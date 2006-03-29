@@ -766,6 +766,8 @@ class Topic{
 		var $_sError;
 		
 	#instellingen
+	#
+	#dit zijn de standaard instellingen 
 		//het aantal berichten per pagina bij het weergeven van een topic.
 		//de standaard, het kan wellicht nog een keer in het profiel gerost worden.
 		var $_postsPerPagina=15; 	//deze werkt dus nog helemaal niet.
@@ -781,6 +783,7 @@ class Topic{
 	function Topic(&$lid, &$db){
 		$this->_lid =& $lid;
 		$this->_db =& $db;
+		//settings uit het profiel ophaelen.
 		$this->_loadSettings();
 	}
 	
@@ -796,7 +799,6 @@ class Topic{
 		//if(isset($aProfiel['forum_posts_per_pagina'])){
 		// $this->_postsPerPagina=$aProfiel['forum_posts_per_pagina'];
 		//}
-		unset($aProfiel);			
 	}
 	/*
 	*	domme string-aan-elkaar-plak-functie voor de naam, als uid meegegeven wordt ook namen ophalen uit db.
@@ -820,7 +822,9 @@ class Topic{
 				$aNaam=$this->_db->next($rNaam);
 			}else{
 				//als de query faalt, wat nepgegevens invoeren, dan faalt de rest iig niet...
-				$aNaam=array('nickname' => 'onbekend', 'voornaam' => '', 'achternaam' => 'onbekend', 'postfix' => '',  'geslacht' => 'm', 'status' => 'S_LID');
+				$aNaam=array(
+					'nickname' => 'onbekend', 'voornaam' => '', 'achternaam' => 'onbekend', 
+					'postfix' => '',  'geslacht' => 'm', 'status' => 'S_LID');
 			} 
 		}
 		//als er in het profiel is aangegeven dat men nicknames wil zien.
@@ -859,10 +863,10 @@ class Topic{
 	* topic ophaelen uit de database, en in de classevars rossen.
 	*/
 	function loadTopic($iTopicID){
+		//als dit waar is gaat alles goed. Zijn er fouten wordt bReturn vals gemaakt.
 		$bReturn=true;
-		//topicID in de klasse rossen
+		//topicID in de klasse rossen en er zeker van zijn dat het een integer is.
 		$this->_topicID=(int)$iTopicID;
-		
 		//zoo, uberdeuberdeuber query om een topic op te halen. 
 		$sTopicQuery="
 			SELECT
@@ -909,6 +913,7 @@ class Topic{
 				$this->_aPost=$bReturn=false;
 				$this->_sError="Dit onderwerp bestaat niet.";
 			}else{
+				//posts in $this->aPosts stoppen.
 				while($aPost=$this->_db->next($rTopicResult)){
 					$this->_aPosts[]=$aPost;
 				}
@@ -925,20 +930,31 @@ class Topic{
 	}
 	//Naar de volgende post springen
 	function nextPost(){ 
+		//controleer of _aPost wel een array is...
 		if(is_array($this->_aPost)){
+			//bericht door de ubb parser heentrekken
 			$bericht=bbview($this->_aPost['tekst'], $this->_aPost['bbcode_uid']);
-			//zo, alleen de nuttige dingen doorgeven...
-			$aPost=array( 'postID'=> $this->_aPost['postID'], 
-				'uid' => $this->_aPost['uid'], 'naam' => htmlentities($this->getForumNaam(), ENT_COMPAT, 'UTF-8'),
+			//zo, alleen de relevante dingen voor een post doorgeven...
+			$aPost=array( 
+				'postID'=> $this->_aPost['postID'], 
+				'uid' => $this->_aPost['uid'], 
+				'naam' => htmlentities($this->getForumNaam(), ENT_COMPAT, 'UTF-8'),
 				'bericht' => $bericht,
 				'datum' => $this->_formatDatum($this->_aPost['datum']), 
 				'bewerkDatum' => $this->_formatDatum($this->_aPost['bewerkDatum']) );
+			//de volgende post laden in $this->_aPosts. Als het de laatste uit de array is zal next false teruggeven
 			$this->_aPost=next($this->_aPosts);
+			//array met gegevens voor deze post teruggeven.
 			return $aPost;
 		}else{
+			//we zijn bij het laatste bericht aangeland waarschijnlijk.
 			return false;
 		}
 	}
+	/*
+	* Functie geeft een array met resultaten terug. Dan klopt er bijzonder weinig meer van
+	* alle functies die per post zijn. dat zij zo. Enkel voor debugging dus dit.
+	*/
 	function getPosts(){
 		while($aBericht=$this->nextPost()){
 			$aBerichten[]=$aBericht;
@@ -964,8 +980,6 @@ class Topic{
 		( $this->_lid->hasPermission($this->getPostRechten()) AND $this->isOpen());
 	}
 	function magModereren(){ return $this->_lid->hasPermission('P_FORUM_MOD'); }
-	
-	
 	
 	//post dingen
 	function getPostUid(){ return $this->_aPost['uid']; }
