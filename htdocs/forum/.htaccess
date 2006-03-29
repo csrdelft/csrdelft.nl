@@ -1,0 +1,38 @@
+RewriteEngine on
+
+##normaal weergeven
+RewriteRule ^categorie/(.*)/(.*) index.php?forum=$1&pagina=$2
+RewriteRule ^cat/(.*)/(.*) index.php?forum=$1&pagina=$2
+RewriteRule ^categorie/(.*) index.php?forum=$1
+RewriteRule ^cat/(.*) index.php?forum=$1
+RewriteRule ^onderwerp/(.*)/(.*) topic.php?topic=$1&pagina=$2
+RewriteRule ^onderwerp/(.*) topic.php?topic=$1
+
+##tijdelijk om de nieuwe Topic classe te testen....
+RewriteRule ^onderwerp1/(.*) topic1.php?topic=$1
+RewriteRule ^onderwerp2/(.*) topic2.php?topic=$1
+
+##toevoegen
+RewriteRule ^onderwerp-toevoegen/(.*) toevoegen.php?forum=$1
+RewriteRule ^toevoegen/(.*) toevoegen.php?topic=$1
+RewriteRule ^reactie/(.*) citeren.php?post=$1
+
+##bewerken
+RewriteRule ^bewerken/(.*) bewerken.php?post=$1
+
+##verwijderen
+RewriteRule ^verwijder-bericht/(.*) verwijderen.php?post=$1
+RewriteRule ^verwijder-onderwerp/(.*) verwijderen.php?topic=$1
+
+##andere mod dingen:
+RewriteRule ^sluit-onderwerp/(.*) sluiten.php?topic=$1&sluiten
+RewriteRule ^open-onderwerp/(.*) sluiten.php?topic=$1&openen
+RewriteRule ^maak-plakkerig/(.*) plakkerig.php?topic=$1&plakkerig
+RewriteRule ^maak-niet-plakkerig/(.*) plakkerig.php?topic=$1&niet-plakkerig
+
+##zo, een poll dan maar
+#stemmen
+RewriteRule ^toon-stemming/(.*) topic.php?topic=$1
+RewriteRule ^stem/(.*) stemmen.php?topic=$1
+RewriteRule ^maak-stemming/(.*) stemming.php?cat=$1
+RewriteRule ^maak-stemming stemming.php

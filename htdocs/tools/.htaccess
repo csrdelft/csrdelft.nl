@@ -1,0 +1,4 @@
+RewriteEngine on
+##normaal weergeven
+RewriteRule ^cat/(.*)/(.*) modrewrite.php?forum=$1&pagina=$2
+

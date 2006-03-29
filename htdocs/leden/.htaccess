@@ -1,0 +1,4 @@
+RewriteEngine on
+RewriteRule ^profiel/(.*) profiel.php?uid=$1
+
+#RewriteRule ^documenten/(.*) documenten.php?dl=$1

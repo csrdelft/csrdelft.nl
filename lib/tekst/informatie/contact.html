@@ -1,0 +1,125 @@
+<!-- This is part of CGI:IRC 0.5
+  == http://cgiirc.sourceforge.net/
+  == Copyright (C) 2000-2005 David Leadbeater <cgiirc@dgl.cx>
+  == Released under the GNU GPL
+  -->
+
+<script language="JavaScript"><!--
+function setjs() {
+ if(navigator.product == 'Gecko') {
+   document.loginform["interface"].value = 'mozilla';
+ }else if(window.opera && document.childNodes) {
+   document.loginform["interface"].value = 'opera7';
+ }else if(navigator.appName == 'Microsoft Internet Explorer' &&
+    navigator.userAgent.indexOf("Mac_PowerPC") > 0) {
+    document.loginform["interface"].value = 'konqueror';
+ }else if(navigator.appName == 'Microsoft Internet Explorer' &&
+ document.getElementById && document.getElementById('ietest').innerHTML) {
+   document.loginform["interface"].value = 'ie';
+ }else if(navigator.appName == 'Konqueror') {
+    document.loginform["interface"].value = 'konqueror';
+ }else if(window.opera) {
+   document.loginform["interface"].value = 'opera';
+ }
+}
+function nickvalid() {
+   var nick = document.loginform.Nickname.value;
+   if(nick.match(/^[A-Za-z0-9\[\]\{\}^\\\|\_\-`]{1,32}$/))
+      return true;
+   alert('Kies een geldige nickname!');
+   //document.loginform.Nickname.value = nick.replace(/[^A-Za-z0-9\[\]\{\}^\\\|\_\-`]/g, '');
+   return false;
+}
+function setcharset() {
+	if(document.charset && document.loginform["Character set"])
+		document.loginform['Character set'].value = document.charset
+}
+//-->
+</script>
+
+<center><span class="kopje2">Contact</span></center><p>
+
+Er zijn diverse mogelijkheden om contact te zoeken met C.S.R.<br />
+<br />
+
+<table border=0 cellspacing=0 cellpadding=0 marginheight=0 marginwidth=0>
+
+<tr>
+<td width="50%">
+<span class="kopje2">Soci&euml;teit Confide</span><br />
+<br />
+C.S.R. heeft een eigen pand in de binnenstad van Delft:<br />
+Oude Delft 9<br />
+2611 BA Delft<br />
+Tel. 015-2135681<br />
+<br />
+U vindt ons op <a href="http://nl.wikipedia.org/wiki/C.S.R.-Delft">WikiPedia</a>,<br />
+En natuurlijk in de 
+<a href="http://www.goudengids.nl/list.asp?gonewsrch=1&origin=homepage&referer=YP&wie=CSR&waar=delft">Gouden Gids</a>... '/\
+</td>
+<td width="50%"><img src="/informatie/images/confideklein.jpg" border="0" width="194" height="118" align="right"></td>
+</tr>
+</table>
+
+<p>
+
+<span class="kopje2">Bestuur</span><br />
+<br />
+
+Het bestuur is per telefoon te bereiken op de societeit of per email
+op <a href="mailto:bestuur@csrdelft.nl">bestuur@csrdelft.nl</a>.
+
+<table border=0 cellspacing=0 cellpadding=0 marginheight=0 marginwidth=0>
+<tr><td width="200">h.t. Praeses:</td><td>Gerlinde Neven</td></tr>
+<tr><td>h.t. Abactis:</td><td>Kees Cozijnsen</td></tr>
+<tr><td>h.t. Fiscus:</td><td>Martijn Schaafsma</td></tr>
+<tr><td>h.t. Vice-Praeses:</td><td>Aris Kool</td></tr>
+<tr><td>h.t. Vice-Abactis:</td><td>Ruben Verhaaf</td></tr>
+</table>
+<br />
+Het bestuur van de vereniging kan u te woord staan met de meest uiteenlopende informatie.
+<p>
+
+<span class="kopje2">De PubliciteitsCommissie</span><br />
+<br />
+De <a href="mailto:pubcie@csrdelft.nl">PubliciteitsCommissie</a> is verantwoordelijk
+voor het bijhouden van deze website. Bij deze commissie kunt u terecht met vragen
+over de inhoud van de website.
+<p>
+
+<span class="kopje2">Internet Heruitzendings Keuvelen</span><br />
+<br />
+C.S.R.-leden houden van kuieren langs de Delftse grachten. Soms zijn we echter
+genoodzaakt op onze werk- of studieplek plaats te nemen, alwaar een PC met
+netwerkaansluiting een onmisbaar element is. Op deze momenten kunnen we ons
+vermaken met Keuvelen op het IRC-kanaal #csrdelft op IRCNet.<br />
+<br />
+IRC (internet heruitzendings keuvelen) is de voorloper van IM
+(onmiddelijke berichtgeving) zoals we dat van MSN (microzacht netwerk)
+en ICQ (ik zoek je) kennen.<br />
+<br />
+Op elk moment van de dag is er een redelijk grote kans dat u iemand van C.S.R.
+treft in dit kanaal. Een bezoek brengen aan #csrdelft kan met een
+IRC programma, zoals <a href="http://www.silverex.org/news/">X-Chat voor Windows</a>
+of X-Chat of IRSSI onder unix/linux,
+in te loggen op een van de servers die in het netwerk zitten,
+bijv. irc.xs4all.nl (als u vanaf een DSL-aansluiting komt) of irc.sci.kun.nl,
+(als u via een universiteitsnetwerk aansluit), een nickname te kiezen en dan het
+commando /join #csrdelft te geven.<br />
+<br />
+Een alternatief is het gebruiken van Webchat, dat kan makkelijk via de Webchat van XS4ALL. Onderstaand
+een invulvakje om het helemaal gemakkelijk te maken.... Kies een geldige nickname, bijvoobeeld uw eigen
+naam zodat voor de aanwezigen duidelijk is wie er binnen komt.<br />
+<form method="post" action="http://webchat.xs4all.nl/cgi-bin/ircnet/irc.cgi" name="loginform" onsubmit="setjs();return nickvalid()">
+<input type="hidden" name="interface" value="nonjs">
+<input type="text" name="Nickname" value="Kies een nickname" class="tekst">
+<input type="hidden" name="Channel" value="#csrdelft">
+<input type="submit" value=" Praat in #csrdelft! " class="tekst">
+</form>
+
+Bent u niet zo bekend met
+IRC, dan kan het raadzaam zijn de volgende pagina's eens te lezen:
+<a href="http://www.irchelp.org/irchelp/ircprimer.html">A Short IRC Primer</a> en/of
+<a href="http://workaround.org/moin/GettingHelpOnIrc">How to get useful help on IRC</a><br />
+<br clear="all">
+
