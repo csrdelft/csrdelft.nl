@@ -60,7 +60,7 @@ N.B. De maaltijdinschrijving sluit op de dag van de maaltijd rond 15:00, als de 
 uitprinten. Vanaf dat moment zal deze ketzer u niet meer willen aan- of afmelden!<br />
 <br />
 Prefereert u vegetarisch eten, of heeft u speciale eetgewoontes of een dieet, gebruik dan het vakje 'Eetwens' in uw
-profielinstellingen om dat aan te geven.<br />
+<a href="/leden/profiel.php">profielinstellingen</a> om dat aan te geven.<br />
 <br />
 
 {$errortxt}
@@ -115,7 +115,10 @@ EOT
 				$m['datum'] = strftime('%a %e %b %H:%M', $m['datum']);
 				# tekst eksaepen
 				$m['tekst'] = htmlentities($m['tekst']);
-
+				//link maken naar maaltijdlijst als men moderator is
+				if($this->_lid->hasPermission('P_MAAL_MOD')){
+					$m['tekst']='<a href="/leden/maaltijdlijst.php?maalid='.$m['id'].'">'.$m['tekst'].'</a>';
+				}
 				print(<<<EOT
 <tr>
 <td valign="top">{$m['datum']}</td>
