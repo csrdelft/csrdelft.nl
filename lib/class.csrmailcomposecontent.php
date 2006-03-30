@@ -26,7 +26,7 @@ class Csrmailcomposecontent {
 	}
 	
 	function getDraft(){
-		$sTemplate=file_get_contents(LIB_PATH.'/teplates/csrmail/'.CSRMAIL_TEMPLATE);
+		$sTemplate=file_get_contents(LIB_PATH.'/templates/csrmail/'.CSRMAIL_TEMPLATE);
 		$aBerichten=$this->_csrmail->getBerichten();
 		if(is_array($aBerichten)){
 			$aKopjes=$this->getKopjes($aBerichten);
