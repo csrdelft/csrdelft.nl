@@ -42,7 +42,7 @@ function setcharset() {
 Er zijn diverse mogelijkheden om contact te zoeken met C.S.R.<br />
 <br />
 
-<table border=0 cellspacing=0 cellpadding=0 marginheight=0 marginwidth=0>
+<table border=0 cellspacing=0 cellpadding=0 marginheight=0 marginwidth=0 width="100%">
 
 <tr>
 <td width="50%">
@@ -69,13 +69,15 @@ En natuurlijk in de
 Het bestuur is per telefoon te bereiken op de societeit of per email
 op <a href="mailto:bestuur@csrdelft.nl">bestuur@csrdelft.nl</a>.
 
-<table border=0 cellspacing=0 cellpadding=0 marginheight=0 marginwidth=0>
+<table border=0 cellspacing=0 cellpadding=0 marginheight=0 marginwidth=0 align="left">
 <tr><td width="200">h.t. Praeses:</td><td>Gerlinde Neven</td></tr>
 <tr><td>h.t. Abactis:</td><td>Kees Cozijnsen</td></tr>
 <tr><td>h.t. Fiscus:</td><td>Martijn Schaafsma</td></tr>
 <tr><td>h.t. Vice-Praeses:</td><td>Aris Kool</td></tr>
 <tr><td>h.t. Vice-Abactis:</td><td>Ruben Verhaaf</td></tr>
 </table>
+
+<br clear="all" />
 <br />
 Het bestuur van de vereniging kan u te woord staan met de meest uiteenlopende informatie.
 <p>
@@ -109,14 +111,25 @@ commando /join #csrdelft te geven.<br />
 <br />
 Een alternatief is het gebruiken van Webchat, dat kan makkelijk via de Webchat van XS4ALL. Onderstaand
 een invulvakje om het helemaal gemakkelijk te maken.... Kies een geldige nickname, bijvoobeeld uw eigen
-naam zodat voor de aanwezigen duidelijk is wie er binnen komt.<br />
+naam zodat voor de aanwezigen duidelijk is wie er binnen komt. Naast het algemene kanaal #csrdelft kunt
+u ook kiezen om het kanaal #pubcie binnen te gaan, voor specifieke discussie over de website, of het
+melden van fouten die u gevonden heeft. (Overigens, als u eenmaal aan het keuvelen bent kan er een extra
+kanaal geopend worden met het commando <tt>/join #kanaal</tt> waarbij kanaal het kanaal is dat u wilt
+bezoeken.)<br />
 <form method="post" action="http://webchat.xs4all.nl/cgi-bin/ircnet/irc.cgi" name="loginform" onsubmit="setjs();return nickvalid()">
 <input type="hidden" name="interface" value="nonjs">
-<input type="text" name="Nickname" value="Kies een nickname" class="tekst">
-<input type="hidden" name="Channel" value="#csrdelft">
-<input type="submit" value=" Praat in #csrdelft! " class="tekst">
+Kies een nickname..
+<input type="text" name="Nickname" value="" class="tekst">
+..en een kanaal..
+<select name="Channel" class="tekst">
+	<option value="#csrdelft"> #csrdelft </option>
+	<option value="#pubcie"> #pubcie </option>
+</select>
+..en..
+<input type="submit" value=" ga keuvelen! " class="tekst">
 </form>
-
+<br />
+<br />
 Bent u niet zo bekend met
 IRC, dan kan het raadzaam zijn de volgende pagina's eens te lezen:
 <a href="http://www.irchelp.org/irchelp/ircprimer.html">A Short IRC Primer</a> en/of
