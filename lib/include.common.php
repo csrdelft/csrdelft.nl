@@ -49,9 +49,9 @@ function array_values_in_array($needles, $haystack) {
 }
 function kapStringNetjesAf(&$sTekst, $iMaxTekens){
 	//test of tekst überhaupt te lang is
-	if(strlen($sTekst)>$iMaxTekens){
+	if(mb_strlen($sTekst)>$iMaxTekens){
 		//tekst is te lang. Afk(n)appen dan maar?
-		$sRanzigAfgekort=substr($sTekst, 0, $iMaxTekens);
+		$sRanzigAfgekort=mb_substr($sTekst, 0, $iMaxTekens);
 		//controleren of er op een spatie is afgekapt.
 		if($sTekst[$iMaxTekens]==' ' OR $sTekst[$iMaxTekens-1]==' '){
 			//er is op een spatie afgekapt.
@@ -59,7 +59,7 @@ function kapStringNetjesAf(&$sTekst, $iMaxTekens){
 			$sTekst=trim($sRanzigAfgekort);
 		}else{
 			//kijk waar de laatste spatie zit.
-			$iSpatiePositie=strrpos($sRanzigAfgekort, ' ');
+			$iSpatiePositie=mb_strrpos($sRanzigAfgekort, ' ');
 			if($iSpatiePositie===false){
 				//geen spatie meer aanwezig voor het afkappunt. 
 				//Gewoon ranzig afkappen met puntjes dus
@@ -67,7 +67,7 @@ function kapStringNetjesAf(&$sTekst, $iMaxTekens){
 				$sTekst=trim($sRanzigAfgekort);
 			}else{
 				//alles na laatste spatie eraf slopen.
-				$sTekst=trim(substr($sRanzigAfgekort, 0, $iSpatiePositie));
+				$sTekst=trim(mb_substr($sRanzigAfgekort, 0, $iSpatiePositie));
 				$bAfgekapt=true;
 			}
 		}
