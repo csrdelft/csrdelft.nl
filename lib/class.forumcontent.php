@@ -383,7 +383,7 @@ function viewTopic($iTopic){
 			echo '</td><td class="forumtekst">';
 			if(($this->_forum->_lid->hasPermission('P_FORUM_POST') AND $aBericht['open']==1) OR
 					$this->_forum->_lid->hasPermission('P_FORUM_MOD')){
-				echo '<form method="post" action="/forum/toevoegen/'.$iTopic.'"><p>';
+				echo '<form method="post" action="/forum/toevoegen/'.$iTopic.'" accept-charset="UTF-8"><p>';
 				echo '<textarea name="bericht" class="tekst" rows="6" cols="80" style="width: 100%;" ></textarea><br />';
 				echo '<input type="submit" name="submit" value="opslaan" /></p></form>';
 			}else{
@@ -576,7 +576,7 @@ Lege velden worden genegeerd.<br /><br />
 			
 			echo '<description>'.$volledigetekst.'</description>';
 			echo '<author>'.$this->_forum->getForumNaam($aPost['uid'], $aPost).'</author>';
-			echo '<category>Forum</category>';
+			echo '<category>forum: '.$aPost['titel.'].'</category>';
 			echo '<comments>http://csrdelft.nl/forum/onderwerp/'.$aPost['tid'].'#laatste</comments>';
 			echo '<guid>http://csrdelft.nl/forum/onderwerp/'.$aPost['tid'].'#'.$aPost['postID'].'</guid>';
 			echo '<pubDate>'.$pubDate.'</pubDate>';
