@@ -26,6 +26,7 @@ class MySql {
 		or die ("Kan geen verbinding maken met host {$cred['host']}\n");
 		mysql_select_db($cred['db'], $this->_db)
 		or die ("Kan niet inloggen bij de database\n");
+		$this->query("SET NAMES 'utf8'");
 	}
 
 	# Deze dus overdingesen in die subklasse!!!!
