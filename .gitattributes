@@ -1,4 +1,9 @@
 * text=auto !eol
+bin/maaltrack.php -text
+bin/mootabos.php -text
+bin/pubcie-admin.php -text
+bin/socciesaldi-koppelen.php -text
+bin/wachtwoord.php -text
 htdocs/.htaccess -text
 htdocs/csrdelft.css -text
 htdocs/forum/.htaccess -text
