@@ -37,11 +37,11 @@ class ForumContent extends SimpleHTML {
 $this->addTijdMeting('begin_Smarty_class');
 		$template=new Smarty();
 		$template->caching=true;
-		$template->compile_check = false;
+		$template->compile_check=false;
 		
-		$template->template_dir = LIB_PATH.'/templates/source/';
-		$template->compile_dir = DATA_PATH.'/template_cache/compiled/';
-		$template->cache_dir = DATA_PATH.'/template_cache/cache/';
+		$template->template_dir = LIB_PATH.'/templates/';
+		$template->compile_dir = DATA_PATH.'template_cache/compiled/';
+		$template->cache_dir = DATA_PATH.'template_cache/cache/';
 		$template->config_dir = LIB_PATH.'/templates/configs/';
 		
 $this->addTijdMeting('voor_isCached');
