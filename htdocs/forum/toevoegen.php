@@ -44,23 +44,19 @@ function main() {
 						}else{
 							header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID.'#laatste');
 						}
-						exit;
 					}else{
 						header('location: http://csrdelft.nl/forum/categorie/'.$iCatID.'&fout='.
 							base64_encode('Er ging iets mis met het databeest.'));
-						exit;
 					}
 				}else{
 					//geen bericht ingevoerd
 					header('location: http://csrdelft.nl/forum/categorie/'.$iCatID.'&fout='.
 						base64_encode('U heeft een leeg bericht ingevoerd.'));
-					exit;
 				}
 			}else{
 				//formulier is niet compleet.
 				header('location: http://csrdelft.nl/forum/categorie/'.$iCatID.'&fout='.
 					base64_encode('<h3>Helaas</h3>Het formulier is niet compleet!'));
-				exit;
 			}
 		}else{
 			if($forum->catExistsVoorUser($iCatID)){
@@ -71,7 +67,6 @@ function main() {
 				//mag niet kijken in de categorie, ook niet posten. Terugt naar het forumoverzicht
 				header('location: http://csrdelft.nl/forum/?fout='.
 					base64_encode('U heeft niet voldoende rechten om in deze categorie te posten of deze categorie te bekijken.'));
-				exit;
 			}
 		}
 	}elseif(isset($_GET['topic'])){
@@ -84,32 +79,26 @@ function main() {
 					$sBericht=bbsave($_POST['bericht'], $bbcode_uid, $db->dbResource());
 					if($forum->addPost($sBericht, $bbcode_uid, $iTopicID)){
 						header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID.'#laatste');
-						exit;
 					}else{
 						header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID.'&fout='.
 							base64_encode('Er ging iets mis met het databeest.'));
-						exit;
 					}
 				}else{
 					header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID.'&fout='.
 						base64_encode('Bericht bevat geen tekens.'));
-					exit;
 				}
 			}else{
 				header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID.'&fout='.
 					base64_encode('U mag hier niet posten.'));
-				exit;
 			}
 		}else{
 			header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID.'&fout='.
 				base64_encode('Formulier incompleet.'));
-			exit;
 		}
 	}else{
 		//geen catID en geen topicID gezet, niet compleet dus.
 		header('location: http://csrdelft.nl/forum/?fout='.
 			base64_encode('<h3>Helaas</h3>Het formulier is niet compleet (geen IDs)!'));
-		exit;
 	}
 }
 
