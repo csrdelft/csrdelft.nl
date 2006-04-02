@@ -32,16 +32,16 @@ class ForumContent extends SimpleHTML {
 ***********************************************************************************************************/	
 	function viewCategories(){
 		$aCategories=$this->_forum->getCategories();
-		?>
-		<h2>Forum</h2>
-		<table class="forumtabel">
+		echo '<h2>Forum</h2>';
+		//eventuele foutmelding weergeven:
+		echo $this->getError();
+		echo '<table class="forumtabel">
 			<tr>
 				<td class="forumhoofd">Forum</td>
 				<td class="forumhoofd">onderwerpen</td>
 				<td class="forumhoofd">berichten</td>
 				<td class="forumhoofd">verandering</td>
-			</tr>
-		<?php
+			</tr>';
 		if(is_array($aCategories)){
 			foreach($aCategories as $aCategorie){
 				if($this->_forum->_lid->hasPermission($aCategorie['rechten_read'])){
@@ -103,6 +103,8 @@ class ForumContent extends SimpleHTML {
 			}
 			$aTopics=$this->_forum->getTopics($iCat, $iPaginaID);
 			echo '<h2><a class="forumGrootlink" href="/forum/">Forum</a> &raquo; '.mb_htmlentities($sCategorie).'</h2>';
+			//eventuele foutmelding weergeven:
+			echo $this->getError();
 			echo '<table class="forumtabel"><tr>';
 			$iKolommen=4;
 			if($this->_forum->_lid->hasPermission('P_FORUM_MOD')){
@@ -238,6 +240,8 @@ class ForumContent extends SimpleHTML {
 			$sCategorie=$this->_forum->getCategorieTitel($aBerichten[0]['categorie']);
 			echo '<a href="/forum/categorie/'.$aBerichten[0]['categorie'].'" class="forumGrootlink">'.mb_htmlentities($sCategorie).'</a> &raquo; ';
 			echo  mb_htmlentities($aBerichten[0]['titel']).'</h2>';
+			//eventuele foutmelding weergeven:
+			echo $this->getError();
 			//topic mod dingen:
 			if($this->_forum->_lid->hasPermission('P_FORUM_MOD')){
 				echo "\r\n".'U mag dit topic modereren:<br /> ';
@@ -589,6 +593,11 @@ Lege velden worden genegeerd.<br /><br />
 	}
 	function setError($sError){
 		$this->_sError=$sError;
+	}
+	function getError(){
+		if(isset($_GET['fout'])){
+			return '<div class="foutmelding">'.mb_htmlentities(base64_decode(trim($_GET['fout']))).'</div>';
+		}
 	}
 	function view(){
 		switch($this->_actie){
