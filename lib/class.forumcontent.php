@@ -92,7 +92,7 @@ class ForumContent extends SimpleHTML {
 	function viewTopics($iCat){
 		$iCat=(int)$iCat;
 		//controleer of de categorie wel bestaat
-		if($this->_forum->catExists($iCat)){
+		if($this->_forum->catExistsVoorUser($iCat)){
 			$sCategorie=$this->_forum->getCategorieTitel($iCat);
 			//topics ophaelen voor deze categorie
 			//wellicht wel ander pagina?
@@ -168,10 +168,17 @@ class ForumContent extends SimpleHTML {
 			}else{//$aTopics is geen array, dus bevat geen berichten.
 				$iAantalTopics=0;
 				echo '<tr><td colspan="3">Deze categorie bevat nog geen berichten of deze pagina bestaat niet.</td></tr>';
+				$aTopic['rechten_read']==$this->_forum->getRechten_post($iCat);
 			}
 			//nieuw topic formuliertje
 			//kijken of er wel gepost mag worden en of de categorie bestaat.
-			echo '<tr><td colspan="'.($iKolommen-1).'" class="forumhoofd">Onderwerp Toevoegen</td>';
+			echo '<tr><td colspan="'.($iKolommen-1).'" class="forumhoofd">';
+			if($this->_forum->_lid->hasPermission($aTopic['rechten_post'])){
+				echo 'Onderwerp Toevoegen';
+			}else{
+				echo '&nbsp;';
+			}
+			echo '</td>';
 			//pagineringslinkjes.
 			echo '<td class="forumhoofd">';
 			if($iAantalTopics>$this->_topicsPerPagina){
@@ -186,12 +193,23 @@ class ForumContent extends SimpleHTML {
 				}
 			}
 			echo '</td></tr>';
-			if($this->_forum->_lid->hasPermission('P_FORUM_POST')){
+			if($this->_forum->_lid->hasPermission($aTopic['rechten_post'])){
 				echo '
 				<tr><td colspan="'.$iKolommen.'" class="forumtekst">
 					<form method="post" action="/forum/onderwerp-toevoegen/'.$iCat.'">
-					<p>
-					Hier kunt u een onderwerp toevoegen in deze categorie van het forum.<br /><br />
+					<p>';
+			if($this->_forum->_lid->hasPermission('P_LOGGED_IN')){
+				echo 'Hier kunt u een onderwerp toevoegen in deze categorie van het forum.<br /><br />';
+			}else{
+				//melding voor niet ingelogde gebruikers die toch willen posten. Ze wordeb 'gemodereerd', dat wil zeggen, de topics zijn
+				//nog niet direct zichtbaar.
+				echo 'Hier kunt u een bericht toevoegen aan het forum. Het zal echter niet direct zichtbaar worden, maar &euml;&euml;rst
+				 door	de PubCie worden goedgekeurd. <Br /><span style="text-decoration: underline;">Het is hierbij verplicht om uw naam en
+				 een email-adres onder het bericht te plaatsen. Dan kan de PubCie eventueel contact met u opnemen. Doet u dat niet, dan 
+				 wordt u bericht wellicht niet geplaatst!</span>
+				 <br /><br />';
+			}
+			echo '
 					<strong>Titel</strong><br />
 					<input type="text" name="titel" value="" style="width: 100%" /><br />
 					<strong>Bericht</strong><br />
@@ -203,43 +221,18 @@ class ForumContent extends SimpleHTML {
 			}
 			echo '</table>';
 		}else{
-			echo '<h2>Categorie bestaat niet</h2><a href="/forum/">Terug naar het forum</a>';
+			echo '<h2>Dit gedeelte van het forum is niet zichtbaar voor u, of het bestaat &uuml;berhaupt niet.</h2><a href="/forum/">Terug naar het forum</a>';
 		}
 	}
 /***********************************************************************************************************
 * Het Topic uiteindelijk weergeven.
 *
 ***********************************************************************************************************/	
-	function viewTopic1($iTopicID){
-		$iTopicID=(int)$iTopicID;
-		require(SMARTY_DIR.'Smarty.class.php');
-		$template=new Smarty();
-		$template->caching=true;
-		$template->template_dir = LIB_PATH.'/templates/source';
-		$template->compile_dir = DATA_PATH.'/template_cache/compiled';
-		$template->cache_dir = DATA_PATH.'/template_cache/cache';
-		$template->config_dir = LIB_PATH.'/templates/configs';
-		
-		if(!$template->is_cached('viewtopic.tpl', $this->_forum->_lid->getForumNaamInstelling())){
-			$topic=new Topic($this->_forum->_lid, $this->_forum->_db);
-			if($topic->loadTopic($iTopicID)){
-				$template->assign('topicID', $iTopicID);
-				$template->assign_by_ref('topic', $topic);
-			}else{
-				$bUseTemplate=false;
-			}
-		}
-		if(isset($bUseTemplate)){
-			echo 'Er is een fout opgetreden: <strong>'.$topic->getError().'</strong>';
-		}else{	
-			$template->display('forum/viewtopic.tpl', $this->_forum->_lid->getForumNaamInstelling());
-		}
-		
-	}
-function viewTopic($iTopic){
+	function viewTopic($iTopic){
 		$iTopic=(int)$iTopic;
 		$aBerichten=$this->_forum->getPosts($iTopic);
-		if(is_array($aBerichten)){
+		$rechten_post=$aBerichten[0]['rechten_post'];
+		if(is_array($aBerichten) AND $this->_forum->_lid->hasPermission($aBerichten[0]['rechten_read'])){
 			//topic weergeven
 			echo '<h2><a href="/forum/" class="forumGrootlink">Forum</a> &raquo; '; 
 			$sCategorie=$this->_forum->getCategorieTitel($aBerichten[0]['categorie']);
@@ -274,7 +267,7 @@ function viewTopic($iTopic){
 					$iPollStemmen=$poll->getPollStemmen($iTopic);
 					$iPollOpties=count($aPollOpties);
 					//er mag maar één keer per *ingelloged lid* per poll gestemd worden, en alleen als het topic open is.
-					if(!$this->_forum->_lid->hasPermission('P_FORUM_POST')){
+					if(!$this->_forum->_lid->hasPermission($rechten_post)){
 						$bMagStemmen=false;
 					}else{
 						if($poll->uidMagStemmen($iTopic) AND ($aBerichten[0]['open']==1)){
@@ -353,13 +346,14 @@ function viewTopic($iTopic){
 				}
 				echo '<br />';
 				//citeer knop enkel als het topic open is en als men mag posten, of als men mod is.
-				if(($aBericht['open']==1 AND $this->_forum->_lid->hasPermission('P_FORUM_POST')) OR 
+				if(($aBericht['open']==1 AND $this->_forum->_lid->hasPermission($rechten_post)) OR 
 					$this->_forum->_lid->hasPermission('P_FORUM_MOD')){
 					echo ' <a href="/forum/reactie/'.$aBericht['postID'].'"><img src="/images/citeren.png" title="Citeer bericht" alt="Citeer bericht" style="border: 0px;" /></a> ';
 				}
 				//bewerken als bericht van gebruiker is, of als men mod is.
-				if(	$this->_forum->magBewerken($aBericht['postID'], $aBericht['uid'], $aBericht['open'])){
-					echo '<a href="/forum/bewerken/'.$aBericht['postID'].'"><img src="/images/bewerken.png" title="Bewerk bericht" alt=" " style="border: 0px;" /></a> ';
+				if($this->_forum->magBewerken($aBericht['postID'], $aBericht['uid'], $aBericht['open'], $rechten_post)){
+					echo '<a href="/forum/bewerken/'.$aBericht['postID'].'">
+						<img src="/images/bewerken.png" title="Bewerk bericht" alt="Bewerk bericht" style="border: 0px;" /></a> ';
 				}
 				//verwijderlinkje, niet als er maar een bericht in het onderwerp is.
 				if($iBerichtenAantal!=1 AND $this->_forum->_lid->hasPermission('P_FORUM_MOD')){
@@ -381,9 +375,8 @@ function viewTopic($iTopic){
 				echo '<br /><strong>Dit topic is gesloten, u mag reageren omdat u beheerder bent.</strong>';
 			}
 			echo '</td><td class="forumtekst">';
-			if(($this->_forum->_lid->hasPermission('P_FORUM_POST') AND $aBericht['open']==1) OR
-					$this->_forum->_lid->hasPermission('P_FORUM_MOD')){
-				echo '<form method="post" action="/forum/toevoegen/'.$iTopic.'" accept-charset="UTF-8"><p>';
+			if($this->_forum->magBerichtToevoegen($iTopic, $aBericht['open'], $rechten_post)){
+				echo '<form method="post" action="/forum/toevoegen/'.$iTopic.'"><p>';
 				echo '<textarea name="bericht" class="tekst" rows="6" cols="80" style="width: 100%;" ></textarea><br />';
 				echo '<input type="submit" name="submit" value="opslaan" /></p></form>';
 			}else{
@@ -397,7 +390,12 @@ function viewTopic($iTopic){
 			}
 			echo '</td></tr></table>';
 		}else{
-			echo 'Onderwerp bestaat helaas niet (meer).';
+			if(!is_array($aBerichten)){
+				echo 'Onderwerp bestaat helaas niet (meer).';
+			}else{
+				echo '<h3>helaas</h3>Dit gedeelte van het forum is niet beschikbaar voor u, u zult moeten inloggen, of terug gaan 
+					naar <a href="/forum/">het forum</a>';
+			}
 		}
 	}
 /***********************************************************************************************************
