@@ -68,6 +68,13 @@ class Forum {
 	*/
 	function getTopics($iCat, $iPagina=0){
 		$iCat=(int)$iCat;
+		//ook op bevestiging wachtende berichten van niet ingelogde gebruikers zichtbaar maken
+		//voor moderators
+		if($this->_lid->hasPermission('P_FORUM_MOD')){
+			$zichtBaarClause="( topic.zichtbaar='zichtbaar' OR topic.zichtbaar='wacht_goedkeuring' )";
+		}else{
+			$zichtBaarClause="topic.zichtbaar='zichtbaar'";
+		}
 		$sTopicsQuery="
 			SELECT
 				categorie.titel AS categorieTitel,
@@ -78,7 +85,8 @@ class Forum {
 				topic.uid AS uid, topic.datumtijd AS datumtijd, 
 				topic.lastuser AS lastuser, topic.lastpost AS lastpost, 
 				topic.lastpostID AS lastpostID, topic.reacties AS reacties, 
-				topic.plakkerig AS plakkerig, topic.open AS open, topic.soort AS soort
+				topic.plakkerig AS plakkerig, topic.open AS open, topic.soort AS soort,
+				topic.zichtbaar AS zichtbaar
 			FROM
 				forum_topic topic
 			INNER JOIN
@@ -86,13 +94,12 @@ class Forum {
 			WHERE
 				topic.categorie=".$iCat."
 			AND
-				topic.zichtbaar='zichtbaar'
+				".$zichtBaarClause."
 			ORDER BY
 				topic.plakkerig, 
 				topic.lastpost DESC
 			LIMIT
 				".($iPagina*$this->_topicsPerPagina).", ".$this->_topicsPerPagina.";";
-		//echo '<pre>'.print_r($sTopicsQuery, true).'</pre>';
 		$rTopicsResult=$this->_db->query($sTopicsQuery);
 		return $this->_db->result2array($rTopicsResult); 
 	}
@@ -110,6 +117,13 @@ class Forum {
 		}else{
 			$sSorteerVolgorde='ASC';
 		}
+		//ook op bevestiging wachtende berichten van niet ingelogde gebruikers zichtbaar maken
+		//voor moderators
+		if($this->_lid->hasPermission('P_FORUM_MOD')){
+			$zichtBaarClause="( topic.zichtbaar='zichtbaar' OR topic.zichtbaar='wacht_goedkeuring' )";
+		}else{
+			$zichtBaarClause="topic.zichtbaar='zichtbaar'";
+		}
 		//zoo, uberdeuberdeuber query om een topic op te halen. Namen worden
 		//ook opgehaald in deze query, die worden door forumcontent weer 
 		//doorgegeven aan getForumNaam();
@@ -124,6 +138,7 @@ class Forum {
 				topic.open AS open,
 				topic.plakkerig AS plakkerig,
 				topic.soort AS soort,
+				topic.zichtbaar AS zichtbaar,
 				post.uid AS uid,
 					lid.nickname AS nickname,
 					lid.voornaam AS voornaam,
@@ -148,7 +163,7 @@ class Forum {
 			WHERE
 				topic.id=".$iTopicID."
 			AND
-				topic.zichtbaar='zichtbaar'
+				".$zichtBaarClause."
 			ORDER BY
 				post.datum ASC;";
 		$rPostsResult=$this->_db->query($sPostsQuery);
@@ -244,6 +259,7 @@ class Forum {
 	function addPost($tekst, $bbcode_uid, $topic=0, $iCat=0, $titel='', $bModerated=false){
 		//het is nu nog goed...
 		$bError=false; 
+		
 		//ff wat gegevens netter maken...
 		$topic=(int)$topic;
 		$iCat=(int)$iCat;
@@ -257,7 +273,13 @@ class Forum {
 		//nieuw topic of enkel een nieuwe post.
 	 	if($topic==0){
 	 		//zichtbaar of of wachtende op goedkeuring
-	 		if($bModerated){ $sZichtbaar='wacht_goedkeuring';	}else{ $sZichtbaar='zichtbaar';}
+	 		if($bModerated){ 
+	 			$sZichtbaar='wacht_goedkeuring'; 
+	 			$bUpdaten=false;
+	 		}else{ 
+	 			$sZichtbaar='zichtbaar';
+	 			$bUpdaten=true;
+	 		}
 			//query maeken
 	 		$sTopicQuery="
 	 			INSERT INTO
@@ -279,6 +301,7 @@ class Forum {
 		}else{
 			//om later het topic nog ff up te daten
 			$bTopicUpdaten=true;
+			$bUpdaten=true;
 		}
 		if(!$bError){
 			//nu nog de (eerste) posting invoegen
@@ -298,51 +321,53 @@ class Forum {
 			//deze query moet hier al uitgevoerd worden omdat anders het postid niet in de topicupdate query gerost kan worden.
 			$bPostQuery=$this->_db->query($sPostQuery);
 			$iPostID=$this->_db->insert_id();
-			if($bTopicUpdaten){
-				//veldjes lastuser en lastpost updaten in forum_topic
-				$sTopicUpdate="
-					UPDATE
-						forum_topic
-					SET
-						lastuser='".$uid."',
-						lastpost='".$datumTijd."',
-						lastpostID=".$iPostID.",
-						reacties=reacties+1
-					WHERE
-						id=".$topic."
-					LIMIT 1;";
-				$this->_db->query($sTopicUpdate);
-				//veldjes lastuser, lastpost, lastpostID en reacties updaten in forum_Cat
-				$iCatID=$this->getCategorieVoorTopic($topic);
-				$sCatUpdate="
-					UPDATE
-						forum_cat
-					SET
-						lastuser='".$uid."',
-						lastpost='".$datumTijd."',
-						lastpostID=".$iPostID.",
-						lasttopic=".$topic.",
-						reacties=reacties+1
-					WHERE
-						id=".$iCatID."
-					LIMIT 1;"; 
-				$this->_db->query($sCatUpdate);	
-			}else{
-				//veldjes voor laatste dingen updateren in forum_cat voor het nieuwe topic
-				 $sCatUpdate="
-					UPDATE
-						forum_cat
-					SET
-						lastuser='".$uid."',
-						lastpost='".$datumTijd."',
-						lastpostID=".$iPostID.",
-						lasttopic=".$topic.",
-						reacties=reacties+1,
-						topics=topics+1	
-					WHERE
-						id=".$iCat."
-					LIMIT 1;"; 
-				$this->_db->query($sCatUpdate);
+			if($bUpdaten){
+				if($bTopicUpdaten){
+					//veldjes lastuser en lastpost updaten in forum_topic
+					$sTopicUpdate="
+						UPDATE
+							forum_topic
+						SET
+							lastuser='".$uid."',
+							lastpost='".$datumTijd."',
+							lastpostID=".$iPostID.",
+							reacties=reacties+1
+						WHERE
+							id=".$topic."
+						LIMIT 1;";
+					$this->_db->query($sTopicUpdate);
+					//veldjes lastuser, lastpost, lastpostID en reacties updaten in forum_Cat
+					$iCatID=$this->getCategorieVoorTopic($topic);
+					$sCatUpdate="
+						UPDATE
+							forum_cat
+						SET
+							lastuser='".$uid."',
+							lastpost='".$datumTijd."',
+							lastpostID=".$iPostID.",
+							lasttopic=".$topic.",
+							reacties=reacties+1
+						WHERE
+							id=".$iCatID."
+						LIMIT 1;"; 
+					$this->_db->query($sCatUpdate);	
+				}else{
+					//veldjes voor laatste dingen updateren in forum_cat voor het nieuwe topic
+					 $sCatUpdate="
+						UPDATE
+							forum_cat
+						SET
+							lastuser='".$uid."',
+							lastpost='".$datumTijd."',
+							lastpostID=".$iPostID.",
+							lasttopic=".$topic.",
+							reacties=reacties+1,
+							topics=topics+1	
+						WHERE
+							id=".$iCat."
+						LIMIT 1;"; 
+					$this->_db->query($sCatUpdate);
+				}
 			}
 			if($bPostQuery){
 				return $topic;
@@ -539,7 +564,7 @@ class Forum {
 	//rechten voor een categorie ophaelen
 	function getRechten_read($iCatID){ return $this->_getRechten($iCatID, 'read'); }
 	function getRechten_post($iCatID){ return $this->_getRechten($iCatID, 'post'); }
-	function getRechten($iCatID, $gebied){
+	function _getRechten($iCatID, $gebied){
 		$iCatID=(int)$iCatID;
 		$sCatQuery="
 			SELECT
@@ -608,7 +633,7 @@ class Forum {
 			if($iOpen==2 AND $this->isOpen($iTopicID)){ $iOpen=0; }else{ $iOpen=1;}
 			if(!is_string($rechten_post)){
 				//rechten_post niet meegegeven, rechten ophaelen in de db...
-				$rechten_post=$this->getRechten_post(getCategorieVoorTopic($iTopicID));
+				$rechten_post=$this->getRechten_post($this->getCategorieVoorTopic($iTopicID));
 			}
 			if($this->_lid->hasPermission($rechten_post) AND $iOpen==1){
 				return true;
@@ -648,7 +673,7 @@ class Forum {
 			if($iOpen==2 AND $this->isOpen($iTopicID)){ $iOpen=0; }else{ $iOpen=1;}
 			if(!is_string($rechten_post)){
 				//rechten_post niet meegegeven, rechten ophaelen in de db...
-				$rechten_post=$this->getRechten_post(getCategorieVoorTopic($iTopicID));
+				$rechten_post=$this->getRechten_post($this->getCategorieVoorTopic($iTopicID));
 			}	
 			if($this->_lid->hasPermission($rechten_post) AND $iOpen==1){
 				if($iPostUid!==false){
@@ -1012,7 +1037,7 @@ class Topic{
 			$aPost=array( 
 				'postID'=> $this->_aPost['postID'], 
 				'uid' => $this->_aPost['uid'], 
-				'naam' => htmlentities($this->getForumNaam()),
+				'naam' => mb_htmlentities($this->getForumNaam()),
 				'bericht' => $bericht,
 				'datum' => $this->_formatDatum($this->_aPost['datum']), 
 				'bewerkDatum' => $this->_formatDatum($this->_aPost['bewerkDatum']) );
