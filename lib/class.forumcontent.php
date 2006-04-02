@@ -48,7 +48,7 @@ class ForumContent extends SimpleHTML {
 					echo '
 <tr>
 <td class="forumtitel">
-	<a href="/forum/categorie/'.$aCategorie['id'].'">'.htmlentities($aCategorie['titel']).'</a><br />
+	<a href="/forum/categorie/'.$aCategorie['id'].'">'.mb_htmlentities($aCategorie['titel']).'</a><br />
 	'.$aCategorie['beschrijving'].'
 </td>
 <td class="forumreacties">'.$aCategorie['topics'].'</td>
@@ -65,7 +65,7 @@ class ForumContent extends SimpleHTML {
 						if(trim($aCategorie['lastuser'])!=''){
 							$sUsername=$this->_forum->getForumNaam($aCategorie['lastuser']);
 							if(trim($sUsername!='')){
-								echo '<a href="/leden/profiel/'.$aCategorie['lastuser'].'">'.htmlentities($sUsername).'</a>';
+								echo '<a href="/leden/profiel/'.$aCategorie['lastuser'].'">'.mb_htmlentities($sUsername).'</a>';
 							}else{
 								echo 'onbekend';
 							}
@@ -102,7 +102,7 @@ class ForumContent extends SimpleHTML {
 				$iPaginaID=0;
 			}
 			$aTopics=$this->_forum->getTopics($iCat, $iPaginaID);
-			echo '<h2><a class="forumGrootlink" href="/forum/">Forum</a> &raquo; '.htmlentities($sCategorie).'</h2>';
+			echo '<h2><a class="forumGrootlink" href="/forum/">Forum</a> &raquo; '.mb_htmlentities($sCategorie).'</h2>';
 			echo '<table class="forumtabel"><tr>';
 			$iKolommen=4;
 			if($this->_forum->_lid->hasPermission('P_FORUM_MOD')){
@@ -138,13 +138,13 @@ class ForumContent extends SimpleHTML {
 						echo '<img src="/images/slotje.png" title="Dit onderwerp is gesloten, u kunt niet meer reageren" alt=" " style="border: 0px;" />&nbsp;&nbsp;';
 					}
 					
-					echo htmlentities($aTopic['titel'], ENT_COMPAT, 'UTF-8').'</a></td> ';
+					echo mb_htmlentities($aTopic['titel']).'</a></td> ';
 		
 					//aantal reacties in dit topic
 					echo '<td class="forumreacties">'.($aTopic['reacties']-1).'</td>';
 					//draadstarter:
 					$sUsername=$this->_forum->getForumNaam($aTopic['uid']);
-					echo '<td class="forumreacties"><a href="/leden/profiel/'.$aTopic['uid'].'">'.htmlentities($sUsername).'</a></td>';
+					echo '<td class="forumreacties"><a href="/leden/profiel/'.$aTopic['uid'].'">'.mb_htmlentities($sUsername).'</a></td>';
 					//laatste veranderingen
 					echo '<td class="forumreactiemoment">';
 					if(date('Y-m-d')==substr($aTopic['lastpost'], 0, 10)){
@@ -156,7 +156,7 @@ class ForumContent extends SimpleHTML {
 					if(trim($aTopic['lastuser'])!=''){
 						$sUsername=$this->_forum->getForumNaam($aTopic['lastuser']);
 						if(trim($sUsername!='')){
-							echo '<a href="/leden/profiel/'.$aTopic['lastuser'].'">'.htmlentities($sUsername).'</a>';
+							echo '<a href="/leden/profiel/'.$aTopic['lastuser'].'">'.mb_htmlentities($sUsername).'</a>';
 						}else{
 							echo 'onbekend';
 						}
@@ -243,8 +243,8 @@ function viewTopic($iTopic){
 			//topic weergeven
 			echo '<h2><a href="/forum/" class="forumGrootlink">Forum</a> &raquo; '; 
 			$sCategorie=$this->_forum->getCategorieTitel($aBerichten[0]['categorie']);
-			echo '<a href="/forum/categorie/'.$aBerichten[0]['categorie'].'" class="forumGrootlink">'.htmlentities($sCategorie, ENT_COMPAT, 'UTF-8').'</a> &raquo; ';
-			echo  htmlentities($aBerichten[0]['titel'], ENT_COMPAT, 'UTF-8').'</h2>';
+			echo '<a href="/forum/categorie/'.$aBerichten[0]['categorie'].'" class="forumGrootlink">'.mb_htmlentities($sCategorie).'</a> &raquo; ';
+			echo  mb_htmlentities($aBerichten[0]['titel']).'</h2>';
 			//topic mod dingen:
 			if($this->_forum->_lid->hasPermission('P_FORUM_MOD')){
 				echo "\r\n".'U mag dit topic modereren:<br /> ';
@@ -288,13 +288,13 @@ function viewTopic($iTopic){
 					if($aBerichten[0]['startUID']==STATISTICUS){
 						echo 'am. Verenigings statisticus';
 					}else{
-						echo $this->_forum->getForumNaam($aBerichten[0]['startUID']);
+						echo mb_htmlentities($this->_forum->getForumNaam($aBerichten[0]['startUID']));
 					}
 					echo ':<br /><br /><br />Er is '.$iPollStemmen.' keer gestemd.</td><td class="forumbericht0">';
 					echo '<form action="/forum/stem/'.$iTopic.'" method="post" >';
 					echo '<table style="width: 100%; margin: 10px 10px 10px 10px; background-color: #f1f1f1;" border="0">';
 					//poll vraag nog een keer
-					echo '<tr><td colspan="3"><strong>'.htmlentities($aBerichten[0]['titel'], ENT_COMPAT, 'UTF-8').'</strong></td></tr>';
+					echo '<tr><td colspan="3"><strong>'.mb_htmlentities($aBerichten[0]['titel']).'</strong></td></tr>';
 					foreach($aPollOpties as $aPollOptie){
 						//lengte van de balk, en het percentage van de stemmen
 						if($aPollOptie['stemmen']!=0){
@@ -308,7 +308,7 @@ function viewTopic($iTopic){
 						if($bMagStemmen){
 							echo '<input type="radio" name="pollOptie" id="'.$aPollOptie['id'].'" value="'.$aPollOptie['id'].'" />';
 						}
-						echo '<label for="'.$aPollOptie['id'].'">'.htmlentities($aPollOptie['optie'], ENT_COMPAT, 'UTF-8').'</label></td>';
+						echo '<label for="'.$aPollOptie['id'].'">'.mb_htmlentities($aPollOptie['optie']).'</label></td>';
 						echo '<td><img src="/images/frikandel.png" height="20px" width="'.$iBalkLengte.'px" title="een del, lekker!" /></td>';
 						echo '<td style="width: 80px">'.round( $fPercentage, 2).'% ('.$aPollOptie['stemmen'].')</td></tr>';
 					}
@@ -336,7 +336,7 @@ function viewTopic($iTopic){
 				echo '<tr><td class="forumauteur">';
 				$sUsername=$this->_forum->getForumNaam($aBericht['uid'], $aBericht);
 				if(trim($sUsername!='')){
-					echo '<a href="/leden/profiel/'.$aBericht['uid'].'">'.htmlentities($sUsername).'</a> schreef ';
+					echo '<a href="/leden/profiel/'.$aBericht['uid'].'">'.mb_htmlentities($sUsername).'</a> schreef ';
 				}else{
 					echo 'onbekend';
 				}

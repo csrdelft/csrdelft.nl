@@ -47,18 +47,20 @@ class CieOverzichtContent extends SimpleHTML {
 				echo '
 					<tr height="30px">
 						<td colspan="3" width="100%" valign="bottom">
-							<a href="/informatie/commissie.php?cie='.htmlentities($cie['naam']).'" class="a2">'.htmlspecialchars($cie['titel']).'</a>
+							<a href="/informatie/commissie.php?cie='.htmlspecialchars($cie['naam']).'" class="a2">
+								'.mb_htmlentities($cie['titel']).'
+							</a>
 						</td>
 					</tr>
 					<tr>
-						<td width="49%" valign="top" >'.htmlentities($cie['stekst']).'</td>
+						<td width="49%" valign="top" >'.mb_htmlentities($cie['stekst']).'</td>
 						<td width="2%"><img src="/images/pixel.gif" width="100%" height="1"></td>
 						<td width="49%" valign="top">';
 		
 				$aCieLeden=$this->_commissie->getCieLeden($cie['id']);
 				if(is_array($aCieLeden)){
 					foreach($aCieLeden as $aCieLid){
-						echo '<a href="../leden/profiel.php?uid='.$aCieLid['uid'].'">'.htmlentities($aCieLid['naam']).'</a>&nbsp;<em>'.$aCieLid['functie'].'</em><br />';
+						echo '<a href="../leden/profiel.php?uid='.$aCieLid['uid'].'">'.mb_htmlentities($aCieLid['naam']).'</a>&nbsp;<em>'.$aCieLid['functie'].'</em><br />';
 					}
 				}else{
 					echo $aCieLeden;
@@ -75,11 +77,11 @@ class CieOverzichtContent extends SimpleHTML {
 				echo '
 					<tr height="30px">
 						<td colspan="3" width="100%" valign="bottom">
-							<a href="/informatie/commissie.php?cie='.htmlspecialchars($cie['naam']).'" class="a2">'.htmlentities($cie['titel']).'</a>
+							<a href="/informatie/commissie.php?cie='.htmlspecialchars($cie['naam']).'" class="a2">'.mb_htmlentities($cie['titel']).'</a>
 					</td>
 					</tr>
 					<tr>
-						<td valign="top" >'.htmlentities($cie['stekst']).'</td>
+						<td valign="top" >'.mb_htmlentities($cie['stekst']).'</td>
 					</tr>';	
 			}
 			echo ' </table>';

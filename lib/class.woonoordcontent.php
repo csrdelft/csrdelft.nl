@@ -86,20 +86,20 @@ certificaat en een Kaapsviooltje. Bovendien waren zij verplicht een open activit
 			foreach($woonoorden as $woonoord) {
 ?>
 <tr height="30">
-<td colspan="3" valign="middle"><? if ($woonoord['link'] == '') { ?><span class="kopje3"><?=htmlentities($woonoord['naam'])?></span><? }
-else { ?><a href="<?=htmlspecialchars($woonoord['link'])?>" class="a3"><?=htmlentities($woonoord['naam'])?></a><? } ?> (<?=htmlspecialchars($woonoord['adres'])?>)</td>
+<td colspan="3" valign="middle"><? if ($woonoord['link'] == '') { ?><span class="kopje3"><?=mb_htmlentities($woonoord['naam'])?></span><? }
+else { ?><a href="<?=htmlspecialchars($woonoord['link'])?>" class="a3"><?=mb_htmlentities($woonoord['naam'])?></a><? } ?> (<?=htmlspecialchars($woonoord['adres'])?>)</td>
 </tr>
 <tr>
-<td valign="top"><? if ($woonoord['plaatje'] != '') { ?><img src="<?php echo htmlspecialchars($woonoord['plaatje']) ?>" align="right"><?php } ?><?=htmlentities($woonoord['tekst'])?></td>
+<td valign="top"><? if ($woonoord['plaatje'] != '') { ?><img src="<?php echo htmlspecialchars($woonoord['plaatje']) ?>" align="right"><?php } ?><?=mb_htmlentities($woonoord['tekst'])?></td>
 <td>&nbsp;</td>
 <td valign="top">
 <?php
 				$bewoners = $this->_woonoord->getBewoners($woonoord['id']);
 				usort($bewoners, 'cmp');
 				foreach ($bewoners as $bewoner) {
-					echo htmlentities($bewoner['voornaam']);
-					if ($bewoner['tussenvoegsel'] != "") echo " ".htmlentities($bewoner['tussenvoegsel']);
-					echo " ".htmlentities($bewoner['achternaam']) . "<br />\n";
+					echo mb_htmlentities($bewoner['voornaam']);
+					if ($bewoner['tussenvoegsel'] != "") echo " ".mb_htmlentities($bewoner['tussenvoegsel']);
+					echo " ".mb_htmlentities($bewoner['achternaam']) . "<br />\n";
 				}
 ?>
 </td>

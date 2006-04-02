@@ -42,14 +42,14 @@ class CommissieContent extends SimpleHTML {
 				<tr><td>'.bbview($cie['tekst'], $cie['bbcode_uid']);
 			//eventueel link
 			if ($cie['link'] != '') {
-				echo 'CommissieWebstek: <a href="'.htmlspecialchars($cie['link']).'">'.htmlentities($cie['link']).'</a>';	
+				echo 'CommissieWebstek: <a href="'.htmlspecialchars($cie['link']).'">'.mb_htmlentities($cie['link']).'</a>';	
 			}
 			echo '</td><td valign="top">';
 			$aCieLeden=$this->_commissie->getCieLeden($cie['id']);
 			if(is_array($aCieLeden)){
 				echo '<table border="0"  class="hoktable" ><tr><td colspan="2"><strong>Commissieleden:</strong></td></tr>';
 				foreach($aCieLeden as $aCieLid){
-					echo '<tr><td width="150px"><a href="../leden/profiel.php?uid='.$aCieLid['uid'].'">'.htmlentities($aCieLid['naam']).'</a></td><td>'.htmlentities($aCieLid['functie']).'</td></tr>';
+					echo '<tr><td width="150px"><a href="../leden/profiel.php?uid='.$aCieLid['uid'].'">'.mb_htmlentities($aCieLid['naam']).'</a></td><td>'.mb_htmlentities($aCieLid['functie']).'</td></tr>';
 				}
 				echo '</table>';
 			}else{
@@ -65,7 +65,7 @@ class CommissieContent extends SimpleHTML {
 				<tr><td>'.bbview($cie['tekst'], $cie['bbcode_uid']);
 			//eventueel link
 			if ($cie['link'] != '') {
-				echo 'CommissieWebstek: <a href="'.htmlspecialchars($cie['link']).'">'.htmlentities($cie['link']).'</a>';	
+				echo 'CommissieWebstek: <a href="'.htmlspecialchars($cie['link']).'">'.mb_htmlentities($cie['link']).'</a>';	
 			}
 			echo '</td></tr></table><a href="javascript: history.go(-1)">[ Terug ]</a>';
 		}

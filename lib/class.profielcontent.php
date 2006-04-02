@@ -42,8 +42,8 @@ class ProfielContent extends SimpleHTML {
 			case 'none':
 
 				$profhtml = array();
-				foreach($profiel as $key => $value) $profhtml[$key] = htmlentities($value);
-				$profhtml['fullname'] = htmlentities(str_replace('  ', ' ',implode(' ',array($profiel['voornaam'],$profiel['tussenvoegsel'],$profiel['achternaam']))));
+				foreach($profiel as $key => $value) $profhtml[$key] = mb_htmlentities($value);
+				$profhtml['fullname'] = mb_htmlentities(str_replace('  ', ' ',implode(' ',array($profiel['voornaam'],$profiel['tussenvoegsel'],$profiel['achternaam']))));
 				
 				# leden-foto
 				if (file_exists( HTDOCS_PATH.'leden/pasfotos/'.$profiel['uid'].'.gif'))
@@ -233,7 +233,7 @@ EOT
 						
 						switch ($fieldinfo[0]) {
 							case 'input':
-								$field_usr = htmlentities($profiel[$field]);
+								$field_usr = mb_htmlentities($profiel[$field]);
 								print(<<<EOT
 <tr>
 <td>{$fieldinfo[1]}</td>

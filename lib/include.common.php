@@ -76,6 +76,10 @@ function kapStringNetjesAf(&$sTekst, $iMaxTekens){
 	}
 	return $bAfgekapt;
 }
+//over de hele site dezelfde htmlentities gebruiken....
+function mb_htmlentities($string){
+	return htmlentities($string, ENT_QUOTES, 'UTF-8');
+}
 
 function opConfide() {
 	if (isset($_SERVER['REMOTE_ADDR']) and in_array($_SERVER['REMOTE_ADDR'],explode(':',CONFIDE_IP))) return true;
