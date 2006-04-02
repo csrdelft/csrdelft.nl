@@ -15,46 +15,35 @@ function main() {
 	session_start();
 	$db = new MySQL();
 	$lid = new Lid($db);
-
-	### Pagina-onderdelen ###
-
-	# menu's
-	require_once('class.dbmenu.php');
-	$homemenu = new DBMenu('home', $lid, $db);
-	$infomenu = new DBMenu('info', $lid, $db);
-	if ($lid->hasPermission('P_LOGGED_IN')) $ledenmenu = new DBMenu('leden', $lid, $db);
-
-	require_once('class.simplehtml.php');
-	require_once('class.hok.php');
-	$homemenuhok = new Hok($homemenu->getMenuTitel(), $homemenu);
-	$infomenuhok = new Hok($infomenu->getMenuTitel(), $infomenu);
-	if ($lid->isLoggedIn()) $ledenmenuhok = new Hok($ledenmenu->getMenuTitel(), $ledenmenu);
-
-	require_once('class.loginform.php');
-	$loginform = new LoginForm($lid);
-	$loginhok = new Hok('Ledenlogin', $loginform);
-
-	# Datum
-	require_once('class.includer.php');
-	$datum = new Includer('', 'datum.php');
-
-	# Het middenstuk
-	if ($lid->hasPermission('P_FORUM_POST')){
-		require_once('class.forum.php');
-		$forum = new Forum($lid, $db);
-		require_once('bbcode/include.bbcode.php');
-		$bbcode_uid=bbnewuid();
-		if(isset($_GET['forum']) AND isset($_POST['bericht']) AND isset($_POST['titel'])){
-			//nieuw topic toevoegen
-			$iCatID=(int)$_GET['forum'];
-			//EERST controleren of deze categorie wel bestaat
-			if($forum->catExists($iCatID)){
+		
+	//forum klasse laden
+	require_once('class.forum.php');
+	$forum = new Forum($lid, $db);
+	require_once('bbcode/include.bbcode.php');
+	$bbcode_uid=bbnewuid();
+	
+	# uitzoeken wat er moet gebeuren.
+	
+	//kijk of er een categorie-id gezet is.
+	if(isset($_GET['forum'])){
+		$iCatID=(int)$_GET['forum'];
+		//kijken of er deze categorie gepost mag worden 
+		if($lid->hasPermission($forum->getRechten_post($iCatID))){
+			if(isset($_POST['bericht']) AND isset($_POST['titel'])){
 				if(strlen(trim($_POST['bericht']))>0 AND strlen(trim($_POST['titel']))>0){
 					$sBericht=bbsave($_POST['bericht'], $bbcode_uid, $db->dbResource());
 					$sTitel=addslashes($_POST['titel']);
-					$iTopicID=$forum->addPost($sBericht, $bbcode_uid, 0, $iCatID, $sTitel);
+					//moderatiestap of niet?
+					if($lid->hasPermission('P_LOGGED_IN')){ $bModerate_step=false; }else{ $bModerate_step=true; }
+					$iTopicID=$forum->addPost($sBericht, $bbcode_uid, 0, $iCatID, $sTitel, $bModerate_step);
 					if(is_int($iTopicID)){
-						header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID.'#laatste');
+						if($bModerate_step){
+							//niet naar het topic refreshen, die is nog niet leesbaar...
+							header('location: http://csrdelft.nl/forum/categorie/'.$iCatID.'&fout='.
+								base64_encode('Uw bericht zal bekeken worden door de PubCie, bedankt voor het posten'));
+						}else{
+							header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID.'#laatste');
+						}
 						exit;
 					}else{
 						header('location: http://csrdelft.nl/forum/categorie/'.$iCatID.'&fout='.
@@ -68,58 +57,60 @@ function main() {
 					exit;
 				}
 			}else{
-				//geen bericht ingevoerd
-				header('location: http://csrdelft.nl/forum/&fout='.
-					base64_encode('Deze categorie bestaat niet'));
-				exit;
-			}
-		}elseif(isset($_GET['topic']) AND isset($_POST['bericht'])){
-			//post toevoegen aan een bestaand onderwerp
-			$iTopicID=(int)$_GET['topic'];
-			if(strlen(trim($_POST['bericht']))>0){
-				$sBericht=bbsave($_POST['bericht'], $bbcode_uid, $db->dbResource());
-				if($forum->addPost($sBericht, $bbcode_uid, $iTopicID)){
-					header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID.'#laatste');
-					exit;
-				}else{
-					header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID.'?fout='.base64_encode('Er ging iets mis met het databeest.'));
-					exit;
-				}
-			}else{
-				//geen bericht ingevoerd
-				header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID.'?fout='.base64_encode('U heeft een leeg bericht ingevoerd.'));
+				//formulier is niet compleet.
+				header('location: http://csrdelft.nl/forum/categorie/'.$iCatID.'&fout='.
+					base64_encode('<h3>Helaas</h3>Het formulier is niet compleet!'));
 				exit;
 			}
 		}else{
-			require_once('class.forumcontent.php');
-			$midden = new ForumContent($forum, 'nieuw-post');
+			if($forum->catExistsVoorUser($iCatID)){
+				//mag niet posten, maar wel de categorie zien, daarheen dan maar...
+				header('location: http://csrdelft.nl/forum/categorie/'.$iCatID);
+				exit;
+			}else{
+				//mag niet kijken in de categorie, ook niet posten. Terugt naar het forumoverzicht
+				header('location: http://csrdelft.nl/forum/?fout='.
+					base64_encode('U heeft niet voldoende rechten om in deze categorie te posten of deze categorie te bekijken.'));
+				exit;
+			}
 		}
-	} else {
-		# geen rechten
-		require_once('class.includer.php');
-		$midden = new Includer('', 'geentoegang.html');
-	}	
-
-	### Kolommen vullen ###
-	require_once('class.column.php');
-	$col0 = new Column(COLUMN_MENU);
-	$col0->addObject($homemenuhok);
-	$col0->addObject($infomenuhok);
-	if ($lid->isLoggedIn()) $col0->addObject($ledenmenuhok);
-	$col0->addObject($loginhok);
-	$col0->addObject($datum);
-
-	$col1 = new Column(COLUMN_MIDDENRECHTS);
-	$col1->addObject($midden);
-
-	# Pagina maken met deze twee kolommen
-	require_once('class.page.php');
-	$page = new Page();
-	$page->addColumn($col0);
-	$page->addColumn($col1);
-
-	$page->view();
-	
+	}elseif(isset($_GET['topic'])){
+		$iTopicID=(int)$_GET['topic'];
+		if(isset($_POST['bericht'])){
+			//reageren mag nog niet als men niet is ingelogged...
+			if($forum->magBerichtToevoegen($iTopicID) AND $lid->isLoggedIn()){
+				//post toevoegen aan een bestaand onderwerp
+				if(strlen(trim($_POST['bericht']))>0){
+					$sBericht=bbsave($_POST['bericht'], $bbcode_uid, $db->dbResource());
+					if($forum->addPost($sBericht, $bbcode_uid, $iTopicID)){
+						header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID.'#laatste');
+						exit;
+					}else{
+						header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID.'&fout='.
+							base64_encode('Er ging iets mis met het databeest.'));
+						exit;
+					}
+				}else{
+					header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID.'&fout='.
+						base64_encode('Bericht bevat geen tekens.'));
+					exit;
+				}
+			}else{
+				header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID.'&fout='.
+					base64_encode('U mag hier niet posten.'));
+				exit;
+			}
+		}else{
+			header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID.'&fout='.
+				base64_encode('Formulier incompleet.'));
+			exit;
+		}
+	}else{
+		//geen catID en geen topicID gezet, niet compleet dus.
+		header('location: http://csrdelft.nl/forum/?fout='.
+			base64_encode('<h3>Helaas</h3>Het formulier is niet compleet (geen IDs)!'));
+		exit;
+	}
 }
 
 ?>
