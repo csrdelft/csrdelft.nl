@@ -126,7 +126,7 @@ class ForumContent extends SimpleHTML {
 					echo '<td class="forumtitel">';
 					//[peiling] ervoor voor onderschijd bij een peiling.
 					if($aTopic['soort']=='T_POLL'){	echo '[peiling] '; }
-					
+					if($aTopic['zichtbaar']=='wacht_goedkeuring'){ echo '[ bevestiging nodig... ] '; }
 					//topictitel met link naar de laatste post in het onderwerp
 					echo '<a href="/forum/onderwerp/'.$aTopic['id']. '#laatste" >';
 					//plaatje voor plakkerig tonen
@@ -247,13 +247,15 @@ class ForumContent extends SimpleHTML {
 					echo '| <a href="/forum/sluit-onderwerp/'.$iTopic.'">sluiten (reageren niet meer mogelijk)</a> ';
 				}else{
 					echo '| <a href="/forum/open-onderwerp/'.$iTopic.'">weer openen (reageren weer w&eacute;l mogelijk)</a> ';
-				}
+				}	
 				if($aBerichten[0]['plakkerig']==0){
 					echo '| <a href="/forum/maak-plakkerig/'.$iTopic.'">maak plakkerig</a> ';
 				}else{
 					echo '| <a href="/forum/maak-niet-plakkerig/'.$iTopic.'">verwijder plakkerigheid</a> ';
 				}
-
+				if($aBerichten[0]['zichtbaar']=='wacht_goedkeuring'){
+					echo '| <a href="/forum/keur-goed/'.$iTopic.'">Keur dit bericht goed.</a> ';
+				}
 				echo ']<br /><br />'."\r\n";
 			}
 			echo '<table class="forumtabel"><tr><td class="forumhoofd">auteur</td><td class="forumhoofd">bericht</td></tr>';
@@ -375,7 +377,9 @@ class ForumContent extends SimpleHTML {
 				echo '<br /><strong>Dit topic is gesloten, u mag reageren omdat u beheerder bent.</strong>';
 			}
 			echo '</td><td class="forumtekst">';
-			if($this->_forum->magBerichtToevoegen($iTopic, $aBericht['open'], $rechten_post)){
+			if($this->_forum->magBerichtToevoegen($iTopic, $aBericht['open'], 'P_FORUM_POST')){	
+			//if($this->_forum->magBerichtToevoegen($iTopic, $aBericht['open'], $rechten_post)){ 
+			//^ nu werkt dit nog niet, omdat htdocs/forum/toevoegen.php er nog niet mee kan omgaan.
 				echo '<form method="post" action="/forum/toevoegen/'.$iTopic.'"><p>';
 				echo '<textarea name="bericht" class="tekst" rows="6" cols="80" style="width: 100%;" ></textarea><br />';
 				echo '<input type="submit" name="submit" value="opslaan" /></p></form>';
@@ -574,7 +578,7 @@ Lege velden worden genegeerd.<br /><br />
 			
 			echo '<description>'.$volledigetekst.'</description>';
 			echo '<author>'.$this->_forum->getForumNaam($aPost['uid'], $aPost).'</author>';
-			echo '<category>forum: '.$aPost['titel.'].'</category>';
+			echo '<category>forum: '.$aPost['titel'].'</category>';
 			echo '<comments>http://csrdelft.nl/forum/onderwerp/'.$aPost['tid'].'#laatste</comments>';
 			echo '<guid>http://csrdelft.nl/forum/onderwerp/'.$aPost['tid'].'#'.$aPost['postID'].'</guid>';
 			echo '<pubDate>'.$pubDate.'</pubDate>';
