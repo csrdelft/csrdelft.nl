@@ -275,8 +275,3 @@ lib/tekst/thuis.html -text
 lib/tekst/thuis2.html -text
 lib/templates/csrmail/csrmail.tpl -text
 lib/templates/forum/viewtopic.tpl -text
-/maaltrack.php -text
-/mootabos.php -text
-/pubcie-admin.php -text
-/socciesaldi-koppelen.php -text
-/wachtwoord.php -text
