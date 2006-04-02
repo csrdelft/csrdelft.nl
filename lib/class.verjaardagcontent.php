@@ -73,9 +73,9 @@ class VerjaardagContent extends SimpleHTML {
 					foreach ($vrjdgn as $vrjdg) {
 						if ($vrjdg['gebdag'] == $dezedag and $maand == $dezemaand) echo '<span class="tekstrood">';
 						echo $vrjdg['gebdag'] . " ";
-						echo htmlentities($vrjdg['voornaam']);
-						if ($vrjdg['tussenvoegsel'] != "") echo " ".htmlentities($vrjdg['tussenvoegsel']);
-						echo " ".htmlentities($vrjdg['achternaam']) . "<br />\n";
+						echo mb_htmlentities($vrjdg['voornaam']);
+						if ($vrjdg['tussenvoegsel'] != "") echo " ".mb_htmlentities($vrjdg['tussenvoegsel']);
+						echo " ".mb_htmlentities($vrjdg['achternaam']) . "<br />\n";
 						if ($vrjdg['gebdag'] == $dezedag and $maand == $dezemaand) echo "</span>";
 					}
 					print("</td>\n");

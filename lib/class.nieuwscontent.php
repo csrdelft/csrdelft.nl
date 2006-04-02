@@ -56,7 +56,7 @@ class NieuwsContent extends SimpleHTML {
 					# als die er is tot daar afhakken
 					if ($lastspace) $message['tekst'] = substr($message['tekst'], 0, $lastspace) . "... ([url={$_SERVER['PHP_SELF']}?id={$message['id']}]lees verder[/url])";
 				}
-			echo '<span class="kopje3">'.htmlentities($message['titel']).'</span>
+			echo '<span class="kopje3">'.mb_htmlentities($message['titel']).'</span>
 					<i>('.date('d-m-Y H:i:s', $message['datum']).')</i><br />
 					'.bbview($message['tekst'], $message['bbcode_uid']).'<br clear="all"><br />';
 			}

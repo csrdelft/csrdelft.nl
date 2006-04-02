@@ -173,13 +173,13 @@ Laat de volgende kolommen zien:<br />
 			foreach ($leden as $lid) {
 				//naam als link naar profiel weergeven.
 				echo '<tr><td valign="top"><a href="/leden/profiel.php?uid='.htmlspecialchars($lid['uid']).'">';
-				echo htmlentities(str_replace('  ', ' ',implode(' ',array($lid['voornaam'],$lid['tussenvoegsel'],$lid['achternaam'])))).'</a></td>';
+				echo mb_htmlentities(str_replace('  ', ' ',implode(' ',array($lid['voornaam'],$lid['tussenvoegsel'],$lid['achternaam'])))).'</a></td>';
 				foreach ($form['kolom'] as $kolom) {
 					echo '<td valign="top">';
 					if($kolom == 'adres'){ 
-						echo htmlentities(str_replace('  ', ' ',implode(' ',array($lid['adres'],$lid['postcode'],$lid['woonplaats']))));
+						echo mb_htmlentities(str_replace('  ', ' ',implode(' ',array($lid['adres'],$lid['postcode'],$lid['woonplaats']))));
 					}else{
-						echo htmlentities($lid[$kolom]);
+						echo mb_htmlentities($lid[$kolom]);
 					}
 					echo '</td>';
 				}//einde foreach kolom

@@ -34,19 +34,19 @@ class Csrmailcomposecontent {
 			$aInhoud['bestuur']=$aInhoud['csr']=$aInhoud['overig']='';
 			if(isset($aKopjes['bestuur'])){
 				foreach($aKopjes['bestuur'] as $sTitel){
-					$aInhoud['bestuur'].='<li>'.htmlentities($sTitel, ENT_COMPAT, 'UTF-8').'</li>'."\r\n";
+					$aInhoud['bestuur'].='<li>'.mb_htmlentities($sTitel).'</li>'."\r\n";
 				}
 			}else{
 				$aInhoud['bestuur']='<li>Geen berichten</li>';
 			}
 			if(isset($aKopjes['csr'])){
 				foreach($aKopjes['csr'] as $sTitel){
-					$aInhoud['csr'].='<li>'.htmlentities($sTitel, ENT_COMPAT, 'UTF-8').'</li>'."\r\n";
+					$aInhoud['csr'].='<li>'.mb_htmlentities($sTitel).'</li>'."\r\n";
 				}
 			}
 			if(isset($aKopjes['overig'])){
 				foreach($aKopjes['overig'] as $sTitel){
-					$aInhoud['overig'].='<li>'.htmlentities($sTitel, ENT_COMPAT, 'UTF-8').'</li>'."\r\n";
+					$aInhoud['overig'].='<li>'.mb_htmlentities($sTitel).'</li>'."\r\n";
 				}
 			}
 			reset($aBerichten);
@@ -89,7 +89,7 @@ Subject: C.S.R. Post ".strftime('%e %B %Y')."\r\n\r\n";
 	
 	function process($sString){
 		$sString=stripslashes($sString);
-		$sString=htmlentities($sString, ENT_COMPAT, 'UTF-8');
+		$sString=mb_htmlentities($sString);
 		$sString=trim($sString);
 		 $aUbbCodes=array(
       array("[b]", "<strong>"),

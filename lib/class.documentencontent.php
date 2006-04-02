@@ -70,10 +70,10 @@ class DocumentenContent extends SimpleHTML {
                       if($j+1<count($aDocumenten[$i]) && $aDocumenten[$i][$j]['naam']==$aDocumenten[$i][$j+1]['naam']){
                           while($j+1<count($aDocumenten[$i]) && $aDocumenten[$i][$j]['naam']==$aDocumenten[$i][$j+1]['naam']){
                               $j++;
-                              $slink.='<a href="documenten/uploads/'.$aDocumenten[$i][$j]['bestandsnaam'].'" target="_blank"> '.substr($aDocumenten[$i][$j]['bestandsnaam'],-3).'</a>';
+                              $slink.='<a href="documenten/uploads/'.$aDocumenten[$i][$j]['bestandsnaam'].'" target="_blank"> '.mb_htmlentities(substr($aDocumenten[$i][$j]['bestandsnaam'],-3)).'</a>';
                           }
                       }
-                      echo '<tr><td>'.$aDocumenten[$i][$j]['naam'].'</td><td>'.$slink.'</td><td>'.$sUsername.'</td><td>'.$aDocumenten[$i][$j]['datum'].'</td></tr>';
+                      echo '<tr><td>'.$aDocumenten[$i][$j]['naam'].'</td><td>'.$slink.'</td><td>'.mb_htmlentities($sUsername).'</td><td>'.$aDocumenten[$i][$j]['datum'].'</td></tr>';
                    }
                    echo '<tr><td>&nbsp;</td></tr>';
                 }

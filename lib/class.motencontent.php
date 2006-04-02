@@ -59,7 +59,7 @@ EOT
 					foreach ($kring[$k][$r] as $kringlid) {
 						if ($kringlid['kringleider'] != 'n') echo "<span class=\"tekstrood\">";
 						if ($kringlid['motebal']!=0) echo '<span class="tekstblauw">';
-						echo htmlentities($kringlid['naam']);
+						echo mb_htmlentities($kringlid['naam']);
 						if ($kringlid['motebal']!='0') echo '&nbsp;O';
 						if ($kringlid['status']=='S_KRINGEL') echo '&nbsp;~';
 						echo "<br />\n";
@@ -85,7 +85,7 @@ EOT
 				print("<td class=\"lijnhoktekst\">");
 				foreach ($kring[$k][$r] as $kringlid) {
 					if ($kringlid['kringleider'] != 'n') echo "<span class=\"tekstrood\">";
-					echo htmlentities($kringlid['naam']);
+					echo mb_htmlentities($kringlid['naam']);
 					if ($kringlid['kringleider'] != 'n') echo "</span>";
 					echo "<br />\n";
 				}

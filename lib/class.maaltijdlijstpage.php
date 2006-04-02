@@ -142,8 +142,8 @@ EOT
 				# linkerveld
 				$i++;
 				print("<tr>");
-				printf('<td class="nummer">%s</td><td>%s',$i,htmlentities($aanmelding['naam']));
-				if ($aanmelding['eetwens'] != '') print('<br /><b>' . htmlentities(trim($aanmelding['eetwens'])) . '</b>');
+				printf('<td class="nummer">%s</td><td>%s',$i,mb_htmlentities($aanmelding['naam']));
+				if ($aanmelding['eetwens'] != '') print('<br /><b>' . mb_htmlentities(trim($aanmelding['eetwens'])) . '</b>');
 				print('</td><td class="vink-vakje">&nbsp;</td>');
 				
 				# rechterveld
@@ -152,8 +152,8 @@ EOT
 					$aanmelding = $leegveld;
 					$j = '&nbsp;';
 				} else $j = ($i+$helft);
-				printf('<td class="nummer">%s</td><td>%s',$j,htmlentities($aanmelding['naam']));
-				if ($aanmelding['eetwens'] != '') print('<br /><b>' . htmlentities(trim($aanmelding['eetwens'])) . '</b>');
+				printf('<td class="nummer">%s</td><td>%s',$j,mb_htmlentities($aanmelding['naam']));
+				if ($aanmelding['eetwens'] != '') print('<br /><b>' . mb_htmlentities(trim($aanmelding['eetwens'])) . '</b>');
 				print('</td><td class="vink-vakje">&nbsp;</td>');
 				print("</tr>\n");
 			} while ($aanmelding = next($aanmeldingen));

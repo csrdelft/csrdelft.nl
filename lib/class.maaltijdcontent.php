@@ -37,7 +37,7 @@ class MaaltijdContent extends SimpleHTML {
 	function view() {
 		# is er een foutboodschap?
 		$error = $this->_maaltrack->getError();
-		if ($error != '') $errortxt = "<span class=\"bodyrood\">N.B.: " . htmlentities($error) . "</span><br /><br />\n";
+		if ($error != '') $errortxt = "<span class=\"bodyrood\">N.B.: " . mb_htmlentities($error) . "</span><br /><br />\n";
 		else $errortxt = '';
 	
 		# introducerende tekst
@@ -114,7 +114,7 @@ EOT
 				# datum formatteren
 				$m['datum'] = strftime('%a %e %b %H:%M', $m['datum']);
 				# tekst eksaepen
-				$m['tekst'] = htmlentities($m['tekst']);
+				$m['tekst'] = mb_htmlentities($m['tekst']);
 				//link maken naar maaltijdlijst als men moderator is
 				if($this->_lid->hasPermission('P_MAAL_MOD')){
 					$m['tekst']='<a href="/leden/maaltijdlijst.php?maalid='.$m['id'].'">'.$m['tekst'].'</a>';
@@ -211,7 +211,7 @@ EOT
 
 		# is er een foutboodschap?
 		$error = $this->_maaltrack->getProxyError();
-		if ($error != '') $errortxt = "<span class=\"bodyrood\">" . htmlentities($error) . "</span><br /><br />\n";
+		if ($error != '') $errortxt = "<span class=\"bodyrood\">" . mb_htmlentities($error) . "</span><br /><br />\n";
 		else $errortxt = '';
 
 		print(<<<EOT

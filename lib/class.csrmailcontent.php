@@ -116,7 +116,7 @@ class Csrmailcontent {
 	}
 	function process($sString){
 		$sString=stripslashes($sString);
-		$sString=htmlentities($sString, ENT_COMPAT, 'UTF-8');
+		$sString=mb_htmlentities($sString);
 		$sString=trim($sString);
 		 $aUbbCodes=array(
       array("[b]", "<strong>"),
