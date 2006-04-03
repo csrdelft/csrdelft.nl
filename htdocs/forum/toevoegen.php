@@ -62,7 +62,6 @@ function main() {
 			if($forum->catExistsVoorUser($iCatID)){
 				//mag niet posten, maar wel de categorie zien, daarheen dan maar...
 				header('location: http://csrdelft.nl/forum/categorie/'.$iCatID);
-				exit;
 			}else{
 				//mag niet kijken in de categorie, ook niet posten. Terugt naar het forumoverzicht
 				header('location: http://csrdelft.nl/forum/?fout='.

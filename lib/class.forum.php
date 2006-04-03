@@ -286,10 +286,10 @@ class Forum {
 		 			forum_topic
 		 	 	(
 			 	 	titel, categorie, uid, datumtijd, 
-			 	 	lastuser, lastpost,  reacties, zichtbaar
+			 	 	lastuser, lastpost,  reacties, zichtbaar, open
 			 	)VALUES(
 			 		'".ucfirst($titel)."', ".$iCat.",	'".$uid."', '".$datumTijd."', 
-			 		'".$uid."', '".$datumTijd."',	1, '".$sZichtbaar."'
+			 		'".$uid."', '".$datumTijd."',	1, '".$sZichtbaar."', 1
 			 	);";
 			if($this->_db->query($sTopicQuery)){
 				$topic=$this->_db->insert_id();
@@ -433,7 +433,7 @@ class Forum {
 			UPDATE
 				forum_topic
 			SET
-				open=0
+				open='0'
 			WHERE
 				id=".$iTopicID."
 			LIMIT 1;";
@@ -445,7 +445,7 @@ class Forum {
 			UPDATE
 				forum_topic
 			SET
-				open=1
+				open='1'
 			WHERE
 				id=".$iTopicID."
 			LIMIT 1;";
@@ -457,7 +457,7 @@ class Forum {
 			UPDATE
 				forum_topic
 			SET
-				plakkerig=1
+				plakkerig='1'
 			WHERE
 				id=".$iTopicID."
 			LIMIT 1;";
@@ -474,6 +474,19 @@ class Forum {
 				id=".$iTopicID."
 			LIMIT 1;";
 		return $this->_db->query($sTopicQuery);
+	}
+	function keurTopicGoed($iTopicID){
+		$iTopicID=(int)$iTopicID;
+		$sTopicQuery="
+			UPDATE
+				forum_topic
+			SET
+				zichtbaar='zichtbaar'
+			WHERE
+				id=".$iTopicID."
+			LIMIT 1;";
+		//query uitvoeren en stats voor topic opnieuw berekenen
+		return $this->_db->query($sTopicQuery) AND $this->updateTopicStats($iTopicID);
 	}
 /***************************************************************************************************
 *	Dingen uitrekenen: post naar topic id, topic naar cat id
@@ -630,7 +643,8 @@ class Forum {
 			return true;
 		}else{
 			//ff ophaelen uit db of het topoc open danwel dicht is.
-			if($iOpen==2 AND $this->isOpen($iTopicID)){ $iOpen=0; }else{ $iOpen=1;}
+			if($iOpen==2)
+				if($this->isOpen($iTopicID)){ $iOpen=1; }else{ $iOpen=0;}
 			if(!is_string($rechten_post)){
 				//rechten_post niet meegegeven, rechten ophaelen in de db...
 				$rechten_post=$this->getRechten_post($this->getCategorieVoorTopic($iTopicID));
@@ -670,17 +684,22 @@ class Forum {
 			return true;
 		}else{
 			//ff ophaelen uit db of het topoc open danwel dicht is.
-			if($iOpen==2 AND $this->isOpen($iTopicID)){ $iOpen=0; }else{ $iOpen=1;}
-			if(!is_string($rechten_post)){
+			$iTopicID=$this->getTopicVoorPostID($iPostID);
+			if($iOpen==2){
+				if($this->isOpen($iTopicID)){ $iOpen=1; }else{ $iOpen=0;}
+			}
+			if($rechten_post===false){
 				//rechten_post niet meegegeven, rechten ophaelen in de db...
 				$rechten_post=$this->getRechten_post($this->getCategorieVoorTopic($iTopicID));
-			}	
+			}
 			if($this->_lid->hasPermission($rechten_post) AND $iOpen==1){
 				if($iPostUid!==false){
 					//met iPostUid controleren, is sneller
 					return $iPostUid==$this->_lid->getUid();
 				}else{
-					return false;
+					//ophaelen uit db..
+					$aPost=$this->getPost($iPostID);
+					return $aPost['open'] AND ($aPost['uid']==$this->_lid->getUid());
 				}
 			}else{
 				return false;
@@ -810,33 +829,37 @@ class Forum {
 			if($bError){
 				return false;
 			}else{
-				//naam klussen.
-				$aProfiel=$this->_lid->getProfile();
-				//als er in het profiel is aangegeven dat men nicknames wil zien.
-				if(isset($aProfiel['forum_name']) AND $aProfiel['forum_name']=='nick' AND trim($aNaam['nickname'])!=''){
-					$sNaam=$aNaam['nickname'];
+				if($uid=='x999'){
+					$sNaam='extern';
 				}else{
-					if($aNaam['status']=='S_NOVIET'){
-						$sNaam='noviet '.$aNaam['voornaam'];
-					}elseif($aNaam['status']=='S_KRINGEL'){
-						$sNaam='~ '.$aNaam['voornaam'];
+					//naam klussen.
+					$aProfiel=$this->_lid->getProfile();
+					//als er in het profiel is aangegeven dat men nicknames wil zien.
+					if(isset($aProfiel['forum_name']) AND $aProfiel['forum_name']=='nick' AND trim($aNaam['nickname'])!=''){
+						$sNaam=$aNaam['nickname'];
 					}else{
-						if($aNaam['geslacht']=='v'){
-							$sNaam='ama. ';
+						if($aNaam['status']=='S_NOVIET'){
+							$sNaam='noviet '.$aNaam['voornaam'];
+						}elseif($aNaam['status']=='S_KRINGEL'){
+							$sNaam='~ '.$aNaam['voornaam'];
 						}else{
-							$sNaam='am. ';
-						}
-						if($aNaam['tussenvoegsel']!=''){
-							$sNaam.=ucfirst($aNaam['tussenvoegsel']).' ';
-						}
-						$sNaam.=$aNaam['achternaam'];
-						if($aNaam['postfix']!=''){
-							$sNaam.=' '.$aNaam['postfix'];
-						}
-						if($aNaam['status']=='S_OUDLID'){
-							$sNaam.=' (oudlid)';
-						}
-					}//einde status if
+							if($aNaam['geslacht']=='v'){
+								$sNaam='ama. ';
+							}else{
+								$sNaam='am. ';
+							}
+							if($aNaam['tussenvoegsel']!=''){
+								$sNaam.=ucfirst($aNaam['tussenvoegsel']).' ';
+							}
+							$sNaam.=$aNaam['achternaam'];
+							if($aNaam['postfix']!=''){
+								$sNaam.=' '.$aNaam['postfix'];
+							}
+							if($aNaam['status']=='S_OUDLID'){
+								$sNaam.=' (oudlid)';
+							}
+						}//einde status if
+					}
 				}
 				//naam in cache rossen.
 				$this->_forumNaamCache[$uid]=$sNaam;

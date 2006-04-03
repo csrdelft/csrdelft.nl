@@ -213,7 +213,7 @@ class ForumContent extends SimpleHTML {
 			}
 			echo '
 					<strong>Titel</strong><br />
-					<input type="text" name="titel" value="" style="width: 100%" /><br />
+					<input type="text" name="titel" value="" class="tekst" style="width: 100%" /><br />
 					<strong>Bericht</strong><br />
 					<textarea name="bericht" rows="10" cols="80" style="width: 100%" class="tekst"></textarea><br />
 					<input type="submit" name="submit" value="verzenden" />

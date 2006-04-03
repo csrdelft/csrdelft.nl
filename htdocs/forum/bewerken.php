@@ -65,7 +65,7 @@ function main() {
 				$midden = new ForumContent($forum, 'bewerk');
 			}
 		}else{
-			header('location: http://csrdelft.nl/forum/?fout='.base64_encode('Geen post om te bewerken.'));
+			header('location: http://csrdelft.nl/forum/?fout='.base64_encode('U mag dit bericht niet bewerken.'));
 			exit;
 		}
 	}else{

@@ -29,6 +29,7 @@ RewriteRule ^sluit-onderwerp/(.*) sluiten.php?topic=$1&sluiten
 RewriteRule ^open-onderwerp/(.*) sluiten.php?topic=$1&openen
 RewriteRule ^maak-plakkerig/(.*) plakkerig.php?topic=$1&plakkerig
 RewriteRule ^maak-niet-plakkerig/(.*) plakkerig.php?topic=$1&niet-plakkerig
+RewriteRule ^keur-goed/(.*) goedkeuren.php?topic=$1
 
 ##zo, een poll dan maar
 #stemmen

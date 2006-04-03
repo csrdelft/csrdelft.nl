@@ -10,6 +10,7 @@ htdocs/forum/.htaccess -text
 htdocs/forum/bewerken.php -text
 htdocs/forum/citeren.php -text
 htdocs/forum/forum-specs.txt -text
+htdocs/forum/goedkeuren.php -text
 htdocs/forum/index.php -text
 htdocs/forum/plakkerig.php -text
 htdocs/forum/rss.php -text
