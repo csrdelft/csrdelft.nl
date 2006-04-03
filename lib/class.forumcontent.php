@@ -205,10 +205,10 @@ class ForumContent extends SimpleHTML {
 			}else{
 				//melding voor niet ingelogde gebruikers die toch willen posten. Ze wordeb 'gemodereerd', dat wil zeggen, de topics zijn
 				//nog niet direct zichtbaar.
-				echo 'Hier kunt u een bericht toevoegen aan het forum. Het zal echter niet direct zichtbaar worden, maar &euml;&euml;rst
-				 door	de PubCie worden goedgekeurd. <Br /><span style="text-decoration: underline;">Het is hierbij verplicht om uw naam en
-				 een email-adres onder het bericht te plaatsen. Dan kan de PubCie eventueel contact met u opnemen. Doet u dat niet, dan 
-				 wordt u bericht wellicht niet geplaatst!</span>
+				echo 'Hier kunt u een bericht toevoegen aan het forum. Het zal echter niet direct zichtbaar worden, maar
+				 &eacute;&eacute;rst door	de PubCie worden goedgekeurd. <br /><span style="text-decoration: underline;">
+				 Het is hierbij verplicht om uw naam en een email-adres onder het bericht te plaatsen. Dan kan de PubCie 
+				 eventueel contact met u opnemen. Doet u dat niet, dan wordt u bericht wellicht niet geplaatst!</span>
 				 <br /><br />';
 			}
 			echo '

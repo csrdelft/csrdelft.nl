@@ -413,19 +413,19 @@ class Forum {
 	//topic verwijderen
 	function deleteTopic($iTopicID){
 		$iTopicID=(int)$iTopicID;
+		//dit moet vóór het verwijderen!
 		$iCatID=$this->getCategorieVoorTopic($iTopicID);
-		$sDeletePosts="
-			DELETE FROM
-				forum_post
-			WHERE
-				tid=".$iTopicID.";";
-		$sDeleteTopic="
-				DELETE FROM
-					forum_topic
-				WHERE
-					id=".$iTopicID."
-				LIMIT 1;";
-		return $this->_db->query($sDeletePosts) AND $this->_db->query($sDeleteTopic) AND $this->updateCatStats($iCatID);
+		$aDelete[]="DELETE FROM	forum_post WHERE tid=".$iTopicID.";";
+		$aDelete[]="DELETE FROM	forum_topic WHERE id=".$iTopicID." LIMIT 1;";
+		//query's om polls weg te gooien, als er niets bestaat voor dit topicID dan 
+		//wordt er dus ook niets weggegooid
+		$aDelete[]="DELETE FROM	forum_poll_stemmen WHERE topicID=".$iTopicID.";";
+		$aDelete[]="DELETE FROM forum_poll WHERE topicID=".$iTopicID.";";
+		$bReturn=true;
+		foreach($aDelete as $sDelete){
+			if($this->_db->query($sDelete)===false) $bReturn=false;
+		}
+		return $bReturn AND $this->updateCatStats($iCatID);
 	}
 	function sluitTopic($iTopicID){
 		$iTopicID=(int)$iTopicID;
