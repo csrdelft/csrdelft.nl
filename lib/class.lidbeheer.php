@@ -130,9 +130,10 @@ Jan Pieter Waagmeester. h.t. Praeses der Pubcie
 
 P.S. Mocht je nog vragen hebben, dan kan je natuurlijk altijd e-posts sturen naar pubcie@csrdelft.nl";
 			mail($aNaamData['email'].', pubcie@csrdelft.nl', 'Nieuw wachtwoord voor de C.S.R.-stek', $mail);
-			$berichten.="\r\n--------------------------------------------\r\n".
+			//$berichten.="\r\n--------------------------------------------\r\n".
 				$mail.
 				"\r\n--------------------------------------------\r\n";
+				$berichten.='gelukt!';
 				return true;
 			}else{
 				$berichten.=mysql_error();

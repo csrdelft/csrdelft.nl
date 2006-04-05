@@ -385,12 +385,12 @@ class ForumContent extends SimpleHTML {
 			//if($this->_forum->magBerichtToevoegen($iTopic, $aBericht['open'], $rechten_post)){ 
 			//^ nu werkt dit nog niet, omdat htdocs/forum/toevoegen.php er nog niet mee kan omgaan.
 				echo '<form method="post" action="/forum/toevoegen/'.$iTopic.'"><p>';
-				echo '<textarea name="bericht" class="tekst" rows="6" cols="80" style="width: 100%;" ></textarea><br />';
+				echo '<textarea name="bericht" class="tekst" rows="10" cols="80" style="width: 100%;" ></textarea><br />';
 				echo '<input type="submit" name="submit" value="opslaan" /></p></form>';
 			}else{
 				if($aBericht['open']==1){
 					//wel open, geen rechten.
-					echo 'U mag hier niet reageren omdat u niet bent ingelogged.';
+					echo 'U mag in dit deel van het forum niet reageren.';
 				}else{
 					//gesloten, wel rechten
 					echo 'U kunt hier niet meer reageren omdat dit onderwerp gesloten is';
@@ -443,11 +443,11 @@ class ForumContent extends SimpleHTML {
 		//	$sBericht=preg_replace('/\[quote\].*(\[quote\].*\[\/quote\]).*\[\/quote\]/', '', $sBericht);
 			
 			echo '<table class="forumtabel">
-				<tr><td colspan="3" class="forumhoofd">Bericht toevogen</td><td class="forumhoofd"></td></tr>
+				<tr><td colspan="3" class="forumhoofd">Bericht toevoegen</td><td class="forumhoofd"></td></tr>
 				<tr><td colspan="4" class="forumtekst">
 				<form method="post" action="/forum/toevoegen/'.$iTopicID.'">
 				<strong>Bericht</strong><br />
-				<textarea name="bericht" rows="10" style="width: 100%" class="tekst">[quote]'.$sBericht.'[/quote]</textarea><br />
+				<textarea name="bericht" rows="20" style="width: 100%" class="tekst">[quote]'.$sBericht.'[/quote]</textarea><br />
 				<input type="submit" name="submit" value="verzenden" /> <a href="/forum/onderwerp/'.$iTopicID.'#laatste">terug naar onderwerp</a>
 				</form>
 				</td></tr></table>';
@@ -471,8 +471,9 @@ class ForumContent extends SimpleHTML {
 					<tr><td colspan="3" class="forumhoofd">Bericht bewerken</td><td class="forumhoofd"></td></tr>
 					<tr><td colspan="4" class="forumtekst">
 					<form method="post" action="/forum/bewerken/'.$iPostID.'">
+					<h2>Als je dingen aanpast zet er dan even bij wat je aanpast! Gebruik bijvoorbeeld [s]...[/s]</h2>
 					<strong>Bericht</strong><br />
-					<textarea name="bericht" rows="10" style="width: 100%" class="tekst">'.bbedit($aPost['tekst'], $aPost['bbcode_uid']).'</textarea><br />
+					<textarea name="bericht" rows="20" style="width: 100%" class="tekst">'.bbedit($aPost['tekst'], $aPost['bbcode_uid']).'</textarea><br />
 					<input type="submit" name="submit" value="verzenden" /> <a href="/forum/onderwerp/'.$iTopicID.'#laatste">terug naar onderwerp</a>
 					</form>
 					</td></tr></table>';
