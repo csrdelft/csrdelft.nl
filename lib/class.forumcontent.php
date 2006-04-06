@@ -96,7 +96,7 @@ class ForumContent extends SimpleHTML {
 			$sCategorie=$this->_forum->getCategorieTitel($iCat);
 			//topics ophaelen voor deze categorie
 			//wellicht wel ander pagina?
-			if(isset($_GET['pagina'])){ $iPaginaID=(int)$_GET['pagina']; }else{ $iPaginaID=0;	}
+			if(isset($_GET['pagina'])){ $iPaginaID=(int)$_GET['pagina']; }else{ $iPaginaID=0; }
 			$aTopics=$this->_forum->getTopics($iCat, $iPaginaID);
 			
 			//weergeven van de navigatielinks:
@@ -233,7 +233,7 @@ class ForumContent extends SimpleHTML {
 * Het Topic uiteindelijk weergeven.
 *
 ***********************************************************************************************************/	
-	function viewTopic($iTopic){
+	function viewTopic($iTopic, $iCiteerPost=0){
 		$iTopic=(int)$iTopic;
 		$aBerichten=$this->_forum->getPosts($iTopic);
 		$rechten_post=$aBerichten[0]['rechten_post'];
@@ -359,7 +359,7 @@ class ForumContent extends SimpleHTML {
 				//citeer knop enkel als het topic open is en als men mag posten, of als men mod is.
 				if(($aBericht['open']==1 AND $this->_forum->_lid->hasPermission($rechten_post)) OR 
 					$this->_forum->_lid->hasPermission('P_FORUM_MOD')){
-					echo ' <a href="/forum/reactie/'.$aBericht['postID'].'"><img src="/images/citeren.png" title="Citeer bericht" alt="Citeer bericht" style="border: 0px;" /></a> ';
+					echo ' <a href="/forum/reactie/'.$aBericht['postID'].'#laatste"><img src="/images/citeren.png" title="Citeer bericht" alt="Citeer bericht" style="border: 0px;" /></a> ';
 				}
 				//bewerken als bericht van gebruiker is, of als men mod is.
 				if($this->_forum->magBewerken($aBericht['postID'], $aBericht['uid'], $aBericht['open'], $rechten_post)){
@@ -380,7 +380,14 @@ class ForumContent extends SimpleHTML {
 				$iWissel++;
 			}//einde foreach $aBerichten
 			//nu nog ff een quickpost formuliertje
-			echo '<tr><td class="forumauteur"><a class="forumpostlink" name="laatste">Snel reageren:</a><br /><br />';
+			echo '<tr><td class="forumauteur">';
+			if($iCiteerPost==0){
+				echo '<a class="forumpostlink" name="laatste">Snel reageren:</a><br /><br />';
+				$iTekstareaRegels=6;
+			}else{
+				echo '<a class="forumpostlink" name="laatste"><stong>Citeren:</strong></a><br /><br />';
+				$iTekstareaRegels=20;
+			}
 			// link om het tekst-vak groter te maken.
 			echo '<a href="#laatste" onclick="vergrootTextarea(\'forumBericht\', 10)" name="Vergroot het invoerveld">invoerveld vergroten &raquo;</a><br />';
 			//berichtje weergeven  voor moderators als het topic gesloten is.
@@ -392,7 +399,14 @@ class ForumContent extends SimpleHTML {
 			//if($this->_forum->magBerichtToevoegen($iTopic, $aBericht['open'], $rechten_post)){ 
 			//^ nu werkt dit nog niet, omdat htdocs/forum/toevoegen.php er nog niet mee kan omgaan.
 				echo '<form method="post" action="/forum/toevoegen/'.$iTopic.'"><p>';
-				echo '<textarea name="bericht" id="forumBericht" class="tekst" rows="6" cols="80" style="width: 100%;" ></textarea><br />';
+				echo '<textarea name="bericht" id="forumBericht" class="tekst" rows="'.$iTekstareaRegels.'" cols="80" style="width: 100%;" >';
+				//inhoud van de textarea vullen met eventuele quote...
+				if($iCiteerPost!=0){
+					$aPost=$this->_forum->getPost((int)$iCiteerPost);
+					$sCiteerBericht=bbedit($aPost['tekst'], $aPost['bbcode_uid']);
+					echo '[quote]'.$sCiteerBericht.'[/quote]';
+				}
+				echo '</textarea><br />';
 				echo '<input type="submit" name="submit" value="opslaan" /></p></form>';
 			}else{
 				if($aBericht['open']==1){
@@ -497,7 +511,7 @@ class ForumContent extends SimpleHTML {
 					<tr><td colspan="3" class="forumhoofd">Bericht bewerken</td><td class="forumhoofd">&nbsp;</td></tr>
 					<tr><td colspan="4" class="forumtekst">
 					<form method="post" action="/forum/bewerken/'.$iPostID.'">
-					<h3>Als je dingen aanpast zet er dan even bij wat je aanpast! Gebruik bijvoorbeeld [s]...[/s]</h3>
+					<h3>Als u dingen aanpast zet er dan even bij w&aacute;t u aanpast! Gebruik bijvoorbeeld [s]...[/s]</h3>
 					<strong>Bericht</strong>&nbsp;&nbsp;';
 				// link om het tekst-vak groter te maken.
 				echo '<a href="#" onclick="vergrootTextarea(\'forumBericht\', 10)" name="Vergroot het invoerveld">invoerveld vergroten</a><br />';
@@ -633,34 +647,8 @@ Lege velden worden genegeerd.<br /><br />
 	}
 	function view(){
 		switch($this->_actie){
-			//overzicht categorieën of overzicht topics voor een categorie weergeven
-			case 'forum':
-				if(isset($_GET['forum'])){
-					$iCatID=(int)$_GET['forum'];
-					$this->viewTopics($iCatID);
-				}else{
-					$this->viewCategories();
-				}
-			break;
-			//topic weergeven
-			case 'topic':
-				$iTopicID=(int)$_GET['topic'];
-				$this->viewTopic($iTopicID);
-			break;
-			case 'topic1':
-				$iTopicID=(int)$_GET['topic'];
-				$this->viewTopic1($iTopicID);
-			break;
-			//wordt nog niet gebruikt.
-			case 'nieuw-post':
-				if(isset($_GET['topic'])){
-					$iTopicID=(int)$_GET['topic'];
-					$this->toevoegFormulier($iTopicID);
-				}else{
-					$this->toevoegFormulier();
-				}
-			break;
-			//poll maeken
+			case 'forum': if(isset($_GET['forum'])){ $this->viewTopics((int)$_GET['forum']); }else{ $this->viewCategories(); } break;
+			case 'topic': $this->viewTopic((int)$_GET['topic']); break;
 			case 'nieuw-poll':
 				if(isset($_GET['cat']) AND $this->_forum->catExists($_GET['cat'])){
 					$iCatID=(int)$_GET['cat'];
@@ -670,34 +658,18 @@ Lege velden worden genegeerd.<br /><br />
 				}	
 				$this->pollFormulier($iCatID);
 			break;
-			//bewerken.
-			case 'bewerk':
+			case 'bewerk': if(isset($_GET['post'])){ $this->bewerkFormulier((int)$_GET['post']); }else{ $this->viewCategories(); } break;
+			case 'citeren': 
 				if(isset($_GET['post'])){
-					$iPostID=(int)$_GET['post'];
-					$this->bewerkFormulier($iPostID);
-				}else{
-					$this->viewCategories();
-				}
+					$this->viewTopic($this->_forum->getTopicVoorPostID((int)$_GET['post']), (int)$_GET['post']); 
+				}else{ 
+					$this->viewCategories(); 
+				} 
 			break;
-			//formulier weergeven, met geciteerde tekst.
-			case 'citeren':
-				if(isset($_GET['post'])){
-					$iPostID=(int)$_GET['post'];
-					$this->citeerFormulier($iPostID);
-				}else{
-					$this->viewCategories();
-				}
-			break;
-			case 'rss':
-				//rss feed klussen...
-				$this->rssFeed();
-				$rss=true;
-			break;
-			default:
-				$this->viewCategories();
-			break;
+			case 'rss': $this->rssFeed();	break;
+			default: $this->viewCategories();	break;
 		}
-		if($this->_forum->_lid->hasPermission('P_FORUM_MOD') AND !isset($rss)){
+		if($this->_forum->_lid->hasPermission('P_FORUM_MOD') AND $this->_actie!='rss'){
 			echo '<br />forum parsetijd: '.round($this->_forum->getParseTime(), 4).' seconden';
 		}
 	}
