@@ -174,18 +174,25 @@ class Forum {
 		$iPostID=(int)$iPostID;
 		$sPostQuery="
 			SELECT
-				post.uid, 
-				post.tekst, 
-				post.bbcode_uid, 
-				post.datum, 
-				topic.open
+				categorie.id as categorieID,
+				categorie.titel as categorieTitel,
+				topic.id as topicID,
+				topic.titel as topicTitel,
+				topic.open as open,
+				post.uid as uid, 
+				post.tekst as tekst, 
+				post.bbcode_uid as bbcode_uid, 
+				post.datum as datum
 			FROM
 				forum_post post, 
-				forum_topic topic
+				forum_topic topic,
+				forum_cat categorie
 			WHERE 
 				post.id=".$iPostID."
 			AND
 				post.tid=topic.id
+			AND
+				topic.categorie=categorie.id
 			AND
 				topic.zichtbaar='zichtbaar'
 			LIMIT 1;";

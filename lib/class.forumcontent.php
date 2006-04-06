@@ -96,13 +96,12 @@ class ForumContent extends SimpleHTML {
 			$sCategorie=$this->_forum->getCategorieTitel($iCat);
 			//topics ophaelen voor deze categorie
 			//wellicht wel ander pagina?
-			if(isset($_GET['pagina'])){
-				$iPaginaID=(int)$_GET['pagina'];
-			}else{
-				$iPaginaID=0;
-			}
+			if(isset($_GET['pagina'])){ $iPaginaID=(int)$_GET['pagina']; }else{ $iPaginaID=0;	}
 			$aTopics=$this->_forum->getTopics($iCat, $iPaginaID);
-			echo '<h2><a class="forumGrootlink" href="/forum/">Forum</a> &raquo; '.mb_htmlentities($sCategorie).'</h2>';
+			
+			//weergeven van de navigatielinks:
+			$sNavigatieLinks='<h2><a class="forumGrootlink" href="/forum/">Forum</a> &raquo; '.mb_htmlentities($sCategorie).'</h2>';
+			echo $sNavigatieLinks;
 			//eventuele foutmelding weergeven:
 			echo $this->getError();
 			echo '<table class="forumtabel"><tr>';
@@ -215,7 +214,7 @@ class ForumContent extends SimpleHTML {
 			echo '
 					<a class="forumpostlink" name="laatste"><strong>Titel</strong></a><br />
 					<input type="text" name="titel" value="" class="tekst" style="width: 100%" /><br />
-					<strong>Bericht</strong>&nbsp;$nbsp; ';
+					<strong>Bericht</strong>&nbsp;&nbsp; ';
 			// link om het tekst-vak groter te maken.
 			echo '<a href="#laatste" onclick="vergrootTextarea(\'forumBericht\', 10)" name="Vergroot het invoerveld">invoerveld vergroten</a><br />';
 			echo '<textarea name="bericht" id="forumBericht" rows="10" cols="80" style="width: 100%" class="tekst"></textarea><br />
@@ -225,6 +224,7 @@ class ForumContent extends SimpleHTML {
 					</td></tr>';
 			}
 			echo '</table>';
+			echo $sNavigatieLinks;
 		}else{
 			echo '<h2>Dit gedeelte van het forum is niet zichtbaar voor u, of het bestaat &uuml;berhaupt niet.</h2><a href="/forum/">Terug naar het forum</a>';
 		}
@@ -238,11 +238,13 @@ class ForumContent extends SimpleHTML {
 		$aBerichten=$this->_forum->getPosts($iTopic);
 		$rechten_post=$aBerichten[0]['rechten_post'];
 		if(is_array($aBerichten) AND $this->_forum->_lid->hasPermission($aBerichten[0]['rechten_read'])){
-			//topic weergeven
-			echo '<h2><a href="/forum/" class="forumGrootlink">Forum</a> &raquo; '; 
-			$sCategorie=$this->_forum->getCategorieTitel($aBerichten[0]['categorie']);
-			echo '<a href="/forum/categorie/'.$aBerichten[0]['categorie'].'" class="forumGrootlink">'.mb_htmlentities($sCategorie).'</a> &raquo; ';
-			echo  mb_htmlentities($aBerichten[0]['titel']).'</h2>';
+			//navigatielinks voor in het forum weergeven:
+			$sNavigatieLinks='<h2><a href="/forum/" class="forumGrootlink">Forum</a> &raquo; 
+				<a href="/forum/categorie/'.$aBerichten[0]['categorie'].'" class="forumGrootlink">
+					'.mb_htmlentities($this->_forum->getCategorieTitel($aBerichten[0]['categorie'])).'
+				</a> &raquo; 
+				'.mb_htmlentities($aBerichten[0]['titel']).'</h2>';
+			echo $sNavigatieLinks;
 			//eventuele foutmelding weergeven:
 			echo $this->getError();
 			//topic mod dingen:
@@ -402,6 +404,9 @@ class ForumContent extends SimpleHTML {
 				}
 			}
 			echo '</td></tr></table>';
+			if($iBerichtenAantal>4){
+				echo $sNavigatieLinks;
+			}
 		}else{
 			if(!is_array($aBerichten)){
 				echo 'Onderwerp bestaat helaas niet (meer).';
@@ -443,10 +448,15 @@ class ForumContent extends SimpleHTML {
 		$aPost=$this->_forum->getPost($iPostID);
 		if(is_array($aPost)){
 			$iTopicID=$this->_forum->getTopicVoorPostID($iPostID);
-			$sTopicTitel=$this->_forum->getTopicTitel($iTopicID);
 			$sBericht=bbedit($aPost['tekst'], $aPost['bbcode_uid']);
-		//	$sBericht=preg_replace('/\[quote\].*(\[quote\].*\[\/quote\]).*\[\/quote\]/', '', $sBericht);
-			
+			//$sBericht=preg_replace('/\[quote\].*(\[quote\].*\[\/quote\]).*\[\/quote\]/', '', $sBericht);
+			//navigatielinks
+			$sNavigatieLinks='<h2><a href="/forum/" class="forumGrootlink">Forum</a> &raquo; 
+				<a href="/forum/categorie/'.$aPost['categorieID'].'" class="forumGrootlink">
+					'.mb_htmlentities($aPost['categorieTitel']).'
+				</a> &raquo; <a href="/forum/onderwerp/'.$iTopicID.'#'.$iPostID.'" class="forumGrootlink">
+				'.mb_htmlentities($aPost['topicTitel']).'</a> &raquo; bericht citeren</h2>';
+			echo $sNavigatieLinks;
 			echo '<table class="forumtabel">
 				<tr><td colspan="3" class="forumhoofd">Bericht toevoegen</td><td class="forumhoofd"></td></tr>
 				<tr><td colspan="4" class="forumtekst">
@@ -475,17 +485,26 @@ class ForumContent extends SimpleHTML {
 			if($iTopicID!=0 OR !preg_match("/^(\d*)$/", $iTopicID)){
 				$sTopicTitel=$this->_forum->getTopicTitel($iTopicID);
 				$aPost=$this->_forum->getPost($iPostID);
+				//navigatielinks
+				$sNavigatieLinks='<h2><a href="/forum/" class="forumGrootlink">Forum</a> &raquo; 
+					<a href="/forum/categorie/'.$aPost['categorieID'].'" class="forumGrootlink">
+						'.mb_htmlentities($aPost['categorieTitel']).'
+					</a> &raquo; <a href="/forum/onderwerp/'.$iTopicID.'#'.$iPostID.'" class="forumGrootlink">
+					'.mb_htmlentities($aPost['topicTitel']).'</a> &raquo; bericht bewerken</h2>';
+				echo $sNavigatieLinks;
+				
 				echo '<table class="forumtabel">
 					<tr><td colspan="3" class="forumhoofd">Bericht bewerken</td><td class="forumhoofd">&nbsp;</td></tr>
 					<tr><td colspan="4" class="forumtekst">
 					<form method="post" action="/forum/bewerken/'.$iPostID.'">
-					<h2>Als je dingen aanpast zet er dan even bij wat je aanpast! Gebruik bijvoorbeeld [s]...[/s]</h2>
+					<h3>Als je dingen aanpast zet er dan even bij wat je aanpast! Gebruik bijvoorbeeld [s]...[/s]</h3>
 					<strong>Bericht</strong>&nbsp;&nbsp;';
 				// link om het tekst-vak groter te maken.
 				echo '<a href="#" onclick="vergrootTextarea(\'forumBericht\', 10)" name="Vergroot het invoerveld">invoerveld vergroten</a><br />';
 
 				echo '
-					<textarea name="bericht" id="forumBericht" rows="20" style="width: 100%" class="tekst">'.bbedit($aPost['tekst'], $aPost['bbcode_uid']).'</textarea><br />
+					<textarea name="bericht" id="forumBericht" rows="20" style="width: 100%" class="tekst">'.
+						bbedit($aPost['tekst'], $aPost['bbcode_uid']).'</textarea><br />
 					<input type="submit" name="submit" value="verzenden" /> <a href="/forum/onderwerp/'.$iTopicID.'#laatste">terug naar onderwerp</a>
 					</form>
 					</td></tr></table>';
