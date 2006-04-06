@@ -45,6 +45,16 @@ class Page extends SimpleHTML {
 <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon" />
 <link rel="stylesheet" href="/csrdelft.css" type="text/css" />
 <link rel="alternate" title="C.S.R.-Delft RSS" type="application/rss+xml" href="http://csrdelft.nl/forum/rss.php" />
+<script type="text/javascript">
+// Textarea's groter maken met behulp van hun id. 'rows' wordt aan het aantal regels toegevoegd.
+function vergrootTextarea(id, rows) {
+  var textarea = document.getElementById(id);
+  //if (!textarea || (typeof(textarea.rows) == "undefined")) return;
+  var currentRows=textarea.rows;
+  textarea.rows = currentRows + rows;
+}
+</script>
+
 </head>
 
 <body>

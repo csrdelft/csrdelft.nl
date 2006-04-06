@@ -199,6 +199,7 @@ class ForumContent extends SimpleHTML {
 				echo '
 				<tr><td colspan="'.$iKolommen.'" class="forumtekst">
 					<form method="post" action="/forum/onderwerp-toevoegen/'.$iCat.'">
+					
 					<p>';
 			if($this->_forum->_lid->hasPermission('P_LOGGED_IN')){
 				echo 'Hier kunt u een onderwerp toevoegen in deze categorie van het forum.<br /><br />';
@@ -212,10 +213,12 @@ class ForumContent extends SimpleHTML {
 				 <br /><br />';
 			}
 			echo '
-					<strong>Titel</strong><br />
+					<a class="forumpostlink" name="laatste"><strong>Titel</strong></a><br />
 					<input type="text" name="titel" value="" class="tekst" style="width: 100%" /><br />
-					<strong>Bericht</strong><br />
-					<textarea name="bericht" rows="10" cols="80" style="width: 100%" class="tekst"></textarea><br />
+					<strong>Bericht</strong>&nbsp;$nbsp; ';
+			// link om het tekst-vak groter te maken.
+			echo '<a href="#laatste" onclick="vergrootTextarea(\'forumBericht\', 10)" name="Vergroot het invoerveld">invoerveld vergroten</a><br />';
+			echo '<textarea name="bericht" id="forumBericht" rows="10" cols="80" style="width: 100%" class="tekst"></textarea><br />
 					<input type="submit" name="submit" value="verzenden" />
 					</p>
 					</form>
@@ -375,7 +378,9 @@ class ForumContent extends SimpleHTML {
 				$iWissel++;
 			}//einde foreach $aBerichten
 			//nu nog ff een quickpost formuliertje
-			echo '<tr><td class="forumauteur"><a class="forumpostlink" name="laatste">Snel reageren:</a>';
+			echo '<tr><td class="forumauteur"><a class="forumpostlink" name="laatste">Snel reageren:</a><br /><br />';
+			// link om het tekst-vak groter te maken.
+			echo '<a href="#laatste" onclick="vergrootTextarea(\'forumBericht\', 10)" name="Vergroot het invoerveld">invoerveld vergroten &raquo;</a><br />';
 			//berichtje weergeven  voor moderators als het topic gesloten is.
 			if($this->_forum->_lid->hasPermission('P_FORUM_MOD') AND $aBericht['open']==0){
 				echo '<br /><strong>Dit topic is gesloten, u mag reageren omdat u beheerder bent.</strong>';
@@ -385,7 +390,7 @@ class ForumContent extends SimpleHTML {
 			//if($this->_forum->magBerichtToevoegen($iTopic, $aBericht['open'], $rechten_post)){ 
 			//^ nu werkt dit nog niet, omdat htdocs/forum/toevoegen.php er nog niet mee kan omgaan.
 				echo '<form method="post" action="/forum/toevoegen/'.$iTopic.'"><p>';
-				echo '<textarea name="bericht" class="tekst" rows="10" cols="80" style="width: 100%;" ></textarea><br />';
+				echo '<textarea name="bericht" id="forumBericht" class="tekst" rows="6" cols="80" style="width: 100%;" ></textarea><br />';
 				echo '<input type="submit" name="submit" value="opslaan" /></p></form>';
 			}else{
 				if($aBericht['open']==1){
@@ -446,8 +451,11 @@ class ForumContent extends SimpleHTML {
 				<tr><td colspan="3" class="forumhoofd">Bericht toevoegen</td><td class="forumhoofd"></td></tr>
 				<tr><td colspan="4" class="forumtekst">
 				<form method="post" action="/forum/toevoegen/'.$iTopicID.'">
-				<strong>Bericht</strong><br />
-				<textarea name="bericht" rows="20" style="width: 100%" class="tekst">[quote]'.$sBericht.'[/quote]</textarea><br />
+				<strong>Bericht</strong>&nbsp;&nbsp;';
+			// link om het tekst-vak groter te maken.
+			echo '<a href="#" onclick="vergrootTextarea(\'forumBericht\', 10)" name="Vergroot het invoerveld">invoerveld vergroten</a><br />';
+			echo '<br />
+				<textarea name="bericht" id="forumBericht" rows="20" style="width: 100%" class="tekst">[quote]'.$sBericht.'[/quote]</textarea><br />
 				<input type="submit" name="submit" value="verzenden" /> <a href="/forum/onderwerp/'.$iTopicID.'#laatste">terug naar onderwerp</a>
 				</form>
 				</td></tr></table>';
@@ -468,12 +476,16 @@ class ForumContent extends SimpleHTML {
 				$sTopicTitel=$this->_forum->getTopicTitel($iTopicID);
 				$aPost=$this->_forum->getPost($iPostID);
 				echo '<table class="forumtabel">
-					<tr><td colspan="3" class="forumhoofd">Bericht bewerken</td><td class="forumhoofd"></td></tr>
+					<tr><td colspan="3" class="forumhoofd">Bericht bewerken</td><td class="forumhoofd">&nbsp;</td></tr>
 					<tr><td colspan="4" class="forumtekst">
 					<form method="post" action="/forum/bewerken/'.$iPostID.'">
 					<h2>Als je dingen aanpast zet er dan even bij wat je aanpast! Gebruik bijvoorbeeld [s]...[/s]</h2>
-					<strong>Bericht</strong><br />
-					<textarea name="bericht" rows="20" style="width: 100%" class="tekst">'.bbedit($aPost['tekst'], $aPost['bbcode_uid']).'</textarea><br />
+					<strong>Bericht</strong>&nbsp;&nbsp;';
+				// link om het tekst-vak groter te maken.
+				echo '<a href="#" onclick="vergrootTextarea(\'forumBericht\', 10)" name="Vergroot het invoerveld">invoerveld vergroten</a><br />';
+
+				echo '
+					<textarea name="bericht" id="forumBericht" rows="20" style="width: 100%" class="tekst">'.bbedit($aPost['tekst'], $aPost['bbcode_uid']).'</textarea><br />
 					<input type="submit" name="submit" value="verzenden" /> <a href="/forum/onderwerp/'.$iTopicID.'#laatste">terug naar onderwerp</a>
 					</form>
 					</td></tr></table>';
