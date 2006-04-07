@@ -138,7 +138,7 @@ class ForumContent extends SimpleHTML {
 					if($aTopic['open']==0){
 						echo '<img src="/images/slotje.png" title="Dit onderwerp is gesloten, u kunt niet meer reageren" alt=" " style="border: 0px;" />&nbsp;&nbsp;';
 					}
-					
+					//titel
 					echo mb_htmlentities($aTopic['titel']).'</a></td> ';
 		
 					//aantal reacties in dit topic
@@ -200,33 +200,36 @@ class ForumContent extends SimpleHTML {
 					<form method="post" action="/forum/onderwerp-toevoegen/'.$iCat.'">
 					
 					<p>';
-			if($this->_forum->_lid->hasPermission('P_LOGGED_IN')){
-				echo 'Hier kunt u een onderwerp toevoegen in deze categorie van het forum.<br /><br />';
-			}else{
-				//melding voor niet ingelogde gebruikers die toch willen posten. Ze wordeb 'gemodereerd', dat wil zeggen, de topics zijn
-				//nog niet direct zichtbaar.
-				echo 'Hier kunt u een bericht toevoegen aan het forum. Het zal echter niet direct zichtbaar worden, maar
-				 &eacute;&eacute;rst door	de PubCie worden goedgekeurd. <br /><span style="text-decoration: underline;">
-				 Het is hierbij verplicht om uw naam en een email-adres onder het bericht te plaatsen. Dan kan de PubCie 
-				 eventueel contact met u opnemen. Doet u dat niet, dan wordt u bericht wellicht niet geplaatst!</span>
-				 <br /><br />';
-			}
-			echo '
-					<a class="forumpostlink" name="laatste"><strong>Titel</strong></a><br />
-					<input type="text" name="titel" value="" class="tekst" style="width: 100%" /><br />
-					<strong>Bericht</strong>&nbsp;&nbsp; ';
-			// link om het tekst-vak groter te maken.
-			echo '<a href="#laatste" onclick="vergrootTextarea(\'forumBericht\', 10)" name="Vergroot het invoerveld">invoerveld vergroten</a><br />';
-			echo '<textarea name="bericht" id="forumBericht" rows="10" cols="80" style="width: 100%" class="tekst"></textarea><br />
-					<input type="submit" name="submit" value="verzenden" />
-					</p>
-					</form>
-					</td></tr>';
+				if($this->_forum->_lid->hasPermission('P_LOGGED_IN')){
+					echo 'Hier kunt u een onderwerp toevoegen in deze categorie van het forum.<br /><br />';
+				}else{
+					//melding voor niet ingelogde gebruikers die toch willen posten. Ze wordeb 'gemodereerd', dat wil zeggen, de topics zijn
+					//nog niet direct zichtbaar.
+					echo 'Hier kunt u een bericht toevoegen aan het forum. Het zal echter niet direct zichtbaar worden, maar
+					 &eacute;&eacute;rst door	de PubCie worden goedgekeurd. <br /><span style="text-decoration: underline;">
+					 Het is hierbij verplicht om uw naam en een email-adres onder het bericht te plaatsen. Dan kan de PubCie 
+					 eventueel contact met u opnemen. Doet u dat niet, dan wordt u bericht wellicht niet geplaatst!</span>
+					 <br /><br />';
+				}
+				echo '
+						<a class="forumpostlink" name="laatste"><strong>Titel</strong></a><br />
+						<input type="text" name="titel" value="" class="tekst" style="width: 100%" /><br />
+						<strong>Bericht</strong>&nbsp;&nbsp; ';
+				// link om het tekst-vak groter te maken.
+				echo '<a href="#laatste" onclick="vergrootTextarea(\'forumBericht\', 10)" name="Vergroot het invoerveld">
+					invoerveld vergroten</a><br />';
+				echo '<textarea name="bericht" id="forumBericht" rows="10" cols="80" style="width: 100%" class="tekst"></textarea><br />
+						<input type="submit" name="submit" value="verzenden" />
+						</p>
+						</form>
+						</td></tr>';
 			}
 			echo '</table>';
+			//nog eens de navigatielinks die ook bovenaan staan.
 			echo $sNavigatieLinks;
 		}else{
-			echo '<h2>Dit gedeelte van het forum is niet zichtbaar voor u, of het bestaat &uuml;berhaupt niet.</h2><a href="/forum/">Terug naar het forum</a>';
+			echo '<h2>Dit gedeelte van het forum is niet zichtbaar voor u, of het bestaat &uuml;berhaupt niet.</h2>
+				<a href="/forum/">Terug naar het forum</a>';
 		}
 	}
 /***********************************************************************************************************
@@ -388,8 +391,11 @@ class ForumContent extends SimpleHTML {
 				echo '<a class="forumpostlink" name="laatste"><stong>Citeren:</strong></a><br /><br />';
 				$iTekstareaRegels=20;
 			}
-			// link om het tekst-vak groter te maken.
-			echo '<a href="#laatste" onclick="vergrootTextarea(\'forumBericht\', 10)" name="Vergroot het invoerveld">invoerveld vergroten &raquo;</a><br />';
+			if($this->_forum->magBerichtToevoegen($iTopic, $aBericht['open'], 'P_FORUM_POST')){	
+				// link om het tekst-vak groter te maken.
+				echo '<a href="#laatste" onclick="vergrootTextarea(\'forumBericht\', 10)" name="Vergroot het invoerveld">
+					invoerveld vergroten &raquo;</a><br />';
+			}			
 			//berichtje weergeven  voor moderators als het topic gesloten is.
 			if($this->_forum->_lid->hasPermission('P_FORUM_MOD') AND $aBericht['open']==0){
 				echo '<br /><strong>Dit topic is gesloten, u mag reageren omdat u beheerder bent.</strong>';
