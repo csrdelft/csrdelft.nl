@@ -52,7 +52,8 @@ function main() {
 		elseif (preg_match("/^strtotime\s+(.+)$/", $input, $matches)) {
 			echo date('r',strtotime($matches[1])) . "\n";
 		}
-		elseif (preg_match("/^adx\s+([^|]+)\|([^|]+)\|([^|]+)\|([^|]+)$/", $input, $matches)) {
+		elseif (preg_match("/^adx\s+([^|]+)\|([^|]+)\|([^|]+)?\|([^|]+)$/", $input, $matches)) {
+			print_r($matches);
 			$datum = strtotime("{$matches[1]} 18:00");
 			$maaltrack->addMaaltijd($datum, $matches[2], $matches[3], $matches[4]) or print($maaltrack->getError()."\n");
 		}
