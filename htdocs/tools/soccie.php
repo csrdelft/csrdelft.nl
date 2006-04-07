@@ -2,42 +2,45 @@
 error_reporting(E_ALL);
 
 
-define('LIB_PATH', '/srv/www/www.csrdelft.nl/lib');
-define('TMP_PATH', '/srv/www/www.csrdelft.nl/tmp');
-define('ETC_PATH', '/srv/www/www.csrdelft.nl/etc/');
-ini_set('include_path', LIB_PATH . ':' . ini_get('include_path'));
+require_once('/srv/www/www.csrdelft.nl/lib/include.config.php');
+require_once('include.common.php');
 require_once('class.mysql.php');
 require_once('blowfish/blowfish.php');
-
+if(!opConfide()){
+	echo 'FAALHAASCH: ga fietsen stelen!'; 
+	exit;
+}
 $db = new MySQL();
 $db->connect();
-
-$instellingen=parse_ini_file(ETC_PATH.'/soccie.ini');
-
-
+$instellingen=parse_ini_file(ETC_PATH.'soccie.ini');
 
 if(isset($_POST['saldi'])){
 	//blowfish klasse laden
 	$blowfish=new Crypt_blowfish($instellingen['secret-key']);
 	$sXml=$blowfish->decrypt(base64_decode($_POST['saldi']));
-	//dingen in een bestand rossen
+	//dingen eventueel in een bestand rossen
 	//$fp=fopen('../../data/soccie.xml', 'w'); fwrite($fp, $sXml);
 	$aSocciesaldi=simplexml_load_string($sXml);
-	//ff tellen
-	$iAantal=count($aSocciesaldi);
-	$bOk=true;
-	foreach($aSocciesaldi as $aSocciesaldo){
-		$query="UPDATE socciesaldi SET saldo=".$aSocciesaldo->saldo." WHERE soccieID=".$aSocciesaldo->id." AND createTerm='".$aSocciesaldo->createTerm."' LIMIT 1;";
-		//echo $query."\r\n";
-		if(!$db->query($query)){
-			$bOk=false;
-			echo 'Een fout. MySQL gaf terug: '.mysql_error()."\r\n";
+	//controleren of we wel een object krijgen:
+	if(is_object($aSocciesaldi)){
+		//ff tellen om een getal te melden in de statusmelding
+		$iAantal=count($aSocciesaldi);
+		$bOk=true;
+		foreach($aSocciesaldi as $aSocciesaldo){
+			$query="UPDATE socciesaldi SET saldo=".$aSocciesaldo->saldo." WHERE soccieID=".$aSocciesaldo->id." AND createTerm='".$aSocciesaldo->createTerm."' LIMIT 1;";
+			if(!$db->query($query)){
+				//scheids, er gaet een kwerie mis, ff een feutmelding printen.
+				$bOk=false;
+				echo 'Een fout. MySQL gaf terug: '.mysql_error()."\r\n";
+			}
 		}
-	}
-	if($bOk){
-		echo '[ '.$iAantal.' regels ontvangen.... OK ]';
+		if($bOk){
+			echo '[ '.$iAantal.' regels ontvangen.... OK ]';
+		}else{
+			echo 'FAALHAASCH ';
+		}
 	}else{
-		echo 'FAALHAASCH '.mysql_error();
+		echo 'FAALHAASH, dit is chaos!';
 	}
 }else{
 	echo 'FAALHAASCH, geen input';
