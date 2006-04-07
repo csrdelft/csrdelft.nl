@@ -29,10 +29,9 @@ function matchCIDR($addr, $cidr) {
 }
 
 function email_like($email) {
-	$regexp="/^[a-z0-9]+([_\\.-][a-z0-9]+)*@([a-z0-9]+([\.-][a-z0-9]+)*)+\\.[a-z]{2,}$/i";
-	if ( !preg_match($regexp, $email) ) return false;
-	return true;
+	return preg_match("/^[a-z0-9]+([_\\.-][a-z0-9]+)*@([a-z0-9]+([\.-][a-z0-9]+)*)+\\.[a-z]{2,}$/i", $email);
 }
+
 //http://nl.php.net/manual/en/function.in_array.php
 function array_values_in_array($needles, $haystack) {
 	if(is_array($needles)){
@@ -82,8 +81,7 @@ function mb_htmlentities($string){
 }
 
 function opConfide() {
-	if (isset($_SERVER['REMOTE_ADDR']) and in_array($_SERVER['REMOTE_ADDR'],explode(':',CONFIDE_IP))) return true;
-	else return false;
+	return ( isset($_SERVER['REMOTE_ADDR']) and defined('CONFIDE_IP') and in_array($_SERVER['REMOTE_ADDR'],explode(':',CONFIDE_IP)) );
 }
 function getDateTime(){
 	return date('Y-m-d H:i:s');
