@@ -149,7 +149,7 @@ function main() {
 					#$lid->diff_to_vab();
 					
 					# om te voorkomen dat een refresh opnieuw een submit doet
-					$myurl = $state->getMyUrl(true);
+					$myurl = $state->getMyUrl();
 					header("Location: {$myurl}");
 					exit;
 				case 2:

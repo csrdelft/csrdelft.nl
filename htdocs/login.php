@@ -13,20 +13,19 @@ session_start();
 $db = new MySQL();
 $lid = new Lid($db);
 
-# ok_url beetje checken, zodat er geen zooi in geinsert wordt.
-if ($lid->login($_POST['user'],$_POST['pass']) and preg_match("/[^ \"\n\r\t<]*?/", $_POST['ok_url'])) {
-	header("Location: {$_POST['ok_url']}");
-	exit;
+# ok_url en user/pass invoer checken
+if (isset($_POST['url']) and preg_match("/^[\w.\/]+$/", $_POST['url'])
+	and isset($_POST['user']) and isset($_POST['pass'])
+	and $_POST['user'] != '' and $_POST['pass'] != '' ) {
+	
+	if ($lid->login(strval($_POST['user']),strval($_POST['pass']))) {
+		header("Location: http://csrdelft.nl{$_POST['url']}");
+	} else {
+		$_SESSION['auth_error'] = "Ongeldige gebruiker of wachtwoord";
+		header("Location: http://csrdelft.nl{$_POST['url']}");
+	}
 }
 
-$_SESSION['auth_error'] = "Ongeldige gebruiker of wachtwoord";
-# beetje checken, zodat er geen zooi in geinsert wordt.
-if (preg_match("/[^ \"\n\r\t<]*?/", $_POST['not_ok_url'])) {
-	header("Location: {$_POST['not_ok_url']}");
-	exit;
-}
-
-header("Location: /");
 exit;
 
 ?>

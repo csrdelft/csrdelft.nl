@@ -55,15 +55,14 @@ EOT
 			print(<<<EOT
 <form id="frm_login" action="/login.php" method="post">
 <p>
-<input type="hidden" name="ok_url" value="{$_SERVER["REQUEST_URI"]}" />
-<input type="hidden" name="not_ok_url" value="{$_SERVER["REQUEST_URI"]}" />
+<input type="hidden" name="url" value="{$_SERVER["REQUEST_URI"]}" />
 Naam:<br /><input type="text" name="user" class="tekst" style="width: 140px;" /><br />
 Wachtwoord:<br /><input type="password" name="pass" class="tekst" style="width:140px;" /><br />
 EOT
 			);
 
 			if (isset($_SESSION['auth_error'])) {
-				print('<span class="bodyrood">' . htmlspecialchars($_SESSION['auth_error']) . '</span>' . "\n");
+				print('<span class="bodyrood">' . htmlspecialchars($_SESSION['auth_error']) . '</span><br />' . "\n");
 				unset($_SESSION['auth_error']);
 			}
 			print (<<<EOT

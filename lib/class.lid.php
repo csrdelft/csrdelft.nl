@@ -242,7 +242,7 @@ class Lid {
 					$this->_formerror[$veld] = "Ongeldige karakters, gebruik reguliere tekst:";
 				} elseif (mb_strlen($invoer) > $max_lengte) {
 					$this->_formerror[$veld] = "Gebruik maximaal {$max_lengte} karakters:";
-				} elseif ($this->nickExists($invoer)) {
+				} elseif ($invoer != "" and $this->nickExists($invoer)) {
 					$this->_formerror[$veld] = "Deze bijnaam is al in gebruik.";
 				} else {
 					# bewaar oude en nieuwe waarde in delta
@@ -288,8 +288,8 @@ class Lid {
 				# is het wel een wijziging?
 				if ($invoer != $this->_tmpprofile[$veld]) {
 					# geldige telefoonnummers...
-					if (!preg_match('/^(\d{3}-\d{7}|\d{2}-\d{8}|\+\d{10-20})$/', $invoer) and $invoer != "") {
-						$this->_formerror[$veld] = "Geldig formaat: 015-2135681; 06-12345678; +31152135681; +31612345678";
+					if (!preg_match('/^(\d{4}-\d{6}|\d{3}-\d{7}|\d{2}-\d{8}|\+\d{10-20})$/', $invoer) and $invoer != "") {
+						$this->_formerror[$veld] = "Geldig formaat: 0187-123456; 015-2135681; 06-12345678; +31152135681";
 					} else {
 						# bewaar oude en nieuwe waarde in delta
 						$this->_delta['diff'][] = array (
@@ -417,12 +417,16 @@ class Lid {
 	function getFormErrors() { return $this->_formerror; }
 
 	function diff_to_sql() {
-		$sqldata = array();
-		foreach ($this->_delta['diff'] as $diff)
-		$sqldata[$diff['veld']] = $this->_db->escape($diff['nieuw']);
+		# Zijn er wel wijzigingen?
+		if (isset($this->_delta['diff']) and is_array($this->_delta['diff']) and count($this->_delta['diff']) > 0) {
+			$sqldata = array();
+			foreach ($this->_delta['diff'] as $diff) {
+				$sqldata[$diff['veld']] = $this->_db->escape($diff['nieuw']);
+			}
 
-		# opslaan van de waarden in de database
-		$this->_db->update_a('lid', 'uid', $this->_delta['uid'], $sqldata);
+			# opslaan van de waarden in de database
+			$this->_db->update_a('lid', 'uid', $this->_delta['uid'], $sqldata);
+		}
 	}
 
 
