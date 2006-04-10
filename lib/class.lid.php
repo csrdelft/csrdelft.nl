@@ -255,6 +255,31 @@ class Lid {
 			}
 		}
 
+		# 7. Website
+		$veld = 'website';
+		$max_lengte = 80;
+
+		if (!isset($_POST['frmdata'][$veld])) {
+			$this->_formerror[$veld] = "Whraagh! ik mis een veld in de data! --> {$veld}";
+		} else {
+			$invoer = strval($_POST['frmdata'][$veld]);
+			# is het wel een wijziging?
+			if ($invoer != $this->_tmpprofile[$veld]) {
+				# controleren op juiste inhoud...
+				if ($invoer != "" and (!ctype_print($invoer) or !preg_match("#([\w]+?://[^ \"\n\r\t<]*?)#is",$invoer) ) ) {
+					$this->_formerror[$veld] = "Ongeldige karakters:";
+				} elseif (mb_strlen($invoer) > $max_lengte) {
+					$this->_formerror[$veld] = "Gebruik maximaal {$max_lengte} karakters:";
+				} else {
+					# bewaar oude en nieuwe waarde in delta
+					$this->_delta['diff'][] = array (
+						'veld' => $veld,
+						'oud'  => $this->_tmpprofile[$veld],
+						'nieuw'  => $invoer
+					);
+				}
+			}
+		}
 			
 		# 3. forum-instellingen
 		$veld = 'forum_name';
@@ -362,8 +387,7 @@ class Lid {
 			}
 		}
 		
-		
-		# password veranderen
+		# 8. password veranderen
 		$velden = array('oldpass', 'nwpass', 'nwpass2');
 		$pwveldenset = true;
 		# controleren of velden in de invoer zitten

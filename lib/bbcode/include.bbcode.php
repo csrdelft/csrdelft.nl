@@ -19,11 +19,8 @@ require_once("bbcode.php");
 # bbview wordt gebruikt als tekst die uit de database komt
 # op het scherm gezet wordt.
 function bbview ($message, $uid) {
-	$message = htmlentities($message, ENT_COMPAT, 'UTF-8');
-	//$message = htmlentities($message);
-	
-	$message = str_replace("\n", "<br />\n", $message);
-	$message = str_replace("\r", "", $message);
+	$message = mb_htmlentities($message);
+	$message=nl2br($message);
 	$message = bbencode_second_pass($message, $uid);
 	$message =html_unconvert($message);
 	return $message;
@@ -35,8 +32,7 @@ function bbedit ($message, $uid) {
  	# Haal de uid-getallen uit de bbcode tags
 	$message = preg_replace('/\:(([a-z0-9]:)?)' . $uid . '/s', '', $message);
 	# We willen in ieder geval dubbele quotes omzetten vanwege het tekstvak...
-	$message = htmlentities($message, ENT_QUOTES, 'UTF-8');
-	//$message = htmlentities($message);
+	$message = mb_htmlentities($message);
 	$message = str_replace('<br />', "\n", $message);
 	$message = unprepare_message($message);
 	return $message;

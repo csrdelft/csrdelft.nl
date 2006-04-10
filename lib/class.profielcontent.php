@@ -45,6 +45,12 @@ class ProfielContent extends SimpleHTML {
 				foreach($profiel as $key => $value) $profhtml[$key] = mb_htmlentities($value);
 				$profhtml['fullname'] = mb_htmlentities(str_replace('  ', ' ',implode(' ',array($profiel['voornaam'],$profiel['tussenvoegsel'],$profiel['achternaam']))));
 				
+				$profhtml['website_kort'] = $profhtml['website'];
+				if (mb_strlen($profhtml['website_kort']) > 25) {
+					$profhtml['website_kort'] = substr($profhtml['website_kort'], 0, 25) . '...';
+				}
+				
+				
 				# leden-foto
 				if (file_exists( HTDOCS_PATH.'leden/pasfotos/'.$profiel['uid'].'.gif'))
 					$foto = '<img src="/leden/pasfotos/'.$profiel['uid'].'.gif" />';
@@ -122,6 +128,7 @@ Kring: {$profhtml['moot']}.{$profhtml['kring']}
 ICQ: {$profhtml['icq']}<br />
 MSN: {$profhtml['msn']}<br />
 Skype: {$profhtml['skype']}<br />
+Website: <a href="{$profhtml['website']}" target="_blank">{$profhtml['website_kort']}</a><br />
 Eetwens: {$profhtml['eetwens']}<br />
 {$sSaldo}
 </td>
@@ -175,13 +182,14 @@ EOT
 				$form[0]['woonplaats'] = array('input',"Woonplaats:");
 				$form[0]['land'] = array('input',"Land:");
 				$form[0]['telefoon'] = array('input',"Telefoon:");
-				$form[0]['mobiel'] = array('input',"Pauper:",'regexp',"/^[-+\d]{10,20}$/");
+				$form[0]['mobiel'] = array('input',"Pauper:");
 				$form[0]['email'] = array('input',"Email:");
 				$form[0]['icq'] = array('input',"ICQ:");
 				$form[0]['msn'] = array('input',"MSN:");
 				$form[0]['skype'] = array('input',"Skype:");
+				$form[0]['website'] = array('input',"Website:");
 
-				$form[0][] = array('ztekst',"&nbsp;","Weergave van namen op het Forum<br />(dit is wat je zelf ziet, niet om wat anderen zien!):");
+				$form[0][] = array('ztekst',"&nbsp;","Weergave van namen op het Forum<br />(dit is wat je zelf ziet, niet wat anderen zien!):");
 				$form[0]['forum_name'] = array('select', "Forum:", array('civitas' => 'Toon Am. / Ama.','nick' => 'Toon bijnamen'));
 
 				$form[1]['o_adres'] = array('input',"Adres Ouders:");
@@ -189,8 +197,6 @@ EOT
 				$form[1]['o_woonplaats'] = array('input',"Woonplaats Ouders:");
 				$form[1]['o_land'] = array('input',"Land Ouders:");
 				$form[1]['o_telefoon'] = array('input',"Telefoon Ouders:");
-				#$form[1]['studie'] = array('input',"Studie:");
-				#$form[1]['studiejaar'] = array('input',"Studiejaar:");
 
 				$form[1][] = array('ztekst',"&nbsp;","Vaste eetgewoontes (vego etc):");
 				$form[1]['eetwens'] = array('input',"Eetwens: (max 20 tekens)");
