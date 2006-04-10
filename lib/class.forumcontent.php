@@ -169,7 +169,7 @@ class ForumContent extends SimpleHTML {
 			}else{//$aTopics is geen array, dus bevat geen berichten.
 				$iAantalTopics=0;
 				echo '<tr><td colspan="3">Deze categorie bevat nog geen berichten of deze pagina bestaat niet.</td></tr>';
-				$aTopic['rechten_read']==$this->_forum->getRechten_post($iCat);
+				$aTopic['rechten_post']=$this->_forum->getRechten_post($iCat);
 			}
 			//nieuw topic formuliertje
 			//kijken of er wel gepost mag worden en of de categorie bestaat.
@@ -401,8 +401,8 @@ class ForumContent extends SimpleHTML {
 				echo '<br /><strong>Dit topic is gesloten, u mag reageren omdat u beheerder bent.</strong>';
 			}
 			echo '</td><td class="forumtekst">';
-			if($this->_forum->magBerichtToevoegen($iTopic, $aBericht['open'], 'P_FORUM_POST')){	
-			//if($this->_forum->magBerichtToevoegen($iTopic, $aBericht['open'], $rechten_post)){ 
+			//if($this->_forum->magBerichtToevoegen($iTopic, $aBericht['open'], 'P_FORUM_POST')){	
+			if($this->_forum->magBerichtToevoegen($iTopic, $aBericht['open'], $rechten_post)){ 
 			//^ nu werkt dit nog niet, omdat htdocs/forum/toevoegen.php er nog niet mee kan omgaan.
 				echo '<form method="post" action="/forum/toevoegen/'.$iTopic.'"><p>';
 				echo '<textarea name="bericht" id="forumBericht" class="tekst" rows="'.$iTekstareaRegels.'" cols="80" style="width: 100%;" >';

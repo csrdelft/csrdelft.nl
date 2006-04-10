@@ -244,6 +244,7 @@ class Forum {
 				topic.categorie != 4 AND
 				topic.categorie != 6 AND
 				topic.categorie != 7 AND
+				topic.categorie != 8 AND
 				topic.zichtbaar='zichtbaar'
 			ORDER BY
 				post.datum DESC
