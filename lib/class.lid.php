@@ -38,6 +38,13 @@ class Lid {
 	
 	# profiel dat we tijdelijk openen om te wijzigen of af te beelden
 	var $_tmpprofile;
+	# in delta worden veranderingen die gemaakt worden in profiel opgeslagen
+	# de veranderingen worden in loadPostTmpProfile ontdekt door POST-invoer
+	# met het huidige profiel te vergelijken, en de verschillen worden dan in
+	# delta gezet. vervolgens kan de functie delta_to_xml er een xml bestandje van
+	# maken, delta_to_sql kan de verandering in sql doorvoeren, en delta_to_ldap
+	# kan de veranderingen naar ldap wegschrijren
+	var $_delta;
 	# Hierin worden tijdens controleren van invoer foutmeldingen gezet die
 	# dan weer worden afgebeeld door ProfielContent
 	var $_formerror = array();
@@ -74,7 +81,6 @@ class Lid {
 			if ($this->_checkpw($profile['password'], $pass)) {
 				$this->_profile = $profile;
 				$_SESSION['_uid'] = $profile['uid'];
-				#echo "Inloggen met uid {$SESSION['_uid']} gelukt!"; 
 				return true;
 			}
 		}
@@ -85,7 +91,6 @@ class Lid {
 			if ($this->_checkpw($profile['password'], $pass)) {
 				$this->_profile = $profile;
 				$_SESSION['_uid'] = $profile['uid'];
-				#echo "Inloggen met nick gelukt!"; 
 				return true;
 			}
 		}
@@ -186,118 +191,224 @@ class Lid {
 	# profiel ingeladen, zodat we snel kunnen vergelijken.
 	
 	# Als een ingevulde waarde verschilt van de oude, dan controleren we de nieuwe waarde, en
-	# als het klopt dan zetten we de nieuwe waarde klaar om de oude te gaan vervangen.
+	# als het klopt dan zetten we de nieuwe waarde klaar in $this->_delta om de oude te gaan vervangen.
 	function loadPostTmpProfile() {
 		# foutmeldingen leeggooien
 		$this->_formerror = array();
+		# uid waarvoor we wijzingen in delta zetten
+		$this->_delta['uid'] = $this->_tmpprofile['uid'];
 		
-		# nieuwe waarden
-		$delta = array();
-		
-		# eerst de tekstvelden
-		$velden = array('adres' => 100, 'postcode' => 7, 'woonplaats' => 50, 'land' => 50, 'nickname' => 20, /*'studie' => 30,*/
+		# 1. eerst de tekstvelden die het lid zelf mag wijzigen
+		$velden = array('adres' => 100, 'postcode' => 7, 'woonplaats' => 50, 'land' => 50,
 			'o_adres' => 100, 'o_postcode' => 7, 'o_woonplaats' => 50, 'o_land' => 50, 'skype' => 20, 'eetwens' => 20 );
+		# voor al deze veldnamen...
 		foreach($velden as $veld => $max_lengte) {
-			$invoer[$veld] = (isset($_POST['frmdata'][$veld])) ? $_POST['frmdata'][$veld] : "";
-			if ($invoer[$veld] != $this->_tmpprofile[$veld]) {
-				# N.B. utf-8 decode toegevoegd als hack...
-				if ($invoer[$veld] != "" and !ctype_print(utf8_decode($invoer[$veld]))) {
-					$this->_formerror[$veld] = "Ongeldige karakters, gebruik reguliere tekst:";
-				} elseif (mb_strlen($invoer[$veld]) > $max_lengte) {
-					$this->_formerror[$veld] = "Gebruik maximaal {$max_lengte} karakters:";
-				} else {
-					# bewaar invoer.
-					$delta[$veld] = $invoer[$veld];
-				}
-			}
-		}
-		
-		# nickname mag nog niet voorkomen N.B. deze nickname search is *case-insensitive*
-		$veld = 'nickname';
-		# kijk of nickname anders is dan de oude
-		if ($invoer[$veld] != $this->_tmpprofile['nickname']) {
-			if ($this->nickExists($invoer[$veld])) $this->_formerror[$veld] = "Deze bijnaam is al in gebruik.";
-			else $delta['nickname'] = $invoer[$veld];
-		}
-			
-		# forum-instellingen
-		$invoer['forum_name'] = (isset($_POST['frmdata']['forum_name'])) ? $_POST['frmdata']['forum_name'] : 'civitas';
-		if ($invoer['forum_name'] != 'civitas' and $invoer['forum_name'] != 'nick') $invoer['forum_name'] = 'civitas';
-		
-		# telefoonvelden
-		$velden = array('telefoon', 'mobiel', 'o_telefoon');
-		foreach ($velden as $veld) {
-			$invoer[$veld] = (isset($_POST['frmdata'][$veld])) ? $_POST['frmdata'][$veld] : "";
-			if (!preg_match('/^\+?[-()\d]{7,20}$/',$invoer[$veld]) and $invoer[$veld] != "")
-				$this->_formerror[$veld] = "Gebruik +, -, (, ) en 0-9, en 7 tot 10 nummers:";
-		}
-		
-		# icq nummer
-		$veld = 'icq';
-		$invoer[$veld] = (isset($_POST['frmdata'][$veld])) ? $_POST['frmdata'][$veld] : "";
-		if (!preg_match('/^\d{5,10}$/',$invoer[$veld]) and $invoer[$veld] != "")
-			$this->_formerror[$veld] = "Gebruik 5 tot 10 getallen:";
-
-		# emailvelden
-		$velden = array('email', 'msn');
-		foreach ($velden as $veld) {
-			if (isset($_POST['frmdata'][$veld]) and $_POST['frmdata'][$veld] != "") {
-				$invoer[$veld] = $_POST['frmdata'][$veld];
-				# staat er wel een @ in?
-				if (strpos($invoer[$veld],'@') === false) {
-					# zo nee, dan is het zowieso ongeldig
-					$this->_formerror[$veld] = "Ongeldig formaat email-adres:";
-				} else {
-					# anders gaan we m ontleden en controleren
-					list ($usr,$dom) = split ('@', $invoer[$veld]);
-					if (strlen($usr) > 50) {
-						$this->_formerror[$veld] = "Gebruik max. 50 karakters voor de @:";
-					} elseif (!preg_match("/^[-\w.]+$/", $usr)) {
-						$this->_formerror[$veld] = "Het adres bevat ongeldige karakters voor de @:";
-					} elseif (!preg_match("/^[a-z0-9]+([-.][a-z0-9]+)*\\.[a-z]{2,4}$/i", $dom)) {
-						$this->_formerror[$veld] = "Het domein is ongeldig:";
-					} elseif (!checkdnsrr($dom, 'A') and !checkdnsrr($dom, 'MX')) {
-						$this->_formerror[$veld] = "Het domein bestaat niet:";
-					} elseif (!checkdnsrr($dom, 'MX')) {
-						$this->_formerror[$veld] = "Het domein is niet geconfigureerd om email te ontvangen:";
+			# kijken of ze in POST voorkomen, zo niet...
+			if (!isset($_POST['frmdata'][$veld])) {
+				$this->_formerror[$veld] = "Whraagh! ik mis een veld in de data! --> {$veld}";
+			} else {
+				$invoer = strval($_POST['frmdata'][$veld]);
+				# is het wel een wijziging?
+				if ($invoer != $this->_tmpprofile[$veld]) {
+					# controleren op juiste inhoud...
+					if ($invoer != "" and !ctype_print($invoer)) {
+						$this->_formerror[$veld] = "Ongeldige karakters, gebruik reguliere tekst:";
+					} elseif (mb_strlen($invoer) > $max_lengte) {
+						$this->_formerror[$veld] = "Gebruik maximaal {$max_lengte} karakters:";
+					} else {
+						# bewaar oude en nieuwe waarde in delta
+						$this->_delta['diff'][] = array (
+							'veld' => $veld,
+							'oud'  => $this->_tmpprofile[$veld],
+							'nieuw'  => $invoer
+						);
 					}
 				}
-			} else $invoer[$veld] = "";
-		}
-		
-		# password veranderen
-		# bla speciaal oldpass,nwpass,nwpass2
-		$oldpass = (isset($_POST['frmdata']['oldpass'])) ? $_POST['frmdata']['oldpass'] : "";
-		$nwpass = (isset($_POST['frmdata']['nwpass'])) ? $_POST['frmdata']['nwpass'] : "";
-		$nwpass2 = (isset($_POST['frmdata']['nwpass2'])) ? $_POST['frmdata']['nwpass2'] : "";
-		
-		$tmperror = "";
-		# alleen actie ondernemen als er een oud password is ingevuld
-		if ($oldpass != "" or $nwpass != "" or $nwpass2 != "") {
-			if ($oldpass == "" and ($nwpass != "" or $nwpass2 != "")) {
-				$this->_formerror['oldpass'] = "Vul ook uw huidige wachtwoord in:";
-			# we kijken of het oude wachtwoord klopt
-			} elseif (!$this->_checkpw($this->_profile['password'], $oldpass)) {
-				$this->_formerror['oldpass'] = "Het huidige wachtwoord is onjuist:";
-			# of er wat nieuws is ingevuld...
-			} elseif ($nwpass == "" and $nwpass2 == "") {
-				$this->_formerror['nwpass'] = "Vul ook het nieuwe wachtwoord 2x in:";
-			# daarna of de twee nieuwe overeenkomen
-			} elseif($nwpass != $nwpass2) {
-				$this->_formerror['nwpass'] = "De nieuwe wachtwoorden komen niet overeen:";
-			# daarna of het nieuwe wel aan de veiligheidscriteria voldoet
-			} elseif(!$this->_isSecure($this->_profile['uid'], $this->_profile['nickname'], $nwpass, $tmperror)) {
-				$this->_formerror['nwpass'] = $tmperror;
-			# anders is het wel ok...
-			} else {
-				$invoer['password'] = $this->_makepasswd($nwpass);
 			}
 		}
 		
-		# invoer kopieren naar dit object
-		$this->_tmpprofile = $invoer;
-		$this->_tmpprofile['uid'] = $this->_profile['uid'];
+		# 2. Nickname -> nickname mag nog niet voorkomen N.B. deze nickname search is *case-insensitive*
+		$veld = 'nickname';
+		$max_lengte = 20;
+
+		if (!isset($_POST['frmdata'][$veld])) {
+			$this->_formerror[$veld] = "Whraagh! ik mis een veld in de data! --> {$veld}";
+		} else {
+			$invoer = strval($_POST['frmdata'][$veld]);
+			# is het wel een wijziging?
+			if ($invoer != $this->_tmpprofile[$veld]) {
+				# controleren op juiste inhoud...
+				if ($invoer != "" and !ctype_print($invoer)) {
+					$this->_formerror[$veld] = "Ongeldige karakters, gebruik reguliere tekst:";
+				} elseif (mb_strlen($invoer) > $max_lengte) {
+					$this->_formerror[$veld] = "Gebruik maximaal {$max_lengte} karakters:";
+				} elseif ($this->nickExists($invoer)) {
+					$this->_formerror[$veld] = "Deze bijnaam is al in gebruik.";
+				} else {
+					# bewaar oude en nieuwe waarde in delta
+					$this->_delta['diff'][] = array (
+						'veld' => $veld,
+						'oud'  => $this->_tmpprofile[$veld],
+						'nieuw'  => $invoer
+					);
+				}
+			}
+		}
+
+			
+		# 3. forum-instellingen
+		$veld = 'forum_name';
+		if (!isset($_POST['frmdata'][$veld])) {
+			$this->_formerror[$veld] = "Whraagh! ik mis een veld in de data! --> {$veld}";
+		} else {
+			$invoer = strval($_POST['frmdata'][$veld]);
+			if ($invoer != 'civitas' and $invoer != 'nick') $invoer = 'civitas';
+			# is het wel een wijziging?
+			if ($invoer != $this->_tmpprofile[$veld]) {
+				if ($this->nickExists($invoer)) $this->_formerror[$veld] = "Deze bijnaam is al in gebruik.";
+				else {
+					# bewaar oude en nieuwe waarde in delta
+					$this->_delta['diff'][] = array (
+						'veld' => $veld,
+						'oud'  => $this->_tmpprofile[$veld],
+						'nieuw'  => $invoer
+					);
+				}
+			}
+		}
 		
+		
+		# 4. telefoonvelden
+		$velden = array('telefoon', 'mobiel', 'o_telefoon');
+		foreach ($velden as $veld) {
+			if (!isset($_POST['frmdata'][$veld])) {
+				$this->_formerror[$veld] = "Whraagh! ik mis een veld in de data! --> {$veld}";
+			} else {
+				$invoer = strval($_POST['frmdata'][$veld]);
+				# is het wel een wijziging?
+				if ($invoer != $this->_tmpprofile[$veld]) {
+					# geldige telefoonnummers...
+					if (!preg_match('/^(\d{3}-\d{7}|\d{2}-\d{8}|\+\d{10-20})$/', $invoer) and $invoer != "") {
+						$this->_formerror[$veld] = "Geldig formaat: 015-2135681; 06-12345678; +31152135681; +31612345678";
+					} else {
+						# bewaar oude en nieuwe waarde in delta
+						$this->_delta['diff'][] = array (
+							'veld' => $veld,
+							'oud'  => $this->_tmpprofile[$veld],
+							'nieuw'  => $invoer
+						);
+					}
+				}
+			}
+		}
+		
+		# 5. ICQ nummer
+		$veld = 'icq';
+		if (!isset($_POST['frmdata'][$veld])) {
+			$this->_formerror[$veld] = "Whraagh! ik mis een veld in de data! --> {$veld}";
+		} else {
+			$invoer = strval($_POST['frmdata'][$veld]);
+			# is het wel een wijziging?
+			if ($invoer != $this->_tmpprofile[$veld]) {
+				if (!preg_match('/^\d{5,10}$/',$invoer) and $invoer != "") {
+					$this->_formerror[$veld] = "Gebruik 5 tot 10 getallen:";
+				} else {
+					# bewaar oude en nieuwe waarde in delta
+					$this->_delta['diff'][] = array (
+						'veld' => $veld,
+						'oud'  => $this->_tmpprofile[$veld],
+						'nieuw'  => $invoer
+					);
+				}
+			}
+		}
+
+		# 6. Mailadressen
+		$velden = array('email', 'msn');
+		foreach ($velden as $veld) {
+			if (!isset($_POST['frmdata'][$veld])) {
+				$this->_formerror[$veld] = "Whraagh! ik mis een veld in de data! --> {$veld}";
+			} else {
+				$invoer = strval($_POST['frmdata'][$veld]);
+				# is het wel een wijziging?
+				if ($invoer != $this->_tmpprofile[$veld]) {
+					# staat er wel een @ in?
+					if (strpos($invoer,'@') === false) {
+						# zo nee, dan is het zowieso ongeldig
+						$this->_formerror[$veld] = "Ongeldig formaat email-adres:";
+					} else {
+						# anders gaan we m ontleden en controleren
+						list ($usr,$dom) = split ('@', $invoer);
+						if (strlen($usr) > 50) {
+							$this->_formerror[$veld] = "Gebruik max. 50 karakters voor de @:";
+						} elseif (!preg_match("/^[-\w.]+$/", $usr)) {
+							$this->_formerror[$veld] = "Het adres bevat ongeldige karakters voor de @:";
+						} elseif (!preg_match("/^[a-z0-9]+([-.][a-z0-9]+)*\\.[a-z]{2,4}$/i", $dom)) {
+							$this->_formerror[$veld] = "Het domein is ongeldig:";
+						} elseif (!checkdnsrr($dom, 'A') and !checkdnsrr($dom, 'MX')) {
+							$this->_formerror[$veld] = "Het domein bestaat niet:";
+						} elseif (!checkdnsrr($dom, 'MX')) {
+							$this->_formerror[$veld] = "Het domein is niet geconfigureerd om email te ontvangen:";
+						} else {
+							# bewaar oude en nieuwe waarde in delta
+							$this->_delta['diff'][] = array (
+								'veld' => $veld,
+								'oud'  => $this->_tmpprofile[$veld],
+								'nieuw'  => $invoer
+							);
+						}
+					}
+				}
+			}
+		}
+		
+		
+		# password veranderen
+		$velden = array('oldpass', 'nwpass', 'nwpass2');
+		$pwveldenset = true;
+		# controleren of velden in de invoer zitten
+		foreach ($velden as $veld) {
+			if (!isset($_POST['frmdata'][$veld])) {
+				$this->_formerror[$veld] = "Whraagh! ik mis een veld in de data! --> {$veld}";
+				$pwveldenset = false;
+			}
+		}
+		if ($pwveldenset === true) {
+			$oldpass = strval($_POST['frmdata']['oldpass']);
+			$nwpass = strval($_POST['frmdata']['nwpass']);
+			$nwpass2 = strval($_POST['frmdata']['nwpass2']);
+		
+			# alleen actie ondernemen als er een oud password is ingevuld
+			if ($oldpass != "" or $nwpass != "" or $nwpass2 != "") {
+				if ($oldpass == "" and ($nwpass != "" or $nwpass2 != "")) {
+					$this->_formerror['oldpass'] = "Vul ook uw huidige wachtwoord in:";
+				# we kijken of het oude wachtwoord klopt
+				} elseif (!$this->_checkpw($this->_profile['password'], $oldpass)) {
+					$this->_formerror['oldpass'] = "Het huidige wachtwoord is onjuist:";
+				# of er wat nieuws is ingevuld...
+				} elseif ($nwpass == "" and $nwpass2 == "") {
+					$this->_formerror['nwpass'] = "Vul ook het nieuwe wachtwoord 2x in:";
+				# daarna of de twee nieuwe overeenkomen
+				} elseif($nwpass != $nwpass2) {
+					$this->_formerror['nwpass'] = "De nieuwe wachtwoorden komen niet overeen:";
+				# daarna of het nieuwe wel aan de veiligheidscriteria voldoet
+				} elseif(!$this->_isSecure($this->_profile['uid'], $this->_profile['nickname'], $nwpass, $tmperror)) {
+					$this->_formerror['nwpass'] = $tmperror;
+				# anders is het wel ok...
+				} else {
+					# bewaar oude en nieuwe waarde in delta
+					$this->_delta['diff'][] = array (
+						'veld' => $veld,
+						'oud'  => $this->_tmpprofile[$veld],
+						'nieuw'  => $this->_makepasswd($nwpass)
+					);
+				}
+			}
+		}
+		
+		# als er regels in formerror staan betekent het dat we niet verder gaan met opslaan van
+		# wijzigingen, maar dat we er met een foutmelding nu uit knallen, en de invoer en de
+		# foutmeldingen aan de gebruiker laten tonen
 		if (count($this->_formerror) != 0) return 2;
 		return 0;
 		
@@ -305,13 +416,13 @@ class Lid {
 	function getTmpProfile() { return $this->_tmpprofile; }
 	function getFormErrors() { return $this->_formerror; }
 
-	function saveSqlTmpProfile() {
-		$sqldata = $this->_tmpprofile;
-		foreach ($sqldata as $index => $inhoud) $sqldata[$index] = $this->_db->escape($inhoud);
-		unset ($sqldata['uid']);
+	function diff_to_sql() {
+		$sqldata = array();
+		foreach ($this->_delta['diff'] as $diff)
+		$sqldata[$diff['veld']] = $this->_db->escape($diff['nieuw']);
 
 		# opslaan van de waarden in de database
-		$this->_db->update_a('lid', 'uid', $this->_tmpprofile['uid'], $sqldata);
+		$this->_db->update_a('lid', 'uid', $this->_delta['uid'], $sqldata);
 	}
 
 
@@ -474,7 +585,7 @@ class Lid {
 		}
 		
 		# mysql escape dingesen
-		$zoektern = $this->_db->escape($zoekterm);
+		$zoekterm = $this->_db->escape($zoekterm);
 		$zoekveld = $this->_db->escape($zoekveld);
 		$sort = $this->_db->escape($sort);
 

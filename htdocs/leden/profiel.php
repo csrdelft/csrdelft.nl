@@ -122,7 +122,10 @@ function main() {
 			break;
 		case 'save':
 			# profiel inladen uit db, als dat niet lukt dan mag het niet
-			if (!$lid->loadSqlTmpProfile($uid)) { $error = 1; break; }
+			if (!$lid->loadSqlTmpProfile($uid)) {
+				$error = 1;
+				break;
+			}
 
 			# profiel inladen uit POST, als dat niet lukt kan het zijn dat...
 			# $error = 1 -> we een 'dat mag niet' pagina gaan afbeelden
@@ -132,10 +135,19 @@ function main() {
 				case 0:
 					# alle invoer was juist, wijzigingen doorvoeren.
 					# deze functie doet:
+					
+					# - maak een xml bestandje met de wijzigingen.
+					#$lid->diff_to_xml();
+					
 					# - wijzigingen in SQL opslaan
+					$lid->diff_to_sql();
+					
 					# - wijzigingen in LDAP opslaan
+					#$lid->diff_to_ldap();
+					
 					# - wijzigingen doorgeven aan de Vice-Abactis
-					$lid->saveTmpProfile();
+					#$lid->diff_to_vab();
+					
 					# om te voorkomen dat een refresh opnieuw een submit doet
 					$myurl = $state->getMyUrl(true);
 					header("Location: {$myurl}");
@@ -146,21 +158,24 @@ function main() {
 					$state->setMyState('edit'); 
 					break;
 				case 1:
-					
-					
+					# geen-toegang pagina wordt hieronder ingevuld
+					break;
 			}
 			break;
 	}
 
 	# De pagina opbouwen, met profiel, of met foutmelding
-	if ($error == 0  or $error == 2) {
-		# Het middenstuk
-		require_once('class.profielcontent.php');
-		$midden = new ProfielContent($lid, $state);
-	} else {
-		# geen rechten
-		require_once('class.includer.php');
-		$midden = new Includer('', 'geentoegang.html');
+	switch ($error) {
+		case 0:
+		case 2:
+			# Het middenstuk
+			require_once('class.profielcontent.php');
+			$midden = new ProfielContent($lid, $state);
+			break;
+		default:
+			# geen rechten
+			require_once('class.includer.php');
+			$midden = new Includer('', 'geentoegang.html');
 	}	
 
 	### Kolommen vullen ###
