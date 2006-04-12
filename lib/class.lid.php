@@ -48,7 +48,6 @@ class Lid {
 	# Hierin worden tijdens controleren van invoer foutmeldingen gezet die
 	# dan weer worden afgebeeld door ProfielContent
 	var $_formerror = array();
-	
 
 	function Lid(&$db) {
 		# we starten op aan het begin van een pagina
@@ -601,21 +600,29 @@ class Lid {
 		return ($error == "");
 	}
 
-	function zoekLeden($zoekterm, $zoekveld, $sort, $aStatus) {
+	function zoekLeden($zoekterm, $zoekveld, $moot, $sort) {
 		$leden = array();
-		
-		//de leden statussen controleren
-		$aValide=array('S_LID', 'S_GASTLID', 'S_NOVIET', 'S_OUDLID', 'S_KRINGEL', 'S_NOBODY');
-		if(array_values_in_array($aStatus, $aValide)){
-			$sValideStati="`status`='".implode($aStatus, "' OR `status`='")."'";
-		}else{
-			$sValideStati="`status`='S_LID' OR `status`='S_GASTLID' OR `status`='S_NOVIET'";
-		}
 		
 		# mysql escape dingesen
 		$zoekterm = $this->_db->escape($zoekterm);
 		$zoekveld = $this->_db->escape($zoekveld);
 		$sort = $this->_db->escape($sort);
+
+		# in welke status wordt gezocht, is afhankelijk van wat voor status de
+		# ingelogd persoon heeft
+		# zoeken voor leden
+		if (in_array($this->_profile['status'], array('S_GASTLID', 'S_LID', 'S_NOVIET', 'S_KRINGEL'))) {
+			$statusfilter = "status='S_LID' OR status='S_GASTLID' OR status='S_NOVIET' OR status='S_KRINGEL'";
+		# zoeken voor oudleden
+		} elseif ($this->_profile['status'] == 'S_OUDLID') {
+			$statusfilter = "status='S_OUDLID'";
+		} else {
+			# hier nog wat fixen ofzo...
+			$statusfilter = "status='S_BESTAETNIET'";
+		}
+
+		# als er een specifieke moot is opgegeven, gaan we alleen in die moot zoeken
+		$mootfilter = ($moot != 'alle') ? 'AND moot= '.(int)$moot : '';
 
 		$result = $this->_db->select("
 			SELECT 
@@ -623,11 +630,12 @@ class Lid {
 			FROM 
 				lid 
 			WHERE 
-				`{$zoekveld}` LIKE '%{$zoekterm}%' 
+				{$zoekveld} LIKE '%{$zoekterm}%' 
 			AND 
-				(".$sValideStati.") 
+				($statusfilter) 
+			{$mootfilter}
 			ORDER BY 
-				`{$sort}`");
+				{$sort}");
 		if ($result !== false and $this->_db->numRows($result) > 0) {
 			while ($lid = $this->_db->next($result)) $leden[] = $lid;
 		}

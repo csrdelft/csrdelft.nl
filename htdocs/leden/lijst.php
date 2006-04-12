@@ -46,10 +46,49 @@ function main() {
 
 	if ($lid->hasPermission('P_LEDEN_READ')) {
 		# Het middenstuk
-		# LedenLijstContent gebruikt $_POST voor:
-		# a,wat,waar,kolom,sort
 		require_once('class.ledenlijstcontent.php');
 		$midden = new LedenlijstContent($lid);
+
+		# we gaan kijken of er een zoek-opdracht is gegeven
+		# zo ja, dan gaan we die straks uitvoeren, en zetten we de ingevulde waarden ook weer
+		# terug in de invulvelden
+		if (isset($_POST['a']) and $_POST['a'] == 'zoek') {
+			$form = array();
+		
+			# er is een zoekopdracht opgegeven, we gaan nu de parameters bekijken
+			# eerst de zoekterm ophalen
+			# als 'wat' leeg is, dan wordt er naar alle leden gezocht
+			$form['wat'] = (isset($_POST['wat'])) ? $_POST['wat'] : '';
+			
+			# in welke kolom van de tabel gezocht wordt...
+			# als er niets geldigs is opgegeven, dan op voornaam zoeken
+			$kolommen = array('nickname','voornaam','achternaam','adres','telefoon','mobiel','email','kring');
+			$form['waar'] = (isset($_POST['waar']) and in_array($_POST['waar'],$kolommen)) ? $_POST['waar'] : 'voornaam';
+
+			# zoek in een bepaalde moot (0=alle)
+			$moten = array('alle','1','2','3','4');
+			$form['moot'] = (isset($_POST['moot']) and in_array($_POST['moot'],$moten)) ? $_POST['moot'] : 'alle';
+
+			# kolom waarop gesorteerd wordt
+			$kolommen = array('uid','voornaam','achternaam','email','adres','telefoon','mobiel');
+			$form['sort'] = (isset($_POST['sort']) and in_array($_POST['sort'],$kolommen)) ? $_POST['sort'] : 'achternaam';
+			
+			# kolommen die afgebeeld kunnen worden
+			$kolommen = array('uid','nickname','moot','email','adres','telefoon','mobiel','icq','msn','skype');
+			$form['kolom'] = array();
+			# kijken of er geldige kolommen zijn opgegeven
+			if (isset($_POST['kolom']) AND is_array($_POST['kolom']) AND count($_POST['kolom']) > 0)
+				$form['kolom'] = array_intersect($_POST['kolom'], $kolommen);
+			# als er geen enkele geldige waarde was zelf een voorstel doen
+			# N.B. naam wordt altijd al afgebeeld
+			if (count($form['kolom']) == 0) $form['kolom'] = array('adres', 'email', 'telefoon', 'mobiel');
+
+			# zoekwaarden voor het formulier aan het content-object mededelen
+			$midden->setForm($form);
+
+			# en zoeken dan maar...
+			$midden->setResult($lid->zoekLeden($form['wat'], $form['waar'], $form['moot'], $form['sort']));
+		}
 	} else {
 		# geen rechten
 		require_once('class.includer.php');

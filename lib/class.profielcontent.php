@@ -278,7 +278,6 @@ EOT
 </table>
 <br clear="all">
 <center>
-<span class="tekstrood">N.B. Het opslaan van wijzigigen is op het moment kapot.</span><br />
 <input type="image" src="/images/wijzigingen_opslaan.gif" width=106 height=12 alt="Wijzigingen opslaan" name="foo" value="bar">
 <a href="{$myurl}"><img src="/images/annuleren.gif" width=69 height=12 alt="Annuleren" border="0"></a>
 </center>
