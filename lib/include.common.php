@@ -1,5 +1,6 @@
 <?php
 
+/*
 function getVar($varname, $default = 0) {
 	# het is belangrijk dat eerst POST getest wordt, en dan GET
 	# er zijn functies die hiervan uitgaan. als POST niet eerst getest wordt kunnen er
@@ -19,6 +20,7 @@ function phplog($service, $msg) {
 	syslog(LOG_INFO, $msg);
 	closelog();
 }
+*/
 
 # http://nl.php.net/manual/en/function.ip2long.php
 # User Contributed Notes

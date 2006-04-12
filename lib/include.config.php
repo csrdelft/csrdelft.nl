@@ -21,8 +21,8 @@ define('HTDOCS_PATH', '/srv/www/www.csrdelft.nl/htdocs/');
 define('TMP_PATH', '/srv/www/www.csrdelft.nl/tmp/');
 define('SMARTY_DIR', '/srv/www/www.csrdelft.nl/lib/smarty/');
 
-define('CSR_PICS', 'http://pubcie.csrdelft.nl/images/');
-define('CSR_ROOT','http://pubcie.csrdelft.nl/');
+define('CSR_PICS', 'http://csrdelft.nl/images/');
+define('CSR_ROOT','http://csrdelft.nl/');
 
 # We willen geen sessie-id in de url hebben
 ini_set('session.use_only_cookies', 1);

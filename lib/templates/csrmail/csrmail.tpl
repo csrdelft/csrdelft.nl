@@ -86,8 +86,8 @@ li{
 <table>
 <tr>
 <td class="zijKolom" valign="top">
-<img src="http://pubcie.csrdelft.nl/images/csrmail/logo.jpg" width="150" height="197" alt="logo van C.S.R." />
-<img src="http://pubcie.csrdelft.nl/images/csrmail/balk.gif" width="150px" height="100%" />
+<img src="http://csrdelft.nl/images/csrmail/logo.jpg" width="150" height="197" alt="logo van C.S.R." />
+<img src="http://csrdelft.nl/images/csrmail/balk.gif" width="150px" height="100%" />
 </td>
 <td class="hoofdKolom">
 <h4><font size="-3" face="verdana">Inhoud</font></h4>
