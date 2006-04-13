@@ -1,39 +1,40 @@
+##hele stapel mod-rewrite dingen voor het forum
 RewriteEngine on
 
 ##normaal weergeven
-RewriteRule ^categorie/(.*)/(.*) index.php?forum=$1&pagina=$2
-RewriteRule ^cat/(.*)/(.*) index.php?forum=$1&pagina=$2
-RewriteRule ^categorie/(.*) index.php?forum=$1
-RewriteRule ^cat/(.*) index.php?forum=$1
-RewriteRule ^onderwerp/(.*)/(.*) topic.php?topic=$1&pagina=$2
-RewriteRule ^onderwerp/(.*) topic.php?topic=$1
+RewriteRule ^categorie/([0-9]+)f/([0-9]+) index.php?forum=$1&pagina=$2
+RewriteRule ^cat/([0-9]+)/([0-9]+) index.php?forum=$1&pagina=$2
+RewriteRule ^categorie/([0-9]+) index.php?forum=$1
+RewriteRule ^cat/([0-9]+) index.php?forum=$1
+RewriteRule ^onderwerp/([0-9]+)/([0-9]+) topic.php?topic=$1&pagina=$2
+RewriteRule ^onderwerp/([0-9]+) topic.php?topic=$1
 
 ##tijdelijk om de nieuwe Topic classe te testen....
-RewriteRule ^onderwerp1/(.*) topic1.php?topic=$1
-RewriteRule ^onderwerp2/(.*) topic2.php?topic=$1
+RewriteRule ^onderwerp1/([0-9]+) topic1.php?topic=$1
+RewriteRule ^onderwerp2/([0-9]+) topic2.php?topic=$1
 
 ##toevoegen
-RewriteRule ^onderwerp-toevoegen/(.*) toevoegen.php?forum=$1
-RewriteRule ^toevoegen/(.*) toevoegen.php?topic=$1
-RewriteRule ^reactie/(.*) citeren.php?post=$1
+RewriteRule ^onderwerp-toevoegen/([0-9]+) toevoegen.php?forum=$1
+RewriteRule ^toevoegen/([0-9]+) toevoegen.php?topic=$1
+RewriteRule ^reactie/([0-9]+) citeren.php?post=$1
 
 ##bewerken
-RewriteRule ^bewerken/(.*) bewerken.php?post=$1
+RewriteRule ^bewerken/([0-9]+) bewerken.php?post=$1
 
 ##verwijderen
-RewriteRule ^verwijder-bericht/(.*) verwijderen.php?post=$1
-RewriteRule ^verwijder-onderwerp/(.*) verwijderen.php?topic=$1
+RewriteRule ^verwijder-bericht/([0-9]+) verwijderen.php?post=$1
+RewriteRule ^verwijder-onderwerp/([0-9]+) verwijderen.php?topic=$1
 
 ##andere mod dingen:
-RewriteRule ^sluit-onderwerp/(.*) sluiten.php?topic=$1&sluiten
-RewriteRule ^open-onderwerp/(.*) sluiten.php?topic=$1&openen
-RewriteRule ^maak-plakkerig/(.*) plakkerig.php?topic=$1&plakkerig
-RewriteRule ^maak-niet-plakkerig/(.*) plakkerig.php?topic=$1&niet-plakkerig
-RewriteRule ^keur-goed/(.*) goedkeuren.php?topic=$1
+RewriteRule ^sluit-onderwerp/([0-9]+) sluiten.php?topic=$1&sluiten
+RewriteRule ^open-onderwerp/([0-9]+) sluiten.php?topic=$1&openen
+RewriteRule ^maak-plakkerig/([0-9]+) plakkerig.php?topic=$1&plakkerig
+RewriteRule ^maak-niet-plakkerig/([0-9]+) plakkerig.php?topic=$1&niet-plakkerig
+RewriteRule ^keur-goed/([0-9]+) goedkeuren.php?topic=$1
 
 ##zo, een poll dan maar
 #stemmen
-RewriteRule ^toon-stemming/(.*) topic.php?topic=$1
-RewriteRule ^stem/(.*) stemmen.php?topic=$1
-RewriteRule ^maak-stemming/(.*) stemming.php?cat=$1
+RewriteRule ^toon-stemming/([0-9]+) topic.php?topic=$1
+RewriteRule ^stem/([0-9]+) stemmen.php?topic=$1
+RewriteRule ^maak-stemming/([0-9]+) stemming.php?cat=$1
 RewriteRule ^maak-stemming stemming.php
