@@ -171,7 +171,6 @@ lib/class.maaltrack.php -text
 lib/class.motencontent.php -text
 lib/class.mysql.php -text
 lib/class.nieuws.php -text
-lib/class.nieuwsbeheerContent.php -text
 lib/class.nieuwscontent.php -text
 lib/class.page.php -text
 lib/class.pollcontent.php -text
