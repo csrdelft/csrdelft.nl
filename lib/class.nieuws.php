@@ -19,51 +19,98 @@ require_once ('class.mysql.php');
 class Nieuws {
 
 	### private ###
-
-	var $_messages = array();
-	var $_loadhidden = false;
-	
+	var $_lid;
 	var $_db;
-	function Nieuws(&$db){
-		$this->_db=$db;
+
+	function Nieuws(&$db, &$lid){
+		$this->_db=&$db;
+		$this->_lid=&$lid;
 	}
 	### public ###
 
 	#
-	# Inladen nieuwsberichten
-	# $id == 0 -> alles inladen
-	# $id != 0 -> alleen opgegeven nummer
+	# ophaelen nieuwsberichten
+	# $iBerichtID == 0 -> alles ophaelen
+	# $iBerichtID != 0 -> alleen opgegeven nummer
 	#
-	function loadMessages($id = 0) {
-		# opschonen cache
-		$this->_messages = array();
-
-		# ophalen van de informatie
-		$result = false; $where = ''; $id = (int)$id;
-
-		$query['select'][] = '*';
-		$query['from'] = '`nieuws`';
-		$query['orderby'] = '`datum` DESC';
-
-		if ($id != 0) $query['where'][] = "`id` = {$id}";
-		if (!$this->_loadhidden) $query['where'][] = "`hidden` = '0'";
-		$result = $this->_db->select_a($query);
-
-		# checken of er wat in zit
-        if ($result !== false and $this->_db->numRows($result) > 0) {
-			while ($message = $this->_db->next($result)) {
-				$this->_messages[] = $message;
-			}
+	function getMessages($iBerichtID=0) {
+		$iBerichtID=(int)$iBerichtID;
+		//where clausule klussen
+		$sWhereClause='';
+		if(!$this->_lid->isLoggedIn()){ $sWhereClause.="nieuws.prive!='1' AND "; }
+		if(!$this->isNieuwsMod()){ $sWhereClause.="nieuws.verborgen!='1' AND "; }
+		if($iBerichtID!=0){ $sWhereClause.="nieuws.id=".$iBerichtID." AND "; }
+		
+		$sNieuwsQuery="
+			SELECT
+				nieuws.id as id, 
+				nieuws.datum as datum, 
+				nieuws.titel as titel, 
+				nieuws.tekst as tekst, 
+				nieuws.bbcode_uid as bbcode_uid, 
+				nieuws.uid as uid, 
+					lid.voornaam as voornaam, lid.achternaam as achternaam, lid.tussenvoegsel as tussenvoegsel,
+				nieuws.prive as prive, 
+				nieuws.verborgen as verborgen
+			FROM
+				nieuws
+			INNER JOIN
+				lid ON( nieuws.uid=lid.uid )
+			WHERE
+				".$sWhereClause."
+				1
+			ORDER BY
+				nieuws.datum DESC
+			LIMIT
+				0, 5;";
+		$rNieuwsBerichten=$this->_db->query($sNieuwsQuery);
+		if($iBerichtID!=0){
+			return $this->_db->next($rNieuwsBerichten);
+		}else{
+			return $this->_db->result2array($rNieuwsBerichten);
 		}
-
-		return sizeof($this->_messages);
 	}
+	function getMessage($iBerichtID){ return $this->getMessages($iBerichtID);	}
 
-	# geef de array met nieuwsberichtjes
-	function getMessages() { return $this->_messages; }
-
-	# wel of niet verborgen berichtjes ophalen
-	function setLoadHidden($loadhidden) { $this->_loadhidden = $loadhidden; }
+	//bericht toevoegen
+	function addMessage($titel, $tekst, $bbcode_uid, $prive=false, $verborgen=false){
+		$datum=time();
+		$titel=$this->_db->escape($titel);
+		$tekst=$tekst;
+		if($prive){$prive=1; }else{ $prive=0; }
+		if($verborgen){$verborgen=1; }else{ $verborgen=0; }
+		$uid=$this->_lid->getUid();
+		$sMessageQuery="
+			INSERT INTO
+				nieuws
+			( 
+				datum, titel, tekst, bbcode_uid, uid, prive, verborgen
+			) VALUES (
+				".$datum.", '".$titel."', '".$tekst."', '".$bbcode_uid."', '".$uid."', '".$prive."', '".$verborgen."'
+			);";
+		return $this->_db->query($sMessageQuery);
+	}
+	function editMessage($iBerichtID, $titel, $tekst, $bbcode_uid, $prive=false, $verborgen=false){
+		$iBerichtID=(int)$iBerichtID;
+		$titel=$this->_db->escape($titel);
+		$tekst=$tekst;
+		if($prive){$prive=1; }else{ $prive=0; }
+		if($verborgen){$verborgen=1; }else{ $verborgen=0; }
+		$sMessageQuery="
+			UPDATE
+				nieuws
+			SET
+				titel='".$titel."', 
+				tekst='".$tekst."', 
+				bbcode_uid='".$bbcode_uid."', 
+				prive='".$prive."', 
+				verborgen='".$verborgen."'
+			WHERE
+				id=".$iBerichtID."
+			LIMIT 1;";
+		return $this->_db->query($sMessageQuery);
+	}
+	function isNieuwsMod(){ return $this->_lid->hasPermission('P_NEWS_MOD');}
 }
 
 ?>

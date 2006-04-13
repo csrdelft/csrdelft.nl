@@ -49,10 +49,10 @@ function main() {
 
 	require_once('class.nieuwscontent.php');
 	require_once('class.nieuws.php');
-	$nieuws = new Nieuws($db);
+	$nieuws = new Nieuws($db, $lid);
 	$nc = new NieuwsContent($nieuws);
-	$nieuws->loadMessages();
-	$nc->setChop(500);
+
+	
 
 	### Kolommen vullen ###
 	require_once('class.column.php');

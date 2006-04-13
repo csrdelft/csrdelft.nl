@@ -1,1 +1,13 @@
+###dingen voor de htdocs root.
 AddDefaultCharset utf-8
+RewriteEngine on
+
+###modRewrite dingen
+#nieuws tonen:
+RewriteRule ^nieuws/([0-9]+) nieuws.php?berichtID=$1
+RewriteRule ^nieuws$ nieuws.php
+RewriteRule ^nieuws/$ nieuws.php
+
+#nieuwsbeheer
+RewriteRule ^nieuws/bewerken/([0-9]+) nieuws.php?berichtID=$1&bewerken=true
+RewriteRule ^nieuws/toevoegen$ nieuws.php?toevoegen=true
