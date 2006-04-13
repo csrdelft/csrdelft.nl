@@ -123,7 +123,6 @@ class Lid {
 		$gevraagd = $this->_permissions[$descr];
 
 		# zoek de rechten van de gebruiker op
-		#print_r($_SESSION);
 		$liddescr = $this->_profile['permissies'];
 		# ga alleen verder als er een geldige permissie wordt teruggegeven
 		if (!array_key_exists($liddescr, $this->_perm_user)) return false;
@@ -421,8 +420,8 @@ class Lid {
 				} else {
 					# bewaar oude en nieuwe waarde in delta
 					$this->_delta['diff'][] = array (
-						'veld' => $veld,
-						'oud'  => $this->_tmpprofile[$veld],
+						'veld' => 'password',
+						'oud'  => $this->_tmpprofile['password'],
 						'nieuw'  => $this->_makepasswd($nwpass)
 					);
 				}

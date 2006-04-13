@@ -33,7 +33,8 @@ class LedenlijstContent extends SimpleHTML {
 		'wat' => '',
 		'waar' => 'voornaam',
 		'kolom' => array('adres', 'email', 'telefoon', 'mobiel'),
-		'sort' => 'achternaam'
+		'sort' => 'achternaam',
+		'moot' => 'alle'
 	);
 	# zoekresultaten van de zoekfunctie in de lid-klasse worden
 	# door het hoofdprogramma opgevraegd en hier in gestopt, zodat
