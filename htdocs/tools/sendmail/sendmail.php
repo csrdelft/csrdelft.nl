@@ -8,17 +8,20 @@
 # Hans van Kranenburg
 
 # C.S.R. Delft 2-1-2005
-# gebruikt getVar uit common
-require_once("include.common.php");
 
 main();
 exit();
 
 function main() {
-	include ("maildata.php");
+
+	# instellingen & rommeltjes
+	require_once('/srv/www/www.csrdelft.nl/lib/include.config.php');
+	require_once('include.common.php');
+
+	require_once("maildata.php");
 
 	# Ophalen welk form het is
-	$form_id = getVar('form_id', '');
+	$form_id = (isset($_POST['form_id'])) ? $_POST['form_id'] : 'f3u7z0r';
 	if ($form_id == '' or !isset($form[$form_id])) die ($sendmail['noform_error']);
 
 	# Referer check
@@ -26,7 +29,7 @@ function main() {
 		die ($sendmail['referer_error']);
 
 	# Wie heeft het verzonden?
-	$submit_by = getVar('submit_by', $sendmail['default_submit_by']);
+	$submit_by = (isset($_POST['submit_by'])) ? $_POST['submit_by'] : $sendmail['default_submit_by'];
 
 	# Controleer of maildata goed is ingesteld
 	checkMailData($form[$form_id], 'submit_to');
