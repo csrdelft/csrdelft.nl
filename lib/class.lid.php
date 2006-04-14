@@ -264,7 +264,7 @@ class Lid {
 			# is het wel een wijziging?
 			if ($invoer != $this->_tmpprofile[$veld]) {
 				# controleren op juiste inhoud...
-				if ($invoer != "" and (!is_utf8_print($invoer) or !preg_match("#([\w]+?://[^ \"\n\r\t<]*?)#is",$invoer) ) ) {
+				if ($invoer != "" and (!is_utf8($invoer) or !preg_match("#([\w]+?://[^ \"\n\r\t<]*?)#is",$invoer) ) ) {
 					$this->_formerror[$veld] = "Ongeldige karakters:";
 				} elseif (mb_strlen($invoer) > $max_lengte) {
 					$this->_formerror[$veld] = "Gebruik maximaal {$max_lengte} karakters:";
@@ -453,6 +453,7 @@ class Lid {
 
 
 	function getPermissions() { return $this->_profile['permissies']; }
+	function getStatus()      { return $this->_profile['status']; }
 	function getForumInstelling(){
 		return array('forum_naam' => $this->_profile['forum_name']);
 	}
@@ -599,7 +600,7 @@ class Lid {
 		return ($error == "");
 	}
 
-	function zoekLeden($zoekterm, $zoekveld, $moot, $sort) {
+	function zoekLeden($zoekterm, $zoekveld, $moot, $sort, $zoekstatus = '') {
 		$leden = array();
 		
 		# mysql escape dingesen
@@ -607,36 +608,49 @@ class Lid {
 		$zoekveld = $this->_db->escape($zoekveld);
 		$sort = $this->_db->escape($sort);
 
-		# in welke status wordt gezocht, is afhankelijk van wat voor status de
+		# in welke status wordt gezocht, is afhankelijk van wat voor rechten de
 		# ingelogd persoon heeft
-		# zoeken voor leden
-		if (in_array($this->_profile['status'], array('S_GASTLID', 'S_LID', 'S_NOVIET', 'S_KRINGEL'))) {
-			$statusfilter = "status='S_LID' OR status='S_GASTLID' OR status='S_NOVIET' OR status='S_KRINGEL'";
-		# zoeken voor oudleden
-		} elseif ($this->_profile['status'] == 'S_OUDLID') {
-			$statusfilter = "status='S_OUDLID'";
-		} else {
-			# hier nog wat fixen ofzo...
-			$statusfilter = "status='S_BESTAETNIET'";
+		
+		$statusfilter = '';
+		# we zoeken in leden als
+		# 1. ingelogde persoon dat alleen maar mag of
+		# 2. ingelogde persoon leden en oudleden mag zoeken, maar niet oudleden alleen heeft gekozen
+		if (
+			($this->hasPermission('P_LEDEN_READ') and !$this->hasPermission('P_OUDLEDEN_READ') ) or
+			($this->hasPermission('P_LEDEN_READ') and $this->hasPermission('P_OUDLEDEN_READ') and $zoekstatus != 'oudleden')
+		   ) {
+			$statusfilter .= "status='S_LID' OR status='S_GASTLID' OR status='S_NOVIET' OR status='S_KRINGEL'";
 		}
-
+		# we zoeken in oudleden als
+		# 1. ingelogde persoon dat alleen maar mag of
+		# 2. ingelogde persoon leden en oudleden mag zoeken, maar niet leden alleen heeft gekozen
+		if (
+			(!$this->hasPermission('P_LEDEN_READ') and $this->hasPermission('P_OUDLEDEN_READ') ) or
+			($this->hasPermission('P_LEDEN_READ') and $this->hasPermission('P_OUDLEDEN_READ') and $zoekstatus != 'leden')
+		   ) {
+			if ($statusfilter != '') $statusfilter .= " OR ";
+			$statusfilter .= "status='S_OUDLID'";
+		}
 		# als er een specifieke moot is opgegeven, gaan we alleen in die moot zoeken
 		$mootfilter = ($moot != 'alle') ? 'AND moot= '.(int)$moot : '';
 
-		$result = $this->_db->select("
-			SELECT 
-				* 
-			FROM 
-				lid 
-			WHERE 
-				{$zoekveld} LIKE '%{$zoekterm}%' 
-			AND 
-				($statusfilter) 
-			{$mootfilter}
-			ORDER BY 
-				{$sort}");
-		if ($result !== false and $this->_db->numRows($result) > 0) {
-			while ($lid = $this->_db->next($result)) $leden[] = $lid;
+		# controleer of we ueberhaupt wel wat te zoeken hebben hier
+		if ($statusfilter != '') {
+			$result = $this->_db->select("
+				SELECT
+					* 
+				FROM 
+					lid 
+				WHERE 
+					{$zoekveld} LIKE '%{$zoekterm}%' 
+				AND 
+					($statusfilter) 
+				{$mootfilter}
+				ORDER BY 
+					{$sort}");
+			if ($result !== false and $this->_db->numRows($result) > 0) {
+				while ($lid = $this->_db->next($result)) $leden[] = $lid;
+			}
 		}
 
 		return $leden;

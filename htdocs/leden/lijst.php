@@ -43,8 +43,8 @@ function main() {
 	# Datum
 	require_once('class.includer.php');
 	$datum = new Includer('', 'datum.php');
-
-	if ($lid->hasPermission('P_LEDEN_READ')) {
+	
+	if ($lid->hasPermission('P_LEDEN_READ') or $lid->hasPermission('P_OUDLEDEN_READ')) {
 		# Het middenstuk
 		require_once('class.ledenlijstcontent.php');
 		$midden = new LedenlijstContent($lid);
@@ -69,6 +69,10 @@ function main() {
 			$moten = array('alle','1','2','3','4');
 			$form['moot'] = (isset($_POST['moot']) and in_array($_POST['moot'],$moten)) ? $_POST['moot'] : 'alle';
 
+			# voor gebruikers die leden en oudleden kunnen zoeken
+			$zoek_in_type = array('(oud)?leden','leden','oudleden');
+			$form['status'] = (isset($_POST['status']) and in_array($_POST['status'],$zoek_in_type)) ? $_POST['status'] : '';
+
 			# kolom waarop gesorteerd wordt
 			$kolommen = array('uid','voornaam','achternaam','email','adres','telefoon','mobiel');
 			$form['sort'] = (isset($_POST['sort']) and in_array($_POST['sort'],$kolommen)) ? $_POST['sort'] : 'achternaam';
@@ -89,7 +93,7 @@ function main() {
 			$midden->setForm($form);
 
 			# en zoeken dan maar...
-			$midden->setResult($lid->zoekLeden($form['wat'], $form['waar'], $form['moot'], $form['sort']));
+			$midden->setResult($lid->zoekLeden($form['wat'], $form['waar'], $form['moot'], $form['sort'], $form['status']));
 		}
 	} else {
 		# geen rechten

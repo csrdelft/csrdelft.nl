@@ -29,12 +29,15 @@ class LedenlijstContent extends SimpleHTML {
 	# deze inhoud gaan we ook weer terugzetten in de velden
 	# de waarden hier zijn de standaardwaarden
 	# N.B. naam staat er niet bij, die wordt altijd getoond!
+	# N.B. status staat er ook niet bij, die wordt in view() neergezet
+	#      als die nog niet doorgegeven is vanuit het hoofdprogramma
+	#      met setForm
 	var	$_form = array(
-		'wat' => '',
-		'waar' => 'voornaam',
-		'kolom' => array('adres', 'email', 'telefoon', 'mobiel'),
-		'sort' => 'achternaam',
-		'moot' => 'alle'
+		'wat'    => '',
+		'waar'   => 'voornaam',
+		'kolom'  => array('adres', 'email', 'telefoon', 'mobiel'),
+		'sort'   => 'achternaam',
+		'moot'   => 'alle'
 	);
 	# zoekresultaten van de zoekfunctie in de lid-klasse worden
 	# door het hoofdprogramma opgevraegd en hier in gestopt, zodat
@@ -105,7 +108,7 @@ EOT
 			if ($this->_form['waar'] == $veld) print(" selected");
 			print(">{$kolomtitel[$veld]}</option>\n");
 		}
-		print("</select>, uit moot:\n<select name=\"moot\" class=\"tekst\">");
+		print("</select>, moot:\n<select name=\"moot\" class=\"tekst\">");
 		# moten zijn nogal hard-coded, maar ik denk dat het makkelijker is aan te passen
 		# in de code als het aantal ooit nog veranderd ipv het dynamisch te gaan maken ofzo
 		$zoek_in_moten = array('alle','1','2','3','4');
@@ -114,7 +117,33 @@ EOT
 			if ($this->_form['moot'] == $veld) print(" selected");
 			print(">{$veld}</option>\n");
 		}
-		print("</select>, sorteer daarbij op:\n<select name=\"sort\" class=\"tekst\">");
+		
+		# als ingelogde persoon leesrechten heeft op leden + oudleden maken we een extra
+		# keuzelijstje. zoeken in leden, oudleden, of allebei tegelijk.
+		if ($this->_lid->hasPermission('P_LEDEN_READ') and $this->_lid->hasPermission('P_OUDLEDEN_READ')) {
+			print("</select>\n, status:\n<select name=\"status\" class=\"tekst\">");
+
+			$zoek_in_type = array('(oud)?leden','leden','oudleden');
+
+			if (!isset($this->_form['status'])) {
+				# voor de standaard-optie kijken we naar de status van de ingelogde persoon
+				$mystatus = $this->_lid->getStatus();
+				if ($mystatus == 'S_OUDLID') {
+					$this->_form['status'] = 'oudleden';
+				} elseif (in_array($mystatus, array('S_LID','S_GASTLID','S_NOVIET','S_KRINGEL'))) {
+					$this->_form['status'] = 'leden';
+				} else {
+					$this->_form['status'] = '(oud)?leden';
+				}
+			}
+			foreach ($zoek_in_type as $veld) {
+				print("<option value=\"{$veld}\"");
+				if ($this->_form['status'] == $veld) print(" selected");
+				print(">{$veld}</option>\n");
+			}
+		}		
+		
+		print("</select>\n, sorteer op:\n<select name=\"sort\" class=\"tekst\">");
 		
 		# de velden waarop de uitvoer geselecteerd kan worden
 		$zoek_sort = array('uid','voornaam','achternaam','email','adres','telefoon','mobiel');
