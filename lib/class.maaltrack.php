@@ -48,8 +48,8 @@ class MaalTrack {
 			return false;
 		}
 		
-		# tekst max 200 karakters ctype_print
-		if (!ctype_print($tekst)) {
+		# tekst max 200 karakters
+		if (!is_utf8($tekst)) {
 			$this->_error = "De omschrijving bevat ongeldige tekens."; 
 			return false;
 		}

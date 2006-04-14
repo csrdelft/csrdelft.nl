@@ -198,7 +198,7 @@ class Lid {
 		
 		# 1. eerst de tekstvelden die het lid zelf mag wijzigen
 		$velden = array('adres' => 100, 'postcode' => 7, 'woonplaats' => 50, 'land' => 50,
-			'o_adres' => 100, 'o_postcode' => 7, 'o_woonplaats' => 50, 'o_land' => 50, 'skype' => 20, 'eetwens' => 20 );
+			'o_adres' => 100, 'o_postcode' => 7, 'o_woonplaats' => 50, 'o_land' => 50, 'skype' => 20, 'eetwens' => 40 );
 		# voor al deze veldnamen...
 		foreach($velden as $veld => $max_lengte) {
 			# kijken of ze in POST voorkomen, zo niet...
@@ -209,7 +209,7 @@ class Lid {
 				# is het wel een wijziging?
 				if ($invoer != $this->_tmpprofile[$veld]) {
 					# controleren op juiste inhoud...
-					if ($invoer != "" and !ctype_print($invoer)) {
+					if ($invoer != "" and !is_utf8($invoer)) {
 						$this->_formerror[$veld] = "Ongeldige karakters, gebruik reguliere tekst:";
 					} elseif (mb_strlen($invoer) > $max_lengte) {
 						$this->_formerror[$veld] = "Gebruik maximaal {$max_lengte} karakters:";
@@ -236,7 +236,7 @@ class Lid {
 			# is het wel een wijziging?
 			if ($invoer != $this->_tmpprofile[$veld]) {
 				# controleren op juiste inhoud...
-				if ($invoer != "" and !ctype_print($invoer)) {
+				if ($invoer != "" and !is_utf8($invoer)) {
 					$this->_formerror[$veld] = "Ongeldige karakters, gebruik reguliere tekst:";
 				} elseif (mb_strlen($invoer) > $max_lengte) {
 					$this->_formerror[$veld] = "Gebruik maximaal {$max_lengte} karakters:";
@@ -264,7 +264,7 @@ class Lid {
 			# is het wel een wijziging?
 			if ($invoer != $this->_tmpprofile[$veld]) {
 				# controleren op juiste inhoud...
-				if ($invoer != "" and (!ctype_print($invoer) or !preg_match("#([\w]+?://[^ \"\n\r\t<]*?)#is",$invoer) ) ) {
+				if ($invoer != "" and (!is_utf8_print($invoer) or !preg_match("#([\w]+?://[^ \"\n\r\t<]*?)#is",$invoer) ) ) {
 					$this->_formerror[$veld] = "Ongeldige karakters:";
 				} elseif (mb_strlen($invoer) > $max_lengte) {
 					$this->_formerror[$veld] = "Gebruik maximaal {$max_lengte} karakters:";
@@ -580,9 +580,9 @@ class Lid {
 		# Korter dan 6 of langer dan 16 mag niet...
 		if (mb_strlen($passwd) < 6 or mb_strlen($passwd) > 16) {
 			$error = "Het wachtwoord moet minimaal 6 en maximaal 16 tekens lang zijn. :-/";
-		# ctype_graph -- Check for any printable character(s) except space
-		} elseif (!ctype_print(utf8_decode($passwd))) {
-			$error = "Het nieuwe wachtwoord bevat ongeldige ('non-printable') karakters... :-(";
+		# is het geldige utf8?
+		} elseif (!is_utf8($passwd)) {
+			$error = "Het nieuwe wachtwoord bevat ongeldige karakters... :-(";
 		} elseif (preg_match('/^[0-9]*$/', $passwd)) {
 			$error = "Het nieuwe wachtwoord moet ook letters of leestekens bevatten... :-|";
 		//eisen zijn wat zwaar, deze er even uit halen
