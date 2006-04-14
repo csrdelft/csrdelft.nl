@@ -150,7 +150,7 @@ EOT
 			# bovenste veld
 			if ($i%2 == 0) print("<td valign=\"top\">\n");
 			if ($veld !== false) {
-				print('<input type="checkbox" name="kolom[]" value="{$veld}"');
+				printf('<input type="checkbox" name="kolom[]" value="%s"', $veld);
 				if (in_array($veld, $this->_form['kolom'])) print(" checked");
 				print(">{$kolomtitel[$veld]}\n");
 				if ($i%2 == 0) print("<br />");

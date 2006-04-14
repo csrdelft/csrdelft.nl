@@ -8,8 +8,8 @@ function main() {
 
 	# Let the browser and proxies cache output
 	session_cache_limiter('public');
-	# One-day (60 * 24, in minutes) cache expiration time for output
-	session_cache_expire(60 * 24);
+	# Een uur (30, in minutes) cache expiration time for output
+	session_cache_expire(30);
 
 	# instellingen & rommeltjes
 	require_once('/srv/www/www.csrdelft.nl/lib/include.config.php');
@@ -54,7 +54,7 @@ function main() {
 		# terug in de invulvelden
 		if (isset($_POST['a']) and $_POST['a'] == 'zoek') {
 			$form = array();
-		
+			
 			# er is een zoekopdracht opgegeven, we gaan nu de parameters bekijken
 			# eerst de zoekterm ophalen
 			# als 'wat' leeg is, dan wordt er naar alle leden gezocht
@@ -77,11 +77,13 @@ function main() {
 			$kolommen = array('uid','nickname','moot','email','adres','telefoon','mobiel','icq','msn','skype');
 			$form['kolom'] = array();
 			# kijken of er geldige kolommen zijn opgegeven
-			if (isset($_POST['kolom']) AND is_array($_POST['kolom']) AND count($_POST['kolom']) > 0)
+			if (isset($_POST['kolom']) and is_array($_POST['kolom']) and count($_POST['kolom']) > 0) {
 				$form['kolom'] = array_intersect($_POST['kolom'], $kolommen);
-			# als er geen enkele geldige waarde was zelf een voorstel doen
-			# N.B. naam wordt altijd al afgebeeld
-			if (count($form['kolom']) == 0) $form['kolom'] = array('adres', 'email', 'telefoon', 'mobiel');
+			} else {
+				# als er geen enkele geldige waarde was zelf een voorstel doen
+				# N.B. naam wordt altijd al afgebeeld
+				$form['kolom'] = array('adres', 'email', 'telefoon', 'mobiel');
+			}
 
 			# zoekwaarden voor het formulier aan het content-object mededelen
 			$midden->setForm($form);
