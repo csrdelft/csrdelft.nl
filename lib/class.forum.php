@@ -1086,6 +1086,7 @@ class Topic{
 	* alle functies die per post zijn. dat zij zo. Enkel voor debugging dus dit.
 	*/
 	function getPosts(){
+
 		while($aBericht=$this->nextPost()){
 			$aBerichten[]=$aBericht;
 		}

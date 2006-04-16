@@ -43,7 +43,7 @@ function main() {
 		require_once('class.forum.php');
 		$forum = new Forum($lid, $db);
 		//gebruik de standaard categorie als de categorie niet bestaat of niet gezet is.
-		if(!(isset($_GET['cat']) AND $forum->catExists($_GET['cat']))){
+		if(!(isset($_GET['cat']) AND $forum->catExistsVoorUser($_GET['cat']))){
 			$iCatID=7;
 		}else{
 			$iCatID=(int)$_GET['cat'];

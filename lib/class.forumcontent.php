@@ -656,7 +656,7 @@ Lege velden worden genegeerd.<br /><br />
 			case 'forum': if(isset($_GET['forum'])){ $this->viewTopics((int)$_GET['forum']); }else{ $this->viewCategories(); } break;
 			case 'topic': $this->viewTopic((int)$_GET['topic']); break;
 			case 'nieuw-poll':
-				if(isset($_GET['cat']) AND $this->_forum->catExists($_GET['cat'])){
+				if(isset($_GET['cat']) AND $this->_forum->catExistsVoorUser($_GET['cat'])){
 					$iCatID=(int)$_GET['cat'];
 				}else{
 					//standaard worden stemmingen in de categorie daarvoor gerost.
