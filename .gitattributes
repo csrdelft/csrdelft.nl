@@ -156,7 +156,6 @@ lib/class.eetplan.php -text
 lib/class.eetplancontent.php -text
 lib/class.forum.php -text
 lib/class.forumcontent.php -text
-lib/class.forumcontent1.php -text
 lib/class.forumpoll.php -text
 lib/class.hok.php -text
 lib/class.includer.php -text

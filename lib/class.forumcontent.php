@@ -95,13 +95,14 @@ class ForumContent extends SimpleHTML {
 		if($this->_forum->catExistsVoorUser($iCat)){
 			$sCategorie=$this->_forum->getCategorieTitel($iCat);
 			//topics ophaelen voor deze categorie
-			//wellicht wel ander pagina?
+			//wellicht wel een andere pagina?
 			if(isset($_GET['pagina'])){ $iPaginaID=(int)$_GET['pagina']; }else{ $iPaginaID=0; }
 			$aTopics=$this->_forum->getTopics($iCat, $iPaginaID);
 			
-			//weergeven van de navigatielinks:
+			//weergeven van de navigatielinks, deze rossen we in een variabele omdat hij onderaan nogeens terug komt
 			$sNavigatieLinks='<h2><a class="forumGrootlink" href="/forum/">Forum</a> &raquo; '.mb_htmlentities($sCategorie).'</h2>';
 			echo $sNavigatieLinks;
+			
 			//eventuele foutmelding weergeven:
 			echo $this->getError();
 			echo '<table class="forumtabel"><tr>';
@@ -213,12 +214,12 @@ class ForumContent extends SimpleHTML {
 				}
 				echo '
 						<a class="forumpostlink" name="laatste"><strong>Titel</strong></a><br />
-						<input type="text" name="titel" value="" class="tekst" style="width: 100%" /><br />
+						<input type="text" name="titel" value="" class="tekst" style="width: 100%" tabindex="1" /><br />
 						<strong>Bericht</strong>&nbsp;&nbsp; ';
 				// link om het tekst-vak groter te maken.
 				echo '<a href="#laatste" onclick="vergrootTextarea(\'forumBericht\', 10)" name="Vergroot het invoerveld">
 					invoerveld vergroten</a><br />';
-				echo '<textarea name="bericht" id="forumBericht" rows="10" cols="80" style="width: 100%" class="tekst"></textarea><br />
+				echo '<textarea name="bericht" id="forumBericht" rows="10" cols="80" style="width: 100%" class="tekst" tabindex="2"></textarea><br />
 						<input type="submit" name="submit" value="verzenden" />
 						</p>
 						</form>
@@ -424,9 +425,8 @@ class ForumContent extends SimpleHTML {
 				}
 			}
 			echo '</td></tr></table>';
-			if($iBerichtenAantal>4){
-				echo $sNavigatieLinks;
-			}
+			//linkjes voor het forum nogeens weergeven, maar alleen als het aantal berichten in het onderwerp groter is dan 4
+			if($iBerichtenAantal>4){ echo $sNavigatieLinks; }
 		}else{
 			if(!is_array($aBerichten)){
 				echo 'Onderwerp bestaat helaas niet (meer).';
@@ -435,64 +435,6 @@ class ForumContent extends SimpleHTML {
 					naar <a href="/forum/">het forum</a>';
 			}
 		}
-	}
-/***********************************************************************************************************
-* Een topic Toevoegen. deze wordt niet gebruikt tot nu toe
-*
-***********************************************************************************************************/	
-	function toevoegFormulier($iTopic=0){
-		$sTopicTitel=$this->_forum->getTopicTitel($iTopicID);
-		if($iTopic==0 OR $sTopicTitel!==false){
-			//nu mag er wat weergegeven worden
-			echo '<h2>Topic toevoegen</h2>';
-			echo '<form method="post" action="/forum/toevoegen/'.$iTopic.'" >';
-			if($iTopic==0){
-				//nieuw topic, dus titel vragen.
-				echo '<strong>Titel</strong><br />Geeft u a.u.b. een titel op die de lading ook dekt.<br /><input type="text" name="titel" value="" />';
-			}else{
-				//oud topic, titel weergeven.
-				echo 'titel:<br />'.$sTopicTitel.'<br />'; 
-			}	
-			
-			echo '</form>';
-		}else{
-			//feutmelding
-		}
-	}
-/***********************************************************************************************************
-* Een bericht citeren.
-*
-***********************************************************************************************************/	
-	function citeerFormulier($iPostID){
-		$iPostID=(int)$iPostID;
-		$aPost=$this->_forum->getPost($iPostID);
-		if(is_array($aPost)){
-			$iTopicID=$this->_forum->getTopicVoorPostID($iPostID);
-			$sBericht=bbedit($aPost['tekst'], $aPost['bbcode_uid']);
-			//$sBericht=preg_replace('/\[quote\].*(\[quote\].*\[\/quote\]).*\[\/quote\]/', '', $sBericht);
-			//navigatielinks
-			$sNavigatieLinks='<h2><a href="/forum/" class="forumGrootlink">Forum</a> &raquo; 
-				<a href="/forum/categorie/'.$aPost['categorieID'].'" class="forumGrootlink">
-					'.mb_htmlentities($aPost['categorieTitel']).'
-				</a> &raquo; <a href="/forum/onderwerp/'.$iTopicID.'#'.$iPostID.'" class="forumGrootlink">
-				'.mb_htmlentities($aPost['topicTitel']).'</a> &raquo; bericht citeren</h2>';
-			echo $sNavigatieLinks;
-			echo '<table class="forumtabel">
-				<tr><td colspan="3" class="forumhoofd">Bericht toevoegen</td><td class="forumhoofd"></td></tr>
-				<tr><td colspan="4" class="forumtekst">
-				<form method="post" action="/forum/toevoegen/'.$iTopicID.'">
-				<strong>Bericht</strong>&nbsp;&nbsp;';
-			// link om het tekst-vak groter te maken.
-			echo '<a href="#" onclick="vergrootTextarea(\'forumBericht\', 10)" name="Vergroot het invoerveld">invoerveld vergroten</a><br />';
-			echo '<br />
-				<textarea name="bericht" id="forumBericht" rows="20" style="width: 100%" class="tekst">[quote]'.$sBericht.'[/quote]</textarea><br />
-				<input type="submit" name="submit" value="verzenden" /> <a href="/forum/onderwerp/'.$iTopicID.'#laatste">terug naar onderwerp</a>
-				</form>
-				</td></tr></table>';
-		}else{
-			echo '<h2>De post waarop u probeert te reageren bestaat niet.</h2><a href="/forum/">Terug naar het forum</a>';
-		}
-		
 	}
 /***********************************************************************************************************
 * een bericht bewerken.
@@ -587,7 +529,7 @@ Lege velden worden genegeerd.<br /><br />
 *
 ***********************************************************************************************************/
 	function rssFeed(){
-		$aPosts=$this->_forum->getLastPosts();
+		$aPosts=$this->_forum->getPostsVoorRss();
 		$datum=date('r');
 		//hoofder maeken
 		?>
