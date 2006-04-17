@@ -141,6 +141,7 @@ class MaalTrack {
 		if (($result !== false) and $this->_db->numRows($result) > 0) {
 			while ($record = $this->_db->next($result)) {
 				if ($mootfilter === true and preg_match("/MOOT[^{$moot}]{1}/", $record['abosoort'])) continue;
+				if ($mootfilter === true and preg_match("/UBER[^{$moot}]{1}/", $record['abosoort'])) continue;
 				$maaltijden[] = $record;
 			}
 		}
@@ -349,6 +350,7 @@ class MaalTrack {
 		if (($result !== false) and $this->_db->numRows($result) > 0) {
 			while ($record = $this->_db->next($result)) {
 				if ($mootfilter === true and preg_match("/MOOT[^{$moot}]{1}/", $record['abosoort'])) continue;
+				if ($mootfilter === true and preg_match("/UBER[^{$moot}]{1}/", $record['abosoort'])) continue;
 				$abos[$record['abosoort']] = $record['tekst'];
 			}
 		}

@@ -540,18 +540,18 @@ class Lid {
 
 		$p = $this->_permissions;
 		$this->_perm_user = array(
-			'P_NOBODY'     => $p['P_NOBODY'] + $p['P_FORUM_READ'],
-			'P_LID'        => $p['P_LOGGED_IN'] + $p['P_FORUM_POST'] + $p['P_DOCS_READ'] + $p['P_LEDEN_READ'] + $p['P_PROFIEL_EDIT'] + $p['P_AGENDA_POST'] + $p['P_MAAL_WIJ'] + $p['P_MAIL_POST'],
-			'P_OUDLID'     => $p['P_LOGGED_IN'] + $p['P_OUDLEDEN_READ'] + $p['P_PROFIEL_EDIT'] + $p['P_FORUM_READ'],
-			'P_MODERATOR'  => $p['P_LOGGED_IN'] + $p['P_FORUM_MOD'] +$p['P_DOCS_MOD'] + $p['P_LEDEN_MOD'] + $p['P_OUDLEDEN_MOD'] + $p['P_AGENDA_MOD'] + $p['P_MAAL_MOD'] + $p['P_MAIL_SEND'] + $p['P_NEWS_MOD']
+			'P_NOBODY'     => $p['P_NOBODY'] | $p['P_FORUM_READ'],
+			'P_LID'        => $p['P_LOGGED_IN'] | $p['P_FORUM_POST'] | $p['P_DOCS_READ'] | $p['P_LEDEN_READ'] | $p['P_PROFIEL_EDIT'] | $p['P_AGENDA_POST'] + $p['P_MAAL_WIJ'] + $p['P_MAIL_POST'],
+			'P_OUDLID'     => $p['P_LOGGED_IN'] | $p['P_OUDLEDEN_READ'] | $p['P_PROFIEL_EDIT'] | $p['P_FORUM_READ'],
+			'P_MODERATOR'  => $p['P_LOGGED_IN'] | $p['P_FORUM_MOD'] | $p['P_DOCS_MOD'] | $p['P_LEDEN_MOD'] | $p['P_OUDLEDEN_MOD'] | $p['P_AGENDA_MOD'] | $p['P_MAAL_MOD'] | $p['P_MAIL_SEND'] | $p['P_NEWS_MOD']
 		);
 		# extra dingen, waarvoor de array perm_user zelf nodig is
-		$this->_perm_user['P_PUBCIE'] = $this->_perm_user['P_MODERATOR'];
-		$this->_perm_user['P_MAALCIE'] = $this->_perm_user['P_LID'] + $p['P_MAAL_MOD'];
-		$this->_perm_user['P_BESTUUR'] = $this->_perm_user['P_MODERATOR'];//$this->_perm_user['P_LID'] + $p['P_LEDEN_MOD'];// + $p['P_NEWS_MOD'] + $p['P_MAAL_MOD'] + ;
-		$this->_perm_user['P_KNORRIE'] = $this->_perm_user['P_LID'] + $p['P_OUDLEDEN_READ'] + $p['P_MAAL_MOD'];
+		$this->_perm_user['P_PUBCIE']  = $this->_perm_user['P_MODERATOR'];
+		$this->_perm_user['P_MAALCIE'] = $this->_perm_user['P_LID'] | $p['P_MAAL_MOD'];
+		$this->_perm_user['P_BESTUUR'] = $this->_perm_user['P_LID'] | $p['P_OUDLEDEN_READ'] | $p['P_NEWS_MOD'] | $p['P_MAAL_MOD'] | $p['P_AGENDA_POST'];
+		$this->_perm_user['P_VAB']     = $this->_perm_user['P_BESTUUR'] | $p['P_LEDEN_MOD'] | $p['P_OUDLEDEN_MOD'];
+		$this->_perm_user['P_KNORRIE'] = $this->_perm_user['P_LID'] | $p['P_OUDLEDEN_READ'] | $p['P_MAAL_MOD'];
 
-		//print_r($this->_perm_user);
 	}
 
 	function _makepasswd($pass) {
