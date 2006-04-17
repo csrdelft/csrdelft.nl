@@ -21,19 +21,13 @@ class MySql {
 	var $_db;
 
 	function connect() {
-		$cred = $this->_getCredentials();
+		$cred = parse_ini_file(ETC_PATH.'mysql.ini');
 		$this->_db = mysql_pconnect($cred['host'], $cred['user'], $cred['pass'])
 		or die ("Kan geen verbinding maken met host {$cred['host']}\n");
 		mysql_select_db($cred['db'], $this->_db)
 		or die ("Kan niet inloggen bij de database\n");
 		//database verbinding vertellen dat hij utf-8 moet gebruiken.
 		$this->query("SET NAMES 'utf8'");
-	}
-
-	# Deze dus overdingesen in die subklasse!!!!
-	function _getCredentials() {
-		# haal instellingen uit de configuratiefile
-		return parse_ini_file(ETC_PATH.'mysql.ini');
 	}
 
 	### public ###

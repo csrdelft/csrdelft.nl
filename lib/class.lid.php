@@ -55,11 +55,9 @@ class Lid {
 		$this->_db =& $db;
 		#print_r($_SESSION);
 
-		# kijken in de sessie of er een gebruiker in staat
-		#if (!isset($_SESSION['_profile']['uid'])) {
-		if (isset($_SESSION['_uid'])) {
-			$this->reloadProfile();
-		} else {
+		# kijken in de sessie of er een gebruiker in staat,
+		# en of dit een gebruiker is die een profiel in de database heeft.
+		if (!isset($_SESSION['_uid']) or !$this->reloadProfile()) {
 			# zo nee, dan nobody user er in gooien...
 			# in dit geval is het de eerste keer dat we een pagina opvragen
 			# of er is net uitgelogd waardoor de gegevens zijn leeggegooid
@@ -551,7 +549,8 @@ class Lid {
 		$this->_perm_user['P_PUBCIE'] = $this->_perm_user['P_MODERATOR'];
 		$this->_perm_user['P_MAALCIE'] = $this->_perm_user['P_LID'] + $p['P_MAAL_MOD'];
 		$this->_perm_user['P_BESTUUR'] = $this->_perm_user['P_MODERATOR'];//$this->_perm_user['P_LID'] + $p['P_LEDEN_MOD'];// + $p['P_NEWS_MOD'] + $p['P_MAAL_MOD'] + ;
-		
+		$this->_perm_user['P_KNORRIE'] = $this->_perm_user['P_LID'] + $p['P_OUDLEDEN_READ'] + $p['P_MAAL_MOD'];
+
 		//print_r($this->_perm_user);
 	}
 

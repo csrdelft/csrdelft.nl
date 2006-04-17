@@ -55,6 +55,7 @@ htdocs/informatie/bestuurstekst.php -text
 htdocs/informatie/commissie.php -text
 htdocs/informatie/contact.php -text
 htdocs/informatie/documenten.php -text
+htdocs/informatie/fotoalbum.php -text
 htdocs/informatie/images/alphabanner.gif -text
 htdocs/informatie/images/amb.gif -text
 htdocs/informatie/images/bestuur_1.jpg -text
@@ -257,6 +258,7 @@ lib/tekst/alpha.html -text
 lib/tekst/bestuur.html -text
 lib/tekst/bestuurstekst.html -text
 lib/tekst/datum.php -text
+lib/tekst/fotoalbum.html -text
 lib/tekst/geentoegang.html -text
 lib/tekst/ihk-quotes.html -text
 lib/tekst/informatie/algemeen.html -text
