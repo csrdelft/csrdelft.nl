@@ -39,23 +39,23 @@ function main() {
 					if(is_int($iTopicID)){
 						if($bModerate_step){
 							//niet naar het topic refreshen, die is nog niet leesbaar...
-							header('location: http://csrdelft.nl/forum/categorie/'.$iCatID.'&fout='.
+							header('location: http://csrdelft.nl/forum/categorie/'.$iCatID.'/'.
 								base64_encode('Uw bericht zal bekeken worden door de PubCie, bedankt voor het posten'));
 						}else{
 							header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID.'#laatste');
 						}
 					}else{
-						header('location: http://csrdelft.nl/forum/categorie/'.$iCatID.'&fout='.
+						header('location: http://csrdelft.nl/forum/categorie/'.$iCatID.'/'.
 							base64_encode('Er ging iets mis met het databeest.'));
 					}
 				}else{
 					//geen bericht ingevoerd
-					header('location: http://csrdelft.nl/forum/categorie/'.$iCatID.'&fout='.
+					header('location: http://csrdelft.nl/forum/categorie/'.$iCatID.'/'.
 						base64_encode('U heeft een leeg bericht ingevoerd.'));
 				}
 			}else{
 				//formulier is niet compleet.
-				header('location: http://csrdelft.nl/forum/categorie/'.$iCatID.'&fout='.
+				header('location: http://csrdelft.nl/forum/categorie/'.$iCatID.'/'.
 					base64_encode('<h3>Helaas</h3>Het formulier is niet compleet!'));
 			}
 		}else{
@@ -79,19 +79,19 @@ function main() {
 					if($forum->addPost($sBericht, $bbcode_uid, $iTopicID)){
 						header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID.'#laatste');
 					}else{
-						header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID.'&fout='.
+						header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID.'/'.
 							base64_encode('Er ging iets mis met het databeest.'));
 					}
 				}else{
-					header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID.'&fout='.
+					header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID.'/'.
 						base64_encode('Bericht bevat geen tekens.'));
 				}
 			}else{
-				header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID.'&fout='.
+				header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID.'/'.
 					base64_encode('U mag hier niet posten.'));
 			}
 		}else{
-			header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID.'&fout='.
+			header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID.'/'.
 				base64_encode('Formulier incompleet.'));
 		}
 	}else{

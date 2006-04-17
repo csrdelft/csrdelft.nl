@@ -22,19 +22,15 @@ function main() {
 		if(isset($_GET['topic'])){
 			$iTopicID=(int)$_GET['topic'];
 			if($forum->keurTopicGoed($iTopicID)){
-				header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID.'&fout='.
-					base64_encode('Onderwerp nu voor iedereen zichtbaar.'));
+				header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID.'/'.base64_encode('Onderwerp nu voor iedereen zichtbaar.'));
 			}else{
-				header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID.'&fout='.
-					base64_encode('Goedkeuren ging mis.'));
+				header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID.'/'.base64_encode('Goedkeuren ging mis.'));
 			}
 		}else{
-			header('location: http://csrdelft.nl/forum/?fout='.
-				base64_encode('Geen topicID gezet.'));
+			header('location: http://csrdelft.nl/forum/?fout='.base64_encode('Geen topicID gezet.'));
 		}
 	} else {
-		header('location: http://csrdelft.nl/forum/?fout='.
-			base64_encode('U heeft daar niets te zoeken.'));
+		header('location: http://csrdelft.nl/forum/?fout='.base64_encode('U heeft daar niets te zoeken.'));
 	}		
 }
 

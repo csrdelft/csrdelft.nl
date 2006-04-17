@@ -189,7 +189,7 @@ class ForumContent extends SimpleHTML {
 					if($iPagina==$iPaginaID){
 						echo ($iPagina+1).' ';
 					}else{
-						echo '<a href="/forum/cat/'.$iCat.'/'.$iPagina.'">'.($iPagina+1).'</a> ';
+						echo '<a href="/forum/categorie/'.$iCat.'/'.$iPagina.'">'.($iPagina+1).'</a> ';
 					}
 				}
 			}
@@ -677,6 +677,7 @@ Lege velden worden genegeerd.<br /><br />
 		}
 		if($this->_forum->_lid->hasPermission('P_FORUM_MOD') AND $this->_actie!='rss'){
 			echo '<br />forum parsetijd: '.round($this->_forum->getParseTime(), 4).' seconden';
+			echo '<pre>'.print_r($_GET, true).'</pre>';
 		}
 	}
 }

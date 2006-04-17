@@ -23,7 +23,7 @@ function main() {
 		require_once('class.forumpoll.php');
 		$poll = new ForumPoll($forum);
 		$iCat=$forum->getCategorieVoorTopic($iTopicID);
-		if($lid->hasPermission($forum->getRechten_post($iCat))) {
+		if($forum->catExistsVoorUser($iCat) AND $lid->hasPermission($forum->getRechten_post($iCat))) {
 			if(isset($_POST['pollOptie']) AND $poll->topicHeeftPoll($iTopicID)){
 				$iPollOptie=(int)$_POST['pollOptie'];
 				//controleren of er al gestemd is
@@ -36,23 +36,19 @@ function main() {
 							header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID);
 						}	
 					}else{
-						header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID.'&fout='.
-							base64_encode('Optie bestaat niet.'));
+						header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID.'/'.base64_encode('Optie bestaat niet.'));
 					}
 				}else{
-					header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID.'&fout='.
-						base64_encode('U mag maar een keer stemmen.'));
+					header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID.'/'.base64_encode('U mag maar een keer stemmen.'));
 				}
 			}else{
-				header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID.'&fout='.
-					base64_encode('Onjuiste gegevens.'));
+				header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID.'/'.base64_encode('Onjuiste gegevens.'));
 			}
 		}else{
-			header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID.'&fout='.
-				base64_encode('U mag hier niet stemmen.'));
+			header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID.'/'.base64_encode('U mag hier niet stemmen.'));
 		}
 	}else{
-		header('location: http://csrdelft.nl/forum/&fout='.
+		header('location: http://csrdelft.nl/forum/?fout='.
 			base64_encode('Hier snap ik geen snars van (waar is het topicID?).'));
 	}	
 }

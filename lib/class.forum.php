@@ -378,6 +378,11 @@ class Forum {
 				}
 			}
 			if($bPostQuery){
+				if($bModerated){
+					//bericht sturen naar pubcie@csrdelft dat er een bericht op goedkeuring wacht
+	 				mail('pubcie@csrdelft.nl', 'Nieuw bericht in extern wacht op goedkeuring', "yo, er is een nieuw bericht in extern, wat op".
+	 				 "goedkeuring wacht \r\nhttp://csrdelft.nl/forum/onderwerp/".$topic);
+	 			}
 				return $topic;
 			}else{
 				return false;
