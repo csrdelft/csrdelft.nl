@@ -21,7 +21,7 @@ class MySql {
 	var $_db;
 
 	function connect() {
-		$cred = parse_ini_file(ETC_PATH.'mysql.ini');
+		$cred = parse_ini_file(ETC_PATH.'/mysql.ini');
 		$this->_db = mysql_pconnect($cred['host'], $cred['user'], $cred['pass'])
 		or die ("Kan geen verbinding maken met host {$cred['host']}\n");
 		mysql_select_db($cred['db'], $this->_db)

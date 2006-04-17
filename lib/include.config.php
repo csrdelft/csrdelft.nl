@@ -13,14 +13,17 @@
 # . gemaakt
 #
 
-define('ETC_PATH', '/srv/www/www.csrdelft.nl/etc/');
+# padnaam zonder trailing slash
+define('ETC_PATH', '/srv/www/www.csrdelft.nl/etc');
 define('LIB_PATH', '/srv/www/www.csrdelft.nl/lib');
-define('DATA_PATH', '/srv/www/www.csrdelft.nl/data/');
+define('DATA_PATH', '/srv/www/www.csrdelft.nl/data');
 define('PICS_PATH', '/srv/www/www.csrdelft.nl/htdocs/images');
-define('HTDOCS_PATH', '/srv/www/www.csrdelft.nl/htdocs/');
-define('TMP_PATH', '/srv/www/www.csrdelft.nl/tmp/');
+define('HTDOCS_PATH', '/srv/www/www.csrdelft.nl/htdocs');
+define('TMP_PATH', '/srv/www/www.csrdelft.nl/tmp');
+# uitzondering:
 define('SMARTY_DIR', '/srv/www/www.csrdelft.nl/lib/smarty/');
 
+# urls met trailing slash
 define('CSR_PICS', 'http://csrdelft.nl/images/');
 define('CSR_ROOT','http://csrdelft.nl/');
 

@@ -12,7 +12,7 @@ if(!opConfide()){
 }
 $db = new MySQL();
 $db->connect();
-$instellingen=parse_ini_file(ETC_PATH.'soccie.ini');
+$instellingen=parse_ini_file(ETC_PATH.'/soccie.ini');
 
 if(isset($_POST['saldi'])){
 	//blowfish klasse laden

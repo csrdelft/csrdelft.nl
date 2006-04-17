@@ -50,30 +50,28 @@ class ProfielContent extends SimpleHTML {
 					$profhtml['website_kort'] = substr($profhtml['website_kort'], 0, 25) . '...';
 				}
 				
+				# email-adres
+				if ($profhtml['email'] != '') $profhtml['email'] = sprintf('<a href="mailto:%s">%s</a>', $profhtml['email'], $profhtml['email']);
 				
-				# leden-foto
-				if (file_exists( HTDOCS_PATH.'leden/pasfotos/'.$profiel['uid'].'.gif'))
+				# leden-foto, mag gif of jpg zijn.
+				if (file_exists( HTDOCS_PATH.'/leden/pasfotos/'.$profiel['uid'].'.gif')){
 					$foto = '<img src="/leden/pasfotos/'.$profiel['uid'].'.gif" />';
-				else $foto = 'Geen foto aanwezig. <br />Mail de pubcie om <br />er een toe te voegen.';
+				}elseif(file_exists( HTDOCS_PATH.'/leden/pasfotos/'.$profiel['uid'].'.jpg')){
+					$foto = '<img src="/leden/pasfotos/'.$profiel['uid'].'.jpg" />';
+				}else{ $foto = 'Geen foto aanwezig. <br />Mail de pubcie om <br />er een toe te voegen.'; }
 				
 				//soccie saldo
-				//koppeltabel klopt nog niet, dus ff uitgezet.
+				$sSaldo='';
+				//alleen als men het eigen profiel bekijkt.
 				if($profiel['uid']==$this->_lid->getUid()){
 					$sSaldo=$this->_lid->getSaldo();
 					if($sSaldo!==false){
 						if($sSaldo<0){
-							$sSaldo='SocCie-saldo: &euro; <span class="bodyrood">'.sprintf ("%01.2f",$sSaldo).'</span>
-								<script language="Javascript">
-									document.bgColor=\'red\'
-								</script>';
+							$sSaldo='SocCie-saldo: &euro; <span class="bodyrood">'.sprintf ("%01.2f",$sSaldo).'</span>';
 						}else{
 							$sSaldo='SocCie-saldo: &euro; '.sprintf ("%01.2f",$sSaldo);
 						}
-					}else{
-						$sSaldo='';
 					}
-				}else{
-					$sSaldo='';
 				}
 				print(<<<EOT
 <center>
