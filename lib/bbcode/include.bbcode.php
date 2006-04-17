@@ -41,6 +41,8 @@ function bbedit ($message, $uid) {
 # bbsave wordt gebruikt als data in het object richting de database moet
 function bbnewuid () { return make_bbcode_uid(); }
 function bbsave ($message, $uid, $db) {
+	//[rul= een alias maeken voor [url=
+	$message = str_replace(array('[rul=http://', '[/rul]'), array('[url=http://', '[/url]'), $message);
 	# uid is een nieuwe bbcode uid
 	$message = prepare_message($message, false, true, false, $uid);
 	return mysql_real_escape_string($message, $db);
