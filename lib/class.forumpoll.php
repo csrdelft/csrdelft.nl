@@ -40,7 +40,9 @@ class ForumPoll {
 			FROM
 				forum_poll
 			WHERE
-				topicID=".$iTopicID.";";
+				topicID=".$iTopicID."
+			ORDER BY
+				id ;";
 		$rOptiesResult=$this->_db->query($sOptiesQuery);
 		if($this->_db->numRows($rOptiesResult)!=0){
 			//zoo, opties in een array rossen
@@ -79,7 +81,9 @@ class ForumPoll {
 				FROM
 					forum_poll
 				WHERE
-					topicID=".$iTopicID.";";
+					topicID=".$iTopicID."
+				ORDER BY
+					id;";
 			$rOptiesResult=$this->_db->query($sOptiesQuery);
 			if($this->_db->numRows($rOptiesResult)!=0){
 				//zoo, opties in een array rossen

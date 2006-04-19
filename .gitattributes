@@ -9,7 +9,6 @@ htdocs/csrdelft.css -text
 htdocs/forum/.htaccess -text
 htdocs/forum/bewerken.php -text
 htdocs/forum/citeren.php -text
-htdocs/forum/forum-specs.txt -text
 htdocs/forum/goedkeuren.php -text
 htdocs/forum/index.php -text
 htdocs/forum/plakkerig.php -text
@@ -19,8 +18,6 @@ htdocs/forum/stemmen.php -text
 htdocs/forum/stemming.php -text
 htdocs/forum/toevoegen.php -text
 htdocs/forum/topic.php -text
-htdocs/forum/topic1.php -text
-htdocs/forum/topic2.php -text
 htdocs/forum/verwijderen.php -text
 htdocs/images/aanmelden.gif -text
 htdocs/images/alpha-klein.gif -text

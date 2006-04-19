@@ -583,7 +583,25 @@ class Forum {
 			return false;
 		}
 	}
-	
+	//aantal pagina's in een categorie uitrekenen:
+	function getPaginaCount($iCatID){
+		$iCatID=(int)$iCatID;
+		$sCatQuery="
+			SELECT
+				count(*) as aantal
+			FROM
+				forum_topic
+			WHERE 
+				categorie=".$iCatID."
+			LIMIT 1;";
+		$rCat=$this->_db->query($sCatQuery);
+		if($this->_db->numRows($rCat)==1){
+			$aCat=$this->_db->next($rCat);
+			return ceil($aCat['aantal']/$this->_topicsPerPagina);
+		}else{	
+			return 1;
+		}
+	}
 	//rechten voor een categorie ophaelen
 	function getRechten_read($iCatID){ return $this->_getRechten($iCatID, 'read'); }
 	function getRechten_post($iCatID){ return $this->_getRechten($iCatID, 'post'); }

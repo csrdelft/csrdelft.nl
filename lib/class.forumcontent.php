@@ -98,7 +98,11 @@ class ForumContent extends SimpleHTML {
 			//wellicht wel een andere pagina?
 			if(isset($_GET['pagina'])){ $iPaginaID=(int)$_GET['pagina']; }else{ $iPaginaID=0; }
 			$aTopics=$this->_forum->getTopics($iCat, $iPaginaID);
-			
+			//als de pagina niet bestaat moet er teruggegaan worden naar de laatste pagina.
+			if($iPaginaID!=0 AND $aTopics===false){
+				$iPaginaID=$this->_forum->getPaginaCount($iCat)-1;
+				$aTopics=$this->_forum->getTopics($iCat, $iPaginaID);
+			}
 			//weergeven van de navigatielinks, deze rossen we in een variabele omdat hij onderaan nogeens terug komt
 			$sNavigatieLinks='<h2><a class="forumGrootlink" href="/forum/">Forum</a> &raquo; '.mb_htmlentities($sCategorie).'</h2>';
 			echo $sNavigatieLinks;
