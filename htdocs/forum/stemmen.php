@@ -23,10 +23,12 @@ function main() {
 		require_once('class.forumpoll.php');
 		$poll = new ForumPoll($forum);
 		$iCat=$forum->getCategorieVoorTopic($iTopicID);
+		//kijken of er voldoende rechten zijn voor het stemmen op een peiling.
 		if($forum->catExistsVoorUser($iCat) AND $lid->hasPermission($forum->getRechten_post($iCat))) {
+			//controleer of er een polloptie is meegegeven en of het onderwerp wel een poll heeft.
 			if(isset($_POST['pollOptie']) AND $poll->topicHeeftPoll($iTopicID)){
 				$iPollOptie=(int)$_POST['pollOptie'];
-				//controleren of er al gestemd is
+				//controleren of er al gestemd is door deze gebruiker
 				if($poll->uidMagStemmen($iTopicID)){
 					//stemmen dan maar...
 					if($poll->addStem($iPollOptie)){
@@ -36,20 +38,24 @@ function main() {
 							header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID);
 						}	
 					}else{
-						header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID.'/'.base64_encode('Optie bestaat niet.'));
+						header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID);
+						$_SESSION['forum_foutmelding']='Optie bestaat niet.';
 					}
 				}else{
-					header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID.'/'.base64_encode('U mag maar een keer stemmen.'));
+					header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID);
+					$_SESSION['forum_foutmelding']='U mag maar een keer stemmen.';
 				}
 			}else{
-				header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID.'/'.base64_encode('Onjuiste gegevens.'));
+				header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID);
+				$_SESSION['forum_foutmelding']='Onjuiste gegevens.';
 			}
 		}else{
-			header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID.'/'.base64_encode('U mag hier niet stemmen.'));
+			header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID);
+			$_SESSION['forum_foutmelding']='U mag hier niet stemmen.';
 		}
 	}else{
-		header('location: http://csrdelft.nl/forum/?fout='.
-			base64_encode('Hier snap ik geen snars van (waar is het topicID?).'));
+		header('location: http://csrdelft.nl/forum/');
+		$_SESSION['forum_foutmelding']='Hier snap ik geen snars van (waar is het topicID?).';
 	}	
 }
 ?>

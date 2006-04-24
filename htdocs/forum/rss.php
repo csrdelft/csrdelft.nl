@@ -27,7 +27,7 @@ function main() {
 		$midden = new ForumContent($forum, 'rss');
 		
 		$midden->view();
-	} 
+	}
 }
 
 ?>

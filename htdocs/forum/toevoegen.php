@@ -39,24 +39,24 @@ function main() {
 					if(is_int($iTopicID)){
 						if($bModerate_step){
 							//niet naar het topic refreshen, die is nog niet leesbaar...
-							header('location: http://csrdelft.nl/forum/categorie/'.$iCatID.'/'.
-								base64_encode('Uw bericht zal bekeken worden door de PubCie, bedankt voor het posten'));
+							header('location: http://csrdelft.nl/forum/categorie/'.$iCatID);
+							$_SESSION['forum_foutmelding']='Uw bericht zal bekeken worden door de PubCie, bedankt voor het posten';
 						}else{
 							header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID.'#laatste');
 						}
 					}else{
-						header('location: http://csrdelft.nl/forum/categorie/'.$iCatID.'/'.
-							base64_encode('Er ging iets mis met het databeest.'));
+						header('location: http://csrdelft.nl/forum/categorie/'.$iCatID);
+						$_SESSION['forum_foutmelding']='Er ging iets mis met het databeest.';
 					}
 				}else{
 					//geen bericht ingevoerd
-					header('location: http://csrdelft.nl/forum/categorie/'.$iCatID.'/'.
-						base64_encode('U heeft een leeg bericht ingevoerd.'));
+					header('location: http://csrdelft.nl/forum/categorie/'.$iCatID);
+					$_SESSION['forum_foutmelding']='U heeft een leeg bericht ingevoerd.';
 				}
 			}else{
 				//formulier is niet compleet.
-				header('location: http://csrdelft.nl/forum/categorie/'.$iCatID.'/'.
-					base64_encode('<h3>Helaas</h3>Het formulier is niet compleet!'));
+				header('location: http://csrdelft.nl/forum/categorie/'.$iCatID);
+				$_SESSION['forum_foutmelding']='<h3>Helaas</h3>Het formulier is niet compleet!';
 			}
 		}else{
 			if($forum->catExistsVoorUser($iCatID)){
@@ -64,8 +64,8 @@ function main() {
 				header('location: http://csrdelft.nl/forum/categorie/'.$iCatID);
 			}else{
 				//mag niet kijken in de categorie, ook niet posten. Terugt naar het forumoverzicht
-				header('location: http://csrdelft.nl/forum/?fout='.
-					base64_encode('U heeft niet voldoende rechten om in deze categorie te posten of deze categorie te bekijken.'));
+				header('location: http://csrdelft.nl/forum/');
+				$_SESSION['forum_foutmelding']='U heeft niet voldoende rechten om in deze categorie te posten of deze categorie te bekijken.';
 			}
 		}
 	}elseif(isset($_GET['topic'])){
@@ -79,25 +79,25 @@ function main() {
 					if($forum->addPost($sBericht, $bbcode_uid, $iTopicID)){
 						header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID.'#laatste');
 					}else{
-						header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID.'/'.
-							base64_encode('Er ging iets mis met het databeest.'));
+						header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID);
+						$_SESSION['forum_foutmelding']='Er ging iets mis met het databeest.';
 					}
 				}else{
-					header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID.'/'.
-						base64_encode('Bericht bevat geen tekens.'));
+					header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID);
+					$_SESSION['forum_foutmelding']='Bericht bevat geen tekens.';
 				}
 			}else{
-				header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID.'/'.
-					base64_encode('U mag hier niet posten.'));
+				header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID);
+				$_SESSION['forum_foutmelding']='U mag hier niet posten.';
 			}
 		}else{
-			header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID.'/'.
-				base64_encode('Formulier incompleet.'));
+			header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID);
+			$_SESSION['forum_foutmelding']='Formulier incompleet.';
 		}
 	}else{
 		//geen catID en geen topicID gezet, niet compleet dus.
-		header('location: http://csrdelft.nl/forum/?fout='.
-			base64_encode('<h3>Helaas</h3>Het formulier is niet compleet (geen IDs)!'));
+		header('location: http://csrdelft.nl/forum/');
+		$_SESSION['forum_foutmelding']='<h3>Helaas</h3>Het formulier is niet compleet (geen ID\'s)!';
 	}
 }
 

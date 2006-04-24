@@ -26,7 +26,8 @@ function main() {
 					header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID);
 					exit;
 				}else{
-					header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID.'/'.base64_encode('Oeps, feutje..'));
+					header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID);
+					$_SESSION['forum_foutmelding']='Oeps, feutje, niet gelukt dus';
 					exit;
 				}
 			}elseif(isset($_GET['niet-plakkerig'])){
@@ -34,19 +35,23 @@ function main() {
 					header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID);
 					exit;
 				}else{
-					header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID.'/'.base64_encode('Oeps, feutje..'));
+					header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID);
+					$_SESSION['forum_foutmelding']='Oeps, feutje, niet gelukt dus'));
 					exit;
 				}
 			}else{
-				header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID.'/'.base64_encode('Hier snap ik geen snars van.'));
+				header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID);
+				$_SESSION['forum_foutmelding']='Hier snap ik geen snars van, niet zooien a.u.b.';
 				exit;
 			}
 		}else{
-			header('location: http://csrdelft.nl/forum/&fout='.base64_encode('Niets om te sluiten of te openen.'));
-				exit;
+			header('location: http://csrdelft.nl/forum/');
+			$_SESSION['forum_foutmelding']='Niets om te sluiten of te openen.';
+			exit;
 		}
 	} else {
-		header('location: http://csrdelft/forum/?fout='.base64_encode('Geen rechten hiervoor'));
+		header('location: http://csrdelft/forum/');
+			$_SESSION['forum_foutmelding']='Geen rechten hiervoor';
 	}	
 }
 ?>

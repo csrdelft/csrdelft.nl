@@ -63,7 +63,8 @@ function main() {
 					//poll toevoegen aan topic.
 					if($poll->maakTopicPoll($iTopicID, $_POST['opties'])){
 						//gelukt.
-						header('location: /forum/onderwerp/'.$iTopicID.'');
+						header('location: /forum/onderwerp/'.$iTopicID);
+						$_SESSION['forum_foutmelding']='Peiling is met succes toegevoegd.';
 						exit;
 					}else{
 						//mislukt.

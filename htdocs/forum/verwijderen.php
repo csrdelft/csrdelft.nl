@@ -24,29 +24,26 @@ function main() {
 			$iTopicID=$forum->getTopicVoorPostID($iPostID);
 			if($forum->deletePost($iPostID)){
 				header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID);
-				exit;
 			}else{
-				header('location: http://csrdelft.nl/forum/?fout='.
-					base64_encode('Verwijderen van bericht mislukt, iets mis met de db ofzo.'));
-				exit;
+				header('location: http://csrdelft.nl/forum/');
+				$_SESSION['forum_foutmelding']='Verwijderen van bericht mislukt, iets mis met de db ofzo.';
 			}
 		}elseif(isset($_GET['topic'])){
 			$iTopicID=(int)$_GET['topic'];
 			$iCatID=$forum->getCategorieVoorTopic($iTopicID);
 			if($forum->deleteTopic($iTopicID)){
 				header('location: http://csrdelft.nl/forum/categorie/'.$iCatID);
-				exit;
 			}else{
-				header('location: http://csrdelft.nl/forum/?fout='.
-					base64_encode('Verwijderen van topic mislukt, iets mis met de db ofzo.'));
-				exit;
+				header('location: http://csrdelft.nl/forum/');
+				$_SESSION['forum_foutmelding']='Verwijderen van topic mislukt, iets mis met de db ofzo.';
 			}
 		}else{
-			header('location: http://csrdelft.nl/forum/?fout='.base64_encode('Ik heb niets om te verwijderen'));
-			exit;
+			header('location: http://csrdelft.nl/forum/');
+			$_SESSION['forum_foutmelding']='Ik heb niets om te verwijderen';
 		}
 	} else {
-		header('location: http://csrdelft.nl/forum/?fout='.base64_encode('Niets te zoeken hier!'));
+		header('location: http://csrdelft.nl/forum/');
+		$_SESSION['forum_foutmelding']='Niets te zoeken hier!';
 	}	
 
 }

@@ -591,12 +591,13 @@ Lege velden worden genegeerd.<br /><br />
 		echo '</channel>';
 		echo '</rss>';
 	}
-	function setError($sError){
-		$this->_sError=$sError;
-	}
+
 	function getError(){
-		if(isset($_GET['fout'])){
-			return '<div class="foutmelding">'.mb_htmlentities(base64_decode(trim($_GET['fout']))).'</div>';
+		if(isset($_SESSION['forum_foutmelding'])){
+			$sError='<div class="foutmelding">'.mb_htmlentities(trim($_SESSION['forum_foutmelding'])).'</div>';
+			//maar één keer tonen, de melding.
+			unset($_SESSION['forum_foutmelding']);
+			return $sError;
 		}
 	}
 	function getTitel(){ 
