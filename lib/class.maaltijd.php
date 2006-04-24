@@ -79,6 +79,7 @@ class MaalTijd {
 	# wat gegevens voor de maaltijdprintlijst
 	function getDatum() { return $this->_maaltijd['datum']; }
 	function getTP() { return $this->_maaltijd['tp']; }
+	function getMaalId() { return $this->_maalid; }
 
 	# Aanmelden van een gebruiker voor deze maaltijd.
 	function aanmelden($uid = '') {
@@ -383,6 +384,9 @@ EOD;
 		#mail('maaltijden@csrdelft.nl', "Maaltijdlijst {$datum}", $emailtekst);
 	}
 	
+	function isGesloten() {
+		return $this->_maaltijd['gesloten'] == '1';
+	}
 	function sluit() {
 		# inschrijving gesloten?
 		if ($this->_maaltijd['gesloten'] == '1') return false;

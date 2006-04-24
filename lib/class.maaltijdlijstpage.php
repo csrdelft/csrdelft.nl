@@ -124,12 +124,31 @@ class MaaltijdLijstPage extends SimpleHTML {
 <body>
 <table class="hoofdtabel">
 <tr><td>
-<h1>C.S.R.-maaltijd {$datumtekst} CONCEPT</h1>
+<h1>C.S.R.-maaltijd {$datumtekst}</h1>
 Tafelpraeses is vandaag {$tptekst}<br /><br />
 </td></tr>
+EOT
+		);
+
+
+		# Als de maaltijd nog niet gesloten is, beelden we een linkje af.
+		if (!$this->_maaltijd->isGesloten()) {
+
+			$maalid = $this->_maaltijd->getMaalId();
+
+			print(<<<EOT
+<tr><td>
+<h1><font color="red">De inschrijving voor deze maaltijd is nog niet gesloten</h1>
+<a href="{$_SERVER['PHP_SELF']}?maalid={$maalid}&sluit=1" onclick="return confirm('Weet u zeker dat u deze maaltijd wil sluiten?')">Nu sluiten! (N.B. Dit is een onomkeerbare stap!!)</a><br /><br />
+</td></tr>
+EOT
+			);
+
+		}
+
+		print(<<<EOT
 <tr><td>
 <table class="inschrijvingen">
-
 EOT
 		);
 
