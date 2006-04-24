@@ -37,18 +37,22 @@ function main() {
 	# Datum
 	require_once('class.includer.php');
 	$datum = new Includer('', 'datum.php');
-
-        # Moeten er acties uitgevoerd worden?
-        require_once('class.documenten.php');
-        $documenten = new Documenten($lid,$db);
-
-
-       if (isset($_POST['categorie'], $_POST['naam'],$_FILES['bestand'])){
-          if($_POST['naam']!== "" && $_FILES['bestand']['name'] !== ""){
-              //move_uploaded_file($_FILES['bestand']['tmp_name'], '/tmp/uploads/');
-              $documenten->add($_FILES['bestand']['name'],$_POST['naam'],$_POST['categorie']);
-          }
-        }
+	
+	# Moeten er acties uitgevoerd worden?
+	require_once('class.documenten.php');
+	$documenten = new Documenten($lid,$db);
+	
+	
+	
+	if (isset($_POST['categorie'], $_POST['naam'],$_FILES['bestand'])){
+		if($_POST['naam']!== "" && $_FILES['bestand']['name'] !== ""){
+			$uploaddir = '/data/leden/documenten/hoi/';
+			$uploadfile = $uploaddir . basename($_FILES['bestand']['name']);
+			if(move_uploaded_file($_FILES['bestand']['tmp_name'], $uploadfile)){
+				$documenten->add($_FILES['bestand']['name'],$_POST['naam'],$_POST['categorie']);
+			}
+		}
+	}
 
 	# Het middenstuk
 	if ($lid->hasPermission('P_LEDEN_READ')) {
@@ -58,7 +62,7 @@ function main() {
 		require_once('class.documentencontent.php');
 		$midden = new DocumentenContent($documenten);
 
-        }
+	}
 	# als je meer rechten hebt, bv toevoegen of verwijderen
 
 
@@ -85,6 +89,7 @@ function main() {
 	$page = new Page();
 	$page->addColumn($col0);
 	$page->addColumn($col1);
+	$page->addTitel('documenten');
 
 	$page->view();
 	

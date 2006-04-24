@@ -67,7 +67,8 @@ function main() {
 	$page = new Page();
 	$page->addColumn($col0);
 	$page->addColumn($col1);
-
+	$page->addTitel('eetplan voor lichting 2005');
+	
 	$page->view();
 	
 }

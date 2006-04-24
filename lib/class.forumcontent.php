@@ -17,6 +17,7 @@ require_once('bbcode/include.bbcode.php');
 class ForumContent extends SimpleHTML {
 	var $_forum;
 	var $_actie;
+	var $_sTitel='forum';
 	
 	var $_sError=false;
 	var $_topicsPerPagina;
@@ -101,6 +102,7 @@ class ForumContent extends SimpleHTML {
 			//als de pagina niet bestaat moet er teruggegaan worden naar de laatste pagina.
 			if($iPaginaID!=0 AND $aTopics===false){
 				$iPaginaID=$this->_forum->getPaginaCount($iCat)-1;
+				//nu wel voor de juiste pagina ophalen...
 				$aTopics=$this->_forum->getTopics($iCat, $iPaginaID);
 			}
 			//weergeven van de navigatielinks, deze rossen we in een variabele omdat hij onderaan nogeens terug komt
@@ -596,6 +598,18 @@ Lege velden worden genegeerd.<br /><br />
 		if(isset($_GET['fout'])){
 			return '<div class="foutmelding">'.mb_htmlentities(base64_decode(trim($_GET['fout']))).'</div>';
 		}
+	}
+	function getTitel(){ 
+		if($this->_actie=='topic' AND isset($_GET['topic'])){
+			$iTopicID=(int)$_GET['topic'];
+			$sCategorie=$this->_forum->getCategorieTitel($this->_forum->getCategorieVoorTopic($iTopicID));
+			$sTitel='forum - '.$sCategorie.' - '.$this->_forum->getTopicTitel($iTopicID);
+		}elseif($this->_actie=='forum' AND isset($_GET['forum'])){
+			$sTitel='forum - '.$this->_forum->getCategorieTitel((int)$_GET['forum']);
+		}else{
+			$sTitel='forum';
+		}
+		return $sTitel; 
 	}
 	function view(){
 		switch($this->_actie){

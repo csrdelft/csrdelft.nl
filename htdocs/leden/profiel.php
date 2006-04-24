@@ -195,7 +195,8 @@ function main() {
 	$page = new Page();
 	$page->addColumn($col0);
 	$page->addColumn($col1);
-
+	$page->addTitel('profiel');
+	
 	$page->view();
 
 }

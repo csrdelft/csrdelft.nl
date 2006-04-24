@@ -1,8 +1,8 @@
 <?php
 
+# prevent global namespace poisoning
 main();
 exit;
-
 function main() {
 
 	# instellingen & rommeltjes
@@ -22,8 +22,8 @@ function main() {
 	require_once('class.dbmenu.php');
 	$homemenu = new DBMenu('home', $lid, $db);
 	$infomenu = new DBMenu('info', $lid, $db);
-	if ($lid->isLoggedIn()) $ledenmenu = new DBMenu('leden', $lid, $db);
-	
+	if ($lid->hasPermission('P_LOGGED_IN')) $ledenmenu = new DBMenu('leden', $lid, $db);
+
 	require_once('class.simplehtml.php');
 	require_once('class.hok.php');
 	$homemenuhok = new Hok($homemenu->getMenuTitel(), $homemenu);
@@ -39,21 +39,21 @@ function main() {
 	$datum = new Includer('', 'datum.php');
 
 	# Het middenstuk
-	if ($lid->hasPermission('P_LEDEN_READ')) {
-		//leden...
-		require_once('class.documenten.php');
-		$documenten =new Documenten($lid);
+	if ($lid->hasPermission('P_BIEB_READ')) {
+		require_once('class.bieb.php');
+		$bieb = new Bieb($lid, $db);
+		require_once('class.biebcontent.php');
 		
-	}
-	
-	# als je meer rechten hebt, bv toevoegen of verwijderen
-
-	
-	else{
+		# goede actie meegeven
+		if (isset($_GET['action'])) { $action = $_GET['action']; }
+		else { $action = 'catalogusMain'; }
+		
+		$midden = new BiebContent($bieb, $action);
+	} else {
 		# geen rechten
 		require_once('class.includer.php');
 		$midden = new Includer('', 'geentoegang.html');
-	}
+	}	
 
 	### Kolommen vullen ###
 	require_once('class.column.php');

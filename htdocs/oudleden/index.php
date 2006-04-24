@@ -58,6 +58,7 @@ require_once('class.page.php');
 $page = new Page();
 $page->addColumn($col0);
 $page->addColumn($col1);
+$page->addTitel('oudleden thuispagina');
 
 $page->view();
 

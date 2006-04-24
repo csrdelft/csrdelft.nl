@@ -23,11 +23,14 @@ class Page extends SimpleHTML {
 	# Een column is een kolom met een bepaalde breedte
 	var $_columns = array();
 
+	var $_titel='C.S.R.-Delft';
+	
 	### public ###
-	function addColumn(&$column, $bTopic=false){ 
-		$this->_columns[] =& $column;
-	}
-
+	function addColumn(&$column, $bTopic=false){ $this->_columns[] =& $column; }
+	function addTitel($sTitel){ $this->_titel='C.S.R.-Delft | '.trim($sTitel); }
+	function getTitel(){ return mb_htmlentities($this->_titel); }
+	
+	
 	function view() {
 		header('Content-Type: text/html; charset=UTF-8');
 
@@ -37,7 +40,7 @@ class Page extends SimpleHTML {
 
 <head>
 
-<title>C.S.R. Delft</title>
+<title>{$this->getTitel()}</title>
 
 <meta http-equiv='content-type' content='text/xhtml; charset=UTF-8' />
 <meta name="keywords" content="student studeren studie delft tu tudelft csr c.s.r. csrdelft christen christenen nederland gezelligheid gezellig" />

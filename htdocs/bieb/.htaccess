@@ -1,0 +1,3 @@
+##hele stapel mod-rewrite dingen voor de bieb
+RewriteEngine on
+RewriteRule ^auteur/([0-9]+)$ catalogus.php?catalogusViewAuteur&auteur_id=$1

@@ -1,8 +1,8 @@
 <?php
 
+# prevent global namespace poisoning
 main();
 exit;
-
 function main() {
 
 	# instellingen & rommeltjes
@@ -22,7 +22,7 @@ function main() {
 	require_once('class.dbmenu.php');
 	$homemenu = new DBMenu('home', $lid, $db);
 	$infomenu = new DBMenu('info', $lid, $db);
-	if ($lid->isLoggedIn()) $ledenmenu = new DBMenu('leden', $lid, $db);
+	if ($lid->hasPermission('P_LOGGED_IN')) $ledenmenu = new DBMenu('leden', $lid, $db);
 
 	require_once('class.simplehtml.php');
 	require_once('class.hok.php');
@@ -39,8 +39,16 @@ function main() {
 	$datum = new Includer('', 'datum.php');
 
 	# Het middenstuk
-	require_once('class.includer.php');
-	$midden = new Includer('informatie', 'woonoord.html');
+	if ($lid->hasPermission('P_BIEB_READ')) {
+		require_once('class.bieb.php');
+		$bieb = new Bieb($lid, $db);
+		require_once('class.biebcontent.php');
+		$midden = new BiebContent($bieb);
+	} else {
+		# geen rechten
+		require_once('class.includer.php');
+		$midden = new Includer('', 'geentoegang.html');
+	}	
 
 	### Kolommen vullen ###
 	require_once('class.column.php');
@@ -63,4 +71,5 @@ function main() {
 	$page->view();
 	
 }
+
 ?>

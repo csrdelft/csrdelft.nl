@@ -5,6 +5,9 @@ bin/pubcie-admin.php -text
 bin/socciesaldi-koppelen.php -text
 bin/wachtwoord.php -text
 htdocs/.htaccess -text
+htdocs/bieb/.htaccess -text
+htdocs/bieb/catalogus.php -text
+htdocs/bieb/index.php -text
 htdocs/csrdelft.css -text
 htdocs/forum/.htaccess -text
 htdocs/forum/bewerken.php -text
@@ -51,7 +54,6 @@ htdocs/informatie/bestuur.php -text
 htdocs/informatie/bestuurstekst.php -text
 htdocs/informatie/commissie.php -text
 htdocs/informatie/contact.php -text
-htdocs/informatie/documenten.php -text
 htdocs/informatie/fotoalbum.php -text
 htdocs/informatie/images/alphabanner.gif -text
 htdocs/informatie/images/amb.gif -text
@@ -96,7 +98,6 @@ htdocs/informatie/mapknor.html -text
 htdocs/informatie/ondervereniging.php -text
 htdocs/informatie/werkgroep.php -text
 htdocs/informatie/woonoord.php -text
-htdocs/informatie/woonoord2.php -text
 htdocs/leden/.htaccess -text
 htdocs/leden/agenda.php -text
 htdocs/leden/arro.php -text
@@ -139,6 +140,8 @@ lib/bbcode/lang_main.php -text
 lib/blowfish/blowfish.php -text
 lib/blowfish/blowfish_default_key.php -text
 lib/class.agenda.php -text
+lib/class.bieb.php -text
+lib/class.biebcontent.php -text
 lib/class.cieoverzichtcontent.php -text
 lib/class.column.php -text
 lib/class.commissie.php -text
@@ -263,7 +266,6 @@ lib/tekst/informatie/lezingen.html -text
 lib/tekst/informatie/lidworden.php -text
 lib/tekst/informatie/ondervereniging.html -text
 lib/tekst/informatie/werkgroep.html -text
-lib/tekst/informatie/woonoord.html -text
 lib/tekst/leden-thuis.html -text
 lib/tekst/maaltijd-niet-ingelogged.html -text
 lib/tekst/maaltijd.html -text

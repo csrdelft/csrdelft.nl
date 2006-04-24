@@ -44,6 +44,7 @@ function main() {
 		$forum = new Forum($lid, $db);
 		require_once('class.forumcontent.php');
 		$midden = new ForumContent($forum, 'forum');
+		$titel=$midden->getTitel();
 	} else {
 		# geen rechten
 		require_once('class.includer.php');
@@ -67,6 +68,7 @@ function main() {
 	$page = new Page();
 	$page->addColumn($col0);
 	$page->addColumn($col1);
+	$page->addTitel($titel);
 
 	$page->view();
 	
