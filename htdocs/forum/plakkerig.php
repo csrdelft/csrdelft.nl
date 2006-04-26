@@ -36,7 +36,7 @@ function main() {
 					exit;
 				}else{
 					header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID);
-					$_SESSION['forum_foutmelding']='Oeps, feutje, niet gelukt dus'));
+					$_SESSION['forum_foutmelding']='Oeps, feutje, niet gelukt dus';
 					exit;
 				}
 			}else{

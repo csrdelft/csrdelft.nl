@@ -22,10 +22,10 @@ function main() {
 		if(isset($_GET['topic'])){
 			$iTopicID=(int)$_GET['topic'];
 			if($forum->keurTopicGoed($iTopicID)){
-				header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID.'/');
+				header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID);
 				$_SESSION['forum_foutmelding']='Onderwerp nu voor iedereen zichtbaar.';
 			}else{
-				header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID.'/');
+				header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID);
 				$_SESSION['forum_foutmelding']='Goedkeuren ging mis.';
 			}
 		}else{
@@ -37,5 +37,4 @@ function main() {
 		$_SESSION['forum_foutmelding']='U heeft daar niets te zoeken.';
 	}		
 }
-
 ?>

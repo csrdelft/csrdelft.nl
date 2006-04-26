@@ -47,7 +47,7 @@ function main() {
 		}
 	} else {
 		header('location: http://csrdelft.nl/forum/');
-		$_SESSION['forum_foutmelding']='Geen rechten hier'));
+		$_SESSION['forum_foutmelding']='Geen rechten hier';
 	}	
 }
 ?>

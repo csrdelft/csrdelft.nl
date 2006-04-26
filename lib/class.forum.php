@@ -725,10 +725,20 @@ class Forum {
 				//nu alleen nog controleren of het bericht van de huidige gebruiker is.
 				//als $iPostUid!==false dan is er geen uid van de post meegegeven, ophalen uit de db dan maar...
 				if($iPostUid!==false){
-					return $iPostUid==$this->_lid->getUid();
+					//extern mag uberhaupt niet bewerken.
+					if($iPostUid!='x999'){
+						return $iPostUid==$this->_lid->getUid();
+					}else{
+						return false;
+					}
 				}else{
 					$aPost=$this->getPost($iPostID);
-					return $aPost['open'] AND ($aPost['uid']==$this->_lid->getUid());
+					//extern mag uberhaupt niet bewerken.
+					if($aPost['uid']!='x999'){
+						return $aPost['open'] AND ($aPost['uid']==$this->_lid->getUid());
+					}else{
+						return false;
+					}
 				}
 			}else{
 				//geen rechten om te posten, en niet open.
