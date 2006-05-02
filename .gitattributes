@@ -22,6 +22,7 @@ htdocs/forum/stemming.php -text
 htdocs/forum/toevoegen.php -text
 htdocs/forum/topic.php -text
 htdocs/forum/verwijderen.php -text
+htdocs/forum/zoeken.php -text
 htdocs/images/aanmelden.gif -text
 htdocs/images/alpha-klein.gif -text
 htdocs/images/annuleren.gif -text

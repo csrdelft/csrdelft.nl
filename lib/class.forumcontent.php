@@ -45,16 +45,14 @@ class ForumContent extends SimpleHTML {
 			</tr>';
 		if(is_array($aCategories)){
 			foreach($aCategories as $aCategorie){
+				//controleren of de gebruiker de huidige categorie mag zien
 				if($this->_forum->_lid->hasPermission($aCategorie['rechten_read'])){
-					echo '
-<tr>
-<td class="forumtitel">
-	<a href="/forum/categorie/'.$aCategorie['id'].'">'.mb_htmlentities($aCategorie['titel']).'</a><br />
-	'.$aCategorie['beschrijving'].'
-</td>
-<td class="forumreacties">'.$aCategorie['topics'].'</td>
-<td class="forumreacties">'.$aCategorie['reacties'].'</td>
-<td class="forumreactiemoment">';
+					echo '<tr><td class="forumtitel">';
+					echo '<a href="/forum/categorie/'.$aCategorie['id'].'">'.mb_htmlentities($aCategorie['titel']).'</a><br />';
+					echo mb_htmlentities($aCategorie['beschrijving']).'</td>';
+					echo '<td class="forumreacties">'.$aCategorie['topics'].'</td>';
+					echo '<td class="forumreacties">'.$aCategorie['reacties'].'</td>';
+					echo '<td class="forumreactiemoment">';
 					if($aCategorie['lastpost']!='0000-00-00 00:00:00'){
 						//als de dag vandaag is, niet de datum weergeven maar 'vandaag'
 						if(date('Y-m-d')==substr($aCategorie['lastpost'], 0, 10)){
@@ -65,26 +63,17 @@ class ForumContent extends SimpleHTML {
 						echo '<br /><a href="/forum/onderwerp/'.$aCategorie['lasttopic'].'#'.$aCategorie['lastpostID'].'">reactie</a> door ';
 						if(trim($aCategorie['lastuser'])!=''){
 							$sUsername=$this->_forum->getForumNaam($aCategorie['lastuser']);
-							if(trim($sUsername!='')){
-								echo '<a href="/leden/profiel/'.$aCategorie['lastuser'].'">'.mb_htmlentities($sUsername).'</a>';
-							}else{
-								echo 'onbekend';
-							}
-						}else{
-							echo 'onbekend';
-						}
-					}else{
-						echo 'nog geen berichten';
-					}
+							echo '<a href="/leden/profiel/'.$aCategorie['lastuser'].'">'.mb_htmlentities($sUsername).'</a>';
+						}else{ echo 'onbekend';	}
+					//er zijn nog geen berichten in deze categorie dus er is ook nog geen laatste bericht
+					}else{ echo 'nog geen berichten'; }
 					echo '</td></tr>';
-				}else{
-					//deze categorie mag gebruiker niet zien. Niets weergeven dus.
 				}
 			}//einde foreach
-		}else{
-			echo '<tr><td colspan="4">Er zijn nog geen categorie&euml;n of er is iets mis met het databeest</td></tr>';
-		}
-		echo '</table>';
+		//het forum is nog leeg, of de database is stuk ofzo
+		}else{ echo '<tr><td colspan="4">Er zijn nog geen categorie&euml;n of er is iets mis met het databeest</td></tr>'; }
+		echo '</table><br />';
+		$this->zoekFormulier();
 	}
 /***********************************************************************************************************
 *	Topics laten zien in een categorie
@@ -112,11 +101,6 @@ class ForumContent extends SimpleHTML {
 			//eventuele foutmelding weergeven:
 			echo $this->getError();
 			echo '<table class="forumtabel"><tr>';
-			$iKolommen=4;
-			if($this->_forum->_lid->hasPermission('P_FORUM_MOD')){
-				echo '<td class="forumhoofd">&nbsp;</td>';
-				$iKolommen=5;
-			}
 			echo '<td class="forumhoofd">Titel</td><td class="forumhoofd">Reacties</td>';
 			echo '<td class="forumhoofd">Auteur</td><td class="forumhoofd">verandering</td></tr>';
 			if(is_array($aTopics)){
@@ -124,12 +108,6 @@ class ForumContent extends SimpleHTML {
 				$iAantalTopics=$this->_forum->topicCount($iCat);
 				foreach($aTopics as $aTopic){
 					echo "\r\n".'<!--begin onderwerp regel--><tr>';
-					//vakje met modereerdingen
-					if($this->_forum->_lid->hasPermission('P_FORUM_MOD')){
-						echo '<td class="forumtitel"><a href="/forum/verwijder-onderwerp/'.$aTopic['id'].'" ';
-						echo 'onclick="return confirm(\'Weet u zeker dat u dit topic wilt verwijderen?\')">';
-						echo '<img src="/images/verwijderen.png" style="border: 0px;" alt=" " /></a></td>'."\r\n";
-					}
 					//cel met topictitel
 					echo '<td class="forumtitel">';
 					//[peiling] ervoor voor onderschijd bij een peiling.
@@ -151,8 +129,7 @@ class ForumContent extends SimpleHTML {
 					//aantal reacties in dit topic
 					echo '<td class="forumreacties">'.($aTopic['reacties']-1).'</td>';
 					//draadstarter:
-					$sUsername=$this->_forum->getForumNaam($aTopic['uid']);
-					echo '<td class="forumreacties"><a href="/leden/profiel/'.$aTopic['uid'].'">'.mb_htmlentities($sUsername).'</a></td>';
+					echo '<td class="forumreacties"><a href="/leden/profiel/'.$aTopic['uid'].'">'.mb_htmlentities($this->_forum->getForumNaam($aTopic['uid'])).'</a></td>';
 					//laatste veranderingen
 					echo '<td class="forumreactiemoment">';
 					if(date('Y-m-d')==substr($aTopic['lastpost'], 0, 10)){
@@ -162,15 +139,8 @@ class ForumContent extends SimpleHTML {
 					}
 					echo '<br /><a href="/forum/onderwerp/'.$aTopic['id'].'#'.$aTopic['lastpostID'].'">reactie</a> door ';
 					if(trim($aTopic['lastuser'])!=''){
-						$sUsername=$this->_forum->getForumNaam($aTopic['lastuser']);
-						if(trim($sUsername!='')){
-							echo '<a href="/leden/profiel/'.$aTopic['lastuser'].'">'.mb_htmlentities($sUsername).'</a>';
-						}else{
-							echo 'onbekend';
-						}
-					}else{
-						echo 'onbekend';
-					}
+						echo '<a href="/leden/profiel/'.$aTopic['lastuser'].'">'.mb_htmlentities($this->_forum->getForumNaam($aTopic['lastuser'])).'</a>';
+					}else{ echo 'onbekend'; }
 					echo '</td></tr><!--einde onderwerp regel-->'."\r\n";
 				}
 			}else{//$aTopics is geen array, dus bevat geen berichten.
@@ -180,7 +150,7 @@ class ForumContent extends SimpleHTML {
 			}
 			//nieuw topic formuliertje
 			//kijken of er wel gepost mag worden en of de categorie bestaat.
-			echo '<tr><td colspan="'.($iKolommen-1).'" class="forumhoofd">';
+			echo '<tr><td colspan="3" class="forumhoofd">';
 			if($this->_forum->_lid->hasPermission($aTopic['rechten_post'])){
 				echo 'Onderwerp Toevoegen';
 			}else{
@@ -191,6 +161,8 @@ class ForumContent extends SimpleHTML {
 			echo '<td class="forumhoofd">';
 			if($iAantalTopics>$this->_topicsPerPagina){
 				$iAantalPaginas=ceil($iAantalTopics/$this->_topicsPerPagina);
+				//bij meer dan tien pagina's boven de tien pagina's geen links meer weergeven
+				if($iAantalPaginas>10){ $iAantalPaginas=10; $bMeer=true; }
 				echo 'pagina: ';
 				for($iPagina=0; $iPagina<$iAantalPaginas; $iPagina++){ 
 					if($iPagina==$iPaginaID){
@@ -199,14 +171,11 @@ class ForumContent extends SimpleHTML {
 						echo '<a href="/forum/categorie/'.$iCat.'/'.$iPagina.'">'.($iPagina+1).'</a> ';
 					}
 				}
+				if(isset($bMeer)){ echo '...'; }
 			}
 			echo '</td></tr>';
 			if($this->_forum->_lid->hasPermission($aTopic['rechten_post'])){
-				echo '
-				<tr><td colspan="'.$iKolommen.'" class="forumtekst">
-					<form method="post" action="/forum/onderwerp-toevoegen/'.$iCat.'">
-					
-					<p>';
+				echo '<tr><td colspan="4" class="forumtekst"><form method="post" action="/forum/onderwerp-toevoegen/'.$iCat.'"><p>';
 				if($this->_forum->_lid->hasPermission('P_LOGGED_IN')){
 					echo 'Hier kunt u een onderwerp toevoegen in deze categorie van het forum.<br /><br />';
 				}else{
@@ -227,9 +196,7 @@ class ForumContent extends SimpleHTML {
 					invoerveld vergroten</a><br />';
 				echo '<textarea name="bericht" id="forumBericht" rows="10" cols="80" style="width: 100%" class="tekst" tabindex="2"></textarea><br />
 						<input type="submit" name="submit" value="verzenden" />
-						</p>
-						</form>
-						</td></tr>';
+						</p></form></td></tr>';
 			}
 			echo '</table>';
 			//nog eens de navigatielinks die ook bovenaan staan.
@@ -244,7 +211,8 @@ class ForumContent extends SimpleHTML {
 *
 ***********************************************************************************************************/	
 	function viewTopic($iTopic, $iCiteerPost=0){
-		$iTopic=(int)$iTopic;
+		//typecasting van de variabelen.
+		$iTopic=(int)$iTopic; $iCiteerPost=(int)$iCiteerPost;
 		$aBerichten=$this->_forum->getPosts($iTopic);
 		$rechten_post=$aBerichten[0]['rechten_post'];
 		if(is_array($aBerichten) AND $this->_forum->_lid->hasPermission($aBerichten[0]['rechten_read'])){
@@ -299,6 +267,7 @@ class ForumContent extends SimpleHTML {
 					}
 					//html dan maer
 					echo '<tr><td class="forumauteur">Een peiling van ';
+					//STATISTICUS is het uid van de verenigingsstatisticus en staat in include.config.php
 					if($aBerichten[0]['startUID']==STATISTICUS){
 						echo 'am. Verenigings statisticus';
 					}else{
@@ -330,11 +299,11 @@ class ForumContent extends SimpleHTML {
 					if($bMagStemmen){
 						echo '<tr><td colspan="3"><input type="submit" value="stemmen" name="stemmen" /> <em>(Als u hier klikt wordt uw eventuele commentaar niet opgeslagen)</em></td></tr>';
 					}
-					echo '</table></form>';
-					echo '</td></tr>';
+					echo '</table></form></td></tr>';
 					//tussenlijntje
 					echo '<tr><td class="forumtussenschot" colspan="2"></td></tr>'."\r\n";
 				break;
+				//hier kunnen nog dingen mee gedaan worden, bijvoorbeeld een andere layout/kleur voor een lezing
 				case 'T_LEZING':
 				break;
 				case 'T_STANDAARD':
@@ -348,20 +317,14 @@ class ForumContent extends SimpleHTML {
 			$iWissel=1;
 			foreach($aBerichten as $aBericht){
 				echo '<tr><td class="forumauteur">';
-				$sUsername=$this->_forum->getForumNaam($aBericht['uid'], $aBericht);
-				if(trim($sUsername!='')){
-					echo '<a href="/leden/profiel/'.$aBericht['uid'].'">'.mb_htmlentities($sUsername).'</a> schreef ';
-				}else{
-					echo 'onbekend';
-				}
+				echo '<a href="/leden/profiel/'.$aBericht['uid'].'">'.mb_htmlentities($this->_forum->getForumNaam($aBericht['uid'], $aBericht)).'</a> schreef ';
 				//anker maken met post-ID
-				echo '<a class="forumpostlink" name="'.$aBericht['postID'].'">';
+				echo '<a class="forumpostlink" name="'.$aBericht['postID'].'"></a>';
 				if(date('Y-m-d')==substr($aBericht['datum'], 0, 10)){
 					echo 'om '.date("G:i", strtotime($aBericht['datum']));;
 				}else{
 					echo 'op '.date("j-n-Y \o\m G:i", strtotime($aBericht['datum']));
 				}
-				echo '</a>';
 				if($aBericht['bewerkDatum']!='0000-00-00 00:00:00'){
 					echo '<br />Bewerkt op '.date("j-n-Y \o\m G:i", strtotime($aBericht['bewerkDatum'])).'';
 				}
@@ -384,7 +347,22 @@ class ForumContent extends SimpleHTML {
 				echo '</td>';
 				
 				//het eigenlijke bericht weergeven.
-				echo "\r\n".'<td class="forumbericht'.($iWissel%2).'">'.bbview($aBericht['tekst'], $aBericht['bbcode_uid']).'</td></tr>';
+				echo "\r\n".'<td class="forumbericht'.($iWissel%2).'">';
+				$sBericht=$aBericht['tekst'];
+				//als er woorden hooggelicht moeten worden
+				if(isset($_GET['highlight']) AND preg_match('/[a-zA-Z0-9\+\-]/', $_GET['highlight'])){
+					$sZoekWoorden=urldecode($_GET['highlight']);
+					$sZoekWoorden=str_replace(array('+', '"', "'", '/','\\'), '', $sZoekWoorden);
+					$aZoekWoorden=explode(' ', $sZoekWoorden);
+					foreach($aZoekWoorden as $sZoekWoord){
+						//als het een leeg zoekwoord betreft of een zoekwoord dat juist uitgesloten zou moeten worden dan niet highlighten
+						if($sZoekWoord!='' AND $sZoekWoord[0]!='-'){
+							//ubb tag invoegen voor het highlighten van de zoekwoorden
+							$sBericht=preg_replace('/'.$sZoekWoord.'/', '[zoekwoord:'.$aBericht['bbcode_uid'].']'.$sZoekWoord.'[/zoekwoord:'.$aBericht['bbcode_uid'].']', $sBericht);
+						}
+					}
+				}	
+				echo bbview($sBericht, $aBericht['bbcode_uid']).'</td></tr>';
 				//tussenlijntje
 				echo '<tr><td class="forumtussenschot" colspan="2"></td></tr>'."\r\n";
 				$iWissel++;
@@ -419,8 +397,7 @@ class ForumContent extends SimpleHTML {
 					$sCiteerBericht=bbedit($aPost['tekst'], $aPost['bbcode_uid']);
 					echo '[quote]'.$sCiteerBericht.'[/quote]';
 				}
-				echo '</textarea><br />';
-				echo '<input type="submit" name="submit" value="opslaan" /></p></form>';
+				echo '</textarea><br /><input type="submit" name="submit" value="opslaan" /></p></form>';
 			}else{
 				if($aBericht['open']==1){
 					//wel open, geen rechten.
@@ -454,12 +431,11 @@ class ForumContent extends SimpleHTML {
 				$sTopicTitel=$this->_forum->getTopicTitel($iTopicID);
 				$aPost=$this->_forum->getPost($iPostID);
 				//navigatielinks
-				$sNavigatieLinks='<h2><a href="/forum/" class="forumGrootlink">Forum</a> &raquo; 
+				echo  '<h2><a href="/forum/" class="forumGrootlink">Forum</a> &raquo; 
 					<a href="/forum/categorie/'.$aPost['categorieID'].'" class="forumGrootlink">
 						'.mb_htmlentities($aPost['categorieTitel']).'
 					</a> &raquo; <a href="/forum/onderwerp/'.$iTopicID.'#'.$iPostID.'" class="forumGrootlink">
 					'.mb_htmlentities($aPost['topicTitel']).'</a> &raquo; bericht bewerken</h2>';
-				echo $sNavigatieLinks;
 				
 				echo '<table class="forumtabel">
 					<tr><td colspan="3" class="forumhoofd">Bericht bewerken</td><td class="forumhoofd">&nbsp;</td></tr>
@@ -474,11 +450,9 @@ class ForumContent extends SimpleHTML {
 					<textarea name="bericht" id="forumBericht" rows="20" style="width: 100%" class="tekst">'.
 						bbedit($aPost['tekst'], $aPost['bbcode_uid']).'</textarea><br />
 					<input type="submit" name="submit" value="verzenden" /> <a href="/forum/onderwerp/'.$iTopicID.'#laatste">terug naar onderwerp</a>
-					</form>
-					</td></tr></table>';
+					</form></td></tr></table>';
 			}else{
-				echo '<h2>Dit bericht bestaat niet.</h2>
-					Terug naar <a href="/forum/">het forum.</a>';
+				echo '<h2>Dit bericht bestaat niet.</h2>Terug naar <a href="/forum/">het forum.</a>';
 			}
 		}else{
 			$iTopicID=$this->_forum->getTopicVoorPostID($iPostID);
@@ -491,28 +465,20 @@ class ForumContent extends SimpleHTML {
 *
 ***********************************************************************************************************/	
 	function pollFormulier($iCatID){
+		$iCatID=(int)$iCatID;
 		$sTitel=$sBericht='';
-		if(isset($_POST['titel'])){
-			$sTitel=trim($_POST['titel']);
-		}
-		if(isset($_POST['bericht'])){
-			$sBericht=trim($_POST['bericht']);
-		}
-		
+		//bij foutmeldingen de berichten uit de post variabelen halen
+		if(isset($_POST['titel'])){ $sTitel=trim($_POST['titel']); }
+		if(isset($_POST['bericht'])){ $sBericht=trim($_POST['bericht']); }
 		echo '<form action="/forum/maak-stemming/'.$iCatID.'" method="post"><table class="forumtabel">
 					<tr><td colspan="3" class="forumhoofd">Peiling toevoegen</td><td class="forumhoofd"></td></tr>
 					<tr><td colspan="4" class="forumtekst">';
-		if($this->_sError!==false){
-			echo '<div class="foutmelding">'.$this->_sError.'</div>';
-		}
-		?>
-<strong>Vraag/stelling</strong><br />
-<input type="text" name="titel" value="<?php echo $sTitel; ?> " style="width: 100%" class="tekst" /><br />
-</td></tr>
-<tr><td colspan="4" class="forumtekst">
-<strong>Opties voor de peiling:</strong><br />
-Lege velden worden genegeerd.<br /><br />
-		<?php
+		//eventuele foutmelding weergeven.
+		echo $this->getError();
+		echo '<strong>Vraag/stelling</strong><br />';
+		echo '<input type="text" name="titel" value="'.$sTitel.'" style="width: 100%" class="tekst" /><br />';
+		echo '</td></tr><tr><td colspan="4" class="forumtekst">';
+		echo '<strong>Opties voor de peiling:</strong><br />Lege velden worden genegeerd.<br /><br />';
 		for($iTeller=0; $iTeller<6; $iTeller++){
 			if(isset($_POST['opties'][$iTeller]) AND trim($_POST['opties'][$iTeller])!=''){
 				$sOptie=trim($_POST['opties'][$iTeller]);
@@ -521,14 +487,10 @@ Lege velden worden genegeerd.<br /><br />
 			}
 			echo ($iTeller+1).'. <input type="text" name="opties[]" value="'.$sOptie.'" style="width: 70%" class="tekst" /><br />';
 		}
-		echo '</td></tr>
-					<tr><td colspan="4" class="forumtekst">
-						<strong>Bericht</strong><br />
-						<textarea name="bericht" rows="10" style="width: 100%" class="tekst">'.$sBericht.'</textarea><br />			
-						<input type="submit" name="submit" value="verzenden" /> <a href="/forum/categorie/'.$iCatID.'">terug naar categorie</a>
-					</td></tr>
-					
-		</table></form>';
+		echo '</td></tr><tr><td colspan="4" class="forumtekst"><strong>Bericht</strong><br />';
+		echo '<textarea name="bericht" rows="10" style="width: 100%" class="tekst">'.$sBericht.'</textarea><br />';
+		echo '<input type="submit" name="submit" value="verzenden" /> <a href="/forum/categorie/'.$iCatID.'">terug naar categorie</a>';
+		echo '</td></tr></table></form>';
 	}
 /***********************************************************************************************************
 * rss feed weergeven van het forum.
@@ -591,13 +553,79 @@ Lege velden worden genegeerd.<br /><br />
 		echo '</channel>';
 		echo '</rss>';
 	}
+/***********************************************************************************************************
+* Zoekah in forumposts, en titels van onderwerpen
+*
+***********************************************************************************************************/
+	function zoeken(){
+		$sZoekQuery='';
+		if(isset($_POST['zoeken'])){ $sZoekQuery=trim($_POST['zoeken']); }elseif(isset($_GET['zoeken'])){ $sZoekQuery=trim($_GET['zoeken']);}
+		//altijd het zoekformulier weergeven.
+		echo '<h2><a href="/forum/" class="forumGrootlink">Forum</a> &raquo; Zoeken </h2>';
+		$this->zoekFormulier($sZoekQuery);
+		if($sZoekQuery!=''){
+			$aZoekResultaten=$this->_forum->searchPosts($sZoekQuery);
+			if(is_array($aZoekResultaten)){
+				$aZoekOnderdelen=explode(' ', $sZoekQuery);
+				$sEersteTerm=$aZoekOnderdelen[0];
+				echo 'In <em>'.count($aZoekResultaten).'</em> onderwerpen kwam de volgende zoekterm voor: <strong>'.mb_htmlentities($sZoekQuery).'</strong>';
+				echo '<table class="forumtabel"><tr><td class="forumhoofd">onderwerp</td><td class="forumhoofd">auteur</td>';
+				echo '<td class="forumhoofd">categorie</td><td class="forumhoofd">datum</td></tr>';
+				foreach($aZoekResultaten as $aZoekResultaat){
+					$iFragmentLengte=250;
+					//ubb wegslopen
+					$sPostFragment=preg_replace('/\[\/?[a-z\*\:]*:'.$aZoekResultaat['bbcode_uid'].'\]/', '', $aZoekResultaat['tekst']);
+					$sPostFragment=preg_replace('/\[url=.*\](.*)\[\/url\]/', '\\1', $sPostFragment);
+					$sPostFragment=preg_replace('/\[\/?[a-z\*\:]*:'.$aZoekResultaat['bbcode_uid'].'\?/', '', $sPostFragment);
+					
+					//is het bericht zelf al korter dan de fragmentlengte?
+					if(strlen($sPostFragment)>=$iFragmentLengte){
+						//beginpositie en lengte van het te tonen fragment proberen te berekenen.
+						$iEersteTermPos=strpos($aZoekResultaat['tekst'], $sEersteTerm);
+						if($iEersteTermPos<(.5*$iFragmentLengte)){ $iBegin=0; }else{ $iBegin=$iEersteTermPos-(.5*$iFragmentLengte); }
+						if($iBegin+$iFragmentLengte>=strlen($aZoekResultaat['tekst'])){ 
+							$iLengte=strlen($aZoekResultaat['tekst'])-$iEersteTermPos; 
+						}else{ 
+							$iLengte=$iFragmentLengte;
+						}
+						//het fragment eruit halen
+						$sPostFragment=substr($sPostFragment, $iBegin, $iLengte);
+						if($iBegin!=0){ $sPostFragment='...'.trim($sPostFragment); };
+					}
+					$sPostFragment=mb_htmlentities($sPostFragment);
+					//zoektermen hooglichten
+					$sPostFragment=preg_replace('/'.$sEersteTerm.'/', '<strong>'.$sEersteTerm.'</strong>', $sPostFragment);
 
+					echo '<tr><td class="forumtitel">';
+					echo '<a href="/forum/onderwerp/'.$aZoekResultaat['tid'].'/'.urlencode($sZoekQuery).'#'.$aZoekResultaat['postID'].'">';
+					echo $aZoekResultaat['titel'].'</a>';
+					if($aZoekResultaat['aantal']!=1){ echo ' <em>('.$aZoekResultaat['aantal'].' berichten in dit onderwerp)</em>'; }
+					echo '<br />'.$sPostFragment.'</td>';
+					echo '<td class="forumtitel">
+						<a href="/leden/profiel/'.$aZoekResultaat['uid'].'">'.$this->_forum->getForumNaam($aZoekResultaat['uid'],$aZoekResultaat).'</a></td>';
+					echo '<td class="forumtitel">
+						<a href="/forum/categorie/'.$aZoekResultaat['categorie'].'">'.$aZoekResultaat['categorieTitel'].'</a></td>';
+					echo '<td class="forumtitel">
+						'.$aZoekResultaat['datum'].'</td>';
+					echo '</tr>';
+				}
+			echo '</table>';
+			}else{ echo '<h3>Er is niets gevonden</h3>Zoekresultaten moeten minimaal 4 letters bevatten...'; }
+		}
+	}
+	function zoekFormulier($sZoekQuery=''){
+		$sZoekQuery=htmlspecialchars($sZoekQuery, ENT_QUOTES, 'UTF-8');
+		echo '<form action="/forum/zoeken.php" method="post"><input type="tekst" value="'.$sZoekQuery.'" name="zoeken" />';
+		echo '<input type="submit" value="zoeken" name="verzenden" /></form><br /><br />';
+	}
 	function getError(){
 		if(isset($_SESSION['forum_foutmelding'])){
 			$sError='<div class="foutmelding">'.mb_htmlentities(trim($_SESSION['forum_foutmelding'])).'</div>';
 			//maar één keer tonen, de melding.
 			unset($_SESSION['forum_foutmelding']);
 			return $sError;
+		}elseif($this->_sError!==false){
+			return '<div class="foutmelding">'.$this->_sError.'</div>';
 		}
 	}
 	function getTitel(){ 
@@ -607,6 +635,8 @@ Lege velden worden genegeerd.<br /><br />
 			$sTitel='forum - '.$sCategorie.' - '.$this->_forum->getTopicTitel($iTopicID);
 		}elseif($this->_actie=='forum' AND isset($_GET['forum'])){
 			$sTitel='forum - '.$this->_forum->getCategorieTitel((int)$_GET['forum']);
+		}elseif($this->_actie=='zoeken'){
+			$sTitel='forum - zoeken';
 		}else{
 			$sTitel='forum';
 		}
@@ -634,6 +664,7 @@ Lege velden worden genegeerd.<br /><br />
 				} 
 			break;
 			case 'rss': $this->rssFeed();	break;
+			case 'zoeken': $this->zoeken(); break;
 			default: $this->viewCategories();	break;
 		}
 		if($this->_forum->_lid->hasPermission('P_FORUM_MOD') AND $this->_actie!='rss'){

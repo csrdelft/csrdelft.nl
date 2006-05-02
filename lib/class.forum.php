@@ -35,6 +35,9 @@ class Forum {
 	//het aantal posts voor een rss feed
 	var $_postsPerRss=15;
 	
+	//aantal zoekresultaten
+	var $_aantalZoekResultaten=20;
+	
 	//constructor.
 	function Forum(&$lid, &$db){
 		$this->_lid =& $lid;
@@ -893,6 +896,68 @@ class Forum {
 				return $sNaam;
 			//er is een fout opgetreden...
 			}else{ return 'FOUT'; }
+		}
+	}
+	function searchPosts($sZoekQuery){
+		if(preg_match('/^[a-zA-Z0-9 \-\+\']*$/', $sZoekQuery)){
+			//bekijken waarin gezocht mag worden...
+			$sCategorieClause='topic.categorie=2 OR topic.categorie=3 ';
+			if($this->_lid->hasPermission('P_LEDEN_READ')){ $sCategorieClause.='OR topic.categorie=1 '; }
+			if($this->_lid->hasPermission('P_FORUM_READ')){ $sCategorieClause.=' OR topic.categorie=4 '; }
+			if($this->_lid->hasPermission('P_OUDLEDEN_READ')){ $sCategorieClause.='OR topic.categorie=8 '; }
+			if($this->_lid->hasPermission('P_FORUM_MOD')){ $sCategorieClause.='OR topic.categorie=6 '; }
+			//sZoekQuery controleren:
+			$sZoekQuery=$this->_db->escape(trim($sZoekQuery));
+			
+			//zoo, uberdeuberdeuber query om een topic op te halen. Namen worden
+			//ook opgehaald in deze query, die worden door forumcontent weer 
+			//doorgegeven aan getForumNaam();
+			$sSearchQuery="
+				SELECT
+					topic.id AS tid,
+					topic.titel AS titel,
+					topic.uid AS startUID,
+					topic.categorie AS categorie,
+						cat.titel AS categorieTitel,
+					topic.open AS open,
+					topic.plakkerig AS plakkerig,
+					topic.soort AS soort,
+					post.uid AS uid,
+						lid.nickname AS nickname,
+						lid.voornaam AS voornaam,
+						lid.tussenvoegsel AS tussenvoegsel,
+						lid.achternaam AS achternaam,
+						lid.postfix AS postfix,
+						lid.geslacht AS geslacht,
+						lid.status AS status,
+					post.id AS postID,
+					post.tekst AS tekst,
+					post.bbcode_uid AS bbcode_uid,
+					post.datum AS datum,
+					post.bewerkDatum AS bewerkDatum,
+					count(*) AS aantal
+				FROM
+					forum_post post
+				INNER JOIN
+					forum_topic topic ON( post.tid=topic.id )
+				INNER JOIN
+					forum_cat cat ON( topic.categorie=cat.id )
+				INNER JOIN 
+					lid ON ( post.uid=lid.uid)
+				WHERE
+					topic.zichtbaar='zichtbaar' AND
+					( ".$sCategorieClause." ) AND
+					MATCH(post.tekst, topic.titel )AGAINST( '".$sZoekQuery."' IN BOOLEAN MODE )
+				GROUP BY
+					topic.id
+				ORDER BY
+					post.datum DESC
+				LIMIT
+					".$this->_aantalZoekResultaten.";";
+				$rSearchResult=$this->_db->query($sSearchQuery);
+				return $this->_db->result2array($rSearchResult);
+		}else{
+			return false;
 		}
 	}
 	function getParseTime(){

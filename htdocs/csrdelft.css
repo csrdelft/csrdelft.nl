@@ -361,4 +361,7 @@ text-align: left;
 	font-family: monospace;
 	background-color: #f1f1f1;
 }
-
+.zoekwoord{
+	background-color: #FFFF99;
+	color: black;
+}

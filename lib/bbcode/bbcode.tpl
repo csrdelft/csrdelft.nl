@@ -66,3 +66,6 @@
 <!-- BEGIN kopje2_open --><span class="kopje2"><!-- END kopje2_open -->
 <!-- BEGIN kopje2_close --></span><!-- END kopje2_close -->
 
+<!-- BEGIN zoekwoord_open --><span class="zoekwoord"><!-- END zoekwoord_open -->
+<!-- BEGIN zoekwoord_close --></span><!-- END zoekwoord_close -->
+

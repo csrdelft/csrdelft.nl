@@ -232,7 +232,10 @@ function bbencode_second_pass($text, $uid)
 	$text = str_replace("[/kopje1:$uid]", $bbcode_tpl['kopje1_close'], $text);
 	$text = str_replace("[kopje2:$uid]", $bbcode_tpl['kopje2_open'], $text);
 	$text = str_replace("[/kopje2:$uid]", $bbcode_tpl['kopje2_close'], $text);
-
+	
+	//[zoekwoord][/zoekwoord]
+	$text = str_replace("[zoekwoord:$uid]", $bbcode_tpl['zoekwoord_open'], $text);
+	$text = str_replace("[/zoekwoord:$uid]", $bbcode_tpl['zoekwoord_close'], $text);
 	// Patterns and replacements for URL and email tags..
 	$patterns = array();
 	$replacements = array();
@@ -352,7 +355,11 @@ function bbencode_first_pass($text, $uid)
  	// [kopjex] and [/kopjex] is rood kopje
 	$text = preg_replace("#\[kopje1\](.*?)\[/kopje1\]#si", "[kopje1:$uid]\\1[/kopje1:$uid]", $text);
 	$text = preg_replace("#\[kopje2\](.*?)\[/kopje2\]#si", "[kopje2:$uid]\\1[/kopje2:$uid]", $text);
+	
+	// [zoekwoord] and [/zoekwoord]
+	$text = preg_replace("#\[zoekwoord\](.*?)\[/zoekwoord\]#si", "[zoekwoord:$uid]\\1[/zoekwoord:$uid]", $text);
 
+	
 	// [img]image_url_here[/img] code..
 	$text = preg_replace("#\[img\]((http|ftp|https|ftps)://)([^ \?&=\#\"\n\r\t<]*?(\.(jpg|jpeg|gif|png)))\[/img\]#sie", "'[img:$uid]\\1' . str_replace(' ', '%20', '\\3') . '[/img:$uid]'", $text);
 	$text = preg_replace("#\[imgl\]((http|ftp|https|ftps)://)([^ \?&=\#\"\n\r\t<]*?(\.(jpg|jpeg|gif|png)))\[/imgl\]#sie", "'[imgl:$uid]\\1' . str_replace(' ', '%20', '\\3') . '[/imgl:$uid]'", $text);
