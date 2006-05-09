@@ -210,7 +210,7 @@ EOT
 
 			foreach ($this->_result as $lid) {
 				//naam als link naar profiel weergeven.
-				echo '<tr><td valign="top"><a href="/leden/profiel.php?uid='.htmlspecialchars($lid['uid']).'">';
+				echo '<tr><td valign="top"><a href="/leden/profiel/'.htmlspecialchars($lid['uid']).'">';
 				echo mb_htmlentities(str_replace('  ', ' ',implode(' ',array($lid['voornaam'],$lid['tussenvoegsel'],$lid['achternaam'])))).'</a></td>';
 				foreach ($this->_form['kolom'] as $kolom) {
 					echo '<td valign="top">';

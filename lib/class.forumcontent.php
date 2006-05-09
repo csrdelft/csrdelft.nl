@@ -358,7 +358,7 @@ class ForumContent extends SimpleHTML {
 						//als het een leeg zoekwoord betreft of een zoekwoord dat juist uitgesloten zou moeten worden dan niet highlighten
 						if($sZoekWoord!='' AND $sZoekWoord[0]!='-'){
 							//ubb tag invoegen voor het highlighten van de zoekwoorden
-							$sBericht=preg_replace('/'.$sZoekWoord.'/', '[zoekwoord:'.$aBericht['bbcode_uid'].']'.$sZoekWoord.'[/zoekwoord:'.$aBericht['bbcode_uid'].']', $sBericht);
+							$sBericht=preg_replace('/('.$sZoekWoord.')/i', '[zoekwoord:'.$aBericht['bbcode_uid'].']\\1[/zoekwoord:'.$aBericht['bbcode_uid'].']', $sBericht);
 						}
 					}
 				}	
@@ -569,7 +569,7 @@ class ForumContent extends SimpleHTML {
 				$aZoekOnderdelen=explode(' ', $sZoekQuery);
 				$sEersteTerm=$aZoekOnderdelen[0];
 				echo 'In <em>'.count($aZoekResultaten).'</em> onderwerpen kwam de volgende zoekterm voor: <strong>'.mb_htmlentities($sZoekQuery).'</strong>';
-				echo '<table class="forumtabel"><tr><td class="forumhoofd">onderwerp</td><td class="forumhoofd">auteur</td>';
+				echo '<br /><br /><table class="forumtabel"><tr><td class="forumhoofd">onderwerp</td><td class="forumhoofd">auteur</td>';
 				echo '<td class="forumhoofd">categorie</td><td class="forumhoofd">datum</td></tr>';
 				foreach($aZoekResultaten as $aZoekResultaat){
 					$iFragmentLengte=250;
@@ -594,7 +594,7 @@ class ForumContent extends SimpleHTML {
 					}
 					$sPostFragment=mb_htmlentities($sPostFragment);
 					//zoektermen hooglichten
-					$sPostFragment=preg_replace('/'.$sEersteTerm.'/', '<strong>'.$sEersteTerm.'</strong>', $sPostFragment);
+					$sPostFragment=preg_replace('/('.$sEersteTerm.')/i', '<strong>\\1</strong>', $sPostFragment);
 
 					echo '<tr><td class="forumtitel">';
 					echo '<a href="/forum/onderwerp/'.$aZoekResultaat['tid'].'/'.urlencode($sZoekQuery).'#'.$aZoekResultaat['postID'].'">';

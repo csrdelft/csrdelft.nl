@@ -63,6 +63,8 @@ class Lid {
 			# of er is net uitgelogd waardoor de gegevens zijn leeggegooid
 			$this->login('x999','x999');
 		}
+		# experimentele logfunctie
+		$this->logBezoek();
 	}
 
 	### public ###
@@ -118,7 +120,7 @@ class Lid {
 		# ga alleen verder als er een geldige permissie wordt gevraagd
 		if (!array_key_exists($descr, $this->_permissions)) return false;
 		# zoek de code op
-		$gevraagd = $this->_permissions[$descr];
+		$gevraagd = (int) $this->_permissions[$descr];
 
 		# zoek de rechten van de gebruiker op
 		$liddescr = $this->_profile['permissies'];
@@ -449,6 +451,21 @@ class Lid {
 		}
 	}
 
+	# We gaan de wijzigingen doorvoeren in ldap, alleen moeten we wel rekening houden
+	# met samengestelde velden!
+	# als een van deze velden is veranderd, voegen we de andere velden in de groep ook
+	# toe voordat we het naar ldap sturen.
+	/*
+	function diff_to_ldap() {
+		$groep_naam  = array('voornaam', 'tusenvoegsel', 'achternaam');
+		# kijken of minimaal een van de naam-velden voorkomt
+		if (
+
+		$groep_adres = array('adres', 'psotcode', 'plaats', 'land');
+		
+	
+	}
+	*/
 
 	function getPermissions() { return $this->_profile['permissies']; }
 	function getStatus()      { return $this->_profile['status']; }
@@ -531,6 +548,9 @@ class Lid {
 			'P_MAIL_POST'    => 02000000000, # mag berichtjes in de pubciemail rossen
 			'P_MAIL_COMPOSE' => 04000000000, # mag alle berichtjes in de pubcie-mail bewerken, en volgorde wijzigen
 			'P_MAIL_SEND'    => 06000000000, # mag de C.S.R.-mail verzenden
+			'P_BIEB_READ'    => 00000000020, # Bibliotheek lezen
+			'P_BIEB_EDIT'    => 00000000040, # Bibliotheek wijzigen		
+			'P_BIEB_MOD'     => 00000000060, # Bibliotheek zowel wijzigen als lezen	
 			# N.B. bij uitbreiding van deze octale getallen met nog een cijfer erbij gaat er iets mis, wat weten we nog niet.
 		);
 
@@ -543,13 +563,13 @@ class Lid {
 			'P_NOBODY'     => $p['P_NOBODY'] | $p['P_FORUM_READ'],
 			'P_LID'        => $p['P_LOGGED_IN'] | $p['P_FORUM_POST'] | $p['P_DOCS_READ'] | $p['P_LEDEN_READ'] | $p['P_PROFIEL_EDIT'] | $p['P_AGENDA_POST'] + $p['P_MAAL_WIJ'] + $p['P_MAIL_POST'],
 			'P_OUDLID'     => $p['P_LOGGED_IN'] | $p['P_OUDLEDEN_READ'] | $p['P_PROFIEL_EDIT'] | $p['P_FORUM_READ'],
-			'P_MODERATOR'  => $p['P_LOGGED_IN'] | $p['P_FORUM_MOD'] | $p['P_DOCS_MOD'] | $p['P_LEDEN_MOD'] | $p['P_OUDLEDEN_MOD'] | $p['P_AGENDA_MOD'] | $p['P_MAAL_MOD'] | $p['P_MAIL_SEND'] | $p['P_NEWS_MOD']
+			'P_MODERATOR'  => $p['P_LOGGED_IN'] | $p['P_FORUM_MOD'] | $p['P_DOCS_MOD'] | $p['P_LEDEN_MOD'] | $p['P_OUDLEDEN_MOD'] | $p['P_AGENDA_MOD'] | $p['P_MAAL_MOD'] | $p['P_MAIL_SEND'] | $p['P_NEWS_MOD'] | $p['P_BIEB_MOD']
 		);
 		# extra dingen, waarvoor de array perm_user zelf nodig is
 		$this->_perm_user['P_PUBCIE']  = $this->_perm_user['P_MODERATOR'];
 		$this->_perm_user['P_MAALCIE'] = $this->_perm_user['P_LID'] | $p['P_MAAL_MOD'];
 		$this->_perm_user['P_BESTUUR'] = $this->_perm_user['P_LID'] | $p['P_OUDLEDEN_READ'] | $p['P_NEWS_MOD'] | $p['P_MAAL_MOD'] | $p['P_AGENDA_POST'];
-		$this->_perm_user['P_VAB']     = $this->_perm_user['P_BESTUUR'] | $p['P_LEDEN_MOD'] | $p['P_OUDLEDEN_MOD'];
+		$this->_perm_user['P_VAB']     = $this->_perm_user['P_BESTUUR'] | $p['P_LEDEN_MOD'] | $p['P_OUDLEDEN_MOD'] | $p['P_BIEB_READ'];
 		$this->_perm_user['P_KNORRIE'] = $this->_perm_user['P_LID'] | $p['P_OUDLEDEN_READ'] | $p['P_MAAL_MOD'];
 
 	}
@@ -833,6 +853,110 @@ class Lid {
 			return false;
 		}
 	}
-	
+	function logBezoek(){
+		$uid=$this->getUid();
+		$datumtijd=date('Y-m-d H:i:s');
+		if(isset($_SERVER['REMOTE_ADDR'])){ 
+			$ip=$this->_db->escape($_SERVER['REMOTE_ADDR']);
+			if(opConfide()){ 
+				$locatie='Confide'; 
+			}elseif(substr($ip, 0, 8)=='130.161.'){ 
+				$locatie='TU';
+			}else{
+				switch($ip){
+					case '83.160.162.84': $locatie='VDelphia'; break;
+					case '145.99.162.33': //HVG
+					case '83.84.128.14': //Sief
+						$locatie='HVG';
+					break;
+					case '145.94.89.206': $locatie='tEis'; break;
+					case '145.94.91.223': //nance.tnw-s 
+					case '145.94.91.245': //aljen
+						$locatie='Aenslag';
+					break;
+					case '80.100.35.230': $locatie='tAiland'; break;
+					case '82.156.121.74': $locatie='LachaiRoi'; break;
+					case '82.171.125.214': $locatie='SpoorBijster'; break;
+					case '82.171.113.19': $locatie='vSpeijk'; break;
+					case '83.84.133.73': $locatie='denHertog'; break;
+					case '62.51.57.11': $locatie='Molshoop'; break;
+					case '62.234.90.217': $locatie='WankelCentrum'; break;
+					case '82.171.112.16': $locatie='GoudenLeeuw'; break;
+					case '145.99.161.74': $locatie='Koornmarkt'; break;
+					case '82.171.127.200': $locatie='Internaat'; break;
+					case '84.35.65.254': $locatie='Perron0'; break;
+					case '82.170.83.173': $locatie='JongeGarde'; break;
+					case '145.94.59.158': //Jieter
+					case '145.94.61.229': //rommel
+						$locatie='Rommel'; 
+					break;
+					case '145.94.58.19': //Allert									
+					case '145.9 4.59.219': //Peturr							    
+					case '145.94.75.148': //Jorrit
+						$locatie='Adam';
+					break;
+					case '145.94.154.180': //OD11.fttd-s
+					case '145.94.141.116': //heidiho.fttd-s
+					case '145.94.58.113': //tommie
+					case '145.94.62.139': //jona
+					case '145.94.121.167': //peter Goudswaard
+						$locatie='OD11';
+					break;
+					default:
+						$locatie='';
+				}//einde switch
+			}
+		}else{ 
+			$ip=''; 
+		}
+		if(isset($_SERVER['REQUEST_URI'])){ $url=$this->_db->escape($_SERVER['REQUEST_URI']); }else{ $url=''; }
+		if(isset($_SERVER['HTTP_REFERER'])){ $referer=$this->_db->escape($_SERVER['HTTP_REFERER']); }else{ $referer=''; }
+		$agent='';
+		if(isset($_SERVER['HTTP_USER_AGENT'])){ 
+			if(preg_match('/bot/i', $_SERVER['HTTP_USER_AGENT']) OR preg_match('/crawl/i', $_SERVER['HTTP_USER_AGENT']) 
+				OR preg_match('/slurp/i', $_SERVER['HTTP_USER_AGENT'])){
+				if(preg_match('/google/i', $_SERVER['HTTP_USER_AGENT'])){ $agent='googleBot'; 
+				}elseif(preg_match('/msn/i', $_SERVER['HTTP_USER_AGENT'])){ $agent='msnBot'; 
+				}elseif(preg_match('/yahoo/i', $_SERVER['HTTP_USER_AGENT'])){ $agent='yahooBot';
+				}else{ $agent='onbekende bot';}
+			}else{
+				if(preg_match('/Windows\ NT\ 5\.1/', $_SERVER['HTTP_USER_AGENT'])){ $agent.='Windows XP | '; 
+				}elseif(preg_match('/Windows\ NT\ 5\.0/', $_SERVER['HTTP_USER_AGENT'])){ $agent.='Windows 2K | ';
+				}elseif(preg_match('/Win\ 9x/', $_SERVER['HTTP_USER_AGENT'])){ $agent.='Windows 9x | ';
+				}elseif(preg_match('/Windows/i', $_SERVER['HTTP_USER_AGENT'])){ $agent.='Windows anders | ';
+				}elseif(preg_match('/Ubuntu\/Dapper/i', $_SERVER['HTTP_USER_AGENT'])){ $agent.='Ubuntu Dapper | ';
+				}elseif(preg_match('/Ubuntu\/Breezy/i', $_SERVER['HTTP_USER_AGENT'])){ $agent.='Ubuntu Breezy | ';
+				}elseif(preg_match('/Ubuntu/i', $_SERVER['HTTP_USER_AGENT'])){ $agent.='Ubuntu | ';
+				}elseif(preg_match('/Linux/i', $_SERVER['HTTP_USER_AGENT'])){ $agent.='Linux | ';
+				}elseif(preg_match('/Google\ Desktop/', $_SERVER['HTTP_USER_AGENT'])){ $agent.='Google Desktop | ';
+				}elseif(preg_match('/Microsoft/i', $_SERVER['HTTP_USER_AGENT'])){ $agent.='iets M$ | '; 
+				}elseif(preg_match('/Mac\ OS\ X/', $_SERVER['HTTP_USER_AGENT'])){ $agent.='OS X | ';
+				}else{ $agent='onbekend | ('.$_SERVER['HTTP_USER_AGENT'].')'; }
+				if(preg_match('/Firefox\/1\.5/', $_SERVER['HTTP_USER_AGENT'])){ $agent.='FF1.5';
+				}elseif(preg_match('/Firefox\/1\.0/', $_SERVER['HTTP_USER_AGENT'])){ $agent.='FF1.0'; 
+				}elseif(preg_match('/Firefox/i', $_SERVER['HTTP_USER_AGENT'])){ $agent.='FF';
+				}elseif(preg_match('/Mozilla\/5\.0/i', $_SERVER['HTTP_USER_AGENT'])){ $agent.='Mozilla';
+				}elseif(preg_match('/Opera/', $_SERVER['HTTP_USER_AGENT'])){ $agent.='Opera';  
+				}elseif(preg_match('/MSIE\ 6\.0/', $_SERVER['HTTP_USER_AGENT'])){ $agent.='IE6';
+				}elseif(preg_match('/MSIE/', $_SERVER['HTTP_USER_AGENT'])){ $agent.='IE';
+				}elseif(preg_match('/Safari/i', $_SERVER['HTTP_USER_AGENT'])){ $agent.='Safari'; 
+				}elseif(preg_match('/Google\ Desktop/', $_SERVER['HTTP_USER_AGENT'])){ $agent.=''; 
+				}elseif(preg_match('/Microsoft/i', $_SERVER['HTTP_USER_AGENT'])){ $agent.=''; 
+				}else{ $agent.='onbekend ('.$_SERVER['HTTP_USER_AGENT'].')'; }
+			}
+			
+		}
+		$sLogQuery="
+			INSERT INTO 
+				log
+			( 
+				uid, ip, locatie, moment, url, referer, useragent
+			)VALUES(
+				'".$uid."', '".$ip."', '".$locatie."', '".$datumtijd."', '".$url."', '".$referer."', '".$agent."'
+			);";
+		if(!preg_match('/stats.php/', $url)){
+			$this->_db->query($sLogQuery);
+		}
+	}
 }
 ?>

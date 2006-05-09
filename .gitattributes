@@ -109,7 +109,6 @@ htdocs/leden/csrmailpreview.php -text
 htdocs/leden/csrmailsend.php -text
 htdocs/leden/documenten -text
 htdocs/leden/documenten.php -text
-htdocs/leden/eetplan.html -text
 htdocs/leden/eetplan.php -text
 htdocs/leden/ihk-citaten.php -text
 htdocs/leden/ihk-quotes.php -text
@@ -127,9 +126,11 @@ htdocs/logout.php -text
 htdocs/nieuws.php -text
 htdocs/oudleden/index.php -text
 htdocs/oudleden/lijst.php -text
+htdocs/robots.txt -text
 htdocs/tools/.htaccess -text
 htdocs/tools/eetplan.php -text
 htdocs/tools/eetplan_h15_s41_a8_m3_r1.htm -text
+htdocs/tools/phpinfo.php -text
 htdocs/tools/sendmail/maildata.php -text
 htdocs/tools/sendmail/sendmail.php -text
 htdocs/tools/soccie.php -text
