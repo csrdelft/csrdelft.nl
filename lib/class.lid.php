@@ -886,12 +886,13 @@ class Lid {
 					case '82.171.127.200': $locatie='Internaat'; break;
 					case '84.35.65.254': $locatie='Perron0'; break;
 					case '82.170.83.173': $locatie='JongeGarde'; break;
+					case '80.60.95.203': $locatie='Sonnenvanck'; break;
 					case '145.94.59.158': //Jieter
 					case '145.94.61.229': //rommel
 						$locatie='Rommel'; 
 					break;
 					case '145.94.58.19': //Allert									
-					case '145.9 4.59.219': //Peturr							    
+					case '145.94.59.219': //Peturr							    
 					case '145.94.75.148': //Jorrit
 						$locatie='Adam';
 					break;
@@ -907,7 +908,7 @@ class Lid {
 				}//einde switch
 			}
 		}else{ 
-			$ip=''; 
+			$ip='0.0.0.0'; $locatie='';
 		}
 		if(isset($_SERVER['REQUEST_URI'])){ $url=$this->_db->escape($_SERVER['REQUEST_URI']); }else{ $url=''; }
 		if(isset($_SERVER['HTTP_REFERER'])){ $referer=$this->_db->escape($_SERVER['HTTP_REFERER']); }else{ $referer=''; }
@@ -954,7 +955,7 @@ class Lid {
 			)VALUES(
 				'".$uid."', '".$ip."', '".$locatie."', '".$datumtijd."', '".$url."', '".$referer."', '".$agent."'
 			);";
-		if(!preg_match('/stats.php/', $url)){
+		if(!preg_match('/stats.php/', $url) AND $locatie!=''){
 			$this->_db->query($sLogQuery);
 		}
 	}

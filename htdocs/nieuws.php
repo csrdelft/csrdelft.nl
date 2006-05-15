@@ -91,6 +91,13 @@ if(isset($_POST['titel']) AND isset($_POST['tekst']) AND $nieuws->isNieuwsMod())
 			if($nieuws->isNieuwsMod()){
 				$nieuwscontent->setActie('bewerken');
 			}
+		}elseif(isset($_GET['verwijderen'])){
+			$iBerichtID=(int)$_GET['berichtID'];
+			if($nieuws->isNieuwsMod()){
+				if($nieuws->deleteMessage($iBerichtID)){
+					header('location: http://csrdelft.nl/nieuws/'); exit;
+				}
+			}
 		}else{
 			$nieuwscontent->setActie('bericht');
 		}

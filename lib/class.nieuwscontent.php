@@ -48,7 +48,7 @@ class NieuwsContent extends SimpleHTML {
 	}
 	function getBerichtModControls($iBerichtID){
 		if($this->_nieuws->isNieuwsMod()){
-			echo '[ verwijderen | <a href="/nieuws/bewerken/'.$iBerichtID.'">bewerken</a> ]';
+			echo '[ <a href="/nieuws/verwijderen/'.$iBerichtID.'" onclick="return confirm(\'Weet u zeker dat u dit nieuwsbericht wilt verwijderen?\')">verwijderen</a> | <a href="/nieuws/bewerken/'.$iBerichtID.'">bewerken</a> ]';
 		}
 	}
 	function bewerkFormulier(){

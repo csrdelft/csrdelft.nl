@@ -46,7 +46,7 @@ function main() {
 		$commissie->loadCommissie($_GET['cie']);
 		require_once('class.commissiecontent.php');
 		$middenvak = new CommissieContent($commissie, $lid);
-		$titel='commissie: '.mb_htmlenteties($_GET['cie']);
+		$titel='commissie: '.mb_htmlentities($_GET['cie']);
 	} else {
 		require_once('class.cieoverzichtcontent.php');
 		$middenvak = new CieOverzichtContent($commissie, $lid);

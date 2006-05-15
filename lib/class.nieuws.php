@@ -58,7 +58,7 @@ class Nieuws {
 				lid ON( nieuws.uid=lid.uid )
 			WHERE
 				".$sWhereClause."
-				1
+				nieuws.verwijderd='0'
 			ORDER BY
 				nieuws.datum DESC
 			LIMIT
@@ -88,6 +88,18 @@ class Nieuws {
 			) VALUES (
 				".$datum.", '".$titel."', '".$tekst."', '".$bbcode_uid."', '".$uid."', '".$prive."', '".$verborgen."'
 			);";
+		return $this->_db->query($sMessageQuery);
+	}
+	function deleteMessage($iBerichtID){
+		$iBerichtID=(int)$iBerichtID;
+		$sMessageQuery="
+			UPDATE
+				nieuws
+			SET
+				verwijderd='1'
+			WHERE
+				id=".$iBerichtID."
+			LIMIT 1;";
 		return $this->_db->query($sMessageQuery);
 	}
 	function editMessage($iBerichtID, $titel, $tekst, $bbcode_uid, $prive=false, $verborgen=false){

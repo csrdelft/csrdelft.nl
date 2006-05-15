@@ -36,7 +36,7 @@ class Forum {
 	var $_postsPerRss=15;
 	
 	//aantal zoekresultaten
-	var $_aantalZoekResultaten=20;
+	var $_aantalZoekResultaten=40;
 	
 	//constructor.
 	function Forum(&$lid, &$db){
@@ -232,6 +232,12 @@ class Forum {
 				topic.soort AS soort,
 				post.uid AS uid,
 					lid.nickname AS nickname,
+					lid.voornaam AS voornaam,
+					lid.achternaam AS achternaam,
+					lid.tussenvoegsel AS tussenvoegsel,
+					lid.postfix AS postfix,
+					lid.status AS status,
+					lid.geslacht AS geslacht,
 				post.id AS postID,
 				post.tekst AS tekst,
 				post.bbcode_uid AS bbcode_uid,
@@ -899,7 +905,7 @@ class Forum {
 		}
 	}
 	function searchPosts($sZoekQuery){
-		if(preg_match('/^[a-zA-Z0-9 \-\+\']*$/', $sZoekQuery)){
+		if(preg_match('/^[a-zA-Z0-9 \-\+\'\"\.]*$/', $sZoekQuery)){
 			//bekijken waarin gezocht mag worden...
 			$sCategorieClause='topic.categorie=2 OR topic.categorie=3 ';
 			if($this->_lid->hasPermission('P_LEDEN_READ')){ $sCategorieClause.='OR topic.categorie=1 '; }

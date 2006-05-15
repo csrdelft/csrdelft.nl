@@ -3,6 +3,7 @@ bin/maaltrack.php -text
 bin/mootabos.php -text
 bin/pubcie-admin.php -text
 bin/socciesaldi-koppelen.php -text
+bin/statgraphgen.php -text
 bin/wachtwoord.php -text
 htdocs/.htaccess -text
 htdocs/bieb/.htaccess -text
