@@ -33,26 +33,26 @@ class Csrmailcomposecontent {
 			//lege array's klussen voor als er geen data is voor de categorie
 			$aInhoud['bestuur']=$aInhoud['csr']=$aInhoud['overig']='';
 			if(isset($aKopjes['bestuur'])){
-				foreach($aKopjes['bestuur'] as $sTitel){
-					$aInhoud['bestuur'].='<li>'.mb_htmlentities($sTitel).'</li>'."\r\n";
+				foreach($aKopjes['bestuur'] as $aKopje){
+					$aInhoud['bestuur'].='<li><a href="#'.$aKopje['ID'].'" style="text-decoration: none;">'.mb_htmlentities($aKopje['titel']).'</a></li>'."\r\n";
 				}
 			}else{
 				$aInhoud['bestuur']='<li>Geen berichten</li>';
 			}
 			if(isset($aKopjes['csr'])){
-				foreach($aKopjes['csr'] as $sTitel){
-					$aInhoud['csr'].='<li>'.mb_htmlentities($sTitel).'</li>'."\r\n";
+				foreach($aKopjes['csr'] as $aKopje){
+					$aInhoud['csr'].='<li><a href="#'.$aKopje['ID'].'" style="text-decoration: none;">'.mb_htmlentities($aKopje['titel']).'</a></li>'."\r\n";
 				}
 			}
 			if(isset($aKopjes['overig'])){
-				foreach($aKopjes['overig'] as $sTitel){
-					$aInhoud['overig'].='<li>'.mb_htmlentities($sTitel).'</li>'."\r\n";
+				foreach($aKopjes['overig'] as $aKopje){
+					$aInhoud['overig'].='<li><a href="#'.$aKopje['ID'].'" style="text-decoration: none;">'.mb_htmlentities($aKopje['titel']).'</a></li>'."\r\n";
 				}
 			}
 			reset($aBerichten);
 			$sBerichten='';
 			foreach($aBerichten as $aBericht){
-				$sBerichten.='<h4>'.$this->process($aBericht['titel']) .'</h4>'."\r\n";
+				$sBerichten.='<h4><a name="'.$aBericht['ID'].'"></a>'.$this->process($aBericht['titel']) .'</h4>'."\r\n";
 				$sBerichten.='<p>'.$this->process($aBericht['bericht']).'</p>'."\r\n";
 			}   
 			$sTemplate=str_replace('[inhoud-bestuur]', $aInhoud['bestuur'], $sTemplate);
@@ -82,7 +82,7 @@ Subject: C.S.R. Post ".strftime('%e %B %Y')."\r\n\r\n";
 	function getKopjes($aBerichten){
 		foreach($aBerichten as $aBericht){
 			//ros alles in een array, met categorie als element.
-			$aKopjes[$aBericht['cat']][]=$aBericht['titel'];
+			$aKopjes[$aBericht['cat']][]=array('titel'=> $aBericht['titel'], 'ID' => $aBericht['ID']);
 		}
 		return $aKopjes;
 	}

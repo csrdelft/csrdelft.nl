@@ -13,7 +13,6 @@
 # . gemaakt
 #
 
-require_once ('class.mysql.php');
 
 class Csrmail {
 	
@@ -26,16 +25,10 @@ class Csrmail {
 		$this->_db =& $db;
 	}
 	function addBericht( $titel, $categorie, $bericht){
-		$titel=addslashes(trim($titel));
-		if(strtolower($titel)=='agenda'){
-			$volgorde=-1000;
-		}else{
-			$volgorde=0;
-		}
-		if(!$this->isValideCategorie($categorie))
-			$categorie='overig';
-		
-		$bericht=addslashes(trim($bericht));
+		$titel=$this->_db->escape(trim($titel));
+		if(strtolower($titel)=='agenda'){ $volgorde=-1000; }else{ $volgorde=0; }
+		if(!$this->isValideCategorie($categorie)){ $categorie='overig'; }
+		$bericht=$this->_db->escape(trim($bericht));
 		$uid=$this->_lid->getUid();
 		$datumTijd=getDateTime();
 		$sBerichtQuery="
@@ -51,10 +44,10 @@ class Csrmail {
 		
 	}
 	function bewerkBericht($iBerichtID, $titel, $categorie, $bericht){
-		$titel=addslashes(trim($titel));
-		if(!$this->isValideCategorie($categorie))
-			$categorie='overig';
-		$bericht=addslashes(trim($bericht));
+		$iBerichtID=(int)$iBerichtID;
+		$titel=$this->_db->escape(trim($titel));
+		if(!$this->isValideCategorie($categorie)){ $categorie='overig'; }
+		$bericht=$this->_db->escape(trim($bericht));
 		$uid=$this->_lid->getUid();
 		$datumTijd=getDateTime();
 		$sBerichtQuery="
@@ -142,6 +135,7 @@ class Csrmail {
 		return $aBerichten;
 	}
 	function getBerichtVoorGebruiker($iBerichtID){
+		$iBerichtID=(int)$iBerichtID;
 		$uid=$this->_lid->getUid();
 		$sBerichtenQuery="
 			SELECT
@@ -163,6 +157,7 @@ class Csrmail {
 		return $aBerichten;
 	}
 	function verwijderBerichtVoorGebruiker($iBerichtID){
+		$iBerichtID=(int)$iBerichtID;
 		$uid=$this->_lid->getUid();
 		$sBerichtVerwijderen="
 			DELETE FROM

@@ -134,7 +134,7 @@ Eetwens: {$profhtml['eetwens']}<br />
 </table>
 
 
-<br clear="all">
+<br />
 EOT
 
 				);
@@ -150,7 +150,12 @@ EOT
 <a href="javascript: history.go(-1)">[ Terug ]</a>
 <?php
 				#}
+if($this->_lid->hasPermission('P_FORUM_MOD')){
+	echo '<a href="/tools/stats.php?uid='.htmlspecialchars($profiel['uid']).'">[ overzicht van bezoeken ]</a>';
+}
+
 ?>
+
 </center>
 <?php
 	
