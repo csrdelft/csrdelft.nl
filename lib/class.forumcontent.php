@@ -361,8 +361,12 @@ class ForumContent extends SimpleHTML {
 							$sBericht=preg_replace('/('.$sZoekWoord.')/i', '[zoekwoord:'.$aBericht['bbcode_uid'].']\\1[/zoekwoord:'.$aBericht['bbcode_uid'].']', $sBericht);
 						}
 					}
-				}	
-				echo bbview($sBericht, $aBericht['bbcode_uid']).'</td></tr>';
+				}
+				$sBericht=bbview($sBericht, $aBericht['bbcode_uid']);
+				//æ's maken van alle aa's
+				//$sBericht=str_replace('aa', '&aelig;', $sBericht);
+				$sBericht=str_replace('AA', '&AElig;', $sBericht);
+				echo $sBericht.'</td></tr>';
 				//tussenlijntje
 				echo '<tr><td class="forumtussenschot" colspan="2"></td></tr>'."\r\n";
 				$iWissel++;
@@ -615,8 +619,8 @@ class ForumContent extends SimpleHTML {
 	}
 	function zoekFormulier($sZoekQuery=''){
 		$sZoekQuery=htmlspecialchars($sZoekQuery, ENT_QUOTES, 'UTF-8');
-		echo '<form action="/forum/zoeken.php" method="post"><input type="tekst" value="'.$sZoekQuery.'" name="zoeken" />';
-		echo '<input type="submit" value="zoeken" name="verzenden" /></form><br /><br />';
+		echo '<form action="/forum/zoeken.php" method="post"><p><input type="text" value="'.$sZoekQuery.'" name="zoeken" />';
+		echo '<input type="submit" value="zoeken" name="verzenden" /></p></form><br />';
 	}
 	function getError(){
 		if(isset($_SESSION['forum_foutmelding'])){
