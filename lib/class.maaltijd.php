@@ -393,7 +393,7 @@ EOD;
 
 		# sluit de maaltijd door het vlaggetje gesloten te zetten...
 		$this->_maaltijd['gesloten'] = '1';
-		print ("UPDATE maaltijd SET gesloten = '1' WHERE id = {$this->_maalid}\n");
+		#print ("UPDATE maaltijd SET gesloten = '1' WHERE id = {$this->_maalid}\n");
 		$this->_db->query("UPDATE maaltijd SET gesloten = '1' WHERE id = {$this->_maalid}");
 
 		# haal de aanmeldingen op en prop ze in de maaltijdgesloten tabel
