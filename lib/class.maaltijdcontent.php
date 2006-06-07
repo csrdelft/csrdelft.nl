@@ -115,8 +115,8 @@ EOT
 				$m['datum'] = strftime('%a %e %b %H:%M', $m['datum']);
 				# tekst eksaepen
 				$m['tekst'] = mb_htmlentities($m['tekst']);
-				//link maken naar maaltijdlijst als men moderator is
-				if($this->_lid->hasPermission('P_MAAL_MOD')){
+				# link maken naar maaltijdlijst als men moderator is of op Confide is
+				if($this->_lid->hasPermission('P_MAAL_MOD') or opConfide()){
 					$m['tekst']='<a href="/leden/maaltijdlijst.php?maalid='.$m['id'].'">'.$m['tekst'].'</a>';
 				}
 				print(<<<EOT
