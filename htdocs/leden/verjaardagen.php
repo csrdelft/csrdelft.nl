@@ -37,7 +37,7 @@ function main() {
 	# Datum
 	require_once('class.includer.php');
 	$datum = new Includer('', 'datum.php');
-
+	
 	if ($lid->hasPermission('P_LEDEN_READ')) {
 		# Het middenstuk
 		require_once('class.verjaardagcontent.php');
@@ -51,12 +51,14 @@ function main() {
 
 	### Kolommen vullen ###
 	require_once('class.column.php');
-	$col0 = new Column(COLUMN_MENU);
-	$col0->addObject($homemenuhok);
-	$col0->addObject($infomenuhok);
-	if ($lid->isLoggedIn()) $col0->addObject($ledenmenuhok);
-	$col0->addObject($loginhok);
-	$col0->addObject($datum);
+	if(!isset($_GET['print'])){
+		$col0 = new Column(COLUMN_MENU);
+		$col0->addObject($homemenuhok);
+		$col0->addObject($infomenuhok);
+		if ($lid->isLoggedIn()) $col0->addObject($ledenmenuhok);
+		$col0->addObject($loginhok);
+		$col0->addObject($datum);
+	}
 
 	$col1 = new Column(COLUMN_MIDDENRECHTS);
 	$col1->addObject($midden);
@@ -64,7 +66,7 @@ function main() {
 	# Pagina maken met deze twee kolommen
 	require_once('class.page.php');
 	$page = new Page();
-	$page->addColumn($col0);
+	if(!isset($_GET['print'])){ $page->addColumn($col0); }
 	$page->addColumn($col1);
 	$page->addTitel('verjaardagen');
 

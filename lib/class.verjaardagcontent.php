@@ -55,22 +55,25 @@ class VerjaardagContent extends SimpleHTML {
 			12 => "December",
 		);
 
-		print('<center><span class="kopje2">Verjaardagskalender</span></center><p>'."\n");
-		print('<table width="100%" class="lijnhoktable" border="1" cellspacing="0" cellpadding="0" marginheight="0" marginwidth="0">'."\n");
+		echo '<center><span class="kopje2">Verjaardagskalender</span></center><p>';
+		if(!isset($_GET['print'])){
+			echo '<a href="verjaardagen.php?print=true">printversie</a>'."\n";
+		}
+		echo '<table class="lijnhoktable" style="width: 800px;">'."\n";
 		for ($r=0; $r<$rijen; $r++) {
-			print("<tr>\n");
+			echo '<tr>';
 			for ($k=1; $k<=$kolommen; $k++) {
 				$maand = ($r*$kolommen+$k+$dezemaand-2)%12+1;
 				$tekst = ($maand <= 12) ? $maanden[$maand] : '&nbsp;';
-				print("<td class=\"lijnhoktitel\">{$tekst}</td>\n");
+				echo '<td class="lijnhoktitel">'.$tekst.'</td>'."\n";
 			}
-			print("</tr><tr>\n");
+			echo "</tr><tr>\n";
 			for ($k=1; $k<=$kolommen; $k++) {
 				$maand = ($r*$kolommen+$k+$dezemaand-2)%12+1;
 				if ($maand <= 12) {
-					print('<td class="lijnhoktekst">'."\n");
+					echo '<td class="lijnhoktekst">'."\n";
 					$vrjdgn = $this->_lid->getVerjaardagen($maand);
-					foreach ($vrjdgn as $vrjdg) {
+					foreach ($vrjdgn as $vrjdg){
 						if ($vrjdg['gebdag'] == $dezedag and $maand == $dezemaand) echo '<span class="tekstrood">';
 						echo $vrjdg['gebdag'] . " ";
 						echo mb_htmlentities($vrjdg['voornaam']);
@@ -78,14 +81,14 @@ class VerjaardagContent extends SimpleHTML {
 						echo " ".mb_htmlentities($vrjdg['achternaam']) . "<br />\n";
 						if ($vrjdg['gebdag'] == $dezedag and $maand == $dezemaand) echo "</span>";
 					}
-					print("</td>\n");
+					echo "</td>\n";
 				} else {
-					print("<td><&nbsp;</td>\n");
+					echo "<td><&nbsp;</td>\n";
 				}
 			}
-			print("</tr>\n");
+			echo "</tr>\n";
 		}
-		print('</table><br clear="all">'."\n");
+		echo '</table><br>'."\n";
 	}
 }
 
