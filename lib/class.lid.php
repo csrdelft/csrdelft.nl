@@ -955,7 +955,7 @@ class Lid {
 			)VALUES(
 				'".$uid."', '".$ip."', '".$locatie."', '".$datumtijd."', '".$url."', '".$referer."', '".$agent."'
 			);";
-		if(!preg_match('/stats.php/', $url) AND $locatie!=''){
+		if(!preg_match('/stats.php/', $url) AND $ip!='0.0.0.0'){
 			$this->_db->query($sLogQuery);
 		}
 	}

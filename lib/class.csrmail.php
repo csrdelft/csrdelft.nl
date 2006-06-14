@@ -24,10 +24,15 @@ class Csrmail {
 		$this->_lid =& $lid;
 		$this->_db =& $db;
 	}
+	function magToevoegen(){ return $this->_lid->hasPermission('P_MAIL_POST'); }
+	function magBeheren(){ return $this->_lid->hasPermission('P_MAIL_COMPOSE'); }
+	function magVerzenden(){ return $this->_lid->hasPermission('P_MAIL_SEND'); }
+	
 	function addBericht( $titel, $categorie, $bericht){
 		$titel=$this->_db->escape(trim($titel));
-		if(strtolower($titel)=='agenda'){ $volgorde=-1000; }else{ $volgorde=0; }
-		if(!$this->isValideCategorie($categorie)){ $categorie='overig'; }
+		//agenda standaard bovenaan.
+		if(strtolower(trim($titel))=='agenda'){ $volgorde=-1000; }else{ $volgorde=0; }
+		if(!$this->_isValideCategorie($categorie)){ $categorie='overig'; }
 		$bericht=$this->_db->escape(trim($bericht));
 		$uid=$this->_lid->getUid();
 		$datumTijd=getDateTime();
@@ -41,12 +46,11 @@ class Csrmail {
 			);";
 		
 		return $this->_db->query($sBerichtQuery);
-		
 	}
 	function bewerkBericht($iBerichtID, $titel, $categorie, $bericht){
 		$iBerichtID=(int)$iBerichtID;
 		$titel=$this->_db->escape(trim($titel));
-		if(!$this->isValideCategorie($categorie)){ $categorie='overig'; }
+		if(!$this->_isValideCategorie($categorie)){ $categorie='overig'; }
 		$bericht=$this->_db->escape(trim($bericht));
 		$uid=$this->_lid->getUid();
 		$datumTijd=getDateTime();
@@ -78,21 +82,13 @@ class Csrmail {
 				$bValid=false;
 				$sError.='Het veld <strong>bericht</strong> moet minstens 15 tekens bevatten.<br />';
 			}
-			if($this->csrzonderpuntjes($_POST['bericht']) ){
-		//	$bValid=false;
-				$sError.='C.S.R. is met puntjes (bericht)!<br />';
-			} 
-			if($this->csrzonderpuntjes($_POST['titel']) ){
-				$bValid=false;
-				$sError.='C.S.R. is met puntjes (titel)!<br />';
-			} 
 		}else{
 			$bValid=false;
 			$sError.='Het formulier is niet compleet<br />';
 		}
 		return $bValid;
 	}
-	function isValideCategorie($categorie){
+	function _isValideCategorie($categorie){
 		$aToegelatenCategorieen=array('bestuur', 'csr', 'overig', 'voorwoord');
 		if(in_array($categorie, $aToegelatenCategorieen)){
 			return true;
@@ -100,19 +96,6 @@ class Csrmail {
 			return false;
 		}
 	}
-	function csrzonderpuntjes($sBericht){
-		$sBericht=strtolower(trim($sBericht));
-		$aFoutCSR=array(' csr ', ' csr', 'csr ', ' csr.', 'cs.r', 'cs.r.', 'c.sr.', 'c.s.r ', 'c.sr', 'csrmail', 'csrmaaltijd', 'c s r', 'csrdelft');
-		$bReturn=false;
-		foreach($aFoutCSR as $sFout){
-			if(is_integer(strpos($sBericht, $sFout))){
-		  	$bReturn=true;
-		  }
-	  }
-	  return $bReturn;
-	}
-	  
-	
 	function getBerichtenVoorGebruiker(){
 		$uid=$this->_lid->getUid();
 		$sBerichtenQuery="
@@ -168,11 +151,7 @@ class Csrmail {
 				ID='".$iBerichtID."'
 			LIMIT 1;";
 		$this->_db->query($sBerichtVerwijderen);
-		if(mysql_affected_rows()==1){
-			return true;
-		}else{
-			return false;
-		}
+		return mysql_affected_rows()==1;
 	}
 	#############################################################
 	###	functies voor compose gedeelte, voor de pubcie
@@ -225,7 +204,6 @@ class Csrmail {
 			$this->clearCache();
 			return $iPubciemailID;
 		}else{
-			//fout
 			return false;
 		}
 	}

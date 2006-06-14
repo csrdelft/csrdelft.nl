@@ -44,7 +44,7 @@ function main() {
 /************************************************************************************************
 *	Wachtwoord resetten.
 ************************************************************************************************/
-		if (preg_match("/^reset (\d{4}|x\d{3})$/", $input, $matches)) {
+		if (preg_match("/^reset (\d{4}|(x|o)\d{3})$/", $input, $matches)) {
 			$uid=$matches[1];
 			$beheer->resetWachtwoord($uid, $berichten);
 			echo $berichten;
@@ -124,9 +124,10 @@ function main() {
 *	Zoeken in voornaam en achternaam
 ************************************************************************************************/
 		elseif(preg_match("/^zoek (.*)$/", $input, $matches)){
-			$dataVoornaam=$lid->zoekLeden($matches[1], 'voornaam', 'achternaam', $aZoekStatus);
-			$dataAchternaam=$lid->zoekLeden($matches[1], 'achternaam', 'achternaam', $aZoekStatus);
-			$dataUid=$lid->zoekLeden($matches[1], 'uid', 'achternaam', $aZoekStatus);
+			print_r($matches);
+			$dataVoornaam=$lid->zoekLeden($matches[1], 'voornaam', 'achternaam', 'alle', $aZoekStatus);
+			$dataAchternaam=$lid->zoekLeden($matches[1], 'achternaam', 'achternaam', 'alle'. $aZoekStatus);
+			$dataUid=$lid->zoekLeden($matches[1], 'uid', 'achternaam', 'alle', $aZoekStatus);
 			$data=array_merge($dataAchternaam, $dataVoornaam, $dataUid);
 			
 			usort($data, 'sorteer_achternaam');

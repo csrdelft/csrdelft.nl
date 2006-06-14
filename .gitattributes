@@ -10,6 +10,8 @@ htdocs/bieb/.htaccess -text
 htdocs/bieb/catalogus.php -text
 htdocs/bieb/index.php -text
 htdocs/csrdelft.css -text
+htdocs/dobberen/bootjesborrel.jpg -text
+htdocs/dobberen/index.html -text
 htdocs/forum/.htaccess -text
 htdocs/forum/bewerken.php -text
 htdocs/forum/citeren.php -text
@@ -105,8 +107,11 @@ htdocs/leden/agenda.php -text
 htdocs/leden/arro.php -text
 htdocs/leden/bibliotheek.php -text
 htdocs/leden/csrmail.php -text
-htdocs/leden/csrmailcompose.php -text
-htdocs/leden/csrmailpreview.php -text
+htdocs/leden/csrmail/.htaccess -text
+htdocs/leden/csrmail/bewerken.php -text
+htdocs/leden/csrmail/index.php -text
+htdocs/leden/csrmail/verzenden.php -text
+htdocs/leden/csrmail/voorbeeld.php -text
 htdocs/leden/csrmailsend.php -text
 htdocs/leden/documenten -text
 htdocs/leden/documenten.php -text
@@ -131,6 +136,7 @@ htdocs/robots.txt -text
 htdocs/tools/.htaccess -text
 htdocs/tools/eetplan.php -text
 htdocs/tools/eetplan_h15_s41_a8_m3_r1.htm -text
+htdocs/tools/index.php -text
 htdocs/tools/phpinfo.php -text
 htdocs/tools/sendmail/maildata.php -text
 htdocs/tools/sendmail/sendmail.php -text

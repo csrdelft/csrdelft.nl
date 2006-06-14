@@ -1,41 +1,11 @@
-<div class="kopje2"><center>Lid worden</center></div>
+<div class="kopje2"><center>Lid worden?</center></div>
 
-Je kunt lid worden van C.S.R. als je een universitaire of HBO-opleiding volgt.
-Naast deze voorwaarde geldt dat je de grondslag van de vereniging
-onderschrijft. Dit doe je door de apostolische Geloofsbelijdenis te
-ondertekenen. Tijdens het eerste halfjaar wordt deze geloofsbelijdenis
-uitvoerig besproken op kring, zodat je weet waar je voor kiest.
-
-<p>
-
-<table border=0 cellspacing=5 cellpadding=0 marginheight=0 marginwidth=0>
-<tr>
-
-<td align="center">
-<img src="/informatie/images/owee.jpg" width="133" height="100"><br clear="all">
-OWee op C.S.R.
-</td>
-
-<td>
-Heb je belangstelling, kom dan langs in de OWee, &eacute;&eacute;n van de laatste weken van
-de zomervakantie om je in te schrijven. Als je je inschrijft, ga je mee op
-startkamp. Daar kun je kennis maken met je jaargenoten en met ouderejaars
-C.S.R.-leden. Je blijft een half jaar adspirant-lid. In die tijd maak je kennis
-met alle facetten van de vereniging voor je besluit lid te worden. In deze tijd
-wordt je begeleid en ingeleid in het verenigingsleven door de
-NoviciaatsCommissie. Na dit halfjaar wordt je ge&iuml;nstalleerd als lid van de
-vereniging.
-</td>
-
-</tr>
-</table>
-
-<p>
-
-Buiten de OWee om kun je terecht bij het bestuur voor informatie, ook over
-gastlidmaatschap en het volgen van kringen zonder lid te worden. Wil je meer
-informatie, of weet je nu al zeker dat je lid wilt worden? Vul dan onderstaand
-formulier in!
+C.S.R. is in Delft d&eacute; vereniging waar zowel van gezelligheid als van vorming het beste te vinden is en daarmee is het een zeer belangrijk deel van het leven van de leden. Als jij een universitaire of HBO-opleiding volgt kan ook jij lid worden. Daarnaast moet je wel de grondslag van de vereniging onderschrijven. Dit doe je door de <a href="http://nl.wikipedia.org/wiki/Apostolische_geloofsbelijdenis">apostolische geloofsbelijdenis</a> te ondertekenen. Deze geloofsbelijdenis is één van de onderwerpen die tijdens het eerste halfjaar Bijbelkring aan de orde komen, zodat je weet waar je voor kiest. Tijdens het eerste jaar kring is er sowieso gelegenheid tot open en toch diepe gesprekken over allerlei onderwerpen omdat je met mensen van je eigen jaar toch een speciale band hebt.<br />
+<br />
+Ben je geïnteresseerd? Kom dan langs in de <a href="http://www.owee.nl">OWee</a>, de op één na laatste week van augustus, om de sfeer te proeven of je in te schrijven. Dit laatste kan tot en met de laatste dag van de Owee. Wanneer je je inschrijft maak je in de week na de Owee verder kennis met C.S.R., je jaargenoten en de rest van de leden. Je gaat onder andere een weekend weg met de vereniging. Voor je daadwerkelijk besluit lid te worden, ben je eerst een half jaar aspirant-lid. In die tijd maak je verder kennis met de vereniging.<br />
+<br />
+<a href="http://csrdelft.nl/informatie/">Hier</a> kan je meer lezen over wat C.S.R. is. Wil je meer informatie dan kan je het formulier onderaan deze pagina gebruiken. We nodigen je van harte uit om eens langs te komen op een maaltijd of een borrel, als je even wat van je laat horen spreken we wat af, maar je kan natuurlijk ook lukraak op een donderdagavond langskomen. We zouden je graag ontmoeten: stuur je mail naar <a href="mailto:owee@csrdelft.nl">owee@csrdelft.nl</a> of bel even met het bestuur (015-2135681). Nóg meer contactgegevens vind je <a href="http://csrdelft.nl/informatie/contact.php">hier</a><br />
+<br />
 
 <?php
 
@@ -70,8 +40,7 @@ function requiredFields() {
 <tr><td align="right">Postcode:</td><td><input type="text" class="tekst" name="postcode"></td></tr>
 <tr><td align="right">Woonplaats:</td><td><input type="text" class="tekst" name="plaats"></td></tr>
 <tr><td align="right">Email:</td><td><input type="text" class="tekst" name="submit_by"></td></tr>
-<tr><td align="right">Ik wil alleen meer informatie:</td><td><input type="radio" name="ik_wil_graag" value="alleen_informatie" checked></td></tr>
-<tr><td align="right">Ik wil graag lid worden:</td><td><input type="radio" name="ik_wil_graag" value="lid_worden"></td></tr>
+<tr><td align="right">opmerking:</td><td><textarea name="opmerking" rows="4" cols="20" class="tekst"></textarea></td></tr>
 <tr><td align="center" colspan=2><input type="submit" class="tekst" value=" Verzenden "></td></tr>
 
 </table>
