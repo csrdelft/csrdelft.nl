@@ -31,11 +31,18 @@ function main() {
 		if($lid->hasPermission($forum->getRechten_post($iCatID))){
 			if(isset($_POST['bericht']) AND isset($_POST['titel'])){
 				if(strlen(trim($_POST['bericht']))>0 AND strlen(trim($_POST['titel']))>0){
+					//Nieuw onderwerp toevoegen toevoegen
 					$sBericht=bbsave($_POST['bericht'], $bbcode_uid, $db->dbResource());
 					$sTitel=addslashes($_POST['titel']);
-					//moderatiestap of niet?
-					if($lid->hasPermission('P_LOGGED_IN')){ $bModerate_step=false; }else{ $bModerate_step=true; }
-					$iTopicID=$forum->addPost($sBericht, $bbcode_uid, 0, $iCatID, $sTitel, $bModerate_step);
+					//modereren of niet.
+					$bModerate_step=(!$lid->hasPermission('P_LOGGED_IN'));
+					//topic daadwerkelijk toevoegen.
+					$iTopicID=$forum->addPost($sBericht, $bbcode_uid, 
+						0, $iCatID, //0 voor een nieuw topic, in een bepaalde categorie
+						$sTitel, 
+						//direct zichtbaar, of eerst door mods bevestigen 
+						$bModerate_step);
+					//als topicID een integer is is het onderwerp succesvol toegevoegd. 
 					if(is_int($iTopicID)){
 						if($bModerate_step){
 							//niet naar het topic refreshen, die is nog niet leesbaar...
@@ -68,16 +75,23 @@ function main() {
 				$_SESSION['forum_foutmelding']='U heeft niet voldoende rechten om in deze categorie te posten of deze categorie te bekijken.';
 			}
 		}
+	//Nieuwe berichten toevoegen.
 	}elseif(isset($_GET['topic'])){
 		$iTopicID=(int)$_GET['topic'];
 		if(isset($_POST['bericht'])){
 			//reageren mag nog niet als men niet is ingelogged...
-			if($forum->magBerichtToevoegen($iTopicID) AND $lid->isLoggedIn()){
+			if($forum->magBerichtToevoegen($iTopicID)){
 				//post toevoegen aan een bestaand onderwerp
 				if(strlen(trim($_POST['bericht']))>0){
+					$bModerate_step=(!$lid->hasPermission('P_LOGGED_IN')); //modereren of niet.
 					$sBericht=bbsave($_POST['bericht'], $bbcode_uid, $db->dbResource());
-					if($forum->addPost($sBericht, $bbcode_uid, $iTopicID)){
-						header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID.'#laatste');
+					if($forum->addPost($sBericht, $bbcode_uid, $iTopicID, 0, '', $bModerate_step)){
+						if($bModerate_step){
+							header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID.'#laatste');
+							$_SESSION['forum_foutmelding']='Uw bericht is verwerkt, het zal binnenkort goedgekeurd worden.';
+						}else{
+							header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID.'#laatste');
+						}
 					}else{
 						header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID);
 						$_SESSION['forum_foutmelding']='Er ging iets mis met het databeest.';

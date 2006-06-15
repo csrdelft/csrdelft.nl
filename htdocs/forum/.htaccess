@@ -24,7 +24,9 @@ RewriteRule ^sluit-onderwerp/([0-9]+)$ sluiten.php?topic=$1&sluiten
 RewriteRule ^open-onderwerp/([0-9]+)$ sluiten.php?topic=$1&openen
 RewriteRule ^maak-plakkerig/([0-9]+)$ plakkerig.php?topic=$1&plakkerig
 RewriteRule ^maak-niet-plakkerig/([0-9]+)$ plakkerig.php?topic=$1&niet-plakkerig
-RewriteRule ^keur-goed/([0-9]+)$ goedkeuren.php?topic=$1
+#goedkeuren gaat aan de hand van posts, wordt een post goedgekeurd, 
+#dan het topic automatisch ook.
+RewriteRule ^keur-goed/([0-9]+)$ goedkeuren.php?post=$1
 
 ##zo, een poll dan maar
 #stemmen

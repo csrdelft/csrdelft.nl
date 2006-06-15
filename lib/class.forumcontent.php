@@ -241,7 +241,7 @@ class ForumContent extends SimpleHTML {
 					echo '| <a href="/forum/maak-niet-plakkerig/'.$iTopic.'">verwijder plakkerigheid</a> ';
 				}
 				if($aBerichten[0]['zichtbaar']=='wacht_goedkeuring'){
-					echo '| <a href="/forum/keur-goed/'.$iTopic.'">Keur dit bericht goed.</a> ';
+					echo '| <a href="/forum/keur-goed/'.$aBerichten[0]['postID'].'">Keur dit bericht goed.</a> ';
 				}
 				echo ']<br /><br />'."\r\n";
 			}
@@ -342,7 +342,11 @@ class ForumContent extends SimpleHTML {
 				//verwijderlinkje, niet als er maar een bericht in het onderwerp is.
 				if($iBerichtenAantal!=1 AND $this->_forum->_lid->hasPermission('P_FORUM_MOD')){
 					echo '<a href="/forum/verwijder-bericht/'.$aBericht['postID'].'" onclick="return confirm(\'Weet u zeker dat u deze post wilt verwijderen?\')">';
-					echo '<img src="/images/verwijderen.png" title="Verwijder bericht" alt=" " style="border: 0px;" /></a>';
+					echo '<img src="/images/verwijderen.png" title="Verwijder bericht" alt="Verwijder bericht" style="border: 0px;" /></a>';
+				}
+				//goedkeuren van berichten
+				if($this->_forum->_lid->hasPermission('P_FORUM_MOD') AND $aBericht['zichtbaar']=='wacht_goedkeuring'){
+					echo '<br /><a href="/forum/keur-goed/'.$aBericht['postID'].'">bericht goedkeuren</a>';
 				}
 				echo '</td>';
 				

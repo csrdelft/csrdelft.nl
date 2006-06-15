@@ -19,18 +19,19 @@ function main() {
 	if ($lid->hasPermission('P_FORUM_MOD')) {
 		require_once('class.forum.php');
 		$forum = new Forum($lid, $db);
-		if(isset($_GET['topic'])){
-			$iTopicID=(int)$_GET['topic'];
-			if($forum->keurTopicGoed($iTopicID)){
+		if(isset($_GET['post'])){
+			$iPostID=(int)$_GET['post'];
+			$iTopicID=$forum->getTopicVoorPostID($iPostID);
+			if($forum->keurGoed($iPostID)){
 				header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID);
-				$_SESSION['forum_foutmelding']='Onderwerp nu voor iedereen zichtbaar.';
+				$_SESSION['forum_foutmelding']='Onderwerp of bericht nu voor iedereen zichtbaar.';
 			}else{
 				header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID);
 				$_SESSION['forum_foutmelding']='Goedkeuren ging mis.';
 			}
 		}else{
 			header('location: http://csrdelft.nl/forum/');
-			$_SESSION['forum_foutmelding']='Geen topicID gezet.';
+			$_SESSION['forum_foutmelding']='Geen postID gezet.';
 		}
 	} else {
 		header('location: http://csrdelft.nl/forum/');

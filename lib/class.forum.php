@@ -125,7 +125,7 @@ class Forum {
 		if($this->_lid->hasPermission('P_FORUM_MOD')){
 			$zichtBaarClause="( topic.zichtbaar='zichtbaar' OR topic.zichtbaar='wacht_goedkeuring' )";
 		}else{
-			$zichtBaarClause="topic.zichtbaar='zichtbaar'";
+			$zichtBaarClause="topic.zichtbaar='zichtbaar' AND post.zichtbaar='zichtbaar'";
 		}
 		//zoo, uberdeuberdeuber query om een topic op te halen. Namen worden
 		//ook opgehaald in deze query, die worden door forumcontent weer 
@@ -141,7 +141,6 @@ class Forum {
 				topic.open AS open,
 				topic.plakkerig AS plakkerig,
 				topic.soort AS soort,
-				topic.zichtbaar AS zichtbaar,
 				post.uid AS uid,
 					lid.nickname AS nickname,
 					lid.voornaam AS voornaam,
@@ -154,7 +153,8 @@ class Forum {
 				post.tekst AS tekst,
 				post.bbcode_uid AS bbcode_uid,
 				post.datum AS datum,
-				post.bewerkDatum AS bewerkDatum
+				post.bewerkDatum AS bewerkDatum,
+				post.zichtbaar AS zichtbaar
 			FROM
 				forum_topic topic
 			INNER JOIN 
@@ -284,17 +284,10 @@ class Forum {
 		}else{
 			$ip='geen ip';
 		}
+		//direct zichtbaar of of wachtende op goedkeuring (moderatie stap);
+ 		if($bModerated){ $sZichtbaar='wacht_goedkeuring'; }else{ $sZichtbaar='zichtbaar';	}
 		//nieuw topic of enkel een nieuwe post.
 	 	if($topic==0){
-	 		//zichtbaar of of wachtende op goedkeuring
-	 		if($bModerated){ 
-	 			$sZichtbaar='wacht_goedkeuring'; 
-	 			$bUpdaten=false;
-	 		}else{ 
-	 			$sZichtbaar='zichtbaar';
-	 			$bUpdaten=true;
-	 		}
-			//query maeken
 	 		$sTopicQuery="
 	 			INSERT INTO
 		 			forum_topic
@@ -314,8 +307,11 @@ class Forum {
 			}
 		}else{
 			//om later het topic nog ff up te daten
-			$bTopicUpdaten=true;
-			$bUpdaten=true;
+			if(!$bModerated){
+				$bTopicUpdaten=true; $bUpdaten=true;
+			}else{
+				$bTopicUpdaten=false; $bUpdaten=false;
+			}
 		}
 		if(!$bError){
 			//nu nog de (eerste) posting invoegen
@@ -323,14 +319,15 @@ class Forum {
 				INSERT INTO
 					forum_post
 				(
-					tid, uid, tekst, bbcode_uid, datum, ip
+					tid, uid, tekst, bbcode_uid, datum, ip, zichtbaar
 				)VALUES(
 					".$topic.",
 					'".$uid."',
 					'".ucfirst($tekst)."',
 					'".$bbcode_uid."',
 					'".$datumTijd."',
-					'".$ip."'
+					'".$ip."',
+					'".$sZichtbaar."'
 				);";
 			//deze query moet hier al uitgevoerd worden omdat anders het postid niet in de topicupdate query gerost kan worden.
 			$bPostQuery=$this->_db->query($sPostQuery);
@@ -494,18 +491,29 @@ class Forum {
 			LIMIT 1;";
 		return $this->_db->query($sTopicQuery);
 	}
-	function keurTopicGoed($iTopicID){
-		$iTopicID=(int)$iTopicID;
-		$sTopicQuery="
+	function keurGoed($iPostID){
+		$iPostID=(int)$iPostID;
+		$sPostQuery="
 			UPDATE
+				forum_post
+			SET
+				zichtbaar='zichtbaar'
+			WHERE
+				id=".$iPostID."
+			LIMIT 1;";
+		$iTopicID=$this->getTopicVoorPostID($iPostID);
+		$sTopicQuery="
+			UPDATE 
 				forum_topic
 			SET
 				zichtbaar='zichtbaar'
 			WHERE
 				id=".$iTopicID."
 			LIMIT 1;";
-		//query uitvoeren en stats voor topic opnieuw berekenen
-		return $this->_db->query($sTopicQuery) AND $this->updateTopicStats($iTopicID);
+		//queries uitvoeren en stats voor topic opnieuw berekenen
+		return 
+			$this->_db->query($sPostQuery) AND $this->_db->query($sTopicQuery) AND 
+			$this->updateTopicStats($iTopicID);
 	}
 /***************************************************************************************************
 *	Dingen uitrekenen: post naar topic id, topic naar cat id

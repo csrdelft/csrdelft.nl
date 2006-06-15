@@ -887,6 +887,7 @@ class Lid {
 					case '84.35.65.254': $locatie='Perron0'; break;
 					case '82.170.83.173': $locatie='JongeGarde'; break;
 					case '80.60.95.203': $locatie='Sonnenvanck'; break;
+					case '82.156.239.192': $locatie='Caesarea'; break;
 					case '145.94.59.158': //Jieter
 					case '145.94.61.229': //rommel
 						$locatie='Rommel'; 
