@@ -106,6 +106,7 @@ class Forum {
 		$rTopicsResult=$this->_db->query($sTopicsQuery);
 		return $this->_db->result2array($rTopicsResult); 
 	}
+	
 	//posts voor topic, gesorteerd op datum
 	function getPosts($iTopicID){
 		$iTopicID=(int)$iTopicID;
@@ -154,7 +155,8 @@ class Forum {
 				post.bbcode_uid AS bbcode_uid,
 				post.datum AS datum,
 				post.bewerkDatum AS bewerkDatum,
-				post.zichtbaar AS zichtbaar
+				post.zichtbaar AS zichtbaar,
+				post.ip AS ip
 			FROM
 				forum_topic topic
 			INNER JOIN 
@@ -250,7 +252,8 @@ class Forum {
 			INNER JOIN 
 				lid ON ( post.uid=lid.uid)
 			WHERE
-				topic.zichtbaar='zichtbaar' AND
+				topic.zichtbaar='zichtbaar' AND 
+				post.zichtbaar='zichtbaar' AND
 				( ".$sCategorieClause." )
 			ORDER BY
 				post.datum DESC
@@ -300,7 +303,7 @@ class Forum {
 			 	);";
 			if($this->_db->query($sTopicQuery)){
 				$topic=$this->_db->insert_id();
-			 	$bTopicUpdaten=false;
+			 	$bTopicUpdaten=false; $bUpdaten=true;
 			}else{
 				//het gaet mis...
 				$bError=true;

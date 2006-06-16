@@ -90,8 +90,8 @@ class ForumContent extends SimpleHTML {
 			$aTopics=$this->_forum->getTopics($iCat, $iPaginaID);
 			//als de pagina niet bestaat moet er teruggegaan worden naar de laatste pagina.
 			if($iPaginaID!=0 AND $aTopics===false){
-				$iPaginaID=$this->_forum->getPaginaCount($iCat)-1;
-				//nu wel voor de juiste pagina ophalen...
+				//de pagina die opgevraagd wordt bestaat niet, gewoon maar de eerste weergeven dan.
+				$iPaginaID=0;
 				$aTopics=$this->_forum->getTopics($iCat, $iPaginaID);
 			}
 			//weergeven van de navigatielinks, deze rossen we in een variabele omdat hij onderaan nogeens terug komt
@@ -107,41 +107,42 @@ class ForumContent extends SimpleHTML {
 				//aantal topics tellen:
 				$iAantalTopics=$this->_forum->topicCount($iCat);
 				foreach($aTopics as $aTopic){
-					echo "\r\n".'<!--begin onderwerp regel--><tr>';
-					//cel met topictitel
-					echo '<td class="forumtitel">';
-					//[peiling] ervoor voor onderschijd bij een peiling.
-					if($aTopic['soort']=='T_POLL'){	echo '[peiling] '; }
-					if($aTopic['zichtbaar']=='wacht_goedkeuring'){ echo '[ bevestiging nodig... ] '; }
-					//topictitel met link naar de laatste post in het onderwerp
-					echo '<a href="/forum/onderwerp/'.$aTopic['id']. '#laatste" >';
-					//plaatje voor plakkerig tonen
+					//de boel klaarmaken voor weergave:
+					$sOnderwerp='';
+					if($aTopic['soort']=='T_POLL'){	$sOnderwerp.='[peiling] '; }
+					if($aTopic['zichtbaar']=='wacht_goedkeuring'){ $sOnderwerp.='[ter goedkeuring...] '; }
+					$sOnderwerp.='<a href="/forum/onderwerp/'.$aTopic['id']. '#laatste" >';
 					if($aTopic['plakkerig']==1){
-						echo '<img src="/images/plakkerig.gif" title="Dit onderwerp is plakkerig, het blijft bovenaan." alt=" " style="border: 0px;" />&nbsp;&nbsp;';
+						$sOnderwerp.='<img src="/images/plakkerig.gif" title="Dit onderwerp is plakkerig, 
+							het blijft bovenaan." alt="plakkerig" style="border: 0px;" />&nbsp;&nbsp;';
 					}
-					//plaatje voor gesloten tonen
 					if($aTopic['open']==0){
-						echo '<img src="/images/slotje.png" title="Dit onderwerp is gesloten, u kunt niet meer reageren" alt=" " style="border: 0px;" />&nbsp;&nbsp;';
+						$sOnderwerp.='<img src="/images/slotje.png" title="Dit onderwerp is gesloten, 
+							u kunt niet meer reageren" alt="sluiten" style="border: 0px;" />&nbsp;&nbsp;';
 					}
-					//titel
-					echo mb_htmlentities($aTopic['titel']).'</a></td> ';
-		
-					//aantal reacties in dit topic
-					echo '<td class="forumreacties">'.($aTopic['reacties']-1).'</td>';
-					//draadstarter:
-					echo '<td class="forumreacties"><a href="/leden/profiel/'.$aTopic['uid'].'">'.mb_htmlentities($this->_forum->getForumNaam($aTopic['uid'])).'</a></td>';
-					//laatste veranderingen
-					echo '<td class="forumreactiemoment">';
+					$sOnderwerp.=mb_htmlentities($aTopic['titel']).'</a>';
+					$sReacties=$aTopic['reacties']-1;
+					$sDraadstarter=mb_htmlentities($this->_forum->getForumNaam($aTopic['uid']));
 					if(date('Y-m-d')==substr($aTopic['lastpost'], 0, 10)){
-						echo 'Vandaag om '.date("G:i", strtotime($aTopic['lastpost']));
+						$sReactieMoment='Vandaag om '.date("G:i", strtotime($aTopic['lastpost']));
 					}else{
-						echo date("G:i j-n-Y", strtotime($aTopic['lastpost']));
+						$sReactieMoment=date("G:i j-n-Y", strtotime($aTopic['lastpost']));
 					}
-					echo '<br /><a href="/forum/onderwerp/'.$aTopic['id'].'#'.$aTopic['lastpostID'].'">reactie</a> door ';
 					if(trim($aTopic['lastuser'])!=''){
-						echo '<a href="/leden/profiel/'.$aTopic['lastuser'].'">'.mb_htmlentities($this->_forum->getForumNaam($aTopic['lastuser'])).'</a>';
-					}else{ echo 'onbekend'; }
-					echo '</td></tr><!--einde onderwerp regel-->'."\r\n";
+						$sLaatsteposter='<a href="/leden/profiel/'.$aTopic['lastuser'].'">'.
+							mb_htmlentities($this->_forum->getForumNaam($aTopic['lastuser'])).'</a>';
+					}else{ $sLaatsteposter='onbekend'; }
+					#####################################
+					## de boel weergeven
+					#####################################
+					echo "\r\n".'<tr>';
+					echo '<td class="forumtitel">'.$sOnderwerp.'</td>';
+					echo '<td class="forumreacties">'.$sReacties.'</td>';
+					echo '<td class="forumreacties"><a href="/leden/profiel/'.$aTopic['uid'].'">'.$sDraadstarter.'</a></td>';
+					echo '<td class="forumreactiemoment">'.$sReactieMoment;
+					echo '<br /><a href="/forum/onderwerp/'.$aTopic['id'].'#'.$aTopic['lastpostID'].'">reactie</a> door ';
+					echo $sLaatsteposter;
+					echo '</td></tr>'."\r\n";
 				}
 			}else{//$aTopics is geen array, dus bevat geen berichten.
 				$iAantalTopics=0;
@@ -149,7 +150,7 @@ class ForumContent extends SimpleHTML {
 				$aTopic['rechten_post']=$this->_forum->getRechten_post($iCat);
 			}
 			//nieuw topic formuliertje
-			//kijken of er wel gepost mag worden en of de categorie bestaat.
+			//kijken of er wel gepost mag worden 
 			echo '<tr><td colspan="3" class="forumhoofd">';
 			if($this->_forum->_lid->hasPermission($aTopic['rechten_post'])){
 				echo 'Onderwerp Toevoegen';
@@ -184,7 +185,8 @@ class ForumContent extends SimpleHTML {
 					echo 'Hier kunt u een bericht toevoegen aan het forum. Het zal echter niet direct zichtbaar worden, maar
 					 &eacute;&eacute;rst door	de PubCie worden goedgekeurd. <br /><span style="text-decoration: underline;">
 					 Het is hierbij verplicht om uw naam en een email-adres onder het bericht te plaatsen. Dan kan de PubCie 
-					 eventueel contact met u opnemen. Doet u dat niet, dan wordt u bericht wellicht niet geplaatst!</span>
+					 eventueel contact met u opnemen. Doet u dat niet, dan wordt u bericht waarschijnlijk niet geplaatst!<br />
+					 <strong>Ook dubbelplaatsen is niet nodig, heb gewoon even geduld!</strong></span>
 					 <br /><br />';
 				}
 				echo '
@@ -202,7 +204,7 @@ class ForumContent extends SimpleHTML {
 			//nog eens de navigatielinks die ook bovenaan staan.
 			echo $sNavigatieLinks;
 		}else{
-			echo '<h2>Dit gedeelte van het forum is niet zichtbaar voor u, of het bestaat &uuml;berhaupt niet.</h2>
+			echo '<h2><a href="/forum/" class="forumGrootlink">Forum</a> &raquo; Foutje</h2>Dit gedeelte van het forum is niet zichtbaar voor u, of het bestaat &uuml;berhaupt niet.
 				<a href="/forum/">Terug naar het forum</a>';
 		}
 	}
@@ -227,7 +229,7 @@ class ForumContent extends SimpleHTML {
 			echo $this->getError();
 			//topic mod dingen:
 			if($this->_forum->_lid->hasPermission('P_FORUM_MOD')){
-				echo "\r\n".'U mag dit topic modereren:<br /> ';
+				echo "\r\n".'U mag dit onderwerp modereren:<br /> ';
 				//topic verwijderen
 				echo '[ <a href="/forum/verwijder-onderwerp/'.$iTopic.'" onclick="return confirm(\'Weet u zeker dat u dit topic wilt verwijderen?\')">verwijderen</a> ';
 				if($aBerichten[0]['open']==1){
@@ -265,17 +267,17 @@ class ForumContent extends SimpleHTML {
 							$bMagStemmen=false;
 						}
 					}
-					//html dan maer
-					echo '<tr><td class="forumauteur">Een peiling van ';
 					//STATISTICUS is het uid van de verenigingsstatisticus en staat in include.config.php
 					if($aBerichten[0]['startUID']==STATISTICUS){
-						echo 'am. Verenigings statisticus';
+						$sPolleigenaar='am. Verenigings statisticus';
 					}else{
-						echo mb_htmlentities($this->_forum->getForumNaam($aBerichten[0]['startUID']));
+						$sPolleigenaar=mb_htmlentities($this->_forum->getForumNaam($aBerichten[0]['startUID']));
 					}
-					echo ':<br /><br /><br />Er is '.$iPollStemmen.' keer gestemd.</td><td class="forumbericht0">';
+					//html dan maer
+					echo '<tr><td class="forumauteur">Een peiling van '.$sPolleigenaar.':<br />';
+					echo '<br /><br />Er is '.$iPollStemmen.' keer gestemd.</td><td class="forumbericht0">';
 					echo '<form action="/forum/stem/'.$iTopic.'" method="post" >';
-					echo '<table style="width: 100%; margin: 10px 10px 10px 10px; background-color: #f1f1f1;" border="0">';
+					echo '<table id="pollTabel">';
 					//poll vraag nog een keer
 					echo '<tr><td colspan="3"><strong>'.mb_htmlentities($aBerichten[0]['titel']).'</strong></td></tr>';
 					foreach($aPollOpties as $aPollOptie){
@@ -287,7 +289,7 @@ class ForumContent extends SimpleHTML {
 							$fPercentage=$iBalkLengte=0;
 						}
 						echo '<tr><td>';
-						//forumulier enkel tonen als er gestemd mag worden
+						//formulier enkel tonen als er gestemd mag worden
 						if($bMagStemmen){
 							echo '<input type="radio" name="pollOptie" id="'.$aPollOptie['id'].'" value="'.$aPollOptie['id'].'" />';
 						}
@@ -347,6 +349,7 @@ class ForumContent extends SimpleHTML {
 				//goedkeuren van berichten
 				if($this->_forum->_lid->hasPermission('P_FORUM_MOD') AND $aBericht['zichtbaar']=='wacht_goedkeuring'){
 					echo '<br /><a href="/forum/keur-goed/'.$aBericht['postID'].'">bericht goedkeuren</a>';
+					echo '<br /><a href="/tools/stats.php?ip='.$aBericht['ip'].'">ip-log</a>';
 				}
 				echo '</td>';
 				
@@ -384,7 +387,7 @@ class ForumContent extends SimpleHTML {
 				echo '<a class="forumpostlink" name="laatste"><stong>Citeren:</strong></a><br /><br />';
 				$iTekstareaRegels=20;
 			}
-			if($this->_forum->magBerichtToevoegen($iTopic, $aBericht['open'], 'P_FORUM_POST')){	
+			if($this->_forum->magBerichtToevoegen($iTopic, $aBericht['open'], $aBericht['rechten_post'])){	
 				// link om het tekst-vak groter te maken.
 				echo '<a href="#laatste" onclick="vergrootTextarea(\'forumBericht\', 10)" name="Vergroot het invoerveld">
 					invoerveld vergroten &raquo;</a><br />';
@@ -394,9 +397,7 @@ class ForumContent extends SimpleHTML {
 				echo '<br /><strong>Dit topic is gesloten, u mag reageren omdat u beheerder bent.</strong>';
 			}
 			echo '</td><td class="forumtekst">';
-			//if($this->_forum->magBerichtToevoegen($iTopic, $aBericht['open'], 'P_FORUM_POST')){	
 			if($this->_forum->magBerichtToevoegen($iTopic, $aBericht['open'], $rechten_post)){ 
-			//^ nu werkt dit nog niet, omdat htdocs/forum/toevoegen.php er nog niet mee kan omgaan.
 				echo '<form method="post" action="/forum/toevoegen/'.$iTopic.'"><p>';
 				echo '<textarea name="bericht" id="forumBericht" class="tekst" rows="'.$iTekstareaRegels.'" cols="80" style="width: 100%;" >';
 				//inhoud van de textarea vullen met eventuele quote...
@@ -422,7 +423,8 @@ class ForumContent extends SimpleHTML {
 			if(!is_array($aBerichten)){
 				echo 'Onderwerp bestaat helaas niet (meer).';
 			}else{
-				echo '<h3>helaas</h3>Dit gedeelte van het forum is niet beschikbaar voor u, u zult moeten inloggen, of terug gaan 
+				echo '<h2><a href="/forum/" class="forumGrootlink">Forum</a> &raquo; Foutje</h2>
+				Dit gedeelte van het forum is niet beschikbaar voor u, u zult moeten inloggen, of terug gaan 
 					naar <a href="/forum/">het forum</a>';
 			}
 		}
@@ -464,7 +466,7 @@ class ForumContent extends SimpleHTML {
 			}
 		}else{
 			$iTopicID=$this->_forum->getTopicVoorPostID($iPostID);
-			echo '<h2>Dit bericht mag u niet bewerken.</h2>
+			echo '<h2><a href="/forum/" class="forumGrootlink">Forum</a> &raquo; Dit bericht mag u niet bewerken.</h2>
 				Terug naar <a href="/forum/onderwerp/'.$iTopicID.'">Vergeet bewerken, ga terug naar het onderwerp waar u vandaan kwam.</a>';
 		}
 	}
