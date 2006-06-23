@@ -215,7 +215,7 @@ class ForumPoll {
 				$bValid=false;
 				$sError.="Het veld 'bericht' moet minsten 15 tekens bevatten.<br />";
 			}
-			if(isset($_POAT['opties'])){
+			if(isset($_POST['opties'])){
 				foreach($_POST['opties'] as $sOptie){
 					if(trim($sOptie)!=''){
 						$aOpties[]=$sOptie;
