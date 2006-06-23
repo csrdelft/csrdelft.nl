@@ -916,10 +916,11 @@ class Lid {
 		$agent='';
 		if(isset($_SERVER['HTTP_USER_AGENT'])){ 
 			if(preg_match('/bot/i', $_SERVER['HTTP_USER_AGENT']) OR preg_match('/crawl/i', $_SERVER['HTTP_USER_AGENT']) 
-				OR preg_match('/slurp/i', $_SERVER['HTTP_USER_AGENT'])){
+				OR preg_match('/slurp/i', $_SERVER['HTTP_USER_AGENT']) OR preg_match('/Teoma/i', $_SERVER['HTTP_USER_AGENT'])){
 				if(preg_match('/google/i', $_SERVER['HTTP_USER_AGENT'])){ $agent='googleBot'; 
 				}elseif(preg_match('/msn/i', $_SERVER['HTTP_USER_AGENT'])){ $agent='msnBot'; 
 				}elseif(preg_match('/yahoo/i', $_SERVER['HTTP_USER_AGENT'])){ $agent='yahooBot';
+				}elseif(preg_match('/Jeeves/i', $_SERVER['HTTP_USER_AGENT'])){ $agent='askJeeves';
 				}else{ $agent='onbekende bot';}
 			}else{
 				if(preg_match('/Windows\ NT\ 5\.1/', $_SERVER['HTTP_USER_AGENT'])){ $agent.='Windows XP | '; 
