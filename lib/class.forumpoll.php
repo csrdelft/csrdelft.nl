@@ -215,14 +215,19 @@ class ForumPoll {
 				$bValid=false;
 				$sError.="Het veld 'bericht' moet minsten 15 tekens bevatten.<br />";
 			}
-			foreach($_POST['opties'] as $sOptie){
-				if(trim($sOptie)!=''){
-					$aOpties[]=$sOptie;
+			if(isset($_POAT['opties'])){
+				foreach($_POST['opties'] as $sOptie){
+					if(trim($sOptie)!=''){
+						$aOpties[]=$sOptie;
+					}
 				}
-			}
-			if(count($aOpties)<2){
+				if(count($aOpties)<2){
+					$bValid=false;
+					$sError.="U moet minstens twee opties opgeven!";
+				}
+			}else{
 				$bValid=false;
-				$sError.="U moet minstens twee opties opgeven!";
+				$sError.='U moet minstens twee opties opgeven!';
 			}
 			
 		}else{

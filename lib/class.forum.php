@@ -780,7 +780,8 @@ class Forum {
 				FROM
 					forum_post
 				WHERE 
-					tid=".$iTopicID."
+					tid=".$iTopicID." AND
+					zichtbaar='zichtbaar'
 				ORDER BY
 					datum DESC
 				LIMIT 1;";
@@ -818,7 +819,8 @@ class Forum {
 			FROM
 				forum_topic
 			WHERE 
-				categorie=".$iCatID."
+				categorie=".$iCatID." AND
+				zichtbaar='zichtbaar'
 			ORDER BY
 				lastpost DESC
 			LIMIT 1;";

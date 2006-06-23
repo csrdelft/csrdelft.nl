@@ -638,6 +638,10 @@ class ForumContent extends SimpleHTML {
 			return '<div class="foutmelding">'.$this->_sError.'</div>';
 		}
 	}
+	function setError($sError){
+		$this->_sError=trim($sError);
+	
+	}
 	function getTitel(){ 
 		if($this->_actie=='topic' AND isset($_GET['topic'])){
 			$iTopicID=(int)$_GET['topic'];
@@ -677,7 +681,7 @@ class ForumContent extends SimpleHTML {
 			case 'zoeken': $this->zoeken(); break;
 			default: $this->viewCategories();	break;
 		}
-		if($this->_forum->_lid->hasPermission('P_FORUM_MOD') AND $this->_actie!='rss'){
+		if($this->_forum->_lid->hasPermission('P_FORUM_MOD') AND $this->_actie!='rss' AND isset($_SESSION['debug'])){
 			echo '<br />forum parsetijd: '.round($this->_forum->getParseTime(), 4).' seconden';
 			echo '<pre>'.print_r($_GET, true).'</pre>';
 		}
