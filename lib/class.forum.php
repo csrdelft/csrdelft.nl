@@ -198,8 +198,6 @@ class Forum {
 				post.tid=topic.id
 			AND
 				topic.categorie=categorie.id
-			AND
-				topic.zichtbaar='zichtbaar'
 			LIMIT 1;";
 		$rPost=$this->_db->query($sPostQuery);
 		if($this->_db->numRows($rPost)==1){
