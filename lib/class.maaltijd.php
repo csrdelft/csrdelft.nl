@@ -87,7 +87,7 @@ class MaalTijd {
 		$proxy = ($uid != $this->_lid->getUid()) ? true : false;
 
 		# kijken of er wel een geldige uid is opgegeven
-		if ($proxy and (!$this->_lid->uidExists($uid) or !preg_match('/S_(GAST)?LID/', $this->_lid->getLidStatus($uid))) ) {
+		if ($proxy and (!$this->_lid->uidExists($uid) or !preg_match('/S_((GAST)?LID|NOVIET)/', $this->_lid->getLidStatus($uid))) ) {
 			$this->_proxyerror = "Opgegeven lid bestaat niet of is geen gewoon Lid.";
 			return false;
 		}
