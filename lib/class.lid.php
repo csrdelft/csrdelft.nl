@@ -524,6 +524,7 @@ class Lid {
 		$this->_permissions = array(
 			'P_NOBODY'       => 00000000001,
 			'P_LOGGED_IN'    => 00000000003, # Leden-menu, eigen profiel raadplegen
+			'P_ADMIN'				 =>	00000000007, # Admin dingen algemeen...	
 			'P_FORUM_READ'   => 00000000400, # Forum lezen
 			'P_FORUM_POST'   => 00000000500, # Berichten plaatsen op het forum en eigen berichten wijzigen
 			'P_FORUM_MOD'    => 00000000700, # Forum-moderator mag berichten van anderen wijzigen of verwijderen
@@ -563,12 +564,12 @@ class Lid {
 			'P_NOBODY'     => $p['P_NOBODY'] | $p['P_FORUM_READ'],
 			'P_LID'        => $p['P_LOGGED_IN'] | $p['P_FORUM_POST'] | $p['P_DOCS_READ'] | $p['P_LEDEN_READ'] | $p['P_PROFIEL_EDIT'] | $p['P_AGENDA_POST'] + $p['P_MAAL_WIJ'] + $p['P_MAIL_POST'],
 			'P_OUDLID'     => $p['P_LOGGED_IN'] | $p['P_OUDLEDEN_READ'] | $p['P_PROFIEL_EDIT'] | $p['P_FORUM_READ'],
-			'P_MODERATOR'  => $p['P_LOGGED_IN'] | $p['P_FORUM_MOD'] | $p['P_DOCS_MOD'] | $p['P_LEDEN_MOD'] | $p['P_OUDLEDEN_MOD'] | $p['P_AGENDA_MOD'] | $p['P_MAAL_MOD'] | $p['P_MAIL_SEND'] | $p['P_NEWS_MOD'] | $p['P_BIEB_MOD']
+			'P_MODERATOR'  => $p['P_ADMIN'] | $p['P_FORUM_MOD'] | $p['P_DOCS_MOD'] | $p['P_LEDEN_MOD'] | $p['P_OUDLEDEN_MOD'] | $p['P_AGENDA_MOD'] | $p['P_MAAL_MOD'] | $p['P_MAIL_SEND'] | $p['P_NEWS_MOD'] | $p['P_BIEB_MOD']
 		);
 		# extra dingen, waarvoor de array perm_user zelf nodig is
 		$this->_perm_user['P_PUBCIE']  = $this->_perm_user['P_MODERATOR'];
 		$this->_perm_user['P_MAALCIE'] = $this->_perm_user['P_LID'] | $p['P_MAAL_MOD'];
-		$this->_perm_user['P_BESTUUR'] = $this->_perm_user['P_LID'] | $p['P_OUDLEDEN_READ'] | $p['P_NEWS_MOD'] | $p['P_MAAL_MOD'] | $p['P_AGENDA_POST'];
+		$this->_perm_user['P_BESTUUR'] = $this->_perm_user['P_LID'] | $p['P_OUDLEDEN_READ'] | $p['P_NEWS_MOD'] | $p['P_MAAL_MOD'] | $p['P_AGENDA_POST'] | $p['P_FORUM_MOD'];
 		$this->_perm_user['P_VAB']     = $this->_perm_user['P_BESTUUR'] | $p['P_LEDEN_MOD'] | $p['P_OUDLEDEN_MOD'] | $p['P_BIEB_READ'];
 		$this->_perm_user['P_KNORRIE'] = $this->_perm_user['P_LID'] | $p['P_OUDLEDEN_READ'] | $p['P_MAAL_MOD'];
 
@@ -625,6 +626,15 @@ class Lid {
 		# mysql escape dingesen
 		$zoekterm = $this->_db->escape($zoekterm);
 		$zoekveld = $this->_db->escape($zoekveld);
+		
+		//Zoeken standaard in voornaam, achternaam, bijnaam en uid.
+		if($zoekveld=='naam'){
+			$zoekfilter="
+				voornaam LIKE '%{$zoekterm}%' OR achternaam LIKE '%{$zoekterm}%' OR 
+				nickname LIKE '%{$zoekterm}%' OR uid LIKE '%{$zoekterm}%'";
+		}else{
+			$zoekfilter="{$zoekveld} LIKE '%{$zoekterm}%'";
+		}
 		$sort = $this->_db->escape($sort);
 
 		# in welke status wordt gezocht, is afhankelijk van wat voor rechten de
@@ -661,7 +671,7 @@ class Lid {
 				FROM 
 					lid 
 				WHERE 
-					{$zoekveld} LIKE '%{$zoekterm}%' 
+					(".$zoekfilter.")
 				AND 
 					($statusfilter) 
 				{$mootfilter}
@@ -736,20 +746,21 @@ class Lid {
 
 	function getVerjaardagen($maand, $dag=0) {
 		$maand = (int)$maand; $dag = (int)$dag; $vrjdgn = array();
-		$result = $this->_db->select("
+		$query="
 			SELECT 
-				voornaam, tussenvoegsel, achternaam, gebdag 
+				uid, voornaam, tussenvoegsel, achternaam, geslacht, email, gebdag 
 			FROM 
 				lid 
 			WHERE 
 				(status='S_LID' OR `status`='S_GASTLID' OR status='S_NOVIET' OR status='S_KRINGEL') 
 			AND 
-				gebmnd = '{$maand}' 
-			ORDER BY gebdag");
+				gebmnd = '{$maand}'";
+		if($dag!=0)	$query.=" AND gebdag=".$dag;
+		$query.=" ORDER BY gebdag";
+		$result = $this->_db->select($query);
 			if ($result !== false and $this->_db->numRows($result) > 0) {
 			while ($vrjdg = $this->_db->next($result)) $vrjdgn[] = $vrjdg;
 		}
-
 		return $vrjdgn;
 	}
 
@@ -888,6 +899,7 @@ class Lid {
 					case '82.170.83.173': $locatie='JongeGarde'; break;
 					case '80.60.95.203': $locatie='Sonnenvanck'; break;
 					case '82.156.239.192': $locatie='Caesarea'; break;
+					case '62.51.55.15': $locatie="bras98"; break;
 					case '145.94.59.158': //Jieter
 					case '145.94.61.229': //rommel
 						$locatie='Rommel'; 

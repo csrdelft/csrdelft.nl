@@ -49,6 +49,6 @@ define('MAALTIJD_PROXY_MAX_TOT', 86400*2);
 # wat is het standaard aantal max inschrijvingen voor een maaltijd?
 define('MAX_MAALTIJD', 100);
 //verenigingsstatisticus
-define('STATISTICUS', '0127' );
+define('STATISTICUS', '0217' );
 
 ?>

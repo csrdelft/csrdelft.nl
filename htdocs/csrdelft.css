@@ -365,3 +365,9 @@ text-align: left;
 	background-color: #FFFF99;
 	color: black;
 }
+#pollTabel{
+	width: 100%; 
+	margin: 10px 10px 10px 10px; 
+	background-color: #f1f1f1; 
+	border: 0px;
+}

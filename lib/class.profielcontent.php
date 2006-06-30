@@ -150,8 +150,8 @@ EOT
 <a href="javascript: history.go(-1)">[ Terug ]</a>
 <?php
 				#}
-if($this->_lid->hasPermission('P_FORUM_MOD')){
-	echo '<a href="/tools/stats.php?uid='.htmlspecialchars($profiel['uid']).'">[ overzicht van bezoeken ]</a>';
+if($this->_lid->hasPermission('P_ADMIN')){
+	echo '<a href="/tools/stats.php?uid='.$profiel['uid'].'">[ overzicht van bezoeken ]</a>';
 }
 
 ?>
@@ -203,7 +203,7 @@ EOT
 
 				$form[1][] = array('ztekst',"&nbsp;","Vaste eetgewoontes (vego etc):");
 				$form[1]['eetwens'] = array('input',"Eetwens: (max 20 tekens)");
-				$form[1][] = array('ztekst',"&nbsp;","Deze bijnaam kunt ook ook gebruiken voor het inloggen:");
+				$form[1][] = array('ztekst',"&nbsp;","Deze bijnaam kunt ook gebruiken voor het inloggen:");
 				$form[1]['nickname'] = array('input',"Bijnaam:");
 				$form[1][] = array('ztekst',"&nbsp;","Wachtwoord wijzigen (optioneel):");
 				$form[1]['oldpass'] = array('password',"Oude wachtwoord:");

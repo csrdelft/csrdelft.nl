@@ -65,11 +65,11 @@ Het bestuur is per telefoon te bereiken op de societeit of
 <a href="mailto:bestuur@csrdelft.nl">per email</a>.
 
 <table border=0 cellspacing=0 cellpadding=0 marginheight=0 marginwidth=0 align="left">
-<tr><td width="200">h.t. Praeses:</td><td>Gerlinde Neven</td></tr>
-<tr><td>h.t. Abactis:</td><td>Kees Cozijnsen</td></tr>
-<tr><td>h.t. Fiscus:</td><td>Martijn Schaafsma</td></tr>
-<tr><td>h.t. Vice-Praeses:</td><td>Aris Kool</td></tr>
-<tr><td>h.t. Vice-Abactis:</td><td>Ruben Verhaaf</td></tr>
+<tr><td width="200">h.t. Praeses:</td><td>Simon Frans de Vries</td></tr>
+<tr><td>h.t. Abactis:</td><td>Jos Carrière</td></tr>
+<tr><td>h.t. Fiscus:</td><td>Robert Rozendal</td></tr>
+<tr><td>h.t. Vice-Praeses:</td><td>Gert Jan Smit </td></tr>
+<tr><td>h.t. Vice-Abactis:</td><td>Michel Weststrate</td></tr>
 </table>
 
 <br clear="all" />
@@ -119,7 +119,11 @@ bezoeken.)<br />
 <form method="post" action="http://webchat.xs4all.nl/cgi-bin/ircnet/irc.cgi" name="loginform" onsubmit="setjs();return nickvalid()">
 <input type="hidden" name="interface" value="nonjs">
 Kies een nickname..
-<input type="text" name="Nickname" value="" class="tekst">
+<input type="text" name="Nickname" value="<?php
+if(isset($this->_lid) AND $this->_lid->hasPermission('P_LEDEN_READ')){
+	echo $this->_lid->getNickName();
+}
+?>" class="tekst">
 ..en een kanaal..
 <select name="Channel" class="tekst">
 	<option value="#csrdelft"> #csrdelft </option>

@@ -18,10 +18,12 @@ class Includer {
 
 	var $_sub = '';
 	var $_page = '';
-
+	
+	var $_lid;
 	### public ###
 
-	function Includer ($sub = '', $page = '') {
+	function Includer ($sub = '', $page = '', &$lid=false) {
+		$this->_lid=$lid;
 		# controleren of het een geldige naam is... platte namespace
 		if ($sub != '') {
 			if (preg_match('/^[-\w\.]+$/',$sub)) $this->_sub = $sub;

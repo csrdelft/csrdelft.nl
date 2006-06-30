@@ -40,7 +40,7 @@ function main() {
 
 	# Het middenstuk
 	require_once('class.includer.php');
-	$midden = new Includer('informatie', 'contact.html');
+	$midden = new Includer('informatie', 'contact.html', $lid);
 
 	### Kolommen vullen ###
 	require_once('class.column.php');

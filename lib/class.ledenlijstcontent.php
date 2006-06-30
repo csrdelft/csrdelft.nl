@@ -34,7 +34,7 @@ class LedenlijstContent extends SimpleHTML {
 	#      met setForm
 	var	$_form = array(
 		'wat'    => '',
-		'waar'   => 'voornaam',
+		'waar'   => 'naam',
 		'kolom'  => array('adres', 'email', 'telefoon', 'mobiel'),
 		'sort'   => 'achternaam',
 		'moot'   => 'alle'
@@ -101,7 +101,7 @@ EOT
 		);
 		
 		# de velden die we presenteren om in te kunnen zoeken
-		$zoek_in_waar = array('nickname','voornaam','achternaam','adres','telefoon','mobiel','email','kring');
+		$zoek_in_waar = array('naam','nickname','voornaam','achternaam','adres','telefoon','mobiel','email','kring');
 		
 		foreach ($zoek_in_waar as $veld) {
 			print("<option value=\"{$veld}\"");

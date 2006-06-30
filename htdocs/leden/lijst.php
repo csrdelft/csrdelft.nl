@@ -62,7 +62,7 @@ function main() {
 			
 			# in welke kolom van de tabel gezocht wordt...
 			# als er niets geldigs is opgegeven, dan op voornaam zoeken
-			$kolommen = array('nickname','voornaam','achternaam','adres','telefoon','mobiel','email','kring');
+			$kolommen = array('naam','nickname','voornaam','achternaam','adres','telefoon','mobiel','email','kring');
 			$form['waar'] = (isset($_POST['waar']) and in_array($_POST['waar'],$kolommen)) ? $_POST['waar'] : 'voornaam';
 
 			# zoek in een bepaalde moot (0=alle)
