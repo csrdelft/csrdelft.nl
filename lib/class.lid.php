@@ -205,7 +205,7 @@ class Lid {
 			if (!isset($_POST['frmdata'][$veld])) {
 				$this->_formerror[$veld] = "Whraagh! ik mis een veld in de data! --> {$veld}";
 			} else {
-				$invoer = strval($_POST['frmdata'][$veld]);
+				$invoer = trim(strval($_POST['frmdata'][$veld]));
 				# is het wel een wijziging?
 				if ($invoer != $this->_tmpprofile[$veld]) {
 					# controleren op juiste inhoud...
@@ -232,7 +232,7 @@ class Lid {
 		if (!isset($_POST['frmdata'][$veld])) {
 			$this->_formerror[$veld] = "Whraagh! ik mis een veld in de data! --> {$veld}";
 		} else {
-			$invoer = strval($_POST['frmdata'][$veld]);
+			$invoer = trim(strval($_POST['frmdata'][$veld]));
 			# is het wel een wijziging?
 			if ($invoer != $this->_tmpprofile[$veld]) {
 				# controleren op juiste inhoud...
@@ -242,13 +242,19 @@ class Lid {
 					$this->_formerror[$veld] = "Gebruik maximaal {$max_lengte} karakters:";
 				} elseif ($invoer != "" and $this->nickExists($invoer)) {
 					$this->_formerror[$veld] = "Deze bijnaam is al in gebruik.";
-				} else {
+				}
+				
+				# als er geen fout is opgetreden veranderde waarde bewaren
+				if (!isset($this->_formerror[$veld])) {
 					# bewaar oude en nieuwe waarde in delta
 					$this->_delta['diff'][] = array (
 						'veld' => $veld,
 						'oud'  => $this->_tmpprofile[$veld],
 						'nieuw'  => $invoer
 					);
+				# anders ingevulde waarde terugzetten in het invoervak
+				} else {
+					$this->_tmpprofile[$veld] = $invoer;
 				}
 			}
 		}
@@ -260,21 +266,31 @@ class Lid {
 		if (!isset($_POST['frmdata'][$veld])) {
 			$this->_formerror[$veld] = "Whraagh! ik mis een veld in de data! --> {$veld}";
 		} else {
-			$invoer = strval($_POST['frmdata'][$veld]);
+			$invoer = trim(strval($_POST['frmdata'][$veld]));
 			# is het wel een wijziging?
 			if ($invoer != $this->_tmpprofile[$veld]) {
 				# controleren op juiste inhoud...
+				# Als er geen protocol aangegeven is, dan gooien we er http:// voor.
+				if ($invoer != "" and is_utf8($invoer) and !preg_match("#^[\w]+?://#is",$invoer) )
+					$invoer = 'http://'.$invoer;
+				# controleren of het een geldige url is...
 				if ($invoer != "" and (!is_utf8($invoer) or !preg_match("#([\w]+?://[^ \"\n\r\t<]*?)#is",$invoer) ) ) {
 					$this->_formerror[$veld] = "Ongeldige karakters:";
 				} elseif (mb_strlen($invoer) > $max_lengte) {
 					$this->_formerror[$veld] = "Gebruik maximaal {$max_lengte} karakters:";
-				} else {
+				}
+				
+				# als er geen fout is opgetreden veranderde waarde bewaren
+				if (!isset($this->_formerror[$veld])) {
 					# bewaar oude en nieuwe waarde in delta
 					$this->_delta['diff'][] = array (
 						'veld' => $veld,
 						'oud'  => $this->_tmpprofile[$veld],
 						'nieuw'  => $invoer
 					);
+				# anders ingevulde waarde terugzetten in het invoervak
+				} else {
+					$this->_tmpprofile[$veld] = $invoer;
 				}
 			}
 		}
@@ -284,18 +300,23 @@ class Lid {
 		if (!isset($_POST['frmdata'][$veld])) {
 			$this->_formerror[$veld] = "Whraagh! ik mis een veld in de data! --> {$veld}";
 		} else {
-			$invoer = strval($_POST['frmdata'][$veld]);
+			$invoer = trim(strval($_POST['frmdata'][$veld]));
 			if ($invoer != 'civitas' and $invoer != 'nick') $invoer = 'civitas';
 			# is het wel een wijziging?
 			if ($invoer != $this->_tmpprofile[$veld]) {
 				if ($this->nickExists($invoer)) $this->_formerror[$veld] = "Deze bijnaam is al in gebruik.";
-				else {
+
+				# als er geen fout is opgetreden veranderde waarde bewaren
+				if (!isset($this->_formerror[$veld])) {
 					# bewaar oude en nieuwe waarde in delta
 					$this->_delta['diff'][] = array (
 						'veld' => $veld,
 						'oud'  => $this->_tmpprofile[$veld],
 						'nieuw'  => $invoer
 					);
+				# anders ingevulde waarde terugzetten in het invoervak
+				} else {
+					$this->_tmpprofile[$veld] = $invoer;
 				}
 			}
 		}
@@ -307,19 +328,25 @@ class Lid {
 			if (!isset($_POST['frmdata'][$veld])) {
 				$this->_formerror[$veld] = "Whraagh! ik mis een veld in de data! --> {$veld}";
 			} else {
-				$invoer = strval($_POST['frmdata'][$veld]);
+				$invoer = trim(strval($_POST['frmdata'][$veld]));
 				# is het wel een wijziging?
 				if ($invoer != $this->_tmpprofile[$veld]) {
 					# geldige telefoonnummers...
 					if (!preg_match('/^(\d{4}-\d{6}|\d{3}-\d{7}|\d{2}-\d{8}|\+\d{10-20})$/', $invoer) and $invoer != "") {
 						$this->_formerror[$veld] = "Geldig formaat: 0187-123456; 015-2135681; 06-12345678; +31152135681";
-					} else {
+					}
+					
+					# als er geen fout is opgetreden veranderde waarde bewaren
+					if (!isset($this->_formerror[$veld])) {
 						# bewaar oude en nieuwe waarde in delta
 						$this->_delta['diff'][] = array (
 							'veld' => $veld,
 							'oud'  => $this->_tmpprofile[$veld],
 							'nieuw'  => $invoer
 						);
+					# anders ingevulde waarde terugzetten in het invoervak
+					} else {
+						$this->_tmpprofile[$veld] = $invoer;
 					}
 				}
 			}
@@ -330,18 +357,24 @@ class Lid {
 		if (!isset($_POST['frmdata'][$veld])) {
 			$this->_formerror[$veld] = "Whraagh! ik mis een veld in de data! --> {$veld}";
 		} else {
-			$invoer = strval($_POST['frmdata'][$veld]);
+			$invoer = trim(strval($_POST['frmdata'][$veld]));
 			# is het wel een wijziging?
 			if ($invoer != $this->_tmpprofile[$veld]) {
-				if (!preg_match('/^\d{5,10}$/',$invoer) and $invoer != "") {
+				if (!preg_match('/^\d{5,10}$/', $invoer) and $invoer != "") {
 					$this->_formerror[$veld] = "Gebruik 5 tot 10 getallen:";
-				} else {
+				}
+
+				# als er geen fout is opgetreden veranderde waarde bewaren
+				if (!isset($this->_formerror[$veld])) {
 					# bewaar oude en nieuwe waarde in delta
 					$this->_delta['diff'][] = array (
 						'veld' => $veld,
 						'oud'  => $this->_tmpprofile[$veld],
 						'nieuw'  => $invoer
 					);
+				# anders ingevulde waarde terugzetten in het invoervak
+				} else {
+					$this->_tmpprofile[$veld] = $invoer;
 				}
 			}
 		}
@@ -352,39 +385,103 @@ class Lid {
 			if (!isset($_POST['frmdata'][$veld])) {
 				$this->_formerror[$veld] = "Whraagh! ik mis een veld in de data! --> {$veld}";
 			} else {
-				$invoer = strval($_POST['frmdata'][$veld]);
+				$invoer = trim(strval($_POST['frmdata'][$veld]));
 				# is het wel een wijziging?
 				if ($invoer != $this->_tmpprofile[$veld]) {
-					# staat er wel een @ in?
-					if (strpos($invoer,'@') === false) {
-						# zo nee, dan is het zowieso ongeldig
-						$this->_formerror[$veld] = "Ongeldig formaat email-adres:";
-					} else {
-						# anders gaan we m ontleden en controleren
-						list ($usr,$dom) = split ('@', $invoer);
-						if (strlen($usr) > 50) {
-							$this->_formerror[$veld] = "Gebruik max. 50 karakters voor de @:";
-						} elseif (!preg_match("/^[-\w.]+$/", $usr)) {
-							$this->_formerror[$veld] = "Het adres bevat ongeldige karakters voor de @:";
-						} elseif (!preg_match("/^[a-z0-9]+([-.][a-z0-9]+)*\\.[a-z]{2,4}$/i", $dom)) {
-							$this->_formerror[$veld] = "Het domein is ongeldig:";
-						} elseif (!checkdnsrr($dom, 'A') and !checkdnsrr($dom, 'MX')) {
-							$this->_formerror[$veld] = "Het domein bestaat niet:";
-						} elseif (!checkdnsrr($dom, 'MX')) {
-							$this->_formerror[$veld] = "Het domein is niet geconfigureerd om email te ontvangen:";
+					# we gaan dus iets veranderen.
+					# eerst kijken of de nieuwe invoer niet een leeg vak is
+					if ($invoer != "") {
+						# staat er wel een @ in?
+						if (strpos($invoer,'@') === false) {
+							# zo nee, dan is het zowieso ongeldig
+							$this->_formerror[$veld] = "Ongeldig formaat email-adres:";
 						} else {
-							# bewaar oude en nieuwe waarde in delta
-							$this->_delta['diff'][] = array (
-								'veld' => $veld,
-								'oud'  => $this->_tmpprofile[$veld],
-								'nieuw'  => $invoer
-							);
+							# anders gaan we m ontleden en controleren
+							list ($usr,$dom) = split ('@', $invoer);
+							if (strlen($usr) > 50) {
+								$this->_formerror[$veld] = "Gebruik max. 50 karakters voor de @:";
+							} elseif (!preg_match("/^[-\w.]+$/", $usr)) {
+								$this->_formerror[$veld] = "Het adres bevat ongeldige karakters voor de @:";
+							} elseif (!preg_match("/^[a-z0-9]+([-.][a-z0-9]+)*\\.[a-z]{2,4}$/i", $dom)) {
+								$this->_formerror[$veld] = "Het domein is ongeldig:";
+							} elseif (!checkdnsrr($dom, 'A') and !checkdnsrr($dom, 'MX')) {
+								$this->_formerror[$veld] = "Het domein bestaat niet:";
+							} elseif (!checkdnsrr($dom, 'MX')) {
+								$this->_formerror[$veld] = "Het domein is niet geconfigureerd om email te ontvangen:";
+							}
 						}
+					}
+					
+					# als er geen fout is opgetreden veranderde waarde bewaren
+					if (!isset($this->_formerror[$veld])) {
+						# bewaar oude en nieuwe waarde in delta
+						$this->_delta['diff'][] = array (
+							'veld' => $veld,
+							'oud'  => $this->_tmpprofile[$veld],
+							'nieuw'  => $invoer
+						);
+					# anders ingevulde waarde terugzetten in het invoervak
+					} else {
+						$this->_tmpprofile[$veld] = $invoer;
 					}
 				}
 			}
 		}
-		
+
+		# 9. Jabber ID
+		$velden = array('jid');
+		foreach ($velden as $veld) {
+			if (!isset($_POST['frmdata'][$veld])) {
+				$this->_formerror[$veld] = "Whraagh! ik mis een veld in de data! --> {$veld}";
+			} else {
+				$invoer = trim(strval($_POST['frmdata'][$veld]));
+				# is het wel een wijziging?
+				if ($invoer != $this->_tmpprofile[$veld]) {
+					# we gaan dus iets veranderen.
+					# eerst kijken of de nieuwe invoer niet een leeg vak is
+					if ($invoer != "") {
+						# staat er wel een @ in?
+						if (strpos($invoer,'@') === false) {
+							# zo nee, dan is het zowieso ongeldig
+							$this->_formerror[$veld] = "Ongeldig formaat Jabber ID:";
+						} else {
+							# anders gaan we m ontleden en controleren
+							if (mb_strpos($invoer,'@') === false) {
+								$this->_formerror[$veld] = "Dit lijkt echt niet op een Jabber ID...";
+							} else {
+								list ($usr,$dom) = split ('@', $invoer);
+								if (mb_strlen($usr) > 50) {
+									$this->_formerror[$veld] = "Gebruik max. 50 karakters voor de @:";
+								}
+								# RFC 821 <- voorlopig voor JabberID even zelfde regels aanhouden
+								# http://www.lookuptables.com/
+								# Hmmmz, \x2E er uit gehaald ( . )
+								elseif (preg_match('/[^\x21-\x7E]/', $usr) or
+								        preg_match('/[\x3C\x3E\x28\x29\x5B\x5D\x5C\x2C\x3B\x40\x22]/', $usr)) {
+									$this->_formerror[$veld] = "Het adres bevat ongeldige karakters voor de @:";
+								} elseif (!preg_match("/^[a-z0-9]+([-.][a-z0-9]+)*\\.[a-z]{2,4}$/i", $dom)) {
+									$this->_formerror[$veld] = "Het domein is ongeldig:";
+								}
+							}
+						}
+					}
+					
+					# als er geen fout is opgetreden veranderde waarde bewaren
+					if (!isset($this->_formerror[$veld])) {
+						# bewaar oude en nieuwe waarde in delta
+						$this->_delta['diff'][] = array (
+							'veld' => $veld,
+							'oud'  => $this->_tmpprofile[$veld],
+							'nieuw'  => $invoer
+						);
+					# anders ingevulde waarde terugzetten in het invoervak
+					} else {
+						$this->_tmpprofile[$veld] = $invoer;
+					}
+				}
+			}
+		}
+
 		# 8. password veranderen
 		$velden = array('oldpass', 'nwpass', 'nwpass2');
 		$pwveldenset = true;
@@ -844,6 +941,7 @@ class Lid {
 			}
 		}
 	}
+	
 	function getSaldo($uid=''){
 		if($uid==''){
 			$uid=$this->getUid();

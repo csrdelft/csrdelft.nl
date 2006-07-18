@@ -56,8 +56,7 @@ class Commissie {
 	
 	function getCieByUid($uid) {
 		$cies = array();
-		$uid = (int)$uid;
-		$result = $this->_db->select("SELECT naam FROM commissie WHERE id IN ( SELECT cieid FROM commissielid WHERE uid = '{$uid}') ORDER BY `naam`");
+		$result = $this->_db->select("SELECT id,naam FROM commissie WHERE id IN ( SELECT cieid FROM commissielid WHERE uid = '{$uid}') ORDER BY `naam`");
 		if ($result !== false and $this->_db->numRows($result) > 0)
 			while ($cie = $this->_db->next($result)) $cies[] = $cie;
 		return $cies;

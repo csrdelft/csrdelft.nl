@@ -26,12 +26,16 @@ class ProfielContent extends SimpleHTML {
 	# de objecten die data leveren
 	var $_lid;
 	var $_state;
+	var $_woonoord;
+	var $_commissie;
 
 	### public ###
 
-	function ProfielContent (&$lid, &$state) {
+	function ProfielContent (&$lid, &$state, &$woonoord, &$commissie) {
 		$this->_lid =& $lid;
 		$this->_state =& $state;
+		$this->_woonoord =& $woonoord;
+		$this->_commissie =& $commissie;
 	}
 
 	function view() {
@@ -73,6 +77,22 @@ class ProfielContent extends SimpleHTML {
 						}
 					}
 				}
+				
+				# kijken of deze persoon nog in een geregistreerd woonoord woont...
+				$woonoord = $this->_woonoord->getWoonoordByUid($profiel['uid']);
+				$woonoordhtml = ($woonoord !== false) ? "<i>" . $woonoord['naam'] . "</i><br />\n" : "";
+				
+				# kijken of deze persoon commissielid is
+				$ciehtml = "";				
+				$cies = $this->_commissie->getCieByUid($profiel['uid']);
+				if (count($cies) != 0) {
+					foreach ($cies as $cie) {
+						$ciehtml .= 'Commissie: <a href="/informatie/commissie.php?cie=' .
+							mb_htmlentities($cie['naam']) . '">' .
+							mb_htmlentities($cie['naam']) . "</a><br />\n";
+					}				
+				}
+				
 				print(<<<EOT
 <center>
 <span class="kopje2">Profiel van {$profhtml['fullname']}</span>
@@ -93,6 +113,7 @@ Lid-nummer: {$profhtml['uid']}<br />
 Bijnaam: {$profhtml['nickname']}
 </td>
 <td class="lijnhoktekst" valign="top">
+{$woonoordhtml}
 {$profhtml['adres']}<br />
 {$profhtml['postcode']} {$profhtml['woonplaats']}<br />
 {$profhtml['land']}
@@ -114,7 +135,8 @@ Studie: {$profhtml['studie']}<br />
 Studie sinds: {$profhtml['studiejaar']}<br />
 Lid sinds: {$profhtml['lidjaar']}<br />
 Geboortedatum: {$profhtml['gebdag']}-{$profhtml['gebmnd']}-{$profhtml['gebjaar']}<br />
-Kring: {$profhtml['moot']}.{$profhtml['kring']}
+Kring: {$profhtml['moot']}.{$profhtml['kring']}<br />
+{$ciehtml}
 </td>
 <td class="lijnhoktekst" valign="top">
 {$profhtml['o_adres']}<br />
@@ -125,6 +147,7 @@ Kring: {$profhtml['moot']}.{$profhtml['kring']}
 <td class="lijnhoktekst" valign="top">
 ICQ: {$profhtml['icq']}<br />
 MSN: {$profhtml['msn']}<br />
+Jabber: {$profhtml['jid']}<br />
 Skype: {$profhtml['skype']}<br />
 Website: <a href="{$profhtml['website']}" target="_blank">{$profhtml['website_kort']}</a><br />
 Eetwens: {$profhtml['eetwens']}<br />
@@ -189,6 +212,7 @@ EOT
 				$form[0]['email'] = array('input',"Email:");
 				$form[0]['icq'] = array('input',"ICQ:");
 				$form[0]['msn'] = array('input',"MSN:");
+				$form[0]['jid'] = array('input',"Jabber:");
 				$form[0]['skype'] = array('input',"Skype:");
 				$form[0]['website'] = array('input',"Website:");
 

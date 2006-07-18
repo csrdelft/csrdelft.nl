@@ -75,6 +75,23 @@ class Woonoord {
 
 		return $bewoners;
 	}
+	
+	function getWoonoordByUid($uid) {
+		# N.B. Bij het veranderen van bewoners en huizen moet opgelet worden dat een bewoner maar
+		# in 1 woonoord tegelijk mag wonen!
+		$result = $this->_db->select("
+			SELECT id, naam
+			FROM woonoord
+			WHERE id IN ( SELECT woonoordid FROM bewoner WHERE uid = '{$uid}' )
+		");
+        if ($result !== false and $this->_db->numRows($result) == 1) {
+			$record = $this->_db->next($result);
+			return array('id' => $record['id'], 'naam' => $record['naam']);
+		}
+		
+		# geen woonoord gevonden
+		return false;	
+	}
 }
 
 ?>

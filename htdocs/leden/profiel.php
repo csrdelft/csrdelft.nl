@@ -168,9 +168,14 @@ function main() {
 	switch ($error) {
 		case 0:
 		case 2:
-			# Het middenstuk
+			# Het middenstuk, we laden ook de woonoord en commissie-
+			# functies is, die worden alleen gebruikt om info op te vragen
+			require_once('class.woonoord.php');
+			require_once('class.commissie.php');
 			require_once('class.profielcontent.php');
-			$midden = new ProfielContent($lid, $state);
+			$woonoord = new Woonoord($db);
+			$commissie = new Commissie($db);
+			$midden = new ProfielContent($lid, $state, $woonoord, $commissie);
 			break;
 		default:
 			# geen rechten
