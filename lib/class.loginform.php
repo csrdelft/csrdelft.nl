@@ -45,7 +45,7 @@ class LoginForm extends SimpleHTML {
 
 <form id="frm_login" action="/logout.php" method="post">
 <p>
-<input type="hidden" name="ok_url" value="{$_SERVER["REQUEST_URI"]}" />
+<input type="hidden" name="url" value="{$_SERVER["REQUEST_URI"]}" />
 <input type="image" src="/images/uitloggen.gif" style="width: 71px; height: 12px;" alt="uitloggen" name="foo" value="bar" />
 </p>
 </form>

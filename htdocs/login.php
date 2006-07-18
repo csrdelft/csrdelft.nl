@@ -14,7 +14,7 @@ $db = new MySQL();
 $lid = new Lid($db);
 
 # ok_url en user/pass invoer checken
-if (isset($_POST['url']) and preg_match("/^[-\w&=.\/]+$/", $_POST['url'])
+if (isset($_POST['url']) and preg_match("/^[-\w?&=.\/]+$/", $_POST['url'])
 	and isset($_POST['user']) and isset($_POST['pass'])
 	/* and $_POST['user'] != '' and $_POST['pass'] != '' */ ) {
 	

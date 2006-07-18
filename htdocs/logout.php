@@ -15,12 +15,10 @@ $lid = new Lid($db);
 
 $lid->logout();
 
-if (isset($_POST['ok_url'])) $ok_url = $_POST['ok_url'];
-else $ok_url = CSR_ROOT;
+# url checken
+if (isset($_POST['url']) and preg_match("/^[-\w?&=.\/]+$/", $_POST['url']))
+		header("Location: http://csrdelft.nl{$_POST['url']}");
 
-# beetje checken, zodat er geen zooi in geinsert wordt.
-if (preg_match("/[^ \"\n\r\t<]*?/", $ok_url))
-	header("Location: {$ok_url}");
-
+exit;
 
 ?>
