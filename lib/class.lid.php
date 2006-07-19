@@ -197,14 +197,12 @@ class Lid {
 		$this->_delta['uid'] = $this->_tmpprofile['uid'];
 		
 		# 1. eerst de tekstvelden die het lid zelf mag wijzigen
-		$velden = array('adres' => 100, 'postcode' => 7, 'woonplaats' => 50, 'land' => 50,
-			'o_adres' => 100, 'o_postcode' => 7, 'o_woonplaats' => 50, 'o_land' => 50, 'skype' => 20, 'eetwens' => 40 );
+		# NB: beroep en eetwens wordt niet getoond in het profiel bij S_LID, adres ouders niet bij S_OUDLID
+		$velden = array('adres' => 100, 'postcode' => 20, 'woonplaats' => 50, 'land' => 50, 'o_adres' => 100,
+		  'o_postcode' => 20, 'o_woonplaats' => 50, 'o_land' => 50, 'skype' => 50, 'eetwens' => 50, 'beroep' => 750 );
 		# voor al deze veldnamen...
 		foreach($velden as $veld => $max_lengte) {
-			# kijken of ze in POST voorkomen, zo niet...
-			if (!isset($_POST['frmdata'][$veld])) {
-				$this->_formerror[$veld] = "Whraagh! ik mis een veld in de data! --> {$veld}";
-			} else {
+			if (isset($_POST['frmdata'][$veld])) {
 				$invoer = trim(strval($_POST['frmdata'][$veld]));
 				# is het wel een wijziging?
 				if ($invoer != $this->_tmpprofile[$veld]) {
@@ -229,9 +227,7 @@ class Lid {
 		$veld = 'nickname';
 		$max_lengte = 20;
 
-		if (!isset($_POST['frmdata'][$veld])) {
-			$this->_formerror[$veld] = "Whraagh! ik mis een veld in de data! --> {$veld}";
-		} else {
+		if (isset($_POST['frmdata'][$veld])) {
 			$invoer = trim(strval($_POST['frmdata'][$veld]));
 			# is het wel een wijziging?
 			if ($invoer != $this->_tmpprofile[$veld]) {
@@ -263,9 +259,7 @@ class Lid {
 		$veld = 'website';
 		$max_lengte = 80;
 
-		if (!isset($_POST['frmdata'][$veld])) {
-			$this->_formerror[$veld] = "Whraagh! ik mis een veld in de data! --> {$veld}";
-		} else {
+		if (isset($_POST['frmdata'][$veld])) {
 			$invoer = trim(strval($_POST['frmdata'][$veld]));
 			# is het wel een wijziging?
 			if ($invoer != $this->_tmpprofile[$veld]) {
@@ -297,27 +291,17 @@ class Lid {
 			
 		# 3. forum-instellingen
 		$veld = 'forum_name';
-		if (!isset($_POST['frmdata'][$veld])) {
-			$this->_formerror[$veld] = "Whraagh! ik mis een veld in de data! --> {$veld}";
-		} else {
+		if (isset($_POST['frmdata'][$veld])) {
 			$invoer = trim(strval($_POST['frmdata'][$veld]));
 			if ($invoer != 'civitas' and $invoer != 'nick') $invoer = 'civitas';
 			# is het wel een wijziging?
 			if ($invoer != $this->_tmpprofile[$veld]) {
-				if ($this->nickExists($invoer)) $this->_formerror[$veld] = "Deze bijnaam is al in gebruik.";
-
-				# als er geen fout is opgetreden veranderde waarde bewaren
-				if (!isset($this->_formerror[$veld])) {
-					# bewaar oude en nieuwe waarde in delta
-					$this->_delta['diff'][] = array (
-						'veld' => $veld,
-						'oud'  => $this->_tmpprofile[$veld],
-						'nieuw'  => $invoer
-					);
-				# anders ingevulde waarde terugzetten in het invoervak
-				} else {
-					$this->_tmpprofile[$veld] = $invoer;
-				}
+				# bewaar oude en nieuwe waarde in delta
+				$this->_delta['diff'][] = array (
+					'veld' => $veld,
+					'oud'  => $this->_tmpprofile[$veld],
+					'nieuw'  => $invoer
+				);
 			}
 		}
 		
@@ -325,9 +309,7 @@ class Lid {
 		# 4. telefoonvelden
 		$velden = array('telefoon', 'mobiel', 'o_telefoon');
 		foreach ($velden as $veld) {
-			if (!isset($_POST['frmdata'][$veld])) {
-				$this->_formerror[$veld] = "Whraagh! ik mis een veld in de data! --> {$veld}";
-			} else {
+			if (isset($_POST['frmdata'][$veld])) {
 				$invoer = trim(strval($_POST['frmdata'][$veld]));
 				# is het wel een wijziging?
 				if ($invoer != $this->_tmpprofile[$veld]) {
@@ -354,9 +336,7 @@ class Lid {
 		
 		# 5. ICQ nummer
 		$veld = 'icq';
-		if (!isset($_POST['frmdata'][$veld])) {
-			$this->_formerror[$veld] = "Whraagh! ik mis een veld in de data! --> {$veld}";
-		} else {
+		if (isset($_POST['frmdata'][$veld])) {
 			$invoer = trim(strval($_POST['frmdata'][$veld]));
 			# is het wel een wijziging?
 			if ($invoer != $this->_tmpprofile[$veld]) {
@@ -382,9 +362,7 @@ class Lid {
 		# 6. Mailadressen
 		$velden = array('email', 'msn');
 		foreach ($velden as $veld) {
-			if (!isset($_POST['frmdata'][$veld])) {
-				$this->_formerror[$veld] = "Whraagh! ik mis een veld in de data! --> {$veld}";
-			} else {
+			if (isset($_POST['frmdata'][$veld])) {
 				$invoer = trim(strval($_POST['frmdata'][$veld]));
 				# is het wel een wijziging?
 				if ($invoer != $this->_tmpprofile[$veld]) {
@@ -398,14 +376,20 @@ class Lid {
 						} else {
 							# anders gaan we m ontleden en controleren
 							list ($usr,$dom) = split ('@', $invoer);
-							if (strlen($usr) > 50) {
+							if (mb_strlen($usr) > 50) {
 								$this->_formerror[$veld] = "Gebruik max. 50 karakters voor de @:";
-							} elseif (!preg_match("/^[-\w.]+$/", $usr)) {
+							} elseif (mb_strlen($dom) > 50) {
+								$this->_formerror[$veld] = "Gebruik max. 50 karakters na de @:";
+							# RFC 821 <- voorlopig voor JabberID even zelfde regels aanhouden
+							# http://www.lookuptables.com/
+							# Hmmmz, \x2E er uit gehaald ( . )
+							} elseif (preg_match('/[^\x21-\x7E]/', $usr) or
+					                  preg_match('/[\x3C\x3E\x28\x29\x5B\x5D\x5C\x2C\x3B\x40\x22]/', $usr)) {
 								$this->_formerror[$veld] = "Het adres bevat ongeldige karakters voor de @:";
 							} elseif (!preg_match("/^[a-z0-9]+([-.][a-z0-9]+)*\\.[a-z]{2,4}$/i", $dom)) {
 								$this->_formerror[$veld] = "Het domein is ongeldig:";
 							} elseif (!checkdnsrr($dom, 'A') and !checkdnsrr($dom, 'MX')) {
-								$this->_formerror[$veld] = "Het domein bestaat niet:";
+								$this->_formerror[$veld] = "Het domein bestaat niet (IPv4):";
 							} elseif (!checkdnsrr($dom, 'MX')) {
 								$this->_formerror[$veld] = "Het domein is niet geconfigureerd om email te ontvangen:";
 							}
@@ -431,9 +415,7 @@ class Lid {
 		# 9. Jabber ID
 		$velden = array('jid');
 		foreach ($velden as $veld) {
-			if (!isset($_POST['frmdata'][$veld])) {
-				$this->_formerror[$veld] = "Whraagh! ik mis een veld in de data! --> {$veld}";
-			} else {
+			if (isset($_POST['frmdata'][$veld])) {
 				$invoer = trim(strval($_POST['frmdata'][$veld]));
 				# is het wel een wijziging?
 				if ($invoer != $this->_tmpprofile[$veld]) {
@@ -447,10 +429,12 @@ class Lid {
 						} else {
 							# anders gaan we m ontleden en controleren
 							if (mb_strpos($invoer,'@') === false) {
-								$this->_formerror[$veld] = "Dit lijkt echt niet op een Jabber ID...";
+								$this->_formerror[$veld] = "Dit lijkt niet op een Jabber ID...";
 							} else {
 								list ($usr,$dom) = split ('@', $invoer);
 								if (mb_strlen($usr) > 50) {
+									$this->_formerror[$veld] = "Gebruik max. 50 karakters voor de @:";
+								} elseif (mb_strlen($dom) > 50) {
 									$this->_formerror[$veld] = "Gebruik max. 50 karakters voor de @:";
 								}
 								# RFC 821 <- voorlopig voor JabberID even zelfde regels aanhouden
@@ -486,12 +470,8 @@ class Lid {
 		$velden = array('oldpass', 'nwpass', 'nwpass2');
 		$pwveldenset = true;
 		# controleren of velden in de invoer zitten
-		foreach ($velden as $veld) {
-			if (!isset($_POST['frmdata'][$veld])) {
-				$this->_formerror[$veld] = "Whraagh! ik mis een veld in de data! --> {$veld}";
-				$pwveldenset = false;
-			}
-		}
+		foreach ($velden as $veld) if (!isset($_POST['frmdata'][$veld])) $pwveldenset = false;
+		# alleen doorgaan als ze er alledrie zijn
 		if ($pwveldenset === true) {
 			$oldpass = strval($_POST['frmdata']['oldpass']);
 			$nwpass = strval($_POST['frmdata']['nwpass']);
@@ -523,6 +503,248 @@ class Lid {
 					);
 				}
 			}
+		}
+
+		# Extra velden die gewijzigd kunnen worden... Oudleden kunnen meer elementaire velden wijzigen
+		# als hun naam, hun studiejaar etc, om de oudledenlijst compleet te krijgen.
+		# De Vice-Abactis kan de info van iedereen wijzigen.
+		
+		if ($this->_profile['status'] == 'S_OUDLID' or $this->hasPermission('P_LEDEN_MOD')) {
+			
+			# Info over naam, studieomschrijving
+			$velden = array('voornaam' => 50, 'tussenvoegsel' => 15, 'achternaam' => 50, 'studie' => 100);
+			# voor al deze veldnamen...
+			foreach($velden as $veld => $max_lengte) {
+				# kijken of ze in POST voorkomen...
+				if (isset($_POST['frmdata'][$veld])) {
+					$invoer = trim(strval($_POST['frmdata'][$veld]));
+					# is het wel een wijziging?
+					if ($invoer != $this->_tmpprofile[$veld]) {
+						# controleren op juiste inhoud...
+						if ($invoer != "" and !is_utf8($invoer)) {
+							$this->_formerror[$veld] = "Ongeldige karakters, gebruik reguliere tekst:";
+						} elseif (mb_strlen($invoer) > $max_lengte) {
+							$this->_formerror[$veld] = "Gebruik maximaal {$max_lengte} karakters:";
+						} else {
+							# bewaar oude en nieuwe waarde in delta
+							$this->_delta['diff'][] = array (
+								'veld' => $veld,
+								'oud'  => $this->_tmpprofile[$veld],
+								'nieuw'  => $invoer
+							);
+						}
+					}
+				}
+			}
+		
+			# jaartallen etc...
+			$velden = array ('studiejaar', 'lidjaar');
+			# moet een getal tussen 1900 en 2100 zijn allemaal
+			foreach($velden as $veld) {
+				# kijken of ze in POST voorkomen...
+				if (isset($_POST['frmdata'][$veld])) {
+					$invoer = trim(strval($_POST['frmdata'][$veld]));
+					# is het wel een wijziging?
+					if ($invoer != $this->_tmpprofile[$veld]) {
+						# controleren op juiste inhoud...
+						if ($invoer != "" and $invoer != (int)$invoer) {
+							$this->_formerror[$veld] = "Ongeldige karakters, typ een jaartal:";
+						} elseif ($invoer < 1900 or $invoer > 2100) {
+							$this->_formerror[$veld] = "Het jaartal ligt buiten toegestane grenzen:";
+						} else {
+							# bewaar oude en nieuwe waarde in delta
+							$this->_delta['diff'][] = array (
+								'veld' => $veld,
+								'oud'  => $this->_tmpprofile[$veld],
+								'nieuw'  => $invoer
+							);
+						}
+					}
+				}
+			}
+			
+			# geboortedatum
+			$veld = 'gebdatum';
+			if (isset($_POST['frmdata'][$veld])) {
+				$invoer = trim(strval($_POST['frmdata'][$veld]));
+				# Kijk of de invoer zinvol te splitsen is in d-m-YYYY
+				$matches = array();
+				if (!preg_match('/^(\d\d?)-(\d\d?)-(\d{4}$)/', $invoer, $matches)) {
+					$this->_formerror[$veld] = "Ongeldige datumformaat, gebruik dag-maand-jaar:";
+					$this->_tmpprofile['gebdag']  = '00';
+					$this->_tmpprofile['gebmnd']  = '00';
+					$this->_tmpprofile['gebjaar'] = '0000';
+				} else {
+					# dag van de maand
+					$gebdag = (int)$matches[1];
+					$gebmnd = (int)$matches[2];
+					$gebjaar = (int)$matches[3];
+
+					# is het wel een wijziging?
+					if ($gebdag != (int)$this->_tmpprofile['gebdag'] or
+					    $gebmnd != (int)$this->_tmpprofile['gebmnd'] or
+					    $gebjaar != (int)$this->_tmpprofile['gebjaar'] ) {
+					    # dan gaan we controleren of de nieuwe datum een bestaande
+					    # datum is...
+					    
+					    # maak eerst een datum-string rechtstreeks van de ingevoerde waarden
+					    $datumstr = sprintf('%02d-%02d-%04d',$gebdag,$gebmnd,$gebjaar);
+					    # maak daarna een die we door mktime en date halen om te kijken of
+					    # dezelfde datum er weer uit komt. bijv. 30 feb wordt 02 maart
+					    # als deze string hetzelfde is als voorgaande is het dus een bestaande
+					    # datum
+					    $datumstr_adj = date("d-m-Y", mktime(0, 0, 0, $gebmnd, $gebdag, $gebjaar));
+					    
+					    if ($datumstr != $datumstr_adj) {
+							$this->_formerror[$veld] = "Opgegeven datum bestaat niet:";
+					    }
+					}
+
+					# als er geen fout is opgetreden veranderde waarde bewaren
+					if (!isset($this->_formerror[$veld])) {
+						# bewaar oude en nieuwe waarde in delta
+						$this->_delta['diff'][] = array (
+							'veld' => 'gebdag',
+							'oud'  => $this->_tmpprofile['gebdag'],
+							'nieuw'  => $gebdag
+						);
+						$this->_delta['diff'][] = array (
+							'veld' => 'gebmnd',
+							'oud'  => $this->_tmpprofile['gebmnd'],
+							'nieuw'  => $gebmnd
+						);
+						$this->_delta['diff'][] = array (
+							'veld' => 'gebjaar',
+							'oud'  => $this->_tmpprofile['gebjaar'],
+							'nieuw'  => $gebjaar
+						);
+					# anders ingevulde waarde terugzetten in het invoervak
+					} else {
+						$this->_tmpprofile['gebdag']  = $gebdag;
+						$this->_tmpprofile['gebmnd']  = $gebmnd;
+						$this->_tmpprofile['gebjaar'] = $gebjaar;
+					}
+				}
+			}
+		}
+
+		# Extra velden die gewijzigd kunnen worden door am. Vice-Abactis
+		if ($this->hasPermission('P_LEDEN_MOD')) {
+
+			$velden = array('postfix' => 7, 'voornamen' => 100, 'kerk' => 50, 'muziek' => 100);
+			# voor al deze veldnamen...
+			foreach($velden as $veld => $max_lengte) {
+				if (isset($_POST['frmdata'][$veld])) {
+					$invoer = trim(strval($_POST['frmdata'][$veld]));
+					# is het wel een wijziging?
+					if ($invoer != $this->_tmpprofile[$veld]) {
+						# controleren op juiste inhoud...
+						if ($invoer != "" and !is_utf8($invoer)) {
+							$this->_formerror[$veld] = "Ongeldige karakters, gebruik reguliere tekst:";
+						} elseif (mb_strlen($invoer) > $max_lengte) {
+							$this->_formerror[$veld] = "Gebruik maximaal {$max_lengte} karakters:";
+						} else {
+							# bewaar oude en nieuwe waarde in delta
+							$this->_delta['diff'][] = array (
+								'veld' => $veld,
+								'oud'  => $this->_tmpprofile[$veld],
+								'nieuw'  => $invoer
+							);
+						}
+					}
+				}
+			}
+
+			# kring en moot
+			$velden = array ('kring' => 10, 'moot' => 4);
+			foreach($velden as $veld => $max) {
+				# kijken of ze in POST voorkomen, zo niet...
+				if (!isset($_POST['frmdata'][$veld])) {
+					$this->_formerror[$veld] = "Whraagh! ik mis een veld in de data! --> {$veld}";
+				} else {
+					$invoer = trim(strval($_POST['frmdata'][$veld]));
+					# is het wel een wijziging?
+					if ($invoer != $this->_tmpprofile[$veld]) {
+						# controleren op juiste inhoud...
+						if ($invoer != "" and $invoer != (int)$invoer) {
+							$this->_formerror[$veld] = "Ongeldige karakters, kies een getal:";
+						} elseif ($invoer < 0 or $invoer > $max) {
+							$this->_formerror[$veld] = "De invoer ligt buiten toegestane grenzen:";
+						} else {
+							# bewaar oude en nieuwe waarde in delta
+							$this->_delta['diff'][] = array (
+								'veld' => $veld,
+								'oud'  => $this->_tmpprofile[$veld],
+								'nieuw'  => $invoer
+							);
+						}
+					}
+				}
+			}
+			
+			# is deze persoon kringleider? (n)iet, (e)erstejaars, (o)uderejaars
+			$veld = 'kringleider';
+			# kijken of het veld in POST voorkomt, zo niet...
+			if (isset($_POST['frmdata'][$veld])) {
+				$invoer = trim(strval($_POST['frmdata'][$veld]));
+				# is het wel een wijziging?
+				if ($invoer != $this->_tmpprofile[$veld]) {
+					# controleren op juiste inhoud...
+					if (!preg_match('/^[neo]$/', $invoer)) {
+						$this->_formerror[$veld] = "Gebruik (n)iet, (e)erstejaars, (o)uderejaars:";
+					} else {
+						# bewaar oude en nieuwe waarde in delta
+						$this->_delta['diff'][] = array (
+							'veld' => $veld,
+							'oud'  => $this->_tmpprofile[$veld],
+							'nieuw'  => $invoer
+						);
+					}
+				}
+			}
+
+			# is deze persoon motebal? (0) nee, (1) ja
+			$veld = 'motebal';
+			# kijken of het veld in POST voorkomt, zo niet...
+			if (isset($_POST['frmdata'][$veld])) {
+				$invoer = trim(strval($_POST['frmdata'][$veld]));
+				# is het wel een wijziging?
+				if ($invoer != $this->_tmpprofile[$veld]) {
+					# controleren op juiste inhoud...
+					if (!preg_match('/^[01]$/', $invoer)) {
+						$this->_formerror[$veld] = "Gebruik (0) nee, (1) ja:";
+					} else {
+						# bewaar oude en nieuwe waarde in delta
+						$this->_delta['diff'][] = array (
+							'veld' => $veld,
+							'oud'  => $this->_tmpprofile[$veld],
+							'nieuw'  => $invoer
+						);
+					}
+				}
+			}
+
+			# is deze persoon (m)an/(v)rouw?
+			$veld = 'geslacht';
+			# kijken of het veld in POST voorkomt, zo niet...
+			if (isset($_POST['frmdata'][$veld])) {
+				$invoer = trim(strval($_POST['frmdata'][$veld]));
+				# is het wel een wijziging?
+				if ($invoer != $this->_tmpprofile[$veld]) {
+					# controleren op juiste inhoud...
+					if (!preg_match('/^[mv]$/', $invoer)) {
+						$this->_formerror[$veld] = "Gebruik (m)an, (v)rouw:";
+					} else {
+						# bewaar oude en nieuwe waarde in delta
+						$this->_delta['diff'][] = array (
+							'veld' => $veld,
+							'oud'  => $this->_tmpprofile[$veld],
+							'nieuw'  => $invoer
+						);
+					}
+				}
+			}
+
 		}
 		
 		# als er regels in formerror staan betekent het dat we niet verder gaan met opslaan van
@@ -621,7 +843,7 @@ class Lid {
 		$this->_permissions = array(
 			'P_NOBODY'       => 00000000001,
 			'P_LOGGED_IN'    => 00000000003, # Leden-menu, eigen profiel raadplegen
-			'P_ADMIN'				 =>	00000000007, # Admin dingen algemeen...	
+			'P_ADMIN'        => 00000000007, # Admin dingen algemeen...	
 			'P_FORUM_READ'   => 00000000400, # Forum lezen
 			'P_FORUM_POST'   => 00000000500, # Berichten plaatsen op het forum en eigen berichten wijzigen
 			'P_FORUM_MOD'    => 00000000700, # Forum-moderator mag berichten van anderen wijzigen of verwijderen
@@ -631,7 +853,7 @@ class Lid {
 			'P_PROFIEL_EDIT' => 00000010000, # Eigen gegevens aanpassen
 			'P_LEDEN_READ'   => 00000040000, # Gegevens over andere leden raadplegen
 			'P_LEDEN_EDIT'   => 00000020000, # Profiel van andere leden wijzigen
-			'P_LEDEN_MOD'    => 00000070000, # samengestelde om te kunnen lezen en veranderen bij iedereen
+			'P_LEDEN_MOD'    => 00070070000, # samengestelde om te kunnen lezen en veranderen bij iedereen
 			'P_AGENDA_READ'  => 00000400000, # Agenda bekijken
 			'P_AGENDA_POST'  => 00000500000, # Items toevoegen aan de agenda
 			'P_AGENDA_MOD'   => 00000700000, # euh?
@@ -639,7 +861,8 @@ class Lid {
 			'P_NEWS_MOD'     => 00003000000, # Nieuws-moderator mag berichten van anderen wijzigen of verwijderen
 			'P_OUDLEDEN_EDIT'=> 00020000000, # Profiel van andere leden wijzigen
 			'P_OUDLEDEN_READ'=> 00040000000, # Gegevens over andere leden raadplegen
-			'P_OUDLEDEN_MOD' => 00060000000, # samengestelde om te kunnen lezen en veranderen bij iedereen
+			'P_OUDLEDEN_MOD' => 00070070000, # samengestelde om te kunnen lezen en veranderen bij iedereen
+			                                 # oudleden-mod is gelijk aan leden-mod
 			'P_MAAL_IK'      => 00100000000, # kan zich aan en afmelden voor maaltijd en eigen abo wijzigen
 			'P_MAAL_WIJ'     => 00500000000, # kan ook anderen aanmelden (niet afmelden!)
 			'P_MAAL_MOD'     => 00700000000, # mag maaltijd aan- en afmeldingen voor iedereen wijzigen
@@ -659,7 +882,7 @@ class Lid {
 		$p = $this->_permissions;
 		$this->_perm_user = array(
 			'P_NOBODY'     => $p['P_NOBODY'] | $p['P_FORUM_READ'],
-			'P_LID'        => $p['P_LOGGED_IN'] | $p['P_FORUM_POST'] | $p['P_DOCS_READ'] | $p['P_LEDEN_READ'] | $p['P_PROFIEL_EDIT'] | $p['P_AGENDA_POST'] + $p['P_MAAL_WIJ'] + $p['P_MAIL_POST'],
+			'P_LID'        => $p['P_LOGGED_IN'] | $p['P_OUDLEDEN_READ'] | $p['P_FORUM_POST'] | $p['P_DOCS_READ'] | $p['P_LEDEN_READ'] | $p['P_PROFIEL_EDIT'] | $p['P_AGENDA_POST'] + $p['P_MAAL_WIJ'] + $p['P_MAIL_POST'],
 			'P_OUDLID'     => $p['P_LOGGED_IN'] | $p['P_OUDLEDEN_READ'] | $p['P_PROFIEL_EDIT'] | $p['P_FORUM_READ'],
 			'P_MODERATOR'  => $p['P_ADMIN'] | $p['P_FORUM_MOD'] | $p['P_DOCS_MOD'] | $p['P_LEDEN_MOD'] | $p['P_OUDLEDEN_MOD'] | $p['P_AGENDA_MOD'] | $p['P_MAAL_MOD'] | $p['P_MAIL_SEND'] | $p['P_NEWS_MOD'] | $p['P_BIEB_MOD']
 		);
@@ -668,7 +891,7 @@ class Lid {
 		$this->_perm_user['P_MAALCIE'] = $this->_perm_user['P_LID'] | $p['P_MAAL_MOD'];
 		$this->_perm_user['P_BESTUUR'] = $this->_perm_user['P_LID'] | $p['P_OUDLEDEN_READ'] | $p['P_NEWS_MOD'] | $p['P_MAAL_MOD'] | $p['P_AGENDA_POST'] | $p['P_FORUM_MOD'];
 		$this->_perm_user['P_VAB']     = $this->_perm_user['P_BESTUUR'] | $p['P_LEDEN_MOD'] | $p['P_OUDLEDEN_MOD'] | $p['P_BIEB_READ'];
-		$this->_perm_user['P_KNORRIE'] = $this->_perm_user['P_LID'] | $p['P_OUDLEDEN_READ'] | $p['P_MAAL_MOD'];
+		$this->_perm_user['P_KNORRIE'] = $this->_perm_user['P_LID'] | $p['P_MAAL_MOD'];
 
 	}
 
@@ -696,8 +919,8 @@ class Lid {
 		$sim_nick = 0; $foo = similar_text($nick,$passwd,$sim_nick);
 
 		# Korter dan 6 of langer dan 16 mag niet...
-		if (mb_strlen($passwd) < 6 or mb_strlen($passwd) > 16) {
-			$error = "Het wachtwoord moet minimaal 6 en maximaal 16 tekens lang zijn. :-/";
+		if (mb_strlen($passwd) < 6 or mb_strlen($passwd) > 60) {
+			$error = "Het wachtwoord moet minimaal 6 en maximaal 60 tekens lang zijn. :-/";
 		# is het geldige utf8?
 		} elseif (!is_utf8($passwd)) {
 			$error = "Het nieuwe wachtwoord bevat ongeldige karakters... :-(";

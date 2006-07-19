@@ -41,6 +41,7 @@ class ProfielContent extends SimpleHTML {
 	function view() {
 		# 
 		$profiel = $this->_lid->getTmpProfile();
+		#print_r($profiel);
 
 		switch($this->_state->getMyState()) {
 			case 'none':
@@ -102,9 +103,9 @@ class ProfielContent extends SimpleHTML {
 <td class="lijnhoktekst" rowspan="4">
 {$foto}
 </td>
-<td class="lijnhoktitel">Identiteit</td>
-<td class="lijnhoktitel">Adres</td>
-<td class="lijnhoktitel">Email/Telefoon</td>
+<td class="lijnhoktitel" width="33%">Identiteit</td>
+<td class="lijnhoktitel" width="33%">Adres</td>
+<td class="lijnhoktitel" width="33%"	>Email/Telefoon</td>
 </tr>
 <tr>
 <td class="lijnhoktekst" valign="top">
@@ -126,7 +127,15 @@ Pauper: {$profhtml['mobiel']}
 </tr>
 <tr>
 <td class="lijnhoktitel">Studie/Lidmaatschap</td>
-<td class="lijnhoktitel">Ouders</td>
+<td class="lijnhoktitel">
+EOT
+				);
+
+				if ($profiel['status'] == 'S_OUDLID') print 'Functie/Beroep';
+				else print 'Ouders';
+				
+				print(<<<EOT
+</td>
 <td class="lijnhoktitel">Overig</td>
 </tr>
 <tr>
@@ -135,14 +144,31 @@ Studie: {$profhtml['studie']}<br />
 Studie sinds: {$profhtml['studiejaar']}<br />
 Lid sinds: {$profhtml['lidjaar']}<br />
 Geboortedatum: {$profhtml['gebdag']}-{$profhtml['gebmnd']}-{$profhtml['gebjaar']}<br />
+EOT
+				);
+
+				if ($profiel['status'] != 'S_OUDLID') print (<<<EOT
 Kring: {$profhtml['moot']}.{$profhtml['kring']}<br />
 {$ciehtml}
+EOT
+				);
+				
+				print(<<<EOT
 </td>
 <td class="lijnhoktekst" valign="top">
+EOT
+				);
+
+				if ($profiel['status'] != 'S_OUDLID') print (<<<EOT
 {$profhtml['o_adres']}<br />
 {$profhtml['o_postcode']} {$profhtml['o_woonplaats']}<br />
 {$profhtml['o_land']}<br />
 {$profhtml['o_telefoon']}
+EOT
+					);
+				else print ($profhtml['beroep']);
+				
+				print(<<<EOT
 </td>
 <td class="lijnhoktekst" valign="top">
 ICQ: {$profhtml['icq']}<br />
@@ -187,6 +213,7 @@ if($this->_lid->hasPermission('P_ADMIN')){
 				print(<<<EOT
 <center><span class="kopje2">Profiel wijzigen</span></center>
 <br />
+
 Hieronder kunt u uw eigen gegevens wijzigen. Voor enkele velden is het niet mogelijk zelf wijzigingen door te voeren.
 Voor de meeste velden geldt daarnaast dat de ingevulde gegevens een geldig formaat moeten hebben.
 Mochten er fouten in het gedeelte van uw profiel staan, dat u niet zelf kunt wijzigen, meld het dan bij de Vice-Abactis.
@@ -203,13 +230,36 @@ EOT
 				# NB!! Op de tekst die hieronder vast wordt ingesteld wordt geen htmlentities ofzo gedaan
 				#
 
+				$form[0][] = array('ztekst',"&nbsp;","<b>Identiteit</b>");
+
+				if ($profiel['status'] == 'S_OUDLID' or $this->_lid->hasPermission('P_LEDEN_MOD')) {
+					$form[0]['voornaam'] = array('input',"Voornaam:");
+					$form[0]['tussenvoegsel'] = array('input',"Tussenv.:");
+					$form[0]['achternaam'] = array('input',"Achternaam:");
+				}
+				if ($this->_lid->hasPermission('P_LEDEN_MOD')) {
+					$form[0]['voornamen'] = array('input',"Voornamen:");
+					$form[0]['postfix'] = array('input',"Postfix:");
+					$form[0]['geslacht'] = array('select', "Geslacht:", array('m' => 'Man','v' => 'Vrouw'));
+				}
+
 				$form[0]['adres'] = array('input',"Adres:");
 				$form[0]['postcode'] = array('input',"Postcode:");
 				$form[0]['woonplaats'] = array('input',"Woonplaats:");
 				$form[0]['land'] = array('input',"Land:");
+
+				if ($profiel['status'] == 'S_OUDLID' or $this->_lid->hasPermission('P_LEDEN_MOD')) {
+					$gebdatum = implode('-',array($profiel['gebdag'],$profiel['gebmnd'],$profiel['gebjaar']));
+					$form[0][] = array('ztekst',"&nbsp;","Gebruik het formaat dd-mm-YYYY");
+					$form[0]['gebdatum'] = array('input',"Geb.datum:",$gebdatum);
+				}				
+
+				$form[0][] = array('ztekst',"&nbsp;","<b>Email/Telefoon</b>");
 				$form[0]['telefoon'] = array('input',"Telefoon:");
 				$form[0]['mobiel'] = array('input',"Pauper:");
 				$form[0]['email'] = array('input',"Email:");
+
+				$form[0][] = array('ztekst',"&nbsp;","<b>Diversen</b>");
 				$form[0]['icq'] = array('input',"ICQ:");
 				$form[0]['msn'] = array('input',"MSN:");
 				$form[0]['jid'] = array('input',"Jabber:");
@@ -219,14 +269,38 @@ EOT
 				$form[0][] = array('ztekst',"&nbsp;","Weergave van namen op het Forum<br />(dit is wat je zelf ziet, niet wat anderen zien!):");
 				$form[0]['forum_name'] = array('select', "Forum:", array('civitas' => 'Toon Am. / Ama.','nick' => 'Toon bijnamen'));
 
-				$form[1]['o_adres'] = array('input',"Adres Ouders:");
-				$form[1]['o_postcode'] = array('input',"Postcode Ouders:");
-				$form[1]['o_woonplaats'] = array('input',"Woonplaats Ouders:");
-				$form[1]['o_land'] = array('input',"Land Ouders:");
-				$form[1]['o_telefoon'] = array('input',"Telefoon Ouders:");
+				if ($this->_lid->hasPermission('P_LEDEN_MOD')) {
+					$form[0]['kerk'] = array('input',"Kerk:");
+					$form[0]['muziek'] = array('input',"Muziek:");
+				}
 
-				$form[1][] = array('ztekst',"&nbsp;","Vaste eetgewoontes (vego etc):");
-				$form[1]['eetwens'] = array('input',"Eetwens: (max 20 tekens)");
+				if ($profiel['status'] != 'S_OUDLID' or $this->_lid->hasPermission('P_LEDEN_MOD')) {
+					$form[1][] = array('ztekst',"&nbsp;","<b>Ouders</b>");
+					$form[1]['o_adres'] = array('input',"Adres Ouders:");
+					$form[1]['o_postcode'] = array('input',"Postcode Ouders:");
+					$form[1]['o_woonplaats'] = array('input',"Woonplaats Ouders:");
+					$form[1]['o_land'] = array('input',"Land Ouders:");
+					$form[1]['o_telefoon'] = array('input',"Telefoon Ouders:");
+					$form[1][] = array('ztekst',"&nbsp;","<b>Diversen:</b>");
+					$form[1][] = array('ztekst',"&nbsp;","Vaste eetgewoontes (vego etc):");
+					$form[1]['eetwens'] = array('input',"Eetwens: (max 20 tekens)");
+				}
+
+				if ($profiel['status'] == 'S_OUDLID' or $this->_lid->hasPermission('P_LEDEN_MOD')) {
+					$form[1][] = array('ztekst',"&nbsp;","<b>Studie/Lidm./Werk</b>");
+					$form[1]['studie'] = array('input',"Studie:");
+					$form[1]['studiejaar'] = array('input',"Beginjaar studie:");
+					$form[1]['lidjaar'] = array('input',"Lid sinds:");
+					$form[1]['beroep'] = array('textarea',"Functie/Beroep:",10);
+				}
+				if ($this->_lid->hasPermission('P_LEDEN_MOD')) {
+					$form[1]['moot'] = array('select', "Moot:", range(0,4));
+					$form[1]['kring'] = array('select', "Kring:", range(0,10));
+					$form[1]['kringleider'] = array('select', "Kringleider:", array('n' => 'Nee','o' => 'Ouderejaarskring','e' => 'Eerstejaarskring'));
+					$form[1]['motebal'] = array('select', "Motebal:", array('0' => 'Nee','1' => 'Ja'));
+				}
+
+				$form[1][] = array('ztekst',"&nbsp;","<b>Inloggegevens</b>");
 				$form[1][] = array('ztekst',"&nbsp;","Deze bijnaam kunt ook gebruiken voor het inloggen:");
 				$form[1]['nickname'] = array('input',"Bijnaam:");
 				$form[1][] = array('ztekst',"&nbsp;","Wachtwoord wijzigen (optioneel):");
@@ -244,12 +318,14 @@ EOT
 
 <table align="center" class="tekst" border="0" cellspacing="0" cellpadding="0" marginheight="0" marginwidth="0">
 <tr>
+
 EOT
 				);
 				foreach ($form as $formkolom) {
 					print(<<<EOT
 <td valign="top">
 <table align="center" class="tekst" border="0" cellspacing="2" cellpadding="0" marginheight="0" marginwidth="0">
+
 EOT
 					);
 
@@ -260,23 +336,39 @@ EOT
 <td>&nbsp;</td>
 <td class="tekstrood">{$formerror[$field]}</td>
 </tr>
+
 EOT
 							);
 						}
 						
 						switch ($fieldinfo[0]) {
 							case 'input':
-								$field_usr = mb_htmlentities($profiel[$field]);
+								# is de inhoud van het vak al meegegeven?
+								if (isset($fieldinfo[2])) $field_usr = mb_htmlentities($fieldinfo[2]);
+								else $field_usr = mb_htmlentities($profiel[$field]);
 								print(<<<EOT
 <tr>
 <td>{$fieldinfo[1]}</td>
 <td><input type="text" name="frmdata[{$field}]" class="tekst" style="width:260px;" value="{$field_usr}"></td>
 </tr>
+
+EOT
+								);
+								break;
+							case 'textarea':
+								$field_usr = mb_htmlentities($profiel[$field]);
+								print(<<<EOT
+<tr>
+<td valign="top">{$fieldinfo[1]}</td>
+<td><textarea name="frmdata[{$field}]" rows="{$fieldinfo[2]}" style="width:260px" class="tekst">{$field_usr}</textarea>
+</td>
+</tr>
+
 EOT
 								);
 								break;
 							case 'ztekst':
-								print("<tr>\n<td>{$fieldinfo[1]}</td>\n<td>{$fieldinfo[2]}</td>\n</tr>\n");
+								print("<tr><td>{$fieldinfo[1]}</td><td>{$fieldinfo[2]}</td></tr>\n");
 								break;
 							case 'password':
 								print(<<<EOT
@@ -284,6 +376,7 @@ EOT
 <td>{$fieldinfo[1]}</td>
 <td><input type="password" name="frmdata[{$field}]" class="tekst" style="width:260px;" value=""></td>
 </tr>
+
 EOT
 								);
 								break;
@@ -309,6 +402,7 @@ EOT
 <a href="{$myurl}"><img src="/images/annuleren.gif" width=69 height=12 alt="Annuleren" border="0"></a>
 </center>
 </form>
+
 EOT
 				);
 				break;
