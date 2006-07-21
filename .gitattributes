@@ -169,6 +169,7 @@ lib/class.forumpoll.php -text
 lib/class.hok.php -text
 lib/class.includer.php -text
 lib/class.kaart.php -text
+lib/class.ldap.php -text
 lib/class.ledenlijstcontent.php -text
 lib/class.lid.php -text
 lib/class.lidbeheer.php -text

@@ -143,7 +143,7 @@ function main() {
 					$lid->diff_to_sql();
 					
 					# - wijzigingen in LDAP opslaan
-					#$lid->diff_to_ldap();
+					$lid->diff_to_ldap();
 					
 					# - wijzigingen doorgeven aan de Vice-Abactis
 					#$lid->diff_to_vab();

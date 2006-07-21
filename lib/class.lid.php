@@ -8,12 +8,9 @@
 # -------------------------------------------------------------------
 # Houdt de ledenlijst bij.
 # -------------------------------------------------------------------
-# Historie:
-# 02-01-2005 Hans van Kranenburg
-# . gemaakt
 #
 
-require_once ('class.mysql.php');
+require_once ('class.ldap.php');
 
 class Lid {
 
@@ -43,7 +40,7 @@ class Lid {
 	# met het huidige profiel te vergelijken, en de verschillen worden dan in
 	# delta gezet. vervolgens kan de functie delta_to_xml er een xml bestandje van
 	# maken, delta_to_sql kan de verandering in sql doorvoeren, en delta_to_ldap
-	# kan de veranderingen naar ldap wegschrijren
+	# kan de veranderingen naar ldap wegschrijven
 	var $_delta;
 	# Hierin worden tijdens controleren van invoer foutmeldingen gezet die
 	# dan weer worden afgebeeld door ProfielContent
@@ -193,8 +190,6 @@ class Lid {
 	function loadPostTmpProfile() {
 		# foutmeldingen leeggooien
 		$this->_formerror = array();
-		# uid waarvoor we wijzingen in delta zetten
-		$this->_delta['uid'] = $this->_tmpprofile['uid'];
 		
 		# 1. eerst de tekstvelden die het lid zelf mag wijzigen
 		# NB: beroep en eetwens wordt niet getoond in het profiel bij S_LID, adres ouders niet bij S_OUDLID
@@ -211,14 +206,18 @@ class Lid {
 						$this->_formerror[$veld] = "Ongeldige karakters, gebruik reguliere tekst:";
 					} elseif (mb_strlen($invoer) > $max_lengte) {
 						$this->_formerror[$veld] = "Gebruik maximaal {$max_lengte} karakters:";
-					} else {
+					}
+					# als er geen fout is opgetreden veranderde waarde bewaren
+					if (!isset($this->_formerror[$veld])) {
 						# bewaar oude en nieuwe waarde in delta
-						$this->_delta['diff'][] = array (
-							'veld' => $veld,
+						$this->_delta[$veld] = array (
 							'oud'  => $this->_tmpprofile[$veld],
 							'nieuw'  => $invoer
 						);
 					}
+					# nieuwe waarde in tmpprofile, is of voor afbeelden in het invulvak,
+					# of voor diff_to_*
+					$this->_tmpprofile[$veld] = $invoer;
 				}
 			}
 		}
@@ -243,15 +242,14 @@ class Lid {
 				# als er geen fout is opgetreden veranderde waarde bewaren
 				if (!isset($this->_formerror[$veld])) {
 					# bewaar oude en nieuwe waarde in delta
-					$this->_delta['diff'][] = array (
-						'veld' => $veld,
+					$this->_delta[$veld] = array (
 						'oud'  => $this->_tmpprofile[$veld],
 						'nieuw'  => $invoer
 					);
-				# anders ingevulde waarde terugzetten in het invoervak
-				} else {
-					$this->_tmpprofile[$veld] = $invoer;
 				}
+				# nieuwe waarde in tmpprofile, is of voor afbeelden in het invulvak,
+				# of voor diff_to_*
+				$this->_tmpprofile[$veld] = $invoer;
 			}
 		}
 
@@ -277,15 +275,14 @@ class Lid {
 				# als er geen fout is opgetreden veranderde waarde bewaren
 				if (!isset($this->_formerror[$veld])) {
 					# bewaar oude en nieuwe waarde in delta
-					$this->_delta['diff'][] = array (
-						'veld' => $veld,
+					$this->_delta[$veld] = array (
 						'oud'  => $this->_tmpprofile[$veld],
 						'nieuw'  => $invoer
 					);
-				# anders ingevulde waarde terugzetten in het invoervak
-				} else {
-					$this->_tmpprofile[$veld] = $invoer;
 				}
+				# nieuwe waarde in tmpprofile, is of voor afbeelden in het invulvak,
+				# of voor diff_to_*
+				$this->_tmpprofile[$veld] = $invoer;
 			}
 		}
 			
@@ -297,11 +294,12 @@ class Lid {
 			# is het wel een wijziging?
 			if ($invoer != $this->_tmpprofile[$veld]) {
 				# bewaar oude en nieuwe waarde in delta
-				$this->_delta['diff'][] = array (
-					'veld' => $veld,
+				$this->_delta[$veld] = array (
 					'oud'  => $this->_tmpprofile[$veld],
 					'nieuw'  => $invoer
 				);
+				# nieuwe waarde in tmpprofile voor diff_to_*
+				$this->_tmpprofile[$veld] = $invoer;
 			}
 		}
 		
@@ -321,15 +319,14 @@ class Lid {
 					# als er geen fout is opgetreden veranderde waarde bewaren
 					if (!isset($this->_formerror[$veld])) {
 						# bewaar oude en nieuwe waarde in delta
-						$this->_delta['diff'][] = array (
-							'veld' => $veld,
+						$this->_delta[$veld] = array (
 							'oud'  => $this->_tmpprofile[$veld],
 							'nieuw'  => $invoer
 						);
-					# anders ingevulde waarde terugzetten in het invoervak
-					} else {
-						$this->_tmpprofile[$veld] = $invoer;
 					}
+					# nieuwe waarde in tmpprofile, is of voor afbeelden in het invulvak,
+					# of voor diff_to_*
+					$this->_tmpprofile[$veld] = $invoer;
 				}
 			}
 		}
@@ -347,15 +344,14 @@ class Lid {
 				# als er geen fout is opgetreden veranderde waarde bewaren
 				if (!isset($this->_formerror[$veld])) {
 					# bewaar oude en nieuwe waarde in delta
-					$this->_delta['diff'][] = array (
-						'veld' => $veld,
+					$this->_delta[$veld] = array (
 						'oud'  => $this->_tmpprofile[$veld],
 						'nieuw'  => $invoer
 					);
-				# anders ingevulde waarde terugzetten in het invoervak
-				} else {
-					$this->_tmpprofile[$veld] = $invoer;
 				}
+				# nieuwe waarde in tmpprofile, is of voor afbeelden in het invulvak,
+				# of voor diff_to_*
+				$this->_tmpprofile[$veld] = $invoer;
 			}
 		}
 
@@ -399,15 +395,14 @@ class Lid {
 					# als er geen fout is opgetreden veranderde waarde bewaren
 					if (!isset($this->_formerror[$veld])) {
 						# bewaar oude en nieuwe waarde in delta
-						$this->_delta['diff'][] = array (
-							'veld' => $veld,
+						$this->_delta[$veld] = array (
 							'oud'  => $this->_tmpprofile[$veld],
 							'nieuw'  => $invoer
 						);
-					# anders ingevulde waarde terugzetten in het invoervak
-					} else {
-						$this->_tmpprofile[$veld] = $invoer;
 					}
+					# nieuwe waarde in tmpprofile, is of voor afbeelden in het invulvak,
+					# of voor diff_to_*
+					$this->_tmpprofile[$veld] = $invoer;
 				}
 			}
 		}
@@ -453,15 +448,14 @@ class Lid {
 					# als er geen fout is opgetreden veranderde waarde bewaren
 					if (!isset($this->_formerror[$veld])) {
 						# bewaar oude en nieuwe waarde in delta
-						$this->_delta['diff'][] = array (
-							'veld' => $veld,
+						$this->_delta[$veld] = array (
 							'oud'  => $this->_tmpprofile[$veld],
 							'nieuw'  => $invoer
 						);
-					# anders ingevulde waarde terugzetten in het invoervak
-					} else {
-						$this->_tmpprofile[$veld] = $invoer;
 					}
+					# nieuwe waarde in tmpprofile, is of voor afbeelden in het invulvak,
+					# of voor diff_to_*
+					$this->_tmpprofile[$veld] = $invoer;
 				}
 			}
 		}
@@ -496,11 +490,13 @@ class Lid {
 				# anders is het wel ok...
 				} else {
 					# bewaar oude en nieuwe waarde in delta
-					$this->_delta['diff'][] = array (
-						'veld' => 'password',
+					$hash = $this->_makepasswd($nwpass);
+					$this->_delta['password'] = array (
 						'oud'  => $this->_tmpprofile['password'],
-						'nieuw'  => $this->_makepasswd($nwpass)
+						'nieuw'  => $hash
 					);
+					# nieuwe waarde voor diff_to_*
+					$this->_tmpprofile['password'] = $hash;
 				}
 			}
 		}
@@ -511,8 +507,38 @@ class Lid {
 		
 		if ($this->_profile['status'] == 'S_OUDLID' or $this->hasPermission('P_LEDEN_MOD')) {
 			
+			# Info over naam => verplichte velden! (ook vanwege sn/cn velden in ldap!)
+			$velden = array('voornaam' => 50, 'achternaam' => 50);
+			# voor al deze veldnamen...
+			foreach($velden as $veld => $max_lengte) {
+				# kijken of ze in POST voorkomen...
+				if (isset($_POST['frmdata'][$veld])) {
+					$invoer = trim(strval($_POST['frmdata'][$veld]));
+					# is het wel een wijziging?
+					if ($invoer != $this->_tmpprofile[$veld]) {
+						# controleren op juiste inhoud...
+						if ($invoer == "") {
+							$this->_formerror[$veld] = "Dit veld mag niet leeggelaten worden:";
+						} elseif ($invoer != "" and !is_utf8($invoer)) {
+							$this->_formerror[$veld] = "Ongeldige karakters, gebruik reguliere tekst:";
+						} elseif (mb_strlen($invoer) > $max_lengte) {
+							$this->_formerror[$veld] = "Gebruik maximaal {$max_lengte} karakters:";
+						} else {
+							# bewaar oude en nieuwe waarde in delta
+							$this->_delta[$veld] = array (
+								'oud'  => $this->_tmpprofile[$veld],
+								'nieuw'  => $invoer
+							);
+						}
+						# nieuwe waarde in tmpprofile, is of voor afbeelden in het invulvak,
+						# of voor diff_to_*
+						$this->_tmpprofile[$veld] = $invoer;
+					}
+				}
+			}
+		
 			# Info over naam, studieomschrijving
-			$velden = array('voornaam' => 50, 'tussenvoegsel' => 15, 'achternaam' => 50, 'studie' => 100);
+			$velden = array('tussenvoegsel' => 15, 'studie' => 100);
 			# voor al deze veldnamen...
 			foreach($velden as $veld => $max_lengte) {
 				# kijken of ze in POST voorkomen...
@@ -527,16 +553,18 @@ class Lid {
 							$this->_formerror[$veld] = "Gebruik maximaal {$max_lengte} karakters:";
 						} else {
 							# bewaar oude en nieuwe waarde in delta
-							$this->_delta['diff'][] = array (
-								'veld' => $veld,
+							$this->_delta[$veld] = array (
 								'oud'  => $this->_tmpprofile[$veld],
 								'nieuw'  => $invoer
 							);
 						}
+						# nieuwe waarde in tmpprofile, is of voor afbeelden in het invulvak,
+						# of voor diff_to_*
+						$this->_tmpprofile[$veld] = $invoer;
 					}
 				}
 			}
-		
+
 			# jaartallen etc...
 			$velden = array ('studiejaar', 'lidjaar');
 			# moet een getal tussen 1900 en 2100 zijn allemaal
@@ -553,12 +581,14 @@ class Lid {
 							$this->_formerror[$veld] = "Het jaartal ligt buiten toegestane grenzen:";
 						} else {
 							# bewaar oude en nieuwe waarde in delta
-							$this->_delta['diff'][] = array (
-								'veld' => $veld,
+							$this->_delta[$veld] = array (
 								'oud'  => $this->_tmpprofile[$veld],
 								'nieuw'  => $invoer
 							);
 						}
+						# nieuwe waarde in tmpprofile, is of voor afbeelden in het invulvak,
+						# of voor diff_to_*
+						$this->_tmpprofile[$veld] = $invoer;
 					}
 				}
 			}
@@ -598,31 +628,29 @@ class Lid {
 					    if ($datumstr != $datumstr_adj) {
 							$this->_formerror[$veld] = "Opgegeven datum bestaat niet:";
 					    }
-					}
 
-					# als er geen fout is opgetreden veranderde waarde bewaren
-					if (!isset($this->_formerror[$veld])) {
-						# bewaar oude en nieuwe waarde in delta
-						$this->_delta['diff'][] = array (
-							'veld' => 'gebdag',
-							'oud'  => $this->_tmpprofile['gebdag'],
-							'nieuw'  => $gebdag
-						);
-						$this->_delta['diff'][] = array (
-							'veld' => 'gebmnd',
-							'oud'  => $this->_tmpprofile['gebmnd'],
-							'nieuw'  => $gebmnd
-						);
-						$this->_delta['diff'][] = array (
-							'veld' => 'gebjaar',
-							'oud'  => $this->_tmpprofile['gebjaar'],
-							'nieuw'  => $gebjaar
-						);
-					# anders ingevulde waarde terugzetten in het invoervak
-					} else {
+						# als er geen fout is opgetreden veranderde waarde bewaren
+						if (!isset($this->_formerror[$veld])) {
+							# bewaar oude en nieuwe waarde in delta
+							$this->_delta['gebdag'] = array (
+								'oud'  => $this->_tmpprofile['gebdag'],
+								'nieuw'  => $gebdag
+							);
+							$this->_delta['gebmnd'] = array (
+								'oud'  => $this->_tmpprofile['gebmnd'],
+								'nieuw'  => $gebmnd
+							);
+							$this->_delta['gebjaar'] = array (
+								'oud'  => $this->_tmpprofile['gebjaar'],
+								'nieuw'  => $gebjaar
+							);
+						}
+						# nieuwe waarde in tmpprofile, is of voor afbeelden in het invulvak,
+						# of voor diff_to_*
 						$this->_tmpprofile['gebdag']  = $gebdag;
 						$this->_tmpprofile['gebmnd']  = $gebmnd;
 						$this->_tmpprofile['gebjaar'] = $gebjaar;
+
 					}
 				}
 			}
@@ -645,12 +673,14 @@ class Lid {
 							$this->_formerror[$veld] = "Gebruik maximaal {$max_lengte} karakters:";
 						} else {
 							# bewaar oude en nieuwe waarde in delta
-							$this->_delta['diff'][] = array (
-								'veld' => $veld,
+							$this->_delta[$veld] = array (
 								'oud'  => $this->_tmpprofile[$veld],
 								'nieuw'  => $invoer
 							);
 						}
+						# nieuwe waarde in tmpprofile, is of voor afbeelden in het invulvak,
+						# of voor diff_to_*
+						$this->_tmpprofile[$veld] = $invoer;
 					}
 				}
 			}
@@ -672,12 +702,14 @@ class Lid {
 							$this->_formerror[$veld] = "De invoer ligt buiten toegestane grenzen:";
 						} else {
 							# bewaar oude en nieuwe waarde in delta
-							$this->_delta['diff'][] = array (
-								'veld' => $veld,
+							$this->_delta[$veld] = array (
 								'oud'  => $this->_tmpprofile[$veld],
 								'nieuw'  => $invoer
 							);
 						}
+						# nieuwe waarde in tmpprofile, is of voor afbeelden in het invulvak,
+						# of voor diff_to_*
+						$this->_tmpprofile[$veld] = $invoer;
 					}
 				}
 			}
@@ -694,11 +726,12 @@ class Lid {
 						$this->_formerror[$veld] = "Gebruik (n)iet, (e)erstejaars, (o)uderejaars:";
 					} else {
 						# bewaar oude en nieuwe waarde in delta
-						$this->_delta['diff'][] = array (
-							'veld' => $veld,
+						$this->_delta[$veld] = array (
 							'oud'  => $this->_tmpprofile[$veld],
 							'nieuw'  => $invoer
 						);
+						# nieuwe waarde in tmpprofile voor diff_to_*
+						$this->_tmpprofile[$veld] = $invoer;
 					}
 				}
 			}
@@ -715,11 +748,12 @@ class Lid {
 						$this->_formerror[$veld] = "Gebruik (0) nee, (1) ja:";
 					} else {
 						# bewaar oude en nieuwe waarde in delta
-						$this->_delta['diff'][] = array (
-							'veld' => $veld,
+						$this->_delta[$veld] = array (
 							'oud'  => $this->_tmpprofile[$veld],
 							'nieuw'  => $invoer
 						);
+						# nieuwe waarde in tmpprofile voor diff_to_*
+						$this->_tmpprofile[$veld] = $invoer;
 					}
 				}
 			}
@@ -736,11 +770,12 @@ class Lid {
 						$this->_formerror[$veld] = "Gebruik (m)an, (v)rouw:";
 					} else {
 						# bewaar oude en nieuwe waarde in delta
-						$this->_delta['diff'][] = array (
-							'veld' => $veld,
+						$this->_delta[$veld] = array (
 							'oud'  => $this->_tmpprofile[$veld],
 							'nieuw'  => $invoer
 						);
+						# nieuwe waarde in tmpprofile voor diff_to_*
+						$this->_tmpprofile[$veld] = $invoer;
 					}
 				}
 			}
@@ -759,32 +794,84 @@ class Lid {
 
 	function diff_to_sql() {
 		# Zijn er wel wijzigingen?
-		if (isset($this->_delta['diff']) and is_array($this->_delta['diff']) and count($this->_delta['diff']) > 0) {
+		if (isset($this->_delta) and is_array($this->_delta) and count($this->_delta) > 0) {
 			$sqldata = array();
-			foreach ($this->_delta['diff'] as $diff) {
-				$sqldata[$diff['veld']] = $this->_db->escape($diff['nieuw']);
+			foreach ($this->_delta as $veld => $diff) {
+				$sqldata[$veld] = $this->_db->escape($diff['nieuw']);
 			}
 
+			# if ($this->hasPermission('P_LEDEN_MOD')) print_r($sqldata);
+
 			# opslaan van de waarden in de database
-			$this->_db->update_a('lid', 'uid', $this->_delta['uid'], $sqldata);
+			$this->_db->update_a('lid', 'uid', $this->_tmpprofile['uid'], $sqldata);
 		}
 	}
 
 	# We gaan de wijzigingen doorvoeren in ldap, alleen moeten we wel rekening houden
 	# met samengestelde velden!
-	# als een van deze velden is veranderd, voegen we de andere velden in de groep ook
-	# toe voordat we het naar ldap sturen.
-	/*
+	# We kijken alleen of er iets is veranderd in een van de LDAP velden, zo ja, dan
+	# rossen we alle velden die in LDAP staan meteen in de modify... uitzoeken welke
+	# precies wel of niet veranderd zijn is meer werk.
 	function diff_to_ldap() {
-		$groep_naam  = array('voornaam', 'tusenvoegsel', 'achternaam');
-		# kijken of minimaal een van de naam-velden voorkomt
-		if (
+	
+		# oudleden staan niet in LDAP!
+		if ($this->_tmpprofile['uid'] == 'S_OUDLID') return;
+	
+		$ldap_velden = array(
+			'voornaam' => '',
+			'tussenvoegsel' => '',
+			'achternaam' => '',
+			'email' => '',
+			'adres' => '',
+			'postcode' => '',
+			'woonplaats' => '',
+			'telefoon' => '',
+			'mobiel' => '',
+			'password' => ''
+		);
+		# komt een veld voor in diff?
+		if (count(array_intersect_key($ldap_velden, $this->_delta)) > 0) {
+			# vanuit het profiel en de diff een ldap entry in elkaar snokken
+			$entry = array();
+			# uid
+			$entry['uid'] = $this->_tmpprofile['uid'];
+			# givenName => verplicht veld, heeft altijd inhoud
+			$entry['givenname'] = $this->_tmpprofile['voornaam'];
+			if ($this->_tmpprofile['tussenvoegsel'] != '') $entry['givenname'] .= ' ' . $this->_tmpprofile['tussenvoegsel'];
+			# sn => verplicht veld, heeft altijd inhoud
+			$entry['sn'] = $this->_tmpprofile['achternaam'];
+			# cn
+			$entry['cn'] = $entry['givenname'] . ' ' . $entry['sn'];
+			# mail
+			$entry['mail'] = $this->_tmpprofile['email'];
+			# ou
+			$entry['ou'] = $this->_tmpprofile['adres'];
+			if ($this->_tmpprofile['postcode'] != '') $entry['ou'] .= ' ' . $this->_tmpprofile['postcode'];
+			if ($this->_tmpprofile['woonplaats'] != '') $entry['ou'] .= ' ' . $this->_tmpprofile['woonplaats'];
+			# homePhone
+			$entry['mail'] = $this->_tmpprofile['telefoon'];
+			# mobile
+			$entry['mobile'] = $this->_tmpprofile['mobiel'];
+			# password
+			$entry['userpassword'] = $this->_tmpprofile['password'];
 
-		$groep_adres = array('adres', 'psotcode', 'plaats', 'land');
-		
+			# lege velden er uit gooien
+			foreach ($entry as $i => $e) if ($e == '') unset ($entry[$i]);
+
+			# if ($this->hasPermission('P_LEDEN_MOD')) print_r($entry);
+			
+			# LDAP verbinding openen
+			$ldap = new LDAP();
+			
+			# bestaat deze uid al in ldap? dan wijzigen, anders aanmaken
+			if ($ldap->isLid($entry['uid'])) $ldap->modifyLid($entry['uid'], $entry);
+			else $ldap->modifyLid($entry['uid'], $entry);
+			
+			# verbinding sluiten
+			$ldap->disconnect();
+		}
 	
 	}
-	*/
 
 	function getPermissions() { return $this->_profile['permissies']; }
 	function getStatus()      { return $this->_profile['status']; }
