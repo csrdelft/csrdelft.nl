@@ -67,8 +67,7 @@ class CommissieContent extends SimpleHTML {
 				}
 			}
 			echo '</td></tr></table><a href="javascript: history.go(-1)">[ Terug ]</a>';
-			//toevoegen van een lid aan commissie, voorlopig enkel nog door mods
-			if($this->_cie->magBewerken()){
+			if($this->_commissie->magBewerken()){
 				echo '<hr /><h2>Deze commissie beheren:</h2>
 					<br />
 					<form action="?cie='.$cie['id'].'" method="post">';
@@ -89,8 +88,9 @@ class CommissieContent extends SimpleHTML {
 								if(count($aCieUid['naamOpties'])>0){
 									echo '<tr><td><select name="naam[]" class="tekst">';
 									foreach($aCieUid['naamOpties'] as $aNaamOptie){
-										echo '<option value="'.$aNaamOptie['uid'].'">
-											'.$aNaamOptie['voornaam'].' '.$aNaamOptie['achternaam'].'</option>';
+										echo '<option value="'.$aNaamOptie['uid'].'">'.$aNaamOptie['voornaam'].' ';
+										if(trim($aNaamOptie['tussenvoegsel'])!=''){ echo $aNaamOptie['tussenvoegsel'].' '; }
+										echo $aNaamOptie['achternaam'].'</option>';
 									}
 									echo '</select></td><td>'.$this->_getFunctieSelector($iCieLidTeller).'</td></tr>';
 								}//dingen die niets opleveren wordt niets voor weergegeven.

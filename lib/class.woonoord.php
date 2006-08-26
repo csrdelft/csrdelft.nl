@@ -19,63 +19,92 @@ class Woonoord {
 	### private ###
 	var $_db;
 	var $_woonoord;
-
-	var $_status = array ('huis' => 'W_HUIS', 'kot' => 'W_KOT', 'overig' => 'W_OVERIG');
+	var $_lid;
 
 	### public ###
 	
 	
-	function Woonoord($db) {
+	function Woonoord(&$db, &$lid) {
 		$this->_db =& $db;
+		$this->_lid =& $lid;
 	}
 
-	function loadWoonoord($naam) {
-		/*
-		if (!preg_match("/^\w+$/",$cie)) $cie = "Commissies";
-		$db = new MySQL();
-
-		# eerst de opgegeven naam proberen...
-		$result = $db->select("SELECT * FROM `commissie` WHERE `naam` = '{$cie}'");
-        if ($result !== false and $db->numRows($result) > 0) {
-			$this->_cie = $db->next($result);
-		} else {
-			# anders de standaard-info
-			$result = $db->select("SELECT * FROM `commissie` WHERE `naam` = 'Commissies'");
-        	if ($result !== false and $db->numRows($result) > 0) {
-				$this->_cie = $db->next($result);
-			} else die("Webmaster, ga die Commissietabel repareren met je donder!");
+	function isLid(){ return $this->_lid->hasPermission('P_LEDEN_READ'); }
+	function magBewerken($iWoonoordID){
+		if($this->_lid->hasPermission('P_LEDEN_MOD')){
+			return true;
+		}else{
+			$iWoonoordID=(int)$iWoonoordID;
+			$sIsBewoner="
+				SELECT
+					uid
+				FROM 
+					bewoner	
+				WHERE
+					woonoordid=".$iWoonoordID."
+				AND
+					uid=".$this->_lid->getUid()."
+				LIMIT 1;";
+			$rIsBewoner=$this->_db->query($sIsBewoner);
+			if($this->_db->numRows($rIsBewoner)==1){
+				return true;
+			}else{
+				return false;
+			}
 		}
-		*/
 	}
-	#function getCommissie() { return $this->_cie; }
-
-	function getAll($status) {
-		# kijken of er een geldige woonoord-status is opgegeven
-		if (!array_key_exists($status, $this->_status)) return array();
-		$status = $this->_status[$status];
-		$woonoorden = array();
-
-		$result = $this->_db->select("SELECT * FROM `woonoord` WHERE `status` = '{$status}' ORDER BY `sort`");
-        if ($result !== false and $this->_db->numRows($result) > 0) {
-			while ($woonoord = $this->_db->next($result)) $woonoorden[] = $woonoord;
+	function getWoonoorden(){
+		$woonoorden=array();
+		$sWoonoorden="
+			SELECT
+				woonoord.id AS id,
+				woonoord.naam AS naam,
+				woonoord.tekst AS tekst,
+				woonoord.adres AS adres,
+				woonoord.status AS status,
+				woonoord.plaatje AS plaatje,
+				woonoord.link AS link,
+				lid.uid AS uid,
+				lid.voornaam AS voornaam,
+				lid.tussenvoegsel AS tussenvoegsel,
+				lid.achternaam AS achternaam
+			FROM 
+				woonoord 
+			LEFT JOIN 
+				bewoner ON(woonoord.id=bewoner.woonoordid)
+			INNER JOIN 
+				lid ON(bewoner.uid=lid.uid)
+			ORDER BY
+				woonoord.sort, lid.achternaam, lid.voornaam;";
+		$rWoonoorden=$this->_db->query($sWoonoorden);
+		echo mysql_error();
+		$iHuidigHuis=0;
+		$sHuidigeStatus='';
+		while($aWoonoord=$this->_db->next($rWoonoorden)){
+			if($sHuidigeStatus!=$aWoonoord['status']){
+				$sHuidigeStatus=$aWoonoord['status'];
+			}
+			if($iHuidigHuis!=$aWoonoord['id']){
+				$iHuidigHuis=$aWoonoord['id']; 
+				$woonoorden[$sHuidigeStatus][$iHuidigHuis]=array(
+					'id'=>$aWoonoord['id'],
+					'naam'=>$aWoonoord['naam'],
+					'tekst'=>$aWoonoord['tekst'],
+					'adres'=>$aWoonoord['adres'],
+					'status'=>$aWoonoord['status'],
+					'plaatje'=>$aWoonoord['plaatje'],
+					'link'=>$aWoonoord['link'],
+					'bewoners'=>array()	);
+			}
+			$woonoorden[$sHuidigeStatus][$iHuidigHuis]['bewoners'][]=array(
+				'uid'=>$aWoonoord['uid'],
+				'voornaam'=>$aWoonoord['voornaam'],
+				'tussenvoegsel'=>$aWoonoord['tussenvoegsel'],
+				'achternaam'=>$aWoonoord['achternaam'] );
 		}
-
 		return $woonoorden;
 	}
-
-	function getBewoners($woonoordid) {
-		$bewoners = array();
-
-		# geen gezooi graag
-		$woonoordid = (int)$woonoordid;
-		$result = $this->_db->select("SELECT `voornaam` , `tussenvoegsel` , `achternaam` FROM `lid` WHERE `uid` IN ( SELECT `uid` FROM `bewoner` WHERE `woonoordid` = '{$woonoordid}' )");
-        if ($result !== false and $this->_db->numRows($result) > 0) {
-			while ($bewoner = $this->_db->next($result)) $bewoners[] = $bewoner;
-		}
-
-		return $bewoners;
-	}
-	
+			
 	function getWoonoordByUid($uid) {
 		# N.B. Bij het veranderen van bewoners en huizen moet opgelet worden dat een bewoner maar
 		# in 1 woonoord tegelijk mag wonen!

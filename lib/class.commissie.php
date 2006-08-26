@@ -185,15 +185,29 @@ class Commissie {
 				$prioriteit=5;
 			break;
 		}
-		$sCieQuery="
-			INSERT INTO
+		//controleren of iemand al in de commissie zit
+		$sDubbelControle="
+			SELECT 
+				uid
+			FROM
 				commissielid
-			(
-				cieid, uid, op, functie, prioriteit
-			) VALUES (
-				".$iCieID.", '".$uid."', '".$op."', '".$functie."', ".$prioriteit."
-			)";
-		return $this->_db->query($sCieQuery);
+			WHERE 
+				cieid=".$iCieID."
+			AND
+				uid='".$uid."'
+			LIMIT 1;";
+		$rDubbelControle=$this->_db->query($sDubbelControle);
+		if($this->_db->numRows($rDubbelControle)==0){
+			$sCieQuery="
+				INSERT INTO
+					commissielid
+				(
+					cieid, uid, op, functie, prioriteit
+				) VALUES (
+					".$iCieID.", '".$uid."', '".$op."', '".$functie."', ".$prioriteit."
+				)";
+			return $this->_db->query($sCieQuery);
+		}else{ return false; }
 	}
 }
 

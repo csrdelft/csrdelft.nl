@@ -41,8 +41,8 @@ function main() {
 	# Het middenstuk
 	require_once('class.woonoord.php');
 	require_once('class.woonoordcontent.php');
-	$woonoord = new Woonoord($db);
-	$midden = new WoonoordContent($woonoord, $lid);
+	$woonoord = new Woonoord($db, $lid);
+	$midden = new WoonoordContent($woonoord);
 
 	### Kolommen vullen ###
 	require_once('class.column.php');
