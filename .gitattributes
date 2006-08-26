@@ -96,12 +96,10 @@ htdocs/informatie/images/vlvs03.jpeg -text
 htdocs/informatie/index.php -text
 htdocs/informatie/lezingen.php -text
 htdocs/informatie/lidworden.php -text
-htdocs/informatie/mapknor.html -text
 htdocs/informatie/ondervereniging.php -text
 htdocs/informatie/werkgroep.php -text
 htdocs/informatie/woonoord.php -text
 htdocs/leden/.htaccess -text
-htdocs/leden/agenda.php -text
 htdocs/leden/arro.php -text
 htdocs/leden/bibliotheek.php -text
 htdocs/leden/csrmail.php -text
