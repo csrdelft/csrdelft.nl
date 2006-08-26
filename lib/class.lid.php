@@ -470,7 +470,8 @@ class Lid {
 			$oldpass = strval($_POST['frmdata']['oldpass']);
 			$nwpass = strval($_POST['frmdata']['nwpass']);
 			$nwpass2 = strval($_POST['frmdata']['nwpass2']);
-		
+		  
+      $tmperror='';
 			# alleen actie ondernemen als er een oud password is ingevuld
 			if ($oldpass != "" or $nwpass != "" or $nwpass2 != "") {
 				if ($oldpass == "" and ($nwpass != "" or $nwpass2 != "")) {

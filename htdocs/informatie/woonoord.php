@@ -42,7 +42,40 @@ function main() {
 	require_once('class.woonoord.php');
 	require_once('class.woonoordcontent.php');
 	$woonoord = new Woonoord($db, $lid);
-	$midden = new WoonoordContent($woonoord);
+	if(isset($_GET['woonoordid'])){
+    $iWoonoordID=(int)$_GET['woonoordid'];
+    if(isset($_GET['verwijderen']) AND isset($_GET['uid']) AND preg_match('/^\w{4}$/', $_GET['uid']) AND $woonoord->magBewerken($iWoonoordID)){
+      //een bewoner verwijderen uit een woonoord
+      $woonoord->delBewoner($iWoonoordID, $_GET['uid']);
+      header('location: http://csrdelft.nl/informatie/woonoord.php');
+      exit;
+    }elseif( isset($_POST['rawBewoners']) AND $woonoord->magBewerken($iWoonoordID)){
+    	$aBewoners=namen2uid($_POST['rawBewoners'], $lid);
+       if(count($aBewoners)>0){
+      	$iSuccesvol=0;
+      	foreach($aBewoners as $aBewoner){
+      		if(isset($aBewoner['uid'])){
+      			$woonoord->addBewoner($iWoonoordID, $aBewoner['uid']);
+      			$iSuccesvol++;
+      		}
+      	}
+      	if($iSuccesvol==count($aBewoners)){
+      		header('location: http://csrdelft.nl/informatie/woonoord.php#'.$iWoonoordID);
+      		exit;
+      	}
+      }	
+    }elseif(isset($_POST['bewoners']) AND is_array($_POST['bewoners']) AND $woonoord->magBewerken($iWoonoordID)){
+      foreach($_POST['bewoners'] as $bewoner){
+      	if(preg_match('/^\w{4}$/', $bewoner)){
+      		$woonoord->addBewoner($iWoonoordID, $bewoner);
+      	}
+      }
+      header('location: http://csrdelft.nl/informatie/woonoord.php');
+      exit;
+    }  
+      
+  }
+  $midden = new WoonoordContent($woonoord, $lid);
 
 	### Kolommen vullen ###
 	require_once('class.column.php');

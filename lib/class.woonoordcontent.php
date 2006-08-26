@@ -30,8 +30,9 @@ class WoonoordContent extends SimpleHTML {
 	var	$_soorten=array('W_HUIS' => 'C.S.R.-huizen', 'W_KOT' => 'C.S.R.-kotten', 'W_OVERIG' => 'Overige woonoorden');
 	### public ###
 
-	function WoonoordContent (&$woonoord) {
+	function WoonoordContent (&$woonoord, &$lid) {
 		$this->_woonoord =& $woonoord;
+		$this->_lid =& $lid;
 	}
 
 	function view() {	
@@ -66,28 +67,69 @@ class WoonoordContent extends SimpleHTML {
 				<td width="47%"><hr><span class="kopje2">Bewoners</span><hr></td></tr>';
 			
 			foreach($woonoorden[$soort] as $woonoord) {
-				echo '<tr height="30"><td colspan="3" valign="middle">';
+				$bBewerken=$this->_woonoord->magBewerken($woonoord['id']);
+				echo '<tr height="30"><td colspan="2" valign="middle"><a name="'.$woonoord['id'].'"></a>';
 				if(trim($woonoord['link'])==''){ 
 					echo '<span class="kopje3">'.mb_htmlentities($woonoord['naam']).'</span>'; 
 				}else{ 
 					echo '<a href="'.htmlspecialchars($woonoord['link']).'" class="a3">'.mb_htmlentities($woonoord['naam']).'</a>'; 
 				} 
 				echo '('.htmlspecialchars($woonoord['adres']).')</td>';
-				echo '</tr>';
-				echo '<tr><td valign="top">';
-				if($woonoord['plaatje'] != '') echo '<img src="'.htmlspecialchars($woonoord['plaatje']).'" align="right">'; 
-				echo mb_htmlentities($woonoord['tekst']).'</td>';
-				echo '<td>&nbsp;</td><td valign="top">';
+				echo '<td valign="top" rowspan="2">';
 				foreach ($woonoord['bewoners'] as $bewoner) {
 					if($this->_woonoord->isLid()) echo '<a href="/leden/profiel/'.$bewoner['uid'].'">';
 					echo mb_htmlentities($bewoner['voornaam']).' ';
 					if(trim($bewoner['tussenvoegsel'])!='') echo mb_htmlentities($bewoner['tussenvoegsel']).' ';
 					echo mb_htmlentities($bewoner['achternaam']);
 					if($this->_woonoord->isLid()) echo '</a>';
+					if($bBewerken OR $this->_lid->hasPermission('P_LEDEN_MOD')){
+						echo ' [ <a href="/informatie/woonoord.php?woonoordid='.$woonoord['id'].'&amp;uid='.$bewoner['uid'].'&amp;verwijderen"onclick=" return confirm(\'Weet u zeker dat u deze bewoner wilt verwijderen?\')">X</a> ]';
+					}							
 					echo "<br />\n";
 				}
-				echo '</td></tr>';
+				echo '</td>';
+				echo '</tr>';
+				echo '<tr><td valign="top">';
+				if($woonoord['plaatje'] != '') echo '<img src="'.htmlspecialchars($woonoord['plaatje']).'" style="float: right;">'; 
+				echo mb_htmlentities($woonoord['tekst']);
+				if($bBewerken){
+					$bRawInvoer=false;
+					//nieuw toevoeg formulier
+					echo '<div class="quote"><form action="woonoord.php?woonoordid='.$woonoord['id'].'#'.$woonoord['id'].'" method="post">';
+					if(isset($_POST['rawBewoners']) AND isset($_GET['woonoordid']) AND $_GET['woonoordid']==$woonoord['id']){
+						$aBewoners=namen2uid($_POST['rawBewoners'], $this->_lid);
+						pr($aBewoners);
+						if(is_array($aBewoners)){
+							foreach($aBewoners as $aBewoner){
+								if(!isset($aBewoner['uid'])){
+									//enkel dingen doen als het niet gelukt is, de rest is dan al ingevoerd.
+									if(count($aBewoner['naamOpties'])>0){
+										echo '<select name="bewoners[]" class="tekst">';
+										foreach($aBewoner['naamOpties'] as $aNaamOptie){
+											echo '<option value="'.$aNaamOptie['uid'].'">'.$aNaamOptie['voornaam'].' ';
+											if(trim($aNaamOptie['tussenvoegsel'])!=''){ echo $aNaamOptie['tussenvoegsel'].' '; }
+											echo $aNaamOptie['achternaam'].'</option>';
+										}
+										echo '</select>';
+									}
+								}
+							}
+						}else{
+							$bRawInvoer=true;
+						}
+					}else{
+						$bRawInvoer=true;
+					}
+					if($bRawInvoer){					
+						echo 'U kunt hier nieuwe bewoners voor uw huis invoeren, gescheiden door komma\'s:<br />';
+						echo '<input type="text" length="60" value="" name="rawBewoners" class="tekst" />';
+					}
+					echo '<input type="submit" value="toevoegen" name="toevoegen" class="tekst" /></form></div>';
+				}
+				echo '</td><td>&nbsp;</td></tr>';
+				echo '<tr><td colspan="3">&nbsp;</td></tr>';
 			}
+			
 		}	
 		echo '<tr><td><hr></td><td>&nbsp;</td><td><hr></td></tr>';
 		echo '</table>';

@@ -113,11 +113,16 @@ function namen2uid($sNamen, $lid){
 	$sNamen=str_replace(', ', ',', $sNamen);
 	$aNamen=explode(',', $sNamen);
 
-	$return=array();
+	$return=false;
 	foreach($aNamen as $sNaam){
 		$aZoekNamen=$lid->zoekLeden($sNaam, 'naam', 'alle', 'achternaam', 'leden');
 		if(count($aZoekNamen)==1){
-			$return[]=array('uid' => $aZoekNamen[0]['uid'], 'naam' => $aZoekNamen[0]['voornaam'].' '.$aZoekNamen[0]['achternaam'] );
+			$naam=$aZoekNamen[0]['voornaam'].' ';
+			if(trim($aZoekNamen[0]['tussenvoegsel'])!=''){ $naam.=$aZoekNamen[0]['tussenvoegsel']; }
+			$naam.=$aZoekNamen[0]['achternaam'];
+			$return[]=array('uid' => $aZoekNamen[0]['uid'], 'naam' => $naam );
+		}elseif(count($aZoekNamen)==0){
+			
 		}else{
 			//geen enkelvoudige match, dan een array teruggeven
 			$return[]['naamOpties']=$aZoekNamen;

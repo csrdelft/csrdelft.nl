@@ -30,28 +30,21 @@ class Woonoord {
 	}
 
 	function isLid(){ return $this->_lid->hasPermission('P_LEDEN_READ'); }
+	
 	function magBewerken($iWoonoordID){
-		if($this->_lid->hasPermission('P_LEDEN_MOD')){
-			return true;
-		}else{
-			$iWoonoordID=(int)$iWoonoordID;
-			$sIsBewoner="
-				SELECT
-					uid
-				FROM 
-					bewoner	
-				WHERE
-					woonoordid=".$iWoonoordID."
-				AND
-					uid=".$this->_lid->getUid()."
-				LIMIT 1;";
-			$rIsBewoner=$this->_db->query($sIsBewoner);
-			if($this->_db->numRows($rIsBewoner)==1){
-				return true;
-			}else{
-				return false;
-			}
-		}
+		$iWoonoordID=(int)$iWoonoordID;
+		$sIsBewoner="
+			SELECT
+				uid
+			FROM 
+				bewoner	
+			WHERE
+				woonoordid=".$iWoonoordID."
+			AND
+				uid='".$this->_lid->getUid()."'
+			LIMIT 1;";
+		$rIsBewoner=$this->_db->query($sIsBewoner);
+		return $this->_db->numRows($rIsBewoner)==1;	
 	}
 	function getWoonoorden(){
 		$woonoorden=array();
@@ -109,18 +102,49 @@ class Woonoord {
 		# N.B. Bij het veranderen van bewoners en huizen moet opgelet worden dat een bewoner maar
 		# in 1 woonoord tegelijk mag wonen!
 		$result = $this->_db->select("
-			SELECT id, naam
-			FROM woonoord
-			WHERE id IN ( SELECT woonoordid FROM bewoner WHERE uid = '{$uid}' )
-		");
-        if ($result !== false and $this->_db->numRows($result) == 1) {
+			SELECT 
+				woonoord.id AS id, woonoord.naam AS naam
+			FROM 
+				woonoord, bewoner
+			WHERE
+				woonoord.id=bewoner.woonoordid
+			AND
+				bewoner.uid='".$uid."'
+			LIMIT 1;");
+    if ($result !== false and $this->_db->numRows($result) == 1) {
 			$record = $this->_db->next($result);
 			return array('id' => $record['id'], 'naam' => $record['naam']);
+		}else{
+			# geen woonoord gevonden
+			return false;	
 		}
-		
-		# geen woonoord gevonden
-		return false;	
 	}
+	function addBewoner($iWoonoordID, $uid){
+    if($this->getWoonoordByUid($uid)===false){
+      $sToevoegen="
+        INSERT INTO
+          bewoner
+        ( 
+          woonoordid, uid 
+        ) VALUES (
+          ".$iWoonoordID.", '".$uid."'
+        );";
+      return $this->_db->query($sToevoegen);
+    }else{
+    	return false;
+    }
+  }
+  function delBewoner($iWoonoordID, $uid){
+    $sVerwijderen="
+      DELETE FROM
+        bewoner
+      WHERE
+        woonoordid=".$iWoonoordID."
+      AND
+        uid='".$uid."'
+      LIMIT 1;";
+    return $this->_db->query($sVerwijderen);
+  }
 }
 
 ?>

@@ -37,7 +37,8 @@ function main() {
 	# Datum
 	require_once('class.includer.php');
 	$datum = new Includer('', 'datum.php');
-
+	
+	$sError='';
 	# Het middenstuk
 	if ($lid->hasPermission('P_FORUM_MOD') OR $lid->getUid()==STATISTICUS){
 		require_once('class.forum.php');

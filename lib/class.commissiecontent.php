@@ -92,7 +92,7 @@ class CommissieContent extends SimpleHTML {
 										if(trim($aNaamOptie['tussenvoegsel'])!=''){ echo $aNaamOptie['tussenvoegsel'].' '; }
 										echo $aNaamOptie['achternaam'].'</option>';
 									}
-									echo '</select></td><td>'.$this->_getFunctieSelector($iCieLidTeller).'</td></tr>';
+									echo '</select></td><td>'.$this->_getFunctieSelector().'</td></tr>';
 								}//dingen die niets opleveren wordt niets voor weergegeven.
 							}
 						}
