@@ -217,7 +217,7 @@ if($this->_lid->hasPermission('P_ADMIN')){
 Hieronder kunt u uw eigen gegevens wijzigen. Voor enkele velden is het niet mogelijk zelf wijzigingen door te voeren.
 Voor de meeste velden geldt daarnaast dat de ingevulde gegevens een geldig formaat moeten hebben.
 Mochten er fouten in het gedeelte van uw profiel staan, dat u niet zelf kunt wijzigen, meld het dan bij de Vice-Abactis.
-Automatiche syncrhonisatie met de LDAP ledenlijst is nog niet geimplementeerd.<br />
+<br />
 <br />
 Als er <span class="tekstrood">tekst in rode letters</span> wordt afgebeeld bij een veld, dan betekent dat dat de invoer
 niet geaccepteerd is, en dat u die zal moeten aanpassen aan het gevraagde formaat. Een aantal velden kan leeg gelaten

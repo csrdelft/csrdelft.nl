@@ -174,7 +174,7 @@ function main() {
 			require_once('class.commissie.php');
 			require_once('class.profielcontent.php');
 			$woonoord = new Woonoord($db);
-			$commissie = new Commissie($db);
+			$commissie = new Commissie($db, $lid);
 			$midden = new ProfielContent($lid, $state, $woonoord, $commissie);
 			break;
 		default:

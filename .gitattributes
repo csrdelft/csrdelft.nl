@@ -54,6 +54,7 @@ htdocs/images/uitloggen.gif -text
 htdocs/images/verwijderen.png -text
 htdocs/images/wijzigingen_opslaan.gif -text
 htdocs/index.php -text
+htdocs/informatie/.htaccess -text
 htdocs/informatie/bestuur.php -text
 htdocs/informatie/bestuurstekst.php -text
 htdocs/informatie/commissie.php -text
@@ -108,11 +109,11 @@ htdocs/leden/arro.php -text
 htdocs/leden/bibliotheek.php -text
 htdocs/leden/csrmail.php -text
 htdocs/leden/csrmail/.htaccess -text
+htdocs/leden/csrmail/archief.php -text
 htdocs/leden/csrmail/bewerken.php -text
 htdocs/leden/csrmail/index.php -text
 htdocs/leden/csrmail/verzenden.php -text
 htdocs/leden/csrmail/voorbeeld.php -text
-htdocs/leden/csrmailsend.php -text
 htdocs/leden/documenten -text
 htdocs/leden/documenten.php -text
 htdocs/leden/eetplan.php -text

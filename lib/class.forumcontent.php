@@ -531,7 +531,7 @@ class ForumContent extends SimpleHTML {
 		<language>nl-nl</language>
 		<link>http://csrdelft.nl/forum/</link>
 		<title>C.S.R.-Delft forum laatste berichten.</title>
-		<managingEditor>PubCie</managingEditor>
+		<managingEditor>PubCie@csrdelft.nl</managingEditor>
 		<webMaster>pubcie@csrdelft.nl</webMaster>
 <?php
 		foreach($aPosts as $aPost){
@@ -544,6 +544,7 @@ class ForumContent extends SimpleHTML {
 			//alle andere ubb kek eruit rossen...
 			$tekst=preg_replace('/(\[(|\/)\w+:[a-f0-9]+\])/', '|', $tekst);
 			//$volledigetekst=$tekst=preg_replace('/(\[(|\/)url=http://[a-f0-9]+:[a-f0-9]+\])/', '|', $volledigetekst);
+			//$tekst=str_replace('-&gt;', '- &gt;', $tekst);
 			$volledigetekst=$tekst;
 			if(kapStringNetjesAf($tekst, 50)){
 				$tekst.='...';
@@ -554,7 +555,7 @@ class ForumContent extends SimpleHTML {
 			
 			echo '<description>'.$volledigetekst.'</description>';
 			echo '<author>'.$this->_forum->getForumNaam($aPost['uid'], $aPost).'</author>';
-			echo '<category>forum: '.$aPost['titel'].'</category>';
+			echo '<category>forum: '.htmlspecialchars($aPost['titel']).'</category>';
 			echo '<comments>http://csrdelft.nl/forum/onderwerp/'.$aPost['tid'].'#laatste</comments>';
 			echo '<guid>http://csrdelft.nl/forum/onderwerp/'.$aPost['tid'].'#'.$aPost['postID'].'</guid>';
 			echo '<pubDate>'.$pubDate.'</pubDate>';

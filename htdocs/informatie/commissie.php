@@ -40,13 +40,38 @@ function main() {
 
 	# Het middenstuk
 	require_once('class.commissie.php');
-	$commissie = new Commissie($db);
+	$commissie = new Commissie($db, $lid);
 
-	if (isset($_GET['cie'])) {
+	if(isset($_GET['cie'])){
 		$commissie->loadCommissie($_GET['cie']);
+			
+		//enkel beheerdingen doen als het met id's gebeurt.
+		if(preg_match('/^\d+$/', $_GET['cie']) AND $commissie->magBewerken($_GET['cie'])){ 
+			$iCieID=(int)$_GET['cie'];
+			if(isset($_GET['verwijderen']) AND isset($_GET['uid'])){
+				$commissie->verwijderCieLid($iCieID, $_GET['uid']);
+				header('location: http://csrdelft.nl/informatie/commissie/'.$iCieID);
+				exit;
+			//alleen nieuwe leden erin gaan stoppen als beide arrays erzijn, en even veel elementen hebben zijn.
+			}elseif(isset($_POST['naam']) AND isset($_POST['functie']) AND
+				is_array($_POST['naam']) AND is_array($_POST['functie']) AND
+				count($_POST['naam'])==count($_POST['functie']) ){
+				//nieuwe commissieleden erin stoppen.
+				for($iTeller=0; $iTeller<count($_POST['naam']); $iTeller++){
+					$commissie->addCieLid($iCieID, $_POST['naam'][$iTeller], $_POST['functie'][$iTeller]);
+				}
+				header('location: http://csrdelft.nl/informatie/commissie/'.$iCieID);
+				exit;
+			}	
+		}
+
 		require_once('class.commissiecontent.php');
 		$middenvak = new CommissieContent($commissie, $lid);
-		$titel='commissie: '.mb_htmlentities($_GET['cie']);
+		if(preg_match('/^\d+$/', $_GET['cie'])){
+			$titel=$commissie->getNaam($_GET['cie']);
+		}else{
+			$titel='commissie: '.mb_htmlentities($_GET['cie']);
+		}
 	} else {
 		require_once('class.cieoverzichtcontent.php');
 		$middenvak = new CieOverzichtContent($commissie, $lid);

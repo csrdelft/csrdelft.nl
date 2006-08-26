@@ -8,6 +8,7 @@ require_once('include.common.php');
 require_once('class.lid.php');
 session_start();
 
+require_once('class.mysql.php');
 $db = new MySQL();
 $lid = new Lid($db);
 ### Pagina-onderdelen ###

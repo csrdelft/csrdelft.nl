@@ -71,7 +71,7 @@ class Lid {
 		$user = $this->_db->escape($user);
 
 		# eerst proberen we via de user-id de gebruiker te vinden
-		$result = $this->_db->select("SELECT * FROM `lid` WHERE `uid` = '{$user}' LIMIT 1");
+		$result = $this->_db->select("SELECT * FROM lid WHERE uid = '{$user}' LIMIT 1");
 		if (($result !== false) and $this->_db->numRows($result) > 0) {
 			$profile = $this->_db->next($result);
 			if ($this->_checkpw($profile['password'], $pass)) {
@@ -81,7 +81,7 @@ class Lid {
 			}
 		}
 		# anders via de nickname N.B. deze nickname search is *case-insensitive*
-		$result = $this->_db->select("SELECT * FROM `lid` WHERE `nickname` = '{$user}' LIMIT 1");
+		$result = $this->_db->select("SELECT * FROM lid WHERE nickname = '{$user}' LIMIT 1");
 		if (($result !== false) and $this->_db->numRows($result) > 0) {
 			$profile = $this->_db->next($result);
 			if ($this->_checkpw($profile['password'], $pass)) {
@@ -96,7 +96,7 @@ class Lid {
 
 	
 	function reloadProfile() {
-		$result = $this->_db->select("SELECT * FROM `lid` WHERE `uid` = '{$_SESSION['_uid']}' LIMIT 1");
+		$result = $this->_db->select("SELECT * FROM lid WHERE uid = '{$_SESSION['_uid']}' LIMIT 1");
         if (($result !== false) and $this->_db->numRows($result) > 0) {
 			$this->_profile = $this->_db->next($result);
 			return true;
@@ -170,7 +170,7 @@ class Lid {
 		if (!isset($this->_db)) $this->_db = new MySQL ();
 		# en gebruiker opzoeken
 		$uid = $this->_db->escape($uid);
-		$result = $this->_db->select("SELECT * FROM `lid` WHERE `uid` = '{$uid}' LIMIT 1");
+		$result = $this->_db->select("SELECT * FROM lid WHERE uid = '{$uid}' LIMIT 1");
         if (($result !== false) and $this->_db->numRows($result) > 0) {
 			$this->_tmpprofile =  $this->_db->next($result);
 			return true;
@@ -815,7 +815,7 @@ class Lid {
 	function diff_to_ldap() {
 	
 		# oudleden staan niet in LDAP!
-		if ($this->_tmpprofile['uid'] == 'S_OUDLID') return;
+		if ($this->_tmpprofile['status'] == 'S_OUDLID') return;
 	
 		$ldap_velden = array(
 			'voornaam' => '',
@@ -1074,7 +1074,11 @@ class Lid {
 		if ($statusfilter != '') {
 			$result = $this->_db->select("
 				SELECT
-					* 
+					uid, nickname, voornaam, tussenvoegsel, achternaam, postfix, adres, postcode, woonplaats, land, telefoon,
+					mobiel, email, geslacht, voornamen, icq, msn, skype, jid, website, beroep, studie, studiejaar, lidjaar, 
+					gebjaar, gebmnd, gebdag, moot, kring, kringleider, motebal, 
+					o_adres, o_postcode, o_woonplaats, o_land, o_telefoon, 
+					kerk, muziek, eetwens
 				FROM 
 					lid 
 				WHERE 
@@ -1096,7 +1100,7 @@ class Lid {
 		# mysql escape dingesen
 		$nick = $this->_db->escape($nick);
 		
-		$result = $this->_db->select("SELECT * FROM `lid` WHERE `nickname` = '{$nick}'");
+		$result = $this->_db->select("SELECT * FROM lid WHERE nickname = '{$nick}'");
         if ($result !== false and $this->_db->numRows($result) > 0)
 			return true;
 		return false;
@@ -1110,7 +1114,7 @@ class Lid {
 	function uidExists($uid) {
 		if (!$this->isValidUid($uid)) return false;
 		
-		$result = $this->_db->select("SELECT * FROM `lid` WHERE `uid` = '{$uid}'");
+		$result = $this->_db->select("SELECT * FROM lid WHERE uid = '{$uid}'");
 		if ($result !== false and $this->_db->numRows($result) > 0) {
 			#echo $this->_db->numRows($result);
 			return true;
@@ -1124,7 +1128,7 @@ class Lid {
 		
 		# opzoeken status
 		$uid = $this->_db->escape($uid);
-		$result = $this->_db->select("SELECT `status` FROM `lid` WHERE `uid` = '{$uid}'");
+		$result = $this->_db->select("SELECT status FROM lid WHERE uid = '{$uid}'");
 		if ($result !== false and $this->_db->numRows($result) > 0) {
 			$record = mysql_fetch_assoc($result);
 			return $record['status'];
@@ -1143,7 +1147,7 @@ class Lid {
 			FROM 
 				lid 
 			WHERE ( 
-				status='S_LID' OR status='S_GASTLID' OR status='S_NOVIET' OR status='S_KRINGEL' ) ORDER BY `{$sort}`");
+				status='S_LID' OR status='S_GASTLID' OR status='S_NOVIET' OR status='S_KRINGEL' ) ORDER BY {$sort}");
         if ($result !== false and $this->_db->numRows($result) > 0) {
 			while ($lid = $this->_db->next($result)) $leden[] = $lid;
 		}
@@ -1159,7 +1163,7 @@ class Lid {
 			FROM 
 				lid 
 			WHERE 
-				(status='S_LID' OR `status`='S_GASTLID' OR status='S_NOVIET' OR status='S_KRINGEL') 
+				(status='S_LID' OR status='S_GASTLID' OR status='S_NOVIET' OR status='S_KRINGEL') 
 			AND 
 				gebmnd = '{$maand}'";
 		if($dag!=0)	$query.=" AND gebdag=".$dag;
@@ -1173,7 +1177,7 @@ class Lid {
 
 	function getMaxKringen() {
 		$maxkringen = 0;
-		$result = $this->_db->select("SELECT MAX(`kring`) as `max` FROM `lid` WHERE (`status`='S_LID' OR `status`='S_GASTLID' OR `status`='S_NOVIET' OR status='S_KRINGEL')");
+		$result = $this->_db->select("SELECT MAX(kring) as max FROM lid WHERE (status='S_LID' OR status='S_GASTLID' OR status='S_NOVIET' OR status='S_KRINGEL')");
         if ($result !== false and $this->_db->numRows($result) > 0) {
 			$max = $this->_db->next($result);
 			$maxkringen = $max['max'];
@@ -1185,7 +1189,7 @@ class Lid {
 	function getMaxMoten() {
 		$maxmoten = 0;
 		$result = $this->_db->select("
-			SELECT MAX(`moot`) as `max` FROM `lid` WHERE (`status`='S_LID' OR `status`='S_GASTLID' OR `status`='S_NOVIET' OR status='S_KRINGEL')");
+			SELECT MAX(moot) as max FROM lid WHERE (status='S_LID' OR status='S_GASTLID' OR status='S_NOVIET' OR status='S_KRINGEL')");
         if ($result !== false and $this->_db->numRows($result) > 0) {
 			$max = $this->_db->next($result);
 			$maxmoten = $max['max'];
@@ -1207,12 +1211,12 @@ class Lid {
 				kringleider,
 				status
 			FROM 
-				`lid` 
+				lid 
 			WHERE 
-				`status`='S_LID' OR `status`='S_GASTLID' OR `status`='S_NOVIET' OR status='S_KRINGEL'
+				status='S_LID' OR status='S_GASTLID' OR status='S_NOVIET' OR status='S_KRINGEL'
 			ORDER BY 
-				`kringleider` DESC,
-				`achternaam` ASC;");
+				kringleider DESC,
+				achternaam ASC;");
 		if ($result !== false and $this->_db->numRows($result) > 0) {
 			while ($lid = $this->_db->next($result)) {
         $kring[$lid['moot']][$lid['kring']][] = array(
@@ -1227,6 +1231,24 @@ class Lid {
 		return $kring;
 	}
 	
+	# deze functie wordt gebruikt om extra info toe te voegen als de inschrijving voor een
+	# maaltijd gesloten wordt, en de inschrijvingen naar de maaltijdgesloten tabel worden
+	# overgezet: de volledige naam en eetwens
+	function getNaamEetwens($uid = '') {
+		if ($uid == '') $uid = $this->_profile['uid'];
+		$result = $this->_db->select("
+			SELECT voornaam, tussenvoegsel, achternaam, eetwens
+			FROM lid
+			WHERE uid='{$uid}'
+		");
+		if ($result !== false and $this->_db->numRows($result) > 0) {
+			$record = $this->_db->next($result);
+			$fullname = str_replace('  ', ' ',implode(' ',array($record['voornaam'],$record['tussenvoegsel'],$record['achternaam'])));
+			return array('naam' => $fullname, 'eetwens' => $record['eetwens']);
+		}
+		return false;
+	}
+	
 	# deze functie wordt door maaltrack gebruikt om de namen van mensen en hun eetwens
 	# toe te voegen aan een lijst met inschrijvingen
 	# parameter: $lijst, een array waar een veld genaamd 'uid' in moet zitten
@@ -1234,9 +1256,9 @@ class Lid {
 	function addNames(&$lijst) {
 		foreach ($lijst as $l => $foo) {
 			$result = $this->_db->select("
-				SELECT `voornaam`, `tussenvoegsel`, `achternaam`, `eetwens`
-				FROM `lid`
-				WHERE `uid`='{$foo['uid']}'
+				SELECT voornaam, tussenvoegsel, achternaam, eetwens
+				FROM lid
+				WHERE uid='{$foo['uid']}'
 			");
 			if ($result !== false and $this->_db->numRows($result) > 0) {
 				$lid = $this->_db->next($result);

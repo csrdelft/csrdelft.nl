@@ -105,4 +105,24 @@ function opConfide() {
 function getDateTime(){
 	return date('Y-m-d H:i:s');
 }
+function pr($sString){
+	echo '<pre>'.print_r($sString, true).'</pre>';
+}
+function namen2uid($sNamen, $lid){
+	$sNamen=trim($sNamen);
+	$sNamen=str_replace(', ', ',', $sNamen);
+	$aNamen=explode(',', $sNamen);
+
+	$return=array();
+	foreach($aNamen as $sNaam){
+		$aZoekNamen=$lid->zoekLeden($sNaam, 'naam', 'alle', 'achternaam', 'leden');
+		if(count($aZoekNamen)==1){
+			$return[]=array('uid' => $aZoekNamen[0]['uid'], 'naam' => $aZoekNamen[0]['voornaam'].' '.$aZoekNamen[0]['achternaam'] );
+		}else{
+			//geen enkelvoudige match, dan een array teruggeven
+			$return[]['naamOpties']=$aZoekNamen;
+		}
+	}
+	return $return;
+}
 ?>

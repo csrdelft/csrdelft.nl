@@ -213,8 +213,7 @@ class Forum {
 			$iAantal=$this->_postsPerRss;
 		}
 		//uitmaken welke categorieën er in de rss feed komen.
-		$sCategorieClause='topic.categorie=2 OR topic.categorie=3 ';
-		//geen zandbak: $sCagegorieClause.='OR topic.categorie=4 ';
+		$sCategorieClause='topic.categorie=2 OR topic.categorie=3 OR topic.categorie=4 ';
 		if($this->_lid->hasPermission('P_LEDEN_READ')){ $sCategorieClause.='OR topic.categorie=1 '; }
 		if($this->_lid->hasPermission('P_OUDLEDEN_READ')){ $sCategorieClause.='OR topic.categorie=8 '; }
 		if($this->_lid->hasPermission('P_FORUM_MOD')){ $sCategorieClause.='OR topic.categorie=6 '; }

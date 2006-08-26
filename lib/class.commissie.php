@@ -20,30 +20,38 @@ class Commissie {
 	### private ###
 
 	var $_cie; # commissie-beschrijving in de database
+	var $_lid;
 	var $_db;
 
 	### public ###
 	
-	function Commissie(&$db) {
+	function Commissie(&$db, &$lid){
 		$this->_db =& $db;
+		$this->_lid =& $lid;
 	}
 
 	function loadCommissie($cie) {
-		if (!preg_match("/^\w+$/",$cie)) $cie = "Commissies";
-
+		$cie=trim($cie);
+		$filter='';
+		if (preg_match("/^\d+$/", $cie)) $filter="id=".$cie;
+		elseif(preg_match("/^\w+$/", $cie)) $filter="naam='".$cie."'";
+		
+		$result = $this->_db->query("
+			SELECT 
+				id, naam, stekst, titel, tekst, bbcode_uid, link 
+			FROM commissie 
+			WHERE ".$filter." 
+			LIMIT 1;");
 		# eerst de opgegeven naam proberen...
-		$result = $this->_db->select("SELECT * FROM commissie WHERE naam = '{$cie}'");
-        if ($result !== false and $this->_db->numRows($result) > 0) {
+	  if ($result !== false AND $this->_db->numRows($result) > 0) {
 			$this->_cie = $this->_db->next($result);
 		} else {
-			# anders de standaard-info
-			$result = $this->_db->select("SELECT * FROM commissie WHERE naam = 'Commissies'");
-        	if ($result !== false and $this->_db->numRows($result) > 0) {
-				$this->_cie = $this->_db->next($result);
-			} else die("Webmaster, ga die Commissietabel repareren met je donder!");
-		}
+			echo 'Commissie met de naam "'.$cie.'" niet gevonden';
+			exit;
+		}		
 	}
 	function getCommissie() { return $this->_cie; }
+	function getNaam(){ return $this->_cie['naam']; }
 	
 	# haalt gegevens over alle commissies op voor de overzichtspagina
 	function getOverzicht() {
@@ -53,6 +61,28 @@ class Commissie {
 			while ($cie = $this->_db->next($result)) $cieoverzicht[] = $cie;
 		return $cieoverzicht;
 	}
+	function magBewerken(){
+		if($this->_lid->hasPermission('P_LEDEN_MOD')){
+			return true;
+		}else{
+			//controleren of iemand commissie op is:
+			$sOpControle="
+				SELECT 
+					uid 
+				FROM 
+					commissielid 
+				WHERE 
+					uid='".$this->_lid->getUid()."' AND cieid=".$this->_cie['id']." AND op='1'
+				LIMIT 1;";
+			$rOpControle=$this->_db->query($sOpControle);
+			if($this->_db->numRows($rOpControle)==1){
+				return true;
+			}else{
+				return false;
+			}
+		}
+	}
+	
 	
 	function getCieByUid($uid) {
 		$cies = array();
@@ -97,12 +127,30 @@ class Commissie {
 			return false;
 		}			
 	}
+	function verwijderCieLid($iCieID, $uid){
+		$iCieID=(int)$iCieID;
+		if(preg_match('/^\w{4}$/', $uid)){
+			$sVerwijderen="
+				DELETE FROM 
+					commissielid
+				WHERE
+					cieid=".$iCieID."
+				AND
+					uid='".$uid."' 
+				LIMIT 1;";
+			return $this->_db->query($sVerwijderen);
+		}else{
+			return false;
+		}
+	}
 	function addCieLid($iCieID, $uid, $functie=''){
 		$iCieID=(int)$iCieID;
+		$op=0;
 		switch(strtolower(trim($functie))){
 			case 'praeses':
 			case 'archivaris':
 				$prioriteit=1;
+				$op=1;
 			break;
 			case 'fiscus':
 			case 'redacteur':
@@ -141,9 +189,9 @@ class Commissie {
 			INSERT INTO
 				commissielid
 			(
-				cieid, uid, functie, prioriteit
+				cieid, uid, op, functie, prioriteit
 			) VALUES (
-				".$iCieID.", '".$uid."', '".$functie."', ".$prioriteit."
+				".$iCieID.", '".$uid."', '".$op."', '".$functie."', ".$prioriteit."
 			)";
 		return $this->_db->query($sCieQuery);
 	}

@@ -20,8 +20,15 @@ function main() {
 	if ($lid->hasPermission('P_MAIL_COMPOSE')) {
 		require_once('class.csrmail.php');
 		$csrmail = new Csrmail($lid, $db);
+		require_once('class.csrmailcontent.php');
 		require_once('class.csrmailcomposecontent.php');
-		$pagina = new Csrmailcomposecontent($csrmail, 'zendPubcie');
+		$csrmailbeheer = new Csrmailcomposecontent($csrmail);
+		
+		
+		if(isset($_GET['iedereen']))
+			$csrmailbeheer->zend('csrmail@lists.jeugdkerken.nl');
+		$csrmailbeheer->zend('pubcie@csrdelft.nl');
+		exit;
 	} else {
 		# geen rechten, geen voorbeeld
 		require_once('class.includer.php');
@@ -30,4 +37,4 @@ function main() {
 	$pagina->view();
 }
 
-?>
+?><a href="verzenden.php?iedereen=true"> aan iedereen verzenden</a>

@@ -78,7 +78,7 @@ class NieuwsContent extends SimpleHTML {
 		echo '<a href="#" onclick="vergrootTextarea(\'nieuwsBericht\', 10)" name="Vergroot het invoerveld">invoerveld vergroten</a><br />';
 		echo '<textarea id="nieuwsBericht" name="tekst" cols="80" rows="10" style="width: 100%" class="tekst">'.$tekst.'</textarea><br />';
 		echo '<input id="prive" type="checkbox" name="prive" '.$prive.' /><label for="prive">Dit bericht alleen weergeven bij leden</label>&nbsp;';
-		echo '<input id="verborgen" type="checkbox" name="verborgen" '.$verborgen.' /><label for="verborgen">Dit bericht verbergen voor leden</label><br />';
+		echo '<input id="verborgen" type="checkbox" name="verborgen" '.$verborgen.' /><label for="verborgen">Dit bericht verbergen voor</label><br />';
 		echo '<input type="submit" name="submit" value="opslaan" />&nbsp;<a href="/nieuws">Annuleren, terug naar nieuws</a></div>';
 	}
 	function nieuwFormulier(){
