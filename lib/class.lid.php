@@ -816,7 +816,7 @@ class Lid {
 	function diff_to_ldap() {
 	
 		# Alleen leden, novieten en kringels staan in LDAP
-		if (pregmatch('/^S_(LID|NOVIET|KRINGEL)$/', $this->_tmpprofile['status'])) {
+		if (preg_match('/^S_(LID|NOVIET|KRINGEL)$/', $this->_tmpprofile['status'])) {
 	
 			$ldap_velden = array(
 				'voornaam' => '',
