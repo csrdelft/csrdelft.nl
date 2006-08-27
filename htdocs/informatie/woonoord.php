@@ -44,14 +44,15 @@ function main() {
 	$woonoord = new Woonoord($db, $lid);
 	if(isset($_GET['woonoordid'])){
     $iWoonoordID=(int)$_GET['woonoordid'];
-    if(isset($_GET['verwijderen']) AND isset($_GET['uid']) AND preg_match('/^\w{4}$/', $_GET['uid']) AND $woonoord->magBewerken($iWoonoordID)){
+    if(isset($_GET['verwijderen']) AND isset($_GET['uid']) AND preg_match('/^\w{4}$/', $_GET['uid']) AND 
+    	($woonoord->magBewerken($iWoonoordID) OR $lid->hasPermission('P_LEDEN_MOD'))){
       //een bewoner verwijderen uit een woonoord
       $woonoord->delBewoner($iWoonoordID, $_GET['uid']);
       header('location: http://csrdelft.nl/informatie/woonoord.php');
       exit;
     }elseif( isset($_POST['rawBewoners']) AND $woonoord->magBewerken($iWoonoordID)){
     	$aBewoners=namen2uid($_POST['rawBewoners'], $lid);
-       if(count($aBewoners)>0){
+       if(is_array($aBewoners) AND count($aBewoners)>0){
       	$iSuccesvol=0;
       	foreach($aBewoners as $aBewoner){
       		if(isset($aBewoner['uid'])){

@@ -47,7 +47,7 @@ class CieOverzichtContent extends SimpleHTML {
 				echo '
 					<tr height="30px">
 						<td colspan="3" width="100%" valign="bottom">
-							<a href="/informatie/commissie.php?cie='.htmlspecialchars($cie['naam']).'" class="a2">
+							<a href="/informatie/commissie/'.htmlspecialchars($cie['naam']).'.html" class="a2">
 								'.mb_htmlentities($cie['titel']).'
 							</a>
 						</td>
@@ -60,7 +60,7 @@ class CieOverzichtContent extends SimpleHTML {
 				$aCieLeden=$this->_commissie->getCieLeden($cie['id']);
 				if(is_array($aCieLeden)){
 					foreach($aCieLeden as $aCieLid){
-						echo '<a href="../leden/profiel.php?uid='.$aCieLid['uid'].'">'.mb_htmlentities($aCieLid['naam']).'</a>&nbsp;<em>'.$aCieLid['functie'].'</em><br />';
+						echo '<a href="../leden/profiel/'.$aCieLid['uid'].'">'.mb_htmlentities($aCieLid['naam']).'</a>&nbsp;<em>'.$aCieLid['functie'].'</em><br />';
 					}
 				}else{
 					echo $aCieLeden;

@@ -106,7 +106,11 @@ function getDateTime(){
 	return date('Y-m-d H:i:s');
 }
 function pr($sString){
-	echo '<pre>'.print_r($sString, true).'</pre>';
+	if($_SERVER['REMOTE_ADDR']=='145.94.59.158'){
+		echo '<pre>'.print_r($sString, true).'</pre>';
+	}else{
+		echo 'Er is een foutje, de webmeester is er al mee bezig...';
+	}
 }
 function namen2uid($sNamen, $lid){
 	$sNamen=trim($sNamen);

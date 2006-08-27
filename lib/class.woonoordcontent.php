@@ -96,9 +96,8 @@ class WoonoordContent extends SimpleHTML {
 					$bRawInvoer=false;
 					//nieuw toevoeg formulier
 					echo '<div class="quote"><form action="woonoord.php?woonoordid='.$woonoord['id'].'#'.$woonoord['id'].'" method="post">';
-					if(isset($_POST['rawBewoners']) AND isset($_GET['woonoordid']) AND $_GET['woonoordid']==$woonoord['id']){
+					if(isset($_POST['rawBewoners']) AND trim($_POST['rawBewoners'])!='' AND isset($_GET['woonoordid']) AND $_GET['woonoordid']==$woonoord['id']){
 						$aBewoners=namen2uid($_POST['rawBewoners'], $this->_lid);
-						pr($aBewoners);
 						if(is_array($aBewoners)){
 							foreach($aBewoners as $aBewoner){
 								if(!isset($aBewoner['uid'])){

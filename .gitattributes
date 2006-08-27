@@ -113,7 +113,6 @@ htdocs/leden/documenten -text
 htdocs/leden/documenten.php -text
 htdocs/leden/eetplan.php -text
 htdocs/leden/ihk-citaten.php -text
-htdocs/leden/ihk-quotes.php -text
 htdocs/leden/index.php -text
 htdocs/leden/lijst.php -text
 htdocs/leden/maaltijd-html.php -text
@@ -144,7 +143,6 @@ lib/bbcode/include.bbcode.php -text
 lib/bbcode/lang_main.php -text
 lib/blowfish/blowfish.php -text
 lib/blowfish/blowfish_default_key.php -text
-lib/class.agenda.php -text
 lib/class.bieb.php -text
 lib/class.biebcontent.php -text
 lib/class.cieoverzichtcontent.php -text

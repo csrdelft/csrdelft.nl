@@ -70,13 +70,14 @@ class CommissieContent extends SimpleHTML {
 			if($this->_commissie->magBewerken()){
 				echo '<hr /><h2>Deze commissie beheren:</h2>
 					<br />
-					<form action="?cie='.$cie['id'].'" method="post">';
+					<form action="/informatie/commissie/'.$cie['id'].'" method="post">';
 				$tekstInvoer=true;
-				if(isset($_POST['cieNamen'])){
+				if(isset($_POST['cieNamen']) AND trim($_POST['cieNamen'])!=''){
 					$aCieUids=namen2uid($_POST['cieNamen'], $this->_lid);
-					if(count($aCieUids)!=0){
+					if(is_array($aCieUids) AND count($aCieUids)!=0){
 						echo '<table border="0">';
 						echo '<tr><td><strong>Naam</strong></td><td><strong>Functie</strong></td></tr>';
+						
 						foreach($aCieUids as $aCieUid){
 							if(isset($aCieUid['uid'])){
 								//naam is gevonden en uniek, dus direct goed.
@@ -97,12 +98,12 @@ class CommissieContent extends SimpleHTML {
 							}
 						}
 						echo '</table>';
+						$tekstInvoer=false;
 					}
-					$tekstInvoer=false;
 				}
 				if($tekstInvoer){
 					echo 'Geef hier namen of lidnummers op voor deze commissie, gescheiden door komma\'s<br />
-						<textarea name="cieNamen" rows="4" cols="40" class="tekst"></textarea>';
+						<input type="text" name="cieNamen" class="tekst" />';
 				}
 				echo '<input type="submit" value="Verzenden" /></form>';
 			}
