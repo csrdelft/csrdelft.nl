@@ -471,7 +471,7 @@ class Lid {
 			$nwpass = strval($_POST['frmdata']['nwpass']);
 			$nwpass2 = strval($_POST['frmdata']['nwpass2']);
 		  
-      $tmperror='';
+			$tmperror='';
 			# alleen actie ondernemen als er een oud password is ingevuld
 			if ($oldpass != "" or $nwpass != "" or $nwpass2 != "") {
 				if ($oldpass == "" and ($nwpass != "" or $nwpass2 != "")) {
@@ -815,58 +815,69 @@ class Lid {
 	# precies wel of niet veranderd zijn is meer werk.
 	function diff_to_ldap() {
 	
-		# oudleden staan niet in LDAP!
-		if ($this->_tmpprofile['status'] == 'S_OUDLID') return;
+		# Alleen leden, novieten en kringels staan in LDAP
+		if (pregmatch('/^S_(LID|NOVIET|KRINGEL)$/', $this->_tmpprofile['status'])) {
 	
-		$ldap_velden = array(
-			'voornaam' => '',
-			'tussenvoegsel' => '',
-			'achternaam' => '',
-			'email' => '',
-			'adres' => '',
-			'postcode' => '',
-			'woonplaats' => '',
-			'telefoon' => '',
-			'mobiel' => '',
-			'password' => ''
-		);
-		# komt een veld voor in diff?
-		if (count(array_intersect_key($ldap_velden, $this->_delta)) > 0) {
-			# vanuit het profiel en de diff een ldap entry in elkaar snokken
-			$entry = array();
-			# uid
-			$entry['uid'] = $this->_tmpprofile['uid'];
-			# givenName => verplicht veld, heeft altijd inhoud
-			$entry['givenname'] = $this->_tmpprofile['voornaam'];
-			if ($this->_tmpprofile['tussenvoegsel'] != '') $entry['givenname'] .= ' ' . $this->_tmpprofile['tussenvoegsel'];
-			# sn => verplicht veld, heeft altijd inhoud
-			$entry['sn'] = $this->_tmpprofile['achternaam'];
-			# cn
-			$entry['cn'] = $entry['givenname'] . ' ' . $entry['sn'];
-			# mail
-			$entry['mail'] = $this->_tmpprofile['email'];
-			# ou
-			$entry['ou'] = $this->_tmpprofile['adres'];
-			if ($this->_tmpprofile['postcode'] != '') $entry['ou'] .= ' ' . $this->_tmpprofile['postcode'];
-			if ($this->_tmpprofile['woonplaats'] != '') $entry['ou'] .= ' ' . $this->_tmpprofile['woonplaats'];
-			# homePhone
-			$entry['mail'] = $this->_tmpprofile['telefoon'];
-			# mobile
-			$entry['mobile'] = $this->_tmpprofile['mobiel'];
-			# password
-			$entry['userpassword'] = $this->_tmpprofile['password'];
+			$ldap_velden = array(
+				'voornaam' => '',
+				'tussenvoegsel' => '',
+				'achternaam' => '',
+				'email' => '',
+				'adres' => '',
+				'postcode' => '',
+				'woonplaats' => '',
+				'telefoon' => '',
+				'mobiel' => '',
+				'password' => ''
+			);
+			# komt een veld voor in diff?
+			if (count(array_intersect_key($ldap_velden, $this->_delta)) > 0) {
+				# vanuit het profiel en de diff een ldap entry in elkaar snokken
+				$entry = array();
+				# uid
+				$entry['uid'] = $this->_tmpprofile['uid'];
+				# givenName => verplicht veld, heeft altijd inhoud
+				$entry['givenname'] = $this->_tmpprofile['voornaam'];
+				if ($this->_tmpprofile['tussenvoegsel'] != '') $entry['givenname'] .= ' ' . $this->_tmpprofile['tussenvoegsel'];
+				# sn => verplicht veld, heeft altijd inhoud
+				$entry['sn'] = $this->_tmpprofile['achternaam'];
+				# cn
+				$entry['cn'] = $entry['givenname'] . ' ' . $entry['sn'];
+				# mail
+				$entry['mail'] = $this->_tmpprofile['email'];
+				# ou
+				$entry['ou'] = $this->_tmpprofile['adres'];
+				if ($this->_tmpprofile['postcode'] != '') $entry['ou'] .= ' ' . $this->_tmpprofile['postcode'];
+				if ($this->_tmpprofile['woonplaats'] != '') $entry['ou'] .= ' ' . $this->_tmpprofile['woonplaats'];
+				# homePhone
+				$entry['mail'] = $this->_tmpprofile['telefoon'];
+				# mobile
+				$entry['mobile'] = $this->_tmpprofile['mobiel'];
+				# password
+				$entry['userpassword'] = $this->_tmpprofile['password'];
 
-			# lege velden er uit gooien
-			foreach ($entry as $i => $e) if ($e == '') unset ($entry[$i]);
+				# lege velden er uit gooien
+				foreach ($entry as $i => $e) if ($e == '') unset ($entry[$i]);
 
-			# if ($this->hasPermission('P_LEDEN_MOD')) print_r($entry);
+				# if ($this->hasPermission('P_LEDEN_MOD')) print_r($entry);
 			
+				# LDAP verbinding openen
+				$ldap = new LDAP();
+			
+				# bestaat deze uid al in ldap? dan wijzigen, anders aanmaken
+				if ($ldap->isLid($entry['uid'])) $ldap->modifyLid($entry['uid'], $entry);
+				else $ldap->addLid($entry['uid'], $entry);
+			
+				# verbinding sluiten
+				$ldap->disconnect();
+			}
+		# Als het een andere status is even kijken of de uid in ldap voorkomt, en zo ja wissen
+		} else {
 			# LDAP verbinding openen
 			$ldap = new LDAP();
 			
-			# bestaat deze uid al in ldap? dan wijzigen, anders aanmaken
-			if ($ldap->isLid($entry['uid'])) $ldap->modifyLid($entry['uid'], $entry);
-			else $ldap->modifyLid($entry['uid'], $entry);
+			# bestaat deze uid in ldap? dan verwijderen
+			if ($ldap->isLid($entry['uid'])) $ldap->removeLid($entry['uid'], $entry);
 			
 			# verbinding sluiten
 			$ldap->disconnect();
@@ -1320,7 +1331,6 @@ class Lid {
 					case '82.156.121.74': $locatie='LachaiRoi'; break;
 					case '82.171.125.214': $locatie='SpoorBijster'; break;
 					case '82.171.113.19': $locatie='vSpeijk'; break;
-					case '83.84.133.73': $locatie='denHertog'; break;
 					case '62.51.57.11': $locatie='Molshoop'; break;
 					case '62.234.90.217': $locatie='WankelCentrum'; break;
 					case '82.171.112.16': $locatie='GoudenLeeuw'; break;
