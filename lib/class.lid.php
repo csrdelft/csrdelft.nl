@@ -41,7 +41,7 @@ class Lid {
 	# delta gezet. vervolgens kan de functie delta_to_xml er een xml bestandje van
 	# maken, delta_to_sql kan de verandering in sql doorvoeren, en delta_to_ldap
 	# kan de veranderingen naar ldap wegschrijven
-	var $_delta;
+	var $_delta = array();
 	# Hierin worden tijdens controleren van invoer foutmeldingen gezet die
 	# dan weer worden afgebeeld door ProfielContent
 	var $_formerror = array();
@@ -171,7 +171,7 @@ class Lid {
 		# en gebruiker opzoeken
 		$uid = $this->_db->escape($uid);
 		$result = $this->_db->select("SELECT * FROM lid WHERE uid = '{$uid}' LIMIT 1");
-        if (($result !== false) and $this->_db->numRows($result) > 0) {
+		if (($result !== false) and $this->_db->numRows($result) > 0) {
 			$this->_tmpprofile =  $this->_db->next($result);
 			return true;
 		}
@@ -190,6 +190,8 @@ class Lid {
 	function loadPostTmpProfile() {
 		# foutmeldingen leeggooien
 		$this->_formerror = array();
+		# delta leeggooien
+		$this->_delta = array();
 		
 		# 1. eerst de tekstvelden die het lid zelf mag wijzigen
 		# NB: beroep en eetwens wordt niet getoond in het profiel bij S_LID, adres ouders niet bij S_OUDLID
@@ -850,7 +852,7 @@ class Lid {
 				if ($this->_tmpprofile['postcode'] != '') $entry['ou'] .= ' ' . $this->_tmpprofile['postcode'];
 				if ($this->_tmpprofile['woonplaats'] != '') $entry['ou'] .= ' ' . $this->_tmpprofile['woonplaats'];
 				# homePhone
-				$entry['mail'] = $this->_tmpprofile['telefoon'];
+				$entry['homePhone'] = $this->_tmpprofile['telefoon'];
 				# mobile
 				$entry['mobile'] = $this->_tmpprofile['mobiel'];
 				# password
