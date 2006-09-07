@@ -50,7 +50,7 @@ class CommissieContent extends SimpleHTML {
 				echo '<table border="0"  class="hoktable" ><tr><td colspan="2"><strong>Commissieleden:</strong></td></tr>';
 				foreach($aCieLeden as $aCieLid){
 					echo '<tr><td width="150px">
-						<a href="../leden/profiel/'.$aCieLid['uid'].'">'.mb_htmlentities($aCieLid['naam']).'</a>
+						<a href="/leden/profiel/'.$aCieLid['uid'].'">'.mb_htmlentities($aCieLid['naam']).'</a>
 						</td><td>'.mb_htmlentities($aCieLid['functie']);
 					echo '</td>';
 					if($this->_commissie->magBewerken()){
@@ -89,9 +89,7 @@ class CommissieContent extends SimpleHTML {
 								if(count($aCieUid['naamOpties'])>0){
 									echo '<tr><td><select name="naam[]" class="tekst">';
 									foreach($aCieUid['naamOpties'] as $aNaamOptie){
-										echo '<option value="'.$aNaamOptie['uid'].'">'.$aNaamOptie['voornaam'].' ';
-										if(trim($aNaamOptie['tussenvoegsel'])!=''){ echo $aNaamOptie['tussenvoegsel'].' '; }
-										echo $aNaamOptie['achternaam'].'</option>';
+										echo '<option value="'.$aNaamOptie['uid'].'">'.$aNaamOptie['naam'].'</option>';
 									}
 									echo '</select></td><td>'.$this->_getFunctieSelector().'</td></tr>';
 								}//dingen die niets opleveren wordt niets voor weergegeven.
@@ -124,7 +122,8 @@ class CommissieContent extends SimpleHTML {
 		$return='';
 		$aFuncties=array('Q.Q.', 'Praeses', 'Fiscus', 'Redacteur', 'Computeur', 'Archivaris', 
 			'Bibliothecaris', 'Statisticus', 'Fotocommissaris','', 'Koemissaris', 'Regisseur', 
-			'Lichttechnicus', 'Geluidstechnicus');
+			'Lichttechnicus', 'Geluidstechnicus', 'Adviseur', 'Internetman', 'Posterman', 
+			'Corveemanager', 'Provisor');
 		sort($aFuncties);
 		$return.='<select name="functie[]" class="tekst">';
 		foreach($aFuncties as $sFunctie){

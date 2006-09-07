@@ -105,9 +105,7 @@ class WoonoordContent extends SimpleHTML {
 									if(count($aBewoner['naamOpties'])>0){
 										echo '<select name="bewoners[]" class="tekst">';
 										foreach($aBewoner['naamOpties'] as $aNaamOptie){
-											echo '<option value="'.$aNaamOptie['uid'].'">'.$aNaamOptie['voornaam'].' ';
-											if(trim($aNaamOptie['tussenvoegsel'])!=''){ echo $aNaamOptie['tussenvoegsel'].' '; }
-											echo $aNaamOptie['achternaam'].'</option>';
+											echo '<option value="'.$aNaamOptie['uid'].'">'.$aNaamOptie['naam'].'</option>';
 										}
 										echo '</select>';
 									}

@@ -88,8 +88,8 @@ class ProfielContent extends SimpleHTML {
 				$cies = $this->_commissie->getCieByUid($profiel['uid']);
 				if (count($cies) != 0) {
 					foreach ($cies as $cie) {
-						$ciehtml .= 'Commissie: <a href="/informatie/commissie.php?cie=' .
-							mb_htmlentities($cie['naam']) . '">' .
+						$ciehtml .= 'Commissie: <a href="/informatie/commissie/'.
+							mb_htmlentities($cie['naam']) . '.html">' .
 							mb_htmlentities($cie['naam']) . "</a><br />\n";
 					}				
 				}

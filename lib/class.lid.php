@@ -1043,16 +1043,29 @@ class Lid {
 
 	function zoekLeden($zoekterm, $zoekveld, $moot, $sort, $zoekstatus = '') {
 		$leden = array();
+		$zoekfilter='';
 		
 		# mysql escape dingesen
-		$zoekterm = $this->_db->escape($zoekterm);
-		$zoekveld = $this->_db->escape($zoekveld);
+		$zoekterm = trim($this->_db->escape($zoekterm));
+		$zoekveld = trim($this->_db->escape($zoekveld));
 		
 		//Zoeken standaard in voornaam, achternaam, bijnaam en uid.
 		if($zoekveld=='naam'){
-			$zoekfilter="
-				voornaam LIKE '%{$zoekterm}%' OR achternaam LIKE '%{$zoekterm}%' OR 
-				nickname LIKE '%{$zoekterm}%' OR uid LIKE '%{$zoekterm}%'";
+			if(preg_match('/ /', trim($zoekterm))){
+				$zoekdelen=explode(' ', $zoekterm);
+				$iZoekdelen=count($zoekdelen);
+				if($iZoekdelen==2){
+					$zoekfilter="( voornaam LIKE '%".$zoekdelen[0]."%' AND achternaam LIKE '%".$zoekdelen[1]."%' ) OR";
+					$zoekfilter.="( voornaam LIKE '%{$zoekterm}%' OR achternaam LIKE '%{$zoekterm}%' OR
+                                        nickname LIKE '%{$zoekterm}%' OR uid LIKE '%{$zoekterm}%' )";
+				}else{
+					$zoekfilter="( voornaam LIKE '%".$zoekdelen[0]."%' AND achternaam LIKE '%".$zoekdelen[$iZoekdelen-1]."%' )";
+				}
+			}else{
+				$zoekfilter="
+					voornaam LIKE '%{$zoekterm}%' OR achternaam LIKE '%{$zoekterm}%' OR 
+					nickname LIKE '%{$zoekterm}%' OR uid LIKE '%{$zoekterm}%'";
+			}
 		}else{
 			$zoekfilter="{$zoekveld} LIKE '%{$zoekterm}%'";
 		}
@@ -1086,7 +1099,7 @@ class Lid {
 
 		# controleer of we ueberhaupt wel wat te zoeken hebben hier
 		if ($statusfilter != '') {
-			$result = $this->_db->select("
+			$sZoeken="
 				SELECT
 					uid, nickname, voornaam, tussenvoegsel, achternaam, postfix, adres, postcode, woonplaats, land, telefoon,
 					mobiel, email, geslacht, voornamen, icq, msn, skype, jid, website, beroep, studie, studiejaar, lidjaar, 
@@ -1101,7 +1114,8 @@ class Lid {
 					($statusfilter) 
 				{$mootfilter}
 				ORDER BY 
-					{$sort}");
+					{$sort}";
+			$result = $this->_db->select($sZoeken);
 			if ($result !== false and $this->_db->numRows($result) > 0) {
 				while ($lid = $this->_db->next($result)) $leden[] = $lid;
 			}
@@ -1189,15 +1203,26 @@ class Lid {
 		return $vrjdgn;
 	}
 
-	function getMaxKringen() {
+	function getMaxKringen($moot=0) {
 		$maxkringen = 0;
-		$result = $this->_db->select("SELECT MAX(kring) as max FROM lid WHERE (status='S_LID' OR status='S_GASTLID' OR status='S_NOVIET' OR status='S_KRINGEL')");
-        if ($result !== false and $this->_db->numRows($result) > 0) {
+		$sMaxKringen="
+			SELECT 
+				MAX(kring) as max 
+			FROM 
+				lid 
+			WHERE 
+				(status='S_LID' OR status='S_GASTLID' OR status='S_NOVIET' OR status='S_KRINGEL') ";
+		if($moot!=0){ $sMaxKringen.="AND moot=".$moot; }
+		$sMaxKringen.="	LIMIT 1;";
+		
+    $result = $this->_db->select($sMaxKringen);
+    if ($result !== false and $this->_db->numRows($result) > 0) {
 			$max = $this->_db->next($result);
 			$maxkringen = $max['max'];
+			return $maxkringen;
+		}else{
+			return 0;
 		}
-
-		return $maxkringen;
 	}
 
 	function getMaxMoten() {
@@ -1233,8 +1258,12 @@ class Lid {
 				achternaam ASC;");
 		if ($result !== false and $this->_db->numRows($result) > 0) {
 			while ($lid = $this->_db->next($result)) {
+				$naam=$lid['voornaam'].' ';
+				if($lid['tussenvoegsel']!='') $naam.=$lid['tussenvoegsel'].' ';
+				$naam.=$lid['achternaam'];
+				
         $kring[$lid['moot']][$lid['kring']][] = array(
-					'naam' => str_replace('  ', ' ', implode(' ', array($lid['voornaam'],$lid['tussenvoegsel'],$lid['achternaam']))),
+					'naam' => $naam,
 					'motebal' => $lid['motebal'],
 					'kringleider' => $lid['kringleider'],
 					'status'=> $lid['status']
@@ -1244,7 +1273,24 @@ class Lid {
 
 		return $kring;
 	}
-	
+	# Deze functie voegt iemand aan een kring toe
+	function addUid2kring($uid, $kring, $moot=0){
+		//controle op invoer
+		//if (!$this->isValidUid($uid)) return false;
+		//$kring=(int)$kring; if($kring>10) return false;
+		//$moot=(int)$moot; if($moot>4) return false;
+		$sKringInvoer="
+			UPDATE 
+				lid
+			SET
+				kring=".$kring."";
+		if($moot!=0) $sKringInvoer.=", moot=".$moot;
+		$sKringInvoer.="			
+			WHERE 
+				uid='".$uid."'
+			LIMIT 1;";
+		return $this->_db->query($sKringInvoer);
+	}
 	# deze functie wordt gebruikt om extra info toe te voegen als de inschrijving voor een
 	# maaltijd gesloten wordt, en de inschrijvingen naar de maaltijdgesloten tabel worden
 	# overgezet: de volledige naam en eetwens
