@@ -896,16 +896,12 @@ class Lid {
 	function getMoot() { return $this->_profile['moot']; }
 	function getFullName($uid = '') {
 		if ($uid == '' or $uid == $this->_profile['uid']) {
-			$fullname = $this->_profile['voornaam'];
-			if ($this->_profile['tussenvoegsel'] != '')
-				$fullname .=' '.$this->_profile['tussenvoegsel'];
-			if ($this->_profile['achternaam'] != '')
-				$fullname .=' '.$this->_profile['achternaam'];
+			$fullname=naam($this->_profile['voornaam'], $this->_profile['achternaam'], $this->_profile['tussenvoegsel']);
 		} else {
 			$result = $this->_db->select("SELECT voornaam, tussenvoegsel, achternaam FROM lid WHERE uid='".$uid."' LIMIT 1;");
 			if ($result !== false and $this->_db->numRows($result) > 0) {
 				$record = $this->_db->next($result);
-				$fullname = str_replace('  ', ' ',implode(' ',array($record['voornaam'],$record['tussenvoegsel'],$record['achternaam'])));
+				$fullname = naam($record['voornaam'], $record['achternaam'], $record['tussenvoegsel']);
 			} else $fullname = 'Niet bekend';
 		}
 		return $fullname;
@@ -1248,6 +1244,7 @@ class Lid {
 				kring, 
 				motebal, 
 				kringleider,
+				email,
 				status
 			FROM 
 				lid 
@@ -1258,15 +1255,12 @@ class Lid {
 				achternaam ASC;");
 		if ($result !== false and $this->_db->numRows($result) > 0) {
 			while ($lid = $this->_db->next($result)) {
-				$naam=$lid['voornaam'].' ';
-				if($lid['tussenvoegsel']!='') $naam.=$lid['tussenvoegsel'].' ';
-				$naam.=$lid['achternaam'];
-				
-        $kring[$lid['moot']][$lid['kring']][] = array(
-					'naam' => $naam,
+				$kring[$lid['moot']][$lid['kring']][] = array(
+					'naam' => naam($lid['voornaam'], $lid['achternaam'], $lid['tussenvoegsel']),
 					'motebal' => $lid['motebal'],
 					'kringleider' => $lid['kringleider'],
-					'status'=> $lid['status']
+					'status'=> $lid['status'],
+					'email'=> $lid['email']
 				);
 			}
 		}
@@ -1303,8 +1297,9 @@ class Lid {
 		");
 		if ($result !== false and $this->_db->numRows($result) > 0) {
 			$record = $this->_db->next($result);
-			$fullname = str_replace('  ', ' ',implode(' ',array($record['voornaam'],$record['tussenvoegsel'],$record['achternaam'])));
-			return array('naam' => $fullname, 'eetwens' => $record['eetwens']);
+			return array(
+				'naam' => naam($record['voornaam'], $record['achternaam'], $record['tussenvoegsel']), 
+				'eetwens' => $record['eetwens']);
 		}
 		return false;
 	}
@@ -1322,10 +1317,7 @@ class Lid {
 			");
 			if ($result !== false and $this->_db->numRows($result) > 0) {
 				$lid = $this->_db->next($result);
-				$naam = $lid['voornaam'];
-				if ($lid['tussenvoegsel'] != '') $naam .= " {$lid['tussenvoegsel']}";
-				if ($lid['achternaam'] != '') $naam .= " {$lid['achternaam']}";
-				$lijst[$l]['naam'] = $naam;
+				$lijst[$l]['naam'] = naam($lid['voornaam'], $lid['achternaam'], $lid['tussenvoegsel']);
 				$lijst[$l]['eetwens'] = $lid['eetwens'];
 			} else {
 				$lijst[$l]['naam'] = $l['uid']."/onbekend";			

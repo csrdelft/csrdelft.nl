@@ -53,20 +53,18 @@ class ForumContent extends SimpleHTML {
 					echo '<td class="forumreacties">'.$aCategorie['topics'].'</td>';
 					echo '<td class="forumreacties">'.$aCategorie['reacties'].'</td>';
 					echo '<td class="forumreactiemoment">';
-					if($aCategorie['lastpost']!='0000-00-00 00:00:00'){
+					if($aCategorie['lastpost']=='0000-00-00 00:00:00'){
+						echo 'nog geen berichten'; 
+					}else{ 
 						//als de dag vandaag is, niet de datum weergeven maar 'vandaag'
-						if(date('Y-m-d')==substr($aCategorie['lastpost'], 0, 10)){
-							echo 'Vandaag om '.date("G:i", strtotime($aCategorie['lastpost']));;
-						}else{
-							echo date("G:i j-n-Y", strtotime($aCategorie['lastpost']));
-						}
+						echo $this->_forum->formatDatum($aCategorie['lastpost']);
 						echo '<br /><a href="/forum/onderwerp/'.$aCategorie['lasttopic'].'#'.$aCategorie['lastpostID'].'">reactie</a> door ';
 						if(trim($aCategorie['lastuser'])!=''){
 							$sUsername=$this->_forum->getForumNaam($aCategorie['lastuser']);
 							echo '<a href="/leden/profiel/'.$aCategorie['lastuser'].'">'.mb_htmlentities($sUsername).'</a>';
 						}else{ echo 'onbekend';	}
 					//er zijn nog geen berichten in deze categorie dus er is ook nog geen laatste bericht
-					}else{ echo 'nog geen berichten'; }
+					}
 					echo '</td></tr>';
 				}
 			}//einde foreach
@@ -123,11 +121,7 @@ class ForumContent extends SimpleHTML {
 					$sOnderwerp.=mb_htmlentities($aTopic['titel']).'</a>';
 					$sReacties=$aTopic['reacties']-1;
 					$sDraadstarter=mb_htmlentities($this->_forum->getForumNaam($aTopic['uid']));
-					if(date('Y-m-d')==substr($aTopic['lastpost'], 0, 10)){
-						$sReactieMoment='Vandaag om '.date("G:i", strtotime($aTopic['lastpost']));
-					}else{
-						$sReactieMoment=date("G:i j-n-Y", strtotime($aTopic['lastpost']));
-					}
+					$sReactieMoment=$this->_forum->formatDatum($aTopic['lastpost']);
 					if(trim($aTopic['lastuser'])!=''){
 						$sLaatsteposter='<a href="/leden/profiel/'.$aTopic['lastuser'].'">'.
 							mb_htmlentities($this->_forum->getForumNaam($aTopic['lastuser'])).'</a>';
@@ -322,13 +316,9 @@ class ForumContent extends SimpleHTML {
 				echo '<a href="/leden/profiel/'.$aBericht['uid'].'">'.mb_htmlentities($this->_forum->getForumNaam($aBericht['uid'], $aBericht)).'</a> schreef ';
 				//anker maken met post-ID
 				echo '<a class="forumpostlink" name="'.$aBericht['postID'].'"></a>';
-				if(date('Y-m-d')==substr($aBericht['datum'], 0, 10)){
-					echo 'om '.date("G:i", strtotime($aBericht['datum']));;
-				}else{
-					echo 'op '.date("j-n-Y \o\m G:i", strtotime($aBericht['datum']));
-				}
+				echo $this->_forum->formatDatum($aBericht['datum']);
 				if($aBericht['bewerkDatum']!='0000-00-00 00:00:00'){
-					echo '<br />Bewerkt op '.date("j-n-Y \o\m G:i", strtotime($aBericht['bewerkDatum'])).'';
+					echo ';<br />Bewerkt '.$this->_forum->formatDatum($aBericht['bewerkDatum']);
 				}
 				echo '<br />';
 				//citeer knop enkel als het topic open is en als men mag posten, of als men mod is.

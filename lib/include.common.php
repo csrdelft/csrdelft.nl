@@ -98,7 +98,12 @@ function is_utf8($string) {
    )*$%xs', $string);
    
 } // function is_utf8
-
+function naam($voornaam, $achternaam, $tussenvoegsel){
+	$naam=$voornaam.' ';
+	if($tussenvoegsel!='') $naam.=$tussenvoegsel.' ';
+	$naam.=$achternaam;
+	return $naam;
+}
 function opConfide() {
 	return ( isset($_SERVER['REMOTE_ADDR']) and defined('CONFIDE_IP') and in_array($_SERVER['REMOTE_ADDR'],explode(':',CONFIDE_IP)) );
 }
@@ -113,23 +118,31 @@ function pr($sString){
 	}
 }
 function namen2uid($sNamen, $lid){
+	$return=array();
 	$sNamen=trim($sNamen);
-	$sNamen=str_replace(', ', ',', $sNamen);
+	$sNamen=str_replace(array(', ', "\r\n", "\n"), ',', $sNamen);
+	
 	$aNamen=explode(',', $sNamen);
-
 	$return=false;
 	foreach($aNamen as $sNaam){
+		$aNaamOpties=array();
 		$aZoekNamen=$lid->zoekLeden($sNaam, 'naam', 'alle', 'achternaam', 'leden');
 		if(count($aZoekNamen)==1){
 			$naam=$aZoekNamen[0]['voornaam'].' ';
-			if(trim($aZoekNamen[0]['tussenvoegsel'])!=''){ $naam.=$aZoekNamen[0]['tussenvoegsel']; }
+			if(trim($aZoekNamen[0]['tussenvoegsel'])!=''){ $naam.=$aZoekNamen[0]['tussenvoegsel'].' '; }
 			$naam.=$aZoekNamen[0]['achternaam'];
 			$return[]=array('uid' => $aZoekNamen[0]['uid'], 'naam' => $naam );
 		}elseif(count($aZoekNamen)==0){
 			
 		}else{
 			//geen enkelvoudige match, dan een array teruggeven
-			$return[]['naamOpties']=$aZoekNamen;
+			foreach($aZoekNamen as $aZoekNaam){
+				$naam=$aZoekNaam['voornaam'].' ';
+				if(trim($aZoekNaam['tussenvoegsel'])!=''){ $naam.=$aZoekNaam['tussenvoegsel'].' '; }
+				$naam.=$aZoekNaam['achternaam'];
+				$aNaamOpties[]=array('uid' => $aZoekNaam['uid'], 'naam' => $naam );
+			}
+			$return[]['naamOpties']=$aNaamOpties;
 		}
 	}
 	return $return;

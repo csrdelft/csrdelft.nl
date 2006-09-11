@@ -976,6 +976,23 @@ class Forum {
 			return false;
 		}
 	}
+	function formatDatum($datetime){
+		$nu=time();
+		$moment=strtotime($datetime);
+		$verschil=$nu-$moment;
+		if($verschil<=60*60){
+			$return='<em>'.floor($verschil/60).' minuten</em> geleden';
+		}elseif($verschil<=(60*60*4)){
+			$return='<em>'.floor($verschil/(60*60)).' uur</em> geleden';
+		}elseif(date('Y-m-d')==date('Y-m-d', $moment)){
+			$return='Vandaag om '.date("G:i", $moment);
+		}elseif(date('Y-m-d', $moment)==date('Y-m-d', strtotime('1 day ago'))){
+			$return='Gisteren om '.date("G:i", $moment);
+		}else{
+			$return= date("G:i j-n-Y", $moment);
+		}
+		return $return;
+	}
 	function getParseTime(){
 		list($usec, $sec) = explode(" ",microtime()); 
 		return ((float)$usec + (float)$sec)-$this->_parseStart;
