@@ -879,7 +879,7 @@ class Lid {
 			$ldap = new LDAP();
 			
 			# bestaat deze uid in ldap? dan verwijderen
-			if ($ldap->isLid($entry['uid'])) $ldap->removeLid($entry['uid'], $entry);
+			if ($ldap->isLid($this->_tmpprofile['uid'])) $ldap->removeLid($this->_tmpprofile['uid']);
 			
 			# verbinding sluiten
 			$ldap->disconnect();
