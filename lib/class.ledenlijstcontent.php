@@ -113,9 +113,9 @@ EOT
 		# in de code als het aantal ooit nog veranderd ipv het dynamisch te gaan maken ofzo
 		$zoek_in_moten = array('alle','1','2','3','4');
 		foreach ($zoek_in_moten as $veld) {
-			print("<option value=\"{$veld}\"");
-			if ($this->_form['moot'] == $veld) print(" selected");
-			print(">{$veld}</option>\n");
+			echo '<option value="'.$veld.'"';
+			if ($this->_form['moot'] == $veld) echo ' selected';
+			echo '>'.$veld.'</option>';
 		}
 		
 		# als ingelogde persoon leesrechten heeft op leden + oudleden maken we een extra
@@ -143,7 +143,7 @@ EOT
 			}
 		}		
 		
-		print("</select>\n, sorteer op:\n<select name=\"sort\" class=\"tekst\">");
+		echo '</select>, sorteer op:<select name="sort" class="tekst">';
 		
 		# de velden waarop de uitvoer geselecteerd kan worden
 		$zoek_sort = array('uid','voornaam','achternaam','email','adres','telefoon','mobiel');
@@ -161,7 +161,7 @@ EOT
 
 <br /><br />
 Laat de volgende kolommen zien:<br />
-<table width="100%" border="0" cellspacing="0" cellpadding="0" marginheight="0" marginwidth="0">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
 
 <tr>
 EOT
@@ -177,45 +177,46 @@ EOT
 		$i = 0;
 		foreach ($laat_zien as $veld) {
 			# bovenste veld
-			if ($i%2 == 0) print("<td valign=\"top\">\n");
+			if ($i%2 == 0) print('<td valign="top">');
 			if ($veld !== false) {
 				printf('<input type="checkbox" name="kolom[]" value="%s"', $veld);
 				if (in_array($veld, $this->_form['kolom'])) print(" checked");
-				print(">{$kolomtitel[$veld]}\n");
-				if ($i%2 == 0) print("<br />");
+				echo '>'.$kolomtitel[$veld];
+				if ($i%2 == 0) echo '<br />';
 				print("\n");
 			}
-			if ($i%2 == 1) print("</td>\n");
+			if ($i%2 == 1) echo '</td>';
 			$i++;
 		}
 
 		# afsluiten form
-		print(<<<EOT
-</tr>
-</table>
-</form>
-EOT
-		);
+		echo '</tr></table></form>';
 		
 		if (count($this->_result) > 0) {
-			print(<<<EOT
-<table width="100%" border="0" cellspacing="0" cellpadding="0" marginheight="0" marginwidth="0">
-<tr><td class="kopje2" valign="top">Naam</td>
-EOT
-			);
+			//zoekresultatentabel met eerst de kopjes		
+			echo '<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr>';
+			if($this->_lid->hasPermission('P_LEDEN_MOD')){ echo '<td>&nbsp;</td>'; }
+			echo '<td class="kopje2" valign="top">Naam</td>';
 			foreach ($this->_form['kolom'] as $kolom){
-				echo "<td class=\"kopje2\" valign=\"top\">{$kolomtitel[$kolom]}</td>";
+				echo '<td class="kopje2" valign="top">'.$kolomtitel[$kolom].'</td>';
 			}
 			echo '</tr>';
-
+			//en de resultaten...
 			foreach ($this->_result as $lid) {
+				$uid=htmlspecialchars($lid['uid']);
+				echo '<tr>';
+				
+				if($this->_lid->hasPermission('P_LEDEN_MOD')){
+					echo '<td valign="top"><a href="/leden/profiel.php?uid='.$uid.'&amp;a=edit">[b]</a>&nbsp;';
+				}
 				//naam als link naar profiel weergeven.
-				echo '<tr><td valign="top"><a href="/leden/profiel/'.htmlspecialchars($lid['uid']).'">';
-				echo mb_htmlentities(str_replace('  ', ' ',implode(' ',array($lid['voornaam'],$lid['tussenvoegsel'],$lid['achternaam'])))).'</a></td>';
+				echo '<td valign="top"><a href="/leden/profiel/'.$uid.'">';
+				echo mb_htmlentities(naam($lid['voornaam'], $lid['achternaam'], $lid['tussenvoegsel'])).'</a></td>';
+				//de rest van de kolommen.
 				foreach ($this->_form['kolom'] as $kolom) {
 					echo '<td valign="top">';
 					if($kolom == 'adres'){ 
-						echo mb_htmlentities(str_replace('  ', ' ',implode(' ',array($lid['adres'],$lid['postcode'],$lid['woonplaats']))));
+						echo mb_htmlentities($lid['adres'].' '.$lid['postcode'].' '.$lid['woonplaats']);
 					}else{
 						echo mb_htmlentities($lid[$kolom]);
 					}
@@ -224,8 +225,10 @@ EOT
 				echo '</tr>';
 			}//einde foreach lid
 			echo'</table>';
-		}//einde if isset post
-		echo '<br clear="all">';
+		}else{
+			if(trim($form_wat)!='') echo '<br />Uw zoekterm heeft niets gevonden. Probeert u het nog eens.';
+		}//einde if count($this->_result)
+		echo '<br />';
 	}//einde functie view
 }//einde classe LedenLijstContent
 

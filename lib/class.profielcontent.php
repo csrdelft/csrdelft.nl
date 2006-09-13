@@ -48,7 +48,7 @@ class ProfielContent extends SimpleHTML {
 
 				$profhtml = array();
 				foreach($profiel as $key => $value) $profhtml[$key] = mb_htmlentities($value);
-				$profhtml['fullname'] = mb_htmlentities(str_replace('  ', ' ',implode(' ',array($profiel['voornaam'],$profiel['tussenvoegsel'],$profiel['achternaam']))));
+				$profhtml['fullname'] = naam($profiel['voornaam'], $profiel['achternaam'], $profiel['tussenvoegsel']);
 				
 				$profhtml['website_kort'] = $profhtml['website'];
 				if (mb_strlen($profhtml['website_kort']) > 25) {
@@ -63,6 +63,10 @@ class ProfielContent extends SimpleHTML {
 					$foto = '<img src="/leden/pasfotos/'.$profiel['uid'].'.gif" />';
 				}elseif(file_exists( HTDOCS_PATH.'/leden/pasfotos/'.$profiel['uid'].'.jpg')){
 					$foto = '<img src="/leden/pasfotos/'.$profiel['uid'].'.jpg" />';
+				}elseif($profhtml['status']=='S_NOVIET'){
+					$aSjaars=array('pino.png', 'oscar.png', 'elmo.png');
+					$foto = '<img src="/leden/pasfotos/'.$aSjaars[rand(0, count($aSjaars)-1)].'" 
+						alt="Eerstejaars moet gaan slapen, eerstejaars moet naar bed" />';
 				}else{ $foto = 'Geen foto aanwezig. <br />Mail de pubcie om <br />er een toe te voegen.'; }
 				
 				//soccie saldo

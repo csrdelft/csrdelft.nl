@@ -137,10 +137,9 @@ function namen2uid($sNamen, $lid){
 		}else{
 			//geen enkelvoudige match, dan een array teruggeven
 			foreach($aZoekNamen as $aZoekNaam){
-				$naam=$aZoekNaam['voornaam'].' ';
-				if(trim($aZoekNaam['tussenvoegsel'])!=''){ $naam.=$aZoekNaam['tussenvoegsel'].' '; }
-				$naam.=$aZoekNaam['achternaam'];
-				$aNaamOpties[]=array('uid' => $aZoekNaam['uid'], 'naam' => $naam );
+				$aNaamOpties[]=array(
+					'uid' => $aZoekNaam['uid'], 
+					'naam' => naam($aZoekNaam['voornaam'], $aZoekNaam['achternaam'], $aZoekNaam['tussenvoegsel']) );
 			}
 			$return[]['naamOpties']=$aNaamOpties;
 		}
