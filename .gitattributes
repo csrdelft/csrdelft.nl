@@ -129,6 +129,7 @@ htdocs/oudleden/index.php -text
 htdocs/oudleden/lijst.php -text
 htdocs/robots.txt -text
 htdocs/tools/.htaccess -text
+htdocs/tools/TESTDOC/documenten.php -text
 htdocs/tools/eetplan.php -text
 htdocs/tools/eetplan_h15_s41_a8_m3_r1.htm -text
 htdocs/tools/index.php -text
