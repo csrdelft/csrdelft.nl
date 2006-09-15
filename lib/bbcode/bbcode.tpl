@@ -17,7 +17,7 @@
 	<tr>
 	  <td class="quote"><!-- END quote_username_open -->
 <!-- BEGIN quote_open -->
-<table width="90%" style="padding: 2px 2px px 10px; " border="0" >
+<table width="90%" style="padding: 2px 2px 0px 10px; " border="0" >
 <tr> 
 	  <td><span class="genmed"><b>Citaat:</b></span></td>
 	</tr>

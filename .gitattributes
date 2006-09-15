@@ -121,6 +121,7 @@ htdocs/leden/maaltijdlijst.php -text
 htdocs/leden/moten.php -text
 htdocs/leden/pasfotos -text
 htdocs/leden/profiel.php -text
+htdocs/leden/sjaarsacties.php -text
 htdocs/leden/verjaardagen.php -text
 htdocs/login.php -text
 htdocs/logout.php -text
@@ -180,6 +181,8 @@ lib/class.page.php -text
 lib/class.pollcontent.php -text
 lib/class.profielcontent.php -text
 lib/class.simplehtml.php -text
+lib/class.sjaarsactie.php -text
+lib/class.sjaarsactiecontent.php -text
 lib/class.state.php -text
 lib/class.verjaardagcontent.php -text
 lib/class.woonoord.php -text

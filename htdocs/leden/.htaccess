@@ -3,6 +3,8 @@ RewriteRule ^profiel/(.*) profiel.php?uid=$1
 
 #RewriteRule ^documenten/(.*) documenten.php?dl=$1
 
+RewriteRule ^sjaarsacties/?$ sjaarsacties.php
+
 RewriteRule ^eetplan/$ eetplan.php
 RewriteRule ^eetplan/sjaars/(.*) eetplan.php?pheutID=$1
 RewriteRule ^eetplan/huis/(.*) eetplan.php?huisID=$1

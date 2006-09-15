@@ -305,7 +305,7 @@ EOT
 				}
 
 				$form[1][] = array('ztekst',"&nbsp;","<b>Inloggegevens</b>");
-				$form[1][] = array('ztekst',"&nbsp;","Deze bijnaam kunt ook gebruiken voor het inloggen:");
+				$form[1][] = array('ztekst',"&nbsp;","Deze bijnaam kunt u ook gebruiken voor het inloggen:");
 				$form[1]['nickname'] = array('input',"Bijnaam:");
 				$form[1][] = array('ztekst',"&nbsp;","Wachtwoord wijzigen (optioneel):");
 				$form[1]['oldpass'] = array('password',"Oude wachtwoord:");

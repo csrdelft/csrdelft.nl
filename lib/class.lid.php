@@ -910,17 +910,26 @@ class Lid {
 	function getCivitasName($uid = ''){
 		$sCivitasNaam='';
 		if ($uid == '' or $uid == $this->_profile['uid']) {
-			$sCivitasNaam = ($this->_profile['geslacht']=='v') ? 'Ama. ' : 'Am. ';
-			if ($this->_profile['tussenvoegsel'] != '') $sCivitasNaam.=$this->_profile['tussenvoegsel'].' ';
-			$sCivitasNaam.=$this->_profile['achternaam'];
+			if($this->_profile['status']=='S_NOVIET'){
+				$sCivitasNaam='noviet '.$this->_profile['voornaam'];
+			}else{
+				$sCivitasNaam = ($this->_profile['geslacht']=='v') ? 'Ama. ' : 'Am. ';
+				if ($this->_profile['tussenvoegsel'] != '') $sCivitasNaam.=$this->_profile['tussenvoegsel'].' ';
+				$sCivitasNaam.=$this->_profile['achternaam'];
+				if ($this->_profile['postfix'] != '') $sCivitasNaam.=' '.$this->_profile['postfix'];
+			}
 		} else {
-			$result = $this->_db->select("SELECT voornaam, tussenvoegsel, achternaam, postfix, geslacht FROM lid WHERE uid='".$uid."' LIMIT 1;");
+			$result = $this->_db->select("SELECT voornaam, tussenvoegsel, achternaam, postfix, geslacht, status FROM lid WHERE uid='".$uid."' LIMIT 1;");
 			if ($result !== false and $this->_db->numRows($result) > 0) {
 				$record = $this->_db->next($result);
-				$sCivitasNaam = ($record['geslacht']=='v') ? 'Ama. ' : 'Am. ';
-				if ($record['tussenvoegsel'] != '') $sCivitasNaam.=$record['tussenvoegsel'].' ';
-				$sCivitasNaam.=$record['achternaam'];				
-				if ($record['postfix'] != '') $sCivitasNaam.=' '.$record['postfix'];
+				if($record['status']=='S_NOVIET'){
+					$sCivitasNaam='noviet '.$record['voornaam'];
+				}else{
+					$sCivitasNaam = ($record['geslacht']=='v') ? 'Ama. ' : 'Am. ';
+					if ($record['tussenvoegsel'] != '') $sCivitasNaam.=$record['tussenvoegsel'].' ';
+					$sCivitasNaam.=$record['achternaam'];				
+					if ($record['postfix'] != '') $sCivitasNaam.=' '.$record['postfix'];
+				}
 			} else $sCivitasNaam = 'Niet bekend';
 		}
 		
