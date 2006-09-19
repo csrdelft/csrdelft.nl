@@ -154,32 +154,28 @@ class ForumPoll {
 		$rHeeftPoll=$this->_db->query($sHeeftPoll);
 		if($this->_db->numRows($rHeeftPoll)==1){
 			$aHeeftPoll=$this->_db->next($rHeeftPoll);
-			if($aHeeftPoll['soort']=='T_POLL'){
-				return true;
-			}else{
-				return false;
-			}
+			return $aHeeftPoll['soort']=='T_POLL';
 		}else{
 			return false;
 		}
 	}
 	//controleer of gebruiker al een stem heeft uitgebracht.
-	function uidMagStemmen($iTopicID){
-		$iTopicID=(int)$iTopicID;
-		$sMagStemmen="
-			SELECT
-				uid
-			FROM
-				forum_poll_stemmen
-			WHERE 
-				topicID=".$iTopicID." AND
-				uid='".$this->_lid->getUid()."'
-			LIMIT 1;";
-		$rMagStemmen=$this->_db->query($sMagStemmen);
-		if($this->_db->numRows($rMagStemmen)==1){
+	function uidMagStemmen($iTopicID, $rechten_post=''){
+		if($rechten_post!='' AND !$this->_lid->hasPermission($rechten_post)){
 			return false;
 		}else{
-			return true;
+			$iTopicID=(int)$iTopicID;
+			$sMagStemmen="
+				SELECT
+					uid
+				FROM
+					forum_poll_stemmen
+				WHERE 
+					topicID=".$iTopicID." AND
+					uid='".$this->_lid->getUid()."'
+				LIMIT 1;";
+			$rMagStemmen=$this->_db->query($sMagStemmen);
+			return $this->_db->numRows($rMagStemmen)!=1 AND $this->_lid->hasPermission($rechten_post);
 		}
 	}
 	function addStem($iOptieID){
@@ -217,9 +213,7 @@ class ForumPoll {
 			}
 			if(isset($_POST['opties'])){
 				foreach($_POST['opties'] as $sOptie){
-					if(trim($sOptie)!=''){
-						$aOpties[]=$sOptie;
-					}
+					if(trim($sOptie)!=''){ $aOpties[]=$sOptie; }
 				}
 				if(count($aOpties)<2){
 					$bValid=false;
@@ -265,6 +259,14 @@ class ForumPoll {
 			}
 		}
 		return $bOk;
+	}
+	function peilingVan($uid){
+		//STATISTICUS is het uid van de verenigingsstatisticus en staat in include.config.php
+		if($uid==STATISTICUS){
+			return 'am. Verenigings statisticus';
+		}else{
+			return $this->_forum->getForumNaam($aBerichten[0]['startUID']);
+		}
 	}
 }//einde classe
 ?>

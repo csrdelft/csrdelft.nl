@@ -96,7 +96,7 @@ class EetplanContent extends SimpleHTML {
 	function viewEetplan($aEetplan){
 		//weergeven
 		echo '<h1>Eetplan overzicht</h1>
-		Van eerstejaers die niet komen opdagen op het eetplan wordt verwacht dat zij minstens &eacute;&eacute;n keer komen koken op het huis waarbij zij gefaeld hebben.<br /><br />
+		<strong style="color: red; font-size: 14px; font-weight: bolder;">LET OP: Van eerstejaers die niet komen opdagen op het eetplan wordt verwacht dat zij minstens &eacute;&eacute;n keer komen koken op het huis waarbij zij gefaeld hebben.</strong><br /><br />
 			<table class="hoktable" >
 			<tr><td class="hoktitel" style="width: 200px;">Pheut/Avond</td>';
 		//kopjes voor tabel

@@ -252,23 +252,10 @@ class ForumContent extends SimpleHTML {
 					$iPollStemmen=$poll->getPollStemmen($iTopic);
 					$iPollOpties=count($aPollOpties);
 					//er mag maar één keer per *ingelloged lid* per poll gestemd worden, en alleen als het topic open is.
-					if(!$this->_forum->_lid->hasPermission($rechten_post)){
-						$bMagStemmen=false;
-					}else{
-						if($poll->uidMagStemmen($iTopic) AND ($aBerichten[0]['open']==1)){
-							$bMagStemmen=true;
-						}else{
-							$bMagStemmen=false;
-						}
-					}
-					//STATISTICUS is het uid van de verenigingsstatisticus en staat in include.config.php
-					if($aBerichten[0]['startUID']==STATISTICUS){
-						$sPolleigenaar='am. Verenigings statisticus';
-					}else{
-						$sPolleigenaar=mb_htmlentities($this->_forum->getForumNaam($aBerichten[0]['startUID']));
-					}
+					$bMagStemmen=$poll->uidMagStemmen($iTopic, $rechten_post) AND ($aBerichten[0]['open']==1);
+					$sPolleigenaar=$poll->peilingVan($aBerichten[0]['startUID']);
 					//html dan maer
-					echo '<tr><td class="forumauteur">Een peiling van '.$sPolleigenaar.':<br />';
+					echo '<tr><td class="forumauteur">Een peiling van '.mb_htmlentities($sPolleigenaar).':<br />';
 					echo '<br /><br />Er is '.$iPollStemmen.' keer gestemd.</td><td class="forumbericht0">';
 					echo '<form action="/forum/stem/'.$iTopic.'" method="post" >';
 					echo '<table id="pollTabel">';

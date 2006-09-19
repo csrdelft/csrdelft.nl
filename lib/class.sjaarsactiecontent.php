@@ -63,11 +63,13 @@ class SjaarsactieContent extends SimpleHTML {
 				echo nl2br(mb_htmlentities($aSjaarsactie['beschrijving']));
 				echo '</td><td style="vertical-align: top; border-left: 1px solid black; padding: 0 0 0 10px;">';
 				$aSjaarsjes=$this->_sjaarsactie->getAanmeldingen($aSjaarsactie['ID']);
+				$bAlAangemeld=false;
 				if(is_array($aSjaarsjes) AND count($aSjaarsjes)!=0){
 					$iAantal=count($aSjaarsjes);
-
 					foreach($aSjaarsjes as $aSjaars){
 						echo '<a href="/leden/profiel/'.$aSjaars['uid'].'">'.mb_htmlentities($aSjaars['naam']).'</a><br />';
+						//controleren of de huidige sjaard hier al is aangemeld. dan bAlAangemeld zetten.
+						if($aSjaars['uid']==$this->_sjaarsactie->_lid->getUid()){ $bAlAangemeld=true; }
 					}
 					$limiet=$aSjaarsactie['limiet']-$iAantal;
 				}else{
@@ -76,8 +78,9 @@ class SjaarsactieContent extends SimpleHTML {
 				}
 				if($limiet>=1){
 					echo 'nog '.$limiet.' plaatsen vrij.';
-					if($this->_sjaarsactie->isSjaars()){	
-						echo '<br /><br /><a href="/leden/sjaarsacties.php?actieID='.$aSjaarsactie['ID'].'&amp;aanmelden">aanmelden</a>';
+					if(!$bAlAangemeld AND $this->_sjaarsactie->isSjaars()){	
+						echo '<br /><br /><a href="/leden/sjaarsacties.php?actieID='.$aSjaarsactie['ID'].'&amp;aanmelden" 
+							onclick="'."return confirm('Weet u zeker dat u wilt aanmelden voor deze sjaarsactie?')".'">aanmelden</a>';
 					}
 				}else{
 					echo 'Deze sjaaractie is vol. U kunt zich niet meer aanmelden.';

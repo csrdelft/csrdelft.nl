@@ -26,21 +26,9 @@ class PollContent extends SimpleHTML {
 		$iTopic=$poll[0]['topicID'];
 		$iPollStemmen=$this->_forumPoll->getPollStemmen($iTopic);
 		//er mag maar één keer per *ingelloged lid* per poll gestemd worden, en alleen als het topic open is.
-		if(!$this->_forumPoll->_forum->_lid->hasPermission('P_FORUM_POST')){
-			$bMagStemmen=false;
-		}else{
-			if($this->_forumPoll->uidMagStemmen($iTopic) AND ($poll[0]['open']==1)){
-				$bMagStemmen=true;
-			}else{
-				$bMagStemmen=false;
-			}
-		}
-		$sPeilingVan='Dit is een peiling van ';
-		if($poll[0]['startUID']==STATISTICUS){
-			$sPeilingVan.='am. Verenigings statisticus';
-		}else{
-			$sPeilingVan.=$this->_forumPoll->_forum->getForumNaam($poll[0]['startUID']);
-		}
+		//er mag maar één keer per *ingelloged lid* per poll gestemd worden, en alleen als het topic open is.
+		$bMagStemmen=$this->_forumPoll->uidMagStemmen($iTopic) AND ($aBerichten[0]['open']==1);
+		$sPeilingVan=mb_htmlentities('Dit is een peiling van '.$this->_forumPoll->peilingVan($poll[0]['startUID']));
 		//html dan maer
 		echo '<form action="/forum/stem/'.$iTopic.'" method="post" >';
 		echo '<table style="width: 100%; margin: 10px 10px 10px 10px; background-color: #f1f1f1;" border="0">';

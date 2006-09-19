@@ -135,6 +135,7 @@ class Sjaarsactie {
 		return $this->_db->query($sNewActie);
 	}
 	function isSjaars(){ return $this->_lid->getStatus()=='S_NOVIET'; }
+	
 	function isNovCie(){
 		//commissieID van de novCie==12
 		$sIsNovCie="
