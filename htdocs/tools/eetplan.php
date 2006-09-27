@@ -3,32 +3,36 @@
 
 # koppel de sjaarsnummers aan de sjaars
 #
-# 0501-0542
-for ($es=1;$es<=25;$es++) $ks[$es] = str_pad($es+500, 4, "0", STR_PAD_LEFT);
-# 0526 bestaat niet
-for ($es=27;$es<=42;$es++) $ks[$es-1] = str_pad($es+500, 4, "0", STR_PAD_LEFT);
+# 0601-0623
+for ($es=1;$es<=23;$es++) {
+	$ks[$es] = str_pad($es+600, 4, "0", STR_PAD_LEFT);
+}
+for ($es=25;$es<=46;$es++) {
+	$ks[$es] = str_pad($es+600, 4, "0", STR_PAD_LEFT);
+}
 
 # koppel de huizennummers aan huizen
-$kh = array(0,3,6,7,10,11,13,1,15,16,17,19,21,2,22,8,18,5);
-
+//$kh = array(0,3,6,7,10,11,13,1,15,16,17,19,21,2,22,8,18,5);
+$kh = array(0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18);
 $khd = array(
-	1 => array ("OD251/11","Oude Delft 251/11","2134612"),
+	1 => array ("'t Ailand", 'Derde Werelddreef 75', ''),
 	2 => array ("De Tolhuis-Alliantie","Westplantsoen 16/14a","2197748/2197749"),
 	3 => array ("De Ambassade","Papsouwselaan 418","2614111"),
+	4 => array ('Bras 98', 'Brasserkade 98',''),
 	5 => array ("Caesarea","Cesar Franckstraat 176","2576721"),
-	6 => array ("BalPol","Balthasar van de Polweg 334/386/412","2626718/2628648/2146651"),
-	7 => array ("Hotel Vlaams","Vlamingstraat 26b","2135340"),
-	8 => array ("'t Internaat","Ternatestraat 83","2125825"),
-	10 => array ("De Koornmarkt","Koornmarkt 81c","2139141/nog 9"),
-	11 => array ("Lachai-Roi","Isaak Hoornbeekstraat 38","-"),
-	13 => array ("De Molshoop","Molstraat 35a","2158504"),
-	15 => array ("Perron 0","Van Leeuwenhoeksingel 21a","2121897/2190511"),
-	16 => array ("Sonnenvanck","Oostsingel 176","2144093"),
-	17 => array ("Huize Van Speijk","Trompetstraat 19","2146067"),
-	18 => array ("Spoorbijster","Van Leeuwenhoeksingel 14","2124058"),
-	19 => array ("Villa Delphia/Lindenburgh","Arnoldstraat 20/VLVS 3","2137153/2141750"),
-	21 => array ("De Kleipot","Cornelis Trompstraat 34","2628231"),
-	22 => array ("St. Joris","Brasserskade 67","-")
+	6 => array ("De Gouden Leeuw","Cornelis Trompstraat 34","2628231"),
+	7 => array ('Huize den Hertog', 'Ternatestraat 5', ''),
+	8 => array ("Hotel Vlaams Gaius","Vlamingstraat 26b","2135340"),
+	9 => array ("'t Internaat","Ternatestraat 83","2125825"),
+	10=> array ("St. Joris","Brasserskade 67","-"),
+	11=> array ("De Koornmarkt","Koornmarkt 81c","2139141/nog 9"),
+	12=> array ("Lachai-Roi","Isaak Hoornbeekstraat 38","-"),
+	13=> array ("De Molshoop","Molstraat 35a","2158504"),
+	14=> array ("OD11","Oude Delft 11",""),
+	15=> array ("Perron 0","Van Leeuwenhoeksingel 21a","2121897/2190511"),
+	16=> array ("Sonnenvanck","Oostsingel 176","2144093"),
+	17=> array ("Huize Van Speijk","Trompetstraat 19","2146067"),
+	18=> array ("Spoorbijster","Van Leeuwenhoeksingel 14","2124058")
 );
 
 # namen opzoeken in de database
@@ -41,8 +45,8 @@ ini_set('error_reporting', E_ALL & ~E_NOTICE);
 #	exit;
 #}
 
-$s = 41; # $s = (int)$_GET['s']; # aantal sjaars
-$h = 17; # $h = (int)$_GET['h']; # aantal huizen
+$s = 46; # $s = (int)$_GET['s']; # aantal sjaars
+$h = 18; # $h = (int)$_GET['h']; # aantal huizen
 $a = 8;  # $a = (int)$_GET['a']; # aantal avonden
 #$m = (int)floor($s/$h);
 #$m = (int)$_GET['m']; # max aantal sjaars per huis per avond
@@ -59,9 +63,16 @@ $visited_sh = array(); # $visited_sh[sjaars][huis] = true
 $seen = array(); # $seen[sjaars][] = sjaars
 
 # sjaars die al in huizen wonen alvast rekening mee houden
-$visited_sh[2][5] = true;   # 0502 Bachet lachairoi
-$visited_sh[21][11] = true; # 0521 Van Leeuwen VLVS
-$visited_sh[3][12] = true;  # 0503 Bas v Berkel Kleipot
+//$visited_sh[2][5] = true;   # 0502 Bachet lachairoi
+//$visited_sh[21][11] = true; # 0521 Van Leeuwen VLVS
+//$visited_sh[3][12] = true;  # 0503 Bas v Berkel Kleipot
+
+$visited_sh[17][16] = true; # 0617 Hemmo Brink Sonnenvanck
+$visited_sh[1][2] = true; # 0601 Wim Hendriksen, Alliantie
+$visited_sh[20][2] = true; # 0620 Marco van 't Wout, Alliantie
+$visited_sh[29][1] = true;  # 0639 Niek Hage, 't Ailand
+$visited_sh[12][3] = true; # 0612 Gerdien duijst, Ambassade
+
 
 # het uiteindelijke rooster
 # $sah[sjaars][avond] = huis.. etc...
@@ -75,7 +86,8 @@ else $ih = rand(1,$h);
 # de avonden langslopen
 for ($ia = 1; $ia <= $a; $ia++) {
 	# de sjaars langslopen
-	for ($is = 1; $is <= $s; $is++) {
+	#for ($is = 1; $is <= $s; $is++) {
+	foreach ($ks as $is => $foo) {
 		# wat foutmeldingen voorkomen
 		if (!isset($ahs[$ia][$ih])) $ahs[$ia][$ih] = array();
 		if (!isset($seen[$is])) $seen[$is] = array();
@@ -129,7 +141,8 @@ echo "        ";
 for ($ia = 1; $ia <= $a; $ia++) echo str_pad('['.$ia.']', 10);
 echo "\n";
 
-for ($is = 1; $is <= $s; $is++) {
+#for ($is = 1; $is <= $s; $is++) {
+foreach ($ks as $is => $foo) {
 	echo str_pad($ks[$is],8);
 	# nu alle avonden
 	for ($ia = 1; $ia <= $a; $ia++) {
@@ -148,7 +161,8 @@ for ($ih = 1; $ih <= $h; $ih++) {
 }
 
 echo "\n<b>Sjaars die elkaar zien:</b>\n\n";
-for ($is = 1; $is <= $s; $is++) {
+#for ($is = 1; $is <= $s; $is++) {
+foreach ($ks as $is => $foo) {
 	echo str_pad('S-'.$ks[$is].': ', 10);
 	sort($seen[$is]);
 	foreach($seen[$is] as $sjaars) {
@@ -190,7 +204,9 @@ En vanwege het ontbreken van bugs, hier nog wat 'unexpected $': $$$$&euro;&euro;
 echo "<b># Eetplanrooster SQL:</b>\n\n";
 for ($is = 1; $is <= $s; $is++) {
 	for ($ia = 1; $ia <= $a; $ia++) {
-		echo "INSERT INTO `eetplan` (`avond`,`uid`,`huis`) VALUES ({$ia},'{$ks[$is]}',{$sah[$is][$ia]});\n";
+		if(isset($ks[$is])){
+			echo "INSERT INTO `eetplan` (`avond`,`uid`,`huis`) VALUES ({$ia},'{$ks[$is]}',{$sah[$is][$ia]});\n";
+		}
 	}
 	echo "\n";
 }

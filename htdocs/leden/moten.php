@@ -38,8 +38,19 @@ function main() {
 	# Datum
 	require_once('class.includer.php');
 	$datum = new Includer('', 'datum.php');
+	
+	#moten toevoegen
+	if($lid->hasPermission('P_LEDEN_MOD') AND isset($_POST['moot']) AND isset($_POST['naam']) AND is_array($_POST['naam'])){
+		$iKringGetal=$lid->getMaxKringen($_POST['moot'])+1;
+		foreach($_POST['naam'] as $sKringLid){
+			//echo 'uid: '.$sKringLid.' moot: '.$_POST['moot'].' kring: '.$iKringGetal;
+			$lid->addUid2kring($sKringLid, $iKringGetal, $_POST['moot']);
+		}
+	header('location: http://csrdelft.nl/leden/moten.php');
+	}
 
 	if ($lid->hasPermission('P_LEDEN_READ')) {
+		
 		# Het middenstuk
 		require_once('class.motencontent.php');
 		$midden = new MotenContent($lid);

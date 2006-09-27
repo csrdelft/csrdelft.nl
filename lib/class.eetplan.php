@@ -31,11 +31,17 @@ class Eetplan {
 		//huizen laden
 		$rEetplan=$this->_db->select("
 			SELECT
-  			uid, huis, avond
+  			eetplan.uid AS uid,
+  			lid.voornaam AS voornaam,
+  			lid.achternaam AS achternaam,
+  			lid.tussenvoegsel AS tussenvoegsel,
+  			eetplan.huis AS huis,
+  			eetplan.avond AS avond
 			FROM
 				eetplan
+			INNER JOIN lid ON(eetplan.uid=lid.uid)
 			ORDER BY
- 				uid, avond;"
+ 				lid.achternaam, avond;"
 			);
 		$aEetplan=array();
 		$aEetplanRegel=array();
@@ -45,7 +51,9 @@ class Eetplan {
 				$aEetplan[]=$aEetplanRegel;
 				$aEetplanRegel=array();
 				//eerste element van de regel is het uid
-				$aEetplanRegel[]=$aEetplanData['uid'];
+				$aEetplanRegel[]=array(
+					'uid' => $aEetplanData['uid'],
+					'naam' => naam($aEetplanData['voornaam'], $aEetplanData['achternaam'], $aEetplanData['tussenvoegsel']));
 			}
 			$aEetplanRegel[]=$aEetplanData['huis'];
 		}

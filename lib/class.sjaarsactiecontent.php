@@ -77,13 +77,13 @@ class SjaarsactieContent extends SimpleHTML {
 					$limiet=$aSjaarsactie['limiet'];
 				}
 				if($limiet>=1){
-					echo 'nog '.$limiet.' plaatsen vrij.';
+					echo 'nog '.$limiet.' plaat'.($limiet==1 ? 's' : 'sen').' vrij.';
 					if(!$bAlAangemeld AND $this->_sjaarsactie->isSjaars()){	
 						echo '<br /><br /><a href="/leden/sjaarsacties.php?actieID='.$aSjaarsactie['ID'].'&amp;aanmelden" 
 							onclick="'."return confirm('Weet u zeker dat u wilt aanmelden voor deze sjaarsactie?')".'">aanmelden</a>';
 					}
 				}else{
-					echo 'Deze sjaaractie is vol. U kunt zich niet meer aanmelden.';
+					echo 'Deze sjaaractie is <span style="color: red;">vol</span>. U kunt zich niet meer aanmelden.';
 				}
 				echo '</td></tr>';
 			}

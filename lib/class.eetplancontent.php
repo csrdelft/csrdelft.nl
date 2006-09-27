@@ -106,8 +106,7 @@ class EetplanContent extends SimpleHTML {
 		echo '</tr>';
 		
 		foreach($aEetplan as $aEetplanVoorPheut){
-			$aPheutNaam=$this->_eetplan->getPheutNaam($aEetplanVoorPheut[0]);
-			echo '<tr><td><a href="/leden/eetplan/sjaars/'.$aEetplanVoorPheut[0].'">'.mb_htmlentities($aPheutNaam['naam']).'</a></td>';
+			echo '<tr><td><a href="/leden/eetplan/sjaars/'.$aEetplanVoorPheut[0]['uid'].'">'.mb_htmlentities($aEetplanVoorPheut[0]['naam']).'</a></td>';
 			for($iTeller=1;$iTeller<=8;$iTeller++){
 				echo '<td><a href="/leden/eetplan/huis/'.$aEetplanVoorPheut[$iTeller].'">'.mb_htmlentities($aEetplanVoorPheut[$iTeller]).'</a></td>';
 			}

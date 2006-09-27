@@ -58,7 +58,9 @@ function main() {
 				count($_POST['naam'])==count($_POST['functie']) ){
 				//nieuwe commissieleden erin stoppen.
 				for($iTeller=0; $iTeller<count($_POST['naam']); $iTeller++){
-					$commissie->addCieLid($iCieID, $_POST['naam'][$iTeller], $_POST['functie'][$iTeller]);
+					if(preg_match('/^\w{4}$/', $_POST['naam'][$iTeller])){
+						$commissie->addCieLid($iCieID, $_POST['naam'][$iTeller], $_POST['functie'][$iTeller]);
+					}
 				}
 				header('location: http://csrdelft.nl/informatie/commissie/'.$iCieID);
 				exit;

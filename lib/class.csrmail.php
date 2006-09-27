@@ -27,13 +27,16 @@ class Csrmail {
 	function magToevoegen(){ return $this->_lid->hasPermission('P_MAIL_POST'); }
 	function magBeheren(){ return $this->_lid->hasPermission('P_MAIL_COMPOSE'); }
 	function magVerzenden(){ return $this->_lid->hasPermission('P_MAIL_SEND'); }
+	function getNaam($uid){ return $this->_lid->getCivitasName($uid); }
 	
 	function addBericht( $titel, $categorie, $bericht){
-		$titel=$this->_db->escape(trim($titel));
-		//agenda standaard bovenaan.
-		if(strtolower(trim($titel))=='agenda'){ $volgorde=-1000; }else{ $volgorde=0; }
+		$titel=ucfirst($this->_db->escape(trim($titel)));
+		$volgorde=0;
+		if(strtolower(trim($titel))=='agenda'){ $volgorde=-1000; }
+		if(preg_match('/kamer/i', $titel)){ $volgorde=99; }
+		if(preg_match('/ampel/i', $titel)){ $volgorde=999; }
 		if(!$this->_isValideCategorie($categorie)){ $categorie='overig'; }
-		$bericht=$this->_db->escape(trim($bericht));
+		$bericht=ucfirst($this->_db->escape(trim($bericht)));
 		$uid=$this->_lid->getUid();
 		$datumTijd=getDateTime();
 		$sBerichtQuery="
@@ -49,10 +52,15 @@ class Csrmail {
 	}
 	function bewerkBericht($iBerichtID, $titel, $categorie, $bericht){
 		$iBerichtID=(int)$iBerichtID;
-		$titel=$this->_db->escape(trim($titel));
+		$titel=ucfirst($this->_db->escape(trim($titel)));
 		if(!$this->_isValideCategorie($categorie)){ $categorie='overig'; }
-		$bericht=$this->_db->escape(trim($bericht));
-		$uid=$this->_lid->getUid();
+		$bericht=ucfirst($this->_db->escape(trim($bericht)));
+		$sVoorwaarde='1';
+		if(!$this->magBeheren()){
+			//enkel de eigen berichten tonen.
+			$uid=$this->_lid->getUid();
+			$sVoorwaarde="uid='".$uid."'";
+		}
 		$datumTijd=getDateTime();
 		$sBerichtQuery="
 			UPDATE
@@ -63,7 +71,7 @@ class Csrmail {
 				bericht='".$bericht."', 
 				datumTijd='".$datumTijd."'
 			WHERE
-				uid='".$uid."'
+				".$sVoorwaarde."
 			AND
 				ID=".$iBerichtID."
 			LIMIT 1;"; 
@@ -97,16 +105,21 @@ class Csrmail {
 		}
 	}
 	function getBerichtenVoorGebruiker(){
-		$uid=$this->_lid->getUid();
+		$sVoorwaarde='1';
+		if(!$this->magBeheren()){
+			//enkel de eigen berichten tonen.
+			$uid=$this->_lid->getUid();
+			$sVoorwaarde="uid='".$uid."'";
+		}
 		$sBerichtenQuery="
 			SELECT
-				ID, titel, cat, bericht, datumTijd
+				ID, titel, cat, bericht, datumTijd, uid
 			FROM
 				pubciemailcache
 			WHERE 
-				uid='".$uid."'
+				".$sVoorwaarde."
 			ORDER BY
-				datumTijd;";
+				cat, volgorde, datumTijd;";
 		$rBerichten=$this->_db->query($sBerichtenQuery);
 		if($this->_db->numRows($rBerichten)==0){
 			$aBerichten=false;
@@ -119,14 +132,19 @@ class Csrmail {
 	}
 	function getBerichtVoorGebruiker($iBerichtID){
 		$iBerichtID=(int)$iBerichtID;
-		$uid=$this->_lid->getUid();
+		$sVoorwaarde='1';
+		if(!$this->magBeheren()){
+			//enkel de eigen berichten ophalen voor niet-admins.
+			$uid=$this->_lid->getUid();
+			$sVoorwaarde="uid='".$uid."'";
+		}
 		$sBerichtenQuery="
 			SELECT
 				ID, titel, cat, bericht, datumTijd
 			FROM
 				pubciemailcache
 			WHERE 
-				uid='".$uid."'
+				".$sVoorwaarde."
 			AND
 				ID=".$iBerichtID."
 			ORDER BY
@@ -137,16 +155,20 @@ class Csrmail {
 		}else{
 			return false;
 		}
-		return $aBerichten;
 	}
 	function verwijderBerichtVoorGebruiker($iBerichtID){
 		$iBerichtID=(int)$iBerichtID;
-		$uid=$this->_lid->getUid();
+		$sVoorwaarde='1';
+		if(!$this->magBeheren()){
+			//enkel de eigen berichten tonen.
+			$uid=$this->_lid->getUid();
+			$sVoorwaarde="uid='".$uid."'";
+		}
 		$sBerichtVerwijderen="
 			DELETE FROM
 				pubciemailcache
 			WHERE
-				uid='".$uid."'
+				".$sVoorwaarde."
 			AND
 				ID='".$iBerichtID."'
 			LIMIT 1;";
@@ -156,7 +178,7 @@ class Csrmail {
 	#############################################################
 	###	functies voor compose gedeelte, voor de pubcie
 	#############################################################
-	function getBerichten(){
+	function getBerichten($iMailID=0){
 		$sBerichtenQuery="
 			SELECT
 				ID, titel, cat, bericht, datumTijd, uid, volgorde

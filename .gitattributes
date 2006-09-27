@@ -152,6 +152,7 @@ lib/class.column.php -text
 lib/class.commissie.php -text
 lib/class.commissiecontent.php -text
 lib/class.csrmail.php -text
+lib/class.csrmailarchiefcontent.php -text
 lib/class.csrmailcomposecontent.php -text
 lib/class.csrmailcontent.php -text
 lib/class.dbmenu.php -text

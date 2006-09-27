@@ -60,8 +60,7 @@ class ForumContent extends SimpleHTML {
 						echo $this->_forum->formatDatum($aCategorie['lastpost']);
 						echo '<br /><a href="/forum/onderwerp/'.$aCategorie['lasttopic'].'#'.$aCategorie['lastpostID'].'">reactie</a> door ';
 						if(trim($aCategorie['lastuser'])!=''){
-							$sUsername=$this->_forum->getForumNaam($aCategorie['lastuser']);
-							echo '<a href="/leden/profiel/'.$aCategorie['lastuser'].'">'.mb_htmlentities($sUsername).'</a>';
+							echo $this->_getNaamLink($aCategorie['lastuser']);
 						}else{ echo 'onbekend';	}
 					//er zijn nog geen berichten in deze categorie dus er is ook nog geen laatste bericht
 					}
@@ -123,8 +122,7 @@ class ForumContent extends SimpleHTML {
 					$sDraadstarter=mb_htmlentities($this->_forum->getForumNaam($aTopic['uid']));
 					$sReactieMoment=$this->_forum->formatDatum($aTopic['lastpost']);
 					if(trim($aTopic['lastuser'])!=''){
-						$sLaatsteposter='<a href="/leden/profiel/'.$aTopic['lastuser'].'">'.
-							mb_htmlentities($this->_forum->getForumNaam($aTopic['lastuser'])).'</a>';
+						$sLaatsteposter=$this->_getNaamLink($aTopic['lastuser']);
 					}else{ $sLaatsteposter='onbekend'; }
 					#####################################
 					## de boel weergeven
@@ -132,7 +130,7 @@ class ForumContent extends SimpleHTML {
 					echo "\r\n".'<tr>';
 					echo '<td class="forumtitel">'.$sOnderwerp.'</td>';
 					echo '<td class="forumreacties">'.$sReacties.'</td>';
-					echo '<td class="forumreacties"><a href="/leden/profiel/'.$aTopic['uid'].'">'.$sDraadstarter.'</a></td>';
+					echo '<td class="forumreacties">'.$this->_getNaamLink($aTopic['uid']).'</td>';
 					echo '<td class="forumreactiemoment">'.$sReactieMoment;
 					echo '<br /><a href="/forum/onderwerp/'.$aTopic['id'].'#'.$aTopic['lastpostID'].'">reactie</a> door ';
 					echo $sLaatsteposter;
@@ -172,7 +170,8 @@ class ForumContent extends SimpleHTML {
 			if($this->_forum->_lid->hasPermission($aTopic['rechten_post'])){
 				echo '<tr><td colspan="4" class="forumtekst"><form method="post" action="/forum/onderwerp-toevoegen/'.$iCat.'"><p>';
 				if($this->_forum->_lid->hasPermission('P_LOGGED_IN')){
-					echo 'Hier kunt u een onderwerp toevoegen in deze categorie van het forum.<br /><br />';
+					echo 'Hier kunt u een onderwerp toevoegen in deze categorie van het forum. Kijkt u vooraf goed of het onderwerp waarover
+						 u post hier wel thuishoort.<br /><br />';
 				}else{
 					//melding voor niet ingelogde gebruikers die toch willen posten. Ze wordeb 'gemodereerd', dat wil zeggen, de topics zijn
 					//nog niet direct zichtbaar.
@@ -300,7 +299,7 @@ class ForumContent extends SimpleHTML {
 			$iWissel=1;
 			foreach($aBerichten as $aBericht){
 				echo '<tr><td class="forumauteur">';
-				echo '<a href="/leden/profiel/'.$aBericht['uid'].'">'.mb_htmlentities($this->_forum->getForumNaam($aBericht['uid'], $aBericht)).'</a> schreef ';
+				echo $this->_getNaamLink($aBericht['uid'], $aBericht).' schreef ';
 				//anker maken met post-ID
 				echo '<a class="forumpostlink" name="'.$aBericht['postID'].'"></a>';
 				echo $this->_forum->formatDatum($aBericht['datum']);
@@ -589,8 +588,7 @@ class ForumContent extends SimpleHTML {
 					echo $aZoekResultaat['titel'].'</a>';
 					if($aZoekResultaat['aantal']!=1){ echo ' <em>('.$aZoekResultaat['aantal'].' berichten in dit onderwerp)</em>'; }
 					echo '<br />'.$sPostFragment.'</td>';
-					echo '<td class="forumtitel">
-						<a href="/leden/profiel/'.$aZoekResultaat['uid'].'">'.$this->_forum->getForumNaam($aZoekResultaat['uid'],$aZoekResultaat).'</a></td>';
+					echo '<td class="forumtitel">'.$this->_getNaamLink($aZoekResultaat['uid'],$aZoekResultaat).'</td>';
 					echo '<td class="forumtitel">
 						<a href="/forum/categorie/'.$aZoekResultaat['categorie'].'">'.$aZoekResultaat['categorieTitel'].'</a></td>';
 					echo '<td class="forumtitel">
@@ -605,6 +603,15 @@ class ForumContent extends SimpleHTML {
 		$sZoekQuery=htmlspecialchars($sZoekQuery, ENT_QUOTES, 'UTF-8');
 		echo '<form action="/forum/zoeken.php" method="post"><p><input type="text" value="'.$sZoekQuery.'" name="zoeken" />';
 		echo '<input type="submit" value="zoeken" name="verzenden" /></p></form><br />';
+	}
+	function _getNaamLink($uid, $aNaam=false){
+		$return='';
+		if($this->_forum->isIngelogged()){
+			$return.='<a href="/leden/profiel/'.$uid.'">';
+		}
+		$return.=mb_htmlentities($this->_forum->getForumNaam($uid, $aNaam));
+		if($this->_forum->isIngelogged()){ $return.='</a>'; }
+		return $return;
 	}
 	function getError(){
 		if(isset($_SESSION['forum_foutmelding'])){

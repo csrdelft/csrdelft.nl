@@ -991,10 +991,11 @@ class Forum {
 		}elseif(date('Y-m-d', $moment)==date('Y-m-d', strtotime('1 day ago'))){
 			$return='gisteren om '.date("G:i", $moment);
 		}else{
-			$return= date("G:i j-n-Y", $moment);
+			$return='op '. date("G:i j-n-Y", $moment);
 		}
 		return $return;
 	}
+	function isIngelogged(){ return $this->_lid->hasPermission('P_LOGGED_IN'); }
 	function getParseTime(){
 		list($usec, $sec) = explode(" ",microtime()); 
 		return ((float)$usec + (float)$sec)-$this->_parseStart;

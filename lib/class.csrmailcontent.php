@@ -6,11 +6,6 @@
 # -------------------------------------------------------------------
 # class.csrmailcontent.php
 # -------------------------------------------------------------------
-# Verzorgt het opvragen van eetplangegevens
-# -------------------------------------------------------------------
-# Historie:
-# 01-10-2005 Jieter
-# . gemaakt
 #
 
 require_once ('class.mysql.php');
@@ -21,7 +16,7 @@ class Csrmailcontent {
 	
 	var $_edit=0;					//bericht wat bewerkt moet worden.
 	
-	var $_sError=false;					//fouten in formulieren, bijvoorbeeld 'geef een titel mee'
+	var $_sError=false;		//fouten in formulieren, bijvoorbeeld 'geef een titel mee'
 	var $_userMessage=''; //dingen als 'het is gelukt' of 'bericht verwijderd'
 	
 	function Csrmailcontent(&$csrmail){
@@ -100,15 +95,21 @@ class Csrmailcontent {
 	}
 	function _toonBerichten(){
 		$aBerichten=$this->_csrmail->getBerichtenVoorGebruiker();
-		echo '<h3>Overzicht van door u geplaatste berichten:</h3>';
+		echo '<h3>Overzicht van berichten:</h3>';
 		if(is_array($aBerichten)){
 			echo '<dl>';
 			foreach($aBerichten as $aBericht){
-				echo '<dt><u>'.str_replace('csr', 'C.S.R.', $aBericht['cat']).'</u> <strong>'.$aBericht['titel'].'</strong> ';
+				echo '<dt><u>'.str_replace('csr', 'C.S.R.', $aBericht['cat']).'</u> ';
+				if($this->_csrmail->magBeheren()){ 
+					echo ' ('.mb_htmlentities($this->_csrmail->getNaam($aBericht['uid'])).') ';
+				}
+				echo '<strong>'.$aBericht['titel'].'</strong> ';
 				//bewerken en verwijderen linkjes.
 				echo '[ <a href="bewerken/'.$aBericht['ID'].'">bewerken</a> | ';
-				echo '<a href="verwijder/'.$aBericht['ID'].'">verwijderen</a> ]</dt>';
-				echo '<dd>'.$this->_process($aBericht['bericht']).'</dd>';
+				echo '<a href="verwijder/'.$aBericht['ID'].'" onclick="return confirm(\'Weet u zeker dat u dit bericht wilt verwijderen?\')" >verwijderen</a> ]</dt>';
+				if(!$this->_csrmail->magBeheren()){
+					echo '<dd>'.$this->_process($aBericht['bericht']).'</dd>';
+				}
 			}
 		}else{
 			echo 'U heeft nog geen berichten geplaatst in deze pubcie-mail;';
@@ -130,7 +131,46 @@ class Csrmailcontent {
 		$sString=nl2br($sString);
 		return $sString;
 	}
-	
+	function _getBody(){
+		$sTemplate=file_get_contents(LIB_PATH.'/templates/csrmail/'.CSRMAIL_TEMPLATE);
+		$aBerichten=$this->_csrmail->getBerichten();
+		if(is_array($aBerichten)){
+			//lege array's klussen voor als er geen data is voor de categorie
+			$aInhoud['bestuur']=$aInhoud['csr']=$aInhoud['overig']='';
+			$aKopjes['bestuur']=$aKopjes['csr']=$aKopjes['overig']=array('Geen berichten');
+			//kopjes uit de berichten halen
+			$aKopjes=$this->_getKopjes($aBerichten);
+			
+			foreach($aKopjes as $sCategorie => $aKopjesPerCat){
+				foreach($aKopjesPerCat as $aKopje){
+					$aInhoud[$sCategorie].='<li><a href="#'.$aKopje['ID'].'" style="text-decoration: none;">
+						'.mb_htmlentities($aKopje['titel']).'</a></li>'."\r\n";
+				}
+			}
+			reset($aBerichten);
+			$sBerichten='';
+			foreach($aBerichten as $aBericht){
+				$sBerichten.='<h4><a name="'.$aBericht['ID'].'"></a>'.$this->_process($aBericht['titel']) .'</h4>'."\r\n";
+				$sBerichten.='<p>'.$this->_process($aBericht['bericht']).'</p>'."\r\n";
+			}   
+			$sTemplate=str_replace('[inhoud-bestuur]', $aInhoud['bestuur'], $sTemplate);
+			$sTemplate=str_replace('[inhoud-csr]', $aInhoud['csr'], $sTemplate);
+			$sTemplate=str_replace('[inhoud-overig]', $aInhoud['overig'], $sTemplate);
+			$sTemplate=str_replace('[berichten]', $sBerichten, $sTemplate);
+		}else{
+			$sTeplate='Geen berichten aanwezig;';
+		}
+		return $sTemplate;
+	}
+	function _getKopjes($aBerichten){
+		foreach($aBerichten as $aBericht){
+			if($aBericht['cat']!='voorwoord'){
+				//ros alles in een array, met categorie als element.
+				$aKopjes[$aBericht['cat']][]=array('titel'=> $aBericht['titel'], 'ID' => $aBericht['ID']);
+			}
+		}
+		return $aKopjes;
+	}
 	function addUserMessage($sMessage, $refresh=true){ 
 		if($refresh){
 			$_SESSION['csrmail_error']=trim($sMessage);

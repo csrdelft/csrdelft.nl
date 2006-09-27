@@ -95,7 +95,7 @@ class MotenContent extends SimpleHTML {
 		$regel = 0;
 		print ("<tr>\n");
 		for ($moot=1; $moot<=$maxmoten; $moot++) {
-			if (isset($this->_kringen[$moot][$regel])) echo '<td class="lijnhoktitel">Kring '.$moot.'.geen</td>';
+			if (isset($this->_kringen[$moot][$regel])) echo '<td class="lijnhoktitel">Kring '.$moot.'.0</td>';
 			else print("<td class=\"lijnhoktitel\">&nbsp;</td>\n");
 		}
 		
