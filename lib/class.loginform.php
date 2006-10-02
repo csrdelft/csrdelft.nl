@@ -35,9 +35,17 @@ class LoginForm extends SimpleHTML {
 		
 		print("U bent:<br />". htmlentities($this->_lid->getFullName()) . "\n");
 		if ($this->_lid->isLoggedIn()) {
-			$fSaldo=$this->_lid->getSaldo();
-			if($fSaldo<0){
-				echo '<br /><br />U staat rood! <br />Uw saldo is: &euro; <span class="bodyrood">'. sprintf ("%01.2f",$fSaldo).'</span><br />';
+			$aSaldi=$this->_lid->getSaldi();
+			if($aSaldi!==false){
+				if($aSaldi['soccie']<0 OR $aSaldi['maalcie']<0){
+					echo '<br /><br />U staat rood! <br />';
+				}
+				if($aSaldi['soccie']<0){ 
+					echo 'Uw SocCie-saldo is: &euro; <span class="bodyrood">'. sprintf ("%01.2f",$aSaldi['soccie']).'</span><br />';
+				}
+				if($aSaldi['maalcie']<0){
+					echo 'Uw MaalCie-saldo is: &euro; <span class="bodyrood">'. sprintf ("%01.2f",$aSaldi['maalcie']).'</span><br />';
+				}
 			}
 			print(<<<EOT
 <br />

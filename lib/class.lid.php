@@ -1335,13 +1335,12 @@ class Lid {
 		}
 	}
 	
-	function getSaldo($uid=''){
-		if($uid==''){
-			$uid=$this->getUid();
-		}
+	function getSaldi($uid=''){
+		if($uid==''){ $uid=$this->getUid(); }
 		$query="
 			SELECT
-				saldo
+				saldo as soccie,
+				maalSaldo as maalcie
 			FROM
 				socciesaldi
 			WHERE
@@ -1350,7 +1349,7 @@ class Lid {
 		$rSaldo=$this->_db->query($query);
 		if($this->_db->numRows($rSaldo)){
 			$aSaldo=$this->_db->next($rSaldo);
-			return $aSaldo['saldo'];
+			return $aSaldo;
 		}else{
 			return false;
 		}

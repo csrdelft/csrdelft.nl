@@ -73,12 +73,17 @@ class ProfielContent extends SimpleHTML {
 				$sSaldo='';
 				//alleen als men het eigen profiel bekijkt.
 				if($profiel['uid']==$this->_lid->getUid()){
-					$sSaldo=$this->_lid->getSaldo();
-					if($sSaldo!==false){
-						if($sSaldo<0){
-							$sSaldo='SocCie-saldo: &euro; <span class="bodyrood">'.sprintf ("%01.2f",$sSaldo).'</span>';
+					$aSaldi=$this->_lid->getSaldi();
+					if($aSaldi!==false){
+						if($aSaldi['soccie']<0){
+							$sSaldo.='SocCie-saldo: &euro; <span class="bodyrood">'.sprintf ("%01.2f",$aSaldi['soccie']).'</span><br />';
 						}else{
-							$sSaldo='SocCie-saldo: &euro; '.sprintf ("%01.2f",$sSaldo);
+							$sSaldo.='SocCie-saldo: &euro; '.sprintf ("%01.2f",$aSaldi['soccie']).'<br />';
+						}
+						if($aSaldi['maalcie']<0){
+							$sSaldo.='MaalCie-saldo: &euro; <span class="bodyrood">'.sprintf ("%01.2f",$aSaldi['maalcie']).'</span>';
+						}else{
+							$sSaldo.='MaalCie-saldo: &euro; '.sprintf ("%01.2f",$aSaldi['maalcie']);
 						}
 					}
 				}
