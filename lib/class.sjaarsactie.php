@@ -113,6 +113,10 @@ class Sjaarsactie {
 				$sError.='Hee, zoveel sjaars zijn er niet dit jaar!<br />';
 				$validated=false;
 			}
+			if($_POST['limiet']<1){
+				$sError.='Hee, er moeten wel sjaars meedoen!<br />';
+				$validated=false;
+			}
 		}
 		$this->_sError=$sError;
 		return $validated;
@@ -135,7 +139,23 @@ class Sjaarsactie {
 		return $this->_db->query($sNewActie);
 	}
 	function isSjaars(){ return $this->_lid->getStatus()=='S_NOVIET'; }
-	
+	function isVol($iActieID){
+		$sIsVol="
+			SELECT
+				sjaarsactie.limiet AS limiet,
+				count(*) as aantal
+			FROM
+				sjaarsactie 
+			INNER JOIN 
+				sjaarsactielid ON(sjaarsactie.id=sjaarsactielid.actieID)
+			WHERE
+				sjaarsactie.id=".$iActieID."
+			GROUP BY 
+				sjaarsactie.id;";
+		$rIsVol=$this->_db->query($sIsVol);
+		$aIsVol=$this->_db->next($rIsVol);
+		return $this->_db->numRows($rIsVol)==1 AND $aIsVol['limiet']==$aIsVol['aantal'];
+	}
 	function isNovCie(){
 		//commissieID van de novCie==12
 		$sIsNovCie="

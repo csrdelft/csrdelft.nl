@@ -161,9 +161,9 @@ class ForumPoll {
 	}
 	//controleer of gebruiker al een stem heeft uitgebracht.
 	function uidMagStemmen($iTopicID, $rechten_post=''){
-		if($rechten_post!='' AND !$this->_lid->hasPermission($rechten_post)){
-			return false;
-		}else{
+		//if($rechten_post!='' AND !$this->_lid->hasPermission($rechten_post)){
+		//	return false;
+		//}else{
 			$iTopicID=(int)$iTopicID;
 			$sMagStemmen="
 				SELECT
@@ -174,9 +174,11 @@ class ForumPoll {
 					topicID=".$iTopicID." AND
 					uid='".$this->_lid->getUid()."'
 				LIMIT 1;";
+		//	pr($sMagStemmen);
+		//exit;
 			$rMagStemmen=$this->_db->query($sMagStemmen);
-			return $this->_db->numRows($rMagStemmen)!=1 AND $this->_lid->hasPermission($rechten_post);
-		}
+			return $this->_db->numRows($rMagStemmen)!=1;
+		//}
 	}
 	function addStem($iOptieID){
 		$iOptieID=(int)$iOptieID;
@@ -263,7 +265,7 @@ class ForumPoll {
 	function peilingVan($uid){
 		//STATISTICUS is het uid van de verenigingsstatisticus en staat in include.config.php
 		if($uid==STATISTICUS){
-			return 'am. Verenigings statisticus';
+			return 'am. Verenigingsstatisticus';
 		}else{
 			return $this->_forum->getForumNaam($aBerichten[0]['startUID']);
 		}
