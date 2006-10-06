@@ -43,7 +43,7 @@ class NieuwsContent extends SimpleHTML {
 	function setChop($chars) { $this->_chop = (int)$chars; }
 	function getNieuwBerichtLink(){
 		if($this->_nieuws->isNieuwsMod()){
-			echo '<hr /><a href="/nieuws/toevoegen">Nieuw nieuwsbericht toevoegen</a>';
+			echo '<a href="/nieuws/toevoegen">Nieuw nieuwsbericht toevoegen</a>';
 		}
 	}
 	function getBerichtModControls($iBerichtID){
@@ -78,7 +78,7 @@ class NieuwsContent extends SimpleHTML {
 		echo '<a href="#" onclick="vergrootTextarea(\'nieuwsBericht\', 10)" name="Vergroot het invoerveld">invoerveld vergroten</a><br />';
 		echo '<textarea id="nieuwsBericht" name="tekst" cols="80" rows="10" style="width: 100%" class="tekst">'.$tekst.'</textarea><br />';
 		echo '<input id="prive" type="checkbox" name="prive" '.$prive.' /><label for="prive">Dit bericht alleen weergeven bij leden</label>&nbsp;';
-		echo '<input id="verborgen" type="checkbox" name="verborgen" '.$verborgen.' /><label for="verborgen">Dit bericht verbergen voor</label><br />';
+		echo '<input id="verborgen" type="checkbox" name="verborgen" '.$verborgen.' /><label for="verborgen">Dit bericht verbergen</label><br />';
 		echo '<input type="submit" name="submit" value="opslaan" />&nbsp;<a href="/nieuws">Annuleren, terug naar nieuws</a></div>';
 	}
 	function nieuwFormulier(){
@@ -129,14 +129,14 @@ class NieuwsContent extends SimpleHTML {
 				}else{
 					$sBericht=bbview($aBericht['tekst'], $aBericht['bbcode_uid']);
 				}
-				echo '<span class="kopje3">';
+				echo '<div class="nieuwsbericht"><div class="nieuwsbody"><div class="nieuwstitel">';
 				//verborgen berichten aangeven, enkel bij mensen met P_NEWS_MOD
 				if($aBericht['verborgen']=='1'){ echo '<em>[verborgen] </em>';	}
-				echo mb_htmlentities($aBericht['titel']).'</span>
-						<i>('.date('d-m-Y H:i', $aBericht['datum']).')</i> ';
+				echo mb_htmlentities($aBericht['titel']).'</div>';
+				//echo '<i>('.date('d-m-Y H:i', $aBericht['datum']).')</i> ';
 				//nieuwsbeheer functie dingen:
-				$this->getBerichtModControls($aBericht['id']);
-				echo '<br />'.$sBericht.'<br /><br />';
+				//$this->getBerichtModControls($aBericht['id']);
+				echo ''.$sBericht.'</div></div>';
 			}//einde foreach bericht
 			$this->getNieuwBerichtLink();
 		}
@@ -145,13 +145,15 @@ class NieuwsContent extends SimpleHTML {
 		$aBericht=$this->_nieuws->getMessage($this->_berichtID);
 		if(is_array($aBericht)){
 			//weergeven
-			echo '<span class="kopje3">';
+			echo '<div class="nieuwsbericht"><div class="nieuwsbody"><div class="nieuwstitel">';
 			//verborgen berichten aangeven, enkel bij mensen met P_NEWS_MOD
 			if($aBericht['verborgen']=='1'){ echo '<em>[verborgen] </em>';	}
-			echo mb_htmlentities($aBericht['titel']).'</span><i>('.date('d-m-Y H:i', $aBericht['datum']).')</i> ';
+			echo mb_htmlentities($aBericht['titel']).'</div><i>('.date('d-m-Y H:i', $aBericht['datum']).')</i> ';
 			//nieuwsbeheer functie dingen:
 			$this->getBerichtModControls($aBericht['id']);
 			echo '<br />'.bbview($aBericht['tekst'], $aBericht['bbcode_uid']).'<br />';
+			
+			echo '</div></div>';
 			$this->getNieuwBerichtLink();
 		}else{
 			echo 'Dit bericht bestaat niet, of is enkel zichtbaar voor ingelogde gebruikers.';

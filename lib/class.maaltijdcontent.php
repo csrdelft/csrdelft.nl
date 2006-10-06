@@ -33,6 +33,9 @@ class MaaltijdContent extends SimpleHTML {
 		$this->_lid =& $lid;
 		$this->_maaltrack =& $maaltrack;
 	}
+	function getTitel(){
+		return 'Maaltijdketzer';
+	}
 
 	function view() {
 		# is er een foutboodschap?
@@ -49,7 +52,7 @@ maaltijd wil inschrijven. In de week direct na de Diesweek zal deze inschrijving
 <br /><br />-->
 
 <table width="100%" class="lijnhoktable">
-<tr><td width="100%" class="lijnhoktitel">Maaltijden</td></tr>
+<tr><td width="100%" class="lijnhoktitel"><h1>Maaltijden</h1></td></tr>
 <tr><td width="100%" class="lijnhoktekst">
 
 Op deze pagina kunt u zich inschrijven voor maaltijden op Confide. Onderstaande tabel toont de maaltijden in de
@@ -141,7 +144,7 @@ EOT
 
 </td></tr>
 
-<tr><td width="100%" class="lijnhoktitel">Maaltijdabonnementen</td></tr>
+<tr><td width="100%" class="lijnhoktitel"><h2>Maaltijdabonnementen</h2></td></tr>
 <tr><td width="100%" class="lijnhoktekst">
 
 <table cellpadding="0" cellspacing="5" marginwidth="0" marginheight="0" border="0" align="left" width="100%">
@@ -218,7 +221,7 @@ EOT
 
 </td></tr>
 
-<tr><td width="100%" class="lijnhoktitel">Andere verenigingsleden aanmelden</td></tr>
+<tr><td width="100%" class="lijnhoktitel"><h2>Andere verenigingsleden aanmelden</h2></td></tr>
 <tr><td width="100%" class="lijnhoktekst">
 
 Het is voor leden alleen mogelijk andere leden aan te melden binnen 48 uur voordat de maaltijd plaatsvindt.
@@ -242,7 +245,7 @@ EOT
 <td witdh="140"><b>Maaltijd:</b></td>
 <td width="140"><b>Lid-nummer:</b></td>
 <td width="100">&nbsp;</td>
-<td><b>U heeft naast uzelf ook aangemeld:</b></td>
+<td><b>U heeft anderen voor deze maaltijd aangemeld:</b></td>
 </tr>
 EOT
 			);
@@ -310,7 +313,7 @@ EOT
 
 </td></tr>
 
-<tr><td width="100%" class="lijnhoktitel">Gasten aanmelden</td></tr>
+<tr><td width="100%" class="lijnhoktitel"><h2>Gasten aanmelden</h2></td></tr>
 <tr><td width="100%" class="lijnhoktekst">
 <br />
 U kunt op uw naam gasten aanmelden voor de maaltijd.<br />

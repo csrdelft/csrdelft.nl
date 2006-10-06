@@ -27,7 +27,7 @@ class PollContent extends SimpleHTML {
 		$iPollStemmen=$this->_forumPoll->getPollStemmen($iTopic);
 		//er mag maar één keer per *ingelloged lid* per poll gestemd worden, en alleen als het topic open is.
 		//er mag maar één keer per *ingelloged lid* per poll gestemd worden, en alleen als het topic open is.
-		$bMagStemmen=$this->_forumPoll->uidMagStemmen($iTopic) AND ($aBerichten[0]['open']==1);
+		$bMagStemmen=$this->_forumPoll->uidMagStemmen($iTopic) AND true;
 		$sPeilingVan=mb_htmlentities('Dit is een peiling van '.$this->_forumPoll->peilingVan($poll[0]['startUID']));
 		//html dan maer
 		echo '<form action="/forum/stem/'.$iTopic.'" method="post" >';

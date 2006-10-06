@@ -13,6 +13,7 @@
 # . gemaakt
 #
 require_once('bbcode/include.bbcode.php');
+require_once('class.simplehtml.php');
 
 class ForumContent extends SimpleHTML {
 	var $_forum;
@@ -69,8 +70,7 @@ class ForumContent extends SimpleHTML {
 			}//einde foreach
 		//het forum is nog leeg, of de database is stuk ofzo
 		}else{ echo '<tr><td colspan="4">Er zijn nog geen categorie&euml;n of er is iets mis met het databeest</td></tr>'; }
-		echo '</table><br />';
-		$this->zoekFormulier();
+		echo '</table>';
 	}
 /***********************************************************************************************************
 *	Topics laten zien in een categorie
@@ -516,7 +516,7 @@ class ForumContent extends SimpleHTML {
 			//ff al de ubb kek eruit rossen...
 			$bbcode_uid=$aPost['bbcode_uid'];
 			//[b][/b]
-				$tekst=preg_replace('/\[b:'.$bbcode_uid.'\](.*?)\[\/b:'.$bbcode_uid.'\]/', '*\\1*', $aPost['tekst']);
+			$tekst=preg_replace('/\[b:'.$bbcode_uid.'\](.*?)\[\/b:'.$bbcode_uid.'\]/', '*\\1*', $aPost['tekst']);
 			//alle andere ubb kek eruit rossen...
 			$tekst=preg_replace('/(\[(|\/)\w+:[a-f0-9]+\])/', '|', $tekst);
 			//$volledigetekst=$tekst=preg_replace('/(\[(|\/)url=http://[a-f0-9]+:[a-f0-9]+\])/', '|', $volledigetekst);
@@ -541,14 +541,32 @@ class ForumContent extends SimpleHTML {
 		echo '</rss>';
 	}
 /***********************************************************************************************************
+* Kort rijtje met laatste posts.
+*
+***********************************************************************************************************/
+	function lastPosts(){
+		$aPosts=$this->_forum->getPostsVoorRss(10);
+		echo '<div id="forumHighlights"><a href="/forum/" class="kopje">Laatste forumberichten:</a><br />';
+		foreach($aPosts as $aPost){
+			$tekst=$aPost['nickname'].': '.$aPost['titel'];
+			if(strlen($tekst)>20){
+				$tekst=substr($tekst, 0, 18).'..';
+			}
+			echo date('H:i', strtotime($aPost['datum'])).' <a href="/forum/onderwerp/'.$aPost['tid'].'#laatste">'.$tekst.'</a><br />'."\n";
+		}
+		echo '</div>';
+	}
+/***********************************************************************************************************
 * Zoekah in forumposts, en titels van onderwerpen
 *
 ***********************************************************************************************************/
 	function zoeken(){
 		$sZoekQuery='';
 		if(isset($_POST['zoeken'])){ $sZoekQuery=trim($_POST['zoeken']); }elseif(isset($_GET['zoeken'])){ $sZoekQuery=trim($_GET['zoeken']);}
+		
+		echo '<h1>Zoeken in het forum</h1>Hier kunt u zoeken in het forum. Zoeken kan met boleaanse zoekparameters, uitleg is 
+			<a href="http://dev.mysql.com/doc/refman/5.0/en/fulltext-boolean.html">hier te vinden</a>.';
 		//altijd het zoekformulier weergeven.
-		echo '<h2><a href="/forum/" class="forumGrootlink">Forum</a> &raquo; Zoeken </h2>';
 		$this->zoekFormulier($sZoekQuery);
 		if($sZoekQuery!=''){
 			$aZoekResultaten=$this->_forum->searchPosts($sZoekQuery);
@@ -627,6 +645,20 @@ class ForumContent extends SimpleHTML {
 		$this->_sError=trim($sError);
 	
 	}
+	function viewWaarbenik(){
+		if($this->_actie=='topic' AND isset($_GET['topic'])){
+			$iTopicID=(int)$_GET['topic'];
+			$sCategorie=$this->_forum->getCategorieTitel($this->_forum->getCategorieVoorTopic($iTopicID));
+			$sTitel='<a href="/forum/">Forum</a> &raquo; <a href="/forum/categorie/??">'.$sCategorie.'</a> &raquo; '.$this->_forum->getTopicTitel($iTopicID);
+		}elseif($this->_actie=='forum' AND isset($_GET['forum'])){
+			$sTitel='<a href="/forum/">Forum</a> &raquo; '.$this->_forum->getCategorieTitel((int)$_GET['forum']);
+		}elseif($this->_actie=='zoeken'){
+			$sTitel='<a href="/forum/">Forum</a> &raquo; zoeken';
+		}else{
+			$sTitel='Forum';
+		}
+		echo $sTitel;
+	}
 	function getTitel(){ 
 		if($this->_actie=='topic' AND isset($_GET['topic'])){
 			$iTopicID=(int)$_GET['topic'];
@@ -663,6 +695,7 @@ class ForumContent extends SimpleHTML {
 				} 
 			break;
 			case 'rss': $this->rssFeed();	break;
+			case 'lastposts': $this->lastPosts(); break;
 			case 'zoeken': $this->zoeken(); break;
 			default: $this->viewCategories();	break;
 		}

@@ -34,7 +34,10 @@ class Includer {
 		elseif (preg_match('/^[-\w\.]+$/',$page)) $this->_page = $page;
 		else die ("Includer: Invalid file info");
 	}
-
+	function getTitel(){
+		$titel=str_replace(array('.html', '.htm', '.php'), '', $this->_page);
+		return ucfirst($titel);
+	}
 	function view() {
 		if ($this->_sub == '') $filename = $this->_page;
 		else $filename = "{$this->_sub}/{$this->_page}";

@@ -23,7 +23,12 @@ class SjaarsactieContent extends SimpleHTML {
 	function SjaarsactieContent (&$sjaarsactie) {
 		$this->_sjaarsactie =& $sjaarsactie;
 	}
-	
+	function getTitel(){
+		return 'Sjaarsacties';
+	}
+	function viewWaarbenik(){
+		echo '<a href="/intern/">Intern</a> &raquo; Sjaarsacties';
+	}
 	function viewNewActieForm(){
 		$naam=$beschrijving='';
 		$limiet=10;
@@ -83,7 +88,7 @@ class SjaarsactieContent extends SimpleHTML {
 							onclick="'."return confirm('Weet u zeker dat u wilt aanmelden voor deze sjaarsactie?')".'">aanmelden</a>';
 					}
 				}else{
-					echo 'Deze sjaaractie is <span style="color: red;">vol</span>. U kunt zich niet meer aanmelden.';
+					echo 'Deze sjaaractie is <strong>vol</strong>. U kunt zich niet meer aanmelden.';
 				}
 				echo '</td></tr>';
 			}

@@ -30,7 +30,9 @@ class VerjaardagContent extends SimpleHTML {
 	function VerjaardagContent (&$lid) {
 		$this->_lid =& $lid;
 	}
-
+	function getTitel(){
+		return 'Verjaardagen';
+	}
 	function view() {
 		# de verjaardagen die vandaag zijn krijgen een highlight
 		$nu = time();
@@ -55,17 +57,17 @@ class VerjaardagContent extends SimpleHTML {
 			12 => "December",
 		);
 
-		echo '<center><span class="kopje2">Verjaardagskalender</span></center><p>';
+		echo '';
 		if(!isset($_GET['print'])){
 			echo '<a href="verjaardagen.php?print=true">printversie</a>'."\n";
 		}
-		echo '<table class="lijnhoktable" style="width: 800px;">'."\n";
+		echo '<table class="lijnhoktable" style="width: 100%;">'."\n";
 		for ($r=0; $r<$rijen; $r++) {
 			echo '<tr>';
 			for ($k=1; $k<=$kolommen; $k++) {
 				$maand = ($r*$kolommen+$k+$dezemaand-2)%12+1;
 				$tekst = ($maand <= 12) ? $maanden[$maand] : '&nbsp;';
-				echo '<td class="lijnhoktitel">'.$tekst.'</td>'."\n";
+				echo '<td class="lijnhoktitel"><strong>'.$tekst.'</strong></td>'."\n";
 			}
 			echo "</tr><tr>\n";
 			for ($k=1; $k<=$kolommen; $k++) {
@@ -81,7 +83,7 @@ class VerjaardagContent extends SimpleHTML {
 						echo " ".mb_htmlentities($vrjdg['achternaam']) . "<br />\n";
 						if ($vrjdg['gebdag'] == $dezedag and $maand == $dezemaand) echo "</span>";
 					}
-					echo "</td>\n";
+					echo "<br /></td>\n";
 				} else {
 					echo "<td><&nbsp;</td>\n";
 				}

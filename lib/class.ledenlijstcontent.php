@@ -59,6 +59,12 @@ class LedenlijstContent extends SimpleHTML {
 	function setResult($result) {
 		$this->_result = $result;
 	}
+	function getTitel(){
+		return 'Ledenlijst';
+	}
+	function viewWaarbenik(){
+		echo '<a href="/intern/">Intern</a> &raquo; Ledenlijst';
+	}
 
 	function view() {
 
@@ -66,7 +72,7 @@ class LedenlijstContent extends SimpleHTML {
 		$form_wat = mb_htmlentities($this->_form['wat']);
 
 		print(<<<EOT
-<center><span class="kopje2">Ledenlijst</span></center><p>
+<h1>Ledenlijst</h1>
 
 Op deze pagina kunt u zoeken in het ledenbestand. Er kan gezocht worden op voornaam, achternaam of email-adres.
 U kunt kiezen welke kolommen u wilt weergeven in de zoekresultaten, en welke sorteervolgorde moet worden aangehouden.
@@ -190,15 +196,15 @@ EOT
 		}
 
 		# afsluiten form
-		echo '</tr></table></form>';
+		echo '</tr></table></form><br />';
 		
 		if (count($this->_result) > 0) {
 			//zoekresultatentabel met eerst de kopjes		
 			echo '<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr>';
 			if($this->_lid->hasPermission('P_LEDEN_MOD')){ echo '<td>&nbsp;</td>'; }
-			echo '<td class="kopje2" valign="top">Naam</td>';
+			echo '<td class="kopje2" valign="top"><strong>Naam</strong></td>';
 			foreach ($this->_form['kolom'] as $kolom){
-				echo '<td class="kopje2" valign="top">'.$kolomtitel[$kolom].'</td>';
+				echo '<td class="kopje2" valign="top"><strong>'.$kolomtitel[$kolom].'</strong></td>';
 			}
 			echo '</tr>';
 			//en de resultaten...

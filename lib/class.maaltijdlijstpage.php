@@ -40,7 +40,7 @@ class MaaltijdLijstPage extends SimpleHTML {
 	# etc...
 	function view() {
 	
-		$aanmeldingen = $this->_maaltijd->getAanmeldingen();
+		$aanmeldingen = $this->_maaltijd->getAanmeldingen_Oud();
 		
 		$datumtekst = strftime('%A %e %B %Y', $this->_maaltijd->getDatum());
 		$tptekst = $this->_lid->getCivitasName($this->_maaltijd->getTP());
@@ -70,7 +70,7 @@ class MaaltijdLijstPage extends SimpleHTML {
   <style type="text/css">
 		body{
 			font-family: verdana;
-			font-size: 12px;
+			font-size: 10px;
 		}
 		a{
 			text-decoration: none;
@@ -85,11 +85,11 @@ class MaaltijdLijstPage extends SimpleHTML {
 		}
 		table.inschrijvingen{
 			border-collapse: collapse;
-			border: thin solid black;
+			border: 1px solid black;
 			width: 100%;
 		}
 		table.inschrijvingen TD{
-		 	border: thin solid black;
+		 	border: 1px solid black;
 		 	padding: 3px 5px 2px 10px;
 		 	vertical-align: top;
 		}
@@ -125,6 +125,14 @@ class MaaltijdLijstPage extends SimpleHTML {
 <table class="hoofdtabel">
 <tr><td>
 <h1>C.S.R.-maaltijd {$datumtekst}</h1>
+Regels omtrent het betalen van de maaltijden op Confide:
+<ul>
+<li>maaltijdprijs: &euro; 2,50</li>
+<li>niet betaald = nb</li>
+<li>2,50 betaald = kruisje (x)</li>
+<li>ander bedrag ingelegd: schrijf duidelijk in het hokje hoeveel je in de helm hebt gegooid.</li>
+<li> als je géén tegoed hebt bij de maalcie betekent een niet direct betaalde maaltijd 20 cent boete!</li>
+</ul>
 Tafelpraeses is vandaag {$tptekst}<br /><br />
 </td></tr>
 EOT

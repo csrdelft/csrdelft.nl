@@ -33,11 +33,12 @@ class MotenContent extends SimpleHTML {
 	function MotenContent (&$lid) {
 		$this->_lid =& $lid;
 		$this->_kringen=$this->_lid->getKringen();
-	//	pr($this->_kringen); exit;
 		//kijken of er email-adressen getoond moeten worden
 		if(isset($_GET['email'])){ $this->_bEmail=true; }
 	}
-	
+	function getTitel(){
+		return 'Moot- en kringindeling';
+	}
 	function printKring($moot, $kring){
 		echo '<td class="lijnhoktekst">';
 			if(!isset($this->_kringen[$moot][$kring])){
@@ -61,7 +62,7 @@ class MotenContent extends SimpleHTML {
 					}
 				}
 			}
-		echo '</td>';
+		echo '<br /></td>';
 	}
 	function view() {
 
@@ -70,19 +71,19 @@ class MotenContent extends SimpleHTML {
 		$maxmoten = $this->_lid->getMaxMoten();
 		$maxkringen = $this->_lid->getMaxKringen();
 
-		echo '<h2>Moot en Kringindeling</h2>';
+		//echo '<h2>Moot en Kringindeling</h2>';
 		if($this->_bEmail===true){
 			echo '<a href="moten.php">Toon zonder email-adressen</a>';
 		}else{
 			echo '<a href="moten.php?email">Toon ook email-adressen</a>';
 		}
-		echo '<br /><br /><table width="700px" class="lijnhoktable" border="1px" cellspacing="0" cellpadding="0">';
+		echo '<br /><br /><table width="100%" class="lijnhoktable" border="0px" cellspacing="0" cellpadding="0">';
 
 		# we gaan de kringen in de moot onder elkaar zetten, een moot per kolom
 		for ($regel=1; $regel<=$maxkringen; $regel++) {
 			echo '<tr>';
 			for ($moot=1; $moot<=$maxmoten; $moot++) {
-				if (isset($this->_kringen[$moot][$regel])) echo '<td class="lijnhoktitel" style="width: 230px;">Kring '.$moot.'.'.$regel.'</td>';
+				if (isset($this->_kringen[$moot][$regel])) echo '<td class="lijnhoktitel" style="width: 230px;"><strong>Kring '.$moot.'.'.$regel.'</strong></td>';
 				else echo '<td class="lijnhoktitel">&nbsp;</td>';
 			}
 			echo '</tr><tr>';
@@ -95,7 +96,7 @@ class MotenContent extends SimpleHTML {
 		$regel = 0;
 		print ("<tr>\n");
 		for ($moot=1; $moot<=$maxmoten; $moot++) {
-			if (isset($this->_kringen[$moot][$regel])) echo '<td class="lijnhoktitel">Kring '.$moot.'.0</td>';
+			if (isset($this->_kringen[$moot][$regel])) echo '<td class="lijnhoktitel"><strong>Kring '.$moot.'.0</strong></td>';
 			else print("<td class=\"lijnhoktitel\">&nbsp;</td>\n");
 		}
 		

@@ -1,49 +1,9 @@
-<!-- This is part of CGI:IRC 0.5
-  == http://cgiirc.sourceforge.net/
-  == Copyright (C) 2000-2005 David Leadbeater <cgiirc@dgl.cx>
-  == Released under the GNU GPL
-  -->
-
-<script language="JavaScript"><!--
-function setjs() {
- if(navigator.product == 'Gecko') {
-   document.loginform["interface"].value = 'mozilla';
- }else if(window.opera && document.childNodes) {
-   document.loginform["interface"].value = 'opera7';
- }else if(navigator.appName == 'Microsoft Internet Explorer' &&
-    navigator.userAgent.indexOf("Mac_PowerPC") > 0) {
-    document.loginform["interface"].value = 'konqueror';
- }else if(navigator.appName == 'Microsoft Internet Explorer' &&
- document.getElementById && document.getElementById('ietest').innerHTML) {
-   document.loginform["interface"].value = 'ie';
- }else if(navigator.appName == 'Konqueror') {
-    document.loginform["interface"].value = 'konqueror';
- }else if(window.opera) {
-   document.loginform["interface"].value = 'opera';
- }
-}
-function nickvalid() {
-   var nick = document.loginform.Nickname.value;
-   if(nick.match(/^[A-Za-z0-9\[\]\{\}^\\\|\_\-`]{1,32}$/))
-      return true;
-   alert('Kies een geldige nickname!');
-   //document.loginform.Nickname.value = nick.replace(/[^A-Za-z0-9\[\]\{\}^\\\|\_\-`]/g, '');
-   return false;
-}
-function setcharset() {
-	if(document.charset && document.loginform["Character set"])
-		document.loginform['Character set'].value = document.charset
-}
-//-->
-</script>
-
-<center><span class="kopje2">Contact</span></center><p>
-<img src="/informatie/images/confide.jpg" border="0"  align="right" style="float: right; margin: 0px 0px 10px 10px;" alt="Sociëteit Confide anno 2006" />
+<h1>Contact</h1>
+<img src="http://csrdelft.nl/informatie/images/confide.jpg" border="0"  align="right" style="float: right; margin: 0px 0px 10px 10px;" alt="Sociëteit Confide anno 2006" />
 
 Er zijn diverse mogelijkheden om contact te zoeken met C.S.R.<br />
 <br />
-<span class="kopje2">Soci&euml;teit Confide</span><br />
-<br />
+<h2>Soci&euml;teit Confide</h2>
 C.S.R. heeft een eigen pand in de binnenstad van Delft:<br />
 Oude Delft 9<br />
 2611 BA Delft<br />
@@ -54,9 +14,7 @@ En natuurlijk in de
 <a href="http://www.goudengids.nl/search/delft/csr.html">Gouden Gids</a>... '/\
 <p>
 
-<span class="kopje2">Bestuur</span><br />
-<br />
-
+<h2>Bestuur</h2>
 Het bestuur is per telefoon te bereiken op de societeit of 
 <a href="mailto:bestuur@csrdelft.nl">per email</a>.
 
@@ -69,21 +27,19 @@ Het bestuur is per telefoon te bereiken op de societeit of
 </table>
 
 <br /><br /><br /><br /><br />
-<br />
+<br /><br />
 Het bestuur van de vereniging kan u te woord staan met de meest uiteenlopende informatie.
 <p>
 
 
 
-<span class="kopje2">De PubliciteitsCommissie</span><br />
-<br />
+<h2>De PubliciteitsCommissie</h2>
 De <a href="mailto:pubcie@csrdelft.nl">PubliciteitsCommissie</a> is verantwoordelijk
 voor het bijhouden van deze website. Bij deze commissie kunt u terecht met vragen
 over de inhoud van de website.
 <p>
 
-<span class="kopje2">Internet Heruitzendings Keuvelen</span><br />
-<br />
+<h2>Internet Heruitzendings Keuvelen</h2>
 C.S.R.-leden houden van kuieren langs de Delftse grachten. Soms zijn we echter
 genoodzaakt op onze werk- of studieplek plaats te nemen, alwaar een PC met
 netwerkaansluiting een onmisbaar element is. Op deze momenten kunnen we ons
@@ -113,7 +69,7 @@ bezoeken.)<br />
 <input type="hidden" name="interface" value="nonjs">
 Kies een nickname..
 <input type="text" name="Nickname" value="<?php
-if(isset($this->_lid) AND $this->_lid->hasPermission('P_LEDEN_READ')){
+if(isset($this->_lid) AND is_object($this->_lid) AND $this->_lid->hasPermission('P_LEDEN_READ')){
 	echo str_replace(array(' '),'_', $this->_lid->getNickName());
 }
 ?>" class="tekst">

@@ -152,6 +152,7 @@ lib/class.cieoverzichtcontent.php -text
 lib/class.column.php -text
 lib/class.commissie.php -text
 lib/class.commissiecontent.php -text
+lib/class.csrdelft.php -text
 lib/class.csrmail.php -text
 lib/class.csrmailarchiefcontent.php -text
 lib/class.csrmailcomposecontent.php -text
@@ -166,6 +167,7 @@ lib/class.forumcontent.php -text
 lib/class.forumpoll.php -text
 lib/class.hok.php -text
 lib/class.includer.php -text
+lib/class.kolom.php -text
 lib/class.ldap.php -text
 lib/class.ledenlijstcontent.php -text
 lib/class.lid.php -text
@@ -175,6 +177,7 @@ lib/class.maaltijd.php -text
 lib/class.maaltijdcontent.php -text
 lib/class.maaltijdlijstpage.php -text
 lib/class.maaltrack.php -text
+lib/class.menu.php -text
 lib/class.motencontent.php -text
 lib/class.mysql.php -text
 lib/class.nieuws.php -text
@@ -212,4 +215,5 @@ lib/tekst/oudleden-thuis.html -text
 lib/tekst/thuis.html -text
 lib/tekst/thuis2.html -text
 lib/templates/csrmail/csrmail.tpl -text
+lib/templates/csrmail/csrmail_owee.tpl -text
 lib/templates/forum/viewtopic.tpl -text

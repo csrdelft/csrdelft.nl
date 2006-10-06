@@ -28,7 +28,9 @@ class ProfielContent extends SimpleHTML {
 	var $_state;
 	var $_woonoord;
 	var $_commissie;
-
+	
+	//array met profiel.
+	var $_profiel;
 	### public ###
 
 	function ProfielContent (&$lid, &$state, &$woonoord, &$commissie) {
@@ -36,19 +38,25 @@ class ProfielContent extends SimpleHTML {
 		$this->_state =& $state;
 		$this->_woonoord =& $woonoord;
 		$this->_commissie =& $commissie;
+		
+		$this->_profiel = $this->_lid->getTmpProfile();
 	}
+	function getTitel(){
+		return 'Het profiel van '.naam($this->_profiel['voornaam'], $this->_profiel['achternaam'], $this->_profiel['tussenvoegsel']);
+	}
+	function viewWaarbenik(){
+		echo '<a href="/intern/">Intern</a> &raquo; <a href="/leden/lijst.php">Ledenlijst</a> &raquo; ';
+		echo 'profiel van '.naam($this->_profiel['voornaam'], $this->_profiel['achternaam'], $this->_profiel['tussenvoegsel']);
 
+	}
 	function view() {
-		# 
-		$profiel = $this->_lid->getTmpProfile();
-		#print_r($profiel);
 
 		switch($this->_state->getMyState()) {
 			case 'none':
-
+				
 				$profhtml = array();
-				foreach($profiel as $key => $value) $profhtml[$key] = mb_htmlentities($value);
-				$profhtml['fullname'] = naam($profiel['voornaam'], $profiel['achternaam'], $profiel['tussenvoegsel']);
+				foreach($this->_profiel as $key => $value) $profhtml[$key] = mb_htmlentities($value);
+				$profhtml['fullname'] = naam($this->_profiel['voornaam'], $this->_profiel['achternaam'], $this->_profiel['tussenvoegsel']);
 				
 				$profhtml['website_kort'] = $profhtml['website'];
 				if (mb_strlen($profhtml['website_kort']) > 25) {
@@ -59,20 +67,20 @@ class ProfielContent extends SimpleHTML {
 				if ($profhtml['email'] != '') $profhtml['email'] = sprintf('<a href="mailto:%s">%s</a>', $profhtml['email'], $profhtml['email']);
 				
 				# leden-foto, mag gif of jpg zijn.
-				if (file_exists( HTDOCS_PATH.'/leden/pasfotos/'.$profiel['uid'].'.gif')){
-					$foto = '<img src="/leden/pasfotos/'.$profiel['uid'].'.gif" />';
-				}elseif(file_exists( HTDOCS_PATH.'/leden/pasfotos/'.$profiel['uid'].'.jpg')){
-					$foto = '<img src="/leden/pasfotos/'.$profiel['uid'].'.jpg" />';
+				if (file_exists( HTDOCS_PATH.'/leden/pasfotos/'.$this->_profiel['uid'].'.gif')){
+					$foto = '<img src="http://csrdelft.nl/leden/pasfotos/'.$this->_profiel['uid'].'.gif" />';
+				}elseif(file_exists( HTDOCS_PATH.'/leden/pasfotos/'.$this->_profiel['uid'].'.jpg')){
+					$foto = '<img src="http://csrdelft.nl/leden/pasfotos/'.$this->_profiel['uid'].'.jpg" />';
 				}elseif($profhtml['status']=='S_NOVIET'){
 					$aSjaars=array('pino.png', 'oscar.png', 'elmo.png');
-					$foto = '<img src="/leden/pasfotos/'.$aSjaars[rand(0, count($aSjaars)-1)].'" 
+					$foto = '<img src="http://csrdelft.nl/leden/pasfotos/'.$aSjaars[rand(0, count($aSjaars)-1)].'" 
 						alt="Eerstejaars moet gaan slapen, eerstejaars moet naar bed" />';
 				}else{ $foto = 'Geen foto aanwezig. <br />Mail de pubcie om <br />er een toe te voegen.'; }
 				
 				//soccie saldo
 				$sSaldo='';
 				//alleen als men het eigen profiel bekijkt.
-				if($profiel['uid']==$this->_lid->getUid()){
+				if($this->_profiel['uid']==$this->_lid->getUid()){
 					$aSaldi=$this->_lid->getSaldi();
 					if($aSaldi!==false){
 						if($aSaldi['soccie']<0){
@@ -89,12 +97,12 @@ class ProfielContent extends SimpleHTML {
 				}
 				
 				# kijken of deze persoon nog in een geregistreerd woonoord woont...
-				$woonoord = $this->_woonoord->getWoonoordByUid($profiel['uid']);
+				$woonoord = $this->_woonoord->getWoonoordByUid($this->_profiel['uid']);
 				$woonoordhtml = ($woonoord !== false) ? "<i>" . $woonoord['naam'] . "</i><br />\n" : "";
 				
 				# kijken of deze persoon commissielid is
 				$ciehtml = "";				
-				$cies = $this->_commissie->getCieByUid($profiel['uid']);
+				$cies = $this->_commissie->getCieByUid($this->_profiel['uid']);
 				if (count($cies) != 0) {
 					foreach ($cies as $cie) {
 						$ciehtml .= 'Commissie: <a href="/informatie/commissie/'.
@@ -104,17 +112,14 @@ class ProfielContent extends SimpleHTML {
 				}
 				
 				print(<<<EOT
-<center>
-<span class="kopje2">Profiel van {$profhtml['fullname']}</span>
-<p>
-<table align="center" class="lijnhoktable" border="1" cellspacing="0" cellpadding="0" marginheight="0" marginwidth="0">
+<table align="center" class="lijnhoktable" border="0px" cellspacing="4px" cellpadding="0" marginheight="0" marginwidth="0">
 <tr>
 <td class="lijnhoktekst" rowspan="4">
 {$foto}
 </td>
-<td class="lijnhoktitel" width="33%">Identiteit</td>
-<td class="lijnhoktitel" width="33%">Adres</td>
-<td class="lijnhoktitel" width="33%"	>Email/Telefoon</td>
+<td class="lijnhoktitel" width="33%"><strong>Identiteit</strong></td>
+<td class="lijnhoktitel" width="33%"><strong>Adres</strong></td>
+<td class="lijnhoktitel" width="33%"><strong>Email/Telefoon</strong></td>
 </tr>
 <tr>
 <td class="lijnhoktekst" valign="top">
@@ -135,17 +140,17 @@ Pauper: {$profhtml['mobiel']}
 </td>
 </tr>
 <tr>
-<td class="lijnhoktitel">Studie/Lidmaatschap</td>
-<td class="lijnhoktitel">
+<td class="lijnhoktitel"><strong>Studie/Lidmaatschap</strong></td>
+<td class="lijnhoktitel"><strong>
 EOT
 				);
 
-				if ($profiel['status'] == 'S_OUDLID') print 'Functie/Beroep';
+				if ($this->_profiel['status'] == 'S_OUDLID') print 'Functie/Beroep';
 				else print 'Ouders';
 				
 				print(<<<EOT
-</td>
-<td class="lijnhoktitel">Overig</td>
+</strong></td>
+<td class="lijnhoktitel"><strong>Overig</strong></td>
 </tr>
 <tr>
 <td class="lijnhoktekst" valign="top">
@@ -156,7 +161,7 @@ Geboortedatum: {$profhtml['gebdag']}-{$profhtml['gebmnd']}-{$profhtml['gebjaar']
 EOT
 				);
 
-				if ($profiel['status'] != 'S_OUDLID') print (<<<EOT
+				if ($this->_profiel['status'] != 'S_OUDLID') print (<<<EOT
 Kring: {$profhtml['moot']}.{$profhtml['kring']}<br />
 {$ciehtml}
 EOT
@@ -168,7 +173,7 @@ EOT
 EOT
 				);
 
-				if ($profiel['status'] != 'S_OUDLID') print (<<<EOT
+				if ($this->_profiel['status'] != 'S_OUDLID') print (<<<EOT
 {$profhtml['o_adres']}<br />
 {$profhtml['o_postcode']} {$profhtml['o_woonplaats']}<br />
 {$profhtml['o_land']}<br />
@@ -198,7 +203,7 @@ EOT
 				);
 	
 				# gaan we een linkje afbeelden naar de edit-functie, of de editvakken?
-				if ( ($this->_lid->hasPermission('P_PROFIEL_EDIT') and $profiel['uid'] == $this->_lid->getUid()) or ($this->_lid->hasPermission('P_LEDEN_EDIT')) ) {
+				if ( ($this->_lid->hasPermission('P_PROFIEL_EDIT') and $this->_profiel['uid'] == $this->_lid->getUid()) or ($this->_lid->hasPermission('P_LEDEN_EDIT')) ) {
 ?>
 <a href="<?=$this->_state->getMyUrl(true) . 'a=edit'?>">[ Bewerken ]</a>
 <?php
@@ -209,7 +214,7 @@ EOT
 <?php
 				#}
 if($this->_lid->hasPermission('P_ADMIN')){
-	echo '<a href="/tools/stats.php?uid='.$profiel['uid'].'">[ overzicht van bezoeken ]</a>';
+	echo '<a href="/tools/stats.php?uid='.$this->_profiel['uid'].'">[ overzicht van bezoeken ]</a>';
 }
 
 ?>
@@ -241,7 +246,7 @@ EOT
 
 				$form[0][] = array('ztekst',"&nbsp;","<b>Identiteit</b>");
 
-				if ($profiel['status'] == 'S_OUDLID' or $this->_lid->hasPermission('P_LEDEN_MOD')) {
+				if ($this->_profiel['status'] == 'S_OUDLID' or $this->_lid->hasPermission('P_LEDEN_MOD')) {
 					$form[0]['voornaam'] = array('input',"Voornaam:");
 					$form[0]['tussenvoegsel'] = array('input',"Tussenv.:");
 					$form[0]['achternaam'] = array('input',"Achternaam:");
@@ -257,8 +262,8 @@ EOT
 				$form[0]['woonplaats'] = array('input',"Woonplaats:");
 				$form[0]['land'] = array('input',"Land:");
 
-				if ($profiel['status'] == 'S_OUDLID' or $this->_lid->hasPermission('P_LEDEN_MOD')) {
-					$gebdatum = implode('-',array($profiel['gebdag'],$profiel['gebmnd'],$profiel['gebjaar']));
+				if ($this->_profiel['status'] == 'S_OUDLID' or $this->_lid->hasPermission('P_LEDEN_MOD')) {
+					$gebdatum = implode('-',array($this->_profiel['gebdag'],$this->_profiel['gebmnd'],$this->_profiel['gebjaar']));
 					$form[0][] = array('ztekst',"&nbsp;","Gebruik het formaat dd-mm-YYYY");
 					$form[0]['gebdatum'] = array('input',"Geb.datum:",$gebdatum);
 				}				
@@ -283,7 +288,7 @@ EOT
 					$form[0]['muziek'] = array('input',"Muziek:");
 				}
 
-				if ($profiel['status'] != 'S_OUDLID' or $this->_lid->hasPermission('P_LEDEN_MOD')) {
+				if ($this->_profiel['status'] != 'S_OUDLID' or $this->_lid->hasPermission('P_LEDEN_MOD')) {
 					$form[1][] = array('ztekst',"&nbsp;","<b>Ouders</b>");
 					$form[1]['o_adres'] = array('input',"Adres Ouders:");
 					$form[1]['o_postcode'] = array('input',"Postcode Ouders:");
@@ -295,7 +300,7 @@ EOT
 					$form[1]['eetwens'] = array('input',"Eetwens: (max 20 tekens)");
 				}
 
-				if ($profiel['status'] == 'S_OUDLID' or $this->_lid->hasPermission('P_LEDEN_MOD')) {
+				if ($this->_profiel['status'] == 'S_OUDLID' or $this->_lid->hasPermission('P_LEDEN_MOD')) {
 					$form[1][] = array('ztekst',"&nbsp;","<b>Studie/Lidm./Werk</b>");
 					$form[1]['studie'] = array('input',"Studie:");
 					$form[1]['studiejaar'] = array('input',"Beginjaar studie:");
@@ -354,7 +359,7 @@ EOT
 							case 'input':
 								# is de inhoud van het vak al meegegeven?
 								if (isset($fieldinfo[2])) $field_usr = mb_htmlentities($fieldinfo[2]);
-								else $field_usr = mb_htmlentities($profiel[$field]);
+								else $field_usr = mb_htmlentities($this->_profiel[$field]);
 								print(<<<EOT
 <tr>
 <td>{$fieldinfo[1]}</td>
@@ -365,7 +370,7 @@ EOT
 								);
 								break;
 							case 'textarea':
-								$field_usr = mb_htmlentities($profiel[$field]);
+								$field_usr = mb_htmlentities($this->_profiel[$field]);
 								print(<<<EOT
 <tr>
 <td valign="top">{$fieldinfo[1]}</td>
@@ -393,7 +398,7 @@ EOT
 								print("<tr>\n<td>\n{$fieldinfo[1]}\n</td>\n");
 								print("<td>\n<select name=\"frmdata[{$field}]\" class=\"tekst\">\n");
 								foreach ($fieldinfo[2] as $key => $value) {
-									$selected = ($profiel[$field] == $key) ? ' selected' : '';
+									$selected = ($this->_profiel[$field] == $key) ? ' selected' : '';
 									printf("<option value=\"%s\" %s>%s</option>\n", $key, $selected, $value);
 								}
 								print("</select>\n</td>\n</tr>\n");

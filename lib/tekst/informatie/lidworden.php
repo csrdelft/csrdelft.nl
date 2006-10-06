@@ -1,4 +1,4 @@
-<div class="kopje2"><center>Lid worden?</center></div>
+<h1>Lid worden?</h1>
 
 C.S.R. is in Delft d&eacute; vereniging waar zowel van gezelligheid als van vorming het beste te vinden is en daarmee is het een zeer belangrijk deel van het leven van de leden. Als jij een universitaire of HBO-opleiding volgt kan ook jij lid worden. Daarnaast moet je wel de grondslag van de vereniging onderschrijven. Dit doe je door de <a href="http://nl.wikipedia.org/wiki/Apostolische_geloofsbelijdenis">apostolische geloofsbelijdenis</a> te ondertekenen. Deze geloofsbelijdenis is één van de onderwerpen die tijdens het eerste halfjaar Bijbelkring aan de orde komen, zodat je weet waar je voor kiest. Tijdens het eerste jaar kring is er sowieso gelegenheid tot open en toch diepe gesprekken over allerlei onderwerpen omdat je met mensen van je eigen jaar toch een speciale band hebt.<br />
 <br />
@@ -29,11 +29,11 @@ function requiredFields() {
 }
 </script>
 
-<center>
+
 <form method="post" name="frm_lidworden" onsubmit="return requiredFields();" action="/tools/sendmail/sendmail.php">
 <input type="hidden" name="form_id" VALUE="lidworden">
 
-<table border=0 cellspacing=2 cellpadding=0 marginheight=0 marginwidth=0>
+<table>
 
 <tr><td align="right">Je naam:</td><td><input type="text" class="tekst" name="naam"></td></tr>
 <tr><td align="right">Straat + huisnummer:</td><td><input type="text" class="tekst" name="straat"></td></tr>
@@ -46,7 +46,7 @@ function requiredFields() {
 </table>
 
 </form>
-</center>
+
 EOT
 	);
 } else {

@@ -29,7 +29,13 @@ class EetplanContent extends SimpleHTML {
 	function EetplanContent (&$eetplan) {
 		$this->_eetplan =& $eetplan;
 	}
-	
+	function getTitel(){
+		return 'Eetplan';
+	}
+	function viewWaarbenik(){ 
+		
+		echo '<a href="/intern/">Intern</a> &raquo; Eetplan';
+	}
 	function viewEetplanVoorPheut($iPheutID){
 		//huizen voor een feut tonen
 		$aEetplan=$this->_eetplan->getEetplanVoorPheut($iPheutID);
@@ -89,7 +95,7 @@ class EetplanContent extends SimpleHTML {
 			echo '<h2><a class="forumGrootlink"href="/leden/eetplan/">Eetplan</a> &raquo; voor '.mb_htmlentities($aEetplanData['huisnaam']).'</h2>
 				'.mb_htmlentities($aEetplanData['huisadres']).' <br /> 
 				Telefoon: '.mb_htmlentities($aEetplanData['telefoon']).'<br />
-				Ga naar <a href="../informatie/woonoord.php">woonoorden pagina</a><br /><br />'.
+				Ga naar <a href="/informatie/woonoord.php">woonoorden pagina</a><br /><br />'.
 				$sUitvoer;
 		}
 	}
@@ -108,7 +114,9 @@ class EetplanContent extends SimpleHTML {
 		foreach($aEetplan as $aEetplanVoorPheut){
 			echo '<tr><td><a href="/leden/eetplan/sjaars/'.$aEetplanVoorPheut[0]['uid'].'">'.mb_htmlentities($aEetplanVoorPheut[0]['naam']).'</a></td>';
 			for($iTeller=1;$iTeller<=8;$iTeller++){
-				echo '<td><a href="/leden/eetplan/huis/'.$aEetplanVoorPheut[$iTeller].'">'.mb_htmlentities($aEetplanVoorPheut[$iTeller]).'</a></td>';
+				echo '<td><a href="/leden/eetplan/huis/'.$aEetplanVoorPheut[$iTeller].'">'.
+					mb_htmlentities($aEetplanVoorPheut[$iTeller]).
+					'</a></td>';
 			}
 			echo '</tr>';
 		}
