@@ -34,10 +34,15 @@ class WoonoordContent extends SimpleHTML {
 		$this->_woonoord =& $woonoord;
 		$this->_lid =& $lid;
 	}
+	function getTitel(){
+		return 'Huizen, kotten en overige woonoorden';
+	}
+	function viewWaarbenik(){
+		echo '<a href="/groepen/">Groepen</a> &raquo; '.$this->getTitel();
+	}
 
 	function view() {	
-		echo '<center><span class="kopje2">Woonoorden</span></center><p>
-			Veel leden van C.S.R. wonen in verenigings-woonoorden. Als een woonoord aan
+		echo 'Veel leden van C.S.R. wonen in verenigings-woonoorden. Als een woonoord aan
 			bepaalde eisen voldoet, kan het een offici&euml;le status als C.S.R. huis krijgen.
 			Daarnaast zijn er kotten en overige woonoorden.<br /><br />
 			Am. Talstra over C.S.R.-huizen in \'Veertig Roem, lustrumalmanak 2001\':<br />
@@ -62,15 +67,15 @@ class WoonoordContent extends SimpleHTML {
 		echo '<table width="100%" border="0" cellspacing="0" cellpadding="0" marginheight="0" marginwidth="0">';
 		$woonoorden = $this->_woonoord->getWoonoorden();
 		foreach ($this->_soorten as $soort => $titel) {
-			echo '<tr><td width="50%"><hr><span class="kopje2">'.$titel.'</span><hr></td>
+			echo '<tr><td width="50%"><hr /><h2>'.$titel.'</h2><hr /></td>
 				<td width="2%">&nbsp;</td>
-				<td width="47%"><hr><span class="kopje2">Bewoners</span><hr></td></tr>';
+				<td width="47%"><hr /><h2>Bewoners</h2><hr /></td></tr>';
 			
 			foreach($woonoorden[$soort] as $woonoord) {
 				$bBewerken=$this->_woonoord->magBewerken($woonoord['id']);
 				echo '<tr height="30"><td colspan="2" valign="middle"><a name="'.$woonoord['id'].'"></a>';
 				if(trim($woonoord['link'])==''){ 
-					echo '<span class="kopje3">'.mb_htmlentities($woonoord['naam']).'</span>'; 
+					echo '<h3>'.mb_htmlentities($woonoord['naam']).'</h3>'; 
 				}else{ 
 					echo '<a href="'.htmlspecialchars($woonoord['link']).'" class="a3">'.mb_htmlentities($woonoord['naam']).'</a>'; 
 				} 
@@ -83,7 +88,7 @@ class WoonoordContent extends SimpleHTML {
 					echo mb_htmlentities($bewoner['achternaam']);
 					if($this->_woonoord->isLid()) echo '</a>';
 					if($bBewerken OR $this->_lid->hasPermission('P_LEDEN_MOD')){
-						echo ' [ <a href="/informatie/woonoord.php?woonoordid='.$woonoord['id'].'&amp;uid='.$bewoner['uid'].'&amp;verwijderen"onclick=" return confirm(\'Weet u zeker dat u deze bewoner wilt verwijderen?\')">X</a> ]';
+						echo ' [ <a href="woonoorden.php?woonoordid='.$woonoord['id'].'&amp;uid='.$bewoner['uid'].'&amp;verwijderen"onclick=" return confirm(\'Weet u zeker dat u deze bewoner wilt verwijderen?\')">X</a> ]';
 					}							
 					echo "<br />\n";
 				}

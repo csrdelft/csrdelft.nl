@@ -174,7 +174,7 @@ class Csrmailcontent {
 	function addUserMessage($sMessage, $refresh=true){ 
 		if($refresh){
 			$_SESSION['csrmail_error']=trim($sMessage);
-			header('location: http://csrdelft.nl/leden/csrmail/');
+			header('location: '.CSR_ROOT.'/leden/csrmail/');
 		}else{	
 			$this->_userMessage=trim($sMessage);
 		}
@@ -187,7 +187,9 @@ class Csrmailcontent {
 	function addNewForm($sError=false){
 		$this->_sError=$sError;
 	}
-	
+	function getTitel(){
+		return 'PubCie-courant beheer';
+	}
 	function view(){
 		echo '<h2>PubCie-post</h2>';
 		if($this->_csrmail->magBeheren()){

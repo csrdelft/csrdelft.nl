@@ -61,7 +61,7 @@ class csrdelft extends SimpleHTML {
 		if(is_object($this->_waarbenik)){
 			echo 'bla';
 		}elseif(method_exists($this->_body, 'viewWaarbenik')){
-			echo '&raquo; <a href="/">Thuis</a> &raquo; ';
+			echo '&raquo; ';
 			$this->_body->viewWaarbenik();
 		}else{
 			//uit de menu-array halen
@@ -83,8 +83,10 @@ class csrdelft extends SimpleHTML {
 	<link rel="stylesheet" href="/layout/default.css" type="text/css" />
 	<link rel="stylesheet" href="/layout/forum.css" type="text/css" />
 	<script type="text/javascript" src="/layout/csrdelft.js" ></script>
+	<link rel="alternate" title="C.S.R.-Delft RSS" type="application/rss+xml" href="http://csrdelft.nl/forum/rss.php" />
 </head>
 <body>
+<div id="layoutContainer">
 <?php $this->_menu->view(); ?>
 <div id="bodyContainer<?php echo $this->getBreed(); ?>">
 	<div id="lichaam<?php echo $this->getBreed(); ?>">
@@ -119,21 +121,20 @@ if($this->_zijkolom!==false){
 </div>
 <?php
 if($this->_lid->isLoggedIn()){
-
-?>
-<div id="searchbox">
-	<form method="post" action="/leden/lijst.php">
-		<p>
-		<input type="hidden" name="a" value="zoek" /><input type="hidden" name="waar" value="naam" />
-		<input type="hidden" name="moot" value="alle" /><input type="hidden" name="status" value="leden" />
-		<input type="hidden" name="sort" value="achternaam" /><input type="hidden" name="kolom[]" value="adres" />
-		<input type="hidden" name="kolom[]" value="email" /><input type="hidden" name="kolom[]" value="telefoon" />
-		<input type="hidden" name="kolom[]" value="mobiel" />
-		<input type="text" value="zoeken in ledenlijst..." onfocus="this.value=''" name="wat" /></p>
-	</form>
-</div>
-<?php
-} //einde isLoggedIn();
+	//zoekformuliertje voor de ledenlijst...
+	echo '<div id="searchbox">
+		<form method="post" action="/leden/lijst.php"><p>
+			<input type="hidden" name="a" value="zoek" /><input type="hidden" name="waar" value="naam" /><input type="hidden" name="moot" value="alle" /><input type="hidden" name="status" value="leden" />
+			<input type="hidden" name="sort" value="achternaam" /><input type="hidden" name="kolom[]" value="adres" /><input type="hidden" name="kolom[]" value="email" /><input type="hidden" name="kolom[]" value="telefoon" />
+			<input type="hidden" name="kolom[]" value="mobiel" />';
+	if(isset($_POST['wat'])){
+		echo '<input type="text" value="'.mb_htmlentities($_POST['wat']).'" name="wat" />';
+	}else{
+		echo '<input type="text" value="Zoeken in ledenlijst..." onfocus="this.value=\'\'" name="wat" />';
+	}
+	echo '</p></form></div>';
+} 
+//einde isLoggedIn();
 ?>
 <div id="personalBox">
 	<?php
@@ -142,11 +143,13 @@ if($this->_lid->isLoggedIn()){
 			echo 'U bent '.str_replace(' ', '&nbsp;', $this->_lid->getCivitasName()).'<br />';;
 			echo ' <a href="/logout.php">log&nbsp;uit</a> | <a href="/leden/profiel/'.$this->_lid->getUid().'">profiel</a>';
 		}else{
+			//linkje om het inlogformulier weer te geven.
 			echo '<a href="#" onclick="document.getElementById(\'inloggen\').style.display = \'block\'">
 				Inloggen...</a><div id="inloggen">';
 			echo '<form id="frm_login" action="/login.php" method="post">';
+			//eventueel een foutmelding over het inloggen weergeven...
 			if (isset($_SESSION['auth_error'])) {
-				print('<span style="color: red;">' . htmlspecialchars($_SESSION['auth_error']) . '</span><br />' . "\n");
+				print('<span style="color: red;">'.htmlspecialchars($_SESSION['auth_error']) . '</span><br />' . "\n");
 				unset($_SESSION['auth_error']);
 			}
 			echo '
@@ -163,8 +166,9 @@ if($this->_lid->isLoggedIn()){
 	?>
 
 </div>
-<div id="lijntje"></div>
-<div id="hoofderFoto"><img src="/layout/images/hoofder5.jpg" height="130px" /></div>
+<div id="lijntje"><img src="/layout/images/pixel.gif" height="3px" width="20px" alt="lijntje..." /></div>
+<div id="hoofderFoto"><img src="/layout/images/hoofder5.jpg" height="130px" alt="een impressie van de Civitas" /></div>
+</div>
 </body>
 </html>
 <?php		

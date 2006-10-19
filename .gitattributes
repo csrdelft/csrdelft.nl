@@ -146,6 +146,8 @@ lib/bbcode/include.bbcode.php -text
 lib/bbcode/lang_main.php -text
 lib/blowfish/blowfish.php -text
 lib/blowfish/blowfish_default_key.php -text
+lib/class.bestuur.php -text
+lib/class.bestuurcontent.php -text
 lib/class.bieb.php -text
 lib/class.biebcontent.php -text
 lib/class.cieoverzichtcontent.php -text
@@ -200,6 +202,7 @@ lib/tekst/bestuurstekst.html -text
 lib/tekst/datum.php -text
 lib/tekst/fotoalbum.html -text
 lib/tekst/geentoegang.html -text
+lib/tekst/groepen.html -text
 lib/tekst/ihk-quotes.html -text
 lib/tekst/informatie/algemeen.html -text
 lib/tekst/informatie/contact.html -text
@@ -214,6 +217,7 @@ lib/tekst/maaltijd2.html -text
 lib/tekst/oudleden-thuis.html -text
 lib/tekst/thuis.html -text
 lib/tekst/thuis2.html -text
+lib/tekst/verbanden.html -text
 lib/templates/csrmail/csrmail.tpl -text
 lib/templates/csrmail/csrmail_owee.tpl -text
 lib/templates/forum/viewtopic.tpl -text

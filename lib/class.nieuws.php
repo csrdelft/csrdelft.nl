@@ -51,7 +51,8 @@ class Nieuws {
 				nieuws.uid as uid, 
 					lid.voornaam as voornaam, lid.achternaam as achternaam, lid.tussenvoegsel as tussenvoegsel,
 				nieuws.prive as prive, 
-				nieuws.verborgen as verborgen
+				nieuws.verborgen as verborgen,
+				nieuws.plaatje as plaatje
 			FROM
 				nieuws
 			INNER JOIN

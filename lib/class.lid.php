@@ -106,7 +106,6 @@ class Lid {
 	
 
 	function logout() {
-		session_unset();
 		setcookie (session_name(), '', (time () - 2592000), '/', '', 0);
 		session_destroy();
 	}
@@ -995,7 +994,7 @@ class Lid {
 		# extra dingen, waarvoor de array perm_user zelf nodig is
 		$this->_perm_user['P_PUBCIE']  = $this->_perm_user['P_MODERATOR'];
 		$this->_perm_user['P_MAALCIE'] = $this->_perm_user['P_LID'] | $p['P_MAAL_MOD'];
-		$this->_perm_user['P_BESTUUR'] = $this->_perm_user['P_LID'] | $p['P_LEDEN_MOD'] | $p['P_OUDLEDEN_READ'] | $p['P_NEWS_MOD'] | $p['P_MAAL_MOD'] | $p['P_AGENDA_POST'] | $p['P_FORUM_MOD'];
+		$this->_perm_user['P_BESTUUR'] = $this->_perm_user['P_LID'] | $p['P_LEDEN_MOD'] | $p['P_OUDLEDEN_READ'] | $p['P_NEWS_MOD'] | $p['P_MAAL_MOD'] | $p['P_AGENDA_POST'] | $p['P_FORUM_MOD'] | $p['P_DOCS_MOD'];
 		$this->_perm_user['P_VAB']     = $this->_perm_user['P_BESTUUR']  | $p['P_OUDLEDEN_MOD'];
 		$this->_perm_user['P_KNORRIE'] = $this->_perm_user['P_LID'] | $p['P_MAAL_MOD'];
 

@@ -34,7 +34,7 @@ class ForumContent extends SimpleHTML {
 ***********************************************************************************************************/	
 	function viewCategories(){
 		$aCategories=$this->_forum->getCategories();
-		echo '<h2>Forum</h2>';
+		//echo '<h2>Forum</h2>';
 		//eventuele foutmelding weergeven:
 		echo $this->getError();
 		echo '<table class="forumtabel">
@@ -93,7 +93,7 @@ class ForumContent extends SimpleHTML {
 			}
 			//weergeven van de navigatielinks, deze rossen we in een variabele omdat hij onderaan nogeens terug komt
 			$sNavigatieLinks='<h2><a class="forumGrootlink" href="/forum/">Forum</a> &raquo; '.mb_htmlentities($sCategorie).'</h2>';
-			echo $sNavigatieLinks;
+			//echo $sNavigatieLinks;
 			
 			//eventuele foutmelding weergeven:
 			echo $this->getError();
@@ -217,7 +217,7 @@ class ForumContent extends SimpleHTML {
 					'.mb_htmlentities($this->_forum->getCategorieTitel($aBerichten[0]['categorie'])).'
 				</a> &raquo; 
 				'.mb_htmlentities($aBerichten[0]['titel']).'</h2>';
-			echo $sNavigatieLinks;
+			//echo $sNavigatieLinks;
 			//eventuele foutmelding weergeven:
 			echo $this->getError();
 			//topic mod dingen:
@@ -520,14 +520,13 @@ class ForumContent extends SimpleHTML {
 			//alle andere ubb kek eruit rossen...
 			$tekst=preg_replace('/(\[(|\/)\w+:[a-f0-9]+\])/', '|', $tekst);
 			//$volledigetekst=$tekst=preg_replace('/(\[(|\/)url=http://[a-f0-9]+:[a-f0-9]+\])/', '|', $volledigetekst);
-			//$tekst=str_replace('-&gt;', '- &gt;', $tekst);
 			$volledigetekst=$tekst;
 			if(kapStringNetjesAf($tekst, 50)){
 				$tekst.='...';
 			}
 			echo '<item>';
 			echo '<title>'.$aPost['nickname'].': '.str_replace(array("\r\n", "\r", "\n"), ' ', $tekst).'</title>';
-			echo '<link>http://csrdelft.nl/forum/onderwerp/'.$aPost['tid'].'#'.$aPost['postID'].'</link>';
+			echo '<link>http://pubcie.csrdelft.nl/forum/onderwerp/'.$aPost['tid'].'#'.$aPost['postID'].'</link>';
 			
 			echo '<description>'.$volledigetekst.'</description>';
 			echo '<author>'.$this->_forum->getForumNaam($aPost['uid'], $aPost).'</author>';
@@ -549,10 +548,10 @@ class ForumContent extends SimpleHTML {
 		echo '<div id="forumHighlights"><a href="/forum/" class="kopje">Laatste forumberichten:</a><br />';
 		foreach($aPosts as $aPost){
 			$tekst=$aPost['nickname'].': '.$aPost['titel'];
-			if(strlen($tekst)>20){
-				$tekst=substr($tekst, 0, 18).'..';
+			if(strlen($tekst)>22){
+				$tekst=substr($tekst, 0, 19).'..';
 			}
-			echo date('H:i', strtotime($aPost['datum'])).' <a href="/forum/onderwerp/'.$aPost['tid'].'#laatste">'.$tekst.'</a><br />'."\n";
+			echo '<span class="tijd">'.date('H:i', strtotime($aPost['datum'])).'</span> <a href="/forum/onderwerp/'.$aPost['tid'].'#laatste">'.$tekst.'</a><br />'."\n";
 		}
 		echo '</div>';
 	}
@@ -659,17 +658,18 @@ class ForumContent extends SimpleHTML {
 		}
 		echo $sTitel;
 	}
-	function getTitel(){ 
+	function getTitel(){
+		$sTitel='Forum - ';
 		if($this->_actie=='topic' AND isset($_GET['topic'])){
 			$iTopicID=(int)$_GET['topic'];
 			$sCategorie=$this->_forum->getCategorieTitel($this->_forum->getCategorieVoorTopic($iTopicID));
-			$sTitel='forum - '.$sCategorie.' - '.$this->_forum->getTopicTitel($iTopicID);
+			$sTitel.=$sCategorie.' - '.$this->_forum->getTopicTitel($iTopicID);
 		}elseif($this->_actie=='forum' AND isset($_GET['forum'])){
-			$sTitel='forum - '.$this->_forum->getCategorieTitel((int)$_GET['forum']);
+			$sTitel.=$this->_forum->getCategorieTitel((int)$_GET['forum']);
 		}elseif($this->_actie=='zoeken'){
-			$sTitel='forum - zoeken';
+			$sTitel.='zoeken';
 		}else{
-			$sTitel='forum';
+			$sTitel='Forum';
 		}
 		return $sTitel; 
 	}

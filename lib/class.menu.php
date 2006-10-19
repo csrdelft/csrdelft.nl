@@ -41,7 +41,7 @@ class menu {
 		# menu ophalen
 		$sMenu="
 			SELECT  
-				ID, pID, tekst, link
+				ID, pID, tekst, link, permission
 			FROM 
 				_menu 
 			WHERE 
@@ -50,18 +50,19 @@ class menu {
 				pID ASC, prioriteit ASC, tekst ASC";
 		$rMenu=$this->_db->query($sMenu);
 		$bUitgedeeld=false;
+		$bUitgedeeldSub=false;
 		//Nu hier een boom-array maken.
 		while($aMenu=$this->_db->next($rMenu)){
 			//uitzoeken of de huidige pagina overeenkomt met de opgehaalde rij
 			$bHuidig=false; 
-			if($bUitgedeeld==false){
-				if(($aMenu['link']!='/' AND $_SERVER['REQUEST_URI']==$aMenu['link']) 
-				//OR ($aMenu['link']!='/' AND strpos($_SERVER['REQUEST_URI'], $aMenu['link'])!==false)
-					){
-					$bHuidig=true; $bUitgedeeld=true;
-					$this->_huidig=$aMenu['ID'];
-					if($aMenu['pID']!=0){ $this->_huidigTop=$aMenu['pID']; }
-				}
+			if((($bUitgedeeld==false AND $aMenu['pID']==0) OR ($bUitgedeeldSub==false AND $aMenu['pID']!=0))AND
+			( $aMenu['link']!='/' AND strpos($_SERVER['REQUEST_URI'], $aMenu['link'])!==false)){
+				$bHuidig=true; 
+				if($aMenu['pID']==0) $bUitgedeeld=true;
+				if($aMenu['pID']!=0) $bUitgedeeldSub=true;
+				$this->_huidig=$aMenu['ID'];
+				if($aMenu['pID']!=0){ $this->_huidigTop=$aMenu['pID']; }
+				
 			}
 			if($aMenu['pID']==0){
 				//hoofdniveau
@@ -71,7 +72,8 @@ class menu {
 					'tekst' => $aMenu['tekst'],
 					'link' => $aMenu['link'],
 					'subitems' => array(),
-					'huidig' => $bHuidig );
+					'huidig' => $bHuidig,
+					'rechten' => $aMenu['permission'] );
 			}else{
 				$this->_menu[$aMenu['pID']]['subitems'][$aMenu['ID']]=array(
 					'ID' => $aMenu['ID'],
@@ -79,11 +81,12 @@ class menu {
 					'tekst' => $aMenu['tekst'],
 					'link' => $aMenu['link'],
 					'subitems' => array(),
-					'huidig' => $bHuidig );
+					'huidig' => $bHuidig,
+					'rechten' => $aMenu['permission'] );
 			}
 		}
 		//standaard huidige pagina is de voorpagina met ID==1
-		if($bUitgedeeld==false AND $_SERVER['REQUEST_URI'][0]=='/'){
+		if($bUitgedeeld==false AND $bUitgedeeldSub==false AND $_SERVER['REQUEST_URI'][0]=='/'){
 			$this->_menu[1]['huidig']=true;
 			$this->_huidig=1;
 		}
@@ -93,19 +96,18 @@ class menu {
 	//viewWaarbenik gebruikt de menu array en $this->_huidig om een paadje te tekenen waar men is. 
 	function viewWaarbenik(){ 
 		echo '&raquo; ';
-		if($this->_huidig==1){
-			echo 'Thuis';
-		}else{
+		if($this->_huidig!=1){
 			if(isset($this->_menu[$this->_huidig])){
 				//één niveau diep: enkel de pagina zelf weergeven, met thuis als link ervoor
-				echo '<a href="/">Thuis</a> &raquo; '.$this->_menu[$this->_huidig]['tekst'];
+				echo ' '.$this->_menu[$this->_huidig]['tekst'];
 			}else{
 				//twee niveau's diep. Thuis link, hoofd-categorie link, sub-categorie
 				$aTop=$this->_menu[$this->_huidigTop];
-				echo '<a href="/">Thuis</a> &raquo; ';
 				echo '<a href="'.$aTop['link'].'">'.$aTop['tekst'].'</a> &raquo; ';
 				echo $aTop['subitems'][$this->_huidig]['tekst'];
 			}
+		}else{
+			echo 'Thuis';
 		}
 	}
 	
@@ -114,6 +116,8 @@ class menu {
 		$subMenu=0; $first=true;
 
 		foreach($this->_menu as $aMenuItem){
+			//controleer of de gebruiker wel het recht heeft om dit item te zien
+			if(!$this->_lid->hasPermission($aMenuItem['rechten'])) continue;
 			if(!$first){ echo ' | '; }else{ $first=false; }
 			echo '<a href="'.$aMenuItem['link'].'">';
 			if($aMenuItem['huidig']===true){ echo '<strong>'; }
@@ -128,9 +132,10 @@ class menu {
 		echo '<div id="submenuContent">';
 		if($subMenu!=0){
 			$first=true;
-			
 			foreach($this->_menu[$subMenu]['subitems'] as $aMenuItem){
-				if(!$first){ echo ' - '; }else{ echo '[ '; $first=false; }
+				//controleer of de gebruiker wel het recht heeft om dit item te zien
+				if(!$this->_lid->hasPermission($aMenuItem['rechten'])) continue;
+				if(!$first){ echo ' - '; }else{ echo '&rArr; '; $first=false; }
 				echo '<a href="'.$aMenuItem['link'].'">';
 				if($aMenuItem['huidig']===true){ echo '<strong>'; }
 				echo $aMenuItem['tekst'];

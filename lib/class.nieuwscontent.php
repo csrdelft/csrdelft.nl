@@ -43,12 +43,12 @@ class NieuwsContent extends SimpleHTML {
 	function setChop($chars) { $this->_chop = (int)$chars; }
 	function getNieuwBerichtLink(){
 		if($this->_nieuws->isNieuwsMod()){
-			echo '<a href="/nieuws/toevoegen">Nieuw nieuwsbericht toevoegen</a>';
+			return '<a href="/nieuws/toevoegen">Nieuw nieuwsbericht toevoegen</a>';
 		}
 	}
 	function getBerichtModControls($iBerichtID){
 		if($this->_nieuws->isNieuwsMod()){
-			echo '[ <a href="/nieuws/verwijderen/'.$iBerichtID.'" onclick="return confirm(\'Weet u zeker dat u dit nieuwsbericht wilt verwijderen?\')">verwijderen</a> | <a href="/nieuws/bewerken/'.$iBerichtID.'">bewerken</a> ]';
+			return '[ <a href="/nieuws/verwijderen/'.$iBerichtID.'" onclick="return confirm(\'Weet u zeker dat u dit nieuwsbericht wilt verwijderen?\')">verwijderen</a> | <a href="/nieuws/bewerken/'.$iBerichtID.'">bewerken</a> ]';
 		}
 	}
 	function bewerkFormulier(){
@@ -129,32 +129,40 @@ class NieuwsContent extends SimpleHTML {
 				}else{
 					$sBericht=bbview($aBericht['tekst'], $aBericht['bbcode_uid']);
 				}
-				echo '<div class="nieuwsbericht"><div class="nieuwsbody"><div class="nieuwstitel">';
+				echo '<div class="nieuwsbericht-vast">';
+				if($aBericht['plaatje']!=''){
+					echo '<div class="nieuwsplaatje"><img src="/layout/nieuws/'.$aBericht['plaatje'].'" width="60px" height="100px" alt="'.$aBericht['plaatje'].'" /></div>';
+				}
+				echo '<div class="nieuwsbody"><div class="nieuwstitel">';
 				//verborgen berichten aangeven, enkel bij mensen met P_NEWS_MOD
 				if($aBericht['verborgen']=='1'){ echo '<em>[verborgen] </em>';	}
 				echo mb_htmlentities($aBericht['titel']).'</div>';
 				//echo '<i>('.date('d-m-Y H:i', $aBericht['datum']).')</i> ';
 				//nieuwsbeheer functie dingen:
 				//$this->getBerichtModControls($aBericht['id']);
-				echo ''.$sBericht.'</div></div>';
+				echo ''.$sBericht.'&nbsp;'.$this->getBerichtModControls($aBericht['id']).'</div></div>';
 			}//einde foreach bericht
-			$this->getNieuwBerichtLink();
+			echo $this->getNieuwBerichtLink();
 		}
 	}
 	function getBericht(){
 		$aBericht=$this->_nieuws->getMessage($this->_berichtID);
 		if(is_array($aBericht)){
 			//weergeven
-			echo '<div class="nieuwsbericht"><div class="nieuwsbody"><div class="nieuwstitel">';
+			echo '<div class="nieuwsbericht">';
+			if($aBericht['plaatje']!=''){
+				echo '<div class="nieuwsplaatje"><img src="/layout/nieuws/'.$aBericht['plaatje'].'" width="60px" height="100px" alt="'.$aBericht['plaatje'].'" /></div>';
+			}
+			echo '<div class="nieuwsbody"><div class="nieuwstitel">';
 			//verborgen berichten aangeven, enkel bij mensen met P_NEWS_MOD
 			if($aBericht['verborgen']=='1'){ echo '<em>[verborgen] </em>';	}
 			echo mb_htmlentities($aBericht['titel']).'</div><i>('.date('d-m-Y H:i', $aBericht['datum']).')</i> ';
 			//nieuwsbeheer functie dingen:
-			$this->getBerichtModControls($aBericht['id']);
+			echo $this->getBerichtModControls($aBericht['id']);
 			echo '<br />'.bbview($aBericht['tekst'], $aBericht['bbcode_uid']).'<br />';
 			
 			echo '</div></div>';
-			$this->getNieuwBerichtLink();
+			echo $this->getNieuwBerichtLink();
 		}else{
 			echo 'Dit bericht bestaat niet, of is enkel zichtbaar voor ingelogde gebruikers.';
 		}
@@ -162,6 +170,14 @@ class NieuwsContent extends SimpleHTML {
 	function setBerichtID($iBerichtID){ $this->_berichtID=(int)$iBerichtID; }
 	function setActie($sActie){	$this->_actie=$sActie; }
 	
+	function getTitel(){
+		switch($this->_actie){
+			case 'bewerken': return 'Nieuws bewerken'; break;
+			case 'bericht': return 'Nieuwsbericht'; break;
+			case 'toevoegen': return 'Nieuws toevoegen'; break;
+			case 'overzicht': return 'Nieuws'; break;
+		}
+	}
 	function view(){
 		echo '<h3>Nieuws</h3>';
 		switch($this->_actie){

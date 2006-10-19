@@ -17,33 +17,27 @@
 
 require_once ('class.simplehtml.php');
 require_once ('bbcode/include.bbcode.php');
-require_once ('class.commissie.php');
+require_once ('class.bestuur.php');
 
-class CommissieContent extends SimpleHTML {
+class BestuurContent extends SimpleHTML {
 
 	### private ###
 
 	# de objecten die data leveren
-	var $_commissie;
+	var $_bestuur;
 	var $_lid;
 
 	### public ###
 
-	function CommissieContent (&$commissie, &$lid) {
-		$this->_commissie =& $commissie;
+	function BestuurContent (&$bestuur, &$lid) {
+		$this->_bestuur =& $bestuur;
 		$this->_lid =& $lid;
 	}
 	function getTitel(){
-		if(preg_match('/^\d+$/', $_GET['cie'])){
-			return $this->_commissie->getNaam($_GET['cie']);
-		}else{
-			return mb_htmlentities($_GET['cie']);
-		}
+		return 'Besturen der Civitas Studiosorum Reformatorum';
 	}
 	function viewWaarbenik(){
-		echo '<a href="/groepen/">Groepen</a> &raquo; 
-					<a href="/groepen/commissies.php">Commissies</a> &raquo; 
-					'.$this->getTitel();
+		echo '<a href="/vereniging/">Vereniging</a> &raquo; '.$this->getTitel();
 	}
 	function viewCommissie($cie){
 		if($this->_lid->hasPermission('P_LEDEN_READ')){
