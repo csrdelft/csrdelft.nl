@@ -21,7 +21,9 @@ class Nieuws {
 	### private ###
 	var $_lid;
 	var $_db;
-
+	
+	var $_aantal=5;
+	
 	function Nieuws(&$db, &$lid){
 		$this->_db=&$db;
 		$this->_lid=&$lid;
@@ -63,7 +65,7 @@ class Nieuws {
 			ORDER BY
 				nieuws.datum DESC
 			LIMIT
-				0, 5;";
+				0, ".$this->_aantal.";";
 		$rNieuwsBerichten=$this->_db->query($sNieuwsQuery);
 		if($iBerichtID!=0){
 			return $this->_db->next($rNieuwsBerichten);

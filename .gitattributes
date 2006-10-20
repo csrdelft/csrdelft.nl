@@ -159,6 +159,7 @@ lib/class.csrmail.php -text
 lib/class.csrmailarchiefcontent.php -text
 lib/class.csrmailcomposecontent.php -text
 lib/class.csrmailcontent.php -text
+lib/class.csrsmarty.php -text
 lib/class.dbmenu.php -text
 lib/class.documenten.php -text
 lib/class.documentencontent.php -text
@@ -197,6 +198,7 @@ lib/class.woonoordcontent.php -text
 lib/include.common.php -text
 lib/include.config.php -text
 lib/tekst/alpha.html -text
+lib/tekst/banners.html -text
 lib/tekst/bestuur.html -text
 lib/tekst/bestuurstekst.html -text
 lib/tekst/datum.php -text
@@ -216,8 +218,9 @@ lib/tekst/maaltijd.html -text
 lib/tekst/maaltijd2.html -text
 lib/tekst/oudleden-thuis.html -text
 lib/tekst/thuis.html -text
-lib/tekst/thuis2.html -text
 lib/tekst/verbanden.html -text
+lib/templates/csrdelft.tpl -text
 lib/templates/csrmail/csrmail.tpl -text
 lib/templates/csrmail/csrmail_owee.tpl -text
 lib/templates/forum/viewtopic.tpl -text
+lib/templates/profiel.tpl -text

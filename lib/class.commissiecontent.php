@@ -34,10 +34,11 @@ class CommissieContent extends SimpleHTML {
 		$this->_lid =& $lid;
 	}
 	function getTitel(){
+		
 		if(preg_match('/^\d+$/', $_GET['cie'])){
-			return $this->_commissie->getNaam($_GET['cie']);
+			return 'Commissies - '.$this->_commissie->getNaam($_GET['cie']);
 		}else{
-			return mb_htmlentities($_GET['cie']);
+			return 'Commissies - '.mb_htmlentities($_GET['cie']);
 		}
 	}
 	function viewWaarbenik(){
@@ -65,7 +66,7 @@ class CommissieContent extends SimpleHTML {
 						</td><td>'.mb_htmlentities($aCieLid['functie']);
 					echo '</td>';
 					if($this->_commissie->magBewerken()){
-						echo '<td><a href="/informatie/commissie/'.$cie['id'].'/verwijder/lid/'.$aCieLid['uid'].'">X</a></td>';
+						echo '<td><a href="/groepen/commissie/'.$cie['id'].'/verwijder/lid/'.$aCieLid['uid'].'">X</a></td>';
 					}
 					
 					echo '</tr>';
@@ -77,7 +78,7 @@ class CommissieContent extends SimpleHTML {
 					echo '<table border="0" cellpadding="5px" class="hoktable" ><tr><td>'.$aCieLeden.'</td></tr></table>';
 				}
 			}
-			echo '</td></tr></table><a href="javascript: history.go(-1)">[ Terug ]</a>';
+			echo '</td></tr></table>';
 			if($this->_commissie->magBewerken()){
 				echo '<hr /><h2>Deze commissie beheren:</h2>
 					<br />
@@ -119,13 +120,13 @@ class CommissieContent extends SimpleHTML {
 		}else{
 			//zonder commissieleden
 			echo '<table border="0" width="100%">
-				<tr><td><center><span class="kopje2">'.$cie['titel'].'</span></center></td></tr>
+				<tr><td><h2>'.$cie['titel'].'</h2></td></tr>
 				<tr><td>'.bbview($cie['tekst'], $cie['bbcode_uid']);
 			//eventueel link
 			if ($cie['link'] != '') {
 				echo 'CommissieWebstek: <a href="'.htmlspecialchars($cie['link']).'">'.mb_htmlentities($cie['link']).'</a>';	
 			}
-			echo '</td></tr></table><a href="javascript: history.go(-1)">[ Terug ]</a>';
+			echo '</td></tr></table>';
 		}
 		
 	}

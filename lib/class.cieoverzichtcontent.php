@@ -34,22 +34,28 @@ class CieOverzichtContent extends SimpleHTML {
 		$this->_commissie =& $commissie;
 		$this->_lid =& $lid;
 	}
+	function getTitel(){
+		return 'Commissieoverzicht';
+	}
+	function viewWaarbenik(){
+		echo '<a href="/groepen/">Groepen</a> &raquo; '.$this->getTitel();
+	}
 	function viewCieOverzicht(){
 		if ($this->_lid->hasPermission('P_LEDEN_READ')){
 			//met commissieleden
 			echo '<table border="0" cellspacing="0" cellpadding="0" marginheight="0" marginwidth="0"><tr>';
-			echo '<td><hr /><span class="kopje2">Commissies</span><hr /></td>
+		/*	echo '<td><hr /><span class="kopje2">Commissies</span><hr /></td>
 				<td width="2%"><img src="/images/pixel.gif" width="100%" height="1"></td>
-				<td><hr /><span class="kopje2">Commissieleden</span><hr /></td>';
+				<td><hr /><span class="kopje2">Commissieleden</span><hr /></td>';*/
 			echo '</tr>';
 			$cieoverzicht = $this->_commissie->getOverzicht();
 			foreach ($cieoverzicht as $cie) {
 				echo '
 					<tr height="30px">
 						<td colspan="3" width="100%" valign="bottom">
-							<a href="/informatie/commissie/'.htmlspecialchars($cie['naam']).'.html" class="a2">
+							<h2><a href="./commissie/'.htmlspecialchars($cie['naam']).'.html">
 								'.mb_htmlentities($cie['titel']).'
-							</a>
+							</a></h2>
 						</td>
 					</tr>
 					<tr>
@@ -77,7 +83,7 @@ class CieOverzichtContent extends SimpleHTML {
 				echo '
 					<tr height="30px">
 						<td colspan="3" width="100%" valign="bottom">
-							<a href="/informatie/commissie.php?cie='.htmlspecialchars($cie['naam']).'" class="a2">'.mb_htmlentities($cie['titel']).'</a>
+							<a href="./commissie.php?cie='.htmlspecialchars($cie['naam']).'" class="a2">'.mb_htmlentities($cie['titel']).'</a>
 					</td>
 					</tr>
 					<tr>

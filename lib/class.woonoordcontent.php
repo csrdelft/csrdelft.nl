@@ -77,7 +77,7 @@ class WoonoordContent extends SimpleHTML {
 				if(trim($woonoord['link'])==''){ 
 					echo '<h3>'.mb_htmlentities($woonoord['naam']).'</h3>'; 
 				}else{ 
-					echo '<a href="'.htmlspecialchars($woonoord['link']).'" class="a3">'.mb_htmlentities($woonoord['naam']).'</a>'; 
+					echo '<h3><a href="'.htmlspecialchars($woonoord['link']).'">'.mb_htmlentities($woonoord['naam']).'</a></h3>'; 
 				} 
 				echo '('.htmlspecialchars($woonoord['adres']).')</td>';
 				echo '<td valign="top" rowspan="2">';

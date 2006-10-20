@@ -218,6 +218,7 @@ class ForumContent extends SimpleHTML {
 				</a> &raquo; 
 				'.mb_htmlentities($aBerichten[0]['titel']).'</h2>';
 			//echo $sNavigatieLinks;
+			echo '<h2>'.mb_htmlentities($aBerichten[0]['titel']).'</h2>';
 			//eventuele foutmelding weergeven:
 			echo $this->getError();
 			//topic mod dingen:

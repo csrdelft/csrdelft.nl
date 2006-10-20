@@ -20,12 +20,10 @@ define('DATA_PATH', '/srv/www/www.csrdelft.nl/data');
 define('PICS_PATH', '/srv/www/www.csrdelft.nl/htdocs/images');
 define('HTDOCS_PATH', '/srv/www/www.csrdelft.nl/htdocs');
 define('TMP_PATH', '/srv/www/www.csrdelft.nl/tmp');
-# uitzondering:
-define('SMARTY_DIR', '/srv/www/www.csrdelft.nl/lib/smarty/');
 
 # urls met trailing slash
 define('CSR_PICS', 'http://csrdelft.nl/images/');
-define('CSR_ROOT','http://csrdelft.nl/');
+define('CSR_ROOT','http://pubcie.csrdelft.nl/');
 
 # We willen geen sessie-id in de url hebben
 ini_set('session.use_only_cookies', 1);
@@ -50,5 +48,28 @@ define('MAALTIJD_PROXY_MAX_TOT', 86400*2);
 define('MAX_MAALTIJD', 100);
 //verenigingsstatisticus
 define('STATISTICUS', '0217' );
+
+//stapeltje dingen includeren die toch (bijna) altijd nodig zijn:
+require_once('include.common.php');
+require_once('class.lid.php');
+require_once('class.mysql.php');
+
+require_once('class.simplehtml.php');
+require_once('class.kolom.php');
+require_once('class.includer.php');
+require_once('class.csrdelft.php');
+
+//smarty template engine...
+define('SMARTY_DIR', LIB_PATH.'/smarty/libs/');
+define('SMARTY_TEMPLATE_DIR', LIB_PATH.'/templates/');
+define('SMARTY_COMPILE_DIR', DATA_PATH.'/smarty/compiled/');
+define('SMARTY_CACHE_DIR', DATA_PATH.'/smarty/cache/');
+
+require_once('class.csrsmarty.php');
+
+session_start();
+$db = new MySQL();
+$lid = new Lid($db);
+
 
 ?>
