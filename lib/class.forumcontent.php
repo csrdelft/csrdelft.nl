@@ -110,12 +110,10 @@ class ForumContent extends SimpleHTML {
 					if($aTopic['zichtbaar']=='wacht_goedkeuring'){ $sOnderwerp.='[ter goedkeuring...] '; }
 					$sOnderwerp.='<a href="/forum/onderwerp/'.$aTopic['id']. '#laatste" >';
 					if($aTopic['plakkerig']==1){
-						$sOnderwerp.='<img src="/images/plakkerig.gif" title="Dit onderwerp is plakkerig, 
-							het blijft bovenaan." alt="plakkerig" style="border: 0px;" />&nbsp;&nbsp;';
+						$sOnderwerp.='<img src="/images/plakkerig.gif" title="Dit onderwerp is plakkerig, het blijft bovenaan." alt="plakkerig" />&nbsp;&nbsp;';
 					}
 					if($aTopic['open']==0){
-						$sOnderwerp.='<img src="/images/slotje.png" title="Dit onderwerp is gesloten, 
-							u kunt niet meer reageren" alt="sluiten" style="border: 0px;" />&nbsp;&nbsp;';
+						$sOnderwerp.='<img src="/images/slotje.png" title="Dit onderwerp is gesloten, u kunt niet meer reageren" alt="sluiten" />&nbsp;&nbsp;';
 					}
 					$sOnderwerp.=mb_htmlentities($aTopic['titel']).'</a>';
 					$sReacties=$aTopic['reacties']-1;

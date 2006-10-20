@@ -65,9 +65,9 @@ class ProfielContent extends SimpleHTML {
 		
 		# leden-foto, mag gif of jpg zijn.
 		if (file_exists( HTDOCS_PATH.'/leden/pasfotos/'.$this->_profiel['uid'].'.gif')){
-			$profhtml['foto'] = '<img src="http://csrdelft.nl/leden/pasfotos/'.$this->_profiel['uid'].'.gif" />';
+			$profhtml['foto'] = '<img src="http://csrdelft.nl/leden/pasfotos/'.$this->_profiel['uid'].'.gif" alt="pasfoto" />';
 		}elseif(file_exists( HTDOCS_PATH.'/leden/pasfotos/'.$this->_profiel['uid'].'.jpg')){
-			$profhtml['foto'] = '<img src="http://csrdelft.nl/leden/pasfotos/'.$this->_profiel['uid'].'.jpg" />';
+			$profhtml['foto'] = '<img src="http://csrdelft.nl/leden/pasfotos/'.$this->_profiel['uid'].'.jpg" alt="pasfoto" />';
 		}elseif($profhtml['status']=='S_NOVIET'){
 			$aSjaars=array('pino.png', 'oscar.png', 'elmo.png');
 			$profhtml['foto']= '<img src="http://csrdelft.nl/leden/pasfotos/'.$aSjaars[rand(0, count($aSjaars)-1)].'" 
@@ -218,106 +218,71 @@ class ProfielContent extends SimpleHTML {
 		$form[1]['nickname'] = array('input',"Bijnaam:");
 		$form[1][] = array('ztekst',"&nbsp;","Wachtwoord wijzigen (optioneel):");
 		$form[1]['oldpass'] = array('password',"Oude wachtwoord:");
-		$form[1]['nwpass'] = array('password',"Nieuwe wachtwoord:");
-		$form[1]['nwpass2'] = array('password',"Nieuwe wachtwoord:");
+		$form[1]['nwpass'] = array('password',"Nieuw wachtwoord:");
+		$form[1]['nwpass2'] = array('password',"Nieuw wachtwoord:");
 		
+		//status veranderen...
+		if ($this->_lid->hasPermission('P_LEDEN_MOD')) {
+			$form[1]['status'] = array('select', 'Status:', 
+				array('S_LID' => 'Lid', 'S_GASTLID' => 'Gastlid', 
+					'S_KRINGEL'=>'Kringel', 'S_NOVIET'=>'Noviet', 'S_OUDLID'=>'Oudlid', 'S_NOBODY' => 'Geen lid'));
+		}
 		# evt. foutmeldingen ophalen
 		$formerror = $this->_lid->getFormErrors();
 		$myurl = $this->_state->getMyUrl();
-				
-				print(<<<EOT
-<form name="frmcontent" action="{$myurl}" method="POST">
-<input type="hidden" name="a" value="save">
-
-<table align="center" class="tekst" border="0" cellspacing="0" cellpadding="0" marginheight="0" marginwidth="0">
-<tr>
-
-EOT
-				);
+		echo '
+			<form name="frmcontent" action="'.$myurl.'" method="post">
+				<input type="hidden" name="a" value="save" />
+				<table>
+					<tr>';
 				foreach ($form as $formkolom) {
-					print(<<<EOT
-<td valign="top">
-<table align="center" class="tekst" border="0" cellspacing="2" cellpadding="0" marginheight="0" marginwidth="0">
-
-EOT
-					);
-
+					echo '<td><table class="profiel_edit">';
 					foreach ($formkolom as $field => $fieldinfo) {
 						if (isset($formerror[$field])) {
-							print(<<<EOT
-<tr>
-<td>&nbsp;</td>
-<td class="tekstrood">{$formerror[$field]}</td>
-</tr>
-
-EOT
-							);
+							echo '<tr><td>&nbsp;</td><td class="waarschuwing">'.$formerror[$field].'</td></tr>';
 						}
-						
-						switch ($fieldinfo[0]) {
-							case 'input':
-								# is de inhoud van het vak al meegegeven?
-								if (isset($fieldinfo[2])) $field_usr = mb_htmlentities($fieldinfo[2]);
-								else $field_usr = mb_htmlentities($this->_profiel[$field]);
-								print(<<<EOT
-<tr>
-<td>{$fieldinfo[1]}</td>
-<td><input type="text" name="frmdata[{$field}]" class="tekst" style="width:260px;" value="{$field_usr}"></td>
-</tr>
-
-EOT
-								);
-								break;
-							case 'textarea':
-								$field_usr = mb_htmlentities($this->_profiel[$field]);
-								print(<<<EOT
-<tr>
-<td valign="top">{$fieldinfo[1]}</td>
-<td><textarea name="frmdata[{$field}]" rows="{$fieldinfo[2]}" style="width:260px" class="tekst">{$field_usr}</textarea>
-</td>
-</tr>
-
-EOT
-								);
-								break;
-							case 'ztekst':
-								print("<tr><td>{$fieldinfo[1]}</td><td>{$fieldinfo[2]}</td></tr>\n");
-								break;
-							case 'password':
-								print(<<<EOT
-<tr>
-<td>{$fieldinfo[1]}</td>
-<td><input type="password" name="frmdata[{$field}]" class="tekst" style="width:260px;" value=""></td>
-</tr>
-
-EOT
-								);
-								break;
-							case 'select':
-								print("<tr>\n<td>\n{$fieldinfo[1]}\n</td>\n");
-								print("<td>\n<select name=\"frmdata[{$field}]\" class=\"tekst\">\n");
-								foreach ($fieldinfo[2] as $key => $value) {
-									$selected = ($this->_profiel[$field] == $key) ? ' selected' : '';
-									printf("<option value=\"%s\" %s>%s</option>\n", $key, $selected, $value);
-								}
-								print("</select>\n</td>\n</tr>\n");
-								break;
-						}
+						//roept een methode aan die verschillende formulier-elementen kan maken.
+						$this->viewFormField($field, $fieldinfo);
 					}
-					print("</table>\n</td>");
+					echo '</table></td>';
 				}
-				print(<<<EOT
-</tr>
-</table>
-<br clear="all">
-<center>
-<input type="image" src="/images/wijzigingen_opslaan.gif" width=106 height=12 alt="Wijzigingen opslaan" name="foo" value="bar">
-<a href="{$myurl}"><img src="/images/annuleren.gif" width=69 height=12 alt="Annuleren" border="0"></a>
-</center>
-</form>
-
-EOT
-				);
+				echo '</tr></table><br />
+					<input type="image" src="/images/wijzigingen_opslaan.gif" width=106 height=12 alt="Wijzigingen opslaan" name="foo" value="bar">
+					<a href="'.$myurl.'"><img src="/images/annuleren.gif" width=69 height=12 alt="Annuleren" border="0"></a>
+					</form>';
+	}
+	function viewFormField($field, $fieldinfo){
+		echo '<tr><td>'.$fieldinfo[1].'</td><td>';
+		switch ($fieldinfo[0]) {
+			case 'input':
+				# is de inhoud van het vak al meegegeven?
+				if(isset($fieldinfo[2])){ 
+					$field_usr = mb_htmlentities($fieldinfo[2]);
+				}else{ 
+					$field_usr = mb_htmlentities($this->_profiel[$field]);
+				}
+				echo '<input type="text" name="frmdata['.$field.']" value="'.$field_usr.'" />';
+			break;
+			case 'textarea':
+				$field_usr = mb_htmlentities($this->_profiel[$field]);
+				echo '<textarea name="frmdata['.$field.']" rows="'.$fieldinfo[2].'">'.$field_usr.'</textarea>';
+			break;
+			case 'ztekst':
+				echo $fieldinfo[2];
+			break;
+			case 'password':
+				echo '<input type="password" name="frmdata['.$field.']" value="" />';
+			break;
+			case 'select':
+				echo '<select name="frmdata['.$field.']">';
+				foreach ($fieldinfo[2] as $key => $value) {
+					$selected = ($this->_profiel[$field] == $key) ? ' selected="selected"' : '';
+					echo '<option value="'.$key. '" '.$selected.'>'.$value.'</option>';
+				}
+				echo '</select>';
+			break;
+		}
+		echo '</td></tr>'."\n";
 	}
 	function view() {
 		switch($this->_state->getMyState()) {

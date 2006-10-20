@@ -192,14 +192,17 @@ class Lid {
 		# delta leeggooien
 		$this->_delta = array();
 		
+		//de post-array inladen in $invoer
+		$form=$_POST['frmdata'];
+		
 		# 1. eerst de tekstvelden die het lid zelf mag wijzigen
 		# NB: beroep en eetwens wordt niet getoond in het profiel bij S_LID, adres ouders niet bij S_OUDLID
 		$velden = array('adres' => 100, 'postcode' => 20, 'woonplaats' => 50, 'land' => 50, 'o_adres' => 100,
 		  'o_postcode' => 20, 'o_woonplaats' => 50, 'o_land' => 50, 'skype' => 50, 'eetwens' => 50, 'beroep' => 750 );
 		# voor al deze veldnamen...
 		foreach($velden as $veld => $max_lengte) {
-			if (isset($_POST['frmdata'][$veld])) {
-				$invoer = trim(strval($_POST['frmdata'][$veld]));
+			if (isset($form[$veld])) {
+				$invoer = trim(strval($form[$veld]));
 				# is het wel een wijziging?
 				if ($invoer != $this->_tmpprofile[$veld]) {
 					# controleren op juiste inhoud...
@@ -227,8 +230,8 @@ class Lid {
 		$veld = 'nickname';
 		$max_lengte = 20;
 
-		if (isset($_POST['frmdata'][$veld])) {
-			$invoer = trim(strval($_POST['frmdata'][$veld]));
+		if (isset($form[$veld])) {
+			$invoer = trim(strval($form[$veld]));
 			# is het wel een wijziging?
 			if ($invoer != $this->_tmpprofile[$veld]) {
 				# controleren op juiste inhoud...
@@ -258,8 +261,8 @@ class Lid {
 		$veld = 'website';
 		$max_lengte = 80;
 
-		if (isset($_POST['frmdata'][$veld])) {
-			$invoer = trim(strval($_POST['frmdata'][$veld]));
+		if (isset($form[$veld])) {
+			$invoer = trim(strval($form[$veld]));
 			# is het wel een wijziging?
 			if ($invoer != $this->_tmpprofile[$veld]) {
 				# controleren op juiste inhoud...
@@ -289,8 +292,8 @@ class Lid {
 			
 		# 3. forum-instellingen
 		$veld = 'forum_name';
-		if (isset($_POST['frmdata'][$veld])) {
-			$invoer = trim(strval($_POST['frmdata'][$veld]));
+		if (isset($form[$veld])) {
+			$invoer = trim(strval($form[$veld]));
 			if ($invoer != 'civitas' and $invoer != 'nick') $invoer = 'civitas';
 			# is het wel een wijziging?
 			if ($invoer != $this->_tmpprofile[$veld]) {
@@ -308,8 +311,8 @@ class Lid {
 		# 4. telefoonvelden
 		$velden = array('telefoon', 'mobiel', 'o_telefoon');
 		foreach ($velden as $veld) {
-			if (isset($_POST['frmdata'][$veld])) {
-				$invoer = trim(strval($_POST['frmdata'][$veld]));
+			if (isset($form[$veld])) {
+				$invoer = trim(strval($form[$veld]));
 				# is het wel een wijziging?
 				if ($invoer != $this->_tmpprofile[$veld]) {
 					# geldige telefoonnummers...
@@ -334,8 +337,8 @@ class Lid {
 		
 		# 5. ICQ nummer
 		$veld = 'icq';
-		if (isset($_POST['frmdata'][$veld])) {
-			$invoer = trim(strval($_POST['frmdata'][$veld]));
+		if (isset($form[$veld])) {
+			$invoer = trim(strval($form[$veld]));
 			# is het wel een wijziging?
 			if ($invoer != $this->_tmpprofile[$veld]) {
 				if (!preg_match('/^\d{5,10}$/', $invoer) and $invoer != "") {
@@ -359,8 +362,8 @@ class Lid {
 		# 6. Mailadressen
 		$velden = array('email', 'msn');
 		foreach ($velden as $veld) {
-			if (isset($_POST['frmdata'][$veld])) {
-				$invoer = trim(strval($_POST['frmdata'][$veld]));
+			if (isset($form[$veld])) {
+				$invoer = trim(strval($form[$veld]));
 				# is het wel een wijziging?
 				if ($invoer != $this->_tmpprofile[$veld]) {
 					# we gaan dus iets veranderen.
@@ -411,8 +414,8 @@ class Lid {
 		# 9. Jabber ID
 		$velden = array('jid');
 		foreach ($velden as $veld) {
-			if (isset($_POST['frmdata'][$veld])) {
-				$invoer = trim(strval($_POST['frmdata'][$veld]));
+			if (isset($form[$veld])) {
+				$invoer = trim(strval($form[$veld]));
 				# is het wel een wijziging?
 				if ($invoer != $this->_tmpprofile[$veld]) {
 					# we gaan dus iets veranderen.
@@ -465,12 +468,12 @@ class Lid {
 		$velden = array('oldpass', 'nwpass', 'nwpass2');
 		$pwveldenset = true;
 		# controleren of velden in de invoer zitten
-		foreach ($velden as $veld) if (!isset($_POST['frmdata'][$veld])) $pwveldenset = false;
+		foreach ($velden as $veld) if (!isset($form[$veld])) $pwveldenset = false;
 		# alleen doorgaan als ze er alledrie zijn
 		if ($pwveldenset === true) {
-			$oldpass = strval($_POST['frmdata']['oldpass']);
-			$nwpass = strval($_POST['frmdata']['nwpass']);
-			$nwpass2 = strval($_POST['frmdata']['nwpass2']);
+			$oldpass = strval($form['oldpass']);
+			$nwpass = strval($form['nwpass']);
+			$nwpass2 = strval($form['nwpass2']);
 		  
 			$tmperror='';
 			# alleen actie ondernemen als er een oud password is ingevuld
@@ -514,8 +517,8 @@ class Lid {
 			# voor al deze veldnamen...
 			foreach($velden as $veld => $max_lengte) {
 				# kijken of ze in POST voorkomen...
-				if (isset($_POST['frmdata'][$veld])) {
-					$invoer = trim(strval($_POST['frmdata'][$veld]));
+				if (isset($form[$veld])) {
+					$invoer = trim(strval($form[$veld]));
 					# is het wel een wijziging?
 					if ($invoer != $this->_tmpprofile[$veld]) {
 						# controleren op juiste inhoud...
@@ -544,8 +547,8 @@ class Lid {
 			# voor al deze veldnamen...
 			foreach($velden as $veld => $max_lengte) {
 				# kijken of ze in POST voorkomen...
-				if (isset($_POST['frmdata'][$veld])) {
-					$invoer = trim(strval($_POST['frmdata'][$veld]));
+				if (isset($form[$veld])) {
+					$invoer = trim(strval($form[$veld]));
 					# is het wel een wijziging?
 					if ($invoer != $this->_tmpprofile[$veld]) {
 						# controleren op juiste inhoud...
@@ -572,8 +575,8 @@ class Lid {
 			# moet een getal tussen 1900 en 2100 zijn allemaal
 			foreach($velden as $veld) {
 				# kijken of ze in POST voorkomen...
-				if (isset($_POST['frmdata'][$veld])) {
-					$invoer = trim(strval($_POST['frmdata'][$veld]));
+				if (isset($form[$veld])) {
+					$invoer = trim(strval($form[$veld]));
 					# is het wel een wijziging?
 					if ($invoer != $this->_tmpprofile[$veld]) {
 						# controleren op juiste inhoud...
@@ -597,8 +600,8 @@ class Lid {
 			
 			# geboortedatum
 			$veld = 'gebdatum';
-			if (isset($_POST['frmdata'][$veld])) {
-				$invoer = trim(strval($_POST['frmdata'][$veld]));
+			if (isset($form[$veld])) {
+				$invoer = trim(strval($form[$veld]));
 				# Kijk of de invoer zinvol te splitsen is in d-m-YYYY
 				$matches = array();
 				if (!preg_match('/^(\d\d?)-(\d\d?)-(\d{4}$)/', $invoer, $matches)) {
@@ -664,8 +667,8 @@ class Lid {
 			$velden = array('postfix' => 7, 'voornamen' => 100, 'kerk' => 50, 'muziek' => 100);
 			# voor al deze veldnamen...
 			foreach($velden as $veld => $max_lengte) {
-				if (isset($_POST['frmdata'][$veld])) {
-					$invoer = trim(strval($_POST['frmdata'][$veld]));
+				if (isset($form[$veld])) {
+					$invoer = trim(strval($form[$veld]));
 					# is het wel een wijziging?
 					if ($invoer != $this->_tmpprofile[$veld]) {
 						# controleren op juiste inhoud...
@@ -691,10 +694,10 @@ class Lid {
 			$velden = array ('kring' => 10, 'moot' => 4);
 			foreach($velden as $veld => $max) {
 				# kijken of ze in POST voorkomen, zo niet...
-				if (!isset($_POST['frmdata'][$veld])) {
+				if (!isset($form[$veld])) {
 					$this->_formerror[$veld] = "Whraagh! ik mis een veld in de data! --> {$veld}";
 				} else {
-					$invoer = trim(strval($_POST['frmdata'][$veld]));
+					$invoer = trim(strval($form[$veld]));
 					# is het wel een wijziging?
 					if ($invoer != $this->_tmpprofile[$veld]) {
 						# controleren op juiste inhoud...
@@ -719,8 +722,8 @@ class Lid {
 			# is deze persoon kringleider? (n)iet, (e)erstejaars, (o)uderejaars
 			$veld = 'kringleider';
 			# kijken of het veld in POST voorkomt, zo niet...
-			if (isset($_POST['frmdata'][$veld])) {
-				$invoer = trim(strval($_POST['frmdata'][$veld]));
+			if (isset($form[$veld])) {
+				$invoer = trim(strval($form[$veld]));
 				# is het wel een wijziging?
 				if ($invoer != $this->_tmpprofile[$veld]) {
 					# controleren op juiste inhoud...
@@ -741,8 +744,8 @@ class Lid {
 			# is deze persoon motebal? (0) nee, (1) ja
 			$veld = 'motebal';
 			# kijken of het veld in POST voorkomt, zo niet...
-			if (isset($_POST['frmdata'][$veld])) {
-				$invoer = trim(strval($_POST['frmdata'][$veld]));
+			if (isset($form[$veld])) {
+				$invoer = trim(strval($form[$veld]));
 				# is het wel een wijziging?
 				if ($invoer != $this->_tmpprofile[$veld]) {
 					# controleren op juiste inhoud...
@@ -763,13 +766,37 @@ class Lid {
 			# is deze persoon (m)an/(v)rouw?
 			$veld = 'geslacht';
 			# kijken of het veld in POST voorkomt, zo niet...
-			if (isset($_POST['frmdata'][$veld])) {
-				$invoer = trim(strval($_POST['frmdata'][$veld]));
+			if (isset($form[$veld])) {
+				$invoer = trim(strval($form[$veld]));
 				# is het wel een wijziging?
 				if ($invoer != $this->_tmpprofile[$veld]) {
 					# controleren op juiste inhoud...
 					if (!preg_match('/^[mv]$/', $invoer)) {
 						$this->_formerror[$veld] = "Gebruik (m)an, (v)rouw:";
+					} else {
+						# bewaar oude en nieuwe waarde in delta
+						$this->_delta[$veld] = array (
+							'oud'  => $this->_tmpprofile[$veld],
+							'nieuw'  => $invoer
+						);
+						# nieuwe waarde in tmpprofile voor diff_to_*
+						$this->_tmpprofile[$veld] = $invoer;
+					}
+				}
+			}
+			
+			# wat is de status van dit lid?
+			$veld = 'status';
+			# kijken of het veld in POST voorkomt, zo niet...
+			if (isset($form[$veld])) {
+				$invoer = trim(strval($form[$veld]));
+				# is het wel een wijziging?
+				if ($invoer != $this->_tmpprofile[$veld]) {
+					# controleren op juiste inhoud...
+					$aValide=array('S_LID', 'S_GASTLID', 'S_KRINGEL', 'S_NOVIET', 'S_OUDLID', 'S_NOBODY');
+					if (!in_array($invoer, $aValide)) {
+						$this->_formerror[$veld] = "Deze status bestaat niet.";
+						echo 'blaat '.$invoer; exit;
 					} else {
 						# bewaar oude en nieuwe waarde in delta
 						$this->_delta[$veld] = array (
