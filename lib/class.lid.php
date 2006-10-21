@@ -97,7 +97,7 @@ class Lid {
 	
 	function reloadProfile() {
 		$result = $this->_db->select("SELECT * FROM lid WHERE uid = '{$_SESSION['_uid']}' LIMIT 1");
-        if (($result !== false) and $this->_db->numRows($result) > 0) {
+		if (($result !== false) and $this->_db->numRows($result) > 0) {
 			$this->_profile = $this->_db->next($result);
 			return true;
 		}
@@ -192,7 +192,7 @@ class Lid {
 		# delta leeggooien
 		$this->_delta = array();
 		
-		//de post-array inladen in $invoer
+		//de post-array inladen in $form
 		$form=$_POST['frmdata'];
 		
 		# 1. eerst de tekstvelden die het lid zelf mag wijzigen
@@ -214,10 +214,7 @@ class Lid {
 					# als er geen fout is opgetreden veranderde waarde bewaren
 					if (!isset($this->_formerror[$veld])) {
 						# bewaar oude en nieuwe waarde in delta
-						$this->_delta[$veld] = array (
-							'oud'  => $this->_tmpprofile[$veld],
-							'nieuw'  => $invoer
-						);
+						$this->storeDeltaProfile($veld, $invoer);
 					}
 					# nieuwe waarde in tmpprofile, is of voor afbeelden in het invulvak,
 					# of voor diff_to_*
@@ -246,10 +243,7 @@ class Lid {
 				# als er geen fout is opgetreden veranderde waarde bewaren
 				if (!isset($this->_formerror[$veld])) {
 					# bewaar oude en nieuwe waarde in delta
-					$this->_delta[$veld] = array (
-						'oud'  => $this->_tmpprofile[$veld],
-						'nieuw'  => $invoer
-					);
+					$this->storeDeltaProfile($veld, $invoer);
 				}
 				# nieuwe waarde in tmpprofile, is of voor afbeelden in het invulvak,
 				# of voor diff_to_*
@@ -279,10 +273,7 @@ class Lid {
 				# als er geen fout is opgetreden veranderde waarde bewaren
 				if (!isset($this->_formerror[$veld])) {
 					# bewaar oude en nieuwe waarde in delta
-					$this->_delta[$veld] = array (
-						'oud'  => $this->_tmpprofile[$veld],
-						'nieuw'  => $invoer
-					);
+					$this->storeDeltaProfile($veld, $invoer);
 				}
 				# nieuwe waarde in tmpprofile, is of voor afbeelden in het invulvak,
 				# of voor diff_to_*
@@ -298,10 +289,7 @@ class Lid {
 			# is het wel een wijziging?
 			if ($invoer != $this->_tmpprofile[$veld]) {
 				# bewaar oude en nieuwe waarde in delta
-				$this->_delta[$veld] = array (
-					'oud'  => $this->_tmpprofile[$veld],
-					'nieuw'  => $invoer
-				);
+				$this->storeDeltaProfile($veld, $invoer);
 				# nieuwe waarde in tmpprofile voor diff_to_*
 				$this->_tmpprofile[$veld] = $invoer;
 			}
@@ -323,10 +311,7 @@ class Lid {
 					# als er geen fout is opgetreden veranderde waarde bewaren
 					if (!isset($this->_formerror[$veld])) {
 						# bewaar oude en nieuwe waarde in delta
-						$this->_delta[$veld] = array (
-							'oud'  => $this->_tmpprofile[$veld],
-							'nieuw'  => $invoer
-						);
+						$this->storeDeltaProfile($veld, $invoer);
 					}
 					# nieuwe waarde in tmpprofile, is of voor afbeelden in het invulvak,
 					# of voor diff_to_*
@@ -348,10 +333,7 @@ class Lid {
 				# als er geen fout is opgetreden veranderde waarde bewaren
 				if (!isset($this->_formerror[$veld])) {
 					# bewaar oude en nieuwe waarde in delta
-					$this->_delta[$veld] = array (
-						'oud'  => $this->_tmpprofile[$veld],
-						'nieuw'  => $invoer
-					);
+					$this->storeDeltaProfile($veld, $invoer);
 				}
 				# nieuwe waarde in tmpprofile, is of voor afbeelden in het invulvak,
 				# of voor diff_to_*
@@ -399,10 +381,7 @@ class Lid {
 					# als er geen fout is opgetreden veranderde waarde bewaren
 					if (!isset($this->_formerror[$veld])) {
 						# bewaar oude en nieuwe waarde in delta
-						$this->_delta[$veld] = array (
-							'oud'  => $this->_tmpprofile[$veld],
-							'nieuw'  => $invoer
-						);
+						$this->storeDeltaProfile($veld, $invoer);
 					}
 					# nieuwe waarde in tmpprofile, is of voor afbeelden in het invulvak,
 					# of voor diff_to_*
@@ -452,10 +431,7 @@ class Lid {
 					# als er geen fout is opgetreden veranderde waarde bewaren
 					if (!isset($this->_formerror[$veld])) {
 						# bewaar oude en nieuwe waarde in delta
-						$this->_delta[$veld] = array (
-							'oud'  => $this->_tmpprofile[$veld],
-							'nieuw'  => $invoer
-						);
+						$this->storeDeltaProfile($veld, $invoer);
 					}
 					# nieuwe waarde in tmpprofile, is of voor afbeelden in het invulvak,
 					# of voor diff_to_*
@@ -496,10 +472,7 @@ class Lid {
 				} else {
 					# bewaar oude en nieuwe waarde in delta
 					$hash = $this->_makepasswd($nwpass);
-					$this->_delta['password'] = array (
-						'oud'  => $this->_tmpprofile['password'],
-						'nieuw'  => $hash
-					);
+					$this->storeDeltaProfile('password', $hash);
 					# nieuwe waarde voor diff_to_*
 					$this->_tmpprofile['password'] = $hash;
 				}
@@ -530,10 +503,7 @@ class Lid {
 							$this->_formerror[$veld] = "Gebruik maximaal {$max_lengte} karakters:";
 						} else {
 							# bewaar oude en nieuwe waarde in delta
-							$this->_delta[$veld] = array (
-								'oud'  => $this->_tmpprofile[$veld],
-								'nieuw'  => $invoer
-							);
+							$this->storeDeltaProfile($veld, $invoer);
 						}
 						# nieuwe waarde in tmpprofile, is of voor afbeelden in het invulvak,
 						# of voor diff_to_*
@@ -558,10 +528,7 @@ class Lid {
 							$this->_formerror[$veld] = "Gebruik maximaal {$max_lengte} karakters:";
 						} else {
 							# bewaar oude en nieuwe waarde in delta
-							$this->_delta[$veld] = array (
-								'oud'  => $this->_tmpprofile[$veld],
-								'nieuw'  => $invoer
-							);
+							$this->storeDeltaProfile($veld, $invoer);
 						}
 						# nieuwe waarde in tmpprofile, is of voor afbeelden in het invulvak,
 						# of voor diff_to_*
@@ -586,10 +553,7 @@ class Lid {
 							$this->_formerror[$veld] = "Het jaartal ligt buiten toegestane grenzen:";
 						} else {
 							# bewaar oude en nieuwe waarde in delta
-							$this->_delta[$veld] = array (
-								'oud'  => $this->_tmpprofile[$veld],
-								'nieuw'  => $invoer
-							);
+							$this->storeDeltaProfile($veld, $invoer);
 						}
 						# nieuwe waarde in tmpprofile, is of voor afbeelden in het invulvak,
 						# of voor diff_to_*
@@ -621,10 +585,7 @@ class Lid {
 						# als er geen fout is opgetreden veranderde waarde bewaren
 						if (!isset($this->_formerror[$veld])) {
 							# bewaar oude en nieuwe waarde in delta
-							$this->_delta['gebdatum'] = array (
-								'oud'  => $this->_tmpprofile['gebdatum'],
-								'nieuw'  => $invoer
-							);
+							$this->storeDeltaProfile($veld, $invoer);
 						}
 						# nieuwe waarde in tmpprofile, is of voor afbeelden in het invulvak,
 						# of voor diff_to_*
@@ -652,10 +613,7 @@ class Lid {
 							$this->_formerror[$veld] = "Gebruik maximaal {$max_lengte} karakters:";
 						} else {
 							# bewaar oude en nieuwe waarde in delta
-							$this->_delta[$veld] = array (
-								'oud'  => $this->_tmpprofile[$veld],
-								'nieuw'  => $invoer
-							);
+							$this->storeDeltaProfile($veld, $invoer);
 						}
 						# nieuwe waarde in tmpprofile, is of voor afbeelden in het invulvak,
 						# of voor diff_to_*
@@ -681,10 +639,7 @@ class Lid {
 							$this->_formerror[$veld] = "De invoer ligt buiten toegestane grenzen:";
 						} else {
 							# bewaar oude en nieuwe waarde in delta
-							$this->_delta[$veld] = array (
-								'oud'  => $this->_tmpprofile[$veld],
-								'nieuw'  => $invoer
-							);
+							$this->storeDeltaProfile($veld, $invoer);
 						}
 						# nieuwe waarde in tmpprofile, is of voor afbeelden in het invulvak,
 						# of voor diff_to_*
@@ -705,10 +660,7 @@ class Lid {
 						$this->_formerror[$veld] = "Gebruik (n)iet, (e)erstejaars, (o)uderejaars:";
 					} else {
 						# bewaar oude en nieuwe waarde in delta
-						$this->_delta[$veld] = array (
-							'oud'  => $this->_tmpprofile[$veld],
-							'nieuw'  => $invoer
-						);
+						$this->storeDeltaProfile($veld, $invoer);
 						# nieuwe waarde in tmpprofile voor diff_to_*
 						$this->_tmpprofile[$veld] = $invoer;
 					}
@@ -727,10 +679,7 @@ class Lid {
 						$this->_formerror[$veld] = "Gebruik (0) nee, (1) ja:";
 					} else {
 						# bewaar oude en nieuwe waarde in delta
-						$this->_delta[$veld] = array (
-							'oud'  => $this->_tmpprofile[$veld],
-							'nieuw'  => $invoer
-						);
+						$this->storeDeltaProfile($veld, $invoer);
 						# nieuwe waarde in tmpprofile voor diff_to_*
 						$this->_tmpprofile[$veld] = $invoer;
 					}
@@ -749,10 +698,7 @@ class Lid {
 						$this->_formerror[$veld] = "Gebruik (m)an, (v)rouw:";
 					} else {
 						# bewaar oude en nieuwe waarde in delta
-						$this->_delta[$veld] = array (
-							'oud'  => $this->_tmpprofile[$veld],
-							'nieuw'  => $invoer
-						);
+						$this->storeDeltaProfile($veld, $invoer);
 						# nieuwe waarde in tmpprofile voor diff_to_*
 						$this->_tmpprofile[$veld] = $invoer;
 					}
@@ -770,15 +716,20 @@ class Lid {
 					$aValide=array('S_LID', 'S_GASTLID', 'S_KRINGEL', 'S_NOVIET', 'S_OUDLID', 'S_NOBODY');
 					if (!in_array($invoer, $aValide)) {
 						$this->_formerror[$veld] = "Deze status bestaat niet.";
-						echo 'blaat '.$invoer; exit;
 					} else {
 						# bewaar oude en nieuwe waarde in delta
-						$this->_delta[$veld] = array (
-							'oud'  => $this->_tmpprofile[$veld],
-							'nieuw'  => $invoer
-						);
+						$this->storeDeltaProfile($veld, $invoer);
 						# nieuwe waarde in tmpprofile voor diff_to_*
 						$this->_tmpprofile[$veld] = $invoer;
+						//rechten ook uitzetten als iemand geen lid meer is.
+						if($invoer=='S_NOBODY'){
+							$this->storeDeltaProfile('permissies', 'P_NOBODY');
+							$this->_tmpprofile['permissies'] = 'P_NOBODY';
+						//of als iemand oudlid wordt:
+						}elseif($invoer=='S_OUDLID'){
+							$this->storeDeltaProfile('permissies', 'P_OUDLID');
+							$this->_tmpprofile['permissies'] = 'P_OUDLID';
+						}
 					}
 				}
 			}
@@ -791,6 +742,15 @@ class Lid {
 		if (count($this->_formerror) != 0) return 2;
 		return 0;
 		
+	}
+	/*
+	* Deze functie slaat velden op in de delta array 
+	*/
+	function storeDeltaProfile($veld, $invoer){
+		$this->_delta[$veld] = array (
+			'oud'  => $this->_tmpprofile[$veld],
+			'nieuw'  => $invoer
+		);						
 	}
 	function getTmpProfile() { return $this->_tmpprofile; }
 	function getFormErrors() { return $this->_formerror; }
