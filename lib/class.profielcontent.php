@@ -162,8 +162,8 @@ class ProfielContent extends SimpleHTML {
 		$form[0]['land'] = array('input',"Land:");
 
 		if ($this->_profiel['status'] == 'S_OUDLID' or $this->_lid->hasPermission('P_LEDEN_MOD')) {
-			$gebdatum = implode('-',array($this->_profiel['gebdag'],$this->_profiel['gebmnd'],$this->_profiel['gebjaar']));
-			$form[0][] = array('ztekst',"&nbsp;","Gebruik het formaat dd-mm-YYYY");
+			$gebdatum = $this->_profiel['gebdatum'];
+			$form[0][] = array('ztekst',"&nbsp;","Gebruik het formaat YYYY-mm-dd");
 			$form[0]['gebdatum'] = array('input',"Geb.datum:",$gebdatum);
 		}				
 

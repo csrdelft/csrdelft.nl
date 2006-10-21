@@ -33,7 +33,7 @@
 			Studie: {$profhtml.studie}<br />
 			Studie sinds: {$profhtml.studiejaar}<br />
 			Lid sinds: {$profhtml.lidjaar}<br />
-			Geboortedatum: {$profhtml.gebdag}-{$profhtml.gebmnd}-{$profhtml.gebjaar}<br />
+			Geboortedatum: {$profhtml.gebdatum|date_format:"%d-%m-%Y"}<br />
 			{if $isOudlid!==true}
 				Kring: {$profhtml.moot}.{$profhtml.kring}<br />
 				{$profhtml.commissies}

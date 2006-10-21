@@ -602,59 +602,33 @@ class Lid {
 			$veld = 'gebdatum';
 			if (isset($form[$veld])) {
 				$invoer = trim(strval($form[$veld]));
-				# Kijk of de invoer zinvol te splitsen is in d-m-YYYY
+				# Kijk of de invoer zinvol te splitsen is in YY-mm-dd
 				$matches = array();
-				if (!preg_match('/^(\d\d?)-(\d\d?)-(\d{4}$)/', $invoer, $matches)) {
+				if (!preg_match('/^(\d{4})-(\d\d?)-(\d\d?)$/', $invoer, $matches)) {
 					$this->_formerror[$veld] = "Ongeldige datumformaat, gebruik dag-maand-jaar:";
-					$this->_tmpprofile['gebdag']  = '00';
-					$this->_tmpprofile['gebmnd']  = '00';
-					$this->_tmpprofile['gebjaar'] = '0000';
+					$this->_tmpprofile['gebdatum']  = '0000-00-00';
 				} else {
-					# dag van de maand
-					$gebdag = (int)$matches[1];
-					$gebmnd = (int)$matches[2];
-					$gebjaar = (int)$matches[3];
-
 					# is het wel een wijziging?
-					if ($gebdag != (int)$this->_tmpprofile['gebdag'] or
-					    $gebmnd != (int)$this->_tmpprofile['gebmnd'] or
-					    $gebjaar != (int)$this->_tmpprofile['gebjaar'] ) {
-					    # dan gaan we controleren of de nieuwe datum een bestaande
-					    # datum is...
-					    
-					    # maak eerst een datum-string rechtstreeks van de ingevoerde waarden
-					    $datumstr = sprintf('%02d-%02d-%04d',$gebdag,$gebmnd,$gebjaar);
-					    # maak daarna een die we door mktime en date halen om te kijken of
-					    # dezelfde datum er weer uit komt. bijv. 30 feb wordt 02 maart
-					    # als deze string hetzelfde is als voorgaande is het dus een bestaande
-					    # datum
-					    $datumstr_adj = date("d-m-Y", mktime(0, 0, 0, $gebmnd, $gebdag, $gebjaar));
-					    
-					    if ($datumstr != $datumstr_adj) {
+					if ($invoer != $this->_tmpprofile['gebdatum']) {
+					  # dan gaan we controleren of de nieuwe datum een bestaande
+					  # datum is...
+					  
+					  #	door strtotime heenhalen en kijken of het dezelfde datum is
+					  if ($invoer != date("Y-m-d", strtotime($invoer))) {
 							$this->_formerror[$veld] = "Opgegeven datum bestaat niet:";
-					    }
+					  }
 
 						# als er geen fout is opgetreden veranderde waarde bewaren
 						if (!isset($this->_formerror[$veld])) {
 							# bewaar oude en nieuwe waarde in delta
-							$this->_delta['gebdag'] = array (
-								'oud'  => $this->_tmpprofile['gebdag'],
-								'nieuw'  => $gebdag
-							);
-							$this->_delta['gebmnd'] = array (
-								'oud'  => $this->_tmpprofile['gebmnd'],
-								'nieuw'  => $gebmnd
-							);
-							$this->_delta['gebjaar'] = array (
-								'oud'  => $this->_tmpprofile['gebjaar'],
-								'nieuw'  => $gebjaar
+							$this->_delta['gebdatum'] = array (
+								'oud'  => $this->_tmpprofile['gebdatum'],
+								'nieuw'  => $invoer
 							);
 						}
 						# nieuwe waarde in tmpprofile, is of voor afbeelden in het invulvak,
 						# of voor diff_to_*
-						$this->_tmpprofile['gebdag']  = $gebdag;
-						$this->_tmpprofile['gebmnd']  = $gebmnd;
-						$this->_tmpprofile['gebjaar'] = $gebjaar;
+						$this->_tmpprofile['gebdatum']  = $invoer;
 
 					}
 				}
@@ -1134,7 +1108,7 @@ class Lid {
 				SELECT
 					uid, nickname, voornaam, tussenvoegsel, achternaam, postfix, adres, postcode, woonplaats, land, telefoon,
 					mobiel, email, geslacht, voornamen, icq, msn, skype, jid, website, beroep, studie, studiejaar, lidjaar, 
-					gebjaar, gebmnd, gebdag, moot, kring, kringleider, motebal, 
+					gebdatum, moot, kring, kringleider, motebal, 
 					o_adres, o_postcode, o_woonplaats, o_land, o_telefoon, 
 					kerk, muziek, eetwens
 				FROM 
@@ -1215,23 +1189,27 @@ class Lid {
 	}
 
 	function getVerjaardagen($maand, $dag=0) {
-		$maand = (int)$maand; $dag = (int)$dag; $vrjdgn = array();
+		$maand = (int)$maand; $dag = (int)$dag; $verjaardagen = array();
 		$query="
 			SELECT 
-				uid, voornaam, tussenvoegsel, achternaam, geslacht, email, gebdag 
+				uid, voornaam, tussenvoegsel, achternaam, geslacht, email, 
+				EXTRACT( DAY FROM gebdatum) as gebdag
 			FROM 
 				lid 
 			WHERE 
 				(status='S_LID' OR status='S_GASTLID' OR status='S_NOVIET' OR status='S_KRINGEL') 
 			AND 
-				gebmnd = '{$maand}'";
+				EXTRACT( MONTH FROM gebdatum)= '{$maand}'";
 		if($dag!=0)	$query.=" AND gebdag=".$dag;
-		$query.=" ORDER BY gebdag";
+		$query.=" ORDER BY gebdag;";
 		$result = $this->_db->select($query);
-			if ($result !== false and $this->_db->numRows($result) > 0) {
-			while ($vrjdg = $this->_db->next($result)) $vrjdgn[] = $vrjdg;
+		
+		if ($result !== false and $this->_db->numRows($result) > 0) {
+			while($verjaardag=$this->_db->next($result)){
+				$verjaardagen[] = $verjaardag;
+			}
 		}
-		return $vrjdgn;
+		return $verjaardagen;
 	}
 
 	function getMaxKringen($moot=0) {
