@@ -43,8 +43,8 @@ class EetplanContent extends SimpleHTML {
 			echo '<h1>Ongeldig pheutID</h1>';
 		}else{
 			$aPheutNaam=$this->_eetplan->getPheutNaam($iPheutID);
-			echo '<h2><a class="forumGrootlink"href="/leden/eetplan/">Eetplan</a> &raquo; voor '.mb_htmlentities($aPheutNaam['naam']).'</h2>
-				<a href="/leden/profiel/'.$iPheutID.'">Naar profiel van '.mb_htmlentities($aPheutNaam['naam']).'</a><br /><br />';
+			echo '<h2><a class="forumGrootlink" href="'.CSR_ROOT.'intern/eetplan/">Eetplan</a> &raquo; voor '.mb_htmlentities($aPheutNaam['naam']).'</h2>
+				<a href="'.CSR_ROOT.'intern/profiel/'.$iPheutID.'">Naar profiel van '.mb_htmlentities($aPheutNaam['naam']).'</a><br /><br />';
 			echo '<table class="hoktable">
 				<tr>
 					<td style="width: 150px"><strong>Avond</strong></td>
@@ -53,7 +53,7 @@ class EetplanContent extends SimpleHTML {
 				echo '
 					<tr>
 						<td >'.$this->_eetplan->getDatum($aEetplanData['avond']).'</td>
-						<td><a href="/leden/eetplan/huis/'.$aEetplanData['huisID'].'"><strong>'.mb_htmlentities($aEetplanData['huisnaam']).'</strong></a><br />
+						<td><a href="'.CSR_ROOT.'intern/eetplan/huis/'.$aEetplanData['huisID'].'"><strong>'.mb_htmlentities($aEetplanData['huisnaam']).'</strong></a><br />
 							'.mb_htmlentities($aEetplanData['huisadres']).' | '.mb_htmlentities($aEetplanData['telefoon']).'
 						</td></tr>';
 			}
@@ -87,17 +87,17 @@ class EetplanContent extends SimpleHTML {
 				}
 				$aPheutNaam=$this->_eetplan->getPheutNaam($aEetplanData['pheut']);
 				$sUitvoer.='</td>
-					<td><strong><a href="eetplan/sjaars/'.$aEetplanData['pheut'].'">'.mb_htmlentities($aPheutNaam['naam']).'</a></strong><br /></td>
+					<td><strong><a href="'.CSR_ROOT.'intern/eetplan/sjaars/'.$aEetplanData['pheut'].'">'.mb_htmlentities($aPheutNaam['naam']).'</a></strong><br /></td>
 					<td>'.mb_htmlentities($aPheutNaam['telefoon']).'</td>
 					<td>'.mb_htmlentities($aPheutNaam['mobiel']).'</td>
 					</tr>';
 			
 			}
 			$sUitvoer.='</table>';
-			echo '<h2><a class="forumGrootlink"href="eetplan/">Eetplan</a> &raquo; voor '.mb_htmlentities($aEetplanData['huisnaam']).'</h2>
+			echo '<h2><a class="forumGrootlink"href="'.CSR_ROOT.'intern/eetplan/">Eetplan</a> &raquo; voor '.mb_htmlentities($aEetplanData['huisnaam']).'</h2>
 				'.mb_htmlentities($aEetplanData['huisadres']).' <br /> 
 				Telefoon: '.mb_htmlentities($aEetplanData['telefoon']).'<br />
-				Ga naar <a href="/groepen/woonoorden.php">woonoorden pagina</a><br /><br />'.
+				Ga naar <a href="/groepen/woonoorden.php">woonoordenpagina</a><br /><br />'.
 				$sUitvoer;
 		}
 	}
@@ -114,9 +114,9 @@ class EetplanContent extends SimpleHTML {
 		echo '</tr>';
 		
 		foreach($aEetplan as $aEetplanVoorPheut){
-			echo '<tr><td><a href="eetplan/sjaars/'.$aEetplanVoorPheut[0]['uid'].'">'.mb_htmlentities($aEetplanVoorPheut[0]['naam']).'</a></td>';
+			echo '<tr><td><a href="'.CSR_ROOT.'intern/eetplan/sjaars/'.$aEetplanVoorPheut[0]['uid'].'">'.mb_htmlentities($aEetplanVoorPheut[0]['naam']).'</a></td>';
 			for($iTeller=1;$iTeller<=8;$iTeller++){
-				echo '<td><a href="eetplan/huis/'.$aEetplanVoorPheut[$iTeller].'">'.
+				echo '<td><a href="'.CSR_ROOT.'intern/eetplan/huis/'.$aEetplanVoorPheut[$iTeller].'">'.
 					mb_htmlentities($aEetplanVoorPheut[$iTeller]).
 					'</a></td>';
 			}
@@ -126,15 +126,15 @@ class EetplanContent extends SimpleHTML {
 		//nog even een huizentabel erachteraan
 		$aHuizenArray=$this->_eetplan->getHuizen();
 		echo '<h1>Huizen met hun nummers:</h1>
-			<table width="100%"> <tr>
+			<table style="width: 100%;"> <tr>
 				<td><strong>huisID</strong></td>
 				<td><strong>Naam</strong></td>
 				<td><strong>Adres</strong></td>
 				<td><strong>Telefoon</strong></td></tr>';
 		foreach($aHuizenArray as $aHuis){
 			echo '<tr>
-				<td><a href="/leden/eetplan/huis/'.$aHuis['huisID'].'">'.$aHuis['huisID'].'</a></td>
-				<td><a href="/leden/eetplan/huis/'.$aHuis['huisID'].'">'.mb_htmlentities($aHuis['huisNaam']).'</a></td>
+				<td><a href="'.CSR_ROOT.'intern/eetplan/huis/'.$aHuis['huisID'].'">'.$aHuis['huisID'].'</a></td>
+				<td><a href="'.CSR_ROOT.'intern/eetplan/huis/'.$aHuis['huisID'].'">'.mb_htmlentities($aHuis['huisNaam']).'</a></td>
 				<td>'.$aHuis['adres'].'</td>
 				<td>'.$aHuis['telefoon'].'</td></tr>';
 		}

@@ -125,13 +125,13 @@ class NieuwsContent extends SimpleHTML {
 				if(kapStringNetjesAf($aBericht['tekst'], $this->_chop)){
 					//afgekapt
 					$sBericht=bbview($aBericht['tekst'], $aBericht['bbcode_uid']);
-					$sBericht.='... <a href="nieuws/'.$aBericht['id'].'">meer</a>';
+					$sBericht.='... <a href="/nieuws/'.$aBericht['id'].'">meer</a>';
 				}else{
 					$sBericht=bbview($aBericht['tekst'], $aBericht['bbcode_uid']);
 				}
 				echo '<div class="nieuwsbericht-vast">';
 				if($aBericht['plaatje']!=''){
-					echo '<div class="nieuwsplaatje"><img src="/layout/nieuws/'.$aBericht['plaatje'].'" width="60px" height="100px" alt="'.$aBericht['plaatje'].'" /></div>';
+					echo '<div class="nieuwsplaatje"><img src="'.CSR_PICS.'nieuws/'.$aBericht['plaatje'].'" width="60px" height="100px" alt="'.$aBericht['plaatje'].'" /></div>';
 				}
 				echo '<div class="nieuwsbody"><div class="nieuwstitel">';
 				//verborgen berichten aangeven, enkel bij mensen met P_NEWS_MOD

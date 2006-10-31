@@ -64,13 +64,13 @@ class ProfielContent extends SimpleHTML {
 		if ($profhtml['email'] != '') $profhtml['email'] = sprintf('<a href="mailto:%s">%s</a>', $profhtml['email'], $profhtml['email']);
 		
 		# leden-foto, mag gif of jpg zijn.
-		if (file_exists( HTDOCS_PATH.'/leden/pasfotos/'.$this->_profiel['uid'].'.gif')){
-			$profhtml['foto'] = '<img src="http://csrdelft.nl/leden/pasfotos/'.$this->_profiel['uid'].'.gif" alt="pasfoto" />';
-		}elseif(file_exists( HTDOCS_PATH.'/leden/pasfotos/'.$this->_profiel['uid'].'.jpg')){
-			$profhtml['foto'] = '<img src="http://csrdelft.nl/leden/pasfotos/'.$this->_profiel['uid'].'.jpg" alt="pasfoto" />';
+		if (file_exists( PICS_PATH.'/pasfoto/'.$this->_profiel['uid'].'.gif')){
+			$profhtml['foto'] = '<img src="'.CSR_PICS.'pasfoto/'.$this->_profiel['uid'].'.gif" alt="pasfoto" />';
+		}elseif(file_exists( PICS_PATH.'/pasfoto/'.$this->_profiel['uid'].'.jpg')){
+			$profhtml['foto'] = '<img src="'.CSR_PICS.'pasfoto/'.$this->_profiel['uid'].'.jpg" alt="pasfoto" />';
 		}elseif($profhtml['status']=='S_NOVIET'){
 			$aSjaars=array('pino.png', 'oscar.png', 'elmo.png');
-			$profhtml['foto']= '<img src="http://csrdelft.nl/leden/pasfotos/'.$aSjaars[rand(0, count($aSjaars)-1)].'" 
+			$profhtml['foto']= '<img src="'.CSR_PICS.'pasfoto/'.$aSjaars[rand(0, count($aSjaars)-1)].'" 
 				alt="Eerstejaars moet gaan slapen, eerstejaars moet naar bed" />';
 		}else{ 
 			$profhtml['foto']='Geen foto aanwezig. <br />Mail de pubcie om <br />er een toe te voegen.'; 
@@ -111,6 +111,8 @@ class ProfielContent extends SimpleHTML {
 		}
 		//de html template in elkaar draaien en weergeven
 		$profiel=new Smarty_csr();
+
+		
 		$profiel->assign('profhtml', $profhtml);
 		$profiel->assign('isOudlid', $this->_profiel['status'] == 'S_OUDLID');
 		//eigen profiel niet cachen, dan krijgen we namelijk rare dingen 
@@ -165,20 +167,21 @@ class ProfielContent extends SimpleHTML {
 			$gebdatum = $this->_profiel['gebdatum'];
 			$form[0][] = array('ztekst',"&nbsp;","Gebruik het formaat YYYY-mm-dd");
 			$form[0]['gebdatum'] = array('input',"Geb.datum:",$gebdatum);
-		}				
+		}	
 
 		$form[0][] = array('ztekst',"&nbsp;","<b>Email/Telefoon</b>");
 		$form[0]['telefoon'] = array('input',"Telefoon:");
 		$form[0]['mobiel'] = array('input',"Pauper:");
 		$form[0]['email'] = array('input',"Email:");
-
+		
 		$form[0][] = array('ztekst',"&nbsp;","<b>Diversen</b>");
 		$form[0]['icq'] = array('input',"ICQ:");
 		$form[0]['msn'] = array('input',"MSN:");
 		$form[0]['jid'] = array('input',"Jabber:");
 		$form[0]['skype'] = array('input',"Skype:");
 		$form[0]['website'] = array('input',"Website:");
-
+		$form[0]['bankrekening'] = array('input', "Bankrekening:");
+		
 		$form[0][] = array('ztekst',"&nbsp;","Weergave van namen op het Forum<br />(dit is wat je zelf ziet, niet wat anderen zien!):");
 		$form[0]['forum_name'] = array('select', "Forum:", array('civitas' => 'Toon Am. / Ama.','nick' => 'Toon bijnamen'));
 

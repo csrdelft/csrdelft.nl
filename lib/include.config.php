@@ -17,12 +17,12 @@
 define('ETC_PATH', '/srv/www/www.csrdelft.nl/etc');
 define('LIB_PATH', '/srv/www/www.csrdelft.nl/lib');
 define('DATA_PATH', '/srv/www/www.csrdelft.nl/data');
-define('PICS_PATH', '/srv/www/www.csrdelft.nl/htdocs/images');
+define('PICS_PATH', '/srv/www/www.csrdelft.nl/images');
 define('HTDOCS_PATH', '/srv/www/www.csrdelft.nl/htdocs');
 define('TMP_PATH', '/srv/www/www.csrdelft.nl/tmp');
 
 # urls met trailing slash
-define('CSR_PICS', 'http://csrdelft.nl/images/');
+define('CSR_PICS', 'http://plaetjes.csrdelft.nl/');
 define('CSR_ROOT','http://pubcie.csrdelft.nl/');
 
 # We willen geen sessie-id in de url hebben
@@ -46,8 +46,11 @@ define('MAALTIJD_LIJST_MAX_TOT', 86400*7*4);
 define('MAALTIJD_PROXY_MAX_TOT', 86400*2);
 # wat is het standaard aantal max inschrijvingen voor een maaltijd?
 define('MAX_MAALTIJD', 100);
+
 //verenigingsstatisticus
 define('STATISTICUS', '0217' );
+//Feut ip voor de rss feed in #csrdelft
+define('FEUT_IP', '145.94.154.180');
 
 //stapeltje dingen includeren die toch (bijna) altijd nodig zijn:
 require_once('include.common.php');

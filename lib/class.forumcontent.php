@@ -491,7 +491,7 @@ class ForumContent extends SimpleHTML {
 		<copyright>Copyright 2006 C.S.R.-Delft</copyright>
 		<pubDate><?php echo $datum; ?></pubDate>
 		<lastBuildDate><?php echo $datum; ?></lastBuildDate>
-		<docs>http://csrdelft.nl/leden/index.php</docs>
+		<docs>http://csrdelft.nl/intern/index.php</docs>
 		<description>
 			C.S.R.-Delft: Vereniging van Christen-studenten te Delft.
 		</description>
@@ -548,9 +548,10 @@ class ForumContent extends SimpleHTML {
 		foreach($aPosts as $aPost){
 			$tekst=$aPost['nickname'].': '.$aPost['titel'];
 			if(strlen($tekst)>22){
-				$tekst=substr($tekst, 0, 19).'..';
+				$tekst=substr($tekst, 0, 18).'..';
 			}
-			echo '<span class="tijd">'.date('H:i', strtotime($aPost['datum'])).'</span> <a href="/forum/onderwerp/'.$aPost['tid'].'#laatste">'.$tekst.'</a><br />'."\n";
+			echo '<span class="tijd">'.date('H:i', strtotime($aPost['datum'])).'</span> ';
+			echo '<a href="/forum/onderwerp/'.$aPost['tid'].'#laatste" title="'.$aPost['titel'].'">'.$tekst.'</a><br />'."\n";
 		}
 		echo '</div>';
 	}
@@ -623,7 +624,7 @@ class ForumContent extends SimpleHTML {
 	function _getNaamLink($uid, $aNaam=false){
 		$return='';
 		if($this->_forum->isIngelogged()){
-			$return.='<a href="/leden/profiel/'.$uid.'">';
+			$return.='<a href="/intern/profiel/'.$uid.'">';
 		}
 		$return.=mb_htmlentities($this->_forum->getForumNaam($uid, $aNaam));
 		if($this->_forum->isIngelogged()){ $return.='</a>'; }
@@ -644,10 +645,16 @@ class ForumContent extends SimpleHTML {
 	
 	}
 	function viewWaarbenik(){
-		if($this->_actie=='topic' AND isset($_GET['topic'])){
-			$iTopicID=(int)$_GET['topic'];
+		if(	($this->_actie=='topic' AND isset($_GET['topic'])) OR 
+				($this->_actie=='citeren' AND isset($_GET['post'])) ){
+			if(isset($_GET['topic'])){
+				$iTopicID=(int)$_GET['topic'];
+			}else{
+				$iTopicID=$this->_forum->getTopicVoorPostID((int)$_GET['post']);
+			}		
+			$iCategorieID=$this->_forum->getCategorieVoorTopic($iTopicID);	
 			$sCategorie=$this->_forum->getCategorieTitel($this->_forum->getCategorieVoorTopic($iTopicID));
-			$sTitel='<a href="/forum/">Forum</a> &raquo; <a href="/forum/categorie/??">'.$sCategorie.'</a> &raquo; '.$this->_forum->getTopicTitel($iTopicID);
+			$sTitel='<a href="/forum/">Forum</a> &raquo; <a href="/forum/categorie/'.$iCategorieID.'">'.$sCategorie.'</a> &raquo; '.$this->_forum->getTopicTitel($iTopicID);
 		}elseif($this->_actie=='forum' AND isset($_GET['forum'])){
 			$sTitel='<a href="/forum/">Forum</a> &raquo; '.$this->_forum->getCategorieTitel((int)$_GET['forum']);
 		}elseif($this->_actie=='zoeken'){
@@ -659,8 +666,13 @@ class ForumContent extends SimpleHTML {
 	}
 	function getTitel(){
 		$sTitel='Forum - ';
-		if($this->_actie=='topic' AND isset($_GET['topic'])){
-			$iTopicID=(int)$_GET['topic'];
+		if(	($this->_actie=='topic' AND isset($_GET['topic'])) OR 
+				($this->_actie=='citeren' AND isset($_GET['post'])) ){
+			if(isset($_GET['topic'])){
+				$iTopicID=(int)$_GET['topic'];
+			}else{
+				$iTopicID=$this->_forum->getTopicVoorPostID((int)$_GET['post']);
+			}
 			$sCategorie=$this->_forum->getCategorieTitel($this->_forum->getCategorieVoorTopic($iTopicID));
 			$sTitel.=$sCategorie.' - '.$this->_forum->getTopicTitel($iTopicID);
 		}elseif($this->_actie=='forum' AND isset($_GET['forum'])){

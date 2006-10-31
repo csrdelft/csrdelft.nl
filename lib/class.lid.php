@@ -186,19 +186,23 @@ class Lid {
 	
 	# Als een ingevulde waarde verschilt van de oude, dan controleren we de nieuwe waarde, en
 	# als het klopt dan zetten we de nieuwe waarde klaar in $this->_delta om de oude te gaan vervangen.
-	function loadPostTmpProfile() {
+	function loadPostTmpProfile($form=false) {
 		# foutmeldingen leeggooien
 		$this->_formerror = array();
 		# delta leeggooien
 		$this->_delta = array();
 		
-		//de post-array inladen in $form
-		$form=$_POST['frmdata'];
+		//kijken of $form een array is. Als dat niet zo is, de postarry inladen
+		if(!is_array($form)){
+			//de post-array inladen in $form
+			$form=$_POST['frmdata'];
+		}
 		
 		# 1. eerst de tekstvelden die het lid zelf mag wijzigen
 		# NB: beroep en eetwens wordt niet getoond in het profiel bij S_LID, adres ouders niet bij S_OUDLID
-		$velden = array('adres' => 100, 'postcode' => 20, 'woonplaats' => 50, 'land' => 50, 'o_adres' => 100,
-		  'o_postcode' => 20, 'o_woonplaats' => 50, 'o_land' => 50, 'skype' => 50, 'eetwens' => 50, 'beroep' => 750 );
+		$velden = array('adres' => 100, 'postcode' => 20, 'woonplaats' => 50, 'land' => 50, 
+			'o_adres' => 100, 'o_postcode' => 20, 'o_woonplaats' => 50, 'o_land' => 50, 
+			'skype' => 50, 'eetwens' => 50, 'beroep' => 750, 'bankrekening' => 12 );
 		# voor al deze veldnamen...
 		foreach($velden as $veld => $max_lengte) {
 			if (isset($form[$veld])) {
@@ -763,10 +767,12 @@ class Lid {
 				$sqldata[$veld] = $this->_db->escape($diff['nieuw']);
 			}
 
-			# if ($this->hasPermission('P_LEDEN_MOD')) print_r($sqldata);
-
 			# opslaan van de waarden in de database
 			$this->_db->update_a('lid', 'uid', $this->_tmpprofile['uid'], $sqldata);
+			
+			//profiel-cache weggooien
+			$profiel=new Smarty_csr();
+			$profiel->clear_cache('profiel.tpl', $this->_tmpprofile['uid']);
 		}
 	}
 
@@ -1299,7 +1305,7 @@ class Lid {
 		}
 	}
 	
-	function getSaldi($uid=''){
+	function getSaldi($uid='', $alleenRood=false){
 		if($uid==''){ $uid=$this->getUid(); }
 		$query="
 			SELECT
@@ -1313,7 +1319,18 @@ class Lid {
 		$rSaldo=$this->_db->query($query);
 		if($this->_db->numRows($rSaldo)){
 			$aSaldo=$this->_db->next($rSaldo);
-			return $aSaldo;
+			if($alleenRood){
+				$return=false;
+				if($aSaldo['soccie']<0){
+					$return[]=array('naam' => 'SocCie', 'saldo' => sprintf("%01.2f",$aSaldo['soccie']));
+				}
+				if($aSaldo['maalcie']<0){
+					$return[]=array('naam' => 'MaalCie', 'saldo' => sprintf("%01.2f",$aSaldo['maalcie']));
+				}
+				return $return;
+			}else{
+				return $aSaldo;
+			}
 		}else{
 			return false;
 		}

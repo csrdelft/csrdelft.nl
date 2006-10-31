@@ -61,26 +61,24 @@ class VerjaardagContent extends SimpleHTML {
 		if(!isset($_GET['print'])){
 			echo '<a href="verjaardagen.php?print=true">printversie</a>'."\n";
 		}
-		echo '<table class="lijnhoktable" style="width: 100%;">'."\n";
+		echo '<table style="width: 100%;">';
 		for ($r=0; $r<$rijen; $r++) {
 			echo '<tr>';
 			for ($k=1; $k<=$kolommen; $k++) {
 				$maand = ($r*$kolommen+$k+$dezemaand-2)%12+1;
 				$tekst = ($maand <= 12) ? $maanden[$maand] : '&nbsp;';
-				echo '<td class="lijnhoktitel"><strong>'.$tekst.'</strong></td>'."\n";
+				echo '<th>'.$tekst.'</th>'."\n";
 			}
 			echo "</tr><tr>\n";
 			for ($k=1; $k<=$kolommen; $k++) {
 				$maand = ($r*$kolommen+$k+$dezemaand-2)%12+1;
 				if ($maand <= 12) {
-					echo '<td class="lijnhoktekst">'."\n";
+					echo '<td>'."\n";
 					$vrjdgn = $this->_lid->getVerjaardagen($maand);
 					foreach ($vrjdgn as $vrjdg){
-						if ($vrjdg['gebdag'] == $dezedag and $maand == $dezemaand) echo '<span class="tekstrood">';
+						if ($vrjdg['gebdag'] == $dezedag and $maand == $dezemaand) echo '<span class="waarschuwing">';
 						echo $vrjdg['gebdag'] . " ";
-						echo mb_htmlentities($vrjdg['voornaam']);
-						if ($vrjdg['tussenvoegsel'] != "") echo " ".mb_htmlentities($vrjdg['tussenvoegsel']);
-						echo " ".mb_htmlentities($vrjdg['achternaam']) . "<br />\n";
+						echo mb_htmlentities(naam($vrjdg['voornaam'], $vrjdg['achternaam'],$vrjdg['tussenvoegsel']))."<br />\n";
 						if ($vrjdg['gebdag'] == $dezedag and $maand == $dezemaand) echo "</span>";
 					}
 					echo "<br /></td>\n";

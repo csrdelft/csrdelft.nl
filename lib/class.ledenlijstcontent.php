@@ -204,10 +204,10 @@ EOT
 				echo '<tr>';
 				
 				if($this->_lid->hasPermission('P_LEDEN_MOD')){
-					echo '<td><a href="/leden/profiel.php?uid='.$uid.'&amp;a=edit">[b]</a>&nbsp;';
+					echo '<td><a href="/intern/profiel.php?uid='.$uid.'&amp;a=edit">[b]</a>&nbsp;';
 				}
 				//naam als link naar profiel weergeven.
-				echo '<td><a href="/leden/profiel/'.$uid.'">';
+				echo '<td><a href="/intern/profiel/'.$uid.'">';
 				echo mb_htmlentities(naam($lid['voornaam'], $lid['achternaam'], $lid['tussenvoegsel'])).'</a></td>';
 				//de rest van de kolommen.
 				foreach ($this->_form['kolom'] as $kolom) {

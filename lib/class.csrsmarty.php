@@ -20,6 +20,7 @@ class Smarty_csr extends Smarty {
  		//$this->config_dir = ;
 		$this->cache_dir = SMARTY_CACHE_DIR;
 		$this->caching = true;
+		$this->assign('csr_pics', CSR_PICS);
   }
 
 }

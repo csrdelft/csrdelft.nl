@@ -72,6 +72,11 @@ class csrdelft extends SimpleHTML {
 		header('Content-Type: text/html; charset=UTF-8');
 		$profiel=new Smarty_csr();
 		$profiel->assign_by_ref('csrdelft', $this);
+		
+		//soccie saldi
+		$saldi=$this->_lid->getSaldi($this->_lid->getUid(), true);
+		$profiel->assign('saldi', $saldi);
+		
 		$profiel->caching=false;
 		
 		$profiel->display('csrdelft.tpl');

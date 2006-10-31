@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.1//EN' 'http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd'>
-<html>
+<html xml:lang="nl">
 <head>
   <title>C.S.R.-Delft | {$csrdelft->getTitel()}</title>
   <meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
@@ -11,7 +11,7 @@
 	<script type="text/javascript" src="/layout/csrdelft.js" ></script>
 	<script type="text/javascript" src="/layout/minmax.js"></script>
 	<script type="text/javascript" src="/layout/position.js"></script>
-	<link rel="alternate" title="C.S.R.-Delft RSS" type="application/rss+xml" href="http://csrdelft.nl/forum/rss.php" />
+	<link rel="alternate" title="C.S.R.-Delft RSS" type="application/rss+xml" href="http://csrdelft.nl/forum/rss.xml" />
 </head>
 <body>
 <div id="layoutContainer">
@@ -45,11 +45,13 @@
 	<div id="navigatieContent">{$csrdelft->viewWaarbenik()}</div>
 </div>
 <div id="hoofder{$csrdelft->getBreed()}">
-	<div id="beeldmerk"><a href="/"><img src="/layout/images/csr.jpg" alt="Beeldmerk van de Vereniging" /></a></div>
+	<div id="beeldmerk">
+		<a href="/" title="Terug naar het begin"><img src="{$csr_pics}layout/beeldmerk.jpg" alt="Beeldmerk van de Vereniging" /></a>
+	</div>
 </div>
 {if $csrdelft->_lid->isLoggedIn() }
   <div id="searchbox">
-  	<form method="post" action="/leden/lijst.php">
+  	<form method="post" action="/intern/lijst.php">
   		<p>
 				<input type="hidden" name="a" value="zoek" />
 				<input type="hidden" name="waar" value="naam" />
@@ -72,9 +74,9 @@
 <div id="personalBox">
 	{if $csrdelft->_lid->isLoggedIn() }
 		U bent {$csrdelft->_lid->getCivitasName()}<br />
-		<a href="/logout.php">log&nbsp;uit</a> | <a href="/leden/profiel/{$csrdelft->_lid->getUid()}">profiel</a>
+		<a href="/logout.php">log&nbsp;uit</a> | <a href="/intern/profiel/{$csrdelft->_lid->getUid()}">profiel</a>
 	{else}
-		<a href="#" onclick="document.getElementById('inloggen').style.display = 'block'">
+		<a href="#" id="inloglink" onclick="document.getElementById('inloggen').style.display = 'block'">
 			Inloggen...
 		</a>
 		<div id="inloggen">
@@ -82,29 +84,27 @@
 				<span class="waarschuwing">{$smarty.session.auth_error}</span>
 			{/if}
 			<form id="frm_login" action="/login.php" method="post">
-				<table>
-					<tr>
-						<td><strong>Inloggen:</strong></td>
-						<td>
-							<input type="hidden" name="url" value="{$smarty.server.REQUEST_URI}" />
-							<input type="submit" class="login" value="inloggen" />
-						</td>
-					</tr>
-					<tr>
-						<td>Naam:</td>
-						<td><input type="text" name="user" class="login" /></td>
-					</tr>
-					<tr>
-						<td>Wachtwoord:</td>
-						<td><input type="password" name="pass" class="login" /></td>
-					</tr>
-				</table>
+				<p style="display: inline;">
+					<input type="hidden" name="url" value="{$smarty.server.REQUEST_URI}" />
+					<input type="text" name="user" class="login" value="Naam" onfocus="this.value=''" />
+					<input type="password" name="pass" class="login" />
+					<input type="submit" name="submit" class="login-submit" value="ok" />
+				</p>
 			</form>
 		</div>
 	{/if}
 </div>
-<div id="lijntje"><img src="/layout/images/pixel.gif" height="3px" width="20px" alt="lijntje..." /></div>
-<div id="hoofderFoto"><img src="/layout/images/hoofder5.jpg" height="130px" alt="een impressie van de Civitas" /></div>
+<div id="lijntje"><img src="{$csr_pics}layout/pixel.gif" height="3px" width="20px" alt="lijntje..." /></div>
+<div id="hoofderFoto"><img src="{$csr_pics}layout/hoofder.jpg" height="130px" alt="een impressie van de Civitas" /></div>
+{if is_array($saldi)}
+	<div id="uStaatRood">
+		<strong>U staat rood:</strong><br />
+		{foreach from=$saldi item=saldo}
+			Uw saldo bij de {$saldo.naam} is &euro; {$saldo.saldo}.<br />
+		{/foreach}
+	</div>
+{/if}
+
 </div>
 </body>
 </html>

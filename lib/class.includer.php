@@ -22,8 +22,8 @@ class Includer {
 	var $_lid;
 	### public ###
 
-	function Includer ($sub = '', $page = '', &$lid=false) {
-		$this->_lid=$lid;
+	function Includer ($sub = '', $page = '') {
+	
 		# controleren of het een geldige naam is... platte namespace
 		if ($sub != '') {
 			if (preg_match('/^[-\w\.]+$/',$sub)) $this->_sub = $sub;

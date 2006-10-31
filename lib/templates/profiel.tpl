@@ -3,7 +3,7 @@
 		<td rowspan="4" class="foto">{$profhtml.foto}</td>
 		<th>Identiteit</th>
 		<th>Adres</th>
-		<th>Email/Telefoon</th>
+		<th>Contact</th>
 	</tr>
 	<tr>
 		<td>
@@ -15,7 +15,8 @@
 			{$profhtml.woonoord}
 			{$profhtml.adres}<br />
 			{$profhtml.postcode} {$profhtml.woonplaats}<br />
-			{$profhtml.land}
+			{$profhtml.land}<br />
+			<a href="http://maps.google.nl/maps?q={$profhtml.adres|replace:' ':'+'}+{$profhtml.woonplaats}+netherlands">kaart</a>
 		</td>
 		<td>
 			E-mail: {$profhtml.email}<br />
@@ -25,7 +26,7 @@
 	</tr>
 	<tr>
 		<th>Studie/Lidmaatschap</th>
-		<th>{if $isOudlid==true}Functie/beroep{else}Ouders{/if}</th>
+		<th>{if $isOudlid==true}Functie/beroep{else}Adres ouders{/if}</th>
 		<th>Overig</th>
 	</tr>
 	<tr>
@@ -44,7 +45,9 @@
 				{$profhtml.o_adres}<br />
 				{$profhtml.o_postcode} {$profhtml.o_woonplaats}<br />
 				{$profhtml.o_land}<br />
-				{$profhtml.o_telefoon}
+				{$profhtml.o_telefoon}<br />
+				<a href="http://maps.google.nl/maps?q={$profhtml.o_adres|replace:' ':'+'}+{$profhtml.o_woonplaats}+netherlands">kaart</a>
+		
 			{else}
 				{$profhtml.beroep}
 			{/if}
@@ -56,6 +59,7 @@
 			Skype: {$profhtml.skype}<br />
 			Website: <a href="{$profhtml.website}" class="linkExt">{$profhtml.website_kort}</a><br />
 			Eetwens: {$profhtml.eetwens}<br />
+			Bankrekening: {$profhtml.bankrekening}<br />
 			{$profhtml.saldi}
 		</td>
 	</tr>

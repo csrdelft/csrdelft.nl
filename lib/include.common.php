@@ -107,6 +107,9 @@ function naam($voornaam, $achternaam, $tussenvoegsel){
 function opConfide() {
 	return ( isset($_SERVER['REMOTE_ADDR']) and defined('CONFIDE_IP') and in_array($_SERVER['REMOTE_ADDR'],explode(':',CONFIDE_IP)) );
 }
+function isFeut(){
+	return isset($_SERVER['REMOTE_ADDR']) and defined('FEUT_IP') and $_SERVER['REMOTE_ADDR']==FEUT_IP;
+}
 function getDateTime(){
 	return date('Y-m-d H:i:s');
 }

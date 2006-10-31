@@ -126,7 +126,7 @@ Je hebt een nieuwe wachtwoord aangevraagd. Je kan nu inloggen met de volgende co
 Je kan je wachtwoord wijzigen in je profiel.
 
 Met vriendelijke groet,
-Jan Pieter Waagmeester. h.t. Praeses der Pubcie
+Hanna Timmerarends. h.t. Praeses der Pubcie
 
 P.S. Mocht je nog vragen hebben, dan kan je natuurlijk altijd e-posts sturen naar pubcie@csrdelft.nl";
 			mail($aNaamData['email'].', pubcie@csrdelft.nl', 'Nieuw wachtwoord voor de C.S.R.-stek', $mail);
