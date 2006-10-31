@@ -1,0 +1,6 @@
+RewriteEngine on
+###modRewrite dingen
+RewriteRule ^commissie/([0-9]+)/verwijder/lid/([a-z0-9]+) commissies.php?cie=$1&uid=$2&verwijderen
+RewriteRule ^commissie/([0-9]+) commissies.php?cie=$1
+
+RewriteRule ^commissie/([a-zA-Z]+)(/|.html|.htm|.php) commissies.php?cie=$1

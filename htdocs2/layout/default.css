@@ -1,0 +1,270 @@
+html, body{
+	margin: 0px; padding: 0px;
+	font-family : Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size : 11px;
+	background-color: #e1e5e5;
+}
+h1{
+	font-size: 17px;
+	margin-top: 3px;
+	margin-bottom: 3px;
+
+}
+h2{
+	font-size: 15px;
+	margin-bottom: 1px;
+}
+h3{
+	font-size: 13px;
+	margin-top: 3px;
+	margin-bottom: 0px;
+}
+p{
+	margin: 5px 0px 10px 0px; padding: 0px;
+}
+a{
+	color: darkred;
+	text-decoration: none;
+}
+a:hover{
+	color: black;
+}
+div{ 
+	margin: 0px; padding: 0px; 
+}
+textarea{
+	font-family : Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+}
+input, select, option{ font-size: 11px; padding-left: 2px;} 
+th{text-align: left;}
+td{vertical-align: top; padding: 0px; font-size: 1em; }
+ul ol{ }
+li{margin: 0 0 0 15px;}
+
+/* pagina-opmaak */
+
+#layoutContainer{
+}
+#navigatie{
+	position: absolute;
+	top: 108px;
+	left: 170px; 
+	height: 22px; width: 820px;
+	background-color: white;
+	opacity:.85; filter: alpha(opacity=85);
+	z-index: 99;
+} #navigatieContent{
+	margin: 3px 10px 0px 10px;
+}
+#menu{
+	position: absolute;
+	top: 130px;
+	left: 170px; right: 0px;
+	height: 40px; width: 819px;
+	background-color: gold;
+	border-right: 1px solid #bbb; 
+	border-top: 1px solid black;
+	border-left: 1px solid black;
+	z-index: 85;
+} #menuContent{
+	margin: 2px 10px 0px 10px; padding: 0px;
+	font-size: 12px;
+}	#submenuContent{
+	position: absolute;
+	display: block;
+
+	left: 10px;
+	margin: 2px 0 0 20px; padding: 0px;
+	font-size: 12px;
+
+}
+	
+#bodyContainer, #bodyContainerBreed{
+	position: absolute;
+	top: 172px; 
+	left: 170px; 
+}	#lichaam, #lichaamBreed{
+		width: 819px;	
+		margin: 0px 0px 25px 0px; 
+
+		background-color: yellow;
+		border-left: 1px solid #bbb;  
+		border-right: 1px solid #bbb;  
+		border-bottom: 1px solid #bbb;  
+	} 
+	#bodyContent{
+		margin: 0px; 
+		padding: 20px;
+		background-color: white;
+	}
+	#copyright{
+		position: absolute;
+		bottom: 0px;
+	} #copyrightContent{
+		margin: 0px 10px 10px 20px; 
+		font-size: 10px;
+		color: #bbb;
+	}	#copyrightContent a{
+			color: #bbb;
+		}
+		#copyrightContent a:hover{
+			color: darkred;
+		}
+#bodyContainerBreed{
+	left: 0px;
+}	#lichaamBreed{
+		width: 990px;
+	}
+#searchbox{
+	position: absolute;
+	top: 140px;
+	left: 735px;
+	width: 250px; height: 20px;
+	text-align: right;
+	z-index: 100;
+}	#searchbox input{ padding: 1px; border: 1px solid darkred; width: 160px;}
+#hoofder, #hoofderBreed{
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 990px; height: 170px;
+	background-color: white;
+	border-right: 1px solid #bbb; 
+	z-index: 1;
+} #beeldmerk{
+	margin: 5px 0px 0px 28px; 
+	width: 120px;
+}
+#hoofderBreed{
+	/* border-bottom: 1px solid black; */
+}
+#zijkolom{
+	position: absolute;
+	top: 172px;
+	left: 0px;
+	width: 170px;
+	margin: 0; 
+	min-height: 800px; 
+	border-right: 1px solid black;
+	border-bottom: 1px solid black; 
+	background-color: gold;
+} #zijkolomContent{
+		margin: 20px 10px 100px 10px;
+		font-size: 10px;
+}	
+
+#lijntje{
+	position: absolute;
+	top: 171px;	left: 0px;
+	width: 990px;
+	height: 4px;
+	background-color: darkred;
+	border-right: 1px solid #bbb;  
+	
+}
+#hoofderFoto{
+	position: absolute;
+	top: 0px;
+	left: 170px;
+	border-right: 1px solid black;
+	z-index: 70;
+}
+#personalBox{
+	position: absolute;
+	z-index: 99;
+	top: 5px;
+	left: 818px;
+	width: 160px;
+	padding: 2px;
+	color: black;
+	font-size: 9px;
+	background-color: white;
+		opacity:.85; filter: alpha(opacity=85);
+	border: 1px solid darkred;
+}
+#inloggen{
+	display: none;
+}
+#inloglink{
+	display: block;
+	width: 160px;
+}
+input.login{
+	font-size: 9px;
+	width: 62px;
+	border: 1px solid grey;
+}
+input.login-submit{
+	font-size: 8px;
+	width: 20px;
+	text-align: center;
+	border: 1px solid grey;
+}
+/* dingen voor afzonderlijke pagina's */
+
+.nieuwsbericht, .nieuwsbericht-vast{
+	margin: 20px 0px 5px 0px;
+
+	border-bottom: 1px solid black;
+	border-right: 1px solid black;
+	background-color: #f5f5f5;
+}	.nieuwsplaatje{
+		margin: 0px 0px 0px 0px;
+		float: left;
+	}
+	.nieuwsbody{
+		margin: 11px 10px 0px 70px;
+	}	.nieuwstitel{
+			font-size: 13px;
+			font-weight: bold;
+		}
+.nieuwsbericht-vast{
+	height: 100px;	
+}	
+.waarschuwing{
+	color: darkred;
+}
+div#uStaatRood{
+	position: absolute;
+	left: 730px;
+	top: 50px;
+	padding: 10px;
+	background-color: white;
+	color: darkred;
+	font-size: 13px;
+	border: 2px solid darkred;
+	opacity:.90; filter: alpha(opacity=90);
+	z-index: 99;
+}
+/* profiel */
+table.profiel{
+	width: 100%;
+	border-collapse: collapse;
+}
+table.profiel th{
+	text-align: left;
+	vertical-align: bottom;
+	border-bottom: 1px solid black;
+	margin: 0;
+	padding: 0px 0px 1px 5px;
+}
+table.profiel td{
+	border-left: 1px solid black;
+	margin: 0px;
+	padding: 5px;
+}
+table.profiel td.foto{
+	margin: 0; padding: 0;
+	border: 0;
+}
+table.profiel_edit{
+	width: 100%;
+	margin: 5px;
+}
+table.profiel_edit tr td input{
+	width: 260px;
+}
+table.profiel_edit tr td textarea{
+	width: 260px;
+}
