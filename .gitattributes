@@ -381,4 +381,5 @@ lib/templates/csrdelft.tpl -text
 lib/templates/csrmail/csrmail.tpl -text
 lib/templates/csrmail/csrmail_owee.tpl -text
 lib/templates/forum/viewtopic.tpl -text
+lib/templates/maaltijdketzer.tpl -text
 lib/templates/profiel.tpl -text

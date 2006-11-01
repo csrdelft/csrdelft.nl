@@ -110,10 +110,10 @@ class ForumContent extends SimpleHTML {
 					if($aTopic['zichtbaar']=='wacht_goedkeuring'){ $sOnderwerp.='[ter goedkeuring...] '; }
 					$sOnderwerp.='<a href="/forum/onderwerp/'.$aTopic['id']. '#laatste" >';
 					if($aTopic['plakkerig']==1){
-						$sOnderwerp.='<img src="/images/plakkerig.gif" title="Dit onderwerp is plakkerig, het blijft bovenaan." alt="plakkerig" />&nbsp;&nbsp;';
+						$sOnderwerp.='<img src="'.CSR_PICS.'forum/plakkerig.gif" title="Dit onderwerp is plakkerig, het blijft bovenaan." alt="plakkerig" />&nbsp;&nbsp;';
 					}
 					if($aTopic['open']==0){
-						$sOnderwerp.='<img src="/images/slotje.png" title="Dit onderwerp is gesloten, u kunt niet meer reageren" alt="sluiten" />&nbsp;&nbsp;';
+						$sOnderwerp.='<img src="'.CSR_PICS.'forum/slotje.png" title="Dit onderwerp is gesloten, u kunt niet meer reageren" alt="sluiten" />&nbsp;&nbsp;';
 					}
 					$sOnderwerp.=mb_htmlentities($aTopic['titel']).'</a>';
 					$sReacties=$aTopic['reacties']-1;
@@ -273,7 +273,7 @@ class ForumContent extends SimpleHTML {
 							echo '<input type="radio" name="pollOptie" id="'.$aPollOptie['id'].'" value="'.$aPollOptie['id'].'" />';
 						}
 						echo '<label for="'.$aPollOptie['id'].'">'.mb_htmlentities($aPollOptie['optie']).'</label></td>';
-						echo '<td><img src="/images/frikandel.png" height="20px" width="'.$iBalkLengte.'px" title="een del, lekker!" /></td>';
+						echo '<td><img src="'.CSR_PICS.'forum/frikandel.png" height="20px" width="'.$iBalkLengte.'px" title="een del, lekker!" /></td>';
 						echo '<td style="width: 80px">'.round( $fPercentage, 2).'% ('.$aPollOptie['stemmen'].')</td></tr>';
 					}
 					//verzendknopje enkel tonen als er gestemd mag worden
@@ -309,17 +309,17 @@ class ForumContent extends SimpleHTML {
 				//citeer knop enkel als het topic open is en als men mag posten, of als men mod is.
 				if(($aBericht['open']==1 AND $this->_forum->_lid->hasPermission($rechten_post)) OR 
 					$this->_forum->_lid->hasPermission('P_FORUM_MOD')){
-					echo ' <a href="/forum/reactie/'.$aBericht['postID'].'#laatste"><img src="/images/citeren.png" title="Citeer bericht" alt="Citeer bericht" style="border: 0px;" /></a> ';
+					echo ' <a href="/forum/reactie/'.$aBericht['postID'].'#laatste"><img src="'.CSR_PICS.'forum/citeren.png" title="Citeer bericht" alt="Citeer bericht" style="border: 0px;" /></a> ';
 				}
 				//bewerken als bericht van gebruiker is, of als men mod is.
 				if($this->_forum->magBewerken($aBericht['postID'], $aBericht['uid'], $aBericht['open'], $rechten_post)){
 					echo '<a href="/forum/bewerken/'.$aBericht['postID'].'">
-						<img src="/images/bewerken.png" title="Bewerk bericht" alt="Bewerk bericht" style="border: 0px;" /></a> ';
+						<img src="'.CSR_PICS.'forum/bewerken.png" title="Bewerk bericht" alt="Bewerk bericht" style="border: 0px;" /></a> ';
 				}
 				//verwijderlinkje, niet als er maar een bericht in het onderwerp is.
 				if($iBerichtenAantal!=1 AND $this->_forum->_lid->hasPermission('P_FORUM_MOD')){
 					echo '<a href="/forum/verwijder-bericht/'.$aBericht['postID'].'" onclick="return confirm(\'Weet u zeker dat u deze post wilt verwijderen?\')">';
-					echo '<img src="/images/verwijderen.png" title="Verwijder bericht" alt="Verwijder bericht" style="border: 0px;" /></a>';
+					echo '<img src="'.CSR_PICS.'forum/verwijderen.png" title="Verwijder bericht" alt="Verwijder bericht" style="border: 0px;" /></a>';
 				}
 				//goedkeuren van berichten
 				if($this->_forum->_lid->hasPermission('P_FORUM_MOD') AND $aBericht['zichtbaar']=='wacht_goedkeuring'){
@@ -498,7 +498,7 @@ class ForumContent extends SimpleHTML {
 		<image>
 			<link>http://csrdelft.nl/</link>
 			<title>C.S.R.-Delft</title>
-			<url>http://csrdelft.nl/informatie/images/csr.jpg</url>
+			<url>'.CSR_PICS.'layout/beeldmerk.jpg</url>
 			<height>150</height>
 			<width>118</width>
 			<description>Logo van C.S.R.-Delft</description>
