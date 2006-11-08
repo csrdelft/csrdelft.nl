@@ -182,6 +182,7 @@ htdocs2/layout/forum.css -text
 htdocs2/layout/minmax.js -text
 htdocs2/layout/position.js -text
 htdocs2/layout/undohtml.css -text
+htdocs2/links.php -text
 htdocs2/login.php -text
 htdocs2/logout.php -text
 htdocs2/maaltijden/maaltijden.php -text
@@ -192,8 +193,8 @@ htdocs2/tools/index.php -text
 htdocs2/tools/sendmail/maildata.php -text
 htdocs2/tools/sendmail/sendmail.php -text
 htdocs2/tools/soccie.php -text
+htdocs2/vereniging/.htaccess -text
 htdocs2/vereniging/bestuur.php -text
-htdocs2/vereniging/bestuur2.php -text
 htdocs2/vereniging/geschiedenis.php -text
 htdocs2/vereniging/index.php -text
 htdocs2/vereniging/lezingen.php -text

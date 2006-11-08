@@ -10,8 +10,11 @@ RewriteRule ^nieuws/$ nieuws.php
 
 #nieuwsbeheer
 RewriteRule ^nieuws/verwijderen/([0-9]+) nieuws.php?berichtID=$1&verwijderen=true
-RewriteRule ^nieuws/bewerken/([0-9]+) nieuws.php?berichtID=$1&bewerken=true
+RewriteRule ^nieuws/bewerken/([0-9]+)$ nieuws.php?berichtID=$1&bewerken=true
+RewriteRule ^nieuws/bewerken/([0-9]+)/verwijder-plaatje nieuws.php?berichtID=$1&plaatje=delete
 RewriteRule ^nieuws/toevoegen$ nieuws.php?toevoegen=true
+
+RewriteRule ^maaltijden/$ maaltijden/maaltijden.php
 
 #terugwaards werkbaar houden van de profielen:
 RewriteRule ^leden/profiel.php$ intern/profiel.php

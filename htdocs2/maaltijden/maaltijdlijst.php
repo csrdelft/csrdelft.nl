@@ -6,9 +6,7 @@ require_once('/srv/www/www.csrdelft.nl/lib/include.config.php');
 	### Pagina-onderdelen ###
 
 # Moeten er acties uitgevoerd worden?
-if (isset($_POST['maalid'])) $maalid = $_POST['maalid'];
-elseif (isset($_GET['maalid'])) $maalid = $_GET['maalid'];
-else $maalid = '';
+$maalid=getOrPost('maalid');
 
 # Een error-waarde houden we bij om zodadelijk evt. een foutmelding
 # te kunnen laden in plaats van de profiel pagina omdat er geen
@@ -16,7 +14,7 @@ else $maalid = '';
 $error = 0;
 
 # controleren of we wel mogen doen wat er gevraagd wordt...
-if ( $maalid == '' or ( !$lid->hasPermission('P_MAAL_MOD') and !opConfide() )	) $error = 1;
+if($maalid == '' or (!$lid->hasPermission('P_MAAL_MOD') and !opConfide())) $error = 1;
 
 # Pagina maken
 if ($error == 0  or $error == 2) {
@@ -43,7 +41,7 @@ if ($error == 0  or $error == 2) {
 	$page->view();
 
 } else {
-	die("Kekschooier! Dat mag niet!");
+	die("HEE, Kekschooier! Dat mag niet!");
 }
 
 

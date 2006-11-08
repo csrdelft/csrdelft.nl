@@ -5,3 +5,5 @@ RewriteRule ^eetplan/sjaars/([0-9]*) eetplan.php?pheutID=$1
 RewriteRule ^eetplan/huis/([0-9]*) eetplan.php?huisID=$1
 
 RewriteRule ^profiel/([0-9a-z]*)$ profiel.php?uid=$1
+
+RewriteRule ^sjaarsacties/$ sjaarsacties.php

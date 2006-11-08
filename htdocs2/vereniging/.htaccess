@@ -1,0 +1,2 @@
+RewriteEngine on
+RewriteRule ^bestuur/([0-9]+)$ bestuur.php?bestuur=$1

@@ -15,7 +15,7 @@ if(isset($_GET['woonoordid'])){
     $woonoord->delBewoner($iWoonoordID, $_GET['uid']);
     header('location: '.CSR_ROOT.'groepen/woonoorden.php');
     exit;
-  }elseif( isset($_POST['rawBewoners']) AND $woonoord->magBewerken($iWoonoordID)){
+  }elseif( isset($_POST['rawBewoners']) AND ($woonoord->magBewerken($iWoonoordID) OR $lid->hasPermission('P_LEDEN_MOD'))){
   	$aBewoners=namen2uid($_POST['rawBewoners'], $lid);
       if(is_array($aBewoners) AND count($aBewoners)>0){
     	$iSuccesvol=0;
