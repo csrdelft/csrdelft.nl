@@ -27,7 +27,7 @@ Prefereert u vegetarisch eten, of heeft u speciale eetgewoontes of een dieet, ge
 			<tr>
 				<td>{$maaltijd.datum|date_format:$datumFormaat}</td>
 				<td>
-					{if $toonLijsten}<a href="/maaltijden/maaltijdlijst.php?maalid={$maaltijden.id}">{/if}
+					{if $toonLijsten}<a href="/maaltijden/maaltijdlijst.php?maalid={$maaltijd.id}">{/if}
 						{$maaltijd.tekst|escape:'html'}
 					{if $toonLijsten}</a>{/if}				
 				</td>
@@ -136,9 +136,7 @@ Prefereert u vegetarisch eten, of heeft u speciale eetgewoontes of een dieet, ge
 					<td><input type="submit" name="foo" value="aanmelden" /></td>
 				{/if}
 				<td>
-				{debug}
 					{if is_array($maaltijd.derden)}
-						
 						<table style="width: 100%;">
 							{foreach from=$maaltijd.derden key=uid item=naam}
 								<tr>

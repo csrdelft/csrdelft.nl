@@ -1,29 +1,7 @@
 <?php
 
-/*
-function getVar($varname, $default = 0) {
-	# het is belangrijk dat eerst POST getest wordt, en dan GET
-	# er zijn functies die hiervan uitgaan. als POST niet eerst getest wordt kunnen er
-	# veiligheidsgaten ontstaan doordat de invoervariabele die in bv. de [new] actie wordt
-	# gebruikt gevalideerd wordt vanuit GET en vervolgens gebruikt wordt direct uit POST
-	# waardoor ongecontroleerde input wordt gebruikt.
-	if (isset($_POST[$varname])) return $_POST[$varname];
-	if (isset($_GET[$varname])) return $_GET[$varname];
-	return $default;
-
-	#($result = $_POST[$varname]) or ($result = $_GET[$varname]) or ($result = $default);
-	#return $result;
-}
-
-function phplog($service, $msg) {
-	openlog($service, LOG_ODELAY, LOG_LOCAL0);
-	syslog(LOG_INFO, $msg);
-	closelog();
-}
-*/
-
-# http://nl.php.net/manual/en/function.ip2long.php
-# User Contributed Notes
+// http://nl.php.net/manual/en/function.ip2long.php
+// User Contributed Notes
 function matchCIDR($addr, $cidr) {
    list($ip, $mask) = explode('/', $cidr);
    $mask = 0xffffffff << (32 - $mask);
@@ -114,8 +92,9 @@ function getDateTime(){
 	return date('Y-m-d H:i:s');
 }
 function pr($sString){
-	if($_SERVER['REMOTE_ADDR']=='145.94.59.158'){
-		echo '<pre>'.print_r($sString, true).'</pre>';
+	$admin=array('145.94.61.229', '145.94.59.158');
+	if(in_array($_SERVER['REMOTE_ADDR'], $admin)){
+		echo '<pre style="background-color: lightblue;">'.print_r($sString, true).'</pre>';
 	}else{
 		echo 'Er is een foutje, de webmeester is er al mee bezig...';
 	}
@@ -148,5 +127,14 @@ function namen2uid($sNamen, $lid){
 		}
 	}
 	return $return;
+}
+function getOrPost($key){
+	if (isset($_POST[$key])){
+		return $_POST[$key];
+	}elseif (isset($_GET[$key])){
+		return $_GET[$key];
+	}else{
+		return '';
+	}
 }
 ?>

@@ -8,7 +8,7 @@
 # -------------------------------------------------------------------
 
 
-
+require_once('class.simplehtml.php');
 class Bestuur extends SimpleHTML {
 
 	### private ###
@@ -22,7 +22,6 @@ class Bestuur extends SimpleHTML {
 	function Bestuur (&$lid, &$db) {
 		$this->_lid =& $lid;
 		$this->_db =& $db;
-		$this->loadBestuur();
 	}
 	
 	function loadBestuur($jaar=0){
@@ -41,24 +40,64 @@ class Bestuur extends SimpleHTML {
 		}
 		$sBestuur="
 			SELECT
-				ID, startjaar, naam, 
-				praeses, abictis, fiscus, vice-praeses, vice-abactis, 
-				tekst, bbcode_uid
+				ID, jaar, naam, 
+				praeses, abactis, fiscus, vice_praeses, vice_abactis, 
+				verhaal, bbcode_uid, tekst
 			FROM
 				bestuur
 			WHERE
-				startjaar=".$jaar."
+				jaar=".$jaar."
 			LIMIT 1;";
+
 		$rBestuur=$this->_db->query($sBestuur);
 		if($rBestuur===false){ 
-			$this->_loadBestuur($jaar-1); 
+			return $this->loadBestuur($jaar-1); 
 		}else{
-			$this->_aBestuur=$this->_db->result2array($rBestuur);
+			while($bestuursLid=$this->_db->next($rBestuur)){
+				$this->_aBestuur=array(
+					'ID' => $bestuursLid['ID'], 'jaar' => $bestuursLid['jaar'], 'naam' => $bestuursLid['naam'],
+					'praeses' => $this->_lid->getFullName($bestuursLid['praeses']),
+					'praeses_uid' => $bestuursLid['praeses'],
+					'abactis' => $this->_lid->getFullName($bestuursLid['abactis']),
+					'abactis_uid' => $bestuursLid['abactis'],
+					'fiscus' => $this->_lid->getFullName($bestuursLid['fiscus']),
+					'fiscus_uid' => $bestuursLid['fiscus'],
+					'vice_praeses' => $this->_lid->getFullName($bestuursLid['vice_praeses']),
+					'vice_praeses_uid' => $bestuursLid['vice_praeses'],
+					'vice_abactis' => $this->_lid->getFullName($bestuursLid['vice_abactis']),
+					'vice_abactis_uid' => $bestuursLid['vice_abactis'],
+					'verhaal' => $bestuursLid['verhaal'],
+					'bbcode_uid' => $bestuursLid['bbcode_uid'],
+					'tekst' => $bestuursLid['tekst']);
+			}
+			return true;
 		}
 	}
 	
-	function isBestuur(){ return in_array($this->_lid->getUid(), $this->_aBestuur) }
-	function getBestuur(){ return $this->_aBestuur;	}
+	function isBestuur(){ return in_array($this->_lid->getUid(), $this->_aBestuur); }
+	function getBestuur(){ 
+		if(!isset($this->_aBestuur['naam'])){
+			//kennelijk nog niets geladen, dan nu maar doen.
+			$this->loadBestuur();	
+		}
+		return $this->_aBestuur;	
+	}
+
+	function getBesturen(){
+		$sBesturen="
+			SELECT 
+				jaar, naam, praeses
+			FROM
+				bestuur
+			ORDER BY
+				jaar DESC";
+		$rBesturen=$this->_db->query($sBesturen);
+		if($rBesturen!==false AND $this->_db->numRows($rBesturen)!=0){
+			return $this->_db->result2array($rBesturen);
+		}else{
+			return false;
+		}
+	}	
 	
 }
 

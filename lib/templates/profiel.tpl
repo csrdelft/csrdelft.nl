@@ -47,7 +47,6 @@
 				{$profhtml.o_land}<br />
 				{$profhtml.o_telefoon}<br />
 				<a href="http://maps.google.nl/maps?q={$profhtml.o_adres|replace:' ':'+'}+{$profhtml.o_woonplaats}+netherlands">kaart</a>
-		
 			{else}
 				{$profhtml.beroep}
 			{/if}
@@ -59,7 +58,7 @@
 			Skype: {$profhtml.skype}<br />
 			Website: <a href="{$profhtml.website}" class="linkExt">{$profhtml.website_kort}</a><br />
 			Eetwens: {$profhtml.eetwens}<br />
-			Bankrekening: {$profhtml.bankrekening}<br />
+			{* Bankrekening: {$profhtml.bankrekening}<br /> *}
 			{$profhtml.saldi}
 		</td>
 	</tr>

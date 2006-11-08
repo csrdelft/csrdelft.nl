@@ -97,10 +97,10 @@ class WoonoordContent extends SimpleHTML {
 				echo '<tr><td valign="top">';
 				if($woonoord['plaatje'] != '') echo '<img src="'.htmlspecialchars($woonoord['plaatje']).'" style="float: right;">'; 
 				echo mb_htmlentities($woonoord['tekst']);
-				if($bBewerken){
+				if($bBewerken OR $this->_lid->hasPermission('P_LEDEN_MOD')){
 					$bRawInvoer=false;
 					//nieuw toevoeg formulier
-					echo '<div class="quote"><form action="woonoord.php?woonoordid='.$woonoord['id'].'#'.$woonoord['id'].'" method="post">';
+					echo '<div class="quote"><form action="woonoorden.php?woonoordid='.$woonoord['id'].'#'.$woonoord['id'].'" method="post">';
 					if(isset($_POST['rawBewoners']) AND trim($_POST['rawBewoners'])!='' AND isset($_GET['woonoordid']) AND $_GET['woonoordid']==$woonoord['id']){
 						$aBewoners=namen2uid($_POST['rawBewoners'], $this->_lid);
 						if(is_array($aBewoners)){

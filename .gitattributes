@@ -373,10 +373,12 @@ lib/tekst/informatie/lidworden.php -text
 lib/tekst/informatie/ondervereniging.html -text
 lib/tekst/informatie/werkgroep.html -text
 lib/tekst/leden-thuis.html -text
+lib/tekst/links.html -text
 lib/tekst/maaltijd-niet-ingelogged.html -text
 lib/tekst/oudleden-thuis.html -text
 lib/tekst/thuis.html -text
 lib/tekst/verbanden.html -text
+lib/templates/bestuur.tpl -text
 lib/templates/csrdelft.tpl -text
 lib/templates/csrmail/csrmail.tpl -text
 lib/templates/csrmail/csrmail_owee.tpl -text

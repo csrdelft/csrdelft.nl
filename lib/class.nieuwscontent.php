@@ -26,9 +26,9 @@ class NieuwsContent extends SimpleHTML {
 	# de objecten die data leveren
 	var $_nieuws;
 
+	var $_chop=500;
 	# afbreken van de tekst van een berichtje bij de eerste spatie
 	# voor het $chop-de karakter, 0 = niet gebruiken
-	var $_chop = 400;
 	var $_sError='';
 	
 	var $_berichtID;
@@ -41,6 +41,14 @@ class NieuwsContent extends SimpleHTML {
 	}
 
 	function setChop($chars) { $this->_chop = (int)$chars; }
+	function setError($sError){ $this->_sError.=$sError; }
+	function getError(){
+		if($this->_sError!=''){ 
+			return '<div class="foutmelding">'.$this->_sError.'</div>'; 
+		}else{
+			return '';
+		}
+	}
 	function getNieuwBerichtLink(){
 		if($this->_nieuws->isNieuwsMod()){
 			return '<a href="/nieuws/toevoegen">Nieuw nieuwsbericht toevoegen</a>';
@@ -48,7 +56,7 @@ class NieuwsContent extends SimpleHTML {
 	}
 	function getBerichtModControls($iBerichtID){
 		if($this->_nieuws->isNieuwsMod()){
-			return '[ <a href="/nieuws/verwijderen/'.$iBerichtID.'" onclick="return confirm(\'Weet u zeker dat u dit nieuwsbericht wilt verwijderen?\')">verwijderen</a> | <a href="/nieuws/bewerken/'.$iBerichtID.'">bewerken</a> ]';
+			return ' [&nbsp;<a href="/nieuws/verwijderen/'.$iBerichtID.'" onclick="return confirm(\'Weet u zeker dat u dit nieuwsbericht wilt verwijderen?\')">verwijderen</a>&nbsp;|&nbsp;<a href="/nieuws/bewerken/'.$iBerichtID.'">bewerken</a>&nbsp;]';
 		}
 	}
 	function bewerkFormulier(){
@@ -68,18 +76,34 @@ class NieuwsContent extends SimpleHTML {
 			$prive=$verborgen='';
 			if(isset($_POST['prive'])){ $prive='checked="checked"'; }
 			if(isset($_POST['verborgen'])){ $verborgen='checked="checked"'; }
+			//voor het plaatje nog eens 
+			$aBericht=$this->_nieuws->getMessage($this->_berichtID);
+			
 		}
-		echo '<form action="/nieuws/bewerken/'.$this->_berichtID.'" method="post"><div class="pubciemail-form">';
-		if($this->_sError!=''){ echo '<div class="foutmelding">'.$this->_sError.'</div>'; }
+		$plaatje=CSR_PICS.'nieuws/'.$aBericht['plaatje'];
+		echo '<form action="/nieuws/bewerken/'.$this->_berichtID.'" method="post" enctype="multipart/form-data">';
+		echo '<div class="pubciemail-form">';
+		echo $this->getError();
 		echo '<strong>Titel</strong><br />
 		<input type="text" name="titel" class="tekst" value="'.$titel.'" style="width: 100%;" /><br />
 		<strong>Bericht</strong>&nbsp;&nbsp;';
 		// link om het tekst-vak groter te maken.
 		echo '<a href="#" onclick="vergrootTextarea(\'nieuwsBericht\', 10)" name="Vergroot het invoerveld">invoerveld vergroten</a><br />';
 		echo '<textarea id="nieuwsBericht" name="tekst" cols="80" rows="10" style="width: 100%" class="tekst">'.$tekst.'</textarea><br />';
-		echo '<input id="prive" type="checkbox" name="prive" '.$prive.' /><label for="prive">Dit bericht alleen weergeven bij leden</label>&nbsp;';
-		echo '<input id="verborgen" type="checkbox" name="verborgen" '.$verborgen.' /><label for="verborgen">Dit bericht verbergen</label><br />';
-		echo '<input type="submit" name="submit" value="opslaan" />&nbsp;<a href="/nieuws">Annuleren, terug naar nieuws</a></div>';
+		echo '<div style="height: 100px; width: 40%; float: left;">Dit bericht...<br />';
+		echo '<input id="prive" type="checkbox" name="prive" '.$prive.' /><label for="prive">...alleen weergeven bij leden</label><br />';
+		echo '<input id="verborgen" type="checkbox" name="verborgen" '.$verborgen.' /><label for="verborgen">...verbergen</label></div>';
+		echo '<div style="height: 100px; width: 60%; float: right; ">';
+		if($plaatje!=''){
+			//plaetje weergeven, en eventueel verwijderen.
+			echo '<img src="'.$plaatje.'" width="60px" height="100px" alt="Afbeelding" style="float: left; margin-right: 10px;" />
+				<strong>Afbeelding bij het nieuws</strong><br /> 
+				<a href="/nieuws/bewerken/'.$this->_berichtID.'/verwijder-plaatje" onclick="confirm(\'Weet u zeker u het plaatje van dit nieuwsbericht wilt verwijderen\')">[ verwijderen ]</a><br /><br />';
+		}
+		//input ding om een plaatje toe te voegen...
+		echo 'Afbeelding toevoegen of vervangen:<br /><input type="file" name="plaatje" size="40" /><br />';
+		echo '<span class="waarschuwing">(png, gif of jpg, 60x100 of groter in die verhouding.)</span></div>';
+		echo '<input type="submit" name="submit" value="opslaan" />&nbsp;<a href="/nieuws" class="annuleer-link">annuleren</a></div>';
 	}
 	function nieuwFormulier(){
 		$titel=$tekst=$prive=$verborgen='';
@@ -88,7 +112,7 @@ class NieuwsContent extends SimpleHTML {
 		if(isset($_POST['prive'])){ $prive='checked="checked"'; }
 		if(isset($_POST['verborgen'])){ $verborgen='checked="checked"'; }
 		echo '<form action="/nieuws/toevoegen" method="post"><div class="pubciemail-form">';
-		if($this->_sError!=''){ echo '<div class="foutmelding">'.$this->_sError.'</div>'; }
+		echo $this->getError();
 		echo '<strong>Titel</strong><br />
 		<input type="text" name="titel" class="tekst" value="'.$titel.'" style="width: 100%;" /><br />
 		<strong>Bericht</strong>&nbsp;&nbsp;';
@@ -97,7 +121,7 @@ class NieuwsContent extends SimpleHTML {
 		echo '<textarea id="nieuwsBericht" name="tekst" cols="80" rows="10" style="width: 100%" class="tekst">'.$tekst.'</textarea><br />';
 		echo '<input id="prive" type="checkbox" name="prive" '.$prive.' /><label for="prive">Dit bericht alleen weergeven voor leden</label>&nbsp;';
 		echo '<input id="verborgen" type="checkbox" name="verborgen" '.$verborgen.' /><label for="verborgen">Dit bericht verbergen</label><br />';
-		echo '<input type="submit" name="submit" value="opslaan"  />&nbsp;<a href="/nieuws">Annuleren, terug naar nieuws</a></div>';
+		echo '<input type="submit" name="submit" value="opslaan"  />&nbsp;<a href="/nieuws" class="annuleer-link">annuleren</a></div>';
 	}
 	function valideerFormulier(){
 		$bNoError=true;
@@ -118,12 +142,11 @@ class NieuwsContent extends SimpleHTML {
 	}
 	function getOverzicht(){
 		$aBerichten=$this->_nieuws->getMessages();
-		if($aBerichten===false OR !is_array($aBerichten)) {	
+		if(!is_array($aBerichten)) {	
 			echo 'Zoals het is, zoals het was, o Civitas!<br />(Geen nieuws gevonden dus....)';
 		}else{
 			foreach ($aBerichten as $aBericht) {
 				if(kapStringNetjesAf($aBericht['tekst'], $this->_chop)){
-					//afgekapt
 					$sBericht=bbview($aBericht['tekst'], $aBericht['bbcode_uid']);
 					$sBericht.='... <a href="/nieuws/'.$aBericht['id'].'">meer</a>';
 				}else{
@@ -137,9 +160,6 @@ class NieuwsContent extends SimpleHTML {
 				//verborgen berichten aangeven, enkel bij mensen met P_NEWS_MOD
 				if($aBericht['verborgen']=='1'){ echo '<em>[verborgen] </em>';	}
 				echo mb_htmlentities($aBericht['titel']).'</div>';
-				//echo '<i>('.date('d-m-Y H:i', $aBericht['datum']).')</i> ';
-				//nieuwsbeheer functie dingen:
-				//$this->getBerichtModControls($aBericht['id']);
 				echo ''.$sBericht.'&nbsp;'.$this->getBerichtModControls($aBericht['id']).'</div></div>';
 			}//einde foreach bericht
 			echo $this->getNieuwBerichtLink();
@@ -148,10 +168,9 @@ class NieuwsContent extends SimpleHTML {
 	function getBericht(){
 		$aBericht=$this->_nieuws->getMessage($this->_berichtID);
 		if(is_array($aBericht)){
-			//weergeven
 			echo '<div class="nieuwsbericht">';
 			if($aBericht['plaatje']!=''){
-				echo '<div class="nieuwsplaatje"><img src="/layout/nieuws/'.$aBericht['plaatje'].'" width="60px" height="100px" alt="'.$aBericht['plaatje'].'" /></div>';
+				echo '<div class="nieuwsplaatje"><img src="'.CSR_PICS.'nieuws/'.$aBericht['plaatje'].'" width="60px" height="100px" alt="'.$aBericht['plaatje'].'" /></div>';
 			}
 			echo '<div class="nieuwsbody"><div class="nieuwstitel">';
 			//verborgen berichten aangeven, enkel bij mensen met P_NEWS_MOD

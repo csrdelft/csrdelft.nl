@@ -239,7 +239,9 @@ class ForumContent extends SimpleHTML {
 				}
 				echo ']<br /><br />'."\r\n";
 			}
-			echo '<table class="forumtabel"><tr><td class="forumhoofd">auteur</td><td class="forumhoofd">bericht</td></tr>';
+			echo '<table class="forumtabel">
+			<tr><td class="forumtussenschot" colspan="2"></td></tr>';
+			//<tr><td class="forumhoofd">auteur</td><td class="forumhoofd">bericht</td></tr>';
 			//speciale topic weergeven als het topic er een is. bijvoorbeeld een poll;
 			switch($aBerichten[0]['soort']){
 				case 'T_POLL':
@@ -546,7 +548,8 @@ class ForumContent extends SimpleHTML {
 		$aPosts=$this->_forum->getPostsVoorRss(10);
 		echo '<div id="forumHighlights"><a href="/forum/" class="kopje">Laatste forumberichten:</a><br />';
 		foreach($aPosts as $aPost){
-			$tekst=$aPost['nickname'].': '.$aPost['titel'];
+			//$tekst=$aPost['nickname'].': ';
+			$tekst=$aPost['titel'];
 			if(strlen($tekst)>22){
 				$tekst=substr($tekst, 0, 18).'..';
 			}
