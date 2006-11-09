@@ -16,7 +16,7 @@ if ($lid->hasPermission('P_LEDEN_READ')) {
 		exit;
 	}
 	//nieuwe sjaarsactie aanmelden
-	if(isset($_POST['verzenden']) AND $sjaarsactie->validateSjaarsactie()){
+	if(isset($_POST['verzenden']) AND $sjaarsactie->validateSjaarsactie() AND !$sjaarsactie->isSjaars()){
 		$sjaarsactie->newSjaarsactie($_POST['actieNaam'], $_POST['beschrijving'], $_POST['limiet']);
 		header('location: '.CSR_ROOT.'intern/sjaarsacties/');
 		exit;
