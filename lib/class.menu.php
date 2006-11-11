@@ -38,6 +38,13 @@ class menu {
 	
 		$this->_menu=array();
 		
+		//ff de request_url van #name en .php ontdoen.
+		$request_uri_full=$request_uri=$_SERVER['REQUEST_URI'];
+		$dotphp=strpos($request_uri, '.php');
+		if($dotphp!==false){ $request_uri=substr($request_uri, 0, $dotphp); }
+		$sharp=strpos($request_uri, '#');
+		if($sharp!==false){ $request_uri=substr($request_uri, 0, $sharp); }	
+		
 		# menu ophalen
 		$sMenu="
 			SELECT  
@@ -49,20 +56,18 @@ class menu {
 			ORDER BY 
 				pID ASC, prioriteit ASC, tekst ASC";
 		$rMenu=$this->_db->query($sMenu);
-		$bUitgedeeld=false;
-		$bUitgedeeldSub=false;
+		
 		//Nu hier een boom-array maken.
 		while($aMenu=$this->_db->next($rMenu)){
 			//uitzoeken of de huidige pagina overeenkomt met de opgehaalde rij
-			$bHuidig=false; 
-			if((($bUitgedeeld==false AND $aMenu['pID']==0) OR ($bUitgedeeldSub==false AND $aMenu['pID']!=0))AND
-			( $aMenu['link']!='/' AND strpos($_SERVER['REQUEST_URI'], $aMenu['link'])!==false)){
-				$bHuidig=true; 
-				if($aMenu['pID']==0) $bUitgedeeld=true;
-				if($aMenu['pID']!=0) $bUitgedeeldSub=true;
+			$bHuidig=false;
+			if(	($aMenu['link']=='/' AND $request_uri=='/') OR
+					($request_uri==$aMenu['link'] AND $aMenu['link']!='/') OR
+					($request_uri_full==$aMenu['link'] AND $aMenu['link']!='/') OR
+					(strpos($request_uri, $aMenu['link'])!==false AND $aMenu['link']!='/')){
 				$this->_huidig=$aMenu['ID'];
 				if($aMenu['pID']!=0){ $this->_huidigTop=$aMenu['pID']; }
-				
+				$bHuidig=true;
 			}
 			if($aMenu['pID']==0){
 				//hoofdniveau
@@ -84,11 +89,6 @@ class menu {
 					'huidig' => $bHuidig,
 					'rechten' => $aMenu['permission'] );
 			}
-		}
-		//standaard huidige pagina is de voorpagina met ID==1
-		if($bUitgedeeld==false AND $bUitgedeeldSub==false AND $_SERVER['REQUEST_URI'][0]=='/'){
-			$this->_menu[1]['huidig']=true;
-			$this->_huidig=1;
 		}
 	}
 

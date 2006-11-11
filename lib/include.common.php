@@ -94,7 +94,7 @@ function getDateTime(){
 function pr($sString){
 	$admin=array('145.94.61.229', '145.94.59.158');
 	if(in_array($_SERVER['REMOTE_ADDR'], $admin)){
-		echo '<pre style="background-color: lightblue;">'.print_r($sString, true).'</pre>';
+		echo '<pre id="pubcie_debug">'.print_r($sString, true).'</pre>';
 	}else{
 		echo 'Er is een foutje, de webmeester is er al mee bezig...';
 	}

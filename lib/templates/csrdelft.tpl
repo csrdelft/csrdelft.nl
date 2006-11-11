@@ -39,6 +39,7 @@
 				{/section}
 			{/if}
 		</div>
+		<div id="zijkolomFooter"></div>
 	</div>
 {/if}
 <div id="navigatie">

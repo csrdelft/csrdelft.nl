@@ -20,7 +20,7 @@ $error = 0;
 # 2 -> er treden (vorm)fouten op in bijv de invoer.
 
 # controleren of we wel mogen doen wat er gevraagd wordt...
-$actionsToegestaan=array('', 'aan', 'af');
+$actionsToegestaan=array('', 'editEetwens', 'addabo', 'delabo');
 if(in_array($action, $actionsToegestaan)){
 	if(!$lid->hasPermission('P_MAAL_IK')){ $error = 1; }
 }else{
@@ -50,40 +50,13 @@ if ($error == 0) switch($action) {
 			exit; 
 		}
 	break;
-	case 'aan':
-		# kijk of een maaltijd is opgegeven
-		$m=getOrPost('m');
-		# kijk of er extra permissies nodig zijn als we iemand anders
-		# aan willen melden
-		$uid=getOrPost('uid');
-		if($uid != '' and $uid != $lid->getUid() AND !$lid->hasPermission('P_MAAL_WIJ') ){
-			$error = 1;
+	case 'editEetwens':
+		$eetwens=getOrPost('eetwens');
+		if(!$lid->setEetwens($eetwens)){
+			$error=2;
 		}else{
-			# ga maar proberen dan...
-			if(!$maaltrack->aanmelden($m, $uid)){
-				$error=2;
-			}else{
-				header("Location: {$_SERVER['PHP_SELF']}");
-				exit;
-			}
-		}
-	break;
-	case 'af':
-		# kijk of een maaltijd is opgegeven
-		$m=getOrPost('m');
-		# kijk of er extra permissies nodig zijn als we iemand anders
-		# af willen melden
-		$uid=getOrPost('uid');
-		if($uid != '' and $uid != $lid->getUid() AND !$lid->hasPermission('P_MAAL_WIJ') ){
-			$error = 1;
-		}else{
-			# ga maar proberen dan...
-			if(!$maaltrack->afmelden($m, $uid)){
-				$error=2;
-			}else{
-				header("Location: {$_SERVER['PHP_SELF']}");
-				exit;
-			}
+			header("Location: {$_SERVER['PHP_SELF']}");
+			exit; 
 		}
 	break;
 }
@@ -92,8 +65,8 @@ if ($error == 0) switch($action) {
 # De pagina opbouwen, met mKetzer, of met foutmelding
 if ($error == 0  or $error == 2) {
 	# Het middenstuk
-	require_once('class.maaltijdcontent.php');
-	$midden = new MaaltijdContent($lid, $maaltrack);
+	require_once('class.maaltijdvoorkeurcontent.php');
+	$midden = new MaaltijdVoorkeurContent($lid, $maaltrack);
 } else {
 	# geen rechten
 	$midden = new Includer('', 'maaltijd-niet-ingelogged.html');

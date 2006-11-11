@@ -41,8 +41,7 @@ class Sjaarsactie {
 			WHERE
 				sjaarsactie.zichtbaar='ja'
 			ORDER BY 
-				sjaarsactie.naam ASC
-			LIMIT 20;";
+				sjaarsactie.naam ASC;";
 		$rActie=$this->_db->query($sActie);
 		if($this->_db->numRows($rActie)==0){ return false; }
 		while($aActie=$this->_db->next($rActie)){

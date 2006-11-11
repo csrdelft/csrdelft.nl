@@ -103,7 +103,7 @@ class NieuwsContent extends SimpleHTML {
 		//input ding om een plaatje toe te voegen...
 		echo 'Afbeelding toevoegen of vervangen:<br /><input type="file" name="plaatje" size="40" /><br />';
 		echo '<span class="waarschuwing">(png, gif of jpg, 60x100 of groter in die verhouding.)</span></div>';
-		echo '<input type="submit" name="submit" value="opslaan" />&nbsp;<a href="/nieuws" class="annuleer-link">annuleren</a></div>';
+		echo '<input type="submit" name="submit" value="opslaan" />&nbsp;<a href="/nieuws" class="knop">annuleren</a></div>';
 	}
 	function nieuwFormulier(){
 		$titel=$tekst=$prive=$verborgen='';
@@ -121,7 +121,7 @@ class NieuwsContent extends SimpleHTML {
 		echo '<textarea id="nieuwsBericht" name="tekst" cols="80" rows="10" style="width: 100%" class="tekst">'.$tekst.'</textarea><br />';
 		echo '<input id="prive" type="checkbox" name="prive" '.$prive.' /><label for="prive">Dit bericht alleen weergeven voor leden</label>&nbsp;';
 		echo '<input id="verborgen" type="checkbox" name="verborgen" '.$verborgen.' /><label for="verborgen">Dit bericht verbergen</label><br />';
-		echo '<input type="submit" name="submit" value="opslaan"  />&nbsp;<a href="/nieuws" class="annuleer-link">annuleren</a></div>';
+		echo '<input type="submit" name="submit" value="opslaan"  />&nbsp;<a href="/nieuws" class="knop">annuleren</a></div>';
 	}
 	function valideerFormulier(){
 		$bNoError=true;

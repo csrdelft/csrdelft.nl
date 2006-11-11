@@ -1,73 +1,55 @@
+html, body{ font-size : 75.5%; }
+h1{	font-size: 1.6em; }
+h2{ font-size: 1.3em; }
+h3{ font-size: 1.25em; }
+h4{ font-size: 1em; }
+textarea, input, select, option, td, th, div, p{ font-size: 1em; }	
+
 html, body{
 	margin: 0px; padding: 0px;
 	font-family : Verdana, Geneva, Arial, Helvetica, sans-serif;
-	font-size : 11px;
 	background-color: #e1e5e5;
 }
-h1{
-	font-size: 17px;
-	margin-top: 3px;
-	margin-bottom: 3px;
+h1{ margin-top: 3px; margin-bottom: 3px;}
+h2{	margin-bottom: 1px;}
+h3{ margin-top: 3px; margin-bottom: 0px; }
+p{ 	margin: 5px 0px 10px 0px; padding: 0px; } 
+a{ 	color: darkred; text-decoration: none; }
+a:hover{ color: black; }
+div{ margin: 0px; padding: 0px; }
 
-}
-h2{
-	font-size: 15px;
-	margin-bottom: 1px;
-}
-h3{
-	font-size: 13px;
-	margin-top: 3px;
-	margin-bottom: 0px;
-}
-p{
-	margin: 5px 0px 10px 0px; padding: 0px;
-}
-a{
-	color: darkred;
-	text-decoration: none;
-}
-a:hover{
-	color: black;
-}
-div{ 
-	margin: 0px; padding: 0px; 
-}
 textarea{
 	font-family : Verdana, Geneva, Arial, Helvetica, sans-serif;
-	font-size: 11px;
 	padding: 2px;
 	border: 1px solid darkgrey;
 }
-input, select{ 
-	font-size: 11px; padding-left: 2px; padding-right: 2px;
-	border: 1px solid darkgrey;
-} 
+input, select{ padding-left: 2px; padding-right: 2px;	border: 1px solid darkgrey; } 
 select{ padding-right: 0px; }
 
-th{text-align: left;}
-td{vertical-align: top; padding: 0px; font-size: 1em; }
-ul ol{ }
+th{ text-align: left; }
+td{ vertical-align: top; padding: 0px; font-size: 1em; }
+ul, ol{ }
 li{margin: 0 0 0 15px;}
-
+li li{ 1em;}
 /* pagina-opmaak */
 
-#layoutContainer{
-}
+#layoutContainer{}
 #navigatie{
 	position: absolute;
 	top: 108px;
 	left: 170px; 
 	height: 22px; width: 820px;
 	background-color: white;
-	opacity:.85; filter: alpha(opacity=85);
 	z-index: 99;
+	opacity:.85; filter: alpha(opacity=85);
 } #navigatieContent{
 	margin: 3px 10px 0px 10px;
+	font-size: 1.25em;
 }
 #menu{
 	position: absolute;
 	top: 130px;
-	left: 170px; right: 0px;
+	left: 170px;
 	height: 40px; width: 819px;
 	background-color: gold;
 	border-right: 1px solid #bbb; 
@@ -76,14 +58,12 @@ li{margin: 0 0 0 15px;}
 	z-index: 85;
 } #menuContent{
 	margin: 2px 10px 0px 10px; padding: 0px;
-	font-size: 12px;
+	font-size: 1.3em;
 }	#submenuContent{
 	position: absolute;
-	display: block;
-
 	left: 10px;
 	margin: 2px 0 0 20px; padding: 0px;
-	font-size: 12px;
+	font-size: 1.3em;
 
 }
 	
@@ -101,8 +81,8 @@ li{margin: 0 0 0 15px;}
 		border-bottom: 1px solid #bbb;  
 	} 
 	#bodyContent{
-		margin: 0px; 
-		padding: 20px;
+		margin: 0px; padding: 20px;
+		font-size: 1.20em;
 		background-color: white;
 	}
 	#copyright{
@@ -112,17 +92,11 @@ li{margin: 0 0 0 15px;}
 		margin: 0px 10px 10px 20px; 
 		font-size: 10px;
 		color: #bbb;
-	}	#copyrightContent a{
-			color: #bbb;
-		}
-		#copyrightContent a:hover{
-			color: darkred;
-		}
+	}	#copyrightContent a{ color: #bbb; }
+		#copyrightContent a:hover{ color: darkred; }
 #bodyContainerBreed{
 	left: 0px;
-}	#lichaamBreed{
-		width: 990px;
-	}
+}	#lichaamBreed{ width: 990px; }
 #searchbox{
 	position: absolute;
 	top: 140px;
@@ -135,31 +109,30 @@ li{margin: 0 0 0 15px;}
 	position: absolute;
 	top: 0px;
 	left: 0px;
-	width: 990px; height: 170px;
+	width: 990px; height: 171px;
 	background-color: white;
 	border-right: 1px solid #bbb; 
 	z-index: 1;
-} #beeldmerk{
-	margin: 5px 0px 0px 28px; 
-	width: 120px;
-}
-#hoofderBreed{
-	/* border-bottom: 1px solid black; */
-}
+} #beeldmerk{ margin: 5px 0px 0px 28px; width: 120px; }
+#hoofderBreed{ }
 #zijkolom{
 	position: absolute;
 	top: 172px;
 	left: 0px;
 	width: 170px;
 	margin: 0; 
-	min-height: 800px; 
 	border-right: 1px solid black;
 	border-bottom: 1px solid black; 
 	background-color: gold;
 } #zijkolomContent{
-		margin: 20px 10px 100px 10px;
-		font-size: 10px;
-}	
+		margin: 20px 10px 10px 10px;
+		min-height: 600px; 
+}	#zijkolomFooter{
+		height: 58px;
+		background-image: url(http://plaetjes.csrdelft.nl/layout/bestuurstekst.gif);
+		background-repeat: no-repeat;
+		background-position: bottom right;
+}
 
 #lijntje{
 	position: absolute;
@@ -184,10 +157,8 @@ li{margin: 0 0 0 15px;}
 	left: 818px;
 	width: 160px;
 	padding: 2px;
-	color: black;
-	font-size: 9px;
-	background-color: white;
-		opacity:.85; filter: alpha(opacity=85);
+	color: black; background-color: white;
+	opacity:.85; filter: alpha(opacity=85);
 	border: 1px solid darkred;
 }
 #inloggen{
@@ -198,16 +169,25 @@ li{margin: 0 0 0 15px;}
 	width: 160px;
 }
 input.login{
-	font-size: 9px;
 	width: 60px;
 	border: 1px solid grey;
 }
 input.login-submit{
-	font-size: 8px;
 	padding: 0px;
 	width: 18px;
 	text-align: center;
 	border: 1px solid grey;
+}
+pre#pubcie_debug{
+	position: absolute;
+	top: 10px;
+	left: 1000px; right: 10px
+	margin: 10px;
+	overflow: auto;
+	font-size: 1.2em;
+	color: black; background-color: white;
+	border: 1px solid darkred;
+	z-index: 100;
 }
 /* dingen voor afzonderlijke pagina's */
 
@@ -217,27 +197,20 @@ input.login-submit{
 	border-bottom: 1px solid black;
 	border-right: 1px solid black;
 	background-color: #f5f5f5;
-}	.nieuwsplaatje{
-		margin: 0px 0px 0px 0px;
-		float: left;
-	}
-	.nieuwsbody{
-		margin: 11px 10px 0px 70px;
-	}	.nieuwstitel{
-			font-size: 13px;
-			font-weight: bold;
-		}
-.nieuwsbericht-vast{
-	height: 100px;	
-}	
-.annuleer-link{
+}	.nieuwsplaatje{ margin: 0px 0px 0px 0px; float: left;	}
+	.nieuwsbody{		margin: 11px 10px 0px 70px;	}	
+	.nieuwstitel{		font-size: 1.1em; font-weight: bold; }
+.nieuwsbericht-vast{ height: 100px;	}	
+
+a.knop{
 	background-color: #f5f5f5;  
 	border: 1px solid darkgrey;
 	padding-left: 2px; padding-right: 2px;
 }
-.waarschuwing{
-	color: darkred;
-}
+a.knop:hover{ }
+
+
+.waarschuwing{ color: darkred; }
 div#uStaatRood{
 	position: absolute;
 	left: 730px;
@@ -245,26 +218,21 @@ div#uStaatRood{
 	padding: 10px;
 	background-color: white;
 	color: darkred;
-	font-size: 13px;
+	font-size: 1.4em;
 	border: 2px solid darkred;
 	opacity:.90; filter: alpha(opacity=90);
 	z-index: 99;
 }
 /* profiel */
-table.profiel{
-	width: 100%;
-	border-collapse: collapse;
-}
-table.profiel th{
+table.profiel{ width: 100%;	border-collapse: collapse; }
+table.profiel th{ 
 	text-align: left;
 	vertical-align: bottom;
 	border-bottom: 1px solid black;
-	margin: 0;
 	padding: 0px 0px 1px 5px;
 }
 table.profiel td{
 	border-left: 1px solid black;
-	margin: 0px;
 	padding: 5px;
 }
 table.profiel td.foto{
@@ -275,22 +243,10 @@ table.profiel_edit{
 	width: 100%;
 	margin: 5px;
 }
-table.profiel_edit tr td input{
-	width: 260px;
-}
-table.profiel_edit tr td textarea{
-	width: 260px;
-}
+table.profiel_edit tr td input, textarea{ width: 260px; }
+
 /* bestuur.php */
-#bestuurContainer{
-	text-align: center;
-}
-table.bestuur{
-	width: 100%; text-align: center;
-}
-table.bestuur th{
-	text-align: center;
-}
-table.bestuur td{
-	text-align: center;
-}
+#bestuurContainer{ text-align: center; }
+table.bestuur{ width: 100%; text-align: center; }
+table.bestuur th{ text-align: center; }
+table.bestuur td{ text-align: center; }

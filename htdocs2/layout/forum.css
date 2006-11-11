@@ -3,29 +3,24 @@
 	width: 100%;
 }
 
-.forumtabel td{
-	font-family: verdana,arial,Helvetica,sans-serif;
-	font-size: 10px;
-	border: 0px;
-	
-}
+.forumtabel td{ border: 0px; }
+
 .forumhoofd {
 	font-weight: bold;
-	color: #000000;
+	color: #000000; background-color: gold;
 	vertical-align: middle;
 	padding: 5px 10px 5px 15px;
 	height: 19px;
-	background-color: gold;
 }
 .forumauteur{
 	vertical-align: top;
 	width: 150px;
 	background-color: #fff;
 	padding: 2px 10px 5px 10px;
-	font-size: 9px;
+	font-size: 0.9em;
 }
 .forummetadata{
-	font-size: 9px;
+	font-size: 0.9em;
 	background-color: #fff;
 	padding: 2px 10px 2px 0.6em;
 }
@@ -42,19 +37,15 @@
 }
 .forumbericht1{
 	color: black;
-	background-color: #f4f4f4;/* #F7F9FF;*/
+	background-color: #f4f4f4;
 		padding: 0.2em 0.6em 10px 0.6em;
 	margin: 0px;
-	vertical-align: top;
-	text-align: left;
+	vertical-align: top; text-align: left;
 }
 .forumbericht0{
 	color: black;
-	 /* background-color: #fff3b4; */
-		padding: 0.2em 0.6em 10px 0.6em;
-	margin: 0px;
-	vertical-align: top;
-	text-align: left;
+	margin: 0px; padding: 0.2em 0.6em 10px 0.6em;
+	vertical-align: top; text-align: left;
 }
 .forumtussenschot { 
 	height: 2px;
@@ -62,27 +53,21 @@
 	background-color: lightgrey;
 }
 .forumreacties{
-	vertical-align: middle;
-	text-align: center;
+	vertical-align: middle; text-align: center;
 	width: 80px;
-	background-color: #F7F9FF;
+	background-color: #f4f4f4;
 }
 .forumtitel {
-	color: #000000;
-	padding: 0.2em 0.6em 0.2em 0.6em;
-	margin: 0px;
-	vertical-align: middle;
-	background-color: #F7F9FF;
-	text-align: left;
+	color: #000000; background-color: #f4f4f4;
+	margin: 0px; padding: 0.2em 0.6em 0.2em 0.6em;
+	vertical-align: middle; text-align: left;
 }
 .forumreactiemoment {
-	color: #000000;
-	padding: 0.2em 0.6em 0.2em 0.6em;
-	margin: 0px;
-	vertical-align: top;
-	background-color: #fff3b4;
+	color: #000000; background-color: #fff3b4;
+	margin: 0px; padding: 0.2em 0.6em 0.2em 0.6em;	
+	vertical-align: top; text-align: left;	
 	width: 180px;
-text-align: left;
+	
 }
 a.forumGrootlink{
 	font-size: 1em;
@@ -113,7 +98,7 @@ a.forumGrootlink{
 	border: 0px;
 }
 #forumHighlights{
-	font-size: 9px;
+	font-size: 0.95em;
 }
 #forumHighlights a.kopje{
 	color: black;
@@ -123,5 +108,5 @@ a.forumGrootlink{
 	color: darkred;
 }
 span.tijd{
-	font-size: 8px;
+	font-size: 0.7em;
 }

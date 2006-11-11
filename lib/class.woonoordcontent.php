@@ -82,7 +82,7 @@ class WoonoordContent extends SimpleHTML {
 				echo '('.htmlspecialchars($woonoord['adres']).')</td>';
 				echo '<td valign="top" rowspan="2">';
 				foreach ($woonoord['bewoners'] as $bewoner) {
-					if($this->_woonoord->isLid()) echo '<a href="/leden/profiel/'.$bewoner['uid'].'">';
+					if($this->_woonoord->isLid()) echo '<a href="/intern/profiel/'.$bewoner['uid'].'">';
 					echo mb_htmlentities($bewoner['voornaam']).' ';
 					if(trim($bewoner['tussenvoegsel'])!='') echo mb_htmlentities($bewoner['tussenvoegsel']).' ';
 					echo mb_htmlentities($bewoner['achternaam']);

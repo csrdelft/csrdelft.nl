@@ -1282,6 +1282,14 @@ class Lid {
 		}
 		return false;
 	}
+	function getEetwens(){ return $this->_profile['eetwens']; }
+	function setEetwens($eetwens){
+		$eetwens=trim($this->_db->escape($eetwens));
+		//ff streepjes enzo eruit halen, anders komen die op de maaltijdlijst.
+		if(strlen($eetwens)<3){ $eetwens=''; }
+		$sEetwens="UPDATE lid SET eetwens='".$eetwens."' WHERE uid='".$this->getUid()."';";
+		return $this->_db->query($sEetwens);
+	}
 	
 	# deze functie wordt door maaltrack gebruikt om de namen van mensen en hun eetwens
 	# toe te voegen aan een lijst met inschrijvingen

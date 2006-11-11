@@ -187,6 +187,7 @@ htdocs2/login.php -text
 htdocs2/logout.php -text
 htdocs2/maaltijden/maaltijden.php -text
 htdocs2/maaltijden/maaltijdlijst.php -text
+htdocs2/maaltijden/voorkeuren.php -text
 htdocs2/nieuws.php -text
 htdocs2/robots.txt -text
 htdocs2/tools/index.php -text
@@ -240,6 +241,7 @@ lib/class.loginform.php -text
 lib/class.maaltijd.php -text
 lib/class.maaltijdcontent.php -text
 lib/class.maaltijdlijstpage.php -text
+lib/class.maaltijdvoorkeurcontent.php -text
 lib/class.maaltrack.php -text
 lib/class.menu.php -text
 lib/class.motencontent.php -text
@@ -385,4 +387,5 @@ lib/templates/csrmail/csrmail.tpl -text
 lib/templates/csrmail/csrmail_owee.tpl -text
 lib/templates/forum/viewtopic.tpl -text
 lib/templates/maaltijdketzer.tpl -text
+lib/templates/maaltijdvoorkeuren.tpl -text
 lib/templates/profiel.tpl -text

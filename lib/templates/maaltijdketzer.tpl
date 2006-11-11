@@ -66,44 +66,6 @@ Prefereert u vegetarisch eten, of heeft u speciale eetgewoontes of een dieet, ge
 {/if}
 </p>
 <br />
-<h2>Maaltijdabonnementen</h2>
-<p>
-	<table style="width: 100%;">
-		<tr>
-			<td>
-				{if $maal.abo.abos|@count==0}
-					Er is geen maaltijdabonnement geactiveerd.
-				{else}
-					<table style="width: 300px;">
-						{foreach from=$maal.abo.abos key=abosoort item=abotekst}
-							<tr>
-								<td>&#8226; {$abotekst}</td>
-								<td>
-									<a href="{$smarty.server.PHP_SELF}?a=delabo&abo={$abosoort}">[ uitschakelen ]</a>
-								</td>
-							</tr>
-						{/foreach}
-					</table>
-				{/if}
-			</td>
-			<td>
-				{if $maal.abo.nietAbos|@count!=0}
-					<form action="{$smarty.server.PHP_SELF}" method="POST">
-						<input type="hidden" name="a" value="addabo" />
-						<label for="addabo_abo">Voeg een abonnement toe:</label>
-						<select name="abo" id="addabo_abo">
-							{foreach from=$maal.abo.nietAbos key=abosoort item=abotekst}
-								<option value="{$abosoort}">{$abotekst}</option>
-							{/foreach}
-						</select>
-						<input type="submit" name="fuh" value="toevoegen" />
-					</form>
-				{/if}
-			</td>
-		</tr>
-	</table>
-</p>
-<br />
 <h2>Andere verenigingsleden aanmelden</h2>
 <p>
 	Het is voor leden alleen mogelijk andere leden aan te melden binnen 48 uur voordat de maaltijd plaatsvindt.
