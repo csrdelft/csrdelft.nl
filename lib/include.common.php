@@ -137,4 +137,18 @@ function getOrPost($key){
 		return '';
 	}
 }
+function sort_achternaam_uid($a, $b) {
+	//sorteer op achternaam ASC, uid DESC
+	$vals = array('achternaam' => 'ASC', 'uid' => 'DESC');
+	while(list($key, $val) = each($vals)) {
+	  if($val == 'DESC') {
+	    if($a[$key] > $b[$key]){ return -1; }
+	    if($a[$key] < $b[$key]){ return 1;  }
+	  }
+	  if($val == 'ASC') {
+	    if($a[$key] < $b[$key]){ return -1; }
+	    if($a[$key] > $b[$key]){ return 1;  }
+	  }
+	}
+}
 ?>

@@ -4,7 +4,7 @@
 # (c)2005 Hans van Kranenburg
 
 #
-# Maaltrack
+# Maaltrack 
 # /lib/class.maaltrack.php
 #
 
@@ -81,6 +81,12 @@ class MaalTrack {
 			$this->_error = "Het maximaal aantal eters moet tussen 1 en " . MAX_MAALTIJD . " zijn."; 
 			return false;
 		}
+
+		# kijk of een gekozen abo niet meteen meer inschrijvingen oplevert dan het maximum wat ingesteld wordt
+		if ($abosoort != "" and $this->getAboCount($abosoort) > $max) {
+			$this->_error = "Het gekozen abonnement levert meer inschrijvingen op dan het maximaal ingestelde aantal."; 
+			return false;
+		}
 		
 		# voeg de maaltijd toe en geef het maalid terug, of false als het
 		# niet gelukt is.
@@ -97,21 +103,18 @@ class MaalTrack {
 			return false;			
 		}
 		# kijk of de maaltijd wel bestaat.
-		$result = $this->_db->select("SELECT * from `maaltijd` WHERE `id` = '{$maalid}'");	
+		$result = $this->_db->select("SELECT id from maaltijd WHERE id='".$maalid,"';");	
 		if (($result === false) or $this->_db->numRows($result) == 0) {
 			$this->_error = "Deze maaltijd bestaat niet";
 			return false;			
 		}
 		
 		# verwijder alle aan/afmeldingen voor deze maaltijd
-		# ...van leden
-		$this->_db->query("DELETE FROM `maaltijdaanmelding` WHERE `maalid` = '{$maalid}'");
-
-		# ...van gasten
-		#FIXME
+		# ...van leden met de bijbehoorende gasten.
+		$this->_db->query("DELETE FROM maaltijdaanmelding WHERE maalid='".$maalid."';");
 
 		# verwijder de maaltijd zelf
-		$this->_db->query("DELETE FROM `maaltijd` WHERE `id` = '{$maalid}'");
+		$this->_db->query("DELETE FROM maaltijd WHERE id='".$maalid."';");
 		
 		return true;		
 	}
@@ -149,68 +152,53 @@ class MaalTrack {
 		return $maaltijden;
 	}
 	
+	function getAboTekst($abosoort = '') {
+		# abotekst: tekst van het abo dat van toepassing is of ''
+		if ($abosoort == '') return '';
+		$result = $this->_db->select("SELECT tekst FROM maaltijdabosoort WHERE abosoort = '{$abosoort}'");
+		if (($result !== false) and $this->_db->numRows($result) > 0) {
+			$record = $this->_db->next($result);
+			return $record['tekst'];
+		} else return '';
+	}
+	
 	# haalt maaltijden op en voegt extra info toe voor op de maaltijdenpagina
 	function getMaaltijden($van = 0, $tot = 0, $mootfilter = true) {
 		$uid = $this->_lid->getUid();
 		if ($uid == 'x999') $mootfilter = false;
 		$maaltijden = $this->getMaaltijdenRaw($van,$tot,$mootfilter);
-		#print_r($maaltijden);
 		
-		$maalxtra = array();
-		
-		foreach ($maaltijden as $maaltijd) {
-			$xtra[] = array();
-			# id: maalid
-			$xtra['id'] = $maaltijd['id'];
-			# datum: wanneer is de maaltijd
-			$xtra['datum'] = $maaltijd['datum'];
-			# gesloten: is de inschrijving gesloten?
-			$xtra['gesloten'] = $maaltijd['gesloten'];
-			# tekst: menu/omschrijving
-			$xtra['tekst'] = $maaltijd['tekst'];
-			# aantal: aantal inschrijvingen
-			$xtra['aantal'] = $maaltijd['aantal'];
-			# max: max aantal inschrijvingen
-			$xtra['max'] = $maaltijd['max'];
-			
-			# abotekst: tekst van het abo dat van toepassing is of ''
-			$result = $this->_db->select("SELECT tekst FROM maaltijdabosoort WHERE abosoort = '{$maaltijd['abosoort']}'");
-			if (($result !== false) and $this->_db->numRows($result) > 0) {
-				$record = $this->_db->next($result);
-				$xtra['abotekst'] = $record['tekst'];
-			} else $xtra['abotekst'] = '';
-			
-			# tp: civitasnaam van de tp
-			# FIXME
+		for ($i = 0; $i < count($maaltijden); $i++) {
+			# omschrijving van het abonnement dat geldt voor deze maaltijd			
+			$maaltijden[$i]['abotekst'] = $this->getAboTekst($maaltijden[$i]['abosoort']);
 			
 			# status: AAN,AF ABO ''
 			# 1a. is er een aan of afmelding voor deze maaltijd?
-			$result = $this->_db->select("SELECT * FROM maaltijdaanmelding WHERE uid = '{$uid}' AND maalid = '{$maaltijd['id']}'");
+			$result = $this->_db->select("SELECT * FROM maaltijdaanmelding WHERE uid = '{$uid}' AND maalid = '{$maaltijden[$i]['id']}'");
 			if (($result !== false) and $this->_db->numRows($result) > 0) {
 				$record = $this->_db->next($result);
-				$xtra['status'] = $record['status'];
+				$maaltijden[$i]['status'] = $record['status'];
 			} else {
 				# 1b. zo nee, is er een abo actief?
-				$result = $this->_db->select("SELECT * FROM maaltijdabo WHERE uid = '{$uid}' AND abosoort = '{$maaltijd['abosoort']}'");
+				$result = $this->_db->select("SELECT * FROM maaltijdabo WHERE uid = '{$uid}' AND abosoort = '{$maaltijden[$i]['abosoort']}'");
 				if (($result !== false) and $this->_db->numRows($result) > 0) {
 					$record = $this->_db->next($result);
-					$xtra['status'] = 'ABO';
+					$maaltijden[$i]['status'] = 'ABO';
 				# 1c. zo ook nee, dan status = ''
-				} else $xtra['status'] = '';
+				} else $maaltijden[$i]['status'] = '';
 			}			
 			
 			# 2. actie is afhankelijk van status en evt. gesloten zijn van de maaltijd
 			# actie: AAN,AF,''
-			if (($xtra['status'] == 'AAN' or $xtra['status'] == 'ABO') and $xtra['gesloten'] == '0' ) $xtra['actie'] = 'af';
-			elseif (($xtra['status'] == 'AF' or $xtra['status'] == '')
-			        and $maaltijd['aantal'] != $maaltijd['max'] and $xtra['gesloten'] == '0' ) 
-				$xtra['actie'] = 'aan';
-			else $xtra['actie'] = '';
-		
-			$maalxtra[] = $xtra;
+			if (($maaltijden[$i]['status'] == 'AAN' or $maaltijden[$i]['status'] == 'ABO')
+			    and $maaltijden[$i]['gesloten'] == '0' ) $maaltijden[$i]['actie'] = 'af';
+			elseif (($maaltijden[$i]['status'] == 'AF' or $maaltijden[$i]['status'] == '')
+			        and $maaltijden[$i]['aantal'] != $maaltijden[$i]['max'] and $maaltijden[$i]['gesloten'] == '0' ) 
+				$maaltijden[$i]['actie'] = 'aan';
+			else $maaltijden[$i]['actie'] = '';
 		}
 		
-		return $maalxtra;
+		return $maaltijden;
 	
 	}
 
@@ -375,6 +363,13 @@ class MaalTrack {
 		if (($result !== false) and $this->_db->numRows($result) > 0)
 			while ($record = $this->_db->next($result)) $wienogmeer[$record['uid']] = $this->_lid->getFullName($record['uid']);
 		return $wienogmeer;			
+	}
+
+	function getAboCount ($abosoort) {
+		$abosoort = $this->_db->escape($abosoort);
+		$result = $this->_db->select("SELECT uid FROM maaltijdabo WHERE abosoort = '{$abosoort}'");
+		if ($result !== false) return $this->_db->numRows($result);
+		return 0;
 	}
 
 }

@@ -223,21 +223,21 @@ class ForumContent extends SimpleHTML {
 			if($this->_forum->_lid->hasPermission('P_FORUM_MOD')){
 				echo "\r\n".'U mag dit onderwerp modereren:<br /> ';
 				//topic verwijderen
-				echo '[ <a href="/forum/verwijder-onderwerp/'.$iTopic.'" onclick="return confirm(\'Weet u zeker dat u dit topic wilt verwijderen?\')">verwijderen</a> ';
+				echo '<a href="/forum/verwijder-onderwerp/'.$iTopic.'" onclick="return confirm(\'Weet u zeker dat u dit topic wilt verwijderen?\')" class="knop">verwijderen</a> ';
 				if($aBerichten[0]['open']==1){
-					echo '| <a href="/forum/sluit-onderwerp/'.$iTopic.'">sluiten (reageren niet meer mogelijk)</a> ';
+					echo ' <a href="/forum/sluit-onderwerp/'.$iTopic.'" class="knop" class="knop">sluiten (reageren niet meer mogelijk)</a> ';
 				}else{
-					echo '| <a href="/forum/open-onderwerp/'.$iTopic.'">weer openen (reageren weer w&eacute;l mogelijk)</a> ';
+					echo ' <a href="/forum/open-onderwerp/'.$iTopic.'" class="knop">weer openen (reageren weer w&eacute;l mogelijk)</a> ';
 				}	
 				if($aBerichten[0]['plakkerig']==0){
-					echo '| <a href="/forum/maak-plakkerig/'.$iTopic.'">maak plakkerig</a> ';
+					echo ' <a href="/forum/maak-plakkerig/'.$iTopic.'" class="knop">maak plakkerig</a> ';
 				}else{
-					echo '| <a href="/forum/maak-niet-plakkerig/'.$iTopic.'">verwijder plakkerigheid</a> ';
+					echo ' <a href="/forum/maak-niet-plakkerig/'.$iTopic.'" class="knop">verwijder plakkerigheid</a> ';
 				}
 				if($aBerichten[0]['zichtbaar']=='wacht_goedkeuring'){
-					echo '| <a href="/forum/keur-goed/'.$aBerichten[0]['postID'].'">Keur dit bericht goed.</a> ';
+					echo ' <a href="/forum/keur-goed/'.$aBerichten[0]['postID'].'">Keur dit bericht goed.</a> ';
 				}
-				echo ']<br /><br />'."\r\n";
+				echo '<br /><br />'."\r\n";
 			}
 			echo '<table class="forumtabel">
 			<tr><td class="forumtussenschot" colspan="2"></td></tr>';

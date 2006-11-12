@@ -15,22 +15,22 @@ Prefereert u vegetarisch eten, of heeft u speciale eetgewoontes of een dieet, ge
 {if $maal.zelf.maaltijden|@count==0}
 	&#8226; Helaas, er is binnenkort geen maaltijd op Confide.<br /><br />
 {else}
-	<table style="width: 100%;">
+	<table class="maaltijden">
 		<tr>
+			{if $toonLijsten}<th></th>{/if}
 			<th>Maaltijd begint om:</th>
 			<th>Menu</th>
 			<th>Aantal(Max)</th>
 			<th>Kom ik eten?</th>
-			<th>Wijzig in:</th>
+			<th>Actie</th>
 		</tr>
 		{foreach from=$maal.zelf.maaltijden item=maaltijd}
 			<tr>
+				{if $toonLijsten}
+					<td><a href="/maaltijden/lijst/{$maaltijd.id}" class="knop">lijst printen</a></td>
+				{/if}
 				<td>{$maaltijd.datum|date_format:$datumFormaat}</td>
-				<td>
-					{if $toonLijsten}<a href="/maaltijden/maaltijdlijst.php?maalid={$maaltijd.id}">{/if}
-						{$maaltijd.tekst|escape:'html'}
-					{if $toonLijsten}</a>{/if}				
-				</td>
+				<td>{$maaltijd.tekst|escape:'html'}</td>
 				<td>
 					{if $maaltijd.aantal < $maaltijd.max}
 						{$maaltijd.aantal} ({$maaltijd.max})
@@ -55,9 +55,9 @@ Prefereert u vegetarisch eten, of heeft u speciale eetgewoontes of een dieet, ge
 					{if $maaltijd.gesloten==1}
 						Inschrijving Gesloten
 					{elseif $maaltijd.actie=='aan'}
-						<a href="{$smarty.server.PHP_SELF}?a=aan&amp;m={$maaltijd.id}">[ ik kom WEL! ]</a>
+						<a href="{$smarty.server.PHP_SELF}?a=aan&amp;m={$maaltijd.id}"><strong>aan</strong>melden</a>
 					{elseif $maaltijd.actie=='af'}
-						<a href="{$smarty.server.PHP_SELF}?a=af&amp;m={$maaltijd.id}">[ ik kom NIET! ]</a>
+						<a href="{$smarty.server.PHP_SELF}?a=af&amp;m={$maaltijd.id}"><strong>af</strong>melden</a>
 					{/if}
 				</td>
 			</tr>

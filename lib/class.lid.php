@@ -1295,6 +1295,8 @@ class Lid {
 	# toe te voegen aan een lijst met inschrijvingen
 	# parameter: $lijst, een array waar een veld genaamd 'uid' in moet zitten
 	# de functie maakt dan een veld 'naam' en 'eetwens' erbij
+	/* DIT WORDT NIET MEER GEBRUIKT,
+	maar gewoon in de selectiequery's van de maaltijd geregeld
 	function addNames(&$lijst) {
 		foreach ($lijst as $l => $foo) {
 			$result = $this->_db->select("
@@ -1311,7 +1313,7 @@ class Lid {
 				$lijst[$l]['eetwens'] = "";
 			}
 		}
-	}
+	}*/
 	
 	function getSaldi($uid='', $alleenRood=false){
 		if($uid==''){ $uid=$this->getUid(); }

@@ -301,6 +301,7 @@ lib/smarty/libs/internals/core.write_cache_file.php -text
 lib/smarty/libs/internals/core.write_compiled_include.php -text
 lib/smarty/libs/internals/core.write_compiled_resource.php -text
 lib/smarty/libs/internals/core.write_file.php -text
+lib/smarty/libs/plugins/block.table_foreach.php -text
 lib/smarty/libs/plugins/block.textformat.php -text
 lib/smarty/libs/plugins/compiler.assign.php -text
 lib/smarty/libs/plugins/function.assign_debug_info.php -text
@@ -386,6 +387,8 @@ lib/templates/csrdelft.tpl -text
 lib/templates/csrmail/csrmail.tpl -text
 lib/templates/csrmail/csrmail_owee.tpl -text
 lib/templates/forum/viewtopic.tpl -text
+lib/templates/maaltijdedit.tpl -text
 lib/templates/maaltijdketzer.tpl -text
+lib/templates/maaltijdlijst.tpl -text
 lib/templates/maaltijdvoorkeuren.tpl -text
 lib/templates/profiel.tpl -text
