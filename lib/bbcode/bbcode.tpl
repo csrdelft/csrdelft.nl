@@ -50,10 +50,10 @@
 <!-- BEGIN size_open --><span style="font-size: {SIZE}px; line-height: normal"><!-- END size_open -->
 <!-- BEGIN size_close --></span><!-- END size_close -->
 
-<!-- BEGIN img --><img src="{URL}" style="border: 0" alt="img" /><br /><!-- END img -->
-<!-- BEGIN imgl --><img src="{URL}" style="border: 0; align: left;" alt="img" /><!-- END img -->
-<!-- BEGIN imgr --><img src="{URL}" style="border: 0; align: right;" /><!-- END imgr -->
-<!-- BEGIN imgc --><center><img src="{URL}" style="border: 0"/></center><br /><!-- END imgc -->
+<!-- BEGIN img --><img src="{URL}"  alt="img" class="forum_image" /><br /><!-- END img -->
+<!-- BEGIN imgl --><img src="{URL}" style="align: left;" alt="img" class="forum_image" /><!-- END img -->
+<!-- BEGIN imgr --><img src="{URL}" style="align: right;" class="forum_image" /><!-- END imgr -->
+<!-- BEGIN imgc --><center><img src="{URL}" class="forum_image" /></center><br /><!-- END imgc -->
 
 <!-- BEGIN urlrel --><a href="{URL}">{DESCRIPTION}</a><!-- END urlrel -->
 <!-- BEGIN url --><a href="{URL}" target="_blank">{DESCRIPTION}</a><!-- END url -->

@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.1//EN' 'http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd'>
 <html>
 <head>
-  <title>Maaltijdaanmeldingen van {$datumtekst}</title>
+  <title>Maaltijdaanmeldingen van {$maaltijd.datum|date_format:$datumFormaat}</title>
   {literal}
   <style type="text/css">
 		body{ font-family: verdana; font-size: 10px; }
@@ -60,8 +60,9 @@ Tafelpraeses is vandaag {$maaltijd.tafelpraeses}
 </p>
 {/if}
 {if $maaltijd.aantal>0}
+	{assign var=nummer value=1}
 	{table_foreach from=$maaltijd.aanmeldingen item=aanmelding table_attr='class="inschrijvingen"' cols=2 name=aanmeldingen}
-		{$aanmelding.naam}
+		{$nummer++}</td><td>{$aanmelding.naam}
 		{if $aanmelding.eetwens!=''}<br /><strong>{$aanmelding.eetwens}</strong>{/if}
 		</td><td>&nbsp;
 	{/table_foreach}
@@ -72,7 +73,7 @@ Tafelpraeses is vandaag {$maaltijd.tafelpraeses}
 	<tr>
 		<td class="overzicht">
 			<strong>Overzicht</strong><br />
-			<table border="0" style="width: 100%">
+			<table style="width: 100%">
 				<tr><td>Aantal inschrijvingen</td><td>{$maaltijd.aantal}</td></tr>
 				<tr><td>Marge i.v.m. gasten</td><td>{$maaltijd.marge}</td></tr>
 				<tr><td>Eters</td><td>{$maaltijd.totaal}</td></tr>
@@ -81,15 +82,14 @@ Tafelpraeses is vandaag {$maaltijd.tafelpraeses}
 		</td>
 		<td class="corvee">
 			<strong>Corvee</strong><br />
-			<table border="0" style="width: 100%">
+			<table  style="width: 100%">
 				<tr><td>koks:</td><td>...</td></tr>
 				<tr><td>&nbsp;</td><td>...</td></tr>
 				<tr><td>afwassers:</td><td>...</td></tr>
 				<tr><td>&nbsp;</td><td>...</td></tr>
 				<tr><td>&nbsp;</td><td>...</td></tr>
+			</table>
 		</td></tr>
 </table>
-
-
 </body>
 </html>

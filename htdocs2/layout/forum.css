@@ -110,3 +110,7 @@ a.forumGrootlink{
 span.tijd{
 	font-size: 0.7em;
 }
+img.forum_image{
+	max-width: 600px; border: 0;
+}	
+

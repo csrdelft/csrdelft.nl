@@ -1021,7 +1021,7 @@ class Lid {
 		$zoekveld = trim($this->_db->escape($zoekveld));
 		
 		//Zoeken standaard in voornaam, achternaam, bijnaam en uid.
-		if($zoekveld=='naam'){
+		if($zoekveld=='naam' AND !preg_match('/\d{2}/', $zoekterm)){
 			if(preg_match('/ /', trim($zoekterm))){
 				$zoekdelen=explode(' ', $zoekterm);
 				$iZoekdelen=count($zoekdelen);
@@ -1038,7 +1038,13 @@ class Lid {
 					nickname LIKE '%{$zoekterm}%' OR uid LIKE '%{$zoekterm}%'";
 			}
 		}else{
-			$zoekfilter="{$zoekveld} LIKE '%{$zoekterm}%'";
+			if(preg_match('/\d{2}/', $zoekterm) AND ($zoekveld=='uid' OR $zoekveld=='naam')){
+				//lichtingen...
+				$zoekfilter="SUBSTRING(uid, 1, 2)='".$zoekterm."'";
+				//echo $zoekfilter;
+			}else{
+				$zoekfilter="{$zoekveld} LIKE '%{$zoekterm}%'";
+			}
 		}
 		$sort = $this->_db->escape($sort);
 

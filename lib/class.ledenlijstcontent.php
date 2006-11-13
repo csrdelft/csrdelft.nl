@@ -90,6 +90,7 @@ EOT
 		# We definieren voor elk veld een 'kolomtitel' die gebruikt wordt boven de kolommen
 		# in de zoekresultaten en in de keuzelijstjes voor zoek in, sorteren op etc...
 		$kolomtitel = array(
+			'pasfoto' => 'Pasfoto',
 			'nickname' => 'Bijnaam',
 			'naam' => 'Naam',
 			'voornaam' => 'Voornaam',
@@ -102,11 +103,15 @@ EOT
 			'icq' => 'ICQ',
 			'msn' => 'MSN',
 			'skype' => 'Skype',
-			'uid' => 'Lidnr'
+			'uid' => 'Lidnr',
+			'studie' => 'Studie',
+			'gebdatum' => 'Geboortedatum'
 		);
 		
 		# de velden die we presenteren om in te kunnen zoeken
-		$zoek_in_waar = array('naam','nickname','voornaam','achternaam','adres','telefoon','mobiel','email','kring');
+		$zoek_in_waar = array(
+			'naam','nickname','voornaam','achternaam', 'uid',
+			'adres','telefoon','mobiel','email','kring','studie','gebdatum');
 		
 		foreach ($zoek_in_waar as $veld) {
 			echo '<option value="'.$veld.'"';
@@ -150,8 +155,10 @@ EOT
 		
 		echo '</select>, sorteer op:<select name="sort" >';
 		
-		# de velden waarop de uitvoer geselecteerd kan worden
-		$zoek_sort = array('uid','voornaam','achternaam','email','adres','telefoon','mobiel');
+		# de velden waarop de uitvoer gesorteerd kan worden
+		$zoek_sort = array(
+			'uid', 'voornaam', 'achternaam', 'email', 'adres',
+			'telefoon','mobiel', 'studie', 'gebdatum');
 
 		foreach ($zoek_sort as $veld) {
 			echo '<option value="'.$veld.'"';
@@ -165,7 +172,9 @@ EOT
 
 
 		# zo, en nu de velden die we kunnen tonen in de resultaten
-		$laat_zien = array('uid','nickname','email','adres','telefoon','mobiel','icq','msn','skype');
+		$laat_zien = array(
+			'uid', 'pasfoto', 'nickname', 'email', 'adres', 'telefoon', 'mobiel', 
+			'icq', 'msn', 'skype', 'studie', 'gebdatum');
 		
 		# tralala zorg dat er een even aantal elementen in staat
 		if (count($laat_zien)%2 != 0) array_push($laat_zien, false);
@@ -191,18 +200,23 @@ EOT
 		
 		if(count($this->_result) > 0) {
 			//zoekresultatentabel met eerst de kopjes		
-			echo '<table style="width: 100%"><tr>';
-			if($this->_lid->hasPermission('P_LEDEN_MOD')){ echo '<td>&nbsp;</td>'; }
-			echo '<td><strong>Naam</strong></td>';
+			echo '<table  class="zoekResultaat"><tr>';
+			if($this->_lid->hasPermission('P_LEDEN_MOD')){ echo '<th>&nbsp;</th>'; }
+			if(in_array('pasfoto', $this->_form['kolom'])){ echo '<th>&nbsp;</th>'; }
+			echo '<th>Naam</th>';
 			foreach ($this->_form['kolom'] as $kolom){
-				echo '<td><strong>'.$kolomtitel[$kolom].'</strong></td>';
+				if($kolom!='pasfoto'){
+					echo '<th>'.$kolomtitel[$kolom].'</th>';
+				}
 			}
 			echo '</tr>';
 			//en de resultaten...
 			foreach ($this->_result as $lid) {
 				$uid=htmlspecialchars($lid['uid']);
 				echo '<tr>';
-				
+				if(in_array('pasfoto', $this->_form['kolom'])){
+					echo '<td><img src="'.CSR_PICS.'/pasfoto/'.$uid.'.gif" height="100px" alt="geen foto" /></td>';
+				}
 				if($this->_lid->hasPermission('P_LEDEN_MOD')){
 					echo '<td><a href="/intern/profiel.php?uid='.$uid.'&amp;a=edit">[b]</a>&nbsp;';
 				}
@@ -211,13 +225,15 @@ EOT
 				echo mb_htmlentities(naam($lid['voornaam'], $lid['achternaam'], $lid['tussenvoegsel'])).'</a></td>';
 				//de rest van de kolommen.
 				foreach ($this->_form['kolom'] as $kolom) {
-					echo '<td>';
-					if($kolom == 'adres'){ 
-						echo mb_htmlentities($lid['adres'].' '.$lid['postcode'].' '.$lid['woonplaats']);
-					}else{
-						echo mb_htmlentities($lid[$kolom]);
+					if($kolom!='pasfoto'){
+						echo '<td>';
+						if($kolom == 'adres'){ 
+							echo mb_htmlentities($lid['adres'].' '.$lid['postcode'].' '.$lid['woonplaats']);
+						}else{
+							echo mb_htmlentities($lid[$kolom]);
+						}
+						echo '</td>';
 					}
-					echo '</td>';
 				}//einde foreach kolom
 				echo '</tr>';
 			}//einde foreach lid

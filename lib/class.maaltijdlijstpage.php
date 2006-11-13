@@ -16,10 +16,6 @@
 # . gemaakt
 #
 
-require_once ('class.simplehtml.php');
-require_once ('class.lid.php');
-require_once ('class.maaltrack.php');
-
 class MaaltijdLijstPage extends SimpleHTML {
 	### private ###
 
@@ -53,7 +49,10 @@ class MaaltijdLijstPage extends SimpleHTML {
 		$aMaal['totaal']=$marge+$aMaal['aantal'];
 		
 		//een zootje lege cellen aan het einde van de aanmeldingen array erbij maken
-		for($i=0;$i<($marge+($aMaal['aantal']*0.1)); $i++){
+		$cellen=ceil($marge+($aMaal['aantal']*0.1));
+		//zorgen dat er altijd een even aantal cellen is
+		if(($cellen%2)!=0){$cellen++;}
+		for($i=0;$i<$cellen; $i++){
 			$aMaal['aanmeldingen'][]=array('naam' => '', 'eetwens' => '');
 		}
 		
@@ -61,7 +60,7 @@ class MaaltijdLijstPage extends SimpleHTML {
 		$aMaal['budget']=($aMaal['aantal']+$marge)*$maaltijdbudget;
 			
 		$maaltijdlijst->assign('maaltijd', $aMaal);
-		$maaltijdlijst->assign('datumFormaat', '%a %e %b %H:%M'); 
+		$maaltijdlijst->assign('datumFormaat', '%A %e %B'); 
 		$maaltijdlijst->display('maaltijdlijst.tpl');
 		
 	}

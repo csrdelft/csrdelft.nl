@@ -23,7 +23,7 @@ if ($lid->hasPermission('P_LEDEN_READ') or $lid->hasPermission('P_OUDLEDEN_READ'
 		
 	# in welke kolom van de tabel gezocht wordt...
 	# als er niets geldigs is opgegeven, dan op voornaam zoeken
-	$kolommen = array('naam','nickname','voornaam','achternaam','adres','telefoon','mobiel','email','kring');
+	$kolommen = array('uid', 'naam','nickname','voornaam','achternaam','adres','telefoon','mobiel','email','kring', 'studie', 'gebdatum');
 	$form['waar'] = (isset($_POST['waar']) and in_array($_POST['waar'],$kolommen)) ? $_POST['waar'] : 'naam';
 
 	# zoek in een bepaalde moot (0=alle)
@@ -38,11 +38,11 @@ if ($lid->hasPermission('P_LEDEN_READ') or $lid->hasPermission('P_OUDLEDEN_READ'
 	else $form['status'] = (isset($_POST['status']) and in_array($_POST['status'],$zoek_in_type)) ? $_POST['status'] : '';
 
 	# kolom waarop gesorteerd wordt
-	$kolommen = array('uid','voornaam','achternaam','email','adres','telefoon','mobiel');
+	$kolommen = array('uid','voornaam','achternaam','email','adres','telefoon','mobiel', 'studie', 'gebdatum');
 	$form['sort'] = (isset($_POST['sort']) and in_array($_POST['sort'],$kolommen)) ? $_POST['sort'] : 'achternaam';
 		
 	# kolommen die afgebeeld kunnen worden
-	$kolommen = array('uid','nickname','moot','email','adres','telefoon','mobiel','icq','msn','skype');
+	$kolommen = array('uid', 'pasfoto', 'nickname','moot','email','adres','telefoon','mobiel','icq','msn','skype','studie','gebdatum');
 	$form['kolom'] = array();
 	# kijken of er geldige kolommen zijn opgegeven
 	if (isset($_POST['kolom']) and is_array($_POST['kolom']) and count($_POST['kolom']) > 0) {
