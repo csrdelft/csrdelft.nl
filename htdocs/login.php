@@ -12,10 +12,10 @@ if (isset($_POST['url']) and preg_match("/^[-\w?&=.\/]+$/", $_POST['url'])
 	/* and $_POST['user'] != '' and $_POST['pass'] != '' */ ) {
 
 	if ($lid->login(strval($_POST['user']), strval($_POST['pass']))) {
-		header("Location: http://pubcie.csrdelft.nl{$_POST['url']}");
+		header("Location: ". CSR_SERVER . $_POST['url']);
 	} else {
 		$_SESSION['auth_error'] = "Ongeldige gebruiker of wachtwoord";
-		header("Location: http://pubcie.csrdelft.nl{$_POST['url']}");
+		header("Location: ". CSR_SERVER . $_POST['url']);
 	}
 }
 	echo $_POST['url'];
