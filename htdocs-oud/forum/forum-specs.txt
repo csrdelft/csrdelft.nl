@@ -1,0 +1,139 @@
+Aantekeningen Kerstvakantie FloraHolland
+
+BBCode aan CSS aanpassen.
+
+-------------------------------------------------------------------
+/forum/index.php = overzicht topics
+
+-------------------------------------------------------------------
+| <Titel> - <datum> - <nick>         |                            |
+|                                    |                            |
+-------------------------------------| laatste bericht <timestamp>|
+| Eerste stuk tekst van 1e post      |     door <nick>            |
+| in 1e thread                       |                            |
+-------------------------------------------------------------------
+| <Titel> - <datum> - <nick>         |                            |
+|                                    |                            |
+-------------------------------------| laatste bericht <timestamp>|
+| Eerste stuk tekst van 1e post      |     door <nick>            |
+| in 2e thread                       |                            |
+-------------------------------------------------------------------
+etc....
+
+in de CSS:
+.forumtitel     \
+.forumtekst  >------ 3 typen celopmaak voor de tabel, vergelijk 'menuhok'
+.foruminfo      /
+
+"Titel" is een link naar de top van de pagina met de thread,
+"laatste bericht" een link naar de onderkant van die pagina
+(topic.php?t=<n>#onderkant)
+
+Onderaan een knop [Nieuwe discussie] alleen afbeelden als
+P_FORUM_POST geldig is.
+
+-------------------------------------------------------------------
+/forum/topic.php?t=<n> = inhoud discussieonderwerp
+
+bij laatste bericht: <a name="onderkant">
+
+-------------------------------------------------------------------
+| <plaatje>  |  <Titel>  bv Re:Onderwerp                          |
+|            |-----------------------------------------------------
+|            |  <Tekst>                                           |
+| <nick>     |                                                    |
+| <datum>    |                                                    |
+|            |                                                    |
+-------------------------------------------------------------------
+| <plaatje>  |  <Titel>  bv Re:Onderwerp                          |
+|            |-----------------------------------------------------
+|            |  <Tekst>                                           |
+| <nick>     |                                                    |
+| <datum>    |                                                    |
+|            |                                                    |
+-------------------------------------------------------------------
+
+Als P_LEDEN_READ dan zijn de nicknames links naar
+/leden/profiel.php?uid=<uid>, en boven de link 'zweeft' een hokje
+met de volledige naam van de persoon.
+
+Indien P_FORUM_POST:
+
+Plaats een reactie:
+-------------------------------------------------------------------
+| <plaatje>  |  Editvak <Titel>                                   |
+|            |-----------------------------------------------------
+| U bent:    |  Editvak <Tekst>                                   |
+| <nick>     |                                                    |
+| <datum>    |                                                    |
+|            |                                                    |
+-------------------------------------------------------------------
+
+t=0 is altijd een lege thread, die wel een vak afbeeld om een
+bericht te plaatsen. dit bericht wordt toegevoegd aan een nieuwe
+thread waar de gebruiker vervolgens heengestuurd wordt. zo is
+de reactie-form ook te gebruiken voor maken van een nieuwe topic
+
+-------------------------------------------------------------------
+
+Database:
+
+Tabel forum_topic:
+- id
+- lastmod (timestamp) \-> gewoon om rekentijd ellende te besparen...
+- lastuser (uid)      /   is niet van belang voor het goed functioneren
+                          van een ander onderdeel
+
+Tabel forum_post:
+- id
+- uid
+- nick
+- titel
+- tekst
+- datum
+- ip
+
+-------------------------------------------------------------------
+class.forum.php (dataklasse dus)
+
+class Forum {
+
+	function getTopics() -> topics gesorteerd op lastmod
+		return: array: titel,datum,tekst1epost,lastmod,lastnick,nick
+
+	function getPosts($topic) -> gesorteerd op datum
+		return: array: nick,datum,titel,tekst,icon_url
+
+	function addPost($titel,$tekst,$topic = 0) -> post aan topic toevoegen
+		return: $topic (als topic=0 opgegeven wordt een nieuwe gemaakt)
+
+}
+
+-------------------------------------------------------------------
+
+> $action == new
+input: POST/GET bevat: titel,tekst,topicnr
+actie:
+- mag de ingelogde user posten?
+- nee: foutmelding
+  ja:
+  - controleren invoer
+  - als $topic == 0: $topic = createTopic();
+  - post aan topic toevoegen
+  - header("Location: this?t={$topic}#bodem");
+
+-------------------------------------------------------------------
+
+Gebruikersinstellingen/Profiel
+
+Nickname : inloggen,forum,shoutbox : max 12 chars mixed case + spatie
+Password: oude/2xnieuwe evt.
+Avatar: URL opgeven naar plaatje met bepaalde extensie? -> zorgen
+        dat er geen grappen met plaatjes via php uitgehaald worden
+        waarbij remote scripting zooi ontstaat...
+        + knop 'default' om plaatje te resetten naar blauwe envelop.
+Geboortedatum : staat vast
+Naam:  staat vast
+Moot: staat vast
+Lid sinds: staat vast
+

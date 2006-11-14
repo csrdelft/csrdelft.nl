@@ -1,0 +1,409 @@
+body {
+	font-family: verdana,arial,Helvetica,sans-serif;
+	font-size: 10px;
+	color:#000000;
+	background-color: #fff;
+	margin: 0px;
+	text-align: center;
+}
+h1{
+	font-size: 1.4em;
+	margin-top: 4px;
+	margin-bottom: 3px;
+}
+h2{
+	font-size: 1.2em;
+	margin-bottom: 1px;
+}
+h3{
+	font-size: 1.1em;
+	margin-top: 3px;
+	margin-bottom: 0px;
+}
+form{
+	display: inline;
+}
+img{
+	border: 0px;
+}
+.bodyrood {
+	font-family: verdana,arial,Helvetica,sans-serif;
+	font-size: 10px;
+	color:#A00005;
+}
+
+.kopje1 {
+	font-family: verdana,arial,Helvetica,sans-serif;
+	font-size: 22px;
+	font-weight: bold;
+	letter-spacing: 1.0pt;
+	color:#000000;
+	padding: 0.6em 0.0em 0.4em 0.0em;
+	}
+.kopje2 {
+	font-family: verdana,arial,Helvetica,sans-serif;
+	font-size: 13px;
+	font-weight: bold;
+	word-spacing: 1.0pt;
+	line-height: 13pt;
+	color:#000000;
+	padding: 1.0em 0.0em 0.6em 0.0em;
+	}
+.kopje3 {
+	font-family: verdana,arial,Helvetica,sans-serif;
+	font-size: 11px;
+	font-weight: bold;
+	color:#000000;
+	padding: 0.0em 0.0em 0.0em 0.0em;
+	}
+
+.kopje2rood {
+	font-family: verdana,arial,Helvetica,sans-serif;
+	font-size: 13px;
+	font-weight: bold;
+	word-spacing: 1.0pt;
+	line-height: 13pt;
+	color:#A00005;
+	padding: 0.0em 0.0em 0.6em 0.0em;
+	}
+.kopje3rood {
+	font-family: verdana,arial,Helvetica,sans-serif;
+	font-size: 11px;
+	font-weight: bold;
+	color:#A00005;
+	padding: 0.0em 0.0em 0.0em 0.0em;
+	}
+
+table {
+	font-family: verdana,arial,Helvetica,sans-serif;
+	font-size: 10px;
+	color:#000000;
+	padding: 0.0em 0.0em 0.0em 0.0em;
+}
+
+a 	{
+	font-family: verdana,arial,Helvetica,sans-serif;
+	font-size: 10px;
+	font-weight: normal;
+	color:#0330B2;
+	padding: 0.0em 0.0em 0.0em 0.0em;
+	text-decoration: none;
+}
+A:hover {
+	color:#000000;
+	padding: 0.0em 0.0em 0.0em 0.0em;
+}
+
+.a2 	{
+	font-family: verdana,arial,Helvetica,sans-serif;
+	font-size: 13px;
+	font-weight: bold;
+	color:#0330B2;
+	padding: 0.0em 0.0em 0.0em 0.0em;
+	text-decoration: none;
+}
+.a2:hover {
+	color:#000000;
+	padding: 0.0em 0.0em 0.0em 0.0em;
+}
+.a3 	{
+	font-family: verdana,arial,Helvetica,sans-serif;
+	font-size: 11px;
+	font-weight: bold;
+	color:#0330B2;
+	padding: 0.0em 0.0em 0.0em 0.0em;
+	text-decoration: none;
+}
+.a3:hover {
+	color:#000000;
+	padding: 0.0em 0.0em 0.0em 0.0em;
+}
+
+.tekst  {
+	font-family: verdana,arial,Helvetica,sans-serif;
+	font-size: 10px;
+	color:#000000;
+	padding: 0.0em 0.0em 0.0em 0.0em;
+	text-align: left;
+}
+.tekstrood  {
+	font-family: verdana,arial,Helvetica,sans-serif;
+	font-size: 10px;
+	color:#A00005;
+	padding: 0.0em 0.0em 0.0em 0.0em;
+}
+.tekstblauw  {
+	font-family: verdana,arial,Helvetica,sans-serif;
+	font-size: 10px;
+	color: blue;
+	padding: 0.0em 0.0em 0.0em 0.0em;
+}
+
+/* Een hok is zo'n blauw ding waar menu's in staan enzo */
+.hoktable {
+	border-collapse: collapse;
+	border: 1px solid #000000;
+}
+.hoktitel {
+	font-family: verdana,arial,Helvetica,sans-serif;
+	font-size: 12px;
+	font-weight: bold;
+	color: #000000;
+	padding: 0.2em 0.6em 0.2em 0.6em;
+	border: 1px solid #000000;
+	text-align: center;
+	vertical-align: middle;
+	height: 19px;
+	background-color: #A6BDFE;
+}
+.hoktekst {
+	font-family: verdana,arial,Helvetica,sans-serif;
+	font-size: 10px;
+	color: #000000;
+	padding: 0.2em 0.6em 0.2em 0.6em;
+	border: 1px solid #000000;
+	text-align: center;
+	vertical-align: middle;
+	background-color: #F7F9FF;
+}
+
+/* Een lijnhok is een wit hok met border=1 */
+.lijnhoktable {
+	border-collapse: collapse;
+	border: 1px solid #000000;
+}
+.lijnhoktitel {
+	font-family: verdana,arial,Helvetica,sans-serif;
+	font-size: 12px;
+	font-weight: bold;
+	color: #000000;
+	padding: 0.2em 0.6em 0.2em 0.6em;
+	border: 1px solid #000000;
+	text-align: center;
+	vertical-align: middle;
+	height: 19px;
+	background-color: #F7F9FF;
+}
+.lijnhoktekst {
+	font-family: verdana,arial,Helvetica,sans-serif;
+	font-size: 10px;
+	color: #000000;
+	padding: 0.2em 0.6em 0.2em 0.6em;
+	border: 1px solid #000000;
+	text-align: left;
+	vertical-align: top;
+	background-color: #FFFFFF;
+}
+
+
+.menu	{
+	font-family: verdana,arial,Helvetica,sans-serif;
+	font-size: 10px;
+	font-weight: bold;
+	color:#000066;
+	padding: 0.0em 0.8em 0.0em 0.0em;
+	}
+.menugrey {
+	font-family: verdana,arial,Helvetica,sans-serif;
+	font-size: 10px;
+	font-weight: bold;
+	color:#a4a4a4;
+	padding: 0.0em 0.8em 0.0em 0.0em;
+	}
+.menublack {
+	font-family: verdana,arial,Helvetica,sans-serif;
+	font-size: 10px;
+	font-weight: bold;
+	color:#000000;
+	padding: 0.0em 0.8em 0.0em 0.0em;
+	}
+.menu:hover {
+	text-decoration: underline;
+	padding: 0.0em 0.8em 0.0em 0.0em;
+	}
+.nav	{
+	font-family: verdana,arial,Helvetica,sans-serif;
+	font-size: 10px;
+	font-weight: normal;
+	color:#000000;
+	padding: 0.0em 0.0em 0.0em 0.0em;
+	text-decoration: none;
+	}
+.nav:hover {
+	text-decoration: underline;
+	}
+.navdisable	{
+	font-family: verdana,arial,Helvetica,sans-serif;
+	font-size: 10px;
+	font-weight: normal;
+	color:#A4A4A4;
+	padding: 0.0em 0.0em 0.0em 0.0em;
+	text-decoration: none;
+	}
+.nava	{
+	font-family: verdana,arial,Helvetica,sans-serif;
+	font-size: 10px;
+	color:#000000;
+	padding: 0.0em 0.0em 0.0em 0.0em;
+	}
+.nava:hover {
+	text-decoration: underline;
+	padding: 0.0em 0.0em 0.0em 0.0em;
+	}
+.linkdisable {
+	font-family: verdana,arial,Helvetica,sans-serif;
+	font-size: 10px;
+	font-weight: normal;
+	color:#000066;
+	padding: 0.0em 0.0em 0.0em 0.0em;
+	text-decoration: none;
+	}
+.pubciemail-form{
+	background-color: #F7F9FF;
+	border: dotted 1px;
+	width: 600px;
+	padding: 10px 20px 10px 20px;
+	margin: 10px 10px 10px 10px;
+}
+.foutmelding{
+	margin: 10px 0px 10px 0px;
+	padding: 5px 5px 5px 5px;
+	color: red; 
+	border: red dotted 1px;
+}
+/************************************************************************  
+* Forumdingen.
+*
+************************************************************************/
+.forumtabel {
+	border: 0px; padding: 0px;
+	width: 90%;
+	border: 1px solid #A6BDFE;
+}
+
+.forumtabel td{
+	font-family: verdana,arial,Helvetica,sans-serif;
+	
+}
+.forumhoofd {
+	font-weight: bold;
+	color: #000000;
+	vertical-align: middle;
+	padding: 5px 10px 5px 15px;
+	height: 19px;
+	background-color: #A6BDFE;
+}
+.forumauteur{
+	vertical-align: top;
+	width: 150px;
+	background-color: #F7F9FF;
+	padding: 2px 10px 5px 10px;
+}
+.forummetadata{
+	font-size: 9px;
+	background-color: #F7F9FF;
+	padding: 2px 10px 2px 0.6em;
+}
+.forumpostlink{
+	color: black;
+}
+.forumtekst {
+	color: #000000;
+	padding: 0.2em 0.6em 10px 0.6em;
+	margin: 0px;
+	vertical-align: top;
+	background-color: #F7F9FF;
+	text-align: left;
+}
+.forumbericht1{
+	color: black;
+	background-color: #F7F9FF;
+		padding: 0.2em 0.6em 10px 0.6em;
+	margin: 0px;
+	vertical-align: top;
+	text-align: left;
+}
+.forumbericht0{
+	color: black;
+	background-color: #fafbff;
+		padding: 0.2em 0.6em 10px 0.6em;
+	margin: 0px;
+	vertical-align: top;
+	text-align: left;
+}
+.forumtussenschot { 
+	height: 2px;
+	margin: 0px; padding: 0px;
+	background-color: #A6BDFE;
+}
+.forumreacties{
+	vertical-align: middle;
+	text-align: center;
+	width: 80px;
+	background-color: #F7F9FF;
+}
+.forumtitel {
+	color: #000000;
+	padding: 0.2em 0.6em 0.2em 0.6em;
+	margin: 0px;
+	vertical-align: middle;
+	background-color: #F7F9FF;
+	text-align: left;
+}
+.forumreactiemoment {
+	color: #000000;
+	padding: 0.2em 0.6em 0.2em 0.6em;
+	margin: 0px;
+	vertical-align: top;
+	background-color: #F7F9FF;
+	width: 180px;
+text-align: left;
+}
+.forumGrootlink{
+	font-size: 1em;
+	color: #0330B2;
+	font-weight: bold;
+}
+.forumGrootlink:hover{
+	color: black;
+}
+.genmed{
+	font-size: 9px;
+}
+.quote{
+	background-color: #f1f1f1;
+	padding: 2px 5px 5px 10px;
+}
+.code{
+	font-family: monospace;
+	background-color: #f1f1f1;
+}
+.zoekwoord{
+	background-color: #FFFF99;
+	color: black;
+}
+#pollTabel{
+	width: 100%; 
+	margin: 10px 10px 10px 10px; 
+	background-color: #f1f1f1; 
+	border: 0px;
+}
+.nieuwsbericht{
+	display: block;
+	min-height: 100px;
+	margin: 20px 0px 40px 15px;
+
+	border-bottom: 1px solid black;
+	border-right: 1px solid black;
+	background-color: #f1f5f5;
+}	.nieuwsplaatje{
+		margin: 0px 0px 00px 0px;
+		float: left;
+	}
+	.nieuwsbody{
+		margin: 11px 10px 40px 70px;
+	}	.nieuwstitel{
+			font-size: 16px;
+			font-weight: bold;
+		}
+	

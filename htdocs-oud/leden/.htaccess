@@ -1,0 +1,14 @@
+RewriteEngine on
+RewriteRule ^profiel/([0-9a-z]{4}) profiel.php?uid=$1
+
+#RewriteRule ^documenten/(.*) documenten.php?dl=$1
+
+RewriteRule ^sjaarsacties/?$ sjaarsacties.php
+
+RewriteRule ^eetplan/$ eetplan.php
+RewriteRule ^eetplan/sjaars/([0-9]*) eetplan.php?pheutID=$1
+RewriteRule ^eetplan/huis/([0-9]*) eetplan.php?huisID=$1
+
+RewriteRule ^documenten/downloads/([0-9]+) download.php?id=$1
+
+RewriteRule ^lijst/([0-9]+)$ maaltijdlijst.php?maalid=$1
