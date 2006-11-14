@@ -8,18 +8,7 @@ function main() {
 
 	# instellingen & rommeltjes
 	require_once('/srv/www/www.csrdelft.nl/lib/include.config.php');
-	require_once('include.common.php');
 
-	# login-systeem
-	require_once('class.lid.php');
-	require_once('class.mysql.php');
-	session_start();
-	$db = new MySQL();
-	$lid = new Lid($db);
-
-	### Pagina-onderdelen ###
-
-	# menu's
 	require_once('class.dbmenu.php');
 	$homemenu = new DBMenu('home', $lid, $db);
 	$infomenu = new DBMenu('info', $lid, $db);
@@ -45,7 +34,7 @@ function main() {
 	# Het middenstuk
 	require_once('class.includer.php');
 	$thuis = new Includer('', 'thuis.html');
-	$thuis2 = new Includer('', 'thuis2.html');
+	$thuis2 = new Includer('', 'banners.html');
 
 	require_once('class.nieuwscontent.php');
 	require_once('class.nieuws.php');

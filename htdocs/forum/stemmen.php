@@ -1,20 +1,6 @@
 <?php
 
-# prevent global namespace poisoning
-main();
-exit;
-function main() {
-
-	# instellingen & rommeltjes
 	require_once('/srv/www/www.csrdelft.nl/lib/include.config.php');
-	require_once('include.common.php');
-
-	# login-systeem
-	require_once('class.lid.php');
-	require_once('class.mysql.php');
-	session_start();
-	$db = new MySQL();
-	$lid = new Lid($db);
 
 	if(isset($_GET['topic'])){
 		$iTopicID=(int)$_GET['topic'];
@@ -57,5 +43,5 @@ function main() {
 		header('location: http://csrdelft.nl/forum/');
 		$_SESSION['forum_foutmelding']='Hier snap ik geen snars van (waar is het topicID?).';
 	}	
-}
+
 ?>

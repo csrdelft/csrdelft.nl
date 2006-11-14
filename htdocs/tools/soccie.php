@@ -3,15 +3,11 @@ error_reporting(E_ALL);
 
 
 require_once('/srv/www/www.csrdelft.nl/lib/include.config.php');
-require_once('include.common.php');
-require_once('class.mysql.php');
 require_once('blowfish/blowfish.php');
 if(!opConfide()){
 	echo 'FAALHAASCH: ga fietsen stelen!'; 
 	exit;
 }
-$db = new MySQL();
-$db->connect();
 $instellingen=parse_ini_file(ETC_PATH.'/soccie.ini');
 
 if(isset($_POST['saldi'])){

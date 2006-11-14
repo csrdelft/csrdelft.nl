@@ -1,20 +1,7 @@
 <?php
 
-# prevent global namespace poisoning
-main();
-exit;
-function main() {
-
 	# instellingen & rommeltjes
 	require_once('/srv/www/www.csrdelft.nl/lib/include.config.php');
-	require_once('include.common.php');
-
-	# login-systeem
-	require_once('class.lid.php');
-	require_once('class.mysql.php');
-	session_start();
-	$db = new MySQL();
-	$lid = new Lid($db);
 		
 	//forum klasse laden
 	require_once('class.forum.php');
@@ -113,6 +100,6 @@ function main() {
 		header('location: http://csrdelft.nl/forum/');
 		$_SESSION['forum_foutmelding']='<h3>Helaas</h3>Het formulier is niet compleet (geen ID\'s)!';
 	}
-}
+
 
 ?>

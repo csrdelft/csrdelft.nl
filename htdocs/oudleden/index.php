@@ -6,7 +6,6 @@ require_once('include.common.php');
 
 # login-systeem
 require_once('class.lid.php');
-session_start();
 
 require_once('class.mysql.php');
 $db = new MySQL();

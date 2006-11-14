@@ -1,11 +1,5 @@
 <?php
 
-# prevent global namespace poisoning
-main();
-exit;
-
-function main() {
-
 	# Let the browser and proxies cache output
 	session_cache_limiter('public');
 	# Een uur (30, in minutes) cache expiration time for output
@@ -13,14 +7,6 @@ function main() {
 
 	# instellingen & rommeltjes
 	require_once('/srv/www/www.csrdelft.nl/lib/include.config.php');
-	require_once('include.common.php');
-
-	# login-systeem
-	require_once('class.lid.php');
-	require_once('class.mysql.php');
-	session_start();
-	$db = new MySQL();
-	$lid = new Lid($db);
 
 	### Pagina-onderdelen ###
 
@@ -124,6 +110,6 @@ function main() {
 	$page->addTitel('ledenlijst');
 	$page->view();
 	
-}
+
 
 ?>

@@ -34,3 +34,6 @@ RewriteRule ^toon-stemming/([0-9]+)$ topic.php?topic=$1
 RewriteRule ^stem/([0-9]+)$ stemmen.php?topic=$1
 RewriteRule ^maak-stemming/([0-9]+)$ stemming.php?cat=$1
 RewriteRule ^maak-stemming$ stemming.php
+
+##rss-feed als .xml
+RewriteRule ^rss\.xml$ rss.php

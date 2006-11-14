@@ -9,3 +9,6 @@ RewriteRule ^eetplan/$ eetplan.php
 RewriteRule ^eetplan/sjaars/([0-9]*) eetplan.php?pheutID=$1
 RewriteRule ^eetplan/huis/([0-9]*) eetplan.php?huisID=$1
 
+RewriteRule ^documenten/downloads/([0-9]+) download.php?id=$1
+
+RewriteRule ^lijst/([0-9]+)$ maaltijdlijst.php?maalid=$1
