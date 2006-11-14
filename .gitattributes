@@ -161,7 +161,11 @@ htdocs2/layout/undohtml.css -text
 htdocs2/links.php -text
 htdocs2/login.php -text
 htdocs2/logout.php -text
-htdocs2/maaltijden/maaltijden.php -text
+htdocs2/maaltijden/.htaccess -text
+htdocs2/maaltijden/archief.php -text
+htdocs2/maaltijden/beheer.php -text
+htdocs2/maaltijden/index.php -text
+htdocs2/maaltijden/info.php -text
 htdocs2/maaltijden/maaltijdlijst.php -text
 htdocs2/maaltijden/voorkeuren.php -text
 htdocs2/nieuws.php -text
@@ -170,6 +174,7 @@ htdocs2/tools/index.php -text
 htdocs2/tools/sendmail/maildata.php -text
 htdocs2/tools/sendmail/sendmail.php -text
 htdocs2/tools/soccie.php -text
+htdocs2/tools/stats.php -text
 htdocs2/vereniging/.htaccess -text
 htdocs2/vereniging/bestuur.php -text
 htdocs2/vereniging/geschiedenis.php -text

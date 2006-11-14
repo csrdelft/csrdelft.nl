@@ -17,16 +17,8 @@
 	<tr>
 	  <td class="quote"><!-- END quote_username_open -->
 <!-- BEGIN quote_open -->
-<table width="90%" style="padding: 2px 2px 0px 10px; " border="0" >
-<tr> 
-	  <td><span class="genmed"><b>Citaat:</b></span></td>
-	</tr>
-	<tr>
-	  <td class="quote"><!-- END quote_open -->
-<!-- BEGIN quote_close --></td>
-	</tr>
-</table>
-<!-- END quote_close -->
+<div class="citaatContainer"><strong>Citaat:</strong><div class="citaat"><!-- END quote_open -->
+<!-- BEGIN quote_close --></div></div><!-- END quote_close -->
 
 <!-- BEGIN code_open --><div class="code"><!-- END code_open -->
 <!-- BEGIN code_close --></div><!-- END code_close -->

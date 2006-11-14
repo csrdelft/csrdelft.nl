@@ -200,7 +200,7 @@ EOT
 		
 		if(count($this->_result) > 0) {
 			//zoekresultatentabel met eerst de kopjes		
-			echo '<table  class="zoekResultaat"><tr>';
+			echo '<table class="zoekResultaat"><tr>';
 			if($this->_lid->hasPermission('P_LEDEN_MOD')){ echo '<th>&nbsp;</th>'; }
 			if(in_array('pasfoto', $this->_form['kolom'])){ echo '<th>&nbsp;</th>'; }
 			echo '<th>Naam</th>';
@@ -218,7 +218,7 @@ EOT
 					echo '<td><img src="'.CSR_PICS.'/pasfoto/'.$uid.'.gif" height="100px" alt="geen foto" /></td>';
 				}
 				if($this->_lid->hasPermission('P_LEDEN_MOD')){
-					echo '<td><a href="/intern/profiel.php?uid='.$uid.'&amp;a=edit">[b]</a>&nbsp;';
+					echo '<td><a href="/intern/profiel.php?uid='.$uid.'&amp;a=edit" class="knop">b</a>&nbsp;';
 				}
 				//naam als link naar profiel weergeven.
 				echo '<td><a href="/intern/profiel/'.$uid.'">';

@@ -3,23 +3,18 @@
 Op deze pagina kunt u zich inschrijven voor maaltijden op Confide. Onderstaande tabel toont de maaltijden in de
 komende weken. Onder "Kom ik eten?" ziet u de huidige status van uw inschrijving voor de maaltijd.<br />
 <br />
-U kunt uw inschrijving wijzigen door gebruik te maken van de opties die aan het einde van elke regel staan.<br />
-N.B. De maaltijdinschrijving sluit op de dag van de maaltijd rond 15:00, als de koks de lijst met aanmeldingen
+N.B. De maaltijdinschrijving sluit op de dag van de maaltijd rond <strong>15:00</strong>, als de koks de lijst met aanmeldingen
 uitprinten. Vanaf dat moment zal deze ketzer u niet meer willen aan- of afmelden!<br />
-<br />
-Prefereert u vegetarisch eten, of heeft u speciale eetgewoontes of een dieet, gebruik dan het vakje 'Eetwens' in uw
-<a href="/intern/profiel.php">profielinstellingen</a> om dat aan te geven.<br />
-{if $maal.zelf.error!=''}
-	<span class="waarschuwing">N.B.: {$maal.zelf.error|escape:'htmlall'}</span>
-{/if}
+</p>
+{if $maal.zelf.error!=''}<span class="waarschuwing">N.B.: {$maal.zelf.error|escape:'htmlall'}</span>{/if}
 {if $maal.zelf.maaltijden|@count==0}
-	&#8226; Helaas, er is binnenkort geen maaltijd op Confide.<br /><br />
+	<p>&#8226; Helaas, er is binnenkort geen maaltijd op Confide.</p>
 {else}
 	<table class="maaltijden">
 		<tr>
 			{if $toonLijsten}<th></th>{/if}
 			<th>Maaltijd begint om:</th>
-			<th>Menu</th>
+			<th>Omschrijving</th>
 			<th>Aantal(Max)</th>
 			<th>Kom ik eten?</th>
 			<th>Actie</th>
@@ -64,7 +59,6 @@ Prefereert u vegetarisch eten, of heeft u speciale eetgewoontes of een dieet, ge
 		{/foreach}
 	</table>
 {/if}
-</p>
 <br />
 <h2>Andere verenigingsleden aanmelden</h2>
 <p>

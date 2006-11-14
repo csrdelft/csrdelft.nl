@@ -205,9 +205,9 @@ pre#pubcie_debug{
 a.knop{
 	background-color: #f5f5f5;  
 	border: 1px solid darkgrey;
-	padding-left: 2px; padding-right: 2px;
+	margin: 2px; padding: 0px 2px 0px 2px;
 }
-a.knop:hover{ }
+a.knop:hover{ background-color: darkgrey;}
 
 
 .waarschuwing{ color: darkred; }
@@ -246,7 +246,7 @@ table.profiel_edit{
 table.profiel_edit tr td input, textarea{ width: 260px; }
 /* intern/lijst.php */
 table.zoekResultaat{ width: 100%; border-collapse: collapse;}
-table.zoekResultaat tr td{border-bottom: 1px solid lightgrey; margin: 0px; padding: 0px;}
+table.zoekResultaat tr td{border-top: 1px solid lightgrey; margin: 0px; padding: 0px;}
 table.zoekResultaat tr td img{ background-color: #fff3b4;}
 /* bestuur.php */
 #bestuurContainer{ text-align: center; }

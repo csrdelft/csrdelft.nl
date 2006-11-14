@@ -30,26 +30,6 @@ if(in_array($action, $actionsToegestaan)){
 
 # als er geen error is, dan kunnen we de actie uit gaan voeren
 if ($error == 0) switch($action) {
-	case 'addabo':
-		# kijk of er een abo is opgegeven
-		$abo=getOrPost('abo');
-		if(!$maaltrack->addabo($abo)){
-			$error=2; 
-		}else{ 
-			header("Location: {$_SERVER['PHP_SELF']}");
-			exit; 
-		}
-	break;
-	case 'delabo':
-		# kijk of er een abo is opgegeven
-		$abo=getOrPost('abo');
-		if(!$maaltrack->delabo($abo)){
-			$error=2; 
-		}else{ 
-			header("Location: {$_SERVER['PHP_SELF']}");
-			exit; 
-		}
-	break;
 	case 'aan':
 		# kijk of een maaltijd is opgegeven
 		$m=getOrPost('m');

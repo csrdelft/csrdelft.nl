@@ -35,18 +35,12 @@
 	background-color: #fff;
 	text-align: left;
 }
-.forumbericht1{
-	color: black;
-	background-color: #f4f4f4;
-		padding: 0.2em 0.6em 10px 0.6em;
-	margin: 0px;
-	vertical-align: top; text-align: left;
-}
-.forumbericht0{
-	color: black;
+.forumbericht0, .forumbericht1{
 	margin: 0px; padding: 0.2em 0.6em 10px 0.6em;
-	vertical-align: top; text-align: left;
+	vertical-align: top; text-align: justify;
 }
+.forumbericht1{ background-color: #f4f4f4; }
+
 .forumtussenschot { 
 	height: 2px;
 	margin: 0px; padding: 0px;
@@ -79,10 +73,16 @@ a.forumGrootlink{
 .genmed{
 	font-size: 9px;
 }
-.quote{
-	background-color: #e1e1e1;
-	padding: 2px 5px 5px 10px;
+div.citaatContainer{
+	margin: 5px 5px 5px 20px;
 }
+div.citaat{ 
+	background-color: #e1e1e1;
+	padding: 5px 10px 5px 10px;
+	font-size: 0.98em;
+}
+div.citaatContainer div.citaat div.citaatContainer div.citaat{ background-color: #e9e9e9;}
+div.citaatContainer div.citaat div.citaatContainer div.citaat div.citaatContainer div.citaat{ background-color: #efefef;}
 .code{
 	font-family: monospace;
 	background-color: #f1f1f1;
@@ -108,7 +108,7 @@ a.forumGrootlink{
 	color: darkred;
 }
 span.tijd{
-	font-size: 0.7em;
+	font-size: 0.95em;
 }
 img.forum_image{
 	max-width: 600px; border: 0;

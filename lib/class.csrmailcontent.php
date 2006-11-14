@@ -34,8 +34,8 @@ class Csrmailcontent {
 		echo '<strong>Titel:</strong><br />';
 		echo '<input type="text" name="titel" value="'.htmlspecialchars($titel).'" style="width: 100%;" class="tekst" />';
 		echo '<br /><br /><strong>Categorie:</strong><br />';
-		echo 'Selecteer hier een categorie. Uw invoer is enkel een voorstel.';
-		echo '<em>Aankondigingen over kamers te huur komen in <strong>overig</strong> terecht! C.S.R. is bedoeld voor';
+		echo 'Selecteer hier een categorie. Uw invoer is enkel een voorstel. ';
+		echo '<em>Aankondigingen over kamers te huur komen in <strong>overig</strong> terecht! C.S.R. is bedoeld voor ';
 		echo 'activiteiten van C.S.R.-commissies en andere verenigingsactiviteiten.</em><br />';
 		echo '<select name="categorie" class="tekst">';
 		//mogelijke categorieën
@@ -174,7 +174,7 @@ class Csrmailcontent {
 	function addUserMessage($sMessage, $refresh=true){ 
 		if($refresh){
 			$_SESSION['csrmail_error']=trim($sMessage);
-			header('location: '.CSR_ROOT.'/leden/csrmail/');
+			header('location: '.CSR_ROOT.'intern/csrmail/' );
 		}else{	
 			$this->_userMessage=trim($sMessage);
 		}
