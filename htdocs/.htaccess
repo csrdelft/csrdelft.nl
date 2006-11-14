@@ -12,3 +12,7 @@ RewriteRule ^nieuws/$ nieuws.php
 RewriteRule ^nieuws/verwijderen/([0-9]+) nieuws.php?berichtID=$1&verwijderen=true
 RewriteRule ^nieuws/bewerken/([0-9]+) nieuws.php?berichtID=$1&bewerken=true
 RewriteRule ^nieuws/toevoegen$ nieuws.php?toevoegen=true
+
+# regeltjes om de oude directorystructuur ook nog te laten werken met de links van de nieuwe
+RewriteRule ^intern/(.*)$ /leden/$1
+RewriteRule ^maaltijden/(.*)$ /leden/$1
