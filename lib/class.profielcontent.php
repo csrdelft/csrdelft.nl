@@ -125,10 +125,10 @@ class ProfielContent extends SimpleHTML {
 		# gaan we een linkje afbeelden naar de edit-functie, of de editvakken?
 		if ( ($this->_lid->hasPermission('P_PROFIEL_EDIT') and $this->_profiel['uid'] == $this->_lid->getUid()) or 
 			$this->_lid->hasPermission('P_LEDEN_EDIT') ){
-			echo '<a href="'.$this->_state->getMyUrl(true).'a=edit">[ Bewerken ]</a> ';
+			echo '<a href="'.$this->_state->getMyUrl(true).'a=edit" class="knop">Bewerken</a> ';
 		}
 		if($this->_lid->hasPermission('P_ADMIN')){
-			echo '<a href="/tools/stats.php?uid='.$this->_profiel['uid'].'">[ overzicht van bezoeken ]</a>';
+			echo '<a href="/tools/stats.php?uid='.$this->_profiel['uid'].'" class="knop">overzicht van bezoeken</a>';
 		}
 	}
 	function viewStateEdit(){
@@ -250,8 +250,8 @@ class ProfielContent extends SimpleHTML {
 					echo '</table></td>';
 				}
 				echo '</tr></table><br />
-					<input type="image" src="/images/wijzigingen_opslaan.gif" width=106 height=12 alt="Wijzigingen opslaan" name="foo" value="bar">
-					<a href="'.$myurl.'"><img src="/images/annuleren.gif" width=69 height=12 alt="Annuleren" border="0"></a>
+					<input type="submit" name="submit" value="Wijzigingen opslaan" />
+					<a href="'.$myurl.'" class="knop">Annuleren</a>
 					</form>';
 	}
 	function viewFormField($field, $fieldinfo){

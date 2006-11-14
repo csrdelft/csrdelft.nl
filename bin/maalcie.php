@@ -4,12 +4,6 @@ error_reporting(E_ALL);
 
 
 require_once('/srv/www/www.csrdelft.nl/lib/include.config.php');
-require_once('include.common.php');
-require_once('class.mysql.php');
-require_once('class.lid.php');
-session_start();
-$db = new MySQL();
-$lid = new Lid($db);
 
 
 $row = 1;

@@ -72,10 +72,8 @@ li li{ 1em;}
 	top: 172px; 
 	left: 170px; 
 }	#lichaam, #lichaamBreed{
-		width: 819px;	
+		width: 819px;	background-color: white;
 		margin: 0px 0px 25px 0px; 
-
-		background-color: yellow;
 		border-left: 1px solid #bbb;  
 		border-right: 1px solid #bbb;  
 		border-bottom: 1px solid #bbb;  

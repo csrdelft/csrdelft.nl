@@ -95,7 +95,7 @@ class WoonoordContent extends SimpleHTML {
 				echo '</td>';
 				echo '</tr>';
 				echo '<tr><td valign="top">';
-				if($woonoord['plaatje'] != '') echo '<img src="'.htmlspecialchars($woonoord['plaatje']).'" style="float: right;">'; 
+				if($woonoord['plaatje'] != '') echo '<img src="'.CSR_PICS.'/pagina/woonoorden/'.htmlspecialchars($woonoord['plaatje']).'" style="float: right;">'; 
 				echo mb_htmlentities($woonoord['tekst']);
 				if($bBewerken OR $this->_lid->hasPermission('P_LEDEN_MOD')){
 					$bRawInvoer=false;
