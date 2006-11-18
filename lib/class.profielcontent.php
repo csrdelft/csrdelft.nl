@@ -166,7 +166,7 @@ class ProfielContent extends SimpleHTML {
 		if ($this->_profiel['status'] == 'S_OUDLID' or $this->_lid->hasPermission('P_LEDEN_MOD')) {
 			$gebdatum = $this->_profiel['gebdatum'];
 			$form[0][] = array('ztekst',"&nbsp;","Gebruik het formaat YYYY-mm-dd");
-			$form[0]['gebdatum'] = array('input',"Geb.datum:",$gebdatum);
+			$form[0]['gebdatum'] = array('input',"Geb.datum:", $gebdatum);
 		}	
 
 		$form[0][] = array('ztekst',"&nbsp;","<b>Email/Telefoon</b>");

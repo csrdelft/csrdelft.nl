@@ -855,10 +855,47 @@ class Lid {
 
 	function getPermissions() { return $this->_profile['permissies']; }
 	function getStatus()      { return $this->_profile['status']; }
-	function getForumInstelling(){
-		return array('forum_naam' => $this->_profile['forum_name']);
-	}
+	function getForumInstelling(){ return array('forum_naam' => $this->_profile['forum_name']); }
 	function getForumNaamInstelling(){ return $this->_profile['forum_name']; }
+	
+	/*
+	* Deze functie maakt een link met de naam, als de gebruiker is ingelogged, anders gewoon een naam.
+	* Dit om te voorkomen dat er op 100 plekken foute paden staan als dat een keer verandert.
+	*/
+	function getNaamLink($uid, $civitas=false, $link=false, $aNaam=false){
+		$sNaam='';
+		if($aNaam===false){
+			if($uid == $this->_profile['uid']){
+				$aNaam=$this->_profile;
+			}else{
+				$rNaam=$this->_db->select("SELECT voornaam, tussenvoegsel, achternaam FROM lid WHERE uid='".$uid."' LIMIT 1;");
+				if($rNaam!==false and $this->_db->numRows($rNaam)==1){
+					$aNaam=$this->_db->next($rNaam);
+				}else{
+					$aNaam=array('voornaam'=>'ho', 'achternaam'=>'ho', 'tussenvoegsel'=>'ho', 'status'=>'ho');
+				}
+			}
+		}
+		if($link AND $this->hasPermission('P_LOGGED_IN')){
+			$sNaam.='<a href="/intern/profiel/'.$uid.'">';
+		}
+		if($civitas){
+			if($aNaam['status']=='S_NOVIET'){
+				$sNaam.='noviet '.mb_htmlentities($aNaam['voornaam']);
+			}else{
+				$sNaam.=($aNaam['geslacht']=='v') ? 'Ama. ' : 'Am. ';
+				if($aNaam['tussenvoegsel'] != '') $sNaam.=$aNaam['tussenvoegsel'].' ';
+				$sNaam.=mb_htmlentities($aNaam['achternaam']);				
+				if($aNaam['postfix'] != '') $sNaam.=' '.$aNaam['postfix'];
+			}
+		}else{
+			$sNaam.=mb_htmlentities(naam($aNaam['voornaam'], $aNaam['achternaam'], $aNaam['tussenvoegsel']));
+		}
+		if($link AND $this->hasPermission('P_LOGGED_IN')){ $sNaam.='</a>'; }
+		
+		return $sNaam;	
+	}
+	
 	function getMoot() { return $this->_profile['moot']; }
 	function getFullName($uid = '') {
 		if ($uid == '' or $uid == $this->_profile['uid']) {
@@ -1222,6 +1259,7 @@ class Lid {
 		$kring = array();
 		$result = $this->_db->select("
 			SELECT 
+				uid, 
 				voornaam, 
 				tussenvoegsel, 
 				achternaam, 
@@ -1241,6 +1279,7 @@ class Lid {
 		if ($result !== false and $this->_db->numRows($result) > 0) {
 			while ($lid = $this->_db->next($result)) {
 				$kring[$lid['moot']][$lid['kring']][] = array(
+					'uid'=> $lid['uid'],
 					'naam' => naam($lid['voornaam'], $lid['achternaam'], $lid['tussenvoegsel']),
 					'motebal' => $lid['motebal'],
 					'kringleider' => $lid['kringleider'],

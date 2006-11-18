@@ -545,16 +545,20 @@ class ForumContent extends SimpleHTML {
 *
 ***********************************************************************************************************/
 	function lastPosts(){
-		$aPosts=$this->_forum->getPostsVoorRss(10);
+		$aPosts=$this->_forum->getPostsVoorRss(15);
 		echo '<div id="forumHighlights"><a href="/forum/" class="kopje">Laatste forumberichten:</a><br />';
 		foreach($aPosts as $aPost){
 			//$tekst=$aPost['nickname'].': ';
 			$tekst=$aPost['titel'];
-			if(strlen($tekst)>22){
-				$tekst=substr($tekst, 0, 18).'..';
+			if(strlen($tekst)>20){
+				$tekst=substr($tekst, 0, 16).'..';
 			}
+			$postfragment=substr(str_replace(array("\n", "\r", ' '), ' ', $aPost['tekst']), 0, 40);
 			echo '<span class="tijd">'.date('H:i', strtotime($aPost['datum'])).'</span> ';
-			echo '<a href="/forum/onderwerp/'.$aPost['tid'].'#laatste" title="'.$aPost['titel'].'">'.$tekst.'</a><br />'."\n";
+			echo '<a href="/forum/onderwerp/'.$aPost['tid'].'#laatste" title="['.$aPost['titel'].'] '.
+					$this->_forum->getForumNaam($aPost['uid'], $aPost).': '.htmlspecialchars($postfragment).'">
+				'.$tekst.'
+				</a><br />'."\n";
 		}
 		echo '</div>';
 	}
@@ -625,13 +629,10 @@ class ForumContent extends SimpleHTML {
 		echo '<input type="submit" value="zoeken" name="verzenden" /></p></form><br />';
 	}
 	function _getNaamLink($uid, $aNaam=false){
-		$return='';
-		if($this->_forum->isIngelogged()){
-			$return.='<a href="/intern/profiel/'.$uid.'">';
-		}
-		$return.=mb_htmlentities($this->_forum->getForumNaam($uid, $aNaam));
-		if($this->_forum->isIngelogged()){ $return.='</a>'; }
-		return $return;
+		//instellingen voor deze gebruiker ophalen...
+		$civitas=$this->_forum->_lid->getForumNaamInstelling()=='civitas';
+		
+		return $this->_forum->_lid->getNaamLink($uid, $civitas, true, $aNaam);
 	}
 	function getError(){
 		if(isset($_SESSION['forum_foutmelding'])){

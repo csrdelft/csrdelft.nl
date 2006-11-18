@@ -50,7 +50,7 @@ class menu {
 			SELECT  
 				ID, pID, tekst, link, permission
 			FROM 
-				_menu 
+				menu 
 			WHERE 
 				zichtbaar='ja' 
 			ORDER BY 

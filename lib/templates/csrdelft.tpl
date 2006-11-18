@@ -24,7 +24,7 @@
 	</div>
 	<div id="copyright">
 		<div id="copyrightContent">
-			&copy; 2006 PubCie Waagmeester der C.S.R.-Delft. | <a href="http://validator.w3.org/check?uri=referer">XHTML 1.1</a>
+			Gemaakt door <a href="mailto:pubcie@csrdelft.nl">PubCie der C.S.R.-Delft</a>. | <a href="http://validator.w3.org/check?uri=referer">XHTML 1.1</a>
 		</div>
 	</div>
 </div>

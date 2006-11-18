@@ -66,7 +66,7 @@ class CieOverzichtContent extends SimpleHTML {
 				$aCieLeden=$this->_commissie->getCieLeden($cie['id']);
 				if(is_array($aCieLeden)){
 					foreach($aCieLeden as $aCieLid){
-						echo '<a href="../leden/profiel/'.$aCieLid['uid'].'">'.mb_htmlentities($aCieLid['naam']).'</a>&nbsp;<em>'.$aCieLid['functie'].'</em><br />';
+						echo $this->_lid->getNaamLink($aCieLid['uid'], false, true, $aCieLid).'&nbsp;<em>'.$aCieLid['functie'].'</em><br />';
 					}
 				}else{
 					echo $aCieLeden;
@@ -77,7 +77,7 @@ class CieOverzichtContent extends SimpleHTML {
 		}else{
 			//zonder commissieleden
 			echo '<table border="0" cellspacing="0" cellpadding="0" marginheight="0" marginwidth="0"><tr>';
-			echo '<td><hr /><span class="kopje2">Commissies</span><hr /></td></tr>';
+			echo '<td><hr /><h2>Commissies</h2<hr /></td></tr>';
 			$cieoverzicht = $this->_commissie->getOverzicht();
 			foreach ($cieoverzicht as $cie) {
 				echo '

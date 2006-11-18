@@ -40,29 +40,29 @@ class MotenContent extends SimpleHTML {
 		return 'Moot- en kringindeling';
 	}
 	function printKring($moot, $kring){
-		echo '<td class="lijnhoktekst">';
+		echo '<td>';
 			if(!isset($this->_kringen[$moot][$kring])){
 				echo '&nbsp;';
 			}else{
 				foreach ($this->_kringen[$moot][$kring] as $kringlid) {
-					if ($kringlid['kringleider'] != 'n') echo '<span class="tekstrood">';
-					if ($kringlid['motebal']!=0) echo '<span class="tekstblauw">';
-					echo mb_htmlentities($kringlid['naam']);
+					if ($kringlid['kringleider'] != 'n' or $kringlid['motebal']!=0) echo '<em>';
+					echo $this->_lid->getNaamLink($kringlid['uid'], false, true);
 					if ($kringlid['motebal']!='0') echo '&nbsp;O';
 					if ($kringlid['status']=='S_KRINGEL') echo '&nbsp;~';
 					echo "<br />\n";
-					if ($kringlid['kringleider'] != 'n' OR $kringlid['motebal']!=0) echo "</span>";
+					if ($kringlid['kringleider'] != 'n' OR $kringlid['motebal']!=0) echo "</em>";
 				}
 				if($this->_bEmail===true AND $kring!=0){
-					echo '<br /><strong>email-adressen:</strong><br/>';
+					echo '<p><strong>email-adressen:</strong><br/>';
 					$first=true;
 					foreach($this->_kringen[$moot][$kring] as $kringlid){
 						if(!$first){ echo ', '; }else{ $first=false; }
 						echo $kringlid['email'];
 					}
+					echo '</p>';
 				}
 			}
-		echo '<br /></td>';
+		echo '</td>';
 	}
 	function view() {
 
@@ -72,19 +72,20 @@ class MotenContent extends SimpleHTML {
 		$maxkringen = $this->_lid->getMaxKringen();
 
 		//echo '<h2>Moot en Kringindeling</h2>';
+		echo '<p>';
 		if($this->_bEmail===true){
 			echo '<a href="moten.php">Toon zonder email-adressen</a>';
 		}else{
 			echo '<a href="moten.php?email">Toon ook email-adressen</a>';
 		}
-		echo '<br /><br /><table width="100%" class="lijnhoktable" border="0px" cellspacing="0" cellpadding="0">';
+		echo '</p><table style="width: 100%">';
 
 		# we gaan de kringen in de moot onder elkaar zetten, een moot per kolom
 		for ($regel=1; $regel<=$maxkringen; $regel++) {
 			echo '<tr>';
 			for ($moot=1; $moot<=$maxmoten; $moot++) {
-				if (isset($this->_kringen[$moot][$regel])) echo '<td class="lijnhoktitel" style="width: 230px;"><strong>Kring '.$moot.'.'.$regel.'</strong></td>';
-				else echo '<td class="lijnhoktitel">&nbsp;</td>';
+				if (isset($this->_kringen[$moot][$regel])) echo '<th>Kring '.$moot.'.'.$regel.'</th>';
+				else echo '<td>&nbsp;</td>';
 			}
 			echo '</tr><tr>';
 			for ($moot=1; $moot<=$maxmoten; $moot++) {
@@ -96,8 +97,11 @@ class MotenContent extends SimpleHTML {
 		$regel = 0;
 		print ("<tr>\n");
 		for ($moot=1; $moot<=$maxmoten; $moot++) {
-			if (isset($this->_kringen[$moot][$regel])) echo '<td class="lijnhoktitel"><strong>Kring '.$moot.'.0</strong></td>';
-			else print("<td class=\"lijnhoktitel\">&nbsp;</td>\n");
+			if (isset($this->_kringen[$moot][$regel])){
+				echo '<th>Kring '.$moot.'.0</th>';
+			}else{ 
+				echo '<td>&nbsp;</td>';
+			}
 		}
 		
 		echo '</tr><tr>';
@@ -111,7 +115,7 @@ class MotenContent extends SimpleHTML {
 		if(false){
 			echo '<tr>';
 			for ($moot=1; $moot<=$maxmoten; $moot++){
-				echo '<td class="lijnhoktekst">';
+				echo '<td >';
 				echo '<form action="moten.php#form" method="post"><a name="form" ></a>
 					<input type="hidden" name="moot" value="'.$moot.'" />';
 				$tekstInvoer=true;

@@ -99,6 +99,7 @@ class Commissie {
 				lid.voornaam AS voornaam, 
 				lid.tussenvoegsel tussenvoegsel, 
 				lid.achternaam AS achternaam,
+				lid.status AS status,
 				commissielid.functie AS functie
 			FROM
 				lid, commissielid
@@ -113,11 +114,13 @@ class Commissie {
 		if($rCieLeden!==false ){
 			if($this->_db->numRows($rCieLeden)>0){
 				while($aCieLid=$this->_db->next($rCieLeden)){
-					$sNaam=$aCieLid['voornaam'].' ';
-					if($aCieLid['tussenvoegsel']!='')
-						$sNaam.=$aCieLid['tussenvoegsel'].' ';
-					$sNaam.=$aCieLid['achternaam'];
-					$aCieLedenReturn[]=array('uid' => $aCieLid['uid'], 'naam' => $sNaam, 'functie'=> $aCieLid['functie']);
+					$aCieLedenReturn[]=array(
+						'uid' => $aCieLid['uid'], 
+						'voornaam' => $aCieLid['voornaam'],
+						'tussenvoegsel' => $aCieLid['tussenvoegsel'],
+						'achternaam' => $aCieLid['achternaam'],
+						'status' => $aCieLid['status'],
+						'functie'=> $aCieLid['functie']);
 				}
 				return $aCieLedenReturn;
 			}else{

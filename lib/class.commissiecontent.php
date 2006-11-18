@@ -59,11 +59,9 @@ class CommissieContent extends SimpleHTML {
 			echo '</td><td valign="top">';
 			$aCieLeden=$this->_commissie->getCieLeden($cie['id']);
 			if(is_array($aCieLeden)){
-				echo '<table border="0"  class="hoktable" ><tr><td colspan="2"><strong>Commissieleden:</strong></td></tr>';
+				echo '<table border="0"  class="hoktable" ><tr><th colspan="2">Commissieleden:</th></tr>';
 				foreach($aCieLeden as $aCieLid){
-					echo '<tr><td width="150px">
-						<a href="/leden/profiel/'.$aCieLid['uid'].'">'.mb_htmlentities($aCieLid['naam']).'</a>
-						</td><td>'.mb_htmlentities($aCieLid['functie']);
+					echo '<tr><td width="150px">'.$this->_lid->getNaamLink($aCieLid['uid'], true, true, $aCieLid).'</td><td>'.mb_htmlentities($aCieLid['functie']);
 					echo '</td>';
 					if($this->_commissie->magBewerken()){
 						echo '<td><a href="/groepen/commissie/'.$cie['id'].'/verwijder/lid/'.$aCieLid['uid'].'">X</a></td>';
@@ -88,7 +86,7 @@ class CommissieContent extends SimpleHTML {
 					$aCieUids=namen2uid($_POST['cieNamen'], $this->_lid);
 					if(is_array($aCieUids) AND count($aCieUids)!=0){
 						echo '<table border="0">';
-						echo '<tr><td><strong>Naam</strong></td><td><strong>Functie</strong></td></tr>';
+						echo '<tr><th>Naam</hd><th>Functie</th></tr>';
 						
 						foreach($aCieUids as $aCieUid){
 							if(isset($aCieUid['uid'])){

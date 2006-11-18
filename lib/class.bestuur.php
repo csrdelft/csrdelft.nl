@@ -56,16 +56,11 @@ class Bestuur extends SimpleHTML {
 			while($bestuursLid=$this->_db->next($rBestuur)){
 				$this->_aBestuur=array(
 					'ID' => $bestuursLid['ID'], 'jaar' => $bestuursLid['jaar'], 'naam' => $bestuursLid['naam'],
-					'praeses' => $this->_lid->getFullName($bestuursLid['praeses']),
-					'praeses_uid' => $bestuursLid['praeses'],
-					'abactis' => $this->_lid->getFullName($bestuursLid['abactis']),
-					'abactis_uid' => $bestuursLid['abactis'],
-					'fiscus' => $this->_lid->getFullName($bestuursLid['fiscus']),
-					'fiscus_uid' => $bestuursLid['fiscus'],
-					'vice_praeses' => $this->_lid->getFullName($bestuursLid['vice_praeses']),
-					'vice_praeses_uid' => $bestuursLid['vice_praeses'],
-					'vice_abactis' => $this->_lid->getFullName($bestuursLid['vice_abactis']),
-					'vice_abactis_uid' => $bestuursLid['vice_abactis'],
+					'praeses' => $this->_lid->getNaamLink($bestuursLid['praeses']),
+					'abactis' => $this->_lid->getNaamLink($bestuursLid['abactis']),
+					'fiscus' => $this->_lid->getNaamLink($bestuursLid['fiscus']),
+					'vice_praeses' => $this->_lid->getNaamLink($bestuursLid['vice_praeses']),
+					'vice_abactis' => $this->_lid->getNaamLink($bestuursLid['vice_abactis']),
 					'verhaal' => $bestuursLid['verhaal'],
 					'bbcode_uid' => $bestuursLid['bbcode_uid'],
 					'tekst' => $bestuursLid['tekst']);

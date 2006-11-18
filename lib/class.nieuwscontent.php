@@ -51,7 +51,7 @@ class NieuwsContent extends SimpleHTML {
 	}
 	function getNieuwBerichtLink(){
 		if($this->_nieuws->isNieuwsMod()){
-			return '<a href="/nieuws/toevoegen">Nieuw nieuwsbericht toevoegen</a>';
+			return '<a href="/nieuws/toevoegen" class="knop">Nieuw nieuwsbericht</a>';
 		}
 	}
 	function getBerichtModControls($iBerichtID){
@@ -198,7 +198,7 @@ class NieuwsContent extends SimpleHTML {
 		}
 	}
 	function view(){
-		echo '<h3>Nieuws</h3>';
+
 		switch($this->_actie){
 			case 'bewerken': $this->bewerkFormulier(); break;
 			case 'bericht': $this->getBericht(); break;

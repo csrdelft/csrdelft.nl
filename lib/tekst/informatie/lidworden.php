@@ -4,7 +4,7 @@ C.S.R. is in Delft d&eacute; vereniging waar zowel van gezelligheid als van vorm
 <br />
 Ben je geïnteresseerd? Kom dan langs in de <a href="http://www.owee.nl">OWee</a>, de op één na laatste week van augustus, om de sfeer te proeven of je in te schrijven. Dit laatste kan tot en met de laatste dag van de Owee. Wanneer je je inschrijft maak je in de week na de Owee verder kennis met C.S.R., je jaargenoten en de rest van de leden. Je gaat onder andere een weekend weg met de vereniging. Voor je daadwerkelijk besluit lid te worden, ben je eerst een half jaar aspirant-lid. In die tijd maak je verder kennis met de vereniging.<br />
 <br />
-<a href="http://csrdelft.nl/informatie/">Hier</a> kan je meer lezen over wat C.S.R. is. Wil je meer informatie dan kan je het formulier onderaan deze pagina gebruiken. We nodigen je van harte uit om eens langs te komen op een maaltijd of een borrel, als je even wat van je laat horen spreken we wat af, maar je kan natuurlijk ook lukraak op een donderdagavond langskomen. We zouden je graag ontmoeten: stuur je mail naar <a href="mailto:owee@csrdelft.nl">owee@csrdelft.nl</a> of bel even met het bestuur (015-2135681). Nóg meer contactgegevens vind je <a href="http://csrdelft.nl/informatie/contact.php">hier</a><br />
+<a href="http://csrdelft.nl/vereniging/">Hier</a> kan je meer lezen over wat C.S.R. is. Wil je meer informatie dan kan je het formulier onderaan deze pagina gebruiken. We nodigen je van harte uit om eens langs te komen op een maaltijd of een borrel, als je even wat van je laat horen spreken we wat af, maar je kan natuurlijk ook lukraak op een donderdagavond langskomen. We zouden je graag ontmoeten: stuur je mail naar <a href="mailto:owee@csrdelft.nl">owee@csrdelft.nl</a> of bel even met het bestuur (015-2135681). Nóg meer contactgegevens vind je <a href="http://csrdelft.nl/contact.php">hier</a>.<br />
 <br />
 
 <?php
@@ -52,7 +52,7 @@ EOT
 } else {
 	print(<<<EOT
 
-<center><div class="tekstrood">Bedankt voor je interesse!</div></center>
+<center><div class="waarschuwing">Bedankt voor je interesse!</div></center>
 <p>
 Je berichtje is doorgegeven aan de Vice-Praeses van het bestuur. Bij deze
 persoon kun je altijd terecht met vragen over kennismaken met C.S.R.

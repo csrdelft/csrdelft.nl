@@ -67,20 +67,20 @@ class WoonoordContent extends SimpleHTML {
 		echo '<table width="100%" border="0" cellspacing="0" cellpadding="0" marginheight="0" marginwidth="0">';
 		$woonoorden = $this->_woonoord->getWoonoorden();
 		foreach ($this->_soorten as $soort => $titel) {
-			echo '<tr><td width="50%"><hr /><h2>'.$titel.'</h2><hr /></td>
+			echo '<tr><td width="50%" colspan="2"><h1>'.$titel.'</h1></td>
 				<td width="2%">&nbsp;</td>
-				<td width="47%"><hr /><h2>Bewoners</h2><hr /></td></tr>';
+				<td width="47%" colspan="2"><h1>Bewoners</h1></td></tr>';
 			
 			foreach($woonoorden[$soort] as $woonoord) {
 				$bBewerken=$this->_woonoord->magBewerken($woonoord['id']);
-				echo '<tr height="30"><td colspan="2" valign="middle"><a name="'.$woonoord['id'].'"></a>';
+				echo '<tr height="30"><td>&nbsp;</td><td colspan="2" valign="middle"><a name="'.$woonoord['id'].'"></a>';
 				if(trim($woonoord['link'])==''){ 
 					echo '<h3>'.mb_htmlentities($woonoord['naam']).'</h3>'; 
 				}else{ 
 					echo '<h3><a href="'.htmlspecialchars($woonoord['link']).'">'.mb_htmlentities($woonoord['naam']).'</a></h3>'; 
 				} 
 				echo '('.htmlspecialchars($woonoord['adres']).')</td>';
-				echo '<td valign="top" rowspan="2">';
+				echo '<td rowspan="2">&nbsp;&nbsp;&nbsp;</td><td valign="top" rowspan="2">';
 				foreach ($woonoord['bewoners'] as $bewoner) {
 					if($this->_woonoord->isLid()) echo '<a href="/intern/profiel/'.$bewoner['uid'].'">';
 					echo mb_htmlentities($bewoner['voornaam']).' ';
@@ -94,7 +94,7 @@ class WoonoordContent extends SimpleHTML {
 				}
 				echo '</td>';
 				echo '</tr>';
-				echo '<tr><td valign="top">';
+				echo '<tr><td>&nbsp;&nbsp;&nbsp;</td><td valign="top">';
 				if($woonoord['plaatje'] != '') echo '<img src="'.CSR_PICS.'/pagina/woonoorden/'.htmlspecialchars($woonoord['plaatje']).'" style="float: right;">'; 
 				echo mb_htmlentities($woonoord['tekst']);
 				if($bBewerken OR $this->_lid->hasPermission('P_LEDEN_MOD')){

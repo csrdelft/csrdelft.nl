@@ -29,7 +29,7 @@ class Csrmailcontent {
 	}
 	//functie die gebruikt wordt voor het bewerken van bestaande en het maken van nieuwe berichten.
 	function _geefBerichtInvoerVeld($titel, $categorie, $bericht, $ID=0){
-		echo '<form method="post" action="?ID='.$ID.'" ><div class="pubciemail-form">';
+		echo '<form method="post" action="?ID='.$ID.'" ><div id="pubciemail_form">';
 		if($this->_sError!==false){ echo '<div class="foutmelding">'.$this->_sError.'</div>'; }
 		echo '<strong>Titel:</strong><br />';
 		echo '<input type="text" name="titel" value="'.htmlspecialchars($titel).'" style="width: 100%;" class="tekst" />';
@@ -65,8 +65,9 @@ class Csrmailcontent {
 		if(isset($_POST['titel'])) $titel=trim($_POST['titel']);
 		if(isset($_POST['categorie'])) $categorie=trim($_POST['categorie']);
 		if(isset($_POST['bericht'])) $bericht=trim($_POST['bericht']);
-		echo '<h3>Nieuw bericht invoeren</h3>
-			Hier kunt u uw bericht(en) voor de pubCie-post achterlaten.<br />';
+		echo '
+			<h3>Nieuw bericht invoeren</h3>
+			<p>Hier kunt u uw bericht(en) voor de pubCie-post achterlaten.</p>';
 		$this->_geefBerichtInvoerVeld($titel, $categorie, $bericht);
 	}	
 	function _geefBerichtBewerken($sError){
@@ -111,6 +112,7 @@ class Csrmailcontent {
 					echo '<dd>'.$this->_process($aBericht['bericht']).'</dd>';
 				}
 			}
+			echo '</dl>';
 		}else{
 			echo 'U heeft nog geen berichten geplaatst in deze pubcie-mail;';
 		}
@@ -184,19 +186,18 @@ class Csrmailcontent {
 		$this->_edit=$iBerichtID;
 		$this->_sError=$sError;
 	}
-	function addNewForm($sError=false){
-		$this->_sError=$sError;
-	}
-	function getTitel(){
-		return 'PubCie-courant beheer';
-	}
+	function addNewForm($sError=false){ $this->_sError=$sError; }
+	
+	function getTitel(){ return 'PubCie-courant beheer'; }
+
 	function view(){
 		echo '<h2>PubCie-post</h2>';
 		if($this->_csrmail->magBeheren()){
-			echo '<a href="voorbeeld.php" target="_blank" >Voorbeeld</a>';
+			echo '<a href="/intern/csrmail/voorbeeld.php" class="knop">Voorbeeld</a> 
+			<a href="/intern/csrmail/verzenden.php" onclick="return confirm(\'Weet u het zeker\')" class="knop">Verzenden</a>';
 		}
 		//eventuele melding printen.
-		if($this->_userMessage!=''){ echo '<div class="pubciemail-form">'.trim($this->_userMessage).'</div>'; }
+		if($this->_userMessage!=''){ echo '<div class="waarschuwing">'.trim($this->_userMessage).'</div>'; }
 		if($this->_edit!==0){
 			//invoerformulier tonen, alsmede een overzicht van berichten
 			$this->_geefBerichtBewerken($this->_sError);
