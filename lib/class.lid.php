@@ -165,8 +165,6 @@ class Lid {
 		# kijken of uid een goed formaat heeft
 		if (!preg_match('/^[a-z\d]{1}\d{3}$/', $uid)) return false;
 		
-		# anders databaseconnectie openen
-		if (!isset($this->_db)) $this->_db = new MySQL ();
 		# en gebruiker opzoeken
 		$uid = $this->_db->escape($uid);
 		$result = $this->_db->select("SELECT * FROM lid WHERE uid = '{$uid}' LIMIT 1");
@@ -574,7 +572,7 @@ class Lid {
 				$matches = array();
 				if (!preg_match('/^(\d{4})-(\d\d?)-(\d\d?)$/', $invoer, $matches)) {
 					$this->_formerror[$veld] = "Ongeldige datumformaat, gebruik dag-maand-jaar:";
-					$this->_tmpprofile['gebdatum']  = '0000-00-00';
+					$this->_tmpprofile['gebdatum']  = $this->_profiel['gebdatum'];
 				} else {
 					# is het wel een wijziging?
 					if ($invoer != $this->_tmpprofile['gebdatum']) {
@@ -776,57 +774,55 @@ class Lid {
 		}
 	}
 
-	# We gaan de wijzigingen doorvoeren in ldap, alleen moeten we wel rekening houden
-	# met samengestelde velden!
-	# We kijken alleen of er iets is veranderd in een van de LDAP velden, zo ja, dan
-	# rossen we alle velden die in LDAP staan meteen in de modify... uitzoeken welke
-	# precies wel of niet veranderd zijn is meer werk.
-	function diff_to_ldap() {
+
+	# Profiel uitlezen uit de database en in LDAP zetten
+	function save_ldap() {
 	
 		# Alleen leden, novieten en kringels staan in LDAP
 		if (preg_match('/^S_(LID|NOVIET|KRINGEL)$/', $this->_tmpprofile['status'])) {
-	
-			$ldap_velden = array(
-				'voornaam' => '',
-				'tussenvoegsel' => '',
-				'achternaam' => '',
-				'email' => '',
-				'adres' => '',
-				'postcode' => '',
-				'woonplaats' => '',
-				'telefoon' => '',
-				'mobiel' => '',
-				'password' => ''
-			);
-			# komt een veld voor in diff?
-			if (count(array_intersect_key($ldap_velden, $this->_delta)) > 0) {
-				# vanuit het profiel en de diff een ldap entry in elkaar snokken
+
+			$result = $this->_db->select("
+				SELECT
+					uid, voornaam, tussenvoegsel, achternaam, adres, postcode, woonplaats, telefoon,
+					mobiel, email, password, website, nickname, land
+				FROM
+					lid
+				WHERE
+					uid = {$this->_tmpprofile['uid']}
+			");
+			if ($result !== false and $this->_db->numRows($result) > 0) {
+				$lid = $this->_db->next($result);
+
+				# ldap entry in elkaar snokken
 				$entry = array();
-				# uid
-				$entry['uid'] = $this->_tmpprofile['uid'];
-				# givenName => verplicht veld, heeft altijd inhoud
-				$entry['givenname'] = $this->_tmpprofile['voornaam'];
-				if ($this->_tmpprofile['tussenvoegsel'] != '') $entry['givenname'] .= ' ' . $this->_tmpprofile['tussenvoegsel'];
-				# sn => verplicht veld, heeft altijd inhoud
-				$entry['sn'] = $this->_tmpprofile['achternaam'];
-				# cn
-				$entry['cn'] = $entry['givenname'] . ' ' . $entry['sn'];
-				# mail
-				$entry['mail'] = $this->_tmpprofile['email'];
-				# ou
-				$entry['ou'] = $this->_tmpprofile['adres'];
-				if ($this->_tmpprofile['postcode'] != '') $entry['ou'] .= ' ' . $this->_tmpprofile['postcode'];
-				if ($this->_tmpprofile['woonplaats'] != '') $entry['ou'] .= ' ' . $this->_tmpprofile['woonplaats'];
-				# homePhone
-				$entry['homePhone'] = $this->_tmpprofile['telefoon'];
-				# mobile
-				$entry['mobile'] = $this->_tmpprofile['mobiel'];
-				# password
-				$entry['userpassword'] = $this->_tmpprofile['password'];
+				$entry['uid'] = $lid['uid'];
+				$entry['givenname'] = str_replace('  ', ' ',implode(' ',array($lid['voornaam'],$lid['tussenvoegsel'])));
+				$entry['sn'] = $lid['achternaam'];
+				$entry['cn'] = str_replace('  ', ' ',implode(' ',array($lid['voornaam'],$lid['tussenvoegsel'],$lid['achternaam'])));
+				$entry['mail'] = $lid['email'];
+				$entry['homephone'] = $lid['telefoon'];
+				$entry['mobile'] = $lid['mobiel'];
+				$entry['homepostaladdress'] = implode('$',array($lid['adres'],$lid['postcode'],$lid['woonplaats']));
+				$entry['o'] = 'C.S.R. Delft';
+				$entry['mozillanickname'] = $lid['nickname'];
+				$entry['mozillausehtmlmail'] = 'FALSE';
+				$entry['mozillahomestreet'] = $lid['adres'];
+				$entry['mozillahomelocalityname'] = $lid['woonplaats'];
+				$entry['mozillahomepostalcode'] = $lid['postcode'];
+				$entry['mozillahomecountryname'] = $lid['land'];
+				$entry['mozillahomeurl'] = $lid['website'];
+				$entry['description'] = 'Ledenlijst C.S.R. Delft';
+				$entry['userPassword'] = $lid['password'];
+
+				# voor woonoord moeten we even moeilijk doen
+				require_once('class.woonoord.php');
+				$woonoord = new Woonoord($this->_db, $this);
+				$wo = $woonoord->getWoonoordByUid($this->_tmpprofile['uid']);
+				if ($wo !== false) $entry['ou'] = $wo['naam'];
 
 				# lege velden er uit gooien
 				foreach ($entry as $i => $e) if ($e == '') unset ($entry[$i]);
-
+				
 				# if ($this->hasPermission('P_LEDEN_MOD')) print_r($entry);
 			
 				# LDAP verbinding openen
@@ -1058,7 +1054,7 @@ class Lid {
 		$zoekveld = trim($this->_db->escape($zoekveld));
 		
 		//Zoeken standaard in voornaam, achternaam, bijnaam en uid.
-		if($zoekveld=='naam' AND !preg_match('/\d{2}/', $zoekterm)){
+		if($zoekveld=='naam' AND !preg_match('/^\d{2}$/', $zoekterm)){
 			if(preg_match('/ /', trim($zoekterm))){
 				$zoekdelen=explode(' ', $zoekterm);
 				$iZoekdelen=count($zoekdelen);
@@ -1075,8 +1071,8 @@ class Lid {
 					nickname LIKE '%{$zoekterm}%' OR uid LIKE '%{$zoekterm}%'";
 			}
 		}else{
-			if(preg_match('/\d{2}/', $zoekterm) AND ($zoekveld=='uid' OR $zoekveld=='naam')){
-				//lichtingen...
+			if(preg_match('/^\d{2}$/', $zoekterm) AND ($zoekveld=='uid' OR $zoekveld=='naam')){
+				//zoeken op lichtingen...
 				$zoekfilter="SUBSTRING(uid, 1, 2)='".$zoekterm."'";
 				//echo $zoekfilter;
 			}else{

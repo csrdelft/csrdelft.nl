@@ -1,0 +1,51 @@
+# ldapsearch -LLL -H ldaps://localhost -b "ou=leden,dc=csrdelft,dc=nl" -x "(uid=x*)" -W -D "cn=admin,dc=csrdelft,dc=nl" | grep "^dn: " > blaat
+# sed 's/^dn: //' < blaat > blaat2
+# ldapdelete -H ldaps://localhost -x -W -D "cn=admin,dc=csrdelft,dc=nl" -f blaat2
+
+# haal dit bestand door het gelijknamige php-scriptje en voer de inhoud aan ldapadd:
+# ./mk_commissie_ldif.php < mk_commissie_ldif.txt > commissie.ldif
+# ldapadd -H ldaps://localhost/ -W -c -x -D "cn=admin,dc=csrdelft,dc=nl" -f ./commissie.ldif
+
+# uid;givenName;sn;cn;mail
+#  als cn leeg is dan wordt het zelfde als sn
+#  als email eindigt op @ wordt csrdelft.nl door het script aangevuld
+
+x001;Bestuur;C.S.R. Delft;Bestuur C.S.R. Delft;bestuur@
+x002;Praeses;C.S.R. Delft;Praeses C.S.R. Delft;praeses@
+x003;Abactis;C.S.R. Delft;Abactis C.S.R. Delft;abactis@
+x004;Fiscus;C.S.R. Delft;Fiscus C.S.R. Delft;fiscus@
+x005;Vice-Praeses;C.S.R. Delft;Vice-Praeses C.S.R. Delft;vice-praeses@
+x006;Vice-Abactis;C.S.R. Delft;Vice-Abactis C.s.R. Delft;vice-abactis@
+
+x010;AcqCie;AcquisitieCommissie;;acqcie@
+x011;ArCie;Arro Kopij Commissie;;arcie@
+x012;AlmanakCie;AlmanakCommissie;;almanakcie@
+x013;Alpha;Alpha Cursus;;alpha@
+x014;BASFCie;Bibliotheek, Archief, Statistiek en FotoCommissie;;basfcie@
+x015;DiesCie;DiesCommissie;;diescie@
+x016;LeOCie;Laudate et Orate Commissie;;leocie@
+x017;Donacie;DonatieCommissie;;donacie@
+x018;HappeningCie;HappeningCommissie;;happening@
+x019;Bestuur Landelijk;Bestuur C.S.R. Landelijk;;landelijk@
+x020;LustrumboekCie;LustrumboekCommissie;;lustrumboekcie@
+x021;LustrumCie;LustrumCommissie;;lustrumcie@
+x022;MaalCie;MaaltijdCommissie;;maalcie@
+x023;MaalCie-Fiscus;MaalCie-Fiscus (Ransapen pas op!);;maalcie-fiscus@
+x024;N.B.G.;Netwerk Beheer Groep;;nbg@
+x025;NovCie;NovitiaatsCommissie;;novcie@
+x026;OWeeCie;OWeeCommissie;;oweecie@
+x027;PubCie;PubliciteitsCommissie;;pubcie@
+x028;SocCie;SocieteitsCommissie;;soccie@
+x029;RestauraCie;RestauratieCommissie;;restauracie@
+
+x040;Fotocommissaris;Fotocommissaris (BASFCie);;fotocommissaris@
+x041;Archivaris;Archivaris (BASFCie);;archivaris@
+x042;Bibliothecaris;Bibliothecaris (BASFCie);;bibliothecaris@
+x043;Statisticus;Statisticus (BASFCie);;statisticus@
+x044;Corvee;CorveeManager;;corvee@
+x045;Oudleden;Oudledenbestuur;;oudleden@
+
+x050;Moot 1;Moot 1;;moot1@
+x051;Moo2;Moo2;;moo2@
+x052;Moot 3;Moot 3;;moot3@
+x053;Moot 4;Moot 4;;moot4@

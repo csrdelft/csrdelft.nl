@@ -50,7 +50,7 @@ class LDAP {
 		}
 		# Onthouden van wat instellingen
 		$this->_conn = $conn;
-		$this->_base_leden    = $ldapini['ldap_base_leden'];
+		$this->_base_leden = $ldapini['ldap_base_leden'];
 		return true;
 	}
 
@@ -65,7 +65,7 @@ class LDAP {
 		$validbase = array(
 			'people'    => $this->_base_people,
 			'antiplesk' => $this->_base_antiplesk,
-			'mailbox'     => $this->_base_mailbox
+			'mailbox'   => $this->_base_mailbox
 		);
 		if (!array_key_exists($mech, $validbase)) return false;
 		
@@ -113,6 +113,7 @@ class LDAP {
 		$entry['objectClass'][] = 'person';
 		$entry['objectClass'][] = 'organizationalPerson';
 		$entry['objectClass'][] = 'inetOrgPerson';
+		$entry['objectClass'][] = 'mozillaAbPersonObsolete';
 		
 		return ldap_add($this->_conn, $dn, $entry);
 	}

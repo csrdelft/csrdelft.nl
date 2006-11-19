@@ -1,6 +1,9 @@
 * text=auto !eol
 bin/maalcie.php -text
 bin/maaltrack.php -text
+bin/mk_commissie_ldif.php -text
+bin/mk_commissie_ldif.txt -text
+bin/mkledenldif.php -text
 bin/mootabos.php -text
 bin/pubcie-admin.php -text
 bin/socciesaldi-koppelen.php -text
