@@ -52,13 +52,17 @@ class Lid {
 		$this->_db =& $db;
 		#print_r($_SESSION);
 
+		# http://www.nabble.com/problem-with-sessions-in-1.4.8-t2550641.html
+		if (session_id() == 'deleted') session_regenerate_id();
+
 		# kijken in de sessie of er een gebruiker in staat,
 		# en of dit een gebruiker is die een profiel in de database heeft.
-		if (!isset($_SESSION['_uid']) or !$this->reloadProfile()) {
+		# tevens kijken of het IP-adres klopt met het adres/range in de sessie
+		if (!isset($_SESSION['_uid']) or !matchCIDR($_SERVER['REMOTE_ADDR'],$_SESSION['_ip']) or !$this->reloadProfile()) {
 			# zo nee, dan nobody user er in gooien...
 			# in dit geval is het de eerste keer dat we een pagina opvragen
 			# of er is net uitgelogd waardoor de gegevens zijn leeggegooid
-			$this->login('x999','x999');
+			$this->login('x999','x999',false);
 		}
 		# experimentele logfunctie
 		$this->logBezoek();
@@ -66,7 +70,10 @@ class Lid {
 
 	### public ###
 
-	function login($user,$pass) {
+	# als een gebruiker wordt ingelogd met ipcheck==true, dan wordt het IPv4 adres
+	# van de gebruiker opgeslagen in de sessie, en het sessie-cookie zal alleen
+	# vanaf dat adres toegang geven tot de website
+	function login($user,$pass,$checkip = true) {
 		#
 		$user = $this->_db->escape($user);
 
@@ -74,24 +81,29 @@ class Lid {
 		$result = $this->_db->select("SELECT * FROM lid WHERE uid = '{$user}' LIMIT 1");
 		if (($result !== false) and $this->_db->numRows($result) > 0) {
 			$profile = $this->_db->next($result);
-			if ($this->_checkpw($profile['password'], $pass)) {
-				$this->_profile = $profile;
-				$_SESSION['_uid'] = $profile['uid'];
-				return true;
+		} else {
+			# anders via de nickname N.B. deze nickname search is *case-insensitive*
+			$result = $this->_db->select("SELECT * FROM lid WHERE nickname = '{$user}' LIMIT 1");
+			if (($result !== false) and $this->_db->numRows($result) > 0) {
+				$profile = $this->_db->next($result);
+			# anders helaasch 
+			} else {
+				return false;
 			}
 		}
-		# anders via de nickname N.B. deze nickname search is *case-insensitive*
-		$result = $this->_db->select("SELECT * FROM lid WHERE nickname = '{$user}' LIMIT 1");
-		if (($result !== false) and $this->_db->numRows($result) > 0) {
-			$profile = $this->_db->next($result);
-			if ($this->_checkpw($profile['password'], $pass)) {
-				$this->_profile = $profile;
-				$_SESSION['_uid'] = $profile['uid'];
-				return true;
-			}
-		}
-		# helaasch
-		return false;
+
+		# we hebben nu een gebruiker gevonden en gaan eerst het wachtwoord controleren
+		if (!$this->_checkpw($profile['password'], $pass)) return false;
+
+		# als dat klopt laden we het profiel in en richten de sessie in
+		$this->_profile = $profile;
+		$_SESSION['_uid'] = $profile['uid'];
+		
+		# sessie koppelen aan ip?
+		if ($checkip == true) $_SESSION['_ip'] = $_SERVER['REMOTE_ADDR'] . "/32";
+		else $_SESSION['_ip'] = $_SERVER['REMOTE_ADDR'] . "/0";
+		
+		return true;
 	}
 
 	
@@ -106,8 +118,9 @@ class Lid {
 	
 
 	function logout() {
-		setcookie (session_name(), '', (time () - 2592000), '/', '', 0);
+		$session_name = session_name();
 		session_destroy();
+		setcookie ($session_name, '', (time () - 2592000), '/', '', 0);
 	}
 
 	### public ###

@@ -89,7 +89,9 @@
 					<input type="hidden" name="url" value="{$smarty.server.REQUEST_URI}" />
 					<input type="text" name="user" class="login" value="Naam" onfocus="this.value=''" />
 					<input type="password" name="pass" class="login" />
-					<input type="submit" name="submit" class="login-submit" value="ok" />
+					<input type="submit" name="submit" class="login-submit" value="ok" /><br />
+					<input type="checkbox" name="checkip" class="login-checkip" value="true" id="login-checkip" checked>
+					<label for="login-checkip">Koppel login en IP-adres</label><br />
 				</p>
 			</form>
 		</div>

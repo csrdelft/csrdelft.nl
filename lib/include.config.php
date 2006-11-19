@@ -74,9 +74,11 @@ define('SMARTY_CACHE_DIR', DATA_PATH.'/smarty/cache/');
 
 require_once('class.csrsmarty.php');
 
+# N.B. het is van belang dat na het starten van de sessie meteen het databaseobject en het
+# Lid-object worden aangemaakt, omdat die de ingelogde gebruiker controleert, en tevens
+# sess_deleted bugs ondervangt en ip-checks doet
 session_start();
 $db = new MySQL();
 $lid = new Lid($db);
-
 
 ?>

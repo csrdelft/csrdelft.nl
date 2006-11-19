@@ -34,7 +34,9 @@
 			Studie: {$profhtml.studie}<br />
 			Studie sinds: {$profhtml.studiejaar}<br />
 			Lid sinds: {$profhtml.lidjaar}<br />
-			Geboortedatum: {$profhtml.gebdatum|date_format:"%d-%m-%Y"}<br />
+			Geboortedatum: 
+			{if $profhtml.gebdatum!='0000-00-00'}{$profhtml.gebdatum|date_format:"%d-%m-%Y"}{/if}
+			<br />
 			{if $isOudlid!==true}
 				Kring: {$profhtml.moot}.{$profhtml.kring}<br />
 				{$profhtml.commissies}
