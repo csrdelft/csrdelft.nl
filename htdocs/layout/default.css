@@ -1,38 +1,42 @@
 html, body{ font-size : 75.5%; }
-h1{	font-size: 1.6em; }
-h2{ font-size: 1.3em; }
-h3{ font-size: 1.25em; }
-h4{ font-size: 1em; }
-textarea, input, select, option, td, th, div, p{ font-size: 1em; }	
+h1{	font-size: 1.6em; line-height: 1.6em; }
+h2{ font-size: 1.3em; line-height: 1.3em; }
+h3{ font-size: 1.25em; line-height: 1.25em; }
+h4{ font-size: 1em; line-height: 1em; }
+body, textarea, input, select, option, tr, td, th, div, p  { 
+	font-size: 1em; line-height: 1.15em; text-align: justify;
+}	
 
 html, body{
 	margin: 0px; padding: 0px;
 	font-family : Verdana, Geneva, Arial, Helvetica, sans-serif;
 	background-color: #e1e5e5;
 }
-h1{ margin-top: 3px; margin-bottom: 3px;}
-h2{	margin-bottom: 1px;}
+h1{ margin-top: 5px; margin-bottom: 10px;}
+h2{	margin-top: 5px; margin-bottom: 4px; }
 h3{ margin-top: 3px; margin-bottom: 0px; }
-p{ 	margin: 5px 0px 10px 0px; padding: 0px; } 
+p{ 	margin: 5px 0px 10px 0px; padding: 0px; text-align: justify; } 
 a{ 	color: darkred; text-decoration: none; }
 a:hover{ color: black; }
 div{ margin: 0px; padding: 0px; }
 
 textarea{
-	font-family : Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
 	padding: 2px;
 	border: 1px solid darkgrey;
 }
-input, select{ padding-left: 2px; padding-right: 2px;	border: 1px solid darkgrey; } 
+input, select{ padding-left: 2px; padding-right: 2px;	border: 1px solid darkgrey; font-size: 1em;} 
 select{ padding-right: 0px; }
 
 th{ text-align: left; }
-td{ vertical-align: top; padding: 0px; font-size: 1em; }
+td{ vertical-align: top; padding: 0px; }
 ul, ol{ }
 li{margin: 0 0 0 15px;}
-li li{ 1em;}
-/* pagina-opmaak */
+li li{ font-size: 1em;}
 
+
+
+/* pagina-opmaak */
 #layoutContainer{}
 #navigatie{
 	position: absolute;
@@ -44,8 +48,9 @@ li li{ 1em;}
 	opacity:.85; filter: alpha(opacity=85);
 } #navigatieContent{
 	margin: 3px 10px 0px 10px;
-	font-size: 1.25em;
+	font-size: 1.1em;
 }
+
 #menu{
 	position: absolute;
 	top: 130px;
@@ -58,12 +63,10 @@ li li{ 1em;}
 	z-index: 85;
 } #menuContent{
 	margin: 2px 10px 0px 10px; padding: 0px;
-	font-size: 1.3em;
 }	#submenuContent{
 	position: absolute;
 	left: 10px;
-	margin: 2px 0 0 20px; padding: 0px;
-	font-size: 1.3em;
+	margin: 4px 0 0 20px; padding: 0px;
 
 }
 	
@@ -78,31 +81,22 @@ li li{ 1em;}
 		border-right: 1px solid #bbb;  
 		border-bottom: 1px solid #bbb;  
 	} 
-	#bodyContent{
-		margin: 0px; padding: 20px;
-		font-size: 1.20em;
-		background-color: white;
-	}
-	#copyright{
-		position: absolute;
-		bottom: 0px;
-	} #copyrightContent{
-		margin: 0px 10px 10px 20px; 
-		font-size: 10px;
-		color: #bbb;
-	}	#copyrightContent a{ color: #bbb; }
-		#copyrightContent a:hover{ color: darkred; }
-#bodyContainerBreed{
-	left: 0px;
-}	#lichaamBreed{ width: 990px; }
+	#bodyContent{ margin: 0px; padding: 20px; font-size: .95em; }
+	#copyright{	position: absolute; bottom: 0px;} 
+		#copyrightContent{ margin: 0px 10px 10px 20px; font-size: .9em; color: #bbb;}
+			#copyrightContent a{ color: #bbb; }
+			#copyrightContent a:hover{ color: darkred; }
+#bodyContainerBreed{ left: 0px; }	
+	#lichaamBreed{ width: 990px; }
 #searchbox{
 	position: absolute;
 	top: 140px;
 	left: 735px;
 	width: 250px; height: 20px;
-	text-align: right;
 	z-index: 100;
-}	#searchbox input{ padding: 1px; border: 1px solid darkred; width: 160px; font-size: 1.2em;}
+	
+}	#searchbox p{ text-align: right; }
+	#searchbox input{ padding: 1px; border: 1px solid darkred; width: 160px; font-size: .9em; }
 #hoofder, #hoofderBreed{
 	position: absolute;
 	top: 0px;
@@ -113,6 +107,7 @@ li li{ 1em;}
 	z-index: 1;
 } #beeldmerk{ margin: 5px 0px 0px 28px; width: 120px; }
 #hoofderBreed{ }
+
 #zijkolom{
 	position: absolute;
 	top: 172px;
@@ -122,21 +117,20 @@ li li{ 1em;}
 	border-right: 1px solid black;
 	border-bottom: 1px solid black; 
 	background-color: gold;
-} #zijkolomContent{
-		margin: 20px 10px 10px 10px;
-		min-height: 600px; 
-}	#zijkolomFooter{
-		height: 58px;
-		background-image: url(http://plaetjes.csrdelft.nl/layout/bestuurstekst.gif);
-		background-repeat: no-repeat;
-		background-position: bottom right;
+	font-size: .85em;
+} #zijkolomContent{ margin: 20px 10px 10px 10px; min-height: 600px; }	
+		#zijkolomFooter{ 
+			height: 77px;
+			background-image: url(http://plaetjes.csrdelft.nl/layout/bestuurstekst.gif);
+			background-repeat: no-repeat;
+			background-position: bottom right;
 }
 
 #lijntje{
 	position: absolute;
 	top: 171px;	left: 0px;
 	width: 990px;
-	height: 4px;
+	height: 3px;
 	background-color: darkred;
 	border-right: 1px solid #bbb;  
 	
@@ -158,28 +152,17 @@ li li{ 1em;}
 	color: black; background-color: white;
 	opacity:.85; filter: alpha(opacity=85);
 	border: 1px solid darkred;
-}
-#inloggen{
-	display: none;
-}
-#inloglink{
-	display: block;
-	width: 160px;
-}
-input.login{
-	width: 60px;
-	border: 1px solid grey;
-}
-input.login-submit{
-	padding: 0px;
-	width: 18px;
-	text-align: center;
-	border: 1px solid grey;
-}
+	font-size: .75em;
+}	#inloglink{	display: block; width: 160px; } 
+	#inloggen{ display: none; }
+		input.login{ width: 60px; border: 1px solid grey; }
+		input.login-submit{ padding: 0px; width: 18px; text-align: center; border: 1px solid grey; }
+		input.login-checkip{ padding: 0px; width: 12px; height: 12px; border: 1px solid grey; }
+		
 pre#pubcie_debug{
 	position: absolute;
 	top: 10px;
-	left: 1000px; right: 10px
+	left: 1000px; right: 10px;
 	margin: 10px;
 	overflow: auto;
 	font-size: 1.2em;
@@ -189,6 +172,9 @@ pre#pubcie_debug{
 }
 /* dingen voor afzonderlijke pagina's */
 
+/* plaatjes in tekst */
+p img{ margin: 15px 10px; }
+/* nieuws */
 .nieuwsbericht, .nieuwsbericht-vast{
 	margin: 20px 0px 5px 0px;
 	min-height: 100px;
@@ -197,26 +183,30 @@ pre#pubcie_debug{
 	background-color: #f5f5f5;
 }	.nieuwsplaatje{ margin: 0px 0px 0px 0px; float: left;	}
 	.nieuwsbody{		margin: 11px 10px 0px 70px;	}	
-	.nieuwstitel{		font-size: 1.1em; font-weight: bold; }
+	.nieuwstitel{		font-size: 1.15em; font-weight: bold; margin-bottom: 5px;}
+	.nieuwstitel a{ color:  black;}
 .nieuwsbericht-vast{ height: 100px;	}	
 
 a.knop{
 	background-color: #f5f5f5;  
 	border: 1px solid darkgrey;
 	margin: 2px; padding: 0px 2px 0px 2px;
+	line-height: 1.1em;
 }
 a.knop:hover{ background-color: darkgrey;}
 
 
 .waarschuwing{ color: darkred; }
+div.blokje{ background-color: #fff3b4; margin: 10px 5px; padding: 5px 10px;}
 div#uStaatRood{
 	position: absolute;
 	left: 730px;
 	top: 50px;
+	width: 230px;
 	padding: 10px;
 	background-color: white;
 	color: darkred;
-	font-size: 1.4em;
+	font-size: 1em;
 	border: 2px solid darkred;
 	opacity:.90; filter: alpha(opacity=90);
 	z-index: 99;
@@ -252,5 +242,9 @@ table.bestuur{ width: 100%; text-align: center; }
 table.bestuur th{ text-align: center; }
 table.bestuur td{ text-align: center; }
 
+/* maaltijdketzer */
+
 table.maaltijden{ width: 100%; }
 table.maaltijden tr{ height: 1.6em; }
+/* csrmail */
+div#pubciemail_form{ background-color: #f1f1f1; border: 1px solid lightgrey; padding: 10px;}

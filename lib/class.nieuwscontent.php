@@ -154,12 +154,13 @@ class NieuwsContent extends SimpleHTML {
 				}
 				echo '<div class="nieuwsbericht-vast">';
 				if($aBericht['plaatje']!=''){
-					echo '<div class="nieuwsplaatje"><img src="'.CSR_PICS.'nieuws/'.$aBericht['plaatje'].'" width="60px" height="100px" alt="'.$aBericht['plaatje'].'" /></div>';
+					echo '<div class="nieuwsplaatje"><a href="/nieuws/'.$aBericht['id'].'">
+						<img src="'.CSR_PICS.'nieuws/'.$aBericht['plaatje'].'" width="60px" height="100px" alt="'.$aBericht['plaatje'].'" /></a></div>';
 				}
-				echo '<div class="nieuwsbody"><div class="nieuwstitel">';
+				echo '<div class="nieuwsbody"><div class="nieuwstitel"><a href="/nieuws/'.$aBericht['id'].'">';
 				//verborgen berichten aangeven, enkel bij mensen met P_NEWS_MOD
 				if($aBericht['verborgen']=='1'){ echo '<em>[verborgen] </em>';	}
-				echo mb_htmlentities($aBericht['titel']).'</div>';
+				echo mb_htmlentities($aBericht['titel']).'</a></div>';
 				echo ''.$sBericht.'&nbsp;'.$this->getBerichtModControls($aBericht['id']).'</div></div>';
 			}//einde foreach bericht
 			echo $this->getNieuwBerichtLink();
