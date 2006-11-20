@@ -118,9 +118,8 @@ class Lid {
 	
 
 	function logout() {
-		$session_name = session_name();
-		session_destroy();
-		setcookie ($session_name, '', (time () - 2592000), '/', '', 0);
+		session_unset();
+		$this->login('x999','x999',false);
 	}
 
 	### public ###
