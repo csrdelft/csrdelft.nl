@@ -65,73 +65,68 @@ switch ($action) {
 		# P_LEDEN_EDIT
 		
 		# FIXME: duidelijkere opzet van statement hieronder. dit is te wazig
-		if ( !($lid->hasPermission('P_LOGGED_IN') and
-		       $lid->hasPermission('P_PROFIEL_EDIT') and
-		       $uid == $lid->getUid()
-		      ) and
-		      !($lid->hasPermission('P_LEDEN_EDIT')) )
+		if(!($lid->hasPermission('P_PROFIEL_EDIT') and $uid == $lid->getUid()) and !($lid->hasPermission('P_LEDEN_EDIT')) ){
 			$error = 1;
-		break;
+		}
+	break;
 	default:
 		# geen geklooi met andere waarden
 		$error = 1;
 }
 
+
 # als er geen error is, dan kunnen we de actie uit gaan voeren
-if ($error == 0) switch($action) {
-	case 'none':
-		# profiel inladen, als dat niet lukt dan mag het niet
-		if (!$lid->loadSqlTmpProfile($uid)) $error = 1;
+if ($error == 0){
+	switch($action) {
+		case 'none':
+			# profiel inladen, als dat niet lukt dan mag het niet
+			if (!$lid->loadSqlTmpProfile($uid)) $error = 1;
 		break;
-	case 'edit':
-		# profiel inladen, als dat niet lukt dan mag het niet
-		if ($lid->loadSqlTmpProfile($uid)) $state->setMyState('edit'); # zodat editvakken getoond worden
-		else $error = 1;
+		case 'edit':
+			# profiel inladen, als dat niet lukt dan mag het niet
+			if ($lid->loadSqlTmpProfile($uid)) $state->setMyState('edit'); # zodat editvakken getoond worden
+			else $error = 1;
+			//pr($lid->_tmpprofile);
 		break;
-	case 'save':
-		# profiel inladen uit db, als dat niet lukt dan mag het niet
-		if (!$lid->loadSqlTmpProfile($uid)) {
-			$error = 1;
-			break;
-		}
+		case 'save':
+			# profiel inladen uit db, als dat niet lukt dan mag het niet
+			if (!$lid->loadSqlTmpProfile($uid)) {
+				$error = 1;
+			}else{
 
-		# profiel inladen uit POST, als dat niet lukt kan het zijn dat...
-		# $error = 1 -> we een 'dat mag niet' pagina gaan afbeelden
-		# $error = 2 -> doorgaan, en naar edit-mode, er moeten eerst fouten opgelost worden
-		$error = $lid->loadPOSTTmpProfile();
-		switch ($error) {
-			case 0:
-				# alle invoer was juist, wijzigingen doorvoeren.
-				# deze functie doet:
-				
-				# - maak een xml bestandje met de wijzigingen.
-				#$lid->diff_to_xml();
-				
-				# - wijzigingen in SQL opslaan
-				$lid->diff_to_sql();
-				
-				# - wijzigingen in LDAP opslaan
-				$lid->diff_to_ldap();
-				
-				# - wijzigingen doorgeven aan de Vice-Abactis
-				#$lid->diff_to_vab();
-				
-				# om te voorkomen dat een refresh opnieuw een submit doet
-				$myurl = $state->getMyUrl();
-				header("Location: {$myurl}");
-				exit;
-			case 2:
-				# er zaten fouten in de invoer, $lid weet welke fouten en
-				# profielcontent zal die afbeelden
-				$state->setMyState('edit'); 
-				break;
-			case 1:
-				# geen-toegang pagina wordt hieronder ingevuld
-				break;
-		}
+				# profiel inladen uit POST, als dat niet lukt kan het zijn dat...
+				# $error = 1 -> we een 'dat mag niet' pagina gaan afbeelden
+				# $error = 2 -> doorgaan, en naar edit-mode, er moeten eerst fouten opgelost worden
+				$error = $lid->loadPOSTTmpProfile();
+				switch ($error) {
+					case 0:
+						# alle invoer was juist, wijzigingen doorvoeren.
+						# deze functie doet:
+						
+						# - wijzigingen in SQL opslaan
+						$lid->diff_to_sql();
+						
+						# - het profiel opnieuw in LDAP opslaan
+						$lid->save_ldap();
+						
+						# om te voorkomen dat een refresh opnieuw een submit doet
+						$myurl = $state->getMyUrl();
+						header("Location: {$myurl}");
+						exit;
+					break;
+					case 2:
+						# er zaten fouten in de invoer, $lid weet welke fouten en
+						# profielcontent zal die afbeelden
+						$state->setMyState('edit'); 
+					break;
+					case 1:
+						# geen-toegang pagina wordt hieronder ingevuld
+					break;
+				}
+			}//end if $lid->loadSqlTmpProfile($uid)
 		break;
-}
-
+	}//end switch $action
+}//end if $error==0
 # De pagina opbouwen, met profiel, of met foutmelding
 switch ($error) {
 	case 0:
@@ -144,7 +139,7 @@ switch ($error) {
 		$woonoord = new Woonoord($db, $lid);
 		$commissie = new Commissie($db, $lid);
 		$midden = new ProfielContent($lid, $state, $woonoord, $commissie);
-		break;
+	break;
 	default:
 		# geen rechten
 		$midden = new Includer('', 'geentoegang.html');

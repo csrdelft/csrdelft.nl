@@ -59,7 +59,7 @@ class ForumContent extends SimpleHTML {
 					}else{ 
 						//als de dag vandaag is, niet de datum weergeven maar 'vandaag'
 						echo $this->_forum->formatDatum($aCategorie['lastpost']);
-						echo '<br /><a href="/forum/onderwerp/'.$aCategorie['lasttopic'].'#'.$aCategorie['lastpostID'].'">reactie</a> door ';
+						echo '<br /><a href="/forum/onderwerp/'.$aCategorie['lasttopic'].'#post'.$aCategorie['lastpostID'].'">reactie</a> door ';
 						if(trim($aCategorie['lastuser'])!=''){
 							echo $this->_getNaamLink($aCategorie['lastuser']);
 						}else{ echo 'onbekend';	}
@@ -108,7 +108,7 @@ class ForumContent extends SimpleHTML {
 					$sOnderwerp='';
 					if($aTopic['soort']=='T_POLL'){	$sOnderwerp.='[peiling] '; }
 					if($aTopic['zichtbaar']=='wacht_goedkeuring'){ $sOnderwerp.='[ter goedkeuring...] '; }
-					$sOnderwerp.='<a href="/forum/onderwerp/'.$aTopic['id']. '#laatste" >';
+					$sOnderwerp.='<a href="/forum/onderwerp/'.$aTopic['id']. '" >';
 					if($aTopic['plakkerig']==1){
 						$sOnderwerp.='<img src="'.CSR_PICS.'forum/plakkerig.gif" title="Dit onderwerp is plakkerig, het blijft bovenaan." alt="plakkerig" />&nbsp;&nbsp;';
 					}
@@ -130,7 +130,7 @@ class ForumContent extends SimpleHTML {
 					echo '<td class="forumreacties">'.$sReacties.'</td>';
 					echo '<td class="forumreacties">'.$this->_getNaamLink($aTopic['uid']).'</td>';
 					echo '<td class="forumreactiemoment">'.$sReactieMoment;
-					echo '<br /><a href="/forum/onderwerp/'.$aTopic['id'].'#'.$aTopic['lastpostID'].'">reactie</a> door ';
+					echo '<br /><a href="/forum/onderwerp/'.$aTopic['id'].'#post'.$aTopic['lastpostID'].'">reactie</a> door ';
 					echo $sLaatsteposter;
 					echo '</td></tr>'."\r\n";
 				}
@@ -185,7 +185,7 @@ class ForumContent extends SimpleHTML {
 						<input type="text" name="titel" value="" class="tekst" style="width: 100%" tabindex="1" /><br />
 						<strong>Bericht</strong>&nbsp;&nbsp; ';
 				// link om het tekst-vak groter te maken.
-				echo '<a href="#laatste" onclick="vergrootTextarea(\'forumBericht\', 10)" name="Vergroot het invoerveld">
+				echo '<a href="" onclick="vergrootTextarea(\'forumBericht\', 10)" name="Vergroot het invoerveld">
 					invoerveld vergroten</a><br />';
 				echo '<textarea name="bericht" id="forumBericht" rows="10" cols="80" style="width: 100%" class="tekst" tabindex="2"></textarea><br />
 						<input type="submit" name="submit" value="verzenden" />
@@ -302,7 +302,7 @@ class ForumContent extends SimpleHTML {
 				echo '<tr><td class="forumauteur">';
 				echo $this->_getNaamLink($aBericht['uid'], $aBericht).' schreef ';
 				//anker maken met post-ID
-				echo '<a class="forumpostlink" name="'.$aBericht['postID'].'"></a>';
+				echo '<a id="post'.$aBericht['postID'].'"></a>';
 				echo $this->_forum->formatDatum($aBericht['datum']);
 				if($aBericht['bewerkDatum']!='0000-00-00 00:00:00'){
 					echo ';<br />Bewerkt '.$this->_forum->formatDatum($aBericht['bewerkDatum']);
@@ -421,7 +421,7 @@ class ForumContent extends SimpleHTML {
 				echo  '<h2><a href="/forum/" class="forumGrootlink">Forum</a> &raquo; 
 					<a href="/forum/categorie/'.$aPost['categorieID'].'" class="forumGrootlink">
 						'.mb_htmlentities($aPost['categorieTitel']).'
-					</a> &raquo; <a href="/forum/onderwerp/'.$iTopicID.'#'.$iPostID.'" class="forumGrootlink">
+					</a> &raquo; <a href="/forum/onderwerp/'.$iTopicID.'#post'.$iPostID.'" class="forumGrootlink">
 					'.mb_htmlentities($aPost['topicTitel']).'</a> &raquo; bericht bewerken</h2>';
 				
 				echo '<table class="forumtabel">
@@ -436,7 +436,7 @@ class ForumContent extends SimpleHTML {
 				echo '
 					<textarea name="bericht" id="forumBericht" rows="20" style="width: 100%" class="tekst">'.
 						bbedit($aPost['tekst'], $aPost['bbcode_uid']).'</textarea><br />
-					<input type="submit" name="submit" value="verzenden" /> <a href="/forum/onderwerp/'.$iTopicID.'#laatste">terug naar onderwerp</a>
+					<input type="submit" name="submit" value="verzenden" /> <a href="/forum/onderwerp/'.$iTopicID.'">terug naar onderwerp</a>
 					</form></td></tr></table>';
 			}else{
 				echo '<h2>Dit bericht bestaat niet.</h2>Terug naar <a href="/forum/">het forum.</a>';
@@ -527,13 +527,13 @@ class ForumContent extends SimpleHTML {
 			}
 			echo '<item>';
 			echo '<title>'.$aPost['nickname'].': '.str_replace(array("\r\n", "\r", "\n"), ' ', $tekst).'</title>';
-			echo '<link>http://pubcie.csrdelft.nl/forum/onderwerp/'.$aPost['tid'].'#'.$aPost['postID'].'</link>';
+			echo '<link>http://pubcie.csrdelft.nl/forum/onderwerp/'.$aPost['tid'].'#post'.$aPost['postID'].'</link>';
 			
 			echo '<description>'.$volledigetekst.'</description>';
 			echo '<author>'.$this->_forum->getForumNaam($aPost['uid'], $aPost).'</author>';
 			echo '<category>forum: '.htmlspecialchars($aPost['titel']).'</category>';
-			echo '<comments>http://csrdelft.nl/forum/onderwerp/'.$aPost['tid'].'#laatste</comments>';
-			echo '<guid>http://csrdelft.nl/forum/onderwerp/'.$aPost['tid'].'#'.$aPost['postID'].'</guid>';
+			echo '<comments>http://csrdelft.nl/forum/onderwerp/'.$aPost['tid'].'</comments>';
+			echo '<guid>http://csrdelft.nl/forum/onderwerp/'.$aPost['tid'].'#post'.$aPost['postID'].'</guid>';
 			echo '<pubDate>'.$pubDate.'</pubDate>';
 			echo '</item>';
 		}
@@ -555,7 +555,7 @@ class ForumContent extends SimpleHTML {
 			}
 			$postfragment=substr(str_replace(array("\n", "\r", ' '), ' ', $aPost['tekst']), 0, 40);
 			echo '<span class="tijd">'.date('H:i', strtotime($aPost['datum'])).'</span> ';
-			echo '<a href="/forum/onderwerp/'.$aPost['tid'].'#laatste" title="['.$aPost['titel'].'] '.
+			echo '<a href="/forum/onderwerp/'.$aPost['tid'].'" title="['.$aPost['titel'].'] '.
 					$this->_forum->getForumNaam($aPost['uid'], $aPost).': '.htmlspecialchars($postfragment).'">
 				'.$tekst.'
 				</a><br />'."\n";
@@ -608,7 +608,7 @@ class ForumContent extends SimpleHTML {
 					$sPostFragment=preg_replace('/('.$sEersteTerm.')/i', '<strong>\\1</strong>', $sPostFragment);
 
 					echo '<tr><td class="forumtitel">';
-					echo '<a href="/forum/onderwerp/'.$aZoekResultaat['tid'].'/'.urlencode($sZoekQuery).'#'.$aZoekResultaat['postID'].'">';
+					echo '<a href="/forum/onderwerp/'.$aZoekResultaat['tid'].'/'.urlencode($sZoekQuery).'#post'.$aZoekResultaat['postID'].'">';
 					echo $aZoekResultaat['titel'].'</a>';
 					if($aZoekResultaat['aantal']!=1){ echo ' <em>('.$aZoekResultaat['aantal'].' berichten in dit onderwerp)</em>'; }
 					echo '<br />'.$sPostFragment.'</td>';

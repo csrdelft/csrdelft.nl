@@ -20,7 +20,7 @@ if (isset($_POST['url']) and preg_match("/^[-\w?&=.\/]+$/", $_POST['url'])
 		header("Location: ". CSR_SERVER . $_POST['url']);
 	}
 }
-	echo $_POST['url'];
+
 exit;
 
 ?>
