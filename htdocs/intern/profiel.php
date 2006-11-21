@@ -10,7 +10,9 @@
 # instellingen & rommeltjes
 require_once('/srv/www/www.csrdelft.nl/lib/include.config.php');
 
-
+//$lid vervangen door een subklasse ervan, met functies voor het profiel
+require_once('class.profiel.php');
+$lid=new Profiel($db);
 
 # Profiel bekijken
 # met P_LOGGED_IN mag een gebruiker zijn eigen profiel bekijken
