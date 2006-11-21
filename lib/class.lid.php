@@ -871,23 +871,32 @@ class Lid {
 	* Dit om te voorkomen dat er op 100 plekken foute paden staan als dat een keer verandert.
 	*/
 	function getNaamLink($uid, $civitas=false, $link=false, $aNaam=false){
+		//als er geen uid is opgegeven, ook geen link of naam teruggeven.
+		if($uid=='' AND !$this->isValidUid($uid)){ return ''; }
 		$sNaam='';
-		if($aNaam===false){
+		//als er geen array wordt meegegeven, of de array is niet compleet genoeg om een naam te tonen, dan de
+		//gegevens ophalen uit de database met het opgegeven uid.
+		if($aNaam===false AND !isset($aNaam['voornaam'], $aNaam['achternaam'], $aNaam['tussenvoegsel'], $aNaam['nickname'])){
+			//betreft het de huidige gebruiker? dan de array van het profiel raadplegen
 			if($uid == $this->_profile['uid']){
 				$aNaam=$this->_profile;
 			}else{
-				$rNaam=$this->_db->select("SELECT voornaam, tussenvoegsel, achternaam FROM lid WHERE uid='".$uid."' LIMIT 1;");
+				$rNaam=$this->_db->select(
+					"SELECT 
+						nickname, voornaam, tussenvoegsel, achternaam, status, geslacht, postfix 
+					FROM lid WHERE uid='".$uid."' LIMIT 1;");
 				if($rNaam!==false and $this->_db->numRows($rNaam)==1){
 					$aNaam=$this->_db->next($rNaam);
 				}else{
-					$aNaam=array('voornaam'=>'ho', 'achternaam'=>'ho', 'tussenvoegsel'=>'ho', 'status'=>'ho');
+					return 'uid_onvindbaar';
 				}
 			}
 		}
-		if($link AND $this->hasPermission('P_LOGGED_IN')){
-			$sNaam.='<a href="/intern/profiel/'.$uid.'">';
-		}
-		if($civitas){
+		//link tonen als dat gevraagd wordt EN als gebruiker is ingelogged.
+		if($link AND $this->hasPermission('P_LOGGED_IN')){ $sNaam.='<a href="/intern/profiel/'.$uid.'">'; }
+		//civitas of niksnamen, enkel relevant voor het forum, verder is gewoon voornaam [tussenvoegsel] achternaam
+		//nog een optie.
+		if($civitas===true OR $civitas=='civitas'){
 			if($aNaam['status']=='S_NOVIET'){
 				$sNaam.='noviet '.mb_htmlentities($aNaam['voornaam']);
 			}else{
@@ -896,6 +905,8 @@ class Lid {
 				$sNaam.=mb_htmlentities($aNaam['achternaam']);				
 				if($aNaam['postfix'] != '') $sNaam.=' '.$aNaam['postfix'];
 			}
+		}elseif($civitas=='nick'){
+			$sNaam.=mb_htmlentities($aNaam['nickname']);
 		}else{
 			$sNaam.=mb_htmlentities(naam($aNaam['voornaam'], $aNaam['achternaam'], $aNaam['tussenvoegsel']));
 		}
@@ -904,49 +915,18 @@ class Lid {
 		return $sNaam;	
 	}
 	
+	
+	function getFullName($uid='') {
+		if($uid==''){ $uid=$this->getUid(); }
+		//geen bijnaam of am./ama., geen link, geen input-array.
+		return $this->getNaamLink($uid, false, false, false);
+	}
+	function getCivitasName($uid=''){
+		if($uid==''){ $uid=$this->getUid(); }
+		//geen bijnaam, geen link, geen input-array
+		return $this->getNaamLink($uid, 'civitas', false, false);
+	}
 	function getMoot() { return $this->_profile['moot']; }
-	function getFullName($uid = '') {
-		if ($uid == '' or $uid == $this->_profile['uid']) {
-			$fullname=naam($this->_profile['voornaam'], $this->_profile['achternaam'], $this->_profile['tussenvoegsel']);
-		} else {
-			$result = $this->_db->select("SELECT voornaam, tussenvoegsel, achternaam FROM lid WHERE uid='".$uid."' LIMIT 1;");
-			if ($result !== false and $this->_db->numRows($result) > 0) {
-				$record = $this->_db->next($result);
-				$fullname = naam($record['voornaam'], $record['achternaam'], $record['tussenvoegsel']);
-			} else $fullname = 'Niet bekend';
-		}
-		return $fullname;
-	}
-
-	function getCivitasName($uid = ''){
-		$sCivitasNaam='';
-		if ($uid == '' or $uid == $this->_profile['uid']) {
-			if($this->_profile['status']=='S_NOVIET'){
-				$sCivitasNaam='noviet '.$this->_profile['voornaam'];
-			}else{
-				$sCivitasNaam = ($this->_profile['geslacht']=='v') ? 'Ama. ' : 'Am. ';
-				if ($this->_profile['tussenvoegsel'] != '') $sCivitasNaam.=$this->_profile['tussenvoegsel'].' ';
-				$sCivitasNaam.=$this->_profile['achternaam'];
-				if ($this->_profile['postfix'] != '') $sCivitasNaam.=' '.$this->_profile['postfix'];
-			}
-		} else {
-			$result = $this->_db->select("SELECT voornaam, tussenvoegsel, achternaam, postfix, geslacht, status FROM lid WHERE uid='".$uid."' LIMIT 1;");
-			if ($result !== false and $this->_db->numRows($result) > 0) {
-				$record = $this->_db->next($result);
-				if($record['status']=='S_NOVIET'){
-					$sCivitasNaam='noviet '.$record['voornaam'];
-				}else{
-					$sCivitasNaam = ($record['geslacht']=='v') ? 'Ama. ' : 'Am. ';
-					if ($record['tussenvoegsel'] != '') $sCivitasNaam.=$record['tussenvoegsel'].' ';
-					$sCivitasNaam.=$record['achternaam'];				
-					if ($record['postfix'] != '') $sCivitasNaam.=' '.$record['postfix'];
-				}
-			} else $sCivitasNaam = 'Niet bekend';
-		}
-		
-		return $sCivitasNaam;
-	}
-
 	function _loadPermissions() {
 		# Hier staan de permissies die voor enkele onderdelen van
 		# de website nodig zijn. Ze worden zowel op de 'echte'
@@ -1149,11 +1129,8 @@ class Lid {
 	function nickExists($nick) {
 		# mysql escape dingesen
 		$nick = $this->_db->escape($nick);
-		
-		$result = $this->_db->select("SELECT * FROM lid WHERE nickname = '{$nick}'");
-        if ($result !== false and $this->_db->numRows($result) > 0)
-			return true;
-		return false;
+		$result = $this->_db->select("SELECT * FROM lid WHERE nickname = '".$nick."'");
+    return ($result !== false and $this->_db->numRows($result) > 0);
 	}
 	
 	function isValidUid($uid) {
@@ -1320,6 +1297,7 @@ class Lid {
 	# deze functie wordt gebruikt om extra info toe te voegen als de inschrijving voor een
 	# maaltijd gesloten wordt, en de inschrijvingen naar de maaltijdgesloten tabel worden
 	# overgezet: de volledige naam en eetwens
+	/* OOK MAAR NIET MEER GEBRUIKEN
 	function getNaamEetwens($uid = '') {
 		if ($uid == '') $uid = $this->_profile['uid'];
 		$result = $this->_db->select("
@@ -1335,6 +1313,7 @@ class Lid {
 		}
 		return false;
 	}
+	*/
 	function getEetwens(){ return $this->_profile['eetwens']; }
 	function setEetwens($eetwens){
 		$eetwens=trim($this->_db->escape($eetwens));
@@ -1344,29 +1323,6 @@ class Lid {
 		return $this->_db->query($sEetwens);
 	}
 	
-	# deze functie wordt door maaltrack gebruikt om de namen van mensen en hun eetwens
-	# toe te voegen aan een lijst met inschrijvingen
-	# parameter: $lijst, een array waar een veld genaamd 'uid' in moet zitten
-	# de functie maakt dan een veld 'naam' en 'eetwens' erbij
-	/* DIT WORDT NIET MEER GEBRUIKT,
-	maar gewoon in de selectiequery's van de maaltijd geregeld
-	function addNames(&$lijst) {
-		foreach ($lijst as $l => $foo) {
-			$result = $this->_db->select("
-				SELECT voornaam, tussenvoegsel, achternaam, eetwens
-				FROM lid
-				WHERE uid='{$foo['uid']}'
-			");
-			if ($result !== false and $this->_db->numRows($result) > 0) {
-				$lid = $this->_db->next($result);
-				$lijst[$l]['naam'] = naam($lid['voornaam'], $lid['achternaam'], $lid['tussenvoegsel']);
-				$lijst[$l]['eetwens'] = $lid['eetwens'];
-			} else {
-				$lijst[$l]['naam'] = $l['uid']."/onbekend";			
-				$lijst[$l]['eetwens'] = "";
-			}
-		}
-	}*/
 	
 	function getSaldi($uid='', $alleenRood=false){
 		if($uid==''){ $uid=$this->getUid(); }

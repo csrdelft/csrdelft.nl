@@ -550,7 +550,7 @@ class ForumContent extends SimpleHTML {
 		foreach($aPosts as $aPost){
 			//$tekst=$aPost['nickname'].': ';
 			$tekst=$aPost['titel'];
-			if(strlen($tekst)>20){
+			if(strlen($tekst)>19){
 				$tekst=substr($tekst, 0, 16).'..';
 			}
 			$postfragment=substr(str_replace(array("\n", "\r", ' '), ' ', $aPost['tekst']), 0, 40);
@@ -630,7 +630,7 @@ class ForumContent extends SimpleHTML {
 	}
 	function _getNaamLink($uid, $aNaam=false){
 		//instellingen voor deze gebruiker ophalen...
-		$civitas=$this->_forum->_lid->getForumNaamInstelling()=='civitas';
+		$civitas=$this->_forum->_lid->getForumNaamInstelling();
 		
 		return $this->_forum->_lid->getNaamLink($uid, $civitas, true, $aNaam);
 	}
