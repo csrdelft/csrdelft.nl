@@ -188,7 +188,7 @@ class Lid {
 		if($link AND $this->hasPermission('P_LOGGED_IN')){ $sNaam.='<a href="/intern/profiel/'.$uid.'">'; }
 		//civitas of niksnamen, enkel relevant voor het forum, verder is gewoon voornaam [tussenvoegsel] achternaam
 		//nog een optie.
-		if($civitas===true OR $civitas=='civitas'){
+		if($civitas===true OR $civitas=='civitas' OR ($civitas=='nick' AND $aNaam['nickname']=='') ){
 			if($aNaam['status']=='S_NOVIET'){
 				$sNaam.='noviet '.mb_htmlentities($aNaam['voornaam']);
 			}else{
