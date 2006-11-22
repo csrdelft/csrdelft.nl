@@ -102,7 +102,7 @@ img.forum_image{
 	border: 0px;
 }
 /* laatste forumberichten enzo */
-#forumHighlights{ font-size: 1em; line-height: 1.05em;}
+#forumHighlights{ font-size: 1em; line-height: 1.05em; text-align: left;}
 #forumHighlights a.kopje{ font-size: 1em; color: black; font-weight: bold; }
 #forumHighlights a.kopje:hover{ font-size: 1em; color: darkred; }
 span.tijd{ font-size: 0.95em; }

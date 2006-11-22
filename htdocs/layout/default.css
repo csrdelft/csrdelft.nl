@@ -222,6 +222,7 @@ table.profiel th{
 table.profiel td{
 	border-left: 1px solid black;
 	padding: 5px;
+	text-align: left;
 }
 table.profiel td.foto{
 	margin: 0; padding: 0;

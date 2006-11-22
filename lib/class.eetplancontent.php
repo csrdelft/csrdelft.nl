@@ -102,7 +102,9 @@ class EetplanContent extends SimpleHTML {
 	function viewEetplan($aEetplan){
 		//weergeven
 		echo '
-		<strong style="color: darkred; font-size: 2em; padding: 10px;font-weight: bold; text-align: justify; display: block; border: 1px solid black; background-color: lightgrey;">LET OP: Van eerstejaers die niet komen opdagen op het eetplan wordt verwacht dat zij minstens &eacute;&eacute;n keer komen koken op het huis waarbij zij gefaeld hebben.</strong><br /><br />
+		<strong style="color: darkred; font-size: 2em; line-height: 1.1em;padding: 
+10px;font-weight: bold; 
+text-align: justify; display: block; border: 1px solid black; background-color: lightgrey;">LET OP: Van eerstejaers die niet komen opdagen op het eetplan wordt verwacht dat zij minstens &eacute;&eacute;n keer komen koken op het huis waarbij zij gefaeld hebben.</strong><br /><br />
 			<table style="width: 100%" >
 			<tr><th style="width: 200px;">Pheut/Avond</td>';
 		//kopjes voor tabel

@@ -555,7 +555,7 @@ class ForumContent extends SimpleHTML {
 			}
 			$postfragment=substr(str_replace(array("\n", "\r", ' '), ' ', $aPost['tekst']), 0, 40);
 			echo '<span class="tijd">'.date('H:i', strtotime($aPost['datum'])).'</span> ';
-			echo '<a href="/forum/onderwerp/'.$aPost['tid'].'" title="['.$aPost['titel'].'] '.
+			echo '<a href="/forum/onderwerp/'.$aPost['tid'].'#post'.$aPost['postID'].'" title="['.$aPost['titel'].'] '.
 					$this->_forum->getForumNaam($aPost['uid'], $aPost).': '.htmlspecialchars($postfragment).'">
 				'.$tekst.'
 				</a><br />'."\n";

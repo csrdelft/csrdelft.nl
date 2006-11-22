@@ -267,7 +267,7 @@ class ForumPoll {
 		if($uid==STATISTICUS){
 			return 'am. Verenigingsstatisticus';
 		}else{
-			return $this->_forum->getForumNaam($aBerichten[0]['startUID']);
+			return $this->_lid->getNaamLink($uid, true, false, false);
 		}
 	}
 }//einde classe
