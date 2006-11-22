@@ -151,4 +151,15 @@ function sort_achternaam_uid($a, $b) {
 	  }
 	}
 }
+function strNthPos($haystack, $needle, $nth = 1){
+   //Fixes a null return if the position is at the beginning of input
+   //It also changes all input to that of a string ^.~
+   $haystack = ' '.$haystack;
+   if (!strpos($haystack, $needle))
+       return false;
+   $offset=0;
+   for($i = 1; $i < $nth; $i++)
+       $offset = strpos($haystack, $needle, $offset) + 1;
+   return strpos($haystack, $needle, $offset) - 1;
+}
 ?>

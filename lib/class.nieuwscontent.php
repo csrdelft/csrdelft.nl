@@ -15,8 +15,7 @@
 # . gemaakt
 #
 
-require_once ('class.simplehtml.php');
-require_once ('bbcode/include.bbcode.php');
+
 require_once ('class.nieuws.php');
 
 class NieuwsContent extends SimpleHTML {
@@ -161,7 +160,13 @@ class NieuwsContent extends SimpleHTML {
 				//verborgen berichten aangeven, enkel bij mensen met P_NEWS_MOD
 				if($aBericht['verborgen']=='1'){ echo '<em>[verborgen] </em>';	}
 				echo mb_htmlentities($aBericht['titel']).'</a></div>';
-				echo ''.$sBericht.'&nbsp;'.$this->getBerichtModControls($aBericht['id']).'</div></div>';
+				//aantal br's tellen.
+				if(substr_count($sBericht, '<br />')>5){
+						echo substr($sBericht, 0, strNthPos($sBericht, '<br />', 5));
+				}else{
+					echo ''.$sBericht;
+				}
+				echo '&nbsp;'.$this->getBerichtModControls($aBericht['id']).'</div></div>';
 			}//einde foreach bericht
 			echo $this->getNieuwBerichtLink();
 		}
