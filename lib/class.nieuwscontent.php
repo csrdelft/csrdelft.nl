@@ -162,7 +162,7 @@ class NieuwsContent extends SimpleHTML {
 				echo mb_htmlentities($aBericht['titel']).'</a></div>';
 				//aantal br's tellen.
 				if(substr_count($sBericht, '<br />')>5){
-						echo substr($sBericht, 0, strNthPos($sBericht, '<br />', 5));
+						echo substr($sBericht, 0, strNthPos($sBericht, '<br />', 5)).'... <a href="/nieuws/'.$aBericht['id'].'">meer</a>';;
 				}else{
 					echo ''.$sBericht;
 				}

@@ -225,7 +225,7 @@ class ForumContent extends SimpleHTML {
 				//topic verwijderen
 				echo '<a href="/forum/verwijder-onderwerp/'.$iTopic.'" onclick="return confirm(\'Weet u zeker dat u dit topic wilt verwijderen?\')" class="knop">verwijderen</a> ';
 				if($aBerichten[0]['open']==1){
-					echo ' <a href="/forum/sluit-onderwerp/'.$iTopic.'" class="knop" class="knop">sluiten (reageren niet meer mogelijk)</a> ';
+					echo ' <a href="/forum/sluit-onderwerp/'.$iTopic.'" class="knop">sluiten (reageren niet meer mogelijk)</a> ';
 				}else{
 					echo ' <a href="/forum/open-onderwerp/'.$iTopic.'" class="knop">weer openen (reageren weer w&eacute;l mogelijk)</a> ';
 				}	
@@ -358,10 +358,10 @@ class ForumContent extends SimpleHTML {
 			//nu nog ff een quickpost formuliertje
 			echo '<tr><td class="forumauteur">';
 			if($iCiteerPost==0){
-				echo '<a class="forumpostlink" name="laatste">Snel reageren:</a><br /><br />';
+				echo '<a class="forumpostlink" id="laatste">Snel reageren:</a><br /><br />';
 				$iTekstareaRegels=6;
 			}else{
-				echo '<a class="forumpostlink" name="laatste"><stong>Citeren:</strong></a><br /><br />';
+				echo '<a class="forumpostlink" id="laatste"><stong>Citeren:</strong></a><br /><br />';
 				$iTekstareaRegels=20;
 			}
 			if($this->_forum->magBerichtToevoegen($iTopic, $aBericht['open'], $aBericht['rechten_post'])){	
@@ -620,7 +620,7 @@ class ForumContent extends SimpleHTML {
 					echo '</tr>';
 				}
 			echo '</table>';
-			}else{ echo '<h3>Er is niets gevonden</h3>Zoekresultaten moeten minimaal 4 letters bevatten...'; }
+			}else{ echo '<h3>Er is niets gevonden</h3>Probeer het opnieuw. (Zoekresultaten moeten minimaal 4 letters bevatten)'; }
 		}
 	}
 	function zoekFormulier($sZoekQuery=''){

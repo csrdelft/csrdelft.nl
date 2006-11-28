@@ -37,4 +37,7 @@ function setcharset() {
 	if(document.charset && document.loginform["Character set"])
 		document.loginform['Character set'].value = document.charset
 }
-//-->
+function bevestig(tekst){
+	return confirm(tekst);
+}
+
