@@ -164,6 +164,7 @@ htdocs/forum/bewerken.php -text
 htdocs/forum/citeren.php -text
 htdocs/forum/goedkeuren.php -text
 htdocs/forum/index.php -text
+htdocs/forum/peiling.php -text
 htdocs/forum/plakkerig.php -text
 htdocs/forum/rss.php -text
 htdocs/forum/sluiten.php -text
@@ -263,6 +264,7 @@ lib/class.lidbeheer.php -text
 lib/class.loginform.php -text
 lib/class.maaltijd.php -text
 lib/class.maaltijdcontent.php -text
+lib/class.maaltijdinfocontent.php -text
 lib/class.maaltijdlijstpage.php -text
 lib/class.maaltijdvoorkeurcontent.php -text
 lib/class.maaltrack.php -text
@@ -412,6 +414,7 @@ lib/templates/csrmail/csrmail.tpl -text
 lib/templates/csrmail/csrmail_owee.tpl -text
 lib/templates/forum/viewtopic.tpl -text
 lib/templates/maaltijdedit.tpl -text
+lib/templates/maaltijdinfo.tpl -text
 lib/templates/maaltijdketzer.tpl -text
 lib/templates/maaltijdlijst.tpl -text
 lib/templates/maaltijdvoorkeuren.tpl -text

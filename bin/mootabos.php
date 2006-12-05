@@ -16,37 +16,40 @@
 	require_once('class.mysql.php');
 	$db = new MySQL();
 	$lid = new Lid($db);
+	//Siri, Wouter K., Thomas Abrahamse
+	$aGeenAbo=array('9101', '0016', '0401');
+	for($moot=1;$moot<=4;$moot++){
 	
-	//moot
-	$moot=1;
-	
-	//kringvolgende leden van een moot ophalen
-	$sMootleden="SELECT uid FROM lid WHERE moot=".$moot." AND kring !=0";
-	$rMootleden=$db->query($sMootleden);
-	while($aMootledenData=$db->next($rMootleden)){
-		$aMootleden[]=$aMootledenData['uid'];
-	}
-	
-	//bestaande mootX abo's ophalen
-	$sMootAbos="SELECT uid FROM maaltijdabo WHERE abosoort='A_MOOT".$moot."'";
-	$rMootAbos=$db->query($sMootAbos);
-	while($aMootAbosData=$db->next($rMootAbos)){
-		$aMootAbos[]=$aMootAbosData['uid'];
-	}
-	
-	//al bestaande mootX abo's van de lijst halen
-	$aAboInvoeren=array_diff($aMootleden, $aMootAbos);
-	
-	//print_r($aAboInvoeren);
-	
-	//query's klussen
-	foreach($aAboInvoeren as $sUid){
-		$sQuery="INSERT INTO maaltijdabo (uid, abosoort )VALUES( '".$sUid."', 'A_MOOT".$moot."');";
-		echo $sQuery;
-		if(false){//$db->query($sQuery)){
-			echo "   ...OK\r\n";
-		}else{
-			echo " ...shit\r\n";
+		//kringvolgende leden van een moot ophalen
+		$sMootleden="SELECT uid FROM lid WHERE moot=".$moot." AND kring !=0";
+		$rMootleden=$db->query($sMootleden);
+		while($aMootledenData=$db->next($rMootleden)){
+			$aMootleden[]=$aMootledenData['uid'];
+		}
+		
+		//bestaande mootX abo's ophalen
+		$sMootAbos="SELECT DISTINCT uid FROM maaltijdabo WHERE abosoort='A_MOOT".$moot."' OR abosoort='A_UBER".$moot."'";
+		$rMootAbos=$db->query($sMootAbos);
+		while($aMootAbosData=$db->next($rMootAbos)){
+			$aMootAbos[]=$aMootAbosData['uid'];
+		}
+		
+		//al bestaande mootX abo's van de lijst halen
+		$aAboInvoeren=array_diff($aMootleden, $aMootAbos);
+		
+		//niet abo leden eraf halen
+		$aAboInvoeren=array_diff($aMootleden, $aGeenAbo);
+		//print_r($aAboInvoeren);
+		
+		//query's klussen
+		foreach($aAboInvoeren as $sUid){
+			$sQuery="INSERT INTO maaltijdabo (uid, abosoort )VALUES( '".$sUid."', 'A_MOOT".$moot."'), ('".$sUid."', 'A_UBER".$moot."');";
+			echo $sQuery;
+			if(false){//$db->query($sQuery)){
+				echo "   ...OK\r\n";
+			}else{
+				echo " ...shit\r\n";
+			}
 		}
 	}
 	

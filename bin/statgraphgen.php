@@ -4,24 +4,19 @@ error_reporting(E_ALL);
 
 
 require_once('/srv/www/www.csrdelft.nl/lib/include.config.php');
-require_once('include.common.php');
-require_once('class.mysql.php');
-require_once('class.lid.php');
-session_start();
-$db = new MySQL();
-$lid = new Lid($db);
 
+define('STATS_DIR', PICS_PATH.'/stats/');
 
-uurstats($db, PICS_PATH.'/stats/uurstats.png');
-dagstats($db, PICS_PATH.'/stats/dagstats.png');
+uurstats($db, STATS_DIR.'uurstats.png');
+dagstats($db, STATS_DIR.'dagstats.png');
 
-uurstatsVoorDag($db, PICS_PATH.'/stats/zondag.png', 1);
-uurstatsVoorDag($db, PICS_PATH.'/stats/maandag.png', 2);
-uurstatsVoorDag($db, PICS_PATH.'/stats/dinsdag.png', 3);
-uurstatsVoorDag($db, PICS_PATH.'/stats/woensdag.png', 4);
-uurstatsVoorDag($db, PICS_PATH.'/stats/donderdag.png', 5);
-uurstatsVoorDag($db, PICS_PATH.'/stats/vrijdag.png', 6);
-uurstatsVoorDag($db, PICS_PATH.'/stats/zaterdag.png', 7);
+uurstatsVoorDag($db, STATS_DIR.'zondag.png', 1);
+uurstatsVoorDag($db, STATS_DIR.'maandag.png', 2);
+uurstatsVoorDag($db, STATS_DIR.'dinsdag.png', 3);
+uurstatsVoorDag($db, STATS_DIR.'woensdag.png', 4);
+uurstatsVoorDag($db, STATS_DIR.'donderdag.png', 5);
+uurstatsVoorDag($db, STATS_DIR.'vrijdag.png', 6);
+uurstatsVoorDag($db, STATS_DIR.'zaterdag.png', 7);
 
 echo 'Statistieken-grafieken geklust om '.date('Y-m-d H:i:s')."\r\n";
 
