@@ -4,7 +4,7 @@
 // User Contributed Notes
 function matchCIDR($addr, $cidr) {
    list($ip, $mask) = explode('/', $cidr);
-   $mask = 0xffffffff << (32 - $mask);
+   $mask = ~ (0xffffffff >> (32 - $mask));
    return ((ip2long($addr) & $mask) == (ip2long($ip) & $mask));
 }
 
