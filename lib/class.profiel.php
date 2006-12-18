@@ -47,7 +47,7 @@ class Profiel extends lid{
 		
 		# en gebruiker opzoeken
 		$uid = $this->_db->escape($uid);
-		$result = $this->_db->select("SELECT * FROM lid WHERE uid = '{$uid}' LIMIT 1");
+		$result = $this->_db->select("SELECT * FROM lid WHERE uid = '".$uid."' LIMIT 1");
 		if (($result !== false) and $this->_db->numRows($result) > 0) {
 			$this->_tmpprofile =  $this->_db->next($result);
 			return true;
@@ -611,6 +611,10 @@ class Profiel extends lid{
 						}elseif($invoer=='S_OUDLID'){
 							$this->storeDeltaProfile('permissies', 'P_OUDLID');
 							$this->_tmpprofile['permissies'] = 'P_OUDLID';
+						//als iemand weer lid wordt.
+						}elseif($invoer=='S_LID' AND $this->_tmpprofile[$veld]!='S_LID'){
+							$this->storeDeltaProfile('permissies', 'P_LID');
+							$this->_tmpprofile['permissies'] = 'P_LID';
 						}
 					}
 				}

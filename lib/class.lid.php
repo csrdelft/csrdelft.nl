@@ -145,7 +145,7 @@ class Lid {
 	function getNickName() { return $this->_profile['nickname']; }
 
 	# <DEPRECATED> een keertje search-replace doen op deze functies ofzo...
-	function isLoggedIn() { return $this->hasPermission('P_LOGGED_IN'); }
+	//function isLoggedIn() { return $this->hasPermission('P_LOGGED_IN'); }
 	function getLoginName() { return $this->getUid(); }
 	# </DEPRECATED>
 
@@ -193,7 +193,7 @@ class Lid {
 				$sNaam.='noviet '.mb_htmlentities($aNaam['voornaam']);
 			}else{
 				$sNaam.=($aNaam['geslacht']=='v') ? 'Ama. ' : 'Am. ';
-				if($aNaam['tussenvoegsel'] != '') $sNaam.=$aNaam['tussenvoegsel'].' ';
+				if($aNaam['tussenvoegsel'] != '') $sNaam.=ucfirst($aNaam['tussenvoegsel']).' ';
 				$sNaam.=mb_htmlentities($aNaam['achternaam']);				
 				if($aNaam['postfix'] != '') $sNaam.=' '.$aNaam['postfix'];
 			}
