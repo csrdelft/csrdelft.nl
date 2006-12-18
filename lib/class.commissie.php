@@ -86,7 +86,7 @@ class Commissie {
 	
 	function getCieByUid($uid) {
 		$cies = array();
-		$result = $this->_db->select("SELECT id,naam FROM commissie WHERE id IN ( SELECT cieid FROM commissielid WHERE uid = '{$uid}') ORDER BY `naam`");
+		$result = $this->_db->select("SELECT id, naam FROM commissie WHERE id IN ( SELECT cieid FROM commissielid WHERE uid = '{$uid}') ORDER BY `naam`");
 		if ($result !== false and $this->_db->numRows($result) > 0)
 			while ($cie = $this->_db->next($result)) $cies[] = $cie;
 		return $cies;
@@ -100,6 +100,7 @@ class Commissie {
 				lid.tussenvoegsel tussenvoegsel, 
 				lid.achternaam AS achternaam,
 				lid.status AS status,
+				lid.geslacht AS geslacht,
 				commissielid.functie AS functie
 			FROM
 				lid, commissielid
@@ -120,7 +121,8 @@ class Commissie {
 						'tussenvoegsel' => $aCieLid['tussenvoegsel'],
 						'achternaam' => $aCieLid['achternaam'],
 						'status' => $aCieLid['status'],
-						'functie'=> $aCieLid['functie']);
+						'functie'=> $aCieLid['functie'], 
+						'geslacht' => $aCieLid['geslacht']);
 				}
 				return $aCieLedenReturn;
 			}else{
