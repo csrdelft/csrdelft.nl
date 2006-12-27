@@ -191,6 +191,7 @@ htdocs/intern/csrmail/verzenden.php -text
 htdocs/intern/csrmail/voorbeeld.php -text
 htdocs/intern/eetplan.php -text
 htdocs/intern/index.php -text
+htdocs/intern/inschrijving/index.php -text
 htdocs/intern/lijst.php -text
 htdocs/intern/profiel.php -text
 htdocs/intern/sjaarsacties.php -text
