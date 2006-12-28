@@ -551,7 +551,7 @@ class ForumContent extends SimpleHTML {
 			//$tekst=$aPost['nickname'].': ';
 			$tekst=$aPost['titel'];
 			if(strlen($tekst)>19){
-				$tekst=substr($tekst, 0, 16).'..';
+				$tekst=trim(substr($tekst, 0, 16)).'..';
 			}
 			$postfragment=substr(str_replace(array("\n", "\r", ' '), ' ', $aPost['tekst']), 0, 40);
 			echo '<span class="tijd">'.date('H:i', strtotime($aPost['datum'])).'</span> ';
@@ -571,7 +571,7 @@ class ForumContent extends SimpleHTML {
 		if(isset($_POST['zoeken'])){ $sZoekQuery=trim($_POST['zoeken']); }elseif(isset($_GET['zoeken'])){ $sZoekQuery=trim($_GET['zoeken']);}
 		
 		echo '<h1>Zoeken in het forum</h1>Hier kunt u zoeken in het forum. Zoeken kan met boleaanse zoekparameters, uitleg is 
-			<a href="http://dev.mysql.com/doc/refman/5.0/en/fulltext-boolean.html">hier te vinden</a>.';
+			<a href="http://dev.mysql.com/doc/refman/5.0/en/fulltext-boolean.html">te vinden op de pagina daarover in de mysql handleiding</a>.';
 		//altijd het zoekformulier weergeven.
 		$this->zoekFormulier($sZoekQuery);
 		if($sZoekQuery!=''){

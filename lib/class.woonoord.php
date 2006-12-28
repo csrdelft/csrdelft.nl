@@ -13,7 +13,6 @@
 # . gemaakt
 #
 
-require_once ('class.mysql.php');
 
 class Woonoord {
 	### private ###
@@ -54,13 +53,15 @@ class Woonoord {
 				woonoord.naam AS naam,
 				woonoord.tekst AS tekst,
 				woonoord.adres AS adres,
-				woonoord.status AS status,
+				woonoord.status AS woonoord_status,
 				woonoord.plaatje AS plaatje,
 				woonoord.link AS link,
 				lid.uid AS uid,
 				lid.voornaam AS voornaam,
 				lid.tussenvoegsel AS tussenvoegsel,
-				lid.achternaam AS achternaam
+				lid.achternaam AS achternaam,
+				lid.geslacht AS geslacht,
+				lid.status AS status
 			FROM 
 				woonoord 
 			LEFT JOIN 
@@ -74,8 +75,8 @@ class Woonoord {
 		$iHuidigHuis=0;
 		$sHuidigeStatus='';
 		while($aWoonoord=$this->_db->next($rWoonoorden)){
-			if($sHuidigeStatus!=$aWoonoord['status']){
-				$sHuidigeStatus=$aWoonoord['status'];
+			if($sHuidigeStatus!=$aWoonoord['woonoord_status']){
+				$sHuidigeStatus=$aWoonoord['woonoord_status'];
 			}
 			if($iHuidigHuis!=$aWoonoord['id']){
 				$iHuidigHuis=$aWoonoord['id']; 
@@ -84,7 +85,7 @@ class Woonoord {
 					'naam'=>$aWoonoord['naam'],
 					'tekst'=>$aWoonoord['tekst'],
 					'adres'=>$aWoonoord['adres'],
-					'status'=>$aWoonoord['status'],
+					'status'=>$aWoonoord['woonoord_status'],
 					'plaatje'=>$aWoonoord['plaatje'],
 					'link'=>$aWoonoord['link'],
 					'bewoners'=>array()	);
@@ -93,7 +94,9 @@ class Woonoord {
 				'uid'=>$aWoonoord['uid'],
 				'voornaam'=>$aWoonoord['voornaam'],
 				'tussenvoegsel'=>$aWoonoord['tussenvoegsel'],
-				'achternaam'=>$aWoonoord['achternaam'] );
+				'achternaam'=>$aWoonoord['achternaam'],
+				'geslacht'=>$aWoonoord['geslacht'],
+				'status'=>$aWoonoord['status'] );
 		}
 		return $woonoorden;
 	}

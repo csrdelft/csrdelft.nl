@@ -41,58 +41,35 @@ class CieOverzichtContent extends SimpleHTML {
 		echo '<a href="/groepen/">Groepen</a> &raquo; '.$this->getTitel();
 	}
 	function viewCieOverzicht(){
-		if ($this->_lid->hasPermission('P_LEDEN_READ')){
-			//met commissieleden
-			echo '<table border="0" cellspacing="0" cellpadding="0" marginheight="0" marginwidth="0"><tr>';
-		/*	echo '<td><hr /><span class="kopje2">Commissies</span><hr /></td>
-				<td width="2%"><img src="/images/pixel.gif" width="100%" height="1"></td>
-				<td><hr /><span class="kopje2">Commissieleden</span><hr /></td>';*/
-			echo '</tr>';
-			$cieoverzicht = $this->_commissie->getOverzicht();
-			foreach ($cieoverzicht as $cie) {
-				echo '
-					<tr height="30px">
-						<td colspan="3" width="100%" valign="bottom">
-							<h2><a href="./commissie/'.htmlspecialchars($cie['naam']).'.html">
-								'.mb_htmlentities($cie['titel']).'
-							</a></h2>
-						</td>
-					</tr>
-					<tr>
-						<td width="49%" valign="top" >'.mb_htmlentities($cie['stekst']).'</td>
-						<td width="2%"><img src="/images/pixel.gif" width="100%" height="1"></td>
-						<td width="49%" valign="top">';
+		$aCommissies=$this->_commissie->getOverzicht();
 		
-				$aCieLeden=$this->_commissie->getCieLeden($cie['id']);
-				if(is_array($aCieLeden)){
-					foreach($aCieLeden as $aCieLid){
-						echo $this->_lid->getNaamLink($aCieLid['uid'], false, true, $aCieLid).'&nbsp;<em>'.$aCieLid['functie'].'</em><br />';
-					}
-				}else{
-					echo $aCieLeden;
-				}
-				echo '</td></tr>';
-			}//einde foreach
-			echo '</table>';
-		}else{
-			//zonder commissieleden
-			echo '<table border="0" cellspacing="0" cellpadding="0" marginheight="0" marginwidth="0"><tr>';
-			echo '<td><hr /><h2>Commissies</h2<hr /></td></tr>';
-			$cieoverzicht = $this->_commissie->getOverzicht();
-			foreach ($cieoverzicht as $cie) {
-				echo '
-					<tr height="30px">
-						<td colspan="3" width="100%" valign="bottom">
-							<a href="./commissie.php?cie='.htmlspecialchars($cie['naam']).'" class="a2">'.mb_htmlentities($cie['titel']).'</a>
+		echo '<table>';
+		foreach ($aCommissies as $cie) {
+			echo '
+				<tr height="30px">
+					<td colspan="3" width="100%" valign="bottom">
+						<h2>
+							<a href="./commissie/'.htmlspecialchars($cie['naam']).'.html">'.mb_htmlentities($cie['titel']).'</a>
+						</h2>
 					</td>
-					</tr>
-					<tr>
-						<td valign="top" >'.mb_htmlentities($cie['stekst']).'</td>
-					</tr>';	
+				</tr>
+				<tr>
+					<td width="49%" valign="top" >'.mb_htmlentities($cie['stekst']).'</td>
+					<td width="2%"><img src="/images/pixel.gif" width="100%" height="1"></td>
+					<td width="49%" valign="top">';
+	
+			$aCieLeden=$this->_commissie->getCieLeden($cie['id']);
+			if(is_array($aCieLeden)){
+				foreach($aCieLeden as $aCieLid){
+					echo $this->_lid->getNaamLink($aCieLid['uid'], false, true, $aCieLid).'&nbsp;<em>'.$aCieLid['functie'].'</em><br />';
+				}
+			}else{
+				echo $aCieLeden;
 			}
-			echo ' </table>';
-			
-		}	
+			echo '</td></tr>';
+		}//einde foreach
+		echo '</table>';
+		
 	}//einde functie
 	
 	function view() {

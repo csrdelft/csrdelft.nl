@@ -64,7 +64,9 @@ class WoonoordContent extends SimpleHTML {
 		echo 'Erkende huizen nodigden het bestuur uit voor een maaltijd en ontvingen hierbij een 
 			certificaat en een Kaapsviooltje. Bovendien waren zij verplicht een open activiteit voor 
 			de hele vereniging te organiseren."</em><br /><br />';
-		echo '<table width="100%" border="0" cellspacing="0" cellpadding="0" marginheight="0" marginwidth="0">';
+		echo '<table>';
+		
+		
 		$woonoorden = $this->_woonoord->getWoonoorden();
 		foreach ($this->_soorten as $soort => $titel) {
 			echo '<tr><td width="50%" colspan="2"><h1>'.$titel.'</h1></td>
@@ -82,11 +84,7 @@ class WoonoordContent extends SimpleHTML {
 				echo '('.htmlspecialchars($woonoord['adres']).')</td>';
 				echo '<td rowspan="2">&nbsp;&nbsp;&nbsp;</td><td valign="top" rowspan="2">';
 				foreach ($woonoord['bewoners'] as $bewoner) {
-					if($this->_woonoord->isLid()) echo '<a href="/intern/profiel/'.$bewoner['uid'].'">';
-					echo mb_htmlentities($bewoner['voornaam']).' ';
-					if(trim($bewoner['tussenvoegsel'])!='') echo mb_htmlentities($bewoner['tussenvoegsel']).' ';
-					echo mb_htmlentities($bewoner['achternaam']);
-					if($this->_woonoord->isLid()) echo '</a>';
+					echo $this->_lid->getNaamLink($bewoner['uid'], true, true, $bewoner);
 					if($bBewerken OR $this->_lid->hasPermission('P_LEDEN_MOD')){
 						echo ' [ <a href="woonoorden.php?woonoordid='.$woonoord['id'].'&amp;uid='.$bewoner['uid'].'&amp;verwijderen"onclick=" return confirm(\'Weet u zeker dat u deze bewoner wilt verwijderen?\')">X</a> ]';
 					}							
@@ -95,7 +93,9 @@ class WoonoordContent extends SimpleHTML {
 				echo '</td>';
 				echo '</tr>';
 				echo '<tr><td>&nbsp;&nbsp;&nbsp;</td><td valign="top">';
-				if($woonoord['plaatje'] != '') echo '<img src="'.CSR_PICS.'/pagina/woonoorden/'.htmlspecialchars($woonoord['plaatje']).'" style="float: right;">'; 
+				if($woonoord['plaatje'] != ''){
+					 echo '<img src="'.CSR_PICS.'/pagina/woonoorden/'.htmlspecialchars($woonoord['plaatje']).'" style="float: right;">'; 
+				}
 				echo mb_htmlentities($woonoord['tekst']);
 				if($bBewerken OR $this->_lid->hasPermission('P_LEDEN_MOD')){
 					$bRawInvoer=false;
@@ -133,7 +133,6 @@ class WoonoordContent extends SimpleHTML {
 			}
 			
 		}	
-		echo '<tr><td><hr></td><td>&nbsp;</td><td><hr></td></tr>';
 		echo '</table>';
 	}
 }

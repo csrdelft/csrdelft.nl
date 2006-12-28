@@ -40,7 +40,7 @@ class Nieuws {
 		$iBerichtID=(int)$iBerichtID;
 		//where clausule klussen
 		$sWhereClause='';
-		if(!$this->_lid->isLoggedIn()){ $sWhereClause.="nieuws.prive!='1' AND "; }
+		if(!$this->_lid->hasPermission('P_LOGGED_IN')){ $sWhereClause.="nieuws.prive!='1' AND "; }
 		if(!$this->isNieuwsMod()){ $sWhereClause.="nieuws.verborgen!='1' AND "; }
 		if($iBerichtID!=0){ $sWhereClause.="nieuws.id=".$iBerichtID." AND "; }
 		

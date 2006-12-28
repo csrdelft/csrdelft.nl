@@ -70,7 +70,7 @@ if ($error == 0) switch($action) {
 
 
 # De pagina opbouwen, met mKetzer, of met foutmelding
-if ($error == 0  or $error == 2) {
+if($error == 0  or $error == 2) {
 	# Het middenstuk
 	require_once('class.maaltijdcontent.php');
 	$midden = new MaaltijdContent($lid, $maaltrack);
