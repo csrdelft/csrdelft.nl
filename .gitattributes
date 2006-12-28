@@ -211,6 +211,7 @@ htdocs/maaltijden/beheer.php -text
 htdocs/maaltijden/index.php -text
 htdocs/maaltijden/info.php -text
 htdocs/maaltijden/maaltijdlijst.php -text
+htdocs/maaltijden/saldi.php -text
 htdocs/maaltijden/voorkeuren.php -text
 htdocs/nieuws.php -text
 htdocs/robots.txt -text
