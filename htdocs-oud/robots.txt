@@ -1,7 +1,0 @@
-#	C.S.R. Delft 
-# ledenpagina's met geen toegang meldingen uitsluiten
-# mailto:pubcie@csrdelft.nl
-
-User-agent: *
-Disallow: /leden/		#dat schiet niet op, mag de robot toch niet zien.
-Disallow: /tools/
