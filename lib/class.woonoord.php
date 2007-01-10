@@ -31,6 +31,7 @@ class Woonoord {
 	function isLid(){ return $this->_lid->hasPermission('P_LEDEN_READ'); }
 	
 	function magBewerken($iWoonoordID){
+		if($this->_lid->hasPermission('P_LEDEN_MOD')){ return true; }
 		$iWoonoordID=(int)$iWoonoordID;
 		$sIsBewoner="
 			SELECT
@@ -61,7 +62,8 @@ class Woonoord {
 				lid.tussenvoegsel AS tussenvoegsel,
 				lid.achternaam AS achternaam,
 				lid.geslacht AS geslacht,
-				lid.status AS status
+				lid.status AS status,
+				lid.postfix AS postfix
 			FROM 
 				woonoord 
 			LEFT JOIN 
@@ -96,7 +98,8 @@ class Woonoord {
 				'tussenvoegsel'=>$aWoonoord['tussenvoegsel'],
 				'achternaam'=>$aWoonoord['achternaam'],
 				'geslacht'=>$aWoonoord['geslacht'],
-				'status'=>$aWoonoord['status'] );
+				'status'=>$aWoonoord['status'],
+				'postfix'=>$aWoonoord['postfix'] );
 		}
 		return $woonoorden;
 	}
