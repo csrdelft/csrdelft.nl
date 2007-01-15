@@ -44,6 +44,7 @@ htdocs/intern/csrmail/voorbeeld.php -text
 htdocs/intern/eetplan.php -text
 htdocs/intern/index.php -text
 htdocs/intern/inschrijving/index.php -text
+htdocs/intern/inschrijving/inschrijving.php -text
 htdocs/intern/lijst.php -text
 htdocs/intern/profiel.php -text
 htdocs/intern/sjaarsacties.php -text
@@ -110,6 +111,8 @@ lib/class.forumcontent.php -text
 lib/class.forumpoll.php -text
 lib/class.hok.php -text
 lib/class.includer.php -text
+lib/class.inschrijving.php -text
+lib/class.inschrijvingcontent.php -text
 lib/class.kolom.php -text
 lib/class.ldap.php -text
 lib/class.ledenlijstcontent.php -text
