@@ -70,16 +70,15 @@ class csrdelft extends SimpleHTML {
 	}
 	function view() {
 		header('Content-Type: text/html; charset=UTF-8');
-		$profiel=new Smarty_csr();
-		$profiel->assign_by_ref('csrdelft', $this);
+		$csrdelft=new Smarty_csr();
+		$csrdelft->assign_by_ref('csrdelft', $this);
 		
 		//soccie saldi
 		$saldi=$this->_lid->getSaldi($this->_lid->getUid(), true);
-		$profiel->assign('saldi', $saldi);
+		$csrdelft->assign('saldi', $saldi);
 		
-		$profiel->caching=false;
-		
-		$profiel->display('csrdelft.tpl');
+		$csrdelft->caching=false;
+		$csrdelft->display('csrdelft.tpl');
 		
 		//als er een error is geweest, die unsetten...
 		if(isset($_SESSION['auth_error'])){ unset($_SESSION['auth_error']); }

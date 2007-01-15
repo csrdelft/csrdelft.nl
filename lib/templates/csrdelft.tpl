@@ -109,5 +109,10 @@
 {/if}
 
 </div>
+<script language="javascript" type="text/javascript">
+<!--
+document.body.style.height = document.documentElement.scrollHeight+'px';
+-->
+</script>
 </body>
 </html>

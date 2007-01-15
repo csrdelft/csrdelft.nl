@@ -79,7 +79,8 @@ li li{ font-size: 1em;}
 		margin: 0px 0px 25px 0px; 
 		border-left: 1px solid #bbb;  
 		border-right: 1px solid #bbb;  
-		border-bottom: 1px solid #bbb;  
+		border-bottom: 1px solid #bbb; 
+		z-index: 1000; 
 	} 
 	#bodyContent{ margin: 0px; padding: 20px; font-size: .95em; }
 	#copyright{	position: absolute; bottom: 0px;} 
