@@ -89,7 +89,7 @@ class Inschrijving {
 				inschrijvinglid.inschrijvingid = ".$iInschrijvingID."
 			AND
 				CONVERT(inschrijving.uid USING utf8) = '".$uid."' LIMIT 1;
-		"
+		";
 		return $this->_db->query($sAfmelden);
 	}
 	
@@ -147,8 +147,7 @@ class Inschrijving {
 				inschrijving.beschrijving AS beschrijving, 
 				inschrijving.verantwoordelijke AS verantwoordelijke,
 				inschrijving.moment AS moment,				 
-				inschrijving.limiet AS limiet,
-				inschrijving.partnereis AS partnereis
+				inschrijving.limiet AS limiet
 			FROM
 				inschrijving
 			WHERE
@@ -156,6 +155,7 @@ class Inschrijving {
 			ORDER BY 
 				inschrijving.moment ASC;";
 		$rInschrijving=$this->_db->query($sInschrijving);	
+		echo mysql_error();
 		if($this->_db->numRows($rInschrijving)==0){ return false; }
 		while($aInschrijving=$this->_db->next($rInschrijving)){
 			$return[]=array(
