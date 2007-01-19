@@ -935,7 +935,9 @@ class Forum {
 		$nu=time();
 		$moment=strtotime($datetime);
 		$verschil=$nu-$moment;
-		if($verschil<=60*60){
+		if($verschil<=60){
+			$return='<em>'.$verschil.' seconden</em> geleden';
+		}elseif($verschil<=60*60){
 			$return='<em>'.floor($verschil/60);
 			if(floor($verschil/60)==1){	$return.=' minuut'; }else{$return.=' minuten'; }
 			$return.='</em> geleden';
@@ -950,11 +952,11 @@ class Forum {
 		}
 		return $return;
 	}
-	function getForumNaam($uid=false, $aNaam=false, $aLink=true ){
+	function getForumNaam($uid=false, $aNaam=false, $aLink=true, $bHtmlentities=true ){
 		//instellingen voor deze gebruiker ophalen...
 		$civitas=$this->_lid->getForumNaamInstelling();
 		
-		return $this->_lid->getNaamLink($uid, $civitas, $aLink, $aNaam);
+		return $this->_lid->getNaamLink($uid, $civitas, $aLink, $aNaam, $bHtmlentities);
 	}
 	function isIngelogged(){ return $this->_lid->hasPermission('P_LOGGED_IN'); }
 	function getParseTime(){

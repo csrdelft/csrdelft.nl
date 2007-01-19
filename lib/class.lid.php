@@ -162,13 +162,14 @@ class Lid {
 	* Deze functie maakt een link met de naam, als de gebruiker is ingelogged, anders gewoon een naam.
 	* Dit om te voorkomen dat er op 100 plekken foute paden staan als dat een keer verandert.
 	*/
-	function getNaamLink($uid, $civitas=false, $link=false, $aNaam=false, $htmlentities=true){
+	function getNaamLink($uid, $civitas=false, $link=false, $aNaam=false, $bHtmlentities=true){
 		//als er geen uid is opgegeven, ook geen link of naam teruggeven.
 		if($uid=='' AND !$this->isValidUid($uid)){ return ''; }
 		$sNaam='';
 		//als er geen array wordt meegegeven, of de array is niet compleet genoeg om een naam te tonen, dan de
 		//gegevens ophalen uit de database met het opgegeven uid.
-		if($aNaam===false AND !isset($aNaam['voornaam'], $aNaam['achternaam'], $aNaam['tussenvoegsel'], $aNaam['nickname'])){
+		if($aNaam===false AND !isset($aNaam['voornaam'], $aNaam['achternaam'], $aNaam['tussenvoegsel'], 
+				$aNaam['nickname'], $aNaam['geslacht'], $aNaam['status'])){
 			//betreft het de huidige gebruiker? dan de array van het profiel raadplegen
 			if($uid == $this->_profile['uid']){
 				$aNaam=$this->_profile;
@@ -200,7 +201,12 @@ class Lid {
 				if($aNaam['postfix'] != '') $sTmpNaam.=' '.$aNaam['postfix'];
 			}
 		}
-		if($htmlentities){ $sNaam.=mb_htmlentities($sTmpNaam); }else{ $sNaam.=$sTmpNaam; }
+		if($bHtmlentities){ 
+			$sNaam.=mb_htmlentities($sTmpNaam); 
+			
+		}else{ 
+			$sNaam.=$sTmpNaam; 
+		}
 		if($link AND $this->hasPermission('P_LOGGED_IN')){ $sNaam.='</a>'; }
 		return $sNaam;	
 	}
