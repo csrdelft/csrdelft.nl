@@ -162,7 +162,7 @@ class Lid {
 	* Deze functie maakt een link met de naam, als de gebruiker is ingelogged, anders gewoon een naam.
 	* Dit om te voorkomen dat er op 100 plekken foute paden staan als dat een keer verandert.
 	*/
-	function getNaamLink($uid, $civitas=false, $link=false, $aNaam=false){
+	function getNaamLink($uid, $civitas=false, $link=false, $aNaam=false, $htmlentities=true){
 		//als er geen uid is opgegeven, ook geen link of naam teruggeven.
 		if($uid=='' AND !$this->isValidUid($uid)){ return ''; }
 		$sNaam='';
@@ -188,22 +188,20 @@ class Lid {
 		if($link AND $this->hasPermission('P_LOGGED_IN')){ $sNaam.='<a href="/intern/profiel/'.$uid.'">'; }
 		//civitas of niksnamen, enkel relevant voor het forum, verder is gewoon voornaam [tussenvoegsel] achternaam
 		//nog een optie.
-		if($civitas===true OR $civitas=='civitas' OR ($civitas=='nick' AND $aNaam['nickname']=='') ){
-			if($aNaam['status']=='S_NOVIET'){
-				$sNaam.='noviet '.mb_htmlentities($aNaam['voornaam']);
-			}else{
-				$sNaam.=($aNaam['geslacht']=='v') ? 'Ama. ' : 'Am. ';
-				if($aNaam['tussenvoegsel'] != '') $sNaam.=ucfirst($aNaam['tussenvoegsel']).' ';
-				$sNaam.=mb_htmlentities($aNaam['achternaam']);				
-				if($aNaam['postfix'] != '') $sNaam.=' '.$aNaam['postfix'];
-			}
-		}elseif($civitas=='nick'){
-			$sNaam.=mb_htmlentities($aNaam['nickname']);
+		if($civitas=='nick' AND $aNaam['nickname']!=''){
+			$sTmpNaam=$aNaam['nickname'];
 		}else{
-			$sNaam.=mb_htmlentities(naam($aNaam['voornaam'], $aNaam['achternaam'], $aNaam['tussenvoegsel']));
+			if($aNaam['status']=='S_NOVIET'){
+				$sTmpNaam='noviet '.$aNaam['voornaam'];
+			}else{
+				$sTmpNaam=($aNaam['geslacht']=='v') ? 'Ama. ' : 'Am. ';
+				if($aNaam['tussenvoegsel'] != '') $sTmpNaam.=ucfirst($aNaam['tussenvoegsel']).' ';
+				$sTmpNaam.=$aNaam['achternaam'];				
+				if($aNaam['postfix'] != '') $sTmpNaam.=' '.$aNaam['postfix'];
+			}
 		}
+		if($htmlentities){ $sNaam.=mb_htmlentities($sTmpNaam); }else{ $sNaam.=$sTmpNaam; }
 		if($link AND $this->hasPermission('P_LOGGED_IN')){ $sNaam.='</a>'; }
-		
 		return $sNaam;	
 	}
 	

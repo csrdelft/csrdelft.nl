@@ -425,8 +425,10 @@ class Forum {
 		$iPostID=(int)$iPostID;
 		$iTopicID=$this->getTopicVoorPostID($iPostID);
 		$sDeletePost="
-			DELETE FROM
+			UPDATE
 				forum_post
+			SET 
+				zichtbaar='verwijderd'
 			WHERE
 				id=".$iPostID."
 			LIMIT 1;";
@@ -861,69 +863,12 @@ class Forum {
 		return $this->_db->query($sCatUpdate);
 	
 	}
+
+
 /***************************************************************************************************
-*	Namen ed.
+*	Zoeken.
 *
 ***************************************************************************************************/	
-	function getForumNaam($uid=false, $aOnderwerpPost=false ){
-		$bError=false;
-		//als er geen uid is opgegeven, dan die van de huidige gebruiker gebruiken.
-		if($uid===false)
-			$uid=$this->_lid->getUid();
-		//controleer of het uid al eens opgezocht is en dus in de array staat.
-		//zo hoeft voor elke naam maar één keer een query gedaan te worden.
-		if(isset($this->_forumNaamCache[$uid])){
-			return $this->_forumNaamCache[$uid];
-		}else{
-			if($aOnderwerpPost===false){
-				//naam ophalen uit de db, als er geen array meegegeven is waarin de gegevens al staan.
-				$sNaamQuery="
-					SELECT 
-						nickname, voornaam, tussenvoegsel, achternaam, postfix, geslacht, status
-					FROM
-						lid
-					WHERE 
-						uid='".$uid."'
-					LIMIT 1;";
-				$rNaam=$this->_db->query($sNaamQuery);
-				if($this->_db->numRows($rNaam)==1){ 
-					$aNaam=$this->_db->next($rNaam);
-				}else{
-					$bError=true;
-				}
-			}else{
-				//array die met de functieaanroep is meegegeven gebruiken, scheelt een query
-				$aNaam=$aOnderwerpPost;
-			}
-			if(!$bError){
-				//naam klussen.
-				$aProfiel=$this->_lid->getProfile();
-				//als er in het profiel is aangegeven dat men nicknames wil zien.
-				if(isset($aProfiel['forum_name']) AND $aProfiel['forum_name']=='nick' AND trim($aNaam['nickname'])!=''){
-					$sNaam=$aNaam['nickname'];
-				}else{
-					//kijken wat voor soort lid dit is.
-					if($aNaam['status']=='S_NOVIET'){
-						$sNaam='noviet '.$aNaam['voornaam'];
-					}elseif($aNaam['status']=='S_KRINGEL'){
-						$sNaam='~ '.$aNaam['voornaam'];
-					}elseif($aNaam['status']=='S_NOBODY'){
-						$sNaam='extern'; //voor 'anonieme' posts in de categorie extern.
-					}else{
-						if($aNaam['geslacht']=='v'){ $sNaam='ama. '; }else{ $sNaam='am. '; }
-						if($aNaam['tussenvoegsel']!=''){ $sNaam.=ucfirst($aNaam['tussenvoegsel']).' '; }
-						$sNaam.=$aNaam['achternaam'];
-						if($aNaam['postfix']!=''){ $sNaam.=' '.$aNaam['postfix']; }
-						if($aNaam['status']=='S_OUDLID'){ $sNaam.=' (oudlid)'; }
-					}//einde status if
-				}//einde nickname vs civitasnaam if
-				//naam in cache rossen.
-				$this->_forumNaamCache[$uid]=$sNaam;
-				return $sNaam;
-			//er is een fout opgetreden...
-			}else{ return 'FOUT'; }
-		}
-	}
 	function searchPosts($sZoekQuery){
 		if(preg_match('/^[a-zA-Z0-9 \-\+\'\"\.]*$/', $sZoekQuery)){
 			//bekijken waarin gezocht mag worden...
@@ -971,7 +916,7 @@ class Forum {
 				INNER JOIN 
 					lid ON ( post.uid=lid.uid)
 				WHERE
-					topic.zichtbaar='zichtbaar' AND
+					topic.zichtbaar='zichtbaar' AND post.zichtbaar='zichtbaar' AND
 					( ".$sCategorieClause." ) AND
 					MATCH(post.tekst, topic.titel )AGAINST( '".$sZoekQuery."' IN BOOLEAN MODE )
 				GROUP BY
@@ -1004,6 +949,12 @@ class Forum {
 			$return='op '. date("G:i j-n-Y", $moment);
 		}
 		return $return;
+	}
+	function getForumNaam($uid=false, $aNaam=false, $aLink=true ){
+		//instellingen voor deze gebruiker ophalen...
+		$civitas=$this->_lid->getForumNaamInstelling();
+		
+		return $this->_lid->getNaamLink($uid, $civitas, $aLink, $aNaam);
 	}
 	function isIngelogged(){ return $this->_lid->hasPermission('P_LOGGED_IN'); }
 	function getParseTime(){

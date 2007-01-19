@@ -61,7 +61,7 @@ class ForumContent extends SimpleHTML {
 						echo $this->_forum->formatDatum($aCategorie['lastpost']);
 						echo '<br /><a href="/forum/onderwerp/'.$aCategorie['lasttopic'].'#post'.$aCategorie['lastpostID'].'">reactie</a> door ';
 						if(trim($aCategorie['lastuser'])!=''){
-							echo $this->_getNaamLink($aCategorie['lastuser']);
+							echo $this->_forum->getForumNaam($aCategorie['lastuser']);
 						}else{ echo 'onbekend';	}
 					//er zijn nog geen berichten in deze categorie dus er is ook nog geen laatste bericht
 					}
@@ -120,7 +120,7 @@ class ForumContent extends SimpleHTML {
 					$sDraadstarter=mb_htmlentities($this->_forum->getForumNaam($aTopic['uid']));
 					$sReactieMoment=$this->_forum->formatDatum($aTopic['lastpost']);
 					if(trim($aTopic['lastuser'])!=''){
-						$sLaatsteposter=$this->_getNaamLink($aTopic['lastuser']);
+						$sLaatsteposter=$this->_forum->getForumNaam($aTopic['lastuser']);
 					}else{ $sLaatsteposter='onbekend'; }
 					#####################################
 					## de boel weergeven
@@ -128,7 +128,7 @@ class ForumContent extends SimpleHTML {
 					echo "\r\n".'<tr>';
 					echo '<td class="forumtitel">'.$sOnderwerp.'</td>';
 					echo '<td class="forumreacties">'.$sReacties.'</td>';
-					echo '<td class="forumreacties">'.$this->_getNaamLink($aTopic['uid']).'</td>';
+					echo '<td class="forumreacties">'.$this->_forum->getForumNaam($aTopic['uid']).'</td>';
 					echo '<td class="forumreactiemoment">'.$sReactieMoment;
 					echo '<br /><a href="/forum/onderwerp/'.$aTopic['id'].'#post'.$aTopic['lastpostID'].'">reactie</a> door ';
 					echo $sLaatsteposter;
@@ -171,7 +171,7 @@ class ForumContent extends SimpleHTML {
 					echo 'Hier kunt u een onderwerp toevoegen in deze categorie van het forum. Kijkt u vooraf goed of het onderwerp waarover
 						 u post hier wel thuishoort.<br /><br />';
 				}else{
-					//melding voor niet ingelogde gebruikers die toch willen posten. Ze wordeb 'gemodereerd', dat wil zeggen, de topics zijn
+					//melding voor niet ingelogde gebruikers die toch willen posten. Ze worden 'gemodereerd', dat wil zeggen, de topics zijn
 					//nog niet direct zichtbaar.
 					echo 'Hier kunt u een bericht toevoegen aan het forum. Het zal echter niet direct zichtbaar worden, maar
 					 &eacute;&eacute;rst door	de PubCie worden goedgekeurd. <br /><span style="text-decoration: underline;">
@@ -300,7 +300,7 @@ class ForumContent extends SimpleHTML {
 			$iWissel=1;
 			foreach($aBerichten as $aBericht){
 				echo '<tr><td class="forumauteur">';
-				echo $this->_getNaamLink($aBericht['uid'], $aBericht).' schreef ';
+				echo $this->_forum->getForumNaam($aBericht['uid'], $aBericht).' schreef ';
 				//anker maken met post-ID
 				echo '<a id="post'.$aBericht['postID'].'"></a>';
 				echo $this->_forum->formatDatum($aBericht['datum']);
@@ -376,6 +376,10 @@ class ForumContent extends SimpleHTML {
 			echo '</td><td class="forumtekst">';
 			if($this->_forum->magBerichtToevoegen($iTopic, $aBericht['open'], $rechten_post)){ 
 				echo '<form method="post" action="/forum/toevoegen/'.$iTopic.'"><p>';
+				//berichtje weergeven voor niet-ingeloggede gebruikers dat ze een naam moeten vermelden.
+				if(!$this->_forum->_lid->hasPermission('P_LOGGED_IN')){
+					echo '<strong>Uw bericht wordt bekeken en goedgekeurd door de <a href="http://csrdelft.nl/groepen/commissie/PubCie.html">PubCie</a>. Als u <em>uw naam</em> erbij vermeld, is het echter geen enkel probleem.</strong><br /><br />';
+				}
 				echo '<textarea name="bericht" id="forumBericht" class="tekst" rows="'.$iTekstareaRegels.'" cols="80" style="width: 100%;" >';
 				//inhoud van de textarea vullen met eventuele quote...
 				if($iCiteerPost!=0){
@@ -500,7 +504,7 @@ class ForumContent extends SimpleHTML {
 		<image>
 			<link>http://csrdelft.nl/</link>
 			<title>C.S.R.-Delft</title>
-			<url>'.CSR_PICS.'layout/beeldmerk.jpg</url>
+			<url><?php echo CSR_PICS; ?>layout/beeldmerk.jpg</url>
 			<height>150</height>
 			<width>118</width>
 			<description>Logo van C.S.R.-Delft</description>
@@ -519,7 +523,7 @@ class ForumContent extends SimpleHTML {
 			//[b][/b]
 			$tekst=preg_replace('/\[b:'.$bbcode_uid.'\](.*?)\[\/b:'.$bbcode_uid.'\]/', '*\\1*', $aPost['tekst']);
 			//alle andere ubb kek eruit rossen...
-			$tekst=preg_replace('/(\[(|\/)\w+:[a-f0-9]+\])/', '|', $tekst);
+			$tekst=preg_replace('/(\[(|\/)\w+:'.$bbcode_uid.'\])/', '|', $tekst);
 			//$volledigetekst=$tekst=preg_replace('/(\[(|\/)url=http://[a-f0-9]+:[a-f0-9]+\])/', '|', $volledigetekst);
 			$volledigetekst=$tekst;
 			if(kapStringNetjesAf($tekst, 50)){
@@ -527,10 +531,10 @@ class ForumContent extends SimpleHTML {
 			}
 			echo '<item>';
 			echo '<title>'.$aPost['nickname'].': '.str_replace(array("\r\n", "\r", "\n"), ' ', $tekst).'</title>';
-			echo '<link>http://pubcie.csrdelft.nl/forum/onderwerp/'.$aPost['tid'].'#post'.$aPost['postID'].'</link>';
+			echo '<link>http://csrdelft.nl/forum/onderwerp/'.$aPost['tid'].'#post'.$aPost['postID'].'</link>';
 			
 			echo '<description>'.$volledigetekst.'</description>';
-			echo '<author>'.$this->_forum->getForumNaam($aPost['uid'], $aPost).'</author>';
+			echo '<author>'.$this->_forum->getForumNaam($aPost['uid'], $aPost, false, false, false).'</author>';
 			echo '<category>forum: '.htmlspecialchars($aPost['titel']).'</category>';
 			echo '<comments>http://csrdelft.nl/forum/onderwerp/'.$aPost['tid'].'</comments>';
 			echo '<guid>http://csrdelft.nl/forum/onderwerp/'.$aPost['tid'].'#post'.$aPost['postID'].'</guid>';
@@ -553,10 +557,11 @@ class ForumContent extends SimpleHTML {
 			if(strlen($tekst)>19){
 				$tekst=trim(substr($tekst, 0, 16)).'..';
 			}
-			$postfragment=substr(str_replace(array("\n", "\r", ' '), ' ', $aPost['tekst']), 0, 40);
+			$post=preg_replace('/(\[(|\/)\w+:'.$aPost['bbcode_uid'].'\])/', '|', $aPost['tekst']);
+			$postfragment=substr(str_replace(array("\n", "\r", ' '), ' ', $post), 0, 40);
 			echo '<span class="tijd">'.date('H:i', strtotime($aPost['datum'])).'</span> ';
 			echo '<a href="/forum/onderwerp/'.$aPost['tid'].'#post'.$aPost['postID'].'" title="['.$aPost['titel'].'] '.
-					$this->_forum->getForumNaam($aPost['uid'], $aPost).': '.htmlspecialchars($postfragment).'">
+					$this->_forum->getForumNaam($aPost['uid'], $aPost, false).': '.htmlspecialchars($postfragment).'">
 				'.$tekst.'
 				</a><br />'."\n";
 		}
@@ -612,7 +617,7 @@ class ForumContent extends SimpleHTML {
 					echo $aZoekResultaat['titel'].'</a>';
 					if($aZoekResultaat['aantal']!=1){ echo ' <em>('.$aZoekResultaat['aantal'].' berichten in dit onderwerp)</em>'; }
 					echo '<br />'.$sPostFragment.'</td>';
-					echo '<td class="forumtitel">'.$this->_getNaamLink($aZoekResultaat['uid'],$aZoekResultaat).'</td>';
+					echo '<td class="forumtitel">'.$this->_forum->getForumNaam($aZoekResultaat['uid'],$aZoekResultaat).'</td>';
 					echo '<td class="forumtitel">
 						<a href="/forum/categorie/'.$aZoekResultaat['categorie'].'">'.$aZoekResultaat['categorieTitel'].'</a></td>';
 					echo '<td class="forumtitel">
@@ -628,12 +633,7 @@ class ForumContent extends SimpleHTML {
 		echo '<form action="/forum/zoeken.php" method="post"><p><input type="text" value="'.$sZoekQuery.'" name="zoeken" />';
 		echo '<input type="submit" value="zoeken" name="verzenden" /></p></form><br />';
 	}
-	function _getNaamLink($uid, $aNaam=false){
-		//instellingen voor deze gebruiker ophalen...
-		$civitas=$this->_forum->_lid->getForumNaamInstelling();
-		
-		return $this->_forum->_lid->getNaamLink($uid, $civitas, true, $aNaam);
-	}
+	
 	function getError(){
 		if(isset($_SESSION['forum_foutmelding'])){
 			$sError='<div class="foutmelding">'.mb_htmlentities(trim($_SESSION['forum_foutmelding'])).'</div>';
