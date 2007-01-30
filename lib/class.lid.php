@@ -194,6 +194,10 @@ class Lid {
 		}else{
 			if($aNaam['status']=='S_NOVIET'){
 				$sTmpNaam='noviet '.$aNaam['voornaam'];
+			}elseif($aNaam['status']=='S_KRINGEL'){
+				$sTmpNaam=$aNaam['voornaam'].' ';
+				if($aNaam['tussenvoegsel'] != '') $sTmpNaam.=ucfirst($aNaam['tussenvoegsel']).' ';
+				$sTmpNaam.=$aNaam['achternaam'];		
 			}else{
 				$sTmpNaam=($aNaam['geslacht']=='v') ? 'Ama. ' : 'Am. ';
 				if($aNaam['tussenvoegsel'] != '') $sTmpNaam.=ucfirst($aNaam['tussenvoegsel']).' ';
