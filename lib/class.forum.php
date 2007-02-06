@@ -124,7 +124,8 @@ class Forum {
 		//ook op bevestiging wachtende berichten van niet ingelogde gebruikers zichtbaar maken
 		//voor moderators
 		if($this->_lid->hasPermission('P_FORUM_MOD')){
-			$zichtBaarClause="( topic.zichtbaar='zichtbaar' OR topic.zichtbaar='wacht_goedkeuring' )";
+			$zichtBaarClause="( topic.zichtbaar='zichtbaar' OR topic.zichtbaar='wacht_goedkeuring')
+				 AND (post.zichtbaar='zichtbaar' OR post.zichtbaar='wacht_goedkeuring')";
 		}else{
 			$zichtBaarClause="topic.zichtbaar='zichtbaar' AND post.zichtbaar='zichtbaar'";
 		}

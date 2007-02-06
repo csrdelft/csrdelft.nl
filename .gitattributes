@@ -9,6 +9,7 @@ bin/pubcie-admin.php -text
 bin/socciesaldi-koppelen.php -text
 bin/statgraphgen.php -text
 bin/wachtwoord.php -text
+/csrdelft.sql -text
 htdocs/.htaccess -text
 htdocs/contact.php -text
 htdocs/forum/.htaccess -text

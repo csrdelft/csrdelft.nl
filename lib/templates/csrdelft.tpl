@@ -12,6 +12,7 @@
 	<script type="text/javascript" src="/layout/minmax.js"></script>
 	<script type="text/javascript" src="/layout/position.js"></script>
 	<link rel="alternate" title="C.S.R.-Delft RSS" type="application/rss+xml" href="http://csrdelft.nl/forum/rss.xml" />
+	<link rel="shortcut icon" href="{$csr_pics}layout/favicon.ico" />
 </head>
 <body>
 <div id="layoutContainer">
@@ -109,7 +110,7 @@
 {/if}
 
 </div>
-<script language="javascript" type="text/javascript">
+<script type="text/javascript">
 <!--
 document.body.style.height = document.documentElement.scrollHeight+'px';
 -->
