@@ -102,7 +102,7 @@ class Csrmailcontent {
 			foreach($aBerichten as $aBericht){
 				echo '<dt><u>'.str_replace('csr', 'C.S.R.', $aBericht['cat']).'</u> ';
 				if($this->_csrmail->magBeheren()){ 
-					echo ' ('.mb_htmlentities($this->_csrmail->getNaam($aBericht['uid'])).') ';
+					echo ' ('.$this->_csrmail->getNaam($aBericht['uid']).') ';
 				}
 				echo '<strong>'.$aBericht['titel'].'</strong> ';
 				//bewerken en verwijderen linkjes.
@@ -130,6 +130,7 @@ class Csrmailcontent {
  		}
 		//linkjes
 		$sString=eregi_replace("\\[url=([^\\[]*)\]([^\\[]*)\\[/url\\]","<a href=\"\\1\" >\\2</a>", $sString);
+		$sString=eregi_replace("\\[img\]([^\\[]*)\\[/img\\]","<img src=\"\\1\" />", $sString);
 		$sString=nl2br($sString);
 		return $sString;
 	}

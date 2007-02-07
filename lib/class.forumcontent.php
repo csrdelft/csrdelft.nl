@@ -534,7 +534,7 @@ class ForumContent extends SimpleHTML {
 			echo '<link>http://csrdelft.nl/forum/onderwerp/'.$aPost['tid'].'#post'.$aPost['postID'].'</link>';
 			
 			echo '<description>'.$volledigetekst.'</description>';
-			echo '<author>'.$this->_forum->getForumNaam($aPost['uid'], $aPost, false, false, false, false).'</author>';
+			echo '<author>'.$this->_forum->getForumNaam($aPost['uid'], $aPost, false, false, false).'</author>';
 			echo '<category>forum: '.htmlspecialchars($aPost['titel']).'</category>';
 			echo '<comments>http://csrdelft.nl/forum/onderwerp/'.$aPost['tid'].'</comments>';
 			echo '<guid>http://csrdelft.nl/forum/onderwerp/'.$aPost['tid'].'#post'.$aPost['postID'].'</guid>';
