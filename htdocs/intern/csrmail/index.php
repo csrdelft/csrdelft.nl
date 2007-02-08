@@ -55,6 +55,12 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
 			//bericht bewerken.
 			$body->addEditForm($iBerichtID);
 		}
+	}elseif(isset($_GET['leegmaken'])){
+		if(is_integer($csrmail->clearCache())){
+			$body->addUserMessage('<h3>Cache is leeggemaakt!</h3>');
+		}else{
+			$body->addUserMessage('<h3>Cache leegmaken is mislukt!</h3>');
+		}
 	}
 }
 $pagina=new csrdelft($body,  $lid, $db);

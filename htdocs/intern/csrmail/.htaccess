@@ -3,4 +3,4 @@ RewriteEngine on
 
 RewriteRule ^bewerken/([0-9]*) index.php?ID=$1&bewerken=bewerken
 RewriteRule ^verwijder/([0-9]*) index.php?ID=$1&verwijder=verwijderen
-
+RewriteRule ^leegmaken$ index.php?leegmaken=leegmaken

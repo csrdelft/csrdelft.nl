@@ -22,8 +22,11 @@ $lid=new Profiel($db);
 
 # ophalen uid die meegegeven is
 # NB uid zit altijd in de URL als het niet de uid van de gebruiker zelf is!
-if (isset($_GET['uid'])) $uid = $_GET['uid'];
-else $uid = $lid->getUid();
+if(isset($_GET['uid'])){ 
+	$uid = $_GET['uid'];
+}else{
+	$uid = $lid->getUid();
+}
 
 # we gaan dingen met acties doen...
 require_once("class.state.php");
@@ -36,9 +39,13 @@ require_once("class.state.php");
 $state = new State('none', "{$_SERVER['PHP_SELF']}?uid={$uid}");
 
 # zijn we met beheer bezig?
-if (isset($_POST['a'])) $action = $_POST['a'];
-elseif (isset($_GET['a'])) $action = $_GET['a'];
-else $action = 'none';
+if(isset($_POST['a'])){ 
+	$action = $_POST['a'];
+}elseif(isset($_GET['a'])){
+	$action = $_GET['a'];
+}else{
+	$action = 'none';
+}
 
 # Een error-waarde houden we bij om zodadelijk evt. een foutmelding
 # te kunnen laden in plaats van de profiel pagina omdat er geen

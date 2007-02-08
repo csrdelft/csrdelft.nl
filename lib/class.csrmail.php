@@ -202,7 +202,7 @@ class Csrmail {
 	*	functie rost alles vanuit de tabel pubciemailcache naar de tabel 
 	* pubciemail en pubciemailbericht.
 	*/
-	function moveFromCache(){
+	function clearCache(){
 		$aBerichten=$this->getBerichten();
 		$iPubciemailID=$this->createPubciemail();
 		if(is_integer($iPubciemailID)){
@@ -223,17 +223,14 @@ class Csrmail {
 				$this->_db->query($sMoveQuery);
 			}//einde foreach $aBerichten
 			//cache leeggooien:
-			$this->clearCache();
+			$sClearCache="
+			TRUNCATE TABLE
+				pubciemailcache;";
+			$this->_db->query($sClearCache);
 			return $iPubciemailID;
 		}else{
 			return false;
 		}
-	}
-	function clearCache(){
-		$sClearCache="
-			TRUNCATE TABLE
-				pubciemailcache;";
-		return $this->_db->query($sClearCache);
 	}
 	function createPubciemail(){
 		$uid=$this->_lid->getUid();

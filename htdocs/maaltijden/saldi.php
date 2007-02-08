@@ -16,7 +16,6 @@ if(is_array($_FILES) AND isset($_FILES['CSVSaldi'])){
 	$row=0;
 	foreach($aRegels as $regel){
 		$regel=str_replace(array('"', ' ', "\n", "\r"), '', $regel);
-		echo $regel."<br />\n";
 		$aRegel=explode(',', $regel);
 		if($lid->isValidUid($aRegel[0]) AND is_numeric($aRegel[1])){
 			$sQuery="UPDATE socciesaldi SET maalSaldo=".$aRegel[1]." WHERE uid='".$aRegel[0]."' LIMIT 1;";

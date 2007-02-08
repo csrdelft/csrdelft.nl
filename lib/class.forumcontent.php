@@ -241,7 +241,6 @@ class ForumContent extends SimpleHTML {
 			}
 			echo '<table class="forumtabel">
 			<tr><td class="forumtussenschot" colspan="2"></td></tr>';
-			//<tr><td class="forumhoofd">auteur</td><td class="forumhoofd">bericht</td></tr>';
 			//speciale topic weergeven als het topic er een is. bijvoorbeeld een poll;
 			switch($aBerichten[0]['soort']){
 				case 'T_POLL':
@@ -251,13 +250,13 @@ class ForumContent extends SimpleHTML {
 					$aPollOpties=$poll->getPollOpties($iTopic);
 					$iPollStemmen=$poll->getPollStemmen($iTopic);
 					$iPollOpties=count($aPollOpties);
-					//er mag maar één keer per *ingelloged lid* per poll gestemd worden, en alleen als het topic open is.
+					//er mag maar één keer per *ingellogged lid* per poll gestemd worden, en alleen als het topic open is.
 					$bMagStemmen=$poll->uidMagStemmen($iTopic, $rechten_post) AND ($aBerichten[0]['open']==1);
 					$sPolleigenaar=$poll->peilingVan($aBerichten[0]['startUID']);
 					//html dan maer
 					echo '<tr><td class="forumauteur">Een peiling van '.mb_htmlentities($sPolleigenaar).':<br />';
 					echo '<br /><br />Er is '.$iPollStemmen.' keer gestemd.</td><td class="forumbericht0">';
-					echo '<form action="/forum/stem/'.$iTopic.'" method="post" >';
+					echo '<form action="/forum/stem/'.$iTopic.'" method="post">';
 					echo '<table id="pollTabel">';
 					//poll vraag nog een keer
 					echo '<tr><td colspan="3"><strong>'.mb_htmlentities($aBerichten[0]['titel']).'</strong></td></tr>';
@@ -325,7 +324,7 @@ class ForumContent extends SimpleHTML {
 				}
 				//goedkeuren van berichten
 				if($this->_forum->_lid->hasPermission('P_FORUM_MOD') AND $aBericht['zichtbaar']=='wacht_goedkeuring'){
-					echo '<br /><a href="/forum/keur-goed/'.$aBericht['postID'].'">bericht goedkeuren</a>';
+					echo '<br /><a href="/forum/keur-goed/'.$aBericht['postID'].'" onclick="return confirm(\'Weet u zeker dat u dit bericht wilt goedkeuren?\')">bericht goedkeuren</a>';
 					echo '<br /><a href="/tools/stats.php?ip='.$aBericht['ip'].'">ip-log</a>';
 				}
 				echo '</td>';
@@ -366,8 +365,8 @@ class ForumContent extends SimpleHTML {
 			}
 			if($this->_forum->magBerichtToevoegen($iTopic, $aBericht['open'], $aBericht['rechten_post'])){	
 				// link om het tekst-vak groter te maken.
-				echo '<a href="#laatste" onclick="vergrootTextarea(\'forumBericht\', 10)" name="Vergroot het invoerveld">
-					invoerveld vergroten &raquo;</a><br />';
+				echo '<a href="#laatste" onclick="vergrootTextarea(\'forumBericht\', 10)" title="Vergroot het invoerveld">
+					invoerveld vergroten&nbsp;&raquo;</a><br />';
 			}			
 			//berichtje weergeven  voor moderators als het topic gesloten is.
 			if($this->_forum->_lid->hasPermission('P_FORUM_MOD') AND $aBericht['open']==0){

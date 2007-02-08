@@ -195,7 +195,8 @@ class Csrmailcontent {
 		echo '<h2>PubCie-post</h2>';
 		if($this->_csrmail->magBeheren()){
 			echo '<a href="/intern/csrmail/voorbeeld.php" class="knop">Voorbeeld</a> 
-			<a href="/intern/csrmail/verzenden.php" onclick="return confirm(\'Weet u het zeker\')" class="knop">Verzenden</a>';
+			<a href="/intern/csrmail/verzenden.php" onclick="return confirm(\'Weet u het zeker dat u de C.S.R.-courant wilt versturen?\')" class="knop">Verzenden</a> 
+			<a href="/intern/csrmail/leegmaken" class="knop" onclick="return confirm(\'Weet u zeker dat u de cache wilt leeggooien?\')">Leegmaken</a>';
 		}
 		//eventuele melding printen.
 		if($this->_userMessage!=''){ echo '<div class="waarschuwing">'.trim($this->_userMessage).'</div>'; }
