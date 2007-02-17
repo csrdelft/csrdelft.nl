@@ -101,6 +101,7 @@ class Commissie {
 				lid.achternaam AS achternaam,
 				lid.status AS status,
 				lid.geslacht AS geslacht,
+				lid.postfix AS postfix,
 				commissielid.functie AS functie
 			FROM
 				lid, commissielid
@@ -122,7 +123,8 @@ class Commissie {
 						'achternaam' => $aCieLid['achternaam'],
 						'status' => $aCieLid['status'],
 						'functie'=> $aCieLid['functie'], 
-						'geslacht' => $aCieLid['geslacht']);
+						'geslacht' => $aCieLid['geslacht'],
+						'postfix' => $aCieLid['postfix']);
 				}
 				return $aCieLedenReturn;
 			}else{
