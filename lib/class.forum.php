@@ -937,7 +937,9 @@ class Forum {
 		$moment=strtotime($datetime);
 		$verschil=$nu-$moment;
 		if($verschil<=60){
-			$return='<em>'.$verschil.' seconden</em> geleden';
+			$return='<em>'.$verschil.' ';
+			if($verschil==1) {$return.='seconde';}else{$return.='seconden';}
+			$return.='</em> geleden';
 		}elseif($verschil<=60*60){
 			$return='<em>'.floor($verschil/60);
 			if(floor($verschil/60)==1){	$return.=' minuut'; }else{$return.=' minuten'; }
