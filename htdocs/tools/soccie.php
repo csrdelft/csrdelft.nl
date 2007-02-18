@@ -2,7 +2,7 @@
 error_reporting(E_ALL);
 
 
-require_once('/srv/www/www.csrdelft.nl/lib/include.config.php');
+require_once('include.config.php');
 require_once('include.common.php');
 require_once('class.mysql.php');
 require_once('blowfish/blowfish.php');

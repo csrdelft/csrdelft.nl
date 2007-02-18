@@ -15,7 +15,7 @@ exit();
 function main() {
 
 	# instellingen & rommeltjes
-	require_once('/srv/www/www.csrdelft.nl/lib/include.config.php');
+	require_once('include.config.php');
 	require_once('include.common.php');
 
 	require_once("maildata.php");

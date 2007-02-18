@@ -1,6 +1,6 @@
 <?php
 
-require_once('/srv/www/www.csrdelft.nl/lib/include.config.php');
+require_once('include.config.php');
 
 //geen maalmod, dan terug naar de maaltijden...
 if(!$lid->hasPermission('P_MAAL_MOD')){ header('location: http://csrdelft.nl/maaltijden/'); exit; }

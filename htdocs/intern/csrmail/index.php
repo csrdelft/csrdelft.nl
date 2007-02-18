@@ -1,7 +1,7 @@
 <?php
 
 # instellingen & rommeltjes
-require_once('/srv/www/www.csrdelft.nl/lib/include.config.php');
+require_once('include.config.php');
 if(!$lid->hasPermission('P_MAIL_POST')){ header('location: '.CSR_ROOT.''); exit; }
 
 ## zijkolom in elkaar jetzen

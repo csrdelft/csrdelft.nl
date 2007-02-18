@@ -1,6 +1,6 @@
 <?php
 # instellingen & rommeltjes
-require_once('/srv/www/www.csrdelft.nl/lib/include.config.php');
+require_once('include.config.php');
 
 # als er genoeg rechten zijn een preview van de csrmail laten zien.
 if (!$lid->hasPermission('P_MAIL_COMPOSE')) { header('location: '.CSR_ROOT); exit; }

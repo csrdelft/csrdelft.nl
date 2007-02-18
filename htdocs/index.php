@@ -7,13 +7,13 @@
 # -------------------------------------------------------------------
 
 # instellingen & rommeltjes
-require_once('/srv/www/www.csrdelft.nl/lib/include.config.php');
+require_once('include.config.php');
 
 ## zijkolom in elkaar jetzen
 	$zijkolom=new kolom();
 	//laatste forumberichten toevoegen aan zijkolom:
-	require_once('class.forum.php'); 
-	require_once('class.forumcontent.php');
+	require_once(LIB_PATH . '/class.forum.php'); 
+	require_once(LIB_PATH . '/class.forumcontent.php');
 	$forum=new forum($lid, $db);
 	$forumcontent=new forumcontent($forum, 'lastposts');
 	
@@ -26,8 +26,8 @@ require_once('/srv/www/www.csrdelft.nl/lib/include.config.php');
 	$body->addObject($thuis);
 
 	//nieuws.
-	require_once('class.nieuws.php');
-	require_once('class.nieuwscontent.php');
+	require_once(LIB_PATH . '/class.nieuws.php');
+	require_once(LIB_PATH . '/class.nieuwscontent.php');
 	$nieuws=new nieuws( $db, $lid);
 	$body->addObject(new nieuwscontent($nieuws));
 	//bannertje weergeven...

@@ -1,6 +1,6 @@
 <?php
 
-require_once('/srv/www/www.csrdelft.nl/lib/include.config.php');
+require_once('include.config.php');
 # uitzoeken wat er moet gebeuren.
 //forum klasse laden
 require_once('class.forum.php');

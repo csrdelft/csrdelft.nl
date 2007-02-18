@@ -2,7 +2,7 @@
 error_reporting(E_ALL);
 
 
-require_once('/srv/www/www.csrdelft.nl/lib/include.config.php');
+require_once('include.config.php');
 
 
 if(!$lid->hasPermission('P_FORUM_MOD')){

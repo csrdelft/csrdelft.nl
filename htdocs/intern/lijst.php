@@ -6,7 +6,7 @@ session_cache_limiter('public');
 session_cache_expire(30);
 
 # instellingen & rommeltjes
-require_once('/srv/www/www.csrdelft.nl/lib/include.config.php');
+require_once('include.config.php');
 
 
 if ($lid->hasPermission('P_LEDEN_READ') or $lid->hasPermission('P_OUDLEDEN_READ')) {

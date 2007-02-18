@@ -1,6 +1,6 @@
 <?php
 
-require_once('/srv/www/www.csrdelft.nl/lib/include.config.php');
+require_once('include.config.php');
 
 # MaaltijdenSysteem
 require_once('class.maaltrack.php');

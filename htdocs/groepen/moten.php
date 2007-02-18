@@ -1,7 +1,7 @@
 <?php
 
 # instellingen & rommeltjes
-require_once('/srv/www/www.csrdelft.nl/lib/include.config.php');
+require_once('include.config.php');
 
 #moten toevoegen
 if($lid->hasPermission('P_LEDEN_MOD') AND isset($_POST['moot'], $_POST['naam']) AND is_array($_POST['naam'])){

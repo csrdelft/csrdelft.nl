@@ -8,7 +8,7 @@
 
 
 # instellingen & rommeltjes
-require_once('/srv/www/www.csrdelft.nl/lib/include.config.php');
+require_once('include.config.php');
 
 //$lid vervangen door een subklasse ervan, met functies voor het profiel
 require_once('class.profiel.php');

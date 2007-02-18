@@ -2,7 +2,7 @@
 
 
 # instellingen & rommeltjes
-require_once('/srv/www/www.csrdelft.nl/lib/include.config.php');
+require_once('include.config.php');
 	### Pagina-onderdelen ###
 
 # Moeten er acties uitgevoerd worden?
