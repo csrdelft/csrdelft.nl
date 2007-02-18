@@ -23,17 +23,16 @@ define('TMP_PATH', '/srv/www/www.csrdelft.nl/tmp');
 
 # urls met trailing slash
 define('CSR_PICS', 'http://plaetjes.csrdelft.nl/');
-define('CSR_ROOT','http://csrdelft.nl/');
+define('CSR_ROOT','http://csr.localhost/');
 # vreemde eend in de beijt, zonder trailing /, voor als we
 # $_SERVER["REQUEST_URI"] gebruiken enzo
-define('CSR_SERVER','http://csrdelft.nl');
+define('CSR_SERVER','http://csr.localhost');
 
 # We willen geen sessie-id in de url hebben
 ini_set('session.use_only_cookies', 1);
 session_save_path('/srv/www/www.csrdelft.nl/sessie');
 
 # wat instellingen
-ini_set('include_path', LIB_PATH . ':' . ini_get('include_path'));
 ini_set('upload_tmp_dir','/srv/www/www.csrdelft.nl/tmp');
 setlocale(LC_ALL, 'nl_NL.utf8@euro');
 
