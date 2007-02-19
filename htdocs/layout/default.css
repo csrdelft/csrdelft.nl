@@ -236,7 +236,7 @@ table.profiel_edit{
 table.profiel_edit tr td input, textarea{ width: 260px; }
 /* intern/lijst.php */
 table.zoekResultaat{ width: 100%; border-collapse: collapse;}
-table.zoekResultaat tr td{border-top: 1px solid lightgrey; margin: 0px; padding: 0px;}
+table.zoekResultaat tr td{border-top: 1px solid lightgrey; margin: 0px; padding: 2px; text-align: left;}
 table.zoekResultaat tr td img{ background-color: #fff3b4;}
 /* bestuur.php */
 #bestuurContainer{ text-align: center; }
