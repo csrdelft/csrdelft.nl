@@ -51,7 +51,7 @@ class DocumentenContent extends SimpleHTML {
                 <input type="submit" class="tekst" value=" toevoegen ">
                 </FORM> ';
 */
-                //require_once('/srv/www/www.csrdelft.nl/lib/include.config.php');
+                //require_once('include.config.php');
                 
                 echo '<table class="forumtabel">';
 

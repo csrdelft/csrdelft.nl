@@ -119,8 +119,8 @@ class MySql {
 		}
 		$q1 = substr($q1, 0, -2); # laatste komma verwijderen
 
-		#echo "UPDATE `$table` SET $q1 WHERE `id`=$id";
-		$this->query("UPDATE `".$table."` SET $q1 WHERE `$idkolom`=$id");
+		echo "UPDATE `$table` SET $q1 WHERE `id`=$id";
+		$this->query("UPDATE `".$table."` SET $q1 WHERE `$idkolom`='$id'");
 	}
 	
 	// zet een resultaat ding om in een array
