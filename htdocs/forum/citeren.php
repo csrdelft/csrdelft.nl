@@ -16,6 +16,8 @@ if ($lid->hasPermission('P_FORUM_POST')){
 
 ## zijkolom in elkaar jetzen
 	$zijkolom=new kolom();
+	$forumcontent=new forumcontent($forum, 'lastposts');
+	$zijkolom->add($forumcontent);
 	
 # pagina weergeven
 $pagina=new csrdelft($midden, $lid, $db);
