@@ -118,17 +118,17 @@ class LidBeheer{
 		$mail="
 Hallo ".$sNaam.",
 
-Je hebt een nieuwe wachtwoord aangevraagd. Je kan nu inloggen met de volgende combinatie:
+U heeft een nieuw wachtwoord aangevraagd voor http://csrdelft.nl. U kunt nu inloggen met de volgende combinatie:
 
 ".$uid."
 ".$password."
 
-Je kan je wachtwoord wijzigen in je profiel.
+U kan uw wachtwoord wijzigen in uw profiel: http://csrdelft.nl/intern/profiel/".$uid." .
 
 Met vriendelijke groet,
 Hanna Timmerarends. h.t. Praeses der Pubcie
 
-P.S. Mocht je nog vragen hebben, dan kan je natuurlijk altijd e-posts sturen naar pubcie@csrdelft.nl";
+P.S. Mocht u nog vragen hebben, dan kan u natuurlijk altijd e-posts sturen naar pubcie@csrdelft.nl";
 			mail($aNaamData['email'].', pubcie@csrdelft.nl', 'Nieuw wachtwoord voor de C.S.R.-stek', $mail);
 			//$berichten.="\r\n--------------------------------------------\r\n".
 				$mail.
