@@ -16,8 +16,16 @@ require_once('include.config.php');
 	require_once('class.forumcontent.php');
 	$forum=new forum($lid, $db);
 	$forumcontent=new forumcontent($forum, 'lastposts');
-	
 	$zijkolom->add($forumcontent);
+	
+	//Komende 10 verjaardagen erbij
+	if($lid->hasPermission('P_LOGGED_IN')) {
+		require_once('class.verjaardagcontent.php');
+		
+		$verjaardagcontent=new VerjaardagContent($lid, 'komende10');
+		$zijkolom->add($verjaardagcontent);
+	}
+	
 	$zijkolom->add(new Includer('', 'alpha.html'));
 
 ## de pagina-inhoud;

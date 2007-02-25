@@ -126,7 +126,9 @@ U heeft een nieuw wachtwoord aangevraagd voor http://csrdelft.nl. U kunt nu inlo
 U kan uw wachtwoord wijzigen in uw profiel: http://csrdelft.nl/intern/profiel/".$uid." .
 
 Met vriendelijke groet,
-Hanna Timmerarends. h.t. Praeses der Pubcie
+
+Hanna Timmerarends
+h.t. Praeses der Pubcie
 
 P.S. Mocht u nog vragen hebben, dan kan u natuurlijk altijd e-posts sturen naar pubcie@csrdelft.nl";
 			mail($aNaamData['email'].', pubcie@csrdelft.nl', 'Nieuw wachtwoord voor de C.S.R.-stek', $mail);

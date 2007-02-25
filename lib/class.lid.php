@@ -505,6 +505,40 @@ class Lid {
 		}
 		return $verjaardagen;
 	}
+	
+	function getKomende10Verjaardagen() {
+		$query="
+			SELECT
+				uid, voornaam, tussenvoegsel, achternaam, status, geslacht, postfix,
+				TO_DAYS(
+						CONCAT(
+						IF(
+							DATE_FORMAT(gebdatum, '%m-%d') < DATE_FORMAT(NOW(), '%m-%d'),
+							YEAR(NOW()) + 1,
+							YEAR(NOW())
+						),
+						DATE_FORMAT(gebdatum, '-%m-%d')
+					)
+				) - TO_DAYS(now()) AS jarig_over,
+				YEAR(NOW()) - YEAR(gebdatum) AS leeftijd
+			FROM
+				lid
+			WHERE
+				(status='S_LID' OR status='S_GASTLID' OR status='S_NOVIET' OR status='S_KRINGEL') 
+			AND
+				NOT gebdatum = '0000-00-00'
+			ORDER BY jarig_over ASC, lidjaar, gebdatum, achternaam
+			LIMIT 10";
+		
+		$result = $this->_db->select($query);
+		
+		if ($result !== false and $this->_db->numRows($result) > 0) {
+			while($verjaardag=$this->_db->next($result)){
+				$verjaardagen[] = $verjaardag;
+			}
+		}
+		return $verjaardagen;		
+	}
 
 	function getMaxKringen($moot=0) {
 		$maxkringen = 0;

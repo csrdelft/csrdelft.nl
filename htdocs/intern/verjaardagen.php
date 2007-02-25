@@ -9,7 +9,7 @@ require_once('class.kolom.php');
 if ($lid->hasPermission('P_LEDEN_READ')) {
 	# Het middenstuk
 	require_once('class.verjaardagcontent.php');
-	$midden = new VerjaardagContent($lid);
+	$midden = new VerjaardagContent($lid, 'alleverjaardagen');
 } else {
 	# geen rechten
 	$midden = new Includer('', 'geentoegang.html');
