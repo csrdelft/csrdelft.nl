@@ -2,7 +2,7 @@
 error_reporting(E_ALL);
 
 
-require_once('include.config.php');
+require_once('/srv/www/www.csrdelft.nl/lib/include.config.php');
 
 
 if(!$lid->hasPermission('P_FORUM_MOD')){
@@ -43,7 +43,11 @@ class stats{
 				log 
 			INNER JOIN 
 				lid ON(log.uid=lid.uid) 
-			ORDER BY 
+			WHERE 1 ";
+		if(isset($_GET['sjaars'])){
+			$sLogQuery.="AND status='S_NOVIET' ";
+		}
+			$sLogQuery.="ORDER BY 
 				moment DESC
 			LIMIT
 				0, 30;";
@@ -185,3 +189,4 @@ class stats{
 		echo '</table>';
 	}
 }// einde stats klasse
+?>

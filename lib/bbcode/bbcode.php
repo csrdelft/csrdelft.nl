@@ -175,7 +175,8 @@ function bbencode_second_pass($text, $uid)
 	// [QUOTE] and [/QUOTE] for posting replies with quote, or just for quoting stuff.
 	$text = str_replace("[quote:$uid]", $bbcode_tpl['quote_open'], $text);
 	$text = str_replace("[/quote:$uid]", $bbcode_tpl['quote_close'], $text);
-
+	$text = str_replace("[citaat:$uid]", $bbcode_tpl['quote_open'], $text);
+	$text = str_replace("[/citaat:$uid]", $bbcode_tpl['quote_close'], $text);
 	// New one liner to deal with opening quotes with usernames...
 	// replaces the two line version that I had here before..
 	$text = preg_replace("/\[quote:$uid=\"(.*?)\"\]/si", $bbcode_tpl['quote_username_open'], $text);
@@ -315,7 +316,11 @@ function bbencode_first_pass($text, $uid)
 	// [QUOTE] and [/QUOTE] for posting replies with quote, or just for quoting stuff.
 	$text = bbencode_first_pass_pda($text, $uid, '[quote]', '[/quote]', '', false, '');
 	$text = bbencode_first_pass_pda($text, $uid, '/\[quote=(\\\".*?\\\")\]/is', '[/quote]', '', false, '', "[quote:$uid=\\1]");
-
+	// [citaat] and [/citaat] for posting replies with quote, or just for quoting stuff.
+	$text = bbencode_first_pass_pda($text, $uid, '[citaat]', '[/citaat]', '', false, '');
+	$text = bbencode_first_pass_pda($text, $uid, '/\[citaat=(\\\".*?\\\")\]/i', '[/citaat]', '', false, '', "[citaat:$uid=\\1]");
+	
+	
 	// [list] and [list=x] for (un)ordered lists.
 	$open_tag = array();
 	$open_tag[0] = "[list]";

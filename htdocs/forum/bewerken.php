@@ -18,7 +18,7 @@ if(isset($_GET['post'])){
 			$bericht=bbsave(trim($_POST['bericht']), $bbcode_uid, $db->dbResource());
 			if($forum->editPost($iPostID, $bericht, $bbcode_uid)){
 				$iTopicID=$forum->getTopicVoorPostID($iPostID);
-				header('location: '.CSR_ROOT.'forum/onderwerp/'.$iTopicID.'#'.$iPostID);
+				header('location: '.CSR_ROOT.'forum/onderwerp/'.$iTopicID.'#post'.$iPostID);
 				exit;
 			}else{
 				//echo mysql_error();
