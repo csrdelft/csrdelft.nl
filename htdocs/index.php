@@ -1,4 +1,5 @@
 <?php
+# Test om te zien of committen werkt
 #
 # C.S.R. Delft
 #
