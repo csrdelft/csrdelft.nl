@@ -137,7 +137,11 @@ class MaalTrack {
 		$totsql = ($tot != 0) ? " AND `datum` < '{$tot}'" : "";
 		
 		# mootfilter
-		if ($mootfilter === true) $moot = $this->_lid->getMoot();
+		if(!$this->_lid->hasPermission('P_MAAL_MOD')){
+			if($mootfilter === true) $moot = $this->_lid->getMoot(); 
+		}else{
+			$mootfilter=false;
+		}
 		
 		$maaltijden = array();
 		$result = $this->_db->select("SELECT * from `maaltijd` WHERE `datum` > '{$van}'{$totsql} ORDER BY datum ASC");	
@@ -318,7 +322,20 @@ class MaalTrack {
 		}
 		return $abos;
 	}
-
+	# alle abo's opvragen
+	function getAbos() {
+		$abos = array();
+		$result = $this->_db->select("
+			SELECT maaltijdabosoort.abosoort, maaltijdabosoort.tekst
+			FROM maaltijdabosoort
+			WHERE 1;");
+		if (($result !== false) and $this->_db->numRows($result) > 0) {
+			while ($record = $this->_db->next($result)) {
+				$abos[$record['abosoort']] = $record['tekst']; 
+			}
+		}
+		return $abos;
+	}
 
 	function hasAbo($abosoort) {
 		if ($abosoort != '') {
