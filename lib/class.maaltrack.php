@@ -134,7 +134,7 @@ class MaalTrack {
 		# als $tot niet is opgegeven, of 0 is, dan worden alle maaltijden vanaf
 		# van teruggegeven, gesorteerd op tijd
 		$tot = (int)$tot;
-		$totsql = ($tot != 0) ? " AND `datum` < '{$tot}'" : "";
+		$totsql = ($tot != 0) ? "datum < '".$tot."'" : "1";
 		
 		# mootfilter
 		if(!$this->_lid->hasPermission('P_MAAL_MOD')){
@@ -144,12 +144,21 @@ class MaalTrack {
 		}
 		
 		$maaltijden = array();
-		$result = $this->_db->select("SELECT * from `maaltijd` WHERE `datum` > '{$van}'{$totsql} ORDER BY datum ASC");	
+		$sMaaltijdQuery="
+			SELECT 
+				* 
+			FROM 
+				maaltijd 
+			WHERE 
+				datum > '".$van."' AND ".$totsql." 
+			ORDER BY 
+				datum ASC";	
+		$result=$this->_db->select($sMaaltijdQuery);
 		if (($result !== false) and $this->_db->numRows($result) > 0) {
 			while ($record = $this->_db->next($result)) {
-				if ($mootfilter === true and preg_match("/MOOT[^{$moot}]{1}/", $record['abosoort'])) continue;
-				if ($mootfilter === true and preg_match("/UBER[^{$moot}]{1}/", $record['abosoort'])) continue;
-				$maaltijden[] = $record;
+				if(!($mootfilter===true AND preg_match("/(MOOT|UBER)[^{$moot}]{1}/", $record['abosoort']))){
+					$maaltijden[] = $record;
+				}
 			}
 		}
 		# id, datum, gesloten, tekst, abosoort, max, aantal, tp
