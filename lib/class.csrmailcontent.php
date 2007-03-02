@@ -174,6 +174,10 @@ class Csrmailcontent {
 		}
 		return $aKopjes;
 	}
+	function _voorbeeldIframe(){
+		echo '<br /><h3>Voorbeeld van de C.S.R.-courant</h3>
+			<iframe src="/intern/csrmail/voorbeeld.php" style="width: 100%; height: 250px;"></iframe>';
+	}
 	function addUserMessage($sMessage, $refresh=true){ 
 		if($refresh){
 			$_SESSION['csrmail_error']=trim($sMessage);
@@ -189,10 +193,10 @@ class Csrmailcontent {
 	}
 	function addNewForm($sError=false){ $this->_sError=$sError; }
 	
-	function getTitel(){ return 'PubCie-courant beheer'; }
+	function getTitel(){ return 'C.S.R.-courant beheer'; }
 
 	function view(){
-		echo '<h2>PubCie-post</h2>';
+		echo '<h2>C.S.R.-courant</h2>';
 		if($this->_csrmail->magBeheren()){
 			echo '<a href="/intern/csrmail/voorbeeld.php" class="knop">Voorbeeld</a> 
 			<a href="/intern/csrmail/verzenden.php" onclick="return confirm(\'Weet u het zeker dat u de C.S.R.-courant wilt versturen?\')" class="knop">Verzenden</a> 
@@ -211,6 +215,9 @@ class Csrmailcontent {
 			//overzicht van berichten plus een formulier voor een nieuw bericht.
 			$this->_toonBerichten();
 			$this->_geefBerichtNieuw();
+		}
+		if($this->_csrmail->magBeheren()){
+			$this->_voorbeeldIframe();
 		}
 		
 	}
