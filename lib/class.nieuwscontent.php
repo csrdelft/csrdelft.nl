@@ -79,7 +79,7 @@ class NieuwsContent extends SimpleHTML {
 			$aBericht=$this->_nieuws->getMessage($this->_berichtID);
 			
 		}
-		$plaatje=CSR_PICS.'nieuws/'.$aBericht['plaatje'];
+		
 		echo '<form action="/nieuws/bewerken/'.$this->_berichtID.'" method="post" enctype="multipart/form-data">';
 		echo '<div class="pubciemail-form">';
 		echo $this->getError();
@@ -93,11 +93,13 @@ class NieuwsContent extends SimpleHTML {
 		echo '<input id="prive" type="checkbox" name="prive" '.$prive.' /><label for="prive">...alleen weergeven bij leden</label><br />';
 		echo '<input id="verborgen" type="checkbox" name="verborgen" '.$verborgen.' /><label for="verborgen">...verbergen</label></div>';
 		echo '<div style="height: 100px; width: 60%; float: right; ">';
-		if($plaatje!=''){
-			//plaetje weergeven, en eventueel verwijderen.
-			echo '<img src="'.$plaatje.'" width="60px" height="100px" alt="Afbeelding" style="float: left; margin-right: 10px;" />
-				<strong>Afbeelding bij het nieuws</strong><br /> 
-				<a href="/nieuws/bewerken/'.$this->_berichtID.'/verwijder-plaatje" onclick="confirm(\'Weet u zeker u het plaatje van dit nieuwsbericht wilt verwijderen\')">[ verwijderen ]</a><br /><br />';
+		if(trim($aBericht['plaatje'])!=''){
+			echo '<img src="'.CSR_PICS.'nieuws/'.$aBericht['plaatje'].'" width="60px" height="100px" alt="Afbeelding" style="float: left; margin-right: 10px;" />';
+		}
+		echo '<strong>Afbeelding bij het nieuws</strong><br />';
+		//verwijder-link tonen als er een plaetje bijgevoegd is.
+		if(trim($aBericht['plaatje'])!=''){
+			echo '<a href="/nieuws/bewerken/'.$this->_berichtID.'/verwijder-plaatje" onclick="confirm(\'Weet u zeker u het plaatje van dit nieuwsbericht wilt verwijderen\')">[ verwijderen ]</a><br /><br />';
 		}
 		//input ding om een plaatje toe te voegen...
 		echo 'Afbeelding toevoegen of vervangen:<br /><input type="file" name="plaatje" size="40" /><br />';
