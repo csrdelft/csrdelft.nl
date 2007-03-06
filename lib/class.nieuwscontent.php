@@ -99,7 +99,7 @@ class NieuwsContent extends SimpleHTML {
 		echo '<strong>Afbeelding bij het nieuws</strong><br />';
 		//verwijder-link tonen als er een plaetje bijgevoegd is.
 		if(trim($aBericht['plaatje'])!=''){
-			echo '<a href="/nieuws/bewerken/'.$this->_berichtID.'/verwijder-plaatje" onclick="confirm(\'Weet u zeker u het plaatje van dit nieuwsbericht wilt verwijderen\')">[ verwijderen ]</a><br /><br />';
+			echo '<a href="/nieuws/bewerken/'.$this->_berichtID.'/verwijder-plaatje" onclick="confirm(\'Weet u zeker dat u het plaatje van dit nieuwsbericht wilt verwijderen\')">[ verwijderen ]</a><br /><br />';
 		}
 		//input ding om een plaatje toe te voegen...
 		echo 'Afbeelding toevoegen of vervangen:<br /><input type="file" name="plaatje" size="40" /><br />';
