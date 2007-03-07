@@ -15,8 +15,6 @@
 # . gemaakt
 #
 
-require_once ('class.simplehtml.php');
-require_once ('class.lid.php');
 require_once ('class.commissie.php');
 
 class ProfielContent extends SimpleHTML {
@@ -125,10 +123,12 @@ class ProfielContent extends SimpleHTML {
 		# gaan we een linkje afbeelden naar de edit-functie, of de editvakken?
 		if ( ($this->_lid->hasPermission('P_PROFIEL_EDIT') and $this->_profiel['uid'] == $this->_lid->getUid()) or 
 			$this->_lid->hasPermission('P_LEDEN_EDIT') ){
-			echo '<a href="'.$this->_state->getMyUrl(true).'a=edit" class="knop">Bewerken</a> ';
+			echo '<a href="'.$this->_state->getMyUrl(true).'/edit" class="knop">Bewerken</a> ';
 		}
 		if($this->_lid->hasPermission('P_ADMIN')){
-			echo '<a href="/tools/stats.php?uid='.$this->_profiel['uid'].'" class="knop">overzicht van bezoeken</a>';
+			echo '<a href="/tools/stats.php?uid='.$this->_profiel['uid'].'" class="knop">overzicht van bezoeken</a> ';
+			echo '<a href="/intern/profiel/'.$this->_profiel['uid'].'/wachtwoord" class="knop"
+				onclick="return confirm(\'Weet u zeker dat u het wachtwoord van deze gebruiker wilt resetten?\')">reset wachtwoord</a>';
 		}
 	}
 	function viewStateEdit(){

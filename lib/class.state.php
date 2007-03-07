@@ -28,7 +28,7 @@ class State {
 		if ($append) {
 			# als je het meteen achter elkaar zet, dus $this->_myurl . (strpos($this->_my.... werkt het niet
 			$dinges = $this->_myurl;
-			$dinges .= (strpos($this->_myurl, '?') === false) ? '?' : '&';
+			//$dinges .= (strpos($this->_myurl, '?') === false) ? '?' : '';
 			return $dinges;
 		}
 		return $this->_myurl;

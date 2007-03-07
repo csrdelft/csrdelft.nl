@@ -36,7 +36,7 @@ require_once("class.state.php");
 # alleen nog maar a=<actie> aan toegevoegd hoeft te worden.
 # daarnaast bevat het dus de actie waar we mee bezig zijn, en die
 # in de content-klassen bepaalt wat er wel of niet wordt getoond
-$state = new State('none', "{$_SERVER['PHP_SELF']}?uid={$uid}");
+$state = new State('none', "/intern/profiel/{$uid}");
 
 # zijn we met beheer bezig?
 if(isset($_POST['a'])){ 
@@ -78,6 +78,12 @@ switch ($action) {
 			$error = 1;
 		}
 	break;
+	case 'wachtwoord': 
+		# wachtwoord resetten plus mail sturen, alleen als P_ADMIN
+		if(!$lid->hasPermission('P_ADMIN')){
+			$error=1;
+		}
+	break;
 	default:
 		# geen geklooi met andere waarden
 		$error = 1;
@@ -95,7 +101,6 @@ if ($error == 0){
 			# profiel inladen, als dat niet lukt dan mag het niet
 			if ($lid->loadSqlTmpProfile($uid)) $state->setMyState('edit'); # zodat editvakken getoond worden
 			else $error = 1;
-			//pr($lid->_tmpprofile);
 		break;
 		case 'save':
 			# profiel inladen uit db, als dat niet lukt dan mag het niet
@@ -134,6 +139,12 @@ if ($error == 0){
 				}
 			}//end if $lid->loadSqlTmpProfile($uid)
 		break;
+		case 'wachtwoord':
+			# Wachtwoord resetten, wordt nog geen bevestiging van gegeven.
+			$lid->resetWachtwoord($uid);
+			header("Location: ".CSR_ROOT."intern/profiel/".$uid); 
+			exit;
+		break;
 	}//end switch $action
 }//end if $error==0
 # De pagina opbouwen, met profiel, of met foutmelding
@@ -153,14 +164,18 @@ switch ($error) {
 		# geen rechten
 		$midden = new Includer('', 'geentoegang.html');
 }	
-
-$zijbalk=new kolom();
-
-# pagina weergeven
-$pagina=new csrdelft($midden, $lid, $db);
-$pagina->setZijkolom($zijbalk);
-
-$pagina->view();
-
+## zijbalk in elkaar rossen
+	$zijkolom=new kolom();
+	# Komende 10 verjaardagen erbij
+	if($lid->hasPermission('P_LOGGED_IN')) {
+		require_once('class.verjaardagcontent.php');
+		
+		$verjaardagcontent=new VerjaardagContent($lid, 'komende10');
+		$zijkolom->add($verjaardagcontent);
+	}
+## pagina weergeven
+	$pagina=new csrdelft($midden, $lid, $db);
+	$pagina->setZijkolom($zijkolom);
+	$pagina->view();
 
 ?>

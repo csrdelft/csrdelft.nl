@@ -33,7 +33,6 @@ class Lid {
 		# we starten op aan het begin van een pagina
 		$this->_loadPermissions();
 		$this->_db =& $db;
-		#print_r($_SESSION);
 
 		# http://www.nabble.com/problem-with-sessions-in-1.4.8-t2550641.html
 		if (session_id() == 'deleted') session_regenerate_id();

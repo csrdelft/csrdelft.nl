@@ -730,7 +730,41 @@ class Profiel extends lid{
 			# verbinding sluiten
 			$ldap->disconnect();
 		}
-	
+	}
+	function resetWachtwoord($uid){
+		if(!$this->uidExists($uid)){ return false; }
+		$password=substr(md5(time()), 0, 8);
+		$passwordhash=$this->_makepasswd($password);
+		
+		$sNaam=$this->getFullName($uid);
+			
+		$sNieuwWachtwoord="
+			UPDATE
+				lid
+			SET
+				password='".$passwordhash."'
+			WHERE
+				uid='".$uid."'
+			LIMIT 1;";
+		//mail maken
+		$mail="
+Hallo ".$sNaam.",
+
+U heeft een nieuw wachtwoord aangevraagd voor http://csrdelft.nl. U kunt nu inloggen met de volgende combinatie:
+
+".$uid."
+".$password."
+
+U kunt uw wachtwoord wijzigen in uw profiel: http://csrdelft.nl/intern/profiel/".$uid." .
+
+Met vriendelijke groet,
+
+Hanna Timmerarends
+h.t. Praeses der Pubcie
+
+P.S. Mocht u nog vragen hebben, dan kan u natuurlijk altijd e-posts sturen naar pubcie@csrdelft.nl";
+		return $this->_db->query($sNieuwWachtwoord) AND mail($aNaamData['email'].', pubcie@csrdelft.nl', 'Nieuw wachtwoord voor de C.S.R.-stek', $mail);
+
 	}
 }
 ?>

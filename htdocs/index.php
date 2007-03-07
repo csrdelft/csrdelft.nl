@@ -49,5 +49,4 @@ require_once('include.config.php');
 	$pagina->setZijkolom($zijkolom);
 	
 	$pagina->view();
-
 ?>
