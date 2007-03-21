@@ -139,6 +139,7 @@ lib/class.simplehtml.php -text
 lib/class.sjaarsactie.php -text
 lib/class.sjaarsactiecontent.php -text
 lib/class.state.php -text
+lib/class.stringincluder.php -text
 lib/class.verjaardagcontent.php -text
 lib/class.woonoord.php -text
 lib/class.woonoordcontent.php -text
