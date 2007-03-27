@@ -16,7 +16,7 @@
 			{$profhtml.adres}<br />
 			{$profhtml.postcode} {$profhtml.woonplaats}<br />
 			{$profhtml.land}<br />
-			<a href="http://maps.google.nl/maps?q={$profhtml.adres|replace:' ':'+'}+{$profhtml.woonplaats}+netherlands">kaart</a>
+			<a href="http://maps.google.nl/maps?daddr={$profhtml.adres|replace:' ':'+'}+{$profhtml.woonplaats}+netherlands">kaart</a>
 		</td>
 		<td>
 			E-mail: {$profhtml.email}<br />
