@@ -67,7 +67,7 @@ class Csrmailcontent {
 		if(isset($_POST['bericht'])) $bericht=trim($_POST['bericht']);
 		echo '
 			<h3>Nieuw bericht invoeren</h3>
-			<p>Hier kunt u uw bericht(en) voor de pubCie-post achterlaten.</p>';
+			<p>Hier kunt u uw bericht(en) voor de C.S.R.-courant achterlaten.</p>';
 		$this->_geefBerichtInvoerVeld($titel, $categorie, $bericht);
 	}	
 	function _geefBerichtBewerken($sError){
@@ -114,7 +114,7 @@ class Csrmailcontent {
 			}
 			echo '</dl>';
 		}else{
-			echo 'U heeft nog geen berichten geplaatst in deze pubcie-mail;';
+			echo 'U heeft nog geen berichten geplaatst in deze C.S.R.-courant;';
 		}
 	}
 	function _process($sString){
@@ -134,9 +134,9 @@ class Csrmailcontent {
 		$sString=nl2br($sString);
 		return $sString;
 	}
-	function _getBody(){
+	function _getBody($iMailID=0){
 		$sTemplate=file_get_contents(LIB_PATH.'/templates/csrmail/'.CSRMAIL_TEMPLATE);
-		$aBerichten=$this->_csrmail->getBerichten();
+		$aBerichten=$this->_csrmail->getBerichten($iMailID);
 		if(is_array($aBerichten)){
 			//lege array's klussen voor als er geen data is voor de categorie
 			$aInhoud['bestuur']=$aInhoud['csr']=$aInhoud['overig']='';
@@ -173,6 +173,14 @@ class Csrmailcontent {
 			}
 		}
 		return $aKopjes;
+	}
+	function _getArchiefmails(){
+		$aMails=$this->_csrmail->getArchiefmails();
+		$sReturn='<h3>Archief</h3>';
+		foreach($aMails as $aMail){
+			$sReturn.='<a href="/intern/csrmail/archief/'.$aMail['ID'].'">'.$aMail['verzendMoment'].'</a><br />';
+		}
+		return $sReturn;
 	}
 	function _voorbeeldIframe(){
 		echo '<br /><h3>Voorbeeld van de C.S.R.-courant</h3>
@@ -215,9 +223,9 @@ class Csrmailcontent {
 			//overzicht van berichten plus een formulier voor een nieuw bericht.
 			$this->_toonBerichten();
 			$this->_geefBerichtNieuw();
-		}
-		if($this->_csrmail->magBeheren()){
-			$this->_voorbeeldIframe();
+			if($this->_csrmail->magBeheren()){
+				$this->_voorbeeldIframe();
+			}
 		}
 		
 	}

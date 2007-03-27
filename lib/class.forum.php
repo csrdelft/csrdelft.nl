@@ -392,6 +392,7 @@ class Forum {
 				}
 			}
 			if($bPostQuery){
+				$tekst=str_replace(array('\r', '\n', '\r\n'), "\r\n", $tekst);
 				if($bModerated){
 					//bericht sturen naar pubcie@csrdelft dat er een bericht op goedkeuring wacht
 	 				mail('pubcie@csrdelft.nl', 'Nieuw bericht in extern wacht op goedkeuring', 

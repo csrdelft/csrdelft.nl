@@ -63,6 +63,7 @@ require_once('class.simplehtml.php');
 require_once('class.kolom.php');
 require_once('bbcode/include.bbcode.php');
 require_once('class.includer.php');
+require_once('class.stringincluder.php');
 require_once('class.csrdelft.php');
 
 //smarty template engine...

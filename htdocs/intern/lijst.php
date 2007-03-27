@@ -68,12 +68,20 @@ if ($lid->hasPermission('P_LEDEN_READ') or $lid->hasPermission('P_OUDLEDEN_READ'
 	$midden = new Includer('', 'geentoegang.html');
 }	
 
-$zijkolom=new kolom();
+## zijbalk in elkaar rossen
+	$zijkolom=new kolom();
+	# Komende 10 verjaardagen erbij
+	if($lid->hasPermission('P_LOGGED_IN')) {
+		require_once('class.verjaardagcontent.php');
+		
+		$verjaardagcontent=new VerjaardagContent($lid, 'komende10');
+		$zijkolom->add($verjaardagcontent);
+	}
 
-# pagina weergeven
-$pagina=new csrdelft($midden, $lid, $db);
-$pagina->setZijkolom($zijkolom);
-$pagina->view();
-	
+## pagina weergeven
+	$pagina=new csrdelft($midden, $lid, $db);
+	$pagina->setZijkolom($zijkolom);
+	$pagina->view();
+
 
 ?>

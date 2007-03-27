@@ -185,7 +185,7 @@ class ForumContent extends SimpleHTML {
 						<input type="text" name="titel" value="" class="tekst" style="width: 100%" tabindex="1" /><br />
 						<strong>Bericht</strong>&nbsp;&nbsp; ';
 				// link om het tekst-vak groter te maken.
-				echo '<a href="" onclick="vergrootTextarea(\'forumBericht\', 10)" name="Vergroot het invoerveld">
+				echo '<a href="#" onclick="vergrootTextarea(\'forumBericht\', 10)" name="Vergroot het invoerveld">
 					invoerveld vergroten</a><br />';
 				echo '<textarea name="bericht" id="forumBericht" rows="10" cols="80" style="width: 100%" class="tekst" tabindex="2"></textarea><br />
 						<input type="submit" name="submit" value="verzenden" />

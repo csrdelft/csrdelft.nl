@@ -179,16 +179,41 @@ class Csrmail {
 	###	functies voor compose gedeelte, voor de pubcie
 	#############################################################
 	function getBerichten($iMailID=0){
-		$sBerichtenQuery="
-			SELECT
-				ID, titel, cat, bericht, datumTijd, uid, volgorde
-			FROM
-				pubciemailcache
-			WHERE 
-				1
-			ORDER BY
-				cat, volgorde, datumTijd;";
+		if($iMailID==0){ 
+			$sBerichtenQuery="
+				SELECT
+					ID, titel, cat, bericht, datumTijd, uid, volgorde
+				FROM
+					pubciemailcache
+				WHERE 
+					1
+				ORDER BY
+					cat, volgorde, datumTijd;";
+		}else{ 
+			$sBerichtenQuery="
+				SELECT
+					pubciemail.ID AS mailID,
+					pubciemail.verzendMoment AS verzendMoment,
+					pubciemail.verzender AS verzendUid,
+					pubciemail.template AS template,
+					titel, 
+					cat, 
+					bericht, 
+					datumTijd, 
+					pubciemailbericht.uid AS berichtUid, 
+					volgorde
+				FROM
+					pubciemail, pubciemailbericht
+				WHERE 
+					pubciemail.ID=".$iMailID." 
+				AND 
+					pubciemail.ID=pubciemailbericht.pubciemailID
+				ORDER BY
+					cat, volgorde, datumTijd;";
+		//	pr($sBerichtenQuery); exit;
+		}
 		$rBerichten=$this->_db->query($sBerichtenQuery);
+		echo mysql_error();
 		if($this->_db->numRows($rBerichten)==0){
 			$aBerichten=false;
 		}else{
@@ -212,13 +237,15 @@ class Csrmail {
 					INSERT INTO
 						pubciemailbericht
 					(
-						pubciemailID, titel, cat, bericht, volgorde
+						pubciemailID, titel, cat, bericht, volgorde, uid, datumTijd
 					)VALUES(
 						".$iPubciemailID.", 
 						'".$aBericht['titel']."', 
 						'".$aBericht['cat']."', 
 						'".$aBericht['bericht']."', 
-						'".$aBericht['volgorde']."'
+						'".$aBericht['volgorde']."',
+						'".$aBericht['uid']."',
+						'".$aBericht['datumTijd']."'
 					);";
 				$this->_db->query($sMoveQuery);
 			}//einde foreach $aBerichten
@@ -249,6 +276,22 @@ class Csrmail {
 			return false;
 		}
 	}
+	function getArchiefmails(){
+		$sArchiefQuery="
+			SELECT
+				ID, verzendMoment, verzender
+			FROM 
+				pubciemail
+			ORDER BY 
+				verzendMoment DESC;";
+		$rArchief=$this->_db->query($sArchiefQuery);
+		if($this->_db->numRows($rArchief)==0){
+			return false;
+		}else{
+			return $this->_db->result2array($rArchief);
+		}
+	}
+			
 	
 	
 }//einde classe
