@@ -218,7 +218,7 @@ EOT
 					echo '<td><img src="'.CSR_PICS.'/pasfoto/'.$uid.'.gif" height="100px" alt="geen foto" /></td>';
 				}
 				if($this->_lid->hasPermission('P_LEDEN_MOD')){
-					echo '<td><a href="/intern/profiel/'.$uid.'&amp;/edit" class="knop">b</a>&nbsp;';
+					echo '<td><a href="/intern/profiel/'.$uid.'/edit" class="knop">b</a>&nbsp;';
 				}
 				//naam als link naar profiel weergeven.
 				echo '<td><a href="/intern/profiel/'.$uid.'">';
