@@ -196,6 +196,7 @@ class Csrmail {
 					pubciemail.verzendMoment AS verzendMoment,
 					pubciemail.verzender AS verzendUid,
 					pubciemail.template AS template,
+					pubciemailbericht.ID AS ID,
 					titel, 
 					cat, 
 					bericht, 
