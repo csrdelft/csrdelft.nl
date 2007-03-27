@@ -210,10 +210,8 @@ class Csrmail {
 					pubciemail.ID=pubciemailbericht.pubciemailID
 				ORDER BY
 					cat, volgorde, datumTijd;";
-		//	pr($sBerichtenQuery); exit;
 		}
 		$rBerichten=$this->_db->query($sBerichtenQuery);
-		echo mysql_error();
 		if($this->_db->numRows($rBerichten)==0){
 			$aBerichten=false;
 		}else{
