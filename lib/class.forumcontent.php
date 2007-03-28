@@ -559,8 +559,9 @@ class ForumContent extends SimpleHTML {
 			$post=preg_replace('/(\[(|\/)\w+:'.$aPost['bbcode_uid'].'\])/', '|', $aPost['tekst']);
 			$postfragment=substr(str_replace(array("\n", "\r", ' '), ' ', $post), 0, 40);
 			echo '<span class="tijd">'.date('H:i', strtotime($aPost['datum'])).'</span> ';
-			echo '<a href="/forum/onderwerp/'.$aPost['tid'].'#post'.$aPost['postID'].'" title="['.$aPost['titel'].'] '.
-					$this->_forum->getForumNaam($aPost['uid'], $aPost, false).': '.htmlspecialchars($postfragment).'">
+			echo '<a href="/forum/onderwerp/'.$aPost['tid'].'#post'.$aPost['postID'].'" 
+				title="['.htmlspecialchars($aPost['titel']).'] '.
+					$this->_forum->getForumNaam($aPost['uid'], $aPost, false).': '.mb_htmlentities($postfragment).'">
 				'.$tekst.'
 				</a><br />'."\n";
 		}

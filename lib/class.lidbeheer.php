@@ -123,7 +123,7 @@ U heeft een nieuw wachtwoord aangevraagd voor http://csrdelft.nl. U kunt nu inlo
 ".$uid."
 ".$password."
 
-U kan uw wachtwoord wijzigen in uw profiel: http://csrdelft.nl/intern/profiel/".$uid." .
+U kunt uw wachtwoord wijzigen in uw profiel: http://csrdelft.nl/intern/profiel/".$uid." .
 
 Met vriendelijke groet,
 

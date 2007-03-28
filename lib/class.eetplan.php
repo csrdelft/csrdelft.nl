@@ -11,6 +11,8 @@
 # Historie:
 # 01-10-2005 Jieter
 # . gemaakt
+# 15-02-2007 Maarten
+# . datum-feutje hersteld
 #
 
 require_once ('class.mysql.php');
@@ -127,10 +129,10 @@ class Eetplan {
 			'31-10 2006',
 			'28-11 2006',
 			'23-1 2007',
-			'28-2 2007',
-			'28-3 2007',
-			'25-4 2007',
-			'30-5 2007');
+			'27-2 2007',
+			'27-3 2007',
+			'24-4 2007',
+			'29-5 2007');
 		return $aAvonden[$iAvond-1];
 	}
 	
