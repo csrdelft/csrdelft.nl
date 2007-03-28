@@ -1,17 +1,11 @@
 <?php
-
-#
-# C.S.R. Delft
-#
+# C.S.R. Delft | pubcie@csrdelft.nl
 # -------------------------------------------------------------------
 # class.csrmailcomposecontent.php
 # -------------------------------------------------------------------
 # Verzorgt het componeren van de mail
 # -------------------------------------------------------------------
-# Historie:
-# 01-10-2005 Jieter
-# . gemaakt
-#
+
 
 require_once ('class.mysql.php');
 
@@ -74,7 +68,6 @@ Subject: C.S.R.-courant ".strftime('%e %B %Y')."\r\n\r\n";
 	}
 	//function lees($
 	function view(){
-		echo 'Voorbeeld voor de pubcie-mail:';
 		echo $this->_getBody();
 	}
 }//einde classe

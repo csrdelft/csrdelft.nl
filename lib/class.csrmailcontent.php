@@ -1,12 +1,9 @@
 <?php
-
-#
-# C.S.R. Delft
-#
+# C.S.R. Delft | pubcie@csrdelft.nl
 # -------------------------------------------------------------------
 # class.csrmailcontent.php
 # -------------------------------------------------------------------
-#
+
 
 require_once ('class.mysql.php');
 
@@ -14,7 +11,7 @@ class Csrmailcontent {
 	
 	var $_csrmail;				//db object voor de csrmail
 	
-	var $_edit=0;					//bericht wat bewerkt moet worden.
+	var $_edit=0;				//bericht wat bewerkt moet worden.
 	
 	var $_sError=false;		//fouten in formulieren, bijvoorbeeld 'geef een titel mee'
 	var $_userMessage=''; //dingen als 'het is gelukt' of 'bericht verwijderd'
@@ -176,10 +173,12 @@ class Csrmailcontent {
 	}
 	function _getArchiefmails(){
 		$aMails=$this->_csrmail->getArchiefmails();
-		$sReturn='<h3>Archief</h3>';
+		$sReturn='<div id="archiefCourant">
+				<a class="kopje" href="/intern/csrmail/">Archief</a><br />';
 		foreach($aMails as $aMail){
-			$sReturn.='<a href="/intern/csrmail/archief/'.$aMail['ID'].'">'.$aMail['verzendMoment'].'</a><br />';
+			$sReturn.='<a href="/intern/csrmail/archief/'.$aMail['ID'].'">'.strftime('%d %B %Y', strtotime($aMail['verzendMoment'])).'</a><br />';
 		}
+		$sReturn.='</div>';
 		return $sReturn;
 	}
 	function _voorbeeldIframe(){
@@ -201,7 +200,7 @@ class Csrmailcontent {
 	}
 	function addNewForm($sError=false){ $this->_sError=$sError; }
 	
-	function getTitel(){ return 'C.S.R.-courant beheer'; }
+	function getTitel(){ return 'C.S.R.-courant'; }
 
 	function view(){
 		echo '<h2>C.S.R.-courant</h2>';

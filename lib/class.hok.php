@@ -1,20 +1,13 @@
 <?php
-
-#
 # C.S.R. Delft
-#
 # -------------------------------------------------------------------
 # class.hok.php
 # -------------------------------------------------------------------
 # Maakt zo'n blauw hok met een titel en inhoud
 # Als er meerdere titel/objectparen in zitten, dan worden de blauwe
 # blokken aan elkaar geschakeld.
-#
 # -------------------------------------------------------------------
-# Historie:
-# 18-12-2004 Hans van Kranenburg
-# . aangemaakt
-#
+
 
 require_once('class.simplehtml.php');
 

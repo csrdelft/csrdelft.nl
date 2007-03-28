@@ -1,7 +1,5 @@
 <?php
-#
-# C.S.R. Delft
-#
+# C.S.R. Delft | pubcie@csrdelft.nl
 # -------------------------------------------------------------------
 # class.inschrijving.php
 # -------------------------------------------------------------------
@@ -22,6 +20,7 @@
 	#  getInschrijvingen()
 	#  getAanmeldingen()
 	#  getError()
+# -------------------------------------------------------------------
 	
 class Inschrijving {
 	var $_db;

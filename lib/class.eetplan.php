@@ -1,19 +1,11 @@
 <?php
-
-#
-# C.S.R. Delft
-#
+# C.S.R. Delft | pubcie@csrdelft.nl
 # -------------------------------------------------------------------
 # class.eetplan.php
 # -------------------------------------------------------------------
 # Verzorgt het opvragen van eetplangegevens
 # -------------------------------------------------------------------
-# Historie:
-# 01-10-2005 Jieter
-# . gemaakt
-# 15-02-2007 Maarten
-# . datum-feutje hersteld
-#
+
 
 require_once ('class.mysql.php');
 

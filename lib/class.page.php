@@ -1,18 +1,12 @@
 <?php
-
-#
-# C.S.R. Delft
+# C.S.R. Delft | pubcie@csrdelft.nl
 #
 # -------------------------------------------------------------------
 # class.page.php
 # -------------------------------------------------------------------
 # Page is de klasse waarbinnen een pagina in elkaar wordt gezooid
-#
 # -------------------------------------------------------------------
-# Historie:
-# 18-12-2004 Hans van Kranenburg
-# . aangemaakt
-#
+
 
 require_once('class.simplehtml.php');
 
@@ -23,11 +17,11 @@ class Page extends SimpleHTML {
 	# Een column is een kolom met een bepaalde breedte
 	var $_columns = array();
 
-	var $_titel='C.S.R.-Delft';
+	var $_titel='C.S.R. Delft';
 	
 	### public ###
 	function addColumn(&$column, $bTopic=false){ $this->_columns[] =& $column; }
-	function addTitel($sTitel){ $this->_titel='C.S.R.-Delft | '.trim($sTitel); }
+	function addTitel($sTitel){ $this->_titel='C.S.R. Delft | '.trim($sTitel); }
 	function getTitel(){ return mb_htmlentities($this->_titel); }
 	
 	
@@ -47,7 +41,7 @@ class Page extends SimpleHTML {
 <meta name="description" content="C.S.R. Delft - Vereniging van christenstudenten in Delft" />
 <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon" />
 <link rel="stylesheet" href="/csrdelft.css" type="text/css" />
-<link rel="alternate" title="C.S.R.-Delft RSS" type="application/rss+xml" href="http://csrdelft.nl/forum/rss.php" />
+<link rel="alternate" title="C.S.R. Delft RSS" type="application/rss+xml" href="http://csrdelft.nl/forum/rss.php" />
 <script type="text/javascript">
 // Textarea's groter maken met behulp van hun id. 'rows' wordt aan het aantal regels toegevoegd.
 function vergrootTextarea(id, rows) {

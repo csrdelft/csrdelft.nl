@@ -145,7 +145,7 @@ function dagstats($db, $filename){
 	  $hour++;
 	}
 	//write messages on image:
-	imagestring($im, 2, $chartstartX+3, 1,  "C.S.R.-Delft", $chartColorB); //filename
+	imagestring($im, 2, $chartstartX+3, 1,  "C.S.R. Delft", $chartColorB); //filename
 	imagestring($im, 2, $chartstartX+3, 12,  "bezoeken/dag", $chartColorB);//type of chart
 	imagepng($im, $filename);//send image to file
 	imagedestroy($im); //empty stack
@@ -204,7 +204,7 @@ function uurstats($db, $filename){
 	imageLine($im,0, $chartEndY,$width,$chartEndY,$chartColorB);// bottom line
 
 	//write messages on image:
-	imagestring($im, 2, $chartstartX+3, 1,  "C.S.R.-Delft", $chartColorA); //filename
+	imagestring($im, 2, $chartstartX+3, 1,  "C.S.R. Delft", $chartColorA); //filename
 	imagestring($im, 2, $chartstartX+3, 12,  "uurgemiddelde", $chartColorB);//type of chart
 
 	imagestring($im, 1, 2,1, round($maxValue,0), $chartColorB);//diplay maximum value
@@ -310,7 +310,7 @@ function uurstatsVoorDag($db, $filename, $dag){
 	imageLine($im,0, $chartEndY,$width,$chartEndY,$chartColorB);// bottom line
 
 	//write messages on image:
-	imagestring($im, 2, $chartstartX+3, 1,  "C.S.R.-Delft", $chartColorA); //filename
+	imagestring($im, 2, $chartstartX+3, 1,  "C.S.R. Delft", $chartColorA); //filename
 	$dagen=array('zondag', 'maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag');
 	imagestring($im, 2, $chartstartX+3, 12, $dagen[$dag-1], $chartColorB);//type of chart
 	imagestring($im, 1, 2,1, round($maxValue,0), $chartColorB);//diplay maximum value

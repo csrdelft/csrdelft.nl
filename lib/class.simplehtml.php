@@ -23,9 +23,9 @@ class SimpleHTML {
 	//eventueel titel voor een pagina geven
 	function title($sTitle=false){
 		if($sTitle===false){
-			return 'C.S.R.-Delft';
+			return 'C.S.R. Delft';
 		}else{
-			return 'C.S.R.-Delft - '.$sTitle;
+			return 'C.S.R. Delft - '.$sTitle;
 		}
 	}
 }

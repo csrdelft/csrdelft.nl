@@ -1,8 +1,5 @@
 <?php
-
-#
-# C.S.R. Delft
-#
+# C.S.R. Delft | pubcie@csrdelft.nl
 # -------------------------------------------------------------------
 # class.dbmenu.php
 # -------------------------------------------------------------------
@@ -10,10 +7,7 @@
 # De menuopties die niet overeenkomen met de permissies die de
 # gebruiker heeft worden niet getoond.
 # -------------------------------------------------------------------
-# Historie:
-# 02-01-2005 Hans van Kranenburg
-# . gemaakt
-#
+
 
 class DBMenu {
 

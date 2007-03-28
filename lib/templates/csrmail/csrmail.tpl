@@ -1,11 +1,11 @@
-<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.1//EN' 'http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd'>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 
 <html>
 <head>
-  <title>C.S.R. post</title>
-  <meta http-equiv='content-type' content='text/html; charset=UTF-8' />
-  <meta name='author' content='pubCie der C.S.R.-Delft' />
-  <meta name='robots' content='index, follow' />
+  <title>C.S.R.-courant</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+  <meta name="author" content="PubCie der C.S.R. Delft" />
+  <meta name="robots" content="index, follow" />
   <style type="text/css"><!--
 body{
 	font-face: verdana, arial;

@@ -1,17 +1,11 @@
 <?php
-
-#
-# C.S.R. Delft
-#
+# C.S.R. Delft | pubcie@csrdelft.nl
 # -------------------------------------------------------------------
 # class.csrmailcomposecontent.php
 # -------------------------------------------------------------------
 # Verzorgt het componeren van de mail
 # -------------------------------------------------------------------
-# Historie:
-# 01-10-2005 Jieter
-# . gemaakt
-#
+
 
 require_once ('class.mysql.php');
 
@@ -47,7 +41,7 @@ class Csrmailarchiefcontent extends Csrmailcontent{
 			if(isset($_GET['iframe'])){
 				echo $this->_getBody($this->getID());
 			}else{
-				echo '<h2>PubCie-Courant archief</h2>';
+				echo '<h2>Archief C.S.R.-courant</h2>';
 				echo '<iframe src="/intern/csrmail/archief/'.$this->getID().'/iframe" 
 					style="width: 100%; height: 700px; border: 0px;"></iframe>';
 			}		

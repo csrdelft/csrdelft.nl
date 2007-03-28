@@ -1,18 +1,11 @@
 <?php
-
-#
-# C.S.R. Delft
-#
+# C.S.R. Delft | pubcie@csrdelft.nl
 # -------------------------------------------------------------------
 # class.csrdelft.php
 # -------------------------------------------------------------------
 # csrdelft is de klasse waarbinnen een pagina in elkaar wordt gezooid
-#
 # -------------------------------------------------------------------
-# Historie:
-# 18-12-2004 Hans van Kranenburg
-# . aangemaakt
-#
+
 
 require_once('class.simplehtml.php');
 

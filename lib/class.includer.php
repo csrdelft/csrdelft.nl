@@ -1,16 +1,9 @@
 <?php
-
-#
-# C.S.R. Delft
-#
+# C.S.R. Delft | pubcie@csrdelft.nl
 # -------------------------------------------------------------------
 # class.includer.php
 # -------------------------------------------------------------------
-#
-# Historie:
-# 18-12-2004 Hans van Kranenburg
-# . aangemaakt
-#
+
 
 class Includer {
 

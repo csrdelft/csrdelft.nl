@@ -1,17 +1,10 @@
 <?php
-
-#
-# C.S.R. Delft
-#
+# C.S.R. Delft | pubcie@csrdelft.nl
 # -------------------------------------------------------------------
 # class.csrmail.php
 # -------------------------------------------------------------------
 # Verzorgt het opvragen van pubciemailgegevens
 # -------------------------------------------------------------------
-# Historie:
-# 01-10-2005 Jieter
-# . gemaakt
-#
 
 
 class Csrmail {

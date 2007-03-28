@@ -1,17 +1,10 @@
 <?php
-
-#
-# C.S.R. Delft
-#
+# C.S.R. Delft | pubcie@csrdelft.nl
 # -------------------------------------------------------------------
 # class.forumcontent.php
 # -------------------------------------------------------------------
-# Historie:
-#	03-03-2006 Jieter
-# . basis functionaliteit is af.
-# 28-01-2006 Jieter
-# . gemaakt
-#
+
+
 require_once('bbcode/include.bbcode.php');
 require_once('class.simplehtml.php');
 

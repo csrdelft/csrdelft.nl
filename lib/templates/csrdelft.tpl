@@ -1,9 +1,9 @@
 <!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.1//EN' 'http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd'>
 <html xml:lang="nl">
 <head>
-  <title>C.S.R.-Delft | {$csrdelft->getTitel()}</title>
+  <title>C.S.R. Delft | {$csrdelft->getTitel()}</title>
   <meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
-	<meta name="author" content='PubCie C.S.R.-Delft, Jan Pieter Waagmeester' />
+	<meta name="author" content='PubCie C.S.R. Delft, Jan Pieter Waagmeester' />
 	<meta name="robots" content="index, follow" />
 	<link rel="stylesheet" href="/layout/undohtml.css" type="text/css" />
 	<link rel="stylesheet" href="/layout/default.css" type="text/css" />
@@ -11,7 +11,7 @@
 	<script type="text/javascript" src="/layout/csrdelft.js" ></script>
 	<script type="text/javascript" src="/layout/minmax.js"></script>
 	<script type="text/javascript" src="/layout/position.js"></script>
-	<link rel="alternate" title="C.S.R.-Delft RSS" type="application/rss+xml" href="http://csrdelft.nl/forum/rss.xml" />
+	<link rel="alternate" title="C.S.R. Delft RSS" type="application/rss+xml" href="http://csrdelft.nl/forum/rss.xml" />
 	<link rel="shortcut icon" href="{$csr_pics}layout/favicon.ico" />
 </head>
 <body>
@@ -25,7 +25,7 @@
 	</div>
 	<div id="copyright">
 		<div id="copyrightContent">
-			Gemaakt door <a href="mailto:pubcie@csrdelft.nl">PubCie der C.S.R.-Delft</a>. | <a href="http://validator.w3.org/check?uri=referer">XHTML 1.1</a>
+			Gemaakt door <a href="mailto:pubcie@csrdelft.nl">PubCie der C.S.R. Delft</a>. | <a href="http://validator.w3.org/check?uri=referer">XHTML 1.1</a>
 		</div>
 	</div>
 </div>

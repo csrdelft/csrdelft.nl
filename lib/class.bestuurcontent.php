@@ -1,19 +1,11 @@
 <?php
-
-#
-# C.S.R. Delft
-#
+# C.S.R. Delft | pubcie@csrdelft.nl
 # -------------------------------------------------------------------
 # class.commissiecontent.php
 # -------------------------------------------------------------------
-#
 # Beeldt informatie af over Commissies
-#
 # -------------------------------------------------------------------
-# Historie:
-# 29-12-2004 Hans van Kranenburg
-# . gemaakt
-#
+
 
 require_once ('class.simplehtml.php');
 require_once ('bbcode/include.bbcode.php');

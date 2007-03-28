@@ -1,18 +1,11 @@
 <?php
-
-#
-# C.S.R. Delft
-#
+# C.S.R. Delft | pubcie@csrdelft.nl
 # -------------------------------------------------------------------
 # class.commissie.php
 # -------------------------------------------------------------------
 # Regelt de Commissies en Commissieleden tabellen van de database
-#
 # -------------------------------------------------------------------
-# Historie:
-# 31-12-2004 Hans van Kranenburg
-# . gemaakt
-#
+
 
 require_once ('class.mysql.php');
 
