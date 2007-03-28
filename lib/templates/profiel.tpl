@@ -48,7 +48,7 @@
 				{$profhtml.o_postcode} {$profhtml.o_woonplaats}<br />
 				{$profhtml.o_land}<br />
 				{$profhtml.o_telefoon}<br />
-				<a href="http://maps.google.nl/maps?q={$profhtml.o_adres|replace:' ':'+'}+{$profhtml.o_woonplaats}+netherlands">kaart</a>
+				<a href="http://maps.google.nl/maps?daddr={$profhtml.o_adres|replace:' ':'+'}+{$profhtml.o_woonplaats}+netherlands">kaart</a>
 			{else}
 				{$profhtml.beroep}
 			{/if}

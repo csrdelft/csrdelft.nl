@@ -11,9 +11,11 @@ require_once('class.csrmailcomposecontent.php');
 $csrmailbeheer = new Csrmailcomposecontent($csrmail);
 
 if(isset($_GET['iedereen'])){
+	$csrmailbeheer->zend('pubcie@csrdelft.nl');
 	$csrmailbeheer->zend('csrmail@lists.jeugdkerken.nl');	
 	$csrmail->clearCache();
+} else {
+	$csrmailbeheer->zend('pubcie@csrdelft.nl');
 }
-$csrmailbeheer->zend('pubcie@csrdelft.nl');
 
 ?><a href="verzenden.php?iedereen=true"> aan iedereen verzenden</a>
