@@ -486,24 +486,24 @@ class ForumContent extends SimpleHTML {
 		?>
 <rss version="2.0">
 	<channel>
-		<copyright>Copyright 2006 C.S.R.-Delft</copyright>
+		<copyright>Copyright 2006 C.S.R. Delft</copyright>
 		<pubDate><?php echo $datum; ?></pubDate>
 		<lastBuildDate><?php echo $datum; ?></lastBuildDate>
 		<docs>http://csrdelft.nl/intern/index.php</docs>
 		<description>
-			C.S.R.-Delft: Vereniging van Christen-studenten te Delft.
+			C.S.R. Delft: Vereniging van Christen-studenten te Delft.
 		</description>
 		<image>
 			<link>http://csrdelft.nl/</link>
-			<title>C.S.R.-Delft</title>
+			<title>C.S.R. Delft</title>
 			<url><?php echo CSR_PICS; ?>layout/beeldmerk.jpg</url>
 			<height>150</height>
 			<width>118</width>
-			<description>Logo van C.S.R.-Delft</description>
+			<description>Logo van C.S.R. Delft</description>
 		</image>
 		<language>nl-nl</language>
 		<link>http://csrdelft.nl/forum/</link>
-		<title>C.S.R.-Delft forum laatste berichten.</title>
+		<title>C.S.R. Delft forum laatste berichten.</title>
 		<managingEditor>PubCie@csrdelft.nl</managingEditor>
 		<webMaster>pubcie@csrdelft.nl</webMaster>
 <?php
