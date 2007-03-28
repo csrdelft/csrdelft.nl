@@ -10,9 +10,9 @@ require_once('class.csrmailcontent.php');
 require_once('class.csrmailcomposecontent.php');
 $csrmailbeheer = new Csrmailcomposecontent($csrmail);
 
-
 if(isset($_GET['iedereen'])){
-	$csrmailbeheer->zend('csrmail@lists.jeugdkerken.nl');
+	$csrmailbeheer->zend('csrmail@lists.jeugdkerken.nl');	
+	$csrmail->clearCache();
 }
 $csrmailbeheer->zend('pubcie@csrdelft.nl');
 
