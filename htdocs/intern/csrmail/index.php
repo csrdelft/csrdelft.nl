@@ -4,13 +4,19 @@
 require_once('include.config.php');
 if(!$lid->hasPermission('P_MAIL_POST')){ header('location: '.CSR_ROOT.''); exit; }
 
-## zijkolom in elkaar jetzen
-	$zijkolom=new kolom();
 
 require_once('class.csrmail.php');
 $csrmail = new Csrmail($lid, $db);
 require_once('class.csrmailcontent.php');
 $body = new CsrmailContent($csrmail);
+
+## zijkolom in elkaar jetzen
+	$zijkolom=new kolom();
+	if(!isset($_GET['ID'])){ //alleen op de algemene index tonen, niet bij het bewerken oid...
+		require_once('class.csrmailarchiefcontent.php');
+		$zijkolom->add(new CsrmailarchiefContent($csrmail));
+	}
+	
 if($_SERVER['REQUEST_METHOD']=='POST'){
 	if($csrmail->valideerBerichtInvoer($sError)===true){
 		$iBerichtID=(int)$_GET['ID'];
