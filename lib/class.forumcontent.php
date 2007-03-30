@@ -377,7 +377,7 @@ class ForumContent extends SimpleHTML {
 				if($iCiteerPost!=0){
 					$aPost=$this->_forum->getPost((int)$iCiteerPost);
 					$sCiteerBericht=bbedit($aPost['tekst'], $aPost['bbcode_uid']);
-					echo '[quote]'.$sCiteerBericht.'[/quote]';
+					echo '[citaat]'.$sCiteerBericht.'[/citaat]';
 				}
 				echo '</textarea><br /><input type="submit" name="submit" value="opslaan" /></p></form>';
 			}else{
