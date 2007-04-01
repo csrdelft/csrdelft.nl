@@ -74,6 +74,7 @@ htdocs/tools/sendmail/maildata.php -text
 htdocs/tools/sendmail/sendmail.php -text
 htdocs/tools/soccie.php -text
 htdocs/tools/stats.php -text
+htdocs/tools/streeplijst.php -text
 htdocs/vereniging/.htaccess -text
 htdocs/vereniging/bestuur.php -text
 htdocs/vereniging/geschiedenis.php -text
@@ -139,6 +140,7 @@ lib/class.simplehtml.php -text
 lib/class.sjaarsactie.php -text
 lib/class.sjaarsactiecontent.php -text
 lib/class.state.php -text
+lib/class.streeplijstcontent.php -text
 lib/class.stringincluder.php -text
 lib/class.verjaardagcontent.php -text
 lib/class.woonoord.php -text

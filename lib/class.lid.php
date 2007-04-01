@@ -187,10 +187,12 @@ class Lid {
 		//nog een optie.
 		if($civitas=='nick' AND $aNaam['nickname']!=''){
 			$sTmpNaam=$aNaam['nickname'];
+		}elseif($civitas=='streeplijst'){ // achternaam, voornaam [tussenvoegsel] voor de streeplijst
+			$sTmpNaam=$aNaam['achternaam'].', '.$aNaam['voornaam'].' '.$aNaam['tussenvoegsel'];
 		}else{
 			if($aNaam['status']=='S_NOVIET'){
 				$sTmpNaam='noviet '.$aNaam['voornaam'];
-			}elseif($aNaam['status']=='S_KRINGEL'){
+			}elseif($aNaam['status']=='S_KRINGEL' or $civitas==false){
 				$sTmpNaam=$aNaam['voornaam'].' ';
 				if($aNaam['tussenvoegsel'] != '') $sTmpNaam.=ucfirst($aNaam['tussenvoegsel']).' ';
 				$sTmpNaam.=$aNaam['achternaam'];		
