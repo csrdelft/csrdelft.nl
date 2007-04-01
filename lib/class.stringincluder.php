@@ -1,4 +1,9 @@
 <?php
+# C.S.R. Delft | pubcie@csrdelft.nl
+# -------------------------------------------------------------------
+# class.stringincluder.php
+# -------------------------------------------------------------------
+
 
 class stringincluder{
 	var $string='lege pagina';

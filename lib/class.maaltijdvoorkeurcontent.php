@@ -1,20 +1,12 @@
 <?php
-
-#
-# C.S.R. Delft
-#
+# C.S.R. Delft | pubcie@csrdelft.nl
 # -------------------------------------------------------------------
 # class.maaltijdvoorkeurcontent.php
 # -------------------------------------------------------------------
-#
 # Bekijken en wijzigen van voorkeuren voor maaltijdinschrijving 
 # en abonnementen
-#
 # -------------------------------------------------------------------
-# Historie:
-# 20-01-2006 Hans van Kranenburg
-# . gemaakt
-#
+
 
 require_once ('class.maaltrack.php');
 

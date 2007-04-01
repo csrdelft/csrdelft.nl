@@ -1,27 +1,15 @@
 <?php
-
-#
-# C.S.R. Delft LDAP Ledenlijst
+# C.S.R. Delft | pubcie@csrdelft.nl
 # met dank aan Jeugdkerken NL
-#
 # -------------------------------------------------------------------
 # class.ldap.php
 # -------------------------------------------------------------------
-# Beheert LDAP toegang
-#
+# Beheert LDAP-toegang
 # N.B. Let op dat functies in deze klasse verantwoordelijk zijn voor
 # de data die LDAP in gaat. Maak dus op de juiste manier gebruik
 # van de ldap_escape_(dn|attribute) functies!
-#
 # -------------------------------------------------------------------
-# Historie:
-# 31-03-2005
-# . gemaakt voor S.P.I.R.I.T.
-# 07-04-2006
-# . geimporteerd in ap0.4
-# 20-07-2006
-# . aangepast voor Ledenlijst C.S.R.
-#
+
 
 class LDAP {
 	### private ###

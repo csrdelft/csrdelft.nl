@@ -1,15 +1,10 @@
 <?php
-
-#
-# C.S.R. Delft
-#
+# C.S.R. Delft | pubcie@csrdelft.nl
 # -------------------------------------------------------------------
 # class.pollcontent.php
 # -------------------------------------------------------------------
-# Historie:
-# 08-03-2006 Jieter
-# . gemaakt
-#
+
+
 require_once('bbcode/include.bbcode.php');
 
 class PollContent extends SimpleHTML {

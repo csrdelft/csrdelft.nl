@@ -1,19 +1,12 @@
 <?php
-
-#
-# C.S.R. Delft
-#
+# C.S.R. Delft | pubcie@csrdelft.nl
 # -------------------------------------------------------------------
 # class.simplehtml.php
 # -------------------------------------------------------------------
 # Van deze klasse worden alle klassen afgeleid die ervoor
 # bedoeld zijn om uiteindelijk HTML uit te kotsen
-#
 # -------------------------------------------------------------------
-# Historie:
-# 18-12-2004 Hans van Kranenburg
-# . aangemaakt
-#
+
 
 class SimpleHTML {
 	//html voor een pagina uitpoepen.

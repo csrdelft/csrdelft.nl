@@ -1,19 +1,9 @@
 <?php
-
-#
-# C.S.R. Delft
-#
+# C.S.R. Delft | pubcie@csrdelft.nl
 # -------------------------------------------------------------------
 # class.maaltijdinfocontent.php
 # -------------------------------------------------------------------
-#
-# 
-#
-# -------------------------------------------------------------------
-# Historie:
-# 28-07-2006 Hans van Kranenburg
-# . gemaakt
-#
+
 
 require_once ('class.simplehtml.php');
 require_once ('class.lid.php');

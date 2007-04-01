@@ -1,10 +1,9 @@
 <?php
-
-# Camping CMS
-# OogOpslag Internet (c)2005
-# Hans van Kranenburg
-
+# OogOpslag Internet 2005 / C.S.R. Delft | pubcie@csrdelft.nl
+# -------------------------------------------------------------------
 # class.state.php
+# -------------------------------------------------------------------
+
 
 class State {
 	### private ###

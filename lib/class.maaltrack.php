@@ -1,18 +1,15 @@
 <?php
-#
-# Civitas Studiosorum Reformatorum
-# (c)2005 Hans van Kranenburg
-
-#
-# Maaltrack 
-# /lib/class.maaltrack.php
-#
-
+# C.S.R. Delft | pubcie@csrdelft.nl
+# -------------------------------------------------------------------
+# class.maaltijdvoorkeurcontent.php
+# -------------------------------------------------------------------
 # MaalTrack bevat overkoepelende functies voor maaltijden
 # - maaltijd aanmaken
 # - maaltijd verwijderen
 # - maaltijdenlijst opvragen
 # - abonnementen aan/uitzetten
+# -------------------------------------------------------------------
+
 
 require_once("class.maaltijd.php");
 

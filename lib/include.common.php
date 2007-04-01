@@ -1,4 +1,9 @@
 <?php
+# C.S.R. Delft | pubcie@csrdelft.nl
+# -------------------------------------------------------------------
+# include.common.php
+# -------------------------------------------------------------------
+
 
 // http://nl.php.net/manual/en/function.ip2long.php
 // User Contributed Notes

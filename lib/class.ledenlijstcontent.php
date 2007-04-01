@@ -1,19 +1,11 @@
 <?php
-
-#
-# C.S.R. Delft
-#
+# C.S.R. Delft | pubcie@csrdelft.nl
 # -------------------------------------------------------------------
 # class.ledenlijstcontent.php
 # -------------------------------------------------------------------
-#
 # Deze pagina heeft zoekfunctionaliteit voor zoeken in de ledenlijst
-#
 # -------------------------------------------------------------------
-# Historie:
-# 07-09-2005 Hans van Kranenburg
-# . gemaakt
-#
+
 
 require_once ('class.simplehtml.php');
 require_once ('class.lid.php');

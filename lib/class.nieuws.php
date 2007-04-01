@@ -1,18 +1,12 @@
 <?php
-
-#
-# C.S.R. Delft
-#
+# C.S.R. Delft | pubcie@csrdelft.nl
 # -------------------------------------------------------------------
 # class.nieuws.php
 # -------------------------------------------------------------------
 # Verzorgt het opvragen en opslaan van nieuwsberichten.
 # Wordt o.a. door NieuwsContent gebruikt
 # -------------------------------------------------------------------
-# Historie:
-# 29-12-2004 Hans van Kranenburg
-# . gemaakt
-#
+
 
 require_once ('class.mysql.php');
 

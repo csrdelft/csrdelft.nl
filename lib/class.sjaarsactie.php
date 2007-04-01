@@ -1,17 +1,10 @@
 <?php
-
-#
-# C.S.R. Delft
-#
+# C.S.R. Delft | pubcie@csrdelft.nl
 # -------------------------------------------------------------------
 # class.sjaaractie.php
 # -------------------------------------------------------------------
 # Verzorgt het opvragen van sjaarsactiegegevens
 # -------------------------------------------------------------------
-# Historie:
-# 01-10-2005 Jieter
-# . gemaakt
-#
 
 
 class Sjaarsactie {

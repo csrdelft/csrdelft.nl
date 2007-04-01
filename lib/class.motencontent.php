@@ -1,19 +1,11 @@
 <?php
-
-#
-# C.S.R. Delft
-#
+# C.S.R. Delft | pubcie@csrdelft.nl
 # -------------------------------------------------------------------
 # class.motencontent.php
 # -------------------------------------------------------------------
-#
 # Beeldt de moot/kringindeling af
-#
 # -------------------------------------------------------------------
-# Historie:
-# 13-09-2005 Hans van Kranenburg
-# . gemaakt
-#
+
 
 require_once ('class.simplehtml.php');
 require_once ('class.lid.php');

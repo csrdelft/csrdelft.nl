@@ -1,18 +1,8 @@
 <?php
-#
-# Civitas Studiosorum Reformatorum
-# PubCie 04/05/06
-# (c)2004-2006 C.S.R. Delft
-#
-# http://www.csrdelft.nl
-# pubcie@csrdelft.nl
-#
-
-#
-# Maaltijd
-# /lib/class.maaltijd.php
-#
-
+# C.S.R. Delft | pubcie@csrdelft.nl
+# -------------------------------------------------------------------
+# class.maaltijd.php
+# -------------------------------------------------------------------
 # De logica van Maaltijd zit als volgt in elkaar:
 #
 # Er zijn maaltijden met een aantal eigenschappen, leden kunnen abonnementen
@@ -33,7 +23,8 @@
 # N.B. Het controleren op permissies en het controleren van correctheid van
 # opgestuurde data in het formulier gebeurt *niet* hier, maar een stap eerder,
 # bij het inladen van de FORM-data.
-#
+# -------------------------------------------------------------------
+
 
 class MaalTijd {
 	# MySQL connectie

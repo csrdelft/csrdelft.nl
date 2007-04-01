@@ -1,19 +1,10 @@
 <?php
-
-#
 # C.S.R. Delft
-#
 # -------------------------------------------------------------------
 # class.nieuwscontent.php
 # -------------------------------------------------------------------
-#
 # Beeldt de berichten af die in een Nieuws-object zitten.
-#
 # -------------------------------------------------------------------
-# Historie:
-# 29-12-2004 Hans van Kranenburg
-# . gemaakt
-#
 
 
 require_once ('class.nieuws.php');

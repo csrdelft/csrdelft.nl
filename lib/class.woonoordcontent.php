@@ -1,19 +1,11 @@
 <?php
-
-#
-# C.S.R. Delft
-#
+# C.S.R. Delft | pubcie@csrdelft.nl
 # -------------------------------------------------------------------
 # class.woonoordcontent.php
 # -------------------------------------------------------------------
-#
 # Beeldt informatie af over Woonoorden
-#
 # -------------------------------------------------------------------
-# Historie:
-# 28-08-2005 Hans van Kranenburg
-# . gemaakt
-#
+
 
 require_once ('class.simplehtml.php');
 require_once ('bbcode/include.bbcode.php');

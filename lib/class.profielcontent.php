@@ -1,19 +1,11 @@
 <?php
-
-#
 # C.S.R. Delft
-#
 # -------------------------------------------------------------------
 # class.profielcontent.php
 # -------------------------------------------------------------------
-#
 # Bekijken en wijzigen van een ledenprofiel
-#
 # -------------------------------------------------------------------
-# Historie:
-# 09-09-2005 Hans van Kranenburg
-# . gemaakt
-#
+
 
 require_once ('class.commissie.php');
 

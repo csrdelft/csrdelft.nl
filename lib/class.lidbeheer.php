@@ -1,8 +1,9 @@
 <?php
+# C.S.R. Delft
+# -------------------------------------------------------------------
+# class.lidbeheer.php
+# -------------------------------------------------------------------
 
-# lidbeheer C.S.R. Delft
-# (c) 2006 PubCie C.S.R. Delft 
-# 20-01-2006 Hans van Kranenburg
 
 class LidBeheer{
 

@@ -1,20 +1,11 @@
 <?php
-
-#
-# OogOpslag Internet / C.S.R. Delft
-#
+# OogOpslag Internet / C.S.R. Delft | pubcie@csrdelft.nl
 # -------------------------------------------------------------------
 # class.mysql.php
 # -------------------------------------------------------------------
 # MySQL wrapper
-#
 # -------------------------------------------------------------------
-# Historie:
-# 24-12-2004 Hans van Kranenburg
-# . Met dank aan OogOpslag...
-# 04-10-2005
-# . update_a aangepast met de id-kolom
-#
+
 
 class MySql {
 	### private ###

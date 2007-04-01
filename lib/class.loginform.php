@@ -1,8 +1,5 @@
 <?php
-
-#
-# C.S.R. Delft
-#
+# C.S.R. Delft | pubcie@csrdelft.nl
 # -------------------------------------------------------------------
 # class.loginform.php
 # -------------------------------------------------------------------
@@ -10,12 +7,8 @@
 # het target-login-script in de sessie is gezet.
 # Als we al ingelogd zijn (= als we nobody zijn) dan wordt een uit-
 # loggenknop afgebeeld.
-#
 # -------------------------------------------------------------------
-# Historie:
-# 02-01-2005 Hans van Kranenburg
-# . gemaakt
-#
+
 
 require_once ('class.simplehtml.php');
 

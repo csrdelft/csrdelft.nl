@@ -1,4 +1,9 @@
 <?php
+# C.S.R. Delft | pubcie@csrdelft.nl
+# -------------------------------------------------------------------
+# class.inschrijvingcontent.php
+# -------------------------------------------------------------------
+
 
 class InschrijvingContent {
 	
