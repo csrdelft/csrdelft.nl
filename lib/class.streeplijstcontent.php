@@ -119,7 +119,7 @@ class Streeplijstcontent {
 	
 	}
 	function getUrl(){
-		$sReturn='streeplijst.php?goederen='.urlencode($this->getGoederen).
+		$sReturn='streeplijst.php?goederen='.urlencode($this->getGoederen()).
 			'&moot='.$this->moot.'&lichting='.$this->lichting.'&'; 
 		if(isset($_GET['colorCols'])){ $sReturn.='colorCols&'; }
 		if(isset($_GET['sortCols'])){ $sReturn.='sortCols&'; }
@@ -132,7 +132,7 @@ class Streeplijstcontent {
 				<legend>Bestellijst</legend>
 				<br />
 				<strong>Goederen:</strong> (Voer goederen in gescheiden door een komma.)<br />
-				<input type="text"  name="goederen" value="'.$this->getGoederen().'" style="width: 100%;" /><br />
+				<input type="text" name="goederen" value="'.$this->getGoederen().'" style="width: 100%;" /><br />
 				<br />
 			</fieldset>
 			<br />
