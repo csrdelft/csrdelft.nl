@@ -952,9 +952,9 @@ class Forum {
 	}
 	function getForumNaam($uid=false, $aNaam=false, $aLink=true, $bHtmlentities=true ){
 		//instellingen voor deze gebruiker ophalen...
-		$civitas=$this->_lid->getForumNaamInstelling();
+		$vorm=$this->_lid->getForumNaamInstelling();
 		
-		return $this->_lid->getNaamLink($uid, $civitas, $aLink, $aNaam, $bHtmlentities);
+		return $this->_lid->getNaamLink($uid, $vorm, $aLink, $aNaam, $bHtmlentities);
 	}
 	function isIngelogged(){ return $this->_lid->hasPermission('P_LOGGED_IN'); }
 	function getParseTime(){

@@ -110,7 +110,7 @@ class VerjaardagContent extends SimpleHTML {
 						$tekst.='</i><br />';
 					}
 					
-					$tekst.=$this->_lid->getNaamLink($aVerjaardag['uid'], 'full', true, $aVerjaardag);
+					$tekst.=$this->_lid->getNaamLink($aVerjaardag['uid'], 'civitas', true, $aVerjaardag);
 					$tekst .= ' (<b>' . $aVerjaardag['leeftijd'] . '</b>)<br />';
 					
 					echo $tekst;

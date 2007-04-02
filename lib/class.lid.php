@@ -194,14 +194,18 @@ class Lid {
 		if($link AND $this->hasPermission('P_LOGGED_IN')){ $sNaam.='<a href="/intern/profiel/'.$uid.'">'; }
 		//civitas of niksnamen, enkel relevant voor het forum, verder is gewoon voornaam [tussenvoegsel] achternaam
 		//nog een optie.
-		if($vorm=='nick' AND $aNaam['nickname']!=''){
-			$sTmpNaam=$aNaam['nickname'];
+		if($vorm==='nick'){
+			if ($aNaam['nickname']!='') {
+				$sTmpNaam = $aNaam['nickname'];
+			}else {
+				$sTmpNaam = $aNaam['voornaam'];
+			}			
 		}elseif($vorm==='streeplijst'){ // achternaam, voornaam [tussenvoegsel] voor de streeplijst
 			$sTmpNaam=$aNaam['achternaam'].', '.$aNaam['voornaam'];
 			if($aNaam['tussenvoegsel'] != '') $sTmpNaam.=' '.$aNaam['tussenvoegsel'];
 		}elseif($vorm==='full' OR $aNaam['status']=='S_KRINGEL'){
 			$sTmpNaam=$aNaam['voornaam'].' ';
-			if($aNaam['tussenvoegsel'] != '') $sTmpNaam.=ucfirst($aNaam['tussenvoegsel']).' ';
+			if($aNaam['tussenvoegsel'] != '') $sTmpNaam.=$aNaam['tussenvoegsel'].' ';
 			$sTmpNaam.=$aNaam['achternaam'];		
 		}elseif($vorm==='civitas'){
 			if($aNaam['status']=='S_NOVIET'){
