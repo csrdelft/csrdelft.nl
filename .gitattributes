@@ -120,7 +120,6 @@ lib/class.ldap.php -text
 lib/class.ledenlijstcontent.php -text
 lib/class.lid.php -text
 lib/class.lidbeheer.php -text
-lib/class.loginform.php -text
 lib/class.maaltijd.php -text
 lib/class.maaltijdcontent.php -text
 lib/class.maaltijdinfocontent.php -text

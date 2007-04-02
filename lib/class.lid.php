@@ -632,9 +632,6 @@ class Lid {
 			LIMIT 1;";
 		return $this->_db->query($sKringInvoer);
 	}
-	# deze functie wordt gebruikt om extra info toe te voegen als de inschrijving voor een
-	# maaltijd gesloten wordt, en de inschrijvingen naar de maaltijdgesloten tabel worden
-	# overgezet: de volledige naam en eetwens
 
 	function getEetwens(){ return $this->_profile['eetwens']; }
 	
