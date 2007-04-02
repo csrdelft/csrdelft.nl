@@ -522,7 +522,7 @@ class ForumContent extends SimpleHTML {
 				$tekst.='...';
 			}
 			echo '<item>';
-			echo '<title>'.$this->_forum->_lid->getNaamLink($aPost['uid'], 'nick', $aPost, false).': '.str_replace(array("\r\n", "\r", "\n"), ' ', $tekst).'</title>';
+			echo '<title>'.$this->_forum->_lid->getNaamLink($aPost['uid'], 'nick', false, $aPost).': '.str_replace(array("\r\n", "\r", "\n"), ' ', $tekst).'</title>';
 			echo '<link>http://csrdelft.nl/forum/onderwerp/'.$aPost['tid'].'#post'.$aPost['postID'].'</link>';
 			
 			echo '<description>'.$volledigetekst.'</description>';
