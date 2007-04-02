@@ -94,7 +94,6 @@ lib/class.bestuurcontent.php -text
 lib/class.bieb.php -text
 lib/class.biebcontent.php -text
 lib/class.cieoverzichtcontent.php -text
-lib/class.column.php -text
 lib/class.commissie.php -text
 lib/class.commissiecontent.php -text
 lib/class.csrdelft.php -text

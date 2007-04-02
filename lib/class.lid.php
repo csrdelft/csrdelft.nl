@@ -184,10 +184,12 @@ class Lid {
 		//civitas of niksnamen, enkel relevant voor het forum, verder is gewoon voornaam [tussenvoegsel] achternaam
 		//nog een optie.
 		if($vorm==='nick'){
-			if ($aNaam['nickname']!='') {
-				$sTmpNaam = $aNaam['nickname'];
-			}else {
-				$sTmpNaam = $aNaam['voornaam'];
+			if($aNaam['nickname']!=''){
+				$sTmpNaam=$aNaam['nickname'];
+			}else{
+				$sTmpNaam=$aNaam['voornaam'].' ';
+				if($aNaam['tussenvoegsel']!='') $sTmpNaam.=$aNaam['tussenvoegsel'].' ';
+				$sTmpNaam.=$aNaam['achternaam'];
 			}			
 		}elseif($vorm==='streeplijst'){ // achternaam, voornaam [tussenvoegsel] voor de streeplijst
 			$sTmpNaam=$aNaam['achternaam'].', '.$aNaam['voornaam'];
