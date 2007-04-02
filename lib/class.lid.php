@@ -158,7 +158,7 @@ class Lid {
 	* Deze functie maakt een link met de naam, als de gebruiker is ingelogged, anders gewoon een naam.
 	* Dit om te voorkomen dat er op 100 plekken foute paden staan als dat een keer verandert.
 	*/
-	function getNaamLink($uid, $civitas=false, $link=false, $aNaam=false, $bHtmlentities=true){
+	function getNaamLink($uid, $vorm=false, $link=false, $aNaam=false, $bHtmlentities=true){
 		//als er geen uid is opgegeven, ook geen link of naam teruggeven.
 		if($uid=='' AND !$this->isValidUid($uid)){ return ''; }
 		$sNaam='';
@@ -185,14 +185,14 @@ class Lid {
 		if($link AND $this->hasPermission('P_LOGGED_IN')){ $sNaam.='<a href="/intern/profiel/'.$uid.'">'; }
 		//civitas of niksnamen, enkel relevant voor het forum, verder is gewoon voornaam [tussenvoegsel] achternaam
 		//nog een optie.
-		if($civitas=='nick' AND $aNaam['nickname']!=''){
+		if($vorm=='nick' AND $aNaam['nickname']!=''){
 			$sTmpNaam=$aNaam['nickname'];
 		}elseif($civitas=='streeplijst'){ // achternaam, voornaam [tussenvoegsel] voor de streeplijst
 			$sTmpNaam=$aNaam['achternaam'].', '.$aNaam['voornaam'].' '.$aNaam['tussenvoegsel'];
 		}else{
 			if($aNaam['status']=='S_NOVIET'){
 				$sTmpNaam='noviet '.$aNaam['voornaam'];
-			}elseif($aNaam['status']=='S_KRINGEL' or $civitas==false){
+			}elseif($aNaam['status']=='S_KRINGEL' or $vorm===false){
 				$sTmpNaam=$aNaam['voornaam'].' ';
 				if($aNaam['tussenvoegsel'] != '') $sTmpNaam.=ucfirst($aNaam['tussenvoegsel']).' ';
 				$sTmpNaam.=$aNaam['achternaam'];		
@@ -205,7 +205,6 @@ class Lid {
 		}
 		if($bHtmlentities){ 
 			$sNaam.=mb_htmlentities($sTmpNaam); 
-			
 		}else{ 
 			$sNaam.=$sTmpNaam; 
 		}
