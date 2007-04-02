@@ -42,7 +42,7 @@ class LoginForm extends SimpleHTML {
 			}
 			print(<<<EOT
 <br />
-<a href="/leden/profiel/{$this->_lid->getLoginName()}">[P] Mijn profiel</a>
+<a href="/leden/profiel/{$this->_lid->getUid()}">[P] Mijn profiel</a>
 
 <form id="frm_login" action="/logout.php" method="post">
 <p>

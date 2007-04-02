@@ -84,7 +84,6 @@ class Lid {
 		
 		return true;
 	}
-
 	
 	function reloadProfile() {
 		$result = $this->_db->select("SELECT * FROM lid WHERE uid = '{$_SESSION['_uid']}' LIMIT 1");
@@ -93,8 +92,7 @@ class Lid {
 			return true;
 		}
 		return false;
-	}
-	
+	}	
 
 	function logout() {
 		session_unset();
@@ -139,16 +137,7 @@ class Lid {
 
 	function getUid() { return $this->_profile['uid']; }
 	function getNickName() { return $this->_profile['nickname']; }
-
-	# <DEPRECATED> een keertje search-replace doen op deze functies ofzo...
-	//function isLoggedIn() { return $this->hasPermission('P_LOGGED_IN'); }
-	function getLoginName() { return $this->getUid(); }
-	# </DEPRECATED>
-
 	function getProfile() { return $this->_profile; }
-	
-	
-
 	function getPermissions() { return $this->_profile['permissies']; }
 	function getStatus()      { return $this->_profile['status']; }
 	function getForumInstelling(){ return array('forum_naam' => $this->_profile['forum_name']); }
@@ -226,20 +215,22 @@ class Lid {
 		}
 		if($link AND $this->hasPermission('P_LOGGED_IN')){ $sNaam.='</a>'; }
 		return $sNaam;	
-	}
-	
+	}	
 	
 	function getFullName($uid='') {
 		if($uid==''){ $uid=$this->getUid(); }
 		//geen bijnaam of am./ama., geen link, geen input-array.
 		return $this->getNaamLink($uid, 'full', false, false);
 	}
+	
 	function getCivitasName($uid=''){
 		if($uid==''){ $uid=$this->getUid(); }
 		//geen bijnaam, geen link, geen input-array
 		return $this->getNaamLink($uid, 'civitas', false, false);
 	}
+	
 	function getMoot() { return $this->_profile['moot']; }
+	
 	function _loadPermissions() {
 		# Hier staan de permissies die voor enkele onderdelen van
 		# de website nodig zijn. Ze worden zowel op de 'echte'
@@ -450,7 +441,6 @@ class Lid {
 		return preg_match('/^[a-z0-9]{4}$/', $uid) > 0;
 	}
 
-
 	function uidExists($uid) {
 		if (!$this->isValidUid($uid)) return false;
 		
@@ -623,6 +613,7 @@ class Lid {
 
 		return $kring;
 	}
+	
 	# Deze functie voegt iemand aan een kring toe
 	function addUid2kring($uid, $kring, $moot=0){
 		//controle op invoer
@@ -644,32 +635,16 @@ class Lid {
 	# deze functie wordt gebruikt om extra info toe te voegen als de inschrijving voor een
 	# maaltijd gesloten wordt, en de inschrijvingen naar de maaltijdgesloten tabel worden
 	# overgezet: de volledige naam en eetwens
-	/* OOK MAAR NIET MEER GEBRUIKEN
-	function getNaamEetwens($uid = '') {
-		if ($uid == '') $uid = $this->_profile['uid'];
-		$result = $this->_db->select("
-			SELECT voornaam, tussenvoegsel, achternaam, eetwens
-			FROM lid
-			WHERE uid='{$uid}'
-		");
-		if ($result !== false and $this->_db->numRows($result) > 0) {
-			$record = $this->_db->next($result);
-			return array(
-				'naam' => naam($record['voornaam'], $record['achternaam'], $record['tussenvoegsel']), 
-				'eetwens' => $record['eetwens']);
-		}
-		return false;
-	}
-	*/
+
 	function getEetwens(){ return $this->_profile['eetwens']; }
+	
 	function setEetwens($eetwens){
 		$eetwens=trim($this->_db->escape($eetwens));
 		//ff streepjes enzo eruit halen, anders komen die op de maaltijdlijst.
 		if(strlen($eetwens)<3){ $eetwens=''; }
 		$sEetwens="UPDATE lid SET eetwens='".$eetwens."' WHERE uid='".$this->getUid()."';";
 		return $this->_db->query($sEetwens);
-	}
-	
+	}	
 	
 	function getSaldi($uid='', $alleenRood=false){
 		if($uid==''){ $uid=$this->getUid(); }
@@ -701,6 +676,7 @@ class Lid {
 			return false;
 		}
 	}
+	
 	function logBezoek(){
 		$uid=$this->getUid();
 		$datumtijd=date('Y-m-d H:i:s');
