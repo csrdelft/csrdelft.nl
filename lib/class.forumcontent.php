@@ -522,11 +522,11 @@ class ForumContent extends SimpleHTML {
 				$tekst.='...';
 			}
 			echo '<item>';
-			echo '<title>'.$aPost['nickname'].': '.str_replace(array("\r\n", "\r", "\n"), ' ', $tekst).'</title>';
+			echo '<title>'.$this->_forum->getForumNaam($aPost['uid'], $aPost, false, false).': '.str_replace(array("\r\n", "\r", "\n"), ' ', $tekst).'</title>';
 			echo '<link>http://csrdelft.nl/forum/onderwerp/'.$aPost['tid'].'#post'.$aPost['postID'].'</link>';
 			
 			echo '<description>'.$volledigetekst.'</description>';
-			echo '<author>'.$this->_forum->getForumNaam($aPost['uid'], $aPost, false, false, false).'</author>';
+			echo '<author>'.$this->_forum->getForumNaam($aPost['uid'], $aPost, false, false).'</author>';
 			echo '<category>forum: '.htmlspecialchars($aPost['titel']).'</category>';
 			echo '<comments>http://csrdelft.nl/forum/onderwerp/'.$aPost['tid'].'</comments>';
 			echo '<guid>http://csrdelft.nl/forum/onderwerp/'.$aPost['tid'].'#post'.$aPost['postID'].'</guid>';
