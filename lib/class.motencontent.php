@@ -38,7 +38,7 @@ class MotenContent extends SimpleHTML {
 			}else{
 				foreach ($this->_kringen[$moot][$kring] as $kringlid) {
 					if ($kringlid['kringleider'] != 'n' or $kringlid['motebal']!=0) echo '<em>';
-					echo $this->_lid->getNaamLink($kringlid['uid'], false, true);
+					echo $this->_lid->getNaamLink($kringlid['uid'], 'full', true);
 					if ($kringlid['motebal']!='0') echo '&nbsp;O';
 					if ($kringlid['status']=='S_KRINGEL') echo '&nbsp;~';
 					echo "<br />\n";

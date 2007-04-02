@@ -43,7 +43,7 @@ class Sjaarsactie {
 				'actieNaam' => $aActie['actieNaam'],
 				'beschrijving' => $aActie['beschrijving'],
 				'uid' => $aActie['verantwoordelijke'],
-				'naam' => $this->_lid->getCivitasName($aActie['verantwoordelijke']),
+				'naamLink' => $this->_lid->getNaamLink($aActie['verantwoordelijke'], 'civitas', true),
 				'moment' => $aActie['moment'],
 				'limiet' => $aActie['limiet'] );
 		}
@@ -64,7 +64,7 @@ class Sjaarsactie {
 		while($aAanmeld =$this->_db->next($rAanmeldingen)){
 			$return[]=array(
 				'uid' => $aAanmeld['uid'],
-				'naam' => $this->_lid->getCivitasName($aAanmeld['uid']),
+				'naamLink' => $this->_lid->getNaamLink($aAanmeld['uid'], 'civitas', true),
 				'moment' => $aAanmeld['aanmeldmoment'] );
 		}
 		return $return;

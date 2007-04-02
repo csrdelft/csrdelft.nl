@@ -56,9 +56,8 @@ class SjaarsactieContent extends SimpleHTML {
 				echo '<tr><td colspan="2">';
 				echo '<h2 style="border-bottom: 1px dashed black; margin: 15px 0 0px 0;">'.mb_htmlentities($aSjaarsactie['actieNaam']).'</h2></td></tr>';
 				echo '<tr><td><strong>Ouderejaars: ';
-				echo '<a href="/intern/profiel/'.$aSjaarsactie['uid'].'" style="font-weight: bold;">';
-				echo mb_htmlentities($aSjaarsactie['naam']);
-				echo '</a></strong><br /><br />';
+				echo $aSjaarsactie['naamLink'];
+				echo '</strong><br /><br />';
 				echo nl2br(mb_htmlentities($aSjaarsactie['beschrijving']));
 				echo '</td><td style="vertical-align: top; border-left: 1px solid black; padding: 0 0 0 10px;">';
 				$aSjaarsjes=$this->_sjaarsactie->getAanmeldingen($aSjaarsactie['ID']);
@@ -66,7 +65,7 @@ class SjaarsactieContent extends SimpleHTML {
 				if(is_array($aSjaarsjes) AND count($aSjaarsjes)!=0){
 					$iAantal=count($aSjaarsjes);
 					foreach($aSjaarsjes as $aSjaars){
-						echo '<a href="/intern/profiel/'.$aSjaars['uid'].'">'.mb_htmlentities($aSjaars['naam']).'</a><br />';
+						echo $aSjaars['naamLink'].'<br />';
 						//controleren of de huidige sjaard hier al is aangemeld. dan bAlAangemeld zetten.
 						if($aSjaars['uid']==$this->_sjaarsactie->_lid->getUid()){ $bAlAangemeld=true; }
 					}

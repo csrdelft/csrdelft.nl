@@ -98,19 +98,19 @@ class VerjaardagContent extends SimpleHTML {
 						switch ($aVerjaardag['jarig_over']) {
 							case 0:
 								$tekst .= 'Vandaag:';
-								break;
+							break;
 								
 							case 1:
 								$tekst .= 'Morgen:';
-								break;
-								
+							break;
+							
 							default:
 								$tekst .= 'Over ' . $aVerjaardag['jarig_over'] . ' dagen:';
 						}
 						$tekst.='</i><br />';
 					}
 					
-					$tekst.=$this->_lid->getNaamLink($aVerjaardag['uid'], true, true, $aVerjaardag);
+					$tekst.=$this->_lid->getNaamLink($aVerjaardag['uid'], 'full', true, $aVerjaardag);
 					$tekst .= ' (<b>' . $aVerjaardag['leeftijd'] . '</b>)<br />';
 					
 					echo $tekst;

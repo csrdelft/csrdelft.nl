@@ -157,8 +157,17 @@ class Lid {
 	/*
 	* Deze functie maakt een link met de naam, als de gebruiker is ingelogged, anders gewoon een naam.
 	* Dit om te voorkomen dat er op 100 plekken foute paden staan als dat een keer verandert.
+	*
+	* argumenten:
+	*		$uid 						uid van de benodigde naam
+	*		$vorm						Vorm van de naam: ( nick, civitas, streeplijst, full)
+	*		$link						Er wordt een link naar het profiel gemaakt.
+	* 	$bHtmlentities	Naam wordt ge-htmlentities()-ed
+	*
+	*		return: 				string naam
+	*
 	*/
-	function getNaamLink($uid, $vorm=false, $link=false, $aNaam=false, $bHtmlentities=true){
+	function getNaamLink($uid, $vorm='full', $link=false, $aNaam=false, $bHtmlentities=true){
 		//als er geen uid is opgegeven, ook geen link of naam teruggeven.
 		if($uid=='' AND !$this->isValidUid($uid)){ return ''; }
 		$sNaam='';
@@ -187,21 +196,24 @@ class Lid {
 		//nog een optie.
 		if($vorm=='nick' AND $aNaam['nickname']!=''){
 			$sTmpNaam=$aNaam['nickname'];
-		}elseif($civitas=='streeplijst'){ // achternaam, voornaam [tussenvoegsel] voor de streeplijst
-			$sTmpNaam=$aNaam['achternaam'].', '.$aNaam['voornaam'].' '.$aNaam['tussenvoegsel'];
-		}else{
+		}elseif($vorm==='streeplijst'){ // achternaam, voornaam [tussenvoegsel] voor de streeplijst
+			$sTmpNaam=$aNaam['achternaam'].', '.$aNaam['voornaam'];
+			if($aNaam['tussenvoegsel'] != '') $sTmpNaam.=' '.$aNaam['tussenvoegsel'];
+		}elseif($vorm==='full' OR $aNaam['status']=='S_KRINGEL'){
+			$sTmpNaam=$aNaam['voornaam'].' ';
+			if($aNaam['tussenvoegsel'] != '') $sTmpNaam.=ucfirst($aNaam['tussenvoegsel']).' ';
+			$sTmpNaam.=$aNaam['achternaam'];		
+		}elseif($vorm==='civitas'){
 			if($aNaam['status']=='S_NOVIET'){
 				$sTmpNaam='noviet '.$aNaam['voornaam'];
-			}elseif($aNaam['status']=='S_KRINGEL' or $vorm===false){
-				$sTmpNaam=$aNaam['voornaam'].' ';
-				if($aNaam['tussenvoegsel'] != '') $sTmpNaam.=ucfirst($aNaam['tussenvoegsel']).' ';
-				$sTmpNaam.=$aNaam['achternaam'];		
 			}else{
 				$sTmpNaam=($aNaam['geslacht']=='v') ? 'Ama. ' : 'Am. ';
 				if($aNaam['tussenvoegsel'] != '') $sTmpNaam.=ucfirst($aNaam['tussenvoegsel']).' ';
 				$sTmpNaam.=$aNaam['achternaam'];				
 				if($aNaam['postfix'] != '') $sTmpNaam.=' '.$aNaam['postfix'];
 			}
+		}else{
+			$sTmpNaam='ongeldige vorm';
 		}
 		if($bHtmlentities){ 
 			$sNaam.=mb_htmlentities($sTmpNaam); 
@@ -216,7 +228,7 @@ class Lid {
 	function getFullName($uid='') {
 		if($uid==''){ $uid=$this->getUid(); }
 		//geen bijnaam of am./ama., geen link, geen input-array.
-		return $this->getNaamLink($uid, false, false, false);
+		return $this->getNaamLink($uid, 'full', false, false);
 	}
 	function getCivitasName($uid=''){
 		if($uid==''){ $uid=$this->getUid(); }

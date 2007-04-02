@@ -52,7 +52,7 @@ class CieOverzichtContent extends SimpleHTML {
 			$aCieLeden=$this->_commissie->getCieLeden($cie['id']);
 			if(is_array($aCieLeden)){
 				foreach($aCieLeden as $aCieLid){
-					echo $this->_lid->getNaamLink($aCieLid['uid'], false, true, $aCieLid).'&nbsp;<em>'.$aCieLid['functie'].'</em><br />';
+					echo $this->_lid->getNaamLink($aCieLid['uid'], 'full', true, $aCieLid).'&nbsp;<em>'.$aCieLid['functie'].'</em><br />';
 				}
 			}else{
 				echo $aCieLeden;

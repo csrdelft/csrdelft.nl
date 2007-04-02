@@ -50,7 +50,7 @@ class CommissieContent extends SimpleHTML {
 		if(is_array($aCieLeden)){
 			echo '<table border="0"  class="hoktable" ><tr><th colspan="2">Commissieleden:</th></tr>';
 			foreach($aCieLeden as $aCieLid){
-				echo '<tr><td width="150px">'.$this->_lid->getNaamLink($aCieLid['uid'], true, true, $aCieLid).'</td><td>'.mb_htmlentities($aCieLid['functie']);
+				echo '<tr><td width="150px">'.$this->_lid->getNaamLink($aCieLid['uid'], 'civitas', true, $aCieLid).'</td><td>'.mb_htmlentities($aCieLid['functie']);
 				echo '</td>';
 				if($this->_commissie->magBewerken()){
 					echo '<td><a href="/groepen/commissie/'.$cie['id'].'/verwijder/lid/'.$aCieLid['uid'].'">X</a></td>';

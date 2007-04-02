@@ -76,7 +76,7 @@ class WoonoordContent extends SimpleHTML {
 				echo '('.htmlspecialchars($woonoord['adres']).')</td>';
 				echo '<td rowspan="2">&nbsp;&nbsp;&nbsp;</td><td valign="top" rowspan="2">';
 				foreach ($woonoord['bewoners'] as $bewoner) {
-					echo $this->_lid->getNaamLink($bewoner['uid'], true, true, $bewoner);
+					echo $this->_lid->getNaamLink($bewoner['uid'], 'civitas', true, $bewoner);
 					if($bBewerken OR $this->_lid->hasPermission('P_LEDEN_MOD')){
 						echo ' [ <a href="woonoorden.php?woonoordid='.$woonoord['id'].'&amp;uid='.$bewoner['uid'].'&amp;verwijderen"onclick=" return confirm(\'Weet u zeker dat u deze bewoner wilt verwijderen?\')">X</a> ]';
 					}							
