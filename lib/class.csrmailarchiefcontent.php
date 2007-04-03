@@ -11,9 +11,12 @@ require_once ('class.mysql.php');
 
 class Csrmailarchiefcontent extends Csrmailcontent{
 	
+	//csrmail-object
 	var $_csrmail;	
+	//id en array van de huidige csrmail
 	var $iCsrmail=0;
 	var $aCsrmail;	
+	//wat moet er gedaan worden, zie ook setZijkolom()
 	var $zijkolom=false;
 	
 	function Csrmailarchiefcontent(&$csrmail){
@@ -27,8 +30,10 @@ class Csrmailarchiefcontent extends Csrmailcontent{
 		return $this->iCsrmail;
 	}
 	
+	//tussen de modes wisselen, of een overzicht in de zijkolom, of een archiefmail in het
+	//hoofdgedeelte
 	function setZijkolom(){ $this->zijkolom=true; }
-
+	
 	function view(){
 		if($this->getID()==0 OR $this->zijkolom){
 			//overzicht
