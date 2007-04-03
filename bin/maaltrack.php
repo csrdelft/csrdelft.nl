@@ -1,5 +1,4 @@
 #!/usr/bin/php5
-##!/usr/bin/php5 -c /etc/php5/vhosts/csrdelft/php.ini
 <?php
 
 # CLI Maaltijdbeheer C.S.R. Delft

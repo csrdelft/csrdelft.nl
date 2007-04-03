@@ -100,7 +100,7 @@ class MaalTrack {
 			return false;			
 		}
 		# kijk of de maaltijd wel bestaat.
-		$result = $this->_db->select("SELECT id from maaltijd WHERE id='".$maalid,"';");	
+		$result = $this->_db->select("SELECT id from maaltijd WHERE id=".$maalid);	
 		if (($result === false) or $this->_db->numRows($result) == 0) {
 			$this->_error = "Deze maaltijd bestaat niet";
 			return false;			
@@ -108,10 +108,10 @@ class MaalTrack {
 		
 		# verwijder alle aan/afmeldingen voor deze maaltijd
 		# ...van leden met de bijbehoorende gasten.
-		$this->_db->query("DELETE FROM maaltijdaanmelding WHERE maalid='".$maalid."';");
+		$this->_db->query("DELETE FROM maaltijdaanmelding WHERE maalid=".$maalid);
 
 		# verwijder de maaltijd zelf
-		$this->_db->query("DELETE FROM maaltijd WHERE id='".$maalid."';");
+		$this->_db->query("DELETE FROM maaltijd WHERE id=".$maalid);
 		
 		return true;		
 	}
@@ -184,7 +184,7 @@ class MaalTrack {
 			
 			# status: AAN,AF ABO ''
 			# 1a. is er een aan of afmelding voor deze maaltijd?
-			$result = $this->_db->select("SELECT * FROM maaltijdaanmelding WHERE uid = '{$uid}' AND maalid = '{$maaltijden[$i]['id']}'");
+			$result = $this->_db->select("SELECT * FROM maaltijdaanmelding WHERE uid = '{$uid}' AND maalid = {$maaltijden[$i]['id']}");
 			if (($result !== false) and $this->_db->numRows($result) > 0) {
 				$record = $this->_db->next($result);
 				$maaltijden[$i]['status'] = $record['status'];
