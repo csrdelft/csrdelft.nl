@@ -575,7 +575,7 @@ CREATE TABLE `pubciemailbericht` (
   `ID` int(11) NOT NULL auto_increment,
   `pubciemailID` int(11) NOT NULL default '0',
   `titel` varchar(100) NOT NULL default '',
-  `cat` enum('bestuur','csr','overig','voorwoord') NOT NULL default 'bestuur',
+  `cat` enum('voorwoord','bestuur','csr','overig') NOT NULL default 'bestuur',
   `bericht` text NOT NULL,
   `volgorde` int(11) NOT NULL default '0',
   PRIMARY KEY  (`ID`)

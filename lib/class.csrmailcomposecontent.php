@@ -26,18 +26,15 @@ Approved: ".$instellingen['password']."
 Subject: C.S.R.-courant ".strftime('%e %B %Y')."\r\n\r\n";
 		return $sUitvoer;
 	}
+	
 	function getKopjes($aBerichten){
 		foreach($aBerichten as $aBericht){
 			//ros alles in een array, met categorie als element.
 			$aKopjes[$aBericht['cat']][]=array('titel'=> $aBericht['titel'], 'ID' => $aBericht['ID']);
 		}
 		return $aKopjes;
-	}
+	}	
 	
-	
-	function geefBewerkKetzer(){
-	
-	}
 	function zend($sEmailAan){
 		$sHeaders=$this->_getHeaders();
 		$sMail=$this->_getBody();
@@ -66,7 +63,7 @@ Subject: C.S.R.-courant ".strftime('%e %B %Y')."\r\n\r\n";
 		echo fread($smtp, 1024);
 		echo '</pre>';
 	}
-	//function lees($
+
 	function view(){
 		echo $this->_getBody();
 	}

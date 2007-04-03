@@ -17,6 +17,7 @@ class Csrmail {
 		$this->_lid =& $lid;
 		$this->_db =& $db;
 	}
+	
 	function magToevoegen(){ return $this->_lid->hasPermission('P_MAIL_POST'); }
 	function magBeheren(){ return $this->_lid->hasPermission('P_MAIL_COMPOSE'); }
 	function magVerzenden(){ return $this->_lid->hasPermission('P_MAIL_SEND'); }
@@ -43,6 +44,7 @@ class Csrmail {
 		
 		return $this->_db->query($sBerichtQuery);
 	}
+	
 	function bewerkBericht($iBerichtID, $titel, $categorie, $bericht){
 		$iBerichtID=(int)$iBerichtID;
 		$titel=ucfirst($this->_db->escape(trim($titel)));
@@ -71,6 +73,7 @@ class Csrmail {
 		return $this->_db->query($sBerichtQuery);
 		
 	}
+	
 	function valideerBerichtInvoer(&$sError){
 		$bValid=true;
 		$sError='';
@@ -89,6 +92,7 @@ class Csrmail {
 		}
 		return $bValid;
 	}
+	
 	function _isValideCategorie($categorie){
 		$aToegelatenCategorieen=array('bestuur', 'csr', 'overig', 'voorwoord');
 		if(in_array($categorie, $aToegelatenCategorieen)){
@@ -97,6 +101,7 @@ class Csrmail {
 			return false;
 		}
 	}
+	
 	function getBerichtenVoorGebruiker(){
 		$sVoorwaarde='1';
 		if(!$this->magBeheren()){
@@ -123,6 +128,7 @@ class Csrmail {
 		}
 		return $aBerichten;
 	}
+	
 	function getBerichtVoorGebruiker($iBerichtID){
 		$iBerichtID=(int)$iBerichtID;
 		$sVoorwaarde='1';
@@ -149,6 +155,7 @@ class Csrmail {
 			return false;
 		}
 	}
+	
 	function verwijderBerichtVoorGebruiker($iBerichtID){
 		$iBerichtID=(int)$iBerichtID;
 		$sVoorwaarde='1';
@@ -168,6 +175,7 @@ class Csrmail {
 		$this->_db->query($sBerichtVerwijderen);
 		return mysql_affected_rows()==1;
 	}
+	
 	#############################################################
 	###	functies voor compose gedeelte, voor de pubcie
 	#############################################################
@@ -215,6 +223,7 @@ class Csrmail {
 		}
 		return $aBerichten;
 	}
+	
 	/*
 	*	functie rost alles vanuit de tabel pubciemailcache naar de tabel 
 	* pubciemail en pubciemailbericht.
@@ -251,6 +260,7 @@ class Csrmail {
 			return false;
 		}
 	}
+	
 	function createPubciemail(){
 		$uid=$this->_lid->getUid();
 		$datumTijd=getDateTime();
@@ -268,6 +278,7 @@ class Csrmail {
 			return false;
 		}
 	}
+	
 	function getArchiefmails(){
 		$sArchiefQuery="
 			SELECT
@@ -282,9 +293,6 @@ class Csrmail {
 		}else{
 			return $this->_db->result2array($rArchief);
 		}
-	}
-			
-	
-	
+	}	
 }//einde classe
 ?>
