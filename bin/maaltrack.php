@@ -54,7 +54,11 @@ function main() {
 		elseif (preg_match("/^adx\s+([^|]+)\|([^|]+)\|([^|]+)?\|([^|]+)$/", $input, $matches)) {
 			print_r($matches);
 			$datum = strtotime("{$matches[1]} 18:00");
-			$maaltrack->addMaaltijd($datum, $matches[2], $matches[3], $matches[4]) or print($maaltrack->getError()."\n");
+			$mId = $maaltrack->addMaaltijd($datum, $matches[2], $matches[3], $matches[4]) or print($maaltrack->getError()."\n");
+			
+			$m = new Maaltijd($mId,$lid,$db);
+			$m->recount();
+			unset($m);
 		}
 		# laat maaltijden zien vanaf nu
 		elseif ($input == 'view') {
