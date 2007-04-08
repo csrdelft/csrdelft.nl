@@ -294,5 +294,22 @@ class Csrmail {
 			return $this->_db->result2array($rArchief);
 		}
 	}	
+	
+	function getVerzendmoment($iMailID){
+		$sVerzendmomentQuery="
+				SELECT
+					verzendMoment
+				FROM
+					pubciemail
+				WHERE 
+					ID=".$iMailID;
+		$rVerzendmoment=$this->_db->query($sVerzendmomentQuery);
+		if($this->_db->numRows($rVerzendmoment)==0){
+			return false;
+		}else{
+			$aVerzendmoment=$this->_db->next($rVerzendmoment);
+			return $aVerzendmoment['verzendMoment'];
+		}
+	}	
 }//einde classe
 ?>

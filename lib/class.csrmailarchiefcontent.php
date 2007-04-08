@@ -43,7 +43,7 @@ class Csrmailarchiefcontent extends Csrmailcontent{
 			if(isset($_GET['iframe'])){
 				echo $this->_getBody($this->getID());
 			}else{
-				echo '<h2>Archief C.S.R.-courant</h2>';
+				echo '<h2>C.S.R.-courant ' . strftime('%d %B %Y', strtotime($this->_csrmail->getVerzendmoment($this->getID()))) . '</h2>';
 				echo '<iframe src="/intern/csrmail/archief/'.$this->getID().'/iframe" 
 					style="width: 100%; height: 700px; border: 0px;"></iframe>';
 			}		
