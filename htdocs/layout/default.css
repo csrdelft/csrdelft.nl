@@ -198,7 +198,7 @@ a.knop{
 a.knop:hover{ background-color: darkgrey;}
 
 /* waarschuwing */
-.waarschuwing{ color: darkred; }
+.waarschuwing{ color: darkred; font-weight: bold;}
 div.blokje{ background-color: #fff3b4; margin: 10px 5px; padding: 5px 10px;}
 div#uStaatRood{
 	position: absolute;

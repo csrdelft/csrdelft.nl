@@ -84,6 +84,7 @@
 		<div id="inloggen">
 			{if isset($smarty.session.auth_error)}
 				<span class="waarschuwing">{$smarty.session.auth_error}</span>
+				<script type="text/javascript">document.getElementById('inloggen').style.display='block';</script>
 			{/if}
 			<form id="frm_login" action="/login.php" method="post">
 				<p style="display: inline;">
