@@ -129,7 +129,7 @@ class menu {
 			foreach($this->_menu[$subMenu]['subitems'] as $aMenuItem){
 				//controleer of de gebruiker wel het recht heeft om dit item te zien
 				if(!$this->_lid->hasPermission($aMenuItem['rechten'])) continue;
-				if(!$first){ echo ' - '; }else{ echo '&rArr; '; $first=false; }
+				if(!$first){ echo ' - '; }else{ echo '&raquo; '; $first=false; }
 				echo '<a href="'.$aMenuItem['link'].'">';
 				if($aMenuItem['huidig']===true){ echo '<strong>'; }
 				echo $aMenuItem['tekst'];
