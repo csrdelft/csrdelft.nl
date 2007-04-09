@@ -58,6 +58,8 @@ class ProfielContent extends SimpleHTML {
 			$profhtml['foto'] = '<img src="'.CSR_PICS.'pasfoto/'.$this->_profiel['uid'].'.gif" alt="pasfoto" />';
 		}elseif(file_exists( PICS_PATH.'/pasfoto/'.$this->_profiel['uid'].'.jpg')){
 			$profhtml['foto'] = '<img src="'.CSR_PICS.'pasfoto/'.$this->_profiel['uid'].'.jpg" alt="pasfoto" />';
+		}elseif(file_exists( PICS_PATH.'/pasfoto/'.$this->_profiel['uid'].'.png')){
+			$profhtml['foto'] = '<img src="'.CSR_PICS.'pasfoto/'.$this->_profiel['uid'].'.png" alt="pasfoto" />';
 		}elseif($profhtml['status']=='S_NOVIET'){
 			$aSjaars=array('pino.png', 'oscar.png', 'elmo.png');
 			$profhtml['foto']= '<img src="'.CSR_PICS.'pasfoto/'.$aSjaars[rand(0, count($aSjaars)-1)].'" 
