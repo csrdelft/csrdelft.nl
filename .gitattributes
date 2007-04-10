@@ -47,6 +47,7 @@ htdocs/intern/index.php -text
 htdocs/intern/inschrijving/index.php -text
 htdocs/intern/inschrijving/inschrijving.php -text
 htdocs/intern/lijst.php -text
+htdocs/intern/mekellounge.php -text
 htdocs/intern/profiel.php -text
 htdocs/intern/sjaarsacties.php -text
 htdocs/intern/verjaardagen.php -text
@@ -119,6 +120,8 @@ lib/class.ldap.php -text
 lib/class.ledenlijstcontent.php -text
 lib/class.lid.php -text
 lib/class.lidbeheer.php -text
+lib/class.loungeactiviteit.php -text
+lib/class.loungeactiviteitcontent.php -text
 lib/class.maaltijd.php -text
 lib/class.maaltijdcontent.php -text
 lib/class.maaltijdinfocontent.php -text
