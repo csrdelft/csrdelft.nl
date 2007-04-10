@@ -7,6 +7,6 @@ RewriteRule ^eetplan/huis/([0-9]*) eetplan.php?huisID=$1
 RewriteRule ^profiel/([0-9a-z]*)$ profiel.php?uid=$1
 RewriteRule ^profiel/([0-9a-z]*)/([a-z]*)$ profiel.php?uid=$1&a=$2
 
-RewriteRule ^sjaarsacties/$ sjaarsacties.php
+RewriteRule ^sjaarsacties/?$ sjaarsacties.php
 
-RewriteRule ^mekellounge/$ mekellounge.php
+RewriteRule ^mekellounge/?$ mekellounge.php
