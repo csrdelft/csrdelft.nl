@@ -91,7 +91,7 @@ class LoungeactiviteitContent extends SimpleHTML {
 			}
 		}//einde is_array($aLoungeactiviteit)
 		//voor Berr en Jaep het formulier tonen...
-		if($this->_loungeactiviteit->_lid->getUid()=='0623' OR $this->_loungeactiviteit->_lid->getUid()=='0308'){ $this->viewNewActieForm(); }
+		if($this->_loungeactiviteit->_lid->getUid()=='0622' OR $this->_loungeactiviteit->_lid->getUid()=='0308'){ $this->viewNewActieForm(); }
 		echo '</table>';	
 	}
 }

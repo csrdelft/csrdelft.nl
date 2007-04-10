@@ -1,7 +1,7 @@
 <?php
 # C.S.R. Delft | pubcie@csrdelft.nl
 # -------------------------------------------------------------------
-# class.sjaaractie.php
+# class.sjaarsactie.php
 # -------------------------------------------------------------------
 # Verzorgt het opvragen van sjaarsactiegegevens
 # -------------------------------------------------------------------
