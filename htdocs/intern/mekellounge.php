@@ -15,7 +15,7 @@ if ($lid->hasPermission('P_LEDEN_READ')) {
 		exit;
 	}
 	//nieuwe sjaarsactie aanmelden
-	if(isset($_POST['verzenden']) AND $loungeactiviteit->validateLoungeactiviteit() AND ($lid->getUid()=='0622' OR $lid->getUid()=='0308')){
+	if(isset($_POST['verzenden']) AND $loungeactiviteit->validateLoungeactiviteit() AND ($lid->getUid()=='0622' OR $lid->getUid()=='0308' OR $lid->getUid()=='0304')){
 		$loungeactiviteit->newLoungeactiviteit($_POST['actieNaam'], $_POST['beschrijving'], $_POST['limiet']);
 		header('location: '.CSR_ROOT.'intern/mekellounge/');
 		exit;
