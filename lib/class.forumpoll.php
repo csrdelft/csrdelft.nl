@@ -259,7 +259,7 @@ class ForumPoll {
 		if($uid==STATISTICUS){
 			return 'am. Verenigingsstatisticus';
 		}else{
-			return $this->_lid->getNaamLink($uid, true, false, false);
+			return $this->_lid->getNaamLink($uid, 'civitas', false, false);
 		}
 	}
 }//einde classe
