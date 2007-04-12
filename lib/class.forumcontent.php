@@ -52,7 +52,7 @@ class ForumContent extends SimpleHTML {
 					}else{ 
 						//als de dag vandaag is, niet de datum weergeven maar 'vandaag'
 						echo $this->_forum->formatDatum($aCategorie['lastpost']);
-						echo '<br /><a href="/forum/onderwerp/'.$aCategorie['lasttopic'].'#post'.$aCategorie['lastpostID'].'">reactie</a> door ';
+						echo '<br /><a href="/forum/onderwerp/'.$aCategorie['lasttopic'].'#post'.$aCategorie['lastpostID'].'">bericht</a> door ';
 						if(trim($aCategorie['lastuser'])!=''){
 							echo $this->_forum->getForumNaam($aCategorie['lastuser']);
 						}else{ echo 'onbekend';	}
@@ -123,7 +123,7 @@ class ForumContent extends SimpleHTML {
 					echo '<td class="forumreacties">'.$sReacties.'</td>';
 					echo '<td class="forumreacties">'.$this->_forum->getForumNaam($aTopic['uid']).'</td>';
 					echo '<td class="forumreactiemoment">'.$sReactieMoment;
-					echo '<br /><a href="/forum/onderwerp/'.$aTopic['id'].'#post'.$aTopic['lastpostID'].'">reactie</a> door ';
+					echo '<br /><a href="/forum/onderwerp/'.$aTopic['id'].'#post'.$aTopic['lastpostID'].'">bericht</a> door ';
 					echo $sLaatsteposter;
 					echo '</td></tr>'."\r\n";
 				}
