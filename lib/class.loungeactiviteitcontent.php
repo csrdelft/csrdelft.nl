@@ -61,19 +61,18 @@ class LoungeactiviteitContent extends SimpleHTML {
 			foreach($aLoungeactiviteiten as $aLoungeactiviteit){
 				$aSjaarsjes=$this->_loungeactiviteit->getAanmeldingen($aLoungeactiviteit['ID']);
 				echo '<tr';
-				if ($aLoungactiviteit['limiet']-count($aSjaarsjes)<0){
+				if (is_array($aSjaarsjes) AND $aLoungeactiviteit['limiet']-count($aSjaarsjes)<1){
 					echo ' style="color: #aaaaaa;"';
 				}				
 				echo '><td colspan="2">';
 				echo '<h2 style="border-bottom: 1px dashed black; margin: 15px 0 0px 0;">'.mb_htmlentities($aLoungeactiviteit['actieNaam']).'</h2></td></tr>';
 				echo '<tr';
-				if ($aLoungactiviteit['limiet']-count($aSjaarsjes)<0){
+				if (is_array($aSjaarsjes) AND $aLoungeactiviteit['limiet']-count($aSjaarsjes)<1){
 					echo ' style="color: #aaaaaa;"';
 				}
 				echo '><td>';
 				echo nl2br(mb_htmlentities($aLoungeactiviteit['beschrijving']));
 				echo '</td><td style="vertical-align: top; border-left: 1px solid black; padding: 0 0 0 10px;">';
-				
 				$bAlAangemeld=false;
 				if(is_array($aSjaarsjes) AND count($aSjaarsjes)!=0){
 					$iAantal=count($aSjaarsjes);
