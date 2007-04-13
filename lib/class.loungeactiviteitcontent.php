@@ -59,18 +59,27 @@ class LoungeactiviteitContent extends SimpleHTML {
 			echo '<tr><td colspan="2">Nog geen loungeacties.</td></tr>';
 		}else{
 			foreach($aLoungeactiviteiten as $aLoungeactiviteit){
-				echo '<tr><td colspan="2">';
+				$aSjaarsjes=$this->_loungeactiviteit->getAanmeldingen($aLoungeactiviteit['ID']);
+				echo '<tr';
+				if ($aLoungactiviteit['limiet']-count($aSjaarsjes)<0){
+					echo ' style="color: #aaaaaa;"';
+				}				
+				echo '><td colspan="2">';
 				echo '<h2 style="border-bottom: 1px dashed black; margin: 15px 0 0px 0;">'.mb_htmlentities($aLoungeactiviteit['actieNaam']).'</h2></td></tr>';
-				echo '<tr><td>';
+				echo '<tr';
+				if ($aLoungactiviteit['limiet']-count($aSjaarsjes)<0){
+					echo ' style="color: #aaaaaa;"';
+				}
+				echo '><td>';
 				echo nl2br(mb_htmlentities($aLoungeactiviteit['beschrijving']));
 				echo '</td><td style="vertical-align: top; border-left: 1px solid black; padding: 0 0 0 10px;">';
-				$aSjaarsjes=$this->_loungeactiviteit->getAanmeldingen($aLoungeactiviteit['ID']);
+				
 				$bAlAangemeld=false;
 				if(is_array($aSjaarsjes) AND count($aSjaarsjes)!=0){
 					$iAantal=count($aSjaarsjes);
 					foreach($aSjaarsjes as $aSjaars){
 						echo $aSjaars['naamLink'].'<br />';
-						//controleren of de huidige sjaard hier al is aangemeld. dan bAlAangemeld zetten.
+						//controleren of het huidige lid hier al is aangemeld. dan bAlAangemeld zetten.
 						if($aSjaars['uid']==$this->_loungeactiviteit->_lid->getUid()){ $bAlAangemeld=true; }
 					}
 					$limiet=$aLoungeactiviteit['limiet']-$iAantal;
