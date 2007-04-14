@@ -97,13 +97,14 @@ EOT
 			'skype' => 'Skype',
 			'uid' => 'Lidnr',
 			'studie' => 'Studie',
-			'gebdatum' => 'Geboortedatum'
+			'gebdatum' => 'Geboortedatum',
+			'beroep' => 'Functie/beroep'
 		);
 		
 		# de velden die we presenteren om in te kunnen zoeken
 		$zoek_in_waar = array(
-			'naam','nickname','voornaam','achternaam', 'uid',
-			'adres','telefoon','mobiel','email','kring','studie','gebdatum');
+			'naam', 'nickname', 'voornaam', 'achternaam', 'uid',
+			'adres', 'telefoon', 'mobiel', 'email', 'kring', 'studie', 'gebdatum', 'beroep');
 		
 		foreach ($zoek_in_waar as $veld) {
 			echo '<option value="'.$veld.'"';
@@ -150,7 +151,7 @@ EOT
 		# de velden waarop de uitvoer gesorteerd kan worden
 		$zoek_sort = array(
 			'uid', 'voornaam', 'achternaam', 'email', 'adres',
-			'telefoon','mobiel', 'studie', 'gebdatum');
+			'telefoon', 'mobiel', 'studie', 'gebdatum', 'beroep');
 
 		foreach ($zoek_sort as $veld) {
 			echo '<option value="'.$veld.'"';
@@ -160,13 +161,11 @@ EOT
 		echo '</select> 
 			<input type="submit" name="fu" value=" Zoek! " /><br /><br />
 			Laat de volgende kolommen zien:<br /></p><table style="width: 100%"><tr>';
-		
-
 
 		# zo, en nu de velden die we kunnen tonen in de resultaten
 		$laat_zien = array(
 			'uid', 'pasfoto', 'nickname', 'email', 'adres', 'telefoon', 'mobiel', 
-			'icq', 'msn', 'skype', 'studie', 'gebdatum');
+			'icq', 'msn', 'skype', 'studie', 'gebdatum', 'beroep');
 		
 		# tralala zorg dat er een even aantal elementen in staat
 		if (count($laat_zien)%2 != 0) array_push($laat_zien, false);
@@ -241,7 +240,7 @@ EOT
 			}//einde foreach lid
 			echo'</table>';
 		}else{
-			if(trim($form_wat)!='') echo '<br />Uw zoekterm heeft niets gevonden. Probeert u het nog eens.';
+			if(trim($form_wat)!='') echo '<br />Uw zoekopdracht heeft geen resultaten opgeleverd. Probeert u het nog eens.';
 		}//einde if count($this->_result)
 		echo '<br />';
 	}//einde functie view
