@@ -201,9 +201,12 @@ class Forum {
 		}
 	}	
 	//laatste posts voor heel het forum.
-	function getPostsVoorRss($iAantal=false){
+	function getPostsVoorRss($iAantal=false, $bDistinct=true){
 		if($iAantal===false){
 			$iAantal=$this->_postsPerRss;
+		}
+		if($bDistinct){
+			$sDistinctClause='AND topic.lastpostID=post.id';
 		}
 		//uitmaken welke categorieën er in de rss feed komen. Voor feut (bot in #csrdelft)
 		//is er een uitzondering op de ingeloggedheid.
@@ -254,7 +257,8 @@ class Forum {
 			WHERE
 				topic.zichtbaar='zichtbaar' AND 
 				post.zichtbaar='zichtbaar' AND
-				( ".$sCategorieClause." )
+				( ".$sCategorieClause." ) 
+				".$sDistinctClause."
 			ORDER BY
 				post.datum DESC
 			LIMIT

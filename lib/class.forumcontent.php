@@ -480,7 +480,7 @@ class ForumContent extends SimpleHTML {
 *
 ***********************************************************************************************************/
 	function rssFeed(){
-		$aPosts=$this->_forum->getPostsVoorRss();
+		$aPosts=$this->_forum->getPostsVoorRss(false, false);
 		$datum=date('r');
 		//hoofder maeken
 		?>
@@ -541,7 +541,7 @@ class ForumContent extends SimpleHTML {
 *
 ***********************************************************************************************************/
 	function lastPosts(){
-		$aPosts=$this->_forum->getPostsVoorRss(15);
+		$aPosts=$this->_forum->getPostsVoorRss(15, true);
 		echo '<div id="forumHighlights"><a href="/forum/" class="kopje">Laatste forumberichten:</a><br />';
 		foreach($aPosts as $aPost){
 			//$tekst=$aPost['nickname'].': ';
