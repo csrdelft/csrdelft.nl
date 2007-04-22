@@ -52,7 +52,7 @@ define('MAX_MAALTIJD', 100);
 //verenigingsstatisticus
 define('STATISTICUS', '0217' );
 //Feut ip voor de rss feed in #csrdelft
-define('FEUT_IP', '145.94.154.180');
+define('FEUT_IP', '82.94.188.77');
 
 //stapeltje dingen includeren die toch (bijna) altijd nodig zijn:
 require_once('include.common.php');
