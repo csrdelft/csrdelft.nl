@@ -38,7 +38,7 @@
 			{if $profhtml.gebdatum!='0000-00-00'}{$profhtml.gebdatum|date_format:"%d-%m-%Y"}{/if}
 			<br />
 			{if $isOudlid!==true}
-				Kring: {$profhtml.moot}.{$profhtml.kring}<br />
+				Kring: <a href="/groepen/moten.php">{$profhtml.moot}.{$profhtml.kring}</a><br />
 				{$profhtml.commissies}
 			{/if}
 		</td>
