@@ -59,6 +59,9 @@ class CommissieContent extends SimpleHTML {
 				echo '</tr>';
 				
 			}
+			if($this->_commissie->magBewerken()){ 
+				echo '<tr><td colspan="2">Som van SocCie-saldo: &euro; '.$this->_commissie->getCieSaldo().'</td></tr>'; 
+			}
 			echo '</table>';
 		}else{
 			if($aCieLeden!==false){

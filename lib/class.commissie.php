@@ -13,6 +13,8 @@ class Commissie {
 	### private ###
 
 	var $_cie; # commissie-beschrijving in de database
+	var $_cieSaldo=0;
+	
 	var $_lid;
 	var $_db;
 
@@ -31,12 +33,12 @@ class Commissie {
 		
 		$result = $this->_db->query("
 			SELECT 
-				id, naam, stekst, titel, tekst, bbcode_uid, link 
+				id, naam, stekst, titel, tekst, bbcode_uid, link
 			FROM commissie 
 			WHERE ".$filter." 
 			LIMIT 1;");
 		# eerst de opgegeven naam proberen...
-	  if ($result !== false AND $this->_db->numRows($result) > 0) {
+		if ($result !== false AND $this->_db->numRows($result) > 0) {
 			$this->_cie = $this->_db->next($result);
 		} else {
 			echo 'Commissie met de naam "'.$cie.'" niet gevonden';
@@ -49,7 +51,7 @@ class Commissie {
 	# haalt gegevens over alle commissies op voor de overzichtspagina
 	function getOverzicht() {
 		$cieoverzicht = array();
-		$result = $this->_db->select("SELECT `id`, `naam`, `stekst`, `titel` FROM `commissie` ORDER BY `naam`");
+		$result = $this->_db->select("SELECT id, naam, stekst, titel FROM commissie ORDER BY naam;");
 		if ($result !== false and $this->_db->numRows($result) > 0)
 			while ($cie = $this->_db->next($result)) $cieoverzicht[] = $cie;
 		return $cieoverzicht;
@@ -58,6 +60,8 @@ class Commissie {
 		if($this->_lid->hasPermission('P_LEDEN_MOD')){
 			return true;
 		}else{
+			$cieID=0;
+			if(isset($this->_cie['id'])){ $cieID=$this->_cie['id']; }
 			//controleren of iemand commissie op is:
 			$sOpControle="
 				SELECT 
@@ -65,7 +69,7 @@ class Commissie {
 				FROM 
 					commissielid 
 				WHERE 
-					uid='".$this->_lid->getUid()."' AND cieid=".$this->_cie['id']." AND op='1'
+					uid='".$this->_lid->getUid()."' AND cieid=".$cieID." AND op='1'
 				LIMIT 1;";
 			$rOpControle=$this->_db->query($sOpControle);
 			if($this->_db->numRows($rOpControle)==1){
@@ -85,6 +89,7 @@ class Commissie {
 		return $cies;
 	}
 	function getCieLeden($iCieID){
+		$this->_cieSaldo=0;
 		$iCieID=(int)$iCieID;
 		$sCieQuery="
 			SELECT
@@ -95,20 +100,25 @@ class Commissie {
 				lid.status AS status,
 				lid.geslacht AS geslacht,
 				lid.postfix AS postfix,
-				commissielid.functie AS functie
+				commissielid.functie AS functie, 
+				socciesaldi.saldo AS soccieSaldo
 			FROM
-				lid, commissielid
+				lid, commissielid, socciesaldi
 			WHERE
 				commissielid.uid=lid.uid
 			AND
 				commissielid.cieid=".$iCieID."
+			AND
+				commissielid.uid=socciesaldi.uid
 			ORDER BY
 				commissielid.prioriteit,
 				lid.achternaam;";
 		$rCieLeden=$this->_db->select($sCieQuery);
+		
 		if($rCieLeden!==false ){
 			if($this->_db->numRows($rCieLeden)>0){
 				while($aCieLid=$this->_db->next($rCieLeden)){
+					$this->_cieSaldo+=$aCieLid['soccieSaldo'];
 					$aCieLedenReturn[]=array(
 						'uid' => $aCieLid['uid'], 
 						'voornaam' => $aCieLid['voornaam'],
@@ -209,6 +219,7 @@ class Commissie {
 			return $this->_db->query($sCieQuery);
 		}else{ return false; }
 	}
+	function getCieSaldo(){ return $this->_cieSaldo; }
 }
 
 

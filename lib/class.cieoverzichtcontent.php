@@ -40,7 +40,7 @@ class CieOverzichtContent extends SimpleHTML {
 				<tr height="30px">
 					<td colspan="3" width="100%" valign="bottom">
 						<h2>
-							<a href="./commissie/'.htmlspecialchars($cie['naam']).'.html">'.mb_htmlentities($cie['titel']).'</a>
+							<a href="/groepen/commissie/'.htmlspecialchars($cie['naam']).'.html">'.mb_htmlentities($cie['titel']).'</a>
 						</h2>
 					</td>
 				</tr>
@@ -54,11 +54,15 @@ class CieOverzichtContent extends SimpleHTML {
 				foreach($aCieLeden as $aCieLid){
 					echo $this->_lid->getNaamLink($aCieLid['uid'], 'civitas', true, $aCieLid).'&nbsp;<em>'.$aCieLid['functie'].'</em><br />';
 				}
+				if($this->_commissie->magBewerken()){ 
+					echo '<br />Som van het SocCie-saldo: &euro; '.$this->_commissie->getCieSaldo(); 
+				}
 			}else{
 				echo $aCieLeden;
 			}
 			echo '</td></tr>';
 		}//einde foreach
+		
 		echo '</table>';
 		
 	}//einde functie
