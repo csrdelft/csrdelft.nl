@@ -222,8 +222,7 @@ EOT
 					echo '<td><a href="/intern/profiel/'.$uid.'/edit" class="knop">b</a>&nbsp;';
 				}
 				//naam als link naar profiel weergeven.
-				echo '<td><a href="/intern/profiel/'.$uid.'">';
-				echo mb_htmlentities(naam($lid['voornaam'], $lid['achternaam'], $lid['tussenvoegsel'])).'</a></td>';
+				echo '<td>'.$this->_lid->getNaamLink($lid['uid'], 'full', true, $lid).'</td>';
 				//de rest van de kolommen.
 				foreach ($this->_form['kolom'] as $kolom) {
 					if($kolom!='pasfoto'){

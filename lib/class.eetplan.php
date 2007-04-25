@@ -47,7 +47,7 @@ class Eetplan {
 				//eerste element van de regel is het uid
 				$aEetplanRegel[]=array(
 					'uid' => $aEetplanData['uid'],
-					'naam' => naam($aEetplanData['voornaam'], $aEetplanData['achternaam'], $aEetplanData['tussenvoegsel']));
+					'naam' => $this->_lid->getNaamLink($aEetplanData['uid'], 'full', false, $aEetplanData));
 			}
 			$aEetplanRegel[]=$aEetplanData['huis'];
 		}

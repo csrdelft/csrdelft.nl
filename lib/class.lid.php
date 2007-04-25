@@ -584,9 +584,12 @@ class Lid {
 		$result = $this->_db->select("
 			SELECT 
 				uid, 
+				nickname, 
 				voornaam, 
 				tussenvoegsel, 
 				achternaam, 
+				geslacht, 
+				postfix, 
 				moot, 
 				kring, 
 				motebal, 
@@ -602,14 +605,7 @@ class Lid {
 				achternaam ASC;");
 		if ($result !== false and $this->_db->numRows($result) > 0) {
 			while ($lid = $this->_db->next($result)) {
-				$kring[$lid['moot']][$lid['kring']][] = array(
-					'uid'=> $lid['uid'],
-					'naam' => naam($lid['voornaam'], $lid['achternaam'], $lid['tussenvoegsel']),
-					'motebal' => $lid['motebal'],
-					'kringleider' => $lid['kringleider'],
-					'status'=> $lid['status'],
-					'email'=> $lid['email']
-				);
+				$kring[$lid['moot']][$lid['kring']][] = $lid;
 			}
 		}
 
