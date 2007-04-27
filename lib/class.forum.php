@@ -303,11 +303,11 @@ class Forum {
 			 	 	lastuser, lastpost,  reacties, zichtbaar, open
 			 	)VALUES(
 			 		'".ucfirst($titel)."', ".$iCat.",	'".$uid."', '".$datumTijd."', 
-			 		'".$uid."', '".$datumTijd."',	1, '".$sZichtbaar."', 1
+			 		'".$uid."', '".$datumTijd."',	0, '".$sZichtbaar."', 1
 			 	);";
 			if($this->_db->query($sTopicQuery)){
 				$topic=$this->_db->insert_id();
-			 	$bTopicUpdaten=false; $bUpdaten=true;
+			 	$bTopicUpdaten=true; $bUpdaten=true;
 			}else{
 				//het gaet mis...
 				$bError=true;
@@ -340,20 +340,20 @@ class Forum {
 			$bPostQuery=$this->_db->query($sPostQuery);
 			$iPostID=$this->_db->insert_id();
 			if($bUpdaten){
+				//veldjes lastuser en lastpost updaten in forum_topic
+				$sTopicUpdate="
+					UPDATE
+						forum_topic
+					SET
+						lastuser='".$uid."',
+						lastpost='".$datumTijd."',
+						lastpostID=".$iPostID.",
+						reacties=reacties+1
+					WHERE
+						id=".$topic."
+					LIMIT 1;";
+				$this->_db->query($sTopicUpdate);				
 				if($bTopicUpdaten){
-					//veldjes lastuser en lastpost updaten in forum_topic
-					$sTopicUpdate="
-						UPDATE
-							forum_topic
-						SET
-							lastuser='".$uid."',
-							lastpost='".$datumTijd."',
-							lastpostID=".$iPostID.",
-							reacties=reacties+1
-						WHERE
-							id=".$topic."
-						LIMIT 1;";
-					$this->_db->query($sTopicUpdate);
 					//veldjes lastuser, lastpost, lastpostID en reacties updaten in forum_Cat
 					$iCatID=$this->getCategorieVoorTopic($topic);
 					$sCatUpdate="
