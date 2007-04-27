@@ -307,7 +307,7 @@ class Forum {
 			 	);";
 			if($this->_db->query($sTopicQuery)){
 				$topic=$this->_db->insert_id();
-			 	$bTopicUpdaten=true; $bUpdaten=true;
+			 	$bTopicUpdaten=false; $bUpdaten=true;
 			}else{
 				//het gaet mis...
 				$bError=true;
