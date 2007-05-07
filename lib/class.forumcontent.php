@@ -462,7 +462,7 @@ class ForumContent extends SimpleHTML {
 		echo '<input type="text" name="titel" value="'.$sTitel.'" style="width: 100%" class="tekst" /><br />';
 		echo '</td></tr><tr><td colspan="4" class="forumtekst">';
 		echo '<strong>Opties voor de peiling:</strong><br />Lege velden worden genegeerd.<br /><br />';
-		for($iTeller=0; $iTeller<6; $iTeller++){
+		for($iTeller=0; $iTeller<15; $iTeller++){
 			if(isset($_POST['opties'][$iTeller]) AND trim($_POST['opties'][$iTeller])!=''){
 				$sOptie=trim($_POST['opties'][$iTeller]);
 			}else{
