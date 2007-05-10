@@ -42,6 +42,9 @@ htdocs/intern/csrmail/bewerken.php -text
 htdocs/intern/csrmail/index.php -text
 htdocs/intern/csrmail/verzenden.php -text
 htdocs/intern/csrmail/voorbeeld.php -text
+htdocs/intern/documenten/documenten.php -text
+htdocs/intern/documenten/neerladen.php -text
+htdocs/intern/documenten/toevoegen.php -text
 htdocs/intern/eetplan.php -text
 htdocs/intern/index.php -text
 htdocs/intern/inschrijving/index.php -text
@@ -53,6 +56,7 @@ htdocs/intern/sjaarsacties.php -text
 htdocs/intern/verjaardagen.php -text
 htdocs/layout/csrdelft.js -text
 htdocs/layout/default.css -text
+htdocs/layout/documenten.css -text
 htdocs/layout/forum.css -text
 htdocs/layout/minmax.js -text
 htdocs/layout/position.js -text
@@ -131,6 +135,8 @@ lib/class.maaltrack.php -text
 lib/class.menu.php -text
 lib/class.motencontent.php -text
 lib/class.mysql.php -text
+lib/class.neerladen.php -text
+lib/class.neerladencontent.php -text
 lib/class.nieuws.php -text
 lib/class.nieuwscontent.php -text
 lib/class.page.php -text
@@ -143,6 +149,8 @@ lib/class.sjaarsactiecontent.php -text
 lib/class.state.php -text
 lib/class.streeplijstcontent.php -text
 lib/class.stringincluder.php -text
+lib/class.toevoegen.php -text
+lib/class.toevoegencontent.php -text
 lib/class.verjaardagcontent.php -text
 lib/class.woonoord.php -text
 lib/class.woonoordcontent.php -text

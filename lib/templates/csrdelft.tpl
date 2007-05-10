@@ -8,7 +8,8 @@
 	<link rel="stylesheet" href="/layout/undohtml.css" type="text/css" />
 	<link rel="stylesheet" href="/layout/default.css" type="text/css" />
 	<link rel="stylesheet" href="/layout/forum.css" type="text/css" />
-	<script type="text/javascript" src="/layout/csrdelft.js" ></script>
+	<link rel="stylesheet" href="/layout/documenten.css" type="text/css" />
+<script type="text/javascript" src="/layout/csrdelft.js" ></script>
 	<script type="text/javascript" src="/layout/minmax.js"></script>
 	<script type="text/javascript" src="/layout/position.js"></script>
 	<link rel="alternate" title="C.S.R. Delft RSS" type="application/rss+xml" href="http://csrdelft.nl/forum/rss.xml" />
