@@ -127,6 +127,7 @@ lib/class.lidbeheer.php -text
 lib/class.loungeactiviteit.php -text
 lib/class.loungeactiviteitcontent.php -text
 lib/class.maaltijd.php -text
+lib/class.maaltijdbeheercontent.php -text
 lib/class.maaltijdcontent.php -text
 lib/class.maaltijdinfocontent.php -text
 lib/class.maaltijdlijstpage.php -text
@@ -282,6 +283,7 @@ lib/templates/csrdelft.tpl -text
 lib/templates/csrmail/csrmail.tpl -text
 lib/templates/csrmail/csrmail_owee.tpl -text
 lib/templates/forum/viewtopic.tpl -text
+lib/templates/maaltijdbeheer.tpl -text
 lib/templates/maaltijdedit.tpl -text
 lib/templates/maaltijdinfo.tpl -text
 lib/templates/maaltijdketzer.tpl -text

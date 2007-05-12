@@ -4,9 +4,9 @@ RewriteEngine on
 
 ###modRewrite dingen
 #nieuws tonen:
+RewriteRule ^nieuws/?$ nieuws.php
 RewriteRule ^nieuws/([0-9]+)$ nieuws.php?berichtID=$1
-RewriteRule ^nieuws$ nieuws.php
-RewriteRule ^nieuws/$ nieuws.php
+
 
 #nieuwsbeheer
 RewriteRule ^nieuws/verwijderen/([0-9]+) nieuws.php?berichtID=$1&verwijderen=true

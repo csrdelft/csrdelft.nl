@@ -36,7 +36,9 @@ class MotenContent extends SimpleHTML {
 			if(!isset($this->_kringen[$moot][$kring])){
 				echo '&nbsp;';
 			}else{
+				$kringsaldo=0;
 				foreach ($this->_kringen[$moot][$kring] as $kringlid) {
+					$kringsaldo+=$kringlid['socciesaldo'];
 					if ($kringlid['kringleider'] != 'n' or $kringlid['motebal']!=0) echo '<em>';
 					echo $this->_lid->getNaamLink($kringlid['uid'], 'civitas', true, $kringlid);
 					if ($kringlid['motebal']!='0') echo '&nbsp;O';
@@ -53,8 +55,11 @@ class MotenContent extends SimpleHTML {
 					}
 					echo '</p>';
 				}
+				echo '<br /><em>Kring-saldo: € '.sprintf ("%01.2f", $kringsaldo).'</em>';
 			}
 		echo '</td>';
+		
+		return $kringsaldo;
 	}
 	function view() {
 
@@ -72,6 +77,8 @@ class MotenContent extends SimpleHTML {
 		}
 		echo '</p><table style="width: 100%">';
 
+		$mootsaldo[1]=$mootsaldo[2]=$mootsaldo[3]=$mootsaldo[4]=0;
+		
 		# we gaan de kringen in de moot onder elkaar zetten, een moot per kolom
 		for ($regel=1; $regel<=$maxkringen; $regel++) {
 			echo '<tr>';
@@ -81,7 +88,7 @@ class MotenContent extends SimpleHTML {
 			}
 			echo '</tr><tr>';
 			for ($moot=1; $moot<=$maxmoten; $moot++) {
-				$this->printKring($moot, $regel);
+				$mootsaldo[$moot]+=$this->printKring($moot, $regel);
 			}
 		}
 
@@ -99,9 +106,17 @@ class MotenContent extends SimpleHTML {
 		echo '</tr><tr>';
 
 		for ($moot=1; $moot<=$maxmoten; $moot++) {
-			$this->printKring($moot, $regel);
+			$mootsaldo[$moot]+=$this->printKring($moot, $regel);
 		}
 		echo '</tr>';
+		
+		//mootsaldo printen
+		echo '<tr>';
+		for ($moot=1; $moot<=$maxmoten; $moot++) {
+			echo '<td>Mootsaldo: &euro; '.sprintf ("%01.2f", $mootsaldo[$moot]).'</td>';
+		}
+		echo '</tr>';
+		
 		//kringen invoeren... moet nog even goed afgemaakt worden met kringselectie.
 		//daarom nu uitgeschakeld
 		if(false){

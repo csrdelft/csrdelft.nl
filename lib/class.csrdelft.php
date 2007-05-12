@@ -66,7 +66,7 @@ class csrdelft extends SimpleHTML {
 		$csrdelft=new Smarty_csr();
 		$csrdelft->assign_by_ref('csrdelft', $this);
 		
-		//soccie saldi
+		//SocCie-saldi, MaalCie-saldi
 		$saldi=$this->_lid->getSaldi($this->_lid->getUid(), true);
 		$csrdelft->assign('saldi', $saldi);
 		

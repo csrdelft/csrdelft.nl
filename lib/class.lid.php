@@ -372,7 +372,6 @@ class Lid {
 			if(preg_match('/^\d{2}$/', $zoekterm) AND ($zoekveld=='uid' OR $zoekveld=='naam')){
 				//zoeken op lichtingen...
 				$zoekfilter="SUBSTRING(uid, 1, 2)='".$zoekterm."'";
-				//echo $zoekfilter;
 			}else{
 				$zoekfilter="{$zoekveld} LIKE '%{$zoekterm}%'";
 			}
@@ -583,7 +582,7 @@ class Lid {
 		$kring = array();
 		$result = $this->_db->select("
 			SELECT 
-				uid, 
+				lid.uid as uid, 
 				nickname, 
 				voornaam, 
 				tussenvoegsel, 
@@ -595,9 +594,13 @@ class Lid {
 				motebal, 
 				kringleider,
 				email,
-				status
+				status,
+				saldo as socciesaldo
+				
 			FROM 
-				lid 
+				lid
+			LEFT JOIN 
+				socciesaldi ON (lid.uid=socciesaldi.uid)
 			WHERE 
 				status='S_LID' OR status='S_GASTLID' OR status='S_NOVIET' OR status='S_KRINGEL'
 			ORDER BY 

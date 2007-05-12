@@ -60,7 +60,7 @@ class CommissieContent extends SimpleHTML {
 				
 			}
 			if($this->_commissie->magBewerken()){ 
-				echo '<tr><td colspan="2">Som van SocCie-saldo: &euro; '.$this->_commissie->getCieSaldo().'</td></tr>'; 
+				echo '<tr><td colspan="2">Som van SocCie-saldo: &euro; '.sprintf ("%01.2f", $this->_commissie->getCieSaldo()).'</td></tr>'; 
 			}
 			echo '</table>';
 		}else{

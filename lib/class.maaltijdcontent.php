@@ -56,7 +56,7 @@ class MaaltijdContent extends SimpleHTML {
 			}
 		}
 				
-		//...gasten, FIXME
+		//...gasten, TODO, FIXME
 		$aMaal['gasten']=array();
 		
 		//arrays toewijzen en weergeven

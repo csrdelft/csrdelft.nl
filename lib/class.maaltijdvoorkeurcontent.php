@@ -38,6 +38,7 @@ class MaaltijdVoorkeurContent extends SimpleHTML {
 		
 		//...de eetwens
 		$aMaal['eetwens']=$this->_lid->getEetwens();
+		
 		//arrays toewijzen en weergeven
 		$profiel->assign('maal', $aMaal);
 		$profiel->display('maaltijdvoorkeuren.tpl');

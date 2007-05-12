@@ -1,0 +1,68 @@
+<?php
+# C.S.R. Delft | pubcie@csrdelft.nl
+# -------------------------------------------------------------------
+# htdocs/maaltijden/beheer.php
+# -------------------------------------------------------------------
+# Zo, maaltijden beheren. Dit kan:
+# - Maaltijden toevoegen
+# - Maaltijden verwijderen
+# -------------------------------------------------------------------
+
+require_once('include.config.php');
+
+if(!$lid->hasPermission('P_MAAL_MOD')){ header('location: '.CSR_ROOT.'maaltijden/'); exit; }
+
+require_once('class.maaltrack.php');
+require_once('class.maaltijd.php');
+$maaltrack = new MaalTrack($lid, $db);
+
+
+require_once('class.maaltijdbeheercontent.php');
+$beheer = new MaaltijdbeheerContent($lid, $maaltrack);
+
+# verwijderen we een maaltijd?
+if(isset($_GET['verwijder']) AND $_GET['verwijder']==(int)$_GET['verwijder'] AND $_GET['verwijder']!=0){
+	$maaltrack->removeMaaltijd($_GET['verwijder']);
+	header('location: '.CSR_ROOT.'maaltijden/beheer/');
+	exit;
+}
+
+# maaltijd opslaan, of nieuwe toevoegen?
+if(isset($_POST['maalid'], $_POST['moment'], $_POST['omschrijving'], $_POST['limiet'], $_POST['abo'], $_POST['tp'])){
+	# input controleren
+	if($maaltrack->validateForm()){
+		//datum omzetten naar timestamp.
+		$datum=strtotime($_POST['moment']);
+		$maalid=(int)$_POST['maalid'];
+		
+		# nieuwe maaltijd toevoegen of oude bewerken?
+		if($maalid==0){
+			if($maaltrack->addMaaltijd($datum, $_POST['omschrijving'], $_POST['abo'], $_POST['tp'], $_POST['limiet'])){
+				header('location: '.CSR_ROOT.'maaltijden/beheer/');
+				exit;
+			}
+		}else{
+			## TODO, bewerken moet nog gemaakt worden in maaltrack
+			if($maaltrack->editMaaltijd($maalid, $datum, $_POST['omschrijving'], $_POST['abo'], $_POST['tp'], $_POST['limiet'])){
+				header('location: '.CSR_ROOT.'maaltijden/beheer/');
+				exit;
+			}
+		}
+	}
+	#als we hier terecht komen is het niet goed gegaan, dan maar de foutmelding weergeven...
+	$beheer->addError($maaltrack->getError());
+}
+
+
+# bewerken we een maaltijd?
+if(isset($_GET['bewerk']) AND $_GET['bewerk']==(int)$_GET['bewerk'] AND $_GET['bewerk']!=0){
+	$beheer->load($_GET['bewerk']);
+}
+
+$zijkolom=new kolom();
+
+$page=new csrdelft($beheer, $lid, $db);
+$page->setZijkolom($zijkolom);
+$page->view();
+
+?>

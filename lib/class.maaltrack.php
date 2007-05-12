@@ -50,27 +50,19 @@ class MaalTrack {
 			$this->_error = "De omschrijving bevat ongeldige tekens."; 
 			return false;
 		}
-		$tekst = mb_substr($tekst,0,200);
+		$tekst = mb_substr($tekst, 0, 200);
 		$tekst = $this->_db->escape($tekst);
 				
 		# kijk of $tp voorkomt in de ledenlijst
-		if ($tp != "") {
-			$tp = $this->_db->escape($tp);
-			$result = $this->_db->select("SELECT * from `lid` WHERE `uid` = '$tp'");	
-			if (($result === false) or $this->_db->numRows($result) == 0) {
-				$this->_error = "De tafelpraeses moet voorkomen in de ledenlijst."; 
-				return false;
-			}
+		if($tp != "" AND !$this->_lid->uidExists($_POST['tp'])){
+			$this->_error = "De tafelpraeses moet voorkomen in de ledenlijst."; 
+			return false;
 		}
 		
 		# kijk of $abosoort voorkomt in tabel maaltijdabosoort
-		if ($abosoort != "") {
-			$abosoort = $this->_db->escape($abosoort);
-			$result = $this->_db->select("SELECT * from `maaltijdabosoort` WHERE `abosoort` = '$abosoort'");	
-			if (($result === false) or $this->_db->numRows($result) == 0) {
-				$this->_error = "Er is geen bestaande abonnementsvorm opgegeven."; 
-				return false;
-			}
+		if ($abosoort != "" AND !$this->isValidAbo($abosoort)){
+			$this->_error = "Er is geen bestaande abonnementsvorm opgegeven."; 
+			return false;
 		}
 				
 		# controleer of het maximum aantal > 0 en <= MAX_MAALTIJD is
@@ -85,35 +77,102 @@ class MaalTrack {
 			return false;
 		}
 		
-		# voeg de maaltijd toe en geef het maalid terug, of false als het
-		# niet gelukt is.
-		if (!$this->_db->query("
-			INSERT INTO maaltijd (datum,tekst,abosoort,max,tp)
-			VALUES ('$datum','$tekst','$abosoort','$max','$tp')
-		")) return false;
-		return $this->_db->insert_id();
+		# voeg de maaltijd toe en geef het maalid terug, of false als het  niet gelukt is.
+		$maaltijd="
+			INSERT INTO 
+				maaltijd 
+			(
+				datum, tekst, abosoort, max, tp
+			)VALUES(
+				'".$datum."', '".$tekst."', '".$abosoort."', '".$max."', '".$tp."'
+			);";
+		
+		if (!$this->_db->query($maaltijd)){
+			return false;
+		}else{
+			$maaltijd = new Maaltijd ($this->_db->insert_id(), $this->_lid, $this->_db);
+			# ook maar meteen even hertellen, dan zijn de mensen die daar blij van worden weer extra blij...
+			$maaltijd->recount();			
+			return $maaltijd->getMaalId();
+		}
 	}
 	
+	//niet ontzettend nodig meer, doen de add|edit-functies ook...
+	function validateForm(){
+		if(!isset($_POST['maalid'], $_POST['moment'], $_POST['omschrijving'], $_POST['limiet'], $_POST['abo'], $_POST['tp'])){
+			$this->_error="Formulier is niet compleet";
+			return false;
+		}
+		if($_POST['maalid']!=(int)$_POST['maalid']){
+			$this->_error="Formulier is niet compleet";
+			return false;
+		}
+		return true;
+	}
 	function removeMaaltijd($maalid) {
 		if (!is_numeric($maalid)) {
 			$this->_error = "Gebruik een numerieke maaltijd-id waarde om te verwijderen";
 			return false;			
 		}
 		# kijk of de maaltijd wel bestaat.
-		$result = $this->_db->select("SELECT id from maaltijd WHERE id=".$maalid);	
-		if (($result === false) or $this->_db->numRows($result) == 0) {
+		if(!$this->isMaaltijd($maalid)){
 			$this->_error = "Deze maaltijd bestaat niet";
 			return false;			
 		}
 		
 		# verwijder alle aan/afmeldingen voor deze maaltijd
 		# ...van leden met de bijbehoorende gasten.
-		$this->_db->query("DELETE FROM maaltijdaanmelding WHERE maalid=".$maalid);
+		$aanmeldingen="DELETE FROM maaltijdaanmelding WHERE maalid=".$maalid;
 
 		# verwijder de maaltijd zelf
-		$this->_db->query("DELETE FROM maaltijd WHERE id=".$maalid);
+		$maaltijd="DELETE FROM maaltijd WHERE id=".$maalid;
 		
-		return true;		
+		return $this->_db->query($aanmeldingen) AND $this->_db->query($maaltijd);		
+	}
+	
+	
+	# haalt één enkele maaltijd op ter bewerking
+	function getMaaltijd($maalid){
+		$maalid=(int)$maalid;
+		if($maalid==0){
+			$this->_error="Geen geldig maaltijd-id";
+			return false;
+		}
+		$sMaaltijdQuery="
+			SELECT 
+				id, datum, gesloten, tekst, abosoort, max, aantal, tp, kok1, kok2, afw1, afw2, afw3 
+			FROM 
+				maaltijd 
+			WHERE 
+				id=".$maalid." 
+			LIMIT 1;";
+		$rMaaltijd=$this->_db->query($sMaaltijdQuery);
+		$aMaal=$this->_db->next($rMaaltijd);
+		
+		
+		//hier gebeurt een hoop wat handiger kan...
+		return array(
+			'id' => $aMaal['id'],
+			'datum' => $aMaal['datum'],
+			'gesloten' => $aMaal['gesloten'],
+			'tekst' => $aMaal['tekst'],
+			'abosoort' => $aMaal['abosoort'],
+			'max' => $aMaal['max'],
+			'aantal' => $aMaal['aantal'],
+			'tp_uid' => $aMaal['tp'],
+			'tp' => $this->_lid->getNaamLink($aMaal['tp'], 'full', true),
+			'kok1_uid' => $aMaal['kok1'],
+			'kok1' => $this->_lid->getNaamLink($aMaal['kok1'], 'full', true),
+			'kok2_uid' => $aMaal['kok2'],
+			'kok2' => $this->_lid->getNaamLink($aMaal['kok2'], 'full', true),
+			'afw1_uid' => $aMaal['afw1'],
+			'afw1' => $this->_lid->getNaamLink($aMaal['afw1'], 'full', true),
+			'afw2_uid' => $aMaal['afw2'],
+			'afw2' => $this->_lid->getNaamLink($aMaal['afw2'], 'full', true),
+			'afw3_uid' => $aMaal['afw3'],
+			'afw3' => $this->_lid->getNaamLink($aMaal['afw3'], 'full', true));
+		
+		$this->_db->result2array($rMaaltijd);
 	}
 	
 	# haalt maaltijden uit de maaltijdentabel op, voor uitgebreidere info
@@ -149,7 +208,7 @@ class MaalTrack {
 			WHERE 
 				datum > '".$van."' AND ".$totsql." 
 			ORDER BY 
-				datum ASC";	
+				datum ASC;";	
 		$result=$this->_db->select($sMaaltijdQuery);
 		if (($result !== false) and $this->_db->numRows($result) > 0) {
 			while ($record = $this->_db->next($result)) {
@@ -199,13 +258,15 @@ class MaalTrack {
 			}			
 			
 			# 2. actie is afhankelijk van status en evt. gesloten zijn van de maaltijd
-			# actie: AAN,AF,''
-			if (($maaltijden[$i]['status'] == 'AAN' or $maaltijden[$i]['status'] == 'ABO')
-			    and $maaltijden[$i]['gesloten'] == '0' ) $maaltijden[$i]['actie'] = 'af';
-			elseif (($maaltijden[$i]['status'] == 'AF' or $maaltijden[$i]['status'] == '')
-			        and $maaltijden[$i]['aantal'] != $maaltijden[$i]['max'] and $maaltijden[$i]['gesloten'] == '0' ) 
+			# actie: AAN, AF, ''
+			if(($maaltijden[$i]['status']=='AAN' OR $maaltijden[$i]['status']=='ABO') AND $maaltijden[$i]['gesloten']=='0' ){ 
+				$maaltijden[$i]['actie'] = 'af';
+			}elseif(($maaltijden[$i]['status']=='AF' OR $maaltijden[$i]['status']=='')
+					AND $maaltijden[$i]['aantal'] != $maaltijden[$i]['max'] AND $maaltijden[$i]['gesloten'] == '0' ){
 				$maaltijden[$i]['actie'] = 'aan';
-			else $maaltijden[$i]['actie'] = '';
+			}else{
+				$maaltijden[$i]['actie'] = '';
+			}
 		}
 		
 		return $maaltijden;
@@ -225,7 +286,6 @@ class MaalTrack {
 			return false;
 		}
 		return true;
-		
 	}
 	
 	# wrapper-functie voor aanmelden, die controleert of de maaltijd wel bestaat
@@ -332,9 +392,11 @@ class MaalTrack {
 	function getAbos() {
 		$abos = array();
 		$result = $this->_db->select("
-			SELECT maaltijdabosoort.abosoort, maaltijdabosoort.tekst
-			FROM maaltijdabosoort
-			WHERE 1;");
+			SELECT 
+				maaltijdabosoort.abosoort AS abosoort, 
+				maaltijdabosoort.tekst AS tekst
+			FROM 
+				maaltijdabosoort;");
 		if (($result !== false) and $this->_db->numRows($result) > 0) {
 			while ($record = $this->_db->next($result)) {
 				$abos[$record['abosoort']] = $record['tekst']; 
@@ -342,6 +404,7 @@ class MaalTrack {
 		}
 		return $abos;
 	}
+	function isValidAbo($abo){ return array_key_exists($abo, $this->getAbos()); }
 
 	function hasAbo($abosoort) {
 		if ($abosoort != '') {

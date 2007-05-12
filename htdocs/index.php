@@ -12,12 +12,21 @@ require_once('include.config.php');
 ## zijkolom in elkaar jetzen
 	$zijkolom=new kolom();
 	
+	# snel naar ding voor leden
+	if($lid->hasPermission('P_LOGGED_IN')) {
+		$snelnaar='<strong>Ga snel naar</strong><br />
+			&raquo; <a href="/intern/csrmail/">C.S.R.-courant</a><br />
+			&raquo; <a href="/enquete/">Bestuursenquete</a><br />';
+		$zijkolom->add(new stringincluder($snelnaar));
+	}
+	
 	# laatste forumberichten toevoegen aan zijkolom:
 	require_once('class.forum.php'); 
 	require_once('class.forumcontent.php');
 	$forum=new forum($lid, $db);
 	$forumcontent=new forumcontent($forum, 'lastposts');
 	$zijkolom->add($forumcontent);
+	
 	
 	# Komende 10 verjaardagen erbij
 	if($lid->hasPermission('P_LOGGED_IN')) {
