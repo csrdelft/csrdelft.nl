@@ -284,7 +284,7 @@ lib/templates/csrmail/csrmail.tpl -text
 lib/templates/csrmail/csrmail_owee.tpl -text
 lib/templates/forum/viewtopic.tpl -text
 lib/templates/maaltijdbeheer.tpl -text
-lib/templates/maaltijdedit.tpl -text
+lib/templates/maaltijdform.tpl -text
 lib/templates/maaltijdinfo.tpl -text
 lib/templates/maaltijdketzer.tpl -text
 lib/templates/maaltijdlijst.tpl -text

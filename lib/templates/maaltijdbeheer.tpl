@@ -11,7 +11,7 @@
 		{foreach from=$maal.maaltijden item=maaltijd}
 			<tr>
 				<td>
-					<!--<a href="/maaltijden/beheer/bewerk/{$maaltijd.id}"><img src="{$csr_pics}forum/bewerken.png" /></a> -->
+					<a href="/maaltijden/beheer/bewerk/{$maaltijd.id}"><img src="{$csr_pics}forum/bewerken.png" /></a>
 					<a href="/maaltijden/beheer/verwijder/{$maaltijd.id}" onclick="return confirm(\'Weet u zeker dat u deze maaltijd wilt verwijderen?\')"><img src="{$csr_pics}forum/verwijderen.png" /></a>
 				</td>
 				<td>{$maaltijd.datum|date_format:$datumFormaat}</td>
@@ -27,8 +27,6 @@
 		{/foreach}
 	</table>
 {/if}
-
-
 
 {* maaltijd bewerken of toevoegoen, standaard toevoegen *}
 <span id="toevoegen"></span>

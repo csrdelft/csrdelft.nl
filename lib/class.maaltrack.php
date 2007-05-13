@@ -38,7 +38,80 @@ class MaalTrack {
 	function addMaaltijd($datum, $tekst, $abosoort, $tp, $max = MAX_MAALTIJD) {
 		$datum = (int)$datum;
 		$max = (int)$max;
+		$tekst = mb_substr($tekst, 0, 200);
+		$tekst = $this->_db->escape($tekst);
 		
+		# bij fouten, niet doorgaan, false teruggeven.
+		if(!$this->validateMaaltijd($datum, $tekst, $abosoort, $tp, $max)){
+			return false;
+		}
+			
+		# voeg de maaltijd toe en geef het maalid terug, of false als het  niet gelukt is.
+		$maaltijd="
+			INSERT INTO 
+				maaltijd 
+			(
+				datum, tekst, abosoort, max, tp
+			)VALUES(
+				'".$datum."', '".$tekst."', '".$abosoort."', '".$max."', '".$tp."'
+			);";
+		
+		if (!$this->_db->query($maaltijd)){
+			$this->_error="Er is iets mis met de database/query";
+			return false;
+		}else{
+			$maaltijd = new Maaltijd ($this->_db->insert_id(), $this->_lid, $this->_db);
+			# ook maar meteen even hertellen, dan zijn de mensen die daar blij van worden weer extra blij...
+			$maaltijd->recount();			
+			return $maaltijd->getMaalId();
+		}
+	}
+	
+	# bestaande maaltijd bewerken. Niet veel verschil met addMaaltijd, behalve dat hier nog even 
+	# gekeken wordt of de maaltijd wel bestaat.
+	function editMaaltijd($maalid, $datum, $tekst, $abosoort, $tp, $max=MAX_MAALTIJD){
+		if($maalid!=(int)$maalid){
+			$this->_error="Ongeldig maaltijdID opgegeven.";
+			return false;
+		}
+		if(!$this->isMaaltijd($maalid)){
+			$this->_error="Opgegeven maaltijd bestaat niet.";
+			return false;
+		}
+		$datum = (int)$datum;
+		$max = (int)$max;
+		$tekst = mb_substr($tekst, 0, 200);
+		$tekst = $this->_db->escape($tekst);
+		
+		# bij fouten, niet doorgaan, false teruggeven.
+		if(!$this->validateMaaltijd($datum, $tekst, $abosoort, $tp, $max)){
+			return false;
+		}
+		$maaltijd="
+			UPDATE 
+				maaltijd
+			SET
+				datum=".$datum.",
+				tekst='".$tekst."',
+				abosoort='".$abosoort."',
+				tp='".$tp."',
+				max=".$max."
+			WHERE 
+				id=".$maalid."
+			LIMIT 1;";
+		if(!$this->_db->query($maaltijd)){
+			$this->_error="Er is iets mis met de database/query";
+			return false;
+		}else{
+			$maaltijd = new Maaltijd ($maalid, $this->_lid, $this->_db);
+			# ook maar meteen even hertellen, dan zijn de mensen die daar blij van worden weer extra blij...
+			$maaltijd->recount();			
+			return $maalid;
+		}
+	}
+	# deze methode valideert de gemeenschappelijke waarden van addMaaltijd en editMaaltijd.
+	# controle op specifieke dingen voor editMaaltijd gebeurt nog in de methode zelf.
+	function validateMaaltijd($datum, $tekst, $abosoort, $tp, $max){
 		# controleer of de datum niet in het verleden ligt
 		if ($datum < time()) {
 			$this->_error = "Het tijdstip van de maaltijd moet in de toekomst liggen"; 
@@ -50,8 +123,7 @@ class MaalTrack {
 			$this->_error = "De omschrijving bevat ongeldige tekens."; 
 			return false;
 		}
-		$tekst = mb_substr($tekst, 0, 200);
-		$tekst = $this->_db->escape($tekst);
+		
 				
 		# kijk of $tp voorkomt in de ledenlijst
 		if($tp != "" AND !$this->_lid->uidExists($_POST['tp'])){
@@ -74,37 +146,6 @@ class MaalTrack {
 		# kijk of een gekozen abo niet meteen meer inschrijvingen oplevert dan het maximum wat ingesteld wordt
 		if ($abosoort != "" and $this->getAboCount($abosoort) > $max) {
 			$this->_error = "Het gekozen abonnement levert meer inschrijvingen op dan het maximaal ingestelde aantal."; 
-			return false;
-		}
-		
-		# voeg de maaltijd toe en geef het maalid terug, of false als het  niet gelukt is.
-		$maaltijd="
-			INSERT INTO 
-				maaltijd 
-			(
-				datum, tekst, abosoort, max, tp
-			)VALUES(
-				'".$datum."', '".$tekst."', '".$abosoort."', '".$max."', '".$tp."'
-			);";
-		
-		if (!$this->_db->query($maaltijd)){
-			return false;
-		}else{
-			$maaltijd = new Maaltijd ($this->_db->insert_id(), $this->_lid, $this->_db);
-			# ook maar meteen even hertellen, dan zijn de mensen die daar blij van worden weer extra blij...
-			$maaltijd->recount();			
-			return $maaltijd->getMaalId();
-		}
-	}
-	
-	//niet ontzettend nodig meer, doen de add|edit-functies ook...
-	function validateForm(){
-		if(!isset($_POST['maalid'], $_POST['moment'], $_POST['omschrijving'], $_POST['limiet'], $_POST['abo'], $_POST['tp'])){
-			$this->_error="Formulier is niet compleet";
-			return false;
-		}
-		if($_POST['maalid']!=(int)$_POST['maalid']){
-			$this->_error="Formulier is niet compleet";
 			return false;
 		}
 		return true;
@@ -404,17 +445,9 @@ class MaalTrack {
 		}
 		return $abos;
 	}
+	# Controleer of het gegeven abonnement wel bestaat.
 	function isValidAbo($abo){ return array_key_exists($abo, $this->getAbos()); }
-
-	function hasAbo($abosoort) {
-		if ($abosoort != '') {
-			$abosoort = $this->_db->escape($abosoort);
-			$result = $this->_db->select("SELECT * FROM maaltijdabo WHERE abosoort = '{$abosoort}'");
-			if (($result !== false) and $this->_db->numRows($result) > 0) return true;
-		}
-		return false;
-	}
-
+	
 	# alle abosoorten opvragen, als deze gebruiker uit moot 1-4 is, hou daar dan rekening mee
 	# deze functionaliteit kan uitgezet worden door $mootfilter = false te zetten als argument
 	function getAboSoort($mootfilter = true) {

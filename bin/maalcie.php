@@ -14,6 +14,6 @@ while ($data = fgetcsv ($fp, 1000, ",")) {
   $row++;
 }
 fclose ($fp);
-
+echo $row.' regels ingevoerd;';
 
 ?>
