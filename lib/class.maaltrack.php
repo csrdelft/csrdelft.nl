@@ -243,7 +243,7 @@ class MaalTrack {
 		$maaltijden = array();
 		$sMaaltijdQuery="
 			SELECT 
-				* 
+				id, datum, gesloten, tekst, abosoort, max, aantal, tp, kok1, kok2, afw1, afw2, afw3 
 			FROM 
 				maaltijd 
 			WHERE 
@@ -253,8 +253,10 @@ class MaalTrack {
 		$result=$this->_db->select($sMaaltijdQuery);
 		if (($result !== false) and $this->_db->numRows($result) > 0) {
 			while ($record = $this->_db->next($result)) {
+				$record['tp_link']=$this->_lid->getNaamLink($record['tp'], 'civitas', true);
 				if(!($mootfilter===true AND preg_match("/(MOOT|UBER)[^{$moot}]{1}/", $record['abosoort']))){
 					$maaltijden[] = $record;
+					
 				}
 			}
 		}
