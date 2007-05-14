@@ -32,7 +32,5 @@
 {/if}
 
 {* maaltijd bewerken of toevoegoen, standaard toevoegen *}
-<span id="toevoegen"></span>
 {include file='maaltijdform.tpl'}
-
 

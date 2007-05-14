@@ -62,7 +62,7 @@ class MaaltijdbeheerContent extends SimpleHTML {
 			$aForm['id']=0;
 			$aForm['actie']='toevoegen';
 			$aForm['moment']=time();
-			$aForm['abo']='';
+			$aForm['abosoort']='';
 			$aForm['max']=100;
 			//alles standaard naar jan lid.
 			$aForm['tp_uid']=$aForm['kok1_uid']=$aForm['kok2_uid']=
@@ -77,7 +77,7 @@ class MaaltijdbeheerContent extends SimpleHTML {
 			if(isset($_POST['moment'])){ $aForm['moment']=strtotime($_POST['moment']); }
 			if(isset($_POST['omschrijving'])){ $aForm['tekst']=trim(mb_htmlentities($_POST['omschrijving'])); }
 			if(isset($_POST['limiet']) AND $_POST['limiet']==(int)$_POST['limiet']){ $aForm['max']=$_POST['limiet']; }
-			if(isset($_POST['abo']) AND $this->_maaltrack->isValidAbo($_POST['abo'])){ $aForm['abo']=$_POST['abo']; }
+			if(isset($_POST['abo']) AND $this->_maaltrack->isValidAbo($_POST['abo'])){ $aForm['abosoort']=$_POST['abo']; }
 			if(isset($_POST['tp']) AND $this->_lid->uidExists($_POST['tp']) ){ $aForm['tp_uid']=$_POST['tp']; }
 		}	
 		$aForm['abos']=$this->_maaltrack->getAbos();

@@ -19,7 +19,7 @@
 		<tr>
 			<td>Abonnement</td>
 			<td>
-				{html_options name=abo options=$maal.formulier.abos selected=$maal.formulier.abo}
+				{html_options name=abo options=$maal.formulier.abos selected=$maal.formulier.abosoort}
 			</td>
 		</tr>
 		<tr>
