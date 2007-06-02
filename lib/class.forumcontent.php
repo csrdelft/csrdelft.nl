@@ -516,7 +516,7 @@ class ForumContent extends SimpleHTML {
 			//[b][/b]
 			$tekst=preg_replace('/\[b:'.$bbcode_uid.'\](.*?)\[\/b:'.$bbcode_uid.'\]/', '*\\1*', $aPost['tekst']);
 			//alle andere ubb kek eruit rossen...
-			$tekst=preg_replace('/(\[(|\/)\w+:'.$bbcode_uid.'\])/', '|', $tekst);
+			$tekst=preg_replace('/(\[(|\/)\w+:(1:)?'.$bbcode_uid.'\])/', '|', $tekst);
 			//$volledigetekst=$tekst=preg_replace('/(\[(|\/)url=http://[a-f0-9]+:[a-f0-9]+\])/', '|', $volledigetekst);
 			$volledigetekst=$tekst;
 			if(kapStringNetjesAf($tekst, 50)){

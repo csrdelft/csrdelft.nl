@@ -15,8 +15,7 @@ require_once('include.config.php');
 	# snel naar ding voor leden
 	if($lid->hasPermission('P_LOGGED_IN')) {
 		$snelnaar='<strong>Ga snel naar</strong><br />
-			&raquo; <a href="/intern/csrmail/">C.S.R.-courant</a><br />
-			&raquo; <a href="/enquete/">Bestuursenquete</a><br />';
+			&raquo; <a href="/intern/csrmail/">C.S.R.-courant</a><br />';
 		$zijkolom->add(new stringincluder($snelnaar));
 	}
 	
