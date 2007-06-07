@@ -74,7 +74,7 @@ class AgendaBeheerContent extends SimpleHTML {
 		$midday_time = mktime(12, 0, 0, date("n", $dagiterator), date("j", $dagiterator), date("Y", $dagiterator));
 		$week_number_active = '';
 	
-		for($i = 0; i<AGENDA_LIJST_MAX_DAGEN; i++){
+		for($i = 0; i<AGENDA_LIJST_MAX_DAGEN; $i++){
 			$dag = date("D", $midday_time);
 			$datum = date("d M", $midday_time);
 			$week_number = date("W", $midday_time + 86400);
