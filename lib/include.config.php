@@ -49,6 +49,11 @@ define('MAALTIJD_PROXY_MAX_TOT', 86400*2);
 # wat is het standaard aantal max inschrijvingen voor een maaltijd?
 define('MAX_MAALTIJD', 100);
 
+# hoe ver van tevoren worden agendapunten getoond?
+define('AGENDA_LIJST_MAX_TOT', 86400*7*10);
+# hoeveel weken van tevoren worden agendapunten getoond?
+define('AGENDA_LIJST_MAX_DAGEN', 70);
+
 //verenigingsstatisticus
 define('STATISTICUS', '0217' );
 //Feut ip voor de rss feed in #csrdelft

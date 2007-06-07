@@ -36,6 +36,7 @@ htdocs/groepen/werkgroepen.php -text
 htdocs/groepen/woonoorden.php -text
 htdocs/index.php -text
 htdocs/intern/.htaccess -text
+htdocs/intern/agenda/index.php -text
 htdocs/intern/csrmail/.htaccess -text
 htdocs/intern/csrmail/archief.php -text
 htdocs/intern/csrmail/bewerken.php -text
@@ -94,6 +95,12 @@ lib/bbcode/include.bbcode.php -text
 lib/bbcode/lang_main.php -text
 lib/blowfish/blowfish.php -text
 lib/blowfish/blowfish_default_key.php -text
+lib/class.agenda.php -text
+lib/class.agendabeheercontent.php -text
+lib/class.agendacontent.php -text
+lib/class.agendapunt.php -text
+lib/class.agendatoevoegcontent.php -text
+lib/class.agendawijzigcontent.php -text
 lib/class.bestuur.php -text
 lib/class.bestuurcontent.php -text
 lib/class.bieb.php -text
