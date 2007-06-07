@@ -51,7 +51,7 @@ define('MAX_MAALTIJD', 100);
 
 # hoe ver van tevoren worden agendapunten getoond?
 define('AGENDA_LIJST_MAX_TOT', 86400*7*10);
-# hoeveel weken van tevoren worden agendapunten getoond?
+# hoeveel dagen van tevoren worden agendapunten getoond?
 define('AGENDA_LIJST_MAX_DAGEN', 70);
 
 //verenigingsstatisticus
