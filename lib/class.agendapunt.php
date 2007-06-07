@@ -39,12 +39,6 @@ class AgendaPunt {
 		return $error;
 	}
 
-	function getDatum() {
-		$datum = _agendapunt['datum'];
-		return $datum;
-	}
-		
-	
 	# wat gegevens voor de maaltijdprintlijst
 	function getDatum() { return $this->_agendapunt['datum']; }
 	function getTijd() { return $this->_agendapunt['tijd']; }
