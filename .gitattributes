@@ -36,6 +36,7 @@ htdocs/groepen/werkgroepen.php -text
 htdocs/groepen/woonoorden.php -text
 htdocs/index.php -text
 htdocs/intern/.htaccess -text
+htdocs/intern/agenda/.htaccess -text
 htdocs/intern/agenda/index.php -text
 htdocs/intern/csrmail/.htaccess -text
 htdocs/intern/csrmail/archief.php -text
@@ -55,6 +56,7 @@ htdocs/intern/mekellounge.php -text
 htdocs/intern/profiel.php -text
 htdocs/intern/sjaarsacties.php -text
 htdocs/intern/verjaardagen.php -text
+htdocs/layout/agenda.css -text
 htdocs/layout/csrdelft.js -text
 htdocs/layout/default.css -text
 htdocs/layout/documenten.css -text

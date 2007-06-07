@@ -33,7 +33,7 @@ class AgendaWijzigContent extends SimpleHTML {
 
 	function view(){
 
-		if(!isset(getOrPost("mode")) || !isset(getOrPost("id"))){
+		if(getOrPost("mode") == '' || getOrPost("id") == ''){
 			echo 'Er is een fout opgetreden bij het verkrijgen van de gegevens. <a href="#" onClick="history.go(-1);">Ga terug</a> en probeer het opnieuw.';
 		}
 		else{

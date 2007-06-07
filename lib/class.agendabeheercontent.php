@@ -34,7 +34,7 @@ class AgendaBeheerContent extends SimpleHTML {
 	function view(){
 	
 
-		if(isset(getOrPost("action"))){
+		if(getOrPost("action") != ''){
 			$gelukt = false;
 			$action = getOrPost("action");
 			if($action == "add"){

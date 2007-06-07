@@ -16,7 +16,7 @@ $error = 0;
 # 1 -> mag niet, foutpagina afbeelden
 # 2 -> er treden (vorm)fouten op in bijv de invoer.
 
-if(isset(getOrPost("mode"))){
+if(getOrPost("mode") != ''){
 	$mode = getOrPost("mode");
 	if($mode == "add"){
 		if($lid->hasPermission('P_AGENDA_POST')){

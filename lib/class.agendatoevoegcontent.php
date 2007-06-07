@@ -35,7 +35,7 @@ class AgendaToevoegContent extends SimpleHTML {
 
 		$error=$this->_agenda->getError();
 
-		if(!isset(getOrPost("mode")) || !isset(getOrPost("dagid"))){
+		if(getOrPost("mode") == '' || getOrPost("dagid") == ''){
 			echo 'Er is een fout opgetreden bij het verkrijgen van de gegevens. <a href="#" onClick="history.go(-1);">Ga terug</a> en probeer het opnieuw.';
 		}
 		else{

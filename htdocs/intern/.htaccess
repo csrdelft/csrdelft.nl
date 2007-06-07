@@ -32,12 +32,3 @@ RewriteRule ^documenten/bewerken/([0-9]+)/([0-9]+)$ documenten/documenten.php?id
 RewriteRule ^documenten/neerladen/([0-9]+)$ documenten/neerladen.php?id=$1
 RewriteRule ^documenten/bewerken/([0-9]+)$ documenten/documenten.php?id=$1&mode=edit
 RewriteRule ^documenten/verwijderen/([0-9]+)$ documenten/documenten.php?id=$1&mode=del
-
-#agenda-pagina
-RewriteRule ^agenda$ agenda/index.php
-RewriteRule ^agenda/$ agenda/index.php
-
-#het toevoegen, bewerken en verwijderen van agendapunten
-RewriteRule ^agenda/toevoegen/([0-9]+)$ agenda/index.php?dagid=$1&mode=add
-RewriteRule ^agenda/bewerken/([0-9]+)$ agenda/index.php?id=$1&mode=edit
-RewriteRule ^agenda/verwijderen/([0-9]+)$ agenda/index.php?id=$1&action=del

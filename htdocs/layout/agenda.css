@@ -1,0 +1,32 @@
+table.agenda {
+	padding: 0px;
+	width: 80%;
+}
+table.agenda td{
+	padding: 0px 0px 0px 0px;
+}
+
+td.agenda_week {
+	font-weight: bold;
+	color: #000000; 
+	background-color: gold;
+	vertical-align: middle;
+	padding: 5px 10px 5px 15px !important;
+	height: 19px;
+}
+
+td.agenda_dag{
+	width: 30px;
+}
+td.agenda_datum{
+	width: 50px;
+}
+td.agenda_tijd{
+	width: 50px;
+}
+td.agenda_toevoegen{
+	width: 25px;
+}
+td.agenda_buttons{
+	width: 50px;
+}
