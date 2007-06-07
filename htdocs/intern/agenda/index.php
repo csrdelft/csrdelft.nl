@@ -46,11 +46,11 @@ else{
 	# De pagina opbouwen, met mKetzer, of met foutmelding
 	if($error == 0  or $error == 2) {
 		# Het middenstuk
-		if($lid->hasPermission('P_AGENDA_MOD'){
+		if($lid->hasPermission('P_AGENDA_MOD')){
 			require_once('class.agendabeheercontent.php');
 			$midden = new AgendaBeheerContent($lid, $agenda);
 		}
-		elseif($lid->hasPermission('P_AGENDA_POST'){
+		elseif($lid->hasPermission('P_AGENDA_POST')){
 			require_once('class.agendabeheercontent.php');
 			$midden = new AgendaBeheerContent($lid, $agenda);
 		}

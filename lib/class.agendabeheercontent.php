@@ -39,21 +39,21 @@ class AgendaBeheerContent extends SimpleHTML {
 			$action = getOrPost("action");
 			if($action == "add"){
 				if(isset($_POST['dagid']) && isset($_POST['tijd']) && isset($_POST['tekst'])){
-					if($this->_lid->hasPermission('P_AGENDA_POST'){
+					if($this->_lid->hasPermission('P_AGENDA_POST')){
 						$gelukt = $this->_agenda->addAgendaPunt($_POST['dagid'], $_POST['tijd'], $_POST['tekst']);
 					}
 				}
 			}
 			elseif($action == "edit"){
 				if(isset($_POST['id']) && isset($_POST['datum']) && isset($_POST['tijd']) && isset($_POST['tekst'])){
-					if($this->_lid->hasPermission('P_AGENDA_MOD'){
+					if($this->_lid->hasPermission('P_AGENDA_MOD')){
 						$gelukt = $this->_agenda->editAgendaPunt($_POST['id'], $_POST['datum'], $_POST['tijd'], $_POST['tekst']);
 					}
 				}
 			}
 			elseif($action == "del"){
 				if(isset($_POST['id'])){
-					if($this->_lid->hasPermission('P_AGENDA_MOD'){
+					if($this->_lid->hasPermission('P_AGENDA_MOD')){
 						$gelukt = $this->_agenda->removeAgendaPunt($_POST['id']);
 					}
 				}
