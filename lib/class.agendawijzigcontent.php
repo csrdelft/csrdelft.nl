@@ -39,15 +39,15 @@ class AgendaWijzigContent extends SimpleHTML {
 		else{
 			$agendapunt = $this->_agenda->getAgendaPunt(getOrPost("id"));
 			$error=$this->_agenda->getError();
-			echo '<h1>Agendapunt toevoegen</h1>\n
-					<p>\n
+			echo '<h1>Agendapunt toevoegen</h1>
+					<p>
 					Voer een begintijdstip en een omschrijving in, om het agendapunt toe te voegen.
 					';
 			// begin form
-			echo '<form enctype="multipart/form-data" action="." method="POST">'."\n";
+			echo '<form enctype="multipart/form-data" action="../" method="POST">'."\n";
 			echo '<input type="hidden" name="action" value="'.getOrPost("mode").'">'."\n";
 			echo '<input type="hidden" name="id" value="'.getOrPost("id").'">'."\n";
-			echo '<input type="hidden" name="datum" value="'.getOrPost("datum").'">'."\n";
+			echo '<input type="hidden" name="datum" value="'.$agendapunt["datum"].'">'."\n";
 			
 			// table
 			echo '<table border="0" class="forumtabel">'."\n";

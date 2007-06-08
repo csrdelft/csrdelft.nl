@@ -52,9 +52,9 @@ class AgendaBeheerContent extends SimpleHTML {
 				}
 			}
 			elseif($action == "del"){
-				if(isset($_POST['id'])){
+				if(isset($_GET['id'])){
 					if($this->_lid->hasPermission('P_AGENDA_MOD')){
-						$gelukt = $this->_agenda->removeAgendaPunt($_POST['id']);
+						$gelukt = $this->_agenda->removeAgendaPunt($_GET['id']);
 					}
 				}
 			}
@@ -64,17 +64,17 @@ class AgendaBeheerContent extends SimpleHTML {
 			}
 		}
 	
-		echo '<h1>Agenda</h1>\n<p>\nOnderstaande is een overzicht van de C.S.R.-agenda voor de aankomende weken.\n';
+		echo '<h1>Agenda</h1><p>Onderstaande is een overzicht van de C.S.R.-agenda voor de aankomende weken.';
 
-		$error=$this->_agenda->getError();
-		$aAgendaPunten=$this->_agenda->getAgendaPunten($nu, $nu+AGENDA_LIJST_MAX_TOT);
-		echo '<table class="agenda">\n';
-
-		$nu = time();
+		$dagiterator = time();
 		$midday_time = mktime(12, 0, 0, date("n", $dagiterator), date("j", $dagiterator), date("Y", $dagiterator));
 		$week_number_active = '';
+
+                $error=$this->_agenda->getError();
+                $aAgendaPunten=$this->_agenda->getAgendaPunten($dagiterator, $dagiterator+AGENDA_LIJST_MAX_TOT);
+		echo '<table class="agenda">';
 	
-		for($i = 0; i<AGENDA_LIJST_MAX_DAGEN; $i++){
+		for($i = 0; $i<AGENDA_LIJST_MAX_DAGEN; $i++){
 			$dag = date("D", $midday_time);
 			$datum = date("d M", $midday_time);
 			$week_number = date("W", $midday_time + 86400);
@@ -82,44 +82,47 @@ class AgendaBeheerContent extends SimpleHTML {
 
 			if($week_number != $week_number_active){
 				$week_number_active = $week_number;
-				echo '<tr><td>&nbsp;</td></tr>\n';
-				echo '<tr><td colspan="6" class="agenda_week"><strong>Week '.$week_number_active.'</strong></td></tr>\n';
+				echo '<tr><td>&nbsp;</td></tr>';
+				echo '<tr><td colspan="6" class="agenda_week"><strong>Week '.$week_number_active.'</strong></td></tr>';
 			}
 			
-			echo '<tr>\n';
-			echo '<td class="agenda_toevoegen"><a href="toevoegen/'.$midday_time.'"><img class="button" src="http://plaetjes.csrdelft.nl/documenten/plus.jpg" /></a></td>\n';
+			echo '<tr>';
+			echo '<td class="agenda_toevoegen"><a href="toevoegen/'.$midday_time.'"><img class="button" src="http://plaetjes.csrdelft.nl/documenten/plus.jpg" /></a></td>';
 			echo '<td class="agenda_dag">'.$dag.'</td>';
 			echo '<td class="agenda_datum">'.$datum.'</td>';
 
 
-
-			
 			$meerdere_activiteiten = false;
 			foreach($aAgendaPunten as $agendapunt){
-				if(date("w",$midday_time) == date("w",$agendapunt['datum'])){
+				if(date("Y z",$midday_time) == date("Y z",$agendapunt['datum'])){
 					if($meerdere_activiteiten){
-						echo '<tr>\n';
-						echo '<td class="agenda_toevoegen"></td>\n';
+						echo '</tr><tr>';
+						echo '<td class="agenda_toevoegen"></td>';
 						echo '<td class="agenda_dag"></td>';
 						echo '<td class="agenda_datum"></td>';
 					}
 					
 					echo '<td class="agenda_buttons">';
 					echo '<a href="bewerken/'.$agendapunt['id'].'"><img class="button" src="http://plaetjes.csrdelft.nl/forum/bewerken.png" /></a>';
-					echo '<a onclick="return confirm(\'Weet je zeker dat je \\\''.$agendapunt['tekst'].'\\\' wilt verwijderen?\')" href="verwijderen/'.$agendapunt['tekst'].'"><img class="button" src="http://plaetjes.csrdelft.nl/forum/verwijderen.png" /></a>';
+					echo '<a onclick="return confirm(\'Weet je zeker dat je \\\''.$agendapunt['tekst'].'\\\' wilt verwijderen?\')" href="index.php?id='.$agendapunt['id'].'&action=del"><img class="button" src="http://plaetjes.csrdelft.nl/forum/verwijderen.png" /></a>';
 					echo '</td>';
 					echo '<td class="agenda_tijd">'.$agendapunt['tijd'].'</td>';
 					echo '<td class="agenda_activiteit">'.$agendapunt['tekst'].'</td>';
-					echo '\n</tr>\n';
 					$meerdere_activiteiten = true;
 				}
 			}
+			if(!$meerdere_activiteiten){
+				echo '<td class="agenda_buttons"></td>';
+				echo '<td class="agenda_tijd"></td>';
+				echo '<td class="agenda_activiteit"></td>';
+			}
+			echo '</tr>';
 
 			$midday_time = $midday_time + 86400;
 		}
 		
-		echo '</table>\n'
-		echo '</p>\n'
+		echo '</table>';
+		echo '</p>';
 		
 	}
 }

@@ -30,23 +30,20 @@ class AgendaContent extends SimpleHTML {
 	function viewWaarBenik() {
 		echo '<a href="/intern/">Intern</a> &raquo; '.$this->getTitel();
 	}
-
+	
 	function view(){
 	
-		echo '<h1>Agenda</h1>\n
-				<p>\n
-				Onderstaande is een overzicht van de C.S.R.-agenda voor de aankomende weken\n
-				';
+		echo '<h1>Agenda</h1><p>Onderstaande is een overzicht van de C.S.R.-agenda voor de aankomende weken.';
 
-		$error=$this->_agenda->getError();
-		$aAgendaPunten=$this->_agenda->getAgendaPunten($nu, $nu+AGENDA_LIJST_MAX_TOT);
-		echo '<table class="agenda">\n';
-
-		$nu = time();
+		$dagiterator = time();
 		$midday_time = mktime(12, 0, 0, date("n", $dagiterator), date("j", $dagiterator), date("Y", $dagiterator));
 		$week_number_active = '';
+
+                $error=$this->_agenda->getError();
+                $aAgendaPunten=$this->_agenda->getAgendaPunten($dagiterator, $dagiterator+AGENDA_LIJST_MAX_TOT);
+		echo '<table class="agenda">';
 	
-		for($i = 0; i<AGENDA_LIJST_MAX_DAGEN; $i++){
+		for($i = 0; $i<AGENDA_LIJST_MAX_DAGEN; $i++){
 			$dag = date("D", $midday_time);
 			$datum = date("d M", $midday_time);
 			$week_number = date("W", $midday_time + 86400);
@@ -54,36 +51,40 @@ class AgendaContent extends SimpleHTML {
 
 			if($week_number != $week_number_active){
 				$week_number_active = $week_number;
-				echo '<tr><td>&nbsp;</td></tr>\n';
-				echo '<tr><td colspan="4" class="agenda_week"><strong>Week '.$week_number_active.'</strong></td></tr>\n';
+				echo '<tr><td>&nbsp;</td></tr>';
+				echo '<tr><td colspan="4" class="agenda_week"><strong>Week '.$week_number_active.'</strong></td></tr>';
 			}
 			
-			echo '<tr>\n';
+			echo '<tr>';
 			echo '<td class="agenda_dag">'.$dag.'</td>';
 			echo '<td class="agenda_datum">'.$datum.'</td>';
-			
+
+
 			$meerdere_activiteiten = false;
 			foreach($aAgendaPunten as $agendapunt){
-				if(date("w",$midday_time) == date("w",$agendapunt['datum'])){
+				if(date("Y z",$midday_time) == date("Y z",$agendapunt['datum'])){
 					if($meerdere_activiteiten){
-						echo '<tr>\n';
+						echo '</tr><tr>';
 						echo '<td class="agenda_dag"></td>';
 						echo '<td class="agenda_datum"></td>';
 					}
 					
 					echo '<td class="agenda_tijd">'.$agendapunt['tijd'].'</td>';
 					echo '<td class="agenda_activiteit">'.$agendapunt['tekst'].'</td>';
-					echo '\n</tr>\n';
 					$meerdere_activiteiten = true;
 				}
 			}
+			if(!$meerdere_activiteiten){
+				echo '<td class="agenda_tijd"></td>';
+				echo '<td class="agenda_activiteit"></td>';
+			}
+			echo '</tr>';
 
-			
 			$midday_time = $midday_time + 86400;
 		}
 		
-		echo '</table>\n'
-		echo '</p>\n'
+		echo '</table>';
+		echo '</p>';
 		
 	}
 }

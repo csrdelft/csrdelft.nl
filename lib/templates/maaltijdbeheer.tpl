@@ -6,8 +6,9 @@
 			<th>&nbsp;</th>
 			<th>Maaltijd begint om:</th>
 			<th>Omschrijving</th>
+			<th>Abo</th>
 			<th>Tafelpraeses</th>
-			<th>Aantal aanmeldingen (Max)</th>
+			<th># (Max)</th>
 		</tr>
 		{foreach from=$maal.maaltijden item=maaltijd}
 			<tr>
@@ -18,6 +19,7 @@
 				</td>
 				<td>{$maaltijd.datum|date_format:$datumFormaat}</td>
 				<td>{$maaltijd.tekst|escape:'html'}</td>
+				<td>{$maaltijd.abotekst}</td>
 				<td>{$maaltijd.tp_link}</td>
 				<td>
 					{if $maaltijd.aantal < $maaltijd.max}

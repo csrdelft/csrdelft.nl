@@ -12,7 +12,7 @@ uitprinten. Vanaf dat moment zal deze ketzer u niet meer willen aan- of afmelden
 {else}
 	<table class="maaltijden">
 		<tr>
-			{if $toonLijsten}<th></th>{/if}
+			{if $toonLijsten}<th>&nbsp;</th>{/if}
 			<th>Maaltijd begint om:</th>
 			<th>Omschrijving</th>
 			<th>Aantal(Max)</th>

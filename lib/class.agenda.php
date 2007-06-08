@@ -28,7 +28,7 @@ class Agenda {
 	# datum - dag waarop de activiteit is
 	# tijd - tijdstip waarop de activiteit begint
 	# tekst - beschrijving van de activiteit
-	function addAgendaPunt($datum, $tijdstip, $tekst) {
+	function addAgendaPunt($datum, $tijd, $tekst) {
 		$datum = (int)$datum;
 		$tijd = $this->_db->escape($tijd);
 		$tekst = mb_substr($tekst, 0, 200);
@@ -70,7 +70,6 @@ class Agenda {
 			return false;
 		}
 		
-		$datum = (int)$datum;
 		$tijd = $this->_db->escape($tijd);
 		$tekst = mb_substr($tekst, 0, 200);
 		$tekst = $this->_db->escape($tekst);
@@ -86,7 +85,7 @@ class Agenda {
 			SET
 				datum=".$datum.",
 				tijd='".$tijd."',
-				tekst='".$tekst."
+				tekst='".$tekst."'
 			WHERE 
 				id=".$agendaid."
 			LIMIT 1;";
@@ -94,17 +93,17 @@ class Agenda {
 			$this->_error="Er is iets mis met de database/query";
 			return false;
 		}else{
-			$agendapunt = new AgendaPunt ($agendaid, $this->_lid, $this->_db);
-			return $agendapunt;
+			return true;
 		}
 	}
 	
 	# deze methode valideert de gemeenschappelijke waarden van addAgendaPunt en editAgendaPunt.
 	# controle op specifieke dingen voor editAgendaPunt gebeurt nog in de methode zelf.
 	function validateAgendaPunt($datum, $tijd, $tekst){
-		# controleer of de datum niet in het verleden ligt
-		if ($datum < time()) {
-			$this->_error = "Het tijdstip van de activiteit moet in de toekomst liggen"; 
+		
+		#datum moet in de toekomst liggen
+		if ($datum < time()){
+			$this->_error = "Activiteiten in het verleden kunnen niet aangepast worden.";
 			return false;
 		}
 		
@@ -156,7 +155,7 @@ class Agenda {
 		return array(
 			'id' => $aAgendaPunt['id'],
 			'datum' => $aAgendaPunt['datum'],
-			'prijs' => $aAgendaPunt['prijs'],
+			'tijd' => $aAgendaPunt['tijd'],
 			'tekst' => $aAgendaPunt['tekst']);
 		
 		$this->_db->result2array($rAgendaPunt);
@@ -181,7 +180,7 @@ class Agenda {
 			SELECT 
 				* 
 			FROM 
-				maaltijd 
+				agenda 
 			WHERE 
 				datum > '".$van."' AND ".$totsql." 
 			ORDER BY 
@@ -192,7 +191,7 @@ class Agenda {
 				$agendapunten[] = $record;
 			}
 		}
-		# id, datum, prijs, tekst
+		# id, datum, tijd, tekst
 		return $agendapunten;
 	}
 

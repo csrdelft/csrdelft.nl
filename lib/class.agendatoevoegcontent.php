@@ -39,12 +39,12 @@ class AgendaToevoegContent extends SimpleHTML {
 			echo 'Er is een fout opgetreden bij het verkrijgen van de gegevens. <a href="#" onClick="history.go(-1);">Ga terug</a> en probeer het opnieuw.';
 		}
 		else{
-			echo '<h1>Agendapunt toevoegen</h1>\n
-					<p>\n
+			echo '<h1>Agendapunt toevoegen</h1>
+					<p>
 					Voer een begintijdstip en een omschrijving in, om het agendapunt toe te voegen.
 					';
 			// begin form
-			echo '<form enctype="multipart/form-data" action="." method="POST">'."\n";
+			echo '<form enctype="multipart/form-data" action="../" method="POST">'."\n";
 			echo '<input type="hidden" name="action" value="'.getOrPost("mode").'">'."\n";
 			echo '<input type="hidden" name="dagid" value="'.getOrPost("dagid").'">'."\n";
 			
