@@ -191,20 +191,21 @@ class DocumentenContent extends SimpleHTML {
 				// als de url eindigt op /documenten (let op de slash aan het eind)
 				$sLinkPrefix.='documenten/';
 			}
-			
-			// als we 1 categorie laten zien, moeten we (nog) een stapje terug, omdat we in
-			// ..documenten/categorie/xx OF in ..documenten/bewerken/xx/yy zitten.
-			// In het laatste geval is de mode 'edit' actief, dus is de link hierboven ook al aangepast.
-			if($singleCat){
-				$sLinkPrefix='../'.$sLinkPrefix;
-			}
-
-			// Toevoeg-link weergeven
-			echo '<a href="'.$sLinkPrefix.'toevoegen/">Documenten toevoegen</a><p>'."\n";
 		}
 		
 		if($singleCat){
+			// als we 1 categorie laten zien, moeten we (nog) een stapje terug, omdat we in
+			// ..documenten/categorie/xx OF in ..documenten/bewerken/xx/yy zitten.
+			// In het laatste geval is de mode 'edit' actief, dus is de link hierboven ook al aangepast.
+			$sLinkPrefix='../'.$sLinkPrefix;
+			
+			// terug-link weergeven
 			echo '<a href="'.$sLinkPrefix.'">Terug naar volledig overzicht</a><p>'."\n";
+		}
+		
+		if($this->_lid->hasPermission('P_DOCS_MOD')) {
+			// toevoeg-link weergeven
+			echo '<a href="'.$sLinkPrefix.'toevoegen/">Documenten toevoegen</a><p>'."\n";
 		}
 
 		// documenten ophalen
