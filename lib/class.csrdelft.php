@@ -36,7 +36,7 @@ class csrdelft extends SimpleHTML {
 		$this->_lid=&$lid;
 		//nieuw menu-object aanmaken...
 		require_once('class.menu.php');
-		$this->_menu=new menu(&$lid, &$db);
+		$this->_menu=new menu($lid, $db);
 		
 	}
 	

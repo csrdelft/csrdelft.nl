@@ -29,7 +29,7 @@ class kolom extends SimpleHTML {
 	function addObject(&$object) { $this->_objects[] =& $object; }
 	function addTekst($string){ $this->addObject(new string2object($string)); }
 	//aliasje
-	function add(&$object){ $this->addObject(&$object); }
+	function add(&$object){ $this->addObject($object); }
 	
 	function getTitel(){
 		if(isset($this->_objects[0])){
