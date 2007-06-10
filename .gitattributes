@@ -11,7 +11,9 @@ bin/statgraphgen.php -text
 bin/wachtwoord.php -text
 /csrdelft.sql -text
 htdocs/.htaccess -text
-htdocs/contact.php -text
+htdocs/contact/.htaccess -text
+htdocs/contact/index.php -text
+htdocs/contact/sponsors.php -text
 htdocs/forum/.htaccess -text
 htdocs/forum/bewerken.php -text
 htdocs/forum/citeren.php -text
@@ -285,6 +287,7 @@ lib/tekst/leden-thuis.html -text
 lib/tekst/links.html -text
 lib/tekst/maaltijd-niet-ingelogged.html -text
 lib/tekst/oudleden-thuis.html -text
+lib/tekst/sponsors.html -text
 lib/tekst/thuis.html -text
 lib/tekst/verbanden.html -text
 lib/templates/bestuur.tpl -text

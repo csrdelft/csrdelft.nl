@@ -24,7 +24,7 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
 			//nieuw bericht invoeren
 			if($csrmail->addBericht($_POST['titel'], $_POST['categorie'], $_POST['bericht'] )){
 				$body->addUserMessage('<h3>Dank u</h3>
-					Uw bericht is opgenomen in ons databeest, en het zal in de komende pubcie-post verschijnen.');
+					Uw bericht is opgenomen in ons databeest, en het zal in de komende C.S.R.-courant verschijnen.');
 			}else{
 				$body->addUserMessage('<h1>Fout</h1>Er ging iets mis met het invoeren van uw bericht. 
 					Probeer opnieuw, of stuur uw bericht in een mail naar pubcie@csrdelft.nl');
@@ -33,7 +33,7 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
 			//bericht bewerken.
 			if($csrmail->bewerkBericht($iBerichtID, $_POST['titel'], $_POST['categorie'], $_POST['bericht'])){
 				$body->addUserMessage('<h3>Dank u</h3>
-					Uw bericht is opgenomen in ons databeest, en het zal in de komende pubcie-post verschijnen.');
+					Uw bericht is opgenomen in ons databeest, en het zal in de komende C.S.R.-courant verschijnen.');
 			}else{
 				$body->addUserMessage('<h1>Fout</h1>Er ging iets mis met het invoeren van uw bericht. 
 					Probeer opnieuw, of stuur uw bericht in een mail naar pubcie@csrdelft.nl');

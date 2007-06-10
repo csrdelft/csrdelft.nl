@@ -1,20 +1,21 @@
-###dingen voor de htdocs root.
+### Dingen voor de htdocs-root
 AddDefaultCharset utf-8
-RewriteEngine on
+RewriteEngine On
 
-###modRewrite dingen
-#nieuws tonen:
+### mod_rewrite-dingen
+# Nieuws tonen
 RewriteRule ^nieuws/?$ nieuws.php
 RewriteRule ^nieuws/([0-9]+)$ nieuws.php?berichtID=$1
 
-
-#nieuwsbeheer
+# Nieuwsbeheer
 RewriteRule ^nieuws/verwijderen/([0-9]+) nieuws.php?berichtID=$1&verwijderen=true
 RewriteRule ^nieuws/bewerken/([0-9]+)$ nieuws.php?berichtID=$1&bewerken=true
 RewriteRule ^nieuws/bewerken/([0-9]+)/verwijder-plaatje nieuws.php?berichtID=$1&plaatje=delete
 RewriteRule ^nieuws/toevoegen$ nieuws.php?toevoegen=true
 
+# Terugwaarts werkbaar houden van de profielen:
+RewriteRule ^leden/profiel.php$ /intern/profiel.php [R=301]
+RewriteRule ^leden/lijst.php$ /intern/lijst.php [R=301]
 
-#terugwaards werkbaar houden van de profielen:
-RewriteRule ^leden/profiel.php$ intern/profiel.php
-RewriteRule ^leden/lijst.php$ intern/lijst.php
+# Terugwaartse compatibiliteit
+RewriteRule ^contact.php$ /contact/ [R=301]

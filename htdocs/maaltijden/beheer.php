@@ -41,7 +41,6 @@ if(isset($_POST['maalid'], $_POST['moment'], $_POST['omschrijving'], $_POST['lim
 			exit;
 		}
 	}else{
-		## TODO, bewerken moet nog gemaakt worden in maaltrack
 		if($maaltrack->editMaaltijd($maalid, $datum, $_POST['omschrijving'], $_POST['abo'], $_POST['tp'], $_POST['limiet'])){
 			header('location: '.CSR_ROOT.'maaltijden/beheer/');
 			exit;
