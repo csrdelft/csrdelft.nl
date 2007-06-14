@@ -55,7 +55,7 @@ class AgendaContent extends SimpleHTML {
 				$week_number_active = $week_number;
 				echo '<tr><td>&nbsp;</td></tr>';
 				echo '<tr><td ';
-				if(magBeheren()){
+				if($this->magBeheren()){
 					echo 'colspan="5"';
 				}
 				else{
@@ -65,7 +65,7 @@ class AgendaContent extends SimpleHTML {
 			}
 			
 			echo '<tr>';
-			if(magBeheren()){
+			if($this->magBeheren()){
 				echo '<td class="agenda_toevoegen"><a href="toevoegen/'.$this_day.'"><img class="button" src="http://plaetjes.csrdelft.nl/documenten/plus.jpg" /></a></td>';
 			}
 			echo '<td class="agenda_datum">'.$datum.'</td>';
@@ -76,13 +76,13 @@ class AgendaContent extends SimpleHTML {
 				if(date("Y z",$this_day) == date("Y z",$agendapunt['tijd'])){
 					if($meerdere_activiteiten){
 						echo '</tr><tr>';
-						if(magBeheren()){
+						if($this->magBeheren()){
 							echo '<td class="agenda_toevoegen"></td>';
 						}
 						echo '<td class="agenda_datum"></td>';
 					}
 					
-					if(magBeheren()){
+					if($this->magBeheren()){
 						echo '<td class="agenda_buttons">';
 						echo '<a href="bewerken/'.$agendapunt['id'].'"><img class="button" src="http://plaetjes.csrdelft.nl/forum/bewerken.png" /></a>';
 						echo '<a onclick="return confirm(\'Weet je zeker dat je \\\''.$agendapunt['tekst'].'\\\' wilt verwijderen?\')" href="index.php?id='.$agendapunt['id'].'&action=del"><img class="button" src="http://plaetjes.csrdelft.nl/forum/verwijderen.png" /></a>';
@@ -94,7 +94,7 @@ class AgendaContent extends SimpleHTML {
 						echo 'n.v.t.';
 					}
 					else{
-						echo $agendapunt['tijd'];
+						echo $tijd;
 					}
 					echo '</td>';
 					echo '<td class="agenda_activiteit">'.$agendapunt['tekst'].'</td>';
@@ -102,7 +102,7 @@ class AgendaContent extends SimpleHTML {
 				}
 			}
 			if(!$meerdere_activiteiten){
-				if(magBeheren()){
+				if($this->magBeheren()){
 					echo '<td class="agenda_buttons"></td>';
 				}
 				echo '<td class="agenda_tijd"></td>';

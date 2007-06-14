@@ -20,9 +20,9 @@ if(getOrPost("action") != ''){
 	$action = getOrPost("action");
 	if($action == "add"){
 		if(isset($_POST['datum']) && isset($_POST['tijd']) && isset($_POST['tekst'])){
-			if($this->_lid->hasPermission('P_AGENDA_POST')){
-				$tijd = strtotime(date("D d M",$_POST['datum']).' '.$_POST['tijd']);
-				if(!$this->_agenda->addAgendaPunt($tijd, $_POST['tekst'])){
+			if($lid->hasPermission('P_AGENDA_POST')){
+				$tijd = strtotime(date('d F Y',$_POST['datum']).' '.$_POST['tijd']);
+				if(!$agenda->addAgendaPunt($tijd, $_POST['tekst'])){
 					$error = 2;
 				}
 			}
@@ -30,9 +30,9 @@ if(getOrPost("action") != ''){
 	}
 	elseif($action == "edit"){
 		if(isset($_POST['id']) && isset($_POST['datum']) && isset($_POST['tijd']) && isset($_POST['tekst'])){
-			if($this->_lid->hasPermission('P_AGENDA_MOD')){
-				$tijd = strtotime(date("D d M",$_POST['datum']).' '.$_POST['tijd']);
-				if(!$this->_agenda->editAgendaPunt($_POST['id'], $tijd, $_POST['tekst'])){
+			if($lid->hasPermission('P_AGENDA_MOD')){
+				$tijd = strtotime(date("d F Y",$_POST['datum']).' '.$_POST['tijd']);
+				if(!$agenda->editAgendaPunt($_POST['id'], $tijd, $_POST['tekst'])){
 					$error = 2;
 				}
 			}
@@ -40,8 +40,8 @@ if(getOrPost("action") != ''){
 	}
 	elseif($action == "del"){
 		if(isset($_GET['id'])){
-			if($this->_lid->hasPermission('P_AGENDA_MOD')){
-				if(!$this->_agenda->removeAgendaPunt($_GET['id'])){
+			if($lid->hasPermission('P_AGENDA_MOD')){
+				if(!$agenda->removeAgendaPunt($_GET['id'])){
 					$error = 2;
 				}
 			}

@@ -52,6 +52,11 @@ class AgendaWijzigContent extends SimpleHTML {
 			// table
 			echo '<table border="0" class="forumtabel">'."\n";
 
+                        echo '<tr>';
+                        echo '<td>Datum:</td>';
+                        echo '<td><label>'.date("D d M", $agendapunt['tijd']).'</label></td>';
+                        echo '</tr>';
+
 			echo '<tr>';
 			echo '<td>Begint om:</td>';
 			echo '<td><input name="tijd" type="text" value="'.date("H:i",$agendapunt['tijd']).'"/></td>';

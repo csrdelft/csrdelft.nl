@@ -52,7 +52,7 @@ class Agenda {
 			$this->_error="Er is iets mis met de database/query";
 			return false;
 		}else{
-			return $this->_db->insert_id()
+			return $this->_db->insert_id();
 		}
 	}
 	

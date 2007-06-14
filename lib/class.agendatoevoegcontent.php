@@ -50,6 +50,10 @@ class AgendaToevoegContent extends SimpleHTML {
 			
 			// table
 			echo '<table border="0" class="forumtabel">'."\n";
+			echo '<tr>';
+			echo '<td>Datum:</td>';
+			echo '<td><label>'.date("D d M", getOrPost("datum")).'</label></td>';
+			echo '</tr>';
 
 			echo '<tr>';
 			echo '<td>Begint om:</td>';
