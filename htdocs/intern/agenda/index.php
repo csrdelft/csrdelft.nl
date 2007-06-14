@@ -16,6 +16,48 @@ $error = 0;
 # 1 -> mag niet, foutpagina afbeelden
 # 2 -> er treden (vorm)fouten op in bijv de invoer.
 
+if(getOrPost("action") != ''){
+	$action = getOrPost("action");
+	if($action == "add"){
+		if(isset($_POST['datum']) && isset($_POST['tijd']) && isset($_POST['tekst'])){
+			if($this->_lid->hasPermission('P_AGENDA_POST')){
+				$tijd = strtotime(date("D d M",$_POST['datum']).' '.$_POST['tijd']);
+				if(!$this->_agenda->addAgendaPunt($tijd, $_POST['tekst'])){
+					$error = 2;
+				}
+			}
+		}
+	}
+	elseif($action == "edit"){
+		if(isset($_POST['id']) && isset($_POST['datum']) && isset($_POST['tijd']) && isset($_POST['tekst'])){
+			if($this->_lid->hasPermission('P_AGENDA_MOD')){
+				$tijd = strtotime(date("D d M",$_POST['datum']).' '.$_POST['tijd']);
+				if(!$this->_agenda->editAgendaPunt($_POST['id'], $tijd, $_POST['tekst'])){
+					$error = 2;
+				}
+			}
+		}
+	}
+	elseif($action == "del"){
+		if(isset($_GET['id'])){
+			if($this->_lid->hasPermission('P_AGENDA_MOD')){
+				if(!$this->_agenda->removeAgendaPunt($_GET['id'])){
+					$error = 2;
+				}
+			}
+		}
+	}
+	
+	if($error == 2){
+		echo "Error: de actie is mislukt.";
+	}
+	else{
+		header("Location: {$_SERVER['PHP_SELF']}");
+		exit;
+	}
+}
+	
+
 if(getOrPost("mode") != ''){
 	$mode = getOrPost("mode");
 	if($mode == "add"){
@@ -46,18 +88,8 @@ else{
 	# De pagina opbouwen, met mKetzer, of met foutmelding
 	if($error == 0  or $error == 2) {
 		# Het middenstuk
-		if($lid->hasPermission('P_AGENDA_MOD')){
-			require_once('class.agendabeheercontent.php');
-			$midden = new AgendaBeheerContent($lid, $agenda);
-		}
-		elseif($lid->hasPermission('P_AGENDA_POST')){
-			require_once('class.agendabeheercontent.php');
-			$midden = new AgendaBeheerContent($lid, $agenda);
-		}
-		else{
-			require_once('class.agendacontent.php');
-			$midden = new AgendaContent($lid, $agenda);
-		}
+		require_once('class.agendacontent.php');
+		$midden = new AgendaContent($lid, $agenda);
 	} else {
 		# geen rechten
 		$midden = new Includer('', 'geentoegang.html');

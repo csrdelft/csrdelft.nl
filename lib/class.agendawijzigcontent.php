@@ -47,14 +47,14 @@ class AgendaWijzigContent extends SimpleHTML {
 			echo '<form enctype="multipart/form-data" action="../" method="POST">'."\n";
 			echo '<input type="hidden" name="action" value="'.getOrPost("mode").'">'."\n";
 			echo '<input type="hidden" name="id" value="'.getOrPost("id").'">'."\n";
-			echo '<input type="hidden" name="datum" value="'.$agendapunt["datum"].'">'."\n";
+			echo '<input type="hidden" name="datum" value="'.$agendapunt["tijd"].'">'."\n";
 			
 			// table
 			echo '<table border="0" class="forumtabel">'."\n";
 
 			echo '<tr>';
 			echo '<td>Begint om:</td>';
-			echo '<td><input name="tijd" type="text" value="'.$agendapunt['tijd'].'"/></td>';
+			echo '<td><input name="tijd" type="text" value="'.date("H:i",$agendapunt['tijd']).'"/></td>';
 			echo '</tr>';
 			echo '<tr><td>Omschrijving:</td>';
 			echo '<td><input name="tekst" type="text" value="'.$agendapunt['tekst'].'"/></td>';

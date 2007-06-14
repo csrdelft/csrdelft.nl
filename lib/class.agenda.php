@@ -28,14 +28,13 @@ class Agenda {
 	# datum - dag waarop de activiteit is
 	# tijd - tijdstip waarop de activiteit begint
 	# tekst - beschrijving van de activiteit
-	function addAgendaPunt($datum, $tijd, $tekst) {
-		$datum = (int)$datum;
+	function addAgendaPunt($tijd, $tekst) {
 		$tijd = $this->_db->escape($tijd);
 		$tekst = mb_substr($tekst, 0, 200);
 		$tekst = $this->_db->escape($tekst);
 
 		# bij fouten, niet doorgaan, false teruggeven.
-		if(!$this->validateAgendaPunt($datum, $tijd, $tekst)){
+		if(!$this->validateAgendaPunt($tijd, $tekst)){
 			return false;
 		}
 			
@@ -44,23 +43,22 @@ class Agenda {
 			INSERT INTO 
 				agenda 
 			(
-				datum, tijd, tekst
+				tijd, tekst
 			)VALUES(
-				'".$datum."', '".$tijd."', '".$tekst."'
+				'".$tijd."', '".$tekst."'
 			);";
 		
 		if (!$this->_db->query($agendapunt)){
 			$this->_error="Er is iets mis met de database/query";
 			return false;
 		}else{
-			$agendapunt = new AgendaPunt ($this->_db->insert_id(), $this->_lid, $this->_db);
-			return $agendapunt->getAgendaPuntId();
+			return $this->_db->insert_id()
 		}
 	}
 	
 	# bestaand agendapunt bewerken. Niet veel verschil met addAgendaPunt, behalve dat hier nog even 
 	# gekeken wordt of het agendapunt wel bestaat.
-	function editAgendaPunt($agendaid, $datum, $tijd, $tekst){
+	function editAgendaPunt($agendaid, $tijd, $tekst){
 		if($agendaid!=(int)$agendaid){
 			$this->_error="Ongeldig agendaPuntId opgegeven.";
 			return false;
@@ -75,7 +73,7 @@ class Agenda {
 		$tekst = $this->_db->escape($tekst);
 		
 		# bij fouten, niet doorgaan, false teruggeven.
-		if(!$this->validateAgendaPunt($datum, $tijd, $tekst)){
+		if(!$this->validateAgendaPunt($tijd, $tekst)){
 			return false;
 		}
 
@@ -83,7 +81,6 @@ class Agenda {
 			UPDATE 
 				agenda
 			SET
-				datum=".$datum.",
 				tijd='".$tijd."',
 				tekst='".$tekst."'
 			WHERE 
@@ -99,10 +96,10 @@ class Agenda {
 	
 	# deze methode valideert de gemeenschappelijke waarden van addAgendaPunt en editAgendaPunt.
 	# controle op specifieke dingen voor editAgendaPunt gebeurt nog in de methode zelf.
-	function validateAgendaPunt($datum, $tijd, $tekst){
+	function validateAgendaPunt($tijd, $tekst){
 		
 		#datum moet in de toekomst liggen
-		if ($datum < time()){
+		if ($tijd < time()){
 			$this->_error = "Activiteiten in het verleden kunnen niet aangepast worden.";
 			return false;
 		}
@@ -154,7 +151,6 @@ class Agenda {
 		
 		return array(
 			'id' => $aAgendaPunt['id'],
-			'datum' => $aAgendaPunt['datum'],
 			'tijd' => $aAgendaPunt['tijd'],
 			'tekst' => $aAgendaPunt['tekst']);
 		
@@ -173,7 +169,7 @@ class Agenda {
 		# als $tot niet is opgegeven, of 0 is, dan worden alle maaltijden vanaf
 		# van teruggegeven, gesorteerd op tijd
 		$tot = (int)$tot;
-		$totsql = ($tot != 0) ? "datum < '".$tot."'" : "1";
+		$totsql = ($tot != 0) ? "tijd < '".$tot."'" : "1";
 		
 		$agendapunten = array();
 		$sAgendaPuntenQuery="
@@ -182,9 +178,9 @@ class Agenda {
 			FROM 
 				agenda 
 			WHERE 
-				datum > '".$van."' AND ".$totsql." 
+				tijd > '".$van."' AND ".$totsql." 
 			ORDER BY 
-				datum ASC, tijd ASC;";	
+				tijd ASC;";	
 		$result=$this->_db->select($sAgendaPuntenQuery);
 		if (($result !== false) and $this->_db->numRows($result) > 0) {
 			while ($record = $this->_db->next($result)) {

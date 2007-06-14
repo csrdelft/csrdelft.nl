@@ -1,6 +1,6 @@
 RewriteEngine on
 
 #het toevoegen, bewerken en verwijderen van agendapunten
-RewriteRule ^toevoegen/([0-9]+)$ index.php?dagid=$1&mode=add
+RewriteRule ^toevoegen/([0-9]+)$ index.php?datum=$1&mode=add
 RewriteRule ^bewerken/([0-9]+)$ index.php?id=$1&mode=edit
 RewriteRule ^verwijderen/([0-9]+)$ index.php?id=$1&action=del

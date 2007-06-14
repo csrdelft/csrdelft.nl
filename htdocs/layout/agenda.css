@@ -15,11 +15,8 @@ td.agenda_week {
 	height: 19px;
 }
 
-td.agenda_dag{
-	width: 30px;
-}
-td.agenda_datum{
-	width: 50px;
+.agenda_datum{
+	width: 80px;
 }
 td.agenda_tijd{
 	width: 50px;

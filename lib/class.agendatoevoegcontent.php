@@ -35,7 +35,7 @@ class AgendaToevoegContent extends SimpleHTML {
 
 		$error=$this->_agenda->getError();
 
-		if(getOrPost("mode") == '' || getOrPost("dagid") == ''){
+		if(getOrPost("mode") == '' || getOrPost("datum") == ''){
 			echo 'Er is een fout opgetreden bij het verkrijgen van de gegevens. <a href="#" onClick="history.go(-1);">Ga terug</a> en probeer het opnieuw.';
 		}
 		else{
@@ -46,7 +46,7 @@ class AgendaToevoegContent extends SimpleHTML {
 			// begin form
 			echo '<form enctype="multipart/form-data" action="../" method="POST">'."\n";
 			echo '<input type="hidden" name="action" value="'.getOrPost("mode").'">'."\n";
-			echo '<input type="hidden" name="dagid" value="'.getOrPost("dagid").'">'."\n";
+			echo '<input type="hidden" name="datum" value="'.getOrPost("datum").'">'."\n";
 			
 			// table
 			echo '<table border="0" class="forumtabel">'."\n";
