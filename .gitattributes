@@ -100,9 +100,7 @@ lib/bbcode/lang_main.php -text
 lib/blowfish/blowfish.php -text
 lib/blowfish/blowfish_default_key.php -text
 lib/class.agenda.php -text
-lib/class.agendabeheercontent.php -text
 lib/class.agendacontent.php -text
-lib/class.agendapunt.php -text
 lib/class.agendatoevoegcontent.php -text
 lib/class.agendawijzigcontent.php -text
 lib/class.bestuur.php -text

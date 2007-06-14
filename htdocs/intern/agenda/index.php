@@ -4,7 +4,6 @@ require_once('include.config.php');
 
 # MaaltijdenSysteem
 require_once('class.agenda.php');
-require_once('class.agendapunt.php');
 $agenda = new Agenda($lid, $db);
 
 # volgende code gejat uit profiel.php:
