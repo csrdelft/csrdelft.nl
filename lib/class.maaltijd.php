@@ -444,7 +444,6 @@ class MaalTijd {
 				maaltijdaanmelding.maalid='".$this->_maalid."' AND 
 				maaltijdaanmelding.status='AAN';";
 		$rAan=$this->_db->select($sAan);
-		echo mysql_error();
 		if($rAan!==false and $this->_db->numRows($rAan) > 0){
 			while($aAan=$this->_db->next($rAan)){
 				$naam=naam($aAan['voornaam'], $aAan['achternaam'], $aAan['tussenvoegsel']);

@@ -30,9 +30,9 @@ class Bestuur extends SimpleHTML {
 		if($jaar==0){
 			//huidige bestuur laden...
 			$jaar=date('Y');
-			if(date('m-d')<'06-16') $jaar-=1;
+			if(date('m-d')<'06-28') $jaar-=1;
 		}else{
-			if(!preg_match('/\d{4}/', $jaar)) return false;
+			if(!preg_match('/(19|20)\d{2}/', $jaar)) return false;
 			$this->_jaar=$jaar;
 		}
 		$sBestuur="

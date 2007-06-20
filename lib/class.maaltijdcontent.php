@@ -36,7 +36,8 @@ class MaaltijdContent extends SimpleHTML {
 		//...de eigen aanmeldingen
 		$nu=time();
 		$aMaal['zelf']['error']=$this->_maaltrack->getError();
-		$aMaal['zelf']['maaltijden']=$this->_maaltrack->getMaaltijden($nu, $nu+MAALTIJD_LIJST_MAX_TOT);
+		//We halen vanaf $nu-7200 op zodat ook maaltijden die al bezig zijn getoond worden.
+		$aMaal['zelf']['maaltijden']=$this->_maaltrack->getMaaltijden($nu-7200, $nu+MAALTIJD_LIJST_MAX_TOT);
 		
 		//...de abonnementen
 		$aMaal['abo']['abos']=$this->_maaltrack->getAbo();
