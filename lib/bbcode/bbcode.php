@@ -366,15 +366,15 @@ function bbencode_first_pass($text, $uid)
 
 	
 	// [img]image_url_here[/img] code..
-	$text = preg_replace("#\[img\]((http|ftp|https|ftps)://)([^ \?&=\#\"\n\r\t<]*?(\.(jpg|jpeg|gif|png)))\[/img\]#sie", "'[img:$uid]\\1' . str_replace(' ', '%20', '\\3') . '[/img:$uid]'", $text);
-	$text = preg_replace("#\[imgl\]((http|ftp|https|ftps)://)([^ \?&=\#\"\n\r\t<]*?(\.(jpg|jpeg|gif|png)))\[/imgl\]#sie", "'[imgl:$uid]\\1' . str_replace(' ', '%20', '\\3') . '[/imgl:$uid]'", $text);
-	$text = preg_replace("#\[imgr\]((http|ftp|https|ftps)://)([^ \?&=\#\"\n\r\t<]*?(\.(jpg|jpeg|gif|png)))\[/imgr\]#sie", "'[imgr:$uid]\\1' . str_replace(' ', '%20', '\\3') . '[/imgr:$uid]'", $text);
-	$text = preg_replace("#\[imgc\]((http|ftp|https|ftps)://)([^ \?&=\#\"\n\r\t<]*?(\.(jpg|jpeg|gif|png)))\[/imgc\]#sie", "'[imgc:$uid]\\1' . str_replace(' ', '%20', '\\3') . '[/imgc:$uid]'", $text);
+	$text = preg_replace("#\[img\]((http|ftp|https|ftps)://)([^ \#\"\n\r\t<]*?)\[/img\]#sie", "'[img:$uid]\\1' . str_replace(' ', '%20', '\\3') . '[/img:$uid]'", $text);
+	$text = preg_replace("#\[imgl\]((http|ftp|https|ftps)://)([^ \#\"\n\r\t<]*?)\[/imgl\]#sie", "'[imgl:$uid]\\1' . str_replace(' ', '%20', '\\3') . '[/imgl:$uid]'", $text);
+	$text = preg_replace("#\[imgr\]((http|ftp|https|ftps)://)([^ \#\"\n\r\t<]*?)\[/imgr\]#sie", "'[imgr:$uid]\\1' . str_replace(' ', '%20', '\\3') . '[/imgr:$uid]'", $text);
+	$text = preg_replace("#\[imgc\]((http|ftp|https|ftps)://)([^ \#\"\n\r\t<]*?)\[/imgc\]#sie", "'[imgc:$uid]\\1' . str_replace(' ', '%20', '\\3') . '[/imgc:$uid]'", $text);
 
-	$text = preg_replace("#\[img\]([^ \?&=\#\"\n\r\t<]*?(\.(jpg|jpeg|gif|png)))\[/img\]#sie", "'[img:$uid]' . str_replace(' ', '%20', '\\1') . '[/img:$uid]'", $text);
-	$text = preg_replace("#\[imgl\]([^ \?&=\#\"\n\r\t<]*?(\.(jpg|jpeg|gif|png)))\[/imgl\]#sie", "'[imgl:$uid]' . str_replace(' ', '%20', '\\1') . '[/imgl:$uid]'", $text);
-	$text = preg_replace("#\[imgr\]([^ \?&=\#\"\n\r\t<]*?(\.(jpg|jpeg|gif|png)))\[/imgr\]#sie", "'[imgr:$uid]' . str_replace(' ', '%20', '\\1') . '[/imgr:$uid]'", $text);
-	$text = preg_replace("#\[imgc\]([^ \?&=\#\"\n\r\t<]*?(\.(jpg|jpeg|gif|png)))\[/imgc\]#sie", "'[imgc:$uid]' . str_replace(' ', '%20', '\\1') . '[/imgc:$uid]'", $text);
+	$text = preg_replace("#\[img\]([^ \#\"\n\r\t<]*?)\[/img\]#sie", "'[img:$uid]' . str_replace(' ', '%20', '\\1') . '[/img:$uid]'", $text);
+	$text = preg_replace("#\[imgl\]([^ \#\"\n\r\t<]*?)\[/imgl\]#sie", "'[imgl:$uid]' . str_replace(' ', '%20', '\\1') . '[/imgl:$uid]'", $text);
+	$text = preg_replace("#\[imgr\]([^ \#\"\n\r\t<]*?)\[/imgr\]#sie", "'[imgr:$uid]' . str_replace(' ', '%20', '\\1') . '[/imgr:$uid]'", $text);
+	$text = preg_replace("#\[imgc\]([^ \#\"\n\r\t<]*?)\[/imgc\]#sie", "'[imgc:$uid]' . str_replace(' ', '%20', '\\1') . '[/imgc:$uid]'", $text);
 
 	// Remove our padding from the string..
 	return substr($text, 1);;
