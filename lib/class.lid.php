@@ -179,25 +179,27 @@ class Lid {
 				}
 			}
 		}
+		$sVolledigeNaam=$aNaam['voornaam'].' ';
+		if($aNaam['tussenvoegsel']!='') $sVolledigeNaam.=$aNaam['tussenvoegsel'].' ';
+		$sVolledigeNaam.=$aNaam['achternaam'];
+
 		//link tonen als dat gevraagd wordt EN als gebruiker is ingelogged.
-		if($link AND $this->hasPermission('P_LOGGED_IN')){ $sNaam.='<a href="/intern/profiel/'.$uid.'">'; }
+		if($link AND $this->hasPermission('P_LOGGED_IN')){ 
+			$sNaam.='<a href="/intern/profiel/'.$uid.'" title="'.$sVolledigeNaam.'">'; 
+		}
 		//civitas of niksnamen, enkel relevant voor het forum, verder is gewoon voornaam [tussenvoegsel] achternaam
 		//nog een optie.
 		if($vorm==='nick'){
 			if($aNaam['nickname']!=''){
 				$sTmpNaam=$aNaam['nickname'];
 			}else{
-				$sTmpNaam=$aNaam['voornaam'].' ';
-				if($aNaam['tussenvoegsel']!='') $sTmpNaam.=$aNaam['tussenvoegsel'].' ';
-				$sTmpNaam.=$aNaam['achternaam'];
+				$sTempNaam=$sVolledigeNaam;
 			}			
 		}elseif($vorm==='streeplijst'){ // achternaam, voornaam [tussenvoegsel] voor de streeplijst
 			$sTmpNaam=$aNaam['achternaam'].', '.$aNaam['voornaam'];
 			if($aNaam['tussenvoegsel'] != '') $sTmpNaam.=' '.$aNaam['tussenvoegsel'];
 		}elseif($vorm==='full' OR $aNaam['status']=='S_KRINGEL'){
-			$sTmpNaam=$aNaam['voornaam'].' ';
-			if($aNaam['tussenvoegsel'] != '') $sTmpNaam.=$aNaam['tussenvoegsel'].' ';
-			$sTmpNaam.=$aNaam['achternaam'];		
+			$sTmpNaam=$sVolledigeNaam;	
 		}elseif($vorm==='civitas'){
 			if($aNaam['status']=='S_NOVIET'){
 				$sTmpNaam='noviet '.$aNaam['voornaam'];

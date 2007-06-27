@@ -175,8 +175,12 @@ class Csrmailcontent {
 		$aMails=$this->_csrmail->getArchiefmails();
 		$sReturn='<div id="archiefCourant">
 				<a class="kopje" href="/intern/csrmail/">Archief</a><br />';
-		foreach($aMails as $aMail){
-			$sReturn.='<a href="/intern/csrmail/archief/'.$aMail['ID'].'">'.strftime('%d %B %Y', strtotime($aMail['verzendMoment'])).'</a><br />';
+		if(is_array($aMails)){
+			foreach($aMails as $aMail){
+				$sReturn.='<a href="/intern/csrmail/archief/'.$aMail['ID'].'">'.strftime('%d %B %Y', strtotime($aMail['verzendMoment'])).'</a><br />';
+			}
+		}else{
+			$sReturn.='Geen couranten in het archief aanwezig';
 		}
 		$sReturn.='</div>';
 		return $sReturn;

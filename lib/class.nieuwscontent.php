@@ -135,7 +135,7 @@ class NieuwsContent extends SimpleHTML {
 	function getOverzicht(){
 		$aBerichten=$this->_nieuws->getMessages();
 		if(!is_array($aBerichten)) {	
-			echo 'Zoals het is, zoals het was, o Civitas!<br />(Geen nieuws gevonden dus....)';
+			echo 'Zoals het is, zoals het was, o Civitas!<br />(Geen nieuws gevonden dus....)<br /><br />';
 		}else{
 			foreach ($aBerichten as $aBericht) {
 				if(kapStringNetjesAf($aBericht['tekst'], $this->_chop)){
@@ -161,8 +161,8 @@ class NieuwsContent extends SimpleHTML {
 				}
 				echo '&nbsp;'.$this->getBerichtModControls($aBericht['id']).'</div></div>';
 			}//einde foreach bericht
-			echo $this->getNieuwBerichtLink();
 		}
+		echo $this->getNieuwBerichtLink();
 	}
 	function getBericht(){
 		$aBericht=$this->_nieuws->getMessage($this->_berichtID);
