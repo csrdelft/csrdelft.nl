@@ -18,25 +18,24 @@ if(isset($_POST['namenRaw'])){
 				//naam is gevonden en uniek, dus direct goed.
 				$saldi=$lid->getSaldi($aLid['uid']);
 				echo '<tr>';
-				echo '<td colspan="3"><input type="hidden" name="naam[]" value="'.$aLid['uid'].'" />'.$aLid['naam'].'</td>';
-				echo '<td>'.$saldi['soccie'].'</td><td>'.$saldi['maalcie'].'</td></tr>';
+				echo '<td ><input type="hidden" name="naam[]" value="'.$aLid['uid'].'" />'.$aLid['naam'].'</td>';
+				echo '<td>'.sprintf('&euro; %01.2f', $saldi['soccie']).'</td><td>'.sprintf('&euro; %01.2f', $saldi['maalcie']).'</td></tr>';
 			}else{
 				//naam is niet duidelijk, geef ook een selectievakje met de mogelijke opties
 				if(count($aLid['naamOpties'])>0){
-					echo '<tr><td><select name="naam[]" class="tekst">';
+					echo '<tr><td colspan="3"><select name="naam[]" class="tekst">';
 					foreach($aLid['naamOpties'] as $aNaamOptie){
 						echo '<option value="'.$aNaamOptie['uid'].'">'.$aNaamOptie['naam'].'</option>';
 					}
 					echo '</select></td>';
 				}//dingen die niets opleveren wordt niets voor weergegeven.
 			}
-			
 		}
 		echo '</table>';
 		
 	}
 }else{
-	echo '<input type="text" name="namenRaw" />';
+	echo '<textarea name="namenRaw" rows="10" cols="40"></textarea>';
 }
 
 echo '<input type="submit" value="Verzenden" /></form>';
