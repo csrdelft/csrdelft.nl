@@ -10,6 +10,10 @@ bin/socciesaldi-koppelen.php -text
 bin/statgraphgen.php -text
 bin/wachtwoord.php -text
 /csrdelft.sql -text
+etc/csrmail.ini -text
+etc/ldap.ini -text
+etc/mysql.ini -text
+etc/soccie.ini -text
 htdocs/.htaccess -text
 htdocs/contact/.htaccess -text
 htdocs/contact/index.php -text
