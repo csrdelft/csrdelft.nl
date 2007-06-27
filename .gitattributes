@@ -84,6 +84,7 @@ htdocs/maaltijden/voorkeuren.php -text
 htdocs/nieuws.php -text
 htdocs/robots.txt -text
 htdocs/tools/index.php -text
+htdocs/tools/saldo-overzicht.php -text
 htdocs/tools/sendmail/maildata.php -text
 htdocs/tools/sendmail/sendmail.php -text
 htdocs/tools/soccie.php -text
