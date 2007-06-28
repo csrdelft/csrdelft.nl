@@ -61,10 +61,10 @@ Tafelpraeses is vandaag {$maaltijd.tafelpraeses}
 {/if}
 {if $maaltijd.aantal>0}
 	{assign var=nummer value=1}
-	{table_foreach from=$maaltijd.aanmeldingen item=aanmelding table_attr='class="inschrijvingen"' cols=2 name=aanmeldingen}
+	{table_foreach from=$maaltijd.aanmeldingen inner=rows item=aanmelding table_attr='class="inschrijvingen"' cols=2 name=aanmeldingen}
 		{$nummer++}</td><td>{$aanmelding.naam}
 		{if $aanmelding.eetwens!=''}<br /><strong>{$aanmelding.eetwens}</strong>{/if}
-		</td><td>&nbsp;
+		</td><td style="width: 40px;">&nbsp;
 	{/table_foreach}
 {else}
 	Nog geen aanmeldingen voor deze maaltijd.
