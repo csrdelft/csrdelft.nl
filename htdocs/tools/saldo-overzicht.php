@@ -3,7 +3,12 @@
 # instellingen & rommeltjes
 require_once('include.config.php');
 
-if($lid->getUid()!='0436'){ header('location: http://csrdelft.nl'); }
+require_once('class.commissie.php');
+$cie=new Commissie($db, $lid);
+$cie->loadCommissie('SocCie');
+
+
+if(!$cie->magBewerken()){ header('location: http://csrdelft.nl'); }
 
 echo '<h1>Overzicht saldi</h1><form action="/tools/saldo-overzicht.php" method="post">';
 	
