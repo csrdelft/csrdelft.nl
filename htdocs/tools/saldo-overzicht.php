@@ -4,11 +4,11 @@
 require_once('include.config.php');
 
 require_once('class.commissie.php');
-$cie=new Commissie($db, $lid);
-$cie->loadCommissie('SocCie');
+$soccie=$maalcie=new Commissie($db, $lid);
+$soccie->loadCommissie('SocCie');
+$maalcie->loadCommissie('MaalCie');
 
-
-if(!$cie->magBewerken()){ header('location: http://csrdelft.nl'); }
+if(!$soccie->magBewerken() OR !$maalcie->magbewerken()){ header('location: http://csrdelft.nl'); }
 
 echo '<h1>Overzicht saldi</h1><form action="/tools/saldo-overzicht.php" method="post">';
 	
