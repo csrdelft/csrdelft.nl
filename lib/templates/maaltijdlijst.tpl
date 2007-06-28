@@ -46,6 +46,7 @@ Regels omtrent het betalen van de maaltijden op Confide:
 	<li>niet betaald = nb</li>
 	<li>2,50 betaald = kruisje (x)</li>
 	<li>ander bedrag ingelegd: schrijf duidelijk in het hokje hoeveel je in de helm hebt gegooid.</li>
+	<li>bevat derde kolom 'ok'? Dan hebt u nog voldoende tegoed voor deze maaltijd</li>
 	<li> als je géén tegoed hebt bij de maalcie betekent een niet direct betaalde maaltijd 20 cent boete!</li>
 </ul>
 <p>
@@ -62,8 +63,12 @@ Tafelpraeses is vandaag {$maaltijd.tafelpraeses}
 {if $maaltijd.aantal>0}
 	{assign var=nummer value=1}
 	{table_foreach from=$maaltijd.aanmeldingen inner=rows item=aanmelding table_attr='class="inschrijvingen"' cols=2 name=aanmeldingen}
-		{$nummer++}</td><td>{$aanmelding.naam}
-		{if $aanmelding.eetwens!=''}<br /><strong>{$aanmelding.eetwens}</strong>{/if}
+		{$nummer++}</td>
+		<td>{$aanmelding.naam}{if $aanmelding.eetwens!=''}<br /><strong>{$aanmelding.eetwens}</strong>{/if}</td>
+		<td style="width: 20px; text-align: right;">
+			{if $aanmelding.saldo!=''}
+				{if $aanmelding.saldo>=2.50}ok{elseif $aanmelding.saldo>=0}&lt;2,5{else}&lt;0{/if}
+			{/if}
 		</td><td style="width: 40px;">&nbsp;
 	{/table_foreach}
 {else}

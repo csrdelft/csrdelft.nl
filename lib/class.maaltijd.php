@@ -435,11 +435,14 @@ class MaalTijd {
 				lid.voornaam AS voornaam,
 				lid.tussenvoegsel AS tussenvoegsel,
 				lid.achternaam AS achternaam,
-				lid.eetwens AS eetwens
+				lid.eetwens AS eetwens,
+				socciesaldi.maalSaldo AS saldo
 			FROM 
 				maaltijdaanmelding 
 			INNER JOIN 
 				lid ON (lid.uid=maaltijdaanmelding.uid)
+			LEFT JOIN
+				socciesaldi ON (lid.uid=socciesaldi.uid)
 			WHERE 
 				maaltijdaanmelding.maalid='".$this->_maalid."' AND 
 				maaltijdaanmelding.status='AAN';";
@@ -455,7 +458,7 @@ class MaalTijd {
 					for($i=1; $i<=$aAan['gasten']; $i++){
 						$gasten[]=array(
 							'naam' => 'Gast van '.$naam,
-							'achternaam' =>$aAan['achternaam']);
+							'achternaam' => $aAan['achternaam']);
 					}
 				}	
 				//hier array met uid als key maken, om zometeen alles te kunnen wegstrepen
@@ -464,6 +467,7 @@ class MaalTijd {
 					'naam' => $naam,
 					'eetwens' => $aAan['eetwens'],
 					'achternaam' => $aAan['achternaam'],
+					'saldo' => $aAan['saldo'],
 					'door_uid' => $aAan['door_uid'], 
 					'gasten' => $gasten );
 				
@@ -478,11 +482,14 @@ class MaalTijd {
 				lid.voornaam AS voornaam,
 				lid.tussenvoegsel AS tussenvoegsel,
 				lid.achternaam AS achternaam,
-				lid.eetwens AS eetwens
+				lid.eetwens AS eetwens,
+				socciesaldi.maalSaldo AS saldo
 			FROM 
 			 	maaltijdabo 
 			INNER JOIN 
 				lid ON(maaltijdabo.uid=lid.uid)
+			LEFT JOIN
+				socciesaldi ON (lid.uid=socciesaldi.uid)
 			WHERE 
 				abosoort='".$this->_maaltijd['abosoort']."'");
 		if (($rAbo !== false) and $this->_db->numRows($rAbo) > 0){
@@ -493,7 +500,8 @@ class MaalTijd {
 					'uid' => $aAbo['uid'],
 					'naam' => $naam,
 					'eetwens' => $aAbo['eetwens'],
-					'achternaam' => $aAbo['achternaam'] );
+					'achternaam' => $aAbo['achternaam'],
+					'saldo' => $aAbo['saldo'] );
 			}
 		}
 	
