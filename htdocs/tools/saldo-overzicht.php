@@ -16,7 +16,7 @@ if(isset($_POST['namenRaw'])){
 	$aUids=namen2uid($_POST['namenRaw'], $lid);
 	if(is_array($aUids) AND count($aUids)!=0){
 		echo '<table border="0">';
-		echo '<tr><th>Naam</hd><th>SocCie</th><th>MaalCie</th></tr>';
+		echo '<tr><th style="width: 300px;">Naam</hd><th style="width: 100px;">SocCie</th><th style="width: 100px;">MaalCie</th></tr>';
 		
 		foreach($aUids as $aLid){
 			if(isset($aLid['uid'])){
@@ -24,7 +24,12 @@ if(isset($_POST['namenRaw'])){
 				$saldi=$lid->getSaldi($aLid['uid']);
 				echo '<tr>';
 				echo '<td ><input type="hidden" name="naam[]" value="'.$aLid['uid'].'" />'.$aLid['naam'].'</td>';
-				echo '<td>'.sprintf('&euro; %01.2f', $saldi['soccie']).'</td><td>'.sprintf('&euro; %01.2f', $saldi['maalcie']).'</td></tr>';
+				foreach(array('soccie', 'maalcie') as $cie){
+					echo '<td style="text-align: right;';
+					if($saldi[$cie]<0){ echo ' color: red;'; }
+					echo '">'.sprintf('&euro; %01.2f', $saldi[$cie]).'</td>';
+				}
+				echo '</tr>';
 			}else{
 				//naam is niet duidelijk, geef ook een selectievakje met de mogelijke opties
 				if(count($aLid['naamOpties'])>0){
