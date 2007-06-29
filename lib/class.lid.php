@@ -193,7 +193,7 @@ class Lid {
 			if($aNaam['nickname']!=''){
 				$sTmpNaam=$aNaam['nickname'];
 			}else{
-				$sTempNaam=$sVolledigeNaam;
+				$sTmpNaam=$sVolledigeNaam;
 			}			
 		}elseif($vorm==='streeplijst'){ // achternaam, voornaam [tussenvoegsel] voor de streeplijst
 			$sTmpNaam=$aNaam['achternaam'].', '.$aNaam['voornaam'];
