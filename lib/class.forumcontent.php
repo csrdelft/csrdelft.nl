@@ -167,7 +167,7 @@ class ForumContent extends SimpleHTML {
 					//melding voor niet ingelogde gebruikers die toch willen posten. Ze worden 'gemodereerd', dat wil zeggen, de topics zijn
 					//nog niet direct zichtbaar.
 					echo 'Hier kunt u een bericht toevoegen aan het forum. Het zal echter niet direct zichtbaar worden, maar
-					 &eacute;&eacute;rst door	de PubCie worden goedgekeurd. <br /><span style="text-decoration: underline;">
+					 &eacute;&eacute;rst door de PubCie worden goedgekeurd. <br /><span style="text-decoration: underline;">
 					 Het is hierbij verplicht om uw naam en een email-adres onder het bericht te plaatsen. Dan kan de PubCie 
 					 eventueel contact met u opnemen. Doet u dat niet, dan wordt u bericht waarschijnlijk niet geplaatst!<br />
 					 <strong>Ook dubbelplaatsen is niet nodig, heb gewoon even geduld!</strong></span>
@@ -371,7 +371,7 @@ class ForumContent extends SimpleHTML {
 				echo '<form method="post" action="/forum/toevoegen/'.$iTopic.'"><p>';
 				//berichtje weergeven voor niet-ingeloggede gebruikers dat ze een naam moeten vermelden.
 				if(!$this->_forum->_lid->hasPermission('P_LOGGED_IN')){
-					echo '<strong>Uw bericht wordt bekeken en goedgekeurd door de <a href="http://csrdelft.nl/groepen/commissie/PubCie.html">PubCie</a>. Als u <em>uw naam</em> erbij vermeld, is het echter geen enkel probleem.</strong><br /><br />';
+					echo '<strong>Uw bericht wordt pas geplaatst nadat het bekeken en goedgekeurd is door de <a href="http://csrdelft.nl/groepen/commissie/PubCie.html">PubCie</a>. Het vermelden van <em>uw naam</em> verhoogt de kans dat dit gebeurt.</strong><br /><br />';
 				}
 				echo '<textarea name="bericht" id="forumBericht" class="tekst" rows="'.$iTekstareaRegels.'" cols="80" style="width: 100%;" >';
 				//inhoud van de textarea vullen met eventuele quote...

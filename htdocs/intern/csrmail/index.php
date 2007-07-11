@@ -27,7 +27,7 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
 					Uw bericht is opgenomen in ons databeest, en het zal in de komende C.S.R.-courant verschijnen.');
 			}else{
 				$body->addUserMessage('<h1>Fout</h1>Er ging iets mis met het invoeren van uw bericht. 
-					Probeer opnieuw, of stuur uw bericht in een mail naar pubcie@csrdelft.nl');
+					Probeer opnieuw, of stuur uw bericht in een mail naar <a href="mailto:pubcie@csrdelft.nl">pubcie@csrdelft.nl</a>.');
 			}
 		}else{
 			//bericht bewerken.
@@ -36,7 +36,7 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
 					Uw bericht is opgenomen in ons databeest, en het zal in de komende C.S.R.-courant verschijnen.');
 			}else{
 				$body->addUserMessage('<h1>Fout</h1>Er ging iets mis met het invoeren van uw bericht. 
-					Probeer opnieuw, of stuur uw bericht in een mail naar pubcie@csrdelft.nl');
+					Probeer opnieuw, of stuur uw bericht in een mail naar <a href="mailto:pubcie@csrdelft.nl">pubcie@csrdelft.nl</a>.');
 			}
 		}
 	}else{

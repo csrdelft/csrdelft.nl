@@ -76,7 +76,7 @@ if($error == 0  or $error == 2) {
 	$midden = new MaaltijdContent($lid, $maaltrack);
 } else {
 	# geen rechten
-	$midden = new Includer('', 'maaltijd-niet-ingelogged.html');
+	$midden = new Includer('', 'maaltijd-niet-ingelogd.html');
 }
 $zijkolom=new kolom();
 
