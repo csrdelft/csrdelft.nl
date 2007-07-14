@@ -103,13 +103,13 @@ class Commissie {
 				commissielid.functie AS functie, 
 				socciesaldi.saldo AS soccieSaldo
 			FROM
-				lid, commissielid, socciesaldi
+				commissielid			
+			LEFT JOIN
+				lid ON commissielid.uid=lid.uid
+			LEFT JOIN
+				socciesaldi ON commissielid.uid=socciesaldi.uid			
 			WHERE
-				commissielid.uid=lid.uid
-			AND
 				commissielid.cieid=".$iCieID."
-			AND
-				commissielid.uid=socciesaldi.uid
 			ORDER BY
 				commissielid.prioriteit,
 				lid.achternaam;";
