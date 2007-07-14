@@ -110,8 +110,9 @@ class MySql {
 		}
 		$q1 = substr($q1, 0, -2); # laatste komma verwijderen
 
-		# echo "UPDATE `$table` SET $q1 WHERE `id`=$id";
-		$id=(int)$id;
+		if (!is_int($id)) {
+			$id = "'".$id."'";
+		}
 		$this->query("UPDATE `".$table."` SET $q1 WHERE `$idkolom`=".$id.";");
 	}
 	
