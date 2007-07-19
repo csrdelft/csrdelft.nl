@@ -209,9 +209,13 @@ class Csrmailcontent {
 	function view(){
 		echo '<h2>C.S.R.-courant</h2>De C.S.R.-courant wordt elke woensdagmiddag verzonden naar alle leden van C.S.R.. Als u uw bericht voor 17:00 invoert, kunt u tamelijk zeker zijn van plaatsing in de courant. De PubCie streeft ernaar de courant voor 18:00 bij u in uw postvak te krijgen.<br /><br />';
 		if($this->_csrmail->magBeheren()){
-			echo '<a href="/intern/csrmail/voorbeeld.php" class="knop">Voorbeeld</a> 
-			<a href="/intern/csrmail/verzenden.php" onclick="return confirm(\'Weet u het zeker dat u de C.S.R.-courant wilt versturen?\')" class="knop">Verzenden</a> 
-			<a href="/intern/csrmail/leegmaken" class="knop" onclick="return confirm(\'Weet u zeker dat u de cache wilt leeggooien?\')">Leegmaken</a>';
+			echo '<a href="/intern/csrmail/voorbeeld.php" class="knop">Voorbeeld</a>';
+		}
+		if($this->_csrmail->magVerzenden()){
+			echo '<a href="/intern/csrmail/verzenden.php" onclick="return confirm(\'Weet u het zeker dat u de C.S.R.-courant wilt versturen?\')" class="knop">Verzenden</a>';
+		}
+		if($this->_csrmail->magBeheren()){	 
+			echo '<a href="/intern/csrmail/leegmaken" class="knop" onclick="return confirm(\'Weet u zeker dat u de cache wilt leeggooien?\')">Leegmaken</a>';
 		}
 		//eventuele melding printen.
 		if($this->_userMessage!=''){ echo '<div class="waarschuwing">'.trim($this->_userMessage).'</div>'; }
