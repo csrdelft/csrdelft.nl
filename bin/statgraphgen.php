@@ -1,4 +1,4 @@
-#!/usr/bin/php
+#!/usr/bin/php5
 <?php 
 error_reporting(E_ALL);
 
