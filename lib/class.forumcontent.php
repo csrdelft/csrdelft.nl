@@ -341,7 +341,7 @@ class ForumContent extends SimpleHTML {
 				$sBericht=bbview($sBericht, $aBericht['bbcode_uid']);
 				//æ's maken van alle aa's
 				//$sBericht=str_replace('aa', '&aelig;', $sBericht);
-				$sBericht=str_replace('AA', '&AElig;', $sBericht);
+				//$sBericht=str_replace('AA', '&AElig;', $sBericht);
 #				$sBericht=str_replace('666', '<a href="http://www.biblija.net/biblija.cgi?m=Op+8%3A13&compact=1&id18=1&pos=1&set=10&lang=nl">www</a>', $sBericht);
 				echo $sBericht.'</td></tr>';
 				//tussenlijntje
