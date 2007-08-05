@@ -1,0 +1,44 @@
+eamBBParser - Readme
+===================
+
+  eamBBParser is a UBB Parser (or BB-code parser), written in PHP. It provides
+  a class for transforming BB-code to HTML.
+  
+  Requirements:
+    PHP 4 (Not sure of exact version)
+    
+  Download:
+    See projects home page, eambbparser.sourceforge.net for latest versions.
+
+  Credits:
+    Author : 
+      Erik Bakker (erik@eamelink.nl)
+      
+    Bugfixes : 
+      C. Kruijf (MaTriCX@gmail.com)
+      
+    Ideas / Features :
+      C. Kruijf (MaTriCX@gmail.com)
+      
+    All non-Erik Bakker source code parts should be tagged with the authors name. 
+    If I forgot to include your name, let me know and I'll fix it.
+
+  Installation / Usage:
+    See the docs directory 
+
+  ChangeLog:
+    See CHANGELOG file
+
+  Documentation:
+    For developers only interested in implementing the parser, see docs and examples 
+    directory.
+    
+    If you want to modify this parser, the developer manual might come in handy, you
+    can create your own with phpDocumentor (www.phpdoc.org), or request a copy from me 
+    (erik@eamelink.nl)
+
+  Support:
+    Try the projects home page (http://eambbparser.sourceforge.net), or email me directly
+    at erik@eamelink.nl
+
+  Good luck!

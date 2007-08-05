@@ -1,0 +1,82 @@
+<?php
+# C.S.R. Delft | pubcie@csrdelft.nl
+# -------------------------------------------------------------------
+# class.csrubb.php
+# -------------------------------------------------------------------
+#  wrapper
+# -------------------------------------------------------------------
+
+require_once('ubb/eamBBParser.class.php');
+
+class CsrUBB extends eamBBParser{
+  var $lid;
+  
+  function CsrUBB(){
+  	$this->eamBBParser();
+	$this->lid=Lid::get_lid();
+  }
+  function ubb_citaat($arguments=array()){
+  	if($this->quote_level == 0){        
+    	$this->quote_level = 1;
+    	$content = $this->parseArray(array('[/citaat]'), array());
+    	$this->quote_level = 0;
+    } else {
+    	$this->quote_level++;
+    	$delcontent = $this->parseArray(array('[/citaat]'), array());
+    	$this->quote_level--;
+    	unset($delcontent);
+    	$content = '...';
+    }
+	
+    $text='<div class="citaatContainer"><strong>Citaat';
+		if(isset($arguments['citaat'])){
+			$text.=' van '.$this->lid->getNaamLink($arguments['citaat'], 'full', true);
+		}
+		$text.=':</strong><div class="citaat">'.$content.'</div></div>';
+    return $text;  
+  }
+	function ubb_lid($parameters){
+		$content = $this->parseArray(array('[br]'), array());
+		array_unshift($this->parseArray, '[br]');
+		if(isset($parameters['lid'])){
+			$text=$this->lid->getNaamLink($parameters['lid'], 'full', true).$content;
+		}else{
+			$text='geen uid opgegeven';
+		}
+		return $text;
+	}
+	function ubb_youtube($parameters){
+		$content = $this->parseArray(array('[/youtube]'), array());
+		$html='<object width="425" height="350">' .
+				'	<param name="movie" value="http://www.youtube.com/v/'.$content.'"></param>' .
+				'	<param name="wmode" value="transparent"></param>' .
+				'	<embed src="http://www.youtube.com/v/rUTw_JgL61E" type="application/x-shockwave-flash" wmode="transparent" width="425" height="350"></embed>' .
+				'</object>';
+		return $html;
+	}
+	function viewUbbHelp(){
+echo '
+<div id="ubbhulp">
+	<a href="#laatste" onclick="document.getElementById(\'ubbhulpverhaal\').style.display = \'block\'">Opmaakhulp weergeven</a><br />
+</div>
+<div id="ubbhulpverhaal">
+	<h2>Tekst opmaken</h2>
+	U kunt uw berichten opmaken met een simpel opmaaktaaltje wat ubb genoemd wordt. Het lijkt wat op html, maar dan met vierkante haken:<br />
+	<ul>
+		<li>[b]...[/b] voor <strong>vette tekst</strong></li>
+		<li>[i]...[/i] voor <em>cursieve tekst</em></li>
+		<li>[u]...[/u] voor <span style="text-decoration: underline;">onderstreepte tekst</span></li>
+		<li>[s]...[/s] voor <s>doorgestreepte tekst</s></li>
+		<li>[url=http://csrdelft.nl]Webstek van C.S.R.[/url] voor een verwijzing</li>
+		<li>[img]http://csrdelft.nl/plaetje.jpg[/img] voor een plaetje</li>
+		<li>[citaat][/citaat] voor een citaat. [citaat=<em>lidnummer</em>][/citaat] voor een citaat van een lid.</li>
+		<li>[lid=<em>lidnummer</em>] voor een link naar het profiel van een lid of oudlid</li>
+	</ul>
+	Gebruik deze mogelijkheden spaarzaam, ga niet ineens alles vet maken of kleurtjes geven!
+</div>';
+	
+}
+	
+}
+
+?>

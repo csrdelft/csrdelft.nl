@@ -122,6 +122,7 @@ lib/class.csrmailarchiefcontent.php -text
 lib/class.csrmailcomposecontent.php -text
 lib/class.csrmailcontent.php -text
 lib/class.csrsmarty.php -text
+lib/class.csrubb.php -text
 lib/class.dbmenu.php -text
 lib/class.documenten.php -text
 lib/class.documentencontent.php -text
@@ -307,3 +308,8 @@ lib/templates/maaltijdketzer.tpl -text
 lib/templates/maaltijdlijst.tpl -text
 lib/templates/maaltijdvoorkeuren.tpl -text
 lib/templates/profiel.tpl -text
+lib/ubb/LICENSE -text
+lib/ubb/README -text
+lib/ubb/TODO -text
+lib/ubb/eamBBParser.class.php -text
+lib/ubb/eamFunParser.class.php -text
