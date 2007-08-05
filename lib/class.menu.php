@@ -13,8 +13,8 @@ class menu {
 
 	### private ###
 
-	var $_lid;
-	var $_db;
+	protected $_lid;
+	protected $_db;
 
 	//menu is een array met menu-opties.
 	var $_menu=array();
@@ -26,9 +26,9 @@ class menu {
 	
 	### public ###
 
-	function menu(&$lid, &$db) {
-		$this->_lid =& $lid;
-		$this->_db =& $db;
+	function menu() {
+		$this->_lid=Lid::get_lid();
+		$this->_db=MySql::get_MySql();
 	
 		$this->_menu=array();
 		

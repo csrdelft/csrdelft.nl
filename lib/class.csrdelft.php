@@ -12,7 +12,8 @@ require_once('class.simplehtml.php');
 class csrdelft extends SimpleHTML {
 
 	### private ###
-	var $_lid;
+	//TODO: template vind het nodig dat dit public is, zou natuurlijk niet zo moeten zijn...
+	public $_lid;
 	
 	//body is een object met een view-methode welke de content van de pagina maakt.
 	//Als body een methode zijKolom() heeft die gebruiken om de zij-kolom te vullen
@@ -25,7 +26,7 @@ class csrdelft extends SimpleHTML {
 	var $_titel='Geen titel gezet.';
 	var $_waarbenik=false;
 	
-	function csrdelft($body, &$lid, &$db){
+	function csrdelft($body){
 		if(is_object($body)){
 			$this->_body=$body;
 			//als de body een methode heeft om een titel mee te geven die gebruiken, anders de standaard.
@@ -33,10 +34,10 @@ class csrdelft extends SimpleHTML {
 				$this->_titel=$this->_body->getTitel();
 			}
 		}
-		$this->_lid=&$lid;
+		$this->_lid=Lid::get_lid();
 		//nieuw menu-object aanmaken...
 		require_once('class.menu.php');
-		$this->_menu=new menu($lid, $db);
+		$this->_menu=new menu();
 		
 	}
 	

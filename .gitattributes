@@ -173,6 +173,7 @@ lib/class.woonoord.php -text
 lib/class.woonoordcontent.php -text
 lib/include.common.php -text
 lib/include.config.php -text
+lib/include.defines.php.sample -text
 lib/smarty/BUGS -text
 lib/smarty/COPYING.lib -text
 lib/smarty/ChangeLog -text

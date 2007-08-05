@@ -8,32 +8,19 @@
 # -------------------------------------------------------------------
 # Instellingen van het include_path enzo...
 # -------------------------------------------------------------------
-# Historie:
-# 18-08-2005 Hans van Kranenburg
-# . gemaakt
 #
 
-# padnaam zonder trailing slash
-define('ETC_PATH', '/srv/www/www.csrdelft.nl/etc');
-define('LIB_PATH', '/srv/www/www.csrdelft.nl/lib');
-define('DATA_PATH', '/srv/www/www.csrdelft.nl/data');
-define('PICS_PATH', '/srv/www/www.csrdelft.nl/images');
-define('HTDOCS_PATH', '/srv/www/www.csrdelft.nl/htdocs');
-define('TMP_PATH', '/srv/www/www.csrdelft.nl/tmp');
+error_reporting(E_ALL);
 
-# urls met trailing slash
-define('CSR_PICS', 'http://plaetjes.csrdelft.nl/');
-define('CSR_ROOT','http://csrdelft.nl/');
-# vreemde eend in de beijt, zonder trailing /, voor als we
-# $_SERVER["REQUEST_URI"] gebruiken enzo
-define('CSR_SERVER','http://csrdelft.nl');
+//alle paden goedzetten.
+require_once('include.defines.php');
 
 # We willen geen sessie-id in de url hebben
 ini_set('session.use_only_cookies', 1);
-session_save_path('/srv/www/www.csrdelft.nl/sessie');
+session_save_path('/home/csrdelft.nl/trunk/sessie');
 
 # wat instellingen
-ini_set('upload_tmp_dir','/srv/www/www.csrdelft.nl/tmp');
+ini_set('upload_tmp_dir','/home/csrdelft.nl/trunk/tmp');
 setlocale(LC_ALL, 'nl_NL.utf8@euro');
 
 //standaard templaat voor de csrmail
@@ -64,16 +51,10 @@ require_once('class.mysql.php');
 
 require_once('class.simplehtml.php');
 require_once('class.kolom.php');
-require_once('bbcode/include.bbcode.php');
 require_once('class.includer.php');
 require_once('class.stringincluder.php');
 require_once('class.csrdelft.php');
-
-//smarty template engine...
-define('SMARTY_DIR', LIB_PATH.'/smarty/libs/');
-define('SMARTY_TEMPLATE_DIR', LIB_PATH.'/templates/');
-define('SMARTY_COMPILE_DIR', DATA_PATH.'/smarty/compiled/');
-define('SMARTY_CACHE_DIR', DATA_PATH.'/smarty/cache/');
+require_once('class.csrubb.php');
 
 require_once('class.csrsmarty.php');
 
@@ -81,7 +62,9 @@ require_once('class.csrsmarty.php');
 # Lid-object worden aangemaakt, omdat die de ingelogde gebruiker controleert, en tevens
 # sess_deleted bugs ondervangt en ip-checks doet
 session_start();
-$db = new MySQL();
-$lid = new Lid($db);
+
+//database & lid initialiseren...
+$db = MySQL::get_mysql();
+$lid = Lid::get_lid();
 
 ?>

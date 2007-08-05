@@ -10,26 +10,37 @@
 require_once ('class.ldap.php');
 
 class Lid {
-
+	static private $lid;
+	
 	### private ###
+	protected $_db;
+	
 	# het profiel van een gebruiker, i.e. zijn regel uit de database die we inladen
 	# komt in de sessie...
 
 	# permissies die we gebruiken om te vergelijken met de permissies van
 	# een gebruiker. zie functie _loadPermissions()
-	var $_permissions = array();
-	var $_perm_user   = array();
+	protected $_permissions = array();
+	protected $_perm_user   = array();
 
-	var $_db;
-	
 	# Het profiel van de gebruiker... niet meer in de sessie maar bij elke pagina
 	# opgehaald, om wijzigingen meteen actief te krijgen.
-	var $_profile;
+	protected $_profile;
 	
-	function Lid(&$db) {
+	//singleton functionaliteit...
+	private function __construct(){ $this->Lid(); }
+	static function get_lid(){
+    //als er nog geen instantie gemaakt is, die nu maken
+    if(!isset(Lid::$lid)){
+			Lid::$lid = new Lid();
+		}
+    return Lid::$lid;
+  }
+	function Lid() {
 		# we starten op aan het begin van een pagina
 		$this->_loadPermissions();
-		$this->_db =& $db;
+		# database lokaal maken
+		$this->_db=Mysql::get_mysql();
 
 		# http://www.nabble.com/problem-with-sessions-in-1.4.8-t2550641.html
 		if (session_id() == 'deleted') session_regenerate_id();
@@ -52,7 +63,7 @@ class Lid {
 	# als een gebruiker wordt ingelogd met ipcheck==true, dan wordt het IPv4 adres
 	# van de gebruiker opgeslagen in de sessie, en het sessie-cookie zal alleen
 	# vanaf dat adres toegang geven tot de website
-	function login($user,$pass,$checkip = true) {
+	function login($user, $pass, $checkip = true) {
 		#
 		$user = $this->_db->escape($user);
 
@@ -149,7 +160,7 @@ class Lid {
 	*
 	* argumenten:
 	*		$uid 						uid van de benodigde naam
-	*		$vorm						Vorm van de naam: ( nick, civitas, streeplijst, full)
+	*		$vorm						Vorm van de naam: ( nick, civitas, streeplijst, full, user)
 	*		$link						Er wordt een link naar het profiel gemaakt.
 	* 	$bHtmlentities	Naam wordt ge-htmlentities()-ed
 	*
@@ -187,6 +198,10 @@ class Lid {
 		if($link AND $this->hasPermission('P_LOGGED_IN')){ 
 			$sNaam.='<a href="/intern/profiel/'.$uid.'" title="'.$sVolledigeNaam.'">'; 
 		}
+		//als $vorm==='user', de instelling uit het profiel gebruiken voor vorm
+		if($vorm=='user'){
+			$vorm=$this->getForumNaamInstelling();
+		}
 		//civitas of niksnamen, enkel relevant voor het forum, verder is gewoon voornaam [tussenvoegsel] achternaam
 		//nog een optie.
 		if($vorm==='nick'){
@@ -208,6 +223,7 @@ class Lid {
 				if($aNaam['tussenvoegsel'] != '') $sTmpNaam.=ucfirst($aNaam['tussenvoegsel']).' ';
 				$sTmpNaam.=$aNaam['achternaam'];				
 				if($aNaam['postfix'] != '') $sTmpNaam.=' '.$aNaam['postfix'];
+				if($aNaam['status']=='S_OUDLID') $sTmpNaam.='';
 			}
 		}else{
 			$sTmpNaam='ongeldige vorm';
@@ -680,58 +696,9 @@ class Lid {
 	function logBezoek(){
 		$uid=$this->getUid();
 		$datumtijd=date('Y-m-d H:i:s');
+		$locatie='';
 		if(isset($_SERVER['REMOTE_ADDR'])){ 
 			$ip=$this->_db->escape($_SERVER['REMOTE_ADDR']);
-			if(opConfide()){ 
-				$locatie='Confide'; 
-			}elseif(substr($ip, 0, 8)=='130.161.'){ 
-				$locatie='TU';
-			}else{
-				switch($ip){
-					case '83.160.162.84': $locatie='VDelphia'; break;
-					case '145.99.162.33': //HVG
-					case '83.84.128.14': //Sief
-						$locatie='HVG';
-					break;
-					case '145.94.89.206': $locatie='tEis'; break;
-					case '145.94.91.223': //nance.tnw-s 
-					case '145.94.91.245': //aljen
-						$locatie='Aenslag';
-					break;
-					case '80.100.35.230': $locatie='tAiland'; break;
-					case '82.156.121.74': $locatie='LachaiRoi'; break;
-					case '82.171.125.214': $locatie='SpoorBijster'; break;
-					case '82.171.113.19': $locatie='vSpeijk'; break;
-					case '62.51.57.11': $locatie='Molshoop'; break;
-					case '62.234.90.217': $locatie='WankelCentrum'; break;
-					case '82.171.112.16': $locatie='GoudenLeeuw'; break;
-					case '145.99.161.74': $locatie='Koornmarkt'; break;
-					case '82.171.127.200': $locatie='Internaat'; break;
-					case '84.35.65.254': $locatie='Perron0'; break;
-					case '82.170.83.173': $locatie='JongeGarde'; break;
-					case '80.60.95.203': $locatie='Sonnenvanck'; break;
-					case '82.156.239.192': $locatie='Caesarea'; break;
-					case '62.51.55.15': $locatie="bras98"; break;
-					case '145.94.59.158': //Jieter
-					case '145.94.61.229': //rommel
-						$locatie='Rommel'; 
-					break;
-					case '145.94.58.19': //Allert									
-					case '145.94.59.219': //Peturr							    
-					case '145.94.75.148': //Jorrit
-						$locatie='Adam';
-					break;
-					case '145.94.154.180': //OD11.fttd-s
-					case '145.94.141.116': //heidiho.fttd-s
-					case '145.94.58.113': //tommie
-					case '145.94.62.139': //jona
-					case '145.94.121.167': //peter Goudswaard
-						$locatie='OD11';
-					break;
-					default:
-						$locatie='';
-				}//einde switch
-			}
 		}else{ 
 			$ip='0.0.0.0'; $locatie='';
 		}

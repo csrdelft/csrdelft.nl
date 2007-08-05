@@ -27,8 +27,8 @@ class Profiel extends lid{
 	# dan weer worden afgebeeld door ProfielContent
 	var $_formerror = array();
 	
-	function Profiel(&$db){
-		parent::Lid($db);
+	function Profiel(){ 
+		parent::Lid(); 
 	}
 	
 
