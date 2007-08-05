@@ -17,10 +17,10 @@ require_once('include.defines.php');
 
 # We willen geen sessie-id in de url hebben
 ini_set('session.use_only_cookies', 1);
-session_save_path('/home/csrdelft.nl/trunk/sessie');
+session_save_path('/srv/www/www.csrdelft.nl/sessie');
 
 # wat instellingen
-ini_set('upload_tmp_dir','/home/csrdelft.nl/trunk/tmp');
+ini_set('upload_tmp_dir','/srv/www/www.csrdelft.nl/tmp');
 setlocale(LC_ALL, 'nl_NL.utf8@euro');
 
 //standaard templaat voor de csrmail
