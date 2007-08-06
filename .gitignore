@@ -1,0 +1,7 @@
+data/*
+data/smarty/*
+data/smarty/cache/*
+data/smarty/compiled/*
+etc/*.ini
+lib/include.defines.php
+sessie/*
