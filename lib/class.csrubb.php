@@ -10,7 +10,7 @@ require_once('ubb/eamBBParser.class.php');
 
 class CsrUBB extends eamBBParser{
   var $lid;
-  
+
   function CsrUBB(){
   	$this->eamBBParser();
 	$this->lid=Lid::get_lid();
@@ -71,12 +71,13 @@ echo '
 		<li>[img]http://csrdelft.nl/plaetje.jpg[/img] voor een plaetje</li>
 		<li>[citaat][/citaat] voor een citaat. [citaat=<em>lidnummer</em>][/citaat] voor een citaat van een lid.</li>
 		<li>[lid=<em>lidnummer</em>] voor een link naar het profiel van een lid of oudlid</li>
+		<li>[youtube]<em>youtube-id</em>[/youtube] voor een filmpje direct in je post</li>
 	</ul>
 	Gebruik deze mogelijkheden spaarzaam, ga niet ineens alles vet maken of kleurtjes geven!
 </div>';
 	
 }
-	
+
 }
 
 ?>
