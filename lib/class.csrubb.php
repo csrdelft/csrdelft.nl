@@ -50,7 +50,7 @@ class CsrUBB extends eamBBParser{
 		$html='<object width="425" height="350">' .
 				'	<param name="movie" value="http://www.youtube.com/v/'.$content.'"></param>' .
 				'	<param name="wmode" value="transparent"></param>' .
-				'	<embed src="http://www.youtube.com/v/rUTw_JgL61E" type="application/x-shockwave-flash" wmode="transparent" width="425" height="350"></embed>' .
+				'	<embed src="http://www.youtube.com/v/'.$content.'" type="application/x-shockwave-flash" wmode="transparent" width="425" height="350"></embed>' .
 				'</object>';
 		return $html;
 	}
