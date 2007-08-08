@@ -207,6 +207,8 @@ class Forum {
 		}
 		if($bDistinct){
 			$sDistinctClause='AND topic.lastpostID=post.id';
+		}else{
+			$sDistinctClause='';
 		}
 		//uitmaken welke categorieën er in de rss feed komen. Voor feut (bot in #csrdelft)
 		//is er een uitzondering op de ingeloggedheid.
