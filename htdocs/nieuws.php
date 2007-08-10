@@ -13,6 +13,7 @@ $nieuws = new Nieuws($db, $lid);
 $nieuws->setAantal(25);
 $nieuwscontent = new NieuwsContent($nieuws);
 
+require_once('bbcode/include.bbcode.php');
 $bbcode_uid=bbnewuid();
 define('REFRESH', CSR_ROOT.'nieuws/');
 
