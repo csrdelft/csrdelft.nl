@@ -40,7 +40,7 @@ class Profiel extends lid{
 	# profiel inladen
 	function loadSqlTmpProfile($uid) {
 		# kijken of uid een goed formaat heeft
-		if (!preg_match('/^[a-z\d]{1}\d{3}$/', $uid)) return false;
+		if(!$this->isValidUid($uid)){ return false; }
 		
 		# en gebruiker opzoeken
 		$uid = $this->_db->escape($uid);
@@ -734,7 +734,7 @@ class Profiel extends lid{
 		$passwordhash=$this->_makepasswd($password);
 		
 		$sNaam=$this->getFullName($uid);
-			
+	
 		$sNieuwWachtwoord="
 			UPDATE
 				lid
@@ -760,7 +760,7 @@ Hanna Timmerarends
 h.t. Praeses der Pubcie
 
 P.S. Mocht u nog vragen hebben, dan kan u natuurlijk altijd e-posts sturen naar pubcie@csrdelft.nl";
-		return $this->_db->query($sNieuwWachtwoord) AND mail($aNaamData['email'].', pubcie@csrdelft.nl', 'Nieuw wachtwoord voor de C.S.R.-stek', $mail);
+		return $this->_db->query($sNieuwWachtwoord) AND mail($this->getEmail($uid).', pubcie@csrdelft.nl', 'Nieuw wachtwoord voor de C.S.R.-stek', $mail);
 
 	}
 }

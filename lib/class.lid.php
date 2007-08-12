@@ -154,6 +154,21 @@ class Lid {
 	function getForumInstelling(){ return array('forum_naam' => $this->_profile['forum_name']); }
 	function getForumNaamInstelling(){ return $this->_profile['forum_name']; }
 	
+	
+	function getEmail($uid=''){
+		if($uid==''){ 
+			$uid=$this->getUid(); 
+		}else{
+			if(!$this->isValidUid($uid)){
+				return false;
+			}
+		}
+		$sEmailQuery="
+			SELECT email FROM lid WHERE uid='".$uid."' LIMIT 1;";
+		$rEmail=$this->_db->query($sEmailQuery);
+		$aEmail=$this->_db->result2array($rEmail);
+		return $aEmail[0]['email'];
+	}
 	/*
 	* Deze functie maakt een link met de naam, als de gebruiker is ingelogged, anders gewoon een naam.
 	* Dit om te voorkomen dat er op 100 plekken foute paden staan als dat een keer verandert.
