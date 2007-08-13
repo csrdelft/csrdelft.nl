@@ -91,6 +91,7 @@ htdocs/tools/sendmail/sendmail.php -text
 htdocs/tools/soccie.php -text
 htdocs/tools/stats.php -text
 htdocs/tools/streeplijst.php -text
+htdocs/tools/ubb-convert.php -text
 htdocs/vereniging/.htaccess -text
 htdocs/vereniging/bestuur.php -text
 htdocs/vereniging/geschiedenis.php -text
