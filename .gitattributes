@@ -14,7 +14,10 @@ etc/csrmail.ini.sample -text
 etc/ldap.ini.sample -text
 etc/mysql.ini.sample -text
 etc/soccie.ini.sample -text
+gozerbot/csrdelft.py -text
 htdocs/.htaccess -text
+htdocs/bot/.htaccess.sample -text
+htdocs/bot/cmnd.php -text
 htdocs/contact/.htaccess -text
 htdocs/contact/index.php -text
 htdocs/contact/sponsors.php -text

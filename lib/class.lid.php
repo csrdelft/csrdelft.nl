@@ -60,10 +60,24 @@ class Lid {
 
 	### public ###
 
+	# dispatch the login proces to a separate function based on MODE
+	function login($user, $pass = "", $checkip = true) {
+		switch (constant('MODE')) {
+			case 'CLI':
+				return $this->_login_cli($user);
+			case 'BOT':
+				return $this->_login_bot($user);
+			case 'WEB':
+			default:
+				return $this->_login_web($user, $pass, $checkip);
+		}
+
+	}
+
 	# als een gebruiker wordt ingelogd met ipcheck==true, dan wordt het IPv4 adres
 	# van de gebruiker opgeslagen in de sessie, en het sessie-cookie zal alleen
 	# vanaf dat adres toegang geven tot de website
-	function login($user, $pass, $checkip = true) {
+	function _login_web($user,$pass,$checkip = true) {
 		#
 		$user = $this->_db->escape($user);
 
@@ -95,7 +109,27 @@ class Lid {
 		
 		return true;
 	}
-	
+
+	# login without a password, only for BOT use
+	# only uids are supported, no nicknames
+	function _login_bot($user) {
+		#
+		$user = $this->_db->escape($user);
+
+		# search for user uid
+		$result = $this->_db->select("SELECT * FROM lid WHERE uid = '{$user}' LIMIT 1");
+		if (($result !== false) and $this->_db->numRows($result) > 0) {
+			$this->_profile = $this->_db->next($result);
+			return true;
+		}
+		return false;
+	}
+
+	# FIXME: implement this
+	function _login_cli($user) {
+		return false;
+	}
+
 	function reloadProfile() {
 		$result = $this->_db->select("SELECT * FROM lid WHERE uid = '{$_SESSION['_uid']}' LIMIT 1");
 		if (($result !== false) and $this->_db->numRows($result) > 0) {

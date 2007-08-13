@@ -12,15 +12,22 @@
 
 error_reporting(E_ALL);
 
+# default to website mode
+# [ WEB, CLI, BOT ]
+if (!defined('MODE')) define('MODE', 'WEB');
+
 //alle paden goedzetten.
 require_once('include.defines.php');
 
-# We willen geen sessie-id in de url hebben
-ini_set('session.use_only_cookies', 1);
-session_save_path('/srv/www/www.csrdelft.nl/sessie');
+if (constant('MODE') == 'WEB') {
+	# We willen geen sessie-id in de url hebben
+	ini_set('session.use_only_cookies', 1);
+	session_save_path(SESSION_PATH);
 
-# wat instellingen
-ini_set('upload_tmp_dir','/srv/www/www.csrdelft.nl/tmp');
+	# wat instellingen
+	ini_set('upload_tmp_dir',TMP_PATH);
+}
+
 setlocale(LC_ALL, 'nl_NL.utf8@euro');
 
 //standaard templaat voor de csrmail
@@ -49,22 +56,33 @@ require_once('include.common.php');
 require_once('class.lid.php');
 require_once('class.mysql.php');
 
-require_once('class.simplehtml.php');
-require_once('class.kolom.php');
-require_once('class.includer.php');
-require_once('class.stringincluder.php');
-require_once('class.csrdelft.php');
-require_once('class.csrubb.php');
+switch (constant('MODE')) {
+	case 'WEB':
+		require_once('class.simplehtml.php');
+		require_once('class.kolom.php');
+		require_once('class.includer.php');
+		require_once('class.stringincluder.php');
+		require_once('class.csrdelft.php');
+		require_once('class.csrubb.php');
+		require_once('class.csrsmarty.php');
 
-require_once('class.csrsmarty.php');
+		# N.B. het is van belang dat na het starten van de sessie meteen het databaseobject en het
+		# Lid-object worden aangemaakt, omdat die de ingelogde gebruiker controleert, en tevens
+		# sess_deleted bugs ondervangt en ip-checks doet
+		session_start();
+		//database & lid initialiseren...
+		$db = MySQL::get_mysql();
+		$lid = Lid::get_lid();
+		break;
 
-# N.B. het is van belang dat na het starten van de sessie meteen het databaseobject en het
-# Lid-object worden aangemaakt, omdat die de ingelogde gebruiker controleert, en tevens
-# sess_deleted bugs ondervangt en ip-checks doet
-session_start();
+	case 'BOT':
+	case 'CLI':
+                $db = MySQL::get_mysql();
+                $lid = Lid::get_lid();
+		break;
 
-//database & lid initialiseren...
-$db = MySQL::get_mysql();
-$lid = Lid::get_lid();
+	default:
+		die("include.config.php:: unsupported MODE");
+}
 
 ?>

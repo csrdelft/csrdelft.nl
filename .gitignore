@@ -3,5 +3,6 @@ data/smarty/*
 data/smarty/cache/*
 data/smarty/compiled/*
 etc/*.ini
+htdocs/bot/.htaccess
 lib/include.defines.php
 sessie/*

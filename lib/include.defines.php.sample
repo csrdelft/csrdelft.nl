@@ -17,6 +17,7 @@ define('DATA_PATH', BASE_PATH.'data');
 define('PICS_PATH', BASE_PATH.'images');
 define('HTDOCS_PATH', BASE_PATH.'htdocs');
 define('TMP_PATH', BASE_PATH.'tmp');
+define('SESSION_PATH', BASE_PATH.'sessie');
 
 # urls met trailing slash
 define('CSR_PICS', 'http://plaetjes.csrdelft.nl/');
@@ -31,5 +32,7 @@ define('SMARTY_TEMPLATE_DIR', LIB_PATH.'/templates/');
 define('SMARTY_COMPILE_DIR', DATA_PATH.'/smarty/compiled/');
 define('SMARTY_CACHE_DIR', DATA_PATH.'/smarty/cache/');
 
+# security... default is het bot/cmnd.php script niet actief
+define('ENABLE_BOT_CMND', false);
 
 ?>
