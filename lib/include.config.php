@@ -10,6 +10,9 @@
 # -------------------------------------------------------------------
 #
 
+//uncomment de volgende regel om de boel in onderhoudsmode te ketzen
+//define('MODE', 'ONDERHOUD');
+
 error_reporting(E_ALL);
 
 # default to website mode
@@ -58,6 +61,7 @@ require_once('class.mysql.php');
 
 switch (constant('MODE')) {
 	case 'ONDERHOUD':
+		$lid = Lid::get_lid();
 		if(!$lid->hasPermission('P_ADMIN')){
 			header('location: '.CSR_ROOT.'/tools/onderhoud.html');
 			exit;

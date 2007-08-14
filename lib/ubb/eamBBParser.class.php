@@ -683,7 +683,8 @@ class eamBBParser{
 			unset($delcontent);
 			$content = '...';
 		}			
-		$text = '<br /><sub>quote:</sub><hr style="border : 1px solid black;" /><div style="padding-left: 8px">'.$content.'</div><hr style="border : 1px solid black;" />';
+		$text = '<div class="citaatContainer"><strong>Citaat</strong>' .
+				'<div class="citaat">'.$content.'</div></div>';
 		return $text;  
 	}
 	function ubb_list($arguments){
