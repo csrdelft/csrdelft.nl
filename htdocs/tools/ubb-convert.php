@@ -19,6 +19,7 @@ $sPosts="SELECT id, tekst, bbcode_uid FROM nieuws;";
 $rPosts=$db->query($sPosts);
 while($aPost=$db->next($rPosts)){
 	$sPost=str_replace(':'.$aPost['bbcode_uid'], '', $aPost['tekst']);
+	$sPost=html_entity_decode($sPost);
 	$sNewPost="UPDATE nieuws SET tekst='".$sPost."' WHERE id=".$aPost['id']." LIMIT 1;";
 	$db->query($sNewPost);
 }
