@@ -2,15 +2,17 @@
 
 # instellingen & rommeltjes
 require_once('include.config.php');
-	
+require_once('class.forumonderwerp.php');
+require_once('class.forumcontent.php');
+require_once('class.forumonderwerpcontent.php');
+
 # Het middenstuk
 if ($lid->hasPermission('P_FORUM_POST')){
-	require_once('class.forumonderwerp.php');
 	$forum = new ForumOnderwerp();
-$forum->load($forum->getTopicVoorPostID((int)$_GET['post']));
+	$forum->load($forum->getTopicVoorPostID((int)$_GET['post']));
 	
-	require_once('class.forumcontent.php');
-	$midden = new ForumContent($forum, 'citeren');
+	$midden = new ForumOnderwerpContent($forum);
+	$midden->citeer((int)$_GET['post']);
 } else {
 	# geen rechten
 	$midden = new Includer('', 'geentoegang.html');

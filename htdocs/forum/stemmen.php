@@ -21,28 +21,28 @@ if(isset($_GET['topic'])){
 				//stemmen dan maar...
 				if($poll->addStem($iPollOptie)){
 					if($iTopicID==7){
-						header('location: '.CSR_ROOT.'/leden/');
+						header('location: '.CSR_ROOT.'leden/');
 					}else{
-						header('location: '.CSR_ROOT.'/forum/onderwerp/'.$iTopicID);
+						header('location: '.CSR_ROOT.'forum/onderwerp/'.$iTopicID);
 					}	
 				}else{
-					header('location: '.CSR_ROOT.'/forum/onderwerp/'.$iTopicID);
+					header('location: '.CSR_ROOT.'forum/onderwerp/'.$iTopicID);
 					$_SESSION['forum_foutmelding']='Optie bestaat niet.';
 				}
 			}else{
-				header('location: '.CSR_ROOT.'/forum/onderwerp/'.$iTopicID);
+				header('location: '.CSR_ROOT.'forum/onderwerp/'.$iTopicID);
 				$_SESSION['forum_foutmelding']='U mag maar een keer stemmen.';
 			}
 		}else{
-			header('location: '.CSR_ROOT.'/forum/onderwerp/'.$iTopicID);
+			header('location: '.CSR_ROOT.'forum/onderwerp/'.$iTopicID);
 			$_SESSION['forum_foutmelding']='Onjuiste gegevens.';
 		}
 	}else{
-		header('location: '.CSR_ROOT.'/forum/onderwerp/'.$iTopicID);
+		header('location: '.CSR_ROOT.'forum/onderwerp/'.$iTopicID);
 		$_SESSION['forum_foutmelding']='U mag hier niet stemmen.';
 	}
 }else{
-	header('location: '.CSR_ROOT.'/forum/');
+	header('location: '.CSR_ROOT.'forum/');
 	$_SESSION['forum_foutmelding']='Hier snap ik geen snars van (waar is het topicID?).';
 }
 ?>

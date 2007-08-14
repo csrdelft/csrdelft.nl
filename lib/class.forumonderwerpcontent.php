@@ -41,7 +41,7 @@ class ForumOnderwerpContent extends SimpleHTML {
 	}
 		
 	private function getCiteerPost(){
-		return $this->citeerPostID;
+		return $this->citeerPost;
 		
 	}
 	function viewWaarbenik(){

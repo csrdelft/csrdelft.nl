@@ -10,7 +10,7 @@
 require_once('include.config.php');
 
 if (!$lid->hasPermission('P_FORUM_MOD')) {
-	header('location: '.CSR_ROOT.'/forum/');
+	header('location: '.CSR_ROOT.'forum/');
 	$_SESSION['forum_foutmelding']='Niets te zoeken hier!';
 	exit;
 }	
@@ -35,7 +35,8 @@ if(isset($_GET['post'])){
 	}
 }elseif(isset($_GET['topic'])){
 	$iTopicID=(int)$_GET['topic'];
-	if($forum->deleteTopic($iTopicID)){
+	$forum->load($iTopicID);
+	if($forum->deleteTopic()){
 		header('location: '.CSR_ROOT.'forum/categorie/'.$forum->getCatID());
 	}else{
 		header('location: '.CSR_ROOT.'forum/');

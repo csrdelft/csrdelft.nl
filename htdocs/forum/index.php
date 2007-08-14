@@ -9,7 +9,7 @@ require_once('include.config.php');
 # Het middenstuk
 if ($lid->hasPermission('P_FORUM_READ')) {
 	require_once('class.forum.php');
-	$forum = new Forum($lid);
+	$forum = new Forum();
 	require_once('class.forumcontent.php');
 	$midden = new ForumContent($forum, 'forum');
 } else {
@@ -21,7 +21,7 @@ if ($lid->hasPermission('P_FORUM_READ')) {
 	$forumcontent=new forumcontent($forum, 'lastposts');
 	$zijkolom->add($forumcontent);
 	
-$page=new csrdelft($midden, $lid);
+$page=new csrdelft($midden);
 $page->setZijkolom($zijkolom);
 $page->view();
 	

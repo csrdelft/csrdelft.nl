@@ -9,7 +9,7 @@
 require_once('include.config.php');
 
 if(!$lid->hasPermission('P_FORUM_MOD')){
-	header('location: http://csrdelft.nl/forum/');
+	header('location: '.CSR_ROOT.'/forum/');
 	$_SESSION['forum_foutmelding']='U heeft daar niets te zoeken.';
 	exit;
 }
@@ -20,14 +20,14 @@ $forum = new ForumOnderwerp();
 if(isset($_GET['post'])){
 	$forum->loadByPostID((int)$_GET['post']);
 	if($forum->keurGoed($iPostID)){
-		header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID);
+		header('location: '.CSR_ROOT.'forum/onderwerp/'.$forum->getID());
 		$_SESSION['forum_foutmelding']='Onderwerp of bericht nu voor iedereen zichtbaar.';
 	}else{
-		header('location: http://csrdelft.nl/forum/onderwerp/'.$iTopicID);
+		header('location: '.CSR_ROOT.'forum/onderwerp/'.$forum->getID());
 		$_SESSION['forum_foutmelding']='Goedkeuren ging mis.';
 	}
 }else{
-	header('location: http://csrdelft.nl/forum/');
+	header('location: '.CSR_ROOT.'forum/');
 	$_SESSION['forum_foutmelding']='Geen postID gezet.';
 }
 

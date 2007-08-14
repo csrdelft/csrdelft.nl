@@ -26,7 +26,7 @@ if ($lid->hasPermission('P_FORUM_MOD') OR $lid->getUid()==STATISTICUS){
 				//poll toevoegen aan topic.
 				if($poll->maakTopicPoll($forum->getID(), $_POST['opties'])){
 					//gelukt.
-					header('location: '.CSR_ROOT.'/forum/onderwerp/'.$forum->getID());
+					header('location: '.CSR_ROOT.'forum/onderwerp/'.$forum->getID());
 					$_SESSION['forum_foutmelding']='Peiling is met succes toegevoegd.';
 				}else{
 					echo 'maakTopicPoll is mislukt;';
@@ -54,7 +54,7 @@ if ($lid->hasPermission('P_FORUM_MOD') OR $lid->getUid()==STATISTICUS){
 ## zijkolom in elkaar jetzen
 	$zijkolom=new kolom();
 
-$page=new csrdelft($midden, $lid, $db);
+$page=new csrdelft($midden);
 $page->setZijkolom($zijkolom);
 $page->view();
 	

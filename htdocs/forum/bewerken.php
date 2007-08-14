@@ -12,11 +12,8 @@ if(isset($_GET['post'])){
 	//kijken of gebruiker dit bericht mag bewerken
 	if($forum->magBewerken($iPostID)){
 		if($_SERVER['REQUEST_METHOD']=='POST'){
-			//beetje ubb geklooi
-			require_once('bbcode/include.bbcode.php');
-			$bbcode_uid=bbnewuid();
-			$bericht=bbsave(trim($_POST['bericht']), $bbcode_uid, $db->dbResource());
-			if($forum->editPost($iPostID, $bericht, $bbcode_uid)){
+			$bericht=$db->escape(trim($_POST['bericht']));
+			if($forum->editPost($iPostID, $bericht)){
 				$iTopicID=$forum->getTopicVoorPostID($iPostID);
 				header('location: '.CSR_ROOT.'forum/onderwerp/'.$iTopicID.'#post'.$iPostID);
 				exit;
@@ -45,7 +42,7 @@ if(isset($_GET['post'])){
 	$zijkolom->add($forumcontent);
 	
 # pagina weergeven
-$pagina=new csrdelft($midden, $lid, $db);
+$pagina=new csrdelft($midden);
 $pagina->setZijkolom($zijkolom);
 
 $pagina->view();
