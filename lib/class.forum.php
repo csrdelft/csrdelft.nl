@@ -9,35 +9,23 @@
 
 class Forum {
 	
-	var $_db;
-	var $_lid;
+	protected $_db;
+	protected $_lid;
 	
-	//start-tijd van het begin van het parsen van het forum.
-	//gebruikt om aan het einde de totale parse-tijd van het forum te berekenen.
-	var $_parseStart;
-	
-	//array waarin namen gecached worden bij het opvragen van namen,
-	//zodat elke naam maar één keer uit de database hoeft te komen
-	var $_forumNaamCache;
-	
-	//het aantal topics per pagina in het overzicht van categorieën
+	//het aantal topics per pagina in het overzicht per categorie
 	//de standaard, het kan wellicht nog een keer in het profiel gerost worden.
-	var $_topicsPerPagina=15;
+	private $_topicsPerPagina=15;
 	
 	//het aantal posts voor een rss feed
-	var $_postsPerRss=15;
+	private $_postsPerRss=15;
 	
 	//aantal zoekresultaten
-	var $_aantalZoekResultaten=40;
+	private $_aantalZoekResultaten=40;
 	
 	//constructor.
-	function Forum(&$lid, &$db){
-		$this->_lid =& $lid;
-		$this->_db =& $db;
-		
-		//starttijd in parseStart rossen
-		list($usec, $sec) = explode(" ",microtime()); 
-   	$this->_parseStart=((float)$usec + (float)$sec); 
+	public function Forum(){
+		$this->_lid=Lid::get_lid();
+		$this->_db=MySql::get_MySql();
 	}
 /***************************************************************************************************
 *	Lijsten: Categorieën, posts, topics en enkele posts ophalen.
@@ -99,112 +87,13 @@ class Forum {
 		return $this->_db->result2array($rTopicsResult); 
 	}
 	
-	//posts voor topic, gesorteerd op datum
-	function getPosts($iTopicID){
-		$iTopicID=(int)$iTopicID;
-		//sortering opvragen:
-		$aProfiel=$this->_lid->getProfile();
-		if(isset($aProfiel['forum_postsortering'])){
-			if($aProfiel['forum_postsortering']=='DESC'){
-				$sSorteerVolgorde='DESC';
-			}else{
-				$sSorteerVolgorde='ASC';
-			}
-		}else{
-			$sSorteerVolgorde='ASC';
-		}
-		//ook op bevestiging wachtende berichten van niet ingelogde gebruikers zichtbaar maken
-		//voor moderators
-		if($this->_lid->hasPermission('P_FORUM_MOD')){
-			$zichtBaarClause="( topic.zichtbaar='zichtbaar' OR topic.zichtbaar='wacht_goedkeuring')
-				 AND (post.zichtbaar='zichtbaar' OR post.zichtbaar='wacht_goedkeuring')";
-		}else{
-			$zichtBaarClause="topic.zichtbaar='zichtbaar' AND post.zichtbaar='zichtbaar'";
-		}
-		//zoo, uberdeuberdeuber query om een topic op te halen. Namen worden
-		//ook opgehaald in deze query, die worden door forumcontent weer 
-		//doorgegeven aan getForumNaam();
-		$sPostsQuery="
-			SELECT
-				categorie.titel AS categorieTitel,
-				categorie.rechten_read AS rechten_read,
-				categorie.rechten_post AS rechten_post,
-				topic.titel AS titel,
-				topic.uid AS startUID,
-				topic.categorie AS categorie,
-				topic.open AS open,
-				topic.plakkerig AS plakkerig,
-				topic.soort AS soort,
-				post.uid AS uid,
-					lid.nickname AS nickname,
-					lid.voornaam AS voornaam,
-					lid.tussenvoegsel AS tussenvoegsel,
-					lid.achternaam AS achternaam,
-					lid.postfix AS postfix, 
-					lid.geslacht AS geslacht, 
-					lid.status AS status,
-				post.id AS postID,
-				post.tekst AS tekst,
-				post.bbcode_uid AS bbcode_uid,
-				post.datum AS datum,
-				post.bewerkDatum AS bewerkDatum,
-				post.zichtbaar AS zichtbaar,
-				post.ip AS ip
-			FROM
-				forum_topic topic
-			INNER JOIN 
-				forum_cat categorie ON (categorie.id=topic.categorie)
-			LEFT JOIN
-				forum_post post ON( topic.id=post.tid )
-			INNER JOIN 
-				lid ON ( post.uid=lid.uid )
-			WHERE
-				topic.id=".$iTopicID."
-			AND
-				".$zichtBaarClause."
-			ORDER BY
-				post.datum ASC;";
-		$rPostsResult=$this->_db->query($sPostsQuery);
-		return $this->_db->result2array($rPostsResult); 
-	}
-	// een enkele post binnenhalen, bijvoorbeeld om te citeren/bewerken
-	function getPost($iPostID){
-		$iPostID=(int)$iPostID;
-		$sPostQuery="
-			SELECT
-				categorie.id as categorieID,
-				categorie.titel as categorieTitel,
-				topic.id as topicID,
-				topic.titel as topicTitel,
-				topic.open as open,
-				post.uid as uid, 
-				post.tekst as tekst, 
-				post.bbcode_uid as bbcode_uid, 
-				post.datum as datum
-			FROM
-				forum_post post, 
-				forum_topic topic,
-				forum_cat categorie
-			WHERE 
-				post.id=".$iPostID."
-			AND
-				post.tid=topic.id
-			AND
-				topic.categorie=categorie.id
-			LIMIT 1;";
-		$rPost=$this->_db->query($sPostQuery);
-		if($this->_db->numRows($rPost)==1){
-			$aPost=$this->_db->next($rPost);
-			return $aPost;
-		}else{	
-			return false;
-		}
-	}	
+	
 	//laatste posts voor heel het forum.
 	function getPostsVoorRss($iAantal=false, $bDistinct=true){
 		if($iAantal===false){
 			$iAantal=$this->_postsPerRss;
 		}
+		$sDistinctClause=' AND 1';
 		if($bDistinct){
 			$sDistinctClause='AND topic.lastpostID=post.id';
 		}else{
@@ -272,263 +161,7 @@ class Forum {
 *	Dingen opslaan, bewerken en verwijderen: nieuwe posts en topics, posts bewerken
 *
 ***************************************************************************************************/	
-	/*
-	* -> post aan topic toevoegen
-	* (als topic=0 opgegeven wordt een nieuwe gemaakt)
-	* doordat het een universele functie is wordt de boel wat ingewikkeld, ook omdat er direct 
-	* statistieken geupdate worden, wat anders waat 'duurder' zou worden door gebruik te maken 
-	* van de speciaal daarvoor bestemde functies.
-	*/
-	function addPost($tekst, $bbcode_uid, $topic=0, $iCat=0, $titel='', $bModerated=false){
-		//het is nu nog goed...
-		$bError=false; 
-		
-		//ff wat gegevens netter maken...
-		$topic=(int)$topic;
-		$iCat=(int)$iCat;
-		$uid=$this->_lid->getUid();
-		$datumTijd=getDateTime();
-		if(isset($_SERVER['REMOTE_ADDR'])){
-			$ip=$_SERVER['REMOTE_ADDR'];
-		}else{
-			$ip='geen ip';
-		}
-		//direct zichtbaar of of wachtende op goedkeuring (moderatie stap);
- 		if($bModerated){ $sZichtbaar='wacht_goedkeuring'; }else{ $sZichtbaar='zichtbaar';	}
-		//nieuw topic of enkel een nieuwe post.
-	 	if($topic==0){
-	 		$sTopicQuery="
-	 			INSERT INTO
-		 			forum_topic
-		 	 	(
-			 	 	titel, categorie, uid, datumtijd, 
-			 	 	lastuser, lastpost,  reacties, zichtbaar, open
-			 	)VALUES(
-			 		'".ucfirst($titel)."', ".$iCat.",	'".$uid."', '".$datumTijd."', 
-			 		'".$uid."', '".$datumTijd."',	0, '".$sZichtbaar."', 1
-			 	);";
-			if($this->_db->query($sTopicQuery)){
-				$topic=$this->_db->insert_id();
-			 	$bTopicUpdaten=false; $bUpdaten=true;
-			}else{
-				//het gaet mis...
-				$bError=true;
-			}
-		}else{
-			//om later het topic nog ff up te daten
-			if(!$bModerated){
-				$bTopicUpdaten=true; $bUpdaten=true;
-			}else{
-				$bTopicUpdaten=false; $bUpdaten=false;
-			}
-		}
-		if(!$bError){
-			//nu nog de (eerste) posting invoegen
-			$sPostQuery="
-				INSERT INTO
-					forum_post
-				(
-					tid, uid, tekst, bbcode_uid, datum, ip, zichtbaar
-				)VALUES(
-					".$topic.",
-					'".$uid."',
-					'".ucfirst($tekst)."',
-					'".$bbcode_uid."',
-					'".$datumTijd."',
-					'".$ip."',
-					'".$sZichtbaar."'
-				);";
-			//deze query moet hier al uitgevoerd worden omdat anders het postid niet in de topicupdate query gerost kan worden.
-			$bPostQuery=$this->_db->query($sPostQuery);
-			$iPostID=$this->_db->insert_id();
-			if($bUpdaten){
-				//veldjes lastuser en lastpost updaten in forum_topic
-				$sTopicUpdate="
-					UPDATE
-						forum_topic
-					SET
-						lastuser='".$uid."',
-						lastpost='".$datumTijd."',
-						lastpostID=".$iPostID.",
-						reacties=reacties+1
-					WHERE
-						id=".$topic."
-					LIMIT 1;";
-				$this->_db->query($sTopicUpdate);				
-				if($bTopicUpdaten){
-					//veldjes lastuser, lastpost, lastpostID en reacties updaten in forum_Cat
-					$iCatID=$this->getCategorieVoorTopic($topic);
-					$sCatUpdate="
-						UPDATE
-							forum_cat
-						SET
-							lastuser='".$uid."',
-							lastpost='".$datumTijd."',
-							lastpostID=".$iPostID.",
-							lasttopic=".$topic.",
-							reacties=reacties+1
-						WHERE
-							id=".$iCatID."
-						LIMIT 1;"; 
-					$this->_db->query($sCatUpdate);	
-				}else{
-					//veldjes voor laatste dingen updateren in forum_cat voor het nieuwe topic
-					 $sCatUpdate="
-						UPDATE
-							forum_cat
-						SET
-							lastuser='".$uid."',
-							lastpost='".$datumTijd."',
-							lastpostID=".$iPostID.",
-							lasttopic=".$topic.",
-							reacties=reacties+1,
-							topics=topics+1	
-						WHERE
-							id=".$iCat."
-						LIMIT 1;"; 
-					$this->_db->query($sCatUpdate);
-				}
-			}
-			if($bPostQuery){
-				$tekst=str_replace(array('\r', '\n', '\r\n'), "\r\n", $tekst);
-				if($bModerated){
-					//bericht sturen naar pubcie@csrdelft dat er een bericht op goedkeuring wacht
-	 				mail('pubcie@csrdelft.nl', 'Nieuw bericht in extern wacht op goedkeuring', 
-	 					"yo, er is een nieuw bericht in extern, wat op goedkeuring wacht \r\n".
-	 				 	"http://csrdelft.nl/forum/onderwerp/".$topic."\r\n".
-	 				 	"\r\nDe inhoud van het bericht is als volgt: \r\n\r\n".$tekst."\r\n\r\nEINDE BERICHT");
-	 			}
-				return $topic;
-			}else{
-				return false;
-			}
-		}else{
-			//hier is de topic query al misgegaan
-			return false;
-		}
-	}
-	//posts bewerken
-	function editPost($iPostID, $sBericht, $bbcode_uid){
-		$datumTijd=getDateTime();
-		$sEditQuery="
-			UPDATE
-				forum_post
-			SET
-				tekst='".$sBericht."',
-				bbcode_uid='".$bbcode_uid."',
-				bewerkDatum='".$datumTijd."'
-			WHERE
-				id=".$iPostID."
-			LIMIT 1;";
-		return $this->_db->query($sEditQuery);
-	}
-	//post verwijderen
-	function deletePost($iPostID){
-		$iPostID=(int)$iPostID;
-		$iTopicID=$this->getTopicVoorPostID($iPostID);
-		$sDeletePost="
-			UPDATE
-				forum_post
-			SET 
-				zichtbaar='verwijderd'
-			WHERE
-				id=".$iPostID."
-			LIMIT 1;";
-		if($this->_db->query($sDeletePost)){
-			return $this->updateTopicStats($iTopicID);
-		}else{
-			return false;
-		}
-	}
-	//topic verwijderen
-	function deleteTopic($iTopicID){
-		$iTopicID=(int)$iTopicID;
-		//dit moet vóór het verwijderen!
-		$iCatID=$this->getCategorieVoorTopic($iTopicID);
-		$aDelete[]="DELETE FROM	forum_post WHERE tid=".$iTopicID.";";
-		$aDelete[]="DELETE FROM	forum_topic WHERE id=".$iTopicID." LIMIT 1;";
-		//query's om polls weg te gooien, als er niets bestaat voor dit topicID dan 
-		//wordt er dus ook niets weggegooid
-		$aDelete[]="DELETE FROM	forum_poll_stemmen WHERE topicID=".$iTopicID.";";
-		$aDelete[]="DELETE FROM forum_poll WHERE topicID=".$iTopicID.";";
-		$bReturn=true;
-		foreach($aDelete as $sDelete){
-			if($this->_db->query($sDelete)===false) $bReturn=false;
-		}
-		return $bReturn AND $this->updateCatStats($iCatID);
-	}
-	function sluitTopic($iTopicID){
-		$iTopicID=(int)$iTopicID;
-		$sTopicQuery="
-			UPDATE
-				forum_topic
-			SET
-				open='0'
-			WHERE
-				id=".$iTopicID."
-			LIMIT 1;";
-		return $this->_db->query($sTopicQuery);
-	}
-	function openTopic($iTopicID){
-		$iTopicID=(int)$iTopicID;
-		$sTopicQuery="
-			UPDATE
-				forum_topic
-			SET
-				open='1'
-			WHERE
-				id=".$iTopicID."
-			LIMIT 1;";
-		return $this->_db->query($sTopicQuery);
-	}
-	function maakTopicPlakkerig($iTopicID){
-		$iTopicID=(int)$iTopicID;
-		$sTopicQuery="
-			UPDATE
-				forum_topic
-			SET
-				plakkerig='1'
-			WHERE
-				id=".$iTopicID."
-			LIMIT 1;";
-		return $this->_db->query($sTopicQuery);
-	}
-	function unmaakTopicPlakkerig($iTopicID){
-		$iTopicID=(int)$iTopicID;
-		$sTopicQuery="
-			UPDATE
-				forum_topic
-			SET
-				plakkerig='0'
-			WHERE
-				id=".$iTopicID."
-			LIMIT 1;";
-		return $this->_db->query($sTopicQuery);
-	}
-	function keurGoed($iPostID){
-		$iPostID=(int)$iPostID;
-		$sPostQuery="
-			UPDATE
-				forum_post
-			SET
-				zichtbaar='zichtbaar'
-			WHERE
-				id=".$iPostID."
-			LIMIT 1;";
-		$iTopicID=$this->getTopicVoorPostID($iPostID);
-		$sTopicQuery="
-			UPDATE 
-				forum_topic
-			SET
-				zichtbaar='zichtbaar'
-			WHERE
-				id=".$iTopicID."
-			LIMIT 1;";
-		//queries uitvoeren en stats voor topic opnieuw berekenen
-		return 
-			$this->_db->query($sPostQuery) AND $this->_db->query($sTopicQuery) AND 
-			$this->updateTopicStats($iTopicID);
-	}
+
 /***************************************************************************************************
 *	Dingen uitrekenen: post naar topic id, topic naar cat id
 *
@@ -733,94 +366,12 @@ class Forum {
 			return false;
 		}
 	}
-/***************************************************************************************************
-*	Vragen over posts
-*
-***************************************************************************************************/	
-	function magBewerken($iPostID, $iPostUid=false, $iOpen=2, $rechten_post=false){
-		//FORUM_MOD mag alles bewerken
-		if($this->_lid->hasPermission('P_FORUM_MOD')){
-			return true;
-		}else{
-			//uitzoeken of niet mods mogen bewerken.
-			$iTopicID=$this->getTopicVoorPostID($iPostID);
-			//Kijken of het topic open of dicht is. Bewerken mag alleen in open topics. 
-			//Als $iOpen==2 dan is er niets meegegeven met de functieaanroep, en moet het uit de database komen
-			if($iOpen==2){
-				if($this->isOpen($iTopicID)){ $iOpen=1; }else{ $iOpen=0;}
-			}
-			//als $rechten_post===false dan is er geen string met rechten voor het posten meegegeven met de 
-			//functieaanroep, ophalen uit de database dan maar.
-			if($rechten_post===false){ $rechten_post=$this->getRechten_post($this->getCategorieVoorTopic($iTopicID));	}
-			if($this->_lid->hasPermission($rechten_post) AND $iOpen==1){
-				//nu alleen nog controleren of het bericht van de huidige gebruiker is.
-				//als $iPostUid!==false dan is er geen uid van de post meegegeven, ophalen uit de db dan maar...
-				if($iPostUid!==false){
-					//extern mag uberhaupt niet bewerken.
-					if($iPostUid!='x999'){
-						return $iPostUid==$this->_lid->getUid();
-					}else{
-						return false;
-					}
-				}else{
-					$aPost=$this->getPost($iPostID);
-					//extern mag uberhaupt niet bewerken.
-					if($aPost['uid']!='x999'){
-						return $aPost['open'] AND ($aPost['uid']==$this->_lid->getUid());
-					}else{
-						return false;
-					}
-				}
-			}else{
-				//geen rechten om te posten, en niet open.
-				return false;
-			}
-		}
-	}
+
 /***************************************************************************************************
 *	Updaten van stats in categorie en topic
 *
 ***************************************************************************************************/	
-	//dingen updaten voor het topic 
-	function updateTopicStats($iTopicID){
-		$iCatID=$this->getCategorieVoorTopic($iTopicID);
-		if($iCatID!==false){
-			$sTopicStats="
-				SELECT 
-					id, uid, datum
-				FROM
-					forum_post
-				WHERE 
-					tid=".$iTopicID." AND
-					zichtbaar='zichtbaar'
-				ORDER BY
-					datum DESC
-				LIMIT 1;";
-			$rTopicStats=$this->_db->query($sTopicStats);
-			$aTopicStats=$this->_db->next($rTopicStats);
-			$sTopicUpdate="
-				UPDATE
-					forum_topic
-				SET
-					lastpostID=".$aTopicStats['id'].",
-					lastuser='".$aTopicStats['uid']."',
-					lastpost='".$aTopicStats['datum']."',
-					reacties=(
-						SELECT 
-							COUNT(*) AS aantal 
-						FROM 
-							forum_post 
-						WHERE 
-							tid=".$iTopicID." 
-						LIMIT 1)
-				WHERE
-					id=".$iTopicID."
-				LIMIT 1;";
-			return $this->_db->query($sTopicUpdate) AND $this->updateCatStats($iCatID);
-		}else{
-			return false;
-		}
-	}
+	
 	
 	//dingen updaten voor de categorie.
 	function updateCatStats($iCatID){
@@ -957,15 +508,11 @@ class Forum {
 		return $return;
 	}
 	function getForumNaam($uid=false, $aNaam=false, $aLink=true, $bHtmlentities=true ){
-		//instellingen voor deze gebruiker ophalen...
-		$vorm=$this->_lid->getForumNaamInstelling();
-		
-		return $this->_lid->getNaamLink($uid, $vorm, $aLink, $aNaam, $bHtmlentities);
+		return $this->_lid->getNaamLink($uid, 'user', $aLink, $aNaam, $bHtmlentities);
 	}
+	
+	function getTopicsPerPagina(){ return $this->_topicsPerPagina; }
 	function isIngelogged(){ return $this->_lid->hasPermission('P_LOGGED_IN'); }
-	function getParseTime(){
-		list($usec, $sec) = explode(" ",microtime()); 
-		return ((float)$usec + (float)$sec)-$this->_parseStart;
-	}
+	function isModerator(){ return $this->_lid->hasPermission('P_FORUM_MOD'); }
 }//einde classe Forum
 ?>

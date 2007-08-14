@@ -21,9 +21,9 @@ class BestuurContent extends SimpleHTML {
 
 	### public ###
 
-	function BestuurContent (&$bestuur, &$lid) {
+	function BestuurContent (&$bestuur){
 		$this->_bestuur =& $bestuur;
-		$this->_lid =& $lid;
+		$this->_lid=Lid::get_lid();
 	}
 	function getTitel(){
 		return 'Besturen der Civitas Studiosorum Reformatorum';

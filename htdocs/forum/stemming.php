@@ -4,42 +4,37 @@ require_once('include.config.php');
 $sError='';
 # Het middenstuk
 if ($lid->hasPermission('P_FORUM_MOD') OR $lid->getUid()==STATISTICUS){
-	require_once('class.forum.php');
-	$forum = new Forum($lid, $db);
+	require_once('class.forumonderwerp.php');
+	$forum = new ForumOnderwerp();
 	//gebruik de standaard categorie als de categorie niet bestaat of niet gezet is.
 	if(!(isset($_GET['cat']) AND $forum->catExistsVoorUser($_GET['cat']))){
 		$iCatID=7;
 	}else{
 		$iCatID=(int)$_GET['cat'];
 	}
+	$forum->setCat($iCatID);
 	if($_SERVER['REQUEST_METHOD']=='POST'){
 		//ff de boel verwerken..
 		require_once('class.forumpoll.php');
 		$poll = new ForumPoll($forum);
 		if($poll->validatePollForm($sError)){
-			//bbcode ding doen
-			require_once('bbcode/include.bbcode.php');
-			$bbcode_uid=bbnewuid();
-			$sBericht=bbsave($_POST['bericht'], $bbcode_uid, $db->dbResource());
+			$forum->addTopic($_POST['titel']);
 			
-			$iTopicID=$forum->addPost($sBericht, $bbcode_uid, $topic=0, $iCatID, $_POST['titel']);
-			if($iTopicID!==false){
+			$sBericht=$db->escape($_POST['bericht']);
+			$iPostID=$forum->addPost($sBericht);
+			if($iPostID!==false){
 				//poll toevoegen aan topic.
-				if($poll->maakTopicPoll($iTopicID, $_POST['opties'])){
+				if($poll->maakTopicPoll($forum->getID(), $_POST['opties'])){
 					//gelukt.
-					header('location: /forum/onderwerp/'.$iTopicID);
+					header('location: '.CSR_ROOT.'/forum/onderwerp/'.$forum->getID());
 					$_SESSION['forum_foutmelding']='Peiling is met succes toegevoegd.';
-					exit;
 				}else{
-					//mislukt.
 					echo 'maakTopicPoll is mislukt;';
-					exit;
 				}
 			}else{
-				//mislukt.
 				echo 'maakTopicPoll is mislukt;';
-				exit;
 			}
+			exit;
 		}else{
 			//formulier maeken
 			require_once('class.forumcontent.php');

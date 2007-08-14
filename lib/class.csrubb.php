@@ -9,11 +9,12 @@
 require_once('ubb/eamBBParser.class.php');
 
 class CsrUBB extends eamBBParser{
-  var $lid;
-
+  private $lid;
+  
   function CsrUBB(){
   	$this->eamBBParser();
 	$this->lid=Lid::get_lid();
+	$this->paragraph_mode = false;
   }
   function ubb_citaat($arguments=array()){
   	if($this->quote_level == 0){        
@@ -29,17 +30,17 @@ class CsrUBB extends eamBBParser{
     }
 	
     $text='<div class="citaatContainer"><strong>Citaat';
-		if(isset($arguments['citaat'])){
-			$text.=' van '.$this->lid->getNaamLink($arguments['citaat'], 'full', true);
-		}
-		$text.=':</strong><div class="citaat">'.$content.'</div></div>';
+	if(isset($arguments['citaat'])){
+		$text.=' van '.$this->lid->getNaamLink($arguments['citaat'], 'user', true);
+	}
+	$text.=':</strong><div class="citaat">'.trim($content).'</div></div>';
     return $text;  
   }
 	function ubb_lid($parameters){
 		$content = $this->parseArray(array('[br]'), array());
 		array_unshift($this->parseArray, '[br]');
 		if(isset($parameters['lid'])){
-			$text=$this->lid->getNaamLink($parameters['lid'], 'full', true).$content;
+			$text=$this->lid->getNaamLink($parameters['lid'], 'user', true).$content;
 		}else{
 			$text='geen uid opgegeven';
 		}
@@ -76,7 +77,7 @@ echo '
 	Gebruik deze mogelijkheden spaarzaam, ga niet ineens alles vet maken of kleurtjes geven!
 </div>';
 	
-}
+	}
 
 }
 

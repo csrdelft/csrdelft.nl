@@ -16,9 +16,9 @@ class Bestuur extends SimpleHTML {
 
 	var $_jaar='';
 	var $_aBestuur='';
-	function Bestuur (&$lid, &$db) {
-		$this->_lid =& $lid;
-		$this->_db =& $db;
+	function Bestuur() {
+		$this->_lid=Lid::get_lid();
+		$this->_db=MySql::get_MySql();
 	}
 	
 	function loadBestuur($jaar=0){

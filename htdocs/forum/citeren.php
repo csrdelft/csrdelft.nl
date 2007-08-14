@@ -5,8 +5,10 @@ require_once('include.config.php');
 	
 # Het middenstuk
 if ($lid->hasPermission('P_FORUM_POST')){
-	require_once('class.forum.php');
-	$forum = new Forum($lid, $db);
+	require_once('class.forumonderwerp.php');
+	$forum = new ForumOnderwerp();
+$forum->load($forum->getTopicVoorPostID((int)$_GET['post']));
+	
 	require_once('class.forumcontent.php');
 	$midden = new ForumContent($forum, 'citeren');
 } else {
@@ -20,7 +22,7 @@ if ($lid->hasPermission('P_FORUM_POST')){
 	$zijkolom->add($forumcontent);
 	
 # pagina weergeven
-$pagina=new csrdelft($midden, $lid, $db);
+$pagina=new csrdelft($midden);
 $pagina->setZijkolom($zijkolom);
 
 $pagina->view();

@@ -14,20 +14,22 @@ class NieuwsContent extends SimpleHTML {
 	### private ###
 
 	# de objecten die data leveren
-	var $_nieuws;
-
-	var $_chop=500;
+	private $_nieuws;
+	private $ubb;
+	
+	private $_chop=400;
 	# afbreken van de tekst van een berichtje bij de eerste spatie
 	# voor het $chop-de karakter, 0 = niet gebruiken
-	var $_sError='';
+	private $_sError='';
 	
-	var $_berichtID;
-	var $_actie='overzicht';
+	private $_berichtID;
+	private $_actie='overzicht';
 
 	### public ###
 
-	function NieuwsContent (&$nieuws) {
+	public function NieuwsContent (&$nieuws) {
 		$this->_nieuws =& $nieuws;
+		$this->ubb= new csrubb();
 	}
 
 	function setChop($chars) { $this->_chop = (int)$chars; }
@@ -54,7 +56,7 @@ class NieuwsContent extends SimpleHTML {
 			//gegevens direct ophaelen uit database
 			$aBericht=$this->_nieuws->getMessage($this->_berichtID);
 			$titel=$aBericht['titel'];
-			$tekst=bbedit($aBericht['tekst'], $aBericht['bbcode_uid']);
+			$tekst=$aBericht['tekst'];
 			$prive=$verborgen='';
 			if($aBericht['prive']==1){ $prive='checked="checked"'; }
 			if($aBericht['verborgen']==1){ $verborgen='checked="checked"'; }
@@ -139,10 +141,9 @@ class NieuwsContent extends SimpleHTML {
 		}else{
 			foreach ($aBerichten as $aBericht) {
 				if(kapStringNetjesAf($aBericht['tekst'], $this->_chop)){
-					$sBericht=bbview($aBericht['tekst'], $aBericht['bbcode_uid']);
-					$sBericht.='... <a href="/nieuws/'.$aBericht['id'].'">meer</a>';
+					$sBericht=$this->ubb->getHTML($aBericht['tekst'].' [url=/nieuws/'.$aBericht['id'].']...meer[/url]');
 				}else{
-					$sBericht=bbview($aBericht['tekst'], $aBericht['bbcode_uid']);
+					$sBericht=$this->ubb->getHTML($aBericht['tekst']);
 				}
 				echo '<div class="nieuwsbericht-vast">';
 				if($aBericht['plaatje']!=''){
@@ -177,7 +178,7 @@ class NieuwsContent extends SimpleHTML {
 			echo mb_htmlentities($aBericht['titel']).'</div><i>('.date('d-m-Y H:i', $aBericht['datum']).')</i> ';
 			//nieuwsbeheer functie dingen:
 			echo $this->getBerichtModControls($aBericht['id']);
-			echo '<br />'.bbview($aBericht['tekst'], $aBericht['bbcode_uid']).'<br />';
+			echo '<br />'.$this->ubb->getHTML($aBericht['tekst']).'<br />';
 			
 			echo '</div></div>';
 			echo $this->getNieuwBerichtLink();

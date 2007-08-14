@@ -18,9 +18,9 @@ class Nieuws {
 	
 	var $_aantal=5;
 	
-	function Nieuws(&$db, &$lid){
-		$this->_db=&$db;
-		$this->_lid=&$lid;
+	function Nieuws(){
+		$this->_lid=Lid::get_lid();
+		$this->_db=MySql::get_MySql();
 	}
 	### public ###
 
@@ -44,7 +44,6 @@ class Nieuws {
 				nieuws.datum as datum, 
 				nieuws.titel as titel, 
 				nieuws.tekst as tekst, 
-				nieuws.bbcode_uid as bbcode_uid, 
 				nieuws.uid as uid, 
 					lid.voornaam as voornaam, lid.achternaam as achternaam, lid.tussenvoegsel as tussenvoegsel,
 				nieuws.prive as prive, 
@@ -71,7 +70,7 @@ class Nieuws {
 	function getMessage($iBerichtID){ return $this->getMessages($iBerichtID);	}
 
 	//bericht toevoegen
-	function addMessage($titel, $tekst, $bbcode_uid, $prive=false, $verborgen=false, $plaatje=''){
+	function addMessage($titel, $tekst, $prive=false, $verborgen=false, $plaatje=''){
 		$datum=time();
 		$titel=$this->_db->escape($titel);
 		$tekst=$tekst;
@@ -83,9 +82,9 @@ class Nieuws {
 			INSERT INTO
 				nieuws
 			( 
-				datum, titel, tekst, bbcode_uid, uid, prive, verborgen, plaatje
+				datum, titel, tekst, uid, prive, verborgen, plaatje
 			) VALUES (
-				".$datum.", '".$titel."', '".$tekst."', '".$bbcode_uid."', 
+				".$datum.", '".$titel."', '".$tekst."',  
 				'".$uid."', '".$prive."', '".$verborgen."', '".$plaatje."'
 			);";
 		return $this->_db->query($sMessageQuery);
@@ -114,7 +113,7 @@ class Nieuws {
 			LIMIT 1;";
 		return $this->_db->query($sMessageQuery);
 	}
-	function editMessage($iBerichtID, $titel, $tekst, $bbcode_uid, $prive=false, $verborgen=false){
+	function editMessage($iBerichtID, $titel, $tekst, $prive=false, $verborgen=false){
 		$iBerichtID=(int)$iBerichtID;
 		$titel=$this->_db->escape($titel);
 		$tekst=$tekst;
@@ -126,7 +125,6 @@ class Nieuws {
 			SET
 				titel='".$titel."', 
 				tekst='".$tekst."', 
-				bbcode_uid='".$bbcode_uid."', 
 				prive='".$prive."', 
 				verborgen='".$verborgen."'
 			WHERE

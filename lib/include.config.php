@@ -57,6 +57,11 @@ require_once('class.lid.php');
 require_once('class.mysql.php');
 
 switch (constant('MODE')) {
+	case 'ONDERHOUD':
+		if(!$lid->hasPermission('P_ADMIN')){
+			header('location: '.CSR_ROOT.'/tools/onderhoud.html');
+			exit;
+		}
 	case 'WEB':
 		require_once('class.simplehtml.php');
 		require_once('class.kolom.php');
@@ -73,13 +78,13 @@ switch (constant('MODE')) {
 		//database & lid initialiseren...
 		$db = MySQL::get_mysql();
 		$lid = Lid::get_lid();
-		break;
-
+	break;
+	
 	case 'BOT':
 	case 'CLI':
-                $db = MySQL::get_mysql();
-                $lid = Lid::get_lid();
-		break;
+        $db = MySQL::get_mysql();
+        $lid = Lid::get_lid();
+	break;
 
 	default:
 		die("include.config.php:: unsupported MODE");

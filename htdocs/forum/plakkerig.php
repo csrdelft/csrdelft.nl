@@ -1,43 +1,31 @@
 <?php
+# C.S.R. Delft | pubcie@csrdelft.nl
+# -------------------------------------------------------------------
+# plakkerig.php
+# -------------------------------------------------------------------
+# Verwerkt het plakkerig maken van ondewerpen in het forum.
+# -------------------------------------------------------------------
+
 require_once('include.config.php');
 
-
-if ($lid->hasPermission('P_FORUM_MOD')) {
-	require_once('class.forum.php');
-	$forum = new Forum($lid, $db);
-	if(isset($_GET['topic'])){
-		$iTopicID=(int)$_GET['topic'];
-		if(isset($_GET['plakkerig'])){
-			if($forum->maakTopicPlakkerig($iTopicID)){
-				header('location: '.CSR_ROOT.'forum/onderwerp/'.$iTopicID);
-				exit;
-			}else{
-				header('location: '.CSR_ROOT.'forum/onderwerp/'.$iTopicID);
-				$_SESSION['forum_foutmelding']='Oeps, feutje, niet gelukt dus';
-				exit;
-			}
-		}elseif(isset($_GET['niet-plakkerig'])){
-			if($forum->unmaakTopicPlakkerig($iTopicID)){
-				header('location: '.CSR_ROOT.'forum/onderwerp/'.$iTopicID);
-				exit;
-			}else{
-				header('location: '.CSR_ROOT.'forum/onderwerp/'.$iTopicID);
-				$_SESSION['forum_foutmelding']='Oeps, feutje, niet gelukt dus';
-				exit;
-			}
-		}else{
-			header('location: '.CSR_ROOT.'forum/onderwerp/'.$iTopicID);
-			$_SESSION['forum_foutmelding']='Hier snap ik geen snars van, niet zooien a.u.b.';
-			exit;
-		}
-	}else{
-		header('location: '.CSR_ROOT.'forum/');
-		$_SESSION['forum_foutmelding']='Niets om te sluiten of te openen.';
-		exit;
-	}
-} else {
+if(!$lid->hasPermission('P_FORUM_MOD')){
 	header('location: '.CSR_ROOT.'forum/');
-		$_SESSION['forum_foutmelding']='Geen rechten hiervoor';
-}	
+	$_SESSION['forum_foutmelding']='Geen rechten hiervoor';
+	exit;
+}
+
+require_once('class.forumonderwerp.php');
+$forum = new ForumOnderwerp();
+if(isset($_GET['topic'])){
+	$forum->load((int)$_GET['topic']);
+	if(!$forum->togglePlakkerigheid()){
+		$_SESSION['forum_foutmelding']='Oeps, feutje, niet gelukt dus';
+	}
+	header('location: '.CSR_ROOT.'forum/onderwerp/'.$iTopicID);
+}else{
+	header('location: '.CSR_ROOT.'forum/');
+	$_SESSION['forum_foutmelding']='Niets om te sluiten of te openen.';
+}
+	
 
 ?>

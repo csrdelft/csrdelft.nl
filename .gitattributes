@@ -26,14 +26,13 @@ htdocs/forum/bewerken.php -text
 htdocs/forum/citeren.php -text
 htdocs/forum/goedkeuren.php -text
 htdocs/forum/index.php -text
-htdocs/forum/peiling.php -text
+htdocs/forum/onderwerp.php -text
 htdocs/forum/plakkerig.php -text
 htdocs/forum/rss.php -text
 htdocs/forum/sluiten.php -text
 htdocs/forum/stemmen.php -text
 htdocs/forum/stemming.php -text
 htdocs/forum/toevoegen.php -text
-htdocs/forum/topic.php -text
 htdocs/forum/verwijderen.php -text
 htdocs/forum/zoeken.php -text
 htdocs/groepen/.htaccess -text
@@ -87,6 +86,7 @@ htdocs/maaltijden/voorkeuren.php -text
 htdocs/nieuws.php -text
 htdocs/robots.txt -text
 htdocs/tools/index.php -text
+htdocs/tools/onderhoud.html -text
 htdocs/tools/phpinfo.php -text
 htdocs/tools/saldo-overzicht.php -text
 htdocs/tools/sendmail/maildata.php -text
@@ -134,11 +134,11 @@ lib/class.eetplan.php -text
 lib/class.eetplancontent.php -text
 lib/class.forum.php -text
 lib/class.forumcontent.php -text
+lib/class.forumonderwerp.php -text
+lib/class.forumonderwerpcontent.php -text
 lib/class.forumpoll.php -text
 lib/class.hok.php -text
 lib/class.includer.php -text
-lib/class.inschrijving.php -text
-lib/class.inschrijvingcontent.php -text
 lib/class.kolom.php -text
 lib/class.ldap.php -text
 lib/class.ledenlijstcontent.php -text
@@ -305,7 +305,7 @@ lib/templates/bestuur.tpl -text
 lib/templates/csrdelft.tpl -text
 lib/templates/csrmail/csrmail.tpl -text
 lib/templates/csrmail/csrmail_owee.tpl -text
-lib/templates/forum/viewtopic.tpl -text
+lib/templates/forum/rss.tpl -text
 lib/templates/maaltijdbeheer.tpl -text
 lib/templates/maaltijdform.tpl -text
 lib/templates/maaltijdinfo.tpl -text

@@ -1,101 +1,69 @@
 <?php
+# C.S.R. Delft | pubcie@csrdelft.nl
+# -------------------------------------------------------------------
+# toevoegen.php
+# -------------------------------------------------------------------
+# Verwerkt het toevoegen van berichten en ondewerpen in het forum.
+# Het formulier bevat: (bericht en topic of title)
+# -------------------------------------------------------------------
 
 require_once('include.config.php');
-# uitzoeken wat er moet gebeuren.
-//forum klasse laden
-require_once('class.forum.php');
-$forum = new Forum($lid, $db);
-require_once('bbcode/include.bbcode.php');
-$bbcode_uid=bbnewuid();
-	
-//kijk of er een categorie-id gezet is.
-if(isset($_GET['forum'])){
-	$iCatID=(int)$_GET['forum'];
-	//kijken of er deze categorie gepost mag worden 
-	if($lid->hasPermission($forum->getRechten_post($iCatID))){
-		if(isset($_POST['bericht']) AND isset($_POST['titel'])){
-			if(strlen(trim($_POST['bericht']))>0 AND strlen(trim($_POST['titel']))>0){
-				//Nieuw onderwerp toevoegen toevoegen
-				$sBericht=bbsave($_POST['bericht'], $bbcode_uid, $db->dbResource());
-				$sTitel=addslashes($_POST['titel']);
-				//modereren of niet.
-				$bModerate_step=(!$lid->hasPermission('P_LOGGED_IN'));
-				//topic daadwerkelijk toevoegen.
-				$iTopicID=$forum->addPost($sBericht, $bbcode_uid, 
-					0, $iCatID, //0 voor een nieuw topic, in een bepaalde categorie
-					$sTitel, 
-					//direct zichtbaar, of eerst door mods bevestigen 
-					$bModerate_step);
-				//als topicID een integer is is het onderwerp succesvol toegevoegd. 
-				if(is_int($iTopicID)){
-					if($bModerate_step){
-						//niet naar het topic refreshen, die is nog niet leesbaar...
-						header('location: '.CSR_ROOT.'forum/categorie/'.$iCatID);
-						$_SESSION['forum_foutmelding']='Uw bericht zal bekeken worden door de PubCie, bedankt voor het posten';
-					}else{
-						header('location: '.CSR_ROOT.'forum/onderwerp/'.$iTopicID.'#laatste');
-					}
-				}else{
-					header('location: '.CSR_ROOT.'forum/categorie/'.$iCatID);
-					$_SESSION['forum_foutmelding']='Er ging iets mis met het databeest.';
-				}
-			}else{
-				//geen bericht ingevoerd
-				header('location: '.CSR_ROOT.'forum/categorie/'.$iCatID);
-				$_SESSION['forum_foutmelding']='U heeft een leeg bericht ingevoerd.';
-			}
-		}else{
-			//formulier is niet compleet.
-			header('location: '.CSR_ROOT.'forum/categorie/'.$iCatID);
-			$_SESSION['forum_foutmelding']='<h3>Helaas</h3>Het formulier is niet compleet!';
-		}
-	}else{
-		if($forum->catExistsVoorUser($iCatID)){
-			//mag niet posten, maar wel de categorie zien, daarheen dan maar...
-			header('location: '.CSR_ROOT.'forum/categorie/'.$iCatID);
-		}else{
-			//mag niet kijken in de categorie, ook niet posten. Terugt naar het forumoverzicht
-			header('location: '.CSR_ROOT.'forum/');
-			$_SESSION['forum_foutmelding']='U heeft niet voldoende rechten om in deze categorie te posten of deze categorie te bekijken.';
-		}
-	}
-//Nieuwe berichten toevoegen.
-}elseif(isset($_GET['topic'])){
-	$iTopicID=(int)$_GET['topic'];
-	if(isset($_POST['bericht'])){
-		//reageren mag nog niet als men niet is ingelogged...
-		if($forum->magBerichtToevoegen($iTopicID)){
-			//post toevoegen aan een bestaand onderwerp
-			if(strlen(trim($_POST['bericht']))>0){
-				$bModerate_step=(!$lid->hasPermission('P_LOGGED_IN')); //modereren of niet.
-				$sBericht=bbsave($_POST['bericht'], $bbcode_uid, $db->dbResource());
-				if($forum->addPost($sBericht, $bbcode_uid, $iTopicID, 0, '', $bModerate_step)){
-					if($bModerate_step){
-						header('location: '.CSR_ROOT.'forum/onderwerp/'.$iTopicID.'#laatste');
-						$_SESSION['forum_foutmelding']='Uw bericht is verwerkt, het zal binnenkort goedgekeurd worden.';
-					}else{
-						header('location: '.CSR_ROOT.'forum/onderwerp/'.$iTopicID.'#laatste');
-					}
-				}else{
-					header('location: '.CSR_ROOT.'forum/onderwerp/'.$iTopicID);
-					$_SESSION['forum_foutmelding']='Er ging iets mis met het databeest.';
-				}
-			}else{
-				header('location: '.CSR_ROOT.'forum/onderwerp/'.$iTopicID);
-				$_SESSION['forum_foutmelding']='Bericht bevat geen tekens.';
-			}
-		}else{
-			header('location: '.CSR_ROOT.'forum/onderwerp/'.$iTopicID);
-			$_SESSION['forum_foutmelding']='U mag hier niet posten.';
-		}
-	}else{
-		header('location: '.CSR_ROOT.'forum/onderwerp/'.$iTopicID);
-		$_SESSION['forum_foutmelding']='Formulier incompleet.';
+
+//we laden hier forumonderwerp omdat we in onderwerpen werken.
+require_once('class.forumonderwerp.php');
+$forum = new ForumOnderwerp();
+
+//als er geen bericht is gaan we sowieso niets doen.
+if(!isset($_POST['bericht'])){
+	header('location: '.CSR_ROOT.'forum/');
+	$_SESSION['forum_foutmelding']='Helaas, er gaat iets goed mis. Er niet eens een bericht.';
+	exit;
+}
+
+//een nieuw topic toevoegen?
+if(!isset($_GET['topic']) AND isset($_GET['forum'])){
+	$forum->setCat((int)$_GET['forum']);
+	//addTopic laadt zelf de boel in die hij net heeft toegevoegd...
+	if($forum->addTopic($_POST['titel'])===false){
+		header('location: '.CSR_ROOT.'forum/');
+		$_SESSION['forum_foutmelding']='Helaas, er gaat iets goed mis bij het toevoegen van het onderwerp.....';
+		exit;
 	}
 }else{
-	//geen catID en geen topicID gezet, niet compleet dus.
-	header('location: '.CSR_ROOT.'forum/');
-	$_SESSION['forum_foutmelding']='<h3>Helaas</h3>Het formulier is niet compleet (geen ID\'s)!';
+	if($_GET['topic']==(int)$_GET['topic']){
+		//niets nieuws toevoegen, het opgegeven onderwerp gebruiken.
+		$iTopicID=(int)$_GET['topic'];
+		$forum->load($iTopicID);
+	}else{
+		//kennelijk een brak topicID, dan maar weer terug naar het phorum...
+		header('location: '.CSR_ROOT.'forum/');
+		$_SESSION['forum_foutmelding']='Helaas, er moet wel een correct onderwerp-nummer opgegeven worden.';
+		exit;
+	}
+}
+# er is een onderwerp geselecteerd, nu nog even het bericht er aan toevoegen...
+//
+
+if($forum->magPosten()){
+	if(strlen(trim($_POST['bericht']))>0){
+		if($forum->addPost($_POST['bericht'])!==false){
+			if($forum->isModerated()){
+				header('location: '.CSR_ROOT.'forum/onderwerp/'.$forum->getID().'#laatste');
+				$_SESSION['forum_foutmelding']='Uw bericht is verwerkt, het zal binnenkort goedgekeurd worden.';
+			}else{
+				header('location: '.CSR_ROOT.'forum/onderwerp/'.$forum->getID().'#laatste');
+			}
+		}else{
+			header('location: '.CSR_ROOT.'forum/onderwerp/'.$forum->getID().'#laatste');
+			$_SESSION['forum_foutmelding']='Helaas ging er iets mis met het toevoegen van het bericht (forumOnderwerp::addPost()).';
+		}
+	}else{
+		header('location: '.CSR_ROOT.'forum/onderwerp/'.$forum->getID().'#laatste');
+		$_SESSION['forum_foutmelding']='Uw bericht is leeg, lege berichten worden niet geaccepteerd.';
+	}
+}else{
+	header('location: '.CSR_ROOT.'forum/onderwerp/'.$forum->getID().'#laatste');
+	$_SESSION['forum_foutmelding']='Hela, volgens mij mag u dit niet... (forumOnderwerp::magPosten())';
 }
 
 

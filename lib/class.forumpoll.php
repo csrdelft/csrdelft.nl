@@ -19,20 +19,24 @@ class ForumPoll {
 	
 	function ForumPoll(&$forum){
 		# databaseconnectie openen
-		$this->_lid =& $forum->_lid;
-		$this->_db =& $forum->_db;
+		$this->_lid=Lid::get_lid();
+		$this->_db=MySql::get_MySql();
 		$this->_forum =& $forum;
 	}
-	
-	function getPollOpties($iTopicID){
-		$iTopicID=(int)$iTopicID;
+	function getTopicID(){
+		return $this->_forum->getID(); 
+	}
+	function getPollVraag(){
+		return $this->_forum->getTitel();
+	}
+	function getPollOpties(){
 		$sOptiesQuery="
 			SELECT
 				id, optie, stemmen
 			FROM
 				forum_poll
 			WHERE
-				topicID=".$iTopicID."
+				topicID=".$this->_forum->getID()."
 			ORDER BY
 				id ;";
 		$rOptiesResult=$this->_db->query($sOptiesQuery);
@@ -41,7 +45,7 @@ class ForumPoll {
 			while($aOptieData=$this->_db->next($rOptiesResult)){
 				$aOpties[]=array(
 					'id' => $aOptieData['id'],
-					'topicID' => $iTopicID,
+					'topicID' => $this->_forum->getID(),
 					'optie' => $aOptieData['optie'],
 					'stemmen' => $aOptieData['stemmen'] );
 			}
@@ -97,15 +101,14 @@ class ForumPoll {
 			return false;
 		}	
 	}
-	function getPollStemmen($iTopicID){
-		$iTopicID=(int)$iTopicID;
+	function getPollStemmen(){
 		$sStemmenQuery="
 			SELECT
 				sum(stemmen) as totaal
 			FROM
 				forum_poll
 			WHERE
-				topicID=".$iTopicID."
+				topicID=".$this->_forum->getID()."
 			LIMIT 1;";
 		$rStemmenResult=$this->_db->query($sStemmenQuery);
 		if($this->_db->numRows($rStemmenResult)==1){
@@ -133,15 +136,14 @@ class ForumPoll {
 			return false;
 		}
 	}
-	function topicHeeftPoll($iTopicID){
-		$iTopicID=(int)$iTopicID;
+	function topicHeeftPoll(){
 		$sHeeftPoll="
 			SELECT
 				soort
 			FROM
 				forum_topic
 			WHERE
-				id=".$iTopicID."
+				id=".$this->_forum->getID()."
 			LIMIT 1;";
 		$rHeeftPoll=$this->_db->query($sHeeftPoll);
 		if($this->_db->numRows($rHeeftPoll)==1){
@@ -152,25 +154,19 @@ class ForumPoll {
 		}
 	}
 	//controleer of gebruiker al een stem heeft uitgebracht.
-	function uidMagStemmen($iTopicID, $rechten_post=''){
-		//if($rechten_post!='' AND !$this->_lid->hasPermission($rechten_post)){
-		//	return false;
-		//}else{
-			$iTopicID=(int)$iTopicID;
-			$sMagStemmen="
-				SELECT
-					uid
-				FROM
-					forum_poll_stemmen
-				WHERE 
-					topicID=".$iTopicID." AND
-					uid='".$this->_lid->getUid()."'
-				LIMIT 1;";
-		//	pr($sMagStemmen);
-		//exit;
-			$rMagStemmen=$this->_db->query($sMagStemmen);
-			return $this->_db->numRows($rMagStemmen)!=1;
-		//}
+	function uidMagStemmen(){
+		$sMagStemmen="
+			SELECT
+				uid
+			FROM
+				forum_poll_stemmen
+			WHERE 
+				topicID=".$this->_forum->getID()." AND
+				uid='".$this->_lid->getUid()."'
+			LIMIT 1;";
+		$rMagStemmen=$this->_db->query($sMagStemmen);
+		return $this->_db->numRows($rMagStemmen)!=1;
+		
 	}
 	function addStem($iOptieID){
 		$iOptieID=(int)$iOptieID;
@@ -253,6 +249,12 @@ class ForumPoll {
 			}
 		}
 		return $bOk;
+	}
+	function isStatisticus(){
+		return STATISTICUS==$this->_lid->getUid();
+	}
+	function magPeilingMaken(){
+		return $this->isStatisticus() OR $this->_lid->hasPermission('P_FORUM_MOD');
 	}
 	function peilingVan($uid){
 		//STATISTICUS is het uid van de verenigingsstatisticus en staat in include.config.php

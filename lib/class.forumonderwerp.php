@@ -1,0 +1,389 @@
+<?php
+
+# C.S.R. Delft | pubcie@csrdelft.nl
+# -------------------------------------------------------------------
+# class.forum.php
+# -------------------------------------------------------------------
+# Forum databaseklasse
+# -------------------------------------------------------------------
+
+require_once('class.forum.php');
+
+class ForumOnderwerp extends Forum {
+	
+	private $iTopicID=0;
+	private $aTopicProps=array();
+	
+	private $aPosts=array();
+	
+	private $sorteervolgorde='ASC';
+	
+	
+	function ForumOnderwerp(){
+		parent::Forum();
+	}
+	function loadByPostID($iPostID){ return $this->getTopicVoorPostID((int)$iPostID); }
+	function load($iTopicID){
+		$this->iTopicID=(int)$iTopicID;
+		//eerst de algemene topic en categorie-info laden
+		if($this->_lid->hasPermission('P_FORUM_MOD')){
+			$zichtBaarClause="( topic.zichtbaar='zichtbaar' OR topic.zichtbaar='wacht_goedkeuring' )";
+		}else{
+			$zichtBaarClause="topic.zichtbaar='zichtbaar'";
+		}
+		$sTopicQuery="
+			SELECT
+				categorie.id AS categorieID,
+				categorie.titel AS categorieTitel,
+				categorie.rechten_read AS rechten_read,
+				categorie.rechten_post AS rechten_post,
+				topic.id AS topicID,
+				topic.titel AS titel,
+				topic.uid AS startUID,
+				topic.categorie AS categorie,
+				topic.open AS open,
+				topic.plakkerig AS plakkerig,
+				topic.soort AS soort,
+				topic.zichtbaar AS topicZichtbaar
+			FROM 
+				forum_topic topic
+			INNER JOIN 
+				forum_cat categorie ON (categorie.id=topic.categorie)
+			WHERE
+				topic.id=".$this->getID()."
+			AND
+				".$zichtBaarClause."
+			LIMIT 1;";
+		$rTopic=$this->_db->query($sTopicQuery);
+		$this->aTopicProps=$this->_db->result2array($rTopic);
+		$this->aTopicProps=$this->aTopicProps[0];
+		
+
+		if(!$this->_lid->hasPermission($this->aTopicProps['rechten_read'])
+			OR !$this->_lid->hasPermission('P_FORUM_MOD')){
+			//helaas, dit topic mag niet worden gelezen. 
+			return false;
+		}else{
+			return $this->loadPosts();
+		}
+	}
+	private function loadPosts(){
+		$zichtBaarClause="post.zichtbaar='zichtbaar'";
+		if($this->_lid->hasPermission('P_FORUM_MOD')){ 
+			$zichtBaarClause.=" OR post.zichtbaar='wacht_goedkeuring'";
+		}
+		$sPostsQuery="
+			SELECT
+				post.uid AS uid,
+					lid.nickname AS nickname,
+					lid.voornaam AS voornaam,
+					lid.tussenvoegsel AS tussenvoegsel,
+					lid.achternaam AS achternaam,
+					lid.postfix AS postfix, 
+					lid.geslacht AS geslacht, 
+					lid.status AS status,
+				post.id AS postID,
+				post.tekst AS tekst,
+				post.datum AS datum,
+				post.bewerkDatum AS bewerkDatum,
+				post.zichtbaar AS zichtbaar,
+				post.ip AS ip
+			FROM
+				forum_post post
+			INNER JOIN 
+				lid ON ( post.uid=lid.uid )
+			WHERE
+				post.tid=".$this->getID()."
+			AND
+				( ".$zichtBaarClause." ) 
+			ORDER BY
+				post.datum ".$this->sorteervolgorde.";";
+		$rPostsResult=$this->_db->query($sPostsQuery);
+		$this->aPosts=$this->_db->result2array($rPostsResult);
+		return is_array($this->aPosts);
+	}
+	
+	
+	
+	public function setCat($iCatID){
+		$iCatID=(int)$iCatID;
+		$this->aTopicProps=array(
+			'categorieID' => $iCatID,
+			'categorieTitel' => $this->getCategorieTitel($iCatID),
+			'rechten_post' => $this->getRechten_post($iCatID),
+			'topicZichtbaar' => 'zichtbaar');
+	}
+	
+	
+	//categorie
+	public function getCatID(){ return $this->aTopicProps['categorieID']; }
+	public function getCatTitel(){ return $this->aTopicProps['categorieTitel']; }
+	public function getRechtenPost(){ return $this->aTopicProps['rechten_post']; }
+	public function magPosten(){ return $this->_lid->hasPermission($this->getRechtenPost()); }
+	
+	//topic
+	public function getID(){ return $this->iTopicID; }
+	public function getTitel(){ return $this->aTopicProps['titel']; }
+	public function getZichtbaarheid(){ return $this->aTopicProps['topicZichtbaar']; }
+	public function isOpen(){ return $this->aTopicProps['open']==1; }
+	public function isPlakkerig(){ return $this->aTopicProps['plakkerig']==1; }
+	public function isModerated(){ return $this->getZichtbaarheid()=='wacht_goedkeuring'; }
+	public function getSoort(){ return $this->aTopicProps['soort']; }
+	public function getSize(){ return count($this->aPosts); }
+	
+	public function magCiteren(){ return $this->magPosten() AND $this->isOpen(); }
+	
+	public function magBewerken($iPostID){
+		//FORUM_MOD mag alles bewerken
+		if($this->isModerator()){ return true;}
+		if($this->_lid->getUid()=='x999'){ return false;}
+		
+		//intern, nu nog of de huidige post mag.
+		if($this->magPosten() AND $this->isOpen()){
+			//nu alleen nog controleren of het bericht van de huidige gebruiker is.
+			$aPost=$this->getSinglePost($iPostID);
+			return $aPost['uid']==$this->_lid->getUid();
+		}else{
+			//geen rechten om te posten, en niet open.
+			return false;
+		}
+	}
+	
+	function getPosts(){
+		if(is_array($this->aPosts) AND is_array($this->aTopicProps)){
+			return $this->aPosts;
+		}else{
+			return false;
+		}
+	}
+	// een enkele post binnenhalen, bijvoorbeeld om te citeren/bewerken
+	function getSinglePost($iPostID){
+		$iPostID=(int)$iPostID;
+		$sPostQuery="
+			SELECT
+				categorie.id as categorieID,
+				categorie.titel as categorieTitel,
+				topic.id as topicID,
+				topic.titel as topicTitel,
+				topic.open as open,
+				post.uid as uid, 
+				post.tekst as tekst, 
+				post.datum as datum
+			FROM
+				forum_post post, 
+				forum_topic topic,
+				forum_cat categorie
+			WHERE 
+				post.id=".$iPostID."
+			AND
+				post.tid=topic.id
+			AND
+				topic.categorie=categorie.id
+			LIMIT 1;";
+		$rPost=$this->_db->query($sPostQuery);
+		if($this->_db->numRows($rPost)==1){
+			return $this->_db->next($rPost);
+		}else{	
+			return false;
+		}
+	}	
+	
+	function addTopic($titel){
+		$titel=$this->_db->escape(ucfirst($titel));
+		if(!$this->_lid->hasPermission('P_LOGGED_IN')){ 
+			$this->aTopicProps['topicZichtbaar']='wacht_goedkeuring'; 
+		}
+		$sTopicQuery="
+ 			INSERT INTO
+	 			forum_topic
+	 	 	(
+		 	 	titel, categorie, uid, datumtijd, 
+		 	 	lastuser, lastpost,  reacties, zichtbaar, open
+		 	)VALUES(
+		 		'".$titel."', ".$this->getCatID().", '".$this->_lid->getUid()."', '".getDateTime()."', 
+		 		'".$this->_lid->getUid()."', '".getDateTime()."',	0, '".$this->getZichtbaarheid()."', 1
+		 	);";
+		if($this->_db->query($sTopicQuery)){
+			//het zojuist ingevoerde onderwerp inladen...
+			$this->load($this->_db->insert_id());
+			//en hertellen
+			$this->recountTopic();
+			return $this->getID();
+		}else{
+			return false;
+		}
+	}
+	
+	function addPost($tekst){
+		$tekst=$this->_db->escape(trim($tekst));
+		
+		if(isset($_SERVER['REMOTE_ADDR'])){ $ip=$_SERVER['REMOTE_ADDR']; }else{ $ip='0.0.0.0'; }
+ 		
+		$sPostQuery="
+			INSERT INTO
+				forum_post
+			(
+				tid, uid, tekst, datum, ip, zichtbaar
+			)VALUES(
+				".$this->getID().",
+				'".$this->_lid->getUid()."',
+				'".ucfirst($tekst)."',
+				'".getDateTime()."',
+				'".$ip."',
+				'".$this->getZichtbaarheid()."'
+			);";
+		//deze query moet hier al uitgevoerd worden omdat anders het postid niet in de topicupdate query gerost kan worden.
+		if($this->_db->query($sPostQuery)){
+			//een mailtje sturen naar de pubcie om de boel bevestigd te krijgen
+			if($this->isModerated()){
+				//bericht sturen naar pubcie@csrdelft dat er een bericht op goedkeuring wacht
+	 			mail('pubcie@csrdelft.nl', 'Nieuw bericht in extern wacht op goedkeuring', 
+	 				"yo, er is een nieuw bericht in extern, wat op goedkeuring wacht \r\n".
+	 			 	"http://csrdelft.nl/forum/onderwerp/".$this->getID()."\r\n".
+	 			 	"\r\nDe inhoud van het bericht is als volgt: \r\n\r\n".$tekst."\r\n\r\nEINDE BERICHT");
+	 		}
+	 		//de boel hertellen:
+	 		$this->recountTopic();
+	 		return $this->_db->insert_id();
+		}else{
+			return false;
+		}	
+	}
+	//posts bewerken
+	function editPost($iPostID, $sBericht){
+		$sEditQuery="
+			UPDATE
+				forum_post
+			SET
+				tekst='".$sBericht."',
+				bewerkDatum='".getDateTime()."'
+			WHERE
+				id=".$iPostID."
+			LIMIT 1;";
+		return $this->_db->query($sEditQuery);
+	}
+	//post verwijderen
+	function deletePost($iPostID){
+		$iPostID=(int)$iPostID;
+		$sDeletePost="
+			UPDATE
+				forum_post
+			SET 
+				zichtbaar='verwijderd'
+			WHERE
+				id=".$iPostID."
+			LIMIT 1;";
+		if($this->_db->query($sDeletePost)){
+			return $this->recountTopic();
+		}else{
+			return false;
+		}
+	}
+	//topic verwijderen
+	function deleteTopic(){
+		//dit moet vóór het verwijderen!
+		$aDelete[]="DELETE FROM	forum_post WHERE tid=".$this->getID().";";
+		$aDelete[]="DELETE FROM	forum_topic WHERE id=".$this->getID()." LIMIT 1;";
+		//query's om polls weg te gooien, als er niets bestaat voor dit topicID dan 
+		//wordt er dus ook niets weggegooid
+		$aDelete[]="DELETE FROM	forum_poll_stemmen WHERE topicID=".$this->getID().";";
+		$aDelete[]="DELETE FROM forum_poll WHERE topicID=".$this->getID().";";
+		$bReturn=true;
+		foreach($aDelete as $sDelete){
+			if($this->_db->query($sDelete)===false) $bReturn=false;
+		}
+		return $bReturn AND $this->updateCatStats($this->getCatID());
+	}
+	
+	function toggleOpenheid(){
+		if($this->aTopicProps['open']=='0'){
+			$status='1';
+		}else{
+			$status='0';
+		}
+		$sTopicQuery="
+			UPDATE
+				forum_topic
+			SET
+				open='".$status."'
+			WHERE
+				id=".$this->getTopicID()."
+			LIMIT 1;";
+		return $this->_db->query($sTopicQuery);
+	}
+	function togglePlakkerigheid(){
+		if($this->aTopicProps['plakkerig']=='0'){
+			$status='1';
+		}else{
+			$status='0';
+		}
+		$sTopicQuery="
+			UPDATE
+				forum_topic
+			SET
+				plakkerig='".$status."'
+			WHERE
+				id=".$this->getTopicID()."
+			LIMIT 1;";
+		return $this->_db->query($sTopicQuery);
+	}
+	function keurGoed($iPostID){
+		$iPostID=(int)$iPostID;
+		$sPostQuery="
+			UPDATE
+				forum_post
+			SET
+				zichtbaar='zichtbaar'
+			WHERE
+				id=".$iPostID."
+			LIMIT 1;";
+		$iTopicID=$this->getTopicVoorPostID($iPostID);
+		$sTopicQuery="
+			UPDATE 
+				forum_topic
+			SET
+				zichtbaar='zichtbaar'
+			WHERE
+				id=".$iTopicID."
+			LIMIT 1;";
+		//queries uitvoeren en stats voor topic opnieuw berekenen
+		return 
+			$this->_db->query($sPostQuery) AND $this->_db->query($sTopicQuery) AND 
+			$this->recountTopic();
+	}
+	//dingen updaten voor het huidige topic 
+	function recountTopic(){
+		$sTopicStats="
+			SELECT 
+				id, uid, datum
+			FROM
+				forum_post
+			WHERE 
+				tid=".$this->getID()." AND
+				zichtbaar='zichtbaar'
+			ORDER BY
+				datum DESC
+			LIMIT 1;";
+		$rTopicStats=$this->_db->query($sTopicStats);
+		$aTopicStats=$this->_db->next($rTopicStats);
+		$sTopicUpdate="
+			UPDATE
+				forum_topic
+			SET
+				lastpostID=".$aTopicStats['id'].",
+				lastuser='".$aTopicStats['uid']."',
+				lastpost='".$aTopicStats['datum']."',
+				reacties=(
+					SELECT 
+						COUNT(*) AS aantal 
+					FROM 
+						forum_post 
+					WHERE 
+						tid=".$this->getID()." 
+					LIMIT 1)
+			WHERE
+				id=".$this->getID()."
+			LIMIT 1;";
+		return $this->_db->query($sTopicUpdate) AND $this->updateCatStats($this->getCatID());
+	}
+}

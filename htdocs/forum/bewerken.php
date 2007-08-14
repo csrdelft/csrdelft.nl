@@ -4,8 +4,8 @@
 require_once('include.config.php');
 
 //inhoud
-require_once('class.forum.php');
-$forum = new Forum($lid, $db);
+require_once('class.forumonderwerp.php');
+$forum = new ForumOnderwerp();
 //is er uberhaupt wel een postID welke bewerkt moet worden
 if(isset($_GET['post'])){
 	$iPostID=(int)$_GET['post'];
