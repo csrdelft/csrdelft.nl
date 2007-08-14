@@ -57,8 +57,6 @@ class ForumOnderwerpContent extends SimpleHTML {
 		return $sTitel;
 	}
 	function view(){
-		pr($_SESSION);
-	
 		//typecasting van de variabelen.
 		if($this->_forum->getPosts()===false){
 			echo '<h2><a href="/forum/" class="forumGrootlink">Forum</a> &raquo; Foutje</h2>Dit gedeelte van het forum is niet beschikbaar voor u, u zult moeten inloggen, of terug gaan naar <a href="/forum/">het forum</a>';
