@@ -134,6 +134,7 @@ class Forum {
 					lid.postfix AS postfix,
 					lid.status AS status,
 					lid.geslacht AS geslacht,
+					lid.email AS email,
 				post.id AS postID,
 				post.tekst AS tekst,
 				post.bbcode_uid AS bbcode_uid,

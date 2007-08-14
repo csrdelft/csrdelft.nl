@@ -10,8 +10,8 @@
 <rss version="2.0">
 	<channel>
 		<copyright>Copyright 2006 C.S.R. Delft</copyright>
-		<pubDate>{$smarty.now}</pubDate>
-		<lastBuildDate>{$smarty.now}</lastBuildDate>
+		<pubDate>{$smarty.now|date_format:"%a, %e %b %Y %T %Z"}</pubDate>
+		<lastBuildDate>{$smarty.now|date_format:"%a, %e %b %Y %T %Z"}</lastBuildDate>
 		<docs>http://csrdelft.nl/index.php</docs>
 		<description>C.S.R. Delft: Vereniging van Christen-studenten te Delft.</description>
 		<image>
@@ -35,7 +35,7 @@
 			<category>forum: {$post.categorieTitel}</category>
 			<comments>http://csrdelft.nl/forum/onderwerp/{$post.topicID}</comments>
 			<guid>http://csrdelft.nl/forum/onderwerp/{$post.topicID}#post{$post.postID}</guid>
-			<pubDate>{$post.datum}</pubDate>
+			<pubDate>{$post.datum|date_format:"%a, %e %b %Y %T %Z"}</pubDate>
 		</item>
 		{/foreach}
 	</channel>
