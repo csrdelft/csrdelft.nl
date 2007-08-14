@@ -367,30 +367,6 @@ class ForumContent extends SimpleHTML {
 			}else{ echo '<h3>Er is niets gevonden</h3>Probeer het opnieuw. (Zoekresultaten moeten minimaal 4 letters bevatten)'; }
 		}
 	}
-	function viewUbbHelp(){
-		?>
-		<div id="ubbhulp">
-			<a href="#laatste" onclick="document.getElementById('ubbhulpverhaal').style.display = 'block'">Opmaakhulp weergeven</a><br />
-		</div>
-		<div id="ubbhulpverhaal">
-			<h2>Tekst opmaken</h2>
-			U kunt uw berichten opmaken met een simpel opmaaktaaltje wat ubb genoemd wordt. Het lijkt wat op html, maar dan met vierkante haken:<br />
-			<ul>
-				<li>[b]...[/b] voor <strong>vette tekst</strong></li>
-				<li>[i]...[/i] voor <em>cursieve tekst</em></li>
-				<li>[u]...[/u] voor <span style="text-decoration: underline;">onderstreepte tekst</span></li>
-				<li>[s]...[/s] voor <s>doorgestreepte tekst</s></li>
-				<li>[url=http://csrdelft.nl]Webstek van C.S.R.[/url] voor een verwijzing</li>
-				<li>[img]http://csrdelft.nl/plaetje.jpg[/img] voor een plaetje</li>
-				<li>[citaat][/citaat] voor een citaat. [citaat=<em>lidnummer</em>][/citaat] voor een citaat van een lid.</li>
-				<li>[lid=<em>lidnummer</em>] voor een link naar het profiel van een lid of oudlid</li>
-			</ul>
-			Gebruik deze mogelijkheden spaarzaam, ga niet ineens alles vet maken of kleurtjes geven!
-		</div>
-		
-		<?php
-		
-	}
 	function zoekFormulier($sZoekQuery=''){
 		$sZoekQuery=htmlspecialchars($sZoekQuery, ENT_QUOTES, 'UTF-8');
 		echo '<form action="/forum/zoeken.php" method="post"><p><input type="text" value="'.$sZoekQuery.'" name="zoeken" />';
@@ -409,7 +385,6 @@ class ForumContent extends SimpleHTML {
 	}
 	function setError($sError){
 		$this->_sError=trim($sError);
-	
 	}
 	function viewWaarbenik(){
 		if(	($this->_actie=='topic' AND isset($_GET['topic'])) OR 

@@ -127,7 +127,7 @@ class ForumOnderwerp extends Forum {
 	public function getZichtbaarheid(){ return $this->aTopicProps['topicZichtbaar']; }
 	public function isOpen(){ return $this->aTopicProps['open']==1; }
 	public function isPlakkerig(){ return $this->aTopicProps['plakkerig']==1; }
-	public function isModerated(){ return $this->getZichtbaarheid()=='wacht_goedkeuring'; }
+	public function isModerated(){ return !$this->_lid->hasPermission('P_LOGGED_IN'); }
 	public function getSoort(){ return $this->aTopicProps['soort']; }
 	public function getSize(){ return count($this->aPosts); }
 	

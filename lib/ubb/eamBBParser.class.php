@@ -213,7 +213,7 @@ class eamBBParser{
 		$this->htmlFix();
 		
 		// Get output
-		$this->HTML = str_replace('[br]',"<br 0/>\n", $this->parseArray());
+		$this->HTML = str_replace('[br]',"<br />\n", $this->parseArray());
 		
 		
 		return $this->HTML;

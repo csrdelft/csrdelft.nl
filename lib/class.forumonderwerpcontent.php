@@ -57,6 +57,8 @@ class ForumOnderwerpContent extends SimpleHTML {
 		return $sTitel;
 	}
 	function view(){
+		pr($_SESSION);
+	
 		//typecasting van de variabelen.
 		if($this->_forum->getPosts()===false){
 			echo '<h2><a href="/forum/" class="forumGrootlink">Forum</a> &raquo; Foutje</h2>Dit gedeelte van het forum is niet beschikbaar voor u, u zult moeten inloggen, of terug gaan naar <a href="/forum/">het forum</a>';
@@ -84,17 +86,12 @@ class ForumOnderwerpContent extends SimpleHTML {
 				}
 				echo ' <a href="/forum/plakkerigheid/'.$this->_forum->getID().'" class="knop">'.$plakkerigheid.'</a> ';
 				
-				if($this->_forum->isModerated()){
-					//TODO: get first post id here...
-					echo ' <a href="/forum/keur-goed/____">Keur dit bericht goed.</a> ';
-				}
 				echo '<br /><br />'."\r\n";
 			}
 			echo '<table class="forumtabel"><tr><td class="forumtussenschot" colspan="2"></td></tr>';
 			//speciale topic weergeven als het topic er een is. bijvoorbeeld een poll;
 			switch($this->_forum->getSoort()){
 				case 'T_POLL':
-					//TODO: voeg hier een overzichtelijke peiling-call toe, niet nog allemaal html.
 					require_once('class.forumpoll.php');
 					require_once('class.pollcontent.php');
 					$peiling=new ForumPoll($this->_forum);
