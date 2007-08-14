@@ -19,7 +19,7 @@ $forum = new ForumOnderwerp();
 
 if(isset($_GET['post'])){
 	$forum->loadByPostID((int)$_GET['post']);
-	if($forum->keurGoed($iPostID)){
+	if($forum->keurGoed((int)$_GET['post'])){
 		header('location: '.CSR_ROOT.'forum/onderwerp/'.$forum->getID());
 		$_SESSION['forum_foutmelding']='Onderwerp of bericht nu voor iedereen zichtbaar.';
 	}else{

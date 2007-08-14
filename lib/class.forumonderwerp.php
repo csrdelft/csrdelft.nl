@@ -22,7 +22,9 @@ class ForumOnderwerp extends Forum {
 	function ForumOnderwerp(){
 		parent::Forum();
 	}
-	function loadByPostID($iPostID){ return $this->getTopicVoorPostID((int)$iPostID); }
+	function loadByPostID($iPostID){ 
+		return $this->load($this->getTopicVoorPostID((int)$iPostID)); 
+	}
 	function load($iTopicID){
 		$this->iTopicID=(int)$iTopicID;
 		//eerst de algemene topic en categorie-info laden
@@ -59,12 +61,11 @@ class ForumOnderwerp extends Forum {
 		$this->aTopicProps=$this->aTopicProps[0];
 		
 
-		if(!$this->_lid->hasPermission($this->aTopicProps['rechten_read'])
-			OR !$this->_lid->hasPermission('P_FORUM_MOD')){
+		if($this->_lid->hasPermission($this->aTopicProps['rechten_read']) OR $this->_lid->hasPermission('P_FORUM_MOD')){
+			return $this->loadPosts();
+		}else{
 			//helaas, dit topic mag niet worden gelezen. 
 			return false;
-		}else{
-			return $this->loadPosts();
 		}
 	}
 	private function loadPosts(){
@@ -101,10 +102,10 @@ class ForumOnderwerp extends Forum {
 		$rPostsResult=$this->_db->query($sPostsQuery);
 		$this->aPosts=$this->_db->result2array($rPostsResult);
 		return is_array($this->aPosts);
-	}
+	}	
 	
-	
-	
+	//als de categorie handmatig moet worden ingesteld 
+	//(bij het toevoegen van een nieuw onderwerp bijvoorbeeld)
 	public function setCat($iCatID){
 		$iCatID=(int)$iCatID;
 		$this->aTopicProps=array(
@@ -112,8 +113,7 @@ class ForumOnderwerp extends Forum {
 			'categorieTitel' => $this->getCategorieTitel($iCatID),
 			'rechten_post' => $this->getRechten_post($iCatID),
 			'topicZichtbaar' => 'zichtbaar');
-	}
-	
+	}	
 	
 	//categorie
 	public function getCatID(){ return $this->aTopicProps['categorieID']; }
@@ -218,7 +218,11 @@ class ForumOnderwerp extends Forum {
 		$tekst=$this->_db->escape(trim($tekst));
 		
 		if(isset($_SERVER['REMOTE_ADDR'])){ $ip=$_SERVER['REMOTE_ADDR']; }else{ $ip='0.0.0.0'; }
- 		
+ 		if(!$this->_lid->hasPermission('P_LOGGED_IN')){
+ 			$zichtbaarheid='wacht_goedkeuring';
+ 		}else{
+ 			$zichtbaarheid=$this->getZichtbaarheid();
+ 		}
 		$sPostQuery="
 			INSERT INTO
 				forum_post
@@ -230,7 +234,7 @@ class ForumOnderwerp extends Forum {
 				'".ucfirst($tekst)."',
 				'".getDateTime()."',
 				'".$ip."',
-				'".$this->getZichtbaarheid()."'
+				'".$zichtbaarheid."'
 			);";
 		//deze query moet hier al uitgevoerd worden omdat anders het postid niet in de topicupdate query gerost kan worden.
 		if($this->_db->query($sPostQuery)){
