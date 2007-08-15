@@ -31,7 +31,7 @@ if (constant('MODE') == 'WEB') {
 	ini_set('upload_tmp_dir',TMP_PATH);
 }
 
-setlocale(LC_ALL, 'nl_NL.utf8@euro');
+setlocale(LC_ALL, 'nl_NL.utf8');
 
 //standaard templaat voor de csrmail
 define('CSRMAIL_TEMPLATE', 'csrmail.tpl');
