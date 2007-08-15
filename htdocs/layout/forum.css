@@ -127,7 +127,7 @@ div#ubbhulpverhaal{
 	background-color: white;
 	text-align: left;
 }
-div#ubbsluiten{
+span#ubbsluiten{
 	display: block; 
 	width: 16px; height: 16px;
 	float: right;
