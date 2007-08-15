@@ -318,3 +318,4 @@ lib/ubb/README -text
 lib/ubb/TODO -text
 lib/ubb/eamBBParser.class.php -text
 lib/ubb/eamFunParser.class.php -text
+lib/ubb/plugins/rainbow.php -text

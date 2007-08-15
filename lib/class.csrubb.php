@@ -66,6 +66,17 @@ class CsrUBB extends eamBBParser{
 
         return $html;
     }
+    function ubb_rainbow(){
+        $string = $this->parseArray(array('[/rainbow]'), array());
+        
+        if(!@include_once("ubb/plugins/rainbow.php")){
+             return '<b>Rainbow plugin could not be loaded!</b>';
+        }
+        
+        $r = new rainbowMaker();
+        
+        return $r->rainBow($string);
+    }
 	function viewUbbHelp(){
 echo '
 <div id="ubbhulp">
