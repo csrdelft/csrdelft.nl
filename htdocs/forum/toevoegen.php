@@ -16,7 +16,7 @@ $forum = new ForumOnderwerp();
 //als er geen bericht is gaan we sowieso niets doen.
 if(!isset($_POST['bericht'])){
 	header('location: '.CSR_ROOT.'forum/');
-	$_SESSION['forum_foutmelding']='Helaas, er gaat iets goed mis. Er niet eens een bericht.';
+	$_SESSION['melding']='Helaas, er gaat iets goed mis. Er niet eens een bericht.';
 	exit;
 }
 
@@ -25,13 +25,13 @@ if(!isset($_GET['topic']) AND isset($_GET['forum'])){
 	$forum->setCat((int)$_GET['forum']);
 	if(strlen(trim($_POST['titel']))<1){
 		header('location: '.CSR_ROOT.'forum/');
-		$_SESSION['forum_foutmelding']='De titel mag niet leeg zijn.';
+		$_SESSION['melding']='De titel mag niet leeg zijn.';
 		exit;
 	}
 	//addTopic laadt zelf de boel in die hij net heeft toegevoegd...
 	if($forum->addTopic($_POST['titel'])===false){
 		header('location: '.CSR_ROOT.'forum/');
-		$_SESSION['forum_foutmelding']='Helaas, er gaat iets goed mis bij het toevoegen van het onderwerp.....';
+		$_SESSION['melding']='Helaas, er gaat iets goed mis bij het toevoegen van het onderwerp.....';
 		exit;
 	}
 }else{
@@ -42,7 +42,7 @@ if(!isset($_GET['topic']) AND isset($_GET['forum'])){
 	}else{
 		//kennelijk een brak topicID, dan maar weer terug naar het phorum...
 		header('location: '.CSR_ROOT.'forum/');
-		$_SESSION['forum_foutmelding']='Helaas, er moet wel een correct onderwerp-nummer opgegeven worden.';
+		$_SESSION['melding']='Helaas, er moet wel een correct onderwerp-nummer opgegeven worden.';
 		exit;
 	}
 }
@@ -54,7 +54,7 @@ if($forum->magPosten()){
 		if($forum->addPost($_POST['bericht'])!==false){
 			if($forum->isModerated()){
 				header('location: '.CSR_ROOT.'forum/onderwerp/'.$forum->getID().'#laatste');
-				$_SESSION['forum_foutmelding']='Uw bericht is verwerkt, het zal binnenkort goedgekeurd worden.';
+				$_SESSION['melding']='Uw bericht is verwerkt, het zal binnenkort goedgekeurd worden.';
 			}else{
 				header('location: '.CSR_ROOT.'forum/onderwerp/'.$forum->getID().'#laatste');
 			}
