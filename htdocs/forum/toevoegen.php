@@ -23,6 +23,11 @@ if(!isset($_POST['bericht'])){
 //een nieuw topic toevoegen?
 if(!isset($_GET['topic']) AND isset($_GET['forum'])){
 	$forum->setCat((int)$_GET['forum']);
+	if(strlen(trim($_POST['titel']))<1){
+		header('location: '.CSR_ROOT.'forum/');
+		$_SESSION['forum_foutmelding']='De titel mag niet leeg zijn.';
+		exit;
+	}
 	//addTopic laadt zelf de boel in die hij net heeft toegevoegd...
 	if($forum->addTopic($_POST['titel'])===false){
 		header('location: '.CSR_ROOT.'forum/');

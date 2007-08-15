@@ -55,6 +55,17 @@ class CsrUBB extends eamBBParser{
 				'</object>';
 		return $html;
 	}
+	function ubb_1337(){
+        $html = $this->parseArray(array('[/1337]'), array());
+        
+        $html = str_replace('er ', '0r ',$html);
+        $html = str_replace('you', 'j00',$html);
+        $html = str_replace('elite', '1337',$html);
+        $html = strtr($html, "abelostABELOST", "48310574831057");       
+
+
+        return $html;
+    }
 	function viewUbbHelp(){
 echo '
 <div id="ubbhulp">
