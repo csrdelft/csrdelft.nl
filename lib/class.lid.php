@@ -206,7 +206,6 @@ class Lid {
 			SELECT email FROM lid WHERE uid='".$uid."' LIMIT 1;";
 		$rEmail=$this->_db->query($sEmailQuery);
 		$aEmail=$this->_db->next($rEmail);
-		pr($aEmail);
 		return $aEmail['email'];
 	}
 	/*
