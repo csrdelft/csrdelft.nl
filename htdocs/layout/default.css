@@ -236,6 +236,15 @@ table.profiel_edit{
 }
 table.profiel_edit tr td input, textarea{ width: 260px; }
 
+/* algemeen hokje voor (fout)meldingen */
+div#melding{
+	margin: 10px; padding: 10px;
+	background-color: lightgrey;
+	color: red;
+	border: 1px solid black;
+	font-size: 1.3em;
+}
+
 /* intern/lijst.php */
 table.zoekResultaat{ width: 100%; border-collapse: collapse;}
 table.zoekResultaat tr td{border-top: 1px solid lightgrey; margin: 0px; padding: 2px; text-align: left;}

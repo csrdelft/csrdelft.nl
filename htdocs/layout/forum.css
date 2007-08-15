@@ -107,14 +107,6 @@ img.forum_image{
 #forumHighlights a.kopje:hover{ font-size: 1em; color: darkred; }
 span.tijd{ font-size: 0.95em; }
 
-
-div#foutmelding{
-	margin: 10px; padding: 10px;
-	background-color: lightgrey;
-	color: red;
-	border: 1px solid black;
-	font-size: 1.3em;
-}
 div#ubbhulpverhaal{
 	display: none; 
 	z-index: 999;
