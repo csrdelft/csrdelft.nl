@@ -149,7 +149,7 @@ class ForumOnderwerpContent extends SimpleHTML {
 			//nu nog ff een quickpost formuliertje
 			echo '<tr><td class="forumauteur">';
 			if($this->getCiteerPost()==0){
-				echo '<a class="forumpostlink" id="laatste">Snel reageren:</a><br /><br />';
+				echo '<a class="forumpostlink" id="laatste">Reageren:</a><br /><br />';
 				$iTekstareaRegels=6;
 			}else{
 				echo '<a class="forumpostlink" id="laatste"><stong>Citeren:</strong></a><br /><br />';
@@ -158,7 +158,7 @@ class ForumOnderwerpContent extends SimpleHTML {
 			if($this->_forum->magBerichtToevoegen($this->_forum->getID(), $this->_forum->isOpen(), $this->_forum->getRechtenPost())){	
 				// link om het tekst-vak groter te maken.
 				echo '<a href="#laatste" onclick="vergrootTextarea(\'forumBericht\', 10)" title="Vergroot het invoerveld">
-					invoerveld vergroten&nbsp;&raquo;</a><br /><br />';
+					Invoerveld vergroten&nbsp;&raquo;</a><br /><br />';
 				$ubb->viewUbbhelp();
 			}			
 			//berichtje weergeven  voor moderators als het topic gesloten is.

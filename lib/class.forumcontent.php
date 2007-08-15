@@ -183,7 +183,7 @@ class ForumContent extends SimpleHTML {
 						<strong>Bericht</strong>&nbsp;&nbsp; ';
 				// link om het tekst-vak groter te maken.
 				echo '<a href="#" onclick="vergrootTextarea(\'forumBericht\', 10)" name="Vergroot het invoerveld">
-					invoerveld vergroten</a><br />';
+					Invoerveld vergroten</a><br />';
 				echo '<textarea name="bericht" id="forumBericht" rows="10" cols="80" style="width: 100%" class="tekst" tabindex="2"></textarea><br />
 						<input type="submit" name="submit" value="verzenden" />
 						</p></form></td></tr>';
@@ -222,7 +222,7 @@ class ForumContent extends SimpleHTML {
 					<h3>Als u dingen aanpast zet er dan even bij w&aacute;t u aanpast! Gebruik bijvoorbeeld [s]...[/s]</h3>
 					<strong>Bericht</strong>&nbsp;&nbsp;';
 				// link om het tekst-vak groter te maken.
-				echo '<a href="#" onclick="vergrootTextarea(\'forumBericht\', 10)" name="Vergroot het invoerveld">invoerveld vergroten</a><br />';
+				echo '<a href="#" onclick="vergrootTextarea(\'forumBericht\', 10)" name="Vergroot het invoerveld">Invoerveld vergroten</a><br />';
 
 				echo '
 					<textarea name="bericht" id="forumBericht" rows="20" style="width: 100%" class="tekst">'.

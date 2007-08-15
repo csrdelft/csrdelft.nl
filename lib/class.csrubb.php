@@ -74,7 +74,9 @@ echo '
 		<li>[lid=<em>lidnummer</em>] voor een link naar het profiel van een lid of oudlid</li>
 		<li>[youtube]<em>youtube-id</em>[/youtube] voor een filmpje direct in je post</li>
 	</ul>
-	Gebruik deze mogelijkheden spaarzaam, ga niet ineens alles vet maken of kleurtjes geven!
+	Gebruik deze mogelijkheden spaarzaam, ga niet ineens alles vet maken of kleurtjes geven!<br />
+	<br />
+	<a href="#laatste" onclick="document.getElementById(\'ubbhulpverhaal\').style.display = \'none\'">Opmaakhulp verbergen</a>
 </div>';
 	
 	}
