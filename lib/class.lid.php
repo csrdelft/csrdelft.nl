@@ -30,12 +30,12 @@ class Lid {
 	//singleton functionaliteit...
 	private function __construct(){ $this->Lid(); }
 	static function get_lid(){
-    //als er nog geen instantie gemaakt is, die nu maken
-    if(!isset(Lid::$lid)){
+		//als er nog geen instantie gemaakt is, die nu maken
+		if(!isset(Lid::$lid)){
 			Lid::$lid = new Lid();
 		}
-    return Lid::$lid;
-  }
+		return Lid::$lid;
+	}
 	function Lid() {
 		# we starten op aan het begin van een pagina
 		$this->_loadPermissions();
@@ -47,8 +47,13 @@ class Lid {
 
 		# kijken in de sessie of er een gebruiker in staat,
 		# en of dit een gebruiker is die een profiel in de database heeft.
-		# tevens kijken of het IP-adres klopt met het adres/range in de sessie
-		if (!isset($_SESSION['_uid']) or !matchCIDR($_SERVER['REMOTE_ADDR'],$_SESSION['_ip']) or !$this->reloadProfile()) {
+		# als er een IP-veld in de sessie staat wordt dit vergeleken met het huidige IP
+		# waarvan geconnect wordt (kan v4 of v6 zijn)
+		if (
+			!isset($_SESSION['_uid']) or
+			isset($_SESSION['_ip']) and $_SERVER['REMOTE_ADDR'] != $_SESSION['_ip'] or
+			!$this->reloadProfile()
+		) {
 			# zo nee, dan nobody user er in gooien...
 			# in dit geval is het de eerste keer dat we een pagina opvragen
 			# of er is net uitgelogd waardoor de gegevens zijn leeggegooid
@@ -104,8 +109,8 @@ class Lid {
 		$_SESSION['_uid'] = $profile['uid'];
 		
 		# sessie koppelen aan ip?
-		if ($checkip == true) $_SESSION['_ip'] = $_SERVER['REMOTE_ADDR'] . "/32";
-		else $_SESSION['_ip'] = $_SERVER['REMOTE_ADDR'] . "/0";
+		if ($checkip == true) $_SESSION['_ip'] = $_SERVER['REMOTE_ADDR'];
+		else if (isset($_SESSION['_ip'])) unset($_SESSION['_ip']);
 		
 		return true;
 	}
@@ -141,7 +146,7 @@ class Lid {
 
 	function logout() {
 		session_unset();
-		$this->login('x999','x999',false);
+		$this->login('x999','x999',true);
 	}
 
 	### public ###
@@ -502,7 +507,7 @@ class Lid {
 		# mysql escape dingesen
 		$nick = $this->_db->escape($nick);
 		$result = $this->_db->select("SELECT * FROM lid WHERE nickname = '".$nick."'");
-    return ($result !== false and $this->_db->numRows($result) > 0);
+		return ($result !== false and $this->_db->numRows($result) > 0);
 	}
 	
 	function isValidUid($uid) {
@@ -546,7 +551,7 @@ class Lid {
 				lid 
 			WHERE ( 
 				status='S_LID' OR status='S_GASTLID' OR status='S_NOVIET' OR status='S_KRINGEL' ) ORDER BY {$sort}");
-        if ($result !== false and $this->_db->numRows($result) > 0) {
+		if ($result !== false and $this->_db->numRows($result) > 0) {
 			while ($lid = $this->_db->next($result)) $leden[] = $lid;
 		}
 
@@ -623,8 +628,8 @@ class Lid {
 		if($moot!=0){ $sMaxKringen.="AND moot=".$moot; }
 		$sMaxKringen.="	LIMIT 1;";
 		
-    $result = $this->_db->select($sMaxKringen);
-    if ($result !== false and $this->_db->numRows($result) > 0) {
+		$result = $this->_db->select($sMaxKringen);
+		if ($result !== false and $this->_db->numRows($result) > 0) {
 			$max = $this->_db->next($result);
 			$maxkringen = $max['max'];
 			return $maxkringen;
