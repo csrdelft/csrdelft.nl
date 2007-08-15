@@ -733,8 +733,6 @@ class Profiel extends lid{
 		$password=substr(md5(time()), 0, 8);
 		$passwordhash=$this->_makepasswd($password);
 		
-		$sNaam=$this->getFullName($uid);
-	
 		$sNieuwWachtwoord="
 			UPDATE
 				lid
@@ -743,9 +741,10 @@ class Profiel extends lid{
 			WHERE
 				uid='".$uid."'
 			LIMIT 1;";
+		$mailto=$this->getEmail($uid).', pubcie@csrdelft.nl';
 		//mail maken
 		$mail="
-Hallo ".$sNaam.",
+Hallo ".$this->getFullName($uid).",
 
 U heeft een nieuw wachtwoord aangevraagd voor http://csrdelft.nl. U kunt nu inloggen met de volgende combinatie:
 
@@ -760,7 +759,8 @@ Hanna Timmerarends
 h.t. Praeses der Pubcie
 
 P.S. Mocht u nog vragen hebben, dan kan u natuurlijk altijd e-posts sturen naar pubcie@csrdelft.nl";
-		return $this->_db->query($sNieuwWachtwoord) AND mail($this->getEmail($uid).', pubcie@csrdelft.nl', 'Nieuw wachtwoord voor de C.S.R.-stek', $mail);
+		echo $mailto; exit;
+		return $this->_db->query($sNieuwWachtwoord) AND mail($mailto, 'Nieuw wachtwoord voor de C.S.R.-stek', $mail);
 
 	}
 }

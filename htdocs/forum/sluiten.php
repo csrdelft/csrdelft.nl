@@ -10,7 +10,7 @@ require_once('include.config.php');
 
 if(!$lid->hasPermission('P_FORUM_MOD')){
 	header('location: '.CSR_ROOT.'forum/');
-	$_SESSION['forum_foutmelding']='Geen rechten hier';
+	$_SESSION['melding']='Geen rechten hier';
 	exit;
 }
 
@@ -19,12 +19,12 @@ $forum = new ForumOnderwerp();
 if(isset($_GET['topic'])){
 	$forum->load((int)$_GET['topic']);
 	if(!$forum->toggleOpenheid()){
-		$_SESSION['forum_foutmelding']='Oeps, feutje, niets gesloten dus.';
+		$_SESSION['melding']='Oeps, feutje, niets gesloten dus.';
 	}
-	header('location: '.CSR_ROOT.'forum/onderwerp/'.$iTopicID);
+	header('location: '.CSR_ROOT.'forum/onderwerp/'.$forum->getID());
 }else{
 	header('location: '.CSR_ROOT.'forum/');
-	$_SESSION['forum_foutmelding']='Niets om te sluiten of te openen.';
+	$_SESSION['melding']='Niets om te sluiten of te openen.';
 }
 
 

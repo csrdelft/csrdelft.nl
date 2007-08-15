@@ -11,7 +11,7 @@ require_once('include.config.php');
 
 if (!$lid->hasPermission('P_FORUM_MOD')) {
 	header('location: '.CSR_ROOT.'forum/');
-	$_SESSION['forum_foutmelding']='Niets te zoeken hier!';
+	$_SESSION['melding']='Niets te zoeken hier!';
 	exit;
 }	
 require_once('class.forumonderwerp.php');
@@ -19,7 +19,7 @@ $forum = new ForumOnderwerp();
 
 //het juiste onderwerp inladen
 if(isset($_GET['post'])){
-	$forum->load($forum->getTopicVoorPostID((int)$_GET['post']));
+	$forum->loadByPostID($_GET['post']);
 }elseif(isset($_GET['topic'])){
 	$forum->load((int)$_GET['topic']);
 }
@@ -31,20 +31,18 @@ if(isset($_GET['post'])){
 		header('location: '.CSR_ROOT.'forum/onderwerp/'.$forum->getID());
 	}else{
 		header('location: '.CSR_ROOT.'forum/');
-		$_SESSION['forum_foutmelding']='Verwijderen van bericht mislukt, iets mis met de db ofzo.';
+		$_SESSION['melding']='Verwijderen van bericht mislukt, iets mis met de db ofzo.';
 	}
 }elseif(isset($_GET['topic'])){
-	$iTopicID=(int)$_GET['topic'];
-	$forum->load($iTopicID);
 	if($forum->deleteTopic()){
 		header('location: '.CSR_ROOT.'forum/categorie/'.$forum->getCatID());
 	}else{
 		header('location: '.CSR_ROOT.'forum/');
-		$_SESSION['forum_foutmelding']='Verwijderen van topic mislukt, iets mis met de db ofzo.';
+		$_SESSION['melding']='Verwijderen van topic mislukt, iets mis met de db ofzo.';
 	}
 }else{
 	header('location: '.CSR_ROOT.'forum/');
-	$_SESSION['forum_foutmelding']='Ik heb niets om te verwijderen';
+	$_SESSION['melding']='Ik heb niets om te verwijderen';
 }
 
 ?>

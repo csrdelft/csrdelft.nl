@@ -27,7 +27,7 @@ if ($lid->hasPermission('P_FORUM_MOD') OR $lid->getUid()==STATISTICUS){
 				if($poll->maakTopicPoll($forum->getID(), $_POST['opties'])){
 					//gelukt.
 					header('location: '.CSR_ROOT.'forum/onderwerp/'.$forum->getID());
-					$_SESSION['forum_foutmelding']='Peiling is met succes toegevoegd.';
+					$_SESSION['melding']='Peiling is met succes toegevoegd.';
 				}else{
 					echo 'maakTopicPoll is mislukt;';
 				}

@@ -205,8 +205,9 @@ class Lid {
 		$sEmailQuery="
 			SELECT email FROM lid WHERE uid='".$uid."' LIMIT 1;";
 		$rEmail=$this->_db->query($sEmailQuery);
-		$aEmail=$this->_db->result2array($rEmail);
-		return $aEmail[0]['email'];
+		$aEmail=$this->_db->next($rEmail);
+		pr($aEmail);
+		return $aEmail['email'];
 	}
 	/*
 	* Deze functie maakt een link met de naam, als de gebruiker is ingelogged, anders gewoon een naam.

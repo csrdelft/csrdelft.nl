@@ -28,7 +28,7 @@ if(isset($_GET['post'])){
 		}
 	}else{
 		header('location: '.CSR_ROOT.'forum/');
-		$_SESSION['forum_foutmelding']='U mag dit bericht niet bewerken.';
+		$_SESSION['melding']='U mag dit bericht niet bewerken.';
 		exit;
 	}
 }else{

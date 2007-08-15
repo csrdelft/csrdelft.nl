@@ -19,12 +19,12 @@ $forum = new ForumOnderwerp();
 if(isset($_GET['topic'])){
 	$forum->load((int)$_GET['topic']);
 	if(!$forum->togglePlakkerigheid()){
-		$_SESSION['forum_foutmelding']='Oeps, feutje, niet gelukt dus';
+		$_SESSION['melding']='Oeps, feutje, niet gelukt dus';
 	}
-	header('location: '.CSR_ROOT.'forum/onderwerp/'.$iTopicID);
+	header('location: '.CSR_ROOT.'forum/onderwerp/'.$forum->getID());
 }else{
 	header('location: '.CSR_ROOT.'forum/');
-	$_SESSION['forum_foutmelding']='Niets om te sluiten of te openen.';
+	$_SESSION['melding']='Niets om te sluiten of te openen.';
 }
 	
 

@@ -60,15 +60,15 @@ if($forum->magPosten()){
 			}
 		}else{
 			header('location: '.CSR_ROOT.'forum/onderwerp/'.$forum->getID().'#laatste');
-			$_SESSION['forum_foutmelding']='Helaas ging er iets mis met het toevoegen van het bericht (forumOnderwerp::addPost()).';
+			$_SESSION['melding']='Helaas ging er iets mis met het toevoegen van het bericht (forumOnderwerp::addPost()).';
 		}
 	}else{
 		header('location: '.CSR_ROOT.'forum/onderwerp/'.$forum->getID().'#laatste');
-		$_SESSION['forum_foutmelding']='Uw bericht is leeg, lege berichten worden niet geaccepteerd.';
+		$_SESSION['melding']='Uw bericht is leeg, lege berichten worden niet geaccepteerd.';
 	}
 }else{
 	header('location: '.CSR_ROOT.'forum/onderwerp/'.$forum->getID().'#laatste');
-	$_SESSION['forum_foutmelding']='Hela, volgens mij mag u dit niet... (forumOnderwerp::magPosten())';
+	$_SESSION['melding']='Hela, volgens mij mag u dit niet... (forumOnderwerp::magPosten())';
 }
 
 

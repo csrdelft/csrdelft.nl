@@ -12,7 +12,7 @@ require_once('include.config.php');
 
 //$lid vervangen door een subklasse ervan, met functies voor het profiel
 require_once('class.profiel.php');
-$lid=new Profiel($db);
+$lid=new Profiel();
 
 # Profiel bekijken
 # met P_LOGGED_IN mag een gebruiker zijn eigen profiel bekijken
@@ -141,7 +141,11 @@ if ($error == 0){
 		break;
 		case 'wachtwoord':
 			# Wachtwoord resetten, wordt nog geen bevestiging van gegeven.
-			$lid->resetWachtwoord($uid);
+			if($lid->resetWachtwoord($uid)){
+				$_SESSION['melding']='Nieuw wachtwoord met succes verzonden.';
+			}else{
+				$_SESSION['melding']='Wachtwoord resetten mislukt.';
+			}	
 			header("Location: ".CSR_ROOT."intern/profiel/".$uid); 
 			exit;
 		break;

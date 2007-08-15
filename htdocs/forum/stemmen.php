@@ -27,22 +27,22 @@ if(isset($_GET['topic'])){
 					}	
 				}else{
 					header('location: '.CSR_ROOT.'forum/onderwerp/'.$iTopicID);
-					$_SESSION['forum_foutmelding']='Optie bestaat niet.';
+					$_SESSION['melding']='Optie bestaat niet.';
 				}
 			}else{
 				header('location: '.CSR_ROOT.'forum/onderwerp/'.$iTopicID);
-				$_SESSION['forum_foutmelding']='U mag maar een keer stemmen.';
+				$_SESSION['melding']='U mag maar een keer stemmen.';
 			}
 		}else{
 			header('location: '.CSR_ROOT.'forum/onderwerp/'.$iTopicID);
-			$_SESSION['forum_foutmelding']='Onjuiste gegevens.';
+			$_SESSION['melding']='Onjuiste gegevens.';
 		}
 	}else{
 		header('location: '.CSR_ROOT.'forum/onderwerp/'.$iTopicID);
-		$_SESSION['forum_foutmelding']='U mag hier niet stemmen.';
+		$_SESSION['melding']='U mag hier niet stemmen.';
 	}
 }else{
 	header('location: '.CSR_ROOT.'forum/');
-	$_SESSION['forum_foutmelding']='Hier snap ik geen snars van (waar is het topicID?).';
+	$_SESSION['melding']='Hier snap ik geen snars van (waar is het topicID?).';
 }
 ?>

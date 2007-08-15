@@ -22,19 +22,7 @@ class ForumOnderwerpContent extends SimpleHTML {
 		$this->_forum=$bForumonderwerp;
 	}
 
-	function getError(){
-		if(isset($_SESSION['forum_foutmelding'])){
-			$sError='<div id="foutmelding">'.mb_htmlentities(trim($_SESSION['forum_foutmelding'])).'</div>';
-			//maar één keer tonen, de melding.
-			unset($_SESSION['forum_foutmelding']);
-			return $sError;
-		}elseif($this->_sError!==false){
-			return '<div class="foutmelding">'.$this->_sError.'</div>';
-		}
-	}
-	function setError($sError){
-		$this->_sError=trim($sError);
-	}
+	
 	public function citeer($iPostID){
 		//TODO: check of deze post wel bestaat, anders niets citeren.
 		$this->citeerPost=(int)$iPostID;
@@ -64,7 +52,7 @@ class ForumOnderwerpContent extends SimpleHTML {
 			//show title
 			echo '<h2>'.mb_htmlentities($this->_forum->getTitel()).'</h2>';
 			//eventuele foutmelding weergeven:
-			echo $this->getError();
+			echo $this->getMelding();
 			//topic mod dingen:
 			if($this->_forum->isModerator()){
 				echo "\r\n".'U mag dit onderwerp modereren:<br /> ';

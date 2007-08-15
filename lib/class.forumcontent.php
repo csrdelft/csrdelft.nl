@@ -13,7 +13,6 @@ class ForumContent extends SimpleHTML {
 	var $_actie;
 	var $_sTitel='forum';
 	
-	var $_sError=false;
 	var $_topicsPerPagina;
 	
 	function ForumContent($bForum, $actie){
@@ -29,7 +28,7 @@ class ForumContent extends SimpleHTML {
 		$aCategories=$this->_forum->getCategories();
 		//echo '<h2>Forum</h2>';
 		//eventuele foutmelding weergeven:
-		echo $this->getError();
+		echo $this->getMelding();
 		echo '<table class="forumtabel">
 			<tr>
 				<td class="forumhoofd">Forum</td>
@@ -91,7 +90,7 @@ class ForumContent extends SimpleHTML {
 			//echo $sNavigatieLinks;
 			
 			//eventuele foutmelding weergeven:
-			echo $this->getError();
+			echo $this->getMelding();
 			echo '<table class="forumtabel"><tr>';
 			echo '<td class="forumhoofd">Titel</td><td class="forumhoofd">Reacties</td>';
 			echo '<td class="forumhoofd">Auteur</td><td class="forumhoofd">verandering</td></tr>';
@@ -252,7 +251,7 @@ class ForumContent extends SimpleHTML {
 					<tr><td colspan="3" class="forumhoofd">Peiling toevoegen</td><td class="forumhoofd"></td></tr>
 					<tr><td colspan="4" class="forumtekst">';
 		//eventuele foutmelding weergeven.
-		echo $this->getError();
+		echo $this->getMelding();
 		echo '<strong>Vraag/stelling</strong><br />';
 		echo '<input type="text" name="titel" value="'.$sTitel.'" style="width: 100%" class="tekst" /><br />';
 		echo '</td></tr><tr><td colspan="4" class="forumtekst">';
@@ -373,19 +372,6 @@ class ForumContent extends SimpleHTML {
 		echo '<input type="submit" value="zoeken" name="verzenden" /></p></form><br />';
 	}
 	
-	function getError(){
-		if(isset($_SESSION['forum_foutmelding'])){
-			$sError='<div id="foutmelding">'.mb_htmlentities(trim($_SESSION['forum_foutmelding'])).'</div>';
-			//maar één keer tonen, de melding.
-			unset($_SESSION['forum_foutmelding']);
-			return $sError;
-		}elseif($this->_sError!==false){
-			return '<div class="foutmelding">'.$this->_sError.'</div>';
-		}
-	}
-	function setError($sError){
-		$this->_sError=trim($sError);
-	}
 	function viewWaarbenik(){
 		if(	($this->_actie=='topic' AND isset($_GET['topic'])) OR 
 				($this->_actie=='citeren' AND isset($_GET['post'])) ){

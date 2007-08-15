@@ -21,14 +21,14 @@ if(isset($_GET['post'])){
 	$forum->loadByPostID((int)$_GET['post']);
 	if($forum->keurGoed((int)$_GET['post'])){
 		header('location: '.CSR_ROOT.'forum/onderwerp/'.$forum->getID());
-		$_SESSION['forum_foutmelding']='Onderwerp of bericht nu voor iedereen zichtbaar.';
+		$_SESSION['melding']='Onderwerp of bericht nu voor iedereen zichtbaar.';
 	}else{
 		header('location: '.CSR_ROOT.'forum/onderwerp/'.$forum->getID());
-		$_SESSION['forum_foutmelding']='Goedkeuren ging mis.';
+		$_SESSION['melding']='Goedkeuren ging mis.';
 	}
 }else{
 	header('location: '.CSR_ROOT.'forum/');
-	$_SESSION['forum_foutmelding']='Geen postID gezet.';
+	$_SESSION['melding']='Geen postID gezet.';
 }
 
 ?>

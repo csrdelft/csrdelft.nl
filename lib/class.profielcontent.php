@@ -123,6 +123,7 @@ class ProfielContent extends SimpleHTML {
 			echo '<a href="/tools/stats.php?uid='.$this->_profiel['uid'].'" class="knop">overzicht van bezoeken</a> ';
 			echo '<a href="/intern/profiel/'.$this->_profiel['uid'].'/wachtwoord" class="knop"
 				onclick="return confirm(\'Weet u zeker dat u het wachtwoord van deze gebruiker wilt resetten?\')">reset wachtwoord</a>';
+			echo '<br />'.$this->getMelding();
 		}
 	}
 	function viewStateEdit(){

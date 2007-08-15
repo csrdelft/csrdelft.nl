@@ -233,7 +233,7 @@ class ForumOnderwerp extends Forum {
 	//Indien succesvol: nieuwe post-id komt terug. Anders false.
 	function addPost($tekst){
 		$tekst=$this->_db->escape(trim($tekst));
-		if($this->topicID==0){ die('ForumOnderwerp::addPost() geen onderwerp ingeladen'); }
+		if($this->iTopicID==0){ die('ForumOnderwerp::addPost() geen onderwerp ingeladen'); }
 		//het ip-adres bepalen van de post.
 		if(isset($_SERVER['REMOTE_ADDR'])){ $ip=$_SERVER['REMOTE_ADDR']; }else{ $ip='0.0.0.0'; }
  		//kijken of een moderatiestap nodig is...
@@ -333,7 +333,7 @@ class ForumOnderwerp extends Forum {
 			SET
 				open='".$status."'
 			WHERE
-				id=".$this->getTopicID()."
+				id=".$this->getID()."
 			LIMIT 1;";
 		return $this->_db->query($sTopicQuery);
 	}
@@ -350,7 +350,7 @@ class ForumOnderwerp extends Forum {
 			SET
 				plakkerig='".$status."'
 			WHERE
-				id=".$this->getTopicID()."
+				id=".$this->getID()."
 			LIMIT 1;";
 		return $this->_db->query($sTopicQuery);
 	}
