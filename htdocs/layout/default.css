@@ -23,9 +23,9 @@ div{ margin: 0px; padding: 0px; }
 textarea{
 	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
 	padding: 2px;
-	border: 1px solid darkgrey;
+	border: 1px solid #A9A9A9;
 }
-input, select{ padding-left: 2px; padding-right: 2px;	border: 1px solid darkgrey; font-size: 1em;} 
+input, select{ padding-left: 2px; padding-right: 2px;	border: 1px solid #A9A9A9; font-size: 1em;} 
 select{ padding-right: 0px; }
 
 th{ text-align: left; }
@@ -191,11 +191,10 @@ p img{ margin: 15px 10px; }
 
 a.knop{
 	background-color: #f5f5f5;  
-	border: 1px solid darkgrey;
+	border: 1px solid #A9A9A9;
 	margin: 2px; padding: 0px 2px 0px 2px;
 	line-height: 1.1em;
 }
-a.knop:hover{ background-color: darkgrey;}
 
 /* waarschuwing */
 .waarschuwing{ color: darkred; font-weight: bold;}
