@@ -11,23 +11,29 @@ require_once('class.forum.php');
 
 class ForumOnderwerp extends Forum {
 	
+	//het onderwerp wat het huidige is.
 	private $iTopicID=0;
-	private $aTopicProps=array();
-	
-	private $aPosts=array();
-	
-	private $sorteervolgorde='ASC';
-	
+	//eigenschappen van het onderwerp.
+	private $aTopicProps=false;
+	//posts in het onderwerp.
+	private $aPosts=false;
 	
 	function ForumOnderwerp(){
 		parent::Forum();
 	}
+	
+	//een onderwerp laden aan de hand van een zich in dat onderwerp bevindende post.
 	function loadByPostID($iPostID){ 
 		return $this->load($this->getTopicVoorPostID((int)$iPostID)); 
 	}
+	
+	//een onderwerp laden aan de hand van een ID.
+	//geeft true terug als het onderwerp succesvol geladen is en als het ingelogde lid
+	//het onderwerp mag bekijken.
 	function load($iTopicID){
 		$this->iTopicID=(int)$iTopicID;
-		//eerst de algemene topic en categorie-info laden
+		//bepalen of het onderwerp zichtbaar is en dus bekeken mag worden door het 
+		//huidige lid.
 		if($this->_lid->hasPermission('P_FORUM_MOD')){
 			$zichtBaarClause="( topic.zichtbaar='zichtbaar' OR topic.zichtbaar='wacht_goedkeuring' )";
 		}else{
@@ -57,17 +63,19 @@ class ForumOnderwerp extends Forum {
 				".$zichtBaarClause."
 			LIMIT 1;";
 		$rTopic=$this->_db->query($sTopicQuery);
-		$this->aTopicProps=$this->_db->result2array($rTopic);
-		$this->aTopicProps=$this->aTopicProps[0];
+		$this->aTopicProps=$this->_db->next($rTopic);
 		
-
 		if($this->_lid->hasPermission($this->aTopicProps['rechten_read']) OR $this->_lid->hasPermission('P_FORUM_MOD')){
+			//onderwerp mag worden gelezen, dan ook de posts ervoor inladen.
 			return $this->loadPosts();
 		}else{
-			//helaas, dit topic mag niet worden gelezen. 
+			//helaas, dit topic mag niet worden gelezen, geen posts laden, meteen
+			//false teruggeven. 
 			return false;
 		}
 	}
+	//posts inladen voor het huidige onderwerp. Kan enkel intern aangeroepen worden.
+	//geeft true terug als er een array uit komt.
 	private function loadPosts(){
 		$zichtBaarClause="post.zichtbaar='zichtbaar'";
 		if($this->_lid->hasPermission('P_FORUM_MOD')){ 
@@ -98,7 +106,7 @@ class ForumOnderwerp extends Forum {
 			AND
 				( ".$zichtBaarClause." ) 
 			ORDER BY
-				post.datum ".$this->sorteervolgorde.";";
+				post.datum ASC;";
 		$rPostsResult=$this->_db->query($sPostsQuery);
 		$this->aPosts=$this->_db->result2array($rPostsResult);
 		return is_array($this->aPosts);
@@ -136,6 +144,7 @@ class ForumOnderwerp extends Forum {
 	public function magBewerken($iPostID){
 		//FORUM_MOD mag alles bewerken
 		if($this->isModerator()){ return true;}
+		//niet ingeloggede mensen mogen nooit bewerken.
 		if($this->_lid->getUid()=='x999'){ return false;}
 		
 		//intern, nu nog of de huidige post mag.
@@ -149,6 +158,9 @@ class ForumOnderwerp extends Forum {
 		}
 	}
 	
+	//geeft een array met posts terug als die tenminste zijn ingeladen.
+	//Uitvoer van deze functie wordt gebruikt als afweging voor het wel 
+	//weergeven van het onderwerp dan wel een foutmelding.
 	function getPosts(){
 		if(is_array($this->aPosts) AND is_array($this->aTopicProps)){
 			return $this->aPosts;
@@ -188,6 +200,9 @@ class ForumOnderwerp extends Forum {
 		}
 	}	
 	
+	//voeg een onderwerp toe met een titel.
+	//Indien succesvol komt het zojuist ingevoerde onderwerp-id eruit, anders
+	//false.
 	function addTopic($titel){
 		$titel=$this->_db->escape(ucfirst($titel));
 		if(!$this->_lid->hasPermission('P_LOGGED_IN')){ 
@@ -214,10 +229,14 @@ class ForumOnderwerp extends Forum {
 		}
 	}
 	
+	//Een post toevoegen aan het huidige onderwerp.
+	//Indien succesvol: nieuwe post-id komt terug. Anders false.
 	function addPost($tekst){
 		$tekst=$this->_db->escape(trim($tekst));
-		
+		if($this->topicID==0){ die('ForumOnderwerp::addPost() geen onderwerp ingeladen'); }
+		//het ip-adres bepalen van de post.
 		if(isset($_SERVER['REMOTE_ADDR'])){ $ip=$_SERVER['REMOTE_ADDR']; }else{ $ip='0.0.0.0'; }
+ 		//kijken of een moderatiestap nodig is...
  		if(!$this->_lid->hasPermission('P_LOGGED_IN')){
  			$zichtbaarheid='wacht_goedkeuring';
  		}else{
@@ -266,7 +285,9 @@ class ForumOnderwerp extends Forum {
 			LIMIT 1;";
 		return $this->_db->query($sEditQuery);
 	}
-	//post verwijderen
+	
+	//post verwijderen.
+	//posts worden nooit echt verwijderd via de forumsoftware.
 	function deletePost($iPostID){
 		$iPostID=(int)$iPostID;
 		$sDeletePost="
@@ -283,6 +304,7 @@ class ForumOnderwerp extends Forum {
 			return false;
 		}
 	}
+	
 	//topic verwijderen
 	function deleteTopic(){
 		//dit moet vóór het verwijderen!
@@ -315,6 +337,7 @@ class ForumOnderwerp extends Forum {
 			LIMIT 1;";
 		return $this->_db->query($sTopicQuery);
 	}
+	
 	function togglePlakkerigheid(){
 		if($this->aTopicProps['plakkerig']=='0'){
 			$status='1';
@@ -331,6 +354,7 @@ class ForumOnderwerp extends Forum {
 			LIMIT 1;";
 		return $this->_db->query($sTopicQuery);
 	}
+	
 	function keurGoed($iPostID){
 		$iPostID=(int)$iPostID;
 		$sPostQuery="
@@ -351,10 +375,9 @@ class ForumOnderwerp extends Forum {
 				id=".$iTopicID."
 			LIMIT 1;";
 		//queries uitvoeren en stats voor topic opnieuw berekenen
-		return 
-			$this->_db->query($sPostQuery) AND $this->_db->query($sTopicQuery) AND 
-			$this->recountTopic();
+		return $this->_db->query($sPostQuery) AND $this->_db->query($sTopicQuery) AND $this->recountTopic();
 	}
+	
 	//dingen updaten voor het huidige topic 
 	function recountTopic(){
 		$sTopicStats="
