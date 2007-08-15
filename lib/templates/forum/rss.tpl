@@ -28,7 +28,7 @@
 		<managingEditor>PubCie@csrdelft.nl</managingEditor>
 		<webMaster>pubcie@csrdelft.nl</webMaster>
 		{foreach from=$aPosts item=post}<item>
-			<title>{$post.nickname|escape:'html'}:{$post.tekst|truncate:30}</title>
+			<title>{$post.nickname|escape:'html'}:{$post.tekst|truncate:30|escape:'html'}</title>
 			<link>http://csrdelft.nl/forum/onderwerp/{$post.topicID}#post{$post.postID}</link>
 			<description>{$post.tekst|escape:'html'}</description>
 			<author>{$post.nickname|escape:'html'} pubcie@csrdelft.nl</author>
