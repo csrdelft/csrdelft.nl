@@ -9,6 +9,7 @@ $forum = new ForumOnderwerp();
 //is er uberhaupt wel een postID welke bewerkt moet worden
 if(isset($_GET['post'])){
 	$iPostID=(int)$_GET['post'];
+	$forum->loadByPostID($iPostID);
 	//kijken of gebruiker dit bericht mag bewerken
 	if($forum->magBewerken($iPostID)){
 		if($_SERVER['REQUEST_METHOD']=='POST'){
@@ -18,7 +19,6 @@ if(isset($_GET['post'])){
 				header('location: '.CSR_ROOT.'forum/onderwerp/'.$iTopicID.'#post'.$iPostID);
 				exit;
 			}else{
-				//echo mysql_error();
 				require_once('class.forumcontent.php');
 				$midden = new ForumContent($forum, 'bewerk');
 			}
