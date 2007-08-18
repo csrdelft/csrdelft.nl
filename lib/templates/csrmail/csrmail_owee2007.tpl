@@ -90,8 +90,8 @@ a{
 <table>
 <tr>
 <td class="zijKolom" valign="top">
-<img src="http://plaetjes.csrdelft.nl/csrmail/logo_owee2007.gif" width="150" height="197" alt="logo van C.S.R." />
-<img src="http://plaetjes.csrdelft.nl/csrmail/balk_owee2007.gif" width="150px" height="100%" />
+<img src="http://plaetjes.csrdelft.nl/csrmail/logo_owee2007.jpg" width="150" 
+height="187" alt="OWee-courant" />
 </td>
 <td class="hoofdKolom">
 <h4><font size="-3" face="verdana">Inhoud</font></h4>
@@ -99,15 +99,7 @@ a{
 <tr>
 <td class="inhoudKolom" valign="top">
 <font face="verdana" size="-1">
-<div class="inhoudKop"><b>Bestuur</b></div>
-<ul>
-[inhoud-bestuur]
-</ul>
-</font>
-</td>
-<td class="inhoudKolom" valign="top">
-<font face="verdana" size="-1">
-<div class="inhoudKop"><b>C.S.R.</b></div>
+<div class="inhoudKop"><b>OWee</b></div>
 <ul>
 [inhoud-csr]
 </ul>
