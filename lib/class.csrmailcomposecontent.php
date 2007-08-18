@@ -23,7 +23,7 @@ Content-Type: text/html; charset=utf-8
 User-Agent: telnet localhost 25
 X-Complaints-To: pubcie@csrdelft.nl
 Approved: ".$instellingen['password']."
-Subject: C.S.R.-courant ".strftime('%e %B %Y')."\r\n\r\n";
+Subject: OWee-courant ".strftime('%e %B %Y')."\r\n\r\n";
 		return $sUitvoer;
 	}
 	
