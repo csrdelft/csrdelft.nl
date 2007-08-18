@@ -90,8 +90,8 @@ a{
 <table>
 <tr>
 <td class="zijKolom" valign="top">
-<img src="http://csrdelft.nl/images/csrmail/owee.gif" width="150" height="197" alt="logo van C.S.R." />
-<img src="http://csrdelft.nl/images/csrmail/balk_owee.gif" width="150px" height="100%" />
+<img src="http://plaetjes.csrdelft.nl/csrmail/logo_owee2007.gif" width="150" height="197" alt="logo van C.S.R." />
+<img src="http://plaetjes.csrdelft.nl/csrmail/balk_owee2007.gif" width="150px" height="100%" />
 </td>
 <td class="hoofdKolom">
 <h4><font size="-3" face="verdana">Inhoud</font></h4>
