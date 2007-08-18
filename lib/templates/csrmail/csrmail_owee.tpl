@@ -2,7 +2,7 @@
 
 <html>
 <head>
-  <title>C.S.R. post</title>
+  <title>OWee-Courant</title>
   <meta http-equiv='content-type' content='text/html; charset=UTF-8' />
   <meta name='author' content='pubCie der C.S.R. Delft' />
   <meta name='robots' content='index, follow' />

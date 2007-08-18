@@ -304,7 +304,7 @@ lib/tekst/verbanden.html -text
 lib/templates/bestuur.tpl -text
 lib/templates/csrdelft.tpl -text
 lib/templates/csrmail/csrmail.tpl -text
-lib/templates/csrmail/csrmail_owee2007.tpl -text
+lib/templates/csrmail/csrmail_owee.tpl -text
 lib/templates/forum/rss.tpl -text
 lib/templates/maaltijdbeheer.tpl -text
 lib/templates/maaltijdform.tpl -text
