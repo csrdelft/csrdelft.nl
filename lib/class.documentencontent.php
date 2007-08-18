@@ -288,11 +288,11 @@ class DocumentenContent extends SimpleHTML {
 						$row.='/'.$catid;
 					}
 					$row.='#bewerk">'."\n" // de jump-ketser
-					.'<img class="button" src="http://plaetjes.csrdelft.nl/forum/bewerken.png" /></a>'."\n"
+					.'<img class="button" src="'.CSR_PICS.'forum/bewerken.png" /></a>'."\n"
 
 					// verwijderen:
 					.'<a onclick="return confirm(\''.$confirmString.'\')" href="'.$sLinkPrefix.'verwijderen/'.$docid.'">'."\n"
-					.'<img class="button" src="http://plaetjes.csrdelft.nl/forum/verwijderen.png" /></a>'."\n"
+					.'<img class="button" src="'.CSR_PICS.'forum/verwijderen.png" /></a>'."\n"
 
 					// toevoegen:
 					.'<a href="'.$sLinkPrefix.'toevoegen/'.$docid;
@@ -302,7 +302,7 @@ class DocumentenContent extends SimpleHTML {
 						$row.='/'.$catid;
 					}
 					$row.='#voegtoe">'."\n"
-					.'<img class="button" src="http://plaetjes.csrdelft.nl/documenten/plus.jpg" /></a>'."\n"
+					.'<img class="button" src="'.CSR_PICS.'documenten/plus.jpg" /></a>'."\n"
 
 					.'</td></tr>'."\n";
 					

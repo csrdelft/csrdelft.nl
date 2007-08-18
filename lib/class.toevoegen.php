@@ -10,7 +10,8 @@ define("UPLOAD_CUSTOM_ERR_NO_TITLE", 30);
 define("UPLOAD_CUSTOM_ERR_NO_CATEGORY", 31);
 define("UPLOAD_CUSTOM_ERR_TITLE_EXISTS", 32);
 define("UPLOAD_CUSTOM_ERR_INSERT_FAILED", 33);
-
+//TODO: kijk eens naar het uploaden van een plaatje bij het nieuws, en zie dat het een stuk 
+//eenvoudiger kan...
 class Toevoegen {
 	var $errorcodes;
 	var $_db;
@@ -86,7 +87,7 @@ class Toevoegen {
 	
 	//the upload-function
 	function uploadFiles($singleMode=false) {
-		$homedir	= '/srv/www/www.csrdelft.nl/data/leden/documenten/uploads/'; // upload-directory
+		$homedir	= DATA_PATH.'/leden/documenten/uploads/'; // upload-directory
 		$maxfilesize = 10*1024*1024; // maximum file size, checked by this scipt
 		$filenamepattern = '/[a-zA-Z0-6\-_]/';
 		$date = date('Y-m-d'); // de datum voor de db-insert
