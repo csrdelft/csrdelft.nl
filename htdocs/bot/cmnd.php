@@ -134,7 +134,7 @@ switch ($action) {
         # nu array bouwen van naam en uid
         $result = array();
         foreach ($leden as $l)
-           $result[] = $l['uid'] . " " . $lid->getNaamLink($l['uid'], 'full', false, $l);
+           $result[] = $l['uid'] . " " . $lid->getNaamLink($l['uid'], 'full', false, $l, false);
         echo json_encode($result);
         break;
     default:
