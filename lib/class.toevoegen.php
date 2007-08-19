@@ -87,7 +87,7 @@ class Toevoegen {
 	
 	//the upload-function
 	function uploadFiles($singleMode=false) {
-		$homedir	= DATA_PATH.'/leden/documenten/uploads/'; // upload-directory
+		$homedir = DATA_PATH.'/documenten/uploads/'; // upload-directory
 		$maxfilesize = 10*1024*1024; // maximum file size, checked by this scipt
 		$filenamepattern = '/[a-zA-Z0-6\-_]/';
 		$date = date('Y-m-d'); // de datum voor de db-insert

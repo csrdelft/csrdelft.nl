@@ -18,7 +18,7 @@ class NeerladenContent{
 		$filename = $aDocData['bestandsnaam'];
 		
 		// de gegevens combineren en alles verzamelen
-		$path = DATA_PATH.'/leden/documenten/uploads/'.$catid.'/'.$filename;
+		$path = DATA_PATH.'/documenten/uploads/'.$catid.'/'.$filename;
 		$ext = $this->_neerladen->getExtension($filename);
 		$mime = $this->_neerladen->getMimeType($ext);
 
