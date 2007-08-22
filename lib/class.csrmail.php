@@ -241,11 +241,11 @@ class Csrmail {
 						pubciemailID, titel, cat, bericht, volgorde, uid, datumTijd
 					)VALUES(
 						".$iPubciemailID.", 
-						'".$aBericht['titel']."', 
-						'".$aBericht['cat']."', 
-						'".$aBericht['bericht']."', 
+						'".addslashes($aBericht['titel'])."', 
+						'".addslashes($aBericht['cat'])."', 
+						'".addslashes($aBericht['bericht'])."', 
 						'".$aBericht['volgorde']."',
-						'".$aBericht['uid']."',
+						'".addslashes($aBericht['uid'])."',
 						'".$aBericht['datumTijd']."'
 					);";
 				$this->_db->query($sMoveQuery);
@@ -279,12 +279,17 @@ class Csrmail {
 		}
 	}
 	
-	function getArchiefmails(){
+	function getArchiefmails($iJaar = null){
+		if($iJaar!=null){
+			$sQueryJaar="WHERE YEAR(verzendMoment) = ".$iJaar;
+		}
+		
 		$sArchiefQuery="
 			SELECT
 				ID, verzendMoment, verzender
 			FROM 
 				pubciemail
+			".$sQueryJaar."
 			ORDER BY 
 				verzendMoment DESC;";
 		$rArchief=$this->_db->query($sArchiefQuery);
@@ -293,7 +298,17 @@ class Csrmail {
 		}else{
 			return $this->_db->result2array($rArchief);
 		}
-	}	
+	}
+	
+	function getArchiefjaren(){
+		$sJarenQuery="
+			SELECT
+				DISTINCT YEAR(verzendMoment) AS jaar
+			FROM
+				pubciemail
+			ORDER BY
+				verzendMoment DESC;";
+	}
 	
 	function getVerzendmoment($iMailID){
 		$sVerzendmomentQuery="
