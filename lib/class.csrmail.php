@@ -241,11 +241,11 @@ class Csrmail {
 						pubciemailID, titel, cat, bericht, volgorde, uid, datumTijd
 					)VALUES(
 						".$iPubciemailID.", 
-						'".$db->escape($aBericht['titel'])."', 
-						'".$db->escape($aBericht['cat'])."', 
-						'".$db->escape($aBericht['bericht'])."', 
+						'".$this->_db->escape($aBericht['titel'])."', 
+						'".$this->_db->escape($aBericht['cat'])."', 
+						'".$this->_db->escape($aBericht['bericht'])."', 
 						'".$aBericht['volgorde']."',
-						'".$db->escape($aBericht['uid'])."',
+						'".$this->_db->escape($aBericht['uid'])."',
 						'".$aBericht['datumTijd']."'
 					);";
 				$this->_db->query($sMoveQuery);
