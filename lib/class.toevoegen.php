@@ -151,7 +151,7 @@ class Toevoegen {
 					continue;
               	}
               	
-              	// Wel geldige bestandsnaam
+              	// Valid filename
               	
 				// Already-exist-check voor file
 				$destination = $homedir.$cat.'/'.$filename;
@@ -171,8 +171,13 @@ class Toevoegen {
 				if(isset($move) && $move) {
 					$this->errorcodes[$counter] = UPLOAD_CUSTOM_ERR_SUCCEEDED;
                    	
-					if(!$singleMode){
-	                   	//db insert
+					if(!$singleMode) {
+						// The filename must be saved with html-entities so the query and the HTML-header won't
+						// experience abnormal behaviour
+						// The title has been altered already. The filename cannot be done earlier because
+						// you don't want any HTML in the filesystem.
+						$filename = mb_htmlentities($filename);
+	                   	// DB insert
 	                   	if(! $this->addDocument($title, $cat, $date, $filename, $this->_lid->getUid()) ) {
 	                   		$this->errorcodes[$counter] = UPLOAD_CUSTOM_ERR_INSERT_FAILED;
 						}
@@ -193,23 +198,15 @@ class Toevoegen {
 	}
 	
 	function getNumberOfErrors($errorcodes){
-//		if(!isset($errorcodes) || !is_array($errorcodes) || empty($errorcodes)){
-//			return -1;
-//		}
-//		if(isset($errorcodes[0])){
-//			return 1;
-//		}
 		$counter=0;
 		$noFile=0;
 		foreach($errorcodes as $error){
-//			echo '<script language="javascript">alert(\'error = '.$error.'\')</script>';
 			if($error!=UPLOAD_CUSTOM_ERR_SUCCEEDED && $error!=UPLOAD_ERR_NO_FILE){
 				$counter++;
 			} else if($error==UPLOAD_ERR_NO_FILE){
 				$noFile++;				
 			}
 		}
-//		echo '<script language="javascript">alert(\'returning: '.$counter.'\')</script>';
 		if(count($errorcodes)==$noFile){
 			return -1;
 		} else {
@@ -236,7 +233,7 @@ class Toevoegen {
 		return $rCats;
 	}
 
-	//fills the dropdown-menu for categories
+	// Fills the dropdown-menu for categories
 	// parameter is an integer
 	function getCatsOptions($selectedCat=0) {
 		$rCats = $this->getCats('naam');
