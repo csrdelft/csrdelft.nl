@@ -172,11 +172,10 @@ class Toevoegen {
 					$this->errorcodes[$counter] = UPLOAD_CUSTOM_ERR_SUCCEEDED;
                    	
 					if(!$singleMode) {
-						// The filename must be saved with html-entities so the query and the HTML-header won't
-						// experience abnormal behaviour
+						// The filename must be escaped so the query will be accepted any time
 						// The title has been altered already. The filename cannot be done earlier because
-						// you don't want any HTML in the filesystem.
-						$filename = mb_htmlentities($filename);
+						// it has to be saved properly on the filesystem.
+						$filename = mysql_real_escape_string($filename);
 	                   	// DB insert
 	                   	if(! $this->addDocument($title, $cat, $date, $filename, $this->_lid->getUid()) ) {
 	                   		$this->errorcodes[$counter] = UPLOAD_CUSTOM_ERR_INSERT_FAILED;
