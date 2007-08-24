@@ -125,12 +125,14 @@ switch ($action) {
     case 'perms':
         echo json_encode(array($lid->getPermissions()));
         break;
+    case 'zoekoud':
     case 'zoek':
         if (!isset($_GET['zoekterm'])) {
             echo "[]";
             break;
         }
-        $leden = $lid->zoekLeden(urldecode($_GET['zoekterm']), 'naam', 'alle', 'uid', 'leden');
+        $status = ($action == 'zoek') ? 'leden' : 'oudleden';
+        $leden = $lid->zoekLeden(urldecode($_GET['zoekterm']), 'naam', 'alle', 'uid', $status);
         # nu array bouwen van naam en uid
         $result = array();
         foreach ($leden as $l)

@@ -213,7 +213,10 @@ examples.add('csr-profiel', handle_profiel.__doc__, '1) profiel 2) profiel 9808'
 def handle_zoek(bot, ievent):
     """ zoeken in de ledenlijst """
     username = users.getname(ievent.userhost)
-    request = CsrRequest('zoek', username)
+    if ievent.cmnd == 'csr-zoek':
+        request = CsrRequest('zoek', username)
+    else:
+        request = CsrRequest('zoekoud', username)
     if not ievent.rest:
         ievent.missing('<zoekterm>')
         return
@@ -228,6 +231,9 @@ def handle_zoek(bot, ievent):
 
 cmnds.add('csr-zoek', handle_zoek, 'CSRDELFT')
 examples.add('csr-zoek', handle_zoek.__doc__, 'csr-zoek piet')
+
+cmnds.add('csr-zoekoud', handle_zoek, 'CSRDELFT')
+examples.add('csr-zoekoud', 'zoeken in de oudledenlijst', 'csr-zoekoud piet')
 
 def handle_whoami(bot, ievent):
     """ wie ben ik? """
