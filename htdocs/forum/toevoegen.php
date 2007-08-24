@@ -55,7 +55,7 @@ if($forum->magPosten()){
 	if(strlen(trim($_POST['bericht']))>0){
 		if($forum->addPost($_POST['bericht'])!==false){
 			if($forum->isModerated()){
-				header('location: '.CSR_ROOT.'forum/categorie/'.$forum->getCatID().'#laatste');
+				header('location: '.CSR_ROOT.'forum/categorie/'.$forum->getCatID());
 				$_SESSION['melding']='Uw bericht is verwerkt, het zal binnenkort goedgekeurd worden.';
 			}else{
 				header('location: '.CSR_ROOT.'forum/onderwerp/'.$forum->getID().'#laatste');
