@@ -16,7 +16,7 @@
 			{$profhtml.adres}<br />
 			{$profhtml.postcode} {$profhtml.woonplaats}<br />
 			{$profhtml.land}<br />
-			<a href="http://maps.google.nl/maps?daddr={$profhtml.adres|replace:' ':'+'}+{$profhtml.woonplaats}+netherlands">kaart</a>
+			<a href="http://maps.google.nl/maps?daddr={$profhtml.adres|urlencode}+{$profhtml.woonplaats|urlencode}+{$profhtml.land|urlencode}">kaart</a>
 		</td>
 		<td>
 			E-mail: {$profhtml.email}<br />
@@ -48,7 +48,7 @@
 				{$profhtml.o_postcode} {$profhtml.o_woonplaats}<br />
 				{$profhtml.o_land}<br />
 				{$profhtml.o_telefoon}<br />
-				<a href="http://maps.google.nl/maps?daddr={$profhtml.o_adres|replace:' ':'+'}+{$profhtml.o_woonplaats}+netherlands">kaart</a>
+				<a href="http://maps.google.nl/maps?daddr={$profhtml.o_adres|urlencode}+{$profhtml.o_woonplaats|urlencode}+{$profhtml.o_land|urlencode}">kaart</a>
 			{else}
 				{$profhtml.beroep}
 			{/if}
