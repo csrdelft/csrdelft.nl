@@ -23,11 +23,13 @@ if(!isset($_POST['bericht'])){
 //een nieuw topic toevoegen?
 if(!isset($_GET['topic']) AND isset($_GET['forum'])){
 	$forum->setCat((int)$_GET['forum']);
+
 	if(strlen(trim($_POST['titel']))<1){
 		header('location: '.CSR_ROOT.'forum/');
 		$_SESSION['melding']='De titel mag niet leeg zijn.';
 		exit;
 	}
+
 	//addTopic laadt zelf de boel in die hij net heeft toegevoegd...
 	if($forum->addTopic($_POST['titel'])===false){
 		header('location: '.CSR_ROOT.'forum/');
@@ -53,7 +55,7 @@ if($forum->magPosten()){
 	if(strlen(trim($_POST['bericht']))>0){
 		if($forum->addPost($_POST['bericht'])!==false){
 			if($forum->isModerated()){
-				header('location: '.CSR_ROOT.'forum/onderwerp/'.$forum->getID().'#laatste');
+				header('location: '.CSR_ROOT.'forum/categorie/'.$forum->getCatID().'#laatste');
 				$_SESSION['melding']='Uw bericht is verwerkt, het zal binnenkort goedgekeurd worden.';
 			}else{
 				header('location: '.CSR_ROOT.'forum/onderwerp/'.$forum->getID().'#laatste');

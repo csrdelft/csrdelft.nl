@@ -17,13 +17,13 @@ class MySql{
 	
 	private function __construct(){ $this->connect(); }
   
-  static function get_MySql(){
-    //als er nog geen instantie gemaakt is, die nu maken
-    if(!isset(MySql::$Mysql)){
+	static function get_MySql(){
+    	//als er nog geen instantie gemaakt is, die nu maken
+    	if(!isset(MySql::$Mysql)){
 			MySql::$Mysql = new MySql();
 		}
-    return MySql::$Mysql;
-  }
+    	return MySql::$Mysql;
+	}
 	private function connect() {
 		$cred = parse_ini_file(ETC_PATH.'/mysql.ini');
 		$this->_db = mysql_connect($cred['host'], $cred['user'], $cred['pass'])
@@ -41,7 +41,6 @@ class MySql{
 
  	# Retourneert het MySql resultaat bij de opgegeven Query
 	public function query($query) {
-		if (!$this->_db) $this->connect();
 		return mysql_query($query, $this->_db);
 	}
 
@@ -89,7 +88,6 @@ class MySql{
 	# String $table : de tabelnaam
 	# String $sqldata[$column] = $value
 	public function insert_a($table, &$sqldata) {
-		if (!$this->_db) $this->connect();
 		$q1 = "";
 		$q2 = "";
 		foreach ($sqldata as $column => $value) {
@@ -113,7 +111,6 @@ class MySql{
 	# String $sqldata[$column] = $value
 	# NB: API verandering!!! idkolom!!!
 	public function update_a($table, $idkolom, $id, &$sqldata) {
-		if (!$this->_db) $this->connect();
 		$q1 = "";
 		foreach ($sqldata as $column => $value) {
 			$q1 .= $column."='".$value."', ";
@@ -142,7 +139,6 @@ class MySql{
 	# String $table : de tabelnaam
 	# int $id : regel-id
 	public function delete($table, $id) {
-		if (!$this->_db) $this->connect();
 		$id=(int)$id;
 		$this->query("DELETE FROM `".$table."` WHERE `id`=".$id.";");
 	}

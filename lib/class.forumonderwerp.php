@@ -32,13 +32,6 @@ class ForumOnderwerp extends Forum {
 	//het onderwerp mag bekijken.
 	function load($iTopicID){
 		$this->iTopicID=(int)$iTopicID;
-		//bepalen of het onderwerp zichtbaar is en dus bekeken mag worden door het 
-		//huidige lid.
-		if($this->_lid->hasPermission('P_FORUM_MOD')){
-			$zichtBaarClause="( topic.zichtbaar='zichtbaar' OR topic.zichtbaar='wacht_goedkeuring' )";
-		}else{
-			$zichtBaarClause="topic.zichtbaar='zichtbaar'";
-		}
 		$sTopicQuery="
 			SELECT
 				categorie.id AS categorieID,
@@ -60,7 +53,7 @@ class ForumOnderwerp extends Forum {
 			WHERE
 				topic.id=".$this->getID()."
 			AND
-				".$zichtBaarClause."
+				topic.zichtbaar='zichtbaar' OR topic.zichtbaar='wacht_goedkeuring'
 			LIMIT 1;";
 		$rTopic=$this->_db->query($sTopicQuery);
 		$this->aTopicProps=$this->_db->next($rTopic);
