@@ -9,24 +9,30 @@
 
 class Csrmail {
 	
-	var $_db;
-	var $_lid;
+	private $_db;
+	private $_lid;
 	
-	function Csrmail(&$lid, &$db){
-		# databaseconnectie openen
-		$this->_lid =& $lid;
-		$this->_db =& $db;
+	private $categorieen=array('bestuur', 'csr', 'overig', 'voorwoord');
+	
+	function Csrmail(){
+		$this->_lid=Lid::get_lid();
+		$this->_db=MySql::get_MySql();
 	}
 	
 	function magToevoegen(){ return $this->_lid->hasPermission('P_MAIL_POST'); }
 	function magBeheren(){ return $this->_lid->hasPermission('P_MAIL_COMPOSE'); }
 	function magVerzenden(){ return $this->_lid->hasPermission('P_MAIL_SEND'); }
+	
+	function _isValideCategorie($categorie){ return in_array($categorie, $this->categorieen); }
+		
 	function getNaam($uid){ return $this->_lid->getCivitasName($uid); }
 	
 	function addBericht( $titel, $categorie, $bericht){
 		$titel=ucfirst($this->_db->escape(trim($titel)));
 		$volgorde=0;
+		//agenda altijd helemaal bovenaan
 		if(strtolower(trim($titel))=='agenda'){ $volgorde=-1000; }
+		//andere dingen naar achteren
 		if(preg_match('/kamer/i', $titel)){ $volgorde=99; }
 		if(preg_match('/ampel/i', $titel)){ $volgorde=999; }
 		if(!$this->_isValideCategorie($categorie)){ $categorie='overig'; }
@@ -93,14 +99,7 @@ class Csrmail {
 		return $bValid;
 	}
 	
-	function _isValideCategorie($categorie){
-		$aToegelatenCategorieen=array('bestuur', 'csr', 'overig', 'voorwoord');
-		if(in_array($categorie, $aToegelatenCategorieen)){
-			return true;
-		}else{
-			return false;
-		}
-	}
+
 	
 	function getBerichtenVoorGebruiker(){
 		$sVoorwaarde='1';
@@ -214,14 +213,13 @@ class Csrmail {
 					cat, volgorde, datumTijd;";
 		}
 		$rBerichten=$this->_db->query($sBerichtenQuery);
-		if($this->_db->numRows($rBerichten)==0){
-			$aBerichten=false;
-		}else{
+		if($this->_db->numRows($rBerichten)>=1){
 			while($aData=$this->_db->next($rBerichten)){
 				$aBerichten[]=$aData;
 			}
+			return $aBerichten;
 		}
-		return $aBerichten;
+		return false;
 	}
 	
 	/*
@@ -268,9 +266,9 @@ class Csrmail {
 			INSERT INTO
 				pubciemail
 			( 
-				verzendMoment, verzender 
+				verzendMoment, verzender, template
 			) VALUES (
-				'".$datumTijd."', '".$uid."'
+				'".$datumTijd."', '".$uid."', '".CSRMAIL_TEMPLATE."'
 			);";
 		if($this->_db->query($sCreatePubciemailQuery)){
 			return $this->_db->insert_id();

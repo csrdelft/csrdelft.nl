@@ -7,9 +7,10 @@
 
 require_once ('class.mysql.php');
 
-class Csrmailcontent {
+class Csrmailcontent extends SimpleHTML{
 	
-	var $_csrmail;				//db object voor de csrmail
+	private $ubb;
+	private $_csrmail;				//db object voor de csrmail
 	
 	var $_edit=0;				//bericht wat bewerkt moet worden.
 	
@@ -23,11 +24,12 @@ class Csrmailcontent {
 			$this->_userMessage=trim($_SESSION['csrmail_error']);
 			unset($_SESSION['csrmail_error']);
 		}
+		$this->ubb=new CsrUBB();
 	}
 	//functie die gebruikt wordt voor het bewerken van bestaande en het maken van nieuwe berichten.
 	function _geefBerichtInvoerVeld($titel, $categorie, $bericht, $ID=0){
 		echo '<form method="post" action="?ID='.$ID.'" ><div id="pubciemail_form">';
-		if($this->_sError!==false){ echo '<div class="foutmelding">'.$this->_sError.'</div>'; }
+		if($this->_sError!==false){ echo '<div id="melding">'.$this->_sError.'</div>'; }
 		echo '<strong>Titel:</strong><br />';
 		echo '<input type="text" name="titel" value="'.htmlspecialchars($titel).'" style="width: 100%;" class="tekst" />';
 		echo '<br /><br /><strong>Categorie:</strong><br />';
@@ -42,7 +44,7 @@ class Csrmailcontent {
 		if(trim($categorie)=='')
 			$categorie='overig';
 		foreach($aOpties as $aOptie){
-			if(!($aOptie[0]=='voorwoord' AND !$this->_csrmail->_lid->hasPermission('P_MAIL_COMPOSE'))){
+			if(!($aOptie[0]=='voorwoord' AND !$this->_csrmail->magBeheren())){
 				if($aOptie[0]==$categorie){
 					echo '<option value="'.$aOptie[0].'" selected="selected">'.$aOptie[1].'</option>';
 				}else{
@@ -52,6 +54,7 @@ class Csrmailcontent {
 		}
 		echo '</select><br /><br /><strong>Bericht:</strong><br />';
 		echo '<textarea name="bericht" cols="80" style="width: 100%;" rows="15" class="tekst">';
+		//bericht htmlspecialchars()-en zodat het het formulier niet sloopt.
 		echo htmlspecialchars($bericht);
 		echo '</textarea>';
 		echo '<input type="submit" name="verzendenMeer" value="opslaan" class="tekst" /></div></form>';
@@ -106,7 +109,7 @@ class Csrmailcontent {
 				echo '[ <a href="bewerken/'.$aBericht['ID'].'">bewerken</a> | ';
 				echo '<a href="verwijder/'.$aBericht['ID'].'" onclick="return confirm(\'Weet u zeker dat u dit bericht wilt verwijderen?\')" >verwijderen</a> ]</dt>';
 				if(!$this->_csrmail->magBeheren()){
-					echo '<dd>'.$this->_process($aBericht['bericht']).'</dd>';
+					echo '<dd>'.$this->ubb->getHTML($aBericht['bericht']).'</dd>';
 				}
 			}
 			echo '</dl>';
@@ -114,26 +117,14 @@ class Csrmailcontent {
 			echo 'U heeft nog geen berichten geplaatst in deze C.S.R.-courant;';
 		}
 	}
-	function _process($sString){
-		$sString=stripslashes($sString);
-		$sString=mb_htmlentities($sString);
-		$sString=trim($sString);
-		 $aUbbCodes=array(
-      array("[b]", "<strong>"), array("[/b]", "</strong>"),
-      array("[i]", "<em>"), array("[/i]", "</em>"),
-      array("[u]", "<span class=\"onderlijn\">"), array("[/u]", "</span>"));
-    foreach($aUbbCodes as $ubbCode){
-    	$sString=str_replace($ubbCode[0], $ubbCode[1], $sString);
- 		}
-		//linkjes
-		$sString=eregi_replace("\\[url=([^\\[]*)\]([^\\[]*)\\[/url\\]","<a href=\"\\1\" >\\2</a>", $sString);
-		$sString=eregi_replace("\\[img\]([^\\[]*)\\[/img\\]","<img src=\"\\1\" />", $sString);
-		$sString=nl2br($sString);
-		return $sString;
-	}
 	function _getBody($iMailID=0){
-		$sTemplate=file_get_contents(LIB_PATH.'/templates/csrmail/'.CSRMAIL_TEMPLATE);
 		$aBerichten=$this->_csrmail->getBerichten($iMailID);
+		if(isset($aBerichten[0]['template'])){
+			$sTemplate=$aBerichten[0]['template'];
+		}else{
+			$sTemplate=CSRMAIL_TEMPLATE;
+		}
+		$sTemplate=file_get_contents(LIB_PATH.'/templates/csrmail/'.$sTemplate);
 		if(is_array($aBerichten)){
 			//lege array's klussen voor als er geen data is voor de categorie
 			$aInhoud['bestuur']=$aInhoud['csr']=$aInhoud['overig']='';
@@ -149,9 +140,10 @@ class Csrmailcontent {
 			}
 			reset($aBerichten);
 			$sBerichten='';
+
 			foreach($aBerichten as $aBericht){
-				$sBerichten.='<h4><a name="'.$aBericht['ID'].'"></a>'.$this->_process($aBericht['titel']) .'</h4>'."\r\n";
-				$sBerichten.='<p>'.$this->_process($aBericht['bericht']).'</p>'."\r\n";
+				$sBerichten.='<h4><a name="'.$aBericht['ID'].'"></a>'.$this->ubb->getHTML($aBericht['titel']) .'</h4>'."\r\n";
+				$sBerichten.='<p>'.$this->ubb->getHTML($aBericht['bericht']).'</p>'."\r\n";
 			}   
 			$sTemplate=str_replace('[inhoud-bestuur]', $aInhoud['bestuur'], $sTemplate);
 			$sTemplate=str_replace('[inhoud-csr]', $aInhoud['csr'], $sTemplate);
