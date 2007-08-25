@@ -51,7 +51,7 @@ switch ($action) {
         if (count($verjvandaag) > 0) {
             $result = array();
             foreach ($verjvandaag as $verj)
-                $result[] = $lid->getNaamLink($verj['uid'], 'full', false, $verj);
+                $result[] = $lid->getNaamLink($verj['uid'], 'civitas', false, $verj);
             echo json_encode($result);
         } else
             echo "[]";
@@ -63,7 +63,7 @@ switch ($action) {
         if (count($verj10) > 0) {
             $result = array();
             foreach ($verj10 as $verj) {
-                $naam = $lid->getNaamLink($verj['uid'], 'full', false, $verj);
+                $naam = $lid->getNaamLink($verj['uid'], 'civitas', false, $verj);
                 $datum = date("j-n", mktime(0,0,0,date('m'),date('j')+$verj['jarig_over']));
                 # ugly
                 $result[] = sprintf('%s %s (%s)', $datum, $naam, $verj['leeftijd']);
@@ -72,6 +72,7 @@ switch ($action) {
         } else
             echo "[]";
         break;
+
     case 'getprofiel':
         # profiel opvragen van iemand anders mag ook, mits...
         if (isset($_GET['getuid']) and $_GET['getuid'] != $uid) {
@@ -119,12 +120,15 @@ switch ($action) {
         echo json_encode($result);
 
         break;
+
     case 'whoami':
         echo json_encode(array($lid->getFullName()));
         break;
+
     case 'perms':
         echo json_encode(array($lid->getPermissions()));
         break;
+
     case 'zoekoud':
     case 'zoek':
         if (!isset($_GET['zoekterm'])) {
@@ -136,9 +140,103 @@ switch ($action) {
         # nu array bouwen van naam en uid
         $result = array();
         foreach ($leden as $l)
-           $result[] = $l['uid'] . " " . $lid->getNaamLink($l['uid'], 'full', false, $l, false);
+           $result[] = $l['uid'] . " " . $lid->getNaamLink($l['uid'], 'civitas', false, $l, false);
         echo json_encode($result);
         break;
+
+    case 'maallijst':
+        require_once('class.maaltrack.php');
+        $maaltrack = new MaalTrack($lid, $db);
+        # opvragen komende maaltijden + onze status (zijn we ingeschreven etc)
+        $nu=time();
+        $lijst = $maaltrack->getMaaltijden($nu-7200, $nu+MAALTIJD_LIJST_MAX_TOT);
+        # we maken een lijstje met tekst die zo door de bot als list geprint kan worden
+        # $id) $datum, $tekst ($status) (MAX!)?
+        $botlijst = array();
+        foreach ($lijst as $l) {
+            if ($l['gesloten']) $error = ' GESLOTEN';
+            elseif ($l['max'] <= $l['aantal']) $error = ' VOL';
+            else $error = '';
+
+            if ($l['status'] == '') $l['status'] = 'AF';
+
+            $botlijst[] = sprintf('%s) %s, %s (%s)%s'
+                , $l['id']
+                , strftime('%a %e %B %H:%I', $l['datum'])
+                , $l['tekst']
+                , $l['status']
+                , $error
+            );
+        }
+        echo json_encode($botlijst);
+        break;
+
+    case 'maalaan':
+        if (!isset($_GET['maalid'])) {
+            echo "[]";
+            break;
+        }
+        $maalid = $_GET['maalid'];
+        require_once('class.maaltrack.php');
+        $maaltrack = new MaalTrack($lid, $db);
+
+        # iemand anders aanmelden mag ook, mits...
+        $proxyuid = '';
+        if (isset($_GET['proxyuid']) and $_GET['proxyuid'] != $uid) {
+            # ...er permissie is om dat te doen
+            if (!$lid->hasPermission('P_MAAL_WIJ')
+                 or !$lid->uidExists($_GET['proxyuid']) ) {
+                echo "[]";
+                break;
+            }
+            $proxyuid = $_GET['proxyuid'];
+        }
+        $result = array();
+        if ($maaltrack->aanmelden($maalid, $proxyuid)) {
+            $maalinfo = $maaltrack->getMaaltijd($maalid);
+
+            $wie = 'U bent';
+            if ($proxyuid != '') {
+                $wie = $lid->getNaamLink($proxyuid, 'civitas', false, false, false);
+            }
+
+            $result['answer'] = sprintf('%s aangemeld voor de maaltijd op %s'
+                , $wie
+                , strftime('%a %e %B %H:%I', $maalinfo['datum'])
+            );
+        } else {
+            if ($proxyuid != '')
+                $result['answer'] = $maaltrack->getProxyError();
+            else
+                $result['answer'] = $maaltrack->getError();
+        }
+        echo json_encode($result);
+        break;
+
+    case 'maalaf':
+        if (!isset($_GET['maalid'])) {
+            echo "[]";
+            break;
+        }
+        $maalid = $_GET['maalid'];
+        require_once('class.maaltrack.php');
+        $maaltrack = new MaalTrack($lid, $db);
+        $result = array();
+        if ($maaltrack->afmelden($maalid)) {
+            $maalinfo = $maaltrack->getMaaltijd($maalid);
+            $result['answer'] = sprintf('U bent afgemeld voor de maaltijd op %s'
+                , strftime('%a %e %B %H:%I', $maalinfo['datum'])
+            );
+        } else {
+            $result['answer'] = $maaltrack->getError();
+        }
+        echo json_encode($result);
+        break;
+
+    case 'fout':
+        echo 2/0;
+        break;
+
     default:
         echo "[]";
 }

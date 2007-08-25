@@ -19,8 +19,8 @@ class MaalTrack {
 	# Ingelogde persoon
 	var $_lid;
 	# evt. foutboodschap
-	var $_error;
-	var $_proxyerror;
+	var $_error = '';
+	var $_proxyerror = '';
 
 	function MaalTrack(&$lid, &$db) {
 		$this->_lid =& $lid;

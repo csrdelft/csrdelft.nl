@@ -16,7 +16,7 @@ from gozerbot.persist import Persist
 
 from urllib import urlencode
 
-import simplejson, re, os, urllib2
+import simplejson, re, os, urllib2, string
 
 plughelp.add('csrdelft', 'functionaliteit voor C.S.R. leden')
 
@@ -67,16 +67,19 @@ class CsrRequest:
             resultstring = result.read()
             self.info = result.info()
             result.close()
+            try:
+                self.result = simplejson.loads(resultstring)
+            except (TypeError, ValueError):
+                if resultstring:
+                    self.error = string.replace(resultstring, "\n", "") # replace newlines by nothing
+                else:
+                    self.error = 'malformed server response'
+                return False
         except urllib2.URLError, e:
             if hasattr(e, 'reason'):
                 self.error = 'request failed, reason: %s' % e.reason
             elif hasattr(e, 'code'):
                 self.error = 'request failed, error code: %s' % e.code
-            return False
-        try:
-            self.result = simplejson.loads(resultstring)
-        except (TypeError, ValueError):
-            self.error = 'malformed server response'
             return False
         return True
 
@@ -133,6 +136,22 @@ def handle_setuid(bot, ievent):
 cmnds.add('csr-setuid', handle_setuid, 'CSRDELFT')
 examples.add('csr-setuid', 'maak een koppeling met de ledenlijst', 'csr-setuid 9808')
 
+def handle_getuserhosts(bot, ievent):
+    """ opvragen userhosts uit C.S.R. profiel """
+    username = users.getname(ievent.userhost)
+    request = CsrRequest('getuserhosts', username)
+    if not request.execute():
+        ievent.reply(request.error)
+        return
+    if request.result:
+        if len(request.result['userhosts']) > 0:
+            ievent.reply('userhosts in C.S.R. profiel: ', request.result['userhosts'], dot=True)
+        else:
+            ievent.reply('geen userhosts (msn,icq,jabber etc) gevonden in C.S.R. profiel')
+
+cmnds.add('csr-getuserhosts', handle_getuserhosts, 'CSRDELFT')
+examples.add('csr-getuserhosts', handle_getuserhosts.__doc__, 'csr-getuserhosts')
+
 def handle_deluid(bot, ievent):
     """ verwijder koppeling met de ledenlijst """
     username = users.getname(ievent.userhost)
@@ -178,6 +197,67 @@ def handle_maalabo(bot, ievent):
 cmnds.add('csr-maalabo', handle_maalabo, 'CSRDELFT')
 examples.add('csr-maalabo', handle_maalabo.__doc__, 'csr-maalabo')
 
+def handle_maallijst(bot, ievent):
+    """ lijst met komende maaltijden opvragen """
+    username = users.getname(ievent.userhost)
+    request = CsrRequest('maallijst', username)
+    if not request.execute():
+        ievent.reply(request.error)
+        return
+    if request.result:
+        ievent.reply('', request.result, dot=True)
+    else:
+        ievent.reply('er zijn geen maaltijden binnenkort')
+
+cmnds.add('csr-maallijst', handle_maallijst, 'CSRDELFT')
+examples.add('csr-maallijst', handle_maallijst.__doc__, 'csr-maallijst')
+
+def handle_maalaan(bot, ievent):
+    """ aanmelden voor een maaltijd """
+    username = users.getname(ievent.userhost)
+    request = CsrRequest('maalaan', username)
+    try:
+        maalid, proxyuid = ievent.rest.split(' ', 1)
+        request.setparams({'maalid': maalid, 'proxyuid': proxyuid})
+    except ValueError:
+        if not ievent.rest:
+            ievent.missing('<maalid> [<uid>]')
+            return
+        else:
+            maalid = ievent.rest
+            request.setparams({'maalid': maalid})
+    if not request.execute():
+        ievent.reply(request.error)
+        return
+    if request.result:
+        ievent.reply(request.result['answer'])
+    else:
+        ievent.reply('er is een fout opgetreden in de communicatie met de website')
+
+cmnds.add('csr-maalaan', handle_maalaan, 'CSRDELFT')
+examples.add('csr-maalaan', 'aanmelden voor een maaltijd, vraag maaltijden op met csr-maallijst', 'csr-maalaan 123')
+
+def handle_maalaf(bot, ievent):
+    """ afmelden voor een maaltijd """
+    username = users.getname(ievent.userhost)
+    request = CsrRequest('maalaf', username)
+    if not ievent.rest:
+        ievent.missing('<maalid>')
+        return
+    else:
+        maalid = ievent.rest
+        request.setparams({'maalid': maalid})
+    if not request.execute():
+        ievent.reply(request.error)
+        return
+    if request.result:
+        ievent.reply(request.result['answer'])
+    else:
+        ievent.reply('er is een fout opgetreden in de communicatie met de website')
+
+cmnds.add('csr-maalaf', handle_maalaf, 'CSRDELFT')
+examples.add('csr-maalaf', 'afmelden voor een maaltijd, vraag maaltijden op met csr-maallijst', 'csr-maalaf 123')
+
 def handle_jarig(bot, ievent):
     """ komende 10 verjaardagen opvragen """
     username = users.getname(ievent.userhost)
@@ -213,7 +293,7 @@ examples.add('csr-profiel', handle_profiel.__doc__, '1) profiel 2) profiel 9808'
 def handle_zoek(bot, ievent):
     """ zoeken in de ledenlijst """
     username = users.getname(ievent.userhost)
-    if ievent.cmnd == 'csr-zoek':
+    if ievent.command == 'csr-zoek':
         request = CsrRequest('zoek', username)
     else:
         request = CsrRequest('zoekoud', username)
@@ -264,5 +344,18 @@ def handle_perms(bot, ievent):
 
 cmnds.add('csr-perms', handle_perms, 'CSRDELFT')
 examples.add('csr-perms', handle_perms.__doc__, 'csr-perms')
+
+def handle_fout(bot, ievent):
+    username = users.getname(ievent.userhost)
+    request = CsrRequest('fout', username)
+    if not request.execute():
+        ievent.reply(request.error)
+        return
+    if request.result:
+        ievent.reply(request.result)
+    else:
+        ievent.reply('niet bekend')
+
+cmnds.add('csr-fout', handle_fout, 'CSRDELFT')
 
 # vim:ts=4:sw=4:expandtab
