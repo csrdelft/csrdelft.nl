@@ -431,7 +431,8 @@ class MaalTrack {
 		}
 		return $abos;
 	}
-	# alle abo's opvragen
+	# alle abo's opvragen, ook het 'Geen' abo...
+	# deze functie wordt gebruikt om het soort abo te kunnen kiezen bij maaltijdenbeheer
 	function getAbos() {
 		$abos = array();
 		$result = $this->_db->select("
@@ -448,14 +449,15 @@ class MaalTrack {
 		return $abos;
 	}
 	# Controleer of het gegeven abonnement wel bestaat.
-	function isValidAbo($abo){ return array_key_exists($abo, $this->getAbos()); }
+	function isValidAbo($abo){ return $abo != 'A_GEEN' and array_key_exists($abo, $this->getAbos()); }
 	
 	# alle abosoorten opvragen, als deze gebruiker uit moot 1-4 is, hou daar dan rekening mee
 	# deze functionaliteit kan uitgezet worden door $mootfilter = false te zetten als argument
+	# het 'Geen' abonnement wordt hier uitgefilterd
 	function getAboSoort($mootfilter = true) {
 		$abos = array();
 		if ($mootfilter === true) $moot = $this->_lid->getMoot();
-		$result = $this->_db->select("SELECT * FROM `maaltijdabosoort`");
+		$result = $this->_db->select("SELECT * FROM maaltijdabosoort WHERE NOT abosoort='A_GEEN'");
 		if (($result !== false) and $this->_db->numRows($result) > 0) {
 			while ($record = $this->_db->next($result)) {
 				if ($mootfilter === true and preg_match("/MOOT[^{$moot}]{1}/", $record['abosoort'])) continue;

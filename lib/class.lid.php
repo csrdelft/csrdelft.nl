@@ -240,7 +240,7 @@ class Lid {
 				if($rNaam!==false and $this->_db->numRows($rNaam)==1){
 					$aNaam=$this->_db->next($rNaam);
 				}else{
-					return 'uid_onvindbaar';
+					return 'onbekend';
 				}
 			}
 		}

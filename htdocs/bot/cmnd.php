@@ -35,6 +35,7 @@ switch ($action) {
         echo json_encode($lid->getSaldi());
         break;
 
+    # lijstje van welke abo's iemand heeft
     case 'getabo':
         require_once('class.maaltrack.php');
         $maaltrack = new MaalTrack($lid, $db);
@@ -43,6 +44,61 @@ switch ($action) {
             echo json_encode(array_values($myabos));
         else
             echo "[]";
+        break;
+
+    # beetje ranzig allemaal hier, maar deze variant geeft dus ook
+    # tussen haakjes de verkorte naam mee die nodig is om een abo
+    # aan of uit te zetten
+    case 'getwelabos':
+    case 'getnotabos':
+        require_once('class.maaltrack.php');
+        $maaltrack = new MaalTrack($lid, $db);
+        if ($action == 'getwelabos') $abos = $maaltrack->getAbo();
+        else $abos = $maaltrack->getNotAboSoort();
+        if (count($abos) > 0 ) {
+            $result = array();
+            foreach ($abos as $key => $value) {
+                $result[] = sprintf("%s (%s)", $value, str_replace('a_', '', strtolower($key)));
+            }
+            echo json_encode($result);
+        } else {
+            if ($action == 'getwelabos') echo '["U heeft alle maaltijdabonnementen inmiddels geactiveerd"]';
+            else echo '["Er zijn geen abonnementen die uit staan"]';
+        }
+        break;
+
+    case 'addabo':
+        if (!isset($_GET['abosoort'])) {
+            echo "[]";
+            break;
+        }
+        require_once('class.maaltrack.php');
+        $maaltrack = new MaalTrack($lid, $db);
+
+        $result = array();
+        $abosoort = 'A_' . strtoupper($_GET['abosoort']);
+        if ($maaltrack->addAbo($abosoort))
+            $result[] = sprintf("Het maaltijdabonnement '%s' is nu geactiveerd.", $maaltrack->getAboTekst($abosoort));
+        else
+            $result[] = $maaltrack->getError();
+        echo json_encode($result);
+        break;
+
+    case 'delabo':
+        if (!isset($_GET['abosoort'])) {
+            echo "[]";
+            break;
+        }
+        require_once('class.maaltrack.php');
+        $maaltrack = new MaalTrack($lid, $db);
+
+        $result = array();
+        $abosoort = 'A_' . strtoupper($_GET['abosoort']);
+        if ($maaltrack->delAbo($abosoort))
+            $result[] = sprintf("Het maaltijdabonnement '%s' is nu uitgezet.", $maaltrack->getAboTekst($abosoort));
+        else
+            $result[] = $maaltrack->getError();
+        echo json_encode($result);
         break;
 
     /*
@@ -171,7 +227,7 @@ switch ($action) {
         echo json_encode($botlijst);
         break;
 
-    case 'maalaan':
+    case 'maalinfo':
         if (!isset($_GET['maalid'])) {
             echo "[]";
             break;
@@ -182,14 +238,60 @@ switch ($action) {
 
         # als maalid 0 is, eerstvolgende maaltijd zoeken...
         $maalid = $_GET['maalid'];
-        if ($maalid == 0 ) {
+        if ($maalid == 0) {
             $nu=time();
             $lijst = $maaltrack->getMaaltijden($nu-7200, $nu+MAALTIJD_LIJST_MAX_TOT);
             if (count($lijst) > 0) {
                 $maalid = $lijst[0]['id'];
             } else {
                 # ...als die er niet is niets doen
-                $result['answer'] = "Er is binnenkort geen maaltijd om u voor aan te melden";
+                $result[] = "Er is binnenkort geen maaltijd";
+                echo json_encode($result);
+                break;
+            }
+        }
+        if ($maaltrack->isMaaltijd($maalid)) {
+            $maalinfo = $maaltrack->getMaaltijd($maalid);
+            $result[] = "maalid: " . $maalinfo['id'];
+            $result[] = "datum: " . strftime('%a %e %B %H:%I', $maalinfo['datum']);
+            $result[] = "omschrijving: " . $maalinfo['tekst'];
+            $result[] = "abosoort: " . $maaltrack->getAboTekst($maalinfo['abosoort']);
+
+            $aantal = "aantal inschrijvingen: " . $maalinfo['aantal'];
+            if ($maalinfo['gesloten']) $aantal .= ' (GESLOTEN)';
+            elseif ($maalinfo['max'] <= $maalinfo['aantal']) $aantal .= ' (VOL)';
+            $result[] = $aantal;
+
+            $result[] = "tafelpraeses: " . $lid->getNaamLink($maalinfo['tp'], 'civitas', false, false, false);
+            # hm, het koks/afwassers gedeelte is nog niet helemaal uitgedacht volgens mij...
+            # het zijn er niet altijd exact 2/3 namelijk
+            #$result[] = sprintf("koks: %s, %s", $maalinfo['kok1'], $maalinfo['kok2']);
+            #$result[] = sprintf("afwassers: %s, %s, %s", $maalinfo['afw1'], $maalinfo['afw2'], $maalinfo['afw3']);
+        } else {
+            $result[] = "De opgegeven maaltijd bestaat niet.";
+        }
+        echo json_encode($result);
+        break;
+
+    case 'maalaan':
+        if (!isset($_GET['maalid'])) {
+            echo "[]";
+            break;
+        }
+        require_once('class.maaltrack.php');
+        $maaltrack = new MaalTrack($lid, $db);
+        $result = "";
+
+        # als maalid 0 is, eerstvolgende maaltijd zoeken...
+        $maalid = $_GET['maalid'];
+        if ($maalid == 0) {
+            $nu=time();
+            $lijst = $maaltrack->getMaaltijden($nu-7200, $nu+MAALTIJD_LIJST_MAX_TOT);
+            if (count($lijst) > 0) {
+                $maalid = $lijst[0]['id'];
+            } else {
+                # ...als die er niet is niets doen
+                $result = "Er is binnenkort geen maaltijd om u voor aan te melden";
                 echo json_encode($result);
                 break;
             }
@@ -213,17 +315,17 @@ switch ($action) {
                 $wie = $lid->getNaamLink($proxyuid, 'civitas', false, false, false);
             }
 
-            $result['answer'] = sprintf('%s aangemeld voor de maaltijd op %s'
+            $result = sprintf('%s aangemeld voor de maaltijd op %s'
                 , $wie
                 , strftime('%a %e %B %H:%I', $maalinfo['datum'])
             );
         } else {
             if ($proxyuid != '')
-                $result['answer'] = $maaltrack->getProxyError();
+                $result = $maaltrack->getProxyError();
             else
-                $result['answer'] = $maaltrack->getError();
+                $result = $maaltrack->getError();
         }
-        echo json_encode($result);
+        echo json_encode(array($result));
         break;
 
     case 'maalaf':
@@ -233,18 +335,18 @@ switch ($action) {
         }
         require_once('class.maaltrack.php');
         $maaltrack = new MaalTrack($lid, $db);
-        $result = array();
+        $result = "";
 
         # als maalid 0 is, eerstvolgende maaltijd zoeken...
         $maalid = $_GET['maalid'];
-        if ($maalid == 0 ) {
+        if ($maalid == 0) {
             $nu=time();
             $lijst = $maaltrack->getMaaltijden($nu-7200, $nu+MAALTIJD_LIJST_MAX_TOT);
             if (count($lijst) > 0) {
                 $maalid = $lijst[0]['id'];
             } else {
                 # ...als die er niet is niets doen
-                $result['answer'] = "Er is binnenkort geen maaltijd om u voor af te melden";
+                $result = "Er is binnenkort geen maaltijd om u voor af te melden";
                 echo json_encode($result);
                 break;
             }
@@ -252,17 +354,13 @@ switch ($action) {
 
         if ($maaltrack->afmelden($maalid)) {
             $maalinfo = $maaltrack->getMaaltijd($maalid);
-            $result['answer'] = sprintf('U bent afgemeld voor de maaltijd op %s'
+            $result = sprintf('U bent afgemeld voor de maaltijd op %s'
                 , strftime('%a %e %B %H:%I', $maalinfo['datum'])
             );
         } else {
-            $result['answer'] = $maaltrack->getError();
+            $result = $maaltrack->getError();
         }
-        echo json_encode($result);
-        break;
-
-    case 'fout':
-        echo 2/0;
+        echo json_encode(array($result));
         break;
 
     default:
@@ -272,4 +370,3 @@ switch ($action) {
 # vim:ts=4:sw=4:expandtab
 
 ?>
-

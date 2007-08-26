@@ -179,10 +179,10 @@ def handle_saldo(bot, ievent):
     else:
         ievent.reply('er is geen saldo-informatie beschikbaar')
 
-cmnds.add('csr-saldo', handle_saldo, 'CSRDELFT')
-examples.add('csr-saldo', 'saldo bij soccie en maalcie opvragen', 'csr-saldo')
+cmnds.add('saldo', handle_saldo, 'CSRDELFT')
+examples.add('saldo', 'saldo bij soccie en maalcie opvragen', 'saldo')
 
-def handle_maalabo(bot, ievent):
+def handle_abolist(bot, ievent):
     """ actieve maaltijd-abo's opvragen """
     username = users.getname(ievent.userhost)
     request = CsrRequest('getabo', username)
@@ -194,8 +194,56 @@ def handle_maalabo(bot, ievent):
     else:
         ievent.reply('u heeft geen actieve maaltijdabonnementen')
 
-cmnds.add('csr-maalabo', handle_maalabo, 'CSRDELFT')
-examples.add('csr-maalabo', handle_maalabo.__doc__, 'csr-maalabo')
+cmnds.add('abo-list', handle_abolist, 'CSRDELFT')
+examples.add('abo-list', handle_abolist.__doc__, 'abo-list')
+
+def handle_aboaan(bot, ievent):
+    """ aanzetten van een maaltijd-abonnement """
+    username = users.getname(ievent.userhost)
+    if not ievent.rest:
+        request = CsrRequest('getnotabos', username)
+        if not request.execute():
+            ievent.reply(request.error)
+            return
+        else:
+            # N.B.: abosoorten zijn hier in kleine letters, zonder A_ ervoor, dus
+            # bijv. uber1 ipv A_UBER1
+            ievent.reply('beschikbare abonnementen om aan te zetten: ', request.result, dot=True)
+    else:
+        request = CsrRequest('addabo', username)
+        request.setparams({'abosoort': ievent.rest})
+        if not request.execute():
+            ievent.reply(request.error)
+            return
+        else:
+            ievent.reply(request.result)
+
+cmnds.add('abo-aan', handle_aboaan, 'CSRDELFT')
+examples.add('abo-aan', handle_aboaan.__doc__, '1) abo-aan 2) abo-aan moot2')
+
+def handle_abouit(bot, ievent):
+    """ uitzetten van een maaltijd-abonnement """
+    username = users.getname(ievent.userhost)
+    if not ievent.rest:
+        request = CsrRequest('getwelabos', username)
+        if not request.execute():
+            ievent.reply(request.error)
+            return
+        else:
+            # N.B.: abosoorten zijn hier in kleine letters, zonder A_ ervoor, dus
+            # bijv. uber1 ipv A_UBER1
+            ievent.reply('beschikbare abonnementen om uit te zetten: ', request.result, dot=True)
+    else:
+        request = CsrRequest('delabo', username)
+        request.setparams({'abosoort': ievent.rest})
+        if not request.execute():
+            ievent.reply(request.error)
+            return
+        else:
+            ievent.reply(request.result)
+
+cmnds.add('abo-uit', handle_abouit, 'CSRDELFT')
+examples.add('abo-uit', handle_abouit.__doc__, '1) abo-uit 2) abo-uit donderdag')
 
 def handle_maallijst(bot, ievent):
     """ lijst met komende maaltijden opvragen """
@@ -209,11 +257,31 @@ def handle_maallijst(bot, ievent):
     else:
         ievent.reply('er zijn geen maaltijden binnenkort')
 
-cmnds.add('csr-maallijst', handle_maallijst, 'CSRDELFT')
-examples.add('csr-maallijst', handle_maallijst.__doc__, 'csr-maallijst')
+cmnds.add('maal-lijst', handle_maallijst, 'CSRDELFT')
+examples.add('maal-lijst', handle_maallijst.__doc__, 'maal-lijst')
+
+def handle_maalinfo(bot, ievent):
+    """ uitgebreide informatie over een maaltijd, zie ook csr-maallijst """
+    username = users.getname(ievent.userhost)
+    request = CsrRequest('maalinfo', username)
+    if not ievent.rest:
+        maalid = 0
+    else:
+        maalid = ievent.rest
+    request.setparams({'maalid': maalid})
+    if not request.execute():
+        ievent.reply(request.error)
+        return
+    if request.result:
+        ievent.reply('', request.result, dot=True)
+    else:
+        ievent.reply('er is een fout opgetreden in de communicatie met de website')
+
+cmnds.add('maal-info', handle_maalinfo, 'CSRDELFT')
+examples.add('maal-info', handle_maalinfo.__doc__, '1) maal-info 2) maal-info 123')
 
 def handle_maalaan(bot, ievent):
-    """ aanmelden voor een maaltijd """
+    """ aanmelden voor een maaltijd, csr-maalaan [<maalid> [<uid>]] zie ook csr-maallijst """
     username = users.getname(ievent.userhost)
     request = CsrRequest('maalaan', username)
     try:
@@ -222,8 +290,6 @@ def handle_maalaan(bot, ievent):
     except ValueError:
         if not ievent.rest:
             maalid = 0
-            #ievent.missing('<maalid> [<uid>]')
-            #return
         else:
             maalid = ievent.rest
     request.setparams({'maalid': maalid})
@@ -231,22 +297,19 @@ def handle_maalaan(bot, ievent):
         ievent.reply(request.error)
         return
     if request.result:
-        ievent.reply(request.result['answer'])
+        ievent.reply(request.result)
     else:
         ievent.reply('er is een fout opgetreden in de communicatie met de website')
 
-cmnds.add('csr-maalaan', handle_maalaan, 'CSRDELFT')
-examples.add('csr-maalaan', 'aanmelden voor een maaltijd, csr-maalaan [<maalid> [<uid>]] zie ook csr-maallijst', \
-'1) csr-maalaan 2) csr-maalaan 123 3) csr-maalaan 123 9808')
+cmnds.add('maal-aan', handle_maalaan, 'CSRDELFT')
+examples.add('maal-aan', handle_maalaan.__doc__, '1) maal-aan 2) maal-aan 123 3) maal-aan 123 9808')
 
 def handle_maalaf(bot, ievent):
-    """ afmelden voor een maaltijd """
+    """ afmelden voor een maaltijd, csr-maalaf [<maalid>], zie ook csr-maallijst """
     username = users.getname(ievent.userhost)
     request = CsrRequest('maalaf', username)
     if not ievent.rest:
         maalid = 0
-        #ievent.missing('<maalid>')
-        #return
     else:
         maalid = ievent.rest
     request.setparams({'maalid': maalid})
@@ -254,13 +317,12 @@ def handle_maalaf(bot, ievent):
         ievent.reply(request.error)
         return
     if request.result:
-        ievent.reply(request.result['answer'])
+        ievent.reply(request.result)
     else:
         ievent.reply('er is een fout opgetreden in de communicatie met de website')
 
-cmnds.add('csr-maalaf', handle_maalaf, 'CSRDELFT')
-examples.add('csr-maalaf', 'afmelden voor een maaltijd, csr-maalaf [<maalid>], zie ook csr-maallijst',
-'1) csr-maalaf 2) csr-maalaf 123')
+cmnds.add('maal-af', handle_maalaf, 'CSRDELFT')
+examples.add('maal-af', handle_maalaf.__doc__, '1) maal-af 2) maal-af 123')
 
 def handle_jarig(bot, ievent):
     """ komende 10 verjaardagen opvragen """
@@ -274,8 +336,8 @@ def handle_jarig(bot, ievent):
     else:
         ievent.reply('geen verjaardagen')
 
-cmnds.add('csr-jarig', handle_jarig, 'CSRDELFT')
-examples.add('csr-jarig', handle_jarig.__doc__, 'csr-jarig')
+cmnds.add('verjaardagen', handle_jarig, 'CSRDELFT')
+examples.add('verjaardagen', handle_jarig.__doc__, 'verjaardagen')
 
 def handle_profiel(bot, ievent):
     """ profiel opvragen """
@@ -291,8 +353,8 @@ def handle_profiel(bot, ievent):
     else:
         ievent.reply('er is geen profiel-informatie beschikbaar')
 
-cmnds.add('csr-profiel', handle_profiel, 'CSRDELFT')
-examples.add('csr-profiel', handle_profiel.__doc__, '1) profiel 2) profiel 9808')
+cmnds.add('profiel', handle_profiel, 'CSRDELFT')
+examples.add('profiel', handle_profiel.__doc__, '1) profiel 2) profiel 9808')
 
 def handle_zoek(bot, ievent):
     """ zoeken in de ledenlijst """
@@ -313,11 +375,11 @@ def handle_zoek(bot, ievent):
     else:
         ievent.reply('geen zoekresultaten')
 
-cmnds.add('csr-zoek', handle_zoek, 'CSRDELFT')
-examples.add('csr-zoek', handle_zoek.__doc__, 'csr-zoek piet')
+cmnds.add('zoek', handle_zoek, 'CSRDELFT')
+examples.add('zoek', handle_zoek.__doc__, 'zoek piet')
 
-cmnds.add('csr-zoekoud', handle_zoek, 'CSRDELFT')
-examples.add('csr-zoekoud', 'zoeken in de oudledenlijst', 'csr-zoekoud piet')
+cmnds.add('zoek-oud', handle_zoek, 'CSRDELFT')
+examples.add('zoek-oud', 'zoeken in de oudledenlijst', 'zoek-oud piet')
 
 def handle_whoami(bot, ievent):
     """ wie ben ik? """
@@ -348,18 +410,5 @@ def handle_perms(bot, ievent):
 
 cmnds.add('csr-perms', handle_perms, 'CSRDELFT')
 examples.add('csr-perms', handle_perms.__doc__, 'csr-perms')
-
-def handle_fout(bot, ievent):
-    username = users.getname(ievent.userhost)
-    request = CsrRequest('fout', username)
-    if not request.execute():
-        ievent.reply(request.error)
-        return
-    if request.result:
-        ievent.reply(request.result)
-    else:
-        ievent.reply('niet bekend')
-
-cmnds.add('csr-fout', handle_fout, 'CSRDELFT')
 
 # vim:ts=4:sw=4:expandtab
