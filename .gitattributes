@@ -102,11 +102,6 @@ htdocs/vereniging/index.php -text
 htdocs/vereniging/lezingen.php -text
 htdocs/vereniging/lidworden.php -text
 htdocs/vereniging/verbanden.php -text
-lib/bbcode/bbcode.php -text
-lib/bbcode/bbcode.tpl -text
-lib/bbcode/functions_post.php -text
-lib/bbcode/include.bbcode.php -text
-lib/bbcode/lang_main.php -text
 lib/blowfish/blowfish.php -text
 lib/blowfish/blowfish_default_key.php -text
 lib/class.agenda.php -text
@@ -283,7 +278,6 @@ lib/tekst/alpha.html -text
 lib/tekst/banners.html -text
 lib/tekst/bestuur.html -text
 lib/tekst/bestuurstekst.html -text
-lib/tekst/datum.php -text
 lib/tekst/fotoalbum.html -text
 lib/tekst/geentoegang.html -text
 lib/tekst/groepen.html -text
@@ -296,7 +290,6 @@ lib/tekst/informatie/werkgroep.html -text
 lib/tekst/leden-thuis.html -text
 lib/tekst/links.html -text
 lib/tekst/maaltijd-niet-ingelogd.html -text
-lib/tekst/maaltijd-niet-ingelogged.html -text
 lib/tekst/oudleden-thuis.html -text
 lib/tekst/sponsors.html -text
 lib/tekst/thuis.html -text

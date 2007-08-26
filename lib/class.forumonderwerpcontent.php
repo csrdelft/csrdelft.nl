@@ -5,7 +5,6 @@
 # -------------------------------------------------------------------
 
 
-require_once('bbcode/include.bbcode.php');
 require_once('class.simplehtml.php');
 
 class ForumOnderwerpContent extends SimpleHTML {

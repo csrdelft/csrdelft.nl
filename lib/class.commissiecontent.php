@@ -8,7 +8,6 @@
 
 
 require_once ('class.simplehtml.php');
-require_once ('bbcode/include.bbcode.php');
 require_once ('class.commissie.php');
 
 class CommissieContent extends SimpleHTML {
@@ -38,9 +37,12 @@ class CommissieContent extends SimpleHTML {
 					'.$this->getTitel();
 	}
 	function viewCommissie($cie){
+		$ubb = new csrUbb();
+		$sTekst=$ubb->getHTML($cie['tekst']);
+		
 		echo '<table>
 			<tr><td><h2>'.$cie['titel'].'</h2></td><td width="250px">&nbsp;</td></tr>
-			<tr><td>'.bbview($cie['tekst'], $cie['bbcode_uid']);
+			<tr><td>'.$sTekst;
 		//eventueel link
 		if ($cie['link'] != '') {
 			echo 'CommissieWebstek: <a href="'.htmlspecialchars($cie['link']).'">'.mb_htmlentities($cie['link']).'</a>';	

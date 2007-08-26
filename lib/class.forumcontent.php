@@ -5,7 +5,6 @@
 # -------------------------------------------------------------------
 
 
-require_once('bbcode/include.bbcode.php');
 require_once('class.simplehtml.php');
 
 class ForumContent extends SimpleHTML {
@@ -172,7 +171,7 @@ class ForumContent extends SimpleHTML {
 					echo 'Hier kunt u een bericht toevoegen aan het forum. Het zal echter niet direct zichtbaar worden, maar
 					 &eacute;&eacute;rst door de PubCie worden goedgekeurd. <br /><span style="text-decoration: underline;">
 					 Het is hierbij verplicht om uw naam en een email-adres onder het bericht te plaatsen. Dan kan de PubCie 
-					 eventueel contact met u opnemen. Doet u dat niet, dan wordt u bericht waarschijnlijk niet geplaatst!<br />
+					 eventueel contact met u opnemen. Doet u dat niet, dan wordt uw bericht waarschijnlijk niet geplaatst!<br />
 					 <strong>Ook dubbelplaatsen is niet nodig, heb gewoon even geduld!</strong></span>
 					 <br /><br />';
 				}
@@ -225,7 +224,7 @@ class ForumContent extends SimpleHTML {
 
 				echo '
 					<textarea name="bericht" id="forumBericht" rows="20" style="width: 100%" class="tekst">'.
-						bbedit($aPost['tekst'], $aPost['bbcode_uid']).'</textarea><br />
+						$aPost['tekst'].'</textarea><br />
 					<input type="submit" name="submit" value="verzenden" /> <a href="/forum/onderwerp/'.$iTopicID.'">terug naar onderwerp</a>
 					</form></td></tr></table>';
 			}else{
@@ -294,7 +293,7 @@ class ForumContent extends SimpleHTML {
 			if(strlen($tekst)>19){
 				$tekst=trim(substr($tekst, 0, 16)).'..';
 			}
-			$post=preg_replace('/(\[(|\/)\w+:'.$aPost['bbcode_uid'].'\])/', '|', $aPost['tekst']);
+			$post=preg_replace('/(\[(|\/)\w+\])/', '|', $aPost['tekst']);
 			$postfragment=substr(str_replace(array("\n", "\r", ' '), ' ', $post), 0, 40);
 			echo '<span class="tijd">'.date('H:i', strtotime($aPost['datum'])).'</span> ';
 			echo '<a href="/forum/onderwerp/'.$aPost['tid'].'#post'.$aPost['postID'].'" 
@@ -328,9 +327,9 @@ class ForumContent extends SimpleHTML {
 				foreach($aZoekResultaten as $aZoekResultaat){
 					$iFragmentLengte=250;
 					//ubb wegslopen
-					$sPostFragment=preg_replace('/\[\/?[a-z\*\:]*:'.$aZoekResultaat['bbcode_uid'].'\]/', '', $aZoekResultaat['tekst']);
+					$sPostFragment=preg_replace('/\[\/?[a-z\*\:]*\]/', '', $aZoekResultaat['tekst']);
 					$sPostFragment=preg_replace('/\[url=.*\](.*)\[\/url\]/', '\\1', $sPostFragment);
-					$sPostFragment=preg_replace('/\[\/?[a-z\*\:]*:'.$aZoekResultaat['bbcode_uid'].'\?/', '', $sPostFragment);
+					$sPostFragment=preg_replace('/\[\/?[a-z\*\:]*\?/', '', $sPostFragment);
 					
 					//is het bericht zelf al korter dan de fragmentlengte?
 					if(strlen($sPostFragment)>=$iFragmentLengte){

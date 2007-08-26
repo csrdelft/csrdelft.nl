@@ -39,7 +39,7 @@ class Bestuur extends SimpleHTML {
 			SELECT
 				ID, jaar, naam, 
 				praeses, abactis, fiscus, vice_praeses, vice_abactis, 
-				verhaal, bbcode_uid, tekst
+				verhaal, tekst
 			FROM
 				bestuur
 			WHERE
@@ -59,7 +59,6 @@ class Bestuur extends SimpleHTML {
 					'vice_praeses' => $this->_lid->getNaamLink($bestuursLid['vice_praeses']),
 					'vice_abactis' => $this->_lid->getNaamLink($bestuursLid['vice_abactis']),
 					'verhaal' => $bestuursLid['verhaal'],
-					'bbcode_uid' => $bestuursLid['bbcode_uid'],
 					'tekst' => $bestuursLid['tekst']);
 			}
 			return true;

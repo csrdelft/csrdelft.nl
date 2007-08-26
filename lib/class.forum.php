@@ -137,7 +137,6 @@ class Forum {
 					lid.email AS email,
 				post.id AS postID,
 				post.tekst AS tekst,
-				post.bbcode_uid AS bbcode_uid,
 				post.datum AS datum,
 				post.bewerkDatum AS bewerkDatum
 			FROM
@@ -457,7 +456,6 @@ class Forum {
 						lid.status AS status,
 					post.id AS postID,
 					post.tekst AS tekst,
-					post.bbcode_uid AS bbcode_uid,
 					post.datum AS datum,
 					post.bewerkDatum AS bewerkDatum,
 					count(*) AS aantal

@@ -33,7 +33,7 @@ class Commissie {
 		
 		$result = $this->_db->query("
 			SELECT 
-				id, naam, stekst, titel, tekst, bbcode_uid, link
+				id, naam, stekst, titel, tekst, link
 			FROM commissie 
 			WHERE ".$filter." 
 			LIMIT 1;");
