@@ -227,7 +227,7 @@ class Lid {
 		$sNaam='';
 		//als er geen array wordt meegegeven, of de array is niet compleet genoeg om een naam te tonen, dan de
 		//gegevens ophalen uit de database met het opgegeven uid.
-		if($aNaam===false AND !isset($aNaam['voornaam'], $aNaam['achternaam'], $aNaam['tussenvoegsel'], 
+		if($aNaam===false OR !isset($aNaam['voornaam'], $aNaam['achternaam'], $aNaam['tussenvoegsel'], 
 				$aNaam['nickname'], $aNaam['geslacht'], $aNaam['status'], $aNaam['postfix'])){
 			//betreft het de huidige gebruiker? dan de array van het profiel raadplegen
 			if($uid == $this->_profile['uid']){
