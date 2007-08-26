@@ -20,7 +20,13 @@ class Bestuur extends SimpleHTML {
 		$this->_lid=Lid::get_lid();
 		$this->_db=MySql::get_MySql();
 	}
-	
+	//kijk of er een bestuur ingeladen is, anders het huidige inladen.
+	function loadIfNot(){
+		if(!isset($this->_aBestuur['naam'])){
+			//kennelijk nog niets geladen, dan nu maar doen.
+			$this->loadBestuur();	
+		}
+	}
 	function loadBestuur($jaar=0){
 		//leeggooien
 		$this->_jaar=0;
@@ -64,16 +70,18 @@ class Bestuur extends SimpleHTML {
 			return true;
 		}
 	}
-	
-	function isBestuur(){ return in_array($this->_lid->getUid(), $this->_aBestuur); }
+	//check of de huidige gebruiker of $uid in het bestuur zit.
+	function isBestuur($uid=''){
+		$this->loadIfNot();
+		if($uid==''){ $uid=$this->_lid->getUid(); }
+		return in_array($uid, $this->_aBestuur); 
+	}
 	function getBestuur(){ 
-		if(!isset($this->_aBestuur['naam'])){
-			//kennelijk nog niets geladen, dan nu maar doen.
-			$this->loadBestuur();	
-		}
+		$this->loadIfNot();
 		return $this->_aBestuur;	
 	}
-
+	
+	//regel een lijst met besturen die zich in de database bevinden
 	function getBesturen(){
 		$sBesturen="
 			SELECT 
