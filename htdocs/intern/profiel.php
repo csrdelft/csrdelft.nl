@@ -121,7 +121,7 @@ if ($error == 0){
 						$lid->diff_to_sql();
 						
 						# - het profiel opnieuw in LDAP opslaan
-						//$lid->save_ldap();
+						$lid->save_ldap();
 						
 						# om te voorkomen dat een refresh opnieuw een submit doet
 						$myurl = $state->getMyUrl();

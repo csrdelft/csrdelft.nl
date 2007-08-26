@@ -8,7 +8,6 @@
 
 
 require_once ('class.simplehtml.php');
-require_once ('bbcode/include.bbcode.php');
 require_once ('class.woonoord.php');
 
 class WoonoordContent extends SimpleHTML {

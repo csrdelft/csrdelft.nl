@@ -5,8 +5,6 @@
 # -------------------------------------------------------------------
 
 
-require_once('bbcode/include.bbcode.php');
-
 class PollContent extends SimpleHTML {
 	var $_forumPoll;
 	
