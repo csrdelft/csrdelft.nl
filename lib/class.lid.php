@@ -524,7 +524,12 @@ class Lid {
 		}
 		return false;
 	}
-	
+	//een methode om te checken of het huidige dan wel het opgegeven lid in het bestuur zit
+	function isBestuur($uid=''){
+		if($uid==''){ $uid=$this->getUid(); }
+		$bestuur=new Bestuur();
+		return $bestuur->isBestuur($uid);
+	}
 	function getLidStatus($uid) {
 		# is het wel een geldig lid-nummer?
 		if (!$this->isValidUid($uid)) return false;
