@@ -176,10 +176,24 @@ switch ($action) {
             echo "[]";
             break;
         }
-        $maalid = $_GET['maalid'];
         require_once('class.maaltrack.php');
         $maaltrack = new MaalTrack($lid, $db);
+        $result = array();
 
+        # als maalid 0 is, eerstvolgende maaltijd zoeken...
+        $maalid = $_GET['maalid'];
+        if ($maalid == 0 ) {
+            $nu=time();
+            $lijst = $maaltrack->getMaaltijden($nu-7200, $nu+MAALTIJD_LIJST_MAX_TOT);
+            if (count($lijst) > 0) {
+                $maalid = $lijst[0]['id'];
+            } else {
+                # ...als die er niet is niets doen
+                $result['answer'] = "Er is binnenkort geen maaltijd om u voor aan te melden";
+                echo json_encode($result);
+                break;
+            }
+        }
         # iemand anders aanmelden mag ook, mits...
         $proxyuid = '';
         if (isset($_GET['proxyuid']) and $_GET['proxyuid'] != $uid) {
@@ -191,7 +205,6 @@ switch ($action) {
             }
             $proxyuid = $_GET['proxyuid'];
         }
-        $result = array();
         if ($maaltrack->aanmelden($maalid, $proxyuid)) {
             $maalinfo = $maaltrack->getMaaltijd($maalid);
 
@@ -218,10 +231,25 @@ switch ($action) {
             echo "[]";
             break;
         }
-        $maalid = $_GET['maalid'];
         require_once('class.maaltrack.php');
         $maaltrack = new MaalTrack($lid, $db);
         $result = array();
+
+        # als maalid 0 is, eerstvolgende maaltijd zoeken...
+        $maalid = $_GET['maalid'];
+        if ($maalid == 0 ) {
+            $nu=time();
+            $lijst = $maaltrack->getMaaltijden($nu-7200, $nu+MAALTIJD_LIJST_MAX_TOT);
+            if (count($lijst) > 0) {
+                $maalid = $lijst[0]['id'];
+            } else {
+                # ...als die er niet is niets doen
+                $result['answer'] = "Er is binnenkort geen maaltijd om u voor af te melden";
+                echo json_encode($result);
+                break;
+            }
+        }
+
         if ($maaltrack->afmelden($maalid)) {
             $maalinfo = $maaltrack->getMaaltijd($maalid);
             $result['answer'] = sprintf('U bent afgemeld voor de maaltijd op %s'

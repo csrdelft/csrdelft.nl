@@ -221,11 +221,12 @@ def handle_maalaan(bot, ievent):
         request.setparams({'maalid': maalid, 'proxyuid': proxyuid})
     except ValueError:
         if not ievent.rest:
-            ievent.missing('<maalid> [<uid>]')
-            return
+            maalid = 0
+            #ievent.missing('<maalid> [<uid>]')
+            #return
         else:
             maalid = ievent.rest
-            request.setparams({'maalid': maalid})
+    request.setparams({'maalid': maalid})
     if not request.execute():
         ievent.reply(request.error)
         return
@@ -235,18 +236,20 @@ def handle_maalaan(bot, ievent):
         ievent.reply('er is een fout opgetreden in de communicatie met de website')
 
 cmnds.add('csr-maalaan', handle_maalaan, 'CSRDELFT')
-examples.add('csr-maalaan', 'aanmelden voor een maaltijd, vraag maaltijden op met csr-maallijst', 'csr-maalaan 123')
+examples.add('csr-maalaan', 'aanmelden voor een maaltijd, csr-maalaan [<maalid> [<uid>]] zie ook csr-maallijst', \
+'1) csr-maalaan 2) csr-maalaan 123 3) csr-maalaan 123 9808')
 
 def handle_maalaf(bot, ievent):
     """ afmelden voor een maaltijd """
     username = users.getname(ievent.userhost)
     request = CsrRequest('maalaf', username)
     if not ievent.rest:
-        ievent.missing('<maalid>')
-        return
+        maalid = 0
+        #ievent.missing('<maalid>')
+        #return
     else:
         maalid = ievent.rest
-        request.setparams({'maalid': maalid})
+    request.setparams({'maalid': maalid})
     if not request.execute():
         ievent.reply(request.error)
         return
@@ -256,7 +259,8 @@ def handle_maalaf(bot, ievent):
         ievent.reply('er is een fout opgetreden in de communicatie met de website')
 
 cmnds.add('csr-maalaf', handle_maalaf, 'CSRDELFT')
-examples.add('csr-maalaf', 'afmelden voor een maaltijd, vraag maaltijden op met csr-maallijst', 'csr-maalaf 123')
+examples.add('csr-maalaf', 'afmelden voor een maaltijd, csr-maalaf [<maalid>], zie ook csr-maallijst',
+'1) csr-maalaf 2) csr-maalaf 123')
 
 def handle_jarig(bot, ievent):
     """ komende 10 verjaardagen opvragen """
