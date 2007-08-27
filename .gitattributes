@@ -115,6 +115,7 @@ lib/class.biebcontent.php -text
 lib/class.cieoverzichtcontent.php -text
 lib/class.commissie.php -text
 lib/class.commissiecontent.php -text
+lib/class.courant.php -text
 lib/class.csrdelft.php -text
 lib/class.csrmail.php -text
 lib/class.csrmailarchiefcontent.php -text
@@ -295,9 +296,9 @@ lib/tekst/sponsors.html -text
 lib/tekst/thuis.html -text
 lib/tekst/verbanden.html -text
 lib/templates/bestuur.tpl -text
+lib/templates/courant/csrmail.tpl -text
+lib/templates/courant/csrmail_owee.tpl -text
 lib/templates/csrdelft.tpl -text
-lib/templates/csrmail/csrmail.tpl -text
-lib/templates/csrmail/csrmail_owee.tpl -text
 lib/templates/forum/rss.tpl -text
 lib/templates/maaltijdbeheer.tpl -text
 lib/templates/maaltijdform.tpl -text
