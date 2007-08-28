@@ -22,7 +22,7 @@ class SimpleHTML {
 			//maar één keer tonen, de melding.
 			unset($_SESSION['melding']);
 			return $sError;
-		}elseif($this->_sError!==false AND $this->_sError!=''){
+		}elseif($this->_sError!==false){
 			return '<div id="melding">'.$this->_sMelding.'</div>';
 		}else{
 			return '';

@@ -25,7 +25,7 @@
 		U heeft nog geen berichten geplaatst in deze C.S.R.-courant.
 	{else}
 		<dl>
-			{foreach from=$courant->getBerichten() item=bericht}
+			{foreach from=$courant->getBerichtenVoorGebruiker() item=bericht}
 				<dt>
 					<u>{$bericht.categorie|replace:'csr':'C.S.R.'}</u>
 					{if $courant->magBeheren()}({$courant->getNaam($bericht.uid)}){/if}

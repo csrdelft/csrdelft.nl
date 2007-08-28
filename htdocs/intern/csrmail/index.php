@@ -75,5 +75,4 @@ $pagina->setZijkolom($zijkolom);
 
 
 $pagina->view();
-pr($_POST);
 ?>
