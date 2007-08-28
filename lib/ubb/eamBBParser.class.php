@@ -772,7 +772,7 @@ class eamBBParser{
 		}
 		
 		$content = $this->parseArray(array('[/img]'), array());
-		$html = '<img src="'.$content.'" alt="" '.$width . $height.'/>';
+		$html = '<img class="forum_image" src="'.$content.'" alt="" '.$width . $height.'/>';
 		return $html;
 	
 	}
