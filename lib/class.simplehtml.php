@@ -17,17 +17,29 @@ class SimpleHTML {
 
 	}
 	function getMelding(){
-		if(isset($_SESSION['melding'])){
+		if(isset($_SESSION['melding']) AND $_SESSION['melding']!=''){
 			$sError='<div id="melding">'.mb_htmlentities(trim($_SESSION['melding'])).'</div>';
 			//maar één keer tonen, de melding.
 			unset($_SESSION['melding']);
 			return $sError;
-		}elseif($this->_sError!==false){
-			return '<div class="melding">'.$this->_sMelding.'</div>';
+		}elseif($this->_sError!==false AND $this->_sError!=''){
+			return '<div id="melding">'.$this->_sMelding.'</div>';
+		}else{
+			return '';
 		}
 	}
 	function setMelding($sMelding){
 		$this->_sMelding=trim($sMelding);
+	}
+	function invokeRefresh($sMelding, $url=null){
+		if($sMelding!=''){
+			$_SESSION['melding']=$sMelding;
+		}
+		if($url==null){
+			$url=CSR_ROOT.$_SERVER['REQUEST_URI'];
+		}
+		header('location: '.$url);
+		exit;
 	}
 	
 	//eventueel titel voor een pagina geven

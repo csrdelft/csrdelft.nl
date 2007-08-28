@@ -1,43 +1,27 @@
 <?php
 # C.S.R. Delft | pubcie@csrdelft.nl
 # -------------------------------------------------------------------
-# class.csrmailcomposecontent.php
+# class.courantcontent.php
 # -------------------------------------------------------------------
-# Verzorgt het componeren van de mail
+# Verzorgt het in elkaar zetten van de c.s.r.-courant
 # -------------------------------------------------------------------
 
 
-require_once ('class.mysql.php');
 
-class Csrmailcomposecontent extends Csrmailcontent{
+class CourantContent {
 	
-	function _getHeaders(){
+	
+	private $courant;
+	private $instellingen;
+	
+	function CourantContent(&$courant){
 		setlocale (LC_ALL, 'nl_NL@euro');
-		$instellingen=parse_ini_file(ETC_PATH.'/csrmail.ini');
-		
-		$sUitvoer="From: PubCie <pubcie@csrdelft.nl>
-To: leden@csrdelft.nl
-Organization: C.S.R. Delft
-MIME-Version: 1.0
-Content-Type: text/html; charset=utf-8
-User-Agent: telnet localhost 25
-X-Complaints-To: pubcie@csrdelft.nl
-Approved: ".$instellingen['password']."
-Subject: OWee-courant ".strftime('%e %B %Y')."\r\n\r\n";
-		return $sUitvoer;
+		$this->courant=$courant;
+		$this->instellingen=parse_ini_file(ETC_PATH.'/csrmail.ini');
 	}
 	
-	function getKopjes($aBerichten){
-		foreach($aBerichten as $aBericht){
-			//ros alles in een array, met categorie als element.
-			$aKopjes[$aBericht['cat']][]=array('titel'=> $aBericht['titel'], 'ID' => $aBericht['ID']);
-		}
-		return $aKopjes;
-	}	
-	
 	function zend($sEmailAan){
-		$sHeaders=$this->_getHeaders();
-		$sMail=$this->_getBody();
+		$sMail=$this->getMail(true);
 		
 		$smtp=fsockopen('localhost', 25, $feut, $fout);
 		echo 'Zo, mail verzenden naar '.$sEmailAan.'.<pre>';
@@ -54,8 +38,7 @@ Subject: OWee-courant ".strftime('%e %B %Y')."\r\n\r\n";
 		fwrite($smtp, "DATA\r\n");
 		echo htmlspecialchars("DATA\r\n");
 		echo fread($smtp, 1024);
-		fwrite($smtp, $sHeaders."\r\n");
-		echo htmlspecialchars($sHeaders."\r\n");
+		// de mail...
 		fwrite($smtp, $sMail."\r\n");
 		echo htmlspecialchars("[mail hier]\r\n");
 		fwrite($smtp, "\r\n.\r\n");
@@ -63,9 +46,23 @@ Subject: OWee-courant ".strftime('%e %B %Y')."\r\n\r\n";
 		echo fread($smtp, 1024);
 		echo '</pre>';
 	}
-
+	function getMail($headers=false){
+		$mail=new Smarty_csr();
+		
+		$mail->assign('instellingen', $this->instellingen);
+		$mail->assign_by_ref('courant', $this->courant);
+		
+		$mail->assign('indexCats', $this->courant->getCats());
+		$mail->assign('catNames', $this->courant->getCats(true));
+		
+		$mail->assing('headers', $headers);
+		
+		return $mail->fetch($this->courant->getTemplatePath());
+		
+	}
 	function view(){
-		echo $this->_getBody();
+		
+		echo $this->getMail();
 	}
 }//einde classe
 ?>

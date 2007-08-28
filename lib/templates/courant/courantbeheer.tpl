@@ -1,0 +1,72 @@
+<h2>C.S.R.-courant</h2>
+<p>
+	De C.S.R.-courant wordt elke woensdagmiddag verzonden naar alle leden van C.S.R.. 
+	Als u uw bericht voor 17:00 invoert, kunt u tamelijk zeker zijn van plaatsing in de courant.
+	De PubCie streeft ernaar de courant voor 18:00 bij u in uw postvak te krijgen.
+</p>
+<div id="knoppenContainer">
+	{if $courant->magVerzenden()}
+		<a href="/intern/csrmail/verzenden.php" onclick="return confirm('Weet u het zeker dat u de C.S.R.-courant wilt versturen?')" class="knop">Verzenden</a>
+	{/if}
+	{* Volgens mij wordt deze nooit gebruikt...
+		{if $courant->magBeheren()}
+		<a href="/intern/csrmail/leegmaken" class="knop" onclick="return confirm('Weet u zeker dat u de cache wilt leeggooien?')">Leegmaken</a>
+		{/if}
+	*}
+</div>
+
+{* feutmeldingen weergeven... *}
+{if $melding!=''}{$melding}{/if}
+
+{* geen overzicht van berichten bij het bewerken... *}
+{if $form.ID==0}
+	<h3>Overzicht van berichten:</h3>
+	{if !is_array($courant->getBerichten())}
+		U heeft nog geen berichten geplaatst in deze C.S.R.-courant.
+	{else}
+		<dl>
+			{foreach from=$courant->getBerichten() item=bericht}
+				<dt>
+					<u>{$bericht.categorie|replace:'csr':'C.S.R.'}</u>
+					{if $courant->magBeheren()}({$courant->getNaam($bericht.uid)}){/if}
+					<strong>{$bericht.titel}</strong>
+					[ <a href="/intern/csrmail/bewerken/{$bericht.ID}">bewerken</a> | 
+					<a href="/intern/csrmail/verwijder/{$bericht.ID}" onclick="return confirm('Weet u zeker dat u dit bericht wilt verwijderen?')" >verwijderen</a> ]
+				</dt>
+				{if !$courant->magBeheren()}<dd>{$bericht.bericht|ubb}</dd>{/if}
+			{/foreach}
+		</dl>
+			
+	{/if}
+{/if}
+
+
+<form method="post" action="?ID={$form.ID}" >
+	<div id="pubciemail_form">
+		{if $form.ID==0}<h3>Nieuw bericht invoeren</h3>{else}<h3>Bericht bewerken</h3>{/if}<br />
+		{if $form.melding!=''}<div id="melding">{$form.melding}</div>{/if}
+		<strong>Titel:</strong><br />
+		<input type="text" name="titel" value="{$form.titel|escape:'html'}" style="width: 100%;" class="tekst" />
+		<br /><br />
+		<strong>Categorie:</strong><br />
+		Selecteer hier een categorie. Uw invoer is enkel een voorstel.
+		<em>Aankondigingen over kamers te huur komen in <strong>overig</strong> terecht! C.S.R. is bedoeld voor 
+		activiteiten van C.S.R.-commissies en andere verenigingsactiviteiten.</em><br />
+		{html_options name=categorie values=$courant->getCats() output=$form.catsNice selected=$form.categorie}
+		<br /><br />
+		<strong>Bericht:</strong><br />
+		<textarea name="bericht" cols="80" style="width: 100%;" rows="15" class="tekst">{$form.bericht|escape:'html'}</textarea>
+		<input type="submit" name="verzenden" value="opslaan" class="tekst" />
+	</div>
+</form>
+{if $courant->magBeheren()}<br />
+	<h3>Voorbeeld van de C.S.R.-courant.</h3>
+		<script type="text/javascript">//<![CDATA[{literal}
+			function showIframe(){
+				target =document.getElementById('courant_voorbeeld');
+				target.innerHTML = "<iframe src=\"/intern/csrmail/courant.php\" style=\"width: 100%; height: 600px;\"></iframe>";
+			}
+		//]]></script>{/literal}
+		<a href="#" onclick="showIframe()">Laat voorbeeld zien...</a>
+		<div id="courant_voorbeeld"></div>
+{/if}

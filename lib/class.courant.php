@@ -18,24 +18,27 @@ class Courant {
 	
 	private $sError='';
 	private $categorieen=array('bestuur', 'csr', 'overig', 'voorwoord');
+	private $catNames=array('Bestuur', 'C.S.R.', 'Overig', 'Voorwoord');
 	
 	//Constructor voor de courant
 	function Courant(){
-		//de berichten uit de cache laden. Dit zal het meest gebeuren.	
-		$this->load(0);
-	
 		$this->_lid=Lid::get_lid();
 		$this->_db=MySql::get_MySql();
+		
+		//de berichten uit de cache laden. Dit zal het meest gebeuren.	
+		$this->load(0);
 	}
 	/* 
-	 * Courant inladen uit de database. s
+	 * Courant inladen uit de database.
 	 */
 	public function load($courantID){
 		$this->courantID=(int)$courantID;
+		//leegmaken van de berichtenarray
+		$this->berichten=array();
 		if($this->isCache()){ 
 			$sBerichtenQuery="
 				SELECT
-					ID, titel, cat, bericht, datumTijd, uid, volgorde
+					ID, titel, cat AS categorie, bericht, datumTijd, uid, volgorde
 				FROM
 					courantcache
 				WHERE 
@@ -51,7 +54,7 @@ class Courant {
 					courant.template AS template,
 					courantbericht.ID AS ID,
 					titel, 
-					cat, 
+					cat AS categorie, 
 					bericht, 
 					datumTijd, 
 					courantbericht.uid AS berichtUid, 
@@ -78,12 +81,36 @@ class Courant {
 	public function getID(){ return $this->courantID; }
 	public function getError(){ return $this->sError; }
 	public function isCache(){ return $this->courantID==0; }
+	public function getCats($nice=false){
+		if($nice){
+			$return=$this->catNames;
+		}else{
+			$return=$this->categorieen;
+		}
+		//voorwoord eruit gooien
+		if(!$this->magBeheren()){ 
+			unset($return[3]);
+		}
+		return $return; 
+	}
+	
+	public function getNaam($uid){ return $this->_lid->getNaamLink($uid); }
+	public function getTemplatePath(){
+		$return=SMARTY_TEMPLATE_DIR.'courant/mail/';
+		if(isset($this->berichten[0]['template']) AND file_exists($return.$this->berichten[0]['template'])){
+			$return.=$this->berichten[0]['template'];
+		}else{
+			$return.=COURANT_TEMPLATE;
+		}
+		return $return;
+	}
 	
 	function magToevoegen(){ return $this->_lid->hasPermission('P_MAIL_POST'); }
 	function magBeheren(){ return $this->_lid->hasPermission('P_MAIL_COMPOSE'); }
 	function magVerzenden(){ return $this->_lid->hasPermission('P_MAIL_SEND'); }
 	
 	private function _isValideCategorie($categorie){ return in_array($categorie, $this->categorieen); }
+	
 	private function clearTitel($titel){
 		//titel escapen, eerste letter een hoofdletter maken, en de spaties wegkekken
 		return ucfirst($this->_db->escape(trim($titel)));
@@ -146,7 +173,7 @@ class Courant {
 	}
 	function bewerkBericht($iBerichtID, $titel, $categorie, $bericht){
 		$iBerichtID=(int)$iBerichtID;
-		if(!isZichtbaar($iBerichtID)){ return false; }
+		if(!$this->isZichtbaar($iBerichtID)){ return false; }
 		$sBerichtQuery="
 			UPDATE
 				courantcache
@@ -164,7 +191,6 @@ class Courant {
 	
 	function valideerBerichtInvoer(){
 		$bValid=true;
-		$sError='';
 		if(isset($_POST['titel']) AND isset($_POST['categorie']) AND isset($_POST['bericht'])){
 			if(strlen(trim($_POST['titel'])) < 2 ){
 				$bValid=false;
@@ -183,7 +209,9 @@ class Courant {
 	
 	function getVerzendmoment(){
 		if(!$this->isCache()){
-			return $this->berichten[0]['verzendMoment'];
+			//beetje ranzige manier om het eerste element van de array aan te spreken
+			$first=current($this->berichten);
+			return $first['verzendMoment'];
 		}else{
 			$this->sError='De cache is nog niet verzonden, dus heeft geen verzendmoment (Courant::getVerzendMoment())';
 			return false;
@@ -223,18 +251,18 @@ class Courant {
 	
 	function getBericht($iBerichtID){
 		$iBerichtID=(int)$iBerichtID;
-		if(!isZichtbaar($iBerichtID)){ return false; }
+		if(!$this->isZichtbaar($iBerichtID)){ return false; }
 		return $this->berichten[$iBerichtID];
 	}
 	
 	function verwijderBericht($iBerichtID){
 		$iBerichtID=(int)$iBerichtID;
-		if(!isZichtbaar($iBerichtID)){ return false; }
+		if(!$this->isZichtbaar($iBerichtID)){ return false; }
 		$sBerichtVerwijderen="
 			DELETE FROM
 				courantcache
 			WHERE
-				ID='".$iBerichtID."'
+				ID=".$iBerichtID."
 			LIMIT 1;";
 		$this->_db->query($sBerichtVerwijderen);
 		return mysql_affected_rows()==1;
@@ -317,6 +345,7 @@ class Courant {
 			ORDER BY 
 				verzendMoment DESC;";
 		$rArchief=$this->_db->query($sArchiefQuery);
+		
 		if($this->_db->numRows($rArchief)==0){
 			return false;
 		}else{

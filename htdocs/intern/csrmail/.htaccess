@@ -3,8 +3,6 @@ RewriteEngine on
 
 RewriteRule ^bewerken/([0-9]*) index.php?ID=$1&bewerken=bewerken
 RewriteRule ^verwijder/([0-9]*) index.php?ID=$1&verwijder=verwijderen
-RewriteRule ^leegmaken$ index.php?leegmaken=leegmaken
 
-
-RewriteRule ^archief/([0-9]*)/iframe archief.php?ID=$1&iframe
+RewriteRule ^archief/iframe/([0-9]*) courant.php?ID=$1
 RewriteRule ^archief/([0-9]*)/? archief.php?ID=$1

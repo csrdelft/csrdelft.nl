@@ -33,8 +33,8 @@ if (constant('MODE') == 'WEB') {
 
 setlocale(LC_ALL, 'nl_NL.utf8');
 
-//standaard templaat voor de csrmail
-define('CSRMAIL_TEMPLATE', 'csrmail.tpl');
+//standaard templaat voor de C.S.R.-courant
+define('COURANT_TEMPLATE', 'courant.tpl');
 
 # wordt gebruikt om pagina's alleen op Confide te laten zien
 define('CONFIDE_IP', '82.92.101.131:145.94.37.96');

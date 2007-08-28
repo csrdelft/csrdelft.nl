@@ -1,8 +1,12 @@
 <?php
+# C.S.R. Delft | pubcie@csrdelft.nl
+# -------------------------------------------------------------------
+# archief.php
+# -------------------------------------------------------------------
+# Geeft een lijstje met de geärchiveerde couranten weer
+# -------------------------------------------------------------------
 
-# instellingen & rommeltjes
 require_once('include.config.php');
-
 
 ## zijkolom in elkaar jetzen
 	$zijkolom=new kolom();
@@ -10,17 +14,14 @@ require_once('include.config.php');
 
 # Het middenstuk
 if ($lid->hasPermission('P_LEDEN_READ')) {
-	require_once('class.csrmail.php');
-	$csrmail = new Csrmail($lid, $db);
-	require_once('class.csrmailcontent.php');
-	require_once('class.csrmailarchiefcontent.php');
-	$body = new CsrmailarchiefContent($csrmail);
-	if(isset($_GET['iframe'])){ 
-		$body->view(); 
-		exit;
-	}
-	$laatste=new CsrmailarchiefContent($csrmail);
-	$laatste->setZijkolom();
+	require_once('class.courant.php');
+	$courant=new Courant();
+
+	require_once('class.courantarchiefcontent.php');
+	$body = new CourantArchiefContent($courant);
+
+	$laatste=new CourantArchiefContent($courant);
+	$laatste->toggleZijkolom();
 	$zijkolom->add($laatste);
 } else {
 	# geen rechten
@@ -31,7 +32,7 @@ if ($lid->hasPermission('P_LEDEN_READ')) {
 	
 
 # pagina weergeven
-$pagina=new csrdelft($body,  $lid, $db);
+$pagina=new csrdelft($body);
 
 $pagina->setZijkolom($zijkolom);
 

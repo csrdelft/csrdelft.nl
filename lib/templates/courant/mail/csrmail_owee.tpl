@@ -1,11 +1,11 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.1//EN' 'http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd'>
 
 <html>
 <head>
-  <title>C.S.R.-courant</title>
-  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-  <meta name="author" content="PubCie der C.S.R. Delft" />
-  <meta name="robots" content="index, follow" />
+  <title>OWee-Courant</title>
+  <meta http-equiv='content-type' content='text/html; charset=UTF-8' />
+  <meta name='author' content='pubCie der C.S.R. Delft' />
+  <meta name='robots' content='index, follow' />
   <style type="text/css"><!--
 body{
 	font-face: verdana, arial;
@@ -38,23 +38,23 @@ img{
 	border: 0px;
 }
 h4{
-	background-color: #CAD6FF;
+	background-color: #6ea200;
 	font-size: 15px;
 	margin: 10px 0px 0px 0px; padding: 5px 5px 5px 10px;
-	color: black;
+	color: white;
 }
 p{
-	background-color: #FAFAFF;
+	background-color: #b1cd76;
 	margin: 0px 0px 0px 0px;
 	padding: 10px 5px 5px 10px;
-	color: #020883;
+	color: black;
 	font-size: 11px; font-face: verdana, arial;
 	line-height: 1.4em;
 }
 .inhoud{
 	border: 0px;
 	width: 100%;
-	background-color: #FAFAFF;
+	background-color: #b1cd76;
 	margin: 0px 0px 15px 0px;
 	padding: 0px;
 }
@@ -77,17 +77,21 @@ ul{
 }
 li{
 	margin: 0px 0px 0px 00px;
-	color: #020883;
+	color: #000;
 	font-size: 11px;
-} -->
+} 
+a{
+	color: black;
+}
+-->
 </style>
 </head>
 <body >
 <table>
 <tr>
 <td class="zijKolom" valign="top">
-<img src="http://plaetjes.csrdelft.nl/csrmail/logo.jpg" width="150px" height="197px" alt="logo van C.S.R." />
-<img src="http://plaetjes.csrdelft.nl/csrmail/balk.gif" width="150px" height="100%" />
+<img src="http://plaetjes.csrdelft.nl/csrmail/logo_owee2007.jpg" width="150" 
+height="187" alt="OWee-courant" />
 </td>
 <td class="hoofdKolom">
 <h4><font size="-3" face="verdana">Inhoud</font></h4>
@@ -95,15 +99,7 @@ li{
 <tr>
 <td class="inhoudKolom" valign="top">
 <font face="verdana" size="-1">
-<div class="inhoudKop"><b>Bestuur</b></div>
-<ul>
-[inhoud-bestuur]
-</ul>
-</font>
-</td>
-<td class="inhoudKolom" valign="top">
-<font face="verdana" size="-1">
-<div class="inhoudKop"><b>C.S.R.</b></div>
+<div class="inhoudKop"><b>OWee</b></div>
 <ul>
 [inhoud-csr]
 </ul>
@@ -119,7 +115,12 @@ li{
 </td>
 </tr>
 </table>
-<font face="verdana" size="-1">[berichten]</font>
+<font face="verdana" size="-1">
+	{foreach from=$courant.getBerichten() item=bericht}
+		<h4><a name={$bericht.ID}</a>{$this->ubb->getHTML($bericht.titel)}</h4>
+		<p>{$this->ubb->getHTML($bericht.bericht)}</p>
+	{/foreach}
+</font>
 </td>
 </tr>
 </table>

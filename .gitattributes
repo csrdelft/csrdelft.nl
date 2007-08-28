@@ -48,10 +48,9 @@ htdocs/intern/agenda/.htaccess -text
 htdocs/intern/agenda/index.php -text
 htdocs/intern/csrmail/.htaccess -text
 htdocs/intern/csrmail/archief.php -text
-htdocs/intern/csrmail/bewerken.php -text
+htdocs/intern/csrmail/courant.php -text
 htdocs/intern/csrmail/index.php -text
 htdocs/intern/csrmail/verzenden.php -text
-htdocs/intern/csrmail/voorbeeld.php -text
 htdocs/intern/documenten/documenten.php -text
 htdocs/intern/documenten/neerladen.php -text
 htdocs/intern/documenten/toevoegen.php -text
@@ -116,11 +115,10 @@ lib/class.cieoverzichtcontent.php -text
 lib/class.commissie.php -text
 lib/class.commissiecontent.php -text
 lib/class.courant.php -text
+lib/class.courantarchiefcontent.php -text
+lib/class.courantbeheercontent.php -text
+lib/class.courantcontent.php -text
 lib/class.csrdelft.php -text
-lib/class.csrmail.php -text
-lib/class.csrmailarchiefcontent.php -text
-lib/class.csrmailcomposecontent.php -text
-lib/class.csrmailcontent.php -text
 lib/class.csrsmarty.php -text
 lib/class.csrubb.php -text
 lib/class.dbmenu.php -text
@@ -256,6 +254,7 @@ lib/smarty/libs/plugins/modifier.string_format.php -text
 lib/smarty/libs/plugins/modifier.strip.php -text
 lib/smarty/libs/plugins/modifier.strip_tags.php -text
 lib/smarty/libs/plugins/modifier.truncate.php -text
+lib/smarty/libs/plugins/modifier.ubb.php -text
 lib/smarty/libs/plugins/modifier.upper.php -text
 lib/smarty/libs/plugins/modifier.wordwrap.php -text
 lib/smarty/libs/plugins/outputfilter.trimwhitespace.php -text
@@ -296,8 +295,10 @@ lib/tekst/sponsors.html -text
 lib/tekst/thuis.html -text
 lib/tekst/verbanden.html -text
 lib/templates/bestuur.tpl -text
-lib/templates/courant/csrmail.tpl -text
-lib/templates/courant/csrmail_owee.tpl -text
+lib/templates/courant/courantbeheer.tpl -text
+lib/templates/courant/mail/c_header.tpl -text
+lib/templates/courant/mail/courant.tpl -text
+lib/templates/courant/mail/csrmail_owee.tpl -text
 lib/templates/csrdelft.tpl -text
 lib/templates/forum/rss.tpl -text
 lib/templates/maaltijdbeheer.tpl -text

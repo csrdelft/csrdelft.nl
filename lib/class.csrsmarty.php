@@ -17,7 +17,7 @@ class Smarty_csr extends Smarty {
 		$this->compile_dir = SMARTY_COMPILE_DIR;
  		//$this->config_dir = ;
 		$this->cache_dir = SMARTY_CACHE_DIR;
-		$this->caching = true;
+		$this->caching = false;
 		$this->assign('csr_pics', CSR_PICS);
   }
 

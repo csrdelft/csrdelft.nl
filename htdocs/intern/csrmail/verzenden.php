@@ -2,20 +2,23 @@
 # instellingen & rommeltjes
 require_once('include.config.php');
 
-# als er genoeg rechten zijn een preview van de csrmail laten zien.
-if (!$lid->hasPermission('P_MAIL_SEND')) { header('location: '.CSR_ROOT); }
-require_once('class.csrmail.php');
-$csrmail = new Csrmail($lid, $db);
-require_once('class.csrmailcontent.php');
-require_once('class.csrmailcomposecontent.php');
-$csrmailbeheer = new Csrmailcomposecontent($csrmail);
+
+
+require_once('class.courant.php');
+$courant = new Courant();
+if(!$courant->magVerzenden()){ header('location: '.CSR_ROOT); exit; }
+
+require_once('class.courantcontent.php');
+$mail=new CourantContent($courant);
+
 
 if(isset($_GET['iedereen'])){
-	$csrmailbeheer->zend('pubcie@csrdelft.nl');
-	$csrmailbeheer->zend('csrmail@lists.jeugdkerken.nl');	
-	$csrmail->clearCache();
+	$mail->zend('pubcie@csrdelft.nl');
+//voorlopig even uit...
+//	$csrmailbeheer->zend('csrmail@lists.jeugdkerken.nl');	
+	$mail->leegCache();
 } else {
-	$csrmailbeheer->zend('pubcie@csrdelft.nl');
+	$mail->zend('pubcie@csrdelft.nl');
 }
 
 ?><a href="verzenden.php?iedereen=true"> aan iedereen verzenden</a>

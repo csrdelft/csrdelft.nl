@@ -2,76 +2,78 @@
 
 # instellingen & rommeltjes
 require_once('include.config.php');
-if(!$lid->hasPermission('P_MAIL_POST')){ header('location: '.CSR_ROOT.''); exit; }
 
+require_once('class.courant.php');
+$courant = new Courant();
+if(!$courant->magToevoegen()){ header('location: '.CSR_ROOT); exit; }
 
-require_once('class.csrmail.php');
-$csrmail = new Csrmail($lid, $db);
-require_once('class.csrmailcontent.php');
-$body = new CsrmailContent($csrmail);
+require_once('class.courantbeheercontent.php');
+$body = new CourantBeheerContent($courant);
+
+//url waarheen standaard gerefreshed wordt
+$courant_url=CSR_ROOT.'/intern/csrmail';
+
 
 ## zijkolom in elkaar jetzen
 	$zijkolom=new kolom();
 	if(!isset($_GET['ID'])){ //alleen op de algemene index tonen, niet bij het bewerken oid...
-		require_once('class.csrmailarchiefcontent.php');
-		$zijkolom->add(new CsrmailarchiefContent($csrmail));
+		require_once('class.courantarchiefcontent.php');
+		$zijkolom->add(new CourantarchiefContent($courant));
 	}
 	
+	
 if($_SERVER['REQUEST_METHOD']=='POST'){
-	if($csrmail->valideerBerichtInvoer($sError)===true){
+	if($courant->valideerBerichtInvoer()===true){
 		$iBerichtID=(int)$_GET['ID'];
 		if($iBerichtID==0){
 			//nieuw bericht invoeren
-			if($csrmail->addBericht($_POST['titel'], $_POST['categorie'], $_POST['bericht'] )){
-				$body->addUserMessage('<h3>Dank u</h3>
-					Uw bericht is opgenomen in ons databeest, en het zal in de komende C.S.R.-courant verschijnen.');
+			if($courant->addBericht($_POST['titel'], $_POST['categorie'], $_POST['bericht'] )){
+				$melding='<h3>Dank u</h3>Uw bericht is opgenomen in ons databeest, en het zal in de komende C.S.R.-courant verschijnen.';
 			}else{
-				$body->addUserMessage('<h1>Fout</h1>Er ging iets mis met het invoeren van uw bericht. 
-					Probeer opnieuw, of stuur uw bericht in een mail naar <a href="mailto:pubcie@csrdelft.nl">pubcie@csrdelft.nl</a>.');
+				$melding='<h1>Fout</h1>Er ging iets mis met het invoeren van uw bericht. Probeer opnieuw, of stuur uw bericht in een mail naar <a href="mailto:pubcie@csrdelft.nl">pubcie@csrdelft.nl</a>.';
+				$courant_url=CSR_ROOT.'/intern/csrmail/?ID=0';
 			}
+			$body->invokeRefresh($melding, $courant_url);
 		}else{
 			//bericht bewerken.
-			if($csrmail->bewerkBericht($iBerichtID, $_POST['titel'], $_POST['categorie'], $_POST['bericht'])){
-				$body->addUserMessage('<h3>Dank u</h3>
-					Uw bericht is opgenomen in ons databeest, en het zal in de komende C.S.R.-courant verschijnen.');
+			if($courant->bewerkBericht($iBerichtID, $_POST['titel'], $_POST['categorie'], $_POST['bericht'])){
+				$melding='<h3>Dank u</h3>Uw bericht is opgenomen in ons databeest, en het zal in de komende C.S.R.-courant verschijnen.';
 			}else{
-				$body->addUserMessage('<h1>Fout</h1>Er ging iets mis met het invoeren van uw bericht. 
-					Probeer opnieuw, of stuur uw bericht in een mail naar <a href="mailto:pubcie@csrdelft.nl">pubcie@csrdelft.nl</a>.');
+				$melding='<h1>Fout</h1>Er ging iets mis met het invoeren van uw bericht. Probeer opnieuw, of stuur uw bericht in een mail naar <a href="mailto:pubcie@csrdelft.nl">pubcie@csrdelft.nl</a>.';
+				$courant_url.='/bewerken/'.$iBerichtID;
 			}
+			$body->invokeRefresh($courant->getError(), $courant_url);
 		}
 	}else{
 		if(isset($_GET['ID']) AND $_GET['ID']==0){
-			$body->addNewForm($sError);
+			//nieuw bericht	
+			$body->setMelding($courant->getError());
 		}else{
-			$body->addEditForm((int)$_GET['ID'], $sError);
+			//bewerken		
+			$body->setMelding($courant->getError());
+			$body->edit((int)$_GET['ID']);
 		}
 	}
 }else{
 	if(isset($_GET['ID'])){
 		$iBerichtID=(int)$_GET['ID'];
 		if(isset($_GET['verwijder'])){
-			if($csrmail->verwijderBerichtVoorGebruiker($iBerichtID)){
-				$body->addUserMessage('<h3>Uw bericht is verwijderd.</h3>');
+			if($courant->verwijderBericht($iBerichtID)){
+				$body->invokeRefresh('<h3>Uw bericht is verwijderd.</h3>', $courant_url);
 			}else{
-				$body->addUserMessage('<h3>Er ging iets mis!</h3>
-					Uw bericht is niet verwijderd. Probeer het a.u.b. nog eens.');
+				$body->invokeRefresh('<h3>Er ging iets mis!</h3>Uw bericht is niet verwijderd. Probeer het a.u.b. nog eens.', $courant_url);
 			}
 		}
 		if(isset($_GET['bewerken'])){
 			//bericht bewerken.
-			$body->addEditForm($iBerichtID);
-		}
-	}elseif(isset($_GET['leegmaken'])){
-		if(is_integer($csrmail->clearCache())){
-			$body->addUserMessage('<h3>Cache is leeggemaakt!</h3>');
-		}else{
-			$body->addUserMessage('<h3>Cache leegmaken is mislukt!</h3>');
+			$body->edit($iBerichtID);
 		}
 	}
 }
-$pagina=new csrdelft($body,  $lid, $db);
+$pagina=new csrdelft($body);
 $pagina->setZijkolom($zijkolom);
 
-$pagina->view();
 
+$pagina->view();
+pr($_POST);
 ?>

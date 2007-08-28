@@ -111,8 +111,8 @@ div#ubbhulpverhaal{
 	display: none; 
 	z-index: 999;
 	position: absolute; 
-	left: -120px; 
-	width: 300px; 
+	left: -150px; 
+	width: 330px; 
 	border: 1px solid #bbb;
 	margin-top: -13px;
 	padding: 5px;
@@ -124,7 +124,13 @@ span#ubbsluiten{
 	width: 16px; height: 16px;
 	float: right;
 	margin: 0px; padding: 0px;
-	font-weight: bold;	font-size: 16px; 
+	font-weight: bold; font-size: 16px;
+	text-align: center;	vertical-align: middle; 
 	color: black; 
 	cursor: pointer; cursor: hand;
+	border: 1px solid white;
+}
+span#ubbsluiten:hover{
+	border: 1px solid black;
+	background-color: #eee;
 }
