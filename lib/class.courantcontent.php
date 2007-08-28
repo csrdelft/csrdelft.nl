@@ -55,7 +55,7 @@ class CourantContent {
 		$mail->assign('indexCats', $this->courant->getCats());
 		$mail->assign('catNames', $this->courant->getCats(true));
 		
-		$mail->assing('headers', $headers);
+		$mail->assign('headers', $headers);
 		
 		return $mail->fetch($this->courant->getTemplatePath());
 		
