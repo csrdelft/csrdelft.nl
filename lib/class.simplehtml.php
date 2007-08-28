@@ -17,15 +17,15 @@ class SimpleHTML {
 
 	}
 	function getMelding(){
-		if(isset($_SESSION['melding']) AND $_SESSION['melding']!=''){
-			$sError='<div id="melding">'.mb_htmlentities(trim($_SESSION['melding'])).'</div>';
+		if(isset($_SESSION['melding']) AND trim($_SESSION['melding'])!=''){
+			$sError='<div id="melding">'.trim($_SESSION['melding']).'</div>';
 			//maar één keer tonen, de melding.
 			unset($_SESSION['melding']);
 			return $sError;
-		}elseif($this->_sError!==false){
+		}elseif($this->_sMelding!==false AND $this->_sMelding!=''){
 			return '<div id="melding">'.$this->_sMelding.'</div>';
 		}else{
-			return '';
+			return false;
 		}
 	}
 	function setMelding($sMelding){
