@@ -14,8 +14,7 @@ $mail=new CourantContent($courant);
 
 if(isset($_GET['iedereen'])){
 	$mail->zend('pubcie@csrdelft.nl');
-//voorlopig even uit...
-//	$csrmailbeheer->zend('csrmail@lists.jeugdkerken.nl');	
+	$csrmailbeheer->zend('csrmail@lists.jeugdkerken.nl');	
 	$mail->leegCache();
 } else {
 	$mail->zend('pubcie@csrdelft.nl');
