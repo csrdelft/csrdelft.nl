@@ -27,7 +27,9 @@ class CourantarchiefContent{
 	function getTitel(){
 		return 'C.S.R.-courant van '.$this->getVerzendMoment();
 	}
-	
+	function viewWaarbenik(){
+		echo '<a href="/intern/courant/">C.S.R.-courant</a> &raquo; '.$this->getVerzendMoment();
+	}
 	private function getArchiefmails(){
 		$aMails=$this->courant->getArchiefmails();
 		$sReturn='<div id="archiefCourant">
