@@ -45,18 +45,20 @@ class BestuurZijkolomContent extends BestuurContent{
 	
 	function view(){
 		$aBesturen=$this->_bestuur->getBesturen();
-		echo '<ul style="list-style:none">';
-		foreach($aBesturen as $bestuur){
-			echo '<li style="margin-left: 0px; padding-left: 0px;">
-				'.$bestuur['jaar'].'-'.($bestuur['jaar']+1).'&nbsp;';
-			if($bestuur['praeses']!=''){
-				echo '<a href="/vereniging/bestuur/'.$bestuur['jaar'].'">';
+		if(is_array($aBesturen)){
+			echo '<ul style="list-style:none">';
+			foreach($aBesturen as $bestuur){
+				echo '<li style="margin-left: 0px; padding-left: 0px;">
+					'.$bestuur['jaar'].'-'.($bestuur['jaar']+1).'&nbsp;';
+				if($bestuur['praeses']!=''){
+					echo '<a href="/vereniging/bestuur/'.$bestuur['jaar'].'">';
+				}
+				echo str_replace(' ', '&nbsp;', $bestuur['naam']);
+				if($bestuur['praeses']!=''){ echo '</a>';}
+				echo '</li>';
 			}
-			echo str_replace(' ', '&nbsp;', $bestuur['naam']);
-			if($bestuur['praeses']!=''){ echo '</a>';}
-			echo '</li>';
+			echo '</ul>';
 		}
-		echo '</ul>';
 	}
 			
 		

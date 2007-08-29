@@ -17,7 +17,7 @@ class stats{
 
 	var $_db;
 	var $_lid;
-	function stats(&$lid, &$db){
+	function stats(){
 		$this->_lid=Lid::get_lid();
 		$this->_db=MySql::get_MySql();
 	}

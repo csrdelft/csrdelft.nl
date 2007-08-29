@@ -15,7 +15,7 @@
  * Purpose:  process ubb-tags to html
  * Input:    string to be processed
  * Example:  {$var|ubb}
- * @link http://csrdelft.nl/feuten cat
+ * @link http://csrdelft.nl/feuten
  *          (svn repository)
  * @author   Jan Pieter Waagmeester < jpwaag at jpwaag dot com>
  * @version 1.0

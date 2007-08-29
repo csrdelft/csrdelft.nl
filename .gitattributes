@@ -147,7 +147,6 @@ lib/class.neerladen.php -text
 lib/class.neerladencontent.php -text
 lib/class.nieuws.php -text
 lib/class.nieuwscontent.php -text
-lib/class.page.php -text
 lib/class.pollcontent.php -text
 lib/class.profiel.php -text
 lib/class.profielcontent.php -text
@@ -233,6 +232,7 @@ lib/smarty/libs/plugins/modifier.count_characters.php -text
 lib/smarty/libs/plugins/modifier.count_paragraphs.php -text
 lib/smarty/libs/plugins/modifier.count_sentences.php -text
 lib/smarty/libs/plugins/modifier.count_words.php -text
+lib/smarty/libs/plugins/modifier.csrnaam.php -text
 lib/smarty/libs/plugins/modifier.date_format.php -text
 lib/smarty/libs/plugins/modifier.debug_print_var.php -text
 lib/smarty/libs/plugins/modifier.default.php -text

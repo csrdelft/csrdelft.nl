@@ -4,11 +4,11 @@
 	<img src="{$csr_pics}bestuur/{$bestuur.jaar}.jpg" alt="bestuursfoto" />
 	<table class="bestuur" style="">
 		<tr>
-			<td>{$bestuur.vice_praeses}</td>		
-			<td>{$bestuur.abactis}</td>
-			<td>{$bestuur.praeses}</td>
-			<td>{$bestuur.fiscus}</td>
-			<td>{$bestuur.vice_abactis}</td>
+			<td>{$bestuur.vice_praeses|csrnaam:'full':false}</td>		
+			<td>{$bestuur.abactis|csrnaam:'full':false}</td>
+			<td>{$bestuur.praeses|csrnaam:'full':false}</td>
+			<td>{$bestuur.fiscus|csrnaam:'full':false}</td>
+			<td>{$bestuur.vice_abactis|csrnaam:'full':false}</td>
 		</tr>
 		<tr>
 			<th>vice-praeses</th>

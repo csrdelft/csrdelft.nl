@@ -4,22 +4,22 @@
 # class.bestuur.php
 # -------------------------------------------------------------------
 
-
-require_once('class.simplehtml.php');
-class Bestuur extends SimpleHTML {
+class Bestuur{
 
 	### private ###
 
 	# de objecten die data leveren
-	var $_db;
-	var $_lid;
+	private $_db;
+	private $_lid;
 
-	var $_jaar='';
-	var $_aBestuur='';
+	private $_jaar='';
+	private $_aBestuur='';
+	
 	function Bestuur() {
 		$this->_lid=Lid::get_lid();
 		$this->_db=MySql::get_MySql();
 	}
+	
 	//kijk of er een bestuur ingeladen is, anders het huidige inladen.
 	function loadIfNot(){
 		if(!isset($this->_aBestuur['naam'])){
@@ -27,6 +27,7 @@ class Bestuur extends SimpleHTML {
 			$this->loadBestuur();	
 		}
 	}
+	
 	function loadBestuur($jaar=0){
 		//leeggooien
 		$this->_jaar=0;
@@ -56,17 +57,7 @@ class Bestuur extends SimpleHTML {
 		if($rBestuur===false){ 
 			return $this->loadBestuur($jaar-1); 
 		}else{
-			while($bestuursLid=$this->_db->next($rBestuur)){
-				$this->_aBestuur=array(
-					'ID' => $bestuursLid['ID'], 'jaar' => $bestuursLid['jaar'], 'naam' => $bestuursLid['naam'],
-					'praeses' => $this->_lid->getNaamLink($bestuursLid['praeses']),
-					'abactis' => $this->_lid->getNaamLink($bestuursLid['abactis']),
-					'fiscus' => $this->_lid->getNaamLink($bestuursLid['fiscus']),
-					'vice_praeses' => $this->_lid->getNaamLink($bestuursLid['vice_praeses']),
-					'vice_abactis' => $this->_lid->getNaamLink($bestuursLid['vice_abactis']),
-					'verhaal' => $bestuursLid['verhaal'],
-					'tekst' => $bestuursLid['tekst']);
-			}
+			$this->_aBestuur=$this->_db->next($rBestuur);
 			return true;
 		}
 	}
