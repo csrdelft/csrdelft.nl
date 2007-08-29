@@ -8,7 +8,6 @@
 # -------------------------------------------------------------------
 
 
-require_once ('class.mysql.php');
 
 class Nieuws {
 
@@ -135,7 +134,7 @@ class Nieuws {
 	function isNieuwsMod(){ return $this->_lid->hasPermission('P_NEWS_MOD');}
 	
 	function resize_plaatje($file) {
-  	list($owdt,$ohgt,$otype)=@getimagesize($file);
+		list($owdt,$ohgt,$otype)=@getimagesize($file);
 		switch($otype) {
 			case 1:  $oldimg=imagecreatefromgif($file); break;
 			case 2:  $oldimg=imagecreatefromjpeg($file); break;

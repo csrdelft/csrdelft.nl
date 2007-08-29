@@ -11,7 +11,7 @@
 class SimpleHTML {
 	
 	
-	private $_sMelding=false;
+	private $_sMelding='';
 	//html voor een pagina uitpoepen.
 	function view() {
 
@@ -22,14 +22,14 @@ class SimpleHTML {
 			//maar één keer tonen, de melding.
 			unset($_SESSION['melding']);
 			return $sError;
-		}elseif($this->_sMelding!==false AND $this->_sMelding!=''){
+		}elseif($this->_sMelding!=''){
 			return '<div id="melding">'.$this->_sMelding.'</div>';
 		}else{
-			return false;
+			return '';
 		}
 	}
 	function setMelding($sMelding){
-		$this->_sMelding=trim($sMelding);
+		$this->_sMelding.=trim($sMelding);
 	}
 	function invokeRefresh($sMelding, $url=null){
 		if($sMelding!=''){
@@ -43,7 +43,7 @@ class SimpleHTML {
 	}
 	
 	//eventueel titel voor een pagina geven
-	function title($sTitle=false){
+	function getTitel($sTitle=false){
 		if($sTitle===false){
 			return 'C.S.R. Delft';
 		}else{

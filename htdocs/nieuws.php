@@ -27,14 +27,14 @@ if(isset($_FILES['plaatje'], $_GET['berichtID']) AND $nieuws->isNieuwsMod() AND 
 				$nieuws->resize_plaatje(PICS_PATH.'/nieuws/'.$plaatje);
 			}
 			if(!$nieuws->setPlaatje($berichtID, $plaatje)){
-				$nieuwscontent->setError('Afbeelding toevoegen mislukt.<br />');
+				$nieuwscontent->setMelding('Afbeelding toevoegen mislukt.<br />');
 			}
 			chmod(PICS_PATH.'/nieuws/'.$plaatje, 0644);
 		}else{
-			$nieuwscontent->setError('Afbeelding verplaatsen is mislukt.<br />');
+			$nieuwscontent->setMelding('Afbeelding verplaatsen is mislukt.<br />');
 		}
 	}else{
-		$nieuwscontent->setError('Afbeelding is niet in de juiste verhouding.<br />');
+		$nieuwscontent->setMelding('Afbeelding is niet in de juiste verhouding.<br />');
 	}
 }
 //plaatje verwijderen
@@ -54,7 +54,7 @@ if(isset($_POST['titel'], $_POST['tekst']) AND $nieuws->isNieuwsMod()){
 			if($nieuws->addMessage(ucfirst($_POST['titel']), $tekst, $prive, $verborgen)){
 				header('location: '.REFRESH); exit;
 			}else{
-				$nieuwscontent->setError("Query mislukt");
+				$nieuwscontent->setMelding("Query mislukt ");
 			}
 		}else{
 			//formulier geeft een fout, geef het opnieuw weer

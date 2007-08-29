@@ -33,14 +33,6 @@ class NieuwsContent extends SimpleHTML {
 	}
 
 	function setChop($chars) { $this->_chop = (int)$chars; }
-	function setError($sError){ $this->_sError.=$sError; }
-	function getError(){
-		if($this->_sError!=''){ 
-			return '<div class="foutmelding">'.$this->_sError.'</div>'; 
-		}else{
-			return '';
-		}
-	}
 	function getNieuwBerichtLink(){
 		if($this->_nieuws->isNieuwsMod()){
 			return '<a href="/nieuws/toevoegen" class="knop">Nieuw nieuwsbericht</a>';
@@ -75,7 +67,7 @@ class NieuwsContent extends SimpleHTML {
 		
 		echo '<form action="/nieuws/bewerken/'.$this->_berichtID.'" method="post" enctype="multipart/form-data">';
 		echo '<div class="pubciemail-form">';
-		echo $this->getError();
+		echo $this->getMelding();
 		echo '<strong>Titel</strong><br />
 		<input type="text" name="titel" class="tekst" value="'.$titel.'" style="width: 100%;" /><br />
 		<strong>Bericht</strong>&nbsp;&nbsp;';
@@ -106,7 +98,7 @@ class NieuwsContent extends SimpleHTML {
 		if(isset($_POST['prive'])){ $prive='checked="checked"'; }
 		if(isset($_POST['verborgen'])){ $verborgen='checked="checked"'; }
 		echo '<form action="/nieuws/toevoegen" method="post"><div class="pubciemail-form">';
-		echo $this->getError();
+		echo $this->getMelding();
 		echo '<strong>Titel</strong><br />
 		<input type="text" name="titel" class="tekst" value="'.$titel.'" style="width: 100%;" /><br />
 		<strong>Bericht</strong>&nbsp;&nbsp;';
@@ -121,15 +113,15 @@ class NieuwsContent extends SimpleHTML {
 		$bNoError=true;
 		if(!(isset($_POST['titel']) AND isset($_POST['tekst']))){
 			$bNoError=false;
-			$this->_sError.='Formulier is niet compleet<br />';
+			$this->setMelding('Formulier is niet compleet<br />');
 		}else{
 			if(strlen($_POST['titel'])<2){
 				$bNoError=false;
-				$this->_sError.='Het veld <strong>titel</strong> moet minstens 2 tekens bevatten.<br />';
+				$this->setMelding('Het veld <strong>titel</strong> moet minstens 2 tekens bevatten.<br />');
 			}
 			if(strlen($_POST['tekst'])<5){
 				$bNoError=false;
-				$this->_sError.='Het veld <strong>tekst</strong> moet minstens 5 tekens bevatten.<br />';
+				$this->setMelding('Het veld <strong>tekst</strong> moet minstens 5 tekens bevatten.<br />');
 			}
 		}
 		return $bNoError;
