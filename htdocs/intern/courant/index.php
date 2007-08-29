@@ -11,7 +11,7 @@ require_once('class.courantbeheercontent.php');
 $body = new CourantBeheerContent($courant);
 
 //url waarheen standaard gerefreshed wordt
-$courant_url=CSR_ROOT.'/intern/csrmail';
+$courant_url=CSR_ROOT.'intern/courant';
 
 
 ## zijkolom in elkaar jetzen
