@@ -1,7 +1,7 @@
 <?php
 # C.S.R. Delft | pubcie@csrdelft.nl
 # -------------------------------------------------------------------
-# class.dbmenu.php
+# class.menu.php
 # -------------------------------------------------------------------
 # Een menu incl permissies uit de database trekken.
 # De menuopties die niet overeenkomen met de permissies die de

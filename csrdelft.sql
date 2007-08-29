@@ -555,10 +555,10 @@ CREATE TABLE nieuws (
 -- --------------------------------------------------------
 
 -- 
--- Tabel structuur voor tabel 'pubciemail'
+-- Tabel structuur voor tabel 'courant'
 -- 
 
-CREATE TABLE pubciemail (
+CREATE TABLE courant (
   ID int(11) NOT NULL auto_increment,
   verzendMoment datetime NOT NULL default '0000-00-00 00:00:00',
   template varchar(50) NOT NULL default 'csrmail.tpl',
@@ -569,12 +569,12 @@ CREATE TABLE pubciemail (
 -- --------------------------------------------------------
 
 -- 
--- Tabel structuur voor tabel 'pubciemailbericht'
+-- Tabel structuur voor tabel 'courantbericht'
 -- 
 
-CREATE TABLE pubciemailbericht (
+CREATE TABLE courantbericht (
   ID int(11) NOT NULL auto_increment,
-  pubciemailID int(11) NOT NULL default '0',
+  courantID int(11) NOT NULL default '0',
   titel varchar(100) NOT NULL default '',
   cat enum('voorwoord','bestuur','csr','overig') NOT NULL default 'bestuur',
   bericht text NOT NULL,
@@ -587,10 +587,10 @@ CREATE TABLE pubciemailbericht (
 -- --------------------------------------------------------
 
 -- 
--- Tabel structuur voor tabel 'pubciemailcache'
+-- Tabel structuur voor tabel 'courantcache'
 -- 
 
-CREATE TABLE pubciemailcache (
+CREATE TABLE courantcache (
   ID int(11) NOT NULL auto_increment,
   titel varchar(100) NOT NULL default '',
   cat enum('voorwoord','bestuur','csr','overig') NOT NULL default 'overig',

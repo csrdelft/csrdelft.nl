@@ -9,8 +9,9 @@
 require_once('include.config.php');
 
 if(!$lid->hasPermission('P_LOGGED_IN')){ header('location: '.CSR_ROOT); exit; }
+
 require_once('class.streeplijstcontent.php');
-$body=new Streeplijstcontent($lid, $db);
+$body=new Streeplijstcontent();
 
 
 if(isset($_GET['pdf'])){
@@ -19,6 +20,7 @@ if(isset($_GET['pdf'])){
 	echo $body->getHtml();
 }else{
 	$pagina=new csrdelft($body, $lid, $db);
-	$pagina->setZijkolom(new stringincluder('Klus hier uw streeplijst'));
+	$pagina->setZijkolom(new stringincluder('<h4>Klus hier uw streeplijst</h4>' .
+			'Wellicht handig voor polo\'s, weekeinden, wat dan ook. '));
 	$pagina->view();
 }

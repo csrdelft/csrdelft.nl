@@ -18,9 +18,9 @@ class Streeplijstcontent {
 	var $aGoederen;
 	var $aLeden;
 	
-	function Streeplijstcontent(&$lid, &$db){
-		$this->_db=$db;
-		$this->_lid=$lid;
+	function Streeplijstcontent(){
+		$this->_lid=Lid::get_lid();
+		$this->_db=MySql::get_MySql();
 		
 		$this->load();
 		

@@ -2,7 +2,7 @@
 error_reporting(E_ALL);
 
 
-require_once('/srv/www/www.csrdelft.nl/lib/include.config.php');
+require_once('include.config.php');
 
 
 if(!$lid->hasPermission('P_ADMIN')){
@@ -10,7 +10,7 @@ if(!$lid->hasPermission('P_ADMIN')){
 	exit;
 }
 	
-$pagina=new csrdelft(new stats($lid, $db), $lid, $db);
+$pagina=new csrdelft(new stats());
 $pagina->view();
 
 class stats{
@@ -18,8 +18,8 @@ class stats{
 	var $_db;
 	var $_lid;
 	function stats(&$lid, &$db){
-		$this->_db=&$db;
-		$this->_lid=&$lid;
+		$this->_lid=Lid::get_lid();
+		$this->_db=MySql::get_MySql();
 	}
 	function view(){
 		$lid=$this->_lid;
