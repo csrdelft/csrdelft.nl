@@ -7,7 +7,7 @@
 class CourantBeheercontent extends SimpleHTML{
 	
 	private $ubb;
-	private $courant;				//db object voor de csrmail
+	private $courant;				//db object voor de courant
 	
 	private $_edit=0;				//bericht wat bewerkt moet worden.
 	

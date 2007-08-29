@@ -28,10 +28,10 @@ class CourantarchiefContent{
 	private function getArchiefmails(){
 		$aMails=$this->courant->getArchiefmails();
 		$sReturn='<div id="archiefCourant">
-				<a class="kopje" href="/intern/csrmail/">Archief</a><br />';
+				<a class="kopje" href="/intern/courant/">Archief</a><br />';
 		if(is_array($aMails)){
 			foreach($aMails as $aMail){
-				$sReturn.='<a href="/intern/csrmail/archief/'.$aMail['ID'].'">'.strftime('%d %B %Y', strtotime($aMail['verzendMoment'])).'</a><br />';
+				$sReturn.='<a href="/intern/courant/archief/'.$aMail['ID'].'">'.strftime('%d %B %Y', strtotime($aMail['verzendMoment'])).'</a><br />';
 			}
 		}else{
 			$sReturn.='Geen couranten in het archief aanwezig';
@@ -51,7 +51,7 @@ class CourantarchiefContent{
 		}else{
 			$verzendmoment=strftime('%d %B %Y', strtotime($this->courant->getVerzendmoment()));
 			echo '<h2>C.S.R.-courant '.$verzendmoment.'</h2>';
-			echo '<iframe src="/intern/csrmail/archief/iframe/'.$this->courant->getID().'"
+			echo '<iframe src="/intern/courant/archief/iframe/'.$this->courant->getID().'"
 					style="width: 100%; height: 700px; border: 0px;"></iframe>';
 					
 		}

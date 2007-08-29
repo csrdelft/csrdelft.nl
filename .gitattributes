@@ -46,11 +46,11 @@ htdocs/index.php -text
 htdocs/intern/.htaccess -text
 htdocs/intern/agenda/.htaccess -text
 htdocs/intern/agenda/index.php -text
-htdocs/intern/csrmail/.htaccess -text
-htdocs/intern/csrmail/archief.php -text
-htdocs/intern/csrmail/courant.php -text
-htdocs/intern/csrmail/index.php -text
-htdocs/intern/csrmail/verzenden.php -text
+htdocs/intern/courant/.htaccess -text
+htdocs/intern/courant/archief.php -text
+htdocs/intern/courant/courant.php -text
+htdocs/intern/courant/index.php -text
+htdocs/intern/courant/verzenden.php -text
 htdocs/intern/documenten/documenten.php -text
 htdocs/intern/documenten/neerladen.php -text
 htdocs/intern/documenten/toevoegen.php -text
