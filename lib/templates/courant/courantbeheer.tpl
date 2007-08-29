@@ -6,11 +6,11 @@
 </p>
 <div id="knoppenContainer">
 	{if $courant->magVerzenden()}
-		<a href="/intern/csrmail/verzenden.php" onclick="return confirm('Weet u het zeker dat u de C.S.R.-courant wilt versturen?')" class="knop">Verzenden</a>
+		<a href="/intern/courant/verzenden.php" onclick="return confirm('Weet u het zeker dat u de C.S.R.-courant wilt versturen?')" class="knop">Verzenden</a>
 	{/if}
 	{* Volgens mij wordt deze nooit gebruikt...
 		{if $courant->magBeheren()}
-		<a href="/intern/csrmail/leegmaken" class="knop" onclick="return confirm('Weet u zeker dat u de cache wilt leeggooien?')">Leegmaken</a>
+		<a href="/intern/courant/leegmaken" class="knop" onclick="return confirm('Weet u zeker dat u de cache wilt leeggooien?')">Leegmaken</a>
 		{/if}
 	*}
 </div>
@@ -30,8 +30,8 @@
 					<u>{$bericht.categorie|replace:'csr':'C.S.R.'}</u>
 					{if $courant->magBeheren()}({$courant->getNaam($bericht.uid)}){/if}
 					<strong>{$bericht.titel}</strong>
-					[ <a href="/intern/csrmail/bewerken/{$bericht.ID}">bewerken</a> | 
-					<a href="/intern/csrmail/verwijder/{$bericht.ID}" onclick="return confirm('Weet u zeker dat u dit bericht wilt verwijderen?')" >verwijderen</a> ]
+					[ <a href="/intern/courant/bewerken/{$bericht.ID}">bewerken</a> | 
+					<a href="/intern/courant/verwijder/{$bericht.ID}" onclick="return confirm('Weet u zeker dat u dit bericht wilt verwijderen?')" >verwijderen</a> ]
 				</dt>
 				{if !$courant->magBeheren()}<dd>{$bericht.bericht|ubb}</dd>{/if}
 			{/foreach}
@@ -64,7 +64,7 @@
 		<script type="text/javascript">//<![CDATA[{literal}
 			function showIframe(){
 				target =document.getElementById('courant_voorbeeld');
-				target.innerHTML = "<iframe src=\"/intern/csrmail/courant.php\" style=\"width: 100%; height: 600px;\"></iframe>";
+				target.innerHTML = "<iframe src=\"/intern/courant/courant.php\" style=\"width: 100%; height: 600px;\"></iframe>";
 			}
 		//]]></script>{/literal}
 		<a href="#" onclick="showIframe()">Laat voorbeeld zien...</a>
