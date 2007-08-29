@@ -24,6 +24,9 @@ class CourantarchiefContent{
 			$this->courant->load((int)$_GET['ID']);
 		}
 	}
+	function getTitel(){
+		return 'C.S.R.-courant van '.$this->getVerzendMoment();
+	}
 	
 	private function getArchiefmails(){
 		$aMails=$this->courant->getArchiefmails();
@@ -44,13 +47,15 @@ class CourantarchiefContent{
 	//hoofdgedeelte
 	function toggleZijkolom(){ $this->zijkolom=!$this->zijkolom; }
 	
+	function getVerzendMoment(){
+		return strftime('%d %B %Y', strtotime($this->courant->getVerzendmoment()));
+	}
 	function view(){
 		if($this->courant->getID()==0 OR $this->zijkolom){
 			//overzicht
 			echo $this->getArchiefmails();
 		}else{
-			$verzendmoment=strftime('%d %B %Y', strtotime($this->courant->getVerzendmoment()));
-			echo '<h2>C.S.R.-courant '.$verzendmoment.'</h2>';
+			echo '<h2>C.S.R.-courant '.$this->getVerzendMoment().'</h2>';
 			echo '<iframe src="/intern/courant/archief/iframe/'.$this->courant->getID().'"
 					style="width: 100%; height: 700px; border: 0px;"></iframe>';
 					
