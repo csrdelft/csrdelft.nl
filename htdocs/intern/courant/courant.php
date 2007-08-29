@@ -13,8 +13,8 @@ require_once('include.config.php');
 require_once('class.courant.php');
 $courant=new Courant();
 
-# als er genoeg rechten zijn een preview van de csrmail laten zien.
-if (!$courant->magBeheren()) { header('location: '.CSR_ROOT); exit; }
+# als er genoeg rechten zijn een preview van de courant laten zien.
+if (!$courant->magPosten()) { header('location: '.CSR_ROOT); exit; }
 
 //kijken of de huidige getoond moet worden, of een nieuwe
 if(isset($_GET['ID']) AND $_GET['ID']!=0){
