@@ -292,7 +292,7 @@ class Courant {
 					)VALUES(
 						".$iCourantID.", 
 						'".$this->clearTitel($aBericht['titel'])."', 
-						'".$this->clearCategorie($aBericht['cat'])."', 
+						'".$this->clearCategorie($aBericht['categorie'])."', 
 						'".$this->clearBericht($aBericht['bericht'])."', 
 						'".$aBericht['volgorde']."',
 						'".$aBericht['uid']."',
@@ -318,7 +318,7 @@ class Courant {
 			( 
 				verzendMoment, verzender, template
 			) VALUES (
-				'".$datumTijd."', '".$uid."', '".CSRMAIL_TEMPLATE."'
+				'".$datumTijd."', '".$uid."', '".COURANT_TEMPLATE."'
 			);";
 		if($this->_db->query($sCreatecourantQuery)){
 			return $this->_db->insert_id();
