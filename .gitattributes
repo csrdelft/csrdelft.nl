@@ -159,6 +159,8 @@ lib/class.stringincluder.php -text
 lib/class.toevoegen.php -text
 lib/class.toevoegencontent.php -text
 lib/class.verjaardagcontent.php -text
+lib/class.werkgroep.php -text
+lib/class.werkgroepcontent.php -text
 lib/class.woonoord.php -text
 lib/class.woonoordcontent.php -text
 lib/include.common.php -text
