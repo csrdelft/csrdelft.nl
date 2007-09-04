@@ -131,7 +131,7 @@ class Lid {
 		return false;
 	}
 
-	# FIXME: implement this
+	# TODO: implement this
 	function _login_cli($user) {
 		return false;
 	}

@@ -77,6 +77,12 @@ class CsrUBB extends eamBBParser{
         
         return $r->rainBow($string);
     }
+    
+    //even een rul-aliasjes....
+    function ubb_rul($arguments = array()){
+    	return ubb_url($arguments);
+    }
+    
 	function viewUbbHelp(){
 echo '
 <div id="ubbhulp">

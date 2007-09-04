@@ -126,7 +126,7 @@ class Courant {
 			return 'overig'; 
 		}	
 	}
-	function addBericht($titel, $categorie, $bericht){
+	public function addBericht($titel, $categorie, $bericht){
 		//berichten invoeren mag enkel in de cache	
 		if(!$this->isCache()){ 
 			$this->sError='Berichten mogen enkel in de cache worden ingevoerd. (Courant::addBericht())';			
@@ -171,7 +171,7 @@ class Courant {
 		}
 		return false; 
 	}
-	function bewerkBericht($iBerichtID, $titel, $categorie, $bericht){
+	public function bewerkBericht($iBerichtID, $titel, $categorie, $bericht){
 		$iBerichtID=(int)$iBerichtID;
 		if(!$this->isZichtbaar($iBerichtID)){ return false; }
 		$sBerichtQuery="
@@ -189,7 +189,7 @@ class Courant {
 		
 	}
 	
-	function valideerBerichtInvoer(){
+	public function valideerBerichtInvoer(){
 		$bValid=true;
 		if(isset($_POST['titel']) AND isset($_POST['categorie']) AND isset($_POST['bericht'])){
 			if(strlen(trim($_POST['titel'])) < 2 ){
@@ -207,7 +207,7 @@ class Courant {
 		return $bValid;
 	}
 	
-	function getVerzendmoment(){
+	public function getVerzendmoment(){
 		if(!$this->isCache()){
 			//beetje ranzige manier om het eerste element van de array aan te spreken
 			$first=current($this->berichten);
@@ -229,7 +229,7 @@ class Courant {
 	 * Geef de berichten uit de cache terug die de huidige gebruiker mag zien.
 	 * Als de gebruiker beheerder of bestuur is mag de gebruiker alle berichten zien.
 	 */
-	function getBerichtenVoorGebruiker(){
+	public function getBerichtenVoorGebruiker(){
 		if($this->isCache()){
 			$userCache=array();
 			//mods en bestuur zien alle berichten
@@ -249,13 +249,13 @@ class Courant {
 		}
 	}
 	
-	function getBericht($iBerichtID){
+	public function getBericht($iBerichtID){
 		$iBerichtID=(int)$iBerichtID;
 		if(!$this->isZichtbaar($iBerichtID)){ return false; }
 		return $this->berichten[$iBerichtID];
 	}
 	
-	function verwijderBericht($iBerichtID){
+	public function verwijderBericht($iBerichtID){
 		$iBerichtID=(int)$iBerichtID;
 		if(!$this->isZichtbaar($iBerichtID)){ return false; }
 		$sBerichtVerwijderen="
@@ -331,7 +331,7 @@ class Courant {
 	###	Archief-methodes, heeft niets meer met de huidige instantie
 	### te maken.
 	################################################################
-	function getArchiefmails($iJaar = null){
+	public function getArchiefmails($iJaar = null){
 		if($iJaar!=null){
 			$sQueryJaar="WHERE YEAR(verzendMoment) = ".$iJaar;
 		}
@@ -353,7 +353,7 @@ class Courant {
 		}
 	}
 	
-	function getArchiefjaren(){
+	public function getArchiefjaren(){
 		$sJarenQuery="
 			SELECT
 				DISTINCT YEAR(verzendMoment) AS jaar
