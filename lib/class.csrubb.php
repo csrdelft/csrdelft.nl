@@ -80,7 +80,7 @@ class CsrUBB extends eamBBParser{
     
     //even een rul-aliasjes....
     function ubb_rul($arguments = array()){
-    	return ubb_url($arguments);
+    	return $this->ubb_url($arguments);
     }
     
 	function viewUbbHelp(){
