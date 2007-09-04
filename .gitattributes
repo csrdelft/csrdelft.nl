@@ -56,8 +56,6 @@ htdocs/intern/documenten/neerladen.php -text
 htdocs/intern/documenten/toevoegen.php -text
 htdocs/intern/eetplan.php -text
 htdocs/intern/index.php -text
-htdocs/intern/inschrijving/index.php -text
-htdocs/intern/inschrijving/inschrijving.php -text
 htdocs/intern/lijst.php -text
 htdocs/intern/profiel.php -text
 htdocs/intern/sjaarsacties.php -text
