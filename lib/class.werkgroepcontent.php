@@ -93,7 +93,7 @@ class WerkgroepContent extends SimpleHTML {
 								onclick="'."return confirm('Weet u zeker dat u wilt aanmelden voor deze werkgroep?')".'">aanmelden</a>';
 						}
 					}else{
-						echo 'Deze activiteit is <strong>vol</strong>. U kunt zich niet meer aanmelden.';
+						echo 'Deze werkgroep is <strong>vol</strong>. U kunt zich niet meer aanmelden.';
 					}
 					echo '</td>';
 				}
