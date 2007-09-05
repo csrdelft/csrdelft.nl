@@ -82,22 +82,14 @@ li{
 	font-size: 11px;
 }div.citaatContainer{
 	margin: 5px 5px 5px 20px;
-}
-div.citaat{ 
-	background-color: #d9e1ff;
-	padding: 5px 10px 5px 10px;
-	font-size: 0.98em;
-}
-div.citaatContainer div.citaat div.citaatContainer div.citaat{ background-color: #e9e9e9;}
-div.citaatContainer div.citaat div.citaatContainer div.citaat div.citaatContainer div.citaat{ background-color: #efefef;}
- -->{/literal}
+} -->{/literal}
 </style>
 </head>
 <body >
 <table>
 <tr>
 <td class="zijKolom" valign="top">
-<img src="http://plaetjes.csrdelft.nl/csrmail/logo.jpg" width="150px" height="197px" alt="logo van C.S.R." />
+<img src="http://plaetjes.csrdelft.nl/csrmail/logo.jpg" width="150px" height="197px" alt="Logo van C.S.R." />
 <img src="http://plaetjes.csrdelft.nl/csrmail/balk.gif" width="150px" height="100%" />
 </td>
 <td class="hoofdKolom">
