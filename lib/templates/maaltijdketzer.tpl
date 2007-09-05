@@ -98,7 +98,9 @@ uitprinten. Vanaf dat moment zal deze ketzer u niet meer willen aan- of afmelden
 								<tr>
 									<td>{$naam}</td>
 									<td>
-										<a href="{$smarty.server.PHP_SELF}?a=af&m={$maaltijd.id}&uid={$uid}">[ afmelden ]</a>
+										{if $maaltijd.gesloten != 1}
+											<a href="{$smarty.server.PHP_SELF}?a=af&m={$maaltijd.id}&uid={$uid}">[ afmelden ]</a>
+										{/if}
 									</td>
 								</tr>
 							{/foreach}
