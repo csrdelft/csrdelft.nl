@@ -80,7 +80,17 @@ li{
 	margin: 0px 0px 0px 00px;
 	color: #020883;
 	font-size: 11px;
-} -->{/literal}
+}div.citaatContainer{
+	margin: 5px 5px 5px 20px;
+}
+div.citaat{ 
+	background-color: #d9e1ff;
+	padding: 5px 10px 5px 10px;
+	font-size: 0.98em;
+}
+div.citaatContainer div.citaat div.citaatContainer div.citaat{ background-color: #e9e9e9;}
+div.citaatContainer div.citaat div.citaatContainer div.citaat div.citaatContainer div.citaat{ background-color: #efefef;}
+ -->{/literal}
 </style>
 </head>
 <body >
