@@ -177,6 +177,42 @@ switch ($action) {
 
         break;
 
+    case 'aaidrom':
+        # naam opvragen en beginletters omdraaien
+        if (isset($_GET['getuid']) and $_GET['getuid'] != $uid) {
+            # er permissie is om profiel van anderen in te zien en de andere uid bestaat
+            if ( !$lid->hasPermission('P_LEDEN_READ') and !$lid->hasPermission('P_OUDLEDEN_READ')
+                 or !$lid->uidExists($_GET['uid']) ) {
+                echo "[]";
+                break;
+            }
+            require_once('class.profiel.php');
+            $anderlid = new Profiel($db);
+            if (!$anderlid->loadSqlTmpProfile($_GET['getuid'])) {
+                echo "[]";
+                break;
+            }
+            $profiel = $anderlid->getTmpProfile();
+        } else {
+            $profiel = $lid->getProfile();
+        }
+
+        $result = array();
+        $voor = array(); preg_match('/^([^aeiuoy]*)(.*)$/', $profiel['voornaam'], $voor);
+        $achter = array(); preg_match('/^([^aeiuoy]*)(.*)$/', $profiel['achternaam'], $achter);
+
+        $result[] = sprintf("%s%s %s%s%s"
+            , $achter[1]
+            , $voor[2]
+            , ($profiel['tussenvoegsel'] != '') ? $profiel['tussenvoegsel'] . ' ' : ''
+            , $voor[1]
+            , $achter[2]
+        );
+
+        echo json_encode($result);
+
+        break;
+
     case 'whoami':
         echo json_encode(array($lid->getFullName()));
         break;
@@ -253,16 +289,16 @@ switch ($action) {
         if ($maaltrack->isMaaltijd($maalid)) {
             $maalinfo = $maaltrack->getMaaltijd($maalid);
             $result[] = "maalid: " . $maalinfo['id'];
-            $result[] = "datum: " . strftime('%a %e %B %H:%I', $maalinfo['datum']);
+            $result[] = "datum: " . str_replace('  ',' ',strftime('%a %e %B %H:%M', $maalinfo['datum']));
             $result[] = "omschrijving: " . $maalinfo['tekst'];
             $result[] = "abosoort: " . $maaltrack->getAboTekst($maalinfo['abosoort']);
 
-            $aantal = "aantal inschrijvingen: " . $maalinfo['aantal'];
+            $aantal = sprintf("aantal inschrijvingen: %d/%d", $maalinfo['aantal'], $maalinfo['max']);
             if ($maalinfo['gesloten']) $aantal .= ' (GESLOTEN)';
             elseif ($maalinfo['max'] <= $maalinfo['aantal']) $aantal .= ' (VOL)';
             $result[] = $aantal;
 
-            $result[] = "tafelpraeses: " . $lid->getNaamLink($maalinfo['tp'], 'civitas', false, false, false);
+            $result[] = "tafelpraeses: " . $lid->getNaamLink($maalinfo['tp_uid'], 'civitas', false, false, false);
             # hm, het koks/afwassers gedeelte is nog niet helemaal uitgedacht volgens mij...
             # het zijn er niet altijd exact 2/3 namelijk
             #$result[] = sprintf("koks: %s, %s", $maalinfo['kok1'], $maalinfo['kok2']);

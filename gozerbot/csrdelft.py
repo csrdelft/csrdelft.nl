@@ -18,7 +18,7 @@ from urllib import urlencode
 
 import simplejson, re, os, urllib2, string
 
-plughelp.add('csrdelft', 'functionaliteit voor C.S.R. leden')
+plughelp.add('csrdelft', 'functionaliteit voor C.S.R.-leden')
 
 # bot user <-> ledenlijst uid mapping
 csruidmap = Persist(os.path.join(datadir, 'csruidmap'))
@@ -29,6 +29,10 @@ if not csruidmap.data:
 csrconfig = Persist(os.path.join(datadir, 'csr-config'))
 if not csrconfig.data:
     csrconfig.data = {'proto': '', 'url': '', 'user': '', 'pass': ''}
+
+def size():
+    """ aantal koppelingen csr<->bot users """
+    return len(csruidmap.data)
 
 class CsrRequest:
     """ afhandelen van communicatie met de website """
@@ -359,7 +363,7 @@ examples.add('profiel', handle_profiel.__doc__, '1) profiel 2) profiel 9808')
 def handle_zoek(bot, ievent):
     """ zoeken in de ledenlijst """
     username = users.getname(ievent.userhost)
-    if ievent.command == 'csr-zoek':
+    if ievent.command == 'zoek':
         request = CsrRequest('zoek', username)
     else:
         request = CsrRequest('zoekoud', username)
@@ -410,5 +414,22 @@ def handle_perms(bot, ievent):
 
 cmnds.add('csr-perms', handle_perms, 'CSRDELFT')
 examples.add('csr-perms', handle_perms.__doc__, 'csr-perms')
+
+def handle_aaidrom(bot, ievent):
+    """ beginletters naam omdraaien """
+    username = users.getname(ievent.userhost)
+    request = CsrRequest('aaidrom', username)
+    if ievent.rest:
+        request.setparams({'getuid': ievent.rest})
+    if not request.execute():
+        ievent.reply(request.error)
+        return
+    if request.result:
+        ievent.reply(request.result)
+    else:
+        ievent.reply('niet bekend')
+
+cmnds.add('aaidrom', handle_aaidrom, 'CSRDELFT')
+examples.add('aaidrom', handle_aaidrom.__doc__, 'aaidrom x101')
 
 # vim:ts=4:sw=4:expandtab
