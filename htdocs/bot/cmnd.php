@@ -254,7 +254,7 @@ switch ($action) {
 
             $botlijst[] = sprintf('%s) %s, %s (%s)%s'
                 , $l['id']
-                , strftime('%a %e %B %H:%I', $l['datum'])
+                , str_replace('  ',' ',strftime('%a %e %B %H:%M', $l['datum']))
                 , $l['tekst']
                 , $l['status']
                 , $error
@@ -353,7 +353,7 @@ switch ($action) {
 
             $result = sprintf('%s aangemeld voor de maaltijd op %s'
                 , $wie
-                , strftime('%a %e %B %H:%I', $maalinfo['datum'])
+                , str_replace('  ',' ',strftime('%a %e %B %H:%M', $maalinfo['datum']))
             );
         } else {
             if ($proxyuid != '')
@@ -391,7 +391,7 @@ switch ($action) {
         if ($maaltrack->afmelden($maalid)) {
             $maalinfo = $maaltrack->getMaaltijd($maalid);
             $result = sprintf('U bent afgemeld voor de maaltijd op %s'
-                , strftime('%a %e %B %H:%I', $maalinfo['datum'])
+                , str_replace('  ',' ',strftime('%a %e %B %H:%M', $maalinfo['datum']))
             );
         } else {
             $result = $maaltrack->getError();
