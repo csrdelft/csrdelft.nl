@@ -132,7 +132,7 @@ class MaalTrack {
 		}
 		
 		# kijk of $abosoort voorkomt in tabel maaltijdabosoort
-		if ($abosoort != "" AND !$this->isValidAbo($abosoort)){
+		if (!array_key_exists($abosoort, $this->getAbos())) {
 			$this->_error = "Er is geen bestaande abonnementsvorm opgegeven."; 
 			return false;
 		}
