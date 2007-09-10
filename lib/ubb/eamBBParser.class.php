@@ -748,9 +748,22 @@ class eamBBParser{
 		}
 		return $html;
 	}
-	function ubb_img($arguments)
-	{
-		
+	function ubb_img($arguments){
+		if(isset($arguments['float'])){
+			$float='margin: 10px; float: ';
+			switch($arguments['float']){
+				case 'left':
+					$float.=' left;';
+				break;
+				case 'right':
+					$float.=' right;';
+				break;
+				default;
+					$float='';
+			}
+		}else{
+			$float='';
+		}
 		if(isset($arguments['w'])){
 			if((int) $arguments['w']){ // Int to eliminate scripting
 				$width = 'width="'.((int)$arguments['w']).'" ';
@@ -772,7 +785,7 @@ class eamBBParser{
 		}
 		
 		$content = $this->parseArray(array('[/img]'), array());
-		$html = '<img class="forum_image" src="'.$content.'" alt="" '.$width . $height.'/>';
+		$html = '<img class="forum_image" src="'.$content.'" alt="" '.$width . $height.' style="'.$float.'" />';
 		return $html;
 	
 	}

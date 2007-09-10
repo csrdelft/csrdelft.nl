@@ -19,7 +19,7 @@
 		</tr>
 	</table>
 	
-	<p style="margin: 20px;">
+	<p style="margin: 40px; padding: 20px; font-size: 18px; background-color: #eee; text-align: left;">
 		{$bestuur.tekst|ubb}
 	</p>
 	<p>
