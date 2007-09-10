@@ -19,7 +19,10 @@
 		</tr>
 	</table>
 	
+	<p style="margin: 20px;">
+		{$bestuur.tekst|ubb}
+	</p>
 	<p>
-		{$bestuur.tekst}
+		{$bestuur.verhaal|ubb}
 	</p>
 </div>

@@ -83,13 +83,13 @@ class CsrUBB extends eamBBParser{
     	return $this->ubb_url($arguments);
     }
     
-	function viewUbbHelp(){
-echo '
+	static function viewUbbHelp(){
+echo <<<UBBVERHAAL
 <div id="ubbhulp">
-	<a href="#laatste" onclick="document.getElementById(\'ubbhulpverhaal\').style.display = \'block\'">Opmaakhulp weergeven</a><br />
+	<a href="#laatste" onclick="document.getElementById('ubbhulpverhaal').style.display = 'block'">Opmaakhulp weergeven</a><br />
 </div>
 <div id="ubbhulpverhaal">
-	<span id="ubbsluiten" onclick="document.getElementById(\'ubbhulpverhaal\').style.display = \'none\'" title="Opmaakhulp verbergen">&times;</span>
+	<span id="ubbsluiten" onclick="document.getElementById('ubbhulpverhaal').style.display = 'none'" title="Opmaakhulp verbergen">&times;</span>
 	<h2>Tekst opmaken</h2>
 	U kunt uw berichten opmaken met een simpel opmaaktaaltje wat ubb genoemd wordt. Het lijkt wat op html, maar dan met vierkante haken:<br />
 	<ul>
@@ -102,11 +102,13 @@ echo '
 		<li>[citaat][/citaat] voor een citaat. [citaat=<em>lidnummer</em>][/citaat] voor een citaat van een lid.</li>
 		<li>[lid=<em>lidnummer</em>] voor een link naar het profiel van een lid of oudlid</li>
 		<li>[youtube]<em>youtube-id</em>[/youtube] voor een filmpje direct in je post</li>
+		<li>[ubboff]...[/ubboff] voor een stukje met ubb-tags zonder dat ze ge&iuml;nterpreteerd worden</li>
 	</ul>
 	Gebruik deze mogelijkheden spaarzaam, ga niet ineens alles vet maken of kleurtjes geven!<br />
 	<br />
 	
-</div>';
+</div>
+UBBVERHAAL;
 	
 	}
 
