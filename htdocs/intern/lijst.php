@@ -62,6 +62,7 @@ if ($lid->hasPermission('P_LEDEN_READ') or $lid->hasPermission('P_OUDLEDEN_READ'
 	if (isset($_POST['a']) and $_POST['a'] == 'zoek') {
 		# en zoeken dan maar...
 		$aZoekresultaten = $lid->zoekLeden($form['wat'], $form['waar'], $form['moot'], $form['sort'], $form['status']);
+		# Als er maar 1 resultaat is redirecten we naar het profiel, en anders geven we een lijst met de resultaten
 		if (sizeof($aZoekresultaten) == 1) {
 			header('location: '.CSR_ROOT.'intern/profiel/'.$aZoekresultaten[0]['uid']);
 		} else {
