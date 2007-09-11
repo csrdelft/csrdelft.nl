@@ -61,7 +61,12 @@ if ($lid->hasPermission('P_LEDEN_READ') or $lid->hasPermission('P_OUDLEDEN_READ'
 	# terug in de invulvelden
 	if (isset($_POST['a']) and $_POST['a'] == 'zoek') {
 		# en zoeken dan maar...
-		$midden->setResult($lid->zoekLeden($form['wat'], $form['waar'], $form['moot'], $form['sort'], $form['status']));
+		$aZoekresultaten = $lid->zoekLeden($form['wat'], $form['waar'], $form['moot'], $form['sort'], $form['status']);
+		if (sizeof($aZoekresultaten) == 1) {
+			header('location: '.CSR_ROOT.'intern/profiel/'.$aZoekresultaten[0]['uid']);
+		} else {
+			$midden->setResult($aZoekresultaten);
+		}
 	}
 } else {
 	# geen rechten
