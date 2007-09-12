@@ -19,7 +19,7 @@ class savedQuery{
 		//query ophalen
 		$selectQuery="
 			SELECT
-				savedquery, beschrijving
+				savedquery, beschrijving, permissie
 			FROM
 				savedquery
 			WHERE 
@@ -27,16 +27,22 @@ class savedQuery{
 			LIMIT 1;";
 		$result=$db->query($selectQuery);
 		$querydata=$db->result2array($result);
+		$querydata=$querydata[0];
 		
-		//beschrijving opslaan
-		$this->beschrijving=$querydata[0]['beschrijving'];
+		$lid=Lid::get_Lid();
 		
-		//query nog uitvoeren...
-		$queryResult=$db->query($querydata[0]['savedquery']);
-		$this->result=$db->result2array($queryResult);
+		if($lid->hasPermission($querydata['permissie'])){
+			//beschrijving opslaan
+			$this->beschrijving=$querydata['beschrijving'];
+			
+			//query nog uitvoeren...
+			$queryResult=$db->query($querydata['savedquery']);
+			$this->result=$db->result2array($queryResult);
+		}
 		
 	}
 	public function getHtml(){
+		
 		if(is_array($this->result)){
 			$return=$this->beschrijving.'<br />' .
 				'<table class="query_table">';
