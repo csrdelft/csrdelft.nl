@@ -118,7 +118,7 @@ class LDAP {
 	function removeLid($uid) {
 		$base = $this->_base_leden;
 		$dn = 'uid=' . $this->ldap_escape_dn($uid) . ', '. $base;
-		return ldap_delete($this->_conn, $uid);
+		return ldap_delete($this->_conn, $dn);
 	}
 
 	#### Escapen van LDAP-invoer ####
