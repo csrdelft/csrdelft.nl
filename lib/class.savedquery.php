@@ -52,16 +52,24 @@ class savedQuery{
 				$return.='<th>'.$kopje.'</th>';
 			}
 			$return.='</tr>';
+			$rowColor=false;
 			foreach($this->result as $rij){
+				if($rowColor){
+					$style='style="background-color: #ccc;"';
+				}else{
+					$style='';
+				}
+				$rowColor=(!$rowColor);
+
 				$return.='<tr>';
 				foreach($rij as $veld){
-					$return.='<td>'.$veld.'</td>';
+					$return.='<td '.$style.'>'.$veld.'</td>';
 				}
 				$return.='</tr>';
 			}
 			$return.='</table>';
 		}else{
-			$return='Query bestaat niet.';
+			$return='Query ('.$this->queryID.') bestaat niet, of u heeft niet voldoende rechten.';
 		}
 		return $return;
 	}
