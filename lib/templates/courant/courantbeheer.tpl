@@ -21,7 +21,7 @@
 {* geen overzicht van berichten bij het bewerken... *}
 {if $form.ID==0}
 	<h3>Overzicht van berichten:</h3>
-	{if !is_array($courant->getBerichten())}
+	{if !is_array($courant->getBerichtenVoorGebruiker())}
 		U heeft nog geen berichten geplaatst in deze C.S.R.-courant.
 	{else}
 		<dl>
@@ -44,7 +44,6 @@
 <form method="post" action="?ID={$form.ID}" >
 	<div id="pubciemail_form">
 		{if $form.ID==0}<h3>Nieuw bericht invoeren</h3>{else}<h3>Bericht bewerken</h3>{/if}<br />
-		{if $form.melding!=''}<div id="melding">{$form.melding}</div>{/if}
 		<strong>Titel:</strong><br />
 		<input type="text" name="titel" value="{$form.titel|escape:'html'}" style="width: 100%;" class="tekst" />
 		<br /><br />

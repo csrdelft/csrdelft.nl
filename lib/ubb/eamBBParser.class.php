@@ -789,18 +789,16 @@ class eamBBParser{
 		return $html;
 	
 	}
-	function ubb_table($parameters)
-	{   
+	function ubb_table($parameters){   
 		$paramstring = '';
 		foreach($parameters as $name=>$value){
-			if(in_array($name, array('border', 'color', 'bgcolor')))
-			{
-				$paramstring .= ' '.$name . '="'. $value .'" ';
+			if(in_array($name, array('border', 'color', 'background-color'))){
+				$paramstring .= ' '.$name.': '.str_replace('_', ' ', $value).'; ';
 			}
 		}
 		
 		$content = $this->parseArray(array('[/table]'), array('br'));
-		$html = '<table'.$paramstring.'>'.$content.'</table>';
+		$html = '<table class="ubb_table" style="'.$paramstring.'">'.$content.'</table>';
 		return $html;
 	}
 	function ubb_tr()

@@ -148,6 +148,7 @@ lib/class.nieuwscontent.php -text
 lib/class.pollcontent.php -text
 lib/class.profiel.php -text
 lib/class.profielcontent.php -text
+lib/class.savedquery.php -text
 lib/class.simplehtml.php -text
 lib/class.sjaarsactie.php -text
 lib/class.sjaarsactiecontent.php -text

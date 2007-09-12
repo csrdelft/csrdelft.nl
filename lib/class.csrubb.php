@@ -30,8 +30,10 @@ class CsrUBB extends eamBBParser{
     }
 	
     $text='<div class="citaatContainer"><strong>Citaat';
-	if(isset($arguments['citaat'])){
+	if(isset($arguments['citaat']) AND $this->lid->isValidUid($arguments['citaat'])){
 		$text.=' van '.$this->lid->getNaamLink($arguments['citaat'], 'user', true);
+	}else{
+		$text.=' van '.$arguments['citaat'];
 	}
 	$text.=':</strong><div class="citaat">'.trim($content).'</div></div>';
     return $text;  
@@ -46,6 +48,24 @@ class CsrUBB extends eamBBParser{
 		}
 		return $text;
 	}
+	/*
+	 * Deze methode kan resultaten van query's die in de database staan printen in een 
+	 * tabelletje.
+	 */
+	function ubb_query($parameters){
+		
+		
+		if(isset($parameters['query'])){
+			
+			require_once('class.savedquery.php');
+			$query=new SavedQuery((int)$parameters['query']);
+			$return=$query->getHtml();
+		}else{
+			$return='Geen geldige query';
+		}
+		return $return;
+	}
+	
 	function ubb_youtube($parameters){
 		$content = $this->parseArray(array('[/youtube]'), array());
 		$html='<object width="425" height="350">' .
@@ -62,8 +82,6 @@ class CsrUBB extends eamBBParser{
         $html = str_replace('you', 'j00',$html);
         $html = str_replace('elite', '1337',$html);
         $html = strtr($html, "abelostABELOST", "48310574831057");       
-
-
         return $html;
     }
     function ubb_rainbow(){

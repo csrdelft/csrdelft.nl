@@ -171,6 +171,35 @@ pre#pubcie_debug{
 	border: 1px solid darkred;
 	z-index: 100;
 }
+table.ubb_table{
+	padding: 0px;	border-collapse: collapse;
+
+}
+table.ubb_table tr{
+	margin: 0px; padding: 0px;
+}
+table.ubb_table td, th{
+	margin: 0px; padding: 2px;
+}
+
+
+table.query_table{
+	margin: 10px;
+	padding: 0px;	border-collapse: collapse;
+	
+}
+table.query_table td{
+	margin: 0px;
+	padding: 3px;
+	padding-left: 10px; padding-right: 10px;
+	background-color: #bbbbbb;
+}
+
+table.query_table th{
+	margin: 0px; padding: 4px;
+	background-color: #ffd700;
+	border-bottom: 1px solid black;
+}
 /* dingen voor afzonderlijke pagina's */
 
 /* plaatjes in tekst */
