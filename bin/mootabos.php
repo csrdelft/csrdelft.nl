@@ -8,14 +8,8 @@
 	session_id('maaltrack-cli');
 
 	# instellingen & rommeltjes
-	require_once('/srv/www/www.csrdelft.nl/lib/include.config.php');
-	require_once('include.common.php');
+	require_once('include.config.php');
 
-	# login-systeem
-	require_once('class.lid.php');
-	require_once('class.mysql.php');
-	$db = new MySQL();
-	$lid = new Lid($db);
 	//Siri, Wouter K., Thomas Abrahamse
 	$aGeenAbo=array('9101', '0016', '0401');
 	for($moot=1;$moot<=4;$moot++){
