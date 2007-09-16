@@ -32,8 +32,10 @@ class CsrUBB extends eamBBParser{
     $text='<div class="citaatContainer"><strong>Citaat';
 	if(isset($arguments['citaat']) AND $this->lid->isValidUid($arguments['citaat'])){
 		$text.=' van '.$this->lid->getNaamLink($arguments['citaat'], 'user', true);
-	}else{
+	}elseif(trim($arguments['citaat'])!=''){
 		$text.=' van '.$arguments['citaat'];
+	}else{
+		//geen naam ofzo...
 	}
 	$text.=':</strong><div class="citaat">'.trim($content).'</div></div>';
     return $text;  
