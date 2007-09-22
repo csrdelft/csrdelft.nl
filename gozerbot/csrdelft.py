@@ -37,8 +37,8 @@ def size():
 class CsrRequest:
     """ afhandelen van communicatie met de website """
 
-    def __init__(self, action, username):
-        self.params = {'a':action, 'fn':action}
+    def __init__(self, function, username):
+        self.params = {'fn':function}
         try:
             self.params['uid'] = csruidmap.data[username]
         except KeyError:
