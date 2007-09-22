@@ -38,7 +38,7 @@ class CsrRequest:
     """ afhandelen van communicatie met de website """
 
     def __init__(self, action, username):
-        self.params = {'a':action}
+        self.params = {'a':action, 'fn':action}
         try:
             self.params['uid'] = csruidmap.data[username]
         except KeyError:
@@ -144,6 +144,8 @@ def handle_getuserhosts(bot, ievent):
     """ opvragen userhosts uit C.S.R. profiel """
     username = users.getname(ievent.userhost)
     request = CsrRequest('getuserhosts', username)
+    if ievent.rest:
+        request.setparams({'getuid': ievent.rest})
     if not request.execute():
         ievent.reply(request.error)
         return
@@ -186,10 +188,10 @@ def handle_saldo(bot, ievent):
 cmnds.add('saldo', handle_saldo, 'CSRDELFT')
 examples.add('saldo', 'saldo bij soccie en maalcie opvragen', 'saldo')
 
-def handle_abolist(bot, ievent):
+def handle_abolijst(bot, ievent):
     """ actieve maaltijd-abo's opvragen """
     username = users.getname(ievent.userhost)
-    request = CsrRequest('getabo', username)
+    request = CsrRequest('abolijst', username)
     if not request.execute():
         ievent.reply(request.error)
         return
@@ -198,8 +200,8 @@ def handle_abolist(bot, ievent):
     else:
         ievent.reply('u heeft geen actieve maaltijdabonnementen')
 
-cmnds.add('abo-list', handle_abolist, 'CSRDELFT')
-examples.add('abo-list', handle_abolist.__doc__, 'abo-list')
+cmnds.add('abo-lijst', handle_abolijst, 'CSRDELFT')
+examples.add('abo-lijst', handle_abolijst.__doc__, 'abo-lijst')
 
 def handle_aboaan(bot, ievent):
     """ aanzetten van een maaltijd-abonnement """
@@ -364,7 +366,7 @@ def handle_zoek(bot, ievent):
     """ zoeken in de ledenlijst """
     username = users.getname(ievent.userhost)
     if ievent.command == 'zoek':
-        request = CsrRequest('zoek', username)
+        request = CsrRequest('zoeklid', username)
     else:
         request = CsrRequest('zoekoud', username)
     if not ievent.rest:
