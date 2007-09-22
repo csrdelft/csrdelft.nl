@@ -457,7 +457,7 @@ if (array_key_exists($fn,$cmnds)) {
     $params = array();
     foreach ($cmnds[$fn] as $param => $mandatory ) {
         if ($mandatory and !isset($_GET[$param])) {
-            echo 'ERROR: Missing' . $param;
+            echo 'ERROR: Missing ' . $param;
             exit(1);
         } elseif (!$mandatory and !isset($_GET[$param])) {
             $params[$param] = '';
@@ -523,10 +523,11 @@ function anderprofiel($getuid) {
 function profiel_to_botarray($profiel) {
     $result = array();
 
-    $result[] = sprintf("%s %s%s "
+    $result[] = sprintf("%s %s%s (%s)"
         , $profiel['voornaam']
         , ($profiel['tussenvoegsel'] != '') ? $profiel['tussenvoegsel'] . ' ' : ''
         , $profiel['achternaam']
+        , $profiel['uid']
     );
 
     $result[] = sprintf("%s %s %s"
