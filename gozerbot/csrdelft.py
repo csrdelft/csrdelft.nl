@@ -9,7 +9,7 @@ __copyright__ = 'this file is in the public domain'
 from gozerbot.commands import cmnds
 from gozerbot.examples import examples
 from gozerbot.users import users
-from gozerbot.generic import useragent, geturl, rlog
+from gozerbot.generic import useragent, geturl, rlog, waitforuser
 from gozerbot.plughelp import plughelp
 from gozerbot.datadir import datadir
 from gozerbot.persist import Persist
@@ -161,13 +161,18 @@ examples.add('csr-getuserhosts', handle_getuserhosts.__doc__, 'csr-getuserhosts'
 def handle_deluid(bot, ievent):
     """ verwijder koppeling met de ledenlijst """
     username = users.getname(ievent.userhost)
-    try:
-        del csruidmap.data[username]
-    except KeyError:
-        ievent.reply('geen koppeling met de ledenlijst aanwezig')
+    ievent.reply('koppeling met de ledenlijst verwijderen (ja/nee)?')
+    response = waitforuser(bot, ievent.userhost)
+    if not response or response.txt != 'ja':
+        ievent.reply('koppeling wordt niet gewist')
     else:
-        csruidmap.save()
-        ievent.reply('koppeling met de ledenlijst gewist')
+        try:
+            del csruidmap.data[username]
+        except KeyError:
+            ievent.reply('geen koppeling met de ledenlijst aanwezig')
+        else:
+            csruidmap.save()
+            ievent.reply('koppeling met de ledenlijst gewist')
 
 cmnds.add('csr-deluid', handle_deluid, 'CSRDELFT')
 examples.add('csr-deluid', handle_deluid.__doc__, 'csr-deluid')
