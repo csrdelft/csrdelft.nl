@@ -42,10 +42,10 @@ class MaalTijd {
 
 	# we gaan bewerkingen uitvoeren op een maaltijd, onder verantwoordelijkheid van een bepaald lid
 	# NB!! Gebruik MaalTrack::isMaaltijd voor controle of de maaltijd wel bestaat
-	function MaalTijd($maalid, $lid, $db) {
+	function MaalTijd($maalid) {
 		$this->_maalid = (int)$maalid;
-		$this->_lid =& $lid;
-		$this->_db =& $db;
+		$this->_lid=Lid::get_lid();
+		$this->_db=MySql::get_MySql();
 		
 		# gegevens van de maaltijd inladen
 		$result = $this->_db->select("SELECT * FROM maaltijd WHERE id='{$this->_maalid}'");
@@ -93,12 +93,15 @@ class MaalTijd {
 			return false;
 		}
 		
-		if ($proxy) $fullname = $this->_lid->getFullname($uid);
+		if ($proxy){ $fullname = $this->_lid->getFullname($uid); }
 
 		# kan er ueberhaupt nog veranderd worden aan deze maaltijd?
 		if ($this->_maaltijd['gesloten'] == '1') {
-			if (!$proxy) $this->_error = "De inschrijving voor deze maaltijd is inmiddels gesloten.";
-			else $this->_proxyerror = "De inschrijving voor deze maaltijd is inmiddels gesloten.";
+			if (!$proxy){
+				$this->_error = "De inschrijving voor deze maaltijd is inmiddels gesloten.";
+			}else{ 
+				$this->_proxyerror = "De inschrijving voor deze maaltijd is inmiddels gesloten.";
+			}
 			return false;
 		}
 	
@@ -389,30 +392,42 @@ class MaalTijd {
 	function isGesloten() { return $this->_maaltijd['gesloten'] == '1'; }
 	function sluit() {
 		# inschrijving gesloten?
-		if ($this->isGesloten()) return false;
+		if ($this->isGesloten()){ return false; }
 		
 		# haal de aanmeldingen op en prop ze in de maaltijdgesloten tabel:
 		# uid, naam, eetwens, maalid, door, tijdstip, ip
-		#$aan = $this->getAanmeldingen();
-		#foreach ($aan as $ayaan) {
-		#	$sqldata = array();
-		#	$sqldata['uid'] = $this->_db->escape($ayaan['uid']);
-		#	$sqldata['naam'] = $this->_db->escape($ayaan['naam']);
-		#	$sqldata['eetwens'] = $this->_db->escape($ayaan['eetwens']);
-		#	$sqldata['maalid'] = $this->_db->escape($ayaan['maalid']);
-		#	if (isset($ayaan['door'])) $sqldata['']
-			
-		#	$this->_db->query();
-		
-		
-		#}
-		
-		
-		# FIXME
+		$aanmeldingen=$this->getAanmeldingen();
+		foreach ($aanmeldingen as $aan) {
+			if(isset($aan['door_uid'])){ $door=$aan['door_uid']; }else{ $door=''; }
+			if(isset($aan['gasten']) AND is_array($aan['gasten'])){ 
+				$gasten=$aan['gasten']; 
+			}else{ 
+				$gasten=0; 
+			}
+			if(isset($aan['gasten_opmerking'])){ 
+				$gasten_opmerking=$aan['gasten_opmerking']; 
+			}else{ 
+				$gasten_opmerking=''; 
+			}
+			if(isset($aan['tijdstip'])){ $tijdstip=$aan['tijdstip']; }else{ $tijdstip=0; }
+			if(isset($aan['ip'])){ $ip=$aan['ip']; }else{ $ip=''; }
+
+			$aanQuery=
+				"INSERT INTO 
+					maaltijdgesloten 
+				(
+					uid, eetwens, maalid, door, 
+					gasten, gasten_opmerking, tijdstip, ip
+				)VALUES(
+					'".$aan['uid']."', '".$aan['eetwens']."', ".$this->_maalid.", '".$door."', 
+					".$gasten.", '".$gasten_opmerking."', ".$tijdstip.", '".$ip."'
+				);";
+			$this->_db->query($aanQuery);
+		}
 		
 		# verwijder de losse aanmeldingen uit de maaltijdaanmeldingtabel		
-		//$leegmaken="DELETE FROM maaltijdaanmelding WHERE maalid=".$this->_maalid.";";
-		# FIXME
+		$leegmaken="DELETE FROM maaltijdaanmelding WHERE maalid=".$this->_maalid.";";
+		$this->_db->query($leegmaken);
 
 		# sluit de maaltijd door het vlaggetje gesloten te zetten...
 		$this->_maaltijd['gesloten'] = '1';
@@ -424,6 +439,7 @@ class MaalTijd {
 	function getAanmeldingen() {
 
 		# Eerst opvragen van de losse aanmeldingen AAN
+		# merk op dat ook de achternaam wordt opgehaald, nodig voor sorteren!
 		$aan = array();
 		$sAan="
 			SELECT  
@@ -432,35 +448,35 @@ class MaalTijd {
 				maaltijdaanmelding.door AS door_uid,
 				maaltijdaanmelding.gasten AS gasten,
 				maaltijdaanmelding.gasten_opmerking AS gasten_opmerking,
-				lid.voornaam AS voornaam,
-				lid.tussenvoegsel AS tussenvoegsel,
-				lid.achternaam AS achternaam,
+				maaltijdaanmelding.tijdstip AS tijdstip,
+				maaltijdaanmelding.ip AS ip,
 				lid.eetwens AS eetwens,
-				socciesaldi.maalSaldo AS saldo
+				lid.achternaam AS achternaam,
+				lid.maalcieSaldo AS saldo
 			FROM 
 				maaltijdaanmelding 
 			INNER JOIN 
 				lid ON (lid.uid=maaltijdaanmelding.uid)
-			LEFT JOIN
-				socciesaldi ON (lid.uid=socciesaldi.uid)
 			WHERE 
 				maaltijdaanmelding.maalid='".$this->_maalid."' AND 
 				maaltijdaanmelding.status='AAN';";
 		$rAan=$this->_db->select($sAan);
+
 		if($rAan!==false and $this->_db->numRows($rAan) > 0){
 			while($aAan=$this->_db->next($rAan)){
-				$naam=naam($aAan['voornaam'], $aAan['achternaam'], $aAan['tussenvoegsel']);
+				$naam=$this->_lid->getFullName($aAan['uid']);
 				
 				//als deze aanmelding ook gasten in zich heeft, die ook ophalen en er regeltjes
 				//voor toevoegen.
-				$gasten=false;
 				if($aAan['gasten']!=0){
 					for($i=1; $i<=$aAan['gasten']; $i++){
 						$gasten[]=array(
 							'naam' => 'Gast van '.$naam,
 							'achternaam' => $aAan['achternaam']);
 					}
-				}	
+				}else{
+					$gasten=0;
+				}
 				//hier array met uid als key maken, om zometeen alles te kunnen wegstrepen
 				$aan[$aAan['uid']]=array(
 					'uid' => $aAan['uid'],
@@ -469,7 +485,11 @@ class MaalTijd {
 					'achternaam' => $aAan['achternaam'],
 					'saldo' => $aAan['saldo'],
 					'door_uid' => $aAan['door_uid'], 
-					'gasten' => $gasten );
+					'gasten' => $gasten,
+					'gasten_opmerking' => $aAan['gasten_opmerking'],
+					'tijdstip' => $aAan['tijdstip'],
+					'ip' => $aAan['ip']
+					);
 				
 			}
 		}
@@ -483,13 +503,11 @@ class MaalTijd {
 				lid.tussenvoegsel AS tussenvoegsel,
 				lid.achternaam AS achternaam,
 				lid.eetwens AS eetwens,
-				socciesaldi.maalSaldo AS saldo
+				lid.maalcieSaldo AS saldo
 			FROM 
 			 	maaltijdabo 
 			INNER JOIN 
 				lid ON(maaltijdabo.uid=lid.uid)
-			LEFT JOIN
-				socciesaldi ON (lid.uid=socciesaldi.uid)
 			WHERE 
 				abosoort='".$this->_maaltijd['abosoort']."'");
 		if (($rAbo !== false) and $this->_db->numRows($rAbo) > 0){
@@ -534,22 +552,31 @@ class MaalTijd {
 	# aanmeldingen over te zetten naar de maaltijdgesloten-tabel. 
 	function getAanmeldingen_Oud() {
 		# inschrijving gesloten?
-		
-		/* Voorlopig nog niet nodig, pas als de kopieersessies gaan wekren.
 		if($this->isGesloten()){
 			$aan = array();
-			$result = $this->_db->select("SELECT * FROM maaltijdgesloten WHERE maalid='{$this->_maalid}'");
-			if (($result !== false) and $this->_db->numRows($result) > 0){
+			$aanQuery="
+				SELECT 
+					maaltijdgesloten.uid AS uid,
+					maaltijdgesloten.eetwens AS eetwens,
+					lid.maalcieSaldo AS saldo,
+					gasten,
+					gasten_opmerking,
+					tijdstip  
+				FROM maaltijdgesloten 
+				INNER JOIN lid ON(maaltijdgesloten.uid=lid.uid)
+				WHERE maalid='".$this->_maalid."'
+				ORDER BY lid.achternaam;";
+			$result = $this->_db->query($aanQuery);
+			if(($result !== false) AND $this->_db->numRows($result) > 0){
 				while($record = $this->_db->next($result)){ 
-					$aan[$record['uid']] = $record; 
+					$aan[$record['uid']]=$record;
+					$aan[$record['uid']]['naam']=$this->_lid->getFullName($record['uid']); 
 				}
 			}
-			usort($aan, 'sort_achternaam_uid');
 		}else{
-		*/
 			# als inschrijving nog niet gesloten is de normale getAanmeldingen() gebruiken.
 			$aan = $this->getAanmeldingen();
-		//}
+		}
 
 		
 		return $aan;

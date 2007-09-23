@@ -725,23 +725,24 @@ class Lid {
 		if($uid==''){ $uid=$this->getUid(); }
 		$query="
 			SELECT
-				saldo as soccie,
-				maalSaldo as maalcie
+				soccieSaldo, maalcieSaldo
 			FROM
 				socciesaldi
 			WHERE
 				uid='".$uid."'
 			LIMIT 1;";
 		$rSaldo=$this->_db->query($query);
-		if($this->_db->numRows($rSaldo)){
+		if($rSaldo!==false AND $this->_db->numRows($rSaldo)){
 			$aSaldo=$this->_db->next($rSaldo);
 			if($alleenRood){
 				$return=false;
-				if($aSaldo['soccie']<0){
-					$return[]=array('naam' => 'SocCie', 'saldo' => sprintf("%01.2f",$aSaldo['soccie']));
+				if($aSaldo['soccieSaldo']<0){
+					$return[]=array('naam' => 'SocCie', 
+						'saldo' => sprintf("%01.2f",$aSaldo['soccie']));
 				}
-				if($aSaldo['maalcie']<0){
-					$return[]=array('naam' => 'MaalCie', 'saldo' => sprintf("%01.2f",$aSaldo['maalcie']));
+				if($aSaldo['maalcieSaldo']<0){
+					$return[]=array('naam' => 'MaalCie', 
+						'saldo' => sprintf("%01.2f",$aSaldo['maalcie']));
 				}
 				return $return;
 			}else{

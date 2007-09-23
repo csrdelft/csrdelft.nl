@@ -30,7 +30,11 @@ if(isset($_POST['saldi'])){
 		$iAantal=count($aSocciesaldi);
 		$bOk=true;
 		foreach($aSocciesaldi as $aSocciesaldo){
-			$query="UPDATE socciesaldi SET saldo=".$aSocciesaldo->saldo." WHERE soccieID=".$aSocciesaldo->id." AND createTerm='".$aSocciesaldo->createTerm."' LIMIT 1;";
+			$query="
+				UPDATE lid 
+				SET soccieSaldo=".$aSocciesaldo->saldo." 
+				WHERE soccieID=".$aSocciesaldo->id." 
+				  AND createTerm='".$aSocciesaldo->createTerm."' LIMIT 1;";
 			if(!$db->query($query)){
 				//scheids, er gaet een kwerie mis, ff een feutmelding printen.
 				$bOk=false;
