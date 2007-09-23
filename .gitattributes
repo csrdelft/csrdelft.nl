@@ -9,6 +9,7 @@ bin/pubcie-admin.php -text
 bin/socciesaldi-koppelen.php -text
 bin/statgraphgen.php -text
 bin/wachtwoord.php -text
+bin/welkom.php -text
 /csrdelft.sql -text
 etc/csrmail.ini.sample -text
 etc/ldap.ini.sample -text
