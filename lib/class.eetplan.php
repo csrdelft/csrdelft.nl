@@ -14,10 +14,10 @@ class Eetplan {
 	var $_db;
 	var $_lid;
 	
-	function Eetplan(&$lid, &$db){
+	function Eetplan(){
 		# databaseconnectie openen
-		$this->_lid =& $lid;
-		$this->_db =& $db;
+		$this->_lid=Lid::get_lid();
+		$this->_db=MySql::get_MySql();
 	}
 	
 	

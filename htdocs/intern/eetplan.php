@@ -6,7 +6,7 @@ require_once('include.config.php');
 # Het middenstuk
 if ($lid->hasPermission('P_LEDEN_READ')) {
 	require_once('class.eetplan.php');
-	$eetplan = new Eetplan($lid, $db);
+	$eetplan = new Eetplan();
 	require_once('class.eetplancontent.php');
 	$midden = new EetplanContent($eetplan);
 } else {

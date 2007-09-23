@@ -5,10 +5,6 @@
 # -------------------------------------------------------------------
 
 
-require_once ('class.simplehtml.php');
-require_once ('class.lid.php');
-require_once ('class.eetplan.php');
-
 class EetplanContent extends SimpleHTML {
 
 	### private ###
