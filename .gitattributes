@@ -6,6 +6,7 @@ bin/mk_commissie_ldif.txt -text
 bin/mkledenldif.php -text
 bin/mootabos.php -text
 bin/pubcie-admin.php -text
+bin/saldo-kopieer.php -text
 bin/socciesaldi-koppelen.php -text
 bin/statgraphgen.php -text
 bin/wachtwoord.php -text
