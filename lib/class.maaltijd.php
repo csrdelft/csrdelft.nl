@@ -132,7 +132,7 @@ class MaalTijd {
 				UPDATE maaltijdaanmelding
 				SET
 					status = 'AAN',
-					time = {$time},
+					tijdstip = {$time},
 					door = '{$door}',
 					ip = '{$ip}'
 				WHERE maalid='{$this->_maalid}' AND uid='{$uid}'
@@ -143,7 +143,7 @@ class MaalTijd {
 		# als er nog niets stond zetten we een AAN in de tabel
 		} elseif ($status == 'AUTO') {
 			$this->_db->query("
-				INSERT INTO maaltijdaanmelding (uid, maalid, status, time, door, ip)
+				INSERT INTO maaltijdaanmelding (uid, maalid, status, tijdstip, door, ip)
 				VALUES('{$uid}', '{$this->_maalid}', 'AAN', '{$time}', '{$door}', '{$ip}');
 			");
 			$this->recount();
@@ -206,7 +206,7 @@ class MaalTijd {
 					UPDATE maaltijdaanmelding
 					SET
 						status = 'AF',
-						time = {$time},
+						tijdstip = {$time},
 						door = '{$door}',
 						ip = '{$ip}'
 					WHERE maalid='{$this->_maalid}' AND uid = '{$uid}'
@@ -219,7 +219,7 @@ class MaalTijd {
 				# als er niets stond een AF neerzetten
 				$afmelden="
 					INSERT INTO maaltijdaanmelding (
-						uid, maalid, status, time, door, ip
+						uid, maalid, status, tijdstip, door, ip
 					)VALUES(
 						'{$uid}', '{$this->_maalid}', 'AF', '{$time}', '{$door}', '{$ip}'
 					);";
