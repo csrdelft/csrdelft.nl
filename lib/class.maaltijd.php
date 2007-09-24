@@ -28,17 +28,17 @@
 
 class MaalTijd {
 	# MySQL connectie
-	var $_db;
+	private $_db;
 	# lid-object van ingelogde gebruiker
-	var $_lid;
+	private $_lid;
 	# id van de maaltijd waar we bewerkingen op uitvoeren
-	var $_maalid;
+	private $_maalid;
 	# Evt. foutmelding
-	var $_error = '';
-	var $_proxyerror = '';
+	private $_error = '';
+	private $_proxyerror = '';
 	
 	# maaltijd-record
-	var $_maaltijd = false;
+	private $_maaltijd = false;
 
 	# we gaan bewerkingen uitvoeren op een maaltijd, onder verantwoordelijkheid van een bepaald lid
 	# NB!! Gebruik MaalTrack::isMaaltijd voor controle of de maaltijd wel bestaat
@@ -49,9 +49,9 @@ class MaalTijd {
 		
 		# gegevens van de maaltijd inladen
 		$result = $this->_db->select("SELECT * FROM maaltijd WHERE id='{$this->_maalid}'");
-		if (($result !== false) and $this->_db->numRows($result) > 0)
+		if (($result !== false) and $this->_db->numRows($result) > 0){
 			$this->_maaltijd = $this->_db->next($result);
-		
+		}
 	}
 
 	function getError() {
@@ -123,8 +123,8 @@ class MaalTijd {
 		# aanmelding wegschrijven
 		$time = time();
 		$door = $this->_lid->getUid();
-		if (isset($_SERVER['REMOTE_ADDR'])) $ip = $_SERVER['REMOTE_ADDR'];
-		else $ip = '0.0.0.0';
+		if(isset($_SERVER['REMOTE_ADDR'])){ $ip = $_SERVER['REMOTE_ADDR']; 
+		}else{ $ip = '0.0.0.0'; }
 
 		# als er een AF stond, maken we er een AAN van
 		if ($status == 'AF') {
@@ -264,7 +264,9 @@ class MaalTijd {
 		$result = $this->_db->select("SELECT status FROM maaltijdaanmelding WHERE maalid='{$this->_maalid}' AND uid = '{$uid}'");
 		if (($result !== false) and $this->_db->numRows($result) > 0) {
 			$record = $this->_db->next($result); //print_r($record);
-			if ($record['status'] == 'AAN' or $record['status'] == 'AF') return $record['status'];
+			if ($record['status'] == 'AAN' or $record['status'] == 'AF'){
+				return $record['status'];
+			} 
 		}
 		return 'AUTO';
 	}

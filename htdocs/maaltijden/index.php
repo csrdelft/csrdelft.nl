@@ -73,7 +73,7 @@ if ($error == 0) switch($action) {
 if($error == 0  or $error == 2) {
 	# Het middenstuk
 	require_once('class.maaltijdcontent.php');
-	$midden = new MaaltijdContent($lid, $maaltrack);
+	$midden = new MaaltijdContent($maaltrack);
 } else {
 	# geen rechten
 	$midden = new Includer('', 'maaltijd-niet-ingelogd.html');

@@ -55,10 +55,7 @@ class CsrUBB extends eamBBParser{
 	 * tabelletje.
 	 */
 	function ubb_query($parameters){
-		
-		
 		if(isset($parameters['query'])){
-			
 			require_once('class.savedquery.php');
 			$query=new SavedQuery((int)$parameters['query']);
 			$return=$query->getHtml();

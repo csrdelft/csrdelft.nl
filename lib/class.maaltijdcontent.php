@@ -21,9 +21,9 @@ class MaaltijdContent extends SimpleHTML {
 
 	### public ###
 
-	function MaaltijdContent (&$lid, &$maaltrack) {
-		$this->_lid =& $lid;
-		$this->_maaltrack =& $maaltrack;
+	function MaaltijdContent ($maaltrack) {
+		$this->_lid =Lid::get_lid();
+		$this->_maaltrack=$maaltrack;
 	}
 	function getTitel(){ return 'Maaltijdketzer'; }
 	

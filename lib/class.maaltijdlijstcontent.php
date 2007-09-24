@@ -8,7 +8,7 @@
 # -------------------------------------------------------------------
 
 
-class MaaltijdLijstPage extends SimpleHTML {
+class MaaltijdLijstContent extends SimpleHTML {
 	### private ###
 
 	# de objecten die data leveren
@@ -17,9 +17,9 @@ class MaaltijdLijstPage extends SimpleHTML {
 
 	### public ###
 
-	function MaaltijdLijstPage (&$lid, &$maaltijd) {
-		$this->_lid =& $lid;
-		$this->_maaltijd =& $maaltijd;
+	function MaaltijdLijstContent($maaltijd) {
+		$this->_lid=Lid::get_lid();
+		$this->_maaltijd=$maaltijd;
 	}
 
 	function view(){

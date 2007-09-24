@@ -36,8 +36,8 @@ if ($error == 0  or $error == 2) {
 		exit;
 	}
 
-	require_once('class.maaltijdlijstpage.php');
-	$page = new MaaltijdLijstPage($lid, $maaltijd);
+	require_once('class.maaltijdlijstcontent.php');
+	$page = new MaaltijdLijstContent($maaltijd);
 	$page->view();
 
 } else {

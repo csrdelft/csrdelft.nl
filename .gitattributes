@@ -77,7 +77,6 @@ htdocs/maaltijden/.htaccess -text
 htdocs/maaltijden/archief.php -text
 htdocs/maaltijden/beheer.php -text
 htdocs/maaltijden/index.php -text
-htdocs/maaltijden/info.php -text
 htdocs/maaltijden/maaltijdlijst.php -text
 htdocs/maaltijden/saldi.php -text
 htdocs/maaltijden/voorkeuren.php -text
@@ -136,8 +135,7 @@ lib/class.lidbeheer.php -text
 lib/class.maaltijd.php -text
 lib/class.maaltijdbeheercontent.php -text
 lib/class.maaltijdcontent.php -text
-lib/class.maaltijdinfocontent.php -text
-lib/class.maaltijdlijstpage.php -text
+lib/class.maaltijdlijstcontent.php -text
 lib/class.maaltijdvoorkeurcontent.php -text
 lib/class.maaltrack.php -text
 lib/class.menu.php -text

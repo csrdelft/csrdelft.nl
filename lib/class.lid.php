@@ -738,11 +738,11 @@ class Lid {
 				$return=false;
 				if($aSaldo['soccieSaldo']<0){
 					$return[]=array('naam' => 'SocCie', 
-						'saldo' => sprintf("%01.2f",$aSaldo['soccie']));
+						'saldo' => sprintf("%01.2f",$aSaldo['soccieSaldo']));
 				}
 				if($aSaldo['maalcieSaldo']<0){
 					$return[]=array('naam' => 'MaalCie', 
-						'saldo' => sprintf("%01.2f",$aSaldo['maalcie']));
+						'saldo' => sprintf("%01.2f",$aSaldo['maalcieSaldo']));
 				}
 				return $return;
 			}else{

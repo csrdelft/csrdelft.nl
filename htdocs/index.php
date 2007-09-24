@@ -53,7 +53,7 @@ require_once('include.config.php');
 	$body->add(new Includer('', 'banners.html'));
 
 ## pagina weergeven
-	$pagina=new csrdelft($body,  $lid, $db);
+	$pagina=new csrdelft($body);
 	$pagina->setZijkolom($zijkolom);
 	
 	$pagina->view();
