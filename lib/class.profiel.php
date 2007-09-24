@@ -659,8 +659,8 @@ class Profiel extends lid{
 	# Profiel uitlezen uit de database en in LDAP zetten
 	function save_ldap() {
 	
-		# Alleen leden, novieten en kringels staan in LDAP
-		if (preg_match('/^S_(LID|NOVIET|KRINGEL)$/', $this->_tmpprofile['status'])) {
+		# Alleen leden, gastleden, novieten en kringels staan in LDAP
+		if (preg_match('/^S_(LID|GASTLID|NOVIET|KRINGEL)$/', $this->_tmpprofile['status'])) {
 
 			$result = $this->_db->select("
 				SELECT
