@@ -285,30 +285,30 @@ class MaalTrack {
 		foreach($maaltijdenRaw as $maaltijd){
 			$maaltijd['abotekst'] = $this->getAboTekst($maaltijd['abosoort']);
 			
-			# status: AAN,AF ABO ''
-			# 1a. is er een aan of afmelding voor deze maaltijd?
-			$sAanmeldingen="SELECT status FROM maaltijdaanmelding WHERE uid = '".$uid."' AND maalid = ".$maaltijd['id'].";";
-			$rAanmeldingen = $this->_db->query($sAanmeldingen);
-			if (($rAanmeldingen !== false) and $this->_db->numRows($rAanmeldingen) > 0) {
-				$record = $this->_db->next($rAanmeldingen);
-				$maaltijd['status'] = $record['status'];
-			} else {
-				# 1b. zo nee, is er een abo actief?
-				$sAbo="SELECT uid FROM maaltijdabo WHERE uid = '".$uid."' AND abosoort = '".$maaltijd['abosoort']."'";
-				$rAbo = $this->_db->query($sAbo);
-				if(($rAbo !== false) and $this->_db->numRows($rAbo) > 0) {
-					$record = $this->_db->next($rAbo);
-					$maaltijd['status'] = 'ABO';
+			if($maaltijd['gesloten']=='1'){
+				//als de maaltijd al gesloten is, dan uit de maaltijdgesloten-tabel ophalen.
+				$sAanmeldingen="SELECT uid FROM maaltijdgesloten WHERE uid = '".$uid."' AND maalid = ".$maaltijd['id'].";";
+				$rAanmeldingen = $this->_db->query($sAanmeldingen);
+				if (($rAanmeldingen !== false) and $this->_db->numRows($rAanmeldingen) > 0) {
+					$maaltijd['status']='AAN';
 				}else{
-					if($maaltijd['gesloten']=='1'){
-						//als de maaltijd al gesloten is, dan uit een andere tabel ophalen.
-						$sAanmeldingen="SELECT uid FROM maaltijdgesloten WHERE uid = '".$uid."' AND maalid = ".$maaltijd['id'].";";
-						$rAanmeldingen = $this->_db->query($sAanmeldingen);
-						if (($rAanmeldingen !== false) and $this->_db->numRows($rAanmeldingen) > 0) {
-							$maaltijd['status']='AAN';
-						}else{
-							$maaltijd['status'] = '';
-						}
+					$maaltijd['status']='';
+				}
+			}else{
+				# status: AAN,AF ABO ''
+				# 1a. is er een aan of afmelding voor deze maaltijd?
+				$sAanmeldingen="SELECT status FROM maaltijdaanmelding WHERE uid = '".$uid."' AND maalid = ".$maaltijd['id'].";";
+				$rAanmeldingen = $this->_db->query($sAanmeldingen);
+				if (($rAanmeldingen !== false) and $this->_db->numRows($rAanmeldingen) > 0) {
+					$record = $this->_db->next($rAanmeldingen);
+					$maaltijd['status'] = $record['status'];
+				} else {
+					# 1b. zo nee, is er een abo actief?
+					$sAbo="SELECT uid FROM maaltijdabo WHERE uid = '".$uid."' AND abosoort = '".$maaltijd['abosoort']."'";
+					$rAbo = $this->_db->query($sAbo);
+					if(($rAbo !== false) and $this->_db->numRows($rAbo) > 0) {
+						$record = $this->_db->next($rAbo);
+						$maaltijd['status'] = 'ABO';
 					}else{
 						# 1c. zo ook nee, dan status = ''
 						$maaltijd['status'] = '';
@@ -318,12 +318,9 @@ class MaalTrack {
 			
 			# 2. actie is afhankelijk van status en evt. gesloten zijn van de maaltijd
 			# actie: AAN, AF, ''
-			$aanOfAbo=$maaltijd['status']=='AAN' OR $maaltijd['status']=='ABO';
-			
-			if($aanOfAbo AND $maaltijd['gesloten']=='0' ){ 
+			if(($maaltijd['status']=='AAN' OR $maaltijd['status']=='ABO') AND $maaltijd['gesloten']=='0' ){ 
 				$maaltijd['actie'] = 'af';
-			}elseif(($maaltijd['status']=='AF' OR $maaltijd['status']=='')
-					AND $maaltijd['aantal'] != $maaltijd['max'] AND $maaltijd['gesloten'] == '0' ){
+			}elseif(($maaltijd['status']=='AF' OR $maaltijd['status']=='') AND $maaltijd['aantal'] != $maaltijd['max'] AND $maaltijd['gesloten'] == '0' ){
 				$maaltijd['actie'] = 'aan';
 			}else{
 				$maaltijd['actie'] = '';
