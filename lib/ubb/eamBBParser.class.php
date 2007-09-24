@@ -785,6 +785,10 @@ class eamBBParser{
 		}
 		
 		$content = $this->parseArray(array('[/img]'), array());
+		//alleen strings die beginnen met 'http://' worden door de beugel getolereerd.
+		if(substr(trim($content), 0, 7)!='http://'){ 
+			$content='kekschooier'; 
+		}
 		$html = '<img class="forum_image" src="'.$content.'" alt="" '.$width . $height.' style="'.$float.'" />';
 		return $html;
 	
