@@ -17,6 +17,12 @@ function email_like($email) {
 	return preg_match("/^[a-z0-9]+([_\\.-][a-z0-9]+)*@([a-z0-9]+([\.-][a-z0-9]+)*)+\\.[a-z]{2,}$/i", $email);
 }
 
+function url_like($url) {
+    return preg_match('#^(((ht|f)tp(s?)\:\/\/|~/|/)?([\w]+:\w+@)?' .
+        '([a-zA-Z]{1}([\w\-]+\.)+([\w]{2,5}))(:[\d]{1,5})?' .
+        '((/?\w+/)+|/?)(\w+\.[\w]{3,4})?((\?\w+=\w+)?(&\w+=\w+)*)?)?$#', $url);
+}
+
 //http://nl.php.net/manual/en/function.in_array.php
 function array_values_in_array($needles, $haystack) {
 	if(is_array($needles)){

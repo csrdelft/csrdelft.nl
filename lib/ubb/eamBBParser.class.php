@@ -567,6 +567,7 @@ class eamBBParser{
 				}
 			}
 			if(isset($value)){
+				// FIXME: stupid javascript filtering detected
 				if(strstr(strtolower($value), 'javascript:')){
 					$value = 'disabled';
 				}
@@ -631,10 +632,8 @@ class eamBBParser{
 			$href = $content;
 		}
 		
-		// Now, filter the javascript
-		if(strtolower(substr(trim($href),0,10)) == 'javascript'){
-			$href = '';
-		}
+		// only valid patterns
+		if(!url_like($href)) $href = "kekschooier";
 		
 		if(isset($arguments['external']) && 
 				($arguments['external'] == 'y' ||
@@ -731,6 +730,10 @@ class eamBBParser{
 		
 		$mailto = array_shift($this->parseArray);
 		$endtag = array_shift($this->parseArray);
+
+		// only valid patterns
+		if(!email_like($mailto)) $mailto = "kekschooier@csrdelft.nl";
+
 		if($endtag == '[/email]'){
 			if(isset($parameters['email'])){
 				$html .= '<a href="mailto:'. $parameters['email'] . '">'.$mailto.'</a>';
@@ -785,10 +788,10 @@ class eamBBParser{
 		}
 		
 		$content = $this->parseArray(array('[/img]'), array());
-		//alleen strings die beginnen met 'http://' worden door de beugel getolereerd.
-		if(substr(trim($content), 0, 7)!='http://'){ 
-			$content='kekschooier'; 
-		}
+
+		// only valid patterns
+		if(!url_like($content)) $content = "kekschooier";
+
 		$html = '<img class="forum_image" src="'.$content.'" alt="" '.$width . $height.' style="'.$float.'" />';
 		return $html;
 	
