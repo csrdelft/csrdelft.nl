@@ -632,9 +632,6 @@ class eamBBParser{
 			$href = $content;
 		}
 		
-		// only valid patterns
-		if(!url_like($href)) $href = "kekschooier";
-		
 		if(isset($arguments['external']) && 
 				($arguments['external'] == 'y' ||
 				$arguments['external'] == 'yes' ||
@@ -644,7 +641,9 @@ class eamBBParser{
 			$rel = null;
 		}
 		
-		$text = '<a '.$rel.'href="'.$href.'">'.$content.'</a>';
+		// only valid patterns
+		if(!url_like(urldecode($href))) $text = "[Ongeldige URL]";
+		else $text = '<a '.$rel.'href="'.$href.'">'.$content.'</a>';
 		return $text;  
 	}
 	function ubb_code($args = array()){
@@ -732,17 +731,19 @@ class eamBBParser{
 		$endtag = array_shift($this->parseArray);
 
 		// only valid patterns
-		if(!email_like($mailto)) $mailto = "kekschooier@csrdelft.nl";
 
 		if($endtag == '[/email]'){
 			if(isset($parameters['email'])){
-				$html .= '<a href="mailto:'. $parameters['email'] . '">'.$mailto.'</a>';
+                if(!email_like($parameters['email'])) $html .= "[Ongeldig emailadres]";
+				else $html .= '<a href="mailto:'. $parameters['email'] . '">'.$mailto.'</a>';
 			} else {
-				$html .= '<a href="mailto:'. $mailto . '">'.$mailto.'</a>';
+		        if(!email_like($mailto)) $html .= "[Ongeldig emailadres]";
+				else $html .= '<a href="mailto:'. $mailto . '">'.$mailto.'</a>';
 			}
 		} else {
 			if(isset($parameters['email'])){
-				$html .= '<a href="mailto:'. $parameters['email'] . '">'.$parameters['email'].'</a>';
+		        if(!email_like($parameters['email'])) $html .= "[Ongeldig emailadres]";
+				else $html .= '<a href="mailto:'. $parameters['email'] . '">'.$parameters['email'].'</a>';
 			}
 			array_unshift($this->parseArray, $endtag);
 			array_unshift($this->parseArray, $mailto);
@@ -790,9 +791,8 @@ class eamBBParser{
 		$content = $this->parseArray(array('[/img]'), array());
 
 		// only valid patterns
-		if(!url_like($content)) $content = "kekschooier";
-
-		$html = '<img class="forum_image" src="'.$content.'" alt="" '.$width . $height.' style="'.$float.'" />';
+		if(!url_like(urldecode($content))) $html = "[Ongeldige URL]";
+		else $html = '<img class="forum_image" src="'.$content.'" alt="" '.$width . $height.' style="'.$float.'" />';
 		return $html;
 	
 	}
