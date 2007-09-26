@@ -18,9 +18,12 @@ function email_like($email) {
 }
 
 function url_like($url) {
-    return preg_match('#^(((ht|f)tp(s?)\:\/\/|~/|/)?([\w]+:\w+@)?' .
-        '([a-zA-Z]{1}([\w\-]+\.)+([\w]{2,5}))(:[\d]{1,5})?' .
-        '((/?\w+/)+|/?)(\w+\.[\w]{3,4})?((\?\w+=\w+)?(&\w+=\w+)*)?)?$#', $url);
+    #                      http://          user:pass@
+    return preg_match('#^((ht|f)tp(s?)\://)(\w+:\w+@)?' .
+    #    f            oo.bar.   org       :80                
+        '([a-zA-Z0-9]([-\w]+\.)+(\w{2,5}))(:\d{1,5})?' .
+    #    /path       ?foo=bar      &bar=baz
+        '([-\w./]*)?((\?\w+=\w+)?(&\w+=\w+)*)?$#', $url);
 }
 
 //http://nl.php.net/manual/en/function.in_array.php
