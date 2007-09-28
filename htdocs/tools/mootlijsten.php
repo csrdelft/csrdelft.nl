@@ -1,18 +1,12 @@
 <?php
 # Mootlijsten maken
 
-$jaar = '07';
-
 require_once('include.config.php');
 
 if(!$lid->hasPermission('P_ADMIN')){
 	header('location: '.CSR_ROOT);
 	exit;
 }
-
-# databaseconnectie openen
-$db=MySql::get_MySql();
-$lid=Lid::get_lid();
 
 echo <<<EOD
 <table cellpadding="15">
