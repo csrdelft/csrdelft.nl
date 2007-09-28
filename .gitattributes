@@ -83,6 +83,7 @@ htdocs/maaltijden/voorkeuren.php -text
 htdocs/nieuws.php -text
 htdocs/robots.txt -text
 htdocs/tools/index.php -text
+htdocs/tools/mootlijsten.php -text
 htdocs/tools/onderhoud.html -text
 htdocs/tools/phpinfo.php -text
 htdocs/tools/saldo-overzicht.php -text
