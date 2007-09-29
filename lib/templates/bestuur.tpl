@@ -22,7 +22,7 @@
 	<div id="bestuurstekst" style="margin: 40px; padding: 20px; font-size: 18px; background-color: #eee; text-align: left;">
 		{$bestuur.tekst|ubb}
 	</div>
-	<div id="bestuursverhaal>
+	<div id="bestuursverhaal">
 		{$bestuur.verhaal|ubb}
 	</div>
 </div>
