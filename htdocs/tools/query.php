@@ -15,7 +15,7 @@ if(isset($_GET['id']) AND (int)$_GET['id']==$_GET['id']){
 	$savedquery=new savedQuery((int)$_GET['id']);
 }
 
-$html='<h1>Opgeslagen query\'s</h1>';
+$html='Hieronder kunt u enkele opgeslagen query\'s bekijken.';
 
 $html.='<form method="get" action="query.php"><select name="id"  onchange="this.form.submit();">';
 foreach(SavedQuery::getQuerys() as $query){

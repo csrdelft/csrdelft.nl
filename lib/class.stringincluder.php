@@ -6,13 +6,13 @@
 
 
 class stringincluder{
-	var $string='lege pagina';
-	var $title;
+	public $string='lege pagina';
+	public $title;
 	function stringincluder($string, $title=''){
 		$this->string=$string;
 		$this->title=$title;
 	}
-	function getTitle(){ return $this->title; }
+	function getTitel(){ return $this->title; }
 	function view(){
 		echo $this->string;
 	}

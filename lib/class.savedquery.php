@@ -51,13 +51,14 @@ class savedQuery{
 	}
 	//query's zijn zichtbaar als:
 	// - De gebruiker de in de database opgeslagen permissie heeft.
-	// - De gebruiker het in de database opgeslagen uid heeft.
+	// - De gebruiker een van de in de database opgeslagen uids heeft.
 	// - De gebruiker P_ADMIN heeft
 	public static function magWeergeven($permissie){
 		$lid=Lid::get_Lid();
+		$uids=explode(',', $permissie);
 		return $lid->hasPermission($permissie) OR 
 				$lid->hasPermission('P_ADMIN') OR 
-				$lid->getUid()==$permissie;
+				in_array($lid->getUid(), $uids);
 	}
 	public function getHtml(){
 		if(is_array($this->result)){
