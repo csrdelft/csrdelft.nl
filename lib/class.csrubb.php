@@ -94,24 +94,7 @@ class CsrUBB extends eamBBParser{
         
         return $r->rainBow($string);
     }
-    
-    //even een rul-aliasjes....
-    function ubb_rul($arguments = array()){
-    	$content = $this->parseArray(array('[/rul]'), array());		
-		if(isset($arguments['rul'])){
-			$href = $arguments['rul'];					
-		} else {
-			$href = $content;
-		}
-		
-		// Now, filter the javascript
-		if(strtolower(substr(trim($href),0,10)) == 'javascript'){
-			$href = '';
-		}
-		$text = '<a href="'.$href.'">'.$content.'</a>';
-		return $text; 
-    }
-    
+  
 	static function viewUbbHelp(){
 echo <<<UBBVERHAAL
 <div id="ubbhulp">
