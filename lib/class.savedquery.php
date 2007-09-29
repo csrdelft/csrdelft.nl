@@ -27,12 +27,11 @@ class savedQuery{
 				ID=".$this->queryID."
 			LIMIT 1;";
 		$result=$db->query($selectQuery);
-		if($result!==false AND $db->numRows($result)>0){
-			$querydata=$db->result2array($result);
-			$querydata=$querydata[0];
+
+		if($result!==false AND $db->numRows($result)==1){
+			$querydata=$db->next($result);
 			
 			$lid=Lid::get_Lid();
-			
 			if($this->magWeergeven($querydata['permissie'])){
 				//beschrijving opslaan
 				$this->beschrijving=$querydata['beschrijving'];
@@ -40,7 +39,11 @@ class savedQuery{
 				
 				//query nog uitvoeren...
 				$queryResult=$db->query($querydata['savedquery']);
-				$this->result=$db->result2array($queryResult);
+				if($queryResult!==false){
+					$this->result=$db->result2array($queryResult);
+				}elseif($lid->hasPermission('P_ADMIN')){
+					$this->result=mysql_error();
+				}
 			}
 		}
 	}
@@ -61,7 +64,11 @@ class savedQuery{
 				in_array($lid->getUid(), $uids);
 	}
 	public function getHtml(){
+		$lid=Lid::get_Lid();
+	
 		if(is_array($this->result)){
+			
+			
 			$return=$this->beschrijving.'<br /><table class="query_table">';
 			$keysPrinted=false;
 			$return.='<tr>';
@@ -92,7 +99,7 @@ class savedQuery{
 					//als het veld uid als uid_naam geselecteerd wordt, een linkje 
 					//weergeven
 					if($key=='uid_naam'){
-						$lid=Lid::get_Lid();
+						
 						$return.=$lid->getNaamLink($veld, 'full', true);
 					}else{
 						$return.=$veld;
@@ -102,6 +109,10 @@ class savedQuery{
 				$return.='</tr>';
 			}
 			$return.='</table>';
+		}elseif(is_string($this->result) AND $lid->hasPermission('P_ADMIN')){
+			//als this->result een string is, en we hebben te maken met een P_ADMIN, dan die string weergeven, want daar zit
+			//de php_error(); in.
+			$return='Query ('.$this->queryID.') gaf een foutmelding:  <br /><pre style="margin: 10px;">'.$this->result.' </pre>';
 		}else{
 			//foutmelding in geval van geen resultaat, dus of geen query die bestaat, of niet
 			//voldoende rechten.
@@ -117,7 +128,7 @@ class savedQuery{
 				ID, beschrijving, permissie
 			FROM
 				savedquery
-			;";
+			ORDER BY beschrijving;";
 		$result=$db->query($selectQuery);
 		$return=array();
 		$lid=Lid::get_Lid();

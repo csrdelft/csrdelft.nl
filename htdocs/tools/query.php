@@ -9,7 +9,7 @@
 require_once('include.config.php');
 require_once('class.savedquery.php');
 
-
+if(!$lid->hasPermission('P_LOGGED_IN')){ header('location: '.CSR_ROOT); }
 
 if(isset($_GET['id']) AND (int)$_GET['id']==$_GET['id']){
 	$savedquery=new savedQuery((int)$_GET['id']);
@@ -17,10 +17,10 @@ if(isset($_GET['id']) AND (int)$_GET['id']==$_GET['id']){
 
 $html='Hieronder kunt u enkele opgeslagen query\'s bekijken.';
 
-$html.='<form method="get" action="query.php"><select name="id"  onchange="this.form.submit();">';
+$html.='<form method="get" action="query.php"><select name="id" onchange="this.form.submit();">';
 foreach(SavedQuery::getQuerys() as $query){
 	$html.='<option value="'.$query['ID'].'"';
-	if(isset($_GET['id']) AND $_GET['id']==$query['ID']){ $html.='selected="selected"'; }
+	if(isset($_GET['id']) AND $_GET['id']==$query['ID']){ $html.=' selected="selected"'; }
 	$html.='>'.$query['beschrijving'].'</option>';
 }
 $html.='</select> <input type="submit" value="laten zien"></form>';
