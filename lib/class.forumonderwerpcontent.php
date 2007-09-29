@@ -92,6 +92,7 @@ class ForumOnderwerpContent extends SimpleHTML {
 			}
 			
 			$iWissel=1;
+			$ubb = new csrUbb();
 			foreach($this->_forum->getPosts() as $aBericht){
 				echo '<tr><td class="forumauteur">';
 				echo $this->_forum->getForumNaam($aBericht['uid'], $aBericht).' schreef ';
@@ -125,15 +126,24 @@ class ForumOnderwerpContent extends SimpleHTML {
 				
 				//het eigenlijke bericht weergeven.
 				echo "\r\n".'<td class="forumbericht'.($iWissel%2).'">';
-				$sBericht=$aBericht['tekst'];
-				$ubb = new csrUbb();
-				$sBericht=$ubb->getHTML($sBericht);
-				echo $sBericht.'</td></tr>';
+				echo $ubb->getHTML($aBericht['tekst']);
+				echo '</td></tr>';
 				//tussenlijntje
 				echo '<tr><td class="forumtussenschot" colspan="2"></td></tr>'."\r\n";
 				$iWissel++;
 			}//einde foreach $aBerichten
-			//nu nog ff een quickpost formuliertje
+			
+			//eventueele voorbeeld van een post
+			if(isset($_POST['bericht'], $_POST['submit']) AND $_POST['submit']=='voorbeeld'){
+				echo '<tr><td class="forumauteur">Voorbeeld van uw bericht:<br /><br />' .
+						'<h4>LET OP: uw bericht is nog niet opgeslagen!</td>';
+				echo '<td class="forumbericht'.($iWissel%2).'">';
+				echo $ubb->getHTML($_POST['bericht']);
+				echo '</td></tr>';
+				echo '<tr><td class="forumtussenschot" colspan="2"></td></tr>'."\r\n";
+			}
+			
+			//Formulier om een bericht achter te laten
 			echo '<tr><td class="forumauteur">';
 			if($this->getCiteerPost()==0){
 				echo '<a class="forumpostlink" id="laatste">Reageren:</a><br /><br />';
@@ -154,7 +164,7 @@ class ForumOnderwerpContent extends SimpleHTML {
 			}
 			echo '</td><td class="forumtekst">';
 			if($this->_forum->magPosten()){ 
-				echo '<form method="post" action="/forum/toevoegen/'.$this->_forum->getID().'"><p>';
+				echo '<form method="post" action="/forum/toevoegen/'.$this->_forum->getID().'#laatste"><p>';
 				//berichtje weergeven voor niet-ingeloggede gebruikers dat ze een naam moeten vermelden.
 				if(!$this->_forum->isIngelogged()){
 					echo '<strong>Uw bericht wordt pas geplaatst nadat het bekeken en goedgekeurd is door de <a href="http://csrdelft.nl/groepen/commissie/PubCie.html">PubCie</a>. Het vermelden van <em>uw naam</em> verhoogt de kans dat dit gebeurt.</strong><br /><br />';
@@ -163,11 +173,14 @@ class ForumOnderwerpContent extends SimpleHTML {
 				//inhoud van de textarea vullen met eventuele quote...
 				if($this->getCiteerPost()!=0){
 					$aPost=$this->_forum->getSinglePost($this->getCiteerPost());
-					echo '[citaat='.$aPost['uid'].']'.$aPost['tekst'].'[/citaat]';
+					echo '[citaat='.$aPost['uid'].']'.htmlspecialchars($aPost['tekst']).'[/citaat]';
+				}elseif(isset($_POST['bericht'])){
+					echo htmlspecialchars($_POST['bericht']);
 				}
-				echo '</textarea><br /><input type="submit" name="submit" value="opslaan" /></p></form>';
+				echo '</textarea><br /><input type="submit" name="submit" value="opslaan" /> ';
+				echo '<input type="submit" name="submit" value="voorbeeld" style="color: #777;"/></p></form>';
 			}else{
-				if($aBericht['open']==1){
+				if($this->_forum->isOpen()){
 					//wel open, geen rechten.
 					echo 'U mag in dit deel van het forum niet reageren.';
 				}else{
