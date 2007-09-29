@@ -833,11 +833,20 @@ class eamBBParser{
 		$html = '<td>'.$content.'</td>';
 		return $html;
 	}
-	function ubb_th()
-	{
+	function ubb_th(){
 		$content = $this->parseArray(array('[/th]'), array());
 		$html = '<th>'.$content.'</th>';
 		return $html;
-	}	
+	}
+	function ubb_div($arguments=array()){
+		$content=$this->parseArray(array('[/div]'), array());
+		if(isset($arguments['clear'])){
+			$clear='style="clear: both;"';
+		}else{
+			$clear='';
+		}
+		return '<div '.$clear.'>'.$content.'</p>';
+		
+	}
 }
 ?>
