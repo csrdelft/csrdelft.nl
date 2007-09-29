@@ -139,6 +139,26 @@ class menu {
 		}
 		echo '</div></div>';
 	}
+	public static function getGaSnelNaar(){
+		//hier worden even de objecten lokaal gemaakt, anders moet er voor dit ding ook nog een 
+		//tweede instantie van Menu gemaakt worden.
+		$lid=Lid::get_lid();
+		$db=MySql::get_MySql();
+		
+		$gasnelnaar="SELECT tekst, link, permission FROM menu WHERE gasnelnaar='ja' ORDER BY tekst;";
+		$result=$db->query($gasnelnaar);
+		$return='<strong>Ga snel naar</strong><br />';
+		if($result!==false AND $db->numRows($result)>0){
+			while($gsn=$db->next($result)){
+				if($lid->hasPermission($gsn['permission'])){
+					$return.='&raquo; <a href="'.$gsn['link'].'">'.$gsn['tekst'].'</a><br />';
+				}
+			}
+		}else{
+			$return.='Geen items gevonden.';
+		}
+		return $return;
+	}
 }
 
 ?>

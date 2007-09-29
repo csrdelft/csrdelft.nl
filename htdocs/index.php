@@ -11,13 +11,9 @@ require_once('include.config.php');
 
 ## zijkolom in elkaar jetzen
 	$zijkolom=new kolom();
+	require_once('class.menu.php');
+	$zijkolom->add(new stringincluder(Menu::getGaSnelNaar()));
 	
-	# snel naar ding voor leden
-	if($lid->hasPermission('P_LOGGED_IN')) {
-		$snelnaar='<strong>Ga snel naar</strong><br />
-			&raquo; <a href="/intern/csrmail/">C.S.R.-courant</a><br />';
-		$zijkolom->add(new stringincluder($snelnaar));
-	}
 	
 	# laatste forumberichten toevoegen aan zijkolom:
 	require_once('class.forum.php'); 
