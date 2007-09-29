@@ -86,6 +86,7 @@ htdocs/tools/index.php -text
 htdocs/tools/mootlijsten.php -text
 htdocs/tools/onderhoud.html -text
 htdocs/tools/phpinfo.php -text
+htdocs/tools/query.php -text
 htdocs/tools/saldo-overzicht.php -text
 htdocs/tools/sendmail/maildata.php -text
 htdocs/tools/sendmail/sendmail.php -text
