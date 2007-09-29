@@ -623,27 +623,28 @@ class eamBBParser{
 	function ubb_u(){
 		return '<u>'. $this->parseArray(array('[/u]'), array('u')). '</u>';
 	}
+	function ubb_rul($arguments = array()){
+		return $this->ubb_url($arguments);
+	}
 	function ubb_url($arguments = array()){
 		
-		$content = $this->parseArray(array('[/url]'), array());		
+		$content = $this->parseArray(array('[/url]', '[/rul]'), array());		
+		//[url=
 		if(isset($arguments['url'])){
 			$href = $arguments['url'];					
-		} else {
+		}elseif(isset($arguments['rul'])){
+			$href = $arguments['rul'];
+		}else{
+			//of [url][/url]
 			$href = $content;
 		}
-		
-		if(isset($arguments['external']) && 
-				($arguments['external'] == 'y' ||
-				$arguments['external'] == 'yes' ||
-				$arguments['external'] == 'true')){
-			$rel = 'rel="external" '; 
-		} else {
-			$rel = null;
-		}
-		
+	
 		// only valid patterns
-		if(!url_like(urldecode($href))) $text = "[Ongeldige URL]";
-		else $text = '<a '.$rel.'href="'.$href.'">'.$content.'</a>';
+		if(!url_like(urldecode($href))){
+			$text = "[Ongeldige URL]";
+		}else{
+			$text = '<a href="'.$href.'">'.$content.'</a>';
+		}
 		return $text;  
 	}
 	function ubb_code($args = array()){
@@ -709,7 +710,7 @@ class eamBBParser{
 		$content = $this->parseArray(array('[br]'), array());
 		array_unshift($this->parseArray, '[br]');
 		if(isset($parameters['me'])){
-			$html = '<font color="red">*'.$parameters['me'].$content.'</font>';
+			$html = '<font color="red">* '.$parameters['me'].$content.'</font>';
 		} else {
 			$html = '<font color="red">/me'.$content.'</font>';
 		}
@@ -734,16 +735,25 @@ class eamBBParser{
 
 		if($endtag == '[/email]'){
 			if(isset($parameters['email'])){
-                if(!email_like($parameters['email'])) $html .= "[Ongeldig emailadres]";
-				else $html .= '<a href="mailto:'. $parameters['email'] . '">'.$mailto.'</a>';
+                if(!email_like($parameters['email'])){
+                	$html .= "[Ongeldig emailadres]";
+                }else{
+                	$html .= '<a href="mailto:'. $parameters['email'] . '">'.$mailto.'</a>';	
+                }
 			} else {
-		        if(!email_like($mailto)) $html .= "[Ongeldig emailadres]";
-				else $html .= '<a href="mailto:'. $mailto . '">'.$mailto.'</a>';
+		        if(!email_like($mailto)){ 
+		       		$html .= "[Ongeldig emailadres]";
+		        }else{
+		        	$html .= '<a href="mailto:'. $mailto . '">'.$mailto.'</a>';
+		        }
 			}
 		} else {
 			if(isset($parameters['email'])){
-		        if(!email_like($parameters['email'])) $html .= "[Ongeldig emailadres]";
-				else $html .= '<a href="mailto:'. $parameters['email'] . '">'.$parameters['email'].'</a>';
+		       if(!email_like($parameters['email'])){
+                	$html .= "[Ongeldig emailadres]";
+                }else{
+					$html .= '<a href="mailto:'. $parameters['email'] . '">'.$parameters['email'].'</a>';
+		       }
 			}
 			array_unshift($this->parseArray, $endtag);
 			array_unshift($this->parseArray, $mailto);
@@ -791,8 +801,11 @@ class eamBBParser{
 		$content = $this->parseArray(array('[/img]'), array());
 
 		// only valid patterns
-		if(!url_like(urldecode($content))) $html = "[Ongeldige URL]";
-		else $html = '<img class="forum_image" src="'.$content.'" alt="" '.$width . $height.' style="'.$float.'" />';
+		if(!url_like(urldecode($content))){
+			$html = "[Ongeldige URL]";
+		}else{
+			$html = '<img class="forum_image" src="'.$content.'" alt="" '.$width . $height.' style="'.$float.'" />';
+		}
 		return $html;
 	
 	}
