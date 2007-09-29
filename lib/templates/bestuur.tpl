@@ -19,10 +19,10 @@
 		</tr>
 	</table>
 	
-	<p style="margin: 40px; padding: 20px; font-size: 18px; background-color: #eee; text-align: left;">
+	<div id="bestuurstekst" style="margin: 40px; padding: 20px; font-size: 18px; background-color: #eee; text-align: left;">
 		{$bestuur.tekst|ubb}
-	</p>
-	<p>
+	</div>
+	<div id="bestuursverhaal>
 		{$bestuur.verhaal|ubb}
-	</p>
+	</div>
 </div>
