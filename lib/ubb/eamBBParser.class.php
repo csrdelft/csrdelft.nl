@@ -845,7 +845,7 @@ class eamBBParser{
 		}else{
 			$clear='';
 		}
-		return '<div '.$clear.'>'.$content.'</p>';
+		return '<div '.$clear.'>'.$content.'</div>';
 		
 	}
 }
