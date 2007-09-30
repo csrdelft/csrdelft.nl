@@ -75,12 +75,12 @@ class ProfielContent extends SimpleHTML {
 			$aSaldi=$this->_lid->getSaldi();
 			//zijn er uberhaupt wel saldi...
 			if($aSaldi!==false){
-				if($aSaldi['soccie']<0){
+				if($aSaldi['soccieSaldo']<0){
 					$profhtml['saldi'].='SocCie-saldo: &euro; <span class="waarschuwing">'.sprintf ("%01.2f",$aSaldi['soccieSaldo']).'</span><br />';
 				}else{
 					$profhtml['saldi'].='SocCie-saldo: &euro; '.sprintf ("%01.2f",$aSaldi['soccieSaldo']).'<br />';
 				}
-				if($aSaldi['maalcie']<0){
+				if($aSaldi['maalcieSaldo']<0){
 					$profhtml['saldi'].='MaalCie-saldo: &euro; <span class="waarschuwing">'.sprintf ("%01.2f",$aSaldi['maalcieSaldo']).'</span>';
 				}else{
 					$profhtml['saldi'].='MaalCie-saldo: &euro; '.sprintf ("%01.2f",$aSaldi['maalcieSaldo']);

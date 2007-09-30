@@ -109,7 +109,7 @@ $cmnds['getuserhosts'] = array ('getuid' => false);
  * Het is alleen mogelijk eigen saldo op te vragen
  * 
  * params: -
- * uitvoer: {'soccie': socciesaldo, 'maalcie': maalciesaldo}
+ * uitvoer: {'soccieSaldo': socciesaldo, 'maalcieSaldo': maalciesaldo}
  *
  */
 function getsaldo($uid, $params) {
