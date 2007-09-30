@@ -76,14 +76,14 @@ class ProfielContent extends SimpleHTML {
 			//zijn er uberhaupt wel saldi...
 			if($aSaldi!==false){
 				if($aSaldi['soccie']<0){
-					$profhtml['saldi'].='SocCie-saldo: &euro; <span class="waarschuwing">'.sprintf ("%01.2f",$aSaldi['soccie']).'</span><br />';
+					$profhtml['saldi'].='SocCie-saldo: &euro; <span class="waarschuwing">'.sprintf ("%01.2f",$aSaldi['soccieSaldo']).'</span><br />';
 				}else{
-					$profhtml['saldi'].='SocCie-saldo: &euro; '.sprintf ("%01.2f",$aSaldi['soccie']).'<br />';
+					$profhtml['saldi'].='SocCie-saldo: &euro; '.sprintf ("%01.2f",$aSaldi['soccieSaldo']).'<br />';
 				}
 				if($aSaldi['maalcie']<0){
-					$profhtml['saldi'].='MaalCie-saldo: &euro; <span class="waarschuwing">'.sprintf ("%01.2f",$aSaldi['maalcie']).'</span>';
+					$profhtml['saldi'].='MaalCie-saldo: &euro; <span class="waarschuwing">'.sprintf ("%01.2f",$aSaldi['maalcieSaldo']).'</span>';
 				}else{
-					$profhtml['saldi'].='MaalCie-saldo: &euro; '.sprintf ("%01.2f",$aSaldi['maalcie']);
+					$profhtml['saldi'].='MaalCie-saldo: &euro; '.sprintf ("%01.2f",$aSaldi['maalcieSaldo']);
 				}
 			}
 		}
