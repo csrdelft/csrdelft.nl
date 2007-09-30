@@ -672,12 +672,9 @@ class Lid {
 				kringleider,
 				email,
 				status,
-				saldo as socciesaldo
-				
+				soccieSaldo				
 			FROM 
 				lid
-			LEFT JOIN 
-				socciesaldi ON (lid.uid=socciesaldi.uid)
 			WHERE 
 				status='S_LID' OR status='S_GASTLID' OR status='S_NOVIET' OR status='S_KRINGEL'
 			ORDER BY 
@@ -727,7 +724,7 @@ class Lid {
 			SELECT
 				soccieSaldo, maalcieSaldo
 			FROM
-				socciesaldi
+				lid
 			WHERE
 				uid='".$uid."'
 			LIMIT 1;";
