@@ -101,13 +101,11 @@ class Commissie {
 				lid.geslacht AS geslacht,
 				lid.postfix AS postfix,
 				commissielid.functie AS functie, 
-				socciesaldi.saldo AS soccieSaldo
+				lid.soccieSaldo AS soccieSaldo
 			FROM
 				commissielid			
 			LEFT JOIN
 				lid ON commissielid.uid=lid.uid
-			LEFT JOIN
-				socciesaldi ON commissielid.uid=socciesaldi.uid			
 			WHERE
 				commissielid.cieid=".$iCieID."
 			ORDER BY
