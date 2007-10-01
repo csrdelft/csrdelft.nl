@@ -51,7 +51,7 @@ if(!isset($_GET['topic']) AND isset($_GET['forum'])){
 # er is een onderwerp geselecteerd, nu nog even het bericht er aan toevoegen...
 //
 if(!(isset($_POST['submit']) AND $_POST['submit']=='voorbeeld')){
-	if($forum->magPosten()){
+	if($forum->magToevoegen()){
 		if(strlen(trim($_POST['bericht']))>0){
 			if($forum->addPost($_POST['bericht'])!==false){
 				if($forum->isModerated()){
@@ -70,7 +70,7 @@ if(!(isset($_POST['submit']) AND $_POST['submit']=='voorbeeld')){
 		}
 	}else{
 		header('location: '.CSR_ROOT.'forum/onderwerp/'.$forum->getID().'#laatste');
-		$_SESSION['melding']='Hela, volgens mij mag u dit niet... (forumOnderwerp::magPosten())';
+		$_SESSION['melding']='Hela, volgens mij mag u dit niet... (forumOnderwerp::magToevoegen())';
 	}
 }else{
 	require_once('class.forumonderwerpcontent.php');

@@ -132,7 +132,13 @@ class ForumOnderwerp extends Forum {
 	public function getSoort(){ return $this->aTopicProps['soort']; }
 	public function getSize(){ return count($this->aPosts); }
 	
-	public function magCiteren(){ return $this->magPosten() AND $this->isOpen(); }
+	public function magCiteren(){ return $this->magToevoegen(); }
+	public function magToevoegen(){
+		//FORUM_MOD mag alles bewerken
+		if($this->isModerator()){ return true;}
+		return $this->magPosten() AND $this->isOpen();
+		
+	}
 	
 	public function magBewerken($iPostID){
 		//FORUM_MOD mag alles bewerken

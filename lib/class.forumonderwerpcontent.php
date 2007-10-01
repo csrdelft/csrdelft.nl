@@ -163,7 +163,7 @@ class ForumOnderwerpContent extends SimpleHTML {
 				echo '<br /><strong>Dit topic is gesloten, u mag reageren omdat u beheerder bent.</strong>';
 			}
 			echo '</td><td class="forumtekst">';
-			if($this->_forum->magPosten()){ 
+			if($this->_forum->magToevoegen()){ 
 				echo '<form method="post" action="/forum/toevoegen/'.$this->_forum->getID().'#laatste"><p>';
 				//berichtje weergeven voor niet-ingeloggede gebruikers dat ze een naam moeten vermelden.
 				if(!$this->_forum->isIngelogged()){
