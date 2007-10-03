@@ -225,7 +225,7 @@ function getjarig($uid, $params) {
     $verj10 = $lid->getKomende10Verjaardagen();
     $result = array();
     foreach ($verj10 as $verj) {
-        $naam = $lid->getNaamLink($verj['uid'], 'civitas', false, $verj);
+        $naam = $lid->getNaamLink($verj['uid'], 'civitas', false, $verj, false);
         $datum = date("j-n", mktime(0,0,0,date('m'),date('j')+$verj['jarig_over']));
         $result[] = sprintf('%s %s (%s)', $datum, $naam, $verj['leeftijd']);
     }
