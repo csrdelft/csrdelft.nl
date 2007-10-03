@@ -473,6 +473,13 @@ class Lid {
 			if ($statusfilter != '') $statusfilter .= " OR ";
 			$statusfilter .= "status='S_OUDLID'";
 		}
+		# we zoeken in nobodies als
+		# de ingelogde persoon dat mag EN daarom gevraagd heeft
+		if ($this->hasPermission('P_OUDLEDEN_MOD') and $zoekstatus === 'nobodies') {
+			# alle voorgaande filters worden ongedaan gemaakt en er wordt alleen op nobodies gezocht
+			$statusfilter = "status='S_NOBODY'";
+		}
+		
 		# als er een specifieke moot is opgegeven, gaan we alleen in die moot zoeken
 		$mootfilter = ($moot != 'alle') ? 'AND moot= '.(int)$moot : '';
 

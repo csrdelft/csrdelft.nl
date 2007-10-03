@@ -127,6 +127,10 @@ EOT
 			echo '</select>, status:<select name="status">';
 
 			$zoek_in_type = array('(oud)?leden','leden','oudleden');
+			# de VAB mag ook nobodies zoeken
+			if($this->_lid->hasPermission('P_OUDLEDEN_MOD')) {
+				$zoek_in_type[] = 'nobodies';
+			}
 
 			if (!isset($this->_form['status'])) {
 				# voor de standaard-optie kijken we naar de status van de ingelogde persoon

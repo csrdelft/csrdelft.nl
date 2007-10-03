@@ -32,6 +32,11 @@ if ($lid->hasPermission('P_LEDEN_READ') or $lid->hasPermission('P_OUDLEDEN_READ'
 
 	# voor gebruikers die leden en oudleden kunnen zoeken
 	$zoek_in_type = array('(oud)?leden','leden','oudleden');
+	# de VAB mag ook nobodies zoeken
+	if($lid->hasPermission('P_OUDLEDEN_MOD')) {
+		$zoek_in_type[] = 'nobodies';
+	}
+	
 	# deze optie kan ook via GET, zodoende is te sturen dat er via de (oud)ledenlijst default in (oud)leden
 	# gezocht wordt, zonder dat er een POST is verzonden
 	if (isset($_GET['status']) and in_array($_GET['status'],$zoek_in_type)) $form['status'] = $_GET['status'];
