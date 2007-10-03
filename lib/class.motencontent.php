@@ -38,7 +38,7 @@ class MotenContent extends SimpleHTML {
 			}else{
 				$kringsaldo=0;
 				foreach ($this->_kringen[$moot][$kring] as $kringlid) {
-					$kringsaldo+=$kringlid['socciesaldo'];
+					$kringsaldo+=$kringlid['soccieSaldo'];
 					if ($kringlid['kringleider'] != 'n' or $kringlid['motebal']!=0) echo '<em>';
 					echo $this->_lid->getNaamLink($kringlid['uid'], 'civitas', true, $kringlid);
 					if ($kringlid['motebal']!='0') echo '&nbsp;O';
