@@ -133,7 +133,7 @@ class NieuwsContent extends SimpleHTML {
 		}else{
 			foreach ($aBerichten as $aBericht) {
 				if(kapStringNetjesAf($aBericht['tekst'], $this->_chop)){
-					$sBericht=$this->ubb->getHTML($aBericht['tekst'].' [url=/nieuws/'.$aBericht['id'].']...meer[/url]');
+					$sBericht=$this->ubb->getHTML($aBericht['tekst'].' [url='.CSR_ROOT. '/nieuws/'.$aBericht['id'].']...meer[/url]');
 				}else{
 					$sBericht=$this->ubb->getHTML($aBericht['tekst']);
 				}
