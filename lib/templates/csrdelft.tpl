@@ -10,9 +10,9 @@
 	<link rel="stylesheet" href="/layout/agenda.css" type="text/css" />
 	<link rel="stylesheet" href="/layout/forum.css" type="text/css" />
 	<link rel="stylesheet" href="/layout/documenten.css" type="text/css" />
-<script type="text/javascript" src="/layout/csrdelft.js" ></script>
-	<script type="text/javascript" src="/layout/minmax.js"></script>
-	<script type="text/javascript" src="/layout/position.js"></script>
+<script type="text/javascript" src="/layout/csrdelft.js"  defer="true"></script>
+	<script type="text/javascript" src="/layout/minmax.js" defer="true"></script>
+	<script type="text/javascript" src="/layout/position.js" defer="true"></script>
 	<link rel="alternate" title="C.S.R. Delft RSS" type="application/rss+xml" href="http://csrdelft.nl/forum/rss.xml" />
 	<link rel="shortcut icon" href="{$csr_pics}layout/favicon.ico" />
 </head>
@@ -117,7 +117,7 @@
 {/if}
 
 </div>
-<script type="text/javascript" defer="defer">
+<script type="text/javascript" defer="true">
 <!--
 document.body.style.height = document.documentElement.scrollHeight+'px';
 -->
