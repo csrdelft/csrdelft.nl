@@ -50,6 +50,34 @@ class CsrUBB extends eamBBParser{
 		}
 		return $text;
 	}
+	/* 
+	 * ubb_prive().
+	 * 
+	 * Tekst binnen de privé-tag wordt enkel weergegeven voor leden met
+	 * (standaard) P_LOGGED_IN. Een andere permissie kan worden meegegeven.
+	 * 
+	 * LET OP: binnen het forum is citeren mogelijk voor externen. Dan kan 
+	 * de inhoud van deze tag dus bekeken worden door te citeren. Als deze 
+	 * tag dus nuttig moet worden voor het forum moet bij citeren door 
+	 * externen de inhoud van deze tag weggefilterd woren.
+	 */
+	function ubb_prive($arguments=array()){
+		$lid=Lid::get_lid();
+		if(isset($arguments['prive'])){
+			$permissie=$arguments['prive'];
+		}else{
+			$permissie='P_LOGGED_IN';
+		}
+		//content moet altijd geparsed worden, anders blijft de inhoud van de
+		//tag gewoon staan.
+		$content = $this->parseArray(array('[/prive]'), array());
+		if(!$lid->hasPermission($permissie)){
+			$content='';
+		}
+		return $content;
+	}
+	 
+	 
 	/*
 	 * Deze methode kan resultaten van query's die in de database staan printen in een 
 	 * tabelletje.

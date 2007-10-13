@@ -10,7 +10,7 @@
 	<link rel="stylesheet" href="/layout/agenda.css" type="text/css" />
 	<link rel="stylesheet" href="/layout/forum.css" type="text/css" />
 	<link rel="stylesheet" href="/layout/documenten.css" type="text/css" />
-<script type="text/javascript" src="/layout/csrdelft.js"  defer="true"></script>
+	<script type="text/javascript" src="/layout/csrdelft.js"  defer="true"></script>
 	<script type="text/javascript" src="/layout/minmax.js" defer="true"></script>
 	<script type="text/javascript" src="/layout/position.js" defer="true"></script>
 	<link rel="alternate" title="C.S.R. Delft RSS" type="application/rss+xml" href="http://csrdelft.nl/forum/rss.xml" />
@@ -105,7 +105,7 @@
 		</div>
 	{/if}
 </div>
-<div id="lijntje"><img src="{$csr_pics}layout/pixel.gif" height="3px" width="20px" alt="lijntje..." /></div>
+<div id="lijntje"></div>
 <div id="hoofderFoto"><img src="{$csr_pics}layout/hoofder.jpg" height="130px" alt="een impressie van de Civitas" /></div>
 {if is_array($saldi)}
 	<div id="uStaatRood">
@@ -117,6 +117,7 @@
 {/if}
 
 </div>
+<!-- selecteer-bug-fix voor IE ( http://trac.knorrie.org/csrdelft.nl/changeset/158) -->
 <script type="text/javascript" defer="true">
 <!--
 document.body.style.height = document.documentElement.scrollHeight+'px';
