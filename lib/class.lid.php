@@ -537,21 +537,27 @@ class Lid {
 	 * Kijkt of er een pasfoto voor het gegeven uid is, en geef die terug.
 	 */
 	function getPasfoto($uid=null, $imgTag=true){
-		if(!$this->isValidUid($uid) OR $uid=null){
+		if(!$this->isValidUid($uid) OR $uid==null){
 			$uid=$this->getUid();
 		}
 		$validExtensions=array('gif', 'jpg', 'jpeg', 'png');
 		
+		$pasfoto=CSR_PICS.'pasfoto/geen-foto.png';
+		
 		foreach($validExtensions as $validExtension){
 			if(file_exists(PICS_PATH.'/pasfoto/'.$uid.'.'.$validExtension)){
 				$pasfoto=CSR_PICS.'pasfoto/'.$uid.'.'.$validExtension;
+				continue;
 			}
 		}
-		if(!isset($pasfoto)){
-			$pasfoto=CSR_PICS.'pasfoto/geen-foto.png';
-		}
-		if($imgTag){
-			return '<img src="'.$pasfoto.'" alt="pasfoto" />';
+		
+		if($imgTag===true OR $imgTag=='small'){
+			$html='<img src="'.$pasfoto.'" ';
+			if($imgTag=='small'){
+				$html.='style="width: 100px;" ';
+			}
+			$html.='alt="pasfoto" />';
+			return $html; 
 		}else{
 			return $pasfoto;
 		}

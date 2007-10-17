@@ -20,10 +20,11 @@ class ProfielContent extends SimpleHTML {
 	//array met profiel.
 	var $_profiel;
 	### public ###
-
-	function ProfielContent ( &$state) {
+	
+	//LET OP: hier wordt lid wél meegegeven, want het gaat hier om een profiel-object.
+	function ProfielContent ($profiel, &$state) {
 		$this->_state =& $state;
-		$this->_lid=Lid::get_lid();
+		$this->_lid=$profiel;
 		
 		$this->_profiel = $this->_lid->getTmpProfile();
 	}
