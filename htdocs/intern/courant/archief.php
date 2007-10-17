@@ -28,16 +28,11 @@ if ($lid->hasPermission('P_LEDEN_READ')) {
 	$body = new Includer('', 'geentoegang.html');
 }	
 
-
-	
-
 # pagina weergeven
 $pagina=new csrdelft($body);
 
 $pagina->setZijkolom($zijkolom);
 
-
 $pagina->view();
 	
-
 ?>

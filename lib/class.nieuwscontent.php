@@ -133,7 +133,7 @@ class NieuwsContent extends SimpleHTML {
 		}else{
 			foreach ($aBerichten as $aBericht) {
 				if(kapStringNetjesAf($aBericht['tekst'], $this->_chop)){
-					$sBericht=$this->ubb->getHTML($aBericht['tekst'].' [url='.CSR_ROOT. '/nieuws/'.$aBericht['id'].']...meer[/url]');
+					$sBericht=$this->ubb->getHTML($aBericht['tekst'].' [url='.CSR_ROOT. 'nieuws/'.$aBericht['id'].']...meer[/url]');
 				}else{
 					$sBericht=$this->ubb->getHTML($aBericht['tekst']);
 				}
@@ -148,7 +148,7 @@ class NieuwsContent extends SimpleHTML {
 				echo mb_htmlentities($aBericht['titel']).'</a></div>';
 				//aantal br's tellen.
 				if(substr_count($sBericht, '<br />')>5){
-						echo substr($sBericht, 0, strNthPos($sBericht, '<br />', 5)).'... <a href="/nieuws/'.$aBericht['id'].'">meer</a>';;
+					echo substr($sBericht, 0, strNthPos($sBericht, '<br />', 5)).'... <a href="/nieuws/'.$aBericht['id'].'">meer</a>';
 				}else{
 					echo ''.$sBericht;
 				}

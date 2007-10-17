@@ -9,7 +9,7 @@ require_once('class.kolom.php');
 if ($lid->hasPermission('P_LEDEN_READ')) {
 	# Het middenstuk
 	require_once('class.verjaardagcontent.php');
-	$midden = new VerjaardagContent($lid, 'alleverjaardagen');
+	$midden = new VerjaardagContent('alleverjaardagen');
 } else {
 	# geen rechten
 	$midden = new Includer('', 'geentoegang.html');
@@ -18,7 +18,7 @@ if ($lid->hasPermission('P_LEDEN_READ')) {
 	$zijkolom=new kolom();
 
 # pagina weergeven
-$pagina=new csrdelft($midden, $lid, $db);
+$pagina=new csrdelft($midden);
 if(!isset($_GET['print'])){ $pagina->setZijkolom($zijkolom); }
 $pagina->view();
 

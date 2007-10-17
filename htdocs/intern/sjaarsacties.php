@@ -5,7 +5,7 @@ require_once('include.config.php');
 # Het middenstuk
 if ($lid->hasPermission('P_LEDEN_READ')) {
 	require_once('class.sjaarsactie.php');
-	$sjaarsactie = new Sjaarsactie($lid, $db);
+	$sjaarsactie = new Sjaarsactie();
 	
 	//nieuwe aanmelding voor een bestaande sjaarsactie
 	if(isset($_GET['actieID'], $_GET['aanmelden']) AND 
@@ -33,7 +33,7 @@ if ($lid->hasPermission('P_LEDEN_READ')) {
 	$zijkolom=new kolom();
 
 # pagina weergeven
-$pagina=new csrdelft($midden, $lid, $db);
+$pagina=new csrdelft($midden);
 $pagina->setZijkolom($zijkolom);
 $pagina->view();
 

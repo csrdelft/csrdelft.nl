@@ -18,7 +18,7 @@ require_once('include.config.php');
 	# laatste forumberichten toevoegen aan zijkolom:
 	require_once('class.forum.php'); 
 	require_once('class.forumcontent.php');
-	$forum=new forum($lid, $db);
+	$forum=new forum();
 	$forumcontent=new forumcontent($forum, 'lastposts');
 	$zijkolom->add($forumcontent);
 	
@@ -27,8 +27,7 @@ require_once('include.config.php');
 	if($lid->hasPermission('P_LOGGED_IN')) {
 		require_once('class.verjaardagcontent.php');
 		
-		$verjaardagcontent=new VerjaardagContent($lid, 'komende10');
-		$zijkolom->add($verjaardagcontent);
+		$zijkolom->add(new VerjaardagContent('komende10'));
 	}
 	
 	# Alpha-reclame
@@ -42,7 +41,7 @@ require_once('include.config.php');
 	# nieuws
 	require_once('class.nieuws.php');
 	require_once('class.nieuwscontent.php');
-	$nieuws=new nieuws( $db, $lid);
+	$nieuws=new nieuws();
 	$body->addObject(new nieuwscontent($nieuws));
 	
 	# bannertje weergeven...

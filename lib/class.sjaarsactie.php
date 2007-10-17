@@ -13,10 +13,9 @@ class Sjaarsactie {
 	var $_lid;
 	
 	var $_sError;
-	function Sjaarsactie(&$lid, &$db){
-		# databaseconnectie openen
-		$this->_lid =& $lid;
-		$this->_db =& $db;
+	function Sjaarsactie(){
+		$this->_lid=Lid::get_lid();
+		$this->_db=MySql::get_MySql();
 	}
 	
 	

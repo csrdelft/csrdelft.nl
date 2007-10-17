@@ -20,8 +20,8 @@ class VerjaardagContent extends SimpleHTML {
 
 	### public ###
 
-	function VerjaardagContent (&$lid, $actie) {
-		$this->_lid =& $lid;
+	function VerjaardagContent ($actie) {
+		$this->_lid =Lid::get_lid();
 		$this->_actie = $actie;
 		
 	}

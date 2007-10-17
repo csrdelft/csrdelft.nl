@@ -13,7 +13,7 @@ $body = new Includer('', 'leden-thuis.html');
 $zijkolom=new kolom();
 
 # pagina weergeven
-$pagina=new csrdelft($body, $lid, $db);
+$pagina=new csrdelft($body);
 $pagina->setZijkolom($zijkolom);
 $pagina->view();
 

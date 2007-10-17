@@ -564,7 +564,10 @@ class Lid {
 	}
 	
 	
-	//een methode om te checken of het huidige dan wel het opgegeven lid in het bestuur zit
+	/*
+	 * een methode om te checken of het huidige dan wel het opgegeven lid 
+	 * in het huidige bestuur zit.
+	 */
 	function isBestuur($uid=''){
 		if($uid==''){ $uid=$this->getUid(); }
 		$bestuur=new Bestuur();

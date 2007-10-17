@@ -155,9 +155,6 @@ if ($error == 0){
 switch ($error) {
 	case 0:
 	case 2:
-		# Het middenstuk, we laden ook de woonoord en commissie-
-		# functies is, die worden alleen gebruikt om info op te vragen
-
 		require_once('class.profielcontent.php');
 		$midden = new ProfielContent($lid, $state);
 	break;
@@ -171,11 +168,10 @@ switch ($error) {
 	if($lid->hasPermission('P_LOGGED_IN')) {
 		require_once('class.verjaardagcontent.php');
 		
-		$verjaardagcontent=new VerjaardagContent($lid, 'komende10');
-		$zijkolom->add($verjaardagcontent);
+		$zijkolom->add(new VerjaardagContent('komende10'));
 	}
 ## pagina weergeven
-	$pagina=new csrdelft($midden, $lid, $db);
+	$pagina=new csrdelft($midden);
 	$pagina->setZijkolom($zijkolom);
 	$pagina->view();
 

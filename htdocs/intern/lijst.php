@@ -85,12 +85,11 @@ if ($lid->hasPermission('P_LEDEN_READ') or $lid->hasPermission('P_OUDLEDEN_READ'
 	if($lid->hasPermission('P_LOGGED_IN')) {
 		require_once('class.verjaardagcontent.php');
 		
-		$verjaardagcontent=new VerjaardagContent($lid, 'komende10');
-		$zijkolom->add($verjaardagcontent);
+		$zijkolom->add(new VerjaardagContent('komende10'));
 	}
 
 ## pagina weergeven
-	$pagina=new csrdelft($midden, $lid, $db);
+	$pagina=new csrdelft($midden);
 	$pagina->setZijkolom($zijkolom);
 	$pagina->view();
 

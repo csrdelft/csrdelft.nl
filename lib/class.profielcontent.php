@@ -74,7 +74,7 @@ class ProfielContent extends SimpleHTML {
 		require_once('class.woonoord.php');
 		$woonoord=new Woonoord();
 		$woonoord = $woonoord->getWoonoordByUid($this->_profiel['uid']);
-		$profhtml['woonoord']=($woonoord !== false) ? '<em>'.$woonoord['naam'].'</i><br />' : '';
+		$profhtml['woonoord']=($woonoord !== false) ? '<em>'.$woonoord['naam'].'</em><br />' : '';
 		
 		# kijken of deze persoon commissielid is
 		require_once('class.commissie.php');
