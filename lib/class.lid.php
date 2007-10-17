@@ -531,6 +531,33 @@ class Lid {
 		}
 		return false;
 	}
+	/*
+	 * getPasfoto()
+	 * 
+	 * Kijkt of er een pasfoto voor het gegeven uid is, en geef die terug.
+	 */
+	function getPasfoto($uid=null, $imgTag=true){
+		if(!$this->isValidUid($uid) OR $uid=null){
+			$uid=$this->getUid();
+		}
+		$validExtensions=array('gif', 'jpg', 'jpeg', 'png');
+		
+		foreach($validExtensions as $validExtension){
+			if(file_exists(PICS_PATH.'/pasfoto/'.$uid.'.'.$validExtension)){
+				$pasfoto=CSR_PICS.'pasfoto/'.$uid.'.'.$validExtension;
+			}
+		}
+		if(!isset($pasfoto)){
+			$pasfoto=CSR_PICS.'pasfoto/geen-foto.png';
+		}
+		if($imgTag){
+			return '<img src="'.$pasfoto.'" alt="pasfoto" />';
+		}else{
+			return $pasfoto;
+		}
+	}
+	
+	
 	//een methode om te checken of het huidige dan wel het opgegeven lid in het bestuur zit
 	function isBestuur($uid=''){
 		if($uid==''){ $uid=$this->getUid(); }

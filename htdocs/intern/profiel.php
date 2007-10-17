@@ -157,12 +157,9 @@ switch ($error) {
 	case 2:
 		# Het middenstuk, we laden ook de woonoord en commissie-
 		# functies is, die worden alleen gebruikt om info op te vragen
-		require_once('class.woonoord.php');
-		require_once('class.commissie.php');
+
 		require_once('class.profielcontent.php');
-		$woonoord = new Woonoord($db, $lid);
-		$commissie = new Commissie($db, $lid);
-		$midden = new ProfielContent($lid, $state, $woonoord, $commissie);
+		$midden = new ProfielContent($lid, $state);
 	break;
 	default:
 		# geen rechten

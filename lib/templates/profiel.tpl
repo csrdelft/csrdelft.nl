@@ -8,7 +8,8 @@
 	<tr>
 		<td>
 			Naam: {$profhtml.fullname}<br />
-			Lid-nummer: {$profhtml.uid}<br />
+			Civitas-naam: {$profhtml.civitasnaam}<br />
+			Lid-nummer: {$profhtml.uid} <br />
 			Bijnaam: {$profhtml.nickname}
 		</td>
 		<td>
@@ -58,7 +59,7 @@
 			MSN: {$profhtml.msn}<br />
 			Jabber: {$profhtml.jid}<br />
 			Skype: {$profhtml.skype}<br />
-			Website: <a href="{$profhtml.website}" class="linkExt">{$profhtml.website_kort}</a><br />
+			Website: <a href="{$profhtml.website}" class="linkExt">{$profhtml.website|truncate:30}</a><br />
 			Eetwens: {$profhtml.eetwens}<br />
 			{* Bankrekening: {$profhtml.bankrekening}<br /> *}
 			{$profhtml.saldi}

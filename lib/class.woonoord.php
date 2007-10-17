@@ -14,9 +14,9 @@ class Woonoord {
 	### public ###
 	
 	
-	function Woonoord(&$db, &$lid) {
-		$this->_db =& $db;
-		$this->_lid =& $lid;
+	function Woonoord() {
+		$this->_db=MySql::get_MySql();
+		$this->_lid=Lid::get_lid();
 	}
 
 	function isLid(){ return $this->_lid->hasPermission('P_LEDEN_READ'); }
@@ -108,7 +108,7 @@ class Woonoord {
 			AND
 				bewoner.uid='".$uid."'
 			LIMIT 1;");
-    if ($result !== false and $this->_db->numRows($result) == 1) {
+		if ($result !== false and $this->_db->numRows($result) == 1) {
 			$record = $this->_db->next($result);
 			return array('id' => $record['id'], 'naam' => $record['naam']);
 		}else{
@@ -117,31 +117,31 @@ class Woonoord {
 		}
 	}
 	function addBewoner($iWoonoordID, $uid){
-    if($this->getWoonoordByUid($uid)===false){
-      $sToevoegen="
-        INSERT INTO
-          bewoner
-        ( 
-          woonoordid, uid 
-        ) VALUES (
-          ".$iWoonoordID.", '".$uid."'
-        );";
-      return $this->_db->query($sToevoegen);
-    }else{
-    	return false;
-    }
-  }
-  function delBewoner($iWoonoordID, $uid){
-    $sVerwijderen="
-      DELETE FROM
-        bewoner
-      WHERE
-        woonoordid=".$iWoonoordID."
-      AND
-        uid='".$uid."'
-      LIMIT 1;";
-    return $this->_db->query($sVerwijderen);
-  }
+		if($this->getWoonoordByUid($uid)===false){
+			$sToevoegen="
+				INSERT INTO
+					bewoner
+				( 
+					woonoordid, uid 
+				) VALUES (
+					".$iWoonoordID.", '".$uid."'
+				);";
+			return $this->_db->query($sToevoegen);
+		}else{
+			return false;
+		}
+	}
+	function delBewoner($iWoonoordID, $uid){
+		$sVerwijderen="
+			DELETE FROM
+				bewoner
+			WHERE
+				woonoordid=".(int)$iWoonoordID."
+			AND
+				uid='".$uid."'
+			LIMIT 1;";
+		return $this->_db->query($sVerwijderen);
+	}
 }
 
 ?>

@@ -20,9 +20,9 @@ class Commissie {
 
 	### public ###
 	
-	function Commissie(&$db, &$lid){
-		$this->_db =& $db;
-		$this->_lid =& $lid;
+	function Commissie(){
+		$this->_db=MySql::get_MySql();
+		$this->_lid=Lid::get_lid();
 	}
 
 	function loadCommissie($cie) {

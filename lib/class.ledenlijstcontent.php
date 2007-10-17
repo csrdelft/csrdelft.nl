@@ -210,17 +210,7 @@ EOT
 				$uid=htmlspecialchars($lid['uid']);
 				echo '<tr>';
 				if(in_array('pasfoto', $this->_form['kolom'])){
-					echo '<td>';
-					if (file_exists( PICS_PATH.'/pasfoto/'.$uid.'.gif')){
-						echo '<img src="'.CSR_PICS.'pasfoto/'.$uid.'.gif" alt="pasfoto" height="100" />';
-					}elseif(file_exists( PICS_PATH.'/pasfoto/'.$uid.'.jpg')){
-						echo '<img src="'.CSR_PICS.'pasfoto/'.$uid.'.jpg" alt="pasfoto" height="100" />';
-					}elseif(file_exists( PICS_PATH.'/pasfoto/'.$uid.'.png')){
-						echo '<img src="'.CSR_PICS.'pasfoto/'.$uid.'.png" alt="pasfoto" height="100" />';
-					}else{
-						echo 'geen foto';
-					}
-					echo '</td>';
+					echo '<td><a href="/intern/profiel/'.$uid.'">'.$lid->getPasfoto($uid).'</a></td>';
 				}
 				if($this->_lid->hasPermission('P_LEDEN_MOD')){
 					echo '<td><a href="/intern/profiel/'.$uid.'/edit" class="knop">b</a>&nbsp;';
@@ -229,21 +219,23 @@ EOT
 				echo '<td>'.$this->_lid->getNaamLink($lid['uid'], 'full', true, $lid).'</td>';
 				//de rest van de kolommen.
 				foreach ($this->_form['kolom'] as $kolom) {
-					if($kolom!='pasfoto'){
-						echo '<td>';
-						if($kolom == 'adres'){ 
-							echo mb_htmlentities($lid['adres'].' '.$lid['postcode'].' '.$lid['woonplaats']);
-						}else{
-							echo mb_htmlentities($lid[$kolom]);
-						}
-						echo '</td>';
+					switch($kolom){
+						case 'pasfoto':
+						break;
+						case 'adres':
+							echo '<td>'.mb_htmlentities($lid['adres'].' '.$lid['postcode'].' '.$lid['woonplaats']).'</td>';
+						break;
+						default;
+							echo '<td>'.mb_htmlentities($lid[$kolom]).'</td>';
 					}
 				}//einde foreach kolom
 				echo '</tr>';
 			}//einde foreach lid
 			echo'</table>';
 		}else{
-			if(trim($form_wat)!='') echo '<br />Uw zoekopdracht heeft geen resultaten opgeleverd. Probeert u het nog eens.';
+			if(trim($form_wat)!=''){
+				echo '<br />Uw zoekopdracht heeft geen resultaten opgeleverd. Probeert u het nog eens.';
+			}
 		}//einde if count($this->_result)
 		echo '<br />';
 	}//einde functie view
