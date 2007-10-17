@@ -210,7 +210,7 @@ EOT
 				$uid=htmlspecialchars($lid['uid']);
 				echo '<tr>';
 				if(in_array('pasfoto', $this->_form['kolom'])){
-					echo '<td><a href="/intern/profiel/'.$uid.'">'.$lid->getPasfoto($uid).'</a></td>';
+					echo '<td><a href="/intern/profiel/'.$uid.'">'.$this->_lid->getPasfoto($uid).'</a></td>';
 				}
 				if($this->_lid->hasPermission('P_LEDEN_MOD')){
 					echo '<td><a href="/intern/profiel/'.$uid.'/edit" class="knop">b</a>&nbsp;';

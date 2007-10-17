@@ -159,7 +159,7 @@ switch ($error) {
 		# functies is, die worden alleen gebruikt om info op te vragen
 
 		require_once('class.profielcontent.php');
-		$midden = new ProfielContent($lid, $state);
+		$midden = new ProfielContent( $state);
 	break;
 	default:
 		# geen rechten

@@ -16,18 +16,14 @@ class ProfielContent extends SimpleHTML {
 	# de objecten die data leveren
 	var $_lid;
 	var $_state;
-	var $_woonoord;
-	var $_commissie;
 	
 	//array met profiel.
 	var $_profiel;
 	### public ###
 
-	function ProfielContent (&$lid, &$state, &$woonoord, &$commissie) {
-		$this->_lid =& $lid;
+	function ProfielContent ( &$state) {
 		$this->_state =& $state;
-		$this->_woonoord =& $woonoord;
-		$this->_commissie =& $commissie;
+		$this->_lid=Lid::get_lid();
 		
 		$this->_profiel = $this->_lid->getTmpProfile();
 	}
@@ -41,33 +37,19 @@ class ProfielContent extends SimpleHTML {
 	}
 	function viewStateNone(){
 		$profhtml = array();
-		foreach($this->_profiel as $key => $value) $profhtml[$key] = mb_htmlentities($value);
-		
-		$profhtml['fullname'] = naam($this->_profiel['voornaam'], $this->_profiel['achternaam'], $this->_profiel['tussenvoegsel']);
-				
-		$profhtml['website_kort'] = $profhtml['website'];
-		if (mb_strlen($profhtml['website_kort']) > 28) {
-			$profhtml['website_kort'] = substr($profhtml['website_kort'], 0, 25) . '...';
+		foreach($this->_profiel as $key => $value){
+			$profhtml[$key] = mb_htmlentities($value);
 		}
+		$profhtml['fullname']=$this->_lid->getFullName($this->_profiel['uid']);
+		$profhtml['civitasnaam']=$this->_lid->getNaamLink($this->_profiel['uid'], 'civitas', false);
 				
 		# email-adres
-		if ($profhtml['email'] != '') $profhtml['email'] = sprintf('<a href="mailto:%s">%s</a>', $profhtml['email'], $profhtml['email']);
-		
-		# leden-foto, mag gif of jpg zijn.
-		if (file_exists( PICS_PATH.'/pasfoto/'.$this->_profiel['uid'].'.gif')){
-			$profhtml['foto'] = '<img src="'.CSR_PICS.'pasfoto/'.$this->_profiel['uid'].'.gif" alt="pasfoto" />';
-		}elseif(file_exists( PICS_PATH.'/pasfoto/'.$this->_profiel['uid'].'.jpg')){
-			$profhtml['foto'] = '<img src="'.CSR_PICS.'pasfoto/'.$this->_profiel['uid'].'.jpg" alt="pasfoto" />';
-		}elseif(file_exists( PICS_PATH.'/pasfoto/'.$this->_profiel['uid'].'.png')){
-			$profhtml['foto'] = '<img src="'.CSR_PICS.'pasfoto/'.$this->_profiel['uid'].'.png" alt="pasfoto" />';
-		}elseif($profhtml['status']=='S_NOVIET'){
-			$aSjaars=array('pino.png', 'oscar.png', 'elmo.png');
-			$profhtml['foto']= '<img src="'.CSR_PICS.'pasfoto/'.$aSjaars[rand(0, count($aSjaars)-1)].'" 
-				alt="Eerstejaars moet gaan slapen, eerstejaars moet naar bed" />';
-		}else{ 
-			$profhtml['foto']='Geen foto aanwezig. <br />Mail de pubcie om <br />er een toe te voegen.'; 
+		if($profhtml['email'] != ''){ 
+			$profhtml['email'] = sprintf('<a href="mailto:%s">%s</a>', $profhtml['email'], $profhtml['email']);
 		}
 		
+		$profhtml['foto']=$this->_lid->getPasfoto($this->_profiel['uid']);
+			
 		//soccie saldo
 		$profhtml['saldi']='';
 		//alleen als men het eigen profiel bekijkt.
@@ -87,14 +69,17 @@ class ProfielContent extends SimpleHTML {
 				}
 			}
 		}
-				
 		# kijken of deze persoon nog in een geregistreerd woonoord woont...
-		$woonoord = $this->_woonoord->getWoonoordByUid($this->_profiel['uid']);
-		$profhtml['woonoord']=($woonoord !== false) ? "<i>" . $woonoord['naam'] . "</i><br />\n" : "";
+		require_once('class.woonoord.php');
+		$woonoord=new Woonoord();
+		$woonoord = $woonoord->getWoonoordByUid($this->_profiel['uid']);
+		$profhtml['woonoord']=($woonoord !== false) ? '<em>'.$woonoord['naam'].'</i><br />' : '';
 		
 		# kijken of deze persoon commissielid is
+		require_once('class.commissie.php');
+		$commissie=new Commissie();
 		$profhtml['commissies']="";				
-		$aCommissies = $this->_commissie->getCieByUid($this->_profiel['uid']);
+		$aCommissies = $commissie->getCieByUid($this->_profiel['uid']);
 		if (count($aCommissies) != 0) {
 			foreach ($aCommissies as $cie) {
 				$aCieNaam=mb_htmlentities($cie['naam']);
@@ -286,7 +271,7 @@ class ProfielContent extends SimpleHTML {
 	function view() {
 		switch($this->_state->getMyState()) {
 			case 'none': $this->viewStateNone(); break;
-			case 'edit': $this->viewStateEdit();	break;
+			case 'edit': $this->viewStateEdit(); break;
 		}
 	}
 }
