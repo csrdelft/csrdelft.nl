@@ -102,7 +102,7 @@ text-align: justify; display: block; border: 1px solid black; background-color: 
 		echo '</tr>';
 		
 		foreach($aEetplan as $aEetplanVoorPheut){
-			echo '<tr><td><a href="/intern/eetplan/sjaars/'.$aEetplanVoorPheut[0]['uid'].'">'.mb_htmlentities($aEetplanVoorPheut[0]['naam']).'</a></td>';
+			echo '<tr><td><a href="/intern/eetplan/sjaars/'.$aEetplanVoorPheut[0]['uid'].'">'.$aEetplanVoorPheut[0]['naam'].'</a></td>';
 			for($iTeller=1;$iTeller<=8;$iTeller++){
 				echo '<td><a href="/intern/eetplan/huis/'.$aEetplanVoorPheut[$iTeller].'">'.
 					mb_htmlentities($aEetplanVoorPheut[$iTeller]).

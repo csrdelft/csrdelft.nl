@@ -19,7 +19,7 @@ class SimpleHTML {
 	function getMelding(){
 		if(isset($_SESSION['melding']) AND trim($_SESSION['melding'])!=''){
 			$sError='<div id="melding">'.trim($_SESSION['melding']).'</div>';
-			//maar Ã©Ã©n keer tonen, de melding.
+			//maar één keer tonen, de melding.
 			unset($_SESSION['melding']);
 			return $sError;
 		}elseif($this->_sMelding!=''){
