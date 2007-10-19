@@ -553,7 +553,7 @@ class Lid {
 		
 		if($imgTag===true OR $imgTag=='small'){
 			$html='<img src="'.$pasfoto.'" ';
-			if($imgTag=='small'){
+			if($imgTag==='small'){
 				$html.='style="width: 100px;" ';
 			}
 			$html.='alt="pasfoto" />';
