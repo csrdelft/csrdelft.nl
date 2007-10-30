@@ -267,7 +267,7 @@ class Lid {
 		}elseif($vorm==='streeplijst'){ // achternaam, voornaam [tussenvoegsel] voor de streeplijst
 			$sTmpNaam=$aNaam['achternaam'].', '.$aNaam['voornaam'];
 			if($aNaam['tussenvoegsel'] != '') $sTmpNaam.=' '.$aNaam['tussenvoegsel'];
-		}elseif($vorm==='full' OR $aNaam['status']=='S_KRINGEL'){
+		}elseif($vorm==='full' OR $aNaam['status']=='S_KRINGEL' OR $aNaam['status']=='S_NOBODY'){
 			$sTmpNaam=$sVolledigeNaam;	
 		}elseif($vorm==='civitas'){
 			if($aNaam['status']=='S_NOVIET'){
