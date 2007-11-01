@@ -137,6 +137,7 @@ echo <<<UBBVERHAAL
 		<li>[i]...[/i] voor <em>cursieve tekst</em></li>
 		<li>[u]...[/u] voor <span style="text-decoration: underline;">onderstreepte tekst</span></li>
 		<li>[s]...[/s] voor <s>doorgestreepte tekst</s></li>
+		<li>[email=pubcie@csrdelft.nl]Bericht naar de Pubcie[/url] voor een email-verwijzing</li>
 		<li>[url=http://csrdelft.nl]Webstek van C.S.R.[/url] voor een verwijzing</li>
 		<li>[img]http://csrdelft.nl/plaetje.jpg[/img] voor een plaetje</li>
 		<li>[citaat][/citaat] voor een citaat. [citaat=<em>lidnummer</em>][/citaat] voor een citaat van een lid.</li>
