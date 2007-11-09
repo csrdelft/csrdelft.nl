@@ -1,0 +1,2 @@
+RewriteEngine On
+RewriteRule ^leden.csv$ leden-csv.php
