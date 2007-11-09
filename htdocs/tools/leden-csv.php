@@ -12,7 +12,7 @@ require_once('include.config.php');
 if(!$lid->hasPermission('P_LEDEN_READ')){ header('location: '.CSR_ROOT); }
 
 
-//header('content-type: text/csv');
+header('content-type: text/csv');
 $sLedenQuery="
 	SELECT 
 		uid, voornaam, achternaam, tussenvoegsel, CONCAT(moot, '.', kring) AS kring,
