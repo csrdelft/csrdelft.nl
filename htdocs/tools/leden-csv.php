@@ -28,7 +28,27 @@ $sLedenQuery="
 $rLeden=$db->query($sLedenQuery);
 
 while($aLid=$db->next($rLeden)){
-	echo implode($aLid, ';')."\n";
+	foreach($aLid as $key => $veld){
+		$veld=trim($veld);
+		switch($key){
+			case 'mobiel':
+			case 'telefoon':
+			case 'o_telefoon':
+				if($veld!=''){
+					$veld=str_replace(array('-', ' '), '', $veld);
+					if($veld[0]!='+' OR $veld[0]!='0'){
+						echo '+31'.substr($veld, 1);
+					}else{
+						echo $veld;
+					}
+				}
+			break;
+			default:
+				echo $veld;
+		}
+		echo ';';
+	}	
+	echo "\n";
 }
 
 ?>
