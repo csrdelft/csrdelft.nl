@@ -33,8 +33,10 @@ class ForumOnderwerpContent extends SimpleHTML {
 	}
 	function viewWaarbenik(){
 		$sTitel='<a href="/forum/">Forum</a>'.
-			' &raquo; <a href="/forum/categorie/'.$this->_forum->getCatID().'">'.$this->_forum->getCatTitel().'</a>'.
-			' &raquo; '.$this->_forum->getTitel();
+			' &raquo; <a href="/forum/categorie/'.$this->_forum->getCatID().'">'.$this->_forum->getCatTitel().'</a>';
+		$topicTitel=$this->_forum->getTitel();
+		if(strlen($topicTitel)>70){ $topicTitel=substr($topicTitel, 0, 78).'...'; }
+		$sTitel.=' &raquo; '.$topicTitel.'';
 		echo $sTitel;
 	}
 	function getTitel(){
