@@ -33,7 +33,7 @@ class CsrUBB extends eamBBParser{
 	if(isset($arguments['citaat']) AND $this->lid->isValidUid($arguments['citaat'])){
 		$text.=' van '.$this->lid->getNaamLink($arguments['citaat'], 'user', true);
 	}elseif(trim($arguments['citaat'])!=''){
-		$text.=' van '.$arguments['citaat'];
+		$text.=' van '.str_replace('_', '&nbsp;', $arguments['citaat']);
 	}else{
 		//geen naam ofzo...
 	}

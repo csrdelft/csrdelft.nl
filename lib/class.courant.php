@@ -139,7 +139,7 @@ class Courant {
 		if(strtolower(trim($titel))=='agenda'){ $volgorde=-1000; }
 		//andere dingen naar achteren
 		if(preg_match('/kamer/i', $titel)){ $volgorde=99; }
-		if(preg_match('/ampel/i', $titel)){ $volgorde=999; }
+		if(preg_match('/ampel/i', $titel) OR preg_match('/ampel/i', $bericht)){ $volgorde=999; }
 		
 		$sBerichtQuery="
 			INSERT INTO
