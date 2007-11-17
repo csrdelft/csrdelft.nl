@@ -37,7 +37,7 @@ class PollContent extends SimpleHTML {
 				echo '<input type="radio" name="pollOptie" id="'.$aPollOptie['id'].'" value="'.$aPollOptie['id'].'" />';
 			}
 			echo '<label for="'.$aPollOptie['id'].'">'.htmlentities($aPollOptie['optie'], ENT_COMPAT, 'UTF-8').'</label></td>';
-			echo '<td><img src="'.CSR_PICS.'/forum/frikandel.png" height="20px" width="'.$iBalkLengte.'px" title="een del, lekker!" /></td>';
+			echo '<td><div style="display: block; height: 12px; width: '.$iBalkLengte.'px; background-color: gold; border: 1px solid darkgrey;"></div></td>';
 			echo '<td style="width: 90px">'.round($fPercentage, 2).'% ('.$aPollOptie['stemmen'].')</td></tr>';
 		}
 		//verzendknopje enkel tonen als er gestemd mag worden
