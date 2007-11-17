@@ -23,8 +23,9 @@ class ForumOnderwerp extends Forum {
 	}
 	
 	//een onderwerp laden aan de hand van een zich in dat onderwerp bevindende post.
-	function loadByPostID($iPostID){ 
-		return $this->load($this->getTopicVoorPostID((int)$iPostID)); 
+	function loadByPostID($iPostID){
+		$iTopicID=$this->getTopicVoorPostID((int)$iPostID);
+		return $this->load($iTopicID); 
 	}
 	
 	//een onderwerp laden aan de hand van een ID.
@@ -53,17 +54,17 @@ class ForumOnderwerp extends Forum {
 			WHERE
 				topic.id=".$this->getID()."
 			AND
-				topic.zichtbaar='zichtbaar' OR topic.zichtbaar='wacht_goedkeuring'
+				( topic.zichtbaar='zichtbaar' OR topic.zichtbaar='wacht_goedkeuring' )
 			LIMIT 1;";
 		$rTopic=$this->_db->query($sTopicQuery);
 		$this->aTopicProps=$this->_db->next($rTopic);
-		
-		if($this->_lid->hasPermission($this->aTopicProps['rechten_read']) OR $this->_lid->hasPermission('P_FORUM_MOD')){
+		//Mag de gebruiker het huidige onderwerp bekijken, of is de gebruiker een FORUM_MOD
+		if($this->_lid->hasPermission($this->aTopicProps['rechten_read']) OR $this->isModerator()){
 			//onderwerp mag worden gelezen, dan ook de posts ervoor inladen.
 			return $this->loadPosts();
 		}else{
 			//helaas, dit topic mag niet worden gelezen, geen posts laden, meteen
-			//false teruggeven. 
+			//false teruggeven en géén posts inladen. 
 			return false;
 		}
 	}
@@ -71,7 +72,7 @@ class ForumOnderwerp extends Forum {
 	//geeft true terug als er een array uit komt.
 	private function loadPosts(){
 		$zichtBaarClause="post.zichtbaar='zichtbaar'";
-		if($this->_lid->hasPermission('P_FORUM_MOD')){ 
+		if($this->isModerator()){ 
 			$zichtBaarClause.=" OR post.zichtbaar='wacht_goedkeuring'";
 		}
 		$sPostsQuery="
@@ -126,9 +127,12 @@ class ForumOnderwerp extends Forum {
 	public function getID(){ return $this->iTopicID; }
 	public function getTitel(){ return $this->aTopicProps['titel']; }
 	public function getZichtbaarheid(){ return $this->aTopicProps['topicZichtbaar']; }
+	public function setZichtbaarheid($zichtbaarheid){ 
+		$this->aTopicProps['topicZichtbaar']=$zichtbaarheid;
+	}
 	public function isOpen(){ return $this->aTopicProps['open']==1; }
 	public function isPlakkerig(){ return $this->aTopicProps['plakkerig']==1; }
-	public function isModerated(){ return !$this->_lid->hasPermission('P_LOGGED_IN'); }
+	public function needsModeration(){ return !$this->isIngelogged(); }
 	public function getSoort(){ return $this->aTopicProps['soort']; }
 	public function getSize(){ return count($this->aPosts); }
 	
@@ -137,7 +141,6 @@ class ForumOnderwerp extends Forum {
 		//FORUM_MOD mag alles bewerken
 		if($this->isModerator()){ return true;}
 		return $this->magPosten() AND $this->isOpen();
-		
 	}
 	
 	public function magBewerken($iPostID){
@@ -204,8 +207,8 @@ class ForumOnderwerp extends Forum {
 	//false.
 	function addTopic($titel){
 		$titel=$this->_db->escape(ucfirst($titel));
-		if(!$this->_lid->hasPermission('P_LOGGED_IN')){ 
-			$this->aTopicProps['topicZichtbaar']='wacht_goedkeuring'; 
+		if($this->needsModeration()){ 
+			$this->setZichtbaarheid('wacht_goedkeuring'); 
 		}
 		$sTopicQuery="
  			INSERT INTO
@@ -217,6 +220,7 @@ class ForumOnderwerp extends Forum {
 		 		'".$titel."', ".$this->getCatID().", '".$this->_lid->getUid()."', '".getDateTime()."', 
 		 		'".$this->_lid->getUid()."', '".getDateTime()."',	0, '".$this->getZichtbaarheid()."', 1
 		 	);";
+
 		if($this->_db->query($sTopicQuery)){
 			//het zojuist ingevoerde onderwerp inladen...
 			$this->load($this->_db->insert_id());
@@ -235,10 +239,12 @@ class ForumOnderwerp extends Forum {
 		if($this->iTopicID==0){ die('ForumOnderwerp::addPost() geen onderwerp ingeladen'); }
 		//het ip-adres bepalen van de post.
 		if(isset($_SERVER['REMOTE_ADDR'])){ $ip=$_SERVER['REMOTE_ADDR']; }else{ $ip='0.0.0.0'; }
+ 	
  		//kijken of een moderatiestap nodig is...
- 		if(!$this->_lid->hasPermission('P_LOGGED_IN')){
+ 		if($this->needsModeration()){
  			$zichtbaarheid='wacht_goedkeuring';
  		}else{
+ 			//overerving van het onderwerp
  			$zichtbaarheid=$this->getZichtbaarheid();
  		}
 		$sPostQuery="
@@ -254,10 +260,10 @@ class ForumOnderwerp extends Forum {
 				'".$ip."',
 				'".$zichtbaarheid."'
 			);";
-		//deze query moet hier al uitgevoerd worden omdat anders het postid niet in de topicupdate query gerost kan worden.
+		
 		if($this->_db->query($sPostQuery)){
 			//een mailtje sturen naar de pubcie om de boel bevestigd te krijgen
-			if($this->isModerated()){
+			if($this->needsModeration()){
 				//bericht sturen naar pubcie@csrdelft dat er een bericht op goedkeuring wacht
 	 			mail('pubcie@csrdelft.nl', 'Nieuw bericht in extern wacht op goedkeuring', 
 	 				"yo, er is een nieuw bericht in extern, wat op goedkeuring wacht \r\n".
@@ -304,9 +310,9 @@ class ForumOnderwerp extends Forum {
 		}
 	}
 	
-	//topic verwijderen
+	//een onderwerp verwijderen.
 	function deleteTopic(){
-		//dit moet vóór het verwijderen!
+
 		$aDelete[]="DELETE FROM	forum_post WHERE tid=".$this->getID().";";
 		$aDelete[]="DELETE FROM	forum_topic WHERE id=".$this->getID()." LIMIT 1;";
 		//query's om polls weg te gooien, als er niets bestaat voor dit topicID dan 

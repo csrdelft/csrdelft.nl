@@ -393,7 +393,7 @@ class ForumContent extends SimpleHTML {
 	}
 	function getTitel(){
 		$sTitel='Forum - ';
-		if(	($this->_actie=='topic' AND isset($_GET['topic'])) OR 
+		if(($this->_actie=='topic' AND isset($_GET['topic'])) OR 
 				($this->_actie=='citeren' AND isset($_GET['post'])) ){
 			if(isset($_GET['topic'])){
 				$iTopicID=(int)$_GET['topic'];

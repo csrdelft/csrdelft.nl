@@ -49,7 +49,12 @@ class ForumOnderwerpContent extends SimpleHTML {
 	function view(){
 		//typecasting van de variabelen.
 		if($this->_forum->getPosts()===false){
-			echo '<h2><a href="/forum/" class="forumGrootlink">Forum</a> &raquo; Foutje</h2>Dit gedeelte van het forum is niet beschikbaar voor u, u zult moeten inloggen, of terug gaan naar <a href="/forum/">het forum</a>';
+			echo '<h2><a href="/forum/" class="forumGrootlink">Forum</a> &raquo; Foutje</h2>';
+			echo 'Dit gedeelte van het forum is niet beschikbaar voor u, u zult moeten inloggen, of terug gaan naar <a href="/forum/">het forum</a>';
+			if($this->_forum->isModerator()){ 
+				echo '<h2>Debuginformatie</h2><pre>'.print_r($this, true).'</pre>'; 
+			}
+
 		}else{
 			//show title
 			echo '<h2>'.mb_htmlentities($this->_forum->getTitel()).'</h2>';
