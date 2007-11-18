@@ -26,6 +26,8 @@ RewriteRule ^plakkerigheid/([0-9]+)$ plakkerig.php?topic=$1
 #dan het topic automatisch ook.
 RewriteRule ^keur-goed/([0-9]+)$ goedkeuren.php?post=$1
 
+RewriteRule ^verplaats/([0-9]+)/?$ verplaatsen.php?topic=$1
+
 ##zo, een poll dan maar
 #stemmen
 RewriteRule ^toon-stemming/([0-9]+)$ topic.php?topic=$1
