@@ -295,6 +295,10 @@ class ForumOnderwerp extends Forum {
 	//posts worden nooit echt verwijderd via de forumsoftware.
 	function deletePost($iPostID){
 		$iPostID=(int)$iPostID;
+		//hele onderwerp wegkekken als er maar één bericht is.
+		if($this->getSize()==1){
+			return $this->deleteTopic();
+		}
 		$sDeletePost="
 			UPDATE
 				forum_post

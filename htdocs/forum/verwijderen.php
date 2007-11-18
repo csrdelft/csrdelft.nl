@@ -28,17 +28,23 @@ if(isset($_GET['post'])){
 if(isset($_GET['post'])){
 	$iPostID=(int)$_GET['post'];
 	if($forum->deletePost($iPostID)){
-		header('location: '.CSR_ROOT.'forum/onderwerp/'.$forum->getID());
+		//als er maar één bericht in het onderwerp is, verwijderd deletePost() automagisch
+		//het hele onderwerp, dan dus niet weer naar dat onderwerp refreshen.
+		if($forum->getSize()==1){
+			header('location: '.CSR_ROOT.'forum/');
+		}else{
+			header('location: '.CSR_ROOT.'forum/onderwerp/'.$forum->getID());
+		}
 	}else{
 		header('location: '.CSR_ROOT.'forum/');
-		$_SESSION['melding']='Verwijderen van bericht mislukt, iets mis met de db ofzo.';
+		$_SESSION['melding']='Verwijderen van bericht mislukt, iets mis met de db ofzo (ForumOnderwerp::deletePost()).';
 	}
 }elseif(isset($_GET['topic'])){
 	if($forum->deleteTopic()){
 		header('location: '.CSR_ROOT.'forum/categorie/'.$forum->getCatID());
 	}else{
 		header('location: '.CSR_ROOT.'forum/');
-		$_SESSION['melding']='Verwijderen van topic mislukt, iets mis met de db ofzo.';
+		$_SESSION['melding']='Verwijderen van topic mislukt, iets mis met de db ofzo (ForumOnderwerp::deleteTopic()).';
 	}
 }else{
 	header('location: '.CSR_ROOT.'forum/');
