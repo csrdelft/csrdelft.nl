@@ -35,6 +35,7 @@ htdocs/forum/sluiten.php -text
 htdocs/forum/stemmen.php -text
 htdocs/forum/stemming.php -text
 htdocs/forum/toevoegen.php -text
+htdocs/forum/verplaatsen.php -text
 htdocs/forum/verwijderen.php -text
 htdocs/forum/zoeken.php -text
 htdocs/groepen/.htaccess -text

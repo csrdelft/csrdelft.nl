@@ -4,7 +4,7 @@
 # -------------------------------------------------------------------
 # verwijderen.php
 # -------------------------------------------------------------------
-# Verwerkt het verwijderen van berichten en ondewerpen in het forum.
+# Verwerkt het verwijderen van berichten en onderwerpen in het forum.
 # -------------------------------------------------------------------
 
 require_once('include.config.php');

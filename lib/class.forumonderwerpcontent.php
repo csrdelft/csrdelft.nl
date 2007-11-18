@@ -62,7 +62,8 @@ class ForumOnderwerpContent extends SimpleHTML {
 			echo $this->getMelding();
 			//topic mod dingen:
 			if($this->_forum->isModerator()){
-				echo "\r\n".'U mag dit onderwerp modereren:<br /> ';
+				echo "\r\n".'<fieldset style="padding: 10px; margin-bottom: 10px;">';
+				echo '<legend>Modereren</legend>';
 				//topic verwijderen
 				echo '<a href="/forum/verwijder-onderwerp/'.$this->_forum->getID().'" onclick="return confirm(\'Weet u zeker dat u dit topic wilt verwijderen?\')" class="knop">verwijderen</a> ';
 				if($this->_forum->isOpen()){
@@ -79,7 +80,17 @@ class ForumOnderwerpContent extends SimpleHTML {
 				}
 				echo ' <a href="/forum/plakkerigheid/'.$this->_forum->getID().'" class="knop">'.$plakkerigheid.'</a> ';
 				
-				echo '<br /><br />'."\r\n";
+				//verplaatsen
+				echo '<form style="display: inline; " action="/forum/verplaats/'.$this->_forum->getID().'/" method="post">';
+				echo 'verplaats naar: <select name="newCat" onchange="this.form.submit()">';
+				echo '<option value="ongeldig">... selecteer</option>';
+				foreach($this->_forum->getCategories() as $cat){
+					if($cat['id']!=$this->_forum->getCatID()){
+						echo '<option value="'.$cat['id'].'">'.$cat['titel'].'</option>';
+					}
+				}
+				echo '</select></form>';
+				echo '</fieldset>'."\r\n";
 			}
 			echo '<table class="forumtabel"><tr><td class="forumtussenschot" colspan="2"></td></tr>';
 			//speciale topic weergeven als het topic er een is. bijvoorbeeld een poll;

@@ -277,6 +277,25 @@ class ForumOnderwerp extends Forum {
 			return false;
 		}	
 	}
+	/*
+	 * Onderwerp verplaatsten
+	 */
+	function move($newCat){
+		$newCat=(int)$newCat;
+		if(!$this->catExistsVoorUser($newCat)){
+			return false;
+		}
+		$sMove="
+			UPDATE 
+				forum_topic 
+			SET 
+				categorie=".$newCat." 
+			WHERE 
+				id=".$this->getID()." 
+			LIMIT 1;";
+		return $this->_db->query($sMove) AND $this->updateCatStats($newCat) AND 
+			$this->updateCatStats($this->getCatID());	
+	}
 	//posts bewerken
 	function editPost($iPostID, $sBericht){
 		$sEditQuery="
