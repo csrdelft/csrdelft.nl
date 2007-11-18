@@ -48,13 +48,13 @@ if(!isset($_GET['topic']) AND isset($_GET['forum'])){
 		exit;
 	}
 }
+
 # er is een onderwerp geselecteerd, nu nog even het bericht er aan toevoegen...
-//
 if(!(isset($_POST['submit']) AND $_POST['submit']=='voorbeeld')){
 	if($forum->magToevoegen()){
 		if(strlen(trim($_POST['bericht']))>0){
 			if($forum->addPost($_POST['bericht'])!==false){
-				if($forum->isModerated()){
+				if($forum->needsModeration()){
 					header('location: '.CSR_ROOT.'forum/categorie/'.$forum->getCatID());
 					$_SESSION['melding']='Uw bericht is verwerkt, het zal binnenkort goedgekeurd worden.';
 				}else{
