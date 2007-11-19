@@ -25,8 +25,8 @@ if(isset($_GET['post'])){
 	$ubbPost=$ubb->getHTML($post['tekst']);
 	
 	//voor javascript de newlines eruit slopen.
-	$jssafePost=htmlspecialchars(str_replace(array("\r\n", "\r", "\n"), '\n', $post['tekst']), ENT_QUOTES);
-	$jssafeUbbPost=str_replace(array("\r\n", "\r", "\n"), '\n', $ubbPost);
+	$jssafePost=htmlspecialchars(str_replace(array("\r\n", "\r", "\n"), '\n', addslashes($post['tekst'])), ENT_QUOTES);
+	$jssafeUbbPost=str_replace(array("\r\n", "\r", "\n"), '\n', addslashes($ubbPost));
 	
 	//het block-element met daarin de post in een object stoppen
 	echo "div = document.getElementById('post".$iPostID."');";
