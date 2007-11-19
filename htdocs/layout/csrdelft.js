@@ -41,3 +41,10 @@ function bevestig(tekst){
 	return confirm(tekst);
 }
 
+function forumEdit(post){
+	var scripttag=document.createElement('SCRIPT');
+	scripttag.type = 'text/javascript';
+	scripttag.src = '/forum/bewerken/formulier/'+post;
+	document.body.appendChild(scripttag);
+}
+
