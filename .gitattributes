@@ -24,6 +24,7 @@ htdocs/contact/.htaccess -text
 htdocs/contact/index.php -text
 htdocs/contact/sponsors.php -text
 htdocs/forum/.htaccess -text
+htdocs/forum/bewerken.js.php -text
 htdocs/forum/bewerken.php -text
 htdocs/forum/citeren.php -text
 htdocs/forum/goedkeuren.php -text

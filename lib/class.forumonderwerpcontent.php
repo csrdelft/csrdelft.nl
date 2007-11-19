@@ -36,7 +36,7 @@ class ForumOnderwerpContent extends SimpleHTML {
 			' &raquo; <a href="/forum/categorie/'.$this->_forum->getCatID().'">'.$this->_forum->getCatTitel().'</a>';
 		$topicTitel=$this->_forum->getTitel();
 		
-	if(strlen($topicTitel)>70){$topicTitel=substr($topicTitel, 0, 68).'...'; }
+		if(strlen($topicTitel)>70){ $topicTitel=substr($topicTitel, 0, 68).'...'; }
 		$sTitel.=' &raquo; '.$topicTitel.'';
 		echo $sTitel;
 	}
@@ -47,7 +47,6 @@ class ForumOnderwerpContent extends SimpleHTML {
 		return $sTitel;
 	}
 	function view(){
-		//typecasting van de variabelen.
 		if($this->_forum->getPosts()===false){
 			echo '<h2><a href="/forum/" class="forumGrootlink">Forum</a> &raquo; Foutje</h2>';
 			echo 'Dit gedeelte van het forum is niet beschikbaar voor u, u zult moeten inloggen, of terug gaan naar <a href="/forum/">het forum</a>';
@@ -56,8 +55,8 @@ class ForumOnderwerpContent extends SimpleHTML {
 			}
 
 		}else{
-			//show title
-			echo '<h2>'.mb_htmlentities($this->_forum->getTitel()).'</h2>';
+			$titel=mb_htmlentities(wordwrap($this->_forum->getTitel(), 80, "\n", true));
+			echo '<h2>'.$titel.'</h2>';
 			//eventuele foutmelding weergeven:
 			echo $this->getMelding();
 			//topic mod dingen:
@@ -115,8 +114,6 @@ class ForumOnderwerpContent extends SimpleHTML {
 			foreach($this->_forum->getPosts() as $aBericht){
 				echo '<tr><td class="forumauteur">';
 				echo $this->_forum->getForumNaam($aBericht['uid'], $aBericht).' schreef ';
-				//anker maken met post-ID
-				echo '<a id="post'.$aBericht['postID'].'"></a>';
 				echo $this->_forum->formatDatum($aBericht['datum']);
 				if($aBericht['bewerkDatum']!='0000-00-00 00:00:00'){
 					echo ';<br />Bewerkt '.$this->_forum->formatDatum($aBericht['bewerkDatum']);
@@ -128,7 +125,7 @@ class ForumOnderwerpContent extends SimpleHTML {
 				}
 				//bewerken als bericht van gebruiker is, of als men mod is.
 				if($this->_forum->magBewerken($aBericht['postID'])){
-					echo '<a href="/forum/bewerken/'.$aBericht['postID'].'">
+					echo '<a href="#post'.$aBericht['postID'].'" onclick="forumEdit('.$aBericht['postID'].')">
 						<img src="'.CSR_PICS.'forum/bewerken.png" title="Bewerk bericht" alt="Bewerk bericht" style="border: 0px;" /></a> ';
 				}
 				//verwijderlinkje, niet als er maar een bericht in het onderwerp is.
@@ -144,7 +141,7 @@ class ForumOnderwerpContent extends SimpleHTML {
 				echo '</td>';
 				
 				//het eigenlijke bericht weergeven.
-				echo "\r\n".'<td class="forumbericht'.($iWissel%2).'">';
+				echo "\r\n".'<td class="forumbericht'.($iWissel%2).'" id="post'.$aBericht['postID'].'">'; 
 				echo $ubb->getHTML($aBericht['tekst']);
 				echo '</td></tr>';
 				//tussenlijntje

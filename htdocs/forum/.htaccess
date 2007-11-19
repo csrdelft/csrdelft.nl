@@ -13,6 +13,7 @@ RewriteRule ^toevoegen/([0-9]+)$ toevoegen.php?topic=$1
 RewriteRule ^reactie/([0-9]+)$ citeren.php?post=$1
 
 ##bewerken
+RewriteRule ^bewerken/formulier/([0-9]+)$ bewerken.js.php?post=$1
 RewriteRule ^bewerken/([0-9]+)$ bewerken.php?post=$1
 
 ##verwijderen

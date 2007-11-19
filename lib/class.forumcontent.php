@@ -108,7 +108,7 @@ class ForumContent extends SimpleHTML {
 					if($aTopic['open']==0){
 						$sOnderwerp.='<img src="'.CSR_PICS.'forum/slotje.png" title="Dit onderwerp is gesloten, u kunt niet meer reageren" alt="sluiten" />&nbsp;&nbsp;';
 					}
-					$sOnderwerp.=mb_htmlentities($aTopic['titel']).'</a>';
+					$sOnderwerp.=mb_htmlentities(wordwrap($aTopic['titel'], 60, "\n", true)).'</a>';
 					$sReacties=$aTopic['reacties']-1;
 					$sDraadstarter=mb_htmlentities($this->_forum->getForumNaam($aTopic['uid']));
 					$sReactieMoment=$this->_forum->formatDatum($aTopic['lastpost']);

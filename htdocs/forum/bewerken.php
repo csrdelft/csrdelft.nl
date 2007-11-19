@@ -1,6 +1,12 @@
 <?php
 
-# instellingen & rommeltjes
+# C.S.R. Delft | pubcie@csrdelft.nl
+# -------------------------------------------------------------------
+# bewerken.php
+# -------------------------------------------------------------------
+# Verwerkt het bewerken van berichten in het forum.
+# -------------------------------------------------------------------
+
 require_once('include.config.php');
 
 //inhoud
