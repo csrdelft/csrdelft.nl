@@ -20,25 +20,27 @@ if(isset($_GET['post'])){
 	//post ophalen
 	$post=$forum->getSinglePost($iPostID);
 	
-	//post verubb-en
-	$ubb=new CsrUbb();
-	$ubbPost=$ubb->getHTML($post['tekst']);
-	
 	//voor javascript de newlines eruit slopen.
 	$jssafePost=htmlspecialchars(str_replace(array("\r\n", "\r", "\n"), '\n', addslashes($post['tekst'])), ENT_QUOTES);
-	$jssafeUbbPost=str_replace(array("\r\n", "\r", "\n"), '\n', addslashes($ubbPost));
+	
+	//eventueel een al bestaand formulier wegmikken.
+	echo "if(document.getElementById('forumEditForm')){ restorePost(); }";
 	
 	//het block-element met daarin de post in een object stoppen
 	echo "div = document.getElementById('post".$iPostID."');";
 	
+	//inhoud van de td opslaan voor als we besluiten niet verder te gaan met bewerken
+	echo "divContents=div.innerHTML;";
+	
 	//klein javascriptje om de post eventuele weer terug te zetten
-	echo "function restorePost(){
-		div.innerHTML='".$jssafeUbbPost."';
-	}";
+	echo "\nfunction restorePost(){
+		div.innerHTML=divContents;
+	}\n";
 	
 	if($forum->magBewerken($iPostID)){
 		?>
-		var editForm='<form action="/forum/bewerken/<?php echo $iPostID ?>" method="post">';
+		
+		var editForm='<form action="/forum/bewerken/<?php echo $iPostID ?>" method="post" id="forumEditForm">';
 		editForm +='<h3>Bericht bewerken</h3>Als u dingen aanpast zet er dan even bij w&aacute;t u aanpast! Gebruik bijvoorbeeld [s]...[/s]<br />';
 		editForm +='<textarea name="bericht" id="forumBericht" class="tekst" rows="6" cols="80" style="width: 100%;">';
 		editForm +='<?php echo $jssafePost ?></textarea>';
@@ -51,6 +53,7 @@ if(isset($_GET['post'])){
 		editForm+='</div>'; 
 		<?php
 	}
+	
 	echo 'div.innerHTML = editForm;';
 	exit;	
 }
