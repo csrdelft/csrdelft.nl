@@ -303,7 +303,7 @@ class ForumOnderwerp extends Forum {
 		if(!$this->isModerator()){ 
 			return false; 
 		}
-		$newTitel=$this->_db->escape($newTitel);
+		$newTitel=$this->_db->escape(trim($newTitel));
 		$sRename="
 			UPDATE
 				forum_topic

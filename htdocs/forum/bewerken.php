@@ -45,7 +45,7 @@ if(isset($_GET['post'])){
 }elseif(isset($_GET['topic'], $_POST['titel']) AND $forum->isModerator()){
 	//onderwerptitel bewerken.
 	if($forum->load($_GET['topic'])){
-		if(strlen($_POST['titel'])>=2){
+		if(strlen(trim($_POST['titel']))>=2){
 			if(!$forum->rename($_POST['titel'])){
 				$_SESSION['melding']='Onderwerptitel wijzigigen mislukt (ForumOnderwerp::rename()).';
 			}
