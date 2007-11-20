@@ -162,12 +162,6 @@ class Toevoegen {
 					continue;
 				}
 				
-				// Already-exist-check in database
-				if($catExistingRecord=$this->nameExistInDb($title)) {
-					$this->errorcodes[$counter] = UPLOAD_CUSTOM_ERR_NO_TITLE;
-					continue;
-				}
-
 				if(isset($move) && $move) {
 					$this->errorcodes[$counter] = UPLOAD_CUSTOM_ERR_SUCCEEDED;
                    	
