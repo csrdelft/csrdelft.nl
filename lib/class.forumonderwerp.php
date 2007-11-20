@@ -296,6 +296,26 @@ class ForumOnderwerp extends Forum {
 		return $this->_db->query($sMove) AND $this->updateCatStats($newCat) AND 
 			$this->updateCatStats($this->getCatID());	
 	}
+	/*
+	 * Onderwerptitels bewerken.
+	 */
+	function rename($newTitel){
+		if(!$this->isModerator()){ 
+			return false; 
+		}
+		$newTitel=$this->_db->escape($newTitel);
+		$sRename="
+			UPDATE
+				forum_topic
+			SET
+				titel='".$newTitel."'
+			WHERE
+				id=".$this->getID()." 
+			LIMIT 1;";
+		return $this->_db->query($sRename);
+	}
+	
+	
 	//posts bewerken
 	function editPost($iPostID, $sBericht){
 		$sEditQuery="

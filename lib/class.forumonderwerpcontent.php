@@ -64,31 +64,38 @@ class ForumOnderwerpContent extends SimpleHTML {
 				echo "\r\n".'<fieldset style="padding: 10px; margin-bottom: 10px;">';
 				echo '<legend>Modereren</legend>';
 				//topic verwijderen
-				echo '<a href="/forum/verwijder-onderwerp/'.$this->_forum->getID().'" onclick="return confirm(\'Weet u zeker dat u dit topic wilt verwijderen?\')" class="knop">verwijderen</a> ';
+				echo '<div style="float: left; width: 30%;">';
+				echo '<a href="/forum/verwijder-onderwerp/'.$this->_forum->getID().'" onclick="return confirm(\'Weet u zeker dat u dit topic wilt verwijderen?\')" class="knop"><img src="'.CSR_PICS.'forum/verwijderen.png"/> verwijderen</a> <br /><br />';
 				if($this->_forum->isOpen()){
-					$opensluit='sluiten (reageren niet meer mogelijk)';
+					$opensluit='sluiten (geen reactie mogelijk)';
 				}else{
-					$opensluit='weer openen (reageren weer w&eacute;l mogelijk)';
+					$opensluit='weer openen (reactie mogelijk)';
 				}
-				echo ' <a href="/forum/openheid/'.$this->_forum->getID().'" class="knop">'.$opensluit.'</a> ';
+				echo ' <a href="/forum/openheid/'.$this->_forum->getID().'" class="knop"><img src="'.CSR_PICS.'forum/slotje.png" /> '.$opensluit.'</a><br /><br />';
 				
 				if($this->_forum->isPlakkerig()){
 					$plakkerigheid='verwijder plakkerigheid';
 				}else{
 					$plakkerigheid='maak plakkerig';
 				}
-				echo ' <a href="/forum/plakkerigheid/'.$this->_forum->getID().'" class="knop">'.$plakkerigheid.'</a> ';
-				
+				echo ' <a href="/forum/plakkerigheid/'.$this->_forum->getID().'" class="knop"><img src="'.CSR_PICS.'forum/plakkerig.gif" /> '.$plakkerigheid.'</a>';
+				echo '</div>';
+				echo '<div style="float: right; width: 60%;">';
 				//verplaatsen
-				echo '<form style="display: inline; " action="/forum/verplaats/'.$this->_forum->getID().'/" method="post">';
-				echo 'verplaats naar: <select name="newCat" onchange="this.form.submit()">';
+				echo '<form style="" action="/forum/verplaats/'.$this->_forum->getID().'/" method="post">';
+				echo 'Verplaats naar: <br /> <select name="newCat" onchange="this.form.submit()">';
 				echo '<option value="ongeldig">... selecteer</option>';
 				foreach($this->_forum->getCategories() as $cat){
 					if($cat['id']!=$this->_forum->getCatID()){
 						echo '<option value="'.$cat['id'].'">'.$cat['titel'].'</option>';
 					}
 				}
-				echo '</select></form>';
+				echo '</select></form><br />';
+				//titel aanpassen.
+				echo '<form action="/forum/onderwerp/hernoem/'.$this->_forum->getID().'/" method="post">';
+				echo 'Titel aanpassen: <br /><input type="text" name="titel" value="'.$titel.'" style="width: 250px;" />';
+				echo ' <input type="submit" value="opslaan" /></form>';
+				echo '</div>';
 				echo '</fieldset>'."\r\n";
 			}
 			echo '<table class="forumtabel"><tr><td class="forumtussenschot" colspan="2"></td></tr>';
