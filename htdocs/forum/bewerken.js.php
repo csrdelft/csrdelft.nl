@@ -23,6 +23,9 @@ if(isset($_GET['post'])){
 	//voor javascript de newlines eruit slopen.
 	$jssafePost=htmlspecialchars(str_replace(array("\r\n", "\r", "\n"), '\n', addslashes($post['tekst'])), ENT_QUOTES);
 	
+	//aantal regels voor het invoerveldje bepalen
+	$regels=ceil(6+substr_count($jssafePost, '\n')*1.5);
+		
 	//eventueel een al bestaand formulier wegmikken.
 	echo "if(document.getElementById('forumEditForm')){ restorePost(); }";
 	
@@ -42,9 +45,10 @@ if(isset($_GET['post'])){
 		
 		var editForm='<form action="/forum/bewerken/<?php echo $iPostID ?>" method="post" id="forumEditForm">';
 		editForm +='<h3>Bericht bewerken</h3>Als u dingen aanpast zet er dan even bij w&aacute;t u aanpast! Gebruik bijvoorbeeld [s]...[/s]<br />';
-		editForm +='<textarea name="bericht" id="forumBericht" class="tekst" rows="6" cols="80" style="width: 100%;">';
+		editForm +='<textarea name="bericht" id="forumBewerkBericht" class="tekst" rows="<?php echo $regels; ?>" cols="80" style="width: 100%;">';
 		editForm +='<?php echo $jssafePost ?></textarea>';
 		editForm +='<input type="submit" value="opslaan" /> <input type="button" value="terug" onclick="restorePost()" />';
+		editForm +='&nbsp;&nbsp;<a class="knop" onclick="vergrootTextarea(\'forumBewerkBericht\', 10)" title="Vergroot het invoerveld">Invoerveld vergroten</div></form>'
 		<?php
 	}else{
 		?>

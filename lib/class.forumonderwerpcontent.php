@@ -61,7 +61,7 @@ class ForumOnderwerpContent extends SimpleHTML {
 			echo $this->getMelding();
 			//topic mod dingen:
 			if($this->_forum->isModerator()){
-				echo "\r\n".'<fieldset style="padding: 10px; margin-bottom: 10px;">';
+				echo "\r\n".'<fieldset id="modereren">';
 				echo '<legend>Modereren</legend>';
 				//topic verwijderen
 				echo '<div style="float: left; width: 30%;">';
@@ -83,14 +83,14 @@ class ForumOnderwerpContent extends SimpleHTML {
 				echo '<div style="float: right; width: 60%;">';
 				//verplaatsen
 				echo '<form style="" action="/forum/verplaats/'.$this->_forum->getID().'/" method="post">';
-				echo 'Verplaats naar: <br /> <select name="newCat" onchange="this.form.submit()">';
+				echo 'Verplaats naar: <br /> <select name="newCat">';
 				echo '<option value="ongeldig">... selecteer</option>';
 				foreach($this->_forum->getCategories() as $cat){
 					if($cat['id']!=$this->_forum->getCatID()){
 						echo '<option value="'.$cat['id'].'">'.$cat['titel'].'</option>';
 					}
 				}
-				echo '</select></form><br />';
+				echo '</select> <input type="submit" value="opslaan" /></form><br />';
 				//titel aanpassen.
 				echo '<form action="/forum/onderwerp/hernoem/'.$this->_forum->getID().'/" method="post">';
 				echo 'Titel aanpassen: <br /><input type="text" name="titel" value="'.$titel.'" style="width: 250px;" />';
@@ -132,7 +132,7 @@ class ForumOnderwerpContent extends SimpleHTML {
 				}
 				//bewerken als bericht van gebruiker is, of als men mod is.
 				if($this->_forum->magBewerken($aBericht['postID'])){
-					echo '<a href="#post'.$aBericht['postID'].'" onclick="forumEdit('.$aBericht['postID'].')">
+					echo '<a onclick="forumEdit('.$aBericht['postID'].')">
 						<img src="'.CSR_PICS.'forum/bewerken.png" title="Bewerk bericht" alt="Bewerk bericht" style="border: 0px;" /></a> ';
 				}
 				//verwijderlinkje, niet als er maar een bericht in het onderwerp is.

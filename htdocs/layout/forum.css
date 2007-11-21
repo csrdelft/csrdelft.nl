@@ -134,3 +134,9 @@ span#ubbsluiten:hover{
 	border: 1px solid black;
 	background-color: #eee;
 }
+
+fieldset#modereren{
+	padding: 10px; 
+	margin-bottom: 10px;
+	border: 1px solid grey;
+}
