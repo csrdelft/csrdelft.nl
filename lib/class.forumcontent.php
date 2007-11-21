@@ -290,17 +290,15 @@ class ForumContent extends SimpleHTML {
 		foreach($aPosts as $aPost){
 			//$tekst=$aPost['nickname'].': ';
 			$tekst=$aPost['titel'];
-			if(strlen($tekst)>19){
-				$tekst=trim(substr($tekst, 0, 16)).'..';
+			if(strlen($tekst)>18){
+				$tekst=str_replace(' ', '&nbsp;', trim(substr($tekst, 0, 15)).'...');
 			}
 			$post=preg_replace('/(\[(|\/)\w+\])/', '|', $aPost['tekst']);
 			$postfragment=substr(str_replace(array("\n", "\r", ' '), ' ', $post), 0, 40);
-			echo '<span class="tijd">'.date('H:i', strtotime($aPost['datum'])).'</span> ';
+			echo '<span class="tijd">'.date('H:i', strtotime($aPost['datum'])).'</span>&nbsp;';
 			echo '<a href="/forum/onderwerp/'.$aPost['tid'].'#post'.$aPost['postID'].'" 
 				title="['.htmlspecialchars($aPost['titel']).'] '.
-					$this->_forum->getForumNaam($aPost['uid'], $aPost, false).': '.mb_htmlentities($postfragment).'">
-				'.$tekst.'
-				</a><br />'."\n";
+					$this->_forum->getForumNaam($aPost['uid'], $aPost, false).': '.mb_htmlentities($postfragment).'">'.$tekst.'</a><br />'."\n";
 		}
 		echo '</div>';
 	}
