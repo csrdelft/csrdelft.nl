@@ -32,7 +32,7 @@ class Forum {
 *
 ***************************************************************************************************/
 	//categorieen gesorteerd op volgorde
-	function getCategories(){
+	function getCategories($voorLid=false){
 		$sCatsQuery="
 			SELECT
 				id, titel, beschrijving, lastuser, lastpost, lasttopic, lastpostID, reacties, topics, rechten_read
@@ -43,7 +43,14 @@ class Forum {
 			ORDER BY
 				volgorde;";
 		$rCatsResult=$this->_db->query($sCatsQuery);
-		return $this->_db->result2array($rCatsResult);
+		
+		while($aCat=$this->_db->next($rCatsResult)){
+			if($voorLid===true AND !$this->_lid->hasPermission($aCat['rechten_read'])){
+				continue;
+			}
+			$aCats[]=$aCat;	
+		}
+		return $aCats;
 	}
 	/*
 	* Topicoverzicht binnehalen, gesorteerd op plakkerig, lastpost.
@@ -325,43 +332,6 @@ class Forum {
 		if($this->_db->numRows($rTopic)==1){
 			$aTopic=$this->_db->next($rTopic);
 			return $aTopic['titel'];
-		}else{	
-			return false;
-		}
-	}
-	//controleer of gebruiker rechten heeft om te posten in een topic
-	function magBerichtToevoegen($iTopicID, $iOpen=2, $rechten_post=false){
-		//mods mogen sowiso posten.
-		if($this->_lid->hasPermission('P_FORUM_MOD')){
-			return true;
-		}else{
-			//als $iOpen==2 is er geen waarde meegegeven met de functieaanroep, het moet nog uit de db komen.
-			if($iOpen==2){ if($this->isOpen($iTopicID)){ $iOpen=1; }else{ $iOpen=0; } }
-			if(!is_string($rechten_post)){
-				//rechten_post niet meegegeven, rechten ophaelen in de db...
-				$rechten_post=$this->getRechten_post($this->getCategorieVoorTopic($iTopicID));
-			}
-			if($this->_lid->hasPermission($rechten_post) AND $iOpen==1){
-				return true;
-			}else{
-				return false;
-			}
-		}
-	}
-	function isOpen($iTopicID){
-		$iTopicID=(int)$iTopicID;
-		$sTopicQuery="
-			SELECT
-				open
-			FROM
-				forum_topic
-			WHERE 
-				id=".$iTopicID."
-			LIMIT 1;";
-		$rTopic=$this->_db->query($sTopicQuery);
-		if($this->_db->numRows($rTopic)==1){
-			$aTopic=$this->_db->next($rTopic);
-			if($aTopic['open']==1){ return true; }else{ return false; }
 		}else{	
 			return false;
 		}

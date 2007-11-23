@@ -175,7 +175,7 @@ class ForumOnderwerpContent extends SimpleHTML {
 				echo '<a class="forumpostlink" id="laatste"><stong>Citeren:</strong></a><br /><br />';
 				$iTekstareaRegels=20;
 			}
-			if($this->_forum->magBerichtToevoegen($this->_forum->getID(), $this->_forum->isOpen(), $this->_forum->getRechtenPost())){	
+			if($this->_forum->magToevoegen()){	
 				// link om het tekst-vak groter te maken.
 				echo '<a href="#laatste" onclick="vergrootTextarea(\'forumBericht\', 10)" title="Vergroot het invoerveld">
 					Invoerveld vergroten&nbsp;&raquo;</a><br /><br />';

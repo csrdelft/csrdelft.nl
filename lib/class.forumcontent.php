@@ -24,8 +24,7 @@ class ForumContent extends SimpleHTML {
 *
 ***********************************************************************************************************/	
 	function viewCategories(){
-		$aCategories=$this->_forum->getCategories();
-		//echo '<h2>Forum</h2>';
+		$aCategories=$this->_forum->getCategories(true);
 		//eventuele foutmelding weergeven:
 		echo $this->getMelding();
 		echo '<table class="forumtabel">
@@ -37,32 +36,27 @@ class ForumContent extends SimpleHTML {
 			</tr>';
 		if(is_array($aCategories)){
 			foreach($aCategories as $aCategorie){
-				//controleren of de gebruiker de huidige categorie mag zien
-				//TODO: dit netjes oplossen zonder een lid-instantie te maken...
-				$lid=Lid::get_lid();
-				if($lid->hasPermission($aCategorie['rechten_read'])){
-					echo '<tr><td class="forumtitel">';
-					echo '<a href="/forum/categorie/'.$aCategorie['id'].'">'.mb_htmlentities($aCategorie['titel']).'</a><br />';
-					echo mb_htmlentities($aCategorie['beschrijving']).'</td>';
-					echo '<td class="forumreacties">'.$aCategorie['topics'].'</td>';
-					echo '<td class="forumreacties">'.$aCategorie['reacties'].'</td>';
-					echo '<td class="forumreactiemoment">';
-					if($aCategorie['lastpost']=='0000-00-00 00:00:00'){
-						echo 'nog geen berichten'; 
-					}else{ 
-						//als de dag vandaag is, niet de datum weergeven maar 'vandaag'
-						echo $this->_forum->formatDatum($aCategorie['lastpost']);
-						echo '<br /><a href="/forum/onderwerp/'.$aCategorie['lasttopic'].'#post'.$aCategorie['lastpostID'].'">bericht</a> door ';
-						if(trim($aCategorie['lastuser'])!=''){
-							echo $this->_forum->getForumNaam($aCategorie['lastuser']);
-						}else{ echo 'onbekend';	}
-					//er zijn nog geen berichten in deze categorie dus er is ook nog geen laatste bericht
+				echo '<tr><td class="forumtitel">';
+				echo '<a href="/forum/categorie/'.$aCategorie['id'].'">'.mb_htmlentities($aCategorie['titel']).'</a><br />';
+				echo mb_htmlentities($aCategorie['beschrijving']).'</td>';
+				echo '<td class="forumreacties">'.$aCategorie['topics'].'</td>';
+				echo '<td class="forumreacties">'.$aCategorie['reacties'].'</td>';
+				echo '<td class="forumreactiemoment">';
+				if($aCategorie['lastpost']=='0000-00-00 00:00:00'){
+					echo 'nog geen berichten'; 
+				}else{ 
+					echo $this->_forum->formatDatum($aCategorie['lastpost']);
+					echo '<br /><a href="/forum/onderwerp/'.$aCategorie['lasttopic'].'#post'.$aCategorie['lastpostID'].'">bericht</a> door ';
+					if(trim($aCategorie['lastuser'])!=''){
+						echo $this->_forum->getForumNaam($aCategorie['lastuser']);
 					}
-					echo '</td></tr>';
 				}
+				echo '</td></tr>';
 			}//einde foreach
-		//het forum is nog leeg, of de database is stuk ofzo
-		}else{ echo '<tr><td colspan="4">Er zijn nog geen categorie&euml;n of er is iets mis met het databeest</td></tr>'; }
+		}else{ 
+			//het forum is nog leeg, of de database is stuk ofzo
+			echo '<tr><td colspan="4">Er zijn nog geen categorie&euml;n of er is iets mis met het databeest</td></tr>'; 
+		}
 		echo '</table>';
 	}
 /***********************************************************************************************************
