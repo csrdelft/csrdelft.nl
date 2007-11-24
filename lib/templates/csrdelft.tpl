@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.1//EN' 'http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd'>
-<html xml:lang="nl">
+<html xml:lang="nl" xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <title>C.S.R. Delft | {$csrdelft->getTitel()}</title>
   <meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
@@ -10,9 +10,9 @@
 	<link rel="stylesheet" href="/layout/agenda.css" type="text/css" />
 	<link rel="stylesheet" href="/layout/forum.css" type="text/css" />
 	<link rel="stylesheet" href="/layout/documenten.css" type="text/css" />
-	<script type="text/javascript" src="/layout/csrdelft.js"  defer="true"></script>
-	<script type="text/javascript" src="/layout/minmax.js" defer="true"></script>
-	<script type="text/javascript" src="/layout/position.js" defer="true"></script>
+	<script type="text/javascript" src="/layout/csrdelft.js" defer="defer"></script>
+	<script type="text/javascript" src="/layout/minmax.js" defer="defer"></script>
+	<script type="text/javascript" src="/layout/position.js" defer="defer"></script>
 	<link rel="alternate" title="C.S.R. Delft RSS" type="application/rss+xml" href="http://csrdelft.nl/forum/rss.xml" />
 	<link rel="shortcut icon" href="{$csr_pics}layout/favicon.ico" />
 </head>
@@ -118,7 +118,7 @@
 
 </div>
 <!-- selecteer-bug-fix voor IE ( http://trac.knorrie.org/csrdelft.nl/changeset/158) -->
-<script type="text/javascript" defer="true">
+<script type="text/javascript" defer="defer">
 <!--
 document.body.style.height = document.documentElement.scrollHeight+'px';
 -->
