@@ -11,8 +11,7 @@
 	<link rel="stylesheet" href="/layout/forum.css" type="text/css" />
 	<link rel="stylesheet" href="/layout/documenten.css" type="text/css" />
 	<script type="text/javascript" src="/layout/csrdelft.js" defer="defer"></script>
-	<script type="text/javascript" src="/layout/minmax.js" defer="defer"></script>
-	<script type="text/javascript" src="/layout/position.js" defer="defer"></script>
+
 	<link rel="alternate" title="C.S.R. Delft RSS" type="application/rss+xml" href="http://csrdelft.nl/forum/rss.xml" />
 	<link rel="shortcut icon" href="{$csr_pics}layout/favicon.ico" />
 </head>
@@ -105,7 +104,7 @@
 		</div>
 	{/if}
 </div>
-<div id="lijntje"></div>
+<div id="lijntje"><img src="http://plaetjes.csrdelft.nl/layout/pixel.gif" height="1px" width="1px" alt="lijntje..." /></div>
 <div id="hoofderFoto"><img src="{$csr_pics}layout/hoofder.jpg" height="130px" alt="een impressie van de Civitas" /></div>
 {if is_array($saldi)}
 	<div id="uStaatRood">
