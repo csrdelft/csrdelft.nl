@@ -28,7 +28,7 @@ $zijkolom->add($lastposts);
 # pagina weergeven
 $pagina=new csrdelft($midden);
 $pagina->setZijkolom($zijkolom);
-$page->addStylesheet('forum.css');
+$pagina->addStylesheet('forum.css');
 $pagina->view();
 
 
