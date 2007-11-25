@@ -618,7 +618,7 @@ class eamBBParser{
 		return '<em>' . $this->parseArray(array('[/i]'), array('i')) . '</em>';
 	}
 	function ubb_s(){
-		return '<s>' . $this->parseArray(array('[/s]'), array('s')) . '</s>';		 
+		return '<span style="text-decoration: line-through;">' . $this->parseArray(array('[/s]'), array('s')) . '</div>';		 
 	}
 	function ubb_u(){
 		return '<u>'. $this->parseArray(array('[/u]'), array('u')). '</u>';
