@@ -32,6 +32,6 @@ if ($forum->magCiteren()){
 # pagina weergeven
 $pagina=new csrdelft($midden);
 $pagina->setZijkolom($zijkolom);
-
+$pagina->addStylesheet('forum.css');
 $pagina->view();
 ?>
