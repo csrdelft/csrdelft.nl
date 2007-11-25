@@ -56,6 +56,7 @@ if ($lid->hasPermission('P_FORUM_MOD') OR $lid->getUid()==STATISTICUS){
 
 $page=new csrdelft($midden);
 $page->setZijkolom($zijkolom);
+$page->addStylesheet('forum.css');
 $page->view();
 	
 

@@ -180,7 +180,7 @@ EOT
 			# bovenste veld
 			if ($i%2 == 0) print('<td>');
 			if ($veld !== false) {
-				printf('<input type="checkbox" name="kolom[]" value="%s" id="veld'.$i.'" ', $veld);
+				echo '<input type="checkbox" name="kolom[]" value="'.$veld.'"  class="checkbox" id="veld'.$i.'" ';
 				if (in_array($veld, $this->_form['kolom'])) echo ' checked="checked"';
 				echo ' /><label for="veld'.$i.'"> '.$kolomtitel[$veld].'</label>';
 				if ($i%2 == 0) echo '<br />';

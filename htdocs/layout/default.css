@@ -27,6 +27,7 @@ textarea{
 }
 input, select{ padding-left: 2px; padding-right: 2px;	border: 1px solid #A9A9A9; font-size: 1em;} 
 select{ padding-right: 0px; }
+input.checkbox{ border: 0px; }
 
 th{ text-align: left; }
 td{ vertical-align: top; padding: 0px; }
@@ -276,6 +277,35 @@ div#melding{
 	border: 1px solid black;
 	font-size: 1.3em;
 }
+/* ubb-hulp */
+div#ubbhulpverhaal{
+	display: none; 
+	z-index: 999;
+	position: absolute; 
+	left: -150px; 
+	width: 330px; 
+	border: 1px solid #bbb;
+	margin-top: -13px;
+	padding: 5px;
+	background-color: white;
+	text-align: left;
+}
+span#ubbsluiten{
+	display: block; 
+	width: 16px; height: 16px;
+	float: right;
+	margin: 0px; padding: 0px;
+	font-weight: bold; font-size: 16px;
+	text-align: center;	vertical-align: middle; 
+	color: black; 
+	cursor: pointer; cursor: hand;
+	border: 1px solid white;
+}
+span#ubbsluiten:hover{
+	border: 1px solid black;
+	background-color: #eee;
+}
+
 
 /* intern/lijst.php */
 table.zoekResultaat{ width: 100%; border-collapse: collapse;}
@@ -305,6 +335,12 @@ span.tijd{ font-size: 0.95em; }
 #archiefCourant{ font-size: 1em; line-height: 1.05em; text-align: left;}
 #archiefCourant a.kopje{ font-size: 1em; color: black; font-weight: bold; }
 #archiefCourant a.kopje:hover{ font-size: 1em; color: darkred; }
+span.tijd{ font-size: 0.95em; }
+
+/* laatste forumberichten */
+#forumHighlights{ font-size: 1em; line-height: 1.05em; text-align: left;}
+#forumHighlights a.kopje{ font-size: 1em; color: black; font-weight: bold; }
+#forumHighlights a.kopje:hover{ font-size: 1em; color: darkred; }
 span.tijd{ font-size: 0.95em; }
 
 /* Streeplijstgenereertool */

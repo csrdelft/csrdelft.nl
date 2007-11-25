@@ -23,6 +23,8 @@ class csrdelft extends SimpleHTML {
 	//standaard geen zijkolom...
 	var $_zijkolom=false;
 	
+	public $stylesheets=array();
+	
 	var $_titel='Geen titel gezet.';
 	var $_waarbenik=false;
 	
@@ -39,6 +41,15 @@ class csrdelft extends SimpleHTML {
 		require_once('class.menu.php');
 		$this->_menu=new menu();
 		
+	}
+	
+	function addStylesheet($sheet){ $this->stylesheets[]=$sheet; }
+	function getStylesheets(){
+		$return='';
+		foreach($this->stylesheets as $stylesheet){
+			$return='<link rel="stylesheet" href="/layout/'.$stylesheet.'" type="text/css" />';
+		}
+		return $return;
 	}
 	
 	function getTitel(){ return mb_htmlentities($this->_titel); }

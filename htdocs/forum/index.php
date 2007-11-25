@@ -23,6 +23,7 @@ if ($lid->hasPermission('P_FORUM_READ')) {
 	
 $page=new csrdelft($midden);
 $page->setZijkolom($zijkolom);
+$page->addStylesheet('forum.css');
 $page->view();
 	
 ?>

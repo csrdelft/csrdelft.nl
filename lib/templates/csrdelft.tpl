@@ -7,9 +7,7 @@
 	<meta name="robots" content="index, follow" />
 	<link rel="stylesheet" href="/layout/undohtml.css" type="text/css" />
 	<link rel="stylesheet" href="/layout/default.css" type="text/css" />
-	<link rel="stylesheet" href="/layout/agenda.css" type="text/css" />
-	<link rel="stylesheet" href="/layout/forum.css" type="text/css" />
-	<link rel="stylesheet" href="/layout/documenten.css" type="text/css" />
+	{$csrdelft->getStylesheets()}
 	<script type="text/javascript" src="/layout/csrdelft.js" defer="defer"></script>
 
 	<link rel="alternate" title="C.S.R. Delft RSS" type="application/rss+xml" href="http://csrdelft.nl/forum/rss.xml" />

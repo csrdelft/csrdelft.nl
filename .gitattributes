@@ -69,8 +69,6 @@ htdocs/layout/csrdelft.js -text
 htdocs/layout/default.css -text
 htdocs/layout/documenten.css -text
 htdocs/layout/forum.css -text
-htdocs/layout/minmax.js -text
-htdocs/layout/position.js -text
 htdocs/layout/undohtml.css -text
 htdocs/links.php -text
 htdocs/login.php -text

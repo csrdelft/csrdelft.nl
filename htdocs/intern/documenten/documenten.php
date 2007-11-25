@@ -20,7 +20,7 @@ $zijkolom=new kolom();
 // pagina weergeven
 $pagina=new csrdelft($midden, $lid, $db);
 $pagina->setZijkolom($zijkolom);
-
+$pagina->addStylesheet('documenten.css');
 $pagina->view();
 
 ?>
