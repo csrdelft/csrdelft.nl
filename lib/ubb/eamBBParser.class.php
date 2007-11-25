@@ -621,7 +621,7 @@ class eamBBParser{
 		return '<span style="text-decoration: line-through;">' . $this->parseArray(array('[/s]'), array('s')) . '</div>';		 
 	}
 	function ubb_u(){
-		return '<u>'. $this->parseArray(array('[/u]'), array('u')). '</u>';
+		return '<span style="text-decoration: underline;">'. $this->parseArray(array('[/u]'), array('u')). '</span>';
 	}
 	function ubb_rul($arguments = array()){
 		return $this->ubb_url($arguments);
