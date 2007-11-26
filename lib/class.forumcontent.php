@@ -25,6 +25,7 @@ class ForumContent extends SimpleHTML {
 ***********************************************************************************************************/	
 	function viewCategories(){
 		$aCategories=$this->_forum->getCategories(true);
+		print_r($aCategories);
 		//eventuele foutmelding weergeven:
 		echo $this->getMelding();
 		echo '<table class="forumtabel">
@@ -36,22 +37,26 @@ class ForumContent extends SimpleHTML {
 			</tr>';
 		if(is_array($aCategories)){
 			foreach($aCategories as $aCategorie){
-				echo '<tr><td class="forumtitel">';
-				echo '<a href="/forum/categorie/'.$aCategorie['id'].'">'.mb_htmlentities($aCategorie['titel']).'</a><br />';
-				echo mb_htmlentities($aCategorie['beschrijving']).'</td>';
-				echo '<td class="forumreacties">'.$aCategorie['topics'].'</td>';
-				echo '<td class="forumreacties">'.$aCategorie['reacties'].'</td>';
-				echo '<td class="forumreactiemoment">';
-				if($aCategorie['lastpost']=='0000-00-00 00:00:00'){
-					echo 'nog geen berichten'; 
-				}else{ 
-					echo $this->_forum->formatDatum($aCategorie['lastpost']);
-					echo '<br /><a href="/forum/onderwerp/'.$aCategorie['lasttopic'].'#post'.$aCategorie['lastpostID'].'">bericht</a> door ';
-					if(trim($aCategorie['lastuser'])!=''){
-						echo $this->_forum->getForumNaam($aCategorie['lastuser']);
+				if($aCategorie['titel']=='SEPERATOR'){
+					echo '<tr><td class="forumtussenschot" colspan="4"></td></tr>';
+				}else{
+					echo '<tr><td class="forumtitel">';
+					echo '<a href="/forum/categorie/'.$aCategorie['id'].'">'.mb_htmlentities($aCategorie['titel']).'</a><br />';
+					echo mb_htmlentities($aCategorie['beschrijving']).'</td>';
+					echo '<td class="forumreacties">'.$aCategorie['topics'].'</td>';
+					echo '<td class="forumreacties">'.$aCategorie['reacties'].'</td>';
+					echo '<td class="forumreactiemoment">';
+					if($aCategorie['lastpost']=='0000-00-00 00:00:00'){
+						echo 'nog geen berichten'; 
+					}else{ 
+						echo $this->_forum->formatDatum($aCategorie['lastpost']);
+						echo '<br /><a href="/forum/onderwerp/'.$aCategorie['lasttopic'].'#post'.$aCategorie['lastpostID'].'">bericht</a> door ';
+						if(trim($aCategorie['lastuser'])!=''){
+							echo $this->_forum->getForumNaam($aCategorie['lastuser']);
+						}
 					}
+					echo '</td></tr>';
 				}
-				echo '</td></tr>';
 			}//einde foreach
 		}else{ 
 			//het forum is nog leeg, of de database is stuk ofzo
