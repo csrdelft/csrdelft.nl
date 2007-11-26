@@ -5,7 +5,6 @@ bin/mk_commissie_ldif.php -text
 bin/mk_commissie_ldif.txt -text
 bin/mkledenldif.php -text
 bin/mootabos.php -text
-bin/pubcie-admin.php -text
 bin/saldo-kopieer.php -text
 bin/socciesaldi-koppelen.php -text
 bin/statgraphgen.php -text
@@ -136,7 +135,6 @@ lib/class.kolom.php -text
 lib/class.ldap.php -text
 lib/class.ledenlijstcontent.php -text
 lib/class.lid.php -text
-lib/class.lidbeheer.php -text
 lib/class.maaltijd.php -text
 lib/class.maaltijdbeheercontent.php -text
 lib/class.maaltijdcontent.php -text
