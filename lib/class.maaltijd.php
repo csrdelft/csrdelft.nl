@@ -471,6 +471,7 @@ class MaalTijd {
 				//als deze aanmelding ook gasten in zich heeft, die ook ophalen en er regeltjes
 				//voor toevoegen.
 				if($aAan['gasten']!=0){
+					$gasten=array();
 					for($i=1; $i<=$aAan['gasten']; $i++){
 						$gasten[]=array(
 							'naam' => 'Gast van '.$naam,
