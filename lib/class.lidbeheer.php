@@ -128,7 +128,7 @@ U kunt uw wachtwoord wijzigen in uw profiel: http://csrdelft.nl/intern/profiel/"
 
 Met vriendelijke groet,
 
-Hanna Timmerarends
+Teun de Groot,
 h.t. Praeses der Pubcie
 
 P.S. Mocht u nog vragen hebben, dan kan u natuurlijk altijd e-posts sturen naar pubcie@csrdelft.nl";
