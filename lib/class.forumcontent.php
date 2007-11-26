@@ -25,7 +25,6 @@ class ForumContent extends SimpleHTML {
 ***********************************************************************************************************/	
 	function viewCategories(){
 		$aCategories=$this->_forum->getCategories(true);
-		print_r($aCategories);
 		//eventuele foutmelding weergeven:
 		echo $this->getMelding();
 		echo '<table class="forumtabel">
@@ -37,7 +36,7 @@ class ForumContent extends SimpleHTML {
 			</tr>';
 		if(is_array($aCategories)){
 			foreach($aCategories as $aCategorie){
-				if($aCategorie['titel']=='SEPERATOR'){
+				if($aCategorie['titel']=='SEPARATOR'){
 					echo '<tr><td class="forumtussenschot" colspan="4"></td></tr>';
 				}else{
 					echo '<tr><td class="forumtitel">';

@@ -86,7 +86,7 @@ class ForumOnderwerpContent extends SimpleHTML {
 				echo '<div>Verplaats naar: <br /> <select name="newCat">';
 				echo '<option value="ongeldig">... selecteer</option>';
 				foreach($this->_forum->getCategories() as $cat){
-					if($cat['id']!=$this->_forum->getCatID() AND $cat['titel']!='SEPERATOR'){
+					if($cat['id']!=$this->_forum->getCatID() AND $cat['titel']!='SEPARATOR'){
 						echo '<option value="'.$cat['id'].'">'.mb_htmlentities($cat['titel']).'</option>';
 					}
 				}
