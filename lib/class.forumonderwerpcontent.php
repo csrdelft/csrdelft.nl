@@ -93,7 +93,7 @@ class ForumOnderwerpContent extends SimpleHTML {
 				echo '</select> <input type="submit" value="opslaan" /></div></form>';
 				//titel aanpassen.
 				echo '<form action="/forum/onderwerp/hernoem/'.$this->_forum->getID().'/" method="post"><div>';
-				echo 'Titel aanpassen: <br /><input type="text" name="titel" value="'.htmlspecialchars($titel).'" style="width: 250px;" />';
+				echo 'Titel aanpassen: <br /><input type="text" name="titel" value="'.htmlspecialchars($this->_forum->getTitel()).'" style="width: 250px;" />';
 				echo ' <input type="submit" value="opslaan" /></div></form>';
 				echo '</div>';
 				echo '</fieldset>'."\r\n";
