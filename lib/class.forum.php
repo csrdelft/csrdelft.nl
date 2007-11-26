@@ -108,19 +108,29 @@ class Forum {
 		}
 		//uitmaken welke categorieën er in de rss feed komen. Voor feut (bot in #csrdelft)
 		//is er een uitzondering op de ingeloggedheid.
+		
+		//extern, webstek terugkoppeling, zandbak, kamers
+		$cats=array(2,3,4,12);
+		
 		$sCategorieClause='topic.categorie=2 OR topic.categorie=3 OR topic.categorie=4 ';
 		if($this->_lid->hasPermission('P_LEDEN_READ') OR isFeut()){ 
-			//C.S.R.-zaken
-			$sCategorieClause.='OR topic.categorie=1 '; 
+			//C.S.R.-zaken, geloofszaken, nieuws&actualiteit, electronica en techniek, vraag en aanbod
+			$cats=array_merge($cats, array(1, 10, 9, 13, 11));
 		}
 		if($this->_lid->hasPermission('P_OUDLEDEN_READ') OR isFeut()){ 
-			//oudleden forum
-			$sCategorieClause.='OR topic.categorie=8 '; 
+			//oudledenforum
+			$cats[]=8; 
 		}
 		if($this->_lid->hasPermission('P_FORUM_MOD')){ 
 			//pubcie-forum
-			$sCategorieClause.='OR topic.categorie=6 '; 
+			$cats[]=6; 
 		}
+		//aan elkaar plakken:
+		foreach($cats as $cat){
+			$sCats[]='topic.categorie='.$cat;
+		}
+		$sCategorieClause=implode(' OR ', $sCats);
+		
 		//zoo, uberdeuberdeuber query om een topic op te halen. Namen worden
 		//ook opgehaald in deze query, die worden door forumcontent weer 
 		//doorgegeven aan getForumNaam();
