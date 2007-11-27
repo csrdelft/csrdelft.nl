@@ -84,6 +84,7 @@ if(!(isset($_POST['submit']) AND $_POST['submit']=='voorbeeld')){
 	
 	$page=new csrdelft($midden);
 	$page->setZijkolom($zijkolom);
+	$page->addStylesheet('forum.css');
 	$page->view();
 
 }
