@@ -115,7 +115,7 @@ class Forum {
 		$sCategorieClause='topic.categorie=2 OR topic.categorie=3 OR topic.categorie=4 ';
 		if($this->_lid->hasPermission('P_LEDEN_READ') OR isFeut()){ 
 			//C.S.R.-zaken, geloofszaken, nieuws&actualiteit, electronica en techniek, vraag en aanbod
-			$cats=array_merge($cats, array(1, 10, 9, 13, 11));
+			$cats=array_merge($cats, array(1, 10, 9, 13, 11, 17));
 		}
 		if($this->_lid->hasPermission('P_OUDLEDEN_READ') OR isFeut()){ 
 			//oudledenforum
