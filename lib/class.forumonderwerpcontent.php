@@ -84,10 +84,14 @@ class ForumOnderwerpContent extends SimpleHTML {
 				//verplaatsen
 				echo '<form action="/forum/verplaats/'.$this->_forum->getID().'/" method="post">';
 				echo '<div>Verplaats naar: <br /> <select name="newCat">';
-				echo '<option value="ongeldig">... selecteer</option>';
+				echo '<option value="ongeldig">... selecteer</option><optgroup>';
 				foreach($this->_forum->getCategories() as $cat){
-					if($cat['id']!=$this->_forum->getCatID() AND $cat['titel']!='SEPARATOR'){
-						echo '<option value="'.$cat['id'].'">'.mb_htmlentities($cat['titel']).'</option>';
+					if($cat['titel']=='SEPARATOR'){
+						echo '</optgroup>'."\n".'<optgroup label="----------">';
+					}else{
+						if($cat['id']!=$this->_forum->getCatID()){
+							echo '</optgroup><option value="'.$cat['id'].'">'.mb_htmlentities($cat['titel']).'</option>';
+						}
 					}
 				}
 				echo '</select> <input type="submit" value="opslaan" /></div></form>';

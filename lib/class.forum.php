@@ -103,26 +103,25 @@ class Forum {
 		$sDistinctClause=' AND 1';
 		if($bDistinct){
 			$sDistinctClause='AND topic.lastpostID=post.id';
-		}else{
-			$sDistinctClause='';
 		}
 		//uitmaken welke categorieën er in de rss feed komen. Voor feut (bot in #csrdelft)
 		//is er een uitzondering op de ingeloggedheid.
 		
-		//extern, webstek terugkoppeling, zandbak, kamers
+		
+		//extern, webstek terugkoppeling, zandbak, kamers worden altijd weergegeven.
 		$cats=array(2,3,4,12);
 		
-		$sCategorieClause='topic.categorie=2 OR topic.categorie=3 OR topic.categorie=4 ';
 		if($this->_lid->hasPermission('P_LEDEN_READ') OR isFeut()){ 
-			//C.S.R.-zaken, geloofszaken, nieuws&actualiteit, electronica en techniek, vraag en aanbod
-			$cats=array_merge($cats, array(1, 10, 9, 13, 11, 17));
+			//C.S.R.-zaken, geloofszaken, nieuws&actualiteit, electronica en techniek, vraag en aanbod,
+			//groeperingen, kringen& werkgroepen.
+			$cats=array_merge($cats, array(1, 10, 9, 13, 11, 17, 18));
 		}
 		if($this->_lid->hasPermission('P_OUDLEDEN_READ') OR isFeut()){ 
 			//oudledenforum
 			$cats[]=8; 
 		}
 		if($this->_lid->hasPermission('P_FORUM_MOD')){ 
-			//pubcie-forum
+			//pubcie-forum enkel voor forummods.
 			$cats[]=6; 
 		}
 		//aan elkaar plakken:
