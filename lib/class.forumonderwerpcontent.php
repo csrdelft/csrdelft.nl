@@ -87,7 +87,7 @@ class ForumOnderwerpContent extends SimpleHTML {
 				echo '<option value="ongeldig">... selecteer</option><optgroup>';
 				foreach($this->_forum->getCategories() as $cat){
 					if($cat['titel']=='SEPARATOR'){
-						echo '</optgroup>'."\n".'<optgroup label="----------">';
+						echo '</optgroup><optgroup label="'.str_repeat('-', 40).'">';
 					}else{
 						if($cat['id']!=$this->_forum->getCatID()){
 							echo '</optgroup><option value="'.$cat['id'].'">'.mb_htmlentities($cat['titel']).'</option>';
