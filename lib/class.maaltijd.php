@@ -222,9 +222,7 @@ class MaalTijd {
 					INSERT INTO maaltijdaanmelding (
 						uid, maalid, status, tijdstip, door, ip
 					)VALUES(
-						'{$uid}', '{$this->_maalid}', 'AF', '{$time}', '{$door}', '{$ip}',
-						gasten = 0,
-						gasten_opmerking = ''
+						'{$uid}', '{$this->_maalid}', 'AF', '{$time}', '{$door}', '{$ip}'
 					);";
 				$this->_db->query($afmelden);
 				$this->recount();
@@ -267,12 +265,22 @@ class MaalTijd {
 		# kijk of deze gebruiker al was aan- of afgemeld
 		$result = $this->_db->select("SELECT status FROM maaltijdaanmelding WHERE maalid='{$this->_maalid}' AND uid = '{$uid}'");
 		if (($result !== false) and $this->_db->numRows($result) > 0) {
-			$record = $this->_db->next($result); //print_r($record);
+			$record = $this->_db->next($result);
 			if ($record['status'] == 'AAN' or $record['status'] == 'AF'){
 				return $record['status'];
 			} 
 		}
 		return 'AUTO';
+	}
+	
+	function getGasten($uid = '') {
+		# vraag het huidige aantal gasten op voor de maaltijd
+		$result = $this->_db->select("SELECT gasten FROM maaltijdaanmelding WHERE maalid='{$this->_maalid}' AND uid = '{$uid}'");
+		if (($result !== false) and $this->_db->numRows($result) > 0) {
+			$record = $this->_db->next($result);
+			return $record['gasten'];
+		}
+		return 0;
 	}
 	
 	# is $uid aangemeld door $door?
@@ -297,7 +305,7 @@ class MaalTijd {
 	*/
 	function gastAanmelden($gasten, $opmerking) {
 		
-		$gasten = (int)$gasten;
+		$gasten = abs((int)$gasten);
 		$opmerking = $this->_db->escape(mb_substr(trim($opmerking), 0, 255));
 		$uid=$this->_lid->getUid();
 		
@@ -317,9 +325,9 @@ class MaalTijd {
 			$this->aanmelden();
 		}
 		
-		if ($this->isVol($gasten)) {
-			if (@!$proxy) $this->_error = "De gastenaanmelding is mislukt omdat het maximaal aantal inschrijvingen inmiddels is bereikt, of wordt bereikt als dit aantal gasten toegevoegd wordt.";
-			else $this->_proxyerror = "De gastenaanmelding is mislukt omdat het maximaal aantal inschrijvingen inmiddels is bereikt, of wordt bereikt als dit aantal gasten toegevoegd wordt.";
+		# Het maximum aantal deelnemers aan de maaltijd mag niet overschreden worden
+		if ($this->isVol($gasten-$this->getGasten($uid))) {
+			$this->_error = "De gastenaanmelding is mislukt omdat het maximaal aantal inschrijvingen is bereikt, of wordt bereikt als de ".$gasten." gasten toegevoegd worden.";
 			return false;
 		}
 		

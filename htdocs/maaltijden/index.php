@@ -73,7 +73,7 @@ if ($error == 0) switch($action) {
 		$gasten=getOrPost('gasten');
 		$opmerking=getOrPost('opmerking');
 		# ga maar proberen dan...
-		if(!$maaltrack->gastenAanmelden($m, @$gasten, @$opmerking)){
+		if(!$maaltrack->gastenAanmelden($m, $gasten, $opmerking)){
 			$error=2;
 		}else{
 			header("Location: {$_SERVER['PHP_SELF']}");

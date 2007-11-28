@@ -6,7 +6,7 @@ komende weken. Onder "Kom ik eten?" ziet u de huidige status van uw inschrijving
 N.B. De maaltijdinschrijving sluit op de dag van de maaltijd rond <strong>15:00</strong>, als de koks de lijst met aanmeldingen
 uitprinten. Vanaf dat moment zal deze ketzer u niet meer willen aan- of afmelden!<br />
 </p>
-{if $maal.zelf.error!=''}<span class="waarschuwing">N.B.: {$maal.zelf.error|escape:'htmlall'}</span>{/if}
+{if $maal.zelf.error!=''}<span class="waarschuwing">N.B.: {$maal.zelf.error|escape:'htmlall'}</span><br /><br />{/if}
 {if $maal.zelf.maaltijden|@count==0}
 	<p>&#8226; Helaas, er is binnenkort geen maaltijd op Confide.</p>
 {else}
@@ -112,7 +112,7 @@ uitprinten. Vanaf dat moment zal deze ketzer u niet meer willen aan- of afmelden
 			</tr>
 			</form>
 			{/foreach}
-		</table>
+		</table><br />
 	{/if}	
 </p>
 <h2>Gasten aanmelden</h2>

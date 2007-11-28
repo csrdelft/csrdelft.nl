@@ -106,9 +106,8 @@ li li{ font-size: 1em;}
 	width: 990px; height: 171px;
 	background-color: white;
 	border-right: 1px solid #bbb; 
-	background-color: #8b0000; 
 	z-index: 1;
-} #beeldmerk{ margin: 5px 0px 0px 28px; width: 120px;}
+} #beeldmerk{ margin: 5px 0px 0px 28px; width: 120px; }
 #hoofderBreed{ }
 
 #zijkolom{
