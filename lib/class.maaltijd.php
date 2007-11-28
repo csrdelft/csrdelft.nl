@@ -197,7 +197,6 @@ class MaalTijd {
 		$door = $this->_lid->getUid();
 		if (isset($_SERVER['REMOTE_ADDR'])) $ip = $_SERVER['REMOTE_ADDR'];
 		else $ip = '0.0.0.0';
-
 		
 		switch($status){
 			case 'AAN':
@@ -208,7 +207,9 @@ class MaalTijd {
 						status = 'AF',
 						tijdstip = {$time},
 						door = '{$door}',
-						ip = '{$ip}'
+						ip = '{$ip}',
+						gasten = 0,
+						gasten_opmerking = ''
 					WHERE maalid='{$this->_maalid}' AND uid = '{$uid}'
 				";
 				$this->_db->query($afmelden);
@@ -221,7 +222,9 @@ class MaalTijd {
 					INSERT INTO maaltijdaanmelding (
 						uid, maalid, status, tijdstip, door, ip
 					)VALUES(
-						'{$uid}', '{$this->_maalid}', 'AF', '{$time}', '{$door}', '{$ip}'
+						'{$uid}', '{$this->_maalid}', 'AF', '{$time}', '{$door}', '{$ip}',
+						gasten = 0,
+						gasten_opmerking = ''
 					);";
 				$this->_db->query($afmelden);
 				$this->recount();
@@ -234,6 +237,7 @@ class MaalTijd {
 				}else{
 					$this->_proxyerror = "{$fullname} al afgemeld voor deze maaltijd.";
 				}
+				
 				return false;
 			break;
 		}
@@ -288,32 +292,42 @@ class MaalTijd {
 	* expliciet bij iemand hoort kan een van de bestuursleden de gasten onder de eigen 
 	* naam zetten.
 	*
-	* $aantal = aantal gasten voor het huidige lid.
-	* $opm = eventuele eetwens.
+	* $gasten = aantal gasten voor het huidige lid.
+	* $opmerking = eventuele eetwens.
 	*/
-	function gastAanmelden($aantal, $opmerking) {
-		$aantal = (int)$aantal;
-		$opm = $this->_db->escape(mb_substr(trim($opmerking), 0, 255));
+	function gastAanmelden($gasten, $opmerking) {
+		
+		$gasten = (int)$gasten;
+		$opmerking = $this->_db->escape(mb_substr(trim($opmerking), 0, 255));
 		$uid=$this->_lid->getUid();
+		
+		## Als gasten 0 is, gooi dan opmerkingen maar leeg
+		if ($gasten < 1) $opmerking = '';
 		
 		//alvorens gasten aangemeld kunnen worden moet er een regeltje zijn in de
 		//maaltijdaanmelding-tabel. Als die nog niet bestaat moet het dus NU even 
 		//aangemaakt worden. Als men niet is aangemeld, kan men ook geen gasten 
 		//meenemen.
 		$status = $this->getStatus($uid);
-		if($status='AF'){
+		if($status=='AF'){
 			$this->_error="U bent zelf niet aangemeld";
 			return false;
-		}elseif($status='AUTO'){
+		}elseif($status=='AUTO'){
 			//status is auto, dus nog even een expliciete aanmelding maken
 			$this->aanmelden();
 		}
-			
+		
+		if ($this->isVol($gasten)) {
+			if (@!$proxy) $this->_error = "De gastenaanmelding is mislukt omdat het maximaal aantal inschrijvingen inmiddels is bereikt, of wordt bereikt als dit aantal gasten toegevoegd wordt.";
+			else $this->_proxyerror = "De gastenaanmelding is mislukt omdat het maximaal aantal inschrijvingen inmiddels is bereikt, of wordt bereikt als dit aantal gasten toegevoegd wordt.";
+			return false;
+		}
+		
 		$aanmelden="
 			UPDATE
 				maaltijdaanmelding
 			SET
-				gasten=".$aantal.",
+				gasten=".$gasten.",
 				gasten_opmerking='".$opmerking."'
 			WHERE
 				uid='".$uid."'
@@ -390,29 +404,25 @@ class MaalTijd {
 		return $totaal;
 	}
 	
-	function isVol() { return $this->_maaltijd['aantal'] >= $this->_maaltijd['max']; }
+	## isVol met variabele voor hoeveel erbij geteld moet worden, nodig voor gasten aanmelden
+	function isVol($plus = 1) { return $this->_maaltijd['aantal']+$plus-1 >= $this->_maaltijd['max']; }
+	
 	function isGesloten() { return $this->_maaltijd['gesloten'] == '1'; }
+	
 	function sluit() {
 		# inschrijving gesloten?
 		if ($this->isGesloten()){ return false; }
 		
 		# haal de aanmeldingen op en prop ze in de maaltijdgesloten tabel:
-		# uid, naam, eetwens, maalid, door, tijdstip, ip
+		# uid, naam, eetwens, maalid, door, gasten, gasten_opmerking, tijdstip, ip
 		$aanmeldingen=$this->getAanmeldingen();
+
 		foreach ($aanmeldingen as $aan) {
 			if(isset($aan['door_uid'])){ $door=$aan['door_uid']; }else{ $door=''; }
-			if(isset($aan['gasten']) AND is_array($aan['gasten'])){ 
-				$gasten=$aan['gasten']; 
-			}else{ 
-				$gasten=0; 
-			}
-			if(isset($aan['gasten_opmerking'])){ 
-				$gasten_opmerking=$aan['gasten_opmerking']; 
-			}else{ 
-				$gasten_opmerking=''; 
-			}
 			if(isset($aan['tijdstip'])){ $tijdstip=$aan['tijdstip']; }else{ $tijdstip=0; }
 			if(isset($aan['ip'])){ $ip=$aan['ip']; }else{ $ip=''; }
+			if(isset($aan['gasten'])){ $gasten=$aan['gasten']; }else{ $gasten=''; }
+			if(isset($aan['gasten_opmerking'])){ $gasten_opmerking=$aan['gasten_opmerking']; }else{ $gasten_opmerking=''; }
 
 			$aanQuery=
 				"INSERT INTO 
@@ -422,7 +432,7 @@ class MaalTijd {
 					gasten, gasten_opmerking, tijdstip, ip
 				)VALUES(
 					'".$aan['uid']."', '".$aan['eetwens']."', ".$this->_maalid.", '".$door."', 
-					".$gasten.", '".$gasten_opmerking."', ".$tijdstip.", '".$ip."'
+					'".$gasten."', '".$gasten_opmerking."', ".$tijdstip.", '".$ip."'
 				);";
 			$this->_db->query($aanQuery);
 		}
@@ -467,19 +477,6 @@ class MaalTijd {
 		if($rAan!==false and $this->_db->numRows($rAan) > 0){
 			while($aAan=$this->_db->next($rAan)){
 				$naam=$this->_lid->getFullName($aAan['uid']);
-				
-				//als deze aanmelding ook gasten in zich heeft, die ook ophalen en er regeltjes
-				//voor toevoegen.
-				if($aAan['gasten']!=0){
-					$gasten=array();
-					for($i=1; $i<=$aAan['gasten']; $i++){
-						$gasten[]=array(
-							'naam' => 'Gast van '.$naam,
-							'achternaam' => $aAan['achternaam']);
-					}
-				}else{
-					$gasten=0;
-				}
 				//hier array met uid als key maken, om zometeen alles te kunnen wegstrepen
 				$aan[$aAan['uid']]=array(
 					'uid' => $aAan['uid'],
@@ -488,7 +485,7 @@ class MaalTijd {
 					'achternaam' => $aAan['achternaam'],
 					'saldo' => $aAan['saldo'],
 					'door_uid' => $aAan['door_uid'], 
-					'gasten' => $gasten,
+					'gasten' => $aAan['gasten'], 
 					'gasten_opmerking' => $aAan['gasten_opmerking'],
 					'tijdstip' => $aAan['tijdstip'],
 					'ip' => $aAan['ip']
@@ -522,7 +519,8 @@ class MaalTijd {
 					'naam' => $naam,
 					'eetwens' => $aAbo['eetwens'],
 					'achternaam' => $aAbo['achternaam'],
-					'saldo' => $aAbo['saldo'] );
+					'saldo' => $aAbo['saldo'],
+					'gasten' => 0);
 			}
 		}
 	
@@ -539,6 +537,7 @@ class MaalTijd {
 
 		# nog ff sorteren, hier worden de keys anders, geen uids meer dus.
 		usort($aan, 'sort_achternaam_uid');
+
 		return $aan;
 	}
 	
@@ -580,7 +579,18 @@ class MaalTijd {
 			# als inschrijving nog niet gesloten is de normale getAanmeldingen() gebruiken.
 			$aan = $this->getAanmeldingen();
 		}
-
+		
+		# Verwerken van gasten tot aparte regels in de lijst
+		$aanOud = $aan;
+		$aan = array();
+		foreach ($aanOud as $uid => $item) {
+			$aan[$uid] = $item;
+			if ($item['gasten'] > 0) {
+				for ($i = 0; $i < $item['gasten']; $i++) {
+					$aan[$uid.$i]['naam'] = 'Gast van '.$item['naam'];
+				}
+			}
+		}
 		
 		return $aan;
 	}

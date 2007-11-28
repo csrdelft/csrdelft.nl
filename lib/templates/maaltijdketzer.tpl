@@ -77,10 +77,10 @@ uitprinten. Vanaf dat moment zal deze ketzer u niet meer willen aan- of afmelden
 				<th>Maaltijd:</th>
 				<th>Lid-nummer:</th>
 				<th>&nbsp;</th>
-				<th>U heeft anderen voor deze maaltijd aangemeld:</h>
+				<th>U heeft anderen voor deze maaltijd aangemeld:</th>
 			</tr>
 			{foreach from=$maal.anderen.maaltijden item=maaltijd}
-			<form action="{$smarty.server.PHP_SELF}" method="POST">
+			<form action="{$smarty.server.PHP_SELF}" method="post">
 			<input type="hidden" name="a" value="aan" />
 			<input type="hidden" name="m" value="{$maaltijd.id}" />
 				<tr>
@@ -117,7 +117,35 @@ uitprinten. Vanaf dat moment zal deze ketzer u niet meer willen aan- of afmelden
 </p>
 <h2>Gasten aanmelden</h2>
 <p>
-	U kunt op uw naam gasten aanmelden voor de maaltijd.<br />
-	Dit onderdeel is nog niet afgerond helaas.<br />
-	Gasten kunt u opgeven door even te bellen naar het bestuur.<br />
+	Als u staat ingeschreven voor een maaltijd, kunt u op uw naam gasten aanmelden voor de maaltijd.<br />
+	Vul in het vak 'gasten' het aantal in. Het veld 'opmerking' kunt u gebruiken voor eetwensen.<br />
 </p>
+<table class="maaltijden">
+	<tr>
+		<th>Maaltijd begint om:</th>
+		<th>Omschrijving</th>
+		<th>Gasten</th>
+		<th>Opmerking</th>
+		<th>&nbsp;</th>
+	</tr>
+	{foreach from=$maal.zelf.maaltijden item=maaltijd}
+		{if $maaltijd.status=='AAN' || $maaltijd.status=='ABO'}
+			<tr>
+				<td>{$maaltijd.datum|date_format:$datumFormaat}</td>
+				<td>{$maaltijd.tekst|escape:'html'}</td>
+				{if $maaltijd.gesloten == 1}
+					<td>{$maaltijd.gasten|escape:'html'}</td>
+					<td colspan="2">{$maaltijd.opmerking|escape:'html'}</td>
+				{else}
+					<form action="{$smarty.server.PHP_SELF}" method="post">
+					<td><input type="hidden" name="a" value="gasten" />
+					<input type="hidden" name="m" value="{$maaltijd.id}" />
+					<input type="text" name="gasten" style="width:60px;" value="{$maaltijd.gasten}" /></td>
+					<td><input type="text" name="opmerking" style="width:250px;" value="{$maaltijd.opmerking|escape:'html'}"/></td>
+					<td><input type="submit" name="foo" value="aanpassen" /></td>						
+					</form>
+				{/if}
+			</tr>
+		{/if}
+	{/foreach}
+</table>

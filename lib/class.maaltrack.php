@@ -287,21 +287,28 @@ class MaalTrack {
 			
 			if($maaltijd['gesloten']=='1'){
 				//als de maaltijd al gesloten is, dan uit de maaltijdgesloten-tabel ophalen.
-				$sAanmeldingen="SELECT uid FROM maaltijdgesloten WHERE uid = '".$uid."' AND maalid = ".$maaltijd['id'].";";
+				$sAanmeldingen="SELECT uid, gasten, gasten_opmerking FROM maaltijdgesloten WHERE uid = '".$uid."' AND maalid = ".$maaltijd['id'].";";
 				$rAanmeldingen = $this->_db->query($sAanmeldingen);
 				if (($rAanmeldingen !== false) and $this->_db->numRows($rAanmeldingen) > 0) {
 					$maaltijd['status']='AAN';
 				}else{
 					$maaltijd['status']='';
 				}
+				# Gasten ophalen
+				$record = $this->_db->next($rAanmeldingen);
+				$maaltijd['gasten'] = $record['gasten'];
+				$maaltijd['opmerking'] = $record['gasten_opmerking'];
 			}else{
 				# status: AAN,AF ABO ''
 				# 1a. is er een aan of afmelding voor deze maaltijd?
-				$sAanmeldingen="SELECT status FROM maaltijdaanmelding WHERE uid = '".$uid."' AND maalid = ".$maaltijd['id'].";";
+				$sAanmeldingen="SELECT status, gasten, gasten_opmerking FROM maaltijdaanmelding WHERE uid = '".$uid."' AND maalid = ".$maaltijd['id'].";";
 				$rAanmeldingen = $this->_db->query($sAanmeldingen);
 				if (($rAanmeldingen !== false) and $this->_db->numRows($rAanmeldingen) > 0) {
 					$record = $this->_db->next($rAanmeldingen);
 					$maaltijd['status'] = $record['status'];
+					# Gasten ophalen
+					$maaltijd['gasten'] = $record['gasten'];
+					$maaltijd['opmerking'] = $record['gasten_opmerking'];
 				} else {
 					# 1b. zo nee, is er een abo actief?
 					$sAbo="SELECT uid FROM maaltijdabo WHERE uid = '".$uid."' AND abosoort = '".$maaltijd['abosoort']."'";
@@ -313,8 +320,8 @@ class MaalTrack {
 						# 1c. zo ook nee, dan status = ''
 						$maaltijd['status'] = '';
 					}	
-				} 
-			}			
+				}
+			}
 			
 			# 2. actie is afhankelijk van status en evt. gesloten zijn van de maaltijd
 			# actie: AAN, AF, ''
@@ -367,6 +374,20 @@ class MaalTrack {
 		if (!$this->isMaaltijd($maalid)) return false;
 		$maaltijd = new Maaltijd($maalid, $this->_lid, $this->_db);
 		if (!$maaltijd->afmelden($uid)) {
+			$this->_error = $maaltijd->getError();
+			$this->_proxyerror = $maaltijd->getProxyError();
+			return false;
+		}
+		return true;
+	}
+	
+	# wrapper-functie voor gasten aanmelden, die controleert of de maaltijd wel bestaat
+	# en om te zorgen dat foutmeldingen goed terugkomen in de pagina
+	function gastenAanmelden($maalid, $gasten, $opmerking) {
+		# isMaaltijd zet zelf een error als het nodig is
+		if (!$this->isMaaltijd($maalid)) return false;
+		$maaltijd = new Maaltijd($maalid, $this->_lid, $this->_db);
+		if (!$maaltijd->gastAanmelden($gasten, $opmerking)) {
 			$this->_error = $maaltijd->getError();
 			$this->_proxyerror = $maaltijd->getProxyError();
 			return false;

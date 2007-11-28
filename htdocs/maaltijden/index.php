@@ -20,7 +20,7 @@ $error = 0;
 # 2 -> er treden (vorm)fouten op in bijv de invoer.
 
 # controleren of we wel mogen doen wat er gevraagd wordt...
-$actionsToegestaan=array('', 'aan', 'af');
+$actionsToegestaan=array('', 'aan', 'af', 'gasten');
 if(in_array($action, $actionsToegestaan)){
 	if(!$lid->hasPermission('P_MAAL_IK')){ $error = 1; }
 }else{
@@ -64,6 +64,20 @@ if ($error == 0) switch($action) {
 				header("Location: {$_SERVER['PHP_SELF']}");
 				exit;
 			}
+		}
+	break;
+	case 'gasten':
+		# kijk of een maaltijd is opgegeven
+		$m=getOrPost('m');
+		# gastvariabelen ophalen
+		$gasten=getOrPost('gasten');
+		$opmerking=getOrPost('opmerking');
+		# ga maar proberen dan...
+		if(!$maaltrack->gastenAanmelden($m, @$gasten, @$opmerking)){
+			$error=2;
+		}else{
+			header("Location: {$_SERVER['PHP_SELF']}");
+			exit;
 		}
 	break;
 }

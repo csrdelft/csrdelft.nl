@@ -57,9 +57,6 @@ class MaaltijdContent extends SimpleHTML {
 			}
 		}
 				
-		//...gasten, TODO, FIXME
-		$aMaal['gasten']=array();
-		
 		//arrays toewijzen en weergeven
 		$profiel->assign('maal', $aMaal);
 		$profiel->assign('toonLijsten', $this->_lid->hasPermission('P_MAAL_MOD') or opConfide());
