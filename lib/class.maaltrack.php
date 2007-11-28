@@ -41,9 +41,9 @@ class MaalTrack {
 		$tekst = mb_substr($tekst, 0, 200);
 		$tekst = $this->_db->escape($tekst);
 		
-		$koks=(int)$koks;
-		$afwassers=(int)$afwassers;
-		$theedoeken=(int)$theedoeken;
+		$koks=abs((int)$koks);
+		$afwassers=abs((int)$afwassers);
+		$theedoeken=abs((int)$theedoeken);
 		
 		# bij fouten, niet doorgaan, false teruggeven.
 		if(!$this->validateMaaltijd($datum, $tekst, $abosoort, $tp, $koks, $afwassers, $theedoeken, $max)){
@@ -88,9 +88,9 @@ class MaalTrack {
 		$tekst = mb_substr($tekst, 0, 200);
 		$tekst = $this->_db->escape($tekst);
 		
-		$koks=(int)$koks;
-		$afwassers=(int)$afwassers;
-		$theedoeken=(int)$theedoeken;
+		$koks=abs((int)$koks);
+		$afwassers=abs((int)$afwassers);
+		$theedoeken=abs((int)$theedoeken);
 		
 		# bij fouten, niet doorgaan, false teruggeven.
 		if(!$this->validateMaaltijd($datum, $tekst, $abosoort, $tp, $koks, $afwassers, $theedoeken, $max)){
