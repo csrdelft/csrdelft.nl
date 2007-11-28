@@ -35,14 +35,18 @@ class MaalTrack {
 	# abosoort - enum-waarde van een abo dat geldt voor deze maaltijd
 	# tp = tafelpraeses-uid
 	# max - maximaal aantal inschrijvingen
-	function addMaaltijd($datum, $tekst, $abosoort, $tp, $max = MAX_MAALTIJD) {
+	function addMaaltijd($datum, $tekst, $abosoort, $tp, $koks, $afwassers, $theedoeken, $max = MAX_MAALTIJD) {
 		$datum = (int)$datum;
 		$max = (int)$max;
 		$tekst = mb_substr($tekst, 0, 200);
 		$tekst = $this->_db->escape($tekst);
 		
+		$koks=(int)$koks;
+		$afwassers=(int)$afwassers;
+		$theedoeken=(int)$theedoeken;
+		
 		# bij fouten, niet doorgaan, false teruggeven.
-		if(!$this->validateMaaltijd($datum, $tekst, $abosoort, $tp, $max)){
+		if(!$this->validateMaaltijd($datum, $tekst, $abosoort, $tp, $koks, $afwassers, $theedoeken, $max)){
 			return false;
 		}
 			
@@ -51,9 +55,10 @@ class MaalTrack {
 			INSERT INTO 
 				maaltijd 
 			(
-				datum, tekst, abosoort, max, tp
+				datum, tekst, abosoort, max, tp, koks, afwassers, theedoeken
 			)VALUES(
-				'".$datum."', '".$tekst."', '".$abosoort."', '".$max."', '".$tp."'
+				'".$datum."', '".$tekst."', '".$abosoort."', '".$max."', 
+				'".$tp."', '".$koks."', '".$afwassers."', '".$theedoeken."' 
 			);";
 		
 		if (!$this->_db->query($maaltijd)){
@@ -69,7 +74,7 @@ class MaalTrack {
 	
 	# bestaande maaltijd bewerken. Niet veel verschil met addMaaltijd, behalve dat hier nog even 
 	# gekeken wordt of de maaltijd wel bestaat.
-	function editMaaltijd($maalid, $datum, $tekst, $abosoort, $tp, $max=MAX_MAALTIJD){
+	function editMaaltijd($maalid, $datum, $tekst, $abosoort, $tp, $koks, $afwassers, $theedoeken, $max=MAX_MAALTIJD){
 		if($maalid!=(int)$maalid){
 			$this->_error="Ongeldig maaltijdID opgegeven.";
 			return false;
@@ -83,8 +88,12 @@ class MaalTrack {
 		$tekst = mb_substr($tekst, 0, 200);
 		$tekst = $this->_db->escape($tekst);
 		
+		$koks=(int)$koks;
+		$afwassers=(int)$afwassers;
+		$theedoeken=(int)$theedoeken;
+		
 		# bij fouten, niet doorgaan, false teruggeven.
-		if(!$this->validateMaaltijd($datum, $tekst, $abosoort, $tp, $max)){
+		if(!$this->validateMaaltijd($datum, $tekst, $abosoort, $tp, $koks, $afwassers, $theedoeken, $max)){
 			return false;
 		}
 		$maaltijd="
@@ -95,12 +104,15 @@ class MaalTrack {
 				tekst='".$tekst."',
 				abosoort='".$abosoort."',
 				tp='".$tp."',
+				koks='".$koks."',
+				afwassers='".$afwassers."',
+				theedoeken='".$theedoeken."',
 				max=".$max."
 			WHERE 
 				id=".$maalid."
 			LIMIT 1;";
 		if(!$this->_db->query($maaltijd)){
-			$this->_error="Er is iets mis met de database/query";
+			$this->_error="Er is iets mis met de database/query.";
 			return false;
 		}else{
 			$maaltijd = new Maaltijd ($maalid, $this->_lid, $this->_db);
@@ -111,7 +123,7 @@ class MaalTrack {
 	}
 	# deze methode valideert de gemeenschappelijke waarden van addMaaltijd en editMaaltijd.
 	# controle op specifieke dingen voor editMaaltijd gebeurt nog in de methode zelf.
-	function validateMaaltijd($datum, $tekst, $abosoort, $tp, $max){
+	function validateMaaltijd($datum, $tekst, $abosoort, $tp, $koks, $afwassers, $theedoeken, $max){
 		# controleer of de datum niet in het verleden ligt
 		if ($datum < time()) {
 			$this->_error = "Het tijdstip van de maaltijd moet in de toekomst liggen"; 
@@ -142,7 +154,16 @@ class MaalTrack {
 			$this->_error = "Het maximaal aantal eters moet tussen 1 en " . MAX_MAALTIJD . " zijn."; 
 			return false;
 		}
-
+		# kijken of de koks, afwassers niet nul zijn.
+		if($koks<=0 or $afwassers<=0){
+			$this->_error = "Er moet minstens één kok en één afwasser mogelijk zijn."; 
+			return false;
+		}
+		# kijken of de theedoeken <0 is
+		if($theedoeken<0){
+			$this->_error = "Het aantal theedoekenwassers mag niet lager dan nul zijn."; 
+			return false;
+		}
 		# kijk of een gekozen abo niet meteen meer inschrijvingen oplevert dan het maximum wat ingesteld wordt
 		if ($abosoort != "" and $this->getAboCount($abosoort) > $max) {
 			$this->_error = "Het gekozen abonnement levert meer inschrijvingen op dan het maximaal ingestelde aantal."; 
@@ -181,7 +202,8 @@ class MaalTrack {
 		}
 		$sMaaltijdQuery="
 			SELECT 
-				id, datum, gesloten, tekst, abosoort, max, aantal, tp, kok1, kok2, afw1, afw2, afw3 
+				id, datum, gesloten, tekst, abosoort, max, aantal,
+				tp, koks, afwassers, theedoeken 
 			FROM 
 				maaltijd 
 			WHERE 
@@ -189,31 +211,8 @@ class MaalTrack {
 			LIMIT 1;";
 		$rMaaltijd=$this->_db->query($sMaaltijdQuery);
 		$aMaal=$this->_db->next($rMaaltijd);
-		
-		
-		//hier gebeurt een hoop wat handiger kan...
-		return array(
-			'id' => $aMaal['id'],
-			'datum' => $aMaal['datum'],
-			'gesloten' => $aMaal['gesloten'],
-			'tekst' => $aMaal['tekst'],
-			'abosoort' => $aMaal['abosoort'],
-			'max' => $aMaal['max'],
-			'aantal' => $aMaal['aantal'],
-			'tp_uid' => $aMaal['tp'],
-			'tp' => $this->_lid->getNaamLink($aMaal['tp'], 'full', true),
-			'kok1_uid' => $aMaal['kok1'],
-			'kok1' => $this->_lid->getNaamLink($aMaal['kok1'], 'full', true),
-			'kok2_uid' => $aMaal['kok2'],
-			'kok2' => $this->_lid->getNaamLink($aMaal['kok2'], 'full', true),
-			'afw1_uid' => $aMaal['afw1'],
-			'afw1' => $this->_lid->getNaamLink($aMaal['afw1'], 'full', true),
-			'afw2_uid' => $aMaal['afw2'],
-			'afw2' => $this->_lid->getNaamLink($aMaal['afw2'], 'full', true),
-			'afw3_uid' => $aMaal['afw3'],
-			'afw3' => $this->_lid->getNaamLink($aMaal['afw3'], 'full', true));
-		
-		$this->_db->result2array($rMaaltijd);
+	
+		return $aMaal;
 	}
 	
 	# haalt maaltijden uit de maaltijdentabel op, voor uitgebreidere info
@@ -243,7 +242,7 @@ class MaalTrack {
 		$maaltijden = array();
 		$sMaaltijdQuery="
 			SELECT 
-				id, datum, gesloten, tekst, abosoort, max, aantal, tp, kok1, kok2, afw1, afw2, afw3 
+				id, datum, gesloten, tekst, abosoort, max, aantal, tp, koks, afwassers, theedoeken 
 			FROM 
 				maaltijd 
 			WHERE 

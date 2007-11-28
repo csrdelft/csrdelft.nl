@@ -25,28 +25,22 @@
 		<tr>
 			<td>Tafelpraeses</td>
 			<td>
-				{if $maal.formulier.tp!=''}{$maal.formulier.tp} {/if}
-				<input type="text" name="tp" value="{$maal.formulier.tp_uid}" style="width: 50px;" /></td>
+				<input type="text" name="tp" value="{$maal.formulier.tp}" style="width: 50px;" />
+				{if $maal.formulier.tp!=''}{$maal.formulier.tp|csrnaam} {/if}
+			</td>
 		</tr>
-	<!--	<tr>
+		<tr>
 			<td>Koks</td>
-			<td>
-				{if $maal.formulier.kok1!=''}{$maal.formulier.kok1} {/if}
-				<input type="text" name="kok1" value="{$maal.formulier.kok1_uid}" style="width: 50px;" /><br />
-				{if $maal.formulier.kok2!=''}{$maal.formulier.kok2} {/if}
-				<input type="text" name="kok2" value="{$maal.formulier.kok2_uid}" style="width: 50px;" /></td>
+			<td><input type="text" name="koks" value="{$maal.formulier.koks}" style="width: 50px;"  /></td>
 		</tr>
 		<tr>
 			<td>Afwassers</td>
-			<td>
-				{if $maal.formulier.afw1!=''}{$maal.formulier.afw1} {/if}
-				<input type="text" name="afw1" value="{$maal.formulier.afw1_uid}" style="width: 50px;" /><br />
-				{if $maal.formulier.afw2!=''}{$maal.formulier.afw2} {/if}
-				<input type="text" name="afw2" value="{$maal.formulier.afw2_uid}" style="width: 50px;" /><br />
-				{if $maal.formulier.afw3!=''}{$maal.formulier.afw3} {/if}
-				<input type="text" name="afw3" value="{$maal.formulier.afw3_uid}" style="width: 50px;" /></td>
+			<td><input type="text" name="afwassers" value="{$maal.formulier.afwassers}" style="width: 50px;" /></td>
 		</tr>
-		-->
+		<tr>
+			<td>Theedoeken</td>
+			<td><input type="text" name="theedoeken" value="{$maal.formulier.theedoeken}" style="width: 50px;" /></td>
+		</tr>
 		<tr>
 			<td>&nbsp;</td>
 			<Td><input type="submit" name="submit" value="opslaan" /></td>

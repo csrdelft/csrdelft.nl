@@ -29,19 +29,23 @@ if(isset($_GET['verwijder']) AND $_GET['verwijder']==(int)$_GET['verwijder'] AND
 }
 
 # maaltijd opslaan, of nieuwe toevoegen?
-if(isset($_POST['maalid'], $_POST['moment'], $_POST['omschrijving'], $_POST['limiet'], $_POST['abo'], $_POST['tp'])){
+if(isset($_POST['maalid'], $_POST['moment'], $_POST['omschrijving'], $_POST['limiet'], $_POST['abo'], 
+	$_POST['tp'], $_POST['koks'], $_POST['afwassers'], $_POST['theedoeken'] )){
 	//datum omzetten naar timestamp.
 	$datum=strtotime($_POST['moment']);
 	$maalid=(int)$_POST['maalid'];
-		
+	
+	
 	# nieuwe maaltijd toevoegen of oude bewerken?
 	if($maalid==0){
-		if($maaltrack->addMaaltijd($datum, $_POST['omschrijving'], $_POST['abo'], $_POST['tp'], $_POST['limiet'])){
+		if($maaltrack->addMaaltijd($datum, $_POST['omschrijving'], $_POST['abo'], 
+				$_POST['tp'], $_POST['koks'], $_POST['afwassers'], $_POST['theedoeken'], $_POST['limiet'])){
 			header('location: '.CSR_ROOT.'maaltijden/beheer/');
 			exit;
 		}
 	}else{
-		if($maaltrack->editMaaltijd($maalid, $datum, $_POST['omschrijving'], $_POST['abo'], $_POST['tp'], $_POST['limiet'])){
+		if($maaltrack->editMaaltijd($maalid, $datum, $_POST['omschrijving'], $_POST['abo'], 
+				$_POST['tp'], $_POST['koks'], $_POST['afwassers'], $_POST['theedoeken'],  $_POST['limiet'])){
 			header('location: '.CSR_ROOT.'maaltijden/beheer/');
 			exit;
 		}

@@ -65,8 +65,11 @@ class MaaltijdbeheerContent extends SimpleHTML {
 			$aForm['abosoort']='';
 			$aForm['max']=100;
 			//alles standaard naar jan lid.
-			$aForm['tp_uid']=$aForm['kok1_uid']=$aForm['kok2_uid']=
-				$aForm['afw1_uid']=$aForm['afw2_uid']=$aForm['afw3_uid']='x101';
+			$aForm['tp']='x101';
+			
+			$aForm['koks']=2;
+			$aForm['afwassers']=4;
+			$aForm['theedoeken']=1;
 		}else{
 			$aForm=$this->_maaltijd;
 			$aForm['actie']='bewerken';
@@ -78,7 +81,10 @@ class MaaltijdbeheerContent extends SimpleHTML {
 			if(isset($_POST['omschrijving'])){ $aForm['tekst']=trim(mb_htmlentities($_POST['omschrijving'])); }
 			if(isset($_POST['limiet']) AND $_POST['limiet']==(int)$_POST['limiet']){ $aForm['max']=$_POST['limiet']; }
 			if(isset($_POST['abo']) AND $this->_maaltrack->isValidAbo($_POST['abo'])){ $aForm['abosoort']=$_POST['abo']; }
-			if(isset($_POST['tp']) AND $this->_lid->uidExists($_POST['tp']) ){ $aForm['tp_uid']=$_POST['tp']; }
+			if(isset($_POST['tp']) AND $this->_lid->uidExists($_POST['tp']) ){ $aForm['tp']=$_POST['tp']; }
+			if(isset($_POST['koks'])){  $aForm['koks']=(int)$_POST['koks']; }
+			if(isset($_POST['afwassers'])){  $aForm['afwassers']=(int)$_POST['afwassers']; }
+			if(isset($_POST['theedoeken'])){  $aForm['theedoeken']=(int)$_POST['theedoeken']; }
 		}	
 		$aForm['abos']=$this->_maaltrack->getAbos();
 		$aMaal['formulier']=$aForm;
