@@ -46,7 +46,7 @@ class MaalTrack {
 		$theedoeken=abs((int)$theedoeken);
 		
 		# bij fouten, niet doorgaan, false teruggeven.
-		if(!$this->validateMaaltijd($datum, $tekst, $abosoort, $tp, $koks, $afwassers, $theedoeken, $max)){
+		if(!$this->validateMaaltijd($datum, $tekst, $abosoort, $tp, $max)){
 			return false;
 		}
 			
@@ -93,7 +93,7 @@ class MaalTrack {
 		$theedoeken=abs((int)$theedoeken);
 		
 		# bij fouten, niet doorgaan, false teruggeven.
-		if(!$this->validateMaaltijd($datum, $tekst, $abosoort, $tp, $koks, $afwassers, $theedoeken, $max)){
+		if(!$this->validateMaaltijd($datum, $tekst, $abosoort, $tp, $max)){
 			return false;
 		}
 		$maaltijd="
@@ -123,7 +123,7 @@ class MaalTrack {
 	}
 	# deze methode valideert de gemeenschappelijke waarden van addMaaltijd en editMaaltijd.
 	# controle op specifieke dingen voor editMaaltijd gebeurt nog in de methode zelf.
-	function validateMaaltijd($datum, $tekst, $abosoort, $tp, $koks, $afwassers, $theedoeken, $max){
+	function validateMaaltijd($datum, $tekst, $abosoort, $tp, $max){
 		# controleer of de datum niet in het verleden ligt
 		if ($datum < time()) {
 			$this->_error = "Het tijdstip van de maaltijd moet in de toekomst liggen"; 
@@ -152,16 +152,6 @@ class MaalTrack {
 		# controleer of het maximum aantal > 0 en <= MAX_MAALTIJD is
 		if ($max <= 0 or $max > MAX_MAALTIJD) {
 			$this->_error = "Het maximaal aantal eters moet tussen 1 en " . MAX_MAALTIJD . " zijn."; 
-			return false;
-		}
-		# kijken of de koks, afwassers niet nul zijn.
-		if($koks<=0 or $afwassers<=0){
-			$this->_error = "Er moet minstens één kok en één afwasser mogelijk zijn."; 
-			return false;
-		}
-		# kijken of de theedoeken <0 is
-		if($theedoeken<0){
-			$this->_error = "Het aantal theedoekenwassers mag niet lager dan nul zijn."; 
 			return false;
 		}
 		# kijk of een gekozen abo niet meteen meer inschrijvingen oplevert dan het maximum wat ingesteld wordt
