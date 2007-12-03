@@ -641,7 +641,7 @@ class eamBBParser{
 	
 		// only valid patterns
 		if(!url_like(urldecode($href))){
-			$text = "[Ongeldige URL]";
+			$text = "[Ongeldige URL, tip: gebruik tinyurl.com]";
 		}else{
 			$text = '<a href="'.$href.'">'.$content.'</a>';
 		}
@@ -802,7 +802,7 @@ class eamBBParser{
 
 		// only valid patterns
 		if(!url_like(urldecode($content))){
-			$html = "[Ongeldige URL]";
+			$html = "[Ongeldige URL, tip: gebruik tinyurl.com]";
 		}else{
 			$html = '<img class="forum_image" src="'.$content.'" alt="" '.$width . $height.' style="'.$float.'" />';
 		}
