@@ -1,7 +1,10 @@
 <?php
-
-# prevent global namespace poisoning
-
+# C.S.R. Delft | pubcie@csrdelft.nl
+# -------------------------------------------------------------------
+# index.php
+# -------------------------------------------------------------------
+# Weergave van categorieën en het forumoverzicht
+# -------------------------------------------------------------------
 
 # instellingen & rommeltjes
 require_once('include.config.php');

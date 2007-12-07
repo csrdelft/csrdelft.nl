@@ -1,9 +1,12 @@
 ##hele stapel mod-rewrite dingen voor het forum
 RewriteEngine on
 
+RewriteRule ^laatste/$ laatste-berichten.php
+
 ##normaal weergeven
 RewriteRule ^categorie/([0-9]+)/([0-9]+)$ index.php?forum=$1&pagina=$2
 RewriteRule ^categorie/([0-9]+)$ index.php?forum=$1
+RewriteRule ^categorie/laatste/?$ index.php?forum=0
 RewriteRule ^onderwerp/([0-9]+)$ onderwerp.php?topic=$1
 RewriteRule ^onderwerp/([0-9]+)/(.+)$ onderwerp.php?topic=$1&highlight=$2
 

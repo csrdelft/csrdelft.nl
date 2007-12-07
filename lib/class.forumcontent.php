@@ -69,12 +69,16 @@ class ForumContent extends SimpleHTML {
 ***********************************************************************************************************/	
 	function viewTopics($iCat){
 		$iCat=(int)$iCat;
-		//controleer of de categorie wel bestaat
+		
+		//topics ophaelen voor deze categorie
+		//wellicht wel een andere pagina?
+		if(isset($_GET['pagina'])){ 
+			$iPaginaID=(int)$_GET['pagina']; 
+		}else{
+			$iPaginaID=0; 
+		}
 		if($this->_forum->catExistsVoorUser($iCat)){
 			$sCategorie=$this->_forum->getCategorieTitel($iCat);
-			//topics ophaelen voor deze categorie
-			//wellicht wel een andere pagina?
-			if(isset($_GET['pagina'])){ $iPaginaID=(int)$_GET['pagina']; }else{ $iPaginaID=0; }
 			$aTopics=$this->_forum->getTopics($iCat, $iPaginaID);
 			//als de pagina niet bestaat moet er teruggegaan worden naar de laatste pagina.
 			if($iPaginaID!=0 AND $aTopics===false){
@@ -82,115 +86,135 @@ class ForumContent extends SimpleHTML {
 				$iPaginaID=0;
 				$aTopics=$this->_forum->getTopics($iCat, $iPaginaID);
 			}
-			//weergeven van de navigatielinks, deze rossen we in een variabele omdat hij onderaan nogeens terug komt
-			$sNavigatieLinks='<h2><a class="forumGrootlink" href="/forum/">Forum</a> &raquo; '.mb_htmlentities($sCategorie).'</h2>';
-			//echo $sNavigatieLinks;
-			
-			//eventuele foutmelding weergeven:
-			echo $this->getMelding();
-			echo '<table class="forumtabel"><tr>';
-			echo '<td class="forumhoofd">Titel</td><td class="forumhoofd">Reacties</td>';
-			echo '<td class="forumhoofd">Auteur</td><td class="forumhoofd">verandering</td></tr>';
-			if(is_array($aTopics)){
-				//aantal topics tellen:
-				$iAantalTopics=$this->_forum->topicCount($iCat);
-				foreach($aTopics as $aTopic){
-					//de boel klaarmaken voor weergave:
-					$sOnderwerp='';
-					if($aTopic['soort']=='T_POLL'){	$sOnderwerp.='[peiling] '; }
-					if($aTopic['zichtbaar']=='wacht_goedkeuring'){ $sOnderwerp.='[ter goedkeuring...] '; }
-					$sOnderwerp.='<a href="/forum/onderwerp/'.$aTopic['id']. '" >';
-					if($aTopic['plakkerig']==1){
-						$sOnderwerp.='<img src="'.CSR_PICS.'forum/plakkerig.gif" title="Dit onderwerp is plakkerig, het blijft bovenaan." alt="plakkerig" />&nbsp;&nbsp;';
-					}
-					if($aTopic['open']==0){
-						$sOnderwerp.='<img src="'.CSR_PICS.'forum/slotje.png" title="Dit onderwerp is gesloten, u kunt niet meer reageren" alt="sluiten" />&nbsp;&nbsp;';
-					}
-					$sOnderwerp.=mb_htmlentities(wordwrap($aTopic['titel'], 60, "\n", true)).'</a>';
-					$sReacties=$aTopic['reacties']-1;
-					$sDraadstarter=mb_htmlentities($this->_forum->getForumNaam($aTopic['uid']));
-					$sReactieMoment=$this->_forum->formatDatum($aTopic['lastpost']);
-					if(trim($aTopic['lastuser'])!=''){
-						$sLaatsteposter=$this->_forum->getForumNaam($aTopic['lastuser']);
-					}else{ $sLaatsteposter='onbekend'; }
-					#####################################
-					## de boel weergeven
-					#####################################
-					echo "\r\n".'<tr>';
-					echo '<td class="forumtitel">'.$sOnderwerp.'</td>';
-					echo '<td class="forumreacties">'.$sReacties.'</td>';
-					echo '<td class="forumreacties">'.$this->_forum->getForumNaam($aTopic['uid']).'</td>';
-					echo '<td class="forumreactiemoment">'.$sReactieMoment;
-					echo '<br /><a href="/forum/onderwerp/'.$aTopic['id'].'#post'.$aTopic['lastpostID'].'">bericht</a> door ';
-					echo $sLaatsteposter;
-					echo '</td></tr>'."\r\n";
-				}
-			}else{//$aTopics is geen array, dus bevat geen berichten.
-				$iAantalTopics=0;
-				echo '<tr><td colspan="3">Deze categorie bevat nog geen berichten of deze pagina bestaat niet.</td></tr>';
-				$aTopic['rechten_post']=$this->_forum->getRechten_post($iCat);
-			}
-			//nieuw topic formuliertje
-			//kijken of er wel gepost mag worden 
-			echo '<tr><td colspan="3" class="forumhoofd">';
-			//TODO: dit netjes doen
-			$lid=Lid::get_lid();
-			if($lid->hasPermission($aTopic['rechten_post'])){
-				echo 'Onderwerp Toevoegen';
-			}else{
-				echo '&nbsp;';
-			}
-			echo '</td>';
-			//pagineringslinkjes.
-			echo '<td class="forumhoofd">';
-			if($iAantalTopics>$this->_topicsPerPagina){
-				$iAantalPaginas=ceil($iAantalTopics/$this->_topicsPerPagina);
-				//bij meer dan tien pagina's boven de tien pagina's geen links meer weergeven
-				if($iAantalPaginas>10){ $iAantalPaginas=10; $bMeer=true; }
-				echo 'pagina: ';
-				for($iPagina=0; $iPagina<$iAantalPaginas; $iPagina++){ 
-					if($iPagina==$iPaginaID){
-						echo ($iPagina+1).' ';
-					}else{
-						echo '<a href="/forum/categorie/'.$iCat.'/'.$iPagina.'">'.($iPagina+1).'</a> ';
-					}
-				}
-				if(isset($bMeer)){ echo '...'; }
-			}
-			echo '</td></tr>';
-			if($lid->hasPermission($aTopic['rechten_post'])){
-				echo '<tr><td colspan="4" class="forumtekst"><form method="post" action="/forum/onderwerp-toevoegen/'.$iCat.'"><p>';
-				if($lid->hasPermission('P_LOGGED_IN')){
-					echo 'Hier kunt u een onderwerp toevoegen in deze categorie van het forum. Kijkt u vooraf goed of het onderwerp waarover
-						 u post hier wel thuishoort.<br /><br />';
-				}else{
-					//melding voor niet ingelogde gebruikers die toch willen posten. Ze worden 'gemodereerd', dat wil zeggen, de topics zijn
-					//nog niet direct zichtbaar.
-					echo 'Hier kunt u een bericht toevoegen aan het forum. Het zal echter niet direct zichtbaar worden, maar
-					 &eacute;&eacute;rst door de PubCie worden goedgekeurd. <br /><span style="text-decoration: underline;">
-					 Het is hierbij verplicht om uw naam en een email-adres onder het bericht te plaatsen. Dan kan de PubCie 
-					 eventueel contact met u opnemen. Doet u dat niet, dan wordt uw bericht waarschijnlijk niet geplaatst!<br />
-					 <strong>Ook dubbelplaatsen is niet nodig, heb gewoon even geduld!</strong></span>
-					 <br /><br />';
-				}
-				echo '
-						<a class="forumpostlink" name="laatste"><strong>Titel</strong></a><br />
-						<input type="text" name="titel" value="" class="tekst" style="width: 100%" tabindex="1" /><br />
-						<strong>Bericht</strong>&nbsp;&nbsp; ';
-				// link om het tekst-vak groter te maken.
-				echo '<a href="#" onclick="vergrootTextarea(\'forumBericht\', 10)" name="Vergroot het invoerveld">
-					Invoerveld vergroten</a><br />';
-				echo '<textarea name="bericht" id="forumBericht" rows="10" cols="80" style="width: 100%" class="tekst" tabindex="2"></textarea><br />
-						<input type="submit" name="submit" value="verzenden" />
-						</p></form></td></tr>';
-			}
-			echo '</table>';
-			//nog eens de navigatielinks die ook bovenaan staan.
-			echo $sNavigatieLinks;
+			$iAantalTopics=$this->_forum->topicCount($iCat);
+		}elseif($iCat==0){
+			$sCategorie='Laatste forumberichten';
+			$aTopics=$this->_forum->getPostsVoorRss();
+			$iAantalTopics=count($aTopics);
 		}else{
 			echo '<h2><a href="/forum/" class="forumGrootlink">Forum</a> &raquo; Foutje</h2>Dit gedeelte van het forum is niet zichtbaar voor u, of het bestaat &uuml;berhaupt niet.
 				<a href="/forum/">Terug naar het forum</a>';
+			return;
 		}
+		
+		$sNavigatieLinks='<h2><a class="forumGrootlink" href="/forum/">Forum</a> &raquo; '.mb_htmlentities($sCategorie).'</h2>';
+		//echo $sNavigatieLinks;
+		
+		//eventuele foutmelding weergeven:
+		echo $this->getMelding();
+		echo '<table class="forumtabel"><tr>';
+		echo '<td class="forumhoofd">Titel</td><td class="forumhoofd">Reacties</td>';
+		echo '<td class="forumhoofd">Auteur</td><td class="forumhoofd">verandering</td></tr>';
+		if(is_array($aTopics)){
+			//aantal topics tellen:
+			
+			foreach($aTopics as $aTopic){
+				//klein hackje om de array van getPostRss compatible te maken met die van getTopic
+				if($iCat==0){
+					$aTopic['id']=$aTopic['tid'];
+					$aTopic['lastpost']=$aTopic['postID'];
+					$aTopic['lastuser']=$aTopic['uid'];
+				}
+				//de boel klaarmaken voor weergave:
+				$sOnderwerp='';
+				if($aTopic['soort']=='T_POLL'){	$sOnderwerp.='[peiling] '; }
+				if($aTopic['zichtbaar']=='wacht_goedkeuring'){ $sOnderwerp.='[ter goedkeuring...] '; }
+				$sOnderwerp.='<a href="/forum/onderwerp/'.$aTopic['id']. '" >';
+				if($aTopic['plakkerig']==1){
+					$sOnderwerp.='<img src="'.CSR_PICS.'forum/plakkerig.gif" title="Dit onderwerp is plakkerig, het blijft bovenaan." alt="plakkerig" />&nbsp;&nbsp;';
+				}
+				if($aTopic['open']==0){
+					$sOnderwerp.='<img src="'.CSR_PICS.'forum/slotje.png" title="Dit onderwerp is gesloten, u kunt niet meer reageren" alt="sluiten" />&nbsp;&nbsp;';
+				}
+				$sOnderwerp.=mb_htmlentities(wordwrap($aTopic['titel'], 60, "\n", true)).'</a>';
+				if($iCat!=0){
+					$sReacties=$aTopic['reacties']-1;
+				}else{
+					$sReacties=1;
+				}
+				$sDraadstarter=mb_htmlentities($this->_forum->getForumNaam($aTopic['uid']));
+				$sReactieMoment=$this->_forum->formatDatum($aTopic['lastpost']);
+				if(trim($aTopic['lastuser'])!=''){
+					$sLaatsteposter=$this->_forum->getForumNaam($aTopic['lastuser']);
+				}else{
+					$sLaatsteposter='onbekend'; 
+				
+				}
+
+				echo "\r\n".'<tr>';
+				echo '<td class="forumtitel">'.$sOnderwerp.'</td>';
+				echo '<td class="forumreacties">'.$sReacties.'</td>';
+				echo '<td class="forumreacties">'.$this->_forum->getForumNaam($aTopic['uid']).'</td>';
+				echo '<td class="forumreactiemoment">'.$sReactieMoment;
+				echo '<br /><a href="/forum/onderwerp/'.$aTopic['id'].'#post'.$aTopic['lastpostID'].'">bericht</a> door ';
+				echo $sLaatsteposter;
+				echo '</td></tr>'."\r\n";
+			}
+		}else{//$aTopics is geen array, dus bevat geen berichten.
+			$iAantalTopics=0;
+			echo '<tr><td colspan="3">Deze categorie bevat nog geen berichten of deze pagina bestaat niet.</td></tr>';
+		}
+		
+		
+		echo '<tr><td colspan="3" class="forumhoofd">&nbsp;</td>';
+		
+		/*
+		 * Pagineringslinkjes
+		 */
+		echo '<td class="forumhoofd">';
+		if($iAantalTopics>$this->_topicsPerPagina){
+			$iAantalPaginas=ceil($iAantalTopics/$this->_topicsPerPagina);
+			//bij meer dan tien pagina's boven de tien pagina's geen links meer weergeven
+			if($iAantalPaginas>10){ $iAantalPaginas=10; $bMeer=true; }
+			echo 'pagina: ';
+			for($iPagina=0; $iPagina<$iAantalPaginas; $iPagina++){ 
+				if($iPagina==$iPaginaID){
+					echo ($iPagina+1).' ';
+				}else{
+					echo '<a href="/forum/categorie/'.$iCat.'/'.$iPagina.'">'.($iPagina+1).'</a> ';
+				}
+			}
+			if(isset($bMeer)){ echo '...'; }
+		}
+		echo '</td></tr>';
+		
+		
+		
+		/*
+		 * Begin van het invoeren van een nieuw bericht
+		 */
+		 
+		$lid=Lid::get_Lid();
+		if($lid->hasPermission($aTopic['rechten_post'])){
+			echo '<tr><td colspan="4" class="forumtekst"><form method="post" action="/forum/onderwerp-toevoegen/'.$iCat.'"><p>';
+			if($lid->hasPermission('P_LOGGED_IN')){
+				echo 'Hier kunt u een onderwerp toevoegen in deze categorie van het forum. Kijkt u vooraf goed of het onderwerp waarover
+					 u post hier wel thuishoort.<br /><br />';
+			}else{
+				//melding voor niet ingelogde gebruikers die toch willen posten. Ze worden 'gemodereerd', dat wil zeggen, de topics zijn
+				//nog niet direct zichtbaar.
+				echo 'Hier kunt u een bericht toevoegen aan het forum. Het zal echter niet direct zichtbaar worden, maar
+				 &eacute;&eacute;rst door de PubCie worden goedgekeurd. <br /><span style="text-decoration: underline;">
+				 Het is hierbij verplicht om uw naam en een email-adres onder het bericht te plaatsen. Dan kan de PubCie 
+				 eventueel contact met u opnemen. Doet u dat niet, dan wordt uw bericht waarschijnlijk niet geplaatst!<br />
+				 <strong>Ook dubbelplaatsen is niet nodig, heb gewoon even geduld!</strong></span>
+				 <br /><br />';
+			}
+			echo '
+					<a class="forumpostlink" name="laatste"><strong>Titel</strong></a><br />
+					<input type="text" name="titel" value="" class="tekst" style="width: 100%" tabindex="1" /><br />
+					<strong>Bericht</strong>&nbsp;&nbsp; ';
+			// link om het tekst-vak groter te maken.
+			echo '<a href="#" onclick="vergrootTextarea(\'forumBericht\', 10)" name="Vergroot het invoerveld">
+				Invoerveld vergroten</a><br />';
+			echo '<textarea name="bericht" id="forumBericht" rows="10" cols="80" style="width: 100%" class="tekst" tabindex="2"></textarea><br />
+					<input type="submit" name="submit" value="verzenden" />
+					</p></form></td></tr>';
+		}
+		echo '</table>';
+		//nog eens de navigatielinks die ook bovenaan staan.
+		echo $sNavigatieLinks;
+	
 	}
 
 /***********************************************************************************************************
@@ -379,7 +403,12 @@ class ForumContent extends SimpleHTML {
 			$sCategorie=$this->_forum->getCategorieTitel($this->_forum->getCategorieVoorTopic($iTopicID));
 			$sTitel='<a href="/forum/">Forum</a> &raquo; <a href="/forum/categorie/'.$iCategorieID.'">'.$sCategorie.'</a> &raquo; '.$this->_forum->getTopicTitel($iTopicID);
 		}elseif($this->_actie=='forum' AND isset($_GET['forum'])){
-			$sTitel='<a href="/forum/">Forum</a> &raquo; '.$this->_forum->getCategorieTitel((int)$_GET['forum']);
+			$sTitel='<a href="/forum/">Forum</a> &raquo; ';
+			if($_GET['forum']==0){
+				$sTitel.='Laatste forumberichten';
+			}else{
+				 $sTitel.=$this->_forum->getCategorieTitel((int)$_GET['forum']);
+			}
 		}elseif($this->_actie=='zoeken'){
 			$sTitel='<a href="/forum/">Forum</a> &raquo; zoeken';
 		}else{
@@ -409,8 +438,13 @@ class ForumContent extends SimpleHTML {
 	}
 	function view(){
 		switch($this->_actie){
-			case 'forum': if(isset($_GET['forum'])){ $this->viewTopics((int)$_GET['forum']); }else{ $this->viewCategories(); } break;
-			case 'topic': $this->viewTopic(); break;
+			case 'forum': 
+				if(isset($_GET['forum'])){ 
+					$this->viewTopics((int)$_GET['forum']); 
+				}else{
+					$this->viewCategories(); 
+				}
+			break;
 			case 'nieuw-poll':
 				if(isset($_GET['cat']) AND $this->_forum->catExistsVoorUser($_GET['cat'])){
 					$iCatID=(int)$_GET['cat'];
