@@ -142,6 +142,8 @@ class Forum {
 				topic.open AS open,
 				topic.plakkerig AS plakkerig,
 				topic.soort AS soort,
+				topic.lastpost AS lastpost,
+				topic.reacties AS reacties,
 				post.uid AS uid,
 					lid.nickname AS nickname,
 					lid.voornaam AS voornaam,

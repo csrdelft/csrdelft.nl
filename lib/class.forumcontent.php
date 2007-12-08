@@ -89,7 +89,8 @@ class ForumContent extends SimpleHTML {
 			$iAantalTopics=$this->_forum->topicCount($iCat);
 		}elseif($iCat==0){
 			$sCategorie='Laatste forumberichten';
-			$aTopics=$this->_forum->getPostsVoorRss();
+			$this->_topicsPerPagina=40;
+			$aTopics=$this->_forum->getPostsVoorRss($this->_topicsPerPagina);
 			$iAantalTopics=count($aTopics);
 		}else{
 			echo '<h2><a href="/forum/" class="forumGrootlink">Forum</a> &raquo; Foutje</h2>Dit gedeelte van het forum is niet zichtbaar voor u, of het bestaat &uuml;berhaupt niet.
@@ -106,13 +107,11 @@ class ForumContent extends SimpleHTML {
 		echo '<td class="forumhoofd">Titel</td><td class="forumhoofd">Reacties</td>';
 		echo '<td class="forumhoofd">Auteur</td><td class="forumhoofd">verandering</td></tr>';
 		if(is_array($aTopics)){
-			//aantal topics tellen:
-			
 			foreach($aTopics as $aTopic){
 				//klein hackje om de array van getPostRss compatible te maken met die van getTopic
 				if($iCat==0){
 					$aTopic['id']=$aTopic['tid'];
-					$aTopic['lastpost']=$aTopic['postID'];
+					$aTopic['lastpostID']=$aTopic['postID'];
 					$aTopic['lastuser']=$aTopic['uid'];
 				}
 				//de boel klaarmaken voor weergave:
@@ -127,11 +126,7 @@ class ForumContent extends SimpleHTML {
 					$sOnderwerp.='<img src="'.CSR_PICS.'forum/slotje.png" title="Dit onderwerp is gesloten, u kunt niet meer reageren" alt="sluiten" />&nbsp;&nbsp;';
 				}
 				$sOnderwerp.=mb_htmlentities(wordwrap($aTopic['titel'], 60, "\n", true)).'</a>';
-				if($iCat!=0){
-					$sReacties=$aTopic['reacties']-1;
-				}else{
-					$sReacties=1;
-				}
+				$sReacties=$aTopic['reacties']-1;
 				$sDraadstarter=mb_htmlentities($this->_forum->getForumNaam($aTopic['uid']));
 				$sReactieMoment=$this->_forum->formatDatum($aTopic['lastpost']);
 				if(trim($aTopic['lastuser'])!=''){
@@ -308,7 +303,7 @@ class ForumContent extends SimpleHTML {
 ***********************************************************************************************************/
 	function lastPosts(){
 		$aPosts=$this->_forum->getPostsVoorRss(15, true);
-		echo '<div id="forumHighlights"><a href="/forum/" class="kopje">Laatste forumberichten:</a><br />';
+		echo '<div id="forumHighlights"><a href="/forum/categorie/laatste" class="kopje">Laatste forumberichten:</a><br />';
 		foreach($aPosts as $aPost){
 			//$tekst=$aPost['nickname'].': ';
 			$tekst=$aPost['titel'];
@@ -428,7 +423,11 @@ class ForumContent extends SimpleHTML {
 			$sCategorie=$this->_forum->getCategorieTitel($this->_forum->getCategorieVoorTopic($iTopicID));
 			$sTitel.=$sCategorie.' - '.$this->_forum->getTopicTitel($iTopicID);
 		}elseif($this->_actie=='forum' AND isset($_GET['forum'])){
-			$sTitel.=$this->_forum->getCategorieTitel((int)$_GET['forum']);
+			if($_GET['forum']!=0){
+				$sTitel.=$this->_forum->getCategorieTitel((int)$_GET['forum']);
+			}else{
+				$sTitel.='Laatste forumberichten';
+			}
 		}elseif($this->_actie=='zoeken'){
 			$sTitel.='zoeken';
 		}else{
