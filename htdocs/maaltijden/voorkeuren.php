@@ -1,4 +1,10 @@
 <?php
+# C.S.R. Delft | pubcie@csrdelft.nl
+# -------------------------------------------------------------------
+# htdocs/maaltijden/voorkeuren.php
+# -------------------------------------------------------------------
+# Voorkeuren voor maaltijden en corvee opgeven
+# -------------------------------------------------------------------
 
 require_once('include.config.php');
 
@@ -20,7 +26,7 @@ $error = 0;
 # 2 -> er treden (vorm)fouten op in bijv de invoer.
 
 # controleren of we wel mogen doen wat er gevraagd wordt...
-$actionsToegestaan=array('', 'editEetwens', 'addabo', 'delabo');
+$actionsToegestaan=array('', 'editEetwens','editCorveewens', 'addabo', 'delabo');
 if(in_array($action, $actionsToegestaan)){
 	if(!$lid->hasPermission('P_MAAL_IK')){ $error = 1; }
 }else{
@@ -59,6 +65,15 @@ if ($error == 0) switch($action) {
 			exit; 
 		}
 	break;
+	case 'editCorveewens':
+		$corveewens=getOrPost('corveewens');
+		if(!$lid->setCorveewens($corveewens)){
+			$error=2;
+		}else{
+			header("Location: {$_SERVER['PHP_SELF']}");
+			exit; 
+		}
+	break;
 }
 
 
@@ -66,14 +81,14 @@ if ($error == 0) switch($action) {
 if ($error == 0  or $error == 2) {
 	# Het middenstuk
 	require_once('class.maaltijdvoorkeurcontent.php');
-	$midden = new MaaltijdVoorkeurContent($lid, $maaltrack);
+	$midden = new MaaltijdVoorkeurContent($maaltrack);
 } else {
 	# geen rechten
 	$midden = new Includer('', 'maaltijd-niet-ingelogged.html');
 }
 $zijkolom=new kolom();
 
-$page=new csrdelft($midden, $lid, $db);
+$page=new csrdelft($midden);
 $page->setZijkolom($zijkolom);
 $page->view();
 

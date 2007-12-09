@@ -62,7 +62,7 @@ if(isset($_GET['bewerk']) AND $_GET['bewerk']==(int)$_GET['bewerk'] AND $_GET['b
 
 $zijkolom=new kolom();
 
-$page=new csrdelft($beheer, $lid, $db);
+$page=new csrdelft($beheer);
 $page->setZijkolom($zijkolom);
 $page->view();
 

@@ -1,4 +1,10 @@
 <?php
+# C.S.R. Delft | pubcie@csrdelft.nl
+# -------------------------------------------------------------------
+# htdocs/maaltijden/index.php
+# -------------------------------------------------------------------
+# Aanmelden en afmelden voor maaltijden.
+# -------------------------------------------------------------------
 
 require_once('include.config.php');
 
@@ -94,7 +100,7 @@ if($error == 0  or $error == 2) {
 }
 $zijkolom=new kolom();
 
-$page=new csrdelft($midden, $lid, $db);
+$page=new csrdelft($midden);
 $page->setZijkolom($zijkolom);
 $page->view();
 

@@ -750,15 +750,26 @@ class Lid {
 			LIMIT 1;";
 		return $this->_db->query($sKringInvoer);
 	}
-
-	function getEetwens(){ return $this->_profile['eetwens']; }
 	
+	function getEetwens(){ return $this->_profile['eetwens']; }
 	function setEetwens($eetwens){
-		$eetwens=trim($this->_db->escape($eetwens));
-		//ff streepjes enzo eruit halen, anders komen die op de maaltijdlijst.
-		if(strlen($eetwens)<3){ $eetwens=''; }
-		$sEetwens="UPDATE lid SET eetwens='".$eetwens."' WHERE uid='".$this->getUid()."';";
-		return $this->_db->query($sEetwens);
+		return $this->setProperty('eetwens', $eetwens);
+	}
+	function getCorveewens(){ return $this->_profile['corvee_wens']; }
+	function setCorveewens($corveewens){
+		return $this->setProperty('corvee_wens', $corveewens);
+	}
+	function getCorveepunten(){ return $this->profile['corvee_punten']; }
+	function getCorveevrijstelling(){ return $this->profile['corvee_vrijstelling']; }
+	function isKwalikok(){ return $this->profile['corvee_punten']==='1'; }
+	 
+	private function setProperty($property, $contents){
+		$allowedProps=array('eetwens', 'corvee_wens');
+		if(!in_array($property, $allowedProps)){ return false; }
+		$contents=trim($this->_db->escape($contents));
+		if(strlen($contents)<2){ $contents=''; }
+		$sQuery="UPDATE lid SET ".$property."='".$contents."' WHERE uid='".$this->getUid()."';";
+		return $this->_db->query($sQuery);
 	}	
 	
 	function getSaldi($uid='', $alleenRood=false){

@@ -13,6 +13,14 @@ rekening mee houden.
 	<input type="text" name="eetwens" value="{$maal.eetwens}" size="50" /> <input type="submit" name="opslaan" value="opslaan" />
 </form>
 <br />
+<h2>Corveewens</h2>
+<p>Hier kunt u voorkeuren opgeven waar am. Corveecaesar rekening mee kan houden bij het indelen
+van u bij maaltijden.
+</p>
+<form method="post" action="voorkeuren.php">
+	<input type="hidden" name="a" value="editCorveewens" />
+	<input type="text" name="corveewens" value="{$maal.corveewens}" size="50" /> <input type="submit" name="opslaan" value="opslaan" />
+</form>
 <h2>Maaltijdabonnementen</h2>
 <p>
 	Let op! Er is verschil tussen mootmaaltijden en &uuml;berkringen.

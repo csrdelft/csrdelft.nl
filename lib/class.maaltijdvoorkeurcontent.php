@@ -15,18 +15,18 @@ class MaaltijdVoorkeurContent extends SimpleHTML {
 	### private ###
 
 	# de objecten die data leveren
-	var $_lid;
 	var $_maaltrack;
 
 	### public ###
 
-	function MaaltijdVoorkeurContent (&$lid, &$maaltrack) {
-		$this->_lid =& $lid;
-		$this->_maaltrack =& $maaltrack;
+	function MaaltijdVoorkeurContent ($maaltrack) {
+		$this->_maaltrack=$maaltrack;
 	}
 	function getTitel(){ return 'Maaltijdketzer - Voorkeuren'; }
 	function viewWaarBenik(){ echo '<a href="/maaltijden/">Maaltijden</a> &raquo; Voorkeuren'; }
 	function view(){
+		$lid=Lid::get_lid();
+		
 		//de html template in elkaar draaien en weergeven
 		$profiel=new Smarty_csr();
 		$profiel->caching=false;
@@ -34,10 +34,14 @@ class MaaltijdVoorkeurContent extends SimpleHTML {
 		//Dingen ophalen voor....
 		//...de abonnementen
 		$aMaal['abo']['abos']=$this->_maaltrack->getAbo();
-		$aMaal['abo']['nietAbos']=$geenabo = $this->_maaltrack->getNotAboSoort();
+		$aMaal['abo']['nietAbos']=$this->_maaltrack->getNotAboSoort();
 		
 		//...de eetwens
-		$aMaal['eetwens']=$this->_lid->getEetwens();
+		$aMaal['eetwens']=$lid->getEetwens();
+		
+		//...de corveewens
+		$aMaal['corveewens']=$lid->getCorveewens();
+		
 		
 		//arrays toewijzen en weergeven
 		$profiel->assign('maal', $aMaal);
