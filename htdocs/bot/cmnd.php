@@ -416,7 +416,7 @@ function maalinfo($uid, $params) {
             ,($maalinfo['max'] <= $maalinfo['aantal']) ? ' (VOL)' : ''
             ,($maalinfo['gesloten']) ? ' (GESLOTEN)' : ''
         );
-        $result[] = "tafelpraeses: " . $lid->getNaamLink($maalinfo['tp_uid'], 'civitas', false, false, false);
+        $result[] = "tafelpraeses: " . $lid->getNaamLink($maalinfo['tp'], 'civitas', false, false, false);
     } else {
         $result[] = "De opgegeven maaltijd bestaat niet.";
     }
