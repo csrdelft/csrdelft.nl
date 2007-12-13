@@ -140,7 +140,7 @@ uitprinten. Vanaf dat moment zal deze ketzer u niet meer willen aan- of afmelden
 					<form action="{$smarty.server.PHP_SELF}" method="post">
 					<td><input type="hidden" name="a" value="gasten" />
 					<input type="hidden" name="m" value="{$maaltijd.id}" />
-					<input type="text" name="gasten" style="width:60px;" value="{$maaltijd.gasten}" /></td>
+					<input type="text" name="gasten" style="width:60px;" value="{$maaltijd.gasten|intval}" /></td>
 					<td><input type="text" name="opmerking" style="width:250px;" value="{$maaltijd.opmerking|escape:'html'}"/></td>
 					<td><input type="submit" name="foo" value="aanpassen" /></td>						
 					</form>
