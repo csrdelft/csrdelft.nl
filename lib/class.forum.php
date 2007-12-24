@@ -108,13 +108,13 @@ class Forum {
 		//is er een uitzondering op de ingeloggedheid.
 		
 		
-		//extern, webstek terugkoppeling, zandbak, kamers worden altijd weergegeven.
-		$cats=array(2,3,4,12);
+		//extern, zandbak, vraag en aanbod en kamers worden altijd weergegeven.
+		$cats=array(2,4,11,12);
 		
 		if($this->_lid->hasPermission('P_LEDEN_READ') OR isFeut()){ 
-			//C.S.R.-zaken, geloofszaken, nieuws&actualiteit, electronica en techniek, vraag en aanbod,
+			//C.S.R.-zaken, webstek terugkoppeling, geloofszaken, nieuws&actualiteit, electronica en techniek, 
 			//groeperingen, kringen& werkgroepen.
-			$cats=array_merge($cats, array(1, 10, 9, 13, 11, 17, 18));
+			$cats=array_merge($cats, array(1, 4, 10, 9, 13, 17, 18));
 		}
 		if($this->_lid->hasPermission('P_OUDLEDEN_READ') OR isFeut()){ 
 			//oudledenforum
