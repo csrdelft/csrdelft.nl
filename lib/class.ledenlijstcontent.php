@@ -71,6 +71,7 @@ U kunt kiezen welke kolommen u wilt weergeven in de zoekresultaten, en welke sor
 Daarnaast is er de mogelijkheid om de complete ledenlijst weer te geven door te zoeken zonder een zoekterm op te geven.
 Door op de naam van een lid te klikken kunt u naar de Profiel-pagina  gaan van het genoemde lid. Op
 deze pagina is een volledig overzicht van de gegevens te lezen.
+ Mocht u alle leden bijvoorbeeld in uw pauper willen zetten, dan kunt u daarvoor een <a href="/tools/leden.csv">csv-bestand</a> neerladen.
 <form action="{$_SERVER['PHP_SELF']}" method="post">
 <p>
 <input type="hidden" name="a" value="zoek" />
