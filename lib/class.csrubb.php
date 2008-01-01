@@ -39,7 +39,14 @@ class CsrUBB extends eamBBParser{
 	}
 	$text.=':</strong><div class="citaat">'.trim($content).'</div></div>';
     return $text;  
-  }
+	}
+	/* 
+	 * ubb_lid().
+	 * 
+	 * [lid=0436] => Am. Waagmeester
+	 * 
+	 * Geef een link weer naar het profiel van het lid-nummer wat opgegeven is.
+	 */
 	function ubb_lid($parameters){
 		$content = $this->parseArray(array('[br]'), array());
 		array_unshift($this->parseArray, '[br]');
@@ -81,6 +88,8 @@ class CsrUBB extends eamBBParser{
 	/*
 	 * Deze methode kan resultaten van query's die in de database staan printen in een 
 	 * tabelletje.
+	 * 
+	 * [query=1]
 	 */
 	function ubb_query($parameters){
 		if(isset($parameters['query'])){
@@ -93,15 +102,25 @@ class CsrUBB extends eamBBParser{
 		return $return;
 	}
 	
+	/*
+	 * ubb_youtube();
+	 * 
+	 * [youtube]youtubeid[/youtube] 
+	 * 
+	 * geeft een miniatuurafbeelding weer van een youtube-video waarop geklikt kan worden om
+	 * het filmpje af te spelen.
+	 */
 	function ubb_youtube($parameters){
 		$content = $this->parseArray(array('[/youtube]'), array());
-		$html='<object width="425" height="350">' .
-				'	<param name="movie" value="http://www.youtube.com/v/'.$content.'"></param>' .
-				'	<param name="wmode" value="transparent"></param>' .
-				'	<embed src="http://www.youtube.com/v/'.$content.'" type="application/x-shockwave-flash" wmode="transparent" width="425" height="350"></embed>' .
-				'</object>';
+		$html='<div id="youtube'.$content.'">
+			<img src="http://img.youtube.com/vi/'.$content.'/default.jpg"
+				onclick="youtubeDisplay(\''.$content.'\')" style="cursor: pointer; cursor: hand;"
+				alt="klik op de afbeelding om de video te starten"/></div>';
+		
 		return $html;
 	}
+	
+	
 	function ubb_1337(){
         $html = $this->parseArray(array('[/1337]'), array());
         
