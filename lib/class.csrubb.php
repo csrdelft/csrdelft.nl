@@ -112,13 +112,15 @@ class CsrUBB extends eamBBParser{
 	 */
 	function ubb_youtube($parameters){
 		$content = $this->parseArray(array('[/youtube]'), array());
-		if(preg_match('/[0-9a-zA-Z\-]{11}/', $content)){
+		//alleen de eerste 11 tekens zijn relevant...
+		$content=substr($content, 0,11);
+		if(preg_match('/[0-9a-zA-Z\-_]{11}/', $content)){
 			$html='<div id="youtube'.$content.'" class="youtubeVideo"><a onclick="youtubeDisplay(\''.$content.'\')" >
-					<div class="afspelen"><img width="36" height="36" border="0" src="'.CSR_PICS.'forum/afspelen.gif"/></div>
+				<div class="afspelen"><img width="36" height="36" border="0" src="'.CSR_PICS.'forum/afspelen.gif"/></div>
 				<img src="http://img.youtube.com/vi/'.$content.'/default.jpg"
 					alt="klik op de afbeelding om de video te starten"/></a></div>';
 		}else{
-			$html='Ongeldig youtube-id';
+			$html='Ongeldig youtube-id: '.mb_htmlentities($content);
 		}
 		
 		return $html;
