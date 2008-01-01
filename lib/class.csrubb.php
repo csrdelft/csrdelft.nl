@@ -112,14 +112,27 @@ class CsrUBB extends eamBBParser{
 	 */
 	function ubb_youtube($parameters){
 		$content = $this->parseArray(array('[/youtube]'), array());
-		$html='<div id="youtube'.$content.'">
-			<img src="http://img.youtube.com/vi/'.$content.'/default.jpg"
-				onclick="youtubeDisplay(\''.$content.'\')" style="cursor: pointer; cursor: hand;"
-				alt="klik op de afbeelding om de video te starten"/></div>';
+		if(preg_match('/[0-9a-zA-Z\-]{11}/', $content)){
+			$html='<div id="youtube'.$content.'" class="youtubeVideo"><a onclick="youtubeDisplay(\''.$content.'\')" >
+					<div class="afspelen"><img width="36" height="36" border="0" src="'.CSR_PICS.'forum/afspelen.gif"/></div>
+				<img src="http://img.youtube.com/vi/'.$content.'/default.jpg"
+					alt="klik op de afbeelding om de video te starten"/></a></div>';
+		}else{
+			$html='Ongeldig youtube-id';
+		}
 		
 		return $html;
 	}
-	
+	function ubb_googlevideo($parameters){
+		$content = $this->parseArray(array('[/googlevideo]'), array());
+		if(preg_match('/-\d*/', $content)){
+			$html='<embed style="width:400px; height:326px;" id="VideoPlayback" type="application/x-shockwave-flash"
+src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
+		}else{
+			$html='Ongeldig googlevideo-id';
+		}
+		return $html;
+	}
 	
 	function ubb_1337(){
         $html = $this->parseArray(array('[/1337]'), array());
