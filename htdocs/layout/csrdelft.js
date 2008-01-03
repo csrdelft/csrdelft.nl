@@ -49,9 +49,14 @@ function forumEdit(post){
 }
 
 function youtubeDisplay(ytID){
-	var ytDiv = document.getElementById('youtube'+ytID);
-	ytDiv.innerHTML='<object width="425" height="350">'+
-		'<param name="movie" value="http://www.youtube.com/v/'+ ytID + '&autoplay=1"></param>'+
-		'<embed src="http://www.youtube.com/v/'+ ytID + '&autoplay=1" type="application/x-shockwave-flash" wmode="transparent" width="425" height="350"></embed></object>';
+	var html='<object width="425" height="350">' + 
+		'<param name="movie" value="http://www.youtube.com/v/' + ytID + '&autoplay=1"></param>' + 
+		'<embed src="http://www.youtube.com/v/' + ytID + '&autoplay=1" type="application/x-shockwave-flash" wmode="transparent" width="425" height="350"></embed></object>';
+	
+	if(document.all){
+		document.all['youtube'+ytID].innerHTML ='<br />'+ html;
+	}else{
+		document.getElementById('youtube'+ytID).innerHTML = html;
+	}
 }
 

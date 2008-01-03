@@ -115,10 +115,10 @@ class CsrUBB extends eamBBParser{
 		//alleen de eerste 11 tekens zijn relevant...
 		$content=substr($content, 0,11);
 		if(preg_match('/[0-9a-zA-Z\-_]{11}/', $content)){
-			$html='<div id="youtube'.$content.'" class="youtubeVideo"><a onclick="youtubeDisplay(\''.$content.'\')" >
-				<div class="afspelen"><img width="36" height="36" border="0" src="'.CSR_PICS.'forum/afspelen.gif"/></div>
+			$html='<div id="youtube'.$content.'" class="youtubeVideo">
+				<div class="afspelen" onclick="youtubeDisplay(\''.$content.'\')"><img width="36" height="36" src="'.CSR_PICS.'forum/afspelen.gif" alt="afspelen" /></div>
 				<img src="http://img.youtube.com/vi/'.$content.'/default.jpg"
-					alt="klik op de afbeelding om de video te starten"/></a></div>';
+					alt="klik op de afbeelding om de video te starten"/></div>';
 		}else{
 			$html='Ongeldig youtube-id: '.mb_htmlentities($content);
 		}
