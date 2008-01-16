@@ -114,15 +114,18 @@ class CsrUBB extends eamBBParser{
 		$content = $this->parseArray(array('[/youtube]'), array());
 		//alleen de eerste 11 tekens zijn relevant...
 		$content=substr($content, 0,11);
-		if(preg_match('/[0-9a-zA-Z\-_]{11}/', $content)){
-			$html='<div id="youtube'.$content.'" class="youtubeVideo">
-				<div class="afspelen" onclick="youtubeDisplay(\''.$content.'\')"><img width="36" height="36" src="'.CSR_PICS.'forum/afspelen.gif" alt="afspelen" /></div>
-				<img src="http://img.youtube.com/vi/'.$content.'/default.jpg"
-					alt="klik op de afbeelding om de video te starten"/></div>';
+		if($this->quote_level>0){
+			$html='<a href="#youtube'.$content.'">&raquo; youtube-filmpje</a>';
 		}else{
-			$html='Ongeldig youtube-id: '.mb_htmlentities($content);
+			if(preg_match('/[0-9a-zA-Z\-_]{11}/', $content)){
+				$html='<div id="youtube'.$content.'" class="youtubeVideo">
+					<div class="afspelen" onclick="youtubeDisplay(\''.$content.'\')"><img width="36" height="36" src="'.CSR_PICS.'forum/afspelen.gif" alt="afspelen" /></div>
+					<img src="http://img.youtube.com/vi/'.$content.'/default.jpg"
+						alt="klik op de afbeelding om de video te starten"/></div>';
+			}else{
+				$html='Ongeldig youtube-id: '.mb_htmlentities($content);
+			}
 		}
-		
 		return $html;
 	}
 	function ubb_googlevideo($parameters){
