@@ -114,17 +114,19 @@ class CsrUBB extends eamBBParser{
 		$content = $this->parseArray(array('[/youtube]'), array());
 		//alleen de eerste 11 tekens zijn relevant...
 		$content=substr($content, 0,11);
-		if($this->quote_level>0){
-			$html='<a href="#youtube'.$content.'">&raquo; youtube-filmpje</a>';
-		}else{
-			if(preg_match('/[0-9a-zA-Z\-_]{11}/', $content)){
+		if(preg_match('/[0-9a-zA-Z\-_]{11}/', $content)){
+			//als we in een quote-tag zijn, geen embed weergeven maar een link naar de embed,
+			//en het filmpje ook maar meteen starten.
+			if($this->quote_level>0){
+				$html='<a href="#youtube'.$content.'" onclick="youtubeDisplay(\''.$content.'\')" >&raquo; youtube-filmpje</a>';
+			}else{	
 				$html='<div id="youtube'.$content.'" class="youtubeVideo">
 					<div class="afspelen" onclick="youtubeDisplay(\''.$content.'\')"><img width="36" height="36" src="'.CSR_PICS.'forum/afspelen.gif" alt="afspelen" /></div>
 					<img src="http://img.youtube.com/vi/'.$content.'/default.jpg"
 						alt="klik op de afbeelding om de video te starten"/></div>';
-			}else{
-				$html='Ongeldig youtube-id: '.mb_htmlentities($content);
 			}
+		}else{
+			$html='Ongeldig youtube-id: '.mb_htmlentities($content);
 		}
 		return $html;
 	}
