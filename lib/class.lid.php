@@ -271,7 +271,7 @@ class Lid {
 			$sTmpNaam=$sVolledigeNaam;	
 		}elseif($vorm==='civitas'){
 			if($aNaam['status']=='S_NOVIET'){
-				$sTmpNaam='noviet '.$aNaam['voornaam'];
+				$sTmpNaam='Noviet '.$aNaam['voornaam'];
 			}else{
 				$sTmpNaam=($aNaam['geslacht']=='v') ? 'Ama. ' : 'Am. ';
 				if($aNaam['tussenvoegsel'] != '') $sTmpNaam.=ucfirst($aNaam['tussenvoegsel']).' ';
