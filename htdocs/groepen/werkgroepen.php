@@ -37,6 +37,7 @@ $body->add($verhaal);
 # pagina weergeven
 $pagina=new csrdelft($body, $lid, $db);
 $pagina->setZijkolom($zijkolom);
+$pagina->addStylesheet('forum.css');
 $pagina->view();
 
 ?>
