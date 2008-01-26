@@ -2,7 +2,11 @@ data/*
 data/smarty/*
 data/smarty/cache/*
 data/smarty/compiled/*
-etc/*.ini
+etc/bot.htpasswd
+etc/csrmail.ini
+etc/ldap.ini
+etc/mysql.ini
+etc/soccie.ini
 htdocs/bot/.htaccess
 lib/include.defines.php
 sessie/*
