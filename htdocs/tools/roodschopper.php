@@ -29,7 +29,7 @@ while($data=$db->next($result)){
 	
 	
 	$body=$mail->fetch('socciemail.tpl');
-	$to=$data['uid'].'@csrdelft.nl';
+	$to=$data['uid'].'@csrdelft.nl, soccie@csrdelft.nl';
 	
 	mail($to, 'U staat rood bij de SocCie.', $body, "From: soccie@csrdelft.nl.nl\n\r");
 	
