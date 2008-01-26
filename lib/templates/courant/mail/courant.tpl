@@ -9,7 +9,7 @@
   <meta name="robots" content="index, follow" />
   <style type="text/css">{literal}<!--
 body{
-	font-face: verdana, arial;
+	font-face: verdana, arial, sans-serif;
 	font-size: 12px;
 	margin: 0px 0px 20px 0px; padding: 0px ;
 }
@@ -21,7 +21,7 @@ table{
 }
 td{
 	vertical-align: top;
-	font-size: 11px;font-face: verdana, arial;
+	font-size: 11px; font-face: verdana, arial, sans-serif;
 }
 .zijKolom{
 	width: 150px;
@@ -49,7 +49,7 @@ p{
 	margin: 0px 0px 0px 0px;
 	padding: 10px 5px 5px 10px;
 	color: #020883;
-	font-size: 11px; font-face: verdana, arial;
+	font-size: 11px; font-face: verdana, arial, sans-serif;
 	line-height: 1.4em;
 }
 .inhoud{

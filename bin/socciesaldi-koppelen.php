@@ -6,14 +6,14 @@
 	session_id('maaltrack-cli');
 
 	# instellingen & rommeltjes
-	require_once('/srv/www/www.csrdelft.nl/lib/include.config.php');
+	require_once('include.config.php');
 	require_once('include.common.php');
 
 	# login-systeem
 	require_once('class.lid.php');
 	require_once('class.mysql.php');
-	$db = new MySQL();
-	$lid = new Lid($db);
+	$db = MySQL::get_MySQL();
+	$lid = Lid::get_Lid();
 	$sLedenQuery="
 		SELECT
 			voornaam, achternaam, tussenvoegsel, uid 

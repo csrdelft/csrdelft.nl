@@ -13,9 +13,9 @@
 	//Siri, Wouter K., Thomas Abrahamse
 	$aGeenAbo=array('9101', '0016', '0401');
 	for($moot=1;$moot<=4;$moot++){
-	
+		$aMootleden=array();	
 		//kringvolgende leden van een moot ophalen
-		$sMootleden="SELECT uid FROM lid WHERE moot=".$moot." AND kring !=0";
+		$sMootleden="SELECT uid FROM lid WHERE moot=".$moot." AND kring !=0 AND status='S_NOVIET'";
 		$rMootleden=$db->query($sMootleden);
 		while($aMootledenData=$db->next($rMootleden)){
 			$aMootleden[]=$aMootledenData['uid'];
@@ -29,20 +29,20 @@
 		}
 		
 		//al bestaande mootX abo's van de lijst halen
-		$aAboInvoeren=array_diff($aMootleden, $aMootAbos);
+		//$aAboInvoeren=array_diff($aMootleden, $aMootAbos);
 		
 		//niet abo leden eraf halen
-		$aAboInvoeren=array_diff($aMootleden, $aGeenAbo);
+		//$aAboInvoeren=array_diff($aMootleden, $aGeenAbo);
 		//print_r($aAboInvoeren);
 		
 		//query's klussen
-		foreach($aAboInvoeren as $sUid){
-			$sQuery="INSERT INTO maaltijdabo (uid, abosoort )VALUES( '".$sUid."', 'A_MOOT".$moot."'), ('".$sUid."', 'A_UBER".$moot."');";
+		foreach($aMootleden as $sUid){
+			$sQuery="REPLACE INTO maaltijdabo (uid, abosoort )VALUES( '".$sUid."', 'A_MOOT".$moot."'), ('".$sUid."', 'A_UBER".$moot."');";
 			echo $sQuery;
 			if(false){//$db->query($sQuery)){
 				echo "   ...OK\r\n";
 			}else{
-				echo " ...shit\r\n";
+				echo "\r\n";
 			}
 		}
 	}

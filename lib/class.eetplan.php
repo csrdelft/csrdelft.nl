@@ -117,7 +117,7 @@ class Eetplan {
 	
 	function getDatum($iAvond){
 		$aAvonden=array(
-			'3-10-2007',
+			'2-10-2007',
 			'30-10-2007',
 			'27-11-2007',
 			'22-1-2008',

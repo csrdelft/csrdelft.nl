@@ -4,6 +4,7 @@
  * 
  * 
  */
+echo 'kwaak'; exit;
  # instellingen & rommeltjes
 require_once('include.config.php');
 
