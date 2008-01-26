@@ -115,7 +115,8 @@ class Profiel extends lid{
 					$this->_formerror[$veld] = "Ongeldige karakters, gebruik reguliere tekst:";
 				} elseif (mb_strlen($invoer) > $max_lengte) {
 					$this->_formerror[$veld] = "Gebruik maximaal {$max_lengte} karakters:";
-				} elseif ($invoer != "" and $this->nickExists($invoer)) {
+				} elseif ($invoer != "" and strtolower($invoer) != strtolower($form[$veld])
+						and $this->nickExists($invoer)) {
 					$this->_formerror[$veld] = "Deze bijnaam is al in gebruik.";
 				}
 				
