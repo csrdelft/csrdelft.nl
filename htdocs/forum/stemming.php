@@ -20,7 +20,6 @@ if ($lid->hasPermission('P_FORUM_MOD') OR $lid->getUid()==STATISTICUS){
 		if($poll->validatePollForm($sError)){
 			$forum->addTopic($_POST['titel']);
 			
-			$sBericht=$db->escape($_POST['bericht']);
 			$iPostID=$forum->addPost($sBericht);
 			if($iPostID!==false){
 				//poll toevoegen aan topic.
