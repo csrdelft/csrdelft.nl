@@ -122,7 +122,7 @@ class CsrUBB extends eamBBParser{
 			}else{	
 				$html='<div id="youtube'.$content.'" class="youtubeVideo">
 					<div class="afspelen" onclick="youtubeDisplay(\''.$content.'\')"><img width="36" height="36" src="'.CSR_PICS.'forum/afspelen.gif" alt="afspelen" /></div>
-					<img src="http://img.youtube.com/vi/'.$content.'/default.jpg"
+					<img src="http://img.youtube.com/vi/'.$content.'/default.jpg" style="width: 130px; height: 97px;"
 						alt="klik op de afbeelding om de video te starten"/></div>';
 			}
 		}else{
