@@ -19,3 +19,4 @@ RewriteRule ^leden/lijst.php$ /intern/lijst.php [R=301]
 
 # Terugwaartse compatibiliteit
 RewriteRule ^contact.php$ /contact/ [R=301]
+RewriteRule ^base.php.*$ / [R=301]
