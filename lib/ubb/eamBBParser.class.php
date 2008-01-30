@@ -849,7 +849,16 @@ class eamBBParser{
 		}else{
 			$clear='';
 		}
-		return '<div '.$clear.'>'.$content.'</div>';
+		if(isset($arguments['w'])){
+			if((int) $arguments['w']){ // Int to eliminate scripting
+				$width = 'width="'.((int)$arguments['w']).'" ';
+			}else{
+				$width = '';
+			}
+		} else {
+			$width = '';
+		}
+		return '<div '.$clear.' style="'.$width.'">'.$content.'</div>';
 		
 	}
 }
