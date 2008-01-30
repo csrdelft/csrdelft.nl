@@ -851,7 +851,7 @@ class eamBBParser{
 		}
 		if(isset($arguments['w'])){
 			if((int) $arguments['w']){ // Int to eliminate scripting
-				$width = 'width="'.((int)$arguments['w']).'" ';
+				$width = 'width: '.((int)$arguments['w']).'; ';
 			}else{
 				$width = '';
 			}
