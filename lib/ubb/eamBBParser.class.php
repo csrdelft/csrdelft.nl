@@ -842,6 +842,10 @@ class eamBBParser{
 		$content=$this->parseArray(array('[/div]'), array());
 		if(isset($arguments['clear'])){
 			$clear='style="clear: both;"';
+		}elseif(isset($arguments['float']) AND $arguments['float']=='left'){
+			$clear='float="left"';
+		}elseif(isset($arguments['float']) AND $arguments['float']=='right'){
+			$clear='float="right"';
 		}else{
 			$clear='';
 		}
