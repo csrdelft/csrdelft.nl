@@ -227,7 +227,7 @@ class eamBBParser{
 	{
 		   
 		// Do autolinkification																																   
-		$this->UBB = preg_replace($this->preParsePattern, $this->preParseReplacement, $this->UBB);																			  
+		//$this->UBB = preg_replace($this->preParsePattern, $this->preParseReplacement, $this->UBB);																			  
 		
 	}
 	/**
@@ -841,24 +841,36 @@ class eamBBParser{
 	function ubb_div($arguments=array()){
 		$content=$this->parseArray(array('[/div]'), array());
 		if(isset($arguments['clear'])){
-			$clear='style="clear: both;"';
+			$clear='clear: both;';
 		}elseif(isset($arguments['float']) AND $arguments['float']=='left'){
-			$clear='float="left"';
+			$clear='float: left;';
 		}elseif(isset($arguments['float']) AND $arguments['float']=='right'){
-			$clear='float="right"';
+			$clear='float: right;';
 		}else{
 			$clear='';
 		}
 		if(isset($arguments['w'])){
 			if((int) $arguments['w']){ // Int to eliminate scripting
-				$width = 'width: '.((int)$arguments['w']).'; ';
+				$width = 'width: '.((int)$arguments['w']).'px; ';
 			}else{
 				$width = '';
 			}
 		} else {
 			$width = '';
 		}
-		return '<div '.$clear.' style="'.$width.'">'.$content.'</div>';
+
+
+		if(isset($arguments['h'])){
+                        if((int) $arguments['h']){ // Int to eliminate scripting
+                                $height = 'height: '.((int)$arguments['h']).'px; ';
+                        }else{
+                                $height= '';
+                        }
+                } else {
+                        $height = '';
+                }
+
+		return '<div style="'.$clear.' '.$width.' '.$height.'">'.$content.'</div>';
 		
 	}
 }
