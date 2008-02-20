@@ -1,0 +1,141 @@
+100;0;Wetenschap
+1001;100;Techniek
+101;1001;Wiskunde
+102;1001;Scheikunde
+103;1001;Natuurkunde
+104;1001;Biologie
+105;1001;Geneeskunde
+106;1001;Constructies
+107;1001;Bouwkunde
+108;1001;Luchtvaart
+109;1001;Ontwerpen
+110;1001;Geologie
+111;1001;Elektronica
+112;1001;Informatica
+113;1001;Overig
+1002;100;Mens- en gedragskunde
+130;1002;Bedrijfs- en bestuurskunde
+131;1002;Economie
+132;1002;Filosofie
+133;1002;Geschiedenis
+134;1002;Psychologie
+135;1002;Ethiek en duurzaamheid
+136;1002;Veiligheid
+137;1002;Antropologie
+138;1002;Overig
+1003;100;Overig
+150;1003;Theologie
+151;1003;Rechten
+152;1003;Letteren en talen
+153;1003;Politiek
+154;1003;Kunst
+155;1003;Overig
+200;0;Christendom
+2001;200;Algemeen
+201;2001;God
+202;2001;Jezus
+203;2001;Heilige Geest
+204;2001;Bijbel
+205;2001;Dogmatiek
+206;2001;Geloofsbelijdenis
+2002;200;Bijbelstudie
+220;2002;Handleiding voor Bijbelstudie
+221;2002;Thematische Bijbelstudies
+222;2002;Oude testament
+223;2002;Nieuwe testament
+224;2002;Eindtijd
+225;2002;Profeten
+226;2002;Overig
+2003;200;Discipelschap
+240;2003;Identiteit
+241;2003;Bevrijding / geestelijke strijd
+242;2003;Homoseksualiteit
+243;2003;Evangeliseren
+244;2003;Bidden
+245;2003;Leiderschap
+246;2003;Lijden
+247;2003;Dagelijkse omgang met God / Stille tijd
+248;2003;Geloof en wereld
+249;2003;Navolging
+250;2003;Seksualiteit
+251;2003;Rentmeesterschap
+252;2003;Overig
+2004;200;Apologetiek
+270;2004;Schepping en evolutie
+271;2004;Wetenschap
+272;2004;Historiciteit
+273;2004;Vroege Kerk
+274;2004;Protestantisme
+275;2004;Rooms-katholicisisme
+276;2004;Postmoderne kerk
+277;2004;Media
+278;2004;Getuigenis of levensverhaal
+279;2004;Lijdende Kerk
+280;2004;Kerkinrichting
+281;2004;Overig
+300;0;Maatschappij
+3001;300;Politiek
+301;3001;Officiële politieke stukken
+302;3001;Rapporten instanties
+303;3001;Europa
+304;3001;Oorlog
+305;3001;Christelijke politiek
+306;3001;Communisme
+307;3001;Overig
+3002;300;Cultuur
+320;3002;Informatietijdperk
+321;3002;Duurzaamheid en milieu
+322;3002;Ontwikkelingshulp
+323;3002;Nederlandse cultuur
+324;3002;Overheid en wetgeving
+325;3002;Maatschappelijke dienstverlening
+326;3002;Verslaving
+327;3002;Overig
+3003;300;Religie
+340;3003;Christendom en Islam
+341;3003;Islam
+342;3003;Jodendom
+343;3003;Oosterse godsdiensten
+344;3003;Satanisme, wicca en New Age
+345;3003;Overig
+400;0;Ontspanning
+4001;400;Romans
+401;4001;Avonturenromans
+402;4001;Thriller
+403;4001;Drama
+404;4001;Nederlandse literatuur
+405;4001;Buitenlandse literatuur
+406;4001;Gedichten
+407;4001;Overig
+4002;400;Klussen
+420;4002;Huisklussen
+421;4002;Tuinklussen
+422;4002;Overig
+4003;400;Vermaak
+430;4003;Grappen
+431;4003;Muziek
+432;4003;Feesten
+433;4003;Overig
+500;0;Studentikoziteit
+5001;500;C.S.R.
+501;5001;C.S.R. Statuten, HR en SR
+502;5001;C.S.R. lezingverslagen
+503;5001;C.S.R. werkgroepverslagen
+504;5001;C.S.R. Almanakken
+505;5001;C.S.R. overig
+5002;500;TU Delft
+510;5002;TU algemeen
+511;5002;Studieverenigingen
+512;5002;VeRa
+513;5002;Overig
+5003;500;Andere verenigingen en verbanden
+520;5003;Broeders
+521;5003;OZON
+522;5003;S.S.R. Landelijk
+523;5003;S.S.R. Delft
+524;5003;IFES
+525;5003;Ichthus/Alpha/RSK
+526;5003;Navigators
+527;5003;Studentenverenigingen overig
+528;5003;LKvV
+529;5003;Overig

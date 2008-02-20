@@ -1,0 +1,223 @@
+body {
+	font-family:Verdana;
+	color:#333;
+	font-size:11px;
+	line-height:18px;
+	text-align: center;
+}
+
+h2 {
+	font-family:"Trebuchet MS";
+	color:#333;
+	font-size:16px;
+}
+
+a, a:link, a:visited {
+	text-decoration:none;
+	font-weight:bold;
+	color:#57666e;
+}
+
+a:hover {
+	text-decoration:underline;
+	font-weight:bold;
+	color:#57666e;
+}
+
+#container {
+	width:800px;
+	margin:0 auto;
+	text-align:left;
+	border-left:1px solid #eee;
+	border-right:1px solid #eee;
+	background-color:#fff;
+	border-top:5px solid #b1c0c9;
+	border-bottom:5px solid #b1c0c9;
+}
+
+#header {
+	height:50px;
+	background:url("../images/title_background.gif");
+	border-bottom:1px solid #ddd;
+}
+
+#header h1 {
+	display:none;
+}
+
+#booksbackground {
+	height:120px;
+	background:url("../images/header_book.jpg");
+	border-bottom:1px solid #ddd;
+}
+
+.navigation_header {
+	padding:0px;
+	position:relative;
+	height:27px;
+	background-color: #f2f2f2;
+	border-bottom: 1px solid #ddd;
+}
+
+.navigation {
+	position:absolute;
+	left:15px;
+	list-style:none;
+	margin:0;
+	padding:0;
+}
+
+.navigation li {
+	float:left;
+	display:block;
+}
+
+.navigation li a {
+	display:block;
+	padding:5px 7px 5px 7px;
+	text-decoration:none;
+	font-weight:bold;
+	font-family:"Lucida Grande",Verdana;
+	font-size:11px;
+	color:#999;
+}
+
+.navigation li.active a,
+.navigation li a:hover {
+	color:#57666e;
+}
+
+#divBusyIndicator {
+	display: none;
+	position: fixed;
+	bottom: 10px; 
+	right: 10px;
+}
+
+#main {
+	padding: 0px 20px 20px 20px;
+}
+
+#container #actions {
+	display: block;
+	text-align: right;
+	height: 18px;
+	width: 135px;
+	padding: 5px;
+	background-color: #f2f2f2;
+	border-bottom: 1px solid #ddd;
+	border-right: 1px solid #ddd;
+}
+
+#melding {
+	padding-left: 20px;
+	padding-right: 20px;
+	padding-top: 20px;
+	padding-bottom: 0px;
+	font-style: italic;
+	font-weight: bold;
+	color:#57666e;
+}
+
+#footer {
+	background-color:#f2f2f2;
+	margin:0;
+	padding:0;
+	border-top:1px solid #ccc;
+}
+
+#footer p {
+	margin:0;
+	padding:5px 6px 5px 5px;
+	font-family:Verdana;
+	font-size:9px;
+	color:#5b6f7a;
+	font-weight:bold;
+	text-align:right;
+}
+
+#footer p a,
+#footer p a:hover {
+	color:#5b6f7a;
+	text-decoration:none;
+} 
+
+.boekenlijst {
+	padding-bottom: 15px;
+}
+
+.boekenlijst table {
+	width: 700px;
+}
+
+.boekenlijst td {
+	font-size: 10px;
+}
+
+.boekenlijst .tabelkop td {
+	font-size: 11px;
+	font-weight: bold;
+}
+
+.boekenlijst input, .boekenlijst select {
+	font-size: 9px;
+	font-family: Arial;
+}
+
+.smalltext {
+	font-size: 11px;
+	margin-bottom: 15px;
+}
+
+.smalltext td {
+	font-size: 11px;
+}
+
+.smalltext .tabelkop td {
+	font-size: 11px;
+	font-weight: bold;
+}
+
+.details table {
+	border: 1px solid #ddd;
+	font-size: 11px;
+	margin-bottom: 15px;
+}
+
+.details td {
+	padding: 2px;
+}
+
+.details td.detailsKop {
+	font-family:"Trebuchet MS";
+	background-color: #f2f2f2;
+	color:#333;
+	font-size:16px;
+	font-weight: bold;
+	padding: 3px;
+	text-align: center;
+	border-bottom: 1px solid #ddd;
+}
+
+.details td.detailsCaption {
+	padding-left: 6px;
+	padding-right: 4px;
+	text-align: right;
+	font-weight: bold;
+}
+
+td.detailsInfo {
+	padding-right: 6px;
+}
+
+.detailsFirst td {
+	padding-top: 5px;
+}
+
+.detailsLast td {
+	padding-bottom: 5px;
+}
+
+.formFout {
+	color: red;
+}
