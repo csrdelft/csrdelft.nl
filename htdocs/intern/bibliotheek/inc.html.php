@@ -68,6 +68,7 @@
 						if (iAm('beheer.php')) { echo $activeString; }
 						echo '><a href="beheer.php">Beheer</a></li>';
 					}
+					echo '<li><a href="'.CSR_ROOT.'">Csrdelft.nl</a></li>';
 				} ?>
 			</ul>
 		</div>

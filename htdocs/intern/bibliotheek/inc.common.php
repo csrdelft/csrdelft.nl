@@ -13,7 +13,25 @@
 				<h2>Bibliotheek</h2>
 				<p>Welkom op de thuispagina van de C.S.R.-gedistribueerde bibliotheek. <br>
 				U bent nog niet ingelogd. Om deze pagina te bekijken, moet u ingelogd zijn. <br>
-				Ga naar <a href="<?php echo CSR_ROOT ?>">de webstek</a> om dit te doen.</p>
+				<div id="inloggen">
+				<?php
+					if(isset($_SESSION['auth_error'])) {
+						echo '<span class="waarschuwing">Ongeldige gebruiker of wachtwoord!</span>';
+						// Ten slotte even unsetten, zodat we geen last meer hebben van de melding.
+						unset($_SESSION['auth_error']);
+					}
+				?>
+					<form id="frm_login" action="/login.php" method="post">
+					<p style="display: inline;">
+						<input type="hidden" name="url" value="<?php echo $_SERVER['REQUEST_URI'] ?>" />
+						<input type="text" name="user" class="login" value="Naam" onfocus="this.value=''" />
+						<input type="password" name="pass" class="login" />
+						<input type="submit" name="submit" class="login-submit" value="ok" /><br />
+						<input type="checkbox" name="checkip" class="login-checkip" value="true" id="login-checkip" checked="checked" />
+						<label for="login-checkip">Koppel login en IP-adres</label><br />
+					</p>
+					</form>
+				</div>
 			</div>
 <?
 		printFooter();
