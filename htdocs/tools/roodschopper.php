@@ -4,23 +4,25 @@
  * 
  * 
  */
-echo 'kwaak'; exit;
+
+exit;
+
  # instellingen & rommeltjes
 require_once('include.config.php');
-
-require_once('class.commissie.php');
-$soccie=$maalcie=new Commissie($db, $lid);
-$soccie->loadCommissie('SocCie');
 
 if($lid->getUid()!='0436'){ 
 	header('location: http://csrdelft.nl'); 
 }
 
+$saldoGrens=-7;
 
-$query="SELECT uid, soccieSaldo FROM lid WHERE soccieSaldo<-6;";
+$query="SELECT uid, soccieSaldo FROM lid WHERE soccieSaldo<".$saldoGrens.";";
+
+
 
 $result=$db->query($query);
 
+echo 'Aantal rode mensen met een lager saldo dan '.$saldoGrens.": ".$db->numRows($result)."<hr/>";
 
 while($data=$db->next($result)){
 	$mail=new Smarty_csr();

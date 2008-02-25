@@ -1,10 +1,10 @@
 Beste {$uid|csrnaam:civitas:false},
 
-U staat rood bij de SocCie, uw saldo is  € {$saldo}. U wordt verzocht zo snel 
+U staat rood bij de SocCie, uw saldo is  E {$saldo}. U wordt verzocht zo snel 
 mogelijk te zorgen dat saldo weer boven het nulpunt komt. Dat kan door in te 
 leggen bij de bar op de borrel, of geld over te maken naar de SocCie-fiscus:
 
-C.S.R. fiscus sociëteitscommissie
+C.S.R. fiscus societeitscommissie
 31.94.36.403
 
 Zo helpt u de liquiditeit van de SocCie op peil te houden, en teleurstellingen 
@@ -14,5 +14,5 @@ verzonden beschouwen.
 
 Met vriendelijke groet,
 
-am. Waagmeester, 
-h.t. praeses der SocCie der C.S.R.
+am. Schaap, 
+h.t. fiscus der SocCie der C.S.R.
