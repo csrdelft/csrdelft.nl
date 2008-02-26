@@ -182,6 +182,12 @@ table.ubb_table tr{
 table.ubb_table td, th{
 	margin: 0px; padding: 2px;
 }
+pre.ubb_code{
+	width: 580px;
+	margin: 0px; padding-left: 8px;
+	overflow-x:auto;
+	overflow-y:hidden;
+}
 
 
 table.query_table{
@@ -337,7 +343,7 @@ table.maaltijden{ width: 100%; }
 table.maaltijden tr{ height: 1.6em; }
 
 /* csrmail */
-div#pubciemail_form{ background-color: #f1f1f1; border: 1px solid lightgrey; padding: 10px;}
+div#pubciemail_form{ background-color: #f1f1f1; border: 1px solid lightgray; padding: 10px;}
 
 /* verjaardagen in zijbalk */
 #komendeVerjaardagen{ font-size: 1em; line-height: 1.05em; text-align: left;}

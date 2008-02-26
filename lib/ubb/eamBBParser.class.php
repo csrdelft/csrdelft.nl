@@ -652,9 +652,9 @@ class eamBBParser{
 		$content = $this->parseArray(array('[/code]'), array('code', 'br', 'all' => 'all'));
 
 		if(isset($args['code'])){
-			$text = '<br /><sub>'.$args['code'].' code:</sub><hr style="border : 1px solid black;" /><pre style="margin : 0px; padding-left : 8px;">'.$content.'</pre><hr style="border : 1px solid black;" />';
+			$text = '<br /><sub>'.$args['code'].' code:</sub><hr style="border : 1px solid black;" /><pre class="ubb_code">'.$content.'</pre><hr style="border : 1px solid black;" />';
 		} else {
-			$text = '<br /><sub>code:</sub><hr style="border : 1px solid black;" /><pre style="margin : 0px; padding-left : 8px;">'.$content.'</pre><hr style="border : 1px solid black;" />';
+			$text = '<br /><sub>code:</sub><hr style="border : 1px solid black;" /><pre class="ubb_code">'.$content.'</pre><hr style="border : 1px solid black;" />';
 		}
 			   
 		return $text;  
