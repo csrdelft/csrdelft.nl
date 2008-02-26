@@ -32,11 +32,12 @@
 		}
 		table.overzicht TD.overzicht{ border-right: thin solid black; } 
 		table.overzicht TD.corvee{		border-left: thin solid black;  }
+		img{ float: right;}
 	</style>
 	{/literal}
 </head>
 <body>
-
+<img alt="Beeldmerk van de Vereniging" src="http://plaetjes.csrdelft.nl/layout/beeldmerk.jpg"/>
 <h1>C.S.R.-maaltijd {$maaltijd.datum|date_format:$datumFormaat}</h1>
 <p>
 Regels omtrent het betalen van de maaltijden op Confide:
@@ -50,7 +51,7 @@ Regels omtrent het betalen van de maaltijden op Confide:
 	<li>als je géén tegoed hebt bij de maalcie betekent een niet direct betaalde maaltijd 20 cent boete!</li>
 </ul>
 <p>
-Tafelpraeses is vandaag {$maaltijd.tafelpraeses}
+{if $maaltijd.tafelpraeses!='Am. Lid'}Tafelpraeses is vandaag {$maaltijd.tafelpraeses}{/if}
 </p>
 {if !$maaltijd.gesloten}
 	<h1 style="color: red">De inschrijving voor deze maaltijd is nog niet gesloten</h1>
@@ -65,8 +66,8 @@ Tafelpraeses is vandaag {$maaltijd.tafelpraeses}
 	{table_foreach from=$maaltijd.aanmeldingen inner=rows item=aanmelding table_attr='class="inschrijvingen"' cols=2 name=aanmeldingen}
 		{$nummer++}</td>
 		<td>{$aanmelding.naam}
-		{if $aanmelding.eetwens!=''}<br /><strong>{$aanmelding.eetwens}</strong>{/if}
-		{if $aanmelding.gasten_opmerking!=''}<br /><strong>Gasten opmerking: {$aanmelding.gasten_opmerking}</strong>{/if}
+			{if $aanmelding.eetwens!=''}<br /><strong>{$aanmelding.eetwens}</strong>{/if}
+			{if $aanmelding.gasten_opmerking!=''}<br /><strong>Gasten opmerking: {$aanmelding.gasten_opmerking}</strong>{/if}
 		</td>
 		<td style="width: 20px; text-align: right;">
 			{if $aanmelding.saldo!=''}
@@ -80,7 +81,7 @@ Tafelpraeses is vandaag {$maaltijd.tafelpraeses}
 <table class="overzicht">
 	<tr>
 		<td class="overzicht">
-			<strong>Overzicht</strong><br />
+			<strong>Maaltijdgegevens:</strong><br />
 			<table style="width: 100%">
 				<tr><td>Aantal inschrijvingen</td><td>{$maaltijd.aantal}</td></tr>
 				<tr><td>Marge i.v.m. gasten</td><td>{$maaltijd.marge}</td></tr>
