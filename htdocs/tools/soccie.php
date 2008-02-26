@@ -47,11 +47,16 @@ if(isset($_POST['saldi'])){
 					'soccie',
 					".$aSocciesaldo->saldo."
 				);";
-			if(!($db->query($query) AND $db->query($logQuery))){
+			if(!$db->query($query)){
 				//scheids, er gaet een kwerie mis, ff een feutmelding printen.
 				$bOk=false;
 				echo 'Een fout. MySQL gaf terug: '.mysql_error()."\r\n";
+			}else{
+				if(!$db->query($logQuery)){
+					echo 'Koppeling voor '.$aSocciesaldo->voornaam.' '.$aSocciesaldo->achternaam.' mislukt'."\r\n";
+				}
 			}
+			
 		}
 		if($bOk){
 			echo '[ '.$iAantal.' regels ontvangen.... OK ]';
