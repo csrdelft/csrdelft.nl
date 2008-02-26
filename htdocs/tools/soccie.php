@@ -35,7 +35,19 @@ if(isset($_POST['saldi'])){
 				SET soccieSaldo=".$aSocciesaldo->saldo." 
 				WHERE soccieID=".$aSocciesaldo->id." 
 				  AND createTerm='".$aSocciesaldo->createTerm."' LIMIT 1;";
-			if(!$db->query($query)){
+			//sla het saldo ook op in een logje, zodat we later kunnen zien dat iemand al heel lang
+			//rood staat en dus geschopt kan worden...
+			$logQuery="
+				INSERT INTO saldolog 
+				( 
+					uid, moment, cie, saldo
+				)VALUES( 
+					(SELECT uid FROM lid WHERE soccieID=".$aSocciesaldo->id."  AND createTerm='".$aSocciesaldo->createTerm."' ),
+					'".getDateTime()."',
+					'soccie',
+					".$aSocciesaldo->saldo."
+				);";
+			if(!($db->query($query) AND $db->query($logQuery))){
 				//scheids, er gaet een kwerie mis, ff een feutmelding printen.
 				$bOk=false;
 				echo 'Een fout. MySQL gaf terug: '.mysql_error()."\r\n";
