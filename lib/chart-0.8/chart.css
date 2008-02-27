@@ -1,0 +1,30 @@
+body {
+margin-right: 2em;
+margin-left: 2em;
+margin-top: 2em;
+margin-bottom: 2em;
+background: white;
+text: black;
+}
+image {
+}
+table {
+margin-left: 2em;
+margin-right: 2em;
+}
+.margin {
+margin-left: 4em;
+}
+.p {
+text-indent: 1em;
+}
+.tdiv {
+margin-top: 0em;
+}
+h3 {
+font-size: large;
+}
+A {
+  color: black;
+  text-decoration: underline
+}

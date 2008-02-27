@@ -14,7 +14,6 @@ if(!opConfide()){
 }
 //instellingen laden...
 $instellingen=parse_ini_file(ETC_PATH.'/soccie.ini');
-
 if(isset($_POST['saldi'])){
 	//blowfish klasse laden
 	$blowfish=new Crypt_blowfish($instellingen['secret-key']);

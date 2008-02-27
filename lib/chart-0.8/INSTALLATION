@@ -1,0 +1,6 @@
+If you have PHP4 installed, all you need to do to use Chart is to copy
+the rgb.php and chart.php files to somewhere your PHP scripts can find
+them and include them.
+
+You might also wish to edit some of the path constants at the
+beginning of the chart.php file.

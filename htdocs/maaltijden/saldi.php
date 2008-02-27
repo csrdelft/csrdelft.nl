@@ -7,43 +7,9 @@ if(!$lid->hasPermission('P_MAAL_MOD')){ header('location: http://csrdelft.nl/maa
 
 $sStatus='';
 
-if(is_array($_FILES) AND isset($_FILES['CSVSaldi'])){
-	//bestandje uploaden en verwerken...
-	$bCorrect=true;
-	//niet met csv functies omdat dat misging met OS-X regeleinden...
-	$aRegels=preg_split("/[\s]+/", file_get_contents($_FILES['CSVSaldi']['tmp_name']));
+require_once('class.saldi.php');
+$sStatus=Saldi::putMaalcieCsv();
 
-	$row=0;
-	foreach($aRegels as $regel){
-		$regel=str_replace(array('"', ' ', "\n", "\r"), '', $regel);
-		$aRegel=explode(',', $regel);
-		if($lid->isValidUid($aRegel[0]) AND is_numeric($aRegel[1])){
-			$sQuery="UPDATE lid SET maalcieSaldo=".$aRegel[1]." WHERE uid='".$aRegel[0]."' LIMIT 1;";
-			if($db->query($sQuery)){
-				//nu ook nog even naar het saldolog schrijven
-				$logQuery="
-					INSERT INTO saldolog (
-						uid, moment, cie, saldo
-					)VALUES(
-						'".$aRegel[0]."',
-						'".getDateTime()."',
-						'maalcie',
-						".$aRegel[1]."
-					);";
-				$db->query($logQuery);
-			}else{
-				$bCorrect=false; 
-			}
-			$row++;
-		}
-	}
-
-	if($bCorrect===true){
-		$sStatus='Gelukt! er zijn '.$row.' regels ingevoerd; als dit er minder zijn dan u verwacht zitten er ongeldige regels in uw bestand.';
-	}else{
-		$sStatus='Helaas, er ging iets mis. Controleer uw bestand! mysql gaf terug <'.mysql_error().'>';
-	}
-}
 class uploader{
 	var $sStatus='';
 	function uploader($sStatus){

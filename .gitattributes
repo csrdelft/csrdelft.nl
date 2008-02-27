@@ -91,6 +91,7 @@ htdocs/tools/phpinfo.php -text
 htdocs/tools/query.php -text
 htdocs/tools/roodschopper.php -text
 htdocs/tools/saldo-overzicht.php -text
+htdocs/tools/saldografiek.php -text
 htdocs/tools/sendmail/maildata.php -text
 htdocs/tools/sendmail/sendmail.php -text
 htdocs/tools/soccie.php -text
@@ -106,6 +107,17 @@ htdocs/vereniging/lidworden.php -text
 htdocs/vereniging/verbanden.php -text
 lib/blowfish/blowfish.php -text
 lib/blowfish/blowfish_default_key.php -text
+lib/chart-0.8/COPYING -text
+lib/chart-0.8/INSTALLATION -text
+lib/chart-0.8/IsoLatin1.enc -text
+lib/chart-0.8/chart-manual.php -text
+lib/chart-0.8/chart.css -text
+lib/chart-0.8/chart.php -text
+lib/chart-0.8/chart.phps -text
+lib/chart-0.8/data.php -text
+lib/chart-0.8/data.phps -text
+lib/chart-0.8/rgb.php -text
+lib/chart-0.8/rgb.phps -text
 lib/class.agenda.php -text
 lib/class.agendacontent.php -text
 lib/class.agendatoevoegcontent.php -text
@@ -152,6 +164,7 @@ lib/class.nieuwscontent.php -text
 lib/class.pollcontent.php -text
 lib/class.profiel.php -text
 lib/class.profielcontent.php -text
+lib/class.saldi.php -text
 lib/class.savedquery.php -text
 lib/class.simplehtml.php -text
 lib/class.sjaarsactie.php -text
