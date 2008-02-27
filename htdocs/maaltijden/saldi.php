@@ -19,7 +19,20 @@ if(is_array($_FILES) AND isset($_FILES['CSVSaldi'])){
 		$aRegel=explode(',', $regel);
 		if($lid->isValidUid($aRegel[0]) AND is_numeric($aRegel[1])){
 			$sQuery="UPDATE lid SET maalcieSaldo=".$aRegel[1]." WHERE uid='".$aRegel[0]."' LIMIT 1;";
-			if(!$db->query($sQuery)){ $bCorrect=false; }
+			if($db->query($sQuery)){
+				//nu ook nog even naar het saldolog schrijven
+				$logQuery="
+					INSERT INTO saldolog (
+						uid, moment, cie, saldo
+						'".$aRegel[0]."',
+						'".getDateTime()."',
+						'maalcie',
+						".$aRegel[1]."
+					);";
+				$db->query($logQuery);
+			}else{
+				$bCorrect=false; 
+			}
 			$row++;
 		}
 	}
