@@ -24,6 +24,7 @@ if(is_array($_FILES) AND isset($_FILES['CSVSaldi'])){
 				$logQuery="
 					INSERT INTO saldolog (
 						uid, moment, cie, saldo
+					)VALUES(
 						'".$aRegel[0]."',
 						'".getDateTime()."',
 						'maalcie',
