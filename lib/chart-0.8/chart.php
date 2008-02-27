@@ -375,7 +375,7 @@ class chart {
       for ($i = 0; $i < sizeof($this->plots); $i++) {
 	$plot = $this->plots[$i];
 	$plot->stroke($im, $xmin, $xmax, $ymin, $ymax,
-		      $xoff, $yoff, $width, $height, &$this);
+		      $xoff, $yoff, $width, $height, $this);
       }
     }
 
@@ -1147,7 +1147,7 @@ class plot {
     return array($min, $max);
   }
 
-  function stroke ($im, $xmin, $xmax, $ymin, $ymax, $xoff, $yoff,
+ function stroke ($im, $xmin, $xmax, $ymin, $ymax, $xoff, $yoff,
 		   $width, $height, &$chart) {
     $color = rgb_allocate($im, $this->color);
     $style = $this->style;
