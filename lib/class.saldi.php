@@ -17,12 +17,21 @@ class Saldi{
 		$this->load();
 	}
 	private function load(){
-		$sQuery="
-			SELECT moment, saldo 
-			FROM saldolog 
-			WHERE uid='".$this->uid."'
-			  AND cie='".$this->cie."'
-			  AND moment>(NOW() - INTERVAL 40 DAY);";
+		
+		if($this->uid=='0000'){
+			$sQuery="
+				SELECT LEFT(moment, 16) AS moment, SUM(saldo) AS saldo 
+				FROM saldolog 
+				WHERE cie='".$this->cie."' AND 
+					moment>(NOW() - INTERVAL 40 DAY) GROUP BY LEFT(moment, 16);";
+		}else{
+			$sQuery="
+				SELECT moment, saldo 
+				FROM saldolog 
+				WHERE uid='".$this->uid."'
+				  AND cie='".$this->cie."'
+				  AND moment>(NOW() - INTERVAL 40 DAY);";
+		}
 		$db=MySql::get_MySql();
 		$result=$db->query($sQuery);
 		$this->data=$db->result2array($result);
