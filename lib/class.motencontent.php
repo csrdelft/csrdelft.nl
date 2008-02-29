@@ -104,12 +104,12 @@ class MotenContent extends SimpleHTML {
 		}
 		
 		echo '</tr><tr>';
-/*
+		//en ook even de leden van de .0-kring printen
 		for ($moot=1; $moot<=$maxmoten; $moot++) {
 			$mootsaldo[$moot]+=$this->printKring($moot, $regel);
 		}
 		echo '</tr>';
-		
+	/*	
 		//mootsaldo printen
 		echo '<tr>';
 		for ($moot=1; $moot<=$maxmoten; $moot++) {
