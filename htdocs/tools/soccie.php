@@ -12,6 +12,10 @@ if(!opConfide()){
 	echo 'FAALHAASCH: ga fietsen stelen!'; 
 	exit;
 }
+//we slaan hier alvast de huidige datum en tijd op, dan is het zometeen voor alle ingevoerde 
+//saldi gelijk.
+$datum=getDateTime();
+
 //instellingen laden...
 $instellingen=parse_ini_file(ETC_PATH.'/soccie.ini');
 if(isset($_POST['saldi'])){
@@ -42,7 +46,7 @@ if(isset($_POST['saldi'])){
 					uid, moment, cie, saldo
 				)VALUES( 
 					(SELECT uid FROM lid WHERE soccieID=".$aSocciesaldo->id."  AND createTerm='".$aSocciesaldo->createTerm."' ),
-					'".getDateTime()."',
+					'".$datum."',
 					'soccie',
 					".$aSocciesaldo->saldo."
 				);";

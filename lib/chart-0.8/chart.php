@@ -27,7 +27,7 @@ $chart_debug = false;
 
 // The directory where Chart will store cached images. 
 // Make sure this exists.
-$chart_cache_directory = "/var/tmp/cache";
+$chart_cache_directory = TMP_PATH;
 
 // The default is to generate PNG images.  If you set
 // this to false, GIF images will be generated instead.
@@ -39,7 +39,7 @@ $chart_use_png = true;
 $type1_font_encoding = "/home/httpd/html/circus/chart/IsoLatin1.enc";
 
 // If your PHP is compiled with gd2, set this variable to true.
-$gd2 = false;
+$gd2 = true;
 
 function mod ($n, $m) {
   $n1 = (int)($n*1000);

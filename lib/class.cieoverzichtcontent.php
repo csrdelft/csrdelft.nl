@@ -53,9 +53,11 @@ class CieOverzichtContent extends SimpleHTML {
 				foreach($aCieLeden as $aCieLid){
 					echo $this->_lid->getNaamLink($aCieLid['uid'], 'civitas', true, $aCieLid).'&nbsp;<em>'.$aCieLid['functie'].'</em><br />';
 				}
+				/*
 				if($this->_commissie->magBewerken()){ 
 					echo '<br />Som van het SocCie-saldo: &euro; '.sprintf ("%01.2f", $this->_commissie->getCieSaldo()); 
 				}
+				*/
 			}else{
 				echo $aCieLeden;
 			}

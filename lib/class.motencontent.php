@@ -55,7 +55,7 @@ class MotenContent extends SimpleHTML {
 					}
 					echo '</p>';
 				}
-				echo '<br /><em>Kring-saldo: € '.sprintf ("%01.2f", $kringsaldo).'</em>';
+			//	echo '<br /><em>Kring-saldo: € '.sprintf ("%01.2f", $kringsaldo).'</em>';
 			}
 		echo '</td>';
 		
@@ -104,7 +104,7 @@ class MotenContent extends SimpleHTML {
 		}
 		
 		echo '</tr><tr>';
-
+/*
 		for ($moot=1; $moot<=$maxmoten; $moot++) {
 			$mootsaldo[$moot]+=$this->printKring($moot, $regel);
 		}
@@ -116,7 +116,7 @@ class MotenContent extends SimpleHTML {
 			echo '<td>Mootsaldo: &euro; '.sprintf ("%01.2f", $mootsaldo[$moot]).'</td>';
 		}
 		echo '</tr>';
-		
+	*/	
 		//kringen invoeren... moet nog even goed afgemaakt worden met kringselectie.
 		//daarom nu uitgeschakeld
 		if(false){
