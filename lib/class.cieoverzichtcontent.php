@@ -33,38 +33,26 @@ class CieOverzichtContent extends SimpleHTML {
 	function viewCieOverzicht(){
 		$aCommissies=$this->_commissie->getOverzicht();
 		
-		echo '<table>';
 		foreach ($aCommissies as $cie) {
-			echo '
-				<tr height="30px">
-					<td colspan="3" width="100%" valign="bottom">
-						<h2>
-							<a href="/groepen/commissie/'.htmlspecialchars($cie['naam']).'.html">'.mb_htmlentities($cie['titel']).'</a>
-						</h2>
-					</td>
-				</tr>
-				<tr>
-					<td width="49%" valign="top" >'.mb_htmlentities($cie['stekst']).'</td>
-					<td width="2%"><img src="/images/pixel.gif" width="100%" height="1"></td>
-					<td width="49%" valign="top">';
-	
+			echo '<div class="cie">';
+			echo '<div class="cieleden">';
 			$aCieLeden=$this->_commissie->getCieLeden($cie['id']);
 			if(is_array($aCieLeden)){
 				foreach($aCieLeden as $aCieLid){
 					echo $this->_lid->getNaamLink($aCieLid['uid'], 'civitas', true, $aCieLid).'&nbsp;<em>'.$aCieLid['functie'].'</em><br />';
 				}
-				/*
-				if($this->_commissie->magBewerken()){ 
-					echo '<br />Som van het SocCie-saldo: &euro; '.sprintf ("%01.2f", $this->_commissie->getCieSaldo()); 
-				}
-				*/
 			}else{
 				echo $aCieLeden;
 			}
-			echo '</td></tr>';
-		}//einde foreach
-		
-		echo '</table>';
+			echo '</div>';
+			
+			echo '<h2><a href="/groepen/commissie/'.htmlspecialchars($cie['naam']).'.html">'.mb_htmlentities($cie['titel']).'</a></h2>';
+				
+			echo mb_htmlentities($cie['stekst']);
+			echo '</div>';
+		}
+		//zo, nu nog even een clear zodat het niet buiten het witte contentvlak gaat vallen..
+		echo '<div style="clear: both;"></div>';
 		
 	}//einde functie
 	
