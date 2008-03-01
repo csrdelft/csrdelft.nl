@@ -113,11 +113,7 @@ lib/chart-0.8/IsoLatin1.enc -text
 lib/chart-0.8/chart-manual.php -text
 lib/chart-0.8/chart.css -text
 lib/chart-0.8/chart.php -text
-lib/chart-0.8/chart.phps -text
-lib/chart-0.8/data.php -text
-lib/chart-0.8/data.phps -text
 lib/chart-0.8/rgb.php -text
-lib/chart-0.8/rgb.phps -text
 lib/class.agenda.php -text
 lib/class.agendacontent.php -text
 lib/class.agendatoevoegcontent.php -text
