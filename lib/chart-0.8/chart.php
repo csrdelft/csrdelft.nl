@@ -36,7 +36,7 @@ $chart_use_png = true;
 // If you want to use Type1 fonts, PHP has to be told
 // where the IsoLatin1.enc file is.  Such a file is included
 // in the Chart distribution.
-$type1_font_encoding = "/home/httpd/html/circus/chart/IsoLatin1.enc";
+$type1_font_encoding = LIB_PATH."/chart-0.8/IsoLatin1.enc";
 
 // If your PHP is compiled with gd2, set this variable to true.
 $gd2 = true;
