@@ -30,7 +30,7 @@
 	
 	<div id="bestuurstekst" style="margin: 40px; padding: 20px; font-size: 18px; background-color: #eee; text-align: left;">
 		{if $action=='edit'}
-			<textarea name="tekst" style="width: 100%; height: 100px;">{$bestuur.tekst|ubb}</textarea>
+			<textarea name="tekst" style="width: 100%; height: 100px;">{$bestuur.tekst}</textarea>
 		{else}
 			{$bestuur.tekst|ubb}	
 		{/if}
