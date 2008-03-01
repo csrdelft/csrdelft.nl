@@ -23,11 +23,11 @@
 		<textarea name="stekst" style="width: 100%">{$cie.stekst|escape:'html'}</textarea>
 		<strong>Lange beschrijving:</strong><br />
 		<textarea name="tekst" style="width: 100%; height: 200px;">{$cie.tekst|escape:'html'}</textarea>
-		<input type="submit" value="Opslaan" /> <a href="/groepen/commissies/{$cie.id}/" class="knop">terug</a>
+		<input type="submit" value="Opslaan" /> <a href="/groepen/commissie/{$cie.id}/" class="knop">terug</a>
 	</div>
 	</form>
 {else}
-	<div style="float: right; margin: 10px ;"><a href="/groepen/commissies/{$cie.id}/bewerken" class="knop">bewerken</a></div>
+	<div style="float: right; margin: 10px ;"><a href="/groepen/commissie/{$cie.id}/bewerken" class="knop">bewerken</a></div>
 	{$cie.tekst|ubb}
 	
 	{if $cie.link!=''}
