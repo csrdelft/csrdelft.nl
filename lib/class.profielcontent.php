@@ -78,9 +78,8 @@ class ProfielContent extends SimpleHTML {
 		
 		# kijken of deze persoon commissielid is
 		require_once('class.commissie.php');
-		$commissie=new Commissie();
 		$profhtml['commissies']="";				
-		$aCommissies = $commissie->getCieByUid($this->_profiel['uid']);
+		$aCommissies = Commissie::getCieByUid($this->_profiel['uid']);
 		if (count($aCommissies) != 0) {
 			foreach ($aCommissies as $cie) {
 				$aCieNaam=mb_htmlentities($cie['naam']);

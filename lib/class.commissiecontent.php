@@ -74,6 +74,7 @@ class CommissieContent extends SimpleHTML {
 		$ciecontent->assign('action', $this->action);
 		$ciecontent->assign('lidAdder', $this->getLidAdder());
 		
+		$ciecontent->assign('melding', $this->getMelding());
 		$ciecontent->display('commissie.tpl');		
 	}
 	function _getFunctieSelector(){

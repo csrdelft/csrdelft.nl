@@ -244,7 +244,7 @@ class Commissie {
 				SELECT cieid FROM commissielid WHERE uid = '".$uid."'
 			)
 			ORDER BY naam;");
-		if ($result !== false and $this->_db->numRows($result) > 0){
+		if ($result !== false and $db->numRows($result) > 0){
 			$cies=$db->result2array($result);
 		}
 		return $cies;

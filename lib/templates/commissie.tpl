@@ -1,3 +1,4 @@
+{$melding}
 <div style="float: right; width: 210px; margin: 10px;">
 	<strong>Commissieleden:</strong>
 	<table>
