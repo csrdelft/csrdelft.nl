@@ -25,7 +25,7 @@
 	<div id="bestuursverhaal">
 		{if $action=='edit'}
 			<form action="/vereniging/bestuur/{$bestuur.jaar}/bewerken" method="post">
-				<textarea name="verhaal" style="width: 100%; heigth: 400px;">{$bestuur.verhaal}</textarea>
+				<textarea name="verhaal" style="width: 100%; height: 400px;">{$bestuur.verhaal}</textarea>
 				<input type="submit" value="Opslaan" /> <a href="/vereniging/bestuur/{$bestuur.jaar}/" class="knop">terug</a>
 			</form>
 		{else}
@@ -35,4 +35,5 @@
 			{$bestuur.verhaal|ubb}
 		{/if}
 	</div>
+	<div style="clear: all;"></div>
 </div>
