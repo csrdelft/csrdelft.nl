@@ -1,3 +1,4 @@
+{$melding}
 <h1>Bestuur {$bestuur.naam}&nbsp;{$bestuur.jaar}-{$bestuur.jaar+1}</h1>
 
 <div id="bestuurContainer" style="text-align: center">

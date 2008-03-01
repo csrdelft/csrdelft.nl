@@ -38,6 +38,7 @@ class BestuurContent extends SimpleHTML {
 	
 		$bestuur->assign('bestuur', $aBestuur);
 		$bestuur->assign('action', $this->_action);
+		$bestuur->assign('melding', $this->getMelding());
 		
 		$bestuur->display('bestuur.tpl'); 
 	}
