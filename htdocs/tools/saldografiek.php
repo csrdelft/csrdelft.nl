@@ -10,19 +10,23 @@ require_once('chart-0.8/chart.php');
 require_once('class.saldi.php');
 
 
-if(	isset($_GET['uid']) AND 
-	($lid->isValidUid($_GET['uid']) OR $_GET['uid']=='0000') AND 
-	($lid->hasPermission('P_ADMIN') OR $lid->getUid()==$_GET['uid'])){
+if(isset($_GET['uid']) AND ($lid->isValidUid($_GET['uid']) OR $_GET['uid']=='0000')){
+	$uid=$_GET['uid'];
+}else{
+	$uid=$lid->getUid();
+}
+
+if($lid->hasPermission('P_ADMIN') OR $lid->getUid()==$uid){
 	
-	
-	$maalcie=new Saldi($_GET['uid'], 'maalcie');
-	$soccie=new Saldi($_GET['uid'], 'soccie');
+	$maalcie=new Saldi($uid, 'maalcie');
+	$soccie=new Saldi($uid, 'soccie');
 	
 	$chart = new chart(500, 200);
-	if($_GET['uid']=='0000'){
+
+	if($uid=='0000'){
 		$chart->set_title('Totaal');
 	}else{
-		$chart->set_title('Saldo voor '.$lid->getCivitasName($_GET['uid']));
+		$chart->set_title('Saldo voor '.$lid->getNaamLink($uid, 'full', false, false, false));
 	}
 
 	$chart->set_x_ticks($soccie->getKeys(), 'date');
