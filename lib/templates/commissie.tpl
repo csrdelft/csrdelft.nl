@@ -27,6 +27,7 @@
 	</div>
 	</form>
 {else}
+	<div style="float: right; margin: 10px ;"><a href="/groepen/commissies/{$cie.id}/bewerken" class="knop">bewerken</a></div>
 	{$cie.tekst|ubb}
 	
 	{if $cie.link!=''}
