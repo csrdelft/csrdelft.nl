@@ -23,6 +23,16 @@
 		{$bestuur.tekst|ubb}
 	</div>
 	<div id="bestuursverhaal">
-		{$bestuur.verhaal|ubb}
+		{if $action=='edit'}
+			<form action="/vereniging/bestuur/{$bestuur.jaar}/bewerken" method="post">
+				<textarea name="verhaal" style="width: 100%; heigth: 400px;">{$bestuur.verhaal}</textarea>
+				<input type="submit" value="Opslaan" /> <a href="/vereniging/bestuur/{$bestuur.jaar}/" class="knop">terug</a>
+			</form>
+		{else}
+			{if $bestuur.isAdmin}
+				<a href="/vereniging/bestuur/{$bestuur.jaar}/bewerken" class="knop">bewerken</a><hr />
+			{/if}
+			{$bestuur.verhaal|ubb}
+		{/if}
 	</div>
 </div>

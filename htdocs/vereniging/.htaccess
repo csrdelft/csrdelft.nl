@@ -1,3 +1,4 @@
 RewriteEngine on
 RewriteRule ^bestuur/?$ bestuur.php
-RewriteRule ^bestuur/([0-9]+)$ bestuur.php?bestuur=$1
+RewriteRule ^bestuur/([0-9]+)/bewerken/?$ bestuur.php?bestuur=$1&action=bewerken
+RewriteRule ^bestuur/([0-9]+)/?$ bestuur.php?bestuur=$1

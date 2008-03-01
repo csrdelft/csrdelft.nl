@@ -12,17 +12,16 @@ require_once ('class.bestuur.php');
 
 class BestuurContent extends SimpleHTML {
 
-	### private ###
+	protected $_bestuur;
+	
+	private $_action='view';
 
-	# de objecten die data leveren
-	var $_bestuur;
-	var $_lid;
-
-	### public ###
-
-	function BestuurContent (&$bestuur){
-		$this->_bestuur =& $bestuur;
-		$this->_lid=Lid::get_lid();
+	public function __construct($bestuur){
+		$this->_bestuur=$bestuur;
+	}
+	
+	public function setAction($action){
+		$this->_action=$action;
 	}
 	function getTitel(){
 		return 'Besturen der Civitas Studiosorum Reformatorum';
@@ -38,13 +37,14 @@ class BestuurContent extends SimpleHTML {
 		$bestuur->caching=false;
 	
 		$bestuur->assign('bestuur', $aBestuur);
+		$bestuur->assign('action', $this->_action);
+		
 		$bestuur->display('bestuur.tpl'); 
 	}
 }
 class BestuurZijkolomContent extends BestuurContent{
-	
 	function view(){
-		$aBesturen=$this->_bestuur->getBesturen();
+		$aBesturen=Bestuur::getBesturen();
 		if(is_array($aBesturen)){
 			echo '<ul style="list-style:none">';
 			foreach($aBesturen as $bestuur){

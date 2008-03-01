@@ -6,10 +6,6 @@
 
 class Bestuur{
 
-	### private ###
-
-	# de objecten die data leveren
-	private $_db;
 	private $_lid;
 
 	private $_jaar='';
@@ -17,7 +13,6 @@ class Bestuur{
 	
 	function Bestuur() {
 		$this->_lid=Lid::get_lid();
-		$this->_db=MySql::get_MySql();
 	}
 	
 	//kijk of er een bestuur ingeladen is, anders het huidige inladen.
@@ -29,6 +24,7 @@ class Bestuur{
 	}
 	
 	function loadBestuur($jaar=0){
+		$db=MySql::get_MySql();
 		//leeggooien
 		$this->_jaar=0;
 		$this->_aBestuur=array();
@@ -53,27 +49,52 @@ class Bestuur{
 				jaar=".$jaar."
 			LIMIT 1;";
 
-		$rBestuur=$this->_db->query($sBestuur);
+		$rBestuur=$db->query($sBestuur);
 		if($rBestuur===false){ 
 			return $this->loadBestuur($jaar-1); 
 		}else{
-			$this->_aBestuur=$this->_db->next($rBestuur);
+			$this->_aBestuur=$db->next($rBestuur);
+			$this->_aBestuur['isAdmin']=$this->_lid->hasPermission('P_ADMIN') OR $this->isBestuur();
 			return true;
 		}
 	}
+	public function save(){
+		$db=MySql::get_MySql();
+		$bestuurUpdate="
+			UPDATE bestuur 
+			SET 
+				verhaal='".$db->escape($this->_aBestuur['verhaal'])."', 
+				tekst='".$db->escape($this->_aBestuur['tekst'])."'
+			WHERE ID=".$this->_aBestuur['ID']."
+			LIMIT 1;";
+		return $db->query($bestuurUpdate);
+	}
+	
 	//check of de huidige gebruiker of $uid in het bestuur zit.
-	function isBestuur($uid=''){
+	public function isBestuur($uid=''){
 		$this->loadIfNot();
 		if($uid==''){ $uid=$this->_lid->getUid(); }
 		return in_array($uid, $this->_aBestuur); 
 	}
-	function getBestuur(){ 
+	public function getBestuur(){ 
 		$this->loadIfNot();
 		return $this->_aBestuur;	
 	}
+	public function getJaar(){
+		$this->loadIfNot();
+		return $this->_aBestuur['jaar'];
+	}
+	public function setVerhaal($verhaal){
+		$this->_aBestuur['verhaal']=$verhaal;
+	}
+	public function setTekst($tekst){
+		$this->_aBestuur['tekst']=$tekst;
+	}
+
 	
 	//regel een lijst met besturen die zich in de database bevinden
-	function getBesturen(){
+	public static function getBesturen(){
+		$db=MySql::get_MySql();
 		$sBesturen="
 			SELECT 
 				jaar, naam, praeses
@@ -81,9 +102,9 @@ class Bestuur{
 				bestuur
 			ORDER BY
 				jaar DESC";
-		$rBesturen=$this->_db->query($sBesturen);
-		if($rBesturen!==false AND $this->_db->numRows($rBesturen)!=0){
-			return $this->_db->result2array($rBesturen);
+		$rBesturen=$db->query($sBesturen);
+		if($rBesturen!==false AND $db->numRows($rBesturen)!=0){
+			return $db->result2array($rBesturen);
 		}else{
 			return false;
 		}
