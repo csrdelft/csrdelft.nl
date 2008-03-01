@@ -35,5 +35,5 @@
 			{$bestuur.verhaal|ubb}
 		{/if}
 	</div>
-	<div style="clear: all;"></div>
+	<div style="clear: both;"></div>
 </div>
