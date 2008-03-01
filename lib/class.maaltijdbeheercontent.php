@@ -61,7 +61,7 @@ class MaaltijdbeheerContent extends SimpleHTML {
 			//nieuwe maaltijd, standaardwaarden
 			$aForm['id']=0;
 			$aForm['actie']='toevoegen';
-			$aForm['moment']=time();
+			$aForm['datum']=time();
 			$aForm['abosoort']='';
 			$aForm['max']=100;
 			//alles standaard naar jan lid.
@@ -77,8 +77,8 @@ class MaaltijdbeheerContent extends SimpleHTML {
 		# als er een error gegeven wordt, is er hoogstwaarschijnlijk wat mis gegaan bij het bewerken of toevoegen
 		# van een nieuwe maaltijd. Daarom kijken we hier of er nog zinnige invoer uit de post te halen valt.
 		if($this->_error!=''){
-			if(isset($_POST['moment'])){ $aForm['datum']=trim(mb_htmlentities($_POST['moment'])); }
-			if(isset($_POST['omschrijving'])){ $aForm['tekst']=trim(mb_htmlentities($_POST['omschrijving'])); }
+			if(isset($_POST['datum'])){ $aForm['datum']=trim(mb_htmlentities($_POST['datum'])); }
+			if(isset($_POST['tekst'])){ $aForm['tekst']=trim(mb_htmlentities($_POST['tekst'])); }
 			if(isset($_POST['limiet']) AND $_POST['limiet']==(int)$_POST['limiet']){ $aForm['max']=$_POST['limiet']; }
 			if(isset($_POST['abo']) AND $this->_maaltrack->isValidAbo($_POST['abo'])){ $aForm['abosoort']=$_POST['abo']; }
 			if(isset($_POST['tp']) AND $this->_lid->uidExists($_POST['tp']) ){ $aForm['tp']=$_POST['tp']; }

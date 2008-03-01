@@ -6,11 +6,11 @@
 	<table>
 		<tr>
 			<td>Beginmoment</td>
-			<td><input type="text" name="moment" value="{$maal.formulier.datum|date_format:$datumFormaatInvoer}" /></td>
+			<td><input type="text" name="datum" value="{$maal.formulier.datum|date_format:$datumFormaatInvoer}" /></td>
 		</tr>
 		<tr>
 			<td>Omschrijving</td>
-			<td><input type="text" name="omschrijving" value="{$maal.formulier.tekst}" /></td>
+			<td><input type="text" name="tekst" value="{$maal.formulier.tekst}" /></td>
 		</tr>
 		<tr>
 			<td>Limiet</td>

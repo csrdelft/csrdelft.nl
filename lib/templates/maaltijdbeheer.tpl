@@ -35,4 +35,3 @@
 
 {* maaltijd bewerken of toevoegoen, standaard toevoegen *}
 {include file='maaltijdform.tpl'}
-
