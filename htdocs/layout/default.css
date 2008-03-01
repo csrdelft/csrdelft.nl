@@ -332,7 +332,7 @@ table.zoekResultaat tr td{border-top: 1px solid lightgrey; margin: 0px; padding:
 table.zoekResultaat tr td img{ background-color: #fff3b4;}
 
 /* bestuur.php */
-#bestuurContainer{ text-align: center; }
+#bestuurContainer{ text-align: center; clear: both;}
 table.bestuur{ width: 100%; text-align: center; }
 table.bestuur th{ text-align: center; }
 table.bestuur td{ text-align: center; }

@@ -21,9 +21,10 @@ $body = new BestuurContent($bestuur);
 if(isset($_GET['action']) AND $_GET['action']=='bewerken'){
 	$body->setAction('edit');
 	
-	if(isset($_POST['verhaal'])){
+	if(isset($_POST['verhaal'], $_POST['tekst'])){
 		//opslaan
 		$bestuur->setVerhaal($_POST['verhaal']);
+		$bestuur->setTekst($_POST['tekst']);
 		if($bestuur->save()){
 			$body->invokeRefresh('Opslaan gelukt', CSR_ROOT.'vereniging/bestuur/'.$bestuur->getJaar());
 		}else{
