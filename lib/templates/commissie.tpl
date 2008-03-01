@@ -27,7 +27,9 @@
 	</div>
 	</form>
 {else}
-	<div style="float: right; margin: 10px ;"><a href="/groepen/commissie/{$cie.id}/bewerken" class="knop">bewerken</a></div>
+	{if $magBewerken}
+		<div style="float: right; margin: 10px ;"><a href="/groepen/commissie/{$cie.id}/bewerken" class="knop">bewerken</a></div>
+	{/if}
 	{$cie.tekst|ubb}
 	
 	{if $cie.link!=''}
