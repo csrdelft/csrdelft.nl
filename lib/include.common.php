@@ -113,7 +113,8 @@ function pr($sString){
 		echo 'Er is een foutje, de webmeester is er al mee bezig...';
 	}
 }
-function namen2uid($sNamen, $lid){
+function namen2uid($sNamen){
+	$lid=Lid::get_lid();
 	$return=array();
 	$sNamen=trim($sNamen);
 	$sNamen=str_replace(array(', ', "\r\n", "\n"), ',', $sNamen);

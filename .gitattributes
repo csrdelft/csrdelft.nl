@@ -303,6 +303,7 @@ lib/tekst/thuis.html -text
 lib/tekst/verbanden.html -text
 lib/tekst/werkgroepen.html -text
 lib/templates/bestuur.tpl -text
+lib/templates/commissie.tpl -text
 lib/templates/courant/courantbeheer.tpl -text
 lib/templates/courant/mail/c_header.tpl -text
 lib/templates/courant/mail/courant.tpl -text

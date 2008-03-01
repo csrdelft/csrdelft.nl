@@ -12,17 +12,8 @@ require_once ('class.commissie.php');
 
 class CieOverzichtContent extends SimpleHTML {
 
-	### private ###
+	function CieOverzichtContent () {
 
-	# de objecten die data leveren
-	var $_commissie;
-	var $_lid;
-
-	### public ###
-
-	function CieOverzichtContent (&$commissie, &$lid) {
-		$this->_commissie =& $commissie;
-		$this->_lid =& $lid;
 	}
 	function getTitel(){
 		return 'Commissieoverzicht';
@@ -31,15 +22,15 @@ class CieOverzichtContent extends SimpleHTML {
 		echo '<a href="/groepen/">Groepen</a> &raquo; '.$this->getTitel();
 	}
 	function viewCieOverzicht(){
-		$aCommissies=$this->_commissie->getOverzicht();
-		
+		$aCommissies=Commissie::getOverzicht();
+		$lid=Lid::get_lid();
 		foreach ($aCommissies as $cie) {
 			echo '<div class="cie">';
 			echo '<div class="cieleden">';
-			$aCieLeden=$this->_commissie->getCieLeden($cie['id']);
+			$aCieLeden=Commissie::getLeden($cie['id']);
 			if(is_array($aCieLeden)){
 				foreach($aCieLeden as $aCieLid){
-					echo $this->_lid->getNaamLink($aCieLid['uid'], 'civitas', true, $aCieLid).'&nbsp;<em>'.$aCieLid['functie'].'</em><br />';
+					echo $lid->getNaamLink($aCieLid['uid'], 'civitas', true, $aCieLid).'&nbsp;<em>'.$aCieLid['functie'].'</em><br />';
 				}
 			}else{
 				echo $aCieLeden;

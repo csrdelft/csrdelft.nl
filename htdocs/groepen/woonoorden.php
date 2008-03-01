@@ -6,10 +6,10 @@ require_once('include.config.php');
 # Het middenstuk
 require_once('class.woonoord.php');
 require_once('class.woonoordcontent.php');
-$woonoord = new Woonoord($db, $lid);
+$woonoord = new Woonoord();
 if(isset($_GET['woonoordid'])){
   $iWoonoordID=(int)$_GET['woonoordid'];
-  if(isset($_GET['verwijderen'], $_GET['uid']) AND preg_match('/^\w{4}$/', $_GET['uid']) AND 
+  if(isset($_GET['verwijderen'], $_GET['uid']) AND $lid->isValidUid($_GET['uid']) AND 
   	($woonoord->magBewerken($iWoonoordID) OR $lid->hasPermission('P_LEDEN_MOD'))){
     //een bewoner verwijderen uit een woonoord
     $woonoord->delBewoner($iWoonoordID, $_GET['uid']);
@@ -17,7 +17,7 @@ if(isset($_GET['woonoordid'])){
     exit;
   //rawbewoners omzetten naar een array, de unieke rijen direct invoegen
   }elseif(isset($_POST['rawBewoners']) AND $woonoord->magBewerken($iWoonoordID)){
-  	$aBewoners=namen2uid($_POST['rawBewoners'], $lid);
+  	$aBewoners=namen2uid($_POST['rawBewoners']);
       if(is_array($aBewoners) AND count($aBewoners)>0){
     	$iSuccesvol=0;
     	foreach($aBewoners as $aBewoner){
