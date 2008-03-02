@@ -14,14 +14,14 @@
 			<td>{$bestuur.abactis|csrnaam:'full':false}</td>
 			<td>{$bestuur.praeses|csrnaam:'full':false}</td>
 			<td>{$bestuur.fiscus|csrnaam:'full':false}</td>
-			<td>{$bestuur.vice_abactis|csrnaam:'full':false}</td>
+			{if $bestuur.vice_abactis!=''}<td>{$bestuur.vice_abactis|csrnaam:'full':false}</td>{/if}
 		</tr>
 		<tr>
 			<th>vice-praeses</th>
 			<th>abactis</th>
 			<th>praeses</th>
 			<th>fiscus</th>
-			<th>vice-abactis</th>
+			{if $bestuur.vice_abactis!=''}<th>vice-abactis</th>{/if}
 		</tr>
 	</table>
 	{if $action=='edit'}

@@ -36,7 +36,9 @@ li{margin: 0 0 0 15px;}
 li li{ font-size: 1em;}
 
 
-
+.persoonlijkverhaal{
+	margin-left: 10px;
+}
 /* pagina-opmaak */
 #layoutContainer{}
 #navigatie{
@@ -363,6 +365,10 @@ span.tijd{ font-size: 0.95em; }
 span.tijd{ font-size: 0.95em; }
 
 /* commissieoverzichtspagina */
+#cieLijstje{ float: right; margin:  30px 20px 10px 20px; width: 200px; }
+#cieLijstje, #cieLijstje li, #cieLijstje ul{text-align: right;}
+#cieLijstje li{ margin-left: 0px; padding-left: 0px; }
+
 .cie{ clear: both; border-top: 1px solid black; margin-top: 20px; }
 .cieleden{ width: 220px; float: right; padding: 10px 20px 20px 20px; }
 
