@@ -30,7 +30,7 @@ class Commissie {
 		}
 		
 		$result = $db->query("
-			SELECT id, naam, stekst, titel, tekst, link
+			SELECT id, naam, stekst, titel, tekst
 			FROM commissie 
 			WHERE ".$filter." 
 			LIMIT 1;");
@@ -46,8 +46,7 @@ class Commissie {
 		$query="
 			UPDATE commissie 
 			SET tekst='".$db->escape($this->cie['tekst'])."',
-				stekst='".$db->escape($this->cie['stekst'])."',
-				link='".$db->escape($this->cie['link'])."'
+				stekst='".$db->escape($this->cie['stekst'])."'
 			WHERE id=".$this->cie['id']."
 			LIMIT 1;";
 		return $db->query($query);
@@ -62,11 +61,6 @@ class Commissie {
 	}
 	function setStekst($stekst){
 		$this->cie['stekst']=$stekst;
-	}
-	function setLink($link){
-		if(url_like($link)){
-			$this->cie['link']=$link;
-		}
 	}
 	
 	function magBewerken(){

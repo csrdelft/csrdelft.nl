@@ -18,8 +18,6 @@
 	<form action="/groepen/commissie/{$cie.id}/bewerken" method="post">
 	<div class="cieAdmin" style="width: 100%; clear: both;">
 		<h2>Commissie bewerken:</h2>
-		<strong>Website:</strong><br />
-		<input type="text" name="link" value="{$cie.link|escape:'html'}" style="width: 100%" />
 		<strong>Korte beschrijving:</strong><br />
 		<textarea name="stekst" style="width: 100%">{$cie.stekst|escape:'html'}</textarea>
 		<strong>Lange beschrijving:</strong><br />
@@ -32,10 +30,6 @@
 		<div style="float: right; margin: 10px ;"><a href="/groepen/commissie/{$cie.id}/bewerken" class="knop">bewerken</a></div>
 	{/if}
 	{$cie.tekst|ubb}
-	
-	{if $cie.link!=''}
-		<br /> <br />Commissiewebstek: <a href="{$cie.link|escape:'html'}">{$cie.link}</a>	
-	{/if}
 	
 	{if $magBewerken}
 		<div style="clear: both;"></div><hr />

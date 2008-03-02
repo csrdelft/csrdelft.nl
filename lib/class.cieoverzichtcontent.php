@@ -24,6 +24,8 @@ class CieOverzichtContent extends SimpleHTML {
 	function viewCieOverzicht(){
 		$aCommissies=Commissie::getOverzicht();
 		$lid=Lid::get_lid();
+		$ubb=new CsrUBB();
+		
 		foreach ($aCommissies as $cie) {
 			echo '<div class="cie">';
 			echo '<div class="cieleden">';
@@ -39,7 +41,7 @@ class CieOverzichtContent extends SimpleHTML {
 			
 			echo '<h2><a href="/groepen/commissie/'.htmlspecialchars($cie['naam']).'.html">'.mb_htmlentities($cie['titel']).'</a></h2>';
 				
-			echo mb_htmlentities($cie['stekst']);
+			echo $ubb->getHtml($cie['stekst']);
 			echo '</div>';
 		}
 		//zo, nu nog even een clear zodat het niet buiten het witte contentvlak gaat vallen..

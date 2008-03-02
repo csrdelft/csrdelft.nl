@@ -17,10 +17,9 @@ if(isset($_GET['cie'])){
 		switch($_GET['action']){
 			case 'bewerken':
 				$middenvak->setAction('edit');
-				if(isset($_POST['tekst'], $_POST['stekst'], $_POST['link'])){
+				if(isset($_POST['tekst'], $_POST['stekst'])){
 					$commissie->setTekst($_POST['tekst']);
 					$commissie->setStekst($_POST['stekst']);
-					$commissie->setLink($_POST['link']);
 					if($commissie->save()){
 						$middenvak->invokeRefresh('Opslaan gelukt', CSR_ROOT.'groepen/commissie/'.$commissie->getId());	
 					}
