@@ -1,10 +1,10 @@
 {$melding}
-<div style="float: right; width: 210px; margin: 10px;">
+<div class="cieleden">
 	<strong>Commissieleden:</strong>
 	<table>
 		{foreach from=$aCieLeden item=cieLid}
 			<tr>
-				<td width="150px">{$cieLid.uid|csrnaam:'civitas'}</td>
+				<td>{$cieLid.uid|csrnaam:'civitas'}</td>
 				<td>{$cieLid.functie|escape:'html'}</td>
 				{if $magBewerken}
 					<td><a href="/groepen/commissie/{$cie.id}/verwijder/lid/{$cieLid.uid}">X</a></td>

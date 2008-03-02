@@ -44,7 +44,7 @@ class CieOverzichtContent extends SimpleHTML {
 			actief en actueel te houden. De OWeecommissie, afgekort OWeeCie is de eerste commissie van 
 			C.S.R. waarmee een aankomende student in aanraking komt. Deze commissie zit vol met enthousiaste
 			 mensen die verantwoordelijk zijn voor het duidelijk maken dat C.S.R. een briljante vereniging 
-			is. Naast de OWeeCie kent C.S.R. ruim 20 commissies met ieder zijn eigen geweldige taak. 
+			is. Naast de OWeeCie kent C.S.R. ruim 20 commissies met ieder zijn eigen geweldige taak.<br />
 			Commissies worden gevuld met leden die graag vaardigheden en kennis willen op doen van 
 			commissiewerk. Wellicht klinkt dit erg groot en verplicht, maar bijvoorbeeld de OWeeCie is 
 			ook een grote commissie. Als aspirant-lid bij C.S.R. wordt je ingedeeld in een sjaarscommissie 
