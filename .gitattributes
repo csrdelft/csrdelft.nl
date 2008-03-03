@@ -139,6 +139,8 @@ lib/class.forumcontent.php -text
 lib/class.forumonderwerp.php -text
 lib/class.forumonderwerpcontent.php -text
 lib/class.forumpoll.php -text
+lib/class.groep.php -text
+lib/class.groepen.php -text
 lib/class.includer.php -text
 lib/class.kolom.php -text
 lib/class.ldap.php -text
