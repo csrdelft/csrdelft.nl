@@ -90,12 +90,6 @@ function is_utf8($string) {
    )*$%xs', $string);
    
 } // function is_utf8
-function naam($voornaam, $achternaam, $tussenvoegsel){
-	$naam=$voornaam.' ';
-	if($tussenvoegsel!='') $naam.=$tussenvoegsel.' ';
-	$naam.=$achternaam;
-	return $naam;
-}
 function opConfide() {
 	return ( isset($_SERVER['REMOTE_ADDR']) and defined('CONFIDE_IP') and in_array($_SERVER['REMOTE_ADDR'],explode(':',CONFIDE_IP)) );
 }
@@ -136,7 +130,7 @@ function namen2uid($sNamen){
 			foreach($aZoekNamen as $aZoekNaam){
 				$aNaamOpties[]=array(
 					'uid' => $aZoekNaam['uid'], 
-					'naam' => naam($aZoekNaam['voornaam'], $aZoekNaam['achternaam'], $aZoekNaam['tussenvoegsel']) );
+					'naam' => $lid->getFullname($aZoekNaam['uid']) );
 			}
 			$return[]['naamOpties']=$aNaamOpties;
 		}
@@ -176,5 +170,26 @@ function strNthPos($haystack, $needle, $nth = 1){
    for($i = 1; $i < $nth; $i++)
        $offset = strpos($haystack, $needle, $offset) + 1;
    return strpos($haystack, $needle, $offset) - 1;
+}
+/*
+ * Geeft een array terug met alleen de opgegeven keys.
+ * 
+ * @param	$in		ééndimensionele array.
+ * @param	$keys	Keys die uit de in-array gereturned moeten worden.
+ * @return			Array met alleen keys die in $keys zitten
+ * 
+ * @author			Jan Pieter Waagmeester (jieter@jpwaag.com)
+ */
+function array_get_keys($in, $keys){
+	if(!is_array($in) OR !is_array($keys)){
+		return false;
+	}
+	$out=array();
+	foreach($keys as $key){
+		if(isset($in[$key])){
+			$out[$key]=$in[$key];
+		}
+	}
+	return $out;
 }
 ?>

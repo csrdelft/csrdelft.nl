@@ -29,11 +29,11 @@ class ProfielContent extends SimpleHTML {
 		$this->_profiel = $this->_lid->getTmpProfile();
 	}
 	function getTitel(){
-		return 'Het profiel van '.naam($this->_profiel['voornaam'], $this->_profiel['achternaam'], $this->_profiel['tussenvoegsel']);
+		return 'Het profiel van '.$this->_lid->getFullname($this->_profiel['uid']);
 	}
 	function viewWaarbenik(){
 		echo '<a href="/intern/">Intern</a> &raquo; <a href="/leden/lijst.php">Ledenlijst</a> &raquo; ';
-		echo 'profiel van '.naam($this->_profiel['voornaam'], $this->_profiel['achternaam'], $this->_profiel['tussenvoegsel']);
+		echo 'profiel van '.$this->_lid->getFullname($this->_profiel['uid']);
 
 	}
 	function viewStateNone(){
