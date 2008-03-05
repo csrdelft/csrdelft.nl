@@ -268,7 +268,11 @@ div#uStaatRood{
 }
 
 /* profiel */
-table.profiel{ width: 100%;	border-collapse: collapse; }
+table.profiel{ 
+	width: 100%;	
+	border-collapse: collapse; 
+	margin-bottom: 20px;
+}
 table.profiel th{ 
 	text-align: left;
 	vertical-align: bottom;
@@ -281,9 +285,11 @@ table.profiel td{
 	text-align: left;
 }
 table.profiel td.foto{
-	margin: 0; padding: 0;
+	margin: 0; padding: 5px;
 	border: 0;
 }
+td.foto img{ border: 2px solid black; }
+
 table.profiel_edit{
 	width: 100%;
 	margin: 5px;
