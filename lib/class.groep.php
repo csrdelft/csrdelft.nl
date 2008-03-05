@@ -10,8 +10,14 @@ class Groep{
 	private $leden=null;
 	
 	public function __construct($init){
-		if(is_int($init)){
-			$this->load($init);
+		if(is_int($init) OR is_string($init)){
+			//we maken een nieuwe
+			if($init===0){
+				//dit zijn de defaultwaarden voor een nieuwe groep
+				$this->groep=array('id'=>0, 'snaam'=>'', 'naam'=>'', 'sbeschrijving'=>'', 'beschrijving'=>'', 'zichtbaar'=>'zichtbaar');
+			}else{
+				$this->load($init);
+			}
 		}elseif(is_array($init)){
 			$this->groep=array_get_keys($init[0], array('groepId', 'snaam', 'naam', 'sbeschrijving', 'beschrijving', 'zichtbaar'));
 			foreach($init as $lid){
@@ -21,9 +27,35 @@ class Groep{
 			}
 		}
 	}
+	/*
+	 * Laad een groep in aan de hand van het id of de snaam
+	 * 
+	 * @param	$groepId	integer groepId of string snaam
+	 * @return	void
+	 */
 	public function load($groepId){
 		$db=MySql::get_MySql();
-		die('TODO: implement this!!!!1');
+		if(is_int($groepId)){
+			$wherePart="groep.id=".(int)$groepId;
+		}else{
+			$wherePart="groep.snaam='".$db->escape($groepId)."'";
+		}
+		$qGroep="
+			SELECT 
+				groep.id AS groepId, groep.snaam AS snaam, groep.naam AS naam,
+				groep.sbeschrijving AS sbeschrijving, groep.beschrijving AS beschrijving, groep.zichtbaar AS zichtbaar,
+				groeplid.uid AS uid, groeplid.op AS op, groeplid.functie AS functie, groeplid.prioriteit AS prioriteit 
+			FROM groep
+			LEFT JOIN groeplid ON(groep.id=groeplid.groepid) 
+			WHERE ".$wherePart."
+			ORDER BY groeplid.prioriteit ASC;";
+		$rGroep=$db->query($qGroep);
+		while($aGroep=$db->next($rGroep)){
+			if($aGroep['uid']!=''){
+				$this->leden[$aGroep['uid']]=array_get_keys($aGroep, array('uid', 'op', 'functie'));
+			}
+		}
+		$this->groep=array_get_keys($aGroep, array('groepId', 'snaam', 'naam', 'sbeschrijving', 'beschrijving', 'zichtbaar'));
 	}
 	
 	/*
@@ -31,16 +63,26 @@ class Groep{
 	 */
 	public function save(){
 		$db=MySql::get_MySql();
-		$qSave="
-			UPDATE groep SET 
-				snaam='".$db->escape($this->getSname())."',
-	 			naam='".$db->escape($this->getName())."',
-				sbeschrijving='".$db->escape($this->getSbeschrijving())."',
-				beschrijving='".$db->escape($this->getBeschrijving())."',
-				zichtbaar='".$db->escape($this->getZichtbaar())."'
-			WHERE id=".$this->getId()."
-			LIMIT 1;";
-		return $db->query($qSave);
+		if($this->getId()==0){
+			
+		}else{
+			$qSave="
+				UPDATE groep SET 
+					snaam='".$db->escape($this->getSname())."',
+		 			naam='".$db->escape($this->getName())."',
+					sbeschrijving='".$db->escape($this->getSbeschrijving())."',
+					beschrijving='".$db->escape($this->getBeschrijving())."',
+					zichtbaar='".$db->escape($this->getZichtbaar())."'
+				WHERE id=".$this->getId()."
+				LIMIT 1;";
+		}
+		if($db->query($qSave)){
+			if($this->getId()==0){ 
+				$this->groep['id']=$db->insert_id();
+			}
+			return true;
+		}
+		return false;
 	}
 	
 	public function getId(){			return $this->groep['groepId']; }
@@ -57,16 +99,71 @@ class Groep{
 	public function setZichtbaar($value){		$this->groep['zichtbaar']=$value; }
 	
 	public function isLid($uid){	return isset($this->leden[$uid]); }
+	public function isOp($uid){		return $this->isLid($uid) AND $this->leden[$uid]['op']=='1'; }
 	public function getLeden(){		return $this->leden; }
 	
 	public function magBewerken(){
 		$lid=Lid::get_lid();
-		return $lid->hasPermission('P_LEDEN_MOD') OR $this->isLid($lid->getUid());
+		return $lid->hasPermission('P_LEDEN_MOD') OR $this->isOp($lid->getUid());
 	}
-	
-	//TODO: dit maken
-	public static function loadBySname($sname){
-		
+	function verwijderLid($uid){
+		$lid=Lid::get_lid();
+		if($lid->isValidUid($uid)){
+			$db=MySql::get_MySql();
+			$qVerwijderen="
+				DELETE FROM 
+					groeplid
+				WHERE
+					groepid=".$this->getId()."
+				AND
+					uid='".$uid."' 
+				LIMIT 1;";
+			return $db->query($qVerwijderen);
+		}else{
+			return false;
+		}
+	}
+	function addLid($uid, $functie=''){
+		$db=MySql::get_MySql();
+		$op=0;
+		switch(strtolower(trim($functie))){
+			case 'praeses':	case 'archivaris': case 'werkgroepleider':
+				$prioriteit=1;
+				$op=1;
+			break;
+			case 'fiscus': case 'redacteur': case 'bibliothecaris':
+			case 'posterman': case 'techniek': case 'abactis':
+				$prioriteit=2;
+			break;
+			case 'computeur': case 'statisticus': case 'provisor': 
+			case 'internetman': case 'bandleider':
+				$prioriteit=3;
+			break;
+			case 'fotocommisaris':
+				$prioriteit=4;
+			break;
+			case 'koemissaris': case 'stralerpheut': case 'regelneef':
+				$prioriteit=8;
+			break;
+			case 'q.q.': case 'qq':
+				$prioriteit=9;
+				$functie='Q.Q.';
+			break;
+			default:
+				$prioriteit=5;
+			break;
+		}
+		if(!$this->isLid()){
+			$sCieQuery="
+				INSERT INTO commissielid
+					( cieid, uid, op, functie, prioriteit )
+				VALUES (
+					".$this->getId().", '".$uid."', '".$op."', '".$functie."', ".$prioriteit."
+				)";
+			return $db->query($sCieQuery);
+		}else{ 
+			return false; 
+		}
 	}
 }
 ?>

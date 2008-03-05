@@ -40,6 +40,7 @@ htdocs/forum/verwijderen.php -text
 htdocs/forum/zoeken.php -text
 htdocs/groepen/.htaccess -text
 htdocs/groepen/commissies.php -text
+htdocs/groepen/groepen.php -text
 htdocs/groepen/index.php -text
 htdocs/groepen/moten.php -text
 htdocs/groepen/onderverenigingen.php -text
@@ -140,6 +141,8 @@ lib/class.forumonderwerp.php -text
 lib/class.forumonderwerpcontent.php -text
 lib/class.forumpoll.php -text
 lib/class.groep.php -text
+lib/class.groepcontent.php -text
+lib/class.groepcontroller.php -text
 lib/class.groepen.php -text
 lib/class.includer.php -text
 lib/class.kolom.php -text
@@ -312,6 +315,8 @@ lib/templates/courant/mail/courant.tpl -text
 lib/templates/courant/mail/csrmail_owee.tpl -text
 lib/templates/csrdelft.tpl -text
 lib/templates/forum/rss.tpl -text
+lib/templates/groepen/groep.tpl -text
+lib/templates/groepen/groepen.tpl -text
 lib/templates/maaltijdbeheer.tpl -text
 lib/templates/maaltijdform.tpl -text
 lib/templates/maaltijdinfo.tpl -text

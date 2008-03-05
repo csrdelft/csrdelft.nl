@@ -23,7 +23,7 @@ class Groepen{
 	 * Constructor voor Groepen.
 	 * 
 	 * @param	$groeptype		Welke groepen moeten geladen worden?
-	 * @param	$loadMembers	Wel of niet de groepsleden meeladen.	
+	 * @return 	void
 	 */
 	public function __construct($groeptype){
 		$db=MySql::get_MySql();
@@ -87,6 +87,9 @@ class Groepen{
 		$this->groepen[$aGroep[0]['groepId']]=new Groep($aGroep);
 		
 	}
+	/*
+	 * Sla de huidige toestand van de groep op in de database.
+	 */
 	public function save(){
 		$db=MySql::get_MySql();
 		$qSave="
@@ -108,7 +111,27 @@ class Groepen{
 		}
 		return false;
 	}
+	/*
+	 * statische functie om de groepen bij een gebruiker te zoeken.
+	 * 
+	 * @param	$uid	Gebruiker waarvoor groepen moeten worden opgezocht
+	 * @return			Array met groepen
+	 */
+	public static function getGroepenByUid($uid){
+		$db=MySql::get_MySql();
+		$groepen=array();
+		$result=$db->query("
+			SELECT id, snaam, naam
+			FROM groep
+			WHERE id IN ( 
+				SELECT groepid FROM groeplid WHERE uid = '".$db->escape($uid)."'
+			)
+			ORDER BY naam;");
+		if ($result !== false and $db->numRows($result) > 0){
+			$groepen=$db->result2array($result);
+		}
+		return $groepen;
+	}
 }
-
 
 ?>
