@@ -11,9 +11,14 @@ require_once('class.groepen.php');
 require_once('class.groep.php');
 require_once('class.groepcontent.php');
 
-$groepen=new Groepen('Commissies');
+if(isset($_GET['gtype'])){
+	$gtype=$_GET['gtype'];
+}else{
+	$gtype="Commissies";
+}
+$groepen=new Groepen($gtype);
  
-$content=new Groepcontent($groepen->getGroep(3));
+$content=new Groepencontent($groepen);
 
 
 ## zijkolom in elkaar jetzen

@@ -40,6 +40,7 @@ htdocs/forum/verwijderen.php -text
 htdocs/forum/zoeken.php -text
 htdocs/groepen/.htaccess -text
 htdocs/groepen/commissies.php -text
+htdocs/groepen/groep.php -text
 htdocs/groepen/groepen.php -text
 htdocs/groepen/index.php -text
 htdocs/groepen/moten.php -text

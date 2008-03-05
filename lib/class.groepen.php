@@ -83,9 +83,10 @@ class Groepen{
 			}
 			$aGroep[]=$aGroepraw;
 		}
-		//tot slot de laatste groep ook toevoegen
-		$this->groepen[$aGroep[0]['groepId']]=new Groep($aGroep);
-		
+		if(isset($aGroep[0])){
+			//tot slot de laatste groep ook toevoegen
+			$this->groepen[$aGroep[0]['groepId']]=new Groep($aGroep);
+		}
 	}
 	/*
 	 * Sla de huidige toestand van de groep op in de database.
@@ -94,15 +95,13 @@ class Groepen{
 		$db=MySql::get_MySql();
 		$qSave="
 			UPDATE groeptype SET 
-				naam='".$db->escape($this->getType())."',
-				beschrijving='".$db->escape($db->getBeschrijving())."'
 			WHERE id=".$this->getId()."
 			LIMIT 1;";
 		return $db->save();
 	}
 	
-	public function getId(){		return $this->type['id']; }
-	public function getType(){ 			return $this->type['naam']; }
+	public function getId(){			return $this->type['id']; }
+	public function getNaam(){ 			return $this->type['naam']; }
 	public function getBeschrijving(){	return $this->type['beschrijving']; }
 	
 	public function getGroep($groepId){
@@ -111,6 +110,7 @@ class Groepen{
 		}
 		return false;
 	}
+	public function getGroepen(){		return $this->groepen; }
 	/*
 	 * statische functie om de groepen bij een gebruiker te zoeken.
 	 * 
@@ -131,6 +131,23 @@ class Groepen{
 			$groepen=$db->result2array($result);
 		}
 		return $groepen;
+	}
+	/*
+	 * Statische functie om een verzameling van groeptypes terug te geven
+	 * 
+	 * @return		Array met groeptypes
+	 */
+	public static function getGroeptypes(){
+		$db=MySql::get_MySql();
+		$groeptypes=array();
+		$result=$db->query("
+			SELECT id, naam
+			FROM groeptype
+			ORDER BY naam;");
+		if ($result !== false and $db->numRows($result) > 0){
+			$groeptypes=$db->result2array($result);
+		}
+		return $groeptypes;
 	}
 }
 
