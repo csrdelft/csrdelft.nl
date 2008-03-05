@@ -124,6 +124,7 @@ class Groep{
 		return $lid->hasPermission('P_LEDEN_MOD');
 	}
 	public function magBewerken(){
+		$lid=Lid::get_lid();
 		return $this->isAdmin() OR $this->isOp($lid->getUid());
 	}
 	

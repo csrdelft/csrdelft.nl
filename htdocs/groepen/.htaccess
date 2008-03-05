@@ -6,7 +6,7 @@ RewriteRule ^commissie/([0-9]+)/bewerken/?$ commissies.php?cie=$1&action=bewerke
 RewriteRule ^commissie/([0-9]+)/? commissies.php?cie=$1&action=default
 
 RewriteRule ^commissie/([a-zA-Z]+)(/|.html|.htm|.php) commissies.php?cie=$1
-
+RewriteRule ^$	index.php
 
 ##	Groepen nieuwe stijl, lekker, controller ipv duizend regels voor dingen...
 RewriteRule ^([a-zA-Z]*)/?$ groepen.php?gtype=$1	
