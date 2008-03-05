@@ -70,12 +70,12 @@ class VerjaardagContent extends SimpleHTML {
 						$maand = ($r*$kolommen+$k+$dezemaand-2)%12+1;
 						if ($maand <= 12) {
 							echo '<td>'."\n";
-							$vrjdgn = $this->_lid->getVerjaardagen($maand);
-							foreach ($vrjdgn as $vrjdg){
-								if ($vrjdg['gebdag'] == $dezedag and $maand == $dezemaand) echo '<span class="waarschuwing">';
-								echo $vrjdg['gebdag'] . " ";
-								echo mb_htmlentities(naam($vrjdg['voornaam'], $vrjdg['achternaam'],$vrjdg['tussenvoegsel']))."<br />\n";
-								if ($vrjdg['gebdag'] == $dezedag and $maand == $dezemaand) echo "</span>";
+							$verjaardagen = $this->_lid->getVerjaardagen($maand);
+							foreach ($verjaardagen as $verjaardag){
+								if ($verjaardag['gebdag'] == $dezedag and $maand == $dezemaand) echo '<span class="waarschuwing">';
+								echo $verjaardag['gebdag'] . " ";
+								echo $this->_lid->getNaamLink($verjaardag['uid'])."<br />\n";
+								if ($verjaardag['gebdag'] == $dezedag and $maand == $dezemaand) echo "</span>";
 							}
 							echo "<br /></td>\n";
 						} else {

@@ -520,11 +520,10 @@ class MaalTijd {
 				abosoort='".$this->_maaltijd['abosoort']."'");
 		if (($rAbo !== false) and $this->_db->numRows($rAbo) > 0){
 			while ($aAbo = $this->_db->next($rAbo)){
-				$naam=naam($aAbo['voornaam'], $aAbo['achternaam'], $aAbo['tussenvoegsel']);
 				//hier array met uid als key maken, om zometeen alles te kunnen wegstrepen
 				$abo[$aAbo['uid']]=array(
 					'uid' => $aAbo['uid'],
-					'naam' => $naam,
+					'naam' => $this->_lid->getFullName($aAbo['uid']),
 					'eetwens' => $aAbo['eetwens'],
 					'achternaam' => $aAbo['achternaam'],
 					'saldo' => $aAbo['saldo'],
