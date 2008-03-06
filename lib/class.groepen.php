@@ -38,7 +38,8 @@ class Groepen{
 		if($rGroeptype!==false AND $db->numRows($rGroeptype)==1){
 			$this->type=$db->next($rGroeptype);
 		}else{
-			die('FATALE FEUT: Groeptype bestaat niet! Groepen::load()');
+			//TODO: dit netjes doen. Exception gooien ofzo
+			die('FATALE FEUT: Groeptype bestaat niet! Groepen::__construct()');
 		}
 
 		//Vervolgens de groepen van het gegeven type ophalen:
@@ -103,6 +104,10 @@ class Groepen{
 	public function getId(){			return $this->type['id']; }
 	public function getNaam(){ 			return $this->type['naam']; }
 	public function getBeschrijving(){	return $this->type['beschrijving']; }
+	public static function isAdmin(){		
+		$lid=Lid::get_lid();
+		return $lid->hasPermission('P_LEDEN_MOD');
+	}
 	
 	public function getGroep($groepId){
 		if(isset($this->groepen[$groepId])){
@@ -148,6 +153,14 @@ class Groepen{
 			$groeptypes=$db->result2array($result);
 		}
 		return $groeptypes;
+	}
+	public static function isValidGtype($gtypetotest){
+		foreach(Groepen::getGroeptypes() as $gtype){
+			if($gtype['id']==$gtypetotest OR $gtype['naam']==$gtypetotest){
+				return true;
+			}
+		}
+		return false;
 	}
 }
 

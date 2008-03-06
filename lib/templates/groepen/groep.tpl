@@ -1,4 +1,14 @@
 {$melding}
+<ul class="horizontal">
+{foreach from=$groeptypes item=groeptype}
+	<li>
+		{if $groeptype.id==$groep->getTypeId()}<strong>{/if}
+			<a href="/groepen/{$groeptype.naam}/">{$groeptype.naam}</a>
+		{if $groeptype.id==$groep->getTypeId()}</strong>{/if}
+	</li>
+{/foreach}
+</ul>
+<hr />
 <div class="groepleden">
 	<strong>leden:</strong>
 	<table>
@@ -17,8 +27,12 @@
 {if $groep->magBewerken() AND $action=='edit'}
 	<form action="/groepen/{$gtype}/{$groep->getId()}/bewerken" method="post">
 	<div class="groepAdmin" style="width: 100%; clear: both;">
-		<h2>Groep bewerken:</h2>
+		<h2>Groep {if $groep->getId()==0}toevoegen{else}bewerken{/if}:</h2>
 		{if $groep->isAdmin()}
+			{if $groep->getId()==0}
+				<strong>Korte naam:</strong> (Voor in urls. Alleen letters, geen spaties.)<br />
+				<input type="text" name="snaam" style="width: 100%" value="{$groep->getSnaam()|escape:'html'}" />
+			{/if}
 		<strong>Naam:</strong><br />
 		<input type="text" name="naam" style="width: 100%" value="{$groep->getNaam()|escape:'html'}" />
 		<strong>Korte beschrijving:</strong><br />

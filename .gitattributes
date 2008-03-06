@@ -125,6 +125,7 @@ lib/class.bestuurcontent.php -text
 lib/class.cieoverzichtcontent.php -text
 lib/class.commissie.php -text
 lib/class.commissiecontent.php -text
+lib/class.controller.php -text
 lib/class.courant.php -text
 lib/class.courantarchiefcontent.php -text
 lib/class.courantbeheercontent.php -text

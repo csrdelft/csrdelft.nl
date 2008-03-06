@@ -17,18 +17,21 @@ class Groepcontent extends SimpleHTML{
 	public function setAction($action){
 		$this->action=$action;
 	}
-	
+	public function getTitel(){
+		return ''.$_GET['gtype'].' - '.$this->groep->getNaam();
+	}
 	public function view(){
 		$content=new Smarty_csr();
 		
 		$content->assign('groep', $this->groep);
 		
 		$content->assign('action', $this->action);
-		$content->assign('gtype', $this->groep->getType());
+		$content->assign('gtype', $_GET['gtype']);
+		$content->assign('groeptypes', Groepen::getGroeptypes());
 		
+				
 		$content->assign('melding', $this->getMelding());
 		$content->display('groepen/groep.tpl');		
-		
 	}
 }
 class Groepencontent extends SimpleHTML{
@@ -42,6 +45,9 @@ class Groepencontent extends SimpleHTML{
 	public function setAction($action){
 		$this->action=$action;
 	}
+	public function getTitel(){
+		return 'Groepen - '.$this->groepen->getNaam();
+	}
 	
 	public function view(){
 		$content=new Smarty_csr();
@@ -50,6 +56,7 @@ class Groepencontent extends SimpleHTML{
 		
 		$content->assign('action', $this->action);
 		$content->assign('gtype', $this->groepen->getNaam());
+		$content->assign('groeptypes', Groepen::getGroeptypes());
 		
 		$content->assign('melding', $this->getMelding());
 		$content->display('groepen/groepen.tpl');		

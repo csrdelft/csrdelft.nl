@@ -4,20 +4,25 @@
  * 
  * een Groep-object bevat een groep met wat eigenschappen en een array met leden en eventueel functies.
  */
+require_once('class.groepen.php');
+
 class Groep{
 	
 	private $groep=null;
 	private $leden=null;
 	
 	public function __construct($init){
-		if(is_int($init) OR is_string($init)){
-			//we maken een nieuwe
-			if($init===0){
-				//dit zijn de defaultwaarden voor een nieuwe groep
-				$this->groep=array('id'=>0, 'snaam'=>'', 'naam'=>'', 'sbeschrijving'=>'', 'beschrijving'=>'', 'zichtbaar'=>'zichtbaar');
+		if(!is_array($init) AND preg_match('/^\d+$/', $init)){
+			if((int)$init===0){
+				//dit zijn de defaultwaarden voor een nieuwe groep.
+				$this->groep=array('groepId'=>0, 'snaam'=>'', 'naam'=>'', 'sbeschrijving'=>'', 'beschrijving'=>'', 'zichtbaar'=>'zichtbaar');
+				//we moeten ook nog even de groeptypen opzoeken. Die zit als het goed is in GET['gtype'];
+				$this->setGtype();
 			}else{
 				$this->load($init);
 			}
+		}elseif(is_string($init)){
+			$this->load($init);		
 		}elseif(is_array($init) AND isset($init[0])){
 			$this->groep=array_get_keys($init[0], array('groepId', 'snaam', 'naam', 'sbeschrijving', 'beschrijving', 'zichtbaar'));
 			foreach($init as $lid){
@@ -74,7 +79,17 @@ class Groep{
 	public function save(){
 		$db=MySql::get_MySql();
 		if($this->getId()==0){
-			//TODO maak INSERT-query
+			$qSave="
+				INSERT INTO groep (
+					snaam, naam, sbeschrijving, beschrijving, gtype, zichtbaar
+				) VALUES (
+					'".$db->escape($this->getSnaam())."',
+					'".$db->escape($this->getNaam())."',
+					'".$db->escape($this->getSbeschrijving())."',
+					'".$db->escape($this->getBeschrijving())."',
+					".$this->getTypeId().",
+					'".$db->escape($this->getZichtbaar())."'
+				);";
 		}else{
 			$qSave="
 				UPDATE groep SET 
@@ -90,18 +105,16 @@ class Groep{
 			//als het om een nieuwe groep gaat schrijven we het nieuwe id weg in de
 			//instantie van het object, zodat we bijvoorbeeld naar dat nieuwe id kunnen refreshen.
 			if($this->getId()==0){ 
-				$this->groep['id']=$db->insert_id();
+				$this->groep['groepId']=$db->insert_id();
 			}
 			return true;
 		}
 		return false;
 	}
 	
-	public function getType(){
-		if(isset($this->groep['gtype'])){
-			return $this->groep['gtype'];
-		}
-	}
+	public function getType(){			return $this->groep['gtype']; }
+	public function getTypeId(){		return $this->groep['gtypeId']; }
+
 	public function getId(){			return $this->groep['groepId']; }
 	public function getSnaam(){			return $this->groep['snaam']; }
 	public function getNaam(){			return $this->groep['naam']; }
@@ -109,6 +122,20 @@ class Groep{
 	public function getBeschrijving(){	return $this->groep['beschrijving']; }
 	public function getZichtbaar(){		return $this->groep['zichtbaar']; }
 	
+	public function setGtype(){					
+		if(isset($_GET['gtype']) AND Groepen::isValidGtype($_GET['gtype'])){
+			$gtypes=Groepen::getGroeptypes();
+			foreach($gtypes as $gtype){
+				if($gtype['id']==$_GET['gtype'] OR $gtype['naam']==$_GET['gtype']){
+					$this->groep=array_merge(
+						$this->groep, 
+						array('gtypeId'=>$gtype['id'], 'gtype'=>$gtype['naam']));
+				}
+			}
+		}else{
+			die('Geen gtype opgegeven, niet via de juiste weg aangevraagd...');
+		} 
+	}
 	public function setSnaam($value){			$this->groep['snaam']=trim($value); }
 	public function setNaam($value){			$this->groep['naam']=trim($value); }
 	public function setSbeschrijving($value){	$this->groep['sbeschrijving']=trim($value); }

@@ -2,48 +2,21 @@
 /*
  * class.groepcontroller.php	| 	Jan Pieter Waagmeester (jieter@jpwaag.com)
  * 
- * 
- */
-
-class Controller{
-	
-	protected $action='default';
-	protected $content=null;
-	
-	public function __construct(){
-		
-	}
-	public function getContent(){
-		return $this->content;
-	}
-	public function hasAction($action){
-		return method_exists($this, 'action_'.$action);
-	}
-	
-	protected function isPOSTed(){
-		return $_SERVER['REQUEST_METHOD']=='POST';
-	}
-	//call the action
-	protected function performAction(){
-		$action='action_'.$this->action;
-		if($this->hasAction($this->action)){
-			$this->$action();
-		}else{
-			throw new Exception('Action undefined');
-		}
-	}
-	protected function action_default(){
-		return true;
-	}
-}
-
-/*
  * Groepcontroller wordt ge__construct() met één argument, een querystring.
  * Die bestaat uit door slashes gescheiden waarden in de volgende volgorde:
  * 
  * <groepId of groepNaam>/[<actie>/[<parameters voor actie>]]
  * 
+ * bijvoorbeeld voor het verwijderen van een lid uit de PubCie
+ * 
+ * PubCie/addLid/0436
+ * 
+ * Het gaat hierbij om GET-parameters, POST-dingen worden gewoon in de 
+ * controller uit de POST-array getrokken... 
  */
+require_once('class.groepen.php');
+require_once('class.controller.php');
+
 class Groepcontroller extends Controller{
 	
 	private $groep;
@@ -54,14 +27,22 @@ class Groepcontroller extends Controller{
 		$this->lid=Lid::get_Lid();
 		$this->queryparts=explode('/', $querystring);
 		
+		//groep-object inladen
 		if(isset($this->queryparts[0])){
 			$this->groep=new Groep($this->queryparts[0]);
 		}
+		//action voor deze controller goedzetten.
 		if(isset($this->queryparts[1]) AND $this->hasAction($this->queryparts[1])){
 			$this->action=$this->queryparts[1];
 		}
+		//content-object aanmaken..
 		$this->content=new Groepcontent($this->groep);
 		
+		
+		//controleer dat we geen lege groep weergeven.
+		if($this->action=='default' AND $this->groep->getId()==0){
+			$this->content->invokeRefresh('we geven geen lege groepen weer!', CSR_ROOT.'/groepen/');
+		}
 		if(!$this->groep->magBewerken()){
 			$this->action='default';
 		}
@@ -72,9 +53,11 @@ class Groepcontroller extends Controller{
 		$this->content->setAction('view');
 	}
 	public function getUrl($action=null){
-		$url=CSR_ROOT.'groepen/groep/'.$this->groep->getId().'/';
-		if($action!=null AND $this->hasAction($action) AND $action!='default'){
-			$url.=$action;
+		$url=CSR_ROOT.'groepen/'.$this->groep->getType().'/'.$this->groep->getId().'/';
+		if($action!=null AND $this->hasAction($action)){
+			if($action!='default'){
+				$url.=$action;
+			}
 		}elseif($this->action!='default'){
 			$url.=$this->action;
 		}
@@ -91,7 +74,12 @@ class Groepcontroller extends Controller{
 		if($this->isPOSTed()){
 			//validatie moet nog even gemaakt worden. TODO dus nog.
 			if(true){
-				//opslaen
+				//slaan we een nieuwe groep op?
+				if($this->groep->getId()==0 ){
+					$this->groep->setSnaam($_POST['snaam']);
+				}
+				
+				//velden alleen voor admins
 				if($this->groep->isAdmin()){
 					$this->groep->setNaam($_POST['naam']);
 					$this->groep->setSbeschrijving($_POST['sbeschrijving']);
