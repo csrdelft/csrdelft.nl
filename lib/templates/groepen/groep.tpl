@@ -52,3 +52,4 @@
 	
 	{$groep->getBeschrijving()|ubb}
 {/if}
+<div class="clear"></div>

@@ -22,7 +22,7 @@
 {$groepen->getBeschrijving()|ubb}
 <div class="clear"></div>
 {foreach from=$groepen->getGroepen() item=groep}
-	<div class="groep" id="groep{$groep->getId()}">
+	<div class="groep clear" id="groep{$groep->getId()}">
 		<div class="groepleden">
 			<table>
 				{foreach from=$groep->getLeden() item=groeplid}
