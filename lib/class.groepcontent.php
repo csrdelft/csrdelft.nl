@@ -20,6 +20,56 @@ class Groepcontent extends SimpleHTML{
 	public function getTitel(){
 		return ''.$_GET['gtype'].' - '.$this->groep->getNaam();
 	}
+	private function getLidAdder(){
+		if(isset($_POST['rawNamen']) AND trim($_POST['rawNamen'])!=''){
+			echo 'kaas';
+			$return='';
+			$aCieUids=namen2uid($_POST['rawNamen']);
+			if(is_array($aCieUids) AND count($aCieUids)!=0){
+				$return.='<table border="0">';
+				$return.='<tr><th>Naam</hd><th>Functie</th></tr>';
+				
+				foreach($aCieUids as $aCieUid){
+					if(isset($aCieUid['uid'])){
+						//naam is gevonden en uniek, dus direct goed.
+						$return.='<tr>';
+						$return.='<td><input type="hidden" name="naam[]" value="'.$aCieUid['uid'].'" />'.$aCieUid['naam'].'</td>';
+					}else{
+						//naam is niet duidelijk, geef ook een selectievakje met de mogelijke opties
+						if(count($aCieUid['naamOpties'])>0){
+							$return.='<tr><td><select name="naam[]" class="tekst">';
+							foreach($aCieUid['naamOpties'] as $aNaamOptie){
+								$return.='<option value="'.$aNaamOptie['uid'].'">'.$aNaamOptie['naam'].'</option>';
+							}
+							$return.='</select></td>';
+						}//dingen die niets opleveren wordt niets voor weergegeven.
+					}
+					if($this->groep->isAdmin()){
+						$return.='<td><input type="text" name="functie[]" /></td></tr>';
+					}else{
+						$return.='<td>'.$this->getFunctieSelector().'</td></tr>';
+					}
+				}
+				$return.='</table>';
+				return $return;
+			}
+		}
+		return false;
+	} 
+	private function getFunctieSelector(){
+		$return='';
+		$aFuncties=array('Q.Q.', 'Praeses', 'Fiscus', 'Redacteur', 'Computeur', 'Archivaris', 
+			'Bibliothecaris', 'Statisticus', 'Fotocommissaris','', 'Koemissaris', 'Regisseur', 
+			'Lichttechnicus', 'Geluidstechnicus', 'Adviseur', 'Internetman', 'Posterman', 
+			'Corveemanager', 'Provisor');
+		sort($aFuncties);
+		$return.='<select name="functie[]" class="tekst">';
+		foreach($aFuncties as $sFunctie){
+			$return.='<option value="'.$sFunctie.'">'.$sFunctie.'</option>';
+		}
+		$return.='</select>';
+		return $return;
+	}
 	public function view(){
 		$content=new Smarty_csr();
 		
@@ -29,7 +79,10 @@ class Groepcontent extends SimpleHTML{
 		$content->assign('gtype', $_GET['gtype']);
 		$content->assign('groeptypes', Groepen::getGroeptypes());
 		
-				
+		if($this->action=='addLid'){
+			$content->assign('lidAdder', $this->getLidAdder());
+		}
+		
 		$content->assign('melding', $this->getMelding());
 		$content->display('groepen/groep.tpl');		
 	}

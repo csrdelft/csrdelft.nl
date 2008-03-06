@@ -202,10 +202,10 @@ class Groep{
 				$prioriteit=5;
 			break;
 		}
-		if(!$this->isLid()){
+		if(!$this->isLid($uid)){
 			$sCieQuery="
-				INSERT INTO commissielid
-					( cieid, uid, op, functie, prioriteit )
+				INSERT INTO groeplid
+					( groepid, uid, op, functie, prioriteit )
 				VALUES (
 					".$this->getId().", '".$uid."', '".$op."', '".$functie."', ".$prioriteit."
 				)";

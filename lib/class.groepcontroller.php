@@ -9,7 +9,7 @@
  * 
  * bijvoorbeeld voor het verwijderen van een lid uit de PubCie
  * 
- * PubCie/addLid/0436
+ * PubCie/verwijderLid/0436
  * 
  * Het gaat hierbij om GET-parameters, POST-dingen worden gewoon in de 
  * controller uit de POST-array getrokken... 
@@ -95,15 +95,10 @@ class Groepcontroller extends Controller{
 			}else{
 				//geposte waarden in het object stoppen zodat de template ze zo in het 
 				//formulier kan knallen
-				if(isset($_POST['naam'])){
-					$this->groep->setNaam($_POST['naam']);
-				}
-				if(isset($_POST['sbeschrijving'])){
-					$this->groep->setSbeschrijving($_POST['sbeschrijving']);
-				}
-				if(isset($_POST['beschrijving'])){
-					$this->groep->setBeschrijving('beschrijving');
-				}
+				if(isset($_POST['snaam'])){			$this->groep->setSnaam($_POST['snaam']); }
+				if(isset($_POST['naam'])){			$this->groep->setNaam($_POST['naam']); }
+				if(isset($_POST['sbeschrijving'])){	$this->groep->setSbeschrijving($_POST['sbeschrijving']); }
+				if(isset($_POST['beschrijving'])){	$this->groep->setBeschrijving('beschrijving'); }
 			}
 		}
 	}
@@ -112,26 +107,26 @@ class Groepcontroller extends Controller{
 	 * Leden toevoegen aan een groep.
 	 */
 	public function action_addLid(){
+		$this->content->setAction('addLid');
 		if(isset($_POST['naam'], $_POST['functie']) AND is_array($_POST['naam']) AND is_array($_POST['functie']) AND count($_POST['naam'])==count($_POST['functie'])){
 			//nieuwe commissieleden erin stoppen.
-			for($iTeller=0; $iTeller<count($_POST['naam']); $iTeller++){
-				$success=true;
-				if(preg_match('/^\w{4}$/', $_POST['naam'][$iTeller])){
-					if(!$this->groep->addLid($_POST['naam'][$iTeller], $_POST['functie'][$iTeller])){
+			$success=true;
+			for($i=0; $i<count($_POST['naam']); $i++){
+				if($this->lid->isValidUid($_POST['naam'][$i])){
+					if(!$this->groep->addLid($_POST['naam'][$i], $_POST['functie'][$i])){
 						//er gaat iets mis, zet $success op false;	
 						$success=false;
 					}
 				}
 			}
-			if($success){
+			if($success===true){
 				$melding='Leden met succes toegevoegd.';
 			}else{
 				$melding='Niet alle leden met succes toegevoegd. Wellicht waren sommigen al lid van deze groep? (Groepcontroller::action_addLid())';
 			}
-		}else{
-			$melding='Geen uid opgegeven';
+			$this->content->invokeRefresh($melding, $this->getUrl('default'));
 		}
-		$this->content->invokeRefresh($melding, $this->getUrl('default'));
+		
 	}
 	public function action_verwijderLid(){
 		if(isset($this->queryparts[2]) AND $this->lid->isValidUid($this->queryparts[2]) AND $this->groep->magBewerken()){

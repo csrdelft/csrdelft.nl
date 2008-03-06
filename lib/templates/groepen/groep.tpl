@@ -22,6 +22,14 @@
 			</tr>
 		{/foreach}
 	</table>
+	<form action="/groepen/{$gtype}/{$groep->getId()}/addLid" method="post">
+		{if $action=='addLid'}
+			{$lidAdder}
+		{else}
+			<input type="text" name="rawNamen" /> 
+		{/if}
+		<input type="submit" value="toevoegen" />
+	</form>
 </div>
 <h2>{$groep->getNaam()}</h2>
 {if $groep->magBewerken() AND $action=='edit'}
