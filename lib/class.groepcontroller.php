@@ -133,9 +133,14 @@ class Groepcontroller extends Controller{
 		}
 		$this->content->invokeRefresh($melding, $this->getUrl('default'));
 	}
-	public function action_delLid(){
-		if(isset($queryparts[2])){
-			
+	public function action_verwijderLid(){
+		if(isset($this->queryparts[2]) AND $this->lid->isValidUid($this->queryparts[2]) AND $this->groep->magBewerken()){
+			if($this->groep->verwijderLid($this->queryparts[2])){
+				$melding='Lid is uit groep verwijderd.';
+			}else{
+				$melding='Lid uit groep verwijderen mislukt.';
+			}
+			$this->content->invokeRefresh($melding, $this->getUrl('default'));
 		}	
 	}
 	

@@ -17,7 +17,7 @@
 				<td>{$groeplid.uid|csrnaam:'civitas'}</td>
 				<td><em>{$groeplid.functie|escape:'html'}</em></td>
 				{if $groep->magBewerken()}
-					<td><a href="/groepen/{$gtype}/{$groep->getId()}/verwijder/lid/{$groeplid.uid}">X</a></td>
+					<td><a href="/groepen/{$gtype}/{$groep->getId()}/verwijderLid/{$groeplid.uid}">X</a></td>
 				{/if}
 			</tr>
 		{/foreach}
