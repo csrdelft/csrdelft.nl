@@ -22,7 +22,6 @@ class Groepcontent extends SimpleHTML{
 	}
 	private function getLidAdder(){
 		if(isset($_POST['rawNamen']) AND trim($_POST['rawNamen'])!=''){
-			echo 'kaas';
 			$return='';
 			$aCieUids=namen2uid($_POST['rawNamen']);
 			if(is_array($aCieUids) AND count($aCieUids)!=0){

@@ -23,7 +23,7 @@
 		{/foreach}
 	</table>
 	<form action="/groepen/{$gtype}/{$groep->getId()}/addLid" method="post">
-		{if $action=='addLid'}
+		{if $action=='addLid' AND $lidAdder!=false}
 			{$lidAdder}
 		{else}
 			<input type="text" name="rawNamen" /> 
