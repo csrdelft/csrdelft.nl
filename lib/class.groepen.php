@@ -62,6 +62,7 @@ class Groepen{
 			LEFT JOIN groeplid ON(groep.id=groeplid.groepid) 
 			WHERE groep.gtype=".$this->getId()."
 			  AND groep.zichtbaar='zichtbaar'
+			  AND groep.status='ht'
 			ORDER BY groep.snaam ASC, groeplid.prioriteit ASC, groeplid.uid ASC;";
 		$rGroepen=$db->query($qGroepen);
 		

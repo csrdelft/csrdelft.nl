@@ -391,13 +391,15 @@ span.tijd{ font-size: 0.95em; }
 .cieleden table td{ padding: 0px 5px; }
 
 /* Groepen nieuwe stijl */
-#groepLijst{ float: right; margin:  30px 20px 10px 20px; }
+#groepLijst{ float: right; margin: 30px 0px 10px 20px; }
+#groepLijst, #groepLijst li, #groepLijstje ul{ text-align: right;}
+#groepLijst li{ margin-left: 0px; padding-left: 0px; }
 
 .groep{ border-top: 1px solid black; margin-top: 20px; }
 .groepleden{ width: 220px; float: right; padding: 10px 20px 20px 20px; }
 .groepleden table td{ padding: 0px 5px; }
 
-
+#voorganger{ margin-top: 30px; text-align: left;}
 /* Streeplijstgenereertool */
 form#streeplijst fieldset{ padding: 10px;  }
 form#streeplijst fieldset legend{ font-weight: bold; }

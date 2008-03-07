@@ -10,12 +10,10 @@
 </ul>
 <hr />
 <div id="groepLijst">
-<ul style="float: left;">
+<ul style="float: left; margin-right: 10px;">
 {foreach from=$groepen->getGroepen() item=groep name=g}
 	<li style="list-style-type: none;"><a href="#groep{$groep->getId()}">{$groep->getSnaam()}</a></li>
-	{if $smarty.foreach.g.iteration==$smarty.foreach.g.total %2 }</ul><ul style=" clear: none;"> {/if}
-	{*	TODO: nog een mooie tweekolommentabel hier van maken... 
-		halverwege dit ertussen gooien:</ul><ul style=" clear: none;"> *}
+	{if $smarty.foreach.g.iteration==5}</ul><ul style="clear: none;"> {/if}
 {/foreach}	
 </ul>
 </div>

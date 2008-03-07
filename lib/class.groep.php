@@ -216,5 +216,23 @@ class Groep{
 			return false; 
 		}
 	}
+	public function getVoorganger(){
+		$db=MySql::get_MySql();
+		$qVoorganger="
+			SELECT id 
+			FROM groep 
+			WHERE snaam='".$this->getSnaam()."' 
+			  AND id!=".$this->getId()."
+			  AND status!='ht'
+			ORDER BY installatie DESC
+			LIMIT 1;";
+		$rVoorganger=$db->query($qVoorganger);
+		if($rVoorganger!==false AND $db->numRows($rVoorganger)==1){
+			$aVoorganger=$db->result2array($rVoorganger);
+			return new Groep($aVoorganger[0]['id']);
+		}
+		return false;
+		
+	}
 }
 ?>

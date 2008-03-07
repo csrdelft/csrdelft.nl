@@ -33,6 +33,7 @@
 		</form>
 	{/if}
 </div>
+
 <h2>{$groep->getNaam()}</h2>
 {if $groep->magBewerken() AND $action=='edit'}
 	<form action="/groepen/{$gtype}/{$groep->getId()}/bewerken" method="post">
@@ -55,6 +56,12 @@
 	</form>
 {else}
 	<strong>{$groep->getSbeschrijving()|ubb}</strong>
+	{if is_object($voorganger)}
+		<div id="voorganger">
+			Vorige {$groep->getSnaam()}: 
+			<a href="/groepen/{$gtype}/{$voorganger->getId()}/">{$voorganger->getNaam()}</a>
+		</div>
+	{/if}
 	<hr class="clear" /> 
 	{if $groep->magBewerken()}
 		<div style="float: right; margin: 10px ;"><a href="/groepen/{$gtype}/{$groep->getId()}/bewerken" class="knop"><img src="{$csr_pics}forum/bewerken.png" title="Bewerk groep" /></a></div>
