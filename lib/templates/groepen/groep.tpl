@@ -59,7 +59,7 @@
 	<div class="clear" id="voorgangerOpvolger">
 		{if is_array($opvolgerVoorganger)}
 			{if isset($opvolgerVoorganger.voorganger)}
-				&laquo; <a href="/groepen/{$gtype}/{$nextPrev.voorganger->getId()}/">{$opvolgerVoorganger.voorganger->getNaam()}</a>
+				&laquo; <a href="/groepen/{$gtype}/{$opvolgerVoorganger.voorganger->getId()}/">{$opvolgerVoorganger.voorganger->getNaam()}</a>
 			{/if}
 			{if isset($opvolgerVoorganger.voorganger) AND isset($opvolgerVoorganger.opvolger)}|{/if}
 			{if isset($opvolgerVoorganger.opvolger)}
