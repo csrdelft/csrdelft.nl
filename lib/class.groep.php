@@ -57,7 +57,7 @@ class Groep{
 			LEFT JOIN groeplid ON(groep.id=groeplid.groepid)
 			INNER JOIN groeptype ON(groep.gtype=groeptype.id)
 			WHERE ".$wherePart."
-			ORDER BY groeplid.prioriteit ASC;";
+			ORDER BY groeplid.prioriteit ASC, groeplid.uid ASC;";
 		$rGroep=$db->query($qGroep);
 		while($aGroep=$db->next($rGroep)){
 			//groepseigenschappen worden alleen de eerste iteratie opgeslagen
@@ -175,8 +175,10 @@ class Groep{
 	function addLid($uid, $functie=''){
 		$db=MySql::get_MySql();
 		$op=0;
-		switch(strtolower(trim($functie))){
-			case 'praeses':	case 'archivaris': case 'werkgroepleider':
+		$functie=str_replace(array("\n","\r"), '', trim($functie));
+		switch(strtolower($functie)){
+			case 'praeses':	case 'archivaris': case 'werkgroepleider': 
+			case 'ho': case 'leider': case 'oudste': 
 				$prioriteit=1;
 				$op=1;
 			break;
@@ -194,7 +196,7 @@ class Groep{
 			case 'koemissaris': case 'stralerpheut': case 'regelneef':
 				$prioriteit=8;
 			break;
-			case 'q.q.': case 'qq':
+			case 'q.q.': case 'qq': case 'hj':
 				$prioriteit=9;
 				$functie='Q.Q.';
 			break;
@@ -207,7 +209,7 @@ class Groep{
 				INSERT INTO groeplid
 					( groepid, uid, op, functie, prioriteit )
 				VALUES (
-					".$this->getId().", '".$uid."', '".$op."', '".$functie."', ".$prioriteit."
+					".$this->getId().", '".$uid."', '".$op."', '".$db->escape($functie)."', ".$prioriteit."
 				)";
 			return $db->query($sCieQuery);
 		}else{ 

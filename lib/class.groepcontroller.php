@@ -43,6 +43,7 @@ class Groepcontroller extends Controller{
 		if($this->action=='default' AND $this->groep->getId()==0){
 			$this->content->invokeRefresh('we geven geen lege groepen weer!', CSR_ROOT.'/groepen/');
 		}
+		//Normale gebruikers mogen enkel default-acties doen.
 		if(!$this->groep->magBewerken()){
 			$this->action='default';
 		}
