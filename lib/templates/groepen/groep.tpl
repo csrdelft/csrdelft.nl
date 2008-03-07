@@ -63,7 +63,7 @@
 			{/if}
 			{if isset($opvolgerVoorganger.voorganger) AND isset($opvolgerVoorganger.opvolger)}|{/if}
 			{if isset($opvolgerVoorganger.opvolger)}
-				<a href="/groepen/{$gtype}/{$nextPrev.opvolger->getId()}/">{$opvolgerVoorganger.opvolger->getNaam()}</a> &raquo;
+				<a href="/groepen/{$gtype}/{$opvolgerVoorganger.opvolger->getId()}/">{$opvolgerVoorganger.opvolger->getNaam()}</a> &raquo;
 			{/if}
 		{/if}
 	</div> 
