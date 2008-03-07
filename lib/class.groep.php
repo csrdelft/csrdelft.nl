@@ -203,9 +203,10 @@ class Groep{
 			case 'koemissaris': case 'stralerpheut': case 'regelneef':
 				$prioriteit=8;
 			break;
-			case 'q.q.': case 'qq': case 'hj':
-				$prioriteit=9;
+			case 'q.q.': case 'qq':
 				$functie='Q.Q.';
+			 case 'hj':
+				$prioriteit=9;
 			break;
 			default:
 				$prioriteit=5;

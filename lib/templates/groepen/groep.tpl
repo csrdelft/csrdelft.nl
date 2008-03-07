@@ -22,7 +22,7 @@
 			</tr>
 		{/foreach}
 	</table>
-	{if $groep->magBewerken()}
+	{if $groep->magBewerken() AND $action!='edit'}
 		<form action="/groepen/{$gtype}/{$groep->getId()}/addLid" method="post">
 			{if $action=='addLid' AND $lidAdder!=false}
 				{$lidAdder}
