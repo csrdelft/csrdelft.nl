@@ -56,13 +56,17 @@
 	</form>
 {else}
 	<strong>{$groep->getSbeschrijving()|ubb}</strong>
-	{if is_object($voorganger)}
-		<div id="voorganger">
-			Vorige {$groep->getSnaam()}: 
-			<a href="/groepen/{$gtype}/{$voorganger->getId()}/">{$voorganger->getNaam()}</a>
-		</div>
-	{/if}
-	<hr class="clear" /> 
+	<div class="clear" id="voorgangerOpvolger">
+		{if is_array($opvolgerVoorganger)}
+			{if isset($opvolgerVoorganger.voorganger)}
+				&laquo; <a href="/groepen/{$gtype}/{$nextPrev.voorganger->getId()}/">{$opvolgerVoorganger.voorganger->getNaam()}</a>
+			{/if}
+			{if isset($opvolgerVoorganger.voorganger) AND isset($opvolgerVoorganger.opvolger)}|{/if}
+			{if isset($opvolgerVoorganger.opvolger)}
+				<a href="/groepen/{$gtype}/{$nextPrev.opvolger->getId()}/">{$opvolgerVoorganger.opvolger->getNaam()}</a> &raquo;
+			{/if}
+		{/if}
+	</div> 
 	{if $groep->magBewerken()}
 		<div style="float: right; margin: 10px ;"><a href="/groepen/{$gtype}/{$groep->getId()}/bewerken" class="knop"><img src="{$csr_pics}forum/bewerken.png" title="Bewerk groep" /></a></div>
 	{/if}

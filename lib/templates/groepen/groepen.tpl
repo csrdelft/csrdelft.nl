@@ -25,8 +25,8 @@
 			<table>
 				{foreach from=$groep->getLeden() item=groeplid}
 					<tr>
-						<td>{$groeplid.uid|csrnaam:'civitas'}</td>
-						<td><em>{$groeplid.functie|escape:'html'}</em></td>
+						<td style="width: 65%">{$groeplid.uid|csrnaam:'civitas'}</td>
+						<td style="width: 35%"><em>{$groeplid.functie|escape:'html'}</em></td>
 					</tr>
 				{/foreach}
 			</table>

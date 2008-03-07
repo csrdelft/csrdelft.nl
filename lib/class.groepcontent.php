@@ -73,7 +73,7 @@ class Groepcontent extends SimpleHTML{
 		$content=new Smarty_csr();
 		
 		$content->assign('groep', $this->groep);
-		$content->assign('voorganger', $this->groep->getVoorganger());
+		$content->assign('opvolgerVoorganger', $this->groep->getOpvolgerVoorganger());
 		
 		$content->assign('action', $this->action);
 		$content->assign('gtype', $_GET['gtype']);

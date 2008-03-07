@@ -75,7 +75,11 @@ class Groep{
 	
 	/*
 	 * save().
-	 * slaat groepinfo op, geen leden!
+	 * slaat groepinfo op, geen leden! Leden worden direct in de db opgeslagen, niet meer in de instantie
+	 * van de klasse bijgeschreven. Pas bij het inladen de volgende keer worden de nieuwe leden in de 
+	 * instantie van de klasse opgenomen.
+	 * 
+	 * @return			Bool of het gelukt is of niet.	
 	 */
 	public function save(){
 		$db=MySql::get_MySql();
@@ -219,23 +223,38 @@ class Groep{
 			return false; 
 		}
 	}
-	public function getVoorganger(){
+	/*
+	 * Geef een array met een vorige en een volgende terug.
+	 * Dit levert dus vier query's op, niet erg efficient, maar ik optimaliseren kan altijd nog
+	 */
+	public function getOpvolgerVoorganger(){
+		$return=false;
 		$db=MySql::get_MySql();
 		$qVoorganger="
 			SELECT id 
 			FROM groep 
 			WHERE snaam='".$this->getSnaam()."' 
 			  AND installatie<'".$this->getInstallatie()."'
-			  AND status!='ht'
 			ORDER BY installatie DESC
 			LIMIT 1;";
 		$rVoorganger=$db->query($qVoorganger);
-		//echo $qVoorganger; exit;
 		if($rVoorganger!==false AND $db->numRows($rVoorganger)==1){
 			$aVoorganger=$db->result2array($rVoorganger);
-			return new Groep($aVoorganger[0]['id']);
+			$return['voorganger']=new Groep($aVoorganger[0]['id']);
 		}
-		return false;
+		$qOpvolger="
+			SELECT id 
+			FROM groep 
+			WHERE snaam='".$this->getSnaam()."' 
+			  AND installatie>'".$this->getInstallatie()."'
+			ORDER BY installatie ASC
+			LIMIT 1;";
+		$rOpvolger=$db->query($qOpvolger);
+		if($rOpvolger!==false AND $db->numRows($rOpvolger)==1){
+			$aOpvolger=$db->result2array($rOpvolger);
+			$return['opvolger']=new Groep($aOpvolger[0]['id']);
+		}
+		return $return;
 		
 	}
 }
