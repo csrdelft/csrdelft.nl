@@ -51,6 +51,7 @@ class Groep{
 			SELECT 
 				groep.id AS groepId, groep.snaam AS snaam, groep.naam AS naam,
 				groep.sbeschrijving AS sbeschrijving, groep.beschrijving AS beschrijving, groep.zichtbaar AS zichtbaar,
+				groep.status AS status, groep.installatie AS installatie,
 				groeplid.uid AS uid, groeplid.op AS op, groeplid.functie AS functie, groeplid.prioriteit AS prioriteit,
 				groeptype.id AS gtypeId, groeptype.naam AS gtype
 			FROM groep
@@ -62,7 +63,7 @@ class Groep{
 		while($aGroep=$db->next($rGroep)){
 			//groepseigenschappen worden alleen de eerste iteratie opgeslagen
 			if($this->groep===null){
-				$this->groep=array_get_keys($aGroep, array('groepId', 'gtypeId', 'gtype', 'snaam', 'naam', 'sbeschrijving', 'beschrijving', 'zichtbaar'));
+				$this->groep=array_get_keys($aGroep, array('groepId', 'gtypeId', 'gtype', 'snaam', 'naam', 'sbeschrijving', 'beschrijving', 'zichtbaar', 'status', 'installatie'));
 			}
 			//en ook de leden inladen.
 			if($aGroep['uid']!=''){
@@ -121,6 +122,8 @@ class Groep{
 	public function getSbeschrijving(){	return $this->groep['sbeschrijving']; }
 	public function getBeschrijving(){	return $this->groep['beschrijving']; }
 	public function getZichtbaar(){		return $this->groep['zichtbaar']; }
+	public function getStatus(){		return $this->groep['status']; }
+	public function getInstallatie(){	return $this->groep['installatie']; }
 	
 	public function setGtype(){					
 		if(isset($_GET['gtype']) AND Groepen::isValidGtype($_GET['gtype'])){
@@ -222,11 +225,12 @@ class Groep{
 			SELECT id 
 			FROM groep 
 			WHERE snaam='".$this->getSnaam()."' 
-			  AND id!=".$this->getId()."
+			  AND installatie<'".$this->getInstallatie()."'
 			  AND status!='ht'
 			ORDER BY installatie DESC
 			LIMIT 1;";
 		$rVoorganger=$db->query($qVoorganger);
+		//echo $qVoorganger; exit;
 		if($rVoorganger!==false AND $db->numRows($rVoorganger)==1){
 			$aVoorganger=$db->result2array($rVoorganger);
 			return new Groep($aVoorganger[0]['id']);
