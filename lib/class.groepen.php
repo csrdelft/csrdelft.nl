@@ -148,7 +148,7 @@ class Groepen{
 		$result=$db->query("
 			SELECT id, naam
 			FROM groeptype
-			ORDER BY naam;");
+			ORDER BY prioriteit ASC, naam ASC;");
 		if ($result !== false and $db->numRows($result) > 0){
 			$groeptypes=$db->result2array($result);
 		}
