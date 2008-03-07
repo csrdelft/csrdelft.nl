@@ -13,7 +13,7 @@
 <ul style="float: left; margin-right: 10px;">
 {foreach from=$groepen->getGroepen() item=groep name=g}
 	<li style="list-style-type: none;"><a href="#groep{$groep->getId()}">{$groep->getSnaam()}</a></li>
-	{if $smarty.foreach.g.iteration==5}</ul><ul style="clear: none;"> {/if}
+	{* if $smarty.foreach.g.iteration==5}</ul><ul style="clear: none;"> {/if *}
 {/foreach}	
 </ul>
 </div>

@@ -55,7 +55,7 @@
 	</div>
 	</form>
 {else}
-	<strong>{$groep->getSbeschrijving()|ubb}</strong>
+	{$groep->getSbeschrijving()|ubb}
 	<div class="clear" id="voorgangerOpvolger">
 		{if is_array($opvolgerVoorganger)}
 			{if isset($opvolgerVoorganger.voorganger)}
