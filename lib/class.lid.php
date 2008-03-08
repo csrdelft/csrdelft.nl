@@ -636,9 +636,12 @@ class Lid {
 				uid, voornaam, tussenvoegsel, achternaam, status, geslacht, postfix, gebdatum,
 				ADDDATE(
 					gebdatum, 
-					INTERVAL TIMESTAMPDIFF(year, ADDDATE(gebdatum, INTERVAL 1 DAY),
-					CURRENT_DATE
-				)+1 YEAR) AS verjaardag
+					INTERVAL TIMESTAMPDIFF(
+						year,
+						ADDDATE(gebdatum, INTERVAL 1 DAY),
+						CURRENT_DATE
+					)+1 YEAR
+				) AS verjaardag
 			FROM
 				lid
 			WHERE

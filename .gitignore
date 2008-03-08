@@ -1,3 +1,5 @@
+/.project
+/.settings
 data/*
 data/smarty/*
 data/smarty/cache/*
