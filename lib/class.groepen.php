@@ -132,14 +132,14 @@ class Groepen{
 		if($lid->isValidUid($uid)){
 			$qGroepen="
 				SELECT 
-					groep.id AS id, groep.snaam AS snaam, groep.naam AS naam, 
-					groeptype.naam AS gtype, groeptype.status AS status			
+					groep.id AS id, groep.snaam AS snaam, groep.naam AS naam, groep.status AS status,
+					groeptype.naam AS gtype
 				FROM groep
 				INNER JOIN groeptype ON(groep.gtype=groeptype.id)
 				WHERE groep.id IN ( 
 					SELECT groepid FROM groeplid WHERE uid = '".$uid."'
 				)
-				ORDER BY groeptype.status, groeptype.prioriteit, groep.naam;";
+				ORDER BY groep.status, groeptype.prioriteit, groep.naam;";
 				
 			$rGroepen=$db->query($qGroepen);
 			if ($rGroepen !== false and $db->numRows($rGroepen) > 0){
