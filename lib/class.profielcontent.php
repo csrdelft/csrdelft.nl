@@ -29,7 +29,7 @@ class ProfielContent extends SimpleHTML {
 		$this->_profiel = $this->_lid->getTmpProfile();
 	}
 	function getTitel(){
-		return 'Het profiel van '.$this->_lid->getFullname($this->_profiel['uid']);
+		return 'Het profiel van '.$this->_lid->getNaamLink($this->_profiel['uid'], 'full', false, false, false);
 	}
 	function viewWaarbenik(){
 		echo '<a href="/intern/">Intern</a> &raquo; <a href="/leden/lijst.php">Ledenlijst</a> &raquo; ';

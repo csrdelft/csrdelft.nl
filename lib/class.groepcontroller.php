@@ -80,18 +80,18 @@ class Groepcontroller extends Controller{
 				$valid=false;
 				$this->errors.="Korte naam is verplicht bij een nieuwe groep.<br />";
 			}else{
-				if(strlen(trim($_POST['snaam']))<=3){
+				if(strlen(trim($_POST['snaam']))<3){
 					$valid=false;
 					$this->errors.="Korte naam moet minstens drie tekens lang zijn.<br />";
 				}
 			}
 			
 			if(isset($_POST['naam'], $_POST['sbeschrijving'])){
-				if(strlen(trim($_POST['naam']))<=5){
+				if(strlen(trim($_POST['naam']))<5){
 					$valid=false;
 					$this->errors.="Naam moet minstens vijf tekens lang zijn.<br />";
 				}
-				if(strlen(trim($_POST['sbeschrijving']))<=5){
+				if(strlen(trim($_POST['sbeschrijving']))<5){
 					$valid=false;
 					$this->errors.="Korte beschrijving moet minstens vijf tekens lang zijn.<br />";
 				}
