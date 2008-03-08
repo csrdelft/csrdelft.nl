@@ -38,7 +38,6 @@
 {if $groep->magBewerken() AND $action=='edit'}
 	<form action="/groepen/{$gtype}/{$groep->getId()}/bewerken" method="post">
 	<div class="groepAdmin" style="width: 100%; clear: both;">
-		<h2>Groep {if $groep->getId()==0}toevoegen{else}bewerken{/if}:</h2>
 		{if $groep->isAdmin()}
 			{if $groep->getId()==0}
 				<strong>Korte naam:</strong> (Voor in urls. Alleen letters, geen spaties.)<br />
@@ -47,7 +46,7 @@
 		<strong>Naam:</strong><br />
 		<input type="text" name="naam" style="width: 100%" value="{$groep->getNaam()|escape:'html'}" />
 		<strong>Korte beschrijving:</strong><br />
-		<textarea name="sbeschrijving" style="width: 100%">{$groep->getSbeschrijving()|escape:'html'}</textarea>
+		<textarea name="sbeschrijving" style="width: 100%; height: 100px;">{$groep->getSbeschrijving()|escape:'html'}</textarea>
 		{/if}
 		<strong>Lange beschrijving:</strong><br />
 		<textarea name="beschrijving" style="width: 100%; height: 200px;">{$groep->getBeschrijving()|escape:'html'}</textarea>

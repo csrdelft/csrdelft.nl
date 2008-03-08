@@ -23,6 +23,8 @@ class Groepcontroller extends Controller{
 	private $queryparts=array();
 	private $lid;
 	
+	private $errors;
+	
 	public function __construct($querystring){
 		$this->lid=Lid::get_Lid();
 		$this->queryparts=explode('/', $querystring);
@@ -38,10 +40,9 @@ class Groepcontroller extends Controller{
 		//content-object aanmaken..
 		$this->content=new Groepcontent($this->groep);
 		
-		
 		//controleer dat we geen lege groep weergeven.
 		if($this->action=='default' AND $this->groep->getId()==0){
-			$this->content->invokeRefresh('we geven geen lege groepen weer!', CSR_ROOT.'/groepen/');
+			$this->content->invokeRefresh('We geven geen 0-groepen weer! (Groepcontroller::__construct())', CSR_ROOT.'/groepen/');
 		}
 		//Normale gebruikers mogen enkel default-acties doen.
 		if(!$this->groep->magBewerken()){
@@ -64,6 +65,49 @@ class Groepcontroller extends Controller{
 		}
 		return $url;
 	}
+	
+	
+	/*
+	 * Valideer de formulierinvoer voor een groep.
+	 * Beetje gecompliceerd door de verschillende permissielagen, maargoed.
+	 */
+	public function groepValidator(){
+		$valid=true;
+		//Velden beschikbaar voor groepadmins.
+		if($this->groep->isAdmin()){
+			//snaam is alleen relevant bij het maken van een nieuwe groep
+			if($this->groep->getId()==0 AND !isset($_POST['snaam'])){
+				$valid=false;
+				$this->errors.="Korte naam is verplicht bij een nieuwe groep.<br />";
+			}else{
+				if(strlen(trim($_POST['snaam']))<=3){
+					$valid=false;
+					$this->errors.="Korte naam moet minstens drie tekens lang zijn.<br />";
+				}
+			}
+			
+			if(isset($_POST['naam'], $_POST['sbeschrijving'])){
+				if(strlen(trim($_POST['naam']))<=5){
+					$valid=false;
+					$this->errors.="Naam moet minstens vijf tekens lang zijn.<br />";
+				}
+				if(strlen(trim($_POST['sbeschrijving']))<=5){
+					$valid=false;
+					$this->errors.="Korte beschrijving moet minstens vijf tekens lang zijn.<br />";
+				}
+			}else{
+				$valid=false;
+				$this->errors.="Het formulier is niet compleet.<br />";
+			}
+			
+		}
+		//velden beschikbaar voor groepOps
+		if(!isset($_POST['beschrijving'])){
+			$valid=false;
+			$this->errors.="Het veld beschrijving mist.<br />";
+		}
+		return $valid;
+	}
 	/*
 	 * Bewerken en opslaan van groepen. Groepen mogen door groepadmins (groeplid.op=='1')
 	 * voor een deel bewerkt worden, de P_ADMINS kunnen alles aanpassen. Hier wordt de
@@ -74,7 +118,7 @@ class Groepcontroller extends Controller{
 		
 		if($this->isPOSTed()){
 			//validatie moet nog even gemaakt worden. TODO dus nog.
-			if(true){
+			if($this->groepValidator()){
 				//slaan we een nieuwe groep op?
 				if($this->groep->getId()==0 ){
 					$this->groep->setSnaam($_POST['snaam']);
@@ -99,7 +143,10 @@ class Groepcontroller extends Controller{
 				if(isset($_POST['snaam'])){			$this->groep->setSnaam($_POST['snaam']); }
 				if(isset($_POST['naam'])){			$this->groep->setNaam($_POST['naam']); }
 				if(isset($_POST['sbeschrijving'])){	$this->groep->setSbeschrijving($_POST['sbeschrijving']); }
-				if(isset($_POST['beschrijving'])){	$this->groep->setBeschrijving('beschrijving'); }
+				if(isset($_POST['beschrijving'])){	$this->groep->setBeschrijving($_POST['beschrijving']); }
+				//de eventuele fouten van de groepValidator aan de melding toevoegen.
+				$this->content->setMelding($this->errors);
+
 			}
 		}
 	}

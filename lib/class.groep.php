@@ -8,6 +8,10 @@ require_once('class.groepen.php');
 
 class Groep{
 	
+	private $groepseigenschappen=
+		array('groepId', 'gtypeId', 'gtype', 'snaam', 'naam', 'sbeschrijving', 'beschrijving', 
+			'zichtbaar', 'status', 'installatie', 'aanmeldbaar', 'limiet');
+	
 	private $groep=null;
 	private $leden=null;
 	
@@ -15,7 +19,9 @@ class Groep{
 		if(!is_array($init) AND preg_match('/^\d+$/', $init)){
 			if((int)$init===0){
 				//dit zijn de defaultwaarden voor een nieuwe groep.
-				$this->groep=array('groepId'=>0, 'snaam'=>'', 'naam'=>'', 'sbeschrijving'=>'', 'beschrijving'=>'', 'zichtbaar'=>'zichtbaar');
+				$this->groep=array(
+					'groepId'=>0, 'snaam'=>'', 'naam'=>'', 'sbeschrijving'=>'', 'beschrijving'=>'', 
+					'zichtbaar'=>'zichtbaar', 'installatie'=>getDateTime(), 'aanmeldbaar'=>0, 'limiet'=>0);
 				//we moeten ook nog even de groeptypen opzoeken. Die zit als het goed is in GET['gtype'];
 				$this->setGtype();
 			}else{
@@ -24,7 +30,7 @@ class Groep{
 		}elseif(is_string($init)){
 			$this->load($init);		
 		}elseif(is_array($init) AND isset($init[0])){
-			$this->groep=array_get_keys($init[0], array('groepId', 'snaam', 'naam', 'sbeschrijving', 'beschrijving', 'zichtbaar'));
+			$this->groep=array_get_keys($init[0], $this->groepseigenschappen);
 			foreach($init as $lid){
 				if($lid['uid']!=''){
 					$this->leden[$lid['uid']]=array_get_keys($lid, array('uid', 'op', 'functie'));
@@ -51,7 +57,7 @@ class Groep{
 			SELECT 
 				groep.id AS groepId, groep.snaam AS snaam, groep.naam AS naam,
 				groep.sbeschrijving AS sbeschrijving, groep.beschrijving AS beschrijving, groep.zichtbaar AS zichtbaar,
-				groep.status AS status, groep.installatie AS installatie,
+				groep.status AS status, groep.installatie AS installatie, groep.aanmeldbaar AS aanmeldbaar,
 				groeplid.uid AS uid, groeplid.op AS op, groeplid.functie AS functie, groeplid.prioriteit AS prioriteit,
 				groeptype.id AS gtypeId, groeptype.naam AS gtype
 			FROM groep
@@ -63,7 +69,7 @@ class Groep{
 		while($aGroep=$db->next($rGroep)){
 			//groepseigenschappen worden alleen de eerste iteratie opgeslagen
 			if($this->groep===null){
-				$this->groep=array_get_keys($aGroep, array('groepId', 'gtypeId', 'gtype', 'snaam', 'naam', 'sbeschrijving', 'beschrijving', 'zichtbaar', 'status', 'installatie'));
+				$this->groep=array_get_keys($aGroep, $this->groepseigenschappen);
 			}
 			//en ook de leden inladen.
 			if($aGroep['uid']!=''){
@@ -128,6 +134,7 @@ class Groep{
 	public function getZichtbaar(){		return $this->groep['zichtbaar']; }
 	public function getStatus(){		return $this->groep['status']; }
 	public function getInstallatie(){	return $this->groep['installatie']; }
+	public function isAanmeldbaar(){	return $this->groep['aanmeldbaar']==1; }
 	
 	public function setGtype(){					
 		if(isset($_GET['gtype']) AND Groepen::isValidGtype($_GET['gtype'])){

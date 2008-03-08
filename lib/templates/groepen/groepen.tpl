@@ -22,14 +22,11 @@
 {foreach from=$groepen->getGroepen() item=groep}
 	<div class="groep clear" id="groep{$groep->getId()}">
 		<div class="groepleden">
-			<table>
+			<ul style="list-style-type: none;">
 				{foreach from=$groep->getLeden() item=groeplid}
-					<tr>
-						<td style="width: 65%">{$groeplid.uid|csrnaam:'civitas'}</td>
-						<td style="width: 35%"><em>{$groeplid.functie|escape:'html'}</em></td>
-					</tr>
+					<li>{$groeplid.uid|csrnaam:'civitas'}&nbsp;<em>{$groeplid.functie|escape:'html'}</em></li>
 				{/foreach}
-			</table>
+			</ul>
 		</div>
 		<h2><a href="/groepen/{$groepen->getNaam()}/{$groep->getSnaam()}/">{$groep->getNaam()}</a></h2>
 		{$groep->getSbeschrijving()|ubb}
