@@ -9,9 +9,11 @@
 	<link rel="stylesheet" href="/layout/default.css" type="text/css" />
 	{$csrdelft->getStylesheets()}
 	<script type="text/javascript" src="/layout/csrdelft.js" defer="defer"></script>
-
+	
 	<link rel="alternate" title="C.S.R. Delft RSS" type="application/rss+xml" href="http://csrdelft.nl/forum/rss.xml" />
 	<link rel="shortcut icon" href="{$csr_pics}layout/favicon.ico" />
+	<script type="text/javascript" src="/layout/mootools-release-1.11.js"></script>
+	<script type="text/javascript" src="/layout/mootool-test.js"></script>
 </head>
 <body>
 <div id="layoutContainer">
@@ -74,7 +76,7 @@
 {/if}
 <div id="personalBox">
 	{if $csrdelft->_lid->hasPermission('P_LOGGED_IN') }
-		U bent {$csrdelft->_lid->getCivitasName()}<br />
+		U bent {$lid->getCivitasName()}<br />
 		<a href="/logout.php">log&nbsp;uit</a> | <a href="/intern/profiel/{$csrdelft->_lid->getUid()}">profiel</a>
 	{else}
 		<a href="#" id="inloglink" onclick="document.getElementById('inloggen').style.display = 'block'">
@@ -112,7 +114,6 @@
 		{/foreach}
 	</div>
 {/if}
-
 </div>
 <!-- selecteer-bug-fix voor IE ( http://trac.knorrie.org/csrdelft.nl/changeset/158) -->
 <script type="text/javascript" defer="defer">

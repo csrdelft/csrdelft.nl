@@ -76,16 +76,19 @@ class ProfielContent extends SimpleHTML {
 		$woonoord = $woonoord->getWoonoordByUid($this->_profiel['uid']);
 		$profhtml['woonoord']=($woonoord !== false) ? '<em>'.$woonoord['naam'].'</em><br />' : '';
 		
-		# kijken of deze persoon commissielid is
-		require_once('class.commissie.php');
-		$profhtml['commissies']="";				
-		$aCommissies = Commissie::getCieByUid($this->_profiel['uid']);
-		if (count($aCommissies) != 0) {
-			foreach ($aCommissies as $cie) {
-				$aCieNaam=mb_htmlentities($cie['naam']);
-				$profhtml['commissies'].= 'Commissie: <a href="/groepen/commissie/'.$aCieNaam.'.html">'.$aCieNaam."</a><br />\n";
+		# kijken of deze persoon in een groep zit
+		require_once('class.groepen.php');
+		$profhtml['groepen']="";	
+		
+		$aGroepen=Groepen::getGroepenByUid($this->_profiel['uid']);
+		if (count($aGroepen) != 0) {
+			$profhtml['groepen'].='Groepen:<br >';
+			foreach ($aGroepen as $groep) {
+				$groepnaam=mb_htmlentities($groep['naam']);
+				$profhtml['groepen'].='<a href="/groepen/'.$groep['gtype'].'/'.$groep['id'].'/">'.$groepnaam."</a><br />\n";
 			}				
 		}
+				
 		//de html template in elkaar draaien en weergeven
 		$profiel=new Smarty_csr();
 

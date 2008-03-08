@@ -126,16 +126,23 @@ class Groepen{
 	 */
 	public static function getGroepenByUid($uid){
 		$db=MySql::get_MySql();
+		$lid=Lid::get_lid();
+		
 		$groepen=array();
-		$result=$db->query("
-			SELECT id, snaam, naam
-			FROM groep
-			WHERE id IN ( 
-				SELECT groepid FROM groeplid WHERE uid = '".$db->escape($uid)."'
-			)
-			ORDER BY naam;");
-		if ($result !== false and $db->numRows($result) > 0){
-			$groepen=$db->result2array($result);
+		if($lid->isValidUid($uid)){
+			$qGroepen="
+				SELECT groep.id AS id, groep.snaam AS snaam, groep.naam AS naam, groeptype.naam AS gtype			
+				FROM groep
+				INNER JOIN groeptype ON(groep.gtype=groeptype.id)
+				WHERE groep.id IN ( 
+					SELECT groepid FROM groeplid WHERE uid = '".$uid."'
+				)
+				ORDER BY groep.naam;";
+				
+			$rGroepen=$db->query($qGroepen);
+			if ($rGroepen !== false and $db->numRows($rGroepen) > 0){
+				$groepen=$db->result2array($rGroepen);
+			}
 		}
 		return $groepen;
 	}
