@@ -40,7 +40,7 @@
 			<br />
 			{if $isOudlid!==true}
 				Kring: <a href="/groepen/moten.php">{$profhtml.moot}.{$profhtml.kring}</a><br />
-				{$profhtml.commissies}
+				{$profhtml.groepen}
 			{/if}
 		</td>
 		<td>
