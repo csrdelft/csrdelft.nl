@@ -69,12 +69,14 @@ class ProfielContent extends SimpleHTML {
 				}
 			}
 		}
-		/*
-		# kijken of deze persoon nog in een geregistreerd woonoord woont...
+		/* 
+		 # kijken of deze persoon nog in een geregistreerd woonoord woont...
 		require_once('class.woonoord.php');
 		$woonoord=new Woonoord();
 		$woonoord = $woonoord->getWoonoordByUid($this->_profiel['uid']);
 		$profhtml['woonoord']=($woonoord !== false) ? '<em>'.$woonoord['naam'].'</em><br />' : '';
+		
+		*/
 		
 		# kijken of deze persoon in een groep zit
 		require_once('class.groepen.php');
@@ -82,16 +84,19 @@ class ProfielContent extends SimpleHTML {
 		
 		$aGroepen=Groepen::getGroepenByUid($this->_profiel['uid']);
 		if (count($aGroepen) != 0) {
-			$profhtml['groepen'].='Groepen:<br >';
+			$currentStatus=null;
 			foreach ($aGroepen as $groep) {
+				if($currentStatus!=$groep['status']){
+					$profhtml['groepen'].='<br /><strong>'.str_replace(array('ht','ot'), array('h.t.', 'o.t.'),$groep['status']).' groepen:</strong><br />';
+					$currentStatus=$groep['status'];
+				}
 				$groepnaam=mb_htmlentities($groep['naam']);
 				$profhtml['groepen'].='<a href="/groepen/'.$groep['gtype'].'/'.$groep['id'].'/">'.$groepnaam."</a><br />\n";
 			}				
 		}
-		*/	
+				
 		//de html template in elkaar draaien en weergeven
 		$profiel=new Smarty_csr();
-
 		
 		$profiel->assign('profhtml', $profhtml);
 		$profiel->assign('isOudlid', $this->_profiel['status'] == 'S_OUDLID');
