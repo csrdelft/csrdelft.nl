@@ -21,7 +21,7 @@ class Groep{
 				//dit zijn de defaultwaarden voor een nieuwe groep.
 				$this->groep=array(
 					'groepId'=>0, 'snaam'=>'', 'naam'=>'', 'sbeschrijving'=>'', 'beschrijving'=>'', 
-					'zichtbaar'=>'zichtbaar', 'installatie'=>getDateTime(), 'aanmeldbaar'=>0, 'limiet'=>0);
+					'zichtbaar'=>'zichtbaar', 'installatie'=>date('Y-m-d'), 'aanmeldbaar'=>0, 'limiet'=>0);
 				//we moeten ook nog even de groeptypen opzoeken. Die zit als het goed is in GET['gtype'];
 				$this->setGtype();
 			}else{

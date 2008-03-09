@@ -97,7 +97,7 @@ class Groepcontroller extends Controller{
 				}
 				if(!preg_match('/\d{4}-\d{2}-\d{2}/', trim($_POST['installatie']))){
 					$valid=false;
-					$this->errors.="De installatiedatum is niet geldig.<br />";
+					$this->errors.="De installatiedatum is niet geldig. Gebruik JJJJ-mm-dd.<br />";
 				}
 				if(!preg_match('/(h|f|o)t/', $_POST['status'])){
 					$valid=false;
