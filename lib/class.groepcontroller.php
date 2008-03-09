@@ -95,7 +95,7 @@ class Groepcontroller extends Controller{
 					$valid=false;
 					$this->errors.="Korte beschrijving moet minstens vijf tekens lang zijn.<br />";
 				}
-				if(!preg_match('/\d{4}-\d{2}-\d{2}/', trim($_POST['installatie']))){
+				if(!preg_match('/\d{4}-\d{2}-\d{2}/', trim($_POST['installatie']) OR trim($_POST['installatie'])=='0000-00-00')){
 					$valid=false;
 					$this->errors.="De installatiedatum is niet geldig. Gebruik JJJJ-mm-dd.<br />";
 				}
