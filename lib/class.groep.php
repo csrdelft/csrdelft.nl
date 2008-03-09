@@ -175,7 +175,27 @@ class Groep{
 		$lid=Lid::get_lid();
 		return $this->isAdmin() OR $this->isOp($lid->getUid());
 	}
-	
+	/*
+	 * Kijkt of er naast de huidige groep al een andere groep h.t. is
+	 * met dezelfde snaam
+	 */
+	public function hasHt($snaam=null){
+		$db=MySql::get_MySql();
+		if($snaam==null){ 
+			$this->getSnaam(); 
+		}
+		$qHasHt="
+			SELECT id 
+			FROM groep 
+			WHERE snaam='".$db->escape($snaam)."' 
+			  AND id!=".$this->getId().";";
+		$rHasHt=$db->query($qHasHt);
+		echo $qHasHt;
+		if($db->numRows($rHasHt)!=0){
+			return true;
+		}
+		return false;
+	}
 	function verwijderLid($uid){
 		$lid=Lid::get_lid();
 		if($lid->isValidUid($uid)){

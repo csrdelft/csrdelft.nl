@@ -102,6 +102,17 @@ class Groepcontroller extends Controller{
 				if(!preg_match('/(h|f|o)t/', $_POST['status'])){
 					$valid=false;
 					$this->errors.="De status is niet geldig.<br />";
+				}else{
+					//Controleren of er geen h.t. groep bestaat met dezelfde snaam.
+					if($this->groep->getId()==0 AND isset($_POST['snaam'])){
+						$snaam=$_POST['snaam'];
+					}else{
+						$snaam=null;
+					}
+					if($_POST['status']=='ht' AND $this->groep->hasHt($snaam)){
+						$valid=false;
+						$this->errors.="Er is al een h.t.-groep voor deze soort, kies een andere status.<br />";
+					}
 				}
 			}else{
 				$valid=false;
