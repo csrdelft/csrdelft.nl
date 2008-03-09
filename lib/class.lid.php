@@ -655,7 +655,7 @@ class Lid {
 		
 		if ($result !== false and $this->_db->numRows($result) > 0) {
 			while($aVerjaardag=$this->_db->next($result)){
-				$aVerjaardag['jarig_over'] = round((strtotime($aVerjaardag['verjaardag'])-time())/86400);
+				$aVerjaardag['jarig_over'] = ceil((strtotime($aVerjaardag['verjaardag'])-time())/86400);
 				$aVerjaardag['leeftijd'] = round((strtotime($aVerjaardag['verjaardag'])-strtotime($aVerjaardag['gebdatum']))/31536000);
 				$aVerjaardagen[] = $aVerjaardag;
 			}
