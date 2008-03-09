@@ -1,13 +1,13 @@
 RewriteEngine on
 ###modRewrite dingen
-RewriteRule ^commissie/?$ commissies.php
-RewriteRule ^commissie/([0-9]+)/verwijder/lid/([a-z0-9]+) commissies.php?cie=$1&uid=$2&action=verwijderen
-RewriteRule ^commissie/([0-9]+)/bewerken/?$ commissies.php?cie=$1&action=bewerken
-RewriteRule ^commissie/([0-9]+)/? commissies.php?cie=$1&action=default
-
-RewriteRule ^commissie/([a-zA-Z]+)(/|.html|.htm|.php) commissies.php?cie=$1
 
 ##	Groepen nieuwe stijl, lekker, controller ipv duizend regels voor dingen...
 RewriteRule ^$	groepen.php
 RewriteRule ^([a-zA-Z]*)/?$ groepen.php?gtype=$1	
 RewriteRule ^([a-zA-Z]*)/(.*)$ groep.php?gtype=$1&query=$2
+
+## Terugwaartsheid b'vo. Na de ketzer met nieuw elan, regeltjes voor de oude ketzer.
+RewriteRule ^commissies.php(.*) /groepen/Commissies/ [R=301]
+RewriteRule ^commissie/(.*) /groepen/Commissies/ [R=301]
+RewriteRule ^onderverenigingen.php(.*) /groepen/Onderverenigingen/ [R=301]
+RewriteRule ^woonoorden.php(.*) /groepen/Woonoorden/ [R=301]
