@@ -7,7 +7,6 @@
 # -------------------------------------------------------------------
 
 
-require_once ('class.commissie.php');
 
 class ProfielContent extends SimpleHTML {
 
@@ -70,6 +69,7 @@ class ProfielContent extends SimpleHTML {
 				}
 			}
 		}
+		/*
 		# kijken of deze persoon nog in een geregistreerd woonoord woont...
 		require_once('class.woonoord.php');
 		$woonoord=new Woonoord();
@@ -88,7 +88,7 @@ class ProfielContent extends SimpleHTML {
 				$profhtml['groepen'].='<a href="/groepen/'.$groep['gtype'].'/'.$groep['id'].'/">'.$groepnaam."</a><br />\n";
 			}				
 		}
-				
+		*/	
 		//de html template in elkaar draaien en weergeven
 		$profiel=new Smarty_csr();
 
