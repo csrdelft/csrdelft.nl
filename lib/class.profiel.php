@@ -697,11 +697,13 @@ class Profiel extends lid{
 				$entry['userPassword'] = $lid['password'];
 
 				# voor woonoord moeten we even moeilijk doen
-				require_once('class.woonoord.php');
+				/*
+				 TODO: Dit doen met de nieuwe groepenketzer.
+				 require_once('class.woonoord.php');
 				$woonoord = new Woonoord($this->_db, $this);
 				$wo = $woonoord->getWoonoordByUid($this->_tmpprofile['uid']);
 				if ($wo !== false) $entry['ou'] = $wo['naam'];
-
+				*/
 				# lege velden er uit gooien
 				foreach ($entry as $i => $e) if ($e == '') unset ($entry[$i]);
 				
