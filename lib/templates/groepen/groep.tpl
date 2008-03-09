@@ -10,7 +10,6 @@
 </ul>
 <hr />
 <div class="groepleden">
-	<strong>leden:</strong>
 	<table>
 		{foreach from=$groep->getLeden() item=groeplid}
 			<tr>
@@ -57,13 +56,18 @@
 	{$groep->getSbeschrijving()|ubb}
 	<div class="clear" id="voorgangerOpvolger">
 		{if is_array($opvolgerVoorganger)}
-			{if isset($opvolgerVoorganger.voorganger)}
-				&laquo; <a href="/groepen/{$gtype}/{$opvolgerVoorganger.voorganger->getId()}/">{$opvolgerVoorganger.voorganger->getNaam()}</a>
-			{/if}
-			{if isset($opvolgerVoorganger.voorganger) AND isset($opvolgerVoorganger.opvolger)}|{/if}
+			<ul>
 			{if isset($opvolgerVoorganger.opvolger)}
-				<a href="/groepen/{$gtype}/{$opvolgerVoorganger.opvolger->getId()}/">{$opvolgerVoorganger.opvolger->getNaam()}</a> &raquo;
+				<li style="list-style-image: url({$csr_pics}groepen/up.png)"><a href="/groepen/{$gtype}/{$opvolgerVoorganger.opvolger->getId()}/">{$opvolgerVoorganger.opvolger->getNaam()}</a></li>
 			{/if}
+			{if isset($opvolgerVoorganger.voorganger) OR isset($opvolgerVoorganger.opvolger)}
+				<li style="list-style-type: none">{$groep->getNaam()}</li>
+			{/if}
+			{if isset($opvolgerVoorganger.voorganger)}
+				<li style="list-style-image: url({$csr_pics}groepen/down.png)"><a href="/groepen/{$gtype}/{$opvolgerVoorganger.voorganger->getId()}/">{$opvolgerVoorganger.voorganger->getNaam()}</a></li>
+			{/if}
+			</ul>
+			
 		{/if}
 	</div> 
 	{if $groep->magBewerken()}
