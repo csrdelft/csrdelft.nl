@@ -190,7 +190,6 @@ class Groep{
 			WHERE snaam='".$db->escape($snaam)."' 
 			  AND id!=".$this->getId().";";
 		$rHasHt=$db->query($qHasHt);
-		echo $qHasHt;
 		if($db->numRows($rHasHt)!=0){
 			return true;
 		}
