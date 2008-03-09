@@ -92,14 +92,16 @@ class Groep{
 		if($this->getId()==0){
 			$qSave="
 				INSERT INTO groep (
-					snaam, naam, sbeschrijving, beschrijving, gtype, zichtbaar
+					snaam, naam, sbeschrijving, beschrijving, gtype, zichtbaar, status, installatie
 				) VALUES (
 					'".$db->escape($this->getSnaam())."',
 					'".$db->escape($this->getNaam())."',
 					'".$db->escape($this->getSbeschrijving())."',
 					'".$db->escape($this->getBeschrijving())."',
 					".$this->getTypeId().",
-					'".$db->escape($this->getZichtbaar())."'
+					'".$db->escape($this->getZichtbaar())."',
+					'".$db->escape($this->getStatus())."',
+					'".$db->escape($this->getInstallatie())."'
 				);";
 		}else{
 			$qSave="
@@ -108,7 +110,9 @@ class Groep{
 		 			naam='".$db->escape($this->getNaam())."',
 					sbeschrijving='".$db->escape($this->getSbeschrijving())."',
 					beschrijving='".$db->escape($this->getBeschrijving())."',
-					zichtbaar='".$db->escape($this->getZichtbaar())."'
+					zichtbaar='".$db->escape($this->getZichtbaar())."',
+					status='".$db->escape($this->getStatus())."',
+					installatie='".$db->escape($this->getInstallatie())."'
 				WHERE id=".$this->getId()."
 				LIMIT 1;";
 		}
@@ -155,6 +159,9 @@ class Groep{
 	public function setSbeschrijving($value){	$this->groep['sbeschrijving']=trim($value); }
 	public function setBeschrijving($value){	$this->groep['beschrijving']=trim($value); }
 	public function setZichtbaar($value){		$this->groep['zichtbaar']=trim($value); }
+	public function setStatus($value){			$this->groep['status']=trim($value); }
+	public function setInstallatie($value){		$this->groep['installatie']=trim($value); }
+	
 	
 	public function isLid($uid){	return isset($this->leden[$uid]); }
 	public function isOp($uid){		return $this->isLid($uid) AND $this->leden[$uid]['op']=='1'; }

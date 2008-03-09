@@ -86,7 +86,7 @@ class Groepcontroller extends Controller{
 				}
 			}
 			
-			if(isset($_POST['naam'], $_POST['sbeschrijving'])){
+			if(isset($_POST['naam'], $_POST['sbeschrijving'], $_POST['status'], $_POST['installatie'])){
 				if(strlen(trim($_POST['naam']))<5){
 					$valid=false;
 					$this->errors.="Naam moet minstens vijf tekens lang zijn.<br />";
@@ -94,6 +94,14 @@ class Groepcontroller extends Controller{
 				if(strlen(trim($_POST['sbeschrijving']))<5){
 					$valid=false;
 					$this->errors.="Korte beschrijving moet minstens vijf tekens lang zijn.<br />";
+				}
+				if(!preg_match('/\d{4}-\d{2}-\d{2}/', trim($_POST['installatie']))){
+					$valid=false;
+					$this->errors.="De installatiedatum is niet geldig.<br />";
+				}
+				if(!preg_match('/(h|f|o)t/', $_POST['status'])){
+					$valid=false;
+					$this->errors.="De status is niet geldig.<br />";
 				}
 			}else{
 				$valid=false;
@@ -128,6 +136,8 @@ class Groepcontroller extends Controller{
 				if($this->groep->isAdmin()){
 					$this->groep->setNaam($_POST['naam']);
 					$this->groep->setSbeschrijving($_POST['sbeschrijving']);
+					$this->groep->setInstallatie($_POST['installatie']);
+					$this->groep->setStatus($_POST['status']);
 				}
 				$this->groep->setBeschrijving($_POST['beschrijving']);
 				
@@ -144,6 +154,8 @@ class Groepcontroller extends Controller{
 				if(isset($_POST['naam'])){			$this->groep->setNaam($_POST['naam']); }
 				if(isset($_POST['sbeschrijving'])){	$this->groep->setSbeschrijving($_POST['sbeschrijving']); }
 				if(isset($_POST['beschrijving'])){	$this->groep->setBeschrijving($_POST['beschrijving']); }
+				if(isset($_POST['installatie'])){	$this->groep->setInstallatie($_POST['installatie']); }
+				if(isset($_POST['status'])){		$this->groep->setStatus($_POST['status']); }
 				//de eventuele fouten van de groepValidator aan de melding toevoegen.
 				$this->content->setMelding($this->errors);
 

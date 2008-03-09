@@ -42,10 +42,17 @@
 				<strong>Korte naam:</strong> (Voor in urls. Alleen letters, geen spaties.)<br />
 				<input type="text" name="snaam" style="width: 100%" value="{$groep->getSnaam()|escape:'html'}" />
 			{/if}
-		<strong>Naam:</strong><br />
-		<input type="text" name="naam" style="width: 100%" value="{$groep->getNaam()|escape:'html'}" />
-		<strong>Korte beschrijving:</strong><br />
-		<textarea name="sbeschrijving" style="width: 100%; height: 100px;">{$groep->getSbeschrijving()|escape:'html'}</textarea>
+			<strong>Naam:</strong><br />
+			<input type="text" name="naam" style="width: 100%" value="{$groep->getNaam()|escape:'html'}" />
+			<strong>Status:</strong> <select name="status">
+			<option value="ht" {if $groep->getStatus()=="ht"}selected="selected"{/if}>h.t.</option>
+			<option value="ot" {if $groep->getStatus()=="ot"}selected="selected"{/if}>o.t.</option>
+			<option value="ft" {if $groep->getStatus()=="ft"}selected="selected"{/if}>f.t.</option>
+			</select>
+			<strong>Installatiedatum:</strong> <input type="text" name="installatie" value="{$groep->getInstallatie()}" />
+			<br /><br />
+			<strong>Korte beschrijving:</strong><br />
+			<textarea name="sbeschrijving" style="width: 100%; height: 100px;">{$groep->getSbeschrijving()|escape:'html'}</textarea>
 		{/if}
 		<strong>Lange beschrijving:</strong><br />
 		<textarea name="beschrijving" style="width: 100%; height: 200px;">{$groep->getBeschrijving()|escape:'html'}</textarea>
