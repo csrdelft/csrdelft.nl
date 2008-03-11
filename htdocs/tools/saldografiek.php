@@ -15,8 +15,10 @@ if(isset($_GET['uid']) AND ($lid->isValidUid($_GET['uid']) OR $_GET['uid']=='000
 }else{
 	$uid=$lid->getUid();
 }
+require_once('class.groep.php');
+$soccie=new Groep('SocCie');
 
-if($lid->hasPermission('P_ADMIN') OR $lid->getUid()==$uid){
+if($lid->hasPermission('P_ADMIN') OR $soccie->isLid($lid->getUid()) OR $lid->getUid()==$uid){
 	
 	$maalcie=new Saldi($uid, 'maalcie');
 	$soccie=new Saldi($uid, 'soccie');
@@ -34,7 +36,7 @@ if($lid->hasPermission('P_ADMIN') OR $lid->getUid()==$uid){
 	
 	
 	$chart->add_legend('SocCie', 'blue');
-	$chart->add_legend('MaalCie', 'red');
+	//$chart->add_legend('MaalCie', 'red');
 
 	$chart->set_margins(60, 10, 20, 23);
 	$chart->set_labels(false, 'Saldo [euro]');
