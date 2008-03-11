@@ -118,7 +118,7 @@ class ProfielContent extends SimpleHTML {
 				onclick="return confirm(\'Weet u zeker dat u het wachtwoord van deze gebruiker wilt resetten?\')">reset wachtwoord</a>';
 			echo '<br />'.$this->getMelding();
 		}
-		if($this->_lid->hasPermission('P_ADMIN')){
+		if($this->_lid->hasPermission('P_ADMIN') OR $this->_profiel['uid']==$this->getUid()){
 			echo '<br /><img src="/tools/saldografiek.php?uid='.$this->_profiel['uid'].'" />';
 		}
 	}
