@@ -5,3 +5,5 @@
 User-agent: *
 Disallow: /intern/		#dat schiet niet op, mag de robot toch niet zien.
 Disallow: /tools/
+Disallow: /forum/reactie/
+Disallow: /forum/toevoegen/
