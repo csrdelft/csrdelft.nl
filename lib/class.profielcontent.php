@@ -121,7 +121,7 @@ class ProfielContent extends SimpleHTML {
 		require_once('class.groep.php');
 		$soccie=new Groep('SocCie');
 		
-		if($this->_lid->hasPermission('P_ADMIN') OR $soccie->isLid($this->getUid()) OR $this->_profiel['uid']==$this->getUid()){
+		if($this->_lid->hasPermission('P_ADMIN') OR $soccie->isLid($this->_lid->getUid()) OR $this->_profiel['uid']==$this->_lid->getUid()){
 			echo '<br /><img src="/tools/saldografiek.php?uid='.$this->_profiel['uid'].'" />';
 		}
 	}
