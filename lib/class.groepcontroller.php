@@ -214,5 +214,9 @@ class Groepcontroller extends Controller{
 		}	
 	}
 	
+	public function action_geschiedenis(){
+		$this->content=new Groepgeschiedeniscontent(new Groepen($_GET['gtype']));
+	}
+	
 }
 ?>

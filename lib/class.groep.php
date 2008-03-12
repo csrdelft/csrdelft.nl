@@ -291,5 +291,21 @@ class Groep{
 		return $return;
 		
 	}
+	public static function getGroepgeschiedenis($snaam, $limiet=10){
+		$db=MySql::get_MySql();
+		$limiet=(int)$limiet;
+		$groepen=array();
+		$qGroepen="
+			SELECT id, naam
+			FROM groep
+			WHERE snaam='".$db->escape($snaam)."'
+			ORDER BY installatie DESC
+			LIMIT ".$limiet.";";
+		$result=$db->query($qGroepen);
+		if ($result !== false and $db->numRows($result) > 0){
+			$groepen=$db->result2array($result);
+		}
+		return $groepen;
+	}
 }
 ?>

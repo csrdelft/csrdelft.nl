@@ -116,4 +116,45 @@ class Groepencontent extends SimpleHTML{
 		
 	}
 }
+class Groepgeschiedeniscontent extends SimpleHTML{
+		private $groepen;
+	private $action='view';
+	
+	public function __construct($groepen){
+		$this->groepen=$groepen;
+	}
+	public function setAction($action){
+		$this->action=$action;
+	}
+	public function getTitel(){
+		return 'Groepen - '.$this->groepen->getNaam();
+	}
+	
+	public function view(){
+		$maanden=15*12;
+		echo '<table style="border-collapse: collapse;">';
+
+		foreach($this->groepen->getGroepen() as $groep){
+			echo '<tr>';
+			$startspacer=12-substr($groep->getInstallatie(), 5,2);
+			if($startspacer!=0){
+				echo '<td colspan="'.$startspacer.'" style="background-color: lightgray;">&nbsp;</td>';
+			}
+			$oudeGr=Groep::getGroepgeschiedenis($groep->getSnaam(), 5);
+			foreach($oudeGr as $grp){
+				echo '<td colspan="12" style="border: 1px solid black; padding: 2px; width: 150px; text-align: left;">';
+				echo '<a href="/groepen/ ">'.$grp['naam'].'</a>';
+
+				echo '</td>';
+			}
+			if(count($oudeGr)<$maanden){
+				$spacer=$maanden-count($oudeGr);
+				echo '<td colspan="'.$spacer.'" style="background-color: lightgray;">&nbsp;</td>';
+			}
+			echo '</tr>';
+		}
+		echo '</table>';
+			
+	}
+}
 ?>
