@@ -69,15 +69,7 @@ class ProfielContent extends SimpleHTML {
 				}
 			}
 		}
-		/* 
-		 # kijken of deze persoon nog in een geregistreerd woonoord woont...
-		require_once('class.woonoord.php');
-		$woonoord=new Woonoord();
-		$woonoord = $woonoord->getWoonoordByUid($this->_profiel['uid']);
-		$profhtml['woonoord']=($woonoord !== false) ? '<em>'.$woonoord['naam'].'</em><br />' : '';
-		
-		*/
-		
+				
 		# kijken of deze persoon in een groep zit
 		require_once('class.groepen.php');
 		$profhtml['groepen']="";	
@@ -110,7 +102,7 @@ class ProfielContent extends SimpleHTML {
 		# gaan we een linkje afbeelden naar de edit-functie, of de editvakken?
 		if ( ($this->_lid->hasPermission('P_PROFIEL_EDIT') and $this->_profiel['uid'] == $this->_lid->getUid()) or 
 			$this->_lid->hasPermission('P_LEDEN_EDIT') ){
-			echo '<a href="'.$this->_state->getMyUrl(true).'/edit" class="knop">Bewerken</a> ';
+			echo '<a href="'.$this->_state->getMyUrl(true).'/edit" class="knop"><img src="'.CSR_PICS.'forum/bewerken.png" title="Bewerk groep" />Bewerken</a> ';
 		}
 		if($this->_lid->hasPermission('P_ADMIN')){
 			echo '<a href="/tools/stats.php?uid='.$this->_profiel['uid'].'" class="knop">overzicht van bezoeken</a> ';
@@ -118,11 +110,21 @@ class ProfielContent extends SimpleHTML {
 				onclick="return confirm(\'Weet u zeker dat u het wachtwoord van deze gebruiker wilt resetten?\')">reset wachtwoord</a>';
 			echo '<br />'.$this->getMelding();
 		}
-		require_once('class.groep.php');
-		$soccie=new Groep('SocCie');
 		
-		if($this->_lid->hasPermission('P_ADMIN') OR $soccie->isLid($this->_lid->getUid()) OR $this->_profiel['uid']==$this->_lid->getUid()){
+		/*
+		 * Saldografiek gaan we
+		 * - gewoon en meteen weergeven bij het lid zelf.
+		 * - niet meteen weergeven voor SocCie en pubcie, alleen op verzoek.
+		 */
+		if($this->_profiel['uid']==$this->_lid->getUid()){
 			echo '<br /><img src="/tools/saldografiek.php?uid='.$this->_profiel['uid'].'" />';
+		}else{
+			require_once('class.groep.php');
+			$soccie=new Groep('SocCie');
+			if($this->_lid->hasPermission('P_ADMIN') OR $soccie->isLid($this->_lid->getUid())){
+				echo '<br /><a href="#" onclick="document.getElementById(\'saldoGrafiek\').style.display = \'block\'" class="knop">Saldografiek weergeven</a><br />';
+				echo '<br /><div id="saldoGrafiek" style="display: none;"><img src="/tools/saldografiek.php?uid='.$this->_profiel['uid'].'" /></div>';
+			}
 		}
 	}
 	function viewStateEdit(){
