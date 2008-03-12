@@ -143,7 +143,7 @@ class Groepgeschiedeniscontent extends SimpleHTML{
 			$oudeGr=Groep::getGroepgeschiedenis($groep->getSnaam(), 5);
 			foreach($oudeGr as $grp){
 				echo '<td colspan="12" style="border: 1px solid black; padding: 2px; width: 150px; text-align: left;">';
-				echo '<a href="/groepen/ ">'.$grp['naam'].'</a>';
+				echo '<a href="/groepen/'.$this->groepen->getNaam().'/'.$grp['id'].'">'.$grp['naam'].'</a>';
 
 				echo '</td>';
 			}
