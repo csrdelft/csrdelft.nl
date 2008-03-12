@@ -39,7 +39,7 @@
 	<div class="groepAdmin" style="width: 100%; clear: both;">
 		{if $groep->isAdmin()}
 			{if $groep->getId()==0}
-				<strong>Korte naam:</strong> (Voor in urls. Alleen letters, geen spaties.)<br />
+				<strong>Korte naam:</strong> (Voor in urls. Alleen letters, geen spaties. Voor elkaar opvolgende groepen dezelfde naam gebruiken;)<br />
 				<input type="text" name="snaam" style="width: 100%" value="{$groep->getSnaam()|escape:'html'}" />
 			{/if}
 			<strong>Naam:</strong><br />
@@ -74,7 +74,9 @@
 				<li style="list-style-image: url({$csr_pics}groepen/down.png)"><a href="/groepen/{$gtype}/{$opvolgerVoorganger.voorganger->getId()}/">{$opvolgerVoorganger.voorganger->getNaam()}</a></li>
 			{/if}
 			</ul>
-			
+		{/if}
+		{if $groep->isAdmin()}
+			<br /><a href="/groepen/{$gtype}/0/bewerken/{$groep->getSnaam()}/">&raquo; Opvolger toevoegen</a><br />
 		{/if}
 	</div> 
 	{if $groep->magBewerken()}

@@ -20,6 +20,11 @@ class Groepcontent extends SimpleHTML{
 	public function getTitel(){
 		return ''.$_GET['gtype'].' - '.$this->groep->getNaam();
 	}
+	
+	/*
+	 * Deze functie geeft een formulierding voor het eenvoudig toevoegen van leden
+	 * aan een bepaalde groep.
+	 */
 	private function getLidAdder(){
 		if(isset($_POST['rawNamen']) AND trim($_POST['rawNamen'])!=''){
 			$return='';
@@ -54,13 +59,17 @@ class Groepcontent extends SimpleHTML{
 			}
 		}
 		return false;
-	} 
+	}
+	/*
+	 * Niet-admins kunnen kiezen uit een van te voren vastgesteld lijstje met functies, zodat 
+	 * we  niet allerlei onzinnamen krijgen zoals Kücherführer enzo.
+	 */
 	private function getFunctieSelector(){
 		$return='';
 		$aFuncties=array('Q.Q.', 'Praeses', 'Fiscus', 'Redacteur', 'Computeur', 'Archivaris', 
 			'Bibliothecaris', 'Statisticus', 'Fotocommissaris','', 'Koemissaris', 'Regisseur', 
 			'Lichttechnicus', 'Geluidstechnicus', 'Adviseur', 'Internetman', 'Posterman', 
-			'Corveemanager', 'Provisor');
+			'Corveemanager', 'Provisor', 'HO', 'HJ', 'Onderhuurder');
 		sort($aFuncties);
 		$return.='<select name="functie[]" class="tekst">';
 		foreach($aFuncties as $sFunctie){

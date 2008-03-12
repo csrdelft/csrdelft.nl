@@ -148,6 +148,13 @@ class Groepcontroller extends Controller{
 	 */
 	public function action_bewerken(){
 		$this->content->setAction('edit');
+
+		//Als er een derde argument meegegeven wordt is dat een korte naam
+		//die we invullen in het formulier.
+		if(isset($this->queryparts[2]) AND preg_match('/\w{3,20}/', $this->queryparts[2])){
+			$this->groep->setStatus('ot');
+			$this->groep->setSnaam($this->queryparts[2]);
+		}
 		
 		if($this->isPOSTed()){
 			//validatie moet nog even gemaakt worden. TODO dus nog.

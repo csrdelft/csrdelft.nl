@@ -10,7 +10,8 @@
  * leden kunnen uiteraard lid zijn van verschillende groepen, maar niet meer 
  * dan één keer in een bepaalde groep zitten.
  *  
- * Deze klasse is een verzameling van groepen van een bepaald type.
+ * Deze klasse is een verzameling van groepobjecten van een bepaald type. Standaard 
+ * worden alleen de h.t.-groepen opgehaald.
  */
  
 class Groepen{
@@ -97,10 +98,11 @@ class Groepen{
 	public function save(){
 		$db=MySql::get_MySql();
 		$qSave="
-			UPDATE groeptype SET 
+			UPDATE groeptype 
+			SET beschrijving='".$db->escape($this->getBeschrijving())."'
 			WHERE id=".$this->getId()."
 			LIMIT 1;";
-		return $db->save();
+		return $db->query($qSave);
 	}
 	
 	public function getId(){			return $this->type['id']; }
@@ -118,6 +120,7 @@ class Groepen{
 		return false;
 	}
 	public function getGroepen(){		return $this->groepen; }
+	
 	/*
 	 * statische functie om de groepen bij een gebruiker te zoeken.
 	 * 
@@ -156,15 +159,15 @@ class Groepen{
 	public static function getGroeptypes(){
 		$db=MySql::get_MySql();
 		$groeptypes=array();
-		$result=$db->query("
+		$qGroeptypen="
 			SELECT id, naam
 			FROM groeptype
-			ORDER BY prioriteit ASC, naam ASC;");
-		if ($result !== false and $db->numRows($result) > 0){
-			$groeptypes=$db->result2array($result);
-		}
-		return $groeptypes;
+			WHERE zichtbaar=1
+			ORDER BY prioriteit ASC, naam ASC;";
+		$rGroeptypen=$db->query($qGroeptypen);
+		return $db->result2array($rGroeptypen);
 	}
+	
 	public static function isValidGtype($gtypetotest){
 		foreach(Groepen::getGroeptypes() as $gtype){
 			if($gtype['id']==$gtypetotest OR $gtype['naam']==$gtypetotest){
