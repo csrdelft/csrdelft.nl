@@ -197,6 +197,7 @@ class ProfielContent extends SimpleHTML {
 			$form[1][] = array('ztekst',"&nbsp;","<b>Diversen:</b>");
 			$form[1][] = array('ztekst',"&nbsp;","Di&euml;ten (Vego, notenallergie etc.):");
 			$form[1]['eetwens'] = array('input',"Di&euml;ten: (max 20 tekens)");
+			$form[1]['studienr'] = array('input',"Studienummer:");
 		}
 
 		if ($this->_profiel['status'] == 'S_OUDLID' or $this->_lid->hasPermission('P_LEDEN_MOD')) {
