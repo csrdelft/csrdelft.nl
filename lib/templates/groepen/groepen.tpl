@@ -18,7 +18,11 @@
 </ul>
 </div>
 {$groepen->getBeschrijving()|ubb}
-<div class="clear"></div>
+<div class="clear">
+	{if $groepen->isAdmin()}
+		<a href="/groepen/{$groepen->getNaam()}/0/bewerken" class="knop">Nieuwe groep</a>
+	{/if}
+</div>
 {foreach from=$groepen->getGroepen() item=groep}
 	<div class="groep clear" id="groep{$groep->getId()}">
 		<div class="groepleden">
