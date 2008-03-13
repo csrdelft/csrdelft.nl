@@ -97,9 +97,9 @@ class Groepcontroller extends Controller{
 			}
 			
 			if(isset($_POST['naam'], $_POST['sbeschrijving'], $_POST['status'], $_POST['installatie'])){
-				if(strlen(trim($_POST['naam']))<5){
+				if(strlen(trim($_POST['naam']))<3){
 					$valid=false;
-					$this->errors.="Naam moet minstens vijf tekens lang zijn.<br />";
+					$this->errors.="Naam moet minstens drie tekens lang zijn.<br />";
 				}
 				if(strlen(trim($_POST['sbeschrijving']))<5){
 					$valid=false;
