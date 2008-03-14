@@ -319,6 +319,27 @@ class Profiel extends lid{
 				}
 			}
 		}
+		
+		# studienummer
+		$veld = 'studienr';
+		if (isset($form[$veld])) {
+			$invoer = trim(strval($form[$veld]));
+			# is het wel een wijziging?
+			if ($invoer != $this->_tmpprofile[$veld]) {
+				# controleren op juiste inhoud...
+				if (!preg_match('/^[0-9]{6,7}$/', $invoer, $matches)) {
+					$this->_formerror[$veld] = "Geen geldig studienummer opgegeven:";
+				}
+				# als er geen fout is opgetreden veranderde waarde bewaren
+				if (!isset($this->_formerror[$veld])) {
+					# bewaar oude en nieuwe waarde in delta
+					$this->storeDeltaProfile($veld, $invoer);
+				}
+				# nieuwe waarde in tmpprofile, is of voor afbeelden in het invulvak,
+				# of voor diff_to_*
+				$this->_tmpprofile[$veld] = $invoer;
+			}
+		}
 
 		# 8. password veranderen
 		$velden = array('oldpass', 'nwpass', 'nwpass2');
@@ -439,27 +460,6 @@ class Profiel extends lid{
 						# of voor diff_to_*
 						$this->_tmpprofile[$veld] = $invoer;
 					}
-				}
-			}
-			
-			# studienummer
-			$veld = 'studienr';
-			if (isset($form[$veld])) {
-				$invoer = trim(strval($form[$veld]));
-				# is het wel een wijziging?
-				if ($invoer != $this->_tmpprofile[$veld]) {
-					# controleren op juiste inhoud...
-					if (!preg_match('/^[0-9]{6,7}$/', $invoer, $matches)) {
-						$this->_formerror[$veld] = "Geen geldig studienummer opgegeven:";
-					}
-					# als er geen fout is opgetreden veranderde waarde bewaren
-					if (!isset($this->_formerror[$veld])) {
-						# bewaar oude en nieuwe waarde in delta
-						$this->storeDeltaProfile($veld, $invoer);
-					}
-					# nieuwe waarde in tmpprofile, is of voor afbeelden in het invulvak,
-					# of voor diff_to_*
-					$this->_tmpprofile[$veld] = $invoer;
 				}
 			}
 			
