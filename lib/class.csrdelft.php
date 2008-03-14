@@ -12,8 +12,7 @@ require_once('class.simplehtml.php');
 class csrdelft extends SimpleHTML {
 
 	### private ###
-	//TODO: template vind het nodig dat dit public is, zou natuurlijk niet zo moeten zijn...
-	public $_lid;
+	private $_lid;
 	
 	//body is een object met een view-methode welke de content van de pagina maakt.
 	//Als body een methode zijKolom() heeft die gebruiken om de zij-kolom te vullen

@@ -52,7 +52,7 @@
 		<a href="/" title="Terug naar het begin"><img src="{$csr_pics}layout/beeldmerk.jpg" alt="Beeldmerk van de Vereniging" /></a>
 	</div>
 </div>
-{if $csrdelft->_lid->hasPermission('P_LOGGED_IN') }
+{if $lid->hasPermission('P_LOGGED_IN') }
   <div id="searchbox">
   	<form method="post" action="/intern/lijst.php">
   		<p>
@@ -75,9 +75,9 @@
 	</div>
 {/if}
 <div id="personalBox">
-	{if $csrdelft->_lid->hasPermission('P_LOGGED_IN') }
+	{if $lid->hasPermission('P_LOGGED_IN') }
 		U bent {$lid->getCivitasName()}<br />
-		<a href="/logout.php">log&nbsp;uit</a> | <a href="/intern/profiel/{$csrdelft->_lid->getUid()}">profiel</a>
+		<a href="/logout.php">log&nbsp;uit</a> | <a href="/intern/profiel/{$lid->getUid()}">profiel</a>
 	{else}
 		<a href="#" id="inloglink" onclick="document.getElementById('inloggen').style.display = 'block'">
 			Inloggen...
