@@ -127,6 +127,20 @@ class Groep{
 		return false;
 	}
 	
+	/*
+	 * Groep wegkekken
+	 */
+	public function delete(){
+		if($this->getId()==0){
+			die('Kan geen lege groep wegkekken. Groep::delete()');
+		}
+		$db=MySql::get_MySql();
+		$qDeleteLeden="DELETE FROM groeplid WHERE groepid=".$this->getId().";";
+		$qDeleteGroep="DELETE FROM groep WHERE id=".$this->getId()." LIMIT 1;";
+		
+		return $db->query($qDeleteLeden) AND $db->query($qDeleteGroep);
+	}
+	
 	public function getType(){			return $this->groep['gtype']; }
 	public function getTypeId(){		return $this->groep['gtypeId']; }
 

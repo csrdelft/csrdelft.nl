@@ -194,6 +194,17 @@ class Groepcontroller extends Controller{
 			}
 		}
 	}
+	/*
+	 * een groep verwijderen.
+	 */
+	public function action_verwijderen(){
+		if($this->groep->delete()){
+			$melding='Groep met succes verwijderd.';
+		}else{
+			$melding='Groep verwijderen mislukt Groepcontroller::action_deleteGroep()';
+		}
+		$this->content->invokeRefresh($melding, CSR_ROOT.'groepen/');
+	}
 	
 	/*
 	 * Leden toevoegen aan een groep.

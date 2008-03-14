@@ -85,10 +85,19 @@
 		{/if}
 		</ul>	
 	</div> 
-	{if $groep->magBewerken()}
-		<div style="float: right; margin: 10px ;"><a href="/groepen/{$gtype}/{$groep->getId()}/bewerken" class="knop"><img src="{$csr_pics}forum/bewerken.png" title="Bewerk groep" /></a></div>
+	{if $groep->magBewerken() OR $groep->isAdmin()}
+		<div style="float: right; margin: 10px ;">
+		{if $groep->magBewerken()}
+			<a href="/groepen/{$gtype}/{$groep->getId()}/bewerken" class="knop"><img src="{$csr_pics}forum/bewerken.png" title="Bewerk groep" /></a>
+			<br /><br />
+		{/if}
+		{if $groep->isAdmin()}
+		<a class="knop" onclick="return confirm('Weet u zeker dat u deze groep wilt verwijderen?')" href="/groepen/{$gtype}/{$groep->getId()}/verwijderen">
+			<img src="{$csr_pics}forum/verwijderen.png" title="Verwijder groep" />
+		</a>
+		{/if}
+		</div>
 	{/if}
-	
 	{$groep->getBeschrijving()|ubb}
 {/if}
 <div class="clear"></div>

@@ -3,6 +3,12 @@
  * class.groepcontent.php	| 	Jan Pieter Waagmeester (jieter@jpwaag.com)
  * 
  * 
+ * Een verzameling contentclassen voor de groepenketzer.
+ * 
+ * Groepcontent					Weergeven van een groep & bewerken en etc.
+ * Groepencontent				Weergeven van een groepenoverzicht
+ * Groepengeschiedeniscontent	Weergeven van een mooie patchwork van groepjes.
+ * 
  */
 
 
@@ -18,7 +24,7 @@ class Groepcontent extends SimpleHTML{
 		$this->action=$action;
 	}
 	public function getTitel(){
-		return ''.$_GET['gtype'].' - '.$this->groep->getNaam();
+		return $_GET['gtype'].' - '.$this->groep->getNaam();
 	}
 	
 	/*
@@ -126,21 +132,18 @@ class Groepencontent extends SimpleHTML{
 	}
 }
 class Groepgeschiedeniscontent extends SimpleHTML{
-		private $groepen;
-	private $action='view';
+	
+	private $groepen;
 	
 	public function __construct($groepen){
 		$this->groepen=$groepen;
 	}
-	public function setAction($action){
-		$this->action=$action;
-	}
-	public function getTitel(){
+		public function getTitel(){
 		return 'Groepen - '.$this->groepen->getNaam();
 	}
 	
 	public function view(){
-		$maanden=15*12;
+		$maanden=5*12;
 		echo '<table style="border-collapse: collapse;">';
 
 		foreach($this->groepen->getGroepen() as $groep){
