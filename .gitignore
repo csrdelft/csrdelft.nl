@@ -6,6 +6,7 @@ data/smarty/cache/*
 data/smarty/compiled/*
 etc/bot.htpasswd
 etc/csrmail.ini
+etc/gozerbot.ini
 etc/ldap.ini
 etc/mysql.ini
 etc/soccie.ini

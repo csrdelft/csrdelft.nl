@@ -1,0 +1,10 @@
+;
+; Inloggegevens voor Feut
+;
+
+[feut]
+host = syrinx.knorrie.org
+port = 5500
+password = 
+target = #csrdelft
+cryptkey = 

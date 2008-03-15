@@ -12,6 +12,7 @@ bin/wachtwoord.php -text
 bin/welkom.php -text
 /csrdelft.sql -text
 etc/csrmail.ini.sample -text
+etc/gozerbot.ini.sample -text
 etc/ldap.ini.sample -text
 etc/mysql.ini.sample -text
 etc/soccie.ini.sample -text
@@ -124,6 +125,7 @@ lib/class.courantarchiefcontent.php -text
 lib/class.courantbeheercontent.php -text
 lib/class.courantcontent.php -text
 lib/class.csrdelft.php -text
+lib/class.csrgozerbot.php -text
 lib/class.csrsmarty.php -text
 lib/class.csrubb.php -text
 lib/class.documenten.php -text
@@ -173,6 +175,8 @@ lib/class.toevoegencontent.php -text
 lib/class.verjaardagcontent.php -text
 lib/class.werkgroep.php -text
 lib/class.werkgroepcontent.php -text
+lib/gozerbot/class.AES.php -text
+lib/gozerbot/class.GozerbotUDP.php -text
 lib/include.common.php -text
 lib/include.config.php -text
 lib/include.defines.php.sample -text
