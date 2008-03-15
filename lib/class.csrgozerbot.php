@@ -12,6 +12,9 @@ class CsrGozerbot extends GozerbotUDP{
 	
 	public function CsrGozerbot(){
 		$aSettings=parse_ini_file(ETC_PATH.'/gozerbot.ini');
+		
+		if ($aSettings['cryptkey']=='') {$aSettings['cryptkey']=null;}
+		
 		$this->setHost($aSettings['host']);
 		$this->setPort($aSettings['port']);
 		$this->setPassword($aSettings['password']);
