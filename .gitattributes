@@ -46,8 +46,6 @@ htdocs/groepen/moten.php -text
 htdocs/groepen/werkgroepen.php -text
 htdocs/index.php -text
 htdocs/intern/.htaccess -text
-htdocs/intern/agenda/.htaccess -text
-htdocs/intern/agenda/index.php -text
 htdocs/intern/courant/.htaccess -text
 htdocs/intern/courant/archief.php -text
 htdocs/intern/courant/courant.php -text
@@ -96,7 +94,6 @@ htdocs/tools/sendmail/sendmail.php -text
 htdocs/tools/soccie.php -text
 htdocs/tools/stats.php -text
 htdocs/tools/streeplijst.php -text
-htdocs/tools/ubb-convert.php -text
 htdocs/vereniging/.htaccess -text
 htdocs/vereniging/bestuur.php -text
 htdocs/vereniging/geschiedenis.php -text
@@ -113,10 +110,6 @@ lib/chart-0.8/chart-manual.php -text
 lib/chart-0.8/chart.css -text
 lib/chart-0.8/chart.php -text
 lib/chart-0.8/rgb.php -text
-lib/class.agenda.php -text
-lib/class.agendacontent.php -text
-lib/class.agendatoevoegcontent.php -text
-lib/class.agendawijzigcontent.php -text
 lib/class.bestuur.php -text
 lib/class.bestuurcontent.php -text
 lib/class.controller.php -text

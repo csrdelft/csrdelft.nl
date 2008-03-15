@@ -513,7 +513,7 @@ class Lid {
 	function nickExists($nick) {
 		# mysql escape dingesen
 		$nick = $this->_db->escape($nick);
-		$result = $this->_db->select("SELECT * FROM lid WHERE nickname = '".$nick."'");
+		$result = $this->_db->select("SELECT uid FROM lid WHERE nickname = '".$nick."'");
 		return ($result !== false and $this->_db->numRows($result) > 0);
 	}
 	
@@ -524,7 +524,7 @@ class Lid {
 	function uidExists($uid) {
 		if (!$this->isValidUid($uid)) return false;
 		
-		$result = $this->_db->select("SELECT * FROM lid WHERE uid = '{$uid}'");
+		$result = $this->_db->select("SELECT uid FROM lid WHERE uid = '{$uid}'");
 		if ($result !== false and $this->_db->numRows($result) > 0) {
 			#echo $this->_db->numRows($result);
 			return true;
@@ -585,25 +585,6 @@ class Lid {
 			return $record['status'];
 		}	
 		return false;
-	}
-
-	function getAlleLeden($sort) {
-		$leden = array();
-
-		# mysql escape dingesen
-		$sort = $this->_db->escape($sort);
-
-		$result = $this->_db->select("
-			SELECT * 
-			FROM 
-				lid 
-			WHERE ( 
-				status='S_LID' OR status='S_GASTLID' OR status='S_NOVIET' OR status='S_KRINGEL' ) ORDER BY {$sort}");
-		if ($result !== false and $this->_db->numRows($result) > 0) {
-			while ($lid = $this->_db->next($result)) $leden[] = $lid;
-		}
-
-		return $leden;
 	}
 
 	function getVerjaardagen($maand, $dag=0) {
