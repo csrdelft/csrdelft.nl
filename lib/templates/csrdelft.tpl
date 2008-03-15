@@ -3,7 +3,7 @@
 <head>
   <title>C.S.R. Delft | {$csrdelft->getTitel()}</title>
   <meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
-	<meta name="author" content='PubCie C.S.R. Delft, Jan Pieter Waagmeester' />
+	<meta name="author" content="PubCie C.S.R. Delft, Jan Pieter Waagmeester" />
 	<meta name="robots" content="index, follow" />
 	<link rel="stylesheet" href="/layout/undohtml.css" type="text/css" />
 	<link rel="stylesheet" href="/layout/default.css" type="text/css" />
@@ -12,8 +12,6 @@
 	
 	<link rel="alternate" title="C.S.R. Delft RSS" type="application/rss+xml" href="http://csrdelft.nl/forum/rss.xml" />
 	<link rel="shortcut icon" href="{$csr_pics}layout/favicon.ico" />
-	<script type="text/javascript" src="/layout/mootools-release-1.11.js"></script>
-	<script type="text/javascript" src="/layout/mootool-test.js"></script>
 </head>
 <body>
 <div id="layoutContainer">
@@ -116,7 +114,7 @@
 {/if}
 </div>
 <!-- selecteer-bug-fix voor IE ( http://trac.knorrie.org/csrdelft.nl/changeset/158) -->
-<script type="text/javascript" defer="defer">
+<script type="text/javascript">
 <!--
 document.body.style.height = document.documentElement.scrollHeight+'px';
 -->
