@@ -42,10 +42,11 @@ class Groepcontroller extends Controller{
 		
 		//controleer dat we geen lege groep weergeven.
 		if($this->action=='default' AND $this->groep->getId()==0){
-			$this->content->invokeRefresh('We geven geen 0-groepen weer! (Groepcontroller::__construct())', CSR_ROOT.'/groepen/');
+			$this->content->invokeRefresh('We geven geen 0-groepen weer! (Groepcontroller::__construct())', CSR_ROOT.'groepen/');
 		}
-		//Normale gebruikers mogen enkel default-acties doen.
-		if(!$this->groep->magBewerken()){
+		//Normale gebruikers mogen niet alle acties doen.
+		$allow=array('default', 'aanmelden');
+		if(!in_array($this->action, $allow) AND !$this->groep->magBewerken()){
 			$this->action='default';
 		}
 		$this->performAction();
@@ -235,6 +236,22 @@ class Groepcontroller extends Controller{
 		$this->content->invokeRefresh($melding, CSR_ROOT.'groepen/');
 	}
 	
+	/*
+	 * Ingelogde leden kunnen zich aanmelden.
+	 */
+	public function action_aanmelden(){
+		if($this->groep->magAanmelden()){
+			if($this->groep->meldAan()){
+				$melding='';
+			}else{
+				$melding='Aanmelden voor groep mislukt.';
+			}
+			
+		}else{
+			$melding='U kunt zich niet aanmelden voor deze groep, wellicht is hij vol.';
+		}
+		$this->content->invokeRefresh($melding, $this->getUrl('default'));
+	}
 	/*
 	 * Leden toevoegen aan een groep.
 	 */

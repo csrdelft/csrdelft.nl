@@ -399,6 +399,7 @@ ul.groepleden{ width: 230px; float: right; padding: 10px 20px 20px 20px; }
 
 #groepleden{ float: right; padding: 10px 20px 20px 20px; }
 #groepleden table td{ padding: 0px 5px; lext-align: left;}
+#groepleden table { margin-bottom: 10px;}
 #voorgangerOpvolger{ margin: 10px 0px; padding: 3px 20px; border-bottom: 1px solid black;}
 	.vorigeGroep{ list-style-image: url(http://plaetjes.csrdelft.nl/groepen/up.png); }
 	.volgendeGroep{ list-style-image: url(http://plaetjes.csrdelft.nl/groepen/down.png); }

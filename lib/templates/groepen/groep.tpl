@@ -21,6 +21,12 @@
 			</tr>
 		{/foreach}
 	</table>
+	{if $groep->magAanmelden()}
+		<a href="/groepen/{$gtype}/{$groep->getId()}/aanmelden" class="knop">aanmelden</a>
+	{elseif $groep->isAanmeldbaar() AND $groep->isVol()}
+		Deze groep is vol, u kunt zich niet meer aanmelden.
+	{/if}
+	
 	{if $groep->magBewerken() AND $action!='edit'}
 		<form action="/groepen/{$gtype}/{$groep->getId()}/addLid" method="post">
 			{if $action=='addLid' AND $lidAdder!=false}

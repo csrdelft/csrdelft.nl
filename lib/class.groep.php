@@ -164,6 +164,7 @@ class Groep{
 	public function isAanmeldbaar(){	return $this->groep['aanmeldbaar']==1; }
 	public function getLimiet(){		return $this->groep['limiet']; }
 	
+	
 	public function setGtype(){					
 		if(isset($_GET['gtype']) AND Groepen::isValidGtype($_GET['gtype'])){
 			$gtypes=Groepen::getGroeptypes();
@@ -190,6 +191,8 @@ class Groep{
 	public function isLid($uid){	return isset($this->leden[$uid]); }
 	public function isOp($uid){		return $this->isLid($uid) AND $this->leden[$uid]['op']=='1'; }
 	public function getLeden(){		return $this->leden; }
+	public function getLidCount(){	return count($this->getLeden()); }
+	public function isVol(){		return $this->getLimiet()<=$this->getLidCount(); }
 	
 	public static function isAdmin(){		
 		$lid=Lid::get_lid();
@@ -219,7 +222,25 @@ class Groep{
 		}
 		return false;
 	}
-	function verwijderLid($uid){
+	/*
+	 * Kijk of de groep aanmeldbaar is, de gebruiker mag aanmelden, en of de limiet nog niet
+	 * overschreden is.
+	 */
+	public function magAanmelden(){
+		if($this->isAanmeldbaar()){
+			$lid=Lid::get_Lid();
+			if($lid->hasPermission('P_LEDEN_READ')){
+				if($this->getLimiet()==0){
+					return true;
+				}else{
+					return !$this->isVol();
+				}
+			}
+		}
+		return false;
+	}
+	
+	public function verwijderLid($uid){
 		$lid=Lid::get_lid();
 		if($lid->isValidUid($uid)){
 			$db=MySql::get_MySql();
@@ -236,7 +257,15 @@ class Groep{
 			return false;
 		}
 	}
-	function addLid($uid, $functie=''){
+	public function meldAan(){
+		if($this->magAanmelden()){
+			$lid=Lid::get_lid();
+			return $this->addLid($lid->getUid());
+		}
+		return false;
+	}
+	
+	public function addLid($uid, $functie=''){
 		$db=MySql::get_MySql();
 		$op=0;
 		$functie=str_replace(array("\n","\r"), '', trim($functie));
