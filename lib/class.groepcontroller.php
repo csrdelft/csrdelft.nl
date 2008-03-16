@@ -180,7 +180,7 @@ class Groepcontroller extends Controller{
 			if($this->groepValidator()){
 				//slaan we een nieuwe groep op?
 				if($this->groep->getId()==0 ){
-					$this->groep->setSnaam($_POST['snaam']);
+					$this->groep->setValue('snaam',$_POST['snaam']);
 				}
 				
 				//velden alleen voor admins
