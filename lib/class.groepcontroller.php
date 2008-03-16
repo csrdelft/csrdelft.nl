@@ -171,8 +171,8 @@ class Groepcontroller extends Controller{
 		//Als er een derde argument meegegeven wordt is dat een korte naam
 		//die we invullen in het formulier.
 		if(isset($this->queryparts[2]) AND preg_match('/\w{3,20}/', $this->queryparts[2])){
-			$this->groep->setStatus('ot');
-			$this->groep->setSnaam($this->queryparts[2]);
+			$this->groep->setValue('status', 'ot');
+			$this->groep->setValue('snaam', $this->queryparts[2]);
 		}
 		
 		if($this->isPOSTed()){

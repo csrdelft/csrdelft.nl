@@ -34,7 +34,7 @@
 				{$lidAdder}<input type="submit" value="toevoegen" />
 			</form>
 		{else}
-			<a onclick="toggleDiv('lidAdder')" class="knop" href="#lidAdder">Leden toevoegen</a><br />
+			<a onclick="toggleDiv('lidAdder')" class="knop" href="#">Leden toevoegen</a><br />
 			<form action="/groepen/{$gtype}/{$groep->getId()}/addLid" method="post" id="lidAdder" class="verborgen">
 				Voer hier door komma's gescheiden namen of uid's in:<br /><br />
 				Zoek ook in: <input type="checkbox" name="filterOud" id="filterOud" /> <label for="filterOud">oudleden</label>
