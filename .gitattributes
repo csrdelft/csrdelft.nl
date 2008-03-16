@@ -43,7 +43,6 @@ htdocs/groepen/.htaccess -text
 htdocs/groepen/groep.php -text
 htdocs/groepen/groepen.php -text
 htdocs/groepen/moten.php -text
-htdocs/groepen/werkgroepen.php -text
 htdocs/index.php -text
 htdocs/intern/.htaccess -text
 htdocs/intern/courant/.htaccess -text
@@ -166,8 +165,6 @@ lib/class.stringincluder.php -text
 lib/class.toevoegen.php -text
 lib/class.toevoegencontent.php -text
 lib/class.verjaardagcontent.php -text
-lib/class.werkgroep.php -text
-lib/class.werkgroepcontent.php -text
 lib/gozerbot/class.AES.php -text
 lib/gozerbot/class.GozerbotUDP.php -text
 lib/include.common.php -text
