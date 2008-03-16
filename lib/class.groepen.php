@@ -58,7 +58,7 @@ class Groepen{
 			SELECT 
 				groep.id AS groepId, groep.snaam AS snaam, groep.naam AS naam,
 				groep.sbeschrijving AS sbeschrijving, groep.beschrijving AS beschrijving, groep.zichtbaar AS zichtbaar,
-				groep.status AS status, groep.installatie AS installatie, groep.aanmeldbaar AS aanmeldbaar,
+				groep.status AS status, groep.begin AS begin, groep.einde AS einde, groep.aanmeldbaar AS aanmeldbaar,
 				groeplid.uid AS uid, groeplid.op AS op, groeplid.functie AS functie, groeplid.prioriteit AS prioriteit 
 			FROM groep
 			LEFT JOIN groeplid ON(groep.id=groeplid.groepid) 
@@ -105,9 +105,11 @@ class Groepen{
 		return $db->query($qSave);
 	}
 	
+	public function getGroepen(){		return $this->groepen; }
 	public function getId(){			return $this->type['id']; }
 	public function getNaam(){ 			return $this->type['naam']; }
 	public function getBeschrijving(){	return $this->type['beschrijving']; }
+	
 	public static function isAdmin(){		
 		$lid=Lid::get_lid();
 		return $lid->hasPermission('P_LEDEN_MOD');
@@ -119,8 +121,7 @@ class Groepen{
 		}
 		return false;
 	}
-	public function getGroepen(){		return $this->groepen; }
-	
+		
 	/*
 	 * statische functie om de groepen bij een gebruiker te zoeken.
 	 * 

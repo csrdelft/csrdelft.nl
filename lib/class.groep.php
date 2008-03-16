@@ -10,8 +10,8 @@ class Groep{
 	
 	private $groepseigenschappen=
 		array('groepId', 'gtypeId', 'gtype', 'snaam', 'naam', 'sbeschrijving', 'beschrijving', 
-			'zichtbaar', 'status', 'installatie', 'aanmeldbaar', 'limiet');
-	
+			'zichtbaar', 'status', 'begin', 'einde', 'aanmeldbaar', 'limiet');
+		
 	private $groep=null;
 	private $leden=null;
 	
@@ -21,7 +21,7 @@ class Groep{
 				//dit zijn de defaultwaarden voor een nieuwe groep.
 				$this->groep=array(
 					'groepId'=>0, 'snaam'=>'', 'naam'=>'', 'sbeschrijving'=>'', 'beschrijving'=>'', 
-					'zichtbaar'=>'zichtbaar', 'installatie'=>date('Y-m-d'), 'aanmeldbaar'=>0, 'limiet'=>0);
+					'zichtbaar'=>'zichtbaar', 'begin'=>date('Y-m-d'), 'einde'=>'0000-00-00','aanmeldbaar'=>0, 'limiet'=>0);
 				//we moeten ook nog even de groeptypen opzoeken. Die zit als het goed is in GET['gtype'];
 				$this->setGtype();
 			}else{
@@ -57,7 +57,7 @@ class Groep{
 			SELECT 
 				groep.id AS groepId, groep.snaam AS snaam, groep.naam AS naam,
 				groep.sbeschrijving AS sbeschrijving, groep.beschrijving AS beschrijving, groep.zichtbaar AS zichtbaar,
-				groep.status AS status, groep.installatie AS installatie, groep.aanmeldbaar AS aanmeldbaar,
+				groep.status AS status, groep.begin AS begin, groep.einde AS einde, groep.aanmeldbaar AS aanmeldbaar,
 				groeplid.uid AS uid, groeplid.op AS op, groeplid.functie AS functie, groeplid.prioriteit AS prioriteit,
 				groeptype.id AS gtypeId, groeptype.naam AS gtype
 			FROM groep
@@ -92,7 +92,7 @@ class Groep{
 		if($this->getId()==0){
 			$qSave="
 				INSERT INTO groep (
-					snaam, naam, sbeschrijving, beschrijving, gtype, zichtbaar, status, installatie
+					snaam, naam, sbeschrijving, beschrijving, gtype, zichtbaar, status, begin, einde
 				) VALUES (
 					'".$db->escape($this->getSnaam())."',
 					'".$db->escape($this->getNaam())."',
@@ -101,7 +101,8 @@ class Groep{
 					".$this->getTypeId().",
 					'".$db->escape($this->getZichtbaar())."',
 					'".$db->escape($this->getStatus())."',
-					'".$db->escape($this->getInstallatie())."'
+					'".$db->escape($this->getBegin())."',
+					'".$db->escape($this->getEinde())."'
 				);";
 		}else{
 			$qSave="
@@ -112,7 +113,8 @@ class Groep{
 					beschrijving='".$db->escape($this->getBeschrijving())."',
 					zichtbaar='".$db->escape($this->getZichtbaar())."',
 					status='".$db->escape($this->getStatus())."',
-					installatie='".$db->escape($this->getInstallatie())."'
+					begin='".$db->escape($this->getBegin())."',
+					einde='".$db->escape($this->getEinde())."'
 				WHERE id=".$this->getId()."
 				LIMIT 1;";
 		}
@@ -151,7 +153,8 @@ class Groep{
 	public function getBeschrijving(){	return $this->groep['beschrijving']; }
 	public function getZichtbaar(){		return $this->groep['zichtbaar']; }
 	public function getStatus(){		return $this->groep['status']; }
-	public function getInstallatie(){	return $this->groep['installatie']; }
+	public function getBegin(){			return $this->groep['begin']; }
+	public function getEinde(){			return $this->groep['einde']; }
 	public function isAanmeldbaar(){	return $this->groep['aanmeldbaar']==1; }
 	
 	public function setGtype(){					
@@ -168,15 +171,14 @@ class Groep{
 			die('Geen gtype opgegeven, niet via de juiste weg aangevraagd...');
 		} 
 	}
-	public function setSnaam($value){			$this->groep['snaam']=trim($value); }
-	public function setNaam($value){			$this->groep['naam']=trim($value); }
-	public function setSbeschrijving($value){	$this->groep['sbeschrijving']=trim($value); }
-	public function setBeschrijving($value){	$this->groep['beschrijving']=trim($value); }
-	public function setZichtbaar($value){		$this->groep['zichtbaar']=trim($value); }
-	public function setStatus($value){			$this->groep['status']=trim($value); }
-	public function setInstallatie($value){		$this->groep['installatie']=trim($value); }
 	
-	
+	public function setValue($key, $value){
+		$fields=array('snaam', 'naam', 'sbeschrijving', 'beschrijving', 'zichtbaar', 'status', 'begin', 'einde');
+		if(in_array($key, $fields)){
+			$this->groep[$key]=trim($value);	
+		}
+	}
+
 	public function isLid($uid){	return isset($this->leden[$uid]); }
 	public function isOp($uid){		return $this->isLid($uid) AND $this->leden[$uid]['op']=='1'; }
 	public function getLeden(){		return $this->leden; }
@@ -282,8 +284,8 @@ class Groep{
 			SELECT id 
 			FROM groep 
 			WHERE snaam='".$this->getSnaam()."' 
-			  AND installatie<'".$this->getInstallatie()."'
-			ORDER BY installatie DESC
+			  AND begin<'".$this->getBegin()."'
+			ORDER BY begin DESC
 			LIMIT 1;";
 		$rVoorganger=$db->query($qVoorganger);
 		if($rVoorganger!==false AND $db->numRows($rVoorganger)==1){
@@ -294,8 +296,8 @@ class Groep{
 			SELECT id 
 			FROM groep 
 			WHERE snaam='".$this->getSnaam()."' 
-			  AND installatie>'".$this->getInstallatie()."'
-			ORDER BY installatie ASC
+			  AND begin>'".$this->getBegin()."'
+			ORDER BY begin ASC
 			LIMIT 1;";
 		$rOpvolger=$db->query($qOpvolger);
 		if($rOpvolger!==false AND $db->numRows($rOpvolger)==1){
@@ -313,7 +315,7 @@ class Groep{
 			SELECT id, naam
 			FROM groep
 			WHERE snaam='".$db->escape($snaam)."'
-			ORDER BY installatie DESC
+			ORDER BY begin DESC
 			LIMIT ".$limiet.";";
 		$result=$db->query($qGroepen);
 		if ($result !== false and $db->numRows($result) > 0){

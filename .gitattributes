@@ -300,6 +300,7 @@ lib/templates/csrdelft.tpl -text
 lib/templates/forum/rss.tpl -text
 lib/templates/groepen/groep.tpl -text
 lib/templates/groepen/groepen.tpl -text
+lib/templates/groepen/groepformulier.tpl -text
 lib/templates/maaltijdbeheer.tpl -text
 lib/templates/maaltijdform.tpl -text
 lib/templates/maaltijdinfo.tpl -text

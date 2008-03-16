@@ -96,7 +96,7 @@ class Groepcontroller extends Controller{
 				}
 			}
 			
-			if(isset($_POST['naam'], $_POST['sbeschrijving'], $_POST['status'], $_POST['installatie'])){
+			if(isset($_POST['naam'], $_POST['sbeschrijving'], $_POST['status'], $_POST['begin'], $_POST['einde'])){
 				if(strlen(trim($_POST['naam']))<3){
 					$valid=false;
 					$this->errors.="Naam moet minstens drie tekens lang zijn.<br />";
@@ -105,13 +105,22 @@ class Groepcontroller extends Controller{
 					$valid=false;
 					$this->errors.="Korte beschrijving moet minstens vijf tekens lang zijn.<br />";
 				}
-				if(!preg_match('/\d{4}-\d{2}-\d{2}/', trim($_POST['installatie']))){
+				if(!preg_match('/\d{4}-\d{2}-\d{2}/', trim($_POST['begin']))){
 					$valid=false;
-					$this->errors.="De installatiedatum is niet geldig. Gebruik JJJJ-mm-dd.<br />";
+					$this->errors.="De begindatum is niet geldig. Gebruik JJJJ-mm-dd.<br />";
 				}
-				if(trim($_POST['installatie'])=='0000-00-00'){
+				if(trim($_POST['begin'])=='0000-00-00'){
 					$valid=false;
-					$this->errors.="De installatiedatum mag niet 0000-00-00 zijn.<br />";
+					$this->errors.="De begindatum mag niet 0000-00-00 zijn.<br />";
+				}
+				
+				if(!preg_match('/\d{4}-\d{2}-\d{2}/', trim($_POST['einde']))){
+					$valid=false;
+					$this->errors.="De begindatum is niet geldig. Gebruik JJJJ-mm-dd.<br />";
+				}
+				if($_POST['status']=='ot' AND trim($_POST['einde'])=='0000-00-00'){
+					$valid=false;
+					$this->errors.="Een o.t. groep moet een einddatum bevatten.<br />";
 				}
 				if(!preg_match('/(h|f|o)t/', $_POST['status'])){
 					$valid=false;
@@ -166,28 +175,30 @@ class Groepcontroller extends Controller{
 				
 				//velden alleen voor admins
 				if($this->groep->isAdmin()){
-					$this->groep->setNaam($_POST['naam']);
-					$this->groep->setSbeschrijving($_POST['sbeschrijving']);
-					$this->groep->setInstallatie($_POST['installatie']);
-					$this->groep->setStatus($_POST['status']);
+					$this->groep->setValue('naam', $_POST['naam']);
+					$this->groep->setValue('sbeschrijving', $_POST['sbeschrijving']);
+					$this->groep->setValue('begin', $_POST['begin']);
+					$this->groep->setValue('einde', $_POST['einde']);
+					$this->groep->setValue('status', $_POST['status']);
 				}
-				$this->groep->setBeschrijving($_POST['beschrijving']);
+				$this->groep->setValue('beschrijving', $_POST['beschrijving']);
 				
 				if($this->groep->save()){
 					$melding='Opslaan van groep gelukt!';	
 				}else{
-					$melding='Opslaan van groep mislukt. (Groep::save() called by Groepcontroller::action_bewerken())';
+					$melding='Opslaan van groep mislukt. (returned from Groep::save() called by Groepcontroller::action_bewerken())';
 				}
 				$this->content->invokeRefresh($melding, $this->getUrl('default'));
 			}else{
 				//geposte waarden in het object stoppen zodat de template ze zo in het 
 				//formulier kan knallen
-				if(isset($_POST['snaam'])){			$this->groep->setSnaam($_POST['snaam']); }
-				if(isset($_POST['naam'])){			$this->groep->setNaam($_POST['naam']); }
-				if(isset($_POST['sbeschrijving'])){	$this->groep->setSbeschrijving($_POST['sbeschrijving']); }
-				if(isset($_POST['beschrijving'])){	$this->groep->setBeschrijving($_POST['beschrijving']); }
-				if(isset($_POST['installatie'])){	$this->groep->setInstallatie($_POST['installatie']); }
-				if(isset($_POST['status'])){		$this->groep->setStatus($_POST['status']); }
+				$fields=array('snaam', 'naam', 'sbeschrijving', 'beschrijving', 'zichtbaar', 'status', 'begin', 'einde');
+				
+				foreach($fields as $field){
+					if(isset($_POST[$field])){
+						$this->groep->setValue($field, $_POST[$field]);
+					}
+				}
 				//de eventuele fouten van de groepValidator aan de melding toevoegen.
 				$this->content->setMelding($this->errors);
 
