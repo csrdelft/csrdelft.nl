@@ -95,7 +95,7 @@ class Groep{
 			$qSave="
 				INSERT INTO groep (
 					snaam, naam, sbeschrijving, beschrijving, gtype, zichtbaar, status, begin, einde,
-					aanmeldbaar, limiet
+					aanmeldbaar, limiet, toonFuncties
 				) VALUES (
 					'".$db->escape($this->getSnaam())."',
 					'".$db->escape($this->getNaam())."',
