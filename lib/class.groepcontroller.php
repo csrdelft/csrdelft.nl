@@ -118,23 +118,32 @@ class Groepcontroller extends Controller{
 					$valid=false;
 					$this->errors.="De begindatum is niet geldig. Gebruik JJJJ-mm-dd.<br />";
 				}
-				if($_POST['status']=='ot' AND trim($_POST['einde'])=='0000-00-00'){
-					$valid=false;
-					$this->errors.="Een o.t. groep moet een einddatum bevatten.<br />";
-				}
 				if(!preg_match('/(h|f|o)t/', $_POST['status'])){
 					$valid=false;
 					$this->errors.="De status is niet geldig.<br />";
 				}else{
+					if($_POST['status']=='ot' AND trim($_POST['einde'])=='0000-00-00'){
+						$valid=false;
+						$this->errors.="Een o.t. groep moet een einddatum bevatten.<br />";
+					}
+					
 					//Controleren of er geen h.t. groep bestaat met dezelfde snaam.
 					if($this->groep->getId()==0 AND isset($_POST['snaam'])){
 						$snaam=$_POST['snaam'];
 					}else{
 						$snaam=null;
 					}
-					if($_POST['status']=='ht' AND $this->groep->hasHt($snaam)){
-						$valid=false;
-						$this->errors.="Er is al een h.t.-groep voor deze soort, kies een andere status.<br />";
+					if($_POST['status']=='ht'){
+						if($this->groep->hasHt($snaam)){
+							$valid=false;
+							$this->errors.="Er is al een h.t.-groep voor deze soort, kies een andere status.<br />";
+						}
+						if(isset($_POST['aanmeldbaar'], $_POST['limiet'])){
+							if($_POST['limiet']<0 OR $_POST['limiet']>200){
+								$valid=false;
+								$this->errors.="Kies een limiet tussen 0 en 200<br />";
+							}
+						}
 					}
 				}
 			}else{
@@ -180,6 +189,15 @@ class Groepcontroller extends Controller{
 					$this->groep->setValue('begin', $_POST['begin']);
 					$this->groep->setValue('einde', $_POST['einde']);
 					$this->groep->setValue('status', $_POST['status']);
+					if($this->groep->getStatus()=='ht'){
+						if(isset($_POST['aanmeldbaar'])){
+							$this->groep->setValue('aanmeldbaar', 1);
+							$this->groep->setValue('limiet', $_POST['limiet']);	
+						}else{
+							$this->groep->setValue('aanmeldbaar', 0);
+							$this->groep->setValue('limiet', 0);	
+						}
+					}
 				}
 				$this->groep->setValue('beschrijving', $_POST['beschrijving']);
 				
@@ -192,7 +210,7 @@ class Groepcontroller extends Controller{
 			}else{
 				//geposte waarden in het object stoppen zodat de template ze zo in het 
 				//formulier kan knallen
-				$fields=array('snaam', 'naam', 'sbeschrijving', 'beschrijving', 'zichtbaar', 'status', 'begin', 'einde');
+				$fields=array('snaam', 'naam', 'sbeschrijving', 'beschrijving', 'zichtbaar', 'status', 'begin', 'einde', 'aanmeldbaar', 'limiet');
 				
 				foreach($fields as $field){
 					if(isset($_POST[$field])){

@@ -60,4 +60,21 @@ function youtubeDisplay(ytID){
 		document.getElementById('youtube'+ytID).innerHTML = html;
 	}
 }
+function updateGroepform(){
+	var status=document.getElementById('groepStatus');
+	var gAanmeldDiv=document.getElementById('groepAanmeldbaarContainer')
+	if(status.selectedIndex==0){
+		gAanmeldDiv.style.display="block";
+		
+		var aanmeldbaar=document.getElementById('groepAanmeldbaar');
+		var gLimietDiv=document.getElementById('groepLimietContainer');
+		if(aanmeldbaar.checked){
+			gLimietDiv.style.display="block";
+		}else{
+			gLimietDiv.style.display="none";
+		}
+	}else{
+		gAanmeldDiv.style.display="none";
+	}
+}
 
