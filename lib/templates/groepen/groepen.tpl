@@ -10,12 +10,11 @@
 </ul>
 <hr />
 <div id="groepLijst">
-<ul style="float: left; margin-right: 10px;">
-{foreach from=$groepen->getGroepen() item=groep name=g}
-	<li style="list-style-type: none;"><a href="#groep{$groep->getId()}">{$groep->getSnaam()}</a></li>
-	{* if $smarty.foreach.g.iteration==5}</ul><ul style="clear: none;"> {/if *}
-{/foreach}	
-</ul>
+	<ul>
+	{foreach from=$groepen->getGroepen() item=groep name=g}
+		<li><a href="#groep{$groep->getId()}">{$groep->getSnaam()}</a></li>
+	{/foreach}	
+	</ul>
 </div>
 {$groepen->getBeschrijving()|ubb}
 <div class="clear">
@@ -23,15 +22,14 @@
 		<a href="/groepen/{$groepen->getNaam()}/0/bewerken" class="knop">Nieuwe groep</a>
 	{/if}
 </div>
+
 {foreach from=$groepen->getGroepen() item=groep}
 	<div class="groep clear" id="groep{$groep->getId()}">
-		<div class="groepleden">
-			<ul style="list-style-type: none;">
-				{foreach from=$groep->getLeden() item=groeplid}
-					<li>{$groeplid.uid|csrnaam:'civitas'}&nbsp;<em>{$groeplid.functie|escape:'html'}</em></li>
-				{/foreach}
-			</ul>
-		</div>
+		<ul class="groepleden nobullets">
+			{foreach from=$groep->getLeden() item=groeplid}
+				<li>{$groeplid.uid|csrnaam:'civitas'}&nbsp;<em>{$groeplid.functie|escape:'html'}</em></li>
+			{/foreach}
+		</ul>
 		<h2><a href="/groepen/{$groepen->getNaam()}/{$groep->getSnaam()}/">{$groep->getNaam()}</a></h2>
 		{$groep->getSbeschrijving()|ubb}
 	</div>

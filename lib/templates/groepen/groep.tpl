@@ -1,5 +1,5 @@
 {$melding}
-<ul class="horizontal">
+<ul class="horizontal nobullets">
 {foreach from=$groeptypes item=groeptype}
 	<li>
 		{if $groeptype.id==$groep->getTypeId()}<strong>{/if}
@@ -9,7 +9,7 @@
 {/foreach}
 </ul>
 <hr />
-<div class="groepleden">
+<div id="groepleden">
 	<table>
 		{foreach from=$groep->getLeden() item=groeplid}
 			<tr>
@@ -41,16 +41,16 @@
 {else}
 	{$groep->getSbeschrijving()|ubb}
 	<div class="clear" id="voorgangerOpvolger">
-		<ul>
+		<ul class="nobullets">
 		{if is_array($opvolgerVoorganger)}
 			{if isset($opvolgerVoorganger.opvolger)}
-				<li style="list-style-image: url({$csr_pics}groepen/up.png)"><a href="/groepen/{$gtype}/{$opvolgerVoorganger.opvolger->getId()}/">{$opvolgerVoorganger.opvolger->getNaam()}</a></li>
+				<li class="vorigeGroep"><a href="/groepen/{$gtype}/{$opvolgerVoorganger.opvolger->getId()}/">{$opvolgerVoorganger.opvolger->getNaam()}</a></li>
 			{/if}
 			{if isset($opvolgerVoorganger.voorganger) OR isset($opvolgerVoorganger.opvolger)}
-				<li style="list-style-type: none">{$groep->getNaam()}</li>
+				<li>{$groep->getNaam()}</li>
 			{/if}
 			{if isset($opvolgerVoorganger.voorganger)}
-				<li style="list-style-image: url({$csr_pics}groepen/down.png)"><a href="/groepen/{$gtype}/{$opvolgerVoorganger.voorganger->getId()}/">{$opvolgerVoorganger.voorganger->getNaam()}</a></li>
+				<li class="volgendeGroep"><a href="/groepen/{$gtype}/{$opvolgerVoorganger.voorganger->getId()}/">{$opvolgerVoorganger.voorganger->getNaam()}</a></li>
 			{/if}
 		{/if}
 		{if $groep->isAdmin()}
@@ -59,16 +59,16 @@
 		</ul>	
 	</div> 
 	{if $groep->magBewerken() OR $groep->isAdmin()}
-		<div style="float: right; margin: 10px ;">
-		{if $groep->magBewerken()}
-			<a href="/groepen/{$gtype}/{$groep->getId()}/bewerken" class="knop"><img src="{$csr_pics}forum/bewerken.png" title="Bewerk groep" /></a>
-			<br /><br />
-		{/if}
-		{if $groep->isAdmin()}
-		<a class="knop" onclick="return confirm('Weet u zeker dat u deze groep wilt verwijderen?')" href="/groepen/{$gtype}/{$groep->getId()}/verwijderen">
-			<img src="{$csr_pics}forum/verwijderen.png" title="Verwijder groep" />
-		</a>
-		{/if}
+		<div id="groepAdmin">
+			{if $groep->magBewerken()}
+				<a href="/groepen/{$gtype}/{$groep->getId()}/bewerken" class="knop"><img src="{$csr_pics}forum/bewerken.png" title="Bewerk groep" /></a>
+				<br /><br />
+			{/if}
+			{if $groep->isAdmin()}
+			<a class="knop" onclick="return confirm('Weet u zeker dat u deze groep wilt verwijderen?')" href="/groepen/{$gtype}/{$groep->getId()}/verwijderen">
+				<img src="{$csr_pics}forum/verwijderen.png" title="Verwijder groep" />
+			</a>
+			{/if}
 		</div>
 	{/if}
 	{$groep->getBeschrijving()|ubb}

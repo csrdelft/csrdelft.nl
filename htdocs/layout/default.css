@@ -43,9 +43,9 @@ hr{
 }
 ul.horizontal li{
 	display: inline;
-	list-style-type: none;
 	padding-right: 20px;
 }
+ul.nobullets li{ list-style-type: none; }
 
 .persoonlijkverhaal{
 	margin-left: 10px;
@@ -392,16 +392,21 @@ span.tijd{ font-size: 0.95em; }
 
 /* Groepen nieuwe stijl */
 #groepLijst{ float: right; margin: 30px 0px 10px 20px; }
-#groepLijst, #groepLijst li, #groepLijstje ul{ text-align: right;}
-#groepLijst li{ margin-left: 0px; padding-left: 0px; }
-
+#groepLijst, #groepLijst li, #groepLijst ul{ text-align: right;}
+#groepLijst li{ list-style-type: none; }
 .groep{ border-top: 1px solid black; margin-top: 20px; }
-.groepleden{ width: 230px; float: right; padding: 10px 20px 20px 20px; }
-.groepleden table{ width: 100%; }
-.groepleden table td{ padding: 0px 5px; lext-align: left;}
+ul.groepleden{ width: 230px; float: right; padding: 10px 20px 20px 20px; }
 
-#voorgangerOpvolger{ margin: 10px 0px; padding: 3px 20px; text-align: left; border-bottom: 1px solid black;}
+#groepleden{ float: right; padding: 10px 20px 20px 20px; }
+#groepleden table td{ padding: 0px 5px; lext-align: left;}
 
+#voorgangerOpvolger{ margin: 10px 0px; padding: 3px 20px; border-bottom: 1px solid black;}
+
+.vorigeGroep{ list-style-image: url(http://plaetjes.csrdelft.nl/groepen/up.png); }
+.volgendeGroep{ list-style-image: url(http://plaetjes.csrdelft.nl/groepen/down.png); }
+
+
+#groepAdmin{ float: right; margin: 10px ; }
 /* Streeplijstgenereertool */
 form#streeplijst fieldset{ padding: 10px;  }
 form#streeplijst fieldset legend{ font-weight: bold; }
