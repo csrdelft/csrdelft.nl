@@ -13,7 +13,7 @@
 		{/if}
 		<div class="clear"></div>
 		<label for="groepNaam"><strong>Naam:</strong></label>
-		<input type="text" id="groepNaam" name="naam" style="width: 80%" value="{$groep->getNaam()|escape:'html'}" />
+		<input type="text" id="groepNaam" name="naam" style="width: 70%" value="{$groep->getNaam()|escape:'html'}" /><br />
 
 		<label for="groepStatus"><strong>Status:</strong></label>
 		<select name="status" id="groepStatus" onchange="updateGroepform();">
@@ -34,14 +34,14 @@
 			<input type="input" name="limiet" id="groepLimiet" value="{$groep->getLimiet()}" /> <em>Vul een 0 voor geen limiet.</em>
 		</div>
 		<label for="toonFuncties"><strong>Toon functies?</strong></label>
-		<input type="checkbox" name="toonFuncties" id="toonFuncties" {if $groep->toonFuncties()}checked="checked"{/if} />
+		<input type="checkbox" name="toonFuncties" id="toonFuncties" {if $groep->toonFuncties()}checked="checked"{/if} /><br />
 	
 		<label for="sbeschrijving"><strong>Korte beschrijving:</strong><br /><br />UBB staat aan.</label>
-		<textarea id="sbeschrijving" name="sbeschrijving" style="width: 80%; height: 100px;">{$groep->getSbeschrijving()|escape:'html'}</textarea>
+		<textarea id="sbeschrijving" name="sbeschrijving" style="width: 70%; height: 100px;">{$groep->getSbeschrijving()|escape:'html'}</textarea>
 		<br />
 	{/if}
 	<label for="sbeschrijving"><strong>Lange beschrijving:</strong><br /><br />UBB staat aan.</label>
-	<textarea id="sbeschrijving" name="beschrijving" style="width: 80%; height: 200px;">{$groep->getBeschrijving()|escape:'html'}</textarea>
+	<textarea id="sbeschrijving" name="beschrijving" style="width: 70%; height: 200px;">{$groep->getBeschrijving()|escape:'html'}</textarea><br />
 	<label for="submit"></label><input type="submit" id="submit" value="Opslaan" /> <a href="/groepen/{$gtype}/{$groep->getId()}/" class="knop">terug</a>
 </div>
 </form>
