@@ -79,7 +79,7 @@ function updateGroepform(){
 }
 function toggleDiv(id){
 	var div=document.getElementById(id);
-	if(div.style.display=="none"){
+	if(div.style.display!="block"){
 		div.style.display="block";
 	}else{
 		div.style.display="none";
