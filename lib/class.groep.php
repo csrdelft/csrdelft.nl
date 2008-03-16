@@ -226,13 +226,13 @@ class Groep{
 		return false;
 	}
 	/*
-	 * Kijk of de groep aanmeldbaar is, de gebruiker mag aanmelden, en of de limiet nog niet
-	 * overschreden is.
+	 * Kijk of de groep aanmeldbaar is, de gebruiker mag aanmelden, de gebruiker nog 
+	 * niet aangemald is en of de limiet nog niet overschreden is.
 	 */
 	public function magAanmelden(){
 		if($this->isAanmeldbaar()){
 			$lid=Lid::get_Lid();
-			if($lid->hasPermission('P_LEDEN_READ')){
+			if($lid->hasPermission('P_LEDEN_READ') AND !$this->isLid($lid->getUid())){
 				if($this->getLimiet()==0){
 					return true;
 				}else{
