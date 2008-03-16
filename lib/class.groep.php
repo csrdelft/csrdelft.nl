@@ -8,6 +8,7 @@ require_once('class.groepen.php');
 
 class Groep{
 	
+	//deze array wordt in deze klasse twee keer gebruikt: in __construct() en load()  
 	private $groepseigenschappen=
 		array('groepId', 'gtypeId', 'gtype', 'snaam', 'naam', 'sbeschrijving', 'beschrijving', 
 			'zichtbaar', 'status', 'begin', 'einde', 'aanmeldbaar', 'limiet', 'toonFuncties');
@@ -194,7 +195,7 @@ class Groep{
 	public function isOp($uid){		return $this->isLid($uid) AND $this->leden[$uid]['op']=='1'; }
 	public function getLeden(){		return $this->leden; }
 	public function getLidCount(){	return count($this->getLeden()); }
-	public function isVol(){		return $this->getLimiet()<=$this->getLidCount(); }
+	public function isVol(){		return $this->getLimiet()!=0 AND $this->getLimiet()<=$this->getLidCount(); }
 	
 	public static function isAdmin(){		
 		$lid=Lid::get_lid();

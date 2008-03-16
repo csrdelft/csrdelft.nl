@@ -29,6 +29,11 @@
 			{foreach from=$groep->getLeden() item=groeplid}
 				<li>{$groeplid.uid|csrnaam:'civitas'}{if $groep->toonFuncties()}&nbsp;<em>{$groeplid.functie|escape:'html'}{/if}</em></li>
 			{/foreach}
+			{if $groep->magAanmelden()}
+				<li><br /><a href="/groepen/{$gtype}/{$groep->getId()}/aanmelden" class="knop">aanmelden</a><li>
+			{elseif $groep->isAanmeldbaar() AND $groep->isVol()}
+				<li><br />Deze groep is vol, u kunt zich niet meer aanmelden.</li>
+			{/if}
 		</ul>
 		<h2><a href="/groepen/{$groepen->getNaam()}/{$groep->getSnaam()}/">{$groep->getNaam()}</a></h2>
 		{$groep->getSbeschrijving()|ubb}
