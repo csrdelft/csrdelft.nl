@@ -38,9 +38,9 @@ hr{
 	height: 1px; background-color: black;
 	border: 0 none;
 }
-.clear{
-	clear: both;
-}
+.clear{	clear: both; }
+.verborgen{ display: none; }
+
 ul.horizontal li{
 	display: inline;
 	padding-right: 20px;
@@ -380,15 +380,6 @@ span.tijd{ font-size: 0.95em; }
 #forumHighlights a.kopje{ font-size: 1em; color: black; font-weight: bold; }
 #forumHighlights a.kopje:hover{ font-size: 1em; color: darkred; }
 span.tijd{ font-size: 0.95em; }
-
-/* commissieoverzichtspagina */
-#cieLijstje{ float: right; margin:  30px 20px 10px 20px; width: 200px; }
-#cieLijstje, #cieLijstje li, #cieLijstje ul{text-align: right;}
-#cieLijstje li{ margin-left: 0px; padding-left: 0px; }
-
-.cie{ clear: both; border-top: 1px solid black; margin-top: 20px; }
-.cieleden{ width: 220px; float: right; padding: 10px 20px 20px 20px; }
-.cieleden table td{ padding: 0px 5px; }
 
 /* Groepen nieuwe stijl */
 #groepLijst{ float: right; margin: 30px 0px 10px 20px; }
