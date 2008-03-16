@@ -448,36 +448,44 @@ class Lid {
 				$zoekfilter="{$zoekveld} LIKE '%{$zoekterm}%'";
 			}
 		}
+		
 		$sort = $this->_db->escape($sort);
 
 		# in welke status wordt gezocht, is afhankelijk van wat voor rechten de
 		# ingelogd persoon heeft
 		
 		$statusfilter = '';
-		# we zoeken in leden als
-		# 1. ingelogde persoon dat alleen maar mag of
-		# 2. ingelogde persoon leden en oudleden mag zoeken, maar niet oudleden alleen heeft gekozen
-		if (
-			($this->hasPermission('P_LEDEN_READ') and !$this->hasPermission('P_OUDLEDEN_READ') ) or
-			($this->hasPermission('P_LEDEN_READ') and $this->hasPermission('P_OUDLEDEN_READ') and $zoekstatus != 'oudleden')
-		   ) {
-			$statusfilter .= "status='S_LID' OR status='S_GASTLID' OR status='S_NOVIET' OR status='S_KRINGEL'";
-		}
-		# we zoeken in oudleden als
-		# 1. ingelogde persoon dat alleen maar mag of
-		# 2. ingelogde persoon leden en oudleden mag zoeken, maar niet leden alleen heeft gekozen
-		if (
-			(!$this->hasPermission('P_LEDEN_READ') and $this->hasPermission('P_OUDLEDEN_READ') ) or
-			($this->hasPermission('P_LEDEN_READ') and $this->hasPermission('P_OUDLEDEN_READ') and $zoekstatus != 'leden')
-		   ) {
-			if ($statusfilter != '') $statusfilter .= " OR ";
-			$statusfilter .= "status='S_OUDLID'";
-		}
-		# we zoeken in nobodies als
-		# de ingelogde persoon dat mag EN daarom gevraagd heeft
-		if ($this->hasPermission('P_OUDLEDEN_MOD') and $zoekstatus === 'nobodies') {
-			# alle voorgaande filters worden ongedaan gemaakt en er wordt alleen op nobodies gezocht
-			$statusfilter = "status='S_NOBODY'";
+		
+		if(is_array($zoekstatus)){
+			//we gaan nu gewoon simpelweg statussen aan elkaar plakken. LET OP: deze functie doet nu 
+			//geen controle of een gebruiker dat mag, dat moet dus eerder gebeuren.
+			$statusfilter="status='".implode("' OR status='", $zoekstatus)."'"; 
+		}else{
+			# we zoeken in leden als
+			# 1. ingelogde persoon dat alleen maar mag of
+			# 2. ingelogde persoon leden en oudleden mag zoeken, maar niet oudleden alleen heeft gekozen
+			if (
+				($this->hasPermission('P_LEDEN_READ') and !$this->hasPermission('P_OUDLEDEN_READ') ) or
+				($this->hasPermission('P_LEDEN_READ') and $this->hasPermission('P_OUDLEDEN_READ') and $zoekstatus != 'oudleden')
+			   ) {
+				$statusfilter .= "status='S_LID' OR status='S_GASTLID' OR status='S_NOVIET' OR status='S_KRINGEL'";
+			}
+			# we zoeken in oudleden als
+			# 1. ingelogde persoon dat alleen maar mag of
+			# 2. ingelogde persoon leden en oudleden mag zoeken, maar niet leden alleen heeft gekozen
+			if (
+				(!$this->hasPermission('P_LEDEN_READ') and $this->hasPermission('P_OUDLEDEN_READ') ) or
+				($this->hasPermission('P_LEDEN_READ') and $this->hasPermission('P_OUDLEDEN_READ') and $zoekstatus != 'leden')
+			   ) {
+				if ($statusfilter != '') $statusfilter .= " OR ";
+				$statusfilter .= "status='S_OUDLID'";
+			}
+			# we zoeken in nobodies als
+			# de ingelogde persoon dat mag EN daarom gevraagd heeft
+			if ($this->hasPermission('P_OUDLEDEN_MOD') and $zoekstatus === 'nobodies') {
+				# alle voorgaande filters worden ongedaan gemaakt en er wordt alleen op nobodies gezocht
+				$statusfilter = "status='S_NOBODY'";
+			}
 		}
 		
 		# als er een specifieke moot is opgegeven, gaan we alleen in die moot zoeken

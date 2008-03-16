@@ -190,6 +190,9 @@ class Groepcontroller extends Controller{
 					$this->groep->setValue('begin', $_POST['begin']);
 					$this->groep->setValue('einde', $_POST['einde']);
 					$this->groep->setValue('status', $_POST['status']);
+					
+					//ht-groepen kunnen aanmeldbaar gemaakt worden, ot groepen zijn nooit
+					//aanmeldbaar
 					if($this->groep->getStatus()=='ht'){
 						if(isset($_POST['aanmeldbaar'])){
 							$this->groep->setValue('aanmeldbaar', 1);
@@ -198,6 +201,8 @@ class Groepcontroller extends Controller{
 							$this->groep->setValue('aanmeldbaar', 0);
 							$this->groep->setValue('limiet', 0);	
 						}
+					}else{
+						$this->groep->setValue('aanmeldbaar', 0);
 					}
 				}
 				$this->groep->setValue('beschrijving', $_POST['beschrijving']);

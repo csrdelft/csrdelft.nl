@@ -34,21 +34,33 @@ class Groepcontent extends SimpleHTML{
 	private function getLidAdder(){
 		if(isset($_POST['rawNamen']) AND trim($_POST['rawNamen'])!=''){
 			$return='';
-			$aCieUids=namen2uid($_POST['rawNamen']);
-			if(is_array($aCieUids) AND count($aCieUids)!=0){
+			
+			//uitmaken waarin we allemaal zoeken, standaard in de normale leden, wellicht
+			//ook in oudleden en nobodies
+			$zoekin=array('S_LID', 'S_NOVIET', 'S_GASTLID', 'S_KRINGEL');
+			if(isset($_POST['filterOud'])){
+				$zoekin[]='S_OUDLID';
+			}
+			if(isset($_POST['filterNobody']) AND $groep->isAdmin()){
+				echo 'nobody';
+				$zoekin[]='S_NOBODY';
+			}
+
+			$leden=namen2uid($_POST['rawNamen'], $zoekin);
+			
+			if(is_array($leden) AND count($leden)!=0){
 				$return.='<table border="0">';
-				$return.='<tr><th>Naam</hd><th>Functie</th></tr>';
-				
-				foreach($aCieUids as $aCieUid){
-					if(isset($aCieUid['uid'])){
+			
+				foreach($leden as $aGroepUid){
+					if(isset($aGroepUid['uid'])){
 						//naam is gevonden en uniek, dus direct goed.
 						$return.='<tr>';
-						$return.='<td><input type="hidden" name="naam[]" value="'.$aCieUid['uid'].'" />'.$aCieUid['naam'].'</td>';
+						$return.='<td><input type="hidden" name="naam[]" value="'.$aGroepUid['uid'].'" />'.$aGroepUid['naam'].'</td>';
 					}else{
 						//naam is niet duidelijk, geef ook een selectievakje met de mogelijke opties
-						if(count($aCieUid['naamOpties'])>0){
+						if(count($aGroepUid['naamOpties'])>0){
 							$return.='<tr><td><select name="naam[]" class="tekst">';
-							foreach($aCieUid['naamOpties'] as $aNaamOptie){
+							foreach($aGroepUid['naamOpties'] as $aNaamOptie){
 								$return.='<option value="'.$aNaamOptie['uid'].'">'.$aNaamOptie['naam'].'</option>';
 							}
 							$return.='</select></td>';

@@ -28,10 +28,14 @@
 	{/if}
 	
 	{if $groep->magBewerken() AND $action!='edit'}
-		<form action="/groepen/{$gtype}/{$groep->getId()}/addLid" method="post">
+		<form action="/groepen/{$gtype}/{$groep->getId()}/addLid" method="post" >
 			{if $action=='addLid' AND $lidAdder!=false}
 				{$lidAdder}
 			{else}
+				<input type="checkbox" name="filterOud" id="filterOud" /> <label for="filterOud">oudleden</label>
+				{if $groep->isAdmin()}
+					<input type="checkbox" name="filterNobody" id="filterNobody" /> <label for="filterNobody">nobodies</label>
+				{/if}<br />
 				<input type="text" name="rawNamen" /> 
 			{/if}
 			<input type="submit" value="toevoegen" />

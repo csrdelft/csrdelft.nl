@@ -107,7 +107,7 @@ function pr($sString){
 		echo 'Er is een foutje, de webmeester is er al mee bezig...';
 	}
 }
-function namen2uid($sNamen){
+function namen2uid($sNamen, $filter='leden'){
 	$lid=Lid::get_lid();
 	$return=array();
 	$sNamen=trim($sNamen);
@@ -117,7 +117,7 @@ function namen2uid($sNamen){
 	$return=false;
 	foreach($aNamen as $sNaam){
 		$aNaamOpties=array();
-		$aZoekNamen=$lid->zoekLeden($sNaam, 'naam', 'alle', 'achternaam', '(oud)?leden');
+		$aZoekNamen=$lid->zoekLeden($sNaam, 'naam', 'alle', 'achternaam', $filter);
 		if(count($aZoekNamen)==1){
 			$naam=$aZoekNamen[0]['voornaam'].' ';
 			if(trim($aZoekNamen[0]['tussenvoegsel'])!=''){ $naam.=$aZoekNamen[0]['tussenvoegsel'].' '; }
