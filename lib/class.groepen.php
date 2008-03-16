@@ -58,7 +58,7 @@ class Groepen{
 			SELECT 
 				groep.id AS groepId, groep.snaam AS snaam, groep.naam AS naam,
 				groep.sbeschrijving AS sbeschrijving, groep.beschrijving AS beschrijving, groep.zichtbaar AS zichtbaar,
-				groep.status AS status, groep.begin AS begin, groep.einde AS einde, groep.aanmeldbaar AS aanmeldbaar,
+				groep.status AS status, begin, einde, aanmeldbaar, limiet, toonFuncties,
 				groeplid.uid AS uid, groeplid.op AS op, groeplid.functie AS functie, groeplid.prioriteit AS prioriteit 
 			FROM groep
 			LEFT JOIN groeplid ON(groep.id=groeplid.groepid) 

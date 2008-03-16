@@ -10,7 +10,7 @@ class Groep{
 	
 	private $groepseigenschappen=
 		array('groepId', 'gtypeId', 'gtype', 'snaam', 'naam', 'sbeschrijving', 'beschrijving', 
-			'zichtbaar', 'status', 'begin', 'einde', 'aanmeldbaar', 'limiet');
+			'zichtbaar', 'status', 'begin', 'einde', 'aanmeldbaar', 'limiet', 'toonFuncties');
 		
 	private $groep=null;
 	private $leden=null;
@@ -22,7 +22,7 @@ class Groep{
 				$this->groep=array(
 					'groepId'=>0, 'snaam'=>'', 'naam'=>'', 'sbeschrijving'=>'', 'beschrijving'=>'', 
 					'zichtbaar'=>'zichtbaar', 'begin'=>date('Y-m-d'), 'einde'=>'0000-00-00',
-					'aanmeldbaar'=>0, 'limiet'=>0);
+					'aanmeldbaar'=>0, 'limiet'=>0, 'toonFuncties'=>1);
 				//we moeten ook nog even de groeptypen opzoeken. Die zit als het goed is in GET['gtype'];
 				$this->setGtype();
 			}else{
@@ -58,7 +58,7 @@ class Groep{
 			SELECT 
 				groep.id AS groepId, groep.snaam AS snaam, groep.naam AS naam,
 				groep.sbeschrijving AS sbeschrijving, groep.beschrijving AS beschrijving, groep.zichtbaar AS zichtbaar,
-				groep.status AS status,  begin, einde, aanmeldbaar, limiet,
+				groep.status AS status,  begin, einde, aanmeldbaar, limiet, toonFuncties,
 				groeplid.uid AS uid, groeplid.op AS op, groeplid.functie AS functie, groeplid.prioriteit AS prioriteit,
 				groeptype.id AS gtypeId, groeptype.naam AS gtype
 			FROM groep
@@ -106,7 +106,8 @@ class Groep{
 					'".$db->escape($this->getBegin())."',
 					'".$db->escape($this->getEinde())."',
 					".($this->isAanmeldbaar() ? 1 : 0).",
-					".(int)$this->getLimiet()."
+					".(int)$this->getLimiet().",
+					".($this->toonFuncties() ? 1 : 0)."
 				);";
 		}else{
 			$qSave="
@@ -120,7 +121,8 @@ class Groep{
 					begin='".$db->escape($this->getBegin())."',
 					einde='".$db->escape($this->getEinde())."',
 					aanmeldbaar=".($this->isAanmeldbaar() ? 1 : 0).",
-					limiet=".(int)$this->getLimiet()."
+					limiet=".(int)$this->getLimiet().",
+					toonFuncties=".($this->toonFuncties() ? 1 : 0)."
 				WHERE id=".$this->getId()."
 				LIMIT 1;";
 		}
@@ -163,7 +165,7 @@ class Groep{
 	public function getEinde(){			return $this->groep['einde']; }
 	public function isAanmeldbaar(){	return $this->groep['aanmeldbaar']==1; }
 	public function getLimiet(){		return $this->groep['limiet']; }
-	
+	public function toonFuncties(){		return $this->groep['toonFuncties']==1; }
 	
 	public function setGtype(){					
 		if(isset($_GET['gtype']) AND Groepen::isValidGtype($_GET['gtype'])){
@@ -182,7 +184,7 @@ class Groep{
 	
 	public function setValue($key, $value){
 		$fields=array('snaam', 'naam', 'sbeschrijving', 'beschrijving', 
-			'zichtbaar', 'status', 'begin', 'einde', 'aanmeldbaar', 'limiet');
+			'zichtbaar', 'status', 'begin', 'einde', 'aanmeldbaar', 'limiet', 'toonFuncties');
 		if(in_array($key, $fields)){
 			$this->groep[$key]=trim($value);	
 		}

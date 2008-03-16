@@ -27,7 +27,7 @@
 	<div class="groep clear" id="groep{$groep->getId()}">
 		<ul class="groepleden nobullets">
 			{foreach from=$groep->getLeden() item=groeplid}
-				<li>{$groeplid.uid|csrnaam:'civitas'}&nbsp;<em>{$groeplid.functie|escape:'html'}</em></li>
+				<li>{$groeplid.uid|csrnaam:'civitas'}{if $groep->toonFuncties()}&nbsp;<em>{$groeplid.functie|escape:'html'}{/if}</em></li>
 			{/foreach}
 		</ul>
 		<h2><a href="/groepen/{$groepen->getNaam()}/{$groep->getSnaam()}/">{$groep->getNaam()}</a></h2>

@@ -14,7 +14,7 @@
 		{foreach from=$groep->getLeden() item=groeplid}
 			<tr>
 				<td>{$groeplid.uid|csrnaam:'civitas'}</td>
-				<td><em>{$groeplid.functie|escape:'html'}</em></td>
+				{if $groep->toonFuncties()}<td><em>{$groeplid.functie|escape:'html'}</em></td>{/if}
 				{if $groep->magBewerken()}
 					<td><a href="/groepen/{$gtype}/{$groep->getId()}/verwijderLid/{$groeplid.uid}">X</a></td>
 				{/if}

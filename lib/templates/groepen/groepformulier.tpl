@@ -33,7 +33,9 @@
 			<label for="groepLimiet"><strong>Limiet:</strong></label>
 			<input type="input" name="limiet" id="groepLimiet" value="{$groep->getLimiet()}" /> <em>Vul een 0 voor geen limiet.</em>
 		</div>
-
+		<label for="toonFuncties"><strong>Toon functies?</strong></label>
+		<input type="checkbox" name="toonFuncties" id="toonFuncties" {if $groep->toonFuncties()}checked="checked"{/if} />
+	
 		<label for="sbeschrijving"><strong>Korte beschrijving:</strong><br /><br />UBB staat aan.</label>
 		<textarea id="sbeschrijving" name="sbeschrijving" style="width: 80%; height: 100px;">{$groep->getSbeschrijving()|escape:'html'}</textarea>
 		<br />
