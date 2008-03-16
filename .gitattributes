@@ -303,7 +303,6 @@ lib/templates/groepen/groepen.tpl -text
 lib/templates/groepen/groepformulier.tpl -text
 lib/templates/maaltijdbeheer.tpl -text
 lib/templates/maaltijdform.tpl -text
-lib/templates/maaltijdinfo.tpl -text
 lib/templates/maaltijdketzer.tpl -text
 lib/templates/maaltijdlijst.tpl -text
 lib/templates/maaltijdvoorkeuren.tpl -text
