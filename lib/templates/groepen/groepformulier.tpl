@@ -5,7 +5,7 @@
 			<h2>Nieuwe groep toevoegen in context {$gtype}</h2>
 			
 			<label for="groepSnaam"><strong>Korte naam:</strong></label>
-			<div id="groepSnaam" style=" float: right; width: 450px; margin-bottom: 10px;">
+			<div id="groepSnaam" class="opmerking">
 				Voor gebruik in urls &eacute;n ter sortering. Alleen letters en cijfers, geen spaties. Voor elkaar opvolgende groepen dezelfde naam gebruiken.<br />
 			</div>
 			<input type="text"  name="snaam" value="{$groep->getSnaam()|escape:'html'}" />
@@ -34,8 +34,15 @@
 			<input type="input" name="limiet" id="groepLimiet" value="{$groep->getLimiet()}" /> <em>Vul een 0 voor geen limiet.</em>
 		</div>
 		<label for="toonFuncties"><strong>Toon functies?</strong></label>
-		<input type="checkbox" name="toonFuncties" id="toonFuncties" {if $groep->toonFuncties()}checked="checked"{/if} /><br />
-	
+		<div id="functieOpmVerbergen" class="opmerking verborgen">Functies zijn verborgen voor leden, ze kunnen wel opgegeven worden.</div>
+			<div id="functieOpmNiet" class="opmerking verborgen">Er kunnen nu geen functies worden opgegeven.</div>
+		<select name="toonFuncties" id="toonFuncties" onchange="updateGroepform();">
+			<option value="tonen" {if $groep->getToonFuncties()=="tonen"}selected="selected"{/if}>Altijd</option>
+			<option value="verbergen" {if $groep->getToonFuncties()=="verbergen"}selected="selected"{/if}>Alleen voor groepadmins</option>
+			<option value="niet" {if $groep->getToonFuncties()=="niet"}selected="selected"{/if}>Nooit</option>
+		</select>
+			
+		<br />
 		<label for="sbeschrijving"><strong>Korte beschrijving:</strong><br /><br />UBB staat aan.</label>
 		<textarea id="sbeschrijving" name="sbeschrijving" style="width: 70%; height: 100px;">{$groep->getSbeschrijving()|escape:'html'}</textarea>
 		<br />

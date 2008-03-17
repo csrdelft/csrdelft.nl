@@ -23,7 +23,8 @@ class Groepcontroller extends Controller{
 	private $queryparts=array();
 	private $lid;
 	
-	private $errors;
+	private $valid=true;
+	private $errors='';
 	
 	public function __construct($querystring){
 		$this->lid=Lid::get_Lid();
@@ -73,59 +74,51 @@ class Groepcontroller extends Controller{
 	 * Beetje gecompliceerd door de verschillende permissielagen, maargoed.
 	 */
 	public function groepValidator(){
-		$valid=true;
 		//Velden beschikbaar voor groepadmins.
 		if($this->groep->isAdmin()){
 			//snaam is alleen relevant bij het maken van een nieuwe groep
 			if($this->groep->getId()==0 AND !isset($_POST['snaam'])){
-				$valid=false;
-				$this->errors.="Korte naam is verplicht bij een nieuwe groep.<br />";
+				$this->addError("Korte naam is verplicht bij een nieuwe groep.");
 			}else{
 				if($this->groep->getId()==0){
-					if( strlen(trim($_POST['snaam']))<3){
-						$valid=false;
-						$this->errors.="Korte naam moet minstens drie tekens lang zijn.<br />";
+					if(strlen(trim($_POST['snaam']))<3){
+						$this->addError("Korte naam moet minstens drie tekens lang zijn.");
 					}
 					if(strlen(trim($_POST['snaam']))>20){
-						$valid=false;
-						$this->errors.="Korte naam mag maximaal 20 tekens bevatten.<br />";
+						$this->addError("Korte naam mag maximaal 20 tekens bevatten.");
 					}
 					if(preg_match('/\s/', trim($_POST['snaam']))){
-						$valid=false;
-						$this->errors.="Korte naam mag geen spaties bevatten.<br />";
+						$this->addError("Korte naam mag geen spaties bevatten.");
 					}
 				}
 			}
 			
-			if(isset($_POST['naam'], $_POST['sbeschrijving'], $_POST['status'], $_POST['begin'], $_POST['einde'])){
+			if(isset($_POST['naam'], $_POST['sbeschrijving'], $_POST['status'], $_POST['begin'], $_POST['einde'], $_POST['toonFuncties'])){
 				if(strlen(trim($_POST['naam']))<3){
-					$valid=false;
-					$this->errors.="Naam moet minstens drie tekens lang zijn.<br />";
+					$this->addError("Naam moet minstens drie tekens lang zijn.");
 				}
 				if(strlen(trim($_POST['sbeschrijving']))<5){
-					$valid=false;
-					$this->errors.="Korte beschrijving moet minstens vijf tekens lang zijn.<br />";
+					$this->addError("Korte beschrijving moet minstens vijf tekens lang zijn.");
 				}
 				if(!preg_match('/\d{4}-\d{2}-\d{2}/', trim($_POST['begin']))){
-					$valid=false;
-					$this->errors.="De begindatum is niet geldig. Gebruik JJJJ-mm-dd.<br />";
+					$this->addError("De begindatum is niet geldig. Gebruik JJJJ-mm-dd.");
 				}
 				if(trim($_POST['begin'])=='0000-00-00'){
-					$valid=false;
-					$this->errors.="De begindatum mag niet 0000-00-00 zijn.<br />";
+					$this->addError("De begindatum mag niet 0000-00-00 zijn.");
 				}
 				
 				if(!preg_match('/\d{4}-\d{2}-\d{2}/', trim($_POST['einde']))){
-					$valid=false;
-					$this->errors.="De begindatum is niet geldig. Gebruik JJJJ-mm-dd.<br />";
+					$this->addError("De begindatum is niet geldig. Gebruik JJJJ-mm-dd.");
 				}
+				if(!in_array($_POST['toonFuncties'], array('tonen', 'verbergen', 'niet'))){
+					$this->addError("ToonFuncties mag deze waarden niet hebben.");
+				}
+				
 				if(!preg_match('/(h|f|o)t/', $_POST['status'])){
-					$valid=false;
-					$this->errors.="De status is niet geldig.<br />";
+					$this->addError("De status is niet geldig.");
 				}else{
 					if($_POST['status']=='ot' AND trim($_POST['einde'])=='0000-00-00'){
-						$valid=false;
-						$this->errors.="Een o.t. groep moet een einddatum bevatten.<br />";
+						$this->addError("Een o.t. groep moet een einddatum bevatten.");
 					}
 					
 					//Controleren of er geen h.t. groep bestaat met dezelfde snaam.
@@ -136,30 +129,31 @@ class Groepcontroller extends Controller{
 					}
 					if($_POST['status']=='ht'){
 						if($this->groep->hasHt($snaam)){
-							$valid=false;
-							$this->errors.="Er is al een h.t.-groep voor deze soort, kies een andere status.<br />";
+							$this->addError("Er is al een h.t.-groep voor deze soort, kies een andere status.");
 						}
 						if(isset($_POST['aanmeldbaar'], $_POST['limiet'])){
 							if($_POST['limiet']<0 OR $_POST['limiet']>200){
-								$valid=false;
-								$this->errors.="Kies een limiet tussen 0 en 200<br />";
+								$this->addError("Kies een limiet tussen 0 en 200");
 							}
 						}
 					}
 				}
 			}else{
-				$valid=false;
-				$this->errors.="Het formulier is niet compleet.<br />";
+				$this->addError("Het formulier is niet compleet.");
 			}
 			
 		}
 		//velden beschikbaar voor groepOps
 		if(!isset($_POST['beschrijving'])){
-			$valid=false;
-			$this->errors.="Het veld beschrijving mist.<br />";
+			$this->addError("Het veld beschrijving mist.");
 		}
-		return $valid;
+		return $this->valid;
 	}
+	public function addError($error){
+		$this->valid=false;
+		$this->errors.=$error.'<br />';
+	}
+	
 	/*
 	 * Bewerken en opslaan van groepen. Groepen mogen door groepadmins (groeplid.op=='1')
 	 * voor een deel bewerkt worden, de P_ADMINS kunnen alles aanpassen. Hier wordt de
@@ -204,11 +198,7 @@ class Groepcontroller extends Controller{
 					}else{
 						$this->groep->setValue('aanmeldbaar', 0);
 					}
-					if(isset($_POST['toonFuncties'])){
-						$this->groep->setValue('toonFuncties', 1);
-					}else{
-						$this->groep->setValue('toonFuncties', 0);
-					}
+					$this->groep->setValue('toonFuncties', $_POST['toonFuncties']);
 				}
 				$this->groep->setValue('beschrijving', $_POST['beschrijving']);
 				

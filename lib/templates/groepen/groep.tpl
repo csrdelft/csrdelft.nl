@@ -22,7 +22,17 @@
 		{/foreach}
 	</table>
 	{if $groep->magAanmelden()}
-		<a href="/groepen/{$gtype}/{$groep->getId()}/aanmelden" class="knop">aanmelden</a>
+		<a href="#" onclick="toggleDiv('aanmeldForm')" class="knop">aanmelden</a>
+		<form action="/groepen/{$gtype}/{$groep->getId()}/aanmelden" method="post" id="aanmeldForm" class="verborgen">
+			U kunt zich hier aanmelden voor deze groep.
+			{if $groep->getToonFuncties()!='niet'}
+				Geef ook een opmerking/functie op:<br /> 
+				<input type="text" name="functie" />
+			{else}
+				<br />
+			{/if}
+			<input type="submit" value="aanmelden" />
+		</form>
 	{elseif $groep->isAanmeldbaar() AND $groep->isVol()}
 		Deze groep is vol, u kunt zich niet meer aanmelden.
 	{/if}

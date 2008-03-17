@@ -23,7 +23,7 @@ class Groep{
 				$this->groep=array(
 					'groepId'=>0, 'snaam'=>'', 'naam'=>'', 'sbeschrijving'=>'', 'beschrijving'=>'', 
 					'zichtbaar'=>'zichtbaar', 'begin'=>date('Y-m-d'), 'einde'=>'0000-00-00',
-					'aanmeldbaar'=>0, 'limiet'=>0, 'toonFuncties'=>1);
+					'aanmeldbaar'=>0, 'limiet'=>0, 'toonFuncties'=>'tonen');
 				//we moeten ook nog even de groeptypen opzoeken. Die zit als het goed is in GET['gtype'];
 				$this->setGtype();
 			}else{
@@ -108,7 +108,7 @@ class Groep{
 					'".$db->escape($this->getEinde())."',
 					".($this->isAanmeldbaar() ? 1 : 0).",
 					".(int)$this->getLimiet().",
-					".($this->toonFuncties() ? 1 : 0)."
+					'".$this->getToonFuncties()."'
 				);";
 		}else{
 			$qSave="
@@ -123,7 +123,7 @@ class Groep{
 					einde='".$db->escape($this->getEinde())."',
 					aanmeldbaar=".($this->isAanmeldbaar() ? 1 : 0).",
 					limiet=".(int)$this->getLimiet().",
-					toonFuncties=".($this->toonFuncties() ? 1 : 0)."
+					toonFuncties='".$this->getToonFuncties()."'
 				WHERE id=".$this->getId()."
 				LIMIT 1;";
 		}
@@ -166,7 +166,25 @@ class Groep{
 	public function getEinde(){			return $this->groep['einde']; }
 	public function isAanmeldbaar(){	return $this->groep['aanmeldbaar']==1; }
 	public function getLimiet(){		return $this->groep['limiet']; }
-	public function toonFuncties(){		return $this->groep['toonFuncties']==1; }
+	public function getToonFuncties(){	return $this->groep['toonFuncties']; }
+	
+	/*
+	 * Geef een bool terug of de functies getoond worden of niet.
+	 * Elke groep heeft een veld wat drie waarden kan hebben:
+	 * 
+	 * tonen		Iedereen ziet de functies
+	 * verbergen	Alleen admins en groepOps mogen de functies zien.
+	 * niet			Functies worden in het geheel verborgen.
+	 */
+	public function toonFuncties(){		
+		if($this->getToonFuncties()!='niet'){
+			if($this->magBewerken()){
+				return true;
+			}
+			return $this->groep['toonFuncties']=='tonen';
+		}
+		return false; 
+	}
 	
 	public function setGtype(){					
 		if(isset($_GET['gtype']) AND Groepen::isValidGtype($_GET['gtype'])){
@@ -211,14 +229,15 @@ class Groep{
 	 */
 	public function hasHt($snaam=null){
 		$db=MySql::get_MySql();
-		if($snaam==null){ 
-			$this->getSnaam(); 
-		}
+		if($snaam==null){
+			$snaam=$this->getSnaam(); 
+		} 
 		$qHasHt="
 			SELECT id 
 			FROM groep 
 			WHERE snaam='".$db->escape($snaam)."' 
-			  AND id!=".$this->getId().";";
+			  AND status='ht' 
+			  AND id!=".$this->getId()."";
 		$rHasHt=$db->query($qHasHt);
 		if($db->numRows($rHasHt)!=0){
 			return true;
