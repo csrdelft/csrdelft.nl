@@ -279,10 +279,10 @@ class Groep{
 			return false;
 		}
 	}
-	public function meldAan(){
+	public function meldAan($functie){
 		if($this->magAanmelden()){
 			$lid=Lid::get_lid();
-			return $this->addLid($lid->getUid());
+			return $this->addLid($lid->getUid(), $functie);
 		}
 		return false;
 	}

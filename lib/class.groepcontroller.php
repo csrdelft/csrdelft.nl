@@ -241,7 +241,11 @@ class Groepcontroller extends Controller{
 	 */
 	public function action_aanmelden(){
 		if($this->groep->magAanmelden()){
-			if($this->groep->meldAan()){
+			$functie='';
+			if(isset($_POST['functie'])){
+				$functie=$_POST['functie'];
+			}
+			if($this->groep->meldAan($functie)){
 				$melding='';
 			}else{
 				$melding='Aanmelden voor groep mislukt.';
