@@ -29,7 +29,7 @@ class Streeplijstcontent {
 		if(isset($_GET['goederen']) AND trim($_GET['goederen'])!=''){
 			$sGoederen=htmlspecialchars($_GET['goederen']);
 		}else{
-			$sGoederen='bier, S.bier, fris, reep, mix, sig., wijnF, sterk, B.noot, WW';
+			$sGoederen='Grolschbier, S.bier, frisfris, reep, mix, sig., wijnF, sterk, B.noot, WW';
 		}
 		$this->parseGoederen($sGoederen);
 		
@@ -165,7 +165,7 @@ class Streeplijstcontent {
 			</fieldset>
 			</form>';
 		if(isset($_GET['toon'])){
-			echo '<a href="'.$this->getUrl().'pdf">Neerladen als pdf</a><br />';
+			echo '<a href="'.$this->getUrl().'iframe">Alleen de streeplijst</a><br />';
 			//iframe met html meuk...
 			echo '<iframe style="width: 100%; height: 400px;" src="'.$this->getUrl().'iframe"></iframe>';
 			
