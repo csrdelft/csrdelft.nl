@@ -12,6 +12,8 @@
 	
 	<link rel="alternate" title="C.S.R. Delft RSS" type="application/rss+xml" href="http://csrdelft.nl/forum/rss.xml" />
 	<link rel="shortcut icon" href="{$csr_pics}layout/favicon.ico" />
+	<script type="text/javascript" src="/layout/mootools-release-1.11.js"></script> 
+ 	<script type="text/javascript" src="/layout/mootool-test.js"></script> 
 </head>
 <body>
 <div id="layoutContainer">

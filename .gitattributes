@@ -64,6 +64,8 @@ htdocs/layout/csrdelft.js -text
 htdocs/layout/default.css -text
 htdocs/layout/documenten.css -text
 htdocs/layout/forum.css -text
+htdocs/layout/mootool-test.js -text
+htdocs/layout/mootools-release-1.11.js -text
 htdocs/layout/undohtml.css -text
 htdocs/links.php -text
 htdocs/login.php -text
