@@ -33,7 +33,7 @@
 				<li><br />Deze groep is vol, u kunt zich niet meer aanmelden.</li>
 			{/if}
 		</ul>
-		<h2><a href="/groepen/{$groepen->getNaam()}/{$groep->getSnaam()}/">{$groep->getNaam()}</a></h2>
+		<h2><a href="/groepen/{$groepen->getNaam()}/{$groep->getId()}/">{$groep->getNaam()}</a></h2>
 		{$groep->getSbeschrijving()|ubb}
 	</div>
 {/foreach}

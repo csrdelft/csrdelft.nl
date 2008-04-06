@@ -31,7 +31,7 @@ class Groepen{
 		
 		//we laden eerst de gegevens over de groep op
 		$qGroeptype="
-			SELECT id, naam, beschrijving
+			SELECT id, naam, beschrijving, toonHistorie
 			FROM groeptype
 			WHERE groeptype.naam='".$db->escape($groeptype)."'
 			LIMIT 1;";
@@ -53,7 +53,13 @@ class Groepen{
 	 */
 	private function load(){
 		$db=MySql::get_MySql();
-			
+		
+		//Afhankelijk van de instelling voor het groeptype halen we alleen de 
+		//h.t.-groepen op, of ook de o.t.-groepen.
+		$htotFilter="groep.status='ht'";
+		if($this->getToonHistorie()){
+			$htotFilter.=" OR groep.status='ot'";
+		}
 		$qGroepen="
 			SELECT 
 				groep.id AS groepId, groep.snaam AS snaam, groep.naam AS naam,
@@ -64,7 +70,7 @@ class Groepen{
 			LEFT JOIN groeplid ON(groep.id=groeplid.groepid) 
 			WHERE groep.gtype=".$this->getId()."
 			  AND groep.zichtbaar='zichtbaar'
-			  AND groep.status='ht'
+			  AND (".$htotFilter.")
 			ORDER BY groep.snaam ASC, groeplid.prioriteit ASC, groeplid.uid ASC;";
 		$rGroepen=$db->query($qGroepen);
 		
@@ -109,6 +115,7 @@ class Groepen{
 	public function getId(){			return $this->type['id']; }
 	public function getNaam(){ 			return $this->type['naam']; }
 	public function getBeschrijving(){	return $this->type['beschrijving']; }
+	public function getToonHistorie(){	return $this->type['toonHistorie']==1; }
 	
 	public static function isAdmin(){		
 		$lid=Lid::get_lid();
