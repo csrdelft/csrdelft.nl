@@ -9,13 +9,15 @@
 {/foreach}
 </ul>
 <hr />
-<div id="groepLijst">
-	<ul>
-	{foreach from=$groepen->getGroepen() item=groep name=g}
-		<li><a href="#groep{$groep->getId()}">{$groep->getSnaam()}</a></li>
-	{/foreach}	
-	</ul>
-</div>
+{if !$groepen->getToonHistorie()}
+	<div id="groepLijst">
+		<ul>
+		{foreach from=$groepen->getGroepen() item=groep name=g}
+			<li><a href="#groep{$groep->getId()}">{$groep->getSnaam()}</a></li>
+		{/foreach}	
+		</ul>
+	</div>
+{/if}
 {$groepen->getBeschrijving()|ubb}
 <div class="clear">
 	{if $groepen->isAdmin()}

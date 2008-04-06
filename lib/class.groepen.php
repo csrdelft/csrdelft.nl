@@ -57,9 +57,12 @@ class Groepen{
 		//Afhankelijk van de instelling voor het groeptype halen we alleen de 
 		//h.t.-groepen op, of ook de o.t.-groepen.
 		$htotFilter="groep.status='ht'";
+		$sort="groep.id ASC, ";
 		if($this->getToonHistorie()){
 			$htotFilter.=" OR groep.status='ot'";
+			$sort="groep.begin DESC, groep.id ASC, ";
 		}
+		
 		$qGroepen="
 			SELECT 
 				groep.id AS groepId, groep.snaam AS snaam, groep.naam AS naam,
@@ -71,9 +74,8 @@ class Groepen{
 			WHERE groep.gtype=".$this->getId()."
 			  AND groep.zichtbaar='zichtbaar'
 			  AND (".$htotFilter.")
-			ORDER BY groep.snaam ASC, groeplid.prioriteit ASC, groeplid.uid ASC;";
+			ORDER BY ".$sort."groep.snaam ASC, groeplid.prioriteit ASC, groeplid.uid ASC;";
 		$rGroepen=$db->query($qGroepen);
-		
 		//nu een beetje magic om een stapeltje groepobjecten te genereren:
 		$currentGroepId=null;
 		$aGroep=array();
@@ -84,6 +86,7 @@ class Groepen{
 			//zijn we bij een volgende groep aangekomen?
 			if($currentGroepId!=$aGroepraw['groepId']){
 				//groepobject maken en aan de array toevoegen
+				
 				$this->groepen[$aGroep[0]['groepId']]=new Groep($aGroep);
 				
 				//tenslotte nieuwe groep als huidige kiezen en groeparray leegmikken
@@ -92,7 +95,9 @@ class Groepen{
 				
 			}
 			$aGroep[]=$aGroepraw;
+			
 		}
+		
 		if(isset($aGroep[0])){
 			//tot slot de laatste groep ook toevoegen
 			$this->groepen[$aGroep[0]['groepId']]=new Groep($aGroep);
