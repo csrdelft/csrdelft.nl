@@ -80,7 +80,7 @@ class Lid {
 
 	}
 
-	# als een gebruiker wordt ingelogd met ipcheck==true, dan wordt het IPv4 adres
+	# als een gebruiker wordt ingelogd met ipcheck==true, dan wordt het IP-adres
 	# van de gebruiker opgeslagen in de sessie, en het sessie-cookie zal alleen
 	# vanaf dat adres toegang geven tot de website
 	function _login_web($user,$pass,$checkip = true) {
