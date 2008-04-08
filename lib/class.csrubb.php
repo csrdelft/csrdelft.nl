@@ -9,36 +9,37 @@
 require_once('ubb/eamBBParser.class.php');
 
 class CsrUBB extends eamBBParser{
-  private $lid;
-  
-  function CsrUBB(){
-  	$this->eamBBParser();
-	$this->lid=Lid::get_lid();
-	$this->paragraph_mode = false;
-  }
-  function ubb_citaat($arguments=array()){
-  	if($this->quote_level == 0){        
-    	$this->quote_level = 1;
-    	$content = $this->parseArray(array('[/citaat]'), array());
-    	$this->quote_level = 0;
-    } else {
-    	$this->quote_level++;
-    	$delcontent = $this->parseArray(array('[/citaat]'), array());
-    	$this->quote_level--;
-    	unset($delcontent);
-    	$content = '...';
-    }
+	private $lid;
+
 	
-    $text='<div class="citaatContainer"><strong>Citaat';
-	if(isset($arguments['citaat']) AND $this->lid->isValidUid($arguments['citaat'])){
-		$text.=' van '.$this->lid->getNaamLink($arguments['citaat'], 'user', true);
-	}elseif(trim($arguments['citaat'])!=''){
-		$text.=' van '.str_replace('_', '&nbsp;', $arguments['citaat']);
-	}else{
-		//geen naam ofzo...
+	function CsrUBB(){
+		$this->eamBBParser();
+		$this->lid=Lid::get_lid();
+		$this->paragraph_mode = false;
 	}
-	$text.=':</strong><div class="citaat">'.trim($content).'</div></div>';
-    return $text;  
+	function ubb_citaat($arguments=array()){
+		if($this->quote_level == 0){        
+	    	$this->quote_level = 1;
+	    	$content = $this->parseArray(array('[/citaat]'), array());
+			$this->quote_level = 0;
+		} else {
+			$this->quote_level++;
+			$delcontent = $this->parseArray(array('[/citaat]'), array());
+			$this->quote_level--;
+			unset($delcontent);
+			$content = '...';
+		}
+	
+		$text='<div class="citaatContainer"><strong>Citaat';
+		if(isset($arguments['citaat']) AND $this->lid->isValidUid($arguments['citaat'])){
+			$text.=' van '.$this->lid->getNaamLink($arguments['citaat'], 'user', true);
+		}elseif(trim($arguments['citaat'])!=''){
+			$text.=' van '.str_replace('_', '&nbsp;', $arguments['citaat']);
+		}else{
+			//geen naam ofzo...
+		}
+		$text.=':</strong><div class="citaat">'.trim($content).'</div></div>';
+		return $text;  
 	}
 	/* 
 	 * ubb_lid().
@@ -110,6 +111,7 @@ class CsrUBB extends eamBBParser{
 	 * geeft een miniatuurafbeelding weer van een youtube-video waarop geklikt kan worden om
 	 * het filmpje af te spelen.
 	 */
+	private $youtube=array();
 	function ubb_youtube($parameters){
 		$content = $this->parseArray(array('[/youtube]'), array());
 		//alleen de eerste 11 tekens zijn relevant...
@@ -117,13 +119,16 @@ class CsrUBB extends eamBBParser{
 		if(preg_match('/[0-9a-zA-Z\-_]{11}/', $content)){
 			//als we in een quote-tag zijn, geen embed weergeven maar een link naar de embed,
 			//en het filmpje ook maar meteen starten.
-			if($this->quote_level>0){
-				$html='<a href="#youtube'.$content.'" onclick="youtubeDisplay(\''.$content.'\')" >&raquo; youtube-filmpje</a>';
+			if($this->quote_level>0 OR isset($this->youtube[$content])){
+				$html='<a href="#youtube'.$content.'" onclick="youtubeDisplay(\''.$content.'\')" >&raquo; youtube-filmpje (ergens anders op deze pagina)</a>';
 			}else{	
 				$html='<div id="youtube'.$content.'" class="youtubeVideo">
 					<div class="afspelen" onclick="youtubeDisplay(\''.$content.'\')"><img width="36" height="36" src="'.CSR_PICS.'forum/afspelen.gif" alt="afspelen" /></div>
 					<img src="http://img.youtube.com/vi/'.$content.'/default.jpg" style="width: 130px; height: 97px;"
 						alt="klik op de afbeelding om de video te starten"/></div>';
+				//sla het youtube-id op in een array, dan plaatsen we de tweede keer dat 
+				//het filmpje in een topic geplaatst wordt een linkje.
+				$this->youtube[$content]=$content;
 			}
 		}else{
 			$html='Ongeldig youtube-id: '.mb_htmlentities($content).'. Kies alleen de 11 tekens na v=';
