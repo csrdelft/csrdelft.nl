@@ -126,7 +126,7 @@ class CsrUBB extends eamBBParser{
 						alt="klik op de afbeelding om de video te starten"/></div>';
 			}
 		}else{
-			$html='Ongeldig youtube-id: '.mb_htmlentities($content);
+			$html='Ongeldig youtube-id: '.mb_htmlentities($content).'. Kies alleen de 11 tekens na v=';
 		}
 		return $html;
 	}
