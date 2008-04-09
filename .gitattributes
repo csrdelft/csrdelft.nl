@@ -65,6 +65,7 @@ htdocs/layout/default.css -text
 htdocs/layout/documenten.css -text
 htdocs/layout/forum.css -text
 htdocs/layout/undohtml.css -text
+htdocs/layout/vb.css -text
 htdocs/links.php -text
 htdocs/login.php -text
 htdocs/logout.php -text
