@@ -20,8 +20,9 @@ class NeerladenContent{
 		// de gegevens combineren en alles verzamelen
 		$path = DATA_PATH.'/documenten/uploads/'.$catid.'/'.$filename;
 		$ext = $this->_neerladen->getExtension($filename);
+		
 		$mime = $this->_neerladen->getMimeType($ext);
-
+		
 		// de daadwerkelijke header
 		header('Pragma: public');
 		header('Cache-Control: must-revalidate, post-check=0, pre-check=0');

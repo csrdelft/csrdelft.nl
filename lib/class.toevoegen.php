@@ -98,7 +98,6 @@ class Toevoegen {
 //			$this->errorcode[] = UPLOAD_CUSTOM_ERR_NO_FILES;
 //			return; // returns if there are no files to upload
 //		}
-		
 		// there ARE files to upload){
 		$counter = 1;
 		for($i = 0; $i < count($_FILES); $i++, $counter++)
@@ -109,8 +108,8 @@ class Toevoegen {
 			} else {
 				$file = $_FILES['file'.$counter];
 			}
-						
-		    $filename	= $file['name'];
+		    
+			$filename	= $file['name'];
 		    $temp	= $file['tmp_name']; 
 		    $error	= $file['error'];
 		    $size	= $file['size'];
@@ -131,7 +130,6 @@ class Toevoegen {
 					} // als hier nog een else komt: doe het als hierboven!
 				}
 		    }
-		    
 		    if($error == UPLOAD_ERR_OK) // There is no error, the file uploaded with success
 		    {
 	            if(!is_uploaded_file($temp)) {

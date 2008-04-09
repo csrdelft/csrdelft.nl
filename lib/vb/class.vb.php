@@ -45,7 +45,7 @@ class VB {
 			//Michel, Gertjan, Rini, Gerrit, Sief, Marijn, Bert v. D
 			//TODO: regel dit handiger, met rechtenmodelletje
 			$mods = array("0438", "0429","0615","0431","0221","0203","0308");
-			if (isset($mods[$this->_lid->getUID()]))
+			if (in_array($this->_lid->getUID(),$mods))
 				return true;
 			if ($this->_lid->hasPermission('P_ADMIN'))
 				return true;
@@ -207,13 +207,19 @@ class VB {
 	/** selecteer één object a.d.h. van een select query */
 	public function singleSelect($query)
 	{
-		return $this->_db->next($this->_db->select($query));
+		$res = $this->_db->select($query);
+		if (!$res)
+			return false;
+		return $this->_db->next($res);
 	}
 	
 	/** selecteer meerdere objecten a.d.h.v. een select query */
 	public function multipleSelect($query)
 	{
-		return $this->_db->result2array($this->_db->select($query));
+		$res = $this->_db->select($query);
+		if (!$res)
+			return false;
+		return $this->_db->result2array($res);
 	}
 
 	/** zet een onderwerp om van knoop (heeft subonderwerpen) naar blad (bevat alleen bronnen) en vice versa */
@@ -360,7 +366,10 @@ class VB {
 	}
 	
 	/** removes a source object, provide contentmanager for notify callbacks
-	pre: rechten gecheckt */
+	pre: rechten gecheckt 
+	TODO: sources should only be removed when the nummer of relatoins drop to zero, or this is explicit decided. 
+	in a subject, only the link should be removed
+	*/
 	function removeSource($r,$cm)
 	{
 		//verwijder eerst alle relaties
@@ -376,8 +385,10 @@ class VB {
 		$res = $this->_db->query($query);
 		$cm->notify("Verwijderen links naar andere bronnen... ".($res?"voltooid":"mislukt"));
 		
-		$this->postRemoveSource($r,$cm);
-		return $this->_db->query($r->getDeleteQuery());
+		if (!$this->postRemoveSource($r,$cm))
+			$cm->notify("fout tijdens verwijderen van resources van de bron");
+		else
+			return $this->_db->query($r->getDeleteQuery());
 	}
 	
 	/**
@@ -416,7 +427,32 @@ class VB {
 	 */
 	function postRemoveSource($r,$cm)
 	{
-		//TODO:			
+		if ($r->sourceType == "file") {
+			$catid = $this->getVBFileCatID();
+			if (is_int((int)$r->id) && is_int((int)$catid)){
+				$docnaam = "vb_".$r->id."_1";
+				$res = $this->singleSelect("SELECT id FROM document WHERE name ='".$docnaam." AND categorie = '".$catid."'");
+				if ($res && isset($res['id'])) {
+					require_once("class.document.php");
+					$docs = new Documenten($this->_lid,$this->_db);
+					if($docs->deleteDocument($res['id']))	{
+						$cm->notify("Bron bestanden zijn verwijderd");
+						return true;
+					}
+					else
+						$cm->notify("fout in Documenten::deleteDocument, kon document ".$res['id']." niet verwijderen");
+				}
+				else {
+					$cm->notify("kon de bron ".$docnaam." niet vinden in de database, er is geen bestand verwijderd");
+					return true; //this is allowed
+				}
+			}
+			else
+				$cm->notify("kan bron niet verwijderen, bron id '".$r->id."' is ongeldig of categorie '".$catid."' niet gevonden");
+			return false;
+		}
+		else //geen bestand
+			return true;
 	}
 	
 	/** waar moeten vormingsbank topics gecreëerd worden? */
@@ -479,6 +515,96 @@ class VB {
 			$res = true;	
 		}
 		return $res;
+	}
+
+	
+	/**
+	 * this performs a file upload
+	* TODO: wat gebeurt er als een bron gewijzigd wordt?
+	 */
+	function uploadfile($r,$cm)
+	{
+		$cm->notify("Uploading file");
+		$catid = $this->getVBFileCatID();
+		$title = "vb_".$r->id."_1";
+		$cleanup = true;
+		if ($catid == -1)
+			die("Kon de vormingsbank uploadcategorie niet vinden: ".$catid);
+		$result;
+		//those two variables are expected by the uploadscript, so lets create them
+		$_POST['cat1'] = $catid;
+		$_POST['title1'] = $title;
+		$errorcodes;
+		//copied from class.toevoegencontent.php / class.document.php
+		$postIsArray = isset($_POST) && is_array($_POST);
+		if( !(($postIsArray
+				&& empty($_POST))
+				&& (isset($_FILES) 
+				&& is_array($_FILES) 
+				&& empty($_FILES)) ) ) { // TODO: overbodige checks weglaten
+		// als de arrays $_POST en $_FILES *niet* leeg zijn
+			require_once ('class.toevoegen.php');
+			$toevoegen = new Toevoegen($this->_db, $this->_lid);
+			$toevoegen->uploadFiles(false);
+			$errorcodes=$toevoegen->getErrorcodes();
+		} 
+		else { // $_POST of $_FILES wel leeg
+		    $cm->notify("geen bestanden in request gevonden/ ongeldige request");
+		}
+		if(isset($errorcodes) && is_array($errorcodes) && !empty($errorcodes)) {
+			// er zijn bestanden geupload (want er zijn errorcodes)
+			$numberOfErrors=$toevoegen->getNumberOfErrors($errorcodes);
+			if($numberOfErrors==-1)
+				$cm->notify('Er zijn geen bestanden opgegeven. Probeer het opnieuw.');
+			else if($numberOfErrors>0) {
+				//statische functies zouden zooo handig zijn...., num aar even voor de foutmelding een toevoegen content aanma
+				require_once('class.toevoegencontent.php');
+				$tmp = new toevoegencontent($toevoegen);
+				$tmp->errorcodes = $errorcodes;
+				$cm->notify($tmp->getErrorLine(1, $title));
+				//TODO: als bestand al bestand, bijv door andere bron, dan niet verwijderen
+			}
+			else {
+				$cm->notify("uploaden voltooid");
+				//hmm... omslachtig? vind het ingevoegde bestand, en link ernaartoe
+				$rName = $this->_db->select("
+					SELECT documentbestand.id 
+					FROM documentbestand JOIN document ON documentbestand.documentID = document.id 
+					WHERE document.naam = '".$title."' AND document.categorie = '".$catid."' LIMIT 1");
+				if( mysql_num_rows($rName) == 1 ){
+					$arr = mysql_fetch_array($rName);
+					$r->link = (int)$arr['id'];
+					if (!$this->_db->query($r->getUpdateQuery()))
+						$cm->notify("kon de link naar het document niet opslaan!");
+					else //alles gelukt
+						$cleanup = false;
+				}
+				else
+					$cm->notify("kon geuploade bestand niet terugvinden in de database");
+			}
+		}	
+		if ($cleanup) {
+		//als iets gefaald heeft verwijder bron besetanden etc...
+			$cm->notify("er ging ergens iets mis, alles wordt nu netjes opgeruimd, probeer het daarna eens overnieuw op te doen");
+			$this->removeSource($r, $cm);
+		}
+	}
+	
+	/**
+	 * this function finds the category where the vormingsbank files have to be stored
+	 */
+	private function getVBFileCatID() {
+		$rName = $this->_db->select("
+			SELECT	ID
+			FROM	documentencategorie
+			WHERE	naam = 'vormingsbank';"
+		);
+		if( mysql_num_rows($rName) == 0 ) {
+			return -1;
+		} else {
+			$arr = mysql_fetch_array($rName);
+			return $arr['ID'];
+		}
 	}
 }
 ?>

@@ -146,22 +146,29 @@ class VBContent extends SimpleHTML {
 		$this->generateLocationBar($sub);
 		$tpl = $this->newTemplate();
 		$tpl->assign(sub,$sub);
-		//edit subject formulier weergeven
-		$tpl->assign(editdiv,VBSubject::getEditDiv());
-		//create a temporary object, that we want to edit if 'toevoegen' is pressed
-		$tmp = new VBSubject();
-		$tmp->parent = $sub->id;
-		$tpl->assign(addsubjectclick, $tmp->getJSAddHandler());
-		//edit sources
-		$tmp = new VBSource();
-		$tpl->assign(addsourceclick,$tmp->getJSAddHandler()); //de JSAddHandler is generiek en bevat code voor alle types bronnen, niet elegant, wel makkelijk
-		$tpl->assign(editlinkdiv, 		VBLinkSource::getEditDiv()); 
-		//TODO: andere editdivds
-//		$tpl->assign(editfilediv, 		VBFileSource::getEditDiv());
-		$tpl->assign(editdiscussiondiv, VBDiscussionSource::getEditDiv());
-//		$tpl->assign(editbookdiv, 		VBBookSource::getEditDiv());
+//		if ($sub->isLeaf != "1")
+//		{
+			//edit subject formulier weergeven
+			$tpl->assign(editdiv,VBSubject::getEditDiv());
+			//create a temporary object, that we want to edit if 'toevoegen' is pressed
+			$tmp = new VBSubject();
+			$tmp->parent = $sub->id;
+			$tpl->assign(addsubjectclick, $tmp->getJSAddHandler());
+//		}
+//		else
+//		{
+			//edit sources
+			$tmp = new VBSource();
+			$tpl->assign(addsourceclick,$tmp->getJSAddHandler()); //de JSAddHandler is generiek en bevat code voor alle types bronnen, niet elegant, wel makkelijk
+			$tpl->assign(editlinkdiv, 		VBLinkSource::getEditDiv()); 
+			//TODO: andere editdivds
+			$tpl->assign(editfilediv, 		VBFileSource::getEditDiv());
+			$tpl->assign(editdiscussiondiv, VBDiscussionSource::getEditDiv());
+	//		$tpl->assign(editbookdiv, 		VBBookSource::getEditDiv());
+//		}
 		//display
-		$tpl->display('vb/subject.tpl');		
+		$tpl->display('vb/subject.tpl');
+		
 	}
 	
 	/** dat ding dat bovenin moet */
@@ -190,6 +197,8 @@ class VBContent extends SimpleHTML {
 		$this->generateLocationBar($source);
 		$tpl = $this->newTemplate();
 		$tpl->assign(source,$source);
+		//TODO: comefrom is een tijdelijke variable om navigatie te vereeenvoudigen, verwijderen straks
+		$tpl->assign(comefrom,(isset($_GET['comefrom'])?$_GET['comefrom']:'-1'));
 		//edit gerelateerde onderwerpen
 		$tpl->assign(editsubjectsourcediv, VBSubjectSource::getEditDiv());
 		$tpl->assign(addlabelclick, $this->_search->createSearchDivLink("addlabel"));
@@ -209,6 +218,27 @@ class VBContent extends SimpleHTML {
 			array("actie"=>"addsourcesourcelink", "source1"=>$this->_objid),
 			"<textarea name='reason'>&lt;reden voor deze relatie&gt;</textarea>"));			
 		$tpl->display('vb/source.tpl');
+		//render forum discussie
+		//TODO: fourm hangt er nog niet echt lekker in..... redirecten is een ramp nu
+		if ($source->sourceType=="discussion") {
+			//copied from forumonderwerp.php
+			require_once('include.config.php');
+			require_once('class.forumonderwerp.php');
+			require_once('class.forumcontent.php');
+			require_once('class.forumonderwerpcontent.php');
+			# Het middenstuk
+			if($this->_vb->_lid->hasPermission('P_FORUM_READ')) {
+				$forum = new ForumOnderwerp();
+				//onderwerp laden
+				$forum->load((int)$source->link);
+				$midden = new ForumOnderwerpContent($forum);
+			} else {
+			# geen rechten
+			#	echo "denied";
+				$midden = new Includer('', 'geentoegang.html');
+			}	
+			$midden->view();
+		}
 	}
 	
 	/** Deze methode bevat de logica voor het opslaan van een object: toevoegen als id == -1, anders opslaan */

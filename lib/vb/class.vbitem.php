@@ -27,10 +27,10 @@ class VBItem
 		$r = '
 			<a href="#" onClick="
 				'.$this->getJSEditHandler().'
-				"><img src="http://plaetjes.csrdelft.nl/forum/edit.png"/>E</a>
+				"><img class="button" src="http://plaetjes.csrdelft.nl/forum/bewerken.png" alt="E"/></a>
 			<a href="#" onClick="
 				'.$this->getJSRemoveHandler().'
-				"><img src="http://plaetjes.csrdelft.nl/forum/remove.png"/>X</a>
+				"><img class="button" src="http://plaetjes.csrdelft.nl/forum/verwijderen.png" alt="X"/></a>
 		';
 		return $r;
 	}
@@ -190,7 +190,7 @@ class VBItem
 				<p style="display:inline">
 					<a href="#" onClick="document.getElementById(\''.$classname.'editdiv\').style.display=\'none\';">X</a>
 					<b>Object bewerken</b>
-					<form method=\'post\' name=\''.$classname.'EditForm\' action=\'/vb/index.php\'>
+					<form enctype="multipart/form-data"  method=\'post\' name=\''.$classname.'EditForm\' action=\'/vb/index.php\'>
 						<input type="hidden" name="actie" value="commit"/>
 						<input type="hidden" name="class" value="'.$classname.'"/>
 						'.$innerhtml.'

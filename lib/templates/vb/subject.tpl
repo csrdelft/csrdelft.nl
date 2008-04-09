@@ -1,6 +1,6 @@
 <h1>Thema {$sub->name}</h1>
-{if $sub->parent != "0"}
-	Terug omhoog naar <a href="index.php?actie=subject&id={$sub->parent}">{$sub->parentobj->name}</a>
+{if $sub->parent != "-1"}
+	 <a href="index.php?actie=subject&id={$sub->parent}">&lt;&lt;Terug omhoog</a>
 {/if}
 <table width="100%">
 	<tr>
@@ -35,7 +35,10 @@
 				{/section}
 				{if $allowadd}
 					<br/>
-					<a href="#" onclick="{$addsubjectclick}">Voeg sub onderwerp toe</a>
+					<a href="#" onclick="{$addsubjectclick}">
+						<img class="button" src="http://plaetjes.csrdelft.nl/documenten/plus.jpg"/>
+						Voeg sub onderwerp toe
+					</a>
 					{$editdiv}										
 				{/if}
 			{else}
@@ -55,7 +58,10 @@
 					<br/><a href="#" onClick="
  						document.getElementById('sourceTypeDropDown').value='discussion';
 						document.getElementById('goAddSource').click();
-					">Voeg discussie toe</a>
+					">
+						<img class="button" src="http://plaetjes.csrdelft.nl/documenten/plus.jpg"/>
+						Voeg discussie toe
+					</a>
 				{/if}
 			{/if}
 		</td>
