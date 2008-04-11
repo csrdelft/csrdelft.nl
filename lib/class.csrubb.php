@@ -156,7 +156,7 @@ src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
 		$html='<div class="groep_embed" style="margin: 10px; padding: 5px 10px; border: 1px solid black;">';
 		$html.='<table style="float: right">';
 		foreach($groep->getLeden() as $groeplid){
-			$html.='<tr><td>'.$this->lid->getNaamLink($groeplid['uid']).'</td>';
+			$html.='<tr><td>'.$this->lid->getNaamLink($groeplid['uid'], 'civitas', true).'</td>';
 			if($groep->toonFuncties()){ 
 				$html.='<td><em>'.mb_htmlentities($groeplid['functie']).'</em></td>';
 			}
