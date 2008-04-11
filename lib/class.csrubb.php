@@ -146,6 +146,36 @@ src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
 		return $html;
 	}
 	
+	protected function ubb_groep($parameters){
+		$content=$this->parseArray(array('[/groep]'), array());
+		//if(isset($parameters));
+		require_once('class.groep.php');
+		$groep=new Groep((int)$content);
+		//TODO: zet deze style-meuk in de style-sheet.
+		//TODO: zet dit in een smarty-template
+		$html='<div class="groep_embed" style="margin: 10px; padding: 5px 10px; border: 1px solid black;">';
+		$html.='<table style="float: right">';
+		foreach($groep->getLeden() as $groeplid){
+			$html.='<tr><td>'.$this->lid->getNaamLink($groeplid['uid']).'</td>';
+			if($groep->toonFuncties()){ 
+				$html.='<td><em>'.mb_htmlentities($groeplid['functie']).'</em></td>';
+			}
+			$html.='</tr>';
+		}
+		$html.='</table>';
+		$html.='<h2>'.$groep->getNaam().'</h2><p>'.$groep->getSbeschrijving().'</p><br />';
+		if($groep->isAanmeldbaar() AND $groep->magAanmelden()){
+			$html.='<form action="/groepen/'.$groep->getType().'/'.$groep->getId().'/aanmelden" method="post" id="aanmeldForm">U kunt zich hier aanmelden voor deze groep.';
+			if($groep->getToonFuncties()!='niet'){
+				$html.='Geef ook een opmerking/functie op:<br /><input type="text" name="functie" />';
+			}else{
+				$html.='<br />';
+			}
+			$html.='<input type="submit" value="aanmelden" /></form>';
+		}
+		$html.='<div class="clear">&nbsp;</div></div>';
+		return $html;
+	}
 	function ubb_1337(){
         $html = $this->parseArray(array('[/1337]'), array());
         
