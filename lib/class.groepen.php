@@ -71,10 +71,11 @@ class Groepen{
 				groeplid.uid AS uid, groeplid.op AS op, groeplid.functie AS functie, groeplid.prioriteit AS prioriteit 
 			FROM groep
 			LEFT JOIN groeplid ON(groep.id=groeplid.groepid) 
+			INNER JOIN lid ON(groeplid.uid=lid.uid)
 			WHERE groep.gtype=".$this->getId()."
 			  AND groep.zichtbaar='zichtbaar'
 			  AND (".$htotFilter.")
-			ORDER BY ".$sort."groep.snaam ASC, groeplid.prioriteit ASC, groeplid.uid ASC;";
+			ORDER BY ".$sort."groep.snaam ASC, groeplid.prioriteit ASC, lid.achternaam ASC, lid.voornaam ASC;";
 		$rGroepen=$db->query($qGroepen);
 		//nu een beetje magic om een stapeltje groepobjecten te genereren:
 		$currentGroepId=null;
