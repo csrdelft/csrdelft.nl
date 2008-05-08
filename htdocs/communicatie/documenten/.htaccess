@@ -1,3 +1,5 @@
+RewriteEngine On
+
 #documenten toevoegen
 RewriteRule ^toevoegen$ toevoegen.php
 RewriteRule ^toevoegen/$ toevoegen.php

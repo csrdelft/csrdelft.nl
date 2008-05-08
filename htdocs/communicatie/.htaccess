@@ -1,5 +1,6 @@
 RewriteEngine On
 
+# Als we naar /communicatie/ gaan worden we doorgestuurd naar het forum
 RewriteRule ^/?$ /communicatie/forum/ [R]
 
 # Ledenlijst

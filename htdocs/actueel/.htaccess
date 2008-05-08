@@ -1,5 +1,6 @@
 RewriteEngine On
 
+# Als we naar /actueel/ gaan worden we doorgestuurd naar de mededelingen
 RewriteRule ^/?$ /actueel/mededelingen/ [R]
 
 # Sjaarsacties
