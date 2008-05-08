@@ -1,3 +1,10 @@
+<div style="float: right; margin: 0 0 10px 10px;">
+	<a href="/actueel/maaltijden/voorkeuren.php" title="Instellingen">Instellingen</a>
+	{if $lid->hasPermission('P_MAAL_MOD')}
+		| <a href="/actueel/maaltijden/beheer/" title="Beheer">Beheer</a>
+		| <a href="/actueel/maaltijden/saldi.php" title="Saldo's updaten">Saldo's updaten</a>
+	{/if}
+</div>
 <h1>Maaltijden</h1>
 <p>
 Op deze pagina kunt u zich inschrijven voor maaltijden op Confide. Onderstaande tabel toont de maaltijden in de
@@ -22,7 +29,7 @@ uitprinten. Vanaf dat moment zal deze ketzer u niet meer willen aan- of afmelden
 		{foreach from=$maal.zelf.maaltijden item=maaltijd}
 			<tr>
 				{if $toonLijsten}
-					<td><a href="/maaltijden/lijst/{$maaltijd.id}" class="knop">lijst printen</a></td>
+					<td><a href="/actueel/maaltijden/lijst/{$maaltijd.id}" class="knop">lijst printen</a></td>
 				{/if}
 				<td>{$maaltijd.datum|date_format:$datumFormaat}</td>
 				<td>{$maaltijd.tekst|escape:'html'}</td>

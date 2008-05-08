@@ -53,7 +53,7 @@ class Groep{
 		}else{
 			//een snaam is niet uniek. Enkel voor h.t. groepen is de snaam uniek, niet voor
 			//o.t. vs. h.t. of bij o.t. onderling
-			$wherePart="groep.snaam='".$db->escape($groepId)."' AND status='ht'";
+			$wherePart="groep.snaam='".$db->escape($groepId)."' AND groep.status='ht'";
 		}
 		$qGroep="
 			SELECT 
@@ -366,6 +366,19 @@ class Groep{
 		}
 		return $return;
 		
+	}
+	/*
+	 * Deze functie geeft een array terug met functies en aantallen.
+	 */
+	public function getFunctieAantal(){
+		$functies=array();
+		foreach($this->leden as $lid){
+			if(!isset($functies[$lid['functie']])){
+				$functies[$lid['functie']]=0;
+			}
+			$functies[$lid['functie']]++;
+		}
+		return $functies;
 	}
 	public static function getGroepgeschiedenis($snaam, $limiet=10){
 		$db=MySql::get_MySql();

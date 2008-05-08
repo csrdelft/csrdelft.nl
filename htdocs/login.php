@@ -16,7 +16,7 @@ if (isset($_POST['url']) and preg_match("/^[-\w?&=.\/]+$/", $_POST['url'])
 	if ($lid->login(strval($_POST['user']), strval($_POST['pass']), $checkip)) {
 		header("Location: ". CSR_SERVER . $_POST['url']);
 	} else {
-		$_SESSION['auth_error'] = "Ongeldige gebruiker of wachtwoord!";
+		$_SESSION['auth_error'] = "Login gefaald!";
 		header("Location: ". CSR_SERVER . $_POST['url']);
 	}
 }

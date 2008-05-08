@@ -74,7 +74,7 @@ class VerjaardagContent extends SimpleHTML {
 							foreach ($verjaardagen as $verjaardag){
 								if ($verjaardag['gebdag'] == $dezedag and $maand == $dezemaand) echo '<span class="waarschuwing">';
 								echo $verjaardag['gebdag'] . " ";
-								echo $this->_lid->getNaamLink($verjaardag['uid'])."<br />\n";
+								echo $this->_lid->getNaamLink($verjaardag['uid'], 'full', false, $verjaardag)."<br />\n";
 								if ($verjaardag['gebdag'] == $dezedag and $maand == $dezemaand) echo "</span>";
 							}
 							echo "<br /></td>\n";
@@ -89,7 +89,7 @@ class VerjaardagContent extends SimpleHTML {
 				
 			case 'komende10':
 				$aVerjaardagen=$this->_lid->getKomende10Verjaardagen();
-				echo '<div id="komendeVerjaardagen"><a href="/intern/verjaardagen.php" class="kopje">Komende verjaardagen:</a><br />';
+				echo '<h1>Verjaardagen</h1>';
 				for ($i=0; $i<sizeOf($aVerjaardagen); $i++) {					
 					$aVerjaardag = $aVerjaardagen[$i];
 
@@ -115,8 +115,8 @@ class VerjaardagContent extends SimpleHTML {
 					
 					echo $tekst;
 					$tekst = '';
+					echo '<div class="item">'.date('d-m', strtotime($aVerjaardag['gebdatum'])).' '.$this->_lid->getNaamLink($aVerjaardag['uid'], 'civitas', true, $aVerjaardag).'</div>';
 				}
-				echo '</div>';
 				break;
 		}
 	}

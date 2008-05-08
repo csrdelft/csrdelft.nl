@@ -22,7 +22,8 @@ class csrdelft extends SimpleHTML {
 	//standaard geen zijkolom...
 	var $_zijkolom=false;
 	
-	public $stylesheets=array();
+	private $_stylesheets=array();
+	private $_scripts=array();
 	
 	var $_titel='Geen titel gezet.';
 	var $_waarbenik=false;
@@ -42,14 +43,11 @@ class csrdelft extends SimpleHTML {
 		
 	}
 	
-	function addStylesheet($sheet){ $this->stylesheets[]=$sheet; }
-	function getStylesheets(){
-		$return='';
-		foreach($this->stylesheets as $stylesheet){
-			$return='<link rel="stylesheet" href="/layout/'.$stylesheet.'" type="text/css" />';
-		}
-		return $return;
-	}
+	function addStylesheet($sheet){ $this->_stylesheets[]=$sheet; }
+	function getStylesheets(){		return $this->_stylesheets; }
+	
+	function addScript($script){ 	$this->_scripts[]=$script; }
+	function getScripts(){			return $this->_scripts; }
 	
 	function getTitel(){ return mb_htmlentities($this->_titel); }
 	function setZijkolom($zijkolom){
@@ -60,30 +58,23 @@ class csrdelft extends SimpleHTML {
 	function getBreed(){
 		if($this->_zijkolom===false){ echo 'Breed'; }else{ echo ''; }
 	}
-	
-	function viewWaarbenik(){
-		if(is_object($this->_waarbenik)){
-			echo 'bla';
-		}elseif(method_exists($this->_body, 'viewWaarbenik')){
-			echo '&raquo; ';
-			$this->_body->viewWaarbenik();
-		}else{
-			//uit de menu-array halen
-			$this->_menu->viewWaarbenik();
-		}
-	}
+
 	function view() {
 		header('Content-Type: text/html; charset=UTF-8');
 		$csrdelft=new Smarty_csr();
 		$csrdelft->assign_by_ref('csrdelft', $this);
 		
 		//SocCie-saldi, MaalCie-saldi
-		$saldi=$this->_lid->getSaldi($this->_lid->getUid(), true);
+		$saldi=$this->_lid->getSaldi();
 		$csrdelft->assign('saldi', $saldi);
 		
 		$csrdelft->caching=false;
 		$csrdelft->display('csrdelft.tpl');
 		
+		if(defined('DEBUG') AND $this->_lid->hasPermission('P_ADMIN')){
+			$db=MySql::get_MySql();
+			echo '<pre>'.$db->getDebug().'</pre>';
+		}
 		//als er een error is geweest, die unsetten...
 		if(isset($_SESSION['auth_error'])){ unset($_SESSION['auth_error']); }
 	}

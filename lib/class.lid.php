@@ -61,7 +61,8 @@ class Lid {
 			$this->login('x999','x999',false);
 		}
 		# experimentele logfunctie
-		$this->logBezoek();
+		if(!$this instanceof Profiel){ $this->logBezoek(); }
+	
 	}
 
 	### public ###
@@ -222,65 +223,84 @@ class Lid {
 	*		return: 				string naam
 	*
 	*/
-	function getNaamLink($uid, $vorm='full', $link=false, $aNaam=false, $bHtmlentities=true){
+	//we houden een cache bij met daarin:
+	// nickname, voornaam, tussenvoegsel, achternaam, geslacht, status, postfix
+
+	private function addLidToCache($uid, $naamArray){
+		$lidCache=LidCache::get_LidCache();
+		$lidCache->setLid($uid, $naamArray);
+	}
+	private function getLidFromCache($uid){
+		$lidCache=LidCache::get_LidCache();
+		return $lidCache->getLid($uid);
+	}
+
+	public function getNaamLink($uid, $vorm='full', $link=false, $aNaam=false, $bHtmlentities=true){
 		//als er geen uid is opgegeven, ook geen link of naam teruggeven.
 		if($uid=='' AND !$this->isValidUid($uid)){ return ''; }
 		$sNaam='';
-		//als er geen array wordt meegegeven, of de array is niet compleet genoeg om een naam te tonen, dan de
-		//gegevens ophalen uit de database met het opgegeven uid.
-		if(!isset($aNaam['voornaam'], $aNaam['achternaam'], $aNaam['tussenvoegsel'], $aNaam['nickname'], $aNaam['geslacht'], $aNaam['status'], $aNaam['postfix'])){
-			//betreft het de huidige gebruiker? dan de array van het profiel raadplegen
-			if($uid == $this->_profile['uid']){
-				$aNaam=$this->_profile;
-			}else{
-				$rNaam=$this->_db->select(
-					"SELECT 
-						nickname, voornaam, tussenvoegsel, achternaam, status, geslacht, postfix 
-					FROM lid WHERE uid='".$uid."' LIMIT 1;");
-				if($rNaam!==false and $this->_db->numRows($rNaam)==1){
-					$aNaam=$this->_db->next($rNaam);
+
+		if($this->getLidFromCache($uid)===false){
+			//als er geen array wordt meegegeven, of de array is niet compleet genoeg om een naam te tonen, dan de
+			//gegevens ophalen uit de database met het opgegeven uid.
+			if(!isset($aNaam['voornaam'], $aNaam['achternaam'], $aNaam['tussenvoegsel'], $aNaam['nickname'], $aNaam['geslacht'], $aNaam['status'], $aNaam['postfix'])){
+				//er bestaat en regeltje in de cache, die gebruiken
+				if($uid==$this->_profile['uid']){
+					$this->addLidToCache($uid, $this->_profile);
 				}else{
-					return 'onbekend';
+					//Bestaat het lid nog niet in de cache, dan ophalen uit de db.
+					$this->addLidToCache($uid, Lid::getNaamArray($uid));
 				}
+			}else{
+				//als de meegegeven array wel compleet is die ook in de cache rammen.
+				$this->addLidToCache($uid, $aNaam);
 			}
 		}
+		$aNaam=$this->getLidFromCache($uid);
+		
 		$sVolledigeNaam=$aNaam['voornaam'].' ';
 		if($aNaam['tussenvoegsel']!='') $sVolledigeNaam.=$aNaam['tussenvoegsel'].' ';
 		$sVolledigeNaam.=$aNaam['achternaam'];
 
 		//link tonen als dat gevraagd wordt EN als gebruiker is ingelogged.
 		if($link AND $this->hasPermission('P_LOGGED_IN')){ 
-			$sNaam.='<a href="/intern/profiel/'.$uid.'" title="'.$sVolledigeNaam.'">'; 
+			$sNaam.='<a href="/communicatie/profiel/'.$uid.'" title="'.$sVolledigeNaam.'" class="'.$aNaam['status'].'">'; 
 		}
 		//als $vorm==='user', de instelling uit het profiel gebruiken voor vorm
 		if($vorm=='user'){
 			$vorm=$this->getForumNaamInstelling();
 		}
-		//civitas of niksnamen, enkel relevant voor het forum, verder is gewoon voornaam [tussenvoegsel] achternaam
-		//nog een optie.
-		if($vorm==='nick'){
-			if($aNaam['nickname']!=''){
-				$sTmpNaam=$aNaam['nickname'];
-			}else{
+		switch($vorm){
+			case 'nick':
+				if($aNaam['nickname']!=''){
+					$sTmpNaam=$aNaam['nickname'];
+				}else{
+					$sTmpNaam=$sVolledigeNaam;
+				}		
+			break;
+			//achternaam, voornaam [tussenvoegsel] voor de streeplijst
+			case 'streeplijst':
+				$sTmpNaam=$aNaam['achternaam'].', '.$aNaam['voornaam'];
+				if($aNaam['tussenvoegsel'] != '') $sTmpNaam.=' '.$aNaam['tussenvoegsel'];
+			break;
+			case 'full':
 				$sTmpNaam=$sVolledigeNaam;
-			}			
-		}elseif($vorm==='streeplijst'){ // achternaam, voornaam [tussenvoegsel] voor de streeplijst
-			$sTmpNaam=$aNaam['achternaam'].', '.$aNaam['voornaam'];
-			if($aNaam['tussenvoegsel'] != '') $sTmpNaam.=' '.$aNaam['tussenvoegsel'];
-		}elseif($vorm==='full' OR $aNaam['status']=='S_KRINGEL' OR $aNaam['status']=='S_NOBODY'){
-			$sTmpNaam=$sVolledigeNaam;	
-		}elseif($vorm==='civitas'){
-			if($aNaam['status']=='S_NOVIET'){
-				$sTmpNaam='Noviet '.$aNaam['voornaam'];
-			}else{
-				$sTmpNaam=($aNaam['geslacht']=='v') ? 'Ama. ' : 'Am. ';
-				if($aNaam['tussenvoegsel'] != '') $sTmpNaam.=ucfirst($aNaam['tussenvoegsel']).' ';
-				$sTmpNaam.=$aNaam['achternaam'];				
-				if($aNaam['postfix'] != '') $sTmpNaam.=' '.$aNaam['postfix'];
-				if($aNaam['status']=='S_OUDLID') $sTmpNaam.='';
-			}
-		}else{
-			$sTmpNaam='ongeldige vorm';
+			break;
+			case 'civitas':
+				if($aNaam['status']=='S_NOVIET'){
+					$sTmpNaam='Noviet '.$aNaam['voornaam'];
+				}elseif($aNaam['status']=='S_KRINGEL' OR $aNaam['status']=='S_NOBODY'){
+					$sTmpNaam=$sVolledigeNaam;
+				}else{
+					$sTmpNaam=($aNaam['geslacht']=='v') ? 'Ama. ' : 'Am. ';
+					if($aNaam['tussenvoegsel'] != '') $sTmpNaam.=ucfirst($aNaam['tussenvoegsel']).' ';
+					$sTmpNaam.=$aNaam['achternaam'];				
+					if($aNaam['postfix'] != '') $sTmpNaam.=' '.$aNaam['postfix'];
+					if($aNaam['status']=='S_OUDLID') $sTmpNaam.=' •';
+				}
+			break;
+			default:
+				$sTmpNaam='Formaat in $vorm is onbekend.';
 		}
 		if($bHtmlentities){ 
 			$sNaam.=mb_htmlentities($sTmpNaam); 
@@ -288,8 +308,23 @@ class Lid {
 			$sNaam.=$sTmpNaam; 
 		}
 		if($link AND $this->hasPermission('P_LOGGED_IN')){ $sNaam.='</a>'; }
+		
 		return $sNaam;	
 	}	
+	public static function getNaamArray($uid){
+		$db=MySql::get_MySql();
+		$qNaam="
+			SELECT nickname, voornaam, tussenvoegsel, achternaam, status, geslacht, postfix 
+			FROM lid WHERE uid='".$uid."' LIMIT 1;";
+		$rNaam=$db->query($qNaam);
+		if($rNaam!==false and $db->numRows($rNaam)==1){
+			return $db->next($rNaam);
+		}else{
+			//lid bestaat niet in de db, dus we geven 'onbekend' terug.
+			return 'onbekend';
+		}
+	}
+	
 	
 	function getFullName($uid='') {
 		if($uid==''){ $uid=$this->getUid(); }
@@ -401,9 +436,6 @@ class Lid {
 			$error = "Het nieuwe wachtwoord bevat ongeldige karakters... :-(";
 		} elseif (preg_match('/^[0-9]*$/', $passwd)) {
 			$error = "Het nieuwe wachtwoord moet ook letters of leestekens bevatten... :-|";
-		//eisen zijn wat zwaar, deze er even uit halen
-		//} elseif (preg_match('/^[A-Za-z]*$/', $passwd)) {
-		//	$error = "Het nieuwe wachtwoord moet ook een cijfer of leesteken bevatten... :-S";
 		} elseif ($uid == $passwd) {
 			$error = "Het wachtwoord mag niet gelijk zijn aan je gebruikersnaam! :-@";
 		} elseif ($sim_uid > 60) {
@@ -499,7 +531,7 @@ class Lid {
 					mobiel, email, geslacht, voornamen, icq, msn, skype, jid, website, beroep, studie, studiejaar, lidjaar, 
 					gebdatum, moot, kring, kringleider, motebal, 
 					o_adres, o_postcode, o_woonplaats, o_land, o_telefoon, 
-					kerk, muziek, eetwens
+					kerk, muziek, eetwens, status
 				FROM 
 					lid 
 				WHERE 
@@ -560,7 +592,7 @@ class Lid {
 		}
 		
 		if($imgTag===true OR $imgTag==='small'){
-			$html='<img src="'.$pasfoto.'" ';
+			$html='<img class="pasfoto" src="'.$pasfoto.'" ';
 			if($imgTag==='small'){
 				$html.='style="width: 100px;" ';
 			}
@@ -599,8 +631,8 @@ class Lid {
 		$maand = (int)$maand; $dag = (int)$dag; $verjaardagen = array();
 		$query="
 			SELECT 
-				uid, voornaam, tussenvoegsel, achternaam, geslacht, email, 
-				EXTRACT( DAY FROM gebdatum) as gebdag
+				uid, voornaam, tussenvoegsel, achternaam, nickname, postfix, geslacht, email, 
+				EXTRACT( DAY FROM gebdatum) as gebdag, status
 			FROM 
 				lid 
 			WHERE 
@@ -622,7 +654,7 @@ class Lid {
 	function getKomende10Verjaardagen() {
 		$query="
 			SELECT
-				uid, voornaam, tussenvoegsel, achternaam, status, geslacht, postfix, gebdatum,
+				uid, nickname, voornaam, tussenvoegsel, achternaam, status, geslacht, postfix, gebdatum,
 				ADDDATE(
 					gebdatum, 
 					INTERVAL TIMESTAMPDIFF(
@@ -773,20 +805,16 @@ class Lid {
 		$rSaldo=$this->_db->query($query);
 		if($rSaldo!==false AND $this->_db->numRows($rSaldo)){
 			$aSaldo=$this->_db->next($rSaldo);
-			if($alleenRood){
-				$return=false;
-				if($aSaldo['soccieSaldo']<0){
-					$return[]=array('naam' => 'SocCie', 
-						'saldo' => sprintf("%01.2f",$aSaldo['soccieSaldo']));
-				}
-				if($aSaldo['maalcieSaldo']<0){
-					$return[]=array('naam' => 'MaalCie', 
-						'saldo' => sprintf("%01.2f",$aSaldo['maalcieSaldo']));
-				}
-				return $return;
-			}else{
-				return $aSaldo;
+			$return=false;
+			if(!($alleenRood && $aSaldo['soccieSaldo']<0)){
+				$return[]=array('naam' => 'SocCie', 
+					'saldo' => sprintf("%01.2f",$aSaldo['soccieSaldo']));
 			}
+			if(!($alleenRood && $aSaldo['maalcieSaldo']<0)){
+				$return[]=array('naam' => 'MaalCie', 
+					'saldo' => sprintf("%01.2f",$aSaldo['maalcieSaldo']));
+			}
+			return $return;
 		}else{
 			return false;
 		}
@@ -850,6 +878,64 @@ class Lid {
 		if(!preg_match('/stats.php/', $url) AND $ip!='0.0.0.0'){
 			$this->_db->query($sLogQuery);
 		}
+	}
+}
+/*
+ * LidCache
+ * 
+ * Wrapper voor memcache met fallback naar een array. classe is een singleton.
+ */
+class LidCache{
+	//instantie van de huidige classe.
+	private static $lidCache;
+	
+	//memcache-object
+	private $memcache;
+	private $connected=false;
+	
+	//als er geen verbinding is in deze array een run-time-only cache bijhouden.
+	private $fallbackCache=array();
+	
+	private function __construct(){
+		//eerst even controleren of de Memcache-classe aanwezig is, zoniet gewoon terugvallen naar
+		//run-time-only caching.
+		if(class_exists('Memcache')){
+			$this->memcache=new Memcache;
+			$this->connected=@$this->memcache->connect('unix://'.DATA_PATH.'/csrdelft-cache.socket', 0);
+		}
+		
+	}
+	
+	public static function get_LidCache(){
+		//als er nog geen instantie gemaakt is, die nu maken
+		if(!isset(LidCache::$lidCache)){
+			LidCache::$lidCache = new LidCache();
+		}
+		return LidCache::$lidCache;
+	}
+	
+	public function setLid($uid, $aNaam){
+		//alleen de dingen in de cache zetten die we willen gebruiken voor de namen.
+		$aNaam=array_get_keys($aNaam, array('nickname', 'voornaam', 'tussenvoegsel', 'achternaam', 'geslacht', 'status', 'postfix'));
+		if($this->connected){
+			$this->memcache->set($uid, $aNaam);
+		}else{
+			$this->fallbackCache[$uid]=$aNaam;
+		}
+	}
+	
+	public function getLid($uid){
+		if($this->connected){
+			return $this->memcache->get($uid);
+		}else{
+			if(isset($this->fallbackCache[$uid])){
+				return $this->fallbackCache[$uid];
+			}
+		}
+		return false;
+	}
+	public function getStats(){
+		return $this->memcache->getStats();
 	}
 }
 ?>

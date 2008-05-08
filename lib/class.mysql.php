@@ -14,6 +14,7 @@ class MySql{
 
 	//resource handle
 	private $_db;
+	private $querys=array();
 	
 	private function __construct(){ $this->connect(); }
   
@@ -41,6 +42,7 @@ class MySql{
 
  	# Retourneert het MySql resultaat bij de opgegeven Query
 	public function query($query) {
+		$this->debug($query);
 		return mysql_query($query, $this->_db);
 	}
 
@@ -148,6 +150,18 @@ class MySql{
 	}
 	public function dbResource() {
 		return $this->_db;
+	}
+	function debug($string){
+		if(defined('DEBUG')){
+			$string=str_replace(array("\r\n", "\n", "\t", '  ', '   '), ' ', $string);
+			if(mysql_error()!=''){
+				$string.="\nmysql_error(): ".mysql_error();
+			}
+			$this->querys[]=$string;
+		}
+	}
+	public function getDebug(){
+		return 'MySql query '.print_r($this->querys, true);
 	}
 }
 
