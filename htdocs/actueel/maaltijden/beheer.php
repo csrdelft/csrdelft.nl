@@ -24,7 +24,7 @@ $beheer = new MaaltijdbeheerContent($lid, $maaltrack);
 # verwijderen we een maaltijd?
 if(isset($_GET['verwijder']) AND $_GET['verwijder']==(int)$_GET['verwijder'] AND $_GET['verwijder']!=0){
 	$maaltrack->removeMaaltijd($_GET['verwijder']);
-	header('location: '.CSR_ROOT.'maaltijden/beheer/');
+	header('location: '.CSR_ROOT.'actueel/maaltijden/beheer/');
 	exit;
 }
 
@@ -40,13 +40,13 @@ if(isset($_POST['maalid'], $_POST['datum'], $_POST['tekst'], $_POST['limiet'], $
 	if($maalid==0){
 		if($maaltrack->addMaaltijd($datum, $_POST['tekst'], $_POST['abo'], 
 				$_POST['tp'], $_POST['koks'], $_POST['afwassers'], $_POST['theedoeken'], $_POST['limiet'])){
-			header('location: '.CSR_ROOT.'maaltijden/beheer/');
+			header('location: '.CSR_ROOT.'actueel/maaltijden/beheer/');
 			exit;
 		}
 	}else{
 		if($maaltrack->editMaaltijd($maalid, $datum, $_POST['tekst'], $_POST['abo'], 
 				$_POST['tp'], $_POST['koks'], $_POST['afwassers'], $_POST['theedoeken'],  $_POST['limiet'])){
-			header('location: '.CSR_ROOT.'maaltijden/beheer/');
+			header('location: '.CSR_ROOT.'actueel/maaltijden/beheer/');
 			exit;
 		}
 	}
