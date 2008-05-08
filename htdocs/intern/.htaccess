@@ -1,0 +1,36 @@
+RewriteEngine on
+
+RewriteRule ^csrmail/(.*) /intern/courant/$1 [R=301]
+
+RewriteRule ^eetplan/$ eetplan.php
+RewriteRule ^eetplan/sjaars/([0-9]*) eetplan.php?pheutID=$1
+RewriteRule ^eetplan/huis/([0-9]*) eetplan.php?huisID=$1
+
+RewriteRule ^profiel/([0-9a-z]*)$ profiel.php?uid=$1
+RewriteRule ^profiel/([0-9a-z]*)/([a-z]*)$ profiel.php?uid=$1&a=$2
+
+RewriteRule ^sjaarsacties/?$ sjaarsacties.php
+
+RewriteRule ^mekellounge/?$ mekellounge.php
+
+#documenten-pagina
+RewriteRule ^documenten$ documenten/documenten.php
+RewriteRule ^documenten/$ documenten/documenten.php
+
+#documenten toevoegen
+RewriteRule ^documenten/toevoegen$ documenten/toevoegen.php
+RewriteRule ^documenten/toevoegen/$ documenten/toevoegen.php
+RewriteRule ^documenten/toevoegen/gelukt$ documenten/documenten.php?mode=uploaded&successful=true
+
+#toevoegen v/e extentie
+RewriteRule ^documenten/toevoegen/([0-9]+)$ documenten/documenten.php?id=$1&mode=add
+RewriteRule ^documenten/toevoegen/([0-9]+)/([0-9]+)$ documenten/documenten.php?id=$1&mode=add&categorie=$2
+
+#enkele categorie weergeven
+RewriteRule ^documenten/categorie/([0-9]+)$ documenten/documenten.php?categorie=$1
+RewriteRule ^documenten/bewerken/([0-9]+)/([0-9]+)$ documenten/documenten.php?id=$1&mode=edit&categorie=$2
+
+#het neerladen, bewerken en verwijderen van documenten
+RewriteRule ^documenten/neerladen/([0-9]+)$ documenten/neerladen.php?id=$1
+RewriteRule ^documenten/bewerken/([0-9]+)$ documenten/documenten.php?id=$1&mode=edit
+RewriteRule ^documenten/verwijderen/([0-9]+)$ documenten/documenten.php?id=$1&mode=del

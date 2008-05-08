@@ -52,7 +52,6 @@ class Saldi{
 	public static function putMaalcieCsv($key='CSVSaldi'){
 		$db=MySql::get_MySql();
 		$lid=Lid::get_lid();
-		$sStatus='';
 		if(is_array($_FILES) AND isset($_FILES[$key])){
 			//bestandje uploaden en verwerken...
 			$bCorrect=true;
@@ -94,7 +93,8 @@ class Saldi{
 				$sStatus='Helaas, er ging iets mis. Controleer uw bestand! mysql gaf terug <'.mysql_error().'>';
 			}
 		}
-		return $sStatus;		
+		return $sStatus;
+		
 	}
 	
 	public static function getSaldi($uid, $alleenRood=false){

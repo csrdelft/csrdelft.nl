@@ -32,8 +32,8 @@ class ForumOnderwerpContent extends SimpleHTML {
 		
 	}
 	function viewWaarbenik(){
-		$sTitel='<a href="/communicatie/forum/">Forum</a>'.
-			' &raquo; <a href="/communicatie/forum/categorie/'.$this->_forum->getCatID().'">'.$this->_forum->getCatTitel().'</a>';
+		$sTitel='<a href="/forum/">Forum</a>'.
+			' &raquo; <a href="/forum/categorie/'.$this->_forum->getCatID().'">'.$this->_forum->getCatTitel().'</a>';
 		$topicTitel=$this->_forum->getTitel();
 		
 		if(strlen($topicTitel)>70){ $topicTitel=substr($topicTitel, 0, 68).'...'; }
@@ -48,18 +48,15 @@ class ForumOnderwerpContent extends SimpleHTML {
 	}
 	function view(){
 		if($this->_forum->getPosts()===false){
-			echo '<h2><a href="/communicatie/forum/" class="forumGrootlink">Forum</a> &raquo; Foutje</h2>';
-			echo 'Dit gedeelte van het forum is niet beschikbaar voor u, u zult moeten inloggen, of terug gaan naar <a href="/communicatie/forum/">het forum</a>';
+			echo '<h2><a href="/forum/" class="forumGrootlink">Forum</a> &raquo; Foutje</h2>';
+			echo 'Dit gedeelte van het forum is niet beschikbaar voor u, u zult moeten inloggen, of terug gaan naar <a href="/forum/">het forum</a>';
 			if($this->_forum->isModerator()){ 
 				echo '<h2>Debuginformatie</h2><pre>'.print_r($this, true).'</pre>'; 
 			}
 
 		}else{
-			$navlinks='<div class="forumNavigatie"><a href="/communicatie/forum/" class="forumGrootlink">Forum</a> &raquo; 
-				<a href="/communicatie/forum/categorie/'.$this->_forum->getCatID().'" class="forumGrootlink">
-					'.mb_htmlentities($this->_forum->getCatTitel()).'</a><br />
-				 <h1>'.mb_htmlentities(wordwrap($this->_forum->getTitel(), 80, "\n", true)).'</h1></div>';
-			echo $navlinks;
+			$titel=mb_htmlentities(wordwrap($this->_forum->getTitel(), 80, "\n", true));
+			echo '<h2>'.$titel.'</h2>';
 			//eventuele foutmelding weergeven:
 			echo $this->getMelding();
 			//topic mod dingen:
@@ -68,24 +65,24 @@ class ForumOnderwerpContent extends SimpleHTML {
 				echo '<legend>Modereren</legend>';
 				//topic verwijderen
 				echo '<div style="float: left; width: 30%;">';
-				echo '<a href="/communicatie/forum/verwijder-onderwerp/'.$this->_forum->getID().'" onclick="return confirm(\'Weet u zeker dat u dit topic wilt verwijderen?\')" class="knop"><img src="'.CSR_PICS.'forum/verwijderen.png" alt="verwijderen" /> verwijderen</a> <br /><br />';
+				echo '<a href="/forum/verwijder-onderwerp/'.$this->_forum->getID().'" onclick="return confirm(\'Weet u zeker dat u dit topic wilt verwijderen?\')" class="knop"><img src="'.CSR_PICS.'forum/verwijderen.png" alt="verwijderen" /> verwijderen</a> <br /><br />';
 				if($this->_forum->isOpen()){
 					$opensluit='sluiten (geen reactie mogelijk)';
 				}else{
 					$opensluit='weer openen (reactie mogelijk)';
 				}
-				echo ' <a href="/communicatie/forum/openheid/'.$this->_forum->getID().'" class="knop"><img src="'.CSR_PICS.'forum/slotje.png" alt="Slotje" /> '.$opensluit.'</a><br /><br />';
+				echo ' <a href="/forum/openheid/'.$this->_forum->getID().'" class="knop"><img src="'.CSR_PICS.'forum/slotje.png" alt="Slotje" /> '.$opensluit.'</a><br /><br />';
 				
 				if($this->_forum->isPlakkerig()){
 					$plakkerigheid='verwijder plakkerigheid';
 				}else{
 					$plakkerigheid='maak plakkerig';
 				}
-				echo ' <a href="/communicatie/forum/plakkerigheid/'.$this->_forum->getID().'" class="knop"><img src="'.CSR_PICS.'forum/plakkerig.gif" alt="plakkerig" /> '.$plakkerigheid.'</a>';
+				echo ' <a href="/forum/plakkerigheid/'.$this->_forum->getID().'" class="knop"><img src="'.CSR_PICS.'forum/plakkerig.gif" alt="plakkerig" /> '.$plakkerigheid.'</a>';
 				echo '</div>';
 				echo '<div style="float: right; width: 60%;">';
 				//verplaatsen
-				echo '<form action="/communicatie/forum/verplaats/'.$this->_forum->getID().'/" method="post">';
+				echo '<form action="/forum/verplaats/'.$this->_forum->getID().'/" method="post">';
 				echo '<div>Verplaats naar: <br /> <select name="newCat">';
 				echo '<option value="ongeldig">... selecteer</option><optgroup>';
 				foreach($this->_forum->getCategories() as $cat){
@@ -99,7 +96,7 @@ class ForumOnderwerpContent extends SimpleHTML {
 				}
 				echo '</select> <input type="submit" value="opslaan" /></div></form>';
 				//titel aanpassen.
-				echo '<form action="/communicatie/forum/onderwerp/hernoem/'.$this->_forum->getID().'/" method="post"><div>';
+				echo '<form action="/forum/onderwerp/hernoem/'.$this->_forum->getID().'/" method="post"><div>';
 				echo 'Titel aanpassen: <br /><input type="text" name="titel" value="'.htmlspecialchars($this->_forum->getTitel()).'" style="width: 250px;" />';
 				echo ' <input type="submit" value="opslaan" /></div></form>';
 				echo '</div>';
@@ -135,7 +132,7 @@ class ForumOnderwerpContent extends SimpleHTML {
 				echo '<br />';
 				//citeer knop enkel als het topic open is en als men mag posten, of als men mod is.
 				if($this->_forum->magCiteren()){
-					echo ' <a href="/communicatie/forum/reactie/'.$aBericht['postID'].'#laatste"><img src="'.CSR_PICS.'forum/citeren.png" title="Citeer bericht" alt="Citeer bericht" style="border: 0px;" /></a> ';
+					echo ' <a href="/forum/reactie/'.$aBericht['postID'].'#laatste"><img src="'.CSR_PICS.'forum/citeren.png" title="Citeer bericht" alt="Citeer bericht" style="border: 0px;" /></a> ';
 				}
 				//bewerken als bericht van gebruiker is, of als men mod is.
 				if($this->_forum->magBewerken($aBericht['postID'])){
@@ -144,12 +141,12 @@ class ForumOnderwerpContent extends SimpleHTML {
 				}
 				//verwijderlinkje, niet als er maar een bericht in het onderwerp is.
 				if($this->_forum->isModerator()){
-					echo '<a href="/communicatie/forum/verwijder-bericht/'.$aBericht['postID'].'" onclick="return confirm(\'Weet u zeker dat u deze post wilt verwijderen?\')">';
+					echo '<a href="/forum/verwijder-bericht/'.$aBericht['postID'].'" onclick="return confirm(\'Weet u zeker dat u deze post wilt verwijderen?\')">';
 					echo '<img src="'.CSR_PICS.'forum/verwijderen.png" title="Verwijder bericht" alt="Verwijder bericht" style="border: 0px;" /></a>';
 				}
 				//goedkeuren van berichten
 				if($this->_forum->isModerator() AND $aBericht['zichtbaar']=='wacht_goedkeuring'){
-					echo '<br /><a href="/communicatie/forum/keur-goed/'.$aBericht['postID'].'" onclick="return confirm(\'Weet u zeker dat u dit bericht wilt goedkeuren?\')">bericht goedkeuren</a>';
+					echo '<br /><a href="/forum/keur-goed/'.$aBericht['postID'].'" onclick="return confirm(\'Weet u zeker dat u dit bericht wilt goedkeuren?\')">bericht goedkeuren</a>';
 					echo '<br /><a href="/tools/stats.php?ip='.$aBericht['ip'].'">ip-log</a>';
 				}
 				echo '</td>';
@@ -194,7 +191,7 @@ class ForumOnderwerpContent extends SimpleHTML {
 			}
 			echo '</td><td class="forumtekst">';
 			if($this->_forum->magToevoegen()){ 
-				echo '<form method="post" action="/communicatie/forum/toevoegen/'.$this->_forum->getID().'#laatste"><p>';
+				echo '<form method="post" action="/forum/toevoegen/'.$this->_forum->getID().'#laatste"><p>';
 				//berichtje weergeven voor niet-ingeloggede gebruikers dat ze een naam moeten vermelden.
 				if(!$this->_forum->isIngelogged()){
 					echo '<strong>Uw bericht wordt pas geplaatst nadat het bekeken en goedgekeurd is door de <a href="http://csrdelft.nl/groepen/commissie/PubCie.html">PubCie</a>. Het vermelden van <em>uw naam</em> verhoogt de kans dat dit gebeurt.</strong><br /><br />';
@@ -221,7 +218,12 @@ class ForumOnderwerpContent extends SimpleHTML {
 			echo '</td></tr></table>';
 			//linkjes voor het forum nogeens weergeven, maar alleen als het aantal berichten in het onderwerp groter is dan 4
 			if($this->_forum->getSize()>4){ 
-				echo $navlinks;
+			//navigatielinks voor in het forum weergeven:
+			echo '<h2><a href="/forum/" class="forumGrootlink">Forum</a> &raquo; 
+				<a href="/forum/categorie/'.$this->_forum->getCatID().'" class="forumGrootlink">
+					'.mb_htmlentities($this->_forum->getCatTitel()).'
+				</a> &raquo; 
+				'.mb_htmlentities($this->_forum->getTitel()).'</h2>';
 			}
 		}
 	}

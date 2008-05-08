@@ -22,9 +22,9 @@ class MaalTrack {
 	var $_error = '';
 	var $_proxyerror = '';
 
-	function MaalTrack() {
-		$this->_lid=Lid::get_lid();
-		$this->_db =MySql::get_MySql();
+	function MaalTrack(&$lid, &$db) {
+		$this->_lid =& $lid;
+		$this->_db =& $db;
 	}
 	
 	function getError() { $error = $this->_error; $this->_error = ""; return $error; }
@@ -264,11 +264,9 @@ class MaalTrack {
 	}
 	
 	# haalt maaltijden op en voegt extra info toe voor op de maaltijdenpagina
-	function getMaaltijden($van = 0, $tot = 0, $mootfilter = true, $uid=null) {
-		if($uid==null){
-			$uid = $this->_lid->getUid();
-		}
-		if($uid == 'x999'){ $mootfilter = false; }
+	function getMaaltijden($van = 0, $tot = 0, $mootfilter = true) {
+		$uid = $this->_lid->getUid();
+		if ($uid == 'x999'){ $mootfilter = false; }
 		
 		$maaltijdenRaw = $this->getMaaltijdenRaw($van,$tot,$mootfilter);
 		
@@ -444,21 +442,17 @@ class MaalTrack {
 	}
 	
 	# abo's opvragen voor huidige gebruiker
-	public function getAbo($uid=null) {
+	function getAbo() {
 		$abos = array();
-		if($uid==null){ 
-			$uid = $this->_lid->getUid(); 
-		}
-		$qAbo="
-			SELECT maaltijdabosoort.abosoort, maaltijdabosoort.tekst
-			FROM maaltijdabo, maaltijdabosoort
+		$uid = $this->_lid->getUid();
+		$result = $this->_db->select("
+			SELECT maaltijdabosoort.abosoort,maaltijdabosoort.tekst
+			FROM maaltijdabo,maaltijdabosoort
 			WHERE maaltijdabo.abosoort = maaltijdabosoort.abosoort
-				AND maaltijdabo.uid = '".$uid."';";
-		$rAbo=$this->_db->query($qAbo);
-		if (($rAbo !== false) and $this->_db->numRows($rAbo) > 0) {
-			while ($record = $this->_db->next($rAbo)){
-				$abos[$record['abosoort']] = $record['tekst']; 
-			}
+				AND maaltijdabo.uid = '{$uid}'
+		");
+		if (($result !== false) and $this->_db->numRows($result) > 0) {
+			while ($record = $this->_db->next($result)) { $abos[$record['abosoort']] = $record['tekst']; }
 		}
 		return $abos;
 	}

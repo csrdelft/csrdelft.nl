@@ -44,7 +44,7 @@ function bevestig(tekst){
 function forumEdit(post){
 	var scripttag=document.createElement('SCRIPT');
 	scripttag.type = 'text/javascript';
-	scripttag.src = '/communicatie/forum/bewerken/formulier/'+post;
+	scripttag.src = '/forum/bewerken/formulier/'+post;
 	document.body.appendChild(scripttag);
 }
 

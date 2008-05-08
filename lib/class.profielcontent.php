@@ -49,17 +49,7 @@ class ProfielContent extends SimpleHTML {
 		}
 		
 		$profhtml['foto']=$this->_lid->getPasfoto($this->_profiel['uid']);
-		
-		//woonoord
-		require_once('class.groepen.php');
-		$woonoord=Groepen::getGroepenByType(2, $this->_profiel['uid']);
-		if(count($woonoord)==1){
-			$woonoord=$woonoord[0];
-			$profhtml['woonoord']='<a href="/actueel/groepen/'.$woonoord['gtype'].'/'.$woonoord['id'].'"><strong>'.$woonoord['naam'].'</strong></a>:<br />';
-		}else{
-			$profhtml['woonoord']='<br />';
-		}
-		
+			
 		//soccie saldo
 		$profhtml['saldi']='';
 		//alleen als men het eigen profiel bekijkt.
@@ -89,38 +79,14 @@ class ProfielContent extends SimpleHTML {
 			$currentStatus=null;
 			foreach ($aGroepen as $groep) {
 				if($currentStatus!=$groep['status']){
-					if($currentStatus!=null){ 
-						$profhtml['groepen'].='</div>';
-					}
-					$profhtml['groepen'].='<div class="groep'.$groep['status'].'"><strong>'.str_replace(array('ht','ot'), array('h.t.', 'o.t.'),$groep['status']).' groepen:</strong><br />';
+					$profhtml['groepen'].='<br /><strong>'.str_replace(array('ht','ot'), array('h.t.', 'o.t.'),$groep['status']).' groepen:</strong><br />';
 					$currentStatus=$groep['status'];
 				}
 				$groepnaam=mb_htmlentities($groep['naam']);
-				$profhtml['groepen'].='<a href="/actueel/groepen/'.$groep['gtype'].'/'.$groep['id'].'/">'.$groepnaam."</a><br />\n";
-			}
-			$profhtml['groepen'].='</div>';				
+				$profhtml['groepen'].='<a href="/groepen/'.$groep['gtype'].'/'.$groep['id'].'/">'.$groepnaam."</a><br />\n";
+			}				
 		}
-		/*
-		 * Saldografiek gaan we
-		 * - gewoon en meteen weergeven bij het lid zelf.
-		 * - niet meteen weergeven voor SocCie en pubcie, alleen op verzoek.
-		 */
-		if($this->_profiel['uid']==$this->_lid->getUid()){
-			$profhtml['saldografiek']='<br /><img src="/tools/saldografiek.php?uid='.$this->_profiel['uid'].'" />';
-		}else{
-			require_once('class.groep.php');
-			$soccie=new Groep('SocCie');
-			if($this->_lid->hasPermission('P_ADMIN') OR $soccie->isLid($this->_lid->getUid())){
-				$profhtml['saldografiek']='<br /><a  onclick="document.getElementById(\'saldoGrafiek\').style.display = \'block\'" class="knop">Saldografiek weergeven</a><br />';
-				$profhtml['saldografiek'].='<br /><div id="saldoGrafiek" style="display: none;"><img src="/tools/saldografiek.php?uid='.$this->_profiel['uid'].'" /></div>';
-			}
-		}
-		
-		$profhtml['abos']=array();
-		require_once('class.maaltrack.php');
-		$maaltrack=new Maaltrack();
-		$profhtml['abos']=$maaltrack->getAbo($this->_profiel['uid']);
-	
+				
 		//de html template in elkaar draaien en weergeven
 		$profiel=new Smarty_csr();
 		
@@ -131,12 +97,7 @@ class ProfielContent extends SimpleHTML {
 		if($this->_profiel['uid']==$this->_lid->getUid()){
 			$profiel->caching=false;
 		}
-		if(!isset($_GET['skin'])){
-			$template='profiel_nieuw.tpl';	
-		}else{
-			$template='profiel.tpl';
-		}
-		$profiel->display($template, $this->_profiel['uid']);
+		$profiel->display('profiel.tpl', $this->_profiel['uid']);
 		
 		# gaan we een linkje afbeelden naar de edit-functie, of de editvakken?
 		if ( ($this->_lid->hasPermission('P_PROFIEL_EDIT') and $this->_profiel['uid'] == $this->_lid->getUid()) or 
@@ -145,12 +106,26 @@ class ProfielContent extends SimpleHTML {
 		}
 		if($this->_lid->hasPermission('P_ADMIN')){
 			echo '<a href="/tools/stats.php?uid='.$this->_profiel['uid'].'" class="knop">overzicht van bezoeken</a> ';
-			echo '<a href="/communicatie/profiel/'.$this->_profiel['uid'].'/wachtwoord" class="knop"
+			echo '<a href="/intern/profiel/'.$this->_profiel['uid'].'/wachtwoord" class="knop"
 				onclick="return confirm(\'Weet u zeker dat u het wachtwoord van deze gebruiker wilt resetten?\')">reset wachtwoord</a>';
 			echo '<br />'.$this->getMelding();
 		}
 		
-		
+		/*
+		 * Saldografiek gaan we
+		 * - gewoon en meteen weergeven bij het lid zelf.
+		 * - niet meteen weergeven voor SocCie en pubcie, alleen op verzoek.
+		 */
+		if($this->_profiel['uid']==$this->_lid->getUid()){
+			echo '<br /><img src="/tools/saldografiek.php?uid='.$this->_profiel['uid'].'" />';
+		}else{
+			require_once('class.groep.php');
+			$soccie=new Groep('SocCie');
+			if($this->_lid->hasPermission('P_ADMIN') OR $soccie->isLid($this->_lid->getUid())){
+				echo '<br /><a href="#" onclick="document.getElementById(\'saldoGrafiek\').style.display = \'block\'" class="knop">Saldografiek weergeven</a><br />';
+				echo '<br /><div id="saldoGrafiek" style="display: none;"><img src="/tools/saldografiek.php?uid='.$this->_profiel['uid'].'" /></div>';
+			}
+		}
 	}
 	function viewStateEdit(){
 		echo '<h2>Profiel wijzigen</h2>
@@ -159,7 +134,7 @@ class ProfielContent extends SimpleHTML {
 			een geldig formaat moeten hebben. Mochten er fouten in het gedeelte van uw profiel staan, 
 			dat u niet zelf kunt wijzigen, meld het dan bij de Vice-Abactis. <br /> <br />Als er 
 			<span class="waarschuwing">tekst in rode letters</span> wordt afgebeeld bij een veld, dan 
-			betekent dat dat de invoer niet geaccepteerd is, en dat u die zult moeten moeten aanpassen aan het
+			betekent dat dat de invoer niet geaccepteerd is, en dat u die zal moeten aanpassen aan het
 			gevraagde formaat. Een aantal velden kan leeg gelaten worden als er geen zinvolle informatie voor is.';
 				
 		#

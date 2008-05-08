@@ -1,41 +1,28 @@
-/**** GENERAL *****************************************************************/
-body, html, p, a, img, h1, h2, h3, h4, ul, li, form, fieldset, input {
-	margin: 0;
-	padding: 0;
-}div{border: 0px solid red;}
-
-body {
-	font-family : Verdana, Geneva, Arial, Helvetica, sans-serif;
-	font-size: 11px;
-}
-
-#container {
-	margin: 10px auto;
-	width: 1004px;
-	background: url('http://plaetjes.csrdelft.nl/worst/containerbg_top.png') no-repeat;
-}
-
+html, body{ font-size : 75.5%; }
+h1{	font-size: 1.6em; line-height: 1.6em; }
+h2{ font-size: 1.3em; line-height: 1.3em; }
+h3{ font-size: 1.25em; line-height: 1.25em; }
+h4{ font-size: 1em; line-height: 1em; }
 body, textarea, input, select, option, tr, td, th, div, p  { 
-	text-align: justify;
-}
+	font-size: 1em; line-height: 1.15em; text-align: justify;
+}	
 
-h1{
-	font-size: 1.6em;
-	margin-bottom: 0.2em;
+html, body{
+	margin: 0px; padding: 0px;
+	font-family : Verdana, Geneva, Arial, Helvetica, sans-serif;
+	background-color: #e1e5e5;
 }
-p{
-	margin-bottom: 1em;
-}
-
-
-a{color: #0a338d; text-decoration: none;}
-a:hover{color: #0a338d; text-decoration: underline;}
+h1{ margin-top: 5px; margin-bottom: 10px;}
+h2{	margin-top: 5px; margin-bottom: 4px; }
+h3{ margin-top: 3px; margin-bottom: 0px; }
+p{ 	margin: 5px 0px 10px 0px; padding: 0px; text-align: justify; } 
+a{ 	color: darkred; text-decoration: none; }
+a:hover{ color: black; }
 div{ margin: 0px; padding: 0px; }
 
 textarea{
 	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
 	padding: 2px;
-	font-size: 1em;
 	border: 1px solid #A9A9A9;
 }
 input, select{ padding-left: 2px; padding-right: 2px;	border: 1px solid #A9A9A9; font-size: 1em;} 
@@ -60,280 +47,133 @@ ul.horizontal li{
 }
 ul.nobullets li{ list-style-type: none; }
 
-
-/**** MENU ********************************************************************/
-#menu {
-	margin: 0 auto;
-	width: 966px;
-	height: 142px;
-	background: url('http://plaetjes.csrdelft.nl/worst/menubg.png') repeat-x;
+.persoonlijkverhaal{
+	margin-left: 10px;
 }
-#menuleft{
-	float: left;
-	width: 259px;
-	height: 142px;
-}
-#menuleft img{
-	border: 0;
-	padding: 4px 30px 0px;
-}
-#menucenter{
-	float: left;
-	width: 560px;
-	height: 142px;
-}
-
-/**** MENU BANNER *************************************************************/
-#menubanner{
-	margin: 2px 0;
-	width: 547px;
-	height: 106px;
-}
-#banner1 { display:none; }
-#banner2 { display:none; }
-#banner3 { display:none; }
-#banner4 { display:none; }
-
-/**** MAIN MENU ***************************************************************/
-#mainmenu ul {
-	list-style-type: none;
-}
-#mainmenu li {
-	display: inline;
-}
-#mainmenu a {
-	margin-left: 17px;
-	_margin: 0 6px -18px 9px; /*IE6 fix*/
-	overflow: none;
-	padding: 6px 0 0 0;
-	display: block;
-	float: left;
-	text-align: center;
-	font-size: 13px;
-	width: 122px;
-	height: 26px;
-	font-weight: bold;
-	text-decoration: none;
-	background: url('http://plaetjes.csrdelft.nl/worst/menubutton.png') no-repeat;
-}	
-#mainmenu a:link, #mainmenu a:visited {
-	color: #ffffff;
-}
-#mainmenu a:hover, #mainmenu a:active, #mainmenu a.active {
-	background: url('http://plaetjes.csrdelft.nl/worst/menubutton_hover.png') no-repeat;
-}
-
-/**** SUBMENU *****************************************************************/
-#submenu {
-	margin: 0 auto;
-	width: 966px;
-	height: 24px;
-	background: url('http://plaetjes.csrdelft.nl/worst/submenubg.png') repeat-x;
-}
-#submenuitems {
-	padding-top: 5px;
-	margin-left: 201px;
-	_margin-left: 199px; /*IE6 fix*/
-	vertical-align: bottom;
-	text-align: center;
-}
-#submenuitems div{
-	display: none;
-	text-align: center;
-}
-#sub1{
-	margin-left: 0px; 
-	text-align: left !important; 
-}
-#sub2{
-	width: 700px;
-	margin-left: -75px; 
-}
-#sub3{	
-	width: 650px;
-	margin-left: 90px; 
-}
-#sub4{
-	width: 600px;
-	margin-left: 160px; 
-	text-align: right !important;
-}
-
-#submenuitems div.active {
-	display: block;
-}
-#submenu img {
-	margin-top: 4px;
-	vertical-align: top;
-}
-#submenu a {
-	padding: 3px 2px;
-	font-size: 12px;
-	text-decoration: none;	
-}
-#submenu a:link, #submenu a:visited {
-	color: #ffffff;
-}
-#submenu a:hover, #submenu a:active, #submenu a.active {
-	color: #e8cf2a;
-}
-
-/**** MENU RIGHT **************************************************************/
-#menuright{
-	float: right;
-	width: 138px;
-	height: 142px;
-	position: relative;
-}
-#key img {
-	float: right;
-	padding: 10px;
-	border: 0;
-}
-#ingelogd{
-	color: #ffffff;
-	margin-top: 2px;
-	width: 133px;
-}
-#ingelogd a{
-	color: #ffffff;
-}
-#profiellink{
-	float: left;
-}
-#uitloggen{
-	float: right;
-}
-#saldi{	
-	border-collapse: collapse;
-	width: 100%;
-}#saldi th{
-	font-weight: normal;
-	margin: 0;
-	padding: 0;
-}#saldi th.boven{
-	text-align: right;
-}#saldi td{
-	padding-left: 3px;
-	text-align: right;
-}
-#zoekveld{
-	width: 127px;
-	text-align: center;
-	padding: 2px;
+/* pagina-opmaak */
+#layoutContainer{}
+#navigatie{
 	position: absolute;
-	top: 115px;
-}
-#login{
-	display: none; /*Standaard laten zien of niet (inline/none) */
-	margin-right: 10px;
-	float: right;
-}
-#login fieldset{
-	border: 0;
-}
-#login input{
-	padding: 1px;
-	margin: 1px 0px;
-	width: 125px;
-	_width: 85px; /*IE6 Fix*/
-	border: 1px solid #000;
-	background-color: #fff;
-}
-#login input.checkbox {
-	_margin-left: -3px;
-	width: auto;
-	border: 0;
-	background: none;
-	float: left;
-}
-#login label{
-	margin: 1px;
-	_margin-top: 5px;
-	padding: 0;
-	float: right;
-	color: #fff;
+	top: 108px;
+	left: 170px; 
+	height: 22px; width: 820px;
+	background-color: white;
+	z-index: 99;
+	opacity:.85; filter: alpha(opacity=85);
+} #navigatieContent{
+	margin: 3px 10px 0px 10px;
+	font-size: 1.1em;
 }
 
-/**** MAIN ********************************************************************/
-#main {
-	min-height: 250px;
-	width: 1004px;
-	background: url('http://plaetjes.csrdelft.nl/worst/mainbg.png') repeat-y;
-}
-#mainleft {
-	float: left;
-	margin-top: 3px;
-	margin-left: 17px; _margin-left: 7px; /*IE6 Fix*/
-	width: 200px;
-}
-#mainright { 
-	float: right;
-	margin-right: 24px;
-	padding: 10px 0;
-	width: 760px;
-}
-
-/**** BLOCK *******************************************************************/
-#mainleft .block {
-	margin: 10px 15px 0px 10px;
-}
-#mainleft .block h1 {
-	margin: 0;
-	padding: 1px 5px;
-	font-size: 11px;
-	height: 13px;
-	color: #162673;
-	font-weight: bold;
-	background: url('http://plaetjes.csrdelft.nl/worst/blocktitle.png') no-repeat;
-	border-bottom: 1px solid #b8b8b8;
-}
-#mainleft .block h1 a{
-	color:  #162673;
-}
-#mainleft .block .item {
-	padding: 0px 5px 0px 5px;
-	font-size: 10px;
-	background-color: #f5f5f5;
-	border: 1px solid #b8b8b8;
-	border-top: 0;
-	text-align: left;
-}
-#mainleft .block .item .right {
+#menu{
+	position: absolute;
+	top: 130px;
+	left: 170px;
+	height: 40px; width: 819px;
+	background-color: gold;
+	border-right: 1px solid #bbb; 
+	border-top: 1px solid black;
+	border-left: 1px solid black;
+	z-index: 85;
+} #menuContent{
+	margin: 2px 10px 0px 10px; padding: 0px;
+}	#submenuContent{
+	position: absolute;
+	left: 10px;
+	margin: 4px 0 0 20px; padding: 0px;
 
 }
-#mainleft a {
-	color: #000;
-	text-decoration: none;
-}
-#mainleft a:hover{
-	text-decoration: underline;
+	
+#bodyContainer, #bodyContainerBreed{
+	position: absolute;
+	top: 172px; 
+	left: 170px; 
+}	#lichaam, #lichaamBreed{
+		width: 819px;	background-color: white;
+		margin: 0px 0px 25px 0px; 
+		border-left: 1px solid #bbb;  
+		border-right: 1px solid #bbb;  
+		border-bottom: 1px solid #bbb; 
+		z-index: 1000; 
+	} 
+	#bodyContent{ margin: 0px; padding: 20px; font-size: .95em; }
+	#copyright{	position: absolute; bottom: 0px;} 
+		#copyrightContent{ margin: 0px 10px 10px 20px; font-size: .9em; color: #bbb;}
+			#copyrightContent a{ color: #bbb; }
+			#copyrightContent a:hover{ color: darkred; }
+#bodyContainerBreed{ left: 0px; }	
+	#lichaamBreed{ width: 990px; }
+#searchbox{
+	position: absolute;
+	top: 140px;
+	left: 735px;
+	width: 250px; height: 20px;
+	z-index: 100;
+	
+}	#searchbox p{ text-align: right; }
+	#searchbox input{ padding: 1px; border: 1px solid darkred; width: 160px; font-size: .9em; }
+#hoofder, #hoofderBreed{
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 990px; height: 171px;
+	background-color: white;
+	border-right: 1px solid #bbb; 
+	z-index: 1;
+} #beeldmerk{ margin: 5px 0px 0px 28px; width: 120px;}
+#hoofderBreed{ }
+
+#zijkolom{
+	position: absolute;
+	top: 172px;
+	left: 0px;
+	width: 170px;
+	margin: 0; 
+	border-right: 1px solid black;
+	border-bottom: 1px solid black; 
+	background-color: gold;
+	font-size: .85em;
+} #zijkolomContent{ margin: 20px 10px 10px 10px; min-height: 600px; _height: 600px; }	
+		#zijkolomFooter{ 
+			height: 77px;
+			background-image: url(http://plaetjes.csrdelft.nl/layout/bestuurstekst.gif);
+			background-repeat: no-repeat;
+			background-position: bottom right;
 }
 
-/**** FOOTER ******************************************************************/
-#footer {
-	clear: both;
-	padding-top: 7px;
-	width: 1004px;
-	height: 22px;
-	text-align: center;
-	background: url('http://plaetjes.csrdelft.nl/worst/footerbg.png') no-repeat #fff;
+#lijntje{
+	position: absolute;
+	top: 171px;	left: 0px;
+	width: 990px;
+	height: 3px;
+	background-color: darkred;
+	border-right: 1px solid #bbb;  
+	
 }
-#footer a {
-	color: #000;
-	text-decoration: none;
+#hoofderFoto{
+	position: absolute;
+	top: 0px;
+	left: 170px;
+	border-right: 1px solid black;
+	z-index: 70;
 }
-#footer a:hover{
-	text-decoration: underline;
-}
-
-/**** OVERIG ******************************************************************/
-a.knop{
-	background-color: #f5f5f5;  
-	border: 1px solid #A9A9A9;
-	margin: 2px; padding: 0px 2px 0px 2px;
-	line-height: 1.1em;
-}
+#personalBox{
+	position: absolute;
+	z-index: 99;
+	top: 5px;
+	left: 818px;
+	width: 160px;
+	padding: 2px;
+	color: black; background-color: white;
+	opacity:.85; filter: alpha(opacity=85);
+	border: 1px solid darkred;
+	font-size: .75em;
+}	#inloglink{	display: block; width: 160px; } 
+	#inloggen{ display: none; }
+		input.login{ width: 60px; border: 1px solid grey; }
+		input.login-submit{ padding: 0px; width: 18px; text-align: center; border: 1px solid grey; }
+		input.login-checkip{ padding: 0px; width: 12px; height: 12px; border: 1px solid grey; }
+		
 pre#pubcie_debug{
 	position: absolute;
 	top: 10px;
@@ -396,101 +236,23 @@ table.query_table th{
 }
 
 
+/* dingen voor afzonderlijke pagina's */
+
 /* plaatjes in tekst */
 p img{ margin: 15px 10px; }
 
 /* nieuws */
 .nieuwsbericht, .nieuwsbericht-vast{
-	margin: 10px 0px 5px 0px;
-	min-height: 200px; _height: 200px;
+	margin: 20px 0px 5px 0px;
+	min-height: 100px; _height: 100px;
 	border-bottom: 1px solid black;
 	border-right: 1px solid black;
 	background-color: #f5f5f5;
-}	.nieuwsplaatje{ margin: 0px 10px 0px 0px; float: left;	}
-	.nieuwsbody{		margin: 11px 10px 0px 70px; padding-top: 5px;}	
-	.nieuwstitel{		font-size: 1.3em; font-weight: bold; margin-bottom: 5px;}
+}	.nieuwsplaatje{ margin: 0px 0px 0px 0px; float: left;	}
+	.nieuwsbody{		margin: 11px 10px 0px 70px; }	
+	.nieuwstitel{		font-size: 1.15em; font-weight: bold; margin-bottom: 5px;}
 	.nieuwstitel a{ color:  black;}
-.nieuwsbericht-vast{ height: 100px;	}
-
-#mededelingen-titel{
-	height: 20px;
-	width: 70%;
-	margin: 0px 0px 10px 0px;
-}
-.mededelingen-overzichtlijst{
-	width: 320px;
-	float: left;
-}
-.mededelingen-beheerlink{
-	width: 20%;
-	float: right;
-	text-align: right;
-}
-.mededelingenlijst-block{
-	margin: 0px 10px 10px 0px;
-	width: 300px;
-}
-.mededelingenlijst-block-titel{
-	height: 19px;
-	padding-top: 1px;
-	padding-left: 7px;
-	border: 1px solid #B4B4B4;
-	background-color: #F0F0F0;
-	color: #162673;
-	font-size: 14px;
-	font-weight: bold;
-}
-.mededelingenlijst-item{
-	padding: 3px 2px 3px 7px;
-	font-size: 11px;
-	border-bottom: 1px solid #B8B8B8;
-}
-.mededelingenlijst-block a{	color: black; }
-.mededelingenlijst-plaatje{ margin: 0px 5px 0px 0px; float: left; }
-#top1mededeling{
-	height: 200px; width: 200px;
-}
-#top1mededeling #titel{
-	height: 30px; width: 190px;
-	padding: 5px;
-	font-size: 12px;
-	/*font-weight: bold;*/
-	color: white;
-	text-align: left;
-	position: relative; top: -60px;
-	overflow: hidden;
-	background-color: black;
-	filter:alpha(opacity=65);
-	-moz-opacity:.65;
-	opacity:.65;
-}
-#verborgen, #verborgen a{
-	color: lightgrey;
-}
-.mededeling-grotebalk{
-	height: 70px;
-	padding: 8px 12px 8px 6px;
-	margin-bottom: 10px;
-	border: 1px solid #B4B4B4;
-	background-color: #F0F0F0;
-}
-.mededeling-grotebalk #plaatje{
-	width: 70px;
-	height: 70px;
-	margin-right: 10px;
-	float: left;
-}
-.mededeling-grotebalk #titel{
-	font-weight: bold;
-	font-size: 1.1em;
-}
-.mededeling-grotebalk #bericht{
-	text-align: left;
-}
-#mededelingen-top3block{
-	float: left;
-	width: 350px;
-}
+.nieuwsbericht-vast{ height: 100px;	}	
 
 a.knop{
 	background-color: #f5f5f5;  
@@ -500,7 +262,7 @@ a.knop{
 }
 
 /* waarschuwing */
-.waarschuwing{ color: red;}
+.waarschuwing{ color: darkred; font-weight: bold;}
 div.blokje{ background-color: #fff3b4; margin: 10px 5px; padding: 5px 10px;}
 div#uStaatRood{
 	position: absolute;
@@ -557,8 +319,8 @@ div#melding{
 div#ubbhulpverhaal{
 	display: none; 
 	z-index: 999;
-	position: absolute;
-	margin-left: -180px;
+	position: absolute; 
+	left: -150px; 
 	width: 330px; 
 	border: 1px solid #bbb;
 	margin-top: -13px;
@@ -568,10 +330,10 @@ div#ubbhulpverhaal{
 }
 span#ubbsluiten{
 	display: block; 
-	width: 18px; height: 18px;
+	width: 16px; height: 16px;
 	float: right;
 	margin: 0px; padding: 0px;
-	font-weight: bold; font-size: 14px;
+	font-weight: bold; font-size: 16px;
 	text-align: center;	vertical-align: middle; 
 	color: black; 
 	cursor: pointer; cursor: hand;
@@ -581,13 +343,18 @@ span#ubbsluiten:hover{
 	border: 1px solid black;
 	background-color: #eee;
 }
-div.offtopic{ font-size: 9px; color: #bbb; }
-div.offtopic a{ color: #bbb; }
+
 
 /* intern/lijst.php */
 table.zoekResultaat{ width: 100%; border-collapse: collapse;}
 table.zoekResultaat tr td{border-top: 1px solid lightgrey; margin: 0px; padding: 2px; text-align: left;}
 table.zoekResultaat tr td img{ background-color: #fff3b4;}
+
+/* bestuur.php */
+#bestuurContainer{ text-align: center; clear: both;}
+table.bestuur{ width: 100%; text-align: center; }
+table.bestuur th{ text-align: center; }
+table.bestuur td{ text-align: center; }
 
 /* maaltijdketzer */
 table.maaltijden{ width: 100%; }
@@ -596,11 +363,43 @@ table.maaltijden tr{ height: 1.6em; }
 /* csrmail */
 div#pubciemail_form{ background-color: #f1f1f1; border: 1px solid lightgray; padding: 10px;}
 
+/* verjaardagen in zijbalk */
+#komendeVerjaardagen{ font-size: 1em; line-height: 1.05em; text-align: left;}
+#komendeVerjaardagen a.kopje{ font-size: 1em; color: black; font-weight: bold; }
+#komendeVerjaardagen a.kopje:hover{ font-size: 1em; color: darkred; }
+span.tijd{ font-size: 0.95em; }
+
 /* archief C.S.R.-courant */
 #archiefCourant{ font-size: 1em; line-height: 1.05em; text-align: left;}
 #archiefCourant a.kopje{ font-size: 1em; color: black; font-weight: bold; }
 #archiefCourant a.kopje:hover{ font-size: 1em; color: darkred; }
 span.tijd{ font-size: 0.95em; }
+
+/* laatste forumberichten */
+#forumHighlights{ font-size: 1em; line-height: 1.05em; text-align: left;}
+#forumHighlights a.kopje{ font-size: 1em; color: black; font-weight: bold; }
+#forumHighlights a.kopje:hover{ font-size: 1em; color: darkred; }
+span.tijd{ font-size: 0.95em; }
+
+/* Groepen nieuwe stijl */
+#groepLijst{ float: right; margin: 30px 0px 10px 20px; }
+#groepLijst, #groepLijst li, #groepLijst ul{ text-align: right;}
+#groepLijst li{ list-style-type: none; }
+.groep{ border-top: 1px solid black; margin-top: 20px; }
+ul.groepleden{ width: 230px; float: right; padding: 10px 20px 20px 20px; }
+
+#groepleden{ float: right; padding: 10px 20px 20px 20px; }
+#groepleden td{ padding: 0px 5px; lext-align: left;}
+#groepleden table { margin-bottom: 10px;}
+#groepleden form{ background-color: #f1f1f1; border: 1px solid lightgray; padding: 10px; width: 250px; }
+#voorgangerOpvolger{ margin: 10px 0px; padding: 3px 20px; border-bottom: 1px solid black;}
+	.vorigeGroep{ list-style-image: url(http://plaetjes.csrdelft.nl/groepen/up.png); }
+	.volgendeGroep{ list-style-image: url(http://plaetjes.csrdelft.nl/groepen/down.png); }
+#groepAdmin{ float: right; margin: 10px ; }
+#groepFormulier{ width: 100%;}
+#groepFormulier label{ float: left; margin-right: 15px; width: 130px;}
+#groepFormulier input, #groepFormulier textarea, #groepFormulier select{ margin-top: 4px; margin-bottom: 4px; }
+#groepFormulier div.opmerking{  float: right; width: 450px; margin-bottom: 10px; }
 
 /* Streeplijstgenereertool */
 form#streeplijst fieldset{ padding: 10px;  }

@@ -27,16 +27,21 @@ class CourantarchiefContent{
 	function getTitel(){
 		return 'C.S.R.-courant van '.$this->getVerzendMoment();
 	}
+	function viewWaarbenik(){
+		echo '<a href="/intern/">Intern</a> &raquo; <a href="/intern/courant/">C.S.R.-courant</a> &raquo; '.$this->getVerzendMoment();
+	}
 	private function getArchiefmails(){
 		$aMails=$this->courant->getArchiefmails();
-		$sReturn='<h1>Archief C.S.R.-courant</h1>';
+		$sReturn='<div id="archiefCourant">
+				<a class="kopje" href="/intern/courant/">Archief</a><br />';
 		if(is_array($aMails)){
 			foreach($aMails as $aMail){
-				$sReturn.='<a href="/actueel/courant/archief/'.$aMail['ID'].'">'.strftime('%d %B %Y', strtotime($aMail['verzendMoment'])).'</a><br />';
+				$sReturn.='<a href="/intern/courant/archief/'.$aMail['ID'].'">'.strftime('%d %B %Y', strtotime($aMail['verzendMoment'])).'</a><br />';
 			}
 		}else{
 			$sReturn.='Geen couranten in het archief aanwezig';
 		}
+		$sReturn.='</div>';
 		return $sReturn;
 	}
 	
@@ -52,8 +57,8 @@ class CourantarchiefContent{
 			//overzicht
 			echo $this->getArchiefmails();
 		}else{
-			echo '<h1>C.S.R.-courant '.$this->getVerzendMoment().'</h1>';
-			echo '<iframe src="/actueel/courant/archief/iframe/'.$this->courant->getID().'"
+			echo '<h2>C.S.R.-courant '.$this->getVerzendMoment().'</h2>';
+			echo '<iframe src="/intern/courant/archief/iframe/'.$this->courant->getID().'"
 					style="width: 100%; height: 700px; border: 0px;"></iframe>';
 					
 		}

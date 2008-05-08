@@ -20,14 +20,6 @@
 				{/if}
 			</tr>
 		{/foreach}
-		{if $groep->isAanmeldbaar() AND $groep->magBewerken()}
-			<table>
-				{foreach from=$groep->getFunctieAantal() key=functie item=aantal}
-					{if $functie!=''}<tr><td>{$functie}</td><td>{$aantal}</td></tr>{/if}
-				{/foreach}
-				<tr><td><strong>Totaal</strong></td><td>{$groep->getLidCount()}</td></tr>
-			</table>
-		{/if}
 	</table>
 	{if $groep->magAanmelden()}
 		<a href="#" onclick="toggleDiv('aanmeldForm')" class="knop">aanmelden</a>

@@ -10,13 +10,13 @@ require_once('ubb/eamBBParser.class.php');
 
 class CsrUBB extends eamBBParser{
 	private $lid;
-  
+
+	
 	function CsrUBB(){
 		$this->eamBBParser();
 		$this->lid=Lid::get_lid();
 		$this->paragraph_mode = false;
 	}
-	
 	function ubb_citaat($arguments=array()){
 		if($this->quote_level == 0){        
 	    	$this->quote_level = 1;
@@ -41,7 +41,6 @@ class CsrUBB extends eamBBParser{
 		$text.=':</strong><div class="citaat">'.trim($content).'</div></div>';
 		return $text;  
 	}
-
 	/* 
 	 * ubb_lid().
 	 * 
@@ -59,7 +58,6 @@ class CsrUBB extends eamBBParser{
 		}
 		return $text;
 	}
-	
 	/* 
 	 * ubb_prive().
 	 * 
@@ -85,7 +83,8 @@ class CsrUBB extends eamBBParser{
 			$content='';
 		}
 		return $content;
-	} 
+	}
+	 
 	 
 	/*
 	 * Deze methode kan resultaten van query's die in de database staan printen in een 
@@ -136,7 +135,6 @@ class CsrUBB extends eamBBParser{
 		}
 		return $html;
 	}
-	
 	function ubb_googlevideo($parameters){
 		$content = $this->parseArray(array('[/googlevideo]'), array());
 		if(preg_match('/-\d*/', $content)){
@@ -146,14 +144,8 @@ src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
 			$html='Ongeldig googlevideo-id';
 		}
 		return $html;
-	}	
-	/*
-	 * ubb_groep()
-	 * 
-	 * [groep]123[/groep]
-	 * Geeft een groep met kortebeschrijving en een lijstje met leden weer.
-	 * Als de groep aanmeldbaar is komt er ook een aanmeldknopje bij.
-	 */
+	}
+	
 	protected function ubb_groep($parameters){
 		$content=$this->parseArray(array('[/groep]'), array());
 		//if(isset($parameters));
@@ -162,25 +154,20 @@ src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
 		//TODO: zet deze style-meuk in de style-sheet.
 		//TODO: zet dit in een smarty-template
 		$html='<div class="groep_embed" style="margin: 10px; padding: 5px 10px; border: 1px solid black;">';
-		if(is_array($groep->getLeden())){
-			$html.='<table style="float: right">';
-			foreach($groep->getLeden() as $groeplid){
-				$html.='<tr><td>'.$this->lid->getNaamLink($groeplid['uid'], 'civitas', true).'</td>';
-				if($groep->toonFuncties()){ 
-					$html.='<td><em>'.mb_htmlentities($groeplid['functie']).'</em></td>';
-				}
-				$html.='</tr>';
+		$html.='<table style="float: right">';
+		foreach($groep->getLeden() as $groeplid){
+			$html.='<tr><td>'.$this->lid->getNaamLink($groeplid['uid'], 'civitas', true).'</td>';
+			if($groep->toonFuncties()){ 
+				$html.='<td><em>'.mb_htmlentities($groeplid['functie']).'</em></td>';
 			}
-			$html.='</table>';
+			$html.='</tr>';
 		}
-		$html.='<h2><a href="/actueel/groepen/'.$groep->getType().'/'.$groep->getId().'">';
-		$html.=$groep->getNaam().'</a></h2>';
-		$ubb=new CsrUBB();
-		$html.='<p>'.$ubb->getHTML($groep->getSbeschrijving()).'</p><br />';
+		$html.='</table>';
+		$html.='<h2>'.$groep->getNaam().'</h2><p>'.$groep->getSbeschrijving().'</p><br />';
 		if($groep->isAanmeldbaar() AND $groep->magAanmelden()){
-			$html.='<form action="/actueel/groepen/'.$groep->getType().'/'.$groep->getId().'/aanmelden" method="post" id="aanmeldForm">U kunt zich hier aanmelden voor deze groep.';
+			$html.='<form action="/groepen/'.$groep->getType().'/'.$groep->getId().'/aanmelden" method="post" id="aanmeldForm">U kunt zich hier aanmelden voor deze groep.';
 			if($groep->getToonFuncties()!='niet'){
-				$html.=' Geef ook een opmerking/functie op:<br /><input type="text" name="functie" />';
+				$html.='Geef ook een opmerking/functie op:<br /><input type="text" name="functie" />';
 			}else{
 				$html.='<br />';
 			}
@@ -188,10 +175,6 @@ src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
 		}
 		$html.='<div class="clear">&nbsp;</div></div>';
 		return $html;
-	}
-	public function ubb_offtopic(){
-		$content = $this->parseArray(array('[/offtopic]'), array());
-		return '<div class="offtopic">'.$content.'</div>';
 	}
 	function ubb_1337(){
         $html = $this->parseArray(array('[/1337]'), array());
@@ -202,7 +185,6 @@ src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
         $html = strtr($html, "abelostABELOST", "48310574831057");       
         return $html;
     }
-    
     function ubb_rainbow(){
         $string = $this->parseArray(array('[/rainbow]'), array());
         
@@ -213,15 +195,6 @@ src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
         $r = new rainbowMaker();
         
         return $r->rainBow($string);
-    }
-    
-    function ubb_clear($parameters){
-		switch (@$parameters['clear']){
-			case 'left':	$sClear='left';		break;
-			case 'right':	$sClear='right';	break;
-			default:		$sClear='both';
-		}
-		return '<br style="height: 0px; clear: '.$sClear.';" />';
     }
   
 	static function viewUbbHelp(){
@@ -238,7 +211,7 @@ echo <<<UBBVERHAAL
 		<li>[i]...[/i] voor <em>cursieve tekst</em></li>
 		<li>[u]...[/u] voor <span style="text-decoration: underline;">onderstreepte tekst</span></li>
 		<li>[s]...[/s] voor <span style="text-decoration: line-through;">doorgestreepte tekst</span></li>
-		<li>[email=pubcie@csrdelft.nl]Bericht naar de Pubcie[/email] voor een email-verwijzing</li>
+		<li>[email=pubcie@csrdelft.nl]Bericht naar de Pubcie[/url] voor een email-verwijzing</li>
 		<li>[url=http://csrdelft.nl]Webstek van C.S.R.[/url] voor een verwijzing</li>
 		<li>[img]http://csrdelft.nl/plaetje.jpg[/img] voor een plaetje</li>
 		<li>[citaat][/citaat] voor een citaat. [citaat=<em>lidnummer</em>][/citaat] voor een citaat van een lid.</li>
@@ -254,26 +227,7 @@ echo <<<UBBVERHAAL
 UBBVERHAAL;
 	
 	}
-	
-	/*
-	 * Deze methode kan de belangrijkste mededelingen (doorgaans een top3) weergeven.
-	 * 
-	 * [mededelingen=top3]
-	 */
-	function ubb_mededelingen($parameters){
-		if(isset($parameters['mededelingen']) AND $parameters['mededelingen']=='top3'){
-			require_once('class.nieuwscontent.php');
-			require_once('class.nieuws.php');
-			$nieuws = new Nieuws();
-			$nieuws->setAantalTopBerichten(3);
-			$nieuws->setStandaardRank(255);
-			$nieuwscontent = new NieuwsContent($nieuws);
-			$return=$nieuwscontent->getTopBlock();
-		}else{
-			$return='Geen geldig mededelingenblok.';
-		}
-		return $return;
-	}
+
 }
 
 ?>

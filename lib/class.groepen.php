@@ -57,7 +57,7 @@ class Groepen{
 		//Afhankelijk van de instelling voor het groeptype halen we alleen de 
 		//h.t.-groepen op, of ook de o.t.-groepen.
 		$htotFilter="groep.status='ht'";
-		$sort='';
+		$sort="groep.id ASC, ";
 		if($this->getToonHistorie()){
 			$htotFilter.=" OR groep.status='ot'";
 			$sort="groep.begin DESC, groep.id ASC, ";
@@ -71,11 +71,10 @@ class Groepen{
 				groeplid.uid AS uid, groeplid.op AS op, groeplid.functie AS functie, groeplid.prioriteit AS prioriteit 
 			FROM groep
 			LEFT JOIN groeplid ON(groep.id=groeplid.groepid) 
-			INNER JOIN lid ON(groeplid.uid=lid.uid) 
 			WHERE groep.gtype=".$this->getId()."
 			  AND groep.zichtbaar='zichtbaar'
 			  AND (".$htotFilter.")
-			ORDER BY ".$sort."groep.snaam ASC, groeplid.prioriteit ASC, lid.achternaam ASC, lid.voornaam ASC;";
+			ORDER BY ".$sort."groep.snaam ASC, groeplid.prioriteit ASC, groeplid.uid ASC;";
 		$rGroepen=$db->query($qGroepen);
 		//nu een beetje magic om een stapeltje groepobjecten te genereren:
 		$currentGroepId=null;
@@ -105,8 +104,7 @@ class Groepen{
 		}
 	}
 	/*
-	 * Sla de huidige toestand van het groeptype op in de database.
-	 * LET OP: deze methode doet niets met de ingeladen groepen.
+	 * Sla de huidige toestand van de groep op in de database.
 	 */
 	public function save(){
 		$db=MySql::get_MySql();
@@ -151,7 +149,7 @@ class Groepen{
 			$qGroepen="
 				SELECT 
 					groep.id AS id, groep.snaam AS snaam, groep.naam AS naam, groep.status AS status,
-					groeptype.naam AS gtype, groeptype.id AS gtypeId
+					groeptype.naam AS gtype
 				FROM groep
 				INNER JOIN groeptype ON(groep.gtype=groeptype.id)
 				WHERE groep.id IN ( 
@@ -165,23 +163,6 @@ class Groepen{
 			}
 		}
 		return $groepen;
-	}
-	/*
-	 * Haal de huidige groepen van een bebaald type voor een bepaald lid. 
-	 */
-	public static function getGroepenByType($type, $uid){
-		$type=(int)$type;
-		$groepenByUid=Groepen::getGroepenByUid($uid);
-		if(is_array($groepenByUid)){
-			$groepen=array();
-			foreach($groepenByUid as $groep){
-				if($groep['gtypeId']==$type AND $groep['status']=='ht'){
-					$groepen[]=$groep;
-				}
-			}
-			return $groepen;
-		}
-		
 	}
 	/*
 	 * Statische functie om een verzameling van groeptypes terug te geven

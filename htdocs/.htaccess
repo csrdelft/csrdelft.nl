@@ -3,21 +3,20 @@ AddDefaultCharset utf-8
 RewriteEngine On
 
 ### mod_rewrite-dingen
-# Pagina
-RewriteRule ^pagina/([a-z]+)/bewerken? pagina.php?naam=$1&bewerken=ja
-RewriteRule ^pagina/([a-z]+)/? pagina.php?naam=$1
+# Nieuws tonen
+RewriteRule ^nieuws/?$ nieuws.php
+RewriteRule ^nieuws/([0-9]+)$ nieuws.php?berichtID=$1
 
-# Vereniging
-RewriteRule ^vereniging/?$ 			pagina.php?naam=vereniging
-RewriteRule ^vereniging/([a-z]+)/? 	pagina.php?naam=$1
+# Nieuwsbeheer
+RewriteRule ^nieuws/verwijderen/([0-9]+) nieuws.php?berichtID=$1&verwijderen=true
+RewriteRule ^nieuws/bewerken/([0-9]+)$ nieuws.php?berichtID=$1&bewerken=true
+RewriteRule ^nieuws/bewerken/([0-9]+)/verwijder-plaatje nieuws.php?berichtID=$1&plaatje=delete
+RewriteRule ^nieuws/toevoegen$ nieuws.php?toevoegen=true
 
-# Contact
-RewriteRule ^contact/?$ 			pagina.php?naam=contact
-RewriteRule ^contact/([a-z]+)/? 	pagina.php?naam=$1
+# Terugwaarts werkbaar houden van de profielen:
+RewriteRule ^leden/profiel.php$ /intern/profiel.php [R=301]
+RewriteRule ^leden/lijst.php$ /intern/lijst.php [R=301]
 
-# heleboel 301's voor terugwaarste compatibiliteit.
-RewriteRule ^forum/(.*)$			/communicatie/forum/$1 [R=301]
-RewriteRule ^intern/profiel(.*)		/communicatie/profiel$1 [R=301]
-RewriteRule ^contact.php$ 			/contact/ [R=301]
-RewriteRule ^base.php.*$ 			/ [R=301]
-RewriteRule ^nieuws/(.*)$			/actueel/mededelingen/$1 [R=301]
+# Terugwaartse compatibiliteit
+RewriteRule ^contact.php$ /contact/ [R=301]
+RewriteRule ^base.php.*$ / [R=301]

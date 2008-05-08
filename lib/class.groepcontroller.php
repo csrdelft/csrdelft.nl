@@ -43,7 +43,7 @@ class Groepcontroller extends Controller{
 		
 		//controleer dat we geen lege groep weergeven.
 		if($this->action=='default' AND $this->groep->getId()==0){
-			$this->content->invokeRefresh('We geven geen 0-groepen weer! (Groepcontroller::__construct())', CSR_ROOT.'actueel/groepen/');
+			$this->content->invokeRefresh('We geven geen 0-groepen weer! (Groepcontroller::__construct())', CSR_ROOT.'groepen/');
 		}
 		//Normale gebruikers mogen niet alle acties doen.
 		$allow=array('default', 'aanmelden');
@@ -57,7 +57,7 @@ class Groepcontroller extends Controller{
 		$this->content->setAction('view');
 	}
 	public function getUrl($action=null){
-		$url=CSR_ROOT.'actueel/groepen/'.$this->groep->getType().'/'.$this->groep->getId().'/';
+		$url=CSR_ROOT.'groepen/'.$this->groep->getType().'/'.$this->groep->getId().'/';
 		if($action!=null AND $this->hasAction($action)){
 			if($action!='default'){
 				$url.=$action;
@@ -233,7 +233,7 @@ class Groepcontroller extends Controller{
 		}else{
 			$melding='Groep verwijderen mislukt Groepcontroller::action_deleteGroep()';
 		}
-		$this->content->invokeRefresh($melding, CSR_ROOT.'actueel/groepen/');
+		$this->content->invokeRefresh($melding, CSR_ROOT.'groepen/');
 	}
 	
 	/*

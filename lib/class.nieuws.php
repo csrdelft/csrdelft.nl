@@ -11,64 +11,54 @@
 
 class Nieuws {
 
-	private $_lid;
-	private $_db;
+	### private ###
+	var $_lid;
+	var $_db;
 	
-	private $aantalTopBerichten;
-	private $standaardRank;
+	var $_aantal=5;
 	
 	function Nieuws(){
 		$this->_lid=Lid::get_lid();
 		$this->_db=MySql::get_MySql();
 	}
+	### public ###
 
-	public function setAantalTopBerichten($iAantal){ $this->aantalTopBerichten=(int)$iAantal; }
-	public function setStandaardRank($iRank){ $this->standaardRank=(int)$iRank; }
-	public function getAantalTopBerichten(){ return $this->aantalTopBerichten; }
-	public function getStandaardRank(){ return $this->standaardRank; }
-	
+	function setAantal($iAantal){ $this->_aantal=(int)$iAantal; }
+	#
 	# ophaelen nieuwsberichten
 	# $iBerichtID == 0 -> alles ophaelen met een limiet van $this->_aantal;
 	# $iBerichtID != 0 -> alleen opgegeven nummer
-	public function getMessages($iBerichtID=0,$includeVerborgen=false,$limit=0){
+	#
+	function getMessages($iBerichtID=0) {
 		$iBerichtID=(int)$iBerichtID;
 		//where clausule klussen
 		$sWhereClause='';
-		if(!$this->_lid->hasPermission('P_LOGGED_IN')){ $sWhereClause.="mededeling.prive!='1' AND "; }
-		if(!$includeVerborgen){ $sWhereClause.="mededeling.verborgen!='1' AND "; }
-		if($iBerichtID!=0){ $sWhereClause.="mededeling.id=".$iBerichtID." AND "; }
-		$limit=(int)$limit;
-
+		if(!$this->_lid->hasPermission('P_LOGGED_IN')){ $sWhereClause.="nieuws.prive!='1' AND "; }
+		if(!$this->isNieuwsMod()){ $sWhereClause.="nieuws.verborgen!='1' AND "; }
+		if($iBerichtID!=0){ $sWhereClause.="nieuws.id=".$iBerichtID." AND "; }
+		
 		$sNieuwsQuery="
 			SELECT
-				mededeling.id as id, 
-				mededeling.datum as datum, 
-				mededeling.titel as titel, 
-				mededeling.tekst as tekst, 
-				mededeling.rank as rank, 
-				mededeling.uid as uid, 
-			"//		lid.voornaam as voornaam, lid.achternaam as achternaam, lid.tussenvoegsel as tussenvoegsel,
-			."	mededeling.prive as prive, 
-				mededeling.verborgen as verborgen,
-				mededeling.plaatje as plaatje,
-				mededeling.categorie as categorie,
-				mededelingcategorie.plaatje as categorieplaatje,
-				mededelingcategorie.naam as categorienaam
+				nieuws.id as id, 
+				nieuws.datum as datum, 
+				nieuws.titel as titel, 
+				nieuws.tekst as tekst, 
+				nieuws.uid as uid, 
+					lid.voornaam as voornaam, lid.achternaam as achternaam, lid.tussenvoegsel as tussenvoegsel,
+				nieuws.prive as prive, 
+				nieuws.verborgen as verborgen,
+				nieuws.plaatje as plaatje
 			FROM
-				mededeling
-		"//	INNER JOIN
-		//		lid ON( mededeling.uid=lid.uid )
-		."	LEFT JOIN
-				mededelingcategorie ON( mededelingcategorie.id=mededeling.categorie )
+				nieuws
+			INNER JOIN
+				lid ON( nieuws.uid=lid.uid )
 			WHERE
 				".$sWhereClause."
-				mededeling.verwijderd='0'
+				nieuws.verwijderd='0'
 			ORDER BY
-				mededeling.datum DESC";
-		if($limit!=0 AND $limit>0){
-			$sNieuwsQuery.=' LIMIT 0,'.$limit;
-		}
-		$sNieuwsQuery.=';';
+				nieuws.datum DESC
+			LIMIT
+				0, ".$this->_aantal.";";
 		$rNieuwsBerichten=$this->_db->query($sNieuwsQuery);
 		if($iBerichtID!=0){
 			return $this->_db->next($rNieuwsBerichten);
@@ -76,83 +66,33 @@ class Nieuws {
 			return $this->_db->result2array($rNieuwsBerichten);
 		}
 	}
-	public function getMessage($iBerichtID, $includeVerborgen=false){ return $this->getMessages($iBerichtID, $includeVerborgen);	}
-	
-	public function getCategorieen(){
-		$sCategorieQuery="
-			SELECT
-				id, naam
-			FROM
-				mededelingcategorie
-			ORDER BY
-				rank, id";
-		$rCategorieen=$this->_db->query($sCategorieQuery);
-		return $this->_db->result2array($rCategorieen);
-	}
-	
-	public function getTop($aantal){
-		$aantal=(int)$aantal;
-		if($aantal <= 0){ return array(); }
-
-		//where clausule klussen
-		$sWhereClause='';
-		if(!$this->_lid->hasPermission('P_LOGGED_IN')){ $sWhereClause.="mededeling.prive!='1' AND "; }
-		
-		$sQuery="
-			SELECT
-				mededeling.id as id, 
-				mededeling.datum as datum, 
-				mededeling.titel as titel, 
-				mededeling.tekst as tekst, 
-				mededeling.prive as prive, 
-				mededeling.plaatje as plaatje
-			FROM
-				mededeling
-			WHERE
-				".$sWhereClause."
-				mededeling.verwijderd='0' AND
-				mededeling.verborgen='0'
-			ORDER BY
-				mededeling.rank ASC,
-				mededeling.datum DESC
-			LIMIT
-				0, ".$aantal.";";
-		$rTop=$this->_db->query($sQuery);
-		if($aantal==1){
-			return $this->_db->next($rTop);
-		} else {
-			return $this->_db->result2array($rTop);
-		}
-	}
+	function getMessage($iBerichtID){ return $this->getMessages($iBerichtID);	}
 
 	//bericht toevoegen
-	public function addMessage($titel, $tekst, $categorie, $rank=255, $prive=false, $verborgen=false, $plaatje=''){
+	function addMessage($titel, $tekst, $prive=false, $verborgen=false, $plaatje=''){
 		$datum=time();
 		$titel=$this->_db->escape($titel);
 		$tekst=$tekst;
-		$categorie=(int)$categorie;
-		$rank=(int)$rank;
-		if($rank!=$this->getStandaardRank()){ $this->resetRank($rank); }
 		if($prive){$prive=1; }else{ $prive=0; }
 		if($verborgen){$verborgen=1; }else{ $verborgen=0; }
 		$plaatje=trim($plaatje);
 		$uid=$this->_lid->getUid();
 		$sMessageQuery="
 			INSERT INTO
-				mededeling
+				nieuws
 			( 
-				datum, titel, categorie, tekst, rank, uid, prive, verborgen, plaatje
+				datum, titel, tekst, uid, prive, verborgen, plaatje
 			) VALUES (
-				".$datum.", '".$titel."', '".$categorie."', '".$tekst."', '".$rank."',
+				".$datum.", '".$titel."', '".$tekst."',  
 				'".$uid."', '".$prive."', '".$verborgen."', '".$plaatje."'
 			);";
 		return $this->_db->query($sMessageQuery);
 	}
-	public function setPlaatje($nieuwsID, $bestandsnaam=''){
+	function setPlaatje($nieuwsID, $bestandsnaam=''){
 		$bestandsnaam=$this->_db->escape($bestandsnaam);
 		$sPlaatje="
 			UPDATE
-				mededeling
+				nieuws
 			SET
 				plaatje='".$bestandsnaam."'
 			WHERE
@@ -160,11 +100,11 @@ class Nieuws {
 			LIMIT 1;";
 		return $this->_db->query($sPlaatje);
 	}
-	public function deleteMessage($iBerichtID){
+	function deleteMessage($iBerichtID){
 		$iBerichtID=(int)$iBerichtID;
 		$sMessageQuery="
 			UPDATE
-				mededeling
+				nieuws
 			SET
 				verwijderd='1'
 			WHERE
@@ -172,23 +112,18 @@ class Nieuws {
 			LIMIT 1;";
 		return $this->_db->query($sMessageQuery);
 	}
-	public function editMessage($iBerichtID, $titel, $tekst, $categorie, $rank, $prive=false, $verborgen=false){
+	function editMessage($iBerichtID, $titel, $tekst, $prive=false, $verborgen=false){
 		$iBerichtID=(int)$iBerichtID;
 		$titel=$this->_db->escape($titel);
 		$tekst=$tekst;
-		$rank=(int)$rank;
-		if($rank!=$this->getStandaardRank()){ $this->resetRank($rank); }
-		$categorie=(int)$categorie;
 		if($prive){$prive=1; }else{ $prive=0; }
 		if($verborgen){$verborgen=1; }else{ $verborgen=0; }
 		$sMessageQuery="
 			UPDATE
-				mededeling
+				nieuws
 			SET
 				titel='".$titel."', 
 				tekst='".$tekst."', 
-				categorie='".$categorie."', 
-				rank='".$rank."', 
 				prive='".$prive."', 
 				verborgen='".$verborgen."'
 			WHERE
@@ -196,9 +131,9 @@ class Nieuws {
 			LIMIT 1;";
 		return $this->_db->query($sMessageQuery);
 	}
-	public function isNieuwsMod(){ return $this->_lid->hasPermission('P_NEWS_MOD');}
+	function isNieuwsMod(){ return $this->_lid->hasPermission('P_NEWS_MOD');}
 	
-	public function resize_plaatje($file) {
+	function resize_plaatje($file) {
 		list($owdt,$ohgt,$otype)=@getimagesize($file);
 		switch($otype) {
 			case 1:  $oldimg=imagecreatefromgif($file); break;
@@ -206,8 +141,8 @@ class Nieuws {
 			case 3:  $oldimg=imagecreatefrompng($file); break;
 		}
 		if($oldimg) {
-			$newimg=imagecreatetruecolor(200, 200);
-			if(imagecopyresampled($newimg, $oldimg, 0, 0, 0, 0, 200, 200, $owdt, $ohgt)){
+			$newimg=imagecreatetruecolor(60, 100);
+			if(imagecopyresampled($newimg, $oldimg, 0, 0, 0, 0, 60, 100, $owdt, $ohgt)){
 				switch($otype) {
 					case 1: imagegif($newimg,$file); break;   
 					case 2: imagejpeg($newimg,$file,90); break;
@@ -218,21 +153,7 @@ class Nieuws {
 				//mislukt
 			}
 		}
-	}
-	
-	private function resetRank($rank){
-		$rank=(int)$rank;
-		if($rank<=0 OR $rank>=$this->getStandaardRank())
-			return;
 		
-		$sUpdateRankQuery="
-			UPDATE
-				mededeling
-			SET
-				rank='".$this->getStandaardRank()."'
-			WHERE
-				rank='".$rank."';";
-		$this->_db->query($sUpdateRankQuery);
 	}
 }
 

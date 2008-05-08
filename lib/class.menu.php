@@ -38,7 +38,7 @@ class menu {
 		if($dotphp!==false){ $request_uri=substr($request_uri, 0, $dotphp); }
 		$sharp=strpos($request_uri, '#');
 		if($sharp!==false){ $request_uri=substr($request_uri, 0, $sharp); }	
-
+		
 		# menu ophalen
 		$sMenu="
 			SELECT  
@@ -74,14 +74,6 @@ class menu {
 					'huidig' => $bHuidig,
 					'rechten' => $aMenu['permission'] );
 			}else{
-				// Als een submenuitem huidig is, eventuele voorgaande submenuitems huidig=0 maken, om dubbele huidigen te voorkomen
-				if ($bHuidig) {
-					foreach ($this->_menu[$aMenu['pID']]['subitems'] as $key => $dummy) {
-						$this->_menu[$aMenu['pID']]['subitems'][$key]['huidig'] = 0;
-					}
-				}
-				
-				//subniveau
 				$this->_menu[$aMenu['pID']]['subitems'][$aMenu['ID']]=array(
 					'ID' => $aMenu['ID'],
 					'pID' => $aMenu['pID'],
