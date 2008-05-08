@@ -13,7 +13,10 @@
 //uncomment de volgende regel om de boel in onderhoudsmode te ketzen
 //define('MODE', 'ONDERHOUD');
 
-error_reporting(E_ALL);
+define('DEBUG', 'DEBUG');
+if(defined('DEBUG')){
+	error_reporting(E_ALL);
+}
 
 # default to website mode
 # [ WEB, CLI, BOT ]
@@ -82,6 +85,7 @@ switch (constant('MODE')) {
 		//database & lid initialiseren...
 		$db = MySQL::get_mysql();
 		$lid = Lid::get_lid();
+		$lidCache=LidCache::get_LidCache();
 	break;
 	
 	case 'BOT':

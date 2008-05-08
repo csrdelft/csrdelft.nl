@@ -3,7 +3,7 @@
 {foreach from=$groeptypes item=groeptype}
 	<li>
 		{if $groeptype.id==$groepen->getId()}<strong>{/if}
-			<a href="/groepen/{$groeptype.naam}/">{$groeptype.naam}</a>
+			<a href="/actueel/groepen/{$groeptype.naam}/">{$groeptype.naam}</a>
 		{if $groeptype.id==$groepen->getId()}</strong>{/if}
 	</li>
 {/foreach}
@@ -21,7 +21,7 @@
 {$groepen->getBeschrijving()|ubb}
 <div class="clear">
 	{if $groepen->isAdmin()}
-		<a href="/groepen/{$groepen->getNaam()}/0/bewerken" class="knop">Nieuwe groep</a>
+		<a href="/actueel/groepen/{$groepen->getNaam()}/0/bewerken" class="knop">Nieuwe groep</a>
 	{/if}
 </div>
 
@@ -35,11 +35,12 @@
 				<li><br />Deze groep is vol, u kunt zich niet meer aanmelden.</li>
 			{/if}
 		</ul>
-		<h2><a href="/groepen/{$groepen->getNaam()}/{$groep->getId()}/">{$groep->getNaam()}</a></h2>
+		<h2><a href="/actueel/groepen/{$groepen->getNaam()}/{$groep->getId()}/">{$groep->getNaam()}</a></h2>
 		{$groep->getSbeschrijving()|ubb}
 	</div>
 {/foreach}
 <hr class="clear" />
 {if $groepen->isAdmin()}
-	<a href="/groepen/{$groepen->getNaam()}/0/bewerken" class="knop">Nieuwe groep</a>
+	<a href="/actueel/groepen/{$groepen->getNaam()}/0/bewerken" class="knop">Nieuwe groep</a>
 {/if}
+

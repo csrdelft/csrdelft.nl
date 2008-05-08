@@ -13,9 +13,9 @@
 		{foreach from=$maal.maaltijden item=maaltijd}
 			<tr>
 				<td>
-					<a href="/maaltijden/beheer/bewerk/{$maaltijd.id}"><img src="{$csr_pics}forum/bewerken.png" /></a>
-					<a href="/maaltijden/beheer/verwijder/{$maaltijd.id}" onclick="return confirm(\'Weet u zeker dat u deze maaltijd wilt verwijderen?\')"><img src="{$csr_pics}forum/verwijderen.png" /></a>
-					<a href="/maaltijden/lijst/{$maaltijd.id}" class="knop">lijst</a>
+					<a href="/actueel/maaltijden/beheer/bewerk/{$maaltijd.id}"><img src="{$csr_pics}forum/bewerken.png" /></a>
+					<a href="/actueel/maaltijden/beheer/verwijder/{$maaltijd.id}" onclick="return confirm(\'Weet u zeker dat u deze maaltijd wilt verwijderen?\')"><img src="{$csr_pics}forum/verwijderen.png" /></a>
+					<a href="/actueel/maaltijden/lijst/{$maaltijd.id}" class="knop">lijst</a>
 				</td>
 				<td>{$maaltijd.datum|date_format:$datumFormaat}</td>
 				<td>{$maaltijd.tekst|escape:'html'}</td>

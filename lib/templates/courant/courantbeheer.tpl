@@ -1,3 +1,6 @@
+<div style="float: right; margin: 0 0 10px 10px;">
+	<a href="/actueel/courant/archief/" title="Archief">Archief</a>
+</div>
 <h2>C.S.R.-courant</h2>
 <p>
 	De C.S.R.-courant wordt elke woensdagmiddag verzonden naar alle leden van C.S.R.. 
@@ -6,11 +9,11 @@
 </p>
 <div id="knoppenContainer">
 	{if $courant->magVerzenden()}
-		<a href="/intern/courant/verzenden.php" onclick="return confirm('Weet u het zeker dat u de C.S.R.-courant wilt versturen?')" class="knop">Verzenden</a>
+		<a href="/actueel/courant/verzenden.php" onclick="return confirm('Weet u het zeker dat u de C.S.R.-courant wilt versturen?')" class="knop">Verzenden</a>
 	{/if}
 	{* Volgens mij wordt deze nooit gebruikt...
 		{if $courant->magBeheren()}
-		<a href="/intern/courant/leegmaken" class="knop" onclick="return confirm('Weet u zeker dat u de cache wilt leeggooien?')">Leegmaken</a>
+		<a href="/actueel/courant/leegmaken" class="knop" onclick="return confirm('Weet u zeker dat u de cache wilt leeggooien?')">Leegmaken</a>
 		{/if}
 	*}
 </div>
@@ -30,8 +33,8 @@
 					<u>{$bericht.categorie|replace:'csr':'C.S.R.'}</u>
 					{if $courant->magBeheren()}({$bericht.uid|csrnaam:'full':false}){/if}
 					<strong>{$bericht.titel}</strong>
-					[ <a href="/intern/courant/bewerken/{$bericht.ID}">bewerken</a> | 
-					<a href="/intern/courant/verwijder/{$bericht.ID}" onclick="return confirm('Weet u zeker dat u dit bericht wilt verwijderen?')" >verwijderen</a> ]
+					[ <a href="/actueel/courant/bewerken/{$bericht.ID}">bewerken</a> | 
+					<a href="/actueel/courant/verwijder/{$bericht.ID}" onclick="return confirm('Weet u zeker dat u dit bericht wilt verwijderen?')" >verwijderen</a> ]
 				</dt>
 				{if !$courant->magBeheren()}<dd>{$bericht.bericht|ubb}</dd>{/if}
 			{/foreach}
@@ -63,7 +66,7 @@
 		<script type="text/javascript">//<![CDATA[{literal}
 			function showIframe(){
 				target =document.getElementById('courant_voorbeeld');
-				target.innerHTML = "<iframe src=\"/intern/courant/courant.php\" style=\"width: 100%; height: 600px;\"></iframe>";
+				target.innerHTML = "<iframe src=\"/actueel/courant/courant.php\" style=\"width: 100%; height: 600px;\"></iframe>";
 			}
 		//]]></script>{/literal}
 		<a href="#" onclick="showIframe()">Laat voorbeeld zien...</a>

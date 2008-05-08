@@ -139,6 +139,7 @@ class Forum {
 				topic.titel AS titel,
 				topic.uid AS startUID,
 				topic.categorie AS categorie,
+					categorie.titel AS categorieTitel,
 				topic.open AS open,
 				topic.plakkerig AS plakkerig,
 				topic.soort AS soort,
@@ -159,6 +160,8 @@ class Forum {
 				post.bewerkDatum AS bewerkDatum
 			FROM
 				forum_topic topic
+			INNER JOIN 
+				forum_cat categorie ON(categorie.id=topic.categorie)
 			LEFT JOIN
 				forum_post post ON( topic.id=post.tid )
 			INNER JOIN 

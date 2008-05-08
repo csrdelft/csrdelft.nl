@@ -44,7 +44,7 @@ function bevestig(tekst){
 function forumEdit(post){
 	var scripttag=document.createElement('SCRIPT');
 	scripttag.type = 'text/javascript';
-	scripttag.src = '/forum/bewerken/formulier/'+post;
+	scripttag.src = '/communicatie/forum/bewerken/formulier/'+post;
 	document.body.appendChild(scripttag);
 }
 
@@ -54,7 +54,6 @@ function youtubeDisplay(ytID){
 		'<embed src="http://www.youtube.com/v/' + ytID + '&autoplay=1" type="application/x-shockwave-flash" wmode="transparent" width="425" height="350"></embed></object>';
 	
 	if(document.all){
-		//hier moet een <br /> ofzo voor de <object>-tag, want anders maakt IE de div leeg ipv er iets in te zetten.
 		document.all['youtube'+ytID].innerHTML ='<br />'+ html;
 	}else{
 		document.getElementById('youtube'+ytID).innerHTML = html;

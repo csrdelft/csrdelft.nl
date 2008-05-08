@@ -19,9 +19,9 @@ function email_like($email) {
 
 function url_like($url) {
     #                      http://          user:pass@
-    return preg_match('#^([a-zA-z]{1,6}\://)(\w+:\w+@)?' .
+    return preg_match('#^(([a-zA-z]{1,6}\://)(\w+:\w+@)?' .
     #    f            oo.bar.   org       :80                
-        '([a-zA-Z0-9]([-\w]+\.)+(\w{2,5}))(:\d{1,5})?' .
+        '([a-zA-Z0-9]([-\w]+\.)+(\w{2,5}))(:\d{1,5})?)?' .
     #    /path       ?file=http://foo:bar@w00t.l33t.h4x0rz/
         '(/~)?[-\w./]*([-@()\#?/&;:+,._\w= ]+)?$#', $url);
 }

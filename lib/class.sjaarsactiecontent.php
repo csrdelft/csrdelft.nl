@@ -34,7 +34,7 @@ class SjaarsactieContent extends SimpleHTML {
 		echo '<h2 style="border-bottom: 1px dashed black; margin: 15px 0 0px 0;">Een sjaarsactie aanmelden</h2></td></tr>';
 		echo '<tr><td colspan="2">';
 
-		echo '<form action="/intern/sjaarsacties.php" method="post"><div style="background-color: #F7F9FF; margin: 5px; padding: 5px; width: 710px;">';
+		echo '<form action="/actueel/sjaarsacties/" method="post"><div style="background-color: #F7F9FF; margin: 5px; padding: 5px; width: 710px;">';
 		if(trim($sError)!=''){ echo '<div class="foutmelding">'.$sError.'</div>'; }
 		echo '<strong>Naam:</strong> (van de sjaarsactie)<br /><input type="text" value="'.$naam.'" name="actieNaam" class="tekst" style="width: 700px" /><br />';
 		echo '<strong>Beschrijving:</strong><br /><textarea name="beschrijving" rows="8" class="tekst" style="width: 700px">'.$beschrijving.'</textarea><br />';
@@ -78,7 +78,7 @@ class SjaarsactieContent extends SimpleHTML {
 				if($limiet>=1){
 					echo 'nog '.$limiet.' plaat'.($limiet==1 ? 's' : 'sen').' vrij.';
 					if(!$bAlAangemeld AND $this->_sjaarsactie->isSjaars()){	
-						echo '<br /><br /><a href="/intern/sjaarsacties.php?actieID='.$aSjaarsactie['ID'].'&amp;aanmelden" 
+						echo '<br /><br /><a href="/actueel/sjaarsacties.php?actieID='.$aSjaarsactie['ID'].'&amp;aanmelden" 
 							onclick="'."return confirm('Weet u zeker dat u wilt aanmelden voor deze sjaarsactie?')".'">aanmelden</a>';
 					}
 				}else{

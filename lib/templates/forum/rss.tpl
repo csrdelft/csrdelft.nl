@@ -5,13 +5,12 @@
 # -------------------------------------------------------------------
 # templaat voor de rss-voederbak
 # -------------------------------------------------------------------
-# TODO: maak de data rfc-aware && regel de forum-voorkeuren voor namen
 *}
-<rss version="2.0">
+<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/">
 	<channel>
 		<copyright>Copyright 2006 C.S.R. Delft</copyright>
-		<pubDate>{$smarty.now|date_format:"%a, %e %b %Y %T"} +0200</pubDate>
-		<lastBuildDate>{$smarty.now|date_format:"%a, %e %b %Y %T"} +0200</lastBuildDate>
+		<pubDate>{$smarty.now|rfc2822}</pubDate>
+		<lastBuildDate>{$smarty.now|rfc2822}</lastBuildDate>
 		<docs>http://csrdelft.nl/index.php</docs>
 		<description>C.S.R. Delft: Vereniging van Christen-studenten te Delft.</description>
 		<image>
@@ -23,19 +22,19 @@
 			<description>Logo van C.S.R. Delft</description>
 		</image>
 		<language>nl-nl</language>
-		<link>http://csrdelft.nl/forum/</link>
+		<link>http://csrdelft.nl/communicatie/forum/</link>
 		<title>C.S.R. Delft forum laatste berichten.</title>
-		<managingEditor>PubCie@csrdelft.nl</managingEditor>
-		<webMaster>pubcie@csrdelft.nl</webMaster>
+		<managingEditor>PubCie@csrdelft.nl (Publiciteitscommissie der C.S.R.)</managingEditor>
+		<webMaster>pubcie@csrdelft.nl (Publiciteitscommissie der C.S.R.)</webMaster>
 		{foreach from=$aPosts item=post}<item>
-			<title>{$post.nickname|escape:'html'}:{$post.tekst|truncate:30|escape:'html'}</title>
-			<link>http://csrdelft.nl/forum/onderwerp/{$post.tid}#post{$post.postID}</link>
+			<title>{$post.titel|truncate:30|escape:'html'}</title>
+			<link>http://csrdelft.nl/communicatie/forum/onderwerp/{$post.tid}#post{$post.postID}</link>
 			<description>{$post.tekst|escape:'html'}</description>
-			<author>{$post.nickname|escape:'html'} pubcie@csrdelft.nl</author>
-			<category>forum: {$post.categorieTitel}</category>
-			<comments>http://csrdelft.nl/forum/onderwerp/{$post.tid}</comments>
-			<guid>http://csrdelft.nl/forum/onderwerp/{$post.tid}#post{$post.postID}</guid>
-			<pubDate>{$post.datum|date_format:"%a, %e %b %Y %T"} +0200</pubDate>
+			<dc:creator>{$post.uid|csrnaam:'user':false:false|escape:'html'}</dc:creator>
+			<category>forum/{$post.categorieTitel|escape:'html'}</category>
+			<comments>http://csrdelft.nl/communicatie/forum/onderwerp/{$post.tid}</comments>
+			<guid isPermaLink="true">http://csrdelft.nl/communicatie/forum/onderwerp/{$post.tid}#post{$post.postID}</guid>
+			<pubDate>{$post.datum|rfc2822}</pubDate>
 		</item>
 		{/foreach}
 	</channel>

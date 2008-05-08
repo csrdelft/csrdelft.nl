@@ -1,6 +1,6 @@
 <h1>Maaltijd {$maal.formulier.actie}</h1>
 
-<form action="/maaltijden/beheer/" method="post">
+<form action="/actueel/maaltijden/beheer/" method="post">
 	<input type="hidden" name="maalid" value="{$maal.formulier.id}" />
 	{if isset($error)}<div class="waarschuwing">{$error}</div>{/if}
 	<table>

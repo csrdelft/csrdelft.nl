@@ -14,6 +14,7 @@ class MySql{
 
 	//resource handle
 	private $_db;
+	private $querys=array();
 	
 	private function __construct(){ $this->connect(); }
   
@@ -41,6 +42,7 @@ class MySql{
 
  	# Retourneert het MySql resultaat bij de opgegeven Query
 	public function query($query) {
+		$this->debug($query);
 		return mysql_query($query, $this->_db);
 	}
 
@@ -79,10 +81,10 @@ class MySql{
 	  return $this->query($query);
 	}
 
-	public function next($result)          { return mysql_fetch_assoc($result); }
-	public function numRows($result)       { return mysql_num_rows($result); }
-	public function insert_id()            { return mysql_insert_id($this->_db); }
-	public function affected_rows($result) { return mysql_affected_rows($result); }
+	public function next($result)		{ return mysql_fetch_assoc($result); }
+	public function numRows($result)	{ return mysql_num_rows($result); }
+	public function insert_id()			{ return mysql_insert_id($this->_db); }
+	public function affected_rows() 	{ return mysql_affected_rows($this->_db); }
 
 	# Toevoegen van een regel
 	# String $table : de tabelnaam
@@ -148,6 +150,18 @@ class MySql{
 	}
 	public function dbResource() {
 		return $this->_db;
+	}
+	function debug($string){
+		if(defined('DEBUG')){
+			$string=str_replace(array("\r\n", "\n", "\t", '  ', '   '), ' ', $string);
+			if(mysql_error()!=''){
+				$string.="\nmysql_error(): ".mysql_error();
+			}
+			$this->querys[]=$string;
+		}
+	}
+	public function getDebug(){
+		return 'MySql query '.print_r($this->querys, true);
 	}
 }
 

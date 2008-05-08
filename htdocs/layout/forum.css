@@ -7,7 +7,7 @@ table.forumtabel td{ border: 0px; }
 
 .forumhoofd {
 	font-weight: bold;
-	color: #000; background-color: gold;
+	color: #000; background-color: lightblue;
 	vertical-align: middle;
 	padding: 5px 10px 5px 15px;
 	height: 19px;
@@ -58,7 +58,7 @@ table.forumtabel td{ border: 0px; }
 	vertical-align: middle; text-align: left;
 }
 .forumreactiemoment {
-	color: #000; background-color: #fff3b4;
+	color: #000; background-color: #cde4eb;
 	margin: 0px; padding: 0.2em 0.6em 0.2em 0.6em;	
 	vertical-align: top; text-align: left;	
 	width: 180px;
@@ -93,7 +93,7 @@ div.citaatContainer div.citaat div.citaatContainer div.citaat div.citaatContaine
 	color: black;
 }
 img.forum_image{
-	max-width: 600px; border: 0;
+	max-width: 586px; border: 0;
 }	
 #pollTabel{
 	width: 100%; 

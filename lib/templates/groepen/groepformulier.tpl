@@ -1,4 +1,4 @@
-<form action="/groepen/{$gtype}/{$groep->getId()}/bewerken" method="post">
+<form action="/actueel/groepen/{$gtype}/{$groep->getId()}/bewerken" method="post">
 <div id="groepFormulier" class="clear">
 	{if $groep->isAdmin()}
 		{if $groep->getId()==0}
@@ -49,7 +49,7 @@
 	{/if}
 	<label for="sbeschrijving"><strong>Lange beschrijving:</strong><br /><br />UBB staat aan.</label>
 	<textarea id="sbeschrijving" name="beschrijving" style="width: 70%; height: 200px;">{$groep->getBeschrijving()|escape:'html'}</textarea><br />
-	<label for="submit"></label><input type="submit" id="submit" value="Opslaan" /> <a href="/groepen/{$gtype}/{$groep->getId()}/" class="knop">terug</a>
+	<label for="submit"></label><input type="submit" id="submit" value="Opslaan" /> <a href="/actueel/groepen/{$gtype}/{$groep->getId()}/" class="knop">terug</a>
 </div>
 </form>
 <script type="text/javascript">

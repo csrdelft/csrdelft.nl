@@ -24,8 +24,8 @@
  * @param bool
  * @return string
  */
-function smarty_modifier_csrnaam($uid, $vorm='civitas', $link=true){
+function smarty_modifier_csrnaam($uid, $vorm='civitas', $link=true, $entities=true){
 	//get the csrdelft.nl/ member-object
 	$lid=Lid::get_lid();
-	return $lid->getNaamLink($uid, $vorm, $link);
+	return $lid->getNaamLink($uid, $vorm, $link, false, $entities);
 }

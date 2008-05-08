@@ -60,7 +60,7 @@ class stats{
 			$naam.=' '.$aLogRegel['achternaam'];
 			
 			echo '<tr><td class="forumtitel">'.date('D H:i', strtotime($aLogRegel['moment'])).'</td>';
-			echo '<td class="forumtitel" ><a href="?uid='.htmlspecialchars($aLogRegel['uid']).'">+</a> <a href="/leden/profiel/'.htmlspecialchars($aLogRegel['uid']).'" target="_blank">'.$naam.'</a></td>';
+			echo '<td class="forumtitel" ><a href="?uid='.htmlspecialchars($aLogRegel['uid']).'">+</a> <a href="/leden/communicatie/profiel/'.htmlspecialchars($aLogRegel['uid']).'" target="_blank">'.$naam.'</a></td>';
 			echo '<td class="forumtitel"><a href="?ip='.htmlspecialchars($aLogRegel['ip']).'">+</a> 
 				'.gethostbyaddr($aLogRegel['ip']).' <strong>('.$aLogRegel['locatie'].')</strong></td>';
 			echo '<td class="forumtitel" ';
@@ -164,7 +164,7 @@ class stats{
 			$naam.=' '.$aLogRegel['achternaam'];
 			echo '<tr>';
 			echo '<td class="forumtitel">'.date('D H:i', strtotime($aLogRegel['moment'])).'</td>';
-			echo '<td class="forumtitel"><a href="?uid='.htmlspecialchars($aLogRegel['uid']).'">+</a> <a href="/leden/profiel/'.htmlspecialchars($aLogRegel['uid']).'" target="_blank">'.$naam.'</a></td>';
+			echo '<td class="forumtitel"><a href="?uid='.htmlspecialchars($aLogRegel['uid']).'">+</a> <a href="/leden/communicatie/profiel/'.htmlspecialchars($aLogRegel['uid']).'" target="_blank">'.$naam.'</a></td>';
 			echo '<td class="forumtitel"><a href="http://csrdelft.nl'.$aLogRegel['url'].'" target="_blank">'.$aLogRegel['url'].'</a></td>';
 			echo '<td class="forumtitel">'.$aLogRegel['useragent'].'</td>';
 			if($aLogRegel['referer']==''){

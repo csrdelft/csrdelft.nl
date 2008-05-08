@@ -1,0 +1,25 @@
+RewriteEngine On
+
+RewriteRule ^/?$ /actueel/mededelingen/ [R]
+
+# Sjaarsacties
+RewriteRule ^sjaarsacties/?$ sjaarsacties.php
+
+# Eetplan
+RewriteRule ^eetplan/$ eetplan.php
+RewriteRule ^eetplan/sjaars/([0-9]*) eetplan.php?pheutID=$1
+RewriteRule ^eetplan/huis/([0-9]*) eetplan.php?huisID=$1
+
+# Mededelingen tonen
+RewriteRule ^mededelingen/?$ mededelingen.php
+RewriteRule ^mededelingen/([0-9]+)$ mededelingen.php?berichtID=$1
+
+# Mededelingen beheer
+RewriteRule ^mededelingen/beheer mededelingen.php?beheer=true
+RewriteRule ^mededelingen/verwijderen/([0-9]+) mededelingen.php?berichtID=$1&verwijderen=true
+RewriteRule ^mededelingen/bewerken/([0-9]+)$ mededelingen.php?berichtID=$1&bewerken=true
+RewriteRule ^mededelingen/bewerken/([0-9]+)/verwijder-plaatje mededelingen.php?berichtID=$1&plaatje=delete
+RewriteRule ^mededelingen/toevoegen$ mededelingen.php?toevoegen=true
+
+# Pagina's met tekst
+RewriteRule ^owee/? ../pagina.php?naam=owee

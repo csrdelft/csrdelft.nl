@@ -19,7 +19,7 @@ class PollContent extends SimpleHTML {
 		$iPollStemmen=$this->_forumPoll->getPollStemmen();
 		//html dan maer
 		echo '<tr/><td class="forumauteur">Er is '.$iPollStemmen.' keer gestemd.</td><td>';
-		echo '<form action="/forum/stem/'.$this->_forumPoll->getTopicID().'" method="post" >';
+		echo '<form action="/communicatie/forum/stem/'.$this->_forumPoll->getTopicID().'" method="post" >';
 		echo '<table  id="pollTabel">';
 		//poll vraag nog een keer
 		echo '<tr><td colspan="3"><strong>'.$this->_forumPoll->getPollVraag().'</strong></td></tr>';

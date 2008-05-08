@@ -72,7 +72,7 @@ Daarnaast is er de mogelijkheid om de complete ledenlijst weer te geven door te 
 Door op de naam van een lid te klikken kunt u naar de Profiel-pagina  gaan van het genoemde lid. Op
 deze pagina is een volledig overzicht van de gegevens te lezen.
  Mocht u alle leden bijvoorbeeld in uw pauper willen zetten, dan kunt u daarvoor een <a href="/tools/leden.csv">csv-bestand</a> neerladen.
-<form action="{$_SERVER['PHP_SELF']}" method="post">
+<form action="/communicatie/ledenlijst/" method="post">
 <p>
 <input type="hidden" name="a" value="zoek" />
 Zoek <input type="text" name="wat" style="width:100px;" value="{$form_wat}" />
@@ -211,11 +211,11 @@ EOT
 				$uid=htmlspecialchars($lid['uid']);
 				echo '<tr>';
 				if(in_array('pasfoto', $this->_form['kolom'])){
-					echo '<td><a href="/intern/profiel/'.$uid.'">';
+					echo '<td><a href="/communicatie/profiel/'.$uid.'">';
 					echo $this->_lid->getPasfoto($uid, 'small').'</a></td>';
 				}
 				if($this->_lid->hasPermission('P_LEDEN_MOD')){
-					echo '<td><a href="/intern/profiel/'.$uid.'/edit" class="knop">b</a>&nbsp;';
+					echo '<td><a href="/communicatie/profiel/'.$uid.'/edit" class="knop">b</a>&nbsp;';
 				}
 				//naam als link naar profiel weergeven.
 				echo '<td>'.$this->_lid->getNaamLink($lid['uid'], 'full', true, $lid).'</td>';

@@ -31,15 +31,15 @@ class EetplanContent extends SimpleHTML {
 			echo '<h1>Ongeldig pheutID</h1>';
 		}else{
 			$aPheutNaam=$this->_eetplan->getPheutNaam($iPheutID);
-			echo '<h2><a class="forumGrootlink" href="/intern/eetplan/">Eetplan</a> &raquo; voor '.mb_htmlentities($aPheutNaam['naam']).'</h2>
-				<a href="/intern/profiel/'.$iPheutID.'">Naar profiel van '.mb_htmlentities($aPheutNaam['naam']).'</a><br /><br />';
+			echo '<h2><a class="forumGrootlink" href="/actueel/eetplan/">Eetplan</a> &raquo; voor '.mb_htmlentities($aPheutNaam['naam']).'</h2>
+				<a href="/communicatie/profiel/'.$iPheutID.'">Naar profiel van '.mb_htmlentities($aPheutNaam['naam']).'</a><br /><br />';
 			echo '<table class="hoktable">
 				<tr><th style="width: 150px">Avond</th><th style="width: 200px">Huis</th></tr>';
 			foreach($aEetplan as $aEetplanData){
 				echo '
 					<tr>
 						<td >'.$this->_eetplan->getDatum($aEetplanData['avond']).'</td>
-						<td><a href="/intern/eetplan/huis/'.$aEetplanData['huisID'].'"><strong>'.mb_htmlentities($aEetplanData['huisnaam']).'</strong></a><br />
+						<td><a href="/actueel/eetplan/huis/'.$aEetplanData['huisID'].'"><strong>'.mb_htmlentities($aEetplanData['huisnaam']).'</strong></a><br />
 							'.mb_htmlentities($aEetplanData['huisadres']).' | '.mb_htmlentities($aEetplanData['telefoon']).'
 						</td></tr>';
 			}
@@ -73,14 +73,14 @@ class EetplanContent extends SimpleHTML {
 				}
 				$aPheutNaam=$this->_eetplan->getPheutNaam($aEetplanData['pheut']);
 				$sUitvoer.='</td>
-					<td><strong><a href="/intern/eetplan/sjaars/'.$aEetplanData['pheut'].'">'.mb_htmlentities($aPheutNaam['naam']).'</a></strong><br /></td>
+					<td><strong><a href="/actueel/eetplan/sjaars/'.$aEetplanData['pheut'].'">'.mb_htmlentities($aPheutNaam['naam']).'</a></strong><br /></td>
 					<td>'.mb_htmlentities($aPheutNaam['telefoon']).'</td>
 					<td>'.mb_htmlentities($aPheutNaam['mobiel']).'</td>
 					</tr>';
 			
 			}
 			$sUitvoer.='</table>';
-			echo '<h2><a class="forumGrootlink"href="/intern/eetplan/">Eetplan</a> &raquo; voor '.mb_htmlentities($aEetplanData['huisnaam']).'</h2>
+			echo '<h2><a class="forumGrootlink"href="/actueel/eetplan/">Eetplan</a> &raquo; voor '.mb_htmlentities($aEetplanData['huisnaam']).'</h2>
 				'.mb_htmlentities($aEetplanData['huisadres']).' <br /> 
 				Telefoon: '.mb_htmlentities($aEetplanData['telefoon']).'<br />
 				Ga naar <a href="/groepen/woonoorden.php">woonoordenpagina</a><br /><br />'.
@@ -102,9 +102,9 @@ text-align: justify; display: block; border: 1px solid black; background-color: 
 		echo '</tr>';
 		
 		foreach($aEetplan as $aEetplanVoorPheut){
-			echo '<tr><td><a href="/intern/eetplan/sjaars/'.$aEetplanVoorPheut[0]['uid'].'">'.$aEetplanVoorPheut[0]['naam'].'</a></td>';
+			echo '<tr><td><a href="/actueel/eetplan/sjaars/'.$aEetplanVoorPheut[0]['uid'].'">'.$aEetplanVoorPheut[0]['naam'].'</a></td>';
 			for($iTeller=1;$iTeller<=8;$iTeller++){
-				echo '<td><a href="/intern/eetplan/huis/'.$aEetplanVoorPheut[$iTeller].'">'.
+				echo '<td><a href="/actueel/eetplan/huis/'.$aEetplanVoorPheut[$iTeller].'">'.
 					mb_htmlentities($aEetplanVoorPheut[$iTeller]).
 					'</a></td>';
 			}
@@ -118,8 +118,8 @@ text-align: justify; display: block; border: 1px solid black; background-color: 
 				<tr><th>huisID</th><th>Naam</th><th>Adres</th><th>Telefoon</th></tr>';
 		foreach($aHuizenArray as $aHuis){
 			echo '<tr>
-				<td><a href="/intern/eetplan/huis/'.$aHuis['huisID'].'">'.$aHuis['huisID'].'</a></td>
-				<td><a href="/intern/eetplan/huis/'.$aHuis['huisID'].'">'.mb_htmlentities($aHuis['huisNaam']).'</a></td>
+				<td><a href="/actueel/eetplan/huis/'.$aHuis['huisID'].'">'.$aHuis['huisID'].'</a></td>
+				<td><a href="/actueel/eetplan/huis/'.$aHuis['huisID'].'">'.mb_htmlentities($aHuis['huisNaam']).'</a></td>
 				<td>'.$aHuis['adres'].'</td>
 				<td>'.$aHuis['telefoon'].'</td></tr>';
 		}
