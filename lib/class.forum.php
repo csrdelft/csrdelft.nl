@@ -113,8 +113,8 @@ class Forum {
 		
 		if($this->_lid->hasPermission('P_LEDEN_READ') OR isFeut()){ 
 			//C.S.R.-zaken, webstek terugkoppeling, geloofszaken, nieuws&actualiteit, electronica en techniek, 
-			//groeperingen, kringen& werkgroepen.
-			$cats=array_merge($cats, array(1, 3, 10, 9, 13, 17, 18));
+			//groeperingen, kringen& werkgroepen, bidpunten, vacatures
+			$cats=array_merge($cats, array(1, 3, 10, 9, 13, 17, 18, 20, 21));
 		}
 		if($this->_lid->hasPermission('P_OUDLEDEN_READ') OR isFeut()){ 
 			//oudledenforum
