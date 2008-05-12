@@ -131,11 +131,7 @@ class ProfielContent extends SimpleHTML {
 		if($this->_profiel['uid']==$this->_lid->getUid()){
 			$profiel->caching=false;
 		}
-		if(!isset($_GET['skin'])){
-			$template='profiel_nieuw.tpl';	
-		}else{
-			$template='profiel.tpl';
-		}
+		$template='profiel.tpl';
 		$profiel->display($template, $this->_profiel['uid']);
 		
 		# gaan we een linkje afbeelden naar de edit-functie, of de editvakken?
