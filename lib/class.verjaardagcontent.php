@@ -72,10 +72,10 @@ class VerjaardagContent extends SimpleHTML {
 							echo '<td>'."\n";
 							$verjaardagen = $this->_lid->getVerjaardagen($maand);
 							foreach ($verjaardagen as $verjaardag){
-								if ($verjaardag['gebdag'] == $dezedag and $maand == $dezemaand) echo '<span class="waarschuwing">';
+								if ($verjaardag['gebdag'] == $dezedag and $maand == $dezemaand) echo '<em>';
 								echo $verjaardag['gebdag'] . " ";
 								echo $this->_lid->getNaamLink($verjaardag['uid'], 'full', false, $verjaardag)."<br />\n";
-								if ($verjaardag['gebdag'] == $dezedag and $maand == $dezemaand) echo "</span>";
+								if ($verjaardag['gebdag'] == $dezedag and $maand == $dezemaand) echo "</em>";
 							}
 							echo "<br /></td>\n";
 						} else {

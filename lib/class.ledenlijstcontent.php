@@ -89,7 +89,7 @@ class LedenlijstContent extends SimpleHTML {
 <div style="float: right; margin: 0 0 10px 10px;">
 	<a href="/tools/leden.csv" title="CSV-bestand downloaden">CSV-bestand downloaden</a>
 	| <a href="/communicatie/verjaardagen.php" title="Overzicht verjaardagen">Verjaardagen</a>
-	| <a href="/communicatie/moten.php" title="Moten">Moten</a>
+	| <a href="/communicatie/moten.php" title="Kringen">Kringen</a>
 </div>
 <h1>Ledenlijst</h1>
 <form action="/communicatie/ledenlijst/" method="post" id="ledenlijst_zoeken">

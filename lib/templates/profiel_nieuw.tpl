@@ -35,9 +35,7 @@
 					{if $profhtml.mobiel!=''}{$profhtml.mobiel}<br />{/if}
 				</div>
 			</div>
-			<div class="gegevensouders">
-				
-			
+			<div class="gegevensouders">			
 				{if $profhtml.o_adres!=''}
 					<div class="label">
 						<a href="http://maps.google.nl/maps?daddr={$profhtml.o_adres|urlencode}+{$profhtml.o_woonplaats|urlencode}+{$profhtml.o_land|urlencode}">
@@ -77,7 +75,7 @@
 			<div class="label">Lid sinds:</div> {$profhtml.lidjaar}<br />
 			<br />
 			{if $isOudlid!==true}
-				<div class="label">Kring:</div> <a href="/groepen/moten.php">{$profhtml.moot}.{$profhtml.kring}</a><br />
+				<div class="label">Kring:</div> <a href="/communicatie/moten.php">{$profhtml.moot}.{$profhtml.kring}</a><br />
 			{/if}
 		</div>
 	</div>
