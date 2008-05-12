@@ -28,7 +28,6 @@ htdocs/actueel/eetplan.php -text
 htdocs/actueel/groepen/.htaccess -text
 htdocs/actueel/groepen/groep.php -text
 htdocs/actueel/groepen/groepen.php -text
-htdocs/actueel/groepen/moten.php -text
 htdocs/actueel/maaltijden/.htaccess -text
 htdocs/actueel/maaltijden/archief.php -text
 htdocs/actueel/maaltijden/beheer.php -text
@@ -62,6 +61,7 @@ htdocs/communicatie/forum/verplaatsen.php -text
 htdocs/communicatie/forum/verwijderen.php -text
 htdocs/communicatie/forum/zoeken.php -text
 htdocs/communicatie/lijst.php -text
+htdocs/communicatie/moten.php -text
 htdocs/communicatie/profiel.php -text
 htdocs/communicatie/verjaardagen.php -text
 htdocs/index.php -text

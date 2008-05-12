@@ -27,7 +27,7 @@ class LedenlijstContent extends SimpleHTML {
 	var	$_form = array(
 		'wat'    => '',
 		'waar'   => 'naam',
-		'kolom'  => array('adres', 'email', 'telefoon', 'mobiel'),
+		'kolom'  => array('adres', 'email', 'mobiel'),
 		'sort'   => 'achternaam',
 		'moot'   => 'alle'
 	);
@@ -59,27 +59,10 @@ class LedenlijstContent extends SimpleHTML {
 	}
 
 	function view() {
-
 		# De ingevulde zoekterm weer afbeelden
 		$form_wat = mb_htmlentities($this->_form['wat']);
-
-		print(<<<EOT
-<h1>Ledenlijst</h1>
-
-Op deze pagina kunt u zoeken in het ledenbestand. Er kan gezocht worden op voornaam, achternaam of email-adres.
-U kunt kiezen welke kolommen u wilt weergeven in de zoekresultaten, en welke sorteervolgorde moet worden aangehouden.
-Daarnaast is er de mogelijkheid om de complete ledenlijst weer te geven door te zoeken zonder een zoekterm op te geven.
-Door op de naam van een lid te klikken kunt u naar de Profiel-pagina  gaan van het genoemde lid. Op
-deze pagina is een volledig overzicht van de gegevens te lezen.
- Mocht u alle leden bijvoorbeeld in uw pauper willen zetten, dan kunt u daarvoor een <a href="/tools/leden.csv">csv-bestand</a> neerladen.
-<form action="/communicatie/ledenlijst/" method="post">
-<p>
-<input type="hidden" name="a" value="zoek" />
-Zoek <input type="text" name="wat" style="width:100px;" value="{$form_wat}" />
-in <select name="waar">
-EOT
-		);
-
+		
+		
 		# We definieren voor elk veld een 'kolomtitel' die gebruikt wordt boven de kolommen
 		# in de zoekresultaten en in de keuzelijstjes voor zoek in, sorteren op etc...
 		$kolomtitel = array(
@@ -101,7 +84,51 @@ EOT
 			'gebdatum' => 'Geboortedatum',
 			'beroep' => 'Functie/beroep'
 		);
+				
+		print(<<<EOT
+<div style="float: right; margin: 0 0 10px 10px;">
+	<a href="/tools/leden.csv" title="CSV-bestand downloaden">CSV-bestand downloaden</a>
+	| <a href="/communicatie/verjaardagen.php" title="Overzicht verjaardagen">Verjaardagen</a>
+	| <a href="/communicatie/moten.php" title="Moten">Moten</a>
+</div>
+<h1>Ledenlijst</h1>
+<form action="/communicatie/ledenlijst/" method="post" id="ledenlijst_zoeken">
+<fieldset id="kolommen">
+			Laat de volgende kolommen zien:<br /></p><table style="width: 100%"><tr>
+EOT
+);
+
+		# zo, en nu de velden die we kunnen tonen in de resultaten
+		$laat_zien = array(
+			'uid', 'pasfoto', 'nickname', 'email', 'adres', 'telefoon', 'mobiel', 
+			'icq', 'msn', 'skype', 'studie', 'gebdatum', 'beroep');
 		
+		# tralala zorg dat er een even aantal elementen in staat
+		if (count($laat_zien)%2 != 0) array_push($laat_zien, false);
+
+		# itereren kun je leren, vakjes afbeelden 2 onder elkaar
+		$i = 0;
+		foreach ($laat_zien as $veld) {
+			# bovenste veld
+			if ($i%4 == 0) print('<td>');
+			if ($veld !== false) {
+				echo '<input type="checkbox" name="kolom[]" value="'.$veld.'"  class="checkbox" id="veld'.$i.'" ';
+				if (in_array($veld, $this->_form['kolom'])){echo ' checked="checked"';}
+				echo ' /><label for="veld'.$i.'"> '.$kolomtitel[$veld].'</label>';
+				if ($i%2 != 3) echo '<br />';
+				print("\n");
+			}
+			if ($i%4 == 3) echo '</td>';
+			$i++;
+		}
+
+		# afsluiten form
+		echo '</tr></table></fieldset>
+<p>
+<input type="hidden" name="a" value="zoek" />
+<strong>Zoek:</strong> <input type="text" name="wat" style="width:100px;" value="'.$form_wat.'" />
+in <select name="waar">';		
+
 		# de velden die we presenteren om in te kunnen zoeken
 		$zoek_in_waar = array(
 			'naam', 'nickname', 'voornaam', 'achternaam', 'uid',
@@ -112,7 +139,7 @@ EOT
 			if ($this->_form['waar'] == $veld) echo ' selected="selected"';
 			echo '>'.$kolomtitel[$veld].'</option>';
 		}
-		echo '</select>, moot:<select name="moot">';
+		echo '</select><br />Selectie: &nbsp;moot:<select name="moot">';
 		# moten zijn nogal hard-coded, maar ik denk dat het makkelijker is aan te passen
 		# in de code als het aantal ooit nog veranderd ipv het dynamisch te gaan maken ofzo
 		$zoek_in_moten = array('alle','1','2','3','4');
@@ -125,7 +152,7 @@ EOT
 		# als ingelogde persoon leesrechten heeft op leden + oudleden maken we een extra
 		# keuzelijstje. zoeken in leden, oudleden, of allebei tegelijk.
 		if ($this->_lid->hasPermission('P_LEDEN_READ') and $this->_lid->hasPermission('P_OUDLEDEN_READ')) {
-			echo '</select>, status:<select name="status">';
+			echo '</select> status:<select name="status">';
 
 			$zoek_in_type = array('(oud)?leden','leden','oudleden');
 			# de VAB mag ook nobodies zoeken
@@ -151,7 +178,7 @@ EOT
 			}
 		}		
 		
-		echo '</select>, sorteer op:<select name="sort" >';
+		echo '</select><br />Sorteer op:<select name="sort" >';
 		
 		# de velden waarop de uitvoer gesorteerd kan worden
 		$zoek_sort = array(
@@ -164,35 +191,8 @@ EOT
 			echo '>'.$kolomtitel[$veld].'</option>';
 		}
 		echo '</select> 
-			<input type="submit" name="fu" value=" Zoek! " /><br /><br />
-			Laat de volgende kolommen zien:<br /></p><table style="width: 100%"><tr>';
-
-		# zo, en nu de velden die we kunnen tonen in de resultaten
-		$laat_zien = array(
-			'uid', 'pasfoto', 'nickname', 'email', 'adres', 'telefoon', 'mobiel', 
-			'icq', 'msn', 'skype', 'studie', 'gebdatum', 'beroep');
-		
-		# tralala zorg dat er een even aantal elementen in staat
-		if (count($laat_zien)%2 != 0) array_push($laat_zien, false);
-
-		# itereren kun je leren, vakjes afbeelden 2 onder elkaar
-		$i = 0;
-		foreach ($laat_zien as $veld) {
-			# bovenste veld
-			if ($i%2 == 0) print('<td>');
-			if ($veld !== false) {
-				echo '<input type="checkbox" name="kolom[]" value="'.$veld.'"  class="checkbox" id="veld'.$i.'" ';
-				if (in_array($veld, $this->_form['kolom'])) echo ' checked="checked"';
-				echo ' /><label for="veld'.$i.'"> '.$kolomtitel[$veld].'</label>';
-				if ($i%2 == 0) echo '<br />';
-				print("\n");
-			}
-			if ($i%2 == 1) echo '</td>';
-			$i++;
-		}
-
-		# afsluiten form
-		echo '</tr></table></form><br />';
+			<input type="submit" name="fu" value=" Zoek! " id="zoek" />
+			</form><hr class="clear" />';
 		
 		if(count($this->_result) > 0) {
 			//zoekresultatentabel met eerst de kopjes		

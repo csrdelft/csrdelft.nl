@@ -55,7 +55,7 @@ if ($lid->hasPermission('P_LEDEN_READ') or $lid->hasPermission('P_OUDLEDEN_READ'
 	} else {
 		# als er geen enkele geldige waarde was zelf een voorstel doen
 		# N.B. naam wordt altijd al afgebeeld
-		$form['kolom'] = array('adres', 'email', 'telefoon', 'mobiel');
+		$form['kolom'] = array('adres', 'email', 'mobiel');
 	}
 
 	# zoekwaarden voor het formulier aan het content-object mededelen

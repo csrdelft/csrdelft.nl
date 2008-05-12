@@ -89,11 +89,15 @@ class VerjaardagContent extends SimpleHTML {
 				
 			case 'komende10':
 				$aVerjaardagen=$this->_lid->getKomende10Verjaardagen();
-				echo '<h1>Verjaardagen</h1>';
+				echo '<h1><a href="/communicatie/verjaardagen.php">Verjaardagen</a></h1>';
 				for ($i=0; $i<sizeOf($aVerjaardagen); $i++) {					
 					$aVerjaardag = $aVerjaardagen[$i];
 
-					echo '<div class="item">'.date('d-m', strtotime($aVerjaardag['gebdatum'])).' '.$this->_lid->getNaamLink($aVerjaardag['uid'], 'civitas', true, $aVerjaardag).'</div>';
+					echo '<div class="item">'.date('d-m', strtotime($aVerjaardag['gebdatum'])).' ';
+					if($aVerjaardag['jarig_over']==0){echo '<em>';}
+					echo $this->_lid->getNaamLink($aVerjaardag['uid'], 'civitas', true, $aVerjaardag);
+					if($aVerjaardag['jarig_over']==0){echo '</em>';}
+					echo '</div>';
 				}
 				break;
 		}
