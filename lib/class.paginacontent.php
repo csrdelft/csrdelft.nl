@@ -28,6 +28,9 @@ class PaginaContent extends SimpleHTML {
 	}
 	
 	function view(){
+		if(!isset($this->sActie)){
+			$this->sActie='bekijken';
+		}
 		switch ($this->sActie){
 			case 'bekijken':
 				$ubb=new csrUbb();
