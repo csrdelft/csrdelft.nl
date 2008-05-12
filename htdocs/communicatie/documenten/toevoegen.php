@@ -11,7 +11,9 @@ if ($lid->hasPermission('P_DOCS_MOD')) {
 	$midden = new ToevoegenContent($upload);
 } else {
 	// geen rechten
-	$midden = new Includer('', 'geentoegang.html');
+	require_once 'class.paginacontent.php';
+	$pagina=new Pagina('geentoegang');
+	$midden = new PaginaContent($pagina);
 }	
 
 // zijkolom in elkaar jetzen

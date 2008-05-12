@@ -19,7 +19,9 @@ if ($lid->hasPermission('P_LEDEN_READ')) {
 	$midden = new MotenContent($lid);
 } else {
 	# geen rechten
-	$midden = new Includer('', 'geentoegang.html');
+	require_once 'class.paginacontent.php';
+	$pagina=new Pagina('geentoegang');
+	$midden = new PaginaContent($pagina);
 }	
 	
 ## zijkolom in elkaar jetzen

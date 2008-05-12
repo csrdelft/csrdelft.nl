@@ -20,7 +20,9 @@ if ($lid->hasPermission('P_LEDEN_READ')) {
 	$body = new CourantArchiefContent($courant);
 } else {
 	# geen rechten
-	$body = new Includer('', 'geentoegang.html');
+	require_once 'class.paginacontent.php';
+	$pagina=new Pagina('geentoegang');
+	$midden = new PaginaContent($pagina);
 }	
 
 # pagina weergeven

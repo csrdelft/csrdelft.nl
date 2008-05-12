@@ -161,7 +161,9 @@ switch ($error) {
 	break;
 	default:
 		# geen rechten
-		$midden = new Includer('', 'geentoegang.html');
+		require_once 'class.paginacontent.php';
+		$pagina=new Pagina('geentoegang');
+		$midden = new PaginaContent($pagina);
 }	
 ## zijbalk in elkaar rossen
 $zijkolom=new kolom();

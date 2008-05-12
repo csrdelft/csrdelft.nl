@@ -32,7 +32,9 @@ if ($vb->isLid()) {
 	$midden = new VBContent($vb, $action,$id); //toon root thema's
 } else {
 	# geen rechten
-	$midden = new Includer('', 'geentoegang.html');
+	require_once 'class.paginacontent.php';
+	$pagina=new Pagina('geentoegang');
+	$midden = new PaginaContent($pagina);
 }
 
 ## zijkolom in elkaar jetzen

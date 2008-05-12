@@ -76,7 +76,9 @@ if ($lid->hasPermission('P_LEDEN_READ') or $lid->hasPermission('P_OUDLEDEN_READ'
 	}
 } else {
 	# geen rechten
-	$midden = new Includer('', 'geentoegang.html');
+	require_once 'class.paginacontent.php';
+	$pagina=new Pagina('geentoegang');
+	$midden = new PaginaContent($pagina);
 }	
 
 ## zijbalk in elkaar rossen

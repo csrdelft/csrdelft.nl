@@ -11,7 +11,9 @@ if ($lid->hasPermission('P_LEDEN_READ')) {
 	require_once('class.documentencontent.php');
 	$midden=new DocumentenContent($documenten);
 }else{ 
-	$midden = new Includer('', 'geentoegang.html');
+	require_once 'class.paginacontent.php';
+	$pagina=new Pagina('geentoegang');
+	$midden = new PaginaContent($pagina);
 }
 
 // zijkolom in elkaar jetzen
