@@ -292,7 +292,6 @@ lib/templates/maaltijdlijst.tpl -text
 lib/templates/maaltijdvoorkeuren.tpl -text
 lib/templates/menu.tpl -text
 lib/templates/profiel.tpl -text
-lib/templates/profiel_nieuw.tpl -text
 lib/templates/socciemail.tpl -text
 lib/templates/vb/home.tpl -text
 lib/templates/vb/source.tpl -text

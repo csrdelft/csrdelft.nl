@@ -107,3 +107,11 @@ fieldset#modereren{
 	margin-bottom: 10px;
 	border: 1px solid grey;
 }
+
+#forum_zoeken{
+	float: right;
+	padding-right: 2px;
+}
+#forum_zoeken input{
+	padding: 2px 4px;
+}

@@ -25,6 +25,8 @@ class ForumContent extends SimpleHTML {
 ***********************************************************************************************************/	
 	function viewCategories(){
 		$aCategories=$this->_forum->getCategories(true);
+		echo '<form id="forum_zoeken" action="/communicatie/forum/zoeken.php" method="post"><input type="text" name="zoeken" value="zoeken in forum" onfocus="this.value=\'\';" /></form>';
+		echo '<h1>Forum</h1>';
 		//eventuele foutmelding weergeven:
 		echo $this->getMelding();
 		echo '<table class="forumtabel">
@@ -98,8 +100,9 @@ class ForumContent extends SimpleHTML {
 			return;
 		}
 		
-		$sNavigatieLinks='<h2><a class="forumGrootlink" href="/communicatie/forum/">Forum</a> &raquo; '.mb_htmlentities($sCategorie).'</h2>';
-		//echo $sNavigatieLinks;
+		echo '<form id="forum_zoeken" action="/communicatie/forum/zoeken.php" method="post"><input type="text" name="zoeken" value="zoeken in forum" onfocus="this.value=\'\';" /></form>';
+		echo '<div class="forumNavigatie"><a href="/communicatie/forum/" class="forumGrootlink">Forum</a>';
+		echo '<h1>'.mb_htmlentities(wordwrap($this->_forum->getCategorieTitel($iCat), 80, "\n", true)).'</h1></div>';
 		
 		//eventuele foutmelding weergeven:
 		echo $this->getMelding();
