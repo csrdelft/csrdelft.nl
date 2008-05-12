@@ -55,6 +55,7 @@ class ForumOnderwerpContent extends SimpleHTML {
 			}
 
 		}else{
+			echo '<form id="forum_zoeken" action="/communicatie/forum/zoeken.php" method="post"><input type="text" name="zoeken" value="zoeken in forum" onfocus="this.value=\'\';" /></form>';
 			$navlinks='<div class="forumNavigatie"><a href="/communicatie/forum/" class="forumGrootlink">Forum</a> &raquo; 
 				<a href="/communicatie/forum/categorie/'.$this->_forum->getCatID().'" class="forumGrootlink">
 					'.mb_htmlentities($this->_forum->getCatTitel()).'</a><br />
