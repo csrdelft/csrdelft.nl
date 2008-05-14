@@ -76,6 +76,8 @@ class savedQuery{
 				$return.='<th>';
 				if($kopje=='uid_naam'){
 					$return.='Naam';
+				}elseif($kopje=='groep_naam'){
+					$return.='Groep';
 				}else{
 					$return.=$kopje;
 				}
@@ -99,8 +101,12 @@ class savedQuery{
 					//als het veld uid als uid_naam geselecteerd wordt, een linkje 
 					//weergeven
 					if($key=='uid_naam'){
-						
 						$return.=$lid->getNaamLink($veld, 'full', true);
+					}elseif($key=='groep_naam'){
+						require_once('class.groep.php');
+						$groep=new Groep((int)$veld);
+						$return.='<a href="/actueel/groepen/'.$groep->getTypeId().'/'.$groep->getId().'">'.$groep->getNaam().'</a>';
+						
 					}else{
 						$return.=$veld;
 					}
