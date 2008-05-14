@@ -13,8 +13,7 @@ $mail=new CourantContent($courant);
 
 
 if(isset($_GET['iedereen'])){
-	$mail->zend('pubcie@csrdelft.nl');
-	$mail->zend('csrmail@lists.jeugdkerken.nl');	
+	$mail->zend('leden@csrdelft.nl');	
 	$courant->leegCache();
 } else {
 	$mail->zend('pubcie@csrdelft.nl');
