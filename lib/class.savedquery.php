@@ -105,7 +105,7 @@ class savedQuery{
 					}elseif($key=='groep_naam'){
 						require_once('class.groep.php');
 						$groep=new Groep((int)$veld);
-						$return.='<a href="/actueel/groepen/'.$groep->getTypeId().'/'.$groep->getId().'">'.$groep->getNaam().'</a>';
+						$return.='<a href="/actueel/groepen/'.$groep->getType().'/'.$groep->getId().'">'.$groep->getNaam().'</a>';
 						
 					}else{
 						$return.=$veld;
