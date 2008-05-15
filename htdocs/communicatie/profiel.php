@@ -146,7 +146,7 @@ if ($error == 0){
 			}else{
 				$_SESSION['melding']='Wachtwoord resetten mislukt.';
 			}	
-			header("Location: ".CSR_ROOT."intern/communicatie/profiel/".$uid); 
+			header("Location: ".CSR_ROOT."communicatie/profiel/".$uid); 
 			exit;
 		break;
 	}//end switch $action
