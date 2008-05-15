@@ -83,7 +83,7 @@ class EetplanContent extends SimpleHTML {
 			echo '<h2><a class="forumGrootlink"href="/actueel/eetplan/">Eetplan</a> &raquo; voor '.mb_htmlentities($aEetplanData['huisnaam']).'</h2>
 				'.mb_htmlentities($aEetplanData['huisadres']).' <br /> 
 				Telefoon: '.mb_htmlentities($aEetplanData['telefoon']).'<br />
-				Ga naar <a href="/groepen/woonoorden.php">woonoordenpagina</a><br /><br />'.
+				Ga naar <a href="/actueel/groepen/Woonoorden/">woonoordenpagina</a><br /><br />'.
 				$sUitvoer;
 		}
 	}
