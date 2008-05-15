@@ -71,7 +71,7 @@ class Groepen{
 				groeplid.uid AS uid, groeplid.op AS op, groeplid.functie AS functie, groeplid.prioriteit AS prioriteit 
 			FROM groep
 			LEFT JOIN groeplid ON(groep.id=groeplid.groepid) 
-			INNER JOIN lid ON(groeplid.uid=lid.uid) 
+			LEFT JOIN lid ON(groeplid.uid=lid.uid) 
 			WHERE groep.gtype=".$this->getId()."
 			  AND groep.zichtbaar='zichtbaar'
 			  AND (".$htotFilter.")
