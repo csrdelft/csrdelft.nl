@@ -65,7 +65,7 @@ class Groep{
 			FROM groep
 			LEFT JOIN groeplid ON(groep.id=groeplid.groepid)
 			INNER JOIN groeptype ON(groep.gtype=groeptype.id)
-			INNER JOIN lid ON (groeplid.uid=lid.uid)
+			LEFT JOIN lid ON (groeplid.uid=lid.uid)
 			WHERE ".$wherePart."
 			ORDER BY groeplid.prioriteit ASC, lid.achternaam ASC, lid.voornaam ASC;";
 		$rGroep=$db->query($qGroep);
