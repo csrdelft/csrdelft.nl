@@ -102,11 +102,14 @@ class savedQuery{
 					//weergeven
 					if($key=='uid_naam'){
 						$return.=$lid->getNaamLink($veld, 'full', true);
-					}elseif($key=='groep_naam'){
+					}elseif($key=='groep_naam' AND $veld!=''){
 						require_once('class.groep.php');
-						$groep=new Groep((int)$veld);
-						$return.='<a href="/actueel/groepen/'.$groep->getType().'/'.$groep->getId().'">'.$groep->getNaam().'</a>';
-						
+						//$veld mag een enkel id zijn of een serie door komma's gescheiden id's
+						$groepen=explode(',', $veld);
+						foreach($groepen as $groepid){
+							$groep=new Groep((int)$groepid);
+							$return.=$groep->getLink();
+						}						
 					}else{
 						$return.=$veld;
 					}

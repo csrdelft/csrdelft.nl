@@ -367,6 +367,10 @@ class Groep{
 		return $return;
 		
 	}
+	public function getLink(){
+		return '<a class="groeplink" href="/actueel/groepen/'.$this->getType().'/'.$this->getId().'">'.$this->getNaam().'</a>';
+	}
+	
 	/*
 	 * Deze functie geeft een array terug met functies en aantallen.
 	 */

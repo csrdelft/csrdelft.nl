@@ -173,8 +173,7 @@ src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
 			}
 			$html.='</table>';
 		}
-		$html.='<h2><a href="/actueel/groepen/'.$groep->getType().'/'.$groep->getId().'">';
-		$html.=$groep->getNaam().'</a></h2>';
+		$html.='<h2>'.$groep->getLink().'</h2>';
 		$ubb=new CsrUBB();
 		$html.='<p>'.$ubb->getHTML($groep->getSbeschrijving()).'</p><br />';
 		if($groep->isAanmeldbaar() AND $groep->magAanmelden()){

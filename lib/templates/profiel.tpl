@@ -86,13 +86,16 @@
 			<div style="clear: left;"></div>
 		</div>
 	</div>
-	<div class="profielregel">
-		<div class="left">Financi&euml;el</div>	
-		<div class="gegevens">		
-			{if $profhtml.bankrekening!=''}<div class="label">Bankrekening:</div> {$profhtml.bankrekening}<br />{/if}
-			{$profhtml.saldografiek}
+	{if $profhtml.saldografiek!='' OR $profhtml.bankrekening!=''}
+		<div class="profielregel">
+			<div class="left">Financi&euml;el</div>	
+			<div class="gegevens">		
+				{if $profhtml.bankrekening!=''}<div class="label">Bankrekening:</div> {$profhtml.bankrekening}<br />{/if}
+				{$profhtml.saldografiek}
+			</div>
 		</div>
-	</div>
+	{/if}
+	
 	
 	<div class="profielregel">
 		<div class="left">Maaltijden</div>	
