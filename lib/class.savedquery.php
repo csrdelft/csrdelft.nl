@@ -106,10 +106,15 @@ class savedQuery{
 						require_once('class.groep.php');
 						//$veld mag een enkel id zijn of een serie door komma's gescheiden id's
 						$groepen=explode(',', $veld);
+						$groeplinks=array();
 						foreach($groepen as $groepid){
-							$groep=new Groep((int)$groepid);
-							$return.=$groep->getLink();
-						}						
+							$groepid=(int)$groepid;
+							if($groepid!=0){
+								$groep=new Groep();
+								$groeplinks[].=$groep->getLink();
+							}
+						}
+						$return.=implode(', ', $groeplinks);						
 					}else{
 						$return.=$veld;
 					}
