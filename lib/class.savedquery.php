@@ -110,7 +110,7 @@ class savedQuery{
 						foreach($groepen as $groepid){
 							$groepid=(int)$groepid;
 							if($groepid!=0){
-								$groep=new Groep();
+								$groep=new Groep($groepid);
 								$groeplinks[].=$groep->getLink();
 							}
 						}
