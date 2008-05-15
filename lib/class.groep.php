@@ -376,11 +376,13 @@ class Groep{
 	 */
 	public function getFunctieAantal(){
 		$functies=array();
-		foreach($this->leden as $lid){
-			if(!isset($functies[$lid['functie']])){
-				$functies[$lid['functie']]=0;
+		if(is_array($this->leden)){
+			foreach($this->leden as $lid){
+				if(!isset($functies[$lid['functie']])){
+					$functies[$lid['functie']]=0;
+				}
+				$functies[$lid['functie']]++;
 			}
-			$functies[$lid['functie']]++;
 		}
 		return $functies;
 	}
