@@ -78,6 +78,8 @@ class savedQuery{
 					$return.='Naam';
 				}elseif($kopje=='groep_naam'){
 					$return.='Groep';
+				}elseif(substr($kopje, 0, 10)=='groep_naam'){
+					$return.=substr($kopje, 11);
 				}else{
 					$return.=$kopje;
 				}
@@ -102,7 +104,7 @@ class savedQuery{
 					//weergeven
 					if($key=='uid_naam'){
 						$return.=$lid->getNaamLink($veld, 'full', true);
-					}elseif($key=='groep_naam' AND $veld!=''){
+					}elseif(substr($key, 0, 10)=='groep_naam' AND $veld!=''){
 						require_once('class.groep.php');
 						//$veld mag een enkel id zijn of een serie door komma's gescheiden id's
 						$groepen=explode(',', $veld);
@@ -114,7 +116,7 @@ class savedQuery{
 								$groeplinks[].=$groep->getLink();
 							}
 						}
-						$return.=implode(', ', $groeplinks);						
+						$return.=implode('<br />', $groeplinks);						
 					}else{
 						$return.=$veld;
 					}
