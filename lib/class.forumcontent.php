@@ -306,7 +306,7 @@ class ForumContent extends SimpleHTML {
 ***********************************************************************************************************/
 	function lastPosts(){
 		$aPosts=$this->_forum->getPostsVoorRss(15, true);
-		echo '<h1><a href="/communicatie/forum/">Forum</a></h1>';
+		echo '<h1><a href="/communicatie/forum/categorie/laatste">Forum</a></h1>';
 		foreach($aPosts as $aPost){
 			//$tekst=$aPost['nickname'].': ';
 			$tekst=$aPost['titel'];
