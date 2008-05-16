@@ -210,11 +210,11 @@ class NieuwsContent extends SimpleHTML {
 			foreach($aBerichten as $aBericht){
 				$sLink = '<a href="'.NIEUWS_ROOT.$aBericht['id'].'">';
 				$sResultaat.='<div class="mededeling-grotebalk">';
-				$sResultaat.=$sLink.'<div id="plaatje">';
+				$sResultaat.=$sLink.'<div class="plaatje">';
 				$sResultaat.='<img src="'.CSR_PICS.'nieuws/'.$aBericht['plaatje'].'" width="70px" height="70px" alt="'.$this->knipTekst(mb_htmlentities($aBericht['titel'],10,5)).'" />';
 				$sResultaat.='</div></a>';
-				$sResultaat.=$sLink.'<div id="titel">'.$this->knipTekst(mb_htmlentities($aBericht['titel']), 34, 1).'</div></a>';
-				$sResultaat.='<div id="bericht">'.$this->knipTekst($this->ubb->getHTML($aBericht['tekst']), 40, 4).'</div>';
+				$sResultaat.=$sLink.'<div class="titel">'.$this->knipTekst(mb_htmlentities($aBericht['titel']), 34, 1).'</div></a>';
+				$sResultaat.='<div class="bericht">'.$this->knipTekst($this->ubb->getHTML($aBericht['tekst']), 40, 4).'</div>';
 				$sResultaat.='</div>';
 			}
 		}

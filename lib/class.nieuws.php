@@ -47,8 +47,7 @@ class Nieuws {
 				mededeling.tekst as tekst, 
 				mededeling.rank as rank, 
 				mededeling.uid as uid, 
-			"//		lid.voornaam as voornaam, lid.achternaam as achternaam, lid.tussenvoegsel as tussenvoegsel,
-			."	mededeling.prive as prive, 
+				mededeling.prive as prive, 
 				mededeling.verborgen as verborgen,
 				mededeling.plaatje as plaatje,
 				mededeling.categorie as categorie,
@@ -56,9 +55,7 @@ class Nieuws {
 				mededelingcategorie.naam as categorienaam
 			FROM
 				mededeling
-		"//	INNER JOIN
-		//		lid ON( mededeling.uid=lid.uid )
-		."	LEFT JOIN
+			LEFT JOIN
 				mededelingcategorie ON( mededelingcategorie.id=mededeling.categorie )
 			WHERE
 				".$sWhereClause."
