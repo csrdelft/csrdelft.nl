@@ -118,9 +118,11 @@ class ProfielContent extends SimpleHTML {
 		
 		$profhtml['abos']=array();
 		require_once('class.maaltrack.php');
+		require_once('class.maaltijd.php');
 		$maaltrack=new Maaltrack();
 		$profhtml['abos']=$maaltrack->getAbo($this->_profiel['uid']);
-	
+		$profhtml['recenteMaaltijden']=Maaltijd::getRecenteMaaltijden($this->_profiel['uid']);
+		
 		//de html template in elkaar draaien en weergeven
 		$profiel=new Smarty_csr();
 		

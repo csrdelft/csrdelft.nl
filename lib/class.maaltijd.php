@@ -601,6 +601,21 @@ class MaalTijd {
 		
 		return $aan;
 	}
+	public static function getRecenteMaaltijden($uid, $aantal=10){
+		$db=Mysql::get_MySql();
+		$maalQuery="
+			SELECT
+				maaltijd.datum AS datum,
+				maaltijd.tekst AS tekst
+			FROM maaltijdgesloten 
+			INNER JOIN maaltijd ON(maaltijdgesloten.maalid=maaltijd.id)
+			WHERE maaltijdgesloten.uid='".$uid."'
+			ORDER BY datum DESC 
+			LIMIT ".$aantal.";";
+		$maalResult=$db->query($maalQuery);
+		echo mysql_error();
+		return $db->result2array($maalResult);
+	}
 }
 
 ?>

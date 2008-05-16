@@ -108,10 +108,13 @@
 				{/foreach}
 				</ul>
 			{/if}
+			<br />
 			<div class="label">Recent</div>
-			<div class="data">
-			
-			</div>
+			<ul class="nobullets data">
+				{foreach from=$profhtml.recenteMaaltijden item=maaltijd}
+					<li><em>{$maaltijd.datum|date_format:"%d-%m-%Y"}</em> - {$maaltijd.tekst}</li>
+				{/foreach}
+			</ul>
 		</div>
 	</div>
 	
