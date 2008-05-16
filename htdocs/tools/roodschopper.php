@@ -14,9 +14,15 @@ if($lid->getUid()!='0436'){
 	header('location: http://csrdelft.nl'); 
 }
 
+//instellingen
 $saldoGrens=-7;
+$cie='soccie';
 
-$query="SELECT uid, soccieSaldo FROM lid WHERE soccieSaldo<".$saldoGrens.";";
+$naam=array('soccie' => 'SocCie', 'maalcie' => 'MaalCie');
+
+$query="
+	SELECT uid, ".$cie."Saldo AS saldo
+	FROM lid WHERE ".$cie."Saldo<".$saldoGrens.";";
 
 
 
@@ -28,13 +34,13 @@ while($data=$db->next($result)){
 	$mail=new Smarty_csr();
 	
 	$mail->assign('uid', $data['uid']);
-	$mail->assign('saldo', number_format($data['soccieSaldo'], 2, ',', ''));	
+	$mail->assign('saldo', number_format($data['saldo'], 2, ',', ''));	
 	
+	$body=$mail->fetch($cie.'mail.tpl');
+	$to=$data['uid'].'@csrdelft.nl, '.$cie.'@csrdelft.nl';
+	$subject='U staat rood bij de '.$naam[$cie].'.';
 	
-	$body=$mail->fetch('socciemail.tpl');
-	$to=$data['uid'].'@csrdelft.nl, soccie@csrdelft.nl';
-	
-	mail($to, 'U staat rood bij de SocCie.', $body, "From: soccie@csrdelft.nl\n\r");
+	//mail($to, $subject, $body, "From: '.$cie.'@csrdelft.nl\n\r");
 	
 	echo nl2br($body).'<hr />';
 }

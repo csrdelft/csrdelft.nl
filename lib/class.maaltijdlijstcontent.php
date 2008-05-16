@@ -55,7 +55,7 @@ class MaaltijdLijstContent extends SimpleHTML {
 			
 		$maaltijdlijst->assign('maaltijd', $aMaal);
 		$maaltijdlijst->assign('datumFormaat', '%A %e %B'); 
-		$maaltijdlijst->display('maaltijdlijst.tpl');
+		$maaltijdlijst->display('maaltijdketzer/lijst.tpl');
 		
 	}
 }

@@ -95,7 +95,7 @@ class MaaltijdbeheerContent extends SimpleHTML {
 		$maaltijdbeheer->assign('datumFormaat', '%a %e %b %H:%M');
 		$maaltijdbeheer->assign('datumFormaatInvoer', '%Y-%m-%d %H:%M'); 
 		if($this->_error!=''){ $maaltijdbeheer->assign('error', $this->_error); }
-		$maaltijdbeheer->display('maaltijdbeheer.tpl');
+		$maaltijdbeheer->display('maaltijdketzer/beheer.tpl');
 	}
 }
 

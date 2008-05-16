@@ -25,7 +25,7 @@ class MaaltijdContent extends SimpleHTML {
 		$this->_lid =Lid::get_lid();
 		$this->_maaltrack=$maaltrack;
 	}
-	function getTitel(){ return 'Maaltijdketzer'; }
+	function getTitel(){ return 'Maaltijdketzer - Overzicht abonnementen'; }
 	
 	function view(){
 		//de html template in elkaar draaien en weergeven
@@ -61,7 +61,7 @@ class MaaltijdContent extends SimpleHTML {
 		$profiel->assign('maal', $aMaal);
 		$profiel->assign('toonLijsten', $this->_lid->hasPermission('P_MAAL_MOD') or opConfide());
 		$profiel->assign('datumFormaat', '%a %e %b %H:%M'); 
-		$profiel->display('maaltijdketzer.tpl');
+		$profiel->display('maaltijdketzer/maaltijdketzer.tpl');
 	}
 }
 

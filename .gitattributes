@@ -138,6 +138,7 @@ lib/class.ldap.php -text
 lib/class.ledenlijstcontent.php -text
 lib/class.lid.php -text
 lib/class.maaltijd.php -text
+lib/class.maaltijdabocontent.php -text
 lib/class.maaltijdbeheercontent.php -text
 lib/class.maaltijdcontent.php -text
 lib/class.maaltijdlijstcontent.php -text
@@ -285,9 +286,17 @@ lib/templates/forum/rss.tpl -text
 lib/templates/groepen/groep.tpl -text
 lib/templates/groepen/groepen.tpl -text
 lib/templates/groepen/groepformulier.tpl -text
+lib/templates/maalciemail.tpl -text
 lib/templates/maaltijdbeheer.tpl -text
 lib/templates/maaltijdform.tpl -text
 lib/templates/maaltijdketzer.tpl -text
+lib/templates/maaltijdketzer/abo-overzicht.tpl -text
+lib/templates/maaltijdketzer/beheer.tpl -text
+lib/templates/maaltijdketzer/formulier.tpl -text
+lib/templates/maaltijdketzer/lijst.tpl -text
+lib/templates/maaltijdketzer/maaltijdketzer.tpl -text
+lib/templates/maaltijdketzer/saldi-updater.tpl -text
+lib/templates/maaltijdketzer/voorkeuren.tpl -text
 lib/templates/maaltijdlijst.tpl -text
 lib/templates/maaltijdvoorkeuren.tpl -text
 lib/templates/menu.tpl -text

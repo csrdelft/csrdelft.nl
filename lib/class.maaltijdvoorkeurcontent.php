@@ -45,7 +45,7 @@ class MaaltijdVoorkeurContent extends SimpleHTML {
 		
 		//arrays toewijzen en weergeven
 		$profiel->assign('maal', $aMaal);
-		$profiel->display('maaltijdvoorkeuren.tpl');
+		$profiel->display('maaltijdketzer/voorkeuren.tpl');
 	}
 }
 
