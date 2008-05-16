@@ -474,17 +474,17 @@ p img{ margin: 15px 10px; }
 	border: 1px solid #B4B4B4;
 	background-color: #F0F0F0;
 }
-.mededeling-grotebalk #plaatje{
+.mededeling-grotebalk .plaatje{
 	width: 70px;
 	height: 70px;
 	margin-right: 10px;
 	float: left;
 }
-.mededeling-grotebalk #titel{
+.mededeling-grotebalk .titel{
 	font-weight: bold;
 	font-size: 1.1em;
 }
-.mededeling-grotebalk #bericht{
+.mededeling-grotebalk .bericht{
 	text-align: left;
 }
 #mededelingen-top3block{
