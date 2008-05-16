@@ -25,7 +25,7 @@ class MaaltijdContent extends SimpleHTML {
 		$this->_lid =Lid::get_lid();
 		$this->_maaltrack=$maaltrack;
 	}
-	function getTitel(){ return 'Maaltijdketzer - Overzicht abonnementen'; }
+	function getTitel(){ return 'Maaltijdketzer'; }
 	
 	function view(){
 		//de html template in elkaar draaien en weergeven

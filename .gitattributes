@@ -287,9 +287,6 @@ lib/templates/groepen/groep.tpl -text
 lib/templates/groepen/groepen.tpl -text
 lib/templates/groepen/groepformulier.tpl -text
 lib/templates/maalciemail.tpl -text
-lib/templates/maaltijdbeheer.tpl -text
-lib/templates/maaltijdform.tpl -text
-lib/templates/maaltijdketzer.tpl -text
 lib/templates/maaltijdketzer/abo-overzicht.tpl -text
 lib/templates/maaltijdketzer/beheer.tpl -text
 lib/templates/maaltijdketzer/formulier.tpl -text
@@ -297,8 +294,6 @@ lib/templates/maaltijdketzer/lijst.tpl -text
 lib/templates/maaltijdketzer/maaltijdketzer.tpl -text
 lib/templates/maaltijdketzer/saldi-updater.tpl -text
 lib/templates/maaltijdketzer/voorkeuren.tpl -text
-lib/templates/maaltijdlijst.tpl -text
-lib/templates/maaltijdvoorkeuren.tpl -text
 lib/templates/menu.tpl -text
 lib/templates/profiel.tpl -text
 lib/templates/socciemail.tpl -text
