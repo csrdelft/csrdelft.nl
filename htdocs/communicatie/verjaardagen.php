@@ -21,7 +21,7 @@ if ($lid->hasPermission('P_LEDEN_READ')) {
 
 # pagina weergeven
 $pagina=new csrdelft($midden);
-if(!isset($_GET['print'])){ $pagina->setZijkolom($zijkolom); }
+$pagina->setZijkolom($zijkolom); 
 $pagina->view();
 
 

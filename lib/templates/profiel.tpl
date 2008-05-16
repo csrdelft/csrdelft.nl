@@ -107,8 +107,8 @@
 					<li>{$abo}</li>
 				{/foreach}
 				</ul>
+				<br />
 			{/if}
-			<br />
 			<div class="label">Recent</div>
 			<ul class="nobullets data">
 				{foreach from=$profhtml.recenteMaaltijden item=maaltijd}

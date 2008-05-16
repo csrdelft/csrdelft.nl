@@ -54,9 +54,6 @@ class VerjaardagContent extends SimpleHTML {
 					12 => "December",
 				);
 		
-				if(!isset($_GET['print'])){
-					echo '<a href="verjaardagen.php?print=true">printversie</a>'."\n";
-				}
 				echo '<table style="width: 100%;">';
 				for ($r=0; $r<$rijen; $r++) {
 					echo '<tr>';
