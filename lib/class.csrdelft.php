@@ -16,17 +16,16 @@ class csrdelft extends SimpleHTML {
 	
 	//body is een object met een view-methode welke de content van de pagina maakt.
 	//Als body een methode zijKolom() heeft die gebruiken om de zij-kolom te vullen
-	var $_body;
+	public $_body;
 	//menu bevat een menu-object.
-	var $_menu;
+	public $_menu;
 	//standaard geen zijkolom...
-	var $_zijkolom=false;
+	public $_zijkolom=false;
 	
 	private $_stylesheets=array();
 	private $_scripts=array();
 	
-	var $_titel='Geen titel gezet.';
-	var $_waarbenik=false;
+	private $_titel='Geen titel gezet.';
 	
 	function csrdelft($body){
 		if(is_object($body)){
@@ -41,12 +40,27 @@ class csrdelft extends SimpleHTML {
 		require_once('class.menu.php');
 		$this->_menu=new menu();
 		
+		//Stylesheets en scripts die we altijd gebruiken
+		$this->addStylesheet('undohtml.css');
+		$this->addStylesheet('default.css');
+		$this->addScript('csrdelft.js');
+		$this->addScript('menu.js');		
 	}
 	
-	function addStylesheet($sheet){ $this->_stylesheets[]=$sheet; }
+	function addStylesheet($sheet){ 
+		$this->_stylesheets[]=array(
+			'naam' => $sheet,
+			'datum' => filemtime(HTDOCS_PATH.'/layout/'.$sheet)
+		);
+	}
 	function getStylesheets(){		return $this->_stylesheets; }
 	
-	function addScript($script){ 	$this->_scripts[]=$script; }
+	function addScript($script){
+		$this->_scripts[]=array(
+			'naam' => $script,
+			'datum' => filemtime(HTDOCS_PATH.'/layout/'.$script)
+		); 
+	}
 	function getScripts(){			return $this->_scripts; }
 	
 	function getTitel(){ return mb_htmlentities($this->_titel); }

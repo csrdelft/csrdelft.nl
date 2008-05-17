@@ -5,16 +5,12 @@
 	<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
 	<meta name="author" content="PubCie C.S.R. Delft" />
 	<meta name="robots" content="index, follow" />
-	<link rel="stylesheet" href="/layout/undohtml.css" type="text/css" />
-	<link rel="stylesheet" href="/layout/default.css" type="text/css" />
 	{foreach from=$csrdelft->getStylesheets() item=sheet}
-		<link rel="stylesheet" href="/layout/{$sheet}" type="text/css" />
+		<link rel="stylesheet" href="/layout/{$sheet.naam}?{$sheet.datum}" type="text/css" />
 	{/foreach}
-	<script type="text/javascript" src="/layout/menu.js"></script>
-	<script type="text/javascript" src="/layout/csrdelft.js"></script>
 	{foreach from=$csrdelft->getScripts() item=script}
-		<script type="text/javascript" src="/layout/{$script}"></script>
-	{/foreach}	
+		<script type="text/javascript" src="/layout/{$script.naam}?{$script.datum}"></script>
+	{/foreach}
 	<link rel="alternate" title="C.S.R. Delft RSS" type="application/rss+xml" href="http://csrdelft.nl/communicatie/forum/rss.xml" />
 	<link rel="shortcut icon" href="{$csr_pics}layout/favicon.ico" />
 </head>
