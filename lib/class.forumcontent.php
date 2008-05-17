@@ -310,8 +310,8 @@ class ForumContent extends SimpleHTML {
 		foreach($aPosts as $aPost){
 			//$tekst=$aPost['nickname'].': ';
 			$tekst=$aPost['titel'];
-			if(strlen($tekst)>21){
-				$tekst=str_replace(' ', '&nbsp;', trim(substr($tekst, 0, 18)).'...');
+			if(strlen($tekst)>20){
+				$tekst=str_replace(' ', '&nbsp;', trim(substr($tekst, 0, 18)).'…');
 			}
 			$post=preg_replace('/(\[(|\/)\w+\])/', '|', $aPost['tekst']);
 			$postfragment=substr(str_replace(array("\n", "\r", ' '), ' ', $post), 0, 40);

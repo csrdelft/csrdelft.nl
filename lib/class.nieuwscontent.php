@@ -102,9 +102,9 @@ class NieuwsContent extends SimpleHTML {
 		// link om het tekst-vak groter te maken.
 		echo '<a href="#" onclick="vergrootTextarea(\'nieuwsBericht\', 10)" name="Vergroot het invoerveld">invoerveld vergroten</a><br />';
 		echo '<textarea id="nieuwsBericht" name="tekst" cols="80" rows="10" style="width: 100%" class="tekst">'.$tekst.'</textarea><br />';
-		echo '<div style="height: 200px; width: 30%; float: left;">Dit bericht...<br />';
-		echo '<input id="prive" type="checkbox" name="prive" '.$prive.' /><label for="prive">...alleen weergeven bij leden</label><br />';
-		echo '<input id="verborgen" type="checkbox" name="verborgen" '.$verborgen.' /><label for="verborgen">...verbergen</label><br />';
+		echo '<div style="height: 200px; width: 30%; float: left;">Dit bericht…<br />';
+		echo '<input id="prive" type="checkbox" name="prive" '.$prive.' /><label for="prive">…alleen weergeven bij leden</label><br />';
+		echo '<input id="verborgen" type="checkbox" name="verborgen" '.$verborgen.' /><label for="verborgen">…verbergen</label><br />';
 		echo '<br />Categorie: '.$sCategorieSelect;
 		echo '<br />Markering: '.$this->getTopSelect($rank).'<br />';
 		echo '</div>';
@@ -237,7 +237,7 @@ class NieuwsContent extends SimpleHTML {
 	private function getOverzichtLijst(array $aBerichten)
 	{
 		if(!is_array($aBerichten) OR empty($aBerichten)) {	
-			echo 'Zoals het is, zoals het was, o Civitas!<br />(Geen mededelingen gevonden dus....)<br /><br />';
+			echo 'Zoals het is, zoals het was, o Civitas!<br />(Geen mededelingen gevonden dus…)<br /><br />';
 		}else{
 			$bEersteRecord=true;
 			$iHuidigeJaarWeeknummer=date('YW')+1; // Volgende week.
@@ -279,7 +279,7 @@ class NieuwsContent extends SimpleHTML {
 			//$tekst=$aPost['nickname'].': ';
 			$titel=$aBericht['titel'];
 			if(strlen($titel)>21){
-				$titel=str_replace(' ', '&nbsp;', trim(substr($titel, 0, 18)).'...');
+				$titel=str_replace(' ', '&nbsp;', trim(substr($titel, 0, 18)).'…');
 			}
 			$bericht=preg_replace('/(\[(|\/)\w+\])/', '|', $aBericht['tekst']);
 			$berichtfragment=substr(str_replace(array("\n", "\r", ' '), ' ', $bericht), 0, 40);
@@ -359,7 +359,7 @@ class NieuwsContent extends SimpleHTML {
 							if(substr($sTag, 0, 1) == '/' AND $iPositieEindTag!==false){ // Er wordt een tag beëindigd! Even printen dus.
 								$sResultaat.='<'.substr($sTag,0,$iPositieEindTag);
 							}
-							$sResultaat.='...';
+							$sResultaat.='…';
 							$bStopDeBoel=true;
 							break;
 						}
@@ -378,10 +378,10 @@ class NieuwsContent extends SimpleHTML {
 			$sResultaat=substr($sResultaat, 0, strlen($sResultaat)-$iLengteRegelAfsluiting);
 		}
 		if($iRegelsOver<=0 AND isset($aRegelsInTekst[$i+1])){ // Indien er geen regels meer over zijn, maar wel tekst.
-			$sEind=substr($sResultaat, strlen($sResultaat)-3, 3); // Laatste drie tekens ophalen.
+			$sEind=substr($sResultaat, strlen($sResultaat)-1, 1); // Laatste teken ophalen.
 			// Alleen de puntjes erachter zetten als dit nog niet gedaan is doordat er een woord niet meer paste.
-			if($sEind!='...'){
-				$sResultaat.='...';
+			if($sEind!='…'){
+				$sResultaat.='…';
 			}
 		}
 		return $sResultaat;
