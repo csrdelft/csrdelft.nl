@@ -109,12 +109,14 @@
 				</ul>
 				<br />
 			{/if}
-			<div class="label">Recent</div>
-			<ul class="nobullets data">
-				{foreach from=$profhtml.recenteMaaltijden item=maaltijd}
-					<li><em>{$maaltijd.datum|date_format:"%a %d-%m"}</em> - {$maaltijd.tekst}</li>
-				{/foreach}
-			</ul>
+			{if $lid->getUid()==$profhtml.uid OR $lid->hasPermission('P_MAAL_MOD')}
+				<div class="label">Recent</div>
+				<ul class="nobullets data">
+					{foreach from=$profhtml.recenteMaaltijden item=maaltijd}
+						<li><em>{$maaltijd.datum|date_format:"%a %d-%m"}</em> - {$maaltijd.tekst}</li>
+					{/foreach}
+				</ul>
+			{/if}
 		</div>
 	</div>
 	
