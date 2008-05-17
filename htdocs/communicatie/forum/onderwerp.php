@@ -16,6 +16,7 @@ require_once('class.forumonderwerpcontent.php');
 # Het middenstuk
 if($lid->hasPermission('P_FORUM_READ')) {
 	$forum = new ForumOnderwerp();
+	$forum->updateLaatstBekeken();
 	//onderwerp laden
 	$forum->load((int)$_GET['topic']);
 	$midden = new ForumOnderwerpContent($forum);

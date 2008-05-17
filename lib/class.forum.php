@@ -497,5 +497,7 @@ class Forum {
 	function getTopicsPerPagina(){ return $this->_topicsPerPagina; }
 	function isIngelogged(){ return $this->_lid->hasPermission('P_LOGGED_IN'); }
 	function isModerator(){ return $this->_lid->hasPermission('P_FORUM_MOD'); }
+	function getLaatstBekeken(){ return $this->_lid->getForumLaatstBekeken(); }
+	function updateLaatstBekeken(){ $this->_lid->updateForumLaatstBekeken(); }
 }//einde classe Forum
 ?>

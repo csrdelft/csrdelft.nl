@@ -195,6 +195,20 @@ class Lid {
 	function getForumInstelling(){ return array('forum_naam' => $this->_profile['forum_name']); }
 	function getForumNaamInstelling(){ return $this->_profile['forum_name']; }
 	
+	function getForumLaatstBekeken(){
+		if($this->getUID()=='x999'){
+			return time();
+		}else{
+			return strtotime($this->_profile['forum_laatstbekeken']); 
+		}
+	}
+	function updateForumLaatstBekeken(){
+		if($this->getUID()!='x999'){
+			$sDatumQuery="UPDATE lid SET forum_laatstbekeken=NOW() WHERE uid='".$this->getUID()."';";
+			$this->_db->query($sDatumQuery);
+			$this->_profile['forum_laatstbekeken']=date('Y-m-d H:i:s');
+		}
+	} 
 	
 	function getEmail($uid=''){
 		if($uid==''){ 
