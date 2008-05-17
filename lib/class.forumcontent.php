@@ -237,7 +237,7 @@ class ForumContent extends SimpleHTML {
 					<tr><td colspan="3" class="forumhoofd">Bericht bewerken</td><td class="forumhoofd">&nbsp;</td></tr>
 					<tr><td colspan="4" class="forumtekst">
 					<form method="post" action="/communicatie/forum/bewerken/'.$iPostID.'">
-					<h3>Als u dingen aanpast zet er dan even bij w&aacute;t u aanpast! Gebruik bijvoorbeeld [s]...[/s]</h3>
+					<h3>Als u dingen aanpast zet er dan even bij w&aacute;t u aanpast! Zet bijvoorbeeld de gemaakte wijzigingen in een [offtopic]...[/offtopic]-tag onder uw bericht.</h3>
 					<strong>Bericht</strong>&nbsp;&nbsp;';
 				// link om het tekst-vak groter te maken.
 				echo '<a href="#" onclick="vergrootTextarea(\'forumBericht\', 10)" name="Vergroot het invoerveld">Invoerveld vergroten</a><br />';
