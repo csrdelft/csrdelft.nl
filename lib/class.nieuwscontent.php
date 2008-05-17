@@ -208,12 +208,12 @@ class NieuwsContent extends SimpleHTML {
 		$aBerichten=$this->_nieuws->getTop($this->_nieuws->getAantalTopBerichten());
 		if(is_array($aBerichten) AND !empty($aBerichten)){
 			foreach($aBerichten as $aBericht){
-				$sLink = '<a href="'.NIEUWS_ROOT.$aBericht['id'].'">';
+				$sLink = '<a href="'.NIEUWS_ROOT.$aBericht['id'].'" title="'.mb_htmlentities($aBericht['titel']).'">';
 				$sResultaat.='<div class="mededeling-grotebalk">';
-				$sResultaat.=$sLink.'<div class="plaatje">';
+				$sResultaat.='<div class="plaatje">'.$sLink;
 				$sResultaat.='<img src="'.CSR_PICS.'nieuws/'.$aBericht['plaatje'].'" width="70px" height="70px" alt="'.$this->knipTekst(mb_htmlentities($aBericht['titel'],10,5)).'" />';
-				$sResultaat.='</div></a>';
-				$sResultaat.=$sLink.'<div class="titel">'.$this->knipTekst(mb_htmlentities($aBericht['titel']), 34, 1).'</div></a>';
+				$sResultaat.='</a></div>';
+				$sResultaat.='<div class="titel">'.$sLink.$this->knipTekst(mb_htmlentities($aBericht['titel']), 34, 1).'</a></div>';
 				$sResultaat.='<div class="bericht">'.$this->knipTekst($this->ubb->getHTML($aBericht['tekst']), 40, 4).'</div>';
 				$sResultaat.='</div>';
 			}
