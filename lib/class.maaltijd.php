@@ -601,6 +601,9 @@ class MaalTijd {
 		
 		return $aan;
 	}
+	/*
+	 * Haal de $aantal meest recente maaltijden op voor een gegeven lid.
+	 */
 	public static function getRecenteMaaltijden($uid, $aantal=10){
 		$db=Mysql::get_MySql();
 		$maalQuery="
@@ -613,7 +616,6 @@ class MaalTijd {
 			ORDER BY datum DESC 
 			LIMIT ".$aantal.";";
 		$maalResult=$db->query($maalQuery);
-		echo mysql_error();
 		return $db->result2array($maalResult);
 	}
 }

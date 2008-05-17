@@ -1,7 +1,7 @@
 .floatR{ float: right; }
 .label{ float: left; width: 80px; font-size: 9px; color: #999; }
 .data{ margin-left: 80px; }
-
+.data li{ margin-left: 0px; } 
 #profiel{ margin: 20px 0px 200px 0px; }
 #profiel h1{ margin-bottom: 10px; }
 #profiel img.pasfoto{ border: 2px solid black; margin-left: 20px;}
