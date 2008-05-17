@@ -319,7 +319,7 @@ class ForumContent extends SimpleHTML {
 			echo '<a href="/communicatie/forum/onderwerp/'.$aPost['tid'].'#post'.$aPost['postID'].'" 
 				title="['.htmlspecialchars($aPost['titel']).'] '.
 					$this->_forum->getForumNaam($aPost['uid'], $aPost, false).': '.mb_htmlentities($postfragment).'"';
-			if (strtotime($aPost['datum']) > $this->_forum->getLaatstBekeken()) { echo ' style="font-style: italic;"'; }
+			if (strtotime($aPost['datum']) > $this->_forum->getLaatstBekeken()) { echo ' class="opvallend"'; }
 			echo '>'.$tekst.'</a><br />'."\n";
 			echo '</div>';
 		}

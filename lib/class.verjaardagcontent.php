@@ -91,9 +91,9 @@ class VerjaardagContent extends SimpleHTML {
 					$aVerjaardag = $aVerjaardagen[$i];
 
 					echo '<div class="item">'.date('d-m', strtotime($aVerjaardag['gebdatum'])).' ';
-					if($aVerjaardag['jarig_over']==0){echo '<em>';}
+					if($aVerjaardag['jarig_over']==0){echo '<span class="opvallend">';}
 					echo $this->_lid->getNaamLink($aVerjaardag['uid'], 'civitas', true, $aVerjaardag);
-					if($aVerjaardag['jarig_over']==0){echo '</em>';}
+					if($aVerjaardag['jarig_over']==0){echo '</span>';}
 					echo '</div>';
 				}
 				break;
