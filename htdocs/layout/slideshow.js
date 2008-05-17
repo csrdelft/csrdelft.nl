@@ -26,6 +26,8 @@ aantal_per_serie=10; // Het aantal foto's per serie
 // "startwhen" leave it at "null" to start the function by calling it from your page by link
 // or set it to 1 to start the slide automatically as soon as the images are loaded
 //*****nothing more to do, have fun :)
+i=0;
+parr = new Array();
 //**************************************************************************************
 ftim=fdur*1000/steps;stim=sdur*1000;
 serie = Math.ceil(Math.random()*6);
@@ -69,20 +71,20 @@ function slide(numa){
 	if(numa>=9){pnext=parr[0];}else{pnext=parr[numa];}
 	pnext.style.visibility = "visible";
 	pnext.style.filter = "Alpha(Opacity=100)";
-	pnext.style.MozOpacity = 1;
+	pnext.style.opacity = 1;
 	ptofade.style.filter = "Alpha(Opacity=100)";
-	ptofade.style.MozOpacity = 1;
+	ptofade.style.opacity = 1;
 	factor = 100/steps;
 	slidenow();
 }
 
 function slidenow(){
-	check1=ptofade.style.MozOpacity;
+	check1=ptofade.style.opacity;
 	maxalpha = (100 - factor*u)/100*105;
 	if(check1<=maxalpha/100){u=u+1;}
 	curralpha = 100 - factor*u;
 	ptofade.style.filter = "Alpha(Opacity="+curralpha+")";
-	ptofade.style.MozOpacity = curralpha/100;
+	ptofade.style.opacity = curralpha/100;
 	
 	if(u<steps){
 		window.setTimeout("slidenow()",ftim);
@@ -103,16 +105,16 @@ function slidenow(){
 }
 
 function next(){
-	if(tid!=undefined){
+	try{
 		window.clearTimeout(tid);
-	}
+	}catch(e){}
 	if(i>aantal_per_serie-1){i=0;}
 	slide(i);
 }
 function previous(){
-	if(tid!=undefined){
+	try{
 		window.clearTimeout(tid);
-	}
+	}catch(e){}
 	if(i==0){i=aantal_per_serie-1;}
 	slide(i-1);
 }
@@ -124,18 +126,18 @@ function start(){
 function pause(){
     if (active==1) {
     	active=0;
-    	if(tid!=undefined){
+    	try{
 	    	window.clearTimeout(tid);
-    	}
+    	}catch(e){}
     }
 }
 function resume(){
 	if (active==0) {
     	active=1;
     	if(paused==0){
-    		if(tid!=undefined){
+    		try{
     			window.clearTimeout(tid);
-    		}
+    		}catch(e){}
     		tid=window.setTimeout("slide(i)",stim);
     	}
     }	
