@@ -31,9 +31,18 @@ class CourantarchiefContent{
 		$aMails=$this->courant->getArchiefmails();
 		$sReturn='<h1>Archief C.S.R.-courant</h1>';
 		if(is_array($aMails)){
+			$sLijst='';
 			foreach($aMails as $aMail){
-				$sReturn.='<a href="/actueel/courant/archief/'.$aMail['ID'].'">'.strftime('%d %B %Y', strtotime($aMail['verzendMoment'])).'</a><br />';
+				if(isset($iLaatsteJaar)){
+					if($iLaatsteJaar!=$aMail['jaar']){
+						$sReturn.='<div class="courantArchiefJaar"><h2>'.$iLaatsteJaar.'</h2>'.$sLijst.'</div>';
+						$sLijst='';
+					}
+				}
+				$iLaatsteJaar=$aMail['jaar'];
+				$sLijst.='<a href="/actueel/courant/archief/'.$aMail['ID'].'">'.strftime('%d %B', strtotime($aMail['verzendMoment'])).'</a><br />';
 			}
+			$sReturn.='<div class="courantArchiefJaar"><h2>'.$iLaatsteJaar.'</h2>'.$sLijst.'</div>';
 		}else{
 			$sReturn.='Geen couranten in het archief aanwezig';
 		}

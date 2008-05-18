@@ -338,17 +338,14 @@ class Courant {
 	###	Archief-methodes, heeft niets meer met de huidige instantie
 	### te maken.
 	################################################################
-	public function getArchiefmails($iJaar = null){
-		if($iJaar!=null){
-			$sQueryJaar="WHERE YEAR(verzendMoment) = ".$iJaar;
-		}
-		
+	public function getArchiefmails(){
 		$sArchiefQuery="
 			SELECT
-				ID, verzendMoment, verzender
+				ID, verzendMoment, verzender, YEAR(verzendMoment) AS jaar
 			FROM 
 				courant
-			".$sQueryJaar."
+			HAVING
+				jaar >= YEAR(NOW())-9
 			ORDER BY 
 				verzendMoment DESC;";
 		$rArchief=$this->_db->query($sArchiefQuery);
@@ -358,18 +355,6 @@ class Courant {
 		}else{
 			return $this->_db->result2array($rArchief);
 		}
-	}
-	
-	public function getArchiefjaren(){
-		$sJarenQuery="
-			SELECT
-				DISTINCT YEAR(verzendMoment) AS jaar
-			FROM
-				courant
-			ORDER BY
-				verzendMoment DESC;";
-	}
-	
-	
+	}	
 }//einde classe Courant
 ?>
