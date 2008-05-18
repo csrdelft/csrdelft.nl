@@ -39,7 +39,7 @@ for(e = 0; e < aantal_per_serie; e++) {
 	}
 	document.write('<div id="'+theid+'"><img src="http://plaetjes.csrdelft.nl/voorpagina/slides/serie'+serie+'_'+thefile+'.jpg" /></div>');
 }
-//document.write('<a href="#" onclick="if(paused==0){paused=1;pause();}else{paused=0;resume();}" style="display: block; position: absolute; left: 310px; top: 193px; z-index: 3; opacity: .4; filter: alpha(opacity=40);"><img src="pauze.gif" /></a>');
+document.write('<a href="#" onclick="if(paused==0){paused=1;pause();}else{paused=0;resume(true);}" style="display: block; position: absolute; left: 310px; top: 193px; z-index: 3; opacity: .4; filter: alpha(opacity=40);"><img src="http://plaetjes.csrdelft.nl/worst/pauze.gif" /></a>');
 //document.write('<a href="#" onclick="next();" style="display: block; position: absolute; left: 150px; top: 200px; z-index: 3; opacity: .4; filter: alpha(opacity=40);"><img src="pauze.gif" /></a>');
 //document.write('<a href="#" onclick="previous();" style="display: block; position: absolute; left: 50px; top: 200px; z-index: 3; opacity: .4; filter: alpha(opacity=40);"><img src="pauze.gif" /></a>');
 
@@ -131,14 +131,18 @@ function pause(){
     	}catch(e){}
     }
 }
-function resume(){
+function resume(direct){
 	if (active==0) {
     	active=1;
     	if(paused==0){
     		try{
     			window.clearTimeout(tid);
     		}catch(e){}
-    		tid=window.setTimeout("slide(i)",stim);
+    		if(direct){
+    			slide(i);
+    		}else{
+	    		tid=window.setTimeout("slide(i)",stim);
+    		}
     	}
     }	
 }
@@ -146,4 +150,4 @@ function resume(){
 onload=start;
 
 window.onblur=pause;
-window.onfocus=resume;
+window.onfocus="resume(false)";
