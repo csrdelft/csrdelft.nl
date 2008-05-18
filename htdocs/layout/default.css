@@ -601,10 +601,10 @@ table.maaltijden tr{ height: 1.6em; }
 div#pubciemail_form{ background-color: #f1f1f1; border: 1px solid lightgray; padding: 10px;}
 
 /* archief C.S.R.-courant */
-#archiefCourant{ font-size: 1em; line-height: 1.05em; text-align: left;}
-#archiefCourant a.kopje{ font-size: 1em; color: black; font-weight: bold; }
-#archiefCourant a.kopje:hover{ font-size: 1em; color: darkred; }
-span.tijd{ font-size: 0.95em; }
+div.courantArchiefJaar{
+	width: 100px;
+	float: left;
+}
 
 /* Streeplijstgenereertool */
 form#streeplijst fieldset{ padding: 10px;  }
