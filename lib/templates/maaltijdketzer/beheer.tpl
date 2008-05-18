@@ -5,6 +5,7 @@
 		| <a href="/actueel/maaltijden/saldi.php" title="Saldo's updaten">Saldo's updaten</a>
 	{/if}
 </div>
+<h1>Maaltijdbeheer</h1>
 {if $maal.maaltijden|@count==0}
 	<p>&#8226; Helaas, er is binnenkort geen maaltijd op Confide.</p>
 {else}
@@ -38,6 +39,7 @@
 			</tr>
 		{/foreach}
 	</table>
+	<br />
 {/if}
 
 {* maaltijd bewerken of toevoegoen, standaard toevoegen *}
