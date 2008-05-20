@@ -128,6 +128,11 @@ class ProfielContent extends SimpleHTML {
 		
 		$profiel->assign('profhtml', $profhtml);
 		$profiel->assign('isOudlid', $this->_profiel['status'] == 'S_OUDLID');
+		
+		$profiel->assign('magBewerken', ($this->_lid->hasPermission('P_PROFIEL_EDIT') AND $this->_profiel['uid']==$this->_lid->getUid()) OR $this->_lid->hasPermission('P_LEDEN_EDIT'));
+		$profiel->assign('isAdmin', $this->_lid->hasPermission('P_ADMIN'));
+		$profiel->assign('melding', $this->getMelding());
+		
 		//eigen profiel niet cachen, dan krijgen we namelijk rare dingen 
 		//dat we andermans saldo's zien enzo
 		if($this->_profiel['uid']==$this->_lid->getUid()){
@@ -135,20 +140,6 @@ class ProfielContent extends SimpleHTML {
 		}
 		$template='profiel.tpl';
 		$profiel->display($template, $this->_profiel['uid']);
-		
-		# gaan we een linkje afbeelden naar de edit-functie, of de editvakken?
-		if ( ($this->_lid->hasPermission('P_PROFIEL_EDIT') and $this->_profiel['uid'] == $this->_lid->getUid()) or 
-			$this->_lid->hasPermission('P_LEDEN_EDIT') ){
-			echo '<a href="'.$this->_state->getMyUrl(true).'/edit" class="knop"><img src="'.CSR_PICS.'forum/bewerken.png" title="Bewerk groep" />Bewerken</a> ';
-		}
-		if($this->_lid->hasPermission('P_ADMIN')){
-			echo '<a href="/tools/stats.php?uid='.$this->_profiel['uid'].'" class="knop">overzicht van bezoeken</a> ';
-			echo '<a href="/communicatie/profiel/'.$this->_profiel['uid'].'/wachtwoord" class="knop"
-				onclick="return confirm(\'Weet u zeker dat u het wachtwoord van deze gebruiker wilt resetten?\')">reset wachtwoord</a>';
-			echo '<br />'.$this->getMelding();
-		}
-		
-		
 	}
 	function viewStateEdit(){
 		echo '<h2>Profiel wijzigen</h2>
