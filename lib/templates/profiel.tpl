@@ -35,6 +35,7 @@
 					{if $profhtml.mobiel!=''}{$profhtml.mobiel}<br />{/if}
 				</div>
 			</div>
+			{if $isOudlid===false}
 			<div class="gegevensouders">			
 				{if $profhtml.o_adres!=''}
 					<div class="label">
@@ -53,6 +54,7 @@
 					{/if}
 				</div>
 			</div>
+			{/if}
 			<div style="clear: left;"></div>
 		</div>
 	</div>
@@ -74,7 +76,7 @@
 			<div class="label">Studie sinds:</div> {$profhtml.studiejaar}<br />
 			<div class="label">Lid sinds:</div> {$profhtml.lidjaar}<br />
 			<br />
-			{if $isOudlid!==true}
+			{if $isOudlid===false}
 				<div class="label">Kring:</div> <a href="/communicatie/moten.php">{$profhtml.moot}.{$profhtml.kring}</a><br />
 			{/if}
 		</div>
