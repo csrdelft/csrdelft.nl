@@ -5,7 +5,7 @@
 				{$profhtml.foto}<br />
 				<div class="knopjes">
 					{if $magBewerken}
-						<a href="/communicatie/profiel/edit" class="knop"><img src="{$csr_pics}forum/bewerken.png" title="Bewerk groep" />Bewerken</a><br />
+						<a href="/communicatie/profiel/{$profhtml.uid}/edit" class="knop"><img src="{$csr_pics}forum/bewerken.png" title="Bewerk groep" />Bewerken</a><br />
 					{/if}
 					{if $isAdmin}
 						<a href="/tools/stats.php?uid={$profhtml.uid}" class="knop">Overzicht van bezoeken</a><br />
