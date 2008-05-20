@@ -1,7 +1,7 @@
 <div style="float: right; margin: 0 0 10px 10px;">
 	<a href="/actueel/courant/archief/" title="Archief">Archief</a>
 </div>
-<h2>C.S.R.-courant</h2>
+<h1>C.S.R.-courant</h1>
 <p>
 	De C.S.R.-courant wordt elke woensdagmiddag verzonden naar alle leden van C.S.R.. 
 	Als u uw bericht voor 17:00 invoert, kunt u tamelijk zeker zijn van plaatsing in de courant.
