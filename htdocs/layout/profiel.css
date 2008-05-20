@@ -5,6 +5,7 @@
 #profiel{ margin: 20px 0px 200px 0px; }
 #profiel h1{ margin-bottom: 10px; }
 #profiel img.pasfoto{ border: 2px solid black; margin-left: 20px;}
+#profiel .knopjes{ margin-left: 20px; line-height: 2.5em;}
 
 #profiel .profielregel{ margin-bottom: 20px; }
 	#profiel .left{ float: left; width: 60px; text-align: right; font-style: italic; font-size: 0.9em;}
