@@ -94,20 +94,10 @@ class Forum {
 		return $this->_db->result2array($rTopicsResult); 
 	}
 	
-	
-	//laatste posts voor heel het forum.
-	function getPostsVoorRss($iAantal=false, $bDistinct=true){
-		if($iAantal===false){
-			$iAantal=$this->_postsPerRss;
-		}
-		$sDistinctClause=' AND 1';
-		if($bDistinct){
-			$sDistinctClause='AND topic.lastpostID=post.id';
-		}
+	private function getCategorieClause(){
 		//uitmaken welke categorieën er in de rss feed komen. Voor feut (bot in #csrdelft)
 		//is er een uitzondering op de ingeloggedheid.
-		
-		
+				
 		//extern, zandbak, vraag en aanbod en kamers worden altijd weergegeven.
 		$cats=array(2,4,11,12);
 		
@@ -128,8 +118,20 @@ class Forum {
 		foreach($cats as $cat){
 			$sCats[]='topic.categorie='.$cat;
 		}
-		$sCategorieClause=implode(' OR ', $sCats);
-		
+		return implode(' OR ', $sCats);
+	
+	}
+	
+	//laatste posts voor heel het forum.
+	function getPostsVoorRss($iAantal=false, $bDistinct=true){
+		if($iAantal===false){
+			$iAantal=$this->_postsPerRss;
+		}
+		$sDistinctClause=' AND 1';
+		if($bDistinct){
+			$sDistinctClause='AND topic.lastpostID=post.id';
+		}
+	
 		//zoo, uberdeuberdeuber query om een topic op te halen. Namen worden
 		//ook opgehaald in deze query, die worden door forumcontent weer 
 		//doorgegeven aan getForumNaam();
@@ -169,7 +171,7 @@ class Forum {
 			WHERE
 				topic.zichtbaar='zichtbaar' AND 
 				post.zichtbaar='zichtbaar' AND
-				( ".$sCategorieClause." ) 
+				( ".$this->getCategorieClause()." ) 
 				".$sDistinctClause."
 			ORDER BY
 				post.datum DESC
@@ -408,27 +410,7 @@ class Forum {
 ***************************************************************************************************/	
 	function searchPosts($sZoekQuery){
 		if(preg_match('/^[a-zA-Z0-9 \-\+\'\"\.]*$/', $sZoekQuery)){
-			//extern, zandbak, vraag en aanbod en kamers worden altijd weergegeven.
-		$cats=array(2,4,11,12);
 		
-		if($this->_lid->hasPermission('P_LEDEN_READ') OR isFeut()){ 
-			//C.S.R.-zaken, webstek terugkoppeling, geloofszaken, nieuws&actualiteit, electronica en techniek, 
-			//groeperingen, kringen& werkgroepen, bidpunten, vacatures
-			$cats=array_merge($cats, array(1, 3, 10, 9, 13, 17, 18, 20, 21));
-		}
-		if($this->_lid->hasPermission('P_OUDLEDEN_READ') OR isFeut()){ 
-			//oudledenforum
-			$cats[]=8; 
-		}
-		if($this->_lid->hasPermission('P_FORUM_MOD')){ 
-			//pubcie-forum enkel voor forummods.
-			$cats[]=6; 
-		}
-		//aan elkaar plakken:
-		foreach($cats as $cat){
-			$sCats[]='topic.categorie='.$cat;
-		}
-		$sCategorieClause=implode(' OR ', $sCats);
 		//sZoekQuery controleren:
 		$sZoekQuery=$this->_db->escape(trim($sZoekQuery));
 			
@@ -468,7 +450,7 @@ class Forum {
 				lid ON ( post.uid=lid.uid)
 			WHERE
 				topic.zichtbaar='zichtbaar' AND post.zichtbaar='zichtbaar' AND
-				( ".$sCategorieClause." ) AND
+				( ".$this->getCategorieClause()." ) AND
 				MATCH(post.tekst, topic.titel )AGAINST( '".$sZoekQuery."' IN BOOLEAN MODE )
 			GROUP BY
 				topic.id
