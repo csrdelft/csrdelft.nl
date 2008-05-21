@@ -116,10 +116,6 @@ class NieuwsContent extends SimpleHTML {
 			echo '<img src="'.CSR_PICS.'nieuws/'.$aBericht['plaatje'].'" width="200px" height="200px" alt="Afbeelding" style="float: left; margin-right: 10px;" />';
 		}
 		echo '<strong>Afbeelding bij de mededeling</strong><br />';
-		//verwijder-link tonen als er een plaetje bijgevoegd is.
-		if(trim($aBericht['plaatje'])!=''){
-			echo '<a href="'.NIEUWS_ROOT.'bewerken/'.$this->_berichtID.'/verwijder-plaatje" onclick="confirm(\'Weet u zeker dat u het plaatje van dit nieuwsbericht wilt verwijderen\')">[ verwijderen ]</a><br /><br />';
-		}
 		//input ding om een plaatje toe te voegen...
 		echo 'Afbeelding toevoegen of vervangen:<br /><input type="file" name="plaatje" size="40" /><br />';
 		echo '<span class="waarschuwing">(png, gif of jpg, 200x200 of groter in die verhouding.)</span></div>';
