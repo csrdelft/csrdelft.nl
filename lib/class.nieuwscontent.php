@@ -213,7 +213,7 @@ class NieuwsContent extends SimpleHTML {
 				$sResultaat.='<img src="'.CSR_PICS.'nieuws/'.$aBericht['plaatje'].'" width="70px" height="70px" alt="'.$this->knipTekst(mb_htmlentities($aBericht['titel'],10,5)).'" />';
 				$sResultaat.='</a></div>';
 				$sResultaat.='<div class="titel">'.$sLink.$this->knipTekst(mb_htmlentities($aBericht['titel']), 34, 1).'</a></div>';
-				$sResultaat.='<div class="bericht">'.$this->knipTekst($this->ubb->getHTML($aBericht['tekst']), 40, 4).'</div>';
+				$sResultaat.='<div class="bericht">'.$this->knipTekst($this->ubb->getHTML($aBericht['tekst']), 46, 4).'</div>';
 				$sResultaat.='</div>';
 			}
 		}
@@ -249,7 +249,7 @@ class NieuwsContent extends SimpleHTML {
 					// Nieuw blok beginnen.
 					echo '<div class="mededelingenlijst-block">';
 					// Even casten om de 0 ervoor weg te halen (bijvoorbeeld bij week 05).
-					echo '<div class="mededelingenlijst-block-titel">Mededelingen van week '.(int)date('W', $aBericht['datum']).'</div>';
+					echo '<div class="mededelingenlijst-block-titel">Week '.(int)date('W', $aBericht['datum']).'</div>';
 					$iHuidigeJaarWeeknummer = $iJaarWeeknummer;
 				}
 				$sDate=date('(d-m)',$aBericht['datum']);
@@ -263,7 +263,7 @@ class NieuwsContent extends SimpleHTML {
 						<img src="'.CSR_PICS.'nieuws/'.$aBericht['categorieplaatje'].'" width="10px" height="10px" alt="'.$aBericht['categorienaam'].'" /></a></div>';
 				}
 				echo '<div class="itemtitel">'.$sDate.' <a href="'.NIEUWS_ROOT.$aBericht['id'].'">';
-				echo mb_htmlentities($aBericht['titel']).'</a></div>';
+				echo $this->knipTekst(mb_htmlentities($aBericht['titel']), 36, 1).'</a></div>';
 				echo '</div>'; // mededelingenlijst-item
 			}//einde foreach bericht
 			echo '</div>'; //sluit laatste block

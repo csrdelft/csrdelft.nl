@@ -435,19 +435,22 @@ p img{ margin: 15px 10px; }
 	width: 300px;
 }
 .mededelingenlijst-block-titel{
-	height: 19px;
-	padding-top: 1px;
+	height: 16px;
+	padding-top: 2px;
 	padding-left: 7px;
 	border: 1px solid #B4B4B4;
 	background-color: #F0F0F0;
-	color: #162673;
-	font-size: 14px;
+	color: #000000;
+	font-size: 11px;
 	font-weight: bold;
 }
 .mededelingenlijst-item{
 	padding: 3px 2px 3px 7px;
 	font-size: 11px;
 	border-bottom: 1px solid #B8B8B8;
+}
+.mededelingenlijst-item .itemtitel{
+	text-align: left;
 }
 .mededelingenlijst-block a{	color: black; }
 .mededelingenlijst-plaatje{ margin: 0px 5px 0px 0px; float: left; }
