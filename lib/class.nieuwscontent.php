@@ -263,7 +263,7 @@ class NieuwsContent extends SimpleHTML {
 						<img src="'.CSR_PICS.'nieuws/'.$aBericht['categorieplaatje'].'" width="10px" height="10px" alt="'.$aBericht['categorienaam'].'" /></a></div>';
 				}
 				echo '<div class="itemtitel">'.$sDate.' <a href="'.NIEUWS_ROOT.$aBericht['id'].'">';
-				echo $this->knipTekst(mb_htmlentities($aBericht['titel']), 36, 1).'</a></div>';
+				echo $this->knipTekst(mb_htmlentities($aBericht['titel']), 35, 1).'</a></div>';
 				echo '</div>'; // mededelingenlijst-item
 			}//einde foreach bericht
 			echo '</div>'; //sluit laatste block
