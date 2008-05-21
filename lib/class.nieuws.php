@@ -15,6 +15,7 @@ class Nieuws {
 	private $_db;
 	
 	private $aantalTopBerichten;
+	private $topBerichtenSpeling;
 	private $standaardRank;
 	
 	function Nieuws(){
@@ -23,8 +24,10 @@ class Nieuws {
 	}
 
 	public function setAantalTopBerichten($iAantal){ $this->aantalTopBerichten=(int)$iAantal; }
+	public function setTopBerichtenSpeling($iSpeling){ $this->topBerichtenSpeling=(int)$iSpeling; }
 	public function setStandaardRank($iRank){ $this->standaardRank=(int)$iRank; }
 	public function getAantalTopBerichten(){ return $this->aantalTopBerichten; }
+	public function getTopBerichtenSpeling(){ return $this->topBerichtenSpeling; }
 	public function getStandaardRank(){ return $this->standaardRank; }
 	
 	# ophaelen nieuwsberichten

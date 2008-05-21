@@ -8,8 +8,10 @@ require_once('class.nieuwscontent.php');
 require_once('class.nieuws.php');
 $nieuws = new Nieuws();
 
-//aantal berichten op deze pagina lekker hoog, soort archief/overzicht.
-$nieuws->setAantalTopBerichten(3);
+$nieuws->setAantalTopBerichten(3);	// Het aantal top-berichten dat op de Mededelingenpagina wordt weergegeven.
+$nieuws->setTopBerichtenSpeling(3); // Het aantal éxtra berichten die (bijv.) de PubCie-P kan markeren als top-
+									// bericht. Zo kan ook de top-berichten-weergave van externen gereguleerd
+									// worden.
 $nieuws->setStandaardRank(255);
 $nieuwscontent = new NieuwsContent($nieuws);
 

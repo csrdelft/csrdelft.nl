@@ -54,9 +54,12 @@ class NieuwsContent extends SimpleHTML {
 		return $resultaat;
 	}
 	private function getTopSelect($geselecteerdeTop=0){
-		$iTopMax=$this->_nieuws->getAantalTopBerichten(); // Hoeveel 'top-mededelingen' hebben we? Moet groter of gelijk aan één (1) zijn.
+		// Hoeveel 'top-mededelingen' hebben we? Moet groter of gelijk aan één (1) zijn.
+		$iTopMax=$this->_nieuws->getAantalTopBerichten() + $this->_nieuws->getTopBerichtenSpeling();
 		$sResultaat='<select name="rank">';
-		$sResultaat.='<option value="'.$this->_nieuws->getStandaardRank().'">geen</option>';
+		if($geselecteerdeTop==0 OR $geselecteerdeTop>$iTopMax){
+			$sResultaat.='<option value="'.$this->_nieuws->getStandaardRank().'">geen</option>';
+		}
 		for($i=1;$i<=$iTopMax;$i++){
 			$sResultaat.='<option value="'.$i.'"';
 			if($geselecteerdeTop == $i)
