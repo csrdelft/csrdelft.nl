@@ -275,8 +275,7 @@ class NieuwsContent extends SimpleHTML {
 		$aBerichten=$this->_nieuws->getMessages(0,false,8);
 		echo '<h1><a href="/actueel/mededelingen/">Mededelingen</a></h1>';
 		foreach($aBerichten as $aBericht){
-			//$tekst=$aPost['nickname'].': ';
-			$titel=$aBericht['titel'];
+			$titel=mb_htmlentities($aBericht['titel']);
 			if(strlen($titel)>21){
 				$titel=str_replace(' ', '&nbsp;', trim(substr($titel, 0, 18)).'…');
 			}
@@ -284,7 +283,7 @@ class NieuwsContent extends SimpleHTML {
 			$berichtfragment=substr(str_replace(array("\n", "\r", ' '), ' ', $bericht), 0, 40);
 			echo '<div class="item"><span class="tijd">'.date('d-m', $aBericht['datum']).'</span>&nbsp;';
 			echo '<a href="/actueel/mededelingen/'.$aBericht['id'].'" 
-				title="['.htmlspecialchars($aBericht['titel']).'] '.
+				title="['.mb_htmlentities($aBericht['titel']).'] '.
 					mb_htmlentities($berichtfragment).'">'.$titel.'</a><br />'."\n";
 			echo '</div>';
 		}
@@ -338,6 +337,16 @@ class NieuwsContent extends SimpleHTML {
 							}
 						}else{ // De tag wordt wél beëindigd.
 							$iWoordLengte=strlen($sTag) - ($iPositieEindTag+1); // De lengte v/d string ná de tag.
+						}
+						if(	($ampPos=strpos($sTag, '&')	)!==false AND
+							($semiPos=strpos($sTag, ';'))!==false AND
+							($diff=$semiPos-$ampPos		)>=3 AND
+							$diff<=7
+						){
+							//Dus, als er een enkele entiteit in $sTag zit, corrigeren we de woordlengte. We definiëren
+							//een entiteit als een string die begint met een '&', eindigt met een ';' met daartussen 2 tot 6
+							//karakters.
+							$iWoordLengte-=$diff;
 						}
 							
 						// En nu gaan we kijken of het woord past.
