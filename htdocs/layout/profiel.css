@@ -13,11 +13,11 @@
 
 #profiel .naam{ margin-left: 81px;  padding-left: 15px;}
 #profiel .adres{ margin-left: 80px; text-align: left; }
-#profiel .gegevenszelf{ float: left; width: 220px; }
+#profiel .gegevenszelf{ float: left; width: 240px; }
 #profiel .gegevenszelf .label{ text-align: right; margin-top: 2em; }
 #profiel .gegevenszelf .label img{ margin-right: 15px; }
 
-#profiel .gegevensouders{  width: 210px; margin-left: 220px; padding-left: 20px; }
+#profiel .gegevensouders{  width: 240px; margin-left: 240px; padding-left: 10px; }
 #profiel .gegevensouders .label{ width: 50px; margin-top: 2em;}
 #profiel .gegevensouders .adres{ margin-left: 50px; }
 
