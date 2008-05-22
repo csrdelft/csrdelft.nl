@@ -273,6 +273,11 @@ UBBVERHAAL;
 		}
 		return $return;
 	}
+	# Items voor in de zijbalk
+	public function ubb_agendaitem(){
+		$content = $this->parseArray(array('[/agendaitem]'), array());
+		return '<div class="item"><a href="/actueel/agenda/">'.$content.'</a></div>';
+	}
 }
 
 ?>

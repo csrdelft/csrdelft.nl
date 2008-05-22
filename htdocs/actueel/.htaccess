@@ -24,3 +24,4 @@ RewriteRule ^mededelingen/toevoegen$ mededelingen.php?toevoegen=true
 
 # Pagina's met tekst
 RewriteRule ^owee/? ../pagina.php?naam=owee
+RewriteRule ^agenda/? ../pagina.php?naam=agenda

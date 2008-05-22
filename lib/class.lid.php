@@ -154,37 +154,53 @@ class Lid {
 	### public ###
 
 	function hasPermission($descr) {
-		# ga alleen verder als er een geldige permissie wordt gevraagd
-		if (!array_key_exists($descr, $this->_permissions)) return false;
-		# zoek de code op
-		$gevraagd = (int) $this->_permissions[$descr];
-
 		# zoek de rechten van de gebruiker op
 		$liddescr = $this->_profile['permissies'];
+		
 		# ga alleen verder als er een geldige permissie wordt teruggegeven
 		if (!array_key_exists($liddescr, $this->_perm_user)) return false;
 		# zoek de code op
 		$lidheeft = $this->_perm_user[$liddescr];
-
-		# $p is de gevraagde permissie als octaal getal
-		# de permissies van de gebruiker kunnen we bij $this->_lid opvragen
-		# als we die 2 met elkaar AND-en, dan moet het resultaat hetzelfde
-		# zijn aan de gevraagde permissie. In dat geval bestaat de permissie
-		# van het lid dus minimaal uit de gevraagde permissie
-		#
-		# voorbeeld:
-		#  gevraagd:   P_FORUM_MOD: 0000000700
-		#  lid heeft:  P_LID      : 0005544500
-		#  AND resultaat          : 0000000500 -> is niet wat gevraagd is -> weiger
-		#
-		#  gevraagd:  P_DOCS_READ : 0000004000
-		#  gebr heeft: P_LID      : 0005544500
-		#  AND resultaat          : 0000004000 -> ja!
-
-		$resultaat = $gevraagd & $lidheeft;
-		if (!($resultaat == $gevraagd)) return false;
-
-		return true;
+		
+		# Het gevraagde mag een enkele permissie zijn, of meerdere, door komma's
+		# gescheiden, waarvan de gebruiker er dan een hoeft te hebben. Er kunnen
+		# dan ook uid's tussen zitten, als een daarvan gelijk is aan dat van de
+		# gebruiker heeft hij ook rechten.
+		$permissies=explode(',', $descr);
+		foreach($permissies as $permissie){
+			# uid
+			if($permissie==$this->getUid()){
+				return true;
+			}
+			
+			# ga alleen verder als er een geldige permissie wordt gevraagd
+			if (array_key_exists($descr, $this->_permissions)){
+				# zoek de code op
+				$gevraagd = (int) $this->_permissions[$descr];
+	
+				# $p is de gevraagde permissie als octaal getal
+				# de permissies van de gebruiker kunnen we bij $this->_lid opvragen
+				# als we die 2 met elkaar AND-en, dan moet het resultaat hetzelfde
+				# zijn aan de gevraagde permissie. In dat geval bestaat de permissie
+				# van het lid dus minimaal uit de gevraagde permissie
+				#
+				# voorbeeld:
+				#  gevraagd:   P_FORUM_MOD: 0000000700
+				#  lid heeft:  P_LID      : 0005544500
+				#  AND resultaat          : 0000000500 -> is niet wat gevraagd is -> weiger
+				#
+				#  gevraagd:  P_DOCS_READ : 0000004000
+				#  gebr heeft: P_LID      : 0005544500
+				#  AND resultaat          : 0000004000 -> ja!
+				$resultaat=$gevraagd & $lidheeft;
+				if($resultaat==$gevraagd){
+					return true;
+				}
+			}
+		}
+		
+		# Zo niet... dan niet
+		return false;
 	}
 
 	function getUid() { return $this->_profile['uid']; }
@@ -405,9 +421,9 @@ class Lid {
 
 		$p = $this->_permissions;
 		$this->_perm_user = array(
-			'P_NOBODY'     => $p['P_NOBODY'] | $p['P_FORUM_READ'],
+			'P_NOBODY'     => $p['P_NOBODY'] | $p['P_FORUM_READ'] | $p['AGENDA_READ'],
 			'P_LID'        => $p['P_LOGGED_IN'] | $p['P_OUDLEDEN_READ'] | $p['P_FORUM_POST'] | $p['P_DOCS_READ'] | $p['P_LEDEN_READ'] | $p['P_PROFIEL_EDIT'] | $p['P_AGENDA_POST'] | $p['P_MAAL_WIJ'] | $p['P_MAIL_POST'] | $p['P_BIEB_READ'],
-			'P_OUDLID'     => $p['P_LOGGED_IN'] | $p['P_LEDEN_READ'] | $p['P_OUDLEDEN_READ'] | $p['P_FORUM_POST'] | $p['P_PROFIEL_EDIT'] | $p['P_FORUM_READ'] | $p['P_MAIL_POST'],
+			'P_OUDLID'     => $p['P_LOGGED_IN'] | $p['P_LEDEN_READ'] | $p['P_OUDLEDEN_READ'] | $p['P_FORUM_POST'] | $p['P_PROFIEL_EDIT'] | $p['P_FORUM_READ'] | $p['P_MAIL_POST'] | $p['AGENDA_READ'],
 			'P_MODERATOR'  => $p['P_ADMIN'] | $p['P_FORUM_MOD'] | $p['P_DOCS_MOD'] | $p['P_LEDEN_MOD'] | $p['P_OUDLEDEN_MOD'] | $p['P_AGENDA_MOD'] | $p['P_MAAL_MOD'] | $p['P_MAIL_SEND'] | $p['P_NEWS_MOD'] | $p['P_BIEB_MOD']
 		);
 		# extra dingen, waarvoor de array perm_user zelf nodig is

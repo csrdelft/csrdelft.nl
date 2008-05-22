@@ -23,8 +23,11 @@ if (isset($_GET['bewerken']) && $pagina->magBewerken()){
 		header('Location: '.CSR_ROOT.'pagina/'.$pagina->getNaam());
 	}
 	$paginacontent->setActie('bewerken');
-} else {
+}elseif($pagina->magBekijken()){
 	$paginacontent->setActie('bekijken');
+}else{
+	$pagina = new Pagina('geentoegang');
+	$paginacontent = new PaginaContent($pagina);
 }
 
 $zijkolom=new kolom();

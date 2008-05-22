@@ -42,6 +42,13 @@ class Kolom extends SimpleHTML {
 			require_once('class.menu.php');
 			$this->add(new stringincluder(Menu::getGaSnelNaar()));		
 			
+			# Agenda
+			require_once('class.pagina.php');
+			require_once('class.paginacontent.php');
+			$pagina=new Pagina('agendazijbalk');
+			$paginacontent=new PaginaContent($pagina);
+			$this->add($paginacontent);
+			
 			# Laatste mededelingen
 			require_once('class.nieuwscontent.php');
 			require_once('class.nieuws.php');
