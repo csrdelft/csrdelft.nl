@@ -32,7 +32,7 @@ if ($error == 0  or $error == 2) {
 	# Moet deze maaltijd gesloten worden?
 	if (isset($_GET['sluit']) and $_GET['sluit'] == 1) {
 		$maaltijd->sluit();	
-		header('Location: '.CSR_ROOT.'maaltijden/lijst/'.$maalid);
+		header('Location: '.CSR_ROOT.'actueel/maaltijden/lijst/'.$maalid);
 		exit;
 	}
 
