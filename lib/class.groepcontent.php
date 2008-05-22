@@ -65,7 +65,7 @@ class Groepcontent extends SimpleHTML{
 							$return.='</select></td>';
 						}//dingen die niets opleveren wordt niets voor weergegeven.
 					}
-					if($this->groep->isAdmin()){
+					if($this->groep->magBewerken()){
 						$return.='<td><input type="text" name="functie[]" /></td></tr>';
 					}else{
 						$return.='<td>'.$this->getFunctieSelector().'</td></tr>';

@@ -13,7 +13,7 @@
 					{/if}
 				</div>
 			</div>
-			{$melding}<br />
+			{if $melding!=''}{$melding}<br />{/if}
 			<h1>{$profhtml.fullname}</h1>
 		</div>
 	</div>
