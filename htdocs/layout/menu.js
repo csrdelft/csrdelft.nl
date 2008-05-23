@@ -60,12 +60,7 @@ function SetActive(a)
 
 
 /* Menu rechts tonen/verbergen */
-function ShowLogin()
-{
-	document.getElementById('login').style.display = "block";
-}
-
 function ToggleLogin()
 {
-	document.getElementById('login').style.display = (document.getElementById('login').style.display == "none" ? "inline" : "none"); 
+	document.getElementById('login').style.display = (document.getElementById('login').style.display != "inline" ? "inline" : "none"); 
 }

@@ -11,9 +11,6 @@
 	{foreach from=$csrdelft->getScripts() item=script}
 		<script type="text/javascript" src="/layout/{$script.naam}?{$script.datum}"></script>
 	{/foreach}
-	<!--[if lt IE 7.]>
-	<script defer type="text/javascript" src="/layout/pngfix.js"></script>
-	<![endif]-->
 	<link rel="alternate" title="C.S.R. Delft RSS" type="application/rss+xml" href="http://csrdelft.nl/communicatie/forum/rss.xml" />
 	<link rel="shortcut icon" href="{$csr_pics}layout/favicon.ico" />
 </head>
