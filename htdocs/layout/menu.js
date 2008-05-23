@@ -1,11 +1,11 @@
 /* Kleine vertraging bij wisselen tussen menu items */
-var t
-var timeout = 250;
-var timeout_next = 100;
+var menu_t
+var menu_timeout = 250;
+var menu_timeout_next = 100;
 
 function ShowMenu(div)
 {
-	timeout = timeout_next;
+	menu_timeout = menu_timeout_next;
 	
 	document.getElementById('sub1').style.display = "none";
 	document.getElementById('sub2').style.display = "none";
@@ -21,41 +21,42 @@ function ShowMenu(div)
 	document.getElementById('top4').className = '';
 
 	if (div > 0) {
-		document.getElementById('banner'+div).style.display = "inline";
 		document.getElementById('sub'+div).style.display = "block";
 		document.getElementById('top'+div).className = 'active';
+		document.getElementById('banner'+div).style.display = "inline";
+		fixPNG('imgbanner'+div); 
 	}
 }
 
 function StartShowMenu(div)
 {
-	t = setTimeout("ShowMenu("+div+")", timeout);
+	menu_t = setTimeout("ShowMenu("+div+")", menu_timeout);
 }
 
 function ResetShowMenu()
 {
-	clearTimeout(t);
+	clearTimeout(menu_t);
 }
 
         
 /* Na bepaalde tijd uit menu, terugswitchen naar actieve menu item */
-var active;
-var t2
-var timeout2 = 4000;
+var menu_active;
+var menu_t2
+var menu_timeout2 = 4000;
 
 function ResetTimer()
 {
-	clearTimeout(t2);
+	clearTimeout(menu_t2);
 }
 
 function StartTimer()
 {
-	t2 = setTimeout("ShowMenu("+active+")", timeout2);
+	menu_t2 = setTimeout("ShowMenu("+menu_active+")", menu_timeout2);
 }
 
 function SetActive(a)
 {
-	active = a;
+	menu_active = a;
 }
 
 

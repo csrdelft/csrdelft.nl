@@ -2,10 +2,10 @@
 	<div id="menuleft"><a href="/"><img src="http://plaetjes.csrdelft.nl/worst/logo.png" alt="Logo" /></a></div>
 	<div id="menucenter">
 		<div id="menubanner">
-			<div id="banner1"><img src="http://plaetjes.csrdelft.nl/menubalk/banner1.png" alt="banner1" /></div>
-			<div id="banner2"><img src="http://plaetjes.csrdelft.nl/menubalk/banner2.png" alt="banner2" /></div>
-			<div id="banner3"><img src="http://plaetjes.csrdelft.nl/menubalk/banner3.png" alt="banner3" /></div>
-			<div id="banner4"><img src="http://plaetjes.csrdelft.nl/menubalk/banner4.png" alt="banner4" /></div>
+			<div id="banner1"><img src="http://plaetjes.csrdelft.nl/menubalk/banner1.png" id="imgbanner1" alt="banner1" width="553" height="106" /></div>
+			<div id="banner2"><img src="http://plaetjes.csrdelft.nl/menubalk/banner2.png" id="imgbanner2" alt="banner2" width="553" height="106" /></div>
+			<div id="banner3"><img src="http://plaetjes.csrdelft.nl/menubalk/banner3.png" id="imgbanner3" alt="banner3" width="553" height="106" /></div>
+			<div id="banner4"><img src="http://plaetjes.csrdelft.nl/menubalk/banner4.png" id="imgbanner4" alt="banner4" width="553" height="106" /></div>
 		</div>
 		<div id="mainmenu">
 			<ul>
