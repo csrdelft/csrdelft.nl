@@ -12,7 +12,7 @@
 	#profiel .gegevens{ margin-left: 70px; padding-left: 15px; border-left: 1px solid #0a338d; }
 
 #profiel .naam{ margin-left: 81px;  padding-left: 15px;}
-#profiel .adres{ margin-left: 80px; text-align: left; }
+#profiel .adres{ margin-left: 75px; text-align: left; }
 #profiel .gegevenszelf{ float: left; width: 250px; }
 #profiel .gegevenszelf .label{ text-align: right; margin-top: 2em; }
 #profiel .gegevenszelf .label img{ margin-right: 15px; }
