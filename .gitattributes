@@ -71,6 +71,7 @@ htdocs/layout/documenten.css -text
 htdocs/layout/forum.css -text
 htdocs/layout/groepen.css -text
 htdocs/layout/menu.js -text
+htdocs/layout/pngfix.js -text
 htdocs/layout/profiel.css -text
 htdocs/layout/slideshow.js -text
 htdocs/layout/undohtml.css -text

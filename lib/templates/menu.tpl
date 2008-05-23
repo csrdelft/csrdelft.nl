@@ -54,7 +54,7 @@
 				</form>
 			</div>
 		{else}
-			<div id="key"><a href="#" onmouseover="ShowLogin();" onclick="ToggleLogin();" title="Inloggen"><img src="http://plaetjes.csrdelft.nl/worst/key.png" alt="Inloggen" /></a></div>
+			<div id="key"><a href="#" onclick="ToggleLogin();" title="Inloggen"><img src="http://plaetjes.csrdelft.nl/worst/key.gif" alt="Inloggen" /></a></div>
 			<div id="login">			
 				{if isset($smarty.session.auth_error)}
 					<span class="waarschuwing">{$smarty.session.auth_error}</span>
