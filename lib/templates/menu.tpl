@@ -13,8 +13,9 @@
 				<li><a href="{$item.link}" id="top{$item.ID}" onmouseover="StartShowMenu('{$item.ID}');" onmouseout="ResetShowMenu();" {if $item.huidig}class="active" {/if}title="{$item.tekst}">{$item.tekst}</a></li>
 					{if $item.huidig}
 						<script type="text/javascript">
-							document.getElementById('banner{$item.ID}').style.display="inline";
 							SetActive({$item.ID});
+							document.getElementById('banner'+{$item.ID}).style.display = "inline";
+							fixPNG('imgbanner1')
 						</script>
 					{/if}
 				{/foreach}

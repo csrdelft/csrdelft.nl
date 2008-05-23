@@ -24,7 +24,9 @@ function ShowMenu(div)
 		document.getElementById('sub'+div).style.display = "block";
 		document.getElementById('top'+div).className = 'active';
 		document.getElementById('banner'+div).style.display = "inline";
-		fixPNG('imgbanner'+div); 
+		if (typeof fixPNG != "undefined") {
+			fixPNG('imgbanner'+div);
+		}
 	}
 }
 
@@ -40,7 +42,7 @@ function ResetShowMenu()
 
         
 /* Na bepaalde tijd uit menu, terugswitchen naar actieve menu item */
-var menu_active;
+var menu_active = 0;
 var menu_t2
 var menu_timeout2 = 4000;
 

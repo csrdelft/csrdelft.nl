@@ -17,7 +17,9 @@
 	<link rel="alternate" title="C.S.R. Delft RSS" type="application/rss+xml" href="http://csrdelft.nl/communicatie/forum/rss.xml" />
 	<link rel="shortcut icon" href="{$csr_pics}layout/favicon.ico" />
 </head>
-<body>
+
+<body onload="ShowMenu(menu_active)">
+
 <div id="container">
 	{$csrdelft->_menu->view()}
 	<div id="main">
