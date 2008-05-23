@@ -1,5 +1,5 @@
 .floatR{ float: right; }
-.label{ float: left; width: 80px; font-size: 9px; color: #999; }
+.label{ float: left; width: 75px; font-size: 9px; color: #999; }
 .data{ margin-left: 80px; }
 .data li{ margin-left: 0px; } 
 #profiel{ margin: 20px 0px 200px 0px; }
@@ -13,11 +13,11 @@
 
 #profiel .naam{ margin-left: 81px;  padding-left: 15px;}
 #profiel .adres{ margin-left: 80px; text-align: left; }
-#profiel .gegevenszelf{ float: left; width: 240px; }
+#profiel .gegevenszelf{ float: left; width: 250px; }
 #profiel .gegevenszelf .label{ text-align: right; margin-top: 2em; }
 #profiel .gegevenszelf .label img{ margin-right: 15px; }
 
-#profiel .gegevensouders{  width: 240px; margin-left: 240px; padding-left: 10px; }
+#profiel .gegevensouders{  width: 250px; margin-left: 250px; padding-left: 10px; }
 #profiel .gegevensouders .label{ width: 50px; margin-top: 2em;}
 #profiel .gegevensouders .adres{ margin-left: 50px; }
 

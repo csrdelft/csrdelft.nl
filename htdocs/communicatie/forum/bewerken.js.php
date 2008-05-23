@@ -38,6 +38,9 @@ if(isset($_GET['post'])){
 	//klein javascriptje om de post eventuele weer terug te zetten
 	echo "\nfunction restorePost(){
 		div.innerHTML=divContents;
+		document.getElementById('forumBericht').disabled=false;
+		document.getElementById('forumOpslaan').disabled=false;
+		document.getElementById('forumVoorbeeld').disabled=false;
 	}\n";
 	
 	if($forum->magBewerken($iPostID)){

@@ -46,6 +46,9 @@ function forumEdit(post){
 	scripttag.type = 'text/javascript';
 	scripttag.src = '/communicatie/forum/bewerken/formulier/'+post;
 	document.body.appendChild(scripttag);
+	document.getElementById('forumBericht').disabled=true;
+	document.getElementById('forumOpslaan').disabled=true;
+	document.getElementById('forumVoorbeeld').disabled=true;
 }
 
 function youtubeDisplay(ytID){

@@ -198,7 +198,8 @@ class ForumOnderwerpContent extends SimpleHTML {
 				echo '<form method="post" action="/communicatie/forum/toevoegen/'.$this->_forum->getID().'#laatste"><p>';
 				//berichtje weergeven voor niet-ingeloggede gebruikers dat ze een naam moeten vermelden.
 				if(!$this->_forum->isIngelogged()){
-					echo '<strong>Uw bericht wordt pas geplaatst nadat het bekeken en goedgekeurd is door de <a href="http://csrdelft.nl/groepen/commissie/PubCie.html">PubCie</a>. Het vermelden van <em>uw naam</em> verhoogt de kans dat dit gebeurt.</strong><br /><br />';
+					echo '<strong>Uw bericht wordt pas geplaatst nadat het bekeken en goedgekeurd is door de <a href="http://csrdelft.nl/actueel/groepen/Commissies/PubCie/">PubCie</a>. 
+						Het vermelden van <em>uw naam en email-adres</em> is verplicht.</strong><br /><br />';
 				}
 				echo '<textarea name="bericht" id="forumBericht" class="tekst" rows="'.$iTekstareaRegels.'" cols="80" style="width: 100%;" >';
 				//inhoud van de textarea vullen met eventuele quote...
@@ -208,8 +209,8 @@ class ForumOnderwerpContent extends SimpleHTML {
 				}elseif(isset($_POST['bericht'])){
 					echo htmlspecialchars($_POST['bericht']);
 				}
-				echo '</textarea><br /><input type="submit" name="submit" value="opslaan" /> ';
-				echo '<input type="submit" name="submit" value="voorbeeld" style="color: #777;"/></p></form>';
+				echo '</textarea><br /><input type="submit" name="submit" value="opslaan" id="forumOpslaan" /> ';
+				echo '<input type="submit" name="submit" value="voorbeeld" style="color: #777;" id="forumVoorbeeld" /></p></form>';
 			}else{
 				if($this->_forum->isOpen()){
 					//wel open, geen rechten.
