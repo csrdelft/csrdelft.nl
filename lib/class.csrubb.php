@@ -223,8 +223,8 @@ src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
 		return '<br style="height: 0px; clear: '.$sClear.';" />';
     }
   
-	static function viewUbbHelp(){
-echo <<<UBBVERHAAL
+	static function getUbbHelp(){
+return <<<UBBVERHAAL
 <div id="ubbhulp">
 	<a href="#laatste" onclick="document.getElementById('ubbhulpverhaal').style.display = 'block'">Opmaakhulp weergeven</a><br />
 </div>

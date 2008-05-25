@@ -55,7 +55,38 @@ class ForumOnderwerpContent extends SimpleHTML {
 			}
 
 		}else{
-			echo '<form id="forum_zoeken" action="/communicatie/forum/zoeken.php" method="post"><input type="text" name="zoeken" value="zoeken in forum" onfocus="this.value=\'\';" /></form>';
+			$smarty=new Smarty_csr();
+			$smarty->assign('forum', $this->_forum);
+			$smarty->assign('melding', $this->getMelding());
+			if($this->_forum->getSoort()=='T_POLL'){
+				require_once('class.forumpoll.php');
+				require_once('class.pollcontent.php');
+				$peiling=new ForumPoll($this->_forum);
+				$peilingContent=new PollContent($peiling);
+				$smarty->assign('peiling', $peilingContent);
+			}
+			
+			//eventueel een voorbeeld voor een bericht laten zien.
+			if(isset($_POST['bericht'], $_POST['submit']) AND $_POST['submit']=='voorbeeld'){
+				$smarty->assign('postvoorbeeld', $_POST['bericht']);
+			}
+			//wat komt er in de textarea te staan?
+			if($this->getCiteerPost()!=0){
+				$aPost=$this->_forum->getSinglePost($this->getCiteerPost());
+				$textarea='[citaat='.$aPost['uid'].']'.htmlspecialchars($aPost['tekst']).'[/citaat]';
+			}elseif(isset($_POST['bericht'])){
+				$textarea=htmlspecialchars($_POST['bericht']);
+			}else{
+				$textarea='';
+			}
+			$smarty->assign('textarea', $textarea);
+			$smarty->assign('citeerPost', $this->getCiteerPost());
+				
+			$smarty->display('forum/onderwerp.tpl');
+		}
+		if(false){
+			
+		echo '<form id="forum_zoeken" action="/communicatie/forum/zoeken.php" method="post"><input type="text" name="zoeken" value="zoeken in forum" onfocus="this.value=\'\';" /></form>';
 			$navlinks='<div class="forumNavigatie"><a href="/communicatie/forum/" class="forumGrootlink">Forum</a> &raquo; 
 				<a href="/communicatie/forum/categorie/'.$this->_forum->getCatID().'" class="forumGrootlink">
 					'.mb_htmlentities($this->_forum->getCatTitel()).'</a><br />

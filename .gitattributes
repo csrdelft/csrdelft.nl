@@ -250,6 +250,7 @@ lib/smarty/libs/plugins/modifier.indent.php -text
 lib/smarty/libs/plugins/modifier.lower.php -text
 lib/smarty/libs/plugins/modifier.nl2br.php -text
 lib/smarty/libs/plugins/modifier.regex_replace.php -text
+lib/smarty/libs/plugins/modifier.reldate.php -text
 lib/smarty/libs/plugins/modifier.replace.php -text
 lib/smarty/libs/plugins/modifier.rfc2822.php -text
 lib/smarty/libs/plugins/modifier.spacify.php -text
@@ -283,6 +284,7 @@ lib/templates/courant/mail/c_header.tpl -text
 lib/templates/courant/mail/courant.tpl -text
 lib/templates/courant/mail/csrmail_owee.tpl -text
 lib/templates/csrdelft.tpl -text
+lib/templates/forum/onderwerp.tpl -text
 lib/templates/forum/rss.tpl -text
 lib/templates/groepen/groep.tpl -text
 lib/templates/groepen/groepen.tpl -text
