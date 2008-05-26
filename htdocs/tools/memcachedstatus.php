@@ -7,7 +7,7 @@
 require_once('include.config.php');
 
 if($lid->hasPermission('P_ADMIN')){
-	echo '<h1>MemCached statuspagina';
+	echo '<h1>MemCached statuspagina</h1>';
 	$lidCache=LidCache::get_LidCache();
 	$stats=$lidCache->getStats();
 	pr($stats);
