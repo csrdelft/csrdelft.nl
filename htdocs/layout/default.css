@@ -53,6 +53,7 @@ hr{
 }
 .clear{	clear: both; }
 .verborgen{ display: none; }
+.handje{ cursor: pointer; }
 
 ul.horizontal li{
 	display: inline;

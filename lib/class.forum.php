@@ -56,8 +56,9 @@ class Forum {
 	* Topicoverzicht binnehalen, gesorteerd op plakkerig, lastpost.
 	* Eventueel nog paginering.
 	*/
-	function getTopics($iCat, $iPagina=0){
+	function getTopics($iCat, $iPagina=1){
 		$iCat=(int)$iCat;
+		$iPagina=$iPagina-1;
 		//ook op bevestiging wachtende berichten van niet ingelogde gebruikers zichtbaar maken
 		//voor moderators
 		if($this->_lid->hasPermission('P_FORUM_MOD')){

@@ -1,18 +1,38 @@
-table.forumtabel {
+#forumtabel{
 	border: 0px; padding: 0px;
 	width: 100%;
 }
+#forumtabel td{ border: 0px; }
+#forumtabel tr.tussenschot td{ 
+	height: 2px; 
+	margin: 0px; padding: 0px; 
+	background-color: lightgrey; 
+}
+#forumtabel td.auteur{
+	vertical-align: top;
+	width: 150px;
+	background-color: #fff;
+	padding: 2px 10px 5px 10px;
+	font-size: 0.9em;
+	text-align: left;
+}
+#forumtabel td.bericht0, #forumtabel td.bericht1{
+	margin: 0px; padding: 0.2em 0.6em 10px 0.6em;
+	vertical-align: top; text-align: justify;
+}
+#forumtabel td.bericht1{ background-color: #f4f4f4; }
 
-table.forumtabel td{ border: 0px; }
+#forumtabel tr.kleur0 td{ background-color: #fff; }
+#forumtabel tr.kleur1 td{ background-color: #f4f4f4; }
 
-.forumhoofd {
+#forumtabel th{
 	font-weight: bold;
 	color: #000; background-color: lightblue;
 	vertical-align: middle;
 	padding: 5px 10px 5px 15px;
 	height: 19px;
 }
-.forumauteur{
+#forumtabel td.auteur{
 	vertical-align: top;
 	width: 150px;
 	background-color: #fff;
@@ -36,29 +56,15 @@ table.forumtabel td{ border: 0px; }
 	background-color: #fff;
 	text-align: left;
 }
-.forumbericht0, .forumbericht1{
-	margin: 0px; padding: 0.2em 0.6em 10px 0.6em;
-	vertical-align: top; text-align: justify;
-}
-.forumbericht1{ background-color: #f4f4f4; }
-
-.forumtussenschot { 
-	height: 2px;
-	margin: 0px; padding: 0px;
-	background-color: lightgrey;
-}
-.forumreacties{
+#forumtabel td.reacties{
 	vertical-align: middle; text-align: center;
 	width: 80px;
-	background-color: #f4f4f4;
 }
-.forumtitel {
-	color: #000; background-color: #f4f4f4;
+#forumtabel td.titel {
 	margin: 0px; padding: 0.2em 0.6em 0.2em 0.6em;
 	vertical-align: middle; text-align: left;
 }
-.forumreactiemoment {
-	color: #000; background-color: #cde4eb;
+#forumtabel td.reactiemoment {
 	margin: 0px; padding: 0.2em 0.6em 0.2em 0.6em;	
 	vertical-align: top; text-align: left;	
 	width: 180px;
@@ -71,9 +77,8 @@ a.forumGrootlink{
 .forumGrootlink:hover{
 	color: black;
 }
-.genmed{
-	font-size: 9px;
-}
+
+/* ubb-code */
 div.citaatContainer{
 	margin: 5px 5px 5px 20px;
 }
@@ -87,10 +92,6 @@ div.citaatContainer div.citaat div.citaatContainer div.citaat div.citaatContaine
 .code{
 	font-family: monospace;
 	background-color: #f1f1f1;
-}
-.zoekwoord{
-	background-color: #FFFF99;
-	color: black;
 }
 img.forum_image{
 	max-width: 586px; border: 0;

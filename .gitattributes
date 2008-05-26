@@ -235,6 +235,7 @@ lib/smarty/libs/plugins/function.mailto.php -text
 lib/smarty/libs/plugins/function.math.php -text
 lib/smarty/libs/plugins/function.popup.php -text
 lib/smarty/libs/plugins/function.popup_init.php -text
+lib/smarty/libs/plugins/function.sliding_pager.php -text
 lib/smarty/libs/plugins/modifier.capitalize.php -text
 lib/smarty/libs/plugins/modifier.cat.php -text
 lib/smarty/libs/plugins/modifier.count_characters.php -text
@@ -284,8 +285,12 @@ lib/templates/courant/mail/c_header.tpl -text
 lib/templates/courant/mail/courant.tpl -text
 lib/templates/courant/mail/csrmail_owee.tpl -text
 lib/templates/csrdelft.tpl -text
+lib/templates/forum/list_categories.tpl -text
+lib/templates/forum/list_onderwerpen.tpl -text
+lib/templates/forum/list_recent.tpl -text
 lib/templates/forum/onderwerp.tpl -text
 lib/templates/forum/rss.tpl -text
+lib/templates/forum/zoeken.tpl -text
 lib/templates/groepen/groep.tpl -text
 lib/templates/groepen/groepen.tpl -text
 lib/templates/groepen/groepformulier.tpl -text

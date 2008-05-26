@@ -59,15 +59,15 @@
 {/if}{* einde van moderatordeel *}
 
 <table id="forumtabel">
-	<tr>
-		<td class="forumtussenschot" colspan="2"></td>
+	<tr class="tussenschot">
+		<td colspan="2"></td>
 	</tr>
 	{if $forum->getSoort()=='T_POLL'}
 		{$peiling->view()}
 	{/if}
 	{foreach from=$forum->getPosts() item='bericht' name='berichten'}
 		<tr>
-			<td class="forumauteur">
+			<td class="auteur">
 				{$bericht.uid|csrnaam} schreef
 				{$bericht.datum|reldate}
 				{if $bericht.bewerkDatum!='0000-00-00 00:00:00'}
@@ -98,12 +98,12 @@
 					<br /><a href="/tools/stats.php?ip={$bericht.ip}">ip-log</a>
 				{/if}
 			</td>
-			<td class="forumbericht{cycle values="0,1"}" id="post{$bericht.postID}"> 
+			<td class="bericht{cycle values="0,1"}" id="post{$bericht.postID}"> 
 				{$bericht.tekst|ubb}
 			</td>
 		</tr>
-		<tr>
-			<td class="forumtussenschot" colspan="2"></td>
+		<tr class="tussenschot">
+			<td colspan="2"></td>
 		</tr>
 	{/foreach} 
 	{if $postvoorbeeld!=''}
@@ -112,22 +112,22 @@
 				Voorbeeld van uw bericht:<br /><br />
 				<h4>LET OP: uw bericht is nog niet opgeslagen!</h4>
 			</td>
-			<td class="forumbericht{cycle values="0,1"}">
+			<td class="bericht{cycle values="0,1"}">
 				{$postvoorbeeld|ubb}
 			</td>
 		</tr>
-		<tr>
-			<td class="forumtussenschot" colspan="2"></td>
+		<tr class="tussenschot">
+			<td colspan="2"></td>
 		</tr>
 	{/if}
 	{* Formulier om een bericht achter te laten *}
 	<tr>
-		<td class="forumauteur">
+		<td class="auteur">
 			<a class="forumpostlink" id="laatste">
 				{if $citeerPost==0}Reageren{else}Citeren{/if}
 			</a><br /><br />
 			{if $forum->magToevoegen()}	
-				<a href="#laatste" onclick="vergrootTextarea('forumBericht', 10)" title="Vergroot het invoerveld">
+				<a onclick="vergrootTextarea('forumBericht', 10)" class="handje" title="Vergroot het invoerveld">
 					Invoerveld vergroten&nbsp;&raquo;
 				</a><br /><br />
 				{$ubbHulp}

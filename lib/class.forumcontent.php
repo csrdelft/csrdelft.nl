@@ -24,46 +24,10 @@ class ForumContent extends SimpleHTML {
 *
 ***********************************************************************************************************/	
 	function viewCategories(){
-		$aCategories=$this->_forum->getCategories(true);
-		echo '<form id="forum_zoeken" action="/communicatie/forum/zoeken.php" method="post"><input type="text" name="zoeken" value="zoeken in forum" onfocus="this.value=\'\';" /></form>';
-		echo '<h1>Forum</h1>';
-		//eventuele foutmelding weergeven:
-		echo $this->getMelding();
-		echo '<table class="forumtabel">
-			<tr>
-				<td class="forumhoofd">Forum</td>
-				<td class="forumhoofd">onderwerpen</td>
-				<td class="forumhoofd">berichten</td>
-				<td class="forumhoofd">verandering</td>
-			</tr>';
-		if(is_array($aCategories)){
-			foreach($aCategories as $aCategorie){
-				if($aCategorie['titel']=='SEPARATOR'){
-					echo '<tr><td class="forumtussenschot" colspan="4"></td></tr>';
-				}else{
-					echo '<tr><td class="forumtitel">';
-					echo '<a href="/communicatie/forum/categorie/'.$aCategorie['id'].'">'.mb_htmlentities($aCategorie['titel']).'</a><br />';
-					echo mb_htmlentities($aCategorie['beschrijving']).'</td>';
-					echo '<td class="forumreacties">'.$aCategorie['topics'].'</td>';
-					echo '<td class="forumreacties">'.$aCategorie['reacties'].'</td>';
-					echo '<td class="forumreactiemoment">';
-					if($aCategorie['lastpost']=='0000-00-00 00:00:00'){
-						echo 'nog geen berichten'; 
-					}else{ 
-						echo $this->_forum->formatDatum($aCategorie['lastpost']);
-						echo '<br /><a href="/communicatie/forum/onderwerp/'.$aCategorie['lasttopic'].'#post'.$aCategorie['lastpostID'].'">bericht</a> door ';
-						if(trim($aCategorie['lastuser'])!=''){
-							echo $this->_forum->getForumNaam($aCategorie['lastuser']);
-						}
-					}
-					echo '</td></tr>';
-				}
-			}//einde foreach
-		}else{ 
-			//het forum is nog leeg, of de database is stuk ofzo
-			echo '<tr><td colspan="4">Er zijn nog geen categorie&euml;n of er is iets mis met het databeest</td></tr>'; 
-		}
-		echo '</table>';
+		$smarty=new Smarty_csr();
+		$smarty->assign('categories',$this->_forum->getCategories(true));
+		$smarty->assign('melding', $this->getMelding());
+		$smarty->display('forum/list_categories.tpl');
 	}
 /***********************************************************************************************************
 *	Topics laten zien in een categorie
@@ -77,184 +41,51 @@ class ForumContent extends SimpleHTML {
 		if(isset($_GET['pagina'])){ 
 			$iPaginaID=(int)$_GET['pagina']; 
 		}else{
-			$iPaginaID=0; 
+			$iPaginaID=1; 
 		}
 		if($this->_forum->catExistsVoorUser($iCat)){
-			$sCategorie=$this->_forum->getCategorieTitel($iCat);
 			$aTopics=$this->_forum->getTopics($iCat, $iPaginaID);
 			//als de pagina niet bestaat moet er teruggegaan worden naar de laatste pagina.
 			if($iPaginaID!=0 AND $aTopics===false){
 				//de pagina die opgevraagd wordt bestaat niet, gewoon maar de eerste weergeven dan.
-				$iPaginaID=0;
+				$iPaginaID=1;
 				$aTopics=$this->_forum->getTopics($iCat, $iPaginaID);
 			}
 			$iAantalTopics=$this->_forum->topicCount($iCat);
+			$template='forum/list_onderwerpen.tpl';
 		}elseif($iCat==0){
-			$sCategorie='Laatste forumberichten';
 			$this->_topicsPerPagina=40;
 			$aTopics=$this->_forum->getPostsVoorRss($this->_topicsPerPagina);
 			$iAantalTopics=count($aTopics);
+			$template='forum/list_recent.tpl';
 		}else{
 			echo '<h2><a href="/communicatie/forum/" class="forumGrootlink">Forum</a> &raquo; Foutje</h2>Dit gedeelte van het forum is niet zichtbaar voor u, of het bestaat &uuml;berhaupt niet.
 				<a href="/communicatie/forum/">Terug naar het forum</a>';
 			return;
 		}
 		
-		echo '<form id="forum_zoeken" action="/communicatie/forum/zoeken.php" method="post"><input type="text" name="zoeken" value="zoeken in forum" onfocus="this.value=\'\';" /></form>';
-		echo '<div class="forumNavigatie"><a href="/communicatie/forum/" class="forumGrootlink">Forum</a>';
-		echo '<h1>'.mb_htmlentities(wordwrap($this->_forum->getCategorieTitel($iCat), 80, "\n", true)).'</h1></div>';
+		$smarty=new Smarty_csr();
+		$smarty->assign('categorie', $iCat);
+		$smarty->assign('categorietitel', $this->_forum->getCategorieTitel($iCat));
+		$smarty->assign('berichten', $aTopics);
 		
-		//eventuele foutmelding weergeven:
-		echo $this->getMelding();
-		echo '<table class="forumtabel"><tr>';
-		echo '<td class="forumhoofd">Titel</td><td class="forumhoofd">Reacties</td>';
-		echo '<td class="forumhoofd">Auteur</td><td class="forumhoofd">verandering</td></tr>';
-		if(is_array($aTopics)){
-			foreach($aTopics as $aTopic){
-				//klein hackje om de array van getPostRss compatible te maken met die van getTopic
-				if($iCat==0){
-					$aTopic['id']=$aTopic['tid'];
-					$aTopic['lastpostID']=$aTopic['postID'];
-					$aTopic['lastuser']=$aTopic['uid'];
-				}
-				//de boel klaarmaken voor weergave:
-				$sOnderwerp='';
-				if($aTopic['soort']=='T_POLL'){	$sOnderwerp.='[peiling] '; }
-				if($aTopic['zichtbaar']=='wacht_goedkeuring'){ $sOnderwerp.='[ter goedkeuring...] '; }
-				$sOnderwerp.='<a href="/communicatie/forum/onderwerp/'.$aTopic['id']. '" >';
-				if($aTopic['plakkerig']==1){
-					$sOnderwerp.='<img src="'.CSR_PICS.'forum/plakkerig.gif" title="Dit onderwerp is plakkerig, het blijft bovenaan." alt="plakkerig" />&nbsp;&nbsp;';
-				}
-				if($aTopic['open']==0){
-					$sOnderwerp.='<img src="'.CSR_PICS.'forum/slotje.png" title="Dit onderwerp is gesloten, u kunt niet meer reageren" alt="sluiten" />&nbsp;&nbsp;';
-				}
-				$sOnderwerp.=mb_htmlentities(wordwrap($aTopic['titel'], 60, "\n", true)).'</a>';
-				$sReacties=$aTopic['reacties']-1;
-				$sDraadstarter=mb_htmlentities($this->_forum->getForumNaam($aTopic['uid']));
-				$sReactieMoment=$this->_forum->formatDatum($aTopic['lastpost']);
-				if(trim($aTopic['lastuser'])!=''){
-					$sLaatsteposter=$this->_forum->getForumNaam($aTopic['lastuser']);
-				}else{
-					$sLaatsteposter='onbekend'; 
-				
-				}
-
-				echo "\r\n".'<tr>';
-				echo '<td class="forumtitel">'.$sOnderwerp.'</td>';
-				echo '<td class="forumreacties">'.$sReacties.'</td>';
-				echo '<td class="forumreacties">'.$this->_forum->getForumNaam($aTopic['uid']).'</td>';
-				echo '<td class="forumreactiemoment">'.$sReactieMoment;
-				echo '<br /><a href="/communicatie/forum/onderwerp/'.$aTopic['id'].'#post'.$aTopic['lastpostID'].'">bericht</a> door ';
-				echo $sLaatsteposter;
-				echo '</td></tr>'."\r\n";
-			}
-		}else{//$aTopics is geen array, dus bevat geen berichten.
-			$iAantalTopics=0;
-			echo '<tr><td colspan="3">Deze categorie bevat nog geen berichten of deze pagina bestaat niet.</td></tr>';
-		}
-		
-		
-		echo '<tr><td colspan="3" class="forumhoofd">&nbsp;</td>';
-		
-		/*
-		 * Pagineringslinkjes
-		 */
-		echo '<td class="forumhoofd">';
+		//paginanummertjes
+		$pagina['baseurl']='/communicatie/forum/categorie/'.$iCat.'/';
+		$pagina['aantal']=1;
 		if($iAantalTopics>$this->_topicsPerPagina){
-			$iAantalPaginas=ceil($iAantalTopics/$this->_topicsPerPagina);
-			//bij meer dan tien pagina's boven de tien pagina's geen links meer weergeven
-			if($iAantalPaginas>10){ $iAantalPaginas=10; $bMeer=true; }
-			echo 'pagina: ';
-			for($iPagina=0; $iPagina<$iAantalPaginas; $iPagina++){ 
-				if($iPagina==$iPaginaID){
-					echo ($iPagina+1).' ';
-				}else{
-					echo '<a href="/communicatie/forum/categorie/'.$iCat.'/'.$iPagina.'">'.($iPagina+1).'</a> ';
-				}
-			}
-			if(isset($bMeer)){ echo '...'; }
+			$pagina['aantal']=ceil($iAantalTopics/$this->_topicsPerPagina);
 		}
-		echo '</td></tr>';
+		$pagina['huidig']=$iPaginaID;
+		$smarty->assign('pagina', $pagina);
 		
-		
-		
-		/*
-		 * Begin van het invoeren van een nieuw bericht
-		 */
-		 
 		$lid=Lid::get_Lid();
-		if($lid->hasPermission($aTopic['rechten_post'])){
-			echo '<tr><td colspan="4" class="forumtekst"><form method="post" action="/communicatie/forum/onderwerp-toevoegen/'.$iCat.'"><p>';
-			if($lid->hasPermission('P_LOGGED_IN')){
-				echo 'Hier kunt u een onderwerp toevoegen in deze categorie van het forum. Kijkt u vooraf goed of het onderwerp waarover
-					 u post hier wel thuishoort.<br /><br />';
-			}else{
-				//melding voor niet ingelogde gebruikers die toch willen posten. Ze worden 'gemodereerd', dat wil zeggen, de topics zijn
-				//nog niet direct zichtbaar.
-				echo 'Hier kunt u een bericht toevoegen aan het forum. Het zal echter niet direct zichtbaar worden, maar
-				 &eacute;&eacute;rst door de PubCie worden goedgekeurd. <br /><span style="text-decoration: underline;">
-				 Het is hierbij verplicht om uw naam en een email-adres onder het bericht te plaatsen. Dan kan de PubCie 
-				 eventueel contact met u opnemen. Doet u dat niet, dan wordt uw bericht waarschijnlijk niet geplaatst!<br />
-				 <strong>Ook dubbelplaatsen is niet nodig, heb gewoon even geduld!</strong></span>
-				 <br /><br />';
-			}
-			echo '
-					<a class="forumpostlink" name="laatste"><strong>Titel</strong></a><br />
-					<input type="text" name="titel" value="" class="tekst" style="width: 100%" tabindex="1" /><br />
-					<strong>Bericht</strong>&nbsp;&nbsp; ';
-			// link om het tekst-vak groter te maken.
-			echo '<a href="#" onclick="vergrootTextarea(\'forumBericht\', 10)" name="Vergroot het invoerveld">
-				Invoerveld vergroten</a><br />';
-			echo '<textarea name="bericht" id="forumBericht" rows="10" cols="80" style="width: 100%" class="tekst" tabindex="2"></textarea><br />
-					<input type="submit" name="submit" value="verzenden" />
-					</p></form></td></tr>';
-		}
-		echo '</table>';
-		//nog eens de navigatielinks die ook bovenaan staan.
-		echo $sNavigatieLinks;
+		$smarty->assign('magPosten', $lid->hasPermission($aTopics[0]['rechten_post']));
+		$smarty->assign('melding', $this->getMelding());
+		$smarty->display($template);
+		
+		
+		
 	
-	}
-
-/***********************************************************************************************************
-* een bericht bewerken.
-*
-***********************************************************************************************************/	
-	function bewerkFormulier($iPostID){
-		$iPostID=(int)$iPostID;
-		if($this->_forum->magBewerken($iPostID)){
-			$iTopicID=$this->_forum->getTopicVoorPostID($iPostID);
-			if($iTopicID!=0 OR !preg_match("/^(\d*)$/", $iTopicID)){
-				$sTopicTitel=$this->_forum->getTopicTitel($iTopicID);
-				$aPost=$this->_forum->getSinglePost($iPostID);
-				//navigatielinks
-				echo  '<h2><a href="/communicatie/forum/" class="forumGrootlink">Forum</a> &raquo; 
-					<a href="/communicatie/forum/categorie/'.$aPost['categorieID'].'" class="forumGrootlink">
-						'.mb_htmlentities($aPost['categorieTitel']).'
-					</a> &raquo; <a href="/communicatie/forum/onderwerp/'.$iTopicID.'#post'.$iPostID.'" class="forumGrootlink">
-					'.mb_htmlentities($aPost['topicTitel']).'</a> &raquo; bericht bewerken</h2>';
-				
-				echo '<table class="forumtabel">
-					<tr><td colspan="3" class="forumhoofd">Bericht bewerken</td><td class="forumhoofd">&nbsp;</td></tr>
-					<tr><td colspan="4" class="forumtekst">
-					<form method="post" action="/communicatie/forum/bewerken/'.$iPostID.'">
-					<h3>Als u dingen aanpast zet er dan even bij w&aacute;t u aanpast! Geef bijvoorbeeld even aan wat u heeft aangepast in een [offtopic]...[/offtopic]-tag onder uw bericht.</h3>
-					<strong>Bericht</strong>&nbsp;&nbsp;';
-				// link om het tekst-vak groter te maken.
-				echo '<a href="#" onclick="vergrootTextarea(\'forumBericht\', 10)" name="Vergroot het invoerveld">Invoerveld vergroten</a><br />';
-
-				echo '
-					<textarea name="bericht" id="forumBericht" rows="20" style="width: 100%" class="tekst">'.
-						$aPost['tekst'].'</textarea><br />
-					<input type="submit" name="submit" value="verzenden" /> <a href="/communicatie/forum/onderwerp/'.$iTopicID.'">terug naar onderwerp</a>
-					</form></td></tr></table>';
-			}else{
-				echo '<h2>Dit bericht bestaat niet.</h2>Terug naar <a href="/communicatie/forum/">het forum.</a>';
-			}
-		}else{
-			$iTopicID=$this->_forum->getTopicVoorPostID($iPostID);
-			echo '<h2><a href="/communicatie/forum/" class="forumGrootlink">Forum</a> &raquo; Dit bericht mag u niet bewerken.</h2>
-				Terug naar <a href="/communicatie/forum/onderwerp/'.$iTopicID.'">Vergeet bewerken, ga terug naar het onderwerp waar u vandaan kwam.</a>';
-		}
 	}
 /***********************************************************************************************************
 * poll toevoegen
@@ -458,7 +289,6 @@ class ForumContent extends SimpleHTML {
 				}	
 				$this->pollFormulier($iCatID);
 			break;
-			case 'bewerk': if(isset($_GET['post'])){ $this->bewerkFormulier((int)$_GET['post']); }else{ $this->viewCategories(); } break;
 			case 'citeren': 
 				if(isset($_GET['post'])){
 					$this->viewTopic((int)$_GET['post']); 
