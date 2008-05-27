@@ -16,7 +16,7 @@ if($lid->getUid()!='0436'){
 
 //instellingen
 $saldoGrens=-7;
-$cie='soccie';
+$cie='maalcie';
 
 $naam=array('soccie' => 'SocCie', 'maalcie' => 'MaalCie');
 
@@ -40,7 +40,7 @@ while($data=$db->next($result)){
 	$to=$data['uid'].'@csrdelft.nl, '.$cie.'@csrdelft.nl';
 	$subject='U staat rood bij de '.$naam[$cie].'.';
 	
-	//mail($to, $subject, $body, "From: '.$cie.'@csrdelft.nl\n\r");
+//	mail($to, $subject, $body, "From: ".$cie."@csrdelft.nl\n\r");
 	
 	echo nl2br($body).'<hr />';
 }
