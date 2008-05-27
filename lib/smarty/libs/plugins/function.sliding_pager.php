@@ -39,7 +39,7 @@ function smarty_function_sliding_pager($params, &$smarty){
     $separator = '&|&';
     $txt_next  = '&';
     $txt_last  = '&&';
-    $txt_skip  = '…';
+    $txt_skip  = ' … ';
     $css_class = '';
     $link_current = false; 
 
