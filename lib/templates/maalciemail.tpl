@@ -1,6 +1,6 @@
 Beste {$uid|csrnaam:civitas:false},
 
-via dit mailtje wil ik u bewust maken van het feit dat uw saldo negatief is 
+Via dit mailtje wil ik u bewust maken van het feit dat uw saldo negatief is 
 bij de MaalCie. Dit komt door een aantal niet-betaalde maaltijden. Uw schuld 
 bedraagt op dit moment: {$saldo}
 
@@ -14,4 +14,4 @@ Als u denkt dat uw schuld niet klopt, kunt u mij natuurlijk altijd
 terugmailen zodat ik onduidelijkheden weg kan nemen.
 
 Bij voorbaat dank,
-Johan KleinJan, h.t. MaalCie fiscus
+Johan KleinJan, h.t. MaalCiefiscus
