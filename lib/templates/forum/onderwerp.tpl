@@ -22,7 +22,7 @@
 				<img src="{$csr_pics}forum/slotje.png" alt="Slotje" /> 
 				{if $forum->isOpen()}sluiten (geen reactie mogelijk){else}weer openen (reactie mogelijk){/if}
 			</a><br /><br />
-			<a href="/communicatie/forum/plakkerigheid/'.$forum->getID().'" class="knop">
+			<a href="/communicatie/forum/plakkerigheid/{$forum->getID()}" class="knop">
 				<img src="{$csr_pics}forum/plakkerig.gif" alt="plakkerig" />		
 				{if $forum->isPlakkerig()}verwijder plakkerigheid{else}maak plakkerig{/if}
 			</a>
