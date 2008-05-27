@@ -4,7 +4,7 @@
 	<div class="forumNavigatie">
 		<a href="/communicatie/forum/" class="forumGrootlink">Forum</a> &raquo; 
 		<a href="/communicatie/forum/categorie/{$forum->getCatID()}" class="forumGrootlink">
-			{$forum->getCatTitel()|escape:'htmlall'}
+			{$forum->getCatTitel()|escape:'html'}
 		</a><br />
 		<h1>{$forum->getTitel()|wordwrap:80:"\n":true|escape:'htmlall'}</h1>
 	</div>
