@@ -34,7 +34,7 @@
 			<td class="reactiemoment">
 				{$bericht.lastpost|reldate}<br />
 				<a href="/communicatie/forum/onderwerp/{$bericht.id}#post{$bericht.lastpostID}">bericht</a> door 
-				{$bericht.uid|csrnaam}
+				{$bericht.uid|csrnaam:'user'}
 			</td>
 		</tr>
 	{foreachelse}

@@ -32,11 +32,11 @@
 				</a>
 			</td>
 			<td class="reacties">{$bericht.reacties-1}</td>
-			<td class="reacties">{$bericht.uid|csrnaam}</td>
+			<td class="reacties">{$bericht.uid|csrnaam:'user'}</td>
 			<td class="reactiemoment">
 				{$bericht.lastpost|reldate}<br />
 				<a href="/communicatie/forum/onderwerp/{$bericht.id}#post{$bericht.lastpostID}">bericht</a> door 
-				{$bericht.lastuser|csrnaam}
+				{$bericht.lastuser|csrnaam:'user'}
 			</td>
 		</tr>
 	{foreachelse}

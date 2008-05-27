@@ -68,7 +68,7 @@
 	{foreach from=$forum->getPosts() item='bericht' name='berichten'}
 		<tr>
 			<td class="auteur">
-				{$bericht.uid|csrnaam} schreef
+				{$bericht.uid|csrnaam:'user'} schreef
 				{$bericht.datum|reldate}
 				{if $bericht.bewerkDatum!='0000-00-00 00:00:00'}
 					<br />Bewerkt {$bericht.bewerkDatum|reldate}

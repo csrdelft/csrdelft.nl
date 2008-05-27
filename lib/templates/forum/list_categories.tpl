@@ -30,7 +30,7 @@
 						{$categorie.lastpost|reldate}<br />
 						<a href="/communicatie/forum/onderwerp/{$categorie.lasttopic}#post{$categorie.lastpostID}">bericht</a> 
 						{if $categorie.lastuser!=''}
-							door {$categorie.lastuser|csrnaam}
+							door {$categorie.lastuser|csrnaam:'user'}
 						{/if}
 					{/if}
 				</td>
