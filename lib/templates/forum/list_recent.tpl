@@ -20,7 +20,7 @@
 			<td class="titel">
 				{if $bericht.soort=='T_POLL'}[peiling]{/if}
 				{if $bericht.zichtbaar=='wacht_goedkeuring'}[ter goedkeuring...]{/if}
-				<a href="/communicatie/forum/onderwerp/{$bericht.id}">
+				<a href="/communicatie/forum/onderwerp/{$bericht.tid}">
 					{if $bericht.plakkerig==1}
 						<img src="{$csr_pics}forum/plakkerig.gif" title="Dit onderwerp is plakkerig, het blijft bovenaan." alt="plakkerig" />&nbsp;&nbsp;
 					{/if}	
@@ -33,7 +33,7 @@
 			<td class="reacties">{$bericht.reacties-1}</td>
 			<td class="reactiemoment">
 				{$bericht.lastpost|reldate}<br />
-				<a href="/communicatie/forum/onderwerp/{$bericht.id}#post{$bericht.lastpostID}">bericht</a> door 
+				<a href="/communicatie/forum/onderwerp/{$bericht.tid}#post{$bericht.postID}">bericht</a> door 
 				{$bericht.uid|csrnaam:'user'}
 			</td>
 		</tr>
