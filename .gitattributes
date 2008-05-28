@@ -71,6 +71,7 @@ htdocs/layout/documenten.css -text
 htdocs/layout/forum.css -text
 htdocs/layout/groepen.css -text
 htdocs/layout/menu.js -text
+htdocs/layout/owee.css -text
 htdocs/layout/pngfix.js -text
 htdocs/layout/profiel.css -text
 htdocs/layout/slideshow.js -text
@@ -303,6 +304,8 @@ lib/templates/maaltijdketzer/maaltijdketzer.tpl -text
 lib/templates/maaltijdketzer/saldi-updater.tpl -text
 lib/templates/maaltijdketzer/voorkeuren.tpl -text
 lib/templates/menu.tpl -text
+lib/templates/owee_csrdelft.tpl -text
+lib/templates/owee_menu.tpl -text
 lib/templates/profiel.tpl -text
 lib/templates/socciemail.tpl -text
 lib/templates/vb/home.tpl -text

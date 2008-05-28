@@ -26,8 +26,9 @@ class csrdelft extends SimpleHTML {
 	private $_scripts=array();
 	
 	private $_titel='Geen titel gezet.';
+	private $_prefix;
 	
-	function csrdelft($body){
+	function csrdelft($body,$prefix=''){
 		if(is_object($body)){
 			$this->_body=$body;
 			//als de body een methode heeft om een titel mee te geven die gebruiken, anders de standaard.
@@ -38,13 +39,16 @@ class csrdelft extends SimpleHTML {
 		$this->_lid=Lid::get_lid();
 		//nieuw menu-object aanmaken...
 		require_once('class.menu.php');
-		$this->_menu=new menu();
+		$this->_menu=new menu($prefix);
 		
 		//Stylesheets en scripts die we altijd gebruiken
 		$this->addStylesheet('undohtml.css');
 		$this->addStylesheet('default.css');
 		$this->addScript('csrdelft.js');
-		$this->addScript('menu.js');		
+		$this->addScript('menu.js');
+
+		//Prefix opslaan
+		$this->_prefix=$prefix;
 	}
 	
 	function addStylesheet($sheet){ 
@@ -83,7 +87,7 @@ class csrdelft extends SimpleHTML {
 		$csrdelft->assign('saldi', $saldi);
 		
 		$csrdelft->caching=false;
-		$csrdelft->display('csrdelft.tpl');
+		$csrdelft->display($this->_prefix.'csrdelft.tpl');
 		
 		if(defined('DEBUG') AND $this->_lid->hasPermission('P_ADMIN')){
 			$db=MySql::get_MySql();

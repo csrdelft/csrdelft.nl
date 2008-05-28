@@ -33,7 +33,15 @@ if (isset($_GET['bewerken']) && $pagina->magBewerken()){
 $zijkolom=new kolom();
 
 # pagina weergeven
-$depagina=new csrdelft($paginacontent);
+if($_GET['naam']=='owee'){
+	$prefix='owee_';
+}else{
+	$prefix='';
+}
+$depagina=new csrdelft($paginacontent,$prefix);
+if($_GET['naam']=='owee'){
+	$depagina->addStylesheet('owee.css');
+}
 $depagina->setZijkolom($zijkolom);
 $depagina->view();
 

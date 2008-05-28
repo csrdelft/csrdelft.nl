@@ -1,0 +1,39 @@
+#container {
+	background: url('http://www.johannesvg.nl/owee/containerbg_top.png') no-repeat;
+}
+
+/**** MENU ********************************************************************/
+#menu {
+	background: url('http://www.johannesvg.nl/owee/menubg.png') repeat-x;
+}
+
+/**** MAIN MENU ***************************************************************/
+#mainmenu a {
+	background: url('http://www.johannesvg.nl/owee/menubutton.png') no-repeat;
+}	
+#mainmenu a:link, #mainmenu a:visited {
+	color: #ffffff;
+}
+#mainmenu a:hover, #mainmenu a:active, #mainmenu a.active {
+	background: url('http://www.johannesvg.nl/owee/menubutton_hover.png') no-repeat;
+}
+
+/**** SUBMENU *****************************************************************/
+#submenu {
+	background: url('http://www.johannesvg.nl/owee/submenubg.png') repeat-x;
+}
+
+/**** MAIN ********************************************************************/
+#main {
+	background: url('http://www.johannesvg.nl/owee/mainbg.png') repeat-y;
+}
+
+/**** BLOCK *******************************************************************/
+#mainleft .block h1 {
+	background: url('http://www.johannesvg.nl/owee/blocktitle.png') no-repeat;
+}
+
+/**** FOOTER ******************************************************************/
+#footer {
+	background: url('http://www.johannesvg.nl/owee/footerbg.png') no-repeat #fff;
+}

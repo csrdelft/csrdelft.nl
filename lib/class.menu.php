@@ -21,8 +21,10 @@ class menu {
 	private $_huidig=1;
 	//huidigTop is het ID van de menu-optie waaronder de huidige valt
 	private $_huidigTop=0;
+
+	private $_prefix;
 	
-	public function menu() {
+	public function menu($prefix='') {
 		$this->_lid=Lid::get_lid();
 		$this->_db=MySql::get_MySql();
 	
@@ -88,6 +90,9 @@ class menu {
 					'rechten' => $aMenu['permission'] );
 			}
 		}
+
+		//Prefix opslaan
+		$this->_prefix=$prefix;
 	}
 
 	
@@ -137,7 +142,7 @@ class menu {
 		//if($bHuidig===false){$aMenuItems[0]['huidig']=true;}
 		
 		$menu->assign('items', $aMenuItems);		
-		$menu->display('menu.tpl');
+		$menu->display($this->_prefix.'menu.tpl');
 	}
 	
 	public static function getGaSnelNaar(){
