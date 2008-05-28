@@ -115,7 +115,12 @@
 		<div class="left">Maaltijden</div>	
 		<div class="gegevens">		
 			{if $profhtml.abos|@count > 0}
-				<div class="label">Abo's</div>
+				<div class="label">
+					Abo's
+					{if $lid->getUid()==$profhtml.uid}
+						<br /><a href="/actueel/maaltijden/voorkeuren.php" class="knop" title="Abo's bewerken"><img src="{$csr_pics}forum/bewerken.png" title="Bewerk groep" /></a>
+					{/if}
+				</div>
 				<ul class="nobullets data">
 				{foreach from=$profhtml.abos item=abo}
 					<li>{$abo}</li>

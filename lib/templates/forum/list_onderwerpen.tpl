@@ -58,7 +58,7 @@
 					<p>
 						{if $lid->hasPermission('P_LOGGED_IN')}
 							{if $lid->hasPermission('P_FORUM_MOD')}
-								<a href="/communicatie/forum/maak-peiling/{$categorie}" class="knop" style="float: right; margin: 8px;">Peiling toevoegen</a>
+								<a href="/communicatie/forum/maak-stemming/{$categorie}" class="knop" style="float: right; margin: 8px;">Peiling toevoegen</a>
 							{/if}
 							Hier kunt u een onderwerp toevoegen in deze categorie van het forum. Kijkt u vooraf goed of het 
 							onderwerp waarover u post hier wel thuishoort.<br /><br />

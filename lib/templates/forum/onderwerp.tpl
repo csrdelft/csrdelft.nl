@@ -93,7 +93,7 @@
 					</a>
 				{/if}
 				
-				{if $forum->isModerator() AND $aBericht.zichtbaar=='wacht_goedkeuring'}
+				{if $forum->isModerator() AND $bericht.zichtbaar=='wacht_goedkeuring'}
 					<br /><a href="/communicatie/forum/keur-goed/{$bericht.postID}" onclick="return confirm(\'Weet u zeker dat u dit bericht wilt goedkeuren?\')">bericht goedkeuren</a>
 					<br /><a href="/tools/stats.php?ip={$bericht.ip}">ip-log</a>
 				{/if}
