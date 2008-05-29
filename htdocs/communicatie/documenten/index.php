@@ -20,7 +20,7 @@ if ($lid->hasPermission('P_LEDEN_READ')) {
 $zijkolom=new kolom();
 
 // pagina weergeven
-$pagina=new csrdelft($midden, $lid, $db);
+$pagina=new csrdelft($midden);
 $pagina->setZijkolom($zijkolom);
 $pagina->addStylesheet('documenten.css');
 $pagina->view();
