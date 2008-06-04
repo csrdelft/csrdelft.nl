@@ -202,7 +202,7 @@ class Groepen{
 	
 	public static function isValidGtype($gtypetotest){
 		$db=MySql::get_MySql();
-		$qGroep="SELECT id FROM groepen WHERE naam='".$db->escape($gtypetotest)."'";
+		$qGroep="SELECT id FROM groeptype WHERE naam='".$db->escape($gtypetotest)."'";
 		return ($db->numRows($db->query($qGroep))==1);
 	}
 }
