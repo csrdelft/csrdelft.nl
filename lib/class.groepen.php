@@ -201,12 +201,9 @@ class Groepen{
 	}
 	
 	public static function isValidGtype($gtypetotest){
-		foreach(Groepen::getGroeptypes() as $gtype){
-			if($gtype['id']==$gtypetotest OR $gtype['naam']==$gtypetotest){
-				return true;
-			}
-		}
-		return false;
+		$db=MySql::get_MySql();
+		$qGroep="SELECT id FROM groepen WHERE naam='".$db->escape($gtypetotest)."'";
+		return ($db->num_rows($db->query($qGroep))==1);
 	}
 }
 
