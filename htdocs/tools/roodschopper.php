@@ -5,7 +5,7 @@
  * 
  */
 
-exit;
+//exit;
 
  # instellingen & rommeltjes
 require_once('include.config.php');
@@ -16,9 +16,11 @@ if($lid->getUid()!='0436'){
 
 //instellingen
 $saldoGrens=-7;
-$cie='maalcie';
+$cie='soccie';
 
-$naam=array('soccie' => 'SocCie', 'maalcie' => 'MaalCie');
+$naam=array(
+	'soccie' => array('SocCie', 'soccie@csrdelft.nl'), 
+	'maalcie' => array('MaalCie', 'maalcief@csrdelft.nl'));
 
 $query="
 	SELECT uid, ".$cie."Saldo AS saldo
@@ -37,8 +39,8 @@ while($data=$db->next($result)){
 	$mail->assign('saldo', number_format($data['saldo'], 2, ',', ''));	
 	
 	$body=$mail->fetch($cie.'mail.tpl');
-	$to=$data['uid'].'@csrdelft.nl, '.$cie.'@csrdelft.nl';
-	$subject='U staat rood bij de '.$naam[$cie].'.';
+	$to=$data['uid'].'@csrdelft.nl, '.$naam[$cie][1].'';
+	$subject='U staat rood bij de '.$naam[$cie][0].'.';
 	
 //	mail($to, $subject, $body, "From: ".$cie."@csrdelft.nl\n\r");
 	
