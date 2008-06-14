@@ -184,7 +184,7 @@ class Profiel extends lid{
 				# is het wel een wijziging?
 				if ($invoer != $this->_tmpprofile[$veld]) {
 					# geldige telefoonnummers...
-					if (!preg_match('/^(\d{4}-\d{6}|\d{3}-\d{7}|\d{2}-\d{8}|\+\d{10-20})$/', $invoer) and $invoer != "") {
+					if (!preg_match('/^(\d{4}-\d{6}|\d{3}-\d{7}|\d{2}-\d{8}|\+\d{10,20})$/', $invoer) and $invoer != "") {
 						$this->_formerror[$veld] = "Geldig formaat: 0187-123456; 015-2135681; 06-12345678; +31152135681";
 					}
 					
