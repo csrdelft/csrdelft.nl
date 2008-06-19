@@ -23,8 +23,8 @@ class Documenten {
 	private $homedir = '';
 	private $trash='';
 	function Documenten() {
-		$this->homedir = DATA_PATH.'/communicatie/documenten/uploads/';
-		$this->trash = DATA_PATH.'/communicatie/documenten/trash/';
+		$this->homedir = DATA_PATH.'/documenten/uploads/';
+		$this->trash = DATA_PATH.'/documenten/trash/';
 		$this->_lid = Lid::get_Lid();
 		$this->_db = MySql::get_MySql();
 	}
