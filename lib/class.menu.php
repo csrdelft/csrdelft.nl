@@ -24,7 +24,10 @@ class menu {
 
 	private $_prefix;
 	
-	public function menu($prefix='') {
+	/**
+		Michel: param $mainid toegevoegd, de vorminsbank heeft een ander hoofdmenu pID (= 99)
+	**/
+	public function menu($prefix='', $mainid=0) {
 		$this->_lid=Lid::get_lid();
 		$this->_db=MySql::get_MySql();
 	
@@ -58,10 +61,10 @@ class menu {
 					($request_uri_full==$aMenu['link'] AND $aMenu['link']!='/') OR
 					(strpos($request_uri, $aMenu['link'])!==false AND $aMenu['link']!='/')){
 				$this->_huidig=$aMenu['ID'];
-				if($aMenu['pID']!=0){ $this->_huidigTop=$aMenu['pID']; }
+				if($aMenu['pID']!=$mainid){ $this->_huidigTop=$aMenu['pID']; } //mw: 0 --> $mainid
 				$bHuidig=true;
 			}
-			if($aMenu['pID']==0){
+			if($aMenu['pID']==$mainid){  //mw: 0 --> $mainid
 				//hoofdniveau
 				$this->_menu[$aMenu['ID']]=array(
 					'ID' => $aMenu['ID'],

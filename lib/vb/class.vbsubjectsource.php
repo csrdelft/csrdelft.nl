@@ -75,7 +75,7 @@ class VBSubjectSource extends VBItem
 			Reden voor deze relatie:<br/>
 			<textarea name='reason' rows='6' cols='80'></textarea><br/>
 		";
-		return VBItem::getEditDiv($innerhtml, 'vbsubjectsource');
+		return VBItem::getEditDiv("<img src='images/leaf.png'/>Onderwerp-bron relatie bewerken",$innerhtml, 'vbsubjectsource');
 	}
 }
 ?>

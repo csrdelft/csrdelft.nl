@@ -69,13 +69,14 @@ class VBSubject extends VBItem
 			Omschrijving:<br/>
 			<textarea name='description' rows='6' cols='80'></textarea><br/>
 		";
-		return VBItem::getEditDiv($innerhtml, 'vbsubject','subjectdiv');
+		return VBItem::getEditDiv("<img src='images/node.png'/>Onderwerp bewerken", $innerhtml, 'vbsubject');
 	}
 	
-	public function getSearchForm()
+	function getImage()
 	{
-		return "Criterium: <input type='text' width='200' name='searchvalue'/><br/>";
-		
+		if($this->isLeaf)
+			return "images/leaf.png";
+		return "images/node.png";
 	}
 	
 	public function getSearchParamsFromForm($formname)
@@ -83,9 +84,9 @@ class VBSubject extends VBItem
 		return '\"searchvalue\"=>\""+escape(document.getElementById("'.$formname.'").searchvalue.value)+"\""'; 
 	}
 	
-	public function getSearchQuery($param)
+	public function getSimpleSearchQuery($text)
 	{
-		$searchvalue = mysql_escape_string(urldecode($param['searchvalue']));
+		$searchvalue = mysql_escape_string(urldecode($text));
 		return "FROM vb_subject WHERE locate('".$searchvalue."',name) or locate('".$searchvalue."', description) ";
 	}
 	

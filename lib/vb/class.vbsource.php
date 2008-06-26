@@ -118,7 +118,7 @@ class VBSource extends VBItem
 		return $r;
 	}
 	
-	public static function generateEditFields($kind, $linkinput)
+	public static function generateEditFields($title, $kind, $linkinput)
 	{
 		$innerhtml = VBItem::generateHiddenFields(array("id"=>"-1","sourceType"=>"undefined","autoLinkToSubject"=>"1"));
 		$innerhtml.="		
@@ -128,23 +128,34 @@ class VBSource extends VBItem
 			<textarea name='description' rows='6' cols='80'></textarea><br/>
 		";
 		$innerhtml.=$linkinput;
-		return VBItem::getEditDiv($innerhtml, 'vb'.$kind.'source',$kind.'editdiv');
+		return VBItem::getEditDiv($title, $innerhtml, 'vb'.$kind.'source');
 	}
 
-	public function getSearchForm()
-	{
-		return "Criterium: <input type='text' width='200' name='searchvalue'/><br/>";
-	}
 	
 	public function getSearchParamsFromForm($formname)
 	{
 		return '\"searchvalue\"=>\""+escape(document.getElementById("'.$formname.'").searchvalue.value)+"\""'; 
 	}
 
-	public function getSearchQuery($param)
+	public function getSimpleSearchQuery($searchvalue, $links = true, $files = true, $discus = true, $books = true)
 	{
-		$searchvalue = mysql_escape_string(urldecode($param['searchvalue']));
-		return "FROM vb_source WHERE locate('".$searchvalue."',name) or locate('".$searchvalue."', description) ";
+		$searchvalue = mysql_escape_string(urldecode($searchvalue));
+		$query = "FROM vb_source WHERE (locate('".$searchvalue."',name) or locate('".$searchvalue."', description)) AND (false "; //and false ommakkelijk orse te concateneren
+		if ($links)
+			$query .= " OR sourceType = 'link' ";
+		if ($files)
+			$query .= " OR sourceType = 'file' ";
+		if ($discus)
+			$query .= " OR sourceType = 'discussion' ";
+		if ($books)
+			$query .= " OR sourceType = 'book' ";
+		$query.=')';
+		return $query;
+	}
+	
+	function getImage()
+	{
+		return "images/".$this->sourceType.".png";
 	}
 	
 	public function toString()

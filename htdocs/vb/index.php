@@ -10,6 +10,7 @@
 require_once('include.config.php');
 require_once('vb/class.vb.php');
 require_once('vb/class.vbcontent.php');
+require_once('vb/class.vbmain.php');
 
 $vb = new VB();
 
@@ -42,9 +43,8 @@ $zijkolom=new kolom();
 $lastitems=new vbcontent($vb, 'lastposts',$id);
 $zijkolom->add($lastitems);
 	
-$page=new csrdelft($midden);
+$page=new vbmain($midden);
 $page->setZijkolom($zijkolom);
-$page->addStylesheet('vb.css');
 $page->view();
 	
 ?>

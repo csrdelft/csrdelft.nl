@@ -97,7 +97,7 @@ class VBSourceSource extends VBItem
 			Reden voor deze relatie:<br/>
 			<textarea name='reason' rows='6' cols='80'></textarea><br/>
 		";
-		return VBItem::getEditDiv($innerhtml, 'vbsourcesource');
+		return VBItem::getEditDiv("<img src='images/book.png'/>Bron-bron relatie bewerken",$innerhtml, 'vbsourcesource');
 	}
 }
 ?>

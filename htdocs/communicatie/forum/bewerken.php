@@ -26,8 +26,14 @@ if(isset($_GET['post'])){
 		if($_SERVER['REQUEST_METHOD']=='POST'){
 			$bericht=$db->escape(trim($_POST['bericht']));
 			if($forum->editPost($iPostID, $bericht)){
-				$iTopicID=$forum->getTopicVoorPostID($iPostID);
-				header('location: '.CSR_ROOT.'forum/onderwerp/'.$iTopicID.'#post'.$iPostID);
+				//mw: added redirect in case of vb, merk op dat er in het geval van een fout dus niet geredirect wordt (fix?)
+				if ($forum->getSoort()=="T_VBANK")
+					header('location: '.CSR_ROOT.'vb/index.php?actie=sourcebydiscussion&id='.$forum->getID());
+				else
+				{
+					$iTopicID=$forum->getTopicVoorPostID($iPostID);
+					header('location: '.CSR_ROOT.'forum/onderwerp/'.$iTopicID.'#post'.$iPostID);
+				}
 				exit;
 			}else{
 				require_once('class.forumcontent.php');

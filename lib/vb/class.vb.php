@@ -331,6 +331,96 @@ class VB {
 		return $this->_db->query($query);
 	}
 	
+	//central handler for different kind of searchrequests in the system. 
+	//returns a set of objects, extends the object $params with the fields
+	//maxcount, curpage. Returns objects
+	function handleSearchRequest($name, $params)
+	{
+		switch ($name)
+		{
+			case "addlabel":
+			case "addsource":
+				return $this->executeSimpleSearch($params);
+			case "complexsearch":
+				return $this->executeFullSearch($params);				
+			case "quicksearch":
+				//set default params
+				$params->subjects = "1";
+				$params->links = "1";
+				$params->files= "1";
+				$params->discus1= "1";
+				$params->discus2 = "0";
+				$params->books = "1";				
+				return $this->executeFullSearch($params);
+			default:
+				die("unknown search request: ".$name);
+		}
+	}
+	
+	//simplesearch, based on one 'searchvalue' and a specific 'class' param
+	function executeSimpleSearch($params)
+	{
+		$class = $params->class;
+		$obj = new $class();
+		if ($obj == null)
+			die("Invalid search request");
+		$query = $obj->getSimpleSearchQuery($params->searchvalue);
+		$r = $this->singleSelect("SELECT count(*) ".$query);
+		$params->maxcount = (int) $r['count(*)'];
+		$query2 = "SELECT * ".$query." LIMIT ".((int)$params->offset).", ".((int)$params->limit);
+		$objs = $this->multipleSelect($query2);		
+		if (mysql_errno() != 0)
+			die("error during searchquery: ".$query);
+		$objs = VBItem::fromSQLResults($objs, $class);		
+		return $objs;	
+	}
+	
+	//full search,search sources and subjects, based on possible enabled types
+	function executeFullSearch($params)
+	{
+		$params->maxcount = 0;
+		//items tellen
+		if ($params->subjects != "0")
+		{
+			$obj = new VBSubject();
+			$query1 = $obj->getSimpleSearchQuery($params->searchvalue);
+			$r = $this->singleSelect("SELECT count(*) ".$query1);
+			$params->maxcount += (int) $r['count(*)'];
+		}
+		$switchpoint1 = $params->maxcount; //punt waarop de tweede query in werking gaat
+		//zoeken naar bronnen
+		$obj = new VBSource();
+		$query2 = $obj->getSimpleSearchQuery($params->searchvalue, $params->links, $params->files, $params->discus1, $params->books);
+		$r = $this->singleSelect("SELECT count(*) ".$query2);
+		$params->maxcount += (int) $r['count(*)'];
+		$switchpoint2 = $params->maxcount + 1; 
+		//todo: if discuss2 != false, dan kijken in het forum
+		//todo: kloppen deze berekeningen?
+		$result = array();
+		if($params->subjects != "0")
+		{
+			$query = "SELECT * ".$query1." LIMIT ".((int)$params->offset).", ".((int)$params->limit);
+			$objs = $this->multipleSelect($query);		
+			if (mysql_errno() != 0)
+				die("error during searchquery: ".$query);
+			$result = VBItem::fromSQLResults($objs, "vbsubject");
+		}
+		//items ophalen, op basis van de maxsearch die nog niet overschreden mag zijn
+		if($switchpoint1 <= ($params->offset + $params->limit))
+		{
+			$start = max(0, ((int)$params->offset) - $switchpoint1); //offset is de gevraagde ofset min het aantal items dat al geladen is voor subjects
+			$limit = ((int)$params->limit) - $switchpoint1;//-offset? //limit is gevraagde limitmin wat eventueel al gevraagd is voor subjects
+			$query = "SELECT * ".$query2." LIMIT ".$start.", ".$limit;
+			$objs = $this->multipleSelect($query);		
+			if (mysql_errno() != 0)
+				die("error during searchquery: ".$query);
+			$tmp =  VBItem::fromSQLResults($objs, "vbsource");
+			foreach($tmp as $t) // += operator doesnt seem to work...
+				$result[] = $t;
+		}
+		return $result;
+	}
+	
 	function createSourceSourceLink($source1, $source2, $reason)
 	{
 		$ss = new vbsourcesource();
@@ -341,7 +431,6 @@ class VB {
 		$ss->date = getDateTime();
 		$ss->status = 'approved';
 		$query = $ss->getInsertQuery();
-		var_dump($query);
 		return $this->_db->query($query);
 	}
 	

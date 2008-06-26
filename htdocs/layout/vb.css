@@ -1,1 +1,145 @@
-.editdiv{display:none;  border-bottom-width: 5px; border-style: solid; border-color: red }
+.editdiv
+{
+	display:none;  
+	position: absolute;
+	top: 200px;
+	left: 25%;
+	width: 50%;
+	background-color: white;
+	padding: 35px;
+}
+
+.editdivinner
+{
+	border: 1px solid #444444;
+	background-color: #F0F0F0;
+	padding: 4px;
+}
+
+.editdivheader
+{
+	font-weight: bold;
+	border-bottom: 1px solid #444444;
+	color: red;
+}
+
+.rightjustify
+{
+	text-align: right;
+}
+
+h2
+{
+	color: #444444;
+	font-size: 1.5em;
+	border-bottom: 1px solid #b8b8b8;
+}
+
+textarea
+{
+	width: 90%;
+}
+
+#vbzoektable {
+	background: url('/vb/images/zoekveld_vb.png') no-repeat;
+	width: 174px;
+	height: 130px;
+	padding: 10px 30px;
+}
+
+#vbzoekveldlinks {
+	width: 120px;
+}
+
+#vblogobanner {
+	position: absolute;
+	top: 21px;
+	left: 482px;
+}
+
+#vbzoekbtn {
+	width: 80px;
+}
+
+.thema-grotebalk{
+	padding: 2px 12px 2px 6px;
+	margin-bottom: 10px;
+	border: 1px solid #B4B4B4;
+	background-color: #F0F0F0;
+}
+
+.thema-grotebalk .plaatje{
+	width: 16px;
+	height: 16px;
+	margin-right: 10px;
+	float: left;
+}
+.thema-grotebalk .titel{
+	font-weight: bold;
+	font-size: 1.1em;
+}
+
+.thema-grotebalk .bericht{
+	text-align: left;
+}
+
+/* overrides alleen voor klerutjes: */
+a{color: red; text-decoration: none;}
+
+#mainleft .block h1 {
+	margin: 0;
+	padding: 1px 5px;
+	font-size: 11px;
+	height: 13px;
+	color: red;
+	font-weight: bold;
+	background: url('/vb/images/blocktitle_vb.png') no-repeat;
+	border-bottom: 1px solid #b8b8b8;
+}
+#mainleft .block h1 a{
+	color:  red;
+}
+
+/* overrides voor plaatjes, voor de rest letterljk van default.css */
+
+#container {
+	margin: 10px auto;
+	width: 1004px;
+	background: url('/vb/images/containerbg_top_vb.png') no-repeat;
+}
+
+#menu {
+	margin: 0 auto;
+	width: 966px;
+	height: 142px;
+	background: url('/vb/images/menubg_vb.png') repeat-x;
+}
+
+#mainmenu a {
+	line-height: 15px; /*Fix voor Opera*/
+	margin-left: 17px;
+	_margin: 0 6px -18px 9px; /*IE6 fix*/
+	overflow: none;
+	padding: 6px 0 0 0;
+	display: block;
+	float: left;
+	text-align: center;
+	font-size: 13px;
+	width: 122px;
+	height: 26px;
+	font-weight: bold;
+	text-decoration: none;
+	background: url('/vb/images/menubutton_vb.png') no-repeat;
+}	
+
+#mainmenu a:hover, #mainmenu a:active, #mainmenu a.active {
+	background: url('/vb/images/menubutton_hover_vb.png') no-repeat;
+}
+
+/**** SUBMENU *****************************************************************/
+#submenu {
+	margin: 0 auto;
+	width: 966px;
+	height: 24px;
+	background: url('/vb/images/submenubg_vb.png') repeat-x;
+}

@@ -1,0 +1,24 @@
+todolist:
+
+zoeken
+boeken integreren
+ubb code
+navigate geschiedenis
+reference vakje bij bronnen
+layout popups en edit dingen
+layout zoekresultaten
+layout source en subject paginas
+beoordelingen
+in linkerbalk lijst met recente discussies
+rechten in groepen regelen
+plaatjes bij onderwerp typen, subject etc..
+tail messages in zoekresultaten en overzichten
+bronnen zonder label vinden
+
+charsets/ encoding decoding etc... 
+inkorten teksten waar nodig
+mod_rewrite( http://trac.knorrie.org/csrdelft.nl/browser/trunk/htdocs/actueel/groepen/.htaccess )
+fix: als een bestandsbron bewerkt wordt, wordt niet het bestand vervangen
+fix: data in linkerbalk
+fix: relatie kan gelegd worden met node onderwerp
+fix: geen relatie leggen tussen twee dezelfde bronnen, of 2x met hetzelfde onderwerp

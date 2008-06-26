@@ -27,10 +27,10 @@ class VBItem
 		$r = '
 			<a href="#" onClick="
 				'.$this->getJSEditHandler().'
-				"><img class="button" src="http://plaetjes.csrdelft.nl/forum/bewerken.png" alt="E"/></a>
+				"><img class="button" src="images/edit.png" alt="E"/></a>
 			<a href="#" onClick="
 				'.$this->getJSRemoveHandler().'
-				"><img class="button" src="http://plaetjes.csrdelft.nl/forum/verwijderen.png" alt="X"/></a>
+				"><img class="button" src="images/remove.png" alt="X"/></a>
 		';
 		return $r;
 	}
@@ -56,7 +56,7 @@ class VBItem
 			if (property_exists($this,$key) && !in_array($key,$excludes))
 				$r.=VBItem::getJSEditAssignment($class,$key,$waarde);
 		$r.= VBItem::getJSEditAssignment($class,"submit","Opslaan");
-		$r.= "document.getElementById('".$class."editdiv').style.display='block';";
+		$r.= "document.getElementById('".$class."EditFormDiv').style.display='block';";
 		return $r;		
 	}
 	
@@ -183,28 +183,42 @@ class VBItem
 	}
 	
 	/** creëert een standaard edit formulier voor een bepaalde classe. innerhtml kan gebruikt worden extra velden etc etc in het formulier te stoppen */
-	public static function getEditDiv($innerhtml, $classname)
+	public static function getEditDiv($titel, $innerhtml, $name, $beforeformhtml='', $usedefaultaction=1)
 	{
-		$r='
-			<div class="editdiv" id="'.$classname.'editdiv">
-				<p style="display:inline">
-					<a href="#" onClick="document.getElementById(\''.$classname.'editdiv\').style.display=\'none\';">X</a>
-					<b>Object bewerken</b>
-					<form enctype="multipart/form-data"  method=\'post\' name=\''.$classname.'EditForm\' action=\'/vb/index.php\'>
-						<input type="hidden" name="actie" value="commit"/>
-						<input type="hidden" name="class" value="'.$classname.'"/>
-						'.$innerhtml.'
-						<input type="submit" name="submit" value="Voeg Toe"/>
+		$formpostfix='EditForm';
+		return '
+			<div class="editdiv" id="'.$name.$formpostfix.'Div">
+				<div class="editdivinner">
+					<div class ="editdivheader">
+						<table width="100%"><tr><td >
+						'.$titel.'</td><td  class="rightjustify" width="20px">
+							<a href="#" onClick="document.getElementById(\''.$name.$formpostfix.'Div\').style.display=\'none\';">X</a>
+						</td></tr></table>
+					</div><br/>'.$beforeformhtml.'
+					<form enctype="multipart/form-data"  method="post" id="'.$name.$formpostfix.'" name="'.$name.$formpostfix.'" action="/vb/index.php">
+					'.($usedefaultaction?
+						'<input type="hidden" name="actie" value="commit"/>
+						<input type="hidden" name="class" value="'.$name.'"/>'
+						:'').
+						$innerhtml.'
+						<div class="rightjustify">
+							<hr/>
+							<input type="submit" name="submit" value="Opslaan"/>
+							<input type="reset" value="Annuleren" onClick="document.getElementById(\''.$name.$formpostfix.'Div\').style.display=\'none\';"/>
+						</div>
 					</form>
-				</p>
+				</div>
 			</div>
 			';
-		return $r;
-						
+	}
+	
+	function getImage()
+	{
+		return "";
 	}
 	
 	/** wat is de database tabel die hoort bij een bepalde php class naam? */
-	private static function classToTable($class)
+	public static function classToTable($class)
 	{
 		switch(strtolower($class))
 		{

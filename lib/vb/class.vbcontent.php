@@ -48,7 +48,7 @@ class VBContent extends SimpleHTML {
 				$this->showSubject();
 				break;
 			case "search":
-				$this->executeSearch();
+				$this->showSearch();
 				break;
 			case "lastposts":
 				$this->showLeftColumn();
@@ -71,6 +71,9 @@ class VBContent extends SimpleHTML {
 			case "addsourcesourcelink":
 				$this->addSourceSourceLink();
 				break;
+			case "sourcebydiscussion":
+				$this->showSourceByDiscussionId();
+				break;
 			case "pwd": //TODO: remove
 				die($this->_makepasswd($_GET['pwd']));
 			default:
@@ -90,7 +93,7 @@ class VBContent extends SimpleHTML {
 		$home = $this-> newTemplate();
 		//search box
 		$home->assign('search', $this->showSimpleSearch());
-				$sub = $this->_vb->getSubjectById(0); //show default themes
+		$sub = $this->_vb->getSubjectById(0); //show default themes
 		//hoofd onderwerpen
 		$home->assign('themes',$sub->children);
 		$home->display('vb/home.tpl'); 
@@ -99,35 +102,75 @@ class VBContent extends SimpleHTML {
 	/** shows the last posts, and last added sources */
 	function showLeftColumn()
 	{
-		//TODO: klus hier even mooie template van
-		echo "<b>Laatste bronnen</b><table>";
-		foreach($this->_vb->getLastPosts($this->_objid) as $source)
-			echo "<tr><td><a href=\"index.php?actie=source&id=".$source->id."\">".$source->name."</a></td><td>".$this->formatDatum($source->createdate)."</td><td>";
-		echo "</table>";
-		//TODO: forum laatste berichten hier ophalen			
+		echo '<h1><a href="/vb/">Laatste bronnen</a></h1>';
+		foreach($this->_vb->getLastPosts($this->_objid) as $source){
+			$titel=mb_htmlentities($source->name);
+			if(strlen($titel)>21){
+				$titel=str_replace(' ', '&nbsp;', trim(substr($titel, 0, 18)).'…');
+			}
+			$bericht=preg_replace('/(\[(|\/)\w+\])/', '|', $source->description);
+			$berichtfragment=substr(str_replace(array("\n", "\r", ' '), ' ', $bericht), 0, 40);
+			echo '<div class="item"><span class="tijd">'.date('d-m', $source->createdate).'</span>&nbsp;';
+			echo '<a href="index.php?actie=source&id='.$source->id.'" 
+				title="['.mb_htmlentities($source->name).'] '.
+					mb_htmlentities($berichtfragment).'">'.$titel.'</a><br />'."\n";
+			echo '</div>';
+			
+		}
+		//snel zoek ding
+		?><br/><br/>
+			<table id="vbzoektable">
+				<tr><td>
+					<form action="vb/index.php" method="get">
+						<input type="hidden" name="actie" value="staticquicksearch"/>
+						<input id="vbzoekveldlinks" type="text" value="zoeken..." onfocus="this.value=\'\'" onclick="form.submit();" name="searchvalue"/>
+					</form>
+				</td></tr>
+			</table>
+		<?php
 	}
 	
 	/** eenvoudige search box */
 	function showSimpleSearch()
 	{
-		return ('<form method="get" action="index.php">
-				<input type="hidden" name="actie" value="search">
-				<input type="hidden" name="mode" value="simple">
-				<input type="text" value="Zoeken in vormingsbank..." onfocus="this.value=\'\'" name="q" />
-				</p>
-			</form>');		
-	}
-	
-	/** geadvanceerde search boek voor op zoek pagina */
-	function showAdvancedSearch()
-	{
-		//TODO:
+		return $this->_search->createSearchForm('quicksearch',
+			'<input type="text" value="Zoeken in vormingsbank..." 
+				onfocus="this.value=\'\'" name="searchvalue" 
+				onkeyup="
+					if (this.value.length > 2) 
+					{
+						this.form.button.click();
+						document.getElementById(\'hoofdthemas\').style.display = \'none\';
+						document.getElementById(\'searchdiv\').style.display = \'block\';
+					}
+					else
+					{
+						document.getElementById(\'hoofdthemas\').style.display = \'block\';
+						document.getElementById(\'searchdiv\').style.display = \'none\';
+					}
+				"			
+			/>');
 	}
 	
 	/** zoek actie uitvoeren en resultaten weergeven */
-	function executeSearch()
+	function showSearch()
 	{
-		//TODO:
+		$tpl = $this->newTemplate();
+		$tpl->assign(searchform, $this->_search->createSearchForm("complexsearch",
+		'
+				<input type="text" id="zoekveld2" name="searchvalue" value="zoekterm" onfocus="this.value=\'\'; this.style.textAlign=\'left\';"
+					onkeyup="if (this.value.length > 2) this.form.button.click();"/>
+				<h2>Criteria</h2><br>
+				<table><tr><td>
+				<input type="checkbox" name="subjects" value="1"   class="checkbox" id="veld0"  checked  onclick="this.value = (this.checked?\'1\':\'0\');"/><label for="veld0">onderwerp</label><br/>
+				<input type="checkbox" name="links" value="1"  class="checkbox" id="veld1"  checked onclick="this.value = (this.checked?\'1\':\'0\');"/><label for="veld1">internet link</label><br/>
+				<input type="checkbox" name="files" value="1"  class="checkbox" id="veld2"  checked  onclick="this.value = (this.checked?\'1\':\'0\');"/><label for="veld2">bestand</label><br/>
+				</td><td>
+				<input type="checkbox" name="books" value="1"  class="checkbox" id="veld5"  checked  onclick="this.value = (this.checked?\'1\':\'0\');"/><label for="veld5">boek</label><br/>
+				<input type="checkbox" name="discus1" value="1"  class="checkbox" id="veld3"  checked  onclick="this.value = (this.checked?\'1\':\'0\');"/><label for="veld3">discussie omschrijving</label><br/>
+				<input type="checkbox" name="discus2" value="1"  class="checkbox" id="veld4" checked  onclick="this.value = (this.checked?\'1\':\'0\');"/><label for="veld4">discussie inhoud</label><br/>		
+				</td></tr></table>'));
+		$tpl->display('vb/search.tpl');
 	}
 	
 	/** shows a page containing a theme tree, and an advanced search field box  */
@@ -175,7 +218,7 @@ class VBContent extends SimpleHTML {
 	function generateLocationBar($obj)
 	{
 		//TODO:
-		echo "Hier > ziet > u > straks > waar > u > bent<br/>";	
+		//echo "Hier > ziet > u > straks > waar > u > bent<br/>";	
 	}
 	
 	/** linkje naar een bepaalde gebruiker */
@@ -190,6 +233,18 @@ class VBContent extends SimpleHTML {
 		
 	}
 	
+	/** for redirecting from forum edit stuff: find the proper source based on the current forumtopic id*/
+	function showSourceByDiscussionId()
+	{
+		$query = "SELECT id FROM vb_source WHERE sourceType='discussion' AND link='".$this->_objid."' LIMIT 1";
+		$res = $this->_vb->singleSelect($query);
+		if($res == false)
+			die("cannot find required source for discussion".$this->objid.":".$query);
+		$this->_objid = $res['id'];
+		$this->_action = "source";
+		$this->view();
+	}
+	
 	/** shows a source ("Bron"), either book, link, discussion or uploaded file */
 	function showSourcePage()
 	{
@@ -198,24 +253,27 @@ class VBContent extends SimpleHTML {
 		$tpl = $this->newTemplate();
 		$tpl->assign(source,$source);
 		//TODO: comefrom is een tijdelijke variable om navigatie te vereeenvoudigen, verwijderen straks
-		$tpl->assign(comefrom,(isset($_GET['comefrom'])?$_GET['comefrom']:'-1'));
+		$comefrom = (isset($_GET['comefrom'])?$_GET['comefrom']:'-1');
+		$tpl->assign(comefrom,$comefrom);
 		//edit gerelateerde onderwerpen
 		$tpl->assign(editsubjectsourcediv, VBSubjectSource::getEditDiv());
-		$tpl->assign(addlabelclick, $this->_search->createSearchDivLink("addlabel"));
-		$tpl->assign(addlabeldiv, $this->_search->createSearchDiv(
+		$tpl->assign(addlabelclick, $this->_search->createEditFormLink("addlabel"));
+		$tpl->assign(addlabeldiv, $this->_search->createSearchBasedEditForm(
+			"<img src='images/leaf.png'/>Nieuw label toekennen aan ".$source->name,
 			"addlabel",
-			"vbsubject",
+			"Criterium: <input type='text' width='200' name='searchvalue'/><input type='hidden' name='class' value='vbsubject'/>",
 			"subjid",
-			array("actie"=>"addsubjectsourcelink", "sourceid"=>$this->_objid),
+			VBItem::generateHiddenFields(array("actie"=>"addsubjectsourcelink", "sourceid"=>$this->_objid)).
 			"<textarea name='reason'>&lt;reden voor deze relatie&gt;</textarea>"));			
 		//edit gerelateerde bronnen
 		$tpl->assign(editsourcesourcediv, VBSourceSource::getEditDiv());
-		$tpl->assign(addsourceclick, $this->_search->createSearchDivLink("addsource"));
-		$tpl->assign(addsourcediv, $this->_search->createSearchDiv(
+		$tpl->assign(addsourceclick, $this->_search->createEditFormLink("addsource"));
+		$tpl->assign(addsourcediv, $this->_search->createSearchBasedEditForm(
+			"<img src='images/book.png'/>Nieuwe bron-bron relatie toevoegen aan ".$source->name,
 			"addsource",
-			"vbsource",
+			"Criterium: <input type='text' width='200' name='searchvalue'/><input type='hidden' name='class' value='vbsource'/>",
 			"source2",
-			array("actie"=>"addsourcesourcelink", "source1"=>$this->_objid),
+			VBItem::generateHiddenFields(array("actie"=>"addsourcesourcelink", "source1"=>$this->_objid)).
 			"<textarea name='reason'>&lt;reden voor deze relatie&gt;</textarea>"));			
 		$tpl->display('vb/source.tpl');
 		//render forum discussie
@@ -337,7 +395,7 @@ class VBContent extends SimpleHTML {
 			$this->notify("Fout tijdens opslaan van nieuwe bron-thema relatie");
 	}
 	
-		function addsourcesourcelink() {
+	function addsourcesourcelink() {
 		if (!$this->_vb->_lid->hasPermission('P_LOGGED_IN')) {
 			$this->notify("U heeft geen rechten om bron relaties te leggen");
 			return;

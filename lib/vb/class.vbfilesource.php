@@ -6,7 +6,7 @@ class VBFileSource extends VBSource
 	{
 		//note that a hidden link field is created, it is not used, but avoids overriding the
 		//default behaviour of VBSource.getEditHandler
-		return VBSource::generateEditFields('file',
+		return VBSource::generateEditFields("<img src='images/file.png'/>Bestand bron bewerken", 'file',
 			'<input type="hidden" name="MAX_FILE_SIZE" value="10485760">
 			 <input type="hidden" name="link" value="">
 			Voer een bestand in<br/><input name="file1" type="file" size="40"><br/>
