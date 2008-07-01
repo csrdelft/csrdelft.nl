@@ -130,8 +130,6 @@ lib/chart-0.8/chart-manual.php -text
 lib/chart-0.8/chart.css -text
 lib/chart-0.8/chart.php -text
 lib/chart-0.8/rgb.php -text
-lib/class.bestuur.php -text
-lib/class.bestuurcontent.php -text
 lib/class.controller.php -text
 lib/class.courant.php -text
 lib/class.courantarchiefcontent.php -text
@@ -300,7 +298,6 @@ lib/smarty/unit_test/templates/index.tpl -text
 lib/smarty/unit_test/templates/parse_math.tpl -text
 lib/smarty/unit_test/templates/parse_obj_meth.tpl -text
 lib/smarty/unit_test/test_cases.php -text
-lib/templates/bestuur.tpl -text
 lib/templates/courant/courantbeheer.tpl -text
 lib/templates/courant/mail/c_header.tpl -text
 lib/templates/courant/mail/courant.tpl -text
