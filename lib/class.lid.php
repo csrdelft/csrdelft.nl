@@ -8,7 +8,6 @@
 
 
 require_once('class.ldap.php');
-require_once('class.bestuur.php');
 
 class Lid {
 	static private $lid;
