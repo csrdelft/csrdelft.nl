@@ -640,8 +640,9 @@ class Lid {
 	 */
 	function isBestuur($uid=''){
 		if($uid==''){ $uid=$this->getUid(); }
-		$bestuur=new Bestuur();
-		return $bestuur->isBestuur($uid);
+		require_once('class.groep.php');
+		$bestuur=new Groep('bestuur');
+		return $bestuur->isLid($uid);
 	}
 	function getLidStatus($uid) {
 		# is het wel een geldig lid-nummer?

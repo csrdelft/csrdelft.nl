@@ -79,6 +79,7 @@ class ForumContent extends SimpleHTML {
 		$smarty->assign('pagina', $pagina);
 		
 		$lid=Lid::get_Lid();
+		//TODO: dit netjes fixen.
 		$smarty->assign('magPosten', $lid->hasPermission($aTopics[0]['rechten_post']));
 		$smarty->assign('melding', $this->getMelding());
 		$smarty->display($template);

@@ -116,7 +116,7 @@ class CsrUBB extends eamBBParser{
 	function ubb_youtube($parameters){
 		$content = $this->parseArray(array('[/youtube]'), array());
 		//alleen de eerste 11 tekens zijn relevant...
-		$content=substr($content, 0,11);
+		$content=substr($content, 0, 11);
 		if(preg_match('/[0-9a-zA-Z\-_]{11}/', $content)){
 			//als we in een quote-tag zijn, geen embed weergeven maar een link naar de embed,
 			//en het filmpje ook maar meteen starten.
