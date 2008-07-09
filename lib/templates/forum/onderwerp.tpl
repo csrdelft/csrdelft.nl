@@ -6,7 +6,7 @@
 		<a href="/communicatie/forum/categorie/{$forum->getCatID()}" class="forumGrootlink">
 			{$forum->getCatTitel()|escape:'html'}
 		</a><br />
-		<h1>{$forum->getTitel()|wordwrap:80:"\n":true|escape:'htmlall'}</h1>
+		<h1>{$forum->getTitel()|escape:'html'|wordwrap:80:"\n":true}</h1>
 	</div>
 {/capture}
 {$smarty.capture.navlinks}
