@@ -40,7 +40,7 @@
 						<input type="hidden" name="a" value="zoek" />
 						<input type="hidden" name="waar" value="naam" />
 						<input type="hidden" name="moot" value="alle" />
-						<input type="hidden" name="status" value="leden" />
+						<input type="hidden" name="status" value="(oud)?leden" />
 						<input type="hidden" name="sort" value="achternaam" />
 						<input type="hidden" name="kolom[]" value="adres" />
 						<input type="hidden" name="kolom[]" value="email" />
