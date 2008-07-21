@@ -36,7 +36,7 @@ $form['lidworden']['referer']      = 'http://csrdelft.nl/informatie/lidworden.ph
 $form['lidworden']['submit_to']    = 'pubcie@csrdelft.nl,vice-praeses@csrdelft.nl,owee@csrdelft.nl';
 $form['lidworden']['subject']      = 'Lid-Worden formulier website';
 $form['lidworden']['required']     = 'naam';
-$form['lidworden']['data_order']   = 'naam,straat,postcode,plaats,submit_by,opmerking';
+$form['lidworden']['data_order']   = 'naam,straat,postcode,plaats,telefoon,submit_by,opmerking';
 $form['lidworden']['ok_url']       = 'http://csrdelft.nl/informatie/lidworden.php?a=ok';
 $form['lidworden']['not_ok_url']   = '';
 $form['lidworden']['automessage']  = '';
