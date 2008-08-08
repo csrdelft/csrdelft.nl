@@ -40,7 +40,7 @@ setlocale(LC_ALL, 'nl_NL.utf8');
 define('COURANT_TEMPLATE', 'courant.tpl');
 
 # wordt gebruikt om pagina's alleen op Confide te laten zien
-define('CONFIDE_IP', '82.92.101.131:145.94.61.139');
+define('CONFIDE_IP', '82.92.101.131:145.94.52.218');
 
 # hoe ver van tevoren worden maaltijden getoond?
 define('MAALTIJD_LIJST_MAX_TOT', 86400*7*4);
