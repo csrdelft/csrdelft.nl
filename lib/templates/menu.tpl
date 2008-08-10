@@ -9,15 +9,17 @@
 		</div>
 		<div id="mainmenu">
 			<ul>
-			{foreach from=$items item=item}
-				<li><a href="{$item.link}" id="top{$item.ID}" onmouseover="StartShowMenu('{$item.ID}');" onmouseout="ResetShowMenu();" {if $item.huidig}class="active" {/if}title="{$item.tekst}">{$item.tekst}</a></li>
-					{if $item.huidig}
-						<script type="text/javascript">
-							SetActive({$item.ID});
-							document.getElementById('banner'+{$item.ID}).style.display = "inline";
-							fixPNG('imgbanner1')
-						</script>
-					{/if}
+				{foreach from=$items item=item}
+					<li>
+						<a href="{$item.link}" id="top{$item.ID}" onmouseover="StartShowMenu('{$item.ID}');" onmouseout="ResetShowMenu();" {if $item.huidig}class="active" {/if}title="{$item.tekst}">{$item.tekst}</a>
+						{if $item.huidig}
+							<script type="text/javascript">
+								SetActive({$item.ID});
+								document.getElementById('banner'+{$item.ID}).style.display = "inline";
+								fixPNG('imgbanner1')
+							</script>
+						{/if}
+					</li>
 				{/foreach}
 			</ul>
 		</div>

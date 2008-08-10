@@ -109,9 +109,13 @@ fieldset#modereren{
 	border: 1px solid grey;
 }
 
+/* Zoekveld */
 #forum_zoeken{
 	float: right;
 	padding-right: 2px;
+}
+#forum_zoeken fieldset{
+	border: 0;
 }
 #forum_zoeken input{
 	padding: 2px 4px;

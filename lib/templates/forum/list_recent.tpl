@@ -1,4 +1,4 @@
-<form id="forum_zoeken" action="/communicatie/forum/zoeken.php" method="post"><input type="text" name="zoeken" value="zoeken in forum" onfocus="this.value='';" /></form>
+<form id="forum_zoeken" action="/communicatie/forum/zoeken.php" method="post"><fieldset><input type="text" name="zoeken" value="zoeken in forum" onfocus="this.value='';" /></fieldset></form>
 
 {capture name='navlinks'}
 	<div class="forumNavigatie">
