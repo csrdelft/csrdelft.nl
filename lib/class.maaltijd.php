@@ -590,11 +590,11 @@ class MaalTijd {
 		# Verwerken van gasten tot aparte regels in de lijst
 		$aanOud = $aan;
 		$aan = array();
-		foreach ($aanOud as $uid => $item) {
-			$aan[$uid] = $item;
+		foreach ($aanOud as $id => $item) {
+			$aan[$id] = $item;
 			if ($item['gasten'] > 0) {
 				for ($i = 0; $i < $item['gasten']; $i++) {
-					$aan[$uid.$i]['naam'] = 'Gast van '.$item['naam'];
+					$aan[$id.'_gast'.$i]['naam'] = 'Gast van '.$item['naam'];
 				}
 			}
 		}
