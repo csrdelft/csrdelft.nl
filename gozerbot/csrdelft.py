@@ -186,8 +186,10 @@ def handle_saldo(bot, ievent):
         ievent.reply(request.error)
         return
     if request.result:
-        ievent.reply('soccie: %01.2f maalcie: %01.2f' % \
-        (float(request.result['soccieSaldo']), float(request.result['maalcieSaldo'])))
+        result = ''
+        for saldo in request.result:
+            result += '%s: %01.2f ' % (saldo['naam'], float(saldo['saldo']))
+        ievent.reply(result)
     else:
         ievent.reply('er is geen saldo-informatie beschikbaar')
 
