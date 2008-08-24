@@ -33,7 +33,7 @@
 				<table id="saldi">
 					<tr><th> </th><th class="boven">Saldo</th></tr>
 					{foreach from=$lid->getSaldi() item=saldo}
-						<tr><th>{$saldo.naam}</th><td{if $saldo.saldo < 0} style="color: red;"{/if}>&euro; {$saldo.saldo}</td></tr>
+						<tr><th>{$saldo.naam}</th><td{if $saldo.saldo < 0} style="color: red;"{/if}>&euro; {$saldo.saldo|number_format:2:",":"."}</td></tr>
 					{/foreach}
 				</table>
 				<br />
