@@ -19,9 +19,13 @@ require_once('class.groep.php');
 $soccie=new Groep('SocCie');
 
 if($lid->hasPermission('P_ADMIN') OR $soccie->isLid($lid->getUid()) OR $lid->getUid()==$uid){
-	
-	$maalcie=new Saldi($uid, 'maalcie');
-	$soccie=new Saldi($uid, 'soccie');
+	if(isset($_GET['timespan']) AND $_GET['timespan']==(int)$_GET['timespan']){
+		$timespan=$_GET['timespan'];
+	}else{
+		$timespan=40;
+	}
+	$maalcie=new Saldi($uid, 'maalcie', $timespan);
+	$soccie=new Saldi($uid, 'soccie', $timespan);
 	
 	$chart = new chart(500, 200);
 

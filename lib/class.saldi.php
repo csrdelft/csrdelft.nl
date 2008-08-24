@@ -11,26 +11,26 @@ class Saldi{
 	private $cie;
 	
 	private $data;
-	public function __construct($uid, $cie='soccie'){
+	public function __construct($uid, $cie='soccie', $timespan=40){
 		$this->uid=$uid;
 		$this->cie=$cie;
-		$this->load();
+		$this->load((int)$timespan);
 	}
-	private function load(){
-		
+	private function load($timespan){
+		$timespan=(int)$timespan;
 		if($this->uid=='0000'){
 			$sQuery="
 				SELECT LEFT(moment, 16) AS moment, SUM(saldo) AS saldo 
 				FROM saldolog 
 				WHERE cie='".$this->cie."' AND 
-					moment>(NOW() - INTERVAL 40 DAY) GROUP BY LEFT(moment, 16);";
+					moment>(NOW() - INTERVAL ".$timespan." DAY) GROUP BY LEFT(moment, 16);";
 		}else{
 			$sQuery="
 				SELECT moment, saldo 
 				FROM saldolog 
 				WHERE uid='".$this->uid."'
 				  AND cie='".$this->cie."'
-				  AND moment>(NOW() - INTERVAL 40 DAY);";
+				  AND moment>(NOW() - INTERVAL ".$timespan." DAY);";
 		}
 		$db=MySql::get_MySql();
 		$result=$db->query($sQuery);
