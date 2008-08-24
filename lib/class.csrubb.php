@@ -50,10 +50,8 @@ class CsrUBB extends eamBBParser{
 	 * Geef een link weer naar het profiel van het lid-nummer wat opgegeven is.
 	 */
 	function ubb_lid($parameters){
-		$content = $this->parseArray(array('[br]'), array());
-		array_unshift($this->parseArray, '[br]');
 		if(isset($parameters['lid'])){
-			$text=$this->lid->getNaamLink($parameters['lid'], 'user', true).$content;
+			$text=$this->lid->getNaamLink($parameters['lid'], 'user', true);
 		}else{
 			$text='geen uid opgegeven';
 		}
