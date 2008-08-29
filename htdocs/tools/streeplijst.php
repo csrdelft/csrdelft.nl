@@ -19,7 +19,7 @@ if(isset($_GET['pdf'])){
 }elseif(isset($_GET['iframe'])){
 	echo $body->getHtml();
 }else{
-	$pagina=new csrdelft($body, $lid, $db);
+	$pagina=new csrdelft($body);
 	$pagina->setZijkolom(new stringincluder('<h4>Klus hier uw streeplijst</h4>' .
 			'Wellicht handig voor polo\'s, weekeinden, wat dan ook. '));
 	$pagina->view();
