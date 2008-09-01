@@ -48,7 +48,7 @@
 				//echo '  '.$sNaam.'('.$soccieID.') - '.$sLidDbNaam.'('.$uid.') << match';//."\r\n";
 				
 				
-				$query="REPLACE INTO socciesaldi ( uid, soccieID, createTerm )VALUES( '".$uid."', ".$soccieID.", '".$createTerm."');";
+				$query="UPDATE lid SET soccieID = ".$soccieID.", createTerm = '".$createTerm."' WHERE uid = '".$uid."';";
 				$db->query($query);
 				
 				//echo $query."\r\n";
