@@ -83,7 +83,7 @@ class MotenContent extends SimpleHTML {
 		for ($regel=1; $regel<=$maxkringen; $regel++) {
 			echo '<tr>';
 			for ($moot=1; $moot<=$maxmoten; $moot++) {
-				if (isset($this->_kringen[$moot][$regel])) echo '<th>Kring '.$moot.'.'.$regel.'</th>';
+				if (isset($this->_kringen[$moot][$regel])) echo '<th id="kring'.$moot.'.'.$regel.'">Kring '.$moot.'.'.$regel.'</th>';
 				else echo '<td>&nbsp;</td>';
 			}
 			echo '</tr><tr>';
@@ -97,7 +97,7 @@ class MotenContent extends SimpleHTML {
 		print ("<tr>\n");
 		for ($moot=1; $moot<=$maxmoten; $moot++) {
 			if (isset($this->_kringen[$moot][$regel])){
-				echo '<th>Kring '.$moot.'.0</th>';
+				echo '<th name="kring'.$moot.'.0">Kring '.$moot.'.0</th>';
 			}else{ 
 				echo '<td>&nbsp;</td>';
 			}
