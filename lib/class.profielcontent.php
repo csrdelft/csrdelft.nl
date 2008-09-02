@@ -60,25 +60,7 @@ class ProfielContent extends SimpleHTML {
 			$profhtml['woonoord']='<br />';
 		}
 		
-		//soccie saldo
-		$profhtml['saldi']='';
-		//alleen als men het eigen profiel bekijkt.
-		if($this->_profiel['uid']==$this->_lid->getUid()){
-			$aSaldi=$this->_lid->getSaldi();
-			//zijn er uberhaupt wel saldi...
-			if($aSaldi!==false){
-				if($aSaldi['soccieSaldo']<0){
-					$profhtml['saldi'].='SocCie-saldo: &euro; <span class="waarschuwing">'.sprintf ("%01.2f",$aSaldi['soccieSaldo']).'</span><br />';
-				}else{
-					$profhtml['saldi'].='SocCie-saldo: &euro; '.sprintf ("%01.2f",$aSaldi['soccieSaldo']).'<br />';
-				}
-				if($aSaldi['maalcieSaldo']<0){
-					$profhtml['saldi'].='MaalCie-saldo: &euro; <span class="waarschuwing">'.sprintf ("%01.2f",$aSaldi['maalcieSaldo']).'</span>';
-				}else{
-					$profhtml['saldi'].='MaalCie-saldo: &euro; '.sprintf ("%01.2f",$aSaldi['maalcieSaldo']);
-				}
-			}
-		}
+		
 				
 		# kijken of deze persoon in een groep zit
 		require_once('class.groepen.php');
@@ -100,6 +82,13 @@ class ProfielContent extends SimpleHTML {
 			}
 			$profhtml['groepen'].='</div>';				
 		}
+		//soccie saldo
+		$profhtml['saldi']='';
+		//alleen als men het eigen profiel bekijkt.
+		if($this->_profiel['uid']==$this->_lid->getUid()){
+			$profhtml['saldi']=$this->_lid->getSaldi();
+		}
+		
 		/*
 		 * Saldografiek gaan we
 		 * - gewoon en meteen weergeven bij het lid zelf.

@@ -964,6 +964,15 @@ class LidCache{
 		}
 		return false;
 	}
+	public function flushLid($uid){
+		if($this->connected){
+			$this->memcache->delete($uid);
+		}else{
+			if(isset($this->fallbackCache[$uid])){
+				unset($this->fallbackCache[$uid]);
+			}
+		}
+	}
 	public function getStats(){
 		return $this->memcache->getStats();
 	}

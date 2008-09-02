@@ -105,6 +105,15 @@
 			<div class="left">Financi&euml;el</div>	
 			<div class="gegevens">		
 				{if $profhtml.bankrekening!=''}<div class="label">Bankrekening:</div> {$profhtml.bankrekening}<br />{/if}
+				{if $profhtml.saldi!=''}
+					<br />
+					{foreach from=$profhtml.saldi item=saldo}
+						{if $saldo.saldo!=0}
+							<div class="label">{$saldo.naam}saldo:</div> 
+								<div {if $saldo.saldo < 0} style="color: red;"{/if}>&euro; {$saldo.saldo|number_format:2:",":"."}</div>
+						{/if}
+					{/foreach}
+				{/if}
 				{$profhtml.saldografiek}
 			</div>
 		</div>

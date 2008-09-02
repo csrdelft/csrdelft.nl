@@ -674,6 +674,10 @@ class Profiel extends lid{
 			//profiel-cache weggooien
 			$profiel=new Smarty_csr();
 			$profiel->clear_cache('profiel.tpl', $this->_tmpprofile['uid']);
+			
+			//naam-cache leegkekken voor dit lid
+			$lc=LidCache::get_LidCache();
+			$lc->flushLid($this->_tmpprofile['uid']);
 		}
 	}
 
