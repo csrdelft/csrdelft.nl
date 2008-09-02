@@ -12,13 +12,13 @@ if ($lid->hasPermission('P_LEDEN_READ')) {
 		$sjaarsactie->isSjaars() AND !$sjaarsactie->isVol((int)$_GET['actieID'])){
 		//nieuw persoon aanmelden voor een actie
 		$sjaarsactie->meldAan((int)$_GET['actieID'], $lid->getUid());
-		header('location: '.CSR_ROOT.'intern/sjaarsacties/');
+		header('location: '.CSR_ROOT.'actueel/sjaarsacties/');
 		exit;
 	}
 	//nieuwe sjaarsactie aanmelden
 	if(isset($_POST['verzenden']) AND $sjaarsactie->validateSjaarsactie() AND !$sjaarsactie->isSjaars()){
 		$sjaarsactie->newSjaarsactie($_POST['actieNaam'], $_POST['beschrijving'], $_POST['limiet']);
-		header('location: '.CSR_ROOT.'intern/sjaarsacties/');
+		header('location: '.CSR_ROOT.'actueel/sjaarsacties/');
 		exit;
 	}
 		
