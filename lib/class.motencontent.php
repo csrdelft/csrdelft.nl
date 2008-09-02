@@ -97,7 +97,7 @@ class MotenContent extends SimpleHTML {
 		print ("<tr>\n");
 		for ($moot=1; $moot<=$maxmoten; $moot++) {
 			if (isset($this->_kringen[$moot][$regel])){
-				echo '<th name="kring'.$moot.'.0">Kring '.$moot.'.0</th>';
+				echo '<th id="kring'.$moot.'.0">Kring '.$moot.'.0</th>';
 			}else{ 
 				echo '<td>&nbsp;</td>';
 			}
