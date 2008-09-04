@@ -318,6 +318,9 @@ class Lid {
 			case 'civitas':
 				if($aNaam['status']=='S_NOVIET'){
 					$sTmpNaam='Noviet '.$aNaam['voornaam'];
+					if($aNaam['postfix']!=''){
+						$sTmpNaam.=' '.$aNaam['postfix'];
+					}
 				}elseif($aNaam['status']=='S_KRINGEL' OR $aNaam['status']=='S_NOBODY'){
 					$sTmpNaam=$sVolledigeNaam;
 				}else{
