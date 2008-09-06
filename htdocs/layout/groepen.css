@@ -16,4 +16,4 @@ ul.groepleden{ width: 230px; float: right; padding: 10px 20px 20px 20px; }
 #groepFormulier{ width: 100%;}
 #groepFormulier label{ float: left; margin-right: 15px; width: 130px;}
 #groepFormulier input, #groepFormulier textarea, #groepFormulier select{ margin-top: 4px; margin-bottom: 4px; }
-#groepFormulier div.opmerking{  float: right; width: 450px; margin-bottom: 10px; }
+#groepFormulier div.opmerking{  float: right; width: 440px; margin-bottom: 10px; }
