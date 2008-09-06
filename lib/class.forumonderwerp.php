@@ -78,13 +78,6 @@ class ForumOnderwerp extends Forum {
 		$sPostsQuery="
 			SELECT
 				post.uid AS uid,
-					lid.nickname AS nickname,
-					lid.voornaam AS voornaam,
-					lid.tussenvoegsel AS tussenvoegsel,
-					lid.achternaam AS achternaam,
-					lid.postfix AS postfix, 
-					lid.geslacht AS geslacht, 
-					lid.status AS status,
 				post.id AS postID,
 				post.tekst AS tekst,
 				post.datum AS datum,
@@ -93,8 +86,6 @@ class ForumOnderwerp extends Forum {
 				post.ip AS ip
 			FROM
 				forum_post post
-			INNER JOIN 
-				lid ON ( post.uid=lid.uid )
 			WHERE
 				post.tid=".$this->getID()."
 			AND

@@ -150,7 +150,7 @@ class ForumContent extends SimpleHTML {
 			echo '<div class="item"><span class="tijd">'.date('H:i', strtotime($aPost['datum'])).'</span>&nbsp;';
 			echo '<a href="/communicatie/forum/onderwerp/'.$aPost['tid'].'#post'.$aPost['postID'].'" 
 				title="['.htmlspecialchars($aPost['titel']).'] '.
-					$this->_forum->getForumNaam($aPost['uid'], $aPost, false).': '.mb_htmlentities($postfragment).'"';
+					$this->_forum->getForumNaam($aPost['uid'], false, false).': '.mb_htmlentities($postfragment).'"';
 			if (strtotime($aPost['datum']) > $this->_forum->getLaatstBekeken()) { echo ' class="opvallend"'; }
 			echo '>'.$tekst.'</a><br />'."\n";
 			echo '</div>';
@@ -206,7 +206,7 @@ class ForumContent extends SimpleHTML {
 					echo $aZoekResultaat['titel'].'</a>';
 					if($aZoekResultaat['aantal']!=1){ echo ' <em>('.$aZoekResultaat['aantal'].' berichten in dit onderwerp)</em>'; }
 					echo '<br />'.$sPostFragment.'</td>';
-					echo '<td class="forumtitel">'.$this->_forum->getForumNaam($aZoekResultaat['uid'],$aZoekResultaat).'</td>';
+					echo '<td class="forumtitel">'.$this->_forum->getForumNaam($aZoekResultaat['uid']).'</td>';
 					echo '<td class="forumtitel">
 						<a href="/communicatie/forum/categorie/'.$aZoekResultaat['categorie'].'">'.$aZoekResultaat['categorieTitel'].'</a></td>';
 					echo '<td class="forumtitel">

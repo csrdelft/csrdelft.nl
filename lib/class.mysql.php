@@ -153,7 +153,7 @@ class MySql{
 	}
 	function debug($string){
 		if(defined('DEBUG')){
-			$string=str_replace(array("\r\n", "\n", "\t", '  ', '   '), ' ', $string);
+			$string=trim(str_replace(array("\r\n", "\n", "\t", '  ', '   '), ' ', $string));
 			if(mysql_error()!=''){
 				$string.="\nmysql_error(): ".mysql_error();
 			}

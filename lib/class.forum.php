@@ -149,14 +149,6 @@ class Forum {
 				topic.lastpost AS lastpost,
 				topic.reacties AS reacties,
 				post.uid AS uid,
-					lid.nickname AS nickname,
-					lid.voornaam AS voornaam,
-					lid.achternaam AS achternaam,
-					lid.tussenvoegsel AS tussenvoegsel,
-					lid.postfix AS postfix,
-					lid.status AS status,
-					lid.geslacht AS geslacht,
-					lid.email AS email,
 				post.id AS postID,
 				post.tekst AS tekst,
 				post.datum AS datum,
@@ -167,8 +159,6 @@ class Forum {
 				forum_cat categorie ON(categorie.id=topic.categorie)
 			LEFT JOIN
 				forum_post post ON( topic.id=post.tid )
-			INNER JOIN 
-				lid ON ( post.uid=lid.uid)
 			WHERE
 				topic.zichtbaar='zichtbaar' AND 
 				post.zichtbaar='zichtbaar' AND
@@ -429,13 +419,6 @@ class Forum {
 				topic.plakkerig AS plakkerig,
 				topic.soort AS soort,
 				post.uid AS uid,
-					lid.nickname AS nickname,
-					lid.voornaam AS voornaam,
-					lid.tussenvoegsel AS tussenvoegsel,
-					lid.achternaam AS achternaam,
-					lid.postfix AS postfix,
-					lid.geslacht AS geslacht,
-					lid.status AS status,
 				post.id AS postID,
 				post.tekst AS tekst,
 				post.datum AS datum,
@@ -447,8 +430,6 @@ class Forum {
 				forum_topic topic ON( post.tid=topic.id )
 			INNER JOIN
 				forum_cat cat ON( topic.categorie=cat.id )
-			INNER JOIN 
-				lid ON ( post.uid=lid.uid)
 			WHERE
 				topic.zichtbaar='zichtbaar' AND post.zichtbaar='zichtbaar' AND
 				( ".$this->getCategorieClause()." ) AND
@@ -464,29 +445,6 @@ class Forum {
 		}else{
 			return false;
 		}
-	}
-	function formatDatum($datetime){
-		$nu=time();
-		$moment=strtotime($datetime);
-		$verschil=$nu-$moment;
-		if($verschil<=60){
-			$return='<em>'.$verschil.' ';
-			if($verschil==1) {$return.='seconde';}else{$return.='seconden';}
-			$return.='</em> geleden';
-		}elseif($verschil<=60*60){
-			$return='<em>'.floor($verschil/60);
-			if(floor($verschil/60)==1){	$return.=' minuut'; }else{$return.=' minuten'; }
-			$return.='</em> geleden';
-		}elseif($verschil<=(60*60*4)){
-			$return='<em>'.floor($verschil/(60*60)).' uur</em> geleden';
-		}elseif(date('Y-m-d')==date('Y-m-d', $moment)){
-			$return='vandaag om '.date("G:i", $moment);
-		}elseif(date('Y-m-d', $moment)==date('Y-m-d', strtotime('1 day ago'))){
-			$return='gisteren om '.date("G:i", $moment);
-		}else{
-			$return='op '. date("G:i j-n-Y", $moment);
-		}
-		return $return;
 	}
 	function getForumNaam($uid=false, $aNaam=false, $aLink=true, $bHtmlentities=true ){
 		return $this->_lid->getNaamLink($uid, 'user', $aLink, $aNaam, $bHtmlentities);
