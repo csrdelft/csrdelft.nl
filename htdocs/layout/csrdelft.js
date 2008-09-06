@@ -62,6 +62,8 @@ function youtubeDisplay(ytID){
 		document.getElementById('youtube'+ytID).innerHTML = html;
 	}
 }
+function LZ(x) {return(x<0||x>9?"":"0")+x}
+
 function updateGroepform(){
 	var gAanmeldDiv=document.getElementById('groepAanmeldbaarContainer');
 	if(document.getElementById('groepStatus').selectedIndex==0){
@@ -91,6 +93,12 @@ function updateGroepform(){
 		}
 	}else{
 		hideDiv(gAanmeldDiv);
+		var gEindeVeld=document.getElementById('einde');
+		if(gEindeVeld.value='0000-00-00'){
+			var now=new Date();
+			//getYear geeft jaren na 1900 terug.
+			gEindeVeld.value=(now.getYear()+1900)+'-'+LZ(now.getMonth())+'-'+LZ(now.getDate());
+		}
 	}
 }
 function hideDiv(div){ div.style.display="none"; }

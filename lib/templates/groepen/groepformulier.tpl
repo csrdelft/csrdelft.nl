@@ -23,7 +23,7 @@
 		</select><br />
 		
 		<label for="begin"><strong>Periode:</strong></label> 
-		<input type="text" id="begin" name="begin" value="{$groep->getBegin()}" /> - <input type="text" name="einde" value="{$groep->getEinde()}" />
+		<input type="text" id="begin" name="begin" value="{$groep->getBegin()}" /> - <input type="text" name="einde" id="einde" value="{$groep->getEinde()}" />
 		<br />
 		<div id="groepAanmeldbaarContainer" style="display: none;">
 			<label for="groepAanmeldbaar"><strong>Aanmeldbaar?</strong></label>
