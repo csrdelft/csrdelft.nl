@@ -149,7 +149,7 @@ class Groepgeschiedeniscontent extends SimpleHTML{
 	public function __construct($groepen){
 		$this->groepen=$groepen;
 	}
-		public function getTitel(){
+	public function getTitel(){
 		return 'Groepen - '.$this->groepen->getNaam();
 	}
 	

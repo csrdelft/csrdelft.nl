@@ -827,30 +827,37 @@ class Lid {
 	
 	function getSaldi($uid='', $alleenRood=false){
 		if($uid==''){ $uid=$this->getUid(); }
-		$query="
-			SELECT
-				soccieSaldo, maalcieSaldo
-			FROM
-				lid
-			WHERE
-				uid='".$uid."'
-			LIMIT 1;";
-		$rSaldo=$this->_db->query($query);
-		if($rSaldo!==false AND $this->_db->numRows($rSaldo)){
-			$aSaldo=$this->_db->next($rSaldo);
-			$return=false;
-			if(!($alleenRood && $aSaldo['soccieSaldo']<0)){
-				$return[]=array('naam' => 'SocCie', 
-					'saldo' => $aSaldo['soccieSaldo']);
-			}
-			if(!($alleenRood && $aSaldo['maalcieSaldo']<0)){
-				$return[]=array('naam' => 'MaalCie', 
-					'saldo' => $aSaldo['maalcieSaldo']);
-			}
-			return $return;
+		if($uid==$this->getUid()){
+			$aSaldo=array(
+				'soccieSaldo' => $this->_profile['soccieSaldo'],
+				'maalcieSaldo' => $this->_profile['maalcieSaldo']);
 		}else{
-			return false;
+			$query="
+				SELECT
+					soccieSaldo, maalcieSaldo
+				FROM
+					lid
+				WHERE
+					uid='".$uid."'
+				LIMIT 1;";
+			$rSaldo=$this->_db->query($query);
+			if($rSaldo!==false AND $this->_db->numRows($rSaldo)){
+				$aSaldo=$this->_db->next($rSaldo);	
+			}else{
+				return false;
+			}
 		}
+		
+		$return=false;
+		if(!($alleenRood && $aSaldo['soccieSaldo']<0)){
+			$return[]=array('naam' => 'SocCie', 
+				'saldo' => $aSaldo['soccieSaldo']);
+		}
+		if(!($alleenRood && $aSaldo['maalcieSaldo']<0)){
+			$return[]=array('naam' => 'MaalCie', 
+				'saldo' => $aSaldo['maalcieSaldo']);
+		}
+		return $return;
 	}
 	
 	function logBezoek(){
