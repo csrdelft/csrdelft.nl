@@ -154,7 +154,8 @@ class Groepen{
 					groeptype.naam AS gtype, groeptype.id AS gtypeId
 				FROM groep
 				INNER JOIN groeptype ON(groep.gtype=groeptype.id)
-				WHERE groep.id IN ( 
+				WHERE groeptype.toonProfiel=1
+				  AND groep.id IN ( 
 					SELECT groepid FROM groeplid WHERE uid = '".$uid."'
 				)
 				ORDER BY groep.status, groeptype.prioriteit, groep.naam;";
