@@ -165,6 +165,9 @@ class Groep{
 	public function getStatus(){		return $this->groep['status']; }
 	public function getBegin(){			return $this->groep['begin']; }
 	public function getEinde(){			return $this->groep['einde']; }
+	public function getDuration(){		
+		return strtotime($this->getBegin())-strtotime($this->getEinde())/(60*24*30);
+	}
 	public function isAanmeldbaar(){	return $this->groep['aanmeldbaar']==1; }
 	public function getLimiet(){		return $this->groep['limiet']; }
 	public function getToonFuncties(){	return $this->groep['toonFuncties']; }
@@ -391,7 +394,9 @@ class Groep{
 		$limiet=(int)$limiet;
 		$groepen=array();
 		$qGroepen="
-			SELECT id, naam
+			SELECT 
+				id, naam, begin, einde, 
+				EXTRACT( MONTH FROM einde-begin) AS duration
 			FROM groep
 			WHERE snaam='".$db->escape($snaam)."'
 			ORDER BY begin DESC

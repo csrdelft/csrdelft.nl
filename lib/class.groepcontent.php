@@ -154,18 +154,31 @@ class Groepgeschiedeniscontent extends SimpleHTML{
 	}
 	
 	public function view(){
-		$maanden=5*12;
+		$jaren=5;
+		$maanden=$jaren*12;
 		echo '<table style="border-collapse: collapse;">';
-
+		echo '<tr>';
+		for($i=2008; $i>=(2008-$jaren); $i--){
+			echo '<td style="font-size: 8px; width: 10px;" colspan="12">'.$i.'</td>';
+		}
+		echo '</tr>';
+		echo '<tr>';
+		for($i=0; $i<=$maanden; $i++){
+			echo '<td style="max-width: 10px;">&nbsp;</td>';
+		}
+		echo '</tr>';
 		foreach($this->groepen->getGroepen() as $groep){
 			echo '<tr>';
-			$startspacer=12-substr($groep->getInstallatie(), 5,2);
+			$startspacer=12-substr($groep->getBegin(), 5,2);
 			if($startspacer!=0){
-				echo '<td colspan="'.$startspacer.'" style="background-color: lightgray;">&nbsp;</td>';
+				echo '<td colspan="'.$startspacer.'" style="font-size: 8px; background-color: lightgray;">('.$startspacer.')</td>';
 			}
-			$oudeGr=Groep::getGroepgeschiedenis($groep->getSnaam(), 5);
+			
+			$oudeGr=Groep::getGroepgeschiedenis($groep->getSnaam(), $jaren);
 			foreach($oudeGr as $grp){
-				echo '<td colspan="12" style="border: 1px solid black; padding: 2px; width: 150px; text-align: left;">';
+				$duration=$grp['duration'];
+				if($duration<=0){ $duration=12; }
+				echo '<td colspan="'.$duration.'" style="font-size: 8px; border: 1px solid black; padding: 2px; width: 150px; text-align: left;">';
 				echo '<a href="/actueel/groepen/'.$this->groepen->getNaam().'/'.$grp['id'].'">'.$grp['naam'].'</a>';
 
 				echo '</td>';
