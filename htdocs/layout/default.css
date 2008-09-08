@@ -362,7 +362,8 @@ table.ubb_table td, th{
 	margin: 0px; padding: 2px;
 }
 pre.ubb_code{
-	margin: 0px; padding-left: 8px;
+	max-width: 640px;	
+margin: 0px; padding-left: 8px;
 	overflow-x:auto;
 	overflow-y:hidden;
 }
