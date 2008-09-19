@@ -1,9 +1,6 @@
 todolist:
 
-zoeken
 boeken integreren
-ubb code
-navigate geschiedenis (php sessie)
 reference vakje bij bronnen
 beoordelingen
 in linkerbalk lijst met recente discussies

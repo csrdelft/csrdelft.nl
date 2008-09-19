@@ -11,6 +11,7 @@ require_once("class.vbsourcesource.php");
 require_once("class.vbsubjectsource.php");
 //we laden hier forumonderwerp omdat we in onderwerpen werken.
 require_once('class.forumonderwerp.php');
+require_once('class.groep.php');
 
 class VB {
 	var $_db;		//De database connectie
@@ -44,10 +45,17 @@ class VB {
 	function isModerator() {
 			//Michel, Gertjan, Rini, Gerrit, Sief, Marijn, Bert v. D
 			//TODO: regel dit handiger, met rechtenmodelletje
-			$mods = array("0438", "0429","0615","0431","0221","0203","0308");
+/*			$mods = array("0438", "0429","0615","0431","0221","0203","0308");
 			if (in_array($this->_lid->getUID(),$mods))
 				return true;
-			if ($this->_lid->hasPermission('P_ADMIN'))
+*/			if ($this->_lid->hasPermission('P_ADMIN'))
+				return true;
+			$g = new Groep();
+			$g->load("VormingsbankCie");
+			if ($g->isLid($this->_lid->getUID()))
+				return true;
+			$g->load("Werkgroepleiders");
+			if ($g->isLid($this->_lid->getUID()))
 				return true;
 			return false;
 	}

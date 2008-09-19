@@ -22,7 +22,7 @@
 		Gepost door {$source->lid} op {$source->createdate}<br/>
 		Beoordeling {$source->voting()} ({$source->votecount} stemmen totaal)
 		<h2>Omschrijving</h2>
-		{$source->description}
+		{$source->description|ubb}
 
 	</td><td>
 		<h2>Te vinden onder</h2><br/>
@@ -76,7 +76,7 @@
 			{if $allowedit}
 				{$source->opinions[i3]->geteditbuttons()}
 			{/if}
-			{$source->opinions[i3]->lid}: {$source->opinions[i3]->comment}<br/>
+			{$source->opinions[i3]->lid}: {$source->opinions[i3]->comment|ubb}<br/>
 		{/section}
 		{if $allowadd}
 			<a href="index.php?actie=new&class=sourceopinion&sid={$source->id}"><img class="button" src="images/add.png"/> 

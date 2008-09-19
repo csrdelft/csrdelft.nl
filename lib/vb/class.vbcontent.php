@@ -18,6 +18,7 @@ class VBContent extends SimpleHTML {
 	var $_objid = 0;	//Het objectid wat we momenteel aan het bekijken zijn
 	var $_search;
 	var $nav;
+	var $ubb;
 	
 	### public ###
 	public function VBContent(&$vb, $actie,$objid){
@@ -27,6 +28,7 @@ class VBContent extends SimpleHTML {
 		$this->_objid = $objid;
 		$this->_search = new vbsearch($vb);
 		$this->nav = navigator::instance();
+		$this->ubb= new csrubb();
 	}
 
 	function getTitel(){
@@ -119,7 +121,7 @@ class VBContent extends SimpleHTML {
 			}
 			$bericht=preg_replace('/(\[(|\/)\w+\])/', '|', $source->description);
 			$berichtfragment=substr(str_replace(array("\n", "\r", ' '), ' ', $bericht), 0, 40);
-			echo '<div class="item"><span class="tijd">'.date('d-m', $source->createdate).'</span>&nbsp;';
+			echo '<div class="item"><span class="tijd">'.date('H:i', strtotime($source->createdate)).'</span>&nbsp;';
 			echo '<a href="index.php?actie=source&id='.$source->id.'" 
 				title="['.mb_htmlentities($source->name).'] '.
 					mb_htmlentities($berichtfragment).'">'.$titel.'</a><br />'."\n";

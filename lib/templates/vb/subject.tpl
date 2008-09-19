@@ -9,7 +9,7 @@
 			<h2>Omschrijving</h2>
 			<!-- this field is required for the addsource forms, so a sourcelink can be created automatically to this subject -->
 			<input type="hidden" id="SubjectIdField" value="{$sub->id}"/>
-			{$sub->description}
+			{$sub->description|ubb}
 			{* create a button to change a subject type *}
 			{if $allowedit}
 				<br/>
@@ -40,7 +40,7 @@
 							{if $allowedit}
 								{$sub->children[sec2]->geteditbuttons()}
 							{/if}
-							{$sub->children[sec2]->description}
+							{$sub->children[sec2]->description|ubb}
 						</div>
 					</div>
 				{/section}
