@@ -1,3 +1,18 @@
+.navbaractive
+{
+	font-weight: bold;
+	color: #444444;
+}
+
+#navbar
+{
+	position: absolute;
+	top: 175px;
+	margin-left: 10px;	
+	width : 750px;
+	border-bottom: 1px solid #CCCCCC	;
+}
+
 .editdiv
 {
 	display:none;  
@@ -52,9 +67,8 @@ textarea
 }
 
 #vblogobanner {
-	position: absolute;
-	top: 21px;
-	left: 482px;
+	margin-top: 21px;
+	margin-left: 16px;
 }
 
 #vbzoekbtn {

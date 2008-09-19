@@ -23,8 +23,12 @@ function view() {
 		header('Content-Type: text/html; charset=UTF-8');
 		$csrdelft=new Smarty_csr();
 		$csrdelft->assign_by_ref('csrdelft', $this);
-		
+		require_once('class.navigator.php');
 		$csrdelft->caching=false;
+
+		$nav = navigator::instance();
+		$csrdelft->assign_by_ref('navbar',$nav);
+
 		$csrdelft->display('vb/vbcsrdelft.tpl');
 		
 		if(defined('DEBUG') AND Lid::get_lid()->hasPermission('P_ADMIN')){

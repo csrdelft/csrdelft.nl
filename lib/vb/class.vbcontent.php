@@ -9,6 +9,7 @@
 # request en de programma flow wordt hier afgehandeld, de VB dient daar bij 
 # als een zet van hulpfuncties waar de complexere logica wordt afgehandeld. 
 	require_once("class.vbsearch.php");
+	require_once("class.navigator.php");
 	
 class VBContent extends SimpleHTML {
 	### private ###
@@ -16,6 +17,7 @@ class VBContent extends SimpleHTML {
 	var $_action; 	//de huidige actie
 	var $_objid = 0;	//Het objectid wat we momenteel aan het bekijken zijn
 	var $_search;
+	var $nav;
 	
 	### public ###
 	public function VBContent(&$vb, $actie,$objid){
@@ -24,6 +26,7 @@ class VBContent extends SimpleHTML {
 		$this->_action = $actie;
 		$this->_objid = $objid;
 		$this->_search = new vbsearch($vb);
+		$this->nav = navigator::instance();
 	}
 
 	function getTitel(){
@@ -76,6 +79,11 @@ class VBContent extends SimpleHTML {
 				break;
 			case "pwd": //TODO: remove
 				die($this->_makepasswd($_GET['pwd']));
+			case "staticquicksearch":
+				$this->showSearch();
+				echo "<script>document.getElementById('zoekveld2').value='".$_GET['searchvalue']."'; 
+							  document.getElementById('complexsearchSearchForm').button.click(); </script>";
+				break;
 			default:
 				die("onbekende actie! : ".$this->_action);
 		}			
@@ -90,6 +98,7 @@ class VBContent extends SimpleHTML {
 	/** shows the homepage, containg information about the vormingsbank, and a list of main categories */
 	function showHomePage()
 	{
+		$this->nav->resetandpush("thuis");
 		$home = $this-> newTemplate();
 		//search box
 		$home->assign('search', $this->showSimpleSearch());
@@ -121,9 +130,9 @@ class VBContent extends SimpleHTML {
 		?><br/><br/>
 			<table id="vbzoektable">
 				<tr><td>
-					<form action="vb/index.php" method="get">
+					<form action="index.php" method="get">
 						<input type="hidden" name="actie" value="staticquicksearch"/>
-						<input id="vbzoekveldlinks" type="text" value="zoeken..." onfocus="this.value=\'\'" onclick="form.submit();" name="searchvalue"/>
+						<input id="vbzoekveldlinks" type="text" value="zoeken..." onfocus="this.value=''" onblur="form.submit();" name="searchvalue"/>
 					</form>
 				</td></tr>
 			</table>
@@ -155,6 +164,7 @@ class VBContent extends SimpleHTML {
 	/** zoek actie uitvoeren en resultaten weergeven */
 	function showSearch()
 	{
+		$this->nav->push('Zoeken');
 		$tpl = $this->newTemplate();
 		$tpl->assign(searchform, $this->_search->createSearchForm("complexsearch",
 		'
@@ -173,12 +183,7 @@ class VBContent extends SimpleHTML {
 		$tpl->display('vb/search.tpl');
 	}
 	
-	/** shows a page containing a theme tree, and an advanced search field box  */
-	function showThemePage()
-	{
-		//TODO:
-		$this->showThemesTree();
-	}
+
 	
 	/** shows a subject, its either a list of themes, or a list of sources and discussions,
 	//depending on isLeaf subject */
@@ -186,7 +191,8 @@ class VBContent extends SimpleHTML {
 	{
 		//onderwerp weergeven
 		$sub = $this->_vb->getSubjectById($this->_objid);
-		$this->generateLocationBar($sub);
+		$this->nav->pushUrl($sub->name, "index.php?actie=subject&id=".$this->_objid); //give URL, in case of submits etc. before this action
+
 		$tpl = $this->newTemplate();
 		$tpl->assign(sub,$sub);
 //		if ($sub->isLeaf != "1")
@@ -212,26 +218,16 @@ class VBContent extends SimpleHTML {
 		//display
 		$tpl->display('vb/subject.tpl');
 		
+		
 	}
 	
-	/** dat ding dat bovenin moet */
-	function generateLocationBar($obj)
-	{
-		//TODO:
-		//echo "Hier > ziet > u > straks > waar > u > bent<br/>";	
-	}
-	
+
 	/** linkje naar een bepaalde gebruiker */
 	function userLink($lidnr)
 	{
 		//TODO: (zie lid klasse)
 	}
 	
-	/** shows the tree of themes */
-	function showThemesTree()
-	{
-		
-	}
 	
 	/** for redirecting from forum edit stuff: find the proper source based on the current forumtopic id*/
 	function showSourceByDiscussionId()
@@ -249,7 +245,8 @@ class VBContent extends SimpleHTML {
 	function showSourcePage()
 	{
 		$source = $this->_vb->getSourceById($this->_objid); //deze functie cached ook alle gerelateerde objecten :)
-		$this->generateLocationBar($source);
+		$this->nav->pushUrl($source->name, "index.php?actie=source&id=".$this->_objid);
+		
 		$tpl = $this->newTemplate();
 		$tpl->assign(source,$source);
 		//TODO: comefrom is een tijdelijke variable om navigatie te vereeenvoudigen, verwijderen straks
@@ -436,9 +433,6 @@ class VBContent extends SimpleHTML {
 		elseif(is_a(new $class,'vbsource')) //hooray, is a new $class :)
 		{
 			$res = $this->_vb->removeSource($r, $this);
-			//TODO: fetch current subject id from navigation context
-			$this->_objid = 0; 
-			$this->_action = "subject";
 		}
 		elseif($class == 'vbsubjectsource' || $class == 'vbsourcesource')
 		{
@@ -452,8 +446,7 @@ class VBContent extends SimpleHTML {
 		if ($res !=false)
 		{
 			$this->notify("Object verwijderd");
-			//succesfully created, rederict action (as defined earlier)
-			$this->view();
+			$this->nav->autoredir();
 		}
 		else
 		{ 

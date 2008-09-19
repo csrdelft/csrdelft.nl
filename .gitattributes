@@ -119,6 +119,7 @@ htdocs/vb/images/node.png -text
 htdocs/vb/images/remove.png -text
 htdocs/vb/images/submenubg_vb.png -text
 htdocs/vb/images/vormingsbank_vb.png -text
+htdocs/vb/images/vormingsbank_vb_beta.png -text
 htdocs/vb/images/zoekveld_vb.png -text
 htdocs/vb/index.php -text
 htdocs/vb/jsonencode.js -text
@@ -338,6 +339,7 @@ lib/ubb/TODO -text
 lib/ubb/eamBBParser.class.php -text
 lib/ubb/eamFunParser.class.php -text
 lib/ubb/plugins/rainbow.php -text
+lib/vb/class.navigator.php -text
 lib/vb/class.vb.php -text
 lib/vb/class.vbbooksource.php -text
 lib/vb/class.vbcontent.php -text

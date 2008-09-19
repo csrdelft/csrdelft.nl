@@ -1,8 +1,8 @@
 <div id="menu" onmouseover="ResetTimer()" onmouseout="StartTimer()">
-	<div id="menuleft"><a href="/vb"><img src="images/logo_vb.png" alt="Logo" /></a></div>
+	<div id="menuleft"><a href="/"><img src="images/logo_vb.png" alt="Logo" /></a></div>
 	<div id="menucenter">
 		<div id="menubanner">
-			<div><img src="images/vormingsbank_vb.png" id="vblogobanner" alt="banner1"  /></div>
+			<div><img src="images/vormingsbank_vb_beta.png" id="vblogobanner" alt="banner1"  /></div>
 		</div>
 		<div id="mainmenu">
 			<ul>
@@ -23,6 +23,7 @@
 				{$lid->getCivitasName()}<br />
 				<div id="profiellink"><a href="/communicatie/profiel/{$lid->getUid()}">profiel</a></div> <div id="uitloggen"><a href="/logout.php">log&nbsp;uit</a></div><br class="clear" />
 				<br/>
+<!--				
 				<form method="get" action="/vb/ajaxsearch.php">
 					<p>
 						<input type="hidden" name="actie" value="search"/>
@@ -30,6 +31,7 @@
 						<input type="text" id="zoekveld" name="q" value="zoekterm" onfocus="this.value=''; this.style.textAlign='left';"/>
 					</p>
 				</form>
+-->
 			</div>
 		{else}
 			<div id="key"><img src="images/key_vb.png" alt="Inloggen" onclick="ToggleLogin();" /></div>
@@ -42,7 +44,7 @@
 						-->
 					</script>
 				{/if}
-				<form action="/login.php" method="post">
+				<form action="../login.php" method="post">
 					<fieldset>
 						<input type="hidden" name="url" value="{$smarty.server.REQUEST_URI}" />
 						<input type="text" name="user" value="naam" onfocus="if(this.value=='naam')this.value='';" />
