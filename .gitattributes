@@ -75,6 +75,7 @@ htdocs/layout/menu.js -text
 htdocs/layout/owee.css -text
 htdocs/layout/pngfix.js -text
 htdocs/layout/profiel.css -text
+htdocs/layout/showhide.js -text
 htdocs/layout/slideshow.js -text
 htdocs/layout/undohtml.css -text
 htdocs/layout/vb.css -text

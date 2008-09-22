@@ -340,6 +340,9 @@ a.knop{
 	margin: 2px; padding: 0px 2px 0px 2px;
 	line-height: 1.1em;
 }
+h2#mysql_debug_header{
+	text-align: center;
+}
 pre#pubcie_debug{
 	position: absolute;
 	top: 10px;
