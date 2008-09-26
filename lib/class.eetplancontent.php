@@ -65,22 +65,24 @@ class EetplanContent extends SimpleHTML {
 			$iHuidigAvond=0;
 			$row=0; 
 			foreach($aEetplan as $aEetplanData){
+				if($aEetplanData['avond']==$iHuidigAvond){
+					$ertussen='&nbsp;';
+				}else{
+					$ertussen=$this->_eetplan->getDatum($aEetplanData['avond']);
+					$iHuidigAvond=$aEetplanData['avond'];
+					$row++;
+				}
 				$sUitvoer.='
 					<tr class="kleur'.($row%2).'">
-						<td>';
-				if($aEetplanData['avond']==$iHuidigAvond){
-					$sUitvoer.='&nbsp;';
-				}else{
-					$sUitvoer.=$this->_eetplan->getDatum($aEetplanData['avond']);
-					$iHuidigAvond=$aEetplanData['avond'];
-				}
+						<td>'.$ertussen;
+						
 				$aPheutNaam=$this->_eetplan->getPheutNaam($aEetplanData['pheut']);
 				$sUitvoer.='</td>
-					<td><strong><a href="/actueel/eetplan/sjaars/'.$aEetplanData['pheut'].'">'.mb_htmlentities($aPheutNaam['naam']).'</a></strong><br /></td>
+					<td>'.$this->_eetplan->_lid->getNaamLink($aEetplanData['pheut'], 'full', true).'<br /></td>
 					<td>'.mb_htmlentities($aPheutNaam['telefoon']).'</td>
 					<td>'.mb_htmlentities($aPheutNaam['mobiel']).'</td>
 					</tr>';
-				$row++;
+				
 			}
 			$sUitvoer.='</table>';
 			echo '<h2><a class="forumGrootlink"href="/actueel/eetplan/">Eetplan</a> &raquo; voor '.mb_htmlentities($aEetplanData['huisnaam']).'</h2>
