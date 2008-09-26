@@ -33,15 +33,17 @@ class EetplanContent extends SimpleHTML {
 			$aPheutNaam=$this->_eetplan->getPheutNaam($iPheutID);
 			echo '<h2><a class="forumGrootlink" href="/actueel/eetplan/">Eetplan</a> &raquo; voor '.mb_htmlentities($aPheutNaam['naam']).'</h2>
 				<a href="/communicatie/profiel/'.$iPheutID.'">Naar profiel van '.mb_htmlentities($aPheutNaam['naam']).'</a><br /><br />';
-			echo '<table class="hoktable">
+			echo '<table class="eetplantabel">
 				<tr><th style="width: 150px">Avond</th><th style="width: 200px">Huis</th></tr>';
+			$row=0;
 			foreach($aEetplan as $aEetplanData){
 				echo '
-					<tr>
+					<tr class="kleur'.($row%2).'">
 						<td >'.$this->_eetplan->getDatum($aEetplanData['avond']).'</td>
 						<td><a href="/actueel/eetplan/huis/'.$aEetplanData['huisID'].'"><strong>'.mb_htmlentities($aEetplanData['huisnaam']).'</strong></a><br />
 							'.mb_htmlentities($aEetplanData['huisadres']).' | '.mb_htmlentities($aEetplanData['telefoon']).'
 						</td></tr>';
+				$row++;
 			}
 			echo '</table>';
 		}
@@ -53,17 +55,18 @@ class EetplanContent extends SimpleHTML {
 		if($aEetplan===false){
 			echo '<h1>Ongeldig huisID</h1>';
 		}else{
-			$sUitvoer='<table>
+			$sUitvoer='<table class="eetplantabel">
 				<tr>
 				<th style="width: 150px">Avond</td>
 				<th style="width: 200px">Pheut</td>
 				<th>Telefoon</td>
 				<th>Mobiel</td>
 				</tr>';
-			$iHuidigAvond=0; 
+			$iHuidigAvond=0;
+			$row=0; 
 			foreach($aEetplan as $aEetplanData){
 				$sUitvoer.='
-					<tr>
+					<tr class="kleur'.($row%2).'">
 						<td>';
 				if($aEetplanData['avond']==$iHuidigAvond){
 					$sUitvoer.='&nbsp;';
@@ -77,7 +80,7 @@ class EetplanContent extends SimpleHTML {
 					<td>'.mb_htmlentities($aPheutNaam['telefoon']).'</td>
 					<td>'.mb_htmlentities($aPheutNaam['mobiel']).'</td>
 					</tr>';
-			
+				$row++;
 			}
 			$sUitvoer.='</table>';
 			echo '<h2><a class="forumGrootlink"href="/actueel/eetplan/">Eetplan</a> &raquo; voor '.mb_htmlentities($aEetplanData['huisnaam']).'</h2>
@@ -88,40 +91,47 @@ class EetplanContent extends SimpleHTML {
 		}
 	}
 	function viewEetplan($aEetplan){
+		$aHuizenArray=$this->_eetplan->getHuizen();
 		//weergeven
 		echo '
-		<strong style="color: darkred; font-size: 2em; line-height: 1.1em;padding: 
-10px;font-weight: bold; 
-text-align: justify; display: block; border: 1px solid black; background-color: lightgrey;">LET OP: Van eerstejaers die niet komen opdagen op het eetplan wordt verwacht dat zij minstens &eacute;&eacute;n keer komen koken op het huis waarbij zij gefaeld hebben.</strong><br /><br />
-			<table style="width: 100%" >
+		<strong id="eetplanLETOP">LET OP: Van eerstejaers die niet komen opdagen op het eetplan wordt verwacht dat zij minstens &eacute;&eacute;n keer komen koken op het huis waarbij zij gefaeld hebben.</strong><br /><br />
+			<table class="eetplantabel">
 			<tr><th style="width: 200px;">Pheut/Avond</td>';
 		//kopjes voor tabel
 		for($iTeller=1;$iTeller<=8;$iTeller++){
-			echo '<th>'.$this->_eetplan->getDatum($iTeller).'</th>';
+			echo '<th class="huis">'.$this->_eetplan->getDatum($iTeller).'</th>';
 		}	
 		echo '</tr>';
-		
+		$row=0;
 		foreach($aEetplan as $aEetplanVoorPheut){
-			echo '<tr><td><a href="/actueel/eetplan/sjaars/'.$aEetplanVoorPheut[0]['uid'].'">'.$aEetplanVoorPheut[0]['naam'].'</a></td>';
+			
+		
+			echo '<tr class="kleur'.($row%2).'"><td><a href="/actueel/eetplan/sjaars/'.$aEetplanVoorPheut[0]['uid'].'">'.$aEetplanVoorPheut[0]['naam'].'</a></td>';
 			for($iTeller=1;$iTeller<=8;$iTeller++){
-				echo '<td><a href="/actueel/eetplan/huis/'.$aEetplanVoorPheut[$iTeller].'">'.
-					mb_htmlentities($aEetplanVoorPheut[$iTeller]).
+				$huisnaam=$aHuizenArray[$aEetplanVoorPheut[$iTeller]-1]['huisNaam'];
+				$huisnaam=str_replace(array('Huize ', 'De ', '-', ' '), '', $huisnaam);
+				$huisnaam=substr($huisnaam, 0,9);
+				
+				echo '<td class="huis"><a href="/actueel/eetplan/huis/'.$aEetplanVoorPheut[$iTeller].'">'.
+					mb_htmlentities($huisnaam).
 					'</a></td>';
 			}
 			echo '</tr>';
+			$row++;
 		}
 		echo '</table>';
 		//nog even een huizentabel erachteraan
-		$aHuizenArray=$this->_eetplan->getHuizen();
-		echo '<h1>Huizen met hun nummers:</h1>
-			<table style="width: 100%;"> 
-				<tr><th>huisID</th><th>Naam</th><th>Adres</th><th>Telefoon</th></tr>';
+		
+		echo '<br /><h1>Huizen met hun nummers:</h1>
+			<table class="eetplantabel"> 
+				<tr><th>Naam</th><th>Adres</th><th>Telefoon</th></tr>';
+		
 		foreach($aHuizenArray as $aHuis){
-			echo '<tr>
-				<td><a href="/actueel/eetplan/huis/'.$aHuis['huisID'].'">'.$aHuis['huisID'].'</a></td>
+			echo '<tr class="kleur'.($row%2).'">
 				<td><a href="/actueel/eetplan/huis/'.$aHuis['huisID'].'">'.mb_htmlentities($aHuis['huisNaam']).'</a></td>
 				<td>'.$aHuis['adres'].'</td>
 				<td>'.$aHuis['telefoon'].'</td></tr>';
+			$row++;
 		}
 		echo '</table>';
 	}

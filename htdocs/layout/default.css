@@ -637,3 +637,20 @@ form#streeplijst input, label{ text-align: left; margin: 3px; padding: 0px; line
 #ledenlijst_zoeken #kolommen input{
 	margin: 0;
 }
+
+#eetplanLETOP{
+	color: darkred; font-size: 1.8em; 
+	line-height: 1.1em;
+	padding: 10px; font-weight: bold; 
+	text-align: justify; display: block; 
+	border: 1px solid black; background-color: lightgrey;
+}
+.eetplantabel{
+	width: 100%; border-collapse: collapse;
+}
+.eetplantabel tr{ margin: 0px; padding: 0px;}
+.eetplantabel tr td{ margin: 0px; padding: 0px; text-align: left;}
+.eetplantabel tr th{ border-bottom: 1px solid black; }
+.eetplantabel tr.kleur0 td{ background-color: #fff; }
+.eetplantabel tr.kleur1 td{ background-color: #f4f4f4; }
+.eetplantabel tr .huis{ border-left: 1px solid black; padding:3px 4px; margin: 0px; font-size: 10px;}
