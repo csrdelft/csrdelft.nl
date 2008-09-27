@@ -2,7 +2,7 @@ RewriteEngine on
 
 RewriteRule ^lijst/([0-9]+)$ maaltijdlijst.php?maalid=$1
 RewriteRule ^lijst/([0-9]+)/sluiten$ maaltijdlijst.php?maalid=$1&sluit=1
-
+RewriteRule ^lijst/([0-9]+)/fiscaal$ maaltijdlijst.php?maalid=$1&fiscaal=1
 
 #beheer
 

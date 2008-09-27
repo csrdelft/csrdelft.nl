@@ -38,6 +38,12 @@ if ($error == 0  or $error == 2) {
 
 	require_once('class.maaltijdlijstcontent.php');
 	$page = new MaaltijdLijstContent($maaltijd);
+	
+	# Moeten we de fiscaal-lijst weergeven?
+	if($_GET['fiscaal']==1){
+		$page->setFiscaal(true);
+	}
+	
 	$page->view();
 
 } else {

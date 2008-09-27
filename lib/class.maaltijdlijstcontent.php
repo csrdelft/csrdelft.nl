@@ -10,7 +10,8 @@
 
 class MaaltijdLijstContent extends SimpleHTML {
 	### private ###
-
+	private $_fiscaal=false;
+	
 	# de objecten die data leveren
 	var $_lid;
 	var $_maaltijd;
@@ -20,6 +21,10 @@ class MaaltijdLijstContent extends SimpleHTML {
 	function MaaltijdLijstContent($maaltijd) {
 		$this->_lid=Lid::get_lid();
 		$this->_maaltijd=$maaltijd;
+	}
+	
+	function setFiscaal($fiscaal){
+		$this->_fiscaal=$fiscaal;
 	}
 
 	function view(){
@@ -40,11 +45,12 @@ class MaaltijdLijstContent extends SimpleHTML {
 		$aMaal['marge']=$marge;
 		$aMaal['totaal']=$marge+$aMaal['aantal'];
 		
-		//een zootje lege cellen aan het einde van de aanmeldingen array erbij maken
-		$cellen=ceil($marge+($aMaal['aantal']*0.1));
-		//zorgen dat er altijd een even aantal cellen is
-		if(($cellen%2)!=0){ $cellen++; }
-		
+		if(!$this->_fiscaal){
+			//een zootje lege cellen aan het einde van de aanmeldingen array erbij maken
+			$cellen=ceil($marge+($aMaal['aantal']*0.1));
+			//zorgen dat er altijd een even aantal cellen is
+			if(($cellen%2)!=0){ $cellen++; }
+		}		
 		
 		for($i=0;$i<$cellen; $i++){
 			$aMaal['aanmeldingen'][]=array('naam' => '', 'eetwens' => '');
@@ -54,8 +60,12 @@ class MaaltijdLijstContent extends SimpleHTML {
 		$aMaal['budget']=($aMaal['aantal']+$marge)*$maaltijdbudget;
 			
 		$maaltijdlijst->assign('maaltijd', $aMaal);
-		$maaltijdlijst->assign('datumFormaat', '%A %e %B'); 
-		$maaltijdlijst->display('maaltijdketzer/lijst.tpl');
+		$maaltijdlijst->assign('datumFormaat', '%A %e %B');
+		if($this->_fiscaal){
+			$maaltijdlijst->display('maaltijdketzer/lijst_fiscaal.tpl');
+		}else{
+			$maaltijdlijst->display('maaltijdketzer/lijst.tpl');
+		}
 		
 	}
 }

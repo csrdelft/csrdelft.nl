@@ -320,6 +320,7 @@ lib/templates/maaltijdketzer/abo-overzicht.tpl -text
 lib/templates/maaltijdketzer/beheer.tpl -text
 lib/templates/maaltijdketzer/formulier.tpl -text
 lib/templates/maaltijdketzer/lijst.tpl -text
+lib/templates/maaltijdketzer/lijst_fiscaal.tpl -text
 lib/templates/maaltijdketzer/maaltijdketzer.tpl -text
 lib/templates/maaltijdketzer/saldi-updater.tpl -text
 lib/templates/maaltijdketzer/voorkeuren.tpl -text

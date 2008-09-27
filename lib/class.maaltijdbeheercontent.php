@@ -53,7 +53,7 @@ class MaaltijdbeheerContent extends SimpleHTML {
 		
 		//Dingen ophalen voor het overzicht van maaltijden...
 		$aMaal['error']=$this->_maaltrack->getError();
-		$aMaal['maaltijden']=$this->_maaltrack->getMaaltijden(time(), time()+3600*24*100, false);
+		$aMaal['maaltijden']=$this->_maaltrack->getMaaltijden(time()-3600*24*28, time()+3600*24*100, false);
 		
 		
 		//nieuwe maaltijd, of oude bewerken?
