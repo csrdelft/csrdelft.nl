@@ -40,7 +40,7 @@ if ($error == 0  or $error == 2) {
 	$page = new MaaltijdLijstContent($maaltijd);
 	
 	# Moeten we de fiscaal-lijst weergeven?
-	if($_GET['fiscaal']==1){
+	if(isset($_GET['fiscaal']) && $_GET['fiscaal']==1){
 		$page->setFiscaal(true);
 	}
 	
