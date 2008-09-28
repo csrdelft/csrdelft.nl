@@ -622,6 +622,12 @@ class Profiel extends lid{
 						$this->storeDeltaProfile($veld, $invoer);
 						# nieuwe waarde in tmpprofile voor diff_to_*
 						$this->_tmpprofile[$veld] = $invoer;
+						// Maaltijdabos verwijderen indien de status veranderd is in Geen Lid of Oudlid.
+						if($invoer=='S_NOBODY' || $invoer=='S_OUDLID'){
+							if(!$this->deleteMaaltijdabos($this->_tmpprofile['uid'])){
+								$this->_formerror[$veld] = "Maaltijdabo verwijderen mislukt! Statuswijziging niet doorgevoerd.";
+							}
+						}
 						//rechten ook uitzetten als iemand geen lid meer is.
 						if($invoer=='S_NOBODY'){
 							$this->storeDeltaProfile('permissies', 'P_NOBODY');
@@ -789,6 +795,21 @@ h.t. Praeses der Pubcie
 P.S. Mocht u nog vragen hebben, dan kan u natuurlijk altijd e-posts sturen naar pubcie@csrdelft.nl";
 		return $this->_db->query($sNieuwWachtwoord) AND mail($mailto, 'Nieuw wachtwoord voor de C.S.R.-stek', $mail);
 
+	}
+
+	// Verwijdert alle maaltijdabos van het opgegeven lid.
+	function deleteMaaltijdabos($uid){
+		if(!$this->uidExists($uid)){ return false; }
+		$sDeleteQuery="
+			DELETE FROM
+				maaltijdabo
+			WHERE
+				uid='".$uid."';";
+		$rDelete=$this->_db->query($sDeleteQuery);
+		if($rDelete===false)
+			return false;
+		else
+			return true;
 	}
 }
 ?>
