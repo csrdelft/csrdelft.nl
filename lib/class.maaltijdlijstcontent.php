@@ -50,11 +50,11 @@ class MaaltijdLijstContent extends SimpleHTML {
 			$cellen=ceil($marge+($aMaal['aantal']*0.1));
 			//zorgen dat er altijd een even aantal cellen is
 			if(($cellen%2)!=0){ $cellen++; }
+			
+			for($i=0;$i<$cellen; $i++){
+				$aMaal['aanmeldingen'][]=array('naam' => '', 'eetwens' => '');
+			}
 		}		
-		
-		for($i=0;$i<$cellen; $i++){
-			$aMaal['aanmeldingen'][]=array('naam' => '', 'eetwens' => '');
-		}
 		
 		//budget bepalen.
 		$aMaal['budget']=($aMaal['aantal']+$marge)*$maaltijdbudget;
