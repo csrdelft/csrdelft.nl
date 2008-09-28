@@ -623,9 +623,9 @@ class Profiel extends lid{
 						# nieuwe waarde in tmpprofile voor diff_to_*
 						$this->_tmpprofile[$veld] = $invoer;
 						// Maaltijdabos verwijderen indien de status veranderd is in Geen Lid of Oudlid.
-						if($invoer=='S_NOBODY' || $invoer=='S_OUDLID'){
-							if(!$this->deleteMaaltijdabos($this->_tmpprofile['uid'])){
-								$this->_formerror[$veld] = "Maaltijdabo verwijderen mislukt! Statuswijziging niet doorgevoerd.";
+						if($invoer=='S_NOBODY'||$invoer=='S_OUDLID'){
+							if(!$this->deleteMaaltijdresten($this->_tmpprofile['uid'])){
+								$this->_formerror[$veld] = "Maaltijdresten verwijderen mislukt! Statuswijziging niet doorgevoerd.";
 							}
 						}
 						//rechten ook uitzetten als iemand geen lid meer is.
@@ -797,16 +797,34 @@ P.S. Mocht u nog vragen hebben, dan kan u natuurlijk altijd e-posts sturen naar 
 
 	}
 
-	// Verwijdert alle maaltijdabos van het opgegeven lid.
-	function deleteMaaltijdabos($uid){
+	// Verwijdert alle maaltijdabos en alle toekomstige (ongesloten) maaltijdaanmeldingen voor het opgegeven lid.
+	function deleteMaaltijdresten($uid){
 		if(!$this->uidExists($uid)){ return false; }
-		$sDeleteQuery="
+		$sDeleteAbosQuery="
 			DELETE FROM
 				maaltijdabo
 			WHERE
 				uid='".$uid."';";
-		$rDelete=$this->_db->query($sDeleteQuery);
-		if($rDelete===false)
+		$rDeleteAbos=$this->_db->query($sDeleteAbosQuery);
+
+		$sDeleteAanmeldingenQuery="
+			DELETE
+				a
+			FROM
+				maaltijdaanmelding a
+			LEFT JOIN
+				maaltijd m
+			ON
+				m.id = a.maalid
+			WHERE
+				a.uid='".$uid."'
+			AND
+				m.gesloten='0'
+			AND
+				m.datum > UNIX_TIMESTAMP();";
+		$rDeleteAanmeldingen=$this->_db->query($sDeleteAanmeldingenQuery);
+
+		if($rDeleteAbos===false||$rDeleteAanmeldingen===false)
 			return false;
 		else
 			return true;
