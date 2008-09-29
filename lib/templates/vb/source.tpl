@@ -25,7 +25,7 @@
 		{$source->description|ubb}
 
 	</td><td>
-		<h2>Te vinden onder</h2><br/>
+		<h2>Te vinden onder onderwerp</h2><br/>
 		{section name=i1 loop=$source->parents}
 			<div class="thema-grotebalk">
 				<img class="plaatje" src="images/leaf.png"/>

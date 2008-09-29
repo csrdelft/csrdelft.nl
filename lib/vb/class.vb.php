@@ -50,11 +50,10 @@ class VB {
 				return true;
 */			if ($this->_lid->hasPermission('P_ADMIN'))
 				return true;
-			$g = new Groep();
-			$g->load("VormingsbankCie");
+			$g = new Groep("VormingsbankCie");
 			if ($g->isLid($this->_lid->getUID()))
 				return true;
-			$g->load("Werkgroepleiders");
+			$g = new Groep("Werkgroepleiders");
 			if ($g->isLid($this->_lid->getUID()))
 				return true;
 			return false;

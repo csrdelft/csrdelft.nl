@@ -2,7 +2,7 @@
 <tr><td><h1>Vormingsbank C.S.R.Delft</h1></td></tr>
 	<tr>
 		<td width = "50%">
-			<h2>Snel zoeken</h2><br/>
+			<h2>Snel zoeken</h2><
 			{$search}
 			<br/>
 			<h2>De vormingsbank</h2><p>
@@ -44,21 +44,26 @@ ontdekken.</p>
 				</div>
 					
 				<div id="hoofdthemas">
-					<h2>Hoofd thema's</h2><br/>
+					<h2>Hoofdonderwerpen</h2><br/>
 					{section name=sec1 loop=$themes}
 						<div class="thema-grotebalk">
-							<img class="plaatje" src="{$themes[sec1]->getImage()}"/>
-							<div class="titel">
-								<a  href="index.php?actie=subject&id={$themes[sec1]->id}" title="{$themes[sec1]->description}">
-									{$themes[sec1]->name}
-								</a>
-							</div>
-							<div class="bericht">{$themes[sec1]->description}</div>
+							<table>
+								<tr>
+									<td><img class="plaatje" src="{$themes[sec1]->getImage()}"/></td>
+									<td><div class="titel">
+										<a  href="index.php?actie=subject&id={$themes[sec1]->id}" title="{$themes[sec1]->description}">
+											{$themes[sec1]->name}
+										</a>
+									</div>
+									<div class="bericht">{$themes[sec1]->description}</div>
+									</td>
+								</tr>
+							</table>
 						</div>
 						{/section}
 					<!-- use allowedit, not allowadd, to add a main theme -->
 					{if $allowedit}
-						<a href="index.php?actie=subject&id=0">Hoofdthema's beheren</a>
+						<a href="index.php?actie=subject&id=0">Hoofdonderwerpen beheren</a>
 					{/if}
 				</div>
 		</td>

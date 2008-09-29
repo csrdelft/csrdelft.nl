@@ -128,6 +128,9 @@ class VBSearch {
 			{
 			echo "
 				<div class='thema-grotebalk'>
+					<table>
+						<tr>
+							<td rowspan='2'>
 					<input class='plaatje' type='radio' name='".$name."selection' id='".$name."sel".$i."'  onclick='document.getElementById(\"#0EditForm\").#1.value = \"".$obj->id."\";'/>
 					<img class='plaatje' src='".$obj->getImage()."'/>
 					<div class='titel'>
@@ -141,11 +144,17 @@ class VBSearch {
 			else
 			{
 				echo '<div class="thema-grotebalk">
-						<img class="plaatje" src="'.$obj->getImage().'"/>
-						<div class="titel">
-							<a  href="index.php?actie='.$class.'&id='.$obj->id.'" title="'.$obj->description.'">'.$obj->name.'</a>
-						</div>
-						<div class="bericht">'.$msg.'</div></div>';
+						<table>
+							<tr>
+								<td rowspan="2"><img class="plaatje" src="'.$obj->getImage().'"/></td>
+								<td><div class="titel">
+									<a  href="index.php?actie='.$class.'&id='.$obj->id.'" title="'.$obj->description.'">'.$obj->name.'</a>
+								</div></td>
+							</tr><tr>
+								<td><div class="bericht">'.$msg.'</div></td>
+							</tr>
+						</table>
+					</div>';
 			}
 			$i++;
 		}

@@ -30,18 +30,23 @@
 				<br/><h2>Subonderwerpen</h2><br/>
 				{section name=sec2 loop=$sub->children}
 					<div class="thema-grotebalk">
-						<img class="plaatje" src="{$sub->children[sec2]->getImage()}"/>
-						<div class="titel">
-							<a href="index.php?actie=subject&id={$sub->children[sec2]->id}">
-								{$sub->children[sec2]->name}
-							</a>
-						</div>
-						<div class="bericht">
-							{if $allowedit}
-								{$sub->children[sec2]->geteditbuttons()}
-							{/if}
-							{$sub->children[sec2]->description|ubb}
-						</div>
+						<table>
+							<tr><td>
+								<img class="plaatje" src="{$sub->children[sec2]->getImage()}"/>
+								{if $allowedit}
+									{$sub->children[sec2]->geteditbuttons()}
+								{/if}
+							</td><td>
+								<div class="titel">
+									<a href="index.php?actie=subject&id={$sub->children[sec2]->id}">
+										{$sub->children[sec2]->name}
+									</a>
+								</div>
+								<div class="bericht">
+									{$sub->children[sec2]->description|ubb}
+								</div>
+							</td></tr>
+						</table>							
 					</div>
 				{/section}
 				{if $allowadd}
@@ -52,7 +57,7 @@
 					{$editdiv}										
 				{/if}
 			{else}
-				<h2>Forum onderwerpen</h2><br/>
+				<h2>Forum discussies</h2><br/>
 				{section name=sec2 loop=$sub->discussions}
 					{* because a source has multiple parents, provided the parent where we came from, to be able to 
 					produce the bar in future *}

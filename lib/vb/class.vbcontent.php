@@ -100,7 +100,7 @@ class VBContent extends SimpleHTML {
 	/** shows the homepage, containg information about the vormingsbank, and a list of main categories */
 	function showHomePage()
 	{
-		$this->nav->resetandpush("thuis");
+		$this->nav->resetandpush("Thuis","index.php?actie=home");
 		$home = $this-> newTemplate();
 		//search box
 		$home->assign('search', $this->showSimpleSearch());
@@ -186,6 +186,12 @@ class VBContent extends SimpleHTML {
 	}
 	
 
+	function showThemePage()
+	{
+		$this->_action = "subject";
+		$this->_objid = "0";
+		$this->view();
+	}
 	
 	/** shows a subject, its either a list of themes, or a list of sources and discussions,
 	//depending on isLeaf subject */

@@ -26,13 +26,12 @@ class navigator
 	}
 	
 	//zorgt ervoor dat de boom opnieuw gestart wordt (tenzij de nieuwe url al onderdeel uitmaakt van de boom)
-	function resetandpush($title)
+	function resetandpush($title, $url)
 	{
-		$url = $this->getrequest();
 		$i = $this->indexof($url);
 		if ($i == -1)
 			$this->doreset();
-		$this->push($title);		
+		$this->pushUrl($title, $url);		
 	}
 	
 	
