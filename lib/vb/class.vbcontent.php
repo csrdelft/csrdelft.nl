@@ -121,7 +121,7 @@ class VBContent extends SimpleHTML {
 			}
 			$bericht=preg_replace('/(\[(|\/)\w+\])/', '|', $source->description);
 			$berichtfragment=substr(str_replace(array("\n", "\r", ' '), ' ', $bericht), 0, 40);
-			echo '<div class="item"><span class="tijd">'.date('H:i', strtotime($source->createdate)).'</span>&nbsp;';
+			echo '<div class="item">';
 			echo '<a href="index.php?actie=source&id='.$source->id.'" 
 				title="['.mb_htmlentities($source->name).'] '.
 					mb_htmlentities($berichtfragment).'">'.$titel.'</a><br />'."\n";

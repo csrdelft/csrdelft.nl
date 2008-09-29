@@ -2,7 +2,7 @@
 <tr><td><h1>Vormingsbank C.S.R.Delft</h1></td></tr>
 	<tr>
 		<td width = "50%">
-			<h2>Snel zoeken</h2><
+			<h2>Snel zoeken</h2>
 			{$search}
 			<br/>
 			<h2>De vormingsbank</h2><p>
