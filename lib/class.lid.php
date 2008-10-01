@@ -410,7 +410,7 @@ class Lid {
 			'P_MAAL_MOD'     => 00700000000, # mag maaltijd aan- en afmeldingen voor iedereen wijzigen
 			'P_MAIL_POST'    => 02000000000, # mag berichtjes in de pubciemail rossen
 			'P_MAIL_COMPOSE' => 04000000000, # mag alle berichtjes in de pubcie-mail bewerken, en volgorde wijzigen
-			'P_MAIL_SEND'    => 06000000000, # mag de C.S.R.-mail verzenden
+			'P_MAIL_SEND'    => 07000000000, # mag de C.S.R.-mail verzenden
 			'P_BIEB_READ'    => 00000000020, # Bibliotheek lezen
 			'P_BIEB_EDIT'    => 00000000040, # Bibliotheek wijzigen		
 			'P_BIEB_MOD'     => 00000000060, # Bibliotheek zowel wijzigen als lezen	
