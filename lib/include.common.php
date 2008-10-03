@@ -23,7 +23,7 @@ function url_like($url) {
     #    f            oo.bar.   org       :80                
         '([a-zA-Z0-9]([-\w]+\.)+(\w{2,5}))(:\d{1,5})?)?' .
     #    /path       ?file=http://foo:bar@w00t.l33t.h4x0rz/
-        '(/~)?[-\w./]*([-@()\#?/&;:+,._\w= ]+)?$#', $url);
+        '(/~)?[-\w./]*([-@\(\)\#?/&;:+,._\w= ]+)?$#', $url);
 }
 
 //http://nl.php.net/manual/en/function.in_array.php
