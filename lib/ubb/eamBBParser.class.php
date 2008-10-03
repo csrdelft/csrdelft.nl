@@ -571,9 +571,9 @@ class eamBBParser{
 				if(strstr(strtolower($value), 'javascript:')){
 					$value = 'disabled';
 				}
-				if(strstr(strtolower($value), '(')){
-					$value = 'disabled';
-				}
+			//	if(strstr(strtolower($value), '(')){
+			//		$value = 'disabled';
+			//	}
 				
 				$argument_array[$key] = $value;
 			}
