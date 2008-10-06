@@ -5,6 +5,9 @@
 			<h2>Snel zoeken</h2>
 			{$search}
 			<br/>
+			...of klik <a href="index.php?actie=theme">klik</a> hier voor een overzicht van alle onderwerpen
+			<br/>
+			<br/>
 			<h2>De vormingsbank</h2><p>
 			De mensheid heeft de afgelopen eeuwen enorm veel
 ontdekt, ontwikkeld en ontgonnen. Voordat wijzelf in

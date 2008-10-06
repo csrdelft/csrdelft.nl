@@ -333,6 +333,7 @@ lib/templates/vb/home.tpl -text
 lib/templates/vb/search.tpl -text
 lib/templates/vb/source.tpl -text
 lib/templates/vb/subject.tpl -text
+lib/templates/vb/theme.tpl -text
 lib/templates/vb/vbcsrdelft.tpl -text
 lib/templates/vb/vbmenu.tpl -text
 lib/ubb/LICENSE -text
@@ -342,6 +343,7 @@ lib/ubb/eamBBParser.class.php -text
 lib/ubb/eamFunParser.class.php -text
 lib/ubb/plugins/rainbow.php -text
 lib/vb/class.navigator.php -text
+lib/vb/class.subjecttree.php -text
 lib/vb/class.vb.php -text
 lib/vb/class.vbbooksource.php -text
 lib/vb/class.vbcontent.php -text

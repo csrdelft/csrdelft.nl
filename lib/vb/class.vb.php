@@ -324,6 +324,30 @@ class VB {
 			$vb->notify("Ongeldige combinatie van huidig- en doeltype. Mogelijk is het onderwerp reeds geconverteerd.");
 	}
 	
+	/** zet een onderwerp om van knoop (heeft subonderwerpen) naar blad (bevat alleen bronnen) en vice versa */
+	function moveSubject($id, $target, $vb)
+	{
+		if (!$this->isModerator())
+			return $vb->notify("Alleen moderators mogen onderwerpen verplaatsen");
+		$id = (int) $id;
+		$target = (int) $target;
+		$r = $this->getSubjectById($id);
+		$t = $this->getSubjectById($target);
+		if ($r == $t)
+			return $vb->notify("Onderwerp kan niet naar zichzelf verplaatst worden"); //TODO: of kind, maar wordt wel in de input gecontroleer!! ...
+		$vb->notify("Verplaatsen van onderwerp ".$r->name." naar ".$t->name."...");
+		if ($t->isLeaf)
+			return $vb->notify("U kunt onderwerpen niet verplaasten naar 'blad' onderwerpen");
+		$query = "UPDATE vb_subject SET parent= '".$target."' WHERE id = '".$id."'";
+		$res = $this->_db->query($query);
+		if (!$res)
+		{
+			$vb->notifiy("Verplaaten van onderwerp gefaald");
+			return;
+		}
+		$vb->notify("Voltooid");
+	}
+	
 	/** maakt een link van een onderwerp naar een bron aan, met een bepaalde reden
 	pre: rechten gecheckt */
 	function createSourceSubjectLink($subjid, $sourceid, $reason)

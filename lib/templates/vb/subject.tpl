@@ -2,7 +2,11 @@
 	<tr><td colspan="2"><h1>{$sub->name}</h1>
 				{if $sub->parent != "-1"}
 				<a href="index.php?actie=subject&id={$sub->parent}">[omhoog]</a>
+				{if $allowedit}
+					<br/>{$moveForm}
+				{/if}
 			{/if}
+
 	</td></tr>
 	<tr>
 		<td width="50%">

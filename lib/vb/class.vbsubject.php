@@ -94,5 +94,34 @@ class VBSubject extends VBItem
 	{
 		return "<b>".$this->name."</b><br/>".$this->description;
 	}
+	
+	public function getMoveForm($tree) 
+	{
+		$name = "movesubject";
+		return 
+			'<a href="javascript:void()" onclick="document.getElementById(\''.$name.'Div\').style.display=\'block\';">Onderwerp verplaatsen</a>
+				<div class="editdiv" id="'.$name.'Div">
+				<div class="editdivinner">
+					<div class ="editdivheader">
+						<table width="100%"><tr><td >
+						Verplaats '.$this->name.'</td><td  class="rightjustify" width="20px">
+							<a href="#" onClick="document.getElementById(\''.$name.'Div\').style.display=\'none\';">X</a>
+						</td></tr></table>
+					</div><br/>
+					<form enctype="multipart/form-data"  method="post" id="'.$name.'" name="'.$name.'" action="/vb/index.php">
+						<input type="hidden" name="actie" value="movesubject"/>
+						<input type="hidden" name="id" value="'.$this->id.'"/>
+						<select name="target">
+							'.$tree->toOptions($this->parent, $this->id).'
+						</select>
+						<div class="rightjustify">
+							<hr/>
+							<input type="submit" name="submit" value="Opslaan"/>
+							<input type="reset" value="Annuleren" onClick="document.getElementById(\''.$name.'Div\').style.display=\'none\';"/>
+						</div>
+					</form>
+				</div>
+			</div>';
+	}
 }
 ?>

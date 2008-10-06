@@ -10,7 +10,8 @@
 	top: 175px;
 	margin-left: 10px;	
 	width : 750px;
-	border-bottom: 1px solid #CCCCCC	;
+	border-bottom: 1px solid #CCCCCC;
+	display: block;
 }
 
 .editdiv
@@ -116,6 +117,9 @@ a{color: red; text-decoration: none;}
 	color:  red;
 }
 
+#mainright {
+		margin-top: 12px;
+}
 /* overrides voor plaatjes, voor de rest letterljk van default.css */
 
 #container {

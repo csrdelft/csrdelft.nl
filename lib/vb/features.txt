@@ -1,5 +1,9 @@
 todolist:
 
+quicksearch als veld verlaten wordt word er weggenavigeerd, ook als er niet gezocht wordt
+bron bron relatie zoeken fixen 
+jscript error in menu.js, zie firebug
+
 boeken integreren
 reference vakje bij bronnen
 beoordelingen
@@ -86,3 +90,17 @@ Bewerkknopje van 'Carrière' in de tak Persoonlijk werkt niet. Ik kan tekstje ni
 In tekstje van Carrière staat een opsomming dit hoort misschien niet, maar de enters/regeluiteinden worden verwijderd, dit is bedoelde functionaliteit neem ik aan? per ongeluk is deze nu dubbel in systeem, sorry.
 
 Sterkte en veel succes!
+
+- Kunnen onderwerpen uit het forum aan vormingsbank als 'discussie' worden toegevoegd? (Andersom kan wel als je adminrechten hebt op het forum.)
+
+- link>sublink>dieper>onderwerp balkje bovenaan doet het niet, maar ik vermoed dat je dat al zal hebben waargenomen..
+
+
+
+Deze opmerkingen zijn van voor Michel's aanpassingen van weekeind van 20 september:
+
+- Bij het aanpassen van titel van een discussie op het forum, met moderatie-rechten op c.s.r.-stek gaat titel in vormingsbank niet mee, ook de andere kant op wordt de titel niet mee gewijzigd.
+
+- bij toevoegen van bron-bronrelatie: als je zoekterm in typt en je gebruikt dan ENTER, dan spring je uit toevoegvenstertje, ipv op 'zoekknop' te duwen...
+
+- lijntje, grijs vakje of zoiets om onderscheid te maken tussen verschillende berichten in discussies.

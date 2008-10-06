@@ -10,6 +10,7 @@
 # als een zet van hulpfuncties waar de complexere logica wordt afgehandeld. 
 	require_once("class.vbsearch.php");
 	require_once("class.navigator.php");
+	require_once("class.subjecttree.php");
 	
 class VBContent extends SimpleHTML {
 	### private ###
@@ -19,6 +20,7 @@ class VBContent extends SimpleHTML {
 	var $_search;
 	var $nav;
 	var $ubb;
+	var $tree;
 	
 	### public ###
 	public function VBContent(&$vb, $actie,$objid){
@@ -29,6 +31,7 @@ class VBContent extends SimpleHTML {
 		$this->_search = new vbsearch($vb);
 		$this->nav = navigator::instance();
 		$this->ubb= new csrubb();
+		$this->tree = new SubjectTree($vb);
 	}
 
 	function getTitel(){
@@ -69,6 +72,9 @@ class VBContent extends SimpleHTML {
 				break;
 			case "convertsubject":
 				$this->convertSubject();
+				break;
+			case "movesubject":
+				$this->moveSubject();
 				break;
 			case "addsubjectsourcelink":
 				$this->addsubjectSourceLink();
@@ -116,8 +122,8 @@ class VBContent extends SimpleHTML {
 		echo '<h1><a href="/vb/">Laatste bronnen</a></h1>';
 		foreach($this->_vb->getLastPosts($this->_objid) as $source){
 			$titel=mb_htmlentities($source->name);
-			if(strlen($titel)>21){
-				$titel=str_replace(' ', '&nbsp;', trim(substr($titel, 0, 18)).'…');
+			if(strlen($titel)>35 ){
+				$titel=str_replace(' ', '&nbsp;', trim(substr($titel, 0,35)).'…');
 			}
 			$bericht=preg_replace('/(\[(|\/)\w+\])/', '|', $source->description);
 			$berichtfragment=substr(str_replace(array("\n", "\r", ' '), ' ', $bericht), 0, 40);
@@ -188,9 +194,11 @@ class VBContent extends SimpleHTML {
 
 	function showThemePage()
 	{
-		$this->_action = "subject";
-		$this->_objid = "0";
-		$this->view();
+		$this->nav->resetandpush("Onderwerpen","index.php?actie=theme");
+		$t= $this-> newTemplate();
+		//boompie renderen
+		$t->assign('boom', $this->tree->renderTree());
+		$t->display('vb/theme.tpl'); 
 	}
 	
 	/** shows a subject, its either a list of themes, or a list of sources and discussions,
@@ -224,6 +232,10 @@ class VBContent extends SimpleHTML {
 	//		$tpl->assign(editbookdiv, 		VBBookSource::getEditDiv());
 //		}
 		//display
+		if ($this->_vb->isModerator()) {
+			$tpl->assign(moveForm, $sub->getMoveForm($this->tree));
+		}
+		
 		$tpl->display('vb/subject.tpl');
 		
 		
@@ -357,6 +369,7 @@ class VBContent extends SimpleHTML {
 			{
 				case "vbsubject":
 					$this->_action="subject";
+					$this->tree->reset();
 					break;
 				case "vblinksource":
 				case 'vbdiscussionsource':
@@ -436,7 +449,8 @@ class VBContent extends SimpleHTML {
 		{
 			$res = $this->_vb->removeSubject($r, $this);
 			$this->_objid = $r->parent; //navigate to its parent
-			$this->_action = "subject";	
+			$this->_action = "subject";
+			$this->tree->reset();			
 		}
 		elseif(is_a(new $class,'vbsource')) //hooray, is a new $class :)
 		{
@@ -469,7 +483,17 @@ class VBContent extends SimpleHTML {
 		$this->_vb->convertSubject($this->_objid, $this); //rechten worden daar gecontroleerd
 		$this->_action = "subject";
 		$this->view();
+		$this->tree->reset();
 	}
+	
+	function moveSubject()
+	{
+		$this->_vb->moveSubject($this->_objid, $_POST['target'], $this); //rechten worden daar gecontroleerd
+		$this->_action = "subject";
+		$this->view();
+		$this->tree->reset();		
+	}
+	
 	
 	/** pritns a message on the top of the current page, to indicatie status issues etc.  */
 	function notify($message)

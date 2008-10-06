@@ -130,15 +130,18 @@ class VBSearch {
 				<div class='thema-grotebalk'>
 					<table>
 						<tr>
-							<td rowspan='2'>
-					<input class='plaatje' type='radio' name='".$name."selection' id='".$name."sel".$i."'  onclick='document.getElementById(\"#0EditForm\").#1.value = \"".$obj->id."\";'/>
-					<img class='plaatje' src='".$obj->getImage()."'/>
-					<div class='titel'>
-						<label for='".$name."sel".$i."'>
-							<a href='#' class='selectorrow'>".$obj->name."</a>
-						</label>
-					</div>
-					<div class='bericht'>".$msg."<a target='_blank' href='index.php?actie=".$class."&id=".$obj->id."'> [bekijk]</a></div>
+							<td>
+								<input class='plaatje' type='radio' name='".$name."selection' id='".$name."sel".$i."'  onclick='document.getElementById(\"#0EditForm\").#1.value = \"".$obj->id."\";'/>
+								<img class='plaatje' src='".$obj->getImage()."'/>
+							</td><td>
+								<div class='titel'>
+									<label for='".$name."sel".$i."'>
+										<a href='#' class='selectorrow'>".$obj->name."</a>
+									</label>
+								</div>
+								<div class='bericht'>".$msg."<a target='_blank' href='index.php?actie=".$class."&id=".$obj->id."'> [bekijk]</a></div>
+							</td>
+					</table>
 				</div>";
 			}
 			else
