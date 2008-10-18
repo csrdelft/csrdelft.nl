@@ -9,8 +9,9 @@
 # -------------------------------------------------------------------
 #
 
-# padnaam zonder trailing slash
+# padnaam MET trailing slash
 define('BASE_PATH', '/srv/www/www.csrdelft.nl/');
+# padnaam ZONDER trailing slash
 define('ETC_PATH', BASE_PATH.'etc');
 define('LIB_PATH', BASE_PATH.'lib');
 define('DATA_PATH', BASE_PATH.'data');
