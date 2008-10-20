@@ -141,7 +141,7 @@ class ForumContent extends SimpleHTML {
 		echo '<h1><a href="/communicatie/forum/categorie/laatste">Forum</a></h1>';
 		foreach($aPosts as $aPost){
 			//$tekst=$aPost['nickname'].': ';
-			$tekst=$aPost['titel'];
+			$tekst=htmlspecialchars($aPost['titel']);
 			if(strlen($tekst)>20){
 				$tekst=str_replace(' ', '&nbsp;', trim(substr($tekst, 0, 18)).'…');
 			}
