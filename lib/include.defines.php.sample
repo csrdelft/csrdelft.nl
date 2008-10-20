@@ -23,7 +23,7 @@ define('SESSION_PATH', BASE_PATH.'sessie');
 # urls met trailing slash
 define('CSR_PICS', 'http://plaetjes.csrdelft.nl/');
 define('CSR_ROOT','http://csrdelft.nl/');
-# vreemde eend in de beijt, zonder trailing /, voor als we
+# vreemde eend in de beyt, zonder trailing /, voor als we
 # $_SERVER["REQUEST_URI"] gebruiken enzo
 define('CSR_SERVER','http://csrdelft.nl');
 
