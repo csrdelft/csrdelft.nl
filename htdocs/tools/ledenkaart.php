@@ -24,9 +24,10 @@ if(isset($_GET['xml'])){
 	echo '<?xml version="1.0" encoding="utf-8"?><markers>'."\n";
 	while($aLid=$db->next($rLeden)){
 		if($aLid['adres']!=''){	
-			echo '<marker address="'.$aLid['adres'].', '.$aLid['woonplaats'].'" html="'.$lid->getNaamLink($aLid['uid'], 'civitas', false, false, false).'"><![CDATA[ ';
-			echo $lid->getNaamLink($aLid['uid'], 'civitas', false).'';
-			echo ']]></marker>'."\n";
+			echo '<marker address="'.$aLid['adres'].', '.$aLid['woonplaats'].'" label="'.$lid->getNaamLink($aLid['uid'], 'civitas', false, false, false).'">';
+			echo '<infowindow><![CDATA[';
+			echo $lid->getNaamLink($aLid['uid'], 'civitas', true).'';
+			echo ']]></infowindow></marker>'."\n";
 		}
 	}
 	echo '</markers>';
@@ -68,15 +69,16 @@ exit;
 	//loop over the markers array
     for (var i = 0; i < markers.length; i++) {
 		var address = markers[i].getAttribute("address");
-		var html = markers[i].getAttribute("html");
-		showAddress(map,geocoder,address,html,icon);
+		var html = GXml.value(markers[i].getElementsByTagName("infowindow")[0]);
+		var label = markers[i].getAttribute("label");
+		showAddress(map,geocoder,address,html,label,icon);
     } //close for loop
 
 	  }
 	); //close GDownloadUrl
 
 //Create marker and set up event window
-function createMarker(point,html,icon){
+function createMarker(point,html,label){
   var marker = new GMarker(point);
   GEvent.addListener(marker, "click", function() {
      marker.openInfoWindowHtml(html);
@@ -85,14 +87,14 @@ function createMarker(point,html,icon){
 }
 
 //showAddress
-function showAddress(map,geocoder,address,html,icon) {
+function showAddress(map,geocoder,address,html,label) {
   geocoder.getLatLng(
     address,
     function(point) {
       if (!point) {
       //  alert(address + " niet gevonden");
       } else {
-        var marker = createMarker(point,html+'<br/><br/>'+address,icon);
+        var marker = createMarker(point,html+'<br/><br/>'+address,label);
         map.addOverlay(marker);
 		map.addControl(new GMapTypeControl());
       }
