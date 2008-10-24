@@ -70,6 +70,10 @@
 	width: 180px;
 	
 }
+div.bewerkt{ font-size: 8px; color: #bbb; }
+div.bewerkt a{ color: #bbb; }
+div.bewerkt hr{ text-align: left; background-color: #bbb; }
+
 a.forumGrootlink{
 	font-size: 1em;
 	font-weight: bold;

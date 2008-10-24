@@ -596,6 +596,7 @@ span#ubbsluiten:hover{
 }
 div.offtopic{ font-size: 9px; color: #bbb; }
 div.offtopic a{ color: #bbb; }
+div.offtopic hr{ text-align: left; background-color: #bbb; }
 
 /* intern/lijst.php */
 table.zoekResultaat{ width: 100%; border-collapse: collapse;}

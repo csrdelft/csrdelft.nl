@@ -192,4 +192,27 @@ function array_get_keys($in, $keys){
 	}
 	return $out;
 }
+function reldate($datum){
+	$nu=time();
+	$moment=strtotime($datum);
+	$verschil=$nu-$moment;
+	if($verschil<=60){
+		$return='<em>'.$verschil.' ';
+		if($verschil==1) {$return.='seconde';}else{$return.='seconden';}
+		$return.='</em> geleden';
+	}elseif($verschil<=60*60){
+		$return='<em>'.floor($verschil/60);
+		if(floor($verschil/60)==1){	$return.=' minuut'; }else{$return.=' minuten'; }
+		$return.='</em> geleden';
+	}elseif($verschil<=(60*60*4)){
+		$return='<em>'.floor($verschil/(60*60)).' uur</em> geleden';
+	}elseif(date('Y-m-d')==date('Y-m-d', $moment)){
+		$return='vandaag om '.date("G:i", $moment);
+	}elseif(date('Y-m-d', $moment)==date('Y-m-d', strtotime('1 day ago'))){
+		$return='gisteren om '.date("G:i", $moment);
+	}else{
+		$return='op '. date("G:i j-n-Y", $moment);
+	}
+	return $return;
+}
 ?>

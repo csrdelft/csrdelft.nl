@@ -70,9 +70,7 @@
 			<td class="auteur">
 				{$bericht.uid|csrnaam:'user'} schreef
 				{$bericht.datum|reldate}
-				{if $bericht.bewerkDatum!='0000-00-00 00:00:00'}
-					<br />Bewerkt {$bericht.bewerkDatum|reldate}
-				{/if}<br />
+				<br />
 				{* knopjes bij elke post *}
 				{* citeerknop enkel als het onderwerp open is en als men mag posten, of als men mod is. *}
 				{if $forum->magCiteren()}
@@ -100,6 +98,12 @@
 			</td>
 			<td class="bericht{cycle values="0,1"}" id="post{$bericht.postID}"> 
 				{$bericht.tekst|ubb}
+				{if $bericht.bewerkt!=''}
+					<div class="bewerkt">
+						<hr />
+						{$bericht.bewerkt|ubb}
+					</div>
+				{/if}
 			</td>
 		</tr>
 		<tr class="tussenschot">

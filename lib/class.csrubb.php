@@ -41,7 +41,17 @@ class CsrUBB extends eamBBParser{
 		$text.=':</strong><div class="citaat">'.trim($content).'</div></div>';
 		return $text;  
 	}
-
+	/*
+	 * ubb_reldate();
+	 * Geef de relatieve datum terug.
+	 */
+	function ubb_reldate($parameters=array()){
+		if(isset($parameters['reldate'])){
+			return reldate($parameters['reldate']);
+		}else{
+			return 'Geen geldige datum';
+		}
+	}
 	/* 
 	 * ubb_lid().
 	 * 
