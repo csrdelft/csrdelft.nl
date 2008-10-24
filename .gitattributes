@@ -88,6 +88,7 @@ htdocs/tools/.htaccess -text
 htdocs/tools/eetplan.php -text
 htdocs/tools/index.php -text
 htdocs/tools/leden-csv.php -text
+htdocs/tools/ledenkaart.php -text
 htdocs/tools/memcachedstatus.php -text
 htdocs/tools/mootlijsten.php -text
 htdocs/tools/onderhoud.html -text
