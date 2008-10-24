@@ -143,7 +143,7 @@ function showAddress(map,geocoder,address,html,label) {
     </script>
   </head>
   <body onload="load()" onunload="GUnload()">
-    <div id="side_bar" style="width: 200px; float: right; max-height: 600px; background-color: #bbb; overflow: scroll;"></div>
+    <div id="side_bar" style="width: 200px; float: right; height: 600px; background-color: #bbb; overflow-y: scroll;"></div>
     <div id="map" style="width: 700px; height: 600px"></div>
     
   </body>
