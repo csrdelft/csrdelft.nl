@@ -24,7 +24,7 @@ if(isset($_GET['xml'])){
 	echo '<?xml version="1.0" encoding="utf-8"?><markers>'."\n";
 	while($aLid=$db->next($rLeden)){
 		if($aLid['adres']!=''){	
-			echo '<marker address="'.$aLid['adres'].', '.$aLid['woonplaats'].'" html="'.$lid->getNaamLink($aLid['uid'], 'civitas', false).'"><![CDATA[ ';
+			echo '<marker address="'.$aLid['adres'].', '.$aLid['woonplaats'].'" html="'.$lid->getNaamLink($aLid['uid'], 'civitas', false, false, false).'"><![CDATA[ ';
 			echo $lid->getNaamLink($aLid['uid'], 'civitas', false).'';
 			echo ']]></marker>'."\n";
 		}
