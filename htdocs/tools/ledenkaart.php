@@ -17,14 +17,23 @@ if(isset($_GET['xml'])){
 			lid
 		WHERE
 			status='S_LID' OR status='S_GASTLID' OR status='S_NOVIET' OR status='S_KRINGEL'
-		ORDER BY achternaam, voornaam;";
+		ORDER BY adres;";
 	
 	$rLeden=$db->query($sLedenQuery);
 	header('content-type: text/xml');
 	echo '<?xml version="1.0" encoding="utf-8"?><markers>'."\n";
+	$current='';
 	while($aLid=$db->next($rLeden)){
+		$adres=$aLid['adres'].', '.$aLid['woonplaats'];
+		
+		if($adres!=$current){
+			if($current!='');
+			
+			$current=$address;
+		}
+		
 		if($aLid['adres']!=''){	
-			echo '<marker address="'.$aLid['adres'].', '.$aLid['woonplaats'].'" label="'.$lid->getNaamLink($aLid['uid'], 'civitas', false, false, false).'">';
+			echo '<marker address="'.$adres.'" label="'.$lid->getNaamLink($aLid['uid'], 'civitas', false, false, false).'">';
 			echo '<infowindow><![CDATA[';
 			echo $lid->getNaamLink($aLid['uid'], 'civitas', true).'';
 			echo ']]></infowindow></marker>'."\n";
@@ -39,12 +48,28 @@ exit;
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
-    <title>Google Maps JavaScript API Example</title>
+    <title>Leden der Civitas in een kaartje van Google.</title>
     <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAATQu5ACWkfGjbh95oIqCLYxRY812Ew6qILNIUSbDumxwZYKk2hBShiPLD96Ep_T-MwdtX--5T5PYf1A"
       type="text/javascript"></script>
     <script type="text/javascript">
 
     //<![CDATA[
+	
+var address;
+var geocoder;
+var gmarkers = [];
+var html;
+var htmls =[];
+var i = 0;
+var icon;
+var label;
+var map;
+var marker;
+var markers;
+var randomnumber;
+var side_bar_html = "";
+var xml;
+
 
     function load() {
       if (GBrowserIsCompatible()) {
@@ -59,30 +84,41 @@ exit;
 	//store markers in markers array
     var markers = xml.documentElement.getElementsByTagName("marker");
 
-	// create marker icon
-	var icon = new GIcon();
-	icon.image = "http://plaetjes.csrdelft.nl/layout/favicon.ico";
-	icon.iconSize = new GSize(24, 23);
-	icon.iconAnchor = new GPoint(0, 20);
-	icon.infoWindowAnchor = new GPoint(5, 1);
 
 	//loop over the markers array
     for (var i = 0; i < markers.length; i++) {
 		var address = markers[i].getAttribute("address");
 		var html = GXml.value(markers[i].getElementsByTagName("infowindow")[0]);
 		var label = markers[i].getAttribute("label");
-		showAddress(map,geocoder,address,html,label,icon);
+		showAddress(map,geocoder,address,html,label);
     } //close for loop
 
 	  }
 	); //close GDownloadUrl
 
+
+      }
+map.setCenter(new GLatLng(	52.015,4.356667), 14);
+    }
+//
+// This function picks up the click and opens the corresponding info window
+function myclick(i) {
+	GEvent.trigger(gmarkers[i], "click");
+}
 //Create marker and set up event window
 function createMarker(point,html,label){
   var marker = new GMarker(point);
   GEvent.addListener(marker, "click", function() {
      marker.openInfoWindowHtml(html);
-  });
+  }); 
+  // save the info we need to use later for the side_bar
+  gmarkers[i] = marker;
+  htmls[i] = html;
+  // add a line to the side_bar html
+  side_bar_html += '<a href="javascript:myclick(' + i + ')">' + label + '</a><br>';
+  document.getElementById("side_bar").innerHTML = side_bar_html;
+  i++;
+  
   return marker;
 }
 
@@ -96,23 +132,19 @@ function showAddress(map,geocoder,address,html,label) {
       } else {
         var marker = createMarker(point,html+'<br/><br/>'+address,label);
         map.addOverlay(marker);
-		map.addControl(new GMapTypeControl());
+		
       }
     }
   );
 }
 
-
-	 	
-      }
-map.setCenter(new GLatLng(	52.015,4.356667), 14);
-    }
-//
     //]]>
     </script>
   </head>
   <body onload="load()" onunload="GUnload()">
+    <div id="side_bar" style="width: 200px; float: right; max-height: 600px; background-color: #bbb;"></div>
     <div id="map" style="width: 700px; height: 600px"></div>
+    
   </body>
 </html>
 
