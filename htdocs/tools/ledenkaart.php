@@ -24,7 +24,7 @@ if(isset($_GET['xml'])){
 	echo '<?xml version="1.0" encoding="utf-8"?><markers>'."\n";
 	while($aLid=$db->next($rLeden)){
 		if($aLid['adres']!=''){	
-			echo '<marker address="'.$aLid['adres'].', '.$aLid['woonplaats'].'"><![CDATA[ ';
+			echo '<marker address="'.$aLid['adres'].', '.$aLid['woonplaats'].'" html="'.$lid->getNaamLink($aLid['uid'], 'civitas', false).'"><![CDATA[ ';
 			echo $lid->getNaamLink($aLid['uid'], 'civitas', false).'';
 			echo ']]></marker>'."\n";
 		}
@@ -68,7 +68,8 @@ exit;
 	//loop over the markers array
     for (var i = 0; i < markers.length; i++) {
 		var address = markers[i].getAttribute("address");
-		var html = markers[i].innerHTML;		showAddress(map,geocoder,address,html,icon);
+		var html = markers[i].getAttribute("html");
+		showAddress(map,geocoder,address,html,icon);
     } //close for loop
 
 	  }
