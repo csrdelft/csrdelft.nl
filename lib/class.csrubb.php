@@ -46,11 +46,9 @@ class CsrUBB extends eamBBParser{
 	 * Geef de relatieve datum terug.
 	 */
 	function ubb_reldate($parameters=array()){
-		if(isset($parameters['reldate'])){
-			return reldate($parameters['reldate']);
-		}else{
-			return 'Geen geldige datum';
-		}
+		$content = $this->parseArray(array('[/reldate]'), array());
+		return reldate($content);
+		
 	}
 	/* 
 	 * ubb_lid().

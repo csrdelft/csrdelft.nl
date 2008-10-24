@@ -50,6 +50,7 @@ if(isset($_GET['post'])){
 		editForm +='<h3>Bericht bewerken</h3>Als u dingen aanpast zet er dan even bij w&aacute;t u aanpast! Gebruik bijvoorbeeld [s]...[/s]<br />';
 		editForm +='<textarea name="bericht" id="forumBewerkBericht" class="tekst" rows="<?php echo $regels; ?>" cols="80" style="width: 100%;">';
 		editForm +='<?php echo $jssafePost ?></textarea>';
+		editForm +='Reden van bewerking: <input type="text" name="reden" style="width: 250px;"/><br /><br />';
 		editForm +='<input type="submit" value="opslaan" /> <input type="button" value="terug" onclick="restorePost()" />';
 		editForm +='&nbsp;&nbsp;<a class="knop" onclick="vergrootTextarea(\'forumBewerkBericht\', 10)" title="Vergroot het invoerveld">Invoerveld vergroten</div></form>'
 		<?php

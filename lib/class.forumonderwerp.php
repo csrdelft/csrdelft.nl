@@ -82,6 +82,7 @@ class ForumOnderwerp extends Forum {
 				post.tekst AS tekst,
 				post.datum AS datum,
 				post.bewerkDatum AS bewerkDatum,
+				post.bewerkt AS bewerkt,
 				post.zichtbaar AS zichtbaar,
 				post.ip AS ip
 			FROM
@@ -308,13 +309,21 @@ class ForumOnderwerp extends Forum {
 	
 	
 	//posts bewerken
-	function editPost($iPostID, $sBericht){
+	function editPost($iPostID, $sBericht, $reden=''){
+		$lid=Lid::get_lid();
+		$bewerkt='bewerkt door [lid='.$lid->getUid().'] [reldate]'.getDateTime().'[/reldate]';
+		
+		if($reden!=''){
+			$bewerkt.=': '.mb_htmlentities($reden);
+		}
+		$bewerkt.="\n";
 		$sEditQuery="
 			UPDATE
 				forum_post
 			SET
 				tekst='".$sBericht."',
-				bewerkDatum='".getDateTime()."'
+				bewerkDatum='".getDateTime()."',
+				bewerkt=CONCAT(bewerkt, '".$bewerkt."')
 			WHERE
 				id=".$iPostID."
 			LIMIT 1;";
