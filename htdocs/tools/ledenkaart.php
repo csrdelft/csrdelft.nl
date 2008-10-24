@@ -99,6 +99,7 @@ var xml;
 
       }
 map.setCenter(new GLatLng(	52.015,4.356667), 14);
+
     }
 //
 // This function picks up the click and opens the corresponding info window
@@ -142,7 +143,7 @@ function showAddress(map,geocoder,address,html,label) {
     </script>
   </head>
   <body onload="load()" onunload="GUnload()">
-    <div id="side_bar" style="width: 200px; float: right; max-height: 600px; background-color: #bbb;"></div>
+    <div id="side_bar" style="width: 200px; float: right; max-height: 600px; background-color: #bbb; overflow: scroll;"></div>
     <div id="map" style="width: 700px; height: 600px"></div>
     
   </body>
