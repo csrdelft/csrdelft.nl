@@ -318,7 +318,7 @@ class ForumOnderwerp extends Forum {
 			$bewerkt='bewerkt door [lid='.$lid->getUid().'] [reldate]'.getDateTime().'[/reldate]';
 			
 			if($reden!=''){
-				$bewerkt.=': '.mb_htmlentities($reden);
+				$bewerkt.=': '.$this->_db->escape($reden);
 			}
 			$bewerkt.="\n";
 			$sEditQuery="
