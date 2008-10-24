@@ -311,23 +311,31 @@ class ForumOnderwerp extends Forum {
 	//posts bewerken
 	function editPost($iPostID, $sBericht, $reden=''){
 		$lid=Lid::get_lid();
-		$bewerkt='bewerkt door [lid='.$lid->getUid().'] [reldate]'.getDateTime().'[/reldate]';
 		
-		if($reden!=''){
-			$bewerkt.=': '.mb_htmlentities($reden);
+		//kijken of er wel iets aangepast is.
+		$oldPost=$this->getSinglePost($iPostID);
+		if($sBericht!=$oldPost['tekst']){
+			$bewerkt='bewerkt door [lid='.$lid->getUid().'] [reldate]'.getDateTime().'[/reldate]';
+			
+			if($reden!=''){
+				$bewerkt.=': '.mb_htmlentities($reden);
+			}
+			$bewerkt.="\n";
+			$sEditQuery="
+				UPDATE
+					forum_post
+				SET
+					tekst='".$sBericht."',
+					bewerkDatum='".getDateTime()."',
+					bewerkt=CONCAT(bewerkt, '".$bewerkt."')
+				WHERE
+					id=".$iPostID."
+				LIMIT 1;";
+			return $this->_db->query($sEditQuery);
+		}else{
+			return true;
 		}
-		$bewerkt.="\n";
-		$sEditQuery="
-			UPDATE
-				forum_post
-			SET
-				tekst='".$sBericht."',
-				bewerkDatum='".getDateTime()."',
-				bewerkt=CONCAT(bewerkt, '".$bewerkt."')
-			WHERE
-				id=".$iPostID."
-			LIMIT 1;";
-		return $this->_db->query($sEditQuery);
+		
 	}
 	
 	//post verwijderen.
