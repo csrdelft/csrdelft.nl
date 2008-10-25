@@ -10,7 +10,7 @@ if($lid->hasPermission('P_LEDEN_MOD') AND isset($_POST['moot'], $_POST['naam']) 
 		//echo 'uid: '.$sKringLid.' moot: '.$_POST['moot'].' kring: '.$iKringGetal;
 		$lid->addUid2kring($sKringLid, $iKringGetal, $_POST['moot']);
 	}
-	header('location: '.CSR_ROOT.'actueel/groepen/moten.php');
+	header('location: '.CSR_ROOT.'communicatie/moten.php');
 }
 
 if ($lid->hasPermission('P_LEDEN_READ')) {
