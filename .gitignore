@@ -1,3 +1,5 @@
+/.project
+/.settings
 data/*
 data/smarty/*
 data/smarty/cache/*
@@ -9,7 +11,12 @@ etc/ldap.ini
 etc/mysql.ini
 etc/soccie.ini
 htdocs/bot/.htaccess
+htdocs/download
+htdocs/enquete
+htdocs/handelingen
+htdocs/happening
 htdocs/owee
+/images
 lib/include.defines.php
 sessie/*
 /tmp
