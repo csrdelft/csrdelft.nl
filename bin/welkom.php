@@ -3,7 +3,7 @@
 # Scriptje om voor sjaars een wachtwoord te genereren en dat toe te mailen.
 # Vergeet niet voor gebruik hieronder het jaar aan te passen.
 
-$jaar = '07';
+$jaar = '08';
 
 require_once('include.config.php');
 
@@ -11,7 +11,7 @@ require_once('include.config.php');
 $db=MySql::get_MySql();
 $lid=Lid::get_lid();
 
-$result = $db->select("SELECT * FROM `lid` WHERE uid LIKE '".$jaar."%'");
+$result = $db->select("SELECT * FROM `lid` WHERE uid = '0848' OR uid = '0855'");
 if ($result !== false and $db->numRows($result) > 0) {
 	while ($sjaars = $db->next($result)){
 		$tekens = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890';
@@ -42,9 +42,7 @@ Wachtwoord: {$pass}
 Nadat je bent ingelogd kun je het wachtwoord veranderen, en een bijnaam instellen die je in plaats van je lidnummer kunt gebruiken om in te loggen.
 
 Wanneer je problemen hebt met inloggen, of andere vragen over de webstek, kun je terecht bij de PubliciteitsCommissie. 
-Kom even langs in ons IRC-kanaal #pubcie (zie de contactpagina op de webstek), of stuur een e-mail.
-
-Wil je bij je profiel op de webstek een foto hebben geplaatst? Dat kan, maar let even op de eisen die daaraan gesteld worden, zie http://csrdelft.nl/intern/ .
+Kom even langs in ons IRC-kanaal #pubcie (zie de pagina daarover op de webstek onder Communicatie), of stuur een e-mail.
 
 Met vriendelijke groet,
 
@@ -52,7 +50,8 @@ Jan Jaap Treurniet
 h.t. Internetman der PubliciteitsCommissie der Civitas Studiosorum Reformatorum
 EOD;
 
-		mail ($sjaars['email'],"Inloggegevens C.S.R.-webstek",$tekst,"From: PubCie <pubcie@csrdelft.nl>\nContent-Type: text/plain; charset=utf-8\nBcc: pubcie@csrdelft.nl");
+		mail ($sjaars['email'],"Inloggegevens C.S.R.-webstek",$tekst,"From: PubliciteitsCommissie C.S.R. Delft <pubcie@csrdelft.nl>\nContent-Type: text/plain; charset=utf-8\nBcc: pubcie@csrdelft.nl");
+		echo $sjaars['email']."\n";
 	}
 }
 

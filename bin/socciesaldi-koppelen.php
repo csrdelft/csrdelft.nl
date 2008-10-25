@@ -35,13 +35,13 @@
 	foreach($soccieinput as $soccielid){
 		$sNaam=strtolower($soccielid->voornaam.' '.$soccielid->achternaam);
 		foreach($aLeden as $aLid){
-			$sLidDbNaam=strtolower($aLid['voornaam'].' '.$aLid['achternaam']);
+			$sLidDbNaam=strtolower($aLid['voornaam'].($aLid['tussenvoegsel']=='' ? '' : ' '.$aLid['tussenvoegsel']).' '.$aLid['achternaam']);
 			$uid=$aLid['uid'];
 			$soccieID=$soccielid->id;
 			$createTerm=$soccielid->createTerm;
-			if($aLid['tussenvoegsel']!=''){
+/*			if($aLid['tussenvoegsel']!=''){
 				$sLidDbNaam.=' '.$aLid['tussenvoegsel'];
-			}
+			}*/
 			//echo $sLidDbNaam;
 			$gelijkheid=0; similar_text($sNaam, $sLidDbNaam, $gelijkheid);
 			if($gelijkheid >86){

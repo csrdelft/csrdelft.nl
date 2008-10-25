@@ -12,7 +12,7 @@ function main() {
 	session_id('maaltrack-cli');
 
 	# instellingen & rommeltjes
-	require_once('/srv/www/www.csrdelft.nl/lib/include.config.php');
+	require_once('/srv/www/csrdelft.nl/lib/include.config.php');
 	require_once('include.common.php');
 
 	# login-systeem

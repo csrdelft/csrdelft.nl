@@ -16,6 +16,7 @@ $result = $db->select("SELECT uid FROM `lid` WHERE status = 'S_LID' OR status = 
 if ($result !== false and $db->numRows($result) > 0) {
 	while ($uid = $db->next($result)){
 		$uid = $uid['uid'];
+		echo $uid.' toevoegen';
 		$lid->loadSqlTmpProfile($uid);
 		$lid->save_ldap();
 	}

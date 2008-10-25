@@ -136,7 +136,7 @@ class MotenContent extends SimpleHTML {
 //						echo '<td><strong>MB</strong></td>';
 						echo '</tr>';
 						$iNamenTeller=0;
-						pr($aKringleden);
+						//pr($aKringleden);
 						foreach($aKringleden as $aKringlid){
 							if(isset($aKringlid['uid'])){
 								//naam is gevonden en uniek, dus direct goed.
