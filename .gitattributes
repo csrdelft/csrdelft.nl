@@ -103,6 +103,7 @@ htdocs/tools/soccie.php -text
 htdocs/tools/stats.php -text
 htdocs/tools/streeplijst.php -text
 htdocs/tools/testudp.php -text
+htdocs/tools/ubb.php -text
 htdocs/vb/ajaxsearch.php -text
 htdocs/vb/images/add.png -text
 htdocs/vb/images/blocktitle_vb.png -text

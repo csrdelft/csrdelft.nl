@@ -2,6 +2,16 @@
 * csrdelft.nl javascript libje...
 */
 
+//we maken een standaar AJAX-ding aan.
+var http = false;
+if(navigator.appName == "Microsoft Internet Explorer") {
+  http = new ActiveXObject("Microsoft.XMLHTTP");
+} else {
+  http = new XMLHttpRequest();
+}
+
+
+
 function vergrootTextarea(id, rows) {
   var textarea = document.getElementById(id);
   //if (!textarea || (typeof(textarea.rows) == "undefined")) return;
@@ -40,7 +50,29 @@ function setcharset() {
 function bevestig(tekst){
 	return confirm(tekst);
 }
-
+function previewPost(){
+	var post=document.getElementById("forumBewerkBericht").value;
+	var previewDiv=document.getElementById("berichtPreview");
+	applyUBB(post, previewDiv);
+	displayDiv(document.getElementById("berichtPreviewContainer"));
+	
+}
+/*
+ * Apply UBB to a string, and put it in innerHTML of given div.
+ * 
+ * Example:
+ * applyUBB('[url=http://csrdelft.nl]csrdelft.nl[/url]', document.getElementById('berichtPreview'));	
+ */
+function applyUBB(string, div){
+	http.abort();
+	http.open("GET", "/tools/ubb.php?string="+escape(string), true);
+	http.onreadystatechange=function(){
+		if(http.readyState == 4){
+			div.innerHTML=http.responseText;
+		}
+	}
+	http.send(null);
+}
 function forumEdit(post){
 	var scripttag=document.createElement('SCRIPT');
 	scripttag.type = 'text/javascript';

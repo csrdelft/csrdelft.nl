@@ -70,6 +70,15 @@
 	width: 180px;
 	
 }
+div#berichtPreviewContainer{
+	margin-top: 10px;
+}
+div#berichtPreview{
+	margin: 5px 0px; padding: 2px 4px;
+	width: 99%;
+	background-color: #ffffc1;
+	border: 1px solid #ccc;
+}
 div.bewerkt{ font-size: 8px; color: #bbb; }
 div.bewerkt a{ color: #bbb; }
 div.bewerkt hr{ text-align: left; background-color: #bbb; }
