@@ -75,8 +75,10 @@
 						<input type="text" name="titel" value="" class="tekst" style="width: 100%" tabindex="1" /><br />
 						<strong>Bericht</strong>&nbsp;&nbsp;
 						<a onclick="vergrootTextarea('forumBericht', 10);" title="Vergroot het invoerveld" class="handje">Invoerveld vergroten</a><br />
+						
+						<div id="berichtPreviewContainer" class="previewContainer"><h3>Voorbeeld van uw bericht:</h3><div id="berichtPreview" class="preview"></div></div>
 						<textarea name="bericht" id="forumBericht" rows="10" cols="80" style="width: 100%" class="tekst" tabindex="2"></textarea><br />
-						<input type="submit" name="submit" value="verzenden" />
+						<input type="submit" name="submit" value="verzenden" /> <input type="button" value="voorbeeld" style="color: #777;" id="forumVoorbeeld" onclick="previewPost('forumBericht', 'berichtPreview')"/>
 					</p>
 				</form>
 			</td>

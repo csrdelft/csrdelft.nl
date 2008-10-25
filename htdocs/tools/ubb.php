@@ -8,7 +8,7 @@
 require_once('include.config.php');
 
 if(isset($_GET['string'])){
-	$string=urldecode($_GET['string']);
+	$string=trim(urldecode($_GET['string']));
 	$ubb=new CsrUBB();
 	
 	echo  $ubb->getHTML($string);
