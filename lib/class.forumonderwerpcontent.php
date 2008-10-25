@@ -57,16 +57,10 @@ class ForumOnderwerpContent extends SimpleHTML {
 				$smarty->assign('peiling', $peilingContent);
 			}
 			
-			//eventueel een voorbeeld voor een bericht laten zien.
-			if(isset($_POST['bericht'], $_POST['submit']) AND $_POST['submit']=='voorbeeld'){
-				$smarty->assign('postvoorbeeld', $_POST['bericht']);
-			}
 			//wat komt er in de textarea te staan?
 			if($this->getCiteerPost()!=0){
 				$aPost=$this->_forum->getSinglePost($this->getCiteerPost());
 				$textarea='[citaat='.$aPost['uid'].']'.htmlspecialchars($aPost['tekst']).'[/citaat]';
-			}elseif(isset($_POST['bericht'])){
-				$textarea=htmlspecialchars($_POST['bericht']);
 			}else{
 				$textarea='';
 			}

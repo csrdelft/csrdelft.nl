@@ -110,20 +110,6 @@
 			<td colspan="2"></td>
 		</tr>
 	{/foreach} 
-	{if $postvoorbeeld!=''}
-		<tr>
-			<td class="forumauteur">
-				Voorbeeld van uw bericht:<br /><br />
-				<h4>LET OP: uw bericht is nog niet opgeslagen!</h4>
-			</td>
-			<td class="bericht{cycle values="0,1"}">
-				{$postvoorbeeld|ubb}
-			</td>
-		</tr>
-		<tr class="tussenschot">
-			<td colspan="2"></td>
-		</tr>
-	{/if}
 	{* Formulier om een bericht achter te laten *}
 	<tr>
 		<td class="auteur">
