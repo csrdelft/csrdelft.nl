@@ -9,7 +9,7 @@
 require_once 'class.simplehtml.php';
 require_once 'class.pagina.php';
 
-class PaginaContent extends SimpleHTML {
+class PaginaContent extends SimpleHTML{
 	
 	private $_pagina;
 	

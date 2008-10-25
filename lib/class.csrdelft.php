@@ -62,7 +62,7 @@ class csrdelft extends SimpleHTML {
 	function addScript($script){
 		$this->_scripts[]=array(
 			'naam' => $script,
-			'datum' => filemtime(HTDOCS_PATH.'/layout/'.$script)
+			'datum' => (strstr($script,'?')?'':filemtime(HTDOCS_PATH.'/layout/'.$script))
 		); 
 	}
 	function getScripts(){			return $this->_scripts; }

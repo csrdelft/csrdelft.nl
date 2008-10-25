@@ -6,7 +6,7 @@
 # Weergeven en bewerken van pagina's met tekst uit de database
 # -------------------------------------------------------------------
 
-class Pagina {
+class Pagina{
 	
 	private $_db;
 	private $_lid;
@@ -17,7 +17,7 @@ class Pagina {
 	private $sRechtenBekijken;
 	private $sRechtenBewerken;
 	
-	function Pagina($sNaam) {
+	function Pagina($sNaam){
 		$this->_lid=Lid::get_lid();
 		$this->_db=MySql::get_MySql();
 		

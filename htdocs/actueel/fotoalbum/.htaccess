@@ -1,0 +1,8 @@
+RewriteEngine On
+
+# Beheer
+RewriteRule ^beheer/? beheer.php [L]
+
+# Al het andere
+RewriteRule index.php?(.*) index.php?pad=$1 [L]
+RewriteRule (.*) index.php?pad=$1

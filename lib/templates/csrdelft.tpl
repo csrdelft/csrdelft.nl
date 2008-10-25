@@ -38,7 +38,7 @@
 				{/if}
 			</div>
 		{/if}
-		<div id="mainright">
+		<div id="mainright"{if $csrdelft->_zijkolom===false} style="width: 958px;"{/if}>
 			{$csrdelft->_body->view()}
 		</div>
 		<div id="footer">

@@ -1,0 +1,12 @@
+/* Album */
+a.thumb{
+	width: 150px;
+	height: 150px;
+	border: 1px solid #777777;
+	margin: 0 7px 7px 0;
+	float: left;
+	text-align: center;
+}
+a.thumb img{
+	margin: auto;
+}
