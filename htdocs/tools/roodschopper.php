@@ -15,7 +15,7 @@ if($lid->getUid()!='0436'){
 }
 
 //instellingen
-$saldoGrens=-7;
+$saldoGrens=-5;
 $cie='soccie';
 
 $naam=array(

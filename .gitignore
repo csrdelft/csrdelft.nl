@@ -1,5 +1,3 @@
-/.project
-/.settings
 data/*
 data/smarty/*
 data/smarty/cache/*
@@ -11,5 +9,7 @@ etc/ldap.ini
 etc/mysql.ini
 etc/soccie.ini
 htdocs/bot/.htaccess
+htdocs/owee
 lib/include.defines.php
 sessie/*
+/tmp

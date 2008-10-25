@@ -1,3 +1,6 @@
+a, a:HOVER{
+	color: #b84059;
+}
 #container {
 	background: url('http://www.johannesvg.nl/owee/containerbg_top.png') no-repeat;
 }
@@ -31,8 +34,11 @@
 /**** BLOCK *******************************************************************/
 #mainleft .block h1 {
 	background: url('http://www.johannesvg.nl/owee/blocktitle.png') no-repeat;
+	color: #b84059;
 }
-
+#mainleft .block h1 a {
+	color: #b84059;
+}
 /**** FOOTER ******************************************************************/
 #footer {
 	background: url('http://www.johannesvg.nl/owee/footerbg.png') no-repeat #fff;

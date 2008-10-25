@@ -8,11 +8,12 @@ C.S.R. fiscus societeitscommissie
 31.94.36.403
 
 Zo helpt u de liquiditeit van de SocCie op peil te houden, en teleurstellingen 
-aan de bar te voorkomen.
+aan de bar te voorkomen. Denkt u ook aan de te verwachten daling van uw 
+saldo na het verwerken van de streeplijsten van het startkamp.
 Mocht u recent geld hebben overgemaakt, dan kunt u dit bericht als niet 
 verzonden beschouwen.
 
 Met vriendelijke groet,
 
 am. Schaap, 
-h.t. fiscus der SocCie der C.S.R.
+h.t. fiscus SocCie Total Ross.
