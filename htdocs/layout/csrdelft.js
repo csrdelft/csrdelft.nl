@@ -50,12 +50,11 @@ function setcharset() {
 function bevestig(tekst){
 	return confirm(tekst);
 }
-function previewPost(){
-	var post=document.getElementById("forumBewerkBericht").value;
-	var previewDiv=document.getElementById("berichtPreview");
+function previewPost(source, dest){
+	var post=document.getElementById(source).value;
+	var previewDiv=document.getElementById(dest);
 	applyUBB(post, previewDiv);
-	displayDiv(document.getElementById("berichtPreviewContainer"));
-	
+	displayDiv(document.getElementById(dest+"Container"));
 }
 /*
  * Apply UBB to a string, and put it in innerHTML of given div.

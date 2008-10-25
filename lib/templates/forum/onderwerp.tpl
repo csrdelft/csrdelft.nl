@@ -150,10 +150,11 @@
 							<strong>Uw bericht wordt pas geplaatst nadat het bekeken en goedgekeurd is door de <a href="http://csrdelft.nl/actueel/groepen/Commissies/PubCie/">PubCie</a>. 
 							Het vermelden van <em>uw naam en email-adres</em> is verplicht.</strong><br /><br />
 						{/if}
+						<div id="berichtPreviewContainer" class="previewContainer"><h3>Voorbeeld van uw bericht:</h3><div id="berichtPreview" class="preview"></div></div>
 						<textarea name="bericht" id="forumBericht" class="tekst" rows="15" cols="80" style="width: 100%;">{$textarea}</textarea>
 						
 						<input type="submit" name="submit" value="opslaan" id="forumOpslaan" />
-						<input type="submit" name="submit" value="voorbeeld" style="color: #777;" id="forumVoorbeeld" />
+						<input type="button" value="voorbeeld" style="color: #777;" id="forumVoorbeeld" onclick="previewPost('forumBericht', 'berichtPreview')"/>
 					</p>
 				</form>
 			{else}

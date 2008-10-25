@@ -70,10 +70,11 @@
 	width: 180px;
 	
 }
-div#berichtPreviewContainer{
+div.previewContainer{
 	margin-top: 10px;
+	display: none;
 }
-div#berichtPreview{
+div.preview{
 	margin: 5px 0px; padding: 2px 4px;
 	width: 99%;
 	background-color: #ffffc1;
