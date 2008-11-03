@@ -793,7 +793,7 @@ Met vriendelijke groet,
 
 Namens de PubCie,
 
-".$this->getNaamLink($this->getUid, 'full', false, false, false)."
+".$this->getNaamLink($this->getUid(), 'full', false, false, false)."
 
 P.S.: Mocht u nog vragen hebben, dan kan u natuurlijk altijd e-posts sturen naar pubcie@csrdelft.nl";
 		return $this->_db->query($sNieuwWachtwoord) AND mail($mailto, 'Nieuw wachtwoord voor de C.S.R.-stek', $mail, "Bcc: pubcie@csrdelft.nl");
