@@ -9,7 +9,7 @@
 
 require_once ('class.ldap.php');
 
-class Profiel extends lid{
+class Profiel extends Lid{
 	#
 	# data voor de profiel-pagina functionaliteit
 	#
@@ -777,7 +777,7 @@ class Profiel extends lid{
 			WHERE
 				uid='".$uid."'
 			LIMIT 1;";
-		$mailto=$this->getEmail($uid).', pubcie@csrdelft.nl';
+		$mailto=$this->getEmail($uid);
 		//mail maken
 		$mail="
 Hallo ".$this->getFullName($uid).",
@@ -791,11 +791,12 @@ U kunt uw wachtwoord wijzigen in uw profiel: http://csrdelft.nl/communicatie/pro
 
 Met vriendelijke groet,
 
-Teun de Groot
-h.t. Praeses der Pubcie
+Namens de PubCie,
 
-P.S. Mocht u nog vragen hebben, dan kan u natuurlijk altijd e-posts sturen naar pubcie@csrdelft.nl";
-		return $this->_db->query($sNieuwWachtwoord) AND mail($mailto, 'Nieuw wachtwoord voor de C.S.R.-stek', $mail);
+".$this->getNaamLink($this->getUid, 'full', false, false, false)."
+
+P.S.: Mocht u nog vragen hebben, dan kan u natuurlijk altijd e-posts sturen naar pubcie@csrdelft.nl";
+		return $this->_db->query($sNieuwWachtwoord) AND mail($mailto, 'Nieuw wachtwoord voor de C.S.R.-stek', $mail, "Bcc: pubcie@csrdelft.nl");
 
 	}
 
