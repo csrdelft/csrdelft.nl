@@ -1,6 +1,6 @@
 <?php
 /** De basis voor een object dat opgeslagen en bewerkt en weergegeven kan worden */
-class VBItem 
+class VBItem
 {
 	/** 
 	Deze functieneemt een array met (sql) veldbeschrijvingen en en klasnaam, en genereert er objecten uit (zie from sql result)
@@ -87,7 +87,7 @@ class VBItem
 	{
 		$class = strtolower(get_class($this));
 		$r = $this->getJSEditHandler();
-		//deze overriden the dingen die zojuist en edithandler gewijzigd zijn. 
+		//deze overriden the dingen die zojuist in edithandler gewijzigd zijn. 
 		$r.=VBItem::getJSEditAssignment($class,"submit","Toevoegen");
 		return $r;
 	}

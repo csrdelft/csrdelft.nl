@@ -226,10 +226,10 @@ class VBContent extends SimpleHTML {
 			$tmp = new VBSource();
 			$tpl->assign(addsourceclick,$tmp->getJSAddHandler()); //de JSAddHandler is generiek en bevat code voor alle types bronnen, niet elegant, wel makkelijk
 			$tpl->assign(editlinkdiv, 		VBLinkSource::getEditDiv()); 
-			//TODO: andere editdivds
 			$tpl->assign(editfilediv, 		VBFileSource::getEditDiv());
 			$tpl->assign(editdiscussiondiv, VBDiscussionSource::getEditDiv());
-	//		$tpl->assign(editbookdiv, 		VBBookSource::getEditDiv());
+			//TODO: andere editdivds
+			$tpl->assign(editbookdiv, 		VBBookSource::getEditDiv());
 //		}
 		//display
 		if ($this->_vb->isModerator()) {

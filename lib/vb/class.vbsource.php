@@ -15,7 +15,7 @@ class VBSource extends VBItem
 	var $parents = array();
 	var $opinions = array();
 	//field that should not be saved, inserted or edited automatically
-	static $excludes = array("relatedSources","parents","opinions","id");
+	static $excludes = array("relatedSources","parents","opinions","id","schrijver","uitgever","jaar","isbn");
 	
 	function __construct()
 	{
@@ -48,6 +48,11 @@ class VBSource extends VBItem
 				break;
 			case 'book':
 				$source = new VBBookSource();
+				$elem = split("##", $r['link']);
+				$source->schrijver = $elem[0];
+				$source->uitgever = $elem[1];
+				$source->jaar = $elem[2];
+				$source->isbn = $elem[3];
 				break;
 			case 'discussion':
 				$source = new VBDiscussionSource();

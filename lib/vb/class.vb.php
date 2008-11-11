@@ -640,7 +640,7 @@ class VB {
 	
 	/**
 	 * this performs a file upload
-	* TODO: wat gebeurt er als een bron gewijzigd wordt?
+	 * TODO: wat gebeurt er als een bron gewijzigd wordt?
 	 */
 	function uploadfile($r,$cm)
 	{
@@ -708,6 +708,14 @@ class VB {
 			$cm->notify("er ging ergens iets mis, alles wordt nu netjes opgeruimd, probeer het daarna eens overnieuw op te doen");
 			$this->removeSource($r, $cm);
 		}
+	}
+	
+	/**
+	 * de upload van een boek
+	 **/
+	private function linkbook($r,$cm)
+	{
+		
 	}
 	
 	/**
