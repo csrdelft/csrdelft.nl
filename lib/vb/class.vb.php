@@ -533,9 +533,6 @@ class VB {
 			case 'file':
 				$this->uploadfile($r,$cm);
 				return;
-			case 'book':
-				$this->linkbook($r,$cm);
-				return;	
 		}		
 	}
 	
