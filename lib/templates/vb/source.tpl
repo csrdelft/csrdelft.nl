@@ -9,7 +9,7 @@
 		-->
 		<h2><img class="plaatje" src="{$source->getImage()}"/> Details</h2>
 		{if $source->sourceType=="link"}
-			<b>Link: </b><a href="{$source->link}" target="_blank">{$source->link}</a>
+			<b>Link: </b><a class="textlink" href="{$source->link}" target="_blank">{$source->link}</a>
 		{/if}
 		{if $source->sourceType=="discussion"}
 			<b>Link: </b><a href="../forum/onderwerp/{$source->link}">{$source->name}</a>
@@ -29,9 +29,9 @@
 		<br/><br/><h2>Omschrijving</h2>
 		{$source->description|ubb}
 
-	</td><td><div class="thema-grotebalk">
+	</td><td><div class="thema-groterebalk">
 		<h2>Koppelingen</h2>
-		<h3>Onderwerpen</h3><br/>
+		<h3>Onderwerpen</h3>
 		{section name=i1 loop=$source->parents}
 			<div class="thema-grotebalk">
 				<img class="plaatje" src="images/leaf.png"/>
@@ -39,7 +39,9 @@
 					{if $allowedit}
 						{$source->parents[i1]->geteditbuttons()}
 					{/if}
-					<a href="index.php?actie=subject&id={$source->parents[i1]->subjid}">{$source->parents[i1]->subjname}</a>
+					<a class="textlink" href="index.php?actie=subject&id={$source->parents[i1]->subjid}">
+						{$source->parents[i1]->subjname}
+					</a>
 				</div>
 			</div>
 		{/section}
@@ -56,7 +58,7 @@
 			{$editsubjectsourcediv}
 		{/if}
 		
-		<h3>Gerelateerde bronnen</h3><br/>
+		<h3>Gerelateerde bronnen</h3>
 		{section name=i2 loop=$source->relatedSources}
 			<div class="thema-grotebalk">
 				<img class="plaatje" src="{$source->relatedSources[i2]->getImage()}"/>
@@ -83,7 +85,7 @@
 			{$editsourcesourcediv}
 		{/if}
 		
-		<h2>Beoordelingen</h2>
+		<br/><h2>Beoordelingen</h2>
 		{section name=i3 loop=$source->opinions}
 			{if $allowedit}
 				{$source->opinions[i3]->geteditbuttons()}

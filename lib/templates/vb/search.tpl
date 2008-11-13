@@ -1,8 +1,7 @@
 <table width = "100%" cellspacing="10px">
-	<tr><td><h1>Vormingsbank C.S.R.Delft</h1></td></tr>
 	<tr>
-		<td width = "50%">
-			<h2>Zoeken</h2><br/>
+		<td width = "40%">
+			<h2>Zoeken</h2>
 			{$searchform}
 			<br/><br/>
 		</td>

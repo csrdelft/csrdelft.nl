@@ -177,8 +177,8 @@ class VBContent extends SimpleHTML {
 		$tpl->assign(searchform, $this->_search->createSearchForm("complexsearch",
 		'
 				<input type="text" id="zoekveld2" name="searchvalue" value="zoekterm" onfocus="this.value=\'\'; this.style.textAlign=\'left\';"
-					onkeyup="if (this.value.length > 2) this.form.button.click();"/>
-				<h2>Criteria</h2><br>
+					onkeyup="if (this.value.length > 2) this.form.button.click();"/><br/>
+				<br/><h2>Criteria</h2>
 				<table><tr><td>
 				<input type="checkbox" name="subjects" value="1"   class="checkbox" id="veld0"  checked  onclick="this.value = (this.checked?\'1\':\'0\');"/><label for="veld0">onderwerp</label><br/>
 				<input type="checkbox" name="links" value="1"  class="checkbox" id="veld1"  checked onclick="this.value = (this.checked?\'1\':\'0\');"/><label for="veld1">internet link</label><br/>

@@ -711,14 +711,6 @@ class VB {
 	}
 	
 	/**
-	 * de upload van een boek
-	 **/
-	private function linkbook($r,$cm)
-	{
-		
-	}
-	
-	/**
 	 * this function finds the category where the vormingsbank files have to be stored
 	 */
 	private function getVBFileCatID() {

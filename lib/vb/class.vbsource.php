@@ -145,7 +145,7 @@ class VBSource extends VBItem
 	public function getSimpleSearchQuery($searchvalue, $links = true, $files = true, $discus = true, $books = true)
 	{
 		$searchvalue = mysql_escape_string(urldecode($searchvalue));
-		$query = "FROM vb_source WHERE (locate('".$searchvalue."',name) or locate('".$searchvalue."', description)) AND (false "; //and false ommakkelijk orse te concateneren
+		$query = "FROM vb_source WHERE (locate('".$searchvalue."',name) or locate('".$searchvalue."', description) or locate('".$searchvalue."', link)) AND (false "; //and false ommakkelijk orse te concateneren
 		if ($links)
 			$query .= " OR sourceType = 'link' ";
 		if ($files)
