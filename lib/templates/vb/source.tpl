@@ -1,6 +1,6 @@
 
 <table width = "100%" cellspacing="10px">
-	<tr><td colspan="2"><h1>Bron: {$source->name}</h1></td></tr>
+	<tr><td colspan="2"><h1>{$source->name}</h1></td></tr>
 	<tr><td width= "60%">
 		<!--
 		{if $comefrom != "-1"}
@@ -12,10 +12,10 @@
 			<b>Link: </b><a class="textlink" href="{$source->link}" target="_blank">{$source->link}</a>
 		{/if}
 		{if $source->sourceType=="discussion"}
-			<b>Link: </b><a href="../forum/onderwerp/{$source->link}">{$source->name}</a>
+			<b>Forum-discussie: </b><a href="../forum/onderwerp/{$source->link}">{$source->name}</a>
 		{/if}
 		{if $source->sourceType=="file"}
-			<b>Link: </b><a href="../communicatie/documenten/neerladen/{$source->link}" target="_blank">{$source->name} downloaden</a>
+			<b>Bestand: </b><a href="../communicatie/documenten/neerladen/{$source->link}" target="_blank">{$source->name} downloaden</a>
 		{/if}
 		{if $source->sourceType=="book"}
 			<b>Schrijver:</b> {$source->schrijver}<br/>
@@ -48,7 +48,7 @@
 		{if $allowadd}
 			<div class="thema-grotebalk">
 				<a onclick="{$addlabelclick}">
-					<img class="button" src="images/add.png"/>
+					<img class="plaatje" src="images/add.png"/>
 					Toevoegen
 				</a>
 			</div>
@@ -75,7 +75,7 @@
 		{if $allowadd}
 			<div class="thema-grotebalk">
 				<a onclick="{$addsourceclick}">
-					<img class="button" src="images/add.png"/>
+					<img class="plaatje" src="images/add.png"/>
 					Toevoegen
 				</a>
 			</div>
@@ -94,7 +94,8 @@
 		{/section}
 		{if $allowadd}
 			<div class="thema-grotebalk">
-				<a href="index.php?actie=new&class=sourceopinion&sid={$source->id}"><img class="button" src="images/add.png"/> 
+				<a href="index.php?actie=new&class=sourceopinion&sid={$source->id}">
+					<img class="plaatje" src="images/add.png"/> 
 					Toevoegen
 				</a>
 			</div>

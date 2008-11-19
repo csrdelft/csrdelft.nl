@@ -24,7 +24,7 @@
 					title="Converteer dit onderwerp naar 'subonderwerpen' (knoop) onderwerp">Converteer...</a>
 				{else}
 				<a href="#" onclick=
-				"if(confirm('Weet u zeker dat u dit onderwerp naar een blad wilt converteren? Knoop onderwerpen kunnen alleen geconverteerd worden als alle kinderen bladeren zijn. Baderen kunnen alleen bronnen bevatten.'))
+				"if(confirm('Weet u zeker dat u dit onderwerp naar een blad wilt converteren? Knoop onderwerpen kunnen alleen geconverteerd worden als alle kinderen bladeren zijn. Bladeren kunnen alleen bronnen bevatten.'))
 					document.location = 'index.php?actie=convertsubject&id={$sub->id}&target=blad'"
 					title="Converteer dit onderwerp naar 'subbronnen' (blad) onderwerp">Converteer...</a>
 				</br>
@@ -37,11 +37,11 @@
 						<table>
 							<tr><td>
 								<img class="plaatje" src="{$sub->children[sec2]->getImage()}"/>
-								{if $allowedit}
-									{$sub->children[sec2]->geteditbuttons()}
-								{/if}
-							</td><td>
+							</td><td width="100%">
 								<div class="titel">
+									{if $allowedit}
+										{$sub->children[sec2]->geteditbuttons()}
+									{/if}
 									<a href="index.php?actie=subject&id={$sub->children[sec2]->id}">
 										{$sub->children[sec2]->name}
 									</a>

@@ -79,7 +79,7 @@ textarea
 }
 
 .thema-grotebalk{
-	padding: 2px 12px 0px 2px;
+	padding: 2px 2px 2px 2px;
 	margin-bottom: 6px;
 	margin-top: 6px;
 	border: 1px solid #B4B4B4;
@@ -87,7 +87,7 @@ textarea
 }
 
 .thema-grotebalk .plaatje{
-	width: 16px;
+	width: 20px;
 	height: 16px;
 	margin-right: 6px;
 	float: left;
@@ -99,6 +99,10 @@ textarea
 
 .thema-grotebalk .bericht{
 	text-align: left;
+}
+
+.thema-grotebalk .button {
+	float: right;
 }
 
 .thema-groterebalk{

@@ -26,11 +26,11 @@ class VBItem
 	{
 		$r = '
 			<a href="#" onClick="
-				'.$this->getJSEditHandler().'
-				"><img class="button" src="images/edit.png" alt="E"/></a>
-			<a href="#" onClick="
 				'.$this->getJSRemoveHandler().'
 				"><img class="button" src="images/remove.png" alt="X"/></a>
+			<a href="#" onClick="
+				'.$this->getJSEditHandler().'
+				"><img class="button" src="images/edit.png" alt="E"/></a>
 		';
 		return $r;
 	}

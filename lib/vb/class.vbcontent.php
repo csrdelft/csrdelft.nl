@@ -121,15 +121,15 @@ class VBContent extends SimpleHTML {
 	{
 		echo '<h1><a href="/vb/">Laatste bronnen</a></h1>';
 		foreach($this->_vb->getLastPosts($this->_objid) as $source){
-			$titel=mb_htmlentities($source->name);
-			if(strlen($titel)>35 ){
-				$titel=str_replace(' ', '&nbsp;', trim(substr($titel, 0,35)).'…');
+			$titel=$source->name;
+			if(strlen($titel)>29 ){
+				$titel=str_replace(' ', '&nbsp;', trim(substr($titel, 0,27)).'…');
 			}
 			$bericht=preg_replace('/(\[(|\/)\w+\])/', '|', $source->description);
 			$berichtfragment=substr(str_replace(array("\n", "\r", ' '), ' ', $bericht), 0, 40);
 			echo '<div class="item">';
 			echo '<a href="index.php?actie=source&id='.$source->id.'" 
-				title="['.mb_htmlentities($source->name).'] '.
+				title=" '.
 					mb_htmlentities($berichtfragment).'">'.$titel.'</a><br />'."\n";
 			echo '</div>';
 			

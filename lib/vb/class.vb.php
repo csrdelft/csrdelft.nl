@@ -43,11 +43,22 @@ class VB {
 
 	/** hulpfunctie voor de rechten, is deze persoon een vormingsbank moderator? */
 	function isModerator() {
-			if ($this->_lid->hasPermission('P_ADMIN'))	return true;
+			if ($this->_lid->hasPermission('P_ADMIN'))		return true;
 			$g = new Groep("VoBaCie");
-			if ($g->isLid($this->_lid->getUID()))		return true;
-			$g = new Groep("Werkgroepleiders"); //deze groep bestaat niet.
-			if ($g->isLid($this->_lid->getUID()))		return true;
+			if ($g->isLid($this->_lid->getUID()))				return true;
+			$query = "SELECT uid 
+						FROM groeplid 
+						WHERE 	(functie='Leider' OR functie='leider') 
+						AND		groepid IN (
+										SELECT groep.id 
+										FROM groep JOIN groeptype ON groep.gtype = groeptype.id 
+										WHERE groeptype.naam='Werkgroepen' AND groep.status='ht')";
+			$leiders = array();
+			$result = $this->multipleSelect($query);
+			foreach($result as $leider) {
+				array_push($leiders, $leider['uid']);
+			}
+			if(in_array($this->_lid->getUID(),$leiders))	return true;
 			return false;
 	}
 
