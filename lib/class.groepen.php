@@ -191,7 +191,6 @@ class Groepen{
 	 */
 	public static function getGroeptypes(){
 		$db=MySql::get_MySql();
-		$groeptypes=array();
 		$qGroeptypen="
 			SELECT id, naam
 			FROM groeptype
@@ -205,6 +204,29 @@ class Groepen{
 		$db=MySql::get_MySql();
 		$qGroep="SELECT id FROM groeptype WHERE naam='".$db->escape($gtypetotest)."'";
 		return ($db->numRows($db->query($qGroep))==1);
+	}
+
+	/*
+	 * Statische functie die de werkgroepleiders teruggeeft
+	 *
+	 * @return		Array met uid van werkgroepleiders
+	 */
+	public static function getWerkgroepLeiders(){
+		$db=MySql::get_MySql();
+		$Werkgroepleiders = "
+			SELECT uid 
+			FROM groeplid 
+			WHERE 	(functie='Leider' OR functie='leider') 
+			AND groepid IN (
+				SELECT groep.id 
+				FROM groep JOIN groeptype ON groep.gtype = groeptype.id 
+				WHERE groeptype.naam='Werkgroepen' AND groep.status='ht')";
+		$result = $db->result2array($db->query($Werkgroepleiders));
+		$leiders = array();
+		foreach($result as $leider) {
+			array_push($leiders, $leider['uid']);
+		}
+		return $leiders;	
 	}
 }
 

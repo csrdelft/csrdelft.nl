@@ -123,8 +123,9 @@ class VBContent extends SimpleHTML {
 		foreach($this->_vb->getLastPosts($this->_objid) as $source){
 			$titel=$source->name;
 			if(strlen($titel)>29 ){
-				$titel=str_replace(' ', '&nbsp;', trim(substr($titel, 0,27)).'…');
+				$titel=trim(substr($titel, 0,27)).'…';
 			}
+			$titel=str_replace(' ','&nbsp;',mb_htmlentities($titel));
 			$bericht=preg_replace('/(\[(|\/)\w+\])/', '|', $source->description);
 			$berichtfragment=substr(str_replace(array("\n", "\r", ' '), ' ', $bericht), 0, 40);
 			echo '<div class="item">';
