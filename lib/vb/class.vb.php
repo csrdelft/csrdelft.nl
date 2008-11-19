@@ -16,8 +16,8 @@ require_once('class.groep.php');
 class VB {
 	var $_db;		//De database connectie
 	var $_lid;		//het huidige lid
-	
-	
+
+
 	### public ###
 	public function VB(){
 		$this->_lid=Lid::get_lid();
@@ -38,27 +38,19 @@ class VB {
 	function isLid(){
 		//TODO: rechten model aanpassen P_VB_READ, ipv forum rechten gebruiken
 		//laat iemand dingen doen als hij P_Forum_read heeft
-		return $this->_lid->hasPermission('P_FORUM_READ'); 
+		return $this->_lid->hasPermission('P_FORUM_READ');
 	}
-	
+
 	/** hulpfunctie voor de rechten, is deze persoon een vormingsbank moderator? */
 	function isModerator() {
-			//Michel, Gertjan, Rini, Gerrit, Sief, Marijn, Bert v. D
-			//TODO: regel dit handiger, met rechtenmodelletje
-/*			$mods = array("0438", "0429","0615","0431","0221","0203","0308");
-			if (in_array($this->_lid->getUID(),$mods))
-				return true;
-*/			if ($this->_lid->hasPermission('P_ADMIN'))
-				return true;
-			$g = new Groep("VormingsbankCie");
-			if ($g->isLid($this->_lid->getUID()))
-				return true;
-			$g = new Groep("Werkgroepleiders");
-			if ($g->isLid($this->_lid->getUID()))
-				return true;
+			if ($this->_lid->hasPermission('P_ADMIN'))	return true;
+			$g = new Groep("VoBaCie");
+			if ($g->isLid($this->_lid->getUID()))		return true;
+			$g = new Groep("Werkgroepleiders"); //deze groep bestaat niet.
+			if ($g->isLid($this->_lid->getUID()))		return true;
 			return false;
 	}
-	
+
 	/** mag dit object bewerkt worden? */
 	function magBewerken($obj){
 		//rechten model specificeerbaar per object en klasse
@@ -69,7 +61,7 @@ class VB {
 			return true;
 		return false;
 	}
-	
+
 	/** mag dit type object toevoegd worden */
 	function magToevoegen($class)
 	{
@@ -80,7 +72,7 @@ class VB {
 			return true;
 		return false;
 	}
-	
+
 	/** laad een onderwerp. Laadt tevens die kind onderwerpen of bronnen */
 	function getSubjectById($id)
 	{
@@ -92,21 +84,21 @@ class VB {
 			//NOTE, we skip the step of loading the subject source links, and load the sources
 			//immediately, using a join
 			//sources (alles behalve discussies)
-			$query = 
-				"SELECT vb_source.* 
+			$query =
+				"SELECT vb_source.*
 				FROM vb_source JOIN vb_subjectsource ON vb_source.id = vb_subjectsource.sourceid
 				WHERE vb_subjectsource.subjid = ".$id." AND vb_source.sourceType != 'discussion' ORDER BY vb_source.name ASC";
 			$sources = VBSource::FromSQLResults($this->multipleSelect($query));
 			$sub->sources = $sources;
 			//discussion
-			$query = 
-				"SELECT vb_source.* 
+			$query =
+				"SELECT vb_source.*
 				FROM vb_source JOIN vb_subjectsource ON vb_source.id = vb_subjectsource.sourceid
 				WHERE vb_subjectsource.subjid = ".$id." AND vb_source.sourceType = 'discussion' ORDER BY vb_source.createdate ASC";
 			$discussions = VBSource::FromSQLResults($this->multipleSelect($query));
 			$sub->discussions = $discussions;
 		}
-		else 
+		else
 		{
 			$query = "SELECT * FROM vb_subject WHERE parent ='".$id."' ORDER BY name ASC";
 			$subs =  VBSubject::fromSQLResults($this->multipleSelect($query));
@@ -117,7 +109,7 @@ class VB {
 	//$sub->parentobj = $this->getSubjectById($this->parent);
 		return $sub;
 	}
-		
+
 	/** laad een bron, met alle context objecten (onderwerpen, opinies...) */
 	function getSourceById($id)
 	{
@@ -127,7 +119,7 @@ class VB {
 		//the subjects, join direct the subject table, VBSubjectSource can handle this
 		$query = "SELECT vb_subjectsource.*, vb_subject.name AS subjname FROM vb_subjectsource JOIN vb_subject ON vb_subjectsource.subjid = vb_subject.id WHERE sourceid = '".$id."'";
 		$subjects = VBSubjectSource::fromSQLResults($this->multipleSelect($query));
-		//the related sources, 
+		//the related sources,
 		$query = "SELECT * FROM vb_sourcesource WHERE (source1 = '".$id."') OR (source2 = '".$id."') ORDER BY date ASC";
 		$links = VBSourceSource::fromSQLResults($this->multipleSelect($query));
 		foreach($links as $link)
@@ -139,7 +131,7 @@ class VB {
 		$source->setRelations($subjects, $links,$opinions);
 		return $source;
 	}
-	
+
 	/** laad een object, op bassis van class en id */
 	function getObjectById($class, $id)
 	{var_dump($id);
@@ -157,10 +149,10 @@ class VB {
 			case "vbsourcesource":
 				return $this->getUncachedSourceSourceById(VB::getParam('source1'), VB::getParam('source2'));
 			default:
-				die("could not fetch: ".$class);				
+				die("could not fetch: ".$class);
 		}
 	}
-	
+
 	/** laad een bron, zonder daarbij de context te laden (die is meestal toch niet nodig) */
 	function getUncachedSourceById($id)
 	{
@@ -168,9 +160,9 @@ class VB {
 		//the source
 		$query = "SELECT * FROM vb_source WHERE id = '".$id."' LIMIT 1";
 		$source = VBSource::FromSQLResult($this->singleSelect($query));
-		return $source;		
+		return $source;
 	}
-	
+
 	function getUncachedSubjectSourceById($subjid, $sourceid)
 	{
 		$subjid = (int) $subjid;
@@ -178,9 +170,9 @@ class VB {
 		//the source
 		$query = "SELECT * FROM vb_subjectsource WHERE  subjid = '".$subjid."' AND sourceid = '".$sourceid."' LIMIT 1";
 		$source = VBSubjectSource::FromSQLResult($this->singleSelect($query));
-		return $source;		
+		return $source;
 	}
-	
+
 	function getUncachedSourceSourceById($source1, $source2)
 	{
 		$source1 = (int) $source1;
@@ -188,10 +180,10 @@ class VB {
 		//the source
 		$query = "SELECT * FROM vb_sourcesource WHERE  (source1 = '".$source1."' AND source2 = '".$source2."') OR (source2 = '".$source1."' AND source1 = '".$source2."') LIMIT 1";
 		$source = VBSourceSource::FromSQLResult($this->singleSelect($query));
-		return $source;		
+		return $source;
 	}
-	
-	/** laad de laatste bronnen die toegevoegd zijn, 
+
+	/** laad de laatste bronnen die toegevoegd zijn,
 	//obselete?:  binnen het onderwerp inID of zijn kinderen */
 	function getLastPosts($inId)
 	{
@@ -208,9 +200,9 @@ class VB {
 		$obj1 = VBSource::fromSQLResult($this->singleSelect($query)) ;
 		$query = "SELECT * FROM vb_sourcesource WHERE id = '".(int)$linksource->source2."'";
 		$obj2 = VBSource::fromSQLResult($this->singleSelect($query)) ;
-		$linksource->setSourceObjects($obj1, $obj2);		
+		$linksource->setSourceObjects($obj1, $obj2);
 	}
-	
+
 	/** selecteer één object a.d.h. van een select query */
 	public function singleSelect($query)
 	{
@@ -219,7 +211,7 @@ class VB {
 			return false;
 		return $this->_db->next($res);
 	}
-	
+
 	/** selecteer meerdere objecten a.d.h.v. een select query */
 	public function multipleSelect($query)
 	{
@@ -323,7 +315,7 @@ class VB {
 		else
 			$vb->notify("Ongeldige combinatie van huidig- en doeltype. Mogelijk is het onderwerp reeds geconverteerd.");
 	}
-	
+
 	/** zet een onderwerp om van knoop (heeft subonderwerpen) naar blad (bevat alleen bronnen) en vice versa */
 	function moveSubject($id, $target, $vb)
 	{
@@ -347,7 +339,7 @@ class VB {
 		}
 		$vb->notify("Voltooid");
 	}
-	
+
 	/** maakt een link van een onderwerp naar een bron aan, met een bepaalde reden
 	pre: rechten gecheckt */
 	function createSourceSubjectLink($subjid, $sourceid, $reason)
@@ -361,8 +353,8 @@ class VB {
 		$query = $ss->getInsertQuery();
 		return $this->_db->query($query);
 	}
-	
-	//central handler for different kind of searchrequests in the system. 
+
+	//central handler for different kind of searchrequests in the system.
 	//returns a set of objects, extends the object $params with the fields
 	//maxcount, curpage. Returns objects
 	function handleSearchRequest($name, $params)
@@ -373,7 +365,7 @@ class VB {
 			case "addsource":
 				return $this->executeSimpleSearch($params);
 			case "complexsearch":
-				return $this->executeFullSearch($params);				
+				return $this->executeFullSearch($params);
 			case "quicksearch":
 				//set default params
 				$params->subjects = "1";
@@ -381,13 +373,13 @@ class VB {
 				$params->files= "1";
 				$params->discus1= "1";
 				$params->discus2 = "0";
-				$params->books = "1";				
+				$params->books = "1";
 				return $this->executeFullSearch($params);
 			default:
 				die("unknown search request: ".$name);
 		}
 	}
-	
+
 	//simplesearch, based on one 'searchvalue' and a specific 'class' param
 	function executeSimpleSearch($params)
 	{
@@ -399,13 +391,13 @@ class VB {
 		$r = $this->singleSelect("SELECT count(*) ".$query);
 		$params->maxcount = (int) $r['count(*)'];
 		$query2 = "SELECT * ".$query." LIMIT ".((int)$params->offset).", ".((int)$params->limit);
-		$objs = $this->multipleSelect($query2);		
+		$objs = $this->multipleSelect($query2);
 		if (mysql_errno() != 0)
 			die("error during searchquery: ".$query);
-		$objs = VBItem::fromSQLResults($objs, $class);		
-		return $objs;	
+		$objs = VBItem::fromSQLResults($objs, $class);
+		return $objs;
 	}
-	
+
 	//full search,search sources and subjects, based on possible enabled types
 	function executeFullSearch($params)
 	{
@@ -424,14 +416,14 @@ class VB {
 		$query2 = $obj->getSimpleSearchQuery($params->searchvalue, $params->links, $params->files, $params->discus1, $params->books);
 		$r = $this->singleSelect("SELECT count(*) ".$query2);
 		$params->maxcount += (int) $r['count(*)'];
-		$switchpoint2 = $params->maxcount + 1; 
+		$switchpoint2 = $params->maxcount + 1;
 		//todo: if discuss2 != false, dan kijken in het forum
 		//todo: kloppen deze berekeningen?
 		$result = array();
 		if($params->subjects != "0")
 		{
 			$query = "SELECT * ".$query1." LIMIT ".((int)$params->offset).", ".((int)$params->limit);
-			$objs = $this->multipleSelect($query);		
+			$objs = $this->multipleSelect($query);
 			if (mysql_errno() != 0)
 				die("error during searchquery: ".$query);
 			$result = VBItem::fromSQLResults($objs, "vbsubject");
@@ -442,7 +434,7 @@ class VB {
 			$start = max(0, ((int)$params->offset) - $switchpoint1); //offset is de gevraagde ofset min het aantal items dat al geladen is voor subjects
 			$limit = ((int)$params->limit) - $switchpoint1;//-offset? //limit is gevraagde limitmin wat eventueel al gevraagd is voor subjects
 			$query = "SELECT * ".$query2." LIMIT ".$start.", ".$limit;
-			$objs = $this->multipleSelect($query);		
+			$objs = $this->multipleSelect($query);
 			if (mysql_errno() != 0)
 				die("error during searchquery: ".$query);
 			$tmp =  VBItem::fromSQLResults($objs, "vbsource");
@@ -451,7 +443,7 @@ class VB {
 		}
 		return $result;
 	}
-	
+
 	function createSourceSourceLink($source1, $source2, $reason)
 	{
 		$ss = new vbsourcesource();
@@ -464,7 +456,7 @@ class VB {
 		$query = $ss->getInsertQuery();
 		return $this->_db->query($query);
 	}
-	
+
 	/** removes a subject object, provide contentmanager for notify callbacks
 	pre: rechten gecheckt */
 	function removeSubject($r,$cm)
@@ -484,10 +476,10 @@ class VB {
 		}
 		return $this->_db->query($r->getDeleteQuery());
 	}
-	
+
 	/** removes a source object, provide contentmanager for notify callbacks
-	pre: rechten gecheckt 
-	TODO: sources should only be removed when the nummer of relatoins drop to zero, or this is explicit decided. 
+	pre: rechten gecheckt
+	TODO: sources should only be removed when the nummer of relatoins drop to zero, or this is explicit decided.
 	in a subject, only the link should be removed
 	*/
 	function removeSource($r,$cm)
@@ -496,21 +488,21 @@ class VB {
 		$query = "DELETE FROM vb_subjectsource WHERE sourceid = '".(int)$r->id."'";
 		$res = $this->_db->query($query);
 		$cm->notify("Verwijderen uit thema's... ".($res?"voltooid":"mislukt"));
-		
+
 		$query = "DELETE FROM vb_sourceopinion WHERE sid = '".(int)$r->id."'";
 		$res = $this->_db->query($query);
 		$cm->notify("Verwijderen beoordelingen... ".($res?"voltooid":"mislukt"));
-		
+
 		$query = "DELETE FROM vb_sourcesource WHERE (source1 = '".(int)$r->id."') OR (source2 = '".(int)$r->id."')";
 		$res = $this->_db->query($query);
 		$cm->notify("Verwijderen links naar andere bronnen... ".($res?"voltooid":"mislukt"));
-		
+
 		if (!$this->postRemoveSource($r,$cm))
 			$cm->notify("fout tijdens verwijderen van resources van de bron");
 		else
 			return $this->_db->query($r->getDeleteQuery());
 	}
-	
+
 	/**
 	 * After creating a source, a lot of postprocesing has to be done,
 	 * creating subject links, uploading files, creating forum topics etc...
@@ -523,7 +515,7 @@ class VB {
 		//onderwerp relatie leggen
 		$cm->notify("Nieuwe bron registreren onder huidig onderwerp");
 		if (!$this->createSourceSubjectLink($_POST['autoLinkToSubject'],(int)$r->id, "Originele locatie"))
-			$cm->notify(" ..MISLUKT!");	
+			$cm->notify(" ..MISLUKT!");
 		//bronnen verwerken
 		switch($r->sourceType)
 		{
@@ -533,9 +525,9 @@ class VB {
 			case 'file':
 				$this->uploadfile($r,$cm);
 				return;
-		}		
+		}
 	}
-	
+
 	/**
 	 * Give the resoures used by the source free
 	 *
@@ -571,7 +563,7 @@ class VB {
 		else //geen bestand
 			return true;
 	}
-	
+
 	/** waar moeten vormingsbank topics gecreëerd worden? */
 	function getvbforumcategorie()
 	{
@@ -581,9 +573,9 @@ class VB {
 			die("Kon VormingsBank forum niet vinden");
 		return $id;
 	}
-	
+
 	/**
-	 * this object creates an discuion for an existing subject. 
+	 * this object creates an discuion for an existing subject.
 	 * Note that the name will bes tored in both forum and source, for easier showing subjects
 	 * @param unknown_type $r
 	 * @param unknown_type $cm
@@ -617,7 +609,7 @@ class VB {
 			$res = true;
 		if(!$res)
 			return false;
-		
+
 		/** het ging allemaal goed, wijzig the source en set het topic type goed (bij addtopic doen is mooier) */
 		$r->link = $forum->getID();
 		$r->description=""; //staat anders 2 keer in DB
@@ -629,12 +621,12 @@ class VB {
 		else
 		{
 			$cm->notify("geslaagd");
-			$res = true;	
+			$res = true;
 		}
 		return $res;
 	}
 
-	
+
 	/**
 	 * this performs a file upload
 	 * TODO: wat gebeurt er als een bron gewijzigd wordt?
@@ -656,15 +648,15 @@ class VB {
 		$postIsArray = isset($_POST) && is_array($_POST);
 		if( !(($postIsArray
 				&& empty($_POST))
-				&& (isset($_FILES) 
-				&& is_array($_FILES) 
+				&& (isset($_FILES)
+				&& is_array($_FILES)
 				&& empty($_FILES)) ) ) { // TODO: overbodige checks weglaten
 		// als de arrays $_POST en $_FILES *niet* leeg zijn
 			require_once ('class.toevoegen.php');
 			$toevoegen = new Toevoegen($this->_db, $this->_lid);
 			$toevoegen->uploadFiles(false);
 			$errorcodes=$toevoegen->getErrorcodes();
-		} 
+		}
 		else { // $_POST of $_FILES wel leeg
 		    $cm->notify("geen bestanden in request gevonden/ ongeldige request");
 		}
@@ -685,8 +677,8 @@ class VB {
 				$cm->notify("uploaden voltooid");
 				//hmm... omslachtig? vind het ingevoegde bestand, en link ernaartoe
 				$rName = $this->_db->select("
-					SELECT documentbestand.id 
-					FROM documentbestand JOIN document ON documentbestand.documentID = document.id 
+					SELECT documentbestand.id
+					FROM documentbestand JOIN document ON documentbestand.documentID = document.id
 					WHERE document.naam = '".$title."' AND document.categorie = '".$catid."' LIMIT 1");
 				if( mysql_num_rows($rName) == 1 ){
 					$arr = mysql_fetch_array($rName);
@@ -699,14 +691,14 @@ class VB {
 				else
 					$cm->notify("kon geuploade bestand niet terugvinden in de database");
 			}
-		}	
+		}
 		if ($cleanup) {
 		//als iets gefaald heeft verwijder bron besetanden etc...
 			$cm->notify("er ging ergens iets mis, alles wordt nu netjes opgeruimd, probeer het daarna eens overnieuw op te doen");
 			$this->removeSource($r, $cm);
 		}
 	}
-	
+
 	/**
 	 * this function finds the category where the vormingsbank files have to be stored
 	 */
