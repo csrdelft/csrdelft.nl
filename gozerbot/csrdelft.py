@@ -13,7 +13,7 @@ from gozerbot.users import users
 from gozerbot.generic import useragent, geturl, rlog, waitforuser
 from gozerbot.plughelp import plughelp
 from gozerbot.datadir import datadir
-from gozerbot.persist import Persist
+from gozerbot.persist.persist import Persist
 
 from urllib import urlencode
 
