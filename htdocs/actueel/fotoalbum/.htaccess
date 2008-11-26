@@ -1,7 +1,7 @@
 RewriteEngine On
 
 # Beheer
-RewriteRule ^beheer/? beheer.php [L]
+RewriteRule ^verwerk/? verwerk.php [L]
 
 # Al het andere
 RewriteRule index.php?(.*) index.php?pad=$1 [L]

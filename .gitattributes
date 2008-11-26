@@ -28,6 +28,7 @@ htdocs/actueel/courant/verzenden.php -text
 htdocs/actueel/eetplan.php -text
 htdocs/actueel/fotoalbum/.htaccess -text
 htdocs/actueel/fotoalbum/index.php -text
+htdocs/actueel/fotoalbum/verwerk.php -text
 htdocs/actueel/groepen/.htaccess -text
 htdocs/actueel/groepen/groep.php -text
 htdocs/actueel/groepen/groepen.php -text

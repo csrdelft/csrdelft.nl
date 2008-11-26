@@ -32,8 +32,7 @@ class FotoalbumContent extends SimpleHTML{
 		switch($this->actie){
 			case 'album':
 				$smarty=new Smarty_csr();
-				$smarty->assign('albums',$this->_fotoalbum->getSubalbums());
-				$smarty->assign('fotos',$this->_fotoalbum->getFotos());				
+				$smarty->assign('album',$this->_fotoalbum);		
 				$smarty->display('fotoalbum/album.tpl');
 				break;
 				

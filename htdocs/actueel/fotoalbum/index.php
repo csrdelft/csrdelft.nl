@@ -11,7 +11,16 @@ require_once 'include.config.php';
 require_once 'class.fotoalbum.php';
 require_once 'class.fotoalbumcontent.php';
 
-$fotoalbum = new Fotoalbum(urldecode(substr($_SERVER['REQUEST_URI'], 19)), 'Fotoalbum');
+$pad=urldecode(substr($_SERVER['REQUEST_URI'], 19));
+if($pad==''){
+	$mapnaam='Fotoalbum';
+}else{
+	$mapnaam=explode('/',$pad);
+	array_pop($mapnaam);
+	$mapnaam=array_pop($mapnaam);
+}
+
+$fotoalbum = new Fotoalbum($pad, $mapnaam);
 $fotoalbumcontent = new FotoalbumContent($fotoalbum);
 $fotoalbumcontent->setActie('album');
 

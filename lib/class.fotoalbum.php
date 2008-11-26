@@ -23,15 +23,27 @@ class Fotoalbum{
 	
 	function getMapnaam(){
 		return $this->mapnaam;
-		/*$positie=strrpos($this->getPad(),'/',1);
-		if ($positie===strlen($this->getPad())){
-			$positie=0;
-		}
-		return substr($this->getPad(),$positie);*/
 	}
 	
 	function getNaam(){
 		return ucfirst($this->getMapnaam());
+	}
+	
+	function getBreadcrumb(){
+		if($this->getPad()==''){
+			return '';
+		} else {
+			$breadcrumb='<a href="/actueel/fotoalbum/">Fotoalbum</a>';
+			$url='/actueel/fotoalbum/';
+			$mappen=explode('/',$this->getPad());
+			array_pop($mappen);
+			array_pop($mappen);
+			foreach($mappen as $map){
+				$url.=urlencode($map).'/';
+				$breadcrumb.=' » <a href="'.$url.'" title="'.$map.'">'.$map.'</a>';
+			}
+			return $breadcrumb;
+		}
 	}
 	
 	function getSubAlbums(){
@@ -49,13 +61,13 @@ class Fotoalbum{
 		}
 	}
 	
-	function getFotos(){
+	function getFotos($compleet=true){
 		$fotos=array();
 		$handle=opendir(PICS_PATH.'/fotoalbum/'.$this->pad);
 		while(false!==($file=readdir($handle))){
 			if(preg_match('/^.*\.(jpg|jpeg)$/i',$file)){
 				$foto=new Foto($this->pad,$file);
-				if($foto->isCompleet()){
+				if($foto->isCompleet()==$compleet){
 					$fotos[]=$foto;
 				}
 			}
@@ -64,6 +76,38 @@ class Fotoalbum{
 			return $fotos;
 		}else{
 			return false;
+		}
+	}
+	
+	function verwerkFotos(){
+		# Subalbums
+		$albums=$this->getSubAlbums();
+		if($albums!==false){
+			foreach($albums as $album){
+				$album->verwerkFotos();
+			}
+		}
+		
+		# Foto's
+		$fotos=$this->getFotos(false);
+		if($fotos!==false){
+			# Controleren of _thums en _resized bestaan, zo niet dan maken
+			if(!file_exists(PICS_PATH.'/fotoalbum/'.$this->getPad().'/_thumbs')){
+				mkdir(PICS_PATH.'/fotoalbum/'.$this->getPad().'/_thumbs');
+			}
+			if(!file_exists(PICS_PATH.'/fotoalbum/'.$this->getPad().'/_resized')){
+				mkdir(PICS_PATH.'/fotoalbum/'.$this->getPad().'/_resized');
+			}
+			
+			# Thumbnails en resizeds maken
+			foreach($fotos as $foto){
+				if(!$foto->bestaatThumb()){
+					$foto->maakThumb();
+				}
+				if(!$foto->bestaatResized()){
+					$foto->maakResized();
+				}
+			}
 		}
 	}
 }
@@ -86,16 +130,47 @@ class Foto{
 		return $this->bestandsnaam;
 	}
 	
+	function getPad(){
+		return PICS_PATH.'/fotoalbum/'.$this->getMap().$this->getBestandsnaam();
+	}
+	
+	function getThumbPad(){
+		return PICS_PATH.'/fotoalbum/'.$this->getMap().'_thumbs/'.$this->getBestandsnaam();
+	}
+	
+	function getResizedPad(){
+		return PICS_PATH.'/fotoalbum/'.$this->getMap().'_resized/'.$this->getBestandsnaam();
+	}
+	
 	function getThumbURL(){
-		return CSR_PICS.'fotoalbum/'.$this->getMap().'_thumbs/'.$this->bestandsnaam;
+		return CSR_PICS.'fotoalbum/'.$this->getMap().'_thumbs/'.$this->getBestandsnaam();
 	}
 	
 	function getResizedURL(){
-		return CSR_PICS.'fotoalbum/'.$this->getMap().'_resized/'.$this->bestandsnaam;
+		return CSR_PICS.'fotoalbum/'.$this->getMap().'_resized/'.$this->getBestandsnaam();
+	}
+	
+	function bestaatThumb(){
+		return file_exists(PICS_PATH.'/fotoalbum/'.$this->getMap().'_thumbs/'.$this->getBestandsnaam());
+	}
+	
+	function bestaatResized(){
+		return file_exists(PICS_PATH.'/fotoalbum/'.$this->getMap().'_resized/'.$this->getBestandsnaam());
+	}
+	
+	function maakThumb(){
+		set_time_limit(0);
+		$command=IMAGEMAGICK_PATH.'convert "'.$this->getPad().'" -thumbnail 150x150^^ -gravity center -extent 150x150 -format jpg -quality 80 "'.$this->getThumbPad().'"';
+		exec($command);
+	}
+	
+	function maakResized(){
+		set_time_limit(0);
+		$command=IMAGEMAGICK_PATH.'convert "'.$this->getPad().'" -resize 800x800 -format jpg -quality 70 "'.$this->getResizedPad().'"';
+		exec($command);
 	}
 	
 	function isCompleet(){
-		return (file_exists(PICS_PATH.'/fotoalbum/'.$this->getMap().'_thumbs/'.$this->bestandsnaam) &&
-				file_exists(PICS_PATH.'/fotoalbum/'.$this->getMap().'_resized/'.$this->bestandsnaam));
+		return ($this->bestaatThumb() && $this->bestaatResized());
 	}
 }
