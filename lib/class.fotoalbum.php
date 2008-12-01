@@ -47,12 +47,20 @@ class Fotoalbum{
 	}
 	
 	function getSubAlbums(){
-		$albums=array();
+		# Mappenlijst ophalen en sorteren
+		$mappen=array();
 		$handle=opendir(PICS_PATH.'/fotoalbum/'.$this->pad);
 		while(false!==($file=readdir($handle))){
 			if(is_dir(PICS_PATH.'/fotoalbum/'.$this->pad.$file)&&!preg_match('/^(\.|\_)(.*)$/',$file)){
-				$albums[]=new Fotoalbum($this->getPad().$file.'/',$file);
+				$mappen[]=$file;
 			}
+		}
+		sort($mappen);
+		
+		# Albums aanmaken en teruggeven
+		$albums=array();
+		foreach($mappen as $map){
+			$albums[]=new Fotoalbum($this->getPad().$map.'/',$map);
 		}
 		if(count($albums)>0){
 			return $albums;
