@@ -15,6 +15,7 @@ a.album{
 	margin: 15px;
 	float: left;
 	text-align: center;
+	font-weight: bold;
 }
 a.album:hover{
 	text-decoration: none;

@@ -9,7 +9,7 @@
 	{foreach from=$album->getSubAlbums() item=subalbum}
 		<a class="album" href="{$subalbum->getMapnaam()|urlencode}/">
 			<img src="{$subalbum->getThumbURL()}" />
-			<h2>{$subalbum->getNaam()}</h2>
+			{$subalbum->getNaam()}
 		</a>
 	{/foreach}
 	<br />
