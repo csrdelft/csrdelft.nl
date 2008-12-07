@@ -46,6 +46,25 @@ class Fotoalbum{
 		}
 	}
 	
+	function getThumbURL(){
+		# Foto uit album zelf
+		$fotos=$this->getFotos();
+		if($fotos!==false){
+			$foto=$fotos[0];
+			return $foto->getThumbURL();
+		}
+		
+		# Foto uit subalbum
+		$albums=$this->getSubAlbums();
+		if($albums!==false){
+			foreach($albums as $album){
+				return $album->getThumbURL();				
+			}
+		}
+		
+		return CSR_PICS.'fotoalbum/_geen_thumb.jpg';
+	}
+	
 	function getSubAlbums(){
 		# Mappenlijst ophalen en sorteren
 		$mappen=array();

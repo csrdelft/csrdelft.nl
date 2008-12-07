@@ -6,10 +6,10 @@
 {$album->getBreadcrumb()}
 <h1>{$album->getNaam()}</h1>
 {if $album->getSubAlbums()!==false}
-	<h2>Albums</h2>
 	{foreach from=$album->getSubAlbums() item=subalbum}
-		<a href="{$subalbum->getMapnaam()|urlencode}/">
-			<h3>{$subalbum->getNaam()}</h2>
+		<a class="album" href="{$subalbum->getMapnaam()|urlencode}/">
+			<img src="{$subalbum->getThumbURL()}" />
+			<h2>{$subalbum->getNaam()}</h2>
 		</a>
 	{/foreach}
 	<br />

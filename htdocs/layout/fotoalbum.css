@@ -7,6 +7,21 @@ a.thumb{
 	float: left;
 	text-align: center;
 }
-a.thumb img{
-	margin: auto;
+
+a.album{
+	width: 154px;
+	height: 195px;
+	padding: 3px;
+	margin: 15px;
+	float: left;
+	text-align: center;
+}
+a.album:hover{
+	text-decoration: none;
+	border: 1px solid #aaaaaa;
+	padding: 2px;
+}
+a.album img{
+	height: 150px;
+	border: 1px solid #777777;	
 }
