@@ -9,10 +9,14 @@
 
 class Fotoalbum{
 	
+	private $_lid;
+	
 	private $pad;
 	private $mapnaam;
 	
 	function Fotoalbum($pad,$mapnaam){
+		$this->_lid=Lid::get_lid();
+		
 		$this->pad=$pad;
 		$this->mapnaam=$mapnaam;
 	}
@@ -79,7 +83,11 @@ class Fotoalbum{
 		# Albums aanmaken en teruggeven
 		$albums=array();
 		foreach($mappen as $map){
-			$albums[]=new Fotoalbum($this->getPad().$map.'/',$map);
+			$album=new Fotoalbum($this->getPad().$map.'/',$map);
+			if($album->magBekijken()){
+				$albums[]=$album;
+			}
+				
 		}
 		if(count($albums)>0){
 			return $albums;
@@ -104,6 +112,15 @@ class Fotoalbum{
 		}else{
 			return false;
 		}
+	}
+	
+	function magBekijken(){
+		if($this->_lid->hasPermission('P_LOGGED_IN')){
+			return true;
+		}else{
+			return(!preg_match('/novitiaat/i', $this->getPad()));
+		}
+		
 	}
 	
 	function verwerkFotos(){

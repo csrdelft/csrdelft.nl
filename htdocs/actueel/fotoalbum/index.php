@@ -21,16 +21,23 @@ if($pad==''){
 }
 
 $fotoalbum = new Fotoalbum($pad, $mapnaam);
-$fotoalbumcontent = new FotoalbumContent($fotoalbum);
-$fotoalbumcontent->setActie('album');
-
-
-$pagina=new csrdelft($fotoalbumcontent);
-$pagina->addStylesheet('fotoalbum.css');
-$pagina->addStylesheet('lightbox.css');
-$pagina->addScript('prototype.js');
-$pagina->addScript('scriptaculous.js?load=effects,builder');
-$pagina->addScript('fastlightbox.js');
-$pagina->view();
+if($fotoalbum->magBekijken()){
+	$fotoalbumcontent = new FotoalbumContent($fotoalbum);
+	$fotoalbumcontent->setActie('album');
+	
+	$pagina=new csrdelft($fotoalbumcontent);
+	$pagina->addStylesheet('fotoalbum.css');
+	$pagina->addStylesheet('lightbox.css');
+	$pagina->addScript('prototype.js');
+	$pagina->addScript('scriptaculous.js?load=effects,builder');
+	$pagina->addScript('fastlightbox.js');
+	$pagina->view();
+}else{
+	require_once 'class.paginacontent.php';
+	$pagina=new Pagina('geentoegang');
+	$midden=new PaginaContent($pagina);
+	$page=new csrdelft($midden);
+	$page->view();
+}
 
 ?>
