@@ -79,6 +79,7 @@ class Fotoalbum{
 			}
 		}
 		sort($mappen);
+		$mappen=array_reverse($mappen);
 		
 		# Albums aanmaken en teruggeven
 		$albums=array();
