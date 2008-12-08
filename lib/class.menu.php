@@ -45,7 +45,7 @@ class menu {
 			SELECT  
 				ID, pID, tekst, link, permission
 			FROM 
-				menu_nieuw 
+				menu 
 			WHERE 
 				zichtbaar='ja' 
 			ORDER BY 
