@@ -3,16 +3,23 @@
 # koppel de sjaarsnummers aan de sjaars
 #
 # 0701-0730
+/*
 for ($es=1;$es<=6;$es++) {
-	$ks[$es] = str_pad($es+800, 4, "0", STR_PAD_LEFT);
+	$uid=str_pad($es+800, 4, "0", STR_PAD_LEFT);
+	$ks[$uid] = $uid;
 }
 for ($es=8;$es<=14;$es++) {
-	$ks[$es] = str_pad($es+800, 4, "0", STR_PAD_LEFT);
+	$uid=str_pad($es+800, 4, "0", STR_PAD_LEFT);
+	$ks[$uid] = $uid;
 }
-for ($es=16;$es<=57;$es++) {
-	$ks[$es] = str_pad($es+800, 4, "0", STR_PAD_LEFT);
+for ($es=16;$es<=46;$es++) {
+	$uid=str_pad($es+800, 4, "0", STR_PAD_LEFT);
+	$ks[$uid] = $uid;
+}*/
+for ($es=55;$es<=56;$es++) {
+	$uid=str_pad($es+800, 4, "0", STR_PAD_LEFT);
+	$ks[$uid] = $uid;
 }
-
 
 # koppel de huizennummers aan huizen
 //$kh = array(0,3,6,7,10,11,13,1,15,16,17,19,21,2,22,8,18,5);
@@ -52,7 +59,7 @@ ini_set('error_reporting', E_ALL & ~E_NOTICE);
 #}
 echo '<pre>';
 
-$s = 54; # $s = (int)$_GET['s']; # aantal sjaars
+$s = 57; # $s = (int)$_GET['s']; # aantal sjaars
 $h = 21; # $h = (int)$_GET['h']; # aantal huizen
 $a = 8;  # $a = (int)$_GET['a']; # aantal avonden
 #$m = (int)floor($s/$h);
@@ -76,11 +83,31 @@ $visited_sh[34][20]=true; //Lous - Lindenburgh
 $visited_sh[27][10]=true; //Carlos - St. Joris
 $visited_sh[54][3]=true; //Paul - Ambassade
 
-
 # het uiteindelijke rooster
 # $sah[sjaars][avond] = huis.. etc...
 $sah = array();
 $ahs = array();
+
+# data die al in de tabel zit om later feuten toe te kunnen voegen
+$sql='SELECT avond, huis, GROUP_CONCAT(uid) AS uids FROM `eetplan` GROUP BY avond, huis';
+$result=$db->query($sql);
+while($rij=$db->next($result)){
+	$sjaarsen=explode(',', $rij['uids']);
+	
+	foreach($sjaarsen as $foo => $sjaars){
+		$visited[$rij['huis']][]=$sjaars;
+		$visited_sh[$sjaars][$rij['huis']]=true;
+		$visited_ah[$rij['avond']][$rij['huis']][]=$sjaars;
+		$sah[$sjaars][$rij['avond']]=$rij['huis'];
+		$sah[$rij['avond']][$rij['huis']]=$sjaars;
+		
+		foreach($sjaarsen as $subsjaars){
+			$seen[$sjaars][$subsjaars]=true;
+		}
+	}
+}
+
+
 
 # huizen laten rondtellen
 if ($r == 0) $ih = 1;
@@ -205,7 +232,8 @@ En vanwege het ontbreken van bugs, hier nog wat 'unexpected $': $$$$&euro;&euro;
 
 <?
 echo "<b># Eetplanrooster SQL:</b>\n\n";
-for ($is = 1; $is <= $s; $is++) {
+#for ($is = 1; $is <= $s; $is++) {
+foreach ($ks as $is) {
 	for ($ia = 1; $ia <= $a; $ia++) {
 		if(isset($ks[$is])){
 			echo "INSERT INTO `eetplan` (`avond`,`uid`,`huis`) VALUES ({$ia},'{$ks[$is]}',{$sah[$is][$ia]});\n";

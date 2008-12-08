@@ -86,7 +86,7 @@
 			<div id="sub{$item.ID}"{if $item.huidig} class="active"{/if}>
 				{assign var='showseperator' value=false}
 				{foreach from=$item.subitems item=subitem}
-					{if $showseperator} <img src="http://plaetjes.csrdelft.nl/worst/submenuseperator.png" alt="|" /> {/if}
+					{if $showseperator} <img src="http://plaetjes.csrdelft.nl/layout/submenuseperator.png" alt="|" /> {/if}
 					{assign var='showseperator' value=true}
 					<a href="{$subitem.link}" title="{$subitem.tekst}"{if $subitem.huidig} class="active"{/if}>{$subitem.tekst}</a>
 				{/foreach}

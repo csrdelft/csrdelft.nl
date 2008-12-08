@@ -51,8 +51,8 @@
 //  Configurationl
 //
 LightboxOptions = Object.extend({
-    fileLoadingImage:        'http://csrpics.janjaap.treurniet.com/layout/lightbox/loading.gif',     
-    fileBottomNavCloseImage: 'http://csrpics.janjaap.treurniet.com/layout/lightbox/closelabel.gif',
+    fileLoadingImage:        'http://plaetjes.csrdelft.nl/layout/lightbox/loading.gif',     
+    fileBottomNavCloseImage: 'http://plaetjes.csrdelft.nl/layout/lightbox/closelabel.gif',
 
     overlayOpacity: 0.4,   // controls transparency of shadow overlay
 

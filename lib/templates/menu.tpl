@@ -1,5 +1,5 @@
 <div id="menu" onmouseover="ResetTimer()" onmouseout="StartTimer()">
-	<div id="menuleft"><a href="/"><img src="http://plaetjes.csrdelft.nl/worst/logo.gif" alt="Logo" /></a></div>
+	<div id="menuleft"><a href="/"><img src="http://plaetjes.csrdelft.nl/layout/logo.gif" alt="Logo" /></a></div>
 	<div id="menucenter">
 		<div id="menubanner">
 			<div id="banner1"><img src="http://plaetjes.csrdelft.nl/menubalk/banner1.png" id="imgbanner1" alt="banner1" width="553" height="106" /></div>
@@ -57,7 +57,7 @@
 				</form>
 			</div>
 		{else}
-			<div id="key"><img src="http://plaetjes.csrdelft.nl/worst/key.gif" alt="Inloggen" onclick="ToggleLogin();" /></div>
+			<div id="key"><img src="http://plaetjes.csrdelft.nl/layout/key.gif" alt="Inloggen" onclick="ToggleLogin();" /></div>
 			<div id="login">			
 				{if isset($smarty.session.auth_error)}
 					<span class="waarschuwing">{$smarty.session.auth_error}</span>
@@ -88,7 +88,7 @@
 			<div id="sub{$item.ID}"{if $item.huidig} class="active"{/if}>
 				{assign var='showseperator' value=false}
 				{foreach from=$item.subitems item=subitem}
-					{if $showseperator} <img src="http://plaetjes.csrdelft.nl/worst/submenuseperator.gif" alt="|" /> {/if}
+					{if $showseperator} <img src="http://plaetjes.csrdelft.nl/layout/submenuseperator.gif" alt="|" /> {/if}
 					{assign var='showseperator' value=true}
 					<a href="{$subitem.link}" title="{$subitem.tekst}"{if $subitem.huidig} class="active"{/if}>{$subitem.tekst}</a>
 				{/foreach}

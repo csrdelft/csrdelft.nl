@@ -12,7 +12,7 @@ body {
 #container {
 	margin: 10px auto;
 	width: 1004px;
-	background: url('http://plaetjes.csrdelft.nl/worst/containerbg_top.png') no-repeat;
+	background: url('http://plaetjes.csrdelft.nl/layout/containerbg_top.png') no-repeat;
 }
 
 body, textarea, input, select, option, tr, td, th, div, p  { 
@@ -67,7 +67,7 @@ ul.nobullets li{ list-style-type: none; }
 	margin: 0 auto;
 	width: 966px;
 	height: 142px;
-	background: url('http://plaetjes.csrdelft.nl/worst/menubg.png') repeat-x;
+	background: url('http://plaetjes.csrdelft.nl/layout/menubg.png') repeat-x;
 }
 #menuleft{
 	float: left;
@@ -119,13 +119,13 @@ ul.nobullets li{ list-style-type: none; }
 	height: 26px;
 	font-weight: bold;
 	text-decoration: none;
-	background: url('http://plaetjes.csrdelft.nl/worst/menubutton.png') no-repeat;
+	background: url('http://plaetjes.csrdelft.nl/layout/menubutton.png') no-repeat;
 }	
 #mainmenu a:link, #mainmenu a:visited {
 	color: #ffffff;
 }
 #mainmenu a:hover, #mainmenu a:active, #mainmenu a.active {
-	background: url('http://plaetjes.csrdelft.nl/worst/menubutton_hover.png') no-repeat;
+	background: url('http://plaetjes.csrdelft.nl/layout/menubutton_hover.png') no-repeat;
 }
 
 /**** SUBMENU *****************************************************************/
@@ -133,7 +133,7 @@ ul.nobullets li{ list-style-type: none; }
 	margin: 0 auto;
 	width: 966px;
 	height: 24px;
-	background: url('http://plaetjes.csrdelft.nl/worst/submenubg.png') repeat-x;
+	background: url('http://plaetjes.csrdelft.nl/layout/submenubg.png') repeat-x;
 }
 #submenuitems {
 	padding-top: 5px;
@@ -264,7 +264,7 @@ ul.nobullets li{ list-style-type: none; }
 /**** MAIN ********************************************************************/
 #main {
 	width: 1004px;
-	background: url('http://plaetjes.csrdelft.nl/worst/mainbg.png') repeat-y;
+	background: url('http://plaetjes.csrdelft.nl/layout/mainbg.png') repeat-y;
 }
 #mainleft {
 	float: left;
@@ -290,7 +290,7 @@ ul.nobullets li{ list-style-type: none; }
 	height: 13px;
 	color: #162673;
 	font-weight: bold;
-	background: url('http://plaetjes.csrdelft.nl/worst/blocktitle.png') no-repeat;
+	background: url('http://plaetjes.csrdelft.nl/layout/blocktitle.png') no-repeat;
 	border-bottom: 1px solid #b8b8b8;
 }
 #mainleft .block h1 a{
@@ -322,7 +322,7 @@ ul.nobullets li{ list-style-type: none; }
 	width: 1004px;
 	height: 22px;
 	text-align: center;
-	background: url('http://plaetjes.csrdelft.nl/worst/footerbg.png') no-repeat #fff;
+	background: url('http://plaetjes.csrdelft.nl/layout/footerbg.png') no-repeat #fff;
 }
 #footer a {
 	color: #000;

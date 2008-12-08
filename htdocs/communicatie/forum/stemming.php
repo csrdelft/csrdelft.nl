@@ -38,7 +38,7 @@ if ($lid->hasPermission('P_FORUM_MOD') OR $lid->getUid()==STATISTICUS){
 			//formulier maeken
 			require_once('class.forumcontent.php');
 			$midden= new ForumContent($forum, 'nieuw-poll');
-			$midden->setError($sError);
+			$midden->setMelding($sError);
 		}
 	}else{
 		//formulier maeken
