@@ -154,7 +154,7 @@ class menu {
 		$lid=Lid::get_lid();
 		$db=MySql::get_MySql();
 		
-		$gasnelnaar="SELECT tekst, link, permission FROM menu_nieuw WHERE gasnelnaar='ja' ORDER BY tekst;";
+		$gasnelnaar="SELECT tekst, link, permission FROM menu WHERE gasnelnaar='ja' ORDER BY tekst;";
 		$result=$db->query($gasnelnaar);
 		$return='<h1>Ga snel naar</h1>';
 		if($result!==false AND $db->numRows($result)>0){
