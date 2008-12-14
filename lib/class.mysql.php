@@ -15,9 +15,9 @@ class MySql{
 	//resource handle
 	private $_db;
 	private $querys=array();
-	
+
 	private function __construct(){ $this->connect(); }
-  
+
 	static function get_MySql(){
     	//als er nog geen instantie gemaakt is, die nu maken
     	if(!isset(MySql::$Mysql)){
@@ -124,7 +124,7 @@ class MySql{
 		}
 		$this->query("UPDATE `".$table."` SET ".$q1." WHERE `".$idkolom."`=".$id.";");
 	}
-	
+
 	// zet een resultaat ding om in een array
 	public function result2array($rResult){
 		if($this->numRows($rResult)>=1){
@@ -136,7 +136,22 @@ class MySql{
 		}
 		return $aArray;
 	}
-	
+	//geef array terug met resultaten uit de aangeboden query
+	public function query2array($query){
+		$result=$this->query($query);
+		if(!result){
+			return false;
+		}
+		return $this->result2array($query);
+	}
+	//selecteer één regel uit de db en geef die als array terug.
+	public function getRow($query){
+		$result=$this->query($query);
+		if(!$result){
+			return false;
+		}
+		return $this->next($result);
+	}
 	# Bijwerken van een regel
 	# String $table : de tabelnaam
 	# int $id : regel-id
@@ -144,7 +159,7 @@ class MySql{
 		$id=(int)$id;
 		$this->query("DELETE FROM `".$table."` WHERE `id`=".$id.";");
 	}
-	
+
 	public function escape($str) {
 		return mysql_real_escape_string($str, $this->_db);
 	}
