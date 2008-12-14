@@ -40,19 +40,8 @@ if(isset($_GET['post'])){
 					$iTopicID=$forum->getTopicVoorPostID($iPostID);
 					header('location: '.CSR_ROOT.'forum/onderwerp/'.$iTopicID.'#post'.$iPostID);
 				}
-				exit;
-			}else{
-				require_once('class.forumcontent.php');
-				$midden = new ForumContent($forum, 'bewerk');
 			}
-		}else{
-			require_once('class.forumcontent.php');
-			$midden = new ForumContent($forum, 'bewerk');
 		}
-	}else{
-		header('location: '.CSR_ROOT.'forum/');
-		$_SESSION['melding']='U mag dit bericht niet bewerken.';
-		exit;
 	}
 }elseif(isset($_GET['topic'], $_POST['titel']) AND $forum->isModerator()){
 	//onderwerptitel bewerken.
@@ -71,21 +60,6 @@ if(isset($_GET['post'])){
 		$_SESSION['melding']='Onderwerp kan niet geladen worden (ForumOnderwerp::load()).';
 		exit;
 	}	
-}else{
-	# geen rechten
-	require_once 'class.paginacontent.php';
-	$pagina=new Pagina('geentoegang');
-	$midden = new PaginaContent($pagina);
-}	
-
-## zijkolom in elkaar jetzen
-$zijkolom=new kolom();
-	
-# pagina weergeven
-$pagina=new csrdelft($midden);
-$pagina->setZijkolom($zijkolom);
-
-$pagina->view();
-
+}
 
 ?>
