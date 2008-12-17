@@ -44,18 +44,20 @@ td.buttoncell {
 		
 
 /* tekst en input */
-      .dochoofd {
+.dochoofd {
 	font-weight: bold;
-	color: #000000; background-color: gold;
+	color: black;
+	background-color: lightblue;
 	vertical-align: middle;
 	padding: 5px 10px 5px 15px;
 	height: 19px;
 }
 
-input#docTitle{
+input#docTitle {
 	width: 250px;
 }
 
 a#cattitle {
-	color: black;		
+	color: black;
+	text-decoration: none;
 }
