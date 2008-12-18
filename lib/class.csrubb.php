@@ -10,15 +10,15 @@ require_once('ubb/eamBBParser.class.php');
 
 class CsrUBB extends eamBBParser{
 	private $lid;
-  
+
 	function CsrUBB(){
 		$this->eamBBParser();
 		$this->lid=Lid::get_lid();
 		$this->paragraph_mode = false;
 	}
-	
+
 	function ubb_citaat($arguments=array()){
-		if($this->quote_level == 0){        
+		if($this->quote_level == 0){
 	    	$this->quote_level = 1;
 	    	$content = $this->parseArray(array('[/citaat]'), array());
 			$this->quote_level = 0;
@@ -29,7 +29,7 @@ class CsrUBB extends eamBBParser{
 			unset($delcontent);
 			$content = '...';
 		}
-	
+
 		$text='<div class="citaatContainer"><strong>Citaat';
 		if(isset($arguments['citaat']) AND $this->lid->isValidUid($arguments['citaat'])){
 			$text.=' van '.$this->lid->getNaamLink($arguments['citaat'], 'user', true);
@@ -39,7 +39,7 @@ class CsrUBB extends eamBBParser{
 			//geen naam ofzo...
 		}
 		$text.=':</strong><div class="citaat">'.trim($content).'</div></div>';
-		return $text;  
+		return $text;
 	}
 	/*
 	 * ubb_reldate();
@@ -48,13 +48,13 @@ class CsrUBB extends eamBBParser{
 	function ubb_reldate($parameters=array()){
 		$content = $this->parseArray(array('[/reldate]'), array());
 		return reldate($content);
-		
+
 	}
-	/* 
+	/*
 	 * ubb_lid().
-	 * 
+	 *
 	 * [lid=0436] => Am. Waagmeester
-	 * 
+	 *
 	 * Geef een link weer naar het profiel van het lid-nummer wat opgegeven is.
 	 */
 	function ubb_lid($parameters){
@@ -65,16 +65,16 @@ class CsrUBB extends eamBBParser{
 		}
 		return $text;
 	}
-	
-	/* 
+
+	/*
 	 * ubb_prive().
-	 * 
+	 *
 	 * Tekst binnen de privé-tag wordt enkel weergegeven voor leden met
 	 * (standaard) P_LOGGED_IN. Een andere permissie kan worden meegegeven.
-	 * 
-	 * LET OP: binnen het forum is citeren mogelijk voor externen. Dan kan 
-	 * de inhoud van deze tag dus bekeken worden door te citeren. Als deze 
-	 * tag dus nuttig moet worden voor het forum moet bij citeren door 
+	 *
+	 * LET OP: binnen het forum is citeren mogelijk voor externen. Dan kan
+	 * de inhoud van deze tag dus bekeken worden door te citeren. Als deze
+	 * tag dus nuttig moet worden voor het forum moet bij citeren door
 	 * externen de inhoud van deze tag weggefilterd woren.
 	 */
 	function ubb_prive($arguments=array()){
@@ -91,12 +91,12 @@ class CsrUBB extends eamBBParser{
 			$content='';
 		}
 		return $content;
-	} 
-	 
+	}
+
 	/*
-	 * Deze methode kan resultaten van query's die in de database staan printen in een 
+	 * Deze methode kan resultaten van query's die in de database staan printen in een
 	 * tabelletje.
-	 * 
+	 *
 	 * [query=1]
 	 */
 	function ubb_query($parameters){
@@ -109,12 +109,12 @@ class CsrUBB extends eamBBParser{
 		}
 		return $return;
 	}
-	
+
 	/*
 	 * ubb_youtube();
-	 * 
-	 * [youtube]youtubeid[/youtube] 
-	 * 
+	 *
+	 * [youtube]youtubeid[/youtube]
+	 *
 	 * geeft een miniatuurafbeelding weer van een youtube-video waarop geklikt kan worden om
 	 * het filmpje af te spelen.
 	 */
@@ -128,12 +128,12 @@ class CsrUBB extends eamBBParser{
 			//en het filmpje ook maar meteen starten.
 			if($this->quote_level>0 OR isset($this->youtube[$content])){
 				$html='<a href="#youtube'.$content.'" onclick="youtubeDisplay(\''.$content.'\')" >&raquo; youtube-filmpje (ergens anders op deze pagina)</a>';
-			}else{	
+			}else{
 				$html='<div id="youtube'.$content.'" class="youtubeVideo">
 					<div class="afspelen" onclick="youtubeDisplay(\''.$content.'\')"><img width="36" height="36" src="'.CSR_PICS.'forum/afspelen.gif" alt="afspelen" /></div>
 					<img src="http://img.youtube.com/vi/'.$content.'/default.jpg" style="width: 130px; height: 97px;"
 						alt="klik op de afbeelding om de video te starten"/></div>';
-				//sla het youtube-id op in een array, dan plaatsen we de tweede keer dat 
+				//sla het youtube-id op in een array, dan plaatsen we de tweede keer dat
 				//het filmpje in een topic geplaatst wordt een linkje.
 				$this->youtube[$content]=$content;
 			}
@@ -142,20 +142,20 @@ class CsrUBB extends eamBBParser{
 		}
 		return $html;
 	}
-	
+
 	function ubb_googlevideo($parameters){
 		$content = $this->parseArray(array('[/googlevideo]'), array());
-		if(preg_match('/-\d*/', $content)){
+		if(preg_match('/-?\d*/', $content)){
 			$html='<embed style="width:400px; height:326px;" id="VideoPlayback" type="application/x-shockwave-flash"
 src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
 		}else{
 			$html='Ongeldig googlevideo-id';
 		}
 		return $html;
-	}	
+	}
 	/*
 	 * ubb_groep()
-	 * 
+	 *
 	 * [groep]123[/groep]
 	 * Geeft een groep met kortebeschrijving en een lijstje met leden weer.
 	 * Als de groep aanmeldbaar is komt er ook een aanmeldknopje bij.
@@ -172,7 +172,7 @@ src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
 			$html.='<table style="float: right">';
 			foreach($groep->getLeden() as $groeplid){
 				$html.='<tr><td>'.$this->lid->getNaamLink($groeplid['uid'], 'civitas', true).'</td>';
-				if($groep->toonFuncties()){ 
+				if($groep->toonFuncties()){
 					$html.='<td><em>'.mb_htmlentities($groeplid['functie']).'</em></td>';
 				}
 				$html.='</tr>';
@@ -200,26 +200,26 @@ src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
 	}
 	function ubb_1337(){
         $html = $this->parseArray(array('[/1337]'), array());
-        
+
         $html = str_replace('er ', '0r ',$html);
         $html = str_replace('you', 'j00',$html);
         $html = str_replace('elite', '1337',$html);
-        $html = strtr($html, "abelostABELOST", "48310574831057");       
+        $html = strtr($html, "abelostABELOST", "48310574831057");
         return $html;
     }
-    
+
     function ubb_rainbow(){
         $string = $this->parseArray(array('[/rainbow]'), array());
-        
+
         if(!@include_once("ubb/plugins/rainbow.php")){
              return '<b>Rainbow plugin could not be loaded!</b>';
         }
-        
+
         $r = new rainbowMaker();
-        
+
         return $r->rainBow($string);
     }
-    
+
     function ubb_clear($parameters){
 		switch (@$parameters['clear']){
 			case 'left':	$sClear='left';		break;
@@ -228,7 +228,7 @@ src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
 		}
 		return '<br style="height: 0px; clear: '.$sClear.';" />';
     }
-  
+
 	static function getUbbHelp(){
 return <<<UBBVERHAAL
 <div id="ubbhulp">
@@ -254,15 +254,15 @@ return <<<UBBVERHAAL
 	</ul>
 	Gebruik deze mogelijkheden spaarzaam, ga niet ineens alles vet maken of kleurtjes geven!<br />
 	<br />
-	
+
 </div>
 UBBVERHAAL;
-	
+
 	}
-	
+
 	/*
 	 * Deze methode kan de belangrijkste mededelingen (doorgaans een top3) weergeven.
-	 * 
+	 *
 	 * [mededelingen=top3]
 	 */
 	function ubb_mededelingen($parameters){
