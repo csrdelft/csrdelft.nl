@@ -28,6 +28,7 @@ class MaaltijdLijstContent extends SimpleHTML {
 	}
 
 	function view(){
+		$maaltijdprijs=3.00;
 		$maaltijdbudget=1.70;
 		$marge=6;
 		
@@ -56,6 +57,7 @@ class MaaltijdLijstContent extends SimpleHTML {
 			}
 		}		
 		
+		$aMaal['prijs']=$maaltijdprijs;
 		//budget bepalen.
 		$aMaal['budget']=($aMaal['aantal']+$marge)*$maaltijdbudget;
 			
