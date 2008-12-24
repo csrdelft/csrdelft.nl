@@ -114,9 +114,9 @@ pre.ubb_code{
 img.forum_image{
 	max-width: 586px; border: 0;
 }
-div.citaatContainer img.forum_image{
-	max-width: 556px;
-}
+/* zorg dat de plaatjes ook in citaten niet te breed worden */
+div.citaatContainer div.citaat img.forum_image{ max-width: 546px; }
+div.citaatContainer div.citaat div.citaatContainer div.citaat img.forum_image{ max-width: 516px; }
 #pollTabel{
 	width: 100%; 
 	margin: 10px 10px 10px 10px; 
