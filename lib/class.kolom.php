@@ -23,32 +23,29 @@ class Kolom extends SimpleHTML {
 	public function Kolom(){
 		$this->_lid=Lid::get_lid();
 	}
-	
+
 	public function addObject(&$object) 	{$this->_objects[] =& $object;}
 	public function addTekst($string)		{$this->addObject(new string2object($string));}
 	# Alias voor addObject
 	public function add(&$object)			{$this->addObject($object);}
-	
+
 	public function getTitel(){
 		if(isset($this->_objects[0])){
 			return $this->_objects[0]->getTitel();
 		}
 	}
-	
-	public function view() {
-		# Als er geen balk is laten we de standaard-inhoud zien
-		if (count($this->_objects)==0){
+	private function defaultView(){
 			# Ga snel naar
 			require_once('class.menu.php');
-			$this->add(new stringincluder(Menu::getGaSnelNaar()));		
-			
+			$this->add(new stringincluder(Menu::getGaSnelNaar()));
+
 			# Agenda
 			require_once('class.pagina.php');
 			require_once('class.paginacontent.php');
 			$pagina=new Pagina('agendazijbalk');
 			$paginacontent=new PaginaContent($pagina);
 			$this->add($paginacontent);
-			
+
 			# Laatste mededelingen
 			require_once('class.nieuwscontent.php');
 			require_once('class.nieuws.php');
@@ -56,19 +53,24 @@ class Kolom extends SimpleHTML {
 			$nieuwscontent = new NieuwsContent($nieuws);
 			$nieuwscontent->setActie('laatste');
 			$this->add($nieuwscontent);
-			
+
 			# Laatste forumberichten
-			require_once('class.forum.php'); 
-			require_once('class.forumcontent.php');
+			require_once('forum/class.forum.php');
+			require_once('forum/class.forumcontent.php');
 			$forum=new forum();
 			$forumcontent=new forumcontent($forum, 'lastposts');
-			$this->add($forumcontent);			
-			
+			$this->add($forumcontent);
+
 			# Komende 10 verjaardagen
-			require_once('class.verjaardagcontent.php');		
+			require_once('class.verjaardagcontent.php');
 			$this->add(new VerjaardagContent('komende10'));
+	}
+	public function view() {
+		# Als er geen balk is laten we de standaard-inhoud zien
+		if (count($this->_objects)==0){
+			$this->defaultView();
 		}
-		
+
 		foreach ($this->_objects as $object) {
 			$object->view();
 			echo '<br />';

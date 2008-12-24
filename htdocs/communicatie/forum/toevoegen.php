@@ -10,7 +10,7 @@
 require_once('include.config.php');
 
 //we laden hier forumonderwerp omdat we in onderwerpen werken.
-require_once('class.forumonderwerp.php');
+require_once('forum/class.forumonderwerp.php');
 $forum = new ForumOnderwerp();
 
 //als er geen bericht is gaan we sowieso niets doen.
@@ -78,12 +78,12 @@ if(!(isset($_POST['submit']) AND $_POST['submit']=='voorbeeld')){
 		$_SESSION['melding']='Hela, volgens mij mag u dit niet... (forumOnderwerp::magToevoegen())';
 	}
 }else{
-	require_once('class.forumonderwerpcontent.php');
+	require_once('forum/class.forumonderwerpcontent.php');
 	$midden=new Forumonderwerpcontent($forum);
-	
+
 	## zijkolom in elkaar jetzen
 	$zijkolom=new kolom();
-	
+
 	$page=new csrdelft($midden);
 	$page->setZijkolom($zijkolom);
 	$page->addStylesheet('forum.css');

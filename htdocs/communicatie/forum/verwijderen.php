@@ -13,8 +13,8 @@ if (!$lid->hasPermission('P_FORUM_MOD')) {
 	header('location: '.CSR_ROOT.'forum/');
 	$_SESSION['melding']='Niets te zoeken hier!';
 	exit;
-}	
-require_once('class.forumonderwerp.php');
+}
+require_once('forum/class.forumonderwerp.php');
 $forum = new ForumOnderwerp();
 
 //het juiste onderwerp inladen

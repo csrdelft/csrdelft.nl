@@ -8,9 +8,9 @@
 
 # instellingen & rommeltjes
 require_once('include.config.php');
-require_once('class.forumonderwerp.php');
-require_once('class.forumcontent.php');
-require_once('class.forumonderwerpcontent.php');
+require_once('forum/class.forumonderwerp.php');
+require_once('forum/class.forumcontent.php');
+require_once('forum/class.forumonderwerpcontent.php');
 
 $forum = new ForumOnderwerp();
 $forum->loadByPostID((int)$_GET['post']);
@@ -24,11 +24,11 @@ if ($forum->magCiteren()){
 	require_once 'class.paginacontent.php';
 	$pagina=new Pagina('geentoegang');
 	$midden = new PaginaContent($pagina);
-}	
+}
 
 ## zijkolom in elkaar jetzen
 $zijkolom=new kolom();
-	
+
 # pagina weergeven
 $pagina=new csrdelft($midden);
 $pagina->setZijkolom($zijkolom);

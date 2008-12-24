@@ -15,16 +15,16 @@ class ProfielContent extends SimpleHTML {
 	# de objecten die data leveren
 	var $_lid;
 	var $_state;
-	
+
 	//array met profiel.
 	var $_profiel;
 	### public ###
-	
+
 	//LET OP: hier wordt lid wél meegegeven, want het gaat hier om een profiel-object.
 	function ProfielContent ($profiel, &$state) {
 		$this->_state =& $state;
 		$this->_lid=$profiel;
-		
+
 		$this->_profiel = $this->_lid->getTmpProfile();
 	}
 	function getTitel(){
@@ -42,14 +42,14 @@ class ProfielContent extends SimpleHTML {
 		}
 		$profhtml['fullname']=$this->_lid->getFullName($this->_profiel['uid']);
 		$profhtml['civitasnaam']=$this->_lid->getNaamLink($this->_profiel['uid'], 'civitas', false);
-				
+
 		# email-adres
-		if($profhtml['email'] != ''){ 
+		if($profhtml['email'] != ''){
 			$profhtml['email'] = sprintf('<a href="mailto:%s">%s</a>', $profhtml['email'], $profhtml['email']);
 		}
-		
+
 		$profhtml['foto']=$this->_lid->getPasfoto($this->_profiel['uid']);
-		
+
 		//woonoord
 		require_once('class.groepen.php');
 		$woonoord=Groepen::getGroepenByType(2, $this->_profiel['uid']);
@@ -59,19 +59,19 @@ class ProfielContent extends SimpleHTML {
 		}else{
 			$profhtml['woonoord']='<br />';
 		}
-		
-		
-				
+
+
+
 		# kijken of deze persoon in een groep zit
-		require_once('class.groepen.php');
-		$profhtml['groepen']="";	
-		
+		require_once('groepen/class.groepen.php');
+		$profhtml['groepen']="";
+
 		$aGroepen=Groepen::getGroepenByUid($this->_profiel['uid']);
 		if (count($aGroepen) != 0) {
 			$currentStatus=null;
 			foreach ($aGroepen as $groep) {
 				if($currentStatus!=$groep['status']){
-					if($currentStatus!=null){ 
+					if($currentStatus!=null){
 						$profhtml['groepen'].='</div>';
 					}
 					$profhtml['groepen'].='<div class="groep'.$groep['status'].'"><strong>'.str_replace(array('ht','ot'), array('h.t.', 'o.t.'),$groep['status']).' groepen:</strong><br />';
@@ -80,7 +80,7 @@ class ProfielContent extends SimpleHTML {
 				$groepnaam=mb_htmlentities($groep['naam']);
 				$profhtml['groepen'].='<a href="/actueel/groepen/'.$groep['gtype'].'/'.$groep['id'].'/">'.$groepnaam."</a><br />\n";
 			}
-			$profhtml['groepen'].='</div>';				
+			$profhtml['groepen'].='</div>';
 		}
 		//soccie saldo
 		$profhtml['saldi']='';
@@ -88,7 +88,7 @@ class ProfielContent extends SimpleHTML {
 		if($this->_profiel['uid']==$this->_lid->getUid()){
 			$profhtml['saldi']=$this->_lid->getSaldi();
 		}
-		
+
 		/*
 		 * Saldografiek gaan we
 		 * - gewoon en meteen weergeven bij het lid zelf.
@@ -104,25 +104,25 @@ class ProfielContent extends SimpleHTML {
 				$profhtml['saldografiek'].='<br /><div id="saldoGrafiek" style="display: none;"><img src="/tools/saldografiek.php?uid='.$this->_profiel['uid'].'" /></div>';
 			}
 		}
-		
+
 		$profhtml['abos']=array();
 		require_once('class.maaltrack.php');
 		require_once('class.maaltijd.php');
 		$maaltrack=new Maaltrack();
 		$profhtml['abos']=$maaltrack->getAbo($this->_profiel['uid']);
 		$profhtml['recenteMaaltijden']=Maaltijd::getRecenteMaaltijden($this->_profiel['uid']);
-		
+
 		//de html template in elkaar draaien en weergeven
 		$profiel=new Smarty_csr();
-		
+
 		$profiel->assign('profhtml', $profhtml);
 		$profiel->assign('isOudlid', $this->_profiel['status'] == 'S_OUDLID');
-		
+
 		$profiel->assign('magBewerken', ($this->_lid->hasPermission('P_PROFIEL_EDIT') AND $this->_profiel['uid']==$this->_lid->getUid()) OR $this->_lid->hasPermission('P_LEDEN_EDIT'));
 		$profiel->assign('isAdmin', $this->_lid->hasPermission('P_ADMIN'));
 		$profiel->assign('melding', $this->getMelding());
-		
-		//eigen profiel niet cachen, dan krijgen we namelijk rare dingen 
+
+		//eigen profiel niet cachen, dan krijgen we namelijk rare dingen
 		//dat we andermans saldo's zien enzo
 		if($this->_profiel['uid']==$this->_lid->getUid()){
 			$profiel->caching=false;
@@ -132,14 +132,14 @@ class ProfielContent extends SimpleHTML {
 	}
 	function viewStateEdit(){
 		echo '<h2>Profiel wijzigen</h2>
-			Hieronder kunt u uw eigen gegevens wijzigen. Voor enkele velden is het niet mogelijk zelf 
-			wijzigingen door te voeren. Voor de meeste velden geldt daarnaast dat de ingevulde gegevens 
-			een geldig formaat moeten hebben. Mochten er fouten in het gedeelte van uw profiel staan, 
-			dat u niet zelf kunt wijzigen, meld het dan bij de Vice-Abactis. <br /> <br />Als er 
-			<span class="waarschuwing">tekst in rode letters</span> wordt afgebeeld bij een veld, dan 
+			Hieronder kunt u uw eigen gegevens wijzigen. Voor enkele velden is het niet mogelijk zelf
+			wijzigingen door te voeren. Voor de meeste velden geldt daarnaast dat de ingevulde gegevens
+			een geldig formaat moeten hebben. Mochten er fouten in het gedeelte van uw profiel staan,
+			dat u niet zelf kunt wijzigen, meld het dan bij de Vice-Abactis. <br /> <br />Als er
+			<span class="waarschuwing">tekst in rode letters</span> wordt afgebeeld bij een veld, dan
 			betekent dat dat de invoer niet geaccepteerd is, en dat u die zult moeten moeten aanpassen aan het
 			gevraagde formaat. Een aantal velden kan leeg gelaten worden als er geen zinvolle informatie voor is.';
-				
+
 		#
 		# NB!! Op de tekst die hieronder vast wordt ingesteld wordt geen htmlentities ofzo gedaan
 		#
@@ -167,13 +167,13 @@ class ProfielContent extends SimpleHTML {
 			//echo $gebdatum; exit;
 			$form[0][] = array('ztekst',"&nbsp;","Gebruik het formaat YYYY-mm-dd");
 			$form[0]['gebdatum'] = array('input',"Geb.datum:");
-		}	
+		}
 
 		$form[0][] = array('ztekst',"&nbsp;","<b>Email/Telefoon</b>");
 		$form[0]['telefoon'] = array('input',"Telefoon:");
 		$form[0]['mobiel'] = array('input',"Pauper:");
 		$form[0]['email'] = array('input',"Email:");
-		
+
 		$form[0][] = array('ztekst',"&nbsp;","<b>Diversen</b>");
 		$form[0]['icq'] = array('input',"ICQ:");
 		$form[0]['msn'] = array('input',"MSN:");
@@ -181,7 +181,7 @@ class ProfielContent extends SimpleHTML {
 		$form[0]['skype'] = array('input',"Skype:");
 		$form[0]['website'] = array('input',"Website:");
 		$form[0]['bankrekening'] = array('input', "Bankrekening:");
-		
+
 		$form[0][] = array('ztekst',"&nbsp;","Weergave van namen op het Forum<br />(dit is wat je zelf ziet, niet wat anderen zien!):");
 		$form[0]['forum_name'] = array('select', "Forum:", array('civitas' => 'Toon Am. / Ama.','nick' => 'Toon bijnamen'));
 
@@ -224,11 +224,11 @@ class ProfielContent extends SimpleHTML {
 		$form[1]['oldpass'] = array('password',"Oude wachtwoord:");
 		$form[1]['nwpass'] = array('password',"Nieuw wachtwoord:");
 		$form[1]['nwpass2'] = array('password',"Nieuw wachtwoord:");
-		
+
 		//status veranderen...
 		if ($this->_lid->hasPermission('P_LEDEN_MOD')) {
-			$form[1]['status'] = array('select', 'Status:', 
-				array('S_LID' => 'Lid', 'S_GASTLID' => 'Gastlid', 
+			$form[1]['status'] = array('select', 'Status:',
+				array('S_LID' => 'Lid', 'S_GASTLID' => 'Gastlid',
 					'S_KRINGEL'=>'Kringel', 'S_NOVIET'=>'Noviet', 'S_OUDLID'=>'Oudlid', 'S_NOBODY' => 'Geen lid'));
 		}
 		# evt. foutmeldingen ophalen
@@ -260,9 +260,9 @@ class ProfielContent extends SimpleHTML {
 		switch ($fieldinfo[0]) {
 			case 'input':
 				# is de inhoud van het vak al meegegeven?
-				if(isset($fieldinfo[2])){ 
+				if(isset($fieldinfo[2])){
 					$field_usr = mb_htmlentities($fieldinfo[2]);
-				}else{ 
+				}else{
 					$field_usr = mb_htmlentities($this->_profiel[$field]);
 				}
 				echo '<input type="text" name="frmdata['.$field.']" value="'.$field_usr.'" />';

@@ -15,7 +15,7 @@ if (!$lid->hasPermission('P_FORUM_MOD')) {
 	exit;
 }
 
-require_once('class.forumonderwerp.php');
+require_once('forum/class.forumonderwerp.php');
 $forum = new ForumOnderwerp();
 
 if(isset($_GET['topic'])){
@@ -26,7 +26,7 @@ if(isset($_GET['topic'])){
 	exit;
 }
 
-if(isset($_POST['newCat']) AND (int)$_POST['newCat']==$_POST['newCat'] AND 
+if(isset($_POST['newCat']) AND (int)$_POST['newCat']==$_POST['newCat'] AND
 		$forum->move($_POST['newCat'])){
 	header('location: '.CSR_ROOT.'forum/onderwerp/'.$forum->getID());
 	exit;

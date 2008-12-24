@@ -14,7 +14,7 @@ if(!$lid->hasPermission('P_FORUM_MOD')){
 	exit;
 }
 
-require_once('class.forumonderwerp.php');
+require_once('forum/class.forumonderwerp.php');
 $forum = new ForumOnderwerp();
 if(isset($_GET['topic'])){
 	$forum->load((int)$_GET['topic']);
@@ -26,6 +26,6 @@ if(isset($_GET['topic'])){
 	header('location: '.CSR_ROOT.'forum/');
 	$_SESSION['melding']='Niets om te sluiten of te openen.';
 }
-	
+
 
 ?>

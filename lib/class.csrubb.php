@@ -163,7 +163,7 @@ src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
 	protected function ubb_groep($parameters){
 		$content=$this->parseArray(array('[/groep]'), array());
 		//if(isset($parameters));
-		require_once('class.groep.php');
+		require_once('groepen/class.groep.php');
 		$groep=new Groep((int)$content);
 		//TODO: zet deze style-meuk in de style-sheet.
 		//TODO: zet dit in een smarty-template

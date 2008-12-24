@@ -5,10 +5,10 @@ require_once('include.config.php');
 
 if(isset($_GET['topic'])){
 	$iTopicID=(int)$_GET['topic'];
-	require_once('class.forumonderwerp.php');
+	require_once('forum/class.forumonderwerp.php');
 	$forum = new ForumOnderwerp();
 	$forum->load($iTopicID);
-	require_once('class.forumpoll.php');
+	require_once('forum/class.forumpoll.php');
 	$poll = new ForumPoll($forum);
 	$iCatID=$forum->getCatID();
 	//kijken of er voldoende rechten zijn voor het stemmen op een peiling.
@@ -24,7 +24,7 @@ if(isset($_GET['topic'])){
 						header('location: '.CSR_ROOT.'leden/');
 					}else{
 						header('location: '.CSR_ROOT.'forum/onderwerp/'.$iTopicID);
-					}	
+					}
 				}else{
 					header('location: '.CSR_ROOT.'forum/onderwerp/'.$iTopicID);
 					$_SESSION['melding']='Optie bestaat niet.';

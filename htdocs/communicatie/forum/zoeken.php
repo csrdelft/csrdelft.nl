@@ -5,9 +5,9 @@ require_once('include.config.php');
 
 # Het middenstuk
 if ($lid->hasPermission('P_FORUM_READ')) {
-	require_once('class.forum.php');
+	require_once('forum/class.forum.php');
 	$forum = new Forum();
-	require_once('class.forumcontent.php');
+	require_once('forum/class.forumcontent.php');
 	$midden = new ForumContent($forum, 'zoeken');
 } else {
 	# geen rechten

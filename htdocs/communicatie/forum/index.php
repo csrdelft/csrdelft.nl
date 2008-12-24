@@ -11,9 +11,9 @@ require_once('include.config.php');
 
 # Het middenstuk
 if ($lid->hasPermission('P_FORUM_READ')) {
-	require_once('class.forum.php');
+	require_once('forum/class.forum.php');
 	$forum = new Forum();
-	require_once('class.forumcontent.php');
+	require_once('forum/class.forumcontent.php');
 	$midden = new ForumContent($forum, 'forum');
 } else {
 	# geen rechten
@@ -23,10 +23,10 @@ if ($lid->hasPermission('P_FORUM_READ')) {
 }
 ## zijkolom in elkaar jetzen
 $zijkolom=new kolom();
-	
+
 $page=new csrdelft($midden);
 $page->setZijkolom($zijkolom);
 $page->addStylesheet('forum.css');
 $page->view();
-	
+
 ?>

@@ -10,10 +10,10 @@
 require_once('include.config.php');
 
 //inhoud
-require_once('class.forumonderwerp.php');
+require_once('forum/class.forumonderwerp.php');
 $forum = new ForumOnderwerp();
 
-#TODO: als het inline bewerken van berichten goed bevonden wordt, kan dit 
+#TODO: als het inline bewerken van berichten goed bevonden wordt, kan dit
 #voor een groot deel hdb, weergeven van bewerkdingen hoeft dan niet meer hier.
 #functies daarvoor in Forum kunnen dan ook weg.
 
@@ -25,7 +25,7 @@ if(isset($_GET['post'])){
 	if($forum->magBewerken($iPostID)){
 		if($_SERVER['REQUEST_METHOD']=='POST'){
 			$bericht=$db->escape(trim($_POST['bericht']));
-			
+
 			//is er een bewerkreden opgegeven?
 			if(isset($_POST['reden']) AND trim($_POST['reden'])!=''){
 				$reden=$db->escape(trim($_POST['reden']));
@@ -52,14 +52,14 @@ if(isset($_GET['post'])){
 			}
 		}else{
 			$_SESSION['melding']='Titel moet minstens twee tekens lang zijn.';
-		}		
+		}
 		header('location: '.CSR_ROOT.'forum/onderwerp/'.$forum->getID());
 		exit;
 	}else{
 		header('location: '.CSR_ROOT.'forum/');
 		$_SESSION['melding']='Onderwerp kan niet geladen worden (ForumOnderwerp::load()).';
 		exit;
-	}	
+	}
 }
 
 ?>

@@ -4,7 +4,7 @@ require_once('include.config.php');
 $sError='';
 # Het middenstuk
 if ($lid->hasPermission('P_FORUM_MOD') OR $lid->getUid()==STATISTICUS){
-	require_once('class.forumonderwerp.php');
+	require_once('forum/class.forumonderwerp.php');
 	$forum = new ForumOnderwerp();
 	//gebruik de standaard categorie als de categorie niet bestaat of niet gezet is.
 	if(!(isset($_GET['cat']) AND $forum->catExistsVoorUser($_GET['cat']))){
@@ -15,11 +15,11 @@ if ($lid->hasPermission('P_FORUM_MOD') OR $lid->getUid()==STATISTICUS){
 	$forum->setCat($iCatID);
 	if($_SERVER['REQUEST_METHOD']=='POST'){
 		//ff de boel verwerken..
-		require_once('class.forumpoll.php');
+		require_once('forum/class.forumpoll.php');
 		$poll = new ForumPoll($forum);
 		if($poll->validatePollForm($sError)){
 			$forum->addTopic($_POST['titel']);
-			
+
 			$iPostID=$forum->addPost($sBericht);
 			if($iPostID!==false){
 				//poll toevoegen aan topic.
@@ -36,13 +36,13 @@ if ($lid->hasPermission('P_FORUM_MOD') OR $lid->getUid()==STATISTICUS){
 			exit;
 		}else{
 			//formulier maeken
-			require_once('class.forumcontent.php');
+			require_once('forum/class.forumcontent.php');
 			$midden= new ForumContent($forum, 'nieuw-poll');
 			$midden->setMelding($sError);
 		}
 	}else{
 		//formulier maeken
-		require_once('class.forumcontent.php');
+		require_once('forum/class.forumcontent.php');
 		$midden= new ForumContent($forum, 'nieuw-poll');
 	}
 } else {
@@ -50,7 +50,7 @@ if ($lid->hasPermission('P_FORUM_MOD') OR $lid->getUid()==STATISTICUS){
 	require_once 'class.paginacontent.php';
 	$pagina=new Pagina('geentoegang');
 	$midden = new PaginaContent($pagina);
-}	
+}
 
 ## zijkolom in elkaar jetzen
 $zijkolom=new kolom();
@@ -59,7 +59,7 @@ $page=new csrdelft($midden);
 $page->setZijkolom($zijkolom);
 $page->addStylesheet('forum.css');
 $page->view();
-	
+
 
 
 ?>
