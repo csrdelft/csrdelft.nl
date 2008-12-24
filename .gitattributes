@@ -184,7 +184,6 @@ lib/class.nieuws.php -text
 lib/class.nieuwscontent.php -text
 lib/class.pagina.php -text
 lib/class.paginacontent.php -text
-lib/class.pollcontent.php -text
 lib/class.profiel.php -text
 lib/class.profielcontent.php -text
 lib/class.saldi.php -text
@@ -203,6 +202,7 @@ lib/forum/class.forumcontent.php -text
 lib/forum/class.forumonderwerp.php -text
 lib/forum/class.forumonderwerpcontent.php -text
 lib/forum/class.forumpoll.php -text
+lib/forum/class.pollcontent.php -text
 lib/gozerbot/class.AES.php -text
 lib/gozerbot/class.GozerbotUDP.php -text
 lib/groepen/class.groep.php -text
