@@ -51,7 +51,7 @@ class ProfielContent extends SimpleHTML {
 		$profhtml['foto']=$this->_lid->getPasfoto($this->_profiel['uid']);
 
 		//woonoord
-		require_once('class.groepen.php');
+		require_once('groepen/class.groepen.php');
 		$woonoord=Groepen::getGroepenByType(2, $this->_profiel['uid']);
 		if(count($woonoord)==1){
 			$woonoord=$woonoord[0];
