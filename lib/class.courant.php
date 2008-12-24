@@ -8,44 +8,44 @@
 
 
 class Courant {
-	
+
 	private $_db;
 	private $_lid;
-	
+
 	//huidige courant, 0 is de nog niet verzonden cache.
 	private $courantID=0;
 	private $berichten=array();
-	
+
 	private $sError='';
-	private $categorieen=array('bestuur', 'csr', 'overig', 'voorwoord');
-	private $catNames=array('Bestuur', 'C.S.R.', 'Overig', 'Voorwoord');
-	
+	private $categorieen=array('bestuur', 'csr', 'overig', 'voorwoord', 'sponsor');
+	private $catNames=array('Bestuur', 'C.S.R.', 'Overig', 'Voorwoord', 'sponsor');
+
 	//Constructor voor de courant
 	function Courant(){
 		$this->_lid=Lid::get_lid();
 		$this->_db=MySql::get_MySql();
-		
-		//de berichten uit de cache laden. Dit zal het meest gebeuren.	
+
+		//de berichten uit de cache laden. Dit zal het meest gebeuren.
 		$this->load(0);
 	}
-	/* 
+	/*
 	 * Courant inladen uit de database.
 	 */
 	public function load($courantID){
 		$this->courantID=(int)$courantID;
 		//leegmaken van de berichtenarray
 		$this->berichten=array();
-		if($this->isCache()){ 
+		if($this->isCache()){
 			$sBerichtenQuery="
 				SELECT
 					ID, titel, cat AS categorie, bericht, datumTijd, uid, volgorde
 				FROM
 					courantcache
-				WHERE 
+				WHERE
 					1
 				ORDER BY
 					cat, volgorde, datumTijd;";
-		}else{ 
+		}else{
 			$sBerichtenQuery="
 				SELECT
 					courant.ID AS mailID,
@@ -53,17 +53,17 @@ class Courant {
 					courant.verzender AS verzendUid,
 					courant.template AS template,
 					courantbericht.ID AS ID,
-					titel, 
-					cat AS categorie, 
-					bericht, 
-					datumTijd, 
-					courantbericht.uid AS berichtUid, 
+					titel,
+					cat AS categorie,
+					bericht,
+					datumTijd,
+					courantbericht.uid AS berichtUid,
 					volgorde
 				FROM
 					courant, courantbericht
-				WHERE 
-					courant.ID=".$this->getID()." 
-				AND 
+				WHERE
+					courant.ID=".$this->getID()."
+				AND
 					courant.ID=courantbericht.courantID
 				ORDER BY
 					cat, volgorde, datumTijd;";
@@ -77,7 +77,7 @@ class Courant {
 		}
 		return false;
 	}
-	
+
 	public function getID(){ return $this->courantID; }
 	public function getError(){ return $this->sError; }
 	public function isCache(){ return $this->courantID==0; }
@@ -87,13 +87,14 @@ class Courant {
 		}else{
 			$return=$this->categorieen;
 		}
-		//voorwoord eruit gooien
-		if(!$this->magBeheren()){ 
+		//voorwoord en sponsor eruit gooien, die zijn enkel voor beheerders beschikbaar.
+		if(!$this->magBeheren()){
 			unset($return[3]);
+			unset($return[4]);
 		}
-		return $return; 
+		return $return;
 	}
-	
+
 	public function getNaam($uid){ return $this->_lid->getNaamLink($uid); }
 	public function getTemplatePath(){
 		$return=SMARTY_TEMPLATE_DIR.'courant/mail/';
@@ -104,13 +105,13 @@ class Courant {
 		}
 		return $return;
 	}
-	
+
 	function magToevoegen(){ return $this->_lid->hasPermission('P_MAIL_POST'); }
 	function magBeheren(){ return $this->_lid->hasPermission('P_MAIL_COMPOSE'); }
 	function magVerzenden(){ return $this->_lid->hasPermission('P_MAIL_SEND'); }
-	
+
 	private function _isValideCategorie($categorie){ return in_array($categorie, $this->categorieen); }
-	
+
 	private function clearTitel($titel){
 		//titel escapen, eerste letter een hoofdletter maken, en de spaties wegkekken
 		return ucfirst($this->_db->escape(trim($titel)));
@@ -120,19 +121,19 @@ class Courant {
 		return ucfirst($this->_db->escape(trim($bericht)));
 	}
 	private function clearCategorie($categorie){
-		if($this->_isValideCategorie($categorie)){ 
+		if($this->_isValideCategorie($categorie)){
 			return $categorie;
 		}else{
-			return 'overig'; 
-		}	
+			return 'overig';
+		}
 	}
 	public function addBericht($titel, $categorie, $bericht){
-		//berichten invoeren mag enkel in de cache	
-		if(!$this->isCache()){ 
-			$this->sError='Berichten mogen enkel in de cache worden ingevoerd. (Courant::addBericht())';			
-			return false; 
+		//berichten invoeren mag enkel in de cache
+		if(!$this->isCache()){
+			$this->sError='Berichten mogen enkel in de cache worden ingevoerd. (Courant::addBericht())';
+			return false;
 		}
-	
+
 		//volgorde van berichten bepalen:
 		$volgorde=0;
 		//agenda altijd helemaal bovenaan
@@ -140,17 +141,17 @@ class Courant {
 		//andere dingen naar achteren
 		if(preg_match('/kamer/i', $titel)){ $volgorde=99; }
 		if(preg_match('/ampel/i', $titel) OR preg_match('/ampel/i', $bericht)){ $volgorde=999; }
-		
+
 		$sBerichtQuery="
 			INSERT INTO
 				courantcache
-			( 
+			(
 				uid, titel, cat, bericht, datumTijd, volgorde
 			)VALUES(
-				'".$this->_lid->getUid()."', '".$this->clearTitel($titel)."', 
+				'".$this->_lid->getUid()."', '".$this->clearTitel($titel)."',
 				'".$this->clearCategorie($categorie)."', '".$this->clearBericht($bericht)."', '".getDateTime()."', ".$volgorde."
 			);";
-		
+
 		return $this->_db->query($sBerichtQuery);
 	}
 	public function isZichtbaar($iBerichtID){
@@ -158,7 +159,7 @@ class Courant {
 		if($this->isCache()){
 			if($this->magBeheren()){ return true; }
 			if(!isset($this->berichten[$iBerichtID])){
-				$this->sError='Bericht staat niet in cache (Courant::isBewerkbaar())';			
+				$this->sError='Bericht staat niet in cache (Courant::isBewerkbaar())';
 			}else{
 				if($this->berichten[$iBerichtID]['uid']!=$this->_lid->getUid()){
 					$this->sError='U mag geen berichten van anderen aanpassen. (Courant::isBewerkbaar())';
@@ -167,9 +168,9 @@ class Courant {
 				}
 			}
 		}else{
-			$this->sError='Berichten mogen enkel in de cache worden ingevoerd. (Courant::isBewerkbaar())';			
+			$this->sError='Berichten mogen enkel in de cache worden ingevoerd. (Courant::isBewerkbaar())';
 		}
-		return false; 
+		return false;
 	}
 	public function bewerkBericht($iBerichtID, $titel, $categorie, $bericht){
 		$iBerichtID=(int)$iBerichtID;
@@ -178,17 +179,17 @@ class Courant {
 			UPDATE
 				courantcache
 			SET
-				titel='".$this->clearTitel($titel)."', 
-				cat='".$this->clearCategorie($categorie)."', 
-				bericht='".$this->clearBericht($bericht)."', 
+				titel='".$this->clearTitel($titel)."',
+				cat='".$this->clearCategorie($categorie)."',
+				bericht='".$this->clearBericht($bericht)."',
 				datumTijd='".getDateTime()."'
 			WHERE
 				ID=".$iBerichtID."
-			LIMIT 1;"; 
+			LIMIT 1;";
 		return $this->_db->query($sBerichtQuery);
-		
+
 	}
-	
+
 	public function valideerBerichtInvoer(){
 		$bValid=true;
 		if(isset($_POST['titel']) AND isset($_POST['categorie']) AND isset($_POST['bericht'])){
@@ -213,7 +214,7 @@ class Courant {
 		}
 		return $bValid;
 	}
-	
+
 	public function getVerzendmoment(){
 		if(!$this->isCache()){
 			//beetje ranzige manier om het eerste element van de array aan te spreken
@@ -223,8 +224,8 @@ class Courant {
 			$this->sError='De cache is nog niet verzonden, dus heeft geen verzendmoment (Courant::getVerzendMoment())';
 			return false;
 		}
-	}	
-	
+	}
+
 	public function getBerichten(){
 		if(!is_array($this->berichten)){
 			$this->sError='Er zijn geen berichten ingeladen (Courant::getBerichten())';
@@ -255,13 +256,13 @@ class Courant {
 			return false;
 		}
 	}
-	
+
 	public function getBericht($iBerichtID){
 		$iBerichtID=(int)$iBerichtID;
 		if(!$this->isZichtbaar($iBerichtID)){ return false; }
 		return $this->berichten[$iBerichtID];
 	}
-	
+
 	public function verwijderBericht($iBerichtID){
 		$iBerichtID=(int)$iBerichtID;
 		if(!$this->isZichtbaar($iBerichtID)){ return false; }
@@ -274,17 +275,17 @@ class Courant {
 		$this->_db->query($sBerichtVerwijderen);
 		return mysql_affected_rows()==1;
 	}
-	
-	
 
-	
+
+
+
 	/*
-	 * functie rost alles vanuit de tabel courantcache naar de tabel 
+	 * functie rost alles vanuit de tabel courantcache naar de tabel
 	 * courant en courantbericht, zodat ze daar bewaard kunnen worden ter archivering.
 	 */
 	public function leegCache(){
 		if(count($this->getBerichten())==0){
-			$this->sError='Courant bevat helemaal geen berichten (Courant::leegCache())';			
+			$this->sError='Courant bevat helemaal geen berichten (Courant::leegCache())';
 			return false;
 		}
 		$iCourantID=$this->createCourant();
@@ -297,10 +298,10 @@ class Courant {
 					(
 						courantID, titel, cat, bericht, volgorde, uid, datumTijd
 					)VALUES(
-						".$iCourantID.", 
-						'".$this->clearTitel($aBericht['titel'])."', 
-						'".$this->clearCategorie($aBericht['categorie'])."', 
-						'".$this->clearBericht($aBericht['bericht'])."', 
+						".$iCourantID.",
+						'".$this->clearTitel($aBericht['titel'])."',
+						'".$this->clearCategorie($aBericht['categorie'])."',
+						'".$this->clearBericht($aBericht['bericht'])."',
 						'".$aBericht['volgorde']."',
 						'".$aBericht['uid']."',
 						'".$aBericht['datumTijd']."'
@@ -315,14 +316,14 @@ class Courant {
 			return false;
 		}
 	}
-	
+
 	private function createCourant(){
 		$uid=$this->_lid->getUid();
 		$datumTijd=getDateTime();
 		$sCreatecourantQuery="
 			INSERT INTO
 				courant
-			( 
+			(
 				verzendMoment, verzender, template
 			) VALUES (
 				'".$datumTijd."', '".$uid."', '".COURANT_TEMPLATE."'
@@ -333,7 +334,7 @@ class Courant {
 			return false;
 		}
 	}
-	
+
 	################################################################
 	###	Archief-methodes, heeft niets meer met de huidige instantie
 	### te maken.
@@ -342,19 +343,19 @@ class Courant {
 		$sArchiefQuery="
 			SELECT
 				ID, verzendMoment, verzender, YEAR(verzendMoment) AS jaar
-			FROM 
+			FROM
 				courant
 			HAVING
 				jaar >= YEAR(NOW())-9
-			ORDER BY 
+			ORDER BY
 				verzendMoment DESC;";
 		$rArchief=$this->_db->query($sArchiefQuery);
-		
+
 		if($this->_db->numRows($rArchief)==0){
 			return false;
 		}else{
 			return $this->_db->result2array($rArchief);
 		}
-	}	
+	}
 }//einde classe Courant
 ?>

@@ -103,13 +103,20 @@ div.citaat{
 }
 div.citaatContainer div.citaat div.citaatContainer div.citaat{ background-color: #e9e9e9;}
 div.citaatContainer div.citaat div.citaatContainer div.citaat div.citaatContainer div.citaat{ background-color: #efefef;}
-.code{
+pre.ubb_code{
 	font-family: monospace;
 	background-color: #f1f1f1;
+	margin-top: 4px;
+	border-top: 2px solid black;
+	border-bottom: 2px solid black;
+	max-width: 566px;
 }
 img.forum_image{
 	max-width: 586px; border: 0;
-}	
+}
+div.citaatContainer img.forum_image{
+	max-width: 556px;
+}
 #pollTabel{
 	width: 100%; 
 	margin: 10px 10px 10px 10px; 

@@ -100,7 +100,7 @@ li{
 	Weergave van de kopjes bovenaan. Beetje een raar verhaal geworden, maar zo is het wel lekker dynamisch
 *}
 {foreach from=$indexCats item=categorie key=catKey}
-	{if $categorie!='voorwoord'}
+	{if $categorie!='voorwoord' AND $categorie!='sponsor'}
 		<td class="inhoudKolom" valign="top">
 		<font face="verdana" size="-1">
 		<div class="inhoudKop"><b>{$catNames[$catKey]}</b></div>
