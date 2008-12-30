@@ -173,7 +173,6 @@ class NieuwsContent extends SimpleHTML {
 	private function getBericht(){
 		$aBericht=$this->_nieuws->getMessage($this->_berichtID, true);
 		if(is_array($aBericht)){
-			echo '<div class="nieuwsbericht">';
 			if($aBericht['plaatje']!=''){
 				echo '<div class="nieuwsplaatje"><img src="'.CSR_PICS.'nieuws/'.$aBericht['plaatje'].'" width="200px" height="200px" alt="'.$aBericht['plaatje'].'" /></div>';
 			}
@@ -183,11 +182,8 @@ class NieuwsContent extends SimpleHTML {
 			echo mb_htmlentities($aBericht['titel']).'</div><i>('.date('d-m-Y H:i', $aBericht['datum']).')</i> ';
 			//nieuwsbeheer functie dingen:
 			echo '<br />'.$this->ubb->getHTML($aBericht['tekst']).'<br />';
-			
-			echo '</div></div>';
+			echo '</div>';
 			echo $this->getBerichtModControls($aBericht['id']);
-			//echo '<br /><br />';
-			//echo $this->getNieuwBerichtLink();
 		}else{
 			echo 'Dit bericht bestaat niet, of is enkel zichtbaar voor ingelogde gebruikers.';
 		}
@@ -222,11 +218,20 @@ class NieuwsContent extends SimpleHTML {
 	private function viewOverzicht()
 	{
 		$lid=Lid::get_lid();
+		
+		// berichtID setten als dat nog niet gedaan is.
+		if(empty($this->_berichtID))
+			$this->_berichtID = $this->_nieuws->getBelangrijksteMededelingId();
+
 		$includeVerborgen=false;
 		if($lid->hasPermission('P_NEWS_MOD')){ $includeVerborgen=true; }
 		$aBerichten=$this->_nieuws->getMessages(0, $includeVerborgen);
+		
 		echo '<div class="mededelingen-overzichtlijst">';
 		$this->getOverzichtLijst($aBerichten);
+		echo '</div>';
+		echo '<div class="nieuwsbericht">';
+		$this->getBericht();
 		echo '</div>';
 		echo '<div id="mededelingen-top3block">';
 		echo $this->getTopBlock();
@@ -239,9 +244,9 @@ class NieuwsContent extends SimpleHTML {
 			echo 'Zoals het is, zoals het was, o Civitas!<br />(Geen mededelingen gevonden dus…)<br /><br />';
 		}else{
 			$bEersteRecord=true;
-			$iHuidigeJaarWeeknummer=date('YW')+1; // Volgende week.
+			$iHuidigeJaarWeeknummer=date('oW')+1; // Volgende week.
 			foreach ($aBerichten as $aBericht) {
-				$iJaarWeeknummer=date('YW', $aBericht['datum']); // De week van dit record (yyyymm)
+				$iJaarWeeknummer=date('oW', $aBericht['datum']); // De week van dit record (yyyymm)
 				if($iJaarWeeknummer < $iHuidigeJaarWeeknummer){ // Indien we een andere week aan het printen zijn dan de vorige
 					// Voor de eerste keer niets sluiten.
 					if(!$bEersteRecord) { echo '</div>'; }
@@ -252,16 +257,20 @@ class NieuwsContent extends SimpleHTML {
 					echo '<div class="mededelingenlijst-block-titel">Week '.(int)date('W', $aBericht['datum']).'</div>';
 					$iHuidigeJaarWeeknummer = $iJaarWeeknummer;
 				}
-				$sDate=date('(d-m)',$aBericht['datum']);
+				$id='';
+				$class='mededelingenlijst-item';
 				if($aBericht['verborgen']=='1'){
-					echo '<div class="mededelingenlijst-item" id="verborgen">';
-				}else{
-					echo '<div class="mededelingenlijst-item">';
+					$class.=' verborgen-item';
 				}
+				if($aBericht['id']==$this->_berichtID){
+					$id.='id="actief" ';
+				}
+				echo '<div '.$id.'class="'.$class.'">';
 				if($aBericht['categorieplaatje']!=''){
 					echo '<div class="mededelingenlijst-plaatje"><a href="'.NIEUWS_ROOT.$aBericht['id'].'">
 						<img src="'.CSR_PICS.'nieuws/'.$aBericht['categorieplaatje'].'" width="10px" height="10px" alt="'.$aBericht['categorienaam'].'" /></a></div>';
 				}
+				$sDate=date('(d-m)',$aBericht['datum']);
 				echo '<div class="itemtitel">'.$sDate.' <a href="'.NIEUWS_ROOT.$aBericht['id'].'">';
 				echo $this->knipTekst(mb_htmlentities($aBericht['titel']), 35, 1).'</a></div>';
 				echo '</div>'; // mededelingenlijst-item
@@ -411,7 +420,7 @@ class NieuwsContent extends SimpleHTML {
 	private function getPaginaTitel(){
 		switch($this->_actie){
 			case 'bewerken': return 'Mededeling bewerken'; break;
-			case 'bericht': return 'Mededeling'; break;
+//			case 'bericht': return 'Mededeling'; break;
 			case 'toevoegen': return 'Mededeling toevoegen'; break;
 			case 'beheer': return 'Mededelingen beheer'; break;
 			case 'overzicht': return 'Mededelingen'; break;
@@ -423,7 +432,7 @@ class NieuwsContent extends SimpleHTML {
 		}
 		switch($this->_actie){
 			case 'bewerken': $this->bewerkFormulier(); break;
-			case 'bericht': $this->getBericht(); break;
+//			case 'bericht': $this->getBericht(); break;
 			case 'toevoegen': $this->nieuwFormulier(); break;
 			case 'belangrijkste1': $this->viewBelangrijksteMededelingBlock(); break;
 			case 'laatste': $this->getLaatsteMededelingen(); break;

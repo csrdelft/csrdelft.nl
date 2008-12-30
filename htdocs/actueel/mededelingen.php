@@ -98,7 +98,7 @@ if(isset($_POST['titel'], $_POST['tekst'], $_POST['categorie'], $_POST['rank']) 
 				}
 			}
 		}else{
-			$nieuwscontent->setActie('bericht');
+			$nieuwscontent->setActie('overzicht');
 		}
 	}else{
 		if(isset($_GET['toevoegen'])){

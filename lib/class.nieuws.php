@@ -234,6 +234,55 @@ class Nieuws {
 				rank='".$rank."';";
 		$this->_db->query($sUpdateRankQuery);
 	}
+	
+	/*
+	 * Geeft de id van de belangrijkste mededeling terug.
+	 * De belangrijkste mededeling is het top 1-bericht en als deze
+	 * niet bestaat, is het de nieuwste.
+	 */
+	public function getBelangrijksteMededelingId()
+	{
+		$sTop1Query="
+			SELECT
+				id 
+			FROM
+				mededeling
+			WHERE
+				rank = '1' AND
+				mededeling.verwijderd='0' AND
+				mededeling.verborgen='0';
+		";
+		$rTop1=$this->_db->query($sTop1Query);
+		if($this->_db->numRows($rTop1)==1){ // Indien er gewoon één resultaat is.
+			$aTop1=$this->_db->next($rTop1);
+			return (int)$aTop1['id'];
+		} else {
+			// Als er géén top1 is, of zelfs meerdere, dan gaan we zoeken naar de nieuwste mededeling.
+			$sNieuwsteQuery="
+				SELECT
+					id 
+				FROM
+					mededeling
+				WHERE
+					mededeling.verwijderd='0' AND
+					mededeling.verborgen='0'
+				ORDER BY
+					datum DESC, id DESC
+				LIMIT
+					1;
+			";
+			$rNieuwste=$this->_db->query($sNieuwsteQuery);
+			if($this->_db->numRows($rNieuwste)==1){ // Indien er gewoon één resultaat is.
+				$aNieuwste=$this->_db->next($rNieuwste);
+				return (int)$aNieuwste['id'];
+			}
+			else
+			{
+				// Indien er helemaal geen mededeling te vinden is, geven we 0 terug.
+				return 0;
+			}
+		}
+	}
 }
 
 ?>
