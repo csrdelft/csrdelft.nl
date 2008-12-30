@@ -105,7 +105,7 @@ class savedQuery{
 					if($key=='uid_naam'){
 						$return.=$lid->getNaamLink($veld, 'full', true);
 					}elseif(substr($key, 0, 10)=='groep_naam' AND $veld!=''){
-						require_once('class.groep.php');
+						require_once('groepen/class.groep.php');
 						//$veld mag een enkel id zijn of een serie door komma's gescheiden id's
 						$groepen=explode(',', $veld);
 						$groeplinks=array();

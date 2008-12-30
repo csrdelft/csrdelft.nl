@@ -642,7 +642,7 @@ class Lid {
 	 */
 	function isBestuur($uid=''){
 		if($uid==''){ $uid=$this->getUid(); }
-		require_once('class.groep.php');
+		require_once('groepen/class.groep.php');
 		$bestuur=new Groep('bestuur');
 		return $bestuur->isLid($uid);
 	}

@@ -299,9 +299,9 @@ class VBContent extends SimpleHTML {
 		if ($source->sourceType=="discussion") {
 			//copied from forumonderwerp.php
 			require_once('include.config.php');
-			require_once('class.forumonderwerp.php');
-			require_once('class.forumcontent.php');
-			require_once('class.forumonderwerpcontent.php');
+			require_once('forum/class.forumonderwerp.php');
+			require_once('forum/class.forumcontent.php');
+			require_once('forum/class.forumonderwerpcontent.php');
 			# Het middenstuk
 			if($this->_vb->_lid->hasPermission('P_FORUM_READ')) {
 				$forum = new ForumOnderwerp();

@@ -15,7 +15,7 @@ if(isset($_GET['uid']) AND ($lid->isValidUid($_GET['uid']) OR $_GET['uid']=='000
 }else{
 	$uid=$lid->getUid();
 }
-require_once('class.groep.php');
+require_once('groepen/class.groep.php');
 $soccie=new Groep('SocCie');
 
 if($lid->hasPermission('P_ADMIN') OR $soccie->isLid($lid->getUid()) OR $lid->getUid()==$uid){
