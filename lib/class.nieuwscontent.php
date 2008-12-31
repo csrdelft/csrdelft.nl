@@ -174,14 +174,15 @@ class NieuwsContent extends SimpleHTML {
 	private function getBericht(){
 		$aBericht=$this->_nieuws->getMessage($this->_berichtID, true);
 		if(is_array($aBericht)){
-			if($aBericht['plaatje']!=''){
-				echo '<div class="nieuwsplaatje"><img src="'.CSR_PICS.'nieuws/'.$aBericht['plaatje'].'" width="200px" height="200px" alt="'.$aBericht['plaatje'].'" /></div>';
-			}
 			echo '<div class="nieuwsbody"><div class="nieuwstitel">';
 			//verborgen berichten aangeven, enkel bij mensen met P_NEWS_MOD
 			if($aBericht['verborgen']=='1'){ echo '<em>[verborgen] </em>';	}
-			echo mb_htmlentities($aBericht['titel']).'</div><i>('.date('d-m-Y H:i', $aBericht['datum']).')</i> ';
+			echo mb_htmlentities($aBericht['titel']).'</div>';
 			//nieuwsbeheer functie dingen:
+			if($aBericht['plaatje']!=''){
+				echo '<img class="nieuwsplaatje" src="'.CSR_PICS.'nieuws/'.$aBericht['plaatje'].'" width="200px" height="200px" alt="'.$aBericht['plaatje'].'" />';
+			}
+			echo '<i>('.date('d-m-Y H:i', $aBericht['datum']).')</i> ';
 			echo '<br />'.$this->ubb->getHTML($aBericht['tekst']).'<br />';
 			echo '</div>';
 			echo $this->getBerichtModControls($aBericht['id']);
@@ -231,14 +232,14 @@ class NieuwsContent extends SimpleHTML {
 		echo '<div class="mededelingen-overzichtlijst">';
 		$this->getOverzichtLijst($aBerichten);
 		echo '</div>';
-		echo '<div style="width: 400px; float: left;">';
+//		echo '<div style="width: 400px; float: left;">';
 		echo '<div class="nieuwsbericht">';
 		$this->getBericht();
 		echo '</div>';
 		echo '<div id="mededelingen-top3block">';
 		echo $this->getTopBlock();
 		echo '</div>';
-		echo '</div>';
+//		echo '</div>';
 	}
 
 	private function getOverzichtLijst(array $aBerichten)

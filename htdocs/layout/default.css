@@ -416,11 +416,12 @@ p img{ margin: 15px 10px; }
 	min-height: 200px; _height: 200px;
 	border-top: 1px solid black;
 	border-left: 1px solid black;
-	background-color: #E8CF2A;
+	background-color: #ffef7d;
+	width: 360px;
 }
-.nieuwsplaatje{	margin: 0px 0px 0px 12px; float: right;}
+.nieuwsplaatje{	margin: 0px 0px 0px 8px; float: right; border: 1px solid black;}
 .nieuwsbody{	margin: 0px 0px 0px 0px; padding: 0px 3px 5px 0px;}	
-.nieuwstitel{	font-size: 1.3em; font-weight: bold; margin-bottom: 5px;}
+.nieuwstitel{	font-size: 1.3em; font-weight: bold; margin-bottom: 5px; text-align: left;}
 .nieuwstitel a{ color:  black;}
 .nieuwsbericht-vast{ height: 100px;	}
 
@@ -461,7 +462,7 @@ p img{ margin: 15px 10px; }
 	text-align: left;
 }
 .mededelingenlijst-item#actief{
-	background-color: #E8CF2A;
+	background-color: #ffef7d;
 }
 .mededelingenlijst-block a{	color: black; }
 .mededelingenlijst-plaatje{ margin: 0px 5px 0px 0px; float: left; }
@@ -509,6 +510,7 @@ p img{ margin: 15px 10px; }
 #mededelingen-top3block{
 	float: left;
 	margin: 10px 10px 0px 0px;
+	width: 376px;
 }
 
 a.knop{
