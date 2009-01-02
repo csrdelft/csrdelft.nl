@@ -46,6 +46,9 @@ function smarty_function_knop($params, &$smarty){
 	if(isset($params['confirm'])){
 		$knop->setConfirm($params['confirm']);
 	}
+	if(isset($params['class'])){
+		$knop->setClass($params['class']);
+	}
 
     return $knop->getHtml();
 }

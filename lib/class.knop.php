@@ -9,7 +9,7 @@
  */
 class Knop{
 
-	private $knoptypes=array('default', 'toevoegen', 'bewerken', 'verwijderen', 'citeren');
+	private $knoptypes=array('default', 'toevoegen', 'bewerken', 'verwijderen', 'citeren', 'slotje', 'plakkerig');
 	public $url;			//url van de knop.
 	public $type='default';	//type van de knop, default= zonder plaatje, bij de andere opties hoort een plaatje.
 	public $class='knop'; 	//css class
@@ -68,7 +68,7 @@ class Knop{
 			//we gaan een plaatje erbij doen.
 			$html.=$this->getImgTag();
 		}
-		$html.=$this->text;
+		$html.=' '.$this->text;
 		$html.='</a>';
 		return $html;
 	}
