@@ -11,10 +11,10 @@ require_once('class.ldap.php');
 
 class Lid {
 	static private $lid;
-	
+
 	### private ###
 	protected $_db;
-	
+
 	# het profiel van een gebruiker, i.e. zijn regel uit de database die we inladen
 	# komt in de sessie...
 
@@ -26,7 +26,7 @@ class Lid {
 	# Het profiel van de gebruiker... niet meer in de sessie maar bij elke pagina
 	# opgehaald, om wijzigingen meteen actief te krijgen.
 	protected $_profile;
-	
+
 	//singleton functionaliteit...
 	private function __construct(){ $this->Lid(); }
 	static function get_lid(){
@@ -61,7 +61,7 @@ class Lid {
 		}
 		# experimentele logfunctie
 		if(!$this instanceof Profiel){ $this->logBezoek(); }
-	
+
 	}
 
 	### public ###
@@ -96,7 +96,7 @@ class Lid {
 			$result = $this->_db->select("SELECT * FROM lid WHERE nickname = '{$user}' LIMIT 1");
 			if (($result !== false) and $this->_db->numRows($result) > 0) {
 				$profile = $this->_db->next($result);
-			# anders helaasch 
+			# anders helaasch
 			} else {
 				return false;
 			}
@@ -108,11 +108,11 @@ class Lid {
 		# als dat klopt laden we het profiel in en richten de sessie in
 		$this->_profile = $profile;
 		$_SESSION['_uid'] = $profile['uid'];
-		
+
 		# sessie koppelen aan ip?
 		if ($checkip == true) $_SESSION['_ip'] = $_SERVER['REMOTE_ADDR'];
 		else if (isset($_SESSION['_ip'])) unset($_SESSION['_ip']);
-		
+
 		return true;
 	}
 
@@ -143,7 +143,7 @@ class Lid {
 			return true;
 		}
 		return false;
-	}	
+	}
 
 	function logout() {
 		session_unset();
@@ -155,12 +155,12 @@ class Lid {
 	function hasPermission($descr) {
 		# zoek de rechten van de gebruiker op
 		$liddescr = $this->_profile['permissies'];
-		
+
 		# ga alleen verder als er een geldige permissie wordt teruggegeven
 		if (!array_key_exists($liddescr, $this->_perm_user)) return false;
 		# zoek de code op
 		$lidheeft = $this->_perm_user[$liddescr];
-		
+
 		# Het gevraagde mag een enkele permissie zijn, of meerdere, door komma's
 		# gescheiden, waarvan de gebruiker er dan een hoeft te hebben. Er kunnen
 		# dan ook uid's tussen zitten, als een daarvan gelijk is aan dat van de
@@ -171,12 +171,12 @@ class Lid {
 			if($permissie==$this->getUid()){
 				return true;
 			}
-			
+
 			# ga alleen verder als er een geldige permissie wordt gevraagd
 			if (array_key_exists($descr, $this->_permissions)){
 				# zoek de code op
 				$gevraagd = (int) $this->_permissions[$descr];
-	
+
 				# $p is de gevraagde permissie als octaal getal
 				# de permissies van de gebruiker kunnen we bij $this->_lid opvragen
 				# als we die 2 met elkaar AND-en, dan moet het resultaat hetzelfde
@@ -197,7 +197,7 @@ class Lid {
 				}
 			}
 		}
-		
+
 		# Zo niet... dan niet
 		return false;
 	}
@@ -209,12 +209,12 @@ class Lid {
 	function getStatus()      { return $this->_profile['status']; }
 	function getForumInstelling(){ return array('forum_naam' => $this->_profile['forum_name']); }
 	function getForumNaamInstelling(){ return $this->_profile['forum_name']; }
-	
+
 	function getForumLaatstBekeken(){
 		if($this->getUID()=='x999'){
 			return time();
 		}else{
-			return strtotime($this->_profile['forum_laatstbekeken']); 
+			return strtotime($this->_profile['forum_laatstbekeken']);
 		}
 	}
 	function updateForumLaatstBekeken(){
@@ -223,11 +223,11 @@ class Lid {
 			$this->_db->query($sDatumQuery);
 			$this->_profile['forum_laatstbekeken']=date('Y-m-d H:i:s');
 		}
-	} 
-	
+	}
+
 	function getEmail($uid=''){
-		if($uid==''){ 
-			$uid=$this->getUid(); 
+		if($uid==''){
+			$uid=$this->getUid();
 		}else{
 			if(!$this->isValidUid($uid)){
 				return false;
@@ -286,14 +286,14 @@ class Lid {
 			}
 		}
 		$aNaam=$this->getLidFromCache($uid);
-		
+
 		$sVolledigeNaam=$aNaam['voornaam'].' ';
 		if($aNaam['tussenvoegsel']!='') $sVolledigeNaam.=$aNaam['tussenvoegsel'].' ';
 		$sVolledigeNaam.=$aNaam['achternaam'];
 
 		//link tonen als dat gevraagd wordt EN als gebruiker is ingelogged.
-		if($link AND $this->hasPermission('P_LOGGED_IN')){ 
-			$sNaam.='<a href="/communicatie/profiel/'.$uid.'" title="'.$sVolledigeNaam.'" class="'.$aNaam['status'].'">'; 
+		if($link AND $this->hasPermission('P_LOGGED_IN')){
+			$sNaam.='<a href="/communicatie/profiel/'.$uid.'" title="'.$sVolledigeNaam.'" class="'.$aNaam['status'].'">';
 		}
 		//als $vorm==='user', de instelling uit het profiel gebruiken voor vorm
 		if($vorm=='user'){
@@ -305,7 +305,7 @@ class Lid {
 					$sTmpNaam=$aNaam['nickname'];
 				}else{
 					$sTmpNaam=$sVolledigeNaam;
-				}		
+				}
 			break;
 			//achternaam, voornaam [tussenvoegsel] voor de streeplijst
 			case 'streeplijst':
@@ -326,7 +326,7 @@ class Lid {
 				}else{
 					$sTmpNaam=($aNaam['geslacht']=='v') ? 'Ama. ' : 'Am. ';
 					if($aNaam['tussenvoegsel'] != '') $sTmpNaam.=ucfirst($aNaam['tussenvoegsel']).' ';
-					$sTmpNaam.=$aNaam['achternaam'];				
+					$sTmpNaam.=$aNaam['achternaam'];
 					if($aNaam['postfix'] != '') $sTmpNaam.=' '.$aNaam['postfix'];
 					if($aNaam['status']=='S_OUDLID') $sTmpNaam.=' •';
 				}
@@ -334,19 +334,19 @@ class Lid {
 			default:
 				$sTmpNaam='Formaat in $vorm is onbekend.';
 		}
-		if($bHtmlentities){ 
-			$sNaam.=mb_htmlentities($sTmpNaam); 
-		}else{ 
-			$sNaam.=$sTmpNaam; 
+		if($bHtmlentities){
+			$sNaam.=mb_htmlentities($sTmpNaam);
+		}else{
+			$sNaam.=$sTmpNaam;
 		}
 		if($link AND $this->hasPermission('P_LOGGED_IN')){ $sNaam.='</a>'; }
-		
-		return $sNaam;	
-	}	
+
+		return $sNaam;
+	}
 	public static function getNaamArray($uid){
 		$db=MySql::get_MySql();
 		$qNaam="
-			SELECT nickname, voornaam, tussenvoegsel, achternaam, status, geslacht, postfix 
+			SELECT nickname, voornaam, tussenvoegsel, achternaam, status, geslacht, postfix
 			FROM lid WHERE uid='".$uid."' LIMIT 1;";
 		$rNaam=$db->query($qNaam);
 		if($rNaam!==false and $db->numRows($rNaam)==1){
@@ -356,22 +356,22 @@ class Lid {
 			return 'onbekend';
 		}
 	}
-	
-	
+
+
 	function getFullName($uid='') {
 		if($uid==''){ $uid=$this->getUid(); }
 		//geen bijnaam of am./ama., geen link, geen input-array.
 		return $this->getNaamLink($uid, 'full', false, false);
 	}
-	
+
 	function getCivitasName($uid=''){
 		if($uid==''){ $uid=$this->getUid(); }
 		//geen bijnaam, geen link, geen input-array
 		return $this->getNaamLink($uid, 'civitas', false, false);
 	}
-	
+
 	function getMoot() { return $this->_profile['moot']; }
-	
+
 	function _loadPermissions() {
 		# Hier staan de permissies die voor enkele onderdelen van
 		# de website nodig zijn. Ze worden zowel op de 'echte'
@@ -381,11 +381,11 @@ class Lid {
 		# POST = Rechten om iets toe te voegen
 		# MOD  = Moderate rechten, dus verwijderen enzo
 		# Let op: de rechten zijn cumulatief en octaal
-		
+
 		$this->_permissions = array(
 			'P_NOBODY'       => 00000000001,
 			'P_LOGGED_IN'    => 00000000003, # Leden-menu, eigen profiel raadplegen
-			'P_ADMIN'        => 00000000007, # Admin dingen algemeen...	
+			'P_ADMIN'        => 00000000007, # Admin dingen algemeen...
 			'P_FORUM_READ'   => 00000000400, # Forum lezen
 			'P_FORUM_POST'   => 00000000500, # Berichten plaatsen op het forum en eigen berichten wijzigen
 			'P_FORUM_MOD'    => 00000000700, # Forum-moderator mag berichten van anderen wijzigen of verwijderen
@@ -412,8 +412,8 @@ class Lid {
 			'P_MAIL_COMPOSE' => 03000000000, # mag alle berichtjes in de pubcie-mail bewerken, en volgorde wijzigen
 			'P_MAIL_SEND'    => 07000000000, # mag de C.S.R.-mail verzenden
 			'P_BIEB_READ'    => 00000000010, # Bibliotheek lezen
-			'P_BIEB_EDIT'    => 00000000030, # Bibliotheek wijzigen		
-			'P_BIEB_MOD'     => 00000000070, # Bibliotheek zowel wijzigen als lezen	
+			'P_BIEB_EDIT'    => 00000000030, # Bibliotheek wijzigen
+			'P_BIEB_MOD'     => 00000000070, # Bibliotheek zowel wijzigen als lezen
 			# N.B. bij uitbreiding van deze octale getallen met nog een cijfer erbij gaat er iets mis, wat weten we nog niet.
 		);
 
@@ -456,7 +456,7 @@ class Lid {
 	function _isSecure($uid, $nick, $passwd, &$error) {
 		# We doen een aantal standaard checks die een foutmelding kunnen produceren...
 		$error = "";
-	
+
 		$sim_uid = 0; $foo = similar_text($uid,$passwd,$sim_uid);
 		$sim_nick = 0; $foo = similar_text($nick,$passwd,$sim_nick);
 
@@ -482,11 +482,11 @@ class Lid {
 	function zoekLeden($zoekterm, $zoekveld, $moot, $sort, $zoekstatus = '') {
 		$leden = array();
 		$zoekfilter='';
-		
+
 		# mysql escape dingesen
 		$zoekterm = trim($this->_db->escape($zoekterm));
 		$zoekveld = trim($this->_db->escape($zoekveld));
-		
+
 		//Zoeken standaard in voornaam, achternaam, bijnaam en uid.
 		if($zoekveld=='naam' AND !preg_match('/^\d{2}$/', $zoekterm)){
 			if(preg_match('/ /', trim($zoekterm))){
@@ -501,9 +501,12 @@ class Lid {
 				}
 			}else{
 				$zoekfilter="
-					voornaam LIKE '%{$zoekterm}%' OR achternaam LIKE '%{$zoekterm}%' OR 
+					voornaam LIKE '%{$zoekterm}%' OR achternaam LIKE '%{$zoekterm}%' OR
 					nickname LIKE '%{$zoekterm}%' OR uid LIKE '%{$zoekterm}%'";
 			}
+		}elseif($zoekveld='adres'){
+			$zoekfilter="adres LIKE '%{$zoekterm}%' OR woonplaats LIKE '%{$zoekterm}%' OR
+				postcode LIKE '%{$zoekterm}%' OR REPLACE(postcode, ' ', '') LIKE '%".str_replace(' ', '', $zoekterm)."%'";
 		}else{
 			if(preg_match('/^\d{2}$/', $zoekterm) AND ($zoekveld=='uid' OR $zoekveld=='naam')){
 				//zoeken op lichtingen...
@@ -512,18 +515,18 @@ class Lid {
 				$zoekfilter="{$zoekveld} LIKE '%{$zoekterm}%'";
 			}
 		}
-		
+
 		$sort = $this->_db->escape($sort);
 
 		# in welke status wordt gezocht, is afhankelijk van wat voor rechten de
 		# ingelogd persoon heeft
-		
+
 		$statusfilter = '';
-		
+
 		if(is_array($zoekstatus)){
-			//we gaan nu gewoon simpelweg statussen aan elkaar plakken. LET OP: deze functie doet nu 
+			//we gaan nu gewoon simpelweg statussen aan elkaar plakken. LET OP: deze functie doet nu
 			//geen controle of een gebruiker dat mag, dat moet dus eerder gebeuren.
-			$statusfilter="status='".implode("' OR status='", $zoekstatus)."'"; 
+			$statusfilter="status='".implode("' OR status='", $zoekstatus)."'";
 		}else{
 			# we zoeken in leden als
 			# 1. ingelogde persoon dat alleen maar mag of
@@ -551,7 +554,7 @@ class Lid {
 				$statusfilter = "status='S_NOBODY'";
 			}
 		}
-		
+
 		# als er een specifieke moot is opgegeven, gaan we alleen in die moot zoeken
 		$mootfilter = ($moot != 'alle') ? 'AND moot= '.(int)$moot : '';
 
@@ -560,18 +563,18 @@ class Lid {
 			$sZoeken="
 				SELECT
 					uid, nickname, voornaam, tussenvoegsel, achternaam, postfix, adres, postcode, woonplaats, land, telefoon,
-					mobiel, email, geslacht, voornamen, icq, msn, skype, jid, website, beroep, studie, studiejaar, lidjaar, 
-					gebdatum, moot, kring, kringleider, motebal, 
-					o_adres, o_postcode, o_woonplaats, o_land, o_telefoon, 
+					mobiel, email, geslacht, voornamen, icq, msn, skype, jid, website, beroep, studie, studiejaar, lidjaar,
+					gebdatum, moot, kring, kringleider, motebal,
+					o_adres, o_postcode, o_woonplaats, o_land, o_telefoon,
 					kerk, muziek, eetwens, status
-				FROM 
-					lid 
-				WHERE 
+				FROM
+					lid
+				WHERE
 					(".$zoekfilter.")
-				AND 
-					($statusfilter) 
+				AND
+					($statusfilter)
 				{$mootfilter}
-				ORDER BY 
+				ORDER BY
 					{$sort}";
 			$result = $this->_db->select($sZoeken);
 			if ($result !== false and $this->_db->numRows($result) > 0) {
@@ -581,21 +584,21 @@ class Lid {
 
 		return $leden;
 	}
-	
+
 	function nickExists($nick) {
 		# mysql escape dingesen
 		$nick = $this->_db->escape($nick);
 		$result = $this->_db->select("SELECT uid FROM lid WHERE nickname = '".$nick."'");
 		return ($result !== false and $this->_db->numRows($result) > 0);
 	}
-	
+
 	function isValidUid($uid) {
 		return preg_match('/^[a-z0-9]{4}$/', $uid) > 0;
 	}
 
 	function uidExists($uid) {
 		if (!$this->isValidUid($uid)) return false;
-		
+
 		$result = $this->_db->select("SELECT uid FROM lid WHERE uid = '{$uid}'");
 		if ($result !== false and $this->_db->numRows($result) > 0) {
 			#echo $this->_db->numRows($result);
@@ -605,7 +608,7 @@ class Lid {
 	}
 	/*
 	 * getPasfoto()
-	 * 
+	 *
 	 * Kijkt of er een pasfoto voor het gegeven uid is, en geef die terug.
 	 */
 	function getPasfoto($uid=null, $imgTag=true){
@@ -613,31 +616,31 @@ class Lid {
 			$uid=$this->getUid();
 		}
 		$validExtensions=array('gif', 'jpg', 'jpeg', 'png');
-		
+
 		$pasfoto=CSR_PICS.'pasfoto/geen-foto.png';
-		
+
 		foreach($validExtensions as $validExtension){
 			if(file_exists(PICS_PATH.'/pasfoto/'.$uid.'.'.$validExtension)){
 				$pasfoto=CSR_PICS.'pasfoto/'.$uid.'.'.$validExtension;
 				continue;
 			}
 		}
-		
+
 		if($imgTag===true OR $imgTag==='small'){
 			$html='<img class="pasfoto" src="'.$pasfoto.'" ';
 			if($imgTag==='small'){
 				$html.='style="width: 100px;" ';
 			}
 			$html.='alt="pasfoto" />';
-			return $html; 
+			return $html;
 		}else{
 			return $pasfoto;
 		}
 	}
-	
-	
+
+
 	/*
-	 * een methode om te checken of het huidige dan wel het opgegeven lid 
+	 * een methode om te checken of het huidige dan wel het opgegeven lid
 	 * in het huidige bestuur zit.
 	 */
 	function isBestuur($uid=''){
@@ -649,33 +652,33 @@ class Lid {
 	function getLidStatus($uid) {
 		# is het wel een geldig lid-nummer?
 		if (!$this->isValidUid($uid)) return false;
-		
+
 		# opzoeken status
 		$uid = $this->_db->escape($uid);
 		$result = $this->_db->select("SELECT status FROM lid WHERE uid = '{$uid}'");
 		if ($result !== false and $this->_db->numRows($result) > 0) {
 			$record = mysql_fetch_assoc($result);
 			return $record['status'];
-		}	
+		}
 		return false;
 	}
 
 	function getVerjaardagen($maand, $dag=0) {
 		$maand = (int)$maand; $dag = (int)$dag; $verjaardagen = array();
 		$query="
-			SELECT 
-				uid, voornaam, tussenvoegsel, achternaam, nickname, postfix, geslacht, email, 
+			SELECT
+				uid, voornaam, tussenvoegsel, achternaam, nickname, postfix, geslacht, email,
 				EXTRACT( DAY FROM gebdatum) as gebdag, status
-			FROM 
-				lid 
-			WHERE 
-				(status='S_LID' OR status='S_GASTLID' OR status='S_NOVIET' OR status='S_KRINGEL') 
-			AND 
+			FROM
+				lid
+			WHERE
+				(status='S_LID' OR status='S_GASTLID' OR status='S_NOVIET' OR status='S_KRINGEL')
+			AND
 				EXTRACT( MONTH FROM gebdatum)= '{$maand}'";
 		if($dag!=0)	$query.=" AND gebdag=".$dag;
 		$query.=" ORDER BY gebdag;";
 		$result = $this->_db->select($query);
-		
+
 		if ($result !== false and $this->_db->numRows($result) > 0) {
 			while($verjaardag=$this->_db->next($result)){
 				$verjaardagen[] = $verjaardag;
@@ -683,13 +686,13 @@ class Lid {
 		}
 		return $verjaardagen;
 	}
-	
+
 	function getKomende10Verjaardagen() {
 		$query="
 			SELECT
 				uid, nickname, voornaam, tussenvoegsel, achternaam, status, geslacht, postfix, gebdatum,
 				ADDDATE(
-					gebdatum, 
+					gebdatum,
 					INTERVAL TIMESTAMPDIFF(
 						year,
 						ADDDATE(gebdatum, INTERVAL 1 DAY),
@@ -699,14 +702,14 @@ class Lid {
 			FROM
 				lid
 			WHERE
-				(status='S_LID' OR status='S_GASTLID' OR status='S_NOVIET' OR status='S_KRINGEL') 
+				(status='S_LID' OR status='S_GASTLID' OR status='S_NOVIET' OR status='S_KRINGEL')
 			AND
 				NOT gebdatum = '0000-00-00'
 			ORDER BY verjaardag ASC, lidjaar, gebdatum, achternaam
 			LIMIT 10";
-		
+
 		$result = $this->_db->select($query);
-		
+
 		if ($result !== false and $this->_db->numRows($result) > 0) {
 			while($aVerjaardag=$this->_db->next($result)){
 				$aVerjaardag['jarig_over'] = ceil((strtotime($aVerjaardag['verjaardag'])-time())/86400);
@@ -714,21 +717,21 @@ class Lid {
 				$aVerjaardagen[] = $aVerjaardag;
 			}
 		}
-		return $aVerjaardagen;		
+		return $aVerjaardagen;
 	}
 
 	function getMaxKringen($moot=0) {
 		$maxkringen = 0;
 		$sMaxKringen="
-			SELECT 
-				MAX(kring) as max 
-			FROM 
-				lid 
-			WHERE 
+			SELECT
+				MAX(kring) as max
+			FROM
+				lid
+			WHERE
 				(status='S_LID' OR status='S_GASTLID' OR status='S_NOVIET' OR status='S_KRINGEL') ";
 		if($moot!=0){ $sMaxKringen.="AND moot=".$moot; }
 		$sMaxKringen.="	LIMIT 1;";
-		
+
 		$result = $this->_db->select($sMaxKringen);
 		if ($result !== false and $this->_db->numRows($result) > 0) {
 			$max = $this->_db->next($result);
@@ -754,26 +757,26 @@ class Lid {
 	function getKringen() {
 		$kring = array();
 		$result = $this->_db->select("
-			SELECT 
-				lid.uid as uid, 
-				nickname, 
-				voornaam, 
-				tussenvoegsel, 
-				achternaam, 
-				geslacht, 
-				postfix, 
-				moot, 
-				kring, 
-				motebal, 
+			SELECT
+				lid.uid as uid,
+				nickname,
+				voornaam,
+				tussenvoegsel,
+				achternaam,
+				geslacht,
+				postfix,
+				moot,
+				kring,
+				motebal,
 				kringleider,
 				email,
 				status,
-				soccieSaldo				
-			FROM 
+				soccieSaldo
+			FROM
 				lid
-			WHERE 
+			WHERE
 				status='S_LID' OR status='S_GASTLID' OR status='S_NOVIET' OR status='S_KRINGEL'
-			ORDER BY 
+			ORDER BY
 				kringleider DESC,
 				achternaam ASC;");
 		if ($result !== false and $this->_db->numRows($result) > 0) {
@@ -784,7 +787,7 @@ class Lid {
 
 		return $kring;
 	}
-	
+
 	# Deze functie voegt iemand aan een kring toe
 	function addUid2kring($uid, $kring, $moot=0){
 		//controle op invoer
@@ -792,18 +795,18 @@ class Lid {
 		//$kring=(int)$kring; if($kring>10) return false;
 		//$moot=(int)$moot; if($moot>4) return false;
 		$sKringInvoer="
-			UPDATE 
+			UPDATE
 				lid
 			SET
 				kring=".$kring."";
 		if($moot!=0) $sKringInvoer.=", moot=".$moot;
-		$sKringInvoer.="			
-			WHERE 
+		$sKringInvoer.="
+			WHERE
 				uid='".$uid."'
 			LIMIT 1;";
 		return $this->_db->query($sKringInvoer);
 	}
-	
+
 	function getEetwens(){ return $this->_profile['eetwens']; }
 	function setEetwens($eetwens){
 		return $this->setProperty('eetwens', $eetwens);
@@ -815,7 +818,7 @@ class Lid {
 	function getCorveepunten(){ return $this->profile['corvee_punten']; }
 	function getCorveevrijstelling(){ return $this->profile['corvee_vrijstelling']; }
 	function isKwalikok(){ return $this->profile['corvee_punten']==='1'; }
-	 
+
 	private function setProperty($property, $contents){
 		$allowedProps=array('eetwens', 'corvee_wens');
 		if(!in_array($property, $allowedProps)){ return false; }
@@ -823,8 +826,8 @@ class Lid {
 		if(strlen($contents)<2){ $contents=''; }
 		$sQuery="UPDATE lid SET ".$property."='".$contents."' WHERE uid='".$this->getUid()."';";
 		return $this->_db->query($sQuery);
-	}	
-	
+	}
+
 	function getSaldi($uid='', $alleenRood=false){
 		if($uid==''){ $uid=$this->getUid(); }
 		if($uid==$this->getUid()){
@@ -842,46 +845,46 @@ class Lid {
 				LIMIT 1;";
 			$rSaldo=$this->_db->query($query);
 			if($rSaldo!==false AND $this->_db->numRows($rSaldo)){
-				$aSaldo=$this->_db->next($rSaldo);	
+				$aSaldo=$this->_db->next($rSaldo);
 			}else{
 				return false;
 			}
 		}
-		
+
 		$return=false;
 		if(!($alleenRood && $aSaldo['soccieSaldo']<0)){
-			$return[]=array('naam' => 'SocCie', 
+			$return[]=array('naam' => 'SocCie',
 				'saldo' => $aSaldo['soccieSaldo']);
 		}
 		if(!($alleenRood && $aSaldo['maalcieSaldo']<0)){
-			$return[]=array('naam' => 'MaalCie', 
+			$return[]=array('naam' => 'MaalCie',
 				'saldo' => $aSaldo['maalcieSaldo']);
 		}
 		return $return;
 	}
-	
+
 	function logBezoek(){
 		$uid=$this->getUid();
 		$datumtijd=date('Y-m-d H:i:s');
 		$locatie='';
-		if(isset($_SERVER['REMOTE_ADDR'])){ 
+		if(isset($_SERVER['REMOTE_ADDR'])){
 			$ip=$this->_db->escape($_SERVER['REMOTE_ADDR']);
-		}else{ 
+		}else{
 			$ip='0.0.0.0'; $locatie='';
 		}
 		if(isset($_SERVER['REQUEST_URI'])){ $url=$this->_db->escape($_SERVER['REQUEST_URI']); }else{ $url=''; }
 		if(isset($_SERVER['HTTP_REFERER'])){ $referer=$this->_db->escape($_SERVER['HTTP_REFERER']); }else{ $referer=''; }
 		$agent='';
-		if(isset($_SERVER['HTTP_USER_AGENT'])){ 
-			if(preg_match('/bot/i', $_SERVER['HTTP_USER_AGENT']) OR preg_match('/crawl/i', $_SERVER['HTTP_USER_AGENT']) 
+		if(isset($_SERVER['HTTP_USER_AGENT'])){
+			if(preg_match('/bot/i', $_SERVER['HTTP_USER_AGENT']) OR preg_match('/crawl/i', $_SERVER['HTTP_USER_AGENT'])
 				OR preg_match('/slurp/i', $_SERVER['HTTP_USER_AGENT']) OR preg_match('/Teoma/i', $_SERVER['HTTP_USER_AGENT'])){
-				if(preg_match('/google/i', $_SERVER['HTTP_USER_AGENT'])){ $agent='googleBot'; 
-				}elseif(preg_match('/msn/i', $_SERVER['HTTP_USER_AGENT'])){ $agent='msnBot'; 
+				if(preg_match('/google/i', $_SERVER['HTTP_USER_AGENT'])){ $agent='googleBot';
+				}elseif(preg_match('/msn/i', $_SERVER['HTTP_USER_AGENT'])){ $agent='msnBot';
 				}elseif(preg_match('/yahoo/i', $_SERVER['HTTP_USER_AGENT'])){ $agent='yahooBot';
 				}elseif(preg_match('/Jeeves/i', $_SERVER['HTTP_USER_AGENT'])){ $agent='askJeeves';
 				}else{ $agent='onbekende bot';}
 			}else{
-				if(preg_match('/Windows\ NT\ 5\.1/', $_SERVER['HTTP_USER_AGENT'])){ $agent.='Windows XP | '; 
+				if(preg_match('/Windows\ NT\ 5\.1/', $_SERVER['HTTP_USER_AGENT'])){ $agent.='Windows XP | ';
 				}elseif(preg_match('/Windows\ NT\ 5\.0/', $_SERVER['HTTP_USER_AGENT'])){ $agent.='Windows 2K | ';
 				}elseif(preg_match('/Win\ 9x/', $_SERVER['HTTP_USER_AGENT'])){ $agent.='Windows 9x | ';
 				}elseif(preg_match('/Windows/i', $_SERVER['HTTP_USER_AGENT'])){ $agent.='Windows anders | ';
@@ -890,27 +893,27 @@ class Lid {
 				}elseif(preg_match('/Ubuntu/i', $_SERVER['HTTP_USER_AGENT'])){ $agent.='Ubuntu | ';
 				}elseif(preg_match('/Linux/i', $_SERVER['HTTP_USER_AGENT'])){ $agent.='Linux | ';
 				}elseif(preg_match('/Google\ Desktop/', $_SERVER['HTTP_USER_AGENT'])){ $agent.='Google Desktop | ';
-				}elseif(preg_match('/Microsoft/i', $_SERVER['HTTP_USER_AGENT'])){ $agent.='iets M$ | '; 
+				}elseif(preg_match('/Microsoft/i', $_SERVER['HTTP_USER_AGENT'])){ $agent.='iets M$ | ';
 				}elseif(preg_match('/Mac\ OS\ X/', $_SERVER['HTTP_USER_AGENT'])){ $agent.='OS X | ';
 				}else{ $agent='onbekend | ('.$_SERVER['HTTP_USER_AGENT'].')'; }
 				if(preg_match('/Firefox\/1\.5/', $_SERVER['HTTP_USER_AGENT'])){ $agent.='FF1.5';
-				}elseif(preg_match('/Firefox\/1\.0/', $_SERVER['HTTP_USER_AGENT'])){ $agent.='FF1.0'; 
+				}elseif(preg_match('/Firefox\/1\.0/', $_SERVER['HTTP_USER_AGENT'])){ $agent.='FF1.0';
 				}elseif(preg_match('/Firefox/i', $_SERVER['HTTP_USER_AGENT'])){ $agent.='FF';
 				}elseif(preg_match('/Mozilla\/5\.0/i', $_SERVER['HTTP_USER_AGENT'])){ $agent.='Mozilla';
-				}elseif(preg_match('/Opera/', $_SERVER['HTTP_USER_AGENT'])){ $agent.='Opera';  
+				}elseif(preg_match('/Opera/', $_SERVER['HTTP_USER_AGENT'])){ $agent.='Opera';
 				}elseif(preg_match('/MSIE\ 6\.0/', $_SERVER['HTTP_USER_AGENT'])){ $agent.='IE6';
 				}elseif(preg_match('/MSIE/', $_SERVER['HTTP_USER_AGENT'])){ $agent.='IE';
-				}elseif(preg_match('/Safari/i', $_SERVER['HTTP_USER_AGENT'])){ $agent.='Safari'; 
-				}elseif(preg_match('/Google\ Desktop/', $_SERVER['HTTP_USER_AGENT'])){ $agent.=''; 
-				}elseif(preg_match('/Microsoft/i', $_SERVER['HTTP_USER_AGENT'])){ $agent.=''; 
+				}elseif(preg_match('/Safari/i', $_SERVER['HTTP_USER_AGENT'])){ $agent.='Safari';
+				}elseif(preg_match('/Google\ Desktop/', $_SERVER['HTTP_USER_AGENT'])){ $agent.='';
+				}elseif(preg_match('/Microsoft/i', $_SERVER['HTTP_USER_AGENT'])){ $agent.='';
 				}else{ $agent.='onbekend ('.$_SERVER['HTTP_USER_AGENT'].')'; }
 			}
-			
+
 		}
 		$sLogQuery="
-			INSERT INTO 
+			INSERT INTO
 				log
-			( 
+			(
 				uid, ip, locatie, moment, url, referer, useragent
 			)VALUES(
 				'".$uid."', '".$ip."', '".$locatie."', '".$datumtijd."', '".$url."', '".$referer."', '".$agent."'
@@ -922,20 +925,20 @@ class Lid {
 }
 /*
  * LidCache
- * 
+ *
  * Wrapper voor memcache met fallback naar een array. classe is een singleton.
  */
 class LidCache{
 	//instantie van de huidige classe.
 	private static $lidCache;
-	
+
 	//memcache-object
 	private $memcache;
 	private $connected=false;
-	
+
 	//als er geen verbinding is in deze array een run-time-only cache bijhouden.
 	private $fallbackCache=array();
-	
+
 	private function __construct(){
 		//eerst even controleren of de Memcache-classe aanwezig is, zoniet gewoon terugvallen naar
 		//run-time-only caching.
@@ -943,9 +946,9 @@ class LidCache{
 			$this->memcache=new Memcache;
 			$this->connected=@$this->memcache->connect('unix://'.DATA_PATH.'/csrdelft-cache.socket', 0);
 		}
-		
+
 	}
-	
+
 	public static function get_LidCache(){
 		//als er nog geen instantie gemaakt is, die nu maken
 		if(!isset(LidCache::$lidCache)){
@@ -953,7 +956,7 @@ class LidCache{
 		}
 		return LidCache::$lidCache;
 	}
-	
+
 	public function setLid($uid, $aNaam){
 		//alleen de dingen in de cache zetten die we willen gebruiken voor de namen.
 		$aNaam=array_get_keys($aNaam, array('nickname', 'voornaam', 'tussenvoegsel', 'achternaam', 'geslacht', 'status', 'postfix'));
@@ -963,7 +966,7 @@ class LidCache{
 			$this->fallbackCache[$uid]=$aNaam;
 		}
 	}
-	
+
 	public function getLid($uid){
 		if($this->connected){
 			return $this->memcache->get($uid);
