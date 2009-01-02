@@ -45,8 +45,8 @@ class PaginaContent extends SimpleHTML{
 				break;
 
 			case 'bewerken':
-				$sInhoud='<h1>Pagina bewerken</h1>
-					Deze pagina is zichtbaar voor: '.$this->_pagina->getRechtenBekijken().' en bewerkbaar voor '.$this->_pagina->getRechtenBewerken().'.';
+				$sInhoud='<h1>Pagina bewerken</h1>';
+				//$sInhoud.='Deze pagina is zichtbaar voor: '.$this->_pagina->getRechtenBekijken().' en bewerkbaar voor '.$this->_pagina->getRechtenBewerken().'.';
 				$sInhoud.='
 
 				<form action="/pagina/'.$this->_pagina->getNaam().'/bewerken" method="post">
