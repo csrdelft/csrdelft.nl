@@ -7,24 +7,24 @@
 # -------------------------------------------------------------------
 
 class Pagina{
-	
+
 	private $_db;
 	private $_lid;
-	
+
 	private $sNaam;
 	private $sTitel;
 	private $sInhoud;
 	private $sRechtenBekijken;
 	private $sRechtenBewerken;
-	
+
 	function Pagina($sNaam){
 		$this->_lid=Lid::get_lid();
 		$this->_db=MySql::get_MySql();
-		
+
 		$this->sNaam=$sNaam;
 		$this->load();
 	}
-	
+
 	function load(){
 		$sPaginaQuery="SELECT titel, inhoud, rechten_bekijken, rechten_bewerken FROM pagina WHERE naam='".$this->_db->escape($this->sNaam)."'";
 		$rPagina=$this->_db->query($sPaginaQuery);
@@ -38,10 +38,10 @@ class Pagina{
 			$this->setTitel('');
 			$this->setInhoud('');
 			$this->sRechtenBekijken='P_NOBODY';
-			$this->sRechtenBewerken='P_ADMIN';		
+			$this->sRechtenBewerken='P_ADMIN';
 		}
 	}
-	
+
 	function save(){
 		$sPaginaQuery = "UPDATE pagina SET titel='".$this->_db->escape($this->getTitel())."', inhoud='".$this->_db->escape($this->getInhoud())."', rechten_bekijken='".$this->_db->escape($this->sRechtenBekijken)."', rechten_bewerken='".$this->_db->escape($this->sRechtenBewerken)."' WHERE naam = '".$this->_db->escape($this->getNaam())."'";
 		$this->_db->query($sPaginaQuery);
@@ -51,30 +51,35 @@ class Pagina{
 		}
 	}
 
+	function getRechtenBekijken(){
+		echo Lid::formatPermissionstring($this->getRechtenBekijken());
+	}
 	function magBekijken(){
 		return $this->_lid->hasPermission($this->sRechtenBekijken);
 	}
-
+	function getRechtenBewerken(){
+		return Lid::formatPermissionstring($this->getRechtenBewerken());
+	}
 	function magBewerken(){
 		return $this->_lid->hasPermission($this->sRechtenBewerken);
 	}
-	
+
 	function setTitel($sTitel){
 		$this->sTitel=$sTitel;
 	}
-	
+
 	function setInhoud($sInhoud){
 		$this->sInhoud=$sInhoud;
 	}
-	
+
 	function getNaam(){
 		return $this->sNaam;
 	}
-	
+
 	function getTitel(){
 		return $this->sTitel;
 	}
-	
+
 	function getInhoud(){
 		return $this->sInhoud;
 	}

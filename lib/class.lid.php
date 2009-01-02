@@ -151,8 +151,12 @@ class Lid {
 	}
 
 	### public ###
-
-	function hasPermission($descr) {
+	//maakt een permissiestring met uid's enzo wat leesbaarder
+	public static function formatPermissionstring($string){
+		$string=str_replace(',', ', ', $string);
+		return $string; //preg_replace_callback('/([a-z0-9]{4})/', create_function('$uid', '$lid=Lid::get_Lid(); return $lid->getNaamLink($uid);'), $string);
+	}
+	public function hasPermission($descr) {
 		# zoek de rechten van de gebruiker op
 		$liddescr = $this->_profile['permissies'];
 
