@@ -504,7 +504,7 @@ class Lid {
 					voornaam LIKE '%{$zoekterm}%' OR achternaam LIKE '%{$zoekterm}%' OR
 					nickname LIKE '%{$zoekterm}%' OR uid LIKE '%{$zoekterm}%'";
 			}
-		}elseif($zoekveld='adres'){
+		}elseif($zoekveld=='adres'){
 			$zoekfilter="adres LIKE '%{$zoekterm}%' OR woonplaats LIKE '%{$zoekterm}%' OR
 				postcode LIKE '%{$zoekterm}%' OR REPLACE(postcode, ' ', '') LIKE '%".str_replace(' ', '', $zoekterm)."%'";
 		}else{
