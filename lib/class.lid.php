@@ -617,7 +617,7 @@ class Lid {
 		}
 		$validExtensions=array('gif', 'jpg', 'jpeg', 'png');
 
-		$pasfoto=CSR_PICS.'pasfoto/geen-foto.png';
+		$pasfoto=CSR_PICS.'pasfoto/geen-foto.jpg';
 
 		foreach($validExtensions as $validExtension){
 			if(file_exists(PICS_PATH.'/pasfoto/'.$uid.'.'.$validExtension)){
