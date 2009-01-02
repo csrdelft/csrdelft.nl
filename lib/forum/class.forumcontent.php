@@ -11,9 +11,9 @@ class ForumContent extends SimpleHTML {
 	var $_forum;
 	var $_actie;
 	var $_sTitel='forum';
-	
+
 	var $_topicsPerPagina;
-	
+
 	function ForumContent($bForum, $actie){
 		$this->_forum=$bForum;
 		$this->_actie=$actie;
@@ -22,7 +22,7 @@ class ForumContent extends SimpleHTML {
 /***********************************************************************************************************
 * Overzicht van Categorieën met aantal topics en posts
 *
-***********************************************************************************************************/	
+***********************************************************************************************************/
 	function viewCategories(){
 		$smarty=new Smarty_csr();
 		$smarty->assign('categories',$this->_forum->getCategories(true));
@@ -32,16 +32,16 @@ class ForumContent extends SimpleHTML {
 /***********************************************************************************************************
 *	Topics laten zien in een categorie
 *
-***********************************************************************************************************/	
+***********************************************************************************************************/
 	function viewTopics($iCat){
 		$iCat=(int)$iCat;
-		
+
 		//topics ophaelen voor deze categorie
 		//wellicht wel een andere pagina?
-		if(isset($_GET['pagina'])){ 
-			$iPaginaID=(int)$_GET['pagina']; 
+		if(isset($_GET['pagina'])){
+			$iPaginaID=(int)$_GET['pagina'];
 		}else{
-			$iPaginaID=1; 
+			$iPaginaID=1;
 		}
 		if($this->_forum->catExistsVoorUser($iCat)){
 			$aTopics=$this->_forum->getTopics($iCat, $iPaginaID);
@@ -63,12 +63,12 @@ class ForumContent extends SimpleHTML {
 				<a href="/communicatie/forum/">Terug naar het forum</a>';
 			return;
 		}
-		
+
 		$smarty=new Smarty_csr();
 		$smarty->assign('categorie', $iCat);
 		$smarty->assign('categorietitel', $this->_forum->getCategorieTitel($iCat));
 		$smarty->assign('berichten', $aTopics);
-		
+
 		//paginanummertjes
 		$pagina['baseurl']='/communicatie/forum/categorie/'.$iCat.'/';
 		$pagina['aantal']=1;
@@ -77,21 +77,21 @@ class ForumContent extends SimpleHTML {
 		}
 		$pagina['huidig']=$iPaginaID;
 		$smarty->assign('pagina', $pagina);
-		
+
 		$lid=Lid::get_Lid();
 		//TODO: dit netjes fixen.
 		$smarty->assign('magPosten', $lid->hasPermission($aTopics[0]['rechten_post']));
 		$smarty->assign('melding', $this->getMelding());
 		$smarty->display($template);
-		
-		
-		
-	
+
+
+
+
 	}
 /***********************************************************************************************************
 * poll toevoegen
 *
-***********************************************************************************************************/	
+***********************************************************************************************************/
 	function pollFormulier($iCatID){
 		$iCatID=(int)$iCatID;
 		$sTitel=$sBericht='';
@@ -126,10 +126,10 @@ class ForumContent extends SimpleHTML {
 ***********************************************************************************************************/
 	function rssFeed(){
 		$aPosts=$this->_forum->getPostsVoorRss(false, false);
-		
+
 		$rss=new Smarty_csr();
 		$rss->assign('aPosts', $aPosts);
-		
+
 		$rss->display('forum/rss.tpl');
 	}
 /***********************************************************************************************************
@@ -148,7 +148,7 @@ class ForumContent extends SimpleHTML {
 			$post=preg_replace('/(\[(|\/)\w+\])/', '|', $aPost['tekst']);
 			$postfragment=substr(str_replace(array("\n", "\r", ' '), ' ', $post), 0, 40);
 			echo '<div class="item"><span class="tijd">'.date('H:i', strtotime($aPost['datum'])).'</span>&nbsp;';
-			echo '<a href="/communicatie/forum/onderwerp/'.$aPost['tid'].'#post'.$aPost['postID'].'" 
+			echo '<a href="/communicatie/forum/onderwerp/'.$aPost['tid'].'#post'.$aPost['postID'].'"
 				title="['.htmlspecialchars($aPost['titel']).'] '.
 					$this->_forum->getForumNaam($aPost['uid'], false, false).': '.mb_htmlentities($postfragment).'"';
 			if (strtotime($aPost['datum']) > $this->_forum->getLaatstBekeken()) { echo ' class="opvallend"'; }
@@ -163,8 +163,8 @@ class ForumContent extends SimpleHTML {
 	function zoeken(){
 		$sZoekQuery='';
 		if(isset($_POST['zoeken'])){ $sZoekQuery=trim($_POST['zoeken']); }elseif(isset($_GET['zoeken'])){ $sZoekQuery=trim($_GET['zoeken']);}
-		
-		echo '<h1>Zoeken in het forum</h1>Hier kunt u zoeken in het forum. Zoeken kan met boleaanse zoekparameters, uitleg is 
+
+		echo '<h1>Zoeken in het forum</h1>Hier kunt u zoeken in het forum. Zoeken kan met boleaanse zoekparameters, uitleg is
 			<a href="http://dev.mysql.com/doc/refman/5.0/en/fulltext-boolean.html">te vinden op de pagina daarover in de mysql handleiding</a>.';
 		//altijd het zoekformulier weergeven.
 		$this->zoekFormulier($sZoekQuery);
@@ -174,23 +174,24 @@ class ForumContent extends SimpleHTML {
 				$aZoekOnderdelen=explode(' ', $sZoekQuery);
 				$sEersteTerm=$aZoekOnderdelen[0];
 				echo 'In <em>'.count($aZoekResultaten).'</em> onderwerpen kwam de volgende zoekterm voor: <strong>'.mb_htmlentities($sZoekQuery).'</strong>';
-				echo '<br /><br /><table class="forumtabel"><tr><td class="forumhoofd">onderwerp</td><td class="forumhoofd">auteur</td>';
-				echo '<td class="forumhoofd">categorie</td><td class="forumhoofd">datum</td></tr>';
+				echo '<br /><br /><table id="forumtabel"><tr><th>Onderwerp</th><th>Auteur</th>';
+				echo '<th>categorie</th><th>datum</th></tr>';
+				$row=0;
 				foreach($aZoekResultaten as $aZoekResultaat){
 					$iFragmentLengte=250;
 					//ubb wegslopen
 					$sPostFragment=preg_replace('/\[\/?[a-z\*\:]*\]/', '', $aZoekResultaat['tekst']);
 					$sPostFragment=preg_replace('/\[url=.*\](.*)\[\/url\]/', '\\1', $sPostFragment);
 					$sPostFragment=preg_replace('/\[\/?[a-z\*\:]*\?/', '', $sPostFragment);
-					
+
 					//is het bericht zelf al korter dan de fragmentlengte?
 					if(strlen($sPostFragment)>=$iFragmentLengte){
 						//beginpositie en lengte van het te tonen fragment proberen te berekenen.
 						$iEersteTermPos=strpos($aZoekResultaat['tekst'], $sEersteTerm);
 						if($iEersteTermPos<(.5*$iFragmentLengte)){ $iBegin=0; }else{ $iBegin=$iEersteTermPos-(.5*$iFragmentLengte); }
-						if($iBegin+$iFragmentLengte>=strlen($aZoekResultaat['tekst'])){ 
-							$iLengte=strlen($aZoekResultaat['tekst'])-$iEersteTermPos; 
-						}else{ 
+						if($iBegin+$iFragmentLengte>=strlen($aZoekResultaat['tekst'])){
+							$iLengte=strlen($aZoekResultaat['tekst'])-$iEersteTermPos;
+						}else{
 							$iLengte=$iFragmentLengte;
 						}
 						//het fragment eruit halen
@@ -201,17 +202,18 @@ class ForumContent extends SimpleHTML {
 					//zoektermen hooglichten
 					$sPostFragment=preg_replace('/('.$sEersteTerm.')/i', '<strong>\\1</strong>', $sPostFragment);
 
-					echo '<tr><td class="forumtitel">';
+					echo '<tr class="kleur'.($row%2).'"><td class="forumtitel">';
 					echo '<a href="/communicatie/forum/onderwerp/'.$aZoekResultaat['tid'].'/'.urlencode($sZoekQuery).'#post'.$aZoekResultaat['postID'].'">';
 					echo $aZoekResultaat['titel'].'</a>';
 					if($aZoekResultaat['aantal']!=1){ echo ' <em>('.$aZoekResultaat['aantal'].' berichten in dit onderwerp)</em>'; }
 					echo '<br />'.$sPostFragment.'</td>';
-					echo '<td class="forumtitel">'.$this->_forum->getForumNaam($aZoekResultaat['uid']).'</td>';
-					echo '<td class="forumtitel">
+					echo '<td class="titel">'.$this->_forum->getForumNaam($aZoekResultaat['uid']).'</td>';
+					echo '<td class="titel">
 						<a href="/communicatie/forum/categorie/'.$aZoekResultaat['categorie'].'">'.$aZoekResultaat['categorieTitel'].'</a></td>';
-					echo '<td class="forumtitel">
+					echo '<td class="titel">
 						'.$aZoekResultaat['datum'].'</td>';
 					echo '</tr>';
+					$row++;
 				}
 			echo '</table>';
 			}else{ echo '<h3>Er is niets gevonden</h3>Probeer het opnieuw. (Zoekresultaten moeten minimaal 4 letters bevatten)'; }
@@ -222,16 +224,16 @@ class ForumContent extends SimpleHTML {
 		echo '<form action="/communicatie/forum/zoeken.php" method="post"><p><input type="text" value="'.$sZoekQuery.'" name="zoeken" />';
 		echo '<input type="submit" value="zoeken" name="verzenden" /></p></form><br />';
 	}
-	
+
 	function viewWaarbenik(){
-		if(	($this->_actie=='topic' AND isset($_GET['topic'])) OR 
+		if(	($this->_actie=='topic' AND isset($_GET['topic'])) OR
 				($this->_actie=='citeren' AND isset($_GET['post'])) ){
 			if(isset($_GET['topic'])){
 				$iTopicID=(int)$_GET['topic'];
 			}else{
 				$iTopicID=$this->_forum->getTopicVoorPostID((int)$_GET['post']);
-			}		
-			$iCategorieID=$this->_forum->getCategorieVoorTopic($iTopicID);	
+			}
+			$iCategorieID=$this->_forum->getCategorieVoorTopic($iTopicID);
 			$sCategorie=$this->_forum->getCategorieTitel($this->_forum->getCategorieVoorTopic($iTopicID));
 			$sTitel='<a href="/communicatie/forum/">Forum</a> &raquo; <a href="/communicatie/forum/categorie/'.$iCategorieID.'">'.$sCategorie.'</a> &raquo; '.$this->_forum->getTopicTitel($iTopicID);
 		}elseif($this->_actie=='forum' AND isset($_GET['forum'])){
@@ -250,7 +252,7 @@ class ForumContent extends SimpleHTML {
 	}
 	function getTitel(){
 		$sTitel='Forum - ';
-		if(($this->_actie=='topic' AND isset($_GET['topic'])) OR 
+		if(($this->_actie=='topic' AND isset($_GET['topic'])) OR
 				($this->_actie=='citeren' AND isset($_GET['post'])) ){
 			if(isset($_GET['topic'])){
 				$iTopicID=(int)$_GET['topic'];
@@ -270,15 +272,15 @@ class ForumContent extends SimpleHTML {
 		}else{
 			$sTitel='Forum';
 		}
-		return $sTitel; 
+		return $sTitel;
 	}
 	function view(){
 		switch($this->_actie){
-			case 'forum': 
-				if(isset($_GET['forum'])){ 
-					$this->viewTopics((int)$_GET['forum']); 
+			case 'forum':
+				if(isset($_GET['forum'])){
+					$this->viewTopics((int)$_GET['forum']);
 				}else{
-					$this->viewCategories(); 
+					$this->viewCategories();
 				}
 			break;
 			case 'nieuw-poll':
@@ -287,15 +289,15 @@ class ForumContent extends SimpleHTML {
 				}else{
 					//standaard worden stemmingen in de categorie daarvoor gerost.
 					$iCatID=7;
-				}	
+				}
 				$this->pollFormulier($iCatID);
 			break;
-			case 'citeren': 
+			case 'citeren':
 				if(isset($_GET['post'])){
-					$this->viewTopic((int)$_GET['post']); 
-				}else{ 
-					$this->viewCategories(); 
-				} 
+					$this->viewTopic((int)$_GET['post']);
+				}else{
+					$this->viewCategories();
+				}
 			break;
 			case 'rss': $this->rssFeed();	break;
 			case 'lastposts': $this->lastPosts(); break;
