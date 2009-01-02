@@ -16,12 +16,12 @@ class MotenContent extends SimpleHTML {
 
 	var $_kringen;
 	var $_bEmail=false;
-	
+
 	# de objecten die data leveren
 	var $_lid;
-	
+
 	### public ###
-	
+
 	function MotenContent (&$lid) {
 		$this->_lid =& $lid;
 		$this->_kringen=$this->_lid->getKringen();
@@ -32,7 +32,7 @@ class MotenContent extends SimpleHTML {
 		return 'Moot- en kringindeling';
 	}
 	function printKring($moot, $kring){
-		echo '<td>';
+		echo '<td id="kring'.$moot.'.'.$kring.'leden">';
 			if(!isset($this->_kringen[$moot][$kring])){
 				echo '&nbsp;';
 			}else{
@@ -58,12 +58,12 @@ class MotenContent extends SimpleHTML {
 			//	echo '<br /><em>Kring-saldo: € '.sprintf ("%01.2f", $kringsaldo).'</em>';
 			}
 		echo '</td>';
-		
+
 		return $kringsaldo;
 	}
 	function view() {
 
-		
+
 		# we willen weten hoeveel moten en wat het max aantal kringen in een moot is...
 		$maxmoten = $this->_lid->getMaxMoten();
 		$maxkringen = $this->_lid->getMaxKringen();
@@ -78,7 +78,7 @@ class MotenContent extends SimpleHTML {
 		echo '</p><table style="width: 100%">';
 
 		$mootsaldo[1]=$mootsaldo[2]=$mootsaldo[3]=$mootsaldo[4]=0;
-		
+
 		# we gaan de kringen in de moot onder elkaar zetten, een moot per kolom
 		for ($regel=1; $regel<=$maxkringen; $regel++) {
 			echo '<tr>';
@@ -98,25 +98,25 @@ class MotenContent extends SimpleHTML {
 		for ($moot=1; $moot<=$maxmoten; $moot++) {
 			if (isset($this->_kringen[$moot][$regel])){
 				echo '<th id="kring'.$moot.'.0">Kring '.$moot.'.0</th>';
-			}else{ 
+			}else{
 				echo '<td>&nbsp;</td>';
 			}
 		}
-		
+
 		echo '</tr><tr>';
 		//en ook even de leden van de .0-kring printen
 		for ($moot=1; $moot<=$maxmoten; $moot++) {
 			$mootsaldo[$moot]+=$this->printKring($moot, $regel);
 		}
 		echo '</tr>';
-	/*	
+	/*
 		//mootsaldo printen
 		echo '<tr>';
 		for ($moot=1; $moot<=$maxmoten; $moot++) {
 			echo '<td>Mootsaldo: &euro; '.sprintf ("%01.2f", $mootsaldo[$moot]).'</td>';
 		}
 		echo '</tr>';
-	*/	
+	*/
 		//kringen invoeren... moet nog even goed afgemaakt worden met kringselectie.
 		//daarom nu uitgeschakeld
 		if(false){
@@ -126,7 +126,7 @@ class MotenContent extends SimpleHTML {
 				echo '<form action="moten.php#form" method="post"><a name="form" ></a>
 					<input type="hidden" name="moot" value="'.$moot.'" />';
 				$tekstInvoer=true;
-				if(	isset($_POST['kringNamen']) AND trim($_POST['kringNamen'])!='' AND 
+				if(	isset($_POST['kringNamen']) AND trim($_POST['kringNamen'])!='' AND
 						isset($_POST['moot']) AND $_POST['moot']==$moot){
 					$aKringleden=namen2uid($_POST['kringNamen'], $this->_lid);
 					if(is_array($aKringleden) AND count($aKringleden)!=0){
@@ -174,6 +174,15 @@ class MotenContent extends SimpleHTML {
 			echo '</tr>';
 		}
 		echo '</table>';
+		?>
+		<script type="text/javascript">
+			if(document.location.hash.substring(1,6)=='kring'){
+				kring=document.location.hash.substring(1);
+				document.getElementById(kring).style.backgroundColor='lightblue';
+				//document.getElementById(kring+'leden').style.backgroundColor='lightblue';
+			}
+		</script>
+		<?php
 	}
 }
 
