@@ -9,15 +9,15 @@
 /**
  * Smarty {knop} function plugin
  *
- * Type:     function<br>
- * Name:     knop<br>
+ * Type:     function
+ * Name:     knop
  * Date:     May 21, 2002
  * Purpose:  Knopjes generator zodat je dat niet 100 keer opniew intypt.
  * Input:
  *
  * Examples:
  * <pre>
-	{knop }
+	{knop url="http://example.com" type=verwijderen}
  * </pre>
  * @link http://feuten.csrdelft.nl
  * @version  1.2
@@ -33,7 +33,12 @@ function smarty_function_knop($params, &$smarty){
         $smarty->trigger_error("knop: url niet opgegeven");
         return;
     }
-    $knop=new Knop($params['url']);
+   	if(!isset($params['ignorePrefix'])){
+   		if(isset($smarty->_tpl_vars['knopUrlPrefix'])){
+   		 	$params['url']=$smarty->_tpl_vars['knopUrlPrefix'].$params['url'];
+   		}
+   	}
+   	$knop=new Knop($params['url']);
 
     if(isset($params['type'])){
     	$knop->setType($params['type']);

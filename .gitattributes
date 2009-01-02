@@ -271,6 +271,7 @@ lib/smarty/libs/plugins/function.html_select_date.php -text
 lib/smarty/libs/plugins/function.html_select_time.php -text
 lib/smarty/libs/plugins/function.html_table.php -text
 lib/smarty/libs/plugins/function.knop.php -text
+lib/smarty/libs/plugins/function.knopConfig.php -text
 lib/smarty/libs/plugins/function.mailto.php -text
 lib/smarty/libs/plugins/function.math.php -text
 lib/smarty/libs/plugins/function.popup.php -text
