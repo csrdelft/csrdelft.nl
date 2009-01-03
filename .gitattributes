@@ -95,6 +95,7 @@ htdocs/login.php -text
 htdocs/logout.php -text
 htdocs/pagina.php -text
 htdocs/robots.txt -text
+htdocs/segfault.php -text
 htdocs/tools/.htaccess -text
 htdocs/tools/eetplan.php -text
 htdocs/tools/index.php -text
