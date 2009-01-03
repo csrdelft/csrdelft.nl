@@ -64,7 +64,7 @@ require_once('class.mysql.php');
 
 switch (constant('MODE')) {
 	case 'ONDERHOUD':
-		$lid = Lid::get_lid();
+		$lid = Lid::instance();
 		if(!$lid->hasPermission('P_ADMIN')){
 			header('location: '.CSR_ROOT.'/tools/onderhoud.html');
 			exit;
@@ -83,15 +83,15 @@ switch (constant('MODE')) {
 		# sess_deleted bugs ondervangt en ip-checks doet
 		session_start();
 		//database & lid initialiseren...
-		$db = MySQL::get_mysql();
-		$lid = Lid::get_lid();
-		$lidCache=LidCache::get_LidCache();
+		$db = MySQL::instance();
+		$lid = Lid::instance();
+		$lidCache=LidCache::instance();
 	break;
-	
+
 	case 'BOT':
 	case 'CLI':
-        $db = MySQL::get_mysql();
-        $lid = Lid::get_lid();
+        $db = MySQL::instance();
+        $lid = Lid::instance();
 	break;
 
 	default:

@@ -13,14 +13,14 @@ class Nieuws {
 
 	private $_lid;
 	private $_db;
-	
+
 	private $aantalTopBerichten;
 	private $topBerichtenSpeling;
 	private $standaardRank;
-	
+
 	function Nieuws(){
-		$this->_lid=Lid::get_lid();
-		$this->_db=MySql::get_MySql();
+		$this->_lid=Lid::instance();
+		$this->_db=MySql::instance();
 	}
 
 	public function setAantalTopBerichten($iAantal){ $this->aantalTopBerichten=(int)$iAantal; }
@@ -29,7 +29,7 @@ class Nieuws {
 	public function getAantalTopBerichten(){ return $this->aantalTopBerichten; }
 	public function getTopBerichtenSpeling(){ return $this->topBerichtenSpeling; }
 	public function getStandaardRank(){ return $this->standaardRank; }
-	
+
 	# ophaelen nieuwsberichten
 	# $iBerichtID == 0 -> alles ophaelen met een limiet van $this->_aantal;
 	# $iBerichtID != 0 -> alleen opgegeven nummer
@@ -44,13 +44,13 @@ class Nieuws {
 
 		$sNieuwsQuery="
 			SELECT
-				mededeling.id as id, 
-				mededeling.datum as datum, 
-				mededeling.titel as titel, 
-				mededeling.tekst as tekst, 
-				mededeling.rank as rank, 
-				mededeling.uid as uid, 
-				mededeling.prive as prive, 
+				mededeling.id as id,
+				mededeling.datum as datum,
+				mededeling.titel as titel,
+				mededeling.tekst as tekst,
+				mededeling.rank as rank,
+				mededeling.uid as uid,
+				mededeling.prive as prive,
 				mededeling.verborgen as verborgen,
 				mededeling.plaatje as plaatje,
 				mededeling.categorie as categorie,
@@ -77,7 +77,7 @@ class Nieuws {
 		}
 	}
 	public function getMessage($iBerichtID, $includeVerborgen=false){ return $this->getMessages($iBerichtID, $includeVerborgen);	}
-	
+
 	public function getCategorieen(){
 		$sCategorieQuery="
 			SELECT
@@ -89,7 +89,7 @@ class Nieuws {
 		$rCategorieen=$this->_db->query($sCategorieQuery);
 		return $this->_db->result2array($rCategorieen);
 	}
-	
+
 	public function getTop($aantal){
 		$aantal=(int)$aantal;
 		if($aantal <= 0){ return array(); }
@@ -97,14 +97,14 @@ class Nieuws {
 		//where clausule klussen
 		$sWhereClause='';
 		if(!$this->_lid->hasPermission('P_LOGGED_IN')){ $sWhereClause.="mededeling.prive!='1' AND "; }
-		
+
 		$sQuery="
 			SELECT
-				mededeling.id as id, 
-				mededeling.datum as datum, 
-				mededeling.titel as titel, 
-				mededeling.tekst as tekst, 
-				mededeling.prive as prive, 
+				mededeling.id as id,
+				mededeling.datum as datum,
+				mededeling.titel as titel,
+				mededeling.tekst as tekst,
+				mededeling.prive as prive,
 				mededeling.plaatje as plaatje
 			FROM
 				mededeling
@@ -140,7 +140,7 @@ class Nieuws {
 		$sMessageQuery="
 			INSERT INTO
 				mededeling
-			( 
+			(
 				datum, titel, categorie, tekst, rank, uid, prive, verborgen, plaatje
 			) VALUES (
 				".$datum.", '".$titel."', '".$categorie."', '".$tekst."', '".$rank."',
@@ -185,11 +185,11 @@ class Nieuws {
 			UPDATE
 				mededeling
 			SET
-				titel='".$titel."', 
-				tekst='".$tekst."', 
-				categorie='".$categorie."', 
-				rank='".$rank."', 
-				prive='".$prive."', 
+				titel='".$titel."',
+				tekst='".$tekst."',
+				categorie='".$categorie."',
+				rank='".$rank."',
+				prive='".$prive."',
 				verborgen='".$verborgen."'
 			WHERE
 				id=".$iBerichtID."
@@ -197,7 +197,7 @@ class Nieuws {
 		return $this->_db->query($sMessageQuery);
 	}
 	public function isNieuwsMod(){ return $this->_lid->hasPermission('P_NEWS_MOD');}
-	
+
 	public function resize_plaatje($file) {
 		list($owdt,$ohgt,$otype)=@getimagesize($file);
 		switch($otype) {
@@ -209,7 +209,7 @@ class Nieuws {
 			$newimg=imagecreatetruecolor(200, 200);
 			if(imagecopyresampled($newimg, $oldimg, 0, 0, 0, 0, 200, 200, $owdt, $ohgt)){
 				switch($otype) {
-					case 1: imagegif($newimg,$file); break;   
+					case 1: imagegif($newimg,$file); break;
 					case 2: imagejpeg($newimg,$file,90); break;
 					case 3: imagepng($newimg,$file);  break;
 				}
@@ -219,12 +219,12 @@ class Nieuws {
 			}
 		}
 	}
-	
+
 	private function resetRank($rank){
 		$rank=(int)$rank;
 		if($rank<=0 OR $rank>=$this->getStandaardRank())
 			return;
-		
+
 		$sUpdateRankQuery="
 			UPDATE
 				mededeling
@@ -234,7 +234,7 @@ class Nieuws {
 				rank='".$rank."';";
 		$this->_db->query($sUpdateRankQuery);
 	}
-	
+
 	/*
 	 * Geeft de id van de belangrijkste mededeling terug.
 	 * De belangrijkste mededeling is het top 1-bericht en als deze
@@ -244,7 +244,7 @@ class Nieuws {
 	{
 		$sTop1Query="
 			SELECT
-				id 
+				id
 			FROM
 				mededeling
 			WHERE
@@ -260,7 +260,7 @@ class Nieuws {
 			// Als er géén top1 is, of zelfs meerdere, dan gaan we zoeken naar de nieuwste mededeling.
 			$sNieuwsteQuery="
 				SELECT
-					id 
+					id
 				FROM
 					mededeling
 				WHERE

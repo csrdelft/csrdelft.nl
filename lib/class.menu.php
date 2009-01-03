@@ -11,47 +11,45 @@
 require_once 'class.csrsmarty.php';
 
 class menu {
-	protected $_lid;
-	protected $_db;
 
 	//menu is een array met menu-opties.
 	private $_menu=array();
-	
+
 	//huidig is het ID van de menu-optie waar we nu zijn.
 	private $_huidig=1;
 	//huidigTop is het ID van de menu-optie waaronder de huidige valt
 	private $_huidigTop=0;
 
 	private $_prefix;
-	
+
 	/**
 		Michel: param $mainid toegevoegd, de vorminsbank heeft een ander hoofdmenu pID (= 99)
 	**/
 	public function menu($prefix='', $mainid=0) {
-		$this->_lid=Lid::get_lid();
-		$this->_db=MySql::get_MySql();
-	
+		$this->_lid=Lid::instance();
+		$this->_db=MySql::instance();
+
 		$this->_menu=array();
-		
+
 		//ff de request_url van #name en .php ontdoen.
 		$request_uri_full=$request_uri=$_SERVER['REQUEST_URI'];
 		$dotphp=strpos($request_uri, '.php');
 		if($dotphp!==false){ $request_uri=substr($request_uri, 0, $dotphp); }
 		$sharp=strpos($request_uri, '#');
-		if($sharp!==false){ $request_uri=substr($request_uri, 0, $sharp); }	
+		if($sharp!==false){ $request_uri=substr($request_uri, 0, $sharp); }
 
 		# menu ophalen
 		$sMenu="
-			SELECT  
+			SELECT
 				ID, pID, tekst, link, permission
-			FROM 
-				menu 
-			WHERE 
-				zichtbaar='ja' 
-			ORDER BY 
+			FROM
+				menu
+			WHERE
+				zichtbaar='ja'
+			ORDER BY
 				pID ASC, prioriteit ASC, tekst ASC";
 		$rMenu=$this->_db->query($sMenu);
-		
+
 		//Nu hier een boom-array maken.
 		while($aMenu=$this->_db->next($rMenu)){
 			//uitzoeken of de huidige pagina overeenkomt met de opgehaalde rij
@@ -81,7 +79,7 @@ class menu {
 						$this->_menu[$aMenu['pID']]['subitems'][$key]['huidig'] = 0;
 					}
 				}
-				
+
 				//subniveau
 				$this->_menu[$aMenu['pID']]['subitems'][$aMenu['ID']]=array(
 					'ID' => $aMenu['ID'],
@@ -98,9 +96,9 @@ class menu {
 		$this->_prefix=$prefix;
 	}
 
-	
-	//viewWaarbenik gebruikt de menu array en $this->_huidig om een paadje te tekenen waar men is. 
-	public function viewWaarbenik(){ 
+
+	//viewWaarbenik gebruikt de menu array en $this->_huidig om een paadje te tekenen waar men is.
+	public function viewWaarbenik(){
 		echo '&raquo; ';
 		if($this->_huidig!=1){
 			if(isset($this->_menu[$this->_huidig])){
@@ -116,44 +114,45 @@ class menu {
 			echo 'Thuis';
 		}
 	}
-	
+
 	public function view() {
+		$lid=Lid::instance();
 		$menu=new Smarty_csr();
 		$menu->caching=false;
-		
+
 		$aMenuItems=array();
 		$bHuidig=false;
-		
+
 		foreach($this->_menu as $aMenuItem){
 			//controleer of de gebruiker wel het recht heeft om dit item te zien
-			if(!$this->_lid->hasPermission($aMenuItem['rechten'])) continue;
+			if(!$lid->hasPermission($aMenuItem['rechten'])) continue;
 
 			if($aMenuItem['huidig']){$bHuidig=true;}
-			
+
 			$aSubItems=array();
 			foreach($aMenuItem['subitems'] as $aSubItem){
-				if(!$this->_lid->hasPermission($aSubItem['rechten'])) continue;
-				
+				if(!$lid->hasPermission($aSubItem['rechten'])) continue;
+
 				$aSubItems[]=$aSubItem;
-			}			
-			
+			}
+
 			$aMenuItem['subitems']=$aSubItems;
 			$aMenuItems[] = $aMenuItem;
 		}
-		
+
 		//Als er geen huidig item is gekozen wordt het eerste menu huidig
 		//if($bHuidig===false){$aMenuItems[0]['huidig']=true;}
-		
-		$menu->assign('items', $aMenuItems);		
+
+		$menu->assign('items', $aMenuItems);
 		$menu->display($this->_prefix.'menu.tpl');
 	}
-	
+
 	public static function getGaSnelNaar(){
-		//hier worden even de objecten lokaal gemaakt, anders moet er voor dit ding ook nog een 
+		//hier worden even de objecten lokaal gemaakt, anders moet er voor dit ding ook nog een
 		//tweede instantie van Menu gemaakt worden.
-		$lid=Lid::get_lid();
-		$db=MySql::get_MySql();
-		
+		$lid=Lid::instance();
+		$db=MySql::instance();
+
 		$gasnelnaar="SELECT tekst, link, permission FROM menu WHERE gasnelnaar='ja' ORDER BY tekst;";
 		$result=$db->query($gasnelnaar);
 		$return='<h1>Ga snel naar</h1>';

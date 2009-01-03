@@ -1,27 +1,27 @@
 <?php
 /*
  * class.groep.php	| 	Jan Pieter Waagmeester (jieter@jpwaag.com)
- * 
+ *
  * een Groep-object bevat een groep met wat eigenschappen en een array met leden en eventueel functies.
  */
 require_once('class.groepen.php');
 
 class Groep{
-	
-	//deze array wordt in deze klasse twee keer gebruikt: in __construct() en load()  
+
+	//deze array wordt in deze klasse twee keer gebruikt: in __construct() en load()
 	private $groepseigenschappen=
-		array('groepId', 'gtypeId', 'gtype', 'snaam', 'naam', 'sbeschrijving', 'beschrijving', 
+		array('groepId', 'gtypeId', 'gtype', 'snaam', 'naam', 'sbeschrijving', 'beschrijving',
 			'zichtbaar', 'status', 'begin', 'einde', 'aanmeldbaar', 'limiet', 'toonFuncties');
-		
+
 	private $groep=null;
 	private $leden=null;
-	
+
 	public function __construct($init){
 		if(!is_array($init) AND preg_match('/^\d+$/', $init)){
 			if((int)$init===0){
 				//dit zijn de defaultwaarden voor een nieuwe groep.
 				$this->groep=array(
-					'groepId'=>0, 'snaam'=>'', 'naam'=>'', 'sbeschrijving'=>'', 'beschrijving'=>'', 
+					'groepId'=>0, 'snaam'=>'', 'naam'=>'', 'sbeschrijving'=>'', 'beschrijving'=>'',
 					'zichtbaar'=>'zichtbaar', 'begin'=>date('Y-m-d'), 'einde'=>'0000-00-00',
 					'aanmeldbaar'=>0, 'limiet'=>0, 'toonFuncties'=>'tonen');
 				//we moeten ook nog even de groeptypen opzoeken. Die zit als het goed is in GET['gtype'];
@@ -30,7 +30,7 @@ class Groep{
 				$this->load($init);
 			}
 		}elseif(is_string($init)){
-			$this->load($init);		
+			$this->load($init);
 		}elseif(is_array($init) AND isset($init[0])){
 			$this->groep=array_get_keys($init[0], $this->groepseigenschappen);
 			foreach($init as $lid){
@@ -42,12 +42,12 @@ class Groep{
 	}
 	/*
 	 * Laad een groep in aan de hand van het id of de snaam
-	 * 
+	 *
 	 * @param	$groepId	integer groepId of string snaam
 	 * @return	void
 	 */
 	public function load($groepId){
-		$db=MySql::get_MySql();
+		$db=MySql::instance();
 		if(preg_match('/^\d+$/', $groepId)){
 			$wherePart="groep.id=".(int)$groepId;
 		}else{
@@ -56,7 +56,7 @@ class Groep{
 			$wherePart="groep.snaam='".$db->escape($groepId)."' AND groep.status='ht'";
 		}
 		$qGroep="
-			SELECT 
+			SELECT
 				groep.id AS groepId, groep.snaam AS snaam, groep.naam AS naam,
 				groep.sbeschrijving AS sbeschrijving, groep.beschrijving AS beschrijving, groep.zichtbaar AS zichtbaar,
 				groep.status AS status,  begin, einde, aanmeldbaar, limiet, toonFuncties,
@@ -79,19 +79,19 @@ class Groep{
 				$this->leden[$aGroep['uid']]=array_get_keys($aGroep, array('uid', 'op', 'functie'));
 			}
 		}
-		
+
 		}
-	
+
 	/*
 	 * save().
 	 * slaat groepinfo op, geen leden! Leden worden direct in de db opgeslagen, niet meer in de instantie
-	 * van de klasse bijgeschreven. Pas bij het inladen de volgende keer worden de nieuwe leden in de 
+	 * van de klasse bijgeschreven. Pas bij het inladen de volgende keer worden de nieuwe leden in de
 	 * instantie van de klasse opgenomen.
-	 * 
-	 * @return			Bool of het gelukt is of niet.	
+	 *
+	 * @return			Bool of het gelukt is of niet.
 	 */
 	public function save(){
-		$db=MySql::get_MySql();
+		$db=MySql::instance();
 		if($this->getId()==0){
 			$qSave="
 				INSERT INTO groep (
@@ -113,7 +113,7 @@ class Groep{
 				);";
 		}else{
 			$qSave="
-				UPDATE groep SET 
+				UPDATE groep SET
 					snaam='".$db->escape($this->getSnaam())."',
 		 			naam='".$db->escape($this->getNaam())."',
 					sbeschrijving='".$db->escape($this->getSbeschrijving())."',
@@ -131,14 +131,14 @@ class Groep{
 		if($db->query($qSave)){
 			//als het om een nieuwe groep gaat schrijven we het nieuwe id weg in de
 			//instantie van het object, zodat we bijvoorbeeld naar dat nieuwe id kunnen refreshen.
-			if($this->getId()==0){ 
+			if($this->getId()==0){
 				$this->groep['groepId']=$db->insert_id();
 			}
 			return true;
 		}
 		return false;
 	}
-	
+
 	/*
 	 * Groep wegkekken
 	 */
@@ -146,13 +146,13 @@ class Groep{
 		if($this->getId()==0){
 			die('Kan geen lege groep wegkekken. Groep::delete()');
 		}
-		$db=MySql::get_MySql();
+		$db=MySql::instance();
 		$qDeleteLeden="DELETE FROM groeplid WHERE groepid=".$this->getId().";";
 		$qDeleteGroep="DELETE FROM groep WHERE id=".$this->getId()." LIMIT 1;";
-		
+
 		return $db->query($qDeleteLeden) AND $db->query($qDeleteGroep);
 	}
-	
+
 	public function getType(){			return $this->groep['gtype']; }
 	public function getTypeId(){		return $this->groep['gtypeId']; }
 
@@ -165,51 +165,51 @@ class Groep{
 	public function getStatus(){		return $this->groep['status']; }
 	public function getBegin(){			return $this->groep['begin']; }
 	public function getEinde(){			return $this->groep['einde']; }
-	public function getDuration(){		
+	public function getDuration(){
 		return strtotime($this->getBegin())-strtotime($this->getEinde())/(60*24*30);
 	}
 	public function isAanmeldbaar(){	return $this->groep['aanmeldbaar']==1; }
 	public function getLimiet(){		return $this->groep['limiet']; }
 	public function getToonFuncties(){	return $this->groep['toonFuncties']; }
-	
+
 	/*
 	 * Geef een bool terug of de functies getoond worden of niet.
 	 * Elke groep heeft een veld wat drie waarden kan hebben:
-	 * 
+	 *
 	 * tonen		Iedereen ziet de functies
 	 * verbergen	Alleen admins en groepOps mogen de functies zien.
 	 * niet			Functies worden in het geheel verborgen.
 	 */
-	public function toonFuncties(){		
+	public function toonFuncties(){
 		if($this->getToonFuncties()!='niet'){
 			if($this->magBewerken()){
 				return true;
 			}
 			return $this->groep['toonFuncties']=='tonen';
 		}
-		return false; 
+		return false;
 	}
-	
-	public function setGtype(){					
+
+	public function setGtype(){
 		if(isset($_GET['gtype']) AND Groepen::isValidGtype($_GET['gtype'])){
 			$gtypes=Groepen::getGroeptypes();
 			foreach($gtypes as $gtype){
 				if($gtype['id']==$_GET['gtype'] OR $gtype['naam']==$_GET['gtype']){
 					$this->groep=array_merge(
-						$this->groep, 
+						$this->groep,
 						array('gtypeId'=>$gtype['id'], 'gtype'=>$gtype['naam']));
 				}
 			}
 		}else{
 			die('Geen gtype opgegeven, niet via de juiste weg aangevraagd...');
-		} 
+		}
 	}
-	
+
 	public function setValue($key, $value){
-		$fields=array('snaam', 'naam', 'sbeschrijving', 'beschrijving', 
+		$fields=array('snaam', 'naam', 'sbeschrijving', 'beschrijving',
 			'zichtbaar', 'status', 'begin', 'einde', 'aanmeldbaar', 'limiet', 'toonFuncties');
 		if(in_array($key, $fields)){
-			$this->groep[$key]=trim($value);	
+			$this->groep[$key]=trim($value);
 		}
 	}
 
@@ -218,13 +218,13 @@ class Groep{
 	public function getLeden(){		return $this->leden; }
 	public function getLidCount(){	return count($this->getLeden()); }
 	public function isVol(){		return $this->getLimiet()!=0 AND $this->getLimiet()<=$this->getLidCount(); }
-	
-	public static function isAdmin(){		
-		$lid=Lid::get_lid();
+
+	public static function isAdmin(){
+		$lid=Lid::instance();
 		return $lid->hasPermission('P_LEDEN_MOD');
 	}
 	public function magBewerken(){
-		$lid=Lid::get_lid();
+		$lid=Lid::instance();
 		return $this->isAdmin() OR $this->isOp($lid->getUid());
 	}
 	/*
@@ -232,15 +232,15 @@ class Groep{
 	 * met dezelfde snaam
 	 */
 	public function hasHt($snaam=null){
-		$db=MySql::get_MySql();
+		$db=MySql::instance();
 		if($snaam==null){
-			$snaam=$this->getSnaam(); 
-		} 
+			$snaam=$this->getSnaam();
+		}
 		$qHasHt="
-			SELECT id 
-			FROM groep 
-			WHERE snaam='".$db->escape($snaam)."' 
-			  AND status='ht' 
+			SELECT id
+			FROM groep
+			WHERE snaam='".$db->escape($snaam)."'
+			  AND status='ht'
 			  AND id!=".$this->getId()."";
 		$rHasHt=$db->query($qHasHt);
 		if($db->numRows($rHasHt)!=0){
@@ -249,12 +249,12 @@ class Groep{
 		return false;
 	}
 	/*
-	 * Kijk of de groep aanmeldbaar is, de gebruiker mag aanmelden, de gebruiker nog 
+	 * Kijk of de groep aanmeldbaar is, de gebruiker mag aanmelden, de gebruiker nog
 	 * niet aangemald is en of de limiet nog niet overschreden is.
 	 */
 	public function magAanmelden(){
 		if($this->isAanmeldbaar()){
-			$lid=Lid::get_Lid();
+			$lid=Lid::instance();
 			if($lid->hasPermission('P_LEDEN_READ') AND !$this->isLid($lid->getUid())){
 				if($this->getLimiet()==0){
 					return true;
@@ -265,18 +265,18 @@ class Groep{
 		}
 		return false;
 	}
-	
+
 	public function verwijderLid($uid){
-		$lid=Lid::get_lid();
+		$lid=Lid::instance();
 		if($lid->isValidUid($uid)){
-			$db=MySql::get_MySql();
+			$db=MySql::instance();
 			$qVerwijderen="
-				DELETE FROM 
+				DELETE FROM
 					groeplid
 				WHERE
 					groepid=".$this->getId()."
 				AND
-					uid='".$uid."' 
+					uid='".$uid."'
 				LIMIT 1;";
 			return $db->query($qVerwijderen);
 		}else{
@@ -285,19 +285,19 @@ class Groep{
 	}
 	public function meldAan($functie){
 		if($this->magAanmelden()){
-			$lid=Lid::get_lid();
+			$lid=Lid::instance();
 			return $this->addLid($lid->getUid(), $functie);
 		}
 		return false;
 	}
-	
+
 	public function addLid($uid, $functie=''){
-		$db=MySql::get_MySql();
+		$db=MySql::instance();
 		$op=0;
 		$functie=str_replace(array("\n","\r"), '', trim($functie));
 		switch(strtolower($functie)){
-			case 'praeses':	case 'archivaris': case 'werkgroepleider': 
-			case 'ho': case 'leider': case 'oudste': 
+			case 'praeses':	case 'archivaris': case 'werkgroepleider':
+			case 'ho': case 'leider': case 'oudste':
 				$prioriteit=1;
 				$op=1;
 			break;
@@ -305,7 +305,7 @@ class Groep{
 			case 'posterman': case 'techniek': case 'abactis':
 				$prioriteit=2;
 			break;
-			case 'computeur': case 'statisticus': case 'provisor': 
+			case 'computeur': case 'statisticus': case 'provisor':
 			case 'internetman': case 'bandleider':
 				$prioriteit=3;
 			break;
@@ -332,8 +332,8 @@ class Groep{
 					".$this->getId().", '".$uid."', '".$op."', '".$db->escape($functie)."', ".$prioriteit."
 				)";
 			return $db->query($sCieQuery);
-		}else{ 
-			return false; 
+		}else{
+			return false;
 		}
 	}
 	/*
@@ -342,11 +342,11 @@ class Groep{
 	 */
 	public function getOpvolgerVoorganger(){
 		$return=false;
-		$db=MySql::get_MySql();
+		$db=MySql::instance();
 		$qVoorganger="
-			SELECT id 
-			FROM groep 
-			WHERE snaam='".$this->getSnaam()."' 
+			SELECT id
+			FROM groep
+			WHERE snaam='".$this->getSnaam()."'
 			  AND begin<'".$this->getBegin()."'
 			ORDER BY begin DESC
 			LIMIT 1;";
@@ -356,9 +356,9 @@ class Groep{
 			$return['voorganger']=new Groep($aVoorganger[0]['id']);
 		}
 		$qOpvolger="
-			SELECT id 
-			FROM groep 
-			WHERE snaam='".$this->getSnaam()."' 
+			SELECT id
+			FROM groep
+			WHERE snaam='".$this->getSnaam()."'
 			  AND begin>'".$this->getBegin()."'
 			ORDER BY begin ASC
 			LIMIT 1;";
@@ -368,12 +368,12 @@ class Groep{
 			$return['opvolger']=new Groep($aOpvolger[0]['id']);
 		}
 		return $return;
-		
+
 	}
 	public function getLink(){
 		return '<a class="groeplink" href="/actueel/groepen/'.$this->getType().'/'.$this->getId().'">'.$this->getNaam().'</a>';
 	}
-	
+
 	/*
 	 * Deze functie geeft een array terug met functies en aantallen.
 	 */
@@ -390,12 +390,12 @@ class Groep{
 		return $functies;
 	}
 	public static function getGroepgeschiedenis($snaam, $limiet=10){
-		$db=MySql::get_MySql();
+		$db=MySql::instance();
 		$limiet=(int)$limiet;
 		$groepen=array();
 		$qGroepen="
-			SELECT 
-				id, naam, begin, einde, 
+			SELECT
+				id, naam, begin, einde,
 				EXTRACT( MONTH FROM einde-begin) AS duration
 			FROM groep
 			WHERE snaam='".$db->escape($snaam)."'

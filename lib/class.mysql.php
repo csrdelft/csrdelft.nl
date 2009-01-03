@@ -18,12 +18,12 @@ class MySql{
 
 	private function __construct(){ $this->connect(); }
 
-	static function get_MySql(){
+	public static function instance(){
     	//als er nog geen instantie gemaakt is, die nu maken
-    	if(!isset(MySql::$Mysql)){
-			MySql::$Mysql = new MySql();
+    	if(!isset(self::$Mysql)){
+			self::$Mysql = new MySql();
 		}
-    	return MySql::$Mysql;
+    	return self::$Mysql;
 	}
 	private function connect() {
 		$cred = parse_ini_file(ETC_PATH.'/mysql.ini');

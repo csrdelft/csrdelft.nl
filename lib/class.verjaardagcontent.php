@@ -21,9 +21,9 @@ class VerjaardagContent extends SimpleHTML {
 	### public ###
 
 	function VerjaardagContent ($actie) {
-		$this->_lid =Lid::get_lid();
+		$this->_lid =Lid::instance();
 		$this->_actie = $actie;
-		
+
 	}
 	function getTitel(){
 		return 'Verjaardagen';
@@ -35,10 +35,10 @@ class VerjaardagContent extends SimpleHTML {
 				$nu = time();
 				$dezemaand = date('n', $nu);
 				$dezedag = date('j', $nu);
-				
+
 				# afbeelden van alle verjaardagen in 3 rijen en 4 kolommen
 				$rijen = 3; $kolommen = 4;
-		
+
 				$maanden = array (
 					1 => "Januari",
 					2 => "Februari",
@@ -53,7 +53,7 @@ class VerjaardagContent extends SimpleHTML {
 					11 => "November",
 					12 => "December",
 				);
-		
+
 				echo '<table style="width: 100%;">';
 				for ($r=0; $r<$rijen; $r++) {
 					echo '<tr>';
@@ -83,11 +83,11 @@ class VerjaardagContent extends SimpleHTML {
 				}
 				echo '</table><br>'."\n";
 				break;
-				
+
 			case 'komende10':
 				$aVerjaardagen=$this->_lid->getKomende10Verjaardagen();
 				echo '<h1><a href="/communicatie/verjaardagen.php">Verjaardagen</a></h1>';
-				for ($i=0; $i<sizeOf($aVerjaardagen); $i++) {					
+				for ($i=0; $i<sizeOf($aVerjaardagen); $i++) {
 					$aVerjaardag = $aVerjaardagen[$i];
 
 					echo '<div class="item">'.date('d-m', strtotime($aVerjaardag['gebdatum'])).' ';

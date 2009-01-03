@@ -22,8 +22,8 @@ class MotenContent extends SimpleHTML {
 
 	### public ###
 
-	function MotenContent (&$lid) {
-		$this->_lid =& $lid;
+	public function __construct(){
+		$this->_lid=Lid::instance();
 		$this->_kringen=$this->_lid->getKringen();
 		//kijken of er email-adressen getoond moeten worden
 		if(isset($_GET['email'])){ $this->_bEmail=true; }

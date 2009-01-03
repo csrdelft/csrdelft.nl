@@ -8,31 +8,31 @@
 
 
 class Fotoalbum{
-	
+
 	private $_lid;
-	
+
 	private $pad;
 	private $mapnaam;
-	
+
 	function Fotoalbum($pad,$mapnaam){
-		$this->_lid=Lid::get_lid();
-		
+		$this->_lid=Lid::instance();
+
 		$this->pad=$pad;
 		$this->mapnaam=$mapnaam;
 	}
-	
+
 	function getPad(){
 		return $this->pad;
 	}
-	
+
 	function getMapnaam(){
 		return $this->mapnaam;
 	}
-	
+
 	function getNaam(){
 		return ucfirst($this->getMapnaam());
 	}
-	
+
 	function getBreadcrumb(){
 		if($this->getPad()==''){
 			return '';
@@ -49,7 +49,7 @@ class Fotoalbum{
 			return $breadcrumb;
 		}
 	}
-	
+
 	function getThumbURL(){
 		# Foto uit album zelf
 		$fotos=$this->getFotos();
@@ -57,18 +57,18 @@ class Fotoalbum{
 			$foto=$fotos[0];
 			return $foto->getThumbURL();
 		}
-		
+
 		# Foto uit subalbum
 		$albums=$this->getSubAlbums();
 		if($albums!==false){
 			foreach($albums as $album){
-				return $album->getThumbURL();				
+				return $album->getThumbURL();
 			}
 		}
-		
+
 		return CSR_PICS.'fotoalbum/_geen_thumb.jpg';
 	}
-	
+
 	function getSubAlbums(){
 		# Mappenlijst ophalen en sorteren
 		$mappen=array();
@@ -80,7 +80,7 @@ class Fotoalbum{
 		}
 		sort($mappen);
 		$mappen=array_reverse($mappen);
-		
+
 		# Albums aanmaken en teruggeven
 		$albums=array();
 		foreach($mappen as $map){
@@ -88,7 +88,7 @@ class Fotoalbum{
 			if($album->magBekijken()){
 				$albums[]=$album;
 			}
-				
+
 		}
 		if(count($albums)>0){
 			return $albums;
@@ -96,7 +96,7 @@ class Fotoalbum{
 			return false;
 		}
 	}
-	
+
 	function getFotos($compleet=true){
 		$fotos=array();
 		$handle=opendir(PICS_PATH.'/fotoalbum/'.$this->pad);
@@ -114,16 +114,16 @@ class Fotoalbum{
 			return false;
 		}
 	}
-	
+
 	function magBekijken(){
 		if($this->_lid->hasPermission('P_LOGGED_IN')){
 			return true;
 		}else{
 			return(!preg_match('/novitiaat/i', $this->getPad()));
 		}
-		
+
 	}
-	
+
 	function verwerkFotos(){
 		# Subalbums
 		$albums=$this->getSubAlbums();
@@ -132,7 +132,7 @@ class Fotoalbum{
 				$album->verwerkFotos();
 			}
 		}
-		
+
 		# Foto's
 		$fotos=$this->getFotos(false);
 		if($fotos!==false){
@@ -143,7 +143,7 @@ class Fotoalbum{
 			if(!file_exists(PICS_PATH.'/fotoalbum/'.$this->getPad().'/_resized')){
 				mkdir(PICS_PATH.'/fotoalbum/'.$this->getPad().'/_resized');
 			}
-			
+
 			# Thumbnails en resizeds maken
 			foreach($fotos as $foto){
 				if(!$foto->bestaatThumb()){
@@ -158,63 +158,63 @@ class Fotoalbum{
 }
 
 class Foto{
-	
+
 	private $map;
 	private $bestandsnaam;
-	
+
 	function Foto($map,$bestandsnaam){
 		$this->map=$map;
 		$this->bestandsnaam=$bestandsnaam;
 	}
-	
+
 	function getMap(){
 		return $this->map;
 	}
-	
+
 	function getBestandsnaam(){
 		return $this->bestandsnaam;
 	}
-	
+
 	function getPad(){
 		return PICS_PATH.'/fotoalbum/'.$this->getMap().$this->getBestandsnaam();
 	}
-	
+
 	function getThumbPad(){
 		return PICS_PATH.'/fotoalbum/'.$this->getMap().'_thumbs/'.$this->getBestandsnaam();
 	}
-	
+
 	function getResizedPad(){
 		return PICS_PATH.'/fotoalbum/'.$this->getMap().'_resized/'.$this->getBestandsnaam();
 	}
-	
+
 	function getThumbURL(){
 		return CSR_PICS.'fotoalbum/'.$this->getMap().'_thumbs/'.$this->getBestandsnaam();
 	}
-	
+
 	function getResizedURL(){
 		return CSR_PICS.'fotoalbum/'.$this->getMap().'_resized/'.$this->getBestandsnaam();
 	}
-	
+
 	function bestaatThumb(){
 		return file_exists(PICS_PATH.'/fotoalbum/'.$this->getMap().'_thumbs/'.$this->getBestandsnaam());
 	}
-	
+
 	function bestaatResized(){
 		return file_exists(PICS_PATH.'/fotoalbum/'.$this->getMap().'_resized/'.$this->getBestandsnaam());
 	}
-	
+
 	function maakThumb(){
 		set_time_limit(0);
 		$command=IMAGEMAGICK_PATH.'convert "'.$this->getPad().'" -thumbnail 150x150^^ -gravity center -extent 150x150 -format jpg -quality 80 "'.$this->getThumbPad().'"';
 		exec($command);
 	}
-	
+
 	function maakResized(){
 		set_time_limit(0);
 		$command=IMAGEMAGICK_PATH.'convert "'.$this->getPad().'" -resize 800x800 -format jpg -quality 70 "'.$this->getResizedPad().'"';
 		exec($command);
 	}
-	
+
 	function isCompleet(){
 		return ($this->bestaatThumb() && $this->bestaatResized());
 	}

@@ -20,7 +20,7 @@ function email_like($email) {
 function url_like($url) {
     #                      http://          user:pass@
     return preg_match('#^(([a-zA-z]{1,6}\://)(\w+:\w+@)?' .
-    #    f            oo.bar.   org       :80                
+    #    f            oo.bar.   org       :80
         '([a-zA-Z0-9]([-\w]+\.)+(\w{2,5}))(:\d{1,5})?)?' .
     #    /path       ?file=http://foo:bar@w00t.l33t.h4x0rz/
         '(/~)?[-\w./]*([-@()\#?/&;:+,._\w= ]+)?$#', $url);
@@ -32,13 +32,13 @@ function array_values_in_array($needles, $haystack) {
 		$valid=true;
 		foreach($needles as $needle){
 			if(!in_array($needle, $haystack)){
-				$valid=false;	
+				$valid=false;
 			}
 		}
 		return $valid;
 	}else{
 		return in_array($needles, $haystack);
-	}  
+	}
 }
 function kapStringNetjesAf(&$sTekst, $iMaxTekens){
 	//test of tekst überhaupt te lang is
@@ -54,7 +54,7 @@ function kapStringNetjesAf(&$sTekst, $iMaxTekens){
 			//kijk waar de laatste spatie zit.
 			$iSpatiePositie=mb_strrpos($sRanzigAfgekort, ' ');
 			if($iSpatiePositie===false){
-				//geen spatie meer aanwezig voor het afkappunt. 
+				//geen spatie meer aanwezig voor het afkappunt.
 				//Gewoon ranzig afkappen met puntjes dus
 				$bAfgekapt=true;
 				$sTekst=trim($sRanzigAfgekort);
@@ -76,7 +76,7 @@ function mb_htmlentities($string){
 
 // Returns true if $string is valid UTF-8 and false otherwise.
 function is_utf8($string) {
-   
+
    // From http://w3.org/International/questions/qa-forms-utf-8.html
    return preg_match('%^(?:
          [\x09\x0A\x0D\x20-\x7E]            # ASCII
@@ -88,7 +88,7 @@ function is_utf8($string) {
        | [\xF1-\xF3][\x80-\xBF]{3}          # planes 4-15
        |  \xF4[\x80-\x8F][\x80-\xBF]{2}    # plane 16
    )*$%xs', $string);
-   
+
 } // function is_utf8
 function opConfide() {
 	return ( isset($_SERVER['REMOTE_ADDR']) and defined('CONFIDE_IP') and in_array($_SERVER['REMOTE_ADDR'],explode(':',CONFIDE_IP)) );
@@ -108,11 +108,11 @@ function pr($sString){
 	}
 }
 function namen2uid($sNamen, $filter='leden'){
-	$lid=Lid::get_lid();
+	$lid=Lid::instance();
 	$return=array();
 	$sNamen=trim($sNamen);
 	$sNamen=str_replace(array(', ', "\r\n", "\n"), ',', $sNamen);
-	
+
 	$aNamen=explode(',', $sNamen);
 	$return=false;
 	foreach($aNamen as $sNaam){
@@ -124,12 +124,12 @@ function namen2uid($sNamen, $filter='leden'){
 			$naam.=$aZoekNamen[0]['achternaam'];
 			$return[]=array('uid' => $aZoekNamen[0]['uid'], 'naam' => $naam );
 		}elseif(count($aZoekNamen)==0){
-			
+
 		}else{
 			//geen enkelvoudige match, dan een array teruggeven
 			foreach($aZoekNamen as $aZoekNaam){
 				$aNaamOpties[]=array(
-					'uid' => $aZoekNaam['uid'], 
+					'uid' => $aZoekNaam['uid'],
 					'naam' => $lid->getFullname($aZoekNaam['uid']) );
 			}
 			$return[]['naamOpties']=$aNaamOpties;
@@ -173,11 +173,11 @@ function strNthPos($haystack, $needle, $nth = 1){
 }
 /*
  * Geeft een array terug met alleen de opgegeven keys.
- * 
+ *
  * @param	$in		ééndimensionele array.
  * @param	$keys	Keys die uit de in-array gereturned moeten worden.
  * @return			Array met alleen keys die in $keys zitten
- * 
+ *
  * @author			Jan Pieter Waagmeester (jieter@jpwaag.com)
  */
 function array_get_keys($in, $keys){

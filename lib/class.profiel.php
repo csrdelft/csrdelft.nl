@@ -13,7 +13,7 @@ class Profiel extends Lid{
 	#
 	# data voor de profiel-pagina functionaliteit
 	#
-	
+
 	# profiel dat we tijdelijk openen om te wijzigen of af te beelden
 	var $_tmpprofile;
 	# in delta worden veranderingen die gemaakt worden in profiel opgeslagen
@@ -26,11 +26,11 @@ class Profiel extends Lid{
 	# Hierin worden tijdens controleren van invoer foutmeldingen gezet die
 	# dan weer worden afgebeeld door ProfielContent
 	var $_formerror = array();
-	
-	function Profiel(){ 
-		parent::Lid(); 
+
+	function Profiel(){
+		parent::Lid();
 	}
-	
+
 
 	### public ###
 	# naast het profiel van de huidige gebruiker is er een variabele _tmpprofile,
@@ -41,7 +41,7 @@ class Profiel extends Lid{
 	function loadSqlTmpProfile($uid) {
 		# kijken of uid een goed formaat heeft
 		if(!$this->isValidUid($uid)){ return false; }
-		
+
 		# en gebruiker opzoeken
 		$uid = $this->_db->escape($uid);
 		$result = $this->_db->select("SELECT * FROM lid WHERE uid = '".$uid."' LIMIT 1");
@@ -51,14 +51,14 @@ class Profiel extends Lid{
 		}
 		return false;
 	}
-	
+
 	# inladen van de gegevens van het formulier. we geven een errorcode
 	# terug. als die 0 is dan klopt alles, bij 1 dan gaat het grondig mis,
 	# en bij 2 zitten er nog fouten in de invoer
-	
+
 	# N.B. in $this->_tmpprofile wordt vlak voor het aanroepen van deze functie het huidige
 	# profiel ingeladen, zodat we snel kunnen vergelijken.
-	
+
 	# Als een ingevulde waarde verschilt van de oude, dan controleren we de nieuwe waarde, en
 	# als het klopt dan zetten we de nieuwe waarde klaar in $this->_delta om de oude te gaan vervangen.
 	function loadPostTmpProfile($form=false) {
@@ -66,17 +66,17 @@ class Profiel extends Lid{
 		$this->_formerror = array();
 		# delta leeggooien
 		$this->_delta = array();
-		
+
 		//kijken of $form een array is. Als dat niet zo is, de postarry inladen
 		if(!is_array($form)){
 			//de post-array inladen in $form
 			$form=$_POST['frmdata'];
 		}
-		
+
 		# 1. eerst de tekstvelden die het lid zelf mag wijzigen
 		# NB: beroep en eetwens wordt niet getoond in het profiel bij S_LID, adres ouders niet bij S_OUDLID
-		$velden = array('adres' => 100, 'postcode' => 20, 'woonplaats' => 50, 'land' => 50, 
-			'o_adres' => 100, 'o_postcode' => 20, 'o_woonplaats' => 50, 'o_land' => 50, 
+		$velden = array('adres' => 100, 'postcode' => 20, 'woonplaats' => 50, 'land' => 50,
+			'o_adres' => 100, 'o_postcode' => 20, 'o_woonplaats' => 50, 'o_land' => 50,
 			'skype' => 50, 'eetwens' => 50, 'beroep' => 750, 'bankrekening' => 12 );
 		# voor al deze veldnamen...
 		foreach($velden as $veld => $max_lengte) {
@@ -101,7 +101,7 @@ class Profiel extends Lid{
 				}
 			}
 		}
-		
+
 		# 2. Nickname -> nickname mag nog niet voorkomen N.B. deze nickname search is *case-insensitive*
 		$veld = 'nickname';
 		$max_lengte = 20;
@@ -121,7 +121,7 @@ class Profiel extends Lid{
 						and $this->nickExists($invoer)) {
 					$this->_formerror[$veld] = "Deze bijnaam is al in gebruik.";
 				}
-				
+
 				# als er geen fout is opgetreden veranderde waarde bewaren
 				if (!isset($this->_formerror[$veld])) {
 					# bewaar oude en nieuwe waarde in delta
@@ -151,7 +151,7 @@ class Profiel extends Lid{
 				} elseif (mb_strlen($invoer) > $max_lengte) {
 					$this->_formerror[$veld] = "Gebruik maximaal {$max_lengte} karakters:";
 				}
-				
+
 				# als er geen fout is opgetreden veranderde waarde bewaren
 				if (!isset($this->_formerror[$veld])) {
 					# bewaar oude en nieuwe waarde in delta
@@ -162,7 +162,7 @@ class Profiel extends Lid{
 				$this->_tmpprofile[$veld] = $invoer;
 			}
 		}
-			
+
 		# 3. forum-instellingen
 		$veld = 'forum_name';
 		if (isset($form[$veld])) {
@@ -176,8 +176,8 @@ class Profiel extends Lid{
 				$this->_tmpprofile[$veld] = $invoer;
 			}
 		}
-		
-		
+
+
 		# 4. telefoonvelden
 		$velden = array('telefoon', 'mobiel', 'o_telefoon');
 		foreach ($velden as $veld) {
@@ -189,7 +189,7 @@ class Profiel extends Lid{
 					if (!preg_match('/^(\d{4}-\d{6}|\d{3}-\d{7}|\d{2}-\d{8}|\+\d{10,20})$/', $invoer) and $invoer != "") {
 						$this->_formerror[$veld] = "Geldig formaat: 0187-123456; 015-2135681; 06-12345678; +31152135681";
 					}
-					
+
 					# als er geen fout is opgetreden veranderde waarde bewaren
 					if (!isset($this->_formerror[$veld])) {
 						# bewaar oude en nieuwe waarde in delta
@@ -201,7 +201,7 @@ class Profiel extends Lid{
 				}
 			}
 		}
-		
+
 		# 5. ICQ nummer
 		$veld = 'icq';
 		if (isset($form[$veld])) {
@@ -259,7 +259,7 @@ class Profiel extends Lid{
 							}
 						}
 					}
-					
+
 					# als er geen fout is opgetreden veranderde waarde bewaren
 					if (!isset($this->_formerror[$veld])) {
 						# bewaar oude en nieuwe waarde in delta
@@ -309,7 +309,7 @@ class Profiel extends Lid{
 							}
 						}
 					}
-					
+
 					# als er geen fout is opgetreden veranderde waarde bewaren
 					if (!isset($this->_formerror[$veld])) {
 						# bewaar oude en nieuwe waarde in delta
@@ -321,7 +321,7 @@ class Profiel extends Lid{
 				}
 			}
 		}
-		
+
 		# studienummer
 		$veld = 'studienr';
 		if (isset($form[$veld])) {
@@ -353,7 +353,7 @@ class Profiel extends Lid{
 			$oldpass = strval($form['oldpass']);
 			$nwpass = strval($form['nwpass']);
 			$nwpass2 = strval($form['nwpass2']);
-		  
+
 			$tmperror='';
 			# alleen actie ondernemen als er een oud password is ingevuld
 			if ($oldpass != "" or $nwpass != "" or $nwpass2 != "") {
@@ -385,9 +385,9 @@ class Profiel extends Lid{
 		# Extra velden die gewijzigd kunnen worden... Oudleden kunnen meer elementaire velden wijzigen
 		# als hun naam, hun studiejaar etc, om de oudledenlijst compleet te krijgen.
 		# De Vice-Abactis kan de info van iedereen wijzigen.
-		
+
 		if ($this->_profile['status'] == 'S_OUDLID' or $this->hasPermission('P_LEDEN_MOD')) {
-			
+
 			# Info over naam => verplichte velden! (ook vanwege sn/cn velden in ldap!)
 			$velden = array('voornaam' => 50, 'achternaam' => 50);
 			# voor al deze veldnamen...
@@ -414,7 +414,7 @@ class Profiel extends Lid{
 					}
 				}
 			}
-		
+
 			# Info over naam, studieomschrijving
 			$velden = array('tussenvoegsel' => 15, 'studie' => 100);
 			# voor al deze veldnamen...
@@ -464,7 +464,7 @@ class Profiel extends Lid{
 					}
 				}
 			}
-			
+
 			# geboortedatum
 			$veld = 'gebdatum';
 			if (isset($form[$veld])) {
@@ -479,7 +479,7 @@ class Profiel extends Lid{
 					if ($invoer != $this->_tmpprofile['gebdatum']) {
 					  # dan gaan we controleren of de nieuwe datum een bestaande
 					  # datum is...
-					  
+
 					  #	door strtotime heenhalen en kijken of het dezelfde datum is
 					  if ($invoer != date("Y-m-d", strtotime($invoer))) {
 							$this->_formerror[$veld] = "Opgegeven datum bestaat niet:";
@@ -550,7 +550,7 @@ class Profiel extends Lid{
 					}
 				}
 			}
-			
+
 			# is deze persoon kringleider? (n)iet, (e)erstejaars, (o)uderejaars
 			$veld = 'kringleider';
 			# kijken of het veld in POST voorkomt, zo niet...
@@ -607,7 +607,7 @@ class Profiel extends Lid{
 					}
 				}
 			}
-			
+
 			# wat is de status van dit lid?
 			$veld = 'status';
 			# kijken of het veld in POST voorkomt, zo niet...
@@ -648,22 +648,22 @@ class Profiel extends Lid{
 			}
 
 		}
-		
+
 		# als er regels in formerror staan betekent het dat we niet verder gaan met opslaan van
 		# wijzigingen, maar dat we er met een foutmelding nu uit knallen, en de invoer en de
 		# foutmeldingen aan de gebruiker laten tonen
 		if (count($this->_formerror) != 0) return 2;
 		return 0;
-		
+
 	}
 	/*
-	* Deze functie slaat velden op in de delta array 
+	* Deze functie slaat velden op in de delta array
 	*/
 	function storeDeltaProfile($veld, $invoer){
 		$this->_delta[$veld] = array (
 			'oud'  => $this->_tmpprofile[$veld],
 			'nieuw'  => $invoer
-		);						
+		);
 	}
 	function getTmpProfile() { return $this->_tmpprofile; }
 	function getFormErrors() { return $this->_formerror; }
@@ -678,13 +678,13 @@ class Profiel extends Lid{
 
 			# opslaan van de waarden in de database
 			$this->_db->update_a('lid', 'uid', $this->_tmpprofile['uid'], $sqldata);
-			
+
 			//profiel-cache weggooien
 			$profiel=new Smarty_csr();
 			$profiel->clear_cache('profiel.tpl', $this->_tmpprofile['uid']);
-			
+
 			//naam-cache leegkekken voor dit lid
-			$lc=LidCache::get_LidCache();
+			$lc=LidCache::instance();
 			$lc->flushLid($this->_tmpprofile['uid']);
 		}
 	}
@@ -692,7 +692,7 @@ class Profiel extends Lid{
 
 	# Profiel uitlezen uit de database en in LDAP zetten
 	function save_ldap() {
-	
+
 		# Alleen leden, gastleden, novieten en kringels staan in LDAP ( en Knorrie öO~ )
 		if (preg_match('/^S_(LID|GASTLID|NOVIET|KRINGEL)$/', $this->_tmpprofile['status'])
 		    or $this->_tmpprofile['uid'] == '9808') {
@@ -739,16 +739,16 @@ class Profiel extends Lid{
 				*/
 				# lege velden er uit gooien
 				foreach ($entry as $i => $e) if ($e == '') unset ($entry[$i]);
-				
+
 				# if ($this->hasPermission('P_LEDEN_MOD')) print_r($entry);
-			
+
 				# LDAP verbinding openen
 				$ldap = new LDAP();
-			
+
 				# bestaat deze uid al in ldap? dan wijzigen, anders aanmaken
 				if ($ldap->isLid($entry['uid'])) $ldap->modifyLid($entry['uid'], $entry);
 				else $ldap->addLid($entry['uid'], $entry);
-			
+
 				# verbinding sluiten
 				$ldap->disconnect();
 			}
@@ -756,10 +756,10 @@ class Profiel extends Lid{
 		} else {
 			# LDAP verbinding openen
 			$ldap = new LDAP();
-			
+
 			# bestaat deze uid in ldap? dan verwijderen
 			if ($ldap->isLid($this->_tmpprofile['uid'])) $ldap->removeLid($this->_tmpprofile['uid']);
-			
+
 			# verbinding sluiten
 			$ldap->disconnect();
 		}
@@ -768,7 +768,7 @@ class Profiel extends Lid{
 		if(!$this->uidExists($uid)){ return false; }
 		$password=substr(md5(time()), 0, 8);
 		$passwordhash=$this->_makepasswd($password);
-		
+
 		$sNieuwWachtwoord="
 			UPDATE
 				lid

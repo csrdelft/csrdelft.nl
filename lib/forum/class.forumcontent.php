@@ -78,7 +78,7 @@ class ForumContent extends SimpleHTML {
 		$pagina['huidig']=$iPaginaID;
 		$smarty->assign('pagina', $pagina);
 
-		$lid=Lid::get_Lid();
+		$lid=Lid::instance();
 		//TODO: dit netjes fixen.
 		$smarty->assign('magPosten', $lid->hasPermission($aTopics[0]['rechten_post']));
 		$smarty->assign('melding', $this->getMelding());

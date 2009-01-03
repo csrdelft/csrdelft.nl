@@ -15,14 +15,14 @@ class NieuwsContent extends SimpleHTML {
 	# de objecten die data leveren
 	private $_nieuws;
 	private $ubb;
-	
+
 	private $_sError='';
-	
+
 	private $_berichtID;
 	private $_actie='overzicht';
 
-	public function NieuwsContent (&$nieuws) {
-		$this->_nieuws =& $nieuws;
+	public function NieuwsContent($nieuws) {
+		$this->_nieuws=$nieuws;
 		$this->ubb= new csrubb();
 	}
 
@@ -83,7 +83,7 @@ class NieuwsContent extends SimpleHTML {
 			if($aBericht['prive']==1){ $prive='checked="checked"'; }
 			if($aBericht['verborgen']==1){ $verborgen='checked="checked"'; }
 		}else{
-			//wel een bericht om te bewerken, maar de varabelen uit _POST halen omdat het nog niet 
+			//wel een bericht om te bewerken, maar de varabelen uit _POST halen omdat het nog niet
 			//aan de eisen van $this->valideerFormulier() voldeed
 			$titel=htmlspecialchars($_POST['titel']);
 			$tekst=htmlspecialchars($_POST['tekst']);
@@ -92,11 +92,11 @@ class NieuwsContent extends SimpleHTML {
 			$prive=$verborgen='';
 			if(isset($_POST['prive'])){ $prive='checked="checked"'; }
 			if(isset($_POST['verborgen'])){ $verborgen='checked="checked"'; }
-			//voor het plaatje nog eens 
+			//voor het plaatje nog eens
 			$aBericht=$this->_nieuws->getMessage($this->_berichtID);
 		}
 		$sCategorieSelect=$this->getCategorieSelect($categorie);
-		
+
 		echo '<form action="'.NIEUWS_ROOT.'bewerken/'.$this->_berichtID.'" method="post" enctype="multipart/form-data">';
 		echo '<div class="pubciemail-form">';
 		echo $this->getMelding();
@@ -217,10 +217,9 @@ class NieuwsContent extends SimpleHTML {
 		}
 		return $sResultaat;
 	}
-	private function viewOverzicht()
-	{
-		$lid=Lid::get_lid();
-		
+	private function viewOverzicht(){
+		$lid=Lid::instance();
+
 		// berichtID setten als dat nog niet gedaan is.
 		if(empty($this->_berichtID))
 			$this->_berichtID = $this->_nieuws->getBelangrijksteMededelingId();
@@ -228,7 +227,7 @@ class NieuwsContent extends SimpleHTML {
 		$includeVerborgen=false;
 		if($lid->hasPermission('P_NEWS_MOD')){ $includeVerborgen=true; }
 		$aBerichten=$this->_nieuws->getMessages(0, $includeVerborgen);
-		
+
 		echo '<div class="mededelingen-overzichtlijst">';
 		$this->getOverzichtLijst($aBerichten);
 		echo '</div>';
@@ -244,7 +243,7 @@ class NieuwsContent extends SimpleHTML {
 
 	private function getOverzichtLijst(array $aBerichten)
 	{
-		if(!is_array($aBerichten) OR empty($aBerichten)) {	
+		if(!is_array($aBerichten) OR empty($aBerichten)) {
 			echo 'Zoals het is, zoals het was, o Civitas!<br />(Geen mededelingen gevonden dus…)<br /><br />';
 		}else{
 			$bEersteRecord=true;
@@ -283,7 +282,7 @@ class NieuwsContent extends SimpleHTML {
 		}
 		echo '<br />'.$this->getNieuwBerichtLink();
 	}
-	
+
 	function getLaatsteMededelingen(){
 		$aBerichten=$this->_nieuws->getMessages(0,false,8);
 		echo '<h1><a href="/actueel/mededelingen/">Mededelingen</a></h1>';
@@ -295,7 +294,7 @@ class NieuwsContent extends SimpleHTML {
 			$bericht=preg_replace('/(\[(|\/)\w+\])/', '|', $aBericht['tekst']);
 			$berichtfragment=substr(str_replace(array("\n", "\r", ' '), ' ', $bericht), 0, 40);
 			echo '<div class="item"><span class="tijd">'.date('d-m', $aBericht['datum']).'</span>&nbsp;';
-			echo '<a href="/actueel/mededelingen/'.$aBericht['id'].'" 
+			echo '<a href="/actueel/mededelingen/'.$aBericht['id'].'"
 				title="['.mb_htmlentities($aBericht['titel']).'] '.
 					mb_htmlentities($berichtfragment).'">'.$titel.'</a><br />'."\n";
 			echo '</div>';
@@ -303,7 +302,7 @@ class NieuwsContent extends SimpleHTML {
 	}
 
 	/* function knipTekst()
-	 * 
+	 *
 	 * Middels deze functie kunnen we precies bepalen hoeveel regels tekst we willen hebben en hoeveel tekens per regel.
 	 * Een mooie toepassing is een blokje met een ongedefinieerd aantal tekens. Middels deze functie kun je er voor zorgen
 	 * dat de tekst netjes afgekapt wordt na x regels. De functie houdt ook regening met <br /> tags - die bijvoorbeeld
@@ -321,7 +320,7 @@ class NieuwsContent extends SimpleHTML {
 
 		$sResultaat='';
 		$aRegelsInTekst=explode($sRegelAfsluiting, $sTekst);
-		// Per (bron)regel (volgens de newlines in $sTekst) 
+		// Per (bron)regel (volgens de newlines in $sTekst)
 		for($i=0; $i<$iMaxRegels AND $i<count($aRegelsInTekst); $i++){
 			$sRegel=$aRegelsInTekst[$i];
 			$iRegelLengte=strlen(strip_tags($aRegelsInTekst[$i])); // Wel even de tags eruit slopen, want we moeten niet vals spelen.
@@ -334,7 +333,7 @@ class NieuwsContent extends SimpleHTML {
 			}else{ // Er is niet genoeg plek op de huidige regel.
 				// Alle woorden printen die nog passen.
 				$aWoordenInRegel=explode(' ', $sRegel);
-				// Per woord in deze regel. 
+				// Per woord in deze regel.
 				foreach($aWoordenInRegel as $sWoord){
 					$aTagsInWoord = explode('<', $sWoord);
 					// Per tag in dit woord.
@@ -361,7 +360,7 @@ class NieuwsContent extends SimpleHTML {
 							//karakters.
 							$iWoordLengte-=$diff;
 						}
-							
+
 						// En nu gaan we kijken of het woord past.
 						if($iWoordLengte+1<=$iTekensOver){
 							// Het woord past, dus toevoegen.
@@ -410,16 +409,16 @@ class NieuwsContent extends SimpleHTML {
 
 	public function setBerichtID($iBerichtID){ $this->_berichtID=(int)$iBerichtID; }
 	public function setActie($sActie){	$this->_actie=$sActie; }
-	
+
 	public function getTitel(){
 		$categorie='Actueel';
 		return $categorie.' | '.$this->getPaginaTitel();
 	}
-	
+
 	/* function getPaginaTitel
-	 * 
+	 *
 	 * Geeft de titel van de pagina die moet worden laten zien. Deze string wordt gebruikt
-	 * als grote titel bovenaan de pagina, maar ook als title in het browservenster. 
+	 * als grote titel bovenaan de pagina, maar ook als title in het browservenster.
 	 */
 	private function getPaginaTitel(){
 		switch($this->_actie){

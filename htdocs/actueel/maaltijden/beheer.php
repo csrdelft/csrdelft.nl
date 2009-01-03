@@ -15,11 +15,11 @@ if(!$lid->hasPermission('P_MAAL_MOD')){ header('location: '.CSR_ROOT.'maaltijden
 
 require_once('class.maaltrack.php');
 require_once('class.maaltijd.php');
-$maaltrack = new MaalTrack($lid, $db);
+$maaltrack = new MaalTrack();
 
 
 require_once('class.maaltijdbeheercontent.php');
-$beheer = new MaaltijdbeheerContent($lid, $maaltrack);
+$beheer = new MaaltijdbeheerContent($maaltrack);
 
 # verwijderen we een maaltijd?
 if(isset($_GET['verwijder']) AND $_GET['verwijder']==(int)$_GET['verwijder'] AND $_GET['verwijder']!=0){
@@ -29,22 +29,22 @@ if(isset($_GET['verwijder']) AND $_GET['verwijder']==(int)$_GET['verwijder'] AND
 }
 
 # maaltijd opslaan, of nieuwe toevoegen?
-if(isset($_POST['maalid'], $_POST['datum'], $_POST['tekst'], $_POST['limiet'], $_POST['abo'], 
+if(isset($_POST['maalid'], $_POST['datum'], $_POST['tekst'], $_POST['limiet'], $_POST['abo'],
 	$_POST['tp'], $_POST['koks'], $_POST['afwassers'], $_POST['theedoeken'] )){
 	//datum omzetten naar timestamp.
 	$datum=strtotime($_POST['datum']);
 	$maalid=(int)$_POST['maalid'];
-	
-	
+
+
 	# nieuwe maaltijd toevoegen of oude bewerken?
 	if($maalid==0){
-		if($maaltrack->addMaaltijd($datum, $_POST['tekst'], $_POST['abo'], 
+		if($maaltrack->addMaaltijd($datum, $_POST['tekst'], $_POST['abo'],
 				$_POST['tp'], $_POST['koks'], $_POST['afwassers'], $_POST['theedoeken'], $_POST['limiet'])){
 			header('location: '.CSR_ROOT.'actueel/maaltijden/beheer/');
 			exit;
 		}
 	}else{
-		if($maaltrack->editMaaltijd($maalid, $datum, $_POST['tekst'], $_POST['abo'], 
+		if($maaltrack->editMaaltijd($maalid, $datum, $_POST['tekst'], $_POST['abo'],
 				$_POST['tp'], $_POST['koks'], $_POST['afwassers'], $_POST['theedoeken'],  $_POST['limiet'])){
 			header('location: '.CSR_ROOT.'actueel/maaltijden/beheer/');
 			exit;

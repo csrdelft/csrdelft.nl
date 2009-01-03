@@ -9,27 +9,27 @@
 class VBSearch {
 	var $_db;		//De database connectie
 	var $_vb;		//De VormingsBank databeheer klasse
-	
+
 	### public ###
 	public function VBSearch(&$vb){
-		$this->_db=MySql::get_MySql();
+		$this->_db=MySql::instance();
 		$this->_vb=$vb;
 	}
-	
-	
-	
-	
+
+
+
+
 	/*
 		name = naam van dit formulier, is gekoppeld aan de naam van het resultaatformulier etc, gebruikt om verschillende zoek
 			formulieren op een pagina te onderscheiden
 		searchfieldcode = HTML inputs voor alle parameters die naar de searchfunctie doorgegeven moeten worden, bijvoorbeeld:
 			"Criterium: <input type='text' width='200' name='searchvalue'/><br/>"
 		selectionfieldname = de naam van het veld dat gewijzigd dient te worden in het geval dat de resultaat selectie
-			gebruikt dient te worden voor een ander formulier (bijvoorbeeld bij het leggen van relaties), 
-			als het alleen om zoeken gaat, kan dit leeg blijven. 
-	*/	
+			gebruikt dient te worden voor een ander formulier (bijvoorbeeld bij het leggen van relaties),
+			als het alleen om zoeken gaat, kan dit leeg blijven.
+	*/
 	public function createSearchForm($name,  $searchformhtml, $selectionfieldname='')
-	{	
+	{
 		#the xhttp request is copy pasted from  http://en.wikipedia.org/wiki/Ajax_%28programming%29
 		return '
 			<form id="'.$name.'SearchForm" >
@@ -42,8 +42,8 @@ class VBSearch {
 					 var xmlHttp= newRequest();
 					 xmlHttp.onreadystatechange = function() {
 						if (xmlHttp.readyState == 4)
-						   try { 
-								if (xmlHttp.status == 200) 										
+						   try {
+								if (xmlHttp.status == 200)
 								{
 									response = xmlHttp.responseText;
 									response = response.replace(/#0/gm,"'.$name.'");
@@ -52,7 +52,7 @@ class VBSearch {
 								}
 						   } catch (e) {
 							  document.getElementById("'.$name.'searchresults").innerHTML = "Error on Ajax return call : " + e.description + xmlHttp.responseText;
-						   }							 
+						   }
 					 }
 					 xmlHttp.open("post","ajaxsearch.php");
 					var request = formToJSON(document.getElementById("'.$name.'SearchForm"));
@@ -70,13 +70,13 @@ class VBSearch {
 */
 
 	}
-	
-	
+
+
 	public function createSearchResultDiv($name)
 	{
 		return '<div id="'.$name.'searchresults">Geen zoekresultaten...</div>';
 	}
-	
+
 	/*
 		Generates a form, that contains a field for which a selection is required
 		name: the name of this set of search forms, editforms and resultdivs
@@ -92,16 +92,16 @@ class VBSearch {
 			$name,
 			$this->createSearchForm($name, $searchformhtml,$resultfield).
 			'<hr/>'.
-			$this->createSearchResultDiv($name).'											
+			$this->createSearchResultDiv($name).'
 			<hr/>',
 			0);
 	}
-	
+
 	public function createEditFormLink($name)
 	{
 		return 'document.getElementById(\''.$name.'EditFormDiv\').style.display=\'block\';';
 	}
-	
+
 	public function handleRequest()
 	{
 		//we have no http extension, otherwise use http_get_request_body()
@@ -171,5 +171,5 @@ class VBSearch {
 				document.getElementById(\"#0SearchForm\").button.click();'>".($pagenm)."</a> ";
 		}
 	}
-	
+
 }

@@ -11,7 +11,7 @@ require_once('class.csrdelft.php');
 
 class vbmain extends csrdelft {
 
-	
+
 	function vbmain($body){
 		parent::__construct($body,'vb/vb',99);
 		$this->addStylesheet('vb.css');
@@ -30,9 +30,9 @@ function view() {
 		$csrdelft->assign_by_ref('navbar',$nav);
 
 		$csrdelft->display('vb/vbcsrdelft.tpl');
-		
-		if(defined('DEBUG') AND Lid::get_lid()->hasPermission('P_ADMIN')){
-			$db=MySql::get_MySql();
+
+		if(defined('DEBUG') AND Lid::instance()->hasPermission('P_ADMIN')){
+			$db=MySql::instance();
 			echo '<pre>'.$db->getDebug().'</pre>';
 		}
 		//als er een error is geweest, die unsetten...

@@ -44,8 +44,8 @@ class MaalTijd {
 	# NB!! Gebruik MaalTrack::isMaaltijd voor controle of de maaltijd wel bestaat
 	function MaalTijd($maalid) {
 		$this->_maalid = (int)$maalid;
-		$this->_lid=Lid::get_lid();
-		$this->_db=MySql::get_MySql();
+		$this->_lid=Lid::instance();
+		$this->_db=MySql::instance();
 
 		# gegevens van de maaltijd inladen
 		$result = $this->_db->select("SELECT * FROM maaltijd WHERE id='{$this->_maalid}'");
@@ -610,7 +610,7 @@ class MaalTijd {
 	 * Haal de $aantal meest recente maaltijden op voor een gegeven lid.
 	 */
 	public static function getRecenteMaaltijden($uid, $aantal=10){
-		$db=Mysql::get_MySql();
+		$db=Mysql::instance();
 		$maalQuery="
 			SELECT
 				maaltijd.datum AS datum,

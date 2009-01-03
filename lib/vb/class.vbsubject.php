@@ -16,54 +16,54 @@ class VBSubject extends VBItem
 	var $parentobj;
 	//field that should not be saved, inserted or edited automatically
 	static $excludes = array("children","sources","id","discussions","parentobj");
-	
+
 	function __construct()
 	{
-		$this->lid = Lid::get_lid()->getUid();
+		$this->lid = Lid::instance()->getUid();
 		$this->ip = $_SERVER['REMOTE_ADDR'];
 		$this->createdate = getDateTime();
 		$this->isLeaf = 1;
 		$this->status = 'open';
 		$this->id = -1;
 	}
-	
+
 	public function getInsertQuery()
 	{
 		return VBItem::createInsertQuery($this,self::$excludes,array());
 	}
-	
+
 	public function getUpdateQuery()
 	{
 		return VBItem::createUpdateQuery($this,self::$excludes,array())." WHERE id = ".$this->id;
 	}
-	
+
 	public function getJSEditHandler()
 	{
 		//these fields cannot be edited by users, so dont generate javascript for them,
 		//however we need 'id'and 'parent'
-		return VBItem::createJSEditHandler($this, 
+		return VBItem::createJSEditHandler($this,
 			array("children","sources","discussions","lid","isLeaf","status","ip","createdate",  "parentobj"));
 	}
-	
-	
-	
+
+
+
 	public static function fromSQLResult($r)
 	{
 		$t = new VBSubject();
 		VBItem::objectFromQueryResult($t, $r);
 		return $t;
 	}
-	
+
 
 	public static function fromSQLResults($r)
 	{
 		return VBItem::fromSQLResults($r, VBSubject);
 	}
-	
+
 	public static function getEditDiv()
 	{
 		$innerhtml = VBItem::generateHiddenFields(array("id"=>"-1","parent"=>"-1"));
-		$innerhtml.="		
+		$innerhtml.="
 			Naam van het nieuwe onderwerp:<br/>
 			<input type='text' width='200' name='name'/><br/>
 			Omschrijving:<br/>
@@ -71,34 +71,34 @@ class VBSubject extends VBItem
 		";
 		return VBItem::getEditDiv("<img src='images/node.png'/>Onderwerp bewerken", $innerhtml, 'vbsubject');
 	}
-	
+
 	function getImage()
 	{
 		if($this->isLeaf)
 			return "images/leaf.png";
 		return "images/node.png";
 	}
-	
+
 	public function getSearchParamsFromForm($formname)
 	{
-		return '\"searchvalue\"=>\""+escape(document.getElementById("'.$formname.'").searchvalue.value)+"\""'; 
+		return '\"searchvalue\"=>\""+escape(document.getElementById("'.$formname.'").searchvalue.value)+"\""';
 	}
-	
+
 	public function getSimpleSearchQuery($text)
 	{
 		$searchvalue = mysql_escape_string(urldecode($text));
 		return "FROM vb_subject WHERE locate('".$searchvalue."',name) or locate('".$searchvalue."', description) ";
 	}
-	
+
 	public function toString()
 	{
 		return "<b>".$this->name."</b><br/>".$this->description;
 	}
-	
-	public function getMoveForm($tree) 
+
+	public function getMoveForm($tree)
 	{
 		$name = "movesubject";
-		return 
+		return
 			'<a href="javascript:void()" onclick="document.getElementById(\''.$name.'Div\').style.display=\'block\';">Onderwerp verplaatsen</a>
 				<div class="editdiv" id="'.$name.'Div">
 				<div class="editdivinner">

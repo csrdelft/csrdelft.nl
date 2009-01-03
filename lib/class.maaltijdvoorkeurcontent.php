@@ -3,7 +3,7 @@
 # -------------------------------------------------------------------
 # class.maaltijdvoorkeurcontent.php
 # -------------------------------------------------------------------
-# Bekijken en wijzigen van voorkeuren voor maaltijdinschrijving 
+# Bekijken en wijzigen van voorkeuren voor maaltijdinschrijving
 # en abonnementen
 # -------------------------------------------------------------------
 
@@ -25,24 +25,24 @@ class MaaltijdVoorkeurContent extends SimpleHTML {
 	function getTitel(){ return 'Maaltijdketzer - Voorkeuren'; }
 	function viewWaarBenik(){ echo '<a href="/actueel/maaltijden/">Maaltijden</a> &raquo; Voorkeuren'; }
 	function view(){
-		$lid=Lid::get_lid();
-		
+		$lid=Lid::instance();
+
 		//de html template in elkaar draaien en weergeven
 		$profiel=new Smarty_csr();
 		$profiel->caching=false;
-		
+
 		//Dingen ophalen voor....
 		//...de abonnementen
 		$aMaal['abo']['abos']=$this->_maaltrack->getAbo();
 		$aMaal['abo']['nietAbos']=$this->_maaltrack->getNotAboSoort();
-		
+
 		//...de eetwens
 		$aMaal['eetwens']=$lid->getEetwens();
-		
+
 		//...de corveewens
 		$aMaal['corveewens']=$lid->getCorveewens();
-		
-		
+
+
 		//arrays toewijzen en weergeven
 		$profiel->assign('maal', $aMaal);
 		$profiel->display('maaltijdketzer/voorkeuren.tpl');

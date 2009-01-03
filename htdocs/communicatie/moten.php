@@ -16,14 +16,14 @@ if($lid->hasPermission('P_LEDEN_MOD') AND isset($_POST['moot'], $_POST['naam']) 
 if ($lid->hasPermission('P_LEDEN_READ')) {
 	# Het middenstuk
 	require_once('class.motencontent.php');
-	$midden = new MotenContent($lid);
+	$midden = new MotenContent();
 } else {
 	# geen rechten
 	require_once 'class.paginacontent.php';
 	$pagina=new Pagina('geentoegang');
 	$midden = new PaginaContent($pagina);
-}	
-	
+}
+
 ## zijkolom in elkaar jetzen
 	$zijkolom=new kolom();
 

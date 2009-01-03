@@ -22,18 +22,18 @@ class MaaltijdContent extends SimpleHTML {
 	### public ###
 
 	function MaaltijdContent ($maaltrack) {
-		$this->_lid =Lid::get_lid();
+		$this->_lid =Lid::instance();
 		$this->_maaltrack=$maaltrack;
 	}
 	function getTitel(){ return 'Maaltijdketzer - Overzicht abonnementen'; }
-	
+
 	function view(){
 		//de html template in elkaar draaien en weergeven
 		$profiel=new Smarty_csr();
 		$profiel->caching=false;
-		
-		
-		$profiel->assign('datumFormaat', '%a %e %b %H:%M'); 
+
+
+		$profiel->assign('datumFormaat', '%a %e %b %H:%M');
 		$profiel->display('maaltijdketzer/abo-overzicht.tpl');
 	}
 }

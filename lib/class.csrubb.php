@@ -11,9 +11,9 @@ require_once('ubb/eamBBParser.class.php');
 class CsrUBB extends eamBBParser{
 	private $lid;
 
-	function CsrUBB(){
+	public function __construct(){
 		$this->eamBBParser();
-		$this->lid=Lid::get_lid();
+		$this->lid=Lid::instance();
 		$this->paragraph_mode = false;
 	}
 
@@ -78,7 +78,6 @@ class CsrUBB extends eamBBParser{
 	 * externen de inhoud van deze tag weggefilterd woren.
 	 */
 	function ubb_prive($arguments=array()){
-		$lid=Lid::get_lid();
 		if(isset($arguments['prive'])){
 			$permissie=$arguments['prive'];
 		}else{
@@ -87,7 +86,7 @@ class CsrUBB extends eamBBParser{
 		//content moet altijd geparsed worden, anders blijft de inhoud van de
 		//tag gewoon staan.
 		$content = $this->parseArray(array('[/prive]'), array());
-		if(!$lid->hasPermission($permissie)){
+		if(!$this->lid->hasPermission($permissie)){
 			$content='';
 		}
 		return $content;
@@ -205,7 +204,6 @@ src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
 
 
 		$html='<div class="ubbMaaltijd" id="maaltijd'.$maaltijd->getID().'">';
-
 		$html.='<div class="ubbMaaltijdFloat">';
 		$html.='U komt:  <br />';
 		switch($maaltijd->getStatus()){
@@ -322,13 +320,13 @@ UBBVERHAAL;
 		}
 		return $return;
 	}
-	
+
 	# Items voor in de zijbalk
 	public function ubb_agendaitem(){
 		$content = $this->parseArray(array('[/agendaitem]'), array());
 		return '<div class="item"><a href="/actueel/agenda/">'.$content.'</a></div>';
 	}
-	
+
 	# Commentaar-tag
 	public function ubb_commentaar(){
 		return '';

@@ -8,24 +8,24 @@
 
 
 class Forum {
-	
+
 	protected $_db;
 	protected $_lid;
-	
+
 	//het aantal topics per pagina in het overzicht per categorie
 	//de standaard, het kan wellicht nog een keer in het profiel gerost worden.
 	private $_topicsPerPagina=15;
-	
+
 	//het aantal posts voor een rss feed
 	private $_postsPerRss=15;
-	
+
 	//aantal zoekresultaten
 	private $_aantalZoekResultaten=40;
-	
+
 	//constructor.
-	public function Forum(){
-		$this->_lid=Lid::get_lid();
-		$this->_db=MySql::get_MySql();
+	public function __construct(){
+		$this->_lid=Lid::instance();
+		$this->_db=MySql::instance();
 	}
 /***************************************************************************************************
 *	Lijsten: Categorieën, posts, topics en enkele posts ophalen.
@@ -43,12 +43,12 @@ class Forum {
 			ORDER BY
 				volgorde;";
 		$rCatsResult=$this->_db->query($sCatsQuery);
-		
+
 		while($aCat=$this->_db->next($rCatsResult)){
 			if($voorLid===true AND !$this->_lid->hasPermission($aCat['rechten_read'])){
 				continue;
 			}
-			$aCats[]=$aCat;	
+			$aCats[]=$aCat;
 		}
 		return $aCats;
 	}
@@ -71,11 +71,11 @@ class Forum {
 				categorie.titel AS categorieTitel,
 				categorie.rechten_read AS rechten_read,
 				categorie.rechten_post AS rechten_post,
-				topic.id AS id, 
-				topic.titel AS titel, 
-				topic.uid AS uid, topic.datumtijd AS datumtijd, 
-				topic.lastuser AS lastuser, topic.lastpost AS lastpost, 
-				topic.lastpostID AS lastpostID, topic.reacties AS reacties, 
+				topic.id AS id,
+				topic.titel AS titel,
+				topic.uid AS uid, topic.datumtijd AS datumtijd,
+				topic.lastuser AS lastuser, topic.lastpost AS lastpost,
+				topic.lastpostID AS lastpostID, topic.reacties AS reacties,
 				topic.plakkerig AS plakkerig, topic.open AS open, topic.soort AS soort,
 				topic.zichtbaar AS zichtbaar
 			FROM
@@ -87,42 +87,42 @@ class Forum {
 			AND
 				".$zichtBaarClause."
 			ORDER BY
-				topic.plakkerig, 
+				topic.plakkerig,
 				topic.lastpost DESC
 			LIMIT
 				".($iPagina*$this->_topicsPerPagina).", ".$this->_topicsPerPagina.";";
 		$rTopicsResult=$this->_db->query($sTopicsQuery);
-		return $this->_db->result2array($rTopicsResult); 
+		return $this->_db->result2array($rTopicsResult);
 	}
-	
+
 	private function getCategorieClause(){
 		//uitmaken welke categorieën er in de rss feed komen. Voor feut (bot in #csrdelft)
 		//is er een uitzondering op de ingeloggedheid.
-				
+
 		//extern, zandbak, vraag en aanbod en kamers worden altijd weergegeven.
 		$cats=array(2,4,11,12);
-		
-		if($this->_lid->hasPermission('P_LEDEN_READ') OR isFeut()){ 
-			//C.S.R.-zaken, webstek terugkoppeling, geloofszaken, nieuws&actualiteit, electronica en techniek, 
+
+		if($this->_lid->hasPermission('P_LEDEN_READ') OR isFeut()){
+			//C.S.R.-zaken, webstek terugkoppeling, geloofszaken, nieuws&actualiteit, electronica en techniek,
 			//groeperingen, kringen& werkgroepen, bidpunten, vacatures
 			$cats=array_merge($cats, array(1, 3, 10, 9, 13, 17, 18, 20, 21));
 		}
-		if($this->_lid->hasPermission('P_OUDLEDEN_READ') OR isFeut()){ 
+		if($this->_lid->hasPermission('P_OUDLEDEN_READ') OR isFeut()){
 			//oudledenforum
-			$cats[]=8; 
+			$cats[]=8;
 		}
-		if($this->_lid->hasPermission('P_FORUM_MOD')){ 
+		if($this->_lid->hasPermission('P_FORUM_MOD')){
 			//pubcie-forum enkel voor forummods.
-			$cats[]=6; 
+			$cats[]=6;
 		}
 		//aan elkaar plakken:
 		foreach($cats as $cat){
 			$sCats[]='topic.categorie='.$cat;
 		}
 		return implode(' OR ', $sCats);
-	
+
 	}
-	
+
 	//laatste posts voor heel het forum.
 	function getPostsVoorRss($iAantal=false, $bDistinct=true){
 		if($iAantal===false){
@@ -132,9 +132,9 @@ class Forum {
 		if($bDistinct){
 			$sDistinctClause='AND topic.lastpostID=post.id';
 		}
-	
+
 		//zoo, uberdeuberdeuber query om een topic op te halen. Namen worden
-		//ook opgehaald in deze query, die worden door forumcontent weer 
+		//ook opgehaald in deze query, die worden door forumcontent weer
 		//doorgegeven aan getForumNaam();
 		$sPostsQuery="
 			SELECT
@@ -155,31 +155,31 @@ class Forum {
 				post.bewerkDatum AS bewerkDatum
 			FROM
 				forum_topic topic
-			INNER JOIN 
+			INNER JOIN
 				forum_cat categorie ON(categorie.id=topic.categorie)
 			LEFT JOIN
 				forum_post post ON( topic.id=post.tid )
 			WHERE
-				topic.zichtbaar='zichtbaar' AND 
+				topic.zichtbaar='zichtbaar' AND
 				post.zichtbaar='zichtbaar' AND
-				( ".$this->getCategorieClause()." ) 
+				( ".$this->getCategorieClause()." )
 				".$sDistinctClause."
 			ORDER BY
 				post.datum DESC
 			LIMIT
 				".$iAantal.";";
 		$rPostsResult=$this->_db->query($sPostsQuery);
-		return $this->_db->result2array($rPostsResult); 
+		return $this->_db->result2array($rPostsResult);
 	}
 /***************************************************************************************************
 *	Dingen opslaan, bewerken en verwijderen: nieuwe posts en topics, posts bewerken
 *
-***************************************************************************************************/	
+***************************************************************************************************/
 
 /***************************************************************************************************
 *	Dingen uitrekenen: post naar topic id, topic naar cat id
 *
-***************************************************************************************************/	
+***************************************************************************************************/
 	// categorie id voor een topic
 	function getCategorieVoorTopic($iTopicID){
 		$iTopicID=(int)$iTopicID;
@@ -188,14 +188,14 @@ class Forum {
 				categorie
 			FROM
 				forum_topic
-			WHERE 
+			WHERE
 				id=".$iTopicID."
 			LIMIT 1;";
 		$rTopic=$this->_db->query($sTopicQuery);
 		if($this->_db->numRows($rTopic)==1){
 			$aTopic=$this->_db->next($rTopic);
 			return $aTopic['categorie'];
-		}else{	
+		}else{
 			return false;
 		}
 	}
@@ -207,14 +207,14 @@ class Forum {
 				tid
 			FROM
 				forum_post
-			WHERE 
+			WHERE
 				id=".$iPostID."
 			LIMIT 1;";
 		$rPost=$this->_db->query($sPostQuery);
 		if($this->_db->numRows($rPost)==1){
 			$aPost=$this->_db->next($rPost);
 			return $aPost['tid'];
-		}else{	
+		}else{
 			return false;
 		}
 	}
@@ -230,18 +230,18 @@ class Forum {
 				rechten_read
 			FROM
 				forum_cat
-			WHERE 
+			WHERE
 				id=".$iCatID."
 			LIMIT 1;";
 		$rCat=$this->_db->query($sCatQuery);
 		if($this->_db->numRows($rCat)==1){
 			$aCat=$this->_db->next($rCat);
 			return $this->_lid->hasPermission($aCat['rechten_read']);
-		}else{	
+		}else{
 			return false;
 		}
 	}
-	
+
 	// enkel een string met de topictitel
 	function getCategorieTitel($iCatID){
 		$iCatID=(int)$iCatID;
@@ -250,14 +250,14 @@ class Forum {
 				titel
 			FROM
 				forum_cat
-			WHERE 
+			WHERE
 				id=".$iCatID."
 			LIMIT 1;";
 		$rCat=$this->_db->query($sCatQuery);
 		if($this->_db->numRows($rCat)==1){
 			$aCat=$this->_db->next($rCat);
 			return $aCat['titel'];
-		}else{	
+		}else{
 			return false;
 		}
 	}
@@ -269,14 +269,14 @@ class Forum {
 				count(*) as aantal
 			FROM
 				forum_topic
-			WHERE 
+			WHERE
 				categorie=".$iCatID."
 			LIMIT 1;";
 		$rCat=$this->_db->query($sCatQuery);
 		if($this->_db->numRows($rCat)==1){
 			$aCat=$this->_db->next($rCat);
 			return ceil($aCat['aantal']/$this->_topicsPerPagina);
-		}else{	
+		}else{
 			return 1;
 		}
 	}
@@ -290,21 +290,21 @@ class Forum {
 				rechten_".$gebied." as rechten
 			FROM
 				forum_cat
-			WHERE 
+			WHERE
 				id=".$iCatID."
 			LIMIT 1;";
 		$rCat=$this->_db->query($sCatQuery);
 		if($this->_db->numRows($rCat)==1){
 			$aCat=$this->_db->next($rCat);
 			return $aCat['rechten'];
-		}else{	
+		}else{
 			return false;
 		}
 	}
 /***************************************************************************************************
 *	Vragen over topics
 *
-***************************************************************************************************/	
+***************************************************************************************************/
 	//aantal topics in een categorie
 	function topicCount($iCat){
 		$iCat=(int)$iCat;
@@ -332,14 +332,14 @@ class Forum {
 				titel
 			FROM
 				forum_topic
-			WHERE 
+			WHERE
 				id=".$iTopicID."
 			LIMIT 1;";
 		$rTopic=$this->_db->query($sTopicQuery);
 		if($this->_db->numRows($rTopic)==1){
 			$aTopic=$this->_db->next($rTopic);
 			return $aTopic['titel'];
-		}else{	
+		}else{
 			return false;
 		}
 	}
@@ -347,17 +347,17 @@ class Forum {
 /***************************************************************************************************
 *	Updaten van stats in categorie en topic
 *
-***************************************************************************************************/	
-	
-	
+***************************************************************************************************/
+
+
 	//dingen updaten voor de categorie.
 	function updateCatStats($iCatID){
 		$sCatStats="
-			SELECT 
+			SELECT
 				id, lastuser, lastpostID, lastpost
 			FROM
 				forum_topic
-			WHERE 
+			WHERE
 				categorie=".$iCatID." AND
 				zichtbaar='zichtbaar'
 			ORDER BY
@@ -391,22 +391,22 @@ class Forum {
 				id=".$iCatID."
 			LIMIT 1;";
 		return $this->_db->query($sCatUpdate);
-	
+
 	}
 
 
 /***************************************************************************************************
 *	Zoeken.
 *
-***************************************************************************************************/	
+***************************************************************************************************/
 	function searchPosts($sZoekQuery){
 		if(preg_match('/^[a-zA-Z0-9 \-\+\'\"\.]*$/', $sZoekQuery)){
-		
+
 		//sZoekQuery controleren:
 		$sZoekQuery=$this->_db->escape(trim($sZoekQuery));
-			
+
 		//zoo, uberdeuberdeuber query om een topic op te halen. Namen worden
-		//ook opgehaald in deze query, die worden door forumcontent weer 
+		//ook opgehaald in deze query, die worden door forumcontent weer
 		//doorgegeven aan getForumNaam();
 		$sSearchQuery="
 			SELECT
@@ -449,7 +449,7 @@ class Forum {
 	function getForumNaam($uid=false, $aNaam=false, $aLink=true, $bHtmlentities=true ){
 		return $this->_lid->getNaamLink($uid, 'user', $aLink, $aNaam, $bHtmlentities);
 	}
-	
+
 	function getTopicsPerPagina(){ return $this->_topicsPerPagina; }
 	function isIngelogged(){ return $this->_lid->hasPermission('P_LOGGED_IN'); }
 	function isModerator(){ return $this->_lid->hasPermission('P_FORUM_MOD'); }

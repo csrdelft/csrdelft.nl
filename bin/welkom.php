@@ -7,10 +7,6 @@ $jaar = '08';
 
 require_once('include.config.php');
 
-# databaseconnectie openen
-$db=MySql::get_MySql();
-$lid=Lid::get_lid();
-
 $result = $db->select("SELECT * FROM `lid` WHERE uid = '0848' OR uid = '0855'");
 if ($result !== false and $db->numRows($result) > 0) {
 	while ($sjaars = $db->next($result)){
@@ -19,11 +15,11 @@ if ($result !== false and $db->numRows($result) > 0) {
 		for($i = 0; $i < 8; $i++) {
 			$pass .= substr($tekens,rand(0,strlen($tekens)),1);
 		}
-		
+
 		$passwordhash=$lid->_makepasswd($pass);
 		$sQuery="UPDATE lid SET password='".$passwordhash."' WHERE uid='".$sjaars['uid']."' LIMIT 1;";
 		$db->query($sQuery);
-		
+
 		$tekst = <<<EOD
 Beste noviet {$sjaars['voornaam']},
 
@@ -41,7 +37,7 @@ Wachtwoord: {$pass}
 
 Nadat je bent ingelogd kun je het wachtwoord veranderen, en een bijnaam instellen die je in plaats van je lidnummer kunt gebruiken om in te loggen.
 
-Wanneer je problemen hebt met inloggen, of andere vragen over de webstek, kun je terecht bij de PubliciteitsCommissie. 
+Wanneer je problemen hebt met inloggen, of andere vragen over de webstek, kun je terecht bij de PubliciteitsCommissie.
 Kom even langs in ons IRC-kanaal #pubcie (zie de pagina daarover op de webstek onder Communicatie), of stuur een e-mail.
 
 Met vriendelijke groet,

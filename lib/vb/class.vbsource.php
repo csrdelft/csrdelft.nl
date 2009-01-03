@@ -16,28 +16,28 @@ class VBSource extends VBItem
 	var $opinions = array();
 	//field that should not be saved, inserted or edited automatically
 	static $excludes = array("relatedSources","parents","opinions","id","schrijver","uitgever","jaar","isbn");
-	
+
 	function __construct()
 	{
-		$this->lid = Lid::get_lid()->getUid();
+		$this->lid = Lid::instance()->getUid();
 		$this->ip = $_SERVER['REMOTE_ADDR'];
 		$this->createdate = getDateTime();
 		$this->id = -1;
 		$this->votesum=0;
 		$this->votecount=0;
 	}
-	
+
 	public function getInsertQuery()
 	{
 		return VBItem::createInsertQuery($this,self::$excludes,array());
 	}
-	
+
 	public function getUpdateQuery()
 	{
 		return VBItem::createUpdateQuery($this,self::$excludes,array())." WHERE id = ".$this->id;
 	}
-	
-	
+
+
 	public static function fromSQLResult($r)
 	{
 		$source;
@@ -63,7 +63,7 @@ class VBSource extends VBItem
 			default:
 			{
 				var_dump($r);
-				die('Kan bron niet correct laden: '.$r['id'].":".$r['sourceType']);				
+				die('Kan bron niet correct laden: '.$r['id'].":".$r['sourceType']);
 			}
 		}
 		$source->id = $r['id'];
@@ -78,31 +78,31 @@ class VBSource extends VBItem
 		$source->sourceType = $r['sourceType'];
 		return $source;
 	}
-	
+
 	public static function fromSQLResults($ar)
 	{
 		return VBItem::fromSQLResults($ar, VBSource);
 	}
-	
+
 	public function setRelations($parents, $linkedsources, $opinions)
 	{
 		$this->relatedSources = $linkedsources;
 		$this->parents = $parents;
 		$this->opinions = $opinions;
 	}
-	
+
 	public function voting()
 	{
 		if ($this->votecount>0)
 			return $this->votesum / $this->votecount;
-		return "nog geen beoordeling uitgebracht";		
+		return "nog geen beoordeling uitgebracht";
 	}
-	
+
 	public function getJSEditHandler()
 	{
-		return VBItem::createJSEditHandler($this,array("votesum","votecount","lid","createdate","ip","relatedSources","parents","opinions"));		
+		return VBItem::createJSEditHandler($this,array("votesum","votecount","lid","createdate","ip","relatedSources","parents","opinions"));
 	}
-	
+
 	public function getJSAddHandler()
 	{
 		$r = "";
@@ -122,11 +122,11 @@ class VBSource extends VBItem
 		}
 		return $r;
 	}
-	
+
 	public static function generateEditFields($title, $kind, $linkinput)
 	{
 		$innerhtml = VBItem::generateHiddenFields(array("id"=>"-1","sourceType"=>"undefined","autoLinkToSubject"=>"1"));
-		$innerhtml.="		
+		$innerhtml.="
 			Naam van de ".$kind.":<br/>
 			<input type='text' width='200' name='name'/><br/>
 			Omschrijving:<br/>
@@ -136,10 +136,10 @@ class VBSource extends VBItem
 		return VBItem::getEditDiv($title, $innerhtml, 'vb'.$kind.'source');
 	}
 
-	
+
 	public function getSearchParamsFromForm($formname)
 	{
-		return '\"searchvalue\"=>\""+escape(document.getElementById("'.$formname.'").searchvalue.value)+"\""'; 
+		return '\"searchvalue\"=>\""+escape(document.getElementById("'.$formname.'").searchvalue.value)+"\""';
 	}
 
 	public function getSimpleSearchQuery($searchvalue, $links = true, $files = true, $discus = true, $books = true)
@@ -157,12 +157,12 @@ class VBSource extends VBItem
 		$query.=')';
 		return $query;
 	}
-	
+
 	function getImage()
 	{
 		return "images/".$this->sourceType.".png";
 	}
-	
+
 	public function toString()
 	{
 		return "<b>".$this->name."</b><br/>".$this->description;

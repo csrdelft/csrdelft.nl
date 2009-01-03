@@ -9,19 +9,14 @@
 	require_once('include.config.php');
 	require_once('include.common.php');
 
-	# login-systeem
-	require_once('class.lid.php');
-	require_once('class.mysql.php');
-	$db = MySQL::get_MySQL();
-	$lid = Lid::get_Lid();
 	$sLedenQuery="
 		SELECT
-			voornaam, achternaam, tussenvoegsel, uid 
+			voornaam, achternaam, tussenvoegsel, uid
 		FROM
 			lid
 		WHERE
 			status='S_LID'
-		OR 
+		OR
 			status='S_GASTLID'
 		OR
 			status='S_NOVIET';";
@@ -46,18 +41,18 @@
 			$gelijkheid=0; similar_text($sNaam, $sLidDbNaam, $gelijkheid);
 			if($gelijkheid >86){
 				//echo '  '.$sNaam.'('.$soccieID.') - '.$sLidDbNaam.'('.$uid.') << match';//."\r\n";
-				
-				
+
+
 				$query="UPDATE lid SET soccieID = ".$soccieID.", createTerm = '".$createTerm."' WHERE uid = '".$uid."';";
 				$db->query($query);
-				
+
 				//echo $query."\r\n";
-			}elseif($gelijkheid >80){	
+			}elseif($gelijkheid >80){
 				$feutCount++;
 				echo 'niet zeker: '.$sNaam.'('.$soccieID.') - '.$sLidDbNaam.'('.$uid.') '."\r\n";
 			}
 		}
-		
+
 		reset($aLeden);
 
 	}

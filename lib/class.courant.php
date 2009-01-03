@@ -22,8 +22,8 @@ class Courant {
 
 	//Constructor voor de courant
 	function Courant(){
-		$this->_lid=Lid::get_lid();
-		$this->_db=MySql::get_MySql();
+		$this->_lid=Lid::instance();
+		$this->_db=MySql::instance();
 
 		//de berichten uit de cache laden. Dit zal het meest gebeuren.
 		$this->load(0);

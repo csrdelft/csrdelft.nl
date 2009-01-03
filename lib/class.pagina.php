@@ -18,8 +18,8 @@ class Pagina{
 	private $sRechtenBewerken;
 
 	function Pagina($sNaam){
-		$this->_lid=Lid::get_lid();
-		$this->_db=MySql::get_MySql();
+		$this->_lid=Lid::instance();
+		$this->_db=MySql::instance();
 
 		$this->sNaam=$sNaam;
 		$this->load();

@@ -21,41 +21,34 @@ require_once ('class.maaltrack.php');
 
 class MaaltijdbeheerContent extends SimpleHTML {
 
-	### private ###
+	private $_maaltrack;
+	private $_maaltijd=null;
 
-	# de objecten die data leveren
-	var $_lid;
-	var $_maaltrack;
+	private $_error='';
 
-	var $_maaltijd=null;
-	
-	var $_error='';
-	### public ###
-
-	function MaaltijdbeheerContent (&$lid, &$maaltrack) {
-		$this->_lid =& $lid;
-		$this->_maaltrack =& $maaltrack;
+	function __construct($maaltrack) {
+		$this->_maaltrack=$maaltrack;
 	}
 	function getTitel(){ return 'Maaltijdketzer - beheer'; }
-	
+
 	//functie om een maaltijd in het formulier te laden, normaal gewoon een formulier voor nieuwe maaltijden.
 	function load($iMaalID){
 		$iMaalID=(int)$iMaalID;
 		$this->_maaltijd=$this->_maaltrack->getMaaltijd($iMaalID);
 	}
 	function addError($error){ $this->_error=$error; }
-	
+
 	function view(){
-		
+		$lid=Lid::instance();
 		//de html template in elkaar draaien en weergeven
 		$maaltijdbeheer=new Smarty_csr();
 		$maaltijdbeheer->caching=false;
-		
+
 		//Dingen ophalen voor het overzicht van maaltijden...
 		$aMaal['error']=$this->_maaltrack->getError();
 		$aMaal['maaltijden']=$this->_maaltrack->getMaaltijden(time()-3600*24*28, time()+3600*24*100, false);
-		
-		
+
+
 		//nieuwe maaltijd, of oude bewerken?
 		if($this->_maaltijd==null OR !is_array($this->_maaltijd)){
 			//nieuwe maaltijd, standaardwaarden
@@ -66,7 +59,7 @@ class MaaltijdbeheerContent extends SimpleHTML {
 			$aForm['max']=100;
 			//alles standaard naar jan lid.
 			$aForm['tp']='x101';
-			
+
 			$aForm['koks']=2;
 			$aForm['afwassers']=4;
 			$aForm['theedoeken']=1;
@@ -85,15 +78,15 @@ class MaaltijdbeheerContent extends SimpleHTML {
 			if(isset($_POST['koks'])){  $aForm['koks']=(int)$_POST['koks']; }
 			if(isset($_POST['afwassers'])){  $aForm['afwassers']=(int)$_POST['afwassers']; }
 			if(isset($_POST['theedoeken'])){  $aForm['theedoeken']=(int)$_POST['theedoeken']; }
-		}	
+		}
 		$aForm['abos']=$this->_maaltrack->getAbos();
 		$aMaal['formulier']=$aForm;
 
 		//arrays toewijzen en weergeven
 		$maaltijdbeheer->assign('maal', $aMaal);
-		$maaltijdbeheer->assign('toonLijsten', $this->_lid->hasPermission('P_MAAL_MOD') or opConfide());
+		$maaltijdbeheer->assign('toonLijsten', $lid->hasPermission('P_MAAL_MOD') or opConfide());
 		$maaltijdbeheer->assign('datumFormaat', '%a %e %b %H:%M');
-		$maaltijdbeheer->assign('datumFormaatInvoer', '%Y-%m-%d %H:%M'); 
+		$maaltijdbeheer->assign('datumFormaatInvoer', '%Y-%m-%d %H:%M');
 		if($this->_error!=''){ $maaltijdbeheer->assign('error', $this->_error); }
 		$maaltijdbeheer->display('maaltijdketzer/beheer.tpl');
 	}

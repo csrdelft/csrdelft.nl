@@ -10,17 +10,17 @@
 require_once ('class.mysql.php');
 
 class Eetplan {
-	
+
 	var $_db;
 	var $_lid;
-	
+
 	function Eetplan(){
 		# databaseconnectie openen
-		$this->_lid=Lid::get_lid();
-		$this->_db=MySql::get_MySql();
+		$this->_lid=Lid::instance();
+		$this->_db=MySql::instance();
 	}
-	
-	
+
+
 	function getEetplan(){
 		//huizen laden
 		$rEetplan=$this->_db->select("
@@ -57,13 +57,13 @@ class Eetplan {
 		unset($aEetplan[0]);
 		return $aEetplan;
 	}
-	
+
 	function getEetplanVoorPheut($iPheutID){
 		$sEetplanQuery="
 			SELECT DISTINCT
 				eetplan.avond AS avond,
 				eetplanhuis.id AS huisID,
-				eetplanhuis.naam AS huisnaam, 
+				eetplanhuis.naam AS huisnaam,
 				eetplanhuis.adres AS huisadres,
 				eetplanhuis.telefoon AS telefoon
 			FROM
@@ -85,12 +85,12 @@ class Eetplan {
 			return $aEetplan;
 		}
 	}
-		
+
 	function getEetplanVoorHuis($iHuisID){
 		$sEetplanQuery="
 			SELECT DISTINCT
 				eetplan.avond AS avond,
-				eetplanhuis.naam AS huisnaam, 
+				eetplanhuis.naam AS huisnaam,
 				eetplanhuis.adres AS huisadres,
 				eetplanhuis.telefoon AS telefoon,
 				eetplan.uid AS pheut
@@ -113,54 +113,41 @@ class Eetplan {
 			return $aEetplan;
 		}
 	}
-	
-	
+
+
 	function getDatum($iAvond){
 		$aAvonden=array(
 			'30-9-2008',
 			'28-10-2008',
 			'25-11-2008',
 			'20-1-2009',
-			'?-2-2008',
-			'?-3-2008',
-			'?-4-2008',
-			'?-5-2008');
+			'?-2-2009',
+			'?-3-2009',
+			'?-4-2009',
+			'?-5-2009');
 		return $aAvonden[$iAvond-1];
 	}
-	
+
 	function getHuizen(){
 		$sHuizenQuery="
 			SELECT DISTINCT
-				id AS huisID, 
-				naam AS huisNaam, 
-				adres, 
+				id AS huisID,
+				naam AS huisNaam,
+				adres,
 				telefoon
 			FROM
 				eetplanhuis
-			ORDER BY 
+			ORDER BY
 				id;";
 		$rHuizen=$this->_db->select($sHuizenQuery);
 		while($aHuizenData=$this->_db->next($rHuizen)){
 			$aHuizen[]=$aHuizenData;
 		}
 		return $aHuizen;
-	}	
-	function getPheutNaam($iPheutID){
-		$sPheutQuery="
-			SELECT
-				voornaam, tussenvoegsel, achternaam, telefoon, mobiel
-			FROM
-				lid
-			WHERE
-				uid='".$iPheutID."'
-			LIMIT 1;";
-		$rPheutNaam=$this->_db->select($sPheutQuery);
-		$aPheutNaam=$this->_db->next($rPheutNaam);
-		$aReturnPheut['naam']=$aPheutNaam['voornaam'].' '.$aPheutNaam['tussenvoegsel'].' '.$aPheutNaam['achternaam'];
-		$aReturnPheut['telefoon']=$aPheutNaam['telefoon'];
-		$aReturnPheut['mobiel']=$aPheutNaam['mobiel'];
-		return $aReturnPheut;				
 	}
-	
+	function getPheutNaam($uid){
+		return $this->_lid->getNaamLink($uid);
+	}
+
 }
 ?>

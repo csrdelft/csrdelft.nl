@@ -5,38 +5,38 @@
 # -------------------------------------------------------------------
 
 class savedQuery{
-	
+
 	private $queryID;
 	private $beschrijving;
 	private $permissie='P_ADMIN';
 	private $result=null;
-	
+
 	public function savedQuery($id){
 		$this->queryID=(int)$id;
 		$this->load();
 	}
 	private function load(){
-		$db=MySql::get_MySql();
+		$db=MySql::instance();
 		//query ophalen
 		$selectQuery="
 			SELECT
 				savedquery, beschrijving, permissie
 			FROM
 				savedquery
-			WHERE 
+			WHERE
 				ID=".$this->queryID."
 			LIMIT 1;";
 		$result=$db->query($selectQuery);
 
 		if($result!==false AND $db->numRows($result)==1){
 			$querydata=$db->next($result);
-			
-			$lid=Lid::get_Lid();
+
+			$lid=Lid::instance();
 			if($this->magWeergeven($querydata['permissie'])){
 				//beschrijving opslaan
 				$this->beschrijving=$querydata['beschrijving'];
 				$this->permissie=$querydata['permissie'];
-				
+
 				//query nog uitvoeren...
 				$queryResult=$db->query($querydata['savedquery']);
 				if($queryResult!==false){
@@ -47,28 +47,28 @@ class savedQuery{
 			}
 		}
 	}
-	
+
 	public function magBekijken(){
 		return $this->magWeergeven($this->permissie);
-		
+
 	}
 	//query's zijn zichtbaar als:
 	// - De gebruiker de in de database opgeslagen permissie heeft.
 	// - De gebruiker een van de in de database opgeslagen uids heeft.
 	// - De gebruiker P_ADMIN heeft
 	public static function magWeergeven($permissie){
-		$lid=Lid::get_Lid();
+		$lid=Lid::instance();
 		$uids=explode(',', $permissie);
-		return $lid->hasPermission($permissie) OR 
-				$lid->hasPermission('P_ADMIN') OR 
+		return $lid->hasPermission($permissie) OR
+				$lid->hasPermission('P_ADMIN') OR
 				in_array($lid->getUid(), $uids);
 	}
 	public function getHtml(){
-		$lid=Lid::get_Lid();
-	
+		$lid=Lid::instance();
+
 		if(is_array($this->result)){
-			
-			
+
+
 			$return=$this->beschrijving.'<br /><table class="query_table">';
 			$keysPrinted=false;
 			$return.='<tr>';
@@ -95,12 +95,12 @@ class savedQuery{
 					$style='';
 				}
 				$rowColor=(!$rowColor);
-				
+
 				//uit te poepen html maken
 				$return.='<tr>';
 				foreach($rij as $key=>$veld){
 					$return.='<td '.$style.'>';
-					//als het veld uid als uid_naam geselecteerd wordt, een linkje 
+					//als het veld uid als uid_naam geselecteerd wordt, een linkje
 					//weergeven
 					if($key=='uid_naam'){
 						$return.=$lid->getNaamLink($veld, 'full', true);
@@ -116,7 +116,7 @@ class savedQuery{
 								$groeplinks[].=$groep->getLink();
 							}
 						}
-						$return.=implode('<br />', $groeplinks);						
+						$return.=implode('<br />', $groeplinks);
 					}else{
 						$return.=$veld;
 					}
@@ -138,7 +138,7 @@ class savedQuery{
 	}
 	//geef een array terug met de query's die de huidige gebruiker mag bekijken.
 	static public function getQuerys(){
-		$db=MySql::get_MySql();
+		$db=MySql::instance();
 		$selectQuery="
 			SELECT
 				ID, beschrijving, permissie
@@ -147,7 +147,7 @@ class savedQuery{
 			ORDER BY beschrijving;";
 		$result=$db->query($selectQuery);
 		$return=array();
-		$lid=Lid::get_Lid();
+		$lid=Lid::instance();
 		while($data=$db->next($result)){
 			if(savedQuery::magWeergeven($data['permissie'])){
 				$return[]=$data;

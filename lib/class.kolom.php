@@ -9,25 +9,28 @@ require_once('class.simplehtml.php');
 
 class string2object{
 	private $_string;
-	function string2object($string)	{$this->_string=$string;}
-	function view()					{echo $this->_string;}
+	function string2object($string){
+		$this->_string=$string;
+	}
+	function view(){
+		echo $this->_string;
+	}
 }
 
 class Kolom extends SimpleHTML {
 
-	private $_lid;
 	# Een object is een van SimpleHTML afgeleid object waarin een
 	# stuk pagina zit, wat we er met view() uit kunnen krijgen.
 	var $_objects = array();
 
-	public function Kolom(){
-		$this->_lid=Lid::get_lid();
+	public function __construct(){
+
 	}
 
-	public function addObject(&$object) 	{$this->_objects[] =& $object;}
-	public function addTekst($string)		{$this->addObject(new string2object($string));}
+	public function addObject($object){ $this->_objects[]=$object; }
+	public function addTekst($string){ $this->addObject(new string2object($string)); }
 	# Alias voor addObject
-	public function add(&$object)			{$this->addObject($object);}
+	public function add($object){ $this->addObject($object); }
 
 	public function getTitel(){
 		if(isset($this->_objects[0])){

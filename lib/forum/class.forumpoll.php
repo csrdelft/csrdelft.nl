@@ -8,23 +8,23 @@
 
 
 class ForumPoll {
-	
+
 	var $_db;
 	var $_lid;
 	var $_forum;
-	
-	
+
+
 	var $_maxPollOptions=10;
-	
-	
-	function ForumPoll(&$forum){
+
+
+	function ForumPoll($forum){
 		# databaseconnectie openen
-		$this->_lid=Lid::get_lid();
-		$this->_db=MySql::get_MySql();
-		$this->_forum =& $forum;
+		$this->_lid=Lid::instance();
+		$this->_db=MySql::instance();
+		$this->_forum=$forum;
 	}
 	function getTopicID(){
-		return $this->_forum->getID(); 
+		return $this->_forum->getID();
 	}
 	function getPollVraag(){
 		return $this->_forum->getTitel();
@@ -99,7 +99,7 @@ class ForumPoll {
 			}
 		}else{
 			return false;
-		}	
+		}
 	}
 	function getPollStemmen(){
 		$sStemmenQuery="
@@ -160,13 +160,13 @@ class ForumPoll {
 				uid
 			FROM
 				forum_poll_stemmen
-			WHERE 
+			WHERE
 				topicID=".$this->_forum->getID()." AND
 				uid='".$this->_lid->getUid()."'
 			LIMIT 1;";
 		$rMagStemmen=$this->_db->query($sMagStemmen);
 		return $this->_db->numRows($rMagStemmen)!=1;
-		
+
 	}
 	function addStem($iOptieID){
 		$iOptieID=(int)$iOptieID;
@@ -175,7 +175,7 @@ class ForumPoll {
 		$sAddStem="
 			INSERT INTO
 				forum_poll_stemmen
-			(	
+			(
 				topicID, optieID, uid
 			) VALUES (
 				".$iTopicID.", ".$iOptieID.", '".$uid."'
@@ -213,7 +213,7 @@ class ForumPoll {
 				$bValid=false;
 				$sError.='U moet minstens twee opties opgeven!';
 			}
-			
+
 		}else{
 			$bValid=false;
 			$sError.='Forumulier is niet compleet';
@@ -224,8 +224,8 @@ class ForumPoll {
 		foreach($aPostOpties as $sOptie){
 			if(trim($sOptie)!=''){
 				$aQuerys[]="
-					INSERT INTO 
-						forum_poll 
+					INSERT INTO
+						forum_poll
 					(
 						topicID, optie
 					) VALUES (

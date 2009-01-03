@@ -29,18 +29,19 @@ class Lid {
 
 	//singleton functionaliteit...
 	private function __construct(){ $this->Lid(); }
-	static function get_lid(){
+
+	public static function instance(){
 		//als er nog geen instantie gemaakt is, die nu maken
-		if(!isset(Lid::$lid)){
-			Lid::$lid = new Lid();
+		if(!isset(self::$lid)){
+			self::$lid = new Lid();
 		}
-		return Lid::$lid;
+		return self::$lid;
 	}
 	function Lid() {
 		# we starten op aan het begin van een pagina
 		$this->_loadPermissions();
 		# database lokaal maken
-		$this->_db=Mysql::get_mysql();
+		$this->_db=Mysql::instance();
 
 		# http://www.nabble.com/problem-with-sessions-in-1.4.8-t2550641.html
 		if (session_id() == 'deleted') session_regenerate_id();
@@ -154,7 +155,7 @@ class Lid {
 	//maakt een permissiestring met uid's enzo wat leesbaarder
 	public function formatPermissionstring($string){
 		$string=str_replace(',', ', ', $string);
-		return preg_replace_callback('/([a-z0-9]{4})/', create_function('$uid', '$lid=Lid::get_Lid(); return $lid->getNaamLink($uid);'), $string);
+		return preg_replace_callback('/([a-z0-9]{4})/', create_function('$uid', '$lid=Lid::instance(); return $lid->getNaamLink($uid);'), $string);
 	}
 	public function hasPermission($descr) {
 		# zoek de rechten van de gebruiker op
@@ -260,11 +261,11 @@ class Lid {
 	// nickname, voornaam, tussenvoegsel, achternaam, geslacht, status, postfix
 
 	private function addLidToCache($uid, $naamArray){
-		$lidCache=LidCache::get_LidCache();
+		$lidCache=LidCache::instance();
 		$lidCache->setLid($uid, $naamArray);
 	}
 	private function getLidFromCache($uid){
-		$lidCache=LidCache::get_LidCache();
+		$lidCache=LidCache::instance();
 		return $lidCache->getLid($uid);
 	}
 
@@ -347,8 +348,9 @@ class Lid {
 
 		return $sNaam;
 	}
+	//Geef een array terug met gegevens over een persoon.
 	public static function getNaamArray($uid){
-		$db=MySql::get_MySql();
+		$db=MySql::instance();
 		$qNaam="
 			SELECT nickname, voornaam, tussenvoegsel, achternaam, status, geslacht, postfix
 			FROM lid WHERE uid='".$uid."' LIMIT 1;";
@@ -953,7 +955,7 @@ class LidCache{
 
 	}
 
-	public static function get_LidCache(){
+	public static function instance(){
 		//als er nog geen instantie gemaakt is, die nu maken
 		if(!isset(LidCache::$lidCache)){
 			LidCache::$lidCache = new LidCache();

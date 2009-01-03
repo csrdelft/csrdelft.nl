@@ -25,8 +25,8 @@ class Documenten {
 	function Documenten() {
 		$this->homedir = DATA_PATH.'/documenten/uploads/';
 		$this->trash = DATA_PATH.'/documenten/trash/';
-		$this->_lid = Lid::get_Lid();
-		$this->_db = MySql::get_MySql();
+		$this->_lid = Lid::instance();
+		$this->_db = MySql::instance();
 	}
 
 	function getDocumenten($catid = 0) {
@@ -57,7 +57,7 @@ class Documenten {
 			$catid = $aDocData['categorie'];
 			//			$naam = $this->getCategorieNaam($catid);
 			//			$aDocData['catnaam']= $naam;
-			//			$aDocData['catid']= $catid;			
+			//			$aDocData['catid']= $catid;
 
 			// Nieuwe categorie
 			if ($addCatId !== $catid) { // id's worden vergeleken
@@ -122,7 +122,7 @@ class Documenten {
 	//		}
 	//		return "fout ID";
 	//	}
-	//	
+	//
 	//	function add($pad, $name, $catNaam){
 	//                  $datum=date('y-m-d');
 	//                  $uid=$this->_lid->getUid();
@@ -183,7 +183,7 @@ class Documenten {
 			$res = true;
 
 			if (!$this->singleFileMode) {
-				$query = "	
+				$query = "
 									INSERT INTO document (naam, categorie, datum)
 									VALUES ('" . $title . "', '" . $cat . "', '" . $date . "');";
 				$this->_db->query($query);
@@ -267,7 +267,7 @@ class Documenten {
 		//echo 'Binnengekomen gegevens voor updateDocument():<br>id:'.$id.', title:'.$title.', cat:'.$cat.'.';
 		// parameters checken
 		if (isset ($id, $title, $cat) && is_numeric($id) && is_numeric($cat) && is_string($title)) {
-			
+
 				// gegevens van bestand ophalen
 	$sFileData = "
 				SELECT
@@ -319,7 +319,7 @@ class Documenten {
 	}
 
 	function deleteDocument($docid) {
-	
+
 		// Note: both dir-strings end with a '/'
 
 		// requesting document category

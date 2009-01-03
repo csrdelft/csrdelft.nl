@@ -20,8 +20,8 @@ class VB {
 
 	### public ###
 	public function VB(){
-		$this->_lid=Lid::get_lid();
-		$this->_db=MySql::get_MySql();
+		$this->_lid=Lid::instance();
+		$this->_db=MySql::instance();
 	}
 
 	public static function getParam($str)

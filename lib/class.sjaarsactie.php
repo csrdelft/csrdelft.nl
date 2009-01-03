@@ -8,31 +8,31 @@
 
 
 class Sjaarsactie {
-	
+
 	var $_db;
 	var $_lid;
-	
+
 	var $_sError;
 	function Sjaarsactie(){
-		$this->_lid=Lid::get_lid();
-		$this->_db=MySql::get_MySql();
+		$this->_lid=Lid::instance();
+		$this->_db=MySql::instance();
 	}
-	
-	
+
+
 	function getSjaarsacties(){
 		$sActie="
 			SELECT
-				sjaarsactie.ID AS ID, 
-				sjaarsactie.naam AS actieNaam, 
-				sjaarsactie.beschrijving AS beschrijving, 
+				sjaarsactie.ID AS ID,
+				sjaarsactie.naam AS actieNaam,
+				sjaarsactie.beschrijving AS beschrijving,
 				sjaarsactie.verantwoordelijke AS verantwoordelijke,
-				sjaarsactie.moment AS moment, 
+				sjaarsactie.moment AS moment,
 				sjaarsactie.limiet AS limiet
 			FROM
 				sjaarsactie
 			WHERE
 				sjaarsactie.zichtbaar='ja'
-			ORDER BY 
+			ORDER BY
 				sjaarsactie.naam ASC;";
 		$rActie=$this->_db->query($sActie);
 		if($this->_db->numRows($rActie)==0){ return false; }
@@ -55,7 +55,7 @@ class Sjaarsactie {
 				sjaarsactielid.uid AS uid,
 				sjaarsactielid.moment AS aanmeldmoment
 			FROM
-				sjaarsactielid 
+				sjaarsactielid
 			WHERE
 				sjaarsactielid.actieID=".$iActieID.";";
 		$rAanmeldingen=$this->_db->query($sAanmeldingen);
@@ -112,13 +112,13 @@ class Sjaarsactie {
 		$this->_sError=$sError;
 		return $validated;
 	}
-		
+
 	function newSjaarsactie($naam, $beschrijving, $iLimiet){
 		//controleren en escapen
 		$naam=$this->_db->escape($naam);
 		$beschrijving=$this->_db->escape($beschrijving);
 		$iLimiet=(int)$iLimiet;
-		
+
 		$sNewActie="
 			INSERT INTO
 				sjaarsactie
@@ -136,12 +136,12 @@ class Sjaarsactie {
 				sjaarsactie.limiet AS limiet,
 				count(*) as aantal
 			FROM
-				sjaarsactie 
-			INNER JOIN 
+				sjaarsactie
+			INNER JOIN
 				sjaarsactielid ON(sjaarsactie.id=sjaarsactielid.actieID)
 			WHERE
 				sjaarsactie.id=".$iActieID."
-			GROUP BY 
+			GROUP BY
 				sjaarsactie.id;";
 		$rIsVol=$this->_db->query($sIsVol);
 		$aIsVol=$this->_db->next($rIsVol);

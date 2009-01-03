@@ -5,7 +5,7 @@
 require_once('include.config.php');
 
 # databaseconnectie openen
-$db=MySql::get_MySql();
+$db=MySql::instance();
 
 # Profiel-object maken
 require_once('class.profiel.php');
