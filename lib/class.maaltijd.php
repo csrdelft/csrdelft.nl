@@ -265,7 +265,8 @@ class MaalTijd {
 		return (($result !== false) and $this->_db->numRows($result) > 0);
 	}
 
-	function getStatus($uid = '') {
+	function getStatus($uid=null) {
+		if($uid===null){ $uid=$this->_lid->getUid(); }
 		# kijk of deze gebruiker al was aan- of afgemeld
 		$result = $this->_db->select("SELECT status FROM maaltijdaanmelding WHERE maalid='{$this->_maalid}' AND uid = '{$uid}'");
 		if (($result !== false) and $this->_db->numRows($result) > 0) {

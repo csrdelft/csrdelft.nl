@@ -195,7 +195,7 @@ src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
 		return $html;
 	}
 	public function ubb_maaltijd($parameters){
-
+		//TODO: hier nog ABO dingen in fixen.
 		if(!isset($parameters['maaltijd']) OR !preg_match('/\d+/', trim($parameters['maaltijd']))){
 			return 'Geen maaltijdID opgegeven of ongeldig ID.';
 		}
@@ -205,12 +205,11 @@ src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
 
 
 		$html='<div class="ubbMaaltijd" id="maaltijd'.$maaltijd->getID().'">';
-		$html.='<h2>Maaltijd van '.$maaltijd->getMoment().'</h2>';
+
 		$html.='<div class="ubbMaaltijdFloat">';
 		$html.='U komt:  <br />';
 		switch($maaltijd->getStatus()){
 			case 'AAN':
-			case 'AUTO':
 				$html.='<em>eten</em>';
 			break;
 			case 'AF':
@@ -223,18 +222,17 @@ src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
 		}else{
 			switch($maaltijd->getStatus()){
 				case 'AAN':
-				case 'AUTO':
+				//case 'AUTO':
 					$html.='<a href="/actueel/maaltijden/index.php?a=af&amp;m='.$maaltijd->getId().'"><strong>af</strong>melden</a>';
 				break;
-
-
 				case 'AF':
 				default:
 					$html.='<a href="/actueel/maaltijden/index.php?a=aan&amp;m='.$maaltijd->getId().'"><strong>aan</strong>melden</a>';
 				break;
 			}
 		}
-		$html.='</div>'.$maaltijd->getTekst();
+		$html.='</div>';
+		$html.='<h2><a href="/actueel/maaltijden/index.php">Maaltijd van '.$maaltijd->getMoment().'</a></h2>'.$maaltijd->getTekst();
 
 
 		return $html.'</div>';
