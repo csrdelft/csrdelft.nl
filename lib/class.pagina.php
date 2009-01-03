@@ -52,13 +52,13 @@ class Pagina{
 	}
 
 	function getRechtenBekijken(){
-		echo Lid::formatPermissionstring($this->getRechtenBekijken());
+		return $this->_lid->formatPermissionstring($this->sRechtenBekijken);
 	}
 	function magBekijken(){
 		return $this->_lid->hasPermission($this->sRechtenBekijken);
 	}
 	function getRechtenBewerken(){
-		return Lid::formatPermissionstring($this->getRechtenBewerken());
+		return $this->_lid->formatPermissionstring($this->sRechtenBewerken);
 	}
 	function magBewerken(){
 		return $this->_lid->hasPermission($this->sRechtenBewerken);

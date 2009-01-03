@@ -32,6 +32,9 @@ class PaginaContent extends SimpleHTML{
 			$this->sActie='bekijken';
 		}
 		switch ($this->sActie){
+			case 'zijkolom':
+
+			break;
 			case 'bekijken':
 				$ubb=new csrUbb();
 				$ubb->allow_html=true;
@@ -42,11 +45,11 @@ class PaginaContent extends SimpleHTML{
 				}
 
 				echo $sInhoud;
-				break;
-
+			break;
 			case 'bewerken':
 				$sInhoud='<h1>Pagina bewerken</h1>';
-				//$sInhoud.='Deze pagina is zichtbaar voor: '.$this->_pagina->getRechtenBekijken().' en bewerkbaar voor '.$this->_pagina->getRechtenBewerken().'.';
+				$sInhoud.='Deze pagina is zichtbaar voor: '.$this->_pagina->getRechtenBekijken();
+				$sInhoud.=' en bewerkbaar voor '.$this->_pagina->getRechtenBewerken().'.';
 				$sInhoud.='
 
 				<form action="/pagina/'.$this->_pagina->getNaam().'/bewerken" method="post">
@@ -59,7 +62,7 @@ class PaginaContent extends SimpleHTML{
 				</form>';
 
 				echo $sInhoud;
-				break;
+			break;
 		}
 	}
 }
