@@ -194,6 +194,51 @@ src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
 		$html.='<div class="clear">&nbsp;</div></div>';
 		return $html;
 	}
+	public function ubb_maaltijd($parameters){
+
+		if(!isset($parameters['maaltijd']) OR !preg_match('/\d+/', trim($parameters['maaltijd']))){
+			return 'Geen maaltijdID opgegeven of ongeldig ID.';
+		}
+
+		require_once('class.maaltijd.php');
+		$maaltijd=new Maaltijd((int)$parameters['maaltijd']);
+
+
+		$html='<div class="ubbMaaltijd" id="maaltijd'.$maaltijd->getID().'">';
+		$html.='<h2>Maaltijd van '.$maaltijd->getMoment().'</h2>';
+		$html.='<div class="ubbMaaltijdFloat">';
+		$html.='U komt:  <br />';
+		switch($maaltijd->getStatus()){
+			case 'AAN':
+			case 'AUTO':
+				$html.='<em>eten</em>';
+			break;
+			case 'AF':
+			default:
+				$html.='<em>niet eten</em>';
+		}
+		$html.='<br />';
+		if($maaltijd->isGesloten()){
+			$html.='Gesloten';
+		}else{
+			switch($maaltijd->getStatus()){
+				case 'AAN':
+				case 'AUTO':
+					$html.='<a href="/actueel/maaltijden/index.php?a=af&amp;m='.$maaltijd->getId().'"><strong>af</strong>melden</a>';
+				break;
+
+
+				case 'AF':
+				default:
+					$html.='<a href="/actueel/maaltijden/index.php?a=aan&amp;m='.$maaltijd->getId().'"><strong>aan</strong>melden</a>';
+				break;
+			}
+		}
+		$html.='</div>'.$maaltijd->getTekst();
+
+
+		return $html.'</div>';
+	}
 	public function ubb_offtopic(){
 		$content = $this->parseArray(array('[/offtopic]'), array());
 		return '<div class="offtopic">'.$content.'</div>';

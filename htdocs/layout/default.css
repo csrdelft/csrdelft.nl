@@ -404,7 +404,21 @@ table.query_table th{
 	top: 30px;
 }
 
-
+/* maaltijd-ubb-tag */
+.ubbMaaltijd{
+	float: left;
+	width: 200px;
+	height: 75px;
+	border: 1px solid gray;
+	background-color: #ddd;
+	padding: 5px 2px 5px 5px;
+}
+.ubbMaaltijdFloat{
+	float: right; 
+	background-color: #ccc; 
+	width: 60px; 
+	padding: 4px; margin: 6px;
+}
 /* plaatjes in tekst */
 p img{ margin: 15px 10px; }
 
