@@ -27,4 +27,3 @@ $pagina->setZijkolom($zijkolom);
 $pagina->addStylesheet('groepen.css');
 $pagina->view();
 ?>
-?>
