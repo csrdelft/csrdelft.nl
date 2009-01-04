@@ -213,15 +213,19 @@ class Groep{
 		}
 	}
 
-	public function isLid($uid){	return isset($this->leden[$uid]); }
+	public function isLid($uid=null){
+		if($uid===null){
+			$uid=Lid::instance()->getUid();
+		}
+		return isset($this->leden[$uid]);
+	}
 	public function isOp($uid){		return $this->isLid($uid) AND $this->leden[$uid]['op']=='1'; }
 	public function getLeden(){		return $this->leden; }
 	public function getLidCount(){	return count($this->getLeden()); }
 	public function isVol(){		return $this->getLimiet()!=0 AND $this->getLimiet()<=$this->getLidCount(); }
 
 	public static function isAdmin(){
-		$lid=Lid::instance();
-		return $lid->hasPermission('P_LEDEN_MOD');
+		return Lid::instance()->hasPermission('P_LEDEN_MOD');
 	}
 	public function magBewerken(){
 		$lid=Lid::instance();
