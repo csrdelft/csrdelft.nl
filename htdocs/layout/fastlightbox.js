@@ -183,6 +183,15 @@ Lightbox.prototype = {
                 'imageDataContainer imageData imageDetails caption numberDisplay bottomNav bottomNavClose';   
             $w(ids).each(function(id){ th[id] = $(id); });
         }).defer();
+        
+        /*
+        alert(document.location.hash);
+        if (document.location.hash != '#') {
+        	alert(parseInt(document.location.hash.substring(1))+1);
+        	start(imageArray[parseInt(document.location.hash.substring(1))+1]);
+        	changeImage(parseInt(document.location.hash.substring(1)));
+        	showImage();
+        }*/
     },
 
     //
@@ -206,7 +215,7 @@ Lightbox.prototype = {
     //  start()
     //  Display overlay and lightbox. If image is part of a set, add siblings to imageArray.
     //
-    start: function(imageLink) {    
+    start: function(imageLink) {    //alert(imageLink);
 
         $$('select', 'object', 'embed').each(function(node){ node.style.visibility = 'hidden' });
 
@@ -269,6 +278,8 @@ Lightbox.prototype = {
             this.resizeImageContainer(imgPreloader.width, imgPreloader.height);
         }).bind(this);
         imgPreloader.src = this.imageArray[this.activeImage][0];
+        
+        document.location='#'+imageNum;
     },
 
     //
@@ -327,7 +338,7 @@ Lightbox.prototype = {
             duration: this.resizeDuration, 
             queue: 'end', 
             afterFinish: (function(){ this.updateDetails(); }).bind(this) 
-        });
+        });        
         this.preloadNeighborImages();
     },
 
@@ -451,6 +462,7 @@ Lightbox.prototype = {
         this.lightbox.hide();
         new Effect.Fade(this.overlay, { duration: this.overlayDuration });
         $$('select', 'object', 'embed').each(function(node){ node.style.visibility = 'visible' });
+        document.location='#';
     },
 
     //

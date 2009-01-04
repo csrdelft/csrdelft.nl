@@ -9,7 +9,6 @@ bin/mootabos.php -text
 bin/saldo-kopieer.php -text
 bin/socciesaldi-koppelen.php -text
 bin/statgraphgen.php -text
-bin/wachtwoord.php -text
 bin/welkom.php -text
 /csrdelft.sql -text
 etc/csrmail.ini.sample -text
@@ -90,7 +89,6 @@ htdocs/layout/showhide.js -text
 htdocs/layout/slideshow.js -text
 htdocs/layout/undohtml.css -text
 htdocs/layout/vb.css -text
-htdocs/links.php -text
 htdocs/login.php -text
 htdocs/logout.php -text
 htdocs/pagina.php -text
@@ -103,7 +101,6 @@ htdocs/tools/leden-csv.php -text
 htdocs/tools/ledenkaart.php -text
 htdocs/tools/memcachedstatus.php -text
 htdocs/tools/mootlijsten.php -text
-htdocs/tools/onderhoud.html -text
 htdocs/tools/phpinfo.php -text
 htdocs/tools/query.php -text
 htdocs/tools/roodschopper.php -text
@@ -114,7 +111,6 @@ htdocs/tools/sendmail/sendmail.php -text
 htdocs/tools/soccie.php -text
 htdocs/tools/stats.php -text
 htdocs/tools/streeplijst.php -text
-htdocs/tools/testudp.php -text
 htdocs/tools/ubb.php -text
 htdocs/vb/ajaxsearch.php -text
 htdocs/vb/images/add.png -text
