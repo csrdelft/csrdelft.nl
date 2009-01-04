@@ -14,8 +14,8 @@ class Pagina{
 	private $sNaam;
 	private $sTitel;
 	private $sInhoud;
-	private $sRechtenBekijken;
-	private $sRechtenBewerken;
+	private $sRechtenBekijken='P_NOBODY';
+	private $sRechtenBewerken='P_ADMIN';
 
 	function Pagina($sNaam){
 		$this->_lid=Lid::instance();
@@ -23,6 +23,18 @@ class Pagina{
 
 		$this->sNaam=$sNaam;
 		$this->load();
+	}
+	
+	function getPaginas(){
+		$sPaginasQuery="SELECT naam, titel, rechten_bewerken FROM pagina";
+		$rPaginas=$this->_db->query($sPaginasQuery);
+		$aPaginas=array();
+		while($aPagina=$this->_db->next($rPaginas)){
+			if($this->_lid->hasPermission($aPagina['rechten_bewerken'])){
+				$aPaginas[]=$aPagina;
+			}			
+		}
+		return $aPaginas;
 	}
 
 	function load(){
@@ -51,14 +63,20 @@ class Pagina{
 		}
 	}
 
+	function setRechtenBekijken($sRechten){
+		$this->sRechtenBekijken=$sRechten;
+	}
 	function getRechtenBekijken(){
-		return $this->_lid->formatPermissionstring($this->sRechtenBekijken);
+		return $this->sRechtenBekijken;
 	}
 	function magBekijken(){
 		return $this->_lid->hasPermission($this->sRechtenBekijken);
 	}
+	function setRechtenBewerken($sRechten){
+		$this->sRechtenBewerken=$sRechten;
+	}
 	function getRechtenBewerken(){
-		return $this->_lid->formatPermissionstring($this->sRechtenBewerken);
+		return $this->sRechtenBewerken;
 	}
 	function magBewerken(){
 		return $this->_lid->hasPermission($this->sRechtenBewerken);

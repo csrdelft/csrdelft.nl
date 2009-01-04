@@ -153,7 +153,7 @@ class Lid {
 
 	### public ###
 	//maakt een permissiestring met uid's enzo wat leesbaarder
-	public function formatPermissionstring($string){
+	public static function formatPermissionstring($string){
 		$string=str_replace(',', ', ', $string);
 		return preg_replace_callback('/([a-z0-9]{4})/', create_function('$uid', '$lid=Lid::instance(); return $lid->getNaamLink($uid);'), $string);
 	}

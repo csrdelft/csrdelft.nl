@@ -32,9 +32,20 @@ class PaginaContent extends SimpleHTML{
 			$this->sActie='bekijken';
 		}
 		switch ($this->sActie){
+			# Lijst pagina's laten zien in de zijkolom
 			case 'zijkolom':
-
+				$aPaginas=$this->_pagina->getPaginas();
+				
+				echo '<h1>Pagina\'s</h1>';
+				foreach($aPaginas as $aPagina){
+					echo '<div class="item">';
+					echo '<a href="/pagina/'.$aPagina['naam'].'/bewerken"
+						title="'.htmlspecialchars($aPagina['titel']).'">'.htmlspecialchars($aPagina['titel']).'</a><br />';
+					echo '</div>';
+				}
 			break;
+			
+			# Gewoon de inhoud van een pagina laten zien
 			case 'bekijken':
 				$ubb=new csrUbb();
 				$ubb->allow_html=true;
@@ -46,15 +57,22 @@ class PaginaContent extends SimpleHTML{
 
 				echo $sInhoud;
 			break;
+			
+			# De inhoud van een pagina bewerken
 			case 'bewerken':
 				$sInhoud='<h1>Pagina bewerken</h1>';
-				$sInhoud.='Deze pagina is zichtbaar voor: '.$this->_pagina->getRechtenBekijken();
-				$sInhoud.=' en bewerkbaar voor '.$this->_pagina->getRechtenBewerken().'.';
+				$sInhoud.='Deze pagina is zichtbaar voor: '.Lid::formatPermissionstring($this->_pagina->getRechtenBekijken());
+				$sInhoud.=' en bewerkbaar voor: '.Lid::formatPermissionstring($this->_pagina->getRechtenBewerken()).'.';
 				$sInhoud.='
-
 				<form action="/pagina/'.$this->_pagina->getNaam().'/bewerken" method="post">
 					<strong>Titel:</strong><br />
-					<input type="text" name="titel" style="width: 100%" value="'.htmlspecialchars($this->_pagina->getTitel()).'" />
+					<input type="text" name="titel" style="width: 70%" value="'.htmlspecialchars($this->_pagina->getTitel()).'" />
+					<br />
+					<strong>Rechten voor bekijken:</strong><br />
+					<input type="text" name="rechten_bekijken" style="width: 50%;" value="'.htmlspecialchars($this->_pagina->getRechtenBekijken()).'" />
+					<br />
+					<strong>Rechten voor bewerken:</strong><br />
+					<input type="text" name="rechten_bewerken" style="width: 50%" value="'.htmlspecialchars($this->_pagina->getRechtenBewerken()).'" />
 					<br /><br />
 					<strong>Inhoud:</strong><br />
 					<textarea name="inhoud" style="width: 100%; height: 500px;">'.htmlspecialchars($this->_pagina->getInhoud()).'</textarea>
