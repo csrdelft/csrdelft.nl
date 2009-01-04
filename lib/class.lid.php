@@ -624,12 +624,9 @@ class Lid {
 		if (!$this->isValidUid($uid)) return false;
 
 		$result = $this->_db->select("SELECT uid FROM lid WHERE uid = '{$uid}'");
-		if ($result !== false and $this->_db->numRows($result) > 0) {
-			#echo $this->_db->numRows($result);
-			return true;
-		}
-		return false;
+		return ($result !== false and $this->_db->numRows($result) > 0);
 	}
+	
 	/*
 	 * getPasfoto()
 	 *

@@ -74,7 +74,7 @@ class MaaltijdbeheerContent extends SimpleHTML {
 			if(isset($_POST['tekst'])){ $aForm['tekst']=trim(mb_htmlentities($_POST['tekst'])); }
 			if(isset($_POST['limiet']) AND $_POST['limiet']==(int)$_POST['limiet']){ $aForm['max']=$_POST['limiet']; }
 			if(isset($_POST['abo']) AND $this->_maaltrack->isValidAbo($_POST['abo'])){ $aForm['abosoort']=$_POST['abo']; }
-			if(isset($_POST['tp']) AND $this->_lid->uidExists($_POST['tp']) ){ $aForm['tp']=$_POST['tp']; }
+			if(isset($_POST['tp']) AND $lid->uidExists($_POST['tp']) ){ $aForm['tp']=$_POST['tp']; }
 			if(isset($_POST['koks'])){  $aForm['koks']=(int)$_POST['koks']; }
 			if(isset($_POST['afwassers'])){  $aForm['afwassers']=(int)$_POST['afwassers']; }
 			if(isset($_POST['theedoeken'])){  $aForm['theedoeken']=(int)$_POST['theedoeken']; }
