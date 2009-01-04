@@ -198,6 +198,8 @@ lib/class.stringincluder.php -text
 lib/class.toevoegen.php -text
 lib/class.toevoegencontent.php -text
 lib/class.verjaardagcontent.php -text
+lib/documenten/class.categorie.php -text
+lib/documenten/class.document.php -text
 lib/forum/class.forum.php -text
 lib/forum/class.forumcontent.php -text
 lib/forum/class.forumonderwerp.php -text
