@@ -198,7 +198,7 @@ class Lid {
 			# ga alleen verder als er een geldige permissie wordt gevraagd
 			if (array_key_exists($permissie, $this->_permissions)){
 				# zoek de code op
-				$gevraagd = (int) $this->_permissions[$descr];
+				$gevraagd = (int) $this->_permissions[$permissie];
 
 				# $p is de gevraagde permissie als octaal getal
 				# de permissies van de gebruiker kunnen we bij $this->_lid opvragen
