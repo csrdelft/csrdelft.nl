@@ -221,11 +221,11 @@ src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
 			switch($maaltijd->getStatus()){
 				case 'AAN':
 				//case 'AUTO':
-					$html.='<a href="/actueel/maaltijden/index.php?a=af&amp;m='.$maaltijd->getId().'"><strong>af</strong>melden</a>';
+					$html.='<a href="/actueel/maaltijden/index.php?forum&amp;a=af&amp;m='.$maaltijd->getId().'"><strong>af</strong>melden</a>';
 				break;
 				case 'AF':
 				default:
-					$html.='<a href="/actueel/maaltijden/index.php?a=aan&amp;m='.$maaltijd->getId().'"><strong>aan</strong>melden</a>';
+					$html.='<a href="/actueel/maaltijden/index.php?forum&amp;a=aan&amp;m='.$maaltijd->getId().'"><strong>aan</strong>melden</a>';
 				break;
 			}
 		}

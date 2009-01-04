@@ -50,10 +50,15 @@ if ($error == 0) switch($action) {
 			if(!$maaltrack->aanmelden($m, $uid)){
 				$error=2;
 			}else{
+				if(isset($_GET['forum'])){
+					header("Location: ".$_SERVER['HTTP_REFERER']);
+					exit;
+				}
 				header("Location: {$_SERVER['PHP_SELF']}");
 				exit;
 			}
 		}
+
 	break;
 	case 'af':
 		# kijk of een maaltijd is opgegeven
@@ -68,6 +73,10 @@ if ($error == 0) switch($action) {
 			if(!$maaltrack->afmelden($m, $uid)){
 				$error=2;
 			}else{
+				if(isset($_GET['forum'])){
+					header("Location: ".$_SERVER['HTTP_REFERER']);
+					exit;
+				}
 				header("Location: {$_SERVER['PHP_SELF']}");
 				exit;
 			}
@@ -88,7 +97,6 @@ if ($error == 0) switch($action) {
 		}
 	break;
 }
-
 
 # De pagina opbouwen, met mKetzer, of met foutmelding
 if($error == 0  or $error == 2) {
