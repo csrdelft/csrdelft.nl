@@ -329,6 +329,7 @@ UBBVERHAAL;
 
 	# Commentaar-tag
 	public function ubb_commentaar(){
+		$content = $this->parseArray(array('[/commentaar]'), array());
 		return '';
 	}
 }
