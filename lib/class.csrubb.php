@@ -230,7 +230,7 @@ src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
 			}
 		}
 		$html.='</div>';
-		$html.='<h2><a href="/actueel/maaltijden/index.php">Maaltijd van '.$maaltijd->getMoment().'</a></h2>'.$maaltijd->getTekst();
+		$html.='<h2><a href="/actueel/maaltijden/index.php">Maaltijd</a> van '.$maaltijd->getMoment().'</h2>'.$maaltijd->getTekst();
 
 
 		return $html.'</div>';

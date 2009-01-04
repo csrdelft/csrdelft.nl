@@ -154,8 +154,23 @@ class Lid {
 	### public ###
 	//maakt een permissiestring met uid's enzo wat leesbaarder
 	public static function formatPermissionstring($string){
-		$string=str_replace(',', ', ', $string);
-		return preg_replace_callback('/([a-z0-9]{4})/', create_function('$uid', '$lid=Lid::instance(); return $lid->getNaamLink($uid);'), $string);
+		$parts=explode(',', $string);
+		$return=array();
+		$lid=Lid::instance();
+		require_once 'groepen/class.groep.php';
+		foreach($parts as $part){
+			if(Lid::isValidUid($part)){
+				$return[]=$lid->getNaamLink($part, "full", true);
+			}elseif(substr($part, 0, 5)=='groep'){
+				$groep=new Groep(substr($part, 6));
+				if($groep->getId()!=0){
+					$return[]=$groep->getLink();
+				}
+			}else{
+				$return[]=$part;
+			}
+		}
+		return implode(', ', $return);
 	}
 	public function hasPermission($descr) {
 		# zoek de rechten van de gebruiker op
@@ -175,6 +190,10 @@ class Lid {
 			# uid
 			if($permissie==$this->getUid()){
 				return true;
+			}elseif(substr($permissie, 0, 5)=='groep'){
+				require_once 'groepen/class.groep.php';
+				$groep=new Groep(substr($permissie, 6));
+				return $groep->isLid();
 			}
 
 			# ga alleen verder als er een geldige permissie wordt gevraagd
@@ -598,7 +617,7 @@ class Lid {
 		return ($result !== false and $this->_db->numRows($result) > 0);
 	}
 
-	function isValidUid($uid) {
+	public static function isValidUid($uid) {
 		return preg_match('/^[a-z0-9]{4}$/', $uid) > 0;
 	}
 
