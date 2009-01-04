@@ -81,6 +81,9 @@ class Pagina{
 	function magBewerken(){
 		return $this->_lid->hasPermission($this->sRechtenBewerken);
 	}
+	function magPermissiesBewerken(){
+		return $this->_lid->hasPermission('P_ADMIN');
+	}
 
 	function setTitel($sTitel){
 		$this->sTitel=$sTitel;

@@ -21,8 +21,10 @@ if (isset($_GET['bewerken']) && $pagina->magBewerken()){
 	if($_SERVER['REQUEST_METHOD']=='POST'){
 		$pagina->setTitel($_POST['titel']);
 		$pagina->setInhoud($_POST['inhoud']);
-		$pagina->setRechtenBekijken($_POST['rechten_bekijken']);
-		$pagina->setRechtenBewerken($_POST['rechten_bewerken']);
+		if($pagina->magPermissiesBewerken()){
+			$pagina->setRechtenBekijken($_POST['rechten_bekijken']);
+			$pagina->setRechtenBewerken($_POST['rechten_bewerken']);
+		}
 		$pagina->save();
 		header('Location: '.CSR_ROOT.'pagina/'.$pagina->getNaam());
 	}

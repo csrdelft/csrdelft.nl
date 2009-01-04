@@ -66,14 +66,18 @@ class PaginaContent extends SimpleHTML{
 				$sInhoud.='
 				<form action="/pagina/'.$this->_pagina->getNaam().'/bewerken" method="post">
 					<strong>Titel:</strong><br />
-					<input type="text" name="titel" style="width: 70%" value="'.htmlspecialchars($this->_pagina->getTitel()).'" />
-					<br />
-					<strong>Rechten voor bekijken:</strong><br />
-					<input type="text" name="rechten_bekijken" style="width: 50%;" value="'.htmlspecialchars($this->_pagina->getRechtenBekijken()).'" />
-					<br />
-					<strong>Rechten voor bewerken:</strong><br />
-					<input type="text" name="rechten_bewerken" style="width: 50%" value="'.htmlspecialchars($this->_pagina->getRechtenBewerken()).'" />
-					<br /><br />
+					<input type="text" name="titel" style="width: 70%" value="'.htmlspecialchars($this->_pagina->getTitel()).'" />';
+				
+				if($this->_pagina->magPermissiesBewerken()){
+					$sInhoud.='<br />
+						<strong>Rechten voor bekijken:</strong><br />
+						<input type="text" name="rechten_bekijken" style="width: 50%;" value="'.htmlspecialchars($this->_pagina->getRechtenBekijken()).'" />
+						<br />
+						<strong>Rechten voor bewerken:</strong><br />
+						<input type="text" name="rechten_bewerken" style="width: 50%" value="'.htmlspecialchars($this->_pagina->getRechtenBewerken()).'" />';
+				}
+				
+				$sInhoud.='<br /><br />
 					<strong>Inhoud:</strong><br />
 					<textarea name="inhoud" style="width: 100%; height: 500px;">'.htmlspecialchars($this->_pagina->getInhoud()).'</textarea>
 					<input type="submit" value="Opslaan" />
