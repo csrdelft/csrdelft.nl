@@ -11,16 +11,16 @@ a.thumb{
 a.album{
 	width: 154px;
 	height: 195px;
-	padding: 3px;
+	padding: 2px;
 	margin: 15px;
 	float: left;
 	text-align: center;
 	font-weight: bold;
+	border: 1px solid #ffffff;
 }
 a.album:hover{
 	text-decoration: none;
-	border: 1px solid #aaaaaa;
-	padding: 2px;
+	border-color: #aaaaaa;
 }
 a.album img{
 	height: 150px;
