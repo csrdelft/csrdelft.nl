@@ -187,7 +187,7 @@ class Lid {
 		# gebruiker heeft hij ook rechten.
 		$permissies=explode(',', $descr);
 		foreach($permissies as $permissie){
-			# uid
+			$permissies=trim($permissie);
 			if($permissie==$this->getUid()){
 				return true;
 			}elseif(substr($permissie, 0, 5)=='groep'){
@@ -195,9 +195,8 @@ class Lid {
 				$groep=new Groep(substr($permissie, 6));
 				return $groep->isLid();
 			}
-
 			# ga alleen verder als er een geldige permissie wordt gevraagd
-			if (array_key_exists($descr, $this->_permissions)){
+			if (array_key_exists($permissie, $this->_permissions)){
 				# zoek de code op
 				$gevraagd = (int) $this->_permissions[$descr];
 
@@ -216,12 +215,12 @@ class Lid {
 				#  gebr heeft: P_LID      : 0005544500
 				#  AND resultaat          : 0000004000 -> ja!
 				$resultaat=$gevraagd & $lidheeft;
+
 				if($resultaat==$gevraagd){
 					return true;
 				}
 			}
 		}
-
 		# Zo niet... dan niet
 		return false;
 	}
