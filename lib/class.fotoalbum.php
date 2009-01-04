@@ -79,7 +79,7 @@ class Fotoalbum{
 			}
 		}
 		sort($mappen);
-		$mappen=array_reverse($mappen);
+		//$mappen=array_reverse($mappen);
 
 		# Albums aanmaken en teruggeven
 		$albums=array();
@@ -188,7 +188,7 @@ class Foto{
 	}
 
 	function getThumbURL(){
-		return CSR_PICS.'fotoalbum/'.$this->getMap().'_thumbs/'.$this->getBestandsnaam();
+		return CSR_PICS.'fotoalbum/'.urlencode($this->getMap()).'_thumbs/'.$this->getBestandsnaam();
 	}
 
 	function getResizedURL(){
