@@ -188,7 +188,7 @@ class Foto{
 	}
 
 	function getThumbURL(){
-		return CSR_PICS.'fotoalbum/'.urlencode($this->getMap()).'_thumbs/'.$this->getBestandsnaam();
+		return CSR_PICS.'fotoalbum/'.$this->getMap().'_thumbs/'.$this->getBestandsnaam();
 	}
 
 	function getResizedURL(){
