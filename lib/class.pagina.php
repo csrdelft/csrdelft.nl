@@ -26,7 +26,7 @@ class Pagina{
 	}
 	
 	function getPaginas(){
-		$sPaginasQuery="SELECT naam, titel, rechten_bewerken FROM pagina";
+		$sPaginasQuery="SELECT naam, titel, rechten_bewerken FROM pagina ORDER BY titel ASC";
 		$rPaginas=$this->_db->query($sPaginasQuery);
 		$aPaginas=array();
 		while($aPagina=$this->_db->next($rPaginas)){
