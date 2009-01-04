@@ -20,8 +20,8 @@ if($maalid == '' or (!$lid->hasPermission('P_MAAL_MOD') and !opConfide())) $erro
 if ($error == 0  or $error == 2) {
 
 	# MaaltijdenSysteem
-	require_once('class.maaltrack.php');
-	require_once('class.maaltijd.php');
+	require_once('maaltijden/class.maaltrack.php');
+	require_once('maaltijden/class.maaltijd.php');
 	$maaltrack = new MaalTrack($lid, $db);
 
 	# bestaat de maaltijd?
@@ -36,7 +36,7 @@ if ($error == 0  or $error == 2) {
 		exit;
 	}
 
-	require_once('class.maaltijdlijstcontent.php');
+	require_once('maaltijden/class.maaltijdlijstcontent.php');
 	$page = new MaaltijdLijstContent($maaltijd);
 	
 	# Moeten we de fiscaal-lijst weergeven?

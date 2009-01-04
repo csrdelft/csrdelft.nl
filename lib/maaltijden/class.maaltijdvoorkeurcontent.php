@@ -1,14 +1,14 @@
 <?php
 # C.S.R. Delft | pubcie@csrdelft.nl
 # -------------------------------------------------------------------
-# class.maaltijdvoorkeurcontent.php
+# maaltijden/class.maaltijdvoorkeurcontent.php
 # -------------------------------------------------------------------
 # Bekijken en wijzigen van voorkeuren voor maaltijdinschrijving
 # en abonnementen
 # -------------------------------------------------------------------
 
 
-require_once ('class.maaltrack.php');
+require_once ('maaltijden/class.maaltrack.php');
 
 class MaaltijdVoorkeurContent extends SimpleHTML {
 

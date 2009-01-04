@@ -127,7 +127,7 @@ $cmnds['getsaldo'] = array();
  */
 function abolijst($uid, $params) {
     global $lid,$db;
-    require_once('class.maaltrack.php');
+    require_once('maaltijden/class.maaltrack.php');
     $maaltrack = new MaalTrack($lid, $db);
     $myabos = $maaltrack->getAbo();
     if (count($myabos) > 0 ) return array_values($myabos);
@@ -145,7 +145,7 @@ $cmnds['abolijst'] = array();
  */
 function getwelabos($uid, $params) {
     global $lid,$db;
-    require_once('class.maaltrack.php');
+    require_once('maaltijden/class.maaltrack.php');
     $maaltrack = new MaalTrack($lid, $db);
     $result = array();
     $abos = $maaltrack->getAbo();
@@ -166,7 +166,7 @@ $cmnds['getwelabos'] = array();
  */
 function getnotabos($uid, $params) {
     global $lid,$db;
-    require_once('class.maaltrack.php');
+    require_once('maaltijden/class.maaltrack.php');
     $maaltrack = new MaalTrack($lid, $db);
     $result = array();
     $abos = $maaltrack->getNotAboSoort();
@@ -186,7 +186,7 @@ $cmnds['getnotabos'] = array();
  */
 function addabo($uid, $params) {
     global $lid,$db;
-    require_once('class.maaltrack.php');
+    require_once('maaltijden/class.maaltrack.php');
     $maaltrack = new MaalTrack($lid, $db);
     $abosoort = 'A_' . strtoupper($params['abosoort']);
     if ($maaltrack->addAbo($abosoort))
@@ -204,7 +204,7 @@ $cmnds['addabo'] = array('abosoort' => true);
  */
 function delabo($uid, $params) {
     global $lid,$db;
-    require_once('class.maaltrack.php');
+    require_once('maaltijden/class.maaltrack.php');
     $maaltrack = new MaalTrack($lid, $db);
     $abosoort = 'A_' . strtoupper($params['abosoort']);
     if ($maaltrack->delAbo($abosoort))
@@ -361,7 +361,7 @@ $cmnds['zoekoud'] = array('zoekterm' => true);
  */
 function maallijst($uid, $params) {
     global $lid,$db;
-    require_once('class.maaltrack.php');
+    require_once('maaltijden/class.maaltrack.php');
     $maaltrack = new MaalTrack($lid, $db);
     # opvragen komende maaltijden + onze status (zijn we ingeschreven etc)
     $nu = time();
@@ -393,7 +393,7 @@ $cmnds['maallijst'] = array();
  */
 function maalinfo($uid, $params) {
     global $lid,$db;
-    require_once('class.maaltrack.php');
+    require_once('maaltijden/class.maaltrack.php');
     $maaltrack = new MaalTrack($lid, $db);
     $result = array();
 
@@ -478,7 +478,7 @@ exit(0);
 
 function maalaanaf($uid, $params, $aanaf) {
     global $lid,$db;
-    require_once('class.maaltrack.php');
+    require_once('maaltijden/class.maaltrack.php');
     $maaltrack = new MaalTrack($lid, $db);
     $proxyuid = ($params['proxyuid'] == $uid or $params['proxyuid'] == '') ? '' : $params['proxyuid'];
 

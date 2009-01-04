@@ -18,8 +18,8 @@ function main() {
 	# login-systeem
 	require_once('class.lid.php');
 	require_once('class.mysql.php');
-	require_once('class.maaltrack.php');
-	require_once('class.maaltijd.php');
+	require_once('maaltijden/class.maaltrack.php');
+	require_once('maaltijden/class.maaltijd.php');
 
 	$db = new MySQL();
 	$lid = new Lid($db);

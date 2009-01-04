@@ -17,8 +17,8 @@
 
 {if $album->getFotos()!==false}
 	{foreach from=$album->getFotos() item=foto}
-		<a class="thumb" href="{$foto->getResizedURL()}" rel="lightbox[album]">
-			<img src="{$foto->getThumbURL()}" />
+		<a class="thumb" href="{$foto->getResizedURL()}" rel="lightbox[album]" title="{$foto->getBestandsnaam()}">
+			<img src="{$foto->getThumbURL()}" alt="{$foto->getBestandsnaam()}" />
 		</a>
 	{/foreach}
 {/if}

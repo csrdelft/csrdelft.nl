@@ -3,11 +3,11 @@
 # instellingen & rommeltjes
 require_once('include.config.php');
 
-require_once('class.courant.php');
+require_once('courant/class.courant.php');
 $courant = new Courant();
 if(!$courant->magToevoegen()){ header('location: '.CSR_ROOT); exit; }
 
-require_once('class.courantbeheercontent.php');
+require_once('courant/class.courantbeheercontent.php');
 $body = new CourantBeheerContent($courant);
 
 //url waarheen standaard gerefreshed wordt

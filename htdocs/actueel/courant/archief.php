@@ -13,10 +13,10 @@ $zijkolom=new kolom();
 
 # Het middenstuk
 if ($lid->hasPermission('P_LEDEN_READ')) {
-	require_once('class.courant.php');
+	require_once('courant/class.courant.php');
 	$courant=new Courant();
 
-	require_once('class.courantarchiefcontent.php');
+	require_once('courant/class.courantarchiefcontent.php');
 	$body = new CourantArchiefContent($courant);
 } else {
 	# geen rechten

@@ -10,8 +10,8 @@ require_once('include.config.php');
 require_once 'class.paginacontent.php';
 
 # MaaltijdenSysteem
-require_once('class.maaltrack.php');
-require_once('class.maaltijd.php');
+require_once('maaltijden/class.maaltrack.php');
+require_once('maaltijden/class.maaltijd.php');
 $maaltrack = new MaalTrack($lid, $db);
 
 # Moeten er acties uitgevoerd worden?
@@ -93,7 +93,7 @@ if ($error == 0) switch($action) {
 # De pagina opbouwen, met mKetzer, of met foutmelding
 if($error == 0  or $error == 2) {
 	# Het middenstuk
-	require_once('class.maaltijdcontent.php');
+	require_once('maaltijden/class.maaltijdcontent.php');
 	$midden = new MaaltijdContent($maaltrack);
 } else {
 	# geen rechten

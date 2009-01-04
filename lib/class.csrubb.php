@@ -199,7 +199,7 @@ src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
 			return 'Geen maaltijdID opgegeven of ongeldig ID.';
 		}
 
-		require_once('class.maaltijd.php');
+		require_once('maaltijden/class.maaltijd.php');
 		$maaltijd=new Maaltijd((int)$parameters['maaltijd']);
 
 

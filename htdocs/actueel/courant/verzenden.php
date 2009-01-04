@@ -4,11 +4,11 @@ require_once('include.config.php');
 
 
 
-require_once('class.courant.php');
+require_once('courant/class.courant.php');
 $courant = new Courant();
 if(!$courant->magVerzenden()){ header('location: '.CSR_ROOT); exit; }
 
-require_once('class.courantcontent.php');
+require_once('courant/class.courantcontent.php');
 $mail=new CourantContent($courant);
 
 

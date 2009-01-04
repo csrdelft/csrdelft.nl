@@ -10,7 +10,7 @@
 
 require_once('include.config.php');
 
-require_once('class.courant.php');
+require_once('courant/class.courant.php');
 $courant=new Courant();
 
 # als er genoeg rechten zijn een preview van de courant laten zien.
@@ -21,7 +21,7 @@ if(isset($_GET['ID']) AND $_GET['ID']!=0){
 	$courant->load((int)$_GET['ID']);
 }
 
-require_once('class.courantcontent.php');
+require_once('courant/class.courantcontent.php');
 $pagina=new CourantContent($courant);
 
 $pagina->view();

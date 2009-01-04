@@ -13,12 +13,12 @@ require_once('include.config.php');
 
 if(!$lid->hasPermission('P_MAAL_MOD')){ header('location: '.CSR_ROOT.'maaltijden/'); exit; }
 
-require_once('class.maaltrack.php');
-require_once('class.maaltijd.php');
+require_once('maaltijden/class.maaltrack.php');
+require_once('maaltijden/class.maaltijd.php');
 $maaltrack = new MaalTrack();
 
 
-require_once('class.maaltijdbeheercontent.php');
+require_once('maaltijden/class.maaltijdbeheercontent.php');
 $beheer = new MaaltijdbeheerContent($maaltrack);
 
 # verwijderen we een maaltijd?
