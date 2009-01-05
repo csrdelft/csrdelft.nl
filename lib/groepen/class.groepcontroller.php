@@ -106,7 +106,9 @@ class Groepcontroller extends Controller{
 				if(trim($_POST['begin'])=='0000-00-00'){
 					$this->addError("De begindatum mag niet 0000-00-00 zijn.");
 				}
-
+				if($_POST['einde']!='0000-00-00' AND strtotime($_POST['begin'])>strtotime($_POST['einde'])){
+					$this->addError('Begindatum moet voor de einddatum liggen');
+				}
 				if(!preg_match('/\d{4}-\d{2}-\d{2}/', trim($_POST['einde']))){
 					$this->addError("De begindatum is niet geldig. Gebruik JJJJ-mm-dd.");
 				}

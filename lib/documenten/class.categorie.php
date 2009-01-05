@@ -29,10 +29,15 @@ class DocumentenCategorie{
 			//gegevens over de categorie ophalen.
 			$query="SELECT ID, naam, zichtbaar FROM documentcategorie WHERE ID=".$this->getID();
 			$categorie=$db->query2array($query);
-			$this->naam=$categorie['naam'];
-			$this->zichtbaar=$categorie['zichtbaar'];
+			if($categorie!==false){
+				$this->naam=$categorie['naam'];
+				$this->zichtbaar=$categorie['zichtbaar'];
 
-			$this->loadChildren($loadChildren);
+				$this->loadChildren($loadChildren);
+			}else{
+				//gevraagde categorie bestaat niet, we zet het ID weer op 0.
+				$this->ID=0;
+			}
 		}
 	}
 	public function loadChildren($loadChildren){
@@ -74,8 +79,11 @@ class DocumentenCategorie{
 
 	public function getID(){		return $this->ID; }
 	public function getNaam(){		return $this->naam; }
+	public function getZichtbaaar(){return $this->zichtbaar; }
+	public function isZichtbaar(){ 	return $this->zichtbaar==1; }
 
 	public function getDocumenten(){return $this->documenten; }
+
 	public static function exists($catID){
 		$cat=new DocumentenCategorie((int)$catID);
 		return $cat->getID()!=0;

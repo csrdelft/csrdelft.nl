@@ -125,9 +125,9 @@ function updateGroepform(){
 	}else{
 		hideDiv(gAanmeldDiv);
 		var gEindeVeld=document.getElementById('einde');
-		if(gEindeVeld.value='0000-00-00'){
+		if(gEindeVeld.value=='0000-00-00'){
 			var now=new Date();
-			gEindeVeld.value=now.getFullYear()+'-'+LZ(now.getMonth())+'-'+LZ(now.getDate());
+			gEindeVeld.value=now.getFullYear()+'-'+LZ(now.getMonth()+1)+'-'+LZ(now.getDate());
 		}
 	}
 }
