@@ -244,14 +244,16 @@ src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
 		if($maaltijd->isGesloten()){
 			$html.='Gesloten';
 		}else{
-			switch($status){
-				case 'AAN':
-					$html.='<a href="/actueel/maaltijden/index.php?forum&amp;a=af&amp;m='.$maaltijd->getId().'"><strong>af</strong>melden</a>';
-				break;
-				case 'AF':
-				default:
-					$html.='<a href="/actueel/maaltijden/index.php?forum&amp;a=aan&amp;m='.$maaltijd->getId().'"><strong>aan</strong>melden</a>';
-				break;
+			if($this->lid->hasPermission('P_MAAL_IK')){
+				switch($status){
+					case 'AAN':
+						$html.='<a href="/actueel/maaltijden/index.php?forum&amp;a=af&amp;m='.$maaltijd->getId().'"><strong>af</strong>melden</a>';
+					break;
+					case 'AF':
+					default:
+						$html.='<a href="/actueel/maaltijden/index.php?forum&amp;a=aan&amp;m='.$maaltijd->getId().'"><strong>aan</strong>melden</a>';
+					break;
+				}
 			}
 		}
 		$html.='</div>';
