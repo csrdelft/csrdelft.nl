@@ -122,7 +122,12 @@
 	
 	<div class="profielregel">
 		<div class="left">Maaltijden</div>	
-		<div class="gegevens">		
+		<div class="gegevens">
+			{if $profhtml.eetwens!=''}
+				<div class="label">Eetwens</div>
+				<div class="data">{$profhtml.eetwens}</div>
+				<br />
+			{/if}
 			{if $profhtml.abos|@count > 0}
 				<div class="label">
 					Abo's

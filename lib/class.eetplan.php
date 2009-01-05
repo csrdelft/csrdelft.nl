@@ -26,9 +26,6 @@ class Eetplan {
 		$rEetplan=$this->_db->select("
 			SELECT
   			eetplan.uid AS uid,
-  			lid.voornaam AS voornaam,
-  			lid.achternaam AS achternaam,
-  			lid.tussenvoegsel AS tussenvoegsel,
   			eetplan.huis AS huis,
   			eetplan.avond AS avond
 			FROM
@@ -47,7 +44,7 @@ class Eetplan {
 				//eerste element van de regel is het uid
 				$aEetplanRegel[]=array(
 					'uid' => $aEetplanData['uid'],
-					'naam' => $this->_lid->getNaamLink($aEetplanData['uid'], 'full', false, $aEetplanData));
+					'naam' => $this->_lid->getNaamLink($aEetplanData['uid'], 'full', false));
 			}
 			$aEetplanRegel[]=$aEetplanData['huis'];
 		}
@@ -92,10 +89,14 @@ class Eetplan {
 				eetplan.avond AS avond,
 				eetplanhuis.naam AS huisnaam,
 				eetplanhuis.adres AS huisadres,
-				eetplanhuis.telefoon AS telefoon,
-				eetplan.uid AS pheut
+				eetplanhuis.telefoon AS huistelefoon,
+				eetplan.uid AS pheut,
+				lid.eetwens AS eetwens,
+				lid.telefoon AS telefoon,
+				lid.mobiel AS mobiel
 			FROM
 				eetplanhuis, eetplan
+			INNER JOIN lid ON(eetplan.uid=lid.uid)
 			WHERE
 				eetplan.huis=eetplanhuis.id AND
 				eetplanhuis.id=".$iHuisID."
