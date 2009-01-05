@@ -184,7 +184,12 @@ src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
 		if($groep->isAanmeldbaar() AND $groep->magAanmelden()){
 			$html.='<form action="/actueel/groepen/'.$groep->getType().'/'.$groep->getId().'/aanmelden" method="post" id="aanmeldForm">U kunt zich hier aanmelden voor deze groep.';
 			if($groep->getToonFuncties()!='niet'){
-				$html.=' Geef ook een opmerking/functie op:<br /><input type="text" name="functie" />';
+				if($groep->getID()==440){
+					$html.=' Geef de naam van uw galadate op:';
+				}else{
+					$html.=' Geef ook een opmerking/functie op:';
+				}
+				$html.='<br /><input type="text" name="functie" />';
 			}else{
 				$html.='<br />';
 			}
@@ -233,7 +238,7 @@ src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
 		$html.='<h2><a href="/actueel/maaltijden/index.php">Maaltijd</a> van '.$maaltijd->getMoment().'</h2>'.$maaltijd->getTekst();
 
 
-		return $html.'</div>';
+		return $html.'</div><br style="clear: both;" />';
 	}
 	public function ubb_offtopic(){
 		$content = $this->parseArray(array('[/offtopic]'), array());

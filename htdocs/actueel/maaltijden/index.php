@@ -51,7 +51,7 @@ if ($error == 0) switch($action) {
 				$error=2;
 			}else{
 				if(isset($_GET['forum'])){
-					header("Location: ".$_SERVER['HTTP_REFERER']);
+					header("Location: ".$_SERVER['HTTP_REFERER'].'#maaltijd'.$m);
 					exit;
 				}
 				header("Location: {$_SERVER['PHP_SELF']}");
@@ -74,7 +74,7 @@ if ($error == 0) switch($action) {
 				$error=2;
 			}else{
 				if(isset($_GET['forum'])){
-					header("Location: ".$_SERVER['HTTP_REFERER']);
+					header("Location: ".$_SERVER['HTTP_REFERER'].'#maaltijd'.$m);
 					exit;
 				}
 				header("Location: {$_SERVER['PHP_SELF']}");
