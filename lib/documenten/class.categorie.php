@@ -4,6 +4,8 @@
  *
  *
  */
+require_once 'class.document.php';
+
 class DocumentenCategorie{
 
 	private $ID;

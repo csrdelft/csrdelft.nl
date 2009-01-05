@@ -199,13 +199,25 @@ src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
 		return $html;
 	}
 	public function ubb_maaltijd($parameters){
-		//TODO: hier nog ABO dingen in fixen.
-		if(!isset($parameters['maaltijd']) OR !preg_match('/\d+/', trim($parameters['maaltijd']))){
+		if(!isset($parameters['maaltijd']) OR ($parameters['maaltijd']!='next' AND !preg_match('/\d+/', $parameters['maaltijd']))){
 			return 'Geen maaltijdID opgegeven of ongeldig ID.';
 		}
+		$maalid=trim($parameters['maaltijd']);
 
-		require_once('maaltijden/class.maaltijd.php');
-		$maaltijd=new Maaltijd((int)$parameters['maaltijd']);
+		//als de parameter 'next' is dan geven we de eerstvolgende maaltijd weer.
+		if($maalid=='next'){
+			require_once 'maaltijden/class.maaltrack.php';
+			$maaltijden=Maaltrack::getMaaltijdenRaw();
+			if(count($maaltijden)>0){
+				$maalid=$maaltijden[0]['id'];
+			}else{
+				return 'Geen aankomende maaltijd.';
+			}
+		}
+
+		//TODO: hier nog ABO dingen in fixen.
+		require_once 'maaltijden/class.maaltijd.php';
+		$maaltijd=new Maaltijd((int)$maalid);
 
 
 		$html='<div class="ubbMaaltijd" id="maaltijd'.$maaltijd->getID().'">';

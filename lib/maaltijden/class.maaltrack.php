@@ -209,7 +209,9 @@ class MaalTrack {
 	# voor in de kolommen op de maaltijdencontent pagina, zie getMaaltijden hieronder
 	# als de gebruiker uit moot 1-4 is, hou daar dan rekening mee
 	# deze functionaliteit kan uitgezet worden door $mootfilter = false te zetten als argument
-	function getMaaltijdenRaw($van = 0, $tot = 0, $mootfilter = true) {
+	public static function getMaaltijdenRaw($van = 0, $tot = 0, $mootfilter = true) {
+		$lid=Lid::instance();
+		$db=MySql::instance();
 		# kijk in db en haal alle maaltijden op waarbij de begintijd
 		# na $van is, en voor $tot
 
@@ -223,8 +225,8 @@ class MaalTrack {
 		$totsql = ($tot != 0) ? "datum < '".$tot."'" : "1";
 
 		# mootfilter
-		if(!$this->_lid->hasPermission('P_MAAL_MOD')){
-			if($mootfilter === true){ $moot = $this->_lid->getMoot(); }
+		if(!$lid->hasPermission('P_MAAL_MOD')){
+			if($mootfilter === true){ $moot = $lid->getMoot(); }
 		}else{
 			$mootfilter=false;
 		}
@@ -239,10 +241,10 @@ class MaalTrack {
 				datum > '".$van."' AND ".$totsql."
 			ORDER BY
 				datum ASC;";
-		$result=$this->_db->select($sMaaltijdQuery);
-		if (($result !== false) and $this->_db->numRows($result) > 0) {
-			while ($record = $this->_db->next($result)) {
-				$record['tp_link']=$this->_lid->getNaamLink($record['tp'], 'civitas', true);
+		$result=$db->select($sMaaltijdQuery);
+		if (($result !== false) and $db->numRows($result) > 0) {
+			while ($record = $db->next($result)) {
+				$record['tp_link']=$lid->getNaamLink($record['tp'], 'civitas', true);
 				if(!($mootfilter===true AND preg_match("/(MOOT|UBER)[^{$moot}]{1}/", $record['abosoort']))){
 					$maaltijden[] = $record;
 
