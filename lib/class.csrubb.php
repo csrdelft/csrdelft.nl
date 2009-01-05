@@ -225,8 +225,6 @@ src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
 		$html.='U komt:  <br />';
 
 		$status=$maaltijd->getStatus();
-		echo $status.print_r($maaltijd->heeftAbo(), true);
-		pr($maaltijd);
 		switch($status){
 			case 'AAN':
 				$html.='<em>eten</em>';
