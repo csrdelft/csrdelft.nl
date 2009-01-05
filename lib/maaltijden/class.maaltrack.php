@@ -351,7 +351,7 @@ class MaalTrack {
 	function aanmelden($maalid, $uid = '') {
 		# isMaaltijd zet zelf een error als het nodig is
 		if (!$this->isMaaltijd($maalid)) return false;
-		$maaltijd = new Maaltijd($maalid, $this->_lid, $this->_db);
+		$maaltijd = new Maaltijd($maalid);
 		if (!$maaltijd->aanmelden($uid)) {
 			$this->_error = $maaltijd->getError();
 			$this->_proxyerror = $maaltijd->getProxyError();

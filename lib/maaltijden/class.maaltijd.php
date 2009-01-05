@@ -42,7 +42,7 @@ class MaalTijd {
 
 	# we gaan bewerkingen uitvoeren op een maaltijd, onder verantwoordelijkheid van een bepaald lid
 	# NB!! Gebruik MaalTrack::isMaaltijd voor controle of de maaltijd wel bestaat
-	function MaalTijd($maalid) {
+	function __construct($maalid) {
 		$this->_maalid = (int)$maalid;
 		$this->_lid=Lid::instance();
 		$this->_db=MySql::instance();
@@ -246,20 +246,17 @@ class MaalTijd {
 		return false;
 	}
 
-	function heeftAbo($uid = '') {
-		if ($uid == '') $uid = $this->_lid->getUid();
-		if (!$this->_lid->uidExists($uid)) {
+	public function heeftAbo($uid=null) {
+		if($uid==null){
+			$uid = $this->_lid->getUid();
+		}elseif(!$this->_lid->uidExists($uid)){
 			$this->_error = "Opgegeven lid bestaat niet.";
 			return false;
 		}
 		# kijk of deze gebruiker een abo voor deze maaltijd heeft
 		$heeftAbo="
-			SELECT id
-			FROM maaltijdabo
-			WHERE
-				uid = {$uid}
-			AND
-				abosoort = {$this->_maaltijd['abosoort']}
+			SELECT uid FROM maaltijdabo
+			WHERE uid='{$uid}' AND abosoort='{$this->_maaltijd['abosoort']}'
 			LIMIT 1;";
 		$result =$this->_db->select($heeftAbo);
 		return (($result !== false) and $this->_db->numRows($result) > 0);
@@ -268,7 +265,7 @@ class MaalTijd {
 	function getStatus($uid=null) {
 		if($uid===null){ $uid=$this->_lid->getUid(); }
 		# kijk of deze gebruiker al was aan- of afgemeld
-		$result = $this->_db->select("SELECT status FROM maaltijdaanmelding WHERE maalid='{$this->_maalid}' AND uid = '{$uid}'");
+		$result = $this->_db->select("SELECT status FROM maaltijdaanmelding WHERE maalid={$this->_maalid} AND uid='{$uid}'");
 		if (($result !== false) and $this->_db->numRows($result) > 0) {
 			$record = $this->_db->next($result);
 			if ($record['status'] == 'AAN' or $record['status'] == 'AF'){

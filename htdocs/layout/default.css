@@ -407,7 +407,7 @@ table.query_table th{
 /* maaltijd-ubb-tag */
 .ubbMaaltijd{
 	float: left;
-	width: 300px;
+	width: 305px;
 	height: 53px;
 	border: 1px solid gray;
 	background-color: #ddd;
@@ -417,7 +417,7 @@ table.query_table th{
 .ubbMaaltijdFloat{
 	float: right; 
 	background-color: #ccc; 
-	width: 60px; 
+	width: 65px; 
 	padding: 4px; margin-left: 10px;
 }
 /* plaatjes in tekst */

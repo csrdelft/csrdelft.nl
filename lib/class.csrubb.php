@@ -223,10 +223,21 @@ src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
 		$html='<div class="ubbMaaltijd" id="maaltijd'.$maaltijd->getID().'">';
 		$html.='<div class="ubbMaaltijdFloat">';
 		$html.='U komt:  <br />';
-		switch($maaltijd->getStatus()){
+
+		$status=$maaltijd->getStatus();
+		echo $status.print_r($maaltijd->heeftAbo(), true);
+		pr($maaltijd);
+		switch($status){
 			case 'AAN':
 				$html.='<em>eten</em>';
 			break;
+			case 'AUTO':
+				if($maaltijd->heeftAbo()){
+					$html.='<em>eten (abo)</em>';
+					$status='AAN';
+					break;
+				}
+
 			case 'AF':
 			default:
 				$html.='<em>niet eten</em>';
@@ -235,9 +246,8 @@ src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
 		if($maaltijd->isGesloten()){
 			$html.='Gesloten';
 		}else{
-			switch($maaltijd->getStatus()){
+			switch($status){
 				case 'AAN':
-				//case 'AUTO':
 					$html.='<a href="/actueel/maaltijden/index.php?forum&amp;a=af&amp;m='.$maaltijd->getId().'"><strong>af</strong>melden</a>';
 				break;
 				case 'AF':
