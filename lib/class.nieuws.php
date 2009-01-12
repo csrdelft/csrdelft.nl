@@ -18,7 +18,7 @@ class Nieuws {
 	private $topBerichtenSpeling;
 	private $standaardRank;
 
-	function Nieuws(){
+	function __construct(){
 		$this->_lid=Lid::instance();
 		$this->_db=MySql::instance();
 	}
@@ -240,8 +240,7 @@ class Nieuws {
 	 * De belangrijkste mededeling is het top 1-bericht en als deze
 	 * niet bestaat, is het de nieuwste.
 	 */
-	public function getBelangrijksteMededelingId()
-	{
+	public function getBelangrijksteMededelingId(){
 		$sTop1Query="
 			SELECT
 				id
@@ -275,9 +274,7 @@ class Nieuws {
 			if($this->_db->numRows($rNieuwste)==1){ // Indien er gewoon één resultaat is.
 				$aNieuwste=$this->_db->next($rNieuwste);
 				return (int)$aNieuwste['id'];
-			}
-			else
-			{
+			}else{
 				// Indien er helemaal geen mededeling te vinden is, geven we 0 terug.
 				return 0;
 			}

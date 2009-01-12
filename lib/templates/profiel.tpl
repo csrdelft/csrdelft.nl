@@ -124,13 +124,13 @@
 		<div class="left">Maaltijden</div>	
 		<div class="gegevens">
 			{if $profhtml.eetwens!=''}
-				<div class="label">Eetwens</div>
+				<div class="label">Eetwens:</div>
 				<div class="data">{$profhtml.eetwens}</div>
 				<br />
 			{/if}
 			{if $profhtml.abos|@count > 0}
 				<div class="label">
-					Abo's
+					Abo's:
 					{if $lid->getUid()==$profhtml.uid}
 						<br /><a href="/actueel/maaltijden/voorkeuren.php" class="knop" title="Abo's bewerken"><img src="{$csr_pics}forum/bewerken.png" title="Bewerk groep" /></a>
 					{/if}
@@ -143,7 +143,7 @@
 				<br />
 			{/if}
 			{if $lid->getUid()==$profhtml.uid OR $lid->hasPermission('P_MAAL_MOD')}
-				<div class="label">Recent</div>
+				<div class="label">Recent:</div>
 				<ul class="nobullets data">
 					{foreach from=$profhtml.recenteMaaltijden item=maaltijd}
 						<li><em>{$maaltijd.datum|date_format:"%a %d-%m"}</em> - {$maaltijd.tekst}</li>

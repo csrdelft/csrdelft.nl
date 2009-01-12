@@ -58,12 +58,7 @@ if(!(isset($_POST['submit']) AND $_POST['submit']=='voorbeeld')){
 					header('location: '.CSR_ROOT.'communicatie/forum/categorie/'.$forum->getCatID());
 					$_SESSION['melding']='Uw bericht is verwerkt, het zal binnenkort goedgekeurd worden.';
 				}else{
-					//mw: added redirect in case of vb, merk op dat er in het geval van een fout dus niet geredirect wordt (fix?)
-					if($forum->getSoort()=="T_VBANK"){
-						header('location: '.CSR_ROOT.'vb/index.php?actie=sourcebydiscussion&id='.$forum->getID());
-					}else{
-						header('location: '.CSR_ROOT.'communicatie/forum/onderwerp/'.$forum->getID().'#laatste');
-					}
+					header('location: '.CSR_ROOT.'communicatie/forum/onderwerp/'.$forum->getID().'#laatste');
 				}
 			}else{
 				header('location: '.CSR_ROOT.'communicatie/forum/onderwerp/'.$forum->getID().'#laatste');

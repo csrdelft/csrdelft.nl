@@ -59,7 +59,13 @@ class Document{
 					eigenaar='".$this->getEigenaar()."'
 				WHERE ID=".$this->getID().";";
 		}
-		return $db->query($query);
+		if($db->query($query)){
+			if($this->getID()==0){
+				$this->ID=$db->insert_id();
+			}
+			return true;
+		}
+		return false;
 	}
 	public function getID(){		return $this->ID; }
 	public function getNaam(){		return $this->naam; }
@@ -69,7 +75,10 @@ class Document{
 	public function getMimetype(){	return $this->mimetype;	}
 	public function getToegevoegd(){return $this->toegevoegd; }
 	public function getEigenaar(){	return $this->eigenaar;	}
-
+	
+	public function setNaam($naam){
+		$this->naam=$naam;
+	}
 	public function isEigenaar($uid=null){
 		if($uid==null){ Lid::instance()->getUid(); }
 		return $uid==$this->getEigenaar();

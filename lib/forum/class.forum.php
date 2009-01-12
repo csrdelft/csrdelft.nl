@@ -14,13 +14,13 @@ class Forum {
 
 	//het aantal topics per pagina in het overzicht per categorie
 	//de standaard, het kan wellicht nog een keer in het profiel gerost worden.
-	private $_topicsPerPagina=15;
+	private static $_topicsPerPagina=15;
 
 	//het aantal posts voor een rss feed
-	private $_postsPerRss=15;
+	private static $_postsPerRss=15;
 
 	//aantal zoekresultaten
-	private $_aantalZoekResultaten=40;
+	private static $_aantalZoekResultaten=40;
 
 	//constructor.
 	public function __construct(){
@@ -126,7 +126,7 @@ class Forum {
 	//laatste posts voor heel het forum.
 	function getPostsVoorRss($iAantal=false, $bDistinct=true){
 		if($iAantal===false){
-			$iAantal=$this->_postsPerRss;
+			$iAantal=Forum::$_postsPerRss;
 		}
 		$sDistinctClause=' AND 1';
 		if($bDistinct){
@@ -200,7 +200,8 @@ class Forum {
 		}
 	}
 	// topic id voor post
-	function getTopicVoorPostID($iPostID){
+	public static function getTopicVoorPostID($iPostID){
+		$db=MySql::instance();
 		$iPostID=(int)$iPostID;
 		$sPostQuery="
 			SELECT
@@ -210,9 +211,9 @@ class Forum {
 			WHERE
 				id=".$iPostID."
 			LIMIT 1;";
-		$rPost=$this->_db->query($sPostQuery);
-		if($this->_db->numRows($rPost)==1){
-			$aPost=$this->_db->next($rPost);
+		$rPost=$db->query($sPostQuery);
+		if($db->numRows($rPost)==1){
+			$aPost=$db->next($rPost);
 			return $aPost['tid'];
 		}else{
 			return false;
@@ -223,7 +224,8 @@ class Forum {
 *
 ***************************************************************************************************/
 	//bestaat een categorie?
-	function catExistsVoorUser($iCatID){
+	public static function catExistsVoorUser($iCatID){
+		$db=MySql::instance();
 		$iCatID=(int)$iCatID;
 		$sCatQuery="
 			SELECT
@@ -233,10 +235,10 @@ class Forum {
 			WHERE
 				id=".$iCatID."
 			LIMIT 1;";
-		$rCat=$this->_db->query($sCatQuery);
-		if($this->_db->numRows($rCat)==1){
-			$aCat=$this->_db->next($rCat);
-			return $this->_lid->hasPermission($aCat['rechten_read']);
+		$rCat=$db->query($sCatQuery);
+		if($db->numRows($rCat)==1){
+			$aCat=$db->next($rCat);
+			return Lid::instance()->hasPermission($aCat['rechten_read']);
 		}else{
 			return false;
 		}
@@ -405,9 +407,7 @@ class Forum {
 		//sZoekQuery controleren:
 		$sZoekQuery=$this->_db->escape(trim($sZoekQuery));
 
-		//zoo, uberdeuberdeuber query om een topic op te halen. Namen worden
-		//ook opgehaald in deze query, die worden door forumcontent weer
-		//doorgegeven aan getForumNaam();
+		//zoo, uberdeuberdeuber query om een topic op te halen.
 		$sSearchQuery="
 			SELECT
 				topic.id AS tid,
@@ -439,7 +439,7 @@ class Forum {
 			ORDER BY
 				post.datum DESC
 			LIMIT
-				".$this->_aantalZoekResultaten.";";
+				".Forum::$_aantalZoekResultaten.";";
 			$rSearchResult=$this->_db->query($sSearchQuery);
 			return $this->_db->result2array($rSearchResult);
 		}else{
@@ -450,10 +450,10 @@ class Forum {
 		return $this->_lid->getNaamLink($uid, 'user', $aLink, $aNaam, $bHtmlentities);
 	}
 
-	function getTopicsPerPagina(){ return $this->_topicsPerPagina; }
-	function isIngelogged(){ return $this->_lid->hasPermission('P_LOGGED_IN'); }
-	function isModerator(){ return $this->_lid->hasPermission('P_FORUM_MOD'); }
-	function getLaatstBekeken(){ return $this->_lid->getForumLaatstBekeken(); }
-	function updateLaatstBekeken(){ $this->_lid->updateForumLaatstBekeken(); }
+	function getTopicsPerPagina(){ return Forum::$_topicsPerPagina; }
+	function isIngelogged(){ return Lid::instance()->hasPermission('P_LOGGED_IN'); }
+	function isModerator(){ return Lid::instance()->hasPermission('P_FORUM_MOD'); }
+	function getLaatstBekeken(){ return Lid::instance()->getForumLaatstBekeken(); }
+	function updateLaatstBekeken(){ Lid::instance()->updateForumLaatstBekeken(); }
 }//einde classe Forum
 ?>

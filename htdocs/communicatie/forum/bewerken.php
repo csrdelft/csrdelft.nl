@@ -33,13 +33,7 @@ if(isset($_GET['post'])){
 				$reden='';
 			}
 			if($forum->editPost($iPostID, $bericht, $reden)){
-				//mw: added redirect in case of vb, merk op dat er in het geval van een fout dus niet geredirect wordt (fix?)
-				if($forum->getSoort()=="T_VBANK"){
-					header('location: '.CSR_ROOT.'vb/index.php?actie=sourcebydiscussion&id='.$forum->getID());
-				}else{
-					$iTopicID=$forum->getTopicVoorPostID($iPostID);
-					header('location: '.CSR_ROOT.'forum/onderwerp/'.$iTopicID.'#post'.$iPostID);
-				}
+				header('location: '.CSR_ROOT.'forum/onderwerp/'.$forum->getID().'#post'.$iPostID);
 			}
 		}
 	}
