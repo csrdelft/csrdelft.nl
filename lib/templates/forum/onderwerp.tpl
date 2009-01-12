@@ -1,3 +1,4 @@
+{knopConfig prefix=/communicatie/forum/}
 <form id="forum_zoeken" action="/communicatie/forum/zoeken.php" method="post"><fieldset><input type="text" name="zoeken" value="zoeken in forum" onfocus="this.value='';" /></fieldset></form>
 
 {capture name='navlinks'}
@@ -16,15 +17,20 @@
 	<fieldset id="modereren">
 		<legend>Modereren</legend>
 		<div style="float: left; width: 30%;">
-			<a href="/communicatie/forum/verwijder-onderwerp/{$forum->getID()}" onclick="return confirm(\'Weet u zeker dat u dit topic wilt verwijderen?\')" class="knop"><img src="{$csr_pics}forum/verwijderen.png" alt="verwijderen" />verwijderen</a> 
+			{knop url="verwijder-onderwer/`$forum->getID()`" confirm="Weet u zeker dat u dit topic wilt verwijderen?" type=verwijderen text=Verwijderen class=knop} 
 			<br /><br />
-			<a href="/communicatie/forum/openheid/{$forum->getID()}" class="knop">
-				<img src="{$csr_pics}forum/slotje.png" alt="Slotje" /> 
-				{if $forum->isOpen()}sluiten (geen reactie mogelijk){else}weer openen (reactie mogelijk){/if}
+			{if $forum->isOpen()}
+				{knop url="openheid/`$forum->getID()`" class=knop type=slotje text="sluiten (geen reactie mogelijk)"}
+			{else}
+				{knop url="openheid/`$forum->getID()`" class=knop type=slotje text="openen (reactie mogelijk)"}
+			{/if}
 			</a><br /><br />
-			<a href="/communicatie/forum/plakkerigheid/{$forum->getID()}" class="knop">
-				<img src="{$csr_pics}forum/plakkerig.gif" alt="plakkerig" />		
-				{if $forum->isPlakkerig()}verwijder plakkerigheid{else}maak plakkerig{/if}
+			{if $forum->isPlakkerig()}
+				{knop url="plakkerigheid/`$forum->getID()`" class=knop type=plakkerig text="verwijder plakkerigheid"}
+			{else}
+				{knop url="plakkerigheid/`$forum->getID()`" class=knop type=plakkerig text="maak plakkerig"}
+			{/if}
+				
 			</a>
 		</div>
 		<div style="float: right; width: 60%;">
@@ -38,9 +44,7 @@
 						</optgroup>
 						<optgroup label="------">
 							{else}
-								{if $cat.id!=$forum->getCatID()}
-									<option value="{$cat.id}">{$cat.titel|escape:'html'}</option>
-								{/if}
+								{if $cat.id!=$forum->getCatID()}<option value="{$cat.id}">{$cat.titel|escape:'html'}</option>{/if}
 							{/if}
 						{/foreach}
 					</select> 
@@ -74,9 +78,7 @@
 				{* knopjes bij elke post *}
 				{* citeerknop enkel als het onderwerp open is en als men mag posten, of als men mod is. *}
 				{if $forum->magCiteren()}
-					 <a href="/communicatie/forum/reactie/{$bericht.postID}#laatste">
-					 	<img src="{$csr_pics}forum/citeren.png" title="Citeer bericht" alt="Citeer bericht" style="border: 0px;" />
-					 </a>
+					 {knop url="reactie/`$bericht.postID`#laatste" type=citeren}
 				{/if}
 				{* bewerken als bericht van gebruiker is, of als men mod is. *}
 				{if $forum->magBewerken($bericht.postID)}
@@ -86,14 +88,13 @@
 				{/if}
 				{* verwijderlinkje, niet als er maar een bericht in het onderwerp is. *}
 				{if $forum->isModerator()}
-					<a href="/communicatie/forum/verwijder-bericht/{$bericht.postID}" onclick="return confirm('Weet u zeker dat u deze post wilt verwijderen?')">
-						<img src="{$csr_pics}forum/verwijderen.png" title="Verwijder bericht" alt="Verwijder bericht" style="border: 0px;" />
-					</a>
+					{knop url="verwijder-bericht/`$bericht.postID`" type=verwijderen confirm='Weet u zeker dat u dit bericht wilt verwijderen?'}
 				{/if}
 				
 				{if $forum->isModerator() AND $bericht.zichtbaar=='wacht_goedkeuring'}
-					<br /><a href="/communicatie/forum/keur-goed/{$bericht.postID}" onclick="return confirm(\'Weet u zeker dat u dit bericht wilt goedkeuren?\')">bericht goedkeuren</a>
-					<br /><a href="/tools/stats.php?ip={$bericht.ip}">ip-log</a>
+					<br />
+					{knop url="keur-goed/`$bericht.postID`" confirm='Weet u zeker dat u dit bericht wilt goedkeuren?' text='bericht goedkeuren'}
+					{knop ignorePrefix=true url="/tools/stats.php?ip=`$bericht.ip`" text=ip-log}
 				{/if}
 			</td>
 			<td class="bericht{cycle values="0,1"}" id="post{$bericht.postID}"> 

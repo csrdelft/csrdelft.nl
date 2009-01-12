@@ -50,7 +50,6 @@ htdocs/communicatie/documenten/toevoegen.php -text
 htdocs/communicatie/forum/.htaccess -text
 htdocs/communicatie/forum/bewerken.js.php -text
 htdocs/communicatie/forum/bewerken.php -text
-htdocs/communicatie/forum/citeren.php -text
 htdocs/communicatie/forum/goedkeuren.php -text
 htdocs/communicatie/forum/index.php -text
 htdocs/communicatie/forum/onderwerp.php -text
