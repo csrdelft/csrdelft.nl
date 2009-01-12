@@ -17,9 +17,21 @@ require_once('forum/class.forumonderwerpcontent.php');
 if($lid->hasPermission('P_FORUM_READ')) {
 	$forum = new ForumOnderwerp();
 	$forum->updateLaatstBekeken();
-	//onderwerp laden
-	$forum->load((int)$_GET['topic']);
+
+	if(isset($_GET['topic'])){
+		$forum->load((int)$_GET['topic']);
+	}elseif(isset($_GET['post'])){
+		$forum->loadByPostID((int)$_GET['post']);
+	}else{
+		header('location: '.CSR_ROOT.'communicatie/forum/');
+		$_SESSION['melding']='Gen onderwerp- of bericht-id opgegeven.';
+		exit;
+	}
+
 	$midden = new ForumOnderwerpContent($forum);
+	if(isset($_GET['post'])){
+		$midden->citeer((int)$_GET['post']);
+	}
 } else {
 	# geen rechten
 	require_once 'class.paginacontent.php';

@@ -8,11 +8,12 @@ RewriteRule ^categorie/([0-9]+)$ index.php?forum=$1
 RewriteRule ^categorie/laatste/?$ index.php?forum=0
 RewriteRule ^onderwerp/([0-9]+)$ onderwerp.php?topic=$1
 RewriteRule ^onderwerp/([0-9]+)/(.+)$ onderwerp.php?topic=$1&highlight=$2
+RewriteRule ^reactie/([0-9]+)$ onderwerp.php?post=$1
 
 ##toevoegen
 RewriteRule ^onderwerp-toevoegen/([0-9]+)$ toevoegen.php?forum=$1
 RewriteRule ^toevoegen/([0-9]+)$ toevoegen.php?topic=$1
-RewriteRule ^reactie/([0-9]+)$ citeren.php?post=$1
+
 
 ##bewerken
 RewriteRule ^bewerken/formulier/([0-9]+)/?$ bewerken.js.php?post=$1

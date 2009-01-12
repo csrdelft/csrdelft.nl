@@ -90,7 +90,7 @@ class Forum {
 				topic.plakkerig,
 				topic.lastpost DESC
 			LIMIT
-				".($iPagina*$this->_topicsPerPagina).", ".$this->_topicsPerPagina.";";
+				".($iPagina*$this->getTopicsPerPagina()).", ".$this->getTopicsPerPagina().";";
 		$rTopicsResult=$this->_db->query($sTopicsQuery);
 		return $this->_db->result2array($rTopicsResult);
 	}

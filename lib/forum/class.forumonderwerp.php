@@ -226,7 +226,7 @@ class ForumOnderwerp extends Forum {
 
 	//Een post toevoegen aan het huidige onderwerp.
 	//Indien succesvol: nieuwe post-id komt terug. Anders false.
-	function addPost($tekst){
+	public function addPost($tekst){
 		$tekst=$this->_db->escape(trim($tekst));
 		if($this->iTopicID==0){ die('ForumOnderwerp::addPost() geen onderwerp ingeladen'); }
 		//het ip-adres bepalen van de post.
@@ -325,7 +325,7 @@ class ForumOnderwerp extends Forum {
 				UPDATE
 					forum_post
 				SET
-					tekst='".$sBericht."',
+					tekst='".$this->_db->escape($sBericht)."',
 					bewerkDatum='".getDateTime()."',
 					bewerkt=CONCAT(bewerkt, '".$bewerkt."')
 				WHERE

@@ -24,11 +24,11 @@ if(isset($_GET['post'])){
 	//kijken of gebruiker dit bericht mag bewerken
 	if($forum->magBewerken($iPostID)){
 		if($_SERVER['REQUEST_METHOD']=='POST'){
-			$bericht=$db->escape(trim($_POST['bericht']));
+			$bericht=trim($_POST['bericht']);
 
 			//is er een bewerkreden opgegeven?
 			if(isset($_POST['reden']) AND trim($_POST['reden'])!=''){
-				$reden=$db->escape(trim($_POST['reden']));
+				$reden=strip_tags(trim($_POST['reden']));
 			}else{
 				$reden='';
 			}
