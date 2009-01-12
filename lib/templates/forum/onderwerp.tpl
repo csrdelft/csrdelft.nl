@@ -17,7 +17,7 @@
 	<fieldset id="modereren">
 		<legend>Modereren</legend>
 		<div style="float: left; width: 30%;">
-			{knop url="verwijder-onderwer/`$forum->getID()`" confirm="Weet u zeker dat u dit topic wilt verwijderen?" type=verwijderen text=Verwijderen class=knop} 
+			{knop url="verwijder-onderwerp/`$forum->getID()`" confirm="Weet u zeker dat u dit onderwerp wilt verwijderen?" type=verwijderen text=Verwijderen class=knop} 
 			<br /><br />
 			{if $forum->isOpen()}
 				{knop url="openheid/`$forum->getID()`" class=knop type=slotje text="sluiten (geen reactie mogelijk)"}
