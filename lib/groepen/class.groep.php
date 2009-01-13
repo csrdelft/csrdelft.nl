@@ -330,13 +330,14 @@ class Groep{
 			break;
 		}
 		if(!$this->isLid($uid)){
+			$db=MySql::instance();
 			$sCieQuery="
 				INSERT INTO groeplid
 					( groepid, uid, op, functie, prioriteit )
 				VALUES (
 					".$this->getId().", '".$uid."', '".$op."', '".$db->escape($functie)."', ".$prioriteit."
 				)";
-			return MySql::instance()->query($sCieQuery);
+			return $db->query($sCieQuery);
 		}else{
 			return false;
 		}
