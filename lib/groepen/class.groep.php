@@ -149,7 +149,7 @@ class Groep{
 		$db=MySql::instance();
 		$qDeleteLeden="DELETE FROM groeplid WHERE groepid=".$this->getId().";";
 		$qDeleteGroep="DELETE FROM groep WHERE id=".$this->getId()." LIMIT 1;";
-
+		$this->leden=$this->groep=null;
 		return $db->query($qDeleteLeden) AND $db->query($qDeleteGroep);
 	}
 
@@ -253,17 +253,22 @@ class Groep{
 		return false;
 	}
 	/*
-	 * Kijk of de groep aanmeldbaar is, de gebruiker mag aanmelden, de gebruiker nog
-	 * niet aangemald is en of de limiet nog niet overschreden is.
+	 * Gebruiker mag aanmelden als:
+	 *  - de groep aanmeldbaar is
+	 *  - de gebruiker leesrechten voor leden heeft
+	 *  - de gebruiker nog niet aangemald is
+	 *  - de aanmeldlimiet van de groep nog niet overschreden is.
+	 *  - de einddatum van de groep groter is dan de huidige datum
 	 */
 	public function magAanmelden(){
 		if($this->isAanmeldbaar()){
-			$lid=Lid::instance();
-			if($lid->hasPermission('P_LEDEN_READ') AND !$this->isLid($lid->getUid())){
-				if($this->getLimiet()==0){
-					return true;
-				}else{
-					return !$this->isVol();
+			if(Lid::instance()->hasPermission('P_LEDEN_READ') AND !$this->isLid()){
+				if($this->getEinde()=='0000-00-00' OR $this->getEinde()>date('Y-m-d')){
+					if($this->getLimiet()==0){
+						return true;
+					}else{
+						return !$this->isVol();
+					}
 				}
 			}
 		}
@@ -271,9 +276,7 @@ class Groep{
 	}
 
 	public function verwijderLid($uid){
-		$lid=Lid::instance();
-		if($lid->isValidUid($uid)){
-			$db=MySql::instance();
+		if(Lid::instance()->isValidUid($uid) AND $this->isLid($uid)){
 			$qVerwijderen="
 				DELETE FROM
 					groeplid
@@ -282,21 +285,19 @@ class Groep{
 				AND
 					uid='".$uid."'
 				LIMIT 1;";
-			return $db->query($qVerwijderen);
+			return MySql::instance()->query($qVerwijderen);
 		}else{
 			return false;
 		}
 	}
 	public function meldAan($functie){
 		if($this->magAanmelden()){
-			$lid=Lid::instance();
-			return $this->addLid($lid->getUid(), $functie);
+			return $this->addLid(Lid::instance()->getUid(), $functie);
 		}
 		return false;
 	}
 
 	public function addLid($uid, $functie=''){
-		$db=MySql::instance();
 		$op=0;
 		$functie=str_replace(array("\n","\r"), '', trim($functie));
 		switch(strtolower($functie)){
@@ -335,7 +336,7 @@ class Groep{
 				VALUES (
 					".$this->getId().", '".$uid."', '".$op."', '".$db->escape($functie)."', ".$prioriteit."
 				)";
-			return $db->query($sCieQuery);
+			return MySql::instance()->query($sCieQuery);
 		}else{
 			return false;
 		}

@@ -20,15 +20,27 @@ class Document{
 		$this->toegevoegd=getDateTime();
 	}
 
-	public function load($docID){
-		$this->ID=(int)$docID;
-		if($this->getID()==0){
-			$this->setToegevoegd(getDateTime());
+	public function load($init){
+		if(is_array($init)){
+			//array direct laden in properties.
+			$this->ID=$init['ID'];
+			$this->naam=$init['naam'];
+			$this->catID=$init['catID'];
+			$this->bestandsnaam=$init['bestandsnaam'];
+			$this->size=$init['size'];
+			$this->mimetype=$init['mimetype'];
+			$this->toegevoegd=$init['toegevoegd'];
+			$this->eigenaar=$init['eigenaar'];
 		}else{
-			$db=MySql::instance();
-			$query="
-				SELECT ID, naam, catID, bestandsnaam, size, mimetype, toegevoegd, eigenaar
-				FROM document WHERE ID=".$this->getID().";";
+			$this->ID=(int)$init;
+			if($this->getID()==0){
+				$this->setToegevoegd(getDateTime());
+			}else{
+				$db=MySql::instance();
+				$query="
+					SELECT ID, naam, catID, bestandsnaam, size, mimetype, toegevoegd, eigenaar
+					FROM document WHERE ID=".$this->getID().";";
+			}
 		}
 
 	}
@@ -75,7 +87,7 @@ class Document{
 	public function getMimetype(){	return $this->mimetype;	}
 	public function getToegevoegd(){return $this->toegevoegd; }
 	public function getEigenaar(){	return $this->eigenaar;	}
-	
+
 	public function setNaam($naam){
 		$this->naam=$naam;
 	}
