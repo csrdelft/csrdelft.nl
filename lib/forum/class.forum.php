@@ -22,6 +22,8 @@ class Forum {
 	//aantal zoekresultaten
 	private static $_aantalZoekResultaten=40;
 
+	protected $error;
+
 	//constructor.
 	public function __construct(){
 		$this->_lid=Lid::instance();
@@ -95,23 +97,26 @@ class Forum {
 		return $this->_db->result2array($rTopicsResult);
 	}
 
-	private function getCategorieClause(){
+	private function getCategorieClause($token=null){
 		//uitmaken welke categorieën er in de rss feed komen. Voor feut (bot in #csrdelft)
 		//is er een uitzondering op de ingeloggedheid.
 
 		//extern, zandbak, vraag en aanbod en kamers worden altijd weergegeven.
 		$cats=array(2,4,11,12);
 
-		if($this->_lid->hasPermission('P_LEDEN_READ') OR isFeut()){
+		$perm='P_LEDEN_READ';
+		if($this->_lid->hasPermission($perm) OR isFeut() OR $this->_lid->validateWithToken($token, $perm)){
 			//C.S.R.-zaken, webstek terugkoppeling, geloofszaken, nieuws&actualiteit, electronica en techniek,
 			//groeperingen, kringen& werkgroepen, bidpunten, vacatures
 			$cats=array_merge($cats, array(1, 3, 10, 9, 13, 17, 18, 20, 21));
 		}
-		if($this->_lid->hasPermission('P_OUDLEDEN_READ') OR isFeut()){
+		$perm='P_OUDLEDEN_READ';
+		if($this->_lid->hasPermission($perm) OR isFeut() OR $this->_lid->validateWithToken($token, $perm)){
 			//oudledenforum
 			$cats[]=8;
 		}
-		if($this->_lid->hasPermission('P_FORUM_MOD')){
+		$perm='P_FORUM_MOD';
+		if($this->_lid->hasPermission($perm) OR $this->_lid->validateWithToken($token, $perm)){
 			//pubcie-forum enkel voor forummods.
 			$cats[]=6;
 		}
@@ -124,7 +129,7 @@ class Forum {
 	}
 
 	//laatste posts voor heel het forum.
-	function getPostsVoorRss($iAantal=false, $bDistinct=true){
+	function getPostsVoorRss($iAantal=false, $bDistinct=true, $token=null){
 		if($iAantal===false){
 			$iAantal=Forum::$_postsPerRss;
 		}
@@ -136,7 +141,7 @@ class Forum {
 		//zoo, uberdeuberdeuber query om een topic op te halen. Namen worden
 		//ook opgehaald in deze query, die worden door forumcontent weer
 		//doorgegeven aan getForumNaam();
-		$sPostsQuery="
+		$query="
 			SELECT
 				topic.id AS tid,
 				topic.titel AS titel,
@@ -162,14 +167,13 @@ class Forum {
 			WHERE
 				topic.zichtbaar='zichtbaar' AND
 				post.zichtbaar='zichtbaar' AND
-				( ".$this->getCategorieClause()." )
+				( ".Forum::getCategorieClause($token)." )
 				".$sDistinctClause."
 			ORDER BY
 				post.datum DESC
 			LIMIT
 				".$iAantal.";";
-		$rPostsResult=$this->_db->query($sPostsQuery);
-		return $this->_db->result2array($rPostsResult);
+		return $this->_db->query2array($query);
 	}
 /***************************************************************************************************
 *	Dingen opslaan, bewerken en verwijderen: nieuwe posts en topics, posts bewerken
@@ -401,11 +405,20 @@ class Forum {
 *	Zoeken.
 *
 ***************************************************************************************************/
-	function searchPosts($sZoekQuery){
+	function searchPosts($sZoekQuery, $categorie=null){
 		if(preg_match('/^[a-zA-Z0-9 \-\+\'\"\.]*$/', $sZoekQuery)){
 
 		//sZoekQuery controleren:
 		$sZoekQuery=$this->_db->escape(trim($sZoekQuery));
+
+		$singleCat='1';
+		if($categorie!==null AND $categorie!=0){
+			foreach($this->getCategories(true) as $cat){
+				if($cat['id']==$categorie){
+					$singleCat='topic.categorie='.(int)$categorie;
+				}
+			}
+		}
 
 		//zoo, uberdeuberdeuber query om een topic op te halen.
 		$sSearchQuery="
@@ -432,7 +445,7 @@ class Forum {
 				forum_cat cat ON( topic.categorie=cat.id )
 			WHERE
 				topic.zichtbaar='zichtbaar' AND post.zichtbaar='zichtbaar' AND
-				( ".$this->getCategorieClause()." ) AND
+				( ".$this->getCategorieClause()." ) AND (".$singleCat.") AND
 				MATCH(post.tekst, topic.titel )AGAINST( '".$sZoekQuery."' IN BOOLEAN MODE )
 			GROUP BY
 				topic.id
@@ -450,10 +463,12 @@ class Forum {
 		return $this->_lid->getNaamLink($uid, 'user', $aLink, $aNaam, $bHtmlentities);
 	}
 
-	function getTopicsPerPagina(){ return Forum::$_topicsPerPagina; }
-	function isIngelogged(){ return Lid::instance()->hasPermission('P_LOGGED_IN'); }
-	function isModerator(){ return Lid::instance()->hasPermission('P_FORUM_MOD'); }
-	function getLaatstBekeken(){ return Lid::instance()->getForumLaatstBekeken(); }
-	function updateLaatstBekeken(){ Lid::instance()->updateForumLaatstBekeken(); }
+	public function getTopicsPerPagina(){ return Forum::$_topicsPerPagina; }
+	public function isIngelogged(){ return Lid::instance()->hasPermission('P_LOGGED_IN'); }
+	public function isModerator(){ return Lid::instance()->hasPermission('P_FORUM_MOD'); }
+	public function getLaatstBekeken(){ return Lid::instance()->getForumLaatstBekeken(); }
+	public function updateLaatstBekeken(){ Lid::instance()->updateForumLaatstBekeken(); }
+
+	public function getError(){ return $this->error; }
 }//einde classe Forum
 ?>

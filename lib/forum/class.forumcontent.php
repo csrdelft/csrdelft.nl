@@ -14,7 +14,7 @@ class ForumContent extends SimpleHTML {
 
 	var $_topicsPerPagina;
 
-	function ForumContent($bForum, $actie){
+	function __construct($bForum, $actie){
 		$this->_forum=$bForum;
 		$this->_actie=$actie;
 		$this->_topicsPerPagina=$bForum->getTopicsPerPagina();
@@ -125,7 +125,11 @@ class ForumContent extends SimpleHTML {
 *
 ***********************************************************************************************************/
 	function rssFeed(){
-		$aPosts=$this->_forum->getPostsVoorRss(false, false);
+		$token='';
+		if(isset($_GET['token']) AND preg_match('/[a-z0-9]{15}/', $_GET['token'])){
+			$token=$_GET['token'];
+		}
+		$aPosts=$this->_forum->getPostsVoorRss(false, false, $token);
 
 		$rss=new Smarty_csr();
 		$rss->assign('aPosts', $aPosts);
@@ -164,12 +168,13 @@ class ForumContent extends SimpleHTML {
 		$sZoekQuery='';
 		if(isset($_POST['zoeken'])){ $sZoekQuery=trim($_POST['zoeken']); }elseif(isset($_GET['zoeken'])){ $sZoekQuery=trim($_GET['zoeken']);}
 
-		echo '<h1>Zoeken in het forum</h1>Hier kunt u zoeken in het forum. Zoeken kan met boleaanse zoekparameters, uitleg is
-			<a href="http://dev.mysql.com/doc/refman/5.0/en/fulltext-boolean.html">te vinden op de pagina daarover in de mysql handleiding</a>.';
+		echo '<h1>Zoeken in het forum</h1>Hier kunt u zoeken in het forum.
+			<a href="http://dev.mysql.com/doc/refman/5.0/en/fulltext-boolean.html">(uitleg booleaans zoeken MySQL)</a>.<br />';
 		//altijd het zoekformulier weergeven.
-		$this->zoekFormulier($sZoekQuery);
+
+		$this->zoekFormulier($sZoekQuery, (int)$_POST['categorie']);
 		if($sZoekQuery!=''){
-			$aZoekResultaten=$this->_forum->searchPosts($sZoekQuery);
+			$aZoekResultaten=$this->_forum->searchPosts($sZoekQuery, (int)$_POST['categorie']);
 			if(is_array($aZoekResultaten)){
 				$aZoekOnderdelen=explode(' ', $sZoekQuery);
 				$sEersteTerm=$aZoekOnderdelen[0];
@@ -215,13 +220,30 @@ class ForumContent extends SimpleHTML {
 					echo '</tr>';
 					$row++;
 				}
-			echo '</table>';
-			}else{ echo '<h3>Er is niets gevonden</h3>Probeer het opnieuw. (Zoekresultaten moeten minimaal 4 letters bevatten)'; }
+				echo '</table>';
+			}else{
+				echo '<h3>Er is niets gevonden</h3>';
+				if((int)$_POST['categorie']!=0){
+					echo 'Er is niets gevonden in deze categorie. ';
+				}
+				echo 'Pas uw zoekterm aan. (Zoekresultaten moeten minimaal 4 letters bevatten)';
+
+			}
 		}
 	}
-	function zoekFormulier($sZoekQuery=''){
+	function zoekFormulier($sZoekQuery='', $selectedCat=0){
 		$sZoekQuery=htmlspecialchars($sZoekQuery, ENT_QUOTES, 'UTF-8');
-		echo '<form action="/communicatie/forum/zoeken.php" method="post"><p><input type="text" value="'.$sZoekQuery.'" name="zoeken" />';
+		echo '<form action="/communicatie/forum/zoeken.php" method="post">';
+		echo '<p><input type="text" value="'.$sZoekQuery.'" name="zoeken" />&nbsp;';
+		echo 'in categorie: <select name="categorie"><option value="0">Alle</option>';
+		foreach($this->_forum->getCategories(true) as $cat){
+			if($cat['titel']!='SEPARATOR'){
+				echo '<option value="'.$cat['id'].'"';
+				if($cat['id']==$selectedCat){ echo ' selected="selected" '; }
+				echo '>'.$cat['titel'].'</option>';
+			}
+		}
+		echo '</select>&nbsp;';
 		echo '<input type="submit" value="zoeken" name="verzenden" /></p></form><br />';
 	}
 

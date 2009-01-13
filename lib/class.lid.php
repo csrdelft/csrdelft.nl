@@ -50,11 +50,11 @@ class Lid {
 		# en of dit een gebruiker is die een profiel in de database heeft.
 		# als er een IP-veld in de sessie staat wordt dit vergeleken met het huidige IP
 		# waarvan geconnect wordt (kan v4 of v6 zijn)
-		if (
+		if(
 			!isset($_SESSION['_uid']) or
 			isset($_SESSION['_ip']) and $_SERVER['REMOTE_ADDR'] != $_SESSION['_ip'] or
 			!$this->reloadProfile()
-		) {
+		){
 			# zo nee, dan nobody user er in gooien...
 			# in dit geval is het de eerste keer dat we een pagina opvragen
 			# of er is net uitgelogd waardoor de gegevens zijn leeggegooid
@@ -111,8 +111,11 @@ class Lid {
 		$_SESSION['_uid'] = $profile['uid'];
 
 		# sessie koppelen aan ip?
-		if ($checkip == true) $_SESSION['_ip'] = $_SERVER['REMOTE_ADDR'];
-		else if (isset($_SESSION['_ip'])) unset($_SESSION['_ip']);
+		if($checkip == true){
+			$_SESSION['_ip'] = $_SERVER['REMOTE_ADDR'];
+		}elseif(isset($_SESSION['_ip'])){
+			unset($_SESSION['_ip']);
+		}
 
 		return true;
 	}
@@ -151,7 +154,30 @@ class Lid {
 		$this->login('x999','x999',true);
 	}
 
-	### public ###
+	//met een token is het mogelijk rss feeds te zien te krijgen zonder ingelogged te zijn.
+	//permissies worden overgenomen van het lid dat het token heeft, het token staat in het profiel
+	//van een lid.
+	private $tokenCache;
+	public function validateWithToken($token, $perm){
+		if(!preg_match('/[a-z0-9]{25}/', $token)){
+			return false;
+		}
+		if(!isset($this->tokenCache[$token])){
+			$query="SELECT uid, permissies FROM lid WHERE rssToken='".$token."' LIMIT 1;";
+			$this->tokenCache[$token]=$this->_db->getRow($query);
+		}
+		return $this->hasPermission($perm, $this->tokenCache[$token]['permissies']);
+	}
+	public function getToken($uid=null){
+		if($uid==null){ $uid=$this->getUid(); }
+		$token=substr(md5($uid.getDateTime()), 0, 25);
+		$query="UPDATE lid SET rssToken='".$token."' WHERE uid='".$uid."' LIMIT 1;";
+		if($this->_db->query($query)){
+			return $token;
+		}else{
+			return false;
+		}
+	}
 	//maakt een permissiestring met uid's enzo wat leesbaarder
 	public static function formatPermissionstring($string){
 		$parts=explode(',', $string);
@@ -172,9 +198,11 @@ class Lid {
 		}
 		return implode(', ', $return);
 	}
-	public function hasPermission($descr) {
+	public function hasPermission($descr, $liddescr=null) {
 		# zoek de rechten van de gebruiker op
-		$liddescr = $this->_profile['permissies'];
+		if($liddescr==null){
+			$liddescr=$this->_profile['permissies'];
+		}
 
 		# ga alleen verder als er een geldige permissie wordt teruggegeven
 		if (!array_key_exists($liddescr, $this->_perm_user)) return false;
@@ -626,7 +654,7 @@ class Lid {
 		$result = $this->_db->select("SELECT uid FROM lid WHERE uid = '{$uid}'");
 		return ($result !== false and $this->_db->numRows($result) > 0);
 	}
-	
+
 	/*
 	 * getPasfoto()
 	 *

@@ -40,4 +40,6 @@ RewriteRule ^stem/([0-9]+)$ stemmen.php?topic=$1
 RewriteRule ^maak-stemming/([0-9]+)$ stemming.php?cat=$1
 RewriteRule ^maak-stemming$ stemming.php
 
+RewriteRule ^rss/([0-9a-z]*).xml rss.php?token=$1
 RewriteRule ^rss.xml$ rss.php
+

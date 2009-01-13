@@ -139,10 +139,10 @@ class MySql{
 	//geef array terug met resultaten uit de aangeboden query
 	public function query2array($query){
 		$result=$this->query($query);
-		if(!result){
+		if(!$result){
 			return false;
 		}
-		return $this->result2array($query);
+		return $this->result2array($result);
 	}
 	//selecteer één regel uit de db en geef die als array terug.
 	public function getRow($query){

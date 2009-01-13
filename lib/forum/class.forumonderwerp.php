@@ -57,19 +57,24 @@ class ForumOnderwerp extends Forum {
 				( topic.zichtbaar='zichtbaar' OR topic.zichtbaar='wacht_goedkeuring' )
 			LIMIT 1;";
 		$rTopic=$this->_db->query($sTopicQuery);
+		if($this->_db->numRows($rTopic)!=1){
+			$this->error='Dit onderwerp bestaat niet. (ForumOnderwerp::load())';
+			return false;
+		}
 		$this->aTopicProps=$this->_db->next($rTopic);
 		//Mag de gebruiker het huidige onderwerp bekijken, of is de gebruiker een FORUM_MOD
-		if($this->_lid->hasPermission($this->aTopicProps['rechten_read']) OR $this->isModerator()){
+		if($this->magBekijken()){
 			//onderwerp mag worden gelezen, dan ook de posts ervoor inladen.
 			return $this->loadPosts();
 		}else{
 			//helaas, dit topic mag niet worden gelezen, geen posts laden, meteen
 			//false teruggeven en géén posts inladen.
+			$this->error='Gebruiker mag dit onderwerp niet bekijken. (ForumOnderwerp::load())';
 			return false;
 		}
 	}
 	//posts inladen voor het huidige onderwerp. Kan enkel intern aangeroepen worden.
-	//geeft true terug als er een array uit komt.
+	//geeft true terug als er berichten zijn ingeladen.
 	private function loadPosts(){
 		$zichtBaarClause="post.zichtbaar='zichtbaar'";
 		if($this->isModerator()){
@@ -95,6 +100,9 @@ class ForumOnderwerp extends Forum {
 				post.datum ASC;";
 		$rPostsResult=$this->_db->query($sPostsQuery);
 		$this->aPosts=$this->_db->result2array($rPostsResult);
+		if(!is_array($this->aPosts)){
+			$this->error='Er konden een berichten worden ingeladen. (ForumOnderwerp::loadPosts())';
+		}
 		return is_array($this->aPosts);
 	}
 
@@ -113,7 +121,7 @@ class ForumOnderwerp extends Forum {
 	public function getCatID(){ return $this->aTopicProps['categorieID']; }
 	public function getCatTitel(){ return $this->aTopicProps['categorieTitel']; }
 	public function getRechtenPost(){ return $this->aTopicProps['rechten_post']; }
-	public function magPosten(){ return $this->_lid->hasPermission($this->getRechtenPost()); }
+	public function magPosten(){ return Lid::instance()->hasPermission($this->getRechtenPost()); }
 
 	//topic
 	public function getID(){ return $this->iTopicID; }
@@ -128,10 +136,17 @@ class ForumOnderwerp extends Forum {
 	public function getSoort(){ return $this->aTopicProps['soort']; }
 	public function getSize(){ return count($this->aPosts); }
 
+	public function magBekijken(){
+		if($this->isModerator()){ return true; }
+		if(!isset($this->aTopicProps['rechten_read'])){
+			die('ForumOnderwerp::magZien(): Geen onderwerp ingeladen.');
+		}else{
+			return Lid::instance()->hasPermission($this->aTopicProps['rechten_read']);
+		}
+	}
 	public function magCiteren(){ return $this->magToevoegen(); }
 	public function magToevoegen(){
-		//FORUM_MOD mag alles bewerken
-		if($this->isModerator()){ return true;}
+		if($this->isModerator()){ return true; }
 		return $this->magPosten() AND $this->isOpen();
 	}
 

@@ -1,15 +1,22 @@
 <?php
-# instellingen & rommeltjes
+# C.S.R. Delft | pubcie@csrdelft.nl
+# -------------------------------------------------------------------
+# rss.php
+# -------------------------------------------------------------------
+# Geeft een rss-feed terug.
+# -------------------------------------------------------------------
+
+
 require_once('include.config.php');
 
 header('Content-Type: text/xml; charset=UTF-8');
-if ($lid->hasPermission('P_FORUM_READ')) {
+if($lid->hasPermission('P_FORUM_READ') OR isset($_GET['token'])){
 	require_once('forum/class.forum.php');
-	$forum = new Forum();
+	$forum=new Forum();
 	require_once('forum/class.forumcontent.php');
-	$midden = new ForumContent($forum, 'rss');
+	$rss=new ForumContent($forum, 'rss');
 
-	$midden->view();
+	$rss->view();
 }else{
 	echo 'jammer joh';
 }
