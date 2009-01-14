@@ -9,8 +9,8 @@
 
 
 class SimpleHTML {
-	
-	
+
+
 	private $_sMelding='';
 	//html voor een pagina uitpoepen.
 	function view() {
@@ -19,7 +19,7 @@ class SimpleHTML {
 	function getMelding(){
 		if(isset($_SESSION['melding']) AND trim($_SESSION['melding'])!=''){
 			$sError='<div id="melding">'.trim($_SESSION['melding']).'</div>';
-			//maar één keer tonen, de melding.
+			//maar Ã©Ã©n keer tonen, de melding.
 			unset($_SESSION['melding']);
 			return $sError;
 		}elseif($this->_sMelding!=''){
@@ -31,7 +31,7 @@ class SimpleHTML {
 	function setMelding($sMelding){
 		$this->_sMelding.=trim($sMelding);
 	}
-	function invokeRefresh($sMelding, $url=null){
+	public static function invokeRefresh($sMelding, $url=null){
 		if($sMelding!=''){
 			$_SESSION['melding']=$sMelding;
 		}
@@ -41,7 +41,7 @@ class SimpleHTML {
 		header('location: '.$url);
 		exit;
 	}
-	
+
 	//eventueel titel voor een pagina geven
 	function getTitel($sTitle=false){
 		if($sTitle===false){

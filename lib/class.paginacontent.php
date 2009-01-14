@@ -15,7 +15,7 @@ class PaginaContent extends SimpleHTML{
 
 	private $sActie;
 
-	function PaginaContent($pagina){
+	function __construct($pagina){
 		$this->_pagina=$pagina;
 	}
 
@@ -35,7 +35,7 @@ class PaginaContent extends SimpleHTML{
 			# Lijst pagina's laten zien in de zijkolom
 			case 'zijkolom':
 				$aPaginas=$this->_pagina->getPaginas();
-				
+
 				echo '<h1>Pagina\'s</h1>';
 				foreach($aPaginas as $aPagina){
 					echo '<div class="item">';
@@ -44,7 +44,7 @@ class PaginaContent extends SimpleHTML{
 					echo '</div>';
 				}
 			break;
-			
+
 			# Gewoon de inhoud van een pagina laten zien
 			case 'bekijken':
 				$ubb=new csrUbb();
@@ -57,7 +57,7 @@ class PaginaContent extends SimpleHTML{
 
 				echo $sInhoud;
 			break;
-			
+
 			# De inhoud van een pagina bewerken
 			case 'bewerken':
 				$sInhoud='<h1>Pagina bewerken</h1>';
@@ -67,7 +67,7 @@ class PaginaContent extends SimpleHTML{
 				<form action="/pagina/'.$this->_pagina->getNaam().'/bewerken" method="post">
 					<strong>Titel:</strong><br />
 					<input type="text" name="titel" style="width: 70%" value="'.htmlspecialchars($this->_pagina->getTitel()).'" />';
-				
+
 				if($this->_pagina->magPermissiesBewerken()){
 					$sInhoud.='<br />
 						<strong>Rechten voor bekijken:</strong><br />
@@ -76,7 +76,7 @@ class PaginaContent extends SimpleHTML{
 						<strong>Rechten voor bewerken:</strong><br />
 						<input type="text" name="rechten_bewerken" style="width: 50%" value="'.htmlspecialchars($this->_pagina->getRechtenBewerken()).'" />';
 				}
-				
+
 				$sInhoud.='<br /><br />
 					<strong>Inhoud:</strong><br />
 					<textarea name="inhoud" style="width: 100%; height: 500px;">'.htmlspecialchars($this->_pagina->getInhoud()).'</textarea>

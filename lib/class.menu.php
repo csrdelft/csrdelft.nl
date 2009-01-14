@@ -25,9 +25,8 @@ class menu {
 	/**
 		Michel: param $mainid toegevoegd, de vorminsbank heeft een ander hoofdmenu pID (= 99)
 	**/
-	public function menu($prefix='', $mainid=0) {
-		$this->_lid=Lid::instance();
-		$this->_db=MySql::instance();
+	public function __construct($prefix='', $mainid=0) {
+		$db=MySql::instance();
 
 		$this->_menu=array();
 
@@ -48,10 +47,10 @@ class menu {
 				zichtbaar='ja'
 			ORDER BY
 				pID ASC, prioriteit ASC, tekst ASC";
-		$rMenu=$this->_db->query($sMenu);
+		$rMenu=$db->query($sMenu);
 
 		//Nu hier een boom-array maken.
-		while($aMenu=$this->_db->next($rMenu)){
+		while($aMenu=$db->next($rMenu)){
 			//uitzoeken of de huidige pagina overeenkomt met de opgehaalde rij
 			$bHuidig=false;
 			if(	($aMenu['link']=='/' AND $request_uri=='/') OR
