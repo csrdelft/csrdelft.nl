@@ -645,7 +645,7 @@ class Lid {
 	}
 
 	public static function isValidUid($uid) {
-		return preg_match('/^[a-z0-9]{4}$/', $uid) > 0;
+		return is_string($uid) AND preg_match('/^[a-z0-9]{4}$/', $uid) > 0;
 	}
 
 	function uidExists($uid) {
@@ -660,7 +660,7 @@ class Lid {
 	 *
 	 * Kijkt of er een pasfoto voor het gegeven uid is, en geef die terug.
 	 */
-	function getPasfoto($uid=null, $imgTag=true){
+	function getPasfoto($uid=null, $imgTag=true, $cssClass='pasfoto'){
 		if(!$this->isValidUid($uid) OR $uid==null){
 			$uid=$this->getUid();
 		}
@@ -676,7 +676,7 @@ class Lid {
 		}
 
 		if($imgTag===true OR $imgTag==='small'){
-			$html='<img class="pasfoto" src="'.$pasfoto.'" ';
+			$html='<img class="'.mb_htmlentities($cssClass).'" src="'.$pasfoto.'" ';
 			if($imgTag==='small'){
 				$html.='style="width: 100px;" ';
 			}

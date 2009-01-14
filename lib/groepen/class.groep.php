@@ -219,6 +219,7 @@ class Groep{
 		}
 		return isset($this->leden[$uid]);
 	}
+	public function toonPasfotos(){ return true; }
 	public function isOp($uid){		return $this->isLid($uid) AND $this->leden[$uid]['op']=='1'; }
 	public function getLeden(){		return $this->leden; }
 	public function getLidCount(){	return count($this->getLeden()); }

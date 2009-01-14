@@ -290,6 +290,7 @@ lib/smarty/libs/plugins/modifier.escape.php -text
 lib/smarty/libs/plugins/modifier.indent.php -text
 lib/smarty/libs/plugins/modifier.lower.php -text
 lib/smarty/libs/plugins/modifier.nl2br.php -text
+lib/smarty/libs/plugins/modifier.pasfoto.php -text
 lib/smarty/libs/plugins/modifier.regex_replace.php -text
 lib/smarty/libs/plugins/modifier.reldate.php -text
 lib/smarty/libs/plugins/modifier.replace.php -text

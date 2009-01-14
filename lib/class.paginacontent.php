@@ -34,7 +34,7 @@ class PaginaContent extends SimpleHTML{
 		switch ($this->sActie){
 			# Lijst pagina's laten zien in de zijkolom
 			case 'zijkolom':
-				$aPaginas=$this->_pagina->getPaginas();
+				$aPaginas=Pagina::getPaginas();
 
 				echo '<h1>Pagina\'s</h1>';
 				foreach($aPaginas as $aPagina){
@@ -47,7 +47,7 @@ class PaginaContent extends SimpleHTML{
 
 			# Gewoon de inhoud van een pagina laten zien
 			case 'bekijken':
-				$ubb=new csrUbb();
+				$ubb=new CsrUBB();
 				$ubb->allow_html=true;
 				$sInhoud=$ubb->getHTML($this->_pagina->getInhoud());
 

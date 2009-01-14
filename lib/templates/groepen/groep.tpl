@@ -10,25 +10,35 @@
 </ul>
 <hr />
 <div id="groepleden">
-	<table>
-		{foreach from=$groep->getLeden() item=groeplid}
-			<tr>
-				<td>{$groeplid.uid|csrnaam:'civitas'}</td>
-				{if $groep->toonFuncties()}<td><em>{$groeplid.functie|escape:'html'}</em></td>{/if}
-				{if $groep->magBewerken()}
-					<td><a href="/actueel/groepen/{$gtype}/{$groep->getId()}/verwijderLid/{$groeplid.uid}">X</a></td>
-				{/if}
-			</tr>
-		{/foreach}
+	{if $groep->toonPasfotos()}
+		<div class="pasfotomatrix">
+			{foreach from=$groep->getLeden() item=groeplid}
+				{$groeplid.uid|pasfoto}
+			{/foreach}
+		</div>
+	{else}
+		<table>
+			{foreach from=$groep->getLeden() item=groeplid}
+				<tr>
+					<td>{$groeplid.uid|csrnaam:'civitas'}</td>
+					{if $groep->toonFuncties()}<td><em>{$groeplid.functie|escape:'html'}</em></td>{/if}
+					{if $groep->magBewerken()}
+						<td><a href="/actueel/groepen/{$gtype}/{$groep->getId()}/verwijderLid/{$groeplid.uid}">X</a></td>
+					{/if}
+				</tr>
+			{/foreach}
+		</table>
+		
 		{if $groep->isAanmeldbaar() AND $groep->magBewerken()}
-			<table>
+			<a href="#" onclick="toggleDiv('functieOverzicht')" class="knop">Toon functieoverzicht</a>
+			<table id="functieOverzicht" class="verboreng">
 				{foreach from=$groep->getFunctieAantal() key=functie item=aantal}
 					{if $functie!=''}<tr><td>{$functie}</td><td>{$aantal}</td></tr>{/if}
 				{/foreach}
 				<tr><td><strong>Totaal</strong></td><td>{$groep->getLidCount()}</td></tr>
 			</table>
 		{/if}
-	</table>
+	{/if}
 	{if $groep->magAanmelden()}
 		<a href="#" onclick="toggleDiv('aanmeldForm')" class="knop">aanmelden</a>
 		<form action="/actueel/groepen/{$gtype}/{$groep->getId()}/aanmelden" method="post" id="aanmeldForm" class="verborgen">
@@ -44,7 +54,7 @@
 	{elseif $groep->isAanmeldbaar() AND $groep->isVol()}
 		Deze groep is vol, u kunt zich niet meer aanmelden.
 	{/if}
-	
+	<div  class="clear"></div>
 	{if $groep->magBewerken() AND $action!='edit'}
 		{if $action=='addLid' AND $lidAdder!=false}
 			<form action="/actueel/groepen/{$gtype}/{$groep->getId()}/addLid" method="post" >

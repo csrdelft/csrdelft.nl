@@ -581,6 +581,16 @@ table.profiel_edit{
 }
 table.profiel_edit tr td input, textarea{ width: 260px; }
 
+.pasfoto{
+	
+}
+.pasfotomatrix { max-width: 200px; float: right; }
+.pasfotomatrix .pasfoto{
+	width: 50px; height: 67px; float: left;
+	margin-left: 10px; margin-bottom: 10px;
+	border: 1px solid grey;
+}
+
 /* algemeen hokje voor (fout)meldingen */
 div#melding{
 	margin: 10px; padding: 10px;
