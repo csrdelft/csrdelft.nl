@@ -31,7 +31,7 @@
 		
 		{if $groep->isAanmeldbaar() AND $groep->magBewerken()}
 			<a href="#functieOverzicht" onclick="toggleDiv('functieOverzicht')" class="knop">Toon functieoverzicht</a>
-			<table id="functieOverzicht" class="verboreng">
+			<table id="functieOverzicht" class="verborgen">
 				{foreach from=$groep->getFunctieAantal() key=functie item=aantal}
 					{if $functie!=''}<tr><td>{$functie}</td><td>{$aantal}</td></tr>{/if}
 				{/foreach}
