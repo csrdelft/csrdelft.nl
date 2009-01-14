@@ -41,7 +41,9 @@
 			<option value="verbergen" {if $groep->getToonFuncties()=="verbergen"}selected="selected"{/if}>Alleen voor groepadmins</option>
 			<option value="niet" {if $groep->getToonFuncties()=="niet"}selected="selected"{/if}>Nooit</option>
 		</select>
-			
+		<br />
+		<label for="toonPasfotos"><strong>Toon pasfoto's?</strong></label>
+		<input type="checkbox" name="toonPasfotos" id="toonPasfotos" {if $groep->toonPasfotos()}checked="checked"{/if} /> <em>(Pasfoto komt in plaats van naam)</em>
 		<br />
 		<label for="sbeschrijving"><strong>Korte beschrijving:</strong><br /><br />UBB staat aan.</label>
 		<textarea id="sbeschrijving" name="sbeschrijving" style="width: 70%; height: 100px;">{$groep->getSbeschrijving()|escape:'html'}</textarea>

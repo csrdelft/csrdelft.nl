@@ -2,7 +2,7 @@
 	<div id="profielregel">
 		<div class="naam">
 			<div class="floatR">
-				{$profhtml.foto}<br />
+				{$profhtml.uid|pasfoto}<br />
 				<div class="knopjes">
 					{if $magBewerken}
 						<a href="/communicatie/profiel/{$profhtml.uid}/edit" class="knop"><img src="{$csr_pics}forum/bewerken.png" title="Bewerk groep" />Bewerken</a><br />

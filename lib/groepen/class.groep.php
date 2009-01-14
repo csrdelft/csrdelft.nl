@@ -11,7 +11,7 @@ class Groep{
 	//deze array wordt in deze klasse twee keer gebruikt: in __construct() en load()
 	private $groepseigenschappen=
 		array('groepId', 'gtypeId', 'gtype', 'snaam', 'naam', 'sbeschrijving', 'beschrijving',
-			'zichtbaar', 'status', 'begin', 'einde', 'aanmeldbaar', 'limiet', 'toonFuncties');
+			'zichtbaar', 'status', 'begin', 'einde', 'aanmeldbaar', 'limiet', 'toonFuncties', 'toonPasfotos');
 
 	private $groep=null;
 	private $leden=null;
@@ -23,7 +23,7 @@ class Groep{
 				$this->groep=array(
 					'groepId'=>0, 'snaam'=>'', 'naam'=>'', 'sbeschrijving'=>'', 'beschrijving'=>'',
 					'zichtbaar'=>'zichtbaar', 'begin'=>date('Y-m-d'), 'einde'=>'0000-00-00',
-					'aanmeldbaar'=>0, 'limiet'=>0, 'toonFuncties'=>'tonen');
+					'aanmeldbaar'=>0, 'limiet'=>0, 'toonFuncties'=>'tonen', 'toonPasfotos'=>0);
 				//we moeten ook nog even de groeptypen opzoeken. Die zit als het goed is in GET['gtype'];
 				$this->setGtype();
 			}else{
@@ -59,7 +59,7 @@ class Groep{
 			SELECT
 				groep.id AS groepId, groep.snaam AS snaam, groep.naam AS naam,
 				groep.sbeschrijving AS sbeschrijving, groep.beschrijving AS beschrijving, groep.zichtbaar AS zichtbaar,
-				groep.status AS status,  begin, einde, aanmeldbaar, limiet, toonFuncties,
+				groep.status AS status,  begin, einde, aanmeldbaar, limiet, toonFuncties, toonPasfotos,
 				groeplid.uid AS uid, groeplid.op AS op, groeplid.functie AS functie, groeplid.prioriteit AS prioriteit,
 				groeptype.id AS gtypeId, groeptype.naam AS gtype
 			FROM groep
@@ -96,7 +96,7 @@ class Groep{
 			$qSave="
 				INSERT INTO groep (
 					snaam, naam, sbeschrijving, beschrijving, gtype, zichtbaar, status, begin, einde,
-					aanmeldbaar, limiet, toonFuncties
+					aanmeldbaar, limiet, toonFuncties, toonPasfotos
 				) VALUES (
 					'".$db->escape($this->getSnaam())."',
 					'".$db->escape($this->getNaam())."',
@@ -109,7 +109,8 @@ class Groep{
 					'".$db->escape($this->getEinde())."',
 					".($this->isAanmeldbaar() ? 1 : 0).",
 					".(int)$this->getLimiet().",
-					'".$this->getToonFuncties()."'
+					'".$this->getToonFuncties()."',
+					'".$this->getToonPasfotos()."'
 				);";
 		}else{
 			$qSave="
@@ -124,7 +125,8 @@ class Groep{
 					einde='".$db->escape($this->getEinde())."',
 					aanmeldbaar=".($this->isAanmeldbaar() ? 1 : 0).",
 					limiet=".(int)$this->getLimiet().",
-					toonFuncties='".$this->getToonFuncties()."'
+					toonFuncties='".$this->getToonFuncties()."',
+					toonPasfotos='".$this->getToonPasfotos()."'
 				WHERE id=".$this->getId()."
 				LIMIT 1;";
 		}
@@ -171,6 +173,7 @@ class Groep{
 	public function isAanmeldbaar(){	return $this->groep['aanmeldbaar']==1; }
 	public function getLimiet(){		return $this->groep['limiet']; }
 	public function getToonFuncties(){	return $this->groep['toonFuncties']; }
+	public function getToonPasfotos(){	return $this->groep['toonPasfotos']; }
 
 	/*
 	 * Geef een bool terug of de functies getoond worden of niet.
@@ -207,10 +210,13 @@ class Groep{
 
 	public function setValue($key, $value){
 		$fields=array('snaam', 'naam', 'sbeschrijving', 'beschrijving',
-			'zichtbaar', 'status', 'begin', 'einde', 'aanmeldbaar', 'limiet', 'toonFuncties');
+			'zichtbaar', 'status', 'begin', 'einde', 'aanmeldbaar', 'limiet', 'toonFuncties', 'toonPasfotos');
 		if(in_array($key, $fields)){
 			$this->groep[$key]=trim($value);
+		}else{
+			echo 'FEUT: veld is niet toegestaan Groep::setValue()'; exit;
 		}
+
 	}
 
 	public function isLid($uid=null){
@@ -219,7 +225,7 @@ class Groep{
 		}
 		return isset($this->leden[$uid]);
 	}
-	public function toonPasfotos(){ return true; }
+	public function toonPasfotos(){ return $this->getToonPasfotos()==1; }
 	public function isOp($uid){		return $this->isLid($uid) AND $this->leden[$uid]['op']=='1'; }
 	public function getLeden(){		return $this->leden; }
 	public function getLidCount(){	return count($this->getLeden()); }
