@@ -30,7 +30,7 @@
 		</table>
 		
 		{if $groep->isAanmeldbaar() AND $groep->magBewerken()}
-			<a href="#" onclick="toggleDiv('functieOverzicht')" class="knop">Toon functieoverzicht</a>
+			<a href="#functieOverzicht" onclick="toggleDiv('functieOverzicht')" class="knop">Toon functieoverzicht</a>
 			<table id="functieOverzicht" class="verboreng">
 				{foreach from=$groep->getFunctieAantal() key=functie item=aantal}
 					{if $functie!=''}<tr><td>{$functie}</td><td>{$aantal}</td></tr>{/if}
@@ -40,7 +40,7 @@
 		{/if}
 	{/if}
 	{if $groep->magAanmelden()}
-		<a href="#" onclick="toggleDiv('aanmeldForm')" class="knop">aanmelden</a>
+		<a href="#aanmeldForm" onclick="toggleDiv('aanmeldForm')" class="knop">aanmelden</a>
 		<form action="/actueel/groepen/{$gtype}/{$groep->getId()}/aanmelden" method="post" id="aanmeldForm" class="verborgen">
 			U kunt zich hier aanmelden voor deze groep.
 			{if $groep->getToonFuncties()!='niet'}
