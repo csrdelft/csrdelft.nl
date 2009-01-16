@@ -26,16 +26,18 @@
  */
 function smarty_modifier_pasfoto($uid, $cssclass='pasfoto', $link=true){
 	$lid=Lid::instance();
-	if($lid->isValidUid($uid)){
-		$return='';
-		if($link){
-			$return.='<a href="/communicatie/profiel/'.$uid.'" title="'.$lid->getNaamLink($uid, 'full', false).'">';
-		}
-		$return.=$lid->getPasfoto($uid, true, $cssclass);
-		if($link){ $return.='</a>'; }
-		return $return;
-	}else{
-		return 'Ongeldige invoer';
-	}
+	$uids=explode(',', $uid);
+	$return.='';
+	foreach($uids as $uid){
+		if($lid->isValidUid($uid)){
 
+			if($link){
+				$return.='<a href="/communicatie/profiel/'.$uid.'" title="'.$lid->getNaamLink($uid, 'full', false).'">';
+			}
+			$return.=$lid->getPasfoto($uid, true, $cssclass);
+			if($link){ $return.='</a>'; }
+
+		}
+	}
+	return $return;
 }

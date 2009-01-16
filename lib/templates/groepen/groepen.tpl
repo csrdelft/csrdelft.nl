@@ -27,14 +27,14 @@
 
 {foreach from=$groepen->getGroepen() item=groep}
 	<div class="groep clear" id="groep{$groep->getId()}">
-		{if $groep->toonPasfotos()}
-			<div class="pasfotomatrix">
+		{if $groep->toonPasfotos() AND $lid->toonPasfotos()}
+			<div class="pasfotomatrix" style="float: right;">
 				{foreach from=$groep->getLeden() item=groeplid}
 					{$groeplid.uid|pasfoto}
 				{/foreach}
 			</div>
 		{else}
-			<ul class="groepleden nobullets">
+			<ul class="groepledenlijst nobullets">
 				{foreach from=$groep->getLeden() item=groeplid}
 					<li>{$groeplid.uid|csrnaam:'civitas'}{if $groep->toonFuncties()}&nbsp;<em>{$groeplid.functie|escape:'html'}{/if}</em></li>
 				{/foreach}

@@ -43,13 +43,6 @@ class ProfielContent extends SimpleHTML {
 		$profhtml['fullname']=$this->_lid->getFullName($this->_profiel['uid']);
 		$profhtml['civitasnaam']=$this->_lid->getNaamLink($this->_profiel['uid'], 'civitas', false);
 
-		# email-adres
-		if($profhtml['email'] != ''){
-			$profhtml['email'] = sprintf('<a href="mailto:%s">%s</a>', $profhtml['email'], $profhtml['email']);
-		}
-
-		$profhtml['foto']=$this->_lid->getPasfoto($this->_profiel['uid']);
-
 		//woonoord
 		require_once('groepen/class.groepen.php');
 		$woonoord=Groepen::getGroepenByType(2, $this->_profiel['uid']);
@@ -91,17 +84,19 @@ class ProfielContent extends SimpleHTML {
 
 		/*
 		 * Saldografiek gaan we
-		 * - gewoon en meteen weergeven bij het lid zelf.
+		 * - gewoon en meteen weergeven bij het lid (niet oudlid) zelf.
 		 * - niet meteen weergeven voor SocCie en pubcie, alleen op verzoek.
 		 */
-		if($this->_profiel['uid']==$this->_lid->getUid()){
-			$profhtml['saldografiek']='<br /><img src="/tools/saldografiek.php?uid='.$this->_profiel['uid'].'" />';
-		}else{
-			require_once('groepen/class.groep.php');
-			$soccie=new Groep('SocCie');
-			if($this->_lid->hasPermission('P_ADMIN') OR $soccie->isLid($this->_lid->getUid())){
-				$profhtml['saldografiek']='<br /><a  onclick="document.getElementById(\'saldoGrafiek\').style.display = \'block\'" class="knop">Saldografiek weergeven</a><br />';
-				$profhtml['saldografiek'].='<br /><div id="saldoGrafiek" style="display: none;"><img src="/tools/saldografiek.php?uid='.$this->_profiel['uid'].'" /></div>';
+		if($this->_profiel['uid']=='9808' OR $this->_profiel['status']!='S_OUDLID'){
+			if($this->_profiel['uid']==$this->_lid->getUid()){
+				$profhtml['saldografiek']='<br /><img src="/tools/saldografiek.php?uid='.$this->_profiel['uid'].'" />';
+			}else{
+				require_once('groepen/class.groep.php');
+				$soccie=new Groep('SocCie');
+				if($this->_lid->hasPermission('P_ADMIN') OR $soccie->isLid($this->_lid->getUid())){
+					$profhtml['saldografiek']='<br /><a  onclick="document.getElementById(\'saldoGrafiek\').style.display = \'block\'" class="knop">Saldografiek weergeven</a><br />';
+					$profhtml['saldografiek'].='<br /><div id="saldoGrafiek" style="display: none;"><img src="/tools/saldografiek.php?uid='.$this->_profiel['uid'].'" /></div>';
+				}
 			}
 		}
 

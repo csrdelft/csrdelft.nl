@@ -10,6 +10,7 @@ if(navigator.appName == "Microsoft Internet Explorer") {
   http = new XMLHttpRequest();
 }
 
+var orig=null;
 
 
 function vergrootTextarea(id, rows) {
@@ -140,5 +141,21 @@ function toggleDiv(id){
 		displayDiv(div);
 	}else{
 		hideDiv(div);
+	}
+}
+function togglePasfotos(uids, div){
+	if(orig!=null){
+		div.innerHTML=orig;
+		orig=null;
+	}else{
+		http.abort();
+		http.open("GET", "/tools/pasfotos.php?string="+escape(uids), true);
+		http.onreadystatechange=function(){
+			if(http.readyState == 4){
+				orig=div.innerHTML;
+				div.innerHTML=http.responseText;
+			}
+		}
+		http.send(null);
 	}
 }

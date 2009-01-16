@@ -35,7 +35,7 @@ class MySql{
 		$this->query("SET NAMES 'utf8'");
 	}
 
-	### public ###
+
 
 	# het openen van de databaseconnectie gebeurt tijdens het eerste gebruik
 	# ervan. er wordt een persistent connectie gebruikt

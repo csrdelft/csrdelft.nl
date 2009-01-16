@@ -686,6 +686,13 @@ class Lid {
 			return $pasfoto;
 		}
 	}
+	//standaard pasfoto's tonen of niet?
+	function toonPasfotos($uid=null){
+		if(!$this->isValidUid($uid) OR $uid==null){
+			$uid=$this->getUid();
+		}
+		return $uid!='9808'; //speciaal voor knorrie
+	}
 
 
 	/*

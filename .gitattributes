@@ -101,6 +101,7 @@ htdocs/tools/leden-csv.php -text
 htdocs/tools/ledenkaart.php -text
 htdocs/tools/memcachedstatus.php -text
 htdocs/tools/mootlijsten.php -text
+htdocs/tools/pasfotos.php -text
 htdocs/tools/phpinfo.php -text
 htdocs/tools/query.php -text
 htdocs/tools/roodschopper.php -text
@@ -325,6 +326,8 @@ lib/templates/courant/mail/c_header.tpl -text
 lib/templates/courant/mail/courant.tpl -text
 lib/templates/courant/mail/csrmail_owee.tpl -text
 lib/templates/csrdelft.tpl -text
+lib/templates/documenten/document.tpl -text
+lib/templates/documenten/documenten.tpl -text
 lib/templates/forum/list_categories.tpl -text
 lib/templates/forum/list_onderwerpen.tpl -text
 lib/templates/forum/list_recent.tpl -text

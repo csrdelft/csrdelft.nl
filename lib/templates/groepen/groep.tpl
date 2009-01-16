@@ -9,14 +9,16 @@
 {/foreach}
 </ul>
 <hr />
-<div id="groepleden">
-	{if $groep->toonPasfotos()}
-		<div class="pasfotomatrix">
-			{foreach from=$groep->getLeden() item=groeplid}
-				{$groeplid.uid|pasfoto}
-			{/foreach}
+<div id="groepledenContainer">
+	<div class="handje knop" onclick="return togglePasfotos('{$groep->getLedenCSV()}', document.getElementById('ledenvangroep{$groep->getId()}'));">
+		<img src="{$csr_pics}/knopjes/pasfoto.png" title="schakel naar pasfoto'" />
+	</div>
+	{if $groep->magBewerken() AND $action!='edit' AND !($action=='addLid' AND $lidAdder!=false)}
+		<div class="handje knop" title="Leden toevoegen aan groep" onclick="toggleDiv('lidAdder')">
+			<strong>+</strong>
 		</div>
-	{else}
+	{/if}
+	<div id="ledenvangroep{$groep->getId()}" class="groepleden">
 		<table>
 			{foreach from=$groep->getLeden() item=groeplid}
 				<tr>
@@ -28,16 +30,20 @@
 				</tr>
 			{/foreach}
 		</table>
-		
-		{if $groep->isAanmeldbaar() AND $groep->magBewerken()}
-			<a href="#functieOverzicht" onclick="toggleDiv('functieOverzicht')" class="knop">Toon functieoverzicht</a>
-			<table id="functieOverzicht" class="verborgen">
-				{foreach from=$groep->getFunctieAantal() key=functie item=aantal}
-					{if $functie!=''}<tr><td>{$functie}</td><td>{$aantal}</td></tr>{/if}
-				{/foreach}
-				<tr><td><strong>Totaal</strong></td><td>{$groep->getLidCount()}</td></tr>
-			</table>
-		{/if}
+	</div>
+	<br />
+	{if $groep->isAanmeldbaar() AND $groep->magBewerken()}
+		<a href="#functieOverzicht" onclick="toggleDiv('functieOverzicht')" class="knop">Toon functieoverzicht</a>
+		<table id="functieOverzicht" class="verborgen">
+			{foreach from=$groep->getFunctieAantal() key=functie item=aantal}
+				{if $functie!=''}<tr><td>{$functie}</td><td>{$aantal}</td></tr>{/if}
+			{/foreach}
+			<tr><td><strong>Totaal</strong></td><td>{$groep->getLidCount()}</td></tr>
+		</table>
+	{/if}
+
+	{if $groep->toonPasfotos() AND $lid->toonPasFotos()}
+		<script type="text/javascript">togglePasfotos('{$groep->getLedenCSV()}', document.getElementById('ledenvangroep{$groep->getId()}'));</script>
 	{/if}
 	{if $groep->magAanmelden()}
 		<a href="#aanmeldForm" onclick="toggleDiv('aanmeldForm')" class="knop">aanmelden</a>
@@ -54,7 +60,7 @@
 	{elseif $groep->isAanmeldbaar() AND $groep->isVol()}
 		Deze groep is vol, u kunt zich niet meer aanmelden.
 	{/if}
-	<div  class="clear"></div>
+	<div class="clear"></div>
 	{if $groep->magBewerken() AND $action!='edit'}
 		{if $action=='addLid' AND $lidAdder!=false}
 			<form action="/actueel/groepen/{$gtype}/{$groep->getId()}/addLid" method="post" >
@@ -62,8 +68,8 @@
 				{$lidAdder}<input type="submit" value="toevoegen" />
 			</form>
 		{else}
-			<a onclick="toggleDiv('lidAdder')" class="knop" href="#">Leden toevoegen</a><br />
 			<form action="/actueel/groepen/{$gtype}/{$groep->getId()}/addLid" method="post" id="lidAdder" class="verborgen">
+				<h2>Leden toevoegen</h2>
 				Voer hier door komma's gescheiden namen of uid's in:<br /><br />
 				Zoek ook in: <input type="checkbox" name="filterOud" id="filterOud" /> <label for="filterOud">oudleden</label>
 				

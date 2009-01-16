@@ -73,7 +73,7 @@
 	<div class="profielregel">
 		<div class="left">Contact</div>	
 		<div class="gegevens">
-			<div class="label">Email:</div>{$profhtml.email}<br />	
+			<div class="label">Email:</div><a href="mailto:{$profhtml.email}">{$profhtml.email}</a><br />	
 			{if $profhtml.icq!=''}<div class="label">ICQ:</div> {$profhtml.icq}<br />{/if}
 			{if $profhtml.msn!=''}<div class="label">MSN:</div> {$profhtml.msn}<br />{/if}
 			{if $profhtml.jid!=''}<div class="label">Jabber:</div> {$profhtml.jid}<br />{/if}

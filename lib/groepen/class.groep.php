@@ -230,6 +230,13 @@ class Groep{
 	}
 	public function isOp($uid){		return $this->isLid($uid) AND $this->leden[$uid]['op']=='1'; }
 	public function getLeden(){		return $this->leden; }
+	public function getLedenCSV(){
+		$leden=array();
+		foreach($this->getLeden() as $lid){
+			$leden[]=$lid['uid'];
+		}
+		return implode($leden, ',');
+	}
 	public function getLidCount(){	return count($this->getLeden()); }
 	public function isVol(){		return $this->getLimiet()!=0 AND $this->getLimiet()<=$this->getLidCount(); }
 

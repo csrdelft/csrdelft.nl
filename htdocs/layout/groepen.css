@@ -1,14 +1,19 @@
 /* Groepen nieuwe stijl */
+
+/* Groepenlijst */
 #groepLijst{ float: right; margin: 30px 0px 10px 20px; }
 #groepLijst, #groepLijst li, #groepLijst ul{ text-align: right;}
 #groepLijst li{ list-style-type: none; }
 .groep{ border-top: 1px solid black; margin-top: 20px; }
-ul.groepleden{ width: 230px; float: right; padding: 10px 20px 20px 20px; }
+ul.groepledenlijst{ width: 230px; float: right; padding: 10px 20px 20px 20px; }
 
-#groepleden{ float: right; padding: 10px 20px 20px 20px; }
-#groepleden td{ padding: 0px 5px; lext-align: left;}
-#groepleden table { margin-bottom: 10px;}
-#groepleden form{ background-color: #f1f1f1; border: 1px solid lightgray; padding: 10px; width: 250px; }
+/* groep-view */
+#groepledenContainer{ float: right;}
+#groepledenContainer .knop{ float: right; height: 18px; width: 20px; margin-left: 2px; background-color: #cfcfcf; text-align: center;}
+
+.groepleden{ clear: both; width: 200px; background-color: #eee; float: right; border-top: 1px solid #ddd; border-bottom: 1px solid #ddd; }
+.groepleden td{ padding: 0px 5px; lext-align: left;}
+#groepledenContainer form{ background-color: #f1f1f1; border: 1px solid lightgray; padding: 10px; width: 250px; }
 #voorgangerOpvolger{ margin: 10px 0px; padding: 3px 20px; border-bottom: 1px solid black;}
 	.vorigeGroep{ list-style-image: url(http://plaetjes.csrdelft.nl/groepen/up.png); }
 	.volgendeGroep{ list-style-image: url(http://plaetjes.csrdelft.nl/groepen/down.png); }

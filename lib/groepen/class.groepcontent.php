@@ -1,22 +1,22 @@
 <?php
 /*
  * class.groepcontent.php	| 	Jan Pieter Waagmeester (jieter@jpwaag.com)
- * 
- * 
+ *
+ *
  * Een verzameling contentclassen voor de groepenketzer.
- * 
+ *
  * Groepcontent					Weergeven van een groep & bewerken en etc.
  * Groepencontent				Weergeven van een groepenoverzicht
  * Groepengeschiedeniscontent	Weergeven van een mooie patchwork van groepjes.
- * 
+ *
  */
 
 
 class Groepcontent extends SimpleHTML{
-	
+
 	private $groep;
 	private $action='view';
-	
+
 	public function __construct($groep){
 		$this->groep=$groep;
 	}
@@ -26,7 +26,7 @@ class Groepcontent extends SimpleHTML{
 	public function getTitel(){
 		return $_GET['gtype'].' - '.$this->groep->getNaam();
 	}
-	
+
 	/*
 	 * Deze functie geeft een formulierding voor het eenvoudig toevoegen van leden
 	 * aan een bepaalde groep.
@@ -34,7 +34,7 @@ class Groepcontent extends SimpleHTML{
 	private function getLidAdder(){
 		if(isset($_POST['rawNamen']) AND trim($_POST['rawNamen'])!=''){
 			$return='';
-			
+
 			//uitmaken waarin we allemaal zoeken, standaard in de normale leden, wellicht
 			//ook in oudleden en nobodies
 			$zoekin=array('S_LID', 'S_NOVIET', 'S_GASTLID', 'S_KRINGEL');
@@ -46,10 +46,10 @@ class Groepcontent extends SimpleHTML{
 			}
 
 			$leden=namen2uid($_POST['rawNamen'], $zoekin);
-			
+
 			if(is_array($leden) AND count($leden)!=0){
 				$return.='<table border="0">';
-			
+
 				foreach($leden as $aGroepUid){
 					if(isset($aGroepUid['uid'])){
 						//naam is gevonden en uniek, dus direct goed.
@@ -78,14 +78,14 @@ class Groepcontent extends SimpleHTML{
 		return false;
 	}
 	/*
-	 * Niet-admins kunnen kiezen uit een van te voren vastgesteld lijstje met functies, zodat 
+	 * Niet-admins kunnen kiezen uit een van te voren vastgesteld lijstje met functies, zodat
 	 * we  niet allerlei onzinnamen krijgen zoals Kücherführer enzo.
 	 */
 	private function getFunctieSelector(){
 		$return='';
-		$aFuncties=array('Q.Q.', 'Praeses', 'Fiscus', 'Redacteur', 'Computeur', 'Archivaris', 
-			'Bibliothecaris', 'Statisticus', 'Fotocommissaris','', 'Koemissaris', 'Regisseur', 
-			'Lichttechnicus', 'Geluidstechnicus', 'Adviseur', 'Internetman', 'Posterman', 
+		$aFuncties=array('Q.Q.', 'Praeses', 'Fiscus', 'Redacteur', 'Computeur', 'Archivaris',
+			'Bibliothecaris', 'Statisticus', 'Fotocommissaris','', 'Koemissaris', 'Regisseur',
+			'Lichttechnicus', 'Geluidstechnicus', 'Adviseur', 'Internetman', 'Posterman',
 			'Corveemanager', 'Provisor', 'HO', 'HJ', 'Onderhuurder');
 		sort($aFuncties);
 		$return.='<select name="functie[]" class="tekst">';
@@ -97,27 +97,27 @@ class Groepcontent extends SimpleHTML{
 	}
 	public function view(){
 		$content=new Smarty_csr();
-		
+
 		$content->assign('groep', $this->groep);
 		$content->assign('opvolgerVoorganger', $this->groep->getOpvolgerVoorganger());
-		
+
 		$content->assign('action', $this->action);
 		$content->assign('gtype', $_GET['gtype']);
 		$content->assign('groeptypes', Groepen::getGroeptypes());
-		
+
 		if($this->action=='addLid'){
 			$content->assign('lidAdder', $this->getLidAdder());
 		}
-		
+
 		$content->assign('melding', $this->getMelding());
-		$content->display('groepen/groep.tpl');		
+		$content->display('groepen/groep.tpl');
 	}
 }
 class Groepencontent extends SimpleHTML{
-	
+
 	private $groepen;
 	private $action='view';
-	
+
 	public function __construct($groepen){
 		$this->groepen=$groepen;
 	}
@@ -127,32 +127,32 @@ class Groepencontent extends SimpleHTML{
 	public function getTitel(){
 		return 'Groepen - '.$this->groepen->getNaam();
 	}
-	
+
 	public function view(){
 		$content=new Smarty_csr();
-		
+
 		$content->assign('groepen', $this->groepen);
-		
+
 		$content->assign('action', $this->action);
 		$content->assign('gtype', $this->groepen->getNaam());
 		$content->assign('groeptypes', Groepen::getGroeptypes());
-		
+
 		$content->assign('melding', $this->getMelding());
-		$content->display('groepen/groepen.tpl');		
-		
+		$content->display('groepen/groepen.tpl');
+
 	}
 }
 class Groepgeschiedeniscontent extends SimpleHTML{
-	
+
 	private $groepen;
-	
+
 	public function __construct($groepen){
 		$this->groepen=$groepen;
 	}
 	public function getTitel(){
 		return 'Groepen - '.$this->groepen->getNaam();
 	}
-	
+
 	public function view(){
 		$jaren=5;
 		$maanden=$jaren*12;
@@ -173,7 +173,7 @@ class Groepgeschiedeniscontent extends SimpleHTML{
 			if($startspacer!=0){
 				echo '<td colspan="'.$startspacer.'" style="font-size: 8px; background-color: lightgray;">('.$startspacer.')</td>';
 			}
-			
+
 			$oudeGr=Groep::getGroepgeschiedenis($groep->getSnaam(), $jaren);
 			foreach($oudeGr as $grp){
 				$duration=$grp['duration'];
@@ -190,7 +190,11 @@ class Groepgeschiedeniscontent extends SimpleHTML{
 			echo '</tr>';
 		}
 		echo '</table>';
-			
+
 	}
+}
+class GroepProfielContent{
+
+
 }
 ?>
