@@ -10,14 +10,18 @@
 </ul>
 <hr />
 <div id="groepledenContainer">
-	<div class="handje knop" onclick="return togglePasfotos('{$groep->getLedenCSV()}', document.getElementById('ledenvangroep{$groep->getId()}'));">
-		<img src="{$csr_pics}/knopjes/pasfoto.png" title="schakel naar pasfoto'" />
-	</div>
-	{if $groep->magBewerken() AND $action!='edit' AND !($action=='addLid' AND $lidAdder!=false)}
+	<div class="tabjesregel">
+		{if $lid->hasPermission('P_LEDEN_READ')}
+		<div class="handje knop" onclick="return togglePasfotos('{$groep->getLedenCSV()}', document.getElementById('ledenvangroep{$groep->getId()}'));">
+			<img src="{$csr_pics}/knopjes/pasfoto.png" title="schakel naar pasfoto'" />
+		</div>
+		{/if}
+		{if $groep->magBewerken() AND $action!='edit' AND !($action=='addLid' AND $lidAdder!=false)}
 		<div class="handje knop" title="Leden toevoegen aan groep" onclick="toggleDiv('lidAdder')">
 			<strong>+</strong>
 		</div>
-	{/if}
+		{/if}
+	</div>
 	<div id="ledenvangroep{$groep->getId()}" class="groepleden">
 		<table>
 			{foreach from=$groep->getLeden() item=groeplid}
@@ -33,8 +37,9 @@
 	</div>
 	<br />
 	{if $groep->isAanmeldbaar() AND $groep->magBewerken()}
+	<div class="clear"><br /></div>
 		<a href="#functieOverzicht" onclick="toggleDiv('functieOverzicht')" class="knop">Toon functieoverzicht</a>
-		<table id="functieOverzicht" class="verborgen">
+		<table id="functieOverzicht" class="verborgen clear">
 			{foreach from=$groep->getFunctieAantal() key=functie item=aantal}
 				{if $functie!=''}<tr><td>{$functie}</td><td>{$aantal}</td></tr>{/if}
 			{/foreach}
