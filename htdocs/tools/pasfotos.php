@@ -9,7 +9,7 @@ require_once('include.config.php');
 if($lid->hasPermission('P_LEDEN_READ') AND isset($_GET['string'])){
 	$string=trim(urldecode($_GET['string']));
 	$uids=explode(',', $string);
-	$link=isset($_GET['link']);
+	$link=!isset($_GET['link']);
 
 	echo '<div class="pasfotomatrix">';
 	foreach($uids as $uid){

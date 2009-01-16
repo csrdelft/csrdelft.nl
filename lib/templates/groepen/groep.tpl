@@ -64,6 +64,7 @@
 	{if $groep->magBewerken() AND $action!='edit'}
 		{if $action=='addLid' AND $lidAdder!=false}
 			<form action="/actueel/groepen/{$gtype}/{$groep->getId()}/addLid" method="post" >
+				<h2>Leden toevoegen</h2>
 				Hier kunt u eventueel een zinnige functie opgeven, laat het anders leeg!<br /><br />
 				{$lidAdder}<input type="submit" value="toevoegen" />
 			</form>
