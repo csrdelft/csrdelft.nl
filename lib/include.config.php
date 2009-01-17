@@ -53,7 +53,7 @@ define('MAX_MAALTIJD', 100);
 define('AGENDA_LIJST_DEFAULT_DAGEN', 70);
 
 //verenigingsstatisticus
-define('STATISTICUS', '0430' );
+define('STATISTICUS', '0630' );
 //Feut ip voor de rss feed in #csrdelft
 define('FEUT_IP', '82.94.188.77');
 
