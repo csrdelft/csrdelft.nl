@@ -584,7 +584,7 @@ table.profiel_edit tr td input, textarea{ width: 260px; }
 .pasfoto{
 	
 }
-.pasfotomatrix { width: 200px; margin-top: 10px;}
+.pasfotomatrix { width: 260px; margin-top: 10px;}
 .pasfotomatrix .pasfoto{
 	width: 50px; height: 67px; float: left;
 	margin-left: 10px; margin-bottom: 10px;
