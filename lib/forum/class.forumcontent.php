@@ -144,12 +144,13 @@ class ForumContent extends SimpleHTML {
 		$aPosts=$this->_forum->getPostsVoorRss(15, true);
 		echo '<h1><a href="/communicatie/forum/categorie/laatste">Forum</a></h1>';
 		foreach($aPosts as $aPost){
-			//$tekst=$aPost['nickname'].': ';
-			$length=strlen($aPost['titel']);
-			$tekst=mb_htmlentities($aPost['titel']);
-			if($length>20){
-				$tekst=str_replace(' ', '&nbsp;', trim(substr($tekst, 0, 18)).'…');
+			$tekst=$aPost['titel'];
+			if(strlen($tekst)>20){
+				$tekst=trim(substr($tekst, 0, 18)).'…';
 			}
+			$tekst=mb_htmlentities($tekst);
+			$tekst=str_replace(' ', '&nbsp;', $tekst);
+
 			$post=preg_replace('/(\[(|\/)\w+\])/', '|', $aPost['tekst']);
 			$postfragment=substr(str_replace(array("\n", "\r", ' '), ' ', $post), 0, 40);
 			echo '<div class="item"><span class="tijd">'.date('H:i', strtotime($aPost['datum'])).'</span>&nbsp;';
