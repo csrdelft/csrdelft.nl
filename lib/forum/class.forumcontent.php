@@ -145,8 +145,9 @@ class ForumContent extends SimpleHTML {
 		echo '<h1><a href="/communicatie/forum/categorie/laatste">Forum</a></h1>';
 		foreach($aPosts as $aPost){
 			//$tekst=$aPost['nickname'].': ';
-			$tekst=htmlspecialchars($aPost['titel']);
-			if(strlen($tekst)>20){
+			$length=strlen($aPost['titel']);
+			$tekst=mb_htmlentities($aPost['titel']);
+			if($length>20){
 				$tekst=str_replace(' ', '&nbsp;', trim(substr($tekst, 0, 18)).'…');
 			}
 			$post=preg_replace('/(\[(|\/)\w+\])/', '|', $aPost['tekst']);
@@ -154,9 +155,9 @@ class ForumContent extends SimpleHTML {
 			echo '<div class="item"><span class="tijd">'.date('H:i', strtotime($aPost['datum'])).'</span>&nbsp;';
 			echo '<a href="/communicatie/forum/onderwerp/'.$aPost['tid'].'#post'.$aPost['postID'].'"
 				title="['.htmlspecialchars($aPost['titel']).'] '.
-					$this->_forum->getForumNaam($aPost['uid'], false, false).': '.mb_htmlentities($postfragment).'"';
-			if (strtotime($aPost['datum']) > $this->_forum->getLaatstBekeken()) { echo ' class="opvallend"'; }
-			echo '>'.mb_htmlentities($tekst).'</a><br />'."\n";
+					$this->_forum->getForumNaam($aPost['uid'], false, false).': '.$postfragment.'"';
+			if(strtotime($aPost['datum']) > $this->_forum->getLaatstBekeken()) { echo ' class="opvallend"'; }
+			echo '>'.$tekst.'</a><br />'."\n";
 			echo '</div>';
 		}
 	}
