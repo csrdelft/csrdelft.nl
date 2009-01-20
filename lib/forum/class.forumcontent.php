@@ -156,7 +156,7 @@ class ForumContent extends SimpleHTML {
 				title="['.htmlspecialchars($aPost['titel']).'] '.
 					$this->_forum->getForumNaam($aPost['uid'], false, false).': '.mb_htmlentities($postfragment).'"';
 			if (strtotime($aPost['datum']) > $this->_forum->getLaatstBekeken()) { echo ' class="opvallend"'; }
-			echo '>'.$tekst.'</a><br />'."\n";
+			echo '>'.mb_htmlentities($tekst).'</a><br />'."\n";
 			echo '</div>';
 		}
 	}
