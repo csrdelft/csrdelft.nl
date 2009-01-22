@@ -240,7 +240,7 @@ class Groep{
 	 * - Bij zijn groepslidmaatschap is aangegeven dat hij moderator is.
 	 */
 	public function isOp($uid){
-		if($this->lidIsMod()){ return true; }
+		if($this->lidIsMod() AND $this->isLid($uid)){ return true; }
 		return $this->isLid($uid) AND $this->leden[$uid]['op']=='1';
 	}
 
