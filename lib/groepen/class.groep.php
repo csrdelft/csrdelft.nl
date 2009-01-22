@@ -11,7 +11,7 @@ class Groep{
 	//deze array wordt in deze klasse twee keer gebruikt: in __construct() en load()
 	private $groepseigenschappen=
 		array('groepId', 'gtypeId', 'gtype', 'snaam', 'naam', 'sbeschrijving', 'beschrijving',
-			'zichtbaar', 'status', 'begin', 'einde', 'aanmeldbaar', 'limiet', 'toonFuncties', 'toonPasfotos');
+			'zichtbaar', 'status', 'begin', 'einde', 'aanmeldbaar', 'limiet', 'toonFuncties', 'toonPasfotos', 'lidIsMod');
 
 	private $groep=null;
 	private $leden=null;
@@ -23,7 +23,7 @@ class Groep{
 				$this->groep=array(
 					'groepId'=>0, 'snaam'=>'', 'naam'=>'', 'sbeschrijving'=>'', 'beschrijving'=>'',
 					'zichtbaar'=>'zichtbaar', 'begin'=>date('Y-m-d'), 'einde'=>'0000-00-00',
-					'aanmeldbaar'=>0, 'limiet'=>0, 'toonFuncties'=>'tonen', 'toonPasfotos'=>0);
+					'aanmeldbaar'=>0, 'limiet'=>0, 'toonFuncties'=>'tonen', 'toonPasfotos'=>0, 'lidIsMod'=>0);
 				//we moeten ook nog even de groeptypen opzoeken. Die zit als het goed is in GET['gtype'];
 				$this->setGtype();
 			}else{
@@ -59,7 +59,7 @@ class Groep{
 			SELECT
 				groep.id AS groepId, groep.snaam AS snaam, groep.naam AS naam,
 				groep.sbeschrijving AS sbeschrijving, groep.beschrijving AS beschrijving, groep.zichtbaar AS zichtbaar,
-				groep.status AS status,  begin, einde, aanmeldbaar, limiet, toonFuncties, toonPasfotos,
+				groep.status AS status,  begin, einde, aanmeldbaar, limiet, toonFuncties, toonPasfotos, lidIsMod,
 				groeplid.uid AS uid, groeplid.op AS op, groeplid.functie AS functie, groeplid.prioriteit AS prioriteit,
 				groeptype.id AS gtypeId, groeptype.naam AS gtype
 			FROM groep
@@ -96,7 +96,7 @@ class Groep{
 			$qSave="
 				INSERT INTO groep (
 					snaam, naam, sbeschrijving, beschrijving, gtype, zichtbaar, status, begin, einde,
-					aanmeldbaar, limiet, toonFuncties, toonPasfotos
+					aanmeldbaar, limiet, toonFuncties, toonPasfotos, lidIsMod
 				) VALUES (
 					'".$db->escape($this->getSnaam())."',
 					'".$db->escape($this->getNaam())."',
@@ -110,7 +110,8 @@ class Groep{
 					".($this->isAanmeldbaar() ? 1 : 0).",
 					".(int)$this->getLimiet().",
 					'".$this->getToonFuncties()."',
-					'".$this->getToonPasfotos()."'
+					'".$this->getToonPasfotos()."',
+					'".$this->getLidIsMod()."'
 				);";
 		}else{
 			$qSave="
@@ -126,7 +127,8 @@ class Groep{
 					aanmeldbaar=".($this->isAanmeldbaar() ? 1 : 0).",
 					limiet=".(int)$this->getLimiet().",
 					toonFuncties='".$this->getToonFuncties()."',
-					toonPasfotos='".$this->getToonPasfotos()."'
+					toonPasfotos='".$this->getToonPasfotos()."',
+					lidIsMod='".$this->getLidIsMod()."'
 				WHERE id=".$this->getId()."
 				LIMIT 1;";
 		}
@@ -174,6 +176,7 @@ class Groep{
 	public function getLimiet(){		return $this->groep['limiet']; }
 	public function getToonFuncties(){	return $this->groep['toonFuncties']; }
 	public function getToonPasfotos(){	return $this->groep['toonPasfotos']; }
+	public function getLidIsMod(){ 		return $this->groep['lidIsMod']; }
 
 	/*
 	 * Geef een bool terug of de functies getoond worden of niet.
@@ -210,7 +213,7 @@ class Groep{
 
 	public function setValue($key, $value){
 		$fields=array('snaam', 'naam', 'sbeschrijving', 'beschrijving',
-			'zichtbaar', 'status', 'begin', 'einde', 'aanmeldbaar', 'limiet', 'toonFuncties', 'toonPasfotos');
+			'zichtbaar', 'status', 'begin', 'einde', 'aanmeldbaar', 'limiet', 'toonFuncties', 'toonPasfotos', 'lidIsMod');
 		if(in_array($key, $fields)){
 			$this->groep[$key]=trim($value);
 		}else{
@@ -228,7 +231,19 @@ class Groep{
 	public function toonPasfotos(){
 		return Lid::instance()->hasPermission('P_LEDEN_READ') AND $this->getToonPasfotos()==1;
 	}
-	public function isOp($uid){		return $this->isLid($uid) AND $this->leden[$uid]['op']=='1'; }
+	public function lidIsMod(){
+		return $this->getLidIsMod()=='1';
+	}
+	/*
+	 * Een lid is MODerator (of OPerator) van een groep als:
+	 * - voor de groep is ingesteld dat elk lid moderator is.
+	 * - Bij zijn groepslidmaatschap is aangegeven dat hij moderator is.
+	 */
+	public function isOp($uid){
+		if($this->lidIsMod()){ return true; }
+		return $this->isLid($uid) AND $this->leden[$uid]['op']=='1';
+	}
+
 	public function getLeden(){		return $this->leden; }
 	public function getLedenCSV(){
 		$leden=array();

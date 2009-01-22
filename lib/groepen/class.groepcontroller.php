@@ -206,6 +206,11 @@ class Groepcontroller extends Controller{
 					}else{
 						$this->groep->setValue('toonPasfotos', 0);
 					}
+					if(isset($_POST['lidIsMod'])){
+						$this->groep->setValue('lidIsMod', 1);
+					}else{
+						$this->groep->setValue('lidIsMod', 0);
+					}
 				}
 				$this->groep->setValue('beschrijving', $_POST['beschrijving']);
 
