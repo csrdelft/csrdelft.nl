@@ -6,6 +6,9 @@ RewriteRule ^/?$ /communicatie/forum/ [R]
 # Ledenlijst
 RewriteRule ^ledenlijst/? lijst.php
 
+# Verjaardagen
+RewriteRule ^verjaardagen verjaardagen.php
+
 # Profielen
 RewriteRule ^profiel/([0-9a-z]+)$ profiel.php?uid=$1
 RewriteRule ^profiel/([0-9a-z]+)/([a-z]+)$ profiel.php?uid=$1&a=$2
