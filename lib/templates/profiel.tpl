@@ -89,7 +89,7 @@
 			<div class="label">Lid sinds:</div> {$profhtml.lidjaar}<br />
 			<br />
 			{if $isOudlid===false}
-				<div class="label">Kring:</div> <a href="/communicatie/moten.php#kring{$profhtml.moot}.{$profhtml.kring}">{$profhtml.moot}.{$profhtml.kring}</a><br />
+				<div class="label">Kring:</div> <a href="/communicatie/moten#kring{$profhtml.moot}.{$profhtml.kring}">{$profhtml.moot}.{$profhtml.kring}</a><br />
 			{/if}
 		</div>
 	</div>

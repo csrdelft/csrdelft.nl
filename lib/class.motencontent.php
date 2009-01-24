@@ -71,9 +71,9 @@ class MotenContent extends SimpleHTML {
 		//echo '<h2>Moot en Kringindeling</h2>';
 		echo '<p>';
 		if($this->_bEmail===true){
-			echo '<a href="moten.php">Toon zonder email-adressen</a>';
+			echo '<a href="moten">Toon zonder email-adressen</a>';
 		}else{
-			echo '<a href="moten.php?email">Toon ook email-adressen</a>';
+			echo '<a href="moten?email">Toon ook email-adressen</a>';
 		}
 		echo '</p><table style="width: 100%">';
 
@@ -123,7 +123,7 @@ class MotenContent extends SimpleHTML {
 			echo '<tr>';
 			for ($moot=1; $moot<=$maxmoten; $moot++){
 				echo '<td >';
-				echo '<form action="moten.php#form" method="post"><a name="form" ></a>
+				echo '<form action="moten#form" method="post"><a name="form" ></a>
 					<input type="hidden" name="moot" value="'.$moot.'" />';
 				$tekstInvoer=true;
 				if(	isset($_POST['kringNamen']) AND trim($_POST['kringNamen'])!='' AND
