@@ -78,7 +78,7 @@ class ForumOnderwerp extends Forum {
 	private function loadPosts(){
 		$zichtBaarClause="post.zichtbaar='zichtbaar'";
 		if($this->isModerator()){
-			$zichtBaarClause.=" OR post.zichtbaar='wacht_goedkeuring'";
+			$zichtBaarClause.=" OR post.zichtbaar='wacht_goedkeuring' OR post.zichtbaar='spam'";
 		}
 		$sPostsQuery="
 			SELECT

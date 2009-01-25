@@ -70,7 +70,7 @@
 		{$peiling->view()}
 	{/if}
 	{foreach from=$forum->getPosts() item='bericht' name='berichten'}
-		<tr>
+		<tr id="post{$bericht.postID}">
 			<td class="auteur">
 				{$bericht.uid|csrnaam:'user'} schreef
 				{$bericht.datum|reldate}
@@ -86,18 +86,21 @@
 						<img src="{$csr_pics}forum/bewerken.png" title="Bewerk bericht" alt="Bewerk bericht" style="border: 0px;" />
 					</a>
 				{/if}
-				{* verwijderlinkje, niet als er maar een bericht in het onderwerp is. *}
+				
 				{if $forum->isModerator()}
+					{* verwijderlinkje, niet als er maar een bericht in het onderwerp is. *}
 					{knop url="verwijder-bericht/`$bericht.postID`" type=verwijderen confirm='Weet u zeker dat u dit bericht wilt verwijderen?'}
+					{if $bericht.zichtbaar=='wacht_goedkeuring'}
+						<br />
+						{knop url="keur-goed/`$bericht.postID`" confirm='Weet u zeker dat u dit bericht wilt goedkeuren?' text='bericht goedkeuren'}
+						{knop ignorePrefix=true url="/tools/stats.php?ip=`$bericht.ip`" text=ip-log}
+					{elseif $bericht.zichtbaar=='spam'}
+						<h1>SPAM</h1>
+					{/if}
 				{/if}
 				
-				{if $forum->isModerator() AND $bericht.zichtbaar=='wacht_goedkeuring'}
-					<br />
-					{knop url="keur-goed/`$bericht.postID`" confirm='Weet u zeker dat u dit bericht wilt goedkeuren?' text='bericht goedkeuren'}
-					{knop ignorePrefix=true url="/tools/stats.php?ip=`$bericht.ip`" text=ip-log}
-				{/if}
 			</td>
-			<td class="bericht{cycle values="0,1"}" id="post{$bericht.postID}"> 
+			<td class="bericht{cycle values="0,1"}"> 
 				{$bericht.tekst|ubb}
 				{if $bericht.bewerkt!=''}
 					<div class="bewerkt">
