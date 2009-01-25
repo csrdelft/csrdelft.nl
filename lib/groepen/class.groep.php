@@ -337,23 +337,26 @@ class Groep{
 				$prioriteit=1;
 				$op=1;
 			break;
-			case 'fiscus': case 'redacteur': case 'bibliothecaris':
-			case 'posterman': case 'techniek': case 'abactis':
+			case 'abactis': case 'redacteur': case 'bibliothecaris':
+			case 'posterman': case 'techniek':
 				$prioriteit=2;
 			break;
 			case 'computeur': case 'statisticus': case 'provisor':
-			case 'internetman': case 'bandleider':
+			case 'internetman': case 'bandleider': case 'fiscus':
 				$prioriteit=3;
 			break;
-			case 'fotocommisaris':
+			case 'fotocommisaris': case 'vice-praeses':
 				$prioriteit=4;
+			break;
+			case 'vice-abactis':
+				$prioriteit=5;
 			break;
 			case 'koemissaris': case 'stralerpheut': case 'regelneef':
 				$prioriteit=8;
 			break;
 			case 'q.q.': case 'qq':
 				$functie='Q.Q.';
-			 case 'hj':
+			case 'hj':
 				$prioriteit=9;
 			break;
 			default:

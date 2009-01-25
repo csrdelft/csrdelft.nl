@@ -247,9 +247,16 @@ class ForumOnderwerp extends Forum {
 		//het ip-adres bepalen van de post.
 		if(isset($_SERVER['REMOTE_ADDR'])){ $ip=$_SERVER['REMOTE_ADDR']; }else{ $ip='0.0.0.0'; }
 
+		require_once 'class.simplespamfilter.php';
+		$filter=new SimpleSpamfilter($tekst);
+
  		//kijken of een moderatiestap nodig is...
  		if($this->needsModeration()){
- 			$zichtbaarheid='wacht_goedkeuring';
+ 			if($filter->isSpam()){
+				$zichtbaarheid='spam';
+ 			}else{
+ 				$zichtbaarheid='wacht_goedkeuring';
+ 			}
  		}else{
  			//overerving van het onderwerp
  			$zichtbaarheid=$this->getZichtbaarheid();
@@ -270,12 +277,11 @@ class ForumOnderwerp extends Forum {
 
 		if($this->_db->query($sPostQuery)){
 			//een mailtje sturen naar de pubcie om de boel bevestigd te krijgen
-			if($this->needsModeration()){
+			if($this->needsModeration() AND !$filter->isSpam()){
 				//bericht sturen naar pubcie@csrdelft dat er een bericht op goedkeuring wacht
 	 			mail('pubcie@csrdelft.nl', 'Nieuw bericht in extern wacht op goedkeuring',
-	 				"yo, er is een nieuw bericht in extern, wat op goedkeuring wacht \r\n".
 	 			 	"http://csrdelft.nl/communicatie/forum/onderwerp/".$this->getID()."\r\n".
-	 			 	"\r\nDe inhoud van het bericht is als volgt: \r\n\r\n".$tekst."\r\n\r\nEINDE BERICHT");
+	 			 	"\r\nDe inhoud van het bericht is als volgt: \r\n\r\n".nl2br($tekst)."\r\n\r\nEINDE BERICHT");
 	 		}
 	 		//de boel hertellen:
 	 		$this->recountTopic();

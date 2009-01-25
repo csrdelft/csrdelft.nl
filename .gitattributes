@@ -176,6 +176,7 @@ lib/class.profielcontent.php -text
 lib/class.saldi.php -text
 lib/class.savedquery.php -text
 lib/class.simplehtml.php -text
+lib/class.simplespamfilter.php -text
 lib/class.sjaarsactie.php -text
 lib/class.sjaarsactiecontent.php -text
 lib/class.state.php -text
