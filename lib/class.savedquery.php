@@ -67,8 +67,6 @@ class savedQuery{
 		$lid=Lid::instance();
 
 		if(is_array($this->result)){
-
-
 			$return=$this->beschrijving.'<br /><table class="query_table">';
 			$keysPrinted=false;
 			$return.='<tr>';
@@ -104,6 +102,8 @@ class savedQuery{
 					//weergeven
 					if($key=='uid_naam'){
 						$return.=$lid->getNaamLink($veld, 'full', true);
+					}elseif($key=='onderwerp_link'){ //link naar het forum.
+						$return.='<a href="/communicatie/forum/onderwerp/'.$veld.'">'.$veld.'</a>';
 					}elseif(substr($key, 0, 10)=='groep_naam' AND $veld!=''){
 						require_once('groepen/class.groep.php');
 						//$veld mag een enkel id zijn of een serie door komma's gescheiden id's
