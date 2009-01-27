@@ -70,7 +70,7 @@
 		{$peiling->view()}
 	{/if}
 	{foreach from=$forum->getPosts() item='bericht' name='berichten'}
-		<tr id="post{$bericht.postID}">
+		<tr>
 			<td class="auteur">
 				{$bericht.uid|csrnaam:'user'} schreef
 				{$bericht.datum|reldate}
@@ -100,7 +100,7 @@
 				{/if}
 				
 			</td>
-			<td class="bericht{cycle values="0,1"}"> 
+			<td class="bericht{cycle values="0,1"}" id="post{$bericht.postID}"> 
 				{$bericht.tekst|ubb}
 				{if $bericht.bewerkt!=''}
 					<div class="bewerkt">
