@@ -133,7 +133,7 @@
 		</td>
 		<td class="forumtekst">
 			{if $forum->magToevoegen()} 
-				<form method="post" action="/communicatie/forum/toevoegen/{$forum->getID()}#laatste">
+				<form method="post" action="/communicatie/forum/toevoegen/{$forum->getID()}">
 					<p>
 						{* berichtje weergeven voor niet-ingeloggede gebruikers dat ze een naam moeten vermelden. *}
 						{if !$forum->isIngelogged()}
@@ -141,7 +141,7 @@
 							Het vermelden van <em>uw naam en email-adres</em> is verplicht.</strong><br /><br />
 						{/if}
 						<div id="berichtPreviewContainer" class="previewContainer"><h3>Voorbeeld van uw bericht:</h3><div id="berichtPreview" class="preview"></div></div>
-						<textarea name="bericht" id="forumBericht" class="tekst" rows="15" cols="80" style="width: 100%;">{$textarea}</textarea>
+						<textarea name="bericht" id="forumBericht" class="tekst" rows="15" style="width: 100%;">{$textarea}</textarea>
 						
 						<input type="submit" name="submit" value="opslaan" id="forumOpslaan" />
 						<input type="button" value="voorbeeld" style="color: #777;" id="forumVoorbeeld" onclick="previewPost('forumBericht', 'berichtPreview')"/>
@@ -151,7 +151,7 @@
 				{if $forum->isOpen()}
 					U mag in dit deel van het forum niet reageren.
 				{else}
-					U kunt hier niet meer reageren omdat dit onderwerp gesloten is
+					U kunt hier niet meer reageren omdat dit onderwerp gesloten is.
 				{/if}
 			{/if}
 		</td>

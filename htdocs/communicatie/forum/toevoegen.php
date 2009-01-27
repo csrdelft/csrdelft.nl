@@ -24,9 +24,9 @@ if(!isset($_POST['bericht'])){
 if(!isset($_GET['topic']) AND isset($_GET['forum'])){
 	$forum->setCat((int)$_GET['forum']);
 
-	if(strlen(trim($_POST['titel']))<1){
-		header('location: '.CSR_ROOT.'communicatie/forum/');
-		$_SESSION['melding']='De titel mag niet leeg zijn.';
+	if(strlen(trim($_POST['titel']))<1 OR strlen(trim($_POST['bericht']))<1){
+		header('location: '.CSR_ROOT.'communicatie/forum/categorie/'.$forum->getCatID());
+		$_SESSION['melding']='De titel of het bericht kunnen niet leeg zijn.';
 		exit;
 	}
 
