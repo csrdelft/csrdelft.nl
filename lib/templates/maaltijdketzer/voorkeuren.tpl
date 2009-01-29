@@ -13,7 +13,7 @@ en uw eetwens(di&euml;et) aanpassen.
 <p>
 Het is mogelijk dat u allergisch bent voor bepaalde ingredienten, of dat u uit bepaalde 
 overwegingen geen vlees wilt eten. Dit kunt u hieronder aangeven, de koks zullen er dan
-rekening mee houden. <strong>Dit is niet de plek om aan te geven dat u iets niet lekker vind.</strong>
+rekening mee houden. <strong>Dit is niet de plek om aan te geven dat u iets niet lekker vindt.</strong>
 </p>
 <form method="post" action="voorkeuren.php">
 	<input type="hidden" name="a" value="editEetwens" />
