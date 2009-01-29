@@ -124,7 +124,7 @@
 		<div class="left">Maaltijden</div>	
 		<div class="gegevens">
 			{if $profhtml.eetwens!=''}
-				<div class="label">Eetwens:</div>
+				<div class="label">Dieet:</div>
 				<div class="data">{$profhtml.eetwens}</div>
 				<br />
 			{/if}
