@@ -193,8 +193,9 @@ class ProfielContent extends SimpleHTML {
 			$form[1]['o_land'] = array('input',"Land Ouders:");
 			$form[1]['o_telefoon'] = array('input',"Telefoon Ouders:");
 			$form[1][] = array('ztekst',"&nbsp;","<b>Diversen:</b>");
-			$form[1][] = array('ztekst',"&nbsp;","Di&euml;ten (Vego, notenallergie etc.):");
-			$form[1]['eetwens'] = array('input',"Di&euml;ten: (max 20 tekens)");
+			//Dieten passen we wel aan bij de maaltijdvoorkeuren.
+			//$form[1][] = array('ztekst',"&nbsp;","Di&euml;ten (Vego, notenallergie etc.):");
+			//$form[1]['eetwens'] = array('input',"Di&euml;ten: (max 20 tekens)");
 			$form[1]['studienr'] = array('input',"Studienummer:");
 		}
 
