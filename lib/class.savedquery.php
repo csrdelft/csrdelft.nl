@@ -118,7 +118,7 @@ class savedQuery{
 						}
 						$return.=implode('<br />', $groeplinks);
 					}else{
-						$return.=$veld;
+						$return.=mb_htmlentities($veld);
 					}
 					$return.='</td>';
 				}
