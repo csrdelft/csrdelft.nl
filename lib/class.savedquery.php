@@ -58,10 +58,7 @@ class savedQuery{
 	// - De gebruiker P_ADMIN heeft
 	public static function magWeergeven($permissie){
 		$lid=Lid::instance();
-		$uids=explode(',', $permissie);
-		return $lid->hasPermission($permissie) OR
-				$lid->hasPermission('P_ADMIN') OR
-				in_array($lid->getUid(), $uids);
+		return $lid->hasPermission($permissie);
 	}
 	public function getHtml(){
 		$lid=Lid::instance();
@@ -147,7 +144,6 @@ class savedQuery{
 			ORDER BY beschrijving;";
 		$result=$db->query($selectQuery);
 		$return=array();
-		$lid=Lid::instance();
 		while($data=$db->next($result)){
 			if(savedQuery::magWeergeven($data['permissie'])){
 				$return[]=$data;
