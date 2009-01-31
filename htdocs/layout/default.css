@@ -639,7 +639,7 @@ table.zoekResultaat tr td img{ background-color: #fff3b4;}
 /* maaltijdketzer */
 table.maaltijden{ width: 100%; }
 table.maaltijden tr{ height: 1.6em; }
-table.maaltijden tr.old{ color: gray; }
+table.maaltijden tr.old{ opacity: .50; }
 
 /* csrmail */
 div#pubciemail_form{ background-color: #f1f1f1; border: 1px solid lightgray; padding: 10px;}
