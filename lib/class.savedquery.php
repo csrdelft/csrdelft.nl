@@ -11,10 +11,11 @@ class savedQuery{
 	private $permissie='P_ADMIN';
 	private $result=null;
 
-	public function savedQuery($id){
+	public function __construct($id){
 		$this->queryID=(int)$id;
 		$this->load();
 	}
+
 	private function load(){
 		$db=MySql::instance();
 		//query ophalen

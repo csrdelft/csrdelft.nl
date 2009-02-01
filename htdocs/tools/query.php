@@ -11,13 +11,15 @@ require_once('class.savedquery.php');
 
 if(!$lid->hasPermission('P_LOGGED_IN')){ header('location: '.CSR_ROOT); }
 
+$id=0;
 if(isset($_GET['id']) AND (int)$_GET['id']==$_GET['id']){
-	$savedquery=new savedQuery((int)$_GET['id']);
+	$id=(int)$_GET['id'];
+	$savedquery=new savedQuery($id);
 }
 
 $html='<h1>Opgeslagen Query\'s</h1>';
 
-$html.=SavedQuery::getQueryselector((int)$_GET['id']);
+$html.=SavedQuery::getQueryselector($id);
 
 if(isset($savedquery) AND $savedquery->magBekijken()){
 	$html.=$savedquery->getHtml();

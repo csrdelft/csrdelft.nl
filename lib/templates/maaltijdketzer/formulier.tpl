@@ -1,4 +1,4 @@
-<h2 id="maaltijdForumulier">Maaltijd {$maal.formulier.actie}</h2>
+<h2 id="maaltijdFormulier">Maaltijd {$maal.formulier.actie}</h2>
 
 <form action="/actueel/maaltijden/beheer/" method="post">
 	<input type="hidden" name="maalid" value="{$maal.formulier.id}" />
