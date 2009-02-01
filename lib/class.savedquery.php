@@ -31,7 +31,6 @@ class savedQuery{
 		if($result!==false AND $db->numRows($result)==1){
 			$querydata=$db->next($result);
 
-			$lid=Lid::instance();
 			if($this->magWeergeven($querydata['permissie'])){
 				//beschrijving opslaan
 				$this->beschrijving=$querydata['beschrijving'];
@@ -41,7 +40,7 @@ class savedQuery{
 				$queryResult=$db->query($querydata['savedquery']);
 				if($queryResult!==false){
 					$this->result=$db->result2array($queryResult);
-				}elseif($lid->hasPermission('P_ADMIN')){
+				}elseif(Lid::instance()->hasPermission('P_ADMIN')){
 					$this->result=mysql_error();
 				}
 			}
@@ -52,13 +51,9 @@ class savedQuery{
 		return $this->magWeergeven($this->permissie);
 
 	}
-	//query's zijn zichtbaar als:
-	// - De gebruiker de in de database opgeslagen permissie heeft.
-	// - De gebruiker een van de in de database opgeslagen uids heeft.
-	// - De gebruiker P_ADMIN heeft
+	//Query's mogen worden weergegeven als de permissiestring toegelaten wordt door Lid::hasPermission()'
 	public static function magWeergeven($permissie){
-		$lid=Lid::instance();
-		return $lid->hasPermission($permissie);
+		return Lid::instance()->hasPermission($permissie);
 	}
 	public function getHtml(){
 		$lid=Lid::instance();
@@ -75,6 +70,8 @@ class savedQuery{
 					$return.='Groep';
 				}elseif(substr($kopje, 0, 10)=='groep_naam'){
 					$return.=substr($kopje, 11);
+				}elseif($kopje='onderwerp_link'){
+					$return.='Onderwerp';
 				}else{
 					$return.=$kopje;
 				}
@@ -138,10 +135,10 @@ class savedQuery{
 		$db=MySql::instance();
 		$selectQuery="
 			SELECT
-				ID, beschrijving, permissie
+				ID, beschrijving, permissie, categorie
 			FROM
 				savedquery
-			ORDER BY beschrijving;";
+			ORDER BY categorie, beschrijving;";
 		$result=$db->query($selectQuery);
 		$return=array();
 		while($data=$db->next($result)){
@@ -149,6 +146,26 @@ class savedQuery{
 				$return[]=$data;
 			}
 		}
+		return $return;
+	}
+	static public function getQueryselector($id=0){
+
+		$return='<a class="knop" href="#" onclick="toggleDiv(\'sqSelector\')">Laat queryselector zien.</a>';
+		$return.='<div id="sqSelector" class="verborgen">';
+		$current='';
+		foreach(self::getQuerys() as $query){
+			if($current!=$query['categorie']){
+				if($current!=''){ $return.='</ul></div>'; }
+				$return.='<div class="sqCategorie" style="float: left; width: 450px; margin-right: 20px;"><strong>'.$query['categorie'].'</strong><ul>';
+				$current=$query['categorie'];
+			}
+			$return.='<li><a href="query.php?id='.$query['ID'].'">';
+			if($id==$query['ID']){ $return.='<em>'; }
+			$return.=mb_htmlentities($query['beschrijving']);
+			if($id==$query['ID']){ $return.='</em>'; }
+			$return.='</a></li>';
+		}
+		$return.='</ul></div></div><div class="clear"></div>';
 		return $return;
 	}
 }
