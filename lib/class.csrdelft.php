@@ -89,9 +89,8 @@ class csrdelft extends SimpleHTML {
 
 		if(defined('DEBUG') AND $lid->hasPermission('P_ADMIN')){
 			$db=MySql::instance();
-			echo '<script type="text/javascript" src="/layout/showhide.js"></script>
-
-			<h2 id="mysql_debug_header"><a id="mysql_debug_showhide" href="#mysql_debug_header" onclick="javascript:showhide(\'mysql_debug\');">Debug Tonen/Verstoppen</a></h2>
+			echo '
+			<h2 id="mysql_debug_header"><a id="mysql_debug_showhide" href="#mysql_debug_header" onclick="return  toggleDiv(\'mysql_debug\');">Debug Tonen/Verstoppen</a></h2>
 			<div id="mysql_debug" style="display: none"><pre>'.$db->getDebug().'</pre></div>';
 		}
 		//als er een error is geweest, die unsetten...
