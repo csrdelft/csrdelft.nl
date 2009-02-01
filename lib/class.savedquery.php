@@ -158,7 +158,7 @@ class savedQuery{
 		foreach(self::getQuerys() as $query){
 			if($current!=$query['categorie']){
 				if($current!=''){ $return.='</ul></div>'; }
-				$return.='<div class="sqCategorie" style="float: left; width: 450px; margin-right: 20px;"><strong>'.$query['categorie'].'</strong><ul>';
+				$return.='<div class="sqCategorie" style="float: left; width: 450px; margin-right: 20px; margin-bottom: 10px;"><strong>'.$query['categorie'].'</strong><ul>';
 				$current=$query['categorie'];
 			}
 			$return.='<li><a href="query.php?id='.$query['ID'].'">';
