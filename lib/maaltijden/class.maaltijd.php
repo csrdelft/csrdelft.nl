@@ -264,15 +264,23 @@ class MaalTijd {
 
 	function getStatus($uid=null) {
 		if($uid===null){ $uid=$this->_lid->getUid(); }
-		# kijk of deze gebruiker al was aan- of afgemeld
-		$result = $this->_db->select("SELECT status FROM maaltijdaanmelding WHERE maalid={$this->_maalid} AND uid='{$uid}'");
-		if (($result !== false) and $this->_db->numRows($result) > 0) {
-			$record = $this->_db->next($result);
-			if ($record['status'] == 'AAN' or $record['status'] == 'AF'){
-				return $record['status'];
+		if($this->isGesloten()){
+			$result = $this->_db->select("SELECT uid FROM maaltijdgesloten WHERE maalid={$this->_maalid} AND uid='{$uid}'");
+			if (($result !== false) and $this->_db->numRows($result) > 0) {
+				return 'AAN';
 			}
+			return 'AF';
+		}else{
+			# kijk of deze gebruiker al was aan- of afgemeld
+			$result = $this->_db->select("SELECT status FROM maaltijdaanmelding WHERE maalid={$this->_maalid} AND uid='{$uid}'");
+			if (($result !== false) and $this->_db->numRows($result) > 0) {
+				$record = $this->_db->next($result);
+				if ($record['status'] == 'AAN' or $record['status'] == 'AF'){
+					return $record['status'];
+				}
+			}
+			return 'AUTO';
 		}
-		return 'AUTO';
 	}
 
 	function getGasten($uid = '') {
