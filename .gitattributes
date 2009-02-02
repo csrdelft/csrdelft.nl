@@ -324,6 +324,7 @@ lib/smarty/unit_test/test_cases.php -text
 lib/templates/courant/courantbeheer.tpl -text
 lib/templates/courant/mail/c_header.tpl -text
 lib/templates/courant/mail/courant.tpl -text
+lib/templates/courant/mail/courant_draadloos2009.tpl -text
 lib/templates/courant/mail/csrmail_owee.tpl -text
 lib/templates/csrdelft.tpl -text
 lib/templates/documenten/document.tpl -text
