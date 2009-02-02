@@ -39,7 +39,7 @@ h4{
 	color: white;
 }
 p{
-	background-color: #888888;
+	background-color: #528b9f;
 	margin: 0px 0px 0px 0px;
 	padding: 10px 5px 5px 10px;
 	color: #ffffff;
@@ -79,7 +79,7 @@ li{
 } -->{/literal}
 </style>
 </head>
-<body>
+<body style="background-color: black;">
 <table>
 <tr><td><img src="http://dl.getdropbox.com/u/175650/draadloos-header.png" /></td>
 <tr>
@@ -111,7 +111,7 @@ li{
 <font face="verdana" size="-1">	
 {foreach from=$courant->getBerichten() item=bericht}
 	<h4><a name="{$bericht.ID}"></a>{$bericht.titel|ubb}</h4>
-	<p>{$bericht.bericht|ubb}</p>
+	<p style="background-color: #528b9f; margin: 0px; padding: 10px 5px 5px 10px; color: #ffffff; font-size: 11px; font-face: verdana, arial, sans-serif; line-height: 1.4em">{$bericht.bericht|ubb}</p>
 {/foreach}
 </font>
 </td>
