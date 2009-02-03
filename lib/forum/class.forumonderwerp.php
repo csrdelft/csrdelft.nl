@@ -281,7 +281,7 @@ class ForumOnderwerp extends Forum {
 				//bericht sturen naar pubcie@csrdelft dat er een bericht op goedkeuring wacht
 	 			mail('pubcie@csrdelft.nl', 'Nieuw bericht in extern wacht op goedkeuring',
 	 			 	"http://csrdelft.nl/communicatie/forum/onderwerp/".$this->getID()."\r\n".
-	 			 	"\r\nDe inhoud van het bericht is als volgt: \r\n\r\n".nl2br($tekst)."\r\n\r\nEINDE BERICHT");
+	 			 	"\r\nDe inhoud van het bericht is als volgt: \r\n\r\n".str_replace('\r\n', "\n", $tekst)."\r\n\r\nEINDE BERICHT");
 	 		}
 	 		//de boel hertellen:
 	 		$this->recountTopic();
