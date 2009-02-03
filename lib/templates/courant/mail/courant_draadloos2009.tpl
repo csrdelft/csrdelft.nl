@@ -12,7 +12,6 @@ body{
 	font-face: verdana, arial, sans-serif;
 	font-size: 12px;
 	margin: 0px 0px 20px 0px; padding: 0px ;
-	background-color: #000000;
 }
 table{
 	border: 0px;
@@ -33,23 +32,22 @@ img{
 	border: 0px;
 }
 h4{
-	background-color: #444444;
+	background-color: #777;
 	font-size: 15px;
 	margin: 10px 0px 0px 0px; padding: 5px 5px 5px 10px;
 	color: white;
 }
 p{
-	background-color: #528b9f;
+	background-color: #eee;
 	margin: 0px 0px 0px 0px;
 	padding: 10px 5px 5px 10px;
-	color: #ffffff;
 	font-size: 11px; font-face: verdana, arial, sans-serif;
 	line-height: 1.4em;
 }
 .inhoud{
 	border: 0px;
 	width: 100%;
-	background-color: #999999;
+	background-color: #eee;
 	margin: 0px 0px 15px 0px;
 	padding: 0px;
 }
@@ -79,7 +77,7 @@ li{
 } -->{/literal}
 </style>
 </head>
-<body style="background-color: black;">
+<body>
 <table>
 <tr><td><img src="http://dl.getdropbox.com/u/175650/draadloos-header.png" /></td>
 <tr>
@@ -111,7 +109,7 @@ li{
 <font face="verdana" size="-1">	
 {foreach from=$courant->getBerichten() item=bericht}
 	<h4><a name="{$bericht.ID}"></a>{$bericht.titel|ubb}</h4>
-	<p style="background-color: #528b9f; margin: 0px; padding: 10px 5px 5px 10px; color: #ffffff; font-size: 11px; font-face: verdana, arial, sans-serif; line-height: 1.4em">{$bericht.bericht|ubb}</p>
+	<p>{$bericht.bericht|ubb}</p>
 {/foreach}
 </font>
 </td>
