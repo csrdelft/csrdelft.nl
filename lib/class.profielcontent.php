@@ -53,28 +53,9 @@ class ProfielContent extends SimpleHTML {
 			$profhtml['woonoord']='<br />';
 		}
 
+		require_once('groepen/class.groepcontent.php');
+		$profhtml['groepen']=new GroepenProfielContent($this->_profiel['uid']);
 
-
-		# kijken of deze persoon in een groep zit
-		require_once('groepen/class.groepen.php');
-		$profhtml['groepen']="";
-
-		$aGroepen=Groepen::getGroepenByUid($this->_profiel['uid']);
-		if (count($aGroepen) != 0) {
-			$currentStatus=null;
-			foreach ($aGroepen as $groep) {
-				if($currentStatus!=$groep['status']){
-					if($currentStatus!=null){
-						$profhtml['groepen'].='</div>';
-					}
-					$profhtml['groepen'].='<div class="groep'.$groep['status'].'"><strong>'.str_replace(array('ht','ot'), array('h.t.', 'o.t.'),$groep['status']).' groepen:</strong><br />';
-					$currentStatus=$groep['status'];
-				}
-				$groepnaam=mb_htmlentities($groep['naam']);
-				$profhtml['groepen'].='<a href="/actueel/groepen/'.$groep['gtype'].'/'.$groep['id'].'/">'.$groepnaam."</a><br />\n";
-			}
-			$profhtml['groepen'].='</div>';
-		}
 		//soccie saldo
 		$profhtml['saldi']='';
 		//alleen als men het eigen profiel bekijkt.

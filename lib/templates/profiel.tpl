@@ -96,7 +96,7 @@
 	<div class="profielregel">
 		<div class="left">Groepen</div>	
 		<div class="gegevens">		
-			{$profhtml.groepen}
+			{$profhtml.groepen->view()}
 			<div style="clear: left;"></div>
 		</div>
 	</div>

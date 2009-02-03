@@ -193,8 +193,34 @@ class Groepgeschiedeniscontent extends SimpleHTML{
 
 	}
 }
-class GroepProfielContent{
+class GroepenProfielContent extends SimpleHTML{
+	private $uid;
+	public function __construct($uid){
+		$this->uid=$uid;
+	}
+	public function getHTML(){
+		$return='';
 
-
+		$aGroepen=Groepen::getGroepenByUid($this->uid);
+		if (count($aGroepen) != 0) {
+			$currentStatus=null;
+			foreach ($aGroepen as $groep) {
+				if($currentStatus!=$groep['status']){
+					if($currentStatus!=null){
+						$return.='</div>';
+					}
+					$return.='<div class="groep'.$groep['status'].'"><strong>'.str_replace(array('ht','ot', 'ft'), array('h.t.', 'o.t.', 'f.t.'),$groep['status']).' groepen:</strong><br />';
+					$currentStatus=$groep['status'];
+				}
+				$groepnaam=mb_htmlentities($groep['naam']);
+				$return.='<a href="/actueel/groepen/'.$groep['gtype'].'/'.$groep['id'].'/">'.$groepnaam."</a><br />\n";
+			}
+			$return.='</div>';
+		}
+		return $return;
+	}
+	public function view(){
+		echo $this->getHTML();
+	}
 }
 ?>
