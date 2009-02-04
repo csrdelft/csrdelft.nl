@@ -16,6 +16,8 @@ class Groep{
 	private $groep=null;
 	private $leden=null;
 
+	private $error;
+
 	public function __construct($init){
 		if(!is_array($init) AND preg_match('/^\d+$/', $init)){
 			if((int)$init===0){
@@ -140,6 +142,7 @@ class Groep{
 			}
 			return true;
 		}
+		$this->error.='Fout in query, mysql gaf terug: '.mysql_error().' Groep::save()';
 		return false;
 	}
 
@@ -148,7 +151,8 @@ class Groep{
 	 */
 	public function delete(){
 		if($this->getId()==0){
-			die('Kan geen lege groep wegkekken. Groep::delete()');
+			$this->error.='Kan geen lege groep wegkekken. Groep::delete()';
+			return false;
 		}
 		$db=MySql::instance();
 		$qDeleteLeden="DELETE FROM groeplid WHERE groepid=".$this->getId().";";
@@ -207,7 +211,8 @@ class Groep{
 				}
 			}
 		}else{
-			die('Geen gtype opgegeven, niet via de juiste weg aangevraagd...');
+			$this->error.='Geen gtype opgegeven, niet via de juiste weg aangevraagd... (Groep::setGtype())';
+			return false;
 		}
 	}
 
@@ -321,6 +326,36 @@ class Groep{
 			return false;
 		}
 	}
+	/*
+	 * Bewoners gaan uit een huis weg, en moeten dus naar de oudbewonersgroep verplaatst worden.
+	 * Daar hebben normale leden geen rechten voor, en het is een actie met twee stappen. Met
+	 * deze functie kan het in een keer.
+	 *
+	 * @return
+	 *
+	 * true		bij het succesvol verplaatsen van lid naar eerstvolgende voorganger (ot groep met zelfde snaam).
+	 * false 	bij het niet bestaan van een o.t. groep.
+	 * 			bij het niet bestaan van het lid in de huidige groep.
+	 * 			bij een ongeldig uid.
+	 * 			bij het proberen van deze actie door een niet-mod van de huidige groep.
+	 */
+	public function maakLidOt($uid){
+		if(!Lid::instance()->isValidUid($uid) OR !$this->isLid($uid)){
+			$this->error.='Gegeven uid zit niet in groep of is geen geldig uid. (Groep::maakLidOt())';
+			return false;
+		}
+		if(!$this->magBewerken()){
+			$this->error.='Gegeven uid mag deze groep niet bewerken. (Groep::maakLidOt())';
+			return false;
+		}
+		$ot=$this->getOpvolgerVoorganger();
+		if(!isset($ot['voorganger'])){
+			$this->error.='Groep heeft geen voorganger. (Groep::maakLidOt())';
+			return false;
+		}
+		$ot=$ot['voorganger'];
+		return $ot->addLid($uid) AND $this->verwijderLid($uid);
+	}
 	public function meldAan($functie){
 		if($this->magAanmelden()){
 			return $this->addLid(Lid::instance()->getUid(), $functie);
@@ -413,7 +448,23 @@ class Groep{
 	public function getLink(){
 		return '<a class="groeplink" href="/actueel/groepen/'.$this->getType().'/'.$this->getId().'">'.$this->getNaam().'</a>';
 	}
+	public function __toString(){
+		return $this->getLink();
+	}
+	public static function ids2links($string, $separator=','){
+		//$veld mag een enkel id zijn of een serie door komma's gescheiden id's
+		$groepen=explode(',', $string);
+		$groeplinks=array();
+		foreach($groepen as $groepid){
+			$groepid=(int)$groepid;
+			if($groepid!=0){
+				$groep=new Groep($groepid);
+				$groeplinks[]=$groep->getLink();
+			}
+		}
+		return implode($separator, $groeplinks);
 
+	}
 	/*
 	 * Deze functie geeft een array terug met functies en aantallen.
 	 */
@@ -446,6 +497,9 @@ class Groep{
 			$groepen=$db->result2array($result);
 		}
 		return $groepen;
+	}
+	public function getError(){
+		return $this->error();
 	}
 }
 ?>

@@ -300,7 +300,17 @@ class Groepcontroller extends Controller{
 			}else{
 				$melding='Lid uit groep verwijderen mislukt.';
 			}
-			$this->content->invokeRefresh($melding, $this->getUrl('default'));
+			$this->content->invokeRefresh($melding.' (GroepController::action_verwijderLid())', $this->getUrl('default'));
+		}
+	}
+	public function action_maakLidOt(){
+		if(isset($this->queryparts[2]) AND $this->lid->isValidUid($this->queryparts[2]) AND $this->groep->magBewerken()){
+			if($this->groep->maakLidOt(this->queryparts[2])){
+				$melding='Lid naar o.t.-groep verplaatsen gelukt.';
+			}else{
+				$melding='Lid naar o.t.-groep verplaatsen mislukt. ['. $this->groep->getError().'] ';
+			}
+			$this->content->invokeRefresh($melding.' (GroepController::action_maakLidOt())', $this->getUrl('default'));
 		}
 	}
 
