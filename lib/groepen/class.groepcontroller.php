@@ -305,7 +305,7 @@ class Groepcontroller extends Controller{
 	}
 	public function action_maakLidOt(){
 		if(isset($this->queryparts[2]) AND $this->lid->isValidUid($this->queryparts[2]) AND $this->groep->magBewerken()){
-			if($this->groep->maakLidOt(this->queryparts[2])){
+			if($this->groep->maakLidOt($this->queryparts[2])){
 				$melding='Lid naar o.t.-groep verplaatsen gelukt.';
 			}else{
 				$melding='Lid naar o.t.-groep verplaatsen mislukt. ['. $this->groep->getError().'] ';
