@@ -39,10 +39,15 @@ class savedQuery{
 
 				//query nog uitvoeren...
 				$queryResult=$db->query($querydata['savedquery']);
+
 				if($queryResult!==false){
-					$this->result=$db->result2array($queryResult);
+					if($db->numRows($queryResult)==0){
+						$this->result[]=array('Leeg resultaatset' => 'Query leverde geen resultaten terug.');
+					}else{
+						$this->result=$db->result2array($queryResult);
+					}
 				}elseif(Lid::instance()->hasPermission('P_ADMIN')){
-					$this->result=mysql_error();
+					$this->result[]=array('Mysql_error' => mysql_error());
 				}
 			}
 		}
@@ -103,17 +108,7 @@ class savedQuery{
 						$return.='<a href="/communicatie/forum/onderwerp/'.$veld.'">'.$veld.'</a>';
 					}elseif(substr($key, 0, 10)=='groep_naam' AND $veld!=''){
 						require_once('groepen/class.groep.php');
-						//$veld mag een enkel id zijn of een serie door komma's gescheiden id's
-						$groepen=explode(',', $veld);
-						$groeplinks=array();
-						foreach($groepen as $groepid){
-							$groepid=(int)$groepid;
-							if($groepid!=0){
-								$groep=new Groep($groepid);
-								$groeplinks[].=$groep->getLink();
-							}
-						}
-						$return.=implode('<br />', $groeplinks);
+						$return.=Groep::ids2links($veld, '<br />');
 					}else{
 						$return.=mb_htmlentities($veld);
 					}
@@ -122,14 +117,10 @@ class savedQuery{
 				$return.='</tr>';
 			}
 			$return.='</table>';
-		}elseif(is_string($this->result) AND $lid->hasPermission('P_ADMIN')){
-			//als this->result een string is, en we hebben te maken met een P_ADMIN, dan die string weergeven, want daar zit
-			//de php_error(); in.
-			$return='Query ('.$this->queryID.') gaf een foutmelding:  <br /><pre style="margin: 10px;">'.$this->result.' </pre>';
 		}else{
 			//foutmelding in geval van geen resultaat, dus of geen query die bestaat, of niet
 			//voldoende rechten.
-			$return='Query ('.$this->queryID.') bestaat niet, of u heeft niet voldoende rechten.';
+			$return='Query ('.$this->queryID.') bestaat niet, geeft een fout, of u heeft niet voldoende rechten.';
 		}
 		return $return;
 	}
