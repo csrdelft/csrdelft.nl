@@ -73,7 +73,7 @@ class savedQuery{
 					$return.='Groep';
 				}elseif(substr($kopje, 0, 10)=='groep_naam'){
 					$return.=substr($kopje, 11);
-				}elseif($kopje='onderwerp_link'){
+				}elseif($kopje=='onderwerp_link'){
 					$return.='Onderwerp';
 				}else{
 					$return.=$kopje;
