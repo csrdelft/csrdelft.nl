@@ -89,7 +89,7 @@ function forumCiteren(post){
 		if(http.readyState == 4){
 			document.getElementById('forumBericht').value+=http.responseText;
 			//helemaal naar beneden scrollen.
-			window.scroll(0,window.innerWidth);
+			window.scroll(0,document.body.clientHeight);
 		}
 	}
 	http.send(null);
@@ -173,3 +173,5 @@ function togglePasfotos(uids, div){
 		http.send(null);
 	}
 }
+//dummy fixPNG
+function fixPNG(){}
