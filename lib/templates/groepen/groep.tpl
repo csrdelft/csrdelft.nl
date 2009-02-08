@@ -22,7 +22,7 @@
 		</div>
 		{/if}
 		{if $groep->isAdmin() AND $groep->getStatus()=='ht'}
-		<a class="tab" href="/actueel/groepen/{$gtype}/{$groep->getId()}/maakGroepOt" onclick="return confirm('Weet u zeker dat u deze groep o.t. wilt maken?" title="Groep o.t. maken? Eindatum wordt indien niet ingevuld naar vandaag gezet.">
+		<a class="tab" href="/actueel/groepen/{$gtype}/{$groep->getId()}/maakGroepOt" onclick="return confirm('Weet u zeker dat u deze groep o.t. wilt maken?')" title="Groep o.t. maken? Eindatum wordt indien niet ingevuld naar vandaag gezet.">
 			<strong>&raquo;</strong>
 		</a>	
 		{/if}
