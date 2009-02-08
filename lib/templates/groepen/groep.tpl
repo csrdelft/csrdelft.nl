@@ -12,14 +12,19 @@
 <div id="groepledenContainer">
 	<div class="tabjesregel">
 		{if $lid->hasPermission('P_LEDEN_READ')}
-		<div class="handje knop" onclick="return togglePasfotos('{$groep->getLedenCSV()}', document.getElementById('ledenvangroep{$groep->getId()}'));">
+		<div class="tab" onclick="return togglePasfotos('{$groep->getLedenCSV()}', document.getElementById('ledenvangroep{$groep->getId()}'));">
 			<img src="{$csr_pics}/knopjes/pasfoto.png" title="schakel naar pasfoto'" />
 		</div>
 		{/if}
 		{if $groep->magBewerken() AND $action!='edit' AND !($action=='addLid' AND $lidAdder!=false)}
-		<div class="handje knop" title="Leden toevoegen aan groep" onclick="toggleDiv('lidAdder')">
+		<div class="tab" title="Leden toevoegen aan groep" onclick="toggleDiv('lidAdder')">
 			<strong>+</strong>
 		</div>
+		{/if}
+		{if $groep->isAdmin() AND $groep->getStatus()=='ht'}
+		<a class="tab" href="/actueel/groepen/{$gtype}/{$groep->getId()}/maakGroepOt" onclick="return confirm('Weet u zeker dat u deze groep o.t. wilt maken?" title="Groep o.t. maken? Eindatum wordt indien niet ingevuld naar vandaag gezet.">
+			<strong>&raquo;</strong>
+		</a>	
 		{/if}
 	</div>
 	<div id="ledenvangroep{$groep->getId()}" class="groepleden">
@@ -29,8 +34,15 @@
 					<td>{$groeplid.uid|csrnaam:'civitas'}</td>
 					{if $groep->toonFuncties()}<td><em>{$groeplid.functie|escape:'html'}</em></td>{/if}
 					{if $groep->magBewerken()}
-						<td><a href="/actueel/groepen/{$gtype}/{$groep->getId()}/verwijderLid/{$groeplid.uid}">X</a></td>
+						<td>
+						{if $groep->getTypeId()==2 AND $groep->getStatus()=='ht'}
+							<a href="/actueel/groepen/{$gtype}/{$groep->getId()}/maakLidOt/{$groeplid.uid}" title="Verplaats lid naar o.t.-groep">&raquo;</a>
+						{else}
+							<a href="/actueel/groepen/{$gtype}/{$groep->getId()}/verwijderLid/{$groeplid.uid}" title="Verwijder lid uit groep">X</a>
+						{/if}
+						</td>					
 					{/if}
+					
 				</tr>
 			{/foreach}
 		</table>

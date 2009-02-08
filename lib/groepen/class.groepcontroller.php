@@ -308,9 +308,24 @@ class Groepcontroller extends Controller{
 			if($this->groep->maakLidOt($this->queryparts[2])){
 				$melding='Lid naar o.t.-groep verplaatsen gelukt.';
 			}else{
-				$melding='Lid naar o.t.-groep verplaatsen mislukt. ['. $this->groep->getError().'] ';
+				$melding='Lid naar o.t.-groep verplaatsen mislukt. ['. $this->groep->getError().']  (GroepController::action_maakLidOt())';
 			}
-			$this->content->invokeRefresh($melding.' (GroepController::action_maakLidOt())', $this->getUrl('default'));
+			$this->content->invokeRefresh($melding, $this->getUrl('default'));
+		}
+	}
+	public function action_maakGroepOt(){
+		if($this->groep->isAdmin()){
+			if($this->groep->getStatus()=='ht'){
+				if($this->groep->maakOt()){
+					$melding='Groep o.t. maken gelukt.';
+				}else{
+					$melding='Groep o.t. maken mislukt ['. $this->groep->getError().'] (GroepController::action_maakGroepOt())';
+				}
+
+			}else{
+				$melding='Groep kan niet o.t. gemaakt worden omdat groep niet h.t. is.';
+			}
+			$this->content->invokeRefresh($melding, $this->getUrl('default'));
 		}
 	}
 

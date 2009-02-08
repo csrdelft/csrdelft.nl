@@ -222,7 +222,7 @@ class Groep{
 		if(in_array($key, $fields)){
 			$this->groep[$key]=trim($value);
 		}else{
-			echo 'FEUT: veld is niet toegestaan Groep::setValue()'; exit;
+			echo 'FEUT: veld ['.$key.'] is niet toegestaan Groep::setValue()'; exit;
 		}
 
 	}
@@ -287,6 +287,18 @@ class Groep{
 			return true;
 		}
 		return false;
+	}
+	public function maakOt(){
+		if($this->getStatus()!='ht'){
+			$this->error.='Groep o.t. maken mislukt: groep is niet h.t. (Groep::maakOt())';
+			return false;
+		}else{
+			if($this->getEinde()=='0000-00-00'){
+				$this->setValue('einde', date('Y-m-d'));
+			}
+			$this->setValue('status', 'ot');
+			return $this->save();
+		}
 	}
 	/*
 	 * Gebruiker mag aanmelden als:

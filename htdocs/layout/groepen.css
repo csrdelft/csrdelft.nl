@@ -9,7 +9,15 @@ ul.groepledenlijst{ width: 230px; float: right; padding: 10px 20px 20px 20px; ma
 
 /* groep-view */
 #groepledenContainer{ float: right; margin-left: 10px;}
-#groepledenContainer .tabjesregel .knop{ float: right; height: 18px; width: 20px; margin-left: 2px; background-color: #cfcfcf; text-align: center;}
+#groepledenContainer .tabjesregel .tab{ 
+	float: right; 
+	height: 18px; width: 20px; 
+	margin-left: 2px; 
+	background-color: #cfcfcf; 
+	text-align: center;
+	cursor: pointer;
+}
+
 
 .groepleden{ clear: both; width: 260px; background-color: #eee; float: right; border-top: 1px solid #ddd; border-bottom: 1px solid #ddd; }
 .groepleden td{ padding: 0px 5px; lext-align: left;}
