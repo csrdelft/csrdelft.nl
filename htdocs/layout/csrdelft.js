@@ -82,7 +82,19 @@ function forumEdit(post){
 	document.getElementById('forumOpslaan').disabled=true;
 	document.getElementById('forumVoorbeeld').disabled=true;
 }
-
+function forumCiteren(post){
+	http.abort();
+	http.open("GET", "/communicatie/forum/getPost.php?post="+post, true);
+	http.onreadystatechange=function(){
+		if(http.readyState == 4){
+			document.getElementById('forumBericht').value+=http.responseText;
+		}
+	}
+	http.send(null);
+	//we returnen altijd false, dan wordt de href= van <a> niet meer uitgevoerd. 
+	//Het werkt dan dus nog wel als javascript uit staat.
+	return false;
+}
 function youtubeDisplay(ytID){
 	var html='<object width="425" height="350">' + 
 		'<param name="movie" value="http://www.youtube.com/v/' + ytID + '&autoplay=1"></param>' + 

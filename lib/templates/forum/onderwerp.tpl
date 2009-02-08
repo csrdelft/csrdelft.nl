@@ -78,7 +78,10 @@
 				{* knopjes bij elke post *}
 				{* citeerknop enkel als het onderwerp open is en als men mag posten, of als men mod is. *}
 				{if $forum->magCiteren()}
-					 {knop url="reactie/`$bericht.postID`#laatste" type=citeren}
+					{* {knop url="reactie/`$bericht.postID`#laatste" type=citeren} *}
+					<a onclick="return forumCiteren({$bericht.postID})" href="/communicatie/forum/reactie/{$bericht.postID}#laatste">
+						<img src="{$csr_pics}forum/citeren.png" title="Citeer bericht" alt="Citeer bericht" style="border: 0px;" />
+					</a>
 				{/if}
 				{* bewerken als bericht van gebruiker is, of als men mod is. *}
 				{if $forum->magBewerken($bericht.postID)}
