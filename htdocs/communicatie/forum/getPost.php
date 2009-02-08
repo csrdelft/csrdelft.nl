@@ -20,7 +20,7 @@ if(isset($_GET['post'])){
 	if($forum->magCiteren()){
 		$post=$forum->getSinglePost($iPostID);
 
-		$jssafePost=htmlspecialchars(str_replace(array("\r\n", "\r", "\n"), '\n', addslashes($post['tekst'])), ENT_QUOTES);
+		$jssafePost=htmlspecialchars(str_replace(array("\r\n", "\r", "\n"), "\n", addslashes($post['tekst'])), ENT_QUOTES);
 
 		echo '[citaat='.$post['uid'].']'.$jssafePost.'[/citaat]';
 	}
