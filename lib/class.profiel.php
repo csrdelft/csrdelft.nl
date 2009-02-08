@@ -355,11 +355,12 @@ class Profiel extends Lid{
 			$nwpass2 = strval($form['nwpass2']);
 
 			$tmperror='';
-			# alleen actie ondernemen als er een oud password is ingevuld of als 
-			# de uitvoerende instantie P_LEDEN_EDIT heeft
-			if ($oldpass != "" or $this->hasPermission('P_LEDEN_EDIT') ) {
+			# alleen actie ondernemen als er een oud password is ingevuld
+			if ($oldpass != "" or $nwpass != "" or $nwpass2 != "") {
+				if ($oldpass == "" and ($nwpass != "" or $nwpass2 != "")) {
+					$this->_formerror['oldpass'] = "Vul ook uw huidige wachtwoord in:";
 				# we kijken of het oude wachtwoord klopt
-				if (!$this->hasPermission('P_LEDEN_EDIT') and !$this->_checkpw($this->_profile['password'], $oldpass)) {
+				} elseif (!$this->_checkpw($this->_profile['password'], $oldpass)) {
 					$this->_formerror['oldpass'] = "Het huidige wachtwoord is onjuist:";
 				# of er wat nieuws is ingevuld...
 				} elseif ($nwpass == "" and $nwpass2 == "") {
@@ -378,8 +379,6 @@ class Profiel extends Lid{
 					# nieuwe waarde voor diff_to_*
 					$this->_tmpprofile['password'] = $hash;
 				}
-			} else {
-				$this->_formerror['oldpass'] = "Vul ook uw huidige wachtwoord in:";
 			}
 		}
 
@@ -387,7 +386,7 @@ class Profiel extends Lid{
 		# als hun naam, hun studiejaar etc, om de oudledenlijst compleet te krijgen.
 		# De Vice-Abactis kan de info van iedereen wijzigen.
 
-		if ($this->_profile['status'] == 'S_OUDLID' or $this->hasPermission('P_LEDEN_EDIT')) {
+		if ($this->_profile['status'] == 'S_OUDLID' or $this->hasPermission('P_LEDEN_MOD')) {
 
 			# Info over naam => verplichte velden! (ook vanwege sn/cn velden in ldap!)
 			$velden = array('voornaam' => 50, 'achternaam' => 50);
@@ -501,7 +500,7 @@ class Profiel extends Lid{
 		}
 
 		# Extra velden die gewijzigd kunnen worden door am. Vice-Abactis
-		if ($this->hasPermission('P_LEDEN_EDIT')) {
+		if ($this->hasPermission('P_LEDEN_MOD')) {
 
 			$velden = array('postfix' => 7, 'voornamen' => 100, 'kerk' => 50, 'muziek' => 100);
 			# voor al deze veldnamen...
@@ -740,6 +739,8 @@ class Profiel extends Lid{
 				*/
 				# lege velden er uit gooien
 				foreach ($entry as $i => $e) if ($e == '') unset ($entry[$i]);
+
+				# if ($this->hasPermission('P_LEDEN_MOD')) print_r($entry);
 
 				# LDAP verbinding openen
 				$ldap = new LDAP();
