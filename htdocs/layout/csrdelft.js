@@ -88,6 +88,8 @@ function forumCiteren(post){
 	http.onreadystatechange=function(){
 		if(http.readyState == 4){
 			document.getElementById('forumBericht').value+=http.responseText;
+			//helemaal naar beneden scrollen.
+			window.scroll(0,window.innerWidth);
 		}
 	}
 	http.send(null);
