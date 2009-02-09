@@ -299,11 +299,8 @@ src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
 
 	static function getUbbHelp(){
 return <<<UBBVERHAAL
-<div id="ubbhulp">
-	<a href="#laatste" onclick="document.getElementById('ubbhulpverhaal').style.display = 'block'">Opmaakhulp weergeven</a><br />
-</div>
 <div id="ubbhulpverhaal">
-	<span id="ubbsluiten" onclick="document.getElementById('ubbhulpverhaal').style.display = 'none'" title="Opmaakhulp verbergen">&times;</span>
+	<span id="ubbsluiten" onclick="toggleDiv('ubbhulpverhaal')" title="Opmaakhulp verbergen">&times;</span>
 	<h2>Tekst opmaken</h2>
 	U kunt uw berichten opmaken met een simpel opmaaktaaltje wat ubb genoemd wordt. Het lijkt wat op html, maar dan met vierkante haken:<br />
 	<ul>

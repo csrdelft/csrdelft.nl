@@ -123,12 +123,6 @@
 			<a class="forumpostlink" id="laatste">
 				{if $citeerPost==0}Reageren{else}Citeren{/if}
 			</a><br /><br />
-			{if $forum->magToevoegen()}	
-				<a onclick="vergrootTextarea('forumBericht', 10)" class="handje" title="Vergroot het invoerveld">
-					Invoerveld vergroten&nbsp;&raquo;
-				</a><br /><br />
-				{$ubbHulp}
-			{/if}			
 			{* berichtje weergeven  voor moderators als het topic gesloten is. *}
 			{if $forum->isModerator() AND !$forum->isOpen()}
 				<br /><strong>Dit topic is gesloten, u mag reageren omdat u beheerder bent.</strong>
@@ -145,9 +139,11 @@
 						{/if}
 						<div id="berichtPreviewContainer" class="previewContainer"><h3>Voorbeeld van uw bericht:</h3><div id="berichtPreview" class="preview"></div></div>
 						<textarea name="bericht" id="forumBericht" class="tekst" rows="15" style="width: 100%;">{$textarea}</textarea>
-						
+						<a style="float: right;" class="handje knop" onclick="toggleDiv('ubbhulpverhaal')" title="Opmaakhulp weergeven">UBB</a>
+						<a style="float: right;" class="handje knop" onclick="vergrootTextarea('forumBericht', 10)" title="Vergroot het invoerveld"><strong>⇅</strong></a>
 						<input type="submit" name="submit" value="opslaan" id="forumOpslaan" />
 						<input type="button" value="voorbeeld" style="color: #777;" id="forumVoorbeeld" onclick="previewPost('forumBericht', 'berichtPreview')"/>
+						
 					</p>
 				</form>
 			{else}

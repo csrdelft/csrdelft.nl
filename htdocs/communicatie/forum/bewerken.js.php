@@ -52,8 +52,10 @@ if(isset($_GET['post'])){
 		editForm +='<textarea name="bericht" id="forumBewerkBericht" class="tekst" rows="<?php echo $regels; ?>" cols="80" style="width: 100%;">';
 		editForm +='<?php echo $jssafePost ?></textarea>';
 		editForm +='Reden van bewerking: <input type="text" name="reden" style="width: 250px;"/><br /><br />';
+		editForm +='<a style="float: right;" class="handje knop" onclick="toggleDiv(\'ubbhulpverhaal\')" title="Opmaakhulp weergeven">UBB</a>';
+		editForm +='<a style="float: right;" class="handje knop" onclick="vergrootTextarea(\'forumBewerkBericht\', 10)" title="Vergroot het invoerveld"><strong>⇅</strong></a>';
 		editForm +='<input type="submit" value="opslaan" /> <input type="button" value="voorbeeld" onclick="previewPost(\'forumBewerkBericht\', \'bewerkPreview\')" /> <input type="button" value="terug" onclick="restorePost()" />';
-		editForm +='&nbsp;&nbsp;<a class="knop" onclick="vergrootTextarea(\'forumBewerkBericht\', 10)" title="Vergroot het invoerveld">Invoerveld vergroten</div></form>'
+		editForm +='</form>';
 		<?php
 	}else{
 		?>
