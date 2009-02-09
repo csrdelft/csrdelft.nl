@@ -140,7 +140,7 @@
 						<div id="berichtPreviewContainer" class="previewContainer"><h3>Voorbeeld van uw bericht:</h3><div id="berichtPreview" class="preview"></div></div>
 						<textarea name="bericht" id="forumBericht" class="tekst" rows="15" style="width: 100%;">{$textarea}</textarea>
 						<a style="float: right;" class="handje knop" onclick="toggleDiv('ubbhulpverhaal')" title="Opmaakhulp weergeven">UBB</a>
-						<a style="float: right;" class="handje knop" onclick="vergrootTextarea('forumBericht', 10)" title="Vergroot het invoerveld"><strong>⇅</strong></a>
+						<a style="float: right;" class="handje knop" onclick="vergrootTextarea('forumBericht', 10)" title="Vergroot het invoerveld"><strong>&#21C5;</strong></a>
 						<input type="submit" name="submit" value="opslaan" id="forumOpslaan" />
 						<input type="button" value="voorbeeld" style="color: #777;" id="forumVoorbeeld" onclick="previewPost('forumBericht', 'berichtPreview')"/>
 						
