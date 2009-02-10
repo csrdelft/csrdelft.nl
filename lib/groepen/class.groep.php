@@ -252,8 +252,10 @@ class Groep{
 	public function getLeden(){		return $this->leden; }
 	public function getLedenCSV(){
 		$leden=array();
-		foreach($this->getLeden() as $lid){
-			$leden[]=$lid['uid'];
+		if(is_array($this->getLeden())){
+			foreach($this->getLeden() as $lid){
+				$leden[]=$lid['uid'];
+			}
 		}
 		return implode($leden, ',');
 	}
@@ -414,9 +416,9 @@ class Groep{
 			$db=MySql::instance();
 			$sCieQuery="
 				INSERT INTO groeplid
-					( groepid, uid, op, functie, prioriteit )
+					( groepid, uid, op, functie, prioriteit, moment )
 				VALUES (
-					".$this->getId().", '".$uid."', '".$op."', '".$db->escape($functie)."', ".$prioriteit."
+					".$this->getId().", '".$uid."', '".$op."', '".$db->escape($functie)."', ".$prioriteit.", '".getDateTime()."'
 				)";
 			return $db->query($sCieQuery);
 		}else{
@@ -467,11 +469,13 @@ class Groep{
 		//$veld mag een enkel id zijn of een serie door komma's gescheiden id's
 		$groepen=explode(',', $string);
 		$groeplinks=array();
-		foreach($groepen as $groepid){
-			$groepid=(int)$groepid;
-			if($groepid!=0){
-				$groep=new Groep($groepid);
-				$groeplinks[]=$groep->getLink();
+		if(is_array($groepen)){
+			foreach($groepen as $groepid){
+				$groepid=(int)$groepid;
+				if($groepid!=0){
+					$groep=new Groep($groepid);
+					$groeplinks[]=$groep->getLink();
+				}
 			}
 		}
 		return implode($separator, $groeplinks);
