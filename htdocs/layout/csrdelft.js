@@ -73,18 +73,53 @@ function applyUBB(string, div){
 	}
 	http.send(null);
 }
-function forumEdit(post){
-	var scripttag=document.createElement('SCRIPT');
-	scripttag.type = 'text/javascript';
-	scripttag.src = '/communicatie/forum/bewerken/formulier/'+post;
-	document.body.appendChild(scripttag);
-	document.getElementById('forumBericht').disabled=true;
-	document.getElementById('forumOpslaan').disabled=true;
-	document.getElementById('forumVoorbeeld').disabled=true;
+
+/*
+ * Een post bewerken in het forum.
+ * Haal een post op, bouw een formuliertje met javascript.
+ */
+var bewerkDiv=null;
+var bewerkDivInnerHTML=null;
+function forumBewerken(post){
+	http.abort();
+	http.open("GET", "/communicatie/forum/getPost.php?post="+post, true);
+	http.onreadystatechange=function(){
+		if(http.readyState == 4){
+			if(document.getElementById('forumEditForm')){ restorePost(); }
+			
+			bewerkDiv=document.getElementById('post'+post);
+			bewerkDivInnerHTML=bewerkDiv.innerHTML;
+			
+			bewerkDiv.innerHTML='<form action="/communicatie/forum/bewerken/'+post+'" method="post" id="forumEditForm">';
+			bewerkDiv.innerHTML +='<h3>Bericht bewerken</h3>Als u dingen aanpast zet er dan even bij w&aacute;t u aanpast! Gebruik bijvoorbeeld [s]...[/s]<br />';
+			bewerkDiv.innerHTML +='<div id="bewerkPreviewContainer" class="previewContainer"><h3>Voorbeeld van uw bericht:</h3><div id="bewerkPreview" class="preview"></div></div>';
+			bewerkDiv.innerHTML +='<textarea name="bericht" id="forumBewerkBericht" class="tekst" rows="8" style="width: 100%;"></textarea>';
+			bewerkDiv.innerHTML +='Reden van bewerking: <input type="text" name="reden" style="width: 250px;"/><br /><br />';
+			bewerkDiv.innerHTML +='<a style="float: right;" class="handje knop" onclick="toggleDiv(\'ubbhulpverhaal\')" title="Opmaakhulp weergeven">UBB</a>';
+			bewerkDiv.innerHTML +='<a style="float: right;" class="handje knop" onclick="vergrootTextarea(\'forumBewerkBericht\', 10)" title="Vergroot het invoerveld"><strong>&uarr;&darr;</strong></a>';
+			bewerkDiv.innerHTML +='<input type="submit" value="opslaan" /> <input type="button" value="voorbeeld" onclick="previewPost(\'forumBewerkBericht\', \'bewerkPreview\')" /> <input type="button" value="terug" onclick="restorePost()" />';
+			bewerkDiv.innerHTML +='</form>';
+
+			document.getElementById('forumBewerkBericht').value=http.responseText;	
+			
+			//invoerveldjes van het normale toevoegformulier even uitzetten.
+			document.getElementById('forumBericht').disabled=true;
+			document.getElementById('forumOpslaan').disabled=true;
+			document.getElementById('forumVoorbeeld').disabled=true;
+		}
+	}
+	http.send(null);
+	return false;	
+}
+function restorePost(){
+	bewerkDiv.innerHTML=bewerkDivInnerHTML;
+	document.getElementById('forumBericht').disabled=false;
+	document.getElementById('forumOpslaan').disabled=false;
+	document.getElementById('forumVoorbeeld').disabled=false;
 }
 function forumCiteren(post){
 	http.abort();
-	http.open("GET", "/communicatie/forum/getPost.php?post="+post, true);
+	http.open("GET", "/communicatie/forum/getPost.php?citaat=true&post="+post, true);
 	http.onreadystatechange=function(){
 		if(http.readyState == 4){
 			document.getElementById('forumBericht').value+=http.responseText;
@@ -98,15 +133,9 @@ function forumCiteren(post){
 	return false;
 }
 function youtubeDisplay(ytID){
-	var html='<object width="425" height="350">' + 
+	document.getElementById('youtube'+ytID).innerHTML='<object width="425" height="350">' + 
 		'<param name="movie" value="http://www.youtube.com/v/' + ytID + '&autoplay=1"></param>' + 
 		'<embed src="http://www.youtube.com/v/' + ytID + '&autoplay=1" type="application/x-shockwave-flash" wmode="transparent" width="425" height="350"></embed></object>';
-	
-	if(document.all){
-		document.all['youtube'+ytID].innerHTML ='<br />'+ html;
-	}else{
-		document.getElementById('youtube'+ytID).innerHTML = html;
-	}
 }
 function LZ(x) {return(x<0||x>9?"":"0")+x}
 
@@ -174,4 +203,6 @@ function togglePasfotos(uids, div){
 	}
 }
 //dummy fixPNG
-function fixPNG(){}
+function fixPNG(){ 
+	return false; 
+}

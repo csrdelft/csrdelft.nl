@@ -85,7 +85,7 @@
 				{/if}
 				{* bewerken als bericht van gebruiker is, of als men mod is. *}
 				{if $forum->magBewerken($bericht.postID)}
-					<a onclick="forumEdit({$bericht.postID})">
+					<a onclick="forumBewerken({$bericht.postID})">
 						<img src="{$csr_pics}forum/bewerken.png" title="Bewerk bericht" alt="Bewerk bericht" style="border: 0px;" />
 					</a>
 				{/if}

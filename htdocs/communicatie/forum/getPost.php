@@ -11,7 +11,6 @@ require_once('include.config.php');
 require_once('forum/class.forumonderwerp.php');
 $forum = new ForumOnderwerp();
 
-//is er uberhaupt wel een postID welke bewerkt moet worden
 if(isset($_GET['post'])){
 	$iPostID=(int)$_GET['post'];
 	$forum->loadByPostID($iPostID);
@@ -20,9 +19,10 @@ if(isset($_GET['post'])){
 	if($forum->magCiteren()){
 		$post=$forum->getSinglePost($iPostID);
 
-		//$jssafePost=htmlspecialchars(str_replace(array("\r\n", "\r", "\n"), "\n", addslashes($post['tekst'])), ENT_QUOTES);
-
-		echo '[citaat='.$post['uid'].']'.$post['tekst'].'[/citaat]';
+		$citaat=isset($_GET['citaat']);
+		if($citaat){ echo '[citaat='.$post['uid'].']'; }
+		echo $post['tekst'];
+		if($citaat){ echo '[/citaat]'; }
 	}
 }
 ?>
