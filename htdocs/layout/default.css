@@ -223,7 +223,6 @@ ul.nobullets li{ list-style-type: none; }
 	top: 115px;
 }
 #login{
-	display: none; /*Standaard laten zien of niet (inline/none) */
 	margin-right: 10px;
 	float: right;
 }
