@@ -27,15 +27,15 @@
 	<div id="menuright">
 		{if $lid->hasPermission('P_LOGGED_IN') }
 			<div id="ingelogd">
-				{$lid->getCivitasName()}<br />
-				<div id="profiellink"><a href="/communicatie/profiel/{$lid->getUid()}">profiel</a></div> <div id="uitloggen"><a href="/logout.php">log&nbsp;uit</a></div><br class="clear" />
+				{$lid->getUid|csrnaam}<br />
+				<div id="uitloggen"><a href="/logout.php">log&nbsp;uit</a></div><br class="clear" />
 				<br />
-				<table id="saldi">
-					<tr><th> </th><th class="boven">Saldo</th></tr>
+				<div id="saldi">
 					{foreach from=$lid->getSaldi() item=saldo}
-						<tr><th>{$saldo.naam}</th><td{if $saldo.saldo < 0} style="color: red;"{/if}>&euro; {$saldo.saldo|number_format:2:",":"."}</td></tr>
+						<div class="saldo{if $saldo.saldo < 0} staatrood{/if}">&euro; {$saldo.saldo|number_format:2:",":"."}</div>
+						{$saldo.naam}:
 					{/foreach}
-				</table>
+				</div>
 				<br />
 				<form method="post" action="/communicatie/lijst.php">
 					<p>
@@ -57,7 +57,9 @@
 				</form>
 			</div>
 		{else}
-			<div id="key"><img src="http://plaetjes.csrdelft.nl/layout/key.gif" alt="Inloggen" onclick="ToggleLogin();" /></div>
+			<div id="key">
+				<a href="#" onclick="toggleDiv('login');"><img src="http://plaetjes.csrdelft.nl/layout/key.gif" alt="Inloggen" /></a>
+			</div>
 			<div id="login">			
 				{if isset($smarty.session.auth_error)}
 					<span class="waarschuwing">{$smarty.session.auth_error}</span>

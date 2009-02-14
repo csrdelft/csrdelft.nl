@@ -72,11 +72,9 @@ class ProfielContent extends SimpleHTML {
 			if($this->_profiel['uid']==$this->_lid->getUid()){
 				$profhtml['saldografiek']='<br /><img src="/tools/saldografiek.php?uid='.$this->_profiel['uid'].'" />';
 			}else{
-				require_once('groepen/class.groep.php');
-				$soccie=new Groep('SocCie');
-				if($this->_lid->hasPermission('P_ADMIN') OR $soccie->isLid($this->_lid->getUid())){
-					$profhtml['saldografiek']='<br /><a  onclick="document.getElementById(\'saldoGrafiek\').style.display = \'block\'" class="knop">Saldografiek weergeven</a><br />';
-					$profhtml['saldografiek'].='<br /><div id="saldoGrafiek" style="display: none;"><img src="/tools/saldografiek.php?uid='.$this->_profiel['uid'].'" /></div>';
+				if($this->_lid->hasPermission('P_ADMIN,groep:soccie')){
+					$profhtml['saldografiek']='<br /><a  onclick="document.getElementById(\'saldoGrafiek\').innerHTML=\''.htmlspecialchars('<img src="/tools/saldografiek.php?uid='.$this->_profiel['uid'].'" />').'\'" class="knop">Saldografiek weergeven</a><br />';
+					$profhtml['saldografiek'].='<br /><div id="saldoGrafiek"></div>';
 				}
 			}
 		}

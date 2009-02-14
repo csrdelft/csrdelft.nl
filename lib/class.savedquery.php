@@ -145,7 +145,9 @@ class savedQuery{
 	static public function getQueryselector($id=0){
 
 		$return='<a class="knop" href="#" onclick="toggleDiv(\'sqSelector\')">Laat queryselector zien.</a>';
-		$return.='<div id="sqSelector" class="verborgen">';
+		$return.='<div id="sqSelector" ';
+		if($id!=0){ $return.='class="verborgen"'; }
+		$return.='>';
 		$current='';
 		foreach(self::getQuerys() as $query){
 			if($current!=$query['categorie']){

@@ -315,9 +315,9 @@ class Lid {
 		return $lidCache->getLid($uid);
 	}
 
-	public function getNaamLink($uid, $vorm='full', $link=false, $aNaam=false, $bHtmlentities=true){
-		//als er geen uid is opgegeven, ook geen link of naam teruggeven.
-		if($uid=='' AND !$this->isValidUid($uid)){ return ''; }
+	public function getNaamLink($uid=null, $vorm='full', $link=false, $aNaam=false, $bHtmlentities=true){
+		if($uid==null){ $uid=$this->getUid(); }
+		if(!$this->isValidUid($uid)){ return ''; }
 		$sNaam='';
 
 		if($this->getLidFromCache($uid)===false){

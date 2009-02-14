@@ -180,10 +180,10 @@ function displayDiv(div){ div.style.display="block"; }
 
 function toggleDiv(id){
 	var div=document.getElementById(id);
-	if(div.style.display!="block"){
-		displayDiv(div);
-	}else{
+	if(div.style.display=="block" || div.style.display=="inline"){
 		hideDiv(div);
+	}else{
+		displayDiv(div);
 	}
 }
 function togglePasfotos(uids, div){

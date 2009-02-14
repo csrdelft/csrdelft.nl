@@ -60,10 +60,3 @@ function SetActive(a)
 {
 	menu_active = a;
 }
-
-
-/* Menu rechts tonen/verbergen */
-function ToggleLogin()
-{
-	document.getElementById('login').style.display = (document.getElementById('login').style.display != "inline" ? "inline" : "none"); 
-}
