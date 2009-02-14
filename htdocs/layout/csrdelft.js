@@ -10,9 +10,6 @@ if(navigator.appName == "Microsoft Internet Explorer") {
   http = new XMLHttpRequest();
 }
 
-var orig=null;
-
-
 function vergrootTextarea(id, rows) {
   var textarea = document.getElementById(id);
   //if (!textarea || (typeof(textarea.rows) == "undefined")) return;
@@ -90,16 +87,17 @@ function forumBewerken(post){
 			bewerkDiv=document.getElementById('post'+post);
 			bewerkDivInnerHTML=bewerkDiv.innerHTML;
 			
-			bewerkDiv.innerHTML='<form action="/communicatie/forum/bewerken/'+post+'" method="post" id="forumEditForm">';
-			bewerkDiv.innerHTML +='<h3>Bericht bewerken</h3>Als u dingen aanpast zet er dan even bij w&aacute;t u aanpast! Gebruik bijvoorbeeld [s]...[/s]<br />';
-			bewerkDiv.innerHTML +='<div id="bewerkPreviewContainer" class="previewContainer"><h3>Voorbeeld van uw bericht:</h3><div id="bewerkPreview" class="preview"></div></div>';
-			bewerkDiv.innerHTML +='<textarea name="bericht" id="forumBewerkBericht" class="tekst" rows="8" style="width: 100%;"></textarea>';
-			bewerkDiv.innerHTML +='Reden van bewerking: <input type="text" name="reden" style="width: 250px;"/><br /><br />';
-			bewerkDiv.innerHTML +='<a style="float: right;" class="handje knop" onclick="toggleDiv(\'ubbhulpverhaal\')" title="Opmaakhulp weergeven">UBB</a>';
-			bewerkDiv.innerHTML +='<a style="float: right;" class="handje knop" onclick="vergrootTextarea(\'forumBewerkBericht\', 10)" title="Vergroot het invoerveld"><strong>&uarr;&darr;</strong></a>';
-			bewerkDiv.innerHTML +='<input type="submit" value="opslaan" /> <input type="button" value="voorbeeld" onclick="previewPost(\'forumBewerkBericht\', \'bewerkPreview\')" /> <input type="button" value="terug" onclick="restorePost()" />';
-			bewerkDiv.innerHTML +='</form>';
-
+			bewerkForm ='<form action="/communicatie/forum/bewerken/'+post+'" method="post" id="forumEditForm">';
+			bewerkForm+='<h3>Bericht bewerken</h3>Als u dingen aanpast zet er dan even bij w&aacute;t u aanpast! Gebruik bijvoorbeeld [s]...[/s]<br />';
+			bewerkForm+='<div id="bewerkPreviewContainer" class="previewContainer"><h3>Voorbeeld van uw bericht:</h3><div id="bewerkPreview" class="preview"></div></div>';
+			bewerkForm+='<textarea name="bericht" id="forumBewerkBericht" class="tekst" rows="8" style="width: 100%;"></textarea>';
+			bewerkForm+='Reden van bewerking: <input type="text" name="reden" style="width: 250px;"/><br /><br />';
+			bewerkForm+='<a style="float: right;" class="handje knop" onclick="toggleDiv(\'ubbhulpverhaal\')" title="Opmaakhulp weergeven">UBB</a>';
+			bewerkForm+='<a style="float: right;" class="handje knop" onclick="vergrootTextarea(\'forumBewerkBericht\', 10)" title="Vergroot het invoerveld"><strong>&uarr;&darr;</strong></a>';
+			bewerkForm+='<input type="submit" value="opslaan" /> <input type="button" value="voorbeeld" onclick="previewPost(\'forumBewerkBericht\', \'bewerkPreview\')" /> <input type="button" value="terug" onclick="restorePost()" />';
+			bewerkForm+='</form>';
+			
+			bewerkDiv.innerHTML=bewerkForm;
 			document.getElementById('forumBewerkBericht').value=http.responseText;	
 			
 			//invoerveldjes van het normale toevoegformulier even uitzetten.
@@ -136,6 +134,7 @@ function youtubeDisplay(ytID){
 	document.getElementById('youtube'+ytID).innerHTML='<object width="425" height="350">' + 
 		'<param name="movie" value="http://www.youtube.com/v/' + ytID + '&autoplay=1"></param>' + 
 		'<embed src="http://www.youtube.com/v/' + ytID + '&autoplay=1" type="application/x-shockwave-flash" wmode="transparent" width="425" height="350"></embed></object>';
+	return false;
 }
 function LZ(x) {return(x<0||x>9?"":"0")+x}
 
@@ -186,6 +185,7 @@ function toggleDiv(id){
 		displayDiv(div);
 	}
 }
+var orig=null;
 function togglePasfotos(uids, div){
 	if(orig!=null){
 		div.innerHTML=orig;
