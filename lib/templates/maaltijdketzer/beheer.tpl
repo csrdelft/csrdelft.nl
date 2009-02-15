@@ -29,7 +29,7 @@
 				<td>{$maaltijd.datum|date_format:$datumFormaat}</td>
 				<td>{$maaltijd.tekst|escape:'html'}</td>
 				<td>{$maaltijd.abotekst}</td>
-				<td>{$maaltijd.tp_link}</td>
+				<td>{$maaltijd.tp|csrnaam}</td>
 				<td>
 					{if $maaltijd.aantal < $maaltijd.max}
 						{$maaltijd.aantal} ({$maaltijd.max})

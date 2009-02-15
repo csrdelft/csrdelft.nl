@@ -70,6 +70,10 @@ class MaalTijd {
 	# wat gegevens voor de maaltijdprintlijst
 	function getDatum() { return $this->_maaltijd['datum']; }
 	function getTP() { return $this->_maaltijd['tp']; }
+	public function isTp($uid=null){
+		if($uid==null){ $this->_lid->getUid(); }
+		return $uid==$this->getTP();
+	}
 	public function getID(){ return $this->getMaalId(); }
 	function getMaalId() { return $this->_maalid; }
 

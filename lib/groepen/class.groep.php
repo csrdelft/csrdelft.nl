@@ -298,6 +298,9 @@ class Groep{
 			if($this->getEinde()=='0000-00-00'){
 				$this->setValue('einde', date('Y-m-d'));
 			}
+			if($this->isAanmeldbaar()){
+				$this->setValue('aanmeldbaar', 0);
+			}
 			$this->setValue('status', 'ot');
 			return $this->save();
 		}

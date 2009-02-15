@@ -1,53 +1,49 @@
 <?php
+# C.S.R. Delft | pubcie@csrdelft.nl
+# -------------------------------------------------------------------
+# maaltijdlijst.php
+# -------------------------------------------------------------------
 
 
-# instellingen & rommeltjes
-require_once('include.config.php');
-	### Pagina-onderdelen ###
+require_once 'include.config.php';
 
-# Moeten er acties uitgevoerd worden?
-$maalid=getOrPost('maalid');
 
-# Een error-waarde houden we bij om zodadelijk evt. een foutmelding
-# te kunnen laden in plaats van de profiel pagina omdat er geen
-# toegang wordt verleend voor de actie die gevraagd wordt.
-$error = 0;
+$maalid=(int)$_GET['maalid'];
 
-# controleren of we wel mogen doen wat er gevraagd wordt...
-if($maalid == '' or (!$lid->hasPermission('P_MAAL_MOD') and !opConfide())) $error = 1;
+if($maalid==0){
+	SimpleHTML::invokeRefresh('Geen maaltijd-id meegegeven', 'actueel/maaltijden/');
+}
 
-# Pagina maken
-if ($error == 0  or $error == 2) {
+# MaaltijdenSysteem
+require_once 'maaltijden/class.maaltrack.php';
+require_once 'maaltijden/class.maaltijd.php';
+$maaltrack = new MaalTrack();
 
-	# MaaltijdenSysteem
-	require_once('maaltijden/class.maaltrack.php');
-	require_once('maaltijden/class.maaltijd.php');
-	$maaltrack = new MaalTrack($lid, $db);
+# bestaat de maaltijd?
+if (!$maaltrack->isMaaltijd($maalid)){
+	SimpleHTML::invokeRefresh('Maaltijd bestaat niet!', 'actueel/maaltijden/');
+}
 
-	# bestaat de maaltijd?
-	if (!$maaltrack->isMaaltijd($maalid)) die("Maaltijd bestaat niet!");
-	# zo ja, maak object en pagina
-	$maaltijd = new Maaltijd($maalid, $lid, $db);
+$maaltijd = new Maaltijd($maalid);
 
-	# Moet deze maaltijd gesloten worden?
-	if (isset($_GET['sluit']) and $_GET['sluit'] == 1) {
-		$maaltijd->sluit();	
-		header('Location: '.CSR_ROOT.'actueel/maaltijden/lijst/'.$maalid);
-		exit;
-	}
+# Moet deze maaltijd gesloten worden?
+if (isset($_GET['sluit']) and $_GET['sluit'] == 1) {
+	$maaltijd->sluit();
+	header('Location: '.CSR_ROOT.'actueel/maaltijden/lijst/'.$maalid);
+	exit;
+}
 
-	require_once('maaltijden/class.maaltijdlijstcontent.php');
-	$page = new MaaltijdLijstContent($maaltijd);
-	
-	# Moeten we de fiscaal-lijst weergeven?
-	if(isset($_GET['fiscaal']) && $_GET['fiscaal']==1){
-		$page->setFiscaal(true);
-	}
-	
+require_once 'maaltijden/class.maaltijdlijstcontent.php';
+$page = new MaaltijdLijstContent($maaltijd);
+
+# Moeten we de fiscaal-lijst weergeven?
+if(isset($_GET['fiscaal']) && $_GET['fiscaal']==1){
+	$page->setFiscaal(true);
+}
+if($lid->hasPermission('P_MAAL_MOD') OR opConfide() OR $maaltijd->isTp()){
 	$page->view();
-
-} else {
-	die("HEE, Kekschooier! Dat mag niet!");
+}else{
+	SimpleHTML::invokeRefresh('U mag de maaltijdlijst niet bekijken.', 'actueel/maaltijden/');
 }
 
 

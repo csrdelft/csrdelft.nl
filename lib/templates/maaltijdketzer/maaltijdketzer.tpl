@@ -19,16 +19,16 @@ uitprinten. Vanaf dat moment zal deze ketzer u niet meer willen aan- of afmelden
 {else}
 	<table class="maaltijden">
 		<tr>
-			{if $toonLijsten}<th>&nbsp;</th>{/if}
+			<th>&nbsp;</th>
 			<th>Maaltijd begint om:</th>
 			<th>Omschrijving</th>
 			<th>Aantal(Max)</th>
 			<th>Kom ik eten?</th>
 			<th>Actie</th>
-		</tr>
+		</tr>{debug}
 		{foreach from=$maal.zelf.maaltijden item=maaltijd}
 			<tr>
-				{if $toonLijsten}
+				{if $toonLijsten or $maalijd.tp==$lid->getUid()}
 					<td><a href="/actueel/maaltijden/lijst/{$maaltijd.id}" class="knop">lijst printen</a></td>
 				{/if}
 				<td>{$maaltijd.datum|date_format:$datumFormaat}</td>

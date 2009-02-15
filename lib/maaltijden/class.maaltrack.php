@@ -22,7 +22,7 @@ class MaalTrack {
 	var $_error = '';
 	var $_proxyerror = '';
 
-	function MaalTrack() {
+	function __construct() {
 		$this->_lid=Lid::instance();
 		$this->_db =MySql::instance();
 	}
@@ -244,7 +244,6 @@ class MaalTrack {
 		$result=$db->select($sMaaltijdQuery);
 		if (($result !== false) and $db->numRows($result) > 0) {
 			while ($record = $db->next($result)) {
-				$record['tp_link']=$lid->getNaamLink($record['tp'], 'civitas', true);
 				if(!($mootfilter===true AND preg_match("/(MOOT|UBER)[^{$moot}]{1}/", $record['abosoort']))){
 					$maaltijden[] = $record;
 

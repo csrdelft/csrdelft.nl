@@ -13,7 +13,7 @@
 	<div class="tabjesregel">
 		{if $lid->hasPermission('P_LEDEN_READ')}
 		<div class="tab" onclick="return togglePasfotos('{$groep->getLedenCSV()}', document.getElementById('ledenvangroep{$groep->getId()}'));">
-			<img src="{$csr_pics}/knopjes/pasfoto.png" title="schakel naar pasfoto'" />
+			<img src="{$csr_pics}/knopjes/pasfoto.png" title="schakel naar pasfoto's" />
 		</div>
 		{/if}
 		{if $groep->magBewerken() AND $action!='edit' AND !($action=='addLid' AND $lidAdder!=false)}
@@ -26,6 +26,18 @@
 			<strong>&raquo;</strong>
 		</a>	
 		{/if}
+		{if $groep->magBewerken() OR $groep->isAdmin()}
+		{if $groep->magBewerken()}
+		<a class="tab" href="/actueel/groepen/{$gtype}/{$groep->getId()}/bewerken#groepFormulier">
+			<img src="{$csr_pics}forum/bewerken.png" title="Bewerk groep" />
+		</a>
+		{/if}
+		{if $groep->isAdmin()}
+		<a class="tab" onclick="return confirm('Weet u zeker dat u deze groep wilt verwijderen?')" href="/actueel/groepen/{$gtype}/{$groep->getId()}/verwijderen">
+			<img src="{$csr_pics}forum/verwijderen.png" title="Verwijder deze groep" />
+		</a>
+		{/if}
+	{/if}
 	</div>
 	<div id="ledenvangroep{$groep->getId()}" class="groepleden">
 		<table>
@@ -128,20 +140,6 @@
 		{/if}
 		</ul>	
 	</div> 
-	{if $groep->magBewerken() OR $groep->isAdmin()}
-		<div id="groepAdmin">
-			{if $groep->magBewerken()}
-				<a href="/actueel/groepen/{$gtype}/{$groep->getId()}/bewerken" class="knop"><img src="{$csr_pics}forum/bewerken.png" 
-title="Bewerk groep" /></a>
-				<br /><br />
-			{/if}
-			{if $groep->isAdmin()}
-			<a class="knop" onclick="return confirm('Weet u zeker dat u deze groep wilt verwijderen?')" href="/actueel/groepen/{$gtype}/{$groep->getId()}/verwijderen">
-				<img src="{$csr_pics}forum/verwijderen.png" title="Verwijder groep" />
-			</a>
-			{/if}
-		</div>
-	{/if}
 	{$groep->getBeschrijving()|ubb}
 {/if}
 <div class="clear"></div>
