@@ -279,7 +279,7 @@ Lightbox.prototype = {
         }).bind(this);
         imgPreloader.src = this.imageArray[this.activeImage][0];
         
-        document.location='#'+imageNum;
+        //document.location='#'+imageNum;
     },
 
     //
@@ -462,7 +462,7 @@ Lightbox.prototype = {
         this.lightbox.hide();
         new Effect.Fade(this.overlay, { duration: this.overlayDuration });
         $$('select', 'object', 'embed').each(function(node){ node.style.visibility = 'visible' });
-        document.location='#';
+        //document.location='#';
     },
 
     //
