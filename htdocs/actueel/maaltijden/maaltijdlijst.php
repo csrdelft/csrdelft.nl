@@ -27,7 +27,7 @@ if (!$maaltrack->isMaaltijd($maalid)){
 $maaltijd = new Maaltijd($maalid);
 
 # Moet deze maaltijd gesloten worden?
-if (isset($_GET['sluit']) and $_GET['sluit'] == 1) {
+if(($lid->hasPermission('P_MAAL_MOD') OR opConfide()) AND isset($_GET['sluit']) and $_GET['sluit'] == 1) {
 	$maaltijd->sluit();
 	SimpleHTML::invokeRefresh(null, '/actueel/maaltijden/lijst/'.$maalid);
 	exit;

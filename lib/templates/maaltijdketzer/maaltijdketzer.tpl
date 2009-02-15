@@ -28,9 +28,11 @@ uitprinten. Vanaf dat moment zal deze ketzer u niet meer willen aan- of afmelden
 		</tr>
 		{foreach from=$maal.zelf.maaltijden item=maaltijd}
 			<tr>
+				<td>
 				{if $toonLijsten or $maaltijd.tp==$lid->getUid()}
-					<td><a href="/actueel/maaltijden/lijst/{$maaltijd.id}" class="knop">lijst printen</a></td>
+					<a href="/actueel/maaltijden/lijst/{$maaltijd.id}" class="knop">lijst printen</a><
 				{/if}
+				</td>
 				<td>{$maaltijd.datum|date_format:$datumFormaat}</td>
 				<td>{$maaltijd.tekst|escape:'html'}</td>
 				<td>

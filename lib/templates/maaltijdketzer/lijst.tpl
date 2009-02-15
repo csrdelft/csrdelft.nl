@@ -56,9 +56,11 @@ Regels omtrent het betalen van de maaltijden op Confide:
 {if !$maaltijd.gesloten}
 	<h1 style="color: red">De inschrijving voor deze maaltijd is nog niet gesloten</h1>
 <p>
-	<a href="/actueel/maaltijden/lijst/{$maaltijd.id}/sluiten" onclick="return confirm('Weet u zeker dat u deze maaltijd wil sluiten?')">
-		Nu sluiten! (N.B. Dit is een onomkeerbare stap!!)
-	</a>
+	{if $maaltijd.magsluiten}
+		<a href="/actueel/maaltijden/lijst/{$maaltijd.id}/sluiten" onclick="return confirm('Weet u zeker dat u deze maaltijd wil sluiten?')">
+			Nu sluiten! (N.B. Dit is een onomkeerbare stap!!)
+		</a>
+	{/if}
 </p>
 {/if}
 {if $maaltijd.aantal>0}
