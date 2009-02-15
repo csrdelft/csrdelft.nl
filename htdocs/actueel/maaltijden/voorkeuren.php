@@ -40,20 +40,20 @@ if ($error == 0) switch($action) {
 		# kijk of er een abo is opgegeven
 		$abo=getOrPost('abo');
 		if(!$maaltrack->addabo($abo)){
-			$error=2; 
-		}else{ 
+			$error=2;
+		}else{
 			header("Location: {$_SERVER['PHP_SELF']}");
-			exit; 
+			exit;
 		}
 	break;
 	case 'delabo':
 		# kijk of er een abo is opgegeven
 		$abo=getOrPost('abo');
 		if(!$maaltrack->delabo($abo)){
-			$error=2; 
-		}else{ 
+			$error=2;
+		}else{
 			header("Location: {$_SERVER['PHP_SELF']}");
-			exit; 
+			exit;
 		}
 	break;
 	case 'editEetwens':
@@ -62,7 +62,7 @@ if ($error == 0) switch($action) {
 			$error=2;
 		}else{
 			header("Location: {$_SERVER['PHP_SELF']}");
-			exit; 
+			exit;
 		}
 	break;
 	case 'editCorveewens':
@@ -71,7 +71,7 @@ if ($error == 0) switch($action) {
 			$error=2;
 		}else{
 			header("Location: {$_SERVER['PHP_SELF']}");
-			exit; 
+			exit;
 		}
 	break;
 }
@@ -82,9 +82,10 @@ if ($error == 0  or $error == 2) {
 	# Het middenstuk
 	require_once('maaltijden/class.maaltijdvoorkeurcontent.php');
 	$midden = new MaaltijdVoorkeurContent($maaltrack);
-} else {
-	# geen rechten
-	$midden = new Includer('', 'maaltijd-niet-ingelogged.html');
+}else{
+	require_once 'class.paginacontent.php';
+	$midden=new PaginaContent(new Pagina('maaltijden'));
+	$midden->setActie('bekijken');
 }
 $zijkolom=new kolom();
 

@@ -11,7 +11,7 @@
 
 require_once('include.config.php');
 
-if(!$lid->hasPermission('P_MAAL_MOD')){ header('location: '.CSR_ROOT.'maaltijden/'); exit; }
+if(!$lid->hasPermission('P_MAAL_MOD')){ header('location: '.CSR_ROOT.'actueel/maaltijden/'); exit; }
 
 require_once('maaltijden/class.maaltrack.php');
 require_once('maaltijden/class.maaltijd.php');
