@@ -63,11 +63,6 @@
 			<div id="login">			
 				{if isset($smarty.session.auth_error)}
 					<span class="waarschuwing">{$smarty.session.auth_error}</span>
-				<script type="text/javascript">
-						<!--
-						document.getElementById('login').style.display='block';
-						-->
-					</script>
 				{/if}
 				<form action="/login.php" method="post">
 					<fieldset>
@@ -80,7 +75,9 @@
 					</fieldset>
 				</form>			
 			</div>
-			<script type="text/javascript">hideDiv(document.getElementById('login'));</script>
+			{if !isset($smarty.session.auth_error)}
+				<script type="text/javascript">hideDiv(document.getElementById('login'));</script>
+			{/if}			
 		{/if}
 	</div>
 </div>

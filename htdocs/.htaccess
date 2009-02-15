@@ -3,6 +3,8 @@ AddDefaultCharset utf-8
 RewriteEngine On
 
 ### mod_rewrite-dingen
+
+RewriteRule ^pauper/?$				pauper.php
 # Pagina
 RewriteRule ^pagina/([a-z]+)/bewerken? pagina.php?naam=$1&bewerken=ja
 RewriteRule ^pagina/([a-z]+)/? pagina.php?naam=$1

@@ -25,7 +25,7 @@ class csrdelft extends SimpleHTML {
 	private $_titel='Geen titel gezet.';
 	private $_prefix;
 
-	function csrdelft($body,$prefix='',$menuid=0){ //mw: param menuid toegevoegd, zodat het goede menu geladen wordt (voor vb=99)
+	function __construct($body,$prefix='',$menuid=0){ //mw: param menuid toegevoegd, zodat het goede menu geladen wordt (voor vb=99)
 		if(is_object($body)){
 			$this->_body=$body;
 			//als de body een methode heeft om een titel mee te geven die gebruiken, anders de standaard.
@@ -33,18 +33,26 @@ class csrdelft extends SimpleHTML {
 				$this->_titel=$this->_body->getTitel();
 			}
 		}
-		//nieuw menu-object aanmaken...
-		require_once('class.menu.php');
-		$this->_menu=new menu($prefix, $menuid);
-
-		//Stylesheets en scripts die we altijd gebruiken
-		$this->addStylesheet('undohtml.css');
-		$this->addStylesheet('default.css');
-		$this->addScript('csrdelft.js');
-		$this->addScript('menu.js');
-
 		//Prefix opslaan
 		$this->_prefix=$prefix;
+		if($this->_prefix=='' AND isset($_SESSION['pauper'])){
+			$this->_prefix='pauper_';
+		}
+
+		//nieuw menu-object aanmaken...
+		require_once('class.menu.php');
+		$this->_menu=new menu($this->_prefix, $menuid);
+
+		//Stylesheets en scripts die we altijd gebruiken
+		if($this->_prefix=='pauper_'){
+			$this->addStylesheet('pauper.css');
+		}else{
+			$this->addStylesheet('undohtml.css');
+			$this->addStylesheet('default.css');
+			$this->addScript('csrdelft.js');
+			$this->addScript('menu.js');
+		}
+
 	}
 
 	function addStylesheet($sheet){
