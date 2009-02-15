@@ -681,3 +681,8 @@ form#streeplijst input, label{ text-align: left; margin: 3px; padding: 0px; line
 .eetplantabel tr.kleur0 td{ background-color: #fff; }
 .eetplantabel tr.kleur1 td{ background-color: #f4f4f4; }
 .eetplantabel tr .huis{ border-left: 1px solid black; padding:3px 4px; margin: 0px; font-size: 10px;}
+
+#shoutbox{
+
+}
+}
