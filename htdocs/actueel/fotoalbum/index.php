@@ -11,7 +11,7 @@ require_once 'include.config.php';
 require_once 'class.fotoalbum.php';
 require_once 'class.fotoalbumcontent.php';
 
-$pad=urldecode(substr($_SERVER['REQUEST_URI'], 19));
+$pad=htmlspecialchars(urldecode(substr($_SERVER['REQUEST_URI'], 19)));
 if($pad==''){
 	$mapnaam='Fotoalbum';
 }else{
