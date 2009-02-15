@@ -25,7 +25,7 @@ uitprinten. Vanaf dat moment zal deze ketzer u niet meer willen aan- of afmelden
 			<th>Aantal(Max)</th>
 			<th>Kom ik eten?</th>
 			<th>Actie</th>
-		</tr>{debug}
+		</tr>
 		{foreach from=$maal.zelf.maaltijden item=maaltijd}
 			<tr>
 				{if $toonLijsten or $maalijd.tp==$lid->getUid()}
