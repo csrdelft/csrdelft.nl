@@ -24,7 +24,7 @@ class DocumentenCategorie{
 	 * 						0	Alle kinderen inladen.
 	 * 						>0	Dit aantal kinderen wordt ingeladen.
 	 */
-	public function load($catID=0, $loadChildren=0){
+	public function load($catID=0, $childrenLimit=0){
 		$this->ID=(int)$catID;
 		if($this->getID()!=0){
 			$db=MySql::instance();
@@ -35,23 +35,28 @@ class DocumentenCategorie{
 				$this->naam=$categorie['naam'];
 				$this->zichtbaar=$categorie['zichtbaar'];
 
-				$this->loadChildren($loadChildren);
+				$this->loadChildren($childrenLimit);
 			}else{
 				//gevraagde categorie bestaat niet, we zet het ID weer op 0.
 				$this->ID=0;
 			}
 		}
 	}
-	public function loadChildren($loadChildren){
-		//kindertjes ophalen.
-		if($loadChildren>=0){
-			$query="SELECT ID FROM document WHERE catID=".$this->getID();
-			if($loadChildren>0){
-				$query.=' LIMIT '.$loadChildren;
+	/*
+	 * /kindertjes ophalen.
+	 */
+	public function loadChildren($childrenLimit){
+
+		if($childrenLimit>=0){
+			$query="
+				SELECT ID, naam, catID, bestandsnaam, size, mimetype, toegevoegd, eigenaar
+				FROM document WHERE catID=".$this->getID();
+			if($childrenLimit>0){
+				$query.=' LIMIT '.$childrenLimit;
 			}
 			$result=$db->query($query);
 			while($doc=$db->next($result)){
-				$this->documenten[]=new Document($doc['ID']);
+				$this->documenten[]=new Document($doc);
 			}
 		}
 		return $db->numRows($result);

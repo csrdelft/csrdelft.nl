@@ -1,16 +1,27 @@
 <?php
 /*
  * class.controller.php	| 	Jan Pieter Waagmeester (jieter@jpwaag.com)
- * 
- * 
+ *
+ *
  */
 class Controller{
-	
+
 	protected $action='default';
 	protected $content=null;
-	
-	public function __construct(){
-		
+
+	private $queryparts=array();
+
+	public function __construct($querystring){
+		$this->queryparts=explode('/', $querystring);
+
+	}
+	public function hasParam($key){
+		return isset($this->queryparts[$key]);
+	}
+	public function getParam($key){
+		if($this->hasParam($key)){
+			return $this->queryparts[$key];
+		}
 	}
 	public function getContent(){
 		return $this->content;
@@ -18,7 +29,7 @@ class Controller{
 	public function hasAction($action){
 		return method_exists($this, 'action_'.$action);
 	}
-	
+
 	protected function isPOSTed(){
 		return $_SERVER['REQUEST_METHOD']=='POST';
 	}

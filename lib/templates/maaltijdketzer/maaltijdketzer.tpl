@@ -30,7 +30,7 @@ uitprinten. Vanaf dat moment zal deze ketzer u niet meer willen aan- of afmelden
 			<tr>
 				<td>
 				{if $toonLijsten or $maaltijd.tp==$lid->getUid()}
-					<a href="/actueel/maaltijden/lijst/{$maaltijd.id}" class="knop">lijst printen</a><
+					<a href="/actueel/maaltijden/lijst/{$maaltijd.id}" class="knop">lijst printen</a>
 				{/if}
 				</td>
 				<td>{$maaltijd.datum|date_format:$datumFormaat}</td>

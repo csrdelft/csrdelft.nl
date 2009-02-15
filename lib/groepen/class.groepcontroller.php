@@ -20,23 +20,22 @@ require_once('class.controller.php');
 class Groepcontroller extends Controller{
 
 	private $groep;
-	private $queryparts=array();
 	private $lid;
 
 	private $valid=true;
 	private $errors='';
 
 	public function __construct($querystring){
+		parent::__construct($querystring);
 		$this->lid=Lid::instance();
-		$this->queryparts=explode('/', $querystring);
 
 		//groep-object inladen
-		if(isset($this->queryparts[0])){
-			$this->groep=new Groep($this->queryparts[0]);
+		if($this->hasParam(0)){
+			$this->groep=new Groep($this->getParam(0));
 		}
 		//action voor deze controller goedzetten.
-		if(isset($this->queryparts[1]) AND $this->hasAction($this->queryparts[1])){
-			$this->action=$this->queryparts[1];
+		if($this->hasParam(1) AND $this->hasAction($this->getParam(1))){
+			$this->action=$this->getParam(1);
 		}
 		//content-object aanmaken..
 		$this->content=new Groepcontent($this->groep);
@@ -166,9 +165,9 @@ class Groepcontroller extends Controller{
 
 		//Als er een derde argument meegegeven wordt is dat een korte naam
 		//die we invullen in het formulier.
-		if(isset($this->queryparts[2]) AND preg_match('/\w{3,20}/', $this->queryparts[2])){
+		if($this->hasParam(2) AND preg_match('/\w{3,20}/', $this->getParam(2))){
 			$this->groep->setValue('status', 'ot');
-			$this->groep->setValue('snaam', $this->queryparts[2]);
+			$this->groep->setValue('snaam', $this->getParam(2));
 		}
 
 		if($this->isPOSTed()){
@@ -294,8 +293,8 @@ class Groepcontroller extends Controller{
 
 	}
 	public function action_verwijderLid(){
-		if(isset($this->queryparts[2]) AND $this->lid->isValidUid($this->queryparts[2]) AND $this->groep->magBewerken()){
-			if($this->groep->verwijderLid($this->queryparts[2])){
+		if($this->hasParam(2) AND $this->lid->isValidUid($this->getParam(2)) AND $this->groep->magBewerken()){
+			if($this->groep->verwijderLid($this->getParam(2))){
 				$melding='Lid is uit groep verwijderd.';
 			}else{
 				$melding='Lid uit groep verwijderen mislukt.';
@@ -304,8 +303,8 @@ class Groepcontroller extends Controller{
 		}
 	}
 	public function action_maakLidOt(){
-		if(isset($this->queryparts[2]) AND $this->lid->isValidUid($this->queryparts[2]) AND $this->groep->magBewerken()){
-			if($this->groep->maakLidOt($this->queryparts[2])){
+		if($this->hasParam(2) AND $this->lid->isValidUid($this->getParam(2)) AND $this->groep->magBewerken()){
+			if($this->groep->maakLidOt($this->getParam(2))){
 				$melding='Lid naar o.t.-groep verplaatsen gelukt.';
 			}else{
 				$melding='Lid naar o.t.-groep verplaatsen mislukt. ['. $this->groep->getError().']  (GroepController::action_maakLidOt())';

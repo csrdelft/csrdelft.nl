@@ -22,15 +22,7 @@ class Document{
 
 	public function load($init){
 		if(is_array($init)){
-			//array direct laden in properties.
-			$this->ID=$init['ID'];
-			$this->naam=$init['naam'];
-			$this->catID=$init['catID'];
-			$this->bestandsnaam=$init['bestandsnaam'];
-			$this->size=$init['size'];
-			$this->mimetype=$init['mimetype'];
-			$this->toegevoegd=$init['toegevoegd'];
-			$this->eigenaar=$init['eigenaar'];
+			$this->array2properties($init);
 		}else{
 			$this->ID=(int)$init;
 			if($this->getID()==0){
@@ -40,9 +32,24 @@ class Document{
 				$query="
 					SELECT ID, naam, catID, bestandsnaam, size, mimetype, toegevoegd, eigenaar
 					FROM document WHERE ID=".$this->getID().";";
+				$doc=$db->query2array($query);
+				if(is_array($doc)){
+					$this->array2properties($doc);
+				}else{
+					return false;
+				}
 			}
 		}
 
+	}
+	public function array2properties($array){
+		$properties=array('ID', 'naam', 'catID', 'bestandsnaam', 'size', 'mimetype', 'toegevoegd', 'eigenaar');
+		foreach($properties as $prop){
+			if(!isset($array[$prop])){
+				return false;
+			}
+			$this->$prop=$array[$prop];
+		}
 	}
 	public function save(){
 		$db=MySql::instance();

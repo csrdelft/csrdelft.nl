@@ -190,6 +190,7 @@ lib/courant/class.courantbeheercontent.php -text
 lib/courant/class.courantcontent.php -text
 lib/documenten/class.categorie.php -text
 lib/documenten/class.document.php -text
+lib/documenten/class.documentcontroller.php -text
 lib/forum/class.forum.php -text
 lib/forum/class.forumcontent.php -text
 lib/forum/class.forumonderwerp.php -text

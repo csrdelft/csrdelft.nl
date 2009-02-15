@@ -128,7 +128,7 @@
 		<div class="gegevens">
 			{if $profhtml.eetwens!=''}
 				<div class="label">Dieet:</div>
-				<div class="data">{$profhtml.eetwens}</div>
+				<div class="data">{$profhtml.eetwens|escape:'html'}</div>
 				<br />
 			{/if}
 			{if $profhtml.abos|@count > 0}
@@ -144,13 +144,12 @@
 				<div class="label">Recent:</div>
 				<ul class="nobullets data">
 					{foreach from=$profhtml.recenteMaaltijden item=maaltijd}
-						<li><em>{$maaltijd.datum|date_format:"%a %d-%m"}</em> - {$maaltijd.tekst}</li>
+						<li><em>{$maaltijd.datum|date_format:"%a %d-%m"}</em> - {$maaltijd.tekst|escape:'html'}</li>
 					{/foreach}
 				</ul>
 			{/if}
 		</div>
 	</div>
-	{if $lid->hasPermission('P_ADMIN')}
 	<div class="profielregel">
 		<div class="left">Forum</div>
 		<div class="gegevens">
@@ -158,11 +157,10 @@
 			<div class="data">
 				<table style="width: 600px">
 					{foreach from=$profhtml.recenteForumberichten item=bericht}
-						<tr><td><a href="/communicatie/forum/onderwerp/{$bericht.tid}#{$bericht.postID}">{$bericht.titel}</a></td><td>{$bericht.datum|reldate}</td></tr>
+						<tr><td><a href="/communicatie/forum/onderwerp/{$bericht.tid}#{$bericht.postID}">{$bericht.titel|escape:'html'}</a></td><td>{$bericht.datum|reldate}</td></tr>
 					{/foreach}
 				</table>
 			</div>
 		</div>
 	</div>
-	{/if}
 </div>
