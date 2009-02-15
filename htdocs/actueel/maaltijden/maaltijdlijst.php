@@ -21,7 +21,7 @@ $maaltrack = new MaalTrack();
 
 # bestaat de maaltijd?
 if (!$maaltrack->isMaaltijd($maalid)){
-	SimpleHTML::invokeRefresh('Maaltijd bestaat niet!', 'actueel/maaltijden/');
+	SimpleHTML::invokeRefresh('Maaltijd bestaat niet!', '/actueel/maaltijden/');
 }
 
 $maaltijd = new Maaltijd($maalid);
@@ -29,7 +29,7 @@ $maaltijd = new Maaltijd($maalid);
 # Moet deze maaltijd gesloten worden?
 if (isset($_GET['sluit']) and $_GET['sluit'] == 1) {
 	$maaltijd->sluit();
-	header('Location: '.CSR_ROOT.'actueel/maaltijden/lijst/'.$maalid);
+	SimpleHTML::invokeRefresh(null, '/actueel/maaltijden/lijst/'.$maalid);
 	exit;
 }
 
@@ -43,7 +43,7 @@ if(isset($_GET['fiscaal']) && $_GET['fiscaal']==1){
 if($lid->hasPermission('P_MAAL_MOD') OR opConfide() OR $maaltijd->isTp()){
 	$page->view();
 }else{
-	SimpleHTML::invokeRefresh('U mag de maaltijdlijst niet bekijken.', 'actueel/maaltijden/');
+	SimpleHTML::invokeRefresh('U mag de maaltijdlijst niet bekijken.', '/actueel/maaltijden/');
 }
 
 
