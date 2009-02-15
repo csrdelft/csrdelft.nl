@@ -127,15 +127,23 @@ class Forum {
 		return implode(' OR ', $sCats);
 
 	}
-
+	static function getPostsVoorUid($uid=null){
+		if($uid==null){ Lid::instance()->getUid(); }
+		$forum=new Forum();
+		return $forum->getPostsVoorRss(false, false, null, $uid);
+	}
 	//laatste posts voor heel het forum.
-	function getPostsVoorRss($iAantal=false, $bDistinct=true, $token=null){
+	function getPostsVoorRss($iAantal=false, $bDistinct=true, $token=null, $uid=null){
 		if($iAantal===false){
 			$iAantal=Forum::$_postsPerRss;
 		}
 		$sDistinctClause=' AND 1';
 		if($bDistinct){
 			$sDistinctClause='AND topic.lastpostID=post.id';
+		}
+		$uidClause=' AND 1';
+		if($uid!=null){
+			$uidClause=" AND post.uid='".$uid."'";
 		}
 
 		//zoo, uberdeuberdeuber query om een topic op te halen. Namen worden
@@ -168,17 +176,13 @@ class Forum {
 				topic.zichtbaar='zichtbaar' AND
 				post.zichtbaar='zichtbaar' AND
 				( ".Forum::getCategorieClause($token)." )
-				".$sDistinctClause."
+				".$sDistinctClause." ".$uidClause."
 			ORDER BY
 				post.datum DESC
 			LIMIT
 				".$iAantal.";";
 		return $this->_db->query2array($query);
 	}
-/***************************************************************************************************
-*	Dingen opslaan, bewerken en verwijderen: nieuwe posts en topics, posts bewerken
-*
-***************************************************************************************************/
 
 /***************************************************************************************************
 *	Dingen uitrekenen: post naar topic id, topic naar cat id

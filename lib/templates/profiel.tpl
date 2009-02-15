@@ -150,5 +150,19 @@
 			{/if}
 		</div>
 	</div>
-	
+	{if $lid->hasPermission('P_ADMIN')}
+	<div class="profielregel">
+		<div class="left">Forum</div>
+		<div class="gegevens">
+			<div class="label">Recent:</div>
+			<div class="data">
+				<table style="width: 600px">
+					{foreach from=$profhtml.recenteForumberichten item=bericht}
+						<tr><td><a href="/communicatie/onderwerp/{$bericht.tid}#{$bericht.postID}">{$bericht.titel}</a></td><td>{$bericht.datum|reldate}</td></tr>
+					{/foreach}
+				</table>
+			</div>
+		</div>
+	</div>
+	{/if}
 </div>
