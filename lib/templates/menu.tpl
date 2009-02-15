@@ -32,8 +32,10 @@
 				<br />
 				<div id="saldi">
 					{foreach from=$lid->getSaldi() item=saldo}
-						<div class="saldo{if $saldo.saldo < 0} staatrood{/if}">&euro; {$saldo.saldo|number_format:2:",":"."}</div>
-						{$saldo.naam}:
+						<div class="saldoregel">
+							<div class="saldo{if $saldo.saldo < 0} staatrood{/if}">&euro; {$saldo.saldo|number_format:2:",":"."}</div>
+							{$saldo.naam}:
+						</div>
 					{/foreach}
 				</div>
 				<br />
