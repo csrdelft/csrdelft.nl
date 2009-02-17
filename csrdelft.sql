@@ -3,9 +3,9 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jan 04, 2009 at 09:20 PM
--- Server version: 5.0.51
--- PHP Version: 5.2.6-5
+-- Generatie Tijd: 17 Feb 2009 om 12:04
+-- Server versie: 5.0.51
+-- PHP Versie: 5.2.6-1+lenny2
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
@@ -16,123 +16,7 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `biebadmingewijzigd`
---
-
-CREATE TABLE IF NOT EXISTS `biebadmingewijzigd` (
-  `id` int(11) NOT NULL auto_increment,
-  `exemplaar_id` int(11) NOT NULL default '0',
-  `oud_boek_id` int(11) NOT NULL default '0',
-  `auteur_id` int(11) NOT NULL default '0',
-  `categorie_id` int(11) NOT NULL default '0',
-  `titel` varchar(200) NOT NULL default '',
-  `taal` enum('Nederlands','Engels','Duits','Frans','Overig') NOT NULL default 'Nederlands',
-  `isbn` varchar(15) NOT NULL default '',
-  `paginas` smallint(6) default NULL,
-  `uitgavejaar` mediumint(4) default NULL,
-  `uitgeverij` varchar(100) default NULL,
-  `tijdstip` int(11) NOT NULL default '0',
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `biebauteur`
---
-
-CREATE TABLE IF NOT EXISTS `biebauteur` (
-  `id` int(11) NOT NULL auto_increment,
-  `auteur` varchar(100) NOT NULL default '',
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `biebbeschrijving`
---
-
-CREATE TABLE IF NOT EXISTS `biebbeschrijving` (
-  `id` int(11) NOT NULL auto_increment,
-  `boek_id` int(11) NOT NULL default '0',
-  `schrijver_uid` varchar(4) NOT NULL default '',
-  `beschrijving` text NOT NULL,
-  `toegevoegd` int(11) NOT NULL default '0',
-  PRIMARY KEY  (`id`),
-  KEY `boek-id` (`boek_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `biebbevestiging`
---
-
-CREATE TABLE IF NOT EXISTS `biebbevestiging` (
-  `id` int(11) NOT NULL auto_increment,
-  `exemplaar_id` int(11) NOT NULL default '0',
-  `uitgeleend_uid` varchar(4) NOT NULL default '',
-  `geleend_of_teruggegeven` enum('geleend','teruggegeven') NOT NULL default 'geleend',
-  `timestamp` int(11) NOT NULL default '0',
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `biebboek`
---
-
-CREATE TABLE IF NOT EXISTS `biebboek` (
-  `id` int(11) NOT NULL auto_increment,
-  `auteur_id` int(11) NOT NULL default '0',
-  `categorie_id` int(11) NOT NULL default '0',
-  `titel` varchar(200) NOT NULL default '',
-  `taal` enum('Nederlands','Engels','Duits','Frans','Overig') NOT NULL default 'Nederlands',
-  `isbn` varchar(15) NOT NULL default '',
-  `paginas` smallint(6) default NULL,
-  `uitgavejaar` mediumint(4) default NULL,
-  `uitgeverij` varchar(100) default NULL,
-  `code` varchar(10) default NULL,
-  PRIMARY KEY  (`id`),
-  KEY `auteur_id` (`auteur_id`,`categorie_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `biebcategorie`
---
-
-CREATE TABLE IF NOT EXISTS `biebcategorie` (
-  `id` int(11) NOT NULL default '0',
-  `p_id` int(11) NOT NULL default '0',
-  `categorie` varchar(100) NOT NULL default '',
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `biebexemplaar`
---
-
-CREATE TABLE IF NOT EXISTS `biebexemplaar` (
-  `id` int(11) NOT NULL auto_increment,
-  `boek_id` int(11) NOT NULL default '0',
-  `eigenaar_uid` varchar(4) NOT NULL default '',
-  `uitgeleend_uid` varchar(4) NOT NULL default '',
-  `toegevoegd` int(11) NOT NULL default '0',
-  `extern` varchar(100) NOT NULL default '',
-  PRIMARY KEY  (`id`),
-  KEY `boek_id` (`boek_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `courant`
+-- Tabel structuur voor tabel `courant`
 --
 
 CREATE TABLE IF NOT EXISTS `courant` (
@@ -141,47 +25,47 @@ CREATE TABLE IF NOT EXISTS `courant` (
   `template` varchar(50) NOT NULL default 'csrmail.tpl',
   `verzender` varchar(4) NOT NULL default '',
   PRIMARY KEY  (`ID`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=108 ;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `courantbericht`
+-- Tabel structuur voor tabel `courantbericht`
 --
 
 CREATE TABLE IF NOT EXISTS `courantbericht` (
   `ID` int(11) NOT NULL auto_increment,
   `courantID` int(11) NOT NULL default '0',
   `titel` varchar(100) NOT NULL default '',
-  `cat` enum('voorwoord','bestuur','csr','overig') NOT NULL default 'bestuur',
+  `cat` enum('voorwoord','bestuur','csr','overig','sponsor') NOT NULL default 'bestuur',
   `bericht` text NOT NULL,
   `volgorde` int(11) NOT NULL default '0',
   `uid` varchar(4) NOT NULL default '',
   `datumTijd` datetime NOT NULL default '0000-00-00 00:00:00',
   PRIMARY KEY  (`ID`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1400 ;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `courantcache`
+-- Tabel structuur voor tabel `courantcache`
 --
 
 CREATE TABLE IF NOT EXISTS `courantcache` (
   `ID` int(11) NOT NULL auto_increment,
   `titel` varchar(100) NOT NULL default '',
-  `cat` enum('voorwoord','bestuur','csr','overig') NOT NULL default 'overig',
+  `cat` enum('voorwoord','bestuur','csr','overig','sponsor') NOT NULL default 'overig',
   `bericht` text NOT NULL,
   `uid` varchar(4) NOT NULL default '',
   `datumTijd` datetime NOT NULL default '0000-00-00 00:00:00',
   `volgorde` int(11) NOT NULL default '0',
   PRIMARY KEY  (`ID`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `document`
+-- Tabel structuur voor tabel `document`
 --
 
 CREATE TABLE IF NOT EXISTS `document` (
@@ -193,12 +77,12 @@ CREATE TABLE IF NOT EXISTS `document` (
   `eigenaar` varchar(4) NOT NULL default 'x101',
   PRIMARY KEY  (`id`),
   KEY `categorie` (`categorie`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=438 ;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `documentbestand`
+-- Tabel structuur voor tabel `documentbestand`
 --
 
 CREATE TABLE IF NOT EXISTS `documentbestand` (
@@ -207,12 +91,12 @@ CREATE TABLE IF NOT EXISTS `documentbestand` (
   `bestandsnaam` varchar(100) NOT NULL default '',
   PRIMARY KEY  (`id`),
   KEY `document_id` (`documentID`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=465 ;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `documentencategorie`
+-- Tabel structuur voor tabel `documentencategorie`
 --
 
 CREATE TABLE IF NOT EXISTS `documentencategorie` (
@@ -220,12 +104,12 @@ CREATE TABLE IF NOT EXISTS `documentencategorie` (
   `naam` varchar(50) NOT NULL default '',
   `beschrijving` varchar(100) NOT NULL default '',
   PRIMARY KEY  (`ID`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=10 ;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `eetplan`
+-- Tabel structuur voor tabel `eetplan`
 --
 
 CREATE TABLE IF NOT EXISTS `eetplan` (
@@ -238,7 +122,7 @@ CREATE TABLE IF NOT EXISTS `eetplan` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `eetplanhuis`
+-- Tabel structuur voor tabel `eetplanhuis`
 --
 
 CREATE TABLE IF NOT EXISTS `eetplanhuis` (
@@ -252,7 +136,7 @@ CREATE TABLE IF NOT EXISTS `eetplanhuis` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `forum_cat`
+-- Tabel structuur voor tabel `forum_cat`
 --
 
 CREATE TABLE IF NOT EXISTS `forum_cat` (
@@ -270,12 +154,12 @@ CREATE TABLE IF NOT EXISTS `forum_cat` (
   `rechten_read` varchar(50) NOT NULL default 'P_FORUM_READ',
   `rechten_post` varchar(50) NOT NULL default 'P_FORUM_POST',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=22 ;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `forum_poll`
+-- Tabel structuur voor tabel `forum_poll`
 --
 
 CREATE TABLE IF NOT EXISTS `forum_poll` (
@@ -285,12 +169,12 @@ CREATE TABLE IF NOT EXISTS `forum_poll` (
   `stemmen` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `topicID` (`topicID`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=254 ;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `forum_poll_stemmen`
+-- Tabel structuur voor tabel `forum_poll_stemmen`
 --
 
 CREATE TABLE IF NOT EXISTS `forum_poll_stemmen` (
@@ -304,7 +188,7 @@ CREATE TABLE IF NOT EXISTS `forum_poll_stemmen` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `forum_post`
+-- Tabel structuur voor tabel `forum_post`
 --
 
 CREATE TABLE IF NOT EXISTS `forum_post` (
@@ -316,16 +200,16 @@ CREATE TABLE IF NOT EXISTS `forum_post` (
   `bewerkDatum` datetime NOT NULL default '0000-00-00 00:00:00',
   `bewerkt` text NOT NULL,
   `ip` varchar(15) NOT NULL default '',
-  `zichtbaar` enum('wacht_goedkeuring','zichtbaar','onzichtbaar','verwijderd') NOT NULL default 'zichtbaar',
+  `zichtbaar` enum('wacht_goedkeuring','zichtbaar','onzichtbaar','spam','verwijderd') NOT NULL default 'zichtbaar',
   PRIMARY KEY  (`id`),
   KEY `tid` (`tid`),
   FULLTEXT KEY `tekst` (`tekst`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=25044 ;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `forum_topic`
+-- Tabel structuur voor tabel `forum_topic`
 --
 
 CREATE TABLE IF NOT EXISTS `forum_topic` (
@@ -344,12 +228,12 @@ CREATE TABLE IF NOT EXISTS `forum_topic` (
   `soort` enum('T_NORMAAL','T_POLL','T_VBANK') NOT NULL default 'T_NORMAAL',
   PRIMARY KEY  (`id`),
   FULLTEXT KEY `titel` (`titel`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2147 ;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `groep`
+-- Tabel structuur voor tabel `groep`
 --
 
 CREATE TABLE IF NOT EXISTS `groep` (
@@ -366,13 +250,15 @@ CREATE TABLE IF NOT EXISTS `groep` (
   `aanmeldbaar` tinyint(1) NOT NULL default '0',
   `limiet` int(11) NOT NULL default '0',
   `toonFuncties` enum('tonen','verbergen','niet') NOT NULL default 'tonen',
+  `toonPasfotos` int(1) NOT NULL default '0',
+  `lidIsMod` int(1) NOT NULL default '0' COMMENT 'Is elk lid mod',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=481 ;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `groeplid`
+-- Tabel structuur voor tabel `groeplid`
 --
 
 CREATE TABLE IF NOT EXISTS `groeplid` (
@@ -381,13 +267,14 @@ CREATE TABLE IF NOT EXISTS `groeplid` (
   `op` enum('0','1') NOT NULL default '0',
   `functie` varchar(25) NOT NULL default '',
   `prioriteit` int(11) NOT NULL default '0',
+  `moment` datetime NOT NULL,
   PRIMARY KEY  (`groepid`,`uid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `groeptype`
+-- Tabel structuur voor tabel `groeptype`
 --
 
 CREATE TABLE IF NOT EXISTS `groeptype` (
@@ -400,12 +287,12 @@ CREATE TABLE IF NOT EXISTS `groeptype` (
   `toonProfiel` int(1) NOT NULL COMMENT 'Groep in profiel tonen?',
   PRIMARY KEY  (`id`),
   KEY `naam` (`naam`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=10 ;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `lid`
+-- Tabel structuur voor tabel `lid`
 --
 
 CREATE TABLE IF NOT EXISTS `lid` (
@@ -459,6 +346,7 @@ CREATE TABLE IF NOT EXISTS `lid` (
   `forum_postsortering` enum('ASC','DESC') NOT NULL default 'ASC',
   `forum_laatstbekeken` datetime NOT NULL,
   `kgb` text NOT NULL,
+  `rssToken` varchar(25) NOT NULL COMMENT 'Zonder ingelogged te zijn toch volledig rss-feed weergeven',
   `soccieID` int(11) NOT NULL default '0',
   `createTerm` enum('barvoor','barachter') NOT NULL default 'barvoor',
   `soccieSaldo` float NOT NULL default '0',
@@ -470,7 +358,7 @@ CREATE TABLE IF NOT EXISTS `lid` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `log`
+-- Tabel structuur voor tabel `log`
 --
 
 CREATE TABLE IF NOT EXISTS `log` (
@@ -484,12 +372,24 @@ CREATE TABLE IF NOT EXISTS `log` (
   `useragent` varchar(250) NOT NULL default '',
   PRIMARY KEY  (`ID`),
   KEY `uid` (`uid`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2849001 ;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `maaltijd`
+-- Tabel structuur voor tabel `logAggregated`
+--
+
+CREATE TABLE IF NOT EXISTS `logAggregated` (
+  `soort` enum('maand','jaar','ip','url') NOT NULL default 'maand',
+  `waarde` varchar(255) NOT NULL,
+  `pageviews` int(11) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Tabel structuur voor tabel `maaltijd`
 --
 
 CREATE TABLE IF NOT EXISTS `maaltijd` (
@@ -505,12 +405,12 @@ CREATE TABLE IF NOT EXISTS `maaltijd` (
   `afwassers` int(11) NOT NULL,
   `theedoeken` int(11) NOT NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=461 ;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `maaltijdaanmelding`
+-- Tabel structuur voor tabel `maaltijdaanmelding`
 --
 
 CREATE TABLE IF NOT EXISTS `maaltijdaanmelding` (
@@ -532,7 +432,7 @@ CREATE TABLE IF NOT EXISTS `maaltijdaanmelding` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `maaltijdabo`
+-- Tabel structuur voor tabel `maaltijdabo`
 --
 
 CREATE TABLE IF NOT EXISTS `maaltijdabo` (
@@ -545,7 +445,7 @@ CREATE TABLE IF NOT EXISTS `maaltijdabo` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `maaltijdabosoort`
+-- Tabel structuur voor tabel `maaltijdabosoort`
 --
 
 CREATE TABLE IF NOT EXISTS `maaltijdabosoort` (
@@ -557,7 +457,7 @@ CREATE TABLE IF NOT EXISTS `maaltijdabosoort` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `maaltijdgesloten`
+-- Tabel structuur voor tabel `maaltijdgesloten`
 --
 
 CREATE TABLE IF NOT EXISTS `maaltijdgesloten` (
@@ -576,7 +476,7 @@ CREATE TABLE IF NOT EXISTS `maaltijdgesloten` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `mededeling`
+-- Tabel structuur voor tabel `mededeling`
 --
 
 CREATE TABLE IF NOT EXISTS `mededeling` (
@@ -594,12 +494,12 @@ CREATE TABLE IF NOT EXISTS `mededeling` (
   PRIMARY KEY  (`id`),
   KEY `intern` (`prive`),
   FULLTEXT KEY `kopje` (`titel`,`tekst`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='Nieuwsberichten';
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='Nieuwsberichten' AUTO_INCREMENT=453 ;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `mededelingcategorie`
+-- Tabel structuur voor tabel `mededelingcategorie`
 --
 
 CREATE TABLE IF NOT EXISTS `mededelingcategorie` (
@@ -609,12 +509,12 @@ CREATE TABLE IF NOT EXISTS `mededelingcategorie` (
   `plaatje` varchar(250) NOT NULL,
   `beschrijving` text,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `menu`
+-- Tabel structuur voor tabel `menu`
 --
 
 CREATE TABLE IF NOT EXISTS `menu` (
@@ -628,12 +528,12 @@ CREATE TABLE IF NOT EXISTS `menu` (
   `gasnelnaar` enum('ja','nee') NOT NULL,
   PRIMARY KEY  (`ID`),
   KEY `pID` (`pID`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=43 ;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `pagina`
+-- Tabel structuur voor tabel `pagina`
 --
 
 CREATE TABLE IF NOT EXISTS `pagina` (
@@ -648,7 +548,7 @@ CREATE TABLE IF NOT EXISTS `pagina` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `saldolog`
+-- Tabel structuur voor tabel `saldolog`
 --
 
 CREATE TABLE IF NOT EXISTS `saldolog` (
@@ -662,7 +562,7 @@ CREATE TABLE IF NOT EXISTS `saldolog` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `savedquery`
+-- Tabel structuur voor tabel `savedquery`
 --
 
 CREATE TABLE IF NOT EXISTS `savedquery` (
@@ -670,13 +570,14 @@ CREATE TABLE IF NOT EXISTS `savedquery` (
   `savedquery` text NOT NULL,
   `beschrijving` varchar(255) NOT NULL,
   `permissie` varchar(255) NOT NULL default 'P_LOGGED_IN',
+  `categorie` varchar(50) NOT NULL default 'Overig',
   PRIMARY KEY  (`ID`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=42 ;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sjaarsactie`
+-- Tabel structuur voor tabel `sjaarsactie`
 --
 
 CREATE TABLE IF NOT EXISTS `sjaarsactie` (
@@ -688,12 +589,12 @@ CREATE TABLE IF NOT EXISTS `sjaarsactie` (
   `limiet` int(11) NOT NULL default '15',
   `zichtbaar` enum('ja','nee') NOT NULL default 'ja',
   PRIMARY KEY  (`ID`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=29 ;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sjaarsactielid`
+-- Tabel structuur voor tabel `sjaarsactielid`
 --
 
 CREATE TABLE IF NOT EXISTS `sjaarsactielid` (
@@ -703,131 +604,10 @@ CREATE TABLE IF NOT EXISTS `sjaarsactielid` (
   PRIMARY KEY  (`actieID`,`uid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
+INSERT INTO `lid` (`uid`, `nickname`, `voornaam`, `tussenvoegsel`, `achternaam`, `postfix`, `adres`, `postcode`, `woonplaats`, `land`, `telefoon`, `mobiel`, `email`, `geslacht`, `voornamen`, `icq`, `msn`, `skype`, `jid`, `website`, `beroep`, `studie`, `studienr`, `studiejaar`, `lidjaar`, `gebdatum`, `bankrekening`, `moot`, `kring`, `kringleider`, `motebal`, `o_adres`, `o_postcode`, `o_woonplaats`, `o_land`, `o_telefoon`, `kerk`, `muziek`, `password`, `permissies`, `status`, `eetwens`, `corvee_wens`, `corvee_punten`, `corvee_vrijstelling`, `corvee_kwalikok`, `forum_name`, `forum_postsortering`, `forum_laatstbekeken`, `kgb`, `rssToken`, `soccieID`, `createTerm`, `soccieSaldo`, `maalcieSaldo`) VALUES
+('4444', 'oudlid', 'oud', '', 'lid', '', 'oude delft 9', '2613 GL', 'Delft', 'Nederland', '015-2197748', '06-42901018', '', 'm', '', '111111', 'feuten@msn.nl', 'skiep', 'Jabber@bravo.nl', 'http://csrdelft.nl', 'Scheerschooier', 'Schoenmaker', '', 0, 1944, '2005-12-13', '11111112115', 0, 0, 'n', '0', 'papa', '1234ma', 'mama', 'Nederland', '010-5115456', '', '', '{SSHA}YW54T2DvJk6mb4h9Su3P/0Ng+rMwfdoT', 'P_OUDLID', 'S_OUDLID', 'pils!', '', 0, 0, 0, 'civitas', 'ASC', '2009-02-01 01:21:44', '', 'bf563d9dae2ddde27784a6f19', 0, 'barvoor', 0, 0),
+('x027', 'pubcie', 'Publiciteits', '', 'Commissie', '', '', '', '', '', '', '', '', 'm', 'PubCie', '', '', '', '', '', '', '', '', 0, 0, '0000-00-00', '', 0, 0, 'n', '0', '', '', '', '', '', '', '', '{SSHA}28E2jEZATuA70rds9sGIvDaOQ9ECL/Ia', 'P_PUBCIE', 'S_LID', '', '', 0, 0, 0, 'civitas', 'ASC', '0000-00-00 00:00:00', '', '', 0, 'barvoor', 0, 0),
+('x101', 'feut', 'Jan', '', 'Lid', '', 'Oude Delft 9', '2611 BA', 'Delft', 'Nederland', '0800-3388', '06-34782573', '', 'm', 'Novitus', '', '', '', '', '', '', 'feutenkunde', '', 1961, 1961, '1941-02-03', '', 0, 0, 'n', '0', '', '', '', '', '', '', '', '{SSHA}Fg+jW4r+in3KC32p4JcEvuE9/zBwcuSk', 'P_LID', 'S_LID', 'havermout', '', 0, 0, 0, 'civitas', 'ASC', '2009-02-16 00:20:26', '', '', 0, 'barvoor', 0, 0),
+('x999', 'nobody', 'Niet', '', 'ingelogd', '', '', '', '', '', '', '', '', 'm', '', '', '', '', '', '', '', '', '', 0, 0, '0000-00-00', '', 0, 0, 'n', '0', '', '', '', '', '', '', '', '{SSHA}DgnxVkAu6zqB2wLneaFq0v1c75HVjI9A', 'P_NOBODY', 'S_NOBODY', '', '', 0, 0, 0, 'civitas', 'ASC', '0000-00-00 00:00:00', '', '77f1df87d16a7fdfaadaa10ba', 0, 'barvoor', 0, 0);
 
---
--- Table structure for table `torrent_info`
---
 
-CREATE TABLE IF NOT EXISTS `torrent_info` (
-  `id` char(40) NOT NULL COMMENT 'SHA1 Hash of the complete torrent file',
-  `uid` char(4) NOT NULL COMMENT 'UID van degene die de torrent heeft toegevoegd',
-  `name` varchar(256) NOT NULL COMMENT 'Bestandsnaam van de torrent',
-  `description` text NOT NULL COMMENT 'Omschrijving van de torrent',
-  `size` int(11) NOT NULL COMMENT 'Total size of referenced files',
-  `raw` text NOT NULL COMMENT 'The torrent file itself, base64',
-  `date_added` date NOT NULL COMMENT 'Tijdstip van toevoegen',
-  `dl_bytes` bigint(20) NOT NULL default '0' COMMENT 'Downloaded bytes',
-  `seeders` smallint(6) NOT NULL default '0' COMMENT 'Aantal seeders',
-  `leechers` smallint(6) NOT NULL default '0' COMMENT 'Aantal leechers',
-  `speed` smallint(6) NOT NULL default '0' COMMENT 'unused for now',
-  PRIMARY KEY  (`id`),
-  KEY `name` (`name`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `torrent_status`
---
-
-CREATE TABLE IF NOT EXISTS `torrent_status` (
-  `id` char(40) NOT NULL COMMENT 'Peer-ID, SHA1 hash, unique per-peer',
-  `torrent_id` char(40) NOT NULL COMMENT 'FK',
-  `ip` char(50) NOT NULL COMMENT 'IP Address',
-  `port` smallint(6) NOT NULL COMMENT 'IP Port',
-  `downloaded` bigint(20) NOT NULL COMMENT 'Downloaded bytes',
-  `uploaded` bigint(20) NOT NULL COMMENT 'Uploaded bytes',
-  `seeder` tinyint(1) NOT NULL default '0' COMMENT 'Is a seeder? (or a leecher)',
-  `seen` date NOT NULL COMMENT 'Last seen at...',
-  `client_version` varchar(250) NOT NULL COMMENT 'Client version',
-  PRIMARY KEY  (`id`),
-  KEY `seen` (`seen`),
-  KEY `torrent_id` (`torrent_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `vb_source`
---
-
-CREATE TABLE IF NOT EXISTS `vb_source` (
-  `id` int(11) NOT NULL auto_increment,
-  `name` varchar(150) NOT NULL,
-  `description` text NOT NULL,
-  `link` varchar(400) NOT NULL,
-  `votesum` int(11) NOT NULL,
-  `votecount` int(11) NOT NULL,
-  `lid` varchar(4) NOT NULL,
-  `createdate` datetime NOT NULL,
-  `ip` varchar(15) NOT NULL,
-  `sourceType` enum('link','file','book','discussion') NOT NULL default 'link',
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `vb_sourceopinion`
---
-
-CREATE TABLE IF NOT EXISTS `vb_sourceopinion` (
-  `sid` int(11) NOT NULL,
-  `lid` varchar(4) NOT NULL,
-  `rating` int(11) NOT NULL,
-  `createdate` datetime NOT NULL,
-  `comment` text NOT NULL,
-  UNIQUE KEY `lid_source` (`sid`,`lid`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `vb_sourcesource`
---
-
-CREATE TABLE IF NOT EXISTS `vb_sourcesource` (
-  `source1` int(11) NOT NULL,
-  `source2` int(11) NOT NULL,
-  `lid` varchar(4) NOT NULL,
-  `date` datetime NOT NULL,
-  `reason` text NOT NULL,
-  `status` enum('approved','disapproved') NOT NULL default 'approved',
-  `public` tinyint(1) NOT NULL default '1',
-  UNIQUE KEY `sourcelink` (`source1`,`source2`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `vb_subject`
---
-
-CREATE TABLE IF NOT EXISTS `vb_subject` (
-  `id` int(11) NOT NULL auto_increment,
-  `lid` varchar(4) default NULL,
-  `parent` int(11) NOT NULL default '0',
-  `name` varchar(200) NOT NULL,
-  `description` text,
-  `isLeaf` tinyint(1) NOT NULL default '1',
-  `status` enum('invisible','open','closed') NOT NULL default 'open',
-  `ip` varchar(15) NOT NULL,
-  `createdate` datetime NOT NULL,
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COMMENT='vb subjects';
-
--- --------------------------------------------------------
-
---
--- Table structure for table `vb_subjectsource`
---
-
-CREATE TABLE IF NOT EXISTS `vb_subjectsource` (
-  `subjid` int(11) NOT NULL,
-  `sourceid` int(11) NOT NULL,
-  `reason` text NOT NULL,
-  `createdate` datetime NOT NULL,
-  `lid` varchar(4) NOT NULL,
-  UNIQUE KEY `sourcesub` (`subjid`,`sourceid`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
