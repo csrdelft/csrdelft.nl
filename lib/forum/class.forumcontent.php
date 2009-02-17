@@ -143,6 +143,9 @@ class ForumContent extends SimpleHTML {
 	function lastPosts(){
 		$aPosts=$this->_forum->getPostsVoorRss(15, true);
 		echo '<h1><a href="/communicatie/forum/categorie/laatste">Forum</a></h1>';
+		if(!is_array($aPosts)){
+			echo '<div class="item">Geen items gevonden</div>';
+		}
 		foreach($aPosts as $aPost){
 			$tekst=$aPost['titel'];
 			if(strlen($tekst)>20){
@@ -161,6 +164,7 @@ class ForumContent extends SimpleHTML {
 			echo '>'.$tekst.'</a><br />'."\n";
 			echo '</div>';
 		}
+
 	}
 /***********************************************************************************************************
 * Zoekah in forumposts, en titels van onderwerpen
