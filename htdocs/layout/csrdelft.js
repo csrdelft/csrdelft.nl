@@ -9,6 +9,46 @@ if(navigator.appName == "Microsoft Internet Explorer") {
 } else {
   http = new XMLHttpRequest();
 }
+/*
+        // The Javascript escape and unescape functions do not correspond
+        // with what browsers actually do...
+*/
+
+function URLEncode(variable){
+
+        var SAFECHARS = "0123456789" +                                  // Numeric
+                                        "ABCDEFGHIJKLMNOPQRSTUVWXYZ" +  // Alphabetic
+                                        "abcdefghijklmnopqrstuvwxyz" +
+                                        "-_.!~*'()";                                    // RFC2396 Mark characters
+        var HEX = "0123456789ABCDEF";
+
+        var plaintext = variable;
+        var encoded = "";
+        for (var i = 0; i < plaintext.length; i++ ) {
+                var ch = plaintext.charAt(i);
+            if (ch == " ") {
+                    encoded += "+";                             // x-www-urlencoded, rather than %20
+                } else if (SAFECHARS.indexOf(ch) != -1) {
+                    encoded += ch;
+                } else {
+                    var charCode = ch.charCodeAt(0);
+                        if (charCode > 255) {
+                            alert( "Unicode Character '" 
+                        + ch 
+                        + "' cannot be encoded using standard URL encoding.\n" +
+                                          "(URL encoding only supports 8-bit characters.)\n" +
+                                                  "A space (+) will be substituted." );
+                                encoded += "+";
+                        } else {
+                                encoded += "%";
+                                encoded += HEX.charAt((charCode >> 4) & 0xF);
+                                encoded += HEX.charAt(charCode & 0xF);
+                        }
+                }
+        } // for
+
+        return encoded;
+}
 
 function vergrootTextarea(id, rows) {
   var textarea = document.getElementById(id);
@@ -50,9 +90,11 @@ function bevestig(tekst){
 }
 function previewPost(source, dest){
 	var post=document.getElementById(source).value;
-	var previewDiv=document.getElementById(dest);
-	applyUBB(post, previewDiv);
-	displayDiv(document.getElementById(dest+"Container"));
+	if(post.length!=''){
+		var previewDiv=document.getElementById(dest);
+		applyUBB(post, previewDiv);
+		displayDiv(document.getElementById(dest+"Container"));
+	}
 }
 /*
  * Apply UBB to a string, and put it in innerHTML of given div.
@@ -62,7 +104,7 @@ function previewPost(source, dest){
  */
 function applyUBB(string, div){
 	http.abort();
-	http.open("GET", "/tools/ubb.php?string="+escape(string), true);
+	http.open("GET", "/tools/ubb.php?string="+encodeURIComponent(string), true);
 	http.onreadystatechange=function(){
 		if(http.readyState == 4){
 			div.innerHTML=http.responseText;
