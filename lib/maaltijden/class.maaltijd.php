@@ -629,8 +629,7 @@ class MaalTijd {
 			WHERE maaltijdgesloten.uid='".$uid."'
 			ORDER BY datum DESC
 			LIMIT ".$aantal.";";
-		$maalResult=$db->query($maalQuery);
-		return $db->result2array($maalResult);
+		return $db->query2array($maalQuery);
 	}
 }
 
