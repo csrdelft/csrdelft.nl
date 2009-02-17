@@ -193,8 +193,8 @@ class Groepen{
 		$db=MySql::instance();
 		$qGroeptypen="
 			SELECT id, naam
-			FROM groeptype";
-		if($alleenZichtbaar===true){ $qGroeptypen.="WHERE zichtbaar=1"; }
+			FROM groeptype ";
+		if($alleenZichtbaar===true){ $qGroeptypen.="WHERE zichtbaar=1 "; }
 		$qGroeptypen.="ORDER BY prioriteit ASC, naam ASC;";
 		$rGroeptypen=$db->query($qGroeptypen);
 		return $db->result2array($rGroeptypen);
