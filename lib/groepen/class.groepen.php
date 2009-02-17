@@ -189,13 +189,13 @@ class Groepen{
 	 *
 	 * @return		Array met groeptypes
 	 */
-	public static function getGroeptypes(){
+	public static function getGroeptypes($alleenZichtbaar=true){
 		$db=MySql::instance();
 		$qGroeptypen="
 			SELECT id, naam
-			FROM groeptype
-			WHERE zichtbaar=1
-			ORDER BY prioriteit ASC, naam ASC;";
+			FROM groeptype";
+		if($alleenZichtbaar===true){ $qGroeptypen.="WHERE zichtbaar=1"; }
+		$qGroeptypen.="ORDER BY prioriteit ASC, naam ASC;";
 		$rGroeptypen=$db->query($qGroeptypen);
 		return $db->result2array($rGroeptypen);
 	}

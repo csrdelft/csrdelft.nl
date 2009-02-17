@@ -200,6 +200,9 @@ class Groep{
 		return false;
 	}
 
+	/*
+	 * Dit is extreem vies, dit geneuzel met _GET-variableen moet echt snel weg hier.
+	 */
 	public function setGtype(){
 		if(isset($_GET['gtype']) AND Groepen::isValidGtype($_GET['gtype'])){
 			$gtypes=Groepen::getGroeptypes();
@@ -209,6 +212,10 @@ class Groep{
 						$this->groep,
 						array('gtypeId'=>$gtype['id'], 'gtype'=>$gtype['naam']));
 				}
+			}
+			if(!isset($this->groep['gtype'])){
+				$this->error.='Een niet-bestaand gType opgegeven... (Groep::setGtype())';
+				return false;
 			}
 		}else{
 			$this->error.='Geen gtype opgegeven, niet via de juiste weg aangevraagd... (Groep::setGtype())';
