@@ -131,6 +131,11 @@
 				<div class="data">{$profhtml.eetwens|escape:'html'}</div>
 				<br />
 			{/if}
+			{if $profhtml.corvee_wens!=''}
+				<div class="label">Corveewens:</div>
+				<div class="data">{$profhtml.corvee_wens|escape:'html'}</div>
+				<br />
+			{/if}
 			{if $profhtml.abos|@count > 0}
 				<div class="label">Abo's:</div>
 				<ul class="nobullets data">
