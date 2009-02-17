@@ -205,7 +205,7 @@ class Groep{
 	 */
 	public function setGtype(){
 		if(isset($_GET['gtype']) AND Groepen::isValidGtype($_GET['gtype'])){
-			$gtypes=Groepen::getGroeptypes();
+			$gtypes=Groepen::getGroeptypes(false);
 			foreach($gtypes as $gtype){
 				if($gtype['id']==$_GET['gtype'] OR $gtype['naam']==$_GET['gtype']){
 					$this->groep=array_merge(
