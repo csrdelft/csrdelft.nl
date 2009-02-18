@@ -86,7 +86,13 @@ class VerjaardagContent extends SimpleHTML {
 
 			case 'komende10':
 				$aVerjaardagen=$this->_lid->getKomende10Verjaardagen();
-				echo '<h1><a href="/communicatie/verjaardagen">Verjaardagen</a></h1>';
+				echo '<h1>';
+				if($this->_lid->hasPermission('P_LEDEN_READ')){
+					echo '<a href="/communicatie/verjaardagen">Verjaardagen</a>';
+				}else{
+					echo 'Verjaardagen';
+				}
+				echo '</h1>';
 				for ($i=0; $i<sizeOf($aVerjaardagen); $i++) {
 					$aVerjaardag = $aVerjaardagen[$i];
 

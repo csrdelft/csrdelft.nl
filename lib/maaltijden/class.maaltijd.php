@@ -26,7 +26,7 @@
 # -------------------------------------------------------------------
 
 
-class MaalTijd {
+class Maaltijd {
 	# MySQL connectie
 	private $_db;
 	# lid-object van ingelogde gebruiker
@@ -80,8 +80,9 @@ class MaalTijd {
 	public function getMoment(){ return date('Y-m-d H:i', $this->_maaltijd['datum']); }
 	public function getTekst(){ return $this->_maaltijd['tekst']; }
 	# alle info...
-	function getInfo() { return $this->_maaltijd; }
-
+	public function getInfo() { return $this->_maaltijd; }
+	public function getAantalAanmeldingen(){ return $this->_maaltijd['aantal']; }
+	public function getMaxAanmeldingen(){ return $this->_maaltijd['max']; }
 	# Aanmelden van een gebruiker voor deze maaltijd.
 	function aanmelden($uid = '') {
 		if ($uid == '') $uid = $this->_lid->getUid();
@@ -427,7 +428,9 @@ class MaalTijd {
 	}
 
 	## isVol met variabele voor hoeveel erbij geteld moet worden, nodig voor gasten aanmelden
-	function isVol($plus = 1) { return $this->_maaltijd['aantal']+$plus-1 >= $this->_maaltijd['max']; }
+	function isVol($plus = 1) {
+		return $this->getAantalAanmeldingen()+$plus-1 >= $this->_maaltijd['max'];
+	}
 
 	function isGesloten() { return $this->_maaltijd['gesloten'] == '1'; }
 

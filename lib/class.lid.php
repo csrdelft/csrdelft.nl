@@ -342,8 +342,9 @@ class Lid {
 		if($aNaam['tussenvoegsel']!='') $sVolledigeNaam.=$aNaam['tussenvoegsel'].' ';
 		$sVolledigeNaam.=$aNaam['achternaam'];
 
-		//link tonen als dat gevraagd wordt EN als gebruiker is ingelogged.
-		if($link AND $this->hasPermission('P_LOGGED_IN')){
+		//link tonen als dat gevraagd wordt EN als gebruiker P_LEDEN_READ heeft of het om
+		//de gebruiker zelf gaat.
+		if($link AND ($this->hasPermission('P_LEDEN_READ') OR $this->getUid()==$uid)){
 			$sNaam.='<a href="/communicatie/profiel/'.$uid.'" title="'.$sVolledigeNaam.'" class="'.$aNaam['status'].'">';
 		}
 		//als $vorm==='user', de instelling uit het profiel gebruiken voor vorm
@@ -390,7 +391,9 @@ class Lid {
 		}else{
 			$sNaam.=$sTmpNaam;
 		}
-		if($link AND $this->hasPermission('P_LOGGED_IN')){ $sNaam.='</a>'; }
+		if($link AND ($this->hasPermission('P_LEDEN_READ') OR $this->getUid()==$uid)){
+			$sNaam.='</a>';
+		}
 
 		return $sNaam;
 	}
@@ -476,6 +479,7 @@ class Lid {
 		$p = $this->_permissions;
 		$this->_perm_user = array(
 			'P_NOBODY'     => $p['P_NOBODY'] | $p['P_FORUM_READ'] | $p['P_AGENDA_READ'],
+			'P_ETER'       => $p['P_LOGGED_IN'] | $p['P_MAAL_IK'] | $p['P_MAAL_WIJ'] | $p['P_PROFIEL_EDIT'],
 			'P_LID'        => $p['P_LOGGED_IN'] | $p['P_OUDLEDEN_READ'] | $p['P_FORUM_POST'] | $p['P_DOCS_READ'] | $p['P_LEDEN_READ'] | $p['P_PROFIEL_EDIT'] | $p['P_AGENDA_POST'] | $p['P_MAAL_WIJ'] | $p['P_MAIL_POST'] | $p['P_BIEB_READ'],
 			'P_OUDLID'     => $p['P_LOGGED_IN'] | $p['P_LEDEN_READ'] | $p['P_OUDLEDEN_READ'] | $p['P_FORUM_POST'] | $p['P_PROFIEL_EDIT'] | $p['P_FORUM_READ'] | $p['P_MAIL_POST'] | $p['P_AGENDA_READ'],
 			'P_MODERATOR'  => $p['P_ADMIN'] | $p['P_FORUM_MOD'] | $p['P_DOCS_MOD'] | $p['P_LEDEN_MOD'] | $p['P_OUDLEDEN_MOD'] | $p['P_AGENDA_MOD'] | $p['P_MAAL_MOD'] | $p['P_MAIL_SEND'] | $p['P_NEWS_MOD'] | $p['P_BIEB_MOD']

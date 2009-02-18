@@ -257,10 +257,11 @@ src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
 			}
 		}
 		$html.='</div>';
-		$html.='<h2><a href="/actueel/maaltijden/index.php">Maaltijd</a> van '.$maaltijd->getMoment().'</h2>'.$maaltijd->getTekst();
-
-
-		return $html.'</div><br style="clear: both;" />';
+		$html.='<h2><a href="/actueel/maaltijden/index.php">Maaltijd</a> van '.$maaltijd->getMoment().'</h2>';
+		$html.=$maaltijd->getTekst().'<br />';
+		$html.='<span class="small">Inschrijvingen: <em>'.$maaltijd->getAantalAanmeldingen(). '</em> van <em>'.$maaltijd->getMaxAanmeldingen().'</em></span>';
+		$html.='</div><br style="clear: both;" />';
+		return $html;
 	}
 	public function ubb_offtopic(){
 		$content = $this->parseArray(array('[/offtopic]'), array());
