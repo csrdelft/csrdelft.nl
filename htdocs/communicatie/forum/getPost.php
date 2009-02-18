@@ -19,6 +19,9 @@ if(isset($_GET['post'])){
 	if($forum->magCiteren()){
 		$post=$forum->getSinglePost($iPostID);
 
+		if(!$lid->hasPermisson('P_LOGGED_IN')){
+			$post=CsrUBB::filterPrive($post);
+		}
 		$citaat=isset($_GET['citaat']);
 		if($citaat){ echo '[citaat='.$post['uid'].']'; }
 		echo $post['tekst'];
