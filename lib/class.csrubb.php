@@ -91,6 +91,17 @@ class CsrUBB extends eamBBParser{
 		}
 		return $content;
 	}
+	/*
+	 * Omdat we niet willen dat dingen die in privé staan alsnog gezien
+	 * kunnen worden bij het citeren, slopen we hier alles wat in privé-tags staat weg.
+	 */
+	public static function filterPrive($string){
+		if(Lid::instance()->hasPermission('P_LOGGED_IN')){
+			return $string;
+		}else{
+			return preg_replace('/\[prive=?.*?\].*?\[\/prive\]/', '', $string);
+		}
+	}
 
 	/*
 	 * Deze methode kan resultaten van query's die in de database staan printen in een
