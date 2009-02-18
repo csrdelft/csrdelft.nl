@@ -54,6 +54,7 @@ hr{
 .clear{	clear: both; }
 .verborgen{ display: none; }
 .handje{ cursor: pointer; }
+.small{ font-size: smaller; }
 
 ul.horizontal li{
 	display: inline;
@@ -684,5 +685,5 @@ form#streeplijst input, label{ text-align: left; margin: 3px; padding: 0px; line
 
 #shoutbox{
 
-}
+
 }
