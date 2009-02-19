@@ -99,7 +99,7 @@ class CsrUBB extends eamBBParser{
 		if(Lid::instance()->hasPermission('P_LOGGED_IN')){
 			return $string;
 		}else{
-			return preg_replace('/\[prive=?.*?\].*?\[\/prive\]/', '', $string);
+			return preg_replace('/\[prive=?.*?\].*?\[\/prive\]/s', '', $string);
 		}
 	}
 
