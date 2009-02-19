@@ -14,4 +14,4 @@ Als u denkt dat uw schuld niet klopt, kunt u mij natuurlijk altijd
 terugmailen zodat ik onduidelijkheden weg kan nemen.
 
 Bij voorbaat dank,
-Johan KleinJan, h.t. MaalCiefiscus
+Sietse Bolt, h.t. MaalCiefiscus

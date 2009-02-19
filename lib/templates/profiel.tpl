@@ -166,7 +166,10 @@
 			<div class="data">
 				<table style="width: 600px">
 					{foreach from=$profhtml.recenteForumberichten item=bericht}
-						<tr><td><a href="/communicatie/forum/onderwerp/{$bericht.tid}#{$bericht.postID}">{$bericht.titel|escape:'html'}</a></td><td>{$bericht.datum|reldate}</td></tr>
+						<tr>
+							<td><a href="/communicatie/forum/onderwerp/{$bericht.tid}#post{$bericht.postID}">{$bericht.titel|escape:'html'}</a></td>
+							<td>{$bericht.datum|reldate}</td>
+						</tr>
 					{/foreach}
 				</table>
 			</div>
