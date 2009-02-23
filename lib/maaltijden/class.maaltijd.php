@@ -612,6 +612,7 @@ class Maaltijd {
 			if ($item['gasten'] > 0) {
 				for ($i = 0; $i < $item['gasten']; $i++) {
 					$aan[$id.'_gast'.$i]['naam'] = 'Gast van '.$item['naam'];
+					$aan[$id.'_gast'.$i]['uid'] = $item['uid'];
 				}
 			}
 		}
