@@ -47,7 +47,7 @@
 
 <form method="post" action="?ID={$form.ID}" >
 	<div id="pubciemail_form">
-		{if $form.ID==0}<h3>Nieuw bericht invoeren</h3>{else}<h3>Bericht bewerken</h3>{/if}<br />
+		<h3>{if $form.ID==0}Nieuw bericht invoeren{else}Bericht bewerken{/if}</h3><br />
 		<strong>Titel:</strong><br />
 		<input type="text" name="titel" value="{$form.titel|escape:'html'}" style="width: 100%;" class="tekst" />
 		<br /><br />
@@ -58,8 +58,10 @@
 		{html_options name=categorie values=$courant->getCats() output=$form.catsNice selected=$form.categorie}
 		<br /><br />
 		<strong>Bericht:</strong><br />
-		<div id="bewerkPreviewContainer" class="previewContainer"><h3>Voorbeeld van uw bericht:</h3><div id="bewerkPreview" class="preview"></div></div>
+		<div id="bewerkPreviewContainer" class="previewContainer"><div id="bewerkPreview" class="preview"></div></div>
 		<textarea name="bericht" id="courantBericht" cols="80" style="width: 100%;" rows="15" class="tekst">{$form.bericht|escape:'html'}</textarea>
+		<a style="float: right;" class="handje knop" onclick="toggleDiv('ubbhulpverhaal')" title="Opmaakhulp weergeven">UBB</a>
+		<a style="float: right;" class="handje knop" onclick="vergrootTextarea('courantBericht', 10)" title="Vergroot het invoerveld"><strong>&uarr;&darr;</strong></a>
 		<input type="submit" name="verzenden" value="opslaan" class="tekst" /> 
 		<input type="button" value="voorbeeld" onclick="return previewPost('courantBericht', 'bewerkPreview')" />
 	</div>
