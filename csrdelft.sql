@@ -335,7 +335,7 @@ CREATE TABLE IF NOT EXISTS `lid` (
   `kerk` varchar(50) NOT NULL default '',
   `muziek` varchar(100) NOT NULL default '',
   `password` varchar(60) NOT NULL default '',
-  `permissies` enum('P_LID','P_NOBODY','P_PUBCIE','P_OUDLID','P_MODERATOR','P_MAALCIE','P_BESTUUR','P_KNORRIE','P_VAB') NOT NULL default 'P_NOBODY',
+  `permissies` enum('P_LID','P_NOBODY','P_PUBCIE','P_OUDLID','P_MODERATOR','P_MAALCIE','P_BESTUUR','P_KNORRIE','P_VAB','P_ETER') NOT NULL default 'P_NOBODY',
   `status` enum('S_CIE','S_GASTLID','S_LID','S_NOBODY','S_NOVIET','S_OUDLID','S_KRINGEL') NOT NULL default 'S_CIE',
   `eetwens` text NOT NULL,
   `corvee_wens` varchar(255) NOT NULL,
@@ -649,5 +649,35 @@ INSERT INTO `groeptype` (`id`, `naam`, `beschrijving`, `zichtbaar`, `prioriteit`
 (2, 'Woonoorden', '[h=1]Woonoorden der C.S.R.[/h]', 1, 4, 0, 1),
 (3, 'Onderverenigingen', '[h=1]Onderverenigingen[/h]', 1, 6, 0, 1),
 (5, 'Overig', '[h=1]Overige groepen[/h]', 1, 50, 0, 1),
-(6, 'Besturen', '[h=1]Besturen der Civitas[/h]', 1, 4, 1, 1),
+(6, 'Besturen', '[h=1]Besturen der Civitas[/h]', 1, 4, 1, 1);
+
+INSERT INTO `forum_cat` (`id`, `titel`, `beschrijving`, `volgorde`, `lastuser`, `lastpost`, `lasttopic`, `lastpostID`, `reacties`, `topics`, `zichtbaar`, `rechten_read`, `rechten_post`) VALUES
+(1, 'C.S.R.-zaken', 'Afdeling voor interne zaken. Onzichtbaar voor externen die niet kunnen inloggen.', 1, '0639', '0000-00-00 00:00:00', 2145, 25073, 8637, 488, '1', 'P_LOGGED_IN', 'P_FORUM_POST'),
+(2, 'Extern', 'Feestjes bij NSx of Ichthusx, een toffe conferentie, of een mooi concert bezoeken? Kom maar door!', 15, '0315', '0000-00-00 00:00:00', 2135, 25071, 2790, 300, '1', 'P_FORUM_READ', 'P_FORUM_READ'),
+(3, 'Webstek terugkoppeling', 'Feuten in de site gevonden? Wilt u nieuwe functies erin? Kom dan hier!', 190, '0715', '0000-00-00 00:00:00', 2005, 24927, 1520, 98, '1', 'P_LOGGED_IN', 'P_LOGGED_IN'),
+(6, 'PubCie-forum ', 'Dit forum is enkel zichtbaar voor forum moderators. Lekker dichtgetikt lullen dus.', 200, '', '0000-00-00 00:00:00', 2127, 24855, 266, 24, '1', 'P_FORUM_MOD', 'P_FORUM_MOD'),
+(4, 'Zandbak & blætverhalen', 'Kom hier maar spelen en uw slappe blætverhælen ophangen.', 100, '', '0000-00-00 00:00:00', 1948, 24914, 3973, 178, '1', 'P_FORUM_READ', 'P_FORUM_POST');
+
+INSERT INTO `maaltijdabosoort` (`abosoort`, `tekst`) VALUES
+('A_MAANDAG', 'Maandag'),
+('A_DONDERDAG', 'Donderdag'),
+('A_MOOT1', 'Mootmaaltijd moot 1'),
+('A_MOOT2', 'Mootmaaltijd moot 2'),
+('A_MOOT3', 'Mootmaaltijd moot 3'),
+('A_MOOT4', 'Mootmaaltijd moot 4'),
+('A_UBER1', 'Überkring moot 1'),
+('A_UBER2', 'Überkring moot 2'),
+('A_UBER3', 'Überkring moot 3'),
+('A_UBER4', 'Überkring moot 4'),
+('A_GEEN', 'Geen');
+
+INSERT INTO `mededelingcategorie` (`id`, `naam`, `rank`, `plaatje`, `beschrijving`) VALUES
+(1, 'Bestuur', 10, 'groen.jpg', 'Mededelingen van het bestuur.'),
+(2, 'Commissies', 20, 'paars.jpg', 'Mededelingen van commissies.'),
+(3, 'Leden', 30, 'geel.jpg', 'Mededelingen die geplaatst zijn door leden en niet vanuit het bestuur of een commissie.');
+
+
+INSERT INTO `mededeling` (`id`, `datum`, `titel`, `tekst`, `categorie`, `rank`, `uid`, `prive`, `verborgen`, `verwijderd`, `plaatje`) VALUES
+(81, 1172758022, 'Testmededeling', 'Testtekst', 1, 255, 'x999', '0', '', '0', '');
+
 
