@@ -36,6 +36,7 @@
 					[ <a href="/actueel/courant/bewerken/{$bericht.ID}">bewerken</a> | 
 					<a href="/actueel/courant/verwijder/{$bericht.ID}" onclick="return confirm('Weet u zeker dat u dit bericht wilt verwijderen?')" >verwijderen</a> ]
 				</dt>
+				<dd id="courantbericht{$bericht.ID}"></dd>
 				{if !$courant->magBeheren()}<dd>{$bericht.bericht|ubb}</dd>{/if}
 			{/foreach}
 		</dl>
@@ -57,8 +58,10 @@
 		{html_options name=categorie values=$courant->getCats() output=$form.catsNice selected=$form.categorie}
 		<br /><br />
 		<strong>Bericht:</strong><br />
-		<textarea name="bericht" cols="80" style="width: 100%;" rows="15" class="tekst">{$form.bericht|escape:'html'}</textarea>
-		<input type="submit" name="verzenden" value="opslaan" class="tekst" />
+		<div id="bewerkPreviewContainer" class="previewContainer"><h3>Voorbeeld van uw bericht:</h3><div id="bewerkPreview" class="preview"></div></div>
+		<textarea name="bericht" id="courantBericht" cols="80" style="width: 100%;" rows="15" class="tekst">{$form.bericht|escape:'html'}</textarea>
+		<input type="submit" name="verzenden" value="opslaan" class="tekst" /> 
+		<input type="button" value="voorbeeld" onclick="return previewPost('courantBericht', 'bewerkPreview')" />
 	</div>
 </form>
 {if $courant->magBeheren()}<br />

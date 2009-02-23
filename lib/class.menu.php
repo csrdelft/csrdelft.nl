@@ -10,7 +10,7 @@
 
 require_once 'class.csrsmarty.php';
 
-class menu {
+class Menu {
 
 	//menu is een array met menu-opties.
 	private $_menu=array();

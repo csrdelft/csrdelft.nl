@@ -395,6 +395,17 @@ table.query_table th{
 	opacity: 0.7;
 	top: 30px;
 }
+/* ubb voorbeeldding */
+div.previewContainer{
+	margin-top: 10px;
+	display: none;
+}
+div.preview{
+	margin: 5px 0px; padding: 2px 4px;
+	width: 99%;
+	background-color: #ffffc1;
+	border: 1px solid #ccc;
+}
 
 /* maaltijd-ubb-tag */
 .ubbMaaltijd{

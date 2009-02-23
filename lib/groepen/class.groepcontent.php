@@ -8,10 +8,11 @@
  * Groepcontent					Weergeven van een groep & bewerken en etc.
  * Groepencontent				Weergeven van een groepenoverzicht
  * Groepengeschiedeniscontent	Weergeven van een mooie patchwork van groepjes.
- *
+ * GroepenProfielConcent		Weergeven van groepenlijstje in profiel
+ * GroepUbbContent				Weergeven van enkele zaken van een groep met een ubb-tag
  */
 
-
+require_once 'groepen/class.groep.php';
 class Groepcontent extends SimpleHTML{
 
 	private $groep;
@@ -218,6 +219,21 @@ class GroepenProfielContent extends SimpleHTML{
 			$return.='</div>';
 		}
 		return $return;
+	}
+	public function view(){
+		echo $this->getHTML();
+	}
+}
+class GroepUbbContent extends SimpleHTML{
+	private $groep;
+	private $style;
+	public function __construct($groepid, $style='default'){
+		$this->groep=new Groep((int)$groepid);
+	}
+	public function getHTML(){
+		$content=new Smarty_csr();
+		$content->assign('groep', $this->groep);
+		$content->display('groepen/groep.ubb.tpl');
 	}
 	public function view(){
 		echo $this->getHTML();

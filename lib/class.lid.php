@@ -381,6 +381,7 @@ class Lid {
 					$sTmpNaam.=$aNaam['achternaam'];
 					if($aNaam['postfix'] != '') $sTmpNaam.=' '.$aNaam['postfix'];
 					if($aNaam['status']=='S_OUDLID') $sTmpNaam.=' •';
+					if($aNaam['status']=='S_KRINGEL') $sTmpNaam.=' ~';
 				}
 			break;
 			default:

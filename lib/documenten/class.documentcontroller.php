@@ -9,6 +9,8 @@ require_once 'class.controller.php';
 require_once 'documenten/class.document.php';
 require_once 'documenten/class.categorie.php';
 
+require_once 'documenten/class.documentcontent.php';
+
 class DocumentController extends Controller{
 
 	public $document;
@@ -32,7 +34,7 @@ class DocumentController extends Controller{
 		$this->performAction();
 	}
 	public function action_default(){
-
+		$this->content=new DocumentContent();
 	}
 	public function action_delete(){
 

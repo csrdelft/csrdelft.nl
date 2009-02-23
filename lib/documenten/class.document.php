@@ -20,7 +20,7 @@ class Document{
 		$this->toegevoegd=getDateTime();
 	}
 
-	public function load($init){
+	public function load($init=0){
 		if(is_array($init)){
 			$this->array2properties($init);
 		}else{
@@ -86,14 +86,16 @@ class Document{
 		}
 		return false;
 	}
-	public function getID(){		return $this->ID; }
-	public function getNaam(){		return $this->naam; }
-	public function getCatID(){		return $this->catID; }
-	public function getCategorie(){ return new DocumentCategorie($this->getCatID()); }
-	public function getSize(){		return $this->size; }
-	public function getMimetype(){	return $this->mimetype;	}
-	public function getToegevoegd(){return $this->toegevoegd; }
-	public function getEigenaar(){	return $this->eigenaar;	}
+	public function getID(){			return $this->ID; }
+	public function getNaam(){			return $this->naam; }
+	public function getCatID(){			return $this->catID; }
+	public function getCategorie(){ 	return new DocumentCategorie($this->getCatID()); }
+	public function getBestandsnaam(){	return $this->bestandsnaam; }
+	public function hasFile(){			return $this->getBestandsnaam()!=''; }
+	public function getSize(){			return $this->size; }
+	public function getMimetype(){		return $this->mimetype;	}
+	public function getToegevoegd(){	return $this->toegevoegd; }
+	public function getEigenaar(){		return $this->eigenaar;	}
 
 	public function setNaam($naam){
 		$this->naam=$naam;

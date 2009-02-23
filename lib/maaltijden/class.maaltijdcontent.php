@@ -7,9 +7,9 @@
 # -------------------------------------------------------------------
 
 
-require_once ('class.simplehtml.php');
-require_once ('class.lid.php');
-require_once ('maaltijden/class.maaltrack.php');
+require_once 'class.simplehtml.php';
+require_once 'maaltijden/class.maaltijd.php';
+require_once 'maaltijden/class.maaltrack.php';
 
 class MaaltijdContent extends SimpleHTML {
 
@@ -58,6 +58,64 @@ class MaaltijdContent extends SimpleHTML {
 		$profiel->assign('toonLijsten', $lid->hasPermission('P_MAAL_MOD') or opConfide());
 		$profiel->assign('datumFormaat', '%a %e %b %H:%M');
 		$profiel->display('maaltijdketzer/maaltijdketzer.tpl');
+	}
+
+	public static function getMaaltijdubbtag($maalid='next'){
+		//als de parameter 'next' is dan geven we de eerstvolgende maaltijd weer.
+		if($maalid=='next'){
+			$maaltijden=Maaltrack::getMaaltijdenRaw();
+			if(count($maaltijden)>0){
+				$maalid=$maaltijden[0]['id'];
+			}else{
+				return 'Geen aankomende maaltijd.';
+			}
+		}
+		$maaltijd=new Maaltijd((int)$maalid);
+
+		$html='<div class="ubbMaaltijd" id="maaltijd'.$maaltijd->getID().'">';
+		if(Lid::instance()->hasPermission('P_LOGGED_IN')){
+			$html.='<div class="ubbMaaltijdFloat">';
+			$html.='U komt:  <br />';
+
+			$status=$maaltijd->getStatus();
+			switch($status){
+				case 'AAN':
+					$html.='<em>eten</em>';
+				break;
+				case 'AUTO':
+					if($maaltijd->heeftAbo()){
+						$html.='<em>eten (abo)</em>';
+						$status='AAN';
+						break;
+					}
+
+				case 'AF':
+				default:
+					$html.='<em>niet eten</em>';
+			}
+			$html.='<br />';
+			if($maaltijd->isGesloten()){
+				$html.='Gesloten';
+			}else{
+				if(Lid::instance()->hasPermission('P_MAAL_IK')){
+					switch($status){
+						case 'AAN':
+							$html.='<a href="/actueel/maaltijden/index.php?forum&amp;a=af&amp;m='.$maaltijd->getId().'"><strong>af</strong>melden</a>';
+						break;
+						case 'AF':
+						default:
+							$html.='<a href="/actueel/maaltijden/index.php?forum&amp;a=aan&amp;m='.$maaltijd->getId().'"><strong>aan</strong>melden</a>';
+						break;
+					}
+				}
+			}
+			$html.='</div>';
+		}
+		$html.='<h2><a href="/actueel/maaltijden/index.php">Maaltijd</a> van '.$maaltijd->getMoment().'</h2>';
+		$html.=$maaltijd->getTekst().'<br />';
+		$html.='<span class="small">Inschrijvingen: <em>'.$maaltijd->getAantalAanmeldingen(). '</em> van <em>'.$maaltijd->getMaxAanmeldingen().'</em></span>';
+		$html.='</div><br style="clear: both;" />';
+		return $html;
 	}
 }
 

@@ -71,11 +71,6 @@ class CsrUBB extends eamBBParser{
 	 *
 	 * Tekst binnen de privé-tag wordt enkel weergegeven voor leden met
 	 * (standaard) P_LOGGED_IN. Een andere permissie kan worden meegegeven.
-	 *
-	 * LET OP: binnen het forum is citeren mogelijk voor externen. Dan kan
-	 * de inhoud van deze tag dus bekeken worden door te citeren. Als deze
-	 * tag dus nuttig moet worden voor het forum moet bij citeren door
-	 * externen de inhoud van deze tag weggefilterd woren.
 	 */
 	function ubb_prive($arguments=array()){
 		if(isset($arguments['prive'])){
@@ -99,6 +94,11 @@ class CsrUBB extends eamBBParser{
 		if(Lid::instance()->hasPermission('P_LOGGED_IN')){
 			return $string;
 		}else{
+			// .* is greedy by default, dat wil zeggen, matched zoveel mogelijk.
+			// door er .*? van te maken matched het zo weinig mogelijk, dat is precies
+			// wat we hier willen, omdat anders [prive]foo[/prive]bar[prive]foo[/prive]
+			// niets zou opleveren.
+			// de /s modifier zorgt ervoor dat een . ook alle newlines matched.
 			return preg_replace('/\[prive=?.*?\].*?\[\/prive\]/s', '', $string);
 		}
 	}
@@ -172,107 +172,25 @@ src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
 	 */
 	protected function ubb_groep($parameters){
 		$content=$this->parseArray(array('[/groep]'), array());
-		//if(isset($parameters));
-		require_once('groepen/class.groep.php');
-		$groep=new Groep((int)$content);
-		//TODO: zet deze style-meuk in de style-sheet.
-		//TODO: zet dit in een smarty-template
-		$html='<div class="groep_embed" style="margin: 10px; padding: 5px 10px; border: 1px solid black;">';
-		if(is_array($groep->getLeden())){
-			$html.='<table style="float: right">';
-			foreach($groep->getLeden() as $groeplid){
-				$html.='<tr><td>'.$this->lid->getNaamLink($groeplid['uid'], 'civitas', true).'</td>';
-				if($groep->toonFuncties()){
-					$html.='<td><em>'.mb_htmlentities($groeplid['functie']).'</em></td>';
-				}
-				$html.='</tr>';
-			}
-			$html.='</table>';
-		}
-		$html.='<h2>'.$groep->getLink().'</h2>';
-		$ubb=new CsrUBB();
-		$html.='<p>'.$ubb->getHTML($groep->getSbeschrijving()).'</p><br />';
-		if($groep->isAanmeldbaar() AND $groep->magAanmelden()){
-			$html.='<form action="/actueel/groepen/'.$groep->getType().'/'.$groep->getId().'/aanmelden" method="post" id="aanmeldForm">U kunt zich hier aanmelden voor deze groep.';
-			if($groep->getToonFuncties()!='niet'){
-				if($groep->getID()==440){
-					$html.=' Geef de naam van uw galadate op:';
-				}else{
-					$html.=' Geef ook een opmerking/functie op:';
-				}
-				$html.='<br /><input type="text" name="functie" />';
-			}else{
-				$html.='<br />';
-			}
-			$html.='<input type="submit" value="aanmelden" /></form>';
-		}
-		$html.='<div class="clear">&nbsp;</div></div>';
-		return $html;
+
+		require_once 'groepen/class.groepcontent.php';
+		$groeptag=new GroepUbbContent((int)$content);
+		return $groeptag->getHTML();
 	}
+	/*
+	 * ubb_maaltijd();
+	 *
+	 * [maaltijd=next], [maaltijd=1234]
+	 *
+	 * Geeft een blokje met maaltijdgegevens, aantal aanmeldingen en een
+	 * aanmeldknopje weer.
+	 */
 	public function ubb_maaltijd($parameters){
 		if(!isset($parameters['maaltijd']) OR ($parameters['maaltijd']!='next' AND !preg_match('/\d+/', $parameters['maaltijd']))){
 			return 'Geen maaltijdID opgegeven of ongeldig ID.';
 		}
-		$maalid=trim($parameters['maaltijd']);
-
-		//als de parameter 'next' is dan geven we de eerstvolgende maaltijd weer.
-		if($maalid=='next'){
-			require_once 'maaltijden/class.maaltrack.php';
-			$maaltijden=Maaltrack::getMaaltijdenRaw();
-			if(count($maaltijden)>0){
-				$maalid=$maaltijden[0]['id'];
-			}else{
-				return 'Geen aankomende maaltijd.';
-			}
-		}
-
-		//TODO: hier nog ABO dingen in fixen.
-		require_once 'maaltijden/class.maaltijd.php';
-		$maaltijd=new Maaltijd((int)$maalid);
-
-
-		$html='<div class="ubbMaaltijd" id="maaltijd'.$maaltijd->getID().'">';
-		$html.='<div class="ubbMaaltijdFloat">';
-		$html.='U komt:  <br />';
-
-		$status=$maaltijd->getStatus();
-		switch($status){
-			case 'AAN':
-				$html.='<em>eten</em>';
-			break;
-			case 'AUTO':
-				if($maaltijd->heeftAbo()){
-					$html.='<em>eten (abo)</em>';
-					$status='AAN';
-					break;
-				}
-
-			case 'AF':
-			default:
-				$html.='<em>niet eten</em>';
-		}
-		$html.='<br />';
-		if($maaltijd->isGesloten()){
-			$html.='Gesloten';
-		}else{
-			if($this->lid->hasPermission('P_MAAL_IK')){
-				switch($status){
-					case 'AAN':
-						$html.='<a href="/actueel/maaltijden/index.php?forum&amp;a=af&amp;m='.$maaltijd->getId().'"><strong>af</strong>melden</a>';
-					break;
-					case 'AF':
-					default:
-						$html.='<a href="/actueel/maaltijden/index.php?forum&amp;a=aan&amp;m='.$maaltijd->getId().'"><strong>aan</strong>melden</a>';
-					break;
-				}
-			}
-		}
-		$html.='</div>';
-		$html.='<h2><a href="/actueel/maaltijden/index.php">Maaltijd</a> van '.$maaltijd->getMoment().'</h2>';
-		$html.=$maaltijd->getTekst().'<br />';
-		$html.='<span class="small">Inschrijvingen: <em>'.$maaltijd->getAantalAanmeldingen(). '</em> van <em>'.$maaltijd->getMaxAanmeldingen().'</em></span>';
-		$html.='</div><br style="clear: both;" />';
-		return $html;
+		require_once 'maaltijden/class.maaltijdcontent.php';
+		return MaaltijdContent::getMaaltijdubbtag(trim($parameters['maaltijd']));
 	}
 	public function ubb_offtopic(){
 		$content = $this->parseArray(array('[/offtopic]'), array());
@@ -286,18 +204,6 @@ src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
         $html = str_replace('elite', '1337',$html);
         $html = strtr($html, "abelostABELOST", "48310574831057");
         return $html;
-    }
-
-    function ubb_rainbow(){
-        $string = $this->parseArray(array('[/rainbow]'), array());
-
-        if(!@include_once("ubb/plugins/rainbow.php")){
-             return '<b>Rainbow plugin could not be loaded!</b>';
-        }
-
-        $r = new rainbowMaker();
-
-        return $r->rainBow($string);
     }
 
     function ubb_clear($parameters){

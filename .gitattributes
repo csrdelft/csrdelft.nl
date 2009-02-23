@@ -47,6 +47,8 @@ htdocs/communicatie/documenten/.htaccess -text
 htdocs/communicatie/documenten/index.php -text
 htdocs/communicatie/documenten/neerladen.php -text
 htdocs/communicatie/documenten/toevoegen.php -text
+htdocs/communicatie/documenten_new/.htaccess -text
+htdocs/communicatie/documenten_new/index.php -text
 htdocs/communicatie/forum/.htaccess -text
 htdocs/communicatie/forum/bewerken.php -text
 htdocs/communicatie/forum/getPost.php -text
@@ -192,6 +194,7 @@ lib/courant/class.courantbeheercontent.php -text
 lib/courant/class.courantcontent.php -text
 lib/documenten/class.categorie.php -text
 lib/documenten/class.document.php -text
+lib/documenten/class.documentcontent.php -text
 lib/documenten/class.documentcontroller.php -text
 lib/forum/class.forum.php -text
 lib/forum/class.forumcontent.php -text
@@ -340,6 +343,7 @@ lib/templates/forum/rss.tpl -text
 lib/templates/forum/zoeken.tpl -text
 lib/templates/fotoalbum/album.tpl -text
 lib/templates/groepen/groep.tpl -text
+lib/templates/groepen/groep.ubb.tpl -text
 lib/templates/groepen/groepen.tpl -text
 lib/templates/groepen/groepformulier.tpl -text
 lib/templates/maalciemail.tpl -text
