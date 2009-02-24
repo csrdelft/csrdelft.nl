@@ -265,7 +265,12 @@ class Groepcontroller extends Controller{
 		}else{
 			$melding='U kunt zich niet aanmelden voor deze groep, wellicht is hij vol.';
 		}
-		$this->content->invokeRefresh($melding, $this->getUrl('default'));
+		if($this->hasParam(2) AND $this->getParam(2)=='return'){
+			$url=$_SERVER['HTTP_REFERER'].'#groep'.$this->groep->getId();
+		}else{
+			$url=$this->getUrl('default');
+		}
+		$this->content->invokeRefresh($melding, $url);
 	}
 	/*
 	 * Leden toevoegen aan een groep.
