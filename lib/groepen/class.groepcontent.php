@@ -233,7 +233,7 @@ class GroepUbbContent extends SimpleHTML{
 	public function getHTML(){
 		$content=new Smarty_csr();
 		$content->assign('groep', $this->groep);
-		$content->display('groepen/groep.ubb.tpl');
+		return $content->fetch('groepen/groep.ubb.tpl');
 	}
 	public function view(){
 		echo $this->getHTML();
