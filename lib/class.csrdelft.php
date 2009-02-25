@@ -80,21 +80,15 @@ class csrdelft extends SimpleHTML {
 
 	function getTitel(){ return mb_htmlentities($this->_titel); }
 	function setZijkolom($zijkolom=null){
-		if($zijkolom instanceof Kolom){
-			$this->_zijkolom=$zijkolom;
-		}else{
-			$this->_zijkolom=$zijkolom;
-		}
-	}
-	function getBreed(){
-		if($this->_zijkolom===false){ echo 'Breed'; }else{ echo ''; }
+		$this->_zijkolom=$zijkolom;
 	}
 
 	function view() {
 		$lid=Lid::instance();
 
-		//als $this->_zijkolom nog null is die vullen met een standaard lege kolom.
-		if($this->_zijkolom===null){
+		//als $this->_zijkolom geen Kolom-object bevat en niet false is
+		//$this->_zijkolom vullen met een standaard lege kolom.
+		if($this->_zijkolom!==false AND !($this->_zijkolom instanceof Kolom)){
 			$this->_zijkolom=new Kolom();
 		}
 
