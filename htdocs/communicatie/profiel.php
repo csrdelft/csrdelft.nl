@@ -22,7 +22,7 @@ $lid=new Profiel();
 
 # ophalen uid die meegegeven is
 # NB uid zit altijd in de URL als het niet de uid van de gebruiker zelf is!
-if(isset($_GET['uid'])){ 
+if(isset($_GET['uid'])){
 	$uid = $_GET['uid'];
 }else{
 	$uid = $lid->getUid();
@@ -39,7 +39,7 @@ require_once("class.state.php");
 $state = new State('none', "/communicatie/profiel/{$uid}");
 
 # zijn we met beheer bezig?
-if(isset($_POST['a'])){ 
+if(isset($_POST['a'])){
 	$action = $_POST['a'];
 }elseif(isset($_GET['a'])){
 	$action = $_GET['a'];
@@ -62,7 +62,7 @@ switch ($action) {
 		# bekijken kan met P_LEDEN_READ en met P_OUDLEDEN_READ
 		# oudleden kunnen dan ook leden bekijken en vice-versa, maar enkel
 		# als ze uid's kennen.
-		if ( !($lid->hasPermission('P_LOGGED_IN') and $uid == $lid->getUid()) and 
+		if ( !($lid->hasPermission('P_LOGGED_IN') and $uid == $lid->getUid()) and
 			!($lid->hasPermission('P_LEDEN_READ') or $lid->hasPermission('P_OUDLEDEN_READ') )){
 			$error = 1;
 		}
@@ -72,13 +72,13 @@ switch ($action) {
 		# wijzigen van spullen kan met P_PROFIEL_EDIT als de gevraagde
 		# gebruiker dezelfde is als de ingelogde gebruiker, of met
 		# P_LEDEN_EDIT
-		
+
 		# FIXME: duidelijkere opzet van statement hieronder. dit is te wazig
 		if(!($lid->hasPermission('P_PROFIEL_EDIT') and $uid == $lid->getUid()) and !($lid->hasPermission('P_LEDEN_EDIT')) ){
 			$error = 1;
 		}
 	break;
-	case 'wachtwoord': 
+	case 'wachtwoord':
 		# wachtwoord resetten plus mail sturen, alleen als P_ADMIN
 		if(!$lid->hasPermission('P_ADMIN')){
 			$error=1;
@@ -116,13 +116,13 @@ if ($error == 0){
 					case 0:
 						# alle invoer was juist, wijzigingen doorvoeren.
 						# deze functie doet:
-						
+
 						# - wijzigingen in SQL opslaan
 						$lid->diff_to_sql();
-						
+
 						# - het profiel opnieuw in LDAP opslaan
 						$lid->save_ldap();
-						
+
 						# om te voorkomen dat een refresh opnieuw een submit doet
 						$myurl = $state->getMyUrl();
 						header("Location: {$myurl}");
@@ -131,7 +131,7 @@ if ($error == 0){
 					case 2:
 						# er zaten fouten in de invoer, $lid weet welke fouten en
 						# profielcontent zal die afbeelden
-						$state->setMyState('edit'); 
+						$state->setMyState('edit');
 					break;
 					case 1:
 						# geen-toegang pagina wordt hieronder ingevuld
@@ -145,8 +145,8 @@ if ($error == 0){
 				$_SESSION['melding']='Nieuw wachtwoord met succes verzonden.';
 			}else{
 				$_SESSION['melding']='Wachtwoord resetten mislukt.';
-			}	
-			header("Location: ".CSR_ROOT."communicatie/profiel/".$uid); 
+			}
+			header("Location: ".CSR_ROOT."communicatie/profiel/".$uid);
 			exit;
 		break;
 	}//end switch $action
@@ -157,21 +157,17 @@ switch ($error) {
 	case 2:
 		require_once('class.profielcontent.php');
 		$midden = new ProfielContent($lid, $state);
-		
+
 	break;
 	default:
 		# geen rechten
 		require_once 'class.paginacontent.php';
 		$pagina=new Pagina('geentoegang');
 		$midden = new PaginaContent($pagina);
-}	
-## zijbalk in elkaar rossen
-$zijkolom=new kolom();
+}
 
-## pagina weergeven
-	$pagina=new csrdelft($midden);
-	$pagina->addStylesheet('profiel.css');
-	$pagina->setZijkolom($zijkolom);
-	$pagina->view();
+$pagina=new csrdelft($midden);
+$pagina->addStylesheet('profiel.css');
+$pagina->view();
 
 ?>

@@ -11,6 +11,7 @@ class DocumentenCategorie{
 	private $ID;
 	private $naam;
 	private $zichtbaar=1;
+	private $permissie='P_DOCS_READ';
 	private $documenten=array();
 
 	public function __construct($catID=0, $loadChildren=-1){
@@ -29,7 +30,9 @@ class DocumentenCategorie{
 		if($this->getID()!=0){
 			$db=MySql::instance();
 			//gegevens over de categorie ophalen.
-			$query="SELECT ID, naam, zichtbaar FROM documentcategorie WHERE ID=".$this->getID();
+			$query="
+				SELECT ID, naam, zichtbaar, permissie
+				FROM documentcategorie WHERE ID=".$this->getID();
 			$categorie=$db->query2array($query);
 			if($categorie!==false){
 				$this->naam=$categorie['naam'];
@@ -69,16 +72,18 @@ class DocumentenCategorie{
 		if($this->getID()==0){
 			$query="
 				INSERT INTO documentcategorie (
-					naam, zichtbaar
+					naam, zichtbaar, permissie
 				)VALUES(
 					'".$db->escape($this->getNaam())."',
-					".$this->getZichtbaar()."
+					".$this->getZichtbaar().",
+					'".$db->escape($this->getPermissie())."'
 				);";
 		}else{
 			$query="
 				UPDATE documentcategorie SET
 					naam='".$db->escape($this->getNaam())."',
-					zichtbaar=".$this->getZichtbaar()."
+					zichtbaar=".$this->getZichtbaar().",
+					permissie='".$db->escape($this->getPermissie())."'
 				WHERE ID=".$this->getID().";";
 		}
 		return $db->query($query);
@@ -88,12 +93,20 @@ class DocumentenCategorie{
 	public function getNaam(){		return $this->naam; }
 	public function getZichtbaaar(){return $this->zichtbaar; }
 	public function isZichtbaar(){ 	return $this->zichtbaar==1; }
+	public function getPermissie(){ return $this->permissie; }
 
 	public function getDocumenten(){return $this->documenten; }
 
 	public static function exists($catID){
 		$cat=new DocumentenCategorie((int)$catID);
 		return $cat->getID()!=0;
+	}
+	public static function getPermissieVoorCatID($catID){
+		$cat=new DocumentenCategorie((int)$catID);
+		if($cat->getID()!=0){
+			return $cat->getPermissie();
+		}
+		return false;
 	}
 }
 ?>

@@ -9,8 +9,6 @@
 # instellingen & rommeltjes
 require_once('include.config.php');
 
-## zijkolom in elkaar jetzen
-$zijkolom=new kolom();
 
 ## de pagina-inhoud
 $body=new kolom();
@@ -25,7 +23,5 @@ $body->addObject($paginacontent);
 
 ## pagina weergeven
 $pagina=new csrdelft($body);
-$pagina->setZijkolom($zijkolom);
-
 $pagina->view();
 ?>

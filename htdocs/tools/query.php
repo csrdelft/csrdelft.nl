@@ -25,7 +25,9 @@ if(isset($savedquery) AND $savedquery->magBekijken()){
 	$html.=$savedquery->getHtml();
 }
 require_once('class.stringincluder.php');
-$body=new stringincluder($html, 'Opgeslagen query\'s');
-$pagina=new csrdelft($body);
+
+$pagina=new csrdelft(new stringincluder($html, 'Opgeslagen query\'s'));
+$pagina->setZijkolom(false);
+
 $pagina->view();
 ?>

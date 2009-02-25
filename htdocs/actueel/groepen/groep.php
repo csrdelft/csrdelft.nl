@@ -18,12 +18,10 @@ if(!isset($_GET['query'])){
 }
 $controller=new Groepcontroller($_GET['query']);
 
-## zijkolom in elkaar jetzen
-	$zijkolom=new kolom();
 
-# pagina weergeven
 $pagina=new csrdelft($controller->getContent());
-$pagina->setZijkolom($zijkolom);
+
 $pagina->addStylesheet('groepen.css');
+$pagina->addScript('groepen.js');
 $pagina->view();
 ?>

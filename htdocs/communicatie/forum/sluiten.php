@@ -23,8 +23,8 @@ if(isset($_GET['topic'])){
 	}
 	header('location: '.CSR_ROOT.'forum/onderwerp/'.$forum->getID());
 }else{
-	header('location: '.CSR_ROOT.'forum/');
 	$_SESSION['melding']='Niets om te sluiten of te openen.';
+	header('location: '.CSR_ROOT.'forum/');
 }
 
 

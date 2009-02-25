@@ -2,31 +2,26 @@
 /*
  * groepen.php	| 	Jan Pieter Waagmeester (jieter@jpwaag.com)
  *
- *
+ * Overzicht van de h.t. groepen per groepcategorie
  */
 
-require_once('include.config.php');
+require_once 'include.config.php';
 
-require_once('groepen/class.groepen.php');
-require_once('groepen/class.groep.php');
-require_once('groepen/class.groepcontent.php');
+require_once 'groepen/class.groepen.php';
+require_once 'groepen/class.groep.php';
+require_once 'groepen/class.groepcontent.php';
 
 if(isset($_GET['gtype'])){
 	$gtype=$_GET['gtype'];
 }else{
 	$gtype="Commissies";
 }
-$groepen=new Groepen($gtype);
 
-$content=new Groepencontent($groepen);
+$content=new Groepencontent(new Groepen($gtype));
 
 
-## zijkolom in elkaar jetzen
-	$zijkolom=new kolom();
-
-# pagina weergeven
 $pagina=new csrdelft($content);
-$pagina->setZijkolom($zijkolom);
 $pagina->addStylesheet('groepen.css');
+$pagina->addScript('groepen.js');
 $pagina->view();
 ?>

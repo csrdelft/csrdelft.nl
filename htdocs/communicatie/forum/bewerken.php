@@ -13,9 +13,6 @@ require_once('include.config.php');
 require_once('forum/class.forumonderwerp.php');
 $forum = new ForumOnderwerp();
 
-#TODO: als het inline bewerken van berichten goed bevonden wordt, kan dit
-#voor een groot deel hdb, weergeven van bewerkdingen hoeft dan niet meer hier.
-#functies daarvoor in Forum kunnen dan ook weg.
 
 //is er uberhaupt wel een postID welke bewerkt moet worden
 if(isset($_GET['post'])){

@@ -15,12 +15,12 @@ if ($lid->hasPermission('P_LEDEN_READ') or $lid->hasPermission('P_OUDLEDEN_READ'
 	$midden = new LedenlijstContent($lid);
 
 	$form = array();
-		
+
 	# er is een zoekopdracht opgegeven, we gaan nu de parameters bekijken
 	# eerst de zoekterm ophalen
 	# als 'wat' leeg is, dan wordt er naar alle leden gezocht
 	$form['wat'] = (isset($_POST['wat'])) ? $_POST['wat'] : '';
-		
+
 	# in welke kolom van de tabel gezocht wordt...
 	# als er niets geldigs is opgegeven, dan op voornaam zoeken
 	$kolommen = array('uid', 'naam','nickname','voornaam','achternaam','adres','telefoon','mobiel','email','kring', 'studie', 'gebdatum', 'beroep');
@@ -36,7 +36,7 @@ if ($lid->hasPermission('P_LEDEN_READ') or $lid->hasPermission('P_OUDLEDEN_READ'
 	if($lid->hasPermission('P_OUDLEDEN_MOD')) {
 		$zoek_in_type[] = 'nobodies';
 	}
-	
+
 	# deze optie kan ook via GET, zodoende is te sturen dat er via de (oud)ledenlijst default in (oud)leden
 	# gezocht wordt, zonder dat er een POST is verzonden
 	if (isset($_GET['status']) and in_array($_GET['status'],$zoek_in_type)) $form['status'] = $_GET['status'];
@@ -45,7 +45,7 @@ if ($lid->hasPermission('P_LEDEN_READ') or $lid->hasPermission('P_OUDLEDEN_READ'
 	# kolom waarop gesorteerd wordt
 	$kolommen = array('uid', 'voornaam', 'achternaam', 'email', 'adres', 'telefoon', 'mobiel', 'studie', 'gebdatum', 'beroep');
 	$form['sort'] = (isset($_POST['sort']) and in_array($_POST['sort'],$kolommen)) ? $_POST['sort'] : 'achternaam';
-		
+
 	# kolommen die afgebeeld kunnen worden
 	$kolommen = array('uid', 'pasfoto', 'nickname', 'moot', 'email', 'adres', 'telefoon', 'mobiel', 'icq', 'msn', 'skype', 'studie', 'gebdatum', 'beroep');
 	$form['kolom'] = array();
@@ -79,16 +79,11 @@ if ($lid->hasPermission('P_LEDEN_READ') or $lid->hasPermission('P_OUDLEDEN_READ'
 	require_once 'class.paginacontent.php';
 	$pagina=new Pagina('geentoegang');
 	$midden = new PaginaContent($pagina);
-}	
-
-## zijbalk in elkaar rossen
-$zijkolom=new kolom();
+}
 
 
-## pagina weergeven
-	$pagina=new csrdelft($midden);
-	$pagina->setZijkolom($zijkolom);
-	$pagina->view();
+$pagina=new csrdelft($midden);
+$pagina->view();
 
 
 ?>

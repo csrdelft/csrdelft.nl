@@ -19,7 +19,7 @@ define('REFRESH', CSR_ROOT.'actueel/mededelingen/');
 
 //plaetje verwerken:
 if(isset($_FILES['plaatje'], $_GET['berichtID']) AND $nieuws->isNieuwsMod() AND $_FILES['plaatje']['name']!=''){
-	$info=getimagesize($_FILES['plaatje']['tmp_name']); 
+	$info=getimagesize($_FILES['plaatje']['tmp_name']);
 	$berichtID=(int)$_GET['berichtID'];
 	//verhouding controleren
 	if(($info[0]/$info[1])==1){
@@ -43,7 +43,7 @@ if(isset($_FILES['plaatje'], $_GET['berichtID']) AND $nieuws->isNieuwsMod() AND 
 if(isset($_GET['berichtID'], $_GET['plaatje']) AND $_GET['plaatje']=='delete' AND $nieuws->isNieuwsMod()){
 	$nieuws->setPlaatje((int)$_GET['berichtID'], '');
 	header('location: '.REFRESH); exit;
-}	
+}
 # Nieuwspagina
 if(isset($_POST['titel'], $_POST['tekst'], $_POST['categorie'], $_POST['rank']) AND $nieuws->isNieuwsMod()){
 	if(isset($_GET['toevoegen'])){
@@ -109,11 +109,8 @@ if(isset($_POST['titel'], $_POST['tekst'], $_POST['categorie'], $_POST['rank']) 
 	}
 }
 
-$zijkolom=new kolom();
-
 # pagina weergeven
 $pagina=new csrdelft($nieuwscontent);
-$pagina->setZijkolom($zijkolom);
 $pagina->view();
 
 ?>

@@ -52,11 +52,8 @@ if ($lid->hasPermission('P_FORUM_MOD') OR $lid->getUid()==STATISTICUS){
 	$midden = new PaginaContent($pagina);
 }
 
-## zijkolom in elkaar jetzen
-$zijkolom=new kolom();
 
 $page=new csrdelft($midden);
-$page->setZijkolom($zijkolom);
 $page->addStylesheet('forum.css');
 $page->view();
 

@@ -1,18 +1,26 @@
 <?php
+/*
+ * soccie.php.
+ *
+ * Dit bestand is de ingang voor anthrax om de saldi te uploaden, elke morgen
+ * om 6:30 (cronjob op anthrax). Hier worden de saldi uit de XML getrokken die
+ * van Anthrax komt en in de betreffende tabellen in de database gestopt.
+ *
+ * TODO: saldoupdatefunctionaliteit naar Lid verplaatsen.
+ */
 error_reporting(E_ALL);
 
 
-require_once('include.config.php');
-require_once('include.common.php');
-require_once('class.mysql.php');
-require_once('blowfish/blowfish.php');
+require_once 'include.config.php';
+
+require_once 'blowfish/blowfish.php';
 
 //als er niet van een confide-ip gerequest wordt niet accepteren
 if(!opConfide()){
-	echo 'FAALHAASCH: ga fietsen stelen!'; 
+	echo 'FAALHAASCH: ga fietsen stelen!';
 	exit;
 }
-//we slaan hier alvast de huidige datum en tijd op, dan is het zometeen voor alle ingevoerde 
+//we slaan hier alvast de huidige datum en tijd op, dan is het zometeen voor alle ingevoerde
 //saldi gelijk.
 $datum=getDateTime();
 
@@ -34,17 +42,17 @@ if(isset($_POST['saldi'])){
 		$bOk=true;
 		foreach($aSocciesaldi as $aSocciesaldo){
 			$query="
-				UPDATE lid 
-				SET soccieSaldo=".$aSocciesaldo->saldo." 
-				WHERE soccieID=".$aSocciesaldo->id." 
+				UPDATE lid
+				SET soccieSaldo=".$aSocciesaldo->saldo."
+				WHERE soccieID=".$aSocciesaldo->id."
 				  AND createTerm='".$aSocciesaldo->createTerm."' LIMIT 1;";
 			//sla het saldo ook op in een logje, zodat we later kunnen zien dat iemand al heel lang
 			//rood staat en dus geschopt kan worden...
 			$logQuery="
-				INSERT INTO saldolog 
-				( 
+				INSERT INTO saldolog
+				(
 					uid, moment, cie, saldo
-				)VALUES( 
+				)VALUES(
 					(SELECT uid FROM lid WHERE soccieID=".$aSocciesaldo->id."  AND createTerm='".$aSocciesaldo->createTerm."' ),
 					'".$datum."',
 					'soccie',
@@ -59,7 +67,7 @@ if(isset($_POST['saldi'])){
 					echo 'Koppeling voor '.$aSocciesaldo->voornaam.' '.$aSocciesaldo->achternaam.' mislukt'."\r\n";
 				}
 			}
-			
+
 		}
 		if($bOk){
 			echo '[ '.$iAantal.' regels ontvangen.... OK ]';

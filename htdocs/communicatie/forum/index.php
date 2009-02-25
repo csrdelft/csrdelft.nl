@@ -21,11 +21,9 @@ if ($lid->hasPermission('P_FORUM_READ')) {
 	$pagina=new Pagina('geentoegang');
 	$midden = new PaginaContent($pagina);
 }
-## zijkolom in elkaar jetzen
-$zijkolom=new kolom();
+
 
 $page=new csrdelft($midden);
-$page->setZijkolom($zijkolom);
 $page->addStylesheet('forum.css');
 $page->view();
 

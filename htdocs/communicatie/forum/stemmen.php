@@ -22,25 +22,21 @@ if(isset($_GET['topic'])){
 				if($poll->addStem($iPollOptie)){
 					if($iTopicID==7){
 						header('location: '.CSR_ROOT.'leden/');
-					}else{
-						header('location: '.CSR_ROOT.'forum/onderwerp/'.$iTopicID);
+						exit;
 					}
 				}else{
-					header('location: '.CSR_ROOT.'forum/onderwerp/'.$iTopicID);
-					$_SESSION['melding']='Optie bestaat niet.';
+						$_SESSION['melding']='Optie bestaat niet.';
 				}
 			}else{
-				header('location: '.CSR_ROOT.'forum/onderwerp/'.$iTopicID);
 				$_SESSION['melding']='U mag maar een keer stemmen.';
 			}
 		}else{
-			header('location: '.CSR_ROOT.'forum/onderwerp/'.$iTopicID);
 			$_SESSION['melding']='Onjuiste gegevens.';
 		}
 	}else{
-		header('location: '.CSR_ROOT.'forum/onderwerp/'.$iTopicID);
 		$_SESSION['melding']='U mag hier niet stemmen.';
 	}
+	header('location: '.CSR_ROOT.'communicatie/forum/onderwerp/'.$iTopicID);
 }else{
 	header('location: '.CSR_ROOT.'forum/');
 	$_SESSION['melding']='Hier snap ik geen snars van (waar is het topicID?).';

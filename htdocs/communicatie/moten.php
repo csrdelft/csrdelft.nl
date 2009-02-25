@@ -24,14 +24,8 @@ if ($lid->hasPermission('P_LEDEN_READ')) {
 	$midden = new PaginaContent($pagina);
 }
 
-## zijkolom in elkaar jetzen
-	$zijkolom=new kolom();
-
-# pagina weergeven
 $pagina=new csrdelft($midden);
-$pagina->setZijkolom($zijkolom);
 $pagina->addStylesheet('groepen.css');
 $pagina->view();
-
 
 ?>

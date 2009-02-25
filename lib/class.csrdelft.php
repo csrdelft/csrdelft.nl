@@ -7,7 +7,8 @@
 # -------------------------------------------------------------------
 
 
-require_once('class.simplehtml.php');
+require_once 'class.simplehtml.php';
+require_once 'class.kolom.php';
 
 class csrdelft extends SimpleHTML {
 
@@ -16,8 +17,12 @@ class csrdelft extends SimpleHTML {
 	public $_body;
 	//menu bevat een menu-object.
 	public $_menu;
-	//standaard geen zijkolom...
-	public $_zijkolom=false;
+
+	/*
+	 * Zijkolom is standaard, tenzij met setZijkolom($simplehtml); een ander object
+	 * gezet wordt, of met setZijkolom(false); de zijkolom wordt uitgezet.
+	 */
+	public $_zijkolom=null;
 
 	private $_stylesheets=array();
 	private $_scripts=array();
@@ -63,17 +68,21 @@ class csrdelft extends SimpleHTML {
 	}
 	function getStylesheets(){		return $this->_stylesheets; }
 
+
 	function addScript($script){
 		$this->_scripts[]=array(
 			'naam' => $script,
-			'datum' => (strstr($script,'?')?'':filemtime(HTDOCS_PATH.'/layout/'.$script))
+			//voeg geen datum toe als er al een '?' in de scriptnaam staat
+			'datum' => (strstr($script,'?')?'':filemtime(HTDOCS_PATH.'/layout/js/'.$script))
 		);
 	}
 	function getScripts(){			return $this->_scripts; }
 
 	function getTitel(){ return mb_htmlentities($this->_titel); }
-	function setZijkolom($zijkolom){
-		if(is_object($zijkolom)){
+	function setZijkolom($zijkolom=null){
+		if($zijkolom instanceof Kolom){
+			$this->_zijkolom=$zijkolom;
+		}else{
 			$this->_zijkolom=$zijkolom;
 		}
 	}
@@ -84,23 +93,26 @@ class csrdelft extends SimpleHTML {
 	function view() {
 		$lid=Lid::instance();
 
+		//als $this->_zijkolom nog null is die vullen met een standaard lege kolom.
+		if($this->_zijkolom===null){
+			$this->_zijkolom=new Kolom();
+		}
+
 		header('Content-Type: text/html; charset=UTF-8');
 		$csrdelft=new Smarty_csr();
 		$csrdelft->assign_by_ref('csrdelft', $this);
 
 		//SocCie-saldi, MaalCie-saldi
-		$saldi=$lid->getSaldi();
-		$csrdelft->assign('saldi', $saldi);
+		$csrdelft->assign('saldi', $lid->getSaldi());
+
+		if(defined('DEBUG') AND $lid->hasPermission('P_ADMIN')){
+			$db=MySql::instance();
+			$csrdelft->assign('csrdelftDebug',$db=MySql::instance()->getDebug());
+		}
 
 		$csrdelft->caching=false;
 		$csrdelft->display($this->_prefix.'csrdelft.tpl');
 
-		if(defined('DEBUG') AND $lid->hasPermission('P_ADMIN')){
-			$db=MySql::instance();
-			echo '
-			<h2 id="mysql_debug_header"><a id="mysql_debug_showhide" href="#mysql_debug_header" onclick="return  toggleDiv(\'mysql_debug\');">Debug Tonen/Verstoppen</a></h2>
-			<div id="mysql_debug" style="display: none"><pre>'.$db->getDebug().'</pre></div>';
-		}
 		//als er een error is geweest, die unsetten...
 		if(isset($_SESSION['auth_error'])){ unset($_SESSION['auth_error']); }
 	}

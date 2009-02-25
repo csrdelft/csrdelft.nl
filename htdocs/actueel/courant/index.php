@@ -14,9 +14,6 @@ $body = new CourantBeheerContent($courant);
 $courant_url=CSR_ROOT.'actueel/courant';
 
 
-## zijkolom in elkaar jetzen
-$zijkolom=new kolom();
-	
 if($_SERVER['REQUEST_METHOD']=='POST'){
 	if($courant->valideerBerichtInvoer()===true){
 		$iBerichtID=(int)$_GET['ID'];
@@ -41,10 +38,10 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
 		}
 	}else{
 		if(isset($_GET['ID']) AND $_GET['ID']==0){
-			//nieuw bericht	
+			//nieuw bericht
 			$body->setMelding($courant->getError());
 		}else{
-			//bewerken		
+			//bewerken
 			$body->setMelding($courant->getError());
 			$body->edit((int)$_GET['ID']);
 		}
@@ -66,7 +63,5 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
 	}
 }
 $pagina=new csrdelft($body);
-$pagina->setZijkolom($zijkolom);
-
 $pagina->view();
 ?>

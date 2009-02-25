@@ -27,6 +27,7 @@ $body->add($forumcontent);
 $body->add(new stringincluder('</div>'));
 ## pagina weergeven
 $pagina=new csrdelft($body);
+$pagina->setZijkolom(false);
 
 
 $pagina->view();

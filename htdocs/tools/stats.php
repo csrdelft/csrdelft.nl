@@ -11,7 +11,8 @@ if(!$lid->hasPermission('P_ADMIN')){
 	exit;
 }
 
-$pagina=new csrdelft(new stats());
+$pagina=new Csrdelft(new stats());
+$pagina->setZijkolom(false);
 $pagina->view();
 
 class stats{

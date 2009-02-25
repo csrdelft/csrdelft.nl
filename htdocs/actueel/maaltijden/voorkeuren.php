@@ -87,10 +87,8 @@ if ($error == 0  or $error == 2) {
 	$midden=new PaginaContent(new Pagina('maaltijden'));
 	$midden->setActie('bekijken');
 }
-$zijkolom=new kolom();
 
 $page=new csrdelft($midden);
-$page->setZijkolom($zijkolom);
 $page->view();
 
 

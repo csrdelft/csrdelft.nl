@@ -24,10 +24,8 @@ class uploader{
 }
 $midden=new uploader($sStatus);
 
-$zijkolom=new kolom();
 
 $page=new csrdelft($midden);
-$page->setZijkolom($zijkolom);
 $page->view();
 
 ?>

@@ -2,7 +2,7 @@
 /*
  * getPost.php	| 	Jan Pieter Waagmeester (jieter@jpwaag.com)
  *
- * Geef een post met citaattags erom terug.
+ * Geef een post -met eventuele citaattags erom- terug.
  */
 
 require_once('include.config.php');

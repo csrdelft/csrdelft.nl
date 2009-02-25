@@ -1,6 +1,10 @@
 <?php
+/*
+ * zoeken.php	| 	C.S.R. Delft
+ *
+ * Zoeken in het csrdelft.nl-forum
+ */
 
-# instellingen & rommeltjes
 require_once('include.config.php');
 
 # Het middenstuk
@@ -16,12 +20,9 @@ if ($lid->hasPermission('P_FORUM_READ')) {
 	$midden = new PaginaContent($pagina);
 }
 
-//kolom voor de zijkant maken.
-$zijkolom=new kolom();
 
 # pagina weergeven
 $pagina=new csrdelft($midden);
-$pagina->setZijkolom($zijkolom);
 $pagina->addStylesheet('forum.css');
 $pagina->view();
 
