@@ -12,20 +12,19 @@ class DocumentenCategorie{
 	private $naam;
 	private $zichtbaar=1;
 	private $permissie='P_DOCS_READ';
-	private $documenten=array();
+	private $documenten=null;
 
-	public function __construct($catID=0, $loadChildren=-1){
-		$this->load($catID, $loadChildren);
+	private $loadLimit=0;
+
+	public function __construct($catID=0){
+		$this->load($catID);
 	}
 	/*
 	 * DocumentCategorie inladen.
 	 *
 	 * int catID			In te laden categorie, 0= een nieuwe categorie
-	 * int loadChildren		-1	Geen kinderen inladen.
-	 * 						0	Alle kinderen inladen.
-	 * 						>0	Dit aantal kinderen wordt ingeladen.
 	 */
-	public function load($catID=0, $childrenLimit=0){
+	public function load($catID=0){
 		$this->ID=(int)$catID;
 		if($this->getID()!=0){
 			$db=MySql::instance();
@@ -38,7 +37,6 @@ class DocumentenCategorie{
 				$this->naam=$categorie['naam'];
 				$this->zichtbaar=$categorie['zichtbaar'];
 
-				$this->loadChildren($childrenLimit);
 			}else{
 				//gevraagde categorie bestaat niet, we zet het ID weer op 0.
 				$this->ID=0;
@@ -46,21 +44,18 @@ class DocumentenCategorie{
 		}
 	}
 	/*
-	 * /kindertjes ophalen.
+	 * De onderhangende documenten ophalen.
 	 */
-	public function loadChildren($childrenLimit){
-
-		if($childrenLimit>=0){
-			$query="
-				SELECT ID, naam, catID, bestandsnaam, size, mimetype, toegevoegd, eigenaar
-				FROM document WHERE catID=".$this->getID();
-			if($childrenLimit>0){
-				$query.=' LIMIT '.$childrenLimit;
-			}
-			$result=$db->query($query);
-			while($doc=$db->next($result)){
-				$this->documenten[]=new Document($doc);
-			}
+	public function loadDocumenten(){
+		$query="
+			SELECT ID, naam, catID, bestandsnaam, size, mimetype, toegevoegd, eigenaar
+			FROM document WHERE catID=".$this->getID();
+		if($this->loadLimit>0){
+			$query.=' LIMIT '.$this->loadLimit;
+		}
+		$result=$db->query($query);
+		while($doc=$db->next($result)){
+			$this->documenten[]=new Document($doc);
 		}
 		return $db->numRows($result);
 	}
@@ -95,7 +90,11 @@ class DocumentenCategorie{
 	public function isZichtbaar(){ 	return $this->zichtbaar==1; }
 	public function getPermissie(){ return $this->permissie; }
 
-	public function getDocumenten(){return $this->documenten; }
+	public function getDocumenten(){
+		if($this->documenten===null){
+			$this->loadDocumenten();
+		}
+		return $this->documenten; }
 
 	public static function exists($catID){
 		$cat=new DocumentenCategorie((int)$catID);

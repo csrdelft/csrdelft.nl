@@ -100,8 +100,7 @@ class csrdelft extends SimpleHTML {
 		$csrdelft->assign('saldi', $lid->getSaldi());
 
 		if(defined('DEBUG') AND $lid->hasPermission('P_ADMIN')){
-			$db=MySql::instance();
-			$csrdelft->assign('csrdelftDebug',$db=MySql::instance()->getDebug());
+			$csrdelft->assign('db',MySql::instance());
 		}
 
 		$csrdelft->caching=false;

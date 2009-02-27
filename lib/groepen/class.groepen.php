@@ -18,7 +18,7 @@ class Groepen{
 
 	private $type;
 
-	private $groepen=array();
+	private $groepen=null;
 
 	/*
 	 * Constructor voor Groepen.
@@ -43,15 +43,13 @@ class Groepen{
 			die('FATALE FEUT: Groeptype bestaat niet! Groepen::__construct()');
 		}
 
-		//Vervolgens de groepen van het gegeven type ophalen:
-		$this->load();
 	}
 
 	/*
 	 * Laten we de gegevens van het groeptype ophalen, met de bekende groepen voor
 	 * het type.
 	 */
-	private function load(){
+	private function loadGroepen(){
 		$db=MySql::instance();
 
 		//Afhankelijk van de instelling voor het groeptype halen we alleen de
@@ -96,7 +94,6 @@ class Groepen{
 
 			}
 			$aGroep[]=$aGroepraw;
-
 		}
 
 		if(isset($aGroep[0])){
@@ -118,7 +115,12 @@ class Groepen{
 		return $db->query($qSave);
 	}
 
-	public function getGroepen(){		return $this->groepen; }
+	public function getGroepen(){
+		if($this->groepen===null){
+			$this->loadGroepen();
+		}
+		return $this->groepen;
+	}
 	public function getId(){			return $this->type['id']; }
 	public function getNaam(){ 			return $this->type['naam']; }
 	public function getBeschrijving(){	return $this->type['beschrijving']; }
@@ -130,6 +132,9 @@ class Groepen{
 	}
 
 	public function getGroep($groepId){
+		if($this->groepen===null){
+			$this->loadGroepen();
+		}
 		if(isset($this->groepen[$groepId])){
 			return $this->groepen[$groepId];
 		}
@@ -216,7 +221,7 @@ class Groepen{
 		$Werkgroepleiders = "
 			SELECT uid
 			FROM groeplid
-			WHERE 	(functie='Leider' OR functie='leider')
+			WHERE (functie='Leider' OR functie='leider')
 			AND groepid IN (
 				SELECT groep.id
 				FROM groep JOIN groeptype ON groep.gtype = groeptype.id
