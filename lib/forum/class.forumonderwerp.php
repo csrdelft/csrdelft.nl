@@ -111,7 +111,7 @@ class ForumOnderwerp{
 		}
 		$sPostsQuery="
 			SELECT
-				uid, id, tekst, bewerkDatum, bewerkt, zichtbaar, ip
+				uid, id, tekst, datum, bewerkDatum, bewerkt, zichtbaar, ip
 			FROM
 				forum_post post
 			WHERE
