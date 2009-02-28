@@ -49,24 +49,25 @@ class ForumContent extends SimpleHTML {
 		echo '<h1><a href="/communicatie/forum/categorie/laatste">Forum</a></h1>';
 		if(!is_array($aPosts)){
 			echo '<div class="item">Geen items gevonden</div>';
-		}
-		foreach($aPosts as $aPost){
-			$tekst=$aPost['titel'];
-			if(strlen($tekst)>20){
-				$tekst=trim(substr($tekst, 0, 18)).'…';
-			}
-			$tekst=mb_htmlentities($tekst);
-			$tekst=str_replace(' ', '&nbsp;', $tekst);
+		}else{
+			foreach($aPosts as $aPost){
+				$tekst=$aPost['titel'];
+				if(strlen($tekst)>20){
+					$tekst=trim(substr($tekst, 0, 18)).'…';
+				}
+				$tekst=mb_htmlentities($tekst);
+				$tekst=str_replace(' ', '&nbsp;', $tekst);
 
-			$post=preg_replace('/(\[(|\/)\w+\])/', '|', $aPost['tekst']);
-			$postfragment=substr(str_replace(array("\n", "\r", ' '), ' ', $post), 0, 40);
-			echo '<div class="item"><span class="tijd">'.date('H:i', strtotime($aPost['datum'])).'</span>&nbsp;';
-			echo '<a href="/communicatie/forum/onderwerp/'.$aPost['tid'].'#post'.$aPost['postID'].'"
-				title="['.htmlspecialchars($aPost['titel']).'] '.
-					Forum::getForumNaam($aPost['uid'], false, false).': '.mb_htmlentities($postfragment).'"';
-			if(strtotime($aPost['datum']) > Forum::getLaatstBekeken()) { echo ' class="opvallend"'; }
-			echo '>'.$tekst.'</a><br />'."\n";
-			echo '</div>';
+				$post=preg_replace('/(\[(|\/)\w+\])/', '|', $aPost['tekst']);
+				$postfragment=substr(str_replace(array("\n", "\r", ' '), ' ', $post), 0, 40);
+				echo '<div class="item"><span class="tijd">'.date('H:i', strtotime($aPost['datum'])).'</span>&nbsp;';
+				echo '<a href="/communicatie/forum/onderwerp/'.$aPost['tid'].'#post'.$aPost['postID'].'"
+					title="['.htmlspecialchars($aPost['titel']).'] '.
+						Forum::getForumNaam($aPost['uid'], false, false).': '.mb_htmlentities($postfragment).'"';
+				if(strtotime($aPost['datum']) > Forum::getLaatstBekeken()) { echo ' class="opvallend"'; }
+				echo '>'.$tekst.'</a><br />'."\n";
+				echo '</div>';
+			}
 		}
 
 	}
