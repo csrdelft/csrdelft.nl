@@ -11,10 +11,9 @@ require_once('include.config.php');
 
 header('Content-Type: text/xml; charset=UTF-8');
 if($lid->hasPermission('P_FORUM_READ') OR isset($_GET['token'])){
-	require_once('forum/class.forum.php');
-	$forum=new Forum();
-	require_once('forum/class.forumcontent.php');
-	$rss=new ForumContent($forum, 'rss');
+	require_once 'forum/class.forum.php';
+	require_once 'forum/class.forumcontent.php';
+	$rss=new ForumContent('rss');
 
 	$rss->view();
 }else{

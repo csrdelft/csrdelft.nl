@@ -4,20 +4,17 @@
 # class.forumcontent.php
 # -------------------------------------------------------------------
 
-
-require_once('class.simplehtml.php');
+require_once 'class.simplehtml.php';
+require_once 'forum/class.forum.php';
+require_once 'forum/class.forumcategorie.php';
 
 class ForumContent extends SimpleHTML {
-	var $_forum;
-	var $_actie;
-	var $_sTitel='forum';
+	private $forum;
+	private $actie;
+	private $sTitel='forum';
 
-	var $_topicsPerPagina;
-
-	function __construct($bForum, $actie){
-		$this->_forum=$bForum;
-		$this->_actie=$actie;
-		$this->_topicsPerPagina=$bForum->getTopicsPerPagina();
+	function __construct($actie){
+		$this->actie=$actie;
 	}
 /***********************************************************************************************************
 * Overzicht van Categorieën met aantal topics en posts
@@ -25,101 +22,12 @@ class ForumContent extends SimpleHTML {
 ***********************************************************************************************************/
 	function viewCategories(){
 		$smarty=new Smarty_csr();
-		$smarty->assign('categories',$this->_forum->getCategories(true));
+		$smarty->assign('categories', ForumCategorie::getAll(true));
 		$smarty->assign('melding', $this->getMelding());
 		$smarty->display('forum/list_categories.tpl');
 	}
-/***********************************************************************************************************
-*	Topics laten zien in een categorie
-*
-***********************************************************************************************************/
-	function viewTopics($iCat){
-		$iCat=(int)$iCat;
-
-		//topics ophaelen voor deze categorie
-		//wellicht wel een andere pagina?
-		if(isset($_GET['pagina'])){
-			$iPaginaID=(int)$_GET['pagina'];
-		}else{
-			$iPaginaID=1;
-		}
-		if($this->_forum->catExistsVoorUser($iCat)){
-			$aTopics=$this->_forum->getTopics($iCat, $iPaginaID);
-			//als de pagina niet bestaat moet er teruggegaan worden naar de laatste pagina.
-			if($iPaginaID!=0 AND $aTopics===false){
-				//de pagina die opgevraagd wordt bestaat niet, gewoon maar de eerste weergeven dan.
-				$iPaginaID=1;
-				$aTopics=$this->_forum->getTopics($iCat, $iPaginaID);
-			}
-			$iAantalTopics=$this->_forum->topicCount($iCat);
-			$template='forum/list_onderwerpen.tpl';
-		}elseif($iCat==0){
-			$this->_topicsPerPagina=40;
-			$aTopics=$this->_forum->getPostsVoorRss($this->_topicsPerPagina);
-			$iAantalTopics=count($aTopics);
-			$template='forum/list_recent.tpl';
-		}else{
-			echo '<h2><a href="/communicatie/forum/" class="forumGrootlink">Forum</a> &raquo; Foutje</h2>Dit gedeelte van het forum is niet zichtbaar voor u, of het bestaat &uuml;berhaupt niet.
-				<a href="/communicatie/forum/">Terug naar het forum</a>';
-			return;
-		}
-
-		$smarty=new Smarty_csr();
-		$smarty->assign('categorie', $iCat);
-		$smarty->assign('categorietitel', $this->_forum->getCategorieTitel($iCat));
-		$smarty->assign('berichten', $aTopics);
-
-		//paginanummertjes
-		$pagina['baseurl']='/communicatie/forum/categorie/'.$iCat.'/';
-		$pagina['aantal']=1;
-		if($iAantalTopics>$this->_topicsPerPagina){
-			$pagina['aantal']=ceil($iAantalTopics/$this->_topicsPerPagina);
-		}
-		$pagina['huidig']=$iPaginaID;
-		$smarty->assign('pagina', $pagina);
-
-		$lid=Lid::instance();
-
-		$smarty->assign('magPosten', $lid->hasPermission($this->_forum->getRechten_post($iCat)));
-		$smarty->assign('melding', $this->getMelding());
-		$smarty->display($template);
 
 
-
-
-	}
-/***********************************************************************************************************
-* poll toevoegen
-*
-***********************************************************************************************************/
-	function pollFormulier($iCatID){
-		$iCatID=(int)$iCatID;
-		$sTitel=$sBericht='';
-		//bij foutmeldingen de berichten uit de post variabelen halen
-		if(isset($_POST['titel'])){ $sTitel=trim($_POST['titel']); }
-		if(isset($_POST['bericht'])){ $sBericht=trim($_POST['bericht']); }
-		echo '<form action="/communicatie/forum/maak-stemming/'.$iCatID.'" method="post"><table class="forumtabel">
-					<tr><td colspan="3" class="forumhoofd">Peiling toevoegen</td><td class="forumhoofd"></td></tr>
-					<tr><td colspan="4" class="forumtekst">';
-		//eventuele foutmelding weergeven.
-		echo $this->getMelding();
-		echo '<strong>Vraag/stelling</strong><br />';
-		echo '<input type="text" name="titel" value="'.$sTitel.'" style="width: 100%" class="tekst" /><br />';
-		echo '</td></tr><tr><td colspan="4" class="forumtekst">';
-		echo '<strong>Opties voor de peiling:</strong><br />Lege velden worden genegeerd.<br /><br />';
-		for($iTeller=0; $iTeller<15; $iTeller++){
-			if(isset($_POST['opties'][$iTeller]) AND trim($_POST['opties'][$iTeller])!=''){
-				$sOptie=trim($_POST['opties'][$iTeller]);
-			}else{
-				$sOptie='';
-			}
-			echo ($iTeller+1).'. <input type="text" name="opties[]" value="'.$sOptie.'" style="width: 70%" class="tekst" /><br />';
-		}
-		echo '</td></tr><tr><td colspan="4" class="forumtekst"><strong>Bericht</strong><br />';
-		echo '<textarea name="bericht" rows="10" style="width: 100%" class="tekst">'.$sBericht.'</textarea><br />';
-		echo '<input type="submit" name="submit" value="verzenden" /> <a href="/communicatie/forum/categorie/'.$iCatID.'">terug naar categorie</a>';
-		echo '</td></tr></table></form>';
-	}
 /***********************************************************************************************************
 * rss feed weergeven van het forum.
 *
@@ -129,19 +37,15 @@ class ForumContent extends SimpleHTML {
 		if(isset($_GET['token']) AND preg_match('/[a-z0-9]{15}/', $_GET['token'])){
 			$token=$_GET['token'];
 		}
-		$aPosts=$this->_forum->getPostsVoorRss(false, false, $token);
+		$aPosts=Forum::getPostsVoorRss(false, false, $token);
 
 		$rss=new Smarty_csr();
 		$rss->assign('aPosts', $aPosts);
 
 		$rss->display('forum/rss.tpl');
 	}
-/***********************************************************************************************************
-* Kort rijtje met laatste posts.
-*
-***********************************************************************************************************/
-	function lastPosts(){
-		$aPosts=$this->_forum->getPostsVoorRss(15, true);
+	public function lastPostsZijbalk(){
+		$aPosts=Forum::getPostsVoorRss(15, true);
 		echo '<h1><a href="/communicatie/forum/categorie/laatste">Forum</a></h1>';
 		if(!is_array($aPosts)){
 			echo '<div class="item">Geen items gevonden</div>';
@@ -159,18 +63,21 @@ class ForumContent extends SimpleHTML {
 			echo '<div class="item"><span class="tijd">'.date('H:i', strtotime($aPost['datum'])).'</span>&nbsp;';
 			echo '<a href="/communicatie/forum/onderwerp/'.$aPost['tid'].'#post'.$aPost['postID'].'"
 				title="['.htmlspecialchars($aPost['titel']).'] '.
-					$this->_forum->getForumNaam($aPost['uid'], false, false).': '.mb_htmlentities($postfragment).'"';
-			if(strtotime($aPost['datum']) > $this->_forum->getLaatstBekeken()) { echo ' class="opvallend"'; }
+					Forum::getForumNaam($aPost['uid'], false, false).': '.mb_htmlentities($postfragment).'"';
+			if(strtotime($aPost['datum']) > Forum::getLaatstBekeken()) { echo ' class="opvallend"'; }
 			echo '>'.$tekst.'</a><br />'."\n";
 			echo '</div>';
 		}
 
 	}
-/***********************************************************************************************************
-* Zoekah in forumposts, en titels van onderwerpen
-*
-***********************************************************************************************************/
-	function zoeken(){
+	public function lastPosts(){
+ 		$smarty=new Smarty_csr();
+		$smarty->assign('berichten',Forum::getPostsVoorRss(40));
+		$smarty->assign('melding', $this->getMelding());
+		$smarty->display('forum/list_recent.tpl');
+	}
+
+	public function zoeken(){
 		$sZoekQuery='';
 		if(isset($_POST['zoeken'])){ $sZoekQuery=trim($_POST['zoeken']); }elseif(isset($_GET['zoeken'])){ $sZoekQuery=trim($_GET['zoeken']);}
 
@@ -180,7 +87,7 @@ class ForumContent extends SimpleHTML {
 
 		$this->zoekFormulier($sZoekQuery, (int)$_POST['categorie']);
 		if($sZoekQuery!=''){
-			$aZoekResultaten=$this->_forum->searchPosts($sZoekQuery, (int)$_POST['categorie']);
+			$aZoekResultaten=Forum::searchPosts($sZoekQuery, (int)$_POST['categorie']);
 			if(is_array($aZoekResultaten)){
 				$aZoekOnderdelen=explode(' ', $sZoekQuery);
 				$sEersteTerm=$aZoekOnderdelen[0];
@@ -218,7 +125,7 @@ class ForumContent extends SimpleHTML {
 					echo $aZoekResultaat['titel'].'</a>';
 					if($aZoekResultaat['aantal']!=1){ echo ' <em>('.$aZoekResultaat['aantal'].' berichten in dit onderwerp)</em>'; }
 					echo '<br />'.$sPostFragment.'</td>';
-					echo '<td class="titel">'.$this->_forum->getForumNaam($aZoekResultaat['uid']).'</td>';
+					echo '<td class="titel">'.Forum::getForumNaam($aZoekResultaat['uid']).'</td>';
 					echo '<td class="titel">
 						<a href="/communicatie/forum/categorie/'.$aZoekResultaat['categorie'].'">'.$aZoekResultaat['categorieTitel'].'</a></td>';
 					echo '<td class="titel">
@@ -238,11 +145,12 @@ class ForumContent extends SimpleHTML {
 		}
 	}
 	function zoekFormulier($sZoekQuery='', $selectedCat=0){
+		require_once 'forum/class.forumcategorie.php';
 		$sZoekQuery=htmlspecialchars($sZoekQuery, ENT_QUOTES, 'UTF-8');
 		echo '<form action="/communicatie/forum/zoeken.php" method="post">';
 		echo '<p><input type="text" value="'.$sZoekQuery.'" name="zoeken" />&nbsp;';
 		echo 'in categorie: <select name="categorie"><option value="0">Alle</option>';
-		foreach($this->_forum->getCategories(true) as $cat){
+		foreach(ForumCategorie::getAll(true) as $cat){
 			if($cat['titel']!='SEPARATOR'){
 				echo '<option value="'.$cat['id'].'"';
 				if($cat['id']==$selectedCat){ echo ' selected="selected" '; }
@@ -252,50 +160,9 @@ class ForumContent extends SimpleHTML {
 		echo '</select>&nbsp;';
 		echo '<input type="submit" value="zoeken" name="verzenden" /></p></form><br />';
 	}
-
-	function viewWaarbenik(){
-		if(	($this->_actie=='topic' AND isset($_GET['topic'])) OR
-				($this->_actie=='citeren' AND isset($_GET['post'])) ){
-			if(isset($_GET['topic'])){
-				$iTopicID=(int)$_GET['topic'];
-			}else{
-				$iTopicID=$this->_forum->getTopicVoorPostID((int)$_GET['post']);
-			}
-			$iCategorieID=$this->_forum->getCategorieVoorTopic($iTopicID);
-			$sCategorie=$this->_forum->getCategorieTitel($this->_forum->getCategorieVoorTopic($iTopicID));
-			$sTitel='<a href="/communicatie/forum/">Forum</a> &raquo; <a href="/communicatie/forum/categorie/'.$iCategorieID.'">'.$sCategorie.'</a> &raquo; '.$this->_forum->getTopicTitel($iTopicID);
-		}elseif($this->_actie=='forum' AND isset($_GET['forum'])){
-			$sTitel='<a href="/communicatie/forum/">Forum</a> &raquo; ';
-			if($_GET['forum']==0){
-				$sTitel.='Laatste forumberichten';
-			}else{
-				 $sTitel.=$this->_forum->getCategorieTitel((int)$_GET['forum']);
-			}
-		}elseif($this->_actie=='zoeken'){
-			$sTitel='<a href="/communicatie/forum/">Forum</a> &raquo; zoeken';
-		}else{
-			$sTitel='Forum';
-		}
-		echo $sTitel;
-	}
 	function getTitel(){
 		$sTitel='Forum - ';
-		if(($this->_actie=='topic' AND isset($_GET['topic'])) OR
-				($this->_actie=='citeren' AND isset($_GET['post'])) ){
-			if(isset($_GET['topic'])){
-				$iTopicID=(int)$_GET['topic'];
-			}else{
-				$iTopicID=$this->_forum->getTopicVoorPostID((int)$_GET['post']);
-			}
-			$sCategorie=$this->_forum->getCategorieTitel($this->_forum->getCategorieVoorTopic($iTopicID));
-			$sTitel.=$sCategorie.' - '.$this->_forum->getTopicTitel($iTopicID);
-		}elseif($this->_actie=='forum' AND isset($_GET['forum'])){
-			if($_GET['forum']!=0){
-				$sTitel.=$this->_forum->getCategorieTitel((int)$_GET['forum']);
-			}else{
-				$sTitel.='Laatste forumberichten';
-			}
-		}elseif($this->_actie=='zoeken'){
+		if($this->actie=='zoeken'){
 			$sTitel.='zoeken';
 		}else{
 			$sTitel='Forum';
@@ -303,32 +170,10 @@ class ForumContent extends SimpleHTML {
 		return $sTitel;
 	}
 	function view(){
-		switch($this->_actie){
-			case 'forum':
-				if(isset($_GET['forum'])){
-					$this->viewTopics((int)$_GET['forum']);
-				}else{
-					$this->viewCategories();
-				}
-			break;
-			case 'nieuw-poll':
-				if(isset($_GET['cat']) AND $this->_forum->catExistsVoorUser($_GET['cat'])){
-					$iCatID=(int)$_GET['cat'];
-				}else{
-					//standaard worden stemmingen in de categorie daarvoor gerost.
-					$iCatID=7;
-				}
-				$this->pollFormulier($iCatID);
-			break;
-			case 'citeren':
-				if(isset($_GET['post'])){
-					$this->viewTopic((int)$_GET['post']);
-				}else{
-					$this->viewCategories();
-				}
-			break;
+		switch($this->actie){
+			case 'recent': $this->lastPosts(); break;
 			case 'rss': $this->rssFeed();	break;
-			case 'lastposts': $this->lastPosts(); break;
+			case 'lastposts': $this->lastPostsZijbalk(); break;
 			case 'zoeken': $this->zoeken(); break;
 			default: $this->viewCategories();	break;
 		}

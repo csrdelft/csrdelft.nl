@@ -4,57 +4,57 @@
 {capture name='navlinks'}
 	<div class="forumNavigatie">
 		<a href="/communicatie/forum/" class="forumGrootlink">Forum</a> &raquo; 
-		<a href="/communicatie/forum/categorie/{$forum->getCatID()}" class="forumGrootlink">
-			{$forum->getCatTitel()|escape:'html'}
+		<a href="/communicatie/forum/categorie/{$onderwerp->getCategorieID()}" class="forumGrootlink">
+			{$onderwerp->getCategorie()->getNaam()|escape:'html'}
 		</a><br />
-		<h1>{$forum->getTitel()|escape:'html'|wordwrap:80:"\n":true}</h1>
+		<h1>{$onderwerp->getTitel()|escape:'html'|wordwrap:80:"\n":true}</h1>
 	</div>
 {/capture}
 {$smarty.capture.navlinks}
 {$melding}
 
-{if $forum->isModerator()}
+{if $onderwerp->isModerator()}
 	<fieldset id="modereren">
 		<legend>Modereren</legend>
 		<div style="float: left; width: 30%;">
-			{knop url="verwijder-onderwerp/`$forum->getID()`" confirm="Weet u zeker dat u dit onderwerp wilt verwijderen?" type=verwijderen text=Verwijderen class=knop} 
+			{knop url="verwijder-onderwerp/`$onderwerp->getID()`" confirm="Weet u zeker dat u dit onderwerp wilt verwijderen?" type=verwijderen text=Verwijderen class=knop} 
 			<br /><br />
-			{if $forum->isOpen()}
-				{knop url="openheid/`$forum->getID()`" class=knop type=slotje text="sluiten (geen reactie mogelijk)"}
+			{if $onderwerp->isOpen()}
+				{knop url="openheid/`$onderwerp->getID()`" class=knop type=slotje text="sluiten (geen reactie mogelijk)"}
 			{else}
-				{knop url="openheid/`$forum->getID()`" class=knop type=slotje text="openen (reactie mogelijk)"}
+				{knop url="openheid/`$onderwerp->getID()`" class=knop type=slotje text="openen (reactie mogelijk)"}
 			{/if}
 			</a><br /><br />
-			{if $forum->isPlakkerig()}
-				{knop url="plakkerigheid/`$forum->getID()`" class=knop type=plakkerig text="verwijder plakkerigheid"}
+			{if $onderwerp->isPlakkerig()}
+				{knop url="plakkerigheid/`$onderwerp->getID()`" class=knop type=plakkerig text="verwijder plakkerigheid"}
 			{else}
-				{knop url="plakkerigheid/`$forum->getID()`" class=knop type=plakkerig text="maak plakkerig"}
+				{knop url="plakkerigheid/`$onderwerp->getID()`" class=knop type=plakkerig text="maak plakkerig"}
 			{/if}
 				
 			</a>
 		</div>
 		<div style="float: right; width: 60%;">
-			<form action="/communicatie/forum/verplaats/{$forum->getID()}/" method="post">
+			<form action="/communicatie/forum/verplaats/{$onderwerp->getID()}/" method="post">
 				<div>Verplaats naar: <br /> 
 					<select name="newCat">
 						<option value="ongeldig">... selecteer</option>
 						<optgroup>
-						{foreach from=$forum->getCategories() item='cat'}
+						{foreach from=$onderwerp->getCategorie()->getAll() item='cat'}
 							{if $cat.titel=='SEPARATOR'}
 						</optgroup>
 						<optgroup label="------">
 							{else}
-								{if $cat.id!=$forum->getCatID()}<option value="{$cat.id}">{$cat.titel|escape:'html'}</option>{/if}
+								{if $cat.id!=$onderwerp->getCategorieID()}<option value="{$cat.id}">{$cat.titel|escape:'html'}</option>{/if}
 							{/if}
 						{/foreach}
 					</select> 
 					<input type="submit" value="opslaan" />
 				</div>
 			</form>
-			<form action="/communicatie/forum/onderwerp/hernoem/{$forum->getID()}/" method="post">
+			<form action="/communicatie/forum/onderwerp/hernoem/{$onderwerp->getID()}/" method="post">
 				<div>
 					Titel aanpassen: <br />
-					<input type="text" name="titel" value="{$forum->getTitel()|escape:'html'}" style="width: 250px;" />
+					<input type="text" name="titel" value="{$onderwerp->getTitel()|escape:'html'}" style="width: 250px;" />
 					<input type="submit" value="opslaan" />
 				</div>
 			</form>
@@ -66,10 +66,11 @@
 	<tr class="tussenschot">
 		<td colspan="2"></td>
 	</tr>
-	{if $forum->getSoort()=='T_POLL'}
+	{if $onderwerp->getSoort()=='T_POLL'}
 		{$peiling->view()}
 	{/if}
-	{foreach from=$forum->getPosts() item='bericht' name='berichten'}
+	
+	{foreach from=$onderwerp->getPosts() item='bericht' name='berichten'}
 		<tr>
 			<td class="auteur">
 				{$bericht.uid|csrnaam:'user'} schreef
@@ -77,25 +78,25 @@
 				<br />
 				{* knopjes bij elke post *}
 				{* citeerknop enkel als het onderwerp open is en als men mag posten, of als men mod is. *}
-				{if $forum->magCiteren()}
-					{* {knop url="reactie/`$bericht.postID`#laatste" type=citeren} *}
-					<a onclick="return forumCiteren({$bericht.postID})" href="/communicatie/forum/reactie/{$bericht.postID}#laatste">
+				{if $onderwerp->magCiteren()}
+					{* {knop url="reactie/`$bericht.id`#laatste" type=citeren} *}
+					<a onclick="return forumCiteren({$bericht.id})" href="/communicatie/forum/reactie/{$bericht.id}#laatste">
 						<img src="{$csr_pics}forum/citeren.png" title="Citeer bericht" alt="Citeer bericht" style="border: 0px;" />
 					</a>
 				{/if}
 				{* bewerken als bericht van gebruiker is, of als men mod is. *}
-				{if $forum->magBewerken($bericht.postID)}
-					<a onclick="forumBewerken({$bericht.postID})">
+				{if $onderwerp->magBewerken($bericht.id)}
+					<a onclick="forumBewerken({$bericht.id})">
 						<img src="{$csr_pics}forum/bewerken.png" title="Bewerk bericht" alt="Bewerk bericht" style="border: 0px;" />
 					</a>
 				{/if}
 				
-				{if $forum->isModerator()}
+				{if $onderwerp->isModerator()}
 					{* verwijderlinkje, niet als er maar een bericht in het onderwerp is. *}
-					{knop url="verwijder-bericht/`$bericht.postID`" type=verwijderen confirm='Weet u zeker dat u dit bericht wilt verwijderen?'}
+					{knop url="verwijder-bericht/`$bericht.id`" type=verwijderen confirm='Weet u zeker dat u dit bericht wilt verwijderen?'}
 					{if $bericht.zichtbaar=='wacht_goedkeuring'}
 						<br />
-						{knop url="keur-goed/`$bericht.postID`" confirm='Weet u zeker dat u dit bericht wilt goedkeuren?' text='bericht goedkeuren'}
+						{knop url="keur-goed/`$bericht.id`" confirm='Weet u zeker dat u dit bericht wilt goedkeuren?' text='bericht goedkeuren'}
 						{knop ignorePrefix=true url="/tools/stats.php?ip=`$bericht.ip`" text=ip-log}
 					{elseif $bericht.zichtbaar=='spam'}
 						<h1>SPAM</h1>
@@ -103,7 +104,7 @@
 				{/if}
 				
 			</td>
-			<td class="bericht{cycle values="0,1"}" id="post{$bericht.postID}"> 
+			<td class="bericht{cycle values="0,1"}" id="post{$bericht.id}"> 
 				{$bericht.tekst|ubb}
 				{if $bericht.bewerkt!=''}
 					<div class="bewerkt">
@@ -117,23 +118,22 @@
 			<td colspan="2"></td>
 		</tr>
 	{/foreach} 
+
 	{* Formulier om een bericht achter te laten *}
 	<tr>
 		<td class="auteur">
-			<a class="forumpostlink" id="laatste">
-				{if $citeerPost==0}Reageren{else}Citeren{/if}
-			</a><br /><br />
+			<a class="forumpostlink" id="laatste">Reageren</a><br /><br />
 			{* berichtje weergeven  voor moderators als het topic gesloten is. *}
-			{if $forum->isModerator() AND !$forum->isOpen()}
+			{if $onderwerp->isModerator() AND !$onderwerp->isOpen()}
 				<br /><strong>Dit topic is gesloten, u mag reageren omdat u beheerder bent.</strong>
 			{/if}
 		</td>
 		<td class="forumtekst">
-			{if $forum->magToevoegen()} 
-				<form method="post" action="/communicatie/forum/toevoegen/{$forum->getID()}">
+			{if $onderwerp->magToevoegen()} 
+				<form method="post" action="/communicatie/forum/toevoegen/{$onderwerp->getID()}">
 					<p>
 						{* berichtje weergeven voor niet-ingeloggede gebruikers dat ze een naam moeten vermelden. *}
-						{if !$forum->isIngelogged()}
+						{if !$onderwerp->isIngelogged()}
 							<strong>Uw bericht wordt pas geplaatst nadat het bekeken en goedgekeurd is door de <a href="http://csrdelft.nl/actueel/groepen/Commissies/PubCie/">PubCie</a>. 
 							Het vermelden van <em>uw naam en email-adres</em> is verplicht.</strong><br /><br />
 						{/if}
@@ -147,7 +147,7 @@
 					</p>
 				</form>
 			{else}
-				{if $forum->isOpen()}
+				{if $onderwerp->isOpen()}
 					U mag in dit deel van het forum niet reageren.
 				{else}
 					U kunt hier niet meer reageren omdat dit onderwerp gesloten is.
@@ -157,7 +157,7 @@
 	</tr>
 </table>
 {* linkjes voor het forum nogeens weergeven, maar alleen als het aantal berichten in het onderwerp groter is dan 4 *}
-{if $forum->getSize()>4} 
+{if $onderwerp->getSize()>4} 
 	{$smarty.capture.navlinks}
 {/if}
 

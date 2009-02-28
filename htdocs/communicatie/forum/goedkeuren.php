@@ -6,24 +6,24 @@
 # Verwerkt het goedkeuren van berichten en ondewerpen in het forum.
 # -------------------------------------------------------------------
 
-require_once('include.config.php');
+require_once 'include.config.php';
+require_once 'forum/class.forum.php';
 
-if(!$lid->hasPermission('P_FORUM_MOD')){
+if(!Forum::isModerator()){
 	header('location: '.CSR_ROOT.'/communicatie/forum/');
 	$_SESSION['forum_foutmelding']='U heeft daar niets te zoeken.';
 	exit;
 }
 
-require_once('forum/class.forumonderwerp.php');
-$forum = new ForumOnderwerp();
+require_once 'forum/class.forumonderwerp.php';
 
 if(isset($_GET['post'])){
-	$forum->loadByPostID((int)$_GET['post']);
-	if($forum->keurGoed((int)$_GET['post'])){
-		header('location: '.CSR_ROOT.'forum/onderwerp/'.$forum->getID());
+	$forumonderwerp=ForumOnderwerp::loadByPostID((int)$_GET['post']);
+	if($forumonderwerp->keurGoed((int)$_GET['post'])){
+		header('location: '.CSR_ROOT.'forum/onderwerp/'.$forumonderwerp->getID());
 		$_SESSION['melding']='Onderwerp of bericht nu voor iedereen zichtbaar.';
 	}else{
-		header('location: '.CSR_ROOT.'forum/onderwerp/'.$forum->getID());
+		header('location: '.CSR_ROOT.'forum/onderwerp/'.$forumonderwerp->getID());
 		$_SESSION['melding']='Goedkeuren ging mis.';
 	}
 }else{

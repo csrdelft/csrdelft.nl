@@ -58,14 +58,12 @@ class Kolom extends SimpleHTML {
 			$this->add($nieuwscontent);
 
 			# Laatste forumberichten
-			require_once('forum/class.forum.php');
-			require_once('forum/class.forumcontent.php');
-			$forum=new forum();
-			$forumcontent=new forumcontent($forum, 'lastposts');
+			require_once 'forum/class.forumcontent.php';
+			$forumcontent=new forumcontent('lastposts');
 			$this->add($forumcontent);
 
 			# Komende 10 verjaardagen
-			require_once('class.verjaardagcontent.php');
+			require_once 'class.verjaardagcontent.php';
 			$this->add(new VerjaardagContent('komende10'));
 	}
 	public function view() {

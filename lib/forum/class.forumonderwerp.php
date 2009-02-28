@@ -2,94 +2,116 @@
 
 # C.S.R. Delft | pubcie@csrdelft.nl
 # -------------------------------------------------------------------
-# class.forum.php
+# class.forumonderwerp.php
 # -------------------------------------------------------------------
 # Forum databaseklasse
 # -------------------------------------------------------------------
 
-require_once('class.forum.php');
+require_once 'class.forum.php';
+require_once 'class.forumcategorie.php';
 
-class ForumOnderwerp extends Forum {
+class ForumOnderwerp{
 
-	//het onderwerp wat het huidige is.
-	private $iTopicID=0;
-	//eigenschappen van het onderwerp.
-	private $aTopicProps=false;
-	//posts in het onderwerp.
-	private $aPosts=false;
+	private $ID=0;
 
-	function __construct(){
-		parent::__construct();
+	//object van de categorie waar het huidige onderwerp in zit.
+	private $categorie;
+
+	private $titel;
+	private $uid;
+	private $zichtbaar='zichtbaar';
+	private $open=1;
+	private $plakkerig=0;
+	private $soort='T_NORMAAL';
+	private $reacties=0;
+	private $lastuser;
+	private $lastpost;
+	private $lastpostID;
+
+	protected $posts=null;
+
+	private $error;
+	function __construct($init){
+		if(is_array($init)){
+			$this->array2properties($init);
+		}else{
+			$init=(int)$init;
+			if($init!=0){
+				$this->load($init);
+			}
+			//we laden alleen als topicid!=0, bij 0 willen we een nieuw onderwerp maken,
+			//dus hoeven we nog niets uit de db te halen.
+		}
 	}
 
 	//een onderwerp laden aan de hand van een zich in dat onderwerp bevindende post.
-	function loadByPostID($iPostID){
-		$iTopicID=$this->getTopicVoorPostID((int)$iPostID);
-		return $this->load($iTopicID);
+	public static function loadByPostID($iPostID, $loadChildren=true){
+		$iTopicID=Forum::getTopicVoorPostID((int)$iPostID);
+		return new ForumOnderwerp($iTopicID, $loadChildren);
+	}
+
+	/*
+	 * stop de dingen uit een array in de object-eigenschappen.
+	 * Dit wordt gebruikt door __construct() en load(), vandaar in een losse methode;
+	 */
+	private function array2properties($onderwerp){
+		$this->ID=$onderwerp['id'];
+		$this->titel=$onderwerp['titel'];
+		$this->uid=$onderwerp['uid'];
+		$this->setCategorie($onderwerp['categorie']);
+		$this->open=$onderwerp['open'];
+		$this->plakkerig=$onderwerp['plakkerig'];
+		$this->soort=$onderwerp['soort'];
+		$this->zichtbaar=$onderwerp['zichtbaar'];
+		$this->reacties=$onderwerp['reacties'];
+		$this->lastpost=$onderwerp['lastpost'];
+		$this->lastpostID=$onderwerp['lastpostID'];
+		$this->lastuser=$onderwerp['lastuser'];
 	}
 
 	//een onderwerp laden aan de hand van een ID.
 	//geeft true terug als het onderwerp succesvol geladen is en als het ingelogde lid
 	//het onderwerp mag bekijken.
-	function load($iTopicID){
-		$this->iTopicID=(int)$iTopicID;
+	function load($topicID){
+		$this->ID=(int)$topicID;
+		$db=MySql::instance();
 		$sTopicQuery="
 			SELECT
-				categorie.id AS categorieID,
-				categorie.titel AS categorieTitel,
-				categorie.rechten_read AS rechten_read,
-				categorie.rechten_post AS rechten_post,
-				topic.id AS topicID,
-				topic.titel AS titel,
-				topic.uid AS startUID,
-				topic.categorie AS categorie,
-				topic.open AS open,
-				topic.plakkerig AS plakkerig,
-				topic.soort AS soort,
-				topic.zichtbaar AS topicZichtbaar
+				id, titel, uid, categorie, open, plakkerig, soort, zichtbaar,
+				lastpost, lastuser, lastpostID, reacties
 			FROM
 				forum_topic topic
-			INNER JOIN
-				forum_cat categorie ON (categorie.id=topic.categorie)
 			WHERE
 				topic.id=".$this->getID()."
 			AND
 				( topic.zichtbaar='zichtbaar' OR topic.zichtbaar='wacht_goedkeuring' )
 			LIMIT 1;";
-		$rTopic=$this->_db->query($sTopicQuery);
-		if($this->_db->numRows($rTopic)!=1){
+		$onderwerp=$db->getRow($sTopicQuery);
+		if(!is_array($onderwerp)){
 			$this->error='Dit onderwerp bestaat niet. (ForumOnderwerp::load())';
 			return false;
 		}
-		$this->aTopicProps=$this->_db->next($rTopic);
-		//Mag de gebruiker het huidige onderwerp bekijken, of is de gebruiker een FORUM_MOD
-		if($this->magBekijken()){
-			//onderwerp mag worden gelezen, dan ook de posts ervoor inladen.
-			return $this->loadPosts();
-		}else{
+
+		$this->array2properties($onderwerp);
+
+		if(!$this->magBekijken()){
 			//helaas, dit topic mag niet worden gelezen, geen posts laden, meteen
 			//false teruggeven en géén posts inladen.
 			$this->error='Gebruiker mag dit onderwerp niet bekijken. (ForumOnderwerp::load())';
 			return false;
 		}
 	}
+
 	//posts inladen voor het huidige onderwerp. Kan enkel intern aangeroepen worden.
 	//geeft true terug als er berichten zijn ingeladen.
 	private function loadPosts(){
 		$zichtBaarClause="post.zichtbaar='zichtbaar'";
-		if($this->isModerator()){
+		if(Forum::isModerator()){
 			$zichtBaarClause.=" OR post.zichtbaar='wacht_goedkeuring' OR post.zichtbaar='spam'";
 		}
 		$sPostsQuery="
 			SELECT
-				post.uid AS uid,
-				post.id AS postID,
-				post.tekst AS tekst,
-				post.datum AS datum,
-				post.bewerkDatum AS bewerkDatum,
-				post.bewerkt AS bewerkt,
-				post.zichtbaar AS zichtbaar,
-				post.ip AS ip
+				uid, id, tekst, bewerkDatum, bewerkt, zichtbaar, ip
 			FROM
 				forum_post post
 			WHERE
@@ -98,69 +120,79 @@ class ForumOnderwerp extends Forum {
 				( ".$zichtBaarClause." )
 			ORDER BY
 				post.datum ASC;";
-		$rPostsResult=$this->_db->query($sPostsQuery);
-		$this->aPosts=$this->_db->result2array($rPostsResult);
-		if(!is_array($this->aPosts)){
+		$this->posts=MySql::instance()->query2array($sPostsQuery);
+		if(!is_array($this->posts)){
 			$this->error='Er konden een berichten worden ingeladen. (ForumOnderwerp::loadPosts())';
 		}
-		return is_array($this->aPosts);
+		return is_array($this->posts);
 	}
 
 	//als de categorie handmatig moet worden ingesteld
 	//(bij het toevoegen van een nieuw onderwerp bijvoorbeeld)
-	public function setCat($iCatID){
-		$iCatID=(int)$iCatID;
-		$this->aTopicProps=array(
-			'categorieID' => $iCatID,
-			'categorieTitel' => $this->getCategorieTitel($iCatID),
-			'rechten_post' => $this->getRechten_post($iCatID),
-			'topicZichtbaar' => 'zichtbaar');
+	public function setCategorie($iCatID){
+		$this->categorie=(int)$iCatID;
 	}
 
 	//categorie
-	public function getCatID(){ return $this->aTopicProps['categorieID']; }
-	public function getCatTitel(){ return $this->aTopicProps['categorieTitel']; }
-	public function getRechtenPost(){ return $this->aTopicProps['rechten_post']; }
+	public function getCategorieID(){ return $this->getCategorie()->getID(); }
+	public function getCategorie(){
+		if(!($this->categorie instanceof ForumCategorie)){
+			$this->categorie=new ForumCategorie($this->categorie, 1);
+		}
+		return $this->categorie;
+	}
+	public function getRechtenPost(){ return $this->getCategorie()->getRechten_post(); }
 	public function magPosten(){ return Lid::instance()->hasPermission($this->getRechtenPost()); }
 
 	//topic
-	public function getID(){ return $this->iTopicID; }
-	public function getTitel(){ return $this->aTopicProps['titel']; }
-	public function getZichtbaarheid(){ return $this->aTopicProps['topicZichtbaar']; }
-	public function setZichtbaarheid($zichtbaarheid){
-		$this->aTopicProps['topicZichtbaar']=$zichtbaarheid;
+	public function getID(){ return $this->ID; }
+	public function getTitel(){ return $this->titel; }
+	public function getUid(){ return $this->uid; }
+	public function getZichtbaarheid(){ return $this->zichtbaar; }
+	public function setZichtbaarheid($zichtbaarheid){ $this->zichtbaar=$zichtbaarheid; }
+	public function isOpen(){ return $this->open==1; }
+	public function isPlakkerig(){ return $this->plakkerig==1; }
+	public function needsModeration(){ return !Forum::isIngelogged(); }
+	public function getSoort(){ return $this->soort; }
+	public function getReacties(){ return $this->reacties; }
+	public function getLastpost(){ return $this->lastpost; }
+	public function getLastpostID(){ return $this->lastpostID; }
+	public function getLastuser(){ return $this->lastuser; }
+
+	public function getSize(){
+		if($this->posts===null){
+			$this->loadPosts();
+		}
+		return count($this->posts);
 	}
-	public function isOpen(){ return $this->aTopicProps['open']==1; }
-	public function isPlakkerig(){ return $this->aTopicProps['plakkerig']==1; }
-	public function needsModeration(){ return !$this->isIngelogged(); }
-	public function getSoort(){ return $this->aTopicProps['soort']; }
-	public function getSize(){ return count($this->aPosts); }
 
 	public function magBekijken(){
-		if($this->isModerator()){ return true; }
-		if(!isset($this->aTopicProps['rechten_read'])){
+		if(Forum::isModerator()){ return true; }
+		if(!($this->getCategorie() instanceof ForumCategorie)){
 			die('ForumOnderwerp::magZien(): Geen onderwerp ingeladen.');
 		}else{
-			return Lid::instance()->hasPermission($this->aTopicProps['rechten_read']);
+			return Lid::instance()->hasPermission($this->getCategorie()->getRechten_read());
 		}
 	}
+	public function isIngelogged(){ return Forum::isIngelogged(); }
+	public function isModerator(){ return Forum::isModerator(); }
 	public function magCiteren(){ return $this->magToevoegen(); }
 	public function magToevoegen(){
-		if($this->isModerator()){ return true; }
+		if(Forum::isModerator()){ return true; }
 		return $this->magPosten() AND $this->isOpen();
 	}
 
 	public function magBewerken($iPostID){
-		//FORUM_MOD mag alles bewerken
-		if($this->isModerator()){ return true;}
-		//niet ingeloggede mensen mogen nooit bewerken.
-		if($this->_lid->getUid()=='x999'){ return false;}
+		$lid=Lid::instance();
+
+		if(Forum::isModerator()){ return true;}
+		if($lid->getUid()=='x999'){ return false;}
 
 		//intern, nu nog of de huidige post mag.
 		if($this->magPosten() AND $this->isOpen()){
 			//nu alleen nog controleren of het bericht van de huidige gebruiker is.
 			$aPost=$this->getSinglePost($iPostID);
-			return $aPost['uid']==$this->_lid->getUid();
+			return $aPost['uid']==$lid->getUid();
 		}else{
 			//geen rechten om te posten, en niet open.
 			return false;
@@ -171,15 +203,21 @@ class ForumOnderwerp extends Forum {
 	//Uitvoer van deze functie wordt gebruikt als afweging voor het wel
 	//weergeven van het onderwerp dan wel een foutmelding.
 	function getPosts(){
-		if(is_array($this->aPosts) AND is_array($this->aTopicProps)){
-			return $this->aPosts;
+		if($this->posts===null){
+			$this->loadPosts();
+		}
+
+		if(is_array($this->posts)){
+			return $this->posts;
 		}else{
 			return false;
 		}
 	}
 	// een enkele post binnenhalen, bijvoorbeeld om te citeren/bewerken
-	function getSinglePost($iPostID){
+	public static function getSinglePost($iPostID){
 		$iPostID=(int)$iPostID;
+
+		$db=MySql::instance();
 		$sPostQuery="
 			SELECT
 				categorie.id as categorieID,
@@ -201,19 +239,17 @@ class ForumOnderwerp extends Forum {
 			AND
 				topic.categorie=categorie.id
 			LIMIT 1;";
-		$rPost=$this->_db->query($sPostQuery);
-		if($this->_db->numRows($rPost)==1){
-			return $this->_db->next($rPost);
-		}else{
-			return false;
-		}
+		return $db->getRow($sPostQuery);
 	}
 
 	//voeg een onderwerp toe met een titel.
 	//Indien succesvol komt het zojuist ingevoerde onderwerp-id eruit, anders
 	//false.
-	function addTopic($titel){
-		$titel=$this->_db->escape(ucfirst($titel));
+	function add($titel){
+		$db=MySql::instance();
+		$lid=Lid::instance();
+
+		$titel=$db->escape(ucfirst($titel));
 		if($this->needsModeration()){
 			$this->setZichtbaarheid('wacht_goedkeuring');
 		}
@@ -224,15 +260,15 @@ class ForumOnderwerp extends Forum {
 		 	 	titel, categorie, uid, datumtijd,
 		 	 	lastuser, lastpost,  reacties, zichtbaar, open
 		 	)VALUES(
-		 		'".$titel."', ".$this->getCatID().", '".$this->_lid->getUid()."', '".getDateTime()."',
-		 		'".$this->_lid->getUid()."', '".getDateTime()."',	0, '".$this->getZichtbaarheid()."', 1
+		 		'".$titel."', ".$this->getCategorieID().", '".$lid->getUid()."', '".getDateTime()."',
+		 		'".$lid->getUid()."', '".getDateTime()."',	0, '".$this->getZichtbaarheid()."', 1
 		 	);";
 
-		if($this->_db->query($sTopicQuery)){
+		if($db->query($sTopicQuery)){
 			//het zojuist ingevoerde onderwerp inladen...
-			$this->load($this->_db->insert_id());
+			$this->load($db->insert_id());
 			//en hertellen
-			$this->recountTopic();
+			$this->recount();
 			return $this->getID();
 		}else{
 			return false;
@@ -242,8 +278,13 @@ class ForumOnderwerp extends Forum {
 	//Een post toevoegen aan het huidige onderwerp.
 	//Indien succesvol: nieuwe post-id komt terug. Anders false.
 	public function addPost($tekst){
-		$tekst=$this->_db->escape(trim($tekst));
-		if($this->iTopicID==0){ die('ForumOnderwerp::addPost() geen onderwerp ingeladen'); }
+		$db=MySql::instance();
+
+		$tekst=$db->escape(trim($tekst));
+		if(!($this->getCategorie() instanceof ForumCategorie)){
+			die('ForumOnderwerp::addPost() geen onderwerp ingeladen.');
+		}
+
 		//het ip-adres bepalen van de post.
 		if(isset($_SERVER['REMOTE_ADDR'])){ $ip=$_SERVER['REMOTE_ADDR']; }else{ $ip='0.0.0.0'; }
 
@@ -258,7 +299,8 @@ class ForumOnderwerp extends Forum {
  				$zichtbaarheid='wacht_goedkeuring';
  			}
  		}else{
- 			//overerving van het onderwerp
+ 			//Als de moderatiestap niet nodig is, dan erft een post de zichtbaarheid
+ 			//over van het onderwerp.
  			$zichtbaarheid=$this->getZichtbaarheid();
  		}
 		$sPostQuery="
@@ -268,14 +310,14 @@ class ForumOnderwerp extends Forum {
 				tid, uid, tekst, datum, ip, zichtbaar
 			)VALUES(
 				".$this->getID().",
-				'".$this->_lid->getUid()."',
+				'".Lid::instance()->getUid()."',
 				'".ucfirst($tekst)."',
 				'".getDateTime()."',
 				'".$ip."',
 				'".$zichtbaarheid."'
 			);";
 
-		if($this->_db->query($sPostQuery)){
+		if($db->query($sPostQuery)){
 			//een mailtje sturen naar de pubcie om de boel bevestigd te krijgen
 			if($this->needsModeration() AND !$filter->isSpam()){
 				//bericht sturen naar pubcie@csrdelft dat er een bericht op goedkeuring wacht
@@ -283,9 +325,9 @@ class ForumOnderwerp extends Forum {
 	 			 	"http://csrdelft.nl/communicatie/forum/onderwerp/".$this->getID()."\r\n".
 	 			 	"\r\nDe inhoud van het bericht is als volgt: \r\n\r\n".str_replace('\r\n', "\n", $tekst)."\r\n\r\nEINDE BERICHT");
 	 		}
-	 		//de boel hertellen:
-	 		$this->recountTopic();
-	 		return $this->_db->insert_id();
+	 		//de getalletjes updaten
+	 		$this->recount();
+	 		return $db->insert_id();
 		}else{
 			return false;
 		}
@@ -294,20 +336,17 @@ class ForumOnderwerp extends Forum {
 	 * Onderwerp verplaatsten
 	 */
 	function move($newCat){
+		$db=MySql::instance();
 		$newCat=(int)$newCat;
-		if(!$this->catExistsVoorUser($newCat)){
+		if(!ForumCategorie::existsVoorUser($newCat)){
 			return false;
 		}
 		$sMove="
-			UPDATE
-				forum_topic
-			SET
-				categorie=".$newCat."
-			WHERE
-				id=".$this->getID()."
+			UPDATE forum_topic
+			SET categorie=".$newCat."
+			WHERE id=".$this->getID()."
 			LIMIT 1;";
-		return $this->_db->query($sMove) AND $this->updateCatStats($newCat) AND
-			$this->updateCatStats($this->getCatID());
+		return $db->query($sMove) AND $this->getCategorie()->recount();
 	}
 	/*
 	 * Onderwerptitels bewerken.
@@ -316,22 +355,21 @@ class ForumOnderwerp extends Forum {
 		if(!$this->isModerator()){
 			return false;
 		}
-		$newTitel=$this->_db->escape(trim($newTitel));
+		$db=MySql::instance();
+		$newTitel=$db->escape(trim($newTitel));
 		$sRename="
-			UPDATE
-				forum_topic
-			SET
-				titel='".$newTitel."'
-			WHERE
-				id=".$this->getID()."
+			UPDATE forum_topic
+			SET titel='".$newTitel."'
+			WHERE id=".$this->getID()."
 			LIMIT 1;";
-		return $this->_db->query($sRename);
+		return $db->query($sRename);
 	}
 
 
 	//posts bewerken
-	function editPost($iPostID, $sBericht, $reden=''){
+	public function editPost($iPostID, $sBericht, $reden=''){
 		$lid=Lid::instance();
+		$db=MySql::instance();
 
 		//kijken of er wel iets aangepast is.
 		$oldPost=$this->getSinglePost($iPostID);
@@ -339,71 +377,56 @@ class ForumOnderwerp extends Forum {
 			$bewerkt='bewerkt door [lid='.$lid->getUid().'] [reldate]'.getDateTime().'[/reldate]';
 
 			if($reden!=''){
-				$bewerkt.=': '.$this->_db->escape($reden);
+				$bewerkt.=': '.$db->escape($reden);
 			}
 			$bewerkt.="\n";
 			$sEditQuery="
 				UPDATE
 					forum_post
 				SET
-					tekst='".$this->_db->escape($sBericht)."',
+					tekst='".$db->escape($sBericht)."',
 					bewerkDatum='".getDateTime()."',
 					bewerkt=CONCAT(bewerkt, '".$bewerkt."')
 				WHERE
 					id=".$iPostID."
 				LIMIT 1;";
-			return $this->_db->query($sEditQuery);
+			return $db->query($sEditQuery);
 		}else{
 			return true;
 		}
 
 	}
 
-	//post verwijderen.
-	//posts worden nooit echt verwijderd via de forumsoftware.
+	//post 'verwijderen'.
 	function deletePost($iPostID){
 		$iPostID=(int)$iPostID;
 		//hele onderwerp wegkekken als er maar één bericht is.
-		if($this->getSize()==1){
-			return $this->deleteTopic();
+		if($this->getSize(true)==1){
+			return $this->delete();
 		}
 		$sDeletePost="
-			UPDATE
-				forum_post
-			SET
-				zichtbaar='verwijderd'
-			WHERE
-				id=".$iPostID."
+			UPDATE forum_post
+			SET zichtbaar='verwijderd'
+			WHERE id=".$iPostID."
 			LIMIT 1;";
-		if($this->_db->query($sDeletePost)){
-			return $this->recountTopic();
+		if(Mysql::instance()->query($sDeletePost)){
+			return $this->recount();
 		}else{
 			return false;
 		}
 	}
 
-	//een onderwerp verwijderen.
-	function deleteTopic(){
 
-		$aDelete[]="DELETE FROM	forum_post WHERE tid=".$this->getID().";";
-		$aDelete[]="DELETE FROM	forum_topic WHERE id=".$this->getID()." LIMIT 1;";
-		//query's om polls weg te gooien, als er niets bestaat voor dit topicID dan
-		//wordt er dus ook niets weggegooid
-		$aDelete[]="DELETE FROM	forum_poll_stemmen WHERE topicID=".$this->getID().";";
-		$aDelete[]="DELETE FROM forum_poll WHERE topicID=".$this->getID().";";
-		$bReturn=true;
-		foreach($aDelete as $sDelete){
-			if($this->_db->query($sDelete)===false) $bReturn=false;
-		}
-		return $bReturn AND $this->updateCatStats($this->getCatID());
+	function delete(){
+		$db=MySql::instance();
+		$deletePosts="UPDATE forum_post SET zichtbaar='verwijderd' WHERE tid=".$this->getID().";";
+		$deleteOnderwerp="UPDATE forum_topic SET zichtbaar='verwijderd' WHERE id=".$this->getID()." LIMIT 1;";
+		$this->ID=0;
+		return $db->query($deletePosts) AND $db->query($deleteOnderwerp) AND $this->getCategorie()->recount();
 	}
 
 	function toggleOpenheid(){
-		if($this->aTopicProps['open']=='0'){
-			$status='1';
-		}else{
-			$status='0';
-		}
+		$status=$this->isOpen() ? '0' : '1';
 		$sTopicQuery="
 			UPDATE
 				forum_topic
@@ -412,15 +435,11 @@ class ForumOnderwerp extends Forum {
 			WHERE
 				id=".$this->getID()."
 			LIMIT 1;";
-		return $this->_db->query($sTopicQuery);
+		return MySql::instance()->query($sTopicQuery);
 	}
 
 	function togglePlakkerigheid(){
-		if($this->aTopicProps['plakkerig']=='0'){
-			$status='1';
-		}else{
-			$status='0';
-		}
+		$status=$this->isPlakkerig() ? '0' : '1';
 		$sTopicQuery="
 			UPDATE
 				forum_topic
@@ -429,11 +448,13 @@ class ForumOnderwerp extends Forum {
 			WHERE
 				id=".$this->getID()."
 			LIMIT 1;";
-		return $this->_db->query($sTopicQuery);
+		return MySql::instance()->query($sTopicQuery);
 	}
 
-	function keurGoed($iPostID){
+	public function keurGoed($iPostID){
+		$db=MySql::instance();
 		$iPostID=(int)$iPostID;
+
 		$sPostQuery="
 			UPDATE
 				forum_post
@@ -442,21 +463,21 @@ class ForumOnderwerp extends Forum {
 			WHERE
 				id=".$iPostID."
 			LIMIT 1;";
-		$iTopicID=$this->getTopicVoorPostID($iPostID);
 		$sTopicQuery="
 			UPDATE
 				forum_topic
 			SET
 				zichtbaar='zichtbaar'
 			WHERE
-				id=".$iTopicID."
+				id=".$this->getID()."
 			LIMIT 1;";
 		//queries uitvoeren en stats voor topic opnieuw berekenen
-		return $this->_db->query($sPostQuery) AND $this->_db->query($sTopicQuery) AND $this->recountTopic();
+		return $db->query($sPostQuery) AND $db->query($sTopicQuery) AND $this->recount();
 	}
 
 	//dingen updaten voor het huidige topic
-	function recountTopic(){
+	public function recount(){
+		$db=MySql::instance();
 		$sTopicStats="
 			SELECT
 				id, uid, datum
@@ -468,8 +489,7 @@ class ForumOnderwerp extends Forum {
 			ORDER BY
 				datum DESC
 			LIMIT 1;";
-		$rTopicStats=$this->_db->query($sTopicStats);
-		$aTopicStats=$this->_db->next($rTopicStats);
+		$aTopicStats=$db->getRow($sTopicStats);
 		$sTopicUpdate="
 			UPDATE
 				forum_topic
@@ -488,6 +508,7 @@ class ForumOnderwerp extends Forum {
 			WHERE
 				id=".$this->getID()."
 			LIMIT 1;";
-		return $this->_db->query($sTopicUpdate) AND $this->updateCatStats($this->getCatID());
+		return $db->query($sTopicUpdate) AND $this->getCategorie()->recount();
 	}
+	public function getError(){ return $this->error; }
 }

@@ -3,7 +3,7 @@
 {capture name='navlinks'}
 	<div class="forumNavigatie">
 		<a href="/communicatie/forum/" class="forumGrootlink">Forum</a>
-		<h1>{$categorietitel}</h1>
+		<h1>{$categorie->getNaam()}</h1>
 	</div>
 {/capture}
 {$smarty.capture.navlinks}
@@ -16,32 +16,31 @@
 		<th>Auteur</th>
 		<th>verandering</th>
 	</tr>
-	{if !is_array($berichten)}
+	{if !is_array($categorie->getOnderwerpen())}
 		<tr>
 			<td colspan="3">Deze categorie bevat nog geen berichten of deze categorie bestaat niet.</td>
 		</tr>
 	{else}
-		{foreach from=$berichten item=bericht}
+		{foreach from=$categorie->getOnderwerpen() item=onderwerp}
 			<tr class="kleur{cycle values="0,1"}">
 				<td class="titel">
-					{if $bericht.soort=='T_POLL'}[peiling]{/if}
-					{if $bericht.zichtbaar=='wacht_goedkeuring'}[ter goedkeuring...]{/if}
-					<a href="/communicatie/forum/onderwerp/{$bericht.id}">
-						{if $bericht.plakkerig==1}
+					{if $onderwerp->getZichtbaarheid()=='wacht_goedkeuring'}[ter goedkeuring...]{/if}
+					<a href="/communicatie/forum/onderwerp/{$onderwerp->getID()}">
+						{if $onderwerp->isPlakkerig()}
 							<img src="{$csr_pics}forum/plakkerig.gif" title="Dit onderwerp is plakkerig, het blijft bovenaan." alt="plakkerig" />&nbsp;&nbsp;
 						{/if}	
-						{if $bericht.open==0}
+						{if !$onderwerp->isOpen()}
 							<img src="{$csr_pics}forum/slotje.png" title="Dit onderwerp is gesloten, u kunt niet meer reageren" alt="sluiten" />&nbsp;&nbsp;
 						{/if}
-						{$bericht.titel|wordwrap:60:"\n":true|escape:'html'}
+						{$onderwerp->getTitel()|wordwrap:60:"\n":true|escape:'html'}
 					</a>
 				</td>
-				<td class="reacties">{$bericht.reacties-1}</td>
-				<td class="reacties">{$bericht.uid|csrnaam:'user'}</td>
+				<td class="reacties">{$onderwerp->getReacties()}</td>
+				<td class="reacties">{$onderwerp->getUid()|csrnaam:'user'}</td>
 				<td class="reactiemoment">
-					{$bericht.lastpost|reldate}<br />
+					{$onderwerp->getLastpost()|reldate}<br />
 					<a href="/communicatie/forum/onderwerp/{$bericht.id}#post{$bericht.lastpostID}">bericht</a> door 
-					{$bericht.lastuser|csrnaam:'user'}
+					{$onderwerp->getLastuser()|csrnaam:'user'}
 				</td>
 			</tr>
 		{/foreach}
@@ -49,14 +48,15 @@
 	<tr>
 		<th colspan="2">&nbsp;</th>
 		<th colspan="2">
-			{sliding_pager baseurl=$pagina.baseurl pagecount=$pagina.aantal curpage=$pagina.huidig
+			{sliding_pager baseurl="/communicatie/forum/categorie/`$categorie->getID()`/" 
+				pagecount=$categorie->getPaginaCount() curpage=$categorie->getPagina()
 				txt_first="&laquo;" txt_prev="&lt;" separator=" " txt_next="&gt;" txt_last="&raquo;"}
 		</th>
 	</tr>
-	{if $magPosten}
+	{if $categorie->magPosten()}
 		<tr>
 			<td colspan="4" class="tekst">
-				<form method="post" action="/communicatie/forum/onderwerp-toevoegen/{$categorie}">
+				<form method="post" action="/communicatie/forum/onderwerp-toevoegen/{$categorie->getID()}">
 					<p>
 						{if $lid->hasPermission('P_LOGGED_IN')}
 							{if $lid->hasPermission('P_FORUM_MOD')}

@@ -6,18 +6,19 @@
 # Verwerkt het plakkerig maken van ondewerpen in het forum.
 # -------------------------------------------------------------------
 
-require_once('include.config.php');
+require_once 'include.config.php';
+require_once 'forum/class.forum.php';
 
-if(!$lid->hasPermission('P_FORUM_MOD')){
+if(!Forum::isModerator()){
 	header('location: '.CSR_ROOT.'forum/');
-	$_SESSION['forum_foutmelding']='Geen rechten hiervoor';
+	$_SESSION['forum_foutmelding']='Geen rechten voor het aanpassen van plakkerigheid';
 	exit;
 }
 
-require_once('forum/class.forumonderwerp.php');
-$forum = new ForumOnderwerp();
 if(isset($_GET['topic'])){
-	$forum->load((int)$_GET['topic']);
+	require_once 'forum/class.forumonderwerp.php';
+	$forum = new ForumOnderwerp((int)$_GET['topic']);
+
 	if(!$forum->togglePlakkerigheid()){
 		$_SESSION['melding']='Oeps, feutje, niet gelukt dus';
 	}

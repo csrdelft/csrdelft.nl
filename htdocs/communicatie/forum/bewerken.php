@@ -11,15 +11,23 @@ require_once('include.config.php');
 
 //inhoud
 require_once('forum/class.forumonderwerp.php');
-$forum = new ForumOnderwerp();
+if(isset($_GET['post'])){
+	$postID=(int)$_GET['post'];
+	$forumonderwerp=ForumOnderwerp::loadByPostID($postID);
+}elseif(isset($_GET['topic'], $_POST['titel'])){
+	$forumonderwerp= new ForumOnderwerp($_GET['topic']);
+}else{
+	header('location: '.CSR_ROOT.'forum/');
+	$_SESSION['melding']='Onderwerp kan niet geladen worden (ForumOnderwerp::load()).';
+	exit;
+}
+
 
 
 //is er uberhaupt wel een postID welke bewerkt moet worden
 if(isset($_GET['post'])){
-	$iPostID=(int)$_GET['post'];
-	$forum->loadByPostID($iPostID);
 	//kijken of gebruiker dit bericht mag bewerken
-	if($forum->magBewerken($iPostID)){
+	if($forumonderwerp->magBewerken($postID)){
 		if($_SERVER['REQUEST_METHOD']=='POST'){
 			$bericht=trim($_POST['bericht']);
 
@@ -29,28 +37,21 @@ if(isset($_GET['post'])){
 			}else{
 				$reden='';
 			}
-			if($forum->editPost($iPostID, $bericht, $reden)){
-				header('location: '.CSR_ROOT.'forum/onderwerp/'.$forum->getID().'#post'.$iPostID);
+			if($forumonderwerp->editPost($postID, $bericht, $reden)){
+				header('location: '.CSR_ROOT.'forum/onderwerp/'.$forumonderwerp->getID().'#post'.$postID);
 			}
 		}
 	}
-}elseif(isset($_GET['topic'], $_POST['titel']) AND $forum->isModerator()){
-	//onderwerptitel bewerken.
-	if($forum->load($_GET['topic'])){
-		if(strlen(trim($_POST['titel']))>=2){
-			if(!$forum->rename($_POST['titel'])){
-				$_SESSION['melding']='Onderwerptitel wijzigigen mislukt (ForumOnderwerp::rename()).';
-			}
-		}else{
-			$_SESSION['melding']='Titel moet minstens twee tekens lang zijn.';
+}elseif(isset($_GET['topic'], $_POST['titel']) AND $forumonderwerp->isModerator()){
+	if(strlen(trim($_POST['titel']))>=2){
+		if(!$forumonderwerp->rename($_POST['titel'])){
+			$_SESSION['melding']='Onderwerptitel wijzigigen mislukt (ForumOnderwerp::rename()).';
 		}
-		header('location: '.CSR_ROOT.'forum/onderwerp/'.$forum->getID());
-		exit;
 	}else{
-		header('location: '.CSR_ROOT.'forum/');
-		$_SESSION['melding']='Onderwerp kan niet geladen worden (ForumOnderwerp::load()).';
-		exit;
+		$_SESSION['melding']='Titel moet minstens twee tekens lang zijn.';
 	}
+	header('location: '.CSR_ROOT.'forum/onderwerp/'.$forumonderwerp->getID());
+	exit;
 }
 
 ?>

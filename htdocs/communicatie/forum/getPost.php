@@ -9,15 +9,15 @@ require_once('include.config.php');
 
 
 require_once('forum/class.forumonderwerp.php');
-$forum = new ForumOnderwerp();
+
 
 if(isset($_GET['post'])){
 	$iPostID=(int)$_GET['post'];
-	$forum->loadByPostID($iPostID);
+	$forumonderwerp=ForumOnderwerp::loadByPostID($iPostID);
 
 
-	if($forum->magCiteren()){
-		$post=$forum->getSinglePost($iPostID);
+	if($forumonderwerp->magCiteren()){
+		$post=$forumonderwerp->getSinglePost($iPostID);
 
 		if(!$lid->hasPermission('P_LOGGED_IN')){
 			$post=CsrUBB::filterPrive($post);
