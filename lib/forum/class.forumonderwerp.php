@@ -135,8 +135,8 @@ class ForumOnderwerp{
 
 	//categorie
 	public function getCategorieID(){ return $this->getCategorie()->getID(); }
-	public function getCategorie(){
-		if(!($this->categorie instanceof ForumCategorie)){
+	public function getCategorie($force=false){
+		if($force OR !($this->categorie instanceof ForumCategorie)){
 			$this->categorie=new ForumCategorie($this->categorie, 1);
 		}
 		return $this->categorie;
@@ -346,7 +346,13 @@ class ForumOnderwerp{
 			SET categorie=".$newCat."
 			WHERE id=".$this->getID()."
 			LIMIT 1;";
-		return $db->query($sMove) AND $this->getCategorie()->recount();
+		if($db->query($sMove) AND $this->getCategorie()->recount()){
+			//nieuwe categorie ook hertellen.
+			$this->setCategorie($newCat);
+			return $this->getCategorie(true)->recount();
+		}else{
+			return false;
+		}
 	}
 	/*
 	 * Onderwerptitels bewerken.
