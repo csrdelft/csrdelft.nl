@@ -109,10 +109,12 @@ class ForumCategorie{
 			LIMIT 1;";
 		$cat=$db->getRow($sCatQuery);
 		if(is_array($cat)){
-			return ceil($cat['aantal']/Forum::getTopicsPerPagina());
-		}else{
-			return 1;
+			$aantal=ceil($cat['aantal']/Forum::getTopicsPerPagina());
+			if($aantal>0){
+				return $aantal;
+			}
 		}
+		return 1;
 	}
 	public function getOnderwerpen(){
 		if($this->onderwerpen===null){
