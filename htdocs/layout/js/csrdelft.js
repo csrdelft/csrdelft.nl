@@ -133,9 +133,9 @@ function forumCiteren(post){
 	return false;
 }
 function youtubeDisplay(ytID){
-	var html='<object width="425" height="350">' +
-		'<param name="movie" value="http://www.youtube.com/v/' + ytID + '&autoplay=1"></param>' +
-		'<embed src="http://www.youtube.com/v/' + ytID + '&autoplay=1" type="application/x-shockwave-flash" wmode="transparent" width="425" height="350"></embed></object>';
+	var html='<object width="480" height="385">' +
+		'<param name="movie" value="http://www.youtube.com/v/' + ytID + '&autoplay=1&fs=1"></param><param name="allowFullScreen" value="true"></param>' +
+		'<embed src="http://www.youtube.com/v/' + ytID + '&autoplay=1&fs=1" type="application/x-shockwave-flash" wmode="transparent" width="480" height="385" allowfullscreen="true"></embed></object>';
 	
 	if(document.all){
 		//hier moet een <br /> ofzo voor de <object>-tag, want anders maakt IE de div leeg ipv er iets in te zetten. 
@@ -144,11 +144,6 @@ function youtubeDisplay(ytID){
 	}else{
 		document.getElementById('youtube'+ytID).innerHTML = html;
 	}
-}
-function youtubeDisplay(ytID){
-	document.getElementById('youtube'+ytID).innerHTML='<object width="425" height="350">' + 
-		'<param name="movie" value="http://www.youtube.com/v/' + ytID + '&autoplay=1"></param>' + 
-		'<embed src="http://www.youtube.com/v/' + ytID + '&autoplay=1" type="application/x-shockwave-flash" wmode="transparent" width="425" height="350"></embed></object>';
 	return false;
 }
 function LZ(x) {return(x<0||x>9?"":"0")+x}
