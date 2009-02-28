@@ -391,17 +391,17 @@ class Groep{
 		$op=0;
 		$functie=str_replace(array("\n","\r"), '', trim($functie));
 		switch(strtolower($functie)){
-			case 'praeses':	case 'archivaris': case 'werkgroepleider':
+			case 'praeses':	case 'archivaris': case 'werkgroepleider': case 'voorzitter':
 			case 'ho': case 'leider': case 'oudste':
 				$prioriteit=1;
 				$op=1;
 			break;
-			case 'abactis': case 'redacteur': case 'bibliothecaris':
+			case 'abactis': case 'redacteur': case 'bibliothecaris': case 'secretaris':
 			case 'posterman': case 'techniek':
 				$prioriteit=2;
 			break;
 			case 'computeur': case 'statisticus': case 'provisor':
-			case 'internetman': case 'bandleider': case 'fiscus':
+			case 'internetman': case 'bandleider': case 'fiscus': case 'penningmeester':
 				$prioriteit=3;
 			break;
 			case 'fotocommisaris': case 'vice-praeses': case 'koemissaris':
