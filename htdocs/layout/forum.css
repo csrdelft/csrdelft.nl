@@ -82,6 +82,12 @@ a.forumGrootlink{
 .forumGrootlink:hover{
 	color: black;
 }
+textarea.forumBericht{
+	width: 100%; 
+}
+form.gesloten{
+	display: none;
+}
 
 /* ubb-code */
 div.citaatContainer{
