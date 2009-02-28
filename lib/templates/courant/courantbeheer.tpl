@@ -55,7 +55,7 @@
 		Selecteer hier een categorie. Uw invoer is enkel een voorstel.
 		<em>Aankondigingen over kamers te huur komen in <strong>overig</strong> terecht! C.S.R. is bedoeld voor 
 		activiteiten van C.S.R.-commissies en andere verenigingsactiviteiten.</em><br />
-		{html_options name=categorie values=$courant->getCats() output=$form.catsNice selected=$form.categorie}
+		{html_options name=categorie values=$courant->getCats() output=$courant->getCats(true) selected=$form.categorie}
 		<br /><br />
 		<strong>Bericht:</strong><br />
 		<div id="bewerkPreviewContainer" class="previewContainer"><div id="bewerkPreview" class="preview"></div></div>

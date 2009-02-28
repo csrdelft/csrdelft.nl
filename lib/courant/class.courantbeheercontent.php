@@ -5,18 +5,14 @@
 # -------------------------------------------------------------------
 
 class CourantBeheercontent extends SimpleHTML{
-	
-	private $ubb;
+
 	private $courant;				//db object voor de courant
-	
+
 	private $_edit=0;				//bericht wat bewerkt moet worden.
-	
+
 
 	function CourantBeheercontent(&$courant){
 		$this->courant=$courant;
-		//kijken of er nog een bericht getoond moet worden uit de sessie
-		
-		$this->ubb=new CsrUBB();
 	}
 	function getCatNames(){ return $this->catNames; }
 
@@ -24,15 +20,15 @@ class CourantBeheercontent extends SimpleHTML{
 	function getTitel(){ return 'C.S.R.-courant'; }
 
 	function view(){
-		
+
 		$formulier=array();
-		
+
 		//standaardwaarden.
 		$formulier['ID']=0;
 		$formulier['categorie']='overig';
 		$formulier['titel']='';
 		$formulier['bericht']='';
-	
+
 		//voor bewerken waarden eventueel overschrijven met waarden uit de database
 		if($this->_edit!=0){
 			//nog dingen ophalen.
@@ -45,21 +41,15 @@ class CourantBeheercontent extends SimpleHTML{
 			if(isset($_POST['categorie'])){ $formulier['categorie']=htmlspecialchars(trim($_POST['categorie'])); }
 			if(isset($_POST['bericht'])){ $formulier['bericht']=htmlspecialchars(trim($_POST['bericht'])); }
 		}
-		
-		//op een een of andere manier accepteerd {html_options} het bij het output-element
-		//niet dat er een methode wordt aangeroepen. Zal wel een bugje zijn, misschien nog
-		//een keer filen... (TODO)
-		$formulier['catsNice']=$this->courant->getCats(true);
-	
-		//templatemeuk aanslingeren
-		$content=new Smarty_csr();
-		
+
+			$content=new Smarty_csr();
+
 		$content->assign('courant', $this->courant);
 		$content->assign('form', $formulier);
 		$content->assign('melding', $this->getMelding());
-		
+
 		$content->display('courant/courantbeheer.tpl');
-	
+
 	}
 }//einde classe
 
