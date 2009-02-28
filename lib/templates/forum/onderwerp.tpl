@@ -66,10 +66,7 @@
 	<tr class="tussenschot">
 		<td colspan="2"></td>
 	</tr>
-	{if $onderwerp->getSoort()=='T_POLL'}
-		{$peiling->view()}
-	{/if}
-	
+
 	{foreach from=$onderwerp->getPosts() item='bericht' name='berichten'}
 		<tr>
 			<td class="auteur">
