@@ -39,7 +39,7 @@
 				<td class="reacties">{$onderwerp->getUid()|csrnaam:'user'}</td>
 				<td class="reactiemoment">
 					{$onderwerp->getLastpost()|reldate}<br />
-					<a href="/communicatie/forum/onderwerp/{$bericht.id}#post{$bericht.lastpostID}">bericht</a> door 
+					<a href="/communicatie/forum/onderwerp/{$onderwerp->getID()}#post{$onderwerp->getLastpostID()}">bericht</a> door 
 					{$onderwerp->getLastuser()|csrnaam:'user'}
 				</td>
 			</tr>
