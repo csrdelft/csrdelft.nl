@@ -57,31 +57,26 @@
 		<tr>
 			<td colspan="4" class="tekst">
 				<form method="post" action="/communicatie/forum/onderwerp-toevoegen/{$categorie->getID()}">
-					<p>
-						{if $lid->hasPermission('P_LOGGED_IN')}
-							{if $lid->hasPermission('P_FORUM_MOD')}
-								<a href="/communicatie/forum/maak-stemming/{$categorie}" class="knop" style="float: right; margin: 8px;">Peiling toevoegen</a>
-							{/if}
-							Hier kunt u een onderwerp toevoegen in deze categorie van het forum. Kijkt u vooraf goed of het 
-							onderwerp waarover u post hier wel thuishoort.<br /><br />
-						{else}
-							{*	melding voor niet ingelogde gebruikers die toch willen posten. Ze worden 'gemodereerd', dat 
-								wil zeggen, de topics zijn nog niet direct zichtbaar. *}
-							Hier kunt u een bericht toevoegen aan het forum. Het zal echter niet direct zichtbaar worden, maar
-							&eacute;&eacute;rst door de PubCie worden goedgekeurd. <br />
-							<span style="text-decoration: underline;">Het is hierbij verplicht om uw naam en een email-adres 
-							onder het bericht te plaatsen. Dan kan de PubCie eventueel contact met u opnemen. Doet u dat niet, 
-							dan wordt uw bericht waarschijnlijk niet geplaatst!</span><br /><br /><br />
-						{/if}
-						<a class="forumpostlink" name="laatste"><strong>Titel</strong></a><br />
-						<input type="text" name="titel" value="" class="tekst" style="width: 100%" tabindex="1" /><br />
-						<strong>Bericht</strong>&nbsp;&nbsp;
-						<a onclick="vergrootTextarea('forumBericht', 10);" title="Vergroot het invoerveld" class="handje">Invoerveld vergroten</a><br />
-						
-						<div id="berichtPreviewContainer" class="previewContainer"><h3>Voorbeeld van uw bericht:</h3><div id="berichtPreview" class="preview"></div></div>
-						<textarea name="bericht" id="forumBericht" rows="10" cols="80" style="width: 100%" class="tekst" tabindex="2"></textarea><br />
-						<input type="submit" name="submit" value="verzenden" /> <input type="button" value="voorbeeld" style="color: #777;" id="forumVoorbeeld" onclick="previewPost('forumBericht', 'berichtPreview')"/>
-					</p>
+					{if $lid->hasPermission('P_LOGGED_IN')}
+						Hier kunt u een onderwerp toevoegen in deze categorie van het forum. Kijkt u vooraf goed of het 
+						onderwerp waarover u post hier wel thuishoort.<br /><br />
+					{else}
+						{*	melding voor niet ingelogde gebruikers die toch willen posten. Ze worden 'gemodereerd', dat 
+							wil zeggen, de topics zijn nog niet direct zichtbaar. *}
+						Hier kunt u een bericht toevoegen aan het forum. Het zal echter niet direct zichtbaar worden, maar
+						&eacute;&eacute;rst door de PubCie worden goedgekeurd. <br />
+						<span style="text-decoration: underline;">Het is hierbij verplicht om uw naam en een email-adres 
+						onder het bericht te plaatsen. Dan kan de PubCie eventueel contact met u opnemen. Doet u dat niet, 
+						dan wordt uw bericht waarschijnlijk niet geplaatst!</span><br /><br /><br />
+					{/if}
+					<a class="forumpostlink" name="laatste"><strong>Titel</strong></a><br />
+					<input type="text" name="titel" value="" class="tekst" style="width: 100%" tabindex="1" /><br />
+					<br /><strong>Bericht</strong>
+					<div id="berichtPreviewContainer" class="previewContainer"><div id="berichtPreview" class="preview"></div></div>
+					<textarea name="bericht" id="forumBericht" rows="10" cols="80" style="width: 100%" class="tekst" tabindex="2"></textarea><br />
+					<a style="float: right;" class="handje knop" onclick="toggleDiv('ubbhulpverhaal')" title="Opmaakhulp weergeven">UBB</a>
+					<a style="float: right;" class="handje knop" onclick="vergrootTextarea('forumBericht', 10)" title="Vergroot het invoerveld"><strong>&uarr;&darr;</strong></a>
+					<input type="submit" name="submit" value="verzenden" /> <input type="button" value="voorbeeld" style="color: #777;" id="forumVoorbeeld" onclick="previewPost('forumBericht', 'berichtPreview')"/>
 				</form>
 			</td>
 		</tr>
