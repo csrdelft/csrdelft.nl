@@ -404,13 +404,13 @@ class Groep{
 			case 'internetman': case 'bandleider': case 'fiscus':
 				$prioriteit=3;
 			break;
-			case 'fotocommisaris': case 'vice-praeses':
+			case 'fotocommisaris': case 'vice-praeses': case 'koemissaris':
 				$prioriteit=4;
 			break;
 			case 'vice-abactis':
 				$prioriteit=5;
 			break;
-			case 'koemissaris': case 'stralerpheut': case 'regelneef':
+			case 'correspondent': case 'stralerpheut': case 'regelneef':
 				$prioriteit=8;
 			break;
 			case 'q.q.': case 'qq':
