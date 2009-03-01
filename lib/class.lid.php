@@ -404,9 +404,9 @@ class Lid {
 		$qNaam="
 			SELECT nickname, voornaam, tussenvoegsel, achternaam, status, geslacht, postfix
 			FROM lid WHERE uid='".$uid."' LIMIT 1;";
-		$rNaam=$db->query($qNaam);
-		if($rNaam!==false and $db->numRows($rNaam)==1){
-			return $db->next($rNaam);
+		$naam=$db->getRow($qNaam);
+		if(is_array($naam)){
+			return $naam;
 		}else{
 			//lid bestaat niet in de db, dus we geven 'onbekend' terug.
 			return 'onbekend';

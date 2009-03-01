@@ -278,18 +278,21 @@ class Groepcontroller extends Controller{
 	public function action_addLid(){
 		$this->content->setAction('addLid');
 		if(isset($_POST['naam'], $_POST['functie']) AND is_array($_POST['naam']) AND is_array($_POST['functie']) AND count($_POST['naam'])==count($_POST['functie'])){
-			//nieuwe commissieleden erin stoppen.
+			//nieuwe groepleden erin stoppen.
 			$success=true;
+			$aantal=0;
 			for($i=0; $i<count($_POST['naam']); $i++){
 				if($this->lid->isValidUid($_POST['naam'][$i])){
 					if(!$this->groep->addLid($_POST['naam'][$i], $_POST['functie'][$i])){
 						//er gaat iets mis, zet $success op false;
 						$success=false;
+					}else{
+						$aantal++;
 					}
 				}
 			}
 			if($success===true){
-				$melding='Leden met succes toegevoegd.';
+				$melding=$aantal.' leden met succes toegevoegd.';
 			}else{
 				$melding='Niet alle leden met succes toegevoegd. Wellicht waren sommigen al lid van deze groep? (Groepcontroller::action_addLid())';
 			}
@@ -300,11 +303,11 @@ class Groepcontroller extends Controller{
 	public function action_verwijderLid(){
 		if($this->hasParam(2) AND $this->lid->isValidUid($this->getParam(2)) AND $this->groep->magBewerken()){
 			if($this->groep->verwijderLid($this->getParam(2))){
-				$melding='Lid is uit groep verwijderd.';
+				$melding='';
 			}else{
-				$melding='Lid uit groep verwijderen mislukt.';
+				$melding='Lid uit groep verwijderen mislukt (GroepController::action_verwijderLid()).';
 			}
-			$this->content->invokeRefresh($melding.' (GroepController::action_verwijderLid())', $this->getUrl('default'));
+			$this->content->invokeRefresh($melding, $this->getUrl('default'));
 		}
 	}
 	public function action_maakLidOt(){

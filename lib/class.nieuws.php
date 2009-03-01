@@ -37,7 +37,7 @@ class Nieuws {
 		$iBerichtID=(int)$iBerichtID;
 		//where clausule klussen
 		$sWhereClause='';
-		if(!$this->_lid->hasPermission('P_LOGGED_IN')){ $sWhereClause.="mededeling.prive!='1' AND "; }
+		if(!$this->_lid->hasPermission('P_LEDEN_READ')){ $sWhereClause.="mededeling.prive!='1' AND "; }
 		if(!$includeVerborgen){ $sWhereClause.="mededeling.verborgen!='1' AND "; }
 		if($iBerichtID!=0){ $sWhereClause.="mededeling.id=".$iBerichtID." AND "; }
 		$limit=(int)$limit;
@@ -96,7 +96,7 @@ class Nieuws {
 
 		//where clausule klussen
 		$sWhereClause='';
-		if(!$this->_lid->hasPermission('P_LOGGED_IN')){ $sWhereClause.="mededeling.prive!='1' AND "; }
+		if(!$this->_lid->hasPermission('P_LEDEN_READ')){ $sWhereClause.="mededeling.prive!='1' AND "; }
 
 		$sQuery="
 			SELECT
