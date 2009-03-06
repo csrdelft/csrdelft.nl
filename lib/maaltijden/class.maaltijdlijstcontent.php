@@ -58,10 +58,12 @@ class MaaltijdLijstContent extends SimpleHTML {
 		$aMaal['budget']=($aMaal['aantal']+$marge)*$maaltijdbudget;
 
 		$maaltijdlijst->assign('maaltijd', $aMaal);
-		$maaltijdlijst->assign('datumFormaat', '%A %e %B');
+
 		if($this->_fiscaal){
+			$maaltijdlijst->assign('datumFormaat', '%F %H:%M');
 			$maaltijdlijst->display('maaltijdketzer/lijst_fiscaal.tpl');
 		}else{
+			$maaltijdlijst->assign('datumFormaat', '%A %e %B');
 			$maaltijdlijst->display('maaltijdketzer/lijst.tpl');
 		}
 
