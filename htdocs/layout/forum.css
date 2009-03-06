@@ -120,7 +120,9 @@ div.citaatContainer div.citaat div.citaatContainer div.citaat img.forum_image{ m
 	background-color: #f1f1f1; 
 	border: 0px;
 }
-
+fieldset{
+	border: 0;
+}
 fieldset#modereren{
 	padding: 10px; 
 	margin-bottom: 10px;
