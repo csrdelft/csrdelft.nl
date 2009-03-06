@@ -77,6 +77,7 @@ htdocs/layout/js/builder.js -text
 htdocs/layout/js/csrdelft.js -text
 htdocs/layout/js/effects.js -text
 htdocs/layout/js/fastlightbox.js -text
+htdocs/layout/js/gmaps.js -text
 htdocs/layout/js/groepen.js -text
 htdocs/layout/js/lightbox.js -text
 htdocs/layout/js/menu.js -text

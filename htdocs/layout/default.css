@@ -423,6 +423,16 @@ div.preview{
 	width: 68px; 
 	padding: 4px; margin-left: 10px;
 }
+
+/* google maps ubb-tag */
+.ubb_gmap {
+	width:300px;
+	height: 200px;
+	border:1px solid darkgrey;
+	margin:2px;
+}
+
+
 /* plaatjes in tekst */
 p img{ margin: 15px 10px; }
 

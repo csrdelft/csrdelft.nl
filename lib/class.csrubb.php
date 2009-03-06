@@ -248,7 +248,7 @@ UBBVERHAAL;
 	 *
 	 * [mededelingen=top3]
 	 */
-	function ubb_mededelingen($parameters){
+	public function ubb_mededelingen($parameters){
 		if(isset($parameters['mededelingen']) AND $parameters['mededelingen']=='top3'){
 			require_once('class.nieuwscontent.php');
 			require_once('class.nieuws.php');
@@ -273,6 +273,34 @@ UBBVERHAAL;
 	public function ubb_commentaar(){
 		$content = $this->parseArray(array('[/commentaar]'), array());
 		return '';
+	}
+	
+	/*
+	 * Google-maps ubb-tag. Door Piet-Jan Spaans.
+	 * [map]Oude Delft 9[/map]
+	 */
+	private $mapJsLoaded=false;
+	public function ubb_map($parameters){
+		$address = $this->parseArray(array('[/map]'), array());
+		if(trim($address)==''){
+			return 'Geen adres opgegeven';
+		}
+		$address=htmlspecialchars($address);
+		$mapid='map'.md5($address);
+		
+		$html='';
+		if(!$this->mapJsLoaded){
+			$html.='<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAATQu5ACWkfGjbh95oIqCLYxRY812Ew6qILNIUSbDumxwZYKk2hBShiPLD96Ep_T-MwdtX--5T5PYf1A" type="text/javascript"></script><script type="text/javascript" src="/layout/js/gmaps.js"></script>';
+			$this->mapJsLoaded=true;
+		}
+		$html.= 
+<<<MAPHTML
+		<div class="ubb_gmap" id="$mapid"></div><script type="text/javascript">
+     	loadGmaps('$mapid','$address');
+     	</script>
+MAPHTML;
+
+		return $html;
 	}
 }
 
