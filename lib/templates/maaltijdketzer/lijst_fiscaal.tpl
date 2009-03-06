@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.1//EN' 'http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd'>
 <html>
 <head>
-  <title>Maaltijdaanmeldingen van {$maaltijd.datum|date_format:$datumFormaat}</title>
+  <title>{$maaltijd.datum|date_format:$datumFormaat}: maaltijdaanmeldingen.</title>
 </head>
 <body>
 
