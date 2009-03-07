@@ -70,8 +70,8 @@
 						<input type="text" name="user" value="naam" onfocus="if(this.value=='naam')this.value='';" />
 						<input type="password" name="pass" value="" />
 						<input type="checkbox" name="checkip" class="checkbox" value="true" id="login-checkip" checked="checked" />
-						<label for="login-checkip">Koppel IP</label><br /><br /><br />
-						<input type="submit" name="submit" value="Inloggen" />
+						<label for="login-checkip">Koppel IP</label>
+						<input type="submit" class="submit" name="submit" value="Inloggen" />
 					</fieldset>
 				</form>			
 			</div>
