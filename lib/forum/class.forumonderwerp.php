@@ -202,9 +202,14 @@ class ForumOnderwerp{
 	//geeft een array met posts terug als die tenminste zijn ingeladen.
 	//Uitvoer van deze functie wordt gebruikt als afweging voor het wel
 	//weergeven van het onderwerp dan wel een foutmelding.
-	function getPosts(){
-		if($this->posts===null){
-			$this->loadPosts();
+	function getPosts($forcereload=false){
+		if($this->posts===null OR $forcereload){
+			if($this->magBekijken()){
+				$this->loadPosts();
+			}else{
+				//gebruiker mag posts niet bekijken, dus we moten fasle teruggeven.
+				$this->posts=false;
+			}
 		}
 
 		if(is_array($this->posts)){
