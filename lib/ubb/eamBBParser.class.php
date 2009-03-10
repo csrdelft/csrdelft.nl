@@ -827,10 +827,15 @@ class eamBBParser{
 		$html = '<tr>'.$content.'</tr>';
 		return $html;
 	}
-	function ubb_td()
-	{
+	function ubb_td($parameters=array()){
 		$content = $this->parseArray(array('[/td]'), array());
-		$html = '<td>'.$content.'</td>';
+
+		$style='';
+		if(isset($parameters['w'])){
+			$style=' style="width: '.(int)$parameters['w'].'px"';
+		}
+
+		$html = '<td'.$style.'>'.$content.'</td>';
 		return $html;
 	}
 	function ubb_th(){
