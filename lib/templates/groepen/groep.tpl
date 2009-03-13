@@ -37,7 +37,7 @@
 			<img src="{$csr_pics}forum/verwijderen.png" title="Verwijder deze groep" />
 		</a>
 		{/if}
-		{if $groep->isAdmin()}
+		{if $groep->isAdmin() OR ($groep->isAanmeldbaar() AND $groep->magAanmelden())}
 		<a class="tab" onclick="showStats({$groep->getId()})">%</a>
 		{/if}
 	{/if}

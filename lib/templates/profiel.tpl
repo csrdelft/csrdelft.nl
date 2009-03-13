@@ -86,7 +86,8 @@
 		<div class="gegevens">
 			<div class="label">Studie:</div> {$profhtml.studie}<br />
 			<div class="label">Studie sinds:</div> {$profhtml.studiejaar}<br />
-			<div class="label">Lid sinds:</div> {$profhtml.lidjaar}<br />
+			<div class="label">Lid sinds:</div> 
+				{$profhtml.lidjaar}{if $isOudlid AND $profhtml.einddatum!='0000-00-00'}-{$profhtml.einddatum}{/if}<br />
 			<br />
 			{if $isOudlid===false}
 				<div class="label">Kring:</div> 
@@ -122,7 +123,7 @@
 		</div>
 	{/if}
 	
-	
+	{if $lid->getUid()==$profhtml.uid OR $profhtml.eetwens!='' OR is_array($profhtml.recenteMaaltijden)}
 	<div class="profielregel">
 		<div class="left">Maaltijden
 			{if $lid->getUid()==$profhtml.uid}
@@ -160,11 +161,12 @@
 			{/if}
 		</div>
 	</div>
+	{/if}
 	<div style="clear: left;"></div>
+	{if is_array($profhtml.recenteForumberichten)}
 	<div class="profielregel">
 		<div class="left">Forum</div>
 		<div class="gegevens">
-			{if is_array($profhtml.recenteForumberichten)}
 			<div class="label">Recent:</div>
 			<div class="data">
 				<table style="width: 600px">
@@ -176,7 +178,7 @@
 					{/foreach}
 				</table>
 			</div>
-			{/if}
 		</div>
 	</div>
+	{/if}
 </div>

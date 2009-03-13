@@ -340,9 +340,13 @@ class Groepcontroller extends Controller{
 		$this->content=new Groepgeschiedeniscontent(new Groepen($_GET['gtype']));
 	}
 	public function action_stats(){
-		$this->content=new GroepStatsContent($this->groep);
-		$this->content->view();
-		exit;
+		if($this->groep->magAanmelden()){
+			$this->content=new GroepStatsContent($this->groep);
+			$this->content->view();
+			//we willen dit met javascript ophalen, dus niet de hele site-structuur eromheen
+			//hebben, daarom sluiten we hier af.
+			exit;
+		}
 	}
 
 }
