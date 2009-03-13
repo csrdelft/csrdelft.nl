@@ -11,7 +11,7 @@
 <hr />
 <div id="groepledenContainer">
 	<div class="tabjesregel">
-		{if $lid->hasPermission('P_LEDEN_READ')}
+		{if $groep->isIngelogged()}
 		<div class="tab" onclick="return togglePasfotos('{$groep->getLedenCSV()}', document.getElementById('ledenvangroep{$groep->getId()}'));">
 			<img src="{$csr_pics}/knopjes/pasfoto.png" title="schakel naar pasfoto's" />
 		</div>
@@ -37,7 +37,7 @@
 			<img src="{$csr_pics}forum/verwijderen.png" title="Verwijder deze groep" />
 		</a>
 		{/if}
-		{if $groep->isAdmin() OR ($groep->isAanmeldbaar() AND $groep->magAanmelden())}
+		{if $groep->isAdmin() OR ($groep->isAanmeldbaar() AND $groep->isIngelogged())}
 		<a class="tab" onclick="showStats({$groep->getId()})">%</a>
 		{/if}
 	{/if}

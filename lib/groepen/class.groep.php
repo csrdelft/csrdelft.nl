@@ -243,7 +243,7 @@ class Groep{
 		return isset($this->leden[$uid]);
 	}
 	public function toonPasfotos(){
-		return Lid::instance()->hasPermission('P_LEDEN_READ') AND $this->getToonPasfotos()==1;
+		return $this->isIngelogged() AND $this->getToonPasfotos()==1;
 	}
 	public function lidIsMod(){
 		return $this->getLidIsMod()=='1';
@@ -328,7 +328,7 @@ class Groep{
 	 */
 	public function magAanmelden(){
 		if($this->isAanmeldbaar()){
-			if(Lid::instance()->hasPermission('P_LEDEN_READ') AND !$this->isLid()){
+			if($this->isIngelogged() AND !$this->isLid()){
 				if($this->getEinde()=='0000-00-00' OR $this->getEinde()>date('Y-m-d')){
 					if($this->getLimiet()==0){
 						return true;
@@ -546,6 +546,10 @@ class Groep{
 		}
 		return $groepen;
 	}
+	public static function isIngelogged(){
+		return Lid::instance()->hasPermission('P_LEDEN_READ');
+	}
+
 	public function getError(){
 		return $this->error();
 	}
