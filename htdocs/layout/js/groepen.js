@@ -38,3 +38,16 @@ function updateGroepform(){
 		}
 	}
 }
+
+function showStats(groepid){
+	http.abort();
+	http.open("GET", "/actueel/groepen/foo/"+groepid+"/stats/", true);
+	http.onreadystatechange=function(){
+		if(http.readyState == 4){
+			gleden=document.getElementById('ledenvangroep'+groepid);
+			gleden.innerHTML=http.responseText;
+		}
+	}
+	http.send(null);
+	
+}
