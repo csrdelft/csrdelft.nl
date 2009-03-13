@@ -32,9 +32,10 @@ class Saldi{
 				  AND cie='".$this->cie."'
 				  AND moment>(NOW() - INTERVAL ".$timespan." DAY);";
 		}
-		$db=MySql::instance();
-		$result=$db->query($sQuery);
-		$this->data=$db->result2array($result);
+		$this->data=MySql::instance()->query2array($sQuery);
+		if(!is_array($this->data)){
+			throw new Exception('Saldi::load() gefaald.');
+		}
 	}
 
 	public function getValues(){
@@ -48,6 +49,52 @@ class Saldi{
 			$return[]=str_replace(array('-', ':', ' '), '', $row['moment']);
 		}
 		return $return;
+	}
+	public static function putSoccieXML($xml){
+		$db=MySql::instance();
+		$datum=getDateTime(); //invoerdatum voor hele sessie gelijk.
+
+
+		$aSocciesaldi=simplexml_load_string($xml);
+		//controleren of we wel een object krijgen:
+		if(!is_object($aSocciesaldi)){
+			return 'Geen correcte XML ingevoerd! (Saldi::putSoccieXML())';
+		}
+
+		$iAantal=count($aSocciesaldi);
+		$bOk=true;
+		foreach($aSocciesaldi as $aSocciesaldo){
+			$query="
+				UPDATE lid
+				SET soccieSaldo=".$aSocciesaldo->saldo."
+				WHERE soccieID=".$aSocciesaldo->id."
+				  AND createTerm='".$aSocciesaldo->createTerm."' LIMIT 1;";
+			//sla het saldo ook op in een logje, zodat we later kunnen zien dat iemand al heel lang
+			//rood staat en dus geschopt kan worden...
+			$logQuery="
+				INSERT INTO saldolog (
+					uid, moment, cie, saldo
+				)VALUES(
+					(SELECT uid FROM lid WHERE soccieID=".$aSocciesaldo->id."  AND createTerm='".$aSocciesaldo->createTerm."' ),
+					'".$datum."',
+					'soccie',
+					".$aSocciesaldo->saldo."
+				);";
+			if(!$db->query($query)){
+				//scheids, er gaet een kwerie mis, ff een feutmelding printen.
+				$bOk=false;
+			}else{
+				if(!$db->query($logQuery)){
+					echo '-! Koppeling voor '.$aSocciesaldo->voornaam.' '.$aSocciesaldo->achternaam.' mislukt'."\r\n";
+				}
+			}
+
+		}
+		if($bOk){
+			return '[ '.$iAantal.' regels ontvangen.... OK ]';
+		}else{
+			return '[ tenminste 1 van '.$iAantal.' queries is niet gelukt. Laatste foutmelding was '.mysql_error().']';
+		}
 	}
 	public static function putMaalcieCsv($key='CSVSaldi'){
 		$db=MySql::instance();

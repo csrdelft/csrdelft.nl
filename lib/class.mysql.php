@@ -42,8 +42,9 @@ class MySql{
 
  	# Retourneert het MySql resultaat bij de opgegeven Query
 	public function query($query) {
+		$return=mysql_query($query, $this->_db);
 		$this->debug($query);
-		return mysql_query($query, $this->_db);
+		return $return;
 	}
 
 	# Retourneert het MySql resultaat bij de opgegeven Query

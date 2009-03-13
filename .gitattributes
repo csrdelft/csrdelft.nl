@@ -7,6 +7,8 @@ bin/mk_commissie_ldif.txt -text
 bin/mkledenldif.php -text
 bin/mootabos.php -text
 bin/saldo-kopieer.php -text
+bin/soccie_push/mysql.ini.sample -text
+bin/soccie_push/socciesaldi.php -text
 bin/socciesaldi-koppelen.php -text
 bin/statgraphgen.php -text
 bin/welkom.php -text
@@ -114,7 +116,6 @@ htdocs/tools/sendmail/sendmail.php -text
 htdocs/tools/soccie.php -text
 htdocs/tools/stats.php -text
 htdocs/tools/streeplijst.php -text
-htdocs/tools/test_privefilter.php -text
 htdocs/tools/ubb.php -text
 htdocs/vb/ajaxsearch.php -text
 htdocs/vb/images/add.png -text
