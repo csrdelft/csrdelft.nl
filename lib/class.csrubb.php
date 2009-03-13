@@ -277,7 +277,7 @@ UBBVERHAAL;
 	
 	/*
 	 * Google-maps ubb-tag. Door Piet-Jan Spaans.
-	 * [map]Oude Delft 9[/map]
+	 * [map dynamic=false w=100 h=100]Oude Delft 9[/map]
 	 */
 	private $mapJsLoaded=false;
 	public function ubb_map($parameters){
@@ -288,16 +288,32 @@ UBBVERHAAL;
 		$address=htmlspecialchars($address);
 		$mapid='map'.md5($address);
 		
+		$width=300;
+		$height=200;
+		$style='';
+		if(isset($parameters['w']) && $parameters['w']<600){
+			$width = $parameters['w'];			
+		}
+		if(isset($parameters['h']) && $parameters['h']<600){
+			$height= $parameters['h'];
+		}
+		if(isset($parameters['w']) || isset($parameters['h'])){
+			$style='style="width:'.$width.'px;height:'.$height.'px;"';			
+		}		
+		
+		$jscall = "writeStaticGmap('$mapid', '$address',$width,$height);";
+		if(isset($parameters['dynamic']) && $parameters['dynamic']=='true'){		
+				$jscall = "loadGmaps('$mapid','$address');";
+		} 
+		
 		$html='';
 		if(!$this->mapJsLoaded){
 			$html.='<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAATQu5ACWkfGjbh95oIqCLYxRY812Ew6qILNIUSbDumxwZYKk2hBShiPLD96Ep_T-MwdtX--5T5PYf1A" type="text/javascript"></script><script type="text/javascript" src="/layout/js/gmaps.js"></script>';
 			$this->mapJsLoaded=true;
-		}
+		}		
 		$html.= 
 <<<MAPHTML
-		<div class="ubb_gmap" id="$mapid"></div><script type="text/javascript">
-     	loadGmaps('$mapid','$address');
-     	</script>
+		<div class="ubb_gmap" id="$mapid" $style></div><script type="text/javascript">$jscall</script>
 MAPHTML;
 
 		return $html;

@@ -8,8 +8,7 @@ var i = 0;
 function loadGmaps(divId, address) {
 	if (GBrowserIsCompatible()) {
 	    var map = new GMap2(document.getElementById(divId));
-		//map.addControl(new GLargeMapControl());
-		//map.addControl(new GMapTypeControl());
+	    map.addControl(new GSmallMapControl());
 		var geocoder = new GClientGeocoder();
 	    geocoder.getLatLng(
 			address, 
@@ -24,6 +23,28 @@ function loadGmaps(divId, address) {
 			}
 		);//close getLatLng	    
 	}
+}
+function writeStaticGmap(div_id, address,width,height) {
+    var div = document.getElementById(div_id);        
+	var geocoder = new GClientGeocoder();
+	geocoder.getLatLng(
+		address, 
+		function(adr_latlng) {
+			if (!adr_latlng) {
+				div.innerHTML=address + " niet gevonden";
+			} else {
+				var coordinates = adr_latlng.lat()+','+adr_latlng.lng(); 
+				var imgtag = '<img src="http://maps.google.com/staticmap?\
+					size='+width+'x'+height+'&\
+					maptype=roadmap&\
+					markers='+coordinates+',red&\
+					key=ABQIAAAATQu5ACWkfGjbh95oIqCLYxRY812Ew6qILNIUSbDumxwZYKk2hBShiPLD96Ep_T-MwdtX--5T5PYf1A&\
+					sensor=false\
+					"></img>';
+				div.innerHTML=imgtag;
+			}	    
+		}
+	);		
 }
 
 // This function picks up the click and opens the corresponding info window

@@ -696,7 +696,7 @@ class Lid {
 		if(!$this->isValidUid($uid) OR $uid==null){
 			$uid=$this->getUid();
 		}
-		return $uid!='9808'; //speciaal voor knorrie
+		return $uid!='9808' && $uid!='0430'; //speciaal voor knorrie en pan
 	}
 
 
