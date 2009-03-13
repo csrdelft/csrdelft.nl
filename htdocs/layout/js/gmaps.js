@@ -41,7 +41,7 @@ function writeStaticGmap(div_id, address,width,height) {
 					key=ABQIAAAATQu5ACWkfGjbh95oIqCLYxRY812Ew6qILNIUSbDumxwZYKk2hBShiPLD96Ep_T-MwdtX--5T5PYf1A&\
 					sensor=false\
 					"></img>';
-				div.innerHTML=imgtag;
+				div.innerHTML='<a href="http://maps.google.nl/maps?q='+address+'">'+imgtag+'</a>';
 			}	    
 		}
 	);		
