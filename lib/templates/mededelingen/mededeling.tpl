@@ -1,4 +1,4 @@
-<form action="{$nieuws_root}bewerken/{$mededeling->getID()}" method="post" enctype="multipart/form-data">
+<form action="{$nieuws_root}bewerken/{$mededeling->getId()}" method="post" enctype="multipart/form-data">
 	<div class="pubciemail-form">
 		{$mededeling->getMelding()|escape:'html'}
 		<strong>Titel</strong><br />
@@ -14,7 +14,7 @@
 			Categorie:
 			<select name="categorie">
 				{foreach from=$mededeling->getCategorie()->getAll() item=categorie}
-					<option value="{$categorie->getID()}">{$categorie->getNaam()|escape:'html'}</option>
+					<option value="{$categorie->getId()}">{$categorie->getNaam()|escape:'html'}</option>
 				{/foreach}
 			</select><br />
 			Markering:
@@ -33,6 +33,6 @@
 			<span class="waarschuwing">(png, gif of jpg, 200x200 of groter in die verhouding.)</span>
 		</div>
 		<input type="submit" name="submit" value="opslaan" />&nbsp;
-		<a href="{$nieuws_root}{$mededeling->getID()}" class="knop">annuleren</a>
+		<a href="{$nieuws_root}{$mededeling->getId()}" class="knop">annuleren</a>
 	</div>
 </form>

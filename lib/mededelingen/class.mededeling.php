@@ -38,9 +38,17 @@ class Mededeling{
 			}
 		}
 	}
-	public function load(){
+	public function load($id=0){
 		$db=MySql::instance();
-
+		$loadQuery="
+			SELECT id, titel, tekst, datum, uid, rank, prive, verborgen, plaatje, categorie
+			FROM mededeling
+			WHERE id=".(int)$id.";";
+		$mededeling=$db->getRow($loadQuery);
+		if(!is_array($mededeling)){
+			throw new Exception('Mededeling bestaat niet. (Mededeling::load())');
+		}
+		$this->array2properties($mededeling);
 	}
 	public function save(){
 		$db=MySql::instance();
@@ -82,7 +90,7 @@ class Mededeling{
 		}
 		return $return;
 	}
-	public function array2properties($array){
+	private function array2properties($array){
 		$this->id=$array['id'];
 		$this->titel=$array['titel'];
 		$this->tekst=$array['tekst'];
@@ -151,7 +159,13 @@ class Mededeling{
 			WHERE rank='".$this->getRank()."';";
 		return MySql::instance()->query($updateRank);
 	}
-
+	public static function getRanks(){
+		$ranks=array();
+		for($i=1; $i<=6; $i++){
+			$ranks[$i]='Top '.$i;
+		}
+		return $ranks;
+	}
 }
 
 

@@ -10,7 +10,7 @@ class MededelingCategorie{
 
 	private $id;
 	private $naam;
-	private $rank;
+	private $prioriteit;
 	private $plaatje;
 	private $beschrijving;
 
@@ -18,20 +18,28 @@ class MededelingCategorie{
 
 	public function __construct($init){
 		if(is_array($init)){
-			$this->array2poperties($init);
+			$this->array2properties($init);
 		}else{
 			$init=(int)$init;
 			if($init!=0){
 				$this->load($init);
 			}else{
 				//default waarden
-				$this->rank=255;
+
 			}
 		}
 	}
-	public function load(){
+	public function load($id=0){
 		$db=MySql::instance();
-
+		$loadQuery="
+			SELECT id, naam, prioriteit, plaatje, beschrijving
+			FROM mededelingcategorie
+			WHERE id=".(int)$id.";";
+		$mededeling=$db->getRow($loadQuery);
+		if(!is_array($mededeling)){
+			throw new Exception('MededelingCategorie bestaat niet. (MededelingCategorie::load())');
+		}
+		$this->array2properties($mededeling);
 	}
 	public function save(){
 		$db=MySql::instance();
@@ -42,12 +50,12 @@ class MededelingCategorie{
 		}
 	}
 	public function delete(){
-
+		throw new Exception('Nog niet geïmplementeerd MededelingCategorie::delete()');
 	}
 	public function array2properties($array){
 		$this->id=$array['id'];
 		$this->naam=$array['naam'];
-		$this->rank=$array['rank'];
+		$this->prioriteit=$array['prioriteit'];
 		$this->plaatje=$array['plaatje'];
 		$this->beschrijving=$array['beschrijving'];
 	}
@@ -62,7 +70,7 @@ class MededelingCategorie{
 
 	public function getId(){ return $this->id; }
 	public function getNaam(){ return $this->naam; }
-	public function getRank(){ return $this->rank; }
+	public function getPrioriteit(){ return $this->prioriteit; }
 	public function getPlaatje(){ return $this->plaatje; }
 	public function getBeschrijving(){ return $this->beschrijving; }
 
@@ -72,14 +80,20 @@ class MededelingCategorie{
 	public static function getCategorieen(){
 		$db=MySql::instance();
 		$sCategorieQuery="
-			SELECT id, naam, rank, plaatje, beschrijving
+			SELECT id, naam, prioriteit, plaatje, beschrijving
 			FROM mededelingcategorie
-			ORDER BY rank, id";
-		$return='';
-		foreach($db->query2array($sCategorieQuery) as $categorie){
-			$return[]=new MededelingCategorie($categorie);
+			ORDER BY prioriteit, id";
+		$cats=$db->query2array($sCategorieQuery);
+
+		if(is_array($cats)){
+			$return=array();
+			foreach($cats as $categorie){
+				$return[]=new MededelingCategorie($categorie);
+			}
+			return $return;
 		}
-		return $return;
+		return false;
+
 	}
 }
 ?>
