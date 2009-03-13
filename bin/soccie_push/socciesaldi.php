@@ -8,6 +8,22 @@
  *
  * 'installeer' met:
  * svn co http://svn.knorrie.org/csrdelft.nl/trunk/bin/soccie_push .
+ * chmod +x socciesaldi.php
+ * cp mysql.ini.sample mysql.ini
+ * # pas het wachtwoord aan in mysql.ini
+ *
+ * test door ./socciesaldi.php te typen. Als het goed is komt er nu iets te staan als:
+ *
+ * jieter@anthrax.0 ~$ ./socciesaldi.php
+ * SocCie-Saldi versturen naar csrdelft.nl op 2009-03-13 16:05:37
+ * Statusmelding van csrdelft.nl:
+ * [ 274 regels ontvangen.... OK ]
+ * 16:08:37 ...klaar
+ *
+ * Nu is het nog handig om een cronjob te maken:
+ * jieter@anthrax.0 ~$ crontab -e
+ * en voeg deze regel toe om het scriptje elke dag om 6:30 te laten lopen
+ * 30      6       *       *       * /home/jieter/socciesaldi.php >> soccie.log  2>&1
  */
 
 //verbose inschakelen
