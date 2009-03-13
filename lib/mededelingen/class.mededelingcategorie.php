@@ -41,12 +41,34 @@ class MededelingCategorie{
 		}
 		$this->array2properties($mededeling);
 	}
+	public function loadMededelingen(){
+		$query="SELECT id FROM mededelingen WHERE categorie=".$this->getId().";";
+
+		$this->mededelingen=MySql::instance()->query($query);
+	}
 	public function save(){
+		throw new Exception('Nog niet geïmplementeerd');
 		$db=MySql::instance();
 		if($this->getId()==0){
-
+			$saveQuery="
+				INSERT INTO mededelingcategorie (
+					naam, prioriteit, plaatje, beschrijving
+				)VALUES(
+					'".$db->escape($this->getNaam())."',
+					'".$db->escape($this->getPrioriteit())."',
+					'".$db->escape($this->getPlaatje())."',
+					'".$db->escape($this->getBeschrijving())."'
+				)";
 		}else{
-
+			$saveQuery="
+				UPDATE mededelingcategorie
+				SET
+					naam='".$db->escape($this->getNaam())."',
+					prioriteit='".$db->escape($this->getPrioriteit())."',
+					plaatje='".$db->escape($this->getPlaatje())."',
+					beschrijving='".$db->escape($this->getBeschrijving())."'
+				WHERE id=".$this->getId()."
+				LIMIT 1;";
 		}
 	}
 	public function delete(){

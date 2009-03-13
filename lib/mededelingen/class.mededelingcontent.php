@@ -2,8 +2,9 @@
 class MededelingContent extends SimpleHTML{
 	private $mededeling;
 
-	public function _construct(Mededeling $mededeling){
+	public function __construct(Mededeling $mededeling){
 		$this->mededeling=$mededeling;
+
 	}
 
 	public function view(){
