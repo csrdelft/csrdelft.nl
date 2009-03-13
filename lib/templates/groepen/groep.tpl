@@ -37,6 +37,9 @@
 			<img src="{$csr_pics}forum/verwijderen.png" title="Verwijder deze groep" />
 		</a>
 		{/if}
+		{if $groep->isAdmin()}
+		<a class="tab" onclick="showStats({$groep->getId()})">%</a>
+		{/if}
 	{/if}
 	</div>
 	<div id="ledenvangroep{$groep->getId()}" class="groepleden">

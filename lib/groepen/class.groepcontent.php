@@ -239,4 +239,34 @@ class GroepUbbContent extends SimpleHTML{
 		echo $this->getHTML();
 	}
 }
+class GroepStatsContent extends SimpleHTML{
+	private $groep;
+
+	public function __construct($groep){
+		$this->groep=$groep;
+	}
+	public function view(){
+		$stats=$this->groep->getStats();
+		foreach($stats as $title => $stat){
+			echo '<table class="query_table">';
+			$rowColor=false;
+			foreach($stat as $row){
+				//kleurtjes omwisselen
+				if($rowColor){
+					$style='style="background-color: #ccc;"';
+				}else{
+					$style='';
+				}
+				$rowColor=(!$rowColor);
+				echo '<tr>';
+				foreach($row as $column){
+					echo '<td '.$style.'>'.$column.'</td>';
+				}
+				echo '</tr>';
+			}
+			echo '</table><br />';
+		}
+	}
+
+}
 ?>

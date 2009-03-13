@@ -502,8 +502,8 @@ class Groep{
 			$db=MySql::instance();
 
 			$statqueries=array(
-				'moot' => "SELECT moot, count(*) as aantal FROM lid WHERE uid IN(".$this->getLedenCSV(true).") GROUP BY moot;",
-				'geslacht' => "SELECT geslacht, count(*) as aantal FROM lid WHERE uid IN( ".$this->getLedenCSV(true).") group by geslacht;",
+				'moot' => "SELECT CONCAT('Moot ', moot) AS moot, count(*) as aantal FROM lid WHERE uid IN(".$this->getLedenCSV(true).") GROUP BY moot;",
+				'geslacht' => "SELECT REPLACE(REPLACE(geslacht, 'm', 'Man'), 'v', 'Vrouw') AS geslacht, count(*) as aantal FROM lid WHERE uid IN( ".$this->getLedenCSV(true).") group by geslacht;",
 				'lidjaar' => "SELECT lidjaar, count(*) as aantal FROM lid WHERE uid IN( ".$this->getLedenCSV(true).") group by lidjaar;"
 			);
 
