@@ -339,6 +339,9 @@ class Groepcontroller extends Controller{
 	public function action_geschiedenis(){
 		$this->content=new Groepgeschiedeniscontent(new Groepen($_GET['gtype']));
 	}
+	public function action_stats(){
+		$this->content=new StringIncluder('<pre>'.print_r($this->groep->getStats(), true).'</pre>');
+	}
 
 }
 ?>

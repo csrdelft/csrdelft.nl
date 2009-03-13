@@ -16,6 +16,8 @@ class Groep{
 	private $groep=null;
 	private $leden=null;
 
+	private $stats=null;	//groepstatistieken.
+
 	private $error;
 
 	public function __construct($init){
@@ -257,11 +259,15 @@ class Groep{
 	}
 
 	public function getLeden(){		return $this->leden; }
-	public function getLedenCSV(){
+	public function getLedenCSV($quotes=false){
 		$leden=array();
 		if(is_array($this->getLeden())){
 			foreach($this->getLeden() as $lid){
-				$leden[]=$lid['uid'];
+				$field='';
+				if($quotes){ $field.="'"; }
+				$field.=$lid['uid'];
+				if($quotes){ $field.="'"; }
+				$leden[]=$field;
 			}
 		}
 		return implode($leden, ',');
@@ -490,6 +496,22 @@ class Groep{
 		}
 		return implode($separator, $groeplinks);
 
+	}
+	public function getStats($force=false){
+		if($force OR $this->stats===null){
+			$db=MySql::instance();
+
+			$statqueries=array(
+				'moot' => "SELECT moot, count(*) as aantal FROM lid WHERE uid IN(".$this->getLedenCSV(true).") GROUP BY moot;",
+				'geslacht' => "SELECT geslacht, count(*) as aantal FROM lid WHERE uid IN( ".$this->getLedenCSV(true).") group by geslacht;",
+				'lidjaar' => "SELECT lidjaar, count(*) as aantal FROM lid WHERE uid IN( ".$this->getLedenCSV(true).") group by lidjaar;"
+			);
+
+			foreach($statqueries as $key => $query){
+				$this->stats[$key]=$db->query2array($query);
+			}
+		}
+		return $this->stats;
 	}
 	/*
 	 * Deze functie geeft een array terug met functies en aantallen.
