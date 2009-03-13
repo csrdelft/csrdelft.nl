@@ -219,6 +219,7 @@ lib/maaltijden/class.maaltijdcontent.php -text
 lib/maaltijden/class.maaltijdlijstcontent.php -text
 lib/maaltijden/class.maaltijdvoorkeurcontent.php -text
 lib/maaltijden/class.maaltrack.php -text
+lib/mededelingen/class.mededeling.php -text
 lib/smarty/BUGS -text
 lib/smarty/COPYING.lib -text
 lib/smarty/ChangeLog -text
