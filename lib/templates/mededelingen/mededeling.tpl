@@ -29,7 +29,7 @@
 				<img src="{$csr_pics}nieuws/{$mededeling->getPlaatje()|escape:'html'}" width="200px" height="200px" alt="Afbeelding" style="float: left; margin-right: 10px;" />
 			{/if}
 			<strong>Afbeelding bij de mededeling</strong><br />
-			Afbeelding {if $actie=='toevoegen'}toevoegen{else}vervangen{/if}:<br /><input type="file" name="plaatje" size="40" /><br />
+			Afbeelding:<br /><input type="file" name="plaatje" size="40" /><br />
 			<span class="waarschuwing">(png, gif of jpg, 200x200 of groter in die verhouding.)</span>
 		</div>
 		<input type="submit" name="submit" value="opslaan" />&nbsp;

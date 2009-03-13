@@ -14,7 +14,6 @@ class MededelingContent extends SimpleHTML{
 		$content->assign('mededeling', $mededeling);
 		$content->assign('nieuws_root', NIEUWS_ROOT);
 		$content->assign('csr_pics', CSR_PICS);
-		$content->assign('actie', $actie);
 		$content->assign('ranken', $ranken);
 		
 		$content->display('mededelingen/mededeling.tpl');
