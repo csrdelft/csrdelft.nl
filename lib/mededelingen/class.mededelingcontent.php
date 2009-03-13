@@ -13,6 +13,7 @@ class MededelingContent extends SimpleHTML{
 		define( 'NIEUWS_ROOT', '/actueel/mededelingen/');
 
 		$content->assign('mededeling', $this->mededeling);
+		$content->assign('melding', $this->getMelding());
 		$content->assign('nieuws_root', NIEUWS_ROOT);
 		$content->assign('ranken', $ranken);
 

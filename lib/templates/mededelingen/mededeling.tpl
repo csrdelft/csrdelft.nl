@@ -1,6 +1,6 @@
 <form action="{$nieuws_root}bewerken/{$mededeling->getId()}" method="post" enctype="multipart/form-data">
 	<div class="pubciemail-form">
-		{$mededeling->getMelding()|escape:'html'}
+		{$melding|escape:'html'}
 		<strong>Titel</strong><br />
 		<input type="text" name="titel" class="tekst" value="{$mededeling->getTitel()|escape:'html'}" style="width: 100%;" /><br />
 		<strong>Bericht</strong>&nbsp;&nbsp;
