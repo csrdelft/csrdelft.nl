@@ -111,7 +111,7 @@ class MaaltijdContent extends SimpleHTML {
 			}
 			$html.='</div>';
 		}
-		$html.='<h2><a href="/actueel/maaltijden/index.php">Maaltijd</a> van '.date('D j F H:i', strtotime($maaltijd->getMoment())).'</h2>';
+		$html.='<h2><a href="/actueel/maaltijden/index.php">Maaltijd</a> van '.strftime('%a %e %B %H:%M', strtotime($maaltijd->getMoment())).'</h2>';
 		$html.=$maaltijd->getTekst().'<br />';
 		$html.='<span class="small">Inschrijvingen: <em>'.$maaltijd->getAantalAanmeldingen(). '</em> van <em>'.$maaltijd->getMaxAanmeldingen().'</em></span>';
 		$html.='</div><br style="clear: both;" />';
