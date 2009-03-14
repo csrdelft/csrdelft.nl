@@ -22,8 +22,9 @@ class Saldi{
 			$sQuery="
 				SELECT LEFT(moment, 16) AS moment, SUM(saldo) AS saldo
 				FROM saldolog
-				WHERE cie='".$this->cie."' AND
-					moment>(NOW() - INTERVAL ".$timespan." DAY) GROUP BY LEFT(moment, 16);";
+				WHERE cie='".$this->cie."'
+				  AND moment>(NOW() - INTERVAL ".$timespan." DAY)
+				GROUP BY LEFT(moment, 16);";
 		}else{
 			$sQuery="
 				SELECT moment, saldo
@@ -37,7 +38,12 @@ class Saldi{
 			throw new Exception('Saldi::load() gefaald.');
 		}
 	}
-
+	public function getNaam(){
+		switch($this->cie){
+			case 'maalcie':	return 'MaalCie'; break;
+			case 'soccie':	return 'SocCie'; break;
+		}
+	}
 	public function getValues(){
 		foreach($this->data as $row){
 			$return[]=$row['saldo'];
