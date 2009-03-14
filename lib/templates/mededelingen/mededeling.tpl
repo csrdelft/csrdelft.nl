@@ -19,8 +19,8 @@
 			</select><br />
 			Markering:
 			<select name="rank">
-				{foreach from=$markeringen item=markering}
-					<option value="{$markering.rank}">{$markering.naam|escape:'html'}</option>
+				{foreach from=$ranks key=rankId item=rank}
+					<option value="{$rankId}">{$rank|escape:'html'}</option>
 				{/foreach}
 			</select>
 		</div>

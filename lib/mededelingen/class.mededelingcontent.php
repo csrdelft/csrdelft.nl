@@ -8,7 +8,6 @@ class MededelingContent extends SimpleHTML{
 	}
 
 	public function view(){
-		$ranken=Mededeling::getRanks();
 
 		$content=new Smarty_csr();
 		define( 'NIEUWS_ROOT', '/actueel/mededelingen/');
@@ -16,7 +15,7 @@ class MededelingContent extends SimpleHTML{
 		$content->assign('mededeling', $this->mededeling);
 		$content->assign('melding', $this->getMelding());
 		$content->assign('nieuws_root', NIEUWS_ROOT);
-		$content->assign('ranken', $ranken);
+		$content->assign('ranks', Mededeling::getRanks());
 
 		$content->display('mededelingen/mededeling.tpl');
 	}
