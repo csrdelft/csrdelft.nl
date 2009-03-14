@@ -24,8 +24,13 @@ if($lid->hasPermission('P_ADMIN') OR $soccie->isLid($lid->getUid()) OR $lid->get
 	}else{
 		$timespan=40;
 	}
-	$maalcie=new Saldi($uid, 'maalcie', $timespan);
-	$soccie=new Saldi($uid, 'soccie', $timespan);
+	if(isset($_GET['maalcie'])){
+		$saldi=new Saldi($uid, 'maalcie', $timespan);
+		$legend='MaalCie';
+	}else{
+		$saldi=new Saldi($uid, 'soccie', $timespan);
+		$legend='SocCie';
+	}
 	
 	$chart = new chart(500, 200);
 
@@ -35,12 +40,10 @@ if($lid->hasPermission('P_ADMIN') OR $soccie->isLid($lid->getUid()) OR $lid->get
 		$chart->set_title('Saldo voor '.$lid->getNaamLink($uid, 'full', false, false, false));
 	}
 
-	$chart->set_x_ticks($soccie->getKeys(), 'date');
-	$chart->plot($soccie->getValues(), false, 'blue');
+	$chart->set_x_ticks($saldi->getKeys(), 'date');
+	$chart->plot($saldi->getValues(), false, 'blue');
 	
-	
-	$chart->add_legend('SocCie', 'blue');
-	//$chart->add_legend('MaalCie', 'red');
+	$chart->add_legend($legend, 'blue');
 
 	$chart->set_margins(60, 10, 20, 23);
 	$chart->set_labels(false, 'Saldo [euro]');
