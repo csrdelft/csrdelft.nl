@@ -284,10 +284,8 @@ class Lid {
 				return false;
 			}
 		}
-		$sEmailQuery="
-			SELECT email FROM lid WHERE uid='".$uid."' LIMIT 1;";
-		$rEmail=$this->_db->query($sEmailQuery);
-		$aEmail=$this->_db->next($rEmail);
+		$sEmailQuery="SELECT email FROM lid WHERE uid='".$uid."' LIMIT 1;";
+		$aEmail=$this->_db->getRow($sEmailQuery);
 		return $aEmail['email'];
 	}
 	/*
