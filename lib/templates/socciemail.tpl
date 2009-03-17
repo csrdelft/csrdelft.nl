@@ -1,18 +1,19 @@
 Beste {$uid|csrnaam:civitas:false},
 
-U staat rood bij de SocCie, uw saldo is  E {$saldo}. U wordt verzocht zo snel 
-mogelijk te zorgen dat saldo weer boven het nulpunt komt. Dat kan door in te 
-leggen bij de bar op de borrel, of geld over te maken naar de SocCie-fiscus:
+Het zal je niet ontgaan zijn, er is een geheel vernieuwde SocCie al enige tijd actief.
+Zoals je misschien al op het forum hebt gelezen, aanstaande donderdag (19 mrt) houdt 
+deze kersverse SocCie een themapresentatieborrel. U als goede drinker (als ik deze 
+conclusie mag trekken uit de ..euh.. -negatieve- hoogte ;) van uw saldo) wilt daar
+natuurlijk graag bij zijn, en wij verheugen ons nu al ten zeerste op uw komst! Nu 
+zou het ook aardig zijn als u niet alleen komt, maar met u ook uw portomonee, danwel
+broek/rok/jas-zak, met die hoeveelheid geld dat uw saldo dusdanig zal stijgen dat ook 
+de mondhoeken van uw SocCiefiscus zullen neigen omhoog te gaan bewegen.
+Uiteraard is het ook nog steeds mogelijk om geld over te maken, u kunt dit doen naar
+bankrekening: 31.94.36.403 tnv C.S.R. Sociëteitscommissie.
 
-C.S.R. fiscus societeitscommissie
-31.94.36.403
+Bij voorbaat al zeer vriendelijk, hartelijk en welgemeend: bedankt!
 
-Zo helpt u de liquiditeit van de SocCie op peil te houden, en teleurstellingen 
-aan de bar te voorkomen.
-Mocht u recent geld hebben overgemaakt, dan kunt u dit bericht als niet 
-verzonden beschouwen.
+Ama. Uitbeijerse
+h.t. SocCiefiscus
 
-Met vriendelijke groet,
-
-ama. Uitbeijerse, 
-h.t. fiscus SocCie van Ginkel.
+PS. Kort samengevat: inleggen met je hoofd.
