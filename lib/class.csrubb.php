@@ -31,7 +31,9 @@ class CsrUBB extends eamBBParser{
 		$text='<div class="citaatContainer"><strong>Citaat';
 		if(isset($arguments['citaat']) AND Lid::isValidUid($arguments['citaat'])){
 			$lid=LidCache::getLid($arguments['citaat']);
-			$text.=' van '.$lid->getNaamLink('user', 'link');;
+			if($lid instanceof Lid){
+				$text.=' van '.$lid->getNaamLink('user', 'link');
+			}	
 		}elseif(isset($arguments['citaat']) AND trim($arguments['citaat'])!=''){
 			$text.=' van '.str_replace('_', '&nbsp;', $arguments['citaat']);
 		}else{
@@ -57,11 +59,15 @@ class CsrUBB extends eamBBParser{
 	 * Geef een link weer naar het profiel van het lid-nummer wat opgegeven is.
 	 */
 	function ubb_lid($parameters){
-		if(isset($parameters['lid'])){
+		if(isset($parameters['lid']) AND Lid::isValidUid($parameters['lid'])){
 			$lid=LidCache::getLid($parameters['lid']);
-			$text=$lid->getNaamLink('user', 'link');
+			if($lid instanceof Lid){
+				$text=$lid->getNaamLink('user', 'link');
+			}else{
+				$text='Dit lid bestaat niet';
+			}
 		}else{
-			$text='geen uid opgegeven';
+			$text='[lid] Geen correct uid opgegeven ('.mb_htmlentities($parameters['lid']).').<br />';
 		}
 		return $text;
 	}
@@ -115,7 +121,7 @@ class CsrUBB extends eamBBParser{
 			$query=new SavedQuery((int)$parameters['query']);
 			$return=$query->getHtml();
 		}else{
-			$return='Geen geldige query';
+			$return='[query] Geen geldig query-id opgegeven.<br />';
 		}
 		return $return;
 	}

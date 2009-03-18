@@ -20,19 +20,12 @@ class Lid implements Serializable{
 	 * dit 'lid' weergeven.
 	 */
 	public function __construct($uid){
-		if($uid!=='dummy' AND !$this->isValidUid($uid)){
+		if(!$this->isValidUid($uid)){
 			throw new Exception('Geen correct uid opgegeven.');
 		}
 
 		$this->uid=$uid;
-
-		if($this->uid==='dummy'){
-			$this->profiel=array(
-				'voornaam'=>'', 'tussenvoegsel'=>'', 'achternaam'=>'Lid bestaat niet',
-				'status'=>'S_NOBODY', 'geslacht'=>'m');
-		}else{
-			$this->load($uid);
-		}
+		$this->load($uid);
 	}
 	public function load($uid){
 		$db=MySql::instance();
@@ -56,12 +49,11 @@ class Lid implements Serializable{
 	}
 	// sla huidige objectstatus op in db, en update het huidige lid in de LidCache
 	public function save(){
-		$this->assertDummy();
+
 		LidCache::updateLid($this->getUid());
 	}
 	# Sla huidige objecstatus op in LDAP
 	function save_ldap() {
-		$this->assertDummy();
 		require_once 'class.ldap.php';
 
 		$ldap=new LDAP();
@@ -119,7 +111,7 @@ class Lid implements Serializable{
 		$ldap->disconnect();
 	}
 	public function setProperty($property, $contents){
-		$this->assertDummy();
+
 		$allowedProps=array('achternaam', 'eetwens', 'corvee_wens');
 		if(!in_array($property, $allowedProps)){ return false; }
 		$contents=trim($contents);
@@ -275,11 +267,6 @@ class Lid implements Serializable{
 				return $naam;
 		}
 	}
-	private function assertDummy(){
-		if($this->getUid()=='dummy'){
-			throw Exception('Deze actie is niet mogelijk met het dummylid.');
-		}
-	}
 
 	//__toString()-instellingen
 	public $tsVorm='full'; //kan zijn full, user, nick, streeplijst
@@ -337,7 +324,7 @@ class LidCache{
 				Memcached::instance()->set($uid, serialize($lid));
 				return $lid;
 			}catch(Exception $e){
-				return new Lid('dummy');
+				return null;
 			}
 		}
 		self::instance()->uids[]=$uid;
