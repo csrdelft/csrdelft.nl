@@ -176,8 +176,15 @@ class MySql{
 			$this->querys[]=$string;
 		}
 	}
-	public function getDebug(){
-		return 'MySql query '.print_r($this->querys, true);
+	public function getDebug($sql=true, $get=true, $post=true, $files=false, $session=true, $cookie=true){
+		$debug = '';
+		if ($sql)         { $debug .= '<hr />SQL<hr />';     if (count($this->querys) > 0)	$debug .= '<pre>'.htmlentities(print_r($this->querys, true)).'</pre>';     }
+		if ($get)         { $debug .= '<hr />GET<hr />';     if (count($_GET) > 0)		$debug .= '<pre>'.htmlentities(print_r($_GET, true)).'</pre>';     }
+		if ($post)        { $debug .= '<hr />POST<hr />';    if (count($_POST) > 0)		$debug .= '<pre>'.htmlentities(print_r($_POST, true)).'</pre>';    }
+		if ($files)       { $debug .= '<hr />FILES<hr />';   if (count($_FILES) > 0)		$debug .= '<pre>'.htmlentities(print_r($_FILES, true)).'</pre>';   }
+		if ($session)     { $debug .= '<hr />SESSION<hr />'; if (count($_SESSION) > 0)		$debug .= '<pre>'.htmlentities(print_r($_SESSION, true)).'</pre>'; }
+		if ($cookie)      { $debug .= '<hr />COOKIE<hr />';  if (count($_COOKIE) > 0)		$debug .= '<pre>'.htmlentities(print_r($_COOKIE, true)).'</pre>';  }
+		return $debug;
 	}
 }
 

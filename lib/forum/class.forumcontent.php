@@ -61,7 +61,7 @@ class ForumContent extends SimpleHTML {
 				$post=preg_replace('/(\[(|\/)\w+\])/', '|', $aPost['tekst']);
 				$postfragment=substr(str_replace(array("\n", "\r", ' '), ' ', $post), 0, 40);
 				echo '<div class="item"><span class="tijd">'.date('H:i', strtotime($aPost['datum'])).'</span>&nbsp;';
-				echo '<a href="/communicatie/forum/onderwerp/'.$aPost['tid'].'#post'.$aPost['postID'].'"
+				echo '<a href="/communicatie/forum/reactie/'.$aPost['postID'].'"
 					title="['.htmlspecialchars($aPost['titel']).'] '.
 						Forum::getForumNaam($aPost['uid'], false, false).': '.mb_htmlentities($postfragment).'"';
 				if(strtotime($aPost['datum']) > Forum::getLaatstBekeken()) { echo ' class="opvallend"'; }
@@ -122,7 +122,7 @@ class ForumContent extends SimpleHTML {
 					$sPostFragment=preg_replace('/('.$sEersteTerm.')/i', '<strong>\\1</strong>', $sPostFragment);
 
 					echo '<tr class="kleur'.($row%2).'"><td class="forumtitel">';
-					echo '<a href="/communicatie/forum/onderwerp/'.$aZoekResultaat['tid'].'/'.urlencode($sZoekQuery).'#post'.$aZoekResultaat['postID'].'">';
+					echo '<a href="/communicatie/forum/reactie/'.$aZoekResultaat['postID'].'">';
 					echo $aZoekResultaat['titel'].'</a>';
 					if($aZoekResultaat['aantal']!=1){ echo ' <em>('.$aZoekResultaat['aantal'].' berichten in dit onderwerp)</em>'; }
 					echo '<br />'.$sPostFragment.'</td>';

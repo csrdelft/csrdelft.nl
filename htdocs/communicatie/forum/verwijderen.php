@@ -31,7 +31,7 @@ if(isset($_GET['post'])){
 		if($forumonderwerp->getSize()<=1){
 			header('location: '.CSR_ROOT.'forum/');
 		}else{
-			header('location: '.CSR_ROOT.'forum/onderwerp/'.$forumonderwerp->getID());
+			header('location: '.CSR_ROOT.'forum/onderwerp/'.$forumonderwerp->getID().'/'.$forumonderwerp->getPaginaCount().'#laatste');
 		}
 	}else{
 		header('location: '.CSR_ROOT.'forum/');

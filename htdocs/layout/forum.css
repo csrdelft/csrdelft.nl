@@ -140,3 +140,20 @@ fieldset#modereren{
 #forum_zoeken input{
 	padding: 2px 4px;
 }
+
+/* Paginering */
+div.forum_paginering{
+	padding: 5px;
+	float: right;
+}
+div.forum_paginering a{
+	padding: 4px 5px;
+}
+div.forum_paginering a:hover{
+	background-color: #ddd;
+	text-decoration: none;
+}
+div.forum_paginering span.curpage{
+	padding: 4px 5px;
+	font-weight: bold;
+}	

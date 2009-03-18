@@ -15,12 +15,19 @@ require_once 'forum/class.forumonderwerpcontent.php';
 # Het middenstuk
 if($lid->hasPermission('P_FORUM_READ')) {
 	if(isset($_GET['topic'])){
-		$forumonderwerp=new ForumOnderwerp((int)$_GET['topic']);
+		if(isset($_GET['pagina'])){
+			$pagina=$_GET['pagina'];
+		}else{
+			$pagina=1;
+		}
+	
+		$forumonderwerp=new ForumOnderwerp((int)$_GET['topic'], $pagina);
 	}elseif(isset($_GET['post'])){
-		$forumonderwerp=ForumOnderwerp::loadByPostID((int)$_GET['post']);
+		// zoek bijbehorende topic en redirect
+		ForumOnderwerp::redirectByPostID((int)$_GET['post']);
 	}else{
 		header('location: '.CSR_ROOT.'communicatie/forum/');
-		$_SESSION['melding']='Gen onderwerp- of bericht-id opgegeven.';
+		$_SESSION['melding']='Geen onderwerp- of bericht-id opgegeven.';
 		exit;
 	}
 	Forum::updateLaatstBekeken();

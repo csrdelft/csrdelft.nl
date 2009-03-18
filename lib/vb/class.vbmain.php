@@ -33,7 +33,7 @@ function view() {
 
 		if(defined('DEBUG') AND Lid::instance()->hasPermission('P_ADMIN')){
 			$db=MySql::instance();
-			echo '<pre>'.$db->getDebug().'</pre>';
+			echo $db->getDebug();
 		}
 		//als er een error is geweest, die unsetten...
 		if(isset($_SESSION['auth_error'])){ unset($_SESSION['auth_error']); }

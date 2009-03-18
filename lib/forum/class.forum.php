@@ -16,9 +16,13 @@ class Forum{
 	private static $_aantalZoekResultaten=40;
 
 	private static $topicsPerPagina=15;
-	private static $postsPerPagina=100;
+	private static $postsPerPagina=15;
 
 	public static function getTopicVoorPostID($iPostID){
+		$iTopicInfo = array();
+		$iTopicInfo['tid'] = 0;
+		$iTopicInfo['pagina'] = 1;
+		
 		$db=MySql::instance();
 		$iPostID=(int)$iPostID;
 		$sPostQuery="
@@ -28,10 +32,32 @@ class Forum{
 			LIMIT 1;";
 		$post=$db->getRow($sPostQuery);
 		if(is_array($post)){
-			return $post['tid'];
-		}else{
-			return false;
+			$iTopicInfo['tid'] = $post['tid'];
+			
+			$zichtBaarClause="post.zichtbaar='zichtbaar'";
+			if(Forum::isModerator()){
+				$zichtBaarClause.=" OR post.zichtbaar='wacht_goedkeuring' OR post.zichtbaar='spam'";
+			}
+			$sPostQuery="
+				SELECT count(*) as pagina
+				FROM forum_post as post
+				WHERE tid=".$post['tid']."
+				AND datum <= (
+					SELECT datum
+					FROM forum_post
+					WHERE id=".$iPostID."
+				)
+				AND ( ".$zichtBaarClause." )
+				LIMIT 1;";
+			$postpagina=$db->getRow($sPostQuery);
+			if(is_array($postpagina)){
+				$pagina=ceil($postpagina['pagina']/Forum::getPostsPerPagina());
+				if($pagina>0){
+					$iTopicInfo['pagina'] = $pagina;
+				}
+			}
 		}
+		return $iTopicInfo;
 	}
 
 	private function getCategorieClause($token=null){
@@ -121,10 +147,10 @@ class Forum{
 	public static function updateLaatstBekeken(){ Lid::instance()->updateForumLaatstBekeken(); }
 	public static function getTopicsPerPagina(){ return Forum::$topicsPerPagina; }
 	public static function getPostsPerPagina(){
-		if(Lid::instance()->getUid()=='0436'){
+		if(Lid::instance()->getUid()=='0436'){ // Jieter wil alles op 1 pagina?
 			return 1000;
 		}else{
-			return 100;
+			return Forum::$postsPerPagina;
 		}
 	}
 	public static function getForumNaam($uid=false, $aNaam=false, $aLink=true, $bHtmlentities=true ){

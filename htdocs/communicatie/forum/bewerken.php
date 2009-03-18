@@ -38,7 +38,7 @@ if(isset($_GET['post'])){
 				$reden='';
 			}
 			if($forumonderwerp->editPost($postID, $bericht, $reden)){
-				header('location: '.CSR_ROOT.'forum/onderwerp/'.$forumonderwerp->getID().'#post'.$postID);
+				header('location: '.CSR_ROOT.'forum/reactie/'.$postID);
 			}
 		}
 	}

@@ -28,7 +28,7 @@
 						nog geen berichten
 					{else} 
 						{$categorie.lastpost|reldate}<br />
-						<a href="/communicatie/forum/onderwerp/{$categorie.lasttopic}#post{$categorie.lastpostID}">bericht</a> 
+						<a href="/communicatie/forum/reactie/{$categorie.lastpostID}">bericht</a> 
 						{if $categorie.lastuser!=''}
 							door {$categorie.lastuser|csrnaam:'user'}
 						{/if}

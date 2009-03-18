@@ -34,12 +34,15 @@
 						{/if}
 						{$onderwerp->getTitel()|wordwrap:60:"\n":true|escape:'html'}
 					</a>
+						{sliding_pager baseurl="/communicatie/forum/onderwerp/`$onderwerp->getID()`/" 
+						pagecount=$onderwerp->getPaginaCount() curpage=$onderwerp->getPagina()
+						link_current=true txt_pre="[ " txt_prev="&lt;" separator=" " txt_next="&gt;" txt_post=" ]" show_first_last=false show_prev_next=false}
 				</td>
 				<td class="reacties">{$onderwerp->getReacties()}</td>
 				<td class="reacties">{$onderwerp->getUid()|csrnaam:'user'}</td>
 				<td class="reactiemoment">
 					{$onderwerp->getLastpost()|reldate}<br />
-					<a href="/communicatie/forum/onderwerp/{$onderwerp->getID()}#post{$onderwerp->getLastpostID()}">bericht</a> door 
+					<a href="/communicatie/forum/reactie/{$onderwerp->getLastpostID()}">bericht</a> door 
 					{$onderwerp->getLastuser()|csrnaam:'user'}
 				</td>
 			</tr>

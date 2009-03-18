@@ -27,27 +27,37 @@ class ForumOnderwerp{
 	private $lastuser;
 	private $lastpost;
 	private $lastpostID;
+	
+	private $pagina=1;
 
 	protected $posts=null;
 
 	private $error;
-	function __construct($init){
+	function __construct($init, $pagina=1){
 		if(is_array($init)){
 			$this->array2properties($init);
 		}else{
 			$init=(int)$init;
 			if($init!=0){
+				$this->pagina=(int)$pagina;
 				$this->load($init);
 			}
 			//we laden alleen als topicid!=0, bij 0 willen we een nieuw onderwerp maken,
 			//dus hoeven we nog niets uit de db te halen.
 		}
 	}
-
+	
 	//een onderwerp laden aan de hand van een zich in dat onderwerp bevindende post.
 	public static function loadByPostID($iPostID, $loadChildren=true){
-		$iTopicID=Forum::getTopicVoorPostID((int)$iPostID);
-		return new ForumOnderwerp($iTopicID, $loadChildren);
+		$iTopicInfo=Forum::getTopicVoorPostID((int)$iPostID);
+		return new ForumOnderwerp($iTopicInfo['tid'], $loadChildren);
+	}
+	
+	//redirected naar een onderwerp aan de hand van een zich in dat onderwerp bevindende post.
+	public static function redirectByPostID($iPostID){
+		$iTopicInfo=Forum::getTopicVoorPostID((int)$iPostID);
+		header('location: '.CSR_ROOT.'communicatie/forum/onderwerp/'.$iTopicInfo['tid'].'/'.$iTopicInfo['pagina'].'#post'.$iPostID);
+		exit;
 	}
 
 	/*
@@ -75,6 +85,7 @@ class ForumOnderwerp{
 	function load($topicID){
 		$this->ID=(int)$topicID;
 		$db=MySql::instance();
+		
 		$sTopicQuery="
 			SELECT
 				id, titel, uid, categorie, open, plakkerig, soort, zichtbaar,
@@ -83,8 +94,6 @@ class ForumOnderwerp{
 				forum_topic topic
 			WHERE
 				topic.id=".$this->getID()."
-			AND
-				( topic.zichtbaar='zichtbaar' OR topic.zichtbaar='wacht_goedkeuring' )
 			LIMIT 1;";
 		$onderwerp=$db->getRow($sTopicQuery);
 		if(!is_array($onderwerp)){
@@ -119,10 +128,12 @@ class ForumOnderwerp{
 			AND
 				( ".$zichtBaarClause." )
 			ORDER BY
-				post.datum ASC;";
+				post.datum ASC
+			LIMIT
+				".($this->pagina-1)*Forum::getPostsPerPagina().", ".Forum::getPostsPerPagina().";";
 		$this->posts=MySql::instance()->query2array($sPostsQuery);
 		if(!is_array($this->posts)){
-			$this->error='Er konden een berichten worden ingeladen. (ForumOnderwerp::loadPosts())';
+			$this->error='Er konden geen berichten worden ingeladen. (ForumOnderwerp::loadPosts())';
 		}
 		return is_array($this->posts);
 	}
@@ -143,7 +154,7 @@ class ForumOnderwerp{
 	}
 	public function getRechtenPost(){ return $this->getCategorie()->getRechten_post(); }
 	public function magPosten(){ return Lid::instance()->hasPermission($this->getRechtenPost()); }
-
+	
 	//topic
 	public function getID(){ return $this->ID; }
 	public function getTitel(){ return $this->titel; }
@@ -158,6 +169,31 @@ class ForumOnderwerp{
 	public function getLastpost(){ return $this->lastpost; }
 	public function getLastpostID(){ return $this->lastpostID; }
 	public function getLastuser(){ return $this->lastuser; }
+	
+	public function getPagina(){ return $this->pagina; }
+	
+	function getPaginaCount(){
+		$db=MySql::instance();
+		
+		$zichtBaarClause="post.zichtbaar='zichtbaar'";
+		if(Forum::isModerator()){
+			$zichtBaarClause.=" OR post.zichtbaar='wacht_goedkeuring' OR post.zichtbaar='spam'";
+		}
+		$sTopicQuery="
+			SELECT count(*) as aantal
+			FROM forum_post as post
+			WHERE tid=".$this->getID()."
+			AND ( ".$zichtBaarClause." )
+			LIMIT 1;";
+		$topic=$db->getRow($sTopicQuery);
+		if(is_array($topic)){
+			$aantal=ceil($topic['aantal']/Forum::getPostsPerPagina());
+			if($aantal>0){
+				return $aantal;
+			}
+		}
+		return 1;
+	}
 
 	public function getSize(){
 		if($this->posts===null){
@@ -207,7 +243,7 @@ class ForumOnderwerp{
 			if($this->magBekijken()){
 				$this->loadPosts();
 			}else{
-				//gebruiker mag posts niet bekijken, dus we moten fasle teruggeven.
+				//gebruiker mag posts niet bekijken, dus we moten false teruggeven.
 				$this->posts=false;
 			}
 		}

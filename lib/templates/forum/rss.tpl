@@ -28,12 +28,12 @@
 		<webMaster>pubcie@csrdelft.nl (Publiciteitscommissie der C.S.R.)</webMaster>
 		{foreach from=$aPosts item=post}<item>
 			<title>{$post.titel|truncate:30|escape:'html'}</title>
-			<link>http://csrdelft.nl/communicatie/forum/onderwerp/{$post.tid}#post{$post.postID}</link>
+			<link>http://csrdelft.nl/communicatie/forum/reactie/{$post.postID}</link>
 			<description>{$post.tekst|escape:'html'}</description>
 			<dc:creator>{$post.uid|csrnaam:'user':false:false|escape:'html'}</dc:creator>
 			<category>forum/{$post.categorieTitel|escape:'html'}</category>
 			<comments>http://csrdelft.nl/communicatie/forum/onderwerp/{$post.tid}</comments>
-			<guid isPermaLink="true">http://csrdelft.nl/communicatie/forum/onderwerp/{$post.tid}#post{$post.postID}</guid>
+			<guid isPermaLink="true">http://csrdelft.nl/communicatie/forum/reactie/{$post.postID}</guid>
 			<pubDate>{$post.datum|rfc2822}</pubDate>
 		</item>
 		{/foreach}
