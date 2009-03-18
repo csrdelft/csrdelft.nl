@@ -163,6 +163,7 @@ lib/class.includer.php -text
 lib/class.knop.php -text
 lib/class.kolom.php -text
 lib/class.ldap.php -text
+lib/class.memcached.php -text
 lib/class.menu.php -text
 lib/class.motencontent.php -text
 lib/class.mysql.php -text
