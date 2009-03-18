@@ -16,14 +16,13 @@ require_once("maaltijden/class.maaltijd.php");
 class MaalTrack {
 	# MySQL connectie
 	var $_db;
-	# Ingelogde persoon
-	var $_lid;
+
+
 	# evt. foutboodschap
 	var $_error = '';
 	var $_proxyerror = '';
 
 	function __construct() {
-		$this->_lid=Lid::instance();
 		$this->_db =MySql::instance();
 	}
 
@@ -65,7 +64,7 @@ class MaalTrack {
 			$this->_error="Er is iets mis met de database/query";
 			return false;
 		}else{
-			$maaltijd = new Maaltijd ($this->_db->insert_id(), $this->_lid, $this->_db);
+			$maaltijd = new Maaltijd($this->_db->insert_id());
 			# ook maar meteen even hertellen, dan zijn de mensen die daar blij van worden weer extra blij...
 			$maaltijd->recount();
 			return $maaltijd->getMaalId();
@@ -115,7 +114,7 @@ class MaalTrack {
 			$this->_error="Er is iets mis met de database/query.";
 			return false;
 		}else{
-			$maaltijd = new Maaltijd ($maalid, $this->_lid, $this->_db);
+			$maaltijd = new Maaltijd ($maalid);
 			# ook maar meteen even hertellen, dan zijn de mensen die daar blij van worden weer extra blij...
 			$maaltijd->recount();
 			return $maalid;
@@ -138,7 +137,7 @@ class MaalTrack {
 
 
 		# kijk of $tp voorkomt in de ledenlijst
-		if($tp != "" AND !$this->_lid->uidExists($_POST['tp'])){
+		if($tp != "" AND !Lid::exists($_POST['tp'])){
 			$this->_error = "De tafelpraeses moet voorkomen in de ledenlijst.";
 			return false;
 		}
@@ -210,7 +209,7 @@ class MaalTrack {
 	# als de gebruiker uit moot 1-4 is, hou daar dan rekening mee
 	# deze functionaliteit kan uitgezet worden door $mootfilter = false te zetten als argument
 	public static function getMaaltijdenRaw($van = 0, $tot = 0, $mootfilter = true) {
-		$lid=Lid::instance();
+		$lid=LoginLid::instance();
 		$db=MySql::instance();
 		# kijk in db en haal alle maaltijden op waarbij de begintijd
 		# na $van is, en voor $tot
@@ -226,7 +225,7 @@ class MaalTrack {
 
 		# mootfilter
 		if(!$lid->hasPermission('P_MAAL_MOD')){
-			if($mootfilter === true){ $moot = $lid->getMoot(); }
+			if($mootfilter === true){ $moot = $lid->getLid()->getMoot(); }
 		}else{
 			$mootfilter=false;
 		}
@@ -267,7 +266,7 @@ class MaalTrack {
 	# haalt maaltijden op en voegt extra info toe voor op de maaltijdenpagina
 	function getMaaltijden($van = 0, $tot = 0, $mootfilter = true, $uid=null) {
 		if($uid==null){
-			$uid = $this->_lid->getUid();
+			$uid=LoginLid::instance()->getUid();
 		}
 		if($uid == 'x999'){ $mootfilter = false; }
 
@@ -364,7 +363,7 @@ class MaalTrack {
 	function afmelden($maalid, $uid = '') {
 		# isMaaltijd zet zelf een error als het nodig is
 		if (!$this->isMaaltijd($maalid)) return false;
-		$maaltijd = new Maaltijd($maalid, $this->_lid, $this->_db);
+		$maaltijd = new Maaltijd($maalid);
 		if (!$maaltijd->afmelden($uid)) {
 			$this->_error = $maaltijd->getError();
 			$this->_proxyerror = $maaltijd->getProxyError();
@@ -378,7 +377,7 @@ class MaalTrack {
 	function gastenAanmelden($maalid, $gasten, $opmerking) {
 		# isMaaltijd zet zelf een error als het nodig is
 		if (!$this->isMaaltijd($maalid)) return false;
-		$maaltijd = new Maaltijd($maalid, $this->_lid, $this->_db);
+		$maaltijd = new Maaltijd($maalid);
 		if (!$maaltijd->gastAanmelden($gasten, $opmerking)) {
 			$this->_error = $maaltijd->getError();
 			$this->_proxyerror = $maaltijd->getProxyError();
@@ -397,7 +396,7 @@ class MaalTrack {
 		}
 
 		# abo toevoegen
-		$uid = $this->_lid->getUid();
+		$uid = LoginLid::instance()->getUid();
 		$result = $this->_db->query("INSERT INTO `maaltijdabo` (`uid`,`abosoort`) VALUES ('{$uid}','{$abosoort}')");
 
 		# kijken of er maaltijden zijn in de toekomst met dit abo die VOL zijn, en daar AFmeldingen voor maken
@@ -406,7 +405,7 @@ class MaalTrack {
 		$result = $this->_db->query("SELECT * FROM maaltijd WHERE abosoort = '{$abosoort}' AND gesloten = '0'");
 		if (($result !== false) and $this->_db->numRows($result) > 0) {
 			while ($record = $this->_db->next($result)) {
-				$maaltijd = new Maaltijd ($record['id'], $this->_lid, $this->_db);
+				$maaltijd = new Maaltijd ($record['id']);
 				if ($record['aantal'] == $record['max']) $maaltijd->afmelden();
 				else $maaltijd->recount();
 				unset($maaltijd);
@@ -426,7 +425,7 @@ class MaalTrack {
 		}
 
 		# abo verwijderen
-		$uid = $this->_lid->getUid();
+		$uid = LoginLid::instance()->getUid();
 		$result = $this->_db->query("DELETE FROM `maaltijdabo` WHERE `uid` = '{$uid}' AND `abosoort` = '{$abosoort}'");
 
 		# bij de maaltijden met dit abo een recount doen
@@ -434,7 +433,7 @@ class MaalTrack {
 		$result = $this->_db->query("SELECT * FROM maaltijd WHERE abosoort = '{$abosoort}' AND gesloten = '0'");
 		if (($result !== false) and $this->_db->numRows($result) > 0) {
 			while ($record = $this->_db->next($result)) {
-				$maaltijd = new Maaltijd ($record['id'], $this->_lid, $this->_db);
+				$maaltijd = new Maaltijd ($record['id']);
 				# als gebruiker geen expliciete AAN of AF heeft kan het aantal inschrijvingen
 				# veranderen doordat zijn abo's veranderen
 				if ($maaltijd->getStatus() == 'AUTO') $maaltijd->recount();
@@ -448,7 +447,7 @@ class MaalTrack {
 	public function getAbo($uid=null) {
 		$abos = array();
 		if($uid==null){
-			$uid = $this->_lid->getUid();
+			$uid = LoginLid::instance()->getUid();
 		}
 		$qAbo="
 			SELECT maaltijdabosoort.abosoort, maaltijdabosoort.tekst
@@ -488,7 +487,7 @@ class MaalTrack {
 	# het 'Geen' abonnement wordt hier uitgefilterd
 	function getAboSoort($mootfilter = true) {
 		$abos = array();
-		if ($mootfilter === true) $moot = $this->_lid->getMoot();
+		if ($mootfilter === true) $moot = LoginLid::instance()->getLid()->getMoot();
 		$result = $this->_db->select("SELECT * FROM maaltijdabosoort WHERE NOT abosoort='A_GEEN'");
 		if (($result !== false) and $this->_db->numRows($result) > 0) {
 			while ($record = $this->_db->next($result)) {
@@ -516,7 +515,7 @@ class MaalTrack {
 			WHERE maalid = {$maalid} AND door = '{$uid}' AND uid <> door AND status = 'AAN'
 		");
 		if (($result !== false) and $this->_db->numRows($result) > 0)
-			while ($record = $this->_db->next($result)) $wienogmeer[$record['uid']] = $this->_lid->getFullName($record['uid']);
+			while ($record = $this->_db->next($result)) $wienogmeer[$record['uid']] = (string)LidCache::getLid($record['uid']);
 		return $wienogmeer;
 	}
 

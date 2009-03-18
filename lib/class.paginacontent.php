@@ -61,8 +61,8 @@ class PaginaContent extends SimpleHTML{
 			# De inhoud van een pagina bewerken
 			case 'bewerken':
 				$sInhoud='<h1>Pagina bewerken</h1>';
-				$sInhoud.='Deze pagina is zichtbaar voor: '.Lid::formatPermissionstring($this->_pagina->getRechtenBekijken());
-				$sInhoud.=' en bewerkbaar voor: '.Lid::formatPermissionstring($this->_pagina->getRechtenBewerken()).'.';
+				$sInhoud.='Deze pagina is zichtbaar voor: '.LoginLid::formatPermissionstring($this->_pagina->getRechtenBekijken());
+				$sInhoud.=' en bewerkbaar voor: '.LoginLid::formatPermissionstring($this->_pagina->getRechtenBewerken()).'.';
 				$sInhoud.='
 				<form action="/pagina/'.$this->_pagina->getNaam().'/bewerken" method="post">
 					<strong>Titel:</strong><br />

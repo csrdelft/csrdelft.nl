@@ -9,11 +9,9 @@
 require_once('ubb/eamBBParser.class.php');
 
 class CsrUBB extends eamBBParser{
-	private $lid;
 
 	public function __construct(){
 		$this->eamBBParser();
-		$this->lid=Lid::instance();
 		$this->paragraph_mode = false;
 	}
 
@@ -31,8 +29,9 @@ class CsrUBB extends eamBBParser{
 		}
 
 		$text='<div class="citaatContainer"><strong>Citaat';
-		if(isset($arguments['citaat']) AND $this->lid->isValidUid($arguments['citaat'])){
-			$text.=' van '.$this->lid->getNaamLink($arguments['citaat'], 'user', true);
+		if(isset($arguments['citaat']) AND Lid::isValidUid($arguments['citaat'])){
+			$lid=LidCache::getLid($arguments['citaat']);
+			$text.=' van '.$lid->getNaamLink('user', 'link');;
 		}elseif(isset($arguments['citaat']) AND trim($arguments['citaat'])!=''){
 			$text.=' van '.str_replace('_', '&nbsp;', $arguments['citaat']);
 		}else{
@@ -59,7 +58,8 @@ class CsrUBB extends eamBBParser{
 	 */
 	function ubb_lid($parameters){
 		if(isset($parameters['lid'])){
-			$text=$this->lid->getNaamLink($parameters['lid'], 'user', true);
+			$lid=LidCache::getLid($parameters['lid']);
+			$text=$lid->getNaamLink('user', 'link');
 		}else{
 			$text='geen uid opgegeven';
 		}
@@ -81,7 +81,7 @@ class CsrUBB extends eamBBParser{
 		//content moet altijd geparsed worden, anders blijft de inhoud van de
 		//tag gewoon staan.
 		$content = $this->parseArray(array('[/prive]'), array());
-		if(!$this->lid->hasPermission($permissie)){
+		if(!LoginLid::instance()->hasPermission($permissie)){
 			$content='';
 		}
 		return $content;
@@ -91,7 +91,7 @@ class CsrUBB extends eamBBParser{
 	 * kunnen worden bij het citeren, slopen we hier alles wat in privé-tags staat weg.
 	 */
 	public static function filterPrive($string){
-		if(Lid::instance()->hasPermission('P_LOGGED_IN')){
+		if(LoginLid::instance()->hasPermission('P_LOGGED_IN')){
 			return $string;
 		}else{
 			// .* is greedy by default, dat wil zeggen, matched zoveel mogelijk.
@@ -274,7 +274,7 @@ UBBVERHAAL;
 		$content = $this->parseArray(array('[/commentaar]'), array());
 		return '';
 	}
-	
+
 	/*
 	 * Google-maps ubb-tag. Door Piet-Jan Spaans.
 	 * [map dynamic=false w=100 h=100]Oude Delft 9[/map]
@@ -287,34 +287,31 @@ UBBVERHAAL;
 		}
 		$address=htmlspecialchars($address);
 		$mapid='map'.md5($address);
-		
+
 		$width=300;
 		$height=200;
 		$style='';
 		if(isset($parameters['w']) && $parameters['w']<600){
-			$width = $parameters['w'];			
+			$width = $parameters['w'];
 		}
 		if(isset($parameters['h']) && $parameters['h']<600){
 			$height= $parameters['h'];
 		}
 		if(isset($parameters['w']) || isset($parameters['h'])){
-			$style='style="width:'.$width.'px;height:'.$height.'px;"';			
-		}		
-		
+			$style='style="width:'.$width.'px;height:'.$height.'px;"';
+		}
+
 		$jscall = "writeStaticGmap('$mapid', '$address',$width,$height);";
-		if(isset($parameters['dynamic']) && $parameters['dynamic']=='true'){		
-				$jscall = "loadGmaps('$mapid','$address');";
-		} 
-		
+		if(isset($parameters['dynamic']) && $parameters['dynamic']=='true'){
+			$jscall="loadGmaps('$mapid','$address');";
+		}
+
 		$html='';
 		if(!$this->mapJsLoaded){
 			$html.='<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAATQu5ACWkfGjbh95oIqCLYxRY812Ew6qILNIUSbDumxwZYKk2hBShiPLD96Ep_T-MwdtX--5T5PYf1A" type="text/javascript"></script><script type="text/javascript" src="/layout/js/gmaps.js"></script>';
 			$this->mapJsLoaded=true;
-		}		
-		$html.= 
-<<<MAPHTML
-		<div class="ubb_gmap" id="$mapid" $style></div><script type="text/javascript">$jscall</script>
-MAPHTML;
+		}
+		$html.='<div class="ubb_gmap" id="$mapid" $style></div><script type="text/javascript">'.$jscall.'</script>';
 
 		return $html;
 	}

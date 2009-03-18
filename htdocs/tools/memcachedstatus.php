@@ -8,8 +8,7 @@ require_once('include.config.php');
 
 if($lid->hasPermission('P_ADMIN')){
 	echo '<h1>MemCached statuspagina</h1>';
-	$lidCache=LidCache::instance();
-	$stats=$lidCache->getStats();
+	pr(Memcached::instance());
 	pr($stats);
 
 	echo 'Dat is dus '.($stats['cmd_get']/$stats['uptime']).' aanroepen van Lid::getNaamLink() per seconde.';

@@ -90,8 +90,8 @@ class DocumentenCategorie{
 	public function isZichtbaar(){ 	return $this->zichtbaar==1; }
 	public function getPermissie(){ return $this->permissie; }
 
-	public function getDocumenten(){
-		if($this->documenten===null){
+	public function getDocumenten($force=false){
+		if($this->documenten===null OR $force){
 			$this->loadDocumenten();
 		}
 		return $this->documenten; }

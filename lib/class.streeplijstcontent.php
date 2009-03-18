@@ -19,7 +19,6 @@ class Streeplijstcontent {
 
 	}
 	function load(){
-		$lid=Lid::instance();
 		if(isset($_GET['goederen']) AND trim($_GET['goederen'])!=''){
 			$sGoederen=htmlspecialchars($_GET['goederen']);
 		}else{
@@ -34,7 +33,7 @@ class Streeplijstcontent {
 			$this->lichting=$_GET['lichting'];
 		}
 		//leden welke in de lijst moeten laden.
-		$this->aLeden=$lid->zoekLeden($this->lichting, 'uid', $this->moot, 'achternaam', 'leden');
+		$this->aLeden=Zoeken::zoekLeden($this->lichting, 'uid', $this->moot, 'achternaam', 'leden');
 	}
 
 	function parseGoederen($sGoederen){
@@ -47,8 +46,7 @@ class Streeplijstcontent {
 	function getGoederen(){ return implode(', ', $this->getGoederenArray()); }
 
 	function getHtml(){
-		$lid=Lid::instance();
-		$sReturn='
+ 		$sReturn='
 			<html>
 				<head>
 					<style>
@@ -91,12 +89,14 @@ class Streeplijstcontent {
 
 		$iTeller=2;
 		foreach($this->aLeden as $aLid){
+			$lid=LidCache::getLid($aLid['uid']);
+
 			if($iTeller%43==1){
 				$sReturn.=$sKop.'</tr></table>';
 				$sReturn.='<span class="breekpunt"></span>';
 				$sReturn.='<table><tr>'.$sKop;
 			}
-			$sReturn.='<tr><td class="naam">'.str_replace(' ', '&nbsp;', $lid->getNaamLink($aLid['uid'], 'streeplijst', false, $aLid, true)).'</td>';
+			$sReturn.='<tr><td class="naam">'.str_replace(' ', '&nbsp;', $lid->getNaamLink('streeplijst', 'html')).'</td>';
 			for($i=1; $i<=$this->goederenCount(); $i++){
 				$sReturn.='<td class="cell'.($i%2).'">&nbsp;</td>';
 			}

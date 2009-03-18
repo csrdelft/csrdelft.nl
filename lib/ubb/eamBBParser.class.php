@@ -804,7 +804,7 @@ class eamBBParser{
 		if(!url_like(urldecode($content))){
 			$html = "[Ongeldige URL, tip: gebruik tinyurl.com]";
 		}else{
-			$html = '<img class="forum_image" src="'.$content.'" alt="" '.$width . $height.' style="'.$float.'" />';
+			$html = '<img class="forum_image" src="'.$content.'" alt="'.$content.'" '.$width . $height.' style="'.$float.'" />';
 		}
 		return $html;
 

@@ -31,7 +31,7 @@ function view() {
 
 		$csrdelft->display('vb/vbcsrdelft.tpl');
 
-		if(defined('DEBUG') AND Lid::instance()->hasPermission('P_ADMIN')){
+		if(defined('DEBUG') AND LoginLid::instance()->hasPermission('P_ADMIN')){
 			$db=MySql::instance();
 			echo $db->getDebug();
 		}

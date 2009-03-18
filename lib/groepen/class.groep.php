@@ -238,7 +238,7 @@ class Groep{
 
 	public function isLid($uid=null){
 		if($uid===null){
-			$uid=Lid::instance()->getUid();
+			$uid=LoginLid::instance()->getUid();
 		}
 		return isset($this->leden[$uid]);
 	}
@@ -253,7 +253,8 @@ class Groep{
 	 * - voor de groep is ingesteld dat elk lid moderator is.
 	 * - Bij zijn groepslidmaatschap is aangegeven dat hij moderator is.
 	 */
-	public function isOp($uid){
+	public function isOp($uid=null){
+		if($uid===null){ $uid=LoginLid::instance()->getUid(); }
 		if($this->lidIsMod() AND $this->isLid($uid)){ return true; }
 		return $this->isLid($uid) AND $this->leden[$uid]['op']=='1';
 	}
@@ -276,11 +277,10 @@ class Groep{
 	public function isVol(){		return $this->getLimiet()!=0 AND $this->getLimiet()<=$this->getLidCount(); }
 
 	public static function isAdmin(){
-		return Lid::instance()->hasPermission('P_LEDEN_MOD');
+		return LoginLid::instance()->hasPermission('P_LEDEN_MOD');
 	}
 	public function magBewerken(){
-		$lid=Lid::instance();
-		return $this->isAdmin() OR $this->isOp($lid->getUid());
+		return $this->isAdmin() OR $this->isOp(LoginLid::instance()->getUid());
 	}
 	/*
 	 * Kijkt of er naast de huidige groep al een andere groep h.t. is
@@ -342,7 +342,7 @@ class Groep{
 	}
 
 	public function verwijderLid($uid){
-		if(Lid::instance()->isValidUid($uid) AND $this->isLid($uid)){
+		if(Lid::isValidUid($uid) AND $this->isLid($uid)){
 			$qVerwijderen="
 				DELETE FROM
 					groeplid
@@ -370,7 +370,7 @@ class Groep{
 	 * 			bij het proberen van deze actie door een niet-mod van de huidige groep.
 	 */
 	public function maakLidOt($uid){
-		if(!Lid::instance()->isValidUid($uid) OR !$this->isLid($uid)){
+		if(!Lid::isValidUid($uid) OR !$this->isLid($uid)){
 			$this->error.='Gegeven uid zit niet in groep of is geen geldig uid. (Groep::maakLidOt())';
 			return false;
 		}
@@ -388,7 +388,7 @@ class Groep{
 	}
 	public function meldAan($functie){
 		if($this->magAanmelden()){
-			return $this->addLid(Lid::instance()->getUid(), $functie);
+			return $this->addLid(LoginLid::instance()->getUid(), $functie);
 		}
 		return false;
 	}
@@ -547,7 +547,7 @@ class Groep{
 		return $groepen;
 	}
 	public static function isIngelogged(){
-		return Lid::instance()->hasPermission('P_LEDEN_READ');
+		return LoginLid::instance()->hasPermission('P_LEDEN_READ');
 	}
 
 	public function getError(){

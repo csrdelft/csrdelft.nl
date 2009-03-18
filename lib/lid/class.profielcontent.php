@@ -17,18 +17,18 @@ class ProfielContent extends SimpleHTML {
 	var $_state;
 
 	//array met profiel.
-	var $_profiel;
+	private $lid;
+	private $_profiel;
 	### public ###
 
 	//LET OP: hier wordt lid wél meegegeven, want het gaat hier om een profiel-object.
-	function ProfielContent ($profiel, &$state) {
-		$this->_state =& $state;
-		$this->_lid=$profiel;
-
-		$this->_profiel = $this->_lid->getTmpProfile();
+	function ProfielContent ($lid) {
+		$this->lid=$lid;
+		$this->_profiel = $lid->getProfiel();
 	}
 	function getTitel(){
-		return 'Het profiel van '.$this->_lid->getNaamLink($this->_profiel['uid'], 'full', false, false, false);
+		$this->lid->tsMode='plain';
+		return 'Het profiel van '.(string)$this->lid;
 	}
 	function viewWaarbenik(){
 		echo '<a href="/intern/">Intern</a> &raquo; <a href="/leden/lijst.php">Ledenlijst</a> &raquo; ';
@@ -40,15 +40,13 @@ class ProfielContent extends SimpleHTML {
 		foreach($this->_profiel as $key => $value){
 			$profhtml[$key] = mb_htmlentities($value);
 		}
-		$profhtml['fullname']=$this->_lid->getFullName($this->_profiel['uid']);
-		$profhtml['civitasnaam']=$this->_lid->getNaamLink($this->_profiel['uid'], 'civitas', false);
 
-		//woonoord
-		require_once('groepen/class.groepen.php');
-		$woonoord=Groepen::getGroepenByType(2, $this->_profiel['uid']);
-		if(count($woonoord)==1){
-			$woonoord=$woonoord[0];
-			$profhtml['woonoord']='<a href="/actueel/groepen/'.$woonoord['gtype'].'/'.$woonoord['id'].'"><strong>'.$woonoord['naam'].'</strong></a>:<br />';
+		$profhtml['fullname']=$this->lid->getNaam();
+
+
+		$woonoord=$this->lid->getWoonoord();
+		if($woonoord instanceof Groep){
+			$profhtml['woonoord']=$groep->getLink();
 		}else{
 			$profhtml['woonoord']='<br />';
 		}
@@ -59,8 +57,8 @@ class ProfielContent extends SimpleHTML {
 		//soccie saldo
 		$profhtml['saldi']='';
 		//alleen als men het eigen profiel bekijkt.
-		if($this->_profiel['uid']==$this->_lid->getUid()){
-			$profhtml['saldi']=$this->_lid->getSaldi();
+		if(LoginLid::instance()->isSelf($this->_profiel['uid'])){
+			$profhtml['saldi']=$this->lid->getSaldi();
 		}
 
 		/*
@@ -69,10 +67,10 @@ class ProfielContent extends SimpleHTML {
 		 * - niet meteen weergeven voor SocCie en pubcie, alleen op verzoek.
 		 */
 		if($this->_profiel['uid']=='9808' OR $this->_profiel['status']!='S_OUDLID'){
-			if($this->_profiel['uid']==$this->_lid->getUid()){
+			if(LoginLid::instance()->isSelf($this->_profiel['uid'])){
 				$profhtml['saldografiek']='<br /><img src="/tools/saldografiek.php?uid='.$this->_profiel['uid'].'" /><img src="/tools/saldografiek.php?maalcie&timespan=60&uid='.$this->_profiel['uid'].'" />';
 			}else{
-				if($this->_lid->hasPermission('P_ADMIN,groep:soccie')){
+				if(LoginLid::instance()->hasPermission('P_ADMIN,groep:soccie')){
 					$profhtml['saldografiek']='<br /><a  onclick="document.getElementById(\'saldoGrafiek\').innerHTML=\''.htmlspecialchars('<img src="/tools/saldografiek.php?uid='.$this->_profiel['uid'].'" />').'\'" class="knop">Saldografiek weergeven</a><br />';
 					$profhtml['saldografiek'].='<br /><div id="saldoGrafiek"></div>';
 				}
@@ -96,13 +94,13 @@ class ProfielContent extends SimpleHTML {
 		$profiel->assign('profhtml', $profhtml);
 		$profiel->assign('isOudlid', $this->_profiel['status'] == 'S_OUDLID');
 
-		$profiel->assign('magBewerken', ($this->_lid->hasPermission('P_PROFIEL_EDIT') AND $this->_profiel['uid']==$this->_lid->getUid()) OR $this->_lid->hasPermission('P_LEDEN_EDIT'));
-		$profiel->assign('isAdmin', $this->_lid->hasPermission('P_ADMIN'));
+		$profiel->assign('magBewerken', (LoginLid::instance()->hasPermission('P_PROFIEL_EDIT') AND LoginLid::instance()->isSelf($this->_profiel['uid'])) OR LoginLid::instance()->hasPermission('P_LEDEN_EDIT'));
+		$profiel->assign('isAdmin', LoginLid::instance()->hasPermission('P_ADMIN'));
 		$profiel->assign('melding', $this->getMelding());
 
 		//eigen profiel niet cachen, dan krijgen we namelijk rare dingen
 		//dat we andermans saldo's zien enzo
-		if($this->_profiel['uid']==$this->_lid->getUid()){
+		if(LoginLid::instance()->isSelf($this->_profiel['uid'])){
 			$profiel->caching=false;
 		}
 		$template='profiel.tpl';
@@ -270,7 +268,7 @@ class ProfielContent extends SimpleHTML {
 		echo '</td></tr>'."\n";
 	}
 	function view() {
-		switch($this->_state->getMyState()) {
+		switch('none'){ //$this->_state->getMyState()) {
 			case 'none': $this->viewStateNone(); break;
 			case 'edit': $this->viewStateEdit(); break;
 		}

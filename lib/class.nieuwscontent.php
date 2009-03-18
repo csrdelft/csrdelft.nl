@@ -218,14 +218,12 @@ class NieuwsContent extends SimpleHTML {
 		return $sResultaat;
 	}
 	private function viewOverzicht(){
-		$lid=Lid::instance();
-
 		// berichtID setten als dat nog niet gedaan is.
 		if(empty($this->_berichtID))
 			$this->_berichtID = $this->_nieuws->getBelangrijksteMededelingId();
 
 		$includeVerborgen=false;
-		if($lid->hasPermission('P_NEWS_MOD')){ $includeVerborgen=true; }
+		if(LoginLid::instance()->hasPermission('P_NEWS_MOD')){ $includeVerborgen=true; }
 		$aBerichten=$this->_nieuws->getMessages(0, $includeVerborgen);
 
 		echo '<div class="mededelingen-overzichtlijst">';

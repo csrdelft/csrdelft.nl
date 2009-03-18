@@ -16,14 +16,14 @@
 </head>
 {if $lid->hasPermission('P_LOGGED_IN') }
 <div id="ingelogd">
-	{$lid->getUid|csrnaam} | <a href="/logout.php">log&nbsp;uit</a>
+	{$lid->getUid()|csrnaam} | <a href="/logout.php">log&nbsp;uit</a>
 </div>
 {/if}
 {$csrdelft->_body->view()}
 {if $lid->hasPermission('P_LOGGED_IN') }
 	<hr />
 	<div id="ingelogd">
-		{$lid->getUid|csrnaam} | <a href="/logout.php">log&nbsp;uit</a>
+		{$lid->getUid()|csrnaam} | <a href="/logout.php">log&nbsp;uit</a>
 	</div>
 	<form method="post" action="/communicatie/lijst.php?mobile">
 		<p>

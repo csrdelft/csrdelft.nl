@@ -16,13 +16,12 @@ class MaaltijdContent extends SimpleHTML {
 	private $_maaltrack;
 
 	function __construct($maaltrack) {
-		$this->_lid =Lid::instance();
 		$this->_maaltrack=$maaltrack;
 	}
 	function getTitel(){ return 'Maaltijdketzer'; }
 
 	function view(){
-		$lid=Lid::instance();
+		$loginlid=LoginLid::instance();
 
 		//de html template in elkaar draaien en weergeven
 		$profiel=new Smarty_csr();
@@ -45,7 +44,7 @@ class MaaltijdContent extends SimpleHTML {
 		//de door het huidige lid aangemelde leden ophalen voor de opgehaalde maaltijden...
 		for($i=0; $i<count($aMaal['anderen']['maaltijden']); $i++){
 			$maalID=$aMaal['anderen']['maaltijden'][$i]['id'];
-			$anderen=$this->_maaltrack->getProxyAanmeldingen($lid->getUid(), $maalID);
+			$anderen=$this->_maaltrack->getProxyAanmeldingen($loginlid->getUid(), $maalID);
 			if(count($anderen)==0){
 				$aMaal['anderen']['maaltijden'][$i]['derden']=false;
 			}else{
@@ -55,7 +54,7 @@ class MaaltijdContent extends SimpleHTML {
 
 		//arrays toewijzen en weergeven
 		$profiel->assign('maal', $aMaal);
-		$profiel->assign('toonLijsten', $lid->hasPermission('P_MAAL_MOD') or opConfide());
+		$profiel->assign('toonLijsten', $loginlid->hasPermission('P_MAAL_MOD') or opConfide());
 		$profiel->assign('datumFormaat', '%a %e %b %H:%M');
 		$profiel->display('maaltijdketzer/maaltijdketzer.tpl');
 	}
@@ -73,7 +72,7 @@ class MaaltijdContent extends SimpleHTML {
 		$maaltijd=new Maaltijd((int)$maalid);
 
 		$html='<div class="ubbMaaltijd" id="maaltijd'.$maaltijd->getID().'">';
-		if(Lid::instance()->hasPermission('P_LOGGED_IN')){
+		if(LoginLid::instance()->hasPermission('P_LOGGED_IN')){
 			$html.='<div class="ubbMaaltijdFloat">';
 			$html.='U komt:  <br />';
 
@@ -97,7 +96,7 @@ class MaaltijdContent extends SimpleHTML {
 			if($maaltijd->isGesloten()){
 				$html.='Gesloten';
 			}else{
-				if(Lid::instance()->hasPermission('P_MAAL_IK')){
+				if(LoginLid::instance()->hasPermission('P_MAAL_IK')){
 					switch($status){
 						case 'AAN':
 							$html.='<a href="/actueel/maaltijden/index.php?forum&amp;a=af&amp;m='.$maaltijd->getId().'"><strong>af</strong>melden</a>';

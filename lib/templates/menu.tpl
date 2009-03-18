@@ -27,11 +27,11 @@
 	<div id="menuright">
 		{if $lid->hasPermission('P_LOGGED_IN') }
 			<div id="ingelogd">
-				{$lid->getUid|csrnaam}<br />
+				{$lid->getUid()|csrnaam}<br />
 				<div id="uitloggen"><a href="/logout.php">log&nbsp;uit</a></div><br class="clear" />
 				<br />
 				<div id="saldi">
-					{foreach from=$lid->getSaldi() item=saldo}
+					{foreach from=$lid->getLid()->getSaldi() item=saldo}
 						<div class="saldoregel">
 							<div class="saldo{if $saldo.saldo < 0} staatrood{/if}">&euro; {$saldo.saldo|number_format:2:",":"."}</div>
 							{$saldo.naam}:

@@ -14,7 +14,7 @@ class Sjaarsactie {
 
 	var $_sError;
 	function Sjaarsactie(){
-		$this->_lid=Lid::instance();
+		$this->_lid=LoginLid::instance();
 		$this->_db=MySql::instance();
 	}
 
@@ -37,12 +37,13 @@ class Sjaarsactie {
 		$rActie=$this->_db->query($sActie);
 		if($this->_db->numRows($rActie)==0){ return false; }
 		while($aActie=$this->_db->next($rActie)){
+			$lid=LidCache::getLid($aActie['verantwoordelijke']);
 			$return[]=array(
 				'ID' => $aActie['ID'],
 				'actieNaam' => $aActie['actieNaam'],
 				'beschrijving' => $aActie['beschrijving'],
 				'uid' => $aActie['verantwoordelijke'],
-				'naamLink' => $this->_lid->getNaamLink($aActie['verantwoordelijke'], 'civitas', true),
+				'naamLink' => $lid->getNaamLink('civitas', 'link'),
 				'moment' => $aActie['moment'],
 				'limiet' => $aActie['limiet'] );
 		}
@@ -61,9 +62,10 @@ class Sjaarsactie {
 		$rAanmeldingen=$this->_db->query($sAanmeldingen);
 		if($this->_db->numRows($rAanmeldingen)==0){ return false; }
 		while($aAanmeld =$this->_db->next($rAanmeldingen)){
+			$lid=LidCache::getLid($aAanmeld['uid']);
 			$return[]=array(
 				'uid' => $aAanmeld['uid'],
-				'naamLink' => $this->_lid->getNaamLink($aAanmeld['uid'], 'civitas', true),
+				'naamLink' => $lid->getNaamLink('civitas', 'link'),
 				'moment' => $aAanmeld['aanmeldmoment'] );
 		}
 		return $return;
@@ -129,7 +131,7 @@ class Sjaarsactie {
 			);";
 		return $this->_db->query($sNewActie);
 	}
-	function isSjaars(){ return $this->_lid->getStatus()=='S_NOVIET'; }
+	function isSjaars(){ return $this->_lid->getLid()->getStatus()=='S_NOVIET'; }
 	function isVol($iActieID){
 		$sIsVol="
 			SELECT
@@ -148,18 +150,10 @@ class Sjaarsactie {
 		return $this->_db->numRows($rIsVol)==1 AND $aIsVol['limiet']==$aIsVol['aantal'];
 	}
 	function isNovCie(){
-		//commissieID van de novCie==12
-		$sIsNovCie="
-			SELECT
-				uid
-			FROM
-				commissielid
-			WHERE
-				cieid=12
-			AND
-				uid='".$this->_lid->getUid()."';";
-		$rIsNovCie=$this->_db->query($sIsNovCie);
-		return $this->_db->numRows($rIsNovCie)==1;
+
+		require_once 'groepen/class.groep.php';
+		$novcie=new Groep('novcie');
+		return $novcie->isLid();
 	}
 	function getError(){ return $this->_sError; }
 }

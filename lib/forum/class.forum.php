@@ -22,7 +22,7 @@ class Forum{
 		$iTopicInfo = array();
 		$iTopicInfo['tid'] = 0;
 		$iTopicInfo['pagina'] = 1;
-		
+
 		$db=MySql::instance();
 		$iPostID=(int)$iPostID;
 		$sPostQuery="
@@ -33,7 +33,7 @@ class Forum{
 		$post=$db->getRow($sPostQuery);
 		if(is_array($post)){
 			$iTopicInfo['tid'] = $post['tid'];
-			
+
 			$zichtBaarClause="post.zichtbaar='zichtbaar'";
 			if(Forum::isModerator()){
 				$zichtBaarClause.=" OR post.zichtbaar='wacht_goedkeuring' OR post.zichtbaar='spam'";
@@ -61,7 +61,7 @@ class Forum{
 	}
 
 	private function getCategorieClause($token=null){
-		$lid=Lid::instance();
+		$lid=LoginLid::instance();
 		//uitmaken welke categorieën er in de rss feed komen. Voor feut (bot in #csrdelft)
 		//is er een uitzondering op de ingeloggedheid.
 
@@ -141,25 +141,30 @@ class Forum{
 				".$iAantal.";";
 		return MySql::instance()->query2array($query);
 	}
-	public static function isIngelogged(){ return Lid::instance()->hasPermission('P_LOGGED_IN'); }
-	public static function isModerator(){ return Lid::instance()->hasPermission('P_FORUM_MOD'); }
-	public static function getLaatstBekeken(){ return Lid::instance()->getForumLaatstBekeken(); }
-	public static function updateLaatstBekeken(){ Lid::instance()->updateForumLaatstBekeken(); }
+	public static function isIngelogged(){ return LoginLid::instance()->hasPermission('P_LOGGED_IN'); }
+	public static function isModerator(){ return LoginLid::instance()->hasPermission('P_FORUM_MOD'); }
+	public static function getLaatstBekeken(){ return Instelling::get('ForumLaatstBekeken'); }
+	public static function updateLaatstBekeken(){ return; //TODO:LoginLid::instance()->updateForumLaatstBekeken();
+	}
 	public static function getTopicsPerPagina(){ return Forum::$topicsPerPagina; }
 	public static function getPostsPerPagina(){
-		if(Lid::instance()->getUid()=='0436'){ // Jieter wil alles op 1 pagina?
-			return 1000;
+		if(LoginLid::instance()->getUid()=='0436'){ // Jieter wil alles op 1 pagina?
+			return 10;
 		}else{
 			return Forum::$postsPerPagina;
 		}
 	}
 	public static function getForumNaam($uid=false, $aNaam=false, $aLink=true, $bHtmlentities=true ){
-		return Lid::instance()->getNaamLink($uid, 'user', $aLink, $aNaam, $bHtmlentities);
+		$lid=LidCache::getLid($uid);
+		$lid->tsVorm='user';
+		//TODO: netjes oplossen
+		$lid->tsMode=($aLink ? 'link' : 'html');
+		return (string)$lid;
 	}
 
 
 	public static function getPostsVoorUid($uid=null){
-		if($uid==null){ Lid::instance()->getUid(); }
+		if($uid==null){ LoginLid::instance()->getLid()->getUid(); }
 		return Forum::getPostsVoorRss(false, false, null, $uid);
 	}
 	public static function searchPosts($sZoekQuery, $categorie=null){

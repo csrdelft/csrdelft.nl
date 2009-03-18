@@ -20,7 +20,7 @@ class VB {
 
 	### public ###
 	public function VB(){
-		$this->_lid=Lid::instance();
+		$this->_lid=LoginLid::instance();
 		$this->_db=MySql::instance();
 	}
 
@@ -43,11 +43,11 @@ class VB {
 
 	/** hulpfunctie voor de rechten, is deze persoon een vormingsbank moderator? */
 	function isModerator() {
-			if ($this->_lid->hasPermission('P_ADMIN'))		return true;
+			if ($this->_lid->hasPermission('P_ADMIN')){ return true; }
 			$g = new Groep("VoBaCie");
-			if ($g->isLid($this->_lid->getUID()))				return true;
+			if ($g->isLid($this->_lid->getUID())){ return true; }
 			$leiders = Groepen::getWerkgroepLeiders();
-			if(in_array($this->_lid->getUID(),$leiders))	return true;
+			if(in_array($this->_lid->getUID(),$leiders)){ return true; }
 			return false;
 	}
 

@@ -9,9 +9,6 @@
 
 class Courant {
 
-	private $_db;
-	private $_lid;
-
 	//huidige courant, 0 is de nog niet verzonden cache.
 	private $courantID=0;
 	private $berichten=array();
@@ -22,9 +19,6 @@ class Courant {
 
 	//Constructor voor de courant
 	function Courant(){
-		$this->_lid=Lid::instance();
-		$this->_db=MySql::instance();
-
 		//de berichten uit de cache laden. Dit zal het meest gebeuren.
 		$this->load(0);
 	}
@@ -68,9 +62,10 @@ class Courant {
 				ORDER BY
 					cat, volgorde, datumTijd;";
 		}
-		$rBerichten=$this->_db->query($sBerichtenQuery);
+		$db=MySql::instance();
+		$rBerichten=$db->query($sBerichtenQuery);
 		if($this->_db->numRows($rBerichten)>=1){
-			while($aBericht=$this->_db->next($rBerichten)){
+			while($aBericht=$db->next($rBerichten)){
 				$this->berichten[$aBericht['ID']]=$aBericht;
 			}
 			return true;
@@ -95,7 +90,9 @@ class Courant {
 		return $return;
 	}
 
-	public function getNaam($uid){ return $this->_lid->getNaamLink($uid); }
+	public function getNaam($uid){
+		return LidCache::getLid($uid)->getNaam();
+	}
 	public function getTemplatePath(){
 		$return=SMARTY_TEMPLATE_DIR.'courant/mail/';
 		if(isset($this->berichten[0]['template']) AND file_exists($return.$this->berichten[0]['template'])){
@@ -106,9 +103,9 @@ class Courant {
 		return $return;
 	}
 
-	function magToevoegen(){ return $this->_lid->hasPermission('P_MAIL_POST'); }
-	function magBeheren(){ return $this->_lid->hasPermission('P_MAIL_COMPOSE'); }
-	function magVerzenden(){ return $this->_lid->hasPermission('P_MAIL_SEND'); }
+	function magToevoegen(){ return LoginLid::instance()->hasPermission('P_MAIL_POST'); }
+	function magBeheren(){ return LoginLid::instance()->hasPermission('P_MAIL_COMPOSE'); }
+	function magVerzenden(){ return LoginLid::instance()->hasPermission('P_MAIL_SEND'); }
 
 	private function _isValideCategorie($categorie){ return in_array($categorie, $this->categorieen); }
 
@@ -148,11 +145,11 @@ class Courant {
 			(
 				uid, titel, cat, bericht, datumTijd, volgorde
 			)VALUES(
-				'".$this->_lid->getUid()."', '".$this->clearTitel($titel)."',
+				'".LoginLid::instance()>getUid()."', '".$this->clearTitel($titel)."',
 				'".$this->clearCategorie($categorie)."', '".$this->clearBericht($bericht)."', '".getDateTime()."', ".$volgorde."
 			);";
 
-		return $this->_db->query($sBerichtQuery);
+		return MySql::instance()->query($sBerichtQuery);
 	}
 	public function isZichtbaar($iBerichtID){
 		$iBerichtID=(int)$iBerichtID;
@@ -161,7 +158,7 @@ class Courant {
 			if(!isset($this->berichten[$iBerichtID])){
 				$this->sError='Bericht staat niet in cache (Courant::isBewerkbaar())';
 			}else{
-				if($this->berichten[$iBerichtID]['uid']!=$this->_lid->getUid()){
+				if(!LoginLid::instance()->isSelf($this->berichten[$iBerichtID]['uid'])){
 					$this->sError='U mag geen berichten van anderen aanpassen. (Courant::isBewerkbaar())';
 				}else{
 					return true;
@@ -186,7 +183,7 @@ class Courant {
 			WHERE
 				ID=".$iBerichtID."
 			LIMIT 1;";
-		return $this->_db->query($sBerichtQuery);
+		return MySql::instance()->query($sBerichtQuery);
 
 	}
 
@@ -241,11 +238,11 @@ class Courant {
 		if($this->isCache()){
 			$userCache=array();
 			//mods en bestuur zien alle berichten
-			if($this->magBeheren() OR $this->_lid->isBestuur()){
+			if($this->magBeheren() OR LoginLid::instance->hasPermission('groep:bestuur')){
 				return $this->berichten;
 			}else{
 				foreach($this->berichten as $bericht){
-					if($this->_lid->getUid()==$bericht['uid']){
+					if(MySql::instance()->isSelf($bericht['uid'])){
 						$userCache[]=$bericht;
 					}
 				}
@@ -272,8 +269,9 @@ class Courant {
 			WHERE
 				ID=".$iBerichtID."
 			LIMIT 1;";
-		$this->_db->query($sBerichtVerwijderen);
-		return mysql_affected_rows()==1;
+		$db=MySql::instance();
+		$db->query($sBerichtVerwijderen);
+		return $db->numRows()==1;
 	}
 
 
@@ -288,6 +286,7 @@ class Courant {
 			$this->sError='Courant bevat helemaal geen berichten (Courant::leegCache())';
 			return false;
 		}
+		$db=MySql::instance();
 		$iCourantID=$this->createCourant();
 		if(is_integer($iCourantID)){
 			//kopieren dan maar
@@ -306,11 +305,11 @@ class Courant {
 						'".$aBericht['uid']."',
 						'".$aBericht['datumTijd']."'
 					);";
-				$this->_db->query($sMoveQuery);
+				$db->query($sMoveQuery);
 			}//einde foreach $aBerichten
 			//cache leeggooien:
 			$sClearCache="TRUNCATE TABLE courantcache;";
-			$this->_db->query($sClearCache);
+			$db->query($sClearCache);
 			return $iCourantID;
 		}else{
 			return false;
@@ -318,7 +317,9 @@ class Courant {
 	}
 
 	private function createCourant(){
-		$uid=$this->_lid->getUid();
+		$db=MySql::instance();
+
+		$uid=LoginLid::instance()->getUid();
 		$datumTijd=getDateTime();
 		$sCreatecourantQuery="
 			INSERT INTO
@@ -328,8 +329,8 @@ class Courant {
 			) VALUES (
 				'".$datumTijd."', '".$uid."', '".COURANT_TEMPLATE."'
 			);";
-		if($this->_db->query($sCreatecourantQuery)){
-			return $this->_db->insert_id();
+		if($db->query($sCreatecourantQuery)){
+			return $db->insert_id();
 		}else{
 			return false;
 		}
@@ -339,7 +340,9 @@ class Courant {
 	###	Archief-methodes, heeft niets meer met de huidige instantie
 	### te maken.
 	################################################################
-	public function getArchiefmails(){
+	public static function getArchiefmails(){
+		$db=MySql::instance();
+
 		$sArchiefQuery="
 			SELECT
 				ID, verzendMoment, verzender, YEAR(verzendMoment) AS jaar
@@ -349,12 +352,12 @@ class Courant {
 				jaar >= YEAR(NOW())-9
 			ORDER BY
 				verzendMoment DESC;";
-		$rArchief=$this->_db->query($sArchiefQuery);
+		$rArchief=$db->query($sArchiefQuery);
 
-		if($this->_db->numRows($rArchief)==0){
+		if($db->numRows($rArchief)==0){
 			return false;
 		}else{
-			return $this->_db->result2array($rArchief);
+			return $db->result2array($rArchief);
 		}
 	}
 }//einde classe Courant

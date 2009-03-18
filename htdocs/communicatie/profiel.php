@@ -12,7 +12,17 @@ require_once('include.config.php');
 
 //$lid vervangen door een subklasse ervan, met functies voor het profiel
 require_once('class.profiel.php');
-$lid=new Profiel();
+
+if(isset($_GET['uid'])){
+	$uid = $_GET['uid'];
+}else{
+	$uid = $lid->getUid();
+}
+$error=0;
+if(!($lid->hasPermission('P_LEDEN_READ') or $lid->hasPermission('P_OUDLEDEN_READ'))){
+	$error=3;
+}
+/*
 
 # Profiel bekijken
 # met P_LOGGED_IN mag een gebruiker zijn eigen profiel bekijken
@@ -152,11 +162,12 @@ if ($error == 0){
 	}//end switch $action
 }//end if $error==0
 # De pagina opbouwen, met profiel, of met foutmelding
+*/
 switch ($error) {
 	case 0:
 	case 2:
 		require_once('class.profielcontent.php');
-		$midden = new ProfielContent($lid, $state);
+		$midden = new ProfielContent(LidCache::getLid($uid));
 
 	break;
 	default:

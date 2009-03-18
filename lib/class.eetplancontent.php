@@ -30,9 +30,9 @@ class EetplanContent extends SimpleHTML {
 		if($aEetplan===false){
 			echo '<h1>Ongeldig pheutID</h1>';
 		}else{
-			$lid=Lid::instance();
+			$lid=LidCache::getLid($uid);
 			echo '<h2><a class="forumGrootlink" href="/actueel/eetplan/">Eetplan</a> &raquo; voor '.$lid->getNaamLink($uid, 'full', false).'</h2>
-				Profiel van '.$lid->getNaamLink($uid, 'full', true).'<br /><br />';
+				Profiel van '.$lid->getNaamLink('civitas','plain').'<br /><br />';
 			echo '<table class="eetplantabel">
 				<tr><th style="width: 150px">Avond</th><th style="width: 200px">Huis</th></tr>';
 			$row=0;
@@ -51,7 +51,7 @@ class EetplanContent extends SimpleHTML {
 	function viewEetplanVoorHuis($iHuisID){
 		//feuten voor een huis tonen
 		$aEetplan=$this->_eetplan->getEetplanVoorHuis($iHuisID);
-		$lid=Lid::instance();
+
 		if($aEetplan===false){
 			echo '<h1>Ongeldig huisID</h1>';
 		}else{
@@ -77,9 +77,9 @@ class EetplanContent extends SimpleHTML {
 					<tr class="kleur'.($row%2).'">
 						<td>'.$ertussen;
 
-				$aPheutNaam=$this->_eetplan->getPheutNaam($aEetplanData['pheut']);
+				$pheutnaam=$this->_eetplan->getPheutNaam($aEetplanData['pheut']);
 				$sUitvoer.='</td>
-					<td>'.$lid->getNaamLink($aEetplanData['pheut'], 'full', true).'<br /></td>
+					<td>'.$pheutnaam.'<br /></td>
 					<td>'.mb_htmlentities($aEetplanData['telefoon']).'</td>
 					<td>'.mb_htmlentities($aEetplanData['mobiel']).'</td>
 					<td>'.mb_htmlentities($aEetplanData['eetwens']).'</td>

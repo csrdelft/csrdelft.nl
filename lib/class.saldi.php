@@ -104,7 +104,6 @@ class Saldi{
 	}
 	public static function putMaalcieCsv($key='CSVSaldi'){
 		$db=MySql::instance();
-		$lid=Lid::instance();
 		$sStatus='';
 		if(is_array($_FILES) AND isset($_FILES[$key])){
 			//bestandje uploaden en verwerken...
@@ -116,7 +115,7 @@ class Saldi{
 			foreach($aRegels as $regel){
 				$regel=str_replace(array('"', ' ', "\n", "\r"), '', $regel);
 				$aRegel=explode(',', $regel);
-				if($lid->isValidUid($aRegel[0]) AND is_numeric($aRegel[1])){
+				if(Lid::isValidUid($aRegel[0]) AND is_numeric($aRegel[1])){
 					$sQuery="
 						UPDATE lid
 						SET maalcieSaldo=".$aRegel[1]."

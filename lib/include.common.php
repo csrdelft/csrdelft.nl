@@ -99,14 +99,14 @@ function isFeut(){
 function getDateTime(){
 	return date('Y-m-d H:i:s');
 }
-function pr($sString){
+function pr($sString, $cssID='pubcie_debug'){
 	$admin=array('145.94.61.229', '145.94.59.158', '192.168.16.101', '127.0.0.1');
 	if(in_array($_SERVER['REMOTE_ADDR'], $admin)){
-		echo '<pre id="pubcie_debug">'.print_r($sString, true).'</pre>';
+		echo '<pre id="'.$cssID.'">'.print_r($sString, true).'</pre>';
 	}
 }
 function namen2uid($sNamen, $filter='leden'){
-	$lid=Lid::instance();
+
 	$return=array();
 	$sNamen=trim($sNamen);
 	$sNamen=str_replace(array(', ', "\r\n", "\n"), ',', $sNamen);
@@ -115,7 +115,7 @@ function namen2uid($sNamen, $filter='leden'){
 	$return=false;
 	foreach($aNamen as $sNaam){
 		$aNaamOpties=array();
-		$aZoekNamen=$lid->zoekLeden($sNaam, 'naam', 'alle', 'achternaam', $filter);
+		$aZoekNamen=Zoeken::zoekLeden($sNaam, 'naam', 'alle', 'achternaam', $filter);
 		if(count($aZoekNamen)==1){
 			$naam=$aZoekNamen[0]['voornaam'].' ';
 			if(trim($aZoekNamen[0]['tussenvoegsel'])!=''){ $naam.=$aZoekNamen[0]['tussenvoegsel'].' '; }
@@ -126,9 +126,10 @@ function namen2uid($sNamen, $filter='leden'){
 		}else{
 			//geen enkelvoudige match, dan een array teruggeven
 			foreach($aZoekNamen as $aZoekNaam){
+				$lid=LidCache::getLid($aZoekNaam['uid']);
 				$aNaamOpties[]=array(
 					'uid' => $aZoekNaam['uid'],
-					'naam' => $lid->getFullname($aZoekNaam['uid']) );
+					'naam' => $lid->getNaam());
 			}
 			$return[]['naamOpties']=$aNaamOpties;
 		}

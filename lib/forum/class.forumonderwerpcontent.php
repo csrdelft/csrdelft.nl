@@ -50,7 +50,7 @@ class ForumOnderwerpContent extends SimpleHTML {
 			if($this->getCiteerPost()!=0){
 				$post=$this->forumonderwerp->getSinglePost($this->getCiteerPost());
 				if(is_array($post)){
-					if(!Lid::instance()->hasPermission('P_LOGGED_IN')){
+					if(!$this->forumonderwerp->isIngelogged()){
 						$aPost['tekst']=CsrUBB::filterPrive($post['tekst']);
 					}
 					$textarea='[citaat='.$post['uid'].']'.htmlspecialchars($post['tekst']).'[/citaat]';

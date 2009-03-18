@@ -77,7 +77,7 @@
 		</table>
 	{/if}
 
-	{if $groep->toonPasfotos() AND $lid->toonPasFotos()}
+	{if $groep->toonPasfotos() AND $lid->instelling('toonPasFotos')}
 		<script type="text/javascript">togglePasfotos('{$groep->getLedenCSV()}', document.getElementById('ledenvangroep{$groep->getId()}'));</script>
 	{/if}
 	{if $groep->magAanmelden()}

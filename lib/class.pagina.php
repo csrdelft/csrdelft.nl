@@ -18,7 +18,7 @@ class Pagina{
 	private $sRechtenBewerken='P_ADMIN';
 
 	public function __construct($sNaam){
-		$this->_lid=Lid::instance();
+		$this->_lid=LoginLid::instance();
 		$this->_db=MySql::instance();
 
 		$this->sNaam=$sNaam;
@@ -31,7 +31,7 @@ class Pagina{
 		$rPaginas=$db->query($sPaginasQuery);
 		$aPaginas=array();
 		while($aPagina=$db->next($rPaginas)){
-			if(Lid::instance()->hasPermission($aPagina['rechten_bewerken'])){
+			if(LoginLid::instance()->hasPermission($aPagina['rechten_bewerken'])){
 				$aPaginas[]=$aPagina;
 			}
 		}

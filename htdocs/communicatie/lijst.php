@@ -12,7 +12,7 @@ require_once('include.config.php');
 if ($lid->hasPermission('P_LEDEN_READ') or $lid->hasPermission('P_OUDLEDEN_READ')) {
 	# Het middenstuk
 	require_once('class.ledenlijstcontent.php');
-	$midden = new LedenlijstContent($lid);
+	$midden = new LedenlijstContent();
 
 	$form = array();
 
@@ -66,7 +66,7 @@ if ($lid->hasPermission('P_LEDEN_READ') or $lid->hasPermission('P_OUDLEDEN_READ'
 	# terug in de invulvelden
 	if (isset($_POST['a']) and $_POST['a'] == 'zoek') {
 		# en zoeken dan maar...
-		$aZoekresultaten = $lid->zoekLeden($form['wat'], $form['waar'], $form['moot'], $form['sort'], $form['status']);
+		$aZoekresultaten = Zoeker::zoekLeden($form['wat'], $form['waar'], $form['moot'], $form['sort'], $form['status']);
 		# Als er maar 1 resultaat is redirecten we naar het profiel, en anders geven we een lijst met de resultaten
 		if (sizeof($aZoekresultaten) == 1) {
 			header('location: '.CSR_ROOT.'communicatie/profiel/'.$aZoekresultaten[0]['uid']);

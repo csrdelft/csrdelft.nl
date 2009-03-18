@@ -27,7 +27,7 @@
 
 {foreach from=$groepen->getGroepen() item=groep}
 	<div class="groep clear" id="groep{$groep->getId()}">
-		{if $groep->toonPasfotos() AND $lid->toonPasfotos()}
+		{if $groep->toonPasfotos() AND $lid->instelling('toonPasfotos')}
 			<div class="pasfotomatrix" style="float: right;">
 				{foreach from=$groep->getLeden() item=groeplid}
 					{$groeplid.uid|pasfoto}

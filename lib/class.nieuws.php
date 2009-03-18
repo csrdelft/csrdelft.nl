@@ -11,7 +11,6 @@
 
 class Nieuws {
 
-	private $_lid;
 	private $_db;
 
 	private $aantalTopBerichten;
@@ -19,7 +18,6 @@ class Nieuws {
 	private $standaardRank;
 
 	function __construct(){
-		$this->_lid=Lid::instance();
 		$this->_db=MySql::instance();
 	}
 
@@ -37,7 +35,7 @@ class Nieuws {
 		$iBerichtID=(int)$iBerichtID;
 		//where clausule klussen
 		$sWhereClause='';
-		if(!$this->_lid->hasPermission('P_LEDEN_READ')){ $sWhereClause.="mededeling.prive!='1' AND "; }
+		if(!LoginLid::instance()->hasPermission('P_LEDEN_READ')){ $sWhereClause.="mededeling.prive!='1' AND "; }
 		if(!$includeVerborgen){ $sWhereClause.="mededeling.verborgen!='1' AND "; }
 		if($iBerichtID!=0){ $sWhereClause.="mededeling.id=".$iBerichtID." AND "; }
 		$limit=(int)$limit;
@@ -96,7 +94,7 @@ class Nieuws {
 
 		//where clausule klussen
 		$sWhereClause='';
-		if(!$this->_lid->hasPermission('P_LEDEN_READ')){ $sWhereClause.="mededeling.prive!='1' AND "; }
+		if(!LoginLid::instance()->hasPermission('P_LEDEN_READ')){ $sWhereClause.="mededeling.prive!='1' AND "; }
 
 		$sQuery="
 			SELECT
@@ -136,7 +134,7 @@ class Nieuws {
 		if($prive){$prive=1; }else{ $prive=0; }
 		if($verborgen){$verborgen=1; }else{ $verborgen=0; }
 		$plaatje=trim($plaatje);
-		$uid=$this->_lid->getUid();
+		$uid=LoginLid::instance()->getUid();
 		$sMessageQuery="
 			INSERT INTO
 				mededeling
@@ -196,7 +194,7 @@ class Nieuws {
 			LIMIT 1;";
 		return $this->_db->query($sMessageQuery);
 	}
-	public function isNieuwsMod(){ return $this->_lid->hasPermission('P_NEWS_MOD');}
+	public function isNieuwsMod(){ return LoginLid::instance()->hasPermission('P_NEWS_MOD');}
 
 	public function resize_plaatje($file) {
 		list($owdt,$ohgt,$otype)=@getimagesize($file);

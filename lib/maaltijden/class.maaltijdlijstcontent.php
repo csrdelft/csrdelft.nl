@@ -22,7 +22,7 @@ class MaaltijdLijstContent extends SimpleHTML {
 	}
 
 	function view(){
-		$lid=Lid::instance();
+		$loginlid=LoginLid::instance();
 		$maaltijdprijs=3.00; 	//maaltijdprijs voor de leden.
 		$maaltijdbudget=2.00; 	//kookbudget voor de koks
 		$marge=6;				//marge voor gasten.
@@ -34,8 +34,10 @@ class MaaltijdLijstContent extends SimpleHTML {
 		$aMaal['id']=$this->_maaltijd->getMaalId();
 		$aMaal['datum']=$this->_maaltijd->getDatum();
 		$aMaal['gesloten']=$this->_maaltijd->isGesloten();
-		$aMaal['magSluiten']=$lid->hasPermission('P_MAAL_MOD') OR opConfide();
-		$aMaal['tafelpraeses']=$lid->getCivitasName($this->_maaltijd->getTP());
+		$aMaal['magSluiten']=$loginlid->hasPermission('P_MAAL_MOD') OR opConfide();
+		$tp=LidCache::getLid($this->_maaltijd->getTP());
+
+		$aMaal['tafelpraeses']=$tp->getNaamLink('civitas', 'html');
 
 		$aMaal['aanmeldingen']=$this->_maaltijd->getAanmeldingen_Oud();
 		$aMaal['aantal']=count($aMaal['aanmeldingen']);

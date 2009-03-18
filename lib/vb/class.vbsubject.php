@@ -19,7 +19,7 @@ class VBSubject extends VBItem
 
 	function __construct()
 	{
-		$this->lid = Lid::instance()->getUid();
+		$this->lid = LoginLid::instance()->getUid();
 		$this->ip = $_SERVER['REMOTE_ADDR'];
 		$this->createdate = getDateTime();
 		$this->isLeaf = 1;

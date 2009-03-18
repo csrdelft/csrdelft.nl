@@ -20,14 +20,12 @@ require_once('class.controller.php');
 class Groepcontroller extends Controller{
 
 	private $groep;
-	private $lid;
 
 	private $valid=true;
 	private $errors='';
 
 	public function __construct($querystring){
 		parent::__construct($querystring);
-		$this->lid=Lid::instance();
 
 		//groep-object inladen
 		if($this->hasParam(0)){
@@ -282,7 +280,7 @@ class Groepcontroller extends Controller{
 			$success=true;
 			$aantal=0;
 			for($i=0; $i<count($_POST['naam']); $i++){
-				if($this->lid->isValidUid($_POST['naam'][$i])){
+				if(Lid::isValidUid($_POST['naam'][$i])){
 					if(!$this->groep->addLid($_POST['naam'][$i], $_POST['functie'][$i])){
 						//er gaat iets mis, zet $success op false;
 						$success=false;
@@ -301,7 +299,7 @@ class Groepcontroller extends Controller{
 
 	}
 	public function action_verwijderLid(){
-		if($this->hasParam(2) AND $this->lid->isValidUid($this->getParam(2)) AND $this->groep->magBewerken()){
+		if($this->hasParam(2) AND Lid::isValidUid($this->getParam(2)) AND $this->groep->magBewerken()){
 			if($this->groep->verwijderLid($this->getParam(2))){
 				$melding='';
 			}else{
@@ -311,7 +309,7 @@ class Groepcontroller extends Controller{
 		}
 	}
 	public function action_maakLidOt(){
-		if($this->hasParam(2) AND $this->lid->isValidUid($this->getParam(2)) AND $this->groep->magBewerken()){
+		if($this->hasParam(2) AND Lid::isValidUid($this->getParam(2)) AND $this->groep->magBewerken()){
 			if($this->groep->maakLidOt($this->getParam(2))){
 				$melding='Lid naar o.t.-groep verplaatsen gelukt.';
 			}else{

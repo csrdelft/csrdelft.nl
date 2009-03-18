@@ -20,7 +20,7 @@ class Smarty_csr extends Smarty {
 
 		$this->assign('csr_pics', CSR_PICS);
 		$this->assign('ubbHulp', CsrUbb::getUbbHelp());
-		$this->assign('lid', Lid::instance());
+		$this->assign('lid', LoginLid::instance());
   }
 
 }

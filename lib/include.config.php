@@ -59,12 +59,12 @@ define('FEUT_IP', '82.94.188.77');
 
 //stapeltje dingen includeren die toch (bijna) altijd nodig zijn:
 require_once('include.common.php');
-require_once('class.lid.php');
+require_once('lid/class.loginlid.php');
 require_once('class.mysql.php');
 
 switch (constant('MODE')) {
 	case 'ONDERHOUD':
-		$lid = Lid::instance();
+		$lid = LoginLid::instance();
 		if(!$lid->hasPermission('P_ADMIN')){
 			header('location: '.CSR_ROOT.'/tools/onderhoud.html');
 			exit;
@@ -84,14 +84,13 @@ switch (constant('MODE')) {
 		session_start();
 		//database & lid initialiseren...
 		$db = MySQL::instance();
-		$lid = Lid::instance();
-		$lidCache=LidCache::instance();
+		$lid = LoginLid::instance();
 	break;
 
 	case 'BOT':
 	case 'CLI':
         $db = MySQL::instance();
-        $lid = Lid::instance();
+        $lid = LoginLid::instance();
 	break;
 
 	default:

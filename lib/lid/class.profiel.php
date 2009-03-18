@@ -7,9 +7,29 @@
 # -------------------------------------------------------------------
 
 
-require_once ('class.ldap.php');
+require_once 'class.ldap.php';
 
-class Profiel extends Lid{
+class Profiel{
+	private $lid;
+	public $bewerktLid;
+
+	public function __construct($uid){
+		$this->lid=LidCache::getLid($uid);
+		$this->bewerktLid=clone $this->lid;
+	}
+
+	public function diff(){
+		$diff=array();
+		$bewerktProfiel=$this->bewerktLid->getProfiel();
+		foreach($this->lid->getProfiel() as $veld => $waarde){
+			if($waarde!=$bewerktProfiel[$veld]){
+				$diff[$veld]=array('oud'=>$waarde, 'nieuw'=> $bewerktProfiel[$veld]);
+			}
+		}
+		return $diff;
+	}
+}
+class ProfielOld{
 	#
 	# data voor de profiel-pagina functionaliteit
 	#
@@ -28,7 +48,6 @@ class Profiel extends Lid{
 	var $_formerror = array();
 
 	function Profiel(){
-		parent::Lid();
 	}
 
 
@@ -710,7 +729,7 @@ class Profiel extends Lid{
 
 				# ldap entry in elkaar snokken
 				$entry = array();
-				$entry['uid'] = $lid['uid'];
+				$entry['uid'] = $lid->getUid();
 				$entry['givenname'] = str_replace('  ', ' ',implode(' ',array($lid['voornaam'],$lid['tussenvoegsel'])));
 				$entry['sn'] = $lid['achternaam'];
 				$entry['cn'] = str_replace('  ', ' ',implode(' ',array($lid['voornaam'],$lid['tussenvoegsel'],$lid['achternaam'])));
@@ -729,43 +748,45 @@ class Profiel extends Lid{
 				$entry['description'] = 'Ledenlijst C.S.R. Delft';
 				$entry['userPassword'] = $lid['password'];
 
-				# voor woonoord moeten we even moeilijk doen
-				/*
-				 TODO: Dit doen met de nieuwe groepenketzer.
-				 require_once('class.woonoord.php');
-				$woonoord = new Woonoord($this->_db, $this);
-				$wo = $woonoord->getWoonoordByUid($this->_tmpprofile['uid']);
-				if ($wo !== false) $entry['ou'] = $wo['naam'];
-				*/
+
+				$woonoord=Groep::getGroepenByType(2, $this->_profiel['uid']);
+				if(count($woonoord)==1){
+					$woonoord=$woonoord[0];
+					$entry['ou']=$profhtml['woonoord']='<a href="/actueel/groepen/'.$woonoord['gtype'].'/'.$woonoord['id'].'"><strong>'.$woonoord['naam'].'</strong></a>:<br />';
+				}
+
 				# lege velden er uit gooien
 				foreach ($entry as $i => $e) if ($e == '') unset ($entry[$i]);
-
-				# if ($this->hasPermission('P_LEDEN_MOD')) print_r($entry);
 
 				# LDAP verbinding openen
 				$ldap = new LDAP();
 
 				# bestaat deze uid al in ldap? dan wijzigen, anders aanmaken
-				if ($ldap->isLid($entry['uid'])) $ldap->modifyLid($entry['uid'], $entry);
-				else $ldap->addLid($entry['uid'], $entry);
+				if ($ldap->isLid($entry['uid'])){
+					$ldap->modifyLid($entry['uid'], $entry);
+				}else{
+					$ldap->addLid($entry['uid'], $entry);
+				}
 
 				# verbinding sluiten
 				$ldap->disconnect();
 			}
 		# Als het een andere status is even kijken of de uid in ldap voorkomt, en zo ja wissen
-		} else {
+		}else{
 			# LDAP verbinding openen
 			$ldap = new LDAP();
 
 			# bestaat deze uid in ldap? dan verwijderen
-			if ($ldap->isLid($this->_tmpprofile['uid'])) $ldap->removeLid($this->_tmpprofile['uid']);
+			if ($ldap->isLid($this->_tmpprofile['uid'])){
+				$ldap->removeLid($this->_tmpprofile['uid']);
+			}
 
 			# verbinding sluiten
 			$ldap->disconnect();
 		}
 	}
-	function resetWachtwoord($uid){
-		if(!$this->uidExists($uid)){ return false; }
+	public static function resetWachtwoord($uid){
+		if(!Lid::exists($uid)){ return false; }
 		$password=substr(md5(time()), 0, 8);
 		$passwordhash=$this->_makepasswd($password);
 
@@ -777,10 +798,10 @@ class Profiel extends Lid{
 			WHERE
 				uid='".$uid."'
 			LIMIT 1;";
-		$mailto=$this->getEmail($uid);
+		$lid=LoginLid::instance();
 		//mail maken
 		$mail="
-Hallo ".$this->getFullName($uid).",
+Hallo ".$lid->getNaam('full', 'plain').",
 
 U heeft een nieuw wachtwoord aangevraagd voor http://csrdelft.nl. U kunt nu inloggen met de volgende combinatie:
 
@@ -793,10 +814,10 @@ Met vriendelijke groet,
 
 Namens de PubCie,
 
-".$this->getNaamLink($this->getUid(), 'full', false, false, false)."
+".LoginLid::instance()->getLid()->getNaamLink('full', 'plain')."
 
 P.S.: Mocht u nog vragen hebben, dan kan u natuurlijk altijd e-posts sturen naar pubcie@csrdelft.nl";
-		return $this->_db->query($sNieuwWachtwoord) AND mail($mailto, 'Nieuw wachtwoord voor de C.S.R.-stek', $mail, "Bcc: pubcie@csrdelft.nl");
+		return MySql::instance()->query($sNieuwWachtwoord) AND mail($lid->getMail(), 'Nieuw wachtwoord voor de C.S.R.-stek', $mail, "Bcc: pubcie@csrdelft.nl");
 
 	}
 

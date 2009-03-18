@@ -51,7 +51,7 @@ class ForumCategorie{
 
 		//ook op bevestiging wachtende berichten van niet ingelogde gebruikers zichtbaar maken
 		//voor moderators
-		if(Lid::instance()->hasPermission('P_FORUM_MOD')){
+		if(LoginLid::instance()->hasPermission('P_FORUM_MOD')){
 			$zichtBaarClause="( topic.zichtbaar='zichtbaar' OR topic.zichtbaar='wacht_goedkeuring' )";
 		}else{
 			$zichtBaarClause="topic.zichtbaar='zichtbaar'";
@@ -86,9 +86,9 @@ class ForumCategorie{
 	public function getID(){			return $this->ID; }
 	public function getNaam(){			return $this->naam; }
 	public function getRechten_read(){	return $this->rechten_read; }
-	public function magBekijken(){		return Lid::instance()->hasPermission($this->getRechten_read()); }
+	public function magBekijken(){		return LoginLid::instance()->hasPermission($this->getRechten_read()); }
 	public function getRechten_post(){	return $this->rechten_post; }
-	public function magPosten(){ 		return Lid::instance()->hasPermission($this->getRechten_post()); }
+	public function magPosten(){ 		return LoginLid::instance()->hasPermission($this->getRechten_post()); }
 
 	public function getPagina(){		return $this->pagina; }
 
@@ -171,7 +171,7 @@ class ForumCategorie{
 	public static function existsVoorUser($iCatID){
 		$categorie=new ForumCategorie((int)$iCatID);
 		if($categorie->getID()!=0){
-			return Lid::instance()->hasPermission($categorie->getRechten_read());
+			return LoginLid::instance()->hasPermission($categorie->getRechten_read());
 		}
 		return false;
 	}
@@ -185,7 +185,7 @@ class ForumCategorie{
 			WHERE zichtbaar=1
 			ORDER BY volgorde;";
 		$rCatsResult=$db->query($sCatsQuery);
-		$lid=Lid::instance();
+		$lid=LoginLid::instance();
 		while($aCat=$db->next($rCatsResult)){
 			if($voorLid===true AND !$lid->hasPermission($aCat['rechten_read'])){
 				continue;
