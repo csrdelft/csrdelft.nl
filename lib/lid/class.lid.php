@@ -94,7 +94,7 @@ class Lid implements Serializable{
 			}
 
 			# bestaat deze uid al in ldap? dan wijzigen, anders aanmaken
-			if ($ldap->isLid($entry['uid'])){
+			if($ldap->isLid($entry['uid'])){
 				$ldap->modifyLid($entry['uid'], $entry);
 			}else{
 				$ldap->addLid($entry['uid'], $entry);
@@ -109,6 +109,10 @@ class Lid implements Serializable{
 			}
 		}
 		$ldap->disconnect();
+	}
+	//wrappertje voor Instelling, die houdt het ook bij in de SESSIE enzo...
+	public function instelling($key){
+		return Instelling::get($key);
 	}
 	public function setProperty($property, $contents){
 
@@ -144,9 +148,10 @@ class Lid implements Serializable{
 
 	public function getWoonoord(){
 		require_once 'groepen/class.groepen.php';
-		$groepen=Groep::getGroepenByType(2, $this->getUid());
+		$groepen=Groepen::getGroepenByType(2, $this->getUid());
+
 		if(is_array($groepen) AND isset($groepen[0]['id'])){
-			return new Groep($groepen[0]);
+			return new Groep($groepen[0]['id']);
 		}
 		return false;
 	}
@@ -359,6 +364,9 @@ class Instelling{
 	}
 	public static function clear(){
 		unset($_SESSION['instelligen']);
+	}
+	public static function save(){
+
 	}
 
 }

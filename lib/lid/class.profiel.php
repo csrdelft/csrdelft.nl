@@ -28,6 +28,16 @@ class Profiel{
 		}
 		return $diff;
 	}
+	public function ubbDiff(){
+
+		$return='Verandering voor [lid='.$this->lid->getUid().'] [br]';
+		foreach($this->diff() as $veld => $diff){
+			$return.='('.$veld.') '.$diff['oud'].' => '.$diff['nieuw'].'[br]';
+		}
+		return $return;
+	}
+
+	
 }
 class ProfielOld{
 	#

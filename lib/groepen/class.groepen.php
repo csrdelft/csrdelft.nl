@@ -13,6 +13,7 @@
  * Deze klasse is een verzameling van groepobjecten van een bepaald type. Standaard
  * worden alleen de h.t.-groepen opgehaald.
  */
+require_once('class.groep.php');
 
 class Groepen{
 

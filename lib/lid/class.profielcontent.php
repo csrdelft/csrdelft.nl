@@ -46,7 +46,7 @@ class ProfielContent extends SimpleHTML {
 
 		$woonoord=$this->lid->getWoonoord();
 		if($woonoord instanceof Groep){
-			$profhtml['woonoord']=$groep->getLink();
+			$profhtml['woonoord']='<strong>'.$woonoord->getLink().'</strong>';
 		}else{
 			$profhtml['woonoord']='<br />';
 		}

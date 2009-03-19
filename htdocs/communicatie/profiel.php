@@ -6,12 +6,9 @@
 
 # /leden/profiel.php
 
+require_once 'include.config.php';
 
-# instellingen & rommeltjes
-require_once('include.config.php');
-
-//$lid vervangen door een subklasse ervan, met functies voor het profiel
-require_once('class.profiel.php');
+require_once 'lid/class.profiel.php';
 
 if(isset($_GET['uid'])){
 	$uid = $_GET['uid'];
@@ -166,7 +163,7 @@ if ($error == 0){
 switch ($error) {
 	case 0:
 	case 2:
-		require_once('class.profielcontent.php');
+		require_once 'lid/class.profielcontent.php';
 		$midden = new ProfielContent(LidCache::getLid($uid));
 
 	break;
