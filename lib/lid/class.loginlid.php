@@ -272,10 +272,22 @@ class LoginLid{
 		}
 		if(!isset($this->tokenCache[$token])){
 			$query="SELECT uid, permissies FROM lid WHERE rssToken='".$token."' LIMIT 1;";
-			$this->tokenCache[$token]=$this->_db->getRow($query);
+			$this->tokenCache[$token]=MySql::instance()->getRow($query);
 		}
 		return $this->hasPermission($perm, $this->tokenCache[$token]['permissies']);
 	}
+
+	public function getToken($uid=null){
+		if($uid==null){ $uid=$this->getUid(); }
+		$token=substr(md5($uid.getDateTime()), 0, 25);
+		$query="UPDATE lid SET rssToken='".$token."' WHERE uid='".$uid."' LIMIT 1;";
+		if(MySql::instance()->query($query)){
+			return $token;
+		}else{
+			return false;
+		}
+	}
+	
 	//maakt een permissiestring met uid's enzo wat leesbaarder
 	public static function formatPermissionstring($string){
 		$parts=explode(',', $string);

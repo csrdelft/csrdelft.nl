@@ -6,14 +6,13 @@
 # Geef een persoonlijke rss-feed-link.
 # -------------------------------------------------------------------
 
-# instellingen & rommeltjes
-require_once('include.config.php');
+require_once 'include.config.php';
 ?>
 <h1>RSS-feed zonder cookie</h1>
 Het is met de onderstaande link mogelijk het RSS-feed van het forum op <a href="http://csrdelft.nl">csrdelft.nl</a> te bekijken zonder in te loggen met een cookie. Dat houdt dus in dat <em>iedereen</em> die deze link heeft de hele rss-feed kan zien zoals u die ook ziet.<br />
 <pre>
 <?php
-echo CSR_SERVER.'/communicatie/forum/rss/'.$lid->getToken().'.xml';
+echo CSR_SERVER.'/communicatie/forum/rss/'.$loginlid->getToken().'.xml';
 ?>
 </pre>
 <br />

@@ -6,12 +6,12 @@
 # Voorkeuren voor maaltijden en corvee opgeven
 # -------------------------------------------------------------------
 
-require_once('include.config.php');
+require_once 'include.config.php';
 
 # MaaltijdenSysteem
-require_once('maaltijden/class.maaltrack.php');
-require_once('maaltijden/class.maaltijd.php');
-$maaltrack = new MaalTrack($lid, $db);
+require_once 'maaltijden/class.maaltrack.php';
+require_once 'maaltijden/class.maaltijd.php';
+$maaltrack = new MaalTrack();
 
 # Moeten er acties uitgevoerd worden?
 $action=getOrPost('a');
@@ -28,7 +28,7 @@ $error = 0;
 # controleren of we wel mogen doen wat er gevraagd wordt...
 $actionsToegestaan=array('', 'editEetwens','editCorveewens', 'addabo', 'delabo');
 if(in_array($action, $actionsToegestaan)){
-	if(!$lid->hasPermission('P_MAAL_IK')){ $error = 1; }
+	if(!$loginlid->hasPermission('P_MAAL_IK')){ $error = 1; }
 }else{
 	# geen geklooi met andere waarden
 	$error = 1;
@@ -58,7 +58,7 @@ if ($error == 0) switch($action) {
 	break;
 	case 'editEetwens':
 		$eetwens=getOrPost('eetwens');
-		if(!$lid->setEetwens($eetwens)){
+		if(!$loginlid->getLid()->setEetwens($eetwens)){
 			$error=2;
 		}else{
 			header("Location: {$_SERVER['PHP_SELF']}");
@@ -67,7 +67,7 @@ if ($error == 0) switch($action) {
 	break;
 	case 'editCorveewens':
 		$corveewens=getOrPost('corveewens');
-		if(!$lid->setCorveewens($corveewens)){
+		if(!$loginlid->getLid()->setCorveewens($corveewens)){
 			$error=2;
 		}else{
 			header("Location: {$_SERVER['PHP_SELF']}");
@@ -77,10 +77,8 @@ if ($error == 0) switch($action) {
 }
 
 
-# De pagina opbouwen, met mKetzer, of met foutmelding
 if ($error == 0  or $error == 2) {
-	# Het middenstuk
-	require_once('maaltijden/class.maaltijdvoorkeurcontent.php');
+	require_once 'maaltijden/class.maaltijdvoorkeurcontent.php';
 	$midden = new MaaltijdVoorkeurContent($maaltrack);
 }else{
 	require_once 'class.paginacontent.php';

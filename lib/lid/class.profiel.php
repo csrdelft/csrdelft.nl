@@ -11,6 +11,7 @@ require_once 'class.ldap.php';
 
 class Profiel{
 	private $lid;
+	//TODO: nu nog even public voor test-doeleinden.
 	public $bewerktLid;
 
 	public function __construct($uid){
@@ -18,6 +19,9 @@ class Profiel{
 		$this->bewerktLid=clone $this->lid;
 	}
 
+	public function save(){
+		return $this->bewerktLid->save() AND $this->bewerktLid->save_ldap();
+	}
 	public function diff(){
 		$diff=array();
 		$bewerktProfiel=$this->bewerktLid->getProfiel();

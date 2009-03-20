@@ -1,13 +1,13 @@
 <?php
 
-# instellingen & rommeltjes
-require_once('include.config.php');
 
-# Het middenstuk
-if ($lid->hasPermission('P_LEDEN_READ')) {
-	require_once('class.eetplan.php');
+require_once 'include.config.php';
+
+
+if($loginlid->hasPermission('P_LEDEN_READ')) {
+	require_once 'class.eetplan.php';
 	$eetplan = new Eetplan();
-	require_once('class.eetplancontent.php');
+	require_once 'class.eetplancontent.php';
 	$midden = new EetplanContent($eetplan);
 } else {
 	# geen rechten

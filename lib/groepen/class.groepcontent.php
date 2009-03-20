@@ -247,7 +247,13 @@ class GroepStatsContent extends SimpleHTML{
 	}
 	public function view(){
 		$stats=$this->groep->getStats();
+		if(!is_array($stats)){
+			return;
+		}
 		foreach($stats as $title => $stat){
+			if(!is_array($stat)){
+				continue;
+			}
 			echo '<table class="query_table">';
 			$rowColor=false;
 			foreach($stat as $row){

@@ -6,7 +6,7 @@
  */
 require_once('include.config.php');
 
-if($lid->hasPermission('P_ADMIN')){
+if($loginlid->hasPermission('P_ADMIN')){
 	echo '<h1>MemCached statuspagina</h1>';
 	$stats=Memcached::instance()->getStats();
 	pr($stats);

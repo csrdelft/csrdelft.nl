@@ -1,14 +1,12 @@
 <?php
-# instellingen & rommeltjes
-require_once('include.config.php');
 
+require_once 'include.config.php';
 
-// Het middenstuk
-if ($lid->hasPermission('P_LEDEN_READ')) {
-	require_once('class.documenten.php');	
-	$documenten = new Documenten($lid, $db);
+if($loginlid->hasPermission('P_LEDEN_READ')) {
+	require_once 'class.documenten.php';	
+	$documenten = new Documenten();
 	
-	require_once('class.documentencontent.php');
+	require_once 'class.documentencontent.php';
 	$midden=new DocumentenContent($documenten);
 }else{ 
 	require_once 'class.paginacontent.php';

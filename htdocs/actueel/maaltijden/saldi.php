@@ -3,11 +3,11 @@
 require_once('include.config.php');
 
 //geen maalmod, dan terug naar de maaltijden...
-if(!$lid->hasPermission('P_MAAL_MOD')){ header('location: http://csrdelft.nl/actueel/maaltijden/'); exit; }
+if(!$loginlid->hasPermission('P_MAAL_MOD')){ header('location: http://csrdelft.nl/actueel/maaltijden/'); exit; }
 
 $sStatus='';
 
-require_once('class.saldi.php');
+require_once 'class.saldi.php';
 $sStatus=Saldi::putMaalcieCsv();
 
 class uploader{

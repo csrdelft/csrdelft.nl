@@ -1,9 +1,9 @@
 <?php
-# instellingen & rommeltjes
-require_once('include.config.php');
+
+require_once 'include.config.php';
 
 # Het middenstuk
-if ($lid->hasPermission('P_LEDEN_READ')) {
+if ($loginlid->hasPermission('P_LEDEN_READ')) {
 	require_once('class.sjaarsactie.php');
 	$sjaarsactie = new Sjaarsactie();
 
@@ -11,7 +11,7 @@ if ($lid->hasPermission('P_LEDEN_READ')) {
 	if(isset($_GET['actieID'], $_GET['aanmelden']) AND
 		$sjaarsactie->isSjaars() AND !$sjaarsactie->isVol((int)$_GET['actieID'])){
 		//nieuw persoon aanmelden voor een actie
-		$sjaarsactie->meldAan((int)$_GET['actieID'], $lid->getUid());
+		$sjaarsactie->meldAan((int)$_GET['actieID'], $loginlid->getUid());
 		header('location: '.CSR_ROOT.'actueel/sjaarsacties/');
 		exit;
 	}
@@ -22,7 +22,7 @@ if ($lid->hasPermission('P_LEDEN_READ')) {
 		exit;
 	}
 
-	require_once('class.sjaarsactiecontent.php');
+	require_once 'class.sjaarsactiecontent.php';
 	$midden = new SjaarsactieContent($sjaarsactie);
 } else {
 	# geen rechten

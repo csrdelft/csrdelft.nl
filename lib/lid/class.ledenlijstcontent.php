@@ -208,8 +208,7 @@ in <select name="waar">';
 			//en de resultaten...
 			foreach ($this->_result as $uid) {
 				$lid=LidCache::getLid($uid['uid']);
-				$lid->tzMode='link';
-				echo '<tr>';
+					echo '<tr>';
 				if(in_array('pasfoto', $this->_form['kolom'])){
 					echo '<td><a href="/communicatie/profiel/'.$uid.'">';
 					echo $lid->getPasfoto('small').'</a></td>';
@@ -218,7 +217,7 @@ in <select name="waar">';
 					echo '<td><a href="/communicatie/profiel/'.$lid->getUid().'/edit" class="knop">b</a>&nbsp;';
 				}
 				//naam als link naar profiel weergeven.
-				echo '<td>'.(string)$lid.'</td>';
+				echo '<td>'.$lid->getNaamLink('full', 'link').'</td>';
 				//de rest van de kolommen.
 				foreach ($this->_form['kolom'] as $kolom) {
 					switch($kolom){

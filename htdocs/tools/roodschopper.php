@@ -5,12 +5,9 @@
  * 
  */
 
-//exit;
+require_once 'include.config.php';
 
- # instellingen & rommeltjes
-require_once('include.config.php');
-
-if($lid->getUid()!='0436'){ 
+if($loginlid->getUid()!='0436'){ 
 	header('location: http://csrdelft.nl'); 
 }
 

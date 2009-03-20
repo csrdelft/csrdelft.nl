@@ -64,8 +64,8 @@ require_once('class.mysql.php');
 
 switch (constant('MODE')) {
 	case 'ONDERHOUD':
-		$lid = LoginLid::instance();
-		if(!$lid->hasPermission('P_ADMIN')){
+		$loginlid = LoginLid::instance();
+		if(!$loginlid->hasPermission('P_ADMIN')){
 			header('location: '.CSR_ROOT.'/tools/onderhoud.html');
 			exit;
 		}
@@ -84,13 +84,14 @@ switch (constant('MODE')) {
 		session_start();
 		//database & lid initialiseren...
 		$db = MySQL::instance();
-		$lid = LoginLid::instance();
+		$loginlid = LoginLid::instance();
 	break;
 
 	case 'BOT':
 	case 'CLI':
         $db = MySQL::instance();
-        $lid = LoginLid::instance();
+		//TODO: voor bot & cli blijft het nog even $lid ipv $loginlid, nog geen zin om dat allemaal aan te passen.
+		$lid = LoginLid::instance();
 	break;
 
 	default:

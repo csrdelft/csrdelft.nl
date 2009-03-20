@@ -4,16 +4,17 @@
 require_once('include.config.php');
 
 #moten toevoegen
-if($lid->hasPermission('P_LEDEN_MOD') AND isset($_POST['moot'], $_POST['naam']) AND is_array($_POST['naam'])){
-	$iKringGetal=$lid->getMaxKringen($_POST['moot'])+1;
+if($loginlid->hasPermission('P_LEDEN_MOD') AND isset($_POST['moot'], $_POST['naam']) AND is_array($_POST['naam'])){
+	$iKringGetal=$loginlid->getMaxKringen($_POST['moot'])+1;
 	foreach($_POST['naam'] as $sKringLid){
 		//echo 'uid: '.$sKringLid.' moot: '.$_POST['moot'].' kring: '.$iKringGetal;
-		$lid->addUid2kring($sKringLid, $iKringGetal, $_POST['moot']);
+		// TODO: doe dit elegant
+		//$lid->addUid2kring($sKringLid, $iKringGetal, $_POST['moot']);
 	}
 	header('location: '.CSR_ROOT.'communicatie/moten.php');
 }
 
-if ($lid->hasPermission('P_LEDEN_READ')) {
+if ($loginlid->hasPermission('P_LEDEN_READ')) {
 	# Het middenstuk
 	require_once('class.motencontent.php');
 	$midden = new MotenContent();

@@ -56,6 +56,40 @@ class Saldi{
 		}
 		return $return;
 	}
+	/*
+	 * Geef de grafiektags terug voor in het profiel van een bepaald uid.
+	 *  - zelf zie je beide grafieken meteen.
+	 *  - maalcie ziet bij iedereen de maalciegrafiek;
+	 *  - soccie ziet bij iedereen de socciegrafiek;
+	 */
+	public static function getGrafiektags($uid){
+		if($uid=='9808' OR LidCache::getLid($uid)->getStatus()!='S_OUDLID'){
+			$defer=true; //moeten we er expliciet om vragen (knopje indrukken)
+			$show['maalcie']=$show['soccie']=false;
+			if(LoginLid::instance()->isSelf($uid)){
+				$show['maalcie']=$show['soccie']=true;
+				$defer=false;
+			}elseif(LoginLid::instance()->hasPermission('P_ADMIN,groep:soccie')){
+				$soccie=true;
+			}elseif(LoginLid::instance()->hasPermission('P_ADMIN,groep:maalcie')){
+				$show['maalcie']=true;
+			}
+		}
+		$return='';
+		
+		foreach($show as $cie => $value){
+			$imgtag='<img class="handje" id="'.$cie.'grafiek" src="http://csrdelft.nl/tools/saldografiek.php?uid='.$uid.'&'.$cie.'" onclick="verbreedSaldografiek(\''.$cie.'\');" title="Klik op de grafiek om de tijdspanne te vergroten" />';
+			if($defer){
+				$return.='<a id="'.$cie.'link" onclick="document.getElementById(\'saldoGrafiek\').innerHTML+=\''.htmlspecialchars(str_replace("'", "\'", $imgtag)).'\'; document.getElementById(\''.$cie.'link\').display=\'none\';" class="knop">'.ucfirst($cie).'grafiek weergeven</a> ';
+			}else{
+				$return.=$imgtag;
+			}
+		}
+		if($defer){
+			$return.='<br /> <div id="saldoGrafiek"></div>';
+		}
+		return $return;
+	}
 	public static function putSoccieXML($xml){
 		$db=MySql::instance();
 		$datum=getDateTime(); //invoerdatum voor hele sessie gelijk.

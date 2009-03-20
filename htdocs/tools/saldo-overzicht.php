@@ -20,8 +20,9 @@ if(isset($_POST['namenRaw'])){
 		
 		foreach($aUids as $aLid){
 			if(isset($aLid['uid'])){
+				$lid=LidCache::getLid($aLid['uid']);
 				//naam is gevonden en uniek, dus direct goed.
-				$saldi=$lid->getSaldi($aLid['uid']);
+				$saldi=$lid->getSaldi(;
 				echo '<tr>';
 				echo '<td ><input type="hidden" name="naam[]" value="'.$aLid['uid'].'" />'.$aLid['naam'].'</td>';
 				foreach(array('soccie', 'maalcie') as $cie){

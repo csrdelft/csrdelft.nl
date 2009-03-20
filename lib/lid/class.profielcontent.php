@@ -60,23 +60,9 @@ class ProfielContent extends SimpleHTML {
 		if(LoginLid::instance()->isSelf($this->_profiel['uid'])){
 			$profhtml['saldi']=$this->lid->getSaldi();
 		}
-
-		/*
-		 * Saldografiek gaan we
-		 * - gewoon en meteen weergeven bij het lid (niet oudlid) zelf.
-		 * - niet meteen weergeven voor SocCie en pubcie, alleen op verzoek.
-		 */
-		if($this->_profiel['uid']=='9808' OR $this->_profiel['status']!='S_OUDLID'){
-			if(LoginLid::instance()->isSelf($this->_profiel['uid'])){
-				$profhtml['saldografiek']='<br /><img src="/tools/saldografiek.php?uid='.$this->_profiel['uid'].'" /><img src="/tools/saldografiek.php?maalcie&timespan=60&uid='.$this->_profiel['uid'].'" />';
-			}else{
-				if(LoginLid::instance()->hasPermission('P_ADMIN,groep:soccie')){
-					$profhtml['saldografiek']='<br /><a  onclick="document.getElementById(\'saldoGrafiek\').innerHTML=\''.htmlspecialchars('<img src="/tools/saldografiek.php?uid='.$this->_profiel['uid'].'" />').'\'" class="knop">Saldografiek weergeven</a><br />';
-					$profhtml['saldografiek'].='<br /><div id="saldoGrafiek"></div>';
-				}
-			}
-		}
-
+		require_once 'class.saldi.php';
+		$profhtml['saldografiek']=Saldi::getGrafiektags($this->lid->getUid());
+		
 		$profhtml['abos']=array();
 		require_once 'maaltijden/class.maaltrack.php';
 		require_once 'maaltijden/class.maaltijd.php';

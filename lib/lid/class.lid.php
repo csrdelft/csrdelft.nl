@@ -49,8 +49,24 @@ class Lid implements Serializable{
 	}
 	// sla huidige objectstatus op in db, en update het huidige lid in de LidCache
 	public function save(){
-
-		LidCache::updateLid($this->getUid());
+		$db=MySql::instance();
+		$donotsave=array('uid', 'rssToken');
+		$query='UPDATE lid SET ';
+		$queryfields=array();
+		foreach($this->profiel as $veld => $value){
+			if(!in_array($veld, $donotsave)){
+				$row=$veld."=";
+				if((int)$value==$value){
+					$row.=(int)$value;
+				}else{
+					$row.="'".$db->escape($value)."'";
+				}
+				$queryfields[]=$row;
+			}
+		}
+		$query.=implode(', ', $queryfields);
+		$query.=" WHERE uid='".$this->getUid()."';";
+		return $db->query($query) AND LidCache::updateLid($this->getUid());
 	}
 	# Sla huidige objecstatus op in LDAP
 	function save_ldap() {
@@ -339,7 +355,7 @@ class LidCache{
 		if(!Lid::isValidUid($uid)){
 			return false;
 		}
-		return Memcached::delete($uid);
+		return Memcached::instance()->delete($uid);
 	}
 	public static function updateLid($uid){
 		self::flushLid($uid);

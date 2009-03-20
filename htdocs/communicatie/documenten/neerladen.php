@@ -2,10 +2,10 @@
 
 
 # instellingen & rommeltjes
-require_once('include.config.php');
+require_once 'include.config.php';
 
 // if user has no permission
-if (!$lid->hasPermission('P_LOGGED_IN')) {
+if (!$loginlid->hasPermission('P_LOGGED_IN')) {
 	echo 'Je bent niet ingelogd!';
 	exit();
 }
@@ -17,10 +17,10 @@ if( !isset($_GET['id']) || !is_numeric($_GET['id']) ) {
 }
 
 require_once('class.neerladen.php');
-$neerladen = new Neerladen($db);
+$neerladen = new Neerladen();
 
 require_once('class.neerladencontent.php');
-$content=new NeerladenContent($db, $neerladen);
+$content=new NeerladenContent($neerladen);
 
 $content->view();
 ?>

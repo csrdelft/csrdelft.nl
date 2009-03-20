@@ -6,10 +6,10 @@
 # Geeft de in savedquery opgeslagen query's weer
 
 
-require_once('include.config.php');
-require_once('class.savedquery.php');
+require_once 'include.config.php';
+require_once 'class.savedquery.php';
 
-if(!$lid->hasPermission('P_LOGGED_IN')){ header('location: '.CSR_ROOT); }
+if(!$loginlid->hasPermission('P_LOGGED_IN')){ header('location: '.CSR_ROOT); }
 
 $id=0;
 if(isset($_GET['id']) AND (int)$_GET['id']==$_GET['id']){

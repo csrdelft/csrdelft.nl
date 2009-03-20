@@ -12,8 +12,7 @@ require_once 'include.config.php';
 require_once 'forum/class.forumonderwerp.php';
 require_once 'forum/class.forumonderwerpcontent.php';
 
-# Het middenstuk
-if($lid->hasPermission('P_FORUM_READ')) {
+if($loginlid->hasPermission('P_FORUM_READ')) {
 	if(isset($_GET['topic'])){
 		if(isset($_GET['pagina'])){
 			$pagina=$_GET['pagina'];

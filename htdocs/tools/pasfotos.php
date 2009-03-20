@@ -6,7 +6,7 @@
  */
 require_once 'include.config.php';
 
-if($lid->hasPermission('P_LEDEN_READ') AND isset($_GET['string'])){
+if($loginlid->hasPermission('P_LEDEN_READ') AND isset($_GET['string'])){
 	$string=trim(urldecode($_GET['string']));
 	$uids=explode(',', $string);
 	$link=!isset($_GET['link']);
