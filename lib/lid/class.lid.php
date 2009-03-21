@@ -29,10 +29,14 @@ class Lid implements Serializable{
 	}
 	public function load($uid){
 		$db=MySql::instance();
-		$query="SELECT * FROM lid WHERE uid = '".$db->escape($uid)."' LIMIT 1";
+		$query="SELECT * FROM lid WHERE uid = '".$db->escape($uid)."' LIMIT 1;";
 		$lid=$db->getRow($query);
 		if(is_array($lid)){
 			$this->profiel=$lid;
+			//we unserializeren de array even
+			if($this->profiel['instellingen']!=''){
+				$this->profiel['instellingen']=unserialize($this->profiel['instellingen']);
+			}
 		}else{
 			throw new Exception('Lid kon niet geladen worden.');
 		}
@@ -55,8 +59,17 @@ class Lid implements Serializable{
 		$queryfields=array();
 		foreach($this->profiel as $veld => $value){
 			if(!in_array($veld, $donotsave)){
+				switch($veld){
+					case 'instellingen':
+						if($value!=''){
+							$value=serialize($value);
+						}else{
+							continue;
+						}
+					break;
+				}
 				$row=$veld."=";
-				if((int)$value==$value){
+				if(is_integer($value)){
 					$row.=(int)$value;
 				}else{
 					$row.="'".$db->escape($value)."'";
@@ -126,16 +139,13 @@ class Lid implements Serializable{
 		}
 		$ldap->disconnect();
 	}
-	//wrappertje voor Instelling, die houdt het ook bij in de SESSIE enzo...
-	public function instelling($key){
-		return Instelling::get($key);
-	}
 	public function setProperty($property, $contents){
 
-		$allowedProps=array('achternaam', 'eetwens', 'corvee_wens');
+		$allowedProps=array('voornaam', 'achternaam', 'eetwens', 'corvee_wens', 'instellingen');
 		if(!in_array($property, $allowedProps)){ return false; }
-		$contents=trim($contents);
+		if(is_string($contents)){ $contents=trim($contents); }
 		$this->profiel[$property]=$contents;
+		return true;
 	}
 	public function getUid(){		return $this->profiel['uid']; }
 	public function getProfiel(){	return $this->profiel; }
@@ -162,6 +172,19 @@ class Lid implements Serializable{
 	public function getCorveevrijstelling(){ return $this->profiel['corvee_vrijstelling']; }
 	public function isKwalikok(){ return $this->profiel['corvee_punten']==='1'; }
 
+	//wrappertje voor Instelling, die houdt het ook bij in de SESSIE enzo...
+	public function instelling($key){
+		return Instelling::get($key);
+	}
+	public function getInstellingen(){
+		if(!is_array($this->profiel['instellingen'])){
+			$this->profiel['instellingen']=Instelling::getDefaults();
+			$this->save();
+		}
+		return $this->profiel['instellingen'];
+
+	}
+	
 	public function getWoonoord(){
 		require_once 'groepen/class.groepen.php';
 		$groepen=Groepen::getGroepenByType(2, $this->getUid());
@@ -232,7 +255,7 @@ class Lid implements Serializable{
 
 		//als $vorm==='user', de instelling uit het profiel gebruiken voor vorm
 		if($vorm=='user'){
-			$vorm=Instelling::get('ForumNaamInstelling');
+			$vorm=Instelling::get('forum_naam');
 		}
 		switch($vorm){
 			case 'nick':
@@ -363,165 +386,49 @@ class LidCache{
 	}
 }
 /*
- * Gebruikersinstellingen opslaan in de Sessie, als ze daar niet inzitten
- * ophalen uit het actieve lid in LoginLid
+ * Gebruikersinstellingen opslaan in de Sessie.
  */
 class Instelling{
 	public static function get($key){
-		if(!isset($_SESSION['instelligen'][$key])){
-			$lid=LoginLid::instance()->getLid();
-			$function='get'.$key;
-			if(method_exists($lid, $function)){
-				$_SESSION['instelling'][$key]=$lid->$function();
-			}
-			return true;
+		if(!isset($_SESSION['instellingen'])){
+			self::reload();
 		}
-		return $_SESSION['instelligen'][$key];
+		return $_SESSION['instellingen'][$key];
+	}
+	public static function set($key, $value){
+		if(!isset($_SESSION['instellingen'])){
+			self::reload();
+		}
+		if(array_key_exists($key, self::getDefaults())){
+			$_SESSION['instellingen'][$key]=$value;
+		}
 	}
 	public static function clear(){
-		unset($_SESSION['instelligen']);
+		unset($_SESSION['instellingen']);		
+	}
+	public static function reload(){
+		$_SESSION['instellingen']=LoginLid::instance()->getLid()->getInstellingen();
 	}
 	public static function save(){
-
+		$lid=LoginLid::instance()->getLid();
+		$lid->setProperty('instellingen', $_SESSION['instellingen']);
+		return $lid->save();
+	}
+	public static function getDefaults(){
+		return array(
+			'forum_onderwerpenPerPagina' => 15,
+			'forum_postsPerPagina' => 25,
+			'forum_naam' => 'civitas',
+			'forum_zoekresultaten' => 40,
+			'zijbalk_forum' => 10,
+			'zijbalk_mededelingen' => 6,
+			'zijbalk_verjaardagen' => 10);
 	}
 
 }
 
 
-class Verjaardag{
 
-	function getVerjaardagen($maand, $dag=0) {
-		$db=MySql::instance();
-		$maand = (int)$maand; $dag = (int)$dag; $verjaardagen = array();
-		$query="
-			SELECT
-				uid, voornaam, tussenvoegsel, achternaam, nickname, postfix, geslacht, email,
-				EXTRACT( DAY FROM gebdatum) as gebdag, status
-			FROM
-				lid
-			WHERE
-				(status='S_LID' OR status='S_GASTLID' OR status='S_NOVIET' OR status='S_KRINGEL')
-			AND
-				EXTRACT( MONTH FROM gebdatum)= '{$maand}'";
-		if($dag!=0)	$query.=" AND gebdag=".$dag;
-		$query.=" ORDER BY gebdag;";
-		$result = $db->select($query);
-
-		if ($result !== false and $db->numRows($result) > 0) {
-			while($verjaardag=$db->next($result)){
-				$verjaardagen[] = $verjaardag;
-			}
-		}
-		return $verjaardagen;
-	}
-
-	function getKomende10Verjaardagen() {
-		$db=MySql::instance();
-		$query="
-			SELECT
-				uid, nickname, voornaam, tussenvoegsel, achternaam, status, geslacht, postfix, gebdatum,
-				ADDDATE(
-					gebdatum,
-					INTERVAL TIMESTAMPDIFF(
-						year,
-						ADDDATE(gebdatum, INTERVAL 1 DAY),
-						CURRENT_DATE
-					)+1 YEAR
-				) AS verjaardag
-			FROM
-				lid
-			WHERE
-				(status='S_LID' OR status='S_GASTLID' OR status='S_NOVIET' OR status='S_KRINGEL')
-			AND
-				NOT gebdatum = '0000-00-00'
-			ORDER BY verjaardag ASC, lidjaar, gebdatum, achternaam
-			LIMIT 10";
-
-		$result = $db->select($query);
-
-		if ($result !== false and $db->numRows($result) > 0) {
-			while($aVerjaardag=$db->next($result)){
-				$aVerjaardag['jarig_over'] = ceil((strtotime($aVerjaardag['verjaardag'])-time())/86400);
-				$aVerjaardag['leeftijd'] = round((strtotime($aVerjaardag['verjaardag'])-strtotime($aVerjaardag['gebdatum']))/31536000);
-				$aVerjaardagen[] = $aVerjaardag;
-			}
-		}
-		return $aVerjaardagen;
-	}
-}
-class Moot{
-
-	static function getMaxKringen($moot=0) {
-		$db=MySql::instance();
-		$maxkringen = 0;
-		$sMaxKringen="
-			SELECT
-				MAX(kring) as max
-			FROM
-				lid
-			WHERE
-				(status='S_LID' OR status='S_GASTLID' OR status='S_NOVIET' OR status='S_KRINGEL') ";
-		if($moot!=0){ $sMaxKringen.="AND moot=".$moot; }
-		$sMaxKringen.="	LIMIT 1;";
-
-		$result = $db->select($sMaxKringen);
-		if ($result !== false and $db->numRows($result) > 0) {
-			$max = $db->next($result);
-			$maxkringen = $max['max'];
-			return $maxkringen;
-		}else{
-			return 0;
-		}
-	}
-
-	static function getMaxMoten() {
-		$db=MySql::instance();
-		$query="
-			SELECT MAX(moot) as max
-			FROM lid
-			WHERE (status='S_LID' OR status='S_GASTLID' OR status='S_NOVIET' OR status='S_KRINGEL')";
-		$max=$db->getRow($query);
-		if(is_array($max)){
-			return $max['max'];
-		}
-        return 0;
-	}
-
-	static function getKringen() {
-		$db=MySql::instance();
-		$kring = array();
-		$result = $db->select("
-			SELECT
-				lid.uid as uid,
-				nickname,
-				voornaam,
-				tussenvoegsel,
-				achternaam,
-				geslacht,
-				postfix,
-				moot,
-				kring,
-				motebal,
-				kringleider,
-				email,
-				status,
-				soccieSaldo
-			FROM
-				lid
-			WHERE
-				status='S_LID' OR status='S_GASTLID' OR status='S_NOVIET' OR status='S_KRINGEL'
-			ORDER BY
-				kringleider DESC,
-				achternaam ASC;");
-		if ($result !== false and $db->numRows($result) > 0) {
-			while ($lid = $db->next($result)) {
-				$kring[$lid['moot']][$lid['kring']][] = $lid;
-			}
-		}
-
-		return $kring;
-	}
-}
 class Zoeker{
 	function zoekLeden($zoekterm, $zoekveld, $moot, $sort, $zoekstatus = '') {
 		$db=MySql::instance();

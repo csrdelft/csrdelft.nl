@@ -6,7 +6,7 @@
 # Beeldt informatie af over Verjaardagen
 # -------------------------------------------------------------------
 
-
+require_once 'lid/class.mootverjaardag.php';
 
 class VerjaardagContent extends SimpleHTML {
 
@@ -84,8 +84,8 @@ class VerjaardagContent extends SimpleHTML {
 				echo '</table><br>'."\n";
 				break;
 
-			case 'komende10':
-				$aVerjaardagen=Verjaardag::getKomende10Verjaardagen();
+			case 'komende':
+				$aVerjaardagen=Verjaardag::getKomendeVerjaardagen(Instelling::get('zijbalk_verjaardagen'));
 				echo '<h1>';
 				if($this->_lid->hasPermission('P_LEDEN_READ')){
 					echo '<a href="/communicatie/verjaardagen">Verjaardagen</a>';

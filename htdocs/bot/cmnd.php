@@ -85,13 +85,13 @@ $cmnds = array();
 function getuserhosts($uid, $params) {
     global $lid;
     if ($params['getuid'] == '') {
-        $profiel = $lid->getProfile();
-        $naam = $lid->getCivitasName();
+        $profiel = $lid->getLid()->getProfiel();
+        $naam = $lid->getLid()->getNaamLink('civitas','plain');
     } else {
         $profiel = anderprofiel($params['getuid']);
         if ($profiel === false) return array("Profiel niet gevonden in de ledenlijst");
         # N.B. getCivitasName() 'werkt niet' voor een class.profiel object
-        $naam = $lid->getCivitasName($params['getuid']);
+        $naam = LidCache::getLid($params['getuid'])->getNaamLink('civitas', 'plain');
     }
     $userhosts = array();
     if ($profiel['msn'] != "") $userhosts[] = $profiel['msn'];
@@ -114,7 +114,7 @@ $cmnds['getuserhosts'] = array ('getuid' => false);
  */
 function getsaldo($uid, $params) {
     global $lid;
-    return $lid->getSaldi();
+    return $lid->getLid()->getSaldi();
 }
 $cmnds['getsaldo'] = array();
 
@@ -128,7 +128,7 @@ $cmnds['getsaldo'] = array();
 function abolijst($uid, $params) {
     global $lid,$db;
     require_once('maaltijden/class.maaltrack.php');
-    $maaltrack = new MaalTrack($lid, $db);
+    $maaltrack = new MaalTrack();
     $myabos = $maaltrack->getAbo();
     if (count($myabos) > 0 ) return array_values($myabos);
     return array();
@@ -146,7 +146,7 @@ $cmnds['abolijst'] = array();
 function getwelabos($uid, $params) {
     global $lid,$db;
     require_once('maaltijden/class.maaltrack.php');
-    $maaltrack = new MaalTrack($lid, $db);
+    $maaltrack = new MaalTrack();
     $result = array();
     $abos = $maaltrack->getAbo();
     foreach ($abos as $key => $value)
@@ -167,7 +167,7 @@ $cmnds['getwelabos'] = array();
 function getnotabos($uid, $params) {
     global $lid,$db;
     require_once('maaltijden/class.maaltrack.php');
-    $maaltrack = new MaalTrack($lid, $db);
+    $maaltrack = new MaalTrack();
     $result = array();
     $abos = $maaltrack->getNotAboSoort();
     foreach ($abos as $key => $value)
@@ -187,7 +187,7 @@ $cmnds['getnotabos'] = array();
 function addabo($uid, $params) {
     global $lid,$db;
     require_once('maaltijden/class.maaltrack.php');
-    $maaltrack = new MaalTrack($lid, $db);
+    $maaltrack = new MaalTrack();
     $abosoort = 'A_' . strtoupper($params['abosoort']);
     if ($maaltrack->addAbo($abosoort))
         return array(sprintf("Het maaltijdabonnement '%s' is nu geactiveerd.", $maaltrack->getAboTekst($abosoort)));
@@ -205,7 +205,7 @@ $cmnds['addabo'] = array('abosoort' => true);
 function delabo($uid, $params) {
     global $lid,$db;
     require_once('maaltijden/class.maaltrack.php');
-    $maaltrack = new MaalTrack($lid, $db);
+    $maaltrack = new MaalTrack();
     $abosoort = 'A_' . strtoupper($params['abosoort']);
     if ($maaltrack->delAbo($abosoort))
         return array(sprintf("Het maaltijdabonnement '%s' is nu uitgezet.", $maaltrack->getAboTekst($abosoort)));
@@ -221,11 +221,11 @@ $cmnds['delabo'] = array('abosoort' => true);
  *
  */
 function getjarig($uid, $params) {
-    global $lid;
-    $verj10 = $lid->getKomende10Verjaardagen();
+    $verj10 = Verjaardag::getKomendeVerjaardagen(10);
     $result = array();
     foreach ($verj10 as $verj) {
-        $naam = $lid->getNaamLink($verj['uid'], 'civitas', false, $verj, false);
+		$lid=LidCache::getLid($verj['uid']);
+		$naam = $lid->getNaamLink('civitas', 'plain');
         $datum = date("j-n", mktime(0,0,0,date('m'),date('j')+$verj['jarig_over']));
         $result[] = sprintf('%s %s (%s)', $datum, $naam, $verj['leeftijd']);
     }
@@ -243,7 +243,7 @@ $cmnds['getjarig'] = array();
 function getprofiel($uid, $params) {
     global $lid;
     if ($params['getuid'] == '') {
-        $profiel = $lid->getProfile();
+        $profiel = $lid->getLid()->getProfiel();
     } else {
         $profiel = anderprofiel($params['getuid']);
         if ($profiel === false) return array("Profiel niet gevonden in de ledenlijst");
@@ -262,12 +262,14 @@ $cmnds['getprofiel'] = array('getuid' => false);
 function aaidrom($uid, $params) {
     global $lid;
     if ($params['getuid'] == '') {
-        $profiel = $lid->getProfile();
-        $naam = $lid->getCivitasName();
+		$lid=$lid->getLid();
+		$profiel = $lid->getProfiel();
+        $naam = $lid->getNaam('civitas', 'plain');
     } else {
-        $profiel = anderprofiel($params['getuid']);
-        if ($profiel === false) return array("Profiel niet gevonden in de ledenlijst");
-        $naam = $lid->getCivitasName($params['getuid']);
+		$lid=LidCache::getLid($params['getuid']);
+		$profiel = $lid->getProfiel();
+        if (~is_array($profiel)) return array("Profiel niet gevonden in de ledenlijst");
+        $naam = $lid->getNaam('civitas', 'plain');
     }
     $voor = array(); preg_match('/^([^aeiuoy]*)(.*)$/', $profiel['voornaam'], $voor);
     $achter = array(); preg_match('/^([^aeiuoy]*)(.*)$/', $profiel['achternaam'], $achter);
@@ -291,7 +293,7 @@ $cmnds['aaidrom'] = array('getuid' => false);
  */
 function whoami($uid, $params) {
     global $lid;
-    return array($lid->getFullName());
+    return array($lid->getLid()->getNaam());
 }
 $cmnds['whoami'] = array();
 
@@ -304,7 +306,7 @@ $cmnds['whoami'] = array();
  */
 function perms($uid, $params) {
     global $lid;
-    return array($lid->getPermissions());
+    return array($lid->getLid()->getPermissions());
 }
 $cmnds['perms'] = array();
 
@@ -319,13 +321,13 @@ $cmnds['perms'] = array();
  */
 function zoeklid($uid, $params) {
     global $lid;
-    $leden = $lid->zoekLeden(urldecode($params['zoekterm']), 'naam', 'alle', 'uid', 'leden');
+    $leden = Zoeker::zoekLeden(urldecode($params['zoekterm']), 'naam', 'alle', 'uid', 'leden');
     if (count($leden) == 1) {
         $profiel = anderprofiel($leden[0]['uid']);
         return profiel_to_botarray($profiel);
     }
     $result = array(); # array bouwen van naam en uid
-    foreach ($leden as $l) $result[] = $l['uid'] . " " . $lid->getNaamLink($l['uid'], 'civitas', false, $l, false);
+    foreach ($leden as $l) $result[] = $l['uid'] . " " . LidCache::getLid($l['uid'])->getNaamLink('civitas', 'plain');
     return $result;
 }
 $cmnds['zoeklid'] = array('zoekterm' => true);
@@ -341,13 +343,15 @@ $cmnds['zoeklid'] = array('zoekterm' => true);
  */
 function zoekoud($uid, $params) {
     global $lid;
-    $leden = $lid->zoekLeden(urldecode($params['zoekterm']), 'naam', 'alle', 'uid', 'oudleden');
+    $leden =Zoeker::zoekLeden(urldecode($params['zoekterm']), 'naam', 'alle', 'uid', 'oudleden');
     if (count($leden) == 1) {
         $profiel = anderprofiel($leden[0]['uid']);
         return profiel_to_botarray($profiel);
     }
     $result = array(); # array bouwen van naam en uid
-    foreach ($leden as $l) $result[] = $l['uid'] . " " . $lid->getNaamLink($l['uid'], 'civitas', false, $l, false);
+    foreach ($leden as $l){
+		$result[] = $l['uid'] . " " . LidCache::getLid($l['uid'])->getNaamLink('civitas', 'plain');
+	}
     return $result;
 }
 $cmnds['zoekoud'] = array('zoekterm' => true);
@@ -362,7 +366,7 @@ $cmnds['zoekoud'] = array('zoekterm' => true);
 function maallijst($uid, $params) {
     global $lid,$db;
     require_once('maaltijden/class.maaltrack.php');
-    $maaltrack = new MaalTrack($lid, $db);
+    $maaltrack = new MaalTrack();
     # opvragen komende maaltijden + onze status (zijn we ingeschreven etc)
     $nu = time();
     $lijst = $maaltrack->getMaaltijden($nu-7200, $nu+MAALTIJD_LIJST_MAX_TOT);
@@ -394,7 +398,7 @@ $cmnds['maallijst'] = array();
 function maalinfo($uid, $params) {
     global $lid,$db;
     require_once('maaltijden/class.maaltrack.php');
-    $maaltrack = new MaalTrack($lid, $db);
+    $maaltrack = new MaalTrack();
     $result = array();
 
     # als maalid 0 is, eerstvolgende maaltijd zoeken...
@@ -479,7 +483,7 @@ exit(0);
 function maalaanaf($uid, $params, $aanaf) {
     global $lid,$db;
     require_once('maaltijden/class.maaltrack.php');
-    $maaltrack = new MaalTrack($lid, $db);
+    $maaltrack = new MaalTrack();
     $proxyuid = ($params['proxyuid'] == $uid or $params['proxyuid'] == '') ? '' : $params['proxyuid'];
 
     # als maalid 0 is, eerstvolgende maaltijd zoeken... als die er niet is, exit
@@ -496,7 +500,7 @@ function maalaanaf($uid, $params, $aanaf) {
     if ($maaltrack->$fn($maalid, $params['proxyuid'])) {
         $maalinfo = $maaltrack->getMaaltijd($maalid);
         return array(sprintf("%s %sgemeld voor de maaltijd op %s"
-            , ($params['proxyuid'] == '') ? 'U bent' : $lid->getNaamLink($proxyuid, 'civitas', false, false, false)
+            , ($params['proxyuid'] == '') ? 'U bent' : LidCache::getLid($proxyuid)->getNaam()
             , $aanaf
             , str_replace('  ',' ',strftime("%a %e %b '%y %H:%M", $maalinfo['datum']))
         ));
@@ -511,11 +515,13 @@ function anderprofiel($getuid) {
     # profiel opvragen van iemand anders mag ook, mits...
     # er permissie is om profiel van anderen in te zien en de andere uid bestaat
     if ( !$lid->hasPermission('P_LEDEN_READ') and !$lid->hasPermission('P_OUDLEDEN_READ')
-         or !$lid->uidExists($getuid) ) return false;
+         or !Lid::exists($getuid) ) return false;
     require_once('class.profiel.php');
-    $anderlid = new Profiel();
-    if (!$anderlid->loadSqlTmpProfile($getuid)) return false;
-    return ($anderlid->getTmpProfile());
+    $anderlid =LidCache::getLid($getuid);
+    if ($anderlid instanceof Lid){
+		return $anderlid->getProfiel();
+	}
+	return false;
 }
 
 # Deze functie klust een array met daarin wat informatie uit het profiel.

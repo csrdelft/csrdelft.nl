@@ -58,13 +58,17 @@ class Kolom extends SimpleHTML {
 			$this->add($nieuwscontent);
 
 			# Laatste forumberichten
-			require_once 'forum/class.forumcontent.php';
-			$forumcontent=new forumcontent('lastposts');
-			$this->add($forumcontent);
+			if(Instelling::get('zijbalk_forum')>0){
+				require_once 'forum/class.forumcontent.php';
+				$forumcontent=new ForumContent('lastposts');
+				$this->add($forumcontent);
+			}
 
 			# Komende 10 verjaardagen
-			require_once 'class.verjaardagcontent.php';
-			$this->add(new VerjaardagContent('komende10'));
+			if(Instelling::get('zijbalk_verjaardagen')>0){
+				require_once 'class.verjaardagcontent.php';
+				$this->add(new VerjaardagContent('komende'));
+			}
 	}
 	public function view() {
 		# Als er geen balk is laten we de standaard-inhoud zien

@@ -45,7 +45,7 @@ class ForumContent extends SimpleHTML {
 		$rss->display('forum/rss.tpl');
 	}
 	public function lastPostsZijbalk(){
-		$aPosts=Forum::getPostsVoorRss(15, true);
+		$aPosts=Forum::getPostsVoorRss(Instelling::get('zijbalk_forum'), true);
 		echo '<h1><a href="/communicatie/forum/categorie/laatste">Forum</a></h1>';
 		if(!is_array($aPosts)){
 			echo '<div class="item">Geen items gevonden</div>';
@@ -73,7 +73,7 @@ class ForumContent extends SimpleHTML {
 	}
 	public function lastPosts(){
  		$smarty=new Smarty_csr();
-		$smarty->assign('berichten',Forum::getPostsVoorRss(40));
+		$smarty->assign('berichten', Forum::getPostsVoorRss(Instelling::get('forum_zoekresultaten')));
 		$smarty->assign('melding', $this->getMelding());
 		$smarty->display('forum/list_recent.tpl');
 	}

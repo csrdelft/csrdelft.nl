@@ -25,6 +25,12 @@
  * @return string
  */
 function smarty_modifier_csrnaam($uid, $vorm='civitas', $mode='link'){
-	$lid=LidCache::getLid($uid);
-	return (string)$lid->getNaamLink($vorm, $mode);
+	if(Lid::isValidUid($uid)){
+		$lid=LidCache::getLid($uid);
+		if($lid instanceof Lid){
+			return $lid->getNaamLink($vorm, $mode);
+		}else{
+			return 'Lid['.$uid.'] &notin; db.';
+		}
+	}
 }

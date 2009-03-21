@@ -15,9 +15,6 @@ class Forum{
 	//aantal zoekresultaten
 	private static $_aantalZoekResultaten=40;
 
-	private static $topicsPerPagina=15;
-	private static $postsPerPagina=15;
-
 	public static function getTopicVoorPostID($iPostID){
 		$iTopicInfo = array();
 		$iTopicInfo['tid'] = 0;
@@ -146,20 +143,11 @@ class Forum{
 	public static function getLaatstBekeken(){ return Instelling::get('ForumLaatstBekeken'); }
 	public static function updateLaatstBekeken(){ return; //TODO:LoginLid::instance()->updateForumLaatstBekeken();
 	}
-	public static function getTopicsPerPagina(){ return Forum::$topicsPerPagina; }
-	public static function getPostsPerPagina(){
-		if(LoginLid::instance()->getUid()=='0436'){ // Jieter wil alles op 1 pagina?
-			return 10;
-		}else{
-			return Forum::$postsPerPagina;
-		}
-	}
+	public static function getTopicsPerPagina(){ return Instelling::get('forum_onderwerpenPerPagina'); }
+	public static function getPostsPerPagina(){ return Instelling::get('forum_postsPerPagina'); }
+	
 	public static function getForumNaam($uid=false, $aNaam=false, $aLink=true, $bHtmlentities=true ){
-		$lid=LidCache::getLid($uid);
-		$lid->tsVorm='user';
-		//TODO: netjes oplossen
-		$lid->tsMode=($aLink ? 'link' : 'html');
-		return (string)$lid;
+		return LidCache::getLid($uid)->getNaam('user', ($aLink ? 'link' : 'html'));
 	}
 
 
@@ -216,7 +204,7 @@ class Forum{
 			ORDER BY
 				post.datum DESC
 			LIMIT
-				".Forum::$_aantalZoekResultaten.";";
+				".Instelling::get('forum_zoekresultaten').";";
 		return $db->query2array($sSearchQuery);
 	}
 }

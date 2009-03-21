@@ -30,15 +30,12 @@ class ProfielContent extends SimpleHTML {
 		$this->lid->tsMode='plain';
 		return 'Het profiel van '.(string)$this->lid;
 	}
-	function viewWaarbenik(){
-		echo '<a href="/intern/">Intern</a> &raquo; <a href="/leden/lijst.php">Ledenlijst</a> &raquo; ';
-		echo 'profiel van '.$this->_lid->getFullname($this->_profiel['uid']);
-
-	}
 	function viewStateNone(){
 		$profhtml = array();
 		foreach($this->_profiel as $key => $value){
-			$profhtml[$key] = mb_htmlentities($value);
+			if(!is_array($value)){
+				$profhtml[$key] = mb_htmlentities($value);
+			}
 		}
 
 		$profhtml['fullname']=$this->lid->getNaam();

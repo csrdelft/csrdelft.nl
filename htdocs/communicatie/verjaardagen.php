@@ -1,8 +1,8 @@
 <?php
 
 require_once 'include.config.php';
+require_once 'lid/class.mootverjaardag.php';
 
-require_once 'class.kolom.php';
 
 if($loginlid->hasPermission('P_LEDEN_READ')){
 	# Het middenstuk

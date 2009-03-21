@@ -1,9 +1,10 @@
 <?php
 
-# instellingen & rommeltjes
-require_once('include.config.php');
 
-#moten toevoegen
+require_once 'include.config.php';
+require_once 'lid/class.mootverjaardag.php';
+
+
 if($loginlid->hasPermission('P_LEDEN_MOD') AND isset($_POST['moot'], $_POST['naam']) AND is_array($_POST['naam'])){
 	$iKringGetal=$loginlid->getMaxKringen($_POST['moot'])+1;
 	foreach($_POST['naam'] as $sKringLid){
@@ -14,11 +15,11 @@ if($loginlid->hasPermission('P_LEDEN_MOD') AND isset($_POST['moot'], $_POST['naa
 	header('location: '.CSR_ROOT.'communicatie/moten.php');
 }
 
-if ($loginlid->hasPermission('P_LEDEN_READ')) {
+if($loginlid->hasPermission('P_LEDEN_READ')) {
 	# Het middenstuk
 	require_once('class.motencontent.php');
 	$midden = new MotenContent();
-} else {
+}else{
 	# geen rechten
 	require_once 'class.paginacontent.php';
 	$pagina=new Pagina('geentoegang');

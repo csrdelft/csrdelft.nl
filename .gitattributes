@@ -212,6 +212,7 @@ lib/include.defines.php.sample -text
 lib/lid/class.ledenlijstcontent.php -text
 lib/lid/class.lid.php -text
 lib/lid/class.loginlid.php -text
+lib/lid/class.mootverjaardag.php -text
 lib/lid/class.profiel.php -text
 lib/lid/class.profielcontent.php -text
 lib/maaltijden/class.maaltijd.php -text
