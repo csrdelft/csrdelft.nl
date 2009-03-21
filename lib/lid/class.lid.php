@@ -400,7 +400,8 @@ class Instelling{
 			'forum_zoekresultaten' => array(40, 'int'),
 			'zijbalk_forum' => array(10, 'int'),
 			'zijbalk_mededelingen' => array(6, 'int'),
-			'zijbalk_verjaardagen' => array(10, 'int'));
+			'zijbalk_verjaardagen' => array(10, 'int'),
+			'voorpagina_maaltijdblokje' => array('ja', 'enum', array('ja', 'nee')));
 
 	//hebben we een instelling die $key heet?
 	public static function has($key){			return array_key_exists($key, self::$instellingen); }
@@ -412,6 +413,7 @@ class Instelling{
 		}
 		return false;
 	}
+	
 	
 	public static function get($key){
 		//als er nog niets in SESSION staat, herladen.

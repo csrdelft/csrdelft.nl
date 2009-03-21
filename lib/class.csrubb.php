@@ -93,6 +93,29 @@ class CsrUBB extends eamBBParser{
 		return $content;
 	}
 	/*
+	 * Toont content als instelling een bepaalde waarde heeft,
+	 * standaard 'ja';
+	 *
+	 * [instelling=voorpagina_maaltijdblokje][maaltijd=next][/instelling]
+	 */
+	function ubb_instelling($arguments=array()){
+		$content = $this->parseArray(array('[/instelling]'), array());
+		if(!isset($arguments['instelling'])){
+			return 'Geen of een niet bestaande instelling ('.mb_htmlentities($arguments['instelling']).') opgegeven.';
+		}
+		$testwaarde='ja';
+		if(isset($arguments['waarde'])){
+			$testwaarde=$arguments['waarde'];
+		}
+		try{
+			if(Instelling::get($arguments['instelling'])==$testwaarde){
+				return $content;
+			}
+		}catch(Exception $e){
+			return '[instelling]: '.$e->getMessage();
+		}	
+	}
+	/*
 	 * Omdat we niet willen dat dingen die in privé staan alsnog gezien
 	 * kunnen worden bij het citeren, slopen we hier alles wat in privé-tags staat weg.
 	 */
