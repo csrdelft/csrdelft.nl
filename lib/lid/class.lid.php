@@ -259,6 +259,7 @@ class Lid implements Serializable{
 		}
 		switch($vorm){
 			case 'nick':
+			case 'bijnaam':
 				if($this->profiel['nickname']!=''){
 					$naam=$this->profiel['nickname'];
 				}else{
@@ -273,6 +274,7 @@ class Lid implements Serializable{
 				}
 			break;
 			case 'full':
+			case 'volledig':
 				$naam=$sVolledigeNaam;
 			break;
 			case 'civitas':
@@ -396,7 +398,7 @@ class Instelling{
 	private static $instellingen=array(
 			'forum_onderwerpenPerPagina' => array(15, 'int'),
 			'forum_postsPerPagina' => array(25, 'int'),
-			'forum_naam' => array('civitas', 'enum', array('civitas', 'full', 'nick')),
+			'forum_naam' => array('civitas', 'enum', array('civitas', 'volledig', 'bijnaam')),
 			'forum_zoekresultaten' => array(40, 'int'),
 			'zijbalk_forum' => array(10, 'int'),
 			'zijbalk_mededelingen' => array(6, 'int'),
