@@ -71,6 +71,7 @@ htdocs/communicatie/moten.php -text
 htdocs/communicatie/profiel.php -text
 htdocs/communicatie/verjaardagen.php -text
 htdocs/index.php -text
+htdocs/instellingen.php -text
 htdocs/layout/default.css -text
 htdocs/layout/documenten.css -text
 htdocs/layout/forum.css -text

@@ -21,7 +21,21 @@ class InstellingenContent extends SimpleHTML{
 				echo '<legend><strong>'.ucfirst($current).'</strong></legend>';
 			}
 	
-			echo '<label style="float: left; width: 200px;" for="'.$key.'">'.$parts[1].'</label> <input type="text" name="'.$key.'" value="'.Instelling::get($key).'" /> ('.$inst.')<br /><br />';
+			echo '<label style="float: left; width: 200px;" for="'.$key.'">'.$parts[1].'</label>';
+			if(is_array(Instelling::getEnumOptions($key))){
+				echo '<select type="select" name="'.$key.'">';
+				foreach(Instelling::getEnumOptions($key) as $option){
+					echo '<option value="'.$option.'" ';
+					if($option==Instelling::get($key)){
+						echo 'selected="selected"';
+					}
+					echo '>'.$option.'</option>';
+				}
+				echo '</select>';
+			}else{
+				echo ' <input type="text" name="'.$key.'" value="'.Instelling::get($key).'" />';
+			}
+			echo ' ('.$inst.')<br /><br />';
 		}
 		echo '</fieldset><br />';
 			echo 'Als de instellingen worden opgeslagen in de sessie, worden ze niet in het profiel opgeslagen en zij ze na in en uitloggen verdwenen.<br />';

@@ -396,15 +396,21 @@ class Instelling{
 	private static $instellingen=array(
 			'forum_onderwerpenPerPagina' => array(15, 'int'),
 			'forum_postsPerPagina' => array(25, 'int'),
-			'forum_naam' => array('civitas', 'enum', array('civitas', 'full')),
+			'forum_naam' => array('civitas', 'enum', array('civitas', 'full', 'nick')),
 			'forum_zoekresultaten' => array(40, 'int'),
 			'zijbalk_forum' => array(10, 'int'),
 			'zijbalk_mededelingen' => array(6, 'int'),
 			'zijbalk_verjaardagen' => array(10, 'int'));
 
 	//hebben we een instelling die $key heet?
-	public static function has($key){
-		return array_key_exists($key, self::$instellingen )
+	public static function has($key){			return array_key_exists($key, self::$instellingen); }
+	public static function getDefault($key){	return self::$instellingen[$key][0]; }
+	public static function getType($key){		return self::$instellingen[$key][1]; }
+	public static function getEnumOptions($key){
+		if(self::getType($key)=='enum'){
+			return self::$instellingen[$key][2];
+		}
+		return false;
 	}
 	
 	public static function get($key){
@@ -416,8 +422,8 @@ class Instelling{
 			throw new Exception('Deze instelling  bestaat niet');
 		}
 		//als deze instelling nog niet in SESSION staat, maar we em wel kennen, die er instoppen.
-		if(!isset($_SESSION['instellingen'][$key]){
-			$_SESSOIN['instellingen'][$key]=self::instellingen[$key][0];
+		if(!isset($_SESSION['instellingen'][$key])){
+			$_SESSOIN['instellingen'][$key]=self::getDefault($key);
 		}
 		return $_SESSION['instellingen'][$key];
 	}
@@ -429,15 +435,15 @@ class Instelling{
 		if(!self::has($key)){
 			throw new Exception('Deze instelling  bestaat niet');
 		}
-		switch(self::$instellingen[$key][1]){
+		switch(self::getType($key)){
 			case 'int':
 				$value=(int)$value;
 			break;
 			case 'enum':
 				//als $value niet een van de toegestane waarden is
 				//de standaardwaarde teruggeven.
-				if(!in_array($value, self::$instellingen[$key][2])){
-					$value=self::$instellingen[$key][0];
+				if(!in_array($value, self::getEnumOptions($key))){
+					$value=self::getDefault($key);
 				}
 			break;
 		}
@@ -453,7 +459,8 @@ class Instelling{
 		$lid=LoginLid::instance()->getLid();
 		$lid->setProperty('instellingen', $_SESSION['instellingen']);
 		return $lid->save();
-	}
+	}	
+
 	//standaardwaarden teruggeven.
 	public static function getDefaults(){
 		$return=array();
