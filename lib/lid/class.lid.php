@@ -255,7 +255,7 @@ class Lid implements Serializable{
 
 		//als $vorm==='user', de instelling uit het profiel gebruiken voor vorm
 		if($vorm=='user'){
-			$vorm=Instelling::get('forum_naam');
+			$vorm=Instelling::get('forum_naamWeergave');
 		}
 		switch($vorm){
 			case 'nick':
@@ -396,9 +396,9 @@ class Instelling{
 	 * Instellingarray, een naampje, met een default-value en een type.
 	 */
 	private static $instellingen=array(
-			'forum_onderwerpenPerPagina' => array(15, 'int'),
-			'forum_postsPerPagina' => array(25, 'int'),
-			'forum_naam' => array('civitas', 'enum', array('civitas', 'volledig', 'bijnaam')),
+			'forum_onderwerpenPerPagina' => array(15, 'int', 5), //deze hebben een minimum, anders gaat het forum stuk.
+			'forum_postsPerPagina' => array(25, 'int', 10),
+			'forum_naamWeergave' => array('civitas', 'enum', array('civitas', 'volledig', 'bijnaam')),
 			'forum_zoekresultaten' => array(40, 'int'),
 			'zijbalk_forum' => array(10, 'int'),
 			'zijbalk_mededelingen' => array(6, 'int'),
@@ -442,6 +442,10 @@ class Instelling{
 		switch(self::getType($key)){
 			case 'int':
 				$value=(int)$value;
+				//check op minimum
+				if(isset(self::$instellingen[$key][2]) AND $value<self::$instellingen[$key][2]){
+					$value=self::$instellingen[$key][2];
+				}
 			break;
 			case 'enum':
 				//als $value niet een van de toegestane waarden is
