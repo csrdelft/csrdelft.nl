@@ -20,10 +20,7 @@ class EetplanContent extends SimpleHTML {
 	function getTitel(){
 		return 'Eetplan';
 	}
-	function viewWaarbenik(){
 
-		echo '<a href="/intern/">Intern</a> &raquo; Eetplan';
-	}
 	function viewEetplanVoorPheut($uid){
 		//huizen voor een feut tonen
 		$aEetplan=$this->_eetplan->getEetplanVoorPheut($uid);

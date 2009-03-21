@@ -209,6 +209,7 @@ lib/groepen/class.groepen.php -text
 lib/include.common.php -text
 lib/include.config.php -text
 lib/include.defines.php.sample -text
+lib/lid/class.instellingencontent.php -text
 lib/lid/class.ledenlijstcontent.php -text
 lib/lid/class.lid.php -text
 lib/lid/class.loginlid.php -text

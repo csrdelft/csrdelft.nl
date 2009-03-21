@@ -389,19 +389,59 @@ class LidCache{
  * Gebruikersinstellingen opslaan in de Sessie.
  */
 class Instelling{
+
+	/*
+	 * Instellingarray, een naampje, met een default-value en een type.
+	 */
+	private static $instellingen=array(
+			'forum_onderwerpenPerPagina' => array(15, 'int'),
+			'forum_postsPerPagina' => array(25, 'int'),
+			'forum_naam' => array('civitas', 'enum', array('civitas', 'full')),
+			'forum_zoekresultaten' => array(40, 'int'),
+			'zijbalk_forum' => array(10, 'int'),
+			'zijbalk_mededelingen' => array(6, 'int'),
+			'zijbalk_verjaardagen' => array(10, 'int'));
+
+	//hebben we een instelling die $key heet?
+	public static function has($key){
+		return array_key_exists($key, self::$instellingen )
+	}
+	
 	public static function get($key){
+		//als er nog niets in SESSION staat, herladen.
 		if(!isset($_SESSION['instellingen'])){
 			self::reload();
 		}
+		if(!self::has($key)){
+			throw new Exception('Deze instelling  bestaat niet');
+		}
+		//als deze instelling nog niet in SESSION staat, maar we em wel kennen, die er instoppen.
+		if(!isset($_SESSION['instellingen'][$key]){
+			$_SESSOIN['instellingen'][$key]=self::instellingen[$key][0];
+		}
 		return $_SESSION['instellingen'][$key];
 	}
+	
 	public static function set($key, $value){
 		if(!isset($_SESSION['instellingen'])){
 			self::reload();
 		}
-		if(array_key_exists($key, self::getDefaults())){
-			$_SESSION['instellingen'][$key]=$value;
+		if(!self::has($key)){
+			throw new Exception('Deze instelling  bestaat niet');
 		}
+		switch(self::$instellingen[$key][1]){
+			case 'int':
+				$value=(int)$value;
+			break;
+			case 'enum':
+				//als $value niet een van de toegestane waarden is
+				//de standaardwaarde teruggeven.
+				if(!in_array($value, self::$instellingen[$key][2])){
+					$value=self::$instellingen[$key][0];
+				}
+			break;
+		}
+		$_SESSION['instellingen'][$key]=$value;
 	}
 	public static function clear(){
 		unset($_SESSION['instellingen']);		
@@ -414,19 +454,16 @@ class Instelling{
 		$lid->setProperty('instellingen', $_SESSION['instellingen']);
 		return $lid->save();
 	}
+	//standaardwaarden teruggeven.
 	public static function getDefaults(){
-		return array(
-			'forum_onderwerpenPerPagina' => 15,
-			'forum_postsPerPagina' => 25,
-			'forum_naam' => 'civitas',
-			'forum_zoekresultaten' => 40,
-			'zijbalk_forum' => 10,
-			'zijbalk_mededelingen' => 6,
-			'zijbalk_verjaardagen' => 10);
+		$return=array();
+		foreach(self::$instellingen as $key => $instelling){
+			$return[$key]=$instelling[0];
+		}
+		return $return;
 	}
 
 }
-
 
 
 class Zoeker{

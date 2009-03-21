@@ -35,10 +35,6 @@ class DocumentenContent extends SimpleHTML {
 		return 'Documenten';
 	}
 
-	function viewWaarBenik() {
-		echo '<a href="/intern/">Intern</a> &raquo; '.$this->getTitel();
-	}
-
 	/*
 	 * Laat de box zien waarmee men documenten kan bewerken
 	 * parameters: 	catsOptions is een string met de opties van het drop-down menu

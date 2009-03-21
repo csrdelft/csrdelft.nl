@@ -23,7 +23,7 @@ class MaaltijdVoorkeurContent extends SimpleHTML {
 		$this->_maaltrack=$maaltrack;
 	}
 	function getTitel(){ return 'Maaltijdketzer - Voorkeuren'; }
-	function viewWaarBenik(){ echo '<a href="/actueel/maaltijden/">Maaltijden</a> &raquo; Voorkeuren'; }
+
 	function view(){
 		$loginlid=LoginLid::instance();
 

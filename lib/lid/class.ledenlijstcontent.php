@@ -52,9 +52,6 @@ class LedenlijstContent extends SimpleHTML {
 	function getTitel(){
 		return 'Ledenlijst';
 	}
-	function viewWaarbenik(){
-		echo '<a href="/intern/">Intern</a> &raquo; Ledenlijst';
-	}
 
 	function view() {
 		# De ingevulde zoekterm weer afbeelden
