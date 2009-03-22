@@ -7,10 +7,12 @@
  */
 
 class InstellingenContent extends SimpleHTML{
-
+	public function getTitel(){
+		return 'Websiteinstellingen';
+	}
 	public function view(){
 		$instellingen=Instelling::getDefaults();
-		echo '<h1>Instelling csrdelft.nl</h1>Standaarwaarden tussen haakjes.<form method="post">';
+		echo '<h1>Instelling csrdelft.nl</h1>Standaardwaarden tussen haakjes.<form method="post">';
 		$current='';
 		foreach($instellingen as $key =>  $inst){
 			$parts=explode('_', $key);
@@ -21,7 +23,7 @@ class InstellingenContent extends SimpleHTML{
 				echo '<legend><strong>'.ucfirst($current).'</strong></legend>';
 			}
 	
-			echo '<label style="float: left; width: 200px;" for="inst_'.$key.'">'.ucfirst($parts[1]).'</label>';
+			echo '<label style="float: left; width: 200px;" for="inst_'.$key.'">'.Instelling::getDescription($key).'</label>';
 			if(is_array(Instelling::getEnumOptions($key))){
 				echo '<select type="select" id="inst_'.$key.'">';
 				foreach(Instelling::getEnumOptions($key) as $option){

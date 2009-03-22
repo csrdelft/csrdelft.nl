@@ -396,23 +396,24 @@ class Instelling{
 	 * Instellingarray, een naampje, met een default-value en een type.
 	 */
 	private static $instellingen=array(
-			'forum_onderwerpenPerPagina' => array(15, 'int', 5), //deze hebben een minimum, anders gaat het forum stuk.
-			'forum_postsPerPagina' => array(25, 'int', 10),
-			'forum_naamWeergave' => array('civitas', 'enum', array('civitas', 'volledig', 'bijnaam')),
-			'forum_zoekresultaten' => array(40, 'int'),
-			'zijbalk_gasnelnaar' => array('ja', 'enum', array('ja', 'nee')),
-			'zijbalk_mededelingen' => array(8, 'int'),
-			'zijbalk_forum' => array(10, 'int'),
-			'zijbalk_verjaardagen' => array(10, 'int'),
-			'voorpagina_maaltijdblokje' => array('ja', 'enum', array('ja', 'nee')));
+			'forum_onderwerpenPerPagina' => array(15, 'Onderwerpen per pagina', 'int', 5), //deze hebben een minimum, anders gaat het forum stuk.
+			'forum_postsPerPagina' => array(25, 'Berichten per pagina', 'int', 10),
+			'forum_naamWeergave' => array('civitas', 'Naamweergave', 'enum', array('civitas', 'volledig', 'bijnaam')),
+			'forum_zoekresultaten' => array(40, 'Zoekresultaten', 'int'),
+			'zijbalk_gasnelnaar' => array('ja', 'Ga snel naar weergeven', 'enum', array('ja', 'nee')),
+			'zijbalk_mededelingen' => array(8, 'Aantal mededelingen in zijbalk', 'int'),
+			'zijbalk_forum' => array(10, 'Aantal forumberichten in zijbalk', 'int'),
+			'zijbalk_verjaardagen' => array(10, 'Aanal verjaardagen in zijbalk', 'int'),
+			'voorpagina_maaltijdblokje' => array('ja', 'Volgende maaltijd weergeven', 'enum', array('ja', 'nee')));
 
 	//hebben we een instelling die $key heet?
 	public static function has($key){			return array_key_exists($key, self::$instellingen); }
 	public static function getDefault($key){	return self::$instellingen[$key][0]; }
-	public static function getType($key){		return self::$instellingen[$key][1]; }
+	public static function getDescription($key){return self::$instellingen[$key][1]; }
+	public static function getType($key){		return self::$instellingen[$key][2]; }
 	public static function getEnumOptions($key){
 		if(self::getType($key)=='enum'){
-			return self::$instellingen[$key][2];
+			return self::$instellingen[$key][3];
 		}
 		return false;
 	}
@@ -444,8 +445,8 @@ class Instelling{
 			case 'int':
 				$value=(int)$value;
 				//check op minimum
-				if(isset(self::$instellingen[$key][2]) AND $value<self::$instellingen[$key][2]){
-					$value=self::$instellingen[$key][2];
+				if(isset(self::$instellingen[$key][3]) AND $value<self::$instellingen[$key][2]){
+					$value=self::$instellingen[$key][3];
 				}
 			break;
 			case 'enum':
