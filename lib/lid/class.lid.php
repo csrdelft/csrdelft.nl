@@ -445,7 +445,7 @@ class Instelling{
 			case 'int':
 				$value=(int)$value;
 				//check op minimum
-				if(isset(self::$instellingen[$key][3]) AND $value<self::$instellingen[$key][2]){
+				if(isset(self::$instellingen[$key][3]) AND $value<self::$instellingen[$key][3]){
 					$value=self::$instellingen[$key][3];
 				}
 			break;

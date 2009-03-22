@@ -25,7 +25,7 @@ class InstellingenContent extends SimpleHTML{
 	
 			echo '<label style="float: left; width: 200px;" for="inst_'.$key.'">'.Instelling::getDescription($key).'</label>';
 			if(is_array(Instelling::getEnumOptions($key))){
-				echo '<select type="select" id="inst_'.$key.'">';
+				echo '<select type="select" id="inst_'.$key.'" name="'.$key.'">';
 				foreach(Instelling::getEnumOptions($key) as $option){
 					echo '<option value="'.$option.'" ';
 					if($option==Instelling::get($key)){
@@ -35,7 +35,7 @@ class InstellingenContent extends SimpleHTML{
 				}
 				echo '</select>';
 			}else{
-				echo ' <input type="text" id="inst_'.$key.'" value="'.Instelling::get($key).'" />';
+				echo ' <input type="text" id="inst_'.$key.'" name="'.$key.'" value="'.Instelling::get($key).'" />';
 			}
 			echo ' ('.ucfirst($inst).')<br /><br />';
 		}
