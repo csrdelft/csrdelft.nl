@@ -16,7 +16,7 @@ class InstellingenContent extends SimpleHTML{
 			$parts=explode('_', $key);
 			if($parts[0]!=$current){
 				if($current!=''){ echo '</fieldset><br />'; }
-				echo '<fieldset>';
+				echo '<fieldset style="padding: 5px 10px;">';
 				$current=$parts[0];
 				echo '<legend><strong>'.ucfirst($current).'</strong></legend>';
 			}

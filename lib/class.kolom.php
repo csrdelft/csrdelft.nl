@@ -38,10 +38,13 @@ class Kolom extends SimpleHTML {
 		}
 	}
 	private function defaultView(){
-			# Ga snel naar
-			require_once('class.menu.php');
-			$this->add(new stringincluder(Menu::getGaSnelNaar()));
 
+			# Ga snel naar
+			if(Instelling::get('zijbalk_gasnelnaar')=='ja'){
+				require_once('class.menu.php');
+				$this->add(new stringincluder(Menu::getGaSnelNaar()));
+			}
+			
 			# Agenda
 			require_once('class.pagina.php');
 			require_once('class.paginacontent.php');
@@ -50,12 +53,15 @@ class Kolom extends SimpleHTML {
 			$this->add($paginacontent);
 
 			# Laatste mededelingen
-			require_once('class.nieuwscontent.php');
-			require_once('class.nieuws.php');
-			$nieuws = new Nieuws();
-			$nieuwscontent = new NieuwsContent($nieuws);
-			$nieuwscontent->setActie('laatste');
-			$this->add($nieuwscontent);
+			if(Instelling::get('zijbalk_mededelingen')>0){
+				require_once('class.nieuwscontent.php');
+				require_once('class.nieuws.php');
+				$nieuws = new Nieuws();
+				$nieuwscontent = new NieuwsContent($nieuws);
+				$nieuwscontent->aantal=Instelling::get('zijbalk_mededelingen');
+				$nieuwscontent->setActie('laatste');
+				$this->add($nieuwscontent);
+			}
 
 			# Laatste forumberichten
 			if(Instelling::get('zijbalk_forum')>0){

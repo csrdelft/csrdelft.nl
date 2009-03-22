@@ -400,8 +400,9 @@ class Instelling{
 			'forum_postsPerPagina' => array(25, 'int', 10),
 			'forum_naamWeergave' => array('civitas', 'enum', array('civitas', 'volledig', 'bijnaam')),
 			'forum_zoekresultaten' => array(40, 'int'),
+			'zijbalk_gasnelnaar' => array('ja', 'enum', array('ja', 'nee')),
+			'zijbalk_mededelingen' => array(8, 'int'),
 			'zijbalk_forum' => array(10, 'int'),
-			'zijbalk_mededelingen' => array(6, 'int'),
 			'zijbalk_verjaardagen' => array(10, 'int'),
 			'voorpagina_maaltijdblokje' => array('ja', 'enum', array('ja', 'nee')));
 

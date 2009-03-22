@@ -166,7 +166,7 @@
 	{if is_array($profhtml.recenteForumberichten)}
 	<div class="profielregel" id="forum">
 		<div class="left">Forum</div>
-		<div class="gegevens">
+		<div class="gegevens" id="forum_gegevens">
 			{if $lid->getUid()==$profhtml.uid}
 			<div class="label">RSS-feed:</div>
 			<div class="data">
