@@ -68,10 +68,9 @@ class VerjaardagContent extends SimpleHTML {
 							$verjaardagen = Verjaardag::getVerjaardagen($maand);
 							foreach ($verjaardagen as $verjaardag){
 								$lid=LidCache::getLid($verjaardag['uid']);
-								$lid->tsMode='link';
 								if ($verjaardag['gebdag'] == $dezedag and $maand == $dezemaand) echo '<em>';
 								echo $verjaardag['gebdag'] . " ";
-								echo (string)$lid."<br />\n";
+								echo $lid->getNaamLink('civitas', 'link')."<br />\n";
 								if ($verjaardag['gebdag'] == $dezedag and $maand == $dezemaand) echo "</em>";
 							}
 							echo "<br /></td>\n";
@@ -96,10 +95,9 @@ class VerjaardagContent extends SimpleHTML {
 				for ($i=0; $i<sizeOf($aVerjaardagen); $i++) {
 					$aVerjaardag = $aVerjaardagen[$i];
 					$lid=LidCache::getLid($aVerjaardag['uid']);
-					$lid->tsMode='link';
 					echo '<div class="item">'.date('d-m', strtotime($aVerjaardag['gebdatum'])).' ';
 					if($aVerjaardag['jarig_over']==0){echo '<span class="opvallend">';}
-					echo (string)$lid;
+					echo $lid->getNaamLink('civitas', 'link');
 					if($aVerjaardag['jarig_over']==0){echo '</span>';}
 					echo '</div>';
 				}
