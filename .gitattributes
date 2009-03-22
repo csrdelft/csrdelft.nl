@@ -55,7 +55,6 @@ htdocs/communicatie/documenten_new/index.php -text
 htdocs/communicatie/forum/.htaccess -text
 htdocs/communicatie/forum/bewerken.php -text
 htdocs/communicatie/forum/getPost.php -text
-htdocs/communicatie/forum/getToken.php -text
 htdocs/communicatie/forum/goedkeuren.php -text
 htdocs/communicatie/forum/index.php -text
 htdocs/communicatie/forum/onderwerp.php -text

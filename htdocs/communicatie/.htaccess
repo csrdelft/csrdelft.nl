@@ -14,7 +14,7 @@ RewriteRule ^moten moten.php
 
 # Profielen
 RewriteRule ^profiel/([0-9a-z]+)$ profiel.php?uid=$1
-RewriteRule ^profiel/([0-9a-z]+)/([a-z]+)$ profiel.php?uid=$1&a=$2
+RewriteRule ^profiel/([0-9a-z]+)/([a-zA-Z]+)/?$ profiel.php?uid=$1&a=$2
 
 # Pagina's met tekst
 RewriteRule ^irc/? ../pagina.php?naam=irc

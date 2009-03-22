@@ -20,6 +20,11 @@ if(!($loginlid->hasPermission('P_LEDEN_READ') or $loginlid->hasPermission('P_OUD
 	$error=3;
 }
 
+if(isset($_GET['a']) AND $_GET['a']=='rssToken'){//} AND $uid==$loginlid->getUid()){
+	$loginlid->getToken();
+	header('location: '.CSR_ROOT.'communicatie/profiel/'.$uid.'#forum');
+	exit;
+}
 switch ($error) {
 	case 0:
 	case 2:

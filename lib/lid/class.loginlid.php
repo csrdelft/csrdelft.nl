@@ -282,6 +282,7 @@ class LoginLid{
 		$token=substr(md5($uid.getDateTime()), 0, 25);
 		$query="UPDATE lid SET rssToken='".$token."' WHERE uid='".$uid."' LIMIT 1;";
 		if(MySql::instance()->query($query)){
+			LidCache::flushLid($uid);
 			return $token;
 		}else{
 			return false;

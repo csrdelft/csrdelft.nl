@@ -97,7 +97,7 @@
 			{/if}
 		</div>
 	</div>
-	<div class="profielregel">
+	<div class="profielregel" id="groepen">
 		<div class="left">Groepen</div>	
 		<div class="gegevens">		
 			{$profhtml.groepen->view()}
@@ -124,7 +124,7 @@
 	{/if}
 	
 	{if $lid->getUid()==$profhtml.uid OR $profhtml.eetwens!='' OR is_array($profhtml.recenteMaaltijden)}
-	<div class="profielregel">
+	<div class="profielregel" id="maaltijden">
 		<div class="left">Maaltijden
 			{if $lid->getUid()==$profhtml.uid}
 				<br /><a href="/actueel/maaltijden/voorkeuren.php" class="knop" ><img src="{$csr_pics}forum/bewerken.png" title="Maaltijdvoorkeuren bewerken" /></a>
@@ -164,9 +164,22 @@
 	{/if}
 	<div style="clear: left;"></div>
 	{if is_array($profhtml.recenteForumberichten)}
-	<div class="profielregel">
+	<div class="profielregel" id="forum">
 		<div class="left">Forum</div>
 		<div class="gegevens">
+			{if $lid->getUid()==$profhtml.uid}
+			<div class="label">RSS-feed:</div>
+			<div class="data">
+				{if $profhtml.rssToken!=''}
+				<a href="http://csrdelft.nl/communicatie/forum/rss/{$profhtml.rssToken}.xml">
+					<img src="{$csr_pics}layout/feedicon.png" width="14" height="14" alt="RSS-feed http://csrdelft.nl" />
+					Persoonlijke RSS-feed forum
+				</a>
+				{/if}
+				<a class="knop" href="/communicatie/profiel/{$lid->getUid()}/rssToken#forum">Nieuwe aanvragen</a>
+			</div>
+			<br />
+			{/if}
 			<div class="label">Recent:</div>
 			<div class="data">
 				<table style="width: 600px">
