@@ -428,7 +428,7 @@ class Instelling{
 		}
 		//als deze instelling nog niet in SESSION staat, maar we em wel kennen, die er instoppen.
 		if(!isset($_SESSION['instellingen'][$key])){
-			$_SESSOIN['instellingen'][$key]=self::getDefault($key);
+			$_SESSION['instellingen'][$key]=self::getDefault($key);
 		}
 		return $_SESSION['instellingen'][$key];
 	}
