@@ -40,7 +40,7 @@ class InstellingenContent extends SimpleHTML{
 			echo ' ('.ucfirst($inst).')<br /><br />';
 		}
 		echo '</fieldset><br />';
-		echo 'Als de instellingen worden opgeslagen in de sessie, worden ze niet in het profiel opgeslagen en zij ze na in en uitloggen verdwenen.<br />';
+		echo 'Als de instellingen worden opgeslagen in de sessie, worden ze niet in het profiel opgeslagen en zijn ze na uit- en inloggen verdwenen.<br />';
 		echo '<input type="submit" name="save_session" value="opslaan in sessie"> <input type="submit" name="save" value="opslaan in profiel"></form>';
 	
 	}
