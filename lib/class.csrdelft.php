@@ -57,6 +57,11 @@ class csrdelft extends SimpleHTML {
 			$this->addScript('csrdelft.js');
 			$this->addScript('menu.js');
 		}
+		
+		//Roze webstek
+		if(Instelling::get('layout_rozeWebstek')=='ja'){
+			$this->addStylesheet('roze.css');
+		}
 
 	}
 

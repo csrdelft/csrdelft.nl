@@ -1,0 +1,26 @@
+body{
+	background-color: #ff55ff;
+}
+#container,#container *{
+	background-color: #ff00ff !important;
+	background-image: none !important;
+}
+#container{
+	border: 1px solid #b8b8b8;
+	border-width: 0 1px 1px 1px;
+	margin-top: 0;
+}
+#menu,#submenu{
+	margin: 0;
+	padding: 0 19px 0 19px;
+}
+#menu{
+	border-top: 1px solid #b8b8b8;
+	padding-top: 5px
+}
+#submenu{
+	border-bottom: 1px solid #b8b8b8;
+}
+#menu,#menu *,#submenu,#submenu *{
+	background-color: #cc00ff !important;
+}
