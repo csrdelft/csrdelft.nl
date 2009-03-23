@@ -115,7 +115,7 @@ function namen2uid($sNamen, $filter='leden'){
 	$return=false;
 	foreach($aNamen as $sNaam){
 		$aNaamOpties=array();
-		$aZoekNamen=Zoeken::zoekLeden($sNaam, 'naam', 'alle', 'achternaam', $filter);
+		$aZoekNamen=Zoeker::zoekLeden($sNaam, 'naam', 'alle', 'achternaam', $filter);
 		if(count($aZoekNamen)==1){
 			$naam=$aZoekNamen[0]['voornaam'].' ';
 			if(trim($aZoekNamen[0]['tussenvoegsel'])!=''){ $naam.=$aZoekNamen[0]['tussenvoegsel'].' '; }
