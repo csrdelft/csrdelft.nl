@@ -15,7 +15,7 @@ class Courant {
 
 	private $sError='';
 	private $categorieen=array('bestuur', 'csr', 'overig', 'voorwoord', 'sponsor');
-	private $catNames=array('Bestuur', 'C.S.R.', 'Overig', 'Voorwoord', 'sponsor');
+	private $catNames=array('Bestuur', 'C.S.R.', 'Overig', 'Voorwoord', 'Sponsor');
 
 	//Constructor voor de courant
 	function Courant(){
@@ -64,7 +64,7 @@ class Courant {
 		}
 		$db=MySql::instance();
 		$rBerichten=$db->query($sBerichtenQuery);
-		if($this->_db->numRows($rBerichten)>=1){
+		if($db->numRows($rBerichten)>=1){
 			while($aBericht=$db->next($rBerichten)){
 				$this->berichten[$aBericht['ID']]=$aBericht;
 			}
@@ -85,6 +85,8 @@ class Courant {
 		//voorwoord en sponsor eruit gooien, die zijn enkel voor beheerders beschikbaar.
 		if(!$this->magBeheren()){
 			unset($return[3]);
+		}
+		if(!$this->magBeheren() && !LoginLid::instance()->hasPermission('groep:AcqCie')){
 			unset($return[4]);
 		}
 		return $return;
@@ -111,11 +113,11 @@ class Courant {
 
 	private function clearTitel($titel){
 		//titel escapen, eerste letter een hoofdletter maken, en de spaties wegkekken
-		return ucfirst($this->_db->escape(trim($titel)));
+		return ucfirst(MySql::instance()->escape(trim($titel)));
 	}
 	private function clearBericht($bericht){
 		//bericht escapen, eerste letter een hoofdletter maken, en de spaties wegkekken
-		return ucfirst($this->_db->escape(trim($bericht)));
+		return ucfirst(MySql::instance()->escape(trim($bericht)));
 	}
 	private function clearCategorie($categorie){
 		if($this->_isValideCategorie($categorie)){
@@ -145,7 +147,7 @@ class Courant {
 			(
 				uid, titel, cat, bericht, datumTijd, volgorde
 			)VALUES(
-				'".LoginLid::instance()>getUid()."', '".$this->clearTitel($titel)."',
+				'".LoginLid::instance()->getUid()."', '".$this->clearTitel($titel)."',
 				'".$this->clearCategorie($categorie)."', '".$this->clearBericht($bericht)."', '".getDateTime()."', ".$volgorde."
 			);";
 
@@ -238,11 +240,11 @@ class Courant {
 		if($this->isCache()){
 			$userCache=array();
 			//mods en bestuur zien alle berichten
-			if($this->magBeheren() OR LoginLid::instance->hasPermission('groep:bestuur')){
+			if($this->magBeheren() OR LoginLid::instance()->hasPermission('groep:bestuur')){
 				return $this->berichten;
 			}else{
 				foreach($this->berichten as $bericht){
-					if(MySql::instance()->isSelf($bericht['uid'])){
+					if(LoginLid::instance()->isSelf($bericht['uid'])){
 						$userCache[]=$bericht;
 					}
 				}
