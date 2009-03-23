@@ -551,7 +551,7 @@ class Groep{
 	}
 
 	public function getError(){
-		return $this->error();
+		return $this->error;
 	}
 }
 ?>
