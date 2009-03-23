@@ -273,6 +273,22 @@ class GroepStatsContent extends SimpleHTML{
 			echo '</table><br />';
 		}
 	}
+}
+class GroepEmailContent extends SimpleHTML{
+	private $groep;
 
+	public function __construct($groep){
+		$this->groep=$groep;
+	}
+	public function view(){
+		$emails=array();
+		foreach($this->groep->getLeden() as $row){
+			$lid=LidCache::getLid($row['uid']);
+			if($lid instanceof Lid AND $lid->getEmail()!=''){
+				$emails[]=$lid->getEmail();
+			}
+		}
+		echo implode(', ', $emails);
+	}
 }
 ?>

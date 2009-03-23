@@ -151,7 +151,7 @@ class Lid implements Serializable{
 	public function getProfiel(){	return $this->profiel; }
 	public function getNaam(){  	return $this->getNaamLink('full','plain'); }
 	public function getNickname(){ 	return $this->profiel['nickname']; }
-	public function getEmail(){ 	return $this->profiel['uid']; }
+	public function getEmail(){ 	return $this->profiel['email']; }
 	public function getMoot(){ 		return $this->profiel['moot']; }
 	public function getPassword(){	return $this->profiel['password']; }
 	public function checkpw($pass){
@@ -343,6 +343,9 @@ class Lid implements Serializable{
 		$lid=LidCache::getLid($uid);
 		return $lid instanceof Lid;
 	}
+	public static function nickExists($nick){
+		return Lid::loadByNickname($nick) instanceof Lid;
+	}
 }
 
 class LidCache{
@@ -404,7 +407,8 @@ class Instelling{
 			'zijbalk_gasnelnaar' => array('ja', 'Ga snel naar weergeven', 'enum', array('ja', 'nee')),
 			'zijbalk_mededelingen' => array(8, 'Aantal mededelingen in zijbalk', 'int'),
 			'zijbalk_forum' => array(10, 'Aantal forumberichten in zijbalk', 'int'),
-			'zijbalk_verjaardagen' => array(10, 'Aanal verjaardagen in zijbalk', 'int'),
+			'zijbalk_forum_zelf' => array(0, 'Aantal zelf geposte forumberichten zijbalk', 'int'),
+			'zijbalk_verjaardagen' => array(10, 'Aantal verjaardagen in zijbalk', 'int'),
 			'voorpagina_maaltijdblokje' => array('ja', 'Volgende maaltijd weergeven', 'enum', array('ja', 'nee')));
 
 	//hebben we een instelling die $key heet?

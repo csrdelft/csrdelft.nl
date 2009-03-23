@@ -15,12 +15,13 @@ if($loginlid->hasPermission('P_LEDEN_READ') AND isset($_GET['string'])){
 	foreach($uids as $uid){
 		if(Lid::isValidUid($uid)){
 			$lid=LidCache::getLid($uid);
-			if($link){
-				echo '<a href="/communicatie/profiel/'.$uid.'" title="'.$lid->getNaam().'">';
+			if($lid instanceof Lid){
+				if($link){
+					echo '<a href="/communicatie/profiel/'.$uid.'" title="'.$lid->getNaam().'">';
+				}
+				echo $lid->getPasfoto(true);
+				if($link){ echo '</a>'; }
 			}
-			echo $lid->getPasfoto(true);
-			if($link){ echo '</a>'; }
-
 		}
 	}
 	echo '</div>';

@@ -151,9 +151,9 @@ class Forum{
 	}
 
 
-	public static function getPostsVoorUid($uid=null){
-		if($uid==null){ LoginLid::instance()->getLid()->getUid(); }
-		return Forum::getPostsVoorRss(false, false, null, $uid);
+	public static function getPostsVoorUid($uid=null, $aantal=false){
+		if($uid==null){ LoginLid::instance()->getUid(); }
+		return Forum::getPostsVoorRss($aantal, false, null, $uid);
 	}
 	public static function searchPosts($sZoekQuery, $categorie=null){
 		if(!preg_match('/^[a-zA-Z0-9 \-\+\'\"\.]*$/', $sZoekQuery)){

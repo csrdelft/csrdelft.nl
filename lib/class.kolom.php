@@ -69,6 +69,11 @@ class Kolom extends SimpleHTML {
 				$forumcontent=new ForumContent('lastposts');
 				$this->add($forumcontent);
 			}
+			if(Instelling::get('zijbalk_forum_zelf')>0){
+				require_once 'forum/class.forumcontent.php';
+				$forumcontent=new ForumContent('lastposts_zelf');
+				$this->add($forumcontent);
+			}
 
 			# Komende 10 verjaardagen
 			if(Instelling::get('zijbalk_verjaardagen')>0){

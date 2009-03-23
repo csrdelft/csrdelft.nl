@@ -40,6 +40,9 @@
 		{if $groep->isAdmin() OR ($groep->isAanmeldbaar() AND $groep->isIngelogged())}
 		<a class="tab" onclick="showStats({$groep->getId()})">%</a>
 		{/if}
+		{if $groep->isAdmin() OR $groep->isOp()}
+		<a class="tab" onclick="showEmails({$groep->getId()})">@</a>
+		{/if}
 	{/if}
 	</div>
 	<div id="ledenvangroep{$groep->getId()}" class="groepleden">

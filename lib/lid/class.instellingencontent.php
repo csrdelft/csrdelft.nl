@@ -23,7 +23,7 @@ class InstellingenContent extends SimpleHTML{
 				echo '<legend><strong>'.ucfirst($current).'</strong></legend>';
 			}
 	
-			echo '<label style="float: left; width: 200px;" for="inst_'.$key.'">'.Instelling::getDescription($key).'</label>';
+			echo '<label style="float: left; width: 250px;" for="inst_'.$key.'">'.Instelling::getDescription($key).'</label>';
 			if(is_array(Instelling::getEnumOptions($key))){
 				echo '<select type="select" id="inst_'.$key.'" name="'.$key.'">';
 				foreach(Instelling::getEnumOptions($key) as $option){
