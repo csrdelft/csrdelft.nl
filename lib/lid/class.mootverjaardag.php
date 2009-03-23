@@ -132,7 +132,8 @@ class Moot{
 			FROM
 				lid
 			WHERE
-				status='S_LID' OR status='S_GASTLID' OR status='S_NOVIET' OR status='S_KRINGEL'
+				(status='S_LID' OR status='S_GASTLID' OR status='S_NOVIET' OR status='S_KRINGEL') OR
+				((status='S_OUDLID' OR status='S_NOBODY') AND kring <> 0)
 			ORDER BY
 				kringleider DESC,
 				achternaam ASC;");
