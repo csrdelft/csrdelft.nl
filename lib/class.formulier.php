@@ -24,7 +24,7 @@ abstract class FormField{
 		$this->value=$value;
 		$this->description=$description;
 		if($this->isPosted()!==false){
-			$this->value=htmlspecialchars($this->getValue());
+			$this->value=$this->getValue();
 		}
 	}
 	public function getName(){	return $this->name; }
@@ -106,6 +106,9 @@ class InputField extends FormField{
 		return $this->error!='';
 	}
 }
+class RequiredInputField extends InputField{
+	public $notnull=true;
+}
 
 class EmailField extends FormField{
 	public function valid(){
@@ -142,7 +145,7 @@ class UrlField extends FormField{
 		if(!parent::valid()){ return false; }
 		if($this->getValue()==''){ return true; }
 
-		if(!is_utf8($invoer) OR !preg_match("#([\w]+?://[^ \"\n\r\t<]*?)#is",$this->getValue())){
+		if(!is_utf8($this->getValue()) OR !preg_match("#([\w]+?://[^ \"\n\r\t<]*?)#is",$this->getValue())){
 			$this->error='Geen geldige website';
 		}
 
@@ -194,7 +197,7 @@ class IntField extends FormField{
 }
 class NickField extends FormField{
 	public $max_len=20;
-	public function valid($orig){
+	public function valid($lid){
 		if(!parent::valid()){ return false; }
 		if($this->getValue()==''){ return true; }
 		
@@ -204,7 +207,7 @@ class NickField extends FormField{
 			$this->error='Gebruik maximaal '.$this->max_len.' karakters.';
 		# 2e check met strtolower is toegevoegd omdat je anders je eigen nick niet van case kan veranderen
 		# omdat this->nickExists in mysql case-insensitive zoek
-		}elseif(strtolower($orig)!=strtolower($this->getValue()) AND Lid::nickExists($this->getValue())) {
+		}elseif(strtolower($lid->getNickname())!=strtolower($this->getValue()) AND Lid::nickExists($this->getValue())) {
 			$this->error='Deze bijnaam is al in gebruik.';
 		}
 		return $this->error!='';
@@ -225,8 +228,49 @@ class PassField extends FormField{
 	public function isPosted(){
 		return isset($_POST[$this->name.'_current'], $_POST[$this->name.'_new'], $_POST[$this->name.'_confirm']);
 	}
-	public function valid($orig){
+	public function getValue(){
+		if($this->isPosted()){
+			return $_POST[$this->name.'_new'];
+		}
+		return false;
+	}
+		
+	public function valid($lid){
 		if(!parent::valid()){ return false; }
+		$current=$_POST[$this->name.'_current'];
+		$new=$_POST[$this->name.'_new'];
+		$confirm=$_POST[$this->name.'_confirm'];
+		if($current!=''){
+			if(!$lid->checkpw($current)){
+				$this->error='Uw huidige wachtwoord is niet juist';
+			}else{
+				if($new=='' OR $confirm=''){
+					$this->error='Vul uw nieuwe wachtwoord twee keer in';
+				}elseif($new!=$current){
+					$this->error='Nieuwe wachtwoorden komen niet overeen';
+				}elseif(preg_match('/^[0-9]*$/', $new)) {
+		            $this->error='Het nieuwe wachtwoord moet ook letters of leestekens bevatten... :-|';
+				}elseif(mb_strlen($passwd) < 6 OR mb_strlen($passwd) > 60){
+					$this->error='Het wachtwoord moet minimaal 6 en maximaal 16 tekens bevatten';
+				}
+			}
+		}
+		if($new!='' AND $current==''){
+			$this->error='U dient uw huidige wachtwoord ook in te voeren';
+		}
+		return $this->error!='';
+	}
+	public function view(){
+		echo $this->getDiv();
+		echo '<div class="password">';
+		echo $this->getError();
+		echo '<label for="field_'.$this->name.'_current">Huidige wachtwoord</label>';
+		echo '<input type="password" autocomplete="off" id="field_'.$this->name.'_current" name="'.$this->name.'_current" /></div>';
+		echo '<div class="password"><label for="field_'.$this->name.'_new">Nieuw wachtwoord</label>';
+		echo '<input type="password" autocomplete="off" id="field_'.$this->name.'_new" name="'.$this->name.'_new" /></div>';
+		echo '<div class="password"><label for="field_'.$this->name.'_confirm">Nogmaals</label>';
+		echo '<input type="password" autocomplete="off" id="field_'.$this->name.'_confirm" name="'.$this->name.'_confirm" /></div>';
+		echo '</div>';
 	}
 }
 class SelectField extends FormField{

@@ -59,7 +59,7 @@ class Profiel{
 		$valid=true;
 		foreach($this->form as $field){
 			//we checken alleen de formfields, niet de comments enzo.
-			if($field instanceof FormField AND !$field->valid($this->getCurrent($field->getName()))){
+			if($field instanceof FormField AND !$field->valid($this->getLid())){
 				$valid=false;
 			}
 		}
@@ -79,11 +79,12 @@ class Profiel{
 		//zaken bewerken als we oudlid zijn of P_LEDEN_MOD hebben
 		if($profiel['status']=='S_OUDLID' OR $hasLedenMod){
 			$form[]=new Comment('Identiteit:');
-			$form[]=new InputField('voornaam', $profiel['voornaam'], 'Voornaam', 100);
+			$form[]=new RequiredInputField('voornaam', $profiel['voornaam'], 'Voornaam', 100);
 			//TODO: voeg ook voorletters toe aan het profiel
 			$form[]=new InputField('tussenvoegsel', $profiel['tussenvoegsel'], 'Tussenvoegsel', 100);
-			$form[]=new InputField('achternaam', $profiel['achternaam'], 'Achternaam', 100);
+			$form[]=new RequiredInputField('achternaam', $profiel['achternaam'], 'Achternaam', 100);
 			if($hasLedenMod){
+				$form[]=new InputField('postfix', $profiel['postfix'], 'Postfix', 15);
 				$form[]=new SelectField('geslacht', $profiel['geslacht'], 'Geslacht', array('m'=> 'Man', 'v'=>'Vrouw'));
 				$form[]=new InputField('voornamen', $profiel['voornamen'], 'Voornamen', 100);
 			}
@@ -120,22 +121,37 @@ class Profiel{
 		$form[]=$email;
 		$form[]=new EmailField('msn', $profiel['msn'], 'MSN');
 		$form[]=new InputField('icq', $profiel['icq'], 'ICQ', 20); //TODO specifiek ding voor maken
+		$form[]=new EmailField('jid', $profiel['jid'], 'Jabber/Google-talk'); //TODO specifiek ding voor maken
 		$form[]=new InputField('skype', $profiel['skype'], 'Skype', 20); //TODO specifiek ding voor maken
 		$form[]=new UrlField('website', $profiel['website'], 'Website');
 		$form[]=new InputField('bankrekening', $profiel['bankrekening'], 'Bankrekening', 20); //TODO specifiek ding voor maken
 
-		$form[]=new Comment('Studie en Civitas:');
-		$form[]=new InputField('studie', $profiel['studie'], 'Studie', 60);
-		$form[]=new IntField('studiejaar', $profiel['studiejaar'], 'Beginjaar studie');
-		$form[]=new IntField('lidjaar', $profiel['lidjaar'], 'Lid sinds studie');
+		if($profiel['status']=='S_OUDLID' OR $hasLedenMod){
+			$form[]=new Comment('Studie en Civitas:');
+			$form[]=new InputField('studie', $profiel['studie'], 'Studie', 60);
+			$form[]=new IntField('studiejaar', $profiel['studiejaar'], 'Beginjaar studie',date('Y'), 1990);
+			$form[]=new InputField('studienr', $profiel['studienr'], 'Studienummer (TU)', 20);
+			$form[]=new InputField('beroep', $profiel['beroep'], 'Beroep/werk', 50);
+			$form[]=new IntField('lidjaar', $profiel['lidjaar'], 'Lid sinds', date('Y'), 1961);
+			$form[]=new SelectField('moot', $profiel['moot'], 'Moot', range(0,4));
+			$form[]=new SelectField('kring', $profiel['kring'], 'Kring', range(0,9));
+			$form[]=new SelectField('kringleider', $profiel['kringleider'], 'Kringleider', array('n' => 'Nee','o' => 'Ouderejaarskring','e' => 'Eerstejaarskring'));
+			$form[]=new SelectField('motebal', $profiel['motebal'], 'Motebal',array('0' => 'Nee','1' => 'Ja'));
+		}
+		if($hasLedenMod){
+			$form[]=new Comment('Overig');
+			//wellicht binnenkort voor iedereen beschikbaar?
+			$form[]=new InputField('kerk', $profiel['kerk'], 'Kerk', 50);
+			$form[]=new InputField('muziek', $profiel['muziek'], 'Muziekinstrument', 50);
+		}
 		
 		$form[]=new Comment('Inloggen:');
 		$form[]=new NickField('nickname', $profiel['nickname'], 'Bijnaam');
 
 		if($hasLedenMod){
-			$form[]=new InputField('eetwens', $profiel['eetwens'], 'Dieëten', 20);
+			$form[]=new InputField('eetwens', $profiel['eetwens'], 'Diëet', 20);
 		}
-		//$form[]=new PassField('password');
+		$form[]=new PassField('password');
 		$this->form=$form;
 	}
 	
