@@ -159,6 +159,7 @@ lib/class.documenten.php -text
 lib/class.documentencontent.php -text
 lib/class.eetplan.php -text
 lib/class.eetplancontent.php -text
+lib/class.formulier.php -text
 lib/class.fotoalbum.php -text
 lib/class.fotoalbumcontent.php -text
 lib/class.includer.php -text

@@ -139,8 +139,14 @@ class Lid implements Serializable{
 		}
 		$ldap->disconnect();
 	}
+	public function hasProperty($key){	return array_key_exists($key, $this->profiel); }
+	public function getProperty($key){
+		if(!$this->hasProperty($key)){
+			throw new Exception($key.' bestaat niet in profiel');
+		}
+		return $this->profiel[$key];
+	}
 	public function setProperty($property, $contents){
-
 		$allowedProps=array('voornaam', 'achternaam', 'eetwens', 'corvee_wens', 'instellingen');
 		if(!in_array($property, $allowedProps)){ return false; }
 		if(is_string($contents)){ $contents=trim($contents); }

@@ -282,10 +282,13 @@ class GroepEmailContent extends SimpleHTML{
 	}
 	public function view(){
 		$emails=array();
-		foreach($this->groep->getLeden() as $row){
-			$lid=LidCache::getLid($row['uid']);
-			if($lid instanceof Lid AND $lid->getEmail()!=''){
-				$emails[]=$lid->getEmail();
+		$groepleden=$this->groep->getLeden();
+		if(is_array($groepleden)){
+			foreach($groepleden as $groeplid){
+				$lid=LidCache::getLid($groeplid['uid']);
+				if($lid instanceof Lid AND $lid->getEmail()!=''){
+					$emails[]=$lid->getEmail();
+				}
 			}
 		}
 		echo implode(', ', $emails);

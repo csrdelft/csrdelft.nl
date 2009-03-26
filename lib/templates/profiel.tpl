@@ -4,9 +4,9 @@
 			<div class="floatR">
 				{$profhtml.uid|pasfoto}<br />
 				<div class="knopjes">
-					{* if $magBewerken}
-						<a href="/communicatie/profiel/{$profhtml.uid}/edit" class="knop"><img src="{$csr_pics}forum/bewerken.png" title="Bewerk groep" />Bewerken</a><br />
-					{/if *}
+					{if $magBewerken}
+						<a href="/communicatie/profiel/{$profhtml.uid}/bewerken" class="knop"><img src="{$csr_pics}forum/bewerken.png" title="Bewerk dit profiel" />Bewerken</a><br />
+					{/if}
 					{if $isAdmin}
 						<a href="/tools/stats.php?uid={$profhtml.uid}" class="knop">Overzicht van bezoeken</a><br />
 						<a href="/communicatie/profiel/{$profhtml.uid}/wachtwoord" class="knop" onclick="return confirm('Weet u zeker dat u het wachtwoord van deze gebruiker wilt resetten?')">Reset wachtwoord</a><br />

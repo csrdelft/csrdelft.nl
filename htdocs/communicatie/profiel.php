@@ -11,32 +11,50 @@ require_once 'include.config.php';
 require_once 'lid/class.profiel.php';
 
 if(isset($_GET['uid'])){
-	$uid = $_GET['uid'];
+	$uid=$_GET['uid'];
 }else{
-	$uid = $loginlid->getUid();
+	$uid=$loginlid->getUid();
 }
-$error=0;
+
+if(isset($_GET['a'])){
+	$actie=$_GET['a'];
+}else{
+	$actie='view';
+}
+
 if(!($loginlid->hasPermission('P_LEDEN_READ') or $loginlid->hasPermission('P_OUDLEDEN_READ'))){
-	$error=3;
-}
-
-if(isset($_GET['a']) AND $_GET['a']=='rssToken'){//} AND $uid==$loginlid->getUid()){
-	$loginlid->getToken();
-	header('location: '.CSR_ROOT.'communicatie/profiel/'.$uid.'#forum');
-	exit;
-}
-switch ($error) {
-	case 0:
-	case 2:
-		require_once 'lid/class.profielcontent.php';
-		$midden = new ProfielContent(LidCache::getLid($uid));
-
-	break;
-	default:
-		# geen rechten
-		require_once 'class.paginacontent.php';
-		$pagina=new Pagina('geentoegang');
-		$midden = new PaginaContent($pagina);
+	require_once 'class.paginacontent.php';
+	$midden=new PaginaContent(new Pagina('geentoegang'));
+	$midden->setActie('bekijken');
+}else{
+	require_once 'lid/class.profielcontent.php';
+	
+	switch($actie){
+		case 'bewerken':
+			require_once 'lid/class.profiel.php';
+			$profiel=new Profiel($uid);
+			if($profiel->isPosted() AND $profiel->valid()){
+				echo 'valide formulier;';
+				//TODO opslaan.
+				pr($_POST);
+				exit;
+			}else{
+				$midden=new ProfielEditContent($profiel);
+			}
+			
+		break;
+		case 'rssToken':
+			if($uid==$loginlid->getUid()){
+				$loginlid->getToken();
+				header('location: '.CSR_ROOT.'communicatie/profiel/'.$uid.'#forum');
+				exit;
+			}
+		//geen break hier.
+		case 'view':
+		default;
+			$midden=new ProfielContent(LidCache::getLid($uid));
+		break;
+	}
 }
 
 $pagina=new csrdelft($midden);
