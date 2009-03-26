@@ -25,6 +25,18 @@ class Profiel{
 	public function save(){
 		return $this->bewerktLid->save() AND $this->bewerktLid->save_ldap();
 	}
+	public function magBewerken(){
+		if(LoginLid::instance()->hasPermission('P_LEDEN_MOD')){
+			return true;
+		}
+		if(LoginLid::instance()->hasPermission('P_OUDLEDEN_MOD') AND $this->lid->getStatus()=='S_OUDLID'){
+			return true;
+		}
+		if(LoginLid::instance()->isSelf($this->lid->getUid())){
+			return true;
+		}
+		return false;		
+	}
 	public function diff(){
 		$diff=array();
 		$bewerktProfiel=$this->bewerktLid->getProfiel();
@@ -130,13 +142,18 @@ class Profiel{
 			$form[]=new Comment('Studie en Civitas:');
 			$form[]=new InputField('studie', $profiel['studie'], 'Studie', 60);
 			$form[]=new IntField('studiejaar', $profiel['studiejaar'], 'Beginjaar studie',date('Y'), 1990);
-			$form[]=new InputField('studienr', $profiel['studienr'], 'Studienummer (TU)', 20);
+			if($profiel['status']!='S_OUDLID'){
+				$form[]=new InputField('studienr', $profiel['studienr'], 'Studienummer (TU)', 20);
+			}
 			$form[]=new InputField('beroep', $profiel['beroep'], 'Beroep/werk', 50);
 			$form[]=new IntField('lidjaar', $profiel['lidjaar'], 'Lid sinds', date('Y'), 1961);
+		}
+		if($hasLedenMod){
 			$form[]=new SelectField('moot', $profiel['moot'], 'Moot', range(0,4));
 			$form[]=new SelectField('kring', $profiel['kring'], 'Kring', range(0,9));
 			$form[]=new SelectField('kringleider', $profiel['kringleider'], 'Kringleider', array('n' => 'Nee','o' => 'Ouderejaarskring','e' => 'Eerstejaarskring'));
 			$form[]=new SelectField('motebal', $profiel['motebal'], 'Motebal',array('0' => 'Nee','1' => 'Ja'));
+			$form[]=new InputField('eetwens', $profiel['eetwens'], 'Diëet', 20);
 		}
 		if($hasLedenMod){
 			$form[]=new Comment('Overig');
@@ -146,11 +163,8 @@ class Profiel{
 		}
 		
 		$form[]=new Comment('Inloggen:');
-		$form[]=new NickField('nickname', $profiel['nickname'], 'Bijnaam');
+		$form[]=new NickField('nickname', $profiel['nickname'], 'Bijnaam (ingloggen)');
 
-		if($hasLedenMod){
-			$form[]=new InputField('eetwens', $profiel['eetwens'], 'Diëet', 20);
-		}
 		$form[]=new PassField('password');
 		$this->form=$form;
 	}

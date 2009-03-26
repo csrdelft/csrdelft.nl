@@ -28,6 +28,9 @@
 	width: 250px;
 	float: left;
 }
+#profielForm input.regular{
+	width: 300px;
+}
 #profielForm .veld, #profielForm h3, #profielForm .password{
 	clear: both;
 }

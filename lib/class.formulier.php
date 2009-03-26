@@ -74,7 +74,7 @@ abstract class FormField{
 		echo $this->getDiv();
 		echo $this->getLabel();
 		echo $this->getError();
-		echo '<input type="text" id="field_'.$this->name.'" name="'.$this->name.'" value="'.htmlspecialchars($this->value).'" ';
+		echo '<input type="text" id="field_'.$this->name.'" name="'.$this->name.'" class="regular" value="'.htmlspecialchars($this->value).'" ';
 		if(!$this->autocomplete){
 			echo 'autocomplete="off" ';
 		}
@@ -215,7 +215,13 @@ class NickField extends FormField{
 }
 class TelefoonField extends InputField{
 	public function valid(){
+		if(!parent::valid()){ return false; }
+		if($this->getValue()==''){ return true; }
+		if(!preg_match('/\+(\d|-){10-20}/', $this->getValue())){
+			$this->error='Geen geldig telefoonnummer';
+		}		
 
+		return $this->error!='';	
 	}
 }
 /*

@@ -33,13 +33,17 @@ if(!($loginlid->hasPermission('P_LEDEN_READ') or $loginlid->hasPermission('P_OUD
 		case 'bewerken':
 			require_once 'lid/class.profiel.php';
 			$profiel=new Profiel($uid);
-			if($profiel->isPosted() AND $profiel->valid()){
-				echo 'valide formulier;';
-				//TODO opslaan.
-				pr($_POST);
-				exit;
+			if($profiel->magBewerken()){
+				if($profiel->isPosted() AND $profiel->valid()){
+					echo 'valide formulier;';
+					//TODO opslaan.
+					pr($_POST);
+					exit;
+				}else{
+					$midden=new ProfielEditContent($profiel);
+				}
 			}else{
-				$midden=new ProfielEditContent($profiel);
+				$midden=new ProfielContent(LidCache::getLid($uid));
 			}
 			
 		break;
