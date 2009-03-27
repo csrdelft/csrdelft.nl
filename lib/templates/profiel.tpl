@@ -87,9 +87,12 @@
 			<div class="label">Studie:</div> {$profhtml.studie}<br />
 			<div class="label">Studie sinds:</div> {$profhtml.studiejaar}<br />
 			<div class="label">Lid sinds:</div> 
-				{$profhtml.lidjaar}{if $isOudlid AND $profhtml.einddatum!='0000-00-00'}-{$profhtml.einddatum}{/if}<br />
+				{$profhtml.lidjaar}{if $isOudlid AND $profhtml.einddatum!='0000-00-00'} tot {$profhtml.einddatum|substr:0:4}{/if}<br />
 			<br />
-			{if $isOudlid===false}
+			
+			{if $isOudlid}
+				{if $profhtml.beroep!=''}<div class="label">Beroep/werk:</div> {$profhtml.beroep}<br />{/if}
+			{else}
 				<div class="label">Kring:</div> 
 				<a href="/communicatie/moten#kring{$profhtml.moot}.{$profhtml.kring}">{$profhtml.moot}.{$profhtml.kring}</a>
 				{if $profhtml.status=='S_KRINGEL'}(kringel){/if}

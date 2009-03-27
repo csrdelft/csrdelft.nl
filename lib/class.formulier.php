@@ -215,7 +215,7 @@ class TelefoonField extends InputField{
 		if(!parent::valid()){ return false; }
 		if($this->getValue()==''){ return true; }
 		if(!preg_match('/^(\d{4}-\d{6}|\d{3}-\d{7}|\d{2}-\d{8}|\+\d{10,20})$/', $this->getValue())){
-			$this->error='Geen geldig telefoonnummer; 0187-123456; 015-2135681; 06-12345678; +31152135681 ';
+			$this->error='Geen geldig telefoonnummer.';
 		}		
 
 		return $this->error=='';
@@ -310,8 +310,15 @@ class SelectField extends FormField{
 	}
 }
 class DatumField extends FormField{
-	public function __construct($name, $value, $description){
+	public $maxyear;
+	
+	public function __construct($name, $value, $description, $maxyear=null){
 		parent::__construct($name, $value, $description);
+		if($maxyear===null){
+			$this->maxyear=date('Y');
+		}else{
+			$this->maxyear=(int)$maxyear;
+		}
 	}
 	public function isPosted(){
 		return isset($_POST[$this->name.'_jaar'], $_POST[$this->name.'_maand'], $_POST[$this->name.'_dag']);
@@ -326,6 +333,8 @@ class DatumField extends FormField{
 		if(!parent::valid()){ return false; }
 		if(!preg_match('/^(\d{4})-(\d\d?)-(\d\d?)$/', $this->getValue())){
 			$this->error='Ongeldige datum';
+		}elseif(substr($this->getValue(), 0, 4)>$this->maxyear){
+			$this->error='Er kunnen geen data later dan '.$this->maxyear.' worden weergegeven';
 		}
 		return $this->error=='';
 	}
@@ -334,7 +343,7 @@ class DatumField extends FormField{
 		echo $this->getLabel();
 		echo $this->getError();
 		echo '<select id="field_'.$this->name.'" name="'.$this->name.'_jaar" />';
-		foreach(range(1950, date('Y')-15) as $value){
+		foreach(range(1950, $this->maxyear) as $value){
 			echo '<option value="'.$value.'"';
 			if($value==substr($this->value, 0,4)){
 				echo 'selected="selected" ';

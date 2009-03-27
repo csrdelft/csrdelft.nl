@@ -147,7 +147,7 @@ class Lid implements Serializable{
 		return $this->profiel[$key];
 	}
 	public function setProperty($property, $contents){
-		$disallowedProps=array('uid');
+		$disallowedProps=array('uid', 'instellingen');
 		if(!array_key_exists($property, $this->profiel)){ return false; }
 		if(in_array($property, $disallowedProps)){ return false; }
 		if(is_string($contents)){ $contents=trim($contents); }

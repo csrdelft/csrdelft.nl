@@ -113,7 +113,7 @@ class Profiel{
 				$form[]=new SelectField('geslacht', $profiel['geslacht'], 'Geslacht', array('m'=> 'Man', 'v'=>'Vrouw'));
 				$form[]=new InputField('voornamen', $profiel['voornamen'], 'Voornamen', 100);
 			}
-			$form[]=new DatumField('gebdatum', $profiel['gebdatum'], 'Geboortedatum');
+			$form[]=new DatumField('gebdatum', $profiel['gebdatum'], 'Geboortedatum', date('Y')-15);
 		}
 		
 		$form[]=new Comment('Adres:');
@@ -160,6 +160,9 @@ class Profiel{
 			}
 			$form[]=new InputField('beroep', $profiel['beroep'], 'Beroep/werk', 50);
 			$form[]=new IntField('lidjaar', $profiel['lidjaar'], 'Lid sinds', date('Y'), 1960);
+			if($profiel['status']=='S_OUDLID'){
+				$form[]=new DatumField('einddatum', $profiel['einddatum'], 'Oudlid sinds');
+			}
 		}
 		if($hasLedenMod){
 			$form[]=new SelectField('moot', $profiel['moot'], 'Moot', range(0,4));

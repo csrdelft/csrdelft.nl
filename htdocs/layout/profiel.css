@@ -25,11 +25,11 @@
 #profiel .groepot{ margin-left: 50%; }
 
 #profielForm label{
-	width: 250px;
+	width: 150px;
 	float: left;
 }
 #profielForm input.regular{
-	width: 300px;
+	width: 250px;
 }
 #profielForm .veld, #profielForm h3, #profielForm .password{
 	clear: both;
