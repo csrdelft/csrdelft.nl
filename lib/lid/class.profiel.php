@@ -152,14 +152,19 @@ class Profiel{
 		$form[]=new InputField('bankrekening', $profiel['bankrekening'], 'Bankrekening', 20); //TODO specifiek ding voor maken
 
 		if($profiel['status']=='S_OUDLID' OR $hasLedenMod){
+			if($profiel['status']=='S_OUDLID'){
+				$beginjaar=1950;
+			}else{
+				$beginjaar=date('Y')-20;
+			}
 			$form[]=new Comment('Studie en Civitas:');
 			$form[]=new InputField('studie', $profiel['studie'], 'Studie', 60);
-			$form[]=new IntField('studiejaar', $profiel['studiejaar'], 'Beginjaar studie',date('Y'), 1960);
+			$form[]=new IntField('studiejaar', $profiel['studiejaar'], 'Beginjaar studie',date('Y'), $beginjaar);
 			if($profiel['status']!='S_OUDLID'){
 				$form[]=new InputField('studienr', $profiel['studienr'], 'Studienummer (TU)', 20);
 			}
 			$form[]=new InputField('beroep', $profiel['beroep'], 'Beroep/werk', 50);
-			$form[]=new IntField('lidjaar', $profiel['lidjaar'], 'Lid sinds', date('Y'), 1960);
+			$form[]=new IntField('lidjaar', $profiel['lidjaar'], 'Lid sinds', date('Y'), $beginjaar);
 			if($profiel['status']=='S_OUDLID'){
 				$form[]=new DatumField('einddatum', $profiel['einddatum'], 'Oudlid sinds');
 			}
@@ -169,7 +174,7 @@ class Profiel{
 			$form[]=new SelectField('kring', $profiel['kring'], 'Kring', range(0,9));
 			$form[]=new SelectField('kringleider', $profiel['kringleider'], 'Kringleider', array('n' => 'Nee','o' => 'Ouderejaarskring','e' => 'Eerstejaarskring'));
 			$form[]=new SelectField('motebal', $profiel['motebal'], 'Motebal',array('0' => 'Nee','1' => 'Ja'));
-			$form[]=new InputField('eetwens', $profiel['eetwens'], 'Diëet', 20);
+			$form[]=new InputField('eetwens', $profiel['eetwens'], 'Dieet', 20);
 		}
 		if($hasLedenMod){
 			$form[]=new Comment('Overig');
@@ -179,7 +184,7 @@ class Profiel{
 		}
 		
 		$form[]=new Comment('Inloggen:');
-		$form[]=new NickField('nickname', $profiel['nickname'], 'Bijnaam (ingloggen)');
+		$form[]=new NickField('nickname', $profiel['nickname'], 'Bijnaam (inloggen)');
 
 		$form[]=new PassField('password');
 		$this->form=$form;

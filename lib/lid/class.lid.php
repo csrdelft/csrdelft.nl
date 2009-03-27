@@ -82,7 +82,11 @@ class Lid implements Serializable{
 		return $db->query($query) AND LidCache::updateLid($this->getUid());
 	}
 	public function logChange($diff){
-		$this->profiel['changelog']=$diff.$this->profiel['changelog'];
+		if($this->hasProperty('changelog')){
+			$this->profiel['changelog']=$diff.$this->profiel['changelog'];
+		}else{
+			$this->profiel['changelog']=$diff;
+		}		
 	}
 	# Sla huidige objecstatus op in LDAP
 	public function save_ldap() {

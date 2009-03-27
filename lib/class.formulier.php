@@ -343,7 +343,7 @@ class DatumField extends FormField{
 		echo $this->getLabel();
 		echo $this->getError();
 		echo '<select id="field_'.$this->name.'" name="'.$this->name.'_jaar" />';
-		foreach(range(1950, $this->maxyear) as $value){
+		foreach(range(1940, $this->maxyear) as $value){
 			echo '<option value="'.$value.'"';
 			if($value==substr($this->value, 0,4)){
 				echo 'selected="selected" ';
