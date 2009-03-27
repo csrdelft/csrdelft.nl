@@ -24,3 +24,12 @@ body{
 #menu,#menu *,#submenu,#submenu *{
 	background-color: #cc00ff !important;
 }
+
+#logo{
+	background-image: url('http://plaetjes.csrdelft.nl/layout/logop.gif') !important;
+	padding: 133px 0 0 133px !important;
+	margin: 4px 0 0 30px;
+	overflow: hidden !important;
+	width: 0px !important;
+	height: 0px !important;
+}

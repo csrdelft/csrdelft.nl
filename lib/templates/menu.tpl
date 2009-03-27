@@ -1,5 +1,5 @@
 <div id="menu" onmouseover="ResetTimer()" onmouseout="StartTimer()">
-	<div id="menuleft"><a href="/"><img src="http://plaetjes.csrdelft.nl/layout/logo.gif" alt="Logo" /></a></div>
+	<div id="menuleft"><a href="/"><img src="http://plaetjes.csrdelft.nl/layout/logo.gif" alt="Logo" id="logo" /></a></div>
 	<div id="menucenter">
 		<div id="menubanner">
 			<div id="banner1"><img src="http://plaetjes.csrdelft.nl/menubalk/banner1.png" id="imgbanner1" alt="banner1" width="553" height="106" /></div>

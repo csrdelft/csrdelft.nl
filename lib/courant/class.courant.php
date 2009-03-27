@@ -82,10 +82,11 @@ class Courant {
 		}else{
 			$return=$this->categorieen;
 		}
-		//voorwoord en sponsor eruit gooien, die zijn enkel voor beheerders beschikbaar.
+		//Voorwoord eruitgooien, behalve voor beheerders
 		if(!$this->magBeheren()){
 			unset($return[3]);
 		}
+		//Sponsors eruitgooien, behalve voor beheerders en/of AcqCiee
 		if(!$this->magBeheren() && !LoginLid::instance()->hasPermission('groep:AcqCie')){
 			unset($return[4]);
 		}
