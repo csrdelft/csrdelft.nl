@@ -68,7 +68,7 @@ class ProfielContent extends SimpleHTML {
 		$profiel->assign('isOudlid', $this->lid->getStatus()=='S_OUDLID');
 
 		$loginlid=LoginLid::instance();
-		$profiel->assign('magBewerken', ($loginlid->hasPermission('P_PROFIEL_EDIT') AND $loginlid->isSelf($this->lid->getUid()])) OR $loginlid->hasPermission('P_LEDEN_EDIT'));
+		$profiel->assign('magBewerken', ($loginlid->hasPermission('P_PROFIEL_EDIT') AND $loginlid->isSelf($this->lid->getUid())) OR $loginlid->hasPermission('P_LEDEN_EDIT'));
 		$profiel->assign('isAdmin', $loginlid->hasPermission('P_ADMIN'));
 		$profiel->assign('melding', $this->getMelding());
 
