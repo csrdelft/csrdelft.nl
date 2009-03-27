@@ -70,7 +70,7 @@ class Maaltijd {
 	function getDatum() { return $this->_maaltijd['datum']; }
 	function getTP() { return $this->_maaltijd['tp']; }
 	public function isTp($uid=null){
-		if($uid==null){ $uid=$this->_lid->getUid(); }
+		if($uid==null){ $uid=LoginLid::instance()->getUid(); }
 		return $uid==$this->getTP();
 	}
 	public function getID(){ return $this->getMaalId(); }
@@ -187,7 +187,7 @@ class Maaltijd {
 			$this->_proxyerror = "Opgegeven lid bestaat niet.";
 			return false;
 		}
-		if ($proxy) $fullname = $this->_lid->getFullname($uid);
+		if ($proxy) $fullname = (string)LidCache::getLid($uid);
 
 		# kan er ueberhaupt nog veranderd worden aan deze maaltijd?
 		if ($this->_maaltijd['gesloten'] == '1') {
@@ -502,11 +502,10 @@ class Maaltijd {
 
 		if($rAan!==false and $this->_db->numRows($rAan) > 0){
 			while($aAan=$this->_db->next($rAan)){
-				$naam=$this->_lid->getFullName($aAan['uid']);
 				//hier array met uid als key maken, om zometeen alles te kunnen wegstrepen
 				$aan[$aAan['uid']]=array(
 					'uid' => $aAan['uid'],
-					'naam' => $naam,
+					'naam' => (string)LidCache::getLid($aAan['uid']),
 					'eetwens' => $aAan['eetwens'],
 					'achternaam' => $aAan['achternaam'],
 					'saldo' => $aAan['saldo'],
