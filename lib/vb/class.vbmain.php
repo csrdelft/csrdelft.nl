@@ -15,7 +15,7 @@ class vbmain extends csrdelft {
 	function vbmain($body){
 		parent::__construct($body,'vb/vb',99);
 		$this->addStylesheet('vb.css');
-		$this->addScript('../vb/jsonencode.js');
+		$this->addScript('../../vb/jsonencode.js');
 		require_once('class.menu.php');
 	}
 
