@@ -198,4 +198,13 @@
 		</div>
 	</div>
 	{/if}
+	{if $isAdmin AND $profhtml.changelog!=''}
+		<div style="clear: left;"></div>
+		<div class="profielregel" id="changelog">
+			<div class="left">Verandering</div>
+			<div class="gegevens" id="changelog_gegevens">
+				{$profhtml.changelog|ubb}
+			</div>
+		</div>
+	{/if}
 </div>

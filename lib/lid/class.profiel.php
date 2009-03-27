@@ -191,6 +191,36 @@ class Profiel{
 	}
 	
 	public function getFields(){ return $this->form; }
+
+	public static function resetWachtwoord($uid){
+		if(!Lid::exists($uid)){ return false; }
+		$lid=LidCache::getLid($uid);
+		
+		$password=substr(md5(time()), 0, 8);
+		$passwordhash=makepasswd($password);
+
+		$sNieuwWachtwoord="UPDATE lid SET password='".$passwordhash."' WHERE uid='".$uid."' LIMIT 1;";
+		
+		$mail="
+Hallo ".$lid->getNaam().",
+
+U heeft een nieuw wachtwoord aangevraagd voor http://csrdelft.nl. U kunt nu inloggen met de volgende combinatie:
+
+".$uid."
+".$password."
+
+U kunt uw wachtwoord wijzigen in uw profiel: http://csrdelft.nl/communicatie/profiel/".$uid." .
+
+Met vriendelijke groet,
+
+Namens de PubCie,
+
+".LoginLid::instance()->getLid()->getNaam()."
+
+P.S.: Mocht u nog vragen hebben, dan kan u natuurlijk altijd e-posts sturen naar pubcie@csrdelft.nl";
+		return MySql::instance()->query($sNieuwWachtwoord) AND mail($mailto, 'Nieuw wachtwoord voor de C.S.R.-stek', $mail, "Bcc: pubcie@csrdelft.nl");
+
+	}
 }
 
 ?>

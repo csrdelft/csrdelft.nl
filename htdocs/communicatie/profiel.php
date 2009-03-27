@@ -28,10 +28,10 @@ if(!($loginlid->hasPermission('P_LEDEN_READ') or $loginlid->hasPermission('P_OUD
 	$midden->setActie('bekijken');
 }else{
 	require_once 'lid/class.profielcontent.php';
+	require_once 'lid/class.profiel.php';
 	
 	switch($actie){
 		case 'bewerken':
-			require_once 'lid/class.profiel.php';
 			$profiel=new Profiel($uid);
 			if($profiel->magBewerken()){
 				if($profiel->isPosted() AND $profiel->valid() AND $profiel->save()){
@@ -43,6 +43,16 @@ if(!($loginlid->hasPermission('P_LEDEN_READ') or $loginlid->hasPermission('P_OUD
 				$midden=new ProfielContent(LidCache::getLid($uid));
 			}
 			
+		break;
+		case 'wachtwoord':
+			if($loginlid->hasPermission('P_ADMIN')){
+				if(Profiel::resetWachtwoord($uid)){
+					$_SESSION['melding']='Nieuw wachtwoord met succes verzonden.';
+				}else{
+					$_SESSION['melding']='Wachtwoord resetten mislukt.';
+				}
+			}
+			header("Location: ".CSR_ROOT."communicatie/profiel/".$uid);
 		break;
 		case 'rssToken':
 			if($uid==$loginlid->getUid()){

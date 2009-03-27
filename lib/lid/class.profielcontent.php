@@ -21,8 +21,10 @@ class ProfielContent extends SimpleHTML {
 	function view(){
 		$profhtml = array();
 		foreach($this->lid->getProfiel() as $key => $value){
-			if(!is_array($value)){
+			if(!is_array($value) AND $key!='changelog'){
 				$profhtml[$key] = mb_htmlentities($value);
+			}elseif($key=='changelog'){
+			$profhtml[$key] = $value;
 			}
 		}
 
