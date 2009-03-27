@@ -88,7 +88,7 @@
 			<div class="label">Studie:</div> {$profhtml.studie}<br />
 			<div class="label">Studie sinds:</div> {$profhtml.studiejaar}<br />
 			<div class="label">Lid sinds:</div> 
-				{$profhtml.lidjaar}{if $isOudlid AND $profhtml.einddatum!='0000-00-00'} tot {$profhtml.einddatum|substr:0:4}{/if}<br />
+				{$profhtml.lidjaar}{if $isOudlid AND $profhtml.lidafdatum!='0000-00-00'} tot {$profhtml.lidafdatum|substr:0:4}{/if}<br />
 			<br />
 			
 			{if $isOudlid}

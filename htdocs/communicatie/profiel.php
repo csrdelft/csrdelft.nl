@@ -53,6 +53,7 @@ if(!($loginlid->hasPermission('P_LEDEN_READ') or $loginlid->hasPermission('P_OUD
 				}
 			}
 			header("Location: ".CSR_ROOT."communicatie/profiel/".$uid);
+			exit;
 		break;
 		case 'rssToken':
 			if($uid==$loginlid->getUid()){
