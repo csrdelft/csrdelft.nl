@@ -81,8 +81,11 @@ class Lid implements Serializable{
 		$query.=" WHERE uid='".$this->getUid()."';";
 		return $db->query($query) AND LidCache::updateLid($this->getUid());
 	}
+	public function logChange($diff){
+		$this->profiel['changelog']=$diff.$this->profiel['changelog'];
+	}
 	# Sla huidige objecstatus op in LDAP
-	function save_ldap() {
+	public function save_ldap() {
 		require_once 'class.ldap.php';
 
 		$ldap=new LDAP();
@@ -128,9 +131,6 @@ class Lid implements Serializable{
 			}else{
 				$ldap->addLid($entry['uid'], $entry);
 			}
-
-			# verbinding sluiten
-			$ldap->disconnect();
 		}else{
 			# Als het een andere status is even kijken of de uid in ldap voorkomt, zo ja wissen
 			if($ldap->isLid($this->getUid())){
@@ -147,10 +147,15 @@ class Lid implements Serializable{
 		return $this->profiel[$key];
 	}
 	public function setProperty($property, $contents){
-		$allowedProps=array('voornaam', 'achternaam', 'eetwens', 'corvee_wens', 'instellingen');
-		if(!in_array($property, $allowedProps)){ return false; }
+		$disallowedProps=array('uid');
+		if(!array_key_exists($property, $this->profiel)){ return false; }
+		if(in_array($property, $disallowedProps)){ return false; }
 		if(is_string($contents)){ $contents=trim($contents); }
-		$this->profiel[$property]=$contents;
+		if($property=='password'){
+			$this->profiel[$property]=makepasswd($contents);
+		}else{
+			$this->profiel[$property]=$contents;
+		}
 		return true;
 	}
 	public function getUid(){		return $this->profiel['uid']; }
@@ -394,6 +399,7 @@ class LidCache{
 	public static function updateLid($uid){
 		self::flushLid($uid);
 		Memcached::instance()->set($uid, serialize(new Lid($uid)));
+		return true;
 	}
 }
 /*

@@ -34,11 +34,8 @@ if(!($loginlid->hasPermission('P_LEDEN_READ') or $loginlid->hasPermission('P_OUD
 			require_once 'lid/class.profiel.php';
 			$profiel=new Profiel($uid);
 			if($profiel->magBewerken()){
-				if($profiel->isPosted() AND $profiel->valid()){
-					echo 'valide formulier;';
-					//TODO opslaan.
-					pr($_POST);
-					exit;
+				if($profiel->isPosted() AND $profiel->valid() AND $profiel->save()){
+					header('location: '.CSR_ROOT.'communicatie/profiel/'.$uid);
 				}else{
 					$midden=new ProfielEditContent($profiel);
 				}

@@ -23,6 +23,19 @@ class Profiel{
 	}
 
 	public function save(){
+		foreach($this->getFields() as $field){
+			if($field instanceof FormField){
+				//als een wachtwoordveld leeg is doen we er niets mee
+				if($field instanceof PassField AND $field->getValue()==''){ continue; }
+				//is het wel een wijziging?
+				if($field->getValue()!=$this->lid->getProperty($field->getName())){
+					$this->bewerktLid->setProperty($field->getName(), $field->getValue());
+				}	
+			}
+		}
+		if(count($this->diff())>0){
+			$this->bewerktLid->logChange($this->ubbDiff());
+		}
 		return $this->bewerktLid->save() AND $this->bewerktLid->save_ldap();
 	}
 	public function magBewerken(){
@@ -42,18 +55,18 @@ class Profiel{
 		$bewerktProfiel=$this->bewerktLid->getProfiel();
 		foreach($this->lid->getProfiel() as $veld => $waarde){
 			if($waarde!=$bewerktProfiel[$veld]){
-				$diff[$veld]=array('oud'=>$waarde, 'nieuw'=> $bewerktProfiel[$veld]);
+				if($veld=='password'){ continue; }
+				$diff[$veld]=array('oud' => $waarde, 'nieuw' => $bewerktProfiel[$veld]);
 			}
 		}
 		return $diff;
 	}
 	public function ubbDiff(){
-
-		$return='Verandering voor [lid='.$this->lid->getUid().'] [br]';
+		$return='Bewerking van [lid='.LoginLid::instance()->getUid().'] op [reldate]'.getDatetime().'[/reldate][br]';
 		foreach($this->diff() as $veld => $diff){
 			$return.='('.$veld.') '.$diff['oud'].' => '.$diff['nieuw'].'[br]';
 		}
-		return $return;
+		return $return.'[hr]';
 	}
 	public function getLid(){
 		return $this->lid;
@@ -141,12 +154,12 @@ class Profiel{
 		if($profiel['status']=='S_OUDLID' OR $hasLedenMod){
 			$form[]=new Comment('Studie en Civitas:');
 			$form[]=new InputField('studie', $profiel['studie'], 'Studie', 60);
-			$form[]=new IntField('studiejaar', $profiel['studiejaar'], 'Beginjaar studie',date('Y'), 1990);
+			$form[]=new IntField('studiejaar', $profiel['studiejaar'], 'Beginjaar studie',date('Y'), 1960);
 			if($profiel['status']!='S_OUDLID'){
 				$form[]=new InputField('studienr', $profiel['studienr'], 'Studienummer (TU)', 20);
 			}
 			$form[]=new InputField('beroep', $profiel['beroep'], 'Beroep/werk', 50);
-			$form[]=new IntField('lidjaar', $profiel['lidjaar'], 'Lid sinds', date('Y'), 1961);
+			$form[]=new IntField('lidjaar', $profiel['lidjaar'], 'Lid sinds', date('Y'), 1960);
 		}
 		if($hasLedenMod){
 			$form[]=new SelectField('moot', $profiel['moot'], 'Moot', range(0,4));

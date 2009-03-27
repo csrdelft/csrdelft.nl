@@ -101,7 +101,8 @@ class ProfielEditContent extends SimpleHTML{
 		foreach($form as $field){
 			echo $field->view();
 		}
-		echo '<div class="submit"><label for="submit">&nbsp;</label><input type="submit" value="opslaan" /> <input type="reset" value="reset formulier" /><a class="knop" href="/communicatie/profiel/0436">Annuleren</a></div>';
+		echo '<div class="submit"><label for="submit">&nbsp;</label><input type="submit" value="opslaan" /> ';
+		echo '<input type="reset" value="reset formulier" /> <a class="knop" href="/communicatie/profiel/'.$this->profiel->getLid()->getUid().'">Annuleren</a></div>';
 		echo '</form>';
 
 		

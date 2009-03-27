@@ -11,11 +11,11 @@
  */
 
 abstract class FormField{
-	public $name;		
-	public $value;	//welke initiele waarde heeft het veld?
-	public $notnull=false; //mag het veld leeg zijn?
-	public $autocomplete=true; //browser laten autoaanvullen?
-	public $error='';	//foutmeldingen van dit veld
+	public $name;				//naam van het veld in POST
+	public $value;				//welke initiele waarde heeft het veld?
+	public $notnull=false; 		//mag het veld leeg zijn?
+	public $autocomplete=true; 	//browser laten autoaanvullen?
+	public $error='';			//foutmelding van dit veld
 
 	public $suggestions=array();
 
@@ -44,12 +44,10 @@ abstract class FormField{
 	public function valid(){
 		if(!$this->isPosted()){
 			$this->error='Veld is niet gepost.';
-			return false;
 		}elseif($this->notnull AND $this->getValue()==''){
 			$this->error='Dit is een verplicht veld.';
-			return false;
 		}
-		return true;
+		return $this->error=='';
 	}
 	protected function getDiv(){
 		$cssclass='veld';
@@ -103,7 +101,7 @@ class InputField extends FormField{
 		if(mb_strlen($this->getValue())>$this->max_len){
 			$this->error='Maximaal '.$this->max_len.' karakters toegestaan.';
 		}
-		return $this->error!='';
+		return $this->error=='';
 	}
 }
 class RequiredInputField extends InputField{
@@ -128,8 +126,8 @@ class EmailField extends FormField{
 			# http://www.lookuptables.com/
 			# Hmmmz, \x2E er uit gehaald ( . )
 			}elseif(preg_match('/[^\x21-\x7E]/', $usr) OR preg_match('/[\x3C\x3E\x28\x29\x5B\x5D\x5C\x2C\x3B\x40\x22]/', $usr)){
-				$this->error= "Het adres bevat ongeldige karakters voor de @:";
-			}elseif(!preg_match("/^[a-z0-9]+([-.][a-z0-9]+)*\\.[a-z]{2,4}$/i", $dom)){
+				$this->error='Het adres bevat ongeldige karakters voor de @:';
+			}elseif(!preg_match('/^[a-z0-9]+([-.][a-z0-9]+)*\\.[a-z]{2,4}$/i', $dom)){
 				$this->error='Het domein is ongeldig:';
 			}elseif(!checkdnsrr($dom, 'A') and !checkdnsrr($dom, 'MX')){
 				$this->error='Het domein bestaat niet (IPv4):';
@@ -137,7 +135,7 @@ class EmailField extends FormField{
 				$this->error='Het domein is niet geconfigureerd om email te ontvangen:';
 			}
 		}
-		return $this->error!='';
+		return $this->error=='';
 	}
 }
 class UrlField extends FormField{
@@ -148,8 +146,7 @@ class UrlField extends FormField{
 		if(!is_utf8($this->getValue()) OR !preg_match("#([\w]+?://[^ \"\n\r\t<]*?)#is",$this->getValue())){
 			$this->error='Geen geldige website';
 		}
-
-		return $this->error!='';
+		return $this->error=='';
 	}
 }
 
@@ -165,7 +162,7 @@ class WebsiteField extends InputField{
 		} elseif(mb_strlen($this->getValue()) > $this->max_len) {
 			$this->error='Gebruik maximaal '.$this->max_len.' karakters:';
 		}
-		return $this->error!='';
+		return $this->error=='';
 	}
 }
 
@@ -192,7 +189,7 @@ class IntField extends FormField{
 		}elseif($this->min!==null AND $this->getValue()<$this->min){
 			$this->error='Minimale waarde is '.$this->min.' ';
 		}
-		return $this->error!='';
+		return $this->error=='';
 	}
 }
 class NickField extends FormField{
@@ -210,18 +207,18 @@ class NickField extends FormField{
 		}elseif(strtolower($lid->getNickname())!=strtolower($this->getValue()) AND Lid::nickExists($this->getValue())) {
 			$this->error='Deze bijnaam is al in gebruik.';
 		}
-		return $this->error!='';
+		return $this->error=='';
 	}
 }
 class TelefoonField extends InputField{
 	public function valid(){
 		if(!parent::valid()){ return false; }
 		if($this->getValue()==''){ return true; }
-		if(!preg_match('/\+(\d|-){10-20}/', $this->getValue())){
-			$this->error='Geen geldig telefoonnummer';
+		if(!preg_match('/^(\d{4}-\d{6}|\d{3}-\d{7}|\d{2}-\d{8}|\+\d{10,20})$/', $this->getValue())){
+			$this->error='Geen geldig telefoonnummer; 0187-123456; 015-2135681; 06-12345678; +31152135681 ';
 		}		
 
-		return $this->error!='';	
+		return $this->error=='';
 	}
 }
 /*
@@ -264,7 +261,7 @@ class PassField extends FormField{
 		if($new!='' AND $current==''){
 			$this->error='U dient uw huidige wachtwoord ook in te voeren';
 		}
-		return $this->error!='';
+		return $this->error=='';
 	}
 	public function view(){
 		echo $this->getDiv();
@@ -293,7 +290,7 @@ class SelectField extends FormField{
 		if(!array_key_exists($this->getValue(), $this->options)){
 			$this->error='Onbekende optie gekozen';
 		}
-		return $this->error!='';
+		return $this->error=='';
 	}
 	public function view(){
 		echo $this->getDiv();
@@ -330,7 +327,7 @@ class DatumField extends FormField{
 		if(!preg_match('/^(\d{4})-(\d\d?)-(\d\d?)$/', $this->getValue())){
 			$this->error='Ongeldige datum';
 		}
-		return $this->error!='';
+		return $this->error=='';
 	}
 	public function view(){
 		echo $this->getDiv();

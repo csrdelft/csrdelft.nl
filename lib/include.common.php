@@ -12,7 +12,10 @@ function matchCIDR($addr, $cidr) {
    $bitmask = ($mask != 0) ? 0xffffffff >> (32 - $mask) : 0x00000000;
    return ((ip2long($addr) & $bitmask) == (ip2long($ip) & $bitmask));
 }
-
+function makepasswd($pass) {
+	$salt = mhash_keygen_s2k(MHASH_SHA1, $pass, substr(pack('h*', md5(mt_rand())), 0, 8), 4);
+	return "{SSHA}" . base64_encode(mhash(MHASH_SHA1, $pass.$salt).$salt);
+}
 function email_like($email) {
 	return preg_match("/^[a-z0-9]+([_\\.-][a-z0-9]+)*@([a-z0-9]+([\.-][a-z0-9]+)*)+\\.[a-z]{2,}$/i", $email);
 }
