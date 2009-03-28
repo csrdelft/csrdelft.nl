@@ -136,6 +136,7 @@ class Lid implements Serializable{
 			}
 		}
 		$ldap->disconnect();
+		return true;
 	}
 	public function hasProperty($key){	return array_key_exists($key, $this->profiel); }
 	public function getProperty($key){

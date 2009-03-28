@@ -211,7 +211,7 @@ in <select name="waar">';
 					echo $lid->getPasfoto('small').'</a></td>';
 				}
 				if($loginlid->hasPermission('P_LEDEN_MOD')){
-					echo '<td><a href="/communicatie/profiel/'.$lid->getUid().'/edit" class="knop">b</a>&nbsp;';
+					echo '<td><a href="/communicatie/profiel/'.$lid->getUid().'/bewerken/" class="knop">b</a>&nbsp;';
 				}
 				//naam als link naar profiel weergeven.
 				echo '<td>'.$lid->getNaamLink('full', 'link').'</td>';
