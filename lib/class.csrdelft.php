@@ -59,7 +59,7 @@ class csrdelft extends SimpleHTML {
 		}
 		
 		//Roze webstek
-		if(Instelling::get('layout_rozeWebstek')=='ja'){
+		if(Instelling::get('layout_rozeWebstek')=='ja' AND LoginLid::instance()->getUid()!='x999'){
 			//$this->addStylesheet('roze.css');
 		}
 

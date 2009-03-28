@@ -14,16 +14,10 @@ class Lid implements Serializable{
 	private $uid;
 	private $profiel;
 
-	/*
-	 * Constructor kan worden aangeroepen met $uid='dummy', zo hoeft niet overal
-	 * allerlei foutafvangcode geschreven te worden, maar kan het gewoon 'normaal'
-	 * dit 'lid' weergeven.
-	 */
 	public function __construct($uid){
 		if(!$this->isValidUid($uid)){
-			throw new Exception('Geen correct uid opgegeven.');
+			throw new Exception('Geen correct [uid:'.$uid.'] opgegeven.');
 		}
-
 		$this->uid=$uid;
 		$this->load($uid);
 	}
@@ -38,7 +32,7 @@ class Lid implements Serializable{
 				$this->profiel['instellingen']=unserialize($this->profiel['instellingen']);
 			}
 		}else{
-			throw new Exception('Lid kon niet geladen worden.');
+			throw new Exception('Lid [uid:'.$uid.'] kon niet geladen worden.');
 		}
 	}
 	public static function loadByNickname($nick){
