@@ -162,7 +162,6 @@ lib/class.eetplancontent.php -text
 lib/class.formulier.php -text
 lib/class.fotoalbum.php -text
 lib/class.fotoalbumcontent.php -text
-lib/class.includer.php -text
 lib/class.knop.php -text
 lib/class.kolom.php -text
 lib/class.ldap.php -text
@@ -182,7 +181,6 @@ lib/class.simplehtml.php -text
 lib/class.simplespamfilter.php -text
 lib/class.sjaarsactie.php -text
 lib/class.sjaarsactiecontent.php -text
-lib/class.state.php -text
 lib/class.streeplijstcontent.php -text
 lib/class.stringincluder.php -text
 lib/class.toevoegen.php -text

@@ -19,3 +19,4 @@ htdocs/owee
 /images
 lib/include.defines.php
 sessie/*
+/tmp

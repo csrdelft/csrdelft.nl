@@ -72,7 +72,6 @@ switch (constant('MODE')) {
 	case 'WEB':
 		require_once('class.simplehtml.php');
 		require_once('class.kolom.php');
-		require_once('class.includer.php');
 		require_once('class.stringincluder.php');
 		require_once('class.csrdelft.php');
 		require_once('class.csrubb.php');
