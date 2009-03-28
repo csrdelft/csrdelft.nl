@@ -420,7 +420,9 @@ class Instelling{
 			'zijbalk_forum' => array(10, 'Aantal forumberichten in zijbalk', 'int'),
 			'zijbalk_forum_zelf' => array(0, 'Aantal zelf geposte forumberichten zijbalk', 'int'),
 			'zijbalk_verjaardagen' => array(10, 'Aantal verjaardagen in zijbalk', 'int'),
-			'voorpagina_maaltijdblokje' => array('ja', 'Volgende maaltijd weergeven', 'enum', array('ja', 'nee')));
+			'voorpagina_maaltijdblokje' => array('ja', 'Volgende maaltijd weergeven', 'enum', array('ja', 'nee')),
+			'groepen_toonPasfotos' => array('ja', 'Standaard pasfotos tonen', 'enum', array('ja', 'nee'))
+	);
 
 	//hebben we een instelling die $key heet?
 	public static function has($key){			return array_key_exists($key, self::$instellingen); }
