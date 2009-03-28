@@ -29,7 +29,7 @@ class EetplanContent extends SimpleHTML {
 		}else{
 			$lid=LidCache::getLid($uid);
 			echo '<h2><a class="forumGrootlink" href="/actueel/eetplan/">Eetplan</a> &raquo; voor '.$lid->getNaamLink('full', 'plain').'</h2>
-				Profiel van '.$lid->getNaamLink('civitas','plain').'<br /><br />';
+				Profiel van '.$lid->getNaamLink('civitas','link').'<br /><br />';
 			echo '<table class="eetplantabel">
 				<tr><th style="width: 150px">Avond</th><th style="width: 200px">Huis</th></tr>';
 			$row=0;
