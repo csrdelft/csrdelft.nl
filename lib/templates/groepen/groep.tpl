@@ -70,7 +70,7 @@
 	</div>
 	<br />
 
-	{if $groep->toonPasfotos() AND $lid->instelling('toonPasFotos')}
+	{if $groep->toonPasfotos() AND $lid->instelling('groepen_toonPasfotos')=='ja'}
 		<script type="text/javascript">togglePasfotos('{$groep->getLedenCSV()}', document.getElementById('ledenvangroep{$groep->getId()}'));</script>
 	{/if}
 	{if $groep->magAanmelden()}
