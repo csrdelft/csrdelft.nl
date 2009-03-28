@@ -70,10 +70,13 @@ class Saldi{
 			if(LoginLid::instance()->isSelf($uid)){
 				$show['maalcie']=$show['soccie']=true;
 				$defer=false;
-			}elseif(LoginLid::instance()->hasPermission('P_ADMIN,groep:soccie')){
-				$show['soccie']=true;
-			}elseif(LoginLid::instance()->hasPermission('P_ADMIN,groep:maalcie')){
-				$show['maalcie']=true;
+			}else{
+				if(LoginLid::instance()->hasPermission('P_ADMIN,groep:soccie')){
+					$show['soccie']=true;
+				}
+				if(LoginLid::instance()->hasPermission('P_ADMIN,groep:maalcie')){
+					$show['maalcie']=true;
+				}
 			}
 		}
 		$return='';
