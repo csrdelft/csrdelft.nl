@@ -313,8 +313,8 @@ class LoginLid{
 		}else{
 			$ip='0.0.0.0'; $locatie='';
 		}
-		if(isset($_SERVER['REQUEST_URI'])){ $url=$this->_db->escape($_SERVER['REQUEST_URI']); }else{ $url=''; }
-		if(isset($_SERVER['HTTP_REFERER'])){ $referer=$this->_db->escape($_SERVER['HTTP_REFERER']); }else{ $referer=''; }
+		if(isset($_SERVER['REQUEST_URI'])){ $url=$db->escape($_SERVER['REQUEST_URI']); }else{ $url=''; }
+		if(isset($_SERVER['HTTP_REFERER'])){ $referer=$db->escape($_SERVER['HTTP_REFERER']); }else{ $referer=''; }
 
 		$agent='';
 		if(isset($_SERVER['HTTP_USER_AGENT'])){
