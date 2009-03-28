@@ -140,9 +140,9 @@ class Forum{
 	}
 	public static function isIngelogged(){ return LoginLid::instance()->hasPermission('P_LOGGED_IN'); }
 	public static function isModerator(){ return LoginLid::instance()->hasPermission('P_FORUM_MOD'); }
-	public static function getLaatstBekeken(){ return time(); }//)Instelling::get('ForumLaatstBekeken'); }
-	public static function updateLaatstBekeken(){ return; //TODO:LoginLid::instance()->updateForumLaatstBekeken();
-	}
+	public static function getLaatstBekeken(){ return LoginLid::instance()->getForumLaatstBekeken(); }
+	public static function updateLaatstBekeken(){ return LoginLid::instance()->updateForumLaatstBekeken(); }
+
 	public static function getTopicsPerPagina(){ return Instelling::get('forum_onderwerpenPerPagina'); }
 	public static function getPostsPerPagina(){ return Instelling::get('forum_postsPerPagina'); }
 	

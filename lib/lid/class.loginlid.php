@@ -66,6 +66,21 @@ class LoginLid{
 		return $this->lid->getUid()==$uid;
 	}
 
+	//TODO: marco gaat dit goed fixen
+	public function getForumLaatstBekeken(){
+		if($this->getUID()=='x999'){
+			return time();
+		}else{
+			return strtotime($this->lid->getProperty('forum_laatstbekeken'));
+		}
+	}
+	public function updateForumLaatstBekeken(){
+		if($this->getUID()!='x999'){
+			$this->lid->setProperty['forum_laatstbekeken']=date('Y-m-d H:i:s');
+			$this->lid->save();
+		}
+	}
+
 	# dispatch the login proces to a separate function based on MODE
 	public function login($user, $pass = "", $checkip = true) {
 		switch (constant('MODE')) {
