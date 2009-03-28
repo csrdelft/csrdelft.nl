@@ -71,7 +71,7 @@ class Saldi{
 				$show['maalcie']=$show['soccie']=true;
 				$defer=false;
 			}elseif(LoginLid::instance()->hasPermission('P_ADMIN,groep:soccie')){
-				$soccie=true;
+				$show['soccie']=true;
 			}elseif(LoginLid::instance()->hasPermission('P_ADMIN,groep:maalcie')){
 				$show['maalcie']=true;
 			}
@@ -79,11 +79,13 @@ class Saldi{
 		$return='';
 		if(is_array($show)){
 			foreach($show as $cie => $value){
-				$imgtag='<img class="handje" id="'.$cie.'grafiek" src="http://csrdelft.nl/tools/saldografiek.php?uid='.$uid.'&'.$cie.'" onclick="verbreedSaldografiek(\''.$cie.'\');" title="Klik op de grafiek om de tijdspanne te vergroten" />';
-				if($defer){
-					$return.='<a id="'.$cie.'link" onclick="document.getElementById(\'saldoGrafiek\').innerHTML+=\''.htmlspecialchars(str_replace("'", "\'", $imgtag)).'\'; document.getElementById(\''.$cie.'link\').display=\'none\';" class="knop">'.ucfirst($cie).'grafiek weergeven</a> ';
-				}else{
-					$return.=$imgtag;
+				if($value){
+					$imgtag='<img class="handje" id="'.$cie.'grafiek" src="http://csrdelft.nl/tools/saldografiek.php?uid='.$uid.'&'.$cie.'" onclick="verbreedSaldografiek(\''.$cie.'\');" title="Klik op de grafiek om de tijdspanne te vergroten" />';
+					if($defer){
+						$return.='<a id="'.$cie.'link" onclick="document.getElementById(\'saldoGrafiek\').innerHTML+=\''.htmlspecialchars(str_replace("'", "\'", $imgtag)).'\'; document.getElementById(\''.$cie.'link\').display=\'none\';" class="knop">'.ucfirst($cie).'grafiek weergeven</a> ';
+					}else{
+						$return.=$imgtag;
+					}
 				}
 			}
 			if($defer){
