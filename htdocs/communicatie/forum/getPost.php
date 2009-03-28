@@ -7,7 +7,7 @@
 
 require_once 'include.config.php';
 
-require_once 'forum/class.forumonderwerp.php's;
+require_once 'forum/class.forumonderwerp.php';
 
 
 if(isset($_GET['post'])){

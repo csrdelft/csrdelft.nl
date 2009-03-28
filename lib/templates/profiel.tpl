@@ -40,7 +40,7 @@
 					{/if}
 				</div>
 				<div class="adres">
-					{$profhtml.woonoord}
+					{$profhtml.woonoord}<br />
 					{$profhtml.adres}<br />
 					{$profhtml.postcode} {$profhtml.woonplaats}<br />
 					{$profhtml.land}<br />

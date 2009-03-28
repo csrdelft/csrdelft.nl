@@ -205,7 +205,7 @@ class ForumOnderwerp{
 	public function magBekijken(){
 		if(Forum::isModerator()){ return true; }
 		if(!($this->getCategorie() instanceof ForumCategorie)){
-			die('ForumOnderwerp::magZien(): Geen onderwerp ingeladen.');
+			throw new Exception('ForumOnderwerp::magBekijken(): Geen onderwerp ingeladen.');
 		}else{
 			return LoginLid::instance()->hasPermission($this->getCategorie()->getRechten_read());
 		}
@@ -228,7 +228,7 @@ class ForumOnderwerp{
 		if($this->magPosten() AND $this->isOpen()){
 			//nu alleen nog controleren of het bericht van de huidige gebruiker is.
 			$aPost=$this->getSinglePost($iPostID);
-			return $aPost['uid']=$uid;
+			return $aPost['uid']==$uid;
 		}else{
 			//geen rechten om te posten, en niet open.
 			return false;
