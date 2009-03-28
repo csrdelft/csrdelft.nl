@@ -37,6 +37,7 @@ class LoginLid{
 			# of er is net uitgelogd waardoor de gegevens zijn leeggegooid
 			$this->login('x999', 'x999', false);
 		}
+		$this->logBezoek();
 	}
 	private function userIsActive(){
 		//er is geen _uid gezet in _SESSION dus er is nog niemand ingelogged.
