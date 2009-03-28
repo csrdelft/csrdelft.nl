@@ -11,7 +11,10 @@ require_once('class.saldi.php');
 
 
 if(isset($_GET['uid']) AND (Lid::isValidUid($_GET['uid']) OR $_GET['uid']=='0000')){
-	$lid=LidCache::getLid($_GET['uid']);
+	$uid=$_GET['uid'];
+	if($uid!='0000'){
+		$lid=LidCache::getLid($uid);
+	}
 }else{
 	$lid=$loginlid->getLid();
 }
@@ -26,8 +29,8 @@ if(isset($_GET['timespan']) AND $_GET['timespan']==(int)$_GET['timespan']){
 	$timespan=$_GET['timespan'];
 }
 
-if($loginlid->hasPermission('P_ADMIN,groep:'.$cie) OR $loginlid->isSelf($lid->getUid())){
-	$saldi=new Saldi($lid->getUid(), $cie, $timespan);
+if($loginlid->hasPermission('P_ADMIN,groep:'.$cie) OR $loginlid->isSelf($uid)){
+	$saldi=new Saldi($uid, $cie, $timespan);
 
 	$chart=new chart(500, 200);
 
