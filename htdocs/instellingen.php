@@ -28,5 +28,4 @@ $main=new Csrdelft(new InstellingenContent());
 
 $main->view();
 
-
 ?>

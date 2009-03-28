@@ -15,7 +15,6 @@ class LoginLid{
 	protected $_permissions = array();
 	protected $_perm_user   = array();
 
-
 	private $lid;
 
 	public static function instance(){
@@ -127,7 +126,7 @@ class LoginLid{
 		}elseif(isset($_SESSION['_ip'])){
 			unset($_SESSION['_ip']);
 		}
-
+		Instelling::reload();
 		return true;
 	}
 

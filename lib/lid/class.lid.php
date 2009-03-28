@@ -146,7 +146,7 @@ class Lid implements Serializable{
 		return $this->profiel[$key];
 	}
 	public function setProperty($property, $contents){
-		$disallowedProps=array('uid', 'instellingen');
+		$disallowedProps=array('uid');
 		if(!array_key_exists($property, $this->profiel)){ return false; }
 		if(in_array($property, $disallowedProps)){ return false; }
 		if(is_string($contents)){ $contents=trim($contents); }
@@ -181,19 +181,7 @@ class Lid implements Serializable{
 	public function getCorveepunten(){ return $this->profiel['corvee_punten']; }
 	public function getCorveevrijstelling(){ return $this->profiel['corvee_vrijstelling']; }
 	public function isKwalikok(){ return $this->profiel['corvee_punten']==='1'; }
-
-	//wrappertje voor Instelling, die houdt het ook bij in de SESSIE enzo...
-	public function instelling($key){
-		return Instelling::get($key);
-	}
-	public function getInstellingen(){
-		if(!is_array($this->profiel['instellingen'])){
-			$this->profiel['instellingen']=Instelling::getDefaults();
-			$this->save();
-		}
-		return $this->profiel['instellingen'];
-
-	}
+	public function getInstellingen(){ return $this->profiel['instellingen']; }
 	
 	public function getWoonoord(){
 		require_once 'groepen/class.groepen.php';
@@ -481,7 +469,11 @@ class Instelling{
 		unset($_SESSION['instellingen']);		
 	}
 	public static function reload(){
-		$_SESSION['instellingen']=LoginLid::instance()->getLid()->getInstellingen();
+		if(is_array(LoginLid::instance()->getLid()->getInstellingen())){
+			$_SESSION['instellingen']=LoginLid::instance()->getLid()->getInstellingen();
+		}else{
+			$_SESSION['instellingen']=Instelling::getDefaults();
+		}
 	}
 	public static function save(){
 		$lid=LoginLid::instance()->getLid();
