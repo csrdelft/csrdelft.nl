@@ -76,7 +76,7 @@ class LoginLid{
 	}
 	public function updateForumLaatstBekeken(){
 		if($this->getUID()!='x999'){
-			$this->lid->setProperty['forum_laatstbekeken']=date('Y-m-d H:i:s');
+			$this->lid->setProperty('forum_laatstbekeken', date('Y-m-d H:i:s'));
 			$this->lid->save();
 		}
 	}
