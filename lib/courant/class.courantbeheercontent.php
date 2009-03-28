@@ -14,7 +14,6 @@ class CourantBeheercontent extends SimpleHTML{
 	function CourantBeheercontent(&$courant){
 		$this->courant=$courant;
 	}
-	function getCatNames(){ return $this->catNames; }
 
 	function edit($iBerichtID){ $this->_edit=(int)$iBerichtID; }
 	function getTitel(){ return 'C.S.R.-courant'; }

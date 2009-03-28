@@ -20,9 +20,7 @@ class SjaarsactieContent extends SimpleHTML {
 	function getTitel(){
 		return 'Sjaarsacties';
 	}
-	function viewWaarbenik(){
-		echo '<a href="/intern/">Intern</a> &raquo; Sjaarsacties';
-	}
+
 	function viewNewActieForm(){
 		$naam=$beschrijving='';
 		$limiet=10;

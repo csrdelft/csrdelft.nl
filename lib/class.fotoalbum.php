@@ -9,13 +9,10 @@
 
 class Fotoalbum{
 
-	private $_lid;
-
 	private $pad;
 	private $mapnaam;
 
 	function Fotoalbum($pad,$mapnaam){
-		$this->_lid=Lid::instance();
 
 		$this->pad=$pad;
 		$this->mapnaam=$mapnaam;
@@ -116,7 +113,7 @@ class Fotoalbum{
 	}
 
 	function magBekijken(){
-		if($this->_lid->hasPermission('P_LEDEN_READ')){
+		if(LoginLid::instance()->hasPermission('P_LEDEN_READ')){
 			return true;
 		}else{
 			return(!preg_match('/novitiaat/i', $this->getPad()));
@@ -190,11 +187,11 @@ class Foto{
 	}
 
 	function getThumbURL(){
-		return CSR_PICS.'fotoalbum/'.$this->getMap().'_thumbs/'.$this->getBestandsnaam();
+		return CSR_PICS.'fotoalbum/'.$this->urlencode($this->getMap()).'_thumbs/'.$this->urlencode($this->getBestandsnaam());
 	}
 
 	function getResizedURL(){
-		return CSR_PICS.'fotoalbum/'.$this->getMap().'_resized/'.$this->getBestandsnaam();
+		return CSR_PICS.'fotoalbum/'.$this->urlencode($this->getMap()).'_resized/'.$this->urlencode($this->getBestandsnaam());
 	}
 
 	function bestaatThumb(){
@@ -223,5 +220,10 @@ class Foto{
 
 	function isCompleet(){
 		return ($this->bestaatThumb() && $this->bestaatResized());
+	}
+	
+	function urlencode($url){
+		//urlencode() maar dan de slashes niet
+		return str_replace('%2F', '/', rawurlencode($url));
 	}
 }

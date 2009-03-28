@@ -6,13 +6,13 @@
 # Aanmelden en afmelden voor maaltijden.
 # -------------------------------------------------------------------
 
-require_once('include.config.php');
+require_once 'include.config.php' ;
 require_once 'class.paginacontent.php';
 
 # MaaltijdenSysteem
-require_once('maaltijden/class.maaltrack.php');
-require_once('maaltijden/class.maaltijd.php');
-$maaltrack = new MaalTrack($lid, $db);
+require_once 'maaltijden/class.maaltrack.php';
+require_once 'maaltijden/class.maaltijd.php';
+$maaltrack = new MaalTrack();
 
 # Moeten er acties uitgevoerd worden?
 $action=getOrPost('a');
@@ -29,7 +29,7 @@ $error = 0;
 # controleren of we wel mogen doen wat er gevraagd wordt...
 $actionsToegestaan=array('', 'aan', 'af', 'gasten');
 if(in_array($action, $actionsToegestaan)){
-	if(!$lid->hasPermission('P_MAAL_IK')){ $error = 1; }
+	if(!$loginlid->hasPermission('P_MAAL_IK')){ $error = 1; }
 }else{
 	# geen geklooi met andere waarden
 	$error = 1;
@@ -43,7 +43,7 @@ if ($error == 0) switch($action) {
 		# kijk of er extra permissies nodig zijn als we iemand anders
 		# aan willen melden
 		$uid=getOrPost('uid');
-		if($uid != '' and $uid != $lid->getUid() AND !$lid->hasPermission('P_MAAL_WIJ') ){
+		if($uid != '' and $uid != $loginlid->getUid() AND !$loginlid->hasPermission('P_MAAL_WIJ') ){
 			$error = 1;
 		}else{
 			# ga maar proberen dan...
@@ -66,7 +66,7 @@ if ($error == 0) switch($action) {
 		# kijk of er extra permissies nodig zijn als we iemand anders
 		# af willen melden
 		$uid=getOrPost('uid');
-		if($uid != '' and $uid != $lid->getUid() AND !$lid->hasPermission('P_MAAL_WIJ') ){
+		if($uid != '' and $uid != $loginlid->getUid() AND !$loginlid->hasPermission('P_MAAL_WIJ') ){
 			$error = 1;
 		}else{
 			# ga maar proberen dan...

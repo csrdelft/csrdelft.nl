@@ -1,22 +1,13 @@
 <?php
 
-#
 # C.S.R. Delft
-#
 # -------------------------------------------------------------------
 # maaltijden/class.maaltijdbeheercontent.php
 # -------------------------------------------------------------------
-#
 # Toevoegen en bewerken van maaltijden
-#
 # -------------------------------------------------------------------
-# Historie:
-# 20-01-2006 Hans van Kranenburg
-# . gemaakt
-#
 
-require_once ('class.simplehtml.php');
-require_once ('class.lid.php');
+
 require_once ('maaltijden/class.maaltrack.php');
 
 class MaaltijdbeheerContent extends SimpleHTML {
@@ -39,7 +30,7 @@ class MaaltijdbeheerContent extends SimpleHTML {
 	function addError($error){ $this->_error=$error; }
 
 	function view(){
-		$lid=Lid::instance();
+		$loginlid=LoginLid::instance();
 		//de html template in elkaar draaien en weergeven
 		$maaltijdbeheer=new Smarty_csr();
 		$maaltijdbeheer->caching=false;
@@ -74,7 +65,7 @@ class MaaltijdbeheerContent extends SimpleHTML {
 			if(isset($_POST['tekst'])){ $aForm['tekst']=trim(mb_htmlentities($_POST['tekst'])); }
 			if(isset($_POST['limiet']) AND $_POST['limiet']==(int)$_POST['limiet']){ $aForm['max']=$_POST['limiet']; }
 			if(isset($_POST['abo']) AND $this->_maaltrack->isValidAbo($_POST['abo'])){ $aForm['abosoort']=$_POST['abo']; }
-			if(isset($_POST['tp']) AND $lid->uidExists($_POST['tp']) ){ $aForm['tp']=$_POST['tp']; }
+			if(isset($_POST['tp']) AND Lid::exists($_POST['tp']) ){ $aForm['tp']=$_POST['tp']; }
 			if(isset($_POST['koks'])){  $aForm['koks']=(int)$_POST['koks']; }
 			if(isset($_POST['afwassers'])){  $aForm['afwassers']=(int)$_POST['afwassers']; }
 			if(isset($_POST['theedoeken'])){  $aForm['theedoeken']=(int)$_POST['theedoeken']; }
@@ -84,7 +75,7 @@ class MaaltijdbeheerContent extends SimpleHTML {
 
 		//arrays toewijzen en weergeven
 		$maaltijdbeheer->assign('maal', $aMaal);
-		$maaltijdbeheer->assign('toonLijsten', $lid->hasPermission('P_MAAL_MOD') or opConfide());
+		$maaltijdbeheer->assign('toonLijsten', $loginlid->hasPermission('P_MAAL_MOD') or opConfide());
 		$maaltijdbeheer->assign('datumFormaat', '%a %e %b %H:%M');
 		$maaltijdbeheer->assign('datumFormaatInvoer', '%Y-%m-%d %H:%M');
 		if($this->_error!=''){ $maaltijdbeheer->assign('error', $this->_error); }

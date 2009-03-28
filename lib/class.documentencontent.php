@@ -15,16 +15,16 @@ class DocumentenContent extends SimpleHTML {
 	var $_documenten;
 	var $_db;
 	var $_lid;
-	
+
 	var $limit;
 	var $colspan;
 	var $maxFilesize;
 
 	function DocumentenContent(&$documenten) {
 		$this->_documenten =& $documenten;
-		$this->_lid =$documenten->_lid;
+		$this->_lid =LoginLid::instance();
 		$this->_db =& $documenten->_db;
-		
+
 		// TODO: verkrijgen van documenten.php ?!?!?
 		$this->colspan=4;
 		$this->limit=5;
@@ -34,11 +34,7 @@ class DocumentenContent extends SimpleHTML {
 	function getTitel() {
 		return 'Documenten';
 	}
-	
-	function viewWaarBenik() {
-		echo '<a href="/intern/">Intern</a> &raquo; '.$this->getTitel();
-	}
-	
+
 	/*
 	 * Laat de box zien waarmee men documenten kan bewerken
 	 * parameters: 	catsOptions is een string met de opties van het drop-down menu
@@ -64,7 +60,7 @@ class DocumentenContent extends SimpleHTML {
 		} else {
 			$annuleerLink='window.location=\'../../categorie/'.$singleCat.'\'';
 		}
-		
+
 		if($mode == 'edit') {
 			// zorgen dat het formulier ook goed gaat bij SingleCat-mode!
 			if(!$singleCat){
@@ -119,7 +115,7 @@ class DocumentenContent extends SimpleHTML {
 		return $res;
 	}
 
-	function view() {		
+	function view() {
 		// titel
 		echo '<h1>Documenten</h1><p>'."\n";
 
@@ -137,12 +133,12 @@ class DocumentenContent extends SimpleHTML {
 			if(isset($_GET['mode'], $_GET['id'])){ // als er een mode ge-activeerd is
 				$mode=$_GET['mode'];
 				$id=(int)$_GET['id'];
-				
+
 				if($mode == 'del') { // als de mode 'verwijderen' is: document verwijderen
 					$successful = $this->_documenten->deleteDocument($id);
 //					$successful ? $successful = true : $successful = false;
 				}
-				
+
 				// document-id waar het om gaat opslaan voor later gebruik
 				$boxDocId=$id;
 			} else if(isset($_POST['documentid'], $_POST['title'], $_POST['cat']) && is_string($_POST['title'])) {
@@ -173,11 +169,11 @@ class DocumentenContent extends SimpleHTML {
 					$successful=true;
 				} // nog niets voor 'false'...
 			}
-				
+
 			if($mode == 'edit' || $mode=='add' ){
 				$boxCatId=$this->_documenten->getCatIDByDocumentID($id);
 			}
-			
+
 			// overbodig. Verwijderen om verwarring te voorkomen
 			unset($id);
 
@@ -192,17 +188,17 @@ class DocumentenContent extends SimpleHTML {
 				$sLinkPrefix.='documenten/';
 			}
 		}
-		
+
 		if($singleCat){
 			// als we 1 categorie laten zien, moeten we (nog) een stapje terug, omdat we in
 			// ..documenten/categorie/xx OF in ..documenten/bewerken/xx/yy zitten.
 			// In het laatste geval is de mode 'edit' actief, dus is de link hierboven ook al aangepast.
 			$sLinkPrefix='../'.$sLinkPrefix;
-			
+
 			// terug-link weergeven
 			echo '<a href="'.$sLinkPrefix.'">Terug naar volledig overzicht</a><p>'."\n";
 		}
-		
+
 		if($this->_lid->hasPermission('P_DOCS_MOD')) {
 			// toevoeg-link weergeven
 			echo '<a href="'.$sLinkPrefix.'toevoegen/">Documenten toevoegen</a><p>'."\n";
@@ -212,7 +208,7 @@ class DocumentenContent extends SimpleHTML {
 		$aDocumenten = $this->_documenten->getDocumenten($singleCat);
 
 		echo '<table class="doctable">'."\n";
-		
+
 		// per categorie doorlopen
 		for($i=0; $i<count($aDocumenten); $i++) {
 			$catname=$aDocumenten[$i][0];
@@ -232,9 +228,9 @@ class DocumentenContent extends SimpleHTML {
 			}
 			$title.='</strong></td></tr>'."\n";
 			echo $title;
-			 
+
 			// TODO: kijken of $boxDocId bij de eerste paar zit?!
-			
+
 			// de index berekenen die bepaalt hoeveel documenten er maximaal weergegeven worden
 			// aanname: $this->limit is set.
 			$showAll=false;
@@ -244,7 +240,7 @@ class DocumentenContent extends SimpleHTML {
 			} else {
 				$maxIndex=$this->limit+2; // die twee omdat $j in de for-loop hieronder op 2 begint.
 			}
-			
+
 //			if( !$singleCat || !isset($boxCatId) || $catid==$boxCatId){ //|| !($mode=='add' && isset($successful) && $catid==$boxCatId))){
 //				// ofwel: als het normale overzicht gegeven wordt en de huidige categorie NIET
 //				// per se volledig in zicht hoeft te zijn.
@@ -252,7 +248,7 @@ class DocumentenContent extends SimpleHTML {
 //			} else {
 //				$maxIndex=$count;
 //			}
-			
+
 			// per document de categorie doorlopen
 			// j=2, omdat daar de documenten pas beginnen.
 			for($j=2; $j<$count && $j<$maxIndex; $j++) {
@@ -277,7 +273,7 @@ class DocumentenContent extends SimpleHTML {
 				if ($this->_lid->hasPermission('P_DOCS_MOD')) {
 					$escapedName=addslashes(html_entity_decode($name, ENT_NOQUOTES, 'UTF-8'));
 					$confirmString = 'Weet je zeker dat je \\\''.$escapedName.'\\\' wilt verwijderen?';
-					
+
 					$row .= '<td class="buttoncell">'."\n"
 
 					// bewerken:
@@ -305,13 +301,13 @@ class DocumentenContent extends SimpleHTML {
 					.'<img class="button" src="'.CSR_PICS.'documenten/plus.jpg" /></a>'."\n"
 
 					.'</td></tr>'."\n";
-					
+
 					// de rij (box) voor het daadwerkelijk bewerken of toevoegen
 					if(isset($boxDocId, $mode) && $boxDocId == $docid && $mode != 'del'
 						&& (!isset($successful) || !$successful)) {
 							// ofterwijl: er is een mode en een docid ingesteld, het docid is gelijk aan de huidige id,
 							// de mode is niet 'del' (document verwijderen) en de modus is nog niet voltooid
-							
+
 							// twee mogelijkheden: de nieuw ingevoerde gegevens of de normale gegevens
 							if(isset($boxPOST)){
 								$boxTitle=$boxPOST[0];
@@ -328,7 +324,7 @@ class DocumentenContent extends SimpleHTML {
 				}
 				echo $row;
 			}
-			
+
 			// "meer..." weergeven (of niet)
 			if( !$singleCat && ((!$showAll && $catid==$boxCatId && ($count-2)>$this->limit) || (($count-2)>$this->limit && $catid!=$boxCatId))){
 //			if( !$singleCat && ($count-2) > $this->limit &&
@@ -343,7 +339,7 @@ class DocumentenContent extends SimpleHTML {
 			echo '<tr><td>&nbsp;</td></tr>'."\n";
 		}
 		echo '</table>'."\n";
-		
+
 		// eventuele melding weergeven (in een alert)
 		if(isset($mode, $successful)) { // een modus is actief
 			$message='';

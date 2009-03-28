@@ -20,9 +20,9 @@
 	<div id="menuright">
 		{if $lid->hasPermission('P_LOGGED_IN') }
 			<div id="ingelogd">
-				{$lid->getCivitasName()}<br />
-				<div id="profiellink"><a href="/communicatie/profiel/{$lid->getUid()}">profiel</a></div> <div id="uitloggen"><a href="/logout.php">log&nbsp;uit</a></div><br class="clear" />
-				<br/>
+				{$lid->getUid()|csrnaam}<br />
+				<div id="uitloggen"><a href="/logout.php">log&nbsp;uit</a></div><br class="clear" />
+				<br />
 <!--				
 				<form method="get" action="/vb/ajaxsearch.php">
 					<p>

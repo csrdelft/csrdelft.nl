@@ -29,8 +29,8 @@
 class Maaltijd {
 	# MySQL connectie
 	private $_db;
-	# lid-object van ingelogde gebruiker
-	private $_lid;
+
+
 	# id van de maaltijd waar we bewerkingen op uitvoeren
 	private $_maalid;
 	# Evt. foutmelding
@@ -44,7 +44,6 @@ class Maaltijd {
 	# NB!! Gebruik MaalTrack::isMaaltijd voor controle of de maaltijd wel bestaat
 	function __construct($maalid) {
 		$this->_maalid = (int)$maalid;
-		$this->_lid=Lid::instance();
 		$this->_db=MySql::instance();
 
 		# gegevens van de maaltijd inladen
@@ -71,7 +70,7 @@ class Maaltijd {
 	function getDatum() { return $this->_maaltijd['datum']; }
 	function getTP() { return $this->_maaltijd['tp']; }
 	public function isTp($uid=null){
-		if($uid==null){ $uid=$this->_lid->getUid(); }
+		if($uid==null){ $uid=LoginLid::instance()->getUid(); }
 		return $uid==$this->getTP();
 	}
 	public function getID(){ return $this->getMaalId(); }
@@ -85,11 +84,12 @@ class Maaltijd {
 	public function getMaxAanmeldingen(){ return $this->_maaltijd['max']; }
 	# Aanmelden van een gebruiker voor deze maaltijd.
 	function aanmelden($uid = '') {
-		if ($uid == '') $uid = $this->_lid->getUid();
-		$proxy = ($uid != $this->_lid->getUid()) ? true : false;
+		$loginlid=LoginLid::instance();
+		if ($uid == '') $uid = $loginlid->getUid();
+		$proxy = ($uid != $loginlid->getUid()) ? true : false;
 
 		# kijken of er wel een geldige uid is opgegeven
-		if ($proxy and (!$this->_lid->uidExists($uid) or !preg_match('/S_((GAST)?LID|NOVIET)/', $this->_lid->getLidStatus($uid))) ) {
+		if ($proxy and (!Lid::exists($uid) or !preg_match('/S_((GAST)?LID|NOVIET)/', $loginlid->getLid()->getStatus($uid))) ) {
 			$this->_proxyerror = "Opgegeven lid bestaat niet of is geen gewoon Lid.";
 			return false;
 		}
@@ -97,12 +97,12 @@ class Maaltijd {
 		# kijken of iemand anders aangemeld wordt voor een maaltijd	die meer dan
 		# MAALTIJD_PROXY_MAX_TOT vooruit is
 		# P_MAAL_MOD mag dat wel overigens...
-		if ($proxy and ($this->_maaltijd['datum'] - time()) > MAALTIJD_PROXY_MAX_TOT and !$this->_lid->hasPermission('P_MAAL_MOD')) {
+		if ($proxy and ($this->_maaltijd['datum'] - time()) > MAALTIJD_PROXY_MAX_TOT and !$loginlid->hasPermission('P_MAAL_MOD')) {
 			$this->_proxyerror = "U kunt een ander persoon nu niet voor deze maaltijd opgeven.";
 			return false;
 		}
 
-		if ($proxy){ $fullname = $this->_lid->getFullname($uid); }
+		if ($proxy){ $fullname = $loginlid->getLid()->getNaam(); }
 
 		# kan er ueberhaupt nog veranderd worden aan deze maaltijd?
 		if ($this->_maaltijd['gesloten'] == '1') {
@@ -131,7 +131,7 @@ class Maaltijd {
 
 		# aanmelding wegschrijven
 		$time = time();
-		$door = $this->_lid->getUid();
+		$door = $loginlid->getUid();
 		if(isset($_SERVER['REMOTE_ADDR'])){ $ip = $_SERVER['REMOTE_ADDR'];
 		}else{ $ip = '0.0.0.0'; }
 
@@ -168,25 +168,26 @@ class Maaltijd {
 
 	# Afmelden van een gebruiker voor deze maaltijd.
 	function afmelden($uid = '') {
-		if ($uid == '') $uid = $this->_lid->getUid();
-		$proxy = ($uid != $this->_lid->getUid()) ? true : false;
+		$loginlid=LoginLid::instance();
+		if ($uid == '') $uid = $loginlid->getUid();
+		$proxy = (!$loginlid->isSelf($uid)) ? true : false;
 
 		if ($proxy) {
 			# afmelden anderen mag als we MAAL_MOD rechten hebben
-			if ($this->_lid->hasPermission('P_MAAL_MOD')) {
+			if ($loginlid->hasPermission('P_MAAL_MOD')) {
 			# of als we MAAL_WIJ hebben en op confide zijn
-			} elseif (opConfide() or $this->aangemeldDoor($uid, $this->_lid->getUid())) {
+			} elseif (opConfide() or $this->aangemeldDoor($uid, $loginlid->getUid())) {
 			} else {
 				$this->_proxyerror = "U heeft geen rechten om personen af te melden die u niet zelf aangemeld heeft.";
 				return false;
 			}
 		}
 
-		if ($proxy and !$this->_lid->uidExists($uid)) {
+		if ($proxy and !Lid::exists($uid)) {
 			$this->_proxyerror = "Opgegeven lid bestaat niet.";
 			return false;
 		}
-		if ($proxy) $fullname = $this->_lid->getFullname($uid);
+		if ($proxy) $fullname = (string)LidCache::getLid($uid);
 
 		# kan er ueberhaupt nog veranderd worden aan deze maaltijd?
 		if ($this->_maaltijd['gesloten'] == '1') {
@@ -203,7 +204,7 @@ class Maaltijd {
 
 		# afmelding wegschrijven
 		$time = time();
-		$door = $this->_lid->getUid();
+		$door = $loginlid->getUid();
 		if (isset($_SERVER['REMOTE_ADDR'])) $ip = $_SERVER['REMOTE_ADDR'];
 		else $ip = '0.0.0.0';
 
@@ -253,8 +254,8 @@ class Maaltijd {
 
 	public function heeftAbo($uid=null) {
 		if($uid==null){
-			$uid = $this->_lid->getUid();
-		}elseif(!$this->_lid->uidExists($uid)){
+			$uid =LoginLid::instance()->getUid();
+		}elseif(!Lid::exists($uid)){
 			$this->_error = "Opgegeven lid bestaat niet.";
 			return false;
 		}
@@ -268,7 +269,7 @@ class Maaltijd {
 	}
 
 	function getStatus($uid=null) {
-		if($uid===null){ $uid=$this->_lid->getUid(); }
+		if($uid===null){ $uid=LoginLid::instance()->getUid(); }
 		if($this->isGesloten()){
 			$result = $this->_db->select("SELECT uid FROM maaltijdgesloten WHERE maalid={$this->_maalid} AND uid='{$uid}'");
 			if (($result !== false) and $this->_db->numRows($result) > 0) {
@@ -322,7 +323,7 @@ class Maaltijd {
 
 		$gasten = abs((int)$gasten);
 		$opmerking = $this->_db->escape(mb_substr(trim($opmerking), 0, 255));
-		$uid=$this->_lid->getUid();
+		$uid=$loginlid=LoginLid::instance()->getUid();
 
 		## Als gasten 0 is, gooi dan opmerkingen maar leeg
 		if ($gasten < 1) $opmerking = '';
@@ -501,11 +502,10 @@ class Maaltijd {
 
 		if($rAan!==false and $this->_db->numRows($rAan) > 0){
 			while($aAan=$this->_db->next($rAan)){
-				$naam=$this->_lid->getFullName($aAan['uid']);
 				//hier array met uid als key maken, om zometeen alles te kunnen wegstrepen
 				$aan[$aAan['uid']]=array(
 					'uid' => $aAan['uid'],
-					'naam' => $naam,
+					'naam' => (string)LidCache::getLid($aAan['uid']),
 					'eetwens' => $aAan['eetwens'],
 					'achternaam' => $aAan['achternaam'],
 					'saldo' => $aAan['saldo'],
@@ -540,7 +540,7 @@ class Maaltijd {
 				//hier array met uid als key maken, om zometeen alles te kunnen wegstrepen
 				$abo[$aAbo['uid']]=array(
 					'uid' => $aAbo['uid'],
-					'naam' => $this->_lid->getFullName($aAbo['uid']),
+					'naam' => (string)LidCache::getLid($aAbo['uid']),
 					'eetwens' => $aAbo['eetwens'],
 					'achternaam' => $aAbo['achternaam'],
 					'saldo' => $aAbo['saldo'],
@@ -596,7 +596,7 @@ class Maaltijd {
 			if(($result !== false) AND $this->_db->numRows($result) > 0){
 				while($record = $this->_db->next($result)){
 					$aan[$record['uid']]=$record;
-					$aan[$record['uid']]['naam']=$this->_lid->getFullName($record['uid']);
+					$aan[$record['uid']]['naam']=(string)LidCache::getLid($record['uid']);
 				}
 			}
 		}else{

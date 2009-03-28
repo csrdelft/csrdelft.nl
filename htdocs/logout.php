@@ -2,10 +2,9 @@
 
 # logout.php
 
-# instellingen & rommeltjes
 require_once('include.config.php');
 
-$lid->logout();
+$loginlid->logout();
 
 # url checken
 if (isset($_POST['url']) and preg_match("/^[-\w?&=.\/]+$/", $_POST['url'])){

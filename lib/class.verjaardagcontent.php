@@ -6,9 +6,7 @@
 # Beeldt informatie af over Verjaardagen
 # -------------------------------------------------------------------
 
-
-require_once ('class.simplehtml.php');
-require_once ('class.lid.php');
+require_once 'lid/class.mootverjaardag.php';
 
 class VerjaardagContent extends SimpleHTML {
 
@@ -21,7 +19,7 @@ class VerjaardagContent extends SimpleHTML {
 	### public ###
 
 	function VerjaardagContent ($actie) {
-		$this->_lid =Lid::instance();
+		$this->_lid =LoginLid::instance();
 		$this->_actie = $actie;
 
 	}
@@ -67,11 +65,12 @@ class VerjaardagContent extends SimpleHTML {
 						$maand = ($r*$kolommen+$k+$dezemaand-2)%12+1;
 						if ($maand <= 12) {
 							echo '<td>'."\n";
-							$verjaardagen = $this->_lid->getVerjaardagen($maand);
+							$verjaardagen = Verjaardag::getVerjaardagen($maand);
 							foreach ($verjaardagen as $verjaardag){
+								$lid=LidCache::getLid($verjaardag['uid']);
 								if ($verjaardag['gebdag'] == $dezedag and $maand == $dezemaand) echo '<em>';
 								echo $verjaardag['gebdag'] . " ";
-								echo $this->_lid->getNaamLink($verjaardag['uid'], 'full', false, $verjaardag)."<br />\n";
+								echo $lid->getNaamLink('civitas', 'link')."<br />\n";
 								if ($verjaardag['gebdag'] == $dezedag and $maand == $dezemaand) echo "</em>";
 							}
 							echo "<br /></td>\n";
@@ -84,8 +83,8 @@ class VerjaardagContent extends SimpleHTML {
 				echo '</table><br>'."\n";
 				break;
 
-			case 'komende10':
-				$aVerjaardagen=$this->_lid->getKomende10Verjaardagen();
+			case 'komende':
+				$aVerjaardagen=Verjaardag::getKomendeVerjaardagen(Instelling::get('zijbalk_verjaardagen'));
 				echo '<h1>';
 				if($this->_lid->hasPermission('P_LEDEN_READ')){
 					echo '<a href="/communicatie/verjaardagen">Verjaardagen</a>';
@@ -95,10 +94,10 @@ class VerjaardagContent extends SimpleHTML {
 				echo '</h1>';
 				for ($i=0; $i<sizeOf($aVerjaardagen); $i++) {
 					$aVerjaardag = $aVerjaardagen[$i];
-
+					$lid=LidCache::getLid($aVerjaardag['uid']);
 					echo '<div class="item">'.date('d-m', strtotime($aVerjaardag['gebdatum'])).' ';
 					if($aVerjaardag['jarig_over']==0){echo '<span class="opvallend">';}
-					echo $this->_lid->getNaamLink($aVerjaardag['uid'], 'civitas', true, $aVerjaardag);
+					echo $lid->getNaamLink('civitas', 'link');
 					if($aVerjaardag['jarig_over']==0){echo '</span>';}
 					echo '</div>';
 				}

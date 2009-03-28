@@ -15,7 +15,7 @@ class vbmain extends csrdelft {
 	function vbmain($body){
 		parent::__construct($body,'vb/vb',99);
 		$this->addStylesheet('vb.css');
-		$this->addScript('../vb/jsonencode.js');
+		$this->addScript('../../vb/jsonencode.js');
 		require_once('class.menu.php');
 	}
 
@@ -31,7 +31,7 @@ function view() {
 
 		$csrdelft->display('vb/vbcsrdelft.tpl');
 
-		if(defined('DEBUG') AND Lid::instance()->hasPermission('P_ADMIN')){
+		if(defined('DEBUG') AND LoginLid::instance()->hasPermission('P_ADMIN')){
 			$db=MySql::instance();
 			echo $db->getDebug();
 		}

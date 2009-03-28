@@ -9,16 +9,16 @@
 # - Maaltijden verwijderen
 # -------------------------------------------------------------------
 
-require_once('include.config.php');
+require_once 'include.config.php';
 
-if(!$lid->hasPermission('P_MAAL_MOD')){ header('location: '.CSR_ROOT.'actueel/maaltijden/'); exit; }
+if(!$loginlid->hasPermission('P_MAAL_MOD')){ header('location: '.CSR_ROOT.'actueel/maaltijden/'); exit; }
 
-require_once('maaltijden/class.maaltrack.php');
-require_once('maaltijden/class.maaltijd.php');
+require_once 'maaltijden/class.maaltrack.php';
+require_once 'maaltijden/class.maaltijd.php';
 $maaltrack = new MaalTrack();
 
 
-require_once('maaltijden/class.maaltijdbeheercontent.php');
+require_once 'maaltijden/class.maaltijdbeheercontent.php';
 $beheer = new MaaltijdbeheerContent($maaltrack);
 
 # verwijderen we een maaltijd?

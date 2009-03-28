@@ -101,7 +101,7 @@ class Document{
 		$this->naam=$naam;
 	}
 	public function isEigenaar($uid=null){
-		if($uid==null){ Lid::instance()->getUid(); }
+		if($uid==null){ LoginLid::instance()->getUid(); }
 		return $uid==$this->getEigenaar();
 	}
 }

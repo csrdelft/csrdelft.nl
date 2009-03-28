@@ -9,7 +9,7 @@
 require_once 'include.config.php';
 require_once 'forum/class.forumcontent.php';
 
-if($lid->hasPermission('P_FORUM_READ')) {
+if($loginlid->hasPermission('P_FORUM_READ')) {
 	require_once 'forum/class.forum.php';
 
 	if(isset($_GET['forum'])){

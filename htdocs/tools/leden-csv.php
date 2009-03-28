@@ -9,7 +9,7 @@
 require_once('include.config.php');
 
 
-if(!$lid->hasPermission('P_LEDEN_READ')){ header('location: '.CSR_ROOT); }
+if(!$loginlid->hasPermission('P_LEDEN_READ')){ header('location: '.CSR_ROOT); }
 
 
 header('content-type: text/csv');

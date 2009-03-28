@@ -33,7 +33,7 @@ class Mededeling{
 			}else{
 				//default waarden voor een nieuwe mededeling
 				$this->datum=getDateTime();
-				$this->uid=Lid::instance()->getUid();
+				$this->uid=LoginLid::instance()->getUid();
 				$this->rank=self::defaultRank;
 			}
 		}
@@ -122,7 +122,7 @@ class Mededeling{
 	}
 
 	public function isMod(){
-		return Lid::instance()->hasPermission('P_NEWS_MOD');
+		return LoginLid::instance()->hasPermission('P_NEWS_MOD');
 	}
 
 	public static function getTopmost(){

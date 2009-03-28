@@ -7,8 +7,6 @@
 # -------------------------------------------------------------------
 
 
-require_once ('class.simplehtml.php');
-require_once ('class.lid.php');
 
 class LedenlijstContent extends SimpleHTML {
 
@@ -39,10 +37,10 @@ class LedenlijstContent extends SimpleHTML {
 
 	### public ###
 
-	function LedenlijstContent (&$lid) {
-		$this->_lid =& $lid;
+	function __construct() {
+
 	}
-	
+
 	# verander de informatie die standaard in het form ingevuld wordt
 	function setForm($form) {
 		$this->_form = $form;
@@ -54,15 +52,13 @@ class LedenlijstContent extends SimpleHTML {
 	function getTitel(){
 		return 'Ledenlijst';
 	}
-	function viewWaarbenik(){
-		echo '<a href="/intern/">Intern</a> &raquo; Ledenlijst';
-	}
 
 	function view() {
 		# De ingevulde zoekterm weer afbeelden
 		$form_wat = mb_htmlentities($this->_form['wat']);
-		
-		
+
+		$loginlid=LoginLid::instance();
+
 		# We definieren voor elk veld een 'kolomtitel' die gebruikt wordt boven de kolommen
 		# in de zoekresultaten en in de keuzelijstjes voor zoek in, sorteren op etc...
 		$kolomtitel = array(
@@ -84,7 +80,7 @@ class LedenlijstContent extends SimpleHTML {
 			'gebdatum' => 'Geboortedatum',
 			'beroep' => 'Functie/beroep'
 		);
-				
+
 		print(<<<EOT
 <div style="float: right; margin: 0 0 10px 10px;">
 	<a href="/tools/leden.csv" title="CSV-bestand downloaden">CSV-bestand downloaden</a>
@@ -100,9 +96,9 @@ EOT
 
 		# zo, en nu de velden die we kunnen tonen in de resultaten
 		$laat_zien = array(
-			'uid', 'pasfoto', 'nickname', 'email', 'adres', 'telefoon', 'mobiel', 
+			'uid', 'pasfoto', 'nickname', 'email', 'adres', 'telefoon', 'mobiel',
 			'icq', 'msn', 'skype', 'studie', 'gebdatum', 'beroep');
-		
+
 		# tralala zorg dat er een even aantal elementen in staat
 		if (count($laat_zien)%2 != 0) array_push($laat_zien, false);
 
@@ -127,13 +123,13 @@ EOT
 <p>
 <input type="hidden" name="a" value="zoek" />
 <strong>Zoek:</strong> <input type="text" name="wat" style="width:100px;" value="'.$form_wat.'" />
-in <select name="waar">';		
+in <select name="waar">';
 
 		# de velden die we presenteren om in te kunnen zoeken
 		$zoek_in_waar = array(
 			'naam', 'nickname', 'voornaam', 'achternaam', 'uid',
 			'adres', 'telefoon', 'mobiel', 'email', 'kring', 'studie', 'gebdatum', 'beroep');
-		
+
 		foreach ($zoek_in_waar as $veld) {
 			echo '<option value="'.$veld.'"';
 			if ($this->_form['waar'] == $veld) echo ' selected="selected"';
@@ -148,21 +144,21 @@ in <select name="waar">';
 			if ($this->_form['moot'] == $veld) echo ' selected="selected"';
 			echo '>'.$veld.'</option>';
 		}
-		
+
 		# als ingelogde persoon leesrechten heeft op leden + oudleden maken we een extra
 		# keuzelijstje. zoeken in leden, oudleden, of allebei tegelijk.
-		if ($this->_lid->hasPermission('P_LEDEN_READ') and $this->_lid->hasPermission('P_OUDLEDEN_READ')) {
+		if ($loginlid->hasPermission('P_LEDEN_READ') and $loginlid->hasPermission('P_OUDLEDEN_READ')) {
 			echo '</select> status:<select name="status">';
 
 			$zoek_in_type = array('(oud)?leden','leden','oudleden');
 			# de VAB mag ook nobodies zoeken
-			if($this->_lid->hasPermission('P_OUDLEDEN_MOD')) {
+			if($loginlid->hasPermission('P_OUDLEDEN_MOD')) {
 				$zoek_in_type[] = 'nobodies';
 			}
 
 			if (!isset($this->_form['status'])) {
 				# voor de standaard-optie kijken we naar de status van de ingelogde persoon
-				$mystatus = $this->_lid->getStatus();
+				$mystatus = $loginlid->getLid()->getStatus();
 				if ($mystatus == 'S_OUDLID') {
 					$this->_form['status'] = 'oudleden';
 				} elseif (in_array($mystatus, array('S_LID','S_GASTLID','S_NOVIET','S_KRINGEL'))) {
@@ -176,10 +172,10 @@ in <select name="waar">';
 				if ($this->_form['status'] == $veld) echo ' selected="selected"';
 				echo '>'.$veld.'</option>';
 			}
-		}		
-		
+		}
+
 		echo '</select><br />Sorteer op:<select name="sort" >';
-		
+
 		# de velden waarop de uitvoer gesorteerd kan worden
 		$zoek_sort = array(
 			'uid', 'voornaam', 'achternaam', 'email', 'adres',
@@ -190,14 +186,14 @@ in <select name="waar">';
 			if ($this->_form['sort'] == $veld) echo ' selected="selected"';
 			echo '>'.$kolomtitel[$veld].'</option>';
 		}
-		echo '</select> 
+		echo '</select>
 			<input type="submit" name="fu" value=" Zoek! " id="zoek" />
 			</form><hr class="clear" />';
-		
+
 		if(count($this->_result) > 0) {
-			//zoekresultatentabel met eerst de kopjes		
+			//zoekresultatentabel met eerst de kopjes
 			echo '<table class="zoekResultaat"><tr>';
-			if($this->_lid->hasPermission('P_LEDEN_MOD')){ echo '<th>&nbsp;</th>'; }
+			if($loginlid->hasPermission('P_LEDEN_MOD')){ echo '<th>&nbsp;</th>'; }
 			if(in_array('pasfoto', $this->_form['kolom'])){ echo '<th>&nbsp;</th>'; }
 			echo '<th>Naam</th>';
 			foreach ($this->_form['kolom'] as $kolom){
@@ -207,28 +203,28 @@ in <select name="waar">';
 			}
 			echo '</tr>';
 			//en de resultaten...
-			foreach ($this->_result as $lid) {
-				$uid=htmlspecialchars($lid['uid']);
-				echo '<tr>';
+			foreach ($this->_result as $uid) {
+				$lid=LidCache::getLid($uid['uid']);
+					echo '<tr>';
 				if(in_array('pasfoto', $this->_form['kolom'])){
 					echo '<td><a href="/communicatie/profiel/'.$uid.'">';
-					echo $this->_lid->getPasfoto($uid, 'small').'</a></td>';
+					echo $lid->getPasfoto('small').'</a></td>';
 				}
-				if($this->_lid->hasPermission('P_LEDEN_MOD')){
-					echo '<td><a href="/communicatie/profiel/'.$uid.'/edit" class="knop">b</a>&nbsp;';
+				if($loginlid->hasPermission('P_LEDEN_MOD')){
+					echo '<td><a href="/communicatie/profiel/'.$lid->getUid().'/edit" class="knop">b</a>&nbsp;';
 				}
 				//naam als link naar profiel weergeven.
-				echo '<td>'.$this->_lid->getNaamLink($lid['uid'], 'full', true, $lid).'</td>';
+				echo '<td>'.$lid->getNaamLink('full', 'link').'</td>';
 				//de rest van de kolommen.
 				foreach ($this->_form['kolom'] as $kolom) {
 					switch($kolom){
 						case 'pasfoto':
 						break;
 						case 'adres':
-							echo '<td>'.mb_htmlentities($lid['adres'].' '.$lid['postcode'].' '.$lid['woonplaats']).'</td>';
+							echo '<td>'.mb_htmlentities($uid['adres'].' '.$uid['postcode'].' '.$uid['woonplaats']).'</td>';
 						break;
 						default;
-							echo '<td>'.mb_htmlentities($lid[$kolom]).'</td>';
+							echo '<td>'.mb_htmlentities($uid[$kolom]).'</td>';
 					}
 				}//einde foreach kolom
 				echo '</tr>';

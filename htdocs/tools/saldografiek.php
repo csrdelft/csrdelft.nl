@@ -10,10 +10,10 @@ require_once('chart-0.8/chart.php');
 require_once('class.saldi.php');
 
 
-if(isset($_GET['uid']) AND ($lid->isValidUid($_GET['uid']) OR $_GET['uid']=='0000')){
-	$uid=$_GET['uid'];
+if(isset($_GET['uid']) AND (Lid::isValidUid($_GET['uid']) OR $_GET['uid']=='0000')){
+	$lid=LidCache::getLid($_GET['uid']);
 }else{
-	$uid=$lid->getUid();
+	$lid=$loginlid->getLid();
 }
 
 $cie='soccie';
@@ -26,15 +26,15 @@ if(isset($_GET['timespan']) AND $_GET['timespan']==(int)$_GET['timespan']){
 	$timespan=$_GET['timespan'];
 }
 
-if($lid->hasPermission('P_ADMIN,groep:'.$cie) OR $lid->getUid()==$uid){
-	$saldi=new Saldi($uid, $cie, $timespan);
+if($loginlid->hasPermission('P_ADMIN,groep:'.$cie) OR $loginlid->isSelf($lid->getUid())){
+	$saldi=new Saldi($lid->getUid(), $cie, $timespan);
 
 	$chart=new chart(500, 200);
 
 	if($uid=='0000'){
 		$chart->set_title('Som van de saldi');
 	}else{
-		$chart->set_title('Saldo voor '.$lid->getNaamLink($uid, 'full', false, false, false));
+		$chart->set_title('Saldo voor '.$lid->getNaam());
 	}
 
 	$chart->set_x_ticks($saldi->getKeys(), 'date');

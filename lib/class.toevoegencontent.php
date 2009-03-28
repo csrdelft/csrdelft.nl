@@ -16,10 +16,6 @@ class ToevoegenContent extends SimpleHTML {
 		return 'Documenten toevoegen';
 	}
 	
-	function viewWaarBenik() {
-		echo '<a href="/intern/">Intern</a> &raquo; '.$this->getTitel();
-	}
-	
 	function viewForm($number) {
 		$maxfilesizeform = 10*1024*1024;
 		$catsOptions=$this->_toevoegen->getCatsOptions();

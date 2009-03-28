@@ -25,18 +25,16 @@
  * @return string
  */
 function smarty_modifier_pasfoto($uid, $cssclass='pasfoto', $link=true){
-	$lid=Lid::instance();
 	$uids=explode(',', $uid);
 	$return.='';
 	foreach($uids as $uid){
-		if($lid->isValidUid($uid)){
-
+		$lid=LidCache::getLid($uid);
+		if($lid instanceof Lid){
 			if($link){
-				$return.='<a href="/communicatie/profiel/'.$uid.'" title="'.$lid->getNaamLink($uid, 'full', false).'">';
+				$return.='<a href="/communicatie/profiel/'.$uid.'" title="'.$lid->getNaamLink('full', 'html').'">';
 			}
-			$return.=$lid->getPasfoto($uid, true, $cssclass);
+			$return.=$lid->getPasfoto(true, $cssclass);
 			if($link){ $return.='</a>'; }
-
 		}
 	}
 	return $return;

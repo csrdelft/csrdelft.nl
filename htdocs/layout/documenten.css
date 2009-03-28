@@ -1,63 +1,14 @@
-/*@CHARSET "UTF-8";*/
-/* spans en divs*/
-span.box { /* De bewerk- en toevoegbox */
-	float:left;
-	border:1px solid black;
-	padding:3px;
-	display:block;
-	width:400px;
-}
+#documentForm{ background-color: #eee; }
 
-span.boxTitle{ /* De title in de box */
-	font-weight: bold;
-}
 
-div.boxContent{
-	float:left;
-	width: 30%;
+#documentForm .uploadmethode, #documentForm .uploadmethode:hover{ 
+	width: 600px; min-height: 70px; padding: 4px 8px; margin: 4px 10px;
+	clear: both;
 }
-		
+#documentForm .uploadmethode:hover{ background-color: #e5e5e5;  }
+#documentForm .uploadmethode .optie{ float: left; width: 200px; }
+#documentForm .uploadmethode .keuze{ display: none;}
+#documentForm .uploadmethode .keuze label{ width: 150px; float: left; }
 
-/* tabel + de images in de tabel*/
-/*td {
-	height: 16px;		
-}*/
-td.title {
-	width: 450px;
-}		
-td.ext {
- 	width: 100px;		
-}
 
-img.button {
-	margin: 0px;
-}
 
-td.buttoncell {
-         text-align:right;
-       }
-
-      table.doctable {
-	padding: 0px;
-	width: 100%;
-}
-		
-
-/* tekst en input */
-.dochoofd {
-	font-weight: bold;
-	color: black;
-	background-color: lightblue;
-	vertical-align: middle;
-	padding: 5px 10px 5px 15px;
-	height: 19px;
-}
-
-input#docTitle {
-	width: 250px;
-}
-
-a#cattitle {
-	color: black;
-	text-decoration: none;
-}

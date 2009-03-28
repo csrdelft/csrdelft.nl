@@ -247,7 +247,13 @@ class GroepStatsContent extends SimpleHTML{
 	}
 	public function view(){
 		$stats=$this->groep->getStats();
+		if(!is_array($stats)){
+			return;
+		}
 		foreach($stats as $title => $stat){
+			if(!is_array($stat)){
+				continue;
+			}
 			echo '<table class="query_table">';
 			$rowColor=false;
 			foreach($stat as $row){
@@ -267,6 +273,25 @@ class GroepStatsContent extends SimpleHTML{
 			echo '</table><br />';
 		}
 	}
+}
+class GroepEmailContent extends SimpleHTML{
+	private $groep;
 
+	public function __construct($groep){
+		$this->groep=$groep;
+	}
+	public function view(){
+		$emails=array();
+		$groepleden=$this->groep->getLeden();
+		if(is_array($groepleden)){
+			foreach($groepleden as $groeplid){
+				$lid=LidCache::getLid($groeplid['uid']);
+				if($lid instanceof Lid AND $lid->getEmail()!=''){
+					$emails[]=$lid->getEmail();
+				}
+			}
+		}
+		echo implode(', ', $emails);
+	}
 }
 ?>

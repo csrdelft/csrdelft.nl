@@ -44,7 +44,7 @@ h4{
 	margin: 10px 0px 0px 0px; padding: 5px 5px 5px 10px;
 	color: black;
 }
-p{
+div.p{
 	background-color: #FAFAFF;
 	margin: 0px 0px 0px 0px;
 	padding: 10px 5px 5px 10px;
@@ -120,7 +120,7 @@ li{
 <font face="verdana" size="-1">	
 {foreach from=$courant->getBerichten() item=bericht}
 	<h4><a name="{$bericht.ID}"></a>{$bericht.titel|ubb}</h4>
-	<p>{$bericht.bericht|ubb}</p>
+	<div class="p">{$bericht.bericht|ubb}</div>
 {/foreach}
 </font>
 </td>

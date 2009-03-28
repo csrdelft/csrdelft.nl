@@ -8,7 +8,7 @@
  */
 include('include.config.php');
 
-if(!$lid->hasPermission('P_LEDEN_READ')){ header('location: '.CSR_ROOT); }
+if(!$loginlid->hasPermission('P_LEDEN_READ')){ header('location: '.CSR_ROOT); }
 if(isset($_GET['xml'])){
 	$sLedenQuery="
 		SELECT 
@@ -24,6 +24,7 @@ if(isset($_GET['xml'])){
 	echo '<?xml version="1.0" encoding="utf-8"?><markers>'."\n";
 	$current='';
 	while($aLid=$db->next($rLeden)){
+		$lid=LidCache::getLid($aLid['uid']);
 		$adres=$aLid['adres'].', '.$aLid['woonplaats'];
 		
 		if($adres!=$current){
@@ -33,9 +34,9 @@ if(isset($_GET['xml'])){
 		}
 		
 		if($aLid['adres']!=''){	
-			echo '<marker address="'.$adres.'" label="'.$lid->getNaamLink($aLid['uid'], 'civitas', false, false, false).'">';
+			echo '<marker address="'.$adres.'" label="'.$lid->getNaamLink('civitas', 'plain').'">';
 			echo '<infowindow><![CDATA[';
-			echo $lid->getNaamLink($aLid['uid'], 'civitas', true).'';
+			echo $lid->getNaamLink('civitas', 'link').'';
 			echo ']]></infowindow></marker>'."\n";
 		}
 	}

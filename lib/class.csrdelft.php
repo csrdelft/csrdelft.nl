@@ -57,6 +57,11 @@ class csrdelft extends SimpleHTML {
 			$this->addScript('csrdelft.js');
 			$this->addScript('menu.js');
 		}
+		
+		//Roze webstek
+		if(Instelling::get('layout_rozeWebstek')=='ja' AND LoginLid::instance()->getUid()!='x999'){
+			//$this->addStylesheet('roze.css');
+		}
 
 	}
 
@@ -84,7 +89,7 @@ class csrdelft extends SimpleHTML {
 	}
 
 	function view() {
-		$lid=Lid::instance();
+		$loginlid=LoginLid::instance();
 
 		//als $this->_zijkolom geen Kolom-object bevat en niet false is
 		//$this->_zijkolom vullen met een standaard lege kolom.
@@ -97,9 +102,9 @@ class csrdelft extends SimpleHTML {
 		$csrdelft->assign_by_ref('csrdelft', $this);
 
 		//SocCie-saldi, MaalCie-saldi
-		$csrdelft->assign('saldi', $lid->getSaldi());
+		$csrdelft->assign('saldi', $loginlid->getLid()->getSaldi());
 
-		if(defined('DEBUG') AND $lid->hasPermission('P_ADMIN')){
+		if(defined('DEBUG') AND $loginlid->hasPermission('P_ADMIN')){
 			$csrdelft->assign('db',MySql::instance());
 		}
 

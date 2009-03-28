@@ -46,7 +46,7 @@ class savedQuery{
 					}else{
 						$this->result=$db->result2array($queryResult);
 					}
-				}elseif(Lid::instance()->hasPermission('P_ADMIN')){
+				}elseif(LoginLid::instance()->hasPermission('P_ADMIN')){
 					$this->result[]=array('Mysql_error' => mysql_error());
 				}
 			}
@@ -60,11 +60,10 @@ class savedQuery{
 	//Query's mogen worden weergegeven als de permissiestring toegelaten wordt door Lid::hasPermission()'
 	//of als gebruiker P_ADMIN heeft.
 	public static function magWeergeven($permissie){
-		$lid=Lid::instance();
-		return $lid->hasPermission($permissie) OR $lid->hasPermission('P_ADMIN');
+		$loginlid=LoginLid::instance();
+		return $loginlid->hasPermission($permissie) OR $loginlid->hasPermission('P_ADMIN');
 	}
 	public function getHtml(){
-		$lid=Lid::instance();
 
 		if(is_array($this->result)){
 			$return=$this->beschrijving.'<br /><table class="query_table">';
@@ -103,7 +102,7 @@ class savedQuery{
 					//als het veld uid als uid_naam geselecteerd wordt, een linkje
 					//weergeven
 					if($key=='uid_naam'){
-						$return.=$lid->getNaamLink($veld, 'full', true);
+						$return.=LidCache::getLid($veld)->getNaamLink('full', 'link');
 					}elseif($key=='onderwerp_link'){ //link naar het forum.
 						$return.='<a href="/communicatie/forum/onderwerp/'.$veld.'">'.$veld.'</a>';
 						//neem een verwijderlinkje op als het om spam gaat, lekker ranzige hardcoded meuk.

@@ -5,7 +5,8 @@
 				{$profhtml.uid|pasfoto}<br />
 				<div class="knopjes">
 					{if $magBewerken}
-						<a href="/communicatie/profiel/{$profhtml.uid}/edit" class="knop"><img src="{$csr_pics}forum/bewerken.png" title="Bewerk groep" />Bewerken</a><br />
+						<a href="/communicatie/profiel/{$profhtml.uid}/bewerken" class="knop"><img src="{$csr_pics}forum/bewerken.png" title="Bewerk dit profiel" />Bewerken</a><br />
+						{if $profhtml.uid==$lid->getUid()}<a href="/instellingen.php" class="knop">Webstekinstellingen</a><br />{/if}
 					{/if}
 					{if $isAdmin}
 						<a href="/tools/stats.php?uid={$profhtml.uid}" class="knop">Overzicht van bezoeken</a><br />
@@ -87,9 +88,12 @@
 			<div class="label">Studie:</div> {$profhtml.studie}<br />
 			<div class="label">Studie sinds:</div> {$profhtml.studiejaar}<br />
 			<div class="label">Lid sinds:</div> 
-				{$profhtml.lidjaar}{if $isOudlid AND $profhtml.einddatum!='0000-00-00'}-{$profhtml.einddatum}{/if}<br />
+				{$profhtml.lidjaar}{if $isOudlid AND $profhtml.lidafdatum!='0000-00-00'} tot {$profhtml.lidafdatum|substr:0:4}{/if}<br />
 			<br />
-			{if $isOudlid===false}
+			
+			{if $isOudlid}
+				{if $profhtml.beroep!=''}<div class="label">Beroep/werk:</div> {$profhtml.beroep}<br />{/if}
+			{else}
 				<div class="label">Kring:</div> 
 				<a href="/communicatie/moten#kring{$profhtml.moot}.{$profhtml.kring}">{$profhtml.moot}.{$profhtml.kring}</a>
 				{if $profhtml.status=='S_KRINGEL'}(kringel){/if}
@@ -97,7 +101,7 @@
 			{/if}
 		</div>
 	</div>
-	<div class="profielregel">
+	<div class="profielregel" id="groepen">
 		<div class="left">Groepen</div>	
 		<div class="gegevens">		
 			{$profhtml.groepen->view()}
@@ -124,7 +128,7 @@
 	{/if}
 	
 	{if $lid->getUid()==$profhtml.uid OR $profhtml.eetwens!='' OR is_array($profhtml.recenteMaaltijden)}
-	<div class="profielregel">
+	<div class="profielregel" id="maaltijden">
 		<div class="left">Maaltijden
 			{if $lid->getUid()==$profhtml.uid}
 				<br /><a href="/actueel/maaltijden/voorkeuren.php" class="knop" ><img src="{$csr_pics}forum/bewerken.png" title="Maaltijdvoorkeuren bewerken" /></a>
@@ -164,9 +168,22 @@
 	{/if}
 	<div style="clear: left;"></div>
 	{if is_array($profhtml.recenteForumberichten)}
-	<div class="profielregel">
+	<div class="profielregel" id="forum">
 		<div class="left">Forum</div>
-		<div class="gegevens">
+		<div class="gegevens" id="forum_gegevens">
+			{if $lid->getUid()==$profhtml.uid}
+			<div class="label">RSS-feed:</div>
+			<div class="data">
+				{if $profhtml.rssToken!=''}
+				<a href="http://csrdelft.nl/communicatie/forum/rss/{$profhtml.rssToken}.xml">
+					<img src="{$csr_pics}layout/feedicon.png" width="14" height="14" alt="RSS-feed http://csrdelft.nl" />
+					Persoonlijke RSS-feed forum
+				</a>
+				{/if}
+				<a class="knop" href="/communicatie/profiel/{$lid->getUid()}/rssToken#forum">Nieuwe aanvragen</a>
+			</div>
+			<br />
+			{/if}
 			<div class="label">Recent:</div>
 			<div class="data">
 				<table style="width: 600px">
@@ -180,5 +197,14 @@
 			</div>
 		</div>
 	</div>
+	{/if}
+	{if $isAdmin AND $profhtml.changelog!=''}
+		<div style="clear: left;"></div>
+		<div class="profielregel" id="changelog">
+			<div class="left">Verandering</div>
+			<div class="gegevens" id="changelog_gegevens">
+				{$profhtml.changelog|ubb}
+			</div>
+		</div>
 	{/if}
 </div>

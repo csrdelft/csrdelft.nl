@@ -7,10 +7,10 @@
 # Verwerkt het bewerken van berichten in het forum.
 # -------------------------------------------------------------------
 
-require_once('include.config.php');
+require_once 'include.config.php';
 
-//inhoud
-require_once('forum/class.forumonderwerp.php');
+require_once 'forum/class.forumonderwerp.php';
+
 if(isset($_GET['post'])){
 	$postID=(int)$_GET['post'];
 	$forumonderwerp=ForumOnderwerp::loadByPostID($postID);

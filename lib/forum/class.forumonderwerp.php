@@ -27,7 +27,7 @@ class ForumOnderwerp{
 	private $lastuser;
 	private $lastpost;
 	private $lastpostID;
-	
+
 	private $pagina=1;
 
 	protected $posts=null;
@@ -46,13 +46,13 @@ class ForumOnderwerp{
 			//dus hoeven we nog niets uit de db te halen.
 		}
 	}
-	
+
 	//een onderwerp laden aan de hand van een zich in dat onderwerp bevindende post.
 	public static function loadByPostID($iPostID, $loadChildren=true){
 		$iTopicInfo=Forum::getTopicVoorPostID((int)$iPostID);
 		return new ForumOnderwerp($iTopicInfo['tid'], $loadChildren);
 	}
-	
+
 	//redirected naar een onderwerp aan de hand van een zich in dat onderwerp bevindende post.
 	public static function redirectByPostID($iPostID){
 		$iTopicInfo=Forum::getTopicVoorPostID((int)$iPostID);
@@ -85,7 +85,7 @@ class ForumOnderwerp{
 	function load($topicID){
 		$this->ID=(int)$topicID;
 		$db=MySql::instance();
-		
+
 		$sTopicQuery="
 			SELECT
 				id, titel, uid, categorie, open, plakkerig, soort, zichtbaar,
@@ -153,8 +153,8 @@ class ForumOnderwerp{
 		return $this->categorie;
 	}
 	public function getRechtenPost(){ return $this->getCategorie()->getRechten_post(); }
-	public function magPosten(){ return Lid::instance()->hasPermission($this->getRechtenPost()); }
-	
+	public function magPosten(){ return LoginLid::instance()->hasPermission($this->getRechtenPost()); }
+
 	//topic
 	public function getID(){ return $this->ID; }
 	public function getTitel(){ return $this->titel; }
@@ -169,12 +169,12 @@ class ForumOnderwerp{
 	public function getLastpost(){ return $this->lastpost; }
 	public function getLastpostID(){ return $this->lastpostID; }
 	public function getLastuser(){ return $this->lastuser; }
-	
+
 	public function getPagina(){ return $this->pagina; }
-	
+
 	function getPaginaCount(){
 		$db=MySql::instance();
-		
+
 		$zichtBaarClause="post.zichtbaar='zichtbaar'";
 		if(Forum::isModerator()){
 			$zichtBaarClause.=" OR post.zichtbaar='wacht_goedkeuring' OR post.zichtbaar='spam'";
@@ -207,7 +207,7 @@ class ForumOnderwerp{
 		if(!($this->getCategorie() instanceof ForumCategorie)){
 			die('ForumOnderwerp::magZien(): Geen onderwerp ingeladen.');
 		}else{
-			return Lid::instance()->hasPermission($this->getCategorie()->getRechten_read());
+			return LoginLid::instance()->hasPermission($this->getCategorie()->getRechten_read());
 		}
 	}
 	public function isIngelogged(){ return Forum::isIngelogged(); }
@@ -219,16 +219,16 @@ class ForumOnderwerp{
 	}
 
 	public function magBewerken($iPostID){
-		$lid=Lid::instance();
+		$uid=LoginLid::instance()->getUid();
 
 		if(Forum::isModerator()){ return true;}
-		if($lid->getUid()=='x999'){ return false;}
+		if($uid=='x999'){ return false;}
 
 		//intern, nu nog of de huidige post mag.
 		if($this->magPosten() AND $this->isOpen()){
 			//nu alleen nog controleren of het bericht van de huidige gebruiker is.
 			$aPost=$this->getSinglePost($iPostID);
-			return $aPost['uid']==$lid->getUid();
+			return $aPost['uid']=$uid;
 		}else{
 			//geen rechten om te posten, en niet open.
 			return false;
@@ -288,7 +288,7 @@ class ForumOnderwerp{
 	//false.
 	function add($titel){
 		$db=MySql::instance();
-		$lid=Lid::instance();
+		$uid=LoginLid::instance()->getUid();
 
 		$titel=$db->escape(ucfirst($titel));
 		if($this->needsModeration()){
@@ -301,8 +301,8 @@ class ForumOnderwerp{
 		 	 	titel, categorie, uid, datumtijd,
 		 	 	lastuser, lastpost,  reacties, zichtbaar, open
 		 	)VALUES(
-		 		'".$titel."', ".$this->getCategorieID().", '".$lid->getUid()."', '".getDateTime()."',
-		 		'".$lid->getUid()."', '".getDateTime()."',	0, '".$this->getZichtbaarheid()."', 1
+		 		'".$titel."', ".$this->getCategorieID().", '".$uid."', '".getDateTime()."',
+		 		'".$uid."', '".getDateTime()."',	0, '".$this->getZichtbaarheid()."', 1
 		 	);";
 
 		if($db->query($sTopicQuery)){
@@ -351,7 +351,7 @@ class ForumOnderwerp{
 				tid, uid, tekst, datum, ip, zichtbaar
 			)VALUES(
 				".$this->getID().",
-				'".Lid::instance()->getUid()."',
+				'".LoginLid::instance()->getUid()."',
 				'".ucfirst($tekst)."',
 				'".getDateTime()."',
 				'".$ip."',
@@ -415,13 +415,12 @@ class ForumOnderwerp{
 
 	//posts bewerken
 	public function editPost($iPostID, $sBericht, $reden=''){
-		$lid=Lid::instance();
 		$db=MySql::instance();
 
 		//kijken of er wel iets aangepast is.
 		$oldPost=$this->getSinglePost($iPostID);
 		if($sBericht!=$oldPost['tekst']){
-			$bewerkt='bewerkt door [lid='.$lid->getUid().'] [reldate]'.getDateTime().'[/reldate]';
+			$bewerkt='bewerkt door [lid='.LoginLid::instance()->getUid().'] [reldate]'.getDateTime().'[/reldate]';
 
 			if($reden!=''){
 				$bewerkt.=': '.$db->escape($reden);

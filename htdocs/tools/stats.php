@@ -3,10 +3,10 @@
 error_reporting(E_ALL);
 
 
-require_once('include.config.php');
+require_once 'include.config.php';
 
 
-if(!$lid->hasPermission('P_ADMIN')){
+if(!$loginlid->hasPermission('P_ADMIN')){
 	header('location: '.CSR_ROOT);
 	exit;
 }
@@ -17,25 +17,19 @@ $pagina->view();
 
 class stats{
 
-	var $_db;
-	var $_lid;
-	function stats(){
-		$this->_lid=Lid::instance();
-		$this->_db=MySql::instance();
-	}
 	function view(){
-		$lid=$this->_lid;
-		$db=$this->_db;
+
 		if(isset($_GET['uid'])){
-			$this->uidLog($db->escape($_GET['uid']), $db, $lid);
+			$this->uidLog($_GET['uid']);
 		}elseif(isset($_GET['ip'])){
-			$this->ipLog($db->escape($_GET['ip']), $db, $lid);
+			$this->ipLog($_GET['ip']);
 		}else{
-			$this->hoofdLog($db, $lid);
+			$this->hoofdLog();
 		}
 	}
 
-	function hoofdLog($db, $lid){
+	function hoofdLog(){
+		$db=MySql::instance();
 		$sLogQuery="
 			SELECT
 				log.uid AS uid,  moment,
@@ -57,12 +51,10 @@ class stats{
 		echo '<table class="forumtable"><tr><td class="forumhoofd">tijd</td><td class="forumhoofd">Naam</td><td class="forumhoofd">hostnaam</td><td class="forumhoofd">url</td>';
 		echo '<td class="forumhoofd">useragent</td><td class="forumhoofd">referer</td></tr>';
 		while($aLogRegel=$db->next($rLog)){
-			$naam=$aLogRegel['voornaam'];
-			if($aLogRegel['tussenvoegsel']!=''){ $naam.=' '.$aLogRegel['tussenvoegsel']; }
-			$naam.=' '.$aLogRegel['achternaam'];
-
+			$lid=LidCache::getLid($aLogRegel['uid']);
+			$lid->tsMode='link';
 			echo '<tr><td class="forumtitel">'.date('D H:i', strtotime($aLogRegel['moment'])).'</td>';
-			echo '<td class="forumtitel" ><a href="?uid='.htmlspecialchars($aLogRegel['uid']).'">+</a> '.$lid->getNaamLink($aLogRegel['uid']).'</td>';
+			echo '<td class="forumtitel" ><a href="?uid='.htmlspecialchars($aLogRegel['uid']).'">+</a> '.(string)$lid.'</td>';
 			echo '<td class="forumtitel"><a href="?ip='.htmlspecialchars($aLogRegel['ip']).'">+</a>
 				'.gethostbyaddr($aLogRegel['ip']).' <strong>('.$aLogRegel['locatie'].')</strong></td>';
 			echo '<td class="forumtitel" ';
@@ -92,7 +84,12 @@ class stats{
 		}
 		echo '</table>';
 	}
-	function uidLog($uid, $db, $lid){
+	function uidLog($uid){
+		if(!Lid::isValidUid($uid)){
+			echo 'geen correct uid opgegeven.';
+
+		}
+		$db=MySql::instance();
 		$sLogQuery="
 			SELECT
 				log.uid AS uid, moment,
@@ -109,7 +106,9 @@ class stats{
 			LIMIT
 				0, 30;";
 		$rLog=$db->query($sLogQuery);
-		echo 'Laatste bezoeken van <strong>'.$lid->getCivitasName($uid).'</strong>';
+		$lid=LidCache::getLid($uid);
+		$lid->tsMode='link';
+		echo 'Laatste bezoeken van <strong>'.(string)$lid.'</strong>';
 		echo '<table class="forumtable"><tr><td class="forumhoofd">tijd</td><td class="forumhoofd">hostnaam</td><td class="forumhoofd">url</td>';
 		echo '<td class="forumhoofd">useragent</td><td class="forumhoofd">referer</td></tr>';
 		while($aLogRegel=$db->next($rLog)){
@@ -139,7 +138,8 @@ class stats{
 		}
 		echo '</table>';
 	}
-	function ipLog($ip, $db, $lid){
+	function ipLog($ip){
+		$db=MySql::instance();
 		$sLogQuery="
 			SELECT
 				log.uid AS uid, moment,
@@ -150,7 +150,7 @@ class stats{
 			INNER JOIN
 				lid ON(log.uid=lid.uid)
 			WHERE
-				log.ip='".$ip."'
+				log.ip='".$db->escape($ip)."'
 			ORDER BY
 				moment DESC
 			LIMIT
@@ -160,13 +160,11 @@ class stats{
 		echo '<table class="forumtable"><tr><td class="forumhoofd">moment</td><td class="forumhoofd">naam</td><td class="forumhoofd">url</td>';
 		echo '<td class="forumhoofd">useragent</td><td class="forumhoofd">referer</td></tr>';
 		while($aLogRegel=$db->next($rLog)){
-
-			$naam=$aLogRegel['voornaam'];
-			if($aLogRegel['tussenvoegsel']!=''){ $naam.=' '.$aLogRegel['tussenvoegsel']; }
-			$naam.=' '.$aLogRegel['achternaam'];
+			$lid=LidCache::getLid($aLogRegel['uid']);
+			$lid->tsMode='link';
 			echo '<tr>';
 			echo '<td class="forumtitel">'.date('D H:i', strtotime($aLogRegel['moment'])).'</td>';
-			echo '<td class="forumtitel"><a href="?uid='.htmlspecialchars($aLogRegel['uid']).'">+</a> <a href="/communicatie/profiel/'.htmlspecialchars($aLogRegel['uid']).'" target="_blank">'.$naam.'</a></td>';
+			echo '<td class="forumtitel"><a href="?uid='.htmlspecialchars($aLogRegel['uid']).'">+</a> '.(string)$lid.'</td>';
 			echo '<td class="forumtitel"><a href="http://csrdelft.nl'.$aLogRegel['url'].'" target="_blank">'.$aLogRegel['url'].'</a></td>';
 			echo '<td class="forumtitel">'.$aLogRegel['useragent'].'</td>';
 			if($aLogRegel['referer']==''){

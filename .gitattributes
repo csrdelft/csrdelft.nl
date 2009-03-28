@@ -1,7 +1,6 @@
 * text=auto !eol
 bin/ldap-import.php -text
 bin/maalcie.php -text
-bin/maaltrack.php -text
 bin/mk_commissie_ldif.php -text
 bin/mk_commissie_ldif.txt -text
 bin/mkledenldif.php -text
@@ -56,7 +55,6 @@ htdocs/communicatie/documenten_new/index.php -text
 htdocs/communicatie/forum/.htaccess -text
 htdocs/communicatie/forum/bewerken.php -text
 htdocs/communicatie/forum/getPost.php -text
-htdocs/communicatie/forum/getToken.php -text
 htdocs/communicatie/forum/goedkeuren.php -text
 htdocs/communicatie/forum/index.php -text
 htdocs/communicatie/forum/onderwerp.php -text
@@ -72,6 +70,7 @@ htdocs/communicatie/moten.php -text
 htdocs/communicatie/profiel.php -text
 htdocs/communicatie/verjaardagen.php -text
 htdocs/index.php -text
+htdocs/instellingen.php -text
 htdocs/layout/default.css -text
 htdocs/layout/documenten.css -text
 htdocs/layout/forum.css -text
@@ -86,6 +85,7 @@ htdocs/layout/js/groepen.js -text
 htdocs/layout/js/lightbox.js -text
 htdocs/layout/js/menu.js -text
 htdocs/layout/js/pngfix.js -text
+htdocs/layout/js/profiel.js -text
 htdocs/layout/js/prototype.js -text
 htdocs/layout/js/scriptaculous.js -text
 htdocs/layout/js/slideshow.js -text
@@ -93,6 +93,7 @@ htdocs/layout/lightbox.css -text
 htdocs/layout/owee.css -text
 htdocs/layout/pauper.css -text
 htdocs/layout/profiel.css -text
+htdocs/layout/roze.css -text
 htdocs/layout/undohtml.css -text
 htdocs/layout/vb.css -text
 htdocs/login.php -text
@@ -142,8 +143,6 @@ htdocs/vb/images/vormingsbank_vb_beta.png -text
 htdocs/vb/images/zoekveld_vb.png -text
 htdocs/vb/index.php -text
 htdocs/vb/jsonencode.js -text
-lib/blowfish/blowfish.php -text
-lib/blowfish/blowfish_default_key.php -text
 lib/chart-0.8/COPYING -text
 lib/chart-0.8/INSTALLATION -text
 lib/chart-0.8/IsoLatin1.enc -text
@@ -160,14 +159,14 @@ lib/class.documenten.php -text
 lib/class.documentencontent.php -text
 lib/class.eetplan.php -text
 lib/class.eetplancontent.php -text
+lib/class.formulier.php -text
 lib/class.fotoalbum.php -text
 lib/class.fotoalbumcontent.php -text
 lib/class.includer.php -text
 lib/class.knop.php -text
 lib/class.kolom.php -text
 lib/class.ldap.php -text
-lib/class.ledenlijstcontent.php -text
-lib/class.lid.php -text
+lib/class.memcached.php -text
 lib/class.menu.php -text
 lib/class.motencontent.php -text
 lib/class.mysql.php -text
@@ -177,8 +176,6 @@ lib/class.nieuws.php -text
 lib/class.nieuwscontent.php -text
 lib/class.pagina.php -text
 lib/class.paginacontent.php -text
-lib/class.profiel.php -text
-lib/class.profielcontent.php -text
 lib/class.saldi.php -text
 lib/class.savedquery.php -text
 lib/class.simplehtml.php -text
@@ -214,6 +211,13 @@ lib/groepen/class.groepen.php -text
 lib/include.common.php -text
 lib/include.config.php -text
 lib/include.defines.php.sample -text
+lib/lid/class.instellingencontent.php -text
+lib/lid/class.ledenlijstcontent.php -text
+lib/lid/class.lid.php -text
+lib/lid/class.loginlid.php -text
+lib/lid/class.mootverjaardag.php -text
+lib/lid/class.profiel.php -text
+lib/lid/class.profielcontent.php -text
 lib/maaltijden/class.maaltijd.php -text
 lib/maaltijden/class.maaltijdabocontent.php -text
 lib/maaltijden/class.maaltijdbeheercontent.php -text

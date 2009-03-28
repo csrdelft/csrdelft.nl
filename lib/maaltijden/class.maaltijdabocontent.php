@@ -6,23 +6,16 @@
 # Bekijken en wijzigen van maaltijdinschrijving en abonnementen
 # -------------------------------------------------------------------
 
-
-require_once ('class.simplehtml.php');
-require_once ('class.lid.php');
 require_once ('maaltijden/class.maaltrack.php');
 
 class MaaltijdContent extends SimpleHTML {
 
-	### private ###
 
-	# de objecten die data leveren
-	var $_lid;
-	var $_maaltrack;
+	private $_maaltrack;
 
 	### public ###
 
 	function MaaltijdContent ($maaltrack) {
-		$this->_lid =Lid::instance();
 		$this->_maaltrack=$maaltrack;
 	}
 	function getTitel(){ return 'Maaltijdketzer - Overzicht abonnementen'; }

@@ -13,6 +13,7 @@
  * Deze klasse is een verzameling van groepobjecten van een bepaald type. Standaard
  * worden alleen de h.t.-groepen opgehaald.
  */
+require_once('class.groep.php');
 
 class Groepen{
 
@@ -127,8 +128,7 @@ class Groepen{
 	public function getToonHistorie(){	return $this->type['toonHistorie']==1; }
 
 	public static function isAdmin(){
-		$lid=Lid::instance();
-		return $lid->hasPermission('P_LEDEN_MOD');
+		return LoginLid::instance()->hasPermission('P_LEDEN_MOD');
 	}
 
 	public function getGroep($groepId){
@@ -149,10 +149,9 @@ class Groepen{
 	 */
 	public static function getGroepenByUid($uid){
 		$db=MySql::instance();
-		$lid=Lid::instance();
 
 		$groepen=array();
-		if($lid->isValidUid($uid)){
+		if(Lid::isValidUid($uid)){
 			$qGroepen="
 				SELECT
 					groep.id AS id, groep.snaam AS snaam, groep.naam AS naam, groep.status AS status,

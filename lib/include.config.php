@@ -59,13 +59,13 @@ define('FEUT_IP', '82.94.188.77');
 
 //stapeltje dingen includeren die toch (bijna) altijd nodig zijn:
 require_once('include.common.php');
-require_once('class.lid.php');
+require_once('lid/class.loginlid.php');
 require_once('class.mysql.php');
 
 switch (constant('MODE')) {
 	case 'ONDERHOUD':
-		$lid = Lid::instance();
-		if(!$lid->hasPermission('P_ADMIN')){
+		$loginlid = LoginLid::instance();
+		if(!$loginlid->hasPermission('P_ADMIN')){
 			header('location: '.CSR_ROOT.'/tools/onderhoud.html');
 			exit;
 		}
@@ -84,14 +84,14 @@ switch (constant('MODE')) {
 		session_start();
 		//database & lid initialiseren...
 		$db = MySQL::instance();
-		$lid = Lid::instance();
-		$lidCache=LidCache::instance();
+		$loginlid = LoginLid::instance();
 	break;
 
 	case 'BOT':
 	case 'CLI':
         $db = MySQL::instance();
-        $lid = Lid::instance();
+		//TODO: voor bot & cli blijft het nog even $lid ipv $loginlid, nog geen zin om dat allemaal aan te passen.
+		$lid = LoginLid::instance();
 	break;
 
 	default:

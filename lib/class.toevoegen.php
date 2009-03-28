@@ -17,10 +17,10 @@ class Toevoegen {
 	var $_db;
 	var $_lid;
 	
-	function Toevoegen(&$db, &$lid) {
+	function Toevoegen() {
 		$this->errorcodes = array();
-		$this->_db = &$db;
-		$this->_lid = &$lid;
+		$this->_db = MySql::instance();
+		$this->_lid = LoginLid::instance();
 	}
 	
 	function getExtension($filename) {

@@ -1,13 +1,13 @@
 <?php
 
-require_once('include.config.php');
+require_once 'include.config.php';
 
-// Het middenstuk
-if ($lid->hasPermission('P_DOCS_MOD')) {
-	require_once('class.toevoegen.php');
-	$upload = new Toevoegen($db, $lid);
+
+if ($loginlid->hasPermission('P_DOCS_MOD')) {
+	require_once 'class.toevoegen.php';
+	$upload = new Toevoegen();
 	
-	require_once('class.toevoegencontent.php');
+	require_once 'class.toevoegencontent.php';
 	$midden = new ToevoegenContent($upload);
 } else {
 	// geen rechten

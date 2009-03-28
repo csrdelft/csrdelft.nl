@@ -21,6 +21,8 @@ class NieuwsContent extends SimpleHTML {
 	private $_berichtID;
 	private $_actie='overzicht';
 
+	public $aantal=8; //even snel een aantal berichten voor de zijbalk erinhacken...
+
 	public function NieuwsContent($nieuws) {
 		$this->_nieuws=$nieuws;
 		$this->ubb= new csrubb();
@@ -218,14 +220,12 @@ class NieuwsContent extends SimpleHTML {
 		return $sResultaat;
 	}
 	private function viewOverzicht(){
-		$lid=Lid::instance();
-
 		// berichtID setten als dat nog niet gedaan is.
 		if(empty($this->_berichtID))
 			$this->_berichtID = $this->_nieuws->getBelangrijksteMededelingId();
 
 		$includeVerborgen=false;
-		if($lid->hasPermission('P_NEWS_MOD')){ $includeVerborgen=true; }
+		if(LoginLid::instance()->hasPermission('P_NEWS_MOD')){ $includeVerborgen=true; }
 		$aBerichten=$this->_nieuws->getMessages(0, $includeVerborgen);
 
 		echo '<div class="mededelingen-overzichtlijst">';
@@ -284,7 +284,7 @@ class NieuwsContent extends SimpleHTML {
 	}
 
 	function getLaatsteMededelingen(){
-		$aBerichten=$this->_nieuws->getMessages(0,false,8);
+		$aBerichten=$this->_nieuws->getMessages(0,false,$this->aantal);
 		echo '<h1><a href="/actueel/mededelingen/">Mededelingen</a></h1>';
 		foreach($aBerichten as $aBericht){
 			$titel=mb_htmlentities($aBericht['titel']);

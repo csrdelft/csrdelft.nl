@@ -23,9 +23,9 @@ class MaaltijdVoorkeurContent extends SimpleHTML {
 		$this->_maaltrack=$maaltrack;
 	}
 	function getTitel(){ return 'Maaltijdketzer - Voorkeuren'; }
-	function viewWaarBenik(){ echo '<a href="/actueel/maaltijden/">Maaltijden</a> &raquo; Voorkeuren'; }
+
 	function view(){
-		$lid=Lid::instance();
+		$loginlid=LoginLid::instance();
 
 		//de html template in elkaar draaien en weergeven
 		$profiel=new Smarty_csr();
@@ -37,10 +37,10 @@ class MaaltijdVoorkeurContent extends SimpleHTML {
 		$aMaal['abo']['nietAbos']=$this->_maaltrack->getNotAboSoort();
 
 		//...de eetwens
-		$aMaal['eetwens']=$lid->getEetwens();
+		$aMaal['eetwens']=$loginlid->getLid()->getEetwens();
 
 		//...de corveewens
-		$aMaal['corveewens']=$lid->getCorveewens();
+		$aMaal['corveewens']=$loginlid->getLid()->getCorveewens();
 
 
 		//arrays toewijzen en weergeven

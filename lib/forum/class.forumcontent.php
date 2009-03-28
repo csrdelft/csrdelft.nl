@@ -44,9 +44,16 @@ class ForumContent extends SimpleHTML {
 
 		$rss->display('forum/rss.tpl');
 	}
-	public function lastPostsZijbalk(){
-		$aPosts=Forum::getPostsVoorRss(15, true);
-		echo '<h1><a href="/communicatie/forum/categorie/laatste">Forum</a></h1>';
+	public function lastPostsZijbalk($zelf=false){
+		if($zelf){
+			$uid=LoginLid::instance()->getUid();
+			$aPosts=Forum::getPostsVoorUid($uid, Instelling::get('zijbalk_forum_zelf'));
+			echo '<h1><a href="/communicatie/profiel/'.$uid.'/#forum">Forum (zelf gepost)</a></h1>';
+		}else{
+			$aPosts=Forum::getPostsVoorRss(Instelling::get('zijbalk_forum'), true);
+			echo '<h1><a href="/communicatie/forum/categorie/laatste">Forum</a></h1>';
+		}
+		
 		if(!is_array($aPosts)){
 			echo '<div class="item">Geen items gevonden</div>';
 		}else{
@@ -69,11 +76,10 @@ class ForumContent extends SimpleHTML {
 				echo '</div>';
 			}
 		}
-
 	}
 	public function lastPosts(){
  		$smarty=new Smarty_csr();
-		$smarty->assign('berichten',Forum::getPostsVoorRss(40));
+		$smarty->assign('berichten', Forum::getPostsVoorRss(Instelling::get('forum_zoekresultaten')));
 		$smarty->assign('melding', $this->getMelding());
 		$smarty->display('forum/list_recent.tpl');
 	}
@@ -175,6 +181,7 @@ class ForumContent extends SimpleHTML {
 			case 'recent': $this->lastPosts(); break;
 			case 'rss': $this->rssFeed();	break;
 			case 'lastposts': $this->lastPostsZijbalk(); break;
+			case 'lastposts_zelf': $this->lastPostsZijbalk(true); break;
 			case 'zoeken': $this->zoeken(); break;
 			default: $this->viewCategories();	break;
 		}

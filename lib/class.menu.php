@@ -115,7 +115,7 @@ class Menu {
 	}
 
 	public function view() {
-		$lid=Lid::instance();
+		$lid=LoginLid::instance();
 		$menu=new Smarty_csr();
 		$menu->caching=false;
 
@@ -149,7 +149,7 @@ class Menu {
 	public static function getGaSnelNaar(){
 		//hier worden even de objecten lokaal gemaakt, anders moet er voor dit ding ook nog een
 		//tweede instantie van Menu gemaakt worden.
-		$lid=Lid::instance();
+		$lid=LoginLid::instance();
 		$db=MySql::instance();
 
 		$gasnelnaar="SELECT tekst, link, permission FROM menu WHERE gasnelnaar='ja' ORDER BY tekst;";

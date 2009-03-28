@@ -1,12 +1,10 @@
 <?php
 
-# instellingen & rommeltjes
-require_once('include.config.php');
+require_once 'include.config.php';
+require_once 'lid/class.mootverjaardag.php';
 
 
-require_once('class.kolom.php');
-
-if ($lid->hasPermission('P_LEDEN_READ')) {
+if($loginlid->hasPermission('P_LEDEN_READ')){
 	# Het middenstuk
 	require_once('class.verjaardagcontent.php');
 	$midden = new VerjaardagContent('alleverjaardagen');

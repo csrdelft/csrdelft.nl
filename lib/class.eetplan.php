@@ -12,11 +12,9 @@ require_once ('class.mysql.php');
 class Eetplan {
 
 	var $_db;
-	var $_lid;
 
 	function Eetplan(){
 		# databaseconnectie openen
-		$this->_lid=Lid::instance();
 		$this->_db=MySql::instance();
 	}
 
@@ -41,10 +39,11 @@ class Eetplan {
 			if($aEetplanData['avond']==1){
 				$aEetplan[]=$aEetplanRegel;
 				$aEetplanRegel=array();
+				$lid=LidCache::getLid($aEetplanData['uid']);
 				//eerste element van de regel is het uid
 				$aEetplanRegel[]=array(
 					'uid' => $aEetplanData['uid'],
-					'naam' => $this->_lid->getNaamLink($aEetplanData['uid'], 'full', false));
+					'naam' => (string)$lid);
 			}
 			$aEetplanRegel[]=$aEetplanData['huis'];
 		}
@@ -147,7 +146,8 @@ class Eetplan {
 		return $aHuizen;
 	}
 	function getPheutNaam($uid){
-		return $this->_lid->getNaamLink($uid);
+		$lid=LidCache::getLid($uid);
+		return (string)$lid;
 	}
 
 }

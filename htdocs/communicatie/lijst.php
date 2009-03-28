@@ -6,13 +6,13 @@ session_cache_limiter('public');
 session_cache_expire(30);
 
 # instellingen & rommeltjes
-require_once('include.config.php');
+require_once 'include.config.php';
 
 
-if ($lid->hasPermission('P_LEDEN_READ') or $lid->hasPermission('P_OUDLEDEN_READ')) {
+if($loginlid->hasPermission('P_LEDEN_READ') or $loginlid->hasPermission('P_OUDLEDEN_READ')) {
 	# Het middenstuk
-	require_once('class.ledenlijstcontent.php');
-	$midden = new LedenlijstContent($lid);
+	require_once 'lid/class.ledenlijstcontent.php';
+	$midden = new LedenlijstContent();
 
 	$form = array();
 
@@ -33,7 +33,7 @@ if ($lid->hasPermission('P_LEDEN_READ') or $lid->hasPermission('P_OUDLEDEN_READ'
 	# voor gebruikers die leden en oudleden kunnen zoeken
 	$zoek_in_type = array('(oud)?leden','leden','oudleden');
 	# de VAB mag ook nobodies zoeken
-	if($lid->hasPermission('P_OUDLEDEN_MOD')) {
+	if($loginlid->hasPermission('P_OUDLEDEN_MOD')) {
 		$zoek_in_type[] = 'nobodies';
 	}
 
@@ -66,7 +66,7 @@ if ($lid->hasPermission('P_LEDEN_READ') or $lid->hasPermission('P_OUDLEDEN_READ'
 	# terug in de invulvelden
 	if (isset($_POST['a']) and $_POST['a'] == 'zoek') {
 		# en zoeken dan maar...
-		$aZoekresultaten = $lid->zoekLeden($form['wat'], $form['waar'], $form['moot'], $form['sort'], $form['status']);
+		$aZoekresultaten = Zoeker::zoekLeden($form['wat'], $form['waar'], $form['moot'], $form['sort'], $form['status']);
 		# Als er maar 1 resultaat is redirecten we naar het profiel, en anders geven we een lijst met de resultaten
 		if (sizeof($aZoekresultaten) == 1) {
 			header('location: '.CSR_ROOT.'communicatie/profiel/'.$aZoekresultaten[0]['uid']);

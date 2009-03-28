@@ -1,11 +1,9 @@
 <?php
 
 class NeerladenContent{
-	var $_db;
 	var $_neerladen;
 	
-	function NeerladenContent(&$db,$neerladen){
-		$this->_db=$db;
+	function NeerladenContent($neerladen){
 		$this->_neerladen=$neerladen;
 	}
 	

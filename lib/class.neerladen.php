@@ -3,8 +3,8 @@
 class Neerladen {
 	var $_db;
 	
-	function Neerladen(& $db) {
-		$this->_db = &$db;
+	function Neerladen() {
+		$this->_db = MySql::instance();
 	}
 	
 	function getDownloadData($id) {

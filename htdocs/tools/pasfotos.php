@@ -4,22 +4,24 @@
  *
  * Zet een stel uid's om in pasfoto's
  */
-require_once('include.config.php');
+require_once 'include.config.php';
 
-if($lid->hasPermission('P_LEDEN_READ') AND isset($_GET['string'])){
+if($loginlid->hasPermission('P_LEDEN_READ') AND isset($_GET['string'])){
 	$string=trim(urldecode($_GET['string']));
 	$uids=explode(',', $string);
 	$link=!isset($_GET['link']);
 
 	echo '<div class="pasfotomatrix">';
 	foreach($uids as $uid){
-		if($lid->isValidUid($uid)){
-			if($link){
-				echo '<a href="/communicatie/profiel/'.$uid.'" title="'.$lid->getNaamLink($uid, 'full', false).'">';
+		if(Lid::isValidUid($uid)){
+			$lid=LidCache::getLid($uid);
+			if($lid instanceof Lid){
+				if($link){
+					echo '<a href="/communicatie/profiel/'.$uid.'" title="'.$lid->getNaam().'">';
+				}
+				echo $lid->getPasfoto(true);
+				if($link){ echo '</a>'; }
 			}
-			echo $lid->getPasfoto($uid, true);
-			if($link){ echo '</a>'; }
-
 		}
 	}
 	echo '</div>';

@@ -1,5 +1,5 @@
 <div id="menu" onmouseover="ResetTimer()" onmouseout="StartTimer()">
-	<div id="menuleft"><a href="/"><img src="http://plaetjes.csrdelft.nl/layout/logo.gif" alt="Logo" /></a></div>
+	<div id="menuleft"><a href="/"><img src="http://plaetjes.csrdelft.nl/layout/logo.gif" alt="Logo" id="logo" /></a></div>
 	<div id="menucenter">
 		<div id="menubanner">
 			<div id="banner1"><img src="http://plaetjes.csrdelft.nl/menubalk/banner1.png" id="imgbanner1" alt="banner1" width="553" height="106" /></div>
@@ -27,11 +27,11 @@
 	<div id="menuright">
 		{if $lid->hasPermission('P_LOGGED_IN') }
 			<div id="ingelogd">
-				{$lid->getUid|csrnaam}<br />
+				{$lid->getUid()|csrnaam}<br />
 				<div id="uitloggen"><a href="/logout.php">log&nbsp;uit</a></div><br class="clear" />
 				<br />
 				<div id="saldi">
-					{foreach from=$lid->getSaldi() item=saldo}
+					{foreach from=$lid->getLid()->getSaldi() item=saldo}
 						<div class="saldoregel">
 							<div class="saldo{if $saldo.saldo < 0} staatrood{/if}">&euro; {$saldo.saldo|number_format:2:",":"."}</div>
 							{$saldo.naam}:

@@ -40,6 +40,9 @@
 		{if $groep->isAdmin() OR ($groep->isAanmeldbaar() AND $groep->isIngelogged())}
 		<a class="tab" onclick="showStats({$groep->getId()})">%</a>
 		{/if}
+		{if $groep->isAdmin() OR $groep->isOp()}
+		<a class="tab" onclick="showEmails({$groep->getId()})">@</a>
+		{/if}
 	{/if}
 	</div>
 	<div id="ledenvangroep{$groep->getId()}" class="groepleden">
@@ -66,18 +69,8 @@
 		</table>
 	</div>
 	<br />
-	{if $groep->isAanmeldbaar() AND $groep->magBewerken()}
-	<div class="clear"><br /></div>
-		<a href="#functieOverzicht" onclick="toggleDiv('functieOverzicht')" class="knop">Toon functieoverzicht</a>
-		<table id="functieOverzicht" class="verborgen clear">
-			{foreach from=$groep->getFunctieAantal() key=functie item=aantal}
-				{if $functie!=''}<tr><td>{$functie}</td><td>{$aantal}</td></tr>{/if}
-			{/foreach}
-			<tr><td><strong>Totaal</strong></td><td>{$groep->getLidCount()}</td></tr>
-		</table>
-	{/if}
 
-	{if $groep->toonPasfotos() AND $lid->toonPasFotos()}
+	{if $groep->toonPasfotos() AND $lid->instelling('toonPasFotos')}
 		<script type="text/javascript">togglePasfotos('{$groep->getLedenCSV()}', document.getElementById('ledenvangroep{$groep->getId()}'));</script>
 	{/if}
 	{if $groep->magAanmelden()}

@@ -25,7 +25,7 @@ class Documenten {
 	function Documenten() {
 		$this->homedir = DATA_PATH.'/documenten/uploads/';
 		$this->trash = DATA_PATH.'/documenten/trash/';
-		$this->_lid = Lid::instance();
+		$this->_lid = LoginLid::instance();
 		$this->_db = MySql::instance();
 	}
 

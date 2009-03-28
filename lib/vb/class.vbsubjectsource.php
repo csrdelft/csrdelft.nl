@@ -15,7 +15,7 @@ class VBSubjectSource extends VBItem
 
 	function __construct()
 	{
-		$this->lid = Lid::instance()->getUid();
+		$this->lid = LoginLid::instance()->getUid();
 		$this->createdate = getDateTime();
 		$this->subjid = -1;
 		$this->sourceid = -1;
