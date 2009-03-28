@@ -13,7 +13,7 @@ if($loginlid->getUid()!='0436'){
 
 //instellingen
 $saldoGrens=-5;
-$cie='soccie';
+$cie='maalcie';
 
 $naam=array(
 	'soccie' => array('SocCie', 'soccie@csrdelft.nl'), 
@@ -21,7 +21,8 @@ $naam=array(
 
 $query="
 	SELECT uid, ".$cie."Saldo AS saldo
-	FROM lid WHERE ".$cie."Saldo<".$saldoGrens.";";
+	FROM lid WHERE ".$cie."Saldo<".$saldoGrens." AND 
+(status='S_LID');";
 
 
 
@@ -30,6 +31,7 @@ $result=$db->query($query);
 echo 'Aantal rode mensen met een lager saldo dan '.$saldoGrens.": ".$db->numRows($result)."<hr/>";
 
 while($data=$db->next($result)){
+	if($data['uid']=='0641') continue;
 	$mail=new Smarty_csr();
 	
 	$mail->assign('uid', $data['uid']);

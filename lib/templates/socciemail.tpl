@@ -17,3 +17,4 @@ Ama. Uitbeijerse
 h.t. SocCiefiscus
 
 PS. Kort samengevat: inleggen met je hoofd.
+PPS. Uw saldo is nu E {$saldo}
