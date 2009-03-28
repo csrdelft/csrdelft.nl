@@ -57,8 +57,9 @@ if ($error == 0) switch($action) {
 		}
 	break;
 	case 'editEetwens':
-		$eetwens=getOrPost('eetwens');
-		if(!$loginlid->getLid()->setEetwens($eetwens)){
+		$lid=$loginlid->getLid();
+		$lid->setProperty('eetwens', getOrPost('eetwens'));
+		if(!$lid->save()){
 			$error=2;
 		}else{
 			header("Location: {$_SERVER['PHP_SELF']}");
@@ -66,8 +67,9 @@ if ($error == 0) switch($action) {
 		}
 	break;
 	case 'editCorveewens':
-		$corveewens=getOrPost('corveewens');
-		if(!$loginlid->getLid()->setCorveewens($corveewens)){
+		$lid=$loginlid->getLid();
+		$lid->setProperty('corveewens', getOrPost('corveewens'));
+		if(!$lid->save()){
 			$error=2;
 		}else{
 			header("Location: {$_SERVER['PHP_SELF']}");
