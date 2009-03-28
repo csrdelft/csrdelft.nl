@@ -14,7 +14,8 @@
  */
 interface Agendeerbaar {
 	
-	public function getMoment();
+	public function getBeginMoment();
+	public function getEindMoment();
 	public function getTitel();
 	public function getBeschrijving();	
 }
@@ -26,7 +27,8 @@ interface Agendeerbaar {
 class AgendaItem implements Agendeerbaar {
 	
 	private $itemid;
-	private $moment;
+	private $beginMoment;
+	private $eindMoment;
 	private $titel;
 	private $beschrijving;
 	
@@ -37,8 +39,11 @@ class AgendaItem implements Agendeerbaar {
 	public function getItemID(){
 		return $this->itemid;
 	}
-	public function getMoment(){
-		return $this->moment;
+	public function getBeginMoment(){
+		return $this->beginMoment;
+	}
+	public function getEindMoment(){
+		return $this->eindMoment;
 	}
 	public function getTitel(){
 		return $this->titel;
@@ -47,8 +52,11 @@ class AgendaItem implements Agendeerbaar {
 		return $this->beschrijving;
 	}
 	
-	public function setMoment($moment){
-		$this->moment=$moment;
+	public function setBeginMoment($beginMoment){
+		$this->beginMoment=$beginMoment;
+	}
+	public function setEindMoment($eindMoment){
+		$this->eindMoment=$eindMoment;
 	}
 	public function setTitel($titel){
 		$this->titel=$titel;
