@@ -115,7 +115,7 @@ class Lid implements Serializable{
 
 			$woonoord=$this->getWoonoord();
 			if($woonoord instanceof Groep){
-				$entry['ou']=$groep->getNaam();
+				$entry['ou']=$woonoord->getNaam();
 			}
 
 			# lege velden er uit gooien
