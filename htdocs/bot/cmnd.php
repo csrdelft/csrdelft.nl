@@ -268,7 +268,7 @@ function aaidrom($uid, $params) {
     } else {
 		$lid=LidCache::getLid($params['getuid']);
 		$profiel = $lid->getProfiel();
-        if (~is_array($profiel)) return array("Profiel niet gevonden in de ledenlijst");
+        if (!is_array($profiel)) return array("Profiel niet gevonden in de ledenlijst");
         return $lid->getNaamLink('aaidrom', 'plain');
     }
 }
