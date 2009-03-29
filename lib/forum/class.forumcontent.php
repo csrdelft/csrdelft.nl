@@ -88,8 +88,14 @@ class ForumContent extends SimpleHTML {
 		$sZoekQuery='';
 		if(isset($_POST['zoeken'])){ $sZoekQuery=trim($_POST['zoeken']); }elseif(isset($_GET['zoeken'])){ $sZoekQuery=trim($_GET['zoeken']);}
 
-		echo '<h1>Zoeken in het forum</h1>Hier kunt u zoeken in het forum.
-			<a href="http://dev.mysql.com/doc/refman/5.0/en/fulltext-boolean.html">(uitleg booleaans zoeken MySQL)</a>.<br />';
+		echo '<div class="zoekhulp"><h2>Bewerkingstekens</h2>
+			<table><tr><td>+</td><td>= en</td></tr>
+		          <tr><td>-</td><td>= niet</td></tr>
+		          <tr><td><em>spatie</em></td><td>= of</td></tr>
+		          <tr><td><b>"</b>zoek zin<b>" <b> </td><td>= zoekt exact <em>zoek zin</em></td></tr>
+		          <tr><td>*</td><td>= wildcard</td></tr></table>
+		          <a href="http://dev.mysql.com/doc/refman/5.0/en/fulltext-boolean.html">Verdere uitleg booleaans zoeken MySQL...</a></div>';
+		echo '<h1>Zoeken in het forum</h1>Hier kunt u zoeken in het forum.<br />';
 		//altijd het zoekformulier weergeven.
 
 		$this->zoekFormulier($sZoekQuery, (int)$_POST['categorie']);

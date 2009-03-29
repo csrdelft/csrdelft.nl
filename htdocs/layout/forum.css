@@ -140,6 +140,12 @@ fieldset#modereren{
 #forum_zoeken input{
 	padding: 2px 4px;
 }
+/* Zoekhulpvakje */
+div.zoekhulp{
+	float: right;
+	border: 1px solid #BBBBBB;
+	margin-bottom:1em;
+}
 
 /* Paginering */
 div.forum_paginering{
