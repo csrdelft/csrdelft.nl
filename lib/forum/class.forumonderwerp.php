@@ -29,6 +29,7 @@ class ForumOnderwerp{
 	private $lastpostID;
 
 	private $pagina=1;
+	private $paginaCount=null;
 
 	protected $posts=null;
 
@@ -172,27 +173,31 @@ class ForumOnderwerp{
 
 	public function getPagina(){ return $this->pagina; }
 
-	function getPaginaCount(){
-		$db=MySql::instance();
+	function getPaginaCount($force=false){
+		if($this->paginaCount===null){
+			$db=MySql::instance();
 
-		$zichtBaarClause="post.zichtbaar='zichtbaar'";
-		if(Forum::isModerator()){
-			$zichtBaarClause.=" OR post.zichtbaar='wacht_goedkeuring' OR post.zichtbaar='spam'";
-		}
-		$sTopicQuery="
-			SELECT count(*) as aantal
-			FROM forum_post as post
-			WHERE tid=".$this->getID()."
-			AND ( ".$zichtBaarClause." )
-			LIMIT 1;";
-		$topic=$db->getRow($sTopicQuery);
-		if(is_array($topic)){
-			$aantal=ceil($topic['aantal']/Forum::getPostsPerPagina());
-			if($aantal>0){
-				return $aantal;
+			$zichtBaarClause="post.zichtbaar='zichtbaar'";
+			if(Forum::isModerator()){
+				$zichtBaarClause.=" OR post.zichtbaar='wacht_goedkeuring' OR post.zichtbaar='spam'";
+			}
+			$sTopicQuery="
+				SELECT count(*) as aantal
+				FROM forum_post as post
+				WHERE tid=".$this->getID()."
+				AND ( ".$zichtBaarClause." )
+				LIMIT 1;";
+			$topic=$db->getRow($sTopicQuery);
+			if(is_array($topic)){
+				$aantal=ceil($topic['aantal']/Forum::getPostsPerPagina());
+				if($aantal>0){
+					$this->paginaCount=$aantal;
+				}
+			}else{
+				$this->paginaCount=1;
 			}
 		}
-		return 1;
+		return $this->paginaCount;
 	}
 
 	public function getSize(){

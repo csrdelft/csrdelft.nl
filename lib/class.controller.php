@@ -39,7 +39,7 @@ class Controller{
 		if($this->hasAction($this->action)){
 			$this->$action();
 		}else{
-			throw new Exception('Action undefined');
+			throw new Exception('Action ('.$this->action.') undefined');
 		}
 	}
 	protected function action_default(){

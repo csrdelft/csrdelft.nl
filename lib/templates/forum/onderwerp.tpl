@@ -63,20 +63,21 @@
 {/if}{* einde van moderatordeel *}
 
 <table id="forumtabel">
-	<tr class="tussenschot">
-		<td colspan="2"></td>
-	</tr>
-	
-	<tr>
-		<td>&nbsp;</td>
-		<td>
-			<div class="forum_paginering">
-				Pagina: {sliding_pager baseurl="/communicatie/forum/onderwerp/`$onderwerp->getID()`/" 
-					pagecount=$onderwerp->getPaginaCount() curpage=$onderwerp->getPagina()
-					txt_prev="&lt;" separator="" txt_next="&gt;" show_always=true show_first_last=false show_prev_next=false}
-			</div>
-		</td>
-	</tr>
+	{if $onderwerp->getPaginaCount()>1}
+		<tr class="tussenschot">
+			<td colspan="2"></td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td>
+				<div class="forum_paginering">
+					Pagina: {sliding_pager baseurl="/communicatie/forum/onderwerp/`$onderwerp->getID()`/" 
+						pagecount=$onderwerp->getPaginaCount() curpage=$onderwerp->getPagina()
+						txt_prev="&lt;" separator="" txt_next="&gt;" show_always=true show_first_last=false show_prev_next=false}
+				</div>
+			</td>
+		</tr>
+	{/if}
 	
 	<tr class="tussenschot">
 		<td colspan="2"></td>
@@ -131,20 +132,21 @@
 		</tr>
 	{/foreach}
 	
-	<tr>
-		<td>&nbsp;</td>
-		<td>
-			<div class="forum_paginering">
-				Pagina: {sliding_pager baseurl="/communicatie/forum/onderwerp/`$onderwerp->getID()`/" 
-					pagecount=$onderwerp->getPaginaCount() curpage=$onderwerp->getPagina()
-					txt_prev="&lt;" separator="" txt_next="&gt;" show_always=true show_first_last=false show_prev_next=false}
-			</div>
-		</td>
-	</tr>
-	
-	<tr class="tussenschot">
-		<td colspan="2"></td>
-	</tr>	
+	{if $onderwerp->getPaginaCount()>1}
+		<tr>
+			<td>&nbsp;</td>
+			<td>
+				<div class="forum_paginering">
+					Pagina: {sliding_pager baseurl="/communicatie/forum/onderwerp/`$onderwerp->getID()`/" 
+						pagecount=$onderwerp->getPaginaCount() curpage=$onderwerp->getPagina()
+						txt_prev="&lt;" separator="" txt_next="&gt;" show_always=true show_first_last=false show_prev_next=false}
+				</div>
+			</td>
+		</tr>
+		<tr class="tussenschot">
+			<td colspan="2"></td>
+		</tr>
+	{/if}
 
 	{* Formulier om een bericht achter te laten *}
 	<tr>
