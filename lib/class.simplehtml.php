@@ -8,7 +8,7 @@
 # -------------------------------------------------------------------
 
 
-class SimpleHTML {
+abstract class SimpleHTML {
 
 
 	private $_sMelding='';

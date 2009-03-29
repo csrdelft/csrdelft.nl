@@ -294,13 +294,21 @@ class Lid implements Serializable{
 					if($this->profiel['status']=='S_KRINGEL'){ $naam.=' ~'; }
 				}
 			break;
+			case 'aaidrom':
+				$voor = array(); preg_match('/^([^aeiuoy]*)(.*)$/', $this->profiel['voornaam'], $voor);
+				$achter = array(); preg_match('/^([^aeiuoy]*)(.*)$/', $this->profiel['achternaam'], $achter);
+				
+				$naam = sprintf("%s%s %s%s%s", $achter[1], $voor[2], 
+							($this->profiel['tussenvoegsel'] != '') ? $this->profiel['tussenvoegsel'] . ' ' : '',
+							$voor[1], $achter[2]);
+			break;
 			default:
 				$naam='Formaat in $vorm is onbekend.';
 		}
 
 		switch($mode){
 			case 'link':
-				if($this->uid!='dummy' AND LoginLid::instance()->hasPermission('P_LEDEN_READ')){
+				if(LoginLid::instance()->hasPermission('P_LEDEN_READ')){
 					return '<a href="/communicatie/profiel/'.$this->getUid().'" title="'.$sVolledigeNaam.'" class="lidLink '.$this->profiel['status'].'">'.mb_htmlentities($naam).'</a>';
 				}
 			case 'html':

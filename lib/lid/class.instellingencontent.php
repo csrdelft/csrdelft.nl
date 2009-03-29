@@ -12,7 +12,7 @@ class InstellingenContent extends SimpleHTML{
 	}
 	public function view(){
 		$instellingen=Instelling::getDefaults();
-		echo '<h1>Instelling csrdelft.nl</h1>Standaardwaarden tussen haakjes.<form method="post">';
+		echo '<h1>Instellingen csrdelft.nl</h1>Op deze pagina kunt u diverse instellingen voor de webstek wijzigen.<br />De waarden tussen haakjes zijn de standaardwaarden.<form method="post">';
 		$current='';
 		foreach($instellingen as $key =>  $inst){
 			$parts=explode('_', $key);

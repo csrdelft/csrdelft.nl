@@ -264,23 +264,13 @@ function aaidrom($uid, $params) {
     if ($params['getuid'] == '') {
 		$lid=$lid->getLid();
 		$profiel = $lid->getProfiel();
-        $naam = $lid->getNaam('civitas', 'plain');
+        return $lid->getNaam('aaidrom', 'plain');
     } else {
 		$lid=LidCache::getLid($params['getuid']);
 		$profiel = $lid->getProfiel();
         if (~is_array($profiel)) return array("Profiel niet gevonden in de ledenlijst");
-        $naam = $lid->getNaam('civitas', 'plain');
+        return $lid->getNaam('aaidrom', 'plain');
     }
-    $voor = array(); preg_match('/^([^aeiuoy]*)(.*)$/', $profiel['voornaam'], $voor);
-    $achter = array(); preg_match('/^([^aeiuoy]*)(.*)$/', $profiel['achternaam'], $achter);
-
-    return array(sprintf("%s%s %s%s%s"
-        , $achter[1]
-        , $voor[2]
-        , ($profiel['tussenvoegsel'] != '') ? $profiel['tussenvoegsel'] . ' ' : ''
-        , $voor[1]
-        , $achter[2]
-    ));
 }
 $cmnds['aaidrom'] = array('getuid' => false);
 
