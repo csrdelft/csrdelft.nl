@@ -23,3 +23,7 @@ RewriteRule ^intern/profiel(.*)		/communicatie/profiel$1 [R=301]
 RewriteRule ^contact.php$ 			/contact/ [R=301]
 RewriteRule ^base.php.*$ 			/ [R=301]
 RewriteRule ^nieuws/(.*)$			/actueel/mededelingen/$1 [R=301]
+
+# su
+RewriteRule ^su/([0-9a-z]+)/?$ su.php?actie=su&uid=$1
+RewriteRule ^endsu/?$ su.php?actie=endSu

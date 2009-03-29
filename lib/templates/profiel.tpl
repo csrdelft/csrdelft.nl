@@ -11,6 +11,9 @@
 					{if $isAdmin}
 						<a href="/tools/stats.php?uid={$profhtml.uid}" class="knop">Overzicht van bezoeken</a><br />
 						<a href="/communicatie/profiel/{$profhtml.uid}/wachtwoord" class="knop" onclick="return confirm('Weet u zeker dat u het wachtwoord van deze gebruiker wilt resetten?')">Reset wachtwoord</a><br />
+						{if $profhtml.uid!=$lid->getUid() && !$lid->isSued()}
+							<a href="/su/{$profhtml.uid}/" class="knop">su naar dit lid</a><br />
+						{/if}
 					{/if}
 				</div>
 			</div>

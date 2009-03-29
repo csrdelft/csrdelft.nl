@@ -15,7 +15,12 @@ class LoginLid{
 	protected $_permissions = array();
 	protected $_perm_user   = array();
 
+	# lid bevat het Lid dat op dit moment is ingelogd
 	private $lid;
+	
+	# mocht er gesued zijn, dan bevat suedFrom het oorspronkelijk ingelogde Lid,
+	# dus het lid dat de su heeft geïnitieerd.
+	private $suedFrom=null;
 
 	public static function instance(){
 		//als er nog geen instantie gemaakt is, die nu maken
@@ -51,6 +56,10 @@ class LoginLid{
 		$lid=LidCache::getLid($_SESSION['_uid']);
 		if($lid instanceof Lid){
 			$this->lid=$lid;
+			
+			if(isset($_SESSION['_suedFrom'])){
+				$this->suedFrom=LidCache::getLid($_SESSION['_suedFrom']);
+			}
 			return true;
 		}else{
 			return false;
@@ -64,6 +73,36 @@ class LoginLid{
 	}
 	public function isSelf($uid){
 		return $this->lid->getUid()==$uid;
+	}
+	
+	/**
+	 * Switch-user-functies, handig om de webstek snel even te bekijken alsof
+	 * je iemand anders bent.
+	 */
+	public function su($uid){
+		if(!Lid::isValidUid($uid)){
+			throw new Exception('Geen geldig uid opgegeven!');
+		}
+		if($this->isSued()){
+			throw new Exception('Geneste su niet mogelijk!');
+		}
+		$_SESSION['_suedFrom']=$this->lid->getUid();
+		$_SESSION['_uid']=$uid;
+		$this->lid=LidCache::getLid($uid);
+		Instelling::reload();
+	}
+	public function endSu(){
+		$_SESSION['_uid']=$_SESSION['_suedFrom'];
+		$this->lid=$this->suedFrom;
+		unset($_SESSION['_suedFrom']);
+		$this->suedFrom=null;
+		Instelling::reload();
+	}
+	public function isSued(){
+		return $this->suedFrom!==null;
+	}
+	public function getSuedFrom(){
+		return $this->suedFrom;
 	}
 
 	//TODO: marco gaat dit goed fixen
