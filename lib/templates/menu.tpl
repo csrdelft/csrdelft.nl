@@ -28,7 +28,7 @@
 		{if $lid->hasPermission('P_LOGGED_IN') }
 			<div id="ingelogd">
 				{if $lid->isSued()}
-					<a href="/endsu/" style="color: red;">{$lid->getSuedFrom()->getNaamLink('civitas','plain')} als</a><br />» 
+					<a href="/endsu/" style="color: red;">{$lid->getSuedFrom()->getNaamLink('civitas','html')} als</a><br />» 
 				{/if}
 				{$lid->getUid()|csrnaam}<br />				
 				<div id="uitloggen"><a href="/logout.php">log&nbsp;uit</a></div><br class="clear" />

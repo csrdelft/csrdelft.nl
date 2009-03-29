@@ -86,6 +86,9 @@ class LoginLid{
 		if($this->isSued()){
 			throw new Exception('Geneste su niet mogelijk!');
 		}
+		if($uid=='x999'){
+			throw new Exception('Ja, log dan maar lekker uit!');
+		}
 		$_SESSION['_suedFrom']=$this->lid->getUid();
 		$_SESSION['_uid']=$uid;
 		$this->lid=LidCache::getLid($uid);
