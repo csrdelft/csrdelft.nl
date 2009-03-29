@@ -264,12 +264,12 @@ function aaidrom($uid, $params) {
     if ($params['getuid'] == '') {
 		$lid=$lid->getLid();
 		$profiel = $lid->getProfiel();
-        return $lid->getNaam('aaidrom', 'plain');
+        return $lid->getNaamLink('aaidrom', 'plain');
     } else {
 		$lid=LidCache::getLid($params['getuid']);
 		$profiel = $lid->getProfiel();
         if (~is_array($profiel)) return array("Profiel niet gevonden in de ledenlijst");
-        return $lid->getNaam('aaidrom', 'plain');
+        return $lid->getNaamLink('aaidrom', 'plain');
     }
 }
 $cmnds['aaidrom'] = array('getuid' => false);
