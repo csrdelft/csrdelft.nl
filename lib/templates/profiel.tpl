@@ -18,7 +18,7 @@
 				</div>
 			</div>
 			{if $melding!=''}{$melding}<br />{/if}
-			<h1>{$profhtml.fullname}</h1>
+			<h1>{$profhtml.uid|csrnaam:'full':'plain'}</h1>
 		</div>
 	</div>
 	

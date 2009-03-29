@@ -22,22 +22,28 @@ class DocumentController extends Controller{
 	public function __construct($querystring){
 		parent::__construct($querystring);
 		if($this->hasParam(1)){
-			$this->action=$this->getParam(0);
+			$this->action=$this->getParam(1);
+		}
+		if($this->hasParam(0)){
+			$this->document=new Document($this->getParam(0));
 		}
 
-
+		
 		//Normale gebruikers mogen niet alle acties doen.
-		$allow=array('default', '');
+		$allow=array('default');
 		if(!in_array($this->action, $allow) AND !$this->document->magBewerken()){
 			$this->action='default';
 		}
 		$this->performAction();
 	}
 	public function action_default(){
-		$this->content=new DocumentContent();
+		$this->content=new DocumentContent($this->document);
 	}
 	public function action_delete(){
 
+	}
+	public function action_toevoegen(){
+		
 	}
 }
 

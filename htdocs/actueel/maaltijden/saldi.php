@@ -7,7 +7,7 @@ if(!$loginlid->hasPermission('P_MAAL_MOD')){ header('location: http://csrdelft.n
 
 $sStatus='';
 
-require_once 'class.saldi.php';
+require_once 'lid/class.saldi.php';
 $sStatus=Saldi::putMaalcieCsv();
 
 class uploader{

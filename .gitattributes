@@ -179,7 +179,6 @@ lib/class.nieuws.php -text
 lib/class.nieuwscontent.php -text
 lib/class.pagina.php -text
 lib/class.paginacontent.php -text
-lib/class.saldi.php -text
 lib/class.savedquery.php -text
 lib/class.simplehtml.php -text
 lib/class.simplespamfilter.php -text
@@ -213,6 +212,7 @@ lib/groepen/class.groepen.php -text
 lib/include.common.php -text
 lib/include.config.php -text
 lib/include.defines.php.sample -text
+lib/lid/class.instellingen.php -text
 lib/lid/class.instellingencontent.php -text
 lib/lid/class.ledenlijstcontent.php -text
 lib/lid/class.lid.php -text
@@ -220,6 +220,7 @@ lib/lid/class.loginlid.php -text
 lib/lid/class.mootverjaardag.php -text
 lib/lid/class.profiel.php -text
 lib/lid/class.profielcontent.php -text
+lib/lid/class.saldi.php -text
 lib/maaltijden/class.maaltijd.php -text
 lib/maaltijden/class.maaltijdabocontent.php -text
 lib/maaltijden/class.maaltijdbeheercontent.php -text

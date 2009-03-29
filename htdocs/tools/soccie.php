@@ -11,7 +11,7 @@ error_reporting(E_ALL);
 
 
 require_once 'include.config.php';
-require_once 'class.saldi.php';
+require_once 'lid/class.saldi.php';
 
 
 //als er niet van een confide-ip gerequest wordt niet accepteren

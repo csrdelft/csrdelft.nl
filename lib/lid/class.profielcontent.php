@@ -24,12 +24,9 @@ class ProfielContent extends SimpleHTML {
 			if(!is_array($value) AND $key!='changelog'){
 				$profhtml[$key] = mb_htmlentities($value);
 			}elseif($key=='changelog'){
-			$profhtml[$key] = $value;
+				$profhtml[$key] = $value;
 			}
 		}
-
-		$profhtml['fullname']=$this->lid->getNaam();
-
 
 		$woonoord=$this->lid->getWoonoord();
 		if($woonoord instanceof Groep){
@@ -47,7 +44,7 @@ class ProfielContent extends SimpleHTML {
 		if(LoginLid::instance()->isSelf($this->lid->getUid())){
 			$profhtml['saldi']=$this->lid->getSaldi();
 		}
-		require_once 'class.saldi.php';
+		require_once 'lid/class.saldi.php';
 		$profhtml['saldografiek']=Saldi::getGrafiektags($this->lid->getUid());
 		
 		$profhtml['abos']=array();
@@ -59,7 +56,6 @@ class ProfielContent extends SimpleHTML {
 
 		require_once 'forum/class.forum.php';
 		$profhtml['recenteForumberichten']=Forum::getPostsVoorUid($this->lid->getUid());
-
 
 		//de html template in elkaar draaien en weergeven
 		$profiel=new Smarty_csr();

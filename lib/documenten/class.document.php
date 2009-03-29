@@ -10,14 +10,15 @@ class Document{
 	private $ID=0;
 	private $naam;
 	private $catID;
+	private $categorie=null;
 	private $bestandsnaam;
 	private $size=0;
 	private $mimetype='application/octet-stream';
 	private $toegevoegd;
-	private $eigenaar;
+	private $eigenaar;	//uid van de eigenaar
 
-	public function __construct(){
-		$this->toegevoegd=getDateTime();
+	public function __construct($init){
+		$this->load($init);
 	}
 
 	public function load($init=0){
@@ -26,6 +27,7 @@ class Document{
 		}else{
 			$this->ID=(int)$init;
 			if($this->getID()==0){
+				//defaultwaarden voor een nieuw document
 				$this->setToegevoegd(getDateTime());
 			}else{
 				$db=MySql::instance();
@@ -46,7 +48,7 @@ class Document{
 		$properties=array('ID', 'naam', 'catID', 'bestandsnaam', 'size', 'mimetype', 'toegevoegd', 'eigenaar');
 		foreach($properties as $prop){
 			if(!isset($array[$prop])){
-				return false;
+				throw new Exception('Array is niet compleet: '.$prop.' mist.');
 			}
 			$this->$prop=$array[$prop];
 		}
@@ -88,21 +90,33 @@ class Document{
 	}
 	public function getID(){			return $this->ID; }
 	public function getNaam(){			return $this->naam; }
+
 	public function getCatID(){			return $this->catID; }
-	public function getCategorie(){ 	return new DocumentCategorie($this->getCatID()); }
+	public function getCategorie($force=false){
+		if($force OR $this->categorie==null){
+			$this->categerie=new DocumentCategorie($this->getCatID());
+		}
+	}
 	public function getBestandsnaam(){	return $this->bestandsnaam; }
 	public function hasFile(){			return $this->getBestandsnaam()!=''; }
 	public function getSize(){			return $this->size; }
 	public function getMimetype(){		return $this->mimetype;	}
 	public function getToegevoegd(){	return $this->toegevoegd; }
-	public function getEigenaar(){		return $this->eigenaar;	}
+	public function getEigenaar(){
+		return $this->eigenaar;	}
 
 	public function setNaam($naam){
 		$this->naam=$naam;
 	}
+	public function setToegevoegd($toegevoegd){
+		$this->toegevoegd=$toegevoegd;
+	}
 	public function isEigenaar($uid=null){
 		if($uid==null){ LoginLid::instance()->getUid(); }
 		return $uid==$this->getEigenaar();
+	}
+	public function magBewerken(){
+		return $this->isEigenaar() OR LoginLid::instance()->hasPermisson('P_DOCS_MOD');
 	}
 }
 
