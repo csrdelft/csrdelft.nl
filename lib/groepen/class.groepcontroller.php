@@ -347,7 +347,7 @@ class Groepcontroller extends Controller{
 		exit;
 	}
 	public function action_stats(){
-		if($this->groep->isAdmin() OR OR $this->groep->isOp() OR ($this->groep->isAanmeldbaar() AND $this->groep->isIngelogged())){
+		if($this->groep->isAdmin() OR $this->groep->isOp() OR ($this->groep->isAanmeldbaar() AND $this->groep->isIngelogged())){
 			$this->content=new GroepStatsContent($this->groep);
 			$this->content->view();
 		}
