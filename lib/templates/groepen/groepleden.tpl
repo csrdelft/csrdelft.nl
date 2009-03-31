@@ -1,12 +1,24 @@
 {if $actie=='pasfotos'}
 	<div class="pasfotomatrix">
-		{foreach from=$groep->getLidObjects() item=groeplid}
+		{foreach from=$groep->getLidObjects() item=groeplid name=pasfotos}
+			{if $smarty.foreach.pasfotos.index==16}
+				<a class="meerPasfotos" onclick="toggleDiv('morePasfotos'); this.parentNode.removeChild(this)">
+					Nog {$smarty.foreach.pasfotos.total-16} pasfotos tonen...
+				</a>
+				<div class="verborgen" id="morePasfotos">
+				{assign var='moreisopen' value='true'}
+			{/if}
+
 			{if $groep->isIngelogged()}
 				<a href="/communicatie/profiel/{$groeplid->getUid()}" title="{$groeplid->getNaam()}">
 			{/if}
 			{$groeplid->getPasfoto(true)}
 			{if $groep->isIngelogged()}
 				</a>
+			{/if}
+
+			{if $smarty.foreach.pasfotos.last AND $moreisopen}
+				</div>
 			{/if}
 		{/foreach}
 	</div>
