@@ -17,4 +17,24 @@
 			{/if}
 		</tr>
 	{/foreach}
+	{if $groep->isAanmeldbaar() AND !$groep->isLid()}
+		<tr class="aanmelden">
+			<td colspan="3">
+			{if $groep->magAanmelden()}
+				{if $groep->getToonFuncties()=='niet'}
+					<a href="/actueel/groepen/{$gtype}/{$groep->getId()}/aanmelden" onclick="return confirm('Weet u zeker dat u zich wilt aanmelden?')">
+						Aanmelden
+					</a>
+				{else}
+					<form action="/actueel/groepen/{$gtype}/{$groep->getId()}/aanmelden" method="post" id="aanmeldForm">
+						<strong>Aanmelden</strong> (functie/opmerking mogelijk)<br />
+						<input type="text" name="functie" class="functie" />&nbsp;<input type="submit" value="aanmelden" />
+					</form>
+				{/if}
+			{elseif $groep->isVol()}
+				Deze groep is vol, u kunt zich niet meer aanmelden.
+			{/if}
+			</td>
+		</tr>
+	{/if}	
 </table>

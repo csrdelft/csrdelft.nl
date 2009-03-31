@@ -42,11 +42,7 @@ class Groepcontroller extends Controller{
 		if($this->action=='default' AND $this->groep->getId()==0){
 			$this->content->invokeRefresh('We geven geen 0-groepen weer! (Groepcontroller::__construct())', CSR_ROOT.'actueel/groepen/');
 		}
-		//Normale gebruikers mogen niet alle acties doen.
-		$allow=array('default', 'aanmelden');
-		if(!in_array($this->action, $allow) AND !$this->groep->magBewerken()){
-			$this->action='default';
-		}
+
 		$this->performAction();
 	}
 

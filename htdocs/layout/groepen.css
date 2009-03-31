@@ -29,8 +29,11 @@ ul.groepledenlijst{ width: 230px; float: right; padding: 10px 20px 20px 20px; ma
 
 }
 .groepleden{ clear: both; width: 260px; background-color: #eee; float: right; border-top: 1px solid #ddd; border-bottom: 1px solid #ddd; }
-.groepleden td{ padding: 0px 5px; lext-align: left;}
-#groepledenContainer form{ background-color: #f1f1f1; border: 1px solid lightgray; padding: 10px; width: 250px; }
+.groepleden table{ width: 100%; }
+.groepleden table td{ padding: 0px 5px; lext-align: left;}
+.groepleden table tr.aanmelden td{ padding: 3px 5px; border-top: 1px solid #ddd; line-height: 1.6em;}
+.groepleden table tr.aanmelden td input.functie{ width: 160px; } 
+
 #voorgangerOpvolger{ margin: 10px 0px; padding: 3px 20px; border-bottom: 1px solid black;}
 	.vorigeGroep{ list-style-image: url(http://plaetjes.csrdelft.nl/groepen/up.png); }
 	.volgendeGroep{ list-style-image: url(http://plaetjes.csrdelft.nl/groepen/down.png); }

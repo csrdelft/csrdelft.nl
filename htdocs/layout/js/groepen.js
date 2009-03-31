@@ -38,20 +38,26 @@ function updateGroepform(){
 		}
 	}
 }
-
-var groepid=null;
-function showTab(gid, tabid){
-	groepid=gid;
-	//alle tabjes inactief maken, alleen
+/*
+ * showTab()
+ * tabid is meteen de actie die aangeroepen wordt, een tabje erbij is
+ * dus een kwestie van een nieuwe function action_<naam>(){} maken in de
+ * controller
+ */
+function showTab(groepid, tabid){
+	//alle tabjes inactief maken
 	tabs=document.getElementById('tabs').childNodes;
 	for(var tabI in tabs){
 		if(tabs[tabI].tagName=='LI'){
 			tabs[tabI].className='';
 		}
 	}
+	//huidige actief maken.
 	document.getElementById(tabid).className='active';
+
+	//request doen voor de tab-inhoud
 	http.abort();
-	http.open("GET", "/actueel/groepen/foo/"+groepid+"/"+tabid, true);
+	http.open("GET", "/actueel/groepen/XHR/"+groepid+"/"+tabid, true);
 	http.onreadystatechange=function(){
 		if(http.readyState == 4){
 			document.getElementById('ledenvangroep'+groepid).innerHTML=http.responseText;

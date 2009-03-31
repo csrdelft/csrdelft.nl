@@ -45,21 +45,6 @@
 		<script type="text/javascript">showTab('{$groep->getId()}','pasfotos'));</script>
 	{/if}
 	
-	{* if $groep->magAanmelden()}
-		<a href="#aanmeldForm" onclick="toggleDiv('aanmeldForm')" class="knop">aanmelden</a>
-		<form action="/actueel/groepen/{$gtype}/{$groep->getId()}/aanmelden" method="post" id="aanmeldForm" class="verborgen">
-			U kunt zich hier aanmelden voor deze groep.
-			{if $groep->getToonFuncties()!='niet'}
-				Geef ook een opmerking/functie op:<br /> 
-				<input type="text" name="functie" />
-			{else}
-				<br />
-			{/if}
-			<input type="submit" value="aanmelden" />
-		</form>
-	{elseif $groep->isAanmeldbaar() AND $groep->isVol()}
-		Deze groep is vol, u kunt zich niet meer aanmelden.
-	{/if *}
 	<div class="clear"></div>
 	{if $groep->magBewerken() AND $action!='edit'}
 		{if $action=='addLid' AND $lidAdder!=false}
