@@ -25,6 +25,10 @@ body{
 	background-color: #cc00ff !important;
 }
 
+h1,h2,h3,h4,strong, #menu *, #submenu *{
+	font-family: "Comic Sans MS", Arial, sans-serif !important;
+}
+
 #logo{
 	background-image: url('http://plaetjes.csrdelft.nl/layout/logop.gif') !important;
 	padding: 133px 0 0 133px !important;

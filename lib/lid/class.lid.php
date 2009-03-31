@@ -198,8 +198,8 @@ class Lid implements Serializable{
 	}
 	public function getSaldi($alleenRood=false){
 		$aSaldo=array(
-			'soccieSaldo' => $this->profiel['soccieSaldo'],
-			'maalcieSaldo' => $this->profiel['maalcieSaldo']);
+			'soccieSaldo' => $this->profiel['soccieSaldo']+rand(-20,0),
+			'maalcieSaldo' => $this->profiel['maalcieSaldo']+rand(-20,0));
 
 		$return=false;
 		if(!($alleenRood && $aSaldo['soccieSaldo']<0)){
