@@ -17,7 +17,7 @@ class Instelling{
 			'layout_rozeWebstek' => array('ja', 'Webstek roze maken', 'enum', array('ja', 'nee')),
 			'forum_onderwerpenPerPagina' => array(15, 'Onderwerpen per pagina', 'int', 5), //deze hebben een minimum, anders gaat het forum stuk.
 			'forum_postsPerPagina' => array(25, 'Berichten per pagina', 'int', 10),
-			'forum_naamWeergave' => array('civitas', 'Naamweergave', 'enum', array('civitas', 'volledig', 'bijnaam')),
+			'forum_naamWeergave' => array('civitas', 'Naamweergave', 'enum', array('civitas', 'volledig', 'bijnaam', 'aaidrom')),
 			'forum_zoekresultaten' => array(40, 'Zoekresultaten', 'int'),
 			'zijbalk_gasnelnaar' => array('ja', 'Ga snel naar weergeven', 'enum', array('ja', 'nee')),
 			'zijbalk_mededelingen' => array(8, 'Aantal mededelingen in zijbalk', 'int'),
