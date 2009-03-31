@@ -30,6 +30,17 @@ class Groepcontroller extends Controller{
 		//groep-object inladen
 		if($this->hasParam(0)){
 			$this->groep=new Groep($this->getParam(0));
+			if($this->groep->getId()==0 AND isset($_GET['gtype'])){
+				try{
+					$groepen=new Groepen($_GET['gtype']);
+				}catch(Exception $e){
+					GroepContent::invokeRefresh($e->getMessage(), CSR_ROOT.'actueel/groepen/');
+				}
+				$this->groep->setGtype($groepen);
+				if(!($this->groep->getType() instanceof Groepen)){
+					GroepContent::invokeRefresh('Groeptype bestaat niet;', $this->getUrl());
+				}
+			}
 		}
 		//action voor deze controller goedzetten.
 		if($this->hasParam(1) AND $this->hasAction($this->getParam(1))){
@@ -50,7 +61,7 @@ class Groepcontroller extends Controller{
 		$this->content->setAction('view');
 	}
 	public function getUrl($action=null){
-		$url=CSR_ROOT.'actueel/groepen/'.$this->groep->getType().'/'.$this->groep->getId().'/';
+		$url=CSR_ROOT.'actueel/groepen/'.$this->groep->getType()->getNaam().'/'.$this->groep->getId().'/';
 		if($action!=null AND $this->hasAction($action)){
 			if($action!='default'){
 				$url.=$action;
@@ -165,11 +176,10 @@ class Groepcontroller extends Controller{
 		}
 
 		if($this->isPOSTed()){
-			//validatie moet nog even gemaakt worden. TODO dus nog.
 			if($this->groepValidator()){
 				//slaan we een nieuwe groep op?
 				if($this->groep->getId()==0 ){
-					$this->groep->setValue('snaam',$_POST['snaam']);
+					$this->groep->setValue('snaam', $_POST['snaam']);
 				}
 
 				//velden alleen voor admins

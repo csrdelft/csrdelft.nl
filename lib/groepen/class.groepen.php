@@ -30,24 +30,26 @@ class Groepen{
 	public function __construct($groeptype){
 		$db=MySql::instance();
 
-		//we laden eerst de gegevens over de groep op
-		$qGroeptype="
-			SELECT id, naam, beschrijving, toonHistorie
-			FROM groeptype
-			WHERE groeptype.naam='".$db->escape($groeptype)."'
-			LIMIT 1;";
-		$rGroeptype=$db->query($qGroeptype);
-		if($rGroeptype!==false AND $db->numRows($rGroeptype)==1){
-			$this->type=$db->next($rGroeptype);
+		if(is_int($groeptype)){
+			$where="groeptype.id=".(int)$groeptype;
 		}else{
-			//TODO: dit netjes doen. Exception gooien ofzo
-			die('FATALE FEUT: Groeptype bestaat niet! Groepen::__construct()');
+			$where="groeptype.naam='".$db->escape($groeptype)."'";
 		}
-
+	
+		//we laden eerst de gegevens over de groep op
+		$query="
+			SELECT id, naam, beschrijving, toonHistorie FROM groeptype
+			WHERE ".$where." LIMIT 1;";
+		$categorie=$db->getRow($query);
+		if(is_array($categorie)){
+			$this->type=$categorie;
+		}else{
+			throw new Exception('Groeptype ('.$groeptype.') bestaat niet! Groepen::__construct()');
+		}
 	}
 
 	/*
-	 * Laten we de gegevens van het groeptype ophalen, met de bekende groepen voor
+	 * De gevens van het groeptype ophalen, met de bekende groepen voor
 	 * het type.
 	 */
 	private function loadGroepen(){

@@ -152,35 +152,14 @@ class GroepledenContent{
 		$this->actie=$actie;
 	}
 	public function view(){
-		switch($this->actie){
-			case 'pasfotos':
-				echo '<div class="pasfotomatrix">';
-				foreach($this->groep->getLeden() as $glid){
-					if(Lid::isValidUid($glid['uid'])){
-						$lid=LidCache::getLid($glid['uid']);
-						if($lid instanceof Lid){
-							if($this->groep->isIngelogged()){
-								echo '<a href="/communicatie/profiel/'.$lid->getUid().'" title="'.$lid->getNaam().'">';
-							}
-							echo $lid->getPasfoto(true);
-							if($this->groep->isIngelogged()){ echo '</a>'; }
-						}
-					}
-				}
-				echo '</div>';
-			break;
-			case 'default':
-			default:
-				$content=new Smarty_csr();	
+		$content=new Smarty_csr();	
+		$content->assign('groep', $this->groep);
+		$content->assign('actie', $this->actie);
 		
-				$content->assign('groep', $this->groep);
-				$content->display('groepen/groepleden.tpl');
-			break;
-		}
+		$content->display('groepen/groepleden.tpl');
 	}
 }
 class Groepgeschiedeniscontent extends SimpleHTML{
-
 	private $groepen;
 
 	public function __construct($groepen){

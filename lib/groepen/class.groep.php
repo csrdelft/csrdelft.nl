@@ -12,7 +12,7 @@ class Groep{
 	private $groepseigenschappen=
 		array('groepId', 'gtypeId', 'gtype', 'snaam', 'naam', 'sbeschrijving', 'beschrijving',
 			'zichtbaar', 'status', 'begin', 'einde', 'aanmeldbaar', 'limiet', 'toonFuncties', 'toonPasfotos', 'lidIsMod');
-
+	private $gtype=null;
 	private $groep=null;
 	private $leden=null;
 
@@ -28,8 +28,6 @@ class Groep{
 					'groepId'=>0, 'snaam'=>'', 'naam'=>'', 'sbeschrijving'=>'', 'beschrijving'=>'',
 					'zichtbaar'=>'zichtbaar', 'begin'=>date('Y-m-d'), 'einde'=>'0000-00-00',
 					'aanmeldbaar'=>0, 'limiet'=>0, 'toonFuncties'=>'tonen', 'toonPasfotos'=>0, 'lidIsMod'=>0);
-				//we moeten ook nog even de groeptypen opzoeken. Die zit als het goed is in GET['gtype'];
-				$this->setGtype();
 			}else{
 				$this->load($init);
 			}
@@ -163,7 +161,12 @@ class Groep{
 		return $db->query($qDeleteLeden) AND $db->query($qDeleteGroep);
 	}
 
-	public function getType(){			return $this->groep['gtype']; }
+	public function getType(){
+		if($this->gtype===null){
+			$this->gtype=new Groepen((int)$this->getTypeId());
+		}
+		return $this->gtype;
+	}
 	public function getTypeId(){		return $this->groep['gtypeId']; }
 
 	public function getId(){			return $this->groep['groepId']; }
@@ -202,23 +205,11 @@ class Groep{
 		return false;
 	}
 
-	/*
-	 * Dit is extreem vies, dit geneuzel met _GET-variableen moet echt snel weg hier.
-	 */
-	public function setGtype(){
-		if(isset($_GET['gtype']) AND Groepen::isValidGtype($_GET['gtype'])){
-			$gtypes=Groepen::getGroeptypes(false);
-			foreach($gtypes as $gtype){
-				if($gtype['id']==$_GET['gtype'] OR $gtype['naam']==$_GET['gtype']){
-					$this->groep=array_merge(
-						$this->groep,
-						array('gtypeId'=>$gtype['id'], 'gtype'=>$gtype['naam']));
-				}
-			}
-			if(!isset($this->groep['gtype'])){
-				$this->error.='Een niet-bestaand gType opgegeven... (Groep::setGtype())';
-				return false;
-			}
+	public function setGtype($groepen){
+		if($groepen instanceof Groepen){
+			$this->gtype=$groepen;
+			$this->groep['gtypeId']=$groepen->getId();
+			return true;
 		}else{
 			$this->error.='Geen gtype opgegeven, niet via de juiste weg aangevraagd... (Groep::setGtype())';
 			return false;
@@ -260,6 +251,18 @@ class Groep{
 	}
 
 	public function getLeden(){		return $this->leden; }
+	public function getLidObjects(){
+		$leden=array();
+		if(is_array($this->getLeden())){
+			foreach($this->getLeden() as $lid){
+				if(Lid::Exists($lid['uid'])){
+					$leden[]=LidCache::getLid($lid['uid']);
+					
+				}
+			}
+		}
+		return $leden;
+	}
 	public function getLedenCSV($quotes=false){
 		$leden=array();
 		if(is_array($this->getLeden())){
@@ -476,7 +479,7 @@ class Groep{
 
 	}
 	public function getLink(){
-		return '<a class="groeplink" href="/actueel/groepen/'.$this->getType().'/'.$this->getId().'">'.$this->getNaam().'</a>';
+		return '<a class="groeplink" href="/actueel/groepen/'.$this->getType()->getNaam().'/'.$this->getId().'">'.$this->getNaam().'</a>';
 	}
 	public function __toString(){
 		return $this->getLink();

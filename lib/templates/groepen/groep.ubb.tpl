@@ -14,7 +14,7 @@
 	<h2>{$groep->getLink()}</h2>
 	<p>{$groep->getSbeschrijving()|ubb}</p><br />
 	{if $groep->isAanmeldbaar() AND $groep->magAanmelden()}
-		<form action="/actueel/groepen/{$groep->getType()}/{$groep->getId()}/aanmelden/return" method="post" id="aanmeldForm">
+		<form action="/actueel/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/aanmelden/return" method="post" id="aanmeldForm">
 			U kunt zich hier aanmelden voor deze groep.
 			{if $groep->getToonFuncties()!='niet'}
 				Geef ook een opmerking/functie op:
