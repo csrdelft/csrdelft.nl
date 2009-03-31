@@ -255,7 +255,9 @@ class Lid implements Serializable{
 	 * mode:	link, html, plain
 	 */ 
 	public function getNaamLink($vorm='full', $mode='plain'){
-
+		if(LoginLid::instance()->getUid()!='x999'){
+			$vorm='aaidrom';
+		}
 		$sVolledigeNaam=$this->profiel['voornaam'].' ';
 		if($this->profiel['tussenvoegsel']!='') $sVolledigeNaam.=$this->profiel['tussenvoegsel'].' ';
 		$sVolledigeNaam.=$this->profiel['achternaam'];

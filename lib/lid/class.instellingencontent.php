@@ -16,8 +16,6 @@ class InstellingenContent extends SimpleHTML{
 		$current='';
 		foreach($instellingen as $key =>  $inst){
 			$parts=explode('_', $key);
-			//om tot 1 april de roze optie te verbergen
-			if($parts[0]=='layout'){ continue; }
 			if($parts[0]!=$current){
 				if($current!=''){ echo '</fieldset><br />'; }
 				echo '<fieldset style="padding: 5px 10px;">';
