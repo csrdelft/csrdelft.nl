@@ -48,14 +48,14 @@
 	<div class="clear"></div>
 	{if $groep->magBewerken() AND $action!='edit'}
 		{if $action=='addLid' AND $lidAdder!=false}
-			<form action="/actueel/groepen/{$gtype}/{$groep->getId()}/addLid" method="post" >
+			<form action="/actueel/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/addLid" method="post" >
 				<h2>Leden toevoegen</h2>
 				Hier kunt u eventueel een zinnige functie opgeven, laat het anders leeg!<br /><br />
 				{$lidAdder}<input type="submit" value="toevoegen" />
 			</form>
 		{else}
 			<a class="knop" onclick="toggleDiv('lidAdder'); this.parentNode.removeChild(this)">leden toevoegen</a>
-			<form action="/actueel/groepen/{$gtype}/{$groep->getId()}/addLid" method="post" id="lidAdder" class="verborgen">
+			<form action="/actueel/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/addLid" method="post" id="lidAdder" class="verborgen">
 				<h2>Leden toevoegen</h2>
 				Voer hier door komma's gescheiden namen of uid's in:<br /><br />
 				Zoek ook in: <input type="checkbox" name="filterOud" id="filterOud" /> <label for="filterOud">oudleden</label>
@@ -80,34 +80,34 @@
 		<ul class="nobullets">
 		{if is_array($opvolgerVoorganger)}
 			{if isset($opvolgerVoorganger.opvolger)}
-				<li class="vorigeGroep"><a href="/actueel/groepen/{$gtype}/{$opvolgerVoorganger.opvolger->getId()}/">{$opvolgerVoorganger.opvolger->getNaam()}</a></li>
+				<li class="vorigeGroep"><a href="/actueel/groepen/{$groep->getType()->getNaam()}/{$opvolgerVoorganger.opvolger->getId()}/">{$opvolgerVoorganger.opvolger->getNaam()}</a></li>
 			{/if}
 			{if isset($opvolgerVoorganger.voorganger) OR isset($opvolgerVoorganger.opvolger)}
 				<li>{$groep->getNaam()}</li>
 			{/if}
 			{if isset($opvolgerVoorganger.voorganger)}
-				<li class="volgendeGroep"><a href="/actueel/groepen/{$gtype}/{$opvolgerVoorganger.voorganger->getId()}/">{$opvolgerVoorganger.voorganger->getNaam()}</a></li>
+				<li class="volgendeGroep"><a href="/actueel/groepen/{$groep->getType()->getNaam()}/{$opvolgerVoorganger.voorganger->getId()}/">{$opvolgerVoorganger.voorganger->getNaam()}</a></li>
 			{/if}
 		{/if}
 		{if $groep->isAdmin()}
-			<li style="margin-top: 20px;" ><a href="/actueel/groepen/{$gtype}/0/bewerken/{$groep->getSnaam()}/">Opvolger toevoegen</a></li>
+			<li style="margin-top: 20px;" ><a href="/actueel/groepen/{$groep->getType()->getNaam()}/0/bewerken/{$groep->getSnaam()}/">Opvolger toevoegen</a></li>
 		{/if}
 		</ul>	
 	</div> 
 	{if $groep->isAdmin() OR $groep->magBewerken()}
 		<div id="groepAdmin">
 			{if $groep->isAdmin() AND $groep->getStatus()=='ht'}
-				<a class="knop" href="/actueel/groepen/{$gtype}/{$groep->getId()}/maakGroepOt" onclick="return confirm('Weet u zeker dat u deze groep o.t. wilt maken?')" title="Groep o.t. maken? Eindatum wordt indien niet ingevuld naar vandaag gezet.">
+				<a class="knop" href="/actueel/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/maakGroepOt" onclick="return confirm('Weet u zeker dat u deze groep o.t. wilt maken?')" title="Groep o.t. maken? Eindatum wordt indien niet ingevuld naar vandaag gezet.">
 					<strong>&raquo;</strong>
 				</a>
 			{/if}
 			{if $groep->magBewerken()}
-				<a class="knop" href="/actueel/groepen/{$gtype}/{$groep->getId()}/bewerken#groepFormulier">
+				<a class="knop" href="/actueel/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/bewerken#groepFormulier">
 					<img src="{$csr_pics}knopjes/bewerken.png" title="Bewerk groep" />
 				</a>
 			{/if}
 			{if $groep->isAdmin()}
-				<a class="knop" onclick="return confirm('Weet u zeker dat u deze groep wilt verwijderen?');" href="/actueel/groepen/{$gtype}/{$groep->getId()}/verwijderen">
+				<a class="knop" onclick="return confirm('Weet u zeker dat u deze groep wilt verwijderen?');" href="/actueel/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/verwijderen">
 					<img src="{$csr_pics}forum/verwijderen.png" title="Verwijder deze groep" />
 				</a>
 			{/if}
