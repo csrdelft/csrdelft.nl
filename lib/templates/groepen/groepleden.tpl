@@ -55,7 +55,7 @@
 			{else}
 				<form action="/actueel/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/aanmelden" method="post" id="aanmeldForm">
 					<strong>Aanmelden</strong> (functie/opmerking mogelijk)<br />
-					<input type="text" name="functie" class="functie" />&nbsp;<input type="submit" value="aanmelden" />
+					<input type="text" name="functie" maxlength="25" class="functie" />&nbsp;<input type="submit" value="aanmelden" />
 				</form>
 			{/if}
 		{elseif $groep->isVol()}

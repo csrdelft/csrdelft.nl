@@ -67,7 +67,7 @@ class Groepcontent extends SimpleHTML{
 						}//dingen die niets opleveren wordt niets voor weergegeven.
 					}
 					if($this->groep->magBewerken()){
-						$return.='<td><input type="text" name="functie[]" /></td></tr>';
+						$return.='<td><input type="text" maxlength="25" name="functie[]" /></td></tr>';
 					}else{
 						$return.='<td>'.$this->getFunctieSelector().'</td></tr>';
 					}

@@ -104,7 +104,7 @@ class ForumContent extends SimpleHTML {
 			if(is_array($aZoekResultaten)){
 				$aZoekOnderdelen=explode(' ', $sZoekQuery);
 				$sEersteTerm=$aZoekOnderdelen[0];
-				echo 'In <em>'.count($aZoekResultaten).'</em> onderwerpen kwam de volgende zoekterm voor: <strong>'.mb_htmlentities($sZoekQuery).'</strong>';
+				echo '<br />In <em>'.count($aZoekResultaten).'</em> onderwerpen kwam de volgende zoekterm voor: <strong>'.mb_htmlentities($sZoekQuery).'</strong>';
 				echo '<br /><br /><table id="forumtabel"><tr><th>Onderwerp</th><th>Auteur</th>';
 				echo '<th>categorie</th><th>datum</th></tr>';
 				$row=0;

@@ -12,7 +12,7 @@
 			U kunt zich hier aanmelden voor deze groep.
 			{if $groep->getToonFuncties()!='niet'}
 				Geef ook een opmerking/functie op:
-				<br /><input type="text" name="functie" />
+				<br /><input type="text" name="functie" maxlength="25" >
 			{else}
 				<br />
 			{/if}
