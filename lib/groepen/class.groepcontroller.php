@@ -302,9 +302,7 @@ class Groepcontroller extends Controller{
 			}
 			$this->content->invokeRefresh($melding, $this->getUrl('default'));
 		}
-		//TODO: fix this.
 		exit;
-
 	}
 	public function action_verwijderLid(){
 		if($this->hasParam(2) AND Lid::isValidUid($this->getParam(2)) AND $this->groep->magBewerken()){

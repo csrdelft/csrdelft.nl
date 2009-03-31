@@ -103,7 +103,6 @@ class Groepcontent extends SimpleHTML{
 		$content->assign('opvolgerVoorganger', $this->groep->getOpvolgerVoorganger());
 
 		$content->assign('action', $this->action);
-		$content->assign('gtype', $_GET['gtype']);
 		$content->assign('groeptypes', Groepen::getGroeptypes());
 
 		if($this->action=='addLid'){
@@ -239,6 +238,9 @@ class GroepenProfielContent extends SimpleHTML{
 		echo $this->getHTML();
 	}
 }
+/*
+ * Contentclasse voor de groep-ubb-tag
+ */
 class GroepUbbContent extends SimpleHTML{
 	private $groep;
 	private $style;

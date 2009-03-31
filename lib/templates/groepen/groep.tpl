@@ -54,6 +54,7 @@
 				{$lidAdder}<input type="submit" value="toevoegen" />
 			</form>
 		{else}
+			<a class="knop" onclick="toggleDiv('lidAdder'); this.parentNode.removeChild(this)">leden toevoegen</a>
 			<form action="/actueel/groepen/{$gtype}/{$groep->getId()}/addLid" method="post" id="lidAdder" class="verborgen">
 				<h2>Leden toevoegen</h2>
 				Voer hier door komma's gescheiden namen of uid's in:<br /><br />
