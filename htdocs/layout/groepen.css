@@ -19,12 +19,15 @@ ul.groepledenlijst{ width: 230px; float: right; padding: 10px 20px 20px 20px; ma
 	cursor: pointer;
 	list-style-type: none;
 }
-#tabs li.active, #tabs li.active a{
-	background-color:#0a338d; 
+#tabs li a{
+	display: block;
 	color: white;
+	height: 18px; width: 20px; 
 }
+#tabs li.active{
+	background-color:#0a338d; 
 
-
+}
 .groepleden{ clear: both; width: 260px; background-color: #eee; float: right; border-top: 1px solid #ddd; border-bottom: 1px solid #ddd; }
 .groepleden td{ padding: 0px 5px; lext-align: left;}
 #groepledenContainer form{ background-color: #f1f1f1; border: 1px solid lightgray; padding: 10px; width: 250px; }

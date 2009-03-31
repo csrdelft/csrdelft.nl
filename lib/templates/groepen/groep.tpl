@@ -24,27 +24,7 @@
 				<strong>+</strong>
 			</li>
 		{/if}
-		{if $groep->isAdmin() AND $groep->getStatus()=='ht'}
-			<li>
-				<a href="/actueel/groepen/{$gtype}/{$groep->getId()}/maakGroepOt" onclick="return confirm('Weet u zeker dat u deze groep o.t. wilt maken?')" title="Groep o.t. maken? Eindatum wordt indien niet ingevuld naar vandaag gezet.">
-					<strong>&raquo;</strong>
-				</a>
-			</li>
-		{/if}
-		{if $groep->magBewerken()}
-			<li>
-				<a href="/actueel/groepen/{$gtype}/{$groep->getId()}/bewerken#groepFormulier">
-					<img src="{$csr_pics}knopjes/bewerken.png" title="Bewerk groep" />
-				</a>
-			</li>
-		{/if}
-		{if $groep->isAdmin()}
-			<li>
-				<a onclick="return confirm('Weet u zeker dat u deze groep wilt verwijderen?');" href="/actueel/groepen/{$gtype}/{$groep->getId()}/verwijderen">
-					<img src="{$csr_pics}forum/verwijderen.png" title="Verwijder deze groep" />
-				</a>
-			</li>
-		{/if}
+		
 		{if $groep->isAdmin() OR $groep->isOp() OR ($groep->isAanmeldbaar() AND $groep->isIngelogged())}
 			<li id="stats">
 				<a onclick="showTab({$groep->getId()}, 'stats')">%</a>
@@ -128,6 +108,25 @@
 		{/if}
 		</ul>	
 	</div> 
+	{if $groep->isAdmin() OR $groep->magBewerken()}
+		<div id="groepAdmin">
+			{if $groep->isAdmin() AND $groep->getStatus()=='ht'}
+				<a class="knop" href="/actueel/groepen/{$gtype}/{$groep->getId()}/maakGroepOt" onclick="return confirm('Weet u zeker dat u deze groep o.t. wilt maken?')" title="Groep o.t. maken? Eindatum wordt indien niet ingevuld naar vandaag gezet.">
+					<strong>&raquo;</strong>
+				</a>
+			{/if}
+			{if $groep->magBewerken()}
+				<a class="knop" href="/actueel/groepen/{$gtype}/{$groep->getId()}/bewerken#groepFormulier">
+					<img src="{$csr_pics}knopjes/bewerken.png" title="Bewerk groep" />
+				</a>
+			{/if}
+			{if $groep->isAdmin()}
+				<a class="knop" onclick="return confirm('Weet u zeker dat u deze groep wilt verwijderen?');" href="/actueel/groepen/{$gtype}/{$groep->getId()}/verwijderen">
+					<img src="{$csr_pics}forum/verwijderen.png" title="Verwijder deze groep" />
+				</a>
+			{/if}
+		</div>
+	{/if}
 	{$groep->getBeschrijving()|ubb}
 {/if}
 <div class="clear"></div>

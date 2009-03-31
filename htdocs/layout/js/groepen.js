@@ -39,33 +39,10 @@ function updateGroepform(){
 	}
 }
 
-function showStats(groepid){
-	http.abort();
-	http.open("GET", "/actueel/groepen/foo/"+groepid+"/stats/", true);
-	http.onreadystatechange=function(){
-		if(http.readyState == 4){
-			gleden=document.getElementById('ledenvangroep'+groepid);
-			gleden.innerHTML=http.responseText;
-		}
-	}
-	http.send(null);
-	
-}
-function showEmails(groepid){
-	http.abort();
-	http.open("GET", "/actueel/groepen/foo/"+groepid+"/emails/", true);
-	http.onreadystatechange=function(){
-		if(http.readyState == 4){
-			gleden=document.getElementById('ledenvangroep'+groepid);
-			gleden.innerHTML=http.responseText;
-		}
-	}
-	http.send(null);
-}
-
 var groepid=null;
 function showTab(gid, tabid){
 	groepid=gid;
+	//alle tabjes inactief maken, alleen
 	tabs=document.getElementById('tabs').childNodes;
 	for(var tabI in tabs){
 		if(tabs[tabI].tagName=='LI'){
@@ -75,11 +52,10 @@ function showTab(gid, tabid){
 	document.getElementById(tabid).className='active';
 	http.abort();
 	http.open("GET", "/actueel/groepen/foo/"+groepid+"/"+tabid, true);
-	http.onreadystatechange=fillTabarea;
+	http.onreadystatechange=function(){
+		if(http.readyState == 4){
+			document.getElementById('ledenvangroep'+groepid).innerHTML=http.responseText;
+		}
+	};
 	http.send(null);
-}
-function fillTabarea(){
-	if(http.readyState == 4){
-		document.getElementById('ledenvangroep'+groepid).innerHTML=http.responseText;
-	}
 }
