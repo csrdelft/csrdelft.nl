@@ -61,5 +61,25 @@ function showEmails(groepid){
 		}
 	}
 	http.send(null);
-	
+}
+
+var groepid=null;
+function showTab(gid, tabid){
+	groepid=gid;
+	tabs=document.getElementById('tabs').childNodes;
+	for(var tabI in tabs){
+		if(tabs[tabI].tagName=='LI'){
+			tabs[tabI].className='';
+		}
+	}
+	document.getElementById(tabid).className='active';
+	http.abort();
+	http.open("GET", "/actueel/groepen/foo/"+groepid+"/"+tabid, true);
+	http.onreadystatechange=fillTabarea;
+	http.send(null);
+}
+function fillTabarea(){
+	if(http.readyState == 4){
+		document.getElementById('ledenvangroep'+groepid).innerHTML=http.responseText;
+	}
 }

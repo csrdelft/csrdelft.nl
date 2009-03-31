@@ -296,6 +296,8 @@ class Groepcontroller extends Controller{
 			}
 			$this->content->invokeRefresh($melding, $this->getUrl('default'));
 		}
+		//TODO: fix this.
+		exit;
 
 	}
 	public function action_verwijderLid(){
@@ -337,13 +339,24 @@ class Groepcontroller extends Controller{
 	public function action_geschiedenis(){
 		$this->content=new Groepgeschiedeniscontent(new Groepen($_GET['gtype']));
 	}
+
+	//we willen de volgende acties met javascript initieren, dus niet de hele site-structuur eromheen
+	//hebben, daarom sluiten we aan het einde van elke methode af met exit;
+	public function action_lidLijst(){
+		$this->content=new GroepledenContent($this->groep);
+		$this->content->view();
+		exit;
+	}
+	public function action_pasfotos(){
+		$this->content=new GroepledenContent($this->groep, 'pasfotos');
+		$this->content->view();
+		exit;
+	}
 	public function action_emails(){
 		if($this->groep->isAdmin() OR $this->groep->isOp()){
 			$this->content=new GroepEmailContent($this->groep);
 			$this->content->view();
 		}
-		//we willen dit met javascript ophalen, dus niet de hele site-structuur eromheen
-		//hebben, daarom sluiten we hier af.
 		exit;
 	}
 	public function action_stats(){
@@ -351,8 +364,6 @@ class Groepcontroller extends Controller{
 			$this->content=new GroepStatsContent($this->groep);
 			$this->content->view();
 		}
-		//we willen dit met javascript ophalen, dus niet de hele site-structuur eromheen
-		//hebben, daarom sluiten we hier af.
 		exit;
 	}
 

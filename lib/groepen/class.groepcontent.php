@@ -143,6 +143,42 @@ class Groepencontent extends SimpleHTML{
 
 	}
 }
+class GroepledenContent{
+	private $groep;
+	private $actie='default';
+	
+	public function __construct(Groep $groep, $actie='default'){
+		$this->groep=$groep;
+		$this->actie=$actie;
+	}
+	public function view(){
+		switch($this->actie){
+			case 'pasfotos':
+				echo '<div class="pasfotomatrix">';
+				foreach($this->groep->getLeden() as $glid){
+					if(Lid::isValidUid($glid['uid'])){
+						$lid=LidCache::getLid($glid['uid']);
+						if($lid instanceof Lid){
+							if($this->groep->isIngelogged()){
+								echo '<a href="/communicatie/profiel/'.$lid->getUid().'" title="'.$lid->getNaam().'">';
+							}
+							echo $lid->getPasfoto(true);
+							if($this->groep->isIngelogged()){ echo '</a>'; }
+						}
+					}
+				}
+				echo '</div>';
+			break;
+			case 'default':
+			default:
+				$content=new Smarty_csr();	
+		
+				$content->assign('groep', $this->groep);
+				$content->display('groepen/groepleden.tpl');
+			break;
+		}
+	}
+}
 class Groepgeschiedeniscontent extends SimpleHTML{
 
 	private $groepen;

@@ -9,13 +9,19 @@ ul.groepledenlijst{ width: 230px; float: right; padding: 10px 20px 20px 20px; ma
 
 /* groep-view */
 #groepledenContainer{ float: right; margin-left: 10px;}
-#groepledenContainer .tabjesregel .tab{ 
+#tabs li{ 
 	float: right; 
 	height: 18px; width: 20px; 
-	margin-left: 2px; 
+	margin-left: 2px;
+	color: white;
 	background-color: #cfcfcf; 
 	text-align: center;
 	cursor: pointer;
+	list-style-type: none;
+}
+#tabs li.active, #tabs li.active a{
+	background-color:#0a338d; 
+	color: white;
 }
 
 

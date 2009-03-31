@@ -10,70 +10,62 @@
 </ul>
 <hr />
 <div id="groepledenContainer">
-	<div class="tabjesregel">
+	<ul id="tabs">
 		{if $groep->isIngelogged()}
-		<div class="tab" onclick="return togglePasfotos('{$groep->getLedenCSV()}', document.getElementById('ledenvangroep{$groep->getId()}'));">
-			<img src="{$csr_pics}/knopjes/pasfoto.png" title="schakel naar pasfoto's" />
-		</div>
+			<li id="lidlijst" class="active" onclick="return showTab({$groep->getId()}, 'lidlijst');">
+				<img src="{$csr_pics}knopjes/lijst.png" title="Lidlijst tonen" />
+			</li>			
+			<li id="pasfotos" onclick="return showTab({$groep->getId()}, 'pasfotos');">
+				<img src="{$csr_pics}/knopjes/pasfoto.png" title="schakel naar pasfoto's" />
+			</li>
 		{/if}
 		{if $groep->magBewerken() AND $action!='edit' AND !($action=='addLid' AND $lidAdder!=false)}
-		<div class="tab" title="Leden toevoegen aan groep" onclick="toggleDiv('lidAdder')">
-			<strong>+</strong>
-		</div>
+			<li id="addLid" onclick="return showTab('{$groep->getId()}', 'addLid');" title="Leden toevoegen aan groep">
+				<strong>+</strong>
+			</li>
 		{/if}
 		{if $groep->isAdmin() AND $groep->getStatus()=='ht'}
-		<a class="tab" href="/actueel/groepen/{$gtype}/{$groep->getId()}/maakGroepOt" onclick="return confirm('Weet u zeker dat u deze groep o.t. wilt maken?')" title="Groep o.t. maken? Eindatum wordt indien niet ingevuld naar vandaag gezet.">
-			<strong>&raquo;</strong>
-		</a>	
+			<li>
+				<a href="/actueel/groepen/{$gtype}/{$groep->getId()}/maakGroepOt" onclick="return confirm('Weet u zeker dat u deze groep o.t. wilt maken?')" title="Groep o.t. maken? Eindatum wordt indien niet ingevuld naar vandaag gezet.">
+					<strong>&raquo;</strong>
+				</a>
+			</li>
 		{/if}
-		{if $groep->magBewerken() OR $groep->isAdmin()}
 		{if $groep->magBewerken()}
-		<a class="tab" href="/actueel/groepen/{$gtype}/{$groep->getId()}/bewerken#groepFormulier">
-			<img src="{$csr_pics}forum/bewerken.png" title="Bewerk groep" />
-		</a>
+			<li>
+				<a href="/actueel/groepen/{$gtype}/{$groep->getId()}/bewerken#groepFormulier">
+					<img src="{$csr_pics}knopjes/bewerken.png" title="Bewerk groep" />
+				</a>
+			</li>
 		{/if}
 		{if $groep->isAdmin()}
-		<a class="tab" onclick="return confirm('Weet u zeker dat u deze groep wilt verwijderen?')" href="/actueel/groepen/{$gtype}/{$groep->getId()}/verwijderen">
-			<img src="{$csr_pics}forum/verwijderen.png" title="Verwijder deze groep" />
-		</a>
+			<li>
+				<a onclick="return confirm('Weet u zeker dat u deze groep wilt verwijderen?');" href="/actueel/groepen/{$gtype}/{$groep->getId()}/verwijderen">
+					<img src="{$csr_pics}forum/verwijderen.png" title="Verwijder deze groep" />
+				</a>
+			</li>
 		{/if}
 		{if $groep->isAdmin() OR $groep->isOp() OR ($groep->isAanmeldbaar() AND $groep->isIngelogged())}
-		<a class="tab" onclick="showStats({$groep->getId()})">%</a>
+			<li id="stats">
+				<a onclick="showTab({$groep->getId()}, 'stats')">%</a>
+			</li>
 		{/if}
 		{if $groep->isAdmin() OR $groep->isOp()}
-		<a class="tab" onclick="showEmails({$groep->getId()})">@</a>
+			<li id="emails">
+				<a class="tab" onclick="showTab({$groep->getId()}, 'emails')">@</a>
+			</li>
 		{/if}
-	{/if}
-	</div>
+	</ul>
 	<div id="ledenvangroep{$groep->getId()}" class="groepleden">
-		<table>
-			{foreach from=$groep->getLeden() item=groeplid}
-				<tr>
-					<td>{$groeplid.uid|csrnaam:'civitas'}</td>
-					{if $groep->toonFuncties()}<td><em>{$groeplid.functie|escape:'html'}</em></td>{/if}
-					{if $groep->magBewerken()}
-						<td>
-						{if $groep->getTypeId()==2 AND $groep->getStatus()=='ht'}
-							<a href="/actueel/groepen/{$gtype}/{$groep->getId()}/maakLidOt/{$groeplid.uid}" title="Verplaats lid naar o.t.-groep" 
-								{if !$groep->isAdmin()}onclick="return confirm('Weet u zeker dat u deze bewoner naar de oudbewonersgroep wilt verplaatsen?')"{/if}>
-								&raquo;
-							</a>
-						{else}
-							<a href="/actueel/groepen/{$gtype}/{$groep->getId()}/verwijderLid/{$groeplid.uid}" title="Verwijder lid uit groep">X</a>
-						{/if}
-						</td>					
-					{/if}
-					
-				</tr>
-			{/foreach}
-		</table>
+		{include file='groepen/groepleden.tpl'}
 	</div>
 	<br />
-
+	{* we laden meteen de pasfoto-tab als dat ingesteld is. *}
 	{if $groep->toonPasfotos() AND $lid->instelling('groepen_toonPasfotos')=='ja'}
-		<script type="text/javascript">togglePasfotos('{$groep->getLedenCSV()}', document.getElementById('ledenvangroep{$groep->getId()}'));</script>
+		<script type="text/javascript">showTab('{$groep->getId()}','pasfotos'));</script>
 	{/if}
-	{if $groep->magAanmelden()}
+	
+	{* if $groep->magAanmelden()}
 		<a href="#aanmeldForm" onclick="toggleDiv('aanmeldForm')" class="knop">aanmelden</a>
 		<form action="/actueel/groepen/{$gtype}/{$groep->getId()}/aanmelden" method="post" id="aanmeldForm" class="verborgen">
 			U kunt zich hier aanmelden voor deze groep.
@@ -87,7 +79,7 @@
 		</form>
 	{elseif $groep->isAanmeldbaar() AND $groep->isVol()}
 		Deze groep is vol, u kunt zich niet meer aanmelden.
-	{/if}
+	{/if *}
 	<div class="clear"></div>
 	{if $groep->magBewerken() AND $action!='edit'}
 		{if $action=='addLid' AND $lidAdder!=false}
