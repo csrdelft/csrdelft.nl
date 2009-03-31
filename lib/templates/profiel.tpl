@@ -201,7 +201,7 @@
 		</div>
 	</div>
 	{/if}
-	{if $isAdmin AND $profhtml.changelog!=''}
+	{if ($isAdmin OR $isLidMod) AND $profhtml.changelog!=''}
 		<div style="clear: left;"></div>
 		<div class="profielregel" id="changelog">
 			<div class="left">Verandering</div>

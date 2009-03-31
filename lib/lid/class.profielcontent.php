@@ -66,6 +66,7 @@ class ProfielContent extends SimpleHTML {
 		$loginlid=LoginLid::instance();
 		$profiel->assign('magBewerken', ($loginlid->hasPermission('P_PROFIEL_EDIT') AND $loginlid->isSelf($this->lid->getUid())) OR $loginlid->hasPermission('P_LEDEN_EDIT'));
 		$profiel->assign('isAdmin', $loginlid->hasPermission('P_ADMIN'));
+		$profiel->assign('isLidMod', $loginlid->hasPermission('P_LEDEN_MOD'));
 		$profiel->assign('melding', $this->getMelding());
 
 		//eigen profiel niet cachen, dan krijgen we namelijk rare dingen
