@@ -19,11 +19,11 @@
 				<img src="{$csr_pics}/knopjes/pasfoto.png" title="schakel naar pasfoto's" />
 			</li>
 		{/if}
-		{if $groep->magBewerken() AND $action!='edit' AND !($action=='addLid' AND $lidAdder!=false)}
+		{* if $groep->magBewerken() AND $action!='edit' AND !($action=='addLid' AND $lidAdder!=false)}
 			<li id="addLid" onclick="return showTab('{$groep->getId()}', 'addLid');" title="Leden toevoegen aan groep">
 				<strong>+</strong>
 			</li>
-		{/if}
+		{/if *}
 		
 		{if $groep->isAdmin() OR $groep->isOp() OR ($groep->isAanmeldbaar() AND $groep->isIngelogged())}
 			<li id="stats">
