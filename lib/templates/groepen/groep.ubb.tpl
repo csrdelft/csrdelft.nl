@@ -1,16 +1,10 @@
 <div id="groep{$groep->getId()}" class="groep_ubb" style="margin: 10px; padding: 5px 10px; border: 1px solid black;">
- 	{if is_array($groep->getLeden())}
- 	<table style="float: right">
- 		{foreach from=$groep->getLeden() item=groeplid}
-			<tr>
-				<td>{$groeplid.uid|csrnaam:'civitas'}</td>
-				{if $groep->toonFuncties()}
-					<td><em>{$groeplid.functie|escape:'htmlall'}</em></td>
-				{/if}
-			</tr>
-		{/foreach}
-	</table>
-	{/if}
+ 	<div style="float: right">
+		{if $groep->toonPasfotos() AND $lid->instelling('groepen_toonPasfotos')=='ja'}
+			{assign var='actie' value='pasfotos'}
+		{/if}
+		{include file='groepen/groepleden.tpl'}
+	</div>
 	<h2>{$groep->getLink()}</h2>
 	<p>{$groep->getSbeschrijving()|ubb}</p><br />
 	{if $groep->isAanmeldbaar() AND $groep->magAanmelden()}
