@@ -304,12 +304,18 @@ class Lid implements Serializable{
 				}
 			break;
 			case 'aaidrom':
-				$voor = array(); preg_match('/^([^aeiuoy]*)(.*)$/', $this->profiel['voornaam'], $voor);
-				$achter = array(); preg_match('/^([^aeiuoy]*)(.*)$/', $this->profiel['achternaam'], $achter);
+				$voornaam = strtolower($this->profiel['voornaam']);
+				$achternaam = strtolower($this->profiel['achternaam']);
 				
-				$naam = sprintf("%s%s %s%s%s", $achter[1], $voor[2], 
+				$voor = array(); preg_match('/^([^aeiuoy]*)(.*)$/', $voornaam, $voor);
+				$achter = array(); preg_match('/^([^aeiuoy]*)(.*)$/', $achternaam, $achter);
+				
+				$nwvoor = ucfirst($achter[1] . $voor[2]);
+				$nwachter = ucfirst($voor[1] . $achter[2]);
+
+				$naam = sprintf("%s %s%s", $nwvoor, 
 							($this->profiel['tussenvoegsel'] != '') ? $this->profiel['tussenvoegsel'] . ' ' : '',
-							$voor[1], $achter[2]);
+							$nwachter);
 			break;
 			default:
 				$naam='Formaat in $vorm is onbekend.';
