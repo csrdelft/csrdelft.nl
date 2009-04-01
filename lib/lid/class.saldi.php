@@ -64,7 +64,7 @@ class Saldi{
 	 */
 	public static function getGrafiektags($uid){
 		$show=false;
-		$status=array('P_LID', 'P_NOVIET', 'P_GASTLID');
+		$status=array('S_LID', 'S_NOVIET', 'S_GASTLID');
 		if($uid=='9808' OR in_array(LidCache::getLid($uid)->getStatus(), $status)){
 			$defer=true; //moeten we er expliciet om vragen (knopje indrukken)
 			$show['maalcie']=$show['soccie']=false;
