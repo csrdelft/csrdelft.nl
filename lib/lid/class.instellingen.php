@@ -14,7 +14,7 @@ class Instelling{
 	 * Instellingarray, een naampje, met een default-value en een type.
 	 */
 	private static $instellingen=array(
-			'layout_rozeWebstek' => array('ja', 'Webstek roze maken', 'enum', array('ja', 'nee')),
+			'layout_rozeWebstek' => array('nee', 'Webstek roze maken', 'enum', array('ja', 'nee')),
 			'forum_onderwerpenPerPagina' => array(15, 'Onderwerpen per pagina', 'int', 5), //deze hebben een minimum, anders gaat het forum stuk.
 			'forum_postsPerPagina' => array(25, 'Berichten per pagina', 'int', 10),
 			'forum_naamWeergave' => array('civitas', 'Naamweergave', 'enum', array('civitas', 'volledig', 'bijnaam', 'aaidrom')),

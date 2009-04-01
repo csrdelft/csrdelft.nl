@@ -198,8 +198,8 @@ class Lid implements Serializable{
 	}
 	public function getSaldi($alleenRood=false){
 		$aSaldo=array(
-			'soccieSaldo' => $this->profiel['soccieSaldo']+rand(-20,0),
-			'maalcieSaldo' => $this->profiel['maalcieSaldo']+rand(-20,0));
+			'soccieSaldo' => $this->profiel['soccieSaldo'],
+			'maalcieSaldo' => $this->profiel['maalcieSaldo']);
 
 		$return=false;
 		if(!($alleenRood && $aSaldo['soccieSaldo']<0)){
@@ -255,9 +255,6 @@ class Lid implements Serializable{
 	 * mode:	link, html, plain
 	 */ 
 	public function getNaamLink($vorm='full', $mode='plain'){
-		if(LoginLid::instance()->getUid()!='x999'){
-			$vorm='aaidrom';
-		}
 		$sVolledigeNaam=$this->profiel['voornaam'].' ';
 		if($this->profiel['tussenvoegsel']!='') $sVolledigeNaam.=$this->profiel['tussenvoegsel'].' ';
 		$sVolledigeNaam.=$this->profiel['achternaam'];
