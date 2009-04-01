@@ -89,9 +89,13 @@ class LoginLid{
 		if($uid=='x999'){
 			throw new Exception('Ja, log dan maar lekker uit!');
 		}
+		$suNaar=LidCache::getLid($uid);
+		if($suNaar->getStatus()=='S_NOBODY'){
+			throw new Exception('Kan niet su-en naar nobodies!');
+		}
 		$_SESSION['_suedFrom']=$this->lid->getUid();
 		$_SESSION['_uid']=$uid;
-		$this->lid=LidCache::getLid($uid);
+		$this->lid=$suNaar;
 		Instelling::reload();
 	}
 	public function endSu(){
