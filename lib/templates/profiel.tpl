@@ -6,7 +6,7 @@
 				<div class="knopjes">
 					{if $magBewerken}
 						<a href="/communicatie/profiel/{$profhtml.uid}/bewerken" class="knop"><img src="{$csr_pics}forum/bewerken.png" title="Bewerk dit profiel" />Bewerken</a><br />
-						{if $profhtml.uid==$lid->getUid()}<a href="/instellingen.php" class="knop">Webstekinstellingen</a><br />{/if}
+						{if $profhtml.uid==$lid->getUid()}<a href="/instellingen/" class="knop">Webstekinstellingen</a><br />{/if}
 					{/if}
 					{if $isAdmin}
 						<a href="/tools/stats.php?uid={$profhtml.uid}" class="knop">Overzicht van bezoeken</a><br />

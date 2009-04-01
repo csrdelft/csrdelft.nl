@@ -2,11 +2,11 @@
 	<div class="pasfotomatrix">
 		{foreach from=$groep->getLidObjects() item=groeplid name=pasfotos}
 			{if $smarty.foreach.pasfotos.index==16}
-				<a class="meerPasfotos" onclick="toggleDiv('morePasfotos'); this.parentNode.removeChild(this)">
-					Nog {$smarty.foreach.pasfotos.total-16} pasfotos tonen...
+				<a class="toonmeer" onclick="toggleDiv('meerLeden'); this.parentNode.removeChild(this)">
+					Nog {$smarty.foreach.pasfotos.total-16} leden tonen...
 				</a>
-				<div class="verborgen" id="morePasfotos">
-				{assign var='moreisopen' value='true'}
+				<div class="verborgen" id="meerLeden">
+				{assign var='meerisopen' value='true'}
 			{/if}
 
 			{if $groep->isIngelogged()}
@@ -17,7 +17,7 @@
 				</a>
 			{/if}
 
-			{if $smarty.foreach.pasfotos.last AND $moreisopen}
+			{if $smarty.foreach.pasfotos.last AND $meerisopen}
 				</div>
 			{/if}
 		{/foreach}

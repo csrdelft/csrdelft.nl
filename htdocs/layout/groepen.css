@@ -31,7 +31,7 @@ ul.groepledenlijst{ width: 230px; float: right; padding: 10px 20px 20px 20px; ma
 .groepleden{ clear: both; width: 260px; background-color: #eee; float: right; border-top: 1px solid #ddd; border-bottom: 1px solid #ddd; }
 .groepleden table.leden{ width: 100%; }
 .groepleden table.leden td{ padding: 0px 5px; lext-align: left;}
-.groepleden .meerPasfotos{ display: block; padding: 0px 0px 10px 15px;}
+.groepleden .toonmeer{ display: block; padding: 0px 0px 10px 15px;}
 .groepleden .aanmelden { clear: left; padding: 4px 5px; border-top: 1px solid #ddd; line-height: 1.6em;}
 .groepleden .aanmelden input.functie{ width: 160px; } 
 
