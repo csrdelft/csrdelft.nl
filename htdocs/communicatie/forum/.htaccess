@@ -8,12 +8,12 @@ RewriteRule ^categorie/([0-9]+)$ index.php?forum=$1
 RewriteRule ^categorie/laatste/?$ index.php?forum=0
 RewriteRule ^onderwerp/([0-9]+)#post([0-9]+)$ onderwerp.php?post=$2
 RewriteRule ^onderwerp/([0-9]+)/([0-9]+)$ onderwerp.php?topic=$1&pagina=$2
-RewriteRule ^onderwerp/([0-9]+)$ onderwerp.php?topic=$1
-RewriteRule ^reactie/([0-9]+)$ onderwerp.php?post=$1
+RewriteRule ^onderwerp/([0-9]+)/?$ onderwerp.php?topic=$1
+RewriteRule ^reactie/([0-9]+)/?$ onderwerp.php?post=$1
 
 ##toevoegen
-RewriteRule ^onderwerp-toevoegen/([0-9]+)$ toevoegen.php?forum=$1
-RewriteRule ^toevoegen/([0-9]+)$ toevoegen.php?topic=$1
+RewriteRule ^onderwerp-toevoegen/([0-9]+)/?$ toevoegen.php?forum=$1
+RewriteRule ^toevoegen/([0-9]+)/?$ toevoegen.php?topic=$1
 
 
 ##bewerken
@@ -33,13 +33,6 @@ RewriteRule ^plakkerigheid/([0-9]+)$ plakkerig.php?topic=$1
 RewriteRule ^keur-goed/([0-9]+)$ goedkeuren.php?post=$1
 
 RewriteRule ^verplaats/([0-9]+)/?$ verplaatsen.php?topic=$1
-
-##zo, een poll dan maar
-#stemmen
-RewriteRule ^toon-stemming/([0-9]+)$ topic.php?topic=$1
-RewriteRule ^stem/([0-9]+)$ stemmen.php?topic=$1
-RewriteRule ^maak-stemming/([0-9]+)$ stemming.php?cat=$1
-RewriteRule ^maak-stemming$ stemming.php
 
 RewriteRule ^rss/([0-9a-z]*).xml rss.php?token=$1
 RewriteRule ^rss.xml$ rss.php
