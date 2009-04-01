@@ -66,7 +66,7 @@ class savedQuery{
 	public function getHtml(){
 
 		if(is_array($this->result)){
-			$return=$this->beschrijving.'<br /><table class="query_table">';
+			$return=$this->beschrijving.' ('.count($this->result).' regels)<br /><table class="query_table">';
 			$keysPrinted=false;
 			$return.='<tr>';
 			foreach(array_keys($this->result[0]) as $kopje){
