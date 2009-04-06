@@ -42,7 +42,7 @@
 	<br />
 	{* we laden meteen de pasfoto-tab als dat ingesteld is. *}
 	{if $groep->toonPasfotos() AND $lid->instelling('groepen_toonPasfotos')=='ja'}
-		<script type="text/javascript">showTab('{$groep->getId()}','pasfotos'));</script>
+		<script type="text/javascript">	showTab('{$groep->getId()}','pasfotos');</script>
 	{/if}
 	
 	<div class="clear"></div>
