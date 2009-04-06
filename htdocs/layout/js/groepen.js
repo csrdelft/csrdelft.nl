@@ -46,7 +46,7 @@ function updateGroepform(){
  */
 function showTab(groepid, tabid){
 	//alle tabjes inactief maken
-	tabs=document.getElementById('tabs').childNodes;
+	var tabs=document.getElementById('tabs').childNodes;
 	for(var tabI in tabs){
 		if(tabs[tabI].tagName=='LI'){
 			tabs[tabI].className='';
