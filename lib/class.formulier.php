@@ -342,8 +342,17 @@ class DatumField extends FormField{
 		echo $this->getDiv();
 		echo $this->getLabel();
 		echo $this->getError();
+
+		$years=range(1940, $this->maxyear);
+		$mounths=range(1,12);
+		$days=range(1,31);
+		if($this->getValue()=='0000-00-00' OR $this->getValue()==0){
+			$years[]='0000';
+			$mounths[]=0;
+			$days[]=0;
+		}
 		echo '<select id="field_'.$this->name.'" name="'.$this->name.'_jaar" />';
-		foreach(range(1940, $this->maxyear) as $value){
+		foreach($years as $value){
 			echo '<option value="'.$value.'"';
 			if($value==substr($this->value, 0,4)){
 				echo 'selected="selected" ';
@@ -351,8 +360,9 @@ class DatumField extends FormField{
 			echo '>'.$value.'</option>';
 		}
 		echo '</select>&nbsp;';
+		
 		echo '<select id="field_'.$this->name.'" name="'.$this->name.'_maand" />';
-		foreach(range(1, 12) as $value){
+		foreach($mounths as $value){
 			$value=sprintf('%02d', $value);
 			echo '<option value="'.$value.'"';
 			if($value==substr($this->value, 5, 2)){
@@ -364,7 +374,7 @@ class DatumField extends FormField{
 		echo '</select>&nbsp;';
 		
 		echo '<select id="field_'.$this->name.'" name="'.$this->name.'_dag" />';
-		foreach(range(1, 31) as $value){
+		foreach($days as $value){
 			$value=sprintf('%02d', $value);
 			echo '<option value="'.$value.'"';
 			if($value==substr($this->value, 8, 2)){

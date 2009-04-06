@@ -104,12 +104,12 @@ class Profiel{
 		//zaken bewerken als we oudlid zijn of P_LEDEN_MOD hebben
 		if($profiel['status']=='S_OUDLID' OR $hasLedenMod){
 			$form[]=new Comment('Identiteit:');
-			$form[]=new RequiredInputField('voornaam', $profiel['voornaam'], 'Voornaam', 100);
+			$form[]=new RequiredInputField('voornaam', $profiel['voornaam'], 'Voornaam', 50);
 			//TODO: voeg ook voorletters toe aan het profiel
-			$form[]=new InputField('tussenvoegsel', $profiel['tussenvoegsel'], 'Tussenvoegsel', 100);
-			$form[]=new RequiredInputField('achternaam', $profiel['achternaam'], 'Achternaam', 100);
+			$form[]=new InputField('tussenvoegsel', $profiel['tussenvoegsel'], 'Tussenvoegsel', 15);
+			$form[]=new RequiredInputField('achternaam', $profiel['achternaam'], 'Achternaam', 50);
 			if($hasLedenMod){
-				$form[]=new InputField('postfix', $profiel['postfix'], 'Postfix', 15);
+				$form[]=new InputField('postfix', $profiel['postfix'], 'Postfix', 7);
 				$form[]=new SelectField('geslacht', $profiel['geslacht'], 'Geslacht', array('m'=> 'Man', 'v'=>'Vrouw'));
 				$form[]=new InputField('voornamen', $profiel['voornamen'], 'Voornamen', 100);
 			}
@@ -145,11 +145,11 @@ class Profiel{
 		}
 		$form[]=$email;
 		$form[]=new EmailField('msn', $profiel['msn'], 'MSN');
-		$form[]=new InputField('icq', $profiel['icq'], 'ICQ', 20); //TODO specifiek ding voor maken
+		$form[]=new InputField('icq', $profiel['icq'], 'ICQ', 10); //TODO specifiek ding voor maken
 		$form[]=new EmailField('jid', $profiel['jid'], 'Jabber/Google-talk'); //TODO specifiek ding voor maken
 		$form[]=new InputField('skype', $profiel['skype'], 'Skype', 20); //TODO specifiek ding voor maken
 		$form[]=new UrlField('website', $profiel['website'], 'Website');
-		$form[]=new InputField('bankrekening', $profiel['bankrekening'], 'Bankrekening', 20); //TODO specifiek ding voor maken
+		$form[]=new InputField('bankrekening', $profiel['bankrekening'], 'Bankrekening', 11); //TODO specifiek ding voor maken
 
 		if($profiel['status']=='S_OUDLID' OR $hasLedenMod){
 			if($profiel['status']=='S_OUDLID'){
@@ -158,12 +158,12 @@ class Profiel{
 				$beginjaar=date('Y')-20;
 			}
 			$form[]=new Comment('Studie en Civitas:');
-			$form[]=new InputField('studie', $profiel['studie'], 'Studie', 60);
+			$form[]=new InputField('studie', $profiel['studie'], 'Studie', 100);
 			$form[]=new IntField('studiejaar', $profiel['studiejaar'], 'Beginjaar studie',date('Y'), $beginjaar);
 			if($profiel['status']!='S_OUDLID'){
 				$form[]=new InputField('studienr', $profiel['studienr'], 'Studienummer (TU)', 20);
 			}
-			$form[]=new InputField('beroep', $profiel['beroep'], 'Beroep/werk', 50);
+			$form[]=new InputField('beroep', $profiel['beroep'], 'Beroep/werk', 4096);
 			$form[]=new IntField('lidjaar', $profiel['lidjaar'], 'Lid sinds', date('Y'), $beginjaar);
 			if($profiel['status']=='S_OUDLID'){
 				$form[]=new DatumField('lidafdatum', $profiel['lidafdatum'], 'Oudlid sinds');
@@ -174,7 +174,7 @@ class Profiel{
 			$form[]=new SelectField('kring', $profiel['kring'], 'Kring', range(0,9));
 			$form[]=new SelectField('kringleider', $profiel['kringleider'], 'Kringleider', array('n' => 'Nee','o' => 'Ouderejaarskring','e' => 'Eerstejaarskring'));
 			$form[]=new SelectField('motebal', $profiel['motebal'], 'Motebal',array('0' => 'Nee','1' => 'Ja'));
-			$form[]=new InputField('eetwens', $profiel['eetwens'], 'Dieet', 20);
+			$form[]=new InputField('eetwens', $profiel['eetwens'], 'Dieet', 200);
 		}
 		if($hasLedenMod){
 			$form[]=new Comment('Overig');
