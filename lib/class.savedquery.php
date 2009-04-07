@@ -106,7 +106,7 @@ class savedQuery{
 					}elseif($key=='onderwerp_link'){ //link naar het forum.
 						$return.='<a href="/communicatie/forum/onderwerp/'.$veld.'">'.$veld.'</a>';
 						//neem een verwijderlinkje op als het om spam gaat, lekker ranzige hardcoded meuk.
-						if(isset($rij['zichtbaar'], $rij['id']) AND $rij['zichtbaar']=='spam' AND $lid->hasPermission('P_FORUM_MOD')){
+						if(isset($rij['zichtbaar'], $rij['id']) AND $rij['zichtbaar']=='spam' AND LoginLid::instance()->hasPermission('P_FORUM_MOD')){
 							$return.='<br /><a href="/communicatie/forum/verwijder-bericht/'.$rij['id'].'">verwijder&nbsp;bericht</a>';
 						}
 					}elseif(substr($key, 0, 10)=='groep_naam' AND $veld!=''){
