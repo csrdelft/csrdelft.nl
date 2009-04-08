@@ -112,18 +112,22 @@ class Saldi{
 		$iAantal=count($aSocciesaldi);
 		$bOk=true;
 		foreach($aSocciesaldi as $aSocciesaldo){
+			$query="SELECT uid FROM lid WHERE soccieID=".$aSocciesaldo->id."  AND createTerm='".$aSocciesaldo->createTerm."' LIMIT 1";
+			$uidresult=$db->getRow($query);
+			$uid=$uidresult['uid'];
+			
 			$query="
 				UPDATE lid
 				SET soccieSaldo=".$aSocciesaldo->saldo."
-				WHERE soccieID=".$aSocciesaldo->id."
-				  AND createTerm='".$aSocciesaldo->createTerm."' LIMIT 1;";
+				WHERE uid='".$uid."' LIMIT 1;";
+			LidCache::updateLid()
 			//sla het saldo ook op in een logje, zodat we later kunnen zien dat iemand al heel lang
 			//rood staat en dus geschopt kan worden...
 			$logQuery="
 				INSERT INTO saldolog (
 					uid, moment, cie, saldo
 				)VALUES(
-					(SELECT uid FROM lid WHERE soccieID=".$aSocciesaldo->id."  AND createTerm='".$aSocciesaldo->createTerm."' ),
+					'".$uid."',
 					'".$datum."',
 					'soccie',
 					".$aSocciesaldo->saldo."
@@ -134,6 +138,9 @@ class Saldi{
 			}else{
 				if(!$db->query($logQuery)){
 					echo '-! Koppeling voor '.$aSocciesaldo->voornaam.' '.$aSocciesaldo->achternaam.' mislukt'."\r\n";
+				}else{
+					//LidCache resetten voor het betreffende lid
+					LidCache::updateLid($uid);
 				}
 			}
 
@@ -175,6 +182,8 @@ class Saldi{
 								".$aRegel[1]."
 							);";
 						$db->query($logQuery);
+						//LidCache resetten voor het betreffende lid
+						LidCache::updateLid($uid);
 					}else{
 						$bCorrect=false;
 					}
