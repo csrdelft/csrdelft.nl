@@ -16,7 +16,7 @@ if(isset($_GET['iedereen'])){
 	$mail->zend('csrmail@lists.knorrie.org');	
 	$courant->leegCache();
 } else {
-	$mail->zend('pubcie@csrdelft.nl');
+	$mail->zend('pubcie@csrdelft.nl, guitslag@hotmail.com, guitslag@gmail.com, ggguitslaggg@yahoo.co.uk, g.uitslag@student.tudelft.nl');
 }
 
 ?><a href="verzenden.php?iedereen=true"> aan iedereen verzenden</a>

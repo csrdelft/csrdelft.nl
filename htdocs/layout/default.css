@@ -421,7 +421,11 @@ div.preview{
 	border: 1px solid gray;
 	background-color: #ddd;
 	padding: 5px;
-	margin: 5px 0px; 
+}
+
+#forumtabel td .ubbMaaltijd{
+	margin: 0px 10px; 
+	/*position:absolute;*/
 }
 
 .ubbMaaltijdFloat{
