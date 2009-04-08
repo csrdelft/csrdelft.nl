@@ -120,7 +120,7 @@ class Saldi{
 				UPDATE lid
 				SET soccieSaldo=".$aSocciesaldo->saldo."
 				WHERE uid='".$uid."' LIMIT 1;";
-			LidCache::updateLid()
+			LidCache::updateLid();
 			//sla het saldo ook op in een logje, zodat we later kunnen zien dat iemand al heel lang
 			//rood staat en dus geschopt kan worden...
 			$logQuery="
