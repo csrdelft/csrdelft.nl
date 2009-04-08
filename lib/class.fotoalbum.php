@@ -95,11 +95,16 @@ class Fotoalbum{
 	}
 
 	function getFotos($compleet=true){
+		$bestanden=array();
+		$handle=opendir(PICS_PATH.'/fotoalbum/'.$this->pad);		
+		while(false!==($bestand=readdir($handle))){
+			$bestanden[]=$bestand;
+		}
 		$fotos=array();
 		$handle=opendir(PICS_PATH.'/fotoalbum/'.$this->pad);
-		while(false!==($file=readdir($handle))){
-			if(preg_match('/^[^_].*\.(jpg|jpeg)$/i',$file)){
-				$foto=new Foto($this->pad,$file);
+		foreach($bestanden as $bestand){
+			if(preg_match('/^[^_].*\.(jpg|jpeg)$/i',$bestand)){
+				$foto=new Foto($this->pad,$bestand);
 				if($foto->isCompleet()==$compleet){
 					$fotos[]=$foto;
 				}
