@@ -115,12 +115,11 @@ class Saldi{
 			$query="SELECT uid FROM lid WHERE soccieID=".$aSocciesaldo->id."  AND createTerm='".$aSocciesaldo->createTerm."' LIMIT 1";
 			$uidresult=$db->getRow($query);
 			$uid=$uidresult['uid'];
-			
+			if(!Lid::exists($uid)){ continue; } //ignore niet-bestaande leden
 			$query="
 				UPDATE lid
 				SET soccieSaldo=".$aSocciesaldo->saldo."
 				WHERE uid='".$uid."' LIMIT 1;";
-			LidCache::updateLid();
 			//sla het saldo ook op in een logje, zodat we later kunnen zien dat iemand al heel lang
 			//rood staat en dus geschopt kan worden...
 			$logQuery="
