@@ -100,6 +100,7 @@ class Fotoalbum{
 		while(false!==($bestand=readdir($handle))){
 			$bestanden[]=$bestand;
 		}
+		sort($bestanden);
 		$fotos=array();
 		$handle=opendir(PICS_PATH.'/fotoalbum/'.$this->pad);
 		foreach($bestanden as $bestand){
