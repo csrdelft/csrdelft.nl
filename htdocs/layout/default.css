@@ -421,6 +421,7 @@ div.preview{
 	border: 1px solid gray;
 	background-color: #ddd;
 	padding: 5px;
+	margin: 5px 0px; 
 }
 
 .ubbMaaltijdFloat{

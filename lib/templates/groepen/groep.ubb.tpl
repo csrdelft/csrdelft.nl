@@ -1,4 +1,4 @@
-<div id="groep{$groep->getId()}" class="groep_ubb" style="margin: 10px; padding: 5px 10px; border: 1px solid black;">
+<div id="groep{$groep->getId()}" class="groep_ubb" style="margin: 10px 0px; padding: 5px 10px; border: 1px solid black;">
  	<div style="float: right">
 		{if $groep->toonPasfotos() AND $lid->instelling('groepen_toonPasfotos')=='ja'}
 			{assign var='actie' value='pasfotos'}
