@@ -102,12 +102,9 @@ class ForumContent extends SimpleHTML {
 		if($sZoekQuery!=''){
 			$aZoekResultaten=Forum::searchPosts($sZoekQuery, (int)$_POST['categorie']);
 			if(is_array($aZoekResultaten)){
-				$highlight=false;
 				$aZoekOnderdelen=explode(' ', $sZoekQuery);
-				if(is_array($aZoekOnderdelen) AND count($aZoekOnderdelen)>1){
-					$sEersteTerm=$aZoekOnderdelen[0];
-					$highlight=true;
-				}
+				//escape +-en in zoekterm
+				$sEersteTerm=str_replace('+', '\+', $aZoekOnderdelen[0]);
 				
 				echo '<br />In <em>'.count($aZoekResultaten).'</em> onderwerpen kwam de volgende zoekterm voor: <strong>'.mb_htmlentities($sZoekQuery).'</strong>';
 				echo '<br /><br /><table id="forumtabel"><tr><th>Onderwerp</th><th>Auteur</th>';
@@ -135,11 +132,9 @@ class ForumContent extends SimpleHTML {
 						if($iBegin!=0){ $sPostFragment='...'.trim($sPostFragment); };
 					}
 					$sPostFragment=mb_htmlentities($sPostFragment);
-					if($highlight){
-						//zoektermen hooglichten
-						$sPostFragment=preg_replace('/('.$sEersteTerm.')/i', '<strong>\\1</strong>', $sPostFragment);
-					}
-					
+					//zoektermen hooglichten
+					$sPostFragment=preg_replace('/('.$sEersteTerm.')/i', '<strong>\\1</strong>', $sPostFragment);
+						
 					echo '<tr class="kleur'.($row%2).'"><td class="forumtitel">';
 					echo '<a href="/communicatie/forum/reactie/'.$aZoekResultaat['postID'].'">';
 					echo $aZoekResultaat['titel'].'</a>';
