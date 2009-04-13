@@ -47,11 +47,8 @@ class PaginaContent extends SimpleHTML{
 
 			# Gewoon de inhoud van een pagina laten zien
 			case 'bekijken':
-				$ubb=CsrUBB::instance();
-				$ubb->allow_html=true;
-				$sInhoud=$ubb->getHTML($this->_pagina->getInhoud());
-				$ubb->allow_html=false;
-				
+				$sInhoud=CsrHtmlUBB::instance()->getHTML($this->_pagina->getInhoud());
+							
 				if ($this->_pagina->magBewerken()){
 					$sInhoud='<a href="/pagina/'.$this->_pagina->getNaam().'/bewerken" class="knop" style="float: right;"><img src="'.CSR_PICS.'forum/bewerken.png" title="Bewerk pagina" /></a>'.$sInhoud;
 				}
