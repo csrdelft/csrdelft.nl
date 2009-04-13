@@ -68,6 +68,9 @@ class Profiel{
 		}
 		return $return.'[hr]';
 	}
+	public function getUid(){
+		return $this->getLid()->getUid();
+	}
 	public function getLid(){
 		return $this->lid;
 	}

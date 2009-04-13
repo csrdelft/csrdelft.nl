@@ -8,10 +8,14 @@
 require_once('include.config.php');
 
 if(isset($_GET['string'])){
-	$string=trim(urldecode($_GET['string']));
-	$ubb=new CsrUBB();
-	echo $ubb->getHTML($string);
+	$string=urldecode($_GET['string']);
+}elseif(isset($_POST['string'])){
+	$string=$_POST['string'];
 }else{
-	return 'b0rkb0rkb0rk';
+	$string='b0rkb0rkb0rk: geen invoer in htdocs/tools/ubb.php';
 }
+
+$string=trim($string);
+echo CsrUBB::instance()->getHTML($string);
+
 ?>

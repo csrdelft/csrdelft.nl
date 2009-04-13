@@ -180,11 +180,28 @@ class Lid implements Serializable{
 	}
 	public function getPermissies(){return $this->profiel['permissies']; }
 	public function getStatus(){ return $this->profiel['status']; }
+	// Is het huidige lid 'gewoon' lid?
+	public function isLid(){
+		return in_array($this->getStatus(), array('S_NOVIET', 'S_LID', 'S_GASTLID'));
+	}
+	public function getStatusChar(){
+		switch($this->getStatus()){
+			case 'S_OUDLID': return '•';
+			case 'S_KRINGEL': return '~';
+			case 'S_NOBODY': return '∉';
+			case 'S_NOVIET':
+			case 'S_GASTLID':
+			case 'S_LID': return '∈';
+		}				
+	}
+
 	public function getEetwens(){ return $this->profiel['eetwens']; }
 	public function getCorveewens(){ return $this->profiel['corvee_wens']; }
 	public function getCorveepunten(){ return $this->profiel['corvee_punten']; }
 	public function getCorveevrijstelling(){ return $this->profiel['corvee_vrijstelling']; }
 	public function isKwalikok(){ return $this->profiel['corvee_punten']==='1'; }
+	//deze willen we hebben om vanuit templates handig instellingen op te halen.
+	public function instelling($key){ return Instelling::get($key); }
 	public function getInstellingen(){ return $this->profiel['instellingen']; }
 	
 	public function getWoonoord(){
@@ -248,6 +265,7 @@ class Lid implements Serializable{
 			return $pasfoto;
 		}
 	}
+
 	/*
 	 * Maak een link met de naam van het huidige lid naar zijn profiel.
 	 *

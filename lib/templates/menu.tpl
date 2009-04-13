@@ -25,16 +25,16 @@
 		</div>
 	</div>
 	<div id="menuright">
-		{if $lid->hasPermission('P_LOGGED_IN') }
+		{if $loginlid->hasPermission('P_LOGGED_IN') }
 			<div id="ingelogd">
-				{if $lid->isSued()}
-					<a href="/endsu/" style="color: red;">{$lid->getSuedFrom()->getNaamLink('civitas','html')} als</a><br />» 
+				{if $loginlid->isSued()}
+					<a href="/endsu/" style="color: red;">{$loginlid->getSuedFrom()->getNaamLink('civitas','html')} als</a><br />» 
 				{/if}
-				{$lid->getUid()|csrnaam}<br />				
+				{$loginlid->getUid()|csrnaam}<br />				
 				<div id="uitloggen"><a href="/logout.php">log&nbsp;uit</a></div><br class="clear" />
 				<br />
 				<div id="saldi">
-					{foreach from=$lid->getLid()->getSaldi() item=saldo}
+					{foreach from=$loginlid->getLid()->getSaldi() item=saldo}
 						<div class="saldoregel">
 							<div class="saldo{if $saldo.saldo < 0} staatrood{/if}">&euro; {$saldo.saldo|number_format:2:",":"."}</div>
 							{$saldo.naam}:

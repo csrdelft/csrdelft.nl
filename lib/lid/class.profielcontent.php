@@ -58,7 +58,9 @@ class ProfielContent extends SimpleHTML {
 		//de html template in elkaar draaien en weergeven
 		$profiel=new Smarty_csr();
 
+		$profiel->assign('lid', $this->lid);
 		$profiel->assign('profhtml', $profhtml);
+		
 		$profiel->assign('isOudlid', $this->lid->getStatus()=='S_OUDLID');
 
 		$loginlid=LoginLid::instance();
@@ -72,7 +74,7 @@ class ProfielContent extends SimpleHTML {
 		if(LoginLid::instance()->isSelf($this->lid->getUid())){
 			$profiel->caching=false;
 		}
-		$template='profiel.tpl';
+		$template='profiel/profiel.tpl';
 		$profiel->display($template, $this->lid->getUid());
 	}
 }
@@ -85,25 +87,10 @@ class ProfielEditContent extends SimpleHTML{
 	}
 	public function view(){
 		require_once 'class.formulier.php';
-		echo '<h2>Profiel wijzigen</h2>
-			Hieronder kunt u uw eigen gegevens wijzigen. Voor enkele velden is het niet mogelijk zelf
-			wijzigingen door te voeren. Voor de meeste velden geldt daarnaast dat de ingevulde gegevens
-			een geldig formaat moeten hebben. Mochten er fouten in het gedeelte van uw profiel staan,
-			dat u niet zelf kunt wijzigen, meld het dan bij de <a href="mailto:vice-abactis@csrdelft.nl">Vice-Abactis</a>. <br /> <br />Als er
-			<span class="waarschuwing">tekst in rode letters</span> wordt afgebeeld bij een veld, dan
-			betekent dat dat de invoer niet geaccepteerd is, en dat u die zult moeten moeten aanpassen aan het
-			gevraagde formaat. Een aantal velden kan leeg gelaten worden als er geen zinvolle informatie voor is.';
+		$profiel=new Smarty_csr();
+		$profiel->assign('profiel', $this->profiel);
 
-		echo '<form action="/communicatie/profiel/'.$this->profiel->getLid()->getUid().'/bewerken/" id="profielForm" method="post">';
-		$form=$this->profiel->getFields();
-		foreach($form as $field){
-			echo $field->view();
-		}
-		echo '<div class="submit"><label for="submit">&nbsp;</label><input type="submit" value="opslaan" /> ';
-		echo '<input type="reset" value="reset formulier" /> <a class="knop" href="/communicatie/profiel/'.$this->profiel->getLid()->getUid().'">Annuleren</a></div>';
-		echo '</form>';
-
-		
+		$profiel->display('profiel/bewerken.tpl');
 	}
 }
 ?>

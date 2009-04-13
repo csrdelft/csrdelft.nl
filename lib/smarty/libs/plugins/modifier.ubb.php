@@ -23,6 +23,5 @@
  * @return string
  */
 function smarty_modifier_ubb($string){
-   $ubb=new CsrUBB();
-   return $ubb->getHTML($string);
+	return CsrUBB::instance()->getHTML($string);
 }

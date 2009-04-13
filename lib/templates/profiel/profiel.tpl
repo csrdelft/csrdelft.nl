@@ -11,14 +11,17 @@
 					{if $isAdmin}
 						<a href="/tools/stats.php?uid={$profhtml.uid}" class="knop">Overzicht van bezoeken</a><br />
 						<a href="/communicatie/profiel/{$profhtml.uid}/wachtwoord" class="knop" onclick="return confirm('Weet u zeker dat u het wachtwoord van deze gebruiker wilt resetten?')">Reset wachtwoord</a><br />
-						{if $profhtml.uid!=$lid->getUid() && $profhtml.uid!='x999' && !$lid->isSued() && $profhtml.status!='S_NOBODY'}
+						{if $profhtml.uid!=$loginlid->getUid() && $profhtml.uid!='x999' && !$loginlid->isSued() && $profhtml.status!='S_NOBODY'}
 							<a href="/su/{$profhtml.uid}/" class="knop">su naar dit lid</a><br />
 						{/if}
 					{/if}
 				</div>
 			</div>
 			{if $melding!=''}{$melding}<br />{/if}
-			<h1>{$profhtml.uid|csrnaam:'full':'plain'}</h1>
+			<h1>
+				<div class="status" title="{$lid->getStatus()}">{if !$lid->isLid()}{$lid->getStatusChar()}{/if}&nbsp;</div>
+				{$profhtml.uid|csrnaam:'full':'plain'}
+			</h1>
 		</div>
 	</div>
 	

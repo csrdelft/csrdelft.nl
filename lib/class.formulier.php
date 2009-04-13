@@ -402,8 +402,7 @@ class HTMLComment{
 }
 class UBBComment extends HTMLComment{
 	public function view(){
-		$ubb=new CsrUbb();
-		echo $ubb->getHtml($this->comment);
+		echo CsrUBB::instance()->getHtml($this->comment);
 	}
 }
 class Comment extends HTMLComment{

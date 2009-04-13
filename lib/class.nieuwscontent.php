@@ -25,7 +25,7 @@ class NieuwsContent extends SimpleHTML {
 
 	public function NieuwsContent($nieuws) {
 		$this->_nieuws=$nieuws;
-		$this->ubb= new csrubb();
+		$this->ubb=CsrUBB::instance();
 	}
 
 	private function getNieuwBerichtLink(){

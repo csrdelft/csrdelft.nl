@@ -56,8 +56,7 @@ class SjaarsactieContent extends SimpleHTML {
 				echo '<tr><td><strong>Ouderejaars: ';
 				echo $aSjaarsactie['naamLink'];
 				echo '</strong><br /><br />';
-				$ubb = new CsrUbb();
-				echo $ubb->getHTML($aSjaarsactie['beschrijving']);
+				echo CsrUBB::instance()->getHTML($aSjaarsactie['beschrijving']);
 				echo '</td><td style="vertical-align: top; border-left: 1px solid black; padding: 0 0 0 10px;">';
 				$aSjaarsjes=$this->_sjaarsactie->getAanmeldingen($aSjaarsactie['ID']);
 				$bAlAangemeld=false;

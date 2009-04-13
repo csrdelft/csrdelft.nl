@@ -10,7 +10,7 @@ require_once('smarty/libs/Smarty.class.php');
 
 class Smarty_csr extends Smarty {
 
-	function Smarty_csr(){
+	public function __construct(){
 		$this->Smarty();
 		$this->template_dir = SMARTY_TEMPLATE_DIR;
 		$this->compile_dir = SMARTY_COMPILE_DIR;
@@ -18,9 +18,10 @@ class Smarty_csr extends Smarty {
 		$this->cache_dir = SMARTY_CACHE_DIR;
 		$this->caching = false;
 
+		//zet een aantal handige dingen die we veel nodig hebben
 		$this->assign('csr_pics', CSR_PICS);
 		$this->assign('ubbHulp', CsrUbb::getUbbHelp());
-		$this->assign('lid', LoginLid::instance());
+		$this->assign('loginlid', LoginLid::instance());
   }
 
 }

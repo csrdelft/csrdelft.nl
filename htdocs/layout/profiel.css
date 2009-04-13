@@ -7,11 +7,12 @@
 #profiel img.pasfoto{ border: 2px solid black; margin-left: 20px;}
 #profiel .knopjes{ margin-left: 20px; line-height: 2.5em;}
 
-#profiel .profielregel{ margin-bottom: 20px; }
+#profiel .profielregel{ margin-bottom: 20px; clear: left; }
 	#profiel .left{ float: left; width: 60px; text-align: right; font-style: italic; font-size: 0.9em;}
 	#profiel .gegevens{ margin-left: 70px; padding-left: 15px; border-left: 1px solid #0a338d; }
 
-#profiel .naam{ margin-left: 81px;  padding-left: 15px;}
+#profiel .naam .status{ float: left; color: #aaa; width: 60px; padding: 0px 20px;}
+#profiel .naam h1{ padding-left: 60px; }
 #profiel .adres{ margin-left: 75px; text-align: left; }
 #profiel .gegevenszelf{ float: left; width: 250px; }
 #profiel .gegevenszelf .label{ text-align: right; margin-top: 2em; }

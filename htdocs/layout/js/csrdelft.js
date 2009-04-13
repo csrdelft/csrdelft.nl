@@ -64,13 +64,18 @@ function previewPost(source, dest){
  */
 function applyUBB(string, div){
 	http.abort();
-	http.open("GET", "/tools/ubb.php?string="+encodeURIComponent(string), true);
+	var params="string="+encodeURIComponent(string);
+	http.open("POST", "/tools/ubb.php", true);
+	http.setRequestHeader("Content-length", params.length);
+	http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	http.setRequestHeader("Connection", "close");
+
 	http.onreadystatechange=function(){
 		if(http.readyState == 4){
 			div.innerHTML=http.responseText;
 		}
 	}
-	http.send(null);
+	http.send(params);
 }
 
 /*

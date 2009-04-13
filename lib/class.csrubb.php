@@ -10,7 +10,16 @@ require_once('ubb/eamBBParser.class.php');
 
 class CsrUBB extends eamBBParser{
 
-	public function __construct(){
+	static private $instance;
+	public function instance(){
+		//als er nog geen instantie gemaakt is, die nu maken
+		if(!isset(self::$instance)){
+			self::$instance=new CsrUBB();
+		}
+		return self::$instance;
+	}
+	
+	private function __construct(){
 		$this->eamBBParser();
 		$this->paragraph_mode = false;
 	}

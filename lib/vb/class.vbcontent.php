@@ -30,7 +30,7 @@ class VBContent extends SimpleHTML {
 		$this->_objid = $objid;
 		$this->_search = new vbsearch($vb);
 		$this->nav = navigator::instance();
-		$this->ubb= new csrubb();
+		$this->ubb=CsrUBB::instance();
 		$this->tree = new SubjectTree($vb);
 	}
 
