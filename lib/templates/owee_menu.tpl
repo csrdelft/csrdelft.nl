@@ -22,25 +22,30 @@
 			</ul>
 		</div>
 	</div>
-	<div id="menuright">
-		{if $lid->hasPermission('P_LOGGED_IN') }
+<div id="menuright">
+		{if $loginlid->hasPermission('P_LOGGED_IN') }
 			<div id="ingelogd">
-				{$lid->getCivitasName()}<br />
-				<div id="profiellink"><a href="/communicatie/profiel/{$lid->getUid()}">profiel</a></div> <div id="uitloggen"><a href="/logout.php">log&nbsp;uit</a></div><br class="clear" />
+				{if $loginlid->isSued()}
+					<a href="/endsu/" style="color: red;">{$loginlid->getSuedFrom()->getNaamLink('civitas','html')} als</a><br />» 
+				{/if}
+				{$loginlid->getUid()|csrnaam}<br />				
+				<div id="uitloggen"><a href="/logout.php">log&nbsp;uit</a></div><br class="clear" />
 				<br />
-				<table id="saldi">
-					<tr><th> </th><th class="boven">Saldo</th></tr>
-					{foreach from=$lid->getSaldi() item=saldo}
-						<tr><th>{$saldo.naam}</th><td{if $saldo.saldo < 0} style="color: red;"{/if}>&euro; {$saldo.saldo}</td></tr>
+				<div id="saldi">
+					{foreach from=$loginlid->getLid()->getSaldi() item=saldo}
+						<div class="saldoregel">
+							<div class="saldo{if $saldo.saldo < 0} staatrood{/if}">&euro; {$saldo.saldo|number_format:2:",":"."}</div>
+							{$saldo.naam}:
+						</div>
 					{/foreach}
-				</table>
+				</div>
 				<br />
 				<form method="post" action="/communicatie/lijst.php">
 					<p>
 						<input type="hidden" name="a" value="zoek" />
 						<input type="hidden" name="waar" value="naam" />
 						<input type="hidden" name="moot" value="alle" />
-						<input type="hidden" name="status" value="leden" />
+						<input type="hidden" name="status" value="(oud)?leden" />
 						<input type="hidden" name="sort" value="achternaam" />
 						<input type="hidden" name="kolom[]" value="adres" />
 						<input type="hidden" name="kolom[]" value="email" />
@@ -55,27 +60,25 @@
 				</form>
 			</div>
 		{else}
-			<div id="key"><img src="http://www.johannesvg.nl/owee/key.gif" alt="Inloggen" onclick="ToggleLogin();" /></div>
+			<div id="key"><img src="http://plaetjes.csrdelft.nl/layout/key.gif" onclick="toggleDiv('login')" alt="Inloggen" /></div>
 			<div id="login">			
 				{if isset($smarty.session.auth_error)}
 					<span class="waarschuwing">{$smarty.session.auth_error}</span>
-				<script type="text/javascript">
-						<!--
-						document.getElementById('login').style.display='block';
-						-->
-					</script>
 				{/if}
 				<form action="/login.php" method="post">
 					<fieldset>
 						<input type="hidden" name="url" value="{$smarty.server.REQUEST_URI}" />
 						<input type="text" name="user" value="naam" onfocus="if(this.value=='naam')this.value='';" />
-						<input type="password" name="pass" value="wachtwoord" onfocus="if(this.value=='wachtwoord')this.value='';" />
+						<input type="password" name="pass" value="" />
 						<input type="checkbox" name="checkip" class="checkbox" value="true" id="login-checkip" checked="checked" />
-						<label for="login-checkip">Koppel IP</label><br /><br /><br />
-						<input type="submit" name="submit" value="Inloggen" />
+						<label for="login-checkip">Koppel IP</label>
+						<input type="submit" class="submit" name="submit" value="Inloggen" />
 					</fieldset>
 				</form>			
 			</div>
+			{if !isset($smarty.session.auth_error)}
+				<script type="text/javascript">hideDiv(document.getElementById('login'));</script>
+			{/if}			
 		{/if}
 	</div>
 </div>
