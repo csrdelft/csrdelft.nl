@@ -60,7 +60,7 @@
 		<tr>
 			<td colspan="4" class="tekst">
 				<form method="post" action="/communicatie/forum/onderwerp-toevoegen/{$categorie->getID()}">
-					{if $lid->hasPermission('P_LOGGED_IN')}
+					{if $loginlid->hasPermission('P_LOGGED_IN')}
 						Hier kunt u een onderwerp toevoegen in deze categorie van het forum. Kijkt u vooraf goed of het 
 						onderwerp waarover u post hier wel thuishoort.<br /><br />
 					{else}

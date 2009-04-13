@@ -1,4 +1,4 @@
-{if $lid->hasPermission('P_ADMIN')}
+{if $loginlid->hasPermission('P_ADMIN')}
 	<div style="float: right; margin: 0 0 10px 10px;">
 		<a href="/actueel/fotoalbum/verwerk/" title="Verwerken">Verwerken</a>
 	</div>

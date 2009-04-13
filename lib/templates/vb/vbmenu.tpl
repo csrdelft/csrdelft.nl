@@ -18,9 +18,9 @@
 		</div>
 	</div>
 	<div id="menuright">
-		{if $lid->hasPermission('P_LOGGED_IN') }
+		{if $loginlid->hasPermission('P_LOGGED_IN') }
 			<div id="ingelogd">
-				{$lid->getUid()|csrnaam}<br />
+				{$loginlid->getUid()|csrnaam}<br />
 				<div id="uitloggen"><a href="/logout.php">log&nbsp;uit</a></div><br class="clear" />
 				<br />
 <!--				
