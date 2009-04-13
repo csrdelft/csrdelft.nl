@@ -13,11 +13,8 @@ class CsrUBB extends eamBBParser{
 
 	static private $instance;
 	public function instance(){
-		//als er nog geen instantie gemaakt is, die nu maken
-		if(!isset(self::$instance)){
-			self::$instance=new CsrUBB();
-		}
-		return self::$instance;
+		
+		return new CsrUBB();
 	}
 	
 	private function __construct(){
