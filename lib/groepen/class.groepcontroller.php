@@ -29,7 +29,11 @@ class Groepcontroller extends Controller{
 
 		//groep-object inladen
 		if($this->hasParam(0)){
-			$this->groep=new Groep($this->getParam(0));
+			try{
+				$this->groep=new Groep($this->getParam(0));
+			}catch(Exception $e){
+				GroepContent::invokeRefresh($e->getMessage(), CSR_ROOT.'actueel/groepen/');
+			}
 			if($this->groep->getId()==0 AND isset($_GET['gtype'])){
 				try{
 					$groepen=new Groepen($_GET['gtype']);

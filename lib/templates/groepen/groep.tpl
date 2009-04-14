@@ -41,7 +41,7 @@
 	</div>
 	<br />
 	{* we laden meteen de pasfoto-tab als dat ingesteld is. *}
-	{if $groep->toonPasfotos() AND $lid->instelling('groepen_toonPasfotos')=='ja'}
+	{if $groep->toonPasfotos() AND $loginlid->getLid()->instelling('groepen_toonPasfotos')=='ja'}
 		<script type="text/javascript">	showTab('{$groep->getId()}','pasfotos');</script>
 	{/if}
 	

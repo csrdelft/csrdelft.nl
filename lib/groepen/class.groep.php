@@ -71,6 +71,9 @@ class Groep{
 			WHERE ".$wherePart."
 			ORDER BY groeplid.prioriteit ASC, lid.achternaam ASC, lid.voornaam ASC;";
 		$rGroep=$db->query($qGroep);
+		if($db->numRows($rGroep)<1){
+			throw new Exception('Groep [groepid:'.mb_htmlentities($groepId).'] bestaat niet.');
+		}
 		while($aGroep=$db->next($rGroep)){
 			//groepseigenschappen worden alleen de eerste iteratie opgeslagen
 			if($this->groep===null){
@@ -82,7 +85,7 @@ class Groep{
 			}
 		}
 
-		}
+	}
 
 	/*
 	 * save().
@@ -167,7 +170,11 @@ class Groep{
 		}
 		return $this->gtype;
 	}
-	public function getTypeId(){		return $this->groep['gtypeId']; }
+	public function getTypeId(){
+		if(isset($this->groep['gtypeId'])){
+			return $this->groep['gtypeId'];
+		}
+	}
 
 	public function getId(){			return $this->groep['groepId']; }
 	public function getSnaam(){			return $this->groep['snaam']; }
