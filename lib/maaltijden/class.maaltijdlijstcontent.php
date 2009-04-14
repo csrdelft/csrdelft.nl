@@ -25,8 +25,7 @@ class MaaltijdLijstContent extends SimpleHTML {
 		$loginlid=LoginLid::instance();
 		$maaltijdprijs=3.00; 	//maaltijdprijs voor de leden.
 		$maaltijdbudget=2.00; 	//kookbudget voor de koks
-		$marge=6;				//marge voor gasten.
-
+		
 		//de html template in elkaar draaien en weergeven
 		$maaltijdlijst=new Smarty_csr();
 		$maaltijdlijst->caching=false;
@@ -41,6 +40,17 @@ class MaaltijdLijstContent extends SimpleHTML {
 
 		$aMaal['aanmeldingen']=$this->_maaltijd->getAanmeldingen_Oud();
 		$aMaal['aantal']=count($aMaal['aanmeldingen']);
+
+		//kleinere marge bij minder mensen.
+		if($aMaal['aantal']<=39){
+			$marge=3;
+		}elseif($aMaal['aantal']<=49){
+			$marge=4;
+		}elseif($aMaal['aantal']<=59){
+			$marge=5;
+		}else{
+			$marge=6;
+		}
 		$aMaal['marge']=$marge;
 		$aMaal['totaal']=$marge+$aMaal['aantal'];
 
