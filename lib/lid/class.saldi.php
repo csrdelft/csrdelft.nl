@@ -182,7 +182,11 @@ class Saldi{
 							);";
 						$db->query($logQuery);
 						//LidCache resetten voor het betreffende lid
-						LidCache::updateLid($aRegel[0]);
+						try{
+							LidCache::updateLid($aRegel[0]);
+						}catch(Exception $e){
+							return 'Er bestaat een lid niet: '.$e->getMessage();
+						}
 					}else{
 						$bCorrect=false;
 					}
