@@ -182,7 +182,7 @@ class Saldi{
 							);";
 						$db->query($logQuery);
 						//LidCache resetten voor het betreffende lid
-						LidCache::updateLid($uid);
+						LidCache::updateLid($aRegel[0]);
 					}else{
 						$bCorrect=false;
 					}
