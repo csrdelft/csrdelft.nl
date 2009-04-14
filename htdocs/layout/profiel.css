@@ -25,6 +25,7 @@
 #profiel .groepht{ float: left; width: 50%; }
 #profiel .groepot{ margin-left: 50%; }
 
+#profielForm .pasfoto{ position: absolute; margin-left: 625px; }
 #profielForm label{
 	width: 150px;
 	float: left;

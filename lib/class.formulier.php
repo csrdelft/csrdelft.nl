@@ -54,7 +54,7 @@ abstract class FormField{
 		if($this->error!=''){
 			$cssclass.=' metfouten';
 		}
-		return '<div class="'.$cssclass.' blaat">';
+		return '<div class="'.$cssclass.'">';
 	}
 	protected function getLabel(){
 		if($this->description!=null){

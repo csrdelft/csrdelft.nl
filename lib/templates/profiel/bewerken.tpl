@@ -9,6 +9,7 @@ gevraagde formaat. Een aantal velden kan leeg gelaten worden als er geen zinvoll
 
 
 <form action="/communicatie/profiel/{$profiel->getUid()}/bewerken/" id="profielForm" method="post">
+	{$profiel->getLid()->getPasfoto()}
 	{foreach from=$profiel->getFields() item=field}
 		{$field->view()}
 	{/foreach}

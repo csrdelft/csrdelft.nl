@@ -225,8 +225,13 @@ class LoginLid{
 				return true;
 			}elseif(substr($permissie, 0, 5)=='groep'){
 				require_once 'groepen/class.groep.php';
-				$groep=new Groep(substr($permissie, 6));
-				return $groep->isLid();
+				try{
+					$groep=new Groep(substr($permissie, 6));
+					return $groep->isLid();
+				}catch(Exception $e){
+					//de groep bestaat niet, we gaan verder.
+				}
+				
 			}
 			# ga alleen verder als er een geldige permissie wordt gevraagd
 			if (array_key_exists($permissie, $this->_permissions)){
