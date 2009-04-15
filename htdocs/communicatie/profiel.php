@@ -64,7 +64,13 @@ if(!($loginlid->hasPermission('P_LEDEN_READ') or $loginlid->hasPermission('P_OUD
 		//geen break hier.
 		case 'view':
 		default;
-			$midden=new ProfielContent(LidCache::getLid($uid));
+			$lid=LidCache::getLid($uid);
+			if($lid instanceof Lid){
+				$midden=new ProfielContent($lid);
+			}else{
+				require_once('class.paginacontent.php');
+				$midden=new StringIncluder('<h1>Helaas</h1>Dit lid bestaat niet.<br /> U kunt verder zoeken in de <a href="/communicatie/lijst.php">Ledenlijst</a>.');
+			}
 		break;
 	}
 }
