@@ -28,9 +28,10 @@
 	<div class="profielregel">
 		<div class="left">Naam</div>
 		<div class="gegevens">
-			<div class="label">&nbsp;</div>{$profhtml.civitasnaam}<br />
-			<div class="label">Lidnummer:</div> {$profhtml.uid} <br />
-			<div class="label">Bijnaam:</div> {$profhtml.nickname} <br />
+			<div class="label">&nbsp;</div>{$lid->getNaamLink('civitas', 'html')}<br />
+			<div class="label">Lidnummer:</div> {$profhtml.uid}<br />
+			<div class="label">Bijnaam:</div> {$profhtml.nickname}<br />
+			{if $profhtml.voorletters!=''}<div class="label">Voorletters:</div> {$profhtml.voorletters}<br />{/if}
 			{if $profhtml.gebdatum!='0000-00-00'}<div class="label">Geb.datum:</div> {$profhtml.gebdatum|date_format:"%d-%m-%Y"}{/if}
 		</div>
 	</div>

@@ -100,6 +100,8 @@ class Profiel{
 		return $this->lid->getProperty($key);
 	}
 	public function assignFields(){
+		LidCache::updateLid($this->lid->getUid());
+
 		$profiel=$this->lid->getProfiel();
 
 		$hasLedenMod=LoginLid::instance()->hasPermission('P_LEDEN_MOD');
@@ -108,7 +110,7 @@ class Profiel{
 		if($profiel['status']=='S_OUDLID' OR $hasLedenMod){
 			$form[]=new Comment('Identiteit:');
 			$form[]=new RequiredInputField('voornaam', $profiel['voornaam'], 'Voornaam', 50);
-			//TODO: voeg ook voorletters toe aan het profiel
+			$form[]=new InputField('voorletters', $profiel['voorletters'], 'Voorletters', 10);
 			$form[]=new InputField('tussenvoegsel', $profiel['tussenvoegsel'], 'Tussenvoegsel', 15);
 			$form[]=new RequiredInputField('achternaam', $profiel['achternaam'], 'Achternaam', 50);
 			if($hasLedenMod){
