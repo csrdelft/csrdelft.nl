@@ -185,7 +185,9 @@ class IntField extends FormField{
 	
 	public function valid(){
 		if(!parent::valid()){ return false; }
-
+		//als een veld verplicht is heeft het in FormField::valid() al een foutmelding opgeleverd.
+		if($this->getValue()==0){ return true; }
+		
 		if(!preg_match('/\d+/', $this->getValue())){
 			$this->error='Alleen getallen toegestaan';
 		}elseif($this->max!==null AND $this->getValue()>$this->max){
