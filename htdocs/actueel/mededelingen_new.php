@@ -14,6 +14,9 @@ if(isset($_GET['actie'])){
 	$actie=$_GET['actie'];
 }
 
+require_once('mededelingen/class.mededeling.php');
+require_once('mededelingen/class.mededelingcontent.php');
+
 switch($actie){
 	case 'verwijderen':
 		if($mededelingId>0){
@@ -34,4 +37,6 @@ switch($actie){
 	break;
 }
 
+$page=new csrdelft($content);
+$page->view();
 ?>

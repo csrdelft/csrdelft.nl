@@ -102,9 +102,9 @@ class MededelingCategorie{
 	public static function getCategorieen(){
 		$db=MySql::instance();
 		$sCategorieQuery="
-			SELECT id, naam, prioriteit, plaatje, beschrijving
+			SELECT id, naam, rank, plaatje, beschrijving
 			FROM mededelingcategorie
-			ORDER BY prioriteit, id";
+			ORDER BY rank, id";
 		$cats=$db->query2array($sCategorieQuery);
 
 		if(is_array($cats)){
