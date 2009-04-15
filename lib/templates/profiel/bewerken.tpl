@@ -1,4 +1,6 @@
 <h2>Profiel wijzigen</h2>
+<form action="/communicatie/profiel/{$profiel->getUid()}/bewerken/" id="profielForm" method="post">
+{$profiel->getLid()->getPasfoto()}
 Hieronder kunt u uw eigen gegevens wijzigen. Voor enkele velden is het niet mogelijk zelf
 wijzigingen door te voeren. Voor de meeste velden geldt daarnaast dat de ingevulde gegevens
 een geldig formaat moeten hebben. Mochten er fouten in het gedeelte van uw profiel staan,
@@ -8,8 +10,8 @@ betekent dat dat de invoer niet geaccepteerd is, en dat u die zult moeten moeten
 gevraagde formaat. Een aantal velden kan leeg gelaten worden als er geen zinvolle informatie voor is.
 
 
-<form action="/communicatie/profiel/{$profiel->getUid()}/bewerken/" id="profielForm" method="post">
-	{$profiel->getLid()->getPasfoto()}
+
+	
 	{foreach from=$profiel->getFields() item=field}
 		{$field->view()}
 	{/foreach}

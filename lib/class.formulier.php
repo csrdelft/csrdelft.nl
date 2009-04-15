@@ -44,7 +44,8 @@ abstract class FormField{
 	public function valid(){
 		if(!$this->isPosted()){
 			$this->error='Veld is niet gepost.';
-		}elseif($this->notnull AND $this->getValue()==''){
+		//vallen over lege velden als dat aangezet is voor het veld en als gebruiker geen LEDEN_MOD heeft.
+		}elseif($this->notnull AND !LoginLid::instance()->hasPermission('P_LEDEN_MOD') AND $this->getValue()==''){
 			$this->error='Dit is een verplicht veld.';
 		}
 		return $this->error=='';
@@ -137,6 +138,9 @@ class EmailField extends FormField{
 		}
 		return $this->error=='';
 	}
+}
+class RequiredEmailField extends EmailField{
+	public $notnull=true;
 }
 class UrlField extends FormField{
 	public function valid(){

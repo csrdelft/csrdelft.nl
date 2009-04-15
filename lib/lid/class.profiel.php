@@ -110,7 +110,7 @@ class Profiel{
 		if($profiel['status']=='S_OUDLID' OR $hasLedenMod){
 			$form[]=new Comment('Identiteit:');
 			$form[]=new RequiredInputField('voornaam', $profiel['voornaam'], 'Voornaam', 50);
-			$form[]=new InputField('voorletters', $profiel['voorletters'], 'Voorletters', 10);
+			$form[]=new RequiredInputField('voorletters', $profiel['voorletters'], 'Voorletters', 10);
 			$form[]=new InputField('tussenvoegsel', $profiel['tussenvoegsel'], 'Tussenvoegsel', 15);
 			$form[]=new RequiredInputField('achternaam', $profiel['achternaam'], 'Achternaam', 50);
 			if($hasLedenMod){
@@ -122,10 +122,10 @@ class Profiel{
 		}
 		
 		$form[]=new Comment('Adres:');
-		$form[]=new InputField('adres', $profiel['adres'], 'Straatnaam', 100);
-		$form[]=new InputField('postcode', $profiel['postcode'], 'Postcode', 20);
-		$form[]=new InputField('woonplaats', $profiel['woonplaats'], 'Woonplaats', 50);
-		$land=new InputField('land', $profiel['land'], 'Land', 50);
+		$form[]=new RequiredInputField('adres', $profiel['adres'], 'Straatnaam', 100);
+		$form[]=new RequiredInputField('postcode', $profiel['postcode'], 'Postcode', 20);
+		$form[]=new RequiredInputField('woonplaats', $profiel['woonplaats'], 'Woonplaats', 50);
+		$land=new RequiredInputField('land', $profiel['land'], 'Land', 50);
 		$land->setSuggestions('Nederland', 'België', 'Duitsland', 'Frankrijk', 'Verenigd Koninkrijk', 'Verenigde Staten');
 		$form[]=$land;
 		$form[]=new TelefoonField('telefoon', $profiel['telefoon'], 'Telefoonnummer', 20);
@@ -143,7 +143,7 @@ class Profiel{
 		}
 			
 		$form[]=new Comment('Contact:');
-		$email=new EmailField('email', $profiel['email'], 'Emailadres');
+		$email=new RequiredEmailField('email', $profiel['email'], 'Emailadres');
 		if(LoginLid::instance()->isSelf($this->lid->getUid())){
 			//als we ons eigen profiel bewerken is het email-adres verplicht
 			$email->notnull=true;
