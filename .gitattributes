@@ -103,6 +103,7 @@ htdocs/pauper.php -text
 htdocs/robots.txt -text
 htdocs/su.php -text
 htdocs/tools/.htaccess -text
+htdocs/tools/downloadalbum.php -text
 htdocs/tools/eetplan.php -text
 htdocs/tools/index.php -text
 htdocs/tools/leden-csv.php -text
