@@ -1,8 +1,12 @@
-{if $loginlid->hasPermission('P_ADMIN')}
-	<div style="float: right; margin: 0 0 10px 10px;">
-		<a href="/actueel/fotoalbum/verwerk/" title="Verwerken">Verwerken</a>
-	</div>
-{/if}
+<div style="float: right; margin: 0 0 10px 10px;">
+	{if $loginlid->hasPermission('P_LOGGED_IN') && $album->getFotos()!==false}
+		<a href="/tools/downloadalbum.php?album={$album->getPad()}" title="Download als TAR-bestand">Download album</a>
+	{/if}
+	{if $loginlid->hasPermission('P_ADMIN')}
+		| <a href="/actueel/fotoalbum/verwerk/" title="Verwerken">Verwerken</a>
+	{/if}
+</div>
+
 {$album->getBreadcrumb()}
 <h1>{$album->getNaam()}</h1>
 {if $album->getSubAlbums()!==false}
