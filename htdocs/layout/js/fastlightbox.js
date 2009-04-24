@@ -333,6 +333,10 @@ Lightbox.prototype = {
     //  Display image and begin preloading neighbors.
     //
     showImage: function(){
+    	
+    	// LvdG Edit: updateNav hier al gezet, zodat je lekker kan doorklikken
+    	this.updateNav();
+    	
         this.loading.hide();
         new Effect.Appear(this.lightboxImage, { 
             duration: this.resizeDuration, 
@@ -357,7 +361,11 @@ Lightbox.prototype = {
         if (this.imageArray.length > 1){
             this.numberDisplay.update( LightboxOptions.labelImage + ' ' + (this.activeImage + 1) + ' ' + LightboxOptions.labelOf + '  ' + this.imageArray.length).show();
         }
-
+		/*
+         * LvdG Edit:
+         * Hele effect maar meteen weg-gecommentaard
+         * aanroepen van updateNav is verplaatst naar showImage
+         * 
         new Effect.Parallel(
             [ 
                 // Balk uitgezet door Jan Jaap
@@ -374,6 +382,7 @@ Lightbox.prototype = {
                 }).bind(this)
             } 
         );
+        */
     },
 
     //
