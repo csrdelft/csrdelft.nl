@@ -77,7 +77,7 @@ class MededelingCategorie{
 	public function array2properties($array){
 		$this->id=$array['id'];
 		$this->naam=$array['naam'];
-		$this->prioriteit=$array['prioriteit'];
+		$this->prioriteit=$array['rank'];
 		$this->plaatje=$array['plaatje'];
 		$this->beschrijving=$array['beschrijving'];
 	}

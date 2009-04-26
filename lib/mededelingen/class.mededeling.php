@@ -9,7 +9,7 @@ require_once('class.mededelingcategorie.php');
 
 class Mededeling{
 
-	private $id;
+	private $id=0;
 	private $titel;
 	private $tekst;
 	private $datum;
