@@ -165,7 +165,7 @@ class Forum{
 
 		$singleCat='1';
 		if($categorie!==null AND $categorie!=0){
-			foreach($this->getCategories(true) as $cat){
+			foreach(ForumCategorie::getAll(true) as $cat){
 				if($cat['id']==$categorie){
 					$singleCat='topic.categorie='.(int)$categorie;
 				}
