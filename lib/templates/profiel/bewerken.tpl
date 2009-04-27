@@ -9,9 +9,6 @@ dat u niet zelf kunt wijzigen, meld het dan bij de <a href="mailto:vice-abactis@
 betekent dat dat de invoer niet geaccepteerd is, en dat u die zult moeten moeten aanpassen aan het
 gevraagde formaat. Een aantal velden kan leeg gelaten worden als er geen zinvolle informatie voor is.
 
-
-
-	
 	{foreach from=$profiel->getFields() item=field}
 		{$field->view()}
 	{/foreach}
