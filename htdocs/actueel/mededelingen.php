@@ -16,7 +16,7 @@ $nieuws->setStandaardRank(255);
 $nieuwscontent = new NieuwsContent($nieuws);
 
 define('REFRESH', CSR_ROOT.'actueel/mededelingen/');
-echo '<pre>'.print_r($_POST, true).'</pre>';
+
 //plaetje verwerken:
 if(isset($_FILES['plaatje'], $_GET['berichtID']) AND $nieuws->isNieuwsMod() AND $_FILES['plaatje']['name']!=''){
 	$info=getimagesize($_FILES['plaatje']['tmp_name']);
