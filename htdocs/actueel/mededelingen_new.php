@@ -1,5 +1,4 @@
 <?php
-
 require_once('include.config.php');
 
 if(!LoginLid::instance()->hasPermission('P_NEWS_MOD')){
@@ -31,8 +30,9 @@ switch($actie){
 	break; 
 
 	case 'bewerken':
-		print_r($_POST);
-		print_r($_FILES);
+		echo '<pre>'.print_r($_POST, true).'</pre>';
+		echo '<pre>'.print_r($_FILES, true).'</pre>';
+		$_SESSION['melding']='';
 		if(	isset($_POST['titel'],$_POST['tekst'],$_POST['categorie'],$_POST['rank']) )
 		{	// Edit an existing Mededeling.
 			// Get properties from $_POST.
@@ -46,17 +46,34 @@ switch($actie){
 			$mededelingProperties['prive']=		isset($_POST['prive']) ? 1 : 0;
 			$mededelingProperties['verborgen']=	isset($_POST['verborgen']) ? 1 : 0;
 			$mededelingProperties['categorie']=	(int)$_POST['categorie'];
+
 			// Special treatment for the picture.
 			$mededelingProperties['plaatje']='';
-			if(isset($_FILES['plaatje']))
-				$mededelingProperties['plaatje']=processPicture();
+			if(isset($_FILES['plaatje']) AND $_FILES['plaatje']['name']!=''){
+				$info=getimagesize($_FILES['plaatje']['tmp_name']);
+				// Check the ratio.
+				if(($info[0]/$info[1])==1){
+					$pictureFilename=$_FILES['plaatje']['name'];
+					$pictureFullPath=PICS_PATH.'/nieuws/'.$pictureFilename;
+					if( move_uploaded_file($_FILES['plaatje']['tmp_name'], $pictureFullPath)!==false ){
+						$mededelingProperties['plaatje']=$pictureFilename;
+						if($info[0]!=200){ // Too big, resize it.
+							resize_plaatje($pictureFullPath);
+						}
+						chmod($pictureFullPath, 0644);
+					}else{
+						$_SESSION['melding'].='Plaatje verplaatsen is mislukt.<br />';
+					}
+				}else{
+					$_SESSION['melding'].='Plaatje is niet in de juiste verhouding.<br />';
+				}
+			}
 			
 			// Create a Mededeling so we can use getRanks() and getCategorie() below.
 			$mededeling=new Mededeling($mededelingId);
 
 			// Check if all values appear to be OK.
 			$allOK=true;
-			$_SESSION['melding']='';
 			if(strlen($mededelingProperties['titel'])<2){
 				$_SESSION['melding'].='Het veld <b>Titel</b> moet minstens 2 tekens bevatten.<br />';
 				$allOK=false;
@@ -82,10 +99,10 @@ switch($actie){
 			if(isset($_FILES['plaatje']['error'])){
 				// There's a picture missing.
 				$errorNumber=$_FILES['plaatje']['error'];
-				if($mededelingId==0 AND $errorNumber==4)){
+				if($mededelingId==0 AND $errorNumber==4){
 					$_SESSION['melding'].='Het toevoegen van een plaatje is verplicht.<br />';
 					$allOK=false;
-				}else if($errorNumber!=4 AND $mededelingProperties['plaatje']=''){
+				}else if($errorNumber!=UPLOAD_ERR_OK AND $errorNumber!=UPLOAD_ERR_NO_FILE AND $mededelingProperties['plaatje']==''){
 					// Uploading the picture failed.
 					$allOK=false;
 				}
@@ -96,7 +113,7 @@ switch($actie){
 			
 			// Overwrite old Mededeling with one that contains the (maybe) corrected data.
 			$mededeling=new Mededeling($mededelingProperties);
-			
+			echo '<pre>'.print_r($mededelingProperties, true).'</pre>';
 			// Save the mededeling to the database. (Either via UPDATE or INSERT).
 			if($allOK){
 				$mededeling->save();
@@ -117,7 +134,25 @@ switch($actie){
 $page=new csrdelft($content);
 $page->view();
 
-function processPicture(){
-	return '';
+function resize_plaatje($file) {
+	list($owdt,$ohgt,$otype)=@getimagesize($file);
+	switch($otype) {
+		case 1:  $oldimg=imagecreatefromgif($file); break;
+		case 2:  $oldimg=imagecreatefromjpeg($file); break;
+		case 3:  $oldimg=imagecreatefrompng($file); break;
+	}
+	if($oldimg) {
+		$newimg=imagecreatetruecolor(200, 200);
+		if(imagecopyresampled($newimg, $oldimg, 0, 0, 0, 0, 200, 200, $owdt, $ohgt)){
+			switch($otype) {
+				case 1: imagegif($newimg,$file); break;
+				case 2: imagejpeg($newimg,$file,90); break;
+				case 3: imagepng($newimg,$file);  break;
+			}
+			imagedestroy($newimg);
+		}else{
+			//mislukt
+		}
+	}
 }
 ?>

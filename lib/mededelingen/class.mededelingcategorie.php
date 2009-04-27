@@ -32,12 +32,12 @@ class MededelingCategorie{
 	public function load($id=0){
 		$db=MySql::instance();
 		$loadQuery="
-			SELECT id, naam, prioriteit, plaatje, beschrijving
+			SELECT id, naam, rank, plaatje, beschrijving
 			FROM mededelingcategorie
 			WHERE id=".(int)$id.";";
 		$mededeling=$db->getRow($loadQuery);
 		if(!is_array($mededeling)){
-			throw new Exception('MededelingCategorie bestaat niet. (MededelingCategorie::load())');
+			throw new Exception('MededelingCategorie bestaat niet. (MededelingCategorie::load() met id='.$id.')');
 		}
 		$this->array2properties($mededeling);
 	}
