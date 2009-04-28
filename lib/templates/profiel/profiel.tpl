@@ -174,34 +174,36 @@
 	</div>
 	{/if}
 	<div style="clear: left;"></div>
-	{if is_array($profhtml.recenteForumberichten)}
+	{if is_array($profhtml.recenteForumberichten) OR $loginlid->getUid()==$lid->getUid()}
 	<div class="profielregel" id="forum">
 		<div class="left">Forum</div>
 		<div class="gegevens" id="forum_gegevens">
-			{if $lid->getUid()==$profhtml.uid}
-			<div class="label">RSS-feed:</div>
-			<div class="data">
-				{if $profhtml.rssToken!=''}
-				<a href="http://csrdelft.nl/communicatie/forum/rss/{$profhtml.rssToken}.xml">
-					<img src="{$csr_pics}layout/feedicon.png" width="14" height="14" alt="RSS-feed http://csrdelft.nl" />
-					Persoonlijke RSS-feed forum
-				</a>
-				{/if}
-				<a class="knop" href="/communicatie/profiel/{$lid->getUid()}/rssToken#forum">Nieuwe aanvragen</a>
-			</div>
+			{if $loginlid->getUid()==$lid->getUid()}
+				<div class="label">RSS-feed:</div>
+				<div class="data">
+					{if $profhtml.rssToken!=''}
+					<a href="http://csrdelft.nl/communicatie/forum/rss/{$profhtml.rssToken}.xml">
+						<img src="{$csr_pics}layout/feedicon.png" width="14" height="14" alt="RSS-feed http://csrdelft.nl" />
+						Persoonlijke RSS-feed forum
+					</a>
+					{/if}
+					<a class="knop" href="/communicatie/profiel/{$lid->getUid()}/rssToken#forum">Nieuwe aanvragen</a>
+				</div>
 			<br />
 			{/if}
-			<div class="label">Recent:</div>
-			<div class="data">
-				<table style="width: 600px">
-					{foreach from=$profhtml.recenteForumberichten item=bericht}
-						<tr>
-							<td><a href="/communicatie/forum/reactie/{$bericht.postID}">{$bericht.titel|escape:'html'}</a></td>
-							<td>{$bericht.datum|reldate}</td>
-						</tr>
-					{/foreach}
-				</table>
-			</div>
+			{if is_array($profhtml.recenteForumberichten)}
+				<div class="label">Recent:</div>
+				<div class="data">
+					<table style="width: 600px">
+						{foreach from=$profhtml.recenteForumberichten item=bericht}
+							<tr>
+								<td><a href="/communicatie/forum/reactie/{$bericht.postID}">{$bericht.titel|escape:'html'}</a></td>
+								<td>{$bericht.datum|reldate}</td>
+							</tr>
+						{/foreach}
+					</table>
+				</div>
+			{/if}
 		</div>
 	</div>
 	{/if}

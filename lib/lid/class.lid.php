@@ -338,7 +338,10 @@ class Lid implements Serializable{
 			default:
 				$naam='Formaat in $vorm is onbekend.';
 		}
-
+		//niet ingelogged nooit een link laten zijn.
+		if($uid=='x999' AND $mode=='link'){
+			$mode='html';
+		}
 		switch($mode){
 			case 'link':
 				if(LoginLid::instance()->hasPermission('P_LEDEN_READ')){
