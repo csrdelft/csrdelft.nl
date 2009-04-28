@@ -134,7 +134,7 @@
 		</div>
 	{/if}
 	
-	{if $lid->getUid()==$profhtml.uid OR $profhtml.eetwens!='' OR is_array($profhtml.recenteMaaltijden)}
+	{if $loginlid->getUid()==$profhtml.uid OR $profhtml.eetwens!='' OR is_array($profhtml.recenteMaaltijden)}
 	<div class="profielregel" id="maaltijden">
 		<div class="left">Maaltijden
 			{if $lid->getUid()==$profhtml.uid}
@@ -160,7 +160,7 @@
 				</ul>
 				<br />
 			{/if}
-			{if $lid->getUid()==$profhtml.uid OR $lid->hasPermission('P_MAAL_MOD')}
+			{if $loginlid->getUid()==$profhtml.uid OR $lid->hasPermission('P_MAAL_MOD')}
 				{if is_array($profhtml.recenteMaaltijden)}
 					<div class="label">Recent:</div>
 					<ul class="nobullets data">
