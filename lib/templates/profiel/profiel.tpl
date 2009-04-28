@@ -160,7 +160,7 @@
 				</ul>
 				<br />
 			{/if}
-			{if $loginlid->getUid()==$profhtml.uid OR $lid->hasPermission('P_MAAL_MOD')}
+			{if $loginlid->getUid()==$profhtml.uid OR $loginlid->hasPermission('P_MAAL_MOD')}
 				{if is_array($profhtml.recenteMaaltijden)}
 					<div class="label">Recent:</div>
 					<ul class="nobullets data">
