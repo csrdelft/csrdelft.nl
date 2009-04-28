@@ -339,7 +339,7 @@ class Lid implements Serializable{
 				$naam='Formaat in $vorm is onbekend.';
 		}
 		//niet ingelogged nooit een link laten zijn.
-		if($uid=='x999' AND $mode=='link'){
+		if($this->getUid()=='x999' AND $mode=='link'){
 			$mode='html';
 		}
 		switch($mode){
