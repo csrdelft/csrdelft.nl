@@ -1,10 +1,8 @@
 {$melding}
 <ul class="horizontal">
 {foreach from=$groeptypes item=groeptype}
-	<li>
-		{if $groeptype.id==$groepen->getId()}<strong>{/if}
+	<li{if $groeptype.id==$groepen->getId()} class="active"{/if}>
 			<a href="/actueel/groepen/{$groeptype.naam}/">{$groeptype.naam}</a>
-		{if $groeptype.id==$groepen->getId()}</strong>{/if}
 	</li>
 {/foreach}
 </ul>

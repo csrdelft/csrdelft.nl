@@ -33,8 +33,8 @@ class VerjaardagContent extends SimpleHTML {
 						<li>
 							<a href="/communicatie/ledenlijst/">Ledenlijst</a>
 						</li>
-						<li>
-							<strong><a href="/communicatie/verjaardagen" title="Overzicht verjaardagen">Verjaardagen</a></strong>
+						<li class="active">
+							<a href="/communicatie/verjaardagen" title="Overzicht verjaardagen">Verjaardagen</a>
 						</li>
 						<li>
 							<a href="/communicatie/moten/">Kringen</a>

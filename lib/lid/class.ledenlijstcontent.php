@@ -83,8 +83,8 @@ class LedenlijstContent extends SimpleHTML {
 
 		print(<<<EOT
 <ul class="horizontal nobullets">
-	<li>
-		<strong><a href="/communicatie/ledenlijst/">Ledenlijst</a></strong>
+	<li class="active">
+		<a href="/communicatie/ledenlijst/">Ledenlijst</a>
 	</li>
 	<li>
 		<a href="/communicatie/verjaardagen" title="Overzicht verjaardagen">Verjaardagen</a>

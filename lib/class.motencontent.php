@@ -70,8 +70,8 @@ class MotenContent extends SimpleHTML {
 			<li>
 				<a href="/communicatie/verjaardagen" title="Overzicht verjaardagen">Verjaardagen</a>
 			</li>
-			<li>
-				<strong><a href="/communicatie/moten/">Kringen</a></strong>
+			<li class="active">
+				<a href="/communicatie/moten/">Kringen</a>
 			</li>
 		</ul>
 		<hr />';

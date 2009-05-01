@@ -60,6 +60,7 @@ ul.horizontal li{
 	display: inline;
 	padding-right: 20px;
 }
+ul.horizontal li.active{ font-weight:bold; }
 ul.nobullets li{ list-style-type: none; }
 
 

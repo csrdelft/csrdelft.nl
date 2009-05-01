@@ -1,6 +1,6 @@
 <ul class="horizontal nobullets">
-	<li>
-		<strong><a href="/actueel/maaltijden/" title="Maaltijdketzer">Maaltijdketzer</a></strong>
+	<li class="active">
+		<a href="/actueel/maaltijden/" title="Maaltijdketzer">Maaltijdketzer</a>
 	</li>
 	<li>
 		<a href="/actueel/maaltijden/voorkeuren.php" title="Instellingen">Instellingen</a>

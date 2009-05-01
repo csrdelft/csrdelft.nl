@@ -2,8 +2,8 @@
 	<li>
 		<a href="/actueel/maaltijden/" title="Maaltijdketzer">Maaltijdketzer</a>
 	</li>
-	<li>
-		<strong><a href="/actueel/maaltijden/voorkeuren.php" title="Instellingen">Instellingen</a></strong>
+	<li class="active">
+		<a href="/actueel/maaltijden/voorkeuren.php" title="Instellingen">Instellingen</a>
 	</li>
 	{if $loginlid->hasPermission('P_MAAL_MOD')}
 		<li>
