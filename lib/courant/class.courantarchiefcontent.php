@@ -57,6 +57,15 @@ class CourantarchiefContent{
 		return strftime('%d %B %Y', strtotime($this->courant->getVerzendmoment()));
 	}
 	function view(){
+		echo '<ul class="horizontal nobullets">
+			<li>
+				<a href="/actueel/courant/" title="Courantinzendingen">Courantinzendingen</a>
+			</li>
+			<li class="active">
+				<a href="/actueel/courant/archief/" title="Archief">Archief</a>
+			</li>
+		</ul>
+		<hr />';
 		if($this->courant->getID()==0 OR $this->zijkolom){
 			//overzicht
 			echo $this->getArchiefmails();

@@ -1,6 +1,12 @@
-<div style="float: right; margin: 0 0 10px 10px;">
-	<a href="/actueel/courant/archief/" title="Archief">Archief</a>
-</div>
+<ul class="horizontal nobullets">
+	<li class="active">
+		<a href="/actueel/courant/" title="Courantinzendingen">Courantinzendingen</a>
+	</li>
+	<li>
+		<a href="/actueel/courant/archief/" title="Archief">Archief</a>
+	</li>
+</ul>
+<hr />
 <h1>C.S.R.-courant</h1>
 <p>
 	De C.S.R.-courant wordt elke woensdagmiddag verzonden naar alle leden van C.S.R.. 
