@@ -82,10 +82,20 @@ class LedenlijstContent extends SimpleHTML {
 		);
 
 		print(<<<EOT
+<ul class="horizontal nobullets">
+	<li>
+		<strong><a href="/communicatie/ledenlijst/">Ledenlijst</a></strong>
+	</li>
+	<li>
+		<a href="/communicatie/verjaardagen" title="Overzicht verjaardagen">Verjaardagen</a>
+	</li>
+	<li>
+		<a href="/communicatie/moten/">Kringen</a>
+	</li>
+</ul>
+<hr />
 <div style="float: right; margin: 0 0 10px 10px;">
 	<a href="/tools/leden.csv" title="CSV-bestand downloaden">CSV-bestand downloaden</a>
-	| <a href="/communicatie/verjaardagen" title="Overzicht verjaardagen">Verjaardagen</a>
-	| <a href="/communicatie/moten" title="Kringen">Kringen</a>
 </div>
 <h1>Ledenlijst</h1>
 <form action="/communicatie/ledenlijst/" method="post" id="ledenlijst_zoeken">

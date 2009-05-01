@@ -1,10 +1,20 @@
-<div style="float: right; margin: 0 0 10px 10px;">
-	<a href="/actueel/maaltijden/voorkeuren.php" title="Instellingen">Instellingen</a>
+<ul class="horizontal nobullets">
+	<li>
+		<strong><a href="/actueel/maaltijden/" title="Maaltijdketzer">Maaltijdketzer</a></strong>
+	</li>
+	<li>
+		<a href="/actueel/maaltijden/voorkeuren.php" title="Instellingen">Instellingen</a>
+	</li>
 	{if $loginlid->hasPermission('P_MAAL_MOD')}
-		| <a href="/actueel/maaltijden/beheer/" title="Beheer">Beheer</a>
-		| <a href="/actueel/maaltijden/saldi.php" title="Saldo's updaten">Saldo's updaten</a>
+		<li>
+			<a href="/actueel/maaltijden/beheer/" title="Beheer">Beheer</a>
+		</li>
+		<li>
+			<a href="/actueel/maaltijden/saldi.php" title="Saldo's updaten">Saldo's updaten</a>
+		</li>
 	{/if}
-</div>
+</ul>
+<hr />
 <h1>Maaltijden</h1>
 <p>
 Op deze pagina kunt u zich inschrijven voor maaltijden op Confide. Onderstaande tabel toont de maaltijden in de

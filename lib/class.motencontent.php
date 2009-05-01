@@ -62,7 +62,20 @@ class MotenContent extends SimpleHTML {
 		$maxmoten = Moot::getMaxMoten();
 		$maxkringen = Moot::getMaxKringen();
 
-		//echo '<h2>Moot en Kringindeling</h2>';
+		# menuutje
+		echo '<ul class="horizontal nobullets">
+			<li>
+				<a href="/communicatie/ledenlijst/">Ledenlijst</a>
+			</li>
+			<li>
+				<a href="/communicatie/verjaardagen" title="Overzicht verjaardagen">Verjaardagen</a>
+			</li>
+			<li>
+				<strong><a href="/communicatie/moten/">Kringen</a></strong>
+			</li>
+		</ul>
+		<hr />';
+		echo '<h1>Moot en Kringindeling</h1>';
 		echo '<p>';
 		if($this->_bEmail===true){
 			echo '<a href="moten">Toon zonder email-adressen</a>';

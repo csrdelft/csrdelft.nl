@@ -95,6 +95,7 @@ class ForumContent extends SimpleHTML {
 		          <tr class=kleur0><td class="operator">"tekst" </td><td>exacte tekst</td></tr>
 		          <tr class=kleur1><td class="operator">*</td><td>wildcard</td></tr></table>
 		          <a href="http://dev.mysql.com/doc/refman/5.0/en/fulltext-boolean.html">Meer over zoeken</a></div>';
+		echo '<h2><a href="/communicatie/forum/" class="forumGrootlink">Forum</a> &raquo; Zoeken</h2>';
 		echo '<h1>Zoeken in het forum</h1>Hier kunt u zoeken in het forum.<br />';
 		//altijd het zoekformulier weergeven.
 

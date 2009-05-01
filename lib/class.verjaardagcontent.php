@@ -29,6 +29,19 @@ class VerjaardagContent extends SimpleHTML {
 	function view() {
 		switch ($this->_actie) {
 			case 'alleverjaardagen':
+				echo '<ul class="horizontal nobullets">
+						<li>
+							<a href="/communicatie/ledenlijst/">Ledenlijst</a>
+						</li>
+						<li>
+							<strong><a href="/communicatie/verjaardagen" title="Overzicht verjaardagen">Verjaardagen</a></strong>
+						</li>
+						<li>
+							<a href="/communicatie/moten/">Kringen</a>
+						</li>
+					</ul>
+					<hr />';
+				echo '<h1>Verjaardagen</h1>';
 				# de verjaardagen die vandaag zijn krijgen een highlight
 				$nu = time();
 				$dezemaand = date('n', $nu);
