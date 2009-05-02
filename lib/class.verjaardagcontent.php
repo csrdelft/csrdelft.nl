@@ -119,7 +119,7 @@ class VerjaardagContent extends SimpleHTML {
 					echo $lid->getNaamLink('pasfoto', 'link').'<br />'.date('d-m', strtotime($verjaardag['gebdatum']));
 					echo '</div>';
 				}
-				echo '<div class="clear">&nbsp;</div></div>';
+				echo '<div class="clear"></div></div>';
 			break;
 			case 'komende':
 				$aVerjaardagen=Verjaardag::getKomendeVerjaardagen(Instelling::get('zijbalk_verjaardagen'));
