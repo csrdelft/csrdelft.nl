@@ -27,6 +27,9 @@ class VerjaardagContent extends SimpleHTML {
 		return 'Verjaardagen';
 	}
 	function view() {
+		if($this->_actie=='komende' AND $this->_lid->hasPermion('P_ADMIN')){
+			$this->actie='komende_pasfotos';
+		}
 		switch ($this->_actie) {
 			case 'alleverjaardagen':
 				echo '<ul class="horizontal nobullets">
@@ -95,7 +98,24 @@ class VerjaardagContent extends SimpleHTML {
 				}
 				echo '</table><br>'."\n";
 				break;
-
+			case 'komende_pasfotos':
+				$aVerjaardagen=Verjaardag::getKomendeVerjaardagen(Instelling::get('zijbalk_verjaardagen'));
+				echo '<h1>';
+				if($this->_lid->hasPermission('P_LEDEN_READ')){
+					echo '<a href="/communicatie/verjaardagen">Verjaardagen</a>';
+				}else{
+					echo 'Verjaardagen';
+				}
+				echo '</h1>';
+				echo '<div class="item">';
+				foreach($aVerjaardagen as $verjaardag){
+					$lid=LidCache::getLid($verjaardag['uid']);
+					echo '<div class="verjaardag">';
+					echo $lid->getNaamLink('pasfoto', 'link').'<br />'.date('d-m', strtotime($verjaardag['gebdatum']));
+					echo '</div>';
+				}
+				echo '<div class="clear">&nbsp;</div></div>';
+			break;
 			case 'komende':
 				$aVerjaardagen=Verjaardag::getKomendeVerjaardagen(Instelling::get('zijbalk_verjaardagen'));
 				echo '<h1>';
@@ -105,16 +125,15 @@ class VerjaardagContent extends SimpleHTML {
 					echo 'Verjaardagen';
 				}
 				echo '</h1>';
-				for ($i=0; $i<sizeOf($aVerjaardagen); $i++) {
-					$aVerjaardag = $aVerjaardagen[$i];
-					$lid=LidCache::getLid($aVerjaardag['uid']);
-					echo '<div class="item">'.date('d-m', strtotime($aVerjaardag['gebdatum'])).' ';
-					if($aVerjaardag['jarig_over']==0){echo '<span class="opvallend">';}
+				foreach($aVerjaardagen as $verjaardag) {
+					$lid=LidCache::getLid($verjaardag['uid']);
+					echo '<div class="item">'.date('d-m', strtotime($verjaardag['gebdatum'])).' ';
+					if($verjaardag['jarig_over']==0){echo '<span class="opvallend">';}
 					echo $lid->getNaamLink('civitas', 'link');
-					if($aVerjaardag['jarig_over']==0){echo '</span>';}
+					if($verjaardag['jarig_over']==0){echo '</span>';}
 					echo '</div>';
 				}
-				break;
+			break;
 		}
 	}
 }

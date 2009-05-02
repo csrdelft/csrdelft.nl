@@ -335,6 +335,13 @@ class Lid implements Serializable{
 							($this->profiel['tussenvoegsel'] != '') ? $this->profiel['tussenvoegsel'] . ' ' : '',
 							$nwachter);
 			break;
+			case 'pasfoto':
+				if($mode=='link'){
+					$naam=$this->getPasfoto(true, 'lidfoto');
+				}else{
+					$naam='$vorm [pasfoto] alleen toegestaan in linkmodus';
+				}
+			break;		
 			default:
 				$naam='Formaat in $vorm is onbekend.';
 		}
@@ -345,7 +352,10 @@ class Lid implements Serializable{
 		switch($mode){
 			case 'link':
 				if(LoginLid::instance()->hasPermission('P_LEDEN_READ')){
-					return '<a href="/communicatie/profiel/'.$this->getUid().'" title="'.$sVolledigeNaam.'" class="lidLink '.$this->profiel['status'].'">'.mb_htmlentities($naam).'</a>';
+					if($vorm!='pasfoto'){
+						$naam=mb_htmlentities($naam);
+					}
+					return '<a href="/communicatie/profiel/'.$this->getUid().'" title="'.$sVolledigeNaam.'" class="lidLink '.$this->profiel['status'].'">'.$naam.'</a>';
 				}
 			case 'html':
 				return mb_htmlentities($naam);

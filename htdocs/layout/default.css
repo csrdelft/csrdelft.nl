@@ -314,6 +314,16 @@ ul.nobullets li{ list-style-type: none; }
 	text-decoration: underline;
 }
 
+#mainleft .verjaardag{
+	float: left;
+	margin: 2px;
+	border: 0px;
+	text-align: center;
+}
+#mainleft .verjaardag img.lidfoto{
+	width: 50px;
+}
+
 /**** FOOTER ******************************************************************/
 #footer {
 	clear: both;
