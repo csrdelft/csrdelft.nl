@@ -27,8 +27,8 @@ class VerjaardagContent extends SimpleHTML {
 		return 'Verjaardagen';
 	}
 	function view() {
-		if($this->_actie=='komende' AND $this->_lid->hasPermion('P_ADMIN')){
-			$this->actie='komende_pasfotos';
+		if($this->_actie=='komende' AND $this->_lid->hasPermission('P_ADMIN')){
+			$this->_actie='komende_pasfotos';
 		}
 		switch ($this->_actie) {
 			case 'alleverjaardagen':
