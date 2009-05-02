@@ -313,14 +313,19 @@ ul.nobullets li{ list-style-type: none; }
 #mainleft a:hover{
 	text-decoration: underline;
 }
-
-#mainleft .verjaardag{
+#mainleft #komende_pasfotos{
+	padding-top: 4px;
+}
+#mainleft #komende_pasfotos .verjaardag{
 	float: left;
-	margin: 2px;
-	border: 0px;
+	margin: 1px;
+	border: 1px solid #f5f5f5;;
 	text-align: center;
 }
-#mainleft .verjaardag img.lidfoto{
+#mainleft #komende_pasfotos .opvallend{
+	border: 1px solid #b8b8b8;
+}
+#mainleft #komende_pasfotos .verjaardag img.lidfoto{
 	width: 50px;
 }
 
