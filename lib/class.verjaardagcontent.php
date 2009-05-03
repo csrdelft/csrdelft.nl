@@ -113,7 +113,7 @@ class VerjaardagContent extends SimpleHTML {
 				$aantal=Instelling::get('zijbalk_verjaardagen');
 				if($toonpasfotos){
 					//veelvouden van 3 overhouden
-					$aantal=$aantal-($aantal%3);
+					$aantal=$aantal+(3-($aantal%3));
 				}
 				$aVerjaardagen=Verjaardag::getKomendeVerjaardagen($aantal);
 				
