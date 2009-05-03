@@ -27,9 +27,6 @@ class VerjaardagContent extends SimpleHTML {
 		return 'Verjaardagen';
 	}
 	function view() {
-		if($this->_actie=='komende' AND $this->_lid->hasPermission('P_ADMIN')){
-			$this->_actie='komende_pasfotos';
-		}
 		switch ($this->_actie) {
 			case 'alleverjaardagen':
 				echo '<ul class="horizontal nobullets">
@@ -98,31 +95,13 @@ class VerjaardagContent extends SimpleHTML {
 				}
 				echo '</table><br>'."\n";
 				break;
-			case 'komende_pasfotos':
-				$aantal=Instelling::get('zijbalk_verjaardagen');
-				//veelvouden van 3 overhouden
-				$aantal=$aantal-($aantal%3);
-				$aVerjaardagen=Verjaardag::getKomendeVerjaardagen($aantal);
-				echo '<h1>';
-				if($this->_lid->hasPermission('P_LEDEN_READ')){
-					echo '<a href="/communicatie/verjaardagen">Verjaardagen</a>';
-				}else{
-					echo 'Verjaardagen';
-				}
-				echo '</h1>';
-				echo '<div class="item" id="komende_pasfotos">';
-				foreach($aVerjaardagen as $verjaardag){
-					$lid=LidCache::getLid($verjaardag['uid']);
-					echo '<div class="verjaardag';
-					if($verjaardag['jarig_over']==0){ echo ' opvallend'; }
-					echo '">';
-					echo $lid->getNaamLink('pasfoto', 'link').'<br />'.date('d-m', strtotime($verjaardag['gebdatum']));
-					echo '</div>';
-				}
-				echo '<div class="clear"></div></div>';
-			break;
 			case 'komende':
-				$aVerjaardagen=Verjaardag::getKomendeVerjaardagen(Instelling::get('zijbalk_verjaardagen'));
+				if(LoginLid::instance()->getUid()=='x999'){
+					$toonpasfotos=false;
+				}else{
+					$toonpasfotos=Instelling::get('zijbalk_verjaardagen_pasfotos')=='ja';
+				}
+
 				echo '<h1>';
 				if($this->_lid->hasPermission('P_LEDEN_READ')){
 					echo '<a href="/communicatie/verjaardagen">Verjaardagen</a>';
@@ -130,13 +109,34 @@ class VerjaardagContent extends SimpleHTML {
 					echo 'Verjaardagen';
 				}
 				echo '</h1>';
-				foreach($aVerjaardagen as $verjaardag) {
-					$lid=LidCache::getLid($verjaardag['uid']);
-					echo '<div class="item">'.date('d-m', strtotime($verjaardag['gebdatum'])).' ';
-					if($verjaardag['jarig_over']==0){echo '<span class="opvallend">';}
-					echo $lid->getNaamLink('civitas', 'link');
-					if($verjaardag['jarig_over']==0){echo '</span>';}
-					echo '</div>';
+
+				$aantal=Instelling::get('zijbalk_verjaardagen');
+				if($toonpasfotos){
+					//veelvouden van 3 overhouden
+					$aantal=$aantal-($aantal%3);
+				}
+				$aVerjaardagen=Verjaardag::getKomendeVerjaardagen($aantal);
+				
+				if($toonpasfotos){
+					echo '<div class="item" id="komende_pasfotos">';
+					foreach($aVerjaardagen as $verjaardag){
+						$lid=LidCache::getLid($verjaardag['uid']);
+						echo '<div class="verjaardag';
+						if($verjaardag['jarig_over']==0){ echo ' opvallend'; }
+						echo '">';
+						echo $lid->getNaamLink('pasfoto', 'link').'<br />'.date('d-m', strtotime($verjaardag['gebdatum']));
+						echo '</div>';
+					}
+					echo '<div class="clear"></div></div>';
+				}else{
+					foreach($aVerjaardagen as $verjaardag) {
+						$lid=LidCache::getLid($verjaardag['uid']);
+						echo '<div class="item">'.date('d-m', strtotime($verjaardag['gebdatum'])).' ';
+						if($verjaardag['jarig_over']==0){echo '<span class="opvallend">';}
+						echo $lid->getNaamLink('civitas', 'link');
+						if($verjaardag['jarig_over']==0){echo '</span>';}
+						echo '</div>';
+					}
 				}
 			break;
 		}
