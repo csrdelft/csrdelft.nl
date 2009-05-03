@@ -30,7 +30,7 @@ class NieuwsContent extends SimpleHTML {
 
 	private function getNieuwBerichtLink(){
 		if($this->_nieuws->isNieuwsMod()){
-			return '<a href="'.NIEUWS_ROOT.'toevoegen" class="knop">Nieuwe mededeling</a>';
+			return '<a href="'.NIEUWS_ROOT.'toevoegen" class="knop">Nieuwe mededeling</a><br /><br />';
 		}
 	}
 	private function getBerichtModControls($iBerichtID){
@@ -243,6 +243,7 @@ class NieuwsContent extends SimpleHTML {
 
 	private function getOverzichtLijst(array $aBerichten)
 	{
+		echo $this->getNieuwBerichtLink();
 		if(!is_array($aBerichten) OR empty($aBerichten)) {
 			echo 'Zoals het is, zoals het was, o Civitas!<br />(Geen mededelingen gevonden dus…)<br /><br />';
 		}else{
