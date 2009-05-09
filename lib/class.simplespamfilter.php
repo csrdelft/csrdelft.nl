@@ -16,7 +16,7 @@ class SimpleSpamFilter{
 		$this->string=$string;
 		$this->spamregex=
 			"/s-e-x|zoofilia|sexyongpin|grusskarte|geburtstagskarten|animalsex|".
-			"sex-with|dogsex|adultchat|adultlive|camsexlivesex|".
+			"sex-with|dogsex|adultchat|adultlive|camsexlivesex|viagra|".
 			"chatsex|onlinesex|adultporn|adultvideo|adultweb.|hardcoresex|hardcoreporn|".
 			"teenporn|xxxporn|lesbiansex|live(girl|nude|sex|video)|camgirl|".
 			"spycam|voyeursex|casino-online|online-casino|kontaktlinsen|cheapest-phone|".
