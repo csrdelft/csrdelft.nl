@@ -137,7 +137,7 @@
 	{if $loginlid->getUid()==$profhtml.uid OR $profhtml.eetwens!='' OR is_array($profhtml.recenteMaaltijden)}
 	<div class="profielregel" id="maaltijden">
 		<div class="left">Maaltijden
-			{if $lid->getUid()==$profhtml.uid}
+			{if $loginlid->getUid()==$profhtml.uid}
 				<br /><a href="/actueel/maaltijden/voorkeuren.php" class="knop" ><img src="{$csr_pics}forum/bewerken.png" title="Maaltijdvoorkeuren bewerken" /></a>
 			{/if}</div>	
 		<div class="gegevens">
