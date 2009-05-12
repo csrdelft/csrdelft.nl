@@ -50,7 +50,10 @@ $depagina=new csrdelft($paginacontent,$prefix);
 if($_GET['naam']=='owee'){
 	$depagina->addStylesheet('owee.css');
 }
-$depagina->setZijkolom($zijkolom);
+if($_GET['naam']!='video'){
+	$depagina->setZijkolom($zijkolom);
+}
+
 $depagina->view();
 
 ?>
