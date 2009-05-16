@@ -19,6 +19,8 @@ if(isset($_GET['actie'])){
 require_once('mededelingen/class.mededeling.php');
 require_once('mededelingen/class.mededelingcontent.php');
 
+define('MEDEDELINGEN_ROOT', CSR_ROOT.'actueel/mededelingen/');
+
 switch($actie){
 	case 'verwijderen':
 		if($mededelingId>0){
@@ -30,11 +32,11 @@ switch($actie){
 	break; 
 
 	case 'bewerken':
-		echo '<pre>'.print_r($_POST, true).'</pre>';
-		echo '<pre>'.print_r($_FILES, true).'</pre>';
+//		echo '<pre>'.print_r($_POST, true).'</pre>';
+//		echo '<pre>'.print_r($_FILES, true).'</pre>';
 		$_SESSION['melding']='';
 		if(	isset($_POST['titel'],$_POST['tekst'],$_POST['categorie'],$_POST['rank']) )
-		{	// Edit an existing Mededeling.
+		{	// The user is editing an existing Mededeling or tried adding a new one.
 			// Get properties from $_POST.
 			$mededelingProperties=array();
 			$mededelingProperties['id']=		$mededelingId;
@@ -47,14 +49,15 @@ switch($actie){
 			$mededelingProperties['verborgen']=	isset($_POST['verborgen']) ? 1 : 0;
 			$mededelingProperties['categorie']=	(int)$_POST['categorie'];
 
+			$allOK=true; // This variable is set to false if there is an error.
+
 			// Special treatment for the picture.
 			$mededelingProperties['plaatje']='';
-			if(isset($_FILES['plaatje']) AND $_FILES['plaatje']['name']!=''){
+			if(isset($_FILES['plaatje']) AND $_FILES['plaatje']['error']==UPLOAD_ERR_OK){ // If uploading succeedded.
 				$info=getimagesize($_FILES['plaatje']['tmp_name']);
-				// Check the ratio.
-				if(($info[0]/$info[1])==1){
+				if(($info[0]/$info[1])==1){ // If the ratio is fine (1:1).
 					$pictureFilename=$_FILES['plaatje']['name'];
-					$pictureFullPath=PICS_PATH.'/nieuws/'.$pictureFilename;
+					$pictureFullPath=PICS_PATH.'/nieuws/'.$pictureFilename; // TODO: change nieuws to mededelingen
 					if( move_uploaded_file($_FILES['plaatje']['tmp_name'], $pictureFullPath)!==false ){
 						$mededelingProperties['plaatje']=$pictureFilename;
 						if($info[0]!=200){ // Too big, resize it.
@@ -63,9 +66,11 @@ switch($actie){
 						chmod($pictureFullPath, 0644);
 					}else{
 						$_SESSION['melding'].='Plaatje verplaatsen is mislukt.<br />';
+						$allOK=false;
 					}
 				}else{
 					$_SESSION['melding'].='Plaatje is niet in de juiste verhouding.<br />';
+					$allOK=false;
 				}
 			}
 			
@@ -73,7 +78,6 @@ switch($actie){
 			$mededeling=new Mededeling($mededelingId);
 
 			// Check if all values appear to be OK.
-			$allOK=true;
 			if(strlen($mededelingProperties['titel'])<2){
 				$_SESSION['melding'].='Het veld <b>Titel</b> moet minstens 2 tekens bevatten.<br />';
 				$allOK=false;
@@ -96,31 +100,31 @@ switch($actie){
 			if(	!$categorieValid ){
 				$mededelingProperties['categorie']=null;
 			}
-			if(isset($_FILES['plaatje']['error'])){
-				// There's a picture missing.
+			// Check picture.
+			if(empty($mededelingProperties['plaatje']) AND $mededelingId==0){ // If there's no new picture, while there should be.
 				$errorNumber=$_FILES['plaatje']['error'];
-				if($mededelingId==0 AND $errorNumber==4){
+				if($errorNumber==UPLOAD_ERR_NO_FILE){ // If there was no file being uploaded at all. 
 					$_SESSION['melding'].='Het toevoegen van een plaatje is verplicht.<br />';
 					$allOK=false;
-				}else if($errorNumber!=UPLOAD_ERR_OK AND $errorNumber!=UPLOAD_ERR_NO_FILE AND $mededelingProperties['plaatje']==''){
+				}else if($errorNumber!=UPLOAD_ERR_OK){
 					// Uploading the picture failed.
 					$allOK=false;
 				}
-			}else{ // The picture-field did not exist at all.
-				$_SESSION['melding'].='Het toevoegen van een plaatje is verplicht.<br />';
-				$allOK=false;
+				// The last possibility, $errorNumber==UPLOAD_ERR_OK is being issued above, where the picture
+				// is being moved.
 			}
 			
 			// Overwrite old Mededeling with one that contains the (maybe) corrected data.
+			unset($mededeling); // Get rid of the old object.
 			$mededeling=new Mededeling($mededelingProperties);
-			echo '<pre>'.print_r($mededelingProperties, true).'</pre>';
+//			echo '<pre>'.print_r($mededelingProperties, true).'</pre>';
 			// Save the mededeling to the database. (Either via UPDATE or INSERT).
 			if($allOK){
-				$mededeling->save();
+				$realId=$mededeling->save();
 				//TODO: Melding weergeven dat er iets toegevoegd is (?)
-				//TODO: Mededeling-pagina laden.
+				header('location: '.MEDEDELINGEN_ROOT.$realId); exit;
 			}
-		}else{ // Edit an existing Mededeling or display an empty form.
+		}else{ // User is going to edit an existing Mededeling or fill in an empty form.
 			$mededeling=new Mededeling($mededelingId);
 		}
 		$content=new MededelingContent($mededeling);

@@ -55,7 +55,7 @@ class Mededeling{
 		if($this->getId()==0){
 			$saveQuery="
 				INSERT INTO mededeling (
-					titel, tekst, datum, uid, rank, prive, verborgen, categorie
+					titel, tekst, datum, uid, rank, prive, verborgen, categorie, plaatje
 				)VALUES(
 					'".$db->escape($this->getTitel())."',
 					'".$db->escape($this->getTekst())."',
@@ -64,9 +64,17 @@ class Mededeling{
 					".(int)$this->getRank().",
 					'".(int)$this->getPrive()."',
 					'".(int)$this->getVerborgen()."',
-					".(int)$this->getCategorieId()."
+					".(int)$this->getCategorieId().",
+					".$db->escape($this->getPlaatje())."
 				);";
 		}else{
+			// Only update the field plaatje if there is a new picture.
+			// TODO: destroy the old picture! 
+			$setPlaatje='';
+			if($this->getPlaatje()!=''){
+				$setPlaatje=",
+					plaatje='".$db->escape($this->getPlaatje())."'";
+			}
 			$saveQuery="
 				UPDATE
 					mededeling
@@ -78,18 +86,25 @@ class Mededeling{
 					rank=".(int)$this->getRank().",
 					prive='".(int)$this->getPrive()."',
 					verborgen='".(int)$this->getVerborgen()."',
-					categorie=".(int)$this->getCategorieId()."
+					categorie=".(int)$this->getCategorieId().
+					$setPlaatje."
 				WHERE
 					id=".$this->getId()."
 				LIMIT 1;";
 		}
-		$return=$db->query($saveQuery);
+//		$return=$db->query($saveQuery);
 
-		if($return AND $this->getId()==0){
-			$this->id=$db->insert_id();
-		}
-		return $return;
+//		if($return AND $this->getId()==0){
+//			$this->id=$db->insert_id();
+//		}
+		echo 'Dit is de query die uitgevoerd wordt om deze mededeling te saven:<br />';
+		echo '<pre>'.$saveQuery.'</pre>';
+		return -1;
+//		return $return;
 	}
+	/*
+	 * Fills the fields of this object with the given array.
+	 */
 	private function array2properties($array){
 		$this->id=$array['id'];
 		$this->titel=$array['titel'];
