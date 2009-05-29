@@ -2,8 +2,7 @@ Beste {$uid|csrnaam:civitas:false},
 
 Via dit mailtje wil ik u bewust maken van het feit dat uw saldo negatief is
 bij de MaalCie. Dit komt door een aantal niet-betaalde maaltijden. Uw schuld
-bedraagt op dit moment: {$saldo}. Als u nog studiefinanciering ontvangt
-is dit het ideale moment van de maand om het over te maken.
+bedraagt op dit moment: {$saldo}.
 
 Dit bedrag kunt u bij een maaltijd in de helm doen en duidelijk noteren
 hoeveel u heeft ingelegd. Als u het vervelend vindt om grote bedragen in de

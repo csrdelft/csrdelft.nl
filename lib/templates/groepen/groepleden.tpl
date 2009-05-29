@@ -45,7 +45,7 @@
 	</table>
 {/if}
 {* We geven nog even even een aanmeldding weer als de groep aanmeldbaar is. *}
-{if $groep->isAanmeldbaar() AND !$groep->isLid()}
+{if $groep->isAanmeldbaar() AND !$groep->isLid() AND $loginlid->hasPermission('P_LOGGED_IN')}
 	<div class="aanmelden">
 		{if $groep->magAanmelden()}
 			{if $groep->getToonFuncties()=='niet'}

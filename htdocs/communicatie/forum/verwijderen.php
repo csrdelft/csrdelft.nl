@@ -39,7 +39,7 @@ if(isset($_GET['post'])){
 	}
 }elseif(isset($_GET['topic'])){
 	if($forumonderwerp->delete()){
-		header('location: '.CSR_ROOT.'forum/categorie/'.$forum->getCategorieID());
+		header('location: '.CSR_ROOT.'forum/categorie/'.$forumonderwerp->getCategorieID());
 	}else{
 		header('location: '.CSR_ROOT.'forum/');
 		$_SESSION['melding']='Verwijderen van topic mislukt, iets mis met de db ofzo (ForumOnderwerp::delete()).';
