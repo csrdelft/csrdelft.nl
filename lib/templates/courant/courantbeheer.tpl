@@ -14,7 +14,7 @@
 	De PubCie streeft ernaar de courant voor 18:00 bij u in uw postvak te krijgen.
 </p>
 <div id="knoppenContainer">
-	{if $courant->magVerzenden()}
+	{if $courant->magVerzenden() AND sizeof($courant->getBerichten())>0}
 		<a href="/actueel/courant/verzenden.php" onclick="return confirm('Weet u het zeker dat u de C.S.R.-courant wilt versturen?')" class="knop">Verzenden</a>
 	{/if}
 	{* Volgens mij wordt deze nooit gebruikt...
@@ -28,26 +28,21 @@
 {if $melding!=''}{$melding}{/if}
 
 {* geen overzicht van berichten bij het bewerken... *}
-{if $form.ID==0}
+{if $form.ID==0 AND sizeof($courant->getBerichtenVoorGebruiker()) >0}
 	<h3>Overzicht van berichten:</h3>
-	{if !is_array($courant->getBerichtenVoorGebruiker())}
-		U heeft nog geen berichten geplaatst in deze C.S.R.-courant.
-	{else}
-		<dl>
-			{foreach from=$courant->getBerichtenVoorGebruiker() item=bericht}
-				<dt>
-					<u>{$bericht.categorie|replace:'csr':'C.S.R.'}</u>
-					{if $courant->magBeheren()}({$bericht.uid|csrnaam:'full':false}){/if}
-					<strong>{$bericht.titel}</strong>
-					[ <a href="/actueel/courant/bewerken/{$bericht.ID}">bewerken</a> | 
-					<a href="/actueel/courant/verwijder/{$bericht.ID}" onclick="return confirm('Weet u zeker dat u dit bericht wilt verwijderen?')" >verwijderen</a> ]
-				</dt>
-				<dd id="courantbericht{$bericht.ID}"></dd>
-				{if !$courant->magBeheren()}<dd>{$bericht.bericht|ubb}</dd>{/if}
-			{/foreach}
-		</dl>
-			
-	{/if}
+	<dl>
+		{foreach from=$courant->getBerichtenVoorGebruiker() item=bericht}
+			<dt>
+				<u>{$bericht.categorie|replace:'csr':'C.S.R.'}</u>
+				{if $courant->magBeheren()}({$bericht.uid|csrnaam:'full':false}){/if}
+				<strong>{$bericht.titel}</strong>
+				[ <a href="/actueel/courant/bewerken/{$bericht.ID}">bewerken</a> | 
+				<a href="/actueel/courant/verwijder/{$bericht.ID}" onclick="return confirm('Weet u zeker dat u dit bericht wilt verwijderen?')" >verwijderen</a> ]
+			</dt>
+			<dd id="courantbericht{$bericht.ID}"></dd>
+			{if !$courant->magBeheren()}<dd>{$bericht.bericht|ubb}</dd>{/if}
+		{/foreach}
+	</dl>
 {/if}
 
 

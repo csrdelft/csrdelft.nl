@@ -274,7 +274,7 @@ class Courant {
 			LIMIT 1;";
 		$db=MySql::instance();
 		$db->query($sBerichtVerwijderen);
-		return $db->numRows()==1;
+		return $db->affected_rows()==1;
 	}
 
 
