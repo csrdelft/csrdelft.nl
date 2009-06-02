@@ -33,7 +33,7 @@ class Streeplijstcontent {
 			$this->lichting=$_GET['lichting'];
 		}
 		//leden welke in de lijst moeten laden.
-		$this->aLeden=Zoeken::zoekLeden($this->lichting, 'uid', $this->moot, 'achternaam', 'leden');
+		$this->aLeden=Zoeker::zoekLeden($this->lichting, 'uid', $this->moot, 'achternaam', 'leden');
 	}
 
 	function parseGoederen($sGoederen){
