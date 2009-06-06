@@ -64,9 +64,9 @@ class Mededeling{
 					'".$this->getUid()."',
 					".(int)$this->getPrioriteit().",
 					'".(int)$this->getPrive()."',
-					'".(int)$this->getZichtbaarheid()."',
+					'".$this->getZichtbaarheid()."',
 					".(int)$this->getCategorieId().",
-					".$db->escape($this->getPlaatje())."
+					'".$db->escape($this->getPlaatje())."'
 				);";
 		}else{
 			// Only update the field plaatje if there is a new picture.
@@ -86,22 +86,22 @@ class Mededeling{
 					uid='".$this->getUid()."',
 					prioriteit=".(int)$this->getPrioriteit().",
 					prive='".(int)$this->getPrive()."',
-					zichtbaarheid='".(int)$this->getZichtbaarheid()."',
+					zichtbaarheid='".$this->getZichtbaarheid()."',
 					categorie=".(int)$this->getCategorieId().
 					$setPlaatje."
 				WHERE
 					id=".$this->getId()."
 				LIMIT 1;";
 		}
-//		$return=$db->query($saveQuery);
+		$return=$db->query($saveQuery);
 
-//		if($return AND $this->getId()==0){
-//			$this->id=$db->insert_id();
-//		}
+		if($return AND $this->getId()==0){
+			$this->id=$db->insert_id();
+		}
 		echo 'Dit is de query die uitgevoerd wordt om deze mededeling te saven:<br />';
 		echo '<pre>'.$saveQuery.'</pre>';
-		return -1;
-//		return $return;
+//		return -1;
+		return $return;
 	}
 	/*
 	 * Fills the fields of this object with the given array.

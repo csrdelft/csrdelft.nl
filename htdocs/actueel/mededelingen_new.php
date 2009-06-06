@@ -74,9 +74,6 @@ switch($actie){
 				}
 			}
 			
-			// Create a Mededeling so we can use getPrioriteiten() and getCategorie() below.
-			$mededeling=new Mededeling($mededelingId);
-
 			// Check if all values appear to be OK.
 			if(strlen($mededelingProperties['titel'])<2){
 				$_SESSION['melding'].='Het veld <b>Titel</b> moet minstens 2 tekens bevatten.<br />';
@@ -87,13 +84,13 @@ switch($actie){
 				$allOK=false;
 			}
 			if(	$mededelingProperties['prioriteit']<1 OR
-				array_search($mededelingProperties['prioriteit'],array_keys($mededeling->getPrioriteiten()))!==false )
+				array_search($mededelingProperties['prioriteit'],array_keys(Mededeling::getPrioriteiten()))!==false )
 			{
 				$mededelingProperties['prioriteit']=0;
 			}
 			// Check categorie.
 			$categorieValid=false;
-			foreach($mededeling->getCategorie()->getAll() as $categorie){
+			foreach(MededelingCategorie::getCategorieen() as $categorie){
 				if($mededelingProperties['categorie']==$categorie->getId())
 					$categorieValid=true;
 			}
@@ -114,8 +111,6 @@ switch($actie){
 				// is being moved.
 			}
 			
-			// Overwrite old Mededeling with one that contains the (maybe) corrected data.
-			unset($mededeling); // Get rid of the old object.
 			$mededeling=new Mededeling($mededelingProperties);
 //			echo '<pre>'.print_r($mededelingProperties, true).'</pre>';
 			// Save the mededeling to the database. (Either via UPDATE or INSERT).
