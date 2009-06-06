@@ -10,18 +10,19 @@ require_once('class.mededelingcategorie.php');
 class Mededeling{
 
 	private $id=0;
-	private $titel;
-	private $tekst;
 	private $datum;
 	private $uid;
-	private $rank;
+	private $titel;
+	private $tekst;
+	private $zichtbaarheid;
 	private $prive=0;
-	private $verborgen=0;
-	private $plaatje='';
 	private $categorieId=0;
+	private $prioriteit;
+	private $plaatje='';
+
 	private $categorie=null;
 
-	const defaultRank=255;
+	const defaultPrioriteit=255;
 
 	public function __construct($init){
 		if(is_array($init)){
@@ -34,14 +35,14 @@ class Mededeling{
 				//default waarden voor een nieuwe mededeling
 				$this->datum=getDateTime();
 				$this->uid=LoginLid::instance()->getUid();
-				$this->rank=self::defaultRank;
+				$this->prioriteit=self::defaultPrioriteit;
 			}
 		}
 	}
 	public function load($id=0){
-		$db=MySql::instance();
+		$db=MySql::instance(); // TODO: aanpassen op nieuwe tabelstructuur
 		$loadQuery="
-			SELECT id, titel, tekst, datum, uid, rank, prive, verborgen, plaatje, categorie
+			SELECT id, datum, titel, tekst, categorie, uid, prioriteit, prive, zichtbaarheid, plaatje, categorie
 			FROM mededeling
 			WHERE id=".(int)$id.";";
 		$mededeling=$db->getRow($loadQuery);
@@ -55,15 +56,15 @@ class Mededeling{
 		if($this->getId()==0){
 			$saveQuery="
 				INSERT INTO mededeling (
-					titel, tekst, datum, uid, rank, prive, verborgen, categorie, plaatje
+					titel, tekst, datum, uid, prioriteit, prive, zichtbaarheid, categorie, plaatje
 				)VALUES(
 					'".$db->escape($this->getTitel())."',
 					'".$db->escape($this->getTekst())."',
 					'".$this->getDatum()."',
 					'".$this->getUid()."',
-					".(int)$this->getRank().",
+					".(int)$this->getPrioriteit().",
 					'".(int)$this->getPrive()."',
-					'".(int)$this->getVerborgen()."',
+					'".(int)$this->getZichtbaarheid()."',
 					".(int)$this->getCategorieId().",
 					".$db->escape($this->getPlaatje())."
 				);";
@@ -83,9 +84,9 @@ class Mededeling{
 					tekst='".$db->escape($this->getTekst())."',
 					datum='".$this->getDatum()."',
 					uid='".$this->getUid()."',
-					rank=".(int)$this->getRank().",
+					prioriteit=".(int)$this->getPrioriteit().",
 					prive='".(int)$this->getPrive()."',
-					verborgen='".(int)$this->getVerborgen()."',
+					zichtbaarheid='".(int)$this->getZichtbaarheid()."',
 					categorie=".(int)$this->getCategorieId().
 					$setPlaatje."
 				WHERE
@@ -111,9 +112,9 @@ class Mededeling{
 		$this->tekst=$array['tekst'];
 		$this->datum=$array['datum'];
 		$this->uid=$array['uid'];
-		$this->rank=$array['rank'];
+		$this->prioriteit=$array['prioriteit'];
 		$this->prive=$array['prive'];
-		$this->verborgen=$array['verborgen'];
+		$this->zichtbaarheid=$array['zichtbaarheid'];
 		$this->plaatje=$array['plaatje'];
 		$this->categorieId=$array['categorie'];
 	}
@@ -122,11 +123,11 @@ class Mededeling{
 	public function getTekst(){ return $this->tekst; }
 	public function getDatum(){ return $this->datum; }
 	public function getUid(){ return $this->uid; }
-	public function getRank(){ return $this->rank; }
+	public function getPrioriteit(){ return $this->prioriteit; }
 	public function getPrive(){ return $this->prive; }
 	public function isPrive(){ return $this->getPrive==1; }
-	public function getVerborgen(){ return $this->verborgen; }
-	public function isVerborgen(){ return $this->getVerborgen()==1; }
+	public function getZichtbaarheid(){ return $this->zichtbaarheid; }
+	public function isVerborgen(){ return $this->getZichtbaarheid()=='onzichtbaar'; }
 	public function getPlaatje(){ return $this->plaatje; }
 	public function getCategorieId(){ return $this->categorieId; }
 	public function getCategorie($force=false){
@@ -145,7 +146,7 @@ class Mededeling{
 		$top1query="
 			SELECT id
 			FROM mededeling
-			WHERE rank = '1' AND verwijderd='0' AND verborgen='0'
+			WHERE prioriteit = '1' AND verwijderd='0' AND zichtbaarheid='zichtbaar'
 			ORDER BY datum DESC, id DESC;";
 		$top1=$db->getRow($top1query);
 		if(is_array($top1)){
@@ -159,7 +160,7 @@ class Mededeling{
 		$newestQuery="
 			SELECT id
 			FROM mededeling
-			WHERE rank = '1' AND verwijderd='0' AND verborgen='0'
+			WHERE prioriteit = '1' AND verwijderd='0' AND zichtbaarheid='zichtbaar'
 			ORDER BY datum DESC, id DESC;";
 		$newest=$db->getRow($newestQuery);
 		if(is_array($newest)){
@@ -167,19 +168,19 @@ class Mededeling{
 		}
 		return null;
 	}
-	public function resetrank(){
-		$updateRank="
+	public function resetPrioriteit(){
+		$updatePrioriteit="
 			UPDATE mededeling
-			SET	rank='".Mededeling::defaultRank."'
-			WHERE rank='".$this->getRank()."';";
-		return MySql::instance()->query($updateRank);
+			SET	prioriteit='".Mededeling::defaultPrioriteit."'
+			WHERE prioriteit='".$this->getPrioriteit()."';";
+		return MySql::instance()->query($updatePrioriteit);
 	}
-	public static function getRanks(){
-		$ranks=array();
+	public static function getPrioriteiten(){
+		$prioriteiten=array();
 		for($i=1; $i<=6; $i++){
-			$ranks[$i]='Top '.$i;
+			$prioriteiten[$i]='Top '.$i;
 		}
-		return $ranks;
+		return $prioriteiten;
 	}
 }
 

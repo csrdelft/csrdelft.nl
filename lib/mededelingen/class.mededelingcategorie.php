@@ -32,7 +32,7 @@ class MededelingCategorie{
 	public function load($id=0){
 		$db=MySql::instance();
 		$loadQuery="
-			SELECT id, naam, rank, plaatje, beschrijving
+			SELECT id, naam, prioriteit, plaatje, beschrijving
 			FROM mededelingcategorie
 			WHERE id=".(int)$id.";";
 		$mededeling=$db->getRow($loadQuery);
@@ -77,7 +77,7 @@ class MededelingCategorie{
 	public function array2properties($array){
 		$this->id=$array['id'];
 		$this->naam=$array['naam'];
-		$this->prioriteit=$array['rank'];
+		$this->prioriteit=$array['prioriteit'];
 		$this->plaatje=$array['plaatje'];
 		$this->beschrijving=$array['beschrijving'];
 	}
@@ -102,9 +102,9 @@ class MededelingCategorie{
 	public static function getCategorieen(){
 		$db=MySql::instance();
 		$sCategorieQuery="
-			SELECT id, naam, rank, plaatje, beschrijving
+			SELECT id, naam, prioriteit, plaatje, beschrijving
 			FROM mededelingcategorie
-			ORDER BY rank, id";
+			ORDER BY prioriteit, id";
 		$cats=$db->query2array($sCategorieQuery);
 
 		if(is_array($cats)){

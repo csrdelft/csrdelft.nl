@@ -35,7 +35,7 @@ switch($actie){
 //		echo '<pre>'.print_r($_POST, true).'</pre>';
 //		echo '<pre>'.print_r($_FILES, true).'</pre>';
 		$_SESSION['melding']='';
-		if(	isset($_POST['titel'],$_POST['tekst'],$_POST['categorie'],$_POST['rank']) )
+		if(	isset($_POST['titel'],$_POST['tekst'],$_POST['categorie'],$_POST['prioriteit']) )
 		{	// The user is editing an existing Mededeling or tried adding a new one.
 			// Get properties from $_POST.
 			$mededelingProperties=array();
@@ -44,9 +44,9 @@ switch($actie){
 			$mededelingProperties['tekst']=		$_POST['tekst'];
 			$mededelingProperties['datum']=		getDateTime();
 			$mededelingProperties['uid']=		LoginLid::instance()->getUid();
-			$mededelingProperties['rank']=		(int)$_POST['rank'];
+			$mededelingProperties['prioriteit']=		(int)$_POST['prioriteit'];
 			$mededelingProperties['prive']=		isset($_POST['prive']) ? 1 : 0;
-			$mededelingProperties['verborgen']=	isset($_POST['verborgen']) ? 1 : 0;
+			$mededelingProperties['zichtbaarheid']=	isset($_POST['verborgen']) ? 'onzichtbaar' : 'zichtbaar'; // TODO: wacht_goedkeuring
 			$mededelingProperties['categorie']=	(int)$_POST['categorie'];
 
 			$allOK=true; // This variable is set to false if there is an error.
@@ -74,7 +74,7 @@ switch($actie){
 				}
 			}
 			
-			// Create a Mededeling so we can use getRanks() and getCategorie() below.
+			// Create a Mededeling so we can use getPrioriteiten() and getCategorie() below.
 			$mededeling=new Mededeling($mededelingId);
 
 			// Check if all values appear to be OK.
@@ -86,10 +86,10 @@ switch($actie){
 				$_SESSION['melding'].='Het veld <b>Tekst</b> moet minstens 5 tekens bevatten.<br />';
 				$allOK=false;
 			}
-			if(	$mededelingProperties['rank']<1 OR
-				array_search($mededelingProperties['rank'],array_keys($mededeling->getRanks()))!==false )
+			if(	$mededelingProperties['prioriteit']<1 OR
+				array_search($mededelingProperties['prioriteit'],array_keys($mededeling->getPrioriteiten()))!==false )
 			{
-				$mededelingProperties['rank']=0;
+				$mededelingProperties['prioriteit']=0;
 			}
 			// Check categorie.
 			$categorieValid=false;
