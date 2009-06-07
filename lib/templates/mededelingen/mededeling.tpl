@@ -8,29 +8,34 @@
 		{* link om het tekst-vak groter te maken. *}
 		<a href="#" onclick="vergrootTextarea('nieuwsBericht', 10)" name="Vergroot het invoerveld">invoerveld vergroten</a><br />
 		<textarea id="tekst" name="tekst" cols="80" rows="10" style="width: 100%" class="tekst">{$mededeling->getTekst()|escape:'html'}</textarea><br />
-		<div style="height: 200px; width: 30%; float: left;">Dit bericht…<br />
+		<div style="height: 300px; width: 30%; float: left;">Dit bericht…<br />
 			<input id="prive" type="checkbox" name="prive" {if $mededeling->isPrive()}checked="checked"{/if} /><label for="prive">…alleen weergeven bij leden</label><br />
-			<input id="verborgen" type="checkbox" name="verborgen" {if $mededeling->isVerborgen()}checked="checked"{/if} /><label for="verborgen">…verbergen</label><br />
+			<input id="verborgen" type="checkbox" name="verborgen"{if $mededeling->isVerborgen()} checked="checked"{/if} /><label for="verborgen">…verbergen</label><br />
 			<br />
-			Categorie:
+			<strong>Categorie:</strong>
 			<select name="categorie">
 				{foreach from=$mededeling->getCategorie()->getAll() item=categorie}
-					<option value="{$categorie->getId()}">{$categorie->getNaam()|escape:'html'}</option>
+					<option value="{$categorie->getId()}"{if $mededeling->getCategorieId()==$categorie->getId()} selected="selected"{/if}>{$categorie->getNaam()|escape:'html'}</option>
 				{/foreach}
 			</select><br />
-			Markering:
+			<strong>Markering:</strong>
 			<select name="prioriteit">
 				{foreach from=$prioriteiten key=prioriteitId item=prioriteit}
-					<option value="{$prioriteitId}">{$prioriteit|escape:'html'}</option>
+					<option value="{$prioriteitId}"{if $mededeling->getPrioriteit()==$prioriteitId} selected="selected"{/if}>{$prioriteit|escape:'html'}</option>
 				{/foreach}
 			</select>
 		</div>
-		<div style="height: 200px; width: 70%; float: right; ">
+		<div style="height: 300px; width: 70%; float: right; ">
 			{if $mededeling->getPlaatje() != ''}
-				<img src="{$csr_pics}nieuws/{$mededeling->getPlaatje()|escape:'html'}" width="200px" height="200px" alt="Afbeelding" style="float: left; margin-right: 10px;" />
+				<strong>Huidige afbeelding</strong><br />
+			{else}
+				<strong>Afbeelding</strong><br />
 			{/if}
-			<strong>Afbeelding bij de mededeling</strong><br />
-			Afbeelding:<br /><input type="file" name="plaatje" size="40" /><br />
+			{if $mededeling->getPlaatje() != ''}
+				<img src="{$csr_pics}nieuws/{$mededeling->getPlaatje()|escape:'html'}" width="200px" height="200px" alt="Afbeelding" style="margin: 5px 0px 15px 0px;" /><br />
+				<strong>Vervangende afbeelding</strong><br />
+			{/if}
+			<input type="file" name="plaatje" size="40" /><br />
 			<span class="waarschuwing">(png, gif of jpg, 200x200 of groter in die verhouding.)</span>
 		</div>
 		<input type="submit" name="submit" value="opslaan" />&nbsp;

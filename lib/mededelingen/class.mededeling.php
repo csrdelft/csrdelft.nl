@@ -40,7 +40,7 @@ class Mededeling{
 		}
 	}
 	public function load($id=0){
-		$db=MySql::instance(); // TODO: aanpassen op nieuwe tabelstructuur
+		$db=MySql::instance();
 		$loadQuery="
 			SELECT id, datum, titel, tekst, categorie, uid, prioriteit, prive, zichtbaarheid, plaatje, categorie
 			FROM mededeling
@@ -98,9 +98,6 @@ class Mededeling{
 		if($return AND $this->getId()==0){
 			$this->id=$db->insert_id();
 		}
-		echo 'Dit is de query die uitgevoerd wordt om deze mededeling te saven:<br />';
-		echo '<pre>'.$saveQuery.'</pre>';
-//		return -1;
 		return $return;
 	}
 	/*
@@ -125,7 +122,7 @@ class Mededeling{
 	public function getUid(){ return $this->uid; }
 	public function getPrioriteit(){ return $this->prioriteit; }
 	public function getPrive(){ return $this->prive; }
-	public function isPrive(){ return $this->getPrive==1; }
+	public function isPrive(){ return $this->getPrive()==1; }
 	public function getZichtbaarheid(){ return $this->zichtbaarheid; }
 	public function isVerborgen(){ return $this->getZichtbaarheid()=='onzichtbaar'; }
 	public function getPlaatje(){ return $this->plaatje; }
@@ -177,6 +174,7 @@ class Mededeling{
 	}
 	public static function getPrioriteiten(){
 		$prioriteiten=array();
+		$prioriteiten[255]='geen';
 		for($i=1; $i<=6; $i++){
 			$prioriteiten[$i]='Top '.$i;
 		}

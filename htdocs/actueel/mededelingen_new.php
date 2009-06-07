@@ -32,8 +32,6 @@ switch($actie){
 	break; 
 
 	case 'bewerken':
-//		echo '<pre>'.print_r($_POST, true).'</pre>';
-//		echo '<pre>'.print_r($_FILES, true).'</pre>';
 		$_SESSION['melding']='';
 		if(	isset($_POST['titel'],$_POST['tekst'],$_POST['categorie'],$_POST['prioriteit']) )
 		{	// The user is editing an existing Mededeling or tried adding a new one.
@@ -83,11 +81,11 @@ switch($actie){
 				$_SESSION['melding'].='Het veld <b>Tekst</b> moet minstens 5 tekens bevatten.<br />';
 				$allOK=false;
 			}
-			if(	$mededelingProperties['prioriteit']<1 OR
-				array_search($mededelingProperties['prioriteit'],array_keys(Mededeling::getPrioriteiten()))!==false )
-			{
-				$mededelingProperties['prioriteit']=0;
+			if(	array_search($mededelingProperties['prioriteit'],array_keys(Mededeling::getPrioriteiten())) == false )
+			{	// If the priority is invalid.
+				$mededelingProperties['prioriteit']=Mededeling::defaultPrioriteit;
 			}
+			
 			// Check categorie.
 			$categorieValid=false;
 			foreach(MededelingCategorie::getCategorieen() as $categorie){
@@ -112,9 +110,8 @@ switch($actie){
 			}
 			
 			$mededeling=new Mededeling($mededelingProperties);
-//			echo '<pre>'.print_r($mededelingProperties, true).'</pre>';
-			// Save the mededeling to the database. (Either via UPDATE or INSERT).
 			if($allOK){
+				// Save the mededeling to the database. (Either via UPDATE or INSERT).
 				$realId=$mededeling->save();
 				//TODO: Melding weergeven dat er iets toegevoegd is (?)
 				header('location: '.MEDEDELINGEN_ROOT.$realId); exit;
