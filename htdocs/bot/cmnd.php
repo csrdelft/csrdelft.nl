@@ -221,7 +221,8 @@ $cmnds['delabo'] = array('abosoort' => true);
  *
  */
 function getjarig($uid, $params) {
-    $verj10 = Verjaardag::getKomendeVerjaardagen(10);
+	require_once('lid/class.mootverjaardag.php');
+	$verj10 = Verjaardag::getKomendeVerjaardagen(10);
     $result = array();
     foreach ($verj10 as $verj) {
 		$lid=LidCache::getLid($verj['uid']);
@@ -295,8 +296,7 @@ $cmnds['whoami'] = array();
  *
  */
 function perms($uid, $params) {
-    global $lid;
-    return array($lid->getLid()->getPermissions());
+    return array(LoginLid::getLid()->getPermissions());
 }
 $cmnds['perms'] = array();
 
@@ -410,7 +410,8 @@ function maalinfo($uid, $params) {
             ,($maalinfo['max'] <= $maalinfo['aantal']) ? ' (VOL)' : ''
             ,($maalinfo['gesloten']) ? ' (GESLOTEN)' : ''
         );
-        $result[] = "tafelpraeses: " . $lid->getNaamLink($maalinfo['tp'], 'civitas', false, false, false);
+		$lid=new Lid($maalinfo['tp']);
+		$result[] = "tafelpraeses: " . $lid->getNaam();
     } else {
         $result[] = "De opgegeven maaltijd bestaat niet.";
     }
