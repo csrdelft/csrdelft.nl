@@ -296,7 +296,7 @@ $cmnds['whoami'] = array();
  *
  */
 function perms($uid, $params) {
-    return array(LoginLid::instance()->getLid()->getPermissions());
+    return array(LoginLid::instance()->getLid()->getPermissies());
 }
 $cmnds['perms'] = array();
 
