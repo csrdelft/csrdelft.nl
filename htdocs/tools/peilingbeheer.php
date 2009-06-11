@@ -5,18 +5,13 @@
  */
 # instellingen & rommeltjes
 require_once 'include.config.php';
-require_once('class.peilingcontent.php');
+require_once 'class.peilingcontent.php' ;
 
 // if user has no permission
-if (!$loginlid->hasPermission('P_LOGGED_IN')) {
-	echo 'Je bent niet ingelogd!';
-	exit();
-}
-if (!Peiling::magBewerken()) {
-	$html = "Je hebt geen beheerrechten voor deze pagina.";	
-	$pagina=new csrdelft(new stringincluder($html, 'Opgeslagen query\'s'));
-	$pagina->view(); 
-	exit();
+if(!$loginlid->hasPermission('P_LOGGED_IN') OR !Peiling::magBewerken()){
+	$melding="Je hebt geen rechten om deze pagina te bekijken.";
+	$pagina=new csrdelft(new Stringincluder($melding, 'Peilingbeheer'));
+	$pagina->view();
 }
 
 $html = '';
@@ -93,7 +88,7 @@ xr.innerHTML += \'<div class="optie"><input name="optie\'+i+\'" type="text"/></d
 <h1>Peilingbeheertool</h1>
 <div style="position:relative">
 	<b>Nieuwe peiling:</b><br/>
-	<form id="nieuw" action="http://localhost/tools/peilingbeheer.php" method="post">
+	<form id="nieuw" action="/tools/peilingbeheer.php" method="post">
 		<div class="pb_n_rij">
 			<div class="pb_n_col1">
 				Titel:<br/>
