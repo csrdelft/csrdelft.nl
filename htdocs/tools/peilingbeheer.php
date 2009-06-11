@@ -47,8 +47,10 @@ if(isset($_POST) && isset($_POST['titel'])){
 
 $lijst='Peilingen: ';
 $peilingen = Peiling::getLijst();
-foreach($peilingen as $peiling){
-	$lijst .= $peiling['id'].' ';
+if($peilingen){
+	foreach($peilingen as $peiling){
+		$lijst .= $peiling['id'].' ';
+	}
 }
 $lijst = $lijst.'<br/>';
 
