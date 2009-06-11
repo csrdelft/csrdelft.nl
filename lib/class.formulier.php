@@ -253,13 +253,13 @@ class PassField extends FormField{
 			if(!$lid->checkpw($current)){
 				$this->error='Uw huidige wachtwoord is niet juist';
 			}else{
-				if($new=='' OR $confirm=''){
+				if($new=='' OR $confirm==''){
 					$this->error='Vul uw nieuwe wachtwoord twee keer in';
-				}elseif($new!=$current){
+				}elseif($new!=$confirm){
 					$this->error='Nieuwe wachtwoorden komen niet overeen';
 				}elseif(preg_match('/^[0-9]*$/', $new)) {
 		            $this->error='Het nieuwe wachtwoord moet ook letters of leestekens bevatten... :-|';
-				}elseif(mb_strlen($passwd) < 6 OR mb_strlen($passwd) > 60){
+				}elseif(mb_strlen($new) < 6 OR mb_strlen($new) > 60){
 					$this->error='Het wachtwoord moet minimaal 6 en maximaal 16 tekens bevatten';
 				}
 			}

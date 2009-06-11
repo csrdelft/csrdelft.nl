@@ -351,6 +351,26 @@ UBBVERHAAL;
 
 		return $html;
 	}
+	
+	/*
+	 * Peiling ubb-tag. Door Piet-Jan Spaans.
+	 * [peiling=2]
+	 */
+	public function ubb_peiling($parameters){
+		//echo "place:";
+		//print_r($GLOBALS);
+		if(isset($parameters['peiling']) AND is_numeric($parameters['peiling'])){
+			$peilingid = (int)$parameters['peiling'];
+			
+			require_once 'class.peilingcontent.php';
+			$peilingtag=new PeilingUbbContent($peilingid);
+			
+			$return = $peilingtag->getHTML();
+		}else{
+			$return .= 'Geen geldig peilingblok.';
+		}
+		return $return;
+	}
 }
 //we staan normaal geen HTML toe, met deze kan dat wel.
 class CsrHtmlUBB extends CsrUBB{

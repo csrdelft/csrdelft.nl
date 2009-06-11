@@ -111,6 +111,7 @@ htdocs/tools/ledenkaart.php -text
 htdocs/tools/memcachedstatus.php -text
 htdocs/tools/mootlijsten.php -text
 htdocs/tools/pasfotos.php -text
+htdocs/tools/peilingbeheer.php -text
 htdocs/tools/phpinfo.php -text
 htdocs/tools/query.php -text
 htdocs/tools/roodschopper.php -text
@@ -180,6 +181,8 @@ lib/class.nieuws.php -text
 lib/class.nieuwscontent.php -text
 lib/class.pagina.php -text
 lib/class.paginacontent.php -text
+lib/class.peiling.php -text
+lib/class.peilingcontent.php -text
 lib/class.savedquery.php -text
 lib/class.simplehtml.php -text
 lib/class.simplespamfilter.php -text
