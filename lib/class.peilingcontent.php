@@ -18,24 +18,29 @@ class PeilingContent{
 			return 'Peiling '.$pid.' bestaat niet.';	
 		}		
 		
-		$content='';
-		if($this->_peiling->magStemmen()){
-			$content = $this->stemFormulier($dbpeiling);
-		}else{
-			$content = $this->uitslag($dbpeiling);
-		}
-		
-		//Constructie vd tag //width:400px;		
-		$thisurl = "http://".$_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"];
-		$html = '
-			<div style="border: 1px solid black; margin: 10px; padding: 5px 10px;">			
-				<div style="float: right;">
+		$bewerken='';
+		if(Peiling::magBewerken()){
+			$bewerken = '<div style="float: right;">
 					<form id="verwijderpeiling'.$pid.'" action="'.$thisurl.'" method="post">
 						<input type="hidden" name="actie" value="verwijder"/>
 						<input type="hidden" name="id" value="'.$pid.'"/>
 						<input type="submit" value="Verwijder"/>
 					</form>
-				</div>
+				</div>';
+		}
+		
+		$content='';
+		if($this->_peiling->magStemmen()){
+			$content = $this->stemFormulier($dbpeiling);
+		}else{
+			$content = $this->uitslag($dbpeiling);
+		}				
+		
+		//Constructie vd tag //width:400px;		
+		$thisurl = "http://".$_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"];
+		$html = '
+			<div style="border: 1px solid black; margin: 10px; padding: 5px 10px;">			
+				'.$bewerken.'
 				'.$content.'
 			</div>';
 		return $html;
