@@ -118,7 +118,7 @@ class Mededeling{
 	public function getId(){ return $this->id; }
 	public function getTitel(){ return $this->titel; }
 	public function getTekst(){ return $this->tekst; }
-	public function getDatum(){ return $this->datum; }
+	public function getDatum(){ return $this->datum; } //TODO: leesbare datum teruggeven(??)
 	public function getUid(){ return $this->uid; }
 	public function getPrioriteit(){ return $this->prioriteit; }
 	public function getPrive(){ return $this->prive; }

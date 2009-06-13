@@ -123,7 +123,8 @@ switch($actie){
 	break; 
 
 	default:
-		$content=new MededelingenContent();
+		require_once('mededelingen/class.mededelingencontent.php');
+		$content=new MededelingenContent($mededelingId);
 	break;
 }
 
