@@ -26,7 +26,7 @@ $error = 0;
 # 2 -> er treden (vorm)fouten op in bijv de invoer.
 
 # controleren of we wel mogen doen wat er gevraagd wordt...
-$actionsToegestaan=array('', 'editEetwens','editCorveewens', 'addabo', 'delabo');
+$actionsToegestaan=array('', 'editEetwens', 'editCorveewens', 'editCorveevoorkeuren', 'addabo', 'delabo');
 if(in_array($action, $actionsToegestaan)){
 	if(!$loginlid->hasPermission('P_MAAL_IK')){ $error = 1; }
 }else{
@@ -68,12 +68,32 @@ if ($error == 0) switch($action) {
 	break;
 	case 'editCorveewens':
 		$lid=$loginlid->getLid();
-		$lid->setProperty('corveewens', getOrPost('corveewens'));
+		$lid->setProperty('corvee_wens', getOrPost('corvee_wens'));
 		if(!$lid->save()){
 			$error=2;
 		}else{
 			header("Location: {$_SERVER['PHP_SELF']}");
 			exit;
+		}
+	break;
+	case 'editCorveevoorkeuren':
+		$lid=$loginlid->getLid();
+		$voorkeuren_array = getOrPost('corvee_voorkeuren');
+		$voorkeuren = (isset($voorkeuren_array['ma_kok']) ? 1 : 0);
+		$voorkeuren .= (isset($voorkeuren_array['ma_afwas']) ? 1 : 0);
+		$voorkeuren .= (isset($voorkeuren_array['do_kok']) ? 1 : 0);
+		$voorkeuren .= (isset($voorkeuren_array['do_afwas']) ? 1 : 0);
+		$voorkeuren .= (isset($voorkeuren_array['theedoek']) ? 1 : 0);
+		if(!intval($voorkeuren) > 0) {
+			$error=2;
+		}else{
+			$lid->setProperty('corvee_voorkeuren', $voorkeuren);
+			if(!$lid->save()){
+				$error=2;
+			}else{
+				header("Location: {$_SERVER['PHP_SELF']}");
+				exit;
+			}
 		}
 	break;
 }

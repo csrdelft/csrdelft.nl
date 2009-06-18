@@ -4,8 +4,13 @@ RewriteRule ^lijst/([0-9]+)$ maaltijdlijst.php?maalid=$1
 RewriteRule ^lijst/([0-9]+)/sluiten$ maaltijdlijst.php?maalid=$1&sluit=1
 RewriteRule ^lijst/([0-9]+)/fiscaal$ maaltijdlijst.php?maalid=$1&fiscaal=1
 
-#beheer
+RewriteRule ^voorkeuren/?$ voorkeuren.php
 
+#beheer
 RewriteRule ^beheer/?$ beheer.php
 RewriteRule ^beheer/bewerk/([0-9]+)/?$ beheer.php?bewerk=$1
 RewriteRule ^beheer/verwijder/([0-9]+)/?$ beheer.php?verwijder=$1
+
+RewriteRule ^corveebeheer/?$ corveebeheer.php
+RewriteRule ^corveebeheer/bewerk/([0-9]+)/?$ corveebeheer.php?bewerk=$1
+RewriteRule ^corveebeheer/takenbewerk/([0-9]+)/?$ corveebeheer.php?takenbewerk=$1

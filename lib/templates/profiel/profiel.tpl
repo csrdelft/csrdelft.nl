@@ -138,7 +138,7 @@
 	<div class="profielregel" id="maaltijden">
 		<div class="left">Maaltijden
 			{if $loginlid->getUid()==$profhtml.uid}
-				<br /><a href="/actueel/maaltijden/voorkeuren.php" class="knop" ><img src="{$csr_pics}forum/bewerken.png" title="Maaltijdvoorkeuren bewerken" /></a>
+				<br /><a href="/actueel/maaltijden/voorkeuren/" class="knop" ><img src="{$csr_pics}forum/bewerken.png" title="Maaltijdvoorkeuren bewerken" /></a>
 			{/if}</div>	
 		<div class="gegevens">
 			{if $profhtml.eetwens!=''}

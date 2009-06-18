@@ -36,6 +36,7 @@ htdocs/actueel/groepen/groepen.php -text
 htdocs/actueel/maaltijden/.htaccess -text
 htdocs/actueel/maaltijden/archief.php -text
 htdocs/actueel/maaltijden/beheer.php -text
+htdocs/actueel/maaltijden/corveebeheer.php -text
 htdocs/actueel/maaltijden/index.php -text
 htdocs/actueel/maaltijden/maaltijdlijst.php -text
 htdocs/actueel/maaltijden/saldi.php -text
@@ -225,6 +226,7 @@ lib/lid/class.mootverjaardag.php -text
 lib/lid/class.profiel.php -text
 lib/lid/class.profielcontent.php -text
 lib/lid/class.saldi.php -text
+lib/maaltijden/class.corveebeheercontent.php -text
 lib/maaltijden/class.maaltijd.php -text
 lib/maaltijden/class.maaltijdabocontent.php -text
 lib/maaltijden/class.maaltijdbeheercontent.php -text
@@ -368,6 +370,9 @@ lib/templates/groepen/groepleden.tpl -text
 lib/templates/maalciemail.tpl -text
 lib/templates/maaltijdketzer/abo-overzicht.tpl -text
 lib/templates/maaltijdketzer/beheer.tpl -text
+lib/templates/maaltijdketzer/corveebeheer.tpl -text
+lib/templates/maaltijdketzer/corveeformulier.tpl -text
+lib/templates/maaltijdketzer/corveetakenformulier.tpl -text
 lib/templates/maaltijdketzer/formulier.tpl -text
 lib/templates/maaltijdketzer/lijst.tpl -text
 lib/templates/maaltijdketzer/lijst_fiscaal.tpl -text

@@ -120,6 +120,7 @@ class MaalTrack {
 			return $maalid;
 		}
 	}
+	
 	# deze methode valideert de gemeenschappelijke waarden van addMaaltijd en editMaaltijd.
 	# controle op specifieke dingen voor editMaaltijd gebeurt nog in de methode zelf.
 	function validateMaaltijd($datum, $tekst, $abosoort, $tp, $max){
@@ -160,6 +161,7 @@ class MaalTrack {
 		}
 		return true;
 	}
+	
 	function removeMaaltijd($maalid) {
 		if (!is_numeric($maalid)) {
 			$this->_error = "Gebruik een numerieke maaltijd-id waarde om te verwijderen";
@@ -180,7 +182,79 @@ class MaalTrack {
 
 		return $this->_db->query($aanmeldingen) AND $this->_db->query($maaltijd);
 	}
+	
+	# bij bestaande maaltijd de relevante corveevelden bewerken
+	function editCorveeMaaltijd($maalid, $koks, $afwassers, $theedoeken, $punten_kok, $punten_afwas, $punten_theedoek){
+		if($maalid!=(int)$maalid){
+			$this->_error="Ongeldig maaltijdID opgegeven.";
+			return false;
+		}
+		if(!$this->isMaaltijd($maalid)){
+			$this->_error="Opgegeven maaltijd bestaat niet.";
+			return false;
+		}
 
+		$koks=abs((int)$koks);
+		$afwassers=abs((int)$afwassers);
+		$theedoeken=abs((int)$theedoeken);
+		$punten_kok=abs((int)$punten_kok);
+		$punten_afwas=abs((int)$punten_afwas);
+		$punten_theedoek=abs((int)$punten_theedoek);
+
+		$maaltijd="
+			UPDATE
+				maaltijd
+			SET
+				koks='".$koks."',
+				afwassers='".$afwassers."',
+				theedoeken='".$theedoeken."',
+				punten_kok='".$punten_kok."',
+				punten_afwas='".$punten_afwas."',
+				punten_theedoek='".$punten_theedoek."'
+			WHERE
+				id=".$maalid."
+			LIMIT 1;";
+		if(!$this->_db->query($maaltijd)){
+			$this->_error="Er is iets mis met de database/query.";
+			return false;
+		}else{
+			$maaltijd = new Maaltijd ($maalid);
+			return $maalid;
+		}
+	}
+	
+	# bij bestaande maaltijd de taken bewerken
+	function editCorveeMaaltijdTaken($maalid, $kok, $afwas, $theedoek){
+		if($maalid!=(int)$maalid){
+			$this->_error="Ongeldig maaltijdID opgegeven.";
+			return false;
+		}
+		if(!$this->isMaaltijd($maalid)){
+			$this->_error="Opgegeven maaltijd bestaat niet.";
+			return false;
+		}
+
+		/*TOODOO!$maaltijd="
+			UPDATE
+				maaltijd
+			SET
+				koks='".$koks."',
+				afwassers='".$afwassers."',
+				theedoeken='".$theedoeken."',
+				punten_kok='".$punten_kok."',
+				punten_afwas='".$punten_afwas."',
+				punten_theedoek='".$punten_theedoek."'
+			WHERE
+				id=".$maalid."
+			LIMIT 1;";*/
+		if(!$this->_db->query($maaltijd)){
+			$this->_error="Er is iets mis met de database/query.";
+			return false;
+		}else{
+			$maaltijd = new Maaltijd ($maalid);
+			return $maalid;
+		}
+	}
 
 	# haalt één enkele maaltijd op ter bewerking
 	function getMaaltijd($maalid){
@@ -192,7 +266,7 @@ class MaalTrack {
 		$sMaaltijdQuery="
 			SELECT
 				id, datum, gesloten, tekst, abosoort, max, aantal,
-				tp, koks, afwassers, theedoeken
+				tp, koks, afwassers, theedoeken, punten_kok, punten_afwas, punten_theedoek
 			FROM
 				maaltijd
 			WHERE
@@ -200,10 +274,58 @@ class MaalTrack {
 			LIMIT 1;";
 		$rMaaltijd=$this->_db->query($sMaaltijdQuery);
 		$aMaal=$this->_db->next($rMaaltijd);
+		
+		//taken ophalen
+		$aMaal['taken'] = $this->getMaaltijdTaken($maalid);
 
 		return $aMaal;
 	}
+	
+	# haalt de taken van één enkele maaltijd op ter bewerking
+	function getMaaltijdTaken($maalid){
+		$maalid=(int)$maalid;
+		if($maalid==0){
+			$this->_error="Geen geldig maaltijd-id";
+			return false;
+		}
+		
+		$taken = array();
+		$sMaaltijdTakenQuery="
+			SELECT
+				uid, kok, afwas, theedoek
+			FROM
+				maaltijdaanmelding
+			WHERE
+				maalid=".$maalid."
+			AND
+				(kok = 1 OR afwas = 1 OR theedoek = 1)";
+		$rMaaltijdTaken=$this->_db->query($sMaaltijdTakenQuery);
+		if (($rMaaltijdTaken !== false) and $this->_db->numRows($rMaaltijdTaken) > 0) {
+			while ($record = $this->_db->next($rMaaltijdTaken)) {
+				if ($record['kok']) $taken['koks'][] = $record['uid'];
+				if ($record['afwas']) $taken['afwassers'][] = $record['uid'];
+				if ($record['theedoek']) $taken['theedoeken'][] = $record['uid'];
+			}
+		}
 
+		return $taken;
+	}
+	
+	# haalt de lijst met leden op die voor een taak ingedeeld kunnen worden
+	function getTaakLeden(){
+		$zoekLeden = Zoeker::zoekLeden('', 'uid', 'alle', 'achternaam', '', array('uid', 'achternaam', 'voornaam', 'tussenvoegsel', 'corvee_punten'));
+		
+		$taakleden = array('' => '- Geen -');
+		foreach ($zoekLeden as $lid) {
+			$naam = $lid['achternaam'].', '.$lid['voornaam'];
+			if($lid['tussenvoegsel'] != '')
+				$naam .= ' '.$lid['tussenvoegsel'];
+				
+			$taakleden[$lid['uid']] = $naam.' ('.$lid['corvee_punten'].')';		
+		}
+		return $taakleden;
+	}
+	
 	# haalt maaltijden uit de maaltijdentabel op, voor uitgebreidere info
 	# voor in de kolommen op de maaltijdencontent pagina, zie getMaaltijden hieronder
 	# als de gebruiker uit moot 1-4 is, hou daar dan rekening mee
@@ -233,7 +355,10 @@ class MaalTrack {
 		$maaltijden = array();
 		$sMaaltijdQuery="
 			SELECT
-				id, datum, gesloten, tekst, abosoort, max, aantal, tp, koks, afwassers, theedoeken
+				id, datum, gesloten, tekst, abosoort, max, aantal, tp, koks, afwassers, theedoeken, punten_kok, punten_afwas, punten_theedoek,
+				(SELECT COUNT(uid) FROM maaltijdaanmelding WHERE maalid = id AND kok = 1) AS koks_aangemeld,
+				(SELECT COUNT(uid) FROM maaltijdaanmelding WHERE maalid = id AND afwas = 1) AS afwassers_aangemeld,
+				(SELECT COUNT(uid) FROM maaltijdaanmelding WHERE maalid = id AND theedoek = 1) AS theedoeken_aangemeld
 			FROM
 				maaltijd
 			WHERE
@@ -292,11 +417,15 @@ class MaalTrack {
 			}else{
 				# status: AAN,AF ABO ''
 				# 1a. is er een aan of afmelding voor deze maaltijd?
-				$sAanmeldingen="SELECT status, gasten, gasten_opmerking FROM maaltijdaanmelding WHERE uid = '".$uid."' AND maalid = ".$maaltijd['id'].";";
+				$sAanmeldingen="SELECT status, kok, afwas, theedoek, gasten, gasten_opmerking FROM maaltijdaanmelding WHERE uid = '".$uid."' AND maalid = ".$maaltijd['id'].";";
 				$rAanmeldingen = $this->_db->query($sAanmeldingen);
 				if (($rAanmeldingen !== false) and $this->_db->numRows($rAanmeldingen) > 0) {
 					$record = $this->_db->next($rAanmeldingen);
 					$maaltijd['status'] = $record['status'];
+					# Corvee
+					$maaltijd['kok'] = $record['kok'];
+					$maaltijd['afwas'] = $record['afwas'];
+					$maaltijd['theedoek'] = $record['theedoek'];
 					# Gasten ophalen
 					$maaltijd['gasten'] = $record['gasten'];
 					$maaltijd['opmerking'] = $record['gasten_opmerking'];

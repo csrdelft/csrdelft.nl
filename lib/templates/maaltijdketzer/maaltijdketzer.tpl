@@ -3,11 +3,14 @@
 		<a href="/actueel/maaltijden/" title="Maaltijdketzer">Maaltijdketzer</a>
 	</li>
 	<li>
-		<a href="/actueel/maaltijden/voorkeuren.php" title="Instellingen">Instellingen</a>
+		<a href="/actueel/maaltijden/voorkeuren/" title="Instellingen">Instellingen</a>
 	</li>
 	{if $loginlid->hasPermission('P_MAAL_MOD')}
 		<li>
-			<a href="/actueel/maaltijden/beheer/" title="Beheer">Beheer</a>
+			<a href="/actueel/maaltijden/beheer/" title="Beheer">Maaltijdbeheer</a>
+		</li>
+		<li>
+			<a href="/actueel/maaltijden/corveebeheer/" title="Beheer">Corveebeheer</a>
 		</li>
 		<li>
 			<a href="/actueel/maaltijden/saldi.php" title="Saldo's updaten">Saldo's updaten</a>
@@ -18,7 +21,7 @@
 <h1>Maaltijden</h1>
 <p>
 Op deze pagina kunt u zich inschrijven voor maaltijden op Confide. Onderstaande tabel toont de maaltijden in de
-komende weken. Onder "Kom ik eten?" ziet u de huidige status van uw inschrijving voor de maaltijd.<br />
+komende weken. Onder "Kom ik eten?" ziet u de huidige status van uw inschrijving voor de maaltijd. In de kolom K/A/T kunt u zien of u bent ingedeeld voor één van de taken kok, afwassen, of theedoeken<br />
 <br />
 N.B. De maaltijdinschrijving sluit op de dag van de maaltijd rond <strong>15:00</strong>, als de koks de lijst met aanmeldingen
 uitprinten. Vanaf dat moment zal deze ketzer u niet meer willen aan- of afmelden!<br />
@@ -34,6 +37,7 @@ uitprinten. Vanaf dat moment zal deze ketzer u niet meer willen aan- of afmelden
 			<th>Omschrijving</th>
 			<th>Aantal(Max)</th>
 			<th>Kom ik eten?</th>
+			<th>K/A/T</th>
 			<th>Actie</th>
 		</tr>
 		{foreach from=$maal.zelf.maaltijden item=maaltijd}
@@ -62,6 +66,21 @@ uitprinten. Vanaf dat moment zal deze ketzer u niet meer willen aan- of afmelden
 							<span style="color: red;">NEE</span>
 						{else}
 							NEE
+						{/if}
+					</strong>
+				</td>
+				<td>
+						{if $maaltijd.kok==1}
+							<strong><span style="color: green;">Koken</span></strong>
+						{/if}
+						{if $maaltijd.afwas==1}
+							<strong><span style="color: green;">Afwassen</span></strong>
+						{/if}
+						{if $maaltijd.theedoek==1}
+							<strong><span style="color: green;">Theedoeken</span></strong>
+						{/if}
+						{if !$maaltijd.kok && !$maaltijd.afwas && !$maaltijd.theedoek}
+							Geen
 						{/if}
 					</strong>
 				</td>

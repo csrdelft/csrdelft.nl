@@ -3,11 +3,14 @@
 		<a href="/actueel/maaltijden/" title="Maaltijdketzer">Maaltijdketzer</a>
 	</li>
 	<li>
-		<a href="/actueel/maaltijden/voorkeuren.php" title="Instellingen">Instellingen</a>
+		<a href="/actueel/maaltijden/voorkeuren/" title="Instellingen">Instellingen</a>
 	</li>
 	{if $loginlid->hasPermission('P_MAAL_MOD')}
 		<li>
-			<a href="/actueel/maaltijden/beheer/" title="Beheer">Beheer</a>
+			<a href="/actueel/maaltijden/beheer/" title="Beheer">Maaltijdbeheer</a>
+		</li>
+		<li>
+			<a href="/actueel/maaltijden/corveebeheer/" title="Beheer">Corveebeheer</a>
 		</li>
 		<li class="active">
 			<a href="/actueel/maaltijden/saldi.php" title="Saldo's updaten">Saldo's updaten</a>

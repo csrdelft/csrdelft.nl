@@ -195,10 +195,19 @@ class Lid implements Serializable{
 		}				
 	}
 
-	public function getEetwens(){ return $this->profiel['eetwens']; }
-	public function getCorveewens(){ return $this->profiel['corvee_wens']; }
-	public function getCorveepunten(){ return $this->profiel['corvee_punten']; }
-	public function getCorveevrijstelling(){ return $this->profiel['corvee_vrijstelling']; }
+	//corvee_voorkeuren splitsen en teruggeven als array
+	public function getCorveeVoorkeuren(){
+		$corvee_voorkeuren = $this->profiel['corvee_voorkeuren'];
+		$return = array(
+			'ma_kok' => $corvee_voorkeuren[0],
+			'ma_afwas' => $corvee_voorkeuren[1],
+			'do_kok' => $corvee_voorkeuren[2],
+			'do_afwas' => $corvee_voorkeuren[3],
+			'theedoek' => $corvee_voorkeuren[4]
+		);
+		return $return;
+	}
+	
 	public function isKwalikok(){ return $this->profiel['corvee_punten']==='1'; }
 	//deze willen we hebben om vanuit templates handig instellingen op te halen.
 	public function instelling($key){ return Instelling::get($key); }
@@ -229,7 +238,7 @@ class Lid implements Serializable{
 		}
 		return $return;
 	}
-
+	
 	// check of het lid in het bestuur zit.
 	public function isBestuur(){
 		require_once('groepen/class.groep.php');
@@ -442,7 +451,7 @@ class LidCache{
 }
 
 class Zoeker{
-	function zoekLeden($zoekterm, $zoekveld, $moot, $sort, $zoekstatus = '') {
+	function zoekLeden($zoekterm, $zoekveld, $moot, $sort, $zoekstatus = '', $velden = array()) {
 		$db=MySql::instance();
 		$leden = array();
 		$zoekfilter='';
@@ -450,6 +459,10 @@ class Zoeker{
 		# mysql escape dingesen
 		$zoekterm = trim($db->escape($zoekterm));
 		$zoekveld = trim($db->escape($zoekveld));
+		/*TODO: velden checken op rare dingen. Niet dat de velden() array nu buiten code opgegeven kan worden, maar het moet nog wel
+		foreach ($velden as &$veld) {
+			$veld = trim, escape, lalala
+		}*/
 
 		//Zoeken standaard in voornaam, achternaam, bijnaam en uid.
 		if($zoekveld=='naam' AND !preg_match('/^\d{2}$/', $zoekterm)){
@@ -521,16 +534,23 @@ class Zoeker{
 
 		# als er een specifieke moot is opgegeven, gaan we alleen in die moot zoeken
 		$mootfilter = ($moot != 'alle') ? 'AND moot= '.(int)$moot : '';
-
+		
 		# controleer of we ueberhaupt wel wat te zoeken hebben hier
 		if ($statusfilter != '') {
+			# standaardvelden
+			if (empty($velden)) {
+				$velden = array('uid', 'nickname', 'voornaam', 'tussenvoegsel', 'achternaam', 'postfix', 'adres', 'postcode', 'woonplaats', 'land', 'telefoon,
+					mobiel', 'email', 'geslacht', 'voornamen', 'icq', 'msn', 'skype', 'jid', 'website', 'beroep', 'studie', 'studiejaar', 'lidjaar,
+					gebdatum', 'moot', 'kring', 'kringleider', 'motebal,
+					o_adres', 'o_postcode', 'o_woonplaats', 'o_land', 'o_telefoon,
+					kerk', 'muziek', 'eetwens', 'status');
+			}
+		
+			# velden kiezen om terug te geven
+			$velden_sql = implode(', ', $velden);
 			$sZoeken="
 				SELECT
-					uid, nickname, voornaam, tussenvoegsel, achternaam, postfix, adres, postcode, woonplaats, land, telefoon,
-					mobiel, email, geslacht, voornamen, icq, msn, skype, jid, website, beroep, studie, studiejaar, lidjaar,
-					gebdatum, moot, kring, kringleider, motebal,
-					o_adres, o_postcode, o_woonplaats, o_land, o_telefoon,
-					kerk, muziek, eetwens, status
+					".$velden_sql."
 				FROM
 					lid
 				WHERE

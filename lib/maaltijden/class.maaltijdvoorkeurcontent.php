@@ -37,11 +37,13 @@ class MaaltijdVoorkeurContent extends SimpleHTML {
 		$aMaal['abo']['nietAbos']=$this->_maaltrack->getNotAboSoort();
 
 		//...de eetwens
-		$aMaal['eetwens']=$loginlid->getLid()->getEetwens();
-
+		$aMaal['eetwens']=$loginlid->getLid()->getProperty('eetwens');
+		
 		//...de corveewens
-		$aMaal['corveewens']=$loginlid->getLid()->getCorveewens();
-
+		$aMaal['corvee_wens']=$loginlid->getLid()->getProperty('corvee_wens');
+		
+		//...de corveewens
+		$aMaal['corvee_voorkeuren']=$loginlid->getLid()->getCorveeVoorkeuren();		
 
 		//arrays toewijzen en weergeven
 		$profiel->assign('maal', $aMaal);

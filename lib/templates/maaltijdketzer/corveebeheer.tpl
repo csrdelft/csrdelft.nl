@@ -6,10 +6,10 @@
 		<a href="/actueel/maaltijden/voorkeuren/" title="Instellingen">Instellingen</a>
 	</li>
 	{if $loginlid->hasPermission('P_MAAL_MOD')}
-		<li class="active">
+		<li>
 			<a href="/actueel/maaltijden/beheer/" title="Beheer">Maaltijdbeheer</a>
 		</li>
-		<li>
+		<li class="active">
 			<a href="/actueel/maaltijden/corveebeheer/" title="Beheer">Corveebeheer</a>
 		</li>
 		<li>
@@ -18,7 +18,7 @@
 	{/if}
 </ul>
 <hr />
-<h1>Maaltijdbeheer</h1>
+<h1>Corveebeheer</h1>
 {if $maal.maaltijden|@count==0}
 	<p>&#8226; Helaas, er is binnenkort geen maaltijd op Confide.</p>
 {else}
@@ -26,22 +26,32 @@
 		<tr>
 			<th>&nbsp;</th>
 			<th>Maaltijd begint om:</th>
-			<th>Omschrijving</th>
-			<th>Abo</th>
+			<th>Omschrijving</th>						
+			<th>K</th>
+			<th>A</th>
+			<th>T</th>
+			<th>Punten</th>
 			<th>Tafelpraeses</th>
 			<th># (Max)</th>
 		</tr>
 		{foreach from=$maal.maaltijden item=maaltijd}
 			<tr {if $maaltijd.datum<=$smarty.now}class="old"{/if}>
 				<td>
-					<a href="/actueel/maaltijden/beheer/bewerk/{$maaltijd.id}#maaltijdFormulier"><img src="{$csr_pics}forum/bewerken.png" /></a>
-					<a href="/actueel/maaltijden/beheer/verwijder/{$maaltijd.id}" onclick="return confirm(\'Weet u zeker dat u deze maaltijd wilt verwijderen?\')"><img src="{$csr_pics}forum/verwijderen.png" /></a>
-					<a href="/actueel/maaltijden/lijst/{$maaltijd.id}" class="knop">lijst</a>
-					<a href="/actueel/maaltijden/lijst/{$maaltijd.id}/fiscaal" class="knop">&euro;</a>
+					<a href="/actueel/maaltijden/corveebeheer/bewerk/{$maaltijd.id}#corveemaaltijdFormulier"><img src="{$csr_pics}knopjes/bewerken.png" /></a>					
+					<a href="/actueel/maaltijden/corveebeheer/takenbewerk/{$maaltijd.id}#corveetakenFormulier"><img src="{$csr_pics}knopjes/lijstbewerken.png" /></a>
 				</td>
 				<td>{$maaltijd.datum|date_format:$datumFormaat}</td>
 				<td>{$maaltijd.tekst|escape:'html'}</td>
-				<td>{$maaltijd.abotekst}</td>
+				<td {if $maaltijd.koks - $maaltijd.koks_aangemeld > 0}style="color: red;"{/if}>
+					{$maaltijd.koks_aangemeld}/{$maaltijd.koks}
+				</td>				
+				<td {if $maaltijd.afwassers - $maaltijd.afwassers_aangemeld > 0}style="color: red;"{/if}>
+					{$maaltijd.afwassers_aangemeld}/{$maaltijd.afwassers}
+				</td>	
+				<td {if $maaltijd.theedoeken - $maaltijd.theedoeken_aangemeld > 0}style="color: red;"{/if}>
+					{$maaltijd.theedoeken_aangemeld}/{$maaltijd.theedoeken}
+				</td>	
+				<td>({$maaltijd.punten_kok}/{$maaltijd.punten_afwas}/{$maaltijd.punten_theedoek})</td>
 				<td>{$maaltijd.tp|csrnaam}</td>
 				<td>
 					{if $maaltijd.aantal < $maaltijd.max}
@@ -55,6 +65,10 @@
 	</table>
 	<br />
 {/if}
-
-{* maaltijd bewerken of toevoegoen, standaard toevoegen *}
-{include file='maaltijdketzer/formulier.tpl'}
+{if $maal.formulier.actie == "bewerk"}
+{* maaltijd bewerken *}
+{include file='maaltijdketzer/corveeformulier.tpl'}
+{elseif $maal.formulier.actie == "takenbewerk"}
+{* corvee-aanmeldingen bewerken *}
+{include file='maaltijdketzer/corveetakenformulier.tpl'}
+{/if}
