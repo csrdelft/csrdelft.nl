@@ -11,7 +11,6 @@ bin/soccie_push/socciesaldi.php -text
 bin/socciesaldi-koppelen.php -text
 bin/statgraphgen.php -text
 bin/welkom.php -text
-/csrdelft.sql -text
 etc/csrmail.ini.sample -text
 etc/gozerbot.ini.sample -text
 etc/ldap.ini.sample -text
@@ -418,3 +417,7 @@ lib/vb/class.vbsourcesource.php -text
 lib/vb/class.vbsubject.php -text
 lib/vb/class.vbsubjectsource.php -text
 lib/vb/features.txt -text
+sql/1542_peiling.sql -text
+sql/1548_corvee.sql -text
+sql/csrdelft.sql -text
+sql/csrdelft_oud.sql -text
