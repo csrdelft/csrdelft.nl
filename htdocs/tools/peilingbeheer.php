@@ -12,116 +12,60 @@ if(!$loginlid->hasPermission('P_LOGGED_IN') OR !Peiling::magBewerken()){
 	$melding="Je hebt geen rechten om deze pagina te bekijken.";
 	$pagina=new csrdelft(new Stringincluder($melding, 'Peilingbeheer'));
 	$pagina->view();
+	exit();	
 }
 
-$html = '';
+require_once('class.peilingbeheercontent.php');
+$beheer = new PeilingBeheerContent();
+
 $resultaat ='';
-if(isset($_POST) && isset($_POST['titel'])){
-	//Process post
-	require_once('class.peiling.php');
-	$titel = $_POST['titel'];
-	$properties['titel'] = $titel;
-	$verhaal = $_POST['verhaal'];
-	$properties['verhaal'] = $verhaal;
-	$optieid = 1;
-	$opties=array();
-	while(isset($_POST['optie'.$optieid]) ){
-		$opties[$optieid] = $_POST['optie'.$optieid];
-		$optieid++;
+if (isset($_POST)){
+	if(isset($_POST['titel'])){
+		//Process peilingbeheer.php POST.
+		require_once('class.peiling.php');
+		$titel = $_POST['titel'];
+		$properties['titel'] = $titel;
+		$verhaal = $_POST['verhaal'];
+		$properties['verhaal'] = $verhaal;
+		$optieid = 1;
+		$opties=array();
+		while(isset($_POST['optie'.$optieid])){
+			$optietekst = $_POST['optie'.$optieid]; 				
+			if($optietekst!=''){
+				$opties[$optieid] = $optietekst;
+			}
+			$optieid++;
+		}
+		$properties['opties']=$opties;
+	
+		$peiling = new Peiling(0);
+		$pid = $peiling->maakPeiling($properties);	
+		$resultaat = 'De nieuwe peiling heeft id '.$pid.'.';			
 	}
-	$properties['opties']=$opties;
-	print_r($properties);
-
-	$peiling = new Peiling(0);
-	$pid = $peiling->maakPeiling($properties);	
-	$resultaat = 'De nieuwe peiling heeft id '.$pid.'.';
-}
-
-
-//require_once('class.peilingbeheercontent.php');
-
-$lijst='Peilingen: ';
-$peilingen = Peiling::getLijst();
-if($peilingen){
-	foreach($peilingen as $peiling){
-		$lijst .= $peiling['id'].' ';
+	
+	//Process externe POST
+	if( isset($_POST['actie']) && isset($_POST['id']) && is_numeric($_POST['id'])){
+		$id = (int)$_POST['id'];
+		$actie = $_POST['actie'];
+		$peiling = new Peiling($id);
+		switch ($actie) {
+			case "stem":
+				if(isset($_POST['optie']) && is_numeric($_POST['optie'])){						
+					$optie = (int)$_POST['optie'];
+					$r = $peiling->stem($optie);
+				}
+				break;
+			case "verwijder":
+				$r = $peiling->deletePeiling();
+				break;
+		}
+		$ref = $_SERVER['HTTP_REFERER'];			
+		header('location: '.$ref);
+		exit();
 	}
 }
-$lijst = $lijst.'<br/>';
+$beheer->setResultaat($resultaat);
 
-
-$html .= '
-<script type="text/javascript">
-var i=2;
-function addOptie()
-{
-i++;
-var xl=document.getElementById("opties_l");
-var xr=document.getElementById("opties_r");
-xl.innerHTML += \'<div class="optie">Optie \'+i+\':</div>\';
-xr.innerHTML += \'<div class="optie"><input name="optie\'+i+\'" type="text"/></div>\';
-}
-</script>
-<style type="text/css">
-.pb_n_rij {
-	position:relative;
-	display:table;	
-}
-.pb_n_col1 {	
-	position:relative;
-	float:left;
-	width:90px;	
-}
-.pb_n_col2 {
-	position:relative;
-	float:right;	
-}
-.optie {
-	height: 15px;
-}
-#submitd{
-	position:relative;
-	//top:60px;
-}
-
-</style>
-<h1>Peilingbeheertool</h1>
-<div style="position:relative">
-	<b>Nieuwe peiling:</b><br/>
-	<form id="nieuw" action="/tools/peilingbeheer.php" method="post">
-		<div class="pb_n_rij">
-			<div class="pb_n_col1">
-				Titel:<br/>
-				Verhaal:<br/>
-				<div style="height:50px;"></div>
-				<div id="opties_l">
-					<input type="button" onclick="addOptie()" value="extra optie"/><br/>
-					<br/>
-					<div class="optie">Optie 1:</div>
-					<div class="optie">Optie 2:</div>
-				</div>
-			</div>
-			<div class="pb_n_col2">
-				<input name="titel" type="text"/><br/>
-				<textarea name="verhaal" rows="2"></textarea>
-				<div style="height:39px;"></div>				
-				<div id="opties_r">
-					<div class="optie"><input name="optie1" type="text"/></div>
-					<div class="optie"><input name="optie2" type="text"/></div>
-				</div>
-			</div>
-		</div>
-		<div id="submitd">			
-			<input type="submit" value="Maak nieuwe peiling"/>
-		</div>	
-	</form>
-	<div style="position:relative;">
-	'.$lijst.' <br/><br/>
-	'.$resultaat.'	
-	</div>
-</div>
-<br/>';
-
-$pagina=new csrdelft(new stringincluder($html, 'Peilingbeheer'));
+$pagina=new csrdelft($beheer);
 $pagina->view();
 ?>

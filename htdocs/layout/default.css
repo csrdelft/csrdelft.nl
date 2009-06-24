@@ -741,3 +741,28 @@ form#streeplijst input, label{ text-align: left; margin: 3px; padding: 0px; line
 
 
 }
+
+/* Peiling */
+.peiling{
+	border: 1px solid black; 
+	margin: 10px; 
+	padding: 5px 10px;"
+}
+.peilingoptietekst{
+	width:200px;
+}
+.peilingoptiebalk{
+	position:absolute;
+	display: block;
+	top:0px;
+	left:175px; 
+	height: 10px; 					 
+	background-color: #6060FF;  
+	border: 1px outset #0A338D;
+}
+.peilingoptieaantal{
+	position:absolute;
+	top:0px;
+	left:490px;	
+}
+/* Peilingbeheer */

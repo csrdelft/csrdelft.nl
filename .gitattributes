@@ -84,6 +84,7 @@ htdocs/layout/js/gmaps.js -text
 htdocs/layout/js/groepen.js -text
 htdocs/layout/js/lightbox.js -text
 htdocs/layout/js/menu.js -text
+htdocs/layout/js/peilingbeheer.js -text
 htdocs/layout/js/pngfix.js -text
 htdocs/layout/js/profiel.js -text
 htdocs/layout/js/prototype.js -text
@@ -182,6 +183,7 @@ lib/class.nieuwscontent.php -text
 lib/class.pagina.php -text
 lib/class.paginacontent.php -text
 lib/class.peiling.php -text
+lib/class.peilingbeheercontent.php -text
 lib/class.peilingcontent.php -text
 lib/class.savedquery.php -text
 lib/class.simplehtml.php -text

@@ -357,8 +357,6 @@ UBBVERHAAL;
 	 * [peiling=2]
 	 */
 	public function ubb_peiling($parameters){
-		//echo "place:";
-		//print_r($GLOBALS);
 		if(isset($parameters['peiling']) AND is_numeric($parameters['peiling'])){
 			$peilingid = (int)$parameters['peiling'];
 			
