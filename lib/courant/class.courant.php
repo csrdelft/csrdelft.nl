@@ -233,6 +233,9 @@ class Courant {
 		}
 		return $this->berichten;
 	}
+	public function getBerichtenCount(){
+		return count($this->getBerichten());
+	}
 	/*
 	 * Geef de berichten uit de cache terug die de huidige gebruiker mag zien.
 	 * Als de gebruiker beheerder of bestuur is mag de gebruiker alle berichten zien.

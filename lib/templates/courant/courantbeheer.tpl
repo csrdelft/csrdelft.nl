@@ -28,7 +28,7 @@
 {if $melding!=''}{$melding}{/if}
 
 {* geen overzicht van berichten bij het bewerken... *}
-{if $form.ID==0 AND sizeof($courant->getBerichtenVoorGebruiker()) >0}
+{if $form.ID==0 AND sizeof($courant->getBerichtenVoorGebruiker())>0}
 	<h3>Overzicht van berichten:</h3>
 	<dl>
 		{foreach from=$courant->getBerichtenVoorGebruiker() item=bericht}
@@ -67,14 +67,14 @@
 		<input type="button" value="voorbeeld" onclick="return previewPost('courantBericht', 'bewerkPreview')" />
 	</div>
 </form>
-{if $courant->magBeheren()}<br />
-	<h3>Voorbeeld van de C.S.R.-courant.</h3>
+{if $courant->magBeheren() AND $courant->getBerichtenCount()>0}<br />
+	<h3 id="voorbeeld">Voorbeeld van de C.S.R.-courant.</h3>
 		<script type="text/javascript">//<![CDATA[{literal}
 			function showIframe(){
 				target =document.getElementById('courant_voorbeeld');
 				target.innerHTML = "<iframe src=\"/actueel/courant/courant.php\" style=\"width: 100%; height: 600px;\"></iframe>";
 			}
 		//]]></script>{/literal}
-		<a href="#" onclick="showIframe()">Laat voorbeeld zien...</a>
+		<a href="#voorbeeld" onclick="showIframe()">Laat voorbeeld zien...</a>
 		<div id="courant_voorbeeld"></div>
 {/if}

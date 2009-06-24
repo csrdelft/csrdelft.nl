@@ -8,20 +8,20 @@
 # -------------------------------------------------------------------
 
 
-require_once('include.config.php');
+require_once 'include.config.php';
 
-require_once('courant/class.courant.php');
+require_once 'courant/class.courant.php';
 $courant=new Courant();
 
 # als er genoeg rechten zijn een preview van de courant laten zien.
-if (!$courant->magToevoegen()) { header('location: '.CSR_ROOT); exit; }
+if(!$courant->magToevoegen()){ header('location: '.CSR_ROOT); exit; }
 
 //kijken of de huidige getoond moet worden, of een nieuwe
 if(isset($_GET['ID']) AND $_GET['ID']!=0){
 	$courant->load((int)$_GET['ID']);
 }
 
-require_once('courant/class.courantcontent.php');
+require_once 'courant/class.courantcontent.php';
 $pagina=new CourantContent($courant);
 
 $pagina->view();
