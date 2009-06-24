@@ -7,16 +7,6 @@
 require_once 'include.config.php';
 require_once 'class.peilingcontent.php' ;
 
-// if user has no permission
-if(!$loginlid->hasPermission('P_LOGGED_IN') OR !Peiling::magBewerken()){
-	$melding="Je hebt geen rechten om deze pagina te bekijken.";
-	$pagina=new csrdelft(new Stringincluder($melding, 'Peilingbeheer'));
-	$pagina->view();
-	exit();	
-}
-
-require_once('class.peilingbeheercontent.php');
-$beheer = new PeilingBeheerContent();
 
 $resultaat ='';
 if (isset($_POST)){
@@ -64,6 +54,19 @@ if (isset($_POST)){
 		exit();
 	}
 }
+
+require_once('class.peilingbeheercontent.php');
+$beheer = new PeilingBeheerContent();
+
+
+// if user has no permission
+if(!$loginlid->hasPermission('P_LOGGED_IN') OR !Peiling::magBewerken()){
+	$melding="Je hebt geen rechten om deze pagina te bekijken.";
+	$pagina=new csrdelft(new Stringincluder($melding, 'Peilingbeheer'));
+	$pagina->view();
+	exit();	
+}
+
 $beheer->setResultaat($resultaat);
 
 $pagina=new csrdelft($beheer);

@@ -16,15 +16,17 @@ class PeilingContent{
 		$titel = $rpeiling['titel'];
 		$verhaal = nl2br($rpeiling['tekst']); //XHTML=true				
 
-		$ropties = $this->_peiling->getPeilingOpties();		
 		$opties = '';
-		foreach($ropties as $roptie){
-			$optieid = $roptie['id'];
-			$tekst = $roptie['optie'];
-			//$aantal = $ropties[$i]['stemmen'];
-			$opties .= '<input type="radio" name="optie" value="'.($optieid).'"/> '.$tekst.'<br/>';
+		$ropties = $this->_peiling->getPeilingOpties();		
+		if(!empty($ropties)){
+			foreach($ropties as $roptie){
+				$optieid = $roptie['id'];
+				$tekst = $roptie['optie'];
+				//$aantal = $ropties[$i]['stemmen'];
+				$opties .= '<input type="radio" name="optie" value="'.($optieid).'"/> '.$tekst.'<br/>';
+			}
 		}
-
+		
 		//Constructie vd tag //width:400px;
 		$html = '<h3>'.$titel.'</h3>
 				'.$verhaal.'
@@ -46,29 +48,31 @@ class PeilingContent{
 		$titel = $rpeiling['titel'];
 		$verhaal = nl2br($rpeiling['tekst']); //XHTML=true		
 		
-		$ropties = $this->_peiling->getPeilingOpties();		
 		$opties = '';
-		$max = 0;
-		foreach($ropties as $roptie){
-			$max = max($max, $roptie['stemmen']);
-		}		
-		foreach($ropties as $roptie){
-			$tekst = $roptie['optie'];
-			$aantal = $roptie['stemmen'];
-			$perc = 0;
-			if($max != 0){
-				$perc = $aantal / $max;
+		$ropties = $this->_peiling->getPeilingOpties();
+		if(!empty($ropties)){
+			$max = 0;
+			foreach($ropties as $roptie){
+				$max = max($max, $roptie['stemmen']);
+			}		
+			foreach($ropties as $roptie){
+				$tekst = $roptie['optie'];
+				$aantal = $roptie['stemmen'];
+				$perc = 0;
+				if($max != 0){
+					$perc = $aantal / $max;
+				}
+	
+				$opties .= '
+				<div style="position:relative;">
+					<div class="peilingoptietekst">
+						'.$tekst.' 
+					</div>
+					<div class="peilingoptiebalk" style="width: '.($perc*300).'px;">
+						&nbsp;
+					</div><div class="peilingoptieaantal">('.$aantal.')</div>
+				</div>';
 			}
-
-			$opties .= '
-			<div style="position:relative;">
-				<div class="peilingoptietekst">
-					'.$tekst.' 
-				</div>
-				<div class="peilingoptiebalk" style="width: '.($perc*300).'px;">
-					&nbsp;
-				</div><div class="peilingoptieaantal">('.$aantal.')</div>
-			</div>';
 		}
 		
 		$html = '<h3>'.$titel.'</h3>

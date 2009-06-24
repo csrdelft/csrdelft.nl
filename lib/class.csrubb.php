@@ -356,18 +356,17 @@ UBBVERHAAL;
 	 * Peiling ubb-tag. Door Piet-Jan Spaans.
 	 * [peiling=2]
 	 */
-	public function ubb_peiling($parameters){
+	public function ubb_peiling($parameters){		
 		if(isset($parameters['peiling']) AND is_numeric($parameters['peiling'])){
 			$peilingid = (int)$parameters['peiling'];
 			
 			require_once 'class.peilingcontent.php';
 			$peilingtag=new PeilingUbbContent($peilingid);
 			
-			$return = $peilingtag->getHTML();
+			return $peilingtag->getHTML();
 		}else{
-			$return .= 'Geen geldig peilingblok.';
-		}
-		return $return;
+			return 'Geen geldig peilingblok.';
+		}		
 	}
 }
 //we staan normaal geen HTML toe, met deze kan dat wel.
