@@ -62,7 +62,11 @@ class Peiling {
 	
 	public function magStemmen (){
 		$iPeilingID=(int)$this->id;
+		if(!LoginLid::instance()->hasPermission('P_LOGGED_IN')){
+			return false;
+		}
 		$sUserID = LoginLid::instance()->getUid();
+		
 		$sPeilingQuery="
 			SELECT
 				*
