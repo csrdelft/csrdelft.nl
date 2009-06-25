@@ -21,7 +21,7 @@ $(document).observe("keydown", function(event){
 		event.stop();
 	}
 	if(event.keyCode==80){ //80 = p voor instellingen
-		location.href = "http://csrdelft.nl/communicatie/profiel";
+		location.href = "http://csrdelft.nl/communicatie/profiel.php";
 		event.stop();
 	}
 	
