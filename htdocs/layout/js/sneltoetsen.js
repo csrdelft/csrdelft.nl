@@ -17,6 +17,10 @@ $(document).observe("keydown", function(event){
 		location.href = "http://csrdelft.nl/communicatie/forum/categorie/laatste";
 		event.stop();
 	}
+	if(event.keyCode==72){ //72 = h voor thuis
+		location.href = "http://csrdelft.nl/";
+		event.stop();
+	}
 	if(event.keyCode==73){ //73 = i voor instellingen
 		location.href = "http://csrdelft.nl/instellingen";
 		event.stop();
