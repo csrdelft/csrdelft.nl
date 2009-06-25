@@ -5,7 +5,7 @@ $(document).observe("keydown", function(event){
 		event.stop();
 	}
 	if(event.keyCode==68){ //68 = d voor documenten
-		location.href = "http://csrdelft.nl/actueel/documenten/";
+		location.href = "http://csrdelft.nl/communicatie/documenten/";
 		event.stop();
 	}
 	if(event.keyCode==70){ //70 = f voor forum
