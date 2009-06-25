@@ -16,12 +16,16 @@ $(document).observe("keydown", function(event){
 		location.href = "http://csrdelft.nl/instellingen";
 		event.stop();
 	}
-	if(event.keyCode==77){ //77 = m voor forum
+	if(event.keyCode==77){ //77 = m voor mededelingen
 		location.href = "http://csrdelft.nl/actueel/mededelingen";
 		event.stop();
 	}
-	if(event.keyCode==80){ //80 = p voor instellingen
+	if(event.keyCode==80){ //80 = p voor profiel
 		location.href = "http://csrdelft.nl/communicatie/profiel.php";
+		event.stop();
+	}
+	if(event.keyCode==191){ //191 = / voor het ledenzoekvakje
+		document.getElementById('zoekveld').focus();
 		event.stop();
 	}
 	

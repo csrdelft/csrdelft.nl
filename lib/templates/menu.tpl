@@ -42,7 +42,7 @@
 					{/foreach}
 				</div>
 				<br />
-				<form method="post" action="/communicatie/lijst.php">
+				<form method="post" action="/communicatie/lijst.php" name="lidzoeker">
 					<p>
 						<input type="hidden" name="a" value="zoek" />
 						<input type="hidden" name="waar" value="naam" />
