@@ -56,6 +56,10 @@ class csrdelft extends SimpleHTML {
 			$this->addStylesheet('default.css');
 			$this->addScript('csrdelft.js');
 			$this->addScript('menu.js');
+			if(Instelling::get('algemeen_sneltoetsen')=='ja'){
+				$this->addScript('prototype.js');
+				$this->addScript('sneltoetsen.js');
+			}
 		}
 		
 		//Roze webstek
@@ -75,11 +79,22 @@ class csrdelft extends SimpleHTML {
 
 
 	function addScript($script){
-		$this->_scripts[]=array(
-			'naam' => $script,
-			//voeg geen datum toe als er al een '?' in de scriptnaam staat
-			'datum' => (strstr($script,'?')?'':filemtime(HTDOCS_PATH.'/layout/js/'.$script))
-		);
+		//geen twee keer hetzelfde script toevoegen.
+		if(!$this->hasScript($script)){
+			$this->_scripts[]=array(
+				'naam' => $script,
+				//voeg geen datum toe als er al een '?' in de scriptnaam staat
+				'datum' => (strstr($script,'?')?'':filemtime(HTDOCS_PATH.'/layout/js/'.$script))
+			);
+		}
+	}
+	public function hasScript($filename){
+		foreach($this->_scripts as $script){
+			if($script['naam']==$filename){
+				return true;
+			}
+		}
+		return false;
 	}
 	function getScripts(){			return $this->_scripts; }
 
