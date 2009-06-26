@@ -9,7 +9,7 @@ function verbreedSaldografiek(cie){
 
 	timespan=40;
 	uid='';
-	for(i in querystring){
+	for(var i=0;i<querystring.length;i++){
 		keyvalue=querystring[i].split('=');
 		if(keyvalue[0]=='timespan'){
 			timespan=keyvalue[1];

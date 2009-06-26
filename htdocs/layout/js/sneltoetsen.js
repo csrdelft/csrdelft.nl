@@ -1,9 +1,9 @@
 $(document).observe("keydown", function(event){
-	 //Geen sneltoetsen als we in een input-element of text-area zitten.
-    var element = event.element();
+	//Geen sneltoetsen als we in een input-element of text-area zitten.
+	var element = event.element();
     if (element.tagName == 'INPUT' || element.tagName == 'TEXTAREA') {
-    	return;
-    }
+		return;
+	}
 	//alert(event.keyCode);
 	if(event.keyCode==66){ //66 = b voor besturen.
 		location.href = "http://csrdelft.nl/actueel/groepen/Besturen/";
