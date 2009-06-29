@@ -1,10 +1,28 @@
+
+var isMod=false;
+
+$(document).observe("keyup", function(event){
+	if(event.keyCode==16 || event.keyCode==17 || event.keyCode==18){
+		isMod=false;
+	}
+});
 $(document).observe("keydown", function(event){
+	//alert(event.keyCode);
+	if(event.keyCode==16 || event.keyCode==17 || event.keyCode==18){
+		isMod=true;
+		return;
+	}
+	//als er shift, control of alt ingedrukt is doen we niets.
+	if(isMod){
+		return;
+	}
+	
 	//Geen sneltoetsen als we in een input-element of text-area zitten.
 	var element = event.element();
     if (element.tagName == 'INPUT' || element.tagName == 'TEXTAREA') {
 		return;
 	}
-	//alert(event.keyCode);
+	
 	if(event.keyCode==66){ //66 = b voor besturen.
 		location.href = "http://csrdelft.nl/actueel/groepen/Besturen/";
 		event.stop();
