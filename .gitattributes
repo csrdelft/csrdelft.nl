@@ -36,6 +36,7 @@ htdocs/actueel/maaltijden/.htaccess -text
 htdocs/actueel/maaltijden/archief.php -text
 htdocs/actueel/maaltijden/beheer.php -text
 htdocs/actueel/maaltijden/corveebeheer.php -text
+htdocs/actueel/maaltijden/corveepunten.php -text
 htdocs/actueel/maaltijden/index.php -text
 htdocs/actueel/maaltijden/maaltijdlijst.php -text
 htdocs/actueel/maaltijden/saldi.php -text
@@ -229,6 +230,7 @@ lib/lid/class.profiel.php -text
 lib/lid/class.profielcontent.php -text
 lib/lid/class.saldi.php -text
 lib/maaltijden/class.corveebeheercontent.php -text
+lib/maaltijden/class.corveepuntencontent.php -text
 lib/maaltijden/class.maaltijd.php -text
 lib/maaltijden/class.maaltijdabocontent.php -text
 lib/maaltijden/class.maaltijdbeheercontent.php -text
@@ -374,6 +376,7 @@ lib/templates/maaltijdketzer/abo-overzicht.tpl -text
 lib/templates/maaltijdketzer/beheer.tpl -text
 lib/templates/maaltijdketzer/corveebeheer.tpl -text
 lib/templates/maaltijdketzer/corveeformulier.tpl -text
+lib/templates/maaltijdketzer/corveepunten.tpl -text
 lib/templates/maaltijdketzer/corveetakenformulier.tpl -text
 lib/templates/maaltijdketzer/formulier.tpl -text
 lib/templates/maaltijdketzer/lijst.tpl -text
@@ -422,5 +425,6 @@ lib/vb/class.vbsubjectsource.php -text
 lib/vb/features.txt -text
 sql/1542_peiling.sql -text
 sql/1548_corvee.sql -text
+sql/1563_corvee.sql -text
 sql/csrdelft.sql -text
 sql/csrdelft_oud.sql -text

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jun 18, 2009 at 10:55 AM
+-- Generation Time: Jun 29, 2009 at 05:32 PM
 -- Server version: 5.1.30
 -- PHP Version: 5.2.8
 
@@ -542,9 +542,6 @@ CREATE TABLE IF NOT EXISTS `maaltijdaanmelding` (
   `uid` varchar(4) NOT NULL DEFAULT '',
   `maalid` int(11) NOT NULL DEFAULT '0',
   `status` enum('AAN','AF') NOT NULL DEFAULT 'AAN',
-  `kok` tinyint(1) NOT NULL,
-  `afwas` tinyint(1) NOT NULL,
-  `theedoek` tinyint(1) NOT NULL,
   `door` varchar(4) NOT NULL DEFAULT '',
   `gasten` int(11) NOT NULL DEFAULT '0',
   `gasten_opmerking` varchar(255) NOT NULL DEFAULT '',
@@ -582,6 +579,21 @@ CREATE TABLE IF NOT EXISTS `maaltijdabosoort` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `maaltijdcorvee`
+--
+
+CREATE TABLE IF NOT EXISTS `maaltijdcorvee` (
+  `maalid` int(11) NOT NULL,
+  `uid` varchar(4) NOT NULL,
+  `kok` tinyint(1) NOT NULL DEFAULT '0',
+  `afwas` tinyint(1) NOT NULL DEFAULT '0',
+  `theedoek` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`maalid`,`uid`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `maaltijdgesloten`
 --
 
@@ -589,9 +601,6 @@ CREATE TABLE IF NOT EXISTS `maaltijdgesloten` (
   `uid` varchar(4) NOT NULL DEFAULT '',
   `eetwens` text NOT NULL,
   `maalid` int(11) NOT NULL DEFAULT '0',
-  `kok` tinyint(1) NOT NULL,
-  `afwas` tinyint(1) NOT NULL,
-  `theedoek` tinyint(1) NOT NULL,
   `door` varchar(4) NOT NULL DEFAULT '',
   `gasten` int(11) NOT NULL DEFAULT '0',
   `gasten_opmerking` varchar(255) NOT NULL DEFAULT '',

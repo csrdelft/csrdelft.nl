@@ -14,3 +14,5 @@ RewriteRule ^beheer/verwijder/([0-9]+)/?$ beheer.php?verwijder=$1
 RewriteRule ^corveebeheer/?$ corveebeheer.php
 RewriteRule ^corveebeheer/bewerk/([0-9]+)/?$ corveebeheer.php?bewerk=$1
 RewriteRule ^corveebeheer/takenbewerk/([0-9]+)/?$ corveebeheer.php?takenbewerk=$1
+
+RewriteRule ^corveepunten/?$ corveepunten.php

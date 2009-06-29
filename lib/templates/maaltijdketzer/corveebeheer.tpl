@@ -10,7 +10,10 @@
 			<a href="/actueel/maaltijden/beheer/" title="Beheer">Maaltijdbeheer</a>
 		</li>
 		<li class="active">
-			<a href="/actueel/maaltijden/corveebeheer/" title="Beheer">Corveebeheer</a>
+			<a href="/actueel/maaltijden/corveebeheer/" title="Corveebeheer">Corveebeheer</a>
+		</li>
+		<li>
+			<a href="/actueel/maaltijden/corveepunten/" title="Corveepunten">Corveepunten</a>
 		</li>
 		<li>
 			<a href="/actueel/maaltijden/saldi.php" title="Saldo's updaten">Saldo's updaten</a>
@@ -19,6 +22,7 @@
 </ul>
 <hr />
 <h1>Corveebeheer</h1>
+{if $maal.zelf.error!=''}<span class="waarschuwing">N.B.: {$maal.zelf.error|escape:'htmlall'}</span><br /><br />{/if}
 {if $maal.maaltijden|@count==0}
 	<p>&#8226; Helaas, er is binnenkort geen maaltijd op Confide.</p>
 {else}

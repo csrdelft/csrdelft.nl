@@ -93,13 +93,38 @@ Regels omtrent het betalen van de maaltijden op Confide:
 		</td>
 		<td class="corvee">
 			<strong>Corvee</strong><br />
-			<table  style="width: 100%">
-				<tr><td>koks:</td><td>...</td></tr>
-				<tr><td>&nbsp;</td><td>...</td></tr>
-				<tr><td>afwassers:</td><td>...</td></tr>
-				<tr><td>&nbsp;</td><td>...</td></tr>
-				<tr><td>&nbsp;</td><td>...</td></tr>
-			</table>
+				<table>
+					<tr>
+						<td>Koks:</td>
+						<td>
+						{section name=koks loop=$maaltijd.koks}					
+							{assign var='it' value=$smarty.section.koks.iteration-1}
+							{assign var='kok' value=$maaltijd.taken.koks.$it}
+							{if $kok!=''}{$kok|csrnaam}{else}...{/if}<br />
+						{/section}
+						</td>
+					</tr>
+					<tr>
+						<td>Afwassers:</td>
+						<td>
+						{section name=afwassers loop=$maaltijd.afwassers}					
+							{assign var='it' value=$smarty.section.afwassers.iteration-1}
+							{assign var='afwas' value=$maaltijd.taken.afwassers.$it}
+							{if $afwas!=''}{$afwas|csrnaam}{else}...{/if}<br />
+						{/section}
+						</td>
+					</tr>
+					<tr>
+						<td>Theedoekwassers:</td>
+						<td>
+						{section name=theedoeken loop=$maaltijd.theedoeken}					
+							{assign var='it' value=$smarty.section.theedoeken.iteration-1}
+							{assign var='theedoek' value=$maaltijd.taken.theedoeken.$it}
+							{if $theedoek!=''}{$theedoek|csrnaam}{else}...{/if}<br />
+						{/section}
+						</td>
+					</tr>
+				</table>
 		</td></tr>
 </table>
 </body>

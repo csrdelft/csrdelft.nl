@@ -10,7 +10,10 @@
 			<a href="/actueel/maaltijden/beheer/" title="Beheer">Maaltijdbeheer</a>
 		</li>
 		<li>
-			<a href="/actueel/maaltijden/corveebeheer/" title="Beheer">Corveebeheer</a>
+			<a href="/actueel/maaltijden/corveebeheer/" title="Corveebeheer">Corveebeheer</a>
+		</li>
+		<li>
+			<a href="/actueel/maaltijden/corveepunten/" title="Corveepunten">Corveepunten</a>
 		</li>
 		<li>
 			<a href="/actueel/maaltijden/saldi.php" title="Saldo's updaten">Saldo's updaten</a>

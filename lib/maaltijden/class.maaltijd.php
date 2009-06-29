@@ -52,6 +52,28 @@ class Maaltijd {
 			$this->_maaltijd = $this->_db->next($result);
 		}
 	}
+	
+	# haalt de taken op
+	function getTaken(){
+		$taken = array();
+		$sMaaltijdTakenQuery="
+			SELECT
+				uid, kok, afwas, theedoek
+			FROM
+				maaltijdcorvee
+			WHERE
+				maalid=".$this->_maalid."";
+		$rMaaltijdTaken=$this->_db->query($sMaaltijdTakenQuery);
+		if (($rMaaltijdTaken !== false) and $this->_db->numRows($rMaaltijdTaken) > 0) {
+			while ($record = $this->_db->next($rMaaltijdTaken)) {
+				if ($record['kok']) $taken['koks'][] = $record['uid'];
+				if ($record['afwas']) $taken['afwassers'][] = $record['uid'];
+				if ($record['theedoek']) $taken['theedoeken'][] = $record['uid'];
+			}
+		}
+
+		return $taken;
+	}
 
 	function getError() {
 		$error = $this->_error;
@@ -78,10 +100,14 @@ class Maaltijd {
 
 	public function getMoment(){ return date('Y-m-d H:i', $this->_maaltijd['datum']); }
 	public function getTekst(){ return $this->_maaltijd['tekst']; }
+	public function getKoks(){ return $this->_maaltijd['koks']; }
+	public function getAfwassers(){ return $this->_maaltijd['afwassers']; }
+	public function getTheedoeken(){ return $this->_maaltijd['theedoeken']; }
 	# alle info...
 	public function getInfo() { return $this->_maaltijd; }
 	public function getAantalAanmeldingen(){ return $this->_maaltijd['aantal']; }
 	public function getMaxAanmeldingen(){ return $this->_maaltijd['max']; }
+	
 	# Aanmelden van een gebruiker voor deze maaltijd.
 	function aanmelden($uid = '') {
 		$loginlid=LoginLid::instance();
@@ -281,7 +307,7 @@ class Maaltijd {
 			$result = $this->_db->select("SELECT status FROM maaltijdaanmelding WHERE maalid={$this->_maalid} AND uid='{$uid}'");
 			if (($result !== false) and $this->_db->numRows($result) > 0) {
 				$record = $this->_db->next($result);
-				if ($record['status'] == 'AAN' or $record['status'] == 'AF'){
+				if ($record['status'] == 'AAN' or $record['status'] == 'AF' or $record['status'] == 'ONBEKEND'){
 					return $record['status'];
 				}
 			}
@@ -449,7 +475,7 @@ class Maaltijd {
 			if(isset($aan['ip'])){ $ip=$aan['ip']; }else{ $ip=''; }
 			if(isset($aan['gasten'])){ $gasten=$aan['gasten']; }else{ $gasten=''; }
 			if(isset($aan['gasten_opmerking'])){ $gasten_opmerking=$aan['gasten_opmerking']; }else{ $gasten_opmerking=''; }
-
+			
 			$aanQuery=
 				"INSERT INTO
 					maaltijdgesloten
@@ -457,7 +483,8 @@ class Maaltijd {
 					uid, eetwens, maalid, door,
 					gasten, gasten_opmerking, tijdstip, ip
 				)VALUES(
-					'".$aan['uid']."', '".$aan['eetwens']."', ".$this->_maalid.", '".$door."',
+					'".$aan['uid']."', '".$aan['eetwens']."', ".$this->_maalid.", 
+					'".$door."',
 					'".$gasten."', '".$gasten_opmerking."', ".$tijdstip.", '".$ip."'
 				);";
 			$this->_db->query($aanQuery);
@@ -619,6 +646,7 @@ class Maaltijd {
 
 		return $aan;
 	}
+	
 	/*
 	 * Haal de $aantal meest recente maaltijden op voor een gegeven lid.
 	 */

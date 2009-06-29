@@ -2,7 +2,7 @@
 
 <form action="/actueel/maaltijden/corveebeheer/" method="post">
 	<input type="hidden" name="maalid" value="{$maal.formulier.id}" />
-	<input type="hidden" name="actie" value="gewoonbewerk" />
+	<input type="hidden" name="actie" value="bewerk" />
 	{if isset($error)}<div class="waarschuwing">{$error}</div>{/if}
 	<table>
 		<tr>
@@ -31,15 +31,15 @@
 		</tr>
 		<tr>
 			<td>Koks</td>
-			<td><input type="text" name="koks" value="{$maal.formulier.koks}" style="width: 50px;"  /></td>
+			<td><input type="text" name="koks" value="{$maal.formulier.koks}" style="width: 50px;"  /> ({$maal.formulier.koks_aangemeld} aangemeld)</td>
 		</tr>
 		<tr>
 			<td>Afwassers</td>
-			<td><input type="text" name="afwassers" value="{$maal.formulier.afwassers}" style="width: 50px;" /></td>
+			<td><input type="text" name="afwassers" value="{$maal.formulier.afwassers}" style="width: 50px;" /> ({$maal.formulier.afwassers_aangemeld} aangemeld)</td>
 		</tr>
 		<tr>
 			<td>Theedoeken</td>
-			<td><input type="text" name="theedoeken" value="{$maal.formulier.theedoeken}" style="width: 50px;" /></td>
+			<td><input type="text" name="theedoeken" value="{$maal.formulier.theedoeken}" style="width: 50px;" /> ({$maal.formulier.theedoeken_aangemeld} aangemeld)</td>
 		</tr>
 		<tr>
 			<td>Punten Kok</td>
