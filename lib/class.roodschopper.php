@@ -7,7 +7,7 @@
 require_once 'class.csrubb.php';
 
 class Roodschopper{
-	private $cie=soccie;
+	private $cie='soccie';
 	private $saldogrens;
 	private $bericht;
 	
@@ -31,9 +31,9 @@ class Roodschopper{
 	}
 
 	public static function getDefaults(){
-		pr(get_defined_constants());
-		pr(get_defined_functions());
-		pr(xdebug_get_function_stack());
+		//pr(get_defined_constants());
+		//pr(get_defined_functions());
+		//pr(xdebug_get_function_stack());
 
 		$bericht='Beste LID,
 Uw saldo bij de ~ is SALDO, dat is negatief. Inleggen met je hoofd.
