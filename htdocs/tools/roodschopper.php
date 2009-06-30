@@ -6,45 +6,39 @@
  */
 
 require_once 'include.config.php';
+require_once 'class.roodschopper.php';
+require_once 'class.roodschoppercontent.php';
 
-if($loginlid->getUid()!='0436'){ 
-	header('location: http://csrdelft.nl'); 
+if(!Loginlid::instance()->hasPermission('P_ADMIN,groep:MaalCie,groep:SocCie')){
+	header('location: http://csrdelft.nl');
+	exit;
+}
+if(isset($_POST['commissie'], $_POST['bcc'], $_POST['saldogrens'], $_POST['uitsluiten'], $_POST['bericht'])){
+	$cie='soccie';
+	if($_POST['commissie']=='maalcie'){
+		$cie='maalcie';
+	}
+	$roodschopper=new Roodschopper($cie, (int)$_POST['saldogrens'], $_POST['onderwerp'], $_POST['bericht']);
+	$roodschopper->setBcc($_POST['bcc']);
+	$roodschopper->setUitgesluiten($_POST['uitsluiten']);
+}else{
+	$roodschopper=Roodschopper::getDefaults();
 }
 
-//instellingen
-$saldoGrens=-5;
-$cie='maalcie';
 
-$naam=array(
-	'soccie' => array('SocCie', 'soccie@csrdelft.nl'), 
-	'maalcie' => array('MaalCie', 'maalcief@csrdelft.nl'));
-
-$query="
-	SELECT uid, ".$cie."Saldo AS saldo
-	FROM lid WHERE ".$cie."Saldo<".$saldoGrens." AND 
-(status='S_LID');";
-
-
-
-$result=$db->query($query);
-
-echo 'Aantal rode mensen met een lager saldo dan '.$saldoGrens.": ".$db->numRows($result)."<hr/>";
-
-while($data=$db->next($result)){
-	if($data['uid']=='0641') continue;
-	$mail=new Smarty_csr();
-	
-	$mail->assign('uid', $data['uid']);
-	$mail->assign('saldo', number_format($data['saldo'], 2, ',', ''));	
-	
-	$body=$mail->fetch($cie.'mail.tpl');
-	$to=$data['uid'].'@csrdelft.nl, '.$naam[$cie][1].'';
-	$subject='U staat rood bij de '.$naam[$cie][0].'.';
-	
-//	mail($to, $subject, $body, "From: ".$cie."@csrdelft.nl\n\r");
-	
-	echo nl2br($body).'<hr />';
+if(isset($_POST['actie']) AND $_POST['actie']=='simulate'){
+	$aantal=$roodschopper->simulate();
+	echo 'Er zijn '.$aantal.' leden met een saldo lager dan '.$roodschopper->getSaldogrens();
+	exit;
 }
 	
+
+
+$pagina=new Csrdelft(new RoodschopperContent($roodschopper));
+$pagina->addStylesheet('roodschopper.css');
+$pagina->view();
+
+exit;
+
 	
 ?>

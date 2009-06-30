@@ -96,6 +96,7 @@ htdocs/layout/lightbox.css -text
 htdocs/layout/owee.css -text
 htdocs/layout/pauper.css -text
 htdocs/layout/profiel.css -text
+htdocs/layout/roodschopper.css -text
 htdocs/layout/roze.css -text
 htdocs/layout/undohtml.css -text
 htdocs/layout/vb.css -text
@@ -187,6 +188,8 @@ lib/class.paginacontent.php -text
 lib/class.peiling.php -text
 lib/class.peilingbeheercontent.php -text
 lib/class.peilingcontent.php -text
+lib/class.roodschopper.php -text
+lib/class.roodschoppercontent.php -text
 lib/class.savedquery.php -text
 lib/class.simplehtml.php -text
 lib/class.simplespamfilter.php -text
@@ -392,6 +395,7 @@ lib/templates/owee_menu.tpl -text
 lib/templates/pauper_csrdelft.tpl -text
 lib/templates/profiel/bewerken.tpl -text
 lib/templates/profiel/profiel.tpl -text
+lib/templates/roodschopper/roodschopper.tpl -text
 lib/templates/socciemail.tpl -text
 lib/templates/vb/home.tpl -text
 lib/templates/vb/search.tpl -text
