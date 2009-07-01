@@ -1,7 +1,8 @@
 {$melding}
 <h1>Roodschopper</h1>
 <p>Met deze tool kan de SocCie en de MaalCie zelf een roodschopmail versturen. U stelt een aantal parameters in, typt een verhaaltje,
-	en drukt op verzenden. Dan krijgt u een overzichtje te zien van de mensen die rood staan, en kunt u het verzenden bevestigen.</p><br />
+	en drukt op verzenden. Dan krijgt u een overzichtje te zien van de mensen die rood staan, en kunt u het verzenden bevestigen.</p>
+<div class="waarschuwing">PAS OP: vanaf nu worden er werkelijk berichten verzonden!</div><br />
 <form action="roodschopper.php" method="post" id="roodschopper">
 	<fieldset>
 	<label for="commissie">Commissie:</label>
@@ -11,13 +12,13 @@
 	</select><br />
 
 	<label for="bcc">BCC naar:</label>
-	<input type="text" id="bcc" name="bcc" value="{$roodschopper->getBcc()}" /><br />
+	<input type="text" id="bcc" name="bcc" value="{$roodschopper->getBcc()}" /> <span class="small">alle verzonden mails BCCen naar dit adres.</span><br />
 	
 	<label for="saldogrens">Saldogrens:</label>
-	<input type="text" id="saldogrens" name="saldogrens" value="{$roodschopper->getSaldogrens()}" /><br />
+	<input type="text" id="saldogrens" name="saldogrens" value="{$roodschopper->getSaldogrens()}" /> <span class="small">in euro's</span><br />
 
 	<label for="uitsluiten">Geen mail naar:</label>
-	<input type="text" id="uitsluiten" name="uitsluiten" value="{$roodschopper->getUitgesloten()}" /><br /><br />
+	<input type="text" id="uitsluiten" name="uitsluiten" value="{$roodschopper->getUitgesloten()}" /> <span class="small">uid's gescheiden door een komma</span><br /><br />
 
 	<label for="onderwerp">Onderwerp:</label>
 	<input type="text" id="onderwerp" name="onderwerp" value="{$roodschopper->getOnderwerp()}" /><br />

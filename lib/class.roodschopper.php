@@ -124,7 +124,8 @@ h.t. Fiscus.';
 			$headers.="Bcc: ".$this->bcc."\n\r";
 		}
 		foreach($this->teschoppen as $uid => $bericht){
-			//mail($data['uid'].'@csrdelft.nl', $bericht['onderwerp'], $bericht['bericht'], $headers);
+			mail($uid.'@csrdelft.nl', $bericht['onderwerp'], $bericht['bericht'], $headers);
 		}
+		exit;
 	}
 }
