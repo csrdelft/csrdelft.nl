@@ -1,35 +1,49 @@
 <?php
 
 # instellingen & rommeltjes
-require_once('include.config.php');
+require_once 'include.config.php';
 
-require_once('class.commissie.php');
-$soccie=$maalcie=new Commissie($db, $lid);
-$soccie->loadCommissie('SocCie');
-$maalcie->loadCommissie('MaalCie');
 
-if(!$soccie->magBewerken() OR !$maalcie->magbewerken()){ header('location: http://csrdelft.nl'); }
+if(!LoginLid::instance()->hasPermission('P_ADMIN,groep:soccie,groep:maalcie')){
+	header('location: http://csrdelft.nl');
+	exit;
+}
+
+if(LoginLid::instance()->hasPermission('P_ADMIN') AND isset($_POST['action'])){
+
+	
+}
 
 echo '<h1>Overzicht saldi</h1><form action="/tools/saldo-overzicht.php" method="post">';
 	
 if(isset($_POST['namenRaw'])){
-	$aUids=namen2uid($_POST['namenRaw'], $lid);
+	$aUids=namen2uid($_POST['namenRaw']);
 	if(is_array($aUids) AND count($aUids)!=0){
 		echo '<table border="0">';
-		echo '<tr><th style="width: 300px;">Naam</hd><th style="width: 100px;">SocCie</th><th style="width: 100px;">MaalCie</th></tr>';
-		
+		echo '<tr><th style="width: 300px;">Naam</hd>';
+		echo '<th style="width: 100px;">SocCie</th><th style="width: 110px;">MaalCie</th><th style="width: 200px;">Abo\'s</th>';
+		echo '<th>Abo\'s weg</th><th>status naar</th>'
+		echo '</tr>';
+
+		require_once('maaltijden/class.maaltrack.php');
+		$maaltrack=new Maaltrack();
 		foreach($aUids as $aLid){
 			if(isset($aLid['uid'])){
 				$lid=LidCache::getLid($aLid['uid']);
 				//naam is gevonden en uniek, dus direct goed.
-				$saldi=$lid->getSaldi(;
+				$saldi=$lid->getSaldi();
 				echo '<tr>';
 				echo '<td ><input type="hidden" name="naam[]" value="'.$aLid['uid'].'" />'.$aLid['naam'].'</td>';
-				foreach(array('soccie', 'maalcie') as $cie){
+				foreach($lid->getSaldi() as $saldo){
 					echo '<td style="text-align: right;';
-					if($saldi[$cie]<0){ echo ' color: red;'; }
-					echo '">'.sprintf('&euro; %01.2f', $saldi[$cie]).'</td>';
+					if($saldo['saldo']<0){ echo ' color: red;'; }
+					echo '">'.sprintf('&euro; %01.2f', $saldo['saldo']).'</td>';
 				}
+				
+				$abos=$maaltrack->getAbo();
+				echo '<td>'.implode(', ', $abos).'</td>';
+				echo '<td><input type="checkbox" name="delabos[]" /></td>';
+				echo '<td><select name="status[]"><option value="S_NOBODY">Lid af</option><option value="S_OUDLID">Oudlid</option></select></td>';
 				echo '</tr>';
 			}else{
 				//naam is niet duidelijk, geef ook een selectievakje met de mogelijke opties

@@ -89,6 +89,7 @@ htdocs/layout/js/peilingbeheer.js -text
 htdocs/layout/js/pngfix.js -text
 htdocs/layout/js/profiel.js -text
 htdocs/layout/js/prototype.js -text
+htdocs/layout/js/roodschopper.js -text
 htdocs/layout/js/scriptaculous.js -text
 htdocs/layout/js/slideshow.js -text
 htdocs/layout/js/sneltoetsen.js -text
@@ -112,6 +113,7 @@ htdocs/tools/eetplan.php -text
 htdocs/tools/index.php -text
 htdocs/tools/leden-csv.php -text
 htdocs/tools/ledenkaart.php -text
+htdocs/tools/lidaftool.php -text
 htdocs/tools/memcachedstatus.php -text
 htdocs/tools/mootlijsten.php -text
 htdocs/tools/pasfotos.php -text
@@ -119,7 +121,6 @@ htdocs/tools/peilingbeheer.php -text
 htdocs/tools/phpinfo.php -text
 htdocs/tools/query.php -text
 htdocs/tools/roodschopper.php -text
-htdocs/tools/saldo-overzicht.php -text
 htdocs/tools/saldografiek.php -text
 htdocs/tools/sendmail/maildata.php -text
 htdocs/tools/sendmail/sendmail.php -text

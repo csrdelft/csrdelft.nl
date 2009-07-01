@@ -31,9 +31,6 @@ class Roodschopper{
 	}
 
 	public static function getDefaults(){
-		//pr(get_defined_constants());
-		//pr(get_defined_functions());
-		//pr(xdebug_get_function_stack());
 
 		$bericht='Beste LID,
 Uw saldo bij de ~ is SALDO, dat is negatief. Inleggen met je hoofd.
@@ -58,6 +55,8 @@ h.t. Fiscus.';
 			$this->uitsluiten=$uids;
 		}elseif(Lid::isValidUid($uids)){
 			$this->uitsluiten[]=$uids;
+		}else{
+			$this->uitsluiten=explode(',', $uids);
 		}
 	}
 	public function getOnderwerp(){		return $this->onderwerp; }
@@ -68,20 +67,20 @@ h.t. Fiscus.';
 		$query="
 			SELECT uid, ".$this->cie."Saldo AS saldo
 			FROM lid WHERE ".$this->cie."Saldo<".$this->saldogrens."
-			 AND (status='S_LID' OR status='S_NOVIET', OR status='S_GASTLID');";
+			 AND (status='S_LID' OR status='S_NOVIET' OR status='S_GASTLID');";
 
-		$data=$db->result2array($query);
-		$ubb=new CsrUBB();
-		$bericht=$ubb->getHtml($this->bericht);
-		
+		$data=$db->query2array($query);
+
+		$bericht=CsrUBB::instance()->getHtml($this->bericht);
+	
 		foreach($data as $lidsaldo){
 			//als het uid in $this->uitsluiten staat sturen we geen mails.
-			if(in_array($lidsaldo['uid'],$this->uitsluiten)){
+			if(in_array($lidsaldo['uid'], $this->uitsluiten)){
 				continue;
 			}
 			$this->teschoppen[$lidsaldo['uid']]=array(
-				'onderwerp'=>$this->replace($this->onderwerp),
-				'bericht'=>$this->replace($this->bericht));
+				'onderwerp'=>$this->replace($this->onderwerp, $lidsaldo['uid'], $lidsaldo['saldo']),
+				'bericht'=>$this->replace($this->bericht, $lidsaldo['uid'], $lidsaldo['saldo']));
 		}
 		return count($this->teschoppen);
 		
@@ -91,17 +90,28 @@ h.t. Fiscus.';
 		$saldo=number_format($saldo, 2, ',', '');
 		return str_replace(array('LID', 'SALDO'), array($lid->getNaam(), $saldo), $invoer);
 	}
-	
+	public function getLeden(){
+		if($this->teschoppen===null){
+			$this->simulate();
+		}
+		$leden=array();
+		foreach($this->teschoppen as $uid => $bericht){
+			$leden[]=LidCache::getLid($uid);
+		}
+		return $leden;
+	}
+		
 	public function doit(){
 		if($this->teschoppen===null){
 			$this->simulate();
 		}
-		$headers="From: ".$from."\n\r";
+		$headers="From: ".$this->from."\n\r";
 		if($this->bcc!=''){
-			$headers.="Bcc: ".$bcc."\n\r";
+			$headers.="Bcc: ".$this->bcc."\n\r";
 		}
 		foreach($this->teschoppen as $uid => $bericht){
 			//mail($data['uid'].'@csrdelft.nl', $bericht['onderwerp'], $bericht['bericht'], $headers);
+			echo '<h1>'.$bericht['onderwerp'].'</h1>'.$bericht['bericht'].'<hr />';
 		}
 	}
 }

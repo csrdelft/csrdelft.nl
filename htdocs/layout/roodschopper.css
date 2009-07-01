@@ -9,3 +9,5 @@ label{ float: left; width: 130px;}
 textarea {  margin: 3px;}
 br{clear: left;}
 
+#messageContainer{ margin: 3px; margin-left: 139px; border: 1px solid red;  padding: 5px; background-color: #f6cece; }
+
