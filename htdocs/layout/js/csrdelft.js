@@ -2,7 +2,7 @@
  * csrdelft.nl javascript libje...
  */
 
-//we maken een standaar AJAX-ding aan.
+//we maken een standaard AJAX-ding aan.
 var http = false;
 if(navigator.appName == "Microsoft Internet Explorer") {
   http = new ActiveXObject("Microsoft.XMLHTTP");

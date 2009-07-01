@@ -3,6 +3,9 @@
  * Roodschopperklasse.
  *
  * Stuur mensen die rood staan een schopmailtje.
+ *
+ * Er wordt ubb over gedaan, maar de mail wordt plaintext verzonden, dus erg veel zal daar niet
+ * van overblijven. Wellicht kan er later nog een html-optie ingeklust worden.
  */
 require_once 'class.csrubb.php';
 
@@ -22,6 +25,8 @@ class Roodschopper{
 			throw new Exception('Ongeldige commissie');
 		}
 		$this->cie=$cie;
+		//er wordt in roodschopper.php (int)-abs($saldogrens) gedaan, dus dat dit voorkomt
+		//is onwaarschijnlijk.
 		if($saldogrens>0){
 			throw new Exception('Saldogrens moet beneden nul zijn');
 		}
@@ -66,8 +71,10 @@ h.t. Fiscus.';
 		$db=MySql::instance();
 		$query="
 			SELECT uid, ".$this->cie."Saldo AS saldo
-			FROM lid WHERE ".$this->cie."Saldo<".$this->saldogrens."
-			 AND (status='S_LID' OR status='S_NOVIET' OR status='S_GASTLID');";
+			FROM lid
+			WHERE ".$this->cie."Saldo<".$this->saldogrens."
+			 AND (status='S_LID' OR status='S_NOVIET' OR status='S_GASTLID')
+			ORDER BY achternaam, voornaam;";
 
 		$data=$db->query2array($query);
 
@@ -100,7 +107,14 @@ h.t. Fiscus.';
 		}
 		return $leden;
 	}
-		
+	public function preview(){
+		if($this->teschoppen===null){
+			$this->simulate();
+		}
+		foreach($this->teschoppen as $uid => $bericht){
+			echo '<strong>'.$bericht['onderwerp'].'</strong><br /'.nl2br($bericht['bericht']).'<hr />';
+		}
+	}
 	public function doit(){
 		if($this->teschoppen===null){
 			$this->simulate();
@@ -111,7 +125,6 @@ h.t. Fiscus.';
 		}
 		foreach($this->teschoppen as $uid => $bericht){
 			//mail($data['uid'].'@csrdelft.nl', $bericht['onderwerp'], $bericht['bericht'], $headers);
-			echo '<h1>'.$bericht['onderwerp'].'</h1>'.$bericht['bericht'].'<hr />';
 		}
 	}
 }

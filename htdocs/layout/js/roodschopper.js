@@ -11,7 +11,6 @@ function roodschopper(actie){
 			form.elements[i].disabled=true;			
 		}
 	}
-	console.log(params);
 
 	http.open("POST", "/tools/roodschopper.php", true);
 	http.setRequestHeader("Content-length", params.length);
@@ -20,10 +19,15 @@ function roodschopper(actie){
 
 	http.onreadystatechange=function(){
 		if(http.readyState == 4){
-			div=document.getElementById('messageContainer');
-			div.innerHTML=http.responseText;
-			displayDiv(div);
-			hideDiv(document.getElementById('submitContainer'));
+			if(actie=='verzenden'){
+				location.href="/tools/roodschopper.php";
+			}else{
+				div=document.getElementById('messageContainer');
+				div.innerHTML=http.responseText;
+				displayDiv(div);
+				hideDiv(document.getElementById('submitContainer'));
+			}
+			
 		}
 	}
 	http.send(params.join('&'));
