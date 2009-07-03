@@ -121,7 +121,7 @@ h.t. Fiscus.';
 		}
 		$headers="From: ".$this->from."\n\r";
 		if($this->bcc!=''){
-			$headers.="Bcc: ".$this->bcc."\n\r";
+			$headers.="BCC: ".$this->bcc."\n\r";
 		}
 		foreach($this->teschoppen as $uid => $bericht){
 			mail($uid.'@csrdelft.nl', $bericht['onderwerp'], $bericht['bericht'], $headers);
