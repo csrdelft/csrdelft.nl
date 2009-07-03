@@ -15,7 +15,6 @@ class Roodschopper{
 	private $bericht;
 	
 	private $uitsluiten=array();
-	private $from='pubcie@csrdelft.nl';
 	private $bcc;
 
 	private $teschoppen=null;
@@ -119,7 +118,7 @@ h.t. Fiscus.';
 		if($this->teschoppen===null){
 			$this->simulate();
 		}
-		$headers="From: ".$this->from."\n\r";
+		$headers="From: ".$this->cie."@csrdelft.nl\n\r";
 		if($this->bcc!=''){
 			$headers.="BCC: ".$this->bcc."\n\r";
 		}
