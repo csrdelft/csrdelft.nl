@@ -109,7 +109,7 @@ ul.nobullets li{ list-style-type: none; }
 }
 #mainmenu a {
 	line-height: 15px; /*Fix voor Opera*/
-	margin-left: 17px;
+	margin-left: 16px;
 	_margin: 0 6px -18px 9px; /*IE6 fix*/
 	overflow: none;
 	padding: 6px 0 0 0;
