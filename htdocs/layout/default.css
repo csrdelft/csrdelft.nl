@@ -100,21 +100,19 @@ ul.nobullets li{ list-style-type: none; }
 /**** MAIN MENU ***************************************************************/
 #mainmenu {
 	line-height: 0px; /*Fix voor Opera*/
-}
-#mainmenu ul {
 	list-style-type: none;
 }
 #mainmenu li {
-	display: inline;
+	display: block;
+	float: left;
 }
 #mainmenu a {
 	line-height: 15px; /*Fix voor Opera*/
-	margin-left: 16px;
 	_margin: 0 6px -18px 9px; /*IE6 fix*/
 	overflow: none;
 	padding: 6px 0 0 0;
 	display: block;
-	float: left;
+	
 	text-align: center;
 	font-size: 13px;
 	width: 122px;

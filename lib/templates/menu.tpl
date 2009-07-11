@@ -7,22 +7,20 @@
 			<div id="banner3"><img src="http://plaetjes.csrdelft.nl/menubalk/banner3.png" id="imgbanner3" alt="banner3" width="553" height="106" /></div>
 			<div id="banner4"><img src="http://plaetjes.csrdelft.nl/menubalk/banner4.png" id="imgbanner4" alt="banner4" width="553" height="106" /></div>
 		</div>
-		<div id="mainmenu">
-			<ul>
-				{foreach from=$items item=item}
-					<li>
-						<a href="{$item.link}" id="top{$item.ID}" onmouseover="StartShowMenu('{$item.ID}');" onmouseout="ResetShowMenu();" {if $item.huidig}class="active" {/if}title="{$item.tekst}">{$item.tekst}</a>
-						{if $item.huidig}
-							<script type="text/javascript">
-								SetActive({$item.ID});
-								document.getElementById('banner'+{$item.ID}).style.display = "inline";
-								fixPNG('imgbanner1')
-							</script>
-						{/if}
-					</li>
-				{/foreach}
-			</ul>
-		</div>
+		<ul id="mainmenu">
+			{foreach from=$items item=item}
+				<li>
+					<a href="{$item.link}" id="top{$item.ID}" onmouseover="StartShowMenu('{$item.ID}');" onmouseout="ResetShowMenu();" {if $item.huidig}class="active" {/if}title="{$item.tekst}">{$item.tekst}</a>
+					{if $item.huidig}
+						<script type="text/javascript">
+							SetActive({$item.ID});
+							document.getElementById('banner'+{$item.ID}).style.display = "inline";
+							fixPNG('imgbanner1')
+						</script>
+					{/if}
+				</li>
+			{/foreach}
+		</ul>
 	</div>
 	<div id="menuright">
 		{if $loginlid->hasPermission('P_LOGGED_IN') }
