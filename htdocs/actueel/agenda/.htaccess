@@ -1,0 +1,4 @@
+RewriteEngine on
+
+# Gewoon alles doorschuiven naar de controller
+RewriteRule ^(.*)$ index.php?query=$1 [QSA]
