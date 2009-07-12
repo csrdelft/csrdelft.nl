@@ -1,6 +1,5 @@
 # csrdelft.py
 #
-# $Id$
 
 """ interface to http://csrdelft.nl/ """
 
@@ -13,7 +12,7 @@ from gozerbot.users import users
 from gozerbot.generic import useragent, geturl, rlog, waitforuser
 from gozerbot.plughelp import plughelp
 from gozerbot.datadir import datadir
-from gozerbot.persist.persist import Persist
+from gozerbot.persist.persist import PlugPersist
 
 from urllib import urlencode
 
@@ -21,13 +20,20 @@ import simplejson, re, os, urllib2, string
 
 plughelp.add('csrdelft', 'functionaliteit voor C.S.R.-leden')
 
+### UPGRADE pickle -> json
+# #!/usr/bin/python
+# from gozerbot.utils.generic import convertpickle
+# convertpickle('/home/feut/0.9/gozerdata/old/csr-config', '/home/feut/0.9/gozerdata/plugs/csrdelft/config')
+# convertpickle('/home/feut/0.9/gozerdata/old/csruidmap', '/home/feut/0.9/gozerdata/plugs/csrdelft/uidmap')
+### UPGRADE
+
 # bot user <-> ledenlijst uid mapping
-csruidmap = Persist(os.path.join(datadir, 'csruidmap'))
+csruidmap = PlugPersist('uidmap')
 if not csruidmap.data:
     csruidmap.data = {}
 
 # connection settings
-csrconfig = Persist(os.path.join(datadir, 'csr-config'))
+csrconfig = PlugPersist('config')
 if not csrconfig.data:
     csrconfig.data = {'proto': '', 'url': '', 'user': '', 'pass': ''}
 
