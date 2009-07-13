@@ -23,5 +23,6 @@ RewriteRule ^mededelingen/bewerken/([0-9]+)/verwijder-plaatje mededelingen.php?b
 RewriteRule ^mededelingen/toevoegen$ mededelingen.php?toevoegen=true
 
 # Pagina's met tekst
+RewriteRule ^oweeprogramma/? ../pagina.php?naam=oweeintern
 RewriteRule ^owee/? ../pagina.php?naam=owee
 RewriteRule ^agenda/? ../pagina.php?naam=agenda
