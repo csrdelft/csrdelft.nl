@@ -9,7 +9,7 @@
 		<link rel="stylesheet" href="/layout/{$sheet.naam}?{$sheet.datum}" type="text/css" />
 	{/foreach}
 	{foreach from=$csrdelft->getScripts() item=script}
-		<script type="text/javascript" src="/layout/{$script.naam}?{$script.datum}"></script>
+		<script type="text/javascript" src="/layout/js/{$script.naam}?{$script.datum}"></script>
 	{/foreach}
 	<!--[if lt IE 7.]>
 		<script defer type="text/javascript" src="/layout/pngfix.js"></script>
@@ -38,7 +38,7 @@
 				{/if}
 			</div>
 		{/if}
-		<div id="mainright">
+		<div id="mainright"{if $csrdelft->_zijkolom===false} style="width: 958px;"{/if}>
 			{$csrdelft->_body->view()}
 		</div>
 		<div id="footer">
@@ -46,7 +46,13 @@
 		</div>	
 	</div>
 </div>
-
+{$ubbHulp}
+{if isset($db)}
+	<h2 id="mysql_debug_header">
+		<a id="mysql_debug_showhide" href="#mysql_debug_header" onclick="return toggleDiv('mysql_debug');">Debug Tonen/Verstoppen</a>
+	</h2>
+	<div id="mysql_debug" style="display: none">{$db->getDebug()}</div>
+{/if}
 </body>
 
 </html>

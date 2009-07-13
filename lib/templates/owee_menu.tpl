@@ -1,16 +1,16 @@
 <div id="menu" onmouseover="ResetTimer()" onmouseout="StartTimer()">
-	<div id="menuleft"><a href="/"><img src="http://www.johannesvg.nl/owee/logo.png" alt="Logo" /></a></div>
+	<div id="menuleft"><a href="/"><img src="http://plaetjes.csrdelft.nl/owee/2009/logo.gif" alt="Logo" id="logo" /></a></div>
 	<div id="menucenter">
 		<div id="menubanner">
 			<div id="banner1"><img src="http://plaetjes.csrdelft.nl/menubalk/banner1.png" id="imgbanner1" alt="banner1" width="553" height="106" /></div>
-			<div id="banner2"><img src="http://www.johannesvg.nl/owee/banner2.png" id="imgbanner2" alt="banner2" width="553" height="106" /></div>
+			<div id="banner2"><img src="http://plaetjes.csrdelft.nl/menubalk/banner2.png" id="imgbanner2" alt="banner2" width="553" height="106" /></div>
 			<div id="banner3"><img src="http://plaetjes.csrdelft.nl/menubalk/banner3.png" id="imgbanner3" alt="banner3" width="553" height="106" /></div>
 			<div id="banner4"><img src="http://plaetjes.csrdelft.nl/menubalk/banner4.png" id="imgbanner4" alt="banner4" width="553" height="106" /></div>
 		</div>
-		<div id="mainmenu">
-			<ul>
+		<ul id="mainmenu">
 			{foreach from=$items item=item}
-				<li><a href="{$item.link}" id="top{$item.ID}" onmouseover="StartShowMenu('{$item.ID}');" onmouseout="ResetShowMenu();" {if $item.huidig}class="active" {/if}title="{$item.tekst}">{$item.tekst}</a></li>
+				<li>
+					<a href="{$item.link}" id="top{$item.ID}" onmouseover="StartShowMenu('{$item.ID}');" onmouseout="ResetShowMenu();" {if $item.huidig}class="active" {/if}title="{$item.tekst}">{$item.tekst}</a>
 					{if $item.huidig}
 						<script type="text/javascript">
 							SetActive({$item.ID});
@@ -18,11 +18,11 @@
 							fixPNG('imgbanner1')
 						</script>
 					{/if}
-				{/foreach}
-			</ul>
-		</div>
+				</li>
+			{/foreach}
+		</ul>
 	</div>
-<div id="menuright">
+	<div id="menuright">
 		{if $loginlid->hasPermission('P_LOGGED_IN') }
 			<div id="ingelogd">
 				{if $loginlid->isSued()}
@@ -40,7 +40,7 @@
 					{/foreach}
 				</div>
 				<br />
-				<form method="post" action="/communicatie/lijst.php">
+				<form method="post" action="/communicatie/lijst.php" name="lidzoeker">
 					<p>
 						<input type="hidden" name="a" value="zoek" />
 						<input type="hidden" name="waar" value="naam" />
@@ -60,7 +60,7 @@
 				</form>
 			</div>
 		{else}
-			<div id="key"><img src="http://plaetjes.csrdelft.nl/layout/key.gif" onclick="toggleDiv('login')" alt="Inloggen" /></div>
+			<div id="key"><img src="http://plaetjes.csrdelft.nl/owee/2009/key.gif" onclick="toggleDiv('login')" alt="Inloggen" /></div>
 			<div id="login">			
 				{if isset($smarty.session.auth_error)}
 					<span class="waarschuwing">{$smarty.session.auth_error}</span>
@@ -89,7 +89,7 @@
 			<div id="sub{$item.ID}"{if $item.huidig} class="active"{/if}>
 				{assign var='showseperator' value=false}
 				{foreach from=$item.subitems item=subitem}
-					{if $showseperator} <img src="http://plaetjes.csrdelft.nl/layout/submenuseperator.png" alt="|" /> {/if}
+					{if $showseperator} <img src="http://plaetjes.csrdelft.nl/owee/2009/submenuseperator.gif" alt="|" /> {/if}
 					{assign var='showseperator' value=true}
 					<a href="{$subitem.link}" title="{$subitem.tekst}"{if $subitem.huidig} class="active"{/if}>{$subitem.tekst}</a>
 				{/foreach}

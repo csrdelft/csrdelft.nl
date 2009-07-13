@@ -1,45 +1,53 @@
 a, a:HOVER{
-	color: #b84059;
+	color: #ee2561;
 }
 #container {
-	background: url('http://www.johannesvg.nl/owee/containerbg_top.png') no-repeat;
+	background: url('http://plaetjes.csrdelft.nl/owee/2009/containerbg_top.png') no-repeat;
 }
 
 /**** MENU ********************************************************************/
 #menu {
-	background: url('http://www.johannesvg.nl/owee/menubg.png') repeat-x;
+	background: url('http://plaetjes.csrdelft.nl/owee/2009/menubg.png') repeat-x;
 }
 
 /**** MAIN MENU ***************************************************************/
 #mainmenu a {
-	background: url('http://www.johannesvg.nl/owee/menubutton.png') no-repeat;
+	background: url('http://plaetjes.csrdelft.nl/owee/2009/menubutton.png') no-repeat;
 }	
 #mainmenu a:link, #mainmenu a:visited {
 	color: #ffffff;
 }
 #mainmenu a:hover, #mainmenu a:active, #mainmenu a.active {
-	background: url('http://www.johannesvg.nl/owee/menubutton_hover.png') no-repeat;
+	background: url('http://plaetjes.csrdelft.nl/owee/2009/menubutton_hover.png') no-repeat;
 }
 
 /**** SUBMENU *****************************************************************/
 #submenu {
-	background: url('http://www.johannesvg.nl/owee/submenubg.png') repeat-x;
+	background: url('http://plaetjes.csrdelft.nl/owee/2009/submenubg.png') repeat-x;
+}
+#submenu a:hover, #submenu a:active, #submenu a.active {
+	color: #ee2561;
 }
 
 /**** MAIN ********************************************************************/
 #main {
-	background: url('http://www.johannesvg.nl/owee/mainbg.png') repeat-y;
+	background: url('http://plaetjes.csrdelft.nl/owee/2009/mainbg.png') repeat-y;
 }
 
 /**** BLOCK *******************************************************************/
 #mainleft .block h1 {
-	background: url('http://www.johannesvg.nl/owee/blocktitle.png') no-repeat;
-	color: #b84059;
+	background: url('http://plaetjes.csrdelft.nl/owee/2009/blocktitle.png') no-repeat;
+	color: #ee2561;
 }
 #mainleft .block h1 a {
-	color: #b84059;
+	color: #ee2561;
 }
 /**** FOOTER ******************************************************************/
 #footer {
-	background: url('http://www.johannesvg.nl/owee/footerbg.png') no-repeat #fff;
+	background: url('http://plaetjes.csrdelft.nl/owee/2009/footerbg.png') no-repeat #fff;
+}
+/**** INLOGKNOP ***************************************************************/
+#login input.submit {
+	background-color: #c5efcf;
+	color: #000; 
 }
