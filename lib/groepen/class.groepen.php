@@ -229,8 +229,10 @@ class Groepen{
 				WHERE groeptype.naam='Werkgroepen' AND groep.status='ht')";
 		$result = $db->result2array($db->query($Werkgroepleiders));
 		$leiders = array();
-		foreach($result as $leider) {
-			array_push($leiders, $leider['uid']);
+		if(is_array($result)){
+			foreach($result as $leider) {
+				array_push($leiders, $leider['uid']);
+			}
 		}
 		return $leiders;
 	}

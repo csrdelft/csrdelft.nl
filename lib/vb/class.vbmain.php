@@ -29,12 +29,13 @@ function view() {
 		$nav = navigator::instance();
 		$csrdelft->assign_by_ref('navbar',$nav);
 
+		if(defined('DEBUG') AND LoginLid::instance()->hasPermission('P_ADMIN')){
+			 $csrdelft->assign('db', MySql::instance());
+		}
+
 		$csrdelft->display('vb/vbcsrdelft.tpl');
 
-		if(defined('DEBUG') AND LoginLid::instance()->hasPermission('P_ADMIN')){
-			$db=MySql::instance();
-			echo $db->getDebug();
-		}
+		
 		//als er een error is geweest, die unsetten...
 		if(isset($_SESSION['auth_error'])){ unset($_SESSION['auth_error']); }
 	}

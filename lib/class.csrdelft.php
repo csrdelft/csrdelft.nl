@@ -120,7 +120,7 @@ class csrdelft extends SimpleHTML {
 		$csrdelft->assign('saldi', $loginlid->getLid()->getSaldi());
 
 		if(defined('DEBUG') AND ($loginlid->hasPermission('P_ADMIN') OR $loginlid->isSued())){
-			$csrdelft->assign('db',MySql::instance());
+			$csrdelft->assign('db', MySql::instance());
 		}
 
 		$csrdelft->caching=false;

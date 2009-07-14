@@ -503,31 +503,6 @@ class VBContent extends SimpleHTML {
 		echo $message."<br/>";
 	}
 	
-	/** /TODO: vieze copy paste van class.forum, aangezien de methode niet statisch is */
-	function formatDatum($datetime){
-		$nu=time();
-		$moment=strtotime($datetime);
-		$verschil=$nu-$moment;
-		if($verschil<=60){
-			$return='<em>'.$verschil.' ';
-			if($verschil==1) {$return.='seconde';}else{$return.='seconden';}
-			$return.='</em> geleden';
-		}elseif($verschil<=60*60){
-			$return='<em>'.floor($verschil/60);
-			if(floor($verschil/60)==1){	$return.=' minuut'; }else{$return.=' minuten'; }
-			$return.='</em> geleden';
-		}elseif($verschil<=(60*60*4)){
-			$return='<em>'.floor($verschil/(60*60)).' uur</em> geleden';
-		}elseif(date('Y-m-d')==date('Y-m-d', $moment)){
-			$return='vandaag om '.date("G:i", $moment);
-		}elseif(date('Y-m-d', $moment)==date('Y-m-d', strtotime('1 day ago'))){
-			$return='gisteren om '.date("G:i", $moment);
-		}else{
-			$return='op '. date("G:i j-n-Y", $moment);
-		}
-		return $return;
-	}
-
 	/** maak een nieuwe template aan, met gelijk wat standaard variabelen */
 	private function newTemplate()
 	{
@@ -536,7 +511,7 @@ class VBContent extends SimpleHTML {
 		//set rights, which will be used inside the templates
 		$res->assign('allowedit',$this->_vb->isModerator());
 		$res->assign('allowadd',$this->_vb->isLid()); //TODO: might be incostend with magToevoegen(class)
-		//TODO: notify area instead of printing directly?
+		
 		return $res;
 	}
 }

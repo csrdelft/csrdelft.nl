@@ -46,7 +46,6 @@
 		</div>	
 	</div>
 </div>
-{$ubbHulp}
 {if isset($db)}
 	<h2 id="mysql_debug_header">
 		<a id="mysql_debug_showhide" href="#mysql_debug_header" onclick="return toggleDiv('mysql_debug');">Debug Tonen/Verstoppen</a>
@@ -54,5 +53,4 @@
 	<div id="mysql_debug" style="display: none">{$db->getDebug()}</div>
 {/if}
 </body>
-
 </html>

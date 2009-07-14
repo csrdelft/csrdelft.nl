@@ -407,6 +407,34 @@ class Lid implements Serializable{
 	public static function nickExists($nick){
 		return Lid::loadByNickname($nick) instanceof Lid;
 	}
+
+	//Voeg een nieuw regeltje in de lid-tabel in met alleen een nieuw lid-nummer.
+	//niet multi-user safe.
+	public static function createNew($lichting){
+		$db=MySql::instance();
+		$lichtingid=substr($lichting, 2, 2);
+		$query="SELECT max(uid) AS uid FROM lid WHERE LEFT(uid, 2)='".$lichtingid."' LIMIT 1;";
+		
+		$result=$db->query($query);
+		if($db->numRows($result)==1){
+			$lid=$db->result2array($result);
+			$volgnummer=substr($lid[0]['uid'], 2, 2)+1;			
+		}else{
+			$volgnummer='1';
+		}
+		if($volgnummer>99){
+			throw new Exception('Teveel leden dit jaar!');
+		}
+
+		$newuid=$lichtingid.sprintf('%02d', $volgnummer);
+
+		$query="INSERT INTO lid (uid, lidjaar)VALUE('".$newuid."', '".$lichting."');";
+		if($db->query($query)){
+			return $newuid;
+		}else{
+			throw new Exception('Kon geen nieuw uid maken');
+		}
+	}
 }
 
 class LidCache{
