@@ -6,10 +6,10 @@
 	<meta name="author" content="PubCie C.S.R. Delft" />
 	<meta name="robots" content="index, follow" />
 	{foreach from=$csrdelft->getStylesheets() item=sheet}
-		<link rel="stylesheet" href="../layout/{$sheet.naam}?{$sheet.datum}" type="text/css" />
+		<link rel="stylesheet" href="/layout/{$sheet.naam}?{$sheet.datum}" type="text/css" />
 	{/foreach}
 	{foreach from=$csrdelft->getScripts() item=script}
-		<script type="text/javascript" src="../layout/{$script.naam}?{$script.datum}"></script>
+		<script type="text/javascript" src="/layout/js/{$script.naam}?{$script.datum}"></script>
 	{/foreach}
 	<!--[if lt IE 7.]>
 		<script defer type="text/javascript" src="/layout/pngfix.js"></script>
@@ -38,18 +38,21 @@
 				{/if}
 			</div>
 		{/if}
-		<div id="mainright">
+		<div id="mainright"{if $csrdelft->_zijkolom===false} style="width: 958px;"{/if}>
 			{$csrdelft->_body->view()}
-			<div id="navbar">
-				{$navbar->show()}
-			</div>
 		</div>
 		<div id="footer">
 			Gemaakt door <a href="mailto:vormingsbank@csrdelft.nl" title="Vormingsbank C.S.R. Delft">Vormingsbank C.S.R. Delft</a> | <a href="http://validator.w3.org/check/referrer" title="Valideer">XHTML 1.0</a>
 		</div>	
 	</div>
 </div>
-
+{$ubbHulp}
+{if isset($db)}
+	<h2 id="mysql_debug_header">
+		<a id="mysql_debug_showhide" href="#mysql_debug_header" onclick="return toggleDiv('mysql_debug');">Debug Tonen/Verstoppen</a>
+	</h2>
+	<div id="mysql_debug" style="display: none">{$db->getDebug()}</div>
+{/if}
 </body>
 
 </html>

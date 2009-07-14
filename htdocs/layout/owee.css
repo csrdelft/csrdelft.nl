@@ -1,5 +1,9 @@
+/**** GENERAL *****************************************************************/
 a, a:HOVER{
 	color: #ee2561;
+}
+h1, h2, h3, h4 {
+	color: #555555;
 }
 #container {
 	background: url('http://plaetjes.csrdelft.nl/owee/2009/containerbg_top.png') no-repeat;

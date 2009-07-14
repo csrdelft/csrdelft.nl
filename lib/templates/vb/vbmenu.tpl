@@ -4,23 +4,28 @@
 		<div id="menubanner">
 			<div><img src="images/vormingsbank_vb_beta.png" id="vblogobanner" alt="banner1"  /></div>
 		</div>
-		<div id="mainmenu">
-			<ul>
+		<ul id="mainmenu">
 			{foreach from=$items item=item}
-				<li><a href="{$item.link}" id="top{$item.ID}" onmouseover="StartShowMenu('{$item.ID}');" onmouseout="ResetShowMenu();" {if $item.huidig}class="active" {/if}title="{$item.tekst}">{$item.tekst}</a></li>
+				<li>
+					<a href="{$item.link}" id="top{$item.ID}" onmouseover="StartShowMenu('{$item.ID}');" onmouseout="ResetShowMenu();" {if $item.huidig}class="active" {/if}title="{$item.tekst}">{$item.tekst}</a>
 					{if $item.huidig}
 						<script type="text/javascript">
 							SetActive({$item.ID});
+							document.getElementById('banner'+{$item.ID}).style.display = "inline";
+							fixPNG('vblogobanner')
 						</script>
 					{/if}
-				{/foreach}
-			</ul>
-		</div>
+				</li>
+			{/foreach}
+		</ul>
 	</div>
 	<div id="menuright">
 		{if $loginlid->hasPermission('P_LOGGED_IN') }
 			<div id="ingelogd">
-				{$loginlid->getUid()|csrnaam}<br />
+				{if $loginlid->isSued()}
+					<a href="/endsu/" style="color: red;">{$loginlid->getSuedFrom()->getNaamLink('civitas','html')} als</a><br />» 
+				{/if}
+				{$loginlid->getUid()|csrnaam}<br />				
 				<div id="uitloggen"><a href="/logout.php">log&nbsp;uit</a></div><br class="clear" />
 				<br />
 <!--				
@@ -34,27 +39,25 @@
 -->
 			</div>
 		{else}
-			<div id="key"><img src="images/key_vb.png" alt="Inloggen" onclick="ToggleLogin();" /></div>
+			<div id="key"><img src="images/key_vb.png" onclick="toggleDiv('login')" alt="Inloggen" /></div>
 			<div id="login">			
 				{if isset($smarty.session.auth_error)}
 					<span class="waarschuwing">{$smarty.session.auth_error}</span>
-				<script type="text/javascript">
-						<!--
-						document.getElementById('login').style.display='block';
-						-->
-					</script>
 				{/if}
-				<form action="../login.php" method="post">
+				<form action="/login.php" method="post">
 					<fieldset>
 						<input type="hidden" name="url" value="{$smarty.server.REQUEST_URI}" />
 						<input type="text" name="user" value="naam" onfocus="if(this.value=='naam')this.value='';" />
-						<input type="password" name="pass" value="wachtwoord" onfocus="if(this.value=='wachtwoord')this.value='';" />
+						<input type="password" name="pass" value="" />
 						<input type="checkbox" name="checkip" class="checkbox" value="true" id="login-checkip" checked="checked" />
-						<label for="login-checkip">Koppel IP</label><br /><br /><br />
-						<input type="submit" name="submit" value="Inloggen" />
+						<label for="login-checkip">Koppel IP</label>
+						<input type="submit" class="submit" name="submit" value="Inloggen" />
 					</fieldset>
 				</form>			
 			</div>
+			{if !isset($smarty.session.auth_error)}
+				<script type="text/javascript">hideDiv(document.getElementById('login'));</script>
+			{/if}			
 		{/if}
 	</div>
 </div>
@@ -65,7 +68,7 @@
 			<div id="sub{$item.ID}"{if $item.huidig} class="active"{/if}>
 				{assign var='showseperator' value=false}
 				{foreach from=$item.subitems item=subitem}
-					{if $showseperator} <img src="http://plaetjes.csrdelft.nl/layout/submenuseperator.png" alt="|" /> {/if}
+					{if $showseperator} <img src="http://plaetjes.csrdelft.nl/layout/submenuseperator.gif" alt="|" /> {/if}
 					{assign var='showseperator' value=true}
 					<a href="{$subitem.link}" title="{$subitem.tekst}"{if $subitem.huidig} class="active"{/if}>{$subitem.tekst}</a>
 				{/foreach}

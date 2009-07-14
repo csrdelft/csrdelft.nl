@@ -148,19 +148,6 @@ a{color: red; text-decoration: none;}
 }
 
 #mainmenu a {
-	line-height: 15px; /*Fix voor Opera*/
-	margin-left: 17px;
-	_margin: 0 6px -18px 9px; /*IE6 fix*/
-	overflow: none;
-	padding: 6px 0 0 0;
-	display: block;
-	float: left;
-	text-align: center;
-	font-size: 13px;
-	width: 122px;
-	height: 26px;
-	font-weight: bold;
-	text-decoration: none;
 	background: url('/vb/images/menubutton_vb.png') no-repeat;
 }	
 
@@ -174,4 +161,10 @@ a{color: red; text-decoration: none;}
 	width: 966px;
 	height: 24px;
 	background: url('/vb/images/submenubg_vb.png') repeat-x;
+}
+
+/**** INLOGKNOP ***************************************************************/
+#login input.submit {
+	background-color: #5e5f61;
+	color: #fff; 
 }
