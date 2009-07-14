@@ -15,7 +15,7 @@ a, a:HOVER{
 	background: url('http://plaetjes.csrdelft.nl/owee/2009/menubutton.png') no-repeat;
 }	
 #mainmenu a:link, #mainmenu a:visited {
-	color: #ffffff;
+	color: #ee2561;
 }
 #mainmenu a:hover, #mainmenu a:active, #mainmenu a.active {
 	background: url('http://plaetjes.csrdelft.nl/owee/2009/menubutton_hover.png') no-repeat;
