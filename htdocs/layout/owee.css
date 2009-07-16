@@ -5,8 +5,13 @@ a, a:HOVER{
 h1, h2, h3, h4 {
 	color: #555555;
 }
+body{
+background-image:url("http://plaetjes.csrdelft.nl/owee/2009/streepjes.png");
+}
+
 #container {
 	background: url('http://plaetjes.csrdelft.nl/owee/2009/containerbg_top.png') no-repeat;
+	margin: auto;
 }
 
 /**** MENU ********************************************************************/
@@ -48,7 +53,8 @@ h1, h2, h3, h4 {
 }
 /**** FOOTER ******************************************************************/
 #footer {
-	background: url('http://plaetjes.csrdelft.nl/owee/2009/footerbg.png') no-repeat #fff;
+	background: none;
+	/*url('http://plaetjes.csrdelft.nl/owee/2009/footerbg.png') no-repeat #fff;*/
 }
 /**** INLOGKNOP ***************************************************************/
 #login input.submit {
