@@ -95,6 +95,7 @@ htdocs/layout/js/prototype.js -text
 htdocs/layout/js/roodschopper.js -text
 htdocs/layout/js/scriptaculous.js -text
 htdocs/layout/js/slideshow.js -text
+htdocs/layout/js/slideshow_intern.js -text
 htdocs/layout/js/sneltoetsen.js -text
 htdocs/layout/lightbox.css -text
 htdocs/layout/owee.css -text
