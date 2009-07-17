@@ -158,7 +158,14 @@ class Forum{
 	public static function getUserPostCount($uid=null){
 		if($uid==null){ LoginLid::instance()->getUid(); }
 		$db=MySql::instance();
-		$query="SELECT count(*) AS aantal FROM forum_post WHERE uid='".$uid."';";
+		$query="
+			SELECT count(*) AS aantal
+			FROM forum_post as post
+			INNER JOIN forum_topic as onderwerp ON(post.tid=onderwerp.id)
+			INNER JOIN forum_cat as categorie ON(onderwerp.categorie=categorie.id)
+			WHERE post.uid='".$uid."'
+			  AND post.zichtbaar='zichtbaar' AND categorie.id!=6;";
+		
 		$data=$db->getRow($query);
 		if(is_array($data)){
 			return $data['aantal'];
