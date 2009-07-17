@@ -80,7 +80,10 @@ class LedenlijstContent extends SimpleHTML {
 			'gebdatum' => 'Geboortedatum',
 			'beroep' => 'Functie/beroep'
 		);
-
+		$melding=$this->getMelding();
+		if($melding!=''){
+			echo $melding;
+		}
 		print(<<<EOT
 <ul class="horizontal nobullets">
 	<li class="active">

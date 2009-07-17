@@ -4,7 +4,16 @@
 # Hans van Kranenburg
 # sep 2005
 
-# /leden/profiel.php
+/*
+ * Even wat uitleg over het toevoegen van nieuwe leden:
+ * Door naar de url http://csrdelft.nl/communicatie/profiel/0000/nieuwLid/ te gaan wordt er een
+ * nieuw uid aangemaakt in het huidige jaar. Vervolgens wordt de browser meteen naar het
+ * bewerken van het nieuwe profiel gestuurd, waar de gegevens van de noviet ingevoerd kunnen
+ * worden. De code daarvoor is gelijk aan die van het bewerken van een bestaand profiel, met
+ * een ander tekstje erboven. Ook worden de wachtwoordvelden en het bijnaamveld nog niet
+ * weergeven.
+ * 
+ */
 
 require_once 'include.config.php';
 
@@ -31,29 +40,42 @@ if(!($loginlid->hasPermission('P_LEDEN_READ') or $loginlid->hasPermission('P_OUD
 	require_once 'lid/class.profiel.php';
 	
 	switch($actie){
+		case 'novietBewerken':
 		case 'bewerken':
-			$profiel=new Profiel($uid);
+			$profiel=new Profiel($uid, $actie);
+			
 			if($profiel->magBewerken()){
 				if($profiel->isPosted() AND $profiel->valid() AND $profiel->save()){
 					header('location: '.CSR_ROOT.'communicatie/profiel/'.$uid);
 				}else{
-					$midden=new ProfielEditContent($profiel);
+					$midden=new ProfielEditContent($profiel, $actie);
 				}
 			}else{
 				$midden=new ProfielContent(LidCache::getLid($uid));
 			}
-			
+		break;
+		case 'nieuwLid':
+			if($loginlid->hasPermission('P_ADMIN,P_BESTUUR,groep:novcie')){
+				try{
+					//maak het nieuwe uid aan.
+					$nieuwUid=Lid::createNew(date('Y'));
+					ProfielContent::invokeRefresh(null, '/communicatie/profiel/'.$nieuwUid.'/novietBewerken');
+				}catch(Exception $e){
+					ProfielContent::invokeRefresh('<h2>Nieuw lidnummer aanmaken mislukt.</h2>'.$e->getMessage());
+				}	
+			}else{
+				ProfielContent::invokeRefresh('U mag geen nieuwe leden aanmaken', '/communicatie/profiel/');
+			}
 		break;
 		case 'wachtwoord':
 			if($loginlid->hasPermission('P_ADMIN')){
 				if(Profiel::resetWachtwoord($uid)){
-					$_SESSION['melding']='Nieuw wachtwoord met succes verzonden.';
+					$melding='Nieuw wachtwoord met succes verzonden.';
 				}else{
-					$_SESSION['melding']='Wachtwoord resetten mislukt.';
+					$melding='Wachtwoord resetten mislukt.';
 				}
 			}
-			header("Location: ".CSR_ROOT."communicatie/profiel/".$uid);
-			exit;
+			ProfielContent::invokeRefresh($melding, '/communicatie/profiel/'.$uid);
 		break;
 		case 'rssToken':
 			if($uid==$loginlid->getUid()){
@@ -61,15 +83,15 @@ if(!($loginlid->hasPermission('P_LEDEN_READ') or $loginlid->hasPermission('P_OUD
 				header('location: '.CSR_ROOT.'communicatie/profiel/'.$uid.'#forum');
 				exit;
 			}
-		//geen break hier.
+		//geen break hier, want als de bovenstaande actie aangevraagd werd voor de
+		//niet-huidige gebruiker, doen we gewoon een normale view.
 		case 'view':
 		default;
 			$lid=LidCache::getLid($uid);
 			if($lid instanceof Lid){
 				$midden=new ProfielContent($lid);
 			}else{
-				require_once('class.paginacontent.php');
-				$midden=new StringIncluder('<h1>Helaas</h1>Dit lid bestaat niet.<br /> U kunt verder zoeken in de <a href="/communicatie/lijst.php">Ledenlijst</a>.');
+				ProfielContent::invokeRefresh('<h2>Helaas</h2>Dit lid bestaat niet.<br /> U kunt verder zoeken in deze ledenlijst.', '/communicatie/ledenlijst/');
 			}
 		break;
 	}

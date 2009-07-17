@@ -191,6 +191,13 @@
 				</div>
 			<br />
 			{/if}
+			
+			{if is_array($profhtml.berichtCount)}
+				<div class="label"># bijdragen:</div>
+				<div class="data">
+					{$profhtml.berichtCount} berichten.
+				</div>
+			{/if}
 			{if is_array($profhtml.recenteForumberichten)}
 				<div class="label">Recent:</div>
 				<div class="data">

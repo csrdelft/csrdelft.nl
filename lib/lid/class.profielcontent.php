@@ -54,6 +54,7 @@ class ProfielContent extends SimpleHTML {
 
 		require_once 'forum/class.forum.php';
 		$profhtml['recenteForumberichten']=Forum::getPostsVoorUid($this->lid->getUid());
+		$profhtml['berichtCount']=Forum::getUserPostCount($this->lid->getUid());
 
 		//de html template in elkaar draaien en weergeven
 		$profiel=new Smarty_csr();
@@ -82,14 +83,22 @@ class ProfielContent extends SimpleHTML {
 
 class ProfielEditContent extends SimpleHTML{
 	private $profiel;
-	public function __construct($profiel){
+	private $actie;
+	
+	public function __construct($profiel, $actie){
 		$this->profiel=$profiel;
+		$this->actie=$actie;
+	}
+	public function getTitel(){
+		return 'profiel van '.$this->profiel->getLid()->getNaam().' bewerken.';
 	}
 	public function view(){
 		require_once 'class.formulier.php';
 		$profiel=new Smarty_csr();
 		$profiel->assign('profiel', $this->profiel);
 
+		$profiel->assign('melding', $this->getMelding());
+		$profiel->assign('actie', $this->actie);
 		$profiel->display('profiel/bewerken.tpl');
 	}
 }

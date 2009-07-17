@@ -155,6 +155,17 @@ class Forum{
 		if($uid==null){ LoginLid::instance()->getUid(); }
 		return Forum::getPostsVoorRss($aantal, false, null, $uid);
 	}
+	public static function getUserPostCount($uid=null){
+		if($uid==null){ LoginLid::instance()->getUid(); }
+		$db=MySql::instance();
+		$query="SELECT count(*) AS aantal FROM forum_post WHERE uid='".$uid."';";
+		$data=$db->getRow($query);
+		if(is_array($data)){
+			return $data['aantal'];
+		}else{
+			return 0;
+		}
+	}
 	public static function searchPosts($sZoekQuery, $categorie=null){
 		if(!preg_match('/^[a-zA-Z0-9 \-\+\'\"\.]*$/', $sZoekQuery)){
 			return false;

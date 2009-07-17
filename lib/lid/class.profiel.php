@@ -14,11 +14,17 @@ class Profiel{
 	private $lid;
 	private $bewerktLid;
 
+	//als dit false is geven we geen loginvelden weer (wachtwoord && gebruikersnaam)
+	private $showLoginfields=true;
+	
 	private $form=array();
-	public function __construct($uid){
+	public function __construct($uid, $actie='bewerken'){
 		$this->lid=LidCache::getLid($uid);
 		$this->bewerktLid=clone $this->lid;
 
+		if($actie=='novietBewerken'){
+			$this->hideLoginfields();
+		}
 		$this->assignFields();
 	}
 
@@ -38,6 +44,7 @@ class Profiel{
 		}
 		return $this->bewerktLid->save() AND $this->bewerktLid->save_ldap();
 	}
+	
 	public function magBewerken(){
 		if(LoginLid::instance()->hasPermission('P_LEDEN_MOD')){
 			return true;
@@ -50,6 +57,7 @@ class Profiel{
 		}
 		return false;		
 	}
+
 	public function diff(){
 		$diff=array();
 		$bewerktProfiel=$this->bewerktLid->getProfiel();
@@ -68,12 +76,18 @@ class Profiel{
 		}
 		return $return.'[hr]';
 	}
+
 	public function getUid(){
 		return $this->getLid()->getUid();
 	}
 	public function getLid(){
 		return $this->lid;
 	}
+
+	public function hideLoginfields(){
+		$this->showLoginfields=false;
+	}
+	
 	public function isPosted(){
 		$posted=false;
 		foreach($this->form as $field){
@@ -105,7 +119,7 @@ class Profiel{
 		$profiel=$this->lid->getProfiel();
 
 		$hasLedenMod=LoginLid::instance()->hasPermission('P_LEDEN_MOD');
-
+		
 		//zaken bewerken als we oudlid zijn of P_LEDEN_MOD hebben
 		if($profiel['status']=='S_OUDLID' OR $hasLedenMod){
 			$form[]=new Comment('Identiteit:');
@@ -192,11 +206,13 @@ class Profiel{
 			$form[]=new InputField('kerk', $profiel['kerk'], 'Kerk', 50);
 			$form[]=new InputField('muziek', $profiel['muziek'], 'Muziekinstrument', 50);
 		}
-		
-		$form[]=new Comment('Inloggen:');
-		$form[]=new NickField('nickname', $profiel['nickname'], 'Bijnaam (inloggen)');
 
-		$form[]=new PassField('password');
+		if($this->showLoginfields===true){
+			$form[]=new Comment('Inloggen:');
+			$form[]=new NickField('nickname', $profiel['nickname'], 'Bijnaam (inloggen)');
+
+			$form[]=new PassField('password');
+		}
 		$this->form=$form;
 	}
 	
