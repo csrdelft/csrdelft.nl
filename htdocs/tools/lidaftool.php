@@ -14,7 +14,7 @@ if(LoginLid::instance()->hasPermission('P_ADMIN') AND isset($_POST['action'])){
 	
 }
 
-echo '<h1>Overzicht saldi</h1><form action="/tools/saldo-overzicht.php" method="post">';
+echo '<h1>Overzicht saldi</h1><form action="/tools/lidaftool.php" method="post">';
 	
 if(isset($_POST['namenRaw'])){
 	$aUids=namen2uid($_POST['namenRaw']);
@@ -22,7 +22,7 @@ if(isset($_POST['namenRaw'])){
 		echo '<table border="0">';
 		echo '<tr><th style="width: 300px;">Naam</hd>';
 		echo '<th style="width: 100px;">SocCie</th><th style="width: 110px;">MaalCie</th><th style="width: 200px;">Abo\'s</th>';
-		echo '<th>Abo\'s weg</th><th>status naar</th>'
+		echo '<th>Abo\'s weg</th><th>status naar</th>';
 		echo '</tr>';
 
 		require_once('maaltijden/class.maaltrack.php');
