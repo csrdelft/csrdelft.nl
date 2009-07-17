@@ -192,7 +192,7 @@
 			<br />
 			{/if}
 			
-			{if is_array($profhtml.berichtCount)}
+			{if $profhtml.berichtCount>0}
 				<div class="label"># bijdragen:</div>
 				<div class="data">
 					{$profhtml.berichtCount} berichten.
