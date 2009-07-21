@@ -240,7 +240,7 @@ class Nieuws {
 	 */
 	public function getBelangrijksteMededelingId(){
 		$prive='';
-		if(!LoginLid::instance()->hasPermission('P_LEDEN_READ'){
+		if(!LoginLid::instance()->hasPermission('P_LEDEN_READ')){
 			$prive = " AND
 				mededeling.prive!='1'";
 		}
