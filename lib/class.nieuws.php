@@ -239,43 +239,30 @@ class Nieuws {
 	 * niet bestaat, is het de nieuwste.
 	 */
 	public function getBelangrijksteMededelingId(){
-		$sTop1Query="
+		$prive='';
+		if(!LoginLid::instance()->hasPermission('P_LEDEN_READ'){
+			$prive = " AND
+				mededeling.prive!='1'";
+		}
+		$sBelangrijksteQuery="
 			SELECT
 				id
 			FROM
 				mededeling
 			WHERE
-				rank = '1' AND
 				mededeling.verwijderd='0' AND
-				mededeling.verborgen='0';
+				mededeling.verborgen='0'".$prive."
+			ORDER BY
+				rank ASC, datum DESC, id DESC
+			LIMIT 1;
 		";
-		$rTop1=$this->_db->query($sTop1Query);
-		if($this->_db->numRows($rTop1)==1){ // Indien er gewoon één resultaat is.
-			$aTop1=$this->_db->next($rTop1);
-			return (int)$aTop1['id'];
+		$rBelangrijkste=$this->_db->query($sBelangrijksteQuery);
+		if($rBelangrijkste!==false){
+			$aBelangrijkste=$this->_db->next($rBelangrijkste);
+			return (int)$aBelangrijkste['id'];
 		} else {
-			// Als er géén top1 is, of zelfs meerdere, dan gaan we zoeken naar de nieuwste mededeling.
-			$sNieuwsteQuery="
-				SELECT
-					id
-				FROM
-					mededeling
-				WHERE
-					mededeling.verwijderd='0' AND
-					mededeling.verborgen='0'
-				ORDER BY
-					datum DESC, id DESC
-				LIMIT
-					1;
-			";
-			$rNieuwste=$this->_db->query($sNieuwsteQuery);
-			if($this->_db->numRows($rNieuwste)==1){ // Indien er gewoon één resultaat is.
-				$aNieuwste=$this->_db->next($rNieuwste);
-				return (int)$aNieuwste['id'];
-			}else{
-				// Indien er helemaal geen mededeling te vinden is, geven we 0 terug.
-				return 0;
-			}
+			// Indien er helemaal geen mededeling te vinden is, geven we 0 terug.
+			return 0;
 		}
 	}
 }
