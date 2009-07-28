@@ -429,7 +429,7 @@ class Lid implements Serializable{
 		$newuid=$lichtingid.sprintf('%02d', $volgnummer);
 
 		$query="
-			INSERT INTO lid (uid, lidjaar, studiejaar, 'status', 'permissies')
+			INSERT INTO lid (uid, lidjaar, studiejaar, status, permissies)
 			VALUE ('".$newuid."', '".$lichting."', '".$lichting."', 'S_NOVIET', 'P_LID');";
 		if($db->query($query)){
 			return $newuid;

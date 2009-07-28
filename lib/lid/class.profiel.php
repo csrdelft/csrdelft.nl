@@ -14,8 +14,8 @@ class Profiel{
 	private $lid;
 	private $bewerktLid;
 
-	//als dit false is geven we geen loginvelden weer (wachtwoord && gebruikersnaam)
-	private $showLoginfields=true;
+	//zijn we een nieuwe noviet aan het toevoegen?
+	private $editNoviet=false;
 	
 	private $form=array();
 	public function __construct($uid, $actie='bewerken'){
@@ -23,7 +23,7 @@ class Profiel{
 		$this->bewerktLid=clone $this->lid;
 
 		if($actie=='novietBewerken'){
-			$this->hideLoginfields();
+			$this->editNoviet=true;
 		}
 		$this->assignFields();
 	}
@@ -51,6 +51,9 @@ class Profiel{
 		}
 		if(LoginLid::instance()->hasPermission('P_OUDLEDEN_MOD') AND $this->lid->getStatus()=='S_OUDLID'){
 			return true;
+		}
+		if($this->editNoviet==true){
+			return LoginLid::instance()->hasPermission('P_ADMIN,P_BESTUUR,groep:novcie');
 		}
 		if(LoginLid::instance()->isSelf($this->lid->getUid())){
 			return true;
@@ -84,10 +87,6 @@ class Profiel{
 		return $this->lid;
 	}
 
-	public function hideLoginfields(){
-		$this->showLoginfields=false;
-	}
-	
 	public function isPosted(){
 		$posted=false;
 		foreach($this->form as $field){
@@ -121,7 +120,7 @@ class Profiel{
 		$hasLedenMod=LoginLid::instance()->hasPermission('P_LEDEN_MOD');
 		
 		//zaken bewerken als we oudlid zijn of P_LEDEN_MOD hebben
-		if($profiel['status']=='S_OUDLID' OR $hasLedenMod){
+		if($profiel['status']=='S_OUDLID' OR $hasLedenMod OR $this->editNoviet){
 			$form[]=new Comment('Identiteit:');
 			$form[]=new RequiredInputField('voornaam', $profiel['voornaam'], 'Voornaam', 50);
 			$form[]=new RequiredInputField('voorletters', $profiel['voorletters'], 'Voorletters', 10);
@@ -170,7 +169,7 @@ class Profiel{
 		$form[]=new UrlField('website', $profiel['website'], 'Website');
 		$form[]=new InputField('bankrekening', $profiel['bankrekening'], 'Bankrekening', 11); //TODO specifiek ding voor maken
 
-		if($profiel['status']=='S_OUDLID' OR $hasLedenMod){
+		if($profiel['status']=='S_OUDLID' OR $hasLedenMod OR $this->editNoviet){
 			if($profiel['status']=='S_OUDLID'){
 				$beginjaar=1950;
 			}else{
@@ -190,7 +189,7 @@ class Profiel{
 			}
 			
 		}
-		if($hasLedenMod){
+		if($hasLedenMod OR $this->editNoviet){
 			$form[]=new SelectField('moot', $profiel['moot'], 'Moot', range(0,4));
 			$form[]=new SelectField('kring', $profiel['kring'], 'Kring', range(0,9));
 			if($this->lid->isLid() OR $profiel['status']=='S_KRINGEL'){
@@ -200,14 +199,15 @@ class Profiel{
 			$form[]=new InputField('eetwens', $profiel['eetwens'], 'Dieet', 200);
 			
 		}
-		if($hasLedenMod){
+		if($hasLedenMod OR $this->editNoviet){
 			$form[]=new Comment('Overig');
 			//wellicht binnenkort voor iedereen beschikbaar?
 			$form[]=new InputField('kerk', $profiel['kerk'], 'Kerk', 50);
 			$form[]=new InputField('muziek', $profiel['muziek'], 'Muziekinstrument', 50);
 		}
 
-		if($this->showLoginfields===true){
+		if(!$this->editNoviet){
+			//we voeren nog geen wachtwoord of bijnaam in bij novieten, die krijgen ze pas na het novitiaat
 			$form[]=new Comment('Inloggen:');
 			$form[]=new NickField('nickname', $profiel['nickname'], 'Bijnaam (inloggen)');
 
