@@ -439,5 +439,6 @@ lib/vb/features.txt -text
 sql/1542_peiling.sql -text
 sql/1548_corvee.sql -text
 sql/1563_corvee.sql -text
+sql/1592_verticalen.sql -text
 sql/csrdelft.sql -text
 sql/csrdelft_oud.sql -text

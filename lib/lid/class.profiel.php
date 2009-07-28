@@ -190,7 +190,8 @@ class Profiel{
 			
 		}
 		if($hasLedenMod OR $this->editNoviet){
-			$form[]=new SelectField('moot', $profiel['moot'], 'Moot', range(0,4));
+			//$form[]=new SelectField('moot', $profiel['moot'], 'Moot', range(0,4));
+			$form[]=new SelectField('verticale', $profiel['verticale'], 'Verticale', range(0,12));
 			$form[]=new SelectField('kring', $profiel['kring'], 'Kring', range(0,9));
 			if($this->lid->isLid() OR $profiel['status']=='S_KRINGEL'){
 				$form[]=new SelectField('kringleider', $profiel['kringleider'], 'Kringleider', array('n' => 'Nee','o' => 'Ouderejaarskring','e' => 'Eerstejaarskring'));
