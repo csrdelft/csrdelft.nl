@@ -221,7 +221,9 @@ class LoginLid{
 		$permissies=explode(',', $descr);
 		foreach($permissies as $permissie){
 			$permissies=trim($permissie);
-			if($permissie==$this->lid->getUid()){
+			if(substr($permissie, 0, 1)=='!' && !$this->hasPermission(substr($permissie,1), $liddescr)){			
+				return true;
+			}elseif($permissie==$this->lid->getUid()){
 				return true;
 			}elseif(substr($permissie, 0, 5)=='groep'){
 				require_once 'groepen/class.groep.php';
