@@ -44,7 +44,7 @@ if (isset($_GET['bewerken']) && $pagina->magBewerken()){
 if($_GET['naam']=='owee'){
 	$prefix='owee_';
 }else{
-	$prefix='';
+	$prefix='owee_';
 }
 $depagina=new csrdelft($paginacontent,$prefix);
 if($_GET['naam']=='owee'){

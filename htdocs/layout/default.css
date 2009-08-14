@@ -315,17 +315,20 @@ ul.nobullets li{ list-style-type: none; }
 	padding-bottom: 4px;
 }
 #mainleft #komende_pasfotos .verjaardag{
-	height: 85px;
+	height: 87px;
 	float: left;
 	margin: 1px;
 	border: 1px solid #f5f5f5;;
 	text-align: center;
 }
+#mainleft #komende_pasfotos .verjaardag:hover{
+	background-color: #bbb;
+}
 #mainleft #komende_pasfotos .opvallend{
 	border: 1px solid #b8b8b8;
 }
 #mainleft #komende_pasfotos .verjaardag img.lidfoto{
-	width: 50px;
+	max-height: 70px; width: 50px;
 }
 
 /**** FOOTER ******************************************************************/

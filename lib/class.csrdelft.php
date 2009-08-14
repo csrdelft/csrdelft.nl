@@ -30,7 +30,7 @@ class csrdelft extends SimpleHTML {
 	private $_titel='Geen titel gezet.';
 	private $_prefix;
 
-	function __construct($body,$prefix='',$menuid=0){ //mw: param menuid toegevoegd, zodat het goede menu geladen wordt (voor vb=99)
+	function __construct($body,$prefix='owee_',$menuid=0){ //mw: param menuid toegevoegd, zodat het goede menu geladen wordt (voor vb=99)
 		if(is_object($body)){
 			$this->_body=$body;
 			//als de body een methode heeft om een titel mee te geven die gebruiken, anders de standaard.
@@ -66,6 +66,8 @@ class csrdelft extends SimpleHTML {
 		if(Instelling::get('layout_rozeWebstek')=='ja' AND LoginLid::instance()->getUid()!='x999'){
 			$this->addStylesheet('roze.css');
 		}
+
+		$this->addStylesheet('owee.css');
 
 	}
 
