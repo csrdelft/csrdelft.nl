@@ -431,8 +431,8 @@ class Lid implements Serializable{
 		$changelog='Aangemaakt door [lid='.LoginLid::instance()->getUid().'] op [reldate]'.getDatetime().'[/reldate][br]';
 
 		$query="
-			INSERT INTO lid (uid, lidjaar, studiejaar, status, permissies, changelog)
-			VALUE ('".$newuid."', '".$lichting."', '".$lichting."', 'S_NOVIET', 'P_LID', '".$changelog."');";
+			INSERT INTO lid (uid, lidjaar, studiejaar, status, permissies, changelog, land, o_land)
+			VALUE ('".$newuid."', '".$lichting."', '".$lichting."', 'S_NOVIET', 'P_LID', '".$changelog."', 'Nederland', 'Nederland');";
 		if($db->query($query)){
 			return $newuid;
 		}else{

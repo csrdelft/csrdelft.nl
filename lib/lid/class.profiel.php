@@ -127,7 +127,9 @@ class Profiel{
 			$form[]=new InputField('tussenvoegsel', $profiel['tussenvoegsel'], 'Tussenvoegsel', 15);
 			$form[]=new RequiredInputField('achternaam', $profiel['achternaam'], 'Achternaam', 50);
 			if($hasLedenMod){
-				$form[]=new InputField('postfix', $profiel['postfix'], 'Postfix', 7);
+				if(!$this->editNoviet){
+					$form[]=new InputField('postfix', $profiel['postfix'], 'Postfix', 7);
+				}
 				$form[]=new SelectField('geslacht', $profiel['geslacht'], 'Geslacht', array('m'=> 'Man', 'v'=>'Vrouw'));
 				$form[]=new InputField('voornamen', $profiel['voornamen'], 'Voornamen', 100);
 			}
@@ -181,8 +183,10 @@ class Profiel{
 			if($profiel['status']!='S_OUDLID'){
 				$form[]=new InputField('studienr', $profiel['studienr'], 'Studienummer (TU)', 20);
 			}
-			$form[]=new InputField('beroep', $profiel['beroep'], 'Beroep/werk', 4096);
-			$form[]=new IntField('lidjaar', $profiel['lidjaar'], 'Lid sinds', date('Y'), $beginjaar);
+			if(!$this->editNoviet){
+				$form[]=new InputField('beroep', $profiel['beroep'], 'Beroep/werk', 4096);
+				$form[]=new IntField('lidjaar', $profiel['lidjaar'], 'Lid sinds', date('Y'), $beginjaar);
+			}
 			if($profiel['status']=='S_OUDLID'){
 				$form[]=new DatumField('lidafdatum', $profiel['lidafdatum'], 'Oudlid sinds');
 				$form[]=new SelectField('ontvangtcontactueel', $profiel['ontvangtcontactueel'], 'Ontvangt Contactueel', array('ja'=> 'Ja', 'nee' => 'Nee'));
@@ -191,11 +195,13 @@ class Profiel{
 		}
 		if($hasLedenMod OR $this->editNoviet){
 			//$form[]=new SelectField('moot', $profiel['moot'], 'Moot', range(0,4));
-			$form[]=new SelectField('verticale', $profiel['verticale'], 'Verticale', range(0,12));
-			$form[]=new SelectField('kring', $profiel['kring'], 'Kring', range(0,9));
-			if(!$this->editNoviet AND ($this->lid->isLid() OR $profiel['status']=='S_KRINGEL')){
-				$form[]=new SelectField('kringleider', $profiel['kringleider'], 'Kringleider', array('n' => 'Nee','o' => 'Ouderejaarskring','e' => 'Eerstejaarskring'));
-				$form[]=new SelectField('motebal', $profiel['motebal'], 'Motebal',array('0' => 'Nee','1' => 'Ja'));
+			if(!$this->editNoviet){
+				$form[]=new SelectField('verticale', $profiel['verticale'], 'Verticale', range(0,12));
+				$form[]=new SelectField('kring', $profiel['kring'], 'Kring', range(0,9));
+				if($this->lid->isLid() OR $profiel['status']=='S_KRINGEL'){
+					$form[]=new SelectField('kringleider', $profiel['kringleider'], 'Kringleider', array('n' => 'Nee','o' => 'Ouderejaarskring','e' => 'Eerstejaarskring'));
+					$form[]=new SelectField('motebal', $profiel['motebal'], 'Motebal',array('0' => 'Nee','1' => 'Ja'));
+				}
 			}
 			$form[]=new InputField('eetwens', $profiel['eetwens'], 'Dieet', 200);
 			
