@@ -218,6 +218,13 @@
 		</div>
 	</div>
 	{/if}
+	{if $loginlid->hasPermission('P_ADMIN,P_BESTUUR,groep:novcie') AND $lid->getStatus()=='S_NOVIET'}
+
+		<div class="profielregel" id="novcieopmerking">
+			<div class="left">NovCie-<br />opmerking:</div>
+			<div class="gegevens" id="novcie_gegevens">{$profhtml.kgb}</div>
+		</div>
+	{/if}
 	{if ($isAdmin OR $isLidMod) AND $profhtml.changelog!=''}
 		<div style="clear: left;"></div>
 		<div class="profielregel" id="changelog">

@@ -85,6 +85,22 @@ abstract class FormField{
 		echo '</div>';
 	}
 }
+
+/*
+ * Textarea's
+ */
+class TextField extends FormField{
+
+	public function view(){
+		echo $this->getDiv();
+		echo $this->getLabel();
+		echo $this->getError();
+		echo '<textarea id="field_'.$this->name.'" name="'.$this->name.'" class="regular" rows="5">'.htmlspecialchars($this->value).'</textarea>';
+
+		echo '</div>';
+	}
+}
+
 /*
  * Een InputField heeft een maximale lengte.
  */

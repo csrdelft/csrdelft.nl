@@ -193,7 +193,7 @@ class Profiel{
 			//$form[]=new SelectField('moot', $profiel['moot'], 'Moot', range(0,4));
 			$form[]=new SelectField('verticale', $profiel['verticale'], 'Verticale', range(0,12));
 			$form[]=new SelectField('kring', $profiel['kring'], 'Kring', range(0,9));
-			if($this->lid->isLid() OR $profiel['status']=='S_KRINGEL'){
+			if(!$this->editNoviet AND ($this->lid->isLid() OR $profiel['status']=='S_KRINGEL')){
 				$form[]=new SelectField('kringleider', $profiel['kringleider'], 'Kringleider', array('n' => 'Nee','o' => 'Ouderejaarskring','e' => 'Eerstejaarskring'));
 				$form[]=new SelectField('motebal', $profiel['motebal'], 'Motebal',array('0' => 'Nee','1' => 'Ja'));
 			}
@@ -205,6 +205,9 @@ class Profiel{
 			//wellicht binnenkort voor iedereen beschikbaar?
 			$form[]=new InputField('kerk', $profiel['kerk'], 'Kerk', 50);
 			$form[]=new InputField('muziek', $profiel['muziek'], 'Muziekinstrument', 50);
+		}
+		if($this->editNoviet){
+			$form[]=new TextField('kgb', $profiel['kgb'], 'NovCie-opmerking');
 		}
 
 		if(!$this->editNoviet){
