@@ -7,6 +7,9 @@ function ShowMenu(div)
 {
 	menu_timeout = menu_timeout_next;
 	
+	/* Owee banner verstoppen */
+	document.getElementById('banner0').style.display = "none";
+	
 	document.getElementById('sub1').style.display = "none";
 	document.getElementById('sub2').style.display = "none";
 	document.getElementById('sub3').style.display = "none";
@@ -27,6 +30,9 @@ function ShowMenu(div)
 		if (typeof fixPNG != "undefined") {
 			fixPNG('imgbanner'+div);
 		}
+	/* Owee banner tonen */
+	} else {
+		document.getElementById('banner0').style.display = "inline";
 	}
 }
 
