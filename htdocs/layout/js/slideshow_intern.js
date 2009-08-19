@@ -22,7 +22,7 @@ startwhen=1;
 paused=0;
 active=0;
 
-aantal_per_serie=7; // Het aantal foto's per serie
+aantal_per_serie=10; // Het aantal foto's per serie
 // "startwhen" leave it at "null" to start the function by calling it from your page by link
 // or set it to 1 to start the slide automatically as soon as the images are loaded
 //*****nothing more to do, have fun :)
