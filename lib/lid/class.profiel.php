@@ -212,7 +212,7 @@ class Profiel{
 			$form[]=new InputField('kerk', $profiel['kerk'], 'Kerk', 50);
 			$form[]=new InputField('muziek', $profiel['muziek'], 'Muziekinstrument', 50);
 		}
-		if($this->editNoviet){
+		if(LoginLid::instance()->hasPermission('P_BESTUUR,groep:novcie')){
 			$form[]=new TextField('kgb', $profiel['kgb'], 'NovCie-opmerking');
 		}
 
