@@ -55,7 +55,7 @@ if(!($loginlid->hasPermission('P_LEDEN_READ') or $loginlid->hasPermission('P_OUD
 			}
 		break;
 		case 'nieuwLid':
-			if($loginlid->hasPermission('P_ADMIN,P_BESTUUR,groep:novcie')){
+			if($loginlid->hasPermission('P_ADMIN,P_LEDEN_MOD,groep:novcie')){
 				try{
 					//maak het nieuwe uid aan.
 					$nieuwUid=Lid::createNew(date('Y'));

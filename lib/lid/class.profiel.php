@@ -52,8 +52,8 @@ class Profiel{
 		if(LoginLid::instance()->hasPermission('P_OUDLEDEN_MOD') AND $this->lid->getStatus()=='S_OUDLID'){
 			return true;
 		}
-		if($this->editNoviet==true){
-			return LoginLid::instance()->hasPermission('P_ADMIN,P_BESTUUR,groep:novcie');
+		if($this->editNoviet==true AND LoginLid::instance()->hasPermission('groep:novcie')){
+			return true;
 		}
 		if(LoginLid::instance()->isSelf($this->lid->getUid())){
 			return true;
