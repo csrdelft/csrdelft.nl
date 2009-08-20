@@ -126,7 +126,7 @@ class Profiel{
 			$form[]=new RequiredInputField('voorletters', $profiel['voorletters'], 'Voorletters', 10);
 			$form[]=new InputField('tussenvoegsel', $profiel['tussenvoegsel'], 'Tussenvoegsel', 15);
 			$form[]=new RequiredInputField('achternaam', $profiel['achternaam'], 'Achternaam', 50);
-			if($hasLedenMod){
+			if($hasLedenMod OR $this->editNoviet){
 				if(!$this->editNoviet){
 					$form[]=new InputField('postfix', $profiel['postfix'], 'Postfix', 7);
 				}

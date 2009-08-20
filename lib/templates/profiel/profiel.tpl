@@ -8,7 +8,7 @@
 						<a href="/communicatie/profiel/{$profhtml.uid}/bewerken" class="knop"><img src="{$csr_pics}forum/bewerken.png" title="Bewerk dit profiel" />Bewerken</a><br />
 						{if $profhtml.uid==$loginlid->getUid()}<a href="/instellingen/" class="knop">Webstekinstellingen</a><br />{/if}
 					{/if}
-					{if $loginlid->hasPermission('groep:novcie')}
+					{if $lid->getStatus()=='S_NOVIET' AND $loginlid->hasPermission('groep:novcie')}
 						<a href="/communicatie/profiel/{$profhtml.uid}/novietBewerken" class="knop"><img src="{$csr_pics}forum/bewerken.png" title="Bewerk dit profiel" />Noviet bewerken</a><br />
 					{/if}
 					{if $isAdmin}
