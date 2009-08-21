@@ -254,7 +254,8 @@ Namens de PubCie,
 ".LoginLid::instance()->getLid()->getNaam()."
 
 P.S.: Mocht u nog vragen hebben, dan kan u natuurlijk altijd e-posts sturen naar pubcie@csrdelft.nl";
-		return MySql::instance()->query($sNieuwWachtwoord) AND mail($lid->getEmail(), 'Nieuw wachtwoord voor de C.S.R.-stek', $mail, "Bcc: pubcie@csrdelft.nl");
+		return MySql::instance()->query($sNieuwWachtwoord) AND LidCache::flushLid($uid) AND
+			mail($lid->getEmail(), 'Nieuw wachtwoord voor de C.S.R.-stek', $mail, "Bcc: pubcie@csrdelft.nl");
 
 	}
 }
