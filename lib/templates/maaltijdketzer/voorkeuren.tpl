@@ -52,13 +52,6 @@ van u bij maaltijden. Kruis minstens een vakje aan.
 	<input type="submit" name="opslaan" value="opslaan" />
 </form>
 <br />
-<p>Opmerkingen of speciale voorkeuren kunt u hier aangeven.
-</p>
-<form method="post" action="{$smarty.server.PHP_SELF}">
-	<input type="hidden" name="a" value="editCorveewens" />
-	<input type="text" name="corvee_wens" value="{$maal.corvee_wens}" size="50" /> <input type="submit" name="opslaan" value="opslaan" />
-</form>
-<br />
 
 <h2>Maaltijdabonnementen</h2>
 <p>
