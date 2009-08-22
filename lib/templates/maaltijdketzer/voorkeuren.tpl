@@ -44,11 +44,11 @@ van u bij maaltijden. Kruis minstens een vakje aan.
 </p>
 <form method="post" action="{$smarty.server.PHP_SELF}">
 	<input type="hidden" name="a" value="editCorveevoorkeuren" />
-	<input type="checkbox" name="corvee_voorkeuren[ma_kok]" value="1" {if $maal.corvee_voorkeuren.ma_kok}checked="checked"{/if}" /> Maandag koken<br />
-	<input type="checkbox" name="corvee_voorkeuren[ma_afwas]" value="1" {if $maal.corvee_voorkeuren.ma_afwas}checked="checked"{/if}" /> Maandag afwassen<br />
-	<input type="checkbox" name="corvee_voorkeuren[do_kok]" value="1" {if $maal.corvee_voorkeuren.do_kok}checked="checked"{/if}" /> Donderdag koken<br />
-	<input type="checkbox" name="corvee_voorkeuren[do_afwas]" value="1" {if $maal.corvee_voorkeuren.do_afwas}checked="checked"{/if}" /> Donderdag afwassen<br />	
-	<input type="checkbox" name="corvee_voorkeuren[theedoek]" value="1" {if $maal.corvee_voorkeuren.theedoek}checked="checked"{/if}" /> Theedoeken wassen<br />
+	<input type="checkbox" name="corvee_voorkeuren[ma_kok]" value="1" {if $maal.corvee_voorkeuren.ma_kok}checked="checked"{/if} /> Maandag koken<br />
+	<input type="checkbox" name="corvee_voorkeuren[ma_afwas]" value="1" {if $maal.corvee_voorkeuren.ma_afwas}checked="checked"{/if} /> Maandag afwassen<br />
+	<input type="checkbox" name="corvee_voorkeuren[do_kok]" value="1" {if $maal.corvee_voorkeuren.do_kok}checked="checked"{/if} /> Donderdag koken<br />
+	<input type="checkbox" name="corvee_voorkeuren[do_afwas]" value="1" {if $maal.corvee_voorkeuren.do_afwas}checked="checked"{/if} /> Donderdag afwassen<br />	
+	<input type="checkbox" name="corvee_voorkeuren[theedoek]" value="1" {if $maal.corvee_voorkeuren.theedoek}checked="checked"{/if} /> Theedoeken wassen<br />
 	<input type="submit" name="opslaan" value="opslaan" />
 </form>
 <br />
