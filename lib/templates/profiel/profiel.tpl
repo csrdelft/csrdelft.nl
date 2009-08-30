@@ -105,7 +105,7 @@
 				{if $profhtml.beroep!=''}<div class="label">Beroep/werk:</div> {$profhtml.beroep}<br />{/if}
 			{else}
 				<div class="label">Kring:</div> 
-				<a href="/communicatie/moten#kring{$profhtml.verticale}.{$profhtml.kring}">{$profhtml.verticale}.{$profhtml.kring}</a>
+				<a href="/communicatie/moten#kring{$lid->getVerticale()}.{$profhtml.kring}">{$lid->getVerticale()}.{$profhtml.kring}</a>
 				{if $profhtml.status=='S_KRINGEL'}(kringel){/if}
 				<br />
 			{/if}

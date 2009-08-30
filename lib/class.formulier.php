@@ -299,6 +299,8 @@ class PassField extends FormField{
 	}
 }
 class SelectField extends FormField{
+	public $options=array();
+	
 	public function __construct($name, $value, $description=null, $options){
 		parent::__construct($name, $value, $description);
 		$this->options=$options;
@@ -331,6 +333,16 @@ class SelectField extends FormField{
 		echo '</div>';
 	}
 }
+
+class VerticaleField extends SelectField{
+	
+	public function __construct($name, $value, $description=null){
+		$verticalen=array_merge(array('Geen'), range('A', 'H'));
+		parent::__construct($name, $value, $description, $verticalen);
+	}
+}
+
+
 class DatumField extends FormField{
 	public $maxyear;
 	

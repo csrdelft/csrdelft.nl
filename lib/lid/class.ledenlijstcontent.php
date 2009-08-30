@@ -220,7 +220,7 @@ in <select name="waar">';
 				$lid=LidCache::getLid($uid['uid']);
 					echo '<tr>';
 				if(in_array('pasfoto', $this->_form['kolom'])){
-					echo '<td><a href="/communicatie/profiel/'.$uid.'">';
+					echo '<td><a href="/communicatie/profiel/'.$uid['uid'].'">';
 					echo $lid->getPasfoto('small').'</a></td>';
 				}
 				if($loginlid->hasPermission('P_LEDEN_MOD')){

@@ -167,6 +167,10 @@ class Lid implements Serializable{
 	public function getNickname(){ 	return $this->profiel['nickname']; }
 	public function getEmail(){ 	return $this->profiel['email']; }
 	public function getMoot(){ 		return $this->profiel['moot']; }
+	public function getVerticale(){
+		$verticalen=array_merge(array('Geen'), range('A', 'H'));
+		return $verticalen[$this->profiel['verticale']];
+	}
 	public function getPassword(){	return $this->profiel['password']; }
 	public function checkpw($pass){
 		// Verify SSHA hash
