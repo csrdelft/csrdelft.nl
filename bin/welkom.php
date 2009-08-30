@@ -16,7 +16,7 @@ if ($result !== false and $db->numRows($result) > 0) {
 			$pass .= substr($tekens,rand(0,strlen($tekens)),1);
 		}
 
-		$passwordhash=$lid->_makepasswd($pass);
+		$passwordhash=makepasswd($pass);
 		$sQuery="UPDATE lid SET password='".$passwordhash."' WHERE uid='".$sjaars['uid']."' LIMIT 1;";
 		$db->query($sQuery);
 
