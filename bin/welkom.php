@@ -7,7 +7,7 @@ $jaar = '09';
 
 require_once('include.config.php');
 
-$result = $db->select("SELECT * FROM `lid` WHERE uid LIKE '".$jaar."%'");
+$result = $db->select("SELECT * FROM `lid` WHERE status = 'S_NOVIET'");
 if ($result !== false and $db->numRows($result) > 0) {
 	while ($sjaars = $db->next($result)){
 		$tekens = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890';
