@@ -3,11 +3,11 @@
 # Scriptje om voor sjaars een wachtwoord te genereren en dat toe te mailen.
 # Vergeet niet voor gebruik hieronder het jaar aan te passen.
 
-$jaar = '08';
+$jaar = '09';
 
 require_once('include.config.php');
 
-$result = $db->select("SELECT * FROM `lid` WHERE uid = '0848' OR uid = '0855'");
+$result = $db->select("SELECT * FROM `lid` WHERE uid LIKE '".$jaar."%'");
 if ($result !== false and $db->numRows($result) > 0) {
 	while ($sjaars = $db->next($result)){
 		$tekens = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890';
@@ -42,8 +42,8 @@ Kom even langs in ons IRC-kanaal #pubcie (zie de pagina daarover op de webstek o
 
 Met vriendelijke groet,
 
-Jan Jaap Treurniet
-h.t. Internetman der PubliciteitsCommissie der Civitas Studiosorum Reformatorum
+Gerrit Uitslag
+h.t. Praeses der PubliciteitsCommissie der Civitas Studiosorum Reformatorum
 EOD;
 
 		mail ($sjaars['email'],"Inloggegevens C.S.R.-webstek",$tekst,"From: PubliciteitsCommissie C.S.R. Delft <pubcie@csrdelft.nl>\nContent-Type: text/plain; charset=utf-8\nBcc: pubcie@csrdelft.nl");
