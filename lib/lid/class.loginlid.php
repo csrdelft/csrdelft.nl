@@ -225,6 +225,9 @@ class LoginLid{
 				return true;
 			}elseif($permissie==$this->lid->getUid()){
 				return true;
+			}elseif(substr($permissie, 0, 9)=='verticale'){
+				$verticale=strtoupper(substr($permissie, 10));
+				return $verticale==$this->lid->getVerticale();
 			}elseif(substr($permissie, 0, 5)=='groep'){
 				require_once 'groepen/class.groep.php';
 				try{
