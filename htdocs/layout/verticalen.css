@@ -1,9 +1,12 @@
 .verticale{
 	clear: both;
+	border-bottom: 1px solid black;
+	margin-bottom: 10px;
 }
 .kring, .geenkring{
 	float: left;
-	width: 150px;
+	width: 148px;
+	padding: 2px;
 }
 .geenkring{
 	float: right;
