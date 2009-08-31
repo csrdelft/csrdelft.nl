@@ -84,9 +84,11 @@ class VerticalenContent extends SimpleHTML{
 					echo '<h2>Kring '.$kringnaam.'</h2>';
 				}
 				foreach($kring as $lid){
-					if($lid->isKringleider()){ echo '<em>'; }					
+					if($lid->isKringleider()) echo '<em>';
 					echo $lid->getNaamLink('full', 'link').'<br />';
-					if($lid->isKringleider()){ echo '</em>'; }
+					if($lid->getStatus()=='S_KRINGEL') echo '&nbsp;~';
+					if($lid->isVerticaan()) echo '&nbsp;L';
+					if($lid->isKringleider()) echo '</em>';
 				}
 				echo '</div>';
 			}

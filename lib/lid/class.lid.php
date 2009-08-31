@@ -172,9 +172,9 @@ class Lid implements Serializable{
 		require_once 'class.verticalencontent.php';
 		return Verticale::$namen[$this->profiel['verticale']];
 	}
-	public function isKringleider(){
-		return $this->profiel['kringleider']!='n';
-	}
+	public function isKringleider(){ return $this->profiel['kringleider']!='n'; }
+	public function isVerticaan(){ return $this->profiel['motebal']==1; }
+		
 	public function getPassword(){	return $this->profiel['password']; }
 	public function checkpw($pass){
 		// Verify SSHA hash
