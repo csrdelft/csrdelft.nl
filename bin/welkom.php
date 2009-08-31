@@ -20,6 +20,9 @@ if ($result !== false and $db->numRows($result) > 0) {
 		$sQuery="UPDATE lid SET password='".$passwordhash."' WHERE uid='".$sjaars['uid']."' LIMIT 1;";
 		$db->query($sQuery);
 
+		//cache resetten.
+		LidCache::flushLid($sjaars['uid']);
+		
 		$tekst = <<<EOD
 Beste noviet {$sjaars['voornaam']},
 
