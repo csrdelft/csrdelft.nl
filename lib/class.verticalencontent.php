@@ -80,6 +80,7 @@ class VerticalenContent extends SimpleHTML{
 					<a href="/communicatie/moten/">Kringen</a>
 				</li>
 			</ul>
+			<hr />';
 			echo '<div class="verticale">';
 			echo '<h1>Verticale '.$verticale->getNaam().'</h1>';
 			foreach($verticale->getKringen() as $kringnaam => $kring){
