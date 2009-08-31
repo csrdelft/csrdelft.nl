@@ -69,6 +69,17 @@ class VerticalenContent extends SimpleHTML{
 
 		foreach($verticalen as $verticale){
 			
+			echo '<ul class="horizontal nobullets">
+				<li>
+					<a href="/communicatie/ledenlijst/">Ledenlijst</a>
+				</li>
+				<li>
+					<a href="/communicatie/verjaardagen" title="Overzicht verjaardagen">Verjaardagen</a>
+				</li>
+				<li class="active">
+					<a href="/communicatie/moten/">Kringen</a>
+				</li>
+			</ul>
 			echo '<div class="verticale">';
 			echo '<h1>Verticale '.$verticale->getNaam().'</h1>';
 			foreach($verticale->getKringen() as $kringnaam => $kring){

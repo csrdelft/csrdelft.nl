@@ -12,6 +12,9 @@ RewriteRule ^verjaardagen/? verjaardagen.php
 # Moten
 RewriteRule ^moten/? moten.php
 
+# Verticalen
+RewriteRule ^verticalen/? verticalen.php
+
 # Profielen
 RewriteRule ^profiel/?$ profiel.php
 RewriteRule ^profiel/([0-9a-z]+)/?$ profiel.php?uid=$1
