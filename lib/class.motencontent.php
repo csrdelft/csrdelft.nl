@@ -70,12 +70,12 @@ class MotenContent extends SimpleHTML {
 			<li>
 				<a href="/communicatie/verjaardagen" title="Overzicht verjaardagen">Verjaardagen</a>
 			</li>
-			<li class="active">
-				<a href="/communicatie/moten/">Kringen</a>
+			<li>
+				<a href="/communicatie/verticalen/">Kringen</a>
 			</li>
 		</ul>
 		<hr />';
-		echo '<h1>Moot en Kringindeling</h1>';
+		echo '<h1>Oude Moot en Kringindeling</h1>';
 		echo '<p>';
 		if($this->_bEmail===true){
 			echo '<a href="moten">Toon zonder email-adressen</a>';
