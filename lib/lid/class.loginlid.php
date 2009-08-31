@@ -337,7 +337,7 @@ class LoginLid{
 	//van een lid.
 	private $tokenCache;
 	public function validateWithToken($token, $perm){
-		if(!preg_match('/[a-z0-9]{25}/', $token)){
+		if(!preg_match('/[a-z0-9:,]*/', $token)){
 			return false;
 		}
 		if(!isset($this->tokenCache[$token])){
