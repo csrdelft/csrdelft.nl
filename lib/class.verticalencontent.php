@@ -76,7 +76,7 @@ class VerticalenContent extends SimpleHTML{
 				if($kringnaam==0){
 					$kringstyle='geenkring';
 				}
-				echo '<div class="'.$kringstyle.'">';
+				echo '<div class="'.$kringstyle.'" id="kring'.$verticale->getNaam().'.'.$kringnaam.'">';
 				
 				if($kringnaam==0){
 					echo '<h2>Geen kring</h2>'; 
@@ -96,6 +96,15 @@ class VerticalenContent extends SimpleHTML{
 			echo '</div>';
 			
 		}
+		?>
+		<script type="text/javascript">
+			if(document.location.hash.substring(1,6)=='kring'){
+				kring=document.location.hash.substring(1);
+				document.getElementById(kring).style.backgroundColor='#f1f1f1';
+				//document.getElementById(kring+'leden').style.backgroundColor='lightblue';
+			}
+		</script>
+		<?php
 	}
 
 }
