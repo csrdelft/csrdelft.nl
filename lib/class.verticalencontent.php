@@ -75,7 +75,7 @@ class VerticalenContent extends SimpleHTML{
 				<a href="/communicatie/verjaardagen" title="Overzicht verjaardagen">Verjaardagen</a>
 			</li>
 			<li class="active">
-				<a href="/communicatie/moten/">Kringen</a>
+				<a href="/communicatie/verticalen/">Kringen</a>
 			</li>
 		</ul>
 		<hr />';
