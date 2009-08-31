@@ -58,36 +58,17 @@ class Forum{
 	}
 
 	private function getCategorieClause($token=null){
-		$lid=LoginLid::instance();
-		//uitmaken welke categorieën er in de rss feed komen. Voor feut (bot in #csrdelft)
-		//is er een uitzondering op de ingeloggedheid.
+		$loginlid=LoginLid::instance();
 
-		//extern, zandbak, vraag en aanbod en kamers worden altijd weergegeven.
-		$cats=array(2,4,11,12);
+		$cats=array();
+		foreach(ForumCategorie::getAll(true) as $cat){
+			$cats[]='topic.categorie='.$cat['id'];
 
-		$perm='P_LEDEN_READ';
-		if($lid->hasPermission($perm) OR isFeut() OR $lid->validateWithToken($token, $perm)){
-			//C.S.R.-zaken, webstek terugkoppeling, geloofszaken, nieuws&actualiteit, electronica en techniek,
-			//groeperingen, kringen& werkgroepen, bidpunten, vacatures
-			$cats=array_merge($cats, array(1, 3, 10, 9, 13, 17, 18, 20, 21));
 		}
-		$perm='P_OUDLEDEN_READ';
-		if($lid->hasPermission($perm) OR isFeut() OR $lid->validateWithToken($token, $perm)){
-			//oudledenforum
-			$cats[]=8;
-		}
-		$perm='P_FORUM_MOD';
-		if($lid->hasPermission($perm) OR $lid->validateWithToken($token, $perm)){
-			//pubcie-forum enkel voor forummods.
-			$cats[]=6;
-		}
-		//aan elkaar plakken:
-		foreach($cats as $cat){
-			$sCats[]='topic.categorie='.$cat;
-		}
-		return implode(' OR ', $sCats);
-
+		
+		return implode(' OR ', $cats);
 	}
+	
 	public static function getPostsVoorRss($iAantal=false, $bDistinct=true, $token=null, $uid=null){
 		if($iAantal===false){
 			$iAantal=Forum::$_postsPerRss;
