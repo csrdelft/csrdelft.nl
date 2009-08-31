@@ -1,9 +1,15 @@
 .verticale{
 	clear: both;
 }
-.kring{
+.kring, .geenkring{
 	float: left;
 	width: 150px;
-	margin: 4px;
-
 }
+.geenkring{
+	float: right;
+	color: #aaa;
+}
+.geenkring a{
+	color: #aaa;
+}
+
