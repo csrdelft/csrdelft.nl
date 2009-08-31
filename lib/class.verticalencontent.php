@@ -33,11 +33,11 @@ class Verticale{
 	public static function getAll(){
 		$db=MySql::instance();
 		$query="
-			SELECT verticale, kring, GROUP_CONCAT(uid) as kringleden
+			SELECT verticale, kring, GROUP_CONCAT(uid ORDER BY kringleider, achternaam) as kringleden
 			FROM lid
 			WHERE (status='S_NOVIET' OR status='S_GASTLID' OR status='S_LID' OR status='S_KRINGEL') AND verticale !=0
 			GROUP BY verticale, kring
-			";
+			ORDER BY verticale, kring";
 		$result=$db->query($query);
 	
 		$vID=0;
@@ -66,11 +66,19 @@ class VerticalenContent extends SimpleHTML{
 
 		foreach($verticalen as $verticale){
 			
-			echo '<div class="verticale" style="clear: both;">';
+			echo '<div class="verticale">';
 			echo '<h1>Verticale '.$verticale->getNaam().'</h1>';
 			foreach($verticale->getKringen() as $kringnaam => $kring){
-				echo '<div class="kring" style="float: left; width: 150px;">';
-				echo '<h2>Kring '.$kringnaam.'</h2>';
+				echo '<div class="kring"';
+				if($kringnaam==0){
+					echo 'style="float: right;" ';
+				}
+				echo '>';
+				if($kringnaam==0){
+					echo '<h2>Geen kring</h2>'; 
+				}else{
+					echo '<h2>Kring '.$kringnaam.'</h2>';
+				}
 				foreach($kring as $lid){
 					if($lid->isKringleider()){ echo '<em>'; }					
 					echo $lid->getNaamLink('full', 'link').'<br />';

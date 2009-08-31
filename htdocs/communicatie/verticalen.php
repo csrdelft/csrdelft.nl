@@ -19,7 +19,7 @@ if($loginlid->hasPermission('P_LEDEN_READ')) {
 }
 
 $pagina=new csrdelft($midden);
-$pagina->addStylesheet('groepen.css');
+$pagina->addStylesheet('verticalen.css');
 $pagina->view();
 
 ?>
