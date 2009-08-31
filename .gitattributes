@@ -72,6 +72,7 @@ htdocs/communicatie/lijst.php -text
 htdocs/communicatie/moten.php -text
 htdocs/communicatie/profiel.php -text
 htdocs/communicatie/verjaardagen.php -text
+htdocs/communicatie/verticalen.php -text
 htdocs/index.php -text
 htdocs/instellingen.php -text
 htdocs/layout/agenda.css -text
@@ -105,6 +106,7 @@ htdocs/layout/roodschopper.css -text
 htdocs/layout/roze.css -text
 htdocs/layout/undohtml.css -text
 htdocs/layout/vb.css -text
+htdocs/layout/verticalen.css -text
 htdocs/login.php -text
 htdocs/logout.php -text
 htdocs/pagina.php -text
@@ -205,6 +207,7 @@ lib/class.stringincluder.php -text
 lib/class.toevoegen.php -text
 lib/class.toevoegencontent.php -text
 lib/class.verjaardagcontent.php -text
+lib/class.verticalencontent.php -text
 lib/courant/class.courant.php -text
 lib/courant/class.courantarchiefcontent.php -text
 lib/courant/class.courantbeheercontent.php -text

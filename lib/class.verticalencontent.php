@@ -1,0 +1,87 @@
+<?php
+
+class Verticale{
+	public static $namen=array('Geen', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H');
+
+	public $naam;
+	public $kringen=array();
+
+	
+	public function __construct($nummer, $kringen=array()){
+		if((int)$nummer!=$nummer){
+			$nummer=array_search($nummer, $this->kringen);
+		}
+		$this->naam=Verticale::$namen[$nummer];
+		
+			
+	}
+	public function getNaam(){
+		return $this->naam;
+	}
+	public function getKringen(){
+		return $this->kringen;
+	}
+	public function addKring($kring, $kringleden){
+		$leden=explode(',', $kringleden);
+		$this->kringen[$kring]=array();
+		foreach($leden as $uid){
+			$this->kringen[$kring][]=LidCache::getLid($uid);
+		}
+	}
+
+		
+	public static function getAll(){
+		$db=MySql::instance();
+		$query="
+			SELECT verticale, kring, GROUP_CONCAT(uid) as kringleden
+			FROM lid
+			WHERE (status='S_NOVIET' OR status='S_GASTLID' OR status='S_LID' OR status='S_KRINGEL') AND verticale !=0
+			GROUP BY verticale, kring
+			";
+		$result=$db->query($query);
+	
+		$vID=0;
+		$verticalen=array();
+		
+		while($row=$db->next($result)){
+			if($vID!=$row['verticale']){
+				$verticalen[]=$verticale;
+				$vID=$row['verticale'];
+				$verticale=new Verticale($vID);
+			}
+			$verticale->addKring($row['kring'], $row['kringleden']);
+		}
+		$verticalen[]=$verticale;
+		unset($verticalen[0]);
+
+		return $verticalen;
+		
+	}
+	
+}
+class VerticalenContent extends SimpleHTML{
+
+	public function view(){
+		$verticalen=Verticale::getAll();
+
+		foreach($verticalen as $verticale){
+			
+			echo '<div class="verticale" style="clear: both;">';
+			echo '<h1>Verticale '.$verticale->getNaam().'</h1>';
+			foreach($verticale->getKringen() as $kringnaam => $kring){
+				echo '<div class="kring" style="float: left; width: 150px;">';
+				echo '<h2>Kring '.$kringnaam.'</h2>';
+				foreach($kring as $lid){
+					if($lid->isKringleider()){ echo '<em>'; }					
+					echo $lid->getNaamLink('full', 'link').'<br />';
+					if($lid->isKringleider()){ echo '</em>'; }
+				}
+				echo '</div>';
+			}
+			echo '</div>';
+			
+		}
+	}
+
+}
+?>
