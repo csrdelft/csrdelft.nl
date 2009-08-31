@@ -61,8 +61,10 @@ class Forum{
 		$loginlid=LoginLid::instance();
 
 		$cats=array();
-		foreach(ForumCategorie::getAll(true) as $cat){
-			$cats[]='topic.categorie='.$cat['id'];
+		foreach(ForumCategorie::getAll() as $cat){
+			if($loginlid->hasPermission($cat['rechten_read']) OR $loginlid->validateWithToken($token, $cat['rechten_read'])){
+				$cats[]='topic.categorie='.$cat['id'];
+			}
 
 		}
 		
