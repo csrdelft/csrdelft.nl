@@ -62,7 +62,7 @@ class Forum{
 
 		$cats=array();
 		foreach(ForumCategorie::getAll() as $cat){
-			if($loginlid->hasPermission($cat['rechten_read']) OR $loginlid->validateWithToken($token, $cat['rechten_read'])){
+			if($loginlid->hasPermission($cat['rechten_read'])){// OR $loginlid->validateWithToken($token, $cat['rechten_read'])){
 				$cats[]='topic.categorie='.$cat['id'];
 			}
 
