@@ -1,7 +1,8 @@
 <?php
 # Mootlijsten maken
 
-require_once('include.config.php');
+require_once 'include.config.php';
+require_once 'class.verticalencontent.php';
 
 if(!$loginlid->hasPermission('P_ADMIN')){
 	header('location: '.CSR_ROOT);
@@ -13,10 +14,10 @@ echo <<<EOD
 	<tr valign="top">
 EOD;
 
-for($i=1; $i<=4; $i++){
-	$result = $db->select("SELECT uid FROM `lid` WHERE moot=".$i." AND (status='S_LID' OR status='S_GASTLID' OR status='S_NOVIET' OR status='S_KRINGEL')");
+for($i=1; $i<=8; $i++){
+	$result = $db->select("SELECT uid FROM `lid` WHERE verticale=".$i." AND (status='S_LID' OR status='S_GASTLID' OR status='S_NOVIET' OR status='S_KRINGEL')");
 	if ($result !== false and $db->numRows($result) > 0) {
-		echo '<td><h2>Moot '.$i.'</h2><pre>';
+		echo '<td><h2>Verticale '.Verticale::$namen[$i].'</h2><pre>';
 		
 		while($row = $db->next($result)){
 			echo $row['uid']."@csrdelft.nl\n";
