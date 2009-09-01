@@ -6,8 +6,9 @@
 	session_id('maaltrack-cli');
 
 	# instellingen & rommeltjes
-	require_once('include.config.php');
-	require_once('include.common.php');
+	chdir('../lib/');
+	require_once 'include.config.php';
+	
 
 	$sLedenQuery="
 		SELECT
