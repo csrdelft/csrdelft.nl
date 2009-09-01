@@ -15,4 +15,8 @@
 .geenkring a{
 	color: #aaa;
 }
+.mailknopje{
+	float: right;
+	cursor: pointer;
+}
 

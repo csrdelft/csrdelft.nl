@@ -8,9 +8,12 @@ require_once 'class.verticalencontent.php';
 
 
 if($loginlid->hasPermission('P_LEDEN_READ')) {
-	# Het middenstuk
-	require_once 'class.motencontent.php' ;
 	$midden = new VerticalenContent();
+
+	if(isset($_GET['email'])){
+		$midden->viewEmails($_GET['email']);
+		exit;
+	}
 }else{
 	# geen rechten
 	require_once 'class.paginacontent.php';
@@ -20,6 +23,7 @@ if($loginlid->hasPermission('P_LEDEN_READ')) {
 
 $pagina=new csrdelft($midden);
 $pagina->addStylesheet('verticalen.css');
+$pagina->addScript('verticalen.js');
 $pagina->view();
 
 ?>
