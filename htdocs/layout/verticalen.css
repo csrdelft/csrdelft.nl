@@ -8,6 +8,9 @@
 	width: 148px;
 	padding: 2px;
 }
+.kring:hover, .geenkring:hover{
+	background-color: #f1f1f1;
+}
 .geenkring{
 	float: right;
 	color: #aaa;

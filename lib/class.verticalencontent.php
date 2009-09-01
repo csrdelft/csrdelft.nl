@@ -166,7 +166,6 @@ class VerticalenContent extends SimpleHTML{
 			if(document.location.hash.substring(1,6)=='kring'){
 				kring=document.location.hash.substring(1);
 				document.getElementById(kring).style.backgroundColor='#f1f1f1';
-				//document.getElementById(kring+'leden').style.backgroundColor='lightblue';
 			}
 		</script>
 		<?php
