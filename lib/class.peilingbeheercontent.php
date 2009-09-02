@@ -74,8 +74,8 @@ class PeilingBeheerContent{
 						<textarea name="verhaal" rows="2"></textarea>
 						<div style="height:39px;"></div>				
 						<div id="opties_r">
-							<div class="optie"><input name="optie1" type="text"/></div>
-							<div class="optie"><input name="optie2" type="text"/></div>
+							<div class="optie"><input name="optie1" type="text" maxlength=255/></div>
+							<div class="optie"><input name="optie2" type="text" maxlength=255/></div>
 						</div>
 					</div>
 				</div>

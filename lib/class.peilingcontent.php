@@ -13,15 +13,15 @@ class PeilingContent{
 	public function stemFormulier($rpeiling){
 		//Ophalen arrays uit het databeest
 		$pid = $rpeiling['id'];		
-		$titel = $rpeiling['titel'];
-		$verhaal = nl2br($rpeiling['tekst']); //XHTML=true				
-
+		$titel = $rpeiling['titel'];			
+		$verhaal = CsrUbb::instance()->getHTML($rpeiling['tekst']);
+		
 		$opties = '';
 		$ropties = $this->_peiling->getPeilingOpties();		
 		if(!empty($ropties)){
 			foreach($ropties as $roptie){
 				$optieid = $roptie['id'];
-				$tekst = $roptie['optie'];
+				$tekst = CsrUbb::instance()->getHTML($roptie['optie']);
 				//$aantal = $ropties[$i]['stemmen'];
 				$opties .= '<input type="radio" name="optie" value="'.($optieid).'"/> '.$tekst.'<br/>';
 			}
@@ -46,7 +46,7 @@ class PeilingContent{
 		//Ophalen arrays uit het databeest		
 		$pid = $rpeiling['id'];		
 		$titel = $rpeiling['titel'];
-		$verhaal = nl2br($rpeiling['tekst']); //XHTML=true		
+		$verhaal = CsrUbb::instance()->getHTML($rpeiling['tekst']);	
 		
 		$opties = '';
 		$ropties = $this->_peiling->getPeilingOpties();
@@ -56,7 +56,7 @@ class PeilingContent{
 				$max = max($max, $roptie['stemmen']);
 			}		
 			foreach($ropties as $roptie){
-				$tekst = $roptie['optie'];
+				$tekst = CsrUbb::instance()->getHTML($roptie['optie']);
 				$aantal = $roptie['stemmen'];
 				$perc = 0;
 				if($max != 0){
@@ -68,7 +68,7 @@ class PeilingContent{
 					<div class="peilingoptietekst">
 						'.$tekst.' 
 					</div>
-					<div class="peilingoptiebalk" style="width: '.($perc*300).'px;">
+					<div class="peilingoptiebalk" style="width: '.round($perc*300).'px;">
 						&nbsp;
 					</div><div class="peilingoptieaantal">('.$aantal.')</div>
 				</div>';

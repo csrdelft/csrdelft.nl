@@ -9,6 +9,6 @@ function addOptie() {
 	
 	var optiediv_r = document.createElement('div');
 	optiediv_r.setAttribute("class", "optie");
-	optiediv_r.innerHTML = '<input name="optie'+i+'" type="text"/>';	 
+	optiediv_r.innerHTML = '<input name="optie'+i+'" type="text" maxlength=255/>';	 
 	document.getElementById("opties_r").appendChild(optiediv_r);
 }

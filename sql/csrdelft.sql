@@ -706,7 +706,7 @@ CREATE TABLE IF NOT EXISTS `peiling` (
 CREATE TABLE IF NOT EXISTS `peilingoptie` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `peilingid` int(11) NOT NULL,
-  `optie` varchar(100) DEFAULT NULL,
+  `optie` varchar(255) DEFAULT NULL,
   `stemmen` int(11) DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`)
