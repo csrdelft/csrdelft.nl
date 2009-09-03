@@ -107,6 +107,11 @@
 				<div class="label">Kring:</div> 
 				<a href="/communicatie/verticalen#kring{$lid->getVerticale()}.{$profhtml.kring}">{$lid->getVerticale()}.{$profhtml.kring}</a>
 				{if $profhtml.status=='S_KRINGEL'}(kringel){/if}
+				{if $lid->isVerticaan()}
+					(verticaaan)
+				{elseif $lid->isKringleider()}
+					(kringleider)
+				{/if}
 				<br />
 			{/if}
 			{if $profhtml.moot!=0}
