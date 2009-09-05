@@ -27,8 +27,11 @@ class LDAP {
 	# Openen van de LDAP connectie, die we regelmatig nodig hebben...
 	function connect($dobind) {
 		# zijn we al ingelogd?
-		if ($this->_conn !== false) $this->disconnect();
-		
+		if($this->_conn !== false) $this->disconnect();
+
+		if(!file_exists(ETC_PATH."/ldap.ini")){
+			throw new Exception('LDAP not available');
+		}
 		$ldapini = parse_ini_file(ETC_PATH."/ldap.ini");
 		$conn = ldap_connect($ldapini['ldap_host'], $ldapini['ldap_port']);
 		ldap_set_option($conn, LDAP_OPT_PROTOCOL_VERSION, 3);

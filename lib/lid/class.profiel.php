@@ -42,7 +42,15 @@ class Profiel{
 		if(count($this->diff())>0){
 			$this->bewerktLid->logChange($this->ubbDiff());
 		}
-		return $this->bewerktLid->save() AND $this->bewerktLid->save_ldap();
+		if($this->bewerktLid->save()){
+			try{
+				$this->bewerktLid->save_ldap();
+			}catch(Exception $e){
+				//todo: loggen dat LDAP niet beschikbaar is in een mooi eventlog wat ook nog gemaakt moet worden...
+			}
+			return true;
+		}
+		return false;
 	}
 	
 	public function magBewerken(){
@@ -194,14 +202,13 @@ class Profiel{
 			
 		}
 		if($hasLedenMod OR $this->editNoviet){
-			//$form[]=new SelectField('moot', $profiel['moot'], 'Moot', range(0,4));
 			if(!$this->editNoviet){
 				$form[]=new VerticaleField('verticale', $profiel['verticale'], 'Verticale');
 				//$form[]=new SelectField('verticale', $profiel['verticale'], 'Verticale', range(0,12));
 				$form[]=new SelectField('kring', $profiel['kring'], 'Kring', range(0,9));
 				if($this->lid->isLid() OR $profiel['status']=='S_KRINGEL'){
 					$form[]=new SelectField('kringleider', $profiel['kringleider'], 'Kringleider', array('n' => 'Nee','o' => 'Ouderejaarskring','e' => 'Eerstejaarskring'));
-					$form[]=new SelectField('motebal', $profiel['motebal'], 'Motebal',array('0' => 'Nee','1' => 'Ja'));
+					$form[]=new SelectField('motebal', $profiel['motebal'], 'Verticaan', array('0' => 'Nee','1' => 'Ja'));
 				}
 			}
 			$form[]=new InputField('eetwens', $profiel['eetwens'], 'Dieet', 200);

@@ -6,11 +6,19 @@
 .kring, .geenkring{
 	float: left;
 	width: 148px;
-	padding: 2px;
+	padding: 2px 4px 0px 4px;
 }
 .kring:hover, .geenkring:hover{
 	background-color: #f1f1f1;
 }
+.kringleden{
+	overflow:hidden;
+	width: 148px;
+	text-overflow: ellipsis;
+	padding-bottom: 4px;
+	
+}
+
 .geenkring{
 	float: right;
 	color: #aaa;

@@ -146,7 +146,7 @@ class VerticalenContent extends SimpleHTML{
 				}else{
 					echo '<h2>Kring '.$kringnaam.'</h2>';
 				}
-				echo '<div id="leden'.$verticale->getNaam().'.'.$kringnaam.'">';
+				echo '<div id="leden'.$verticale->getNaam().'.'.$kringnaam.'" class="kringleden">';
 				foreach($kring as $lid){
 					if($lid->isKringleider()) echo '<em>';
 					echo $lid->getNaamLink('full', 'link');
@@ -166,6 +166,7 @@ class VerticalenContent extends SimpleHTML{
 			if(document.location.hash.substring(1,6)=='kring'){
 				kring=document.location.hash.substring(1);
 				document.getElementById(kring).style.backgroundColor='#f1f1f1';
+				document.getElementById(kring).style.borderBottom='1px solid black';
 			}
 		</script>
 		<?php
