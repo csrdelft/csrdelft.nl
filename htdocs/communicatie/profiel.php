@@ -100,6 +100,7 @@ if(!($loginlid->hasPermission('P_LEDEN_READ') or $loginlid->hasPermission('P_OUD
 $pagina=new csrdelft($midden);
 $pagina->addStylesheet('profiel.css');
 $pagina->addScript('profiel.js');
+$pagina->addScript('suggest.js');
 $pagina->view();
 
 ?>

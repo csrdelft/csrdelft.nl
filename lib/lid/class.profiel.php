@@ -126,7 +126,8 @@ class Profiel{
 		$profiel=$this->lid->getProfiel();
 
 		$hasLedenMod=LoginLid::instance()->hasPermission('P_LEDEN_MOD');
-		
+
+		$landsuggesties=array('Nederland', 'België', 'Duitsland', 'Frankrijk', 'Verenigd Koninkrijk', 'Verenigde Staten');
 		//zaken bewerken als we oudlid zijn of P_LEDEN_MOD hebben
 		if($profiel['status']=='S_OUDLID' OR $hasLedenMod OR $this->editNoviet){
 			$form[]=new Comment('Identiteit:');
@@ -149,7 +150,7 @@ class Profiel{
 		$form[]=new RequiredInputField('postcode', $profiel['postcode'], 'Postcode', 20);
 		$form[]=new RequiredInputField('woonplaats', $profiel['woonplaats'], 'Woonplaats', 50);
 		$land=new RequiredInputField('land', $profiel['land'], 'Land', 50);
-		$land->setSuggestions('Nederland', 'België', 'Duitsland', 'Frankrijk', 'Verenigd Koninkrijk', 'Verenigde Staten');
+		$land->setSuggestions($landsuggesties);
 		$form[]=$land;
 		$form[]=new TelefoonField('telefoon', $profiel['telefoon'], 'Telefoonnummer', 20);
 		$form[]=new TelefoonField('mobiel', $profiel['mobiel'], 'Paupernummer', 20);
@@ -160,7 +161,7 @@ class Profiel{
 			$form[]=new InputField('o_postcode', $profiel['o_postcode'], 'Postcode', 20);
 			$form[]=new InputField('o_woonplaats', $profiel['o_woonplaats'], 'Woonplaats', 50);
 			$land=new InputField('o_land', $profiel['o_land'], 'Land', 50);
-			$land->setSuggestions('Nederland', 'België', 'Duitsland', 'Frankrijk', 'Verenigd Koninkrijk', 'Verenigde Staten');
+			$land->setSuggestions($landsuggesties);
 			$form[]=$land;
 			$form[]=new TelefoonField('o_telefoon', $profiel['o_telefoon'], 'Telefoonnummer', 20);
 		}
@@ -186,8 +187,11 @@ class Profiel{
 				$beginjaar=date('Y')-20;
 			}
 			$form[]=new Comment('Studie en Civitas:');
-			$form[]=new InputField('studie', $profiel['studie'], 'Studie', 100);
-			$form[]=new IntField('studiejaar', $profiel['studiejaar'], 'Beginjaar studie',date('Y'), $beginjaar);
+			$studie=new InputField('studie', $profiel['studie'], 'Studie', 100);
+			$studie->setSuggestions(array('TUDelft - BK', 'TUDelft - CT', 'TUDelft - ET', 'TUDelft - IO', 'TUDelft - LST', 'TUDelft - LR', 'TUDelft - MT', 'TUDelft - MST', 'TUDelft - TA', 'TUDelft - TB', 'TUDelft - TI', 'TUDelft - TN', 'TUDelft - TW', 'TUDelft - WB'));
+			$form[]=$studie;
+			
+			$form[]=new IntField('studiejaar', $profiel['studiejaar'], 'Beginjaar studie', date('Y'), $beginjaar);
 			if($profiel['status']!='S_OUDLID'){
 				$form[]=new InputField('studienr', $profiel['studienr'], 'Studienummer (TU)', 20);
 			}

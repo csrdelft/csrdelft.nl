@@ -192,6 +192,9 @@ class Groep{
 	public function getLimiet(){		return $this->groep['limiet']; }
 	public function getToonFuncties(){	return $this->groep['toonFuncties']; }
 	public function getToonPasfotos(){	return $this->groep['toonPasfotos']; }
+	public function toonPasfotos(){
+		return $this->isIngelogged() AND $this->getToonPasfotos()==1 AND $loginlid->getLid()->instelling('groepen_toonPasfotos')=='ja';
+	}
 	public function getLidIsMod(){ 		return $this->groep['lidIsMod']; }
 
 	/*
@@ -240,9 +243,7 @@ class Groep{
 		}
 		return isset($this->leden[$uid]);
 	}
-	public function toonPasfotos(){
-		return $this->isIngelogged() AND $this->getToonPasfotos()==1;
-	}
+	
 	public function lidIsMod(){
 		return $this->getLidIsMod()=='1';
 	}

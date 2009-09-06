@@ -468,7 +468,15 @@ div.preview.pagina{
 	margin:2px;
 }
 
-
+.ubb_groep{
+	margin: 10px;
+	padding: 5px 10px;
+	border: 1px solid black;
+}
+.ubb_groep .groepleden{
+	width: 230px;
+	float: right;
+}
 /* plaatjes in tekst */
 p img{ margin: 15px 10px; }
 

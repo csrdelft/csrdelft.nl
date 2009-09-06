@@ -1,6 +1,6 @@
-<div id="groep{$groep->getId()}" class="groep_ubb" style="margin: 10px; padding: 5px 10px; border: 1px solid black;">
- 	<div style="float: right">
-		{if $groep->toonPasfotos() AND $loginlid->getLid()->instelling('groepen_toonPasfotos')=='ja'}
+<div id="groep{$groep->getId()}" class="ubb_groep">
+ 	<div class="groepleden">
+		{if $groep->toonPasfotos()}
 			{assign var='actie' value='pasfotos'}
 		{/if}
 		{include file='groepen/groepleden.tpl'}

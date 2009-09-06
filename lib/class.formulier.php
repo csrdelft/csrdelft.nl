@@ -74,12 +74,15 @@ abstract class FormField{
 		echo $this->getLabel();
 		echo $this->getError();
 		echo '<input type="text" id="field_'.$this->name.'" name="'.$this->name.'" class="regular" value="'.htmlspecialchars($this->value).'" ';
-		if(!$this->autocomplete){
+		if(!$this->autocomplete OR count($this->suggestions)>0){
 			echo 'autocomplete="off" ';
 		}
 		echo ' />';
 		if(count($this->suggestions)>0){
-			echo '<div id="suggest_'.$this->name.'" class="suggest"></div>';
+			echo '<script language="javascript"> ';
+			echo 'var sug_'.$this->name.'=new Array("'.implode('","', $this->suggestions).'"); ';
+			echo 'new actb(document.getElementById("field_'.$this->name.'"), sug_'.$this->name.'); ';
+			echo '</script>';
 		}
 		
 		echo '</div>';

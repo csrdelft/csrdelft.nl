@@ -43,7 +43,7 @@
 		</select>
 		<br />
 		<label for="toonPasfotos"><strong>Toon pasfoto's?</strong></label>
-		<input type="checkbox" name="toonPasfotos" id="toonPasfotos" {if $groep->toonPasfotos()}checked="checked"{/if} /> <em>(Pasfoto komt in plaats van naam)</em>
+		<input type="checkbox" name="toonPasfotos" id="toonPasfotos" {if $groep->getToonPasfotos()}checked="checked"{/if} /> <em>(Pasfoto komt in plaats van naam)</em>
 		<br />
 		<label for="lidIsMod"><strong>Groepslid is mod?</strong></label>
 		<input type="checkbox" name="lidIsMod" id="lidIsMod" {if $groep->lidIsMod()}checked="checked"{/if} /> <em>(Elk lid kan groepsleden toevoegen en het grote verhaal aanpassen.)</em>
