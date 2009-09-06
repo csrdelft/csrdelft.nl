@@ -5,7 +5,7 @@
 }
 .kring, .geenkring{
 	float: left;
-	width: 148px;
+	width: 144px;
 	padding: 2px 4px 0px 4px;
 }
 .kring:hover, .geenkring:hover{
@@ -13,9 +13,10 @@
 }
 .kringleden{
 	overflow:hidden;
-	width: 148px;
+	width: 144px;
 	text-overflow: ellipsis;
 	padding-bottom: 4px;
+	text-align: left;
 	
 }
 
@@ -29,5 +30,6 @@
 .mailknopje{
 	float: right;
 	cursor: pointer;
+	padding-right: 8px;
 }
 
