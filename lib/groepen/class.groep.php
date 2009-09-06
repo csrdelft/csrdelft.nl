@@ -193,7 +193,8 @@ class Groep{
 	public function getToonFuncties(){	return $this->groep['toonFuncties']; }
 	public function getToonPasfotos(){	return $this->groep['toonPasfotos']; }
 	public function toonPasfotos(){
-		return $this->isIngelogged() AND $this->getToonPasfotos()==1 AND $loginlid->getLid()->instelling('groepen_toonPasfotos')=='ja';
+		return $this->isIngelogged() AND $this->getToonPasfotos()==1 AND
+			LoginLid::instance()->getLid()->instelling('groepen_toonPasfotos')=='ja';
 	}
 	public function getLidIsMod(){ 		return $this->groep['lidIsMod']; }
 
@@ -229,12 +230,10 @@ class Groep{
 	public function setValue($key, $value){
 		$fields=array('snaam', 'naam', 'sbeschrijving', 'beschrijving',
 			'zichtbaar', 'status', 'begin', 'einde', 'aanmeldbaar', 'limiet', 'toonFuncties', 'toonPasfotos', 'lidIsMod');
-		if(in_array($key, $fields)){
-			$this->groep[$key]=trim($value);
-		}else{
-			echo 'FEUT: veld ['.$key.'] is niet toegestaan Groep::setValue()'; exit;
+		if(!in_array($key, $fields)){
+			throw new Exception('Veld ['.$key.'] is niet toegestaan Groep::setValue()');
 		}
-
+		$this->groep[$key]=trim($value);
 	}
 
 	public function isLid($uid=null){
@@ -395,6 +394,10 @@ class Groep{
 			return false;
 		}
 		$ot=$ot['voorganger'];
+		if($ot->isLid($tuid)){
+			$this->error.='O.t. groep bevat dit lid al';
+			return false;
+		}
 		return $ot->addLid($uid) AND $this->verwijderLid($uid);
 	}
 	public function meldAan($functie){
@@ -452,9 +455,10 @@ class Groep{
 			return false;
 		}
 	}
+	
 	/*
 	 * Geef een array met een vorige en een volgende terug.
-	 * Dit levert dus vier query's op, niet erg efficient, maar ik optimaliseren kan altijd nog
+	 * Dit levert dus vier query's op, niet erg efficient, maar optimaliseren kan altijd nog
 	 */
 	public function getOpvolgerVoorganger(){
 		$return=false;
@@ -466,10 +470,9 @@ class Groep{
 			  AND begin<'".$this->getBegin()."'
 			ORDER BY begin DESC
 			LIMIT 1;";
-		$rVoorganger=$db->query($qVoorganger);
-		if($rVoorganger!==false AND $db->numRows($rVoorganger)==1){
-			$aVoorganger=$db->result2array($rVoorganger);
-			$return['voorganger']=new Groep($aVoorganger[0]['id']);
+		$voorganger=$db->getRow($qVoorganger);
+		if($voorganger!==false){
+			$return['voorganger']=new Groep($voorganger['id']);
 		}
 		$qOpvolger="
 			SELECT id
@@ -478,10 +481,9 @@ class Groep{
 			  AND begin>'".$this->getBegin()."'
 			ORDER BY begin ASC
 			LIMIT 1;";
-		$rOpvolger=$db->query($qOpvolger);
-		if($rOpvolger!==false AND $db->numRows($rOpvolger)==1){
-			$aOpvolger=$db->result2array($rOpvolger);
-			$return['opvolger']=new Groep($aOpvolger[0]['id']);
+		$opvolger=$db->getRow($qOpvolger);
+		if($opvolger!==false){
+			$return['opvolger']=new Groep($opvolger['id']);
 		}
 		return $return;
 

@@ -476,7 +476,10 @@ div.preview.pagina{
 .ubb_groep .groepleden{
 	width: 230px;
 	float: right;
+	margin-left: 10px;
 }
+.ubb_groep .groepleden table.leden{ width: 100%; }
+.ubb_groep .groepleden table.leden td{ padding: 0px 5px; lext-align: left;}
 /* plaatjes in tekst */
 p img{ margin: 15px 10px; }
 
