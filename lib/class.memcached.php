@@ -44,6 +44,9 @@ class Memcached{
 	public function getStats(){
 		return $this->memcache->getStats();
 	}
+	public function flush(){
+		return $this->memcache->flush();
+	}
 }
 
 ?>

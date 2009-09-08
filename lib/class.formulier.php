@@ -124,6 +124,18 @@ class InputField extends FormField{
 		return $this->error=='';
 	}
 }
+class UidField extends InputField{
+	public function __construct($name, $value, $description){
+		parent::__construct($name, $value, $description, 4);
+	}
+	public function valid(){
+		if(!parent::valid()){ return false; }
+		if(!Lid::isValidUid($this->getValue())){
+			$this->error='Geen geldig uid opgegeven';
+		}
+		return $this->error=='';
+	}
+}
 class RequiredInputField extends InputField{
 	public $notnull=true;
 }

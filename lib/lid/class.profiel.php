@@ -214,6 +214,7 @@ class Profiel{
 					$form[]=new SelectField('kringleider', $profiel['kringleider'], 'Kringleider', array('n' => 'Nee','o' => 'Ouderejaarskring','e' => 'Eerstejaarskring'));
 					$form[]=new SelectField('motebal', $profiel['motebal'], 'Verticaan', array('0' => 'Nee','1' => 'Ja'));
 				}
+				$form[]=new UidField('patroon', $profiel['patroon'], 'Patroon');
 			}
 			$form[]=new InputField('eetwens', $profiel['eetwens'], 'Dieet', 200);
 			

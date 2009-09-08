@@ -174,7 +174,7 @@ class Lid implements Serializable{
 	}
 	public function isKringleider(){ return $this->profiel['kringleider']!='n'; }
 	public function isVerticaan(){ return $this->profiel['motebal']==1; }
-		
+	
 	public function getPassword(){	return $this->profiel['password']; }
 	public function checkpw($pass){
 		// Verify SSHA hash
@@ -202,7 +202,14 @@ class Lid implements Serializable{
 			case 'S_LID': return '∈';
 		}				
 	}
-
+	public function getPatroonUid(){	return $this->profiel['patroon']; }
+	public function getPatroon(){
+		if($this->getPatroonUid()!=''){
+			return LidCache::getLid($this->getPatroonUid());
+		}else{
+			return null;
+		}
+	}
 	//corvee_voorkeuren splitsen en teruggeven als array
 	public function getCorveeVoorkeuren(){
 		$corvee_voorkeuren = $this->profiel['corvee_voorkeuren'];
@@ -487,6 +494,9 @@ class LidCache{
 		self::flushLid($uid);
 		Memcached::instance()->set($uid, serialize(new Lid($uid)));
 		return true;
+	}
+	public static function flushAll(){
+		return Memcached::instance()->flush();
 	}
 }
 

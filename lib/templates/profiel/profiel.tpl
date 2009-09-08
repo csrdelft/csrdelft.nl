@@ -95,7 +95,11 @@
 	<div class="profielregel">
 		<div class="left">Civitas</div>	
 		<div class="gegevens">
-			<div class="label">Studie:</div> {$profhtml.studie}<br />
+			<div class="label">Studie:</div> {$profhtml.studie}
+				{if $lid->getPatroon() instanceof Lid}
+					(patroon: {$lid->getPatroon()->getNaamLink('civitas', 'link')})
+				{/if}
+			<br />
 			<div class="label">Studie sinds:</div> {$profhtml.studiejaar}<br />
 			<div class="label">Lid sinds:</div> 
 				{$profhtml.lidjaar}{if $isOudlid AND $profhtml.lidafdatum!='0000-00-00'} tot {$profhtml.lidafdatum|substr:0:4}{/if}<br />
