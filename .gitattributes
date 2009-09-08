@@ -447,5 +447,6 @@ sql/1548_corvee.sql -text
 sql/1563_corvee.sql -text
 sql/1592_verticalen.sql -text
 sql/1636_peiling.sql -text
+sql/1645_patroon-profiel.sql -text
 sql/csrdelft.sql -text
 sql/csrdelft_oud.sql -text

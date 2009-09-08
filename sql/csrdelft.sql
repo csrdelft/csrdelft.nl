@@ -435,6 +435,7 @@ CREATE TABLE IF NOT EXISTS `lid` (
   `website` varchar(80) NOT NULL DEFAULT '',
   `beroep` text NOT NULL,
   `studie` varchar(100) NOT NULL DEFAULT '',
+  `patroon` varchar(4) NOT NULL DEFAULT '',
   `studienr` varchar(20) NOT NULL,
   `studiejaar` smallint(6) NOT NULL DEFAULT '0',
   `lidjaar` smallint(6) NOT NULL DEFAULT '0',
