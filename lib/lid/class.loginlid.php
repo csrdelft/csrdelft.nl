@@ -329,7 +329,7 @@ class LoginLid{
 		$this->_perm_user['P_BESTUUR'] = $this->_perm_user['P_LID'] | $p['P_LEDEN_MOD'] | $p['P_OUDLEDEN_READ'] | $p['P_NEWS_MOD'] | $p['P_MAAL_MOD'] | $p['P_MAIL_COMPOSE'] | $p['P_AGENDA_MOD'] | $p['P_FORUM_MOD'] | $p['P_DOCS_MOD'];
 		$this->_perm_user['P_VAB']     = $this->_perm_user['P_BESTUUR']  | $p['P_OUDLEDEN_MOD'];
 		$this->_perm_user['P_ETER']	   = $this->_perm_user['P_NOBODY'] | $p['P_LOGGED_IN'] | $p['P_MAAL_IK'] | $p['P_PROFIEL_EDIT'];
-		$this->_perm_user['P_DOCSMOD']  = $this->_perm_user['P_LID'] | $p['P_DOCS_MOD'];
+		$this->_perm_user['P_BASF']  = $this->_perm_user['P_LID'] | $p['P_DOCS_MOD'];
 
 	}
 
