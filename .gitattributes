@@ -124,6 +124,7 @@ htdocs/tools/leden-csv.php -text
 htdocs/tools/ledenkaart.php -text
 htdocs/tools/lidaftool.php -text
 htdocs/tools/memcachedstatus.php -text
+htdocs/tools/naamlink.php -text
 htdocs/tools/pasfotos.php -text
 htdocs/tools/peilingbeheer.php -text
 htdocs/tools/phpinfo.php -text

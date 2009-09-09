@@ -137,6 +137,15 @@ class UidField extends InputField{
 		}
 		return $this->error=='';
 	}
+	public function view(){
+		echo $this->getDiv();
+		echo $this->getLabel();
+		echo $this->getError();
+		echo '<input type="text" id="field_'.$this->name.'" name="'.$this->name.'" class="uid" value="'.htmlspecialchars($this->value).'" ';
+		echo ' autocomplete="off" onKeyUp="uidPreview(\''.$this->name.'\')" maxlength="4" />';
+		echo '<div class="uidPreview" id="preview_'.$this->name.'"></div>';
+		echo '</div>';
+	}
 }
 class RequiredInputField extends InputField{
 	public $notnull=true;

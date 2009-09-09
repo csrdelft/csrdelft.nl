@@ -33,6 +33,13 @@
 #profielForm input.regular{
 	width: 250px;
 }
+#profielForm input.uid{
+	width: 80px;
+}
+#profielForm .uidPreview{
+	display: inline;
+	padding-left: 10px;
+}
 #profielForm .veld, #profielForm h3, #profielForm .password{
 	clear: both;
 }
