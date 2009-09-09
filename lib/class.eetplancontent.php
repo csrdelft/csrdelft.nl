@@ -3,7 +3,7 @@
 # -------------------------------------------------------------------
 # class.ledenlijstcontent.php
 # -------------------------------------------------------------------
-require_once 'class.groep.php';
+require_once 'groepen/class.groep.php';
 
 class EetplanContent extends SimpleHTML {
 
