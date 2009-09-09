@@ -130,6 +130,8 @@ class UidField extends InputField{
 	}
 	public function valid(){
 		if(!parent::valid()){ return false; }
+		//leeg veld wel accepteren.
+		if($this->getValue()==''){ return true; }
 		if(!Lid::isValidUid($this->getValue())){
 			$this->error='Geen geldig uid opgegeven';
 		}
