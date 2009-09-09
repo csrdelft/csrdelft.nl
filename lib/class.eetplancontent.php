@@ -34,12 +34,15 @@ class EetplanContent extends SimpleHTML {
 				<tr><th style="width: 150px">Avond</th><th style="width: 200px">Huis</th></tr>';
 			$row=0;
 			foreach($aEetplan as $aEetplanData){
+				$huis=new Groep($aEetplanData['groepid']);
 				echo '
 					<tr class="kleur'.($row%2).'">
 						<td >'.$this->_eetplan->getDatum($aEetplanData['avond']).'</td>
-						<td><a href="/actueel/eetplan/huis/'.$aEetplanData['huisID'].'"><strong>'.mb_htmlentities($aEetplanData['huisnaam']).'</strong></a><br />
-							'.mb_htmlentities($aEetplanData['huisadres']).' | '.mb_htmlentities($aEetplanData['telefoon']).'
-						</td></tr>';
+						<td><a href="/actueel/eetplan/huis/'.$aEetplanData['huisID'].'"><strong>'.mb_htmlentities($aEetplanData['huisnaam']).'</strong></a><br />';
+				if($huis instanceof Groep AND $huis->getId()!=0){
+					echo 'Huispagina van '.$huis->getLink();
+				}
+				echo '</td></tr>';
 				$row++;
 			}
 			echo '</table>';
@@ -48,10 +51,16 @@ class EetplanContent extends SimpleHTML {
 	function viewEetplanVoorHuis($iHuisID){
 		//feuten voor een huis tonen
 		$aEetplan=$this->_eetplan->getEetplanVoorHuis($iHuisID);
-
+		
+		
 		if($aEetplan===false){
 			echo '<h1>Ongeldig huisID</h1>';
 		}else{
+			try{
+				$huis=new Groep($aEetplan[0]['groepid']);
+			}catch(Exception $e){
+				$huis=new Groep(0); //hmm, dirty 
+			}
 			$sUitvoer='<table class="eetplantabel">
 				<tr>
 				<th style="width: 150px">Avond</th>
@@ -85,10 +94,11 @@ class EetplanContent extends SimpleHTML {
 			}
 			$sUitvoer.='</table>';
 			echo '<h2><a class="forumGrootlink"href="/actueel/eetplan/">Eetplan</a> &raquo; voor '.mb_htmlentities($aEetplanData['huisnaam']).'</h2>
-				'.mb_htmlentities($aEetplanData['huisadres']).' <br />
-				Telefoon: '.mb_htmlentities($aEetplanData['telefoon']).'<br />
-				Ga naar <a href="/actueel/groepen/Woonoorden/">woonoordenpagina</a><br /><br />'.
-				$sUitvoer;
+				'.mb_htmlentities($aEetplanData['huisadres']).' <br />';
+			if($huis instanceof Groep AND $huis->getId()!=0){
+				echo 'Huispagina: '.$huis->getLink().'<br /><br />';
+			}
+			echo $sUitvoer;
 		}
 	}
 	function viewEetplan($aEetplan){
@@ -125,12 +135,21 @@ class EetplanContent extends SimpleHTML {
 
 		echo '<br /><h1>Huizen met hun nummers:</h1>
 			<table class="eetplantabel">
-				<tr><th>Naam</th><th>Adres</th><th>Telefoon</th></tr>';
+				<tr><th>Naam</th><th>huizenpagina</th><th>Adres</th><th>Telefoon</th></tr>';
 
 		foreach($aHuizenArray as $aHuis){
-			echo '<tr class="kleur'.($row%2).'">
-				<td><a href="/actueel/eetplan/huis/'.$aHuis['huisID'].'">'.mb_htmlentities($aHuis['huisNaam']).'</a></td>
-				<td>'.$aHuis['adres'].'</td>
+			try{
+				$huis=new Groep($aHuis['groepid']);
+			}catch(Exception $e){
+				$huis=new Groep(0);
+			}
+			
+			echo '<tr class="kleur'.($row%2).'">';
+			echo '<td><a href="/actueel/eetplan/huis/'.$aHuis['huisID'].'">'.mb_htmlentities($aHuis['huisNaam']).'</a></td><td>';
+			if($huis instanceof Groep AND $huis->getId()!=0){
+				echo $huis->getLink();
+			}
+			echo '</td><td>'.$aHuis['adres'].'</td>
 				<td>'.$aHuis['telefoon'].'</td></tr>';
 			$row++;
 		}

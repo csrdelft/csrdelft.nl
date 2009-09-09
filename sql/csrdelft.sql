@@ -246,6 +246,7 @@ CREATE TABLE IF NOT EXISTS `eetplanhuis` (
   `naam` varchar(50) NOT NULL DEFAULT '',
   `adres` varchar(100) NOT NULL DEFAULT '',
   `telefoon` varchar(20) NOT NULL DEFAULT '',
+  `groepid` int(11) NUT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 

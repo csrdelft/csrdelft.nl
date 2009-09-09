@@ -61,6 +61,7 @@ class Eetplan {
 				eetplanhuis.id AS huisID,
 				eetplanhuis.naam AS huisnaam,
 				eetplanhuis.adres AS huisadres,
+				eetplanhuis.groepid AS groepid,
 				eetplanhuis.telefoon AS telefoon
 			FROM
 				eetplanhuis, eetplan
@@ -89,6 +90,7 @@ class Eetplan {
 				eetplanhuis.naam AS huisnaam,
 				eetplanhuis.adres AS huisadres,
 				eetplanhuis.telefoon AS huistelefoon,
+				eetplanhuis.groepid AS groepid,
 				eetplan.uid AS pheut,
 				lid.eetwens AS eetwens,
 				lid.telefoon AS telefoon,
@@ -117,14 +119,14 @@ class Eetplan {
 
 	function getDatum($iAvond){
 		$aAvonden=array(
-			'30-9-2008',
-			'28-10-2008',
-			'25-11-2008',
-			'20-1-2009',
-			'17-2-2009',
-			'17-3-2009',
-			'14-4-2009',
-			'2-6-2009');
+			'29-9-2008',
+			'27-10-2008',
+			'24-11-2008',
+			'19-1-2009',
+			'??-2-2009',
+			'16-3-2009',
+			'13-4-2009',
+			'16-5-2009');
 		return $aAvonden[$iAvond-1];
 	}
 
@@ -133,6 +135,7 @@ class Eetplan {
 			SELECT DISTINCT
 				id AS huisID,
 				naam AS huisNaam,
+				groepid,
 				adres,
 				telefoon
 			FROM

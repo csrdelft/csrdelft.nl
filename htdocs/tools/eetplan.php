@@ -2,50 +2,52 @@
 
 # koppel de sjaarsnummers aan de sjaars
 #
-# 0701-0730
-/*
-for ($es=1;$es<=6;$es++) {
-	$uid=str_pad($es+800, 4, "0", STR_PAD_LEFT);
+# één oud uid, 30 mist, 38 mist, 43 mist, 47 sjaars dus.
+
+for ($es=1;$es<=29;$es++) {
+	$uid=str_pad($es+900, 4, "0", STR_PAD_LEFT);
 	$ks[$uid] = $uid;
 }
-for ($es=8;$es<=14;$es++) {
-	$uid=str_pad($es+800, 4, "0", STR_PAD_LEFT);
+for ($es=31;$es<=37;$es++) {
+	$uid=str_pad($es+900, 4, "0", STR_PAD_LEFT);
 	$ks[$uid] = $uid;
 }
-for ($es=16;$es<=46;$es++) {
-	$uid=str_pad($es+800, 4, "0", STR_PAD_LEFT);
-	$ks[$uid] = $uid;
-}*/
-for ($es=55;$es<=56;$es++) {
-	$uid=str_pad($es+800, 4, "0", STR_PAD_LEFT);
+for ($es=39;$es<=42;$es++) {
+	$uid=str_pad($es+900, 4, "0", STR_PAD_LEFT);
 	$ks[$uid] = $uid;
 }
+for ($es=44;$es<=49;$es++) {
+	$uid=str_pad($es+900, 4, "0", STR_PAD_LEFT);
+	$ks[$uid] = $uid;
+}
+$ks['0624']='0624'; //dennis Lakerveld
+
 
 # koppel de huizennummers aan huizen
 //$kh = array(0,3,6,7,10,11,13,1,15,16,17,19,21,2,22,8,18,5);
 $kh = array(0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21);
 $khd = array(
-	1 => array ("Villa Delphia", 'Arnoldstraat 20', '015-2137153'),
-	2 => array ("De Tolhuis-Alliantie","Westplantsoen 16/14a","2197748/2197749"),
-	3 => array ("De Ambassade","Papsouwselaan 418","2614111"),
-	4 => array ('Huize Adam', 'Eduard du Perronlaan 654',''),
-	5 => array ("Caesarea","Cesar Franckstraat 176","2576721"),
-	6 => array ("De Gouden Leeuw","Cornelis Trompstraat 34","2628231"),
-	7 => array ('Huize den Hertog', 'Ternatestraat 5', ''),
-	8 => array ("Bras \'98","Brasserskade 98",""),
-	9 => array ("\'t Internaat","Ternatestraat 83","2125825"),
-	10=> array ("St. Joris","Brasserskade 67","-"),
-	11=> array ("De Koornmarkt","Koornmarkt 81c","2139141/nog 9"),
-	12=> array ("Lachen-met-Roy met Lachai-Roi","Isaak Hoornbeekstraat 38","-"),
-	13=> array ("De Molshoop","Molstraat 35a","2158504"),
-	14=> array ("OD11","Oude Delft 11",""),
-	15=> array ("Perron 0","Van Leeuwenhoeksingel 21a","2121897/2190511"),
-	16=> array ("Sonnenvanck","Oostsingel 176","2144093"),
-	17=> array ("Huize Van Speijk","Trompetstraat 19","2146067"),
-	18=> array ("Spoorbijster","Van Leeuwenhoeksingel 14","2124058"),
-	19=> array ("BalPol","Balthasar van der Polweg",""),
-	20=> array ("De Lindenburgh","Van Lynden van Sandenburgstraat 3",""),
-	21=> array ("De Preekstoel","Delfgauwseweg 127","")	
+	1 => array ("'t Ailand ", 5, '015-2137153'),
+	2 => array ('Huize Adam', 554,''),
+	3 => array ("De Ambassade", 6, "2614111"),
+	4 => array('Balpol', 0, 'Remco Bos'),
+	5 => array ("Caesarea", 7,''),
+	6 => array ('Das Haus', 49, ''),
+	7 => array ("De Molshoop", 34, ''),
+	8 => array ("De Gouden Leeuw", 8, ''),
+	9 => array ('Huisje boompje beestje', 0, ''),
+	10=> array ('t\' Internaat', 9 ,"2125825"),
+	11=> array ("De Koornmarkt",33 ,""),
+	12=> array ("Lachai-Roi",57 ,"-"),
+	13=> array ("OD11",14 ,""),
+	14=> array ("De Preekstoel", 62,""),
+	15=> array ("Sonnenvanck",36 ,''),
+	16=> array ("St. Joris",68 ,''),
+	17=> array ("Huize Van Speijk", 39,"2146067"),
+	18=> array ("De Tolhuis-Alliantie", 10, '015-2160585'),
+	19=> array ("Villa Delphia", 37, '015-2137153'),
+	20=> array('Huize * Asterix', 46, ''),
+	21=> array('Lindenburg', 58,'')
 );
 
 # namen opzoeken in de database
@@ -59,7 +61,7 @@ ini_set('error_reporting', E_ALL & ~E_NOTICE);
 #}
 echo '<pre>';
 
-$s = 57; # $s = (int)$_GET['s']; # aantal sjaars
+$s = 47; # $s = (int)$_GET['s']; # aantal sjaars
 $h = 21; # $h = (int)$_GET['h']; # aantal huizen
 $a = 8;  # $a = (int)$_GET['a']; # aantal avonden
 #$m = (int)floor($s/$h);
@@ -78,10 +80,17 @@ $seen = array(); # $seen[sjaars][] = sjaars
 
 # sjaars die al in huizen wonen alvast rekening mee houden
 # voorbeeld: $visited_sh[$sjaarsuid][$huisuid]=true;
-$visited_sh[24][12]=true; //Nienke - Lachai-Roi
-$visited_sh[34][20]=true; //Lous - Lindenburgh
-$visited_sh[27][10]=true; //Carlos - St. Joris
-$visited_sh[54][3]=true; //Paul - Ambassade
+$visited_sh[2][2]=true; //Kees Jan > niet op adam.
+$visited_sh[8][15]=true;	//Ido niet naar sonnenvanck
+$visited_sh[9][12]=true; //RickJ niet naar L-Roi
+$visited_sh[10][17]=true; //Maarten niet naar vSpeijk
+$visited_sh[11][17]=true; //Stefan niet naar vSpeijk
+$visited_sh[14][1]=true; //Gaap niet naar taitailand
+$visited_sh[16][3]=true; //Mirjam niet naar Ambassade
+$visited_sh[17][3]=true; //Annelies niet naar Ambassade
+$visited_sh[20][13]=true; //Maaie niet naar OD11
+$visited_sh[44][4]=true; //Anne niet naar Balpol
+
 
 # het uiteindelijke rooster
 # $sah[sjaars][avond] = huis.. etc...
@@ -244,7 +253,7 @@ foreach ($ks as $is) {
 
 echo "\n# <b>De Woonoorden</b>\n\n";
 for ($ih = 1; $ih <= $h; $ih++) {
-	echo "INSERT INTO `eetplanhuis` (`id`,`naam`,`adres`,`telefoon`) VALUES ({$ih},'{$khd[$kh[$ih]][0]}','{$khd[$kh[$ih]][1]}', '{$khd[$kh[$ih]][2]}');\n";
+	echo "INSERT INTO `eetplanhuis` (`id`,`naam`, groepid,`telefoon`) VALUES ({$ih},'{$khd[$kh[$ih]][0]}',{$khd[$kh[$ih]][1]}, '{$khd[$kh[$ih]][2]}');\n";
 }
 
 ?>
