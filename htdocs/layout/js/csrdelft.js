@@ -185,3 +185,17 @@ function togglePasfotos(uids, div){
 function fixPNG(){ 
 	return false; 
 }
+function uidPreview(fieldname){
+	field=document.getElementById('field_'+fieldname);
+	if(field.value.length==4){
+		http.abort();
+		http.open("GET", "/tools/naamlink.php?uid="+field.value, true);
+		http.onreadystatechange=function(){
+			if(http.readyState == 4){
+				document.getElementById('preview_'+fieldname).innerHTML=http.responseText;	
+			}
+		}
+		http.send(null);
+	}
+	return null;
+}

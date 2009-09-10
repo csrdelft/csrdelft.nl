@@ -7,6 +7,12 @@
 
 require_once 'include.config.php';
 
+
+if(!LoginLid::instance()->hasPermission('P_LEDEN_READ')){
+	echo 'Niet voldoende rechten';
+	exit;
+}
+
 if(isset($_GET['uid'])){
 	$string=urldecode($_GET['uid']);
 }elseif(isset($_POST['uid'])){
@@ -14,15 +20,23 @@ if(isset($_GET['uid'])){
 }else{
 	echo 'Fout in invoer in tools/naamlink.php';
 }
-if(Lid::isValidUid($string) AND LoginLid::instance()->hasPermission('P_LEDEN_READ')){
-	$lid=LidCache::getLid($string);
+
+function uid2naam($uid){
+	$lid=LidCache::getLid($uid);
 	if($lid instanceof Lid){
-		echo $lid->getNaamLink('civitas', 'link');
+		return $lid->getNaamLink('civitas', 'link');
 	}else{
-		echo 'Geen geldig lid';
+		return 'Geen geldig lid';
 	}
+}
+
+if(Lid::isValidUid($string)){
+	echo uid2naam($string);
 }else{
-	echo 'Fout in invoer in tools/naamlink.php';
+	$uids=explode(',', $string);
+	foreach($uids as $uid){
+		echo uid2naam($uid);
+	}
 }
 
 ?>

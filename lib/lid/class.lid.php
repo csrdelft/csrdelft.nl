@@ -162,6 +162,7 @@ class Lid implements Serializable{
 		return true;
 	}
 	public function getUid(){		return $this->profiel['uid']; }
+	public function getGeslacht(){ 	return $this->profiel['geslacht']; }
 	public function getProfiel(){	return $this->profiel; }
 	public function getNaam(){  	return $this->getNaamLink('full','plain'); }
 	public function getNickname(){ 	return $this->profiel['nickname']; }
@@ -335,7 +336,7 @@ class Lid implements Serializable{
 				}elseif($this->profiel['status']=='S_KRINGEL' OR $this->profiel['status']=='S_NOBODY'){
 					$naam=$sVolledigeNaam;
 				}else{
-					$naam=($this->profiel['geslacht']=='v') ? 'Ama. ' : 'Am. ';
+					$naam=($this->getGeslacht()=='v') ? 'Ama. ' : 'Am. ';
 					if($this->profiel['tussenvoegsel'] != ''){
 						$naam.=ucfirst($this->profiel['tussenvoegsel']).' ';
 					}
@@ -501,7 +502,7 @@ class LidCache{
 }
 
 class Zoeker{
-	function zoekLeden($zoekterm, $zoekveld, $moot, $sort, $zoekstatus = '', $velden = array()) {
+	function zoekLeden($zoekterm, $zoekveld, $verticale, $sort, $zoekstatus = '', $velden = array()) {
 		$db=MySql::instance();
 		$leden = array();
 		$zoekfilter='';
@@ -583,7 +584,7 @@ class Zoeker{
 		}
 
 		# als er een specifieke moot is opgegeven, gaan we alleen in die moot zoeken
-		$mootfilter = ($moot != 'alle') ? 'AND moot= '.(int)$moot : '';
+		$mootfilter = ($verticale != 'alle') ? 'AND verticale=\''.$verticale.'\' ' : '';
 		
 		# controleer of we ueberhaupt wel wat te zoeken hebben hier
 		if ($statusfilter != '') {

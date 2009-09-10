@@ -27,7 +27,7 @@ class LedenlijstContent extends SimpleHTML {
 		'waar'   => 'naam',
 		'kolom'  => array('adres', 'email', 'mobiel'),
 		'sort'   => 'achternaam',
-		'moot'   => 'alle'
+		'verticale'   => 'alle'
 	);
 	# zoekresultaten van de zoekfunctie in de lid-klasse worden
 	# door het hoofdprogramma opgevraegd en hier in gestopt, zodat
@@ -78,7 +78,8 @@ class LedenlijstContent extends SimpleHTML {
 			'uid' => 'Lidnr',
 			'studie' => 'Studie',
 			'gebdatum' => 'Geboortedatum',
-			'beroep' => 'Functie/beroep'
+			'beroep' => 'Functie/beroep',
+			'verticale' => 'Verticale'
 		);
 		$melding=$this->getMelding();
 		if($melding!=''){
@@ -110,7 +111,7 @@ EOT
 		# zo, en nu de velden die we kunnen tonen in de resultaten
 		$laat_zien = array(
 			'uid', 'pasfoto', 'nickname', 'email', 'adres', 'telefoon', 'mobiel',
-			'icq', 'msn', 'skype', 'studie', 'gebdatum', 'beroep');
+			'icq', 'msn', 'skype', 'studie', 'gebdatum', 'beroep', 'verticale');
 
 		# tralala zorg dat er een even aantal elementen in staat
 		if (count($laat_zien)%2 != 0) array_push($laat_zien, false);
@@ -148,13 +149,13 @@ in <select name="waar">';
 			if ($this->_form['waar'] == $veld) echo ' selected="selected"';
 			echo '>'.$kolomtitel[$veld].'</option>';
 		}
-		echo '</select><br />Selectie: &nbsp;moot:<select name="moot">';
+		echo '</select><br />Selectie: &nbsp;verticale:<select name="verticale">';
 		# moten zijn nogal hard-coded, maar ik denk dat het makkelijker is aan te passen
 		# in de code als het aantal ooit nog veranderd ipv het dynamisch te gaan maken ofzo
-		$zoek_in_moten = array('alle','1','2','3','4');
-		foreach ($zoek_in_moten as $veld) {
+		$zoek_in_moten = array('alle','A','B','C','D', 'E', 'F', 'G', 'H');
+		foreach ($zoek_in_moten as $key => $veld) {
 			echo '<option value="'.$veld.'"';
-			if ($this->_form['moot'] == $veld) echo ' selected="selected"';
+			if ($this->_form['verticale'] == $key) echo ' selected="selected"';
 			echo '>'.$veld.'</option>';
 		}
 

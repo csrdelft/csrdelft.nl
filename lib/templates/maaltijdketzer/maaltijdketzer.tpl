@@ -129,7 +129,10 @@ uitprinten. Vanaf dat moment zal deze ketzer u niet meer willen aan- of afmelden
 				{if $maaltijd.gesloten == 1}
 					<td colspan="2">Inschrijving gesloten</td>
 				{else}
-					<td><input type="text" name="uid" style="width:140px;" /></td>
+					<td>
+						<input type="text" name="uid" style="width:60px;" id="field_uid{$maaltijd.id}" onkeyup="uidPreview('uid{$maaltijd.id}')" />
+						<div style="display: inline;" id="preview_uid{$maaltijd.id}">&nbsp;</div>
+					</td>
 					<td><input type="submit" name="foo" value="aanmelden" /></td>
 				{/if}
 				<td>

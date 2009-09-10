@@ -23,12 +23,16 @@ if($loginlid->hasPermission('P_LEDEN_READ') or $loginlid->hasPermission('P_OUDLE
 
 	# in welke kolom van de tabel gezocht wordt...
 	# als er niets geldigs is opgegeven, dan op voornaam zoeken
-	$kolommen = array('uid', 'naam','nickname','voornaam','achternaam','adres','telefoon','mobiel','email','kring', 'studie', 'gebdatum', 'beroep');
+	$kolommen = array('uid', 'naam','nickname','voornaam','achternaam','adres','telefoon','mobiel','email','kring', 'studie', 'gebdatum', 'beroep', 'verticale');
 	$form['waar'] = (isset($_POST['waar']) and in_array($_POST['waar'],$kolommen)) ? $_POST['waar'] : 'naam';
 
 	# zoek in een bepaalde moot (0=alle)
-	$moten = array('alle','1','2','3','4');
-	$form['moot'] = (isset($_POST['moot']) and in_array($_POST['moot'],$moten)) ? $_POST['moot'] : 'alle';
+	$moten = array('alle','A','B','C','D', 'E', 'F', 'G', 'H');
+	if(isset($_POST['verticale']) and in_array($_POST['verticale'],$moten)){
+		$form['verticale'] = array_search($_POST['verticale'], $moten);
+	}else{
+		$form['verticale'] = 'alle';
+	}
 
 	# voor gebruikers die leden en oudleden kunnen zoeken
 	$zoek_in_type = array('(oud)?leden','leden','oudleden');
@@ -43,11 +47,11 @@ if($loginlid->hasPermission('P_LEDEN_READ') or $loginlid->hasPermission('P_OUDLE
 	else $form['status'] = (isset($_POST['status']) and in_array($_POST['status'],$zoek_in_type)) ? $_POST['status'] : '';
 
 	# kolom waarop gesorteerd wordt
-	$kolommen = array('uid', 'voornaam', 'achternaam', 'email', 'adres', 'telefoon', 'mobiel', 'studie', 'gebdatum', 'beroep');
+	$kolommen = array('uid', 'voornaam', 'achternaam', 'email', 'adres', 'telefoon', 'mobiel', 'studie', 'gebdatum', 'beroep', 'verticale');
 	$form['sort'] = (isset($_POST['sort']) and in_array($_POST['sort'],$kolommen)) ? $_POST['sort'] : 'achternaam';
 
 	# kolommen die afgebeeld kunnen worden
-	$kolommen = array('uid', 'pasfoto', 'nickname', 'moot', 'email', 'adres', 'telefoon', 'mobiel', 'icq', 'msn', 'skype', 'studie', 'gebdatum', 'beroep');
+	$kolommen = array('uid', 'pasfoto', 'nickname', 'verticale', 'email', 'adres', 'telefoon', 'mobiel', 'icq', 'msn', 'skype', 'studie', 'gebdatum', 'beroep');
 	$form['kolom'] = array();
 	# kijken of er geldige kolommen zijn opgegeven
 	if (isset($_POST['kolom']) and is_array($_POST['kolom']) and count($_POST['kolom']) > 0) {
@@ -66,7 +70,7 @@ if($loginlid->hasPermission('P_LEDEN_READ') or $loginlid->hasPermission('P_OUDLE
 	# terug in de invulvelden
 	if (isset($_POST['a']) and $_POST['a'] == 'zoek') {
 		# en zoeken dan maar...
-		$aZoekresultaten = Zoeker::zoekLeden($form['wat'], $form['waar'], $form['moot'], $form['sort'], $form['status']);
+		$aZoekresultaten = Zoeker::zoekLeden($form['wat'], $form['waar'], $form['verticale'], $form['sort'], $form['status']);
 		# Als er maar 1 resultaat is redirecten we naar het profiel, en anders geven we een lijst met de resultaten
 		if (sizeof($aZoekresultaten) == 1) {
 			header('location: '.CSR_ROOT.'communicatie/profiel/'.$aZoekresultaten[0]['uid']);

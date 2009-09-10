@@ -97,7 +97,7 @@
 		<div class="gegevens">
 			<div class="label">Studie:</div> {$profhtml.studie}
 				{if $lid->getPatroon() instanceof Lid}
-					(patroon: {$lid->getPatroon()->getNaamLink('civitas', 'link')})
+					({if $lid->getPatroon()->getGeslacht()=='v'}m{else}p{/if}atroon: {$lid->getPatroon()->getNaamLink('civitas', 'link')})
 				{/if}
 			<br />
 			<div class="label">Studie sinds:</div> {$profhtml.studiejaar}<br />
