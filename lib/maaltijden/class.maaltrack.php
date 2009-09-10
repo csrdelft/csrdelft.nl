@@ -374,7 +374,7 @@ class MaalTrack {
 
 		# mootfilter
 		if(!$lid->hasPermission('P_MAAL_MOD')){
-			if($mootfilter === true){ $moot = $lid->getLid()->getMoot(); }
+			if($mootfilter === true){ $moot = $lid->getLid()->getVerticale(); }
 		}else{
 			$mootfilter=false;
 		}
@@ -395,7 +395,7 @@ class MaalTrack {
 		$result=$db->select($sMaaltijdQuery);
 		if (($result !== false) and $db->numRows($result) > 0) {
 			while ($record = $db->next($result)) {
-				if(!($mootfilter===true AND preg_match("/(MOOT|UBER)[^{$moot}]{1}/", $record['abosoort']))){
+				if(!($mootfilter===true AND preg_match("/(VERT|UBER)[^{$moot}]{1}/", $record['abosoort']))){
 					$maaltijden[] = $record;
 
 				}
@@ -661,11 +661,11 @@ class MaalTrack {
 	# het 'Geen' abonnement wordt hier uitgefilterd
 	function getAboSoort($mootfilter = true) {
 		$abos = array();
-		if ($mootfilter === true) $moot = LoginLid::instance()->getLid()->getMoot();
+		if ($mootfilter === true) $moot = LoginLid::instance()->getLid()->getVerticale();
 		$result = $this->_db->select("SELECT * FROM maaltijdabosoort WHERE NOT abosoort='A_GEEN'");
 		if (($result !== false) and $this->_db->numRows($result) > 0) {
 			while ($record = $this->_db->next($result)) {
-				if ($mootfilter === true and preg_match("/MOOT[^{$moot}]{1}/", $record['abosoort'])) continue;
+				if ($mootfilter === true and preg_match("/VERT[^{$moot}]{1}/", $record['abosoort'])) continue;
 				if ($mootfilter === true and preg_match("/UBER[^{$moot}]{1}/", $record['abosoort'])) continue;
 				$abos[$record['abosoort']] = $record['tekst'];
 			}
