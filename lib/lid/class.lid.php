@@ -171,8 +171,9 @@ class Lid implements Serializable{
 	
 	public function getVerticale(){
 		require_once 'class.verticalencontent.php';
-		return Verticale::$namen[$this->profiel['verticale']];
+		return Verticale::$namen[$this->getVerticaleID()];
 	}
+	public function getVerticaleID(){ return $this->profiel['verticale']; }
 	public function isKringleider(){ return $this->profiel['kringleider']!='n'; }
 	public function isVerticaan(){ return $this->profiel['motebal']==1; }
 	
