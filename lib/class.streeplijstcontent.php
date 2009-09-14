@@ -159,6 +159,21 @@ class Streeplijstcontent {
 				<br /><input type="submit" name="toon" value="Laeden" />
 			</fieldset>
 			</form>';
+		echo '<br />
+			Aandachtspunten bij printen via Firefox (andere browsers nog geen uitleg beschikbaar):
+			<ul>
+				<li>In de <i>Bestand</i> > <i>Pagina-instellingen</i>:
+				<ul>
+					<li>A4 selecteren als juiste papiergrootte<br /> </li>
+				</ul>
+				</li>
+				<li>In de <i>Opties</i> van <i>Afdruk</i>instellingen (verschijnt via <i>Bestand</i> > <i>Afdrukken...</i>)
+				<ul>
+					<li>De headers en footers allemaal op <i>blanco</i> zetten</li>
+					<li>Achtergrondkleuren afdrukken <i>aan</i>vinken</li>
+				</ul>
+				</li>
+			</ul><br />';	
 		if(isset($_GET['toon'])){
 			echo '<a href="'.$this->getUrl().'iframe">Alleen de streeplijst</a><br />';
 			//iframe met html meuk...

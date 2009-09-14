@@ -164,7 +164,7 @@
 						{* berichtje weergeven voor niet-ingeloggede gebruikers dat ze een naam moeten vermelden. *}
 						{if $onderwerp->needsModeration()}
 							<strong>Uw bericht wordt pas geplaatst nadat het bekeken en goedgekeurd is door de <a href="http://csrdelft.nl/actueel/groepen/Commissies/PubCie/">PubCie</a>. 
-							Het vermelden van <em>uw naam en email-adres</em> is verplicht.</strong><br /><br />
+							Het vermelden van <em>uw naam en email-adres</em> is verplicht.</strong> Gebruik [prive]...[/prive] om het alleen aan ingelogden weer te geven en niet aan externen en zoekmachines.<br /><br />
 						{/if}
 						<div id="berichtPreviewContainer" class="previewContainer"><div id="berichtPreview" class="preview"></div></div>
 						<textarea name="bericht" id="forumBericht" class="forumBericht" rows="12">{$textarea}</textarea>
