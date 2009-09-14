@@ -173,7 +173,7 @@ class eamBBParser{
 
 		// Set max tags
 		$this->tags_counted = 0;
-		$this->max_tags = 300;
+		$this->max_tags = 700;
 
 		// We don't want standard html
 		$this->allow_html = false;
