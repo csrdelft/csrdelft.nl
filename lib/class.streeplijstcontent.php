@@ -6,6 +6,7 @@
 # Kan streep/bestellijsten maken.
 # -------------------------------------------------------------------
 
+require_once('class.verticalencontent.php');
 
 class Streeplijstcontent {
 	private $moot='alle';
@@ -132,12 +133,14 @@ class Streeplijstcontent {
 			<fieldset>
 				<legend>Ledenselectie</legend><br />';
 		//mootselectie
-		echo '<strong>Moot:</strong><br />';
-		$moten=array_merge(array('alle'), range(1, 4));
+		echo '<strong>Verticale:</strong><br />';
+		$moten=array_merge(array('alle'), range(1, 8));
 		foreach($moten as $moot){
 			echo '<input type="radio" name="moot" id="m'.$moot.'" value="'.$moot.'" ';
 			if($moot==$this->moot){ echo 'checked="checked" '; }
-			echo '/> <label for="m'.$moot.'">'.$moot.'</label>';
+			echo '/> <label for="m'.$moot.'">';
+			if($moot=='alle'){ echo $moot; }else{ echo Verticale::$namen[$moot]; }
+			echo '</label>';
 		}
 		echo '<br />';
 		//lichtingsselectie
