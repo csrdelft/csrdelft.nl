@@ -199,7 +199,7 @@ class Profiel{
 				$form[]=new InputField('beroep', $profiel['beroep'], 'Beroep/werk', 4096);
 				$form[]=new IntField('lidjaar', $profiel['lidjaar'], 'Lid sinds', date('Y'), $beginjaar);
 			}
-			if($profiel['status']=='S_OUDLID'){
+			if($profiel['status']=='S_OUDLID' OR $profiel['status']=='S_NOBODY'){
 				$form[]=new DatumField('lidafdatum', $profiel['lidafdatum'], 'Oudlid sinds');
 				$form[]=new SelectField('ontvangtcontactueel', $profiel['ontvangtcontactueel'], 'Ontvangt Contactueel', array('ja'=> 'Ja', 'nee' => 'Nee'));
 			}

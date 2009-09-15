@@ -4,6 +4,7 @@
 class StamboomContent{
 
 	private $root;
+	private $kinderen=0;
 	
 	public function __construct($startuid, $levels=3){
 		if(!Lid::isValidUid($startuid)){
@@ -22,6 +23,7 @@ class StamboomContent{
 		if(count($lid->getKinderen())>0){
 			echo '<div class="kinderen">';
 			foreach($lid->getKinderen() as $kind){
+				$this->kinderen++;
 				$this->viewNode($kind);
 			}
 			echo '<div class="clear">&nbsp;</div>';
@@ -32,6 +34,8 @@ class StamboomContent{
 	}
 	public function view(){
 		$this->viewNode($this->root);
+
+		echo '<h2>Kinderen, (achter)kleinkinderen  voor '.$this->root->getNaam().': '.$this->kinderen.'</h2>';
 	}
 
 }
