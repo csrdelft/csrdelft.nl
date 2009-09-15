@@ -692,7 +692,9 @@ class MaalTrack {
 			WHERE maalid = {$maalid} AND door = '{$uid}' AND uid <> door AND status = 'AAN'
 		");
 		if (($result !== false) and $this->_db->numRows($result) > 0)
-			while ($record = $this->_db->next($result)) $wienogmeer[$record['uid']] = (string)LidCache::getLid($record['uid']);
+			while ($record = $this->_db->next($result)){
+				$wienogmeer[$record['uid']] = (string)LidCache::getLid($record['uid']);
+			}
 		return $wienogmeer;
 	}
 

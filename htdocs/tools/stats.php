@@ -33,12 +33,9 @@ class stats{
 		$sLogQuery="
 			SELECT
 				log.uid AS uid,  moment,
-				voornaam, tussenvoegsel, achternaam,
 				ip, locatie, url, referer, useragent
 			FROM
 				log
-			INNER JOIN
-				lid ON(log.uid=lid.uid)
 			WHERE 1 ";
 		if(isset($_GET['sjaars'])){
 			$sLogQuery.="AND status='S_NOVIET' ";
@@ -93,12 +90,9 @@ class stats{
 		$sLogQuery="
 			SELECT
 				log.uid AS uid, moment,
-				voornaam, tussenvoegsel, achternaam,
 				ip, locatie, url, referer, useragent
 			FROM
 				log
-			INNER JOIN
-				lid ON(log.uid=lid.uid)
 			WHERE
 				log.uid='".$uid."'
 			ORDER BY
@@ -143,12 +137,9 @@ class stats{
 		$sLogQuery="
 			SELECT
 				log.uid AS uid, moment,
-				voornaam, tussenvoegsel, achternaam,
 				ip, locatie, url, referer, useragent
 			FROM
 				log
-			INNER JOIN
-				lid ON(log.uid=lid.uid)
 			WHERE
 				log.ip='".$db->escape($ip)."'
 			ORDER BY

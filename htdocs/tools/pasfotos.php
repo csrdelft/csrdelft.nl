@@ -26,7 +26,7 @@ if($loginlid->hasPermission('P_LEDEN_READ') AND isset($_GET['string'])){
 	}
 	echo '</div>';
 }else{
-	return 'b0rkb0rkb0rk';
+	echo 'b0rkb0rkb0rk';
 }
 ?>
 

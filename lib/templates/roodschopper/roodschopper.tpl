@@ -11,6 +11,9 @@
 		<option value="soccie" {if $roodschopper->getCommissie()=='soccie'}selected="selected"{/if}>SocCie</option>
 	</select><br />
 
+	<label for="from">Afzenderadres:</label>
+	<input type="text" id="from" name="from" value="{$roodschopper->getFrom()}" /> <span class="small">Als afzenderadres gebruiken.</span><br />
+	
 	<label for="bcc">BCC naar:</label>
 	<input type="text" id="bcc" name="bcc" value="{$roodschopper->getBcc()}" /> <span class="small">alle verzonden mails BCCen naar dit adres.</span><br />
 	

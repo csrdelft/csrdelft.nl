@@ -14,13 +14,18 @@ if(!Loginlid::instance()->hasPermission('P_ADMIN,groep:MaalCie,groep:SocCie')){
 	header('location: http://csrdelft.nl');
 	exit;
 }
-if(isset($_POST['commissie'], $_POST['bcc'], $_POST['saldogrens'], $_POST['uitsluiten'], $_POST['bericht'])){
+if(isset($_POST['commissie'], $_POST['bcc'], $_POST['saldogrens'], $_POST['uitsluiten'], $_POST['bericht'], $_POST['from'])){
 	$cie='soccie';
 	if($_POST['commissie']=='maalcie'){
 		$cie='maalcie';
 	}
 	$roodschopper=new Roodschopper($cie, (int)-abs($_POST['saldogrens']), $_POST['onderwerp'], $_POST['bericht']);
-	$roodschopper->setBcc($_POST['bcc']);
+	if(email_like($_POST['bcc'])){
+		$roodschopper->setBcc($_POST['bcc']);
+	}
+	if(email_like($_POST['from'])){
+		$roodschopper->setFrom($_POST['from']);
+	}
 	$roodschopper->setUitgesloten($_POST['uitsluiten']);
 }else{
 	$roodschopper=Roodschopper::getDefaults();

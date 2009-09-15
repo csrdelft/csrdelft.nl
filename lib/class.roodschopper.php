@@ -15,6 +15,7 @@ class Roodschopper{
 	private $bericht;
 	
 	private $uitsluiten=array();
+	private $from;
 	private $bcc;
 
 	private $teschoppen=null;
@@ -32,6 +33,8 @@ class Roodschopper{
 		$this->saldogrens=$saldogrens;
 		$this->onderwerp=htmlspecialchars($onderwerp);
 		$this->bericht=htmlspecialchars($bericht);
+		
+		$this->from=$this->cie.'@csrdelft.nl';
 	}
 
 	public static function getDefaults(){
@@ -51,6 +54,9 @@ h.t. Fiscus.';
 	public function getBcc(){			return $this->bcc; }
 	public function setBcc($bcc){		$this->bcc=$bcc; }
 
+	public function getFrom(){			return $this->from; }
+	public function setFrom($from){		$this->from=$from; }
+	
 	public function getSaldogrens(){	return $this->saldogrens; }
 
 	public function getUitgesloten(){	return implode(',', $this->uitsluiten); }
@@ -118,11 +124,11 @@ h.t. Fiscus.';
 		if($this->teschoppen===null){
 			$this->simulate();
 		}
-		$headers="From: ".$this->cie."@csrdelft.nl\n\r";
+		$headers="From: ".$this->getFrom()."\n";
 		if($this->bcc!=''){
-			$headers.="BCC: ".$this->bcc."\n\r";
+			$headers.="BCC: ".$this->getBcc()."\n";
 		}
-		$headers.='X-Mailer: csrdelft.nl/Jieter';
+		$headers.='X-Mailer: csrdelft.nl/Jieter'."\n\r";
 		foreach($this->teschoppen as $uid => $bericht){
 			mail($uid.'@csrdelft.nl', $bericht['onderwerp'], $bericht['bericht'], $headers);
 		}
