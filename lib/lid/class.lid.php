@@ -18,6 +18,8 @@ class Lid implements Serializable{
 	private $uid;
 	private $profiel;
 
+	private $kinderen=null;
+	
 	public function __construct($uid){
 		if(!$this->isValidUid($uid)){
 			throw new Exception('Geen correct [uid:'.$uid.'] opgegeven.');
@@ -212,6 +214,21 @@ class Lid implements Serializable{
 			return null;
 		}
 	}
+	public function getKinderen($force=false){
+		if($this->kinderen===null or $force){
+			$query="SELECT uid FROM lid WHERE patroon='".$this->getUid()."';";
+			$result=MySql::instance()->query2array($query);
+
+			$this->kinderen=array();
+			if(is_array($result)){
+				foreach($result as $row){
+					$this->kinderen[]=LidCache::getLid($row['uid']);
+				}
+			}
+		}
+		return $this->kinderen;			
+	}
+	
 	//corvee_voorkeuren splitsen en teruggeven als array
 	public function getCorveeVoorkeuren(){
 		$corvee_voorkeuren = $this->profiel['corvee_voorkeuren'];

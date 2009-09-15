@@ -97,7 +97,13 @@
 		<div class="gegevens">
 			<div class="label">Studie:</div> {$profhtml.studie}
 				{if $lid->getPatroon() instanceof Lid}
-					({if $lid->getPatroon()->getGeslacht()=='v'}m{else}p{/if}atroon: {$lid->getPatroon()->getNaamLink('civitas', 'link')})
+					<em>{if $lid->getPatroon()->getGeslacht()=='v'}m{else}p{/if}atroon:</em> {$lid->getPatroon()->getNaamLink('civitas', 'link')};
+				{/if}
+				{if $lid->getKinderen()|@count > 0}
+					Kinderen:
+					{foreach from=$lid->getKinderen() item=kind name=kinderen}
+						{$kind->getNaamLink('civitas', 'link')}{if !$smarty.foreach.kinderen.last}, {/if}
+					{/foreach}
 				{/if}
 			<br />
 			<div class="label">Studie sinds:</div> {$profhtml.studiejaar}<br />
