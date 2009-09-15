@@ -114,7 +114,7 @@
 			{if $isOudlid}
 				{if $profhtml.beroep!=''}<div class="label">Beroep/werk:</div> {$profhtml.beroep}<br />{/if}
 			{else}
-				{if $lid->getVerticale()!=0}
+				{if $profhtml.kring!=0}
 					<div class="label">Kring:</div> 
 					<a href="/communicatie/verticalen#kring{$lid->getVerticale()}.{$profhtml.kring}">{$lid->getVerticale()}.{$profhtml.kring}</a>
 					{if $profhtml.status=='S_KRINGEL'}(kringel){/if}
