@@ -181,7 +181,7 @@ class Profiel{
 		$form[]=new InputField('bankrekening', $profiel['bankrekening'], 'Bankrekening', 11); //TODO specifiek ding voor maken
 
 		if($profiel['status']=='S_OUDLID' OR $hasLedenMod OR $this->editNoviet){
-			if($profiel['status']=='S_OUDLID' OR $this->lid->getUid()=='6601'){ //vd Wekken mag wel eerder begonnen zijn.
+			if($profiel['status']=='S_OUDLID' OR $profiel['status']=='S_NOBODY' OR $this->lid->getUid()=='6601'){ //vd Wekken mag wel eerder begonnen zijn.
 				$beginjaar=1950;
 			}else{
 				$beginjaar=date('Y')-20;
