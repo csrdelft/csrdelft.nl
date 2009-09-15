@@ -394,7 +394,7 @@ class Groep{
 			return false;
 		}
 		$ot=$ot['voorganger'];
-		if($ot->isLid($tuid)){
+		if($ot->isLid($uid)){
 			$this->error.='O.t. groep bevat dit lid al';
 			return false;
 		}
