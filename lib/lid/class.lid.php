@@ -422,12 +422,14 @@ class Lid implements Serializable{
 	public function serialize(){
 		$lid['uid']=$this->getUid();
 		$lid['profiel']=$this->getProfiel();
+		$lid['kinderen']=$this->getKinderen();
 		return serialize($lid);
 	}
 	public function unserialize($serialized){
 		$lid=unserialize($serialized);
 		$this->uid=$lid['uid'];
 		$this->profiel=$lid['profiel'];
+		$this->kinderen=$lid['kinderen'];
 	}
 
 	public static function isValidUid($uid) {

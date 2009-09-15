@@ -1,0 +1,10 @@
+.node{
+        border-left: 1px solid black;
+}
+.node .pasfoto{ width: 40px;}
+.node .kinderen{
+        margin-left: 40px;
+        border-width: 0px 0px 1px 0px;
+        border-style: solid;
+        border-color: black;
+}

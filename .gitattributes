@@ -71,6 +71,7 @@ htdocs/communicatie/forum/zoeken.php -text
 htdocs/communicatie/lijst.php -text
 htdocs/communicatie/moten.php -text
 htdocs/communicatie/profiel.php -text
+htdocs/communicatie/stamboom.php -text
 htdocs/communicatie/verjaardagen.php -text
 htdocs/communicatie/verticalen.php -text
 htdocs/index.php -text
@@ -106,6 +107,7 @@ htdocs/layout/pauper.css -text
 htdocs/layout/profiel.css -text
 htdocs/layout/roodschopper.css -text
 htdocs/layout/roze.css -text
+htdocs/layout/stamboom.css -text
 htdocs/layout/undohtml.css -text
 htdocs/layout/vb.css -text
 htdocs/layout/verticalen.css -text
@@ -244,6 +246,7 @@ lib/lid/class.mootverjaardag.php -text
 lib/lid/class.profiel.php -text
 lib/lid/class.profielcontent.php -text
 lib/lid/class.saldi.php -text
+lib/lid/class.stamboomcontent.php -text
 lib/maaltijden/class.corveebeheercontent.php -text
 lib/maaltijden/class.corveepuntencontent.php -text
 lib/maaltijden/class.maaltijd.php -text
