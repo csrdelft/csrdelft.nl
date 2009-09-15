@@ -22,6 +22,18 @@ require_once 'maaltijden/class.corveepuntencontent.php';
 $punten = new CorveepuntenContent($maaltrack);
 
 
+# actie is bewerken, kijken of velden ingevuld zijn
+if(isset($_POST['actie'])){
+	$uid=$_POST['uid'];
+	$actie=(int)$_POST['actie'];
+
+	# bestaande maaltijd bewerken
+	$corvee_kwalikok = (isset($_POST['corvee_kwalikok'])? 1 : 0);
+	if($actie == 'bewerk' && (isset($_POST['corvee_punten'], $_POST['corvee_vrijstelling'])))
+		$maaltrack->editLid($uid, $corvee_kwalikok, $_POST['corvee_punten'], $_POST['corvee_vrijstelling']);
+}
+
+
 $page=new csrdelft($punten);
 $page->view();
 

@@ -331,13 +331,18 @@ class MaalTrack {
 	}
 	
 	# haalt één enkele maaltijd op ter bewerking
-	function getPuntenlijst(){
-		// TODO: lijst samenstellen en sorteren met behulp van ZoekLeden..
-		// TODO: vrijstelling verwerken in tekort
+	function getPuntenlijst($sorteer = 'corvee_tekort', $sorteer_richting = 'asc'){
+		// TODO: leden meer filteren
+
+		$sorteer_toegestaan = array('uid', 'kok', 'afwas', 'theedoek', 'corvee_kwalikok', 'corvee_punten', 'corvee_vrijstelling', 'corvee_tekort');
+		$sorteer_volgorde_toegestaan = array('asc', 'desc');
+		if (!in_array($sorteer, $sorteer_toegestaan) || !in_array($sorteer_richting, $sorteer_volgorde_toegestaan))
+			print('Ongeldige sorteeroptie');
+	
 		$sLedenQuery="
 			SELECT
-				uid, corvee_punten, corvee_vrijstelling, corvee_voorkeuren,
-				(".CORVEEPUNTEN."-corvee_punten) AS corvee_tekort,
+				uid, corvee_kwalikok, corvee_punten, corvee_vrijstelling, corvee_voorkeuren,
+				(".CORVEEPUNTEN."-ROUND(".CORVEEPUNTEN."*.01*corvee_vrijstelling)-corvee_punten) AS corvee_tekort,
 				(SELECT COUNT(uid) FROM maaltijdcorvee WHERE uid = lid.uid AND kok = 1) AS kok,
 				(SELECT COUNT(uid) FROM maaltijdcorvee WHERE uid = lid.uid AND afwas = 1) AS afwas,
 				(SELECT COUNT(uid) FROM maaltijdcorvee WHERE uid = lid.uid AND theedoek = 1) AS theedoek
@@ -346,11 +351,18 @@ class MaalTrack {
 			WHERE
 				status='S_LID' OR status='S_NOVIET'
 			ORDER BY
-				uid";
+				".$sorteer." ".strtoupper($sorteer_richting).", uid ASC";
 		$rLeden=$this->_db->query($sLedenQuery);
 		$aLeden=$this->_db->result2array($rLeden);
 
 		return $aLeden;
+	}
+	
+	# bij bestaande maaltijd de taken bewerken
+	function editLid($uid, $corvee_kwalikok, $corvee_punten, $corvee_vrijstelling){		
+		// lid bewerken
+		$this->_db->query("UPDATE lid SET corvee_kwalikok='".$corvee_kwalikok."', corvee_punten='".$corvee_punten."', corvee_vrijstelling='".$corvee_vrijstelling."' WHERE uid = '".$uid."'");
+		return true;
 	}
 	
 	# haalt maaltijden uit de maaltijdentabel op, voor uitgebreidere info

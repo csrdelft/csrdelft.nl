@@ -22,27 +22,30 @@ class CorveepuntenContent extends SimpleHTML {
 	}
 	function getTitel(){ return 'Maaltijdketzer - Corveepunten'; }
 	
-	//functie om een lid in het formulier te laden
-	/*function load($iLidID, $actie = null){
-		$iLidID=(int)$iLidID;
-		$this->_actie=$actie;
-		$this->_maaltijd=$this->_maaltrack->getMaaltijd($iMaalID);
-	}*/
-
 	function view(){
 		$loginlid=LoginLid::instance();
 		//de html template in elkaar draaien en weergeven
 		$corveepunten=new Smarty_csr();
 		$corveepunten->caching=false;
-
-		//Dingen ophalen voor het overzicht van leden
-		$aLeden=$this->_maaltrack->getPuntenlijst();
 		
-		if ($this->_actie == 'bekijk')
-			$aLeden['actie']='bekijk';
+		$sorteer = 'uid';
+		$sorteer_richting = 'asc';
+		if (isset($_GET['sorteer'])) $sorteer = $_GET['sorteer'];
+		elseif (isset($_POST['sorteer'])) $sorteer = $_POST['sorteer'];
+		if (isset($_GET['sorteer_richting'])) $sorteer_richting = $_GET['sorteer_richting'];
+		elseif (isset($_POST['sorteer_richting'])) $sorteer_richting = $_POST['sorteer_richting'];
+		
+		//Dingen ophalen voor het overzicht van leden
+		$aLeden=$this->_maaltrack->getPuntenlijst($sorteer, $sorteer_richting);
+		
+		$bewerkt_lid = (isset($_POST['uid']) ? $_POST['uid'] : '');
 
 		//arrays toewijzen en weergeven
 		$corveepunten->assign('leden', $aLeden);
+		$corveepunten->assign('sorteer', $sorteer);
+		$corveepunten->assign('sorteer_richting', $sorteer_richting);
+		$corveepunten->assign('bewerkt_lid', $bewerkt_lid);
+
 		$corveepunten->display('maaltijdketzer/corveepunten.tpl');
 	}
 }
