@@ -1,6 +1,6 @@
 .floatR{ float: right; }
 .label{ float: left; width: 75px; font-size: 9px; color: #999; }
-.data{ margin-left: 80px; }
+.data{ margin-left: 75px; text-align: left;}
 .data li{ margin-left: 0px; } 
 #profiel{ margin: 20px 0px 200px 0px; }
 #profiel h1{ margin-bottom: 10px; }
@@ -21,6 +21,11 @@
 #profiel .gegevensouders{  width: 250px; margin-left: 250px; padding-left: 10px; }
 #profiel .gegevensouders .label{ width: 50px; margin-top: 2em;}
 #profiel .gegevensouders .adres{ margin-left: 50px; }
+
+#profiel .familie{ padding-left: 10px; float: right; width: 314px; margin-right: 100px; }
+#profiel .familie .label{ color: #999; }
+#profiel .familie .kinderen{ margin-left: 75px; }
+#profiel .familie .stamboom{ float: right; margin-right: 50px; }
 
 #profiel .groepht{ float: left; width: 50%; }
 #profiel .groepot{ margin-left: 50%; }

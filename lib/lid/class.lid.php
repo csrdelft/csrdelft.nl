@@ -79,13 +79,12 @@ class Lid implements Serializable{
 		}
 		$query.=implode(', ', $queryfields);
 		$query.=" WHERE uid='".$this->getUid()."';";
-		if($db->query($query)){
+		if($db->query($query) AND LidCache::updateLid($this->getUid())){
 			//als er een patroon is die ook even updaten in de cache, zodat de kindertjes kloppen.
 			if($this->getPatroon() instanceof Lid){
 				LidCache::updateLid($this->getPatroon()->getUid());
 			}
-			//en eigen profiel ook even update in de cache.
-			return LidCache::updateLid($this->getUid());
+			return true;
 		}else{
 			return false;
 		}
