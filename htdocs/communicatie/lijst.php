@@ -1,12 +1,12 @@
 <?php
 
-# Let the browser and proxies cache output
-session_cache_limiter('public');
-
 # instellingen & rommeltjes
 require_once 'include.config.php';
 
 if($loginlid->hasPermission('P_LOGGED_IN')){
+	# Let the browser and proxies cache output
+	session_cache_limiter('public');
+
 	# Een uur (30, in minutes) cache expiration time for output (maar alleen als we ingelogged zijn, anders levert het vreemde fouten op met inloggen)
 	session_cache_expire(30);
 }

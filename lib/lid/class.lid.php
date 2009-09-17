@@ -222,6 +222,13 @@ class Lid implements Serializable{
 			return null;
 		}
 	}
+	/*
+	 * Als er twee leden met elkaar als patroon ingevuld staan gaat het hier mis.
+	 * Deze functie gaat dan oneindig proberen lid-objecten in de kinder-array te stoppen, waardoor
+	 * oneindige recursie ontstaat. PHP geeft daar geen foutmeldingen van. Uit de bugtracker van PHP:
+	 * "This was requested before, and this can NOT be done in a nice way.", wat je dus krijgt is een
+	 * 500 internal server error, met in de apache errorlog iets als "premature end of script headers" 
+	 */
 	public function getKinderen($force=false){
 		if($this->kinderen===null or $force){
 			$query="SELECT uid FROM lid WHERE patroon='".$this->getUid()."';";
@@ -235,6 +242,12 @@ class Lid implements Serializable{
 			}
 		}
 		return $this->kinderen;			
+	}
+	public function getAantalKinderen(){
+		if(!is_array($this->getKinderen())){
+			$this->getKinderen();
+		}
+		return count($this->getKinderen());
 	}
 	
 	//corvee_voorkeuren splitsen en teruggeven als array

@@ -1,8 +1,19 @@
 .node{
-        border-left: 1px solid black;
+	clear: left;
+	border-left: 1px solid black;
 }
-.node .pasfoto{ width: 40px;}
+.node .lid{
+	
+	width: 220px;
+	height: 50px;
+	background-color: #eee;
+	padding: 4px 8px;
+	text-align: left;
+}
+.node .lid:hover{ background-color: #e1e1e1;}
+.node .lidfoto{ height: 50px; float: left; margin-right: 10px;}
 .node .kinderen{
+		clear: left;
         margin-left: 40px;
         border-width: 0px 0px 1px 0px;
         border-style: solid;

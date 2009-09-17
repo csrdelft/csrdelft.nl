@@ -12,7 +12,7 @@
 						<a href="/communicatie/profiel/{$profhtml.uid}/novietBewerken" class="knop"><img src="{$csr_pics}forum/bewerken.png" title="Bewerk dit profiel" />Noviet bewerken</a><br />
 					{/if}
 					{if $isAdmin}
-						<a href="/tools/stats.php?uid={$profhtml.uid}" class="knop">Overzicht van bezoeken</a><br />
+						<a href="/tools/stats.php?uid={$profhtml.uid}" class="knop">Bezoeklog</a><br />
 						<a href="/communicatie/profiel/{$profhtml.uid}/wachtwoord" class="knop" onclick="return confirm('Weet u zeker dat u het wachtwoord van deze gebruiker wilt resetten?')">Reset wachtwoord</a><br />
 						{if $profhtml.uid!=$loginlid->getUid() && $profhtml.uid!='x999' && !$loginlid->isSued() && $profhtml.status!='S_NOBODY'}
 							<a href="/su/{$profhtml.uid}/" class="knop">su naar dit lid</a><br />
@@ -94,51 +94,54 @@
 	</div>
 	<div class="profielregel">
 		<div class="left">Civitas</div>	
-		<div class="familie">
-			<a class="stamboom" href="/communicatie/stamboom.php?uid={$lid->getUid()}" title="Stamboom van {$lid->getNaam()}">
-				<img src="http://plaetjes.csrdelft.nl/knopjes/stamboom.jpg" alt="Stamboom van {$lid->getNaam()}" />
-			</a>
-			{if $lid->getPatroon() instanceof Lid}
-				<div class="label">{if $lid->getPatroon()->getGeslacht()=='v'}M{else}P{/if}atroon:</div>
-				{$lid->getPatroon()->getNaamLink('civitas', 'link')}<br />
-			{/if}
-			{if $lid->getKinderen()|@count > 0}
-				<div class="label">Kinderen:</div>
-				<div class="kinderen">
-					{foreach from=$lid->getKinderen() item=kind name=kinderen}
-						{$kind->getNaamLink('civitas', 'link')}<br />
-					{/foreach}
-				</div>
-			{/if}
-			<div clear: right;">&nbsp;</div>
-		</div>
+		
 		<div class="gegevens">
-			<div class="label">Studie:</div> <div class="data">{$profhtml.studie}</div><br />
+			<div class="half">
+				<div class="label">Studie:</div> <div class="data">{$profhtml.studie}</div><br />
+					
+				<div class="label">Studie sinds:</div> {$profhtml.studiejaar}<br />
+				<div class="label">Lid sinds:</div> 
+					{$profhtml.lidjaar}{if $isOudlid AND $profhtml.lidafdatum!='0000-00-00'} tot {$profhtml.lidafdatum|substr:0:4}{/if}<br />
+				<br />
 				
-			<div class="label">Studie sinds:</div> {$profhtml.studiejaar}<br />
-			<div class="label">Lid sinds:</div> 
-				{$profhtml.lidjaar}{if $isOudlid AND $profhtml.lidafdatum!='0000-00-00'} tot {$profhtml.lidafdatum|substr:0:4}{/if}<br />
-			<br />
-			
-			{if $isOudlid}
-				{if $profhtml.beroep!=''}<div class="label">Beroep/werk:</div> {$profhtml.beroep}<br />{/if}
-			{else}
-				{if $profhtml.kring!=0}
-					<div class="label">Kring:</div> 
-					<a href="/communicatie/verticalen#kring{$lid->getVerticale()}.{$profhtml.kring}">{$lid->getVerticale()}.{$profhtml.kring}</a>
-					{if $profhtml.status=='S_KRINGEL'}(kringel){/if}
-					{if $lid->isVerticaan()}
-						(verticaaan)
-					{elseif $lid->isKringleider()}
-						(kringleider)
+				{if $isOudlid}
+					{if $profhtml.beroep!=''}<div class="label">Beroep/werk:</div> {$profhtml.beroep}<br />{/if}
+				{else}
+					{if $profhtml.kring!=0}
+						<div class="label">Kring:</div> 
+						<a href="/communicatie/verticalen#kring{$lid->getVerticale()}.{$profhtml.kring}">{$lid->getVerticale()}.{$profhtml.kring}</a>
+						{if $profhtml.status=='S_KRINGEL'}(kringel){/if}
+						{if $lid->isVerticaan()}
+							(verticaaan)
+						{elseif $lid->isKringleider()}
+							(kringleider)
+						{/if}
+						<br />
 					{/if}
-					<br />
 				{/if}
-			{/if}
-			{if $profhtml.moot!=0}
-				<div class="label">Oude moot:</div>
-				{$profhtml.moot}
-			{/if}
+				{if $profhtml.moot!=0}
+					<div class="label">Oude moot:</div>
+					{$profhtml.moot}
+				{/if}
+			</div>
+			<div class="familie">
+				<a class="stamboom" href="/communicatie/stamboom.php?uid={$lid->getUid()}" title="Stamboom van {$lid->getNaam()}">
+					<img src="http://plaetjes.csrdelft.nl/knopjes/stamboom.jpg" alt="Stamboom van {$lid->getNaam()}" />
+				</a>
+				{if $lid->getPatroon() instanceof Lid}
+					<div class="label">{if $lid->getPatroon()->getGeslacht()=='v'}M{else}P{/if}atroon:</div>
+					{$lid->getPatroon()->getNaamLink('civitas', 'link')}<br />
+				{/if}
+				{if $lid->getKinderen()|@count > 0}
+					<div class="label">Kinderen:</div>
+					<div class="kinderen">
+						{foreach from=$lid->getKinderen() item=kind name=kinderen}
+							{$kind->getNaamLink('civitas', 'link')}<br />
+						{/foreach}
+					</div>
+				{/if}
+			</div>
+			<div style="clear: left;"></div>
 		</div>
 	</div>
 	<div class="profielregel" id="groepen">

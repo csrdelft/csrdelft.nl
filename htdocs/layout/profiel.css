@@ -10,6 +10,7 @@
 #profiel .profielregel{ margin-bottom: 20px; clear: left; }
 	#profiel .left{ float: left; width: 60px; text-align: right; font-style: italic; font-size: 0.9em;}
 	#profiel .gegevens{ margin-left: 70px; padding-left: 15px; border-left: 1px solid #0a338d; }
+	#profiel .half{ margin-left: 10px; width: 250px; float: left;}
 
 #profiel .naam .status{ float: left; color: #aaa; width: 60px; padding: 0px 20px;}
 #profiel .naam h1{ padding-left: 60px; }
@@ -22,10 +23,9 @@
 #profiel .gegevensouders .label{ width: 50px; margin-top: 2em;}
 #profiel .gegevensouders .adres{ margin-left: 50px; }
 
-#profiel .familie{ padding-left: 10px; float: right; width: 314px; margin-right: 100px; }
-#profiel .familie .label{ color: #999; }
+#profiel .familie{ padding-left: 10px; margin-left: 250px; width: 250px;}
 #profiel .familie .kinderen{ margin-left: 75px; }
-#profiel .familie .stamboom{ float: right; margin-right: 50px; }
+#profiel .familie .stamboom{ float: right; }
 
 #profiel .groepht{ float: left; width: 50%; }
 #profiel .groepot{ margin-left: 50%; }
