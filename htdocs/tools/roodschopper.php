@@ -10,7 +10,7 @@ require_once 'class.roodschopper.php';
 require_once 'class.roodschoppercontent.php';
 
 //Alleen voor admins, maalcie en Soccie. LET OP: SocCie kan nu ook een maalciemail versturen.
-if(!Loginlid::instance()->hasPermission('P_ADMIN,groep:MaalCie,groep:SocCie')){
+if(!Loginlid::instance()->hasPermission('P_ADMIN,groep:MaalCie') AND !Loginlid::instance()->hasPermission('groep:SocCie')){
 	header('location: http://csrdelft.nl');
 	exit;
 }
