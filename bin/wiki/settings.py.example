@@ -1,0 +1,5 @@
+
+dbuser = "user"
+dbpass = "blaat"
+ldapuser = "cn=flap,dc=csrdelft,dc=nl"
+ldappass = "floep"

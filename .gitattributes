@@ -11,6 +11,8 @@ bin/soccie_push/socciesaldi.php -text
 bin/socciesaldi-koppelen.php -text
 bin/statgraphgen.php -text
 bin/welkom.php -text
+bin/wiki/probeer.py -text
+bin/wiki/settings.py.example -text
 etc/csrmail.ini.sample -text
 etc/gozerbot.ini.sample -text
 etc/ldap.ini.sample -text
