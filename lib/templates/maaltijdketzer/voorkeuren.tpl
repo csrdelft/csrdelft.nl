@@ -55,7 +55,6 @@ van u bij maaltijden. Kruis minstens een vakje aan.
 
 <h2>Maaltijdabonnementen</h2>
 <p>
-	Let op! Er is verschil tussen mootmaaltijden en &uuml;berkringen.
 	<table style="width: 100%;">
 		<tr>
 			<td>
