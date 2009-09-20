@@ -66,16 +66,6 @@ if ($error == 0) switch($action) {
 			exit;
 		}
 	break;
-	case 'editCorveewens':
-		$lid=$loginlid->getLid();
-		$lid->setProperty('corvee_wens', getOrPost('corvee_wens'));
-		if(!$lid->save()){
-			$error=2;
-		}else{
-			header("Location: {$_SERVER['PHP_SELF']}");
-			exit;
-		}
-	break;
 	case 'editCorveevoorkeuren':
 		$lid=$loginlid->getLid();
 		$voorkeuren_array = getOrPost('corvee_voorkeuren');
@@ -84,6 +74,9 @@ if ($error == 0) switch($action) {
 		$voorkeuren .= (isset($voorkeuren_array['do_kok']) ? 1 : 0);
 		$voorkeuren .= (isset($voorkeuren_array['do_afwas']) ? 1 : 0);
 		$voorkeuren .= (isset($voorkeuren_array['theedoek']) ? 1 : 0);
+		$voorkeuren .= (isset($voorkeuren_array['afzuigkap']) ? 1 : 0);
+		$voorkeuren .= (isset($voorkeuren_array['frituur']) ? 1 : 0);
+		$voorkeuren .= (isset($voorkeuren_array['keuken']) ? 1 : 0);
 		if(!intval($voorkeuren) > 0) {
 			$error=2;
 		}else{

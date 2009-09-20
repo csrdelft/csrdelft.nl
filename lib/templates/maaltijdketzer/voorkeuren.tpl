@@ -49,6 +49,11 @@ van u bij maaltijden. Kruis minstens een vakje aan.
 	<input type="checkbox" name="corvee_voorkeuren[do_kok]" value="1" {if $maal.corvee_voorkeuren.do_kok}checked="checked"{/if} /> Donderdag koken<br />
 	<input type="checkbox" name="corvee_voorkeuren[do_afwas]" value="1" {if $maal.corvee_voorkeuren.do_afwas}checked="checked"{/if} /> Donderdag afwassen<br />	
 	<input type="checkbox" name="corvee_voorkeuren[theedoek]" value="1" {if $maal.corvee_voorkeuren.theedoek}checked="checked"{/if} /> Theedoeken wassen<br />
+	<br />
+	Een keer in de maand:<br />
+	<input type="checkbox" name="corvee_voorkeuren[afzuigkap]" value="1" {if $maal.corvee_voorkeuren.afzuigkap}checked="checked"{/if} /> Afzuigkap schoonmaken<br />
+	<input type="checkbox" name="corvee_voorkeuren[frituur]" value="1" {if $maal.corvee_voorkeuren.frituur}checked="checked"{/if} /> Frituur schoonmaken<br />
+	<input type="checkbox" name="corvee_voorkeuren[keuken]" value="1" {if $maal.corvee_voorkeuren.keuken}checked="checked"{/if} /> Keuken schoonmaken<br />	
 	<input type="submit" name="opslaan" value="opslaan" />
 </form>
 <br />

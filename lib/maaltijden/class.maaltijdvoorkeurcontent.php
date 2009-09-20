@@ -40,9 +40,6 @@ class MaaltijdVoorkeurContent extends SimpleHTML {
 		$aMaal['eetwens']=$loginlid->getLid()->getProperty('eetwens');
 		
 		//...de corveewens
-		$aMaal['corvee_wens']=$loginlid->getLid()->getProperty('corvee_wens');
-		
-		//...de corveewens
 		$aMaal['corvee_voorkeuren']=$loginlid->getLid()->getCorveeVoorkeuren();		
 
 		//arrays toewijzen en weergeven
