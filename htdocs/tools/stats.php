@@ -41,7 +41,7 @@ class stats{
 			$sLogQuery.="AND status='S_NOVIET' ";
 		}
 			$sLogQuery.="ORDER BY
-				moment DESC
+				ID DESC
 			LIMIT
 				0, 30;";
 		$rLog=$db->query($sLogQuery);
@@ -96,7 +96,7 @@ class stats{
 			WHERE
 				log.uid='".$uid."'
 			ORDER BY
-				moment DESC
+				ID DESC
 			LIMIT
 				0, 30;";
 		$rLog=$db->query($sLogQuery);
@@ -143,7 +143,7 @@ class stats{
 			WHERE
 				log.ip='".$db->escape($ip)."'
 			ORDER BY
-				moment DESC
+				ID DESC
 			LIMIT
 				0, 30;";
 		$rLog=$db->query($sLogQuery);

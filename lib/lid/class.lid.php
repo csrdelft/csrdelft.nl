@@ -245,6 +245,7 @@ class Lid implements Serializable{
 	}
 	public function getAantalKinderen(){
 		if(!is_array($this->getKinderen())){
+			//lazy-loading: bij aanroep van deze methode even forceren dat er een aanroep van this->getKinderen geweest is.
 			$this->getKinderen();
 		}
 		return count($this->getKinderen());
@@ -340,8 +341,12 @@ class Lid implements Serializable{
 	 * mode:	link, html, plain
 	 */ 
 	public function getNaamLink($vorm='full', $mode='plain'){
-		$sVolledigeNaam=$this->profiel['voornaam'].' ';
-		if($this->profiel['tussenvoegsel']!='') $sVolledigeNaam.=$this->profiel['tussenvoegsel'].' ';
+		if($this->profiel['voornaam']!=''){
+			$sVolledigeNaam=$this->profiel['voornaam'].' ';
+		}else{
+			$sVolledigeNaam=$this->profiel['voorletters'];
+		}
+		if($this->profiel['tussenvoegsel']!=''){ $sVolledigeNaam.=$this->profiel['tussenvoegsel'].' '; }
 		$sVolledigeNaam.=$this->profiel['achternaam'];
 
 

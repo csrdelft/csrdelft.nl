@@ -97,7 +97,7 @@
 		
 		<div class="gegevens">
 			<div class="half">
-				<div class="label">Studie:</div> <div class="data">{$profhtml.studie}</div><br />
+				<div class="label">Studie:</div> <div class="data">{$profhtml.studie}</div>
 					
 				<div class="label">Studie sinds:</div> {$profhtml.studiejaar}<br />
 				<div class="label">Lid sinds:</div> 
@@ -105,7 +105,7 @@
 				<br />
 				
 				{if $isOudlid}
-					{if $profhtml.beroep!=''}<div class="label">Beroep/werk:</div> {$profhtml.beroep}<br />{/if}
+					{if $profhtml.beroep!=''}<div class="label">Beroep/werk:</div><div class="data">{$profhtml.beroep}</div><br />{/if}
 				{else}
 					{if $profhtml.kring!=0}
 						<div class="label">Kring:</div> 
@@ -134,7 +134,7 @@
 				{/if}
 				{if $lid->getKinderen()|@count > 0}
 					<div class="label">Kinderen:</div>
-					<div class="kinderen">
+					<div class="data">
 						{foreach from=$lid->getKinderen() item=kind name=kinderen}
 							{$kind->getNaamLink('civitas', 'link')}<br />
 						{/foreach}
@@ -175,7 +175,8 @@
 		<div class="left">Maaltijden
 			{if $loginlid->getUid()==$profhtml.uid}
 				<br /><a href="/actueel/maaltijden/voorkeuren/" class="knop" ><img src="{$csr_pics}forum/bewerken.png" title="Maaltijdvoorkeuren bewerken" /></a>
-			{/if}</div>	
+			{/if}
+		</div>	
 		<div class="gegevens">
 			{if $profhtml.eetwens!=''}
 				<div class="label">Dieet:</div>
@@ -237,10 +238,10 @@
 			{if is_array($profhtml.recenteForumberichten)}
 				<div class="label">Recent:</div>
 				<div class="data">
-					<table style="width: 600px">
+					<table id="recenteForumberichten">
 						{foreach from=$profhtml.recenteForumberichten item=bericht}
 							<tr>
-								<td><a href="/communicatie/forum/reactie/{$bericht.postID}">{$bericht.titel|escape:'html'}</a></td>
+								<td><a href="/communicatie/forum/reactie/{$bericht.postID}">{$bericht.titel|truncate:75|escape:'html'}</a></td>
 								<td>{$bericht.datum|reldate}</td>
 							</tr>
 						{/foreach}
@@ -259,8 +260,8 @@
 	{if ($isAdmin OR $isLidMod) AND $profhtml.changelog!=''}
 		<div style="clear: left;"></div>
 		<div class="profielregel" id="changelog">
-			<div class="left">Verandering</div>
-			<div class="gegevens" id="changelog_gegevens">
+			<div class="left handje" onclick="toggleDiv('changelog_gegevens')">Bewerklog &raquo;</div>
+			<div class="gegevens verborgen" id="changelog_gegevens">
 				{$profhtml.changelog|ubb}
 			</div>
 		</div>

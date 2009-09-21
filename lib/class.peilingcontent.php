@@ -68,7 +68,7 @@ class PeilingContent{
 					<div class="peilingoptietekst">
 						'.$tekst.' 
 					</div>
-					<div class="peilingoptiebalk" style="width: '.round($perc*300).'px;">
+					<div class="peilingoptiebalk" style="width: '.round($perc*150).'px;">
 						&nbsp;
 					</div><div class="peilingoptieaantal">('.$aantal.')</div>
 				</div>';
@@ -79,6 +79,7 @@ class PeilingContent{
 				'.$verhaal.'
 				<div style="padding:5px 5px;">			
 				'.$opties.'
+				<div class="clear">&nbsp;</div>
 				</div>';
 		return $html;
 	}

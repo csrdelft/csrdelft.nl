@@ -97,7 +97,7 @@ class savedQuery{
 
 				//uit te poepen html maken
 				$return.='<tr>';
-				foreach($rij as $key=>$veld){
+				foreach($rij as $key => $veld){
 					$return.='<td '.$style.'>';
 					//als het veld uid als uid_naam geselecteerd wordt, een linkje
 					//weergeven
