@@ -761,23 +761,40 @@ form#streeplijst input, label{ text-align: left; margin: 3px; padding: 0px; line
 .peiling{
 	border: 1px solid black; 
 	margin: 10px; 
-	padding: 5px 10px;"
+	padding: 5px 10px;
+}
+.peilingopties{
+	padding: 5px;
+}
+.peilingoptie{
+	display: table-row;
 }
 .peilingoptietekst{
-	width:173px;
+	display: table-cell;
+	width: 250px;
+	padding: 4px 20px 4px 4px; 
+	float: left;
+	overflow: hidden;
+	border-bottom: 1px solid #eee;
 }
 .peilingoptiebalk{
-	position:absolute;
-	display: block;
-	top:0px;
-	left:175px; 
+	display: table-cell;
+	width: 200px;
+	vertical-align: top;
+	border-bottom: 1px solid #eee;
+	padding: 4px 4px;
+}
+.peilingbalk{	
 	height: 10px; 					 
 	background-color: #6060FF;  
 	border: 1px outset #0A338D;
 }
 .peilingoptieaantal{
-	position:absolute;
-	top:0px;
-	left:490px;	
+	display: table-cell;
+	vertical-align: top;
+	text-align: right;
+	padding: 4px 4px;
+	border-bottom: 1px solid #eee;
+	
 }
 /* Peilingbeheer */

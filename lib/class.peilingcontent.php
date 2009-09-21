@@ -64,20 +64,21 @@ class PeilingContent{
 				}
 	
 				$opties .= '
-				<div style="position:relative;">
+				<div class="peilingoptie">
 					<div class="peilingoptietekst">
 						'.$tekst.' 
 					</div>
-					<div class="peilingoptiebalk" style="width: '.round($perc*150).'px;">
-						&nbsp;
-					</div><div class="peilingoptieaantal">('.$aantal.')</div>
+					<div class="peilingoptiebalk">
+					 <div class="peilingbalk" style="width: '.round($perc*150).'px;">&nbsp;</div>
+					</div>
+					<div class="peilingoptieaantal">('.$aantal.')</div>
 				</div>';
 			}
 		}
 		
 		$html = '<h3>'.$titel.'</h3>
 				'.$verhaal.'
-				<div style="padding:5px 5px;">			
+				<div class="peilingopties">			
 				'.$opties.'
 				<div class="clear">&nbsp;</div>
 				</div>';
