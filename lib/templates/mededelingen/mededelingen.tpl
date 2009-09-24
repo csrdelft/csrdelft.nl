@@ -50,48 +50,49 @@ if(!is_array($aBerichten) OR empty($aBerichten)) {
 }
 echo '<br />'.$this->getNieuwBerichtLink();
 *}
-
-
 </div>
+
 <div style="width: 400px; float: left;">
-	<div class="nieuwsbericht">
 	
-	{* $this->getBericht(); *}
-		<div class="nieuwsbody">
-			<div class="nieuwstitel">{$selectedMededeling->getTitel()|escape:'html'}</div>
-		{*//verborgen berichten aangeven, enkel bij mensen met P_NEWS_MOD
-		if($aBericht['verborgen']=='1'){ echo '<em>[verborgen] </em>';	}
-		*}
-			<img class="nieuwsplaatje" src="{$csr_pics}nieuws/{$selectedMededeling->getPlaatje()}" width="200px" height="200px" alt="{$selectedMededeling->getPlaatje()}" />
-			<i>{$selectedMededeling->getDatum()}</i>     {*date('d-m-Y H:i', *}
-			<br />{$ubb->getHTML($selectedMededeling->getTekst())}<br />
+	{if $selectedMededeling!=null}		{*	If there is no Mededeling selected, there is something
+											wrong, but we don't wat the user to know. *}
+		<div class="nieuwsbericht">
+			<div class="nieuwsbody">
+				<div class="nieuwstitel">{$selectedMededeling->getTitel()|escape:'html'}</div>
+			{if $selectedMededeling->isVerborgen()}
+				<em>[verborgen]</em><br />
+			{/if}
+				<img class="nieuwsplaatje" src="{$csr_pics}nieuws/{$selectedMededeling->getPlaatje()}" width="200px" height="200px" alt="{$selectedMededeling->getPlaatje()}" />
+				<i>{$selectedMededeling->getDatum()}</i><br />
+				{$ubb->getHTML($selectedMededeling->getTekst())}<br />
+			</div>
+		{if $selectedMededeling->loginlidMagBewerken()}
+			<a href="{$nieuws_root}bewerken/{$selectedMededeling->getId()}">
+				<img src="{$csr_pics}forum/bewerken.png" alt="bewerken" />
+			</a>
+			<a href="{$nieuws_root}verwijderen/{$selectedMededeling->getId()}" onclick="return confirm('Weet u zeker dat u deze mededeling wilt verwijderen?');">
+				<img src="{$csr_pics}forum/verwijderen.png" alt="verwijderen" />
+			</a>
+		{/if}
 		</div>
-		{*
-		if($this->_nieuws->isNieuwsMod()){
-			<a href="'.NIEUWS_ROOT.'bewerken/'.$iBerichtID.'"><img src="'.CSR_PICS.'forum/bewerken.png'.'" alt="bewerken" /></a>
-			<a href="'.NIEUWS_ROOT.'verwijderen/'.$iBerichtID.'" onclick="return confirm(\'Weet u zeker dat u dit nieuwsbericht wilt verwijderen?\')"><img src="'.CSR_PICS.'forum/verwijderen.png'.'" alt="verwijderen" /></a>
-		}
-		*}
-			
-			
-	</div>
-	<div id="mededelingen-top3block">
+	{/if}
 	
-	{* $this->getTopBlock();
-	$aBerichten=$this->_nieuws->getTop($this->_nieuws->getAantalTopBerichten());
-	if(is_array($aBerichten) AND !empty($aBerichten)){
-		foreach($aBerichten as $aBericht){
-			$sLink = '<a href="'.NIEUWS_ROOT.$aBericht['id'].'" title="'.mb_htmlentities($aBericht['titel']).'">';
-			$sResultaat.='<div class="mededeling-grotebalk">';
-			$sResultaat.='<div class="plaatje">'.$sLink;
-			$sResultaat.='<img src="'.CSR_PICS.'nieuws/'.$aBericht['plaatje'].'" width="70px" height="70px" alt="'.$this->knipTekst(mb_htmlentities($aBericht['titel'],10,5)).'" />';
-			$sResultaat.='</a></div>';
-			$sResultaat.='<div class="titel">'.$sLink.$this->knipTekst(mb_htmlentities($aBericht['titel']), 34, 1).'</a></div>';
-			$sResultaat.='<div class="bericht">'.$this->knipTekst($this->ubb->getHTML($aBericht['tekst']), 46, 4).'</div>';
-			$sResultaat.='</div>';
-		}
-	}
-	*}	
-			
+	{* Het Topmost block *}
+	<div id="mededelingen-top3block">
+	{foreach from=$topmost item=mededeling}
+		<div class="mededeling-grotebalk">
+			<div class="plaatje">
+				<a href="{$nieuws_root}{$mededeling->getId()}">
+					<img src="{$csr_pics}nieuws/{$mededeling->getPlaatje()}" width="70px" height="70px" alt="{$mededeling->getPlaatje()|escape:'html'}" />
+ 				</a>
+			</div>
+			<div class="titel">
+				<a href="{$nieuws_root}{$mededeling->getId()}">
+					{$mededeling->getAfgeknipteTitel()}
+ 				</a>
+ 			</div>
+			<div class="bericht">{$mededeling->getAfgeknipteTekst()}</div>
+		</div>
+	{/foreach}
 	</div>
 </div>
