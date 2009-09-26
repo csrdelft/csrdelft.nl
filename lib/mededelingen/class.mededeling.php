@@ -144,21 +144,23 @@ class Mededeling{
 		return LoginLid::instance()->hasPermission('P_NEWS_MOD');
 	}
 
-	public static function getTopmost(){
+	public static function getTopmost($aantal){
 		$topmost=array();
-		$db=MySql::instance();
-		$priveClause="";
-		if( !LoginLid::instance()->hasPermission('P_LEDEN_READ') )
-			$priveClause=" AND prive='0'";
-		$topmostQuery="
-			SELECT id
-			FROM mededeling
-			WHERE zichtbaarheid='zichtbaar'".$priveClause."
-			ORDER BY prioriteit ASC, datum DESC;";
-		$resource=$db->select($topmostQuery);
-		while( $mededeling=$db->next($resource) )
-		{
-			$topmost[]=new Mededeling($mededeling['id']);
+		if(is_numeric($aantal) and $aantal>0){
+			$db=MySql::instance();
+			$priveClause="";
+			if( !LoginLid::instance()->hasPermission('P_LEDEN_READ') )
+				$priveClause=" AND prive='0'";
+			$topmostQuery="
+				SELECT id
+				FROM mededeling
+				WHERE zichtbaarheid='zichtbaar'".$priveClause."
+				ORDER BY prioriteit ASC, datum DESC
+				LIMIT ".$aantal;
+			$resource=$db->select($topmostQuery);
+			while( $mededeling=$db->next($resource) ){
+				$topmost[]=new Mededeling($mededeling['id']);
+			}
 		}
 		return $topmost;
 	}
@@ -205,6 +207,23 @@ class Mededeling{
 		$resource=$db->select($aantalQuery);
 		$resultaat=$db->next($resource);
 		return (int)$resultaat['aantal'];
+	}
+	
+	public function getPaginaNummer(){
+		$db=MySql::instance();
+		$priveClause=$verborgenClause="";
+		$verborgenClause="zichtbaarheid='zichtbaar'";
+		if( Mededeling::loginlidIsModerator() )
+			$verborgenClause="zichtbaarheid!='verwijderd'";
+		if( !LoginLid::instance()->hasPermission('P_LEDEN_READ') )
+			$priveClause=" AND prive='0'";
+		$positieQuery="
+			SELECT COUNT(*) as positie
+			FROM mededeling
+			WHERE datum >= '".$this->getDatum()."' AND ".$verborgenClause.$priveClause;
+		$resource=$db->select($positieQuery);
+		$resultaat=$db->next($resource);
+		return ceil($resultaat['positie']/MededelingenContent::aantalPerPagina);
 	}
 
 //	public static function getNewest(){

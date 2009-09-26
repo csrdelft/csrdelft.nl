@@ -17,7 +17,7 @@
 			{/if}
 			<div class="itemtitel">
 				{* {$mededeling->getDatum()} *}
-				<a href="{$nieuws_root}{$mededeling->getId()}">{$mededeling->getAfgeknipteTitel()}</a>
+				<a href="{$nieuws_root}{$mededeling->getId()}"{if $mededeling->isMod() and !$mededeling->isPrive()} style="font-style: italic;"{/if}>{$mededeling->getAfgeknipteTitel()}</a>
 			</div>
 		</div>
 		{/foreach}

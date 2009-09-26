@@ -575,6 +575,7 @@ p img{ margin: 15px 10px; }
 	height: 70px;
 	margin-right: 10px;
 	float: left;
+	overflow: hidden;
 }
 .mededeling-grotebalk .titel{
 	font-weight: bold;

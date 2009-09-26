@@ -129,8 +129,10 @@ switch($actie){
 	default:
 		require_once('mededelingen/class.mededelingencontent.php');
 		$content=new MededelingenContent($mededelingId);
-		if(isset($pagina))
+		if(isset($pagina))	// Als de gebruiker een pagina opvraagt.
 			$content->setPaginaNummer($pagina);
+		else if($mededelingId==0)	// Als de gebruiker GEEN pagina opvraagt en ook geen mededeling.
+			$content->setPaginaNummer(1);
 	break;
 }
 
