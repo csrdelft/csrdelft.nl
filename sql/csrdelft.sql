@@ -463,7 +463,7 @@ CREATE TABLE IF NOT EXISTS `lid` (
   `corvee_punten` int(11) NOT NULL,
   `corvee_vrijstelling` int(3) NOT NULL COMMENT 'percentage vrijstelling',
   `corvee_kwalikok` tinyint(1) NOT NULL,
-  `corvee_voorkeuren` varchar(5) NOT NULL,
+  `corvee_voorkeuren` varchar(8) NOT NULL DEFAULT '11111111',
   `forum_name` enum('nick','civitas') NOT NULL DEFAULT 'civitas',
   `forum_postsortering` enum('ASC','DESC') NOT NULL DEFAULT 'ASC',
   `forum_laatstbekeken` datetime NOT NULL,
@@ -592,6 +592,7 @@ CREATE TABLE IF NOT EXISTS `maaltijdcorvee` (
   `kok` tinyint(1) NOT NULL DEFAULT '0',
   `afwas` tinyint(1) NOT NULL DEFAULT '0',
   `theedoek` tinyint(1) NOT NULL DEFAULT '0',
+  `punten_toegekend` enum('ja','nee','onbekend') NOT NULL DEFAULT 'onbekend',
   PRIMARY KEY (`maalid`,`uid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
