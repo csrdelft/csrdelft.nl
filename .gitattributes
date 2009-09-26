@@ -46,7 +46,7 @@ htdocs/actueel/maaltijden/maaltijdlijst.php -text
 htdocs/actueel/maaltijden/saldi.php -text
 htdocs/actueel/maaltijden/voorkeuren.php -text
 htdocs/actueel/mededelingen.php -text
-htdocs/actueel/mededelingen/.htaccess -text
+htdocs/actueel/mededelingen/.htaccess_inactive -text
 htdocs/actueel/mededelingen/index.php -text
 htdocs/actueel/sjaarsacties.php -text
 htdocs/bot/.htaccess.sample -text
