@@ -23,9 +23,11 @@
 		{/foreach}
 	</div>
 	{/foreach}
-	{section name=loop start=1 loop=$totaalAantalPaginas}
-		<a href="{$nieuws_root}pagina/{$smarty.section.loop.index}">{$smarty.section.loop.index}</a>  
-	{/section}
+	<div class="mededelingen_paginering">
+	Pagina: {sliding_pager baseurl="`$nieuws_root`pagina/" 
+				pagecount=$totaalAantalPaginas curpage=$huidigePagina
+				txt_prev="&lt;" separator="" txt_next="&gt;" show_always=true show_first_last=false show_prev_next=false}
+	</div>
 {/if}
 </div>
 
