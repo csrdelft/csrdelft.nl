@@ -456,5 +456,6 @@ sql/1636_peiling.sql -text
 sql/1645_patroon-profiel.sql -text
 sql/1648_eetplan.sql -text
 sql/1659_corvee.sql -text
+sql/1680_corvee.sql -text
 sql/csrdelft.sql -text
 sql/csrdelft_oud.sql -text
