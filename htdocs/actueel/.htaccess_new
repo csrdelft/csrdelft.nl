@@ -12,15 +12,17 @@ RewriteRule ^eetplan/sjaars/([0-9]*) eetplan.php?pheutID=$1
 RewriteRule ^eetplan/huis/([0-9]*) eetplan.php?huisID=$1
 
 # Mededelingen tonen
-RewriteRule ^mededelingen/?$ mededelingen.php
-RewriteRule ^mededelingen/([0-9]+)$ mededelingen.php?mededelingId=$1
+RewriteRule ^mededelingen/?$ mededelingen_new.php
+RewriteRule ^mededelingen/([0-9]+)$ mededelingen_new.php?mededelingId=$1
 
 # Mededelingen beheer
-#RewriteRule ^mededelingen/beheer mededelingen.php?beheer=true
-RewriteRule ^mededelingen/verwijderen/([0-9]+) mededelingen.php?mededelingId=$1&actie=verwijderen
-RewriteRule ^mededelingen/bewerken/([0-9]+)$ mededelingen.php?mededelingId=$1&actie=bewerken
-RewriteRule ^mededelingen/toevoegen$ mededelingen.php?mededelingId=0&actie=bewerken
+#RewriteRule ^mededelingen/beheer mededelingen_new.php?beheer=true
+RewriteRule ^mededelingen/verwijderen/([0-9]+) mededelingen_new.php?mededelingId=$1&actie=verwijderen
+RewriteRule ^mededelingen/bewerken/([0-9]+)$ mededelingen_new.php?mededelingId=$1&actie=bewerken
+RewriteRule ^mededelingen/toevoegen$ mededelingen_new.php?mededelingId=0&actie=bewerken
+RewriteRule ^mededelingen/pagina/([0-9]+)$ mededelingen_new.php?pagina=$1
 
 # Pagina's met tekst
+RewriteRule ^owee/programma/? ../pagina.php?naam=oweeintern
 RewriteRule ^owee/? ../pagina.php?naam=owee
-RewriteRule ^agenda/? ../pagina.php?naam=agenda
+RewriteRule ^agendaa/? ../pagina.php?naam=agenda

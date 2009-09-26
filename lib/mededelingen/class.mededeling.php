@@ -163,6 +163,50 @@ class Mededeling{
 		return $topmost;
 	}
 
+	public static function getLijstVanPagina($pagina=1, $aantal){
+		$mededelingen=array();
+		$db=MySql::instance();
+		$priveClause=$verborgenClause="";
+		$verborgenClause="zichtbaarheid='zichtbaar'";
+		if( Mededeling::loginlidIsModerator() )
+			$verborgenClause="zichtbaarheid!='verwijderd'";
+		if( !LoginLid::instance()->hasPermission('P_LEDEN_READ') )
+			$priveClause=" AND prive='0'";
+		$paginaQuery="
+			SELECT id, datum
+			FROM mededeling
+			WHERE ".$verborgenClause.$priveClause."
+			ORDER BY datum DESC
+			LIMIT ".(($pagina-1)*$aantal).", ".$aantal;
+		$resource=$db->select($paginaQuery);
+		while( $mededeling=$db->next($resource) )
+		{
+			$datum=date_create($mededeling['datum']);
+			$groepeerstring=$datum->format('F Y'); // Maand voluit en jaar.
+			if(!isset($mededelingen[$groepeerstring]))
+				$mededelingen[$groepeerstring]=array();
+			$mededelingen[$groepeerstring][]=new Mededeling($mededeling['id']);
+		}
+		return $mededelingen;
+	}
+	
+	public static function getAantal(){
+		$db=MySql::instance();
+		$priveClause=$verborgenClause="";
+		$verborgenClause="zichtbaarheid='zichtbaar'";
+		if( Mededeling::loginlidIsModerator() )
+			$verborgenClause="zichtbaarheid!='verwijderd'";
+		if( !LoginLid::instance()->hasPermission('P_LEDEN_READ') )
+			$priveClause=" AND prive='0'";
+		$aantalQuery="
+			SELECT COUNT(*) as aantal
+			FROM mededeling
+			WHERE ".$verborgenClause.$priveClause;
+		$resource=$db->select($aantalQuery);
+		$resultaat=$db->next($resource);
+		return (int)$resultaat['aantal'];
+	}
+
 //	public static function getNewest(){
 //		$db=MySql::instance();
 //		$newestQuery="

@@ -16,6 +16,10 @@ if(isset($_GET['actie'])){
 	$actie=$_GET['actie'];
 }
 
+if(isset($_GET['pagina'])){
+	$pagina=(int)$_GET['pagina'];
+}
+
 require_once('mededelingen/class.mededeling.php');
 require_once('mededelingen/class.mededelingcontent.php');
 
@@ -125,6 +129,8 @@ switch($actie){
 	default:
 		require_once('mededelingen/class.mededelingencontent.php');
 		$content=new MededelingenContent($mededelingId);
+		if(isset($pagina))
+			$content->setPaginaNummer($pagina);
 	break;
 }
 

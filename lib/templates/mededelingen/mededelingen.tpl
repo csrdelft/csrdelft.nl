@@ -1,55 +1,32 @@
-{*
-// berichtID setten als dat nog niet gedaan is.
-if(empty($this->_berichtID))
-	$this->_berichtID = $this->_nieuws->getBelangrijksteMededelingId();
-
-$includeVerborgen=false;
-if($lid->hasPermission('P_NEWS_MOD')){ $includeVerborgen=true; }
-$aBerichten=$this->_nieuws->getMessages(0, $includeVerborgen);
-*}
 <div class="mededelingen-overzichtlijst">
-
-{* $this->getOverzichtLijst($aBerichten);
-echo $this->getNieuwBerichtLink();
-if(!is_array($aBerichten) OR empty($aBerichten)) {
-	echo 'Zoals het is, zoals het was, o Civitas!<br />(Geen mededelingen gevonden dus…)<br /><br />';
-}else{
-	$bEersteRecord=true;
-	$iHuidigeJaarWeeknummer=date('oW')+1; // Volgende week.
-	foreach ($aBerichten as $aBericht) {
-		$iJaarWeeknummer=date('oW', $aBericht['datum']); // De week van dit record (yyyymm)
-		if($iJaarWeeknummer < $iHuidigeJaarWeeknummer){ // Indien we een andere week aan het printen zijn dan de vorige
-			// Voor de eerste keer niets sluiten.
-			if(!$bEersteRecord) { echo '</div>'; }
-			else { $bEersteRecord=false; }
-			// Nieuw blok beginnen.
-			echo '<div class="mededelingenlijst-block">';
-			// Even casten om de 0 ervoor weg te halen (bijvoorbeeld bij week 05).
-			echo '<div class="mededelingenlijst-block-titel">Week '.(int)date('W', $aBericht['datum']).'</div>';
-			$iHuidigeJaarWeeknummer = $iJaarWeeknummer;
-		}
-		$id='';
-		$class='mededelingenlijst-item';
-		if($aBericht['verborgen']=='1'){
-			$class.=' verborgen-item';
-		}
-		if($aBericht['id']==$this->_berichtID){
-			$id.='id="actief" ';
-		}
-		echo '<div '.$id.'class="'.$class.'">';
-		if($aBericht['categorieplaatje']!=''){
-			echo '<div class="mededelingenlijst-plaatje"><a href="'.NIEUWS_ROOT.$aBericht['id'].'">
-				<img src="'.CSR_PICS.'nieuws/'.$aBericht['categorieplaatje'].'" width="10px" height="10px" alt="'.$aBericht['categorienaam'].'" /></a></div>';
-		}
-		$sDate=date('(d-m)',$aBericht['datum']);
-		echo '<div class="itemtitel">'.$sDate.' <a href="'.NIEUWS_ROOT.$aBericht['id'].'">';
-		echo $this->knipTekst(mb_htmlentities($aBericht['titel']), 35, 1).'</a></div>';
-		echo '</div>'; // mededelingenlijst-item
-	}//einde foreach bericht
-	echo '</div>'; //sluit laatste block
-}
-echo '<br />'.$this->getNieuwBerichtLink();
-*}
+{if $selectedMededeling->isMod()}<a href="{$nieuws_root}toevoegen" class="knop">Nieuwe mededeling</a><br /><br />{/if}
+{if empty($lijst)}
+	Zoals het is, zoals het was, o Civitas!<br />(Geen mededelingen gevonden dus…)<br /><br />
+{else}
+	{foreach from=$lijst key=groepering item=mededelingen}
+	<div class="mededelingenlijst-block">
+		<div class="mededelingenlijst-block-titel">{$groepering}</div>
+		{foreach from=$mededelingen item=mededeling}
+			<div {if $mededeling->getId()==$selectedMededeling->getId()}id="actief" {/if}class="mededelingenlijst-item{if $mededeling->isVerborgen()} verborgen-item{/if}">
+			{if $mededeling->getCategorie()->getPlaatje() !=''}
+				<div class="mededelingenlijst-plaatje">
+					<a href="{$nieuws_root}{$mededeling->getId()}">
+						<img src="{$csr_pics}nieuws/{$mededeling->getCategorie()->getPlaatje()}" width="10px" height="10px" />
+					</a>
+				</div>
+			{/if}
+			<div class="itemtitel">
+				{* {$mededeling->getDatum()} *}
+				<a href="{$nieuws_root}{$mededeling->getId()}">{$mededeling->getAfgeknipteTitel()}</a>
+			</div>
+		</div>
+		{/foreach}
+	</div>
+	{/foreach}
+	{section name=loop start=1 loop=$totaalAantalPaginas}
+		<a href="{$nieuws_root}pagina/{$smarty.section.loop.index}">{$smarty.section.loop.index}</a>  
+	{/section}
+{/if}
 </div>
 
 <div style="width: 400px; float: left;">
