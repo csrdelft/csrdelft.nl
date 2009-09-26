@@ -13,6 +13,7 @@
 require_once 'class.ldap.php';
 require_once 'class.memcached.php';
 require_once 'class.instellingen.php';
+require_once 'class.verticale.php';
 
 class Lid implements Serializable{
 	private $uid;
@@ -180,7 +181,6 @@ class Lid implements Serializable{
 	public function getMoot(){ 		return $this->profiel['moot']; }
 	
 	public function getVerticale(){
-		require_once 'class.verticalencontent.php';
 		return Verticale::$namen[$this->getVerticaleID()];
 	}
 	public function getVerticaleID(){ return $this->profiel['verticale']; }
@@ -639,11 +639,11 @@ class Zoeker{
 		if ($statusfilter != '') {
 			# standaardvelden
 			if (empty($velden)) {
-				$velden = array('uid', 'nickname', 'voornaam', 'tussenvoegsel', 'achternaam', 'postfix', 'adres', 'postcode', 'woonplaats', 'land', 'telefoon,
-					mobiel', 'email', 'geslacht', 'voornamen', 'icq', 'msn', 'skype', 'jid', 'website', 'beroep', 'studie', 'studiejaar', 'lidjaar,
-					gebdatum', 'moot', 'kring', 'kringleider', 'motebal', 'verticale
-					o_adres', 'o_postcode', 'o_woonplaats', 'o_land', 'o_telefoon,
-					kerk', 'muziek', 'eetwens', 'status');
+				$velden = array('uid', 'nickname', 'voornaam', 'tussenvoegsel', 'achternaam', 'postfix', 'adres', 'postcode', 'woonplaats', 'land', 'telefoon',
+					'mobiel', 'email', 'geslacht', 'voornamen', 'icq', 'msn', 'skype', 'jid', 'website', 'beroep', 'studie', 'studiejaar', 'lidjaar',
+					'gebdatum', 'moot', 'kring', 'kringleider', 'motebal', 'verticale',
+					'o_adres', 'o_postcode', 'o_woonplaats', 'o_land', 'o_telefoon',
+					'kerk', 'muziek', 'eetwens', 'status');
 			}
 		
 			# velden kiezen om terug te geven

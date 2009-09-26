@@ -6,7 +6,7 @@
 # Kan streep/bestellijsten maken.
 # -------------------------------------------------------------------
 
-require_once('class.verticalencontent.php');
+require_once 'class.verticale.php';
 
 class Streeplijstcontent {
 	private $moot='alle';

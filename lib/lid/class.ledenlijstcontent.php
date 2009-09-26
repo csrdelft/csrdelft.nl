@@ -7,6 +7,7 @@
 # -------------------------------------------------------------------
 
 
+require_once 'class.verticale.php';
 
 class LedenlijstContent extends SimpleHTML {
 
@@ -236,6 +237,9 @@ in <select name="waar">';
 						break;
 						case 'adres':
 							echo '<td>'.mb_htmlentities($uid['adres'].' '.$uid['postcode'].' '.$uid['woonplaats']).'</td>';
+						break;
+						case 'verticale':
+							echo '<td>'.$lid->getVerticale().'</td>';
 						break;
 						default;
 							echo '<td>'.mb_htmlentities($uid[$kolom]).'</td>';

@@ -9,7 +9,7 @@ require_once 'include.config.php';
 
 if(!$loginlid->hasPermission('P_LOGGED_IN')){ header('location: '.CSR_ROOT); exit; }
 
-require_once('class.streeplijstcontent.php');
+require_once 'class.streeplijstcontent.php';
 $body=new Streeplijstcontent();
 
 
