@@ -101,64 +101,66 @@ uitprinten. Vanaf dat moment zal deze ketzer u niet meer willen aan- of afmelden
 	</table>
 {/if}
 <br />
-<h2>Andere verenigingsleden aanmelden</h2>
-<p>
-	Het is voor leden alleen mogelijk andere leden aan te melden binnen 48 uur voordat de maaltijd plaatsvindt.
-	U kunt iemand aanmelden met zijn/haar 4-cijferige lid-nummer. Als iemand u vraagt hem/haar in te schrijven,
-	vraag hier dan even naar, of zoek het op in de ledenlijst.<br />
-	<br />
-	{if $maal.anderen.error!=''}
-		<span class="waarschuwing">N.B.: {$maal.anderen.error|escape:'html'}</span>
-	{/if}
-	{if $maal.anderen.maaltijden|@count==0}
-		&#8226; Helaas, er is binnenkort geen maaltijd op Confide.<br />
-	{else}
-		<table style="width: 100%;">
-			<tr>
-				<th>Maaltijd:</th>
-				<th>Lid-nummer:</th>
-				<th>&nbsp;</th>
-				<th>U heeft anderen voor deze maaltijd aangemeld:</th>
-			</tr>
-			{foreach from=$maal.anderen.maaltijden item=maaltijd}
-			<form action="{$smarty.server.PHP_SELF}" method="post">
-			<input type="hidden" name="a" value="aan" />
-			<input type="hidden" name="m" value="{$maaltijd.id}" />
+{if $loginlid->hasPermission('P_MAAL_WIJ')}
+	<h2>Andere verenigingsleden aanmelden</h2>
+	<p>
+		Het is voor leden alleen mogelijk andere leden aan te melden binnen 48 uur voordat de maaltijd plaatsvindt.
+		U kunt iemand aanmelden met zijn/haar 4-cijferige lid-nummer. Als iemand u vraagt hem/haar in te schrijven,
+		vraag hier dan even naar, of zoek het op in de ledenlijst.<br />
+		<br />
+		{if $maal.anderen.error!=''}
+			<span class="waarschuwing">N.B.: {$maal.anderen.error|escape:'html'}</span>
+		{/if}
+		{if $maal.anderen.maaltijden|@count==0}
+			&#8226; Helaas, er is binnenkort geen maaltijd op Confide.<br />
+		{else}
+			<table style="width: 100%;">
 				<tr>
-					<td>{$maaltijd.datum|date_format:$datumFormaat}</td>
-				{if $maaltijd.gesloten == 1}
-					<td colspan="2">Inschrijving gesloten</td>
-				{else}
-					<td>
-						<input type="text" name="uid" style="width:60px;" id="field_uid{$maaltijd.id}" onkeyup="uidPreview('uid{$maaltijd.id}')" />
-						<div style="display: inline;" id="preview_uid{$maaltijd.id}">&nbsp;</div>
-					</td>
-					<td><input type="submit" name="foo" value="aanmelden" /></td>
-				{/if}
-				<td>
-					{if is_array($maaltijd.derden)}
-						<table style="width: 100%;">
-							{foreach from=$maaltijd.derden key=uid item=naam}
-								<tr>
-									<td>{$naam}</td>
-									<td>
-										{if $maaltijd.gesloten != 1}
-											<a href="{$smarty.server.PHP_SELF}?a=af&m={$maaltijd.id}&uid={$uid}">[ afmelden ]</a>
-										{/if}
-									</td>
-								</tr>
-							{/foreach}
-						</table>
+					<th>Maaltijd:</th>
+					<th>Lid-nummer:</th>
+					<th>&nbsp;</th>
+					<th>U heeft anderen voor deze maaltijd aangemeld:</th>
+				</tr>
+				{foreach from=$maal.anderen.maaltijden item=maaltijd}
+				<form action="{$smarty.server.PHP_SELF}" method="post">
+				<input type="hidden" name="a" value="aan" />
+				<input type="hidden" name="m" value="{$maaltijd.id}" />
+					<tr>
+						<td>{$maaltijd.datum|date_format:$datumFormaat}</td>
+					{if $maaltijd.gesloten == 1}
+						<td colspan="2">Inschrijving gesloten</td>
 					{else}
-						-
+						<td>
+							<input type="text" name="uid" style="width:60px;" id="field_uid{$maaltijd.id}" onkeyup="uidPreview('uid{$maaltijd.id}')" />
+							<div style="display: inline;" id="preview_uid{$maaltijd.id}">&nbsp;</div>
+						</td>
+						<td><input type="submit" name="foo" value="aanmelden" /></td>
 					{/if}
-				</td>
-			</tr>
-			</form>
-			{/foreach}
-		</table><br />
-	{/if}	
-</p>
+					<td>
+						{if is_array($maaltijd.derden)}
+							<table style="width: 100%;">
+								{foreach from=$maaltijd.derden key=uid item=naam}
+									<tr>
+										<td>{$naam}</td>
+										<td>
+											{if $maaltijd.gesloten != 1}
+												<a href="{$smarty.server.PHP_SELF}?a=af&m={$maaltijd.id}&uid={$uid}">[ afmelden ]</a>
+											{/if}
+										</td>
+									</tr>
+								{/foreach}
+							</table>
+						{else}
+							-
+						{/if}
+					</td>
+				</tr>
+				</form>
+				{/foreach}
+			</table><br />
+		{/if}	
+	</p>
+{/if}
 <h2>Gasten aanmelden</h2>
 <p>
 	Als u staat ingeschreven voor een maaltijd, kunt u op uw naam gasten aanmelden voor de maaltijd.<br />

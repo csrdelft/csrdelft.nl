@@ -125,9 +125,11 @@
 				{/if}
 			</div>
 			<div class="familie">
-				<a class="stamboom" href="/communicatie/stamboom.php?uid={$lid->getUid()}" title="Stamboom van {$lid->getNaam()}">
-					<img src="http://plaetjes.csrdelft.nl/knopjes/stamboom.jpg" alt="Stamboom van {$lid->getNaam()}" />
-				</a>
+				{if $lid->getPatroon() instanceof Lid OR $lid->getKinderen()|@count > 0}
+					<a class="stamboom" href="/communicatie/stamboom.php?uid={$lid->getUid()}" title="Stamboom van {$lid->getNaam()}">
+						<img src="http://plaetjes.csrdelft.nl/knopjes/stamboom.jpg" alt="Stamboom van {$lid->getNaam()}" />
+					</a>
+				{/if}
 				{if $lid->getPatroon() instanceof Lid}
 					<div class="label">{if $lid->getPatroon()->getGeslacht()=='v'}M{else}P{/if}atroon:</div>
 					{$lid->getPatroon()->getNaamLink('civitas', 'link')}<br />
