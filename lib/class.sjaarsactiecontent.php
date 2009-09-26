@@ -44,7 +44,14 @@ class SjaarsactieContent extends SimpleHTML {
 	function view(){
 		echo '<h1>Sjaarsacties</h1>';
 		$aSjaarsacties=$this->_sjaarsactie->getSjaarsActies();
-		
+		if(count($aSjaarsacties)>5){
+			echo '<div style="float: right; width: 250px; overflow: hidden;">';
+			foreach($aSjaarsacties as $actie){
+				echo '<a href="#sjaarsactie'.$actie['ID'].'">'.$actie['actieNaam'].'</a><br />';
+			}
+			echo '</div><div class="clear">&nbsp;</div>';
+		}
+				
 		echo '<table border="0" style="width: 100%">';
 		echo '<tr><td><strong>Actie</strong></td><td style="width: 200px;  border-left: 1px solid black; padding: 0 0 0 10px;"><strong>Opgaven</strong></td></tr>';
 		if(!is_array($aSjaarsacties)){
