@@ -47,7 +47,7 @@ class SjaarsactieContent extends SimpleHTML {
 		if(count($aSjaarsacties)>5){
 			echo '<div style="float: right; width: 250px; overflow: hidden;">';
 			foreach($aSjaarsacties as $actie){
-				echo '<a href="#sjaarsactie'.$actie['ID'].'">'.$actie['actieNaam'].'</a><br />';
+				echo '<a href="#sjaarsactie'.$actie['ID'].'">'.mb_htmlentities($actie['actieNaam']).'</a><br />';
 			}
 			echo '</div><div class="clear">&nbsp;</div>';
 		}
@@ -59,7 +59,7 @@ class SjaarsactieContent extends SimpleHTML {
 		}else{
 			foreach($aSjaarsacties as $aSjaarsactie){
 				echo '<tr><td colspan="2">';
-				echo '<h2 style="border-bottom: 1px dashed black; margin: 15px 0 0px 0;">'.mb_htmlentities($aSjaarsactie['actieNaam']).'</h2></td></tr>';
+				echo '<h2 style="border-bottom: 1px dashed black; margin: 15px 0 0px 0;"><a name="sjaarsactie'.$aSjaarsactie['ID'].'" style="color: black;">'.mb_htmlentities($aSjaarsactie['actieNaam']).'</a></h2></td></tr>';
 				echo '<tr><td><strong>Ouderejaars: ';
 				echo $aSjaarsactie['naamLink'];
 				echo '</strong><br /><br />';
