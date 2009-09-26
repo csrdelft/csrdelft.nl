@@ -1,11 +1,11 @@
 RewriteEngine On
 
-RewriteRule ^(.*)$ mededelingen_new.php
-RewriteRule ^([0-9]+)$ mededelingen_new.php?berichtID=$1
+RewriteRule ^$ index.php
+RewriteRule ^([0-9]+)$ index.php?mededelingId=$1
 
 # Mededelingen beheer
-#RewriteRule ^beheer mededelingen_new.php?beheer=true
-RewriteRule ^verwijderen/([0-9]+) mededelingen_new.php?mededelingId=$1&actie=verwijderen
-RewriteRule ^bewerken/([0-9]+)$ mededelingen_new.php?mededelingId=$1&actie=bewerken
-RewriteRule ^toevoegen$ mededelingen_new.php?mededelingId=0&actie=bewerken
-RewriteRule ^pagina/([0-9]+)$ mededelingen_new.php?pagina=$1
+#RewriteRule ^beheer index.php?beheer=true
+RewriteRule ^verwijderen/([0-9]+) index.php?mededelingId=$1&actie=verwijderen
+RewriteRule ^bewerken/([0-9]+)$ index.php?mededelingId=$1&actie=bewerken
+RewriteRule ^toevoegen$ index.php?mededelingId=0&actie=bewerken
+RewriteRule ^pagina/([0-9]+)$ index.php?pagina=$1
