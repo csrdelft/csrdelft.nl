@@ -1,5 +1,4 @@
-{* action should be (after testing and replacing the .htacces): {$nieuws_root}bewerken/{$mededeling->getId()} *}
-<form action="?mededelingId={$mededeling->getId()}&actie=bewerken" method="post" enctype="multipart/form-data">
+<form action="{$nieuws_root}bewerken/{$mededeling->getId()}" method="post" enctype="multipart/form-data">
 	<div class="pubciemail-form">
 		{$melding}
 		<strong>Titel</strong><br />
@@ -10,7 +9,9 @@
 		<textarea id="tekst" name="tekst" cols="80" rows="10" style="width: 100%" class="tekst">{$mededeling->getTekst()|escape:'html'}</textarea><br />
 		<div style="height: 300px; width: 30%; float: left;">Dit bericht…<br />
 			<input id="prive" type="checkbox" name="prive" {if $mededeling->isPrive()}checked="checked"{/if} /><label for="prive">…alleen weergeven bij leden</label><br />
-			<input id="verborgen" type="checkbox" name="verborgen"{if $mededeling->isVerborgen()} checked="checked"{/if} /><label for="verborgen">…verbergen</label><br />
+			{if $mededeling->getZichtbaarheid()!='wacht_goedkeuring'}
+				<input id="verborgen" type="checkbox" name="verborgen"{if $mededeling->isVerborgen()} checked="checked"{/if} /><label for="verborgen">…verbergen</label><br />
+			{/if}
 			<br />
 			<strong>Categorie:</strong>
 			<select name="categorie">

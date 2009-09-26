@@ -112,6 +112,8 @@ class savedQuery{
 					}elseif(substr($key, 0, 10)=='groep_naam' AND $veld!=''){
 						require_once('groepen/class.groep.php');
 						$return.=Groep::ids2links($veld, '<br />');
+					}elseif($key=='med_link'){ //link naar een mededeling.
+						$return.='<a href="/actueel/mededelingen/'.$veld.'">'.$veld.'</a>';
 					}else{
 						$return.=mb_htmlentities($veld);
 					}

@@ -26,6 +26,8 @@ class Mededeling{
 
 	public function __construct($init){
 		if(is_array($init)){
+			if($init['id']>0)
+				$this->load($init['id']);
 			$this->array2properties($init);
 		}else{
 			$init=(int)$init;
@@ -100,6 +102,10 @@ class Mededeling{
 		}
 		return $return;
 	}
+	public function keurGoed(){
+		$this->zichtbaarheid='zichtbaar';
+		$this->save();
+	}
 	/*
 	 * Fills the fields of this object with the given array.
 	 */
@@ -107,11 +113,14 @@ class Mededeling{
 		$this->id=$array['id'];
 		$this->titel=$array['titel'];
 		$this->tekst=$array['tekst'];
-		$this->datum=$array['datum'];
+		if($this->getDatum()===null) // Als we al een datum hebben (uit de DB), hoeven we het niet te vervangen.
+			$this->datum=$array['datum'];
 		$this->uid=$array['uid'];
 		$this->prioriteit=$array['prioriteit'];
 		$this->prive=$array['prive'];
-		$this->zichtbaarheid=$array['zichtbaarheid'];
+		// Als deze mededeling op goedkeuring wachtte of al verwijderd was, verandert hier niets aan.
+		if($this->getZichtbaarheid()!='wacht_goedkeuring' AND $this->getZichtbaarheid()!='verwijderd')
+			$this->zichtbaarheid=$array['zichtbaarheid'];
 		$this->plaatje=$array['plaatje'];
 		$this->categorieId=$array['categorie'];
 	}

@@ -1,4 +1,5 @@
 <div class="mededelingen-overzichtlijst">
+{$melding}
 {if $selectedMededeling->isMod()}<a href="{$nieuws_root}toevoegen" class="knop">Nieuwe mededeling</a><br /><br />{/if}
 {if empty($lijst)}
 	Zoals het is, zoals het was, o Civitas!<br />(Geen mededelingen gevonden dus…)<br /><br />
@@ -17,7 +18,7 @@
 			{/if}
 			<div class="itemtitel">
 				{* {$mededeling->getDatum()} *}
-				<a href="{$nieuws_root}{$mededeling->getId()}"{if $mededeling->isMod() and !$mededeling->isPrive()} style="font-style: italic;"{/if}>{$mededeling->getAfgeknipteTitel()}</a>
+				<a href="{$nieuws_root}{$mededeling->getId()}"{if $mededeling->isMod()} style="{if !$mededeling->isPrive()}font-style: italic;{/if}{if $mededeling->getZichtbaarheid()=='wacht_goedkeuring'}font-weight: bold;{/if}"{/if}>{$mededeling->getAfgeknipteTitel()}</a>
 			</div>
 		</div>
 		{/foreach}
@@ -52,6 +53,9 @@
 			<a href="{$nieuws_root}verwijderen/{$selectedMededeling->getId()}" onclick="return confirm('Weet u zeker dat u deze mededeling wilt verwijderen?');">
 				<img src="{$csr_pics}forum/verwijderen.png" alt="verwijderen" />
 			</a>
+			{if $selectedMededeling->getZichtbaarheid()=='wacht_goedkeuring'}
+			<a onclick="return confirm('Weet u zeker dat u deze mededeling wilt goedkeuren?')" class="knop" href="{$nieuws_root}keur-goed/{$selectedMededeling->getId()}">goedkeuren</a>
+			{/if}
 		{/if}
 		</div>
 	{/if}
