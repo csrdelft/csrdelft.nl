@@ -80,7 +80,8 @@ class LedenlijstContent extends SimpleHTML {
 			'studie' => 'Studie',
 			'gebdatum' => 'Geboortedatum',
 			'beroep' => 'Functie/beroep',
-			'verticale' => 'Verticale'
+			'verticale' => 'Verticale',
+			'lidjaar' => 'Lichting'
 		);
 		$melding=$this->getMelding();
 		if($melding!=''){
@@ -112,7 +113,7 @@ EOT
 		# zo, en nu de velden die we kunnen tonen in de resultaten
 		$laat_zien = array(
 			'uid', 'pasfoto', 'nickname', 'email', 'adres', 'telefoon', 'mobiel',
-			'icq', 'msn', 'skype', 'studie', 'gebdatum', 'beroep', 'verticale');
+			'icq', 'msn', 'skype', 'studie', 'gebdatum', 'beroep', 'verticale', 'lidjaar');
 
 		# tralala zorg dat er een even aantal elementen in staat
 		if (count($laat_zien)%2 != 0) array_push($laat_zien, false);
