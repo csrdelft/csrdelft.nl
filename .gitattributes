@@ -215,6 +215,7 @@ lib/class.stringincluder.php -text
 lib/class.toevoegen.php -text
 lib/class.toevoegencontent.php -text
 lib/class.verjaardagcontent.php -text
+lib/class.verticale.php -text
 lib/class.verticalencontent.php -text
 lib/courant/class.courant.php -text
 lib/courant/class.courantarchiefcontent.php -text
