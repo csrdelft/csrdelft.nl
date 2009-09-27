@@ -327,7 +327,7 @@ UBBVERHAAL;
 		$width=300;
 		$height=200;
 		$style='';
-		if(isset($parameters['w']) && $parameters['w']<600){
+		if(isset($parameters['w']) && $parameters['w']<800){
 			$width = $parameters['w'];
 		}
 		if(isset($parameters['h']) && $parameters['h']<600){

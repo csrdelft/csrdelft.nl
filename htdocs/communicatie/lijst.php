@@ -56,7 +56,7 @@ if($loginlid->hasPermission('P_LEDEN_READ') or $loginlid->hasPermission('P_OUDLE
 	$form['sort'] = (isset($_POST['sort']) and in_array($_POST['sort'],$kolommen)) ? $_POST['sort'] : 'achternaam';
 
 	# kolommen die afgebeeld kunnen worden
-	$kolommen = array('uid', 'pasfoto', 'nickname', 'verticale', 'email', 'adres', 'telefoon', 'mobiel', 'icq', 'msn', 'skype', 'studie', 'gebdatum', 'beroep');
+	$kolommen = array('uid', 'pasfoto', 'nickname', 'verticale', 'email', 'adres', 'telefoon', 'mobiel', 'icq', 'msn', 'skype', 'studie', 'gebdatum', 'beroep', 'lidjaar');
 	$form['kolom'] = array();
 	# kijken of er geldige kolommen zijn opgegeven
 	if (isset($_POST['kolom']) and is_array($_POST['kolom']) and count($_POST['kolom']) > 0) {
