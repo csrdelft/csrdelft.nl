@@ -383,14 +383,19 @@ class Lid implements Serializable{
 				}elseif($this->profiel['status']=='S_KRINGEL' OR $this->profiel['status']=='S_NOBODY'){
 					$naam=$sVolledigeNaam;
 				}else{
-					$naam=($this->getGeslacht()=='v') ? 'Ama. ' : 'Am. ';
+					if(LoginLid::instance()->getLid()->getStatus()=='S_NOVIET'){
+						$naam=($this->getGeslacht()=='v') ? 'Mevr. ' : 'Dhr. ';
+					}else{
+						$naam=($this->getGeslacht()=='v') ? 'Ama. ' : 'Am. ';
+					}
 					if($this->profiel['tussenvoegsel'] != ''){
 						$naam.=ucfirst($this->profiel['tussenvoegsel']).' ';
 					}
 					$naam.=$this->profiel['achternaam'];
 					if($this->profiel['postfix'] != '') $naam.=' '.$this->profiel['postfix'];
-					if($this->profiel['status']=='S_OUDLID'){ $naam.=' •'; }
-					if($this->profiel['status']=='S_KRINGEL'){ $naam.=' ~'; }
+					if($this->profiel['status']=='S_OUDLID' OR $this->profiel['status']=='S_KRINGEL'){
+						$naam.=' '.$this->getStatusChar();
+					}
 				}
 			break;
 			case 'aaidrom':
