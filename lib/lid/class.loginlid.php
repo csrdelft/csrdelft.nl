@@ -235,8 +235,10 @@ class LoginLid{
 					return $groep->isLid();
 				}catch(Exception $e){
 					//de groep bestaat niet, we gaan verder.
-				}
-				
+				}				
+			}elseif(substr($permissie, 0, 8)=='geslacht'){
+				$geslacht=strtolower(substr($permissie, 9));
+				return $geslacht==$this->lid->getGeslacht();
 			}
 			# ga alleen verder als er een geldige permissie wordt gevraagd
 			if (array_key_exists($permissie, $this->_permissions)){
