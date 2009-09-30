@@ -124,13 +124,20 @@ h.t. Fiscus.';
 		if($this->teschoppen===null){
 			$this->simulate();
 		}
+		//zorg dat het onderwerp netjes utf8 in base64 is. Als je dit niet doet krijgt het
+		//spampunten van spamassasin (SUBJECT_NEEDS_ENCODING,SUBJ_ILLEGAL_CHARS)
+		$onderwerp=' =?UTF-8?B?'. base64_encode($bericht['onderwerp']) ."?=\n";
+
 		$headers="From: ".$this->getFrom()."\n";
 		if($this->bcc!=''){
 			$headers.="BCC: ".$this->getBcc()."\n";
 		}
+		//content-type en charset zetten zodat rare tekens in wazige griekse namen
+		//en euro-tekens correct weergegeven worden in de mails.
+		$headers.="Content-Type: text/plain; charset=UTF-8\r\n";
 		$headers.='X-Mailer: csrdelft.nl/Jieter'."\n\r";
 		foreach($this->teschoppen as $uid => $bericht){
-			mail($uid.'@csrdelft.nl', $bericht['onderwerp'], $bericht['bericht'], $headers);
+			mail($uid.'@csrdelft.nl', $onderwerp, $bericht['bericht'], $headers);
 		}
 		exit;
 	}
