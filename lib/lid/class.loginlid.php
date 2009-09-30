@@ -227,21 +227,29 @@ class LoginLid{
 				return true;
 			}elseif(substr($permissie, 0, 9)=='verticale'){
 				$verticale=strtoupper(substr($permissie, 10));
-				return $verticale==$this->lid->getVerticale();
+				if($verticale==$this->lid->getVerticale()){
+					return true;
+				}
 			}elseif(substr($permissie, 0, 5)=='groep'){
 				require_once 'groepen/class.groep.php';
 				try{
 					$groep=new Groep(substr($permissie, 6));
-					return $groep->isLid();
+					if($groep->isLid()){
+						return true;
+					}
 				}catch(Exception $e){
 					//de groep bestaat niet, we gaan verder.
 				}				
 			}elseif(substr($permissie, 0, 8)=='geslacht'){
 				$geslacht=strtolower(substr($permissie, 9));
-				return $geslacht==$this->lid->getGeslacht();
+				if($geslacht==$this->lid->getGeslacht()){
+					return true;
+				}
 			}elseif(substr($permissie, 0, 7)=='lidjaar'){
 				$lidjaar=substr($permissie, 8);
-				return $lidjaar==$this->lid->getProperty('lidjaar');
+				if($lidjaar==$this->lid->getProperty('lidjaar')){
+					return true;
+				}
 			}
 			# ga alleen verder als er een geldige permissie wordt gevraagd
 			if (array_key_exists($permissie, $this->_permissions)){
