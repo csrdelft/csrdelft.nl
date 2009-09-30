@@ -239,6 +239,9 @@ class LoginLid{
 			}elseif(substr($permissie, 0, 8)=='geslacht'){
 				$geslacht=strtolower(substr($permissie, 9));
 				return $geslacht==$this->lid->getGeslacht();
+			}elseif(substr($permissie, 0, 7)=='lidjaar'){
+				$lidjaar=substr($permissie, 8);
+				return $lidjaar==$this->lid->getProperty('lidjaar');
 			}
 			# ga alleen verder als er een geldige permissie wordt gevraagd
 			if (array_key_exists($permissie, $this->_permissions)){
