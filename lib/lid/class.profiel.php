@@ -180,6 +180,8 @@ class Profiel{
 		$form[]=new UrlField('website', $profiel['website'], 'Website');
 		$form[]=new InputField('bankrekening', $profiel['bankrekening'], 'Bankrekening', 11); //TODO specifiek ding voor maken
 
+
+		//TODO: zoek even uit wat nu in welke if moet staan, en maak het overzichtelijk
 		if($profiel['status']=='S_OUDLID' OR $hasLedenMod OR $this->editNoviet){
 			if($profiel['status']=='S_OUDLID' OR $profiel['status']=='S_NOBODY' OR $this->lid->getUid()=='6601'){ //vd Wekken mag wel eerder begonnen zijn.
 				$beginjaar=1950;
@@ -192,9 +194,11 @@ class Profiel{
 			$form[]=$studie;
 			
 			$form[]=new IntField('studiejaar', $profiel['studiejaar'], 'Beginjaar studie', date('Y'), $beginjaar);
-			if($profiel['status']!='S_OUDLID'){
-				$form[]=new InputField('studienr', $profiel['studienr'], 'Studienummer (TU)', 20);
-			}
+		}
+		if($profiel['status']!='S_OUDLID'){
+			$form[]=new InputField('studienr', $profiel['studienr'], 'Studienummer (TU)', 20);
+		}
+		if($profiel['status']=='S_OUDLID' OR $hasLedenMod OR $this->editNoviet){
 			if(!$this->editNoviet){
 				$form[]=new InputField('beroep', $profiel['beroep'], 'Beroep/werk', 4096);
 				$form[]=new IntField('lidjaar', $profiel['lidjaar'], 'Lid sinds', date('Y'), $beginjaar);
@@ -203,7 +207,6 @@ class Profiel{
 				$form[]=new DatumField('lidafdatum', $profiel['lidafdatum'], 'Oudlid sinds');
 				$form[]=new SelectField('ontvangtcontactueel', $profiel['ontvangtcontactueel'], 'Ontvangt Contactueel', array('ja'=> 'Ja', 'nee' => 'Nee'));
 			}
-			
 		}
 		if($hasLedenMod OR $this->editNoviet){
 			if(!$this->editNoviet){
