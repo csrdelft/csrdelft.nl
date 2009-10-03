@@ -65,7 +65,9 @@ class DocumentDownloadContent extends SimpleHtml{
 		header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
 		header('Cache-Control: private',false);
 		header('content-type: '.$this->document->getMimeType());
-		if(!strpos($this->document->getMimetype(), 'image')){
+
+		$mime=$this->document->getMimetype();
+		if(!strstr($mime, 'image') AND !strstr($mime, 'text')){
 			header('Content-Disposition: attachment; filename='.$this->document->getBestandsnaam().';');
 			header('Content-Lenght: '.$this->document->getSize().';');
 		}

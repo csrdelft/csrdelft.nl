@@ -180,48 +180,34 @@ CREATE TABLE IF NOT EXISTS `courantcache` (
 
 -- --------------------------------------------------------
 
---
--- Table structure for table `document`
---
-
 CREATE TABLE IF NOT EXISTS `document` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `naam` varchar(100) NOT NULL DEFAULT '',
-  `categorie` int(11) NOT NULL DEFAULT '0',
-  `datum` date NOT NULL DEFAULT '1000-01-01',
-  `verwijderd` enum('0','1') NOT NULL DEFAULT '0',
-  `eigenaar` varchar(4) NOT NULL DEFAULT 'x101',
-  PRIMARY KEY (`id`),
-  KEY `categorie` (`categorie`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=484 ;
+  `ID` int(11) NOT NULL auto_increment,
+  `naam` varchar(150) NOT NULL,
+  `catID` int(11) NOT NULL,
+  `bestandsnaam` varchar(255) NOT NULL,
+  `size` int(11) NOT NULL,
+  `mimetype` varchar(50) NOT NULL,
+  `toegevoegd` datetime NOT NULL,
+  `eigenaar` varchar(4) NOT NULL,
+  `leesrechten` varchar(100) NOT NULL,
+  PRIMARY KEY  (`ID`),
+  KEY `catID` (`catID`)
+);
 
--- --------------------------------------------------------
 
---
--- Table structure for table `documentbestand`
---
+CREATE TABLE IF NOT EXISTS `documentcategorie` (
+  `ID` int(11) NOT NULL auto_increment,
+  `naam` varchar(255) NOT NULL,
+  `zichtbaar` int(1) NOT NULL,
+  `leesrechten` varchar(150) NOT NULL,
+  PRIMARY KEY  (`ID`)
+) ;
 
-CREATE TABLE IF NOT EXISTS `documentbestand` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `documentID` int(11) NOT NULL DEFAULT '0',
-  `bestandsnaam` varchar(100) NOT NULL DEFAULT '',
-  PRIMARY KEY (`id`),
-  KEY `document_id` (`documentID`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=511 ;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `documentencategorie`
---
-
-CREATE TABLE IF NOT EXISTS `documentencategorie` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `naam` varchar(50) NOT NULL DEFAULT '',
-  `beschrijving` varchar(100) NOT NULL DEFAULT '',
-  PRIMARY KEY (`ID`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=10 ;
-
+INSERT INTO `documentcategorie` (`ID`, `naam`, `zichtbaar`, `leesrechten`) VALUES
+(1, 'Bestuur', 1, 'P_DOCS_READ'),
+(2, 'Lezingen', 1, 'P_DOCS_READ'),
+(3, 'Reglementen', 1, 'P_DOCS_READ'),
+(4, 'Kringen', 1, 'P_DOCS_READ');
 -- --------------------------------------------------------
 
 --
@@ -242,13 +228,14 @@ CREATE TABLE IF NOT EXISTS `eetplan` (
 --
 
 CREATE TABLE IF NOT EXISTS `eetplanhuis` (
-  `id` smallint(6) NOT NULL DEFAULT '0',
-  `naam` varchar(50) NOT NULL DEFAULT '',
-  `adres` varchar(100) NOT NULL DEFAULT '',
-  `telefoon` varchar(20) NOT NULL DEFAULT '',
-  `groepid` int(11) NUT NULL DEFAULT 0,
-  PRIMARY KEY (`id`)
+  `id` smallint(6) NOT NULL default '0',
+  `naam` varchar(50) NOT NULL default '',
+  `adres` varchar(100) NOT NULL default '',
+  `telefoon` varchar(20) NOT NULL default '',
+  `groepid` int(11) NOT NULL,
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
 
 -- --------------------------------------------------------
 
