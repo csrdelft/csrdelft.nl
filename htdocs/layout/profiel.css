@@ -31,7 +31,7 @@
 #profiel #recenteForumberichten{ width: 600px; }
 #profiel #recenteForumberichten td{ text-align: left; }
 
-#profielForm .pasfoto{ float: right; margin-left: 10px;}
+p.profielBewerken .pasfoto{ float: right; margin-left: 10px;}
 #profielForm label{
 	width: 150px;
 	float: left;

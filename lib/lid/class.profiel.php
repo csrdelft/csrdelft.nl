@@ -54,15 +54,19 @@ class Profiel{
 	}
 	
 	public function magBewerken(){
+		//lid-moderator
 		if(LoginLid::instance()->hasPermission('P_LEDEN_MOD')){
 			return true;
 		}
+		//oudlid-moderator
 		if(LoginLid::instance()->hasPermission('P_OUDLEDEN_MOD') AND $this->lid->getStatus()=='S_OUDLID'){
 			return true;
 		}
+		//novietenbewerker (de novCie dus)
 		if($this->editNoviet==true AND LoginLid::instance()->hasPermission('groep:novcie')){
 			return true;
 		}
+		//of het gaat om ons eigen profiel.
 		if(LoginLid::instance()->isSelf($this->lid->getUid())){
 			return true;
 		}
@@ -105,6 +109,7 @@ class Profiel{
 		return $posted;
 	}
 	public function valid(){
+		//alle veldjes langslopen, en kijken of ze valideren.
 		$valid=true;
 		foreach($this->form as $field){
 			//we checken alleen de formfields, niet de comments enzo.
@@ -114,12 +119,18 @@ class Profiel{
 		}
 		return $valid;
 	}
+	
 	public function getCurrent($key){
 		if(!$this->lid->hasProperty($key)){
 			throw new Exception($key.' niet aanwezig in profiel');
 		}
 		return $this->lid->getProperty($key);
 	}
+	/*
+	 * Alle profielvelden die bewerkt kunnen worden hier defenieren.
+	 * Als we ze hier toevoegen, dan verschijnen ze ook automagisch in het profiel-bewerkding,
+	 * en ze worden gecontroleerd met de eigen valideerfuncties.
+	 */
 	public function assignFields(){
 		LidCache::updateLid($this->lid->getUid());
 
@@ -127,7 +138,6 @@ class Profiel{
 
 		$hasLedenMod=LoginLid::instance()->hasPermission('P_LEDEN_MOD');
 
-		$landsuggesties=array('Nederland', 'België', 'Duitsland', 'Frankrijk', 'Verenigd Koninkrijk', 'Verenigde Staten');
 		//zaken bewerken als we oudlid zijn of P_LEDEN_MOD hebben
 		if($profiel['status']=='S_OUDLID' OR $hasLedenMod OR $this->editNoviet){
 			$form[]=new Comment('Identiteit:');
@@ -139,7 +149,7 @@ class Profiel{
 				if(!$this->editNoviet){
 					$form[]=new InputField('postfix', $profiel['postfix'], 'Postfix', 7);
 				}
-				$form[]=new SelectField('geslacht', $profiel['geslacht'], 'Geslacht', array('m'=> 'Man', 'v'=>'Vrouw'));
+				$form[]=new GeslachtField('geslacht', $profiel['geslacht'], 'Geslacht');
 				$form[]=new InputField('voornamen', $profiel['voornamen'], 'Voornamen', 100);
 			}
 			$form[]=new DatumField('gebdatum', $profiel['gebdatum'], 'Geboortedatum', date('Y')-15);
@@ -149,9 +159,7 @@ class Profiel{
 		$form[]=new RequiredInputField('adres', $profiel['adres'], 'Straatnaam', 100);
 		$form[]=new RequiredInputField('postcode', $profiel['postcode'], 'Postcode', 20);
 		$form[]=new RequiredInputField('woonplaats', $profiel['woonplaats'], 'Woonplaats', 50);
-		$land=new RequiredInputField('land', $profiel['land'], 'Land', 50);
-		$land->setSuggestions($landsuggesties);
-		$form[]=$land;
+		$form[]=new RequiredLandField('land', $profiel['land'], 'Land', 50);
 		$form[]=new TelefoonField('telefoon', $profiel['telefoon'], 'Telefoonnummer', 20);
 		$form[]=new TelefoonField('mobiel', $profiel['mobiel'], 'Paupernummer', 20);
 
@@ -160,9 +168,7 @@ class Profiel{
 			$form[]=new InputField('o_adres', $profiel['o_adres'], 'Straatnaam', 100);
 			$form[]=new InputField('o_postcode', $profiel['o_postcode'], 'Postcode', 20);
 			$form[]=new InputField('o_woonplaats', $profiel['o_woonplaats'], 'Woonplaats', 50);
-			$land=new InputField('o_land', $profiel['o_land'], 'Land', 50);
-			$land->setSuggestions($landsuggesties);
-			$form[]=$land;
+			$form[]=new LandField('o_land', $profiel['o_land'], 'Land', 50);
 			$form[]=new TelefoonField('o_telefoon', $profiel['o_telefoon'], 'Telefoonnummer', 20);
 		}
 			
@@ -181,53 +187,52 @@ class Profiel{
 		$form[]=new InputField('bankrekening', $profiel['bankrekening'], 'Bankrekening', 11); //TODO specifiek ding voor maken
 
 
-		//TODO: zoek even uit wat nu in welke if moet staan, en maak het overzichtelijk
+		if($profiel['status']=='S_OUDLID' OR $profiel['status']=='S_NOBODY' OR $this->lid->getUid()=='6601'){ //vd Wekken mag wel eerder begonnen zijn.
+			$beginjaar=1950;
+		}else{
+			$beginjaar=date('Y')-20;
+		}
+		
 		if($profiel['status']=='S_OUDLID' OR $hasLedenMod OR $this->editNoviet){
-			if($profiel['status']=='S_OUDLID' OR $profiel['status']=='S_NOBODY' OR $this->lid->getUid()=='6601'){ //vd Wekken mag wel eerder begonnen zijn.
-				$beginjaar=1950;
-			}else{
-				$beginjaar=date('Y')-20;
-			}
 			$form[]=new Comment('Studie en Civitas:');
-			$studie=new InputField('studie', $profiel['studie'], 'Studie', 100);
-			$studie->setSuggestions(array('TUDelft - BK', 'TUDelft - CT', 'TUDelft - ET', 'TUDelft - IO', 'TUDelft - LST', 'TUDelft - LR', 'TUDelft - MT', 'TUDelft - MST', 'TUDelft - TA', 'TUDelft - TB', 'TUDelft - TI', 'TUDelft - TN', 'TUDelft - TW', 'TUDelft - WB'));
-			$form[]=$studie;
-			
+			$form[]=new StudieField('studie', $profiel['studie'], 'Studie');
 			$form[]=new IntField('studiejaar', $profiel['studiejaar'], 'Beginjaar studie', date('Y'), $beginjaar);
 		}
+		
 		if($profiel['status']!='S_OUDLID'){
 			$form[]=new InputField('studienr', $profiel['studienr'], 'Studienummer (TU)', 20);
 		}
-		if($profiel['status']=='S_OUDLID' OR $hasLedenMod OR $this->editNoviet){
-			if(!$this->editNoviet){
-				$form[]=new InputField('beroep', $profiel['beroep'], 'Beroep/werk', 4096);
-				$form[]=new IntField('lidjaar', $profiel['lidjaar'], 'Lid sinds', date('Y'), $beginjaar);
-			}
-			if($profiel['status']=='S_OUDLID' OR $profiel['status']=='S_NOBODY'){
-				$form[]=new DatumField('lidafdatum', $profiel['lidafdatum'], 'Oudlid sinds');
-				$form[]=new SelectField('ontvangtcontactueel', $profiel['ontvangtcontactueel'], 'Ontvangt Contactueel', array('ja'=> 'Ja', 'nee' => 'Nee'));
-			}
+		
+		if(!$this->editNoviet AND ($profiel['status']=='S_OUDLID' OR $hasLedenMod)){
+			$form[]=new InputField('beroep', $profiel['beroep'], 'Beroep/werk', 4096);
+			$form[]=new IntField('lidjaar', $profiel['lidjaar'], 'Lid sinds', date('Y'), $beginjaar);
 		}
-		if($hasLedenMod OR $this->editNoviet){
-			if(!$this->editNoviet){
-				$form[]=new VerticaleField('verticale', $profiel['verticale'], 'Verticale');
-				//$form[]=new SelectField('verticale', $profiel['verticale'], 'Verticale', range(0,12));
-				$form[]=new SelectField('kring', $profiel['kring'], 'Kring', range(0,9));
-				if($this->lid->isLid() OR $profiel['status']=='S_KRINGEL'){
-					$form[]=new SelectField('kringleider', $profiel['kringleider'], 'Kringleider', array('n' => 'Nee','o' => 'Ouderejaarskring','e' => 'Eerstejaarskring'));
-					$form[]=new SelectField('motebal', $profiel['motebal'], 'Verticaan', array('0' => 'Nee','1' => 'Ja'));
-				}
-				$form[]=new UidField('patroon', $profiel['patroon'], 'Patroon');
+		
+		if($profiel['status']=='S_OUDLID' OR $profiel['status']=='S_NOBODY'){
+			$form[]=new DatumField('lidafdatum', $profiel['lidafdatum'], 'Oudlid sinds');
+		}
+		if($profiel['status']=='S_OUDLID' AND $hasLedenMod){
+			$form[]=new SelectField('ontvangtcontactueel', $profiel['ontvangtcontactueel'], 'Ontvangt Contactueel', array('ja'=> 'Ja', 'nee' => 'Nee'));
+		}
+
+		if($hasLedenMod AND !$this->editNoviet){
+			$form[]=new VerticaleField('verticale', $profiel['verticale'], 'Verticale');
+			$form[]=new SelectField('kring', $profiel['kring'], 'Kring', range(0,9));
+			if($this->lid->isLid()){
+				$form[]=new SelectField('kringleider', $profiel['kringleider'], 'Kringleider', array('n' => 'Nee','o' => 'Ouderejaarskring','e' => 'Eerstejaarskring'));
+				$form[]=new SelectField('motebal', $profiel['motebal'], 'Verticaan', array('0' => 'Nee','1' => 'Ja'));
 			}
+			$form[]=new UidField('patroon', $profiel['patroon'], 'Patroon');
+		}
+		
+		if($hasLedenMod OR $this->editNoviet){
 			$form[]=new InputField('eetwens', $profiel['eetwens'], 'Dieet', 200);
-			
-		}
-		if($hasLedenMod OR $this->editNoviet){
 			$form[]=new Comment('Overig');
 			//wellicht binnenkort voor iedereen beschikbaar?
 			$form[]=new InputField('kerk', $profiel['kerk'], 'Kerk', 50);
 			$form[]=new InputField('muziek', $profiel['muziek'], 'Muziekinstrument', 50);
 		}
+		
 		if(LoginLid::instance()->hasPermission('P_BESTUUR,groep:novcie')){
 			$form[]=new TextField('kgb', $profiel['kgb'], 'NovCie-opmerking');
 		}

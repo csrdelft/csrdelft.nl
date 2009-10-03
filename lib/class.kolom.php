@@ -53,7 +53,7 @@ class Kolom extends SimpleHTML {
 			$this->add($paginacontent);
 
 			# Laatste mededelingen
-			if(Instelling::get('zijbalk_mededelingen')>0){
+			if(false AND Instelling::get('zijbalk_mededelingen')>0){
 				require_once('class.nieuwscontent.php');
 				require_once('class.nieuws.php');
 				$nieuws = new Nieuws();

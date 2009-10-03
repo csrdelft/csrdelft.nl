@@ -8,8 +8,8 @@
 	</p>
 {else}
 	<h2>Profiel wijzigen</h2>
-	{$profiel->getLid()->getPasfoto()}
-	<p>
+	<p class="profielBewerken">
+		{$profiel->getLid()->getPasfoto()}
 		Hieronder kunt u uw eigen gegevens wijzigen. Voor enkele velden is het niet mogelijk zelf
 		wijzigingen door te voeren. Voor de meeste velden geldt daarnaast dat de ingevulde gegevens
 		een geldig formaat moeten hebben. Mochten er fouten in het gedeelte van uw profiel staan,

@@ -2,8 +2,15 @@
 /*
  * class.controller.php	| 	Jan Pieter Waagmeester (jieter@jpwaag.com)
  *
- *
+ * Een controller zorgt ervoor dat de juiste acties uitgevoerd worden,
+ * dat er gecontroleerd wordt of de gebruiker mag doen dat hij probeert
+ * te doen, en dat er een content-ding aangemaakt wordt voor de huidige
+ * actie.
  */
+
+require_once 'class.pagina.php';
+require_once 'class.paginacontent.php';
+
 class Controller{
 
 	protected $action='default';
@@ -44,6 +51,9 @@ class Controller{
 	}
 	protected function action_default(){
 		return true;
+	}
+	protected function action_geentoegang(){
+		$this->content=new PaginaContent(new Pagina('geentoegang'));
 	}
 }
 ?>

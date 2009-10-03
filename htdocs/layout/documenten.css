@@ -1,10 +1,17 @@
-#documentForm{ background-color: #eee; }
+#controls{
+	float: right;
+}
 
+fieldset{ background-color: #eee; padding: 5px 10px; margin-bottom: 10px;}
+fieldset label.metadata{ width: 150px; float: left; }
 
 #documentForm .uploadmethode, #documentForm .uploadmethode:hover{ 
 	width: 600px; min-height: 70px; padding: 4px 8px; margin: 4px 10px;
 	clear: both;
 }
+
+
+
 #documentForm .uploadmethode:hover{ background-color: #e5e5e5;  }
 #documentForm .uploadmethode .optie{ float: left; width: 200px; }
 #documentForm .uploadmethode .keuze{ display: none;}

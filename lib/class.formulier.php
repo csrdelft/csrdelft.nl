@@ -124,6 +124,16 @@ class InputField extends FormField{
 		return $this->error=='';
 	}
 }
+class LandField extends FormField{
+	public function __construct($name, $value, $description){
+		parent::__construct($name, $value, $description);
+		$landsuggesties=array('Nederland', 'België', 'Duitsland', 'Frankrijk', 'Verenigd Koninkrijk', 'Verenigde Staten');
+		$this->setSuggestions($landsuggesties);
+	}
+}
+class RequiredLandField extends LandField{
+	public $notnull=true;
+}
 class UidField extends InputField{
 	public function __construct($name, $value, $description){
 		parent::__construct($name, $value, $description, 4);
@@ -144,6 +154,7 @@ class UidField extends InputField{
 		echo '<input type="text" id="field_'.$this->name.'" name="'.$this->name.'" class="uid" value="'.htmlspecialchars($this->value).'" ';
 		echo ' autocomplete="off" onKeyUp="uidPreview(\''.$this->name.'\')" maxlength="4" />';
 		echo '<div class="uidPreview" id="preview_'.$this->name.'"></div>';
+		echo '<script>uidPreview(\''.$this->name.'\');</script>';
 		echo '</div>';
 	}
 }
@@ -269,6 +280,12 @@ class TelefoonField extends InputField{
 		return $this->error=='';
 	}
 }
+class StudieField extends InputField{
+	public function __construct($name, $value, $description){
+		parent::__construct($name, $value, $description, 100);
+		$this->setSuggestions(array('TUDelft - BK', 'TUDelft - CT', 'TUDelft - ET', 'TUDelft - IO', 'TUDelft - LST', 'TUDelft - LR', 'TUDelft - MT', 'TUDelft - MST', 'TUDelft - TA', 'TUDelft - TB', 'TUDelft - TI', 'TUDelft - TN', 'TUDelft - TW', 'TUDelft - WB'));
+	}
+}
 /*
  * Vreemde eend in de 'bijt', deze unit produceert 3 velden: oud, nieuw en bevestiging.
  */
@@ -359,7 +376,11 @@ class SelectField extends FormField{
 		echo '</div>';
 	}
 }
-
+class GeslachtField extends SelectField{
+	public function __construct($name, $value, $description=null){
+		parent::__construct($name, $value, $description, array('m'=> 'Man', 'v'=>'Vrouw'));
+	}
+}
 class VerticaleField extends SelectField{
 	
 	public function __construct($name, $value, $description=null){

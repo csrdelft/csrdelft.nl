@@ -448,6 +448,7 @@ class LoginLid{
 					$groep=new Groep(substr($part, 6));
 				}catch(Exception $e){
 					$return[]='Onbekende groep';
+					continue;
 				}
 				if($groep->getId()!=0){
 					$return[]=$groep->getLink();

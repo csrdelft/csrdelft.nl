@@ -11,13 +11,21 @@ class DocumentenCategorie{
 	private $ID;
 	private $naam;
 	private $zichtbaar=1;
-	private $permissie='P_DOCS_READ';
+	private $leesrechten='P_DOCS_READ';
+	
 	private $documenten=null;
 
 	private $loadLimit=0;
 
-	public function __construct($catID=0){
-		$this->load($catID);
+	public function __construct($init){
+		if(is_array($init)){
+			$this->ID=$init['ID'];
+			$this->naam=$init['naam'];
+			$this->zichtbaar=$init['zichtbaar'];
+			$this->leesrechten=$init['leesrechten'];
+		}else{
+			$this->load($catID);
+		}
 	}
 	/*
 	 * DocumentCategorie inladen.
@@ -30,7 +38,7 @@ class DocumentenCategorie{
 			$db=MySql::instance();
 			//gegevens over de categorie ophalen.
 			$query="
-				SELECT ID, naam, zichtbaar, permissie
+				SELECT ID, naam, zichtbaar, leesrechten
 				FROM documentcategorie WHERE ID=".$this->getID();
 			$categorie=$db->query2array($query);
 			if($categorie!==false){
@@ -47,6 +55,7 @@ class DocumentenCategorie{
 	 * De onderhangende documenten ophalen.
 	 */
 	public function loadDocumenten(){
+		$db=MySql::instance();
 		$query="
 			SELECT ID, naam, catID, bestandsnaam, size, mimetype, toegevoegd, eigenaar
 			FROM document WHERE catID=".$this->getID();
@@ -67,18 +76,18 @@ class DocumentenCategorie{
 		if($this->getID()==0){
 			$query="
 				INSERT INTO documentcategorie (
-					naam, zichtbaar, permissie
+					naam, zichtbaar, leesrechten
 				)VALUES(
 					'".$db->escape($this->getNaam())."',
 					".$this->getZichtbaar().",
-					'".$db->escape($this->getPermissie())."'
+					'".$db->escape($this->getLeesrechten())."'
 				);";
 		}else{
 			$query="
 				UPDATE documentcategorie SET
 					naam='".$db->escape($this->getNaam())."',
 					zichtbaar=".$this->getZichtbaar().",
-					permissie='".$db->escape($this->getPermissie())."'
+					leesrechten='".$db->escape($this->getLeesrechten())."'
 				WHERE ID=".$this->getID().";";
 		}
 		return $db->query($query);
@@ -88,7 +97,14 @@ class DocumentenCategorie{
 	public function getNaam(){		return $this->naam; }
 	public function getZichtbaaar(){return $this->zichtbaar; }
 	public function isZichtbaar(){ 	return $this->zichtbaar==1; }
-	public function getPermissie(){ return $this->permissie; }
+	public function getLeesrechten(){ return $this->leesrechten; }
+
+	public function getLast($count){
+		$this->loadLimit=(int)$count;
+		$this->loadDocumenten();
+		return $this->documenten;
+	}
+		
 
 	public function getDocumenten($force=false){
 		if($this->documenten===null OR $force){
@@ -100,12 +116,27 @@ class DocumentenCategorie{
 		$cat=new DocumentenCategorie((int)$catID);
 		return $cat->getID()!=0;
 	}
-	public static function getPermissieVoorCatID($catID){
+	public static function getLeesrechtenVoorCatID($catID){
 		$cat=new DocumentenCategorie((int)$catID);
 		if($cat->getID()!=0){
-			return $cat->getPermissie();
+			return $cat->getLeesrechten();
 		}
 		return false;
+	}
+	public static function getAll(){
+		$db=MySql::instance();
+		$query="SELECT ID, naam, zichtbaar, leesrechten
+			FROM documentcategorie
+			ORDER BY naam;";
+		$result=$db->query($query);
+		if($db->numRows($result)<=0){
+			return false;
+		}
+		$return=array();
+		while($categorie=$db->next($result)){
+			$return[]=new DocumentenCategorie($categorie);
+		}
+		return $return;		
 	}
 }
 ?>

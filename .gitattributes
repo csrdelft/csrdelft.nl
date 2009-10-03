@@ -88,10 +88,12 @@ htdocs/layout/fotoalbum.css -text
 htdocs/layout/groepen.css -text
 htdocs/layout/js/builder.js -text
 htdocs/layout/js/csrdelft.js -text
+htdocs/layout/js/documenten.js -text
 htdocs/layout/js/effects.js -text
 htdocs/layout/js/fastlightbox.js -text
 htdocs/layout/js/gmaps.js -text
 htdocs/layout/js/groepen.js -text
+htdocs/layout/js/jquery.js -text
 htdocs/layout/js/lightbox.js -text
 htdocs/layout/js/menu.js -text
 htdocs/layout/js/peilingbeheer.js -text
@@ -386,6 +388,7 @@ lib/templates/courant/mail/csrmail_owee.tpl -text
 lib/templates/csrdelft.tpl -text
 lib/templates/documenten/document.tpl -text
 lib/templates/documenten/documenten.tpl -text
+lib/templates/documenten/documentencategorie.tpl -text
 lib/templates/forum/list_categories.tpl -text
 lib/templates/forum/list_onderwerpen.tpl -text
 lib/templates/forum/list_recent.tpl -text
@@ -461,5 +464,6 @@ sql/1648_eetplan.sql -text
 sql/1659_corvee.sql -text
 sql/1680_corvee.sql -text
 sql/1688_mededelingen.sql -text
+sql/17xx_documenten.sql -text
 sql/csrdelft.sql -text
 sql/csrdelft_oud.sql -text

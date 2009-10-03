@@ -2,6 +2,12 @@
 /*
  * class.document.php	| 	Jan Pieter Waagmeester (jieter@jpwaag.com)
  *
+ * bestanden worden allemaal in één map opgeslagen, met met hun documentID als prefix.
+ *
+ * Als men dus 2008-halfjaarschema.pdf upload komt er een bestand dat bijvoorbeeld
+ * 1123_2008-halfjaarschema.pdf heet in de documentenmap te staan.
+ *
+ * In de database wordt de originele bestandsnaam opgeslagen, zonder prefix dus.
  *
  */
 
@@ -9,13 +15,14 @@ class Document{
 
 	private $ID=0;
 	private $naam;
-	private $catID;
-	private $categorie=null;
-	private $bestandsnaam;
-	private $size=0;
-	private $mimetype='application/octet-stream';
-	private $toegevoegd;
-	private $eigenaar;	//uid van de eigenaar
+	private $catID;			//DocumentID van de categorie van dit bestand
+	private $categorie=null;//DocumentCategorie-object van dit bestand
+	private $bestandsnaam;	//originele bestandsnaam zoals geupload
+	private $size=0;		//bestandsafmeting in bytes
+	private $mimetype='application/octet-stream'; //mime-type van het bestand
+	private $toegevoegd;	//toevoegdatum
+	private $eigenaar;		//uid van de eigenaar
+	private $leesrechten='P_LEDEN_READ'; //rechten nodig om bestand te mogen downloaden
 
 	public function __construct($init){
 		$this->load($init);
@@ -32,7 +39,7 @@ class Document{
 			}else{
 				$db=MySql::instance();
 				$query="
-					SELECT ID, naam, catID, bestandsnaam, size, mimetype, toegevoegd, eigenaar
+					SELECT ID, naam, catID, bestandsnaam, size, mimetype, toegevoegd, eigenaar, leesrechten
 					FROM document WHERE ID=".$this->getID().";";
 				$doc=$db->query2array($query);
 				if(is_array($doc)){
@@ -45,7 +52,7 @@ class Document{
 
 	}
 	public function array2properties($array){
-		$properties=array('ID', 'naam', 'catID', 'bestandsnaam', 'size', 'mimetype', 'toegevoegd', 'eigenaar');
+		$properties=array('ID', 'naam', 'catID', 'bestandsnaam', 'size', 'mimetype', 'toegevoegd', 'eigenaar', 'leesrechten');
 		foreach($properties as $prop){
 			if(!isset($array[$prop])){
 				throw new Exception('Array is niet compleet: '.$prop.' mist.');
@@ -58,7 +65,7 @@ class Document{
 		if($this->getID()==0){
 			$query="
 				INSERT INTO document (
-					naam, catID, bestandsnaam, size, mimetype, toegevoegd, eigenaar
+					naam, catID, bestandsnaam, size, mimetype, toegevoegd, eigenaar, leesrechten
 				)VALUES(
 					'".$db->escape($this->getNaam())."',
 					".$this->getCatID().",
@@ -66,7 +73,8 @@ class Document{
 					".$this->getSize().",
 					'".$db->escape($this->getMimetype())."',
 					'".$this->getToegevoegd()."',
-					'".$this->getEigenaar()."'
+					'".$this->getEigenaar()."',
+					'".$this->getLeesrechten()."'
 				);";
 		}else{
 			$query="
@@ -77,7 +85,8 @@ class Document{
 					size=".$this->getSize().",
 					mimetype='".$db->escape($this->getMimetype())."',
 					toegevoegd='".$this->getToegevoegd()."',
-					eigenaar='".$this->getEigenaar()."'
+					eigenaar='".$this->getEigenaar()."',
+					leesrechten='".$this->getLeesrechten()."'
 				WHERE ID=".$this->getID().";";
 		}
 		if($db->query($query)){
@@ -108,6 +117,9 @@ class Document{
 	public function setNaam($naam){
 		$this->naam=$naam;
 	}
+	public function setCatID($catID){
+		$this->catID=(int)$catID;
+	}
 	public function setToegevoegd($toegevoegd){
 		$this->toegevoegd=$toegevoegd;
 	}
@@ -117,6 +129,12 @@ class Document{
 	}
 	public function magBewerken(){
 		return $this->isEigenaar() OR LoginLid::instance()->hasPermisson('P_DOCS_MOD');
+	}
+	public function getLeesrechten(){
+		return $this->leesrechten;
+	}
+	public function magBekijken(){
+		return LoginLid::instance()->hasPermission($this->getLeesrechten());
 	}
 }
 
