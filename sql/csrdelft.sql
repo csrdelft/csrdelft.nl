@@ -431,7 +431,7 @@ CREATE TABLE IF NOT EXISTS `lid` (
   `gebdatum` date NOT NULL DEFAULT '0000-00-00',
   `bankrekening` varchar(11) NOT NULL DEFAULT '',
   `moot` tinyint(4) NOT NULL DEFAULT '0',
-  `verticale` int(4) NOT NULL DEFALUT '0',
+  `verticale` int(4) NOT NULL DEFAULT '0',
   `kring` tinyint(4) NOT NULL DEFAULT '0',
   `kringleider` enum('n','e','o') NOT NULL DEFAULT 'n',
   `motebal` enum('0','1') NOT NULL DEFAULT '0',
