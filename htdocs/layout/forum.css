@@ -56,6 +56,7 @@
 	background-color: #fff;
 	text-align: left;
 }
+#forumtabel .moment{ font-size: 9px; color: #bbb; }
 #forumtabel td.reacties{
 	vertical-align: middle; text-align: center;
 	width: 80px;
@@ -70,6 +71,8 @@
 	width: 180px;
 	
 }
+#forumtabel label{ float: left; width: 110px; }
+#forumtabel #textareaContainer{ margin-left: 116px; width: 634px;}
 
 div.bewerkt{ font-size: 8px; color: #bbb; }
 div.bewerkt a{ color: #bbb; }

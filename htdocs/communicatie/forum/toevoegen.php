@@ -18,6 +18,16 @@ if(!isset($_POST['bericht'])){
 	exit;
 }
 
+if(isset($_POST['email'])){
+	if(email_like($_POST['email'])){
+		$email="\n[prive][offtopic]email: ".mb_htmlentities($_POST['email'])."[/offtopic][/prive]";
+	}else{
+		header('location: '.CSR_ROOT.'communicatie/forum/');
+		$_SESSION['melding']='U moet een geldig email-adres opgeven.';
+		exit;
+	}
+}
+
 //een nieuw topic toevoegen?
 if(!isset($_GET['topic']) AND isset($_GET['forum'])){
 	$forumonderwerp=new ForumOnderwerp(0);
@@ -32,6 +42,11 @@ if(!isset($_GET['topic']) AND isset($_GET['forum'])){
 		header('location: '.CSR_ROOT.'communicatie/forum/categorie/'.$forumonderwerp->getCategorieID());
 		$_SESSION['melding']='U heeft niet voldoende rechten om onderwerpen toe te voegen (ForumOnderwerp::magToevoegen(); forum/toevoegen.php).';
 		exit;
+	}
+	if($forumonderwerp->needsModeration() AND !isset($email)){
+		header('location: '.CSR_ROOT.'communicatie/forum/');
+		$_SESSION['melding']='Email-adres opgeven is verplicht!';
+		exit;	
 	}
 
 	//addTopic laadt zelf de boel in die hij net heeft toegevoegd...
@@ -54,7 +69,18 @@ if(!isset($_GET['topic']) AND isset($_GET['forum'])){
 
 if($forumonderwerp->magToevoegen()){
 	if(strlen(trim($_POST['bericht']))>0){
-		if($forumonderwerp->addPost($_POST['bericht'])!==false){
+		$bericht=$_POST['bericht'];
+		if($forumonderwerp->needsModeration()){
+			if(!isset($email)){
+				header('location: '.CSR_ROOT.'communicatie/forum/');
+				$_SESSION['melding']='Email-adres opgeven is verplicht!';
+				exit;
+			}else{
+				$bericht=$bericht.$email;
+			}
+		}
+
+		if($forumonderwerp->addPost($bericht)!==false){
 			if($forumonderwerp->needsModeration()){
 				header('location: '.CSR_ROOT.'communicatie/forum/categorie/'.$forumonderwerp->getCategorieID());
 				$_SESSION['melding']='Uw bericht is verwerkt, het zal binnenkort goedgekeurd worden.';

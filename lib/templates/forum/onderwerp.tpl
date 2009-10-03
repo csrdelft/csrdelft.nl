@@ -86,8 +86,8 @@
 	{foreach from=$onderwerp->getPosts() item='bericht' name='berichten'}
 		<tr>
 			<td class="auteur">
-				{$bericht.uid|csrnaam:'user'} schreef
-				{$bericht.datum|reldate}
+				<a href="#post{$bericht.id}" class="moment" style="float: right;"> 	&rarr;</a>{$bericht.uid|csrnaam:'user'}<br />
+				<span class="moment">{$bericht.datum|reldate}</span>
 				<br />
 				{* knopjes bij elke post *}
 				{* citeerknop enkel als het onderwerp open is en als men mag posten, of als men mod is. *}
@@ -164,10 +164,12 @@
 						{* berichtje weergeven voor niet-ingeloggede gebruikers dat ze een naam moeten vermelden. *}
 						{if $onderwerp->needsModeration()}
 							<strong>Uw bericht wordt pas geplaatst nadat het bekeken en goedgekeurd is door de <a href="http://csrdelft.nl/actueel/groepen/Commissies/PubCie/">PubCie</a>. 
-							Het vermelden van <em>uw naam en email-adres</em> is verplicht.</strong> Gebruik [prive]...[/prive] om het alleen aan ingelogden weer te geven en niet aan externen en zoekmachines.<br /><br />
+							Het vermelden van <em>uw naam en email-adres</em> is verplicht.</strong><br /><br />
+							<label for="email">Email-adres:</label><input type="text" name="email" /><br />
 						{/if}
 						<div id="berichtPreviewContainer" class="previewContainer"><div id="berichtPreview" class="preview"></div></div>
 						<textarea name="bericht" id="forumBericht" class="forumBericht" rows="12">{$textarea}</textarea>
+						
 						<a style="float: right;" class="handje knop" onclick="toggleDiv('ubbhulpverhaal')" title="Opmaakhulp weergeven">UBB</a>
 						<a style="float: right;" class="handje knop" onclick="vergrootTextarea('forumBericht', 10)" title="Vergroot het invoerveld"><strong>&uarr;&darr;</strong></a>
 						<input type="submit" name="submit" value="opslaan" id="forumOpslaan" />

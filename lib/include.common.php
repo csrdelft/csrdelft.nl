@@ -213,7 +213,7 @@ function reldate($datum){
 	}elseif(date('Y-m-d', $moment)==date('Y-m-d', strtotime('1 day ago'))){
 		$return='gisteren om '.date("G:i", $moment);
 	}else{
-		$return='op '. date("G:i j-n-Y", $moment);
+		$return=date("G:i j-n-Y", $moment);
 	}
 	return $return;
 }
