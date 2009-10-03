@@ -247,10 +247,14 @@ class Groepcontroller extends Controller{
 	 * een groep verwijderen.
 	 */
 	public function action_verwijderen(){
-		if($this->groep->delete()){
-			$melding='Groep met succes verwijderd.';
+		if($this->groep->isAdmin()){
+			if($this->groep->delete()){
+				$melding='Groep met succes verwijderd.';
+			}else{
+				$melding='Groep verwijderen mislukt Groepcontroller::action_deleteGroep()';
+			}
 		}else{
-			$melding='Groep verwijderen mislukt Groepcontroller::action_deleteGroep()';
+			$melding='Niet voldoende rechten voor deze actie';
 		}
 		$this->content->invokeRefresh($melding, CSR_ROOT.'actueel/groepen/');
 	}
@@ -284,6 +288,9 @@ class Groepcontroller extends Controller{
 	 * Leden toevoegen aan een groep.
 	 */
 	public function action_addLid(){
+		if(!$this->groep->magBewerken()){
+			$this->content->invokeRefresh('Niet voldoende rechten voor deze actie', $this->getUrl('default'));
+		}
 		$this->content->setAction('addLid');
 		if(isset($_POST['naam'], $_POST['functie']) AND is_array($_POST['naam']) AND is_array($_POST['functie']) AND count($_POST['naam'])==count($_POST['functie'])){
 			//nieuwe groepleden erin stoppen.
