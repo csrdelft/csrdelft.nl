@@ -15,7 +15,7 @@ class DocumentController extends Controller{
 
 	public $document;
 
-	public static $baseurl='/communicatie/documenten_new/';
+	public $baseurl='/communicatie/documenten_new/';
 
 	/*
 	 * querystring:
@@ -72,6 +72,8 @@ class DocumentController extends Controller{
 	public function action_download(){
 		$this->loadDocument();
 		$this->content=new DocumentDownloadContent($this->document);
+		$this->content->view();
+		exit;
 	}
 	protected function action_categorie(){
 
@@ -86,9 +88,25 @@ class DocumentController extends Controller{
 		if($this->isPosted()){
 			$this->document->setNaam($_POST['naam']);
 			$this->document->setCatID($_POST['categorie']);
+
 			if($this->document_validator()){
+				switch($_POST['methode']){
+					case 'fromurl':
+					break;
+					case 'uploaden':
+						$file=$_FILES['file_upload'];
+						$this->document->setMimetype($file['type']);
+						$this->document->setSize($file['size']);
+						$this->document->setBestandsnaam($file['name']);
+					break;
+				}
+
 				if($this->document->save()){
-					$melding='Document met succes toegevoegd';
+					if($this->document->moveUploaded($file['tmp_name'])){
+						$melding='Document met succes toegevoegd';
+					}else{
+						$melding='Fout bij het opslaan van het bestand in het bestandsysteem';
+					}
 				}else{
 					$melding='Fout bij toevoegen van document Document::save()';
 				}
@@ -96,13 +114,41 @@ class DocumentController extends Controller{
 			}
 		}
 		$this->content=new DocumentContent($this->document);
+		$this->content->setMelding($this->errors);
+		
 		
 	}
 	private function document_validator(){
 		if(isset($_POST['naam'], $_POST['categorie'])){
-			return false;
+			if(strlen(trim($_POST['naam']))<3){
+				$this->addError('Naam moet tenminste 3 tekens bevatten');
+			}
+			$allowed=array('fromurl', 'uploaden', 'publicftp');
+			if(!(isset($_POST['methode']) AND in_array($_POST['methode'], $allowed))){
+				$this->addError('Niet ondersteunde uploadmethode. Heeft u er wel een gekozen?');
+			}else{
+				switch($_POST['methode']){
+					case 'fromurl':
+						if(!isset($_POST['url'])){
+							$this->addError('Formulier niet compleet');
+						}
+					break;
+					case 'uploaden':
+						if(!isset($_FILES['file_upload'])){
+							$this->addError('Formulier niet compleet');
+						}
+						if($_FILES['file_upload']['error']!=0){
+							$this->addError('Upload-error: error-code: '.$_FILES['file_upload']['error']);
+						}	
+					break;
+					default:
+						$this->addError('Niet ondersteunde methode.');
+				}
+			}
+		}else{
+			$this->addError('Formulier niet compleet');
 		}
-		return false;
+		return $this->valid;
 	}
 }
 

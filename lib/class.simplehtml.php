@@ -13,10 +13,10 @@ abstract class SimpleHTML {
 
 	private $_sMelding='';
 	//html voor een pagina uitpoepen.
-	function view() {
+	public function view() {
 
 	}
-	function getMelding(){
+	public function getMelding(){
 		if(isset($_SESSION['melding']) AND trim($_SESSION['melding'])!=''){
 			$sError='<div id="melding">'.trim($_SESSION['melding']).'</div>';
 			//maar één keer tonen, de melding.
@@ -28,7 +28,7 @@ abstract class SimpleHTML {
 			return '';
 		}
 	}
-	function setMelding($sMelding){
+	public function setMelding($sMelding){
 		$this->_sMelding.=trim($sMelding);
 	}
 	public static function invokeRefresh($sMelding, $url=null){

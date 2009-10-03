@@ -18,6 +18,10 @@ class Controller{
 
 	private $queryparts=array();
 
+	protected $valid=true;
+	protected $errors='';
+
+	
 	public function __construct($querystring){
 		$this->queryparts=explode('/', $querystring);
 
@@ -49,6 +53,11 @@ class Controller{
 			throw new Exception('Action ('.$this->action.') undefined');
 		}
 	}
+	public function addError($error){
+		$this->valid=false;
+		$this->errors.=$error.'<br />';
+	}
+
 	protected function action_default(){
 		return true;
 	}

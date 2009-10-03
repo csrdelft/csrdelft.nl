@@ -21,9 +21,6 @@ class Groepcontroller extends Controller{
 
 	private $groep;
 
-	private $valid=true;
-	private $errors='';
-
 	public function __construct($querystring){
 		parent::__construct($querystring);
 
@@ -159,11 +156,7 @@ class Groepcontroller extends Controller{
 		}
 		return $this->valid;
 	}
-	public function addError($error){
-		$this->valid=false;
-		$this->errors.=$error.'<br />';
-	}
-
+	
 	/*
 	 * Bewerken en opslaan van groepen. Groepen mogen door groepadmins (groeplid.op=='1')
 	 * voor een deel bewerkt worden, de P_ADMINS kunnen alles aanpassen. Hier wordt de

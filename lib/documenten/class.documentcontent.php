@@ -4,7 +4,7 @@
  *
  *
  */
-class DocumentContent{
+class DocumentContent extends SimpleHtml{
 	private $document;
 	public function __construct(Document $document){
 		$this->document=$document;
@@ -15,13 +15,14 @@ class DocumentContent{
 	
 	public function view(){
 		$smarty=new Smarty_csr();
-		
+
+		$smarty->assign('melding', $this->getMelding());
 		$smarty->assign('categorieen', DocumentenCategorie::getAll());
 		$smarty->assign('document', $this->document);
 		$smarty->display('documenten/document.tpl');
 	}
 }
-class DocumentenContent{
+class DocumentenContent extends SimpleHtml{
 
 	public function getTitel(){
 		return 'Documentenketzer';
@@ -29,7 +30,7 @@ class DocumentenContent{
 
 	public function view(){
 		$smarty=new Smarty_csr();
-
+		$smarty->assign('melding', $this->getMelding());
 		$smarty->assign('categorieen', DocumentenCategorie::getAll());
 		$smarty->display('documenten/documenten.tpl');
 	}
@@ -37,7 +38,7 @@ class DocumentenContent{
 /*
  * documenten voor een bepaalde categorie
  */
-class DocumentCategorieContent{
+class DocumentCategorieContent extends SimpleHtml{
 
 	private $categorie;
 	
@@ -53,7 +54,7 @@ class DocumentCategorieContent{
 /*
  * Document downloaden.
  */
-class DocumentDownloadContent{
+class DocumentDownloadContent extends SimpleHtml{
 	private $document;
 	public function __construct(Document $document){
 		$this->document=$document;
@@ -64,10 +65,11 @@ class DocumentDownloadContent{
 		header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
 		header('Cache-Control: private',false);
 		header('content-type: '.$this->document->getMimeType());
- 		header('Content-Disposition: attachment; filename='.$this->document->getBestandsnaam().';');
-		header('Content-Lenght: '.$this->document->getSize().';');
-
-		readfile($this->document->getID().'_'.$this->document->getBestandsnaam());
+		if(!strpos($this->document->getMimetype(), 'image')){
+			header('Content-Disposition: attachment; filename='.$this->document->getBestandsnaam().';');
+			header('Content-Lenght: '.$this->document->getSize().';');
+		}
+		readfile($this->document->documentroot.'/'.$this->document->getID().'_'.$this->document->getBestandsnaam());
 	}
 }
 ?>

@@ -3,6 +3,7 @@
  *}
  
 <h2>Document {if $document->getID()==0}Toevoegen{else}Bewerken{/if}</h2>
+<div class="foutje">{$melding}</div>
 
 <form id="documentForm" method="post" enctype="multipart/form-data">
 	<fieldset>
@@ -21,10 +22,10 @@
 		{if $document->hasFile()}
 			<div class="uploadmethode">
 				<div class="optie">
-					<input type="radio" name="methode" id="radioMethodeKeepfile" value="keepfile" selectend="selected" onchange="updateForm();" /> 
-					<label for="radioMethodeKeepfile">Huidige behouden</label>
+					<input type="radio" name="methode" id="rMethodeKeepfile" value="keepfile" selectend="selected" /> 
+					<label for="rMethodeKeepfile">Huidige behouden</label>
 				</div>
-				<div id="methodeUploaden" class="keuze">
+				<div id="MethodeKeepfile" class="keuze">
 					{$file->getBestandsnaam()}
 				</div>
 			</div>
@@ -32,20 +33,20 @@
 		
 		<div class="uploadmethode">
 			<div class="optie">
-				<input type="radio" name="methode" id="radioMethodeUploaden" value="uploaden" onchange="updateForm();" /> 
-				<label for="radioMethodeUploaden">Uploaden</label>
+				<input type="radio" name="methode" id="rMethodeUploaden" value="uploaden" /> 
+				<label for="rMethodeUploaden">Uploaden</label>
 			</div>
-			<div id="methodeUploaden" class="keuze">
+			<div id="MethodeUploaden" class="keuze">
 				<label for="fromUrl">Selecteer bestand: </label><input type="file" name="file_upload" />
 			</div>
 		</div>
 		<div class="uploadmethode">
 			<div class="optie">
-				<input type="radio" name="methode" id="radioMethodeFromurl" value="fromurl" onchange="updateForm();" /> 
-				<label for="radioMethodeFromurl">Van url</label>
+				<input type="radio" name="methode" id="rMethodeFromurl" value="fromurl"  /> 
+				<label for="rMethodeFromurl">Van url</label>
 			</div>
-			<div id="methodeUploaden" class="keuze">
-				<label for="fromUrl">Geef url in: </label><input type="text" name="file_upload" value="http://" />
+			<div id="MethodeFromurl" class="keuze">
+				<label for="fromUrl">Geef url in: </label><input type="text" name="file_upload" class="fromurl" value="http://" />
 			</div>
 		</div>
 		<label for="submit" class="metadata">&nbsp;</label><input type="submit" name="submit" value="Toevoegen" />

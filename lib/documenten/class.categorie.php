@@ -57,7 +57,7 @@ class DocumentenCategorie{
 	public function loadDocumenten(){
 		$db=MySql::instance();
 		$query="
-			SELECT ID, naam, catID, bestandsnaam, size, mimetype, toegevoegd, eigenaar
+			SELECT ID, naam, catID, bestandsnaam, size, mimetype, toegevoegd, eigenaar, leesrechten
 			FROM document WHERE catID=".$this->getID();
 		if($this->loadLimit>0){
 			$query.=' LIMIT '.$this->loadLimit;

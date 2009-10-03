@@ -24,8 +24,13 @@ class Document{
 	private $eigenaar;		//uid van de eigenaar
 	private $leesrechten='P_LEDEN_READ'; //rechten nodig om bestand te mogen downloaden
 
+
+	public $documentroot;
+	
 	public function __construct($init){
 		$this->load($init);
+
+		$this->documentroot=DATA_PATH.'/documenten';
 	}
 
 	public function load($init=0){
@@ -36,12 +41,13 @@ class Document{
 			if($this->getID()==0){
 				//defaultwaarden voor een nieuw document
 				$this->setToegevoegd(getDateTime());
+				$this->setEigenaar(LoginLid::instance()->getLid()->getUid());
 			}else{
 				$db=MySql::instance();
 				$query="
 					SELECT ID, naam, catID, bestandsnaam, size, mimetype, toegevoegd, eigenaar, leesrechten
 					FROM document WHERE ID=".$this->getID().";";
-				$doc=$db->query2array($query);
+				$doc=$db->getRow($query);
 				if(is_array($doc)){
 					$this->array2properties($doc);
 				}else{
@@ -120,8 +126,20 @@ class Document{
 	public function setCatID($catID){
 		$this->catID=(int)$catID;
 	}
+	public function setBestandsnaam($name){
+		$this->bestandsnaam=$name;
+	}
+	public function setSize($size){
+		$this->size=$size;
+	}
+	public function setMimetype($mime){
+		$this->mimetype=$mime;
+	}
 	public function setToegevoegd($toegevoegd){
 		$this->toegevoegd=$toegevoegd;
+	}
+	public function setEigenaar($uid){
+		$this->eigenaar=$uid;
 	}
 	public function isEigenaar($uid=null){
 		if($uid==null){ LoginLid::instance()->getUid(); }
@@ -135,6 +153,15 @@ class Document{
 	}
 	public function magBekijken(){
 		return LoginLid::instance()->hasPermission($this->getLeesrechten());
+	}
+	public function moveUploaded($source){
+		if($this->getID()==0){
+			throw new Exception('Document moet eerst opgeslagen worden in de database voordat bestand verplaatst kan worden');
+		}
+		if(is_uploaded_file($source)){
+			return move_uploaded_file($source, $this->documentroot.'/'.$this->getID().'_'.$this->bestandsnaam);
+		}
+		return false;
 	}
 }
 
