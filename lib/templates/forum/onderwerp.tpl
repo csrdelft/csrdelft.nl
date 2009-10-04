@@ -86,7 +86,8 @@
 	{foreach from=$onderwerp->getPosts() item='bericht' name='berichten'}
 		<tr>
 			<td class="auteur">
-				<a href="#post{$bericht.id}" class="moment" style="float: right;"> 	&rarr;</a>{$bericht.uid|csrnaam:'user'}<br />
+				<a href="/communicatie/forum/reactie/{$bericht.id}" class="moment" style="float: right;" alt="Link naar deze post">&rarr;</a>
+				{$bericht.uid|csrnaam:'user'}<br />
 				<span class="moment">{$bericht.datum|reldate}</span>
 				<br />
 				{* knopjes bij elke post *}
