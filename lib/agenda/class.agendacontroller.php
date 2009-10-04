@@ -35,7 +35,7 @@ class AgendaController extends Controller {
 	}
 
 	public function action_default() {
-		$this->action_week();
+		$this->action_maand();
 	}
 
 	/**

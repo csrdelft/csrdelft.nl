@@ -1,8 +1,18 @@
 table.agenda {
 	border-collapse: collapse;
-	border: 1px solid;
+	border: 1px solid #000000;
 }
 table.agenda td {
 	padding: 3px;
 	border: 1px solid;
+	width: 100px;
+}
+table.agenda td hr {
+	margin: 5px -3px 5px -3px;
+}
+table.agenda th {
+	padding: 3px;
+	border: 1px solid;
+	text-align: center;
+	background-color: #dddddd;
 }

@@ -40,6 +40,9 @@ class AgendaContent extends SimpleHTML {
 	
 	public function maand() {
 		$content = new Smarty_csr();
+		$content->assign('maand', 'Oktober');
+		$content->assign('jaar', '2009');
+		$content->assign('weken', $this->agenda->getItemsByMaand(2009, 10));		
 		$content->display('agenda/maand.tpl');
 	}
 	

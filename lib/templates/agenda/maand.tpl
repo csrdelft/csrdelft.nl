@@ -1,15 +1,30 @@
 <h1>Agenda {$maand} {$jaar}</h1>
 <table class="agenda maand">
-	<tr class="knoppen">
-		<td><a class="knop">&laquo; Vorige maand</a></td>
-		<td colspan="5"> </td>
-		<td><a class="knop">Volgende maand &raquo;</a></td>
+	<a class="knop">&laquo; Vorige maand</a></td>	
+	<a class="knop">Volgende maand &raquo;</a>
+	<br /><br />
+	<tr>
+		<th> </th>
+		<th>Zondag</th>
+		<th>Maandag</th>
+		<th>Dinsdag</th>
+		<th>Woensdag</th>
+		<th>Donderdag</th>
+		<th>Vrijdag</th>
+		<th>Zaterdag</th>
 	</tr>
-	{foreach from=$dagen item=dag}
+	{foreach from=$weken key=weeknr item=dagen}
 		<tr>		
-			{foreach from=$dagen item=dag}
+			<th>{$weeknr}</th>
+			{foreach from=$dagen key=dagnr item=items}
 				<td>
-					Blaa
+					{$dagnr}					
+					{foreach from = $items item=item}
+						<hr />
+						{$item->getBeginMoment()|date_format:"%R"}-{$item->getEindMoment()|date_format:"%R"} 
+						<b>{$item->getTitel()}</b>
+						<br />
+					{/foreach}
 				</td>
 			{/foreach}
 		</tr>
