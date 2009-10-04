@@ -344,7 +344,7 @@ class Lid implements Serializable{
 		if($this->profiel['voornaam']!=''){
 			$sVolledigeNaam=$this->profiel['voornaam'].' ';
 		}else{
-			$sVolledigeNaam=$this->profiel['voorletters'];
+			$sVolledigeNaam=$this->profiel['voorletters'].' ';
 		}
 		if($this->profiel['tussenvoegsel']!=''){ $sVolledigeNaam.=$this->profiel['tussenvoegsel'].' '; }
 		$sVolledigeNaam.=$this->profiel['achternaam'];
@@ -500,9 +500,16 @@ class Lid implements Serializable{
 
 		$changelog='Aangemaakt door [lid='.LoginLid::instance()->getUid().'] op [reldate]'.getDatetime().'[/reldate][br]';
 
+		if($lichting==date('Y')){
+			$status='S_NOVIET';
+			$perm='P_LID';
+		}else{
+			$status='S_NOBODY';
+			$perm='P_NOBODY';
+		}
 		$query="
 			INSERT INTO lid (uid, lidjaar, studiejaar, status, permissies, changelog, land, o_land)
-			VALUE ('".$newuid."', '".$lichting."', '".$lichting."', 'S_NOVIET', 'P_LID', '".$changelog."', 'Nederland', 'Nederland');";
+			VALUE ('".$newuid."', '".$lichting."', '".$lichting."', '".$status."', '".$perm."', '".$changelog."', 'Nederland', 'Nederland');";
 		if($db->query($query)){
 			return $newuid;
 		}else{

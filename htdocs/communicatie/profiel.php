@@ -58,7 +58,7 @@ if(!($loginlid->hasPermission('P_LEDEN_READ') or $loginlid->hasPermission('P_OUD
 			if($loginlid->hasPermission('P_ADMIN,P_LEDEN_MOD,groep:novcie')){
 				try{
 					//maak het nieuwe uid aan.
-					$nieuwUid=Lid::createNew(date('Y'));
+					$nieuwUid=Lid::createNew($_GET['uid']);
 					ProfielContent::invokeRefresh(null, '/communicatie/profiel/'.$nieuwUid.'/novietBewerken');
 				}catch(Exception $e){
 					ProfielContent::invokeRefresh('<h2>Nieuw lidnummer aanmaken mislukt.</h2>'.$e->getMessage());
