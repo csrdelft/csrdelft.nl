@@ -59,9 +59,28 @@ class CorveebeheerContent extends SimpleHTML {
 			}
 		} elseif ($this->_actie == 'takenbewerk') {
 			$aForm['actie']='takenbewerk';
+			$dag = date('D',$aForm['datum']);
+			if($aForm['datum'] <= time() ){
+				//Oude maaltijden
+				$aForm['kwalikoks']=$this->_maaltrack->getTaakLeden();
+				$aForm['kokleden']=$this->_maaltrack->getTaakLeden();
+				$aForm['afwasleden']=$this->_maaltrack->getTaakLeden();
+				$aForm['theedoekleden']=$this->_maaltrack->getTaakLeden();
+				$aForm['pt_opties']=array(
+					'onbekend' => 'Onbekend',
+					'ja' => 'Ja',
+					'nee' => 'Nee'
+				);
+				print_r($aForm['toegekend']);				
+			} else {
+				//Toekomstige maaltijden
+				$aForm['kwalikoks']=$this->_maaltrack->getTaakLedenGefilterd('kwalikok',$dag,0);
+				$aForm['kokleden']=$this->_maaltrack->getTaakLedenGefilterd('kok',$dag,0);
+				$aForm['afwasleden']=$this->_maaltrack->getTaakLedenGefilterd('afwas',$dag,0);
+				$aForm['theedoekleden']=$this->_maaltrack->getTaakLedenGefilterd('theedoek',$dag,0);
+			}
+						
 		}
-		$aForm['abos']=$this->_maaltrack->getAbos();
-		$aForm['taakleden']=$this->_maaltrack->getTaakLeden();
 		$aMaal['formulier']=$aForm;
 
 		//arrays toewijzen en weergeven

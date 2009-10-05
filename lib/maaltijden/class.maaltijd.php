@@ -58,7 +58,7 @@ class Maaltijd {
 		$taken = array();
 		$sMaaltijdTakenQuery="
 			SELECT
-				uid, kok, afwas, theedoek
+				uid, kok, afwas, theedoek, punten_toegekend
 			FROM
 				maaltijdcorvee
 			WHERE
@@ -69,6 +69,7 @@ class Maaltijd {
 				if ($record['kok']) $taken['koks'][] = $record['uid'];
 				if ($record['afwas']) $taken['afwassers'][] = $record['uid'];
 				if ($record['theedoek']) $taken['theedoeken'][] = $record['uid'];
+				if ($record['punten_toegekend']) $taken['toegekend'][$record['uid']] = $record['punten_toegekend'];				
 			}
 		}
 

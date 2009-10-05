@@ -39,8 +39,8 @@
 			<th># (Max)</th>
 		</tr>
 		{foreach from=$maal.maaltijden item=maaltijd}
-			<tr {if $maaltijd.datum<=$smarty.now}class="old"{/if}>
-				<td>
+			<tr {if $maaltijd.datum<=$smarty.now}class="old"{/if} {if $maal.formulier.id==$maaltijd.id}style="background-color: #bbffbb"{/if}>
+			<td>
 					<a href="/actueel/maaltijden/corveebeheer/bewerk/{$maaltijd.id}#corveemaaltijdFormulier"><img src="{$csr_pics}knopjes/bewerken.png" /></a>					
 					<a href="/actueel/maaltijden/corveebeheer/takenbewerk/{$maaltijd.id}#corveetakenFormulier"><img src="{$csr_pics}knopjes/lijstbewerken.png" /></a>
 				</td>
@@ -55,7 +55,7 @@
 				<td {if $maaltijd.theedoeken - $maaltijd.theedoeken_aangemeld > 0}style="color: red;"{/if}>
 					{$maaltijd.theedoeken_aangemeld}/{$maaltijd.theedoeken}
 				</td>	
-				<td>({$maaltijd.punten_kok}/{$maaltijd.punten_afwas}/{$maaltijd.punten_theedoek})</td>
+				<td {if $maaltijd.is_toegekend}style="color: #0D0;"{/if}>({$maaltijd.punten_kok}/{$maaltijd.punten_afwas}/{$maaltijd.punten_theedoek})</td>
 				<td>{$maaltijd.tp|csrnaam}</td>
 				<td>
 					{if $maaltijd.aantal < $maaltijd.max}

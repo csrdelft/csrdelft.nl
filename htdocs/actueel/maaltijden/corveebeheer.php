@@ -33,10 +33,11 @@ if(isset($_POST['actie'])){
 		header('location: '.CSR_ROOT.'actueel/maaltijden/corveebeheer/bewerk/'.$maalid);
 		exit;
 	} elseif ($actie == 'takenbewerk' && (isset($_POST['kok'], $_POST['afwas'], $_POST['theedoek']))
-		&& ($maaltrack->editCorveeMaaltijdTaken($maalid, $_POST['kok'], $_POST['afwas'], $_POST['theedoek']))){
+		&& ($maaltrack->editCorveeMaaltijdTaken($maalid, $_POST['kok'], $_POST['afwas'], $_POST['theedoek'], $_POST['punten']))){			
 		header('location: '.CSR_ROOT.'actueel/maaltijden/corveebeheer/takenbewerk/'.$maalid);
 		exit;
 	}
+	die();
 	
 	#als we hier terecht komen is het niet goed gegaan, dan maar de foutmelding weergeven...
 	$beheer->addError($maaltrack->getError());
