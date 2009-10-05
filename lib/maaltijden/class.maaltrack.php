@@ -241,7 +241,7 @@ class MaalTrack {
 	}
 	
 	# bij bestaande maaltijd de taken bewerken
-	function editCorveeMaaltijdTaken($maalid, $kok, $afwas, $theedoek, $punten=null){
+	function editCorveeMaaltijdTaken($maalid, $kok, $afwas, $theedoek, $punten){
 		if($maalid!=(int)$maalid){
 			$this->_error="Ongeldig maaltijdID opgegeven.";
 			return false;
@@ -249,6 +249,9 @@ class MaalTrack {
 		if(!$this->isMaaltijd($maalid)){
 			$this->_error="Opgegeven maaltijd bestaat niet.";
 			return false;
+		}
+		if($punten == NULL){
+			$punten = array();
 		}
 		
 		//verwijder dubbele uids
@@ -356,7 +359,6 @@ class MaalTrack {
 			$this->_db->query("INSERT INTO	maaltijdcorvee (maalid, uid, punten_toegekend) VALUES('".$maalid."', '".$uid."', '".$db_toegekend."') ON DUPLICATE KEY UPDATE punten_toegekend = '".$db_toegekend."'");
 		}
 		
-		echo 'the end';
 		$maaltijd = new Maaltijd ($maalid);
 		return $maalid;
 	}

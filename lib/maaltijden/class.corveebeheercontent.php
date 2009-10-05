@@ -15,7 +15,8 @@ class CorveebeheerContent extends SimpleHTML {
 	private $_maaltrack;
 	private $_maaltijd=null;
 	private $_actie=null;
-
+	private $_filter=1;
+	
 	private $_error='';
 
 	function __construct($maaltrack) {
@@ -24,10 +25,11 @@ class CorveebeheerContent extends SimpleHTML {
 	function getTitel(){ return 'Maaltijdketzer - Corveebeheer'; }
 
 	//functie om een maaltijd in het formulier te laden, normaal gewoon een formulier voor nieuwe maaltijden.
-	function load($iMaalID, $actie = null){
+	function load($iMaalID, $actie = null, $filter = 1){
 		$iMaalID=(int)$iMaalID;
 		$this->_actie=$actie;
 		$this->_maaltijd=$this->_maaltrack->getMaaltijd($iMaalID);
+		$this->_filter=$filter;
 	}
 	function addError($error){ $this->_error=$error; }
 
@@ -58,9 +60,10 @@ class CorveebeheerContent extends SimpleHTML {
 				if(isset($_POST['punten_theedoek'])){  $aForm['punten_theedoek']=(int)$_POST['punten_theedoek']; }
 			}
 		} elseif ($this->_actie == 'takenbewerk') {
-			$aForm['actie']='takenbewerk';
+			$aForm['actie']='takenbewerk';			
 			$dag = date('D',$aForm['datum']);
-			if($aForm['datum'] <= time() ){
+			$aForm['filter']=$this->_filter;
+			if($this->_filter == 0 || $aForm['datum'] <= time()){
 				//Oude maaltijden
 				$aForm['kwalikoks']=$this->_maaltrack->getTaakLeden();
 				$aForm['kokleden']=$this->_maaltrack->getTaakLeden();

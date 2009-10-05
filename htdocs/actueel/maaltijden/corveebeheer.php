@@ -33,11 +33,10 @@ if(isset($_POST['actie'])){
 		header('location: '.CSR_ROOT.'actueel/maaltijden/corveebeheer/bewerk/'.$maalid);
 		exit;
 	} elseif ($actie == 'takenbewerk' && (isset($_POST['kok'], $_POST['afwas'], $_POST['theedoek']))
-		&& ($maaltrack->editCorveeMaaltijdTaken($maalid, $_POST['kok'], $_POST['afwas'], $_POST['theedoek'], $_POST['punten']))){			
-		header('location: '.CSR_ROOT.'actueel/maaltijden/corveebeheer/takenbewerk/'.$maalid);
+		&& ($maaltrack->editCorveeMaaltijdTaken($maalid, $_POST['kok'], $_POST['afwas'], $_POST['theedoek'], @$_POST['punten']))){									
+		header('location: '.CSR_ROOT.'actueel/maaltijden/corveebeheer/takenbewerk/'.$maalid.'/'.$_POST['filter']);
 		exit;
 	}
-	die();
 	
 	#als we hier terecht komen is het niet goed gegaan, dan maar de foutmelding weergeven...
 	$beheer->addError($maaltrack->getError());
@@ -52,7 +51,12 @@ if(isset($_GET['bewerk']) AND $_GET['bewerk']==(int)$_GET['bewerk'] AND $_GET['b
 	$beheer->load($_GET['bewerk'], 'bewerk');
 }
 if(isset($_GET['takenbewerk']) AND $_GET['takenbewerk']==(int)$_GET['takenbewerk'] AND $_GET['takenbewerk']!=0){
-	$beheer->load($_GET['takenbewerk'], 'takenbewerk');
+	if(!isset($_GET['filter'])){
+		$beheer->load($_GET['takenbewerk'], 'takenbewerk');
+	}
+	else {
+		$beheer->load($_GET['takenbewerk'], 'takenbewerk', $_GET['filter']);
+	}
 }
 
 $page=new csrdelft($beheer);

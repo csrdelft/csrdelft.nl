@@ -14,6 +14,7 @@ RewriteRule ^beheer/verwijder/([0-9]+)/?$ beheer.php?verwijder=$1
 RewriteRule ^corveebeheer/?$ corveebeheer.php
 RewriteRule ^corveebeheer/bewerk/([0-9]+)/?$ corveebeheer.php?bewerk=$1
 RewriteRule ^corveebeheer/takenbewerk/([0-9]+)/?$ corveebeheer.php?takenbewerk=$1
+RewriteRule ^corveebeheer/takenbewerk/([0-9]+)/([0-1])/?$ corveebeheer.php?takenbewerk=$1&filter=$2
 
 RewriteRule ^corveepunten/?$ corveepunten.php
 RewriteRule ^corveepunten/sorteer/([a-z_]+)/([a-z]+)/?$ corveepunten.php?sorteer=$1&sorteer_richting=$2

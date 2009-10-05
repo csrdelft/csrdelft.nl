@@ -1,8 +1,10 @@
 <h2 id="corveetakenFormulier">Maaltijd Corvee {$maal.formulier.actie}</h2>
-
-<form action="/actueel/maaltijden/corveebeheer/" method="post">
+ 
+<form name="takenbewerk" action="/actueel/maaltijden/corveebeheer/" method="post">
 	<input type="hidden" name="maalid" value="{$maal.formulier.id}" />
 	<input type="hidden" name="actie" value="takenbewerk" />
+	<input type="hidden" id="filter" name="filter" value="{$maal.formulier.filter}" />
+	
 	{if isset($error)}<div class="waarschuwing">{$error}</div>{/if}
 	<table>
 		<tr>
@@ -52,7 +54,11 @@
 						<td>{section name=afwassers loop=$maal.formulier.afwassers}					
 								{assign var='it' value=$smarty.section.afwassers.iteration-1}
 								{assign var='afwasser' value=$maal.formulier.taken.afwassers.$it}
-								{html_options name=afwas[$it] options=$maal.formulier.afwasleden selected=$afwasser}
+								{if $it==0}
+									{html_options name=afwas[$it] options=$maal.formulier.afwasleden selected=$afwasser} (Kwali-afwasser)
+								{else}
+									{html_options name=afwas[$it] options=$maal.formulier.afwasleden selected=$afwasser}
+								{/if}
 								{if $afwasser!=''}{$afwasser|csrnaam}{/if}<br />
 							{/section}
 						</td>
@@ -69,7 +75,7 @@
 					</tr>
 					<tr>
 						<td>&nbsp;</td>
-						<Td><input type="submit" name="submit" value="opslaan" /></td>
+						<Td><input type="submit" name="opslaan" value="opslaan" /> <input type="button" value="Herlaad zonder filter" onClick="document.getElementById('filter').value=0;document.forms['takenbewerk'].submit();" /></td>
 					</tr>
 			</td>
 		</tr>
