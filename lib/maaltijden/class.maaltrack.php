@@ -478,18 +478,23 @@ class MaalTrack {
 	function getPuntenlijst($sorteer = 'corvee_tekort', $sorteer_richting = 'asc'){
 		// TODO: leden meer filteren
 
-		$sorteer_toegestaan = array('uid', 'kok', 'afwas', 'theedoek', 'corvee_kwalikok', 'corvee_punten', 'corvee_punten_bonus', 'corvee_vrijstelling', 'corvee_tekort');
+		$sorteer_toegestaan = array('uid', 'kok', 'afwas', 'theedoek', 'schoonmaken_frituur', 'schoonmaken_afzuigkap', 'schoonmaken_keuken', 'corvee_kwalikok', 'corvee_punten', 'corvee_punten_bonus', 'corvee_vrijstelling', 'corvee_ingeroosterd', 'corvee_tekort');
 		$sorteer_volgorde_toegestaan = array('asc', 'desc');
 		if (!in_array($sorteer, $sorteer_toegestaan) || !in_array($sorteer_richting, $sorteer_volgorde_toegestaan))
 			print('Ongeldige sorteeroptie');
 	
+		// TODO: corvee ingeroosterd berekenen...
 		$sLedenQuery="
 			SELECT
 				uid, corvee_kwalikok, corvee_punten, corvee_punten_bonus, corvee_vrijstelling, corvee_voorkeuren,
+				0 AS corvee_ingeroosterd,
 				(".CORVEEPUNTEN."-CEIL(".CORVEEPUNTEN."*.01*corvee_vrijstelling)-corvee_punten_bonus-corvee_punten) AS corvee_tekort,
 				(SELECT COUNT(uid) FROM maaltijdcorvee WHERE uid = lid.uid AND kok = 1) AS kok,
 				(SELECT COUNT(uid) FROM maaltijdcorvee WHERE uid = lid.uid AND afwas = 1) AS afwas,
-				(SELECT COUNT(uid) FROM maaltijdcorvee WHERE uid = lid.uid AND theedoek = 1) AS theedoek
+				(SELECT COUNT(uid) FROM maaltijdcorvee WHERE uid = lid.uid AND theedoek = 1) AS theedoek,
+				(SELECT COUNT(uid) FROM maaltijdcorvee WHERE uid = lid.uid AND schoonmaken_frituur = 1) AS schoonmaken_frituur,
+				(SELECT COUNT(uid) FROM maaltijdcorvee WHERE uid = lid.uid AND schoonmaken_afzuigkap = 1) AS schoonmaken_afzuigkap,
+				(SELECT COUNT(uid) FROM maaltijdcorvee WHERE uid = lid.uid AND schoonmaken_keuken = 1) AS schoonmaken_keuken
 			FROM
 				lid
 			WHERE
@@ -513,7 +518,7 @@ class MaalTrack {
 	# voor in de kolommen op de maaltijdencontent pagina, zie getMaaltijden hieronder
 	# als de gebruiker uit moot 1-4 is, hou daar dan rekening mee
 	# deze functionaliteit kan uitgezet worden door $mootfilter = false te zetten als argument
-	public static function getMaaltijdenRaw($van = 0, $tot = 0, $mootfilter = true) {
+	public static function getMaaltijdenRaw($van = 0, $tot = 0, $mootfilter = true, $corveefilter = true) {
 		$lid=LoginLid::instance();
 		$db=MySql::instance();
 		# kijk in db en haal alle maaltijden op waarbij de begintijd
@@ -536,6 +541,12 @@ class MaalTrack {
 		}else{
 			$mootfilter=false;
 		}
+		
+		# corveefilter - filtert speciale "dummy" maaltijden bedoelt voor corvee/schoonmaak
+		if ($corveefilter)
+			$corveefilter = "";
+		else
+			$corveefilter = "AND type = 'normaal'";
 
 		$maaltijden = array();
 		$sMaaltijdQuery="
@@ -548,7 +559,7 @@ class MaalTrack {
 			FROM
 				maaltijd
 			WHERE
-				datum > '".$van."' AND ".$totsql."
+				datum > '".$van."' AND ".$totsql." ".$corveefilter."
 			ORDER BY
 				datum ASC;";
 		$result=$db->select($sMaaltijdQuery);
@@ -575,13 +586,13 @@ class MaalTrack {
 	}
 
 	# haalt maaltijden op en voegt extra info toe voor op de maaltijdenpagina
-	function getMaaltijden($van = 0, $tot = 0, $mootfilter = true, $uid=null) {
+	function getMaaltijden($van = 0, $tot = 0, $mootfilter = true, $corveefilter = true, $uid=null) {
 		if($uid==null){
 			$uid=LoginLid::instance()->getUid();
 		}
 		if($uid == 'x999'){ $mootfilter = false; }
 
-		$maaltijdenRaw = $this->getMaaltijdenRaw($van,$tot,$mootfilter);
+		$maaltijdenRaw = $this->getMaaltijdenRaw($van,$tot,$mootfilter,$type);
 
 		$maaltijden=array();
 		foreach($maaltijdenRaw as $maaltijd){

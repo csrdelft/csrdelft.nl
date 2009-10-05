@@ -39,7 +39,7 @@ class CorveebeheerContent extends SimpleHTML {
 
 		//Dingen ophalen voor het overzicht van maaltijden...
 		$aMaal['error']=$this->_maaltrack->getError();
-		$aMaal['maaltijden']=$this->_maaltrack->getMaaltijden(time()-3600*24*28, time()+3600*24*100, false);
+		$aMaal['maaltijden']=$this->_maaltrack->getMaaltijden(time()-3600*24*28, time()+3600*24*100, false, false);
 
 		// bewerken
 		$aForm=$this->_maaltijd;

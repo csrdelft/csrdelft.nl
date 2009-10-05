@@ -466,6 +466,7 @@ sql/1680_corvee.sql -text
 sql/1688_mededelingen.sql -text
 sql/1712_corvee.sql -text
 sql/1713_corvee.sql -text
+sql/1715_corvee.sql -text
 sql/17xx_documenten.sql -text
 sql/csrdelft.sql -text
 sql/csrdelft_oud.sql -text
