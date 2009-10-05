@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jun 29, 2009 at 05:32 PM
+-- Generation Time: Oct 05, 2009 at 09:57 PM
 -- Server version: 5.1.30
 -- PHP Version: 5.2.8
 
@@ -180,34 +180,48 @@ CREATE TABLE IF NOT EXISTS `courantcache` (
 
 -- --------------------------------------------------------
 
+--
+-- Table structure for table `document`
+--
+
 CREATE TABLE IF NOT EXISTS `document` (
-  `ID` int(11) NOT NULL auto_increment,
-  `naam` varchar(150) NOT NULL,
-  `catID` int(11) NOT NULL,
-  `bestandsnaam` varchar(255) NOT NULL,
-  `size` int(11) NOT NULL,
-  `mimetype` varchar(50) NOT NULL,
-  `toegevoegd` datetime NOT NULL,
-  `eigenaar` varchar(4) NOT NULL,
-  `leesrechten` varchar(100) NOT NULL,
-  PRIMARY KEY  (`ID`),
-  KEY `catID` (`catID`)
-);
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `naam` varchar(100) NOT NULL DEFAULT '',
+  `categorie` int(11) NOT NULL DEFAULT '0',
+  `datum` date NOT NULL DEFAULT '1000-01-01',
+  `verwijderd` enum('0','1') NOT NULL DEFAULT '0',
+  `eigenaar` varchar(4) NOT NULL DEFAULT 'x101',
+  PRIMARY KEY (`id`),
+  KEY `categorie` (`categorie`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=484 ;
 
+-- --------------------------------------------------------
 
-CREATE TABLE IF NOT EXISTS `documentcategorie` (
-  `ID` int(11) NOT NULL auto_increment,
-  `naam` varchar(255) NOT NULL,
-  `zichtbaar` int(1) NOT NULL,
-  `leesrechten` varchar(150) NOT NULL,
-  PRIMARY KEY  (`ID`)
-) ;
+--
+-- Table structure for table `documentbestand`
+--
 
-INSERT INTO `documentcategorie` (`ID`, `naam`, `zichtbaar`, `leesrechten`) VALUES
-(1, 'Bestuur', 1, 'P_DOCS_READ'),
-(2, 'Lezingen', 1, 'P_DOCS_READ'),
-(3, 'Reglementen', 1, 'P_DOCS_READ'),
-(4, 'Kringen', 1, 'P_DOCS_READ');
+CREATE TABLE IF NOT EXISTS `documentbestand` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `documentID` int(11) NOT NULL DEFAULT '0',
+  `bestandsnaam` varchar(100) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`),
+  KEY `document_id` (`documentID`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=511 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `documentencategorie`
+--
+
+CREATE TABLE IF NOT EXISTS `documentencategorie` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `naam` varchar(50) NOT NULL DEFAULT '',
+  `beschrijving` varchar(100) NOT NULL DEFAULT '',
+  PRIMARY KEY (`ID`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=10 ;
+
 -- --------------------------------------------------------
 
 --
@@ -228,14 +242,13 @@ CREATE TABLE IF NOT EXISTS `eetplan` (
 --
 
 CREATE TABLE IF NOT EXISTS `eetplanhuis` (
-  `id` smallint(6) NOT NULL default '0',
-  `naam` varchar(50) NOT NULL default '',
-  `adres` varchar(100) NOT NULL default '',
-  `telefoon` varchar(20) NOT NULL default '',
+  `id` smallint(6) NOT NULL DEFAULT '0',
+  `naam` varchar(50) NOT NULL DEFAULT '',
+  `adres` varchar(100) NOT NULL DEFAULT '',
+  `telefoon` varchar(20) NOT NULL DEFAULT '',
   `groepid` int(11) NOT NULL,
-  PRIMARY KEY  (`id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
 
 -- --------------------------------------------------------
 
@@ -423,7 +436,7 @@ CREATE TABLE IF NOT EXISTS `lid` (
   `website` varchar(80) NOT NULL DEFAULT '',
   `beroep` text NOT NULL,
   `studie` varchar(100) NOT NULL DEFAULT '',
-  `patroon` varchar(4) NOT NULL DEFAULT '',
+  `patroon` varchar(4) NOT NULL,
   `studienr` varchar(20) NOT NULL,
   `studiejaar` smallint(6) NOT NULL DEFAULT '0',
   `lidjaar` smallint(6) NOT NULL DEFAULT '0',
@@ -431,7 +444,7 @@ CREATE TABLE IF NOT EXISTS `lid` (
   `gebdatum` date NOT NULL DEFAULT '0000-00-00',
   `bankrekening` varchar(11) NOT NULL DEFAULT '',
   `moot` tinyint(4) NOT NULL DEFAULT '0',
-  `verticale` int(4) NOT NULL DEFAULT '0',
+  `verticale` int(4) NOT NULL,
   `kring` tinyint(4) NOT NULL DEFAULT '0',
   `kringleider` enum('n','e','o') NOT NULL DEFAULT 'n',
   `motebal` enum('0','1') NOT NULL DEFAULT '0',
@@ -464,8 +477,8 @@ CREATE TABLE IF NOT EXISTS `lid` (
   `maalcieSaldo` float NOT NULL DEFAULT '0',
   `changelog` text NOT NULL,
   PRIMARY KEY (`uid`),
-  INDEX ( verticale ),
-  KEY `nickname` (`nickname`)
+  KEY `nickname` (`nickname`),
+  KEY `verticale` (`verticale`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Ledenlijst';
 
 -- --------------------------------------------------------
@@ -610,15 +623,14 @@ CREATE TABLE IF NOT EXISTS `maaltijdgesloten` (
 
 CREATE TABLE IF NOT EXISTS `mededeling` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `datum` int(11) NOT NULL DEFAULT '0',
+  `datum` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `titel` text NOT NULL,
   `tekst` text NOT NULL,
   `categorie` int(11) NOT NULL DEFAULT '0',
-  `rank` tinyint(3) unsigned NOT NULL DEFAULT '255',
+  `prioriteit` tinyint(3) unsigned NOT NULL DEFAULT '255' COMMENT 'Hoe belangrijk is deze mededeling?',
   `uid` varchar(4) NOT NULL DEFAULT '',
   `prive` enum('0','1') NOT NULL DEFAULT '0',
-  `verborgen` enum('0','1') NOT NULL DEFAULT '0',
-  `verwijderd` enum('0','1') NOT NULL DEFAULT '0',
+  `zichtbaarheid` enum('wacht_goedkeuring','zichtbaar','onzichtbaar','verwijderd') NOT NULL DEFAULT 'zichtbaar' COMMENT 'Is hij zichtbaar?',
   `plaatje` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   KEY `intern` (`prive`),
@@ -634,7 +646,7 @@ CREATE TABLE IF NOT EXISTS `mededeling` (
 CREATE TABLE IF NOT EXISTS `mededelingcategorie` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `naam` varchar(250) NOT NULL,
-  `rank` tinyint(3) NOT NULL DEFAULT '0',
+  `prioriteit` tinyint(3) unsigned NOT NULL DEFAULT '255' COMMENT 'De volgorde van de categorieën in de dropdown',
   `plaatje` varchar(250) NOT NULL,
   `beschrijving` text,
   PRIMARY KEY (`id`)
