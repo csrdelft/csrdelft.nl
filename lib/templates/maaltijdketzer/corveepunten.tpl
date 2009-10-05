@@ -33,8 +33,9 @@
 		<th style="width: 40px"><a href="/actueel/maaltijden/corveepunten/sorteer/theedoek/{if $sorteer_richting=='asc'}desc{else}asc{/if}">T</a></th>
 		<th style="width: 70px"><a href="/actueel/maaltijden/corveepunten/sorteer/corvee_kwalikok/{if $sorteer_richting=='asc'}desc{else}asc{/if}">Kwalikok</a></th>
 		<th style="width: 70px"><a href="/actueel/maaltijden/corveepunten/sorteer/corvee_punten/{if $sorteer_richting=='asc'}desc{else}asc{/if}">Punten</a></th>
-		<!--<th>Ingeroosterd</th>-->
+		<th style="width: 70px"><a href="/actueel/maaltijden/corveepunten/sorteer/corvee_punten_bonus/{if $sorteer_richting=='asc'}desc{else}asc{/if}">Bonus</a></th>
 		<th style="width: 90px"><a href="/actueel/maaltijden/corveepunten/sorteer/corvee_vrijstelling/{if $sorteer_richting=='asc'}desc{else}asc{/if}">Vrijstelling</a></th>
+		<!--<th>Ingeroosterd</th>-->
 		<th style="width: 50px"><a href="/actueel/maaltijden/corveepunten/sorteer/corvee_tekort/{if $sorteer_richting=='asc'}desc{else}asc{/if}">Tekort</a></th>
 		<th style="width: 20px">&nbsp;</th>
 	</tr>
@@ -56,8 +57,9 @@
 				<td>{$leden.$it.afwas}</td>
 				<td>{$leden.$it.theedoek}</td>
 				<td><input type="checkbox" name="corvee_kwalikok" value="1" {if $leden.$it.corvee_kwalikok}checked="checked"{/if} /></td>
-				<td><input type="text" name="corvee_punten" value="{$leden.$it.corvee_punten}" style="width: 50px;" /></td>
-				<td><input type="text" name="corvee_vrijstelling" value="{$leden.$it.corvee_vrijstelling}" style="width: 50px;" /></td>
+				<td><input type="text" name="corvee_punten" value="{$leden.$it.corvee_punten}" style="width: 30px;" /></td>
+				<td><input type="text" name="corvee_punten_bonus" value="{$leden.$it.corvee_punten_bonus}" style="width: 30px;" /></td>
+				<td><input type="text" name="corvee_vrijstelling" value="{$leden.$it.corvee_vrijstelling}" style="width: 30px;" />%</td>
 				<td>{$leden.$it.corvee_tekort}</td>
 				<td><input type="submit" name="submit" value="OK" /></td>
 			</tr>

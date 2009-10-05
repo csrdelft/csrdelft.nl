@@ -334,15 +334,15 @@ class MaalTrack {
 	function getPuntenlijst($sorteer = 'corvee_tekort', $sorteer_richting = 'asc'){
 		// TODO: leden meer filteren
 
-		$sorteer_toegestaan = array('uid', 'kok', 'afwas', 'theedoek', 'corvee_kwalikok', 'corvee_punten', 'corvee_vrijstelling', 'corvee_tekort');
+		$sorteer_toegestaan = array('uid', 'kok', 'afwas', 'theedoek', 'corvee_kwalikok', 'corvee_punten', 'corvee_punten_bonus', 'corvee_vrijstelling', 'corvee_tekort');
 		$sorteer_volgorde_toegestaan = array('asc', 'desc');
 		if (!in_array($sorteer, $sorteer_toegestaan) || !in_array($sorteer_richting, $sorteer_volgorde_toegestaan))
 			print('Ongeldige sorteeroptie');
 	
 		$sLedenQuery="
 			SELECT
-				uid, corvee_kwalikok, corvee_punten, corvee_vrijstelling, corvee_voorkeuren,
-				(".CORVEEPUNTEN."-ROUND(".CORVEEPUNTEN."*.01*corvee_vrijstelling)-corvee_punten) AS corvee_tekort,
+				uid, corvee_kwalikok, corvee_punten, corvee_punten_bonus, corvee_vrijstelling, corvee_voorkeuren,
+				(".CORVEEPUNTEN."-CEIL(".CORVEEPUNTEN."*.01*corvee_vrijstelling)-corvee_punten_bonus-corvee_punten) AS corvee_tekort,
 				(SELECT COUNT(uid) FROM maaltijdcorvee WHERE uid = lid.uid AND kok = 1) AS kok,
 				(SELECT COUNT(uid) FROM maaltijdcorvee WHERE uid = lid.uid AND afwas = 1) AS afwas,
 				(SELECT COUNT(uid) FROM maaltijdcorvee WHERE uid = lid.uid AND theedoek = 1) AS theedoek
@@ -359,9 +359,9 @@ class MaalTrack {
 	}
 	
 	# bij bestaande maaltijd de taken bewerken
-	function editLid($uid, $corvee_kwalikok, $corvee_punten, $corvee_vrijstelling){		
+	function editLid($uid, $corvee_kwalikok, $corvee_punten, $corvee_punten_bonus, $corvee_vrijstelling){		
 		// lid bewerken
-		$this->_db->query("UPDATE lid SET corvee_kwalikok='".$corvee_kwalikok."', corvee_punten='".$corvee_punten."', corvee_vrijstelling='".$corvee_vrijstelling."' WHERE uid = '".$uid."'");
+		$this->_db->query("UPDATE lid SET corvee_kwalikok='".$corvee_kwalikok."', corvee_punten='".$corvee_punten."', corvee_punten_bonus='".$corvee_punten_bonus."', corvee_vrijstelling='".$corvee_vrijstelling."' WHERE uid = '".$uid."'");
 		return true;
 	}
 	

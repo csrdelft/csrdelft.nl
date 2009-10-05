@@ -39,7 +39,7 @@ rekening mee houden. <strong>Dit is niet de plek om aan te geven dat u iets niet
 <br />
 {if $loginlid->getLid()->getStatus()!='S_OUDLID'}
 <h2>Corveevoorkeuren</h2>
-	<p>Hier kunt u voorkeuren opgeven waar am. Corveecaesar rekening mee kan houden bij het indelen
+	<p>Hier kunt u voorkeuren opgeven waar am. CorveeCaesar rekening mee kan houden bij het indelen
 	van u bij maaltijden. Kruis minstens een vakje aan.
 	</p>
 	<form method="post" action="{$smarty.server.PHP_SELF}">

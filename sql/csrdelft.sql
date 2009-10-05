@@ -461,6 +461,7 @@ CREATE TABLE IF NOT EXISTS `lid` (
   `eetwens` text NOT NULL,
   `corvee_wens` varchar(255) NOT NULL,
   `corvee_punten` int(11) NOT NULL,
+  `corvee_punten_bonus` int( 11 ) NOT NULL,
   `corvee_vrijstelling` int(3) NOT NULL COMMENT 'percentage vrijstelling',
   `corvee_kwalikok` tinyint(1) NOT NULL,
   `corvee_voorkeuren` varchar(8) NOT NULL DEFAULT '11111111',
