@@ -73,7 +73,6 @@ htdocs/communicatie/forum/verplaatsen.php -text
 htdocs/communicatie/forum/verwijderen.php -text
 htdocs/communicatie/forum/zoeken.php -text
 htdocs/communicatie/lijst.php -text
-htdocs/communicatie/moten.php -text
 htdocs/communicatie/profiel.php -text
 htdocs/communicatie/stamboom.php -text
 htdocs/communicatie/verjaardagen.php -text
@@ -196,7 +195,6 @@ lib/class.kolom.php -text
 lib/class.ldap.php -text
 lib/class.memcached.php -text
 lib/class.menu.php -text
-lib/class.motencontent.php -text
 lib/class.mysql.php -text
 lib/class.neerladen.php -text
 lib/class.neerladencontent.php -text

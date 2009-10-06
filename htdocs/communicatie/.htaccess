@@ -9,8 +9,8 @@ RewriteRule ^ledenlijst/? lijst.php
 # Verjaardagen
 RewriteRule ^verjaardagen/? verjaardagen.php
 
-# Moten
-RewriteRule ^moten/? moten.php
+# Moten redirecten naar verticalen
+RewriteRule ^moten/? verticalen/ [R=301]
 
 # Verticalen
 RewriteRule ^verticalen/? verticalen.php
