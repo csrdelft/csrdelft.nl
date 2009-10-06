@@ -15,6 +15,8 @@ class DocumentController extends Controller{
 
 	public $document;
 
+	private $downloadfile;
+	
 	public $baseurl='/communicatie/documenten_new/';
 
 	/*
@@ -89,20 +91,36 @@ class DocumentController extends Controller{
 			$this->document->setNaam($_POST['naam']);
 			$this->document->setCatID($_POST['categorie']);
 
-			if($this->document_validator()){
+
+			//als we al een bestand hebben voor dit document, moet die natuurlijk eerst hdb.
+			if($this->document->hasFile() AND !$_POST['methode']!='keepfile'){
+				$this->document->deleteFile();
+			}
+			
+			if($this->validate_document()){
 				switch($_POST['methode']){
-					case 'fromurl':
-					break;
 					case 'uploaden':
-						$file=$_FILES['file_upload'];
-						$this->document->setMimetype($file['type']);
-						$this->document->setSize($file['size']);
-						$this->document->setBestandsnaam($file['name']);
+						$this->document->setMimetype($this->downloadfile['type']);
+						$this->document->setSize($this->downloadfile['size']);
+						$this->document->setBestandsnaam($this->downloadfile['name']);
+					break;
+					case 'fromurl':
+						$this->document->setSize(strlen($this->downloadfile));
+						$naam=substr(trim($_POST['url']), strrpos($_POST['url'], '/')+1);
+						if(strlen($naam)<3){
+							$naam=$this->document->getNaam();
+						}
+						$naam=preg_replace("/[^a-zA-Z0-9\s\.\-\_]/", '', $naam);
+						$this->document->setBestandsnaam($naam);
+						
+					break;
+					case 'publicftp':
+
 					break;
 				}
 
 				if($this->document->save()){
-					if($this->document->moveUploaded($file['tmp_name'])){
+					if($this->move_document()){
 						$melding='Document met succes toegevoegd';
 					}else{
 						$melding='Fout bij het opslaan van het bestand in het bestandsysteem';
@@ -118,7 +136,21 @@ class DocumentController extends Controller{
 		
 		
 	}
-	private function document_validator(){
+	private function move_document(){
+		switch($_POST['methode']){
+			case 'fromurl':
+				return $this->document->putFile($this->downloadfile);
+			break;
+			case 'uploaden':
+				return $this->document->moveUploaded($this->downloadfile['tmp_name']);
+			break;
+			case 'publicftp':
+			break;
+		}
+		return false;
+	}
+	
+	private function validate_document(){
 		if(isset($_POST['naam'], $_POST['categorie'])){
 			if(strlen(trim($_POST['naam']))<3){
 				$this->addError('Naam moet tenminste 3 tekens bevatten');
@@ -132,14 +164,19 @@ class DocumentController extends Controller{
 						if(!isset($_POST['url'])){
 							$this->addError('Formulier niet compleet');
 						}
+						$this->downloadfile=file_get_contents($_POST['url']);
 					break;
 					case 'uploaden':
 						if(!isset($_FILES['file_upload'])){
 							$this->addError('Formulier niet compleet');
 						}
-						if($_FILES['file_upload']['error']!=0){
-							$this->addError('Upload-error: error-code: '.$_FILES['file_upload']['error']);
+						$this->downloadfile=$_FILES['file_upload'];
+						if($this->downloadfile['error']!=0){
+							$this->addError('Upload-error: error-code: '.$this->downloadfile['error']);
 						}	
+					break;
+					case 'publicftp':
+						
 					break;
 					default:
 						$this->addError('Niet ondersteunde methode.');

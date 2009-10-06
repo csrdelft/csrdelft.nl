@@ -15,7 +15,7 @@ class Document{
 
 	private $ID=0;
 	private $naam;
-	private $catID;			//DocumentID van de categorie van dit bestand
+	private $catID;			//CategorieID van de categorie van dit bestand
 	private $categorie=null;//DocumentCategorie-object van dit bestand
 	private $bestandsnaam;	//originele bestandsnaam zoals geupload
 	private $size=0;		//bestandsafmeting in bytes
@@ -39,7 +39,8 @@ class Document{
 		}else{
 			$this->ID=(int)$init;
 			if($this->getID()==0){
-				//defaultwaarden voor een nieuw document
+				//Bij $this->ID==0 gaat het om een nieuw document. Hier
+				//zetten we de defaultwaarden voor het nieuwe document.
 				$this->setToegevoegd(getDateTime());
 				$this->setEigenaar(LoginLid::instance()->getLid()->getUid());
 			}else{
@@ -51,7 +52,7 @@ class Document{
 				if(is_array($doc)){
 					$this->array2properties($doc);
 				}else{
-					return false;
+					throw new Exception('load() mislukt. Bestaat het document wel?');
 				}
 			}
 		}
@@ -61,7 +62,7 @@ class Document{
 		$properties=array('ID', 'naam', 'catID', 'bestandsnaam', 'size', 'mimetype', 'toegevoegd', 'eigenaar', 'leesrechten');
 		foreach($properties as $prop){
 			if(!isset($array[$prop])){
-				throw new Exception('Array is niet compleet: '.$prop.' mist.');
+				throw new Exception('Documentproperties-array is niet compleet: '.$prop.' mist.');
 			}
 			$this->$prop=$array[$prop];
 		}
@@ -103,6 +104,10 @@ class Document{
 		}
 		return false;
 	}
+	public function delete(){
+		$deletequery='DELETE FROM document WHERE ID='.$this->getID();
+		return $this->deleteFile() && MySql::instance()->query($deletequery);
+	}
 	public function getID(){			return $this->ID; }
 	public function getNaam(){			return $this->naam; }
 
@@ -113,12 +118,13 @@ class Document{
 		}
 	}
 	public function getBestandsnaam(){	return $this->bestandsnaam; }
-	public function hasFile(){			return $this->getBestandsnaam()!=''; }
+	public function hasFile(){
+		return $this->getBestandsnaam()!='' AND file_exists($this->getFullPath());
+	}
 	public function getSize(){			return $this->size; }
 	public function getMimetype(){		return $this->mimetype;	}
 	public function getToegevoegd(){	return $this->toegevoegd; }
-	public function getEigenaar(){
-		return $this->eigenaar;	}
+	public function getEigenaar(){		return $this->eigenaar;	}
 
 	public function setNaam($naam){
 		$this->naam=$naam;
@@ -126,11 +132,11 @@ class Document{
 	public function setCatID($catID){
 		$this->catID=(int)$catID;
 	}
-	public function setBestandsnaam($name){
-		$this->bestandsnaam=$name;
+	public function setBestandsnaam($naam){
+		$this->bestandsnaam=$naam;
 	}
 	public function setSize($size){
-		$this->size=$size;
+		$this->size=(int)$size;
 	}
 	public function setMimetype($mime){
 		$this->mimetype=$mime;
@@ -139,6 +145,9 @@ class Document{
 		$this->toegevoegd=$toegevoegd;
 	}
 	public function setEigenaar($uid){
+		if(!Lid::isValidUID($uid)){
+			throw new Exception('Geen geldig uid opgegeven');
+		}
 		$this->eigenaar=$uid;
 	}
 	public function isEigenaar($uid=null){
@@ -154,15 +163,49 @@ class Document{
 	public function magBekijken(){
 		return LoginLid::instance()->hasPermission($this->getLeesrechten());
 	}
+
+	/*
+	 * Centrale plek om het volledige pad van een document te maken.
+	 */
+	public function getFullPath(){
+		return $this->documentroot.'/'.$this->getID().'_'.$this->bestandsnaam;
+	}
+	
+	/*
+	 * bestand opslaan vanuit een string in de juiste map.
+	 */
+	public function putFile($file){
+		if($this->getID()==0){
+			throw new Exception('Document moet eerst opgeslagen worden in de database voordat bestand verplaatst kan worden');
+		}
+		return file_put_contents($this->getFullPath(), $file);
+	}
+	/*
+	 * bestand opslaan vanuit upload-tempdir.
+	 */
 	public function moveUploaded($source){
 		if($this->getID()==0){
 			throw new Exception('Document moet eerst opgeslagen worden in de database voordat bestand verplaatst kan worden');
 		}
 		if(is_uploaded_file($source)){
-			return move_uploaded_file($source, $this->documentroot.'/'.$this->getID().'_'.$this->bestandsnaam);
+			return move_uploaded_file($source, $this->getFullPath());
 		}
 		return false;
 	}
+	/*
+	 * Aangehangen bestand verwijderen van de hd.
+	 */
+	public function deleteFile(){
+		if(!$this->hasFile()){
+			throw new Exception('Geen bestand gevonden voor dit document');
+		}
+		if(unlink($this->getFullPath())){
+			$this->setBestandsnaam('');
+			return true;
+		}
+		return false;
+	}
+	
 }
 
 ?>

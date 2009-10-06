@@ -46,10 +46,20 @@
 				<label for="rMethodeFromurl">Van url</label>
 			</div>
 			<div id="MethodeFromurl" class="keuze">
-				<label for="fromUrl">Geef url in: </label><input type="text" name="file_upload" class="fromurl" value="http://" />
+				<label for="fromUrl">Geef url op:</label><input type="text" name="url" class="fromurl" value="http://" />
 			</div>
 		</div>
-		<label for="submit" class="metadata">&nbsp;</label><input type="submit" name="submit" value="Toevoegen" />
+		<div class="uploadmethode">
+			<div class="optie">
+				<input type="radio" name="methode" id="rMethodePublicftp" value="publicftp"  /> 
+				<label for="rMethodePublicftp">Van publieke ftp</label>
+			</div>
+			<div id="MethodePublicftp" class="keuze">
+				<label for="publicftp">Selecteer een bestand:  </label><div id="ftpOpties" style="margin-left: 300px;"><li>Bestand1.pdf</li><li>Bestand2.odf</li><li>Lezing.mp3</li></div>
+			</div>
+			<div class="clear">&nbsp;</div>
+		</div>
+		<label for="submit" class="metadata">&nbsp;</label><input type="submit" name="submit" value="Toevoegen" /> <a href="/communicatie/documenten_new/" class="knop">annuleren</a>
 	</fieldset>
 	
 </form>

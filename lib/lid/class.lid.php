@@ -34,7 +34,7 @@ class Lid implements Serializable{
 		$lid=$db->getRow($query);
 		if(is_array($lid)){
 			$this->profiel=$lid;
-			//we unserializeren de instellingen-array even
+			//we unserializeren de instellingen-array even, hmm, lekker vier
 			if($this->profiel['instellingen']!=''){
 				$this->profiel['instellingen']=unserialize($this->profiel['instellingen']);
 			}
@@ -204,6 +204,13 @@ class Lid implements Serializable{
 	public function isLid(){
 		return in_array($this->getStatus(), array('S_NOVIET', 'S_LID', 'S_GASTLID'));
 	}
+
+	/*
+	 * Geef een karakter terug om de status van het huidige lid aan te
+	 * duiden. In de loop der tijd zijn ~ voor kringel en • voor oudlid
+	 * ingeburgerd. Handig om in leden snel te zien om wat voor soort
+	 * lid het gaat.
+	 */
 	public function getStatusChar(){
 		switch($this->getStatus()){
 			case 'S_OUDLID': return '•';
@@ -214,6 +221,7 @@ class Lid implements Serializable{
 			case 'S_LID': return '∈';
 		}				
 	}
+	
 	public function getPatroonUid(){	return $this->profiel['patroon']; }
 	public function getPatroon(){
 		if($this->getPatroonUid()!=''){
@@ -223,11 +231,17 @@ class Lid implements Serializable{
 		}
 	}
 	/*
-	 * Als er twee leden met elkaar als patroon ingevuld staan gaat het hier mis.
-	 * Deze functie gaat dan oneindig proberen lid-objecten in de kinder-array te stoppen, waardoor
-	 * oneindige recursie ontstaat. PHP geeft daar geen foutmeldingen van. Uit de bugtracker van PHP:
-	 * "This was requested before, and this can NOT be done in a nice way.", wat je dus krijgt is een
-	 * 500 internal server error, met in de apache errorlog iets als "premature end of script headers" 
+	 * Kinderen ophalen voor dit lid. Lazy-loading, er komt een array van
+	 * leden in het object te staan. Herladen kan geforceerd worden met
+	 * $force=true
+	 * 
+	 * PAS OP: Als er twee leden met elkaar als patroon ingevuld staan
+	 * gaat het hier mis. Deze functie gaat dan oneindig proberen lid-
+	 * objecten in de kinder-array te stoppen, waardoor oneindige recursie
+	 * ontstaat. PHP geeft daar geen foutmeldingen van. Uit de bugtracker
+	 * van PHP: "This was requested before, and this can NOT be done in a
+	 * nice way.", wat je dus krijgt is een 500 internal server error,
+	 * met in de apache errorlog iets als "premature end of script headers" 
 	 */
 	public function getKinderen($force=false){
 		if($this->kinderen===null or $force){
@@ -298,9 +312,11 @@ class Lid implements Serializable{
 		return $return;
 	}
 	
-	// check of het lid in het bestuur zit.
+	/*
+	 * Zit het huidige lid in de h.t. groep met de korte naam 'bestuur'?
+	 */
 	public function isBestuur(){
-		require_once('groepen/class.groep.php');
+		require_once 'groepen/class.groep.php';
 		$bestuur=new Groep('bestuur');
 		return $bestuur->isLid($uid->getUid());
 	}
@@ -309,6 +325,7 @@ class Lid implements Serializable{
 	 * getPasfoto()
 	 *
 	 * Kijkt of er een pasfoto voor het gegeven uid is, en geef die terug.
+	 * Geef anders een standaard-plaatje weer, meestal het logo van C.S.R.
 	 */
 	function getPasfoto($imgTag=true, $cssClass='pasfoto'){
 		$validExtensions=array('gif', 'jpg', 'jpeg', 'png');
@@ -337,8 +354,8 @@ class Lid implements Serializable{
 	/*
 	 * Maak een link met de naam van het huidige lid naar zijn profiel.
 	 *
-	 * vorm:	user, nick, bijnaam, streeplijst, full/volledig, civitas, aaidrom
-	 * mode:	link, html, plain
+	 * @vorm:	user, nick, bijnaam, streeplijst, full/volledig, civitas, aaidrom
+	 * @mode:	link, html, plain
 	 */ 
 	public function getNaamLink($vorm='full', $mode='plain'){
 		if($this->profiel['voornaam']!=''){
@@ -443,7 +460,14 @@ class Lid implements Serializable{
 		}
 	}
 
-	//__toString()-instellingen
+	/*
+	 * We kunnen het lid-object type-casten naar string, dan wordt de
+	 * naam weeergegeven. We kunnen aangeven op wat voor manier dat moet,
+	 * pasfotos kunnen dus ook.
+	 *
+	 * Gevolg hiervan is dat we in Smarty ook {$lid} kunnen doen en in
+	 * PHP gewoon echo $lid;
+	 */
 	public $tsVorm='full'; //kan zijn full, user, nick, streeplijst
 	public $tsMode='plain'; //kan zijn pasfoto, link, html, plain;
 	public function __toString(){
@@ -453,6 +477,12 @@ class Lid implements Serializable{
 			return $this->getNaamLink($this->tsVorm, $this->tsMode);
 		}
 	}
+
+	/*
+	 * Het lid-object wordt geserialized opgeslagen in de LidCache,
+	 * deze twee functies geven expliciet aan hoe dat serializen en
+	 * unserializen moet gebeuren.
+	 */
 	public function serialize(){
 		$lid['uid']=$this->getUid();
 		$lid['profiel']=$this->getProfiel();
@@ -466,20 +496,33 @@ class Lid implements Serializable{
 		$this->kinderen=$lid['kinderen'];
 	}
 
+	/*
+	 * Simpel testje voor juistheid van een uid. Dit houdt niet in dat een lid
+	 * ook werkelijk bestaat, gebruik daarvoor Lid::exists();
+	 */
 	public static function isValidUid($uid) {
 		return is_string($uid) AND preg_match('/^[a-z0-9]{4}$/', $uid) > 0;
 	}
+
+	/*
+	 * Bestaat er een lid met uid $uid in de database?
+	 */
 	public static function exists($uid) {
 		if(!Lid::isValidUid($uid)) return false;
 		$lid=LidCache::getLid($uid);
 		return $lid instanceof Lid;
 	}
+	/*
+	 * Bestaat er al een lid met de bijnaam $nick in de database?
+	 */	
 	public static function nickExists($nick){
 		return Lid::loadByNickname($nick) instanceof Lid;
 	}
 
-	//Voeg een nieuw regeltje in de lid-tabel in met alleen een nieuw lid-nummer.
-	//niet multi-user safe.
+	/*
+	 * Voeg een nieuw regeltje in de lid-tabel in met alleen een nieuw lid-nummer.
+	 * PAS OP: niet multi-user safe.
+	 */
 	public static function createNew($lichting){
 		$db=MySql::instance();
 		$lichtingid=substr($lichting, 2, 2);

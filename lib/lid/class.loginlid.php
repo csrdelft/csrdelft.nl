@@ -15,7 +15,7 @@ class LoginLid{
 	protected $_permissions = array();
 	protected $_perm_user   = array();
 
-	# lid bevat het Lid dat op dit moment is ingelogd
+	# $lid bevat het Lid-object van het lid dat op dit moment is ingelogd.
 	private $lid;
 	
 	# mocht er gesued zijn, dan bevat suedFrom het oorspronkelijk ingelogde Lid,
@@ -44,6 +44,9 @@ class LoginLid{
 		}
 		$this->logBezoek();
 	}
+	/*
+	 * Is de huidige gebruiker al actief in een sessie?
+	 */	
 	private function userIsActive(){
 		//er is geen _uid gezet in _SESSION dus er is nog niemand ingelogged.
 		if(!isset($_SESSION['_uid'])){
@@ -203,6 +206,25 @@ class LoginLid{
 	public function instelling($key){
 		return Instelling::get($key);
 	}
+
+	/*
+	 * hasPermission:
+	 *
+	 * @descr	een string met permissie(s).
+	 *
+	 * Met deze functies kan op één of meerdere permissies worden getest,
+	 * onderling gescheiden door komma's. Als een lid één van de
+	 * permissies 'heeft', geeft de functie true terug. Het is dus een
+	 * logische OF tussen de verschillende te testen permissies. Een
+	 * permissie kan met een uitroepteken geïnverteerd worden.
+	 *
+	 * Voorbeeldjes:
+	 *  groep:novcie				geeft true leden van de h.t. NovCie.
+	 *  groep:pubcie,groep:bestuur	geeft true voor leden van h.t. bestuur en h.t. novcie
+	 *  geslacht:m					geeft true voor alle mannelijke leden
+	 *  verticale:d					geeft true voor alle leden van verticale d.
+	 *  !lichting:2009				geeft true voor iedereen behalve lichting 2009.
+	 */
 	public function hasPermission($descr, $liddescr=null) {
 		# zoek de rechten van de gebruiker op
 		if($liddescr==null){
@@ -221,15 +243,23 @@ class LoginLid{
 		$permissies=explode(',', $descr);
 		foreach($permissies as $permissie){
 			$permissies=trim($permissie);
+
+			//een negatie van een permissie.
 			if(substr($permissie, 0, 1)=='!' && !$this->hasPermission(substr($permissie,1), $liddescr)){			
 				return true;
-			}elseif($permissie==$this->lid->getUid()){
+			//als een uid ingevoerd wordt true teruggeven als het om de huidige gebruiker gaat.
+			}elseif($permissie==$this->getUid()){
 				return true;
+			//Behoort een lid tot een bepaalde verticale?
 			}elseif(substr($permissie, 0, 9)=='verticale'){
 				$verticale=strtoupper(substr($permissie, 10));
 				if($verticale==$this->lid->getVerticale()){
 					return true;
 				}
+			//Behoort een lid tot een bepaalde (h.t.) groep?
+			//als een string als bijvoorbeeld 'pubcie' wordt meegegeven zoekt de ketzer
+			//de h.t. groep met die korte naam erbij, als het getal is uiteraard de groep
+			//met dat id.
 			}elseif(substr($permissie, 0, 5)=='groep'){
 				require_once 'groepen/class.groep.php';
 				try{
@@ -239,18 +269,24 @@ class LoginLid{
 					}
 				}catch(Exception $e){
 					//de groep bestaat niet, we gaan verder.
-				}				
+				}
+			//Is een lid man, vrouw en/of geslacht?		
 			}elseif(substr($permissie, 0, 8)=='geslacht'){
 				$geslacht=strtolower(substr($permissie, 9));
 				if($geslacht==$this->lid->getGeslacht()){
 					return true;
+				//we zijn toch zeker niet geslacht??
+				}elseif($geslacht=='nee' AND $this->hasPermission('P_LOGGED_IN')){
+					return true;
 				}
+			//Behoort een lid tot een bepaalde lichting?
 			}elseif(substr($permissie, 0, 7)=='lidjaar'){
 				$lidjaar=substr($permissie, 8);
 				if($lidjaar==$this->lid->getProperty('lidjaar')){
 					return true;
 				}
 			}
+			//vervolgens nog testen op de 'normale' permissies.
 			# ga alleen verder als er een geldige permissie wordt gevraagd
 			if (array_key_exists($permissie, $this->_permissions)){
 				# zoek de code op
@@ -440,9 +476,7 @@ class LoginLid{
 		require_once 'groepen/class.groep.php';
 		foreach($parts as $part){
 			if(Lid::isValidUid($part)){
-				$lid=LidCache::getLid($part);
-
-				$return[]=(string)$lid;
+				$return[]=(string)LidCache::getLid($part);
 			}elseif(substr($part, 0, 5)=='groep'){
 				try{
 					$groep=new Groep(substr($part, 6));
@@ -453,8 +487,28 @@ class LoginLid{
 				if($groep->getId()!=0){
 					$return[]=$groep->getLink();
 				}
-			}else{
-				$return[]=$part;
+			}elseif(substr($permissie, 0, 9)=='verticale'){
+				$verticale=strtoupper(substr($permissie, 10));
+				if(isset(Verticale::$namen[$verticale])){
+					$return[]=Verticale::$namen[$verticale];
+				}else{
+					$return[]='Onbekende verticale';
+				}
+			}elseif(substr($part, 0, 8)=='geslacht'){
+				switch(substr($part, 8)){
+					case 'm':
+					case 'man':
+						$return[]='Man';
+					break;
+					case 'v':
+					case 'vrouw':
+						$return[]='Vrouw';
+					break;
+					case 'nee':
+						$return[]='Niet geslacht';
+					default;
+						$return[]='onbekend geslacht';
+				}
 			}
 		}
 		return implode(', ', $return);

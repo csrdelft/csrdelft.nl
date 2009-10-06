@@ -52,7 +52,10 @@ class DocumentenCategorie{
 		}
 	}
 	/*
-	 * De onderhangende documenten ophalen.
+	 * De onderhangende documenten ophalen. In $this->loadLimit wordt
+	 * gebruikt in de LIMIT-clausule van de query.
+	 * Documenten worden niet automagisch geladen, enkel bij het opvragen
+	 * via getLast() of getDocumenten()
 	 */
 	public function loadDocumenten(){
 		$db=MySql::instance();
@@ -63,13 +66,18 @@ class DocumentenCategorie{
 			$query.=' LIMIT '.$this->loadLimit;
 		}
 		$result=$db->query($query);
-		while($doc=$db->next($result)){
-			$this->documenten[]=new Document($doc);
+		if($db->numRows($result)>0){
+			while($doc=$db->next($result)){
+				$this->documenten[]=new Document($doc);
+			}
+		}else{
+			return false;
 		}
 		return $db->numRows($result);
 	}
 	/*
-	 * Slaat alleen de gegevens van een categorie op, niet de onderliggende documenten
+	 * Slaat alleen de gegevens van een categorie op, DUS NIET de
+	 * onderliggende documenten.
 	 */
 	public function save(){
 		$db=MySql::instance();
