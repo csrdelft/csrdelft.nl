@@ -55,7 +55,7 @@ class DocumentCategorieContent extends SimpleHtml{
 
 	private $categorie;
 	
-	public function __construct(DocumentCategorie $categorie){
+	public function __construct(DocumentenCategorie $categorie){
 		$this->categorie=$categorie;
 	}
 	public function getTitel(){

@@ -16,8 +16,12 @@ if(isset($_GET['querystring'])){
 
 $pagina=new csrdelft($docControl->getContent());
 $pagina->addStylesheet('documenten.css');
+$pagina->addStylesheet('js/datatables/css/datatables_basic.css');
 
 $pagina->addScript('jquery.js');
+$pagina->addScript('datatables/jquery.dataTables.min.js');
+
 $pagina->addScript('documenten.js');
+
 $pagina->view();
 ?>

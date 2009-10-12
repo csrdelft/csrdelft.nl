@@ -20,3 +20,30 @@ fieldset label.metadata{ width: 150px; float: left; }
 
 
 
+.documenten{
+	width: 100%;
+	clear: both;
+	border-collapse: collapse;
+}
+.documenten thead tr th{
+	border-bottom: 1px solid black;
+	padding: 5px 3px 3px 3px;
+}
+.documenten tbody tr th{
+	padding: 3px;
+	border-bottom: 1px solid black;
+	border-top: 1px solid black;
+	background-color: #eee;
+}
+
+.documenten tr td{
+	padding: 2px 3px;
+}
+.documenten tr.odd td{
+	background-color: #efefef;
+}
+/*
+#documentencategorie tr.alt td{
+	background-color: #e5e5e5;
+} 
+*/

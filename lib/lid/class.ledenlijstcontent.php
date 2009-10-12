@@ -208,7 +208,7 @@ in <select name="waar">';
 
 		if(count($this->_result) > 0) {
 			//zoekresultatentabel met eerst de kopjes
-			echo '<table class="zoekResultaat"><tr>';
+			echo '<br /><table class="zoekResultaat" id="zoekResultaat" style="width: 100%; clear: both;"><thead><tr>';
 			if($loginlid->hasPermission('P_LEDEN_MOD')){ echo '<th>&nbsp;</th>'; }
 			if(in_array('pasfoto', $this->_form['kolom'])){ echo '<th>&nbsp;</th>'; }
 			echo '<th>Naam</th>';
@@ -217,7 +217,7 @@ in <select name="waar">';
 					echo '<th>'.$kolomtitel[$kolom].'</th>';
 				}
 			}
-			echo '</tr>';
+			echo '</tr></thead><tbody>';
 			//en de resultaten...
 			foreach ($this->_result as $uid) {
 				$lid=LidCache::getLid($uid['uid']);
@@ -248,7 +248,37 @@ in <select name="waar">';
 				}//einde foreach kolom
 				echo '</tr>';
 			}//einde foreach lid
-			echo'</table>';
+			echo'</tbody></table>';
+
+			//we hacken nog even een zoek- en sorteerbaar tabelletje in elkaar met jquery.
+			$aoColumns='';
+			for($x=0; $x<count($this->_form['kolom']); $x++){
+				$aoColumns.=', null';
+			}
+			?>
+<script>
+	$(document).ready(function(){
+		$("#zoekResultaat tr:odd").addClass('odd');
+		<?php if(LoginLid::instance()->hasPermission('P_ADMIN')){ ?>
+		$("#zoekResultaat").dataTable({
+			"oLanguage": {
+				"sSearch": "Zoeken in selectie:"
+			},
+			"iDisplayLength": 50,
+			"bInfo": false,
+			"bLengthChange": false,
+			"aoColumns": [
+				{"bSortable": false},
+				<?php echo $aoColumns; ?>				
+			]
+		}
+		<?php } ?>
+		);
+	});
+	
+</script>
+
+<?php
 		}else{
 			if(trim($form_wat)!=''){
 				echo '<br />Uw zoekopdracht heeft geen resultaten opgeleverd. Probeert u het nog eens.';

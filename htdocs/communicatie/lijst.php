@@ -92,7 +92,11 @@ if($loginlid->hasPermission('P_LEDEN_READ') or $loginlid->hasPermission('P_OUDLE
 
 
 $pagina=new csrdelft($midden);
-$pagina->view();
 
+$pagina->addStylesheet('js/datatables/css/datatables_basic.css');
+$pagina->addScript('jquery.js');
+$pagina->addScript('datatables/jquery.dataTables.min.js');
+
+$pagina->view();
 
 ?>

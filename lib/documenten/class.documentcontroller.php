@@ -78,7 +78,17 @@ class DocumentController extends Controller{
 		exit;
 	}
 	protected function action_categorie(){
+		if($this->hasParam(1)){
+			try{
+				$categorie=new DocumentenCategorie($this->getParam(1));
+			}catch(Exception $e){
+				DocumentenCategorie::invokeRefresh('categorie bestaat niet');
+			}
+		}else{
+			DocumentenCategorie::invokeRefresh('categorie bestaat niet');
+		}
 
+		$this->content=new DocumentCategorieContent($categorie);
 	}
 	protected function action_bewerken(){
 		$this->loadDocument();
@@ -129,6 +139,10 @@ class DocumentController extends Controller{
 					$melding='Fout bij toevoegen van document Document::save()';
 				}
 				DocumentContent::invokeRefresh($melding, $this->baseurl);
+			}
+		}else{
+			if(isset($_GET['catID']) AND DocumentenCategorie::exists($_GET['catID'])){
+				$this->document->setCatID($_GET['catID']);
 			}
 		}
 		$this->content=new DocumentContent($this->document);

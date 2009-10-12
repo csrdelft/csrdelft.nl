@@ -87,6 +87,15 @@ htdocs/layout/fotoalbum.css -text
 htdocs/layout/groepen.css -text
 htdocs/layout/js/builder.js -text
 htdocs/layout/js/csrdelft.js -text
+htdocs/layout/js/datatables/css/datatables_basic.css -text
+htdocs/layout/js/datatables/images/back_disabled.jpg -text
+htdocs/layout/js/datatables/images/back_enabled.jpg -text
+htdocs/layout/js/datatables/images/forward_disabled.jpg -text
+htdocs/layout/js/datatables/images/forward_enabled.jpg -text
+htdocs/layout/js/datatables/images/sort_asc.jpg -text
+htdocs/layout/js/datatables/images/sort_both.jpg -text
+htdocs/layout/js/datatables/images/sort_desc.jpg -text
+htdocs/layout/js/datatables/jquery.dataTables.min.js -text
 htdocs/layout/js/documenten.js -text
 htdocs/layout/js/effects.js -text
 htdocs/layout/js/fastlightbox.js -text
@@ -341,6 +350,7 @@ lib/smarty/libs/plugins/modifier.date_format.php -text
 lib/smarty/libs/plugins/modifier.debug_print_var.php -text
 lib/smarty/libs/plugins/modifier.default.php -text
 lib/smarty/libs/plugins/modifier.escape.php -text
+lib/smarty/libs/plugins/modifier.filesize.php -text
 lib/smarty/libs/plugins/modifier.indent.php -text
 lib/smarty/libs/plugins/modifier.lower.php -text
 lib/smarty/libs/plugins/modifier.nl2br.php -text

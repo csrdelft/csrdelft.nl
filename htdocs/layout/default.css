@@ -209,9 +209,6 @@ ul.nobullets li{ list-style-type: none; }
 #uitloggen{
 	float: right;
 }
-#saldi{	
-	
-}
 #saldi .saldo{ float: right; }
 #saldi .staatrood{ color: red; }
 #zoekveld{
@@ -359,6 +356,7 @@ a.knop, div.knop{
 	line-height: 1.1em;
 	cursor: pointer;
 }
+
 h2#mysql_debug_header{
 	text-align: center;
 }
@@ -374,8 +372,7 @@ pre#pubcie_debug{
 	z-index: 100;
 }
 table.ubb_table{
-	padding: 0px;	border-collapse: collapse;
-
+	padding: 0px; border-collapse: collapse;
 }
 table.ubb_table tr{
 	margin: 0px; padding: 0px;
@@ -385,18 +382,17 @@ table.ubb_table td, th{
 }
 pre.ubb_code{
 	max-width: 640px;	
-margin: 0px; padding-left: 8px;
+	margin: 0px; padding-left: 8px;
 	overflow-x:auto;
 	overflow-y:hidden;
 }
-
 
 table.query_table{
 	margin: 10px;
 	padding: 0px;	border-collapse: collapse;
 	border: 1px solid black;
-	
 }
+
 table.query_table td{
 	margin: 0px;
 	padding: 4px;
@@ -414,8 +410,8 @@ table.query_table th{
 
 .youtubeVideo{
 	position: relative;
-	
 }
+
 .afspelen{
 	cursor: pointer; cursor: hand;
 	position: absolute;
@@ -448,12 +444,7 @@ div.preview.pagina{
 	background-color: #ddd;
 	padding: 5px;
 }
-
-#forumtabel td .ubbMaaltijd{
-	margin: 0px 10px; 
-	/*position:absolute;*/
-}
-
+#forumtabel td .ubbMaaltijd{ margin: 0px 10px; }
 .ubbMaaltijdFloat{
 	float: right; 
 	background-color: #ccc; 
@@ -601,29 +592,11 @@ p img{ margin: 15px 10px; }
 	padding: 0px 5px 0px 5px;
 }
 
-a.knop{
-	background-color: #f5f5f5;  
-	border: 1px solid #A9A9A9;
-	margin: 2px; padding: 0px 2px 0px 2px;
-	line-height: 1.1em;
-}
 
 /* waarschuwing */
 .waarschuwing{ color: red;}
 div.blokje{ background-color: #fff3b4; margin: 10px 5px; padding: 5px 10px;}
-div#uStaatRood{
-	position: absolute;
-	left: 730px;
-	top: 50px;
-	width: 230px;
-	padding: 10px;
-	background-color: white;
-	color: darkred;
-	font-size: 1em;
-	border: 2px solid darkred;
-	opacity:.90; filter: alpha(opacity=90);
-	z-index: 99;
-}
+
 
 /* profiel */
 table.profiel{ 
@@ -709,11 +682,16 @@ div.offtopic hr{ text-align: left; background-color: #bbb; }
 table.zoekResultaat{ width: 100%; border-collapse: collapse;}
 table.zoekResultaat tr td{border-top: 1px solid lightgrey; margin: 0px; padding: 2px; text-align: left;}
 table.zoekResultaat tr td img{ background-color: #fff3b4;}
+table.zoekResultaat tr.odd td{ background-color: #efefef;}
 
 /* maaltijdketzer */
 table.maaltijden{ width: 100%; }
 table.maaltijden tr{ height: 1.6em; }
 table.maaltijden tr.old{ opacity: .50; }
+#maaltijdform label{ width: 150px; float: left; }
+#maaltijdform input, select{ margin-bottom: 3px;}
+#maaltijdform div.uidPreview{ display: inline; padding-left: 10px; }
+
 
 /* csrmail */
 div#pubciemail_form{ background-color: #f1f1f1; border: 1px solid lightgray; padding: 10px;}

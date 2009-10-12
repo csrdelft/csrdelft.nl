@@ -24,7 +24,7 @@ class DocumentenCategorie{
 			$this->zichtbaar=$init['zichtbaar'];
 			$this->leesrechten=$init['leesrechten'];
 		}else{
-			$this->load($catID);
+			$this->load($init);
 		}
 	}
 	/*
@@ -42,8 +42,8 @@ class DocumentenCategorie{
 				FROM documentcategorie WHERE ID=".$this->getID();
 			$categorie=$db->query2array($query);
 			if($categorie!==false){
-				$this->naam=$categorie['naam'];
-				$this->zichtbaar=$categorie['zichtbaar'];
+				$this->naam=$categorie[0]['naam'];
+				$this->zichtbaar=$categorie[0]['zichtbaar'];
 
 			}else{
 				//gevraagde categorie bestaat niet, we zet het ID weer op 0.
@@ -61,7 +61,7 @@ class DocumentenCategorie{
 		$db=MySql::instance();
 		$query="
 			SELECT ID, naam, catID, bestandsnaam, size, mimetype, toegevoegd, eigenaar, leesrechten
-			FROM document WHERE catID=".$this->getID();
+			FROM document WHERE catID=".$this->getID().' ORDER BY toegevoegd DESC ';
 		if($this->loadLimit>0){
 			$query.=' LIMIT '.$this->loadLimit;
 		}
