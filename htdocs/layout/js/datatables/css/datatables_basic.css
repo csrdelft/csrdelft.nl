@@ -56,6 +56,7 @@
 
 .paginate_enabled_previous {
 	background-image: url('../images/back_enabled.jpg');
+	cursor: pointer;
 }
 
 .paginate_disabled_next {
@@ -64,6 +65,7 @@
 
 .paginate_enabled_next {
 	background-image: url('../images/forward_enabled.jpg');
+	cursor: pointer;
 }
 
 

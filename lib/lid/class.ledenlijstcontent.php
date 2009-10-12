@@ -259,7 +259,7 @@ in <select name="waar">';
 <script>
 	$(document).ready(function(){
 		$("#zoekResultaat tr:odd").addClass('odd');
-		<?php if(LoginLid::instance()->hasPermission('P_ADMIN')){ ?>
+
 		$("#zoekResultaat").dataTable({
 			"oLanguage": {
 				"sSearch": "Zoeken in selectie:"
@@ -268,11 +268,11 @@ in <select name="waar">';
 			"bInfo": false,
 			"bLengthChange": false,
 			"aoColumns": [
-				{"bSortable": false},
+				<?php if($loginlid->hasPermission('P_LEDEN_MOD')){ ?>{"bSortable": false},<?php } ?> 
 				<?php echo $aoColumns; ?>				
 			]
 		}
-		<?php } ?>
+		
 		);
 	});
 	
