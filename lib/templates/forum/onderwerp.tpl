@@ -86,7 +86,7 @@
 	{foreach from=$onderwerp->getPosts() item='bericht' name='berichten'}
 		<tr>
 			<td class="auteur">
-				<span class="togglePasfoto handje" id="t{$bericht.uid}-{$bericht.id}">&raquo;</span>&nbsp;<a href="/communicatie/forum/reactie/{$bericht.id}" class="moment" style="float: right;" alt="Link naar deze post">&rarr;</a>
+				<span class="togglePasfoto" id="t{$bericht.uid}-{$bericht.id}">&raquo;</span>&nbsp;<a href="/communicatie/forum/reactie/{$bericht.id}" class="postlink" alt="Link naar deze post">&rarr;</a>
 				{$bericht.uid|csrnaam:'user'}<br />
 				<span class="moment">{$bericht.datum|reldate}</span>
 				<br />

@@ -40,6 +40,17 @@
 	font-size: 0.9em;
 	text-align: left;
 }
+a.postlink{ float:right; }
+span.togglePasfoto, a.postlink{
+	cursor: pointer;
+	color: #bbb;
+}
+span.togglePasfoto:hover, a.postlink:hover{
+	color: black;
+	text-decoration: none;
+}
+.moment{ font-size: 9px; color: #bbb; }
+
 .forummetadata{
 	font-size: 0.9em;
 	background-color: #fff;
@@ -56,7 +67,6 @@
 	background-color: #fff;
 	text-align: left;
 }
-#forumtabel .moment{ font-size: 9px; color: #bbb; }
 #forumtabel td.reacties{
 	vertical-align: middle; text-align: center;
 	width: 80px;
