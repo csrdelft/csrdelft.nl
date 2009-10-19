@@ -328,14 +328,14 @@ class Lid implements Serializable{
 	 * Geef anders een standaard-plaatje weer, meestal het logo van C.S.R.
 	 */
 	function getPasfoto($imgTag=true, $cssClass='pasfoto'){
-		$validExtensions=array('gif', 'jpg', 'jpeg', 'png');
+		$validExtensions=array('png', 'jpeg', 'jpg', 'gif');
 
 		$pasfoto=CSR_PICS.'pasfoto/geen-foto.jpg';
 
 		foreach($validExtensions as $validExtension){
 			if(file_exists(PICS_PATH.'/pasfoto/'.$this->getUid().'.'.$validExtension)){
 				$pasfoto=CSR_PICS.'pasfoto/'.$this->getUid().'.'.$validExtension;
-				continue;
+				break;
 			}
 		}
 

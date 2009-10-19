@@ -51,7 +51,7 @@ class ForumContent extends SimpleHTML {
 			echo '<h1><a href="/communicatie/profiel/'.$uid.'/#forum">Forum (zelf gepost)</a></h1>';
 		}else{
 			$aPosts=Forum::getPostsVoorRss(Instelling::get('zijbalk_forum'), true);
-			echo '<h1><a href="/communicatie/forum/categorie/laatste">Forum</a></h1>';
+			echo '<div id="zijbalk_forum"><h1><a href="/communicatie/forum/categorie/laatste">Forum</a></h1>';
 		}
 		
 		if(!is_array($aPosts)){
@@ -75,6 +75,9 @@ class ForumContent extends SimpleHTML {
 				echo '>'.$tekst.'</a><br />'."\n";
 				echo '</div>';
 			}
+		}
+		if(!$zelf){
+			echo '</div>';
 		}
 	}
 	public function lastPosts(){

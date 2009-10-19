@@ -2,8 +2,8 @@
 	float: right;
 }
 
-fieldset{ background-color: #eee; padding: 5px 10px; margin-bottom: 10px;}
-fieldset label.metadata{ width: 150px; float: left; }
+#documentForm fieldset{ background-color: #eee; padding: 5px 10px; margin-bottom: 10px;}
+#documentForm fieldset label.metadata{ width: 150px; float: left; }
 
 #documentForm .uploadmethode, #documentForm .uploadmethode:hover{ 
 	width: 100; min-height: 1.5em; padding: 4px 8px; margin: 4px 0px;
@@ -29,6 +29,11 @@ fieldset label.metadata{ width: 150px; float: left; }
 	border-bottom: 1px solid black;
 	padding: 5px 3px 3px 3px;
 }
+.documenten tfoot tr th{
+	border-top: 1px solid black;
+	padding: 3px 3px 5px 3px;
+}
+
 .documenten tbody tr th{
 	padding: 3px;
 	border-bottom: 1px solid black;

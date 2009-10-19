@@ -2,7 +2,10 @@
  * Document toevoegen/bewerken.
  *}
  
-<h2>Document {if $document->getID()==0}Toevoegen{else}Bewerken{/if}</h2>
+<div id="controls">
+	<a class="knop" href="/communicatie/documenten_new/">Terug</a>
+</div>
+<h1>Document {if $document->getID()==0}Toevoegen{else}Bewerken{/if}</h1>
 <div class="foutje">{$melding}</div>
 
 <form id="documentForm" method="post" enctype="multipart/form-data">
@@ -22,7 +25,7 @@
 		{if $document->hasFile()}
 			<div class="uploadmethode">
 				<div class="optie">
-					<input type="radio" name="methode" id="rMethodeKeepfile" value="keepfile" selectend="selected" /> 
+					<input type="radio" name="methode" id="rMethodeKeepfile" value="keepfile" checked="checked" /> 
 					<label for="rMethodeKeepfile">Huidige behouden</label>
 				</div>
 				<div id="MethodeKeepfile" class="keuze">
@@ -33,7 +36,7 @@
 		
 		<div class="uploadmethode">
 			<div class="optie">
-				<input type="radio" name="methode" id="rMethodeUploaden" value="uploaden" /> 
+				<input type="radio" name="methode" id="rMethodeUploaden" value="uploaden" {if $document->getBestandsnaam()==''}checked="checked"{/if} /> 
 				<label for="rMethodeUploaden">Uploaden</label>
 			</div>
 			<div id="MethodeUploaden" class="keuze">
@@ -55,11 +58,11 @@
 				<label for="rMethodePublicftp">Van publieke ftp</label>
 			</div>
 			<div id="MethodePublicftp" class="keuze">
-				<label for="publicftp">Selecteer een bestand:  </label><div id="ftpOpties" style="margin-left: 300px;"><li>Bestand1.pdf</li><li>Bestand2.odf</li><li>Lezing.mp3</li></div>
+				<label for="publicftp">Selecteer een bestand:  </label><div id="ftpOpties" style="margin-left: 300px;">
+				<input type="radio">Bestand1.pdf</input><br /><input type="radio">Bestand2.odf</input><br /><input type="radio">Lezing.mp3</input></div>
 			</div>
-			<div class="clear">&nbsp;</div>
 		</div>
-		<label for="submit" class="metadata">&nbsp;</label><input type="submit" name="submit" value="Toevoegen" /> <a href="/communicatie/documenten_new/" class="knop">annuleren</a>
+		<label for="submit" class="metadata clear">&nbsp;</label><input type="submit" name="submit" value="Toevoegen" /> <a href="/communicatie/documenten_new/" class="knop">annuleren</a>
 	</fieldset>
 	
 </form>

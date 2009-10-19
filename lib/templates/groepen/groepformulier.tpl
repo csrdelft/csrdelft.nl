@@ -11,8 +11,7 @@
 			<input type="text"  name="snaam" value="{$groep->getSnaam()|escape:'html'}" />
 			
 		{/if}
-		<div class="clear"></div>
-		<label for="groepNaam"><strong>Naam:</strong></label>
+		<label for="groepNaam" class="clear"><strong>Naam:</strong></label>
 		<input type="text" id="groepNaam" name="naam" style="width: 70%" value="{$groep->getNaam()|escape:'html'}" /><br />
 
 		<label for="groepStatus"><strong>Status:</strong></label>

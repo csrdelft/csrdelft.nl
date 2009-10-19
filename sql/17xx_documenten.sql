@@ -1,6 +1,12 @@
 --
 -- Nieuwe documentenketzer
 --
+-- PAS OP: de oude tabellen worden weggegooid, dat houdt in de de huidige
+-- documenten weg zijn.
+
+DROP TABLE document;
+DROP TABLE documentbestand;
+DROP TABLE documentencategorie;
 
 CREATE TABLE IF NOT EXISTS `document` (
   `ID` int(11) NOT NULL auto_increment,

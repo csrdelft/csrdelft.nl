@@ -253,7 +253,7 @@
 		</div>
 	</div>
 	{/if}
-	{if $loginlid->hasPermission('P_ADMIN,P_BESTUUR,groep:novcie') AND $lid->getStatus()=='S_NOVIET'}
+	{if $loginlid->hasPermission('P_ADMIN,P_BESTUUR,groep:novcie') AND $lid->getStatus()=='S_NOVIET' AND $profhtml.kgb!=''}
 		<div class="profielregel" id="novcieopmerking">
 			<div class="left">NovCie-<br />opmerking:</div>
 			<div class="gegevens" id="novcie_gegevens">{$profhtml.kgb|ubb}</div>

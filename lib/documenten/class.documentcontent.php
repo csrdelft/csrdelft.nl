@@ -81,7 +81,7 @@ class DocumentDownloadContent extends SimpleHtml{
 	public function view(){
 		header('Pragma: public');
 		header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-		header('Cache-Control: private',false);
+		header('Cache-Control: private', false);
 		header('content-type: '.$this->document->getMimeType());
 
 		$mime=$this->document->getMimetype();

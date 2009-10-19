@@ -115,6 +115,9 @@ class DocumentController extends Controller{
 						$this->document->setBestandsnaam($this->downloadfile['name']);
 					break;
 					case 'fromurl':
+						//we hebben nog geen mime-gegevens van dit bestand,
+						//dus laten het lekker op de standaard staan, geforceerde
+						//download. TODO dus nog, om dit netjes te fixen
 						$this->document->setSize(strlen($this->downloadfile));
 						$naam=substr(trim($_POST['url']), strrpos($_POST['url'], '/')+1);
 						if(strlen($naam)<3){
@@ -177,6 +180,7 @@ class DocumentController extends Controller{
 					case 'fromurl':
 						if(!isset($_POST['url'])){
 							$this->addError('Formulier niet compleet');
+						
 						}
 						$this->downloadfile=file_get_contents($_POST['url']);
 					break;

@@ -27,5 +27,11 @@
 			</tr>
 		{/foreach}
 		</tbody>
+		<tfoot>
+			<tr>
+				<th>Document</th><th>Bestandsgrootte</th><th>Mime-type</th><th>Toegevoegd</th><th>Eigenaar</th>
+			</tr>
+		</tfoot>
 	</table>
+	
 {/if}

@@ -86,10 +86,11 @@
 	{foreach from=$onderwerp->getPosts() item='bericht' name='berichten'}
 		<tr>
 			<td class="auteur">
-				<a href="/communicatie/forum/reactie/{$bericht.id}" class="moment" style="float: right;" alt="Link naar deze post">&rarr;</a>
+				<span class="togglePasfoto handje" id="t{$bericht.uid}-{$bericht.id}">&raquo;</span>&nbsp;<a href="/communicatie/forum/reactie/{$bericht.id}" class="moment" style="float: right;" alt="Link naar deze post">&rarr;</a>
 				{$bericht.uid|csrnaam:'user'}<br />
 				<span class="moment">{$bericht.datum|reldate}</span>
 				<br />
+				<div id="p{$bericht.id}" style="float: right; width: 50px; display: none;"></div>
 				{* knopjes bij elke post *}
 				{* citeerknop enkel als het onderwerp open is en als men mag posten, of als men mod is. *}
 				{if $onderwerp->magCiteren()}
@@ -191,4 +192,27 @@
 {if $onderwerp->getSize()>4} 
 	{$smarty.capture.navlinks}
 {/if}
+{if $loginlid->hasPermission('P_LEDEN_READ')}
+	{literal}
+	<script>
+	$(document).ready(function() {
+		var tpasfotos=$('.togglePasfoto');
+		tpasfotos.click(function(){
+			var parts=this.id.substr(1).split('-');
+			var pasfotodiv=$('#p'+parts[1]);
 
+			if(pasfotodiv.html()==''){
+				pasfotodiv.html('<img src="/tools/pasfoto/'+parts[0]+'.png" width="50" />');
+			}
+			if(pasfotodiv.is(':visible')){
+				$(this).html('&raquo');
+			}else{
+				$(this).html('v');
+			}
+			pasfotodiv.toggle();
+			
+		});
+	});
+	</script>
+	{/literal}
+{/if}

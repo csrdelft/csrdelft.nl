@@ -41,4 +41,9 @@
 {foreachelse}
 	<tr><td colspan="5">Geen categorieën in de database aanwezig.</td></tr>
 {/foreach}
+<tfoot>
+	<tr>
+		<th>Document</th><th>Bestandsgrootte</th><th>Mime-type</th><th>Toegevoegd</th><th>Eigenaar</th>
+	</tr>
+</tfoot>
 </table>

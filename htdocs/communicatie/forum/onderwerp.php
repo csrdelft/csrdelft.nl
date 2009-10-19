@@ -43,5 +43,7 @@ if($loginlid->hasPermission('P_FORUM_READ')) {
 
 $page=new csrdelft($midden);
 $page->addStylesheet('forum.css');
+
+$page->addScript('jquery.js');
 $page->view();
 ?>
