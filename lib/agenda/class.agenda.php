@@ -90,6 +90,14 @@ class Agenda {
 	public function __construct() {
 
 	}
+	
+	public function magToevoegen() {
+		return LoginLid::instance()->hasPermission('P_AGENDA_POST');
+	}
+	
+	public function magBeheren() {
+		return LoginLid::instance()->hasPermission('P_AGENDA_MOD');
+	}
 
 	public function getItems($van=null, $tot=null, $filter=false) {
 		$result = array();
@@ -122,7 +130,7 @@ class Agenda {
 		return $this->getItems($van, $tot);
 	}
 
-	public function getItemsByMaand($jaar=null, $maand=null) {		
+	public function getItemsByMaand($jaar, $maand) {		
 		// Zondag van de eerste week van de maand uitrekenen
 		$startMoment = mktime(0, 0, 0, $maand, 1, $jaar);		
 		if (date('w', $startMoment) != 0) {
@@ -131,32 +139,46 @@ class Agenda {
 		
 		// Zaterdag van de laatste week van de maand uitrekenen
 		$eindMoment = mktime(0, 0, 0, $maand, 1, $jaar);
-		$eindMoment = strtotime('-1 second', strtotime('+1 month', $eindMoment));
-		if (date('w', $eindMoment) != 6) {
+		$eindMoment = strtotime('+1 month', $eindMoment) - 1;
+		if (date('w', $eindMoment) == 6) {
+			$eindMoment++;			
+		} else {
 			$eindMoment = strtotime('next Saturday', $eindMoment);
+			$eindMoment = strtotime('+1 day', $eindMoment);
 		}
 		
 		// Array met weken en dagen maken
-		$cur = $startMoment;	
+		// TODO: Huidige week mag hier wel een vinkje krijgen, kan ie een ander kleurtje krijgen.		
+		$cur = $startMoment;		
 		$agenda = array();
-		while ($cur != $eindMoment+1) {
-			$week = strftime('%U', $cur);
-			$dag = date('d', $cur);
-			
+		while ($cur != $eindMoment) {
+			$week = Agenda::weekNumber($cur);
+			$dag = date('d', $cur);			
 			$agenda[$week][$dag] = array();
 			
-			$cur = strtotime('+1 day', $cur);
+			$cur = strtotime('+1 day', $cur);			
 		}
-		
+				
 		// Items toevoegen aan het array
 		$items = $this->getItems(date('Y-m-d', $startMoment), date('Y-m-d', $eindMoment));
 		foreach ($items as $item) {
-			$week = strftime('%U', $item->getBeginMoment());
+			$week = Agenda::weekNumber($item->getBeginMoment());
 			$dag = date('d', $item->getEindMoment());
 			$agenda[$week][$dag][] = $item;
 		}	
 		
 		return $agenda;
+	}
+	
+	/**
+	 * Geeft het weeknummer van de eerste dag van de week van $date terug.
+	 */
+	public static function weekNumber($date) {
+		if (date('w', $date) == 0) {
+			return strftime('%U', $date);
+		} else {
+			return strftime('%U', strtotime('last Sunday', $date));
+		}
 	}
 }
 ?>

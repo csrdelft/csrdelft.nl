@@ -8,54 +8,49 @@
 
 require_once('class.agenda.php');
 
-class AgendaContent extends SimpleHTML {
+class AgendaMaandContent extends SimpleHTML {
 	
 	private $agenda;
-	private $actie=null;
+	private $jaar;
+	private $maand;
 	
-	public function __construct($agenda){
+	public function __construct($agenda, $jaar, $maand){
 		$this->agenda=$agenda;
+		$this->jaar=$jaar;
+		$this->maand=$maand;
 	}
-	
-	public function setActie($actie) {
-		$this->actie = $actie;
-	}
-	
+		
 	public function getTitel() {
-		$titel = 'Agenda';		
-		
-		switch ($this->actie) {
-			case 'week':
-				$titel .= ' - Weekoverzicht';
-				break;
-		}
-		
+		$titel = 'Agenda - Maandoverzicht voor '.strftime('%B %Y', strtotime($this->jaar.'-'.$this->maand.'-01'));		
+				
 		return $titel;
 	}
 	
-	public function week() {
-		$content = new Smarty_csr();
-		$content->display('agenda/week.tpl');
-	}
-	
-	public function maand() {
-		$content = new Smarty_csr();
-		$content->assign('maand', 'Oktober');
-		$content->assign('jaar', '2009');
-		$content->assign('weken', $this->agenda->getItemsByMaand(2009, 10));		
-		$content->display('agenda/maand.tpl');
-	}
-	
 	public function view(){
-		switch ($this->actie) {
-			case 'week':
-				$this->week();
-				break;
-
-			case 'maand':
-				$this->maand();
-				break;
-		}
+		$content = new Smarty_csr();
+		$content->assign('datum', strtotime($this->jaar.'-'.$this->maand.'-01'));
+		$content->assign('weken', $this->agenda->getItemsByMaand($this->jaar, $this->maand));
+		$content->assign('magToevoegen', $this->agenda->magToevoegen());
+		
+		// URL voor vorige maand
+		$urlVorige = CSR_ROOT.'actueel/agenda/';
+		if ($this->maand == 1) {
+			$urlVorige .= ($this->jaar-1).'-12/';
+		} else {
+			$urlVorige .= $this->jaar.'-'.($this->maand-1).'/';
+		}	
+		$content->assign('urlVorige', $urlVorige);
+		
+		// URL voor volgende maand
+		$urlVolgende = CSR_ROOT.'actueel/agenda/';
+		if ($this->maand == 12) {
+			$urlVolgende .= ($this->jaar+1).'-1/';
+		} else {
+			$urlVolgende .= $this->jaar.'-'.($this->maand+1).'/';
+		}	
+		$content->assign('urlVolgende', $urlVolgende);		
+		
+		$content->display('agenda/maand.tpl');
 	}
 }
 

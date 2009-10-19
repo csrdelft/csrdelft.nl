@@ -340,9 +340,9 @@ class LoginLid{
 			'P_LEDEN_READ'   => 00000040000, # Gegevens over andere leden raadplegen
 			'P_LEDEN_EDIT'   => 00000020000, # Profiel van andere leden wijzigen
 			'P_LEDEN_MOD'    => 00070070000, # samengestelde om te kunnen lezen en veranderen bij iedereen
-			'P_AGENDA_READ'  => 00000400000, # Agenda bekijken
-			'P_AGENDA_POST'  => 00000500000, # Items toevoegen aan de agenda
-			'P_AGENDA_MOD'   => 00000700000, # euh?
+			'P_AGENDA_READ'  => 00000100000, # Agenda bekijken
+			'P_AGENDA_POST'  => 00000300000, # Items toevoegen aan de agenda
+			'P_AGENDA_MOD'   => 00000700000, # Items beheren in de agenda
 			'P_NEWS_POST'    => 00001000000, # Nieuws plaatsen en wijzigen van jezelf
 			'P_NEWS_MOD'     => 00003000000, # Nieuws-moderator mag berichten van anderen wijzigen of verwijderen
 			'P_OUDLEDEN_EDIT'=> 00020000000, # Profiel van andere leden wijzigen

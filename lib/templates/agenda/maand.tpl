@@ -1,8 +1,8 @@
-<h1>Agenda {$maand} {$jaar}</h1>
+<h1>Agenda {$datum|date_format:"%B %Y"}</h1>
 <table class="agenda maand">
-	<a class="knop">&laquo; Vorige maand</a></td>	
-	<a class="knop">Volgende maand &raquo;</a>
-	<br /><br />
+	<a class="knop" href="{$urlVorige}" style="float: left;" >&laquo; Vorige maand</a></td>
+	<a class="knop" href="{$urlVolgende}" style="float: right;">Volgende maand &raquo;</a>
+	<br /><br style="clear: both;" />
 	<tr>
 		<th> </th>
 		<th>Zondag</th>
@@ -18,9 +18,12 @@
 			<th>{$weeknr}</th>
 			{foreach from=$dagen key=dagnr item=items}
 				<td>
-					{$dagnr}					
-					{foreach from = $items item=item}
-						<hr />
+					{if	$magToevoegen}
+						<a class="knop">+</a>
+					{/if}	
+					{$dagnr}	
+					{foreach from=$items item=item}
+						<hr style="clear: both;" />
 						{$item->getBeginMoment()|date_format:"%R"}-{$item->getEindMoment()|date_format:"%R"} 
 						<b>{$item->getTitel()}</b>
 						<br />

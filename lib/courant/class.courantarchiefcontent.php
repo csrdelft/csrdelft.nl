@@ -47,12 +47,8 @@ class CourantarchiefContent{
 			$sReturn.='Geen couranten in het archief aanwezig';
 		}
 		return $sReturn;
-	}
-	
-	//tussen de modes wisselen, of een overzicht in de zijkolom, of een archiefmail in het
-	//hoofdgedeelte
-	function toggleZijkolom(){ $this->zijkolom=!$this->zijkolom; }
-	
+	}	
+
 	function getVerzendMoment(){
 		return strftime('%d %B %Y', strtotime($this->courant->getVerzendmoment()));
 	}

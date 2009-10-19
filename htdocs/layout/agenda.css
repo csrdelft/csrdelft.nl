@@ -16,3 +16,7 @@ table.agenda th {
 	text-align: center;
 	background-color: #dddddd;
 }
+
+table.maand td a.knop {
+	float: right;
+}

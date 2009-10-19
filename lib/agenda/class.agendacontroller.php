@@ -22,9 +22,6 @@ class AgendaController extends Controller {
 		// Agenda maken
 		$this->agenda = new Agenda();
 
-		// Content-object aanmaken
-		$this->content = new AgendaContent($this->agenda);
-
 		// Actie opslaan
 		if ($this->hasParam(0) AND $this->hasAction($this->getParam(0))) {
 			$this->action = $this->getParam(0);
@@ -43,9 +40,9 @@ class AgendaController extends Controller {
 	 * we die, anders laten we de huidige week zien.
 	 */
 	public function action_week() {
-		if ($this->hasParam(1) AND preg_match('/^[0-9]{4}\-[0-9]{1,2}$/', $this->getParam(1))) {
-			$jaar = (int) substr($this->getParam(1), 0, 4);
-			$week = (int) substr($this->getParam(1), 5);
+		if ($this->hasParam(0) AND preg_match('/^[0-9]{4}\-[0-9]{1,2}$/', $this->getParam(0))) {
+			$jaar = (int) substr($this->getParam(0), 0, 4);
+			$week = (int) substr($this->getParam(0), 5);
 		} else {
 			$jaar = date('Y');
 			$week = strftime('%U');
@@ -59,15 +56,15 @@ class AgendaController extends Controller {
 	 * we die, anders laten we de huidige maand zien.
 	 */
 	public function action_maand() {
-		if ($this->hasParam(1) AND preg_match('/^[0-9]{4}\-[0-9]{1,2}$/', $this->getParam(1))) {
-			$jaar = (int) substr($this->getParam(1), 0, 4);
-			$maand = (int) substr($this->getParam(1), 5);
+		if ($this->hasParam(0) AND preg_match('/^[0-9]{4}\-[0-9]{1,2}$/', $this->getParam(0))) {
+			$jaar = (int) substr($this->getParam(0), 0, 4);
+			$maand = (int) substr($this->getParam(0), 5);
 		} else {
 			$jaar = date('Y');
 			$maand = date('n');
 		}
 		
-		$this->content->setActie('maand');
+		$this->content = new AgendaMaandContent($this->agenda, $jaar, $maand);
 	}
 
 	/**
