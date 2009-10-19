@@ -34,12 +34,14 @@ if(isset($_GET['string'])){
 	if(Lid::isValidUid($_GET['uid']) AND $loginlid->hasPermission('P_LEDEN_READ')){
 		$lid=LidCache::getLid($_GET['uid']);
 		$types=array('png', 'gif', 'jpg');
-		if(in_array(substr($lid->getPasfoto(false), -3), $types)){
-			header('Content-type: image/'.substr($lid->getPasfoto(false), -3));
-		}else{
+		$pasfoto=$lid->getPasfotoPath();
+		
+		if(in_array(substr($pasfoto, -3), $types)){
+			header('Content-type: image/'.substr($pasfoto, -3));
+		}else{ //assumption is the mother of all...
 			header('Content-type: image/jpg');
 		}
-		echo file_get_contents($lid->getPasfoto(false));
+		echo file_get_contents(PICS_PATH.'/'.$pasfoto);
 	}else{
 		header('Content-type: image/jpeg');
 		echo file_get_contents(PICS_PATH.'/pasfoto/geen-foto.jpg');
