@@ -588,7 +588,7 @@ class MaalTrack {
 	}
 
 	# haalt maaltijden op en voegt extra info toe voor op de maaltijdenpagina
-	function getMaaltijden($van = 0, $tot = 0, $mootfilter = true, $corveefilter = true, $uid=null) {
+	function getMaaltijden($van = 0, $tot = 0, $mootfilter = true, $corveefilter = true, $uid=null, $alsArray=true) {
 		if($uid==null){
 			$uid=LoginLid::instance()->getUid();
 		}
@@ -597,79 +597,85 @@ class MaalTrack {
 		$maaltijdenRaw = $this->getMaaltijdenRaw($van,$tot,$mootfilter,$type);
 
 		$maaltijden=array();
-		foreach($maaltijdenRaw as $maaltijd){
-			$maaltijd['abotekst'] = $this->getAboTekst($maaltijd['abosoort']);
-
-			if($maaltijd['gesloten']=='1'){
-				//als de maaltijd al gesloten is, dan uit de maaltijdgesloten-tabel ophalen.
-				$sAanmeldingen="SELECT uid, gasten, gasten_opmerking FROM maaltijdgesloten WHERE uid = '".$uid."' AND maalid = ".$maaltijd['id'].";";
-				$rAanmeldingen = $this->_db->query($sAanmeldingen);
-				if (($rAanmeldingen !== false) and $this->_db->numRows($rAanmeldingen) > 0) {
-					$maaltijd['status']='AAN';
-				}else{
-					$maaltijd['status']='';
-				}
-				# Gasten ophalen
-				$record = $this->_db->next($rAanmeldingen);
-				$maaltijd['gasten'] = $record['gasten'];
-				$maaltijd['opmerking'] = $record['gasten_opmerking'];
-			}else{
-				# status: AAN,AF ABO ''
-				# 1a. is er een aan of afmelding voor deze maaltijd?
-				$sAanmeldingen="
-					SELECT
-						status, gasten, gasten_opmerking
-					FROM
-						maaltijdaanmelding
-					WHERE
-						uid = '".$uid."' AND maalid = ".$maaltijd['id'].";";
-				$rAanmeldingen = $this->_db->query($sAanmeldingen);
-				if (($rAanmeldingen !== false) and $this->_db->numRows($rAanmeldingen) > 0) {
-					$record = $this->_db->next($rAanmeldingen);
-					$maaltijd['status'] = $record['status'];
+		if ($alsArray) {
+			foreach($maaltijdenRaw as $maaltijd){
+				$maaltijd['abotekst'] = $this->getAboTekst($maaltijd['abosoort']);
+	
+				if($maaltijd['gesloten']=='1'){
+					//als de maaltijd al gesloten is, dan uit de maaltijdgesloten-tabel ophalen.
+					$sAanmeldingen="SELECT uid, gasten, gasten_opmerking FROM maaltijdgesloten WHERE uid = '".$uid."' AND maalid = ".$maaltijd['id'].";";
+					$rAanmeldingen = $this->_db->query($sAanmeldingen);
+					if (($rAanmeldingen !== false) and $this->_db->numRows($rAanmeldingen) > 0) {
+						$maaltijd['status']='AAN';
+					}else{
+						$maaltijd['status']='';
+					}
 					# Gasten ophalen
+					$record = $this->_db->next($rAanmeldingen);
 					$maaltijd['gasten'] = $record['gasten'];
 					$maaltijd['opmerking'] = $record['gasten_opmerking'];
-				} else {
-					# 1b. zo nee, is er een abo actief?
-					$sAbo="SELECT uid FROM maaltijdabo WHERE uid = '".$uid."' AND abosoort = '".$maaltijd['abosoort']."'";
-					$rAbo = $this->_db->query($sAbo);
-					if(($rAbo !== false) and $this->_db->numRows($rAbo) > 0) {
-						$record = $this->_db->next($rAbo);
-						$maaltijd['status'] = 'ABO';
-					}else{
-						# 1c. zo ook nee, dan status = ''
-						$maaltijd['status'] = '';
+				}else{
+					# status: AAN,AF ABO ''
+					# 1a. is er een aan of afmelding voor deze maaltijd?
+					$sAanmeldingen="
+						SELECT
+							status, gasten, gasten_opmerking
+						FROM
+							maaltijdaanmelding
+						WHERE
+							uid = '".$uid."' AND maalid = ".$maaltijd['id'].";";
+					$rAanmeldingen = $this->_db->query($sAanmeldingen);
+					if (($rAanmeldingen !== false) and $this->_db->numRows($rAanmeldingen) > 0) {
+						$record = $this->_db->next($rAanmeldingen);
+						$maaltijd['status'] = $record['status'];
+						# Gasten ophalen
+						$maaltijd['gasten'] = $record['gasten'];
+						$maaltijd['opmerking'] = $record['gasten_opmerking'];
+					} else {
+						# 1b. zo nee, is er een abo actief?
+						$sAbo="SELECT uid FROM maaltijdabo WHERE uid = '".$uid."' AND abosoort = '".$maaltijd['abosoort']."'";
+						$rAbo = $this->_db->query($sAbo);
+						if(($rAbo !== false) and $this->_db->numRows($rAbo) > 0) {
+							$record = $this->_db->next($rAbo);
+							$maaltijd['status'] = 'ABO';
+						}else{
+							# 1c. zo ook nee, dan status = ''
+							$maaltijd['status'] = '';
+						}
 					}
 				}
+				
+				# Corvee
+				$sCorvee="
+					SELECT
+						kok, afwas, theedoek
+					FROM
+						maaltijdcorvee
+					WHERE
+						uid = '".$uid."' AND maalid = ".$maaltijd['id'].";";
+				$rCorvee = $this->_db->query($sCorvee);
+				if (($rCorvee !== false) and $this->_db->numRows($rCorvee) > 0) {
+					$record = $this->_db->next($rCorvee);
+					$maaltijd['kok'] = $record['kok'];
+					$maaltijd['afwas'] = $record['afwas'];
+					$maaltijd['theedoek'] = $record['theedoek'];
+				}
+	
+				# 2. actie is afhankelijk van status en evt. gesloten zijn van de maaltijd
+				# actie: AAN, AF, ''
+				if(($maaltijd['status']=='AAN' OR $maaltijd['status']=='ABO') AND $maaltijd['gesloten']=='0' ){
+					$maaltijd['actie'] = 'af';
+				}elseif(($maaltijd['status']=='AF' OR $maaltijd['status']=='') AND $maaltijd['aantal'] != $maaltijd['max'] AND $maaltijd['gesloten'] == '0' ){
+					$maaltijd['actie'] = 'aan';
+				}else{
+					$maaltijd['actie'] = '';
+				}
+				$maaltijden[]=$maaltijd;
 			}
-			
-			# Corvee
-			$sCorvee="
-				SELECT
-					kok, afwas, theedoek
-				FROM
-					maaltijdcorvee
-				WHERE
-					uid = '".$uid."' AND maalid = ".$maaltijd['id'].";";
-			$rCorvee = $this->_db->query($sCorvee);
-			if (($rCorvee !== false) and $this->_db->numRows($rCorvee) > 0) {
-				$record = $this->_db->next($rCorvee);
-				$maaltijd['kok'] = $record['kok'];
-				$maaltijd['afwas'] = $record['afwas'];
-				$maaltijd['theedoek'] = $record['theedoek'];
+		} else {
+			foreach($maaltijdenRaw as $maaltijd){
+				$maaltijden[] = new Maaltijd($maaltijd['id']);
 			}
-
-			# 2. actie is afhankelijk van status en evt. gesloten zijn van de maaltijd
-			# actie: AAN, AF, ''
-			if(($maaltijd['status']=='AAN' OR $maaltijd['status']=='ABO') AND $maaltijd['gesloten']=='0' ){
-				$maaltijd['actie'] = 'af';
-			}elseif(($maaltijd['status']=='AF' OR $maaltijd['status']=='') AND $maaltijd['aantal'] != $maaltijd['max'] AND $maaltijd['gesloten'] == '0' ){
-				$maaltijd['actie'] = 'aan';
-			}else{
-				$maaltijd['actie'] = '';
-			}
-			$maaltijden[]=$maaltijd;
 		}
 		return $maaltijden;
 

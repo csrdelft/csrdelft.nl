@@ -6,6 +6,8 @@
 # Dataklassen voor de agenda.
 # -------------------------------------------------------------------
 
+require_once 'maaltijden/class.maaltrack.php';
+
 /**
  * Dit is een interface dat geïmplementeerd kan worden in allerlei
  * klassen, die dan als item in de agenda kunnen verschijnen.
@@ -102,12 +104,13 @@ class Agenda {
 	public function getItems($van=null, $tot=null, $filter=false) {
 		$result = array();
 
+		// Regulie agenda-items
 		$qItems = "SELECT id, titel, beschrijving, begin, eind, rechtenBekijken FROM agenda WHERE 1=1";
 		if ($van != null) {
-			$qItems .= " AND eind >= '".$van."'";
+			$qItems .= " AND eind >= '".date('Y-m-d', $van)."'";
 		}
 		if ($tot != null) {
-			$qItems .= " AND begin <= '".$tot."'";
+			$qItems .= " AND begin <= '".date('Y-m-d', $tot)."'";
 		}
 		$qItems .= " ORDER BY begin ASC, titel ASC";
 
@@ -119,6 +122,13 @@ class Agenda {
 				$result[] = $item;
 			}
 		}
+		
+		// Maaltijden ophalen
+		$maaltrack = new Maaltrack();		
+		$result = array_merge($result, $maaltrack->getMaaltijden($van, $tot, true, true, null, false));
+		
+		// Sorteren
+		usort($result, array('Agenda', 'vergelijkAgendeerbaars'));
 
 		return $result;
 	}
@@ -160,7 +170,7 @@ class Agenda {
 		}
 				
 		// Items toevoegen aan het array
-		$items = $this->getItems(date('Y-m-d', $startMoment), date('Y-m-d', $eindMoment));
+		$items = $this->getItems($startMoment, $eindMoment);
 		foreach ($items as $item) {
 			$week = Agenda::weekNumber($item->getBeginMoment());
 			$dag = date('d', $item->getEindMoment());
@@ -179,6 +189,16 @@ class Agenda {
 		} else {
 			return strftime('%U', strtotime('last Sunday', $date));
 		}
+	}
+	
+	/**
+	 * Vergelijkt twee Agendeerbaars op beginMoment t.b.v. sorteren.
+	 */
+	public static function vergelijkAgendeerbaars($foo, $bar) {
+		if ($foo->getBeginMoment() == $bar->getBeginMoment) {
+			return 0;
+		}
+		return ($foo->getBeginMoment() > $bar->getBeginMoment()) ? 1 : -1;
 	}
 }
 ?>

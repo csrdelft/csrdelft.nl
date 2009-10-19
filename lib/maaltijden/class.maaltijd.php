@@ -25,8 +25,9 @@
 # bij het inladen van de FORM-data.
 # -------------------------------------------------------------------
 
+require_once 'agenda/class.agenda.php';
 
-class Maaltijd {
+class Maaltijd implements Agendeerbaar {
 	# MySQL connectie
 	private $_db;
 
@@ -646,6 +647,19 @@ class Maaltijd {
 		}
 
 		return $aan;
+	}
+	
+	public function getBeginMoment() {
+		return $this->_maaltijd['datum'];
+	}
+	public function getEindMoment() {
+		return strtotime('+1 hour', $this->_maaltijd['datum']);
+	}
+	public function getTitel() {
+		return $this->getTekst();
+	}
+	public function getBeschrijving() {
+		return 'Maaltijd met '.$this->getAantal().' eters.';
 	}
 	
 	/*
