@@ -196,7 +196,7 @@
 	{literal}
 	<script>
 	$(document).ready(function() {
-		var tpasfotos=$('.togglePasfoto')s.click(function(){
+		$('.togglePasfoto').click(function(){
 			var parts=this.id.substr(1).split('-');
 			var pasfotodiv=$('#p'+parts[1]);
 
