@@ -86,7 +86,7 @@
 	{foreach from=$onderwerp->getPosts() item='bericht' name='berichten'}
 		<tr>
 			<td class="auteur">
-				<span class="togglePasfoto" id="t{$bericht.uid}-{$bericht.id}">&raquo;</span>&nbsp;<a href="/communicatie/forum/reactie/{$bericht.id}" class="postlink" alt="Link naar deze post">&rarr;</a>
+				<span class="togglePasfoto" id="t{$bericht.uid}-{$bericht.id}" title="Toon pasfoto van dit lid">&raquo;</span>&nbsp;<a href="/communicatie/forum/reactie/{$bericht.id}" class="postlink" title="Link naar deze post">&rarr;</a>
 				{$bericht.uid|csrnaam:'user'}<br />
 				<span class="moment">{$bericht.datum|reldate}</span>
 				<br />
@@ -196,8 +196,7 @@
 	{literal}
 	<script>
 	$(document).ready(function() {
-		var tpasfotos=$('.togglePasfoto');
-		tpasfotos.click(function(){
+		var tpasfotos=$('.togglePasfoto')s.click(function(){
 			var parts=this.id.substr(1).split('-');
 			var pasfotodiv=$('#p'+parts[1]);
 
@@ -205,7 +204,8 @@
 				pasfotodiv.html('<img src="/tools/pasfoto/'+parts[0]+'.png" width="50" />');
 			}
 			if(pasfotodiv.is(':visible')){
-				$(this).html('&raquo');
+				//om een of andere reden snapt chromium het niet als ik hier een htmlentitie in stop ipv het karakter zelf
+				$(this).html("»"); 
 			}else{
 				$(this).html('v');
 			}
