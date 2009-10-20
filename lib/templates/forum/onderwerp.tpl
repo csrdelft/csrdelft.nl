@@ -122,7 +122,7 @@
 			<td class="bericht{cycle values="0,1"}" id="post{$bericht.id}"> 
 				{$bericht.tekst|ubb}
 				{if $bericht.bewerkt!=''}
-					<div class="bewerkt">
+					<div class="bewerkt clear">
 						<hr />
 						{$bericht.bewerkt|ubb}
 					</div>
