@@ -88,7 +88,7 @@
 				{$bericht.uid|csrnaam:'user'}<br />
 				<span class="moment">{$bericht.datum|reldate}</span>
 				<br />
-				<div id="p{$bericht.id}" class="forumpasfoto{if $loginlid->instelling('forum_toonpasfotos')=='nee'}verborgen{/if}" >
+				<div id="p{$bericht.id}" class="forumpasfoto{if $loginlid->instelling('forum_toonpasfotos')=='nee'} verborgen{/if}" >
 					{if $loginlid->instelling('forum_toonpasfotos')=='ja'}
 						{$bericht.uid|csrnaam:'pasfoto'}
 					{/if}
