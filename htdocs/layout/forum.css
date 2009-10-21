@@ -50,7 +50,8 @@ span.togglePasfoto:hover, a.postlink:hover{
 	text-decoration: none;
 }
 .moment{ font-size: 9px; color: #bbb; }
-
+.forumpasfoto{ float: right; width: 50px; height: 77px;}
+.forumpasfoto .lidfoto{ width: 100%; }
 .forummetadata{
 	font-size: 0.9em;
 	background-color: #fff;

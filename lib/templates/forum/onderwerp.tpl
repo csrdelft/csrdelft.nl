@@ -88,9 +88,9 @@
 				{$bericht.uid|csrnaam:'user'}<br />
 				<span class="moment">{$bericht.datum|reldate}</span>
 				<br />
-				<div id="p{$bericht.id}" style="float: right; width: 50px;" {if $loginlid->instelling('forum_toonpasfotos')=='nee'}class="verborgen"{/if}>
+				<div id="p{$bericht.id}" class="forumpasfoto{if $loginlid->instelling('forum_toonpasfotos')=='nee'}verborgen{/if}" >
 					{if $loginlid->instelling('forum_toonpasfotos')=='ja'}
-						<img src="/tools/pasfoto/{$bericht.uid}.png" width="50" />
+						{$bericht.uid|csrnaam:'pasfoto'}
 					{/if}
 				</div>
 				{* knopjes bij elke post *}
