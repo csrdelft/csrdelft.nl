@@ -24,14 +24,12 @@
 			{else}
 				{knop url="openheid/`$onderwerp->getID()`" class=knop type=slotje text="openen (reactie mogelijk)"}
 			{/if}
-			</a><br /><br />
+			<br /><br />
 			{if $onderwerp->isPlakkerig()}
 				{knop url="plakkerigheid/`$onderwerp->getID()`" class=knop type=plakkerig text="verwijder plakkerigheid"}
 			{else}
 				{knop url="plakkerigheid/`$onderwerp->getID()`" class=knop type=plakkerig text="maak plakkerig"}
-			{/if}
-				
-			</a>
+			{/if}	
 		</div>
 		<div style="float: right; width: 60%;">
 			<form action="/communicatie/forum/verplaats/{$onderwerp->getID()}/" method="post">
@@ -90,7 +88,11 @@
 				{$bericht.uid|csrnaam:'user'}<br />
 				<span class="moment">{$bericht.datum|reldate}</span>
 				<br />
-				<div id="p{$bericht.id}" style="float: right; width: 50px; display: none;"></div>
+				<div id="p{$bericht.id}" style="float: right; width: 50px;" {if $loginlid->instelling('forum_toonpasfotos')=='nee'}class="verborgen"{/if}>
+					{if $loginlid->instelling('forum_toonpasfotos')=='ja'}
+						<img src="/tools/pasfoto/{$bericht.uid}.png" width="50" />
+					{/if}
+				</div>
 				{* knopjes bij elke post *}
 				{* citeerknop enkel als het onderwerp open is en als men mag posten, of als men mod is. *}
 				{if $onderwerp->magCiteren()}
@@ -156,7 +158,7 @@
 			<a class="forumpostlink" id="laatste">Reageren</a><br /><br />
 			{* berichtje weergeven  voor moderators als het topic gesloten is. *}
 			{if $onderwerp->isModerator() AND !$onderwerp->isOpen()}
-				<br /><strong>Dit topic is gesloten, u kunt als moderator <a href="#" onclick="toggleDiv('forumReageren')">toch&nbsp;reageren</a>.</strong>
+				<br /><strong>Dit topic is gesloten, u kunt als moderator <a href="#forumReageren" onclick="toggleDiv('forumReageren')">toch&nbsp;reageren</a>.</strong>
 			{/if}
 		</td>
 		<td class="forumtekst">
@@ -196,21 +198,31 @@
 	{literal}
 	<script>
 	$(document).ready(function() {
-		$('.togglePasfoto').click(function(){
-			var parts=this.id.substr(1).split('-');
-			var pasfotodiv=$('#p'+parts[1]);
+		//alle pijltes voor de namen goedzetten, en visueel 'klikbaar' maken
+		$('.togglePasfoto').each( function(){
+			knop=$(this).addClass('handje');
 
-			if(pasfotodiv.html()==''){
-				pasfotodiv.html('<img src="/tools/pasfoto/'+parts[0]+'.png" width="50" />');
-			}
-			if(pasfotodiv.is(':visible')){
-				//om een of andere reden snapt chromium het niet als ik hier een htmlentitie in stop ipv het karakter zelf
-				$(this).html("»"); 
+			if($('#p'+knop.attr('id').substr(1).split('-')[1]).html().trim()==''){
+				knop.html("»"); 
 			}else{
-				$(this).html('v');
+				knop.html('v');
 			}
-			pasfotodiv.toggle();
-			
+		});
+		$('.togglePasfoto').click(function(){
+			knop=$(this);
+			var parts=knop.attr('id').substr(1).split('-');
+			var pasfoto=$('#p'+parts[1]);
+
+			if(pasfoto.html().trim()==''){
+				pasfoto.html('<img src="/tools/pasfoto/'+parts[0]+'.png" width="50" />');
+			}
+			if(pasfoto.hasClass('verborgen')){
+				knop.html('v');
+			}else{
+				//om een of andere reden snapt chromium het niet als ik hier een htmlentitie in stop ipv het karakter zelf
+				knop.html("»");
+			}
+			pasfoto.toggleClass('verborgen');
 		});
 	});
 	</script>

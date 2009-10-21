@@ -35,9 +35,9 @@
 							{if !$groep->isAdmin()}onclick="return confirm('Weet u zeker dat u deze bewoner naar de oudbewonersgroep wilt verplaatsen?')"{/if}>
 							&raquo;
 						</a>
-					{else}
-						<a href="/actueel/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/verwijderLid/{$groeplid.uid}" title="Verwijder lid uit groep">X</a>
 					{/if}
+					<a href="/actueel/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/verwijderLid/{$groeplid.uid}" title="Verwijder lid uit groep">X</a>
+					
 					</td>					
 				{/if}
 			</tr>
@@ -49,11 +49,11 @@
 	<div class="aanmelden">
 		{if $groep->magAanmelden()}
 			{if $groep->getToonFuncties()=='niet'}
-				<br /><a href="/actueel/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/aanmelden" onclick="return confirm('Weet u zeker dat u zich wilt aanmelden?')">
-					Aanmelden
+				<a href="/actueel/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/aanmelden" onclick="return confirm('Weet u zeker dat u zich wilt aanmelden?')">
+					Aanmelden voor deze groep
 				</a>
 			{else}
-				<form action="/actueel/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/aanmelden" method="post" id="aanmeldForm">
+				<form action="/actueel/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/aanmelden" method="post" id="aanmeldForm" class="clear">
 					<strong>Aanmelden</strong> (functie/opmerking mogelijk)<br />
 					<input type="text" name="functie" maxlength="25" class="functie" />&nbsp;<input type="submit" value="aanmelden" />
 				</form>

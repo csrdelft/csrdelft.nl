@@ -267,28 +267,29 @@ class GroepStatsContent extends SimpleHTML{
 		if(!is_array($stats)){
 			return;
 		}
+		echo '<table class="query_table">';
 		foreach($stats as $title => $stat){
 			if(!is_array($stat)){
 				continue;
 			}
-			echo '<table class="query_table">';
+			echo '<tr><th colspan="2">'.$title.'</th></tr>';
 			$rowColor=false;
 			foreach($stat as $row){
 				//kleurtjes omwisselen
 				if($rowColor){
-					$style='style="background-color: #ccc;"';
+					$style='background-color: #ccc;';
 				}else{
 					$style='';
 				}
 				$rowColor=(!$rowColor);
 				echo '<tr>';
 				foreach($row as $column){
-					echo '<td '.$style.'>'.$column.'</td>';
+					echo '<td style="width: 50%; '.$style.'">'.$column.'</td>';
 				}
 				echo '</tr>';
 			}
-			echo '</table><br />';
 		}
+		echo '</table>';
 	}
 }
 class GroepEmailContent extends SimpleHTML{
@@ -308,7 +309,7 @@ class GroepEmailContent extends SimpleHTML{
 				}
 			}
 		}
-		echo implode(', ', $emails);
+		echo '<div class="emails">'.implode(', ', $emails).'</div>';
 	}
 }
 ?>

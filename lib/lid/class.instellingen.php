@@ -20,13 +20,14 @@ class Instelling{
 			'forum_postsPerPagina' => array(25, 'Berichten per pagina', 'int', 10),
 			'forum_naamWeergave' => array('civitas', 'Naamweergave', 'enum', array('civitas', 'volledig', 'bijnaam', 'aaidrom')),
 			'forum_zoekresultaten' => array(40, 'Zoekresultaten', 'int'),
+			'forum_toonpasfotos' => array('nee', 'Pasfoto\'s standaard weergeven', 'enum', array('ja', 'nee')),
 			'zijbalk_gasnelnaar' => array('ja', 'Ga snel naar weergeven', 'enum', array('ja', 'nee')),
 			'zijbalk_mededelingen' => array(8, 'Aantal mededelingen in zijbalk', 'int'),
 			'zijbalk_forum' => array(10, 'Aantal forumberichten in zijbalk', 'int'),
 			'zijbalk_forum_zelf' => array(0, 'Aantal zelf geposte forumberichten zijbalk', 'int'),
 			'zijbalk_verjaardagen_pasfotos' => array('ja', 'Toon pasfoto\'s bij verjaardagen', 'enum', array('ja', 'nee')),
 			'zijbalk_verjaardagen' => array(10, 'Aantal verjaardagen in zijbalk', 'int'),
-			'voorpagina_maaltijdblokje' => array('ja', 'Volgende maaltijd weergeven', 'enum', array('ja', 'nee')),
+			'voorpagina_maaltijdblokje' => array('ja', 'Eerstvolgende maaltijd weergeven', 'enum', array('ja', 'nee')),
 			'groepen_toonPasfotos' => array('ja', 'Standaard pasfotos tonen', 'enum', array('ja', 'nee'))
 	);
 

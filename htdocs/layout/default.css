@@ -403,6 +403,7 @@ table.query_table td{
 table.query_table th{
 	margin: 0px; padding: 4px;
 	padding-left: 10px; padding-right: 10px;
+	border-top: 1px solid black;
 	border-bottom: 1px solid black;
 	background-color: #ffd700;
 
@@ -471,7 +472,7 @@ div.preview.pagina{
 	margin-left: 10px;
 }
 .ubb_groep .groepleden table.leden{ width: 100%; }
-.ubb_groep .groepleden table.leden td{ padding: 0px 5px; lext-align: left;}
+.ubb_groep .groepleden table.leden td{ padding: 0px 5px; text-align: left;}
 /* plaatjes in tekst */
 p img{ margin: 15px 10px; }
 
@@ -560,6 +561,7 @@ p img{ margin: 15px 10px; }
 	border-top: 1px solid #B8B8B8;
 	border-left: 1px solid #B8B8B8;
 	background-color: #F0F0F0;
+	overflow: hidden;
 }
 .mededeling-grotebalk .plaatje{
 	width: 70px;
