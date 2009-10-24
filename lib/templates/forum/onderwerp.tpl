@@ -35,8 +35,7 @@
 			<form action="/communicatie/forum/verplaats/{$onderwerp->getID()}/" method="post">
 				<div>Verplaats naar: <br /> 
 					<select name="newCat">
-						<option value="ongeldig">... selecteer</option>
-						<optgroup>
+						<optgroup label="selecteer...">
 						{foreach from=$onderwerp->getCategorie()->getAll() item='cat'}
 							{if $cat.titel=='SEPARATOR'}
 						</optgroup>
@@ -88,11 +87,8 @@
 				{$bericht.uid|csrnaam:'user'}<br />
 				<span class="moment">{$bericht.datum|reldate}</span>
 				<br />
-				<div id="p{$bericht.id}" class="forumpasfoto{if $loginlid->instelling('forum_toonpasfotos')=='nee'} verborgen{/if}" >
-					{if $loginlid->instelling('forum_toonpasfotos')=='ja'}
-						{$bericht.uid|csrnaam:'pasfoto'}
-					{/if}
-				</div>
+				<div id="p{$bericht.id}" class="forumpasfoto verborgen">{if $loginlid->instelling('forum_toonpasfotos')=='ja'}{$bericht.uid|csrnaam:'pasfoto'}{/if}</div>
+
 				{* knopjes bij elke post *}
 				{* citeerknop enkel als het onderwerp open is en als men mag posten, of als men mod is. *}
 				{if $onderwerp->magCiteren()}
@@ -108,8 +104,7 @@
 					</a>
 				{/if}
 				
-				{if $onderwerp->isModerator()}
-					{* verwijderlinkje, niet als er maar een bericht in het onderwerp is. *}
+				{if $onderwerp->isModerator()}{* verwijderlinkje *}
 					{knop url="verwijder-bericht/`$bericht.id`" type=verwijderen confirm='Weet u zeker dat u dit bericht wilt verwijderen?'}
 					{if $bericht.zichtbaar=='wacht_goedkeuring'}
 						<br />
@@ -196,33 +191,29 @@
 {/if}
 {if $loginlid->hasPermission('P_LEDEN_READ')}
 	{literal}
-	<script>
+	<script type="text/javascript">
 	$(document).ready(function() {
-		//alle pijltes voor de namen goedzetten, en visueel 'klikbaar' maken
-		$('.togglePasfoto').each( function(){
-			knop=$(this).addClass('handje');
-
-			if($('#p'+knop.attr('id').substr(1).split('-')[1]).html().trim()==''){
-				knop.html("»"); 
-			}else{
-				knop.html('v');
+		$('.togglePasfoto').each(function(){
+			var postid=$(this).attr('id').substr(1).split('-')[1];
+			var pasfoto=$('#p'+postid);
+			if(pasfoto.html()!=''){
+				pasfoto.toggle();
+				$(this).html('v');
 			}
 		});
 		$('.togglePasfoto').click(function(){
-			knop=$(this);
-			var parts=knop.attr('id').substr(1).split('-');
+			var parts=$(this).attr('id').substr(1).split('-');
 			var pasfoto=$('#p'+parts[1]);
 
 			if(pasfoto.html().trim()==''){
-				pasfoto.html('<img src="/tools/pasfoto/'+parts[0]+'.png" width="50" />');
+				pasfoto.html('<img src="/tools/pasfoto/'+parts[0]+'.png" class="lidfoto" />');
 			}
-			if(pasfoto.hasClass('verborgen')){
-				knop.html('v');
+			if(pasfoto.is(':visible')){
+				$(this).html("&raquo;"); 
 			}else{
-				//om een of andere reden snapt chromium het niet als ik hier een htmlentitie in stop ipv het karakter zelf
-				knop.html("»");
+				$(this).html('v');
 			}
-			pasfoto.toggleClass('verborgen');
+			pasfoto.toggle();
 		});
 	});
 	</script>

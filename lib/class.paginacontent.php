@@ -40,7 +40,7 @@ class PaginaContent extends SimpleHTML{
 				foreach($aPaginas as $aPagina){
 					echo '<div class="item">';
 					echo '<a href="/pagina/'.$aPagina['naam'].'/bewerken"
-						title="'.htmlspecialchars($aPagina['titel']).'">'.htmlspecialchars($aPagina['titel']).'</a><br />';
+						title="'.htmlspecialchars($aPagina['titel']).'" >'.htmlspecialchars($aPagina['titel']).'</a><br />';
 					echo '</div>';
 				}
 			break;
@@ -50,7 +50,8 @@ class PaginaContent extends SimpleHTML{
 				$sInhoud=CsrHtmlUBB::instance()->getHTML($this->_pagina->getInhoud());
 							
 				if ($this->_pagina->magBewerken()){
-					$sInhoud='<a href="/pagina/'.$this->_pagina->getNaam().'/bewerken" class="knop" style="float: right;"><img src="'.CSR_PICS.'forum/bewerken.png" title="Bewerk pagina" /></a>'.$sInhoud;
+					$sInhoud='<a href="/pagina/'.$this->_pagina->getNaam().'/bewerken" class="knop" style="float: right;" title="Bewerk pagina">
+						<img src="'.CSR_PICS.'forum/bewerken.png" alt="Bewerk pagina" /></a>'.$sInhoud;
 				}
 
 				echo $sInhoud;

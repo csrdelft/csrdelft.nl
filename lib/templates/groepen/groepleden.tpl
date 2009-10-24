@@ -30,14 +30,15 @@
 				{if $groep->toonFuncties()}<td><em>{$groeplid.functie|escape:'html'}</em></td>{/if}
 				{if $groep->magBewerken()}
 					<td>
-					{if $groep->getTypeId()==2 AND $groep->getStatus()=='ht'}
+					{if $groep->getTypeId()==2 AND $groep->getStatus()=='ht'}{* maak lid ot voor huizen. Dit kunnen leden ook bij zichzelf doen. *}
 						<a href="/actueel/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/maakLidOt/{$groeplid.uid}" title="Verplaats lid naar o.t.-groep" 
 							{if !$groep->isAdmin()}onclick="return confirm('Weet u zeker dat u deze bewoner naar de oudbewonersgroep wilt verplaatsen?')"{/if}>
 							&raquo;
 						</a>
 					{/if}
-					<a href="/actueel/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/verwijderLid/{$groeplid.uid}" title="Verwijder lid uit groep">X</a>
-					
+					{if $groep->isAdmin() OR $groeplid.uid!=$loginlid->getUid()} {* We kunnen onzelf niet uit een groep gooien gooien *}
+						<a href="/actueel/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/verwijderLid/{$groeplid.uid}" title="Verwijder lid uit groep">X</a>
+					{/if}
 					</td>					
 				{/if}
 			</tr>

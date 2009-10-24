@@ -46,7 +46,7 @@ class Knop{
 		$this->confirm=$confirm;
 	}
 	private function getImgTag(){
-		return '<img src="'.CSR_PICS.'/knopjes/'.$this->type.'.png" title="'.ucfirst($this->type).'" />';
+		return '<img src="'.CSR_PICS.'/knopjes/'.$this->type.'.png" title="'.ucfirst($this->type).'" alt="'.ucfirst($this->type).'" />';
 	}
 	public function getHtml(){
 		$html='<a href="'.$this->url.'" class="'.$this->class.'" ';

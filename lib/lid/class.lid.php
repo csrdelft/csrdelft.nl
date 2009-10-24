@@ -453,7 +453,11 @@ class Lid implements Serializable{
 					return '<a href="/communicatie/profiel/'.$this->getUid().'" title="'.$sVolledigeNaam.'" class="lidLink '.$this->profiel['status'].'">'.$naam.'</a>';
 				}
 			case 'html':
-				return mb_htmlentities($naam);
+				if($vorm='pasfoto'){
+					return $naam;
+				}else{
+					return mb_htmlentities($naam);
+				}
 			break;
 			case 'plain':
 			default:
