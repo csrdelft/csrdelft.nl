@@ -197,7 +197,7 @@
 			var postid=$(this).attr('id').substr(1).split('-')[1];
 			var pasfoto=$('#p'+postid);
 			if(pasfoto.html()!=''){
-				pasfoto.toggle();
+				pasfoto.toggleClass('verborgen');
 				$(this).html('v');
 			}
 		});
@@ -205,15 +205,15 @@
 			var parts=$(this).attr('id').substr(1).split('-');
 			var pasfoto=$('#p'+parts[1]);
 
-			if(pasfoto.html().trim()==''){
+			if(pasfoto.html()==''){
 				pasfoto.html('<img src="/tools/pasfoto/'+parts[0]+'.png" class="lidfoto" />');
 			}
-			if(pasfoto.is(':visible')){
+			if(!pasfoto.hasClass('verborgen')){
 				$(this).html("&raquo;"); 
 			}else{
 				$(this).html('v');
 			}
-			pasfoto.toggle();
+			pasfoto.toggleClass('verborgen');
 		});
 	});
 	</script>
