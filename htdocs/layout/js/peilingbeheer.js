@@ -2,13 +2,16 @@ var i=2;
 function addOptie() {
 	i++;
 	
-	var optiediv_l = document.createElement('div');
-	optiediv_l.setAttribute("class", "optie");
-	optiediv_l.innerHTML = 'Optie '+i+':';	 
-	document.getElementById("opties_l").appendChild(optiediv_l);
+	var label = document.createElement('label');
+	label.setAttribute("for", "optie");
+	label.innerHTML = 'Optie '+i+':';	 
+	document.getElementById("opties").appendChild(label);
 	
-	var optiediv_r = document.createElement('div');
-	optiediv_r.setAttribute("class", "optie");
-	optiediv_r.innerHTML = '<input name="optie'+i+'" type="text" maxlength=255/>';	 
-	document.getElementById("opties_r").appendChild(optiediv_r);
+	var input = document.createElement('input');
+	input.setAttribute('name', 'opties[]');
+	input.setAttribute('type', 'text');
+	input.setAttribute('maxlength', 255);
+
+	document.getElementById("opties").appendChild(input);
+	document.getElementById('opties').appendChild(document.createElement('br'));
 }

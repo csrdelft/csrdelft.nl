@@ -6,27 +6,24 @@
 # instellingen & rommeltjes
 require_once 'include.config.php';
 require_once 'class.peilingcontent.php' ;
-
+require_once 'class.peiling.php';
 
 $resultaat ='';
 if (isset($_POST)){
-	if(isset($_POST['titel'])){
-		//Process peilingbeheer.php POST.
-		require_once('class.peiling.php');
+	//peilingbeheer verwerken
+	if(isset($_POST['titel'], $_POST['opties']) AND Peiling::magBewerken()){
+	
 		$titel = $_POST['titel'];
 		$properties['titel'] = $titel;
 		$verhaal = $_POST['verhaal'];
 		$properties['verhaal'] = $verhaal;
-		$optieid = 1;
-		$opties=array();
-		while(isset($_POST['optie'.$optieid])){
-			$optietekst = $_POST['optie'.$optieid]; 				
-			if($optietekst!=''){
-				$opties[$optieid] = $optietekst;
+		
+		$properties['opties']=array();
+		foreach($_POST['opties'] as $optie){
+			if(trim($optie)!=''){
+				$properties['opties'][]=$optie;
 			}
-			$optieid++;
 		}
-		$properties['opties']=$opties;
 	
 		$peiling = new Peiling(0);
 		$pid = $peiling->maakPeiling($properties);	
@@ -49,13 +46,12 @@ if (isset($_POST)){
 				$r = $peiling->deletePeiling();
 				break;
 		}
-		$ref = $_SERVER['HTTP_REFERER'];			
-		header('location: '.$ref);
+		header('location: '.$_SERVER['HTTP_REFERER'].'#peiling'.$id);
 		exit();
 	}
 }
 
-require_once('class.peilingbeheercontent.php');
+require_once 'class.peilingbeheercontent.php';
 $beheer = new PeilingBeheerContent();
 
 

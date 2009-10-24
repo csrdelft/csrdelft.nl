@@ -129,7 +129,7 @@ class PeilingContent{
 		
 		//Constructie vd tag
 		$html = '
-			<div class="peiling">			
+			<div class="peiling" id="peiling'.$pid.'">
 				'.$content.'
 			</div>';
 		return $html;
