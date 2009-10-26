@@ -14,10 +14,12 @@
 
 #documentForm .uploadmethode:hover{ background-color: #e5e5e5;  }
 #documentForm .uploadmethode .optie{ float: left; width: 150px; }
-#documentForm .uploadmethode .keuze{ display: none;}
+#documentForm .uploadmethode .keuze{ display: none; margin-left: 160px; }
 #documentForm .uploadmethode .keuze label{ width: 150px; float: left; }
-#documentForm  input[type=text]{ width: 250px;}
-
+#documentForm .uploadmethode .indent{ margin-left: 160px; }
+#documentForm  input[type=text]{ width: 250px; }
+#documentForm  #ftpOpties select{ width: 350px; }
+#documentForm  #ftpOpties label{ float: none; }
 
 
 .documenten{

@@ -236,6 +236,7 @@ lib/documenten/class.categorie.php -text
 lib/documenten/class.document.php -text
 lib/documenten/class.documentcontent.php -text
 lib/documenten/class.documentcontroller.php -text
+lib/documenten/class.documentuploader.php -text
 lib/forum/class.forum.php -text
 lib/forum/class.forumcategorie.php -text
 lib/forum/class.forumcategoriecontent.php -text

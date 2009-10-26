@@ -3,15 +3,14 @@
  */
 function updateForm(){
 	var methodenaam=$("input[name='methode']:checked").val();
-	id="#Methode"+methodenaam.charAt(0).toUpperCase()+methodenaam.substr(1).toLowerCase();
-
+	id="#"+methodenaam;
 	$(".keuze").fadeOut(100);
 	$(id).fadeIn(100);
 }
 $(document).ready(function() {
 	if($("#documentForm").length > 0){
-		//formulierding
 		updateForm();
+		//bij het wijzigen van een input doen we weer een update op het formulier.
 		$("input[name='methode']").change(updateForm);
 	}
 	//tabellen naar zebra converteren.

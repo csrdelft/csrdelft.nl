@@ -10,8 +10,11 @@
  */
 class DocumentContent extends SimpleHtml{
 	private $document;
-	public function __construct(Document $document){
+	private $uploaders;
+	
+	public function __construct(Document $document, $uploaders){
 		$this->document=$document;
+		$this->uploaders=$uploaders;
 	}
 	public function getTitel(){
 		if($this->document->getID()==0){
@@ -27,6 +30,7 @@ class DocumentContent extends SimpleHtml{
 		$smarty->assign('melding', $this->getMelding());
 		$smarty->assign('categorieen', DocumentenCategorie::getAll());
 		$smarty->assign('document', $this->document);
+		$smarty->assign('uploaders', $this->uploaders);
 		$smarty->display('documenten/document.tpl');
 	}
 }
@@ -71,6 +75,7 @@ class DocumentCategorieContent extends SimpleHtml{
 }
 /*
  * Document downloaden, allemaal headers goedzetten.
+ * Ongeldig aangevraagde documenten worden in de controller afgehandeld.
  */
 class DocumentDownloadContent extends SimpleHtml{
 	private $document;

@@ -22,46 +22,16 @@
 				{/foreach}
 			</select><br /><br />
 		
-		{if $document->hasFile()}
+		{foreach from=$uploaders item=uploader}
 			<div class="uploadmethode">
 				<div class="optie">
-					<input type="radio" name="methode" id="rMethodeKeepfile" value="keepfile" checked="checked" /> 
-					<label for="rMethodeKeepfile">Huidige behouden</label>
+					{$uploader->viewRadiobutton()}
 				</div>
-				<div id="MethodeKeepfile" class="keuze">
-					{$file->getBestandsnaam()}
+				<div class="keuze" id="{$uploader->getNaam()}">
+					{$uploader->view()}
 				</div>
 			</div>
-		{/if}
-		
-		<div class="uploadmethode">
-			<div class="optie">
-				<input type="radio" name="methode" id="rMethodeUploaden" value="uploaden" {if $document->getBestandsnaam()==''}checked="checked"{/if} /> 
-				<label for="rMethodeUploaden">Uploaden</label>
-			</div>
-			<div id="MethodeUploaden" class="keuze">
-				<label for="fromUrl">Selecteer bestand: </label><input type="file" name="file_upload" />
-			</div>
-		</div>
-		<div class="uploadmethode">
-			<div class="optie">
-				<input type="radio" name="methode" id="rMethodeFromurl" value="fromurl"  /> 
-				<label for="rMethodeFromurl">Van url</label>
-			</div>
-			<div id="MethodeFromurl" class="keuze">
-				<label for="fromUrl">Geef url op:</label><input type="text" name="url" class="fromurl" value="http://" />
-			</div>
-		</div>
-		<div class="uploadmethode">
-			<div class="optie">
-				<input type="radio" name="methode" id="rMethodePublicftp" value="publicftp"  /> 
-				<label for="rMethodePublicftp">Van publieke ftp</label>
-			</div>
-			<div id="MethodePublicftp" class="keuze">
-				<label for="publicftp">Selecteer een bestand:  </label><div id="ftpOpties" style="margin-left: 300px;">
-				<input type="radio">Bestand1.pdf</input><br /><input type="radio">Bestand2.odf</input><br /><input type="radio">Lezing.mp3</input></div>
-			</div>
-		</div>
+		{/foreach}
 		<label for="submit" class="metadata clear">&nbsp;</label><input type="submit" name="submit" value="Toevoegen" /> <a href="/communicatie/documenten_new/" class="knop">annuleren</a>
 	</fieldset>
 	

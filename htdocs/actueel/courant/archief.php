@@ -18,7 +18,7 @@ if ($loginlid->hasPermission('P_LEDEN_READ')) {
 	# geen rechten
 	require_once 'class.paginacontent.php';
 	$pagina=new Pagina('geentoegang');
-	$midden = new PaginaContent($pagina);
+	$body = new PaginaContent($pagina);
 }
 
 
