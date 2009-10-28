@@ -55,7 +55,7 @@
 			<input type="hidden" name="url" value="{$smarty.server.REQUEST_URI}" />
 			Naam: <input type="text" name="user" value="naam" /><br />
 			Wachtwoord: <input type="password" name="pass" value="" /><br />
-			<input type="checkbox" name="checkip" class="checkbox" value="true" id="login-checkip" checked="checked" />
+			<input type="checkbox" name="checkip" class="checkbox" value="true" id="login-checkip" />
 			<label for="login-checkip">Koppel IP</label><br /><br />
 			<input type="submit" name="submit" value="Inloggen" />
 		</fieldset>

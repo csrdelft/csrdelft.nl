@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Oct 05, 2009 at 09:57 PM
+-- Generation Time: Oct 28, 2009 at 10:31 AM
 -- Server version: 5.1.30
 -- PHP Version: 5.2.8
 
@@ -185,42 +185,32 @@ CREATE TABLE IF NOT EXISTS `courantcache` (
 --
 
 CREATE TABLE IF NOT EXISTS `document` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `naam` varchar(100) NOT NULL DEFAULT '',
-  `categorie` int(11) NOT NULL DEFAULT '0',
-  `datum` date NOT NULL DEFAULT '1000-01-01',
-  `verwijderd` enum('0','1') NOT NULL DEFAULT '0',
-  `eigenaar` varchar(4) NOT NULL DEFAULT 'x101',
-  PRIMARY KEY (`id`),
-  KEY `categorie` (`categorie`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=484 ;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `documentbestand`
---
-
-CREATE TABLE IF NOT EXISTS `documentbestand` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `documentID` int(11) NOT NULL DEFAULT '0',
-  `bestandsnaam` varchar(100) NOT NULL DEFAULT '',
-  PRIMARY KEY (`id`),
-  KEY `document_id` (`documentID`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=511 ;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `documentencategorie`
---
-
-CREATE TABLE IF NOT EXISTS `documentencategorie` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `naam` varchar(50) NOT NULL DEFAULT '',
-  `beschrijving` varchar(100) NOT NULL DEFAULT '',
+  `naam` varchar(150) NOT NULL,
+  `catID` int(11) NOT NULL,
+  `bestandsnaam` varchar(255) NOT NULL,
+  `size` int(11) NOT NULL,
+  `mimetype` varchar(50) NOT NULL,
+  `toegevoegd` datetime NOT NULL,
+  `eigenaar` varchar(4) NOT NULL,
+  `leesrechten` varchar(100) NOT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `catID` (`catID`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `documentcategorie`
+--
+
+CREATE TABLE IF NOT EXISTS `documentcategorie` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `naam` varchar(255) NOT NULL,
+  `zichtbaar` int(1) NOT NULL,
+  `leesrechten` varchar(150) NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=10 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
 
 -- --------------------------------------------------------
 
@@ -461,10 +451,10 @@ CREATE TABLE IF NOT EXISTS `lid` (
   `eetwens` text NOT NULL,
   `corvee_wens` varchar(255) NOT NULL,
   `corvee_punten` int(11) NOT NULL,
-  `corvee_punten_bonus` int( 11 ) NOT NULL,
+  `corvee_punten_bonus` int(11) NOT NULL,
   `corvee_vrijstelling` int(3) NOT NULL COMMENT 'percentage vrijstelling',
   `corvee_kwalikok` tinyint(1) NOT NULL,
-  `corvee_voorkeuren` varchar(8) NOT NULL DEFAULT '11111111',
+  `corvee_voorkeuren` varchar(8) NOT NULL DEFAULT '11110111',
   `forum_name` enum('nick','civitas') NOT NULL DEFAULT 'civitas',
   `forum_postsortering` enum('ASC','DESC') NOT NULL DEFAULT 'ASC',
   `forum_laatstbekeken` datetime NOT NULL,
@@ -522,6 +512,7 @@ CREATE TABLE IF NOT EXISTS `logaggregated` (
 CREATE TABLE IF NOT EXISTS `maaltijd` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `datum` int(11) NOT NULL DEFAULT '0',
+  `type` enum('normaal','corvee') NOT NULL,
   `gesloten` enum('0','1') NOT NULL DEFAULT '0',
   `tekst` text NOT NULL,
   `abosoort` varchar(20) NOT NULL DEFAULT '',
@@ -534,6 +525,12 @@ CREATE TABLE IF NOT EXISTS `maaltijd` (
   `punten_kok` smallint(4) NOT NULL,
   `punten_afwas` smallint(4) NOT NULL,
   `punten_theedoek` smallint(4) NOT NULL,
+  `schoonmaken_frituur` int(11) NOT NULL,
+  `schoonmaken_afzuigkap` int(11) NOT NULL,
+  `schoonmaken_keuken` int(11) NOT NULL,
+  `punten_schoonmaken_frituur` smallint(4) NOT NULL,
+  `punten_schoonmaken_afzuigkap` smallint(4) NOT NULL,
+  `punten_schoonmaken_keuken` smallint(4) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=510 ;
 
@@ -593,6 +590,9 @@ CREATE TABLE IF NOT EXISTS `maaltijdcorvee` (
   `kok` tinyint(1) NOT NULL DEFAULT '0',
   `afwas` tinyint(1) NOT NULL DEFAULT '0',
   `theedoek` tinyint(1) NOT NULL DEFAULT '0',
+  `schoonmaken_frituur` tinyint(1) NOT NULL,
+  `schoonmaken_afzuigkap` tinyint(1) NOT NULL,
+  `schoonmaken_keuken` tinyint(1) NOT NULL,
   `punten_toegekend` enum('ja','nee','onbekend') NOT NULL DEFAULT 'onbekend',
   PRIMARY KEY (`maalid`,`uid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
