@@ -250,9 +250,6 @@ class MaalTrack {
 			$this->_error="Opgegeven maaltijd bestaat niet.";
 			return false;
 		}
-		if($punten == NULL){
-			$punten = array();
-		}
 		
 		//verwijder dubbele uids
 		$kok = array_unique($kok);
@@ -363,6 +360,233 @@ class MaalTrack {
 		return $maalid;
 	}
 
+	function addSchoonmaakMaaltijd($datum, $tekst, $schoonmaken_frituur, $schoonmaken_afzuigkap, $schoonmaken_keuken, $punten_schoonmaken_frituur, $punten_schoonmaken_afzuigkap, $punten_schoonmaken_keuken) {
+		echo 'check';
+		$datum = (int)$datum;
+		$tekst = mb_substr($tekst, 0, 200);
+		$tekst = $this->_db->escape($tekst);
+
+		$schoonmaken_frituur=abs((int)$schoonmaken_frituur);
+		$schoonmaken_afzuigkap=abs((int)$schoonmaken_afzuigkap);
+		$schoonmaken_keuken=abs((int)$schoonmaken_keuken);
+		$punten_schoonmaken_frituur=abs((int)$punten_schoonmaken_frituur);
+		$punten_schoonmaken_afzuigkap=abs((int)$punten_schoonmaken_afzuigkap);
+		$punten_schoonmaken_keuken=abs((int)$punten_schoonmaken_keuken);
+		
+		# voeg de maaltijd toe en geef het maalid terug, of false als het  niet gelukt is.
+		$maaltijd="
+			INSERT INTO
+				maaltijd
+			(
+				datum, 
+				type,
+				tekst, 
+				koks,
+				afwassers,
+				theedoeken,
+				punten_kok,
+				punten_afwas,
+				punten_theedoek,
+				schoonmaken_frituur, 
+				schoonmaken_afzuigkap, 
+				schoonmaken_keuken,
+				punten_schoonmaken_frituur, 
+				punten_schoonmaken_afzuigkap, 
+				punten_schoonmaken_keuken
+			)VALUES(
+				'".$datum."', 'corvee', '".$tekst."', 0, 0, 0, 0, 0, 0,
+				'".$schoonmaken_frituur."', '".$schoonmaken_afzuigkap."', '".$schoonmaken_keuken."',
+				'".$punten_schoonmaken_frituur."', '".$punten_schoonmaken_afzuigkap."', '".$punten_schoonmaken_keuken."'
+			);";
+		echo $maaltijd.'<br/>';
+		if (!$this->_db->query($maaltijd)){
+			echo $this->_db->getDebug(true, false, false, false, false, false);
+			$this->_error="Er is iets mis met de database/query";
+			return false;
+		}else{
+			echo 'Query ok. ';
+			$maaltijd = new Maaltijd($this->_db->insert_id());
+			# ook maar meteen even hertellen, dan zijn de mensen die daar blij van worden weer extra blij...
+			$maaltijd->recount();
+			return $maaltijd->getMaalId();
+		}
+	}
+	
+	function editSchoonmaakMaaltijd($maalid, $schoonmaken_frituur, $schoonmaken_afzuigkap, $schoonmaken_keuken, $punten_schoonmaken_frituur, $punten_schoonmaken_afzuigkap, $punten_schoonmaken_keuken){		
+		if($maalid!=(int)$maalid){
+			$this->_error="Ongeldig maaltijdID opgegeven.";
+			return false;
+		}
+		if(!$this->isMaaltijd($maalid)){
+			$this->_error="Opgegeven maaltijd bestaat niet.";
+			return false;
+		}
+
+		$schoonmaken_frituur=abs((int)$schoonmaken_frituur);
+		$schoonmaken_afzuigkap=abs((int)$schoonmaken_afzuigkap);
+		$schoonmaken_keuken=abs((int)$schoonmaken_keuken);
+
+		// controleer aantal aangemelde taken
+		$maaltijd = $this->getMaaltijd($maalid);
+		if($schoonmaken_frituur < $maaltijd['frituur_aangemeld']){
+			$this->_error="Het aantal frituurschoonmakers kan niet lager zijn dan het aantal ingedeelde schoonmakers.";
+			return false;
+		}
+		if($schoonmaken_afzuigkap < $maaltijd['afzuigkap_aangemeld']){
+			$this->_error="Het aantal afzuigkapschoonmakers kan niet lager zijn dan het aantal ingedeelde schoonmakers.";
+			return false;
+		}
+		if($schoonmaken_keuken < $maaltijd['keuken_aangemeld']){
+			$this->_error="Het aantal keukenschoonmakers kan niet lager zijn dan het aantal ingedeelde schoonmakers.";
+			return false;
+		}
+
+		$punten_schoonmaken_frituur=abs((int)$punten_schoonmaken_frituur);
+		$punten_schoonmaken_afzuigkap=abs((int)$punten_schoonmaken_afzuigkap);
+		$punten_schoonmaken_keuken=abs((int)$punten_schoonmaken_keuken);
+
+		$maaltijd="
+			UPDATE
+				maaltijd
+			SET
+				schoonmaken_frituur='".$schoonmaken_frituur."',
+				schoonmaken_afzuigkap='".$schoonmaken_afzuigkap."',
+				schoonmaken_keuken='".$schoonmaken_keuken."',
+				punten_schoonmaken_frituur='".$punten_schoonmaken_frituur."',
+				punten_schoonmaken_afzuigkap='".$punten_schoonmaken_afzuigkap."',
+				punten_schoonmaken_keuken='".$punten_schoonmaken_keuken."'
+			WHERE
+				id=".$maalid."
+			LIMIT 1;";
+		if(!$this->_db->query($maaltijd)){
+			$this->_error="Er is iets mis met de database/query.";
+			return false;
+		}else{
+			$maaltijd = new Maaltijd ($maalid);
+			return $maalid;
+		}
+	}
+
+	# bij bestaande maaltijd de taken bewerken
+	function editSchoonmaakMaaltijdTaken($maalid, $frituur, $afzuigkap, $keuken, $punten){
+		if($maalid!=(int)$maalid){
+			$this->_error="Ongeldig maaltijdID opgegeven.";
+			return false;
+		}
+		if(!$this->isMaaltijd($maalid)){
+			$this->_error="Opgegeven maaltijd bestaat niet.";
+			return false;
+		}
+		
+		//verwijder dubbele uids
+		$frituur = array_unique($frituur);
+		$afzuigkap = array_unique($afzuigkap);
+		$keuken = array_unique($keuken);
+		
+		//verwerken punten
+		//formulier toegekend 0=onbekend, 1=ja, 2=nee
+		//van en naar 'ja'
+		//van en naar 'nee'
+		foreach($punten as $uid=>$form_toegekend){
+			if (!$form_toegekend) continue;
+			//haal op of punten al toegekend waren
+			$sToegekendQuery="
+			SELECT 
+				punten_toegekend
+			FROM 
+				maaltijdcorvee 
+			WHERE 
+				maalid=".$maalid." 
+				AND uid=".$uid."
+			;";
+			$dbresult = $this->_db->query($sToegekendQuery);
+			$dbarray = $this->_db->next($dbresult);
+			$db_toegekend = $dbarray['punten_toegekend'];
+
+			//Als iemand nog geen punten toegekend had, maar nu wel, ken ze dan toe
+			if($db_toegekend!='ja' && $form_toegekend=='ja'){
+				$maaltijd = $this->getMaaltijd($maalid);
+				$punten_erbij = (in_array($uid,$frituur)?1:0) * $maaltijd['punten_schoonmaken_frituur'] + 
+								 (in_array($uid,$afzuigkap)?1:0) * $maaltijd['punten_schoonmaken_afzuigkap'] + 
+								 (in_array($uid,$keuken)?1:0) * $maaltijd['punten_schoonmaken_keuken'];
+				if(!$this->_db->query("UPDATE lid SET corvee_punten=corvee_punten+'".$punten_erbij."' WHERE uid=".$uid.";")){
+					$this->_error=$this->_db->debug("");
+					return false;				
+				}
+			}
+			//van ja naar iets anders: punten intrekken
+			if($db_toegekend=='ja' && $form_toegekend!='ja'){
+				$maaltijd = $this->getMaaltijd($maalid);
+				$punten_eraf = (in_array($uid,$frituur)?1:0) * $maaltijd['punten_schoonmaken_frituur'] + 
+								 (in_array($uid,$afzuigkap)?1:0) * $maaltijd['punten_schoonmaken_afzuigkap'] + 
+								 (in_array($uid,$keuken)?1:0) * $maaltijd['punten_schoonmaken_keuken'];
+				if(!$this->_db->query("UPDATE lid SET corvee_punten=corvee_punten-'".$punten_eraf."' WHERE uid=".$uid.";")){
+					$this->_error=$this->_db->debug("");
+					return false;				
+				}
+			}
+
+			//Als iemand niet gefaald had, maar nu wel, ken dan strafpunten toe
+			if($db_toegekend!='nee' && $form_toegekend=='nee'){
+				$maaltijd = $this->getMaaltijd($maalid);
+				$strafpunten = (in_array($uid,$frituur)?1:0) * $maaltijd['punten_schoonmaken_frituur'] + 
+								 (in_array($uid,$afzuigkap)?1:0) * $maaltijd['punten_schoonmaken_afzuigkap'] + 
+								 (in_array($uid,$keuken)?1:0) * $maaltijd['punten_schoonmaken_keuken'];
+				if(!$this->_db->query("UPDATE lid SET corvee_punten_bonus=corvee_punten_bonus-'".$strafpunten."' WHERE uid=".$uid.";")){
+					$this->_error=$this->_db->debug("");
+					return false;				
+				}
+			}
+			//van nee naar iets anders, dus strafpunten intrekken
+			if($db_toegekend=='nee' && $form_toegekend!='nee'){
+				$maaltijd = $this->getMaaltijd($maalid);
+				$strafpunten = (in_array($uid,$frituur)?1:0) * $maaltijd['punten_schoonmaken_frituur'] + 
+								 (in_array($uid,$afzuigkap)?1:0) * $maaltijd['punten_schoonmaken_afzuigkap'] + 
+								 (in_array($uid,$keuken)?1:0) * $maaltijd['punten_schoonmaken_keuken'];
+				if(!$this->_db->query("UPDATE lid SET corvee_punten_bonus=corvee_punten_bonus+'".$strafpunten."' WHERE uid=".$uid.";")){
+					$this->_error=$this->_db->debug("");
+					return false;				
+				}
+			}
+			
+		}
+		
+		//bestaande aanmeldingen verwijderen
+		$query_maaltijd="
+			DELETE FROM
+				maaltijdcorvee
+			WHERE
+				maalid=".$maalid."";
+		if(!$this->_db->query($query_maaltijd)){
+			$this->_error="Er is iets mis met de database/query.";
+			return false;
+		}
+				
+		//aanmeldingen toevoegen
+		foreach($frituur as $uid) {
+			if (!$uid) continue;
+			$this->_db->query("INSERT INTO maaltijdcorvee (maalid, uid, schoonmaken_frituur) VALUES('".$maalid."', '".$uid."', 1) ON DUPLICATE KEY UPDATE schoonmaken_frituur = 1");
+		}
+		foreach($afzuigkap as $uid) {
+			if (!$uid) continue;
+			$this->_db->query("INSERT INTO	maaltijdcorvee (maalid, uid, schoonmaken_afzuigkap) VALUES('".$maalid."', '".$uid."', 1) ON DUPLICATE KEY UPDATE schoonmaken_afzuigkap = 1");
+		}
+		foreach($theedoek as $uid) {
+			if (!$uid) continue;
+			$this->_db->query("INSERT INTO	maaltijdcorvee (maalid, uid, schoonmaken_keuken) VALUES('".$maalid."', '".$uid."', 1) ON DUPLICATE KEY UPDATE schoonmaken_keuken = 1");
+		}
+		//Punten_toegekend updaten
+		foreach($punten as $uid=>$form_toegekend){
+			if (!$uid) continue;
+			//$toekenning = array('onbekend','ja','nee');
+			$db_toegekend = $form_toegekend;
+			$this->_db->query("INSERT INTO	maaltijdcorvee (maalid, uid, punten_toegekend) VALUES('".$maalid."', '".$uid."', '".$db_toegekend."') ON DUPLICATE KEY UPDATE punten_toegekend = '".$db_toegekend."'");
+		}
+		
+		$maaltijd = new Maaltijd ($maalid);
+		return $maalid;
+	}
+	
 	# haalt één enkele maaltijd op ter bewerking
 	function getMaaltijd($maalid){
 		$maalid=(int)$maalid;
@@ -372,11 +596,16 @@ class MaalTrack {
 		}
 		$sMaaltijdQuery="
 			SELECT
-				id, datum, gesloten, tekst, abosoort, max, aantal,
+				id, type, datum, gesloten, tekst, abosoort, max, aantal,
 				tp, koks, afwassers, theedoeken, punten_kok, punten_afwas, punten_theedoek,
 				(SELECT COUNT(uid) FROM maaltijdcorvee WHERE maalid = id AND kok = 1) AS koks_aangemeld,
 				(SELECT COUNT(uid) FROM maaltijdcorvee WHERE maalid = id AND afwas = 1) AS afwassers_aangemeld,
 				(SELECT COUNT(uid) FROM maaltijdcorvee WHERE maalid = id AND theedoek = 1) AS theedoeken_aangemeld,
+				schoonmaken_frituur, schoonmaken_afzuigkap, schoonmaken_keuken, 
+				punten_schoonmaken_frituur, punten_schoonmaken_afzuigkap, punten_schoonmaken_keuken,
+				(SELECT COUNT(uid) FROM maaltijdcorvee WHERE maalid = id AND schoonmaken_frituur = 1) AS frituur_aangemeld,
+				(SELECT COUNT(uid) FROM maaltijdcorvee WHERE maalid = id AND schoonmaken_afzuigkap = 1) AS afzuigkap_aangemeld,
+				(SELECT COUNT(uid) FROM maaltijdcorvee WHERE maalid = id AND schoonmaken_keuken = 1) AS keuken_aangemeld,				
 				(SELECT COUNT(*)>0 FROM maaltijdcorvee WHERE maalid = id AND punten_toegekend = 'ja') AS is_toegekend
 			FROM
 				maaltijd
@@ -437,6 +666,15 @@ class MaalTrack {
 			case 'theedoek':
 				$taakfilter = bindec('000010000');
 			break;
+			case 'frituur':
+				$taakfilter = bindec('000000100');
+			break;
+			case 'afzuigkap':
+				$taakfilter = bindec('000001000');
+			break;
+			case 'keuken':
+				$taakfilter = bindec('000000010');
+			break;
 		}
 		
 		//combineren van dag en taak
@@ -453,6 +691,9 @@ class MaalTrack {
 			$eigenvoorkeur= bindec($lid['corvee_voorkeuren'] . $heefttekort); //Totaal 8+1 = 9 bits lang
 			
 			if($taak == 'kwalikok' && $lid['corvee_kwalikok']==0){
+				$eigenvoorkeur=bindec('000000000');
+			}
+			if($taak == 'kok' && $lid['corvee_kwalikok']==1){
 				$eigenvoorkeur=bindec('000000000');
 			}
 			
@@ -484,7 +725,7 @@ class MaalTrack {
 		$sorteer_volgorde_toegestaan = array('asc', 'desc');
 		if (!in_array($sorteer, $sorteer_toegestaan) || !in_array($sorteer_richting, $sorteer_volgorde_toegestaan))
 			print('Ongeldige sorteeroptie');
-			
+	
 		// TODO: corvee ingeroosterd berekenen...
 		$sLedenQuery="
 			SELECT
@@ -505,23 +746,6 @@ class MaalTrack {
 				".$sorteer." ".strtoupper($sorteer_richting).", uid ASC";
 		$rLeden=$this->_db->query($sLedenQuery);
 		$aLeden=$this->_db->result2array($rLeden);
-		
-		// rood naar geel naar groen
-		foreach($aLeden as &$rLid) {
-			$kleur_start = 8;
-			$tekort_offset = 2;
-			
-			$rRaw = 2 * (($rLid['corvee_tekort']/(CORVEEPUNTEN+$tekort_offset)));	// waarde tussen 0 en 1
-			$gRaw = 2 * (1-$rLid['corvee_tekort']/(CORVEEPUNTEN+$tekort_offset));	// waarde tussen 0 en 1
-			if ($rRaw < 0) $rRaw = 0; if ($rRaw > 1) $rRaw = 1;
-			if ($gRaw < 0) $gRaw = 0; if ($gRaw > 1) $gRaw = 1;
-			
-			$r = $kleur_start + round($rRaw * (15-1-$kleur_start));
-			$g = $kleur_start + round($gRaw * (15-1-$kleur_start));
-			$b = $kleur_start;
-						
-			$rLid['corvee_tekort_rgb'] = dechex($r).dechex($g).dechex($b);
-		}
 
 		return $aLeden;
 	}
@@ -562,19 +786,27 @@ class MaalTrack {
 		}
 		
 		# corveefilter - filtert speciale "dummy" maaltijden bedoelt voor corvee/schoonmaak
-		if ($corveefilter)
-			$corveefilter = "";
-		else
+		if ($corveefilter){
+			$corveevelden = "";
 			$corveefilter = "AND type = 'normaal'";
+		} else {
+			$corveevelden = ", schoonmaken_frituur, schoonmaken_afzuigkap, schoonmaken_keuken, punten_schoonmaken_frituur, punten_schoonmaken_afzuigkap, punten_schoonmaken_keuken,
+				(SELECT COUNT(uid) FROM maaltijdcorvee WHERE maalid = id AND schoonmaken_frituur = 1) AS frituur_aangemeld,
+				(SELECT COUNT(uid) FROM maaltijdcorvee WHERE maalid = id AND schoonmaken_afzuigkap = 1) AS afzuigkap_aangemeld,
+				(SELECT COUNT(uid) FROM maaltijdcorvee WHERE maalid = id AND schoonmaken_keuken = 1) AS keuken_aangemeld
+				";
+			$corveefilter = "";
+		}
 
 		$maaltijden = array();
 		$sMaaltijdQuery="
 			SELECT
-				id, datum, gesloten, tekst, abosoort, max, aantal, tp, koks, afwassers, theedoeken, punten_kok, punten_afwas, punten_theedoek, corvee_gemaild,
+				id, datum, type, gesloten, tekst, abosoort, max, aantal, tp, koks, afwassers, theedoeken, punten_kok, punten_afwas, punten_theedoek, corvee_gemaild,
 				(SELECT COUNT(uid) FROM maaltijdcorvee WHERE maalid = id AND kok = 1) AS koks_aangemeld,
 				(SELECT COUNT(uid) FROM maaltijdcorvee WHERE maalid = id AND afwas = 1) AS afwassers_aangemeld,
 				(SELECT COUNT(uid) FROM maaltijdcorvee WHERE maalid = id AND theedoek = 1) AS theedoeken_aangemeld,
 				(SELECT COUNT(*)>0 FROM maaltijdcorvee WHERE maalid = id AND punten_toegekend = 'ja') AS is_toegekend
+				".$corveevelden."
 			FROM
 				maaltijd
 			WHERE
@@ -605,7 +837,7 @@ class MaalTrack {
 	}
 
 	# haalt maaltijden op en voegt extra info toe voor op de maaltijdenpagina
-	function getMaaltijden($van = 0, $tot = 0, $mootfilter = true, $corveefilter = true, $uid=null, $alsArray=true) {
+	function getMaaltijden($van = 0, $tot = 0, $mootfilter = true, $corveefilter = true, $uid=null) {
 		if($uid==null){
 			$uid=LoginLid::instance()->getUid();
 		}
@@ -614,85 +846,79 @@ class MaalTrack {
 		$maaltijdenRaw = $this->getMaaltijdenRaw($van,$tot,$mootfilter,$corveefilter);
 
 		$maaltijden=array();
-		if ($alsArray) {
-			foreach($maaltijdenRaw as $maaltijd){
-				$maaltijd['abotekst'] = $this->getAboTekst($maaltijd['abosoort']);
-	
-				if($maaltijd['gesloten']=='1'){
-					//als de maaltijd al gesloten is, dan uit de maaltijdgesloten-tabel ophalen.
-					$sAanmeldingen="SELECT uid, gasten, gasten_opmerking FROM maaltijdgesloten WHERE uid = '".$uid."' AND maalid = ".$maaltijd['id'].";";
-					$rAanmeldingen = $this->_db->query($sAanmeldingen);
-					if (($rAanmeldingen !== false) and $this->_db->numRows($rAanmeldingen) > 0) {
-						$maaltijd['status']='AAN';
-					}else{
-						$maaltijd['status']='';
-					}
-					# Gasten ophalen
-					$record = $this->_db->next($rAanmeldingen);
-					$maaltijd['gasten'] = $record['gasten'];
-					$maaltijd['opmerking'] = $record['gasten_opmerking'];
+		foreach($maaltijdenRaw as $maaltijd){
+			$maaltijd['abotekst'] = $this->getAboTekst($maaltijd['abosoort']);
+
+			if($maaltijd['gesloten']=='1'){
+				//als de maaltijd al gesloten is, dan uit de maaltijdgesloten-tabel ophalen.
+				$sAanmeldingen="SELECT uid, gasten, gasten_opmerking FROM maaltijdgesloten WHERE uid = '".$uid."' AND maalid = ".$maaltijd['id'].";";
+				$rAanmeldingen = $this->_db->query($sAanmeldingen);
+				if (($rAanmeldingen !== false) and $this->_db->numRows($rAanmeldingen) > 0) {
+					$maaltijd['status']='AAN';
 				}else{
-					# status: AAN,AF ABO ''
-					# 1a. is er een aan of afmelding voor deze maaltijd?
-					$sAanmeldingen="
-						SELECT
-							status, gasten, gasten_opmerking
-						FROM
-							maaltijdaanmelding
-						WHERE
-							uid = '".$uid."' AND maalid = ".$maaltijd['id'].";";
-					$rAanmeldingen = $this->_db->query($sAanmeldingen);
-					if (($rAanmeldingen !== false) and $this->_db->numRows($rAanmeldingen) > 0) {
-						$record = $this->_db->next($rAanmeldingen);
-						$maaltijd['status'] = $record['status'];
-						# Gasten ophalen
-						$maaltijd['gasten'] = $record['gasten'];
-						$maaltijd['opmerking'] = $record['gasten_opmerking'];
-					} else {
-						# 1b. zo nee, is er een abo actief?
-						$sAbo="SELECT uid FROM maaltijdabo WHERE uid = '".$uid."' AND abosoort = '".$maaltijd['abosoort']."'";
-						$rAbo = $this->_db->query($sAbo);
-						if(($rAbo !== false) and $this->_db->numRows($rAbo) > 0) {
-							$record = $this->_db->next($rAbo);
-							$maaltijd['status'] = 'ABO';
-						}else{
-							# 1c. zo ook nee, dan status = ''
-							$maaltijd['status'] = '';
-						}
-					}
+					$maaltijd['status']='';
 				}
-				
-				# Corvee
-				$sCorvee="
+				# Gasten ophalen
+				$record = $this->_db->next($rAanmeldingen);
+				$maaltijd['gasten'] = $record['gasten'];
+				$maaltijd['opmerking'] = $record['gasten_opmerking'];
+			}else{
+				# status: AAN,AF ABO ''
+				# 1a. is er een aan of afmelding voor deze maaltijd?
+				$sAanmeldingen="
 					SELECT
-						kok, afwas, theedoek
+						status, gasten, gasten_opmerking
 					FROM
-						maaltijdcorvee
+						maaltijdaanmelding
 					WHERE
 						uid = '".$uid."' AND maalid = ".$maaltijd['id'].";";
-				$rCorvee = $this->_db->query($sCorvee);
-				if (($rCorvee !== false) and $this->_db->numRows($rCorvee) > 0) {
-					$record = $this->_db->next($rCorvee);
-					$maaltijd['kok'] = $record['kok'];
-					$maaltijd['afwas'] = $record['afwas'];
-					$maaltijd['theedoek'] = $record['theedoek'];
+				$rAanmeldingen = $this->_db->query($sAanmeldingen);
+				if (($rAanmeldingen !== false) and $this->_db->numRows($rAanmeldingen) > 0) {
+					$record = $this->_db->next($rAanmeldingen);
+					$maaltijd['status'] = $record['status'];
+					# Gasten ophalen
+					$maaltijd['gasten'] = $record['gasten'];
+					$maaltijd['opmerking'] = $record['gasten_opmerking'];
+				} else {
+					# 1b. zo nee, is er een abo actief?
+					$sAbo="SELECT uid FROM maaltijdabo WHERE uid = '".$uid."' AND abosoort = '".$maaltijd['abosoort']."'";
+					$rAbo = $this->_db->query($sAbo);
+					if(($rAbo !== false) and $this->_db->numRows($rAbo) > 0) {
+						$record = $this->_db->next($rAbo);
+						$maaltijd['status'] = 'ABO';
+					}else{
+						# 1c. zo ook nee, dan status = ''
+						$maaltijd['status'] = '';
+					}
 				}
-	
-				# 2. actie is afhankelijk van status en evt. gesloten zijn van de maaltijd
-				# actie: AAN, AF, ''
-				if(($maaltijd['status']=='AAN' OR $maaltijd['status']=='ABO') AND $maaltijd['gesloten']=='0' ){
-					$maaltijd['actie'] = 'af';
-				}elseif(($maaltijd['status']=='AF' OR $maaltijd['status']=='') AND $maaltijd['aantal'] != $maaltijd['max'] AND $maaltijd['gesloten'] == '0' ){
-					$maaltijd['actie'] = 'aan';
-				}else{
-					$maaltijd['actie'] = '';
-				}
-				$maaltijden[]=$maaltijd;
 			}
-		} else {
-			foreach($maaltijdenRaw as $maaltijd){
-				$maaltijden[] = new Maaltijd($maaltijd['id']);
+			
+			# Corvee
+			$sCorvee="
+				SELECT
+					kok, afwas, theedoek
+				FROM
+					maaltijdcorvee
+				WHERE
+					uid = '".$uid."' AND maalid = ".$maaltijd['id'].";";
+			$rCorvee = $this->_db->query($sCorvee);
+			if (($rCorvee !== false) and $this->_db->numRows($rCorvee) > 0) {
+				$record = $this->_db->next($rCorvee);
+				$maaltijd['kok'] = $record['kok'];
+				$maaltijd['afwas'] = $record['afwas'];
+				$maaltijd['theedoek'] = $record['theedoek'];
 			}
+
+			# 2. actie is afhankelijk van status en evt. gesloten zijn van de maaltijd
+			# actie: AAN, AF, ''
+			if(($maaltijd['status']=='AAN' OR $maaltijd['status']=='ABO') AND $maaltijd['gesloten']=='0' ){
+				$maaltijd['actie'] = 'af';
+			}elseif(($maaltijd['status']=='AF' OR $maaltijd['status']=='') AND $maaltijd['aantal'] != $maaltijd['max'] AND $maaltijd['gesloten'] == '0' ){
+				$maaltijd['actie'] = 'aan';
+			}else{
+				$maaltijd['actie'] = '';
+			}
+			$maaltijden[]=$maaltijd;
 		}
 		return $maaltijden;
 
@@ -896,66 +1122,6 @@ class MaalTrack {
 		$result = $this->_db->select("SELECT uid FROM maaltijdabo WHERE abosoort = '{$abosoort}'");
 		if ($result !== false) return $this->_db->numRows($result);
 		return 0;
-	}
-	
-	# corvee automailer
-	function corveeAutoMailer()
-	{
-		// get maaltijden waar datum < deze week
-		$maaltijden = $this->getMaaltijdenRaw(0, time()+86400*7);
-		
-		echo 'Start<br />Maaltijden ophalen binnen komende 7 dagen..<br />';
-		foreach($maaltijden as $maaltijd)
-		{
-			echo '- Maaltijd ID '.$maaltijd['id'].': ';
-			if ($maaltijd['corvee_gemaild']) {
-				echo 'Reeds gemaild.';
-			} else {
-				$lMaaltijd = new Maaltijd($maaltijd['id']);
-				
-				// taken ophalen
-				$taken = $lMaaltijd->getTaken();
-				$teller = 0;
-				foreach($taken as $taak => $leden)
-				{
-					$template = null;
-					switch ($taak) {
-						case 'afwassers':
-							$template = 'afwas.tpl';
-						case 'koks' :
-						case 'theedoeken':
-						case 'schoonmaken_frituur':
-						case 'schoonmaken_afzuigkap':
-						case 'schoonmaken_keuken':
-							$template = 'afwas.tpl'; // eentje maken voor elke taak
-					}
-					if (!$template) continue;
-					
-					// mailen
-					$onderwerp = 'CSR Delft Corvee';
-					$headers = '';//
-					
-					$mail = new Smarty_csr();
-					setlocale(LC_ALL, 'nl_NL');
-					$mail->assign('datum', strftime('%d-%m-%Y (%A)', $maaltijd['datum']));
-					$bericht = $mail->fetch('maaltijdketzer/corveemail/'.$template);
-					foreach($leden as $uid) {			
-						//mail($uid.'@csrdelft.nl', $onderwerp, $bericht, $headers);
-						$teller++;
-					}
-				}
-				echo 'Mensen gemaild: '.$teller;
-				
-				// update corvee_gemaild
-				/*$query = "UPDATE maaltijd SET corvee_gemaild = 1 WHERE id=".$maaltijd['id']."";
-				if(!$this->_db->query($query)){
-					$this->_error="Er is iets mis met de database/query.";
-					return false;
-				}*/
-			}
-			echo '<br />';
-		}
-		echo 'Klaar!<br />';
 	}
 
 }

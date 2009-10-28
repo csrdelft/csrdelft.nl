@@ -34,8 +34,10 @@
 			<th>K</th>
 			<th>A</th>
 			<th>T</th>
+			<th>sF</th>
+			<th>sA</th>
+			<th>sK</th>
 			<th>Punten</th>
-			<th>Tafelpraeses</th>
 			<th># (Max)</th>
 		</tr>
 		{foreach from=$maal.maaltijden item=maaltijd}
@@ -46,33 +48,50 @@
 				</td>
 				<td>{$maaltijd.datum|date_format:$datumFormaat}</td>
 				<td>{$maaltijd.tekst|escape:'html'}</td>
-				<td {if $maaltijd.koks - $maaltijd.koks_aangemeld > 0}style="color: red;"{/if}>
-					{$maaltijd.koks_aangemeld}/{$maaltijd.koks}
-				</td>				
-				<td {if $maaltijd.afwassers - $maaltijd.afwassers_aangemeld > 0}style="color: red;"{/if}>
-					{$maaltijd.afwassers_aangemeld}/{$maaltijd.afwassers}
-				</td>	
-				<td {if $maaltijd.theedoeken - $maaltijd.theedoeken_aangemeld > 0}style="color: red;"{/if}>
-					{$maaltijd.theedoeken_aangemeld}/{$maaltijd.theedoeken}
-				</td>	
-				<td {if $maaltijd.is_toegekend}style="color: #0D0;"{/if}>({$maaltijd.punten_kok}/{$maaltijd.punten_afwas}/{$maaltijd.punten_theedoek})</td>
-				<td>{$maaltijd.tp|csrnaam}</td>
-				<td>
-					{if $maaltijd.aantal < $maaltijd.max}
+				{if $maaltijd.type == "normaal"}
+					<td {if $maaltijd.koks - $maaltijd.koks_aangemeld > 0}style="color: red;"{/if}>
+						{$maaltijd.koks_aangemeld}/{$maaltijd.koks}
+					</td>				
+					<td {if $maaltijd.afwassers - $maaltijd.afwassers_aangemeld > 0}style="color: red;"{/if}>
+						{$maaltijd.afwassers_aangemeld}/{$maaltijd.afwassers}
+					</td>	
+					<td {if $maaltijd.theedoeken - $maaltijd.theedoeken_aangemeld > 0}style="color: red;"{/if}>
+						{$maaltijd.theedoeken_aangemeld}/{$maaltijd.theedoeken}
+					</td>	
+					<td />
+					<td />
+					<td />
+					<td {if $maaltijd.is_toegekend}style="color: #0D0;"{/if}>({$maaltijd.punten_kok}/{$maaltijd.punten_afwas}/{$maaltijd.punten_theedoek})</td>
+					<td>
 						{$maaltijd.aantal} ({$maaltijd.max})
-					{else}
-						VOL ({$maaltijd.max})
-					{/if}
-				</td>
+					</td>
+				{else} {* Corveemaaltijd *}	
+					<td />
+					<td />
+					<td />
+					<td {if $maaltijd.schoonmaken_frituur - $maaltijd.frituur_aangemeld > 0}style="color: red;"{/if}>
+						{$maaltijd.frituur_aangemeld}/{$maaltijd.schoonmaken_frituur}
+					</td>				
+					<td {if $maaltijd.schoonmaken_afzuigkap - $maaltijd.afzuigkap_aangemeld > 0}style="color: red;"{/if}>
+						{$maaltijd.afzuigkap_aangemeld}/{$maaltijd.schoonmaken_afzuigkap}
+					</td>	
+					<td {if $maaltijd.schoonmaken_keuken - $maaltijd.keuken_aangemeld > 0}style="color: red;"{/if}>
+						{$maaltijd.keuken_aangemeld}/{$maaltijd.schoonmaken_keuken}
+					</td>
+					<td {if $maaltijd.is_toegekend}style="color: #0D0;"{/if}>
+						({$maaltijd.punten_schoonmaken_frituur}/{$maaltijd.punten_schoonmaken_afzuigkap}/{$maaltijd.punten_schoonmaken_keuken})
+					</td>
+					<td />
+				{/if}
 			</tr>
 		{/foreach}
 	</table>
 	<br />
 {/if}
-{if $maal.formulier.actie == "bewerk"}
-{* maaltijd bewerken *}
-{include file='maaltijdketzer/corveeformulier.tpl'}
+{if $maal.formulier.actie == "bewerk" || $maal.formulier.actie == "toevoegen"}
+	{* maaltijd bewerken *}
+	{include file='maaltijdketzer/corveeformulier.tpl'}
 {elseif $maal.formulier.actie == "takenbewerk"}
-{* corvee-aanmeldingen bewerken *}
-{include file='maaltijdketzer/corveetakenformulier.tpl'}
+	{* corvee-aanmeldingen bewerken *}
+	{include file='maaltijdketzer/corveetakenformulier.tpl'}
 {/if}

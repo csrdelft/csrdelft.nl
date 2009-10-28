@@ -23,27 +23,52 @@ $beheer = new CorveebeheerContent($maaltrack);
 
 
 # actie is bewerken, kijken of velden ingevuld zijn
-if(isset($_POST['actie'])){
-	$maalid=(int)$_POST['maalid'];
+if(isset($_POST['actie']) && isset($_POST['type'])){
 	$actie=(int)$_POST['actie'];
-
-	# bestaande maaltijd bewerken
-	if($actie == 'bewerk' && (isset($_POST['koks'], $_POST['afwassers'], $_POST['theedoeken'], $_POST['punten_kok'], $_POST['punten_afwas'], $_POST['punten_theedoek']))
-		&& ($maaltrack->editCorveeMaaltijd($maalid, $_POST['koks'], $_POST['afwassers'], $_POST['theedoeken'], $_POST['punten_kok'], $_POST['punten_afwas'], $_POST['punten_theedoek']))){
-		header('location: '.CSR_ROOT.'actueel/maaltijden/corveebeheer/bewerk/'.$maalid);
+	$type=(int)$_POST['type'];
+	$maalid=(int)$_POST['maalid'];
+	if(isset($_POST['punten']))
+		$punten = $_POST['punten'];
+	else
+		$punten = array();
+	if(isset($_POST['datum']))
+		$datum=strtotime($_POST['datum']);
+		
+	# nieuwe maaltijd toevoegen of oude bewerken?
+	if($actie == 'toevoegen' && $type=='corvee' && isset($datum, $_POST['tekst'], $_POST['frituur'], $_POST['afzuigkap'], $_POST['keuken'],$_POST['punten_schoonmaken_frituur'], $_POST['punten_schoonmaken_afzuigkap'], $_POST['punten_schoonmaken_keuken'])
+	   	&& $maaltrack->addSchoonmaakMaaltijd($datum, $_POST['tekst'], 
+		$_POST['frituur'], $_POST['afzuigkap'], $_POST['keuken'],
+		$_POST['punten_schoonmaken_frituur'], $_POST['punten_schoonmaken_afzuigkap'], $_POST['punten_schoonmaken_keuken']
+		)){
+		header('location: '.CSR_ROOT.'actueel/maaltijden/corveebeheer/');
 		exit;
-	} elseif ($actie == 'takenbewerk' && (isset($_POST['kok'], $_POST['afwas'], $_POST['theedoek']))
-		&& ($maaltrack->editCorveeMaaltijdTaken($maalid, $_POST['kok'], $_POST['afwas'], $_POST['theedoek'], @$_POST['punten']))){									
-		header('location: '.CSR_ROOT.'actueel/maaltijden/corveebeheer/takenbewerk/'.$maalid.'/'.$_POST['filter']);
-		exit;
+	}else{	
+		# bestaande maaltijd bewerken
+		if($actie == 'bewerk' && $type == 'normaal' && (isset($_POST['koks'], $_POST['afwassers'], $_POST['theedoeken'], $_POST['punten_kok'], $_POST['punten_afwas'], $_POST['punten_theedoek']))
+			&& ($maaltrack->editCorveeMaaltijd($maalid, $_POST['koks'], $_POST['afwassers'], $_POST['theedoeken'], $_POST['punten_kok'], $_POST['punten_afwas'], $_POST['punten_theedoek']))){
+			header('location: '.CSR_ROOT.'actueel/maaltijden/corveebeheer/bewerk/'.$maalid);
+			exit;
+		} elseif ($actie == 'bewerk' && $type == 'corvee' && (isset($_POST['frituur'], $_POST['afzuigkap'], $_POST['keuken'], $_POST['punten_schoonmaken_frituur'], $_POST['punten_schoonmaken_afzuigkap'], $_POST['punten_schoonmaken_keuken']))
+			&& ($maaltrack->editSchoonmaakMaaltijd($maalid, $_POST['frituur'], $_POST['afzuigkap'], $_POST['keuken'], $_POST['punten_schoonmaken_frituur'], $_POST['punten_schoonmaken_afzuigkap'], $_POST['punten_schoonmaken_keuken']))){
+			header('location: '.CSR_ROOT.'actueel/maaltijden/corveebeheer/bewerk/'.$maalid);
+			exit;
+		} elseif ($actie == 'takenbewerk' && $type == 'normaal' && (isset($_POST['kok'], $_POST['afwas'], $_POST['theedoek']))
+			&& ($maaltrack->editCorveeMaaltijdTaken($maalid, $_POST['kok'], $_POST['afwas'], $_POST['theedoek'], $punten))){									
+			header('location: '.CSR_ROOT.'actueel/maaltijden/corveebeheer/takenbewerk/'.$maalid.'/'.$_POST['filter']);
+			exit;
+		} elseif ($actie == 'takenbewerk' && $type == 'corvee' && (isset($_POST['frituur'], $_POST['afzuigkap'], $_POST['keuken'])
+			&& ($maaltrack->editSchoonmaakMaaltijdTaken($maalid, $_POST['frituur'], $_POST['afzuigkap'], $_POST['keuken'], $punten)))){
+			header('location: '.CSR_ROOT.'actueel/maaltijden/corveebeheer/takenbewerk/'.$maalid.'/'.$_POST['filter']);
+			exit;	
+		}
+		
+		#als we hier terecht komen is het niet goed gegaan, dan maar de foutmelding weergeven...
+		$beheer->addError($maaltrack->getError());
+		if($actie == 'bewerk')
+			$beheer->load($maalid, 'bewerk');
+		elseif ($actie == 'takenbewerk')
+			$beheer->load($maalid, 'takenbewerk');
 	}
-	
-	#als we hier terecht komen is het niet goed gegaan, dan maar de foutmelding weergeven...
-	$beheer->addError($maaltrack->getError());
-	if($actie == 'bewerk')
-		$beheer->load($maalid, 'bewerk');
-	elseif ($actie == 'takenbewerk')
-		$beheer->load($maalid, 'takenbewerk');
 }
 
 # bewerken we een maaltijd?
