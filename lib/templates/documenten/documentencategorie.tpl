@@ -21,8 +21,8 @@
 			<tr class="document">
 				<td><a href="/communicatie/documenten_new/download/{$document->getID()}/{$document->getBestandsnaam()}">{$document->getNaam()|escape:'html'}</a></td>
 				<td class="size">{$document->getSize()}</td>
-				<td class="mimetype">{$document->getMimetype()}</td>
-				<td class="datum">{$document->getToegevoegd()|reldate}</td>
+				<td class="mimetype">{$document->getFriendlyMimetype()}</td>
+				<td class="datum"><div class="verborgen">{$document->getToegevoegd()}</div>{$document->getToegevoegd()|reldate}</td>
 				<td class="eigenaar">{$document->getEigenaar()|csrnaam}</td>
 			</tr>
 		{/foreach}

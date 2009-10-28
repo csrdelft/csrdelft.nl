@@ -6,6 +6,9 @@
  * zorgen voor de speciale functies. In DocumentUploader::getAll() moet een
  * eventueel nieuw object aan de array toegevoegd worden.
  */
+
+require_once 'mimemagic/MimeMagic.php'; //mediawiki's mime magic class
+
 abstract class DocumentUploader{
 
 	public $beschrijving;
@@ -18,7 +21,6 @@ abstract class DocumentUploader{
 	public $size;
 	
 	public function __construct(){
-
 	}
 	public function getNaam(){ return get_class($this); }
 
@@ -96,6 +98,9 @@ class DUFileupload extends DocumentUploader{
 			$this->addError('Upload-error: error-code: '.$this->file['error']);
 		}
 		if($this->getErrors()==''){
+			$mimemagic=new MimeMagic();
+
+			
 			$this->filename=$this->file['name'];
 			$this->mimetype=$this->file['type'];
 			$this->size=$this->file['size'];
@@ -133,8 +138,14 @@ class DUFromurl extends DocumentUploader{
 			$this->file=file_get_contents($_POST['url']);
 			$naam=substr(trim($_POST['url']), strrpos($_POST['url'], '/')+1);
 
+			//Bestand tijdelijk omslaan om mime-type te bepalen.
+			$tmpfile=TMP_PATH.'docuketz0r'.microtime().'.tmp';
+			file_put_contents($tmpfile, $this->file);
+			$mimetype=MimeMagic::singleton()->guessMimeType($tmpfile);
+			unlink($tmpfile);
+
 			$this->filename=preg_replace("/[^a-zA-Z0-9\s\.\-\_]/", '', $naam);
-			$this->mimetype='plain/cheese'; //TODO: do teh magic.
+			$this->mimetype=$mimetype;
 			$this->size=strlen($this->file);
 		}
 		return $this->getErrors=='';
@@ -164,13 +175,10 @@ class DUFromftp extends DocumentUploader{
 	}
 	private function getFilelist(){
 		$handler = opendir($this->path);
-		while ($file = readdir($handler)) {
-
-			// if $file isn't this directory or its parent, 
-			// add it to the results array
-			if (!is_dir($this->path.$file) AND $file != '.' AND $file != '..' AND substr($file,0,1)!='.'){
+		while($file = readdir($handler)) {
+			//we willen geen directories en geen verborgen bestanden.
+			if(!is_dir($this->path.$file) AND substr($file,0,1)!='.'){
 				$results[] = $file;
-
 			}
 		}
 
@@ -186,10 +194,13 @@ class DUFromftp extends DocumentUploader{
 			$this->addError('Bestand is niet aanwezig in public FTP-map');
 		}
 		if($this->getErrors()==''){
+			$mimemagic=MimeMagic::singleton();
+			
+			
 			$this->file=$_POST['ftpfile'];
 			$this->filename=$_POST['ftpfile'];
 			$this->size=filesize($this->path.$this->file);
-			$this->mimetype='plain/cheese'; //TODO: do teh magic.
+			$this->mimetype=MimeMagic::singleton()->guessMimeType($this->path.$this->file);
 		}
 		return $this->getErrors()=='';
 	}

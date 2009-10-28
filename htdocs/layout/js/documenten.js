@@ -36,7 +36,7 @@ $(document).ready(function() {
 				"bUseRendered": false
 			}, 
 			null, //mime-type
-			null, //toegevoegd
+			{'sType': 'html'}, //moment toegevoegd
 			null //Eigenaar
 			]
 		});

@@ -30,7 +30,7 @@
 			<tr class="document">
 				<td><a href="/communicatie/documenten_new/download/{$document->getID()}/{$document->getBestandsnaam()}">{$document->getNaam()|escape:'html'}</a></td>
 				<td class="size">{$document->getSize()|filesize}</td>
-				<td>{$document->getMimetype()}</td>
+				<td>{$document->getFriendlyMimetype()}</td>
 				<td>{$document->getToegevoegd()|reldate}</td>
 				<td>{$document->getEigenaar()|csrnaam}</td>
 			</tr>

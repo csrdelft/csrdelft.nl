@@ -163,7 +163,21 @@ class Document{
 	public function magBekijken(){
 		return LoginLid::instance()->hasPermission($this->getLeesrechten());
 	}
-
+	public function getFriendlyMimetype(){
+		if(strpos($this->getMimetype(), 'pdf')){
+			return 'pdf';
+		}elseif(strpos($this->getMimetype(), 'msword')){
+			return 'doc';
+		}elseif(strpos($this->getMimetype(), 'jpeg')){
+			return 'jpg';
+		}elseif(strpos($this->getMimetype(), 'png')){
+			return 'png';
+		}elseif($this->getMimetype()=='application/octet-stream'){
+			return 'onbekend';
+		}else{
+			return $this->getMimetype();
+		}
+	}
 	/*
 	 * Centrale plek om het volledige pad van een document te maken.
 	 */
