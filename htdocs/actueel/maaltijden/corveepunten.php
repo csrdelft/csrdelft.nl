@@ -11,7 +11,7 @@
 
 require_once 'include.config.php';
 
-if(!$loginlid->hasPermission('P_MAAL_MOD')){ header('location: '.CSR_ROOT.'actueel/maaltijden/'); exit; }
+
 
 require_once 'maaltijden/class.maaltrack.php';
 require_once 'maaltijden/class.maaltijd.php';
@@ -23,7 +23,11 @@ $punten = new CorveepuntenContent($maaltrack);
 
 
 # actie is bewerken, kijken of velden ingevuld zijn
+if(!$loginlid->hasPermission('P_MAAL_MOD'))
+
 if(isset($_POST['actie'])){
+	if(!$loginlid->hasPermission('P_MAAL_MOD')){ header('location: '.CSR_ROOT.'actueel/maaltijden/'); exit; }
+
 	$uid=$_POST['uid'];
 	$actie=(int)$_POST['actie'];
 

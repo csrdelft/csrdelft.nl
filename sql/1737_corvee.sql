@@ -1,0 +1,1 @@
+ALTER TABLE `maaltijd` ADD `corvee_gemaild` TINYINT( 1 ) NOT NULL DEFAULT '0';

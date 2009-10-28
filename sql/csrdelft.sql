@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Oct 28, 2009 at 10:31 AM
+-- Generation Time: Oct 28, 2009 at 03:21 PM
 -- Server version: 5.1.30
 -- PHP Version: 5.2.8
 
@@ -531,6 +531,7 @@ CREATE TABLE IF NOT EXISTS `maaltijd` (
   `punten_schoonmaken_frituur` smallint(4) NOT NULL,
   `punten_schoonmaken_afzuigkap` smallint(4) NOT NULL,
   `punten_schoonmaken_keuken` smallint(4) NOT NULL,
+  `corvee_gemaild` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=510 ;
 

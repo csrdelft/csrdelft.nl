@@ -1,4 +1,5 @@
 * text=auto !eol
+bin/corvee_mailer.php -text
 bin/ldap-import.php -text
 bin/maalcie.php -text
 bin/mk_commissie_ldif.php -text
@@ -132,6 +133,7 @@ htdocs/pauper.php -text
 htdocs/robots.txt -text
 htdocs/su.php -text
 htdocs/tools/.htaccess -text
+htdocs/tools/corvee_mailer.php -text
 htdocs/tools/downloadalbum.php -text
 htdocs/tools/eetplan.php -text
 htdocs/tools/flushcache.php -text
@@ -415,6 +417,7 @@ lib/templates/maaltijdketzer/abo-overzicht.tpl -text
 lib/templates/maaltijdketzer/beheer.tpl -text
 lib/templates/maaltijdketzer/corveebeheer.tpl -text
 lib/templates/maaltijdketzer/corveeformulier.tpl -text
+lib/templates/maaltijdketzer/corveemail/afwas.tpl -text
 lib/templates/maaltijdketzer/corveepunten.tpl -text
 lib/templates/maaltijdketzer/corveetakenformulier.tpl -text
 lib/templates/maaltijdketzer/formulier.tpl -text
@@ -476,6 +479,7 @@ sql/1688_mededelingen.sql -text
 sql/1712_corvee.sql -text
 sql/1713_corvee.sql -text
 sql/1715_corvee.sql -text
+sql/1737_corvee.sql -text
 sql/17xx_documenten.sql -text
 sql/csrdelft.sql -text
 sql/csrdelft_oud.sql -text

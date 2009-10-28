@@ -5,15 +5,15 @@
 	<li>
 		<a href="/actueel/maaltijden/voorkeuren/" title="Instellingen">Instellingen</a>
 	</li>
+	<li>
+		<a href="/actueel/maaltijden/corveepunten/" title="Corveepunten">Corveepunten</a>
+	</li>
 	{if $loginlid->hasPermission('P_MAAL_MOD')}
-		<li>
-			<a href="/actueel/maaltijden/beheer/" title="Beheer">Maaltijdbeheer</a>
-		</li>
 		<li class="active">
 			<a href="/actueel/maaltijden/corveebeheer/" title="Corveebeheer">Corveebeheer</a>
 		</li>
 		<li>
-			<a href="/actueel/maaltijden/corveepunten/" title="Corveepunten">Corveepunten</a>
+			<a href="/actueel/maaltijden/beheer/" title="Beheer">Maaltijdbeheer</a>
 		</li>
 		<li>
 			<a href="/actueel/maaltijden/saldi.php" title="Saldo's updaten">Saldo's updaten</a>
@@ -39,7 +39,7 @@
 			<th># (Max)</th>
 		</tr>
 		{foreach from=$maal.maaltijden item=maaltijd}
-			<tr {if $maaltijd.datum<=$smarty.now}class="old"{/if} {if $maal.formulier.id==$maaltijd.id}style="background-color: #bbffbb"{/if}>
+			<tr {if $maaltijd.datum<=$smarty.now}class="old"{/if} style="background-color: {cycle values="#e9e9e9, #fff"};{if $maal.formulier.id==$maaltijd.id}background-color: #bfb{/if}">
 			<td>
 					<a href="/actueel/maaltijden/corveebeheer/bewerk/{$maaltijd.id}#corveemaaltijdFormulier"><img src="{$csr_pics}knopjes/bewerken.png" /></a>					
 					<a href="/actueel/maaltijden/corveebeheer/takenbewerk/{$maaltijd.id}#corveetakenFormulier"><img src="{$csr_pics}knopjes/lijstbewerken.png" /></a>

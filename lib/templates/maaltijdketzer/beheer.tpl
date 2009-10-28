@@ -5,15 +5,15 @@
 	<li>
 		<a href="/actueel/maaltijden/voorkeuren/" title="Instellingen">Instellingen</a>
 	</li>
+	<li>
+		<a href="/actueel/maaltijden/corveepunten/" title="Corveepunten">Corveepunten</a>
+	</li>
 	{if $loginlid->hasPermission('P_MAAL_MOD')}
-		<li class="active">
-			<a href="/actueel/maaltijden/beheer/" title="Beheer">Maaltijdbeheer</a>
-		</li>
 		<li>
 			<a href="/actueel/maaltijden/corveebeheer/" title="Corveebeheer">Corveebeheer</a>
 		</li>
-		<li>
-			<a href="/actueel/maaltijden/corveepunten/" title="Corveepunten">Corveepunten</a>
+		<li class="active">
+			<a href="/actueel/maaltijden/beheer/" title="Beheer">Maaltijdbeheer</a>
 		</li>
 		<li>
 			<a href="/actueel/maaltijden/saldi.php" title="Saldo's updaten">Saldo's updaten</a>
@@ -35,7 +35,7 @@
 			<th># (Max)</th>
 		</tr>
 		{foreach from=$maal.maaltijden item=maaltijd}
-			<tr {if $maaltijd.datum<=$smarty.now}class="old"{/if}>
+			<tr {if $maaltijd.datum<=$smarty.now}class="old"{/if} style="background-color: {cycle values="#e9e9e9, #fff"}">
 				<td>
 					<a href="/actueel/maaltijden/beheer/bewerk/{$maaltijd.id}#maaltijdFormulier"><img src="{$csr_pics}forum/bewerken.png" /></a>
 					<a href="/actueel/maaltijden/beheer/verwijder/{$maaltijd.id}" onclick="return confirm(\'Weet u zeker dat u deze maaltijd wilt verwijderen?\')"><img src="{$csr_pics}forum/verwijderen.png" /></a>

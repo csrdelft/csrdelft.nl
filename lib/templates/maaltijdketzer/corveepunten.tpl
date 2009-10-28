@@ -5,15 +5,15 @@
 	<li>
 		<a href="/actueel/maaltijden/voorkeuren/" title="Instellingen">Instellingen</a>
 	</li>
+	<li class="active">
+		<a href="/actueel/maaltijden/corveepunten/" title="Corveepunten">Corveepunten</a>
+	</li>
 	{if $loginlid->hasPermission('P_MAAL_MOD')}
-		<li>
-			<a href="/actueel/maaltijden/beheer/" title="Beheer">Maaltijdbeheer</a>
-		</li>
 		<li>
 			<a href="/actueel/maaltijden/corveebeheer/" title="Corveebeheer">Corveebeheer</a>
 		</li>
-		<li class="active">
-			<a href="/actueel/maaltijden/corveepunten/" title="Corveepunten">Corveepunten</a>
+		<li>
+			<a href="/actueel/maaltijden/beheer/" title="Beheer">Maaltijdbeheer</a>
 		</li>
 		<li>
 			<a href="/actueel/maaltijden/saldi.php" title="Saldo's updaten">Saldo's updaten</a>
@@ -42,37 +42,62 @@
 		<th style="width: 50px"><a href="/actueel/maaltijden/corveepunten/sorteer/corvee_tekort/{if $sorteer_richting=='asc'}desc{else}asc{/if}">Tekort</a></th>
 		<th style="width: 20px">&nbsp;</th>
 	</tr>
-	{section name=leden loop=$leden}					
-		{assign var='it' value=$smarty.section.leden.iteration-1}
-		{assign var='lid' value=$leden.$it.uid}
-		{if $lid!=''}
-			<form id="{$lid}" action="/actueel/maaltijden/corveepunten/" method="post">
-			<input type="hidden" name="uid" value="{$lid}" />
-			<input type="hidden" name="sorteer" value="{$sorteer}" />
-			<input type="hidden" name="sorteer_richting" value="{$sorteer_richting}" />
-			<input type="hidden" name="actie" value="bewerk" />
+	{if $loginlid->hasPermission('P_MAAL_MOD')}
+		{section name=leden loop=$leden}					
+			{assign var='it' value=$smarty.section.leden.iteration-1}
+			{assign var='lid' value=$leden.$it.uid}
+			{if $lid!=''}
+				<form id="{$lid}" action="/actueel/maaltijden/corveepunten/" method="post">
+				<input type="hidden" name="uid" value="{$lid}" />
+				<input type="hidden" name="sorteer" value="{$sorteer}" />
+				<input type="hidden" name="sorteer_richting" value="{$sorteer_richting}" />
+				<input type="hidden" name="actie" value="bewerk" />
 
-			<tr {if $bewerkt_lid==$lid}style="background-color: #bbffbb"{/if}>
-				<td></td>
-				<td>{$lid|csrnaam}</td>
-				<!--<td>{$leden.$it.corvee_voorkeuren}</td>-->
-				<td>{$leden.$it.kok}</td>
-				<td>{$leden.$it.afwas}</td>
-				<td>{$leden.$it.theedoek}</td>
-				<td>{$leden.$it.schoonmaken_frituur}</td>
-				<td>{$leden.$it.schoonmaken_afzuigkap}</td>
-				<td>{$leden.$it.schoonmaken_keuken}</td>
-				<td><input type="checkbox" name="corvee_kwalikok" value="1" {if $leden.$it.corvee_kwalikok}checked="checked"{/if} /></td>
-				<td><input type="text" name="corvee_punten" value="{$leden.$it.corvee_punten}" style="width: 30px;" /></td>
-				<td><input type="text" name="corvee_punten_bonus" value="{$leden.$it.corvee_punten_bonus}" style="width: 30px;" /></td>
-				<td><input type="text" name="corvee_vrijstelling" value="{$leden.$it.corvee_vrijstelling}" style="width: 30px;" />%</td>
-				<!--<td>{$leden.$it.corvee_ingeroosterd}</td>-->
-				<td>{$leden.$it.corvee_tekort}</td>
-				<td><input type="submit" name="submit" value="OK" /></td>
-			</tr>
-			
-			</form>
-		{else}FOUT{/if}
-	{/section}
+				<tr style="background-color: {cycle values="#e9e9e9, #fff"};{if $bewerkt_lid==$lid}background-color: #bfb{else}{/if}">
+					<td></td>
+					<td>{$lid|csrnaam}</td>
+					<td>{$leden.$it.kok}</td>
+					<td>{$leden.$it.afwas}</td>
+					<td>{$leden.$it.theedoek}</td>
+					<td>{$leden.$it.schoonmaken_frituur}</td>
+					<td>{$leden.$it.schoonmaken_afzuigkap}</td>
+					<td>{$leden.$it.schoonmaken_keuken}</td>
+					<td><input type="checkbox" name="corvee_kwalikok" value="1" {if $leden.$it.corvee_kwalikok}checked="checked"{/if} /></td>
+					<td><input type="text" name="corvee_punten" value="{$leden.$it.corvee_punten}" style="width: 30px;" /></td>
+					<td><input type="text" name="corvee_punten_bonus" value="{$leden.$it.corvee_punten_bonus}" style="width: 30px;" /></td>
+					<td><input type="text" name="corvee_vrijstelling" value="{$leden.$it.corvee_vrijstelling}" style="width: 30px;" />%</td>
+					<!--<td>{$leden.$it.corvee_ingeroosterd}</td>-->
+					<td style="background-color: #{$leden.$it.corvee_tekort_rgb}">{$leden.$it.corvee_tekort}</td>
+					<td><input type="submit" name="submit" value="OK" /></td>
+				</tr>
+				
+				</form>
+			{else}FOUT{/if}
+		{/section}
+	{else}
+		{section name=leden loop=$leden}					
+			{assign var='it' value=$smarty.section.leden.iteration-1}
+			{assign var='lid' value=$leden.$it.uid}
+			{if $lid!=''}
+				<tr style="background-color: {cycle values="#e9e9e9, #fff"}">
+					<td></td>
+					<td>{$lid|csrnaam}</td>
+					<td>{$leden.$it.kok}</td>
+					<td>{$leden.$it.afwas}</td>
+					<td>{$leden.$it.theedoek}</td>
+					<td>{$leden.$it.schoonmaken_frituur}</td>
+					<td>{$leden.$it.schoonmaken_afzuigkap}</td>
+					<td>{$leden.$it.schoonmaken_keuken}</td>
+					<td>{$leden.$it.corvee_kwalikok}</td>
+					<td>{$leden.$it.corvee_punten}</td>
+					<td>{$leden.$it.corvee_punten_bonus}</td>
+					<td>{$leden.$it.corvee_vrijstelling}%</td>
+					<!--<td>{$leden.$it.corvee_ingeroosterd}</td>-->
+					<td style="background-color: #{$leden.$it.corvee_tekort_rgb}">{$leden.$it.corvee_tekort}</td>
+					<td></td>
+				</tr>
+			{else}FOUT{/if}
+		{/section}
+	{/if}
 </table>
 <br />

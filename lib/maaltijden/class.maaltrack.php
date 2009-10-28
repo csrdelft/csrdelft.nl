@@ -484,7 +484,7 @@ class MaalTrack {
 		$sorteer_volgorde_toegestaan = array('asc', 'desc');
 		if (!in_array($sorteer, $sorteer_toegestaan) || !in_array($sorteer_richting, $sorteer_volgorde_toegestaan))
 			print('Ongeldige sorteeroptie');
-	
+			
 		// TODO: corvee ingeroosterd berekenen...
 		$sLedenQuery="
 			SELECT
@@ -505,6 +505,23 @@ class MaalTrack {
 				".$sorteer." ".strtoupper($sorteer_richting).", uid ASC";
 		$rLeden=$this->_db->query($sLedenQuery);
 		$aLeden=$this->_db->result2array($rLeden);
+		
+		// rood naar geel naar groen
+		foreach($aLeden as &$rLid) {
+			$kleur_start = 8;
+			$tekort_offset = 2;
+			
+			$rRaw = 2 * (($rLid['corvee_tekort']/(CORVEEPUNTEN+$tekort_offset)));	// waarde tussen 0 en 1
+			$gRaw = 2 * (1-$rLid['corvee_tekort']/(CORVEEPUNTEN+$tekort_offset));	// waarde tussen 0 en 1
+			if ($rRaw < 0) $rRaw = 0; if ($rRaw > 1) $rRaw = 1;
+			if ($gRaw < 0) $gRaw = 0; if ($gRaw > 1) $gRaw = 1;
+			
+			$r = $kleur_start + round($rRaw * (15-1-$kleur_start));
+			$g = $kleur_start + round($gRaw * (15-1-$kleur_start));
+			$b = $kleur_start;
+						
+			$rLid['corvee_tekort_rgb'] = dechex($r).dechex($g).dechex($b);
+		}
 
 		return $aLeden;
 	}
@@ -553,7 +570,7 @@ class MaalTrack {
 		$maaltijden = array();
 		$sMaaltijdQuery="
 			SELECT
-				id, datum, gesloten, tekst, abosoort, max, aantal, tp, koks, afwassers, theedoeken, punten_kok, punten_afwas, punten_theedoek,
+				id, datum, gesloten, tekst, abosoort, max, aantal, tp, koks, afwassers, theedoeken, punten_kok, punten_afwas, punten_theedoek, corvee_gemaild,
 				(SELECT COUNT(uid) FROM maaltijdcorvee WHERE maalid = id AND kok = 1) AS koks_aangemeld,
 				(SELECT COUNT(uid) FROM maaltijdcorvee WHERE maalid = id AND afwas = 1) AS afwassers_aangemeld,
 				(SELECT COUNT(uid) FROM maaltijdcorvee WHERE maalid = id AND theedoek = 1) AS theedoeken_aangemeld,
@@ -594,7 +611,7 @@ class MaalTrack {
 		}
 		if($uid == 'x999'){ $mootfilter = false; }
 
-		$maaltijdenRaw = $this->getMaaltijdenRaw($van,$tot,$mootfilter,$type);
+		$maaltijdenRaw = $this->getMaaltijdenRaw($van,$tot,$mootfilter,$corveefilter);
 
 		$maaltijden=array();
 		if ($alsArray) {
@@ -879,6 +896,66 @@ class MaalTrack {
 		$result = $this->_db->select("SELECT uid FROM maaltijdabo WHERE abosoort = '{$abosoort}'");
 		if ($result !== false) return $this->_db->numRows($result);
 		return 0;
+	}
+	
+	# corvee automailer
+	function corveeAutoMailer()
+	{
+		// get maaltijden waar datum < deze week
+		$maaltijden = $this->getMaaltijdenRaw(0, time()+86400*7);
+		
+		echo 'Start<br />Maaltijden ophalen binnen komende 7 dagen..<br />';
+		foreach($maaltijden as $maaltijd)
+		{
+			echo '- Maaltijd ID '.$maaltijd['id'].': ';
+			if ($maaltijd['corvee_gemaild']) {
+				echo 'Reeds gemaild.';
+			} else {
+				$lMaaltijd = new Maaltijd($maaltijd['id']);
+				
+				// taken ophalen
+				$taken = $lMaaltijd->getTaken();
+				$teller = 0;
+				foreach($taken as $taak => $leden)
+				{
+					$template = null;
+					switch ($taak) {
+						case 'afwassers':
+							$template = 'afwas.tpl';
+						case 'koks' :
+						case 'theedoeken':
+						case 'schoonmaken_frituur':
+						case 'schoonmaken_afzuigkap':
+						case 'schoonmaken_keuken':
+							$template = 'afwas.tpl'; // eentje maken voor elke taak
+					}
+					if (!$template) continue;
+					
+					// mailen
+					$onderwerp = 'CSR Delft Corvee';
+					$headers = '';//
+					
+					$mail = new Smarty_csr();
+					setlocale(LC_ALL, 'nl_NL');
+					$mail->assign('datum', strftime('%d-%m-%Y (%A)', $maaltijd['datum']));
+					$bericht = $mail->fetch('maaltijdketzer/corveemail/'.$template);
+					foreach($leden as $uid) {			
+						//mail($uid.'@csrdelft.nl', $onderwerp, $bericht, $headers);
+						$teller++;
+					}
+				}
+				echo 'Mensen gemaild: '.$teller;
+				
+				// update corvee_gemaild
+				/*$query = "UPDATE maaltijd SET corvee_gemaild = 1 WHERE id=".$maaltijd['id']."";
+				if(!$this->_db->query($query)){
+					$this->_error="Er is iets mis met de database/query.";
+					return false;
+				}*/
+			}
+			echo '<br />';
+		}
+		echo 'Klaar!<br />';
 	}
 
 }

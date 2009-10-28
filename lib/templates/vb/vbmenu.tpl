@@ -49,7 +49,7 @@
 						<input type="hidden" name="url" value="{$smarty.server.REQUEST_URI}" />
 						<input type="text" name="user" value="naam" onfocus="if(this.value=='naam')this.value='';" />
 						<input type="password" name="pass" value="" />
-						<input type="checkbox" name="checkip" class="checkbox" value="true" id="login-checkip" />
+						<input type="checkbox" name="checkip" class="checkbox" value="true" id="login-checkip" checked="checked" />
 						<label for="login-checkip">Koppel IP</label>
 						<input type="submit" class="submit" name="submit" value="Inloggen" />
 					</fieldset>

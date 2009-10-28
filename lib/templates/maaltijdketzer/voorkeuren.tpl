@@ -5,15 +5,15 @@
 	<li class="active">
 		<a href="/actueel/maaltijden/voorkeuren/" title="Instellingen">Instellingen</a>
 	</li>
+	<li>
+		<a href="/actueel/maaltijden/corveepunten/" title="Corveepunten">Corveepunten</a>
+	</li>
 	{if $loginlid->hasPermission('P_MAAL_MOD')}
-		<li>
-			<a href="/actueel/maaltijden/beheer/" title="Beheer">Maaltijdbeheer</a>
-		</li>
 		<li>
 			<a href="/actueel/maaltijden/corveebeheer/" title="Corveebeheer">Corveebeheer</a>
 		</li>
 		<li>
-			<a href="/actueel/maaltijden/corveepunten/" title="Corveepunten">Corveepunten</a>
+			<a href="/actueel/maaltijden/beheer/" title="Beheer">Maaltijdbeheer</a>
 		</li>
 		<li>
 			<a href="/actueel/maaltijden/saldi.php" title="Saldo's updaten">Saldo's updaten</a>
@@ -40,20 +40,23 @@ rekening mee houden. <strong>Dit is niet de plek om aan te geven dat u iets niet
 {if $loginlid->getLid()->getStatus()!='S_OUDLID'}
 <h2>Corveevoorkeuren</h2>
 	<p>Hier kunt u voorkeuren opgeven waar am. CorveeCaesar rekening mee kan houden bij het indelen
-	van u bij maaltijden. Kruis minstens een vakje aan.
+	van u bij maaltijden.<br />Kruis minstens één vakje aan.
 	</p>
 	<form method="post" action="{$smarty.server.PHP_SELF}">
 		<input type="hidden" name="a" value="editCorveevoorkeuren" />
+		
+		<i>Wekelijkse taken:</i><br />
 		<input type="checkbox" name="corvee_voorkeuren[ma_kok]" value="1" {if $maal.corvee_voorkeuren.ma_kok}checked="checked"{/if} /> Maandag koken<br />
 		<input type="checkbox" name="corvee_voorkeuren[ma_afwas]" value="1" {if $maal.corvee_voorkeuren.ma_afwas}checked="checked"{/if} /> Maandag afwassen<br />
 		<input type="checkbox" name="corvee_voorkeuren[do_kok]" value="1" {if $maal.corvee_voorkeuren.do_kok}checked="checked"{/if} /> Donderdag koken<br />
 		<input type="checkbox" name="corvee_voorkeuren[do_afwas]" value="1" {if $maal.corvee_voorkeuren.do_afwas}checked="checked"{/if} /> Donderdag afwassen<br />	
 		<input type="checkbox" name="corvee_voorkeuren[theedoek]" value="1" {if $maal.corvee_voorkeuren.theedoek}checked="checked"{/if} /> Theedoeken wassen<br />
 		<br />
-		Een keer in de maand:<br />
+		<i>Maandelijkse taken:</i><br />
 		<input type="checkbox" name="corvee_voorkeuren[afzuigkap]" value="1" {if $maal.corvee_voorkeuren.afzuigkap}checked="checked"{/if} /> Afzuigkap schoonmaken<br />
 		<input type="checkbox" name="corvee_voorkeuren[frituur]" value="1" {if $maal.corvee_voorkeuren.frituur}checked="checked"{/if} /> Frituur schoonmaken<br />
 		<input type="checkbox" name="corvee_voorkeuren[keuken]" value="1" {if $maal.corvee_voorkeuren.keuken}checked="checked"{/if} /> Keuken schoonmaken<br />	
+		<br />
 		<input type="submit" name="opslaan" value="opslaan" />
 	</form>
 	<br />
