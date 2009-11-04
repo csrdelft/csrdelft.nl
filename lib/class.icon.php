@@ -15,12 +15,22 @@ class Icon{
 	//handige dingen die we graag gebruiken in csrdelft.nl. Moeten geen namen zijn die al voorkomen
 	//in de lijst met icons.
 	public static $alias=array(
-		'toevoegen'=>'add',
-		'bewerken'=>'pencil',
-		'verwijderen'=>'cross',
-		'citeren'=>'comments',
-		'plakkerig'=>'note',
-		'rss'=>'feed'
+		// algemeen
+		'toevoegen' => 'add',
+		'bewerken' => 'pencil',
+		'verwijderen' => 'cross',
+		'rss' => 'feed',
+		
+		// forum
+		'citeren' => 'comments',
+		'plakkerig' => 'note',
+		
+		// corvee
+		'taken_bewerken' => 'text_list_bullets',
+		'punten_bewerken' => 'award_star_gold_1',
+		'punten_bewerken_toegekend' => 'award_star_gold_2',
+		'gemaild' => 'email_open',
+		'niet_gemaild' => 'email'
 	);
 
 	
