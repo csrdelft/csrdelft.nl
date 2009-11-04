@@ -78,6 +78,7 @@ switch (constant('MODE')) {
 		require_once('class.csrdelft.php');
 		require_once('class.csrubb.php');
 		require_once('class.csrsmarty.php');
+		require_once('class.icon.php');
 
 		# N.B. het is van belang dat na het starten van de sessie meteen het databaseobject en het
 		# Lid-object worden aangemaakt, omdat die de ingelogde gebruiker controleert, en tevens
