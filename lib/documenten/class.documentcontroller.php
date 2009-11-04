@@ -72,12 +72,12 @@ class DocumentController extends Controller{
 		$this->loadDocument();
 		try{
 			if($this->document->delete()){
-				DocumentContent::invokeRefresh('Document is met succes verwijderd.', null);
+				DocumentContent::invokeRefresh('Document is met succes verwijderd.', $this->baseurl);
 			}else{
-				DocumentContent::invokeRefresh('Document is niet verwijderd. Gaat mis in (Document::delete())', null);
+				DocumentContent::invokeRefresh('Document is niet verwijderd. Gaat mis in (Document::delete())', $this->baseurl);
 			}
 		}catch(Exception $e){
-			DocumentContent::invokeRefresh('Document is niet verwijderd: '.$e->getMessage(), null);
+			DocumentContent::invokeRefresh('Document is niet verwijderd: '.$e->getMessage(), $this->baseurl);
 		}
 	}
 	public function action_download(){

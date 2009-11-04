@@ -163,6 +163,10 @@ class Document{
 	public function magBekijken(){
 		return LoginLid::instance()->hasPermission($this->getLeesrechten());
 	}
+	public function magVerwijderen(){
+		return LoginLid::instance()->hasPermission('P_DOCS_MOD');
+	}
+	
 	public function getFriendlyMimetype(){
 		if(strpos($this->getMimetype(), 'pdf')){
 			return 'pdf';

@@ -20,7 +20,12 @@
 		<tbody>
 		{foreach from=$categorie->getDocumenten() item=document}
 			<tr class="document">
-				<td><a href="{$document->getDownloadurl()}">{$document->getNaam()|escape:'html'}</a></td>
+				<td>
+					<a href="{$document->getDownloadurl()}">{$document->getNaam()|escape:'html'}</a>
+					{if $document->magVerwijderen()}
+						<a class="verwijderen" href="/communicatie/documenten/verwijderen/{$document->getID()}" title="Document verwijderen">{icon get="verwijderen"}</a>
+					{/if}
+				</td>
 				<td class="size">{$document->getSize()}</td>
 				<td class="mimetype" title="{$document->getMimetype()}">{$document->getMimetype()|mimeicon}</td>
 				<td class="datum"><div class="verborgen">{$document->getToegevoegd()}</div>{$document->getToegevoegd()|reldate}</td>

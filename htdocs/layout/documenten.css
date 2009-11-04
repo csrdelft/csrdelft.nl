@@ -52,6 +52,7 @@ tbody a.toevoegen{
 .documenten tr td{
 	padding: 2px 3px;
 }
+.documenten tr td a.verwijderen{ float: right; }
 .documenten tr.odd td{
 	background-color: #efefef;
 }
