@@ -179,6 +179,8 @@ class Lid implements Serializable{
 	public function getNickname(){ 	return $this->profiel['nickname']; }
 	public function getEmail(){ 	return $this->profiel['email']; }
 	public function getMoot(){ 		return $this->profiel['moot']; }
+
+	public function isJarig(){		return substr($this->profiel['gebdatum'], 5, 5)==date('m-d'); }
 	
 	public function getVerticale(){
 		return Verticale::$namen[$this->getVerticaleID()];

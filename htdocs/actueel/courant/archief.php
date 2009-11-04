@@ -14,7 +14,7 @@ if ($loginlid->hasPermission('P_LEDEN_READ')) {
 
 	require_once 'courant/class.courantarchiefcontent.php';
 	$body = new CourantArchiefContent($courant);
-} else {
+}else{
 	# geen rechten
 	require_once 'class.paginacontent.php';
 	$pagina=new Pagina('geentoegang');

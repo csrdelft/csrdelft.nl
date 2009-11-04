@@ -1,4 +1,4 @@
-<div id="profiel">
+<div id="profiel" {if $lid->isJarig()}class="jarig"{/if}>
 	<div id="profielregel">
 		<div class="naam">
 			<div class="floatR">
