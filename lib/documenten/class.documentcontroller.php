@@ -54,10 +54,11 @@ class DocumentController extends Controller{
 	//ga er van uit dat in getParam(1) een documentid staat en laad dat in.
 	private function loadDocument(){
 		if($this->hasParam(1)){
-			$this->document=new Document($this->getParam(1));
-		}
-		if(!$this->document instanceof Document){
-			DocumentContent::invokeRefresh('Geen geldig id opgegeven of een niet-bestaand document opgevraagd', $this->baseurl);
+			try{
+				$this->document=new Document($this->getParam(1));
+			}catch(Exception $e){
+				DocumentContent::invokeRefresh('Geen geldig id opgegeven of een niet-bestaand document opgevraagd', $this->baseurl);
+			}
 		}
 	}
 	/*

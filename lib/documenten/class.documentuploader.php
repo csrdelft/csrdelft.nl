@@ -24,7 +24,7 @@ abstract class DocumentUploader{
 	}
 	public function getNaam(){ return get_class($this); }
 
-	private function addError($error){ $this->errors.=$error."\n"; }
+	protected function addError($error){ $this->errors.=$error."\n"; }
 	public function getErrors(){ return $this->errors; }
 
 	abstract public function valid();						//is de formulierinvoer geldig voor deze methode?
@@ -95,7 +95,17 @@ class DUFileupload extends DocumentUploader{
 		}
 		$this->file=$_FILES['file_upload'];
 		if($this->file['error']!=0){
-			$this->addError('Upload-error: error-code: '.$this->file['error']);
+			switch($this->file['error']){
+				case 1:
+					$this->addError('Bestand is te groot: Maximaal '.ini_get('upload_max_filesize').'B ');
+				break;
+				case 4:
+					$this->addError('Selecteer een bestand');
+				break;
+				default:
+					$this->addError('Upload-error: error-code: '.$this->file['error']);
+				}
+			}
 		}
 		if($this->getErrors()==''){
 			$this->filename=$this->file['name'];
