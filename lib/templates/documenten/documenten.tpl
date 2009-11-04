@@ -6,11 +6,12 @@
 	<a class="knop" href="/communicatie/documenten_new/toevoegen/">Toevoegen</a>
 </div>
 <h1>Documenten</h1>
+<div class="foutje">{$melding}</div>
 
 <table id="documenten" class="documenten">
 <thead>
 	<tr>
-		<th>Document</th><th>Bestandsgrootte</th><th>Mime-type</th><th>Toegevoegd</th><th>Eigenaar</th>
+		<th>Document</th><th>Bestandsgrootte</th><th>Type</th><th>Toegevoegd</th><th>Eigenaar</th>
 	</tr>
 </thead>
 
@@ -30,7 +31,7 @@
 			<tr class="document">
 				<td><a href="/communicatie/documenten_new/download/{$document->getID()}/{$document->getBestandsnaam()}">{$document->getNaam()|escape:'html'}</a></td>
 				<td class="size">{$document->getSize()|filesize}</td>
-				<td>{$document->getFriendlyMimetype()}</td>
+				<td><div class="verborgen">{$document->getMimetype()}</div>{$document->getMimetype()|mimeicon}</td>
 				<td>{$document->getToegevoegd()|reldate}</td>
 				<td>{$document->getEigenaar()|csrnaam}</td>
 			</tr>

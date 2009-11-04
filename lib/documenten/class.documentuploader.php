@@ -27,8 +27,8 @@ abstract class DocumentUploader{
 	private function addError($error){ $this->errors.=$error."\n"; }
 	public function getErrors(){ return $this->errors; }
 
-	abstract public function valid();						//is de formulierinvoer geldig voor deze methode.
-	abstract public function movefile(Document $document);	//bestand uiteindelijk opslaan in de juiste plek.
+	abstract public function valid();						//is de formulierinvoer geldig voor deze methode?
+	abstract public function movefile(Document $document);	//bestand uiteindelijk opslaan op de juiste plek.
 	
 	public function getFilename(){ return $this->filename; }
 	public function getMimetype(){ return $this->mimetype; }
@@ -98,9 +98,6 @@ class DUFileupload extends DocumentUploader{
 			$this->addError('Upload-error: error-code: '.$this->file['error']);
 		}
 		if($this->getErrors()==''){
-			$mimemagic=new MimeMagic();
-
-			
 			$this->filename=$this->file['name'];
 			$this->mimetype=$this->file['type'];
 			$this->size=$this->file['size'];
@@ -194,9 +191,6 @@ class DUFromftp extends DocumentUploader{
 			$this->addError('Bestand is niet aanwezig in public FTP-map');
 		}
 		if($this->getErrors()==''){
-			$mimemagic=MimeMagic::singleton();
-			
-			
 			$this->file=$_POST['ftpfile'];
 			$this->filename=$_POST['ftpfile'];
 			$this->size=filesize($this->path.$this->file);

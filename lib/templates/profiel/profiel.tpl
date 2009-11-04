@@ -6,16 +6,16 @@
 				<div class="knopjes">
 					{if $magBewerken}
 						<a href="/communicatie/profiel/{$profhtml.uid}/bewerken" class="knop"><img src="{$csr_pics}forum/bewerken.png" title="Bewerk dit profiel" />Bewerken</a><br />
-						{if $profhtml.uid==$loginlid->getUid()}<a href="/instellingen/" class="knop">Webstekinstellingen</a><br />{/if}
+						{if $profhtml.uid==$loginlid->getUid()}<a href="/instellingen/" class="knop">{icon get="instellingen"} Webstekinstellingen</a><br />{/if}
 					{/if}
 					{if $lid->getStatus()=='S_NOVIET' AND $loginlid->hasPermission('groep:novcie')}
 						<a href="/communicatie/profiel/{$profhtml.uid}/novietBewerken" class="knop"><img src="{$csr_pics}forum/bewerken.png" title="Bewerk dit profiel" />Noviet bewerken</a><br />
 					{/if}
 					{if $isAdmin}
-						<a href="/tools/stats.php?uid={$profhtml.uid}" class="knop">Bezoeklog</a><br />
+						<a href="/tools/stats.php?uid={$profhtml.uid}" class="knop">{icon get="server_chart"} Bezoeklog</a><br />
 						<a href="/communicatie/profiel/{$profhtml.uid}/wachtwoord" class="knop" onclick="return confirm('Weet u zeker dat u het wachtwoord van deze gebruiker wilt resetten?')">Reset wachtwoord</a><br />
-						{if $profhtml.uid!=$loginlid->getUid() && $profhtml.uid!='x999' && !$loginlid->isSued() && $profhtml.status!='S_NOBODY'}
-							<a href="/su/{$profhtml.uid}/" class="knop">su naar dit lid</a><br />
+						{if $loginlid->maySuTo($lid)}
+							<a href="/su/{$profhtml.uid}/" class="knop">{icon get='su'} Su naar dit lid</a><br />
 						{/if}
 					{/if}
 				</div>
@@ -222,8 +222,7 @@
 				<div class="data">
 					{if $profhtml.rssToken!=''}
 					<a href="http://csrdelft.nl/communicatie/forum/rss/{$profhtml.rssToken}.xml">
-						<img src="{$csr_pics}layout/feedicon.png" width="14" height="14" alt="RSS-feed http://csrdelft.nl" />
-						Persoonlijke RSS-feed forum
+						{icon get='rss'} Persoonlijke RSS-feed forum
 					</a>
 					{/if}
 					<a class="knop" href="/communicatie/profiel/{$lid->getUid()}/rssToken#forum">Nieuwe aanvragen</a>

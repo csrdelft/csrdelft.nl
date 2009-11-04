@@ -54,5 +54,4 @@
 	<div id="mysql_debug" style="display: none">{$db->getDebug()}</div>
 {/if}
 </body>
-
 </html>

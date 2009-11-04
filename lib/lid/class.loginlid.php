@@ -114,6 +114,9 @@ class LoginLid{
 	public function getSuedFrom(){
 		return $this->suedFrom;
 	}
+	public function maySuTo(Lid $lid){
+		return !$this->isSelf($lid->getUid()) AND $lid->getUid()!='x999' && !$this->isSued() && $lid->getStatus()!='S_NOBODY';
+	}
 
 	//TODO: marco gaat dit goed fixen
 	public function getForumLaatstBekeken(){

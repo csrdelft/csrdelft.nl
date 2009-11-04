@@ -168,8 +168,12 @@ class Document{
 			return 'pdf';
 		}elseif(strpos($this->getMimetype(), 'msword')){
 			return 'doc';
+		}elseif(strpos($this->getMimetype(), 'html')){
+			return 'html';
 		}elseif(strpos($this->getMimetype(), 'jpeg')){
 			return 'jpg';
+		}elseif(strpos($this->getMimetype(), 'plain')){
+			return 'txt';
 		}elseif(strpos($this->getMimetype(), 'png')){
 			return 'png';
 		}elseif($this->getMimetype()=='application/octet-stream'){

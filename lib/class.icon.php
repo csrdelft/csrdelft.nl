@@ -20,6 +20,14 @@ class Icon{
 		'bewerken' => 'pencil',
 		'verwijderen' => 'cross',
 		'rss' => 'feed',
+
+		//documumenten
+		'mime-doc' => 'page_white_word',
+		'mime-image' => 'page_white_picture',
+		'mime-onbekend' => 'page_white',
+		'mime-pdf' => 'page_white_acrobat',
+		'mime-plain' => 'page_white_text',
+		'mime-zip' => 'page_white_zip',
 		
 		// forum
 		'citeren' => 'comments',
@@ -30,7 +38,12 @@ class Icon{
 		'punten_bewerken' => 'award_star_gold_1',
 		'punten_bewerken_toegekend' => 'award_star_gold_2',
 		'gemaild' => 'email_open',
-		'niet_gemaild' => 'email'
+		'niet_gemaild' => 'email',
+
+		//profiel
+		'stats' => 'server_chart',
+		'su' => 'user_go',
+		'instellingen' => 'cog'
 	);
 
 	
