@@ -23,3 +23,6 @@ RewriteRule ^profiel/([0-9a-z]+)/([a-zA-Z]+)/?$ profiel.php?uid=$1&a=$2
 # Pagina's met tekst
 RewriteRule ^irc/? ../pagina.php?naam=irc
 RewriteRule ^orientatie/? ../pagina.php?naam=orientatie
+
+# Documentenketzer
+RewriteRule ^documenten/(.*)$ documenten.php?querystring=$1 [QSA]

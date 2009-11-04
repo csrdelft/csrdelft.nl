@@ -54,8 +54,8 @@ htdocs/actueel/sjaarsacties.php -text
 htdocs/bot/.htaccess.sample -text
 htdocs/bot/cmnd.php -text
 htdocs/communicatie/.htaccess -text
+htdocs/communicatie/documenten.php -text
 htdocs/communicatie/documenten_new/.htaccess -text
-htdocs/communicatie/documenten_new/index.php -text
 htdocs/communicatie/documenten_old/.htaccess -text
 htdocs/communicatie/documenten_old/index.php -text
 htdocs/communicatie/documenten_old/neerladen.php -text

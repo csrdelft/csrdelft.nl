@@ -3,7 +3,7 @@
  *}
  
 <div id="controls">
-	<a class="knop" href="/communicatie/documenten_new/">Terug</a>
+	<a class="knop" href="/communicatie/documenten/">Terug</a>
 </div>
 <h1>Document {if $document->getID()==0}Toevoegen{else}Bewerken{/if}</h1>
 <div class="foutje">{$melding}</div>
@@ -32,7 +32,7 @@
 				</div>
 			</div>
 		{/foreach}
-		<label for="submit" class="metadata clear">&nbsp;</label><input type="submit" name="submit" value="Toevoegen" /> <a href="/communicatie/documenten_new/" class="knop">annuleren</a>
+		<label for="submit" class="metadata clear">&nbsp;</label><input type="submit" name="submit" value="Toevoegen" /> <a href="/communicatie/documenten/" class="knop">annuleren</a>
 	</fieldset>
 	
 </form>

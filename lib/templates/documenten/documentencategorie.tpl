@@ -2,10 +2,10 @@
  * Toon een overzicht van documenten in een bepaalde categorie
  *}
 <div id="controls">
-	<a class="knop" href="/communicatie/documenten_new/toevoegen/?catID={$categorie->getID()}">Toevoegen</a>
+	<a class="knop" href="/communicatie/documenten/toevoegen/?catID={$categorie->getID()}">Toevoegen</a>
 </div>
 
-<a href="/communicatie/documenten_new">Documenten</a><h1>{$categorie->getNaam()}</h1>
+<a href="/communicatie/documenten">Documenten</a><h1>{$categorie->getNaam()}</h1>
 <div class="foutje">{$melding}</div>
 
 {if !is_array($categorie->getAll())}

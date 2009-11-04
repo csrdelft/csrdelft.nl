@@ -20,7 +20,7 @@
 	<tbody>
 		<tr>
 			<th colspan="5">
-				<a href="/communicatie/documenten_new/categorie/{$categorie->getID()}/" title="Alle documenten in {$categorie->getNaam()|escape:'html'}">
+				<a href="/communicatie/documenten/categorie/{$categorie->getID()}/" title="Alle documenten in {$categorie->getNaam()|escape:'html'}">
 					{$categorie->getNaam()|escape:'html'}
 				</a>
 			</th>

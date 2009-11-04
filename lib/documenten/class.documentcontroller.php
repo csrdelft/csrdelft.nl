@@ -16,7 +16,7 @@ class DocumentController extends Controller{
 
 	public $document;
 
-	public $baseurl='/communicatie/documenten_new/';
+	public $baseurl='/communicatie/documenten/';
 
 	/*
 	 * querystring:
