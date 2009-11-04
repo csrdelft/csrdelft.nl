@@ -104,7 +104,6 @@ class DUFileupload extends DocumentUploader{
 				break;
 				default:
 					$this->addError('Upload-error: error-code: '.$this->file['error']);
-				}
 			}
 		}
 		if($this->getErrors()==''){
