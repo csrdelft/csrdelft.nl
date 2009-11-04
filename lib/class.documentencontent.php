@@ -298,7 +298,7 @@ class DocumentenContent extends SimpleHTML {
 						$row.='/'.$catid;
 					}
 					$row.='#voegtoe">'."\n"
-					.Icon::getTag("plus", "button").'</a>'."\n"
+					.Icon::getTag("toevoegen", "button").'</a>'."\n"
 
 					.'</td></tr>'."\n";
 
