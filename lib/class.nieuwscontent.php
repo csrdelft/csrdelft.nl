@@ -36,7 +36,7 @@ class NieuwsContent extends SimpleHTML {
 	private function getBerichtModControls($iBerichtID){
 		if($this->_nieuws->isNieuwsMod()){
 			return	'<a href="'.NIEUWS_ROOT.'bewerken/'.$iBerichtID.'"><img src="'.CSR_PICS.'forum/bewerken.png'.'" alt="bewerken" /></a> '.
-					'<a href="'.NIEUWS_ROOT.'verwijderen/'.$iBerichtID.'" onclick="return confirm(\'Weet u zeker dat u dit nieuwsbericht wilt verwijderen?\')"><img src="'.CSR_PICS.'forum/verwijderen.png'.'" alt="verwijderen" /></a>';
+					'<a href="'.NIEUWS_ROOT.'verwijderen/'.$iBerichtID.'" onclick="return confirm(\'Weet u zeker dat u dit nieuwsbericht wilt verwijderen?\')">'.Icon::getTag("verwijderen").'</a>';
 		}
 	}
 	private function getCategorieSelect($geselecteerdeCategorie=0){

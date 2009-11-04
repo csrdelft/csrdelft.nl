@@ -31,6 +31,7 @@ class Icon{
 		
 		// forum
 		'citeren' => 'comments',
+		'slotje' => 'lock',
 		'plakkerig' => 'note',
 		
 		// corvee

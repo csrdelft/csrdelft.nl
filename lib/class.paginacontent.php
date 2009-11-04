@@ -51,7 +51,7 @@ class PaginaContent extends SimpleHTML{
 							
 				if ($this->_pagina->magBewerken()){
 					$sInhoud='<a href="/pagina/'.$this->_pagina->getNaam().'/bewerken" class="knop" style="float: right;" title="Bewerk pagina">
-						<img src="'.CSR_PICS.'forum/bewerken.png" alt="Bewerk pagina" /></a>'.$sInhoud;
+						'.Icon::getTag("bewerken").'</a>'.$sInhoud;
 				}
 
 				echo $sInhoud;

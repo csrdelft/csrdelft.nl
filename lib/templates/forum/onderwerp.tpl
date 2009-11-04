@@ -94,13 +94,13 @@
 				{if $onderwerp->magCiteren()}
 					{* {knop url="reactie/`$bericht.id`#laatste" type=citeren} *}
 					<a onclick="return forumCiteren({$bericht.id})" href="/communicatie/forum/reactie/{$bericht.id}#laatste">
-						<img src="{$csr_pics}forum/citeren.png" title="Citeer bericht" alt="Citeer bericht" style="border: 0px;" />
+						<img src="{icon get="citeren" notag=true}" title="Citeer bericht" alt="Citeer bericht" style="border: 0px;" />
 					</a>
 				{/if}
 				{* bewerken als bericht van gebruiker is, of als men mod is. *}
 				{if $onderwerp->magBewerken($bericht.id)}
 					<a onclick="forumBewerken({$bericht.id})">
-						<img src="{$csr_pics}forum/bewerken.png" title="Bewerk bericht" alt="Bewerk bericht" style="border: 0px;" />
+						<img src="{icon get="bewerken" notag=true}" title="Bewerk bericht" alt="Bewerk bericht" style="border: 0px;" />
 					</a>
 				{/if}
 				

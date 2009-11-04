@@ -44,8 +44,8 @@
 		{foreach from=$maal.maaltijden item=maaltijd}
 			<tr {if $maaltijd.datum<=$smarty.now}class="old"{/if} style="background-color: {cycle values="#e9e9e9, #fff"};{if $maal.formulier.id==$maaltijd.id}background-color: #bfb{/if}">
 			<td>
-					<a href="/actueel/maaltijden/corveebeheer/bewerk/{$maaltijd.id}#corveemaaltijdFormulier"><img src="{$csr_pics}knopjes/bewerken.png" /></a>					
-					<a href="/actueel/maaltijden/corveebeheer/takenbewerk/{$maaltijd.id}#corveetakenFormulier"><img src="{$csr_pics}knopjes/lijstbewerken.png" /></a>
+					<a href="/actueel/maaltijden/corveebeheer/bewerk/{$maaltijd.id}#corveemaaltijdFormulier">{icon get="bewerken"}</a>					
+					<a href="/actueel/maaltijden/corveebeheer/takenbewerk/{$maaltijd.id}#corveetakenFormulier">{icon get="taken_bewerken"}</a>
 				</td>
 				<td>{$maaltijd.datum|date_format:$datumFormaat}</td>
 				<td>{$maaltijd.tekst|escape:'html'}</td>
@@ -86,9 +86,9 @@
 				{/if}
 				<td>
 					{if $maaltijd.corvee_gemaild == "1"}
-						<img src="{$csr_pics}knopjes/email_open.png" alt="Gemaild" />
+						<img src="{icon get="gemaild" notag=true}" alt="Gemaild" />
 					{else}
-						<img src="{$csr_pics}knopjes/email.png" alt="Niet gemaild" />
+						<img src="{icon get="niet_gemaild" notag=true}" alt="Niet gemaild" />
 					{/if}
 				</td>
 			</tr>

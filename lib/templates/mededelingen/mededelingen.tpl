@@ -48,10 +48,10 @@
 			</div>
 		{if $selectedMededeling->loginlidMagBewerken()}
 			<a href="{$nieuws_root}bewerken/{$selectedMededeling->getId()}">
-				<img src="{$csr_pics}forum/bewerken.png" alt="bewerken" />
+				{icon get="bewerken"}
 			</a>
 			<a href="{$nieuws_root}verwijderen/{$selectedMededeling->getId()}" onclick="return confirm('Weet u zeker dat u deze mededeling wilt verwijderen?');">
-				<img src="{$csr_pics}forum/verwijderen.png" alt="verwijderen" />
+				{icon get="verwijderen"}
 			</a>
 			{if $selectedMededeling->getZichtbaarheid()=='wacht_goedkeuring'}
 			<a onclick="return confirm('Weet u zeker dat u deze mededeling wilt goedkeuren?')" class="knop" href="{$nieuws_root}keur-goed/{$selectedMededeling->getId()}">goedkeuren</a>

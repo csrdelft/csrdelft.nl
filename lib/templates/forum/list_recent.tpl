@@ -22,10 +22,10 @@
 				{if $bericht.zichtbaar=='wacht_goedkeuring'}[ter goedkeuring...]{/if}
 				<a href="/communicatie/forum/reactie/{$bericht.postID}">
 					{if $bericht.plakkerig==1}
-						<img src="{$csr_pics}forum/plakkerig.gif" title="Dit onderwerp is plakkerig, het blijft bovenaan." alt="plakkerig" />&nbsp;&nbsp;
+						<img src="{icon get="plakkerig" notag=true}" title="Dit onderwerp is plakkerig, het blijft bovenaan." alt="plakkerig" />&nbsp;&nbsp;
 					{/if}	
 					{if $bericht.open==0}
-						<img src="{$csr_pics}forum/slotje.png" title="Dit onderwerp is gesloten, u kunt niet meer reageren" alt="sluiten" />&nbsp;&nbsp;
+						<img src="{icon get="slotje" notag=true}" title="Dit onderwerp is gesloten, u kunt niet meer reageren" alt="sluiten" />&nbsp;&nbsp;
 					{/if}
 					{$bericht.titel|wordwrap:60:"\n":true|escape:'html'}
 				</a>

@@ -27,10 +27,10 @@
 					{if $onderwerp->getZichtbaarheid()=='wacht_goedkeuring'}[ter goedkeuring...]{/if}
 					<a href="/communicatie/forum/onderwerp/{$onderwerp->getID()}">
 						{if $onderwerp->isPlakkerig()}
-							<img src="{$csr_pics}forum/plakkerig.gif" title="Dit onderwerp is plakkerig, het blijft bovenaan." alt="plakkerig" />&nbsp;&nbsp;
+							<img src="{icon get="plakkerig" notag=true}" title="Dit onderwerp is plakkerig, het blijft bovenaan." alt="plakkerig" />&nbsp;&nbsp;
 						{/if}	
 						{if !$onderwerp->isOpen()}
-							<img src="{$csr_pics}forum/slotje.png" title="Dit onderwerp is gesloten, u kunt niet meer reageren" alt="sluiten" />&nbsp;&nbsp;
+							<img src="{icon get="slotje" notag=true}" title="Dit onderwerp is gesloten, u kunt niet meer reageren" alt="sluiten" />&nbsp;&nbsp;
 						{/if}
 						{$onderwerp->getTitel()|wordwrap:60:"\n":true|escape:'html'}
 					</a>
