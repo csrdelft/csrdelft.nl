@@ -23,7 +23,7 @@ $(document).ready(function() {
 			"sInfoEmtpy": "Geen documenten gevonden",
 			"sSearch": "Zoeken:"
 		},
-		"iDisplayLength": 50,
+		"iDisplayLength": 20,
 		"bInfo": false,
 		"bLengthChange": false,
 		"aoColumns": [
