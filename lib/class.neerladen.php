@@ -12,11 +12,11 @@ class Neerladen {
 			SELECT
 				categorie, bestandsnaam
 			FROM
-				document
+				_document
 			JOIN
-				documentbestand ON document.id = documentID
+				_documentbestand ON _document.id = documentID
 			WHERE
-				documentbestand.id=".$id.";";
+				_documentbestand.id=".$id.";";
 		
 		$rDocData=$this->_db->select($sDocumentData);
 		mysql_error();

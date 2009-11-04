@@ -3,6 +3,8 @@
  * MimeMagic-bestand gejat van MediaWiki. op 28 oktober 2009. (versie 1.15.1)
  */
 
+require_once 'XmlTypeCheck.php';
+require_once 'DjVuImage.php';
 //een paar dummies.
 function wfDebug(){	}
 function wfSuppressWarnings(){}

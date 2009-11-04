@@ -34,7 +34,7 @@ class Documenten {
 					SELECT
 								ID, naam, categorie, datum
 					FROM
-								document
+								_document
 					WHERE ";
 		if ($catid > 0) {
 			$sQuery .= "categorie=" . $catid . " AND ";
@@ -88,7 +88,7 @@ class Documenten {
 					SELECT
 								ID, naam
 					FROM
-								documentencategorie
+								_documentencategorie
 					ORDER BY
 								ID	");
 
@@ -151,7 +151,7 @@ class Documenten {
 	function getExtensionsByID($id) {
 		$query = "
 				SELECT id, bestandsnaam
-				FROM documentbestand
+				FROM _documentbestand
 				WHERE documentID = $id;
 				";
 
@@ -184,7 +184,7 @@ class Documenten {
 
 			if (!$this->singleFileMode) {
 				$query = "
-									INSERT INTO document (naam, categorie, datum)
+									INSERT INTO _document (naam, categorie, datum)
 									VALUES ('" . $title . "', '" . $cat . "', '" . $date . "');";
 				$this->_db->query($query);
 				echo mysql_error();
@@ -201,7 +201,7 @@ class Documenten {
 			}
 
 			$query = "
-							INSERT INTO documentbestand (documentID, bestandsnaam)
+							INSERT INTO _documentbestand (documentID, bestandsnaam)
 							VALUES ('" . $docid . "', '" . $filename . "');";
 			$this->_db->query($query);
 
@@ -218,7 +218,7 @@ class Documenten {
 	function nameExistInDb($name) {
 		$rName = $this->_db->select("
 					SELECT	categorie
-					FROM	document
+					FROM	_document
 					WHERE	naam = '" . $name . "';");
 		if (mysql_num_rows($rName) == 0) {
 			return 0;
@@ -234,7 +234,7 @@ class Documenten {
 					SELECT
 							ID, naam
 					FROM
-							documentencategorie ";
+							_documentencategorie ";
 		if (isset ($sort) && $sort == 'naam') {
 			$query .= "
 							ORDER BY
@@ -273,11 +273,11 @@ class Documenten {
 				SELECT
 					categorie, bestandsnaam
 				FROM
-					document
+					_document
 				JOIN
-					documentbestand ON document.id = documentID
+					_documentbestand ON _document.id = documentID
 				WHERE
-					document.id=" . $id . ";";
+					_document.id=" . $id . ";";
 			$rFileData = $this->_db->select($sFileData);
 			if (!$rFileData) {
 				mysql_error();
@@ -299,7 +299,7 @@ class Documenten {
 			if ($ready) {
 				$query = "
 								UPDATE
-									document
+									_document
 								SET
 									`naam` ='" . $title . "', `categorie`=" . $newCat . "
 								WHERE
@@ -328,7 +328,7 @@ class Documenten {
 					SELECT
 							categorie
 					FROM
-							document
+							_document
 					WHERE
 							id=" . $docid . ";");
 		if (!$rCat) {
@@ -346,7 +346,7 @@ class Documenten {
 					SELECT
 						bestandsnaam
 					FROM
-						documentbestand
+						_documentbestand
 					WHERE
 						documentID = " . $docid . ";");
 		if (!$rFiles) {
@@ -373,7 +373,7 @@ class Documenten {
 		// updating document-record
 		$rUpdate = $this->_db->select("
 					UPDATE
-						document
+						_document
 					SET
 						verwijderd='1'
 					WHERE
@@ -395,7 +395,7 @@ class Documenten {
 				SELECT
 					categorie
 				FROM
-					document
+					_document
 				WHERE
 					id=" . $docid . ";";
 
@@ -416,7 +416,7 @@ class Documenten {
 				SELECT
 					naam
 				FROM
-					document
+					_document
 				WHERE
 					id=" . $docid . ";";
 

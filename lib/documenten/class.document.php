@@ -188,6 +188,9 @@ class Document{
 	public function getFullPath(){
 		return $this->documentroot.'/'.$this->getID().'_'.$this->bestandsnaam;
 	}
+	public function getDownloadurl(){
+		return '/communicatie/documenten_new/download/'.$this->getID().'/'.$this->getBestandsnaam();
+	}
 	
 	/*
 	 * bestand opslaan vanuit een string in de juiste map.

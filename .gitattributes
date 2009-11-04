@@ -54,12 +54,12 @@ htdocs/actueel/sjaarsacties.php -text
 htdocs/bot/.htaccess.sample -text
 htdocs/bot/cmnd.php -text
 htdocs/communicatie/.htaccess -text
-htdocs/communicatie/documenten/.htaccess -text
-htdocs/communicatie/documenten/index.php -text
-htdocs/communicatie/documenten/neerladen.php -text
-htdocs/communicatie/documenten/toevoegen.php -text
 htdocs/communicatie/documenten_new/.htaccess -text
 htdocs/communicatie/documenten_new/index.php -text
+htdocs/communicatie/documenten_old/.htaccess -text
+htdocs/communicatie/documenten_old/index.php -text
+htdocs/communicatie/documenten_old/neerladen.php -text
+htdocs/communicatie/documenten_old/toevoegen.php -text
 htdocs/communicatie/forum/.htaccess -text
 htdocs/communicatie/forum/bewerken.php -text
 htdocs/communicatie/forum/getPost.php -text
@@ -279,7 +279,9 @@ lib/mededelingen/class.mededeling.php -text
 lib/mededelingen/class.mededelingcategorie.php -text
 lib/mededelingen/class.mededelingcontent.php -text
 lib/mededelingen/class.mededelingencontent.php -text
+lib/mimemagic/DjVuImage.php -text
 lib/mimemagic/MimeMagic.php -text
+lib/mimemagic/XmlTypeCheck.php -text
 lib/mimemagic/mime.info -text
 lib/mimemagic/mime.types -text
 lib/smarty/BUGS -text

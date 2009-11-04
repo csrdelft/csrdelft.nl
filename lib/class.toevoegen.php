@@ -56,7 +56,7 @@ class Toevoegen {
 			$res = true;
 			$query = "
 				INSERT INTO
-					documentbestand (documentID, bestandsnaam)
+					_documentbestand (documentID, bestandsnaam)
 				VALUES
 					('".$docid."', '".$filename."');";
 			$this->_db->query($query);	
@@ -73,7 +73,7 @@ class Toevoegen {
 	function nameExistInDb($name) {
 		$rName = $this->_db->select("
 			SELECT	categorie
-			FROM	document
+			FROM	_document
 			WHERE	naam = '".$name."';"
 		);
 		if( mysql_num_rows($rName) == 0 ) {
@@ -212,7 +212,7 @@ class Toevoegen {
 			SELECT
 					ID, naam
 			FROM
-					documentencategorie ";
+					_documentencategorie ";
 		if(isset($sort) && $sort=='naam'){
 			$query.="
 				ORDER BY

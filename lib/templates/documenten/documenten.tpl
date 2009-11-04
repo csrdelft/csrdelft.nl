@@ -27,7 +27,7 @@
 		</tr>
 		{foreach from=$categorie->getLast(5) item=document}
 			<tr class="document">
-				<td><a href="/communicatie/documenten_new/download/{$document->getID()}/{$document->getBestandsnaam()}">{$document->getNaam()|escape:'html'}</a></td>
+				<td><a href="{$document->getDownloadurl()}">{$document->getNaam()|escape:'html'}</a></td>
 				<td class="size">{$document->getSize()|filesize}</td>
 				<td title="{$document->getMimetype()}">{$document->getMimetype()|mimeicon}</td>
 				<td>{$document->getToegevoegd()|reldate}</td>

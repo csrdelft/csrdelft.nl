@@ -21,7 +21,10 @@ class Icon{
 		'verwijderen' => 'cross',
 
 		//documumenten
-		'mime-doc' => 'page_white_word',
+		'mime-audio' => 'ipod',
+		'mime-word' => 'page_white_word',
+		'mime-excel' => 'page_white_excel',
+		'mime-powerpoint' => 'page_white_powerpoint',
 		'mime-image' => 'page_white_picture',
 		'mime-onbekend' => 'page_white',
 		'mime-pdf' => 'page_white_acrobat',

@@ -20,7 +20,7 @@
 		<tbody>
 		{foreach from=$categorie->getDocumenten() item=document}
 			<tr class="document">
-				<td><a href="/communicatie/documenten_new/download/{$document->getID()}/{$document->getBestandsnaam()}">{$document->getNaam()|escape:'html'}</a></td>
+				<td><a href="{$document->getDownloadurl()}">{$document->getNaam()|escape:'html'}</a></td>
 				<td class="size">{$document->getSize()}</td>
 				<td class="mimetype" title="{$document->getMimetype()}">{$document->getMimetype()|mimeicon}</td>
 				<td class="datum"><div class="verborgen">{$document->getToegevoegd()}</div>{$document->getToegevoegd()|reldate}</td>
