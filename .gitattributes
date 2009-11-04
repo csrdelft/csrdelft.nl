@@ -179,6 +179,7 @@ htdocs/vb/images/vormingsbank_vb_beta.png -text
 htdocs/vb/images/zoekveld_vb.png -text
 htdocs/vb/index.php -text
 htdocs/vb/jsonencode.js -text
+images/famfamfam/.index -text
 lib/agenda/class.agenda.php -text
 lib/agenda/class.agendacontent.php -text
 lib/agenda/class.agendacontroller.php -text
