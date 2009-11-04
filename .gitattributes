@@ -201,6 +201,7 @@ lib/class.eetplancontent.php -text
 lib/class.formulier.php -text
 lib/class.fotoalbum.php -text
 lib/class.fotoalbumcontent.php -text
+lib/class.icon.php -text
 lib/class.knop.php -text
 lib/class.kolom.php -text
 lib/class.ldap.php -text
