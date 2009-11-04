@@ -3,7 +3,7 @@
  *}
 
 <div id="controls">
-	<a class="knop" href="/communicatie/documenten_new/toevoegen/">Toevoegen</a>
+	<a class="knop" href="/communicatie/documenten/toevoegen/">Toevoegen</a>
 </div>
 <h1>Documenten</h1>
 <div class="foutje">{$melding}</div>
