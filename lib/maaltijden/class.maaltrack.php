@@ -1150,7 +1150,7 @@ class MaalTrack {
 		echo "Start<br />Maaltijden ophalen binnen komende 7 dagen..<br />\n";
 		foreach($maaltijden as $maaltijd)
 		{
-			echo "- Maaltijd ID '.$maaltijd['id'].': ";
+			echo "- Maaltijd ID ".$maaltijd['id'].": ";
 			if ($maaltijd['corvee_gemaild']) {
 				echo "Reeds gemaild.";
 			} else {
@@ -1194,7 +1194,7 @@ class MaalTrack {
 						$teller++;
 					}
 				}
-				echo 'Mensen gemaild: '.$teller;
+				echo "Mensen gemaild: ".$teller;
 				
 				// update corvee_gemaild
 				$query = "UPDATE maaltijd SET corvee_gemaild = 1 WHERE id=".$maaltijd['id']."";
