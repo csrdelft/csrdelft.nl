@@ -256,7 +256,7 @@ class LoginLid{
 			//Behoort een lid tot een bepaalde verticale?
 			}elseif(substr($permissie, 0, 9)=='verticale'){
 				$verticale=strtoupper(substr($permissie, 10));
-				if($verticale==$this->lid->getVerticale()){
+				if($verticale==$this->lid->getVerticaleLetter()){
 					return true;
 				}
 			//Behoort een lid tot een bepaalde (h.t.) groep?

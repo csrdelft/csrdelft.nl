@@ -2,7 +2,8 @@
 
 class Verticale{
 	public static $namen=array('Geen', 'Archibalt', 'Faculteit', 'C', 'D', 'E', 'Lekker', 'G', 'H');
-
+	public static $letters=array('Geen', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H');
+	
 	public $nummer;
 	public $naam;
 	public $kringen=array();

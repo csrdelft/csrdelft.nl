@@ -47,7 +47,8 @@ class Document{
 				$db=MySql::instance();
 				$query="
 					SELECT ID, naam, catID, bestandsnaam, size, mimetype, toegevoegd, eigenaar, leesrechten
-					FROM document WHERE ID=".$this->getID().";";
+					FROM document
+					WHERE ID=".$this->getID().";";
 				$doc=$db->getRow($query);
 				if(is_array($doc)){
 					$this->array2properties($doc);
