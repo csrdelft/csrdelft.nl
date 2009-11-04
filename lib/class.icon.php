@@ -15,6 +15,7 @@ class Icon{
 	//handige dingen die we graag gebruiken in csrdelft.nl. Moeten geen namen zijn die al voorkomen
 	//in de lijst met icons.
 	public static $alias=array(
+		'toevoegen'=>'add',
 		'bewerken'=>'pencil',
 		'verwijderen'=>'cross',
 		'citeren'=>'comments',

@@ -1147,12 +1147,12 @@ class MaalTrack {
 		// get maaltijden waar datum < deze week
 		$maaltijden = $this->getMaaltijdenRaw(0, time()+86400*7);
 		
-		echo 'Start<br />Maaltijden ophalen binnen komende 7 dagen..<br />';
+		echo "Start<br />Maaltijden ophalen binnen komende 7 dagen..<br />\n";
 		foreach($maaltijden as $maaltijd)
 		{
-			echo '- Maaltijd ID '.$maaltijd['id'].': ';
+			echo "- Maaltijd ID '.$maaltijd['id'].': ";
 			if ($maaltijd['corvee_gemaild']) {
-				echo 'Reeds gemaild.';
+				echo "Reeds gemaild.";
 			} else {
 				$lMaaltijd = new Maaltijd($maaltijd['id']);
 				
@@ -1203,9 +1203,9 @@ class MaalTrack {
 					return false;
 				}
 			}
-			echo '<br />';
+			echo "<br />\n";
 		}
-		echo 'Klaar!<br />';
+		echo "Klaar!<br />\n";
 	}
 
 }
