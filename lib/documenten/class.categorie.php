@@ -39,7 +39,9 @@ class DocumentenCategorie{
 			//gegevens over de categorie ophalen.
 			$query="
 				SELECT ID, naam, zichtbaar, leesrechten
-				FROM documentcategorie WHERE ID=".$this->getID();
+				FROM documentcategorie
+				WHERE ID=".$this->getID()."
+				  AND zichtbaar=1";
 			$categorie=$db->query2array($query);
 			if($categorie!==false){
 				$this->naam=$categorie[0]['naam'];
@@ -61,11 +63,14 @@ class DocumentenCategorie{
 		$db=MySql::instance();
 		$query="
 			SELECT ID, naam, catID, bestandsnaam, size, mimetype, toegevoegd, eigenaar, leesrechten
-			FROM document WHERE catID=".$this->getID().' ORDER BY toegevoegd DESC ';
+			FROM document
+			WHERE catID=".$this->getID()."
+			ORDER BY toegevoegd DESC";
 		if($this->loadLimit>0){
 			$query.=' LIMIT '.$this->loadLimit;
 		}
 		$result=$db->query($query);
+		echo mysql_error();
 		if($db->numRows($result)>0){
 			while($doc=$db->next($result)){
 				$this->documenten[]=new Document($doc);
@@ -135,6 +140,7 @@ class DocumentenCategorie{
 		$db=MySql::instance();
 		$query="SELECT ID, naam, zichtbaar, leesrechten
 			FROM documentcategorie
+			WHERE zichtbaar=1
 			ORDER BY naam;";
 		$result=$db->query($query);
 		if($db->numRows($result)<=0){

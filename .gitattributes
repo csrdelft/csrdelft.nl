@@ -57,6 +57,7 @@ htdocs/communicatie/.htaccess -text
 htdocs/communicatie/documenten.php -text
 htdocs/communicatie/documenten_new/.htaccess -text
 htdocs/communicatie/documenten_old/.htaccess -text
+htdocs/communicatie/documenten_old/convert2new.php -text
 htdocs/communicatie/documenten_old/index.php -text
 htdocs/communicatie/documenten_old/neerladen.php -text
 htdocs/communicatie/documenten_old/toevoegen.php -text

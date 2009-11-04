@@ -42,7 +42,7 @@
 		{foreach from=$categorie->getLast(5) item=document}
 			<tr class="document">
 				<td>
-					<a href="{$document->getDownloadurl()}">{$document->getNaam()|escape:'html'}</a>
+					<a href="{$document->getDownloadurl()}">{$document->getNaam()|escape:'html'|wordwrap:60:'<br />'}</a>
 					{if $document->magVerwijderen()}
 						<a class="verwijderen" href="/communicatie/documenten/verwijderen/{$document->getID()}" title="Document verwijderen">{icon get="verwijderen"}</a>
 					{/if}
