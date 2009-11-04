@@ -19,7 +19,6 @@ class Icon{
 		'toevoegen' => 'add',
 		'bewerken' => 'pencil',
 		'verwijderen' => 'cross',
-		'rss' => 'feed',
 
 		//documumenten
 		'mime-doc' => 'page_white_word',

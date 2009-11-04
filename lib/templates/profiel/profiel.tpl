@@ -222,7 +222,7 @@
 				<div class="data">
 					{if $profhtml.rssToken!=''}
 					<a href="http://csrdelft.nl/communicatie/forum/rss/{$profhtml.rssToken}.xml">
-						{icon get='rss'} Persoonlijke RSS-feed forum
+						{icon get='feed'} Persoonlijke RSS-feed forum
 					</a>
 					{/if}
 					<a class="knop" href="/communicatie/profiel/{$lid->getUid()}/rssToken#forum">Nieuwe aanvragen</a>
