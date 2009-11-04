@@ -27,7 +27,7 @@ $(document).ready(function() {
 		"bInfo": false,
 		"bLengthChange": false,
 		"aoColumns": [
-			null, // documentnaam
+			{'sType': 'html'}, // documentnaam
 			//Bestandstgrootte naar B/KB omzetten.
 			{"fnRender":
 				function(oObj){
