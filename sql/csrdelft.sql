@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Oct 28, 2009 at 03:21 PM
+-- Generation Time: Nov 04, 2009 at 11:54 AM
 -- Server version: 5.1.30
 -- PHP Version: 5.2.8
 
@@ -446,7 +446,7 @@ CREATE TABLE IF NOT EXISTS `lid` (
   `kerk` varchar(50) NOT NULL DEFAULT '',
   `muziek` varchar(100) NOT NULL DEFAULT '',
   `password` varchar(60) NOT NULL DEFAULT '',
-  `permissies` enum('P_LID','P_NOBODY','P_PUBCIE','P_OUDLID','P_MODERATOR','P_MAALCIE','P_BESTUUR','P_KNORRIE','P_VAB','P_ETER') NOT NULL DEFAULT 'P_NOBODY',
+  `permissies` enum('P_LID','P_NOBODY','P_PUBCIE','P_OUDLID','P_MODERATOR','P_MAALCIE','P_BESTUUR','P_KNORRIE','P_VAB','P_ETER','P_BASF') NOT NULL DEFAULT 'P_NOBODY',
   `status` enum('S_CIE','S_GASTLID','S_LID','S_NOBODY','S_NOVIET','S_OUDLID','S_KRINGEL') NOT NULL DEFAULT 'S_CIE',
   `eetwens` text NOT NULL,
   `corvee_wens` varchar(255) NOT NULL,
