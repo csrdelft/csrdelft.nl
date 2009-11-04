@@ -3,7 +3,7 @@
  *}
 
 <div id="controls">
-	<a class="knop" href="/communicatie/documenten/toevoegen/">Toevoegen</a>
+	<a class="knop" href="/communicatie/documenten/toevoegen/">{icon get="toevoegen"} Toevoegen</a>
 </div>
 <h1>Documenten</h1>
 <div class="foutje">{$melding}</div>
@@ -22,6 +22,10 @@
 			<th colspan="5">
 				<a href="/communicatie/documenten/categorie/{$categorie->getID()}/" title="Alle documenten in {$categorie->getNaam()|escape:'html'}">
 					{$categorie->getNaam()|escape:'html'}
+				</a>
+				<a class="toevoegen" href="/communicatie/documenten/toevoegen/?catID={$categorie->getID()}"
+						title="Document toevoegen in categorie: {$categorie->getNaam()|escape:'html'}">
+					{icon get="toevoegen"}
 				</a>
 			</th>
 		</tr>
