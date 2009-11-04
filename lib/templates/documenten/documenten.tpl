@@ -25,13 +25,11 @@
 				</a>
 			</th>
 		</tr>
-		
-			
 		{foreach from=$categorie->getLast(5) item=document}
 			<tr class="document">
 				<td><a href="/communicatie/documenten_new/download/{$document->getID()}/{$document->getBestandsnaam()}">{$document->getNaam()|escape:'html'}</a></td>
 				<td class="size">{$document->getSize()|filesize}</td>
-				<td><div class="verborgen">{$document->getMimetype()}</div>{$document->getMimetype()|mimeicon}</td>
+				<td title="{$document->getMimetype()}">{$document->getMimetype()|mimeicon}</td>
 				<td>{$document->getToegevoegd()|reldate}</td>
 				<td>{$document->getEigenaar()|csrnaam}</td>
 			</tr>
@@ -42,9 +40,9 @@
 {foreachelse}
 	<tr><td colspan="5">Geen categorieën in de database aanwezig.</td></tr>
 {/foreach}
-<tfoot>
-	<tr>
-		<th>Document</th><th>Bestandsgrootte</th><th>Mime-type</th><th>Toegevoegd</th><th>Eigenaar</th>
-	</tr>
-</tfoot>
+	<tfoot>
+		<tr>
+			<th>Document</th><th>Bestandsgrootte</th><th>Type</th><th>Toegevoegd</th><th>Eigenaar</th>
+		</tr>
+	</tfoot>
 </table>

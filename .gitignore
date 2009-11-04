@@ -17,6 +17,7 @@ htdocs/handelingen
 htdocs/happening
 htdocs/owee
 /images
+images/famfamfam/*.png
 lib/include.defines.php
 sessie/*
 /tmp
