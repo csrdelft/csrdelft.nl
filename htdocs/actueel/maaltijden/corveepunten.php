@@ -23,8 +23,6 @@ $punten = new CorveepuntenContent($maaltrack);
 
 
 # actie is bewerken, kijken of velden ingevuld zijn
-if(!$loginlid->hasPermission('P_MAAL_MOD'))
-
 if(isset($_POST['actie'])){
 	if(!$loginlid->hasPermission('P_MAAL_MOD')){ header('location: '.CSR_ROOT.'actueel/maaltijden/'); exit; }
 
