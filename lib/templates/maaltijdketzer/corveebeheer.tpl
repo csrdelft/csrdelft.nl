@@ -39,6 +39,7 @@
 			<th>sK</th>
 			<th>Punten</th>
 			<th># (Max)</th>
+			<th>&nbsp;</th>
 		</tr>
 		{foreach from=$maal.maaltijden item=maaltijd}
 			<tr {if $maaltijd.datum<=$smarty.now}class="old"{/if} style="background-color: {cycle values="#e9e9e9, #fff"};{if $maal.formulier.id==$maaltijd.id}background-color: #bfb{/if}">
@@ -83,6 +84,13 @@
 					</td>
 					<td />
 				{/if}
+				<td>
+					{if $maaltijd.corvee_gemaild == "1"}
+						<img src="{$csr_pics}knopjes/email_open.png" alt="Gemaild" />
+					{else}
+						<img src="{$csr_pics}knopjes/email.png" alt="Niet gemaild" />
+					{/if}
+				</td>
 			</tr>
 		{/foreach}
 	</table>

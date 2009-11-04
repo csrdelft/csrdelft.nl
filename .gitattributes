@@ -422,6 +422,11 @@ lib/templates/maaltijdketzer/beheer.tpl -text
 lib/templates/maaltijdketzer/corveebeheer.tpl -text
 lib/templates/maaltijdketzer/corveeformulier.tpl -text
 lib/templates/maaltijdketzer/corveemail/afwas.tpl -text
+lib/templates/maaltijdketzer/corveemail/koks.tpl -text
+lib/templates/maaltijdketzer/corveemail/schoonmaken_afzuigkap.tpl -text
+lib/templates/maaltijdketzer/corveemail/schoonmaken_frituur.tpl -text
+lib/templates/maaltijdketzer/corveemail/schoonmaken_keuken.tpl -text
+lib/templates/maaltijdketzer/corveemail/theedoeken.tpl -text
 lib/templates/maaltijdketzer/corveepunten.tpl -text
 lib/templates/maaltijdketzer/corveetakenformulier.tpl -text
 lib/templates/maaltijdketzer/formulier.tpl -text

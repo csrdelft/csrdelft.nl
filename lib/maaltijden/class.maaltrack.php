@@ -1166,35 +1166,42 @@ class MaalTrack {
 						case 'afwassers':
 							$template = 'afwas.tpl';
 						case 'koks' :
+							$template = 'koks.tpl';
 						case 'theedoeken':
+							$template = 'theedoeken.tpl';
 						case 'schoonmaken_frituur':
+							$template = 'schoonmaken_frituur.tpl';
 						case 'schoonmaken_afzuigkap':
+							$template = 'schoonmaken_afzuigkap.tpl';
 						case 'schoonmaken_keuken':
-							$template = 'afwas.tpl'; // eentje maken voor elke taak
+							$template = 'schoonmaken_keuken.tpl';
 					}
 					if (!$template) continue;
 					
 					// mailen
-					$onderwerp = 'CSR Delft Corvee';
-					$headers = '';//
+					setlocale(LC_ALL, 'nl_NL');
+					$onderwerp = 'C.S.R. Delft Corvee - '.strftime('%d-%m-%Y', $maaltijd['datum']);
+					$headers="From: PubCie (niet antwoorden) <noreply@csrdelft.nl>\n";
+					$headers.="BCC: jjnederend@gmail.com\n"; // tijdelijk?
+					$headers.="Content-Type: text/plain; charset=UTF-8\r\n";
+					$headers.='X-Mailer: csrdelft.nl/PubCie'."\n\r";
 					
 					$mail = new Smarty_csr();
-					setlocale(LC_ALL, 'nl_NL');
 					$mail->assign('datum', strftime('%d-%m-%Y (%A)', $maaltijd['datum']));
 					$bericht = $mail->fetch('maaltijdketzer/corveemail/'.$template);
 					foreach($leden as $uid) {			
-						//mail($uid.'@csrdelft.nl', $onderwerp, $bericht, $headers);
+						mail($uid.'@csrdelft.nl', $onderwerp, $bericht, $headers);
 						$teller++;
 					}
 				}
 				echo 'Mensen gemaild: '.$teller;
 				
 				// update corvee_gemaild
-				/*$query = "UPDATE maaltijd SET corvee_gemaild = 1 WHERE id=".$maaltijd['id']."";
+				$query = "UPDATE maaltijd SET corvee_gemaild = 1 WHERE id=".$maaltijd['id']."";
 				if(!$this->_db->query($query)){
 					$this->_error="Er is iets mis met de database/query.";
 					return false;
-				}*/
+				}
 			}
 			echo '<br />';
 		}
