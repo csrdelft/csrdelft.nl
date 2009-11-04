@@ -24,6 +24,10 @@ RewriteRule ^profiel/([0-9a-z]+)/([a-zA-Z]+)/?$ profiel.php?uid=$1&a=$2
 RewriteRule ^irc/? ../pagina.php?naam=irc
 RewriteRule ^orientatie/? ../pagina.php?naam=orientatie
 
+#Oude documentlinks voorlopig doorverwijzen naar de oude ketzer.
+RewriteRule ^documenten/neerladen/([0-9]+)/?$ documenten_old/neerladen/$1
+
 # Documentenketzer
 RewriteRule ^documenten$ documenten.php?querystring=
 RewriteRule ^documenten/(.*)$ documenten.php?querystring=$1 [QSA]
+

@@ -33,7 +33,8 @@ function smarty_modifier_mimeicon($mimetype){
 	}elseif(strpos($mimetype, 'ms-powerpoint')!==false){return Icon::getTag('mime-powerpoint');
 	}elseif(strpos($mimetype, 'pdf')!==false){			return Icon::getTag('mime-pdf');
 	}elseif(strpos($mimetype, 'plain')!==false){		return Icon::getTag('mime-plain');
-	}elseif(strpos($mimetype, 'zip')!==false){			return Icon::getTag('mime-zip');
+	}elseif(strpos($mimetype, 'zip')!==false OR
+			strpos($mimetype, 'rar')!==false){			return Icon::getTag('mime-zip');
 	}else{												return Icon::getTag('mime-onbekend');
 	}
 }
