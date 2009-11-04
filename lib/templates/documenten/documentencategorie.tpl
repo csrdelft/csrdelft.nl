@@ -2,7 +2,9 @@
  * Toon een overzicht van documenten in een bepaalde categorie
  *}
 <div id="controls">
-	<a class="knop" href="/communicatie/documenten/toevoegen/?catID={$categorie->getID()}">{icon get="toevoegen"} Toevoegen</a>
+	{if $loginlid->hasPermission('P_DOCS_MOD')}
+		<a class="knop" href="/communicatie/documenten/toevoegen/?catID={$categorie->getID()}">{icon get="toevoegen"} Toevoegen</a>
+	{/if}
 </div>
 
 <a href="/communicatie/documenten">Documenten</a><h1>{$categorie->getNaam()}</h1>
