@@ -10,8 +10,8 @@
 <h1>Documenten</h1>
 <div class="foutje">{$melding}</div>
 
-<div style="width: 100%; background-color: #FFFFC1;">
-	<div style="padding: 10px"><h2>Nieuwe documentenketzer</h2>
+<div style="width: 100%;">
+	<div class="blokje"><h2>Nieuwe documentenketzer</h2>
 	Deze ketzer is net nieuw, nog lang niet alles staat ook in deze ketzer en wellicht is dit nog af en toe stuk. De oude ketzer is er ook nog: <a href="/communicatie/documenten_old">Oude ketzer</a>
 	</div>
 </div>

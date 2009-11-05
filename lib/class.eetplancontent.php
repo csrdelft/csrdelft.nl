@@ -105,7 +105,10 @@ class EetplanContent extends SimpleHTML {
 		$aHuizenArray=$this->_eetplan->getHuizen();
 		//weergeven
 		echo '
-		<strong id="eetplanLETOP">LET OP: Van eerstejaers die niet komen opdagen op het eetplan wordt verwacht dat zij minstens &eacute;&eacute;n keer komen koken op het huis waarbij zij gefaeld hebben.</strong><br /><br />
+			<h1>Eetplan</h1>
+			<div class="blokje"><h2>LET OP: </h2>
+				Van eerstejaers die niet komen opdagen op het eetplan wordt verwacht dat zij minstens &eacute;&eacute;n keer komen koken op het huis waarbij zij gefaeld hebben.
+			</div>
 			<table class="eetplantabel">
 			<tr><th style="width: 200px;">Pheut/Avond</td>';
 		//kopjes voor tabel

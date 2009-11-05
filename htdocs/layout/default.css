@@ -597,7 +597,8 @@ p img{ margin: 15px 10px; }
 
 /* waarschuwing */
 .waarschuwing{ color: red;}
-div.blokje{ background-color: #fff3b4; margin: 10px 5px; padding: 5px 10px;}
+/* geel blokje */
+div.blokje{ background-color: #FFFFC1; margin: 10px 0px; padding: 10px 10px;}
 
 
 /* profiel */
