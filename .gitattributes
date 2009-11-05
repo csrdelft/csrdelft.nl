@@ -55,7 +55,6 @@ htdocs/bot/.htaccess.sample -text
 htdocs/bot/cmnd.php -text
 htdocs/communicatie/.htaccess -text
 htdocs/communicatie/documenten.php -text
-htdocs/communicatie/documenten_new/.htaccess -text
 htdocs/communicatie/documenten_old/.htaccess -text
 htdocs/communicatie/documenten_old/convert2new.php -text
 htdocs/communicatie/documenten_old/index.php -text

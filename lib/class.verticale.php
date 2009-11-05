@@ -11,7 +11,7 @@ class Verticale{
 	
 	public function __construct($nummer, $kringen=array()){
 		if(preg_match('/^[A-Z]{1}$/', $nummer)){
-			$nummer=array_search($nummer, Verticale::$namen);
+			$nummer=array_search($nummer, Verticale::$letters);
 		}
 
 		if(!array_key_exists($nummer, Verticale::$namen)){
@@ -36,6 +36,9 @@ class Verticale{
 	}
 	public function getNaam(){
 		return $this->naam;
+	}
+	public function getLetter(){
+		return self::$letters[$this->nummer];
 	}
 	
 	public function getKringen(){

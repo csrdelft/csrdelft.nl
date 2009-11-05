@@ -1,5 +1,0 @@
-RewriteEngine on
-
-#let op de QSA, query string append-optie
-
-RewriteRule ^(.*)$ index.php?querystring=$1 [QSA]

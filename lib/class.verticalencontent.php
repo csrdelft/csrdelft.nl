@@ -51,14 +51,14 @@ class VerticalenContent extends SimpleHTML{
 				if($kringnaam==0){
 					$kringstyle='geenkring';
 				}
-				echo '<div class="'.$kringstyle.'" id="kring'.$verticale->getNaam().'.'.$kringnaam.'">';
-				echo '<div class="mailknopje" onclick="toggleEmails(\''.$verticale->getNaam().'.'.$kringnaam.'\')">@</div>';
+				echo '<div class="'.$kringstyle.'" id="kring'.$verticale->getLetter().'.'.$kringnaam.'">';
+				echo '<div class="mailknopje" onclick="toggleEmails(\''.$verticale->getLetter().'.'.$kringnaam.'\')">@</div>';
 				if($kringnaam==0){
 					echo '<h2>Geen kring</h2>'; 
 				}else{
 					echo '<h2>Kring '.$kringnaam.'</h2>';
 				}
-				echo '<div id="leden'.$verticale->getNaam().'.'.$kringnaam.'" class="kringleden">';
+				echo '<div id="leden'.$verticale->getLetter().'.'.$kringnaam.'" class="kringleden">';
 				foreach($kring as $lid){
 					if($lid->isKringleider()) echo '<em>';
 					echo $lid->getNaamLink('full', 'link');
