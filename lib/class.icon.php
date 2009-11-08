@@ -19,6 +19,7 @@ class Icon{
 		'toevoegen' => 'add',
 		'bewerken' => 'pencil',
 		'verwijderen' => 'cross',
+		'alert' => 'stop',
 
 		//documumenten
 		'mime-audio' => 'ipod',
@@ -46,6 +47,7 @@ class Icon{
 		//profiel
 		'stats' => 'server_chart',
 		'su' => 'user_go',
+		'resetpassword' => 'user_gray',
 		'instellingen' => 'cog'
 	);
 

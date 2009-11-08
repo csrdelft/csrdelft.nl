@@ -16,7 +16,7 @@
 	<table id="documentencategorie" class="documenten">
 		<thead>
 			<tr>
-				<th>Document</th><th>Bestandsgrootte</th><th>Type</th><th>Toegevoegd</th><th>Eigenaar</th>
+				<th>Document</th><th>Grootte</th><th>Type</th><th>Toegevoegd</th><th>Eigenaar</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -37,7 +37,7 @@
 		</tbody>
 		<tfoot>
 			<tr>
-				<th>Document</th><th>Bestandsgrootte</th><th>Type</th><th>Toegevoegd</th><th>Eigenaar</th>
+				<th>Document</th><th>Grootte</th><th>Type</th><th>Toegevoegd</th><th>Eigenaar</th>
 			</tr>
 		</tfoot>
 	</table>

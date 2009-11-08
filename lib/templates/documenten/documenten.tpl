@@ -10,16 +10,10 @@
 <h1>Documenten</h1>
 <div class="foutje">{$melding}</div>
 
-<div style="width: 100%;">
-	<div class="blokje"><h2>Nieuwe documentenketzer</h2>
-	Deze ketzer is net nieuw, nog lang niet alles staat ook in deze ketzer en wellicht is dit nog af en toe stuk. De oude ketzer is er ook nog: <a href="/communicatie/documenten_old">Oude ketzer</a>
-	</div>
-</div>
-
 <table id="documenten" class="documenten">
 <thead>
 	<tr>
-		<th>Document</th><th>Bestandsgrootte</th><th>Type</th><th>Toegevoegd</th><th>Eigenaar</th>
+		<th>Document</th><th>Grootte</th><th>Type</th><th>Toegevoegd</th><th>Eigenaar</th>
 	</tr>
 </thead>
 
@@ -42,7 +36,7 @@
 		{foreach from=$categorie->getLast(5) item=document}
 			<tr class="document">
 				<td>
-					<a href="{$document->getDownloadurl()}">{$document->getNaam()|escape:'html'|wordwrap:60:'<br />'}</a>
+					<a href="{$document->getDownloadurl()}">{$document->getNaam()|escape:'html'|wordwrap:75:'<br />'}</a>
 					{if $document->magVerwijderen()}
 						<a class="verwijderen" href="/communicatie/documenten/verwijderen/{$document->getID()}" title="Document verwijderen">{icon get="verwijderen"}</a>
 					{/if}
@@ -61,7 +55,7 @@
 {/foreach}
 	<tfoot>
 		<tr>
-			<th>Document</th><th>Bestandsgrootte</th><th>Type</th><th>Toegevoegd</th><th>Eigenaar</th>
+			<th>Document</th><th>Grootte</th><th>Type</th><th>Toegevoegd</th><th>Eigenaar</th>
 		</tr>
 	</tfoot>
 </table>

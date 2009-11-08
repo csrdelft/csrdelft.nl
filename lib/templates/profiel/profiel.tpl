@@ -13,7 +13,9 @@
 					{/if}
 					{if $isAdmin}
 						<a href="/tools/stats.php?uid={$profhtml.uid}" class="knop">{icon get="server_chart"} Bezoeklog</a><br />
-						<a href="/communicatie/profiel/{$profhtml.uid}/wachtwoord" class="knop" onclick="return confirm('Weet u zeker dat u het wachtwoord van deze gebruiker wilt resetten?')">Reset wachtwoord</a><br />
+						<a href="/communicatie/profiel/{$profhtml.uid}/wachtwoord" class="knop" onclick="return confirm('Weet u zeker dat u het wachtwoord van deze gebruiker wilt resetten?')">
+							{icon get="resetpassword"} Reset wachtwoord
+						</a><br />
 						{if $loginlid->maySuTo($lid)}
 							<a href="/su/{$profhtml.uid}/" class="knop">{icon get='su'} Su naar dit lid</a><br />
 						{/if}
