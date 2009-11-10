@@ -2,6 +2,7 @@ RewriteEngine On
 
 # Beheer
 RewriteRule ^verwerk/? verwerk.php [L]
+RewriteRule ^toevoegen/? ../../pagina.php?naam=fotostoevoegen [L]
 
 # Al het andere
 RewriteRule index.php?(.*) index.php?pad=$1 [L]

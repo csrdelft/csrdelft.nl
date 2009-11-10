@@ -1,6 +1,9 @@
 <div style="float: right; margin: 0 0 10px 10px;">
+	{if $loginlid->hasPermission('P_LOGGED_IN')}
+		<a href="/actueel/fotoalbum/toevoegen/" title="Toevoegen">Toevoegen</a>
+	{/if}
 	{if $loginlid->hasPermission('P_LOGGED_IN') && $album->getFotos()!==false}
-		<a href="/tools/downloadalbum.php?album={$album->getPad()}" title="Download als TAR-bestand">Download album</a>
+		| <a href="/tools/downloadalbum.php?album={$album->getPad()}" title="Download als TAR-bestand">Download album</a>
 	{/if}
 	{if $loginlid->hasPermission('P_ADMIN')}
 		| <a href="/actueel/fotoalbum/verwerk/" title="Verwerken">Verwerken</a>
