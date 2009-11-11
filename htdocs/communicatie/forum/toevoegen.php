@@ -20,7 +20,7 @@ if(!isset($_POST['bericht'])){
 
 if(isset($_POST['email'])){
 	if(email_like($_POST['email'])){
-		$email="\n[prive][offtopic]email: ".mb_htmlentities($_POST['email'])."[/offtopic][/prive]";
+		$email="\n[prive][offtopic]email: [email]".mb_htmlentities($_POST['email'])."[/email][/offtopic][/prive]";
 	}else{
 		header('location: '.CSR_ROOT.'communicatie/forum/');
 		$_SESSION['melding']='U moet een geldig email-adres opgeven.';
