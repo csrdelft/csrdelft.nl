@@ -4,7 +4,7 @@ require_once 'mededelingen/class.mededeling.php';
 
 define('MEDEDELINGEN_ROOT','actueel/mededelingen/');
 
-if(!Mededeling::isMod()){
+if(!Mededeling::isModerator()){
 	header('location: '.CSR_ROOT.'/actueel/mededelingen');
 	$_SESSION['mededelingen_foutmelding']='U heeft daar niets te zoeken.';
 	exit;

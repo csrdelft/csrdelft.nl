@@ -20,6 +20,7 @@ class Icon{
 		'bewerken' => 'pencil',
 		'verwijderen' => 'cross',
 		'alert' => 'stop',
+		'goedkeuren' => 'tick',
 
 		//documumenten
 		'mime-audio' => 'ipod',

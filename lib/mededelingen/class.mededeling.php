@@ -55,6 +55,15 @@ class Mededeling{
 	}
 	public function save(){
 		$db=MySql::instance();
+		if($this->getPrioriteit()!=self::defaultPrioriteit)
+		{
+			// Eerst even de prioriteit 'resetten'.
+			$prioriteitQuery="
+				UPDATE mededeling
+				SET prioriteit=".self::defaultPrioriteit."
+				WHERE prioriteit=".(int)$this->getPrioriteit();
+			$db->query($prioriteitQuery);
+		}
 		if($this->getId()==0){
 			$saveQuery="
 				INSERT INTO mededeling (
@@ -95,10 +104,14 @@ class Mededeling{
 					id=".$this->getId()."
 				LIMIT 1;";
 		}
-		$return=$db->query($saveQuery);
+		$queryResult=$db->query($saveQuery);
 
-		if($return AND $this->getId()==0){
-			$this->id=$db->insert_id();
+		$return=-1;
+		if($queryResult){
+			$return=$this->getId();
+			if($return==0){
+				$return=$db->insert_id();
+			}
 		}
 		return $return;
 	}
@@ -149,10 +162,6 @@ class Mededeling{
 		return $this->categorie;
 	}
 
-	public function isMod(){
-		return LoginLid::instance()->hasPermission('P_NEWS_MOD');
-	}
-
 	public static function getTopmost($aantal){
 		$topmost=array();
 		if(is_numeric($aantal) and $aantal>0){
@@ -179,7 +188,7 @@ class Mededeling{
 		$db=MySql::instance();
 		$priveClause=$verborgenClause="";
 		$verborgenClause="zichtbaarheid='zichtbaar'";
-		if( Mededeling::loginlidIsModerator() )
+		if( Mededeling::isModerator() )
 			$verborgenClause="zichtbaarheid!='verwijderd'";
 		if( !LoginLid::instance()->hasPermission('P_LEDEN_READ') )
 			$priveClause=" AND prive='0'";
@@ -205,7 +214,7 @@ class Mededeling{
 		$db=MySql::instance();
 		$priveClause=$verborgenClause="";
 		$verborgenClause="zichtbaarheid='zichtbaar'";
-		if( Mededeling::loginlidIsModerator() )
+		if( Mededeling::isModerator() )
 			$verborgenClause="zichtbaarheid!='verwijderd'";
 		if( !LoginLid::instance()->hasPermission('P_LEDEN_READ') )
 			$priveClause=" AND prive='0'";
@@ -222,7 +231,7 @@ class Mededeling{
 		$db=MySql::instance();
 		$priveClause=$verborgenClause="";
 		$verborgenClause="zichtbaarheid='zichtbaar'";
-		if( Mededeling::loginlidIsModerator() )
+		if( Mededeling::isModerator() )
 			$verborgenClause="zichtbaarheid!='verwijderd'";
 		if( !LoginLid::instance()->hasPermission('P_LEDEN_READ') )
 			$priveClause=" AND prive='0'";
@@ -232,7 +241,7 @@ class Mededeling{
 			WHERE datum >= '".$this->getDatum()."' AND ".$verborgenClause.$priveClause;
 		$resource=$db->select($positieQuery);
 		$resultaat=$db->next($resource);
-		return ceil($resultaat['positie']/MededelingenContent::aantalPerPagina);
+		return ceil(($resultaat['positie']+1)/MededelingenContent::aantalPerPagina);
 	}
 
 //	public static function getNewest(){
@@ -264,18 +273,20 @@ class Mededeling{
 		return $prioriteiten;
 	}
 	
-	// function loginlidMagBewerken()
+	// function magBewerken()
 	// post: geeft true terug als het huidige lid deze Mededeling mag bewerken of verwijderen. Anders, false.
-	public function loginlidMagBewerken(){
+	public function magBewerken(){
 		// het huidige lid mag dit bericht alleen bewerken als hij moderator is of als dit zijn eigen bericht
 		// is (en hij dus het toevoeg-recht heeft).
-		return Mededeling::loginlidIsModerator() OR
-		(Mededeling::loginlidMagToevoegen() AND $this->getUid()==LoginLid::instance()->getUid());
+		return Mededeling::isModerator() OR
+		(Mededeling::magToevoegen() AND $this->getUid()==LoginLid::instance()->getUid());
 	}
-	// function loginlidMagToevoegen()
+	
+	public static function isModerator(){ return LoginLid::instance()->hasPermission('P_NEWS_MOD'); }
+
+	// function magToevoegen()
 	// post: geeft true terug als het huidige lid Mededelingen mag toevoegen.
-	public static function loginlidMagToevoegen(){ return LoginLid::instance()->hasPermission('P_NEWS_POST'); }
-	public static function loginlidIsModerator(){ return LoginLid::instance()->hasPermission('P_NEWS_MOD'); }
+	public static function magToevoegen(){ return LoginLid::instance()->hasPermission('P_NEWS_POST'); }
 	
 	public static function knipTekst($sTekst, $iMaxTekensPerRegel=26, $iMaxRegels=2)
 	{

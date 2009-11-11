@@ -1,7 +1,7 @@
 <?php
 require_once('include.config.php');
 
-if(!LoginLid::instance()->hasPermission('P_NEWS_MOD')){
+if(!LoginLid::instance()->hasPermission('P_NEWS_MOD')){ //TODO: gehele IF weghalen.
 	header('location: '.CSR_ROOT);
 	exit;
 }
@@ -27,15 +27,28 @@ define('MEDEDELINGEN_ROOT', CSR_ROOT.'actueel/mededelingen/');
 
 switch($actie){
 	case 'verwijderen':
+		if(!Mededeling::magToevoegen()){
+			header('location: '.CSR_ROOT);
+			exit;
+		}
 		if($mededelingId>0){
 			$mededeling=new Mededeling($mededelingId);
-			$mededeling->delete();
+			if(Mededeling::isModerator() OR $mededeling->getUid()==LoginLid::instance()->getUid())
+				$mededeling->delete();
+			else{ // Dit lid mag deze mededeling helemaal niet verwijderen!
+				header('location: '.CSR_ROOT);
+				exit;
+			}
 		}
 		$content=new MededelingenContent();
 		// TODO: refreshen.
 	break; 
 
 	case 'bewerken':
+		if(!Mededeling::magToevoegen()){
+			header('location: '.CSR_ROOT);
+			exit;
+		}
 		$_SESSION['melding']='';
 		if(	isset($_POST['titel'],$_POST['tekst'],$_POST['categorie'],$_POST['prioriteit']) )
 		{	// The user is editing an existing Mededeling or tried adding a new one.
@@ -48,7 +61,10 @@ switch($actie){
 			$mededelingProperties['uid']=		LoginLid::instance()->getUid();
 			$mededelingProperties['prioriteit']=		(int)$_POST['prioriteit'];
 			$mededelingProperties['prive']=		isset($_POST['prive']) ? 1 : 0;
-			$mededelingProperties['zichtbaarheid']=	isset($_POST['verborgen']) ? 'onzichtbaar' : 'zichtbaar'; // TODO: wacht_goedkeuring
+			if(!Mededeling::isModerator())
+				$mededelingProperties['zichtbaarheid']='wacht_goedkeuring';
+			else
+				$mededelingProperties['zichtbaarheid']=	isset($_POST['verborgen']) ? 'onzichtbaar' : 'zichtbaar';
 			$mededelingProperties['categorie']=	(int)$_POST['categorie'];
 
 			$allOK=true; // This variable is set to false if there is an error.
@@ -117,6 +133,8 @@ switch($actie){
 			if($allOK){
 				// Save the mededeling to the database. (Either via UPDATE or INSERT).
 				$realId=$mededeling->save();
+				if($realId==-1) // If something went wrong, just go to the main page.
+					$realId='';
 				//TODO: Melding weergeven dat er iets toegevoegd is (?)
 				header('location: '.MEDEDELINGEN_ROOT.$realId); exit;
 			}
