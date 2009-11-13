@@ -1,0 +1,1 @@
+ALTER TABLE `mededelingcategorie` ADD `permissie` ENUM( 'P_NEWS_POST', 'P_NEWS_MOD' ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'P_NEWS_POST' COMMENT 'Mag lid berichten toevoegen aan deze categorie?' AFTER `prioriteit` ;

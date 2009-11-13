@@ -11,6 +11,7 @@ class MededelingCategorie{
 	private $id;
 	private $naam;
 	private $prioriteit;
+	private $permissie;
 	private $plaatje;
 	private $beschrijving;
 
@@ -78,6 +79,7 @@ class MededelingCategorie{
 		$this->id=$array['id'];
 		$this->naam=$array['naam'];
 		$this->prioriteit=$array['prioriteit'];
+		$this->permissie=$array['permissie'];
 		$this->plaatje=$array['plaatje'];
 		$this->beschrijving=$array['beschrijving'];
 	}
@@ -96,13 +98,15 @@ class MededelingCategorie{
 	public function getPlaatje(){ return $this->plaatje; }
 	public function getBeschrijving(){ return $this->beschrijving; }
 
+	public function magUitbreiden(){ return LoginLid::instance()->hasPermission($this->permissie); }
+
 	public static function getAll(){
 		return MededelingCategorie::getCategorieen();
 	}
 	public static function getCategorieen(){
 		$db=MySql::instance();
 		$sCategorieQuery="
-			SELECT id, naam, prioriteit, plaatje, beschrijving
+			SELECT id, naam, prioriteit, permissie, plaatje, beschrijving
 			FROM mededelingcategorie
 			ORDER BY prioriteit, id";
 		$cats=$db->query2array($sCategorieQuery);
@@ -115,7 +119,6 @@ class MededelingCategorie{
 			return $return;
 		}
 		return false;
-
 	}
 }
 ?>

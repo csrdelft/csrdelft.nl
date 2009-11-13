@@ -20,7 +20,9 @@
 			<strong>Categorie:</strong>
 			<select name="categorie">
 				{foreach from=$mededeling->getCategorie()->getAll() item=categorie}
-					<option value="{$categorie->getId()}"{if $mededeling->getCategorieId()==$categorie->getId()} selected="selected"{/if}>{$categorie->getNaam()|escape:'html'}</option>
+					{if $categorie->magUitbreiden()}
+						<option value="{$categorie->getId()}"{if $mededeling->getCategorieId()==$categorie->getId()} selected="selected"{/if}>{$categorie->getNaam()|escape:'html'}</option>
+					{/if}
 				{/foreach}
 			</select><br />
 			{if $mededeling->isModerator()}
