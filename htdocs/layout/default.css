@@ -593,6 +593,13 @@ p img{ margin: 15px 10px; }
 	font-weight: bold;
 	padding: 0px 5px 0px 5px;
 }
+/* positionering van het vergroot-invoerveld-knop */
+.knop#vergroot{
+	position: relative;
+	top: 2px;
+	left: -13px;
+}
+
 
 
 /* waarschuwing */

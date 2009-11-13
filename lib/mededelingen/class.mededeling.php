@@ -241,7 +241,7 @@ class Mededeling{
 			WHERE datum >= '".$this->getDatum()."' AND ".$verborgenClause.$priveClause;
 		$resource=$db->select($positieQuery);
 		$resultaat=$db->next($resource);
-		return ceil(($resultaat['positie']+1)/MededelingenContent::aantalPerPagina);
+		return ceil(($resultaat['positie'])/MededelingenContent::aantalPerPagina);
 	}
 
 //	public static function getNewest(){
