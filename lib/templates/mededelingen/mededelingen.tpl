@@ -44,6 +44,7 @@
 			{/if}
 				<img class="nieuwsplaatje" src="{$csr_pics}nieuws/{$selectedMededeling->getPlaatje()}" width="200px" height="200px" alt="{$selectedMededeling->getPlaatje()}" />
 				<i>{$selectedMededeling->getDatum()}</i><br />
+				{if $selectedMededeling->isModerator()}{$ubb->getHTML($lidtag)}<br />{/if}
 				{$ubb->getHTML($selectedMededeling->getTekst())}<br />
 			</div>
 		{if $selectedMededeling->magBewerken()}

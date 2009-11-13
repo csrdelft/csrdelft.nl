@@ -56,6 +56,7 @@ class MededelingenContent extends SimpleHTML{
 		// The following attribute can't be null. Otherwise, the page will
 		// not display a full Mededeling.
 		$content->assign('selectedMededeling', $this->selectedMededeling);
+		$content->assign('lidtag', '[lid='.$this->selectedMededeling->getUid().']');
 		$content->assign('ubb', CsrUBB::instance());
 		
 		$content->assign('huidigePagina', $this->paginaNummer);
