@@ -1,6 +1,7 @@
 <div class="mededelingen-overzichtlijst">
 {$melding}
 {if $selectedMededeling->magToevoegen()}<a class="knop" href="{$nieuws_root}toevoegen">{icon get="toevoegen"} Toevoegen</a><br /><br />{/if}
+
 {if empty($lijst)}
 	Zoals het is, zoals het was, o Civitas!<br />(Geen mededelingen gevonden dus…)<br /><br />
 {else}
@@ -39,27 +40,27 @@
 		<div class="nieuwsbericht">
 			<div class="nieuwsbody">
 				<div class="nieuwstitel">{$selectedMededeling->getTitel()|escape:'html'}</div>
-			{if $selectedMededeling->isVerborgen()}
-				<em>[verborgen]</em><br />
-			{/if}
+				{if $selectedMededeling->isVerborgen()}
+					<em>[verborgen]</em><br />
+				{/if}
 				<img class="nieuwsplaatje" src="{$csr_pics}nieuws/{$selectedMededeling->getPlaatje()}" width="200px" height="200px" alt="{$selectedMededeling->getPlaatje()}" />
 				<i>{$selectedMededeling->getDatum()}</i><br />
-				{if $selectedMededeling->isModerator()}{$ubb->getHTML($lidtag)}<br />{/if}
-				{$ubb->getHTML($selectedMededeling->getTekst())}<br />
+				{if $selectedMededeling->isModerator()}{$selectedMededeling->getUid()|csrnaam}<br />{/if}
+				{$selectedMededeling->getTekst()|ubb}<br />
 			</div>
-		{if $selectedMededeling->magBewerken()}
-			<a href="{$nieuws_root}bewerken/{$selectedMededeling->getId()}">
-				{icon get="bewerken"}
-			</a>
-			<a href="{$nieuws_root}verwijderen/{$selectedMededeling->getId()}" onclick="return confirm('Weet u zeker dat u deze mededeling wilt verwijderen?');">
-				{icon get="verwijderen"}
-			</a>
-			{if $selectedMededeling->isModerator() AND $selectedMededeling->getZichtbaarheid()=='wacht_goedkeuring'}
-			<a onclick="return confirm('Weet u zeker dat u deze mededeling wilt goedkeuren?')" href="{$nieuws_root}keur-goed/{$selectedMededeling->getId()}">
-				{icon get="goedkeuren"}
-			</a>
+			{if $selectedMededeling->magBewerken()}
+				<a href="{$nieuws_root}bewerken/{$selectedMededeling->getId()}">
+					{icon get="bewerken"}
+				</a>
+				<a href="{$nieuws_root}verwijderen/{$selectedMededeling->getId()}" onclick="return confirm('Weet u zeker dat u deze mededeling wilt verwijderen?');">
+					{icon get="verwijderen"}
+				</a>
+				{if $selectedMededeling->isModerator() AND $selectedMededeling->getZichtbaarheid()=='wacht_goedkeuring'}
+					<a onclick="return confirm('Weet u zeker dat u deze mededeling wilt goedkeuren?')" href="{$nieuws_root}keur-goed/{$selectedMededeling->getId()}">
+						{icon get="goedkeuren"}
+					</a>
+				{/if}
 			{/if}
-		{/if}
 		</div>
 	{/if}
 	
