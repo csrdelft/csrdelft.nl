@@ -80,8 +80,8 @@ class Mededeling{
 					'".$db->escape($this->getPlaatje())."'
 				);";
 		}else{
-			// Only update the field plaatje if there is a new picture.
-			// TODO: destroy the old picture! 
+			// Alleen als er een nieuw plaatje is hoeft het plaatjesveld geüpdate te worden.
+			// TODO: het oude plaatje verwijderen! 
 			$setPlaatje='';
 			if($this->getPlaatje()!=''){
 				$setPlaatje=",
@@ -120,21 +120,29 @@ class Mededeling{
 		$this->save();
 	}
 	/*
-	 * Fills the fields of this object with the given array.
+	 * Vult de attributen van dit object met de waarden in de gegeven array.
 	 */
 	private function array2properties($array){
 		$this->id=$array['id'];
 		$this->titel=$array['titel'];
 		$this->tekst=$array['tekst'];
-		if($this->getDatum()===null) // Als we al een datum hebben (uit de DB), hoeven we het niet te vervangen.
+		if($this->getDatum()===null){ // Als we al een datum hebben (uit de DB), hoeven we het niet te vervangen.
 			$this->datum=$array['datum'];
-		$this->uid=$array['uid'];
-		$this->prioriteit=$array['prioriteit'];
+		}
+		if($this->getUid()===null){ // Als we al een Uid hebben (uit de DB), hoeven we deze niet te vervangen.
+			$this->uid=$array['uid'];
+		}
+		if(Mededeling::isModerator()){
+			$this->prioriteit=$array['prioriteit'];
+		}
 		$this->prive=$array['prive'];
-		// Als deze mededeling op goedkeuring wachtte of al verwijderd was, verandert hier niets aan.
-		if($this->getZichtbaarheid()!='wacht_goedkeuring' AND $this->getZichtbaarheid()!='verwijderd')
+		// Om zichtbaarheid te veranderen moet je moderator zijn en als deze mededeling op goedkeuring wachtte
+		// of al verwijderd was, verandert hier niets aan.
+		if(Mededeling::isModerator() AND $this->getZichtbaarheid()!='wacht_goedkeuring' AND $this->getZichtbaarheid()!='verwijderd'){
 			$this->zichtbaarheid=$array['zichtbaarheid'];
+		}
 		$this->plaatje=$array['plaatje'];
+		
 		$this->categorieId=$array['categorie'];
 	}
 	public function getId(){ return $this->id; }

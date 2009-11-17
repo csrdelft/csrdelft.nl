@@ -141,6 +141,13 @@ switch($actie){
 		}else{ // User is going to edit an existing Mededeling or fill in an empty form.
 			$mededeling=new Mededeling($mededelingId);
 		}
+		
+		// Controleren of de gebruiker deze mededeling wel mag bewerken.
+		if($mededelingId>0 AND !$mededeling->magBewerken()){ // Moet dit niet eerder gebeuren?
+			header('location: '.CSR_ROOT);	// Misschien melding weergeven en terug gaan naar
+											// de mededelingenpagina? 
+			exit;
+		}
 		$content=new MededelingContent($mededeling);
 	break; 
 

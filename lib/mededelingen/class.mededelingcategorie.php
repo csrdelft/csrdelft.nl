@@ -33,7 +33,7 @@ class MededelingCategorie{
 	public function load($id=0){
 		$db=MySql::instance();
 		$loadQuery="
-			SELECT id, naam, prioriteit, plaatje, beschrijving
+			SELECT id, naam, prioriteit, permissie, plaatje, beschrijving
 			FROM mededelingcategorie
 			WHERE id=".(int)$id.";";
 		$mededeling=$db->getRow($loadQuery);

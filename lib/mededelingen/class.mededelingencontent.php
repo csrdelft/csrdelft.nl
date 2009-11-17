@@ -1,6 +1,6 @@
 <?php
 class MededelingenContent extends SimpleHTML{
-	private $selectedMededeling;
+	private $geselecteerdeMededeling;
 	private $paginaNummer;
 	private $paginaNummerOpgevraagd;
 	private $topMost;
@@ -9,24 +9,24 @@ class MededelingenContent extends SimpleHTML{
 	const aantalPerPagina=6;
 	
 	public function __construct($mededelingId){
-		$this->selectedMededeling=null;
+		$this->geselecteerdeMededeling=null;
 		$this->paginaNummer=1;
 		$this->paginaNummerOpgevraagd=false;
 
-		$this->topMost=Mededeling::getTopmost(self::aantalTopMostBlock); // Get the n most important mededelingen.
+		$this->topMost=Mededeling::getTopmost(self::aantalTopMostBlock); // Haal de n belangrijkste mededelingen op.
 		
 		if($mededelingId!=0){
 			try{
-				$this->selectedMededeling=new Mededeling($mededelingId);
+				$this->geselecteerdeMededeling=new Mededeling($mededelingId);
 			} catch (Exception $e) {
-				// Do nothing, keeping $selectedMededeling equal to null.
+				// Doe niets, zodat $geselecteerdeMededeling gelijk blijft aan null.
 			}
 		}
-		if($this->selectedMededeling===null){
-			// If there is at least one topmost, make it the selected one.
-			// Otherwise, keep $this->selectedMededeling equal to null.
+		if($this->geselecteerdeMededeling===null){
+			// Als er minstens één 'topmost' mededeling is, maak dat de geselecteerde.
+			// Anders, hou $this->geselecteerdeMededeling gelijk aan null.
 			if(isset($this->topMost[0]))
-				$this->selectedMededeling=$this->topMost[0];
+				$this->geselecteerdeMededeling=$this->topMost[0];
 		}
 	}
 	
@@ -39,7 +39,7 @@ class MededelingenContent extends SimpleHTML{
 
 	public function view(){
 		if(!$this->paginaNummerOpgevraagd){
-			$this->paginaNummer = $this->selectedMededeling->getPaginaNummer();
+			$this->paginaNummer = $this->geselecteerdeMededeling->getPaginaNummer();
 		}
 		
 		$content=new Smarty_csr();
@@ -50,9 +50,7 @@ class MededelingenContent extends SimpleHTML{
 		
 		$content->assign('topmost', $this->topMost);
 		$content->assign('lijst', Mededeling::getLijstVanPagina($this->paginaNummer, self::aantalPerPagina));
-		// The following attribute can't be null. Otherwise, the page will
-		// not display a full Mededeling.
-		$content->assign('selectedMededeling', $this->selectedMededeling);
+		$content->assign('geselecteerdeMededeling', $this->geselecteerdeMededeling);
 		
 		$content->assign('huidigePagina', $this->paginaNummer);
 		$content->assign('totaalAantalPaginas', (ceil(Mededeling::getAantal()/self::aantalPerPagina)));
