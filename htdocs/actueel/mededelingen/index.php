@@ -112,11 +112,13 @@ switch($actie){
 			// Check categorie.
 			$categorieValid=false;
 			foreach(MededelingCategorie::getCategorieen() as $categorie){
-				if($mededelingProperties['categorie']==$categorie->getId())
+				if($mededelingProperties['categorie']==$categorie->getId() AND $categorie->magUitbreiden())
 					$categorieValid=true;
 			}
 			if(	!$categorieValid ){
 				$mededelingProperties['categorie']=null;
+				$_SESSION['melding'].='De categorie is ongeldig.<br />';
+				$allOK=false;
 			}
 			// Check picture.
 			if(empty($mededelingProperties['plaatje']) AND $mededelingId==0){ // If there's no new picture, while there should be.
