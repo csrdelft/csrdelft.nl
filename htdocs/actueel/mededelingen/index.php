@@ -50,8 +50,8 @@ switch($actie){
 			exit;
 		}
 		$_SESSION['melding']='';
-		if(	isset($_POST['titel'],$_POST['tekst'],$_POST['categorie'],$_POST['prioriteit']) )
-		{	// The user is editing an existing Mededeling or tried adding a new one.
+		if(	isset($_POST['titel'],$_POST['tekst'],$_POST['categorie']) ){
+			// The user is editing an existing Mededeling or tried adding a new one.
 			// Get properties from $_POST.
 			$mededelingProperties=array();
 			$mededelingProperties['id']=		$mededelingId;
@@ -59,12 +59,15 @@ switch($actie){
 			$mededelingProperties['tekst']=		$_POST['tekst'];
 			$mededelingProperties['datum']=		getDateTime();
 			$mededelingProperties['uid']=		LoginLid::instance()->getUid();
-			$mededelingProperties['prioriteit']=		(int)$_POST['prioriteit'];
+			if(isset($_POST['prioriteit'])){
+				$mededelingProperties['prioriteit']=		(int)$_POST['prioriteit'];
+			}
 			$mededelingProperties['prive']=		isset($_POST['prive']) ? 1 : 0;
-			if(!Mededeling::isModerator())
+			if(!Mededeling::isModerator()){
 				$mededelingProperties['zichtbaarheid']='wacht_goedkeuring';
-			else
-				$mededelingProperties['zichtbaarheid']=	isset($_POST['verborgen']) ? 'onzichtbaar' : 'zichtbaar';
+			}else{
+				$mededelingProperties['zichtbaarheid']=isset($_POST['verborgen']) ? 'onzichtbaar' : 'zichtbaar';
+			}
 			$mededelingProperties['categorie']=	(int)$_POST['categorie'];
 
 			$allOK=true; // This variable is set to false if there is an error.
@@ -101,8 +104,8 @@ switch($actie){
 				$_SESSION['melding'].='Het veld <b>Tekst</b> moet minstens 5 tekens bevatten.<br />';
 				$allOK=false;
 			}
-			if(	array_search($mededelingProperties['prioriteit'],array_keys(Mededeling::getPrioriteiten())) == false )
-			{	// If the priority is invalid.
+			if(	!isset($mededelingProperties['prioriteit']) OR array_search($mededelingProperties['prioriteit'],array_keys(Mededeling::getPrioriteiten())) == false ){
+				// If the priority is invalid.
 				$mededelingProperties['prioriteit']=Mededeling::defaultPrioriteit;
 			}
 			
@@ -154,10 +157,11 @@ switch($actie){
 	default:
 		require_once('mededelingen/class.mededelingencontent.php');
 		$content=new MededelingenContent($mededelingId);
-		if(isset($pagina))	// Als de gebruiker een pagina opvraagt.
+		if(isset($pagina)){	// Als de gebruiker een pagina opvraagt.
 			$content->setPaginaNummer($pagina);
-		else if($mededelingId==0)	// Als de gebruiker GEEN pagina opvraagt en ook geen mededeling.
+		}else if($mededelingId==0){	// Als de gebruiker GEEN pagina opvraagt en ook geen mededeling.
 			$content->setPaginaNummer(1);
+		}
 	break;
 }
 

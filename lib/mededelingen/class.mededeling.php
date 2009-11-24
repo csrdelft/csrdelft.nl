@@ -132,13 +132,13 @@ class Mededeling{
 		if($this->getUid()===null){ // Als we al een Uid hebben (uit de DB), hoeven we deze niet te vervangen.
 			$this->uid=$array['uid'];
 		}
-		if(Mededeling::isModerator()){
+		if($this->getPrioriteit()===null OR Mededeling::isModerator()){
 			$this->prioriteit=$array['prioriteit'];
 		}
 		$this->prive=$array['prive'];
 		// Om zichtbaarheid te veranderen moet je moderator zijn en als deze mededeling op goedkeuring wachtte
 		// of al verwijderd was, verandert hier niets aan.
-		if(Mededeling::isModerator() AND $this->getZichtbaarheid()!='wacht_goedkeuring' AND $this->getZichtbaarheid()!='verwijderd'){
+		if( $this->getZichtbaarheid()===null OR (Mededeling::isModerator() AND $this->getZichtbaarheid()!='wacht_goedkeuring' AND $this->getZichtbaarheid()!='verwijderd') ) {
 			$this->zichtbaarheid=$array['zichtbaarheid'];
 		}
 		$this->plaatje=$array['plaatje'];
@@ -239,17 +239,21 @@ class Mededeling{
 		$db=MySql::instance();
 		$priveClause=$verborgenClause="";
 		$verborgenClause="zichtbaarheid='zichtbaar'";
-		if( Mededeling::isModerator() )
+		if( Mededeling::isModerator() ){
 			$verborgenClause="zichtbaarheid!='verwijderd'";
-		if( !LoginLid::instance()->hasPermission('P_LEDEN_READ') )
+		}
+		if( !LoginLid::instance()->hasPermission('P_LEDEN_READ') ){
 			$priveClause=" AND prive='0'";
+		}
 		$positieQuery="
 			SELECT COUNT(*) as positie
 			FROM mededeling
 			WHERE datum >= '".$this->getDatum()."' AND ".$verborgenClause.$priveClause;
 		$resource=$db->select($positieQuery);
-		$resultaat=$db->next($resource);
-		return ceil(($resultaat['positie'])/MededelingenContent::aantalPerPagina);
+		$record=$db->next($resource);
+		$paginaNummer=ceil(($record['positie'])/MededelingenContent::aantalPerPagina);
+		$paginaNummer=$paginaNummer >= 1 ? $paginaNummer : 1; // Het moet natuurlijk wel groter dan 0 zijn.
+		return $paginaNummer;
 	}
 
 //	public static function getNewest(){
