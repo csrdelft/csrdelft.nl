@@ -20,7 +20,7 @@
 			<strong>Categorie:</strong>
 			<select name="categorie">
 				{foreach from=$mededeling->getCategorie()->getAll() item=categorie}
-					{if $categorie->magUitbreiden()}
+					{if $categorie->magUitbreiden() OR $categorie->getId()==$mededeling->getCategorieId()}
 						<option value="{$categorie->getId()}"{if $mededeling->getCategorieId()==$categorie->getId()} selected="selected"{/if}>{$categorie->getNaam()|escape:'html'}</option>
 					{/if}
 				{/foreach}

@@ -111,9 +111,13 @@ switch($actie){
 			
 			// Check categorie.
 			$categorieValid=false;
+			$tijdelijkeMededeling=$mededelingId>0 ? new Mededeling($mededelingId) : null;
 			foreach(MededelingCategorie::getCategorieen() as $categorie){
-				if($mededelingProperties['categorie']==$categorie->getId() AND $categorie->magUitbreiden())
+				$hetIsDeze=($mededelingProperties['categorie']==$categorie->getId());
+				$categorieOnveranderd=($tijdelijkeMededeling!==null AND $tijdelijkeMededeling->getCategorieId()==$mededelingProperties['categorie']);
+				if( $hetIsDeze AND ($categorie->magUitbreiden() OR $categorieOnveranderd) ){
 					$categorieValid=true;
+				}
 			}
 			if(	!$categorieValid ){
 				$mededelingProperties['categorie']=null;
