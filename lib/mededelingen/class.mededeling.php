@@ -132,9 +132,7 @@ class Mededeling{
 		if($this->getUid()===null){ // Als we al een Uid hebben (uit de DB), hoeven we deze niet te vervangen.
 			$this->uid=$array['uid'];
 		}
-		if($this->getPrioriteit()===null OR Mededeling::isModerator()){
-			$this->prioriteit=$array['prioriteit'];
-		}
+		$this->prioriteit=$array['prioriteit'];
 		$this->prive=$array['prive'];
 		// Om zichtbaarheid te veranderen moet je moderator zijn en als deze mededeling op goedkeuring wachtte
 		// of al verwijderd was, verandert hier niets aan.

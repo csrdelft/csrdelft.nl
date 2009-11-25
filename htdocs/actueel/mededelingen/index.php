@@ -96,6 +96,7 @@ switch($actie){
 			}
 			
 			// Check if all values appear to be OK.
+			$tijdelijkeMededeling=$mededelingId>0 ? new Mededeling($mededelingId) : null;
 			if(strlen($mededelingProperties['titel'])<2){
 				$_SESSION['melding'].='Het veld <b>Titel</b> moet minstens 2 tekens bevatten.<br />';
 				$allOK=false;
@@ -104,14 +105,23 @@ switch($actie){
 				$_SESSION['melding'].='Het veld <b>Tekst</b> moet minstens 5 tekens bevatten.<br />';
 				$allOK=false;
 			}
-			if(	!isset($mededelingProperties['prioriteit']) OR array_search($mededelingProperties['prioriteit'],array_keys(Mededeling::getPrioriteiten())) == false ){
-				// If the priority is invalid.
-				$mededelingProperties['prioriteit']=Mededeling::defaultPrioriteit;
+			
+			// Check prioriteit.
+			$prioriteitIsOngeldig=true;
+			if(isset($mededelingProperties['prioriteit'])){
+				$prioriteitIsOngeldig=(array_search($mededelingProperties['prioriteit'],array_keys(Mededeling::getPrioriteiten())) === false);
+			}
+			// Indien de gebruiker geen moderator is OF de prioriteit ongeldig is.
+			if(!Mededeling::isModerator() OR $prioriteitIsOngeldig){
+				if($tijdelijkeMededeling!==null){ // We bewerken, dus huidige prioriteit behouden.
+					$mededelingProperties['prioriteit']=$tijdelijkeMededeling->getPrioriteit();
+				}else{ // We voegen toe, dus default prioriteit gebruiken.
+					$mededelingProperties['prioriteit']=Mededeling::defaultPrioriteit;
+				}
 			}
 			
 			// Check categorie.
 			$categorieValid=false;
-			$tijdelijkeMededeling=$mededelingId>0 ? new Mededeling($mededelingId) : null;
 			foreach(MededelingCategorie::getCategorieen() as $categorie){
 				$hetIsDeze=($mededelingProperties['categorie']==$categorie->getId());
 				$categorieOnveranderd=($tijdelijkeMededeling!==null AND $tijdelijkeMededeling->getCategorieId()==$mededelingProperties['categorie']);
