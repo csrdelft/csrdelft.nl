@@ -2,6 +2,14 @@
 
 from settings import dbuser, dbpass, ldapuser, ldappass
 
+dryrun = True
+
+import sys
+if '-y' in sys.argv:
+    dryrun = False
+else:
+    print "N.B. wijzigingen worden alleen daadwerkelijk doorgevoerd als u dit script met argument -y draait"
+
 print "Verbinden naar mysql..."
 import MySQLdb
 db = MySQLdb.connect(host="localhost", user=dbuser, passwd=dbpass, db="csrdelft")
@@ -56,13 +64,15 @@ for naam in missing:
            ('member', ["uid=%s,ou=leden,dc=csrdelft,dc=nl" % x for x in dbuids[naam]]),
           ]
     print "Missende groep in ldap:", naam
-    l.add_s('cn=%s,ou=groepen,dc=csrdelft,dc=nl' % naam, new)
+    if not dryrun:
+        l.add_s('cn=%s,ou=groepen,dc=csrdelft,dc=nl' % naam, new)
 
 # welke groep staat wel in ldap maar niet in de db?
 toremove = ldapnamen - dbnamen
 for naam in toremove:
     print "Groep in ldap die niet (meer) in de db staat:", naam
-    l.delete('cn=%s,ou=groepen,dc=csrdelft,dc=nl' % naam)
+    if not dryrun:
+        l.delete('cn=%s,ou=groepen,dc=csrdelft,dc=nl' % naam)
 
 present = ldapnamen & dbnamen
 #print "Groepen die zowel in db als in ldap staan:", present
@@ -74,7 +84,8 @@ for naam in present:
         modify.append((ldap.MOD_DELETE, 'member', "uid=%s,ou=leden,dc=csrdelft,dc=nl" % uid))
     if modify:
         print "Wijzigingen in groep %s"% naam, modify 
-        l.modify_s('cn=%s,ou=groepen,dc=csrdelft,dc=nl' % naam, modify)
+        if not dryrun:
+            l.modify_s('cn=%s,ou=groepen,dc=csrdelft,dc=nl' % naam, modify)
 
 l.unbind()
 db.close()
