@@ -29,7 +29,8 @@ dbuids = {}
 cursor.execute("select snaam, id from groep where status='ht' and gtype=1")
 result = cursor.fetchall() # ('Cie',1)
 for entry in result:
-    cursor.execute("select uid from groeplid where groepid=%d" % entry[1])
+    #cursor.execute("select uid from groeplid where groepid=%d" % entry[1])
+    cursor.execute("select distinct uid from groeplid where groepid=%d or groepid=(select id from groep where status='ot' and snaam='%s' order by begin desc limit 1)" % (entry[1],entry[0]))
     naam = entry[0]
     uids = flatten(cursor.fetchall())
     dbnamen.add(naam)
@@ -83,7 +84,7 @@ for naam in present:
     for uid in ldapuids[naam] - dbuids[naam]:
         modify.append((ldap.MOD_DELETE, 'member', "uid=%s,ou=leden,dc=csrdelft,dc=nl" % uid))
     if modify:
-        print "Wijzigingen in groep %s"% naam, modify 
+        print "Wijzigingen (erbij=%d, weg=%d) in groep %s" % (ldap.MOD_ADD, ldap.MOD_DELETE, naam), modify 
         if not dryrun:
             l.modify_s('cn=%s,ou=groepen,dc=csrdelft,dc=nl' % naam, modify)
 
