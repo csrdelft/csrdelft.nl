@@ -115,6 +115,11 @@ class Mededeling{
 		}
 		return $return;
 	}
+	public function delete(){
+		$db=MySql::instance();
+		$delete="UPDATE mededeling SET zichtbaarheid='verwijderd' WHERE id=".$this->getId().";";
+		return $db->query($delete);
+	}
 	public function keurGoed(){
 		$this->zichtbaarheid='zichtbaar';
 		$this->save();

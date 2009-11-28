@@ -33,15 +33,22 @@ switch($actie){
 		}
 		if($mededelingId>0){
 			$mededeling=new Mededeling($mededelingId);
-			if(Mededeling::isModerator() OR $mededeling->getUid()==LoginLid::instance()->getUid())
-				$mededeling->delete();
-			else{ // Dit lid mag deze mededeling helemaal niet verwijderen!
+			if(Mededeling::isModerator() OR $mededeling->getUid()==LoginLid::instance()->getUid()){
+				$verwijderd=$mededeling->delete();
+				if($verwijderd===false){
+					$_SESSION['melding']='Het verwijderen is mislukt.';
+				}else{
+					$_SESSION['melding']='De mededeling is succesvol verwijderd.';
+				}
+			}else{ // Dit lid mag deze mededeling helemaal niet verwijderen!
 				header('location: '.CSR_ROOT);
 				exit;
 			}
 		}
-		$content=new MededelingenContent();
-		// TODO: refreshen.
+		require_once('mededelingen/class.mededelingencontent.php');
+		$content=new MededelingenContent(0);
+		// De eerste pagina laden.
+		$content->setPaginaNummer(1);
 	break; 
 
 	case 'bewerken':
