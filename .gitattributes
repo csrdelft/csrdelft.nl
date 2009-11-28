@@ -117,6 +117,7 @@ htdocs/layout/js/sneltoetsen.js -text
 htdocs/layout/js/suggest.js -text
 htdocs/layout/js/verticalen.js -text
 htdocs/layout/lightbox.css -text
+htdocs/layout/mededelingen.css -text
 htdocs/layout/owee.css -text
 htdocs/layout/pauper.css -text
 htdocs/layout/profiel.css -text

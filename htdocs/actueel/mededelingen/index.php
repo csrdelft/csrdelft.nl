@@ -189,6 +189,7 @@ switch($actie){
 }
 
 $page=new csrdelft($content);
+$page->addStylesheet('mededelingen.css');
 $page->view();
 
 function resize_plaatje($file) {

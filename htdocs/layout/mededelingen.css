@@ -1,0 +1,123 @@
+/* nieuws */
+.nieuwsbericht, .nieuwsbericht-vast{
+	float: left;
+	margin: 0px 10px 5px 0px;
+	padding: 8px 8px 8px 8px;
+	min-height: 200px; _height: 200px;
+	border-top: 1px solid black;
+	border-left: 1px solid black;
+	background-color: #ffef7d;
+	width: 360px;
+}
+.nieuwsplaatje{	margin: 0px 0px 0px 8px; float: right; border: 1px solid black;}
+.nieuwsbody{	margin: 0px 0px 0px 0px; padding: 0px 3px 5px 0px;}	
+.nieuwstitel{	font-size: 1.3em; font-weight: bold; margin-bottom: 5px; text-align: left;}
+.nieuwstitel a{ color:  black;}
+.nieuwsbericht-vast{ height: 100px;	}
+
+#mededelingen-titel{
+	height: 20px;
+	width: 70%;
+	margin: 0px 0px 10px 0px;
+}
+.mededelingen-overzichtlijst{
+	width: 320px;
+	float: left;
+}
+.mededelingen-beheerlink{
+	width: 20%;
+	float: right;
+	text-align: right;
+}
+.mededelingenlijst-block{
+	margin: 0px 10px 10px 0px;
+	width: 300px;
+}
+.mededelingenlijst-block-titel{
+	height: 16px;
+	padding-top: 2px;
+	padding-left: 7px;
+	border: 1px solid #B4B4B4;
+	background-color: #F0F0F0;
+	color: #000000;
+	font-size: 11px;
+	font-weight: bold;
+}
+.mededelingenlijst-item{
+	padding: 3px 2px 3px 7px;
+	font-size: 11px;
+	border-bottom: 1px solid #B8B8B8;
+}
+.mededelingenlijst-item .itemtitel{
+	text-align: left;
+}
+.mededelingenlijst-item#actief{
+	background-color: #ffef7d;
+}
+.mededelingenlijst-block a{	color: black; }
+.mededelingenlijst-plaatje{ margin: 0px 5px 0px 0px; float: left; }
+#top1mededeling{
+	height: 200px; width: 200px;
+}
+#top1mededeling #titel{
+	height: 30px; width: 190px;
+	padding: 5px;
+	font-size: 12px;
+	/*font-weight: bold;*/
+	color: white;
+	text-align: left;
+	position: relative; top: -60px;
+	overflow: hidden;
+	background-color: black;
+	filter:alpha(opacity=65);
+	-moz-opacity:.65;
+	opacity:.65;
+}
+.mededelingenlijst-block .verborgen-item, .mededelingenlijst-block .verborgen-item a{
+	color: grey;
+}
+.mededeling-grotebalk{
+	height: 70px;
+	padding: 8px 12px 8px 6px;
+	margin-bottom: 10px;
+	border-top: 1px solid #B8B8B8;
+	border-left: 1px solid #B8B8B8;
+	background-color: #F0F0F0;
+	overflow: hidden;
+}
+.mededeling-grotebalk .plaatje{
+	width: 70px;
+	height: 70px;
+	margin-right: 10px;
+	float: left;
+	overflow: hidden;
+}
+.mededeling-grotebalk .titel{
+	font-weight: bold;
+	font-size: 1.1em;
+}
+.mededeling-grotebalk .bericht{
+	text-align: left;
+}
+#mededelingen-top3block{
+	float: left;
+	margin: 10px 10px 0px 0px;
+	width: 376px;
+}
+.mededelingen_paginering{
+	margin-right: 15px;
+	text-align: right;
+}
+.mededelingen_paginering a{
+	padding: 0px 5px 0px 5px;
+}
+.mededelingen_paginering span.curpage{
+	font-weight: bold;
+	padding: 0px 5px 0px 5px;
+}
+/* positionering van het vergroot-invoerveld-knop */
+.knop#vergroot{
+	position: relative;
+	top: 2px;
+	left: -13px;
+}

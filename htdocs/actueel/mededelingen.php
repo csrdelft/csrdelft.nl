@@ -111,6 +111,7 @@ if(isset($_POST['titel'], $_POST['tekst'], $_POST['categorie'], $_POST['rank']) 
 
 # pagina weergeven
 $pagina=new csrdelft($nieuwscontent);
+$pagina->addStylesheet('mededelingen.css');
 $pagina->view();
 
 ?>
