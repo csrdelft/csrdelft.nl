@@ -672,3 +672,33 @@ form#streeplijst input, label{ text-align: left; margin: 3px; padding: 0px; line
 	
 }
 /* Peilingbeheer */
+
+/* Mededelingen */
+.mededeling-grotebalk{
+	height: 70px;
+	padding: 8px 12px 8px 6px;
+	margin-bottom: 10px;
+	border-top: 1px solid #B8B8B8;
+	border-left: 1px solid #B8B8B8;
+	background-color: #F0F0F0;
+	overflow: hidden;
+}
+.mededeling-grotebalk .plaatje{
+	width: 70px;
+	height: 70px;
+	margin-right: 10px;
+	float: left;
+	overflow: hidden;
+}
+.mededeling-grotebalk .titel{
+	font-weight: bold;
+	font-size: 1.1em;
+}
+.mededeling-grotebalk .bericht{
+	text-align: left;
+}
+#mededelingen-top3block{
+	float: left;
+	margin: 10px 10px 0px 0px;
+	width: 376px;
+}
