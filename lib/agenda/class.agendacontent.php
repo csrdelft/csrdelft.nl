@@ -101,7 +101,7 @@ class AgendaZijbalkContent extends SimpleHTML {
 		$filter = !LoginLid::instance()->hasPermission('P_AGENDA_MOD');
 		
 		$beginMoment = strtotime(date('Y-m-d'));
-		$eindMoment = strtotime('+2 weeks', $beginMoment);
+		$eindMoment = strtotime('+'.$this->aantalWeken.' weeks', $beginMoment);
 		$eindMoment = strtotime('next saturday', $eindMoment);
 		$items = $this->agenda->getItems($beginMoment, $eindMoment, $filter);
 		
