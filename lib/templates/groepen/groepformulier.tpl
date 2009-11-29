@@ -8,11 +8,11 @@
 			<div id="groepSnaam" class="opmerking">
 				Voor gebruik in urls &eacute;n ter sortering. Alleen letters en cijfers, geen spaties. Voor elkaar opvolgende groepen dezelfde naam gebruiken.<br />
 			</div>
-			<input type="text"  name="snaam" value="{$groep->getSnaam()|escape:'html'}" />
+			<input type="text" maxlength="20"  name="snaam" value="{$groep->getSnaam()|escape:'html'}" />
 			
 		{/if}
 		<label for="groepNaam" class="clear"><strong>Naam:</strong></label>
-		<input type="text" id="groepNaam" name="naam" style="width: 70%" value="{$groep->getNaam()|escape:'html'}" /><br />
+		<input type="text" id="groepNaam" maxlength="50" name="naam" style="width: 70%" value="{$groep->getNaam()|escape:'html'}" /><br />
 
 		<label for="groepStatus"><strong>Status:</strong></label>
 		<select name="status" id="groepStatus" onchange="updateGroepform();">
