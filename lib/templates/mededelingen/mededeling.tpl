@@ -11,11 +11,16 @@
 				<a id="vergroot" class="handje knop" onclick="vergrootTextarea('tekst', 10)" title="Vergroot het invoerveld"><strong>&uarr;&darr;</strong></a>
 			</div>
 		</div>
-		<div style="height: 300px; width: 30%; float: left;">Dit bericht…<br />
-			<input id="prive" type="checkbox" name="prive" {if $mededeling->isPrive()}checked="checked"{/if} /><label for="prive">…alleen weergeven bij leden</label><br />
+		<div style="height: 300px; width: 30%; float: left;">
 			{if $mededeling->isModerator() AND $mededeling->getZichtbaarheid()!='wacht_goedkeuring'}
-				<input id="verborgen" type="checkbox" name="verborgen"{if $mededeling->isVerborgen()} checked="checked"{/if} /><label for="verborgen">…verbergen</label><br />
+				<br /><input id="verborgen" type="checkbox" name="verborgen"{if $mededeling->isVerborgen()} checked="checked"{/if} /><label for="verborgen">Dit bericht verbergen</label><br /><br />
 			{/if}
+			<strong>Doelgroep:</strong>
+			<select name="doelgroep">
+				{foreach from=$mededeling->getDoelgroepen() item=doelgroep}
+					<option value="{$doelgroep}"{if $mededeling->getDoelgroep()==$doelgroep} selected="selected"{/if}>{$doelgroep}</option>
+				{/foreach}
+			</select>
 			<br />
 			<strong>Categorie:</strong>
 			<select name="categorie">

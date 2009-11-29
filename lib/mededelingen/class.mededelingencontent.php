@@ -3,17 +3,17 @@ class MededelingenContent extends SimpleHTML{
 	private $geselecteerdeMededeling;
 	private $paginaNummer;
 	private $paginaNummerOpgevraagd;
-	private $topMost;
 	
 	const aantalTopMostBlock=3;
 	const aantalPerPagina=6;
+	const mededelingenRoot='/actueel/mededelingen/';
 	
 	public function __construct($mededelingId){
 		$this->geselecteerdeMededeling=null;
 		$this->paginaNummer=1;
 		$this->paginaNummerOpgevraagd=false;
 
-		$this->topMost=Mededeling::getTopmost(self::aantalTopMostBlock); // Haal de n belangrijkste mededelingen op.
+		$topMost=Mededeling::getTopmost(self::aantalTopMostBlock); // Haal de n belangrijkste mededelingen op.
 		
 		if($mededelingId!=0){
 			try{
@@ -25,8 +25,9 @@ class MededelingenContent extends SimpleHTML{
 		if($this->geselecteerdeMededeling===null){
 			// Als er minstens één 'topmost' mededeling is, maak dat de geselecteerde.
 			// Anders, hou $this->geselecteerdeMededeling gelijk aan null.
-			if(isset($this->topMost[0]))
-				$this->geselecteerdeMededeling=$this->topMost[0];
+			if(isset($topMost[0])){
+				$this->geselecteerdeMededeling=$topMost[0];
+			}
 		}
 	}
 	
@@ -43,12 +44,10 @@ class MededelingenContent extends SimpleHTML{
 		}
 		
 		$content=new Smarty_csr();
-		define( 'NIEUWS_ROOT', '/actueel/mededelingen/');
 
 		$content->assign('melding', $this->getMelding());
-		$content->assign('nieuws_root', NIEUWS_ROOT);
+		$content->assign('nieuws_root', self::mededelingenRoot);
 		
-		$content->assign('topmost', $this->topMost);
 		$content->assign('lijst', Mededeling::getLijstVanPagina($this->paginaNummer, self::aantalPerPagina));
 		$content->assign('geselecteerdeMededeling', $this->geselecteerdeMededeling);
 		
@@ -56,6 +55,17 @@ class MededelingenContent extends SimpleHTML{
 		$content->assign('totaalAantalPaginas', (ceil(Mededeling::getAantal()/self::aantalPerPagina)));
 
 		$content->display('mededelingen/mededelingen.tpl');
+	}
+	
+	public function getTopBlock($oudledenVersie=false){
+		$content=new Smarty_csr();
+		
+		$topMost=Mededeling::getTopmost(self::aantalTopMostBlock, $oudledenVersie);
+
+		$content->assign('mededelingenRoot', self::mededelingenRoot);
+		$content->assign('topmost', $topMost);
+
+		return $content->fetch('mededelingen/mededelingentopblock.tpl');
 	}
 }
 ?>

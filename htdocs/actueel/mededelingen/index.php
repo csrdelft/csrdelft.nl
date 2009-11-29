@@ -69,7 +69,7 @@ switch($actie){
 			if(isset($_POST['prioriteit'])){
 				$mededelingProperties['prioriteit']=		(int)$_POST['prioriteit'];
 			}
-			$mededelingProperties['prive']=		isset($_POST['prive']) ? 1 : 0;
+			$mededelingProperties['doelgroep']=	$_POST['doelgroep'];
 			if(!Mededeling::isModerator()){
 				$mededelingProperties['zichtbaarheid']='wacht_goedkeuring';
 			}else{
@@ -125,6 +125,12 @@ switch($actie){
 				}else{ // We voegen toe, dus default prioriteit gebruiken.
 					$mededelingProperties['prioriteit']=Mededeling::defaultPrioriteit;
 				}
+			}
+			
+			// Check doelgroep.
+			if(array_search($mededelingProperties['doelgroep'], Mededeling::getDoelgroepen())===false){
+				$_SESSION['melding'].='De doelgroep is ongeldig.<br />';
+				$allOK=false;
 			}
 			
 			// Check categorie.

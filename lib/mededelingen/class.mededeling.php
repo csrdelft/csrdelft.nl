@@ -15,7 +15,7 @@ class Mededeling{
 	private $titel;
 	private $tekst;
 	private $zichtbaarheid;
-	private $prive=0;
+	private $doelgroep;
 	private $categorieId=0;
 	private $prioriteit;
 	private $plaatje='';
@@ -44,7 +44,7 @@ class Mededeling{
 	public function load($id=0){
 		$db=MySql::instance();
 		$loadQuery="
-			SELECT id, datum, titel, tekst, categorie, uid, prioriteit, prive, zichtbaarheid, plaatje, categorie
+			SELECT id, datum, titel, tekst, categorie, uid, prioriteit, doelgroep, zichtbaarheid, plaatje, categorie
 			FROM mededeling
 			WHERE id=".(int)$id.";";
 		$mededeling=$db->getRow($loadQuery);
@@ -67,14 +67,14 @@ class Mededeling{
 		if($this->getId()==0){
 			$saveQuery="
 				INSERT INTO mededeling (
-					titel, tekst, datum, uid, prioriteit, prive, zichtbaarheid, categorie, plaatje
+					titel, tekst, datum, uid, prioriteit, doelgroep, zichtbaarheid, categorie, plaatje
 				)VALUES(
 					'".$db->escape($this->getTitel())."',
 					'".$db->escape($this->getTekst())."',
 					'".$this->getDatum()."',
 					'".$this->getUid()."',
 					".(int)$this->getPrioriteit().",
-					'".(int)$this->getPrive()."',
+					'".$this->getDoelgroep()."',
 					'".$this->getZichtbaarheid()."',
 					".(int)$this->getCategorieId().",
 					'".$db->escape($this->getPlaatje())."'
@@ -96,7 +96,7 @@ class Mededeling{
 					datum='".$this->getDatum()."',
 					uid='".$this->getUid()."',
 					prioriteit=".(int)$this->getPrioriteit().",
-					prive='".(int)$this->getPrive()."',
+					doelgroep='".$this->getDoelgroep()."',
 					zichtbaarheid='".$this->getZichtbaarheid()."',
 					categorie=".(int)$this->getCategorieId().
 					$setPlaatje."
@@ -138,7 +138,7 @@ class Mededeling{
 			$this->uid=$array['uid'];
 		}
 		$this->prioriteit=$array['prioriteit'];
-		$this->prive=$array['prive'];
+		$this->doelgroep=$array['doelgroep'];
 		// Om zichtbaarheid te veranderen moet je moderator zijn en als deze mededeling op goedkeuring wachtte
 		// of al verwijderd was, verandert hier niets aan.
 		if( $this->getZichtbaarheid()===null OR (Mededeling::isModerator() AND $this->getZichtbaarheid()!='wacht_goedkeuring' AND $this->getZichtbaarheid()!='verwijderd') ) {
@@ -160,8 +160,8 @@ class Mededeling{
 	public function getDatum(){ return $this->datum; } //TODO: leesbare datum teruggeven(??)
 	public function getUid(){ return $this->uid; }
 	public function getPrioriteit(){ return $this->prioriteit; }
-	public function getPrive(){ return $this->prive; }
-	public function isPrive(){ return $this->getPrive()==1; }
+	public function getDoelgroep(){ return $this->doelgroep; }
+	public function isPrive(){ return $this->getDoelgroep()!='iedereen'; }
 	public function getZichtbaarheid(){ return $this->zichtbaarheid; }
 	public function isVerborgen(){ return $this->getZichtbaarheid()=='onzichtbaar'; }
 	public function getPlaatje(){ return $this->plaatje; }
@@ -173,17 +173,20 @@ class Mededeling{
 		return $this->categorie;
 	}
 
-	public static function getTopmost($aantal){
+	public static function getTopmost($aantal, $oudledenVersie=false){
 		$topmost=array();
 		if(is_numeric($aantal) and $aantal>0){
 			$db=MySql::instance();
-			$priveClause="";
-			if( !LoginLid::instance()->hasPermission('P_LEDEN_READ') )
-				$priveClause=" AND prive='0'";
+			$doelgroepClause="";
+			if( !LoginLid::instance()->hasPermission('P_LEDEN_READ') ){
+				$doelgroepClause=" AND doelgroep='iedereen'";
+			}else if($oudledenVersie){
+				$doelgroepClause=" AND doelgroep='(oud)leden'";
+			}
 			$topmostQuery="
 				SELECT id
 				FROM mededeling
-				WHERE zichtbaarheid='zichtbaar'".$priveClause."
+				WHERE zichtbaarheid='zichtbaar'".$doelgroepClause."
 				ORDER BY prioriteit ASC, datum DESC
 				LIMIT ".$aantal;
 			$resource=$db->select($topmostQuery);
@@ -197,16 +200,16 @@ class Mededeling{
 	public static function getLijstVanPagina($pagina=1, $aantal){
 		$mededelingen=array();
 		$db=MySql::instance();
-		$priveClause=$verborgenClause="";
+		$doelgroepClause=$verborgenClause="";
 		$verborgenClause="zichtbaarheid='zichtbaar'";
 		if( Mededeling::isModerator() )
 			$verborgenClause="zichtbaarheid!='verwijderd'";
 		if( !LoginLid::instance()->hasPermission('P_LEDEN_READ') )
-			$priveClause=" AND prive='0'";
+			$doelgroepClause=" AND doelgroep='iedereen'";
 		$paginaQuery="
 			SELECT id, datum
 			FROM mededeling
-			WHERE ".$verborgenClause.$priveClause."
+			WHERE ".$verborgenClause.$doelgroepClause."
 			ORDER BY datum DESC
 			LIMIT ".(($pagina-1)*$aantal).", ".$aantal;
 		$resource=$db->select($paginaQuery);
@@ -223,16 +226,16 @@ class Mededeling{
 	
 	public static function getAantal(){
 		$db=MySql::instance();
-		$priveClause=$verborgenClause="";
+		$doelgroepClause=$verborgenClause="";
 		$verborgenClause="zichtbaarheid='zichtbaar'";
 		if( Mededeling::isModerator() )
 			$verborgenClause="zichtbaarheid!='verwijderd'";
 		if( !LoginLid::instance()->hasPermission('P_LEDEN_READ') )
-			$priveClause=" AND prive='0'";
+			$doelgroepClause=" AND doelgroep='iedereen'";
 		$aantalQuery="
 			SELECT COUNT(*) as aantal
 			FROM mededeling
-			WHERE ".$verborgenClause.$priveClause;
+			WHERE ".$verborgenClause.$doelgroepClause;
 		$resource=$db->select($aantalQuery);
 		$resultaat=$db->next($resource);
 		return (int)$resultaat['aantal'];
@@ -240,18 +243,18 @@ class Mededeling{
 	
 	public function getPaginaNummer(){
 		$db=MySql::instance();
-		$priveClause=$verborgenClause="";
+		$doelgroepClause=$verborgenClause="";
 		$verborgenClause="zichtbaarheid='zichtbaar'";
 		if( Mededeling::isModerator() ){
 			$verborgenClause="zichtbaarheid!='verwijderd'";
 		}
 		if( !LoginLid::instance()->hasPermission('P_LEDEN_READ') ){
-			$priveClause=" AND prive='0'";
+			$doelgroepClause=" AND doelgroep='iedereen'";
 		}
 		$positieQuery="
 			SELECT COUNT(*) as positie
 			FROM mededeling
-			WHERE datum >= '".$this->getDatum()."' AND ".$verborgenClause.$priveClause;
+			WHERE datum >= '".$this->getDatum()."' AND ".$verborgenClause.$doelgroepClause;
 		$resource=$db->select($positieQuery);
 		$record=$db->next($resource);
 		$paginaNummer=ceil(($record['positie'])/MededelingenContent::aantalPerPagina);
@@ -286,6 +289,10 @@ class Mededeling{
 			$prioriteiten[$i]='Top '.$i;
 		}
 		return $prioriteiten;
+	}
+	
+	public static function getDoelgroepen(){
+		return array('iedereen', '(oud)leden', 'leden');
 	}
 	
 	// function magBewerken()
