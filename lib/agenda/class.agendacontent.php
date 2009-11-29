@@ -27,9 +27,11 @@ class AgendaMaandContent extends SimpleHTML {
 	}
 
 	public function view(){
+		$filter = !LoginLid::instance()->hasPermission('P_AGENDA_MOD');
+		
 		$content = new Smarty_csr();
 		$content->assign('datum', strtotime($this->jaar.'-'.$this->maand.'-01'));
-		$content->assign('weken', $this->agenda->getItemsByMaand($this->jaar, $this->maand));
+		$content->assign('weken', $this->agenda->getItemsByMaand($this->jaar, $this->maand, $filter));
 		$content->assign('magToevoegen', $this->agenda->magToevoegen());
 		$content->assign('magBeheren', $this->agenda->magBeheren());
 		$content->assign('melding', $this->getMelding());
@@ -96,10 +98,12 @@ class AgendaZijbalkContent extends SimpleHTML {
 	}
 	
 	public function view() {
+		$filter = !LoginLid::instance()->hasPermission('P_AGENDA_MOD');
+		
 		$beginMoment = strtotime(date('Y-m-d'));
 		$eindMoment = strtotime('+2 weeks', $beginMoment);
 		$eindMoment = strtotime('next saturday', $eindMoment);
-		$items = $this->agenda->getItems($beginMoment, $eindMoment, true);
+		$items = $this->agenda->getItems($beginMoment, $eindMoment, $filter);
 		
 		$content = new Smarty_csr();
 		$content->assign('items', $items);

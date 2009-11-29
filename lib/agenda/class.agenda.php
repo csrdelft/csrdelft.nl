@@ -154,7 +154,7 @@ class Agenda {
 		return LoginLid::instance()->hasPermission('P_AGENDA_MOD');
 	}
 
-	public function getItems($van=null, $tot=null, $filter=false) {
+	public function getItems($van=null, $tot=null, $filter) {
 		$result = array();
 
 		// Regulie agenda-items
@@ -193,7 +193,7 @@ class Agenda {
 		return $this->getItems($van, $tot);
 	}
 
-	public function getItemsByMaand($jaar, $maand) {		
+	public function getItemsByMaand($jaar, $maand, $filter) {		
 		// Zondag van de eerste week van de maand uitrekenen
 		$startMoment = mktime(0, 0, 0, $maand, 1, $jaar);		
 		if (date('w', $startMoment) != 0) {
@@ -223,7 +223,7 @@ class Agenda {
 		}
 				
 		// Items toevoegen aan het array
-		$items = $this->getItems($startMoment, $eindMoment);
+		$items = $this->getItems($startMoment, $eindMoment, $filter);
 		foreach ($items as $item) {
 			$week = Agenda::weekNumber($item->getBeginMoment());
 			$dag = date('d', $item->getEindMoment());
