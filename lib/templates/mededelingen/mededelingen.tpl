@@ -39,23 +39,26 @@
 					<em>[verborgen]</em><br />
 				{/if}
 				<img class="nieuwsplaatje" src="{$csr_pics}nieuws/{$geselecteerdeMededeling->getPlaatje()}" width="200px" height="200px" alt="{$geselecteerdeMededeling->getPlaatje()}" />
-				<i>{$geselecteerdeMededeling->getDatum()}</i><br />
-				{if $geselecteerdeMededeling->isModerator()}{$geselecteerdeMededeling->getUid()|csrnaam}<br />{/if}
 				{$geselecteerdeMededeling->getTekst()|ubb}<br />
 			</div>
-			{if $geselecteerdeMededeling->magBewerken()}
-				<a href="{$nieuws_root}bewerken/{$geselecteerdeMededeling->getId()}">
-					{icon get="bewerken"}
-				</a>
-				<a href="{$nieuws_root}verwijderen/{$geselecteerdeMededeling->getId()}" onclick="return confirm('Weet u zeker dat u deze mededeling wilt verwijderen?');">
-					{icon get="verwijderen"}
-				</a>
-				{if $geselecteerdeMededeling->isModerator() AND $geselecteerdeMededeling->getZichtbaarheid()=='wacht_goedkeuring'}
-					<a onclick="return confirm('Weet u zeker dat u deze mededeling wilt goedkeuren?')" href="{$nieuws_root}keur-goed/{$geselecteerdeMededeling->getId()}">
-						{icon get="goedkeuren"}
+			<div class="informatie">
+				<hr />
+				Geplaatst op {$geselecteerdeMededeling->getDatum()|date_format:'%d-%m-%Y'}{if $geselecteerdeMededeling->isModerator()} door {$geselecteerdeMededeling->getUid()|csrnaam}{/if}<br />
+				Categorie: {$geselecteerdeMededeling->getCategorie()->getNaam()}<br />
+				{if $geselecteerdeMededeling->magBewerken()}
+					<a href="{$nieuws_root}bewerken/{$geselecteerdeMededeling->getId()}">
+						{icon get="bewerken"}
 					</a>
+					<a href="{$nieuws_root}verwijderen/{$geselecteerdeMededeling->getId()}" onclick="return confirm('Weet u zeker dat u deze mededeling wilt verwijderen?');">
+						{icon get="verwijderen"}
+					</a>
+					{if $geselecteerdeMededeling->isModerator() AND $geselecteerdeMededeling->getZichtbaarheid()=='wacht_goedkeuring'}
+						<a onclick="return confirm('Weet u zeker dat u deze mededeling wilt goedkeuren?')" href="{$nieuws_root}keur-goed/{$geselecteerdeMededeling->getId()}">
+							{icon get="goedkeuren"}
+						</a>
+					{/if}
 				{/if}
-			{/if}
+			</div>
 		</div>
 		
 		{* Het Topmost block *}

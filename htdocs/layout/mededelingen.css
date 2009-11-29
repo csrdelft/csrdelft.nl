@@ -9,6 +9,13 @@
 	background-color: #ffef7d;
 	width: 360px;
 }
+.nieuwsbericht .informatie{
+	font-size: 90%;
+	color: gray;
+}
+.nieuwsbericht .informatie img{
+	margin-top: 3px;
+}
 .nieuwsplaatje{	margin: 0px 0px 0px 8px; float: right; border: 1px solid black;}
 .nieuwsbody{	margin: 0px 0px 0px 0px; padding: 0px 3px 5px 0px;}	
 .nieuwstitel{	font-size: 1.3em; font-weight: bold; margin-bottom: 5px; text-align: left;}
