@@ -93,7 +93,7 @@ class AgendaController extends Controller {
 		
 		if ($this->isPosted()) {
 			$item = $this->maakItem();
-			if ($this->valideerItem($item) === false) {
+			if ($this->valideerItem(&$item) === false) {
 				
 			} else {
 				$item->opslaan();
@@ -185,9 +185,10 @@ class AgendaController extends Controller {
 		}
 		if ($item->getBeginMoment() >= $item->getEindMoment()) {
 			$this->addError('Beginmoment moet voor eindmoment liggen.');
+			$item->setEindMoment($item->getBeginMoment());
 		}
 		if (date('Y-m-d', $item->getBeginMoment()) != date('Y-m-d', $item->getEindMoment())) {
-			$this->addError('Beginmoment en eindmoment moeten op dezelfde dag zijn.');
+			$this->addError('Beginmoment en eindmoment moeten op dezelfde dag zijn.');			
 		}
 
 		if ($this->valid) {
