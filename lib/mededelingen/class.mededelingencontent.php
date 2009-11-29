@@ -13,11 +13,14 @@ class MededelingenContent extends SimpleHTML{
 		$this->paginaNummer=1;
 		$this->paginaNummerOpgevraagd=false;
 
-		$topMost=Mededeling::getTopmost(self::aantalTopMostBlock); // Haal de n belangrijkste mededelingen op.
-		
 		if($mededelingId!=0){
 			try{
 				$this->geselecteerdeMededeling=new Mededeling($mededelingId);
+				if(($this->geselecteerdeMededeling->isPrive() AND !LoginLid::instance()->hasPermission('P_LEDEN_READ')) OR
+						($this->geselecteerdeMededeling->getZichtbaarheid()=='wacht_goedkeuring' AND !Mededeling::isModerator())){
+					// De gebruiker heeft geen rechten om dit bericht te bekijken, dus we resetten het weer.
+					$this->geselecteerdeMededeling=null;
+				}
 			} catch (Exception $e) {
 				// Doe niets, zodat $geselecteerdeMededeling gelijk blijft aan null.
 			}
@@ -25,6 +28,7 @@ class MededelingenContent extends SimpleHTML{
 		if($this->geselecteerdeMededeling===null){
 			// Als er minstens één 'topmost' mededeling is, maak dat de geselecteerde.
 			// Anders, hou $this->geselecteerdeMededeling gelijk aan null.
+			$topMost=Mededeling::getTopmost(self::aantalTopMostBlock); // Haal de n belangrijkste mededelingen op.
 			if(isset($topMost[0])){
 				$this->geselecteerdeMededeling=$topMost[0];
 			}
