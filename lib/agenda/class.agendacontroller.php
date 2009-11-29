@@ -93,7 +93,7 @@ class AgendaController extends Controller {
 		
 		if ($this->isPosted()) {
 			$item = $this->maakItem();
-			if ($this->valideerItem(&$item) === false) {
+			if ($this->valideerItem($item) === false) {
 				
 			} else {
 				$item->opslaan();
