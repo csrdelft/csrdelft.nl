@@ -194,7 +194,7 @@ class Agenda {
 	/**
 	 * Vergelijkt twee Agendeerbaars op beginMoment t.b.v. sorteren.
 	 */
-	public static function vergelijkAgendeerbaars($foo, $bar) {
+	public static function vergelijkAgendeerbaars(Agendeerbaar $foo, Agendeerbaar $bar) {
 		if ($foo->getBeginMoment() == $bar->getBeginMoment) {
 			return 0;
 		}
