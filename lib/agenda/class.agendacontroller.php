@@ -81,16 +81,120 @@ class AgendaController extends Controller {
 		$this->content->setActie('jaar');
 	}
 
+	/**
+	 * Item toevoegen aan de agenda.
+	 */
 	public function action_toevoegen() {
-
+		if (!$this->agenda->magToevoegen()) {
+			$this->action = 'geentoegang';
+			$this->performAction();
+			return;
+		}
+		
+		if ($this->isPosted()) {
+			$item = $this->maakItem();
+			if ($this->valideerItem($item) === false) {
+				
+			} else {
+				$item->opslaan();
+				AgendaMaandContent::invokeRefresh('Het agenda-item is succesvol toegevoegd.', '/actueel/agenda/'.date('Y-m', $item->getBeginMoment()).'/');
+			}
+		} else {			
+			if ($this->hasParam(1) AND preg_match('/^[0-9]{4}\-[0-9]{1,2}-[0-9]{1,2}$/', $this->getParam(1))) {
+				$dag = strtotime($this->getParam(1));
+			} else {
+				$dag = time();
+				// Afkappen naar 0:00
+				$dag = strtotime(substr(date('Y-m-d', $dag), 0, 10)); 
+			}
+			
+			$beginMoment = $dag + 72000;
+			$eindMoment = $dag + 79200;
+			
+			$item = new AgendaItem(0, $beginMoment, $eindMoment);
+		}
+		
+		$this->content = new AgendaItemContent($this->agenda, $item, 'toevoegen');
+		$this->content->setMelding($this->errors);
 	}
 	
 	public function action_bewerken() {
-
+		if (!$this->agenda->magBeheren()) {
+			$this->action = 'geentoegang';
+			$this->performAction();
+			return;
+		}
+		
+		if ($this->hasParam(1) && is_numeric($this->getParam(1))) {
+			$itemID = (int)$this->getParam(1);
+			
+			if ($this->isPosted()) {
+				$item = $this->maakItem($itemID);
+				if ($this->valideerItem($item) === false) {
+					
+				} else {
+					$item->opslaan();
+					AgendaMaandContent::invokeRefresh('Het agenda-item is succesvol bewerkt.', '/actueel/agenda/'.date('Y-m', $item->getBeginMoment()).'/');
+				}
+			} else {		
+				$item = AgendaItem::getItem($itemID);
+			}
+		} else {
+			AgendaMaandContent::invokeRefresh('Agenda-item niet gevonden.', '/actueel/agenda/');
+		}
+		
+		$this->content = new AgendaItemContent($this->agenda, $item, 'toevoegen');
+		$this->content->setMelding($this->errors);
 	}
-
+		
 	public function action_verwijderen() {
+		if (!$this->agenda->magBeheren()) {
+			$this->action = 'geentoegang';
+			$this->performAction();
+			return;
+		}
+		
+		if ($this->hasParam(1) && is_numeric($this->getParam(1))) {
+			$item = AgendaItem::getItem((int)$this->getParam(1));
+			$url = '/actueel/agenda/'.date('Y-m', $item->getBeginMoment()).'/';
+			if ($item->verwijder()) {
+				AgendaMaandContent::invokeRefresh('Het agenda-item is succesvol verwijderd.', $url);
+			} else {
+				AgendaMaandContent::invokeRefresh('Het agenda-item kon niet worden verwijderd.', $url);
+			}
+		}
+	}
+	
+	/**
+	 * Maakt een nieuw AgendaItem met de gePOSTe gegevens.
+	 */
+	private function maakItem($itemId=0) {
+		$beginMoment = strtotime($_POST['beginMoment']);
+		$eindMoment = strtotime($_POST['eindMoment']);				
+		return new AgendaItem($itemId, $beginMoment, $eindMoment, $_POST['titel'], $_POST['beschrijving'], 'P_NOBODY');
+	}
+	
+	/**
+	 * Controleert of de ingevulde gegevens een geldig AgendaItem kunnen vormen.
+	 * Geeft dat AgendaItem terug als dat het geval is, en false als dat niet 
+	 * het geval is.
+	 */
+	private function valideerItem($item) {
+		if ($item->getTitel() == '') {
+			$this->addError('Titel mag niet leeg zijn.');
+		}
+		if ($item->getBeginMoment() >= $item->getEindMoment()) {
+			$this->addError('Beginmoment moet voor eindmoment liggen.');
+		}
+		if (date('Y-m-d', $item->getBeginMoment()) != date('Y-m-d', $item->getEindMoment())) {
+			$this->addError('Beginmoment en eindmoment moeten op dezelfde dag zijn.');
+		}
 
+		if ($this->valid) {
+			return $item;
+		} else {
+			return false;
+		}
 	}
 }
 ?>

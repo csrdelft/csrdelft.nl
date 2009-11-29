@@ -14,6 +14,7 @@ require_once('agenda/class.agendacontroller.php');
 
 $controller=new AgendaController($_GET['query']);
 $pagina=new csrdelft($controller->getContent());
+$pagina->setZijkolom(false);
 $pagina->addStylesheet('agenda.css');
 $pagina->view();
 

@@ -33,7 +33,7 @@ class AgendaItem implements Agendeerbaar {
 	private $beschrijving;
 	private $rechtenBekijken;
 
-	public function __construct($itemid, $beginMoment, $eindMoment, $titel, $beschrijving, $rechtenBekijken) {
+	public function __construct($itemid=0, $beginMoment=0, $eindMoment=0, $titel='', $beschrijving='', $rechtenBekijken='P_NOBODY') {
 		$this->itemid = $itemid;
 		$this->setBeginMoment($beginMoment);
 		$this->setEindMoment($eindMoment);
@@ -58,7 +58,7 @@ class AgendaItem implements Agendeerbaar {
 		return $this->beschrijving;
 	}
 	public function getRechtenBekijken() {
-		return $this->getRechtenBekijken();
+		return $this->rechtenBekijken;
 	}
 
 	public function setBeginMoment($beginMoment) {
@@ -79,6 +79,59 @@ class AgendaItem implements Agendeerbaar {
 
 	public function magBekijken() {
 		return LoginLid::instance()->getLid()->hasPermission($this->getRechtenBekijken());
+	}
+	
+	public function opslaan() {
+		$db = MySql::instance();
+		if ($this->getItemID() == 0) {
+			$query = "
+				INSERT INTO agenda (
+					titel, beschrijving, begin, eind, rechtenBekijken
+				) VALUES (
+					'".$db->escape($this->getTitel())."',
+					'".$db->escape($this->getBeschrijving())."',
+					FROM_UNIXTIME(".$this->getBeginMoment()."),
+					FROM_UNIXTIME(".$this->getEindMoment()."),
+					'".$this->getRechtenBekijken()."'
+				);";
+		} else {
+			$query = "
+				UPDATE agenda SET
+					titel = '".$db->escape($this->getTitel())."',
+					beschrijving = '".$db->escape($this->getBeschrijving())."',
+					begin = FROM_UNIXTIME(".$this->getBeginMoment()."),
+					eind = FROM_UNIXTIME(".$this->getEindMoment().")
+				WHERE id=".$this->getItemID().";";
+		}
+		if ($db->query($query)) {
+			if ($this->getItemID() == 0) {
+				$this->itemid = $db->insert_id();
+			}
+			return true;
+		}
+		return false;
+	}
+	
+	public function verwijder() {
+		$db = MySQL::instance();
+		$query = "DELETE FROM agenda WHERE id = ".$this->getItemID();
+		if ($db->query($query)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	public static function getItem($id) {
+		$db = MySQL::instance();
+		$query = "SELECT titel, beschrijving, begin, eind, rechtenBekijken 
+					FROM agenda WHERE id = ".(int)$id;
+		$item = $db->getRow($query);
+		$item['begin'] = strtotime($item['begin']);
+		$item['eind'] = strtotime($item['eind']);
+		
+		return new AgendaItem($id, $item['begin'], $item['eind'], $item['titel'], 
+				$item['beschrijving'], $item['rechtenBekijken']);
 	}
 }
 
@@ -158,13 +211,13 @@ class Agenda {
 		}
 		
 		// Array met weken en dagen maken
-		// TODO: Huidige week mag hier wel een vinkje krijgen, kan ie een ander kleurtje krijgen.		
 		$cur = $startMoment;		
 		$agenda = array();
 		while ($cur != $eindMoment) {
 			$week = Agenda::weekNumber($cur);
 			$dag = date('d', $cur);			
-			$agenda[$week][$dag] = array();
+			$agenda[$week][$dag]['datum'] = $cur;
+			$agenda[$week][$dag]['items'] = array();
 			
 			$cur = strtotime('+1 day', $cur);			
 		}
@@ -174,7 +227,7 @@ class Agenda {
 		foreach ($items as $item) {
 			$week = Agenda::weekNumber($item->getBeginMoment());
 			$dag = date('d', $item->getEindMoment());
-			$agenda[$week][$dag][] = $item;
+			$agenda[$week][$dag]['items'][] = $item;
 		}	
 		
 		return $agenda;

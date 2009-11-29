@@ -5,7 +5,7 @@ table.agenda {
 table.agenda td {
 	padding: 3px;
 	border: 1px solid;
-	width: 100px;
+	width: 127px;
 }
 table.agenda td hr {
 	margin: 5px -3px 5px -3px;
@@ -17,6 +17,27 @@ table.agenda th {
 	background-color: #dddddd;
 }
 
-table.maand td a.knop {
+/*** MAAND ***************************/
+table.maand td.anderemaand {
+	color: #aaaaaa;
+	border-color: #000000;
+}
+table.maand td.anderemaand hr {
+	background-color: #dddddd;
+}
+table.maand td.dezeweek {
+	background-color: #eeeeee;
+}
+table.maand td a.toevoegen {
 	float: right;
+}
+table.maand td a.beheren {
+	float: right;
+	margin-left: 1px;
+}
+
+/*** FORMULIER ***********************/
+form.agendaitem label {
+	float: left;
+	width: 120px;
 }

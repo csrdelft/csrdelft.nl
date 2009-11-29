@@ -397,9 +397,9 @@ lib/smarty/unit_test/templates/index.tpl -text
 lib/smarty/unit_test/templates/parse_math.tpl -text
 lib/smarty/unit_test/templates/parse_obj_meth.tpl -text
 lib/smarty/unit_test/test_cases.php -text
+lib/templates/agenda/item.tpl -text
 lib/templates/agenda/jaar.tpl -text
 lib/templates/agenda/maand.tpl -text
-lib/templates/agenda/toevoegen.tpl -text
 lib/templates/agenda/week.tpl -text
 lib/templates/courant/courantbeheer.tpl -text
 lib/templates/courant/mail/c_header.tpl -text
