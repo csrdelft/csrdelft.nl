@@ -52,7 +52,7 @@ class Kolom extends SimpleHTML {
 			$paginacontent=new PaginaContent($pagina);
 			$this->add($paginacontent);
 			
-			if(LoginLid::instance()->hasPermission('P_AGENDA_POST')) {
+			if(LoginLid::instance()->hasPermission('P_AGENDA_POST') || LoginLid::instance()->getLid()->getUid()=='x101') {
 				if(Instelling::get('zijbalk_agendaweken')>0){
 					require_once('agenda/class.agenda.php');
 					require_once('agenda/class.agendacontent.php');
