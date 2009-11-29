@@ -78,7 +78,7 @@ class AgendaItem implements Agendeerbaar {
 	}
 
 	public function magBekijken() {
-		return LoginLid::instance()->getLid()->hasPermission($this->getRechtenBekijken());
+		return LoginLid::instance()->hasPermission($this->getRechtenBekijken());
 	}
 	
 	public function opslaan() {
@@ -178,7 +178,7 @@ class Agenda {
 		
 		// Maaltijden ophalen
 		$maaltrack = new Maaltrack();		
-		$result = array_merge($result, $maaltrack->getMaaltijden($van, $tot, true, true, null, false));
+		$result = array_merge($result, $maaltrack->getMaaltijden($van, $tot, $filter, $filter, null, false));
 		
 		// Sorteren
 		usort($result, array('Agenda', 'vergelijkAgendeerbaars'));

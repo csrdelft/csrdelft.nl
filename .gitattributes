@@ -401,6 +401,7 @@ lib/templates/agenda/item.tpl -text
 lib/templates/agenda/jaar.tpl -text
 lib/templates/agenda/maand.tpl -text
 lib/templates/agenda/week.tpl -text
+lib/templates/agenda/zijbalk.tpl -text
 lib/templates/courant/courantbeheer.tpl -text
 lib/templates/courant/mail/c_header.tpl -text
 lib/templates/courant/mail/courant.tpl -text

@@ -51,6 +51,16 @@ class Kolom extends SimpleHTML {
 			$pagina=new Pagina('agendazijbalk');
 			$paginacontent=new PaginaContent($pagina);
 			$this->add($paginacontent);
+			
+			if(LoginLid::instance()->hasPermission('P_AGENDA_POST')) {
+				if(Instelling::get('zijbalk_agendaweken')>0){
+					require_once('agenda/class.agenda.php');
+					require_once('agenda/class.agendacontent.php');
+					$agenda=new Agenda();
+					$agendacontent=new AgendaZijbalkContent($agenda, Instelling::get('zijbalk_agendaweken'));
+					$this->add($agendacontent);
+				}
+			}
 
 			# Laatste mededelingen
 			if(Instelling::get('zijbalk_mededelingen')>0){

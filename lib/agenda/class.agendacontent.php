@@ -81,4 +81,30 @@ class AgendaItemContent extends SimpleHTML {
 	}
 }
 
+class AgendaZijbalkContent extends SimpleHTML {
+	
+	private $agenda;
+	private $aantalWeken;
+	
+	public function __construct($agenda, $aantalWeken) {
+		$this->agenda = $agenda;
+		$this->aantalWeken = $aantalWeken;
+	}
+	
+	public function getTitel() {
+		return 'Agenda - Zijbalk';
+	}
+	
+	public function view() {
+		$beginMoment = strtotime(date('Y-m-d'));
+		$eindMoment = strtotime('+2 weeks', $beginMoment);
+		$eindMoment = strtotime('next saturday', $eindMoment);
+		$items = $this->agenda->getItems($beginMoment, $eindMoment, true);
+		
+		$content = new Smarty_csr();
+		$content->assign('items', $items);
+		$content->display('agenda/zijbalk.tpl');
+	}
+}
+
 ?>

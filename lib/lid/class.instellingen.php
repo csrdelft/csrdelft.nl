@@ -22,6 +22,7 @@ class Instelling{
 			'forum_zoekresultaten' => array(40, 'Zoekresultaten', 'int'),
 			'forum_toonpasfotos' => array('nee', 'Pasfoto\'s standaard weergeven', 'enum', array('ja', 'nee')),
 			'zijbalk_gasnelnaar' => array('ja', 'Ga snel naar weergeven', 'enum', array('ja', 'nee')),
+			'zijbalk_agendaweken' => array(2, 'Aantal weken vooruit agenda weergeven', 'int'),
 			'zijbalk_mededelingen' => array(8, 'Aantal mededelingen in zijbalk', 'int'),
 			'zijbalk_forum' => array(10, 'Aantal forumberichten in zijbalk', 'int'),
 			'zijbalk_forum_zelf' => array(0, 'Aantal zelf geposte forumberichten zijbalk', 'int'),
