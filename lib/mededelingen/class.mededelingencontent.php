@@ -57,6 +57,8 @@ class MededelingenContent extends SimpleHTML{
 		
 		$content->assign('huidigePagina', $this->paginaNummer);
 		$content->assign('totaalAantalPaginas', (ceil(Mededeling::getAantal()/self::aantalPerPagina)));
+		
+		$content->assign('datumtijdFormaat', '%d-%m-%Y %H:%M');
 
 		$content->display('mededelingen/mededelingen.tpl');
 	}

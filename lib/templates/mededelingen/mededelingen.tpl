@@ -49,6 +49,9 @@
 					Doelgroep: {$geselecteerdeMededeling->getDoelgroep()}<br />
 					Prioriteit: {$geselecteerdeMededeling->getPrioriteit()}<br />
 				{/if}
+				{if $geselecteerdeMededeling->isModerator() OR $geselecteerdeMededeling->magBewerken()}
+					Vervalt {if $geselecteerdeMededeling->getVervaltijd()===null}nooit{else}op: {$geselecteerdeMededeling->getVervaltijd()|date_format:$datumtijdFormaat}{/if}<br />
+				{/if}
 				{if $geselecteerdeMededeling->magBewerken()}
 					<a href="{$nieuws_root}bewerken/{$geselecteerdeMededeling->getId()}">
 						{icon get="bewerken"}

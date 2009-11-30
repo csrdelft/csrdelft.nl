@@ -65,6 +65,9 @@ switch($actie){
 			$mededelingProperties['titel']=		$_POST['titel'];
 			$mededelingProperties['tekst']=		$_POST['tekst'];
 			$mededelingProperties['datum']=		getDateTime();
+			if(isset($_POST['vervaltijd'])){
+				$mededelingProperties['vervaltijd']=$_POST['vervaltijd'];
+			}
 			$mededelingProperties['uid']=		LoginLid::instance()->getUid();
 			if(isset($_POST['prioriteit'])){
 				$mededelingProperties['prioriteit']=		(int)$_POST['prioriteit'];
@@ -111,6 +114,24 @@ switch($actie){
 			if(strlen($mededelingProperties['tekst'])<5){
 				$_SESSION['melding'].='Het veld <b>Tekst</b> moet minstens 5 tekens bevatten.<br />';
 				$allOK=false;
+			}
+			
+			// Check vervaltijd.
+			if(!isset($_POST['vervaltijdAan'], $_POST['vervaltijd'])){
+				// Indien de gebruiker geen einddatum wil, reset deze!
+				$mededelingProperties['vervaltijd']=null;
+			}else{
+				$vervaltijd=strtotime($mededelingProperties['vervaltijd']);
+				if($vervaltijd===false OR !isGeldigeDatum($mededelingProperties['vervaltijd'])){
+					$_SESSION['melding'].='Vervaltijd is ongeldig.<br />';
+					$allOK=false;
+				}else{
+					$datum=strtotime($mededelingProperties['datum']);
+					if($vervaltijd<=$datum){
+						$_SESSION['melding'].='Vervaltijd moet groter zijn dan de huidige tijd.<br />';
+						$allOK=false;
+					}
+				}
 			}
 			
 			// Check prioriteit.

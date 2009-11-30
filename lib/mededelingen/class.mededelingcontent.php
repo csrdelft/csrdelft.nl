@@ -16,6 +16,14 @@ class MededelingContent extends SimpleHTML{
 		$content->assign('melding', $this->getMelding());
 		$content->assign('nieuws_root', NIEUWS_ROOT);
 		$content->assign('prioriteiten', Mededeling::getPrioriteiten());
+		$content->assign('datumtijdFormaat', '%d-%m-%Y %H:%M');
+		
+		// Een standaard vervaltijd verzinnen indien nodig.
+		if($this->mededeling->getVervaltijd()===null){
+			$standaardVervaltijd=new DateTime(getDateTime());
+			$standaardVervaltijd=$standaardVervaltijd->format('Y-m-d 23:59');
+			$content->assign('standaardVervaltijd', $standaardVervaltijd);
+		}
 
 		$content->display('mededelingen/mededeling.tpl');
 	}

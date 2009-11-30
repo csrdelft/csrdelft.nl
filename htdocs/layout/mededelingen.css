@@ -12,6 +12,7 @@
 .nieuwsbericht .informatie{
 	font-size: 90%;
 	color: gray;
+	text-align: left;
 }
 .nieuwsbericht .informatie img{
 	margin-top: 3px;
@@ -107,6 +108,7 @@ div#instellingen{
 	width: 30%;
 	float: left;
 	margin-top: 10px;
+	text-align: left;
 }
 div#plaatje{
 	height: 300px;
@@ -116,4 +118,8 @@ div#plaatje{
 }
 div#knoppen{
 	float: left;
+}
+
+input#vervaltijd{
+	width: 110px;
 }

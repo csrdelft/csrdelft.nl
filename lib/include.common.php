@@ -102,6 +102,25 @@ function isFeut(){
 function getDateTime(){
 	return date('Y-m-d H:i:s');
 }
+// function isGeldigeDatum
+// pre: $datum is een string in de vorm 'yyyy-mm-dd' of 'yyyy-mm-dd hh:mm' of 'yyyy-mm-dd hh:mm:ss'.
+// post: true is teruggegeven als de datum in de string geldid is (volgens checkdate()). Anders is false teruggegeven.
+function isGeldigeDatum($datum){
+	// De string opdelen en checken of er genoeg delen zijn.
+	$delen=explode('-', $datum);
+	if(count($delen)<3){ return false; }
+
+	// Checken of we geldige strings hebben, voordat we ze casten naar ints.
+	$jaar=$delen[0];
+	if(!is_numeric($jaar) OR strlen($jaar)!=4){ return false; }
+	$maand=$delen[1];
+	if(!is_numeric($maand) OR strlen($maand)!=2){ return false; }
+	$dag=substr($delen[2], 0, 2); // Alleen de eerste twee karakters pakken.
+	if(!is_numeric($dag) OR strlen($dag)!=2){ return false; }
+	
+	// De strings casten naar ints en de datum laten checken.
+	return checkdate((int)$maand, (int)$dag, (int)$jaar);
+}
 function pr($sString, $cssID='pubcie_debug'){
 	$admin=array('145.94.61.229', '145.94.59.158', '192.168.16.101', '127.0.0.1');
 	if(in_array($_SERVER['REMOTE_ADDR'], $admin)){

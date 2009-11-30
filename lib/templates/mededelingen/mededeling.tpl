@@ -27,15 +27,18 @@
 		</select>
 		<br />
 		{if $mededeling->isModerator()}
-		<strong>Prioriteit:</strong>
-		<select name="prioriteit">
-			{foreach from=$prioriteiten key=prioriteitId item=prioriteit}
-				<option value="{$prioriteitId}"{if $mededeling->getPrioriteit()==$prioriteitId} selected="selected"{/if}>{$prioriteit|escape:'html'}</option>
-			{/foreach}
-		</select>
+			<strong>Prioriteit:</strong>
+			<select name="prioriteit">
+				{foreach from=$prioriteiten key=prioriteitId item=prioriteit}
+					<option value="{$prioriteitId}"{if $mededeling->getPrioriteit()==$prioriteitId} selected="selected"{/if}>{$prioriteit|escape:'html'}</option>
+				{/foreach}
+			</select><br />
 		{/if}
+		<input type="checkbox" name="vervaltijdAan"{if $mededeling->getVervaltijd()!==null} checked="checked"{/if} onchange="this.form.vervaltijd.disabled=this.form.vervaltijd.disabled==''?'disabled':''" />
+		Vervalt op
+		<input id="vervaltijd" type="text" name="vervaltijd" value="{if $mededeling->getVervaltijd()!==null}{$mededeling->getVervaltijd()|date_format:$datumtijdFormaat}{else}{$standaardVervaltijd}" disabled="disabled{/if}" />
 		{if $mededeling->isModerator() AND $mededeling->getZichtbaarheid()!='wacht_goedkeuring'}
-			<br /><input id="verborgen" type="checkbox" name="verborgen"{if $mededeling->isVerborgen()} checked="checked"{/if} /><label for="verborgen">Dit bericht verbergen</label><br /><br />
+			<br /><input id="verborgen" type="checkbox" name="verborgen"{if $mededeling->isVerborgen()} checked="checked"{/if} /><label for="verborgen">Verbergen</label><br /><br />
 		{/if}
 	</div>
 	<div id="plaatje">

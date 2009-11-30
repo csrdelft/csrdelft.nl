@@ -11,6 +11,7 @@ class Mededeling{
 
 	private $id=0;
 	private $datum;
+	private $vervaltijd;
 	private $uid;
 	private $titel;
 	private $tekst;
@@ -44,7 +45,7 @@ class Mededeling{
 	public function load($id=0){
 		$db=MySql::instance();
 		$loadQuery="
-			SELECT id, datum, titel, tekst, categorie, uid, prioriteit, doelgroep, zichtbaarheid, plaatje, categorie
+			SELECT id, datum, vervaltijd, titel, tekst, categorie, uid, prioriteit, doelgroep, zichtbaarheid, plaatje, categorie
 			FROM mededeling
 			WHERE id=".(int)$id.";";
 		$mededeling=$db->getRow($loadQuery);
@@ -64,14 +65,21 @@ class Mededeling{
 				WHERE prioriteit=".(int)$this->getPrioriteit();
 			$db->query($prioriteitQuery);
 		}
+		// Vervaltijd MySQL-NULL maken als hij PHP-null is.
+		if($this->getVervaltijd()===null){
+			$vervaltijd="NULL";
+		}else{
+			$vervaltijd="'".$this->getVervaltijd()."'";
+		}
 		if($this->getId()==0){
 			$saveQuery="
 				INSERT INTO mededeling (
-					titel, tekst, datum, uid, prioriteit, doelgroep, zichtbaarheid, categorie, plaatje
+					titel, tekst, datum, vervaltijd, uid, prioriteit, doelgroep, zichtbaarheid, categorie, plaatje
 				)VALUES(
 					'".$db->escape($this->getTitel())."',
 					'".$db->escape($this->getTekst())."',
 					'".$this->getDatum()."',
+					".$vervaltijd.",
 					'".$this->getUid()."',
 					".(int)$this->getPrioriteit().",
 					'".$this->getDoelgroep()."',
@@ -94,6 +102,7 @@ class Mededeling{
 					titel='".$db->escape($this->getTitel())."',
 					tekst='".$db->escape($this->getTekst())."',
 					datum='".$this->getDatum()."',
+					vervaltijd=".$vervaltijd.",
 					uid='".$this->getUid()."',
 					prioriteit=".(int)$this->getPrioriteit().",
 					doelgroep='".$this->getDoelgroep()."',
@@ -134,6 +143,7 @@ class Mededeling{
 		if($this->getDatum()===null){ // Als we al een datum hebben (uit de DB), hoeven we het niet te vervangen.
 			$this->datum=$array['datum'];
 		}
+		$this->vervaltijd=$array['vervaltijd'];
 		if($this->getUid()===null){ // Als we al een Uid hebben (uit de DB), hoeven we deze niet te vervangen.
 			$this->uid=$array['uid'];
 		}
@@ -157,7 +167,8 @@ class Mededeling{
 	public function getAfgeknipteTekst(){
 		return Mededeling::knipTekst(CsrUBB::instance()->getHTML($this->getTekst()), 46, 4); //TODO: constanten van maken.
 	}
-	public function getDatum(){ return $this->datum; } //TODO: leesbare datum teruggeven(??)
+	public function getDatum(){ return $this->datum; }
+	public function getVervaltijd(){ return $this->vervaltijd; }
 	public function getUid(){ return $this->uid; }
 	public function getPrioriteit(){ return $this->prioriteit; }
 	public function getDoelgroep(){ return $this->doelgroep; }
@@ -186,7 +197,8 @@ class Mededeling{
 			$topmostQuery="
 				SELECT id
 				FROM mededeling
-				WHERE zichtbaarheid='zichtbaar'".$doelgroepClause."
+				WHERE (vervaltijd IS NULL OR vervaltijd > '".getDateTime()."')
+				AND zichtbaarheid='zichtbaar'".$doelgroepClause."
 				ORDER BY prioriteit ASC, datum DESC
 				LIMIT ".$aantal;
 			$resource=$db->select($topmostQuery);
@@ -200,7 +212,7 @@ class Mededeling{
 	public static function getLijstVanPagina($pagina=1, $aantal){
 		$mededelingen=array();
 		$db=MySql::instance();
-		$doelgroepClause=$verborgenClause="";
+		$doelgroepClause="";
 		$verborgenClause="zichtbaarheid='zichtbaar'";
 		if( Mededeling::isModerator() )
 			$verborgenClause="zichtbaarheid!='verwijderd'";
@@ -209,7 +221,8 @@ class Mededeling{
 		$paginaQuery="
 			SELECT id, datum
 			FROM mededeling
-			WHERE ".$verborgenClause.$doelgroepClause."
+			WHERE (vervaltijd IS NULL OR vervaltijd > '".getDateTime()."')
+			AND ".$verborgenClause.$doelgroepClause."
 			ORDER BY datum DESC
 			LIMIT ".(($pagina-1)*$aantal).", ".$aantal;
 		$resource=$db->select($paginaQuery);
@@ -226,7 +239,7 @@ class Mededeling{
 	
 	public static function getAantal(){
 		$db=MySql::instance();
-		$doelgroepClause=$verborgenClause="";
+		$doelgroepClause="";
 		$verborgenClause="zichtbaarheid='zichtbaar'";
 		if( Mededeling::isModerator() )
 			$verborgenClause="zichtbaarheid!='verwijderd'";
@@ -235,7 +248,8 @@ class Mededeling{
 		$aantalQuery="
 			SELECT COUNT(*) as aantal
 			FROM mededeling
-			WHERE ".$verborgenClause.$doelgroepClause;
+			WHERE (vervaltijd IS NULL OR vervaltijd>'".getDateTime()."')
+			AND ".$verborgenClause.$doelgroepClause;
 		$resource=$db->select($aantalQuery);
 		$resultaat=$db->next($resource);
 		return (int)$resultaat['aantal'];
@@ -254,7 +268,8 @@ class Mededeling{
 		$positieQuery="
 			SELECT COUNT(*) as positie
 			FROM mededeling
-			WHERE datum >= '".$this->getDatum()."' AND ".$verborgenClause.$doelgroepClause;
+			WHERE (vervaltijd IS NULL OR vervaltijd > '".getDateTime()."')
+			AND datum>='".$this->getDatum()."' AND ".$verborgenClause.$doelgroepClause;
 		$resource=$db->select($positieQuery);
 		$record=$db->next($resource);
 		$paginaNummer=ceil(($record['positie'])/MededelingenContent::aantalPerPagina);
