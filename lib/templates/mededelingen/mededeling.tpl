@@ -27,7 +27,7 @@
 		</select>
 		<br />
 		{if $mededeling->isModerator()}
-		<strong>Markering:</strong>
+		<strong>Prioriteit:</strong>
 		<select name="prioriteit">
 			{foreach from=$prioriteiten key=prioriteitId item=prioriteit}
 				<option value="{$prioriteitId}"{if $mededeling->getPrioriteit()==$prioriteitId} selected="selected"{/if}>{$prioriteit|escape:'html'}</option>

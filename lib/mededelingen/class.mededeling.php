@@ -286,7 +286,7 @@ class Mededeling{
 		$prioriteiten=array();
 		$prioriteiten[255]='geen';
 		for($i=1; $i<=6; $i++){
-			$prioriteiten[$i]='Top '.$i;
+			$prioriteiten[$i]='Prioriteit '.$i;
 		}
 		return $prioriteiten;
 	}
