@@ -45,6 +45,10 @@
 				<hr />
 				Geplaatst op {$geselecteerdeMededeling->getDatum()|date_format:'%d-%m-%Y'}{if $geselecteerdeMededeling->isModerator()} door {$geselecteerdeMededeling->getUid()|csrnaam}{/if}<br />
 				Categorie: {$geselecteerdeMededeling->getCategorie()->getNaam()}<br />
+				{if $geselecteerdeMededeling->isModerator()}
+					Doelgroep: {$geselecteerdeMededeling->getDoelgroep()}<br />
+					Prioriteit: {$geselecteerdeMededeling->getPrioriteit()}<br />
+				{/if}
 				{if $geselecteerdeMededeling->magBewerken()}
 					<a href="{$nieuws_root}bewerken/{$geselecteerdeMededeling->getId()}">
 						{icon get="bewerken"}
