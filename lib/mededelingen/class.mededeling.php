@@ -160,10 +160,22 @@ class Mededeling{
 	}
 	public function getId(){ return $this->id; }
 	public function getTitel(){ return $this->titel; }
+	public function getTitelVoorZijbalk(){
+		$resultaat=$this->getTitel();
+		if(strlen($resultaat)>21){ //TODO: constante van maken?
+			$resultaat=trim(substr($resultaat, 0, 18)).'…'; //TODO: constanten van maken?
+		}
+		return $resultaat;
+	}
 	public function getAfgeknipteTitel(){
 		return Mededeling::knipTekst(mb_htmlentities($this->getTitel(), 34, 1)); //TODO: constanten van maken.
 	}
 	public function getTekst(){ return $this->tekst; }
+	public function getTekstVoorZijbalk(){
+		$tijdelijk=preg_replace('/(\[(|\/)\w+\])/', '|', $this->getTekst());
+		$resultaat=substr(str_replace(array("\n", "\r", ' '), ' ', $tijdelijk), 0, 40); //TODO: constanten van maken?
+		return $resultaat;
+	}
 	public function getAfgeknipteTekst(){
 		return Mededeling::knipTekst(CsrUBB::instance()->getHTML($this->getTekst()), 46, 4); //TODO: constanten van maken.
 	}
@@ -257,7 +269,7 @@ class Mededeling{
 	
 	public function getPaginaNummer(){
 		$db=MySql::instance();
-		$doelgroepClause=$verborgenClause="";
+		$doelgroepClause="";
 		$verborgenClause="zichtbaarheid='zichtbaar'";
 		if( Mededeling::isModerator() ){
 			$verborgenClause="zichtbaarheid!='verwijderd'";
@@ -277,19 +289,27 @@ class Mededeling{
 		return $paginaNummer;
 	}
 
-//	public static function getNewest(){
-//		$db=MySql::instance();
-//		$newestQuery="
-//			SELECT id
-//			FROM mededeling
-//			WHERE prioriteit = '1' AND verwijderd='0' AND zichtbaarheid='zichtbaar'
-//			ORDER BY datum DESC, id DESC;";
-//		$newest=$db->getRow($newestQuery);
-//		if(is_array($newest)){
-//			return new Mededeling($newest['id']);
-//		}
-//		return null;
-//	}
+	public static function getLaatsteMededelingen(){
+		$resultaat=array();
+		$db=MySql::instance();
+		$zichtbaarheidClause="zichtbaarheid='zichtbaar'";
+		$doelgroepClause="";
+		if( !LoginLid::instance()->hasPermission('P_LEDEN_READ') ){
+			$doelgroepClause=" AND doelgroep='iedereen'";
+		}
+		$laatstenQuery="
+			SELECT id
+			FROM mededeling
+			WHERE (vervaltijd IS NULL OR vervaltijd > '".getDateTime()."') 
+			AND ".$zichtbaarheidClause.$doelgroepClause."
+			ORDER BY datum DESC, id DESC;";
+		$resource=$db->select($laatstenQuery);
+		while($mededelingRecord=$db->next($resource)){
+			$resultaat[]=new Mededeling($mededelingRecord['id']);
+		}
+		return $resultaat;
+	}
+	
 	public function resetPrioriteit(){
 		$updatePrioriteit="
 			UPDATE mededeling

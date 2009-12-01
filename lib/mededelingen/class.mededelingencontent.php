@@ -74,4 +74,25 @@ class MededelingenContent extends SimpleHTML{
 		return $content->fetch('mededelingen/mededelingentopblock.tpl');
 	}
 }
+class MededelingenZijbalkContent extends SimpleHTML{
+	private $aantal;
+	
+	public function __construct($aantal){
+		$this->aantal=(int)$aantal;
+	}
+	
+	public function view(){
+		$content=new Smarty_csr();
+		
+		// Handige variabelen.
+		$content->assign('mededelingenRoot', MededelingenContent::mededelingenRoot);
+		$content->assign('datumFormaat', '%d-%m');
+		
+		// De laatste n mededelingen ophalen en meegeven aan $content.
+		$mededelingen=Mededeling::getLaatsteMededelingen($this->aantal);
+		$content->assign('mededelingen', $mededelingen);
+
+		$content->display('mededelingen/mededelingenzijbalk.tpl');
+	}
+}
 ?>
