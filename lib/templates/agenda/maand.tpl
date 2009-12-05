@@ -2,10 +2,12 @@
 
 {$melding}
 
-<table class="agenda" id="maand">
-	<a class="knop" href="{$urlVorige}" style="float: left;" >&laquo; Vorige maand</a></td>
+<div class="maandnavigatie">
+	<a class="knop" href="{$urlVorige}" style="float: left;" >&laquo; Vorige maand</a>
 	<a class="knop" href="{$urlVolgende}" style="float: right;">Volgende maand &raquo;</a>
-	<br /><br style="clear: both;" />
+</div>
+<table class="agenda" id="maand">
+	
 	<tr>
 		<th> </th>
 		<th>Zondag</th>
@@ -54,3 +56,7 @@
 		</tr>
 	{/foreach}
 </table>
+<div class="maandnavigatie">
+	<a class="knop" href="{$urlVorige}" style="float: left;" >&laquo; Vorige maand</a>
+	<a class="knop" href="{$urlVolgende}" style="float: right;">Volgende maand &raquo;</a>
+</div>

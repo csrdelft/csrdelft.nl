@@ -1,11 +1,12 @@
 table.agenda {
 	border-collapse: collapse;
 	border: 1px solid #ccc;
+	width: 100%;
 }
 table.agenda td {
 	padding: 3px;
 	border: 1px solid;
-	width: 127px;
+	width: 132px;
 }
 table.agenda td hr {
 	margin: 5px -3px 5px -3px;
@@ -19,6 +20,13 @@ table.agenda th {
 }
 
 /*** MAAND ***************************/
+div.maandnavigatie a{
+	margin: 10px 0px;
+	padding: 3px 2px;
+}
+table#maand{
+	clear: both;
+}
 table#maand tr th{ 
 	background-color: #eee;
 	border: 1px solid #ccc;
@@ -29,6 +37,7 @@ table#maand tr td{
 
 table#maand tr td.dag{
 	padding: 0px;
+	text-align: left;
 }
 table#maand td.anderemaand { /* De dagen die van andere maanden in de maand-tabel vallen doorzichtig maken */
 	opacity: 0.4;
@@ -41,10 +50,10 @@ table#maand tr#dezeweek td.dag{
 }
 table#maand tr td#vandaag{
 	background-color: #ffffe0;
-	border: 1px solid #bbb !important;
+	border: 1px solid #bbb;
 }
 table#maand tr td:hover{
-	background-color: #fafafa;
+	background-color: #fafafa ;
 	border: 1px solid #bbb;
 }
 table#maand td div.meta{
