@@ -38,6 +38,7 @@ table#maand tr td{
 table#maand tr td.dag{
 	padding: 0px;
 	text-align: left;
+	
 }
 table#maand td.anderemaand { /* De dagen die van andere maanden in de maand-tabel vallen doorzichtig maken */
 	opacity: 0.4;
@@ -72,13 +73,16 @@ table#maand td ul{
 table#maand td ul li{
 	margin: 0px;
 	padding: 4px 4px;
-
+	font-size: 10px;
 }
 table#maand td ul li.odd{
 	background-color: #eaeaea;
 }
 table#maand td ul li .tijd{
 	font-size: 10px;
+}
+table#maand td ul li  img.icon{
+	float: right;
 }
 table#maand td ul li a.beheren{
 	float: right; margin-left: 1px;

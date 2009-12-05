@@ -44,10 +44,14 @@
 									{icon get="bewerken"}
 								</a>
 							{/if}
-							<div class="tijd">
-								{$item->getBeginMoment()|date_format:"%R"}-{$item->getEindMoment()|date_format:"%R"}
-							</div>
-							<strong title="{$item->getBeschrijving()|escape:'htmlall'}">{$item->getTitel()}</strong>
+							{if $item instanceof Lid} {* Verjaardag *}
+								{icon get="verjaardag"} {$item->getTitel()}
+							{else}
+								<div class="tijd">
+									{$item->getBeginMoment()|date_format:"%R"}-{$item->getEindMoment()|date_format:"%R"}
+								</div>
+								<strong title="{$item->getBeschrijving()|escape:'htmlall'}">{$item->getTitel()}</strong>
+							{/if}
 							</li>
 						{/foreach}
 					</ul>

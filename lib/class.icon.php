@@ -21,6 +21,7 @@ class Icon{
 		'verwijderen' => 'cross',
 		'alert' => 'stop',
 		'goedkeuren' => 'tick',
+		'verjaardag' => 'cake',
 
 		//documumenten
 		'mime-audio' => 'ipod',

@@ -14,8 +14,10 @@ require_once 'class.ldap.php';
 require_once 'class.memcached.php';
 require_once 'class.instellingen.php';
 require_once 'class.verticale.php';
+require_once 'class.pushmessage.php';
+require_once 'agenda/class.agenda.php';
 
-class Lid implements Serializable{
+class Lid implements Serializable, Agendeerbaar{
 	private $uid;
 	private $profiel;
 
@@ -181,6 +183,14 @@ class Lid implements Serializable{
 	public function getMoot(){ 		return $this->profiel['moot']; }
 
 	public function isJarig(){		return substr($this->profiel['gebdatum'], 5, 5)==date('m-d'); }
+	
+	//we maken een lid Agendeerbaar, zodat het in de agenda kan.
+	public function getBeginMoment(){ 
+		return strtotime(date('Y-').substr($this->profiel['gebdatum'], 5, 5).' 00:00');
+	} 
+	public function getEindMoment(){ return $this->getBeginMoment()+60; }
+	public function getTitel(){ return  $this->getNaamLink('civitas', 'link'); }
+	public function getBeschrijving(){ return $this->getTitel().' wordt n'; }
 	
 	public function getVerticale(){
 		return Verticale::$namen[$this->getVerticaleID()];
@@ -569,6 +579,24 @@ class Lid implements Serializable{
 		}else{
 			throw new Exception('Kon geen nieuw uid aanmaken.');
 		}
+	}
+	public static function getVerjaardagen($van, $tot){
+		$van=date('m-d', $van);
+		$tot=date('m-d', $tot);
+		$query="
+			SELECT uid FROM lid 
+			WHERE SUBSTRING(gebdatum, 6)>='".$van."' AND SUBSTRING(gebdatum, 6)<='".$tot."' AND
+			(status='S_NOVIET' OR status='S_GASTLID' OR status='S_LID' OR status='S_KRINGEL') AND
+			NOT gebdatum = '0000-00-00';";
+		$leden=MySql::instance()->query2array($query);
+		
+		$return=array();
+		if(is_array($leden)){
+			foreach($leden as $uid){
+				$return[]=LidCache::getLid($uid['uid']);
+			}
+		}
+		return $return;
 	}
 }
 

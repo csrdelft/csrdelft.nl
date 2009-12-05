@@ -180,6 +180,9 @@ class Agenda {
 		$maaltrack = new Maaltrack();		
 		$result = array_merge($result, $maaltrack->getMaaltijden($van, $tot, $filter, $filter, null, false));
 		
+		//Verjaardagen
+		$result = array_merge($result, Lid::getVerjaardagen($van, $tot));
+
 		// Sorteren
 		usort($result, array('Agenda', 'vergelijkAgendeerbaars'));
 
