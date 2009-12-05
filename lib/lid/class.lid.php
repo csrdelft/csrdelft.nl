@@ -14,7 +14,6 @@ require_once 'class.ldap.php';
 require_once 'class.memcached.php';
 require_once 'class.instellingen.php';
 require_once 'class.verticale.php';
-require_once 'class.pushmessage.php';
 require_once 'agenda/class.agenda.php';
 
 class Lid implements Serializable, Agendeerbaar{
@@ -186,7 +185,7 @@ class Lid implements Serializable, Agendeerbaar{
 	
 	//we maken een lid Agendeerbaar, zodat het in de agenda kan.
 	public function getBeginMoment(){ 
-		return strtotime(date('Y-').substr($this->profiel['gebdatum'], 5, 5).' 00:00');
+		return strtotime(date('Y-').substr($this->profiel['gebdatum'], 5, 5).' 01:11:11'); // 1 b'vo
 	} 
 	public function getEindMoment(){ return $this->getBeginMoment()+60; }
 	public function getTitel(){ return  $this->getNaamLink('civitas', 'link'); }
@@ -234,7 +233,7 @@ class Lid implements Serializable, Agendeerbaar{
 			case 'S_NOVIET':
 			case 'S_GASTLID':
 			case 'S_LID': return '∈';
-		}				
+		}
 	}
 	
 	public function getPatroonUid(){	return $this->profiel['patroon']; }

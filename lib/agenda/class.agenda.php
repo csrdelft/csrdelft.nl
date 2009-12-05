@@ -14,8 +14,8 @@ require_once 'maaltijden/class.maaltrack.php';
  */
 interface Agendeerbaar {
 
-	public function getBeginMoment();
-	public function getEindMoment();
+	public function getBeginMoment(); //timestamp van beginmoment
+	public function getEindMoment();  //timestamp van eindmoment
 	public function getTitel();
 	public function getBeschrijving();
 }
@@ -182,7 +182,7 @@ class Agenda {
 		
 		//Verjaardagen
 		$result = array_merge($result, Lid::getVerjaardagen($van, $tot));
-
+		
 		// Sorteren
 		usort($result, array('Agenda', 'vergelijkAgendeerbaars'));
 
