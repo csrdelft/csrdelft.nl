@@ -1,6 +1,6 @@
 table.agenda {
 	border-collapse: collapse;
-	border: 1px solid #000000;
+	border: 1px solid #ccc;
 }
 table.agenda td {
 	padding: 3px;
@@ -14,26 +14,65 @@ table.agenda th {
 	padding: 3px;
 	border: 1px solid;
 	text-align: center;
+	vertical-align: top;
 	background-color: #dddddd;
 }
 
 /*** MAAND ***************************/
-table.maand td.anderemaand {
-	color: #aaaaaa;
-	border-color: #000000;
+table#maand tr th{ 
+	background-color: #eee;
+	border: 1px solid #ccc;
 }
-table.maand td.anderemaand hr {
-	background-color: #dddddd;
+table#maand tr td{
+	height: 100px; border: 1px solid #ddd;
 }
-table.maand td.dezeweek {
-	background-color: #eeeeee;
+
+table#maand tr td.dag{
+	padding: 0px;
 }
-table.maand td a.toevoegen {
-	float: right;
+table#maand td.anderemaand { /* De dagen die van andere maanden in de maand-tabel vallen doorzichtig maken */
+	opacity: 0.4;
+	filter: alpha(opacity=40);
 }
-table.maand td a.beheren {
-	float: right;
-	margin-left: 1px;
+table#maand tr#dezeweek td.dag{
+	background-color: #fffff0;
+	border-bottom: 1px solid #ccc;
+	border-top: 1px solid #ccc;
+}
+table#maand tr td#vandaag{
+	background-color: #ffffe0;
+	border: 1px solid #bbb !important;
+}
+table#maand tr td:hover{
+	background-color: #fafafa;
+	border: 1px solid #bbb;
+}
+table#maand td div.meta{
+	padding: 3px 4px;
+	border-bottom: 1px solid #eee;
+}	
+table#maand td div a.toevoegen{
+	float: right; 
+}
+
+table#maand td ul{
+	clear: both;
+	list-style-type: none;
+	margin: 0px; padding: 0px;
+}
+table#maand td ul li{
+	margin: 0px;
+	padding: 4px 4px;
+
+}
+table#maand td ul li.odd{
+	background-color: #eaeaea;
+}
+table#maand td ul li .tijd{
+	font-size: 10px;
+}
+table#maand td ul li a.beheren{
+	float: right; margin-left: 1px;
 }
 
 /*** FORMULIER ***********************/
