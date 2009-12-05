@@ -662,7 +662,7 @@ class Maaltijd implements Agendeerbaar {
 		return $this->getTekst();
 	}
 	public function getBeschrijving() {
-		return 'Maaltijd met '.$this->getAantal().' eters.';
+		return 'Maaltijd met '.$this->getAantalAanmeldingen().' eters.';
 	}
 	
 	/*
