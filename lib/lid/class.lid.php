@@ -585,11 +585,17 @@ class Lid implements Serializable, Agendeerbaar{
 		}
 	}
 	public static function getVerjaardagen($van, $tot){
-		$van=date('m-d', $van);
-		$tot=date('m-d', $tot);
+		$vanjaar=date('Y', $van);
+		$totjaar=date('Y', $tot);
+		$van=date('Y-m-d', $van);
+		$tot=date('Y-m-d', $tot);
 		$query="
-			SELECT uid FROM lid 
-			WHERE SUBSTRING(gebdatum, 6)>='".$van."' AND SUBSTRING(gebdatum, 6)<='".$tot."' AND
+			SELECT uid  FROM lid 
+			WHERE (
+				(CONCAT('".$vanjaar."', SUBSTRING(gebdatum, 5))>='".$van."' AND CONCAT('".$vanjaar."', SUBSTRING(gebdatum, 5))<'".$tot."') 
+			OR 
+				(CONCAT('".$totjaar."', SUBSTRING(gebdatum, 5))>='".$van."' AND CONCAT('".$totjaar."', SUBSTRING(gebdatum, 5))<'".$tot."') 
+			) AND
 			(status='S_NOVIET' OR status='S_GASTLID' OR status='S_LID' OR status='S_KRINGEL') AND
 			NOT gebdatum = '0000-00-00';";
 		$leden=MySql::instance()->query2array($query);
