@@ -181,6 +181,7 @@ class Agenda {
 		$result = array_merge($result, $maaltrack->getMaaltijden($van, $tot, $filter, $filter, null, false));
 		
 		//Verjaardagen
+		$_SESSION['agenda_jaar']=date('Y', $van);
 		$result = array_merge($result, Lid::getVerjaardagen($van, $tot));
 		
 		// Sorteren

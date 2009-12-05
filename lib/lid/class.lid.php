@@ -184,10 +184,13 @@ class Lid implements Serializable, Agendeerbaar{
 	public function isJarig(){		return substr($this->profiel['gebdatum'], 5, 5)==date('m-d'); }
 	
 	//we maken een lid Agendeerbaar, zodat het in de agenda kan.
-	//TODO : hier moet op een of andere manier het opgevraagde jaar in komen, anders gaat het lekker mis 
-	//met de regelnummers enzo.
 	public function getBeginMoment(){ 
-		return strtotime(date('Y-').substr($this->profiel['gebdatum'], 5, 5).' 01:11:11'); // 1 b'vo
+		$jaar=date('Y');
+		if(isset($_SESSION['agenda_jaar'])){ //FIEES, Patrick
+			$jaar=$_SESSION['agenda_jaar'];
+		}
+		$datum=$jaar.'-'.substr($this->profiel['gebdatum'], 5, 5).' 01:11:11'; // 1 b'vo
+		return strtotime($datum); 
 	} 
 	public function getEindMoment(){ return $this->getBeginMoment()+60; }
 	public function getTitel(){ return  $this->getNaamLink('civitas', 'link'); }
