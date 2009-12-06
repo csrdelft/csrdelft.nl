@@ -36,5 +36,7 @@ function setTijd(begin, einde){
 	<label for="beschrijving">Beschrijving</label> 
 		<input type="text" id="beschrijving" name="beschrijving" value="{$item->getBeschrijving()}" /><br /><br />	
 			
-	<input type="submit" name="submit" value="Opslaan" />
+	<label for="submit">&nbsp;</label>
+	<input type="submit" name="submit" value="Opslaan" /> 
+	<a class="knop" href="/actueel/agenda/{$item->getBeginMoment()|date_format:"%Y-%m"}">terug</a>
 </form>

@@ -478,7 +478,7 @@ div.preview.pagina{
 div.ubb_document{
 	background-color: #ddd;
 	border: 1px solid #ccc;
-	width: 400px;
+	width: 450px;
 	margin: 2px 4px; padding: 4px 6px;
 }
 div.ubb_document span.size{ 
@@ -487,8 +487,8 @@ div.ubb_document span.size{
 }
 div.ubb_document .icon{ float: left; }
 div.ubb_document a{
-	display: block; width: 320px;
-	padding-left: 30px;
+	display: block; width: 375px;
+	padding-left: 25px;
 	text-align: left;
 }
 /* plaatjes in tekst */

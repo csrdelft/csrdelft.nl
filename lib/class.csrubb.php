@@ -228,7 +228,7 @@ src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
 		try{
 			$document=new Document($id);
 			$content=new DocumentUbbContent($document);
-			return $content->view();
+			return $content->getHTML();
 		}catch(Exception $e){
 			return '<div class="ubb_document">Ongeldig document</div>';
 		}

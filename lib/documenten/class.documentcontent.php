@@ -103,11 +103,13 @@ class DocumentUbbContent extends SimpleHtml{
 	public function __construct(Document $document){
 		$this->document=$document;
 	}
-	public function view(){
+	public function getHTML(){
 		$smarty=new Smarty_csr();	//hmm, lekker overkill
 		$smarty->assign('document', $this->document);
-		$smarty->display('documenten/document.ubb.tpl'); 
-		
+		return $smarty->fetch('documenten/document.ubb.tpl'); 
+	}
+	public function view(){
+		echo $this->getHTML();
 	}
 }
 ?>
