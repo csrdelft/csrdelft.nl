@@ -180,8 +180,11 @@ class Agenda {
 		$maaltrack = new Maaltrack();		
 		$result = array_merge($result, $maaltrack->getMaaltijden($van, $tot, $filter, $filter, null, false));
 		
-		//Verjaardagen
-		$_SESSION['agenda_jaar']=date('Y', $van);
+		//Verjaardagen. Omdat Leden eigenlijk niet Agendeerbaar, maar meer iets als
+		//PeriodiekAgendeerbaar zijn, maar we geen zin hebben om dat te implementeren,
+		//doen we hier even een vieze hack waardoor
+		$GLOBALS['agenda_jaar']=date('Y', $van);
+		$GLOBALS['agenda_maand']=date('m', ($van+$tot/2));
 		$result = array_merge($result, Lid::getVerjaardagen($van, $tot));
 		
 		// Sorteren

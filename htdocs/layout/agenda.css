@@ -50,9 +50,10 @@ table#maand tr#dezeweek td.dag{
 	border-top: 1px solid #ccc;
 }
 table#maand tr td#vandaag{
-	background-color: #ffffe0;
+	background-color: #ffffd0 !important;
 	border: 1px solid #bbb;
 }
+
 table#maand tr td:hover{
 	background-color: #fafafa ;
 	border: 1px solid #bbb;
@@ -60,7 +61,11 @@ table#maand tr td:hover{
 table#maand td div.meta{
 	padding: 3px 4px;
 	border-bottom: 1px solid #eee;
-}	
+}
+table#maand tr td#vandaag div.meta{ 
+	font-weight: bold;
+	background-color: #ffffc0;
+}
 table#maand td div a.toevoegen{
 	float: right; 
 }
@@ -80,6 +85,8 @@ table#maand td ul li.odd{
 }
 table#maand td ul li .tijd{
 	font-size: 10px;
+	color: #777;
+	
 }
 table#maand td ul li  img.icon{
 	float: right;
@@ -92,4 +99,10 @@ table#maand td ul li a.beheren{
 form.agendaitem label {
 	float: left;
 	width: 120px;
+}
+div.standaardtijden{
+	float: right; margin-right: 450px; width: 200px; 
+}
+div.standaardtijden a{
+	cursor: pointer;
 }

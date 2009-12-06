@@ -186,8 +186,17 @@ class Lid implements Serializable, Agendeerbaar{
 	//we maken een lid Agendeerbaar, zodat het in de agenda kan.
 	public function getBeginMoment(){ 
 		$jaar=date('Y');
-		if(isset($_SESSION['agenda_jaar'])){ //FIEES, Patrick
-			$jaar=$_SESSION['agenda_jaar'];
+		if(isset($GLOBALS['agenda_jaar'], $GLOBALS['agenda_maand'])){ //FIEES, Patrick. 
+			/*
+			 * Punt is dat we het goede (opgevraagde) jaar erbij moeten zetten, 
+			 * anders gaat het mis op randen van weken en jaren.
+			 * De maand is ook nodig, anders gaat het weer mis met de weken in januari, want dan schuift
+			 * alles doordat het jaar nog op het restje van de vorige maand staat.
+			 */
+			$jaar=$GLOBALS['agenda_jaar'];
+			if($GLOBALS['agenda_maand']==1 AND substr($this->profiel['gebdatum'],5,2)==$GLOBALS['agenda_maand']){
+				$jaar+=1;
+			}
 		}
 		$datum=$jaar.'-'.substr($this->profiel['gebdatum'], 5, 5).' 01:11:11'; // 1 b'vo
 		return strtotime($datum); 
