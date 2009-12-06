@@ -409,6 +409,7 @@ lib/templates/courant/mail/courant_draadloos2009.tpl -text
 lib/templates/courant/mail/csrmail_owee.tpl -text
 lib/templates/csrdelft.tpl -text
 lib/templates/documenten/document.tpl -text
+lib/templates/documenten/document.ubb.tpl -text
 lib/templates/documenten/documenten.tpl -text
 lib/templates/documenten/documentencategorie.tpl -text
 lib/templates/forum/list_categories.tpl -text

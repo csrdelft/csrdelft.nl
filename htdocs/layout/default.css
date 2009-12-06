@@ -259,6 +259,7 @@ ul.nobullets li{ list-style-type: none; }
 	width: 1004px;
 	background: url('http://plaetjes.csrdelft.nl/layout/mainbg.png') repeat-y;
 }
+
 #mainleft {
 	float: left;
 	margin-top: 3px;
@@ -473,6 +474,23 @@ div.preview.pagina{
 }
 .ubb_groep .groepleden table.leden{ width: 100%; }
 .ubb_groep .groepleden table.leden td{ padding: 0px 5px; text-align: left;}
+
+div.ubb_document{
+	background-color: #ddd;
+	border: 1px solid #ccc;
+	width: 400px;
+	margin: 2px 4px; padding: 4px 6px;
+}
+div.ubb_document span.size{ 
+	color: #777;
+	float: right;
+}
+div.ubb_document .icon{ float: left; }
+div.ubb_document a{
+	display: block; width: 320px;
+	padding-left: 30px;
+	text-align: left;
+}
 /* plaatjes in tekst */
 p img{ margin: 15px 10px; }
 

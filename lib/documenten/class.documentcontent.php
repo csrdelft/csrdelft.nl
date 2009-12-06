@@ -4,6 +4,7 @@
  *
  *
  */
+require_once('class.document.php');
 
 /*
  * Weergeven van één document, bijvoorbeeld toevoegen/bewerken.
@@ -95,6 +96,18 @@ class DocumentDownloadContent extends SimpleHtml{
 			header('Content-Lenght: '.$this->document->getSize().';');
 		}
 		readfile($this->document->getFullPath());
+	}
+}
+class DocumentUbbContent extends SimpleHtml{
+	private $document;
+	public function __construct(Document $document){
+		$this->document=$document;
+	}
+	public function view(){
+		$smarty=new Smarty_csr();	//hmm, lekker overkill
+		$smarty->assign('document', $this->document);
+		$smarty->display('documenten/document.ubb.tpl'); 
+		
 	}
 }
 ?>

@@ -213,6 +213,27 @@ src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
 		$groeptag=new GroepUbbContent((int)$content);
 		return $groeptag->getHTML();
 	}
+	
+	/*
+	 * ubb_document();
+	 * 
+	 * [document]1234[/document]
+	 * 
+	 * Geeft een blokje met een documentnaam, link, bestandsgrootte en formaat.
+	 */
+	protected function ubb_document($parameters){
+		$id=(int)$this->parseArray(array('[/document]'), array());
+		
+		require_once('documenten/class.documentcontent.php');
+		try{
+			$document=new Document($id);
+			$content=new DocumentUbbContent($document);
+			return $content->view();
+		}catch(Exception $e){
+			return '<div class="ubb_document">Ongeldig document</div>';
+		}
+	}
+	 
 	/*
 	 * ubb_maaltijd();
 	 *
