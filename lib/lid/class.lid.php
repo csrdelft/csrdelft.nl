@@ -606,7 +606,15 @@ class Lid implements Serializable, Agendeerbaar{
 			$limitclause='';
 		}
 		$query="
-			SELECT uid  FROM lid 
+			SELECT uid, ADDDATE(
+					gebdatum,
+					INTERVAL TIMESTAMPDIFF(
+						year,
+						ADDDATE(gebdatum, INTERVAL 1 DAY),
+						CURRENT_DATE
+					)+1 YEAR
+				) as verjaardag
+			FROM lid 
 			WHERE (
 				(CONCAT('".$vanjaar."', SUBSTRING(gebdatum, 5))>='".$van."' AND CONCAT('".$vanjaar."', SUBSTRING(gebdatum, 5))<'".$tot."') 
 			OR 
@@ -614,6 +622,7 @@ class Lid implements Serializable, Agendeerbaar{
 			) AND
 			(status='S_NOVIET' OR status='S_GASTLID' OR status='S_LID' OR status='S_KRINGEL') AND
 			NOT gebdatum = '0000-00-00'
+			ORDER BY verjaardag ASC
 			".$limitclause.";";
 
 		$leden=MySql::instance()->query2array($query);
