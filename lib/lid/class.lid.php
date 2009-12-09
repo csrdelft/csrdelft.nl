@@ -182,6 +182,7 @@ class Lid implements Serializable, Agendeerbaar{
 	public function getMoot(){ 		return $this->profiel['moot']; }
 
 	public function isJarig(){		return substr($this->profiel['gebdatum'], 5, 5)==date('m-d'); }
+	public function getGeboortedatum(){ return $this->profiel['gebdatum']; }
 	
 	//we maken een lid Agendeerbaar, zodat het in de agenda kan.
 	public function getBeginMoment(){ 
@@ -593,11 +594,17 @@ class Lid implements Serializable, Agendeerbaar{
 			throw new Exception('Kon geen nieuw uid aanmaken.');
 		}
 	}
-	public static function getVerjaardagen($van, $tot){
+	public static function getVerjaardagen($van, $tot, $limiet=0){
 		$vanjaar=date('Y', $van);
 		$totjaar=date('Y', $tot);
 		$van=date('Y-m-d', $van);
 		$tot=date('Y-m-d', $tot);
+		
+		if($limiet>0){
+			$limitclause="LIMIT ".(int)$limiet;
+		}else{
+			$limitclause='';
+		}
 		$query="
 			SELECT uid  FROM lid 
 			WHERE (
@@ -606,7 +613,9 @@ class Lid implements Serializable, Agendeerbaar{
 				(CONCAT('".$totjaar."', SUBSTRING(gebdatum, 5))>='".$van."' AND CONCAT('".$totjaar."', SUBSTRING(gebdatum, 5))<'".$tot."') 
 			) AND
 			(status='S_NOVIET' OR status='S_GASTLID' OR status='S_LID' OR status='S_KRINGEL') AND
-			NOT gebdatum = '0000-00-00';";
+			NOT gebdatum = '0000-00-00'
+			".$limitclause.";";
+
 		$leden=MySql::instance()->query2array($query);
 		
 		$return=array();

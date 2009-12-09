@@ -500,9 +500,9 @@ sql/1713_corvee.sql -text
 sql/1715_corvee.sql -text
 sql/1737_corvee.sql -text
 sql/1742_database_correctie.sql -text
+sql/1765_documenten.sql -text
 sql/1778_mededelingen.sql -text
 sql/1793_agenda.sql -text
-sql/17xx_documenten.sql -text
 sql/1801_mededelingen.sql -text
 sql/1807_mededelingen.sql -text
 sql/csrdelft.sql -text

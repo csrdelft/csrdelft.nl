@@ -26,6 +26,7 @@ $(document).ready(function() {
 		"iDisplayLength": 20,
 		"bInfo": false,
 		"bLengthChange": false,
+		"aaSorting": [3, 'desc'], //sorteren op de vierde kolom, [datum]
 		"aoColumns": [
 			{'sType': 'html'}, // documentnaam
 			//Bestandstgrootte naar B/KB omzetten.

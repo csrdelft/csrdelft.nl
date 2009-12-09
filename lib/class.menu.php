@@ -154,7 +154,7 @@ class Menu {
 
 		$gasnelnaar="SELECT tekst, link, permission FROM menu WHERE gasnelnaar='ja' ORDER BY tekst;";
 		$result=$db->query($gasnelnaar);
-		$return='<h1>Ga snel naar</h1>';
+		$return='<div id="zijbalk_gasnelnaar"><h1>Ga snel naar</h1>';
 		if($result!==false AND $db->numRows($result)>0){
 			while($gsn=$db->next($result)){
 				if($lid->hasPermission($gsn['permission'])){
@@ -164,7 +164,7 @@ class Menu {
 		}else{
 			$return.='<div class="item">Geen items gevonden.</div>';
 		}
-		return $return;
+		return $return.'</div>';
 	}
 }
 

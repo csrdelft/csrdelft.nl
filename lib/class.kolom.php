@@ -44,15 +44,15 @@ class Kolom extends SimpleHTML {
 				require_once('class.menu.php');
 				$this->add(new stringincluder(Menu::getGaSnelNaar()));
 			}
-			
+/*
 			# Agenda
 			require_once('class.pagina.php');
 			require_once('class.paginacontent.php');
 			$pagina=new Pagina('agendazijbalk');
 			$paginacontent=new PaginaContent($pagina);
 			$this->add($paginacontent);
-			
-			if(LoginLid::instance()->hasPermission('P_AGENDA_POST') || LoginLid::instance()->getLid()->getUid()=='x101') {
+*/
+			if(LoginLid::instance()->hasPermission('P_AGENDA_READ')){
 				if(Instelling::get('zijbalk_agendaweken')>0){
 					require_once('agenda/class.agenda.php');
 					require_once('agenda/class.agendacontent.php');

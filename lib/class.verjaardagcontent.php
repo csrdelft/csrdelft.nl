@@ -102,7 +102,7 @@ class VerjaardagContent extends SimpleHTML {
 					$toonpasfotos=Instelling::get('zijbalk_verjaardagen_pasfotos')=='ja';
 				}
 
-				echo '<h1>';
+				echo '<div id="zijbalk_verjaardagen"><h1>';
 				if($this->_lid->hasPermission('P_LEDEN_READ')){
 					echo '<a href="/communicatie/verjaardagen">Verjaardagen</a>';
 				}else{
@@ -118,29 +118,30 @@ class VerjaardagContent extends SimpleHTML {
 						$aantal=3;
 					}
 				}
-				$aVerjaardagen=Verjaardag::getKomendeVerjaardagen($aantal);
+				//verjaardagen opvragen voor 30 dagen vooruit, met een limiet als hierboven 
+				//gedefenieerd.
+				$aVerjaardagen=Lid::getVerjaardagen(time(), time()+3600*24*30, $aantal);
 				
 				if($toonpasfotos){
 					echo '<div class="item" id="komende_pasfotos">';
-					foreach($aVerjaardagen as $verjaardag){
-						$lid=LidCache::getLid($verjaardag['uid']);
+					foreach($aVerjaardagen as $lid){
 						echo '<div class="verjaardag';
-						if($verjaardag['jarig_over']==0){ echo ' opvallend'; }
+						if($lid->isJarig()){ echo ' opvallend'; }
 						echo '">';
-						echo $lid->getNaamLink('pasfoto', 'link').'<br />'.date('d-m', strtotime($verjaardag['gebdatum']));
+						echo $lid->getNaamLink('pasfoto', 'link').'<br />'.date('d-m', strtotime($lid->getGeboortedatum()));
 						echo '</div>';
 					}
 					echo '<div class="clear"></div></div>';
 				}else{
-					foreach($aVerjaardagen as $verjaardag) {
-						$lid=LidCache::getLid($verjaardag['uid']);
-						echo '<div class="item">'.date('d-m', strtotime($verjaardag['gebdatum'])).' ';
-						if($verjaardag['jarig_over']==0){echo '<span class="opvallend">';}
+					foreach($aVerjaardagen as $lid) {
+						echo '<div class="item">'.date('d-m', strtotime($lid->getGeboortedatum())).' ';
+						if($lid->isJarig()){echo '<span class="opvallend">';}
 						echo $lid->getNaamLink('civitas', 'link');
-						if($verjaardag['jarig_over']==0){echo '</span>';}
+						if($lid->isJarig()){echo '</span>';}
 						echo '</div>';
 					}
 				}
+				echo '</div>'; //einde wrapperdiv
 			break;
 		}
 	}
