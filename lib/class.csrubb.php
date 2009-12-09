@@ -195,7 +195,7 @@ class CsrUBB extends eamBBParser{
 			$html='<embed style="width:400px; height:326px;" id="VideoPlayback" type="application/x-shockwave-flash"
 src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
 		}else{
-			$html='Ongeldig googlevideo-id';
+			$html='[googlevideo] Ongeldig googlevideo-id';
 		}
 		return $html;
 	}
@@ -230,7 +230,7 @@ src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
 			$content=new DocumentUbbContent($document);
 			return $content->getHTML();
 		}catch(Exception $e){
-			return '<div class="ubb_document">Ongeldig document</div>';
+			return '<div class="ubb_document">[document] Ongeldig document (id:'.$id.')</div>';
 		}
 	}
 	 
@@ -244,7 +244,7 @@ src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
 	 */
 	public function ubb_maaltijd($parameters){
 		if(!isset($parameters['maaltijd']) OR ($parameters['maaltijd']!='next' AND !preg_match('/\d+/', $parameters['maaltijd']))){
-			return 'Geen maaltijdID opgegeven of ongeldig ID.';
+			return '[maaltijd] Geen maaltijdID opgegeven of ongeldig ID (id:'.mb_htmlentities($parameters['maaltijd']).')';
 		}
 		require_once 'maaltijden/class.maaltijdcontent.php';
 		return MaaltijdContent::getMaaltijdubbtag(trim($parameters['maaltijd']));
@@ -315,7 +315,7 @@ UBBVERHAAL;
 			$nieuwscontent = new NieuwsContent($nieuws);
 			$return=$nieuwscontent->getTopBlock();
 		}else{
-			$return='Geen geldig mededelingenblok.';
+			$return='[mededelingen] Geen geldig mededelingenblok.';
 		}
 		return $return;
 	}
@@ -340,7 +340,7 @@ UBBVERHAAL;
 	public function ubb_map($parameters){
 		$address = $this->parseArray(array('[/map]'), array());
 		if(trim($address)==''){
-			return 'Geen adres opgegeven';
+			return '[map] Geen adres opgegeven';
 		}
 		$address=htmlspecialchars($address);
 		$mapid='map'.md5($address);
@@ -386,7 +386,7 @@ UBBVERHAAL;
 			
 			return $peilingtag->getHTML();
 		}else{
-			return 'Geen geldig peilingblok.';
+			return '[peiling] Geen geldig peilingblok.';
 		}		
 	}
 }
