@@ -178,7 +178,7 @@ class Agenda {
 		
 		// Maaltijden ophalen
 		$maaltrack = new Maaltrack();		
-		$result = array_merge($result, $maaltrack->getMaaltijden($van, $tot, $filter, $filter, null, false));
+		$result = array_merge($result, $maaltrack->getMaaltijden($van, $tot, $filter, true, null, false));
 		
 		//Verjaardagen. Omdat Leden eigenlijk niet Agendeerbaar, maar meer iets als
 		//PeriodiekAgendeerbaar zijn, maar we geen zin hebben om dat te implementeren,
