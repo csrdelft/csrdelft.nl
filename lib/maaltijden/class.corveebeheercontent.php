@@ -54,13 +54,13 @@ class CorveebeheerContent extends SimpleHTML {
 			$aForm['max']=0;
 			//alles standaard naar jan lid.
 			$aForm['tp']='x101';
-			$aForm['tekst']='Corveemaaltijd';
+			$aForm['tekst']='Corveevrijdag';
 			$aForm['frituur_aangemeld']=0;
 			$aForm['afzuigkap_aangemeld']=0;
 			$aForm['keuken_aangemeld']=0;
-			$aForm['schoonmaken_frituur']=2;
-			$aForm['schoonmaken_afzuigkap']=2;
-			$aForm['schoonmaken_keuken']=3;
+			$aForm['schoonmaken_frituur']=0;
+			$aForm['schoonmaken_afzuigkap']=0;
+			$aForm['schoonmaken_keuken']=0;
 			$aForm['punten_schoonmaken_frituur']=2;
 			$aForm['punten_schoonmaken_afzuigkap']=2;
 			$aForm['punten_schoonmaken_keuken']=3;

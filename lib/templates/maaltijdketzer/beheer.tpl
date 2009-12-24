@@ -43,7 +43,7 @@
 					<a href="/actueel/maaltijden/lijst/{$maaltijd.id}/fiscaal" class="knop">&euro;</a>
 				</td>
 				<td>{$maaltijd.datum|date_format:$datumFormaat}</td>
-				<td>{$maaltijd.tekst|escape:'html'}</td>
+				<td>{$maaltijd.tekst|truncate:20|escape:'html'}</td>
 				<td>{$maaltijd.abotekst}</td>
 				<td>{$maaltijd.tp|csrnaam}</td>
 				<td>

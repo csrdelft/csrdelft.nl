@@ -48,7 +48,7 @@
 					<a href="/actueel/maaltijden/corveebeheer/takenbewerk/{$maaltijd.id}#corveetakenFormulier">{icon get="taken_bewerken"}</a>
 				</td>
 				<td>{$maaltijd.datum|date_format:$datumFormaat}</td>
-				<td>{$maaltijd.tekst|escape:'html'}</td>
+				<td>{$maaltijd.tekst|truncate:20|escape:'html'}</td>
 				{if $maaltijd.type == "normaal"}
 					<td {if $maaltijd.koks - $maaltijd.koks_aangemeld > 0}style="color: red;"{/if}>
 						{$maaltijd.koks_aangemeld}/{$maaltijd.koks}
@@ -66,7 +66,7 @@
 					<td>
 						{$maaltijd.aantal} ({$maaltijd.max})
 					</td>
-				{else} {* Corveemaaltijd *}	
+				{else} {* Corveevrijdag *}	
 					<td />
 					<td />
 					<td />

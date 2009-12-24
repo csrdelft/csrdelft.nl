@@ -1,4 +1,4 @@
-<h2 id="corveetakenFormulier">Maaltijd Corvee {$maal.formulier.actie}</h2>
+<h2 id="corveetakenFormulier">Corveevrijdag {$maal.formulier.actie}</h2>
  
 <form name="takenbewerk" action="/actueel/maaltijden/corveebeheer/" method="post">
 	<input type="hidden" name="actie" value="takenbewerk" />
@@ -75,7 +75,7 @@
 								{/section}
 							</td>
 						</tr>
-					{else} {* Corveemaaltijd *}
+					{else} {* Corveevrijdag *}
 						<tr>
 							<td>
 								Frituurschoonmakers({$maal.formulier.schoonmaken_frituur})

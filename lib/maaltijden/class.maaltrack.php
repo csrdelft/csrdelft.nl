@@ -754,6 +754,7 @@ class MaalTrack {
 			
 			$rRaw = 2 * (($rLid['corvee_tekort']/(CORVEEPUNTEN+$tekort_offset)));	// waarde tussen 0 en 1
 			$gRaw = 2 * (1-$rLid['corvee_tekort']/(CORVEEPUNTEN+$tekort_offset));	// waarde tussen 0 en 1
+			if ($rRaw > 0 && $rRaw < 0.5) $rRaw = 0.5; // verschil tussen 0 en 1 tekort wat duidelijker maken
 			if ($rRaw < 0) $rRaw = 0; if ($rRaw > 1) $rRaw = 1;
 			if ($gRaw < 0) $gRaw = 0; if ($gRaw > 1) $gRaw = 1;
 			
