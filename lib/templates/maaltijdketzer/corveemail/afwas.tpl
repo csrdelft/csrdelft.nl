@@ -1,8 +1,9 @@
 Gefeliciteerd! U bent de gelukkige die op {$datum} de vuile vaat weer laat schitteren op Confide.
 
-Om alles zo goed mogelijk te laten verlopen krijg u van mij een document over het AFWASSEN. Lees dit door en hou u hieraan. Het belangrijkste in dit document zijn de volgende zaken:
+Om alles zo goed mogelijk te laten verlopen krijg u van mij een document over het AFWASSEN (kopie staat op Confide in de kookmap). Lees dit door en hou u hieraan. Het belangrijkste in dit document zijn de volgende zaken:
 
 - Coördineer het afruimen goed (taak van de kwali-afwasser);
+- Wees aanwezig op de maaltijd;
 - Help de tafelpraeses met het opruimen van de tafels;
 - Verdeel de taken goed in de keuken;
 - Vul de HACCP in;

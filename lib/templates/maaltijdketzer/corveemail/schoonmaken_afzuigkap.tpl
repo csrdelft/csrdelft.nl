@@ -1,14 +1,8 @@
-Gefeliciteerd! U bent de gelukkige die op {$datum} te [schoonmaken afzuigkap]
+Gefeliciteerd! U bent de gelukkige die op {$datum} het mogelijk maakt dat de lucht weer fris is in de keuken van Confide.
 
-Om alles zo goed mogelijk te laten verlopen krijg u van mij een document over het [SCHOONMAKEN AFZUIGKAP]. Lees dit door en hou u hieraan. Het belangrijkste in dit document zijn de volgende zaken:
+Om alles zo goed mogelijk te laten verlopen krijg u van mij een document over het SCHOONMAKEN VAN DE AFZUIGKAPPEN. Lees dit door en hou u hieraan.
 
-[- schoonmaken]
-[- schoonmaken]
-[- schoonmaken]
-[- schoonmaken]
-[- schoonmaken]
- 
-Kunt u niet [schoonmaken] op deze dag zorg dan zelf voor een vervanger, dat doe ik niet.
+Kunt u niet de afzuigkappen schoonmaken op deze dag zorg dan zelf voor een vervanger, dat doe ik niet.
 
 Ik wens u heel veel succes en plezier.
 
