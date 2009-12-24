@@ -1,17 +1,33 @@
 -- phpMyAdmin SQL Dump
--- version 3.1.1
+-- version 3.2.0.1
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Nov 04, 2009 at 11:54 AM
--- Server version: 5.1.30
--- PHP Version: 5.2.8
+-- Generation Time: Dec 24, 2009 at 02:02 
+-- Server version: 5.1.37
+-- PHP Version: 5.3.0
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
 --
 -- Database: `csrdelft`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `agenda`
+--
+
+CREATE TABLE IF NOT EXISTS `agenda` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `titel` varchar(100) NOT NULL,
+  `beschrijving` text NOT NULL,
+  `begin` datetime NOT NULL,
+  `eind` datetime NOT NULL,
+  `rechtenBekijken` varchar(200) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -626,16 +642,16 @@ CREATE TABLE IF NOT EXISTS `maaltijdgesloten` (
 CREATE TABLE IF NOT EXISTS `mededeling` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `datum` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `vervaltijd` datetime DEFAULT NULL COMMENT 'Wanneer vervalt hij?',
   `titel` text NOT NULL,
   `tekst` text NOT NULL,
   `categorie` int(11) NOT NULL DEFAULT '0',
   `prioriteit` tinyint(3) unsigned NOT NULL DEFAULT '255' COMMENT 'Hoe belangrijk is deze mededeling?',
   `uid` varchar(4) NOT NULL DEFAULT '',
-  `prive` enum('0','1') NOT NULL DEFAULT '0',
+  `doelgroep` enum('iedereen','(oud)leden','leden') NOT NULL DEFAULT 'iedereen',
   `zichtbaarheid` enum('wacht_goedkeuring','zichtbaar','onzichtbaar','verwijderd') NOT NULL DEFAULT 'zichtbaar' COMMENT 'Is hij zichtbaar?',
   `plaatje` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
-  KEY `intern` (`prive`),
   FULLTEXT KEY `kopje` (`titel`,`tekst`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='Nieuwsberichten' AUTO_INCREMENT=488 ;
 
@@ -649,6 +665,7 @@ CREATE TABLE IF NOT EXISTS `mededelingcategorie` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `naam` varchar(250) NOT NULL,
   `prioriteit` tinyint(3) unsigned NOT NULL DEFAULT '255' COMMENT 'De volgorde van de categorieën in de dropdown',
+  `permissie` enum('P_NEWS_POST','P_NEWS_MOD') NOT NULL DEFAULT 'P_NEWS_POST' COMMENT 'Mag lid berichten toevoegen aan deze categorie?',
   `plaatje` varchar(250) NOT NULL,
   `beschrijving` text,
   PRIMARY KEY (`id`)
