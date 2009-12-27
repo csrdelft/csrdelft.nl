@@ -92,7 +92,7 @@ class DocumentDownloadContent extends SimpleHtml{
 
 		$mime=$this->document->getMimetype();
 		if(!strstr($mime, 'image') AND !strstr($mime, 'text')){
-			header('Content-Disposition: attachment; filename="'.urlencode($this->document->getBestandsnaam()).'";');
+			header('Content-Disposition: attachment; filename="'.$this->document->getBestandsnaam().'";');
 			header('Content-Lenght: '.$this->document->getSize().';');
 		}
 		readfile($this->document->getFullPath());
