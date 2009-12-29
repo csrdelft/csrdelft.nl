@@ -165,7 +165,7 @@ class AgendaController extends Controller {
 		}
 	}
 	function action_courant(){
-		if(LoginLid::instance()->hasPermission('P_MAIL_SEND')){
+		if(LoginLid::instance()->hasPermission('P_MAIL_COMPOSE')){
 			$content=new AgendaCourantContent($this->agenda, 2);
 			
 			$content->view();

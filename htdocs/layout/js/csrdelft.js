@@ -192,7 +192,7 @@ function uidPreview(fieldname){
 		http.open("GET", "/tools/naamlink.php?uid="+field.value, true);
 		http.onreadystatechange=function(){
 			if(http.readyState == 4){
-				document.getElementById('preview_'+fieldname).innerHTML=http.responseText;	
+				document.getElementById('preview_'+fieldname).innerHTML=http.responseText;
 			}
 		}
 		http.send(null);
@@ -216,7 +216,7 @@ function importAgenda(id){
 	http.open("GET", "/actueel/agenda/courant/", true);
 	http.onreadystatechange=function(){
 		if(http.readyState == 4){
-			textarea=document.getElementById(id).innerHTML=http.responseText;
+			document.getElementById(id).value+="\n"+http.responseText;
 		}
 	}
 	http.send(null);

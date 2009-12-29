@@ -65,7 +65,7 @@
 		<a style="float: right;" class="handje knop" onclick="vergrootTextarea('courantBericht', 10)" title="Vergroot het invoerveld"><strong>&uarr;&darr;</strong></a>
 		<input type="submit" name="verzenden" value="opslaan" class="tekst" /> 
 		<input type="button" value="voorbeeld" onclick="return previewPost('courantBericht', 'bewerkPreview')" />
-		{if $courant->magVerzenden()}
+		{if $courant->magBeheren()}
 			&nbsp;&nbsp;<input type="button" value="Importeer agenda" onclick="return importAgenda('courantBericht')" />
 		{/if}
 	</div>
