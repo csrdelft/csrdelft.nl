@@ -209,3 +209,16 @@ function readableFileSize(size){
 	size=size/1;
     return size.toFixed(1) + ' ' + units[i];
 }
+
+function importAgenda(id){
+	textarea=document.getElementById(id);
+	http.abort();
+	http.open("GET", "/actueel/agenda/courant/", true);
+	http.onreadystatechange=function(){
+		if(http.readyState == 4){
+			textarea=document.getElementById(id).innerHTML=http.responseText;
+		}
+	}
+	http.send(null);
+	return null;
+}

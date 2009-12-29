@@ -255,7 +255,7 @@ class Agenda {
 	 * Vergelijkt twee Agendeerbaars op beginMoment t.b.v. sorteren.
 	 */
 	public static function vergelijkAgendeerbaars(Agendeerbaar $foo, Agendeerbaar $bar) {
-		if ($foo->getBeginMoment() == $bar->getBeginMoment) {
+		if ($foo->getBeginMoment() == $bar->getBeginMoment()) {
 			return 0;
 		}
 		return ($foo->getBeginMoment() > $bar->getBeginMoment()) ? 1 : -1;

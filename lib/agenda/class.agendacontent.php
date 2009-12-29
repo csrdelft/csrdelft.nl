@@ -110,5 +110,26 @@ class AgendaZijbalkContent extends SimpleHTML {
 		$content->display('agenda/zijbalk.tpl');
 	}
 }
+class AgendaCourantContent extends SimpleHTML{
+	private $agenda;
+	private $aantalWeken;
+	
+	public function __construct($agenda, $aantalWeken) {
+		$this->agenda = $agenda;
+		$this->aantalWeken = $aantalWeken;
+		
+		$filter = !LoginLid::instance()->hasPermission('P_AGENDA_MOD');
+		
+		$beginMoment = strtotime(date('Y-m-d'));
+		$eindMoment = strtotime('+'.$this->aantalWeken.' weeks', $beginMoment);
+		$eindMoment = strtotime('next saturday', $eindMoment);
+		$items = $this->agenda->getItems($beginMoment, $eindMoment, $filter);
+		
+		$content = new Smarty_csr();
+		$content->assign('items', $items);
+		$content->display('agenda/courant.tpl');
+	}
+	
+}
 
 ?>

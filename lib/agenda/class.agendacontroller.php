@@ -164,6 +164,15 @@ class AgendaController extends Controller {
 			}
 		}
 	}
+	function action_courant(){
+		if(LoginLid::instance()->hasPermission('P_MAIL_SEND')){
+			$content=new AgendaCourantContent($this->agenda, 2);
+			
+			$content->view();
+		}
+		//ajax-request, we doen zelf de $content->view() hier
+		exit;
+	}
 	
 	/**
 	 * Maakt een nieuw AgendaItem met de gePOSTe gegevens.
