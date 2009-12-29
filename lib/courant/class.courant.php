@@ -106,9 +106,9 @@ class Courant {
 		return $return;
 	}
 
-	function magToevoegen(){ return LoginLid::instance()->hasPermission('P_MAIL_POST'); }
-	function magBeheren(){ return LoginLid::instance()->hasPermission('P_MAIL_COMPOSE'); }
-	function magVerzenden(){ return LoginLid::instance()->hasPermission('P_MAIL_SEND'); }
+	public static function magToevoegen(){ return LoginLid::instance()->hasPermission('P_MAIL_POST'); }
+	public static function magBeheren(){ return LoginLid::instance()->hasPermission('P_MAIL_COMPOSE'); }
+	public static function magVerzenden(){ return LoginLid::instance()->hasPermission('P_MAIL_SEND'); }
 
 	private function _isValideCategorie($categorie){ return in_array($categorie, $this->categorieen); }
 
