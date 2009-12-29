@@ -165,7 +165,8 @@ class AgendaController extends Controller {
 		}
 	}
 	function action_courant(){
-		if(LoginLid::instance()->hasPermission('P_MAIL_COMPOSE')){
+		require_once 'courant/class.courant.php';
+		if(Courant::magBeheren()){
 			$content=new AgendaCourantContent($this->agenda, 2);
 			
 			$content->view();
