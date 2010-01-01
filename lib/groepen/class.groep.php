@@ -27,7 +27,7 @@ class Groep{
 				$this->groep=array(
 					'groepId'=>0, 'snaam'=>'', 'naam'=>'', 'sbeschrijving'=>'', 'beschrijving'=>'',
 					'zichtbaar'=>'zichtbaar', 'begin'=>date('Y-m-d'), 'einde'=>'0000-00-00',
-					'aanmeldbaar'=>0, 'limiet'=>0, 'toonFuncties'=>'tonen', 'toonPasfotos'=>0, 'lidIsMod'=>0);
+					'aanmeldbaar'=>'', 'limiet'=>0, 'toonFuncties'=>'tonen', 'toonPasfotos'=>0, 'lidIsMod'=>0);
 			}else{
 				$this->load($init);
 			}
@@ -112,7 +112,7 @@ class Groep{
 					'".$db->escape($this->getStatus())."',
 					'".$db->escape($this->getBegin())."',
 					'".$db->escape($this->getEinde())."',
-					".($this->isAanmeldbaar() ? 1 : 0).",
+					'".$db->escape($this->getAanmeldbaar())."',
 					".(int)$this->getLimiet().",
 					'".$this->getToonFuncties()."',
 					'".$this->getToonPasfotos()."',
@@ -129,7 +129,7 @@ class Groep{
 					status='".$db->escape($this->getStatus())."',
 					begin='".$db->escape($this->getBegin())."',
 					einde='".$db->escape($this->getEinde())."',
-					aanmeldbaar=".($this->isAanmeldbaar() ? 1 : 0).",
+					aanmeldbaar='".$db->escape($this->getAanmeldbaar())."',
 					limiet=".(int)$this->getLimiet().",
 					toonFuncties='".$this->getToonFuncties()."',
 					toonPasfotos='".$this->getToonPasfotos()."',
@@ -188,7 +188,10 @@ class Groep{
 	public function getDuration(){
 		return strtotime($this->getBegin())-strtotime($this->getEinde())/(60*24*30);
 	}
-	public function isAanmeldbaar(){	return $this->groep['aanmeldbaar']==1; }
+	public function getAanmeldbaar(){	return $this->groep['aanmeldbaar']; }
+	public function isAanmeldbaar(){
+		return LoginLid::instance()->hasPermission($this->getAanmeldbaar()); 
+	}
 	public function getLimiet(){		return $this->groep['limiet']; }
 	public function getToonFuncties(){	return $this->groep['toonFuncties']; }
 	public function getToonPasfotos(){	return $this->groep['toonPasfotos']; }
@@ -322,7 +325,7 @@ class Groep{
 				$this->setValue('einde', date('Y-m-d'));
 			}
 			if($this->isAanmeldbaar()){
-				$this->setValue('aanmeldbaar', 0);
+				$this->setValue('aanmeldbaar', '');
 			}
 			$this->setValue('status', 'ot');
 			return $this->save();

@@ -8,7 +8,7 @@ function updateGroepform(){
 		displayDiv(gAanmeldDiv);
 		var gLimietDiv=document.getElementById('groepLimietContainer');
 
-		if(document.getElementById('groepAanmeldbaar').checked){
+		if(document.getElementById('groepAanmeldbaar').value!=''){
 			displayDiv(gLimietDiv);
 			//eventueel een opmerking weergeven bij de gekozen optie in de select.
 			switch(document.getElementById('toonFuncties').selectedIndex){

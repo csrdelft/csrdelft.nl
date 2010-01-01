@@ -26,7 +26,15 @@
 		<br />
 		<div id="groepAanmeldbaarContainer" style="display: none;">
 			<label for="groepAanmeldbaar"><strong>Aanmeldbaar?</strong></label>
-			<input type="checkbox" name="aanmeldbaar" id="groepAanmeldbaar" onchange="updateGroepform();" {if $groep->isAanmeldbaar()}checked="checked"{/if} />
+			
+			<select name="aanmeldbaar" id="groepAanmeldbaar" onchange="updateGroepform();"  /> 
+			{foreach from=$aanmeldfilters key=filtervalue item=filtertekst}
+				<option value="{$filtervalue}" {if $value==$groep->getAanmeldbaar()}selected="selected"{/if}>
+					{$filtertekst}
+				</option>
+			{/foreach}
+			{debug}
+			</select>
 		</div>
 		<div id="groepLimietContainer" style="display: none;">
 			<label for="groepLimiet"><strong>Limiet:</strong></label>

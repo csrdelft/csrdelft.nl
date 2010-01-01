@@ -506,5 +506,6 @@ sql/1778_mededelingen.sql -text
 sql/1793_agenda.sql -text
 sql/1801_mededelingen.sql -text
 sql/1807_mededelingen.sql -text
+sql/1837_groepaanmeldfilter.sql -text
 sql/csrdelft.sql -text
 sql/csrdelft_oud.sql -text

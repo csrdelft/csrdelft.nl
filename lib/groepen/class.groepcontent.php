@@ -104,6 +104,17 @@ class Groepcontent extends SimpleHTML{
 
 		$content->assign('action', $this->action);
 		$content->assign('groeptypes', Groepen::getGroeptypes());
+		$content->assign('aanmeldfilters', array(
+			'' => 'Niet aanmeldbaar',
+			'P_LOGGED_IN' => 'Alle leden', 
+			'geslacht:m' => 'Alleen mannen',
+			'geslacht:v' => 'Alleen vrouwen',
+			'verticale:A' => 'Verticale A', 'verticale:B' => 'Verticale B', 
+			'verticale:C' => 'Verticale C', 'verticale:D' => 'Verticale D',
+			'verticale:E' => 'Verticale E', 'verticale:F' => 'Verticale F', 
+			'verticale:G' => 'Verticale G', 'verticale:H' => 'Verticale H')); //TODO: voeg lichtingen toe.
+			
+			
 
 		if($this->action=='addLid'){
 			$content->assign('lidAdder', $this->getLidAdder());
