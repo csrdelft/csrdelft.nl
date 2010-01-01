@@ -96,6 +96,22 @@ class Groepcontent extends SimpleHTML{
 		$return.='</select>';
 		return $return;
 	}
+	public function getAanmeldfilters(){
+		$filters=array(
+			'' => 'Niet aanmeldbaar',
+			'P_LOGGED_IN' => 'Alle leden', 
+			'geslacht:m' => 'Alleen mannen',
+			'geslacht:v' => 'Alleen vrouwen');
+		foreach(Verticale::$letters as $key => $verticale){
+			if($verticale=='Geen'){ 
+				continue;
+			}
+			$filter='verticale:'.$verticale;
+			$filters[$filter] = 'Verticale '.Verticale::$namen[$key];
+		}
+		//TODO: voeg lichtingen toe.
+		return $filters;
+	}
 	public function view(){
 		$content=new Smarty_csr();
 
@@ -104,15 +120,7 @@ class Groepcontent extends SimpleHTML{
 
 		$content->assign('action', $this->action);
 		$content->assign('groeptypes', Groepen::getGroeptypes());
-		$content->assign('aanmeldfilters', array(
-			'' => 'Niet aanmeldbaar',
-			'P_LOGGED_IN' => 'Alle leden', 
-			'geslacht:m' => 'Alleen mannen',
-			'geslacht:v' => 'Alleen vrouwen',
-			'verticale:A' => 'Verticale A', 'verticale:B' => 'Verticale B', 
-			'verticale:C' => 'Verticale C', 'verticale:D' => 'Verticale D',
-			'verticale:E' => 'Verticale E', 'verticale:F' => 'Verticale F', 
-			'verticale:G' => 'Verticale G', 'verticale:H' => 'Verticale H')); //TODO: voeg lichtingen toe.
+		$content->assign('aanmeldfilters', $this->getAanmeldfilters()); 
 			
 			
 
