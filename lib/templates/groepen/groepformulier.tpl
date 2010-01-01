@@ -29,11 +29,10 @@
 			
 			<select name="aanmeldbaar" id="groepAanmeldbaar" onchange="updateGroepform();"  /> 
 			{foreach from=$aanmeldfilters key=filtervalue item=filtertekst}
-				<option value="{$filtervalue}" {if $value==$groep->getAanmeldbaar()}selected="selected"{/if}>
+				<option value="{$filtervalue}" {if $filtervalue==$groep->getAanmeldbaar()}selected="selected"{/if}>
 					{$filtertekst}
 				</option>
 			{/foreach}
-			{debug}
 			</select>
 		</div>
 		<div id="groepLimietContainer" style="display: none;">
