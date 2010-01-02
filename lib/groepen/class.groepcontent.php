@@ -102,14 +102,21 @@ class Groepcontent extends SimpleHTML{
 			'P_LOGGED_IN' => 'Alle leden', 
 			'geslacht:m' => 'Alleen mannen',
 			'geslacht:v' => 'Alleen vrouwen');
+		
+		//verticalen.
 		foreach(Verticale::$letters as $key => $verticale){
-			if($verticale=='Geen'){ 
-				continue;
-			}
+			if($verticale=='Geen'){ continue; }
 			$filter='verticale:'.$verticale;
 			$filters[$filter] = 'Verticale '.Verticale::$namen[$key];
 		}
-		//TODO: voeg lichtingen toe.
+		
+		//lichtingen
+		$nu=date('Y');
+		if(date('m')<=8){ $nu--; }
+		for($lichting=$nu; $lichting>=($nu-7); $lichting--){
+			$filters['lichting:'.$lichting]='Lichting '.$lichting;
+		}
+		
 		return $filters;
 	}
 	public function view(){
