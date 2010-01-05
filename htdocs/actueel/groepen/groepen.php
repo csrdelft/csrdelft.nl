@@ -17,8 +17,11 @@ if(isset($_GET['gtype'])){
 	$gtype="Commissies";
 }
 
-$content=new Groepencontent(new Groepen($gtype));
-
+try{
+	$content=new Groepencontent(new Groepen($gtype));
+}catch(Exception $e){
+	GroepenContent::invokeRefresh('Groeptype ('.mb_htmlentities($gtype).') bestaat niet', '/actueel/groepen/');
+}
 
 $pagina=new csrdelft($content);
 $pagina->addStylesheet('groepen.css');

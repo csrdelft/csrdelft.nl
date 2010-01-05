@@ -111,6 +111,10 @@ class DocumentenCategorie{
 	public function getZichtbaaar(){return $this->zichtbaar; }
 	public function isZichtbaar(){ 	return $this->zichtbaar==1; }
 	public function getLeesrechten(){ return $this->leesrechten; }
+	
+	public function magBekijken(){
+		return LoginLid::instance()->hasPermission($this->getLeesrechten()); 
+	}
 
 	public function getLast($count){
 		$this->loadLimit=(int)$count;
@@ -138,7 +142,8 @@ class DocumentenCategorie{
 	}
 	public static function getAll(){
 		$db=MySql::instance();
-		$query="SELECT ID, naam, zichtbaar, leesrechten
+		$query="
+			SELECT ID, naam, zichtbaar, leesrechten
 			FROM documentcategorie
 			WHERE zichtbaar=1
 			ORDER BY naam;";
@@ -148,9 +153,12 @@ class DocumentenCategorie{
 		}
 		$return=array();
 		while($categorie=$db->next($result)){
-			$return[]=new DocumentenCategorie($categorie);
+			$categorie=new DocumentenCategorie($categorie);
+			if($categorie->magBekijken()){
+				$return[]=$categorie;
+			}
 		}
-		return $return;		
+		return $return;
 	}
 }
 ?>
