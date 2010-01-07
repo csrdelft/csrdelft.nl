@@ -176,16 +176,19 @@ class Agenda {
 			}
 		}
 		
-		// Maaltijden ophalen
-		$maaltrack = new Maaltrack();		
-		$result = array_merge($result, $maaltrack->getMaaltijden($van, $tot, $filter, true, null, false));
-		
-		//Verjaardagen. Omdat Leden eigenlijk niet Agendeerbaar, maar meer iets als
-		//PeriodiekAgendeerbaar zijn, maar we geen zin hebben om dat te implementeren,
-		//doen we hier even een vieze hack waardoor
-		$GLOBALS['agenda_jaar']=date('Y', $van);
-		$GLOBALS['agenda_maand']=date('m', ($van+$tot/2));
-		$result = array_merge($result, Lid::getVerjaardagen($van, $tot));
+		if(Instelling::get('agenda_toonMaaltijden')=='ja'){
+			// Maaltijden ophalen
+			$maaltrack = new Maaltrack();		
+			$result = array_merge($result, $maaltrack->getMaaltijden($van, $tot, $filter, true, null, false));
+		}
+		if(Instelling::get('agenda_toonVerjaardagen')=='ja'){
+			//Verjaardagen. Omdat Leden eigenlijk niet Agendeerbaar, maar meer iets als
+			//PeriodiekAgendeerbaar zijn, maar we geen zin hebben om dat te implementeren,
+			//doen we hier even een vieze hack waardoor
+			$GLOBALS['agenda_jaar']=date('Y', $van);
+			$GLOBALS['agenda_maand']=date('m', ($van+$tot/2));
+			$result = array_merge($result, Lid::getVerjaardagen($van, $tot));
+		}
 		
 		// Sorteren
 		usort($result, array('Agenda', 'vergelijkAgendeerbaars'));
