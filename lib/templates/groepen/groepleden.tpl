@@ -51,7 +51,11 @@
 		{if $groep->magAanmelden()}
 			{if $groep->getToonFuncties()=='niet'}
 				<a href="/actueel/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/aanmelden" onclick="return confirm('Weet u zeker dat u zich wilt aanmelden?')">
-					Aanmelden voor deze groep
+					{if $groep->getToonPasfotos()}
+						<img class="pasfoto" src="{$csr_pics}/groepen/aanmelden.jpg" title="Aanmelden voor deze groep">
+					{else}
+						Aanmelden voor deze groep
+					{/if}
 				</a>
 			{else}
 				<form action="/actueel/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/aanmelden" method="post" id="aanmeldForm" class="clear">

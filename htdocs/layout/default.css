@@ -474,6 +474,10 @@ div.preview.pagina{
 }
 .ubb_groep .groepleden table.leden{ width: 100%; }
 .ubb_groep .groepleden table.leden td{ padding: 0px 5px; text-align: left;}
+.ubb_groep .groepleden .pasfoto{ 
+	width: 50px; height: 67px; 
+	border: 1px solid grey;
+	float: left; margin-left: 10px;}
 
 div.ubb_document{
 	background-color: #ddd;
