@@ -1,7 +1,7 @@
 <?php
 
 class Verticale{
-	public static $namen=array('Geen', 'Archibald', 'Faculteit', 'C', 'D', 'E', 'Lekker', 'Securis', 'H');
+	public static $namen=array('Geen', 'Archibald', 'Faculteit', 'C', 'Diagonaal', 'E', 'Lekker', 'Securis', 'H');
 	public static $letters=array('Geen', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H');
 	
 	public $nummer;
@@ -26,7 +26,8 @@ class Verticale{
 		$query="
 			SELECT kring, GROUP_CONCAT(uid ORDER BY kringleider DESC, achternaam ASC) as kringleden
 			FROM lid
-			WHERE (status='S_NOVIET' OR status='S_GASTLID' OR status='S_LID' OR status='S_KRINGEL') AND verticale=".$this->nummer."
+			WHERE (status='S_NOVIET' OR status='S_GASTLID' OR status='S_LID' OR status='S_KRINGEL') 
+			  AND verticale=".$this->nummer."
 			GROUP BY kring
 			ORDER BY kring";
 		$result=$db->query($query);
@@ -69,7 +70,8 @@ class Verticale{
 		$query="
 			SELECT verticale, kring, GROUP_CONCAT(uid ORDER BY kringleider DESC, achternaam ASC) as kringleden
 			FROM lid
-			WHERE (status='S_NOVIET' OR status='S_GASTLID' OR status='S_LID' OR status='S_KRINGEL') AND verticale !=0
+			WHERE (status='S_NOVIET' OR status='S_GASTLID' OR status='S_LID' OR status='S_KRINGEL') 
+			  AND verticale !=0
 			GROUP BY verticale, kring
 			ORDER BY verticale, kring";
 		$result=$db->query($query);
