@@ -2,9 +2,19 @@
 /*
  * Alphacursusbanner.
  */
-//header('content-type: image/jpeg');
+header('content-type: image/jpeg');
 
-$cachename='alphabanner.cache.jpg';
+$width=370;
+$height=62;
+if(isset($_GET['width'])){
+	if($_GET['width']>300){
+		$width=(int)$_GET['width'];
+		$height=ceil($width/6);
+	}
+}
+
+
+$cachename='alphabanner.cache.'.$width.'.jpg';
 $sourcepath='';
 
 if(file_exists($cachename)){
@@ -14,7 +24,7 @@ if(file_exists($cachename)){
 }
 
 if(!$valid){
-	$img=imagecreatetruecolor(370, 62);
+	$img=imagecreatetruecolor($width, $height);
 	
 	$diff=strtotime('2010-02-18')-time();
 	$diffdays=floor($diff/(60*60*24));
@@ -41,8 +51,8 @@ if(!$valid){
 	foreach($parts as $part){
 		$sourcefile=$sourcepath.'tegel_'.$part.'.jpg';
 		//imagecopy($img, imagecreatefromjpeg($sourcefile), $i, 0, 0, 0, 62, 62);
-		imagecopyresampled($img, imagecreatefromjpeg($sourcefile), $i, 0, 0, 0, 62, 62, 50, 50);
-		$i=$i+62;
+		imagecopyresampled($img, imagecreatefromjpeg($sourcefile), $i, 0, 0, 0, $height, $height, 50, 50);
+		$i=$i+$height;
 	}
 	imagejpeg($img, $cachename);
 }
