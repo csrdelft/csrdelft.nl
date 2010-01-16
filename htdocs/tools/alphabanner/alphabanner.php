@@ -18,7 +18,7 @@ $cachename='alphabanner.cache.'.$width.'.jpg';
 $sourcepath='';
 
 if(file_exists($cachename)){
-	$valid=filemtime($cachename)-strtotime(date('Y-m-d')) < 60*60*24;
+	$valid=date('Y-m-d', filemtime($cachename)) == date('Y-m-d');
 }else{
 	$valid=false;
 }
@@ -35,7 +35,7 @@ if(!$valid){
 		$parts=array('alpha', 'start', 'in');
 		if($diffdays>9){
 			$parts[]=floor($diffdays/10);
-			$parts[]=($diffdays-floor($diffdays/10))/10;
+			$parts[]=floor(($diffdays-floor($diffdays/10))/10);
 		}else{
 			$parts[]='leeg';
 			$parts[]=$diffdays;
@@ -55,8 +55,9 @@ if(!$valid){
 		$i=$i+$height;
 	}
 	imagejpeg($img, $cachename);
+	imagejpeg($img);
+}else{
+	echo file_get_contents($cachename);
 }
-
-echo file_get_contents($cachename);
 
 ?>

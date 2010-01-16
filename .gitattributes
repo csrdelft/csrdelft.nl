@@ -134,7 +134,6 @@ htdocs/pauper.php -text
 htdocs/robots.txt -text
 htdocs/su.php -text
 htdocs/tools/.htaccess -text
-htdocs/tools/alphabanner/alphabanner.cache.jpg -text
 htdocs/tools/alphabanner/alphabanner.php -text
 htdocs/tools/alphabanner/tegel_0.jpg -text
 htdocs/tools/alphabanner/tegel_1.jpg -text
