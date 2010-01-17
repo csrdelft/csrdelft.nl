@@ -110,7 +110,7 @@ class Lid implements Serializable, Agendeerbaar{
 			# ldap entry in elkaar snokken
 			$entry = array();
 			$entry['uid'] = $this->getUid();
-			$entry['givenname'] = $this->getNaam();
+			$entry['givenname'] = $this->profiel['voornaam'];
 			$entry['sn'] = $this->profiel['achternaam'];
 			$entry['cn'] = $this->getNaam();
 			$entry['mail'] = $this->getEmail();
