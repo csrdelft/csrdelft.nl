@@ -26,7 +26,7 @@ def flatten(nested):
 # haal de groepnamen en groepid's op uit de db
 dbnamen = set()
 dbuids = {}
-cursor.execute("select snaam, id from groep where status='ht' and gtype=1")
+cursor.execute("select snaam, id from groep where status='ht' and gtype in (select id from groeptype where syncWithLDAP = 1)")
 result = cursor.fetchall() # ('Cie',1)
 for entry in result:
     #cursor.execute("select uid from groeplid where groepid=%d" % entry[1])
