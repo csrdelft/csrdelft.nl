@@ -80,6 +80,15 @@ class AgendaController extends Controller {
 		
 		$this->content->setActie('jaar');
 	}
+	
+	/**
+	 * iCalendar genereren.
+	 */
+	public function action_icalendar() {		
+		$this->content = new AgendaIcalendarContent($this->agenda);
+		$this->content->view();
+		exit;
+	}
 
 	/**
 	 * Item toevoegen aan de agenda.

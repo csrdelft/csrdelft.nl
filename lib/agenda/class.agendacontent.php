@@ -132,4 +132,22 @@ class AgendaCourantContent extends SimpleHTML{
 	
 }
 
+class AgendaIcalendarContent extends SimpleHTML {
+	
+	private $agenda;
+	
+	public function __construct($agenda) {
+		$this->agenda = $agenda;
+	}
+	
+	public function view() {
+		$filter = !LoginLid::instance()->hasPermission('P_AGENDA_MOD');
+		$items = $this->agenda->getItems(null, null, $filter);
+		
+		$content = new Smarty_csr();
+		$content->assign('items', $items);
+		$content->display('agenda/icalendar.tpl');
+	}
+}
+
 ?>
