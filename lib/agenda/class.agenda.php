@@ -178,8 +178,9 @@ class Agenda {
 		
 		if(Instelling::get('agenda_toonMaaltijden')=='ja'){
 			// Maaltijden ophalen
-			$maaltrack = new Maaltrack();		
-			$result = array_merge($result, $maaltrack->getMaaltijden($van, $tot, $filter, true, null, false));
+			$maaltrack = new Maaltrack();
+			// Ranzige hack met $van+1, anders neemt de maaltijdketzer de huidige tijd
+			$result = array_merge($result, $maaltrack->getMaaltijden($van+1, $tot, $filter, true, null, false));
 		}
 		if(Instelling::get('agenda_toonVerjaardagen')=='ja'){
 			//Verjaardagen. Omdat Leden eigenlijk niet Agendeerbaar, maar meer iets als
