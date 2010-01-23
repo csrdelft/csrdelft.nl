@@ -47,6 +47,12 @@ BEGIN:VEVENT
 SUMMARY:{$item->getTitel()}
 DTSTART;TZID=Europe/Amsterdam:{$item->getBeginMoment()|date_format:"%Y%m%dT%H%M%S"}
 DTEND;TZID=Europe/Amsterdam:{$item->getEindMoment()|date_format:"%Y%m%dT%H%M%S"}
+X-GOOGLE-CALENDAR-CONTENT-TITLE:{$item->getTitel()}
+{if $item instanceof Maaltijd}
+X-GOOGLE-CALENDAR-CONTENT-ICON:http://plaetjes.csrdelft.nl/famfamfam/cup.png
+{else}
+X-GOOGLE-CALENDAR-CONTENT-ICON:http://plaetjes.csrdelft.nl/layout/favicon.ico
+{/if}
 END:VEVENT
 {/if}
 {/foreach}
