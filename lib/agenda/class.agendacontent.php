@@ -105,6 +105,10 @@ class AgendaZijbalkContent extends SimpleHTML {
 		$eindMoment = strtotime('next saturday', $eindMoment);
 		$items = $this->agenda->getItems($beginMoment, $eindMoment, $filter);
 		
+		if(count($items)>Instelling::get('zijbalk_agenda_max')){
+			$items=array_slice($items, Instelling::get('zijbalk_agenda_max'));
+		}
+		
 		$content = new Smarty_csr();
 		$content->assign('items', $items);
 		$content->display('agenda/zijbalk.tpl');
