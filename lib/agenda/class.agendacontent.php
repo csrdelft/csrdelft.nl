@@ -106,7 +106,7 @@ class AgendaZijbalkContent extends SimpleHTML {
 		$items = $this->agenda->getItems($beginMoment, $eindMoment, $filter);
 		
 		if(count($items)>Instelling::get('zijbalk_agenda_max')){
-			$items=array_slice($items, Instelling::get('zijbalk_agenda_max'));
+			$items=array_slice($items, 0, Instelling::get('zijbalk_agenda_max'));
 		}
 		
 		$content = new Smarty_csr();
