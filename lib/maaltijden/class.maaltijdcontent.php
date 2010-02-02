@@ -95,6 +95,8 @@ class MaaltijdContent extends SimpleHTML {
 			$html.='<br />';
 			if($maaltijd->isGesloten()){
 				$html.='Gesloten';
+			}elseif($maaltijd->isVol()){
+				$html.='Vol';
 			}else{
 				if(LoginLid::instance()->hasPermission('P_MAAL_IK')){
 					switch($status){
