@@ -46,6 +46,12 @@
 			<td>
 					<a href="/actueel/maaltijden/corveebeheer/bewerk/{$maaltijd.id}#corveemaaltijdFormulier">{icon get="bewerken"}</a>					
 					<a href="/actueel/maaltijden/corveebeheer/takenbewerk/{$maaltijd.id}#corveetakenFormulier">{icon get="taken_bewerken"}</a>
+					<a href="/actueel/maaltijden/corveebeheer/puntenbewerk/{$maaltijd.id}#corveepuntenFormulier">
+					<img src={if $maaltijd.is_toegekend}
+							"{$csr_pics}knopjes/puntenbewerken_toegekend.png"
+							{else}
+							"{$csr_pics}knopjes/puntenbewerken.png"
+							{/if} /></a>
 				</td>
 				<td>{$maaltijd.datum|date_format:$datumFormaat}</td>
 				<td>{$maaltijd.tekst|truncate:20|escape:'html'}</td>
@@ -79,7 +85,7 @@
 					<td {if $maaltijd.schoonmaken_keuken - $maaltijd.keuken_aangemeld > 0}style="color: red;"{/if}>
 						{$maaltijd.keuken_aangemeld}/{$maaltijd.schoonmaken_keuken}
 					</td>
-					<td {if $maaltijd.is_toegekend}style="color: #0D0;"{/if}>
+					<td>
 						({$maaltijd.punten_schoonmaken_frituur}/{$maaltijd.punten_schoonmaken_afzuigkap}/{$maaltijd.punten_schoonmaken_keuken})
 					</td>
 					<td />
@@ -99,6 +105,9 @@
 {if $maal.formulier.actie == "bewerk" || $maal.formulier.actie == "toevoegen"}
 	{* maaltijd bewerken *}
 	{include file='maaltijdketzer/corveeformulier.tpl'}
+{elseif $maal.formulier.actie == "puntenbewerk"}
+	{* corvee-punten toekennnen *}
+	{include file='maaltijdketzer/corveepuntenformulier.tpl'}
 {elseif $maal.formulier.actie == "takenbewerk"}
 	{* corvee-aanmeldingen bewerken *}
 	{include file='maaltijdketzer/corveetakenformulier.tpl'}

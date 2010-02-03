@@ -9,9 +9,6 @@
 	{if isset($error)}<div class="waarschuwing">{$error}</div>{/if}
 	<table>
 		<tr>
-			<td>
-	<table>
-		<tr>
 			<td style="width: 120px">Beginmoment</td>
 			<td>{$maal.formulier.datum|date_format:$datumFormaatInvoer}</td>
 		</tr>		
@@ -116,37 +113,6 @@
 						<td>&nbsp;</td>
 						<Td><input type="submit" name="opslaan" value="opslaan" /> <input type="button" value="Herlaad zonder filter" onClick="document.getElementById('filter').value=0;document.forms['takenbewerk'].submit();" /></td>
 					</tr>
-			</td>
-		</tr>
-	</table>
-			</td>
-			<td>
-	{if $maal.formulier.datum<=$smarty.now}	
-	<table>
-		<tr>
-			<td>
-				Corveepunten
-			</td>
-		</tr>
-		{foreach from=$maal.formulier.taken.toegekend key=lid item=selected}
-		<tr>
-			<td>
-				{$lid|csrnaam}
-			</td>
-			<td>
-				{$selected}
-			</td>
-			<td>
-				{if $selected=="onbekend"}	
-					{html_options name=punten[$lid] options=$maal.formulier.pt_opties selected="ja"}
-				{else}
-					{html_options name=punten[$lid] options=$maal.formulier.pt_opties selected=$selected}
-				{/if}
-			</td>
-		</tr>
-		{/foreach}
-	</table>
-	{/if}
 			</td>
 		</tr>
 	</table>

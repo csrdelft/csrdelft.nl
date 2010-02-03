@@ -81,6 +81,13 @@ class CorveebeheerContent extends SimpleHTML {
 					if(isset($_POST['punten_afwas'])){  $aForm['punten_afwas']=(int)$_POST['punten_afwas']; }
 					if(isset($_POST['punten_theedoek'])){  $aForm['punten_theedoek']=(int)$_POST['punten_theedoek']; }
 				}
+			} elseif ($this->_actie == 'puntenbewerk') {
+				$aForm['actie']='puntenbewerk';
+				$aForm['pt_opties']=array(
+						'onbekend' => 'Onbekend',
+						'ja' => 'Ja',
+						'nee' => 'Nee'
+				);	
 			} elseif ($this->_actie == 'takenbewerk') {
 				$aForm['actie']='takenbewerk';			
 				$dag = date('D',$aForm['datum']);
@@ -97,11 +104,6 @@ class CorveebeheerContent extends SimpleHTML {
 						$aForm['afzuigkapleden']=$this->_maaltrack->getTaakLeden();
 						$aForm['keukenleden']=$this->_maaltrack->getTaakLeden();
 					}
-					$aForm['pt_opties']=array(
-						'onbekend' => 'Onbekend',
-						'ja' => 'Ja',
-						'nee' => 'Nee'
-					);
 				} else {
 					if($aForm['type'] == "normaal"){
 						//Toekomstige maaltijden

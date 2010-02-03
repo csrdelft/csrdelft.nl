@@ -241,7 +241,7 @@ class MaalTrack {
 	}
 	
 	# bij bestaande maaltijd de taken bewerken
-	function editCorveeMaaltijdTaken($maalid, $kok, $afwas, $theedoek, $punten){
+	function editCorveeMaaltijdTaken($maalid, $kok, $afwas, $theedoek){
 		if($maalid!=(int)$maalid){
 			$this->_error="Ongeldig maaltijdID opgegeven.";
 			return false;
@@ -255,74 +255,6 @@ class MaalTrack {
 		$kok = array_unique($kok);
 		$afwas = array_unique($afwas);
 		$theedoek = array_unique($theedoek);
-		
-		//verwerken punten
-		//formulier toegekend 0=onbekend, 1=ja, 2=nee
-		//van en naar 'ja'
-		//van en naar 'nee'
-		foreach($punten as $uid=>$form_toegekend){
-			if (!$form_toegekend) continue;
-			//haal op of punten al toegekend waren
-			$sToegekendQuery="
-			SELECT 
-				punten_toegekend
-			FROM 
-				maaltijdcorvee 
-			WHERE 
-				maalid=".$maalid." 
-				AND uid=".$uid."
-			;";
-			$dbresult = $this->_db->query($sToegekendQuery);
-			$dbarray = $this->_db->next($dbresult);
-			$db_toegekend = $dbarray['punten_toegekend'];
-
-			//Als iemand nog geen punten toegekend had, maar nu wel, ken ze dan tpe
-			if($db_toegekend!='ja' && $form_toegekend=='ja'){
-				$maaltijd = $this->getMaaltijd($maalid);
-				$punten_erbij = (in_array($uid,$kok)?1:0) * $maaltijd['punten_kok'] + 
-								 (in_array($uid,$afwas)?1:0) * $maaltijd['punten_afwas'] + 
-								 (in_array($uid,$theedoek)?1:0) * $maaltijd['punten_theedoek'];
-				if(!$this->_db->query("UPDATE lid SET corvee_punten=corvee_punten+'".$punten_erbij."' WHERE uid=".$uid.";")){
-					$this->_error=$this->_db->debug("");
-					return false;				
-				}
-			}
-			//van ja naar iets anders: punten intrekken
-			if($db_toegekend=='ja' && $form_toegekend!='ja'){
-				$maaltijd = $this->getMaaltijd($maalid);
-				$punten_eraf = (in_array($uid,$kok)?1:0) * $maaltijd['punten_kok'] + 
-								 (in_array($uid,$afwas)?1:0) * $maaltijd['punten_afwas'] + 
-								 (in_array($uid,$theedoek)?1:0) * $maaltijd['punten_theedoek'];
-				if(!$this->_db->query("UPDATE lid SET corvee_punten=corvee_punten-'".$punten_eraf."' WHERE uid=".$uid.";")){
-					$this->_error=$this->_db->debug("");
-					return false;				
-				}
-			}
-
-			//Als iemand niet gefaald had, maar nu wel, ken dan strafpunten toe
-			if($db_toegekend!='nee' && $form_toegekend=='nee'){
-				$maaltijd = $this->getMaaltijd($maalid);
-				$strafpunten = (in_array($uid,$kok)?1:0) * $maaltijd['punten_kok'] + 
-								 (in_array($uid,$afwas)?1:0) * $maaltijd['punten_afwas'] + 
-								 (in_array($uid,$theedoek)?1:0) * $maaltijd['punten_theedoek'];
-				if(!$this->_db->query("UPDATE lid SET corvee_punten_bonus=corvee_punten_bonus-'".$strafpunten."' WHERE uid=".$uid.";")){
-					$this->_error=$this->_db->debug("");
-					return false;				
-				}
-			}
-			//van nee naar iets anders, dus strafpunten intrekken
-			if($db_toegekend=='nee' && $form_toegekend!='nee'){
-				$maaltijd = $this->getMaaltijd($maalid);
-				$strafpunten = (in_array($uid,$kok)?1:0) * $maaltijd['punten_kok'] + 
-								 (in_array($uid,$afwas)?1:0) * $maaltijd['punten_afwas'] + 
-								 (in_array($uid,$theedoek)?1:0) * $maaltijd['punten_theedoek'];
-				if(!$this->_db->query("UPDATE lid SET corvee_punten_bonus=corvee_punten_bonus+'".$strafpunten."' WHERE uid=".$uid.";")){
-					$this->_error=$this->_db->debug("");
-					return false;				
-				}
-			}
-			
-		}
 		
 		//bestaande aanmeldingen verwijderen
 		$query_maaltijd="
@@ -348,6 +280,89 @@ class MaalTrack {
 			if (!$uid) continue;
 			$this->_db->query("INSERT INTO	maaltijdcorvee (maalid, uid, theedoek) VALUES('".$maalid."', '".$uid."', 1) ON DUPLICATE KEY UPDATE theedoek = 1");
 		}
+		
+		$maaltijd = new Maaltijd ($maalid);
+		return $maalid;
+	}
+
+	function editCorveeMaaltijdPunten($maalid, $punten){
+		if($maalid!=(int)$maalid){
+			$this->_error="Ongeldig maaltijdID opgegeven.";
+			return false;
+		}
+		if(!$this->isMaaltijd($maalid)){
+			$this->_error="Opgegeven maaltijd bestaat niet.";
+			return false;
+		}
+		
+		//Ophalen voor welke taken men ingedeeld is
+		print_r($punten);
+		
+		//verwerken punten
+		//formulier toegekend 0=onbekend, 1=ja, 2=nee
+		//van en naar 'ja'
+		//van en naar 'nee'
+		foreach($punten as $uid=>$form_toegekend){
+			if (!$form_toegekend) continue;
+			//haal op of punten al toegekend waren
+			$sToegekendQuery="
+			SELECT 
+				punten_toegekend
+			FROM 
+				maaltijdcorvee 
+			WHERE 
+				maalid=".$maalid." 
+				AND uid=".$uid."
+			;";
+			$dbresult = $this->_db->query($sToegekendQuery);
+			$dbarray = $this->_db->next($dbresult);
+			$db_toegekend = $dbarray['punten_toegekend'];
+
+			$maaltijd = $this->getMaaltijd($maalid);
+			//Als iemand nog geen punten toegekend had, maar nu wel, ken ze dan tpe
+			if($db_toegekend!='ja' && $form_toegekend=='ja'){				
+				$punten_erbij = (in_array($uid,$kok)?1:0) * $maaltijd['punten_kok'] + 
+								 (in_array($uid,$afwas)?1:0) * $maaltijd['punten_afwas'] + 
+								 (in_array($uid,$theedoek)?1:0) * $maaltijd['punten_theedoek'];
+				if(!$this->_db->query("UPDATE lid SET corvee_punten=corvee_punten+'".$punten_erbij."' WHERE uid=".$uid.";")){
+					$this->_error=$this->_db->debug("");
+					return false;				
+				}
+			}
+			//van ja naar iets anders: punten intrekken
+			if($db_toegekend=='ja' && $form_toegekend!='ja'){
+				$punten_eraf = (in_array($uid,$kok)?1:0) * $maaltijd['punten_kok'] + 
+								 (in_array($uid,$afwas)?1:0) * $maaltijd['punten_afwas'] + 
+								 (in_array($uid,$theedoek)?1:0) * $maaltijd['punten_theedoek'];
+				if(!$this->_db->query("UPDATE lid SET corvee_punten=corvee_punten-'".$punten_eraf."' WHERE uid=".$uid.";")){
+					$this->_error=$this->_db->debug("");
+					return false;				
+				}
+			}
+
+			//Als iemand niet gefaald had, maar nu wel, ken dan strafpunten toe
+			if($db_toegekend!='nee' && $form_toegekend=='nee'){
+				$strafpunten = (in_array($uid,$kok)?1:0) * $maaltijd['punten_kok'] + 
+								 (in_array($uid,$afwas)?1:0) * $maaltijd['punten_afwas'] + 
+								 (in_array($uid,$theedoek)?1:0) * $maaltijd['punten_theedoek'];
+				if(!$this->_db->query("UPDATE lid SET corvee_punten_bonus=corvee_punten_bonus-'".$strafpunten."' WHERE uid=".$uid.";")){
+					$this->_error=$this->_db->debug("");
+					return false;				
+				}
+			}
+			//van nee naar iets anders, dus strafpunten intrekken
+			if($db_toegekend=='nee' && $form_toegekend!='nee'){
+				$strafpunten = (in_array($uid,$kok)?1:0) * $maaltijd['punten_kok'] + 
+								 (in_array($uid,$afwas)?1:0) * $maaltijd['punten_afwas'] + 
+								 (in_array($uid,$theedoek)?1:0) * $maaltijd['punten_theedoek'];
+				if(!$this->_db->query("UPDATE lid SET corvee_punten_bonus=corvee_punten_bonus+'".$strafpunten."' WHERE uid=".$uid.";")){
+					$this->_error=$this->_db->debug("");
+					return false;				
+				}
+			}
+			
+		}
+		
 		//Punten_toegekend updaten
 		foreach($punten as $uid=>$form_toegekend){
 			if (!$uid) continue;
@@ -359,9 +374,8 @@ class MaalTrack {
 		$maaltijd = new Maaltijd ($maalid);
 		return $maalid;
 	}
-
+	
 	function addSchoonmaakMaaltijd($datum, $tekst, $schoonmaken_frituur, $schoonmaken_afzuigkap, $schoonmaken_keuken, $punten_schoonmaken_frituur, $punten_schoonmaken_afzuigkap, $punten_schoonmaken_keuken) {
-		echo 'check';
 		$datum = (int)$datum;
 		$tekst = mb_substr($tekst, 0, 200);
 		$tekst = $this->_db->escape($tekst);
@@ -398,13 +412,11 @@ class MaalTrack {
 				'".$schoonmaken_frituur."', '".$schoonmaken_afzuigkap."', '".$schoonmaken_keuken."',
 				'".$punten_schoonmaken_frituur."', '".$punten_schoonmaken_afzuigkap."', '".$punten_schoonmaken_keuken."'
 			);";
-		echo $maaltijd.'<br/>';
 		if (!$this->_db->query($maaltijd)){
 			echo $this->_db->getDebug(true, false, false, false, false, false);
 			$this->_error="Er is iets mis met de database/query";
 			return false;
 		}else{
-			echo 'Query ok. ';
 			$maaltijd = new Maaltijd($this->_db->insert_id());
 			# ook maar meteen even hertellen, dan zijn de mensen die daar blij van worden weer extra blij...
 			$maaltijd->recount();
@@ -468,7 +480,7 @@ class MaalTrack {
 	}
 
 	# bij bestaande maaltijd de taken bewerken
-	function editSchoonmaakMaaltijdTaken($maalid, $frituur, $afzuigkap, $keuken, $punten){
+	function editSchoonmaakMaaltijdTaken($maalid, $frituur, $afzuigkap, $keuken){
 		if($maalid!=(int)$maalid){
 			$this->_error="Ongeldig maaltijdID opgegeven.";
 			return false;
@@ -482,6 +494,64 @@ class MaalTrack {
 		$frituur = array_unique($frituur);
 		$afzuigkap = array_unique($afzuigkap);
 		$keuken = array_unique($keuken);
+		
+		//bestaande aanmeldingen verwijderen
+		$query_maaltijd="
+			DELETE FROM
+				maaltijdcorvee
+			WHERE
+				maalid=".$maalid."";
+		if(!$this->_db->query($query_maaltijd)){
+			$this->_error="Er is iets mis met de database/query.";
+			return false;
+		}
+				
+		//aanmeldingen toevoegen
+		foreach($frituur as $uid) {
+			if (!$uid) continue;
+			$this->_db->query("INSERT INTO maaltijdcorvee (maalid, uid, schoonmaken_frituur) VALUES('".$maalid."', '".$uid."', 1) ON DUPLICATE KEY UPDATE schoonmaken_frituur = 1");
+		}
+		foreach($afzuigkap as $uid) {
+			if (!$uid) continue;
+			$this->_db->query("INSERT INTO	maaltijdcorvee (maalid, uid, schoonmaken_afzuigkap) VALUES('".$maalid."', '".$uid."', 1) ON DUPLICATE KEY UPDATE schoonmaken_afzuigkap = 1");
+		}
+		foreach($keuken as $uid) {
+			if (!$uid) continue;
+			$this->_db->query("INSERT INTO	maaltijdcorvee (maalid, uid, schoonmaken_keuken) VALUES('".$maalid."', '".$uid."', 1) ON DUPLICATE KEY UPDATE schoonmaken_keuken = 1");
+		}
+		
+		$maaltijd = new Maaltijd ($maalid);
+		return $maalid;
+	}
+
+	# bij bestaande maaltijd de taken bewerken
+	function editSchoonmaakMaaltijdPunten($maalid, $punten){
+		if($maalid!=(int)$maalid){
+			$this->_error="Ongeldig maaltijdID opgegeven.";
+			return false;
+		}
+		if(!$this->isMaaltijd($maalid)){
+			$this->_error="Opgegeven maaltijd bestaat niet.";
+			return false;
+		}
+		
+		//Haal op uit de maaltijdgegevens wie wat gedaan heeft
+		//Dit blijft tijdens de hele functie constant
+		$maaltijd = $this->getMaaltijd($maalid);
+		
+		$frituur = array();
+		if(array_key_exists('schoonmaken_frituur', $maaltijd['taken'])){ 
+			$frituur = array_unique($maaltijd['taken']['schoonmaken_frituur']);
+		}
+		
+		$afzuigkap = array();
+		if(array_key_exists('schoonmaken_afzuigkap', $maaltijd['taken'])){ 
+			$afzuigkap = array_unique($maaltijd['taken']['schoonmaken_afzuigkap']);
+		}
+		$keuken = array();
+		if(array_key_exists('schoonmaken_keuken', $maaltijd['taken'])){ 
+			$keuken = array_unique($maaltijd['taken']['schoonmaken_keuken']);
+		}		
 		
 		//verwerken punten
 		//formulier toegekend 0=onbekend, 1=ja, 2=nee
@@ -504,8 +574,7 @@ class MaalTrack {
 			$db_toegekend = $dbarray['punten_toegekend'];
 
 			//Als iemand nog geen punten toegekend had, maar nu wel, ken ze dan toe
-			if($db_toegekend!='ja' && $form_toegekend=='ja'){
-				$maaltijd = $this->getMaaltijd($maalid);
+			if($db_toegekend!='ja' && $form_toegekend=='ja'){				
 				$punten_erbij = (in_array($uid,$frituur)?1:0) * $maaltijd['punten_schoonmaken_frituur'] + 
 								 (in_array($uid,$afzuigkap)?1:0) * $maaltijd['punten_schoonmaken_afzuigkap'] + 
 								 (in_array($uid,$keuken)?1:0) * $maaltijd['punten_schoonmaken_keuken'];
@@ -516,7 +585,6 @@ class MaalTrack {
 			}
 			//van ja naar iets anders: punten intrekken
 			if($db_toegekend=='ja' && $form_toegekend!='ja'){
-				$maaltijd = $this->getMaaltijd($maalid);
 				$punten_eraf = (in_array($uid,$frituur)?1:0) * $maaltijd['punten_schoonmaken_frituur'] + 
 								 (in_array($uid,$afzuigkap)?1:0) * $maaltijd['punten_schoonmaken_afzuigkap'] + 
 								 (in_array($uid,$keuken)?1:0) * $maaltijd['punten_schoonmaken_keuken'];
@@ -528,10 +596,10 @@ class MaalTrack {
 
 			//Als iemand niet gefaald had, maar nu wel, ken dan strafpunten toe
 			if($db_toegekend!='nee' && $form_toegekend=='nee'){
-				$maaltijd = $this->getMaaltijd($maalid);
 				$strafpunten = (in_array($uid,$frituur)?1:0) * $maaltijd['punten_schoonmaken_frituur'] + 
 								 (in_array($uid,$afzuigkap)?1:0) * $maaltijd['punten_schoonmaken_afzuigkap'] + 
 								 (in_array($uid,$keuken)?1:0) * $maaltijd['punten_schoonmaken_keuken'];
+				echo $strafpunten.' strafpunten voor '.$uid.'<br/>';
 				if(!$this->_db->query("UPDATE lid SET corvee_punten_bonus=corvee_punten_bonus-'".$strafpunten."' WHERE uid=".$uid.";")){
 					$this->_error=$this->_db->debug("");
 					return false;				
@@ -539,7 +607,6 @@ class MaalTrack {
 			}
 			//van nee naar iets anders, dus strafpunten intrekken
 			if($db_toegekend=='nee' && $form_toegekend!='nee'){
-				$maaltijd = $this->getMaaltijd($maalid);
 				$strafpunten = (in_array($uid,$frituur)?1:0) * $maaltijd['punten_schoonmaken_frituur'] + 
 								 (in_array($uid,$afzuigkap)?1:0) * $maaltijd['punten_schoonmaken_afzuigkap'] + 
 								 (in_array($uid,$keuken)?1:0) * $maaltijd['punten_schoonmaken_keuken'];
@@ -550,31 +617,7 @@ class MaalTrack {
 			}
 			
 		}
-		
-		//bestaande aanmeldingen verwijderen
-		$query_maaltijd="
-			DELETE FROM
-				maaltijdcorvee
-			WHERE
-				maalid=".$maalid."";
-		if(!$this->_db->query($query_maaltijd)){
-			$this->_error="Er is iets mis met de database/query.";
-			return false;
-		}
-				
-		//aanmeldingen toevoegen
-		foreach($frituur as $uid) {
-			if (!$uid) continue;
-			$this->_db->query("INSERT INTO maaltijdcorvee (maalid, uid, schoonmaken_frituur) VALUES('".$maalid."', '".$uid."', 1) ON DUPLICATE KEY UPDATE schoonmaken_frituur = 1");
-		}
-		foreach($afzuigkap as $uid) {
-			if (!$uid) continue;
-			$this->_db->query("INSERT INTO	maaltijdcorvee (maalid, uid, schoonmaken_afzuigkap) VALUES('".$maalid."', '".$uid."', 1) ON DUPLICATE KEY UPDATE schoonmaken_afzuigkap = 1");
-		}
-		foreach($theedoek as $uid) {
-			if (!$uid) continue;
-			$this->_db->query("INSERT INTO	maaltijdcorvee (maalid, uid, schoonmaken_keuken) VALUES('".$maalid."', '".$uid."', 1) ON DUPLICATE KEY UPDATE schoonmaken_keuken = 1");
-		}
+					
 		//Punten_toegekend updaten
 		foreach($punten as $uid=>$form_toegekend){
 			if (!$uid) continue;

@@ -24,8 +24,8 @@ $beheer = new CorveebeheerContent($maaltrack);
 
 # actie is bewerken, kijken of velden ingevuld zijn
 if(isset($_POST['actie']) && isset($_POST['type'])){
-	$actie=(int)$_POST['actie'];
-	$type=(int)$_POST['type'];
+	$actie=$_POST['actie'];
+	$type=$_POST['type'];
 	$maalid=(int)$_POST['maalid'];
 	if(isset($_POST['punten']))
 		$punten = $_POST['punten'];
@@ -44,28 +44,38 @@ if(isset($_POST['actie']) && isset($_POST['type'])){
 		exit;
 	}else{	
 		# bestaande maaltijd bewerken
-		if($actie == 'bewerk' && $type == 'normaal' && (isset($_POST['koks'], $_POST['afwassers'], $_POST['theedoeken'], $_POST['punten_kok'], $_POST['punten_afwas'], $_POST['punten_theedoek']))
+		if($actie === 'bewerk' && $type === 'normaal' && (isset($_POST['koks'], $_POST['afwassers'], $_POST['theedoeken'], $_POST['punten_kok'], $_POST['punten_afwas'], $_POST['punten_theedoek']))
 			&& ($maaltrack->editCorveeMaaltijd($maalid, $_POST['koks'], $_POST['afwassers'], $_POST['theedoeken'], $_POST['punten_kok'], $_POST['punten_afwas'], $_POST['punten_theedoek']))){
 			header('location: '.CSR_ROOT.'actueel/maaltijden/corveebeheer/bewerk/'.$maalid);
 			exit;
-		} elseif ($actie == 'bewerk' && $type == 'corvee' && (isset($_POST['frituur'], $_POST['afzuigkap'], $_POST['keuken'], $_POST['punten_schoonmaken_frituur'], $_POST['punten_schoonmaken_afzuigkap'], $_POST['punten_schoonmaken_keuken']))
+		} elseif ($actie === 'bewerk' && $type === 'corvee' && (isset($_POST['frituur'], $_POST['afzuigkap'], $_POST['keuken'], $_POST['punten_schoonmaken_frituur'], $_POST['punten_schoonmaken_afzuigkap'], $_POST['punten_schoonmaken_keuken']))
 			&& ($maaltrack->editSchoonmaakMaaltijd($maalid, $_POST['frituur'], $_POST['afzuigkap'], $_POST['keuken'], $_POST['punten_schoonmaken_frituur'], $_POST['punten_schoonmaken_afzuigkap'], $_POST['punten_schoonmaken_keuken']))){
 			header('location: '.CSR_ROOT.'actueel/maaltijden/corveebeheer/bewerk/'.$maalid);
 			exit;
-		} elseif ($actie == 'takenbewerk' && $type == 'normaal' && (isset($_POST['kok'], $_POST['afwas'], $_POST['theedoek']))
-			&& ($maaltrack->editCorveeMaaltijdTaken($maalid, $_POST['kok'], $_POST['afwas'], $_POST['theedoek'], $punten))){									
+		} elseif ($actie === 'takenbewerk' && $type === 'normaal' && (isset($_POST['kok'], $_POST['afwas'], $_POST['theedoek']))
+			&& ($maaltrack->editCorveeMaaltijdTaken($maalid, $_POST['kok'], $_POST['afwas'], $_POST['theedoek']))){									
 			header('location: '.CSR_ROOT.'actueel/maaltijden/corveebeheer/takenbewerk/'.$maalid.'/'.$_POST['filter']);
 			exit;
-		} elseif ($actie == 'takenbewerk' && $type == 'corvee' && (isset($_POST['frituur'], $_POST['afzuigkap'], $_POST['keuken'])
-			&& ($maaltrack->editSchoonmaakMaaltijdTaken($maalid, $_POST['frituur'], $_POST['afzuigkap'], $_POST['keuken'], $punten)))){
+		} elseif ($actie === 'takenbewerk' && $type === 'corvee' && (isset($_POST['frituur']) || isset($_POST['afzuigkap']) || isset($_POST['keuken']))
+			&& ($maaltrack->editSchoonmaakMaaltijdTaken($maalid, $_POST['frituur'], $_POST['afzuigkap'], $_POST['keuken']))) {
 			header('location: '.CSR_ROOT.'actueel/maaltijden/corveebeheer/takenbewerk/'.$maalid.'/'.$_POST['filter']);
 			exit;	
+		} elseif ($actie === 'puntenbewerk' && $type === 'normaal' 
+			&& ($maaltrack->editCorveeMaaltijdPunten($maalid, $punten))) {
+			header('location: '.CSR_ROOT.'actueel/maaltijden/corveebeheer/puntenbewerk/'.$maalid);
+			exit;
+		} elseif ($actie === 'puntenbewerk' && $type === 'corvee' 
+			&& ($maaltrack->editSchoonmaakMaaltijdPunten($maalid, $punten))) {
+			header('location: '.CSR_ROOT.'actueel/maaltijden/corveebeheer/puntenbewerk/'.$maalid);
+			exit;
 		}
 		
 		#als we hier terecht komen is het niet goed gegaan, dan maar de foutmelding weergeven...
 		$beheer->addError($maaltrack->getError());
 		if($actie == 'bewerk')
 			$beheer->load($maalid, 'bewerk');
+		elseif ($actie == 'puntenbewerk')
+			$beheer->load($maalid, 'puntenbewerk');
 		elseif ($actie == 'takenbewerk')
 			$beheer->load($maalid, 'takenbewerk');
 	}
@@ -74,6 +84,9 @@ if(isset($_POST['actie']) && isset($_POST['type'])){
 # bewerken we een maaltijd?
 if(isset($_GET['bewerk']) AND $_GET['bewerk']==(int)$_GET['bewerk'] AND $_GET['bewerk']!=0){
 	$beheer->load($_GET['bewerk'], 'bewerk');
+}
+if(isset($_GET['puntenbewerk']) AND $_GET['puntenbewerk']==(int)$_GET['puntenbewerk'] AND $_GET['puntenbewerk']!=0){
+	$beheer->load($_GET['puntenbewerk'], 'puntenbewerk');
 }
 if(isset($_GET['takenbewerk']) AND $_GET['takenbewerk']==(int)$_GET['takenbewerk'] AND $_GET['takenbewerk']!=0){
 	if(!isset($_GET['filter'])){
