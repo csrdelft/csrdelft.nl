@@ -208,7 +208,7 @@ class DUFromftp extends DocumentUploader{
 		return $this->getErrors()=='';
 	}
 	public function moveFile(Document $document){
-		if($document->putFile(file_get_contents($this->path.$this->file))){
+		if($document->copyFile($this->path.$this->file)){
 			//moeten we het bestand ook verwijderen uit de public ftp?
 			if(isset($_POST['deleteFiles'])){
 				return unlink($this->path.$this->file);

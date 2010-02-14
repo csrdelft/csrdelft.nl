@@ -138,10 +138,14 @@ class DocumentController extends Controller{
 				$this->document->setMimetype($uploader->getMimetype());
 				
 				if($this->document->save()){
-					if($uploader->moveFile($this->document)){
-						$melding='Document met succes toegevoegd';
-					}else{
-						$melding='Fout bij het opslaan van het bestand in het bestandsysteem';
+					try{
+						if($uploader->moveFile($this->document)){
+							$melding='Document met succes toegevoegd';
+						}else{
+							$melding='Fout bij het opslaan van het bestand in het bestandsysteem';
+						}
+					}catch(Exception $e){
+						$melding='Bestand aan document toevoegen mislukt: '.$e->getMessage();
 					}
 				}else{
 					$melding='Fout bij toevoegen van document Document::save()';
@@ -170,14 +174,10 @@ class DocumentController extends Controller{
 				if($_POST['methode']=='DUKeepfile' AND !$this->document->hasFile()){
 					$this->addError('Dit document heeft nog geen bestand, dus dat kan ook niet behouden worden.');
 				}
-		
 				//kijken of we errors hebben in de huidige methode.
 				if(!$this->uploaders[$_POST['methode']]->valid()){
 					$this->addError($this->uploaders[$_POST['methode']]->getErrors());
 				}
-				
-
-					
 			}
 		}else{
 			$this->addError('Formulier niet compleet');

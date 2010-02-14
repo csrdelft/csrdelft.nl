@@ -191,18 +191,31 @@ class Document{
 	 * bestand opslaan vanuit een string in de juiste map.
 	 */
 	public function putFile($file){
-		if($this->getID()==0){
-			throw new Exception('Document moet eerst opgeslagen worden in de database voordat bestand verplaatst kan worden');
-		}
+		$this->throwExceptionWhenUnsaved();
+		$this->throwExceptionWhenDestNotWriteable();
+		
 		return file_put_contents($this->getFullPath(), $file);
+	}
+	/*
+	 * Bestand kopieren naar de juiste map.
+	 */
+	public function copyFile($source){
+		$this->throwExceptionWhenUnsaved();
+		$this->throwExceptionWhenDestNotWriteable();
+		
+		if(file_exists($source)){
+			return copy($source, $this->getFullPath());
+		}else{
+			throw new Exception('Bronbestand bestaat niet');
+		}
 	}
 	/*
 	 * bestand opslaan vanuit upload-tempdir.
 	 */
 	public function moveUploaded($source){
-		if($this->getID()==0){
-			throw new Exception('Document moet eerst opgeslagen worden in de database voordat bestand verplaatst kan worden');
-		}
+		$this->throwExceptionWhenUnsaved();
+		$this->throwExceptionWhenDestNotWriteable();
+		
 		if(is_uploaded_file($source)){
 			return move_uploaded_file($source, $this->getFullPath());
 		}
@@ -231,7 +244,16 @@ class Document{
 		}
 		return false;
 	}
-	
+	private function throwExceptionWhenUnsaved(){
+		if($this->getID()==0){
+			throw new Exception('Document moet eerst opgeslagen worden in de database voordat bestand verplaatst kan worden');
+		}
+	}
+	private function throwExceptionWhenDestNotWriteable(){
+		if(!is_writable($this->documentroot)){
+			throw new Exception('Doelmap is niet beschrijfbaar');
+		}
+	}
 }
 
 ?>
