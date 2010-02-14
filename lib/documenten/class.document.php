@@ -107,7 +107,9 @@ class Document{
 	}
 	public function delete(){
 		$deletequery='DELETE FROM document WHERE ID='.$this->getID();
-		return $this->deleteFile() && MySql::instance()->query($deletequery);
+		//zorg dat $this->deleteFile geen exceptions gooit als er geen bestand bestaat
+		//voor het huidige document, zodat verwijderen gewoon lukt. 
+		return $this->deleteFile(false) && MySql::instance()->query($deletequery);
 	}
 	public function getID(){			return $this->ID; }
 	public function getNaam(){			return $this->naam; }
@@ -127,24 +129,12 @@ class Document{
 	public function getToegevoegd(){	return $this->toegevoegd; }
 	public function getEigenaar(){		return $this->eigenaar;	}
 
-	public function setNaam($naam){
-		$this->naam=$naam;
-	}
-	public function setCatID($catID){
-		$this->catID=(int)$catID;
-	}
-	public function setBestandsnaam($naam){
-		$this->bestandsnaam=$naam;
-	}
-	public function setSize($size){
-		$this->size=(int)$size;
-	}
-	public function setMimetype($mime){
-		$this->mimetype=$mime;
-	}
-	public function setToegevoegd($toegevoegd){
-		$this->toegevoegd=$toegevoegd;
-	}
+	public function setNaam($naam){				$this->naam=$naam; }
+	public function setCatID($catID){			$this->catID=(int)$catID; }
+	public function setBestandsnaam($naam){		$this->bestandsnaam=$naam; }
+	public function setSize($size){				$this->size=(int)$size; }
+	public function setMimetype($mime){			$this->mimetype=$mime; }
+	public function setToegevoegd($toegevoegd){	$this->toegevoegd=$toegevoegd; }
 	public function setEigenaar($uid){
 		if(!Lid::isValidUID($uid)){
 			throw new Exception('Geen geldig uid opgegeven');
@@ -221,13 +211,23 @@ class Document{
 	/*
 	 * Aangehangen bestand verwijderen van de hd.
 	 */
-	public function deleteFile(){
+	public function deleteFile($throwWhenNotFound=true){
 		if(!$this->hasFile()){
-			throw new Exception('Geen bestand gevonden voor dit document');
+			if($throwWhenNotFound){
+				throw new Exception('Geen bestand gevonden voor dit document');
+			}else{
+				return true;
+			}
 		}
-		if(unlink($this->getFullPath())){
+		if(@unlink($this->getFullPath())){
 			$this->setBestandsnaam('');
 			return true;
+		}else{
+			if(is_writable($this->getFullPath())){
+				throw new Exception('Kan bestand niet verwijderen, lijkt wel beschrijfbaar');
+			}else{
+				throw new Exception('Kan bestand niet verwijderen, niet beschrijfbaar');
+			}
 		}
 		return false;
 	}
