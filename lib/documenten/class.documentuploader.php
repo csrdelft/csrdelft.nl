@@ -126,13 +126,12 @@ class DUFileupload extends DocumentUploader{
 class DUFromurl extends DocumentUploader{
 	
 	private $file; //string met het hele bestand.
+	private $url='http://';
 	
 	public function __construct(){
 		$this->beschrijving='Ophalen vanaf url';
 	}
-	public function whenPosted(){
 
-	}
 	public function valid(){
 		if(!isset($_POST['url'])){
 			$this->addError('Formulier niet compleet');
@@ -140,19 +139,29 @@ class DUFromurl extends DocumentUploader{
 		if(!url_like($_POST['url'])){
 			$this->addError('Dit lijkt niet op een url...');
 		}
+		$this->url=$_POST['url'];
+		
 		if($this->getErrors()==''){
-			$this->file=file_get_contents($_POST['url']);
-			$naam=substr(trim($_POST['url']), strrpos($_POST['url'], '/')+1);
+			$this->file=@file_get_contents($this->url);
+			if(strlen($this->file)==0){
+				$this->addError('Bestand is leeg, check de url.');
+			}else{
+				$naam=substr(trim($this->url), strrpos($this->url, '/')+1);
 
-			//Bestand tijdelijk omslaan om mime-type te bepalen.
-			$tmpfile=TMP_PATH.'docuketz0r'.microtime().'.tmp';
-			file_put_contents($tmpfile, $this->file);
-			$mimetype=MimeMagic::singleton()->guessMimeType($tmpfile);
-			unlink($tmpfile);
+				//Bestand tijdelijk omslaan om mime-type te bepalen.
+				$tmpfile=TMP_PATH.'docuketz0r'.microtime().'.tmp';
+				if(is_writable(TMP_PATH)){
+					file_put_contents($tmpfile, $this->file);
+					$mimetype=MimeMagic::singleton()->guessMimeType($tmpfile);
+					unlink($tmpfile);
 
-			$this->filename=preg_replace("/[^a-zA-Z0-9\s\.\-\_]/", '', $naam);
-			$this->mimetype=$mimetype;
-			$this->size=strlen($this->file);
+					$this->filename=preg_replace("/[^a-zA-Z0-9\s\.\-\_]/", '', $naam);
+					$this->mimetype=$mimetype;
+					$this->size=strlen($this->file);
+				}else{
+					$this->addError('Ophalen vanaf url mislukt: TMP_PATH is niet beschrijfbaar.');
+				}
+			}
 		}
 		return $this->getErrors()=='';
 	}
@@ -164,7 +173,7 @@ class DUFromurl extends DocumentUploader{
 		echo '
 			<label for="fromUrl">Geef url op:</label>
 			<div class="indent">
-				<input type="text" name="url" class="fromurl" value="http://" /><br />
+				<input type="text" name="url" class="fromurl" value="'.$this->url.'" /><br />
 				<span class="small">Bestanden zullen met het mime-type <code>application/octet-stream</code> worden opgeslagen.</span>
 			</div>';
 				

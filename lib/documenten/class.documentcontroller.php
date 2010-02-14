@@ -82,8 +82,13 @@ class DocumentController extends Controller{
 	}
 	public function action_download(){
 		$this->loadDocument();
-		$this->content=new DocumentDownloadContent($this->document);
-		$this->content->view();
+		
+		if($this->document->hasFile()){
+			$this->content=new DocumentDownloadContent($this->document);
+			$this->content->view();
+		}else{
+			DocumentContent::invokeRefresh('Document heeft geen bestand, sorry voor het ongemak.', $this->baseurl);
+		}
 		exit;
 	}
 	protected function action_categorie(){
