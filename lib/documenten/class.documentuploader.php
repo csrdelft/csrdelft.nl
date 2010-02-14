@@ -154,10 +154,10 @@ class DUFromurl extends DocumentUploader{
 			$this->mimetype=$mimetype;
 			$this->size=strlen($this->file);
 		}
-		return $this->getErrors=='';
+		return $this->getErrors()=='';
 	}
 	public function moveFile(Document $document){
-		return $document->putFile($this->downloadfile);
+		return $document->putFile($this->file);
 	}
 
 	public function view(){
