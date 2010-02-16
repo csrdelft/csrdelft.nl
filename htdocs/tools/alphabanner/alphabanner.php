@@ -34,8 +34,9 @@ if(!$valid){
 	}else{
 		$parts=array('alpha', 'start', 'in');
 		if($diffdays>9){
-			$parts[]=floor($diffdays/10);
-			$parts[]=floor(($diffdays-floor($diffdays/10))/10);
+			$diffstring=(string)$diffdays;			
+			$parts[]=$diffstring[0];
+			$parts[]=$diffstring[1];
 		}else{
 			$parts[]='leeg';
 			$parts[]=$diffdays;
@@ -43,8 +44,9 @@ if(!$valid){
 		if($diffdays>1){
 			$parts[]='dagen';
 		}else{
-			$diffdays='dag';
+			$parts[]='dag';
 		}
+//		print_r($parts);
 	}
 	
 	$i=0;
