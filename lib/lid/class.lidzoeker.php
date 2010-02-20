@@ -108,6 +108,11 @@ class LidZoeker{
 					}
 					$this->addFilter('status', $add);
 				break;
+				case 'sort':
+					if(array_key_exists($value, $this->getSortableVelden())){
+						$this->sort=$value;
+					}
+				break;
 			}
 		}
 	}
