@@ -179,6 +179,9 @@ class Lid implements Serializable, Agendeerbaar{
 	public function getNaam(){  	return $this->getNaamLink('full','plain'); }
 	public function getNickname(){ 	return $this->profiel['nickname']; }
 	public function getEmail(){ 	return $this->profiel['email']; }
+	public function getAdres(){
+		return $this->profiel['adres'].' '.$this->profiel['postcode'].' '.$this->profiel['woonplaats']; 
+	}
 	public function getMoot(){ 		return $this->profiel['moot']; }
 
 	public function isJarig(){		return substr($this->profiel['gebdatum'], 5, 5)==date('m-d'); }
@@ -248,6 +251,18 @@ class Lid implements Serializable, Agendeerbaar{
 			case 'S_NOVIET':
 			case 'S_GASTLID':
 			case 'S_LID': return '∈';
+			case 'S_OVERLEDEN': return '✝';
+		}
+	}
+	public function getStatusDescription(){
+		switch($this->getStatus()){
+			case 'S_OUDLID': return 'Oudlid';
+			case 'S_KRINGEL': return 'Kringel';
+			case 'S_NOBODY': return 'Nobody';
+			case 'S_NOVIET': return 'Noviet';
+			case 'S_GASTLID': return 'Gastlid';
+			case 'S_LID': return 'Lid';
+			case 'S_OVERLEDEN': return 'Overleden';
 		}
 	}
 	

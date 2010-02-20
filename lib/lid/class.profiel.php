@@ -153,6 +153,9 @@ class Profiel{
 				$form[]=new InputField('voornamen', $profiel['voornamen'], 'Voornamen', 100);
 			}
 			$form[]=new DatumField('gebdatum', $profiel['gebdatum'], 'Geboortedatum', date('Y')-15);
+			if(in_array($profiel['status'], array('S_NOBODY', 'S_OVERLEDEN'))){
+				$form[]=new DatumField('gebdatum', $profiel['sterfdatum'], 'Overleden op:');
+			}
 		}
 		
 		$form[]=new Comment('Adres:');
@@ -160,7 +163,7 @@ class Profiel{
 		$form[]=new RequiredInputField('postcode', $profiel['postcode'], 'Postcode', 20);
 		$form[]=new RequiredInputField('woonplaats', $profiel['woonplaats'], 'Woonplaats', 50);
 		$form[]=new RequiredLandField('land', $profiel['land'], 'Land', 50);
-		$form[]=new TelefoonField('telefoon', $profiel['telefoon'], 'Telefoonnummer', 20);
+		$form[]=new TelefoonField('telefoon', $profiel['telefoon'], 'Telefoonnummer (vast)', 20);
 		$form[]=new TelefoonField('mobiel', $profiel['mobiel'], 'Paupernummer', 20);
 
 		if($profiel['status']!='S_OUDLID'){

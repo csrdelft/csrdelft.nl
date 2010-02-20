@@ -17,7 +17,8 @@
  *
  * Examples:
  * <pre>
-	{icon get='verwijderen'}
+ *	{icon get='verwijderen'}
+ *	{icon get='verwijderen' notag}
  * </pre>
  * @link http://feuten.csrdelft.nl
  * @version  1.0
