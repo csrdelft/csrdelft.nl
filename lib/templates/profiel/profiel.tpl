@@ -23,8 +23,8 @@
 				</div>
 			</div>
 			{if $melding!=''}{$melding}<br />{/if}
-			<h1>
-				<div class="status" title="{$lid->getStatus()}">{if !$lid->isLid()}{$lid->getStatusChar()}{/if}&nbsp;</div>
+			<h1 title="Lid-status: {$lid->getStatusDescription()}">
+				<div class="status">{if !$lid->isLid()}{$lid->getStatusChar()}{/if}&nbsp;</div>
 				{$profhtml.uid|csrnaam:'full':'plain'}
 			</h1>
 		</div>
@@ -33,7 +33,7 @@
 	<div class="profielregel">
 		<div class="left">Naam</div>
 		<div class="gegevens">
-			<div class="label">&nbsp;</div>{$lid->getNaamLink('civitas', 'html')}<br />
+			<div class="label">&nbsp;</div> {$lid->getNaamLink('civitas', 'html')}<br />
 			<div class="label">Lidnummer:</div> {$profhtml.uid}<br />
 			<div class="label">Bijnaam:</div> {$profhtml.nickname}<br />
 			{if $profhtml.voorletters!=''}<div class="label">Voorletters:</div> {$profhtml.voorletters}<br />{/if}
@@ -105,6 +105,7 @@
 				<div class="label">Studie sinds:</div> {$profhtml.studiejaar}<br />
 				<div class="label">Lid sinds:</div> 
 					{$profhtml.lidjaar}{if $isOudlid AND $profhtml.lidafdatum!='0000-00-00'} tot {$profhtml.lidafdatum|substr:0:4}{/if}<br />
+				<div class="label">Status:</div> {$lid->getStatusDescription()}<br />
 				<br />
 				
 				{if $isOudlid}
