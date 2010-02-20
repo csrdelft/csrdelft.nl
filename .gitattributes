@@ -116,6 +116,7 @@ htdocs/layout/js/slideshow_intern.js -text
 htdocs/layout/js/sneltoetsen.js -text
 htdocs/layout/js/suggest.js -text
 htdocs/layout/js/verticalen.js -text
+htdocs/layout/ledenlijst.css -text
 htdocs/layout/lightbox.css -text
 htdocs/layout/mededelingen.css -text
 htdocs/layout/owee.css -text
@@ -278,6 +279,7 @@ lib/lid/class.instellingen.php -text
 lib/lid/class.instellingencontent.php -text
 lib/lid/class.ledenlijstcontent.php -text
 lib/lid/class.lid.php -text
+lib/lid/class.lidzoeker.php -text
 lib/lid/class.loginlid.php -text
 lib/lid/class.mootverjaardag.php -text
 lib/lid/class.profiel.php -text

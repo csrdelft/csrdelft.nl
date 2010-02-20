@@ -1,0 +1,77 @@
+form{
+}
+label{ width: 200px; float: left; text-align: right; padding-right: 10px;}
+#advanced{
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+#veldselectie{
+	width: 500px;
+	margin-left: 210px;
+	padding-top: 4px;
+	overflow: hidden;
+
+}
+.selectVeld{ 
+	float: left;
+	width: 100px;
+	line-height: 1em;
+	white-space: nowrap;
+}
+.selectVeld label{
+	margin-left: 5px;
+	float: none;
+	text-align: left;
+	width: auto;
+	
+}
+.selectVeld input{ }
+
+
+/* intern/lijst.php */
+table.zoekResultaat{ width: 100%; border-collapse: collapse; clear: both; }
+table.zoekResultaat thead.above tr th{ border-bottom: 1px solid black; }
+table.zoekResultaat thead.below tr th{ border-top: 1px solid black; }
+table.zoekResultaat tr td{border-top: 1px solid lightgrey; margin: 0px; padding: 2px 4px; text-align: left;}
+table.zoekResultaat tr td img{ background-color: #fff3b4;}
+table.zoekResultaat tr.odd td{ background-color: #efefef;}
+table.zoekResultaat img.pasfoto{ height: 90px; }
+
+textarea.csv{
+	width: 100%;
+	height: 500px;
+}
+.visitekaartje{
+	border: 1px solid #bbb;
+	width: 236px;
+	height: 90px;
+	
+	float: left;
+	margin: 5px;
+	padding-right: 5px;
+	text-align: left;
+	overflow: hidden;
+}
+.visitekaartje h2{ 
+	margin-top: 2px;
+	font-size: 12px;
+	display: block;
+	white-space: nowrap;
+	overflow: hidden;
+}
+.visitekaartje h2 a{
+	color: black;
+}
+
+.visitekaartje .lidfoto{ 
+	float: left; height: 90px; padding-right: 10px; 
+}
+.visitekaartje .adres{
+	margin-top: 5px;
+	text-align: left;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+
+

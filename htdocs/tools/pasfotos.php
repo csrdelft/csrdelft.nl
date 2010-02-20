@@ -29,15 +29,20 @@ if(isset($_GET['string'])){
 	}else{
 		echo 'niet voldoende rechten';
 	}	
-}elseif(isset($_GET['uid'], $_GET['image'])){
+}elseif(isset($_GET['image'])){
+	if(isset($_GET['uid'])){
+		$uid=$_GET['uid'];
+	}else{
+		$uid=$loginlid->getUid();
+	}
 	//cache-dingen regelen: 6 dagen vooruit.
 	header("Pragma: public");
 	header("Cache-Control: maxage=21000");
 	header('Expires: ' . gmdate('D, d M Y H:i:s', (time()+21000)) . ' GMT');
 	
 	//we geven de pasfoto voor het gegeven uid direct aan de browser, als we lid-leesrechten hebben
-	if(Lid::isValidUid($_GET['uid']) AND $loginlid->hasPermission('P_LEDEN_READ')){
-		$lid=LidCache::getLid($_GET['uid']);
+	if(Lid::isValidUid($uid) AND $loginlid->hasPermission('P_LEDEN_READ')){
+		$lid=LidCache::getLid($uid);
 		$types=array('png', 'gif', 'jpg');
 		$pasfoto=$lid->getPasfotoPath();
 		

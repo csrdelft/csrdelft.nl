@@ -4,7 +4,9 @@ RewriteEngine On
 RewriteRule ^/?$ /communicatie/forum/ [R]
 
 # Ledenlijst
-RewriteRule ^ledenlijst/? lijst.php
+RewriteRule ^(leden)?lijst/$ lijst.php
+RewriteRule ^(leden)?lijst/?(.*)$ lijst.php [QSA]
+
 
 # Verjaardagen
 RewriteRule ^verjaardagen/? verjaardagen.php
