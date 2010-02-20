@@ -119,7 +119,7 @@ class LidZoeker{
 		
 		if(preg_match('/^\d{2}$/', $zoekterm)){ //lichting bij een sting van 2 cijfers
 			$query="RIGHT(lidjaar,2)=".(int)$zoekterm." ";
-		}elseif(Lid::isValidUid($zoekterm)){ //uid's is ook niet zo moeilijk.
+		}elseif(preg_match('/^[a-z0-9][0-9]{3}$/', $zoekterm)){ //uid's is ook niet zo moeilijk.
 			$query="uid='".$zoekterm."' ";
 		}elseif(preg_match('/^[\-0-9]+$/', $zoekterm)){
 			$defaults[]="telefoon LIKE '%".$zoekterm."%' ";
