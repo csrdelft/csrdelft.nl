@@ -37,7 +37,7 @@ table.zoekResultaat tr td{border-top: 1px solid lightgrey; margin: 0px; padding:
 table.zoekResultaat tr td img{ background-color: #fff3b4;}
 table.zoekResultaat tr.odd td{ background-color: #efefef;}
 table.zoekResultaat img.pasfoto{ height: 90px; }
-
+.dataTables_filter{ padding-bottom: 10px; }
 textarea.csv{
 	width: 100%;
 	height: 500px;
