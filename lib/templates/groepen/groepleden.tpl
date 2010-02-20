@@ -2,10 +2,10 @@
 	<div class="pasfotomatrix">
 		{foreach from=$groep->getLidObjects() item=groeplid name=pasfotos}
 			{if $smarty.foreach.pasfotos.index==16}
-				<a class="toonmeer" onclick="toggleDiv('meerLeden'); this.parentNode.removeChild(this)">
+				<a class="toonmeer" onclick="toggleDiv('meerLeden-{$groep->getId()}'); this.parentNode.removeChild(this)">
 					Nog {$smarty.foreach.pasfotos.total-16} leden tonen...
 				</a>
-				<div class="verborgen" id="meerLeden">
+				<div class="verborgen" id="meerLeden-{$groep->getId()}">
 				{assign var='meerisopen' value='true'}
 			{/if}
 
@@ -52,7 +52,8 @@
 			{if $groep->getToonFuncties()=='niet'}
 				<a href="/actueel/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/aanmelden" onclick="return confirm('Weet u zeker dat u zich wilt aanmelden?')">
 					{if $actie=='pasfotos'}
-						<img class="pasfoto" src="{$csr_pics}/groepen/aanmelden.jpg" title="Aanmelden voor deze groep">
+						<img class="pasfoto" src="{$csr_pics}/groepen/aanmelden.jpg" title="Aanmelden voor deze groep"
+							onmouseover="this.src='/tools/pasfotos.php?image';" onmouseout="this.src='{$csr_pics}/groepen/aanmelden.jpg';" />
 					{else}
 						Aanmelden voor deze groep
 					{/if}
