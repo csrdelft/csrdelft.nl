@@ -120,6 +120,7 @@ class LedenlijstContent extends SimpleHTML{
 						$('#advanced select').removeAttr('disabled');
 					}
 				});
+				
 				if(document.location.hash=='#geavanceerd'){
 					$('#advanced').removeClass('verborgen');
 				}else{
@@ -127,7 +128,10 @@ class LedenlijstContent extends SimpleHTML{
 					$('#advanced select').attr('disabled', 'disabled');
 				}
 				//weergave van selectie beschikbare veldjes
-				$('#fweergave').change(updateVeldselectie);
+				$('#fweergave').change(function(){
+					updateVeldselectie();
+					$('#zoekform').submit();
+					});
 				updateVeldselectie();
 			});
 		</script>

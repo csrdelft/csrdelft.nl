@@ -23,6 +23,7 @@ label{ width: 200px; float: left; text-align: right; padding-right: 10px;}
 	float: none;
 	text-align: left;
 	width: auto;
+	font-size: 10px;
 	
 }
 .selectVeld input{ }

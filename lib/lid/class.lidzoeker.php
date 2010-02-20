@@ -8,8 +8,8 @@
 class LidZoeker{
 	
 	private $allowVelden=array(
-		'pasfoto', 'uid', 'naam', 'voornaam', 'tussenvoegsel', 'achternaam', 'nickname', 
-		'email', 'adres', 'telefoon', 'mobiel', 'skype', 'studie', 'status',
+		'pasfoto', 'uid', 'naam', 'voornaam', 'tussenvoegsel', 'achternaam', 'nickname', 'geslacht',
+		'email', 'adres', 'telefoon', 'mobiel', 'msn', 'jid', 'skype', 'studie', 'status',
 		'gebdatum', 'beroep', 'verticale', 'lidjaar', 'kring', 'patroon');
 	
 	//deze velden kunnen we niet selecteren voor de ledenlijst, ze zijn wel te 
@@ -24,6 +24,7 @@ class LidZoeker{
 		'studie' => 'Studie',
 		'gebdatum' => 'Geb.datum',
 		'studienr' => 'StudieNr.',
+		'jid' => 'Jabber',
 		'ontvangtcontactueel' => 'Contactueel?');
 	
 	//toegestane opties voor het statusfilter.
@@ -87,13 +88,14 @@ class LidZoeker{
 					$value=strtoupper($value);
 					
 					if($value=='*' OR $value=='ALL'){
+						if(isset($this->filters['status'])){
+							unset($this->filters['status']);
+						}
 						break;
 					}
 					$filters=explode('|', $value);
 					
-					if(isset($this->filters['status'])){
-						unset($this->filters['status']);
-					}
+					
 					$add=array();
 					foreach($filters as $filter){
 						if($filter=='LEDEN'){
