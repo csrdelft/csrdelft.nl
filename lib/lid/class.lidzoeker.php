@@ -91,6 +91,9 @@ class LidZoeker{
 					}
 					$filters=explode('|', $value);
 					
+					if(isset($this->filters['status'])){
+						unset($this->filters['status']);
+					}
 					$add=array();
 					foreach($filters as $filter){
 						if($filter=='LEDEN'){
