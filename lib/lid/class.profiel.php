@@ -154,7 +154,7 @@ class Profiel{
 			}
 			$form[]=new DatumField('gebdatum', $profiel['gebdatum'], 'Geboortedatum', date('Y')-15);
 			if(in_array($profiel['status'], array('S_NOBODY', 'S_OVERLEDEN'))){
-				$form[]=new DatumField('gebdatum', $profiel['sterfdatum'], 'Overleden op:');
+				$form[]=new DatumField('sterfdatum', $profiel['sterfdatum'], 'Overleden op:');
 			}
 		}
 		
