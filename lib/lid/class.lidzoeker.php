@@ -1,6 +1,8 @@
 <?php
 /*
  * LidZoeker
+ * 
+ * de array's die in deze class staan bepalen wat er in het formulier te zien is.
  */
 
 class LidZoeker{
@@ -8,7 +10,7 @@ class LidZoeker{
 	private $allowVelden=array(
 		'pasfoto', 'uid', 'naam', 'voornaam', 'tussenvoegsel', 'achternaam', 'nickname', 
 		'email', 'adres', 'telefoon', 'mobiel', 'skype', 'studie', 'status',
-		'gebdatum', 'beroep', 'verticale', 'lidjaar', 'studienr', 'kring', 'patroon');
+		'gebdatum', 'beroep', 'verticale', 'lidjaar', 'kring', 'patroon');
 	
 	//deze velden kunnen we niet selecteren voor de ledenlijst, ze zijn wel te 
 	//filteren en te sorteren.
@@ -48,7 +50,7 @@ class LidZoeker{
 		if(Loginlid::instance()->hasPermission('P_LEDEN_MOD')){
 			$this->allowVelden=array_merge(
 				$this->allowVelden, 
-				array('bankrekening', 'muziek', 'ontvangtcontactueel', 'kerk', 'lidafdatum'));
+				array('studienr', 'bankrekening', 'muziek', 'ontvangtcontactueel', 'kerk', 'lidafdatum'));
 		}
 	}
 	public function parseQuery($query){
@@ -60,7 +62,6 @@ class LidZoeker{
 		foreach($query as $key => $value){
 			switch($key){
 				case 'q':
-				case 'query':
 					$this->query=$value;
 				break;
 				case 'weergave':
@@ -99,22 +100,25 @@ class LidZoeker{
 					}
 					$this->addFilter('status', $add);
 				break;
-				case 'velden':
-				
-				break;
 			}
 		}
 	}
 	private function defaultSearch($zoekterm){
 		$query='';
+		$defaults=array();
+		
 		$zoekterm=MySql::instance()->escape($zoekterm);
 		
-		if(preg_match('/^\d{2}$/', $query)){ //lichting bij een sting van 2 cijfers
+		if(preg_match('/^\d{2}$/', $zoekterm)){ //lichting bij een sting van 2 cijfers
 			$query="RIGHT(lidjaar,2)=".(int)$zoekterm." ";
-		}elseif(Lid::isValidUid($query)){ //uid's is ook niet zo moeilijk.
+		}elseif(Lid::isValidUid($zoekterm)){ //uid's is ook niet zo moeilijk.
 			$query="uid='".$zoekterm."' ";
+		}elseif(preg_match('/^[\-0-9]+$/', $zoekterm)){
+			$defaults[]="telefoon LIKE '%".$zoekterm."%' ";
+			$defaults[]="mobiel LIKE '%".$zoekterm."%' ";
+			
+			$query.='( '.implode(' OR ', $defaults).' )';
 		}else{
-			$defaults=array();
 			$defaults[]="voornaam LIKE '%".$zoekterm."%' ";
 			$defaults[]="achternaam LIKE '%".$zoekterm."%' ";
 			$defaults[]="CONCAT_WS(' ', voornaam, tussenvoegsel, achternaam) LIKE '%".$zoekterm."%' ";
@@ -126,6 +130,9 @@ class LidZoeker{
 			$defaults[]="adres LIKE '%".$zoekterm."%' ";
 			$defaults[]="postcode LIKE '%".$zoekterm."%' ";
 			$defaults[]="woonplaats LIKE '%".$zoekterm."%' ";
+			
+			$defaults[]="studie LIKE '%".$zoekterm."%' ";
+			$defaults[]="email LIKE '%".$zoekterm."%' ";
 			
 			$query.='( '.implode(' OR ', $defaults).' )';
 		}
@@ -144,7 +151,7 @@ class LidZoeker{
 			$query.=$this->defaultSearch($this->query);
 		}		
 		$query.=$this->getFilterSQL();
-		$query.='ORDER BY '.implode($this->sort).';';
+		$query.=' ORDER BY '.implode($this->sort).';';
 		
 		$this->sqlquery=$query;
 		$result=$db->query2array($query);
