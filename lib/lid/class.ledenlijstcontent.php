@@ -179,8 +179,9 @@ class LLLijst extends LLweergave{
 				case 'pasfoto':
 					$aoColumns[]='{"bSortable": false}';
 				break;
-				case 'naam':
 				case 'email':
+				case 'naam':
+				case 'kring':
 					$aoColumns[]='{"sType": \'html\'}';
 				break;
 				default:
@@ -213,6 +214,12 @@ class LLLijst extends LLweergave{
 		foreach($this->velden as $veld){
 			echo '<td class="'.$veld.'">';
 			switch($veld){
+				case 'adres':
+					echo mb_htmlentities($lid->getAdres());
+				break;
+				case 'kring':
+					echo $lid->getKring(true);
+				break;
 				case 'naam': 
 					echo $lid->getNaamLink('full', 'link'); 
 				break;
@@ -221,9 +228,6 @@ class LLLijst extends LLweergave{
 				break;
 				case 'status':
 					echo $lid->getStatusDescription();
-				break;
-				case 'adres':
-					echo mb_htmlentities($lid->getAdres());
 				break;
 				case 'verticale':
 					echo mb_htmlentities($lid->getVerticale());
@@ -266,13 +270,31 @@ class LLCSV extends LLweergave{
 	public function viewLid(Lid $lid){
 		foreach($this->velden as $veld){
 			switch($veld){
+				case 'adres':
+					echo $lid->getProperty('adres').';';
+					echo $lid->getProperty('postcode').';';
+					echo $lid->getProperty('woonplaats');
+				break;
 				case 'naam':
 					echo $lid->getProperty('voornaam').';';
 					echo $lid->getProperty('tussenvoegsel').';';
 					echo $lid->getProperty('achternaam');
 				break;
+				case 'kring':
+					echo $lid->getKring(false);
+				break;
+				case 'pasfoto':
+					echo $lid->getPasfoto(false);
+				break;
+				case 'verticale':
+					echo $this->getVerticale();
+				break;
 				default:
-					echo $lid->getProperty($veld);
+					try{
+						echo $lid->getProperty($veld);
+					}catch(Exception $e){
+						//omit non-existant fields
+					}
 				break;
 			}
 			echo ';';

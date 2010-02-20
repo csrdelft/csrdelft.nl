@@ -8,7 +8,7 @@ class LidZoeker{
 	private $allowVelden=array(
 		'pasfoto', 'uid', 'naam', 'voornaam', 'tussenvoegsel', 'achternaam', 'nickname', 
 		'email', 'adres', 'telefoon', 'mobiel', 'skype', 'studie', 'status',
-		'gebdatum', 'beroep', 'verticale', 'lidjaar');
+		'gebdatum', 'beroep', 'verticale', 'lidjaar', 'studienr', 'kring');
 	
 	//deze velden kunnen we niet selecteren voor de ledenlijst, ze zijn wel te 
 	//filteren en te sorteren.
@@ -20,7 +20,9 @@ class LidZoeker{
 		'telefoon' => 'Nummer',
 		'mobiel' => 'Pauper',
 		'studie' => 'Studie',
-		'gebdatum' => 'Geb.datum');
+		'gebdatum' => 'Geb.datum',
+		'studienr' => 'StudieNr.',
+		'ontvangtcontactueel' => 'Concactuele?');
 	
 	//toegestane opties voor het statusfilter.
 	private $allowStatus=array('S_LID', 'S_NOVIET', 'S_GASTLID', 'S_NOBODY', 'S_OUDLID', 'S_KRINGEL', 'S_OVERLEDEN');
@@ -42,6 +44,13 @@ class LidZoeker{
 	
 	private $result=null;
 	
+	public function __construct(){
+		if(Loginlid::instance()->hasPermission('P_LEDEN_MOD')){
+			$this->allowVelden=array_merge(
+				$this->allowVelden, 
+				array('banknummer', 'muziek', 'ontvangtcontactueel'));
+		}
+	}
 	public function parseQuery($query){
 		if(!is_array($query)){
 			$parts=explode('&', $query);
@@ -102,14 +111,15 @@ class LidZoeker{
 		
 		if(preg_match('/^\d{2}$/', $query)){ //lichting bij een sting van 2 cijfers
 			$query="RIGHT(lidjaar,2)=".(int)$zoekterm." ";
-		}elseif(Lid::isValidUid($query)){
+		}elseif(Lid::isValidUid($query)){ //uid's is ook niet zo moeilijk.
 			$query="uid='".$zoekterm."' ";
 		}else{
 			$defaults=array();
 			$defaults[]="voornaam LIKE '%".$zoekterm."%' ";
 			$defaults[]="achternaam LIKE '%".$zoekterm."%' ";
 			$defaults[]="CONCAT_WS(' ', voornaam, tussenvoegsel, achternaam) LIKE '%".$zoekterm."%' ";
-			$defaults[]="CONCAT_WS(' ',tussenvoegsel, achternaam) LIKE '%".$zoekterm."%' ";
+			$defaults[]="CONCAT_WS(' ', tussenvoegsel, achternaam) LIKE '%".$zoekterm."%' ";
+			$defaults[]="CONCAT_WS(', ', achternaam, tussenvoegsel) LIKE '%".$zoekterm."%' ";
 			$defaults[]="nickname LIKE '%".$zoekterm."%' ";
 			
 			$defaults[]="CONCAT_WS(' ', adres, postcode, woonplaats) LIKE '%".$zoekterm."%' ";
@@ -127,10 +137,7 @@ class LidZoeker{
 	 */
 	public function search(){
 		$db=MySql::instance();
-		if($this->zoekveld=='default'){
-			
-		}
-		
+
 		$query="SELECT uid FROM lid WHERE ";
 		
 		if($this->query!=''){

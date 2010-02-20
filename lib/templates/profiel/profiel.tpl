@@ -112,13 +112,7 @@
 				{else}
 					{if $profhtml.kring!=0}
 						<div class="label">Kring:</div> 
-						<a href="/communicatie/verticalen#kring{$lid->getVerticaleLetter()}.{$profhtml.kring}">{$lid->getVerticale()}.{$profhtml.kring}</a>
-						{if $profhtml.status=='S_KRINGEL'}(kringel){/if}
-						{if $lid->isVerticaan()}
-							(verticaaan)
-						{elseif $lid->isKringleider()}
-							(kringleider)
-						{/if}
+						{$lid->getKring(true)}
 						<br />
 					{/if}
 				{/if}

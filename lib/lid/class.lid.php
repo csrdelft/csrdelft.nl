@@ -218,6 +218,25 @@ class Lid implements Serializable, Agendeerbaar{
 	public function getVerticaleID(){ return $this->profiel['verticale']; }
 	public function isKringleider(){ return $this->profiel['kringleider']!='n'; }
 	public function isVerticaan(){ return $this->profiel['motebal']==1; }
+	public function getKring($link=false){
+		$vertkring=$this->getVerticaleLetter().'.'.$this->profiel['kring'];
+		
+		if($this->getStatus()=='S_KRINGEL'){
+			$postfix='(kringel)';
+		}elseif($this->isVerticaan()){
+			$postfix='(verticaaan)';
+		}elseif($this->isKringleider()){
+			$postfix='(kringleider)';
+		}else{
+			$postfix='';
+		}
+		if($link){
+			return '<a href="/communicatie/verticalen#kring'.$vertkring.'">'.$vertkring.'</a> '.$postfix;
+		}else{
+			return $vertkring.' '.$postfix;
+		}
+	}
+		
 	
 	public function getPassword(){	return $this->profiel['password']; }
 	public function checkpw($pass){
