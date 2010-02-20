@@ -24,7 +24,7 @@ class LidZoeker{
 		'studie' => 'Studie',
 		'gebdatum' => 'Geb.datum',
 		'studienr' => 'StudieNr.',
-		'ontvangtcontactueel' => 'Concactuele?');
+		'ontvangtcontactueel' => 'Contactueel?');
 	
 	//toegestane opties voor het statusfilter.
 	private $allowStatus=array('S_LID', 'S_NOVIET', 'S_GASTLID', 'S_NOBODY', 'S_OUDLID', 'S_KRINGEL', 'S_OVERLEDEN');
@@ -41,7 +41,7 @@ class LidZoeker{
 	private $zoekveld=array('default');
 	private $filters=array();
 	private $sort=array('achternaam');
-	private $velden=array('naam', 'adres', 'email', 'telefoon', 'mobiel');
+	private $velden=array('naam', 'email', 'telefoon', 'mobiel');
 	private $weergave='lijst';
 	
 	private $result=null;
@@ -52,6 +52,9 @@ class LidZoeker{
 				$this->allowVelden, 
 				array('studienr', 'bankrekening', 'muziek', 'ontvangtcontactueel', 'kerk', 'lidafdatum'));
 		}
+		
+		//parse default values.
+		$this->parseQuery($this->rawQuery);
 	}
 	public function parseQuery($query){
 		if(!is_array($query)){
