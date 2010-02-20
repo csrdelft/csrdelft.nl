@@ -40,7 +40,7 @@ class LedenlijstContent extends SimpleHTML{
 			if(in_array($key, $this->zoeker->getSelectedVelden())){
 				echo 'checked="checked" ';
 			}
-			echo '/>';
+			echo ' />';
 			echo '<label for="veld'.$key.'">'.ucfirst($veld).'</label>';
 			echo '</div>';
 		}
@@ -112,13 +112,19 @@ class LedenlijstContent extends SimpleHTML{
 					
 					if(adv.hasClass('verborgen')){
 						window.location.hash='';
+						$('#advanced input').attr('disabled', 'disabled');
 					}else{
 						window.location.hash='geavanceerd';
 						$('#zoekform').attr('action', '#geavanceerd');
+						$('#advanced input').removeAttr('disabled');
+						$('#advanced select').removeAttr('disabled');
 					}
 				});
 				if(document.location.hash=='#geavanceerd'){
 					$('#advanced').removeClass('verborgen');
+				}else{
+					$('#advanced input').attr('disabled', 'disabled');
+					$('#advanced select').attr('disabled', 'disabled');
 				}
 				//weergave van selectie beschikbare veldjes
 				$('#fweergave').change(updateVeldselectie);
