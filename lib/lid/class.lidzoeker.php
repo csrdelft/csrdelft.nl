@@ -110,7 +110,7 @@ class LidZoeker{
 				break;
 				case 'sort':
 					if(array_key_exists($value, $this->getSortableVelden())){
-						$this->sort=$value;
+						$this->sort=array($value);
 					}
 				break;
 			}
