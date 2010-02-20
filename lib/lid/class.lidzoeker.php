@@ -8,7 +8,7 @@ class LidZoeker{
 	private $allowVelden=array(
 		'pasfoto', 'uid', 'naam', 'voornaam', 'tussenvoegsel', 'achternaam', 'nickname', 
 		'email', 'adres', 'telefoon', 'mobiel', 'skype', 'studie', 'status',
-		'gebdatum', 'beroep', 'verticale', 'lidjaar', 'studienr', 'kring');
+		'gebdatum', 'beroep', 'verticale', 'lidjaar', 'studienr', 'kring', 'patroon');
 	
 	//deze velden kunnen we niet selecteren voor de ledenlijst, ze zijn wel te 
 	//filteren en te sorteren.
@@ -48,7 +48,7 @@ class LidZoeker{
 		if(Loginlid::instance()->hasPermission('P_LEDEN_MOD')){
 			$this->allowVelden=array_merge(
 				$this->allowVelden, 
-				array('banknummer', 'muziek', 'ontvangtcontactueel'));
+				array('bankrekening', 'muziek', 'ontvangtcontactueel', 'kerk', 'lidafdatum'));
 		}
 	}
 	public function parseQuery($query){

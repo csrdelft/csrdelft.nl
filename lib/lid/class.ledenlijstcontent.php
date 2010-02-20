@@ -182,6 +182,8 @@ class LLLijst extends LLweergave{
 				case 'email':
 				case 'naam':
 				case 'kring':
+				case 'patroon':
+				case 'verticale':
 					$aoColumns[]='{"sType": \'html\'}';
 				break;
 				default:
@@ -225,6 +227,14 @@ class LLLijst extends LLweergave{
 				break;
 				case 'pasfoto': 
 					echo $lid->getPasfoto(); 
+				break;
+				case 'patroon':
+					$patroon=$lid->getPatroon();
+					if($patroon instanceof Lid){
+						echo $patroon->getNaamLink('full', 'link');
+					}else{
+						echo '-';
+					}
 				break;
 				case 'status':
 					echo $lid->getStatusDescription();
@@ -285,6 +295,9 @@ class LLCSV extends LLweergave{
 				break;
 				case 'pasfoto':
 					echo $lid->getPasfoto(false);
+				break;
+				case 'patroon':
+					echo $lid->getPatroonUid();
 				break;
 				case 'verticale':
 					echo $this->getVerticale();
