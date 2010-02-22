@@ -201,6 +201,8 @@ class Groepcontroller extends Controller{
 						$this->groep->setValue('aanmeldbaar', '');
 					}
 					$this->groep->setValue('toonFuncties', $_POST['toonFuncties']);
+					$this->groep->setFunctiefilter($_POST['functiefilter']);
+					
 					if(isset($_POST['toonPasfotos'])){
 						$this->groep->setValue('toonPasfotos', 1);
 					}else{

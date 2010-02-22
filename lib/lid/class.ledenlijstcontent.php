@@ -3,7 +3,11 @@
  *  C.S.R. Delft | pubcie@csrdelft.nl
  * 
  * LLWeergave, LLLijst, LLKaartje, LLCSV:
- * 		verschillende methode's om dingen in de ledenlijst weer te geven.
+ * 		verschillende methode's om dingen in de ledenlijst weer te geven. 
+ * 		Als je een nieuwe weergave erbij wilt klussen maak dan een class
+ * 		LL<Naam> extends LLWeergave{} aan en voeg die naam toe aan de 
+ * 		array private $weergave in LidZoeker.
+ * 
  * LedenlijstContent
  * 		Algemene View voor de ledenlijst.
  */
@@ -142,14 +146,18 @@ class LedenlijstContent extends SimpleHTML{
 
 abstract class LLWeergave{
 	protected $leden;
+	
 	public function __construct(LidZoeker $zoeker){
 		$this->leden=$zoeker->getLeden();
 		$this->velden=$zoeker->getVelden();
 	}
+	
 	public abstract function viewHeader();
 	public abstract function viewFooter();
 	
+	//viewLid print één regel of vakje ofzo.
 	public abstract function viewLid(Lid $lid);
+	
 	public function view(){
 		$this->viewHeader();
 		foreach($this->leden as $lid){
@@ -160,6 +168,9 @@ abstract class LLWeergave{
 	
 }
 
+/*
+ * De 'normale' ledenlijst, zoals het is zoals het was.
+ */
 class LLLijst extends LLweergave{ 
 	
 	private function viewVeldnamen(){
@@ -216,9 +227,7 @@ class LLLijst extends LLweergave{
 			
 			);
 		});
-		</script>
-		<?php
-		
+		</script><?php
 	}
 	
 	public function viewLid(Lid $lid){
@@ -263,6 +272,9 @@ class LLLijst extends LLweergave{
 
 }
 
+/*
+ * Visitekaartjes, 3 op één regel.
+ */
 class LLKaartje extends LLweergave{ 
 	public function viewHeader(){}
 	public function viewFooter(){}
@@ -277,8 +289,12 @@ class LLKaartje extends LLweergave{
 		echo '<a href="mailto:'.htmlspecialchars($lid->getEmail()).'">'.mb_htmlentities($lid->getEmail()).'</a><br />';
 		echo '</div></div>';
 	}
-
 }
+
+/*
+ * CSV in een textarea. 
+ * Eventueel zou het nog geforceerd downloadbaar gemaakt kunnen worden
+ */
 class LLCSV extends LLweergave{
 	public function viewHeader(){
 		echo '<textarea class="csv">';
@@ -288,39 +304,40 @@ class LLCSV extends LLweergave{
 	}
 	
 	public function viewLid(Lid $lid){
+		$return='';
 		foreach($this->velden as $veld){
 			switch($veld){
 				case 'adres':
-					echo $lid->getProperty('adres').';';
-					echo $lid->getProperty('postcode').';';
-					echo $lid->getProperty('woonplaats');
+					$return.=$lid->getProperty('adres').';';
+					$return.=$lid->getProperty('postcode').';';
+					$return.=$lid->getProperty('woonplaats');
 				break;
 				case 'naam':
-					echo $lid->getProperty('voornaam').';';
-					echo $lid->getProperty('tussenvoegsel').';';
-					echo $lid->getProperty('achternaam');
+					$return.=$lid->getProperty('voornaam').';';
+					$return.=$lid->getProperty('tussenvoegsel').';';
+					$return.=$lid->getProperty('achternaam');
 				break;
 				case 'kring':
-					echo $lid->getKring(false);
+					$return.=$lid->getKring(false);
 				break;
 				case 'pasfoto':
-					echo $lid->getPasfoto(false);
+					$return.=$lid->getPasfoto(false);
 				break;
 				case 'patroon':
-					echo $lid->getPatroonUid();
+					$return.=$lid->getPatroonUid();
 				break;
 				case 'verticale':
-					echo $this->getVerticale();
+					$return.=$this->getVerticale();
 				break;
 				default:
 					try{
-						echo $lid->getProperty($veld);
+						$return.=$lid->getProperty($veld);
 					}catch(Exception $e){
 						//omit non-existant fields
 					}
 				break;
 			}
-			echo ';';
+			echo htmlspecialchars($return).';';
 		}
 		echo "\n";
 	}

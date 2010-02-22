@@ -29,6 +29,7 @@ class Lid implements Serializable, Agendeerbaar{
 		$this->uid=$uid;
 		$this->load($uid);
 	}
+	
 	public function load($uid){
 		$db=MySql::instance();
 		$query="SELECT * FROM lid WHERE uid = '".$db->escape($uid)."' LIMIT 1;";
@@ -43,6 +44,7 @@ class Lid implements Serializable, Agendeerbaar{
 			throw new Exception('Lid [uid:'.$uid.'] kon niet geladen worden.');
 		}
 	}
+	
 	public static function loadByNickname($nick){
 		$db=MySql::instance();
 		$query="SELECT uid FROM lid WHERE nickname='".$db->escape($nick)."' LIMIT 1";
@@ -53,6 +55,7 @@ class Lid implements Serializable, Agendeerbaar{
 			return false;
 		}
 	}
+	
 	// sla huidige objectstatus op in db, en update het huidige lid in de LidCache
 	public function save(){
 		$db=MySql::instance();
@@ -98,7 +101,10 @@ class Lid implements Serializable, Agendeerbaar{
 			$this->profiel['changelog']=$diff;
 		}		
 	}
-	# Sla huidige objecstatus op in LDAP
+	
+	/*
+	 * Sla huidige objectstatus op in LDAP
+	 */
 	public function save_ldap() {
 		require_once 'class.ldap.php';
 
@@ -154,6 +160,12 @@ class Lid implements Serializable, Agendeerbaar{
 		$ldap->disconnect();
 		return true;
 	}
+	
+	/*
+	 * Om niet overal getters en setters voor te hoeven maken, en om een
+	 * generiek aansprekfunctie te hebben voor het profiel, de volgende 
+	 * functies:
+	 */
 	public function hasProperty($key){	return array_key_exists($key, $this->profiel); }
 	public function getProperty($key){
 		if(!$this->hasProperty($key)){
@@ -173,21 +185,26 @@ class Lid implements Serializable, Agendeerbaar{
 		}
 		return true;
 	}
-	public function getUid(){		return $this->profiel['uid']; }
-	public function getGeslacht(){ 	return $this->profiel['geslacht']; }
-	public function getProfiel(){	return $this->profiel; }
-	public function getNaam(){  	return $this->getNaamLink('full','plain'); }
-	public function getNickname(){ 	return $this->profiel['nickname']; }
-	public function getEmail(){ 	return $this->profiel['email']; }
-	public function getAdres(){
-		return $this->profiel['adres'].' '.$this->profiel['postcode'].' '.$this->profiel['woonplaats']; 
-	}
-	public function getMoot(){ 		return $this->profiel['moot']; }
+	public function getUid(){			return $this->profiel['uid']; }
+	public function getGeslacht(){ 		return $this->profiel['geslacht']; }
+	public function getProfiel(){		return $this->profiel; }
+	public function getNaam(){  		return $this->getNaamLink('full','plain'); }
+	public function getNickname(){ 		return $this->profiel['nickname']; }
+	public function getEmail(){ 		return $this->profiel['email']; }
+	public function getAdres(){			return $this->profiel['adres'].' '.$this->profiel['postcode'].' '.$this->profiel['woonplaats']; }
+	public function getMoot(){ 			return $this->profiel['moot']; }
 
-	public function isJarig(){		return substr($this->profiel['gebdatum'], 5, 5)==date('m-d'); }
+	public function isJarig(){			return substr($this->profiel['gebdatum'], 5, 5)==date('m-d'); }
 	public function getGeboortedatum(){ return $this->profiel['gebdatum']; }
 	
-	//we maken een lid Agendeerbaar, zodat het in de agenda kan.
+	/*
+	 * implements Agendeerbaar
+	 * 
+	 * We maken een lid Agendeerbaar, zodat het in de agenda kan. Het is
+	 * een beetje vieze hack omdat Agendeerbaar een enkele activiteit 
+	 * verwacht, terwijl een verjaardag een periodieke activiteit (elk
+	 * jaar) is.
+	 */
 	public function getBeginMoment(){ 
 		$jaar=date('Y');
 		if(isset($GLOBALS['agenda_jaar'], $GLOBALS['agenda_maand'])){ //FIEES, Patrick. 
@@ -209,15 +226,14 @@ class Lid implements Serializable, Agendeerbaar{
 	public function getTitel(){ return  $this->getNaamLink('civitas', 'link'); }
 	public function getBeschrijving(){ return $this->getTitel().' wordt n'; }
 	
-	public function getVerticale(){
-		return Verticale::$namen[$this->getVerticaleID()];
-	}
-	public function getVerticaleLetter(){
-		return Verticale::$letters[$this->getVerticaleID()];
-	}
+	//Verticale: respectievelijk naam, letter en id. Bijvooreeld voor 'Diagonaal', 4, 'D'
+	public function getVerticale(){			return Verticale::$namen[$this->getVerticaleID()]; } 
+	public function getVerticaleLetter(){	return Verticale::$letters[$this->getVerticaleID()]; }
 	public function getVerticaleID(){ return $this->profiel['verticale']; }
+	
 	public function isKringleider(){ return $this->profiel['kringleider']!='n'; }
 	public function isVerticaan(){ return $this->profiel['motebal']==1; }
+	
 	public function getKring($link=false){
 		$vertkring=$this->getVerticaleLetter().'.'.$this->profiel['kring'];
 		
@@ -318,7 +334,7 @@ class Lid implements Serializable, Agendeerbaar{
 				}
 			}
 		}
-		return $this->kinderen;			
+		return $this->kinderen;
 	}
 	public function getAantalKinderen(){
 		if(!is_array($this->getKinderen())){
@@ -345,6 +361,7 @@ class Lid implements Serializable, Agendeerbaar{
 	}
 	
 	public function isKwalikok(){ return $this->profiel['corvee_punten']==='1'; }
+	
 	//deze willen we hebben om vanuit templates handig instellingen op te halen.
 	public function instelling($key){ return Instelling::get($key); }
 	public function getInstellingen(){ return $this->profiel['instellingen']; }
@@ -581,6 +598,7 @@ class Lid implements Serializable, Agendeerbaar{
 		$lid=LidCache::getLid($uid);
 		return $lid instanceof Lid;
 	}
+	
 	/*
 	 * Bestaat er al een lid met de bijnaam $nick in de database?
 	 */	
@@ -628,6 +646,7 @@ class Lid implements Serializable, Agendeerbaar{
 			throw new Exception('Kon geen nieuw uid aanmaken.');
 		}
 	}
+	
 	public static function getVerjaardagen($van, $tot, $limiet=0){
 		$vanjaar=date('Y', $van);
 		$totjaar=date('Y', $tot);
@@ -715,6 +734,13 @@ class LidCache{
 	}
 }
 
+/*
+ * Dit is de oude zoekfunctie, er is vervanging in lib/lid/class.lidzoeker.php,
+ * maar deze functie wordt o.a. nog gebruikt door lib/include.common.php:namen2uid()
+ * dus ze blijft hier nog even staan.
+ * 
+ * TODO dus: een statische functie bouwen in lidZoeker die dit overneemt.
+ */
 class Zoeker{
 	function zoekLeden($zoekterm, $zoekveld, $verticale, $sort, $zoekstatus = '', $velden = array()) {
 		$db=MySql::instance();

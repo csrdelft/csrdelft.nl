@@ -60,8 +60,16 @@
 				</a>
 			{else}
 				<form action="/actueel/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/aanmelden" method="post" id="aanmeldForm" class="clear">
-					<strong>Aanmelden</strong> (functie/opmerking mogelijk)<br />
-					<input type="text" name="functie" maxlength="25" class="functie" />&nbsp;<input type="submit" value="aanmelden" />
+					<strong>Aanmelden</strong><br />
+					{if $groep->hasFunctiefilter()}
+						<select name="functie">
+							{foreach from=$groep->getFunctiefilters() item=filter}
+								<option value="{$filter|escape:'html'}">{$filter|escape:'html'}</option>
+							{/foreach}
+						</select>
+					{else}
+						<input type="text" name="functie" maxlength="25" class="functie" />
+					{/if}&nbsp;<input type="submit" value="aanmelden" />
 				</form>
 			{/if}
 		{elseif $groep->isVol()}

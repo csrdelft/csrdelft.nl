@@ -11,7 +11,8 @@ class Groep{
 	//deze array wordt in deze klasse twee keer gebruikt: in __construct() en load()
 	private $groepseigenschappen=
 		array('groepId', 'gtypeId', 'gtype', 'snaam', 'naam', 'sbeschrijving', 'beschrijving',
-			'zichtbaar', 'status', 'begin', 'einde', 'aanmeldbaar', 'limiet', 'toonFuncties', 'toonPasfotos', 'lidIsMod');
+			'zichtbaar', 'status', 'begin', 'einde', 'aanmeldbaar', 'limiet', 'toonFuncties', 'functiefilter',
+			'toonPasfotos', 'lidIsMod');
 	private $gtype=null;
 	private $groep=null;
 	private $leden=null;
@@ -27,7 +28,8 @@ class Groep{
 				$this->groep=array(
 					'groepId'=>0, 'snaam'=>'', 'naam'=>'', 'sbeschrijving'=>'', 'beschrijving'=>'',
 					'zichtbaar'=>'zichtbaar', 'begin'=>date('Y-m-d'), 'einde'=>'0000-00-00',
-					'aanmeldbaar'=>'', 'limiet'=>0, 'toonFuncties'=>'tonen', 'toonPasfotos'=>0, 'lidIsMod'=>0);
+					'aanmeldbaar'=>'', 'limiet'=>0, 'toonFuncties'=>'tonen', 'functiefilter',
+					'toonPasfotos'=>0, 'lidIsMod'=>0);
 			}else{
 				$this->load($init);
 			}
@@ -42,6 +44,7 @@ class Groep{
 			}
 		}
 	}
+	
 	/*
 	 * Laad een groep in aan de hand van het id of de snaam
 	 *
@@ -61,7 +64,7 @@ class Groep{
 			SELECT
 				groep.id AS groepId, groep.snaam AS snaam, groep.naam AS naam,
 				groep.sbeschrijving AS sbeschrijving, groep.beschrijving AS beschrijving, groep.zichtbaar AS zichtbaar,
-				groep.status AS status,  begin, einde, aanmeldbaar, limiet, toonFuncties, toonPasfotos, lidIsMod,
+				groep.status AS status, begin, einde, aanmeldbaar, limiet, toonFuncties, functiefilter, toonPasfotos, lidIsMod,
 				groeplid.uid AS uid, groeplid.op AS op, groeplid.functie AS functie, groeplid.prioriteit AS prioriteit,
 				groeptype.id AS gtypeId, groeptype.naam AS gtype
 			FROM groep
@@ -101,7 +104,7 @@ class Groep{
 			$qSave="
 				INSERT INTO groep (
 					snaam, naam, sbeschrijving, beschrijving, gtype, zichtbaar, status, begin, einde,
-					aanmeldbaar, limiet, toonFuncties, toonPasfotos, lidIsMod
+					aanmeldbaar, limiet, toonFuncties, functiefilter, toonPasfotos, lidIsMod
 				) VALUES (
 					'".$db->escape($this->getSnaam())."',
 					'".$db->escape($this->getNaam())."',
@@ -115,6 +118,7 @@ class Groep{
 					'".$db->escape($this->getAanmeldbaar())."',
 					".(int)$this->getLimiet().",
 					'".$this->getToonFuncties()."',
+					'".$db->escape($this->getFunctiefilter())."',
 					'".$this->getToonPasfotos()."',
 					'".$this->getLidIsMod()."'
 				);";
@@ -132,6 +136,7 @@ class Groep{
 					aanmeldbaar='".$db->escape($this->getAanmeldbaar())."',
 					limiet=".(int)$this->getLimiet().",
 					toonFuncties='".$this->getToonFuncties()."',
+					functiefilter='".$db->escape($this->getFunctiefilter())."',
 					toonPasfotos='".$this->getToonPasfotos()."',
 					lidIsMod='".$this->getLidIsMod()."'
 				WHERE id=".$this->getId()."
@@ -218,7 +223,8 @@ class Groep{
 		}
 		return false;
 	}
-
+	
+	//zet get groeptype, oftewel, groepcategorie.
 	public function setGtype($groepen){
 		if($groepen instanceof Groepen){
 			$this->gtype=$groepen;
@@ -246,6 +252,10 @@ class Groep{
 		return isset($this->leden[$uid]);
 	}
 	
+	/*
+	 * LidIsMod houdt in dat élk lid van een groep leden kan toevoegen
+	 * en de groepsbeschrijving kan aanpassen.
+	 */
 	public function lidIsMod(){
 		return $this->getLidIsMod()=='1';
 	}
@@ -336,19 +346,19 @@ class Groep{
 	 *  - de groep aanmeldbaar is
 	 *  - de gebruiker leesrechten voor leden heeft
 	 *  - de gebruiker nog niet aangemald is
-	 *  - de aanmeldlimiet van de groep nog niet overschreden is.
 	 *  - de einddatum van de groep groter is dan de huidige datum
+	 *  - de aanmeldlimiet van de groep nog niet overschreden is.
 	 */
 	public function magAanmelden(){
-		if($this->isAanmeldbaar()){
-			if($this->isIngelogged() AND !$this->isLid()){
-				if($this->getEinde()=='0000-00-00' OR $this->getEinde()>date('Y-m-d')){
-					if($this->getLimiet()==0){
-						return true;
-					}else{
-						return !$this->isVol();
-					}
-				}
+		if(!$this->isAanmeldbaar()) 	return false;
+		if(!$this->isIngelogged()) 		return false;
+		if($this->isLid()) 				return false;
+		
+		if($this->getEinde()=='0000-00-00' OR $this->getEinde()>date('Y-m-d')){
+			if($this->getLimiet()==0){
+				return true;
+			}else{
+				return !$this->isVol();
 			}
 		}
 		return false;
@@ -357,12 +367,9 @@ class Groep{
 	public function verwijderLid($uid){
 		if(Lid::isValidUid($uid) AND $this->isLid($uid)){
 			$qVerwijderen="
-				DELETE FROM
-					groeplid
-				WHERE
-					groepid=".$this->getId()."
-				AND
-					uid='".$uid."'
+				DELETE FROM groeplid
+				WHERE groepid=".$this->getId()."
+				  AND uid='".$uid."'
 				LIMIT 1;";
 			return MySql::instance()->query($qVerwijderen);
 		}else{
@@ -403,6 +410,7 @@ class Groep{
 		}
 		return $ot->addLid($uid) AND $this->verwijderLid($uid);
 	}
+	
 	public function meldAan($functie){
 		if($this->magAanmelden()){
 			return $this->addLid(LoginLid::instance()->getUid(), $functie);
@@ -410,6 +418,30 @@ class Groep{
 		return false;
 	}
 
+	/*
+	 * Functiefilters.
+	 * Groepen worden steeds vaker als inschrijfketzer gebruikt, daardoor
+	 * komt er vaak allerlei onzin in het functieveld terecht. Door het 
+	 * groepfilter
+	 */
+	public function hasFunctiefilter(){ return $this->getFunctiefilter()!=''; }
+	public function getFunctiefilter(){ return $this->groep['functiefilter']; }
+	public function getFunctiefilters(){
+		if($this->hasFunctiefilter()){
+			return explode('|', $this->getFunctiefilter());
+		}
+		return false;
+	}
+	public function setFunctiefilter($filters){
+		if(!is_array($filters)){
+			$this->groep['functiefilter']=$filters;
+		}else{
+			$this->groep['functiefilter']=implode('|', trim($filters));
+		}
+	}
+	
+	
+	
 	public function addLid($uid, $functie=''){
 		$op=0;
 		$functie=str_replace(array("\n","\r"), '', trim($functie));
@@ -491,12 +523,20 @@ class Groep{
 		return $return;
 
 	}
+	
 	public function getLink(){
 		return '<a class="groeplink" href="/actueel/groepen/'.$this->getType()->getNaam().'/'.$this->getId().'">'.$this->getNaam().'</a>';
 	}
+	
 	public function __toString(){
 		return $this->getLink();
 	}
+	
+	/*
+	 * Geef een serie links terug voor de in $string gegeven groepid's.
+	 * 
+	 * $string		Door comma's gescheiden groepid's.
+	 */
 	public static function ids2links($string, $separator=','){
 		//$veld mag een enkel id zijn of een serie door komma's gescheiden id's
 		$groepen=explode(',', $string);
@@ -511,8 +551,12 @@ class Groep{
 			}
 		}
 		return implode($separator, $groeplinks);
-
 	}
+	
+	/*
+	 * Groepstatistiekjes.
+	 * Worden weergegeven in een tabje bij de groepleden.
+	 */
 	public function getStats($force=false){
 		if($force OR $this->stats===null){
 			$db=MySql::instance();
@@ -530,8 +574,11 @@ class Groep{
 		}
 		return $this->stats;
 	}
+	
 	/*
 	 * Deze functie geeft een array terug met functies en aantallen.
+	 * 
+	 * Handig als de functie gebruikt wordt voor maten oid.
 	 */
 	public function getFunctieAantal(){
 		$functies=array();
@@ -545,6 +592,11 @@ class Groep{
 		}
 		return $functies;
 	}
+	
+	/*
+	 * Experimentele groepgeschiedenis.
+	 * Een tijdbalkje klussen met de opeenvolgende groepen. Niet afgemaakt.
+	 */
 	public static function getGroepgeschiedenis($snaam, $limiet=10){
 		$db=MySql::instance();
 		$limiet=(int)$limiet;
@@ -563,6 +615,7 @@ class Groep{
 		}
 		return $groepen;
 	}
+	
 	public static function isIngelogged(){
 		return LoginLid::instance()->hasPermission('P_LEDEN_READ');
 	}

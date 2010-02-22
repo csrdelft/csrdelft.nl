@@ -9,7 +9,8 @@
 				Voor gebruik in urls &eacute;n ter sortering. Alleen letters en cijfers, geen spaties. Voor elkaar opvolgende groepen dezelfde naam gebruiken.<br />
 			</div>
 			<input type="text" maxlength="20"  name="snaam" value="{$groep->getSnaam()|escape:'html'}" />
-			
+		{else}
+			<hr />
 		{/if}
 		<label for="groepNaam" class="clear"><strong>Naam:</strong></label>
 		<input type="text" id="groepNaam" maxlength="50" name="naam" style="width: 70%" value="{$groep->getNaam()|escape:'html'}" /><br />
@@ -24,6 +25,7 @@
 		<label for="begin"><strong>Periode:</strong></label> 
 		<input type="text" id="begin" name="begin" value="{$groep->getBegin()}" /> - <input type="text" name="einde" id="einde" value="{$groep->getEinde()}" />
 		<br />
+		<hr />
 		<div id="groepAanmeldbaarContainer" style="display: none;">
 			<label for="groepAanmeldbaar"><strong>Aanmeldbaar?</strong></label>
 			
@@ -46,8 +48,11 @@
 			<option value="tonen" {if $groep->getToonFuncties()=="tonen"}selected="selected"{/if}>Altijd</option>
 			<option value="verbergen" {if $groep->getToonFuncties()=="verbergen"}selected="selected"{/if}>Alleen voor groepadmins</option>
 			<option value="niet" {if $groep->getToonFuncties()=="niet"}selected="selected"{/if}>Nooit</option>
-		</select>
-		<br />
+		</select><br />
+		<label for="functiefilter"><strong>Functiefilter:</strong></label>
+		<input type="text" name="functiefilter" value="{$groep->getFunctiefilter()|escape:'html'}" /><div class="opmerking">Door '|' gescheiden mogelijke opties (eerste is de standaard). Veld leeglaten voor vrije invoer.</div>
+		
+		<hr class="clear" />
 		<label for="toonPasfotos"><strong>Toon pasfoto's?</strong></label>
 		<input type="checkbox" name="toonPasfotos" id="toonPasfotos" {if $groep->getToonPasfotos()}checked="checked"{/if} /> <em>(Pasfoto komt in plaats van naam)</em>
 		<br />
@@ -60,6 +65,7 @@
 	{/if}
 	<label for="sbeschrijving"><strong>Lange beschrijving:</strong><br /><br />UBB staat aan.</label>
 	<textarea id="sbeschrijving" name="beschrijving" style="width: 70%; height: 200px;">{$groep->getBeschrijving()|escape:'html'}</textarea><br />
+	<hr />
 	<label for="submit"></label><input type="submit" id="submit" value="Opslaan" /> <a href="/actueel/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/" class="knop">terug</a>
 </div>
 </form>
