@@ -2,8 +2,24 @@
 {$melding}
 {if $geselecteerdeMededeling!==null}		{*	Check of er een mededeling geselecteerd is.	Zo niet, dan
 												is de database leeg en geven we een nette foutmelding.	*}
-	{if $geselecteerdeMededeling->magToevoegen()}<a class="knop" href="{$nieuws_root}toevoegen">{icon get="toevoegen"} Toevoegen</a><br /><br />{/if}
-	
+	{if $geselecteerdeMededeling->magToevoegen()}<a class="knop" href="{$nieuws_root}toevoegen">{icon get="toevoegen"} Toevoegen</a>{/if}
+	{if $geselecteerdeMededeling->isModerator()}
+	<a class="knop" href="#" onclick="toggleDiv('legenda')">{icon get="legenda"} Legenda</a>
+	<div id="legenda" style="display:none;">
+		<span id="ubbsluiten" onclick="toggleDiv('legenda')" title="Legenda verbergen">&times;</span>
+		<h2>Legenda Mededelingen</h2>
+		<br />
+		Voor de moderators zijn mededelingen in de lijst gemarkeerd. Dit is de betekenis van de markering:<br />
+		<ul>
+			<li><strong>dikgedrukte</strong> mededelingen wachten op goedkeuring</li>
+			<li><em>schuingedrukte</em> mededelingen zijn zichtbaar voor iedereen (mits ze goedgekeurd zijn)</li>
+			<li>normale tekst geeft aan dat mededelingen alleen zichtbaar zijn voor (oud)leden</li>
+		</ul>
+		<br />
+	</div>
+	{/if}
+	<br />
+	<br />	
 	{foreach from=$lijst key=groepering item=mededelingen}
 		<div class="mededelingenlijst-block">
 			<div class="mededelingenlijst-block-titel">{$groepering}</div>

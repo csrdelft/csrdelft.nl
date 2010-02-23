@@ -69,6 +69,20 @@
 	margin-top: 30px;
 }
 
+.mededelingen-overzichtlijst #legenda{
+	display: none; 
+	z-index: 999;
+	position: fixed;
+	left: 50px;
+	top: 50px;
+	width: 330px; 
+	border: 1px solid #bbb;
+	margin-top: -13px;
+	padding: 5px;
+	background-color: white;
+	text-align: left;
+}
+
 #top1mededeling{
 	height: 200px; width: 200px;
 }

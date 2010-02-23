@@ -50,7 +50,10 @@ class Icon{
 		'stats' => 'server_chart',
 		'su' => 'user_go',
 		'resetpassword' => 'user_gray',
-		'instellingen' => 'cog'
+		'instellingen' => 'cog',
+		
+		//mededelingen
+		'legenda' => 'tag_yellow'
 	);
 
 	
