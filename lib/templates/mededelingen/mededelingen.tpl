@@ -30,6 +30,7 @@
 					txt_prev="&lt;" separator="" txt_next="&gt;" show_always=true show_first_last=false show_prev_next=false}
 		</div>
 	
+	{if !empty($wachtGoedkeuring)}
 	<div class="wachtgoedkeuring">
 		<h2>Wachtend op goedkeuring van de PubCie:</h2><br />
 		{foreach from=$wachtGoedkeuring key=groepering item=mededelingen}
@@ -53,6 +54,7 @@
 		</div> {* Einde mededelingenlijst-block*}
 	{/foreach}
 	</div>
+	{/if}
 </div> {* Einde mededelingen-overzichtlijst *}
 	
 	<div style="width: 400px; float: left;">

@@ -121,6 +121,14 @@ class Mededeling{
 			if($return==0){
 				$return=$db->insert_id();
 			}
+			
+			// Als er een nieuwe mededeling is toegevoegd die wacht op goedkeuring moeten
+			// we de PubCie mailen.
+			if($this->getId()==0 AND $this->getZichtbaarheid()=='wacht_goedkeuring'){
+				mail('pubcie@csrdelft.nl', 'Nieuwe mededeling wacht op goedkeuring',
+		 			 	CSR_ROOT."actueel/mededelingen/".$return."\r\n".
+		 			 	"\r\nDe inhoud van de mededeling is als volgt: \r\n\r\n".str_replace('\r\n', "\n", $this->getTekst())."\r\n\r\nEINDE BERICHT");
+			}
 		}
 		return $return;
 	}
