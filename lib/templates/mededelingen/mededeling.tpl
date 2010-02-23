@@ -1,5 +1,8 @@
 <form action="{$nieuws_root}bewerken/{$mededeling->getId()}" method="post" enctype="multipart/form-data">
 	{$melding}
+	{if !$mededeling->isModerator()}
+	Hier kunt u een mededeling toevoegen. Het zal echter niet direct zichtbaar worden, maar &eacute;&eacute;rst door de PubCie worden goedgekeurd.<br /><br />
+	{/if} 
 	<strong>Titel</strong><br />
 	<input type="text" name="titel" value="{$mededeling->getTitel()|escape:'html'}" style="width: 100%;" /><br />
 	<strong>Tekst</strong>&nbsp;&nbsp;

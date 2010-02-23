@@ -249,6 +249,32 @@ class Mededeling{
 		return $mededelingen;
 	}
 	
+	public static function getLijstWachtGoedkeuring(){
+		$mededelingen=array();
+		// Moderators of niet-ingelogden hebben geen berichten die wachten op goedkeuring.
+		if( Mededeling::isModerator() OR !LoginLid::instance()->hasPermission('P_LEDEN_READ') )
+			return $mededelingen;
+				
+		$db=MySql::instance();
+		$query="
+			SELECT id, datum
+			FROM mededeling
+			WHERE uid='".LoginLid::instance()->getUid()."' 
+			AND (vervaltijd IS NULL OR vervaltijd > '".getDateTime()."')
+			AND zichtbaarheid='wacht_goedkeuring'
+			ORDER BY datum DESC";
+		$resource=$db->select($query);
+		while( $mededeling=$db->next($resource) )
+		{
+			$datum=date_create($mededeling['datum']);
+			$groepeerstring=$datum->format('F Y'); // Maand voluit en jaar.
+			if(!isset($mededelingen[$groepeerstring]))
+				$mededelingen[$groepeerstring]=array();
+			$mededelingen[$groepeerstring][]=new Mededeling($mededeling['id']);
+		}
+		return $mededelingen;
+	}
+	
 	public static function getAantal(){
 		$db=MySql::instance();
 		$doelgroepClause="";

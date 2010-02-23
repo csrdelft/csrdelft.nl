@@ -64,6 +64,11 @@
 }
 .mededelingenlijst-block a{	color: black; }
 .mededelingenlijst-plaatje{ margin: 0px 5px 0px 0px; float: left; }
+
+.mededelingen-overzichtlijst .wachtgoedkeuring{
+	margin-top: 30px;
+}
+
 #top1mededeling{
 	height: 200px; width: 200px;
 }

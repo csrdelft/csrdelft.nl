@@ -54,6 +54,7 @@ class MededelingenContent extends SimpleHTML{
 		
 		$content->assign('lijst', Mededeling::getLijstVanPagina($this->paginaNummer, self::aantalPerPagina));
 		$content->assign('geselecteerdeMededeling', $this->geselecteerdeMededeling);
+		$content->assign('wachtGoedkeuring', Mededeling::getLijstWachtGoedkeuring());
 		
 		$content->assign('huidigePagina', $this->paginaNummer);
 		$content->assign('totaalAantalPaginas', (ceil(Mededeling::getAantal()/self::aantalPerPagina)));
