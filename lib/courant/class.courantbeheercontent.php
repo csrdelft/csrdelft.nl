@@ -36,9 +36,9 @@ class CourantBeheercontent extends SimpleHTML{
 
 		//als er gepost is de meuk uit post halen.
 		if($_SERVER['REQUEST_METHOD']=='POST'){
-			if(isset($_POST['titel'])){ $formulier['titel']=htmlspecialchars(trim($_POST['titel'])); }
-			if(isset($_POST['categorie'])){ $formulier['categorie']=htmlspecialchars(trim($_POST['categorie'])); }
-			if(isset($_POST['bericht'])){ $formulier['bericht']=htmlspecialchars(trim($_POST['bericht'])); }
+			if(isset($_POST['titel'])){ $formulier['titel']=trim($_POST['titel']); }
+			if(isset($_POST['categorie'])){ $formulier['categorie']=trim($_POST['categorie']); }
+			if(isset($_POST['bericht'])){ $formulier['bericht']=trim($_POST['bericht']); }
 		}
 
 			$content=new Smarty_csr();
