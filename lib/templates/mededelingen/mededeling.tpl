@@ -11,6 +11,7 @@
 	<div style="float: right;">
 		<div style="position: absolute;">
 			<a id="vergroot" class="handje knop" onclick="vergrootTextarea('tekst', 10)" title="Vergroot het invoerveld"><strong>&uarr;&darr;</strong></a>
+			<a id="opmaakhulp" class="handje knop" onclick="toggleDiv('ubbhulpverhaal')" title="Opmaakhulp weergeven">UBB</a>
 		</div>
 	</div>
 	<div id="instellingen">

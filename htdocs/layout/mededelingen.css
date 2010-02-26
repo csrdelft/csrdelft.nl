@@ -119,7 +119,12 @@
 .knop#vergroot{
 	position: relative;
 	top: 2px;
-	left: -13px;
+	left: -45px;
+}
+.knop#opmaakhulp{
+	position: relative;
+	top: 2px;
+	left: -49px;
 }
 
 div#instellingen{
