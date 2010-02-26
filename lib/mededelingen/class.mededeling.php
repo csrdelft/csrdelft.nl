@@ -211,8 +211,8 @@ class Mededeling{
 			$doelgroepClause="";
 			if( !LoginLid::instance()->hasPermission('P_LEDEN_READ') ){
 				$doelgroepClause=" AND doelgroep='iedereen'";
-			}else if($oudledenVersie){
-				$doelgroepClause=" AND doelgroep='(oud)leden'";
+			}else if($oudledenVersie OR self::isOudlid()){
+				$doelgroepClause=" AND doelgroep!='leden'";
 			}
 			$topmostQuery="
 				SELECT id
@@ -234,10 +234,15 @@ class Mededeling{
 		$db=MySql::instance();
 		$doelgroepClause="";
 		$verborgenClause="zichtbaarheid='zichtbaar'";
-		if( Mededeling::isModerator() )
+		if( Mededeling::isModerator() ){
 			$verborgenClause="zichtbaarheid!='verwijderd'";
-		if( !LoginLid::instance()->hasPermission('P_LEDEN_READ') )
+		}
+		if( !LoginLid::instance()->hasPermission('P_LEDEN_READ') ){
 			$doelgroepClause=" AND doelgroep='iedereen'";
+		}else if( self::isOudlid() ){
+			$doelgroepClause=" AND doelgroep!='leden'";
+		}
+			
 		$paginaQuery="
 			SELECT id, datum
 			FROM mededeling
@@ -374,6 +379,8 @@ class Mededeling{
 	}
 	
 	public static function isModerator(){ return LoginLid::instance()->hasPermission('P_NEWS_MOD'); }
+	
+	public static function isOudlid(){ return LoginLid::instance()->hasPermission('P_ALLEEN_OUDLID'); }
 
 	// function magToevoegen()
 	// post: geeft true terug als het huidige lid Mededelingen mag toevoegen.

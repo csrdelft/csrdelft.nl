@@ -18,8 +18,10 @@
 		<br />
 	</div>
 	{/if}
+	{if $geselecteerdeMededeling->magToevoegen() OR $geselecteerdeMededeling->isModerator()}
 	<br />
 	<br />	
+	{/if}
 	{foreach from=$lijst key=groepering item=mededelingen}
 		<div class="mededelingenlijst-block">
 			<div class="mededelingenlijst-block-titel">{$groepering}</div>
