@@ -328,7 +328,7 @@ class Mededeling{
 		return $paginaNummer;
 	}
 
-	public static function getLaatsteMededelingen(){
+	public static function getLaatsteMededelingen($aantal){
 		$resultaat=array();
 		$db=MySql::instance();
 		$zichtbaarheidClause="zichtbaarheid='zichtbaar'";
@@ -341,7 +341,8 @@ class Mededeling{
 			FROM mededeling
 			WHERE (vervaltijd IS NULL OR vervaltijd > '".getDateTime()."') 
 			AND ".$zichtbaarheidClause.$doelgroepClause."
-			ORDER BY datum DESC, id DESC;";
+			ORDER BY datum DESC, id DESC
+			LIMIT ".(int)$aantal;
 		$resource=$db->select($laatstenQuery);
 		while($mededelingRecord=$db->next($resource)){
 			$resultaat[]=new Mededeling($mededelingRecord['id']);
