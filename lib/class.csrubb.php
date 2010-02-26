@@ -306,14 +306,19 @@ UBBVERHAAL;
 	 * [mededelingen=top3]
 	 */
 	public function ubb_mededelingen($parameters){
-		if(isset($parameters['mededelingen']) AND $parameters['mededelingen']=='top3'){
-			require_once('class.nieuwscontent.php');
-			require_once('class.nieuws.php');
-			$nieuws = new Nieuws();
-			$nieuws->setAantalTopBerichten(3);
-			$nieuws->setStandaardRank(255);
-			$nieuwscontent = new NieuwsContent($nieuws);
-			$return=$nieuwscontent->getTopBlock();
+		if(isset($parameters['mededelingen'])){
+			require_once('mededelingen/class.mededeling.php');
+			require_once('mededelingen/class.mededelingencontent.php');
+			$type=$parameters['mededelingen'];
+			if($type=='top3leden'){
+				$mededelingenContent=new MededelingenContent(0);
+				$return=$mededelingenContent->getTopBlock();
+			}else if($type=='top3oudleden'){
+				$mededelingenContent=new MededelingenContent(0);
+				$return=$mededelingenContent->getTopBlock(true);
+			}else{
+				$return='Geen geldig type ('.$type.').';
+			}
 		}else{
 			$return='[mededelingen] Geen geldig mededelingenblok.';
 		}
