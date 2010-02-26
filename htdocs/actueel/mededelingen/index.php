@@ -86,21 +86,27 @@ switch($actie){
 			$mededelingProperties['plaatje']='';
 			if(isset($_FILES['plaatje']) AND $_FILES['plaatje']['error']==UPLOAD_ERR_OK){ // If uploading succeedded.
 				$info=getimagesize($_FILES['plaatje']['tmp_name']);
-				if(($info[0]/$info[1])==1){ // If the ratio is fine (1:1).
-					$pictureFilename=$_FILES['plaatje']['name'];
-					$pictureFullPath=PICS_PATH.'/nieuws/'.$pictureFilename; // TODO: change nieuws to mededelingen
-					if( move_uploaded_file($_FILES['plaatje']['tmp_name'], $pictureFullPath)!==false ){
-						$mededelingProperties['plaatje']=$pictureFilename;
-						if($info[0]!=200){ // Too big, resize it.
-							resize_plaatje($pictureFullPath);
+				if($info[0]!=0 AND $info[1]!=0)
+				{
+					if(($info[0]/$info[1])==1){ // If the ratio is fine (1:1).
+						$pictureFilename=$_FILES['plaatje']['name'];
+						$pictureFullPath=PICS_PATH.'/nieuws/'.$pictureFilename; // TODO: change nieuws to mededelingen
+						if( move_uploaded_file($_FILES['plaatje']['tmp_name'], $pictureFullPath)!==false ){
+							$mededelingProperties['plaatje']=$pictureFilename;
+							if($info[0]!=200){ // Too big, resize it.
+								resize_plaatje($pictureFullPath);
+							}
+							chmod($pictureFullPath, 0644);
+						}else{
+							$_SESSION['melding'].='Plaatje verplaatsen is mislukt.<br />';
+							$allOK=false;
 						}
-						chmod($pictureFullPath, 0644);
 					}else{
-						$_SESSION['melding'].='Plaatje verplaatsen is mislukt.<br />';
+						$_SESSION['melding'].='Plaatje is niet in de juiste verhouding.<br />';
 						$allOK=false;
 					}
 				}else{
-					$_SESSION['melding'].='Plaatje is niet in de juiste verhouding.<br />';
+					$_SESSION['melding'].='Het is niet gelukt om de resolutie van het plaatje te bepalen.<br />';
 					$allOK=false;
 				}
 			}
