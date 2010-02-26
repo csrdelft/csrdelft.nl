@@ -14,6 +14,7 @@
 			<li><strong>dikgedrukte</strong> mededelingen wachten op goedkeuring</li>
 			<li><em>schuingedrukte</em> mededelingen zijn zichtbaar voor iedereen (mits ze goedgekeurd zijn)</li>
 			<li>normale tekst geeft aan dat mededelingen alleen zichtbaar zijn voor (oud)leden</li>
+			<li><span style="color: grey;">grijs gekleurde</span> mededelingen zijn verborgen en dus alleen zichtbaar voor moderators</li>
 		</ul>
 		<br />
 	</div>
@@ -79,9 +80,6 @@
 		<div class="nieuwsbericht">
 			<div class="nieuwsbody">
 				<div class="nieuwstitel">{$geselecteerdeMededeling->getTitel()|escape:'html'}</div>
-				{if $geselecteerdeMededeling->isVerborgen()}
-					<em>[verborgen]</em><br />
-				{/if}
 				<img class="nieuwsplaatje" src="{$csr_pics}nieuws/{$geselecteerdeMededeling->getPlaatje()}" width="200px" height="200px" alt="{$geselecteerdeMededeling->getPlaatje()}" />
 				{$geselecteerdeMededeling->getTekst()|ubb}<br />
 			</div>
@@ -95,6 +93,9 @@
 				{/if}
 				{if $geselecteerdeMededeling->isModerator() OR $geselecteerdeMededeling->magBewerken()}
 					Vervalt {if $geselecteerdeMededeling->getVervaltijd()===null}nooit{else}op: {$geselecteerdeMededeling->getVervaltijd()|date_format:$datumtijdFormaat}{/if}<br />
+				{/if}
+				{if $geselecteerdeMededeling->isModerator() AND $geselecteerdeMededeling->isVerborgen()}
+					Verborgen: ja<br />
 				{/if}
 				{if $geselecteerdeMededeling->magBewerken()}
 					<a href="{$nieuws_root}bewerken/{$geselecteerdeMededeling->getId()}">
