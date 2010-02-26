@@ -22,6 +22,7 @@ if(isset($_GET['pagina'])){
 
 require_once('mededelingen/class.mededeling.php');
 require_once('mededelingen/class.mededelingcontent.php');
+require_once('mededelingen/class.mededelingencontent.php');
 
 define('MEDEDELINGEN_ROOT', CSR_ROOT.'actueel/mededelingen/');
 
@@ -45,7 +46,6 @@ switch($actie){
 				exit;
 			}
 		}
-		require_once('mededelingen/class.mededelingencontent.php');
 		$content=new MededelingenContent(0);
 		// De eerste pagina laden.
 		$content->setPaginaNummer(1);
@@ -211,7 +211,6 @@ switch($actie){
 	break; 
 
 	default:
-		require_once('mededelingen/class.mededelingencontent.php');
 		$content=new MededelingenContent($mededelingId);
 		if(isset($pagina)){	// Als de gebruiker een pagina opvraagt.
 			$content->setPaginaNummer($pagina);
