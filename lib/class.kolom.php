@@ -64,13 +64,10 @@ class Kolom extends SimpleHTML {
 
 			# Laatste mededelingen
 			if(Instelling::get('zijbalk_mededelingen')>0){
-				require_once('class.nieuwscontent.php');
-				require_once('class.nieuws.php');
-				$nieuws = new Nieuws();
-				$nieuwscontent = new NieuwsContent($nieuws);
-				$nieuwscontent->aantal=Instelling::get('zijbalk_mededelingen');
-				$nieuwscontent->setActie('laatste');
-				$this->add($nieuwscontent);
+				require_once('mededelingen/class.mededeling.php');
+				require_once('mededelingen/class.mededelingencontent.php');
+				$content=new MededelingenZijbalkContent(Instelling::get('zijbalk_mededelingen'));
+				$this->add($content);
 			}
 
 			# Laatste forumberichten
