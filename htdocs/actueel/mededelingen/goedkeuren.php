@@ -19,7 +19,7 @@ if(isset($_GET['mededelingId']) AND is_numeric($_GET['mededelingId']) AND $_GET[
 	}
 	header('location: '.CSR_ROOT.MEDEDELINGEN_ROOT.$mededeling->getId());
 	$mededeling->keurGoed();
-	$_SESSION['melding']='Mededeling is nu voor iedereen zichtbaar.';
+	$_SESSION['melding']='Mededeling is nu goedgekeurd.';
 }else{
 	header('location: '.CSR_ROOT.MEDEDELINGEN_ROOT);
 	$_SESSION['melding']='Geen mededelingId gezet.';

@@ -16,8 +16,17 @@ class MededelingenContent extends SimpleHTML{
 		if($mededelingId!=0){
 			try{
 				$this->geselecteerdeMededeling=new Mededeling($mededelingId);
-				if(($this->geselecteerdeMededeling->isPrive() AND !LoginLid::instance()->hasPermission('P_LEDEN_READ')) OR
-						($this->geselecteerdeMededeling->getZichtbaarheid()=='wacht_goedkeuring' AND !Mededeling::isModerator())){
+				// In de volgende gevallen heeft de gebruiker geen rechten om deze mededeling te bekijken:
+				// 1. Indien dit bericht alleen voor leden zichtbaar is en de gebruiker geen leden-lees rechten heeft.
+				// 2. Indien het bericht verborgen is en de gebruiker geen moderator is.
+				// 3. Indien het bericht wacht op goedkeuring en de gebruiker geen moderator is EN het bericht niet van hem is. 
+				if(
+					($this->geselecteerdeMededeling->isPrive() AND !LoginLid::instance()->hasPermission('P_LEDEN_READ')) OR
+					($this->geselecteerdeMededeling->getZichtbaarheid()=='onzichtbaar' AND !Mededeling::isModerator()) OR
+					($this->geselecteerdeMededeling->getZichtbaarheid()=='wacht_goedkeuring' AND
+						( (LoginLid::instance()->getUid()!=$this->geselecteerdeMededeling->getUid()) AND
+							!Mededeling::isModerator() ))
+				){
 					// De gebruiker heeft geen rechten om dit bericht te bekijken, dus we resetten het weer.
 					$this->geselecteerdeMededeling=null;
 				}

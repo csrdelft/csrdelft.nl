@@ -14,7 +14,7 @@
 		</div>
 	</div>
 	<div id="instellingen">
-		<strong>Categorie:</strong>
+		<strong>Categorie: <a title="De categorie bepaalt welk kleurtje erv&oacute;&oacute;r komt in de overzichtspagina.">{icon get="vraagteken"}</a></strong>
 		<select name="categorie">
 			{foreach from=$mededeling->getCategorie()->getAll() item=categorie}
 				{if $categorie->magUitbreiden() OR $categorie->getId()==$mededeling->getCategorieId()}
@@ -22,7 +22,7 @@
 				{/if}
 			{/foreach}
 		</select><br />
-		<strong>Doelgroep:</strong>
+		<strong>Doelgroep: <a title="De doelgroep bepaalt welke groep(en) mensen het recht krijg(t)(en) om deze mededeling te zien.">{icon get="vraagteken"}</a></strong>
 		<select name="doelgroep">
 			{foreach from=$mededeling->getDoelgroepen() item=doelgroep}
 				<option value="{$doelgroep}"{if $mededeling->getDoelgroep()==$doelgroep} selected="selected"{/if}>{$doelgroep}</option>
@@ -30,7 +30,7 @@
 		</select>
 		<br />
 		{if $mededeling->isModerator()}
-			<strong>Prioriteit:</strong>
+			<strong>Prioriteit: <a title="Hoe belangrijk is deze mededeling? De mededelingen met de hoogste prioriteit komt bovenaan in de top {$aantalTopMostBlock} op de voorpagina van de stek.">{icon get="vraagteken"}</a></strong>
 			<select name="prioriteit">
 				{foreach from=$prioriteiten key=prioriteitId item=prioriteit}
 					<option value="{$prioriteitId}"{if $mededeling->getPrioriteit()==$prioriteitId} selected="selected"{/if}>{$prioriteit|escape:'html'}</option>
@@ -41,7 +41,7 @@
 		Vervalt op
 		<input id="vervaltijd" type="text" name="vervaltijd" value="{if $mededeling->getVervaltijd()!==null}{$mededeling->getVervaltijd()|date_format:$datumtijdFormaat}{else}{$standaardVervaltijd}" disabled="disabled{/if}" />
 		{if $mededeling->isModerator() AND $mededeling->getZichtbaarheid()!='wacht_goedkeuring'}
-			<br /><input id="verborgen" type="checkbox" name="verborgen"{if $mededeling->isVerborgen()} checked="checked"{/if} /><label for="verborgen">Verbergen</label><br /><br />
+			<br /><input id="verborgen" type="checkbox" name="verborgen"{if $mededeling->isVerborgen()} checked="checked"{/if} /><label for="verborgen">Verbergen</label> <a title="Verborgen mededelingen zijn alleen voor moderators zichtbaar.">{icon get="vraagteken"}</a>
 		{/if}
 	</div>
 	<div id="plaatje">
@@ -55,7 +55,7 @@
 			<strong>Vervangende afbeelding</strong><br />
 		{/if}
 		<input type="file" name="plaatje" size="40" /><br />
-		<span class="waarschuwing">(png, gif of jpg, 200x200 of groter in die verhouding.)</span>
+		<span>(png, gif of jpg, 200x200 of groter in die verhouding)</span>
 	</div>
 	<div id="knoppen">
 		<input type="submit" name="submit" value="opslaan" />&nbsp;

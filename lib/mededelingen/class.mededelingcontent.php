@@ -17,6 +17,7 @@ class MededelingContent extends SimpleHTML{
 		$content->assign('nieuws_root', NIEUWS_ROOT);
 		$content->assign('prioriteiten', Mededeling::getPrioriteiten());
 		$content->assign('datumtijdFormaat', '%Y-%m-%d %H:%M');
+		$content->assign('aantalTopMostBlock', MededelingenContent::aantalTopMostBlock);
 		
 		// Een standaard vervaltijd verzinnen indien nodig.
 		if($this->mededeling->getVervaltijd()===null){

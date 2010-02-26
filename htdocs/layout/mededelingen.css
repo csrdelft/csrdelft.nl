@@ -129,6 +129,10 @@ div#instellingen{
 	margin-top: 10px;
 	text-align: left;
 }
+div#instellingen img{
+	position: relative;
+	top: 4px;
+}
 div#plaatje{
 	height: 300px;
 	width: 70%;
