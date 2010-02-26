@@ -103,8 +103,8 @@ function getDateTime(){
 	return date('Y-m-d H:i:s');
 }
 // function isGeldigeDatum
-// pre: $datum is een string in de vorm 'yyyy-mm-dd' of 'yyyy-mm-dd hh:mm' of 'yyyy-mm-dd hh:mm:ss'.
-// post: true is teruggegeven als de datum in de string geldid is (volgens checkdate()). Anders is false teruggegeven.
+// pre: $datum is een string die begint met 'yyyy-mm-dd'. Wat daarna komt maakt niet uit.
+// post: true is teruggegeven als de datum in de string geldig is (volgens checkdate()). Anders is false teruggegeven.
 function isGeldigeDatum($datum){
 	// De string opdelen en checken of er genoeg delen zijn.
 	$delen=explode('-', $datum);
