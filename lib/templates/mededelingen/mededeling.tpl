@@ -38,8 +38,9 @@
 				{/foreach}
 			</select><br />
 		{/if}
-		<div class="vervalt">
-			<label>Vervalt op:<input type="checkbox" name="vervaltijdAan"{if $mededeling->getVervaltijd()!==null} checked="checked"{/if} onchange="this.form.vervaltijd.disabled=this.form.vervaltijd.disabled==''?'disabled':''" /></label>
+		<label>Vervalt op:</label>
+		<div id="vervalt">
+			<input type="checkbox" name="vervaltijdAan"{if $mededeling->getVervaltijd()!==null} checked="checked"{/if} onchange="this.form.vervaltijd.disabled=this.form.vervaltijd.disabled==''?'disabled':''" />&nbsp;
 			<input id="vervaltijd" type="text" name="vervaltijd" value="{if $mededeling->getVervaltijd()!==null}{$mededeling->getVervaltijd()|date_format:$datumtijdFormaat}{else}{$standaardVervaltijd}" disabled="disabled{/if}" />
 		</div><br />
 		{if $mededeling->isModerator() AND $mededeling->getZichtbaarheid()!='wacht_goedkeuring'}
