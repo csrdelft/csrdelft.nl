@@ -1,21 +1,22 @@
+<h1>Mededeling {if $mededeling->getId()==0}toevoegen{else}bewerken{/if}</h1>
 <form action="{$nieuws_root}bewerken/{$mededeling->getId()}" method="post" enctype="multipart/form-data">
 	{$melding}
 	{if !$mededeling->isModerator()}
 	Hier kunt u een mededeling toevoegen. Het zal echter niet direct zichtbaar worden, maar &eacute;&eacute;rst door de PubCie worden goedgekeurd.<br /><br />
 	{/if} 
-	<strong>Titel</strong><br />
-	<input type="text" name="titel" value="{$mededeling->getTitel()|escape:'html'}" style="width: 100%;" /><br />
-	<strong>Tekst</strong>&nbsp;&nbsp;
-	{* link om het tekst-vak groter te maken. *}
-	<textarea id="tekst" name="tekst" cols="80" rows="10" style="width: 100%;">{$mededeling->getTekst()|escape:'html'}</textarea><br />
-	<div style="float: right;">
-		<div style="position: absolute;">
-			<a id="vergroot" class="handje knop" onclick="vergrootTextarea('tekst', 10)" title="Vergroot het invoerveld"><strong>&uarr;&darr;</strong></a>
-			<a id="opmaakhulp" class="handje knop" onclick="toggleDiv('ubbhulpverhaal')" title="Opmaakhulp weergeven">UBB</a>
-		</div>
+	<label>Titel:</label>
+	<input type="text" name="titel" value="{$mededeling->getTitel()|escape:'html'}" class="titel" /><br />
+	<label>Tekst:</label>
+	<div class="indent">
+		<div id="bewerkPreviewContainer" class="previewContainer"><div id="bewerkPreview" class="preview"></div></div>
+		<textarea id="tekst" name="tekst" class="tekst">{$mededeling->getTekst()|escape:'html'}</textarea><br />
+		<a id="voorbeeld" class="handje knop" onclick="return previewPost('tekst', 'bewerkPreview')">Voorbeeld</a>
+		<a id="vergroot" class="handje knop" onclick="vergrootTextarea('tekst', 10)" title="Vergroot het invoerveld"><strong>&uarr;&darr;</strong></a>
+		<a id="opmaakhulp" class="handje knop" onclick="toggleDiv('ubbhulpverhaal')" title="Opmaakhulp weergeven">UBB</a>
 	</div>
+	
 	<div id="instellingen">
-		<strong>Categorie: <a title="De categorie bepaalt welk kleurtje erv&oacute;&oacute;r komt in de overzichtspagina.">{icon get="vraagteken"}</a></strong>
+		<label for="categorie">Categorie: <a title="De categorie bepaalt welk kleurtje erv&oacute;&oacute;r komt in de overzichtspagina.">{icon get="vraagteken"}</a></label>
 		<select name="categorie">
 			{foreach from=$mededeling->getCategorie()->getAll() item=categorie}
 				{if $categorie->magUitbreiden() OR $categorie->getId()==$mededeling->getCategorieId()}
@@ -23,26 +24,27 @@
 				{/if}
 			{/foreach}
 		</select><br />
-		<strong>Doelgroep: <a title="De doelgroep bepaalt welke groep(en) mensen het recht krijg(t)(en) om deze mededeling te zien.">{icon get="vraagteken"}</a></strong>
+		<label for="doelgroep">Doelgroep: <a title="De doelgroep bepaalt welke groep(en) mensen het recht krijg(t)(en) om deze mededeling te zien.">{icon get="vraagteken"}</a></label>
 		<select name="doelgroep">
 			{foreach from=$mededeling->getDoelgroepen() item=doelgroep}
 				<option value="{$doelgroep}"{if $mededeling->getDoelgroep()==$doelgroep} selected="selected"{/if}>{$doelgroep}</option>
 			{/foreach}
-		</select>
-		<br />
+		</select><br />
 		{if $mededeling->isModerator()}
-			<strong>Prioriteit: <a title="Hoe belangrijk is deze mededeling? De mededelingen met de hoogste prioriteit komt bovenaan in de top {$aantalTopMostBlock} op de voorpagina van de stek.">{icon get="vraagteken"}</a></strong>
+			<label for="prioriteit">Prioriteit: <a title="Hoe belangrijk is deze mededeling? De mededelingen met de hoogste prioriteit komt bovenaan in de top {$aantalTopMostBlock} op de voorpagina van de stek.">{icon get="vraagteken"}</a></label>
 			<select name="prioriteit">
 				{foreach from=$prioriteiten key=prioriteitId item=prioriteit}
 					<option value="{$prioriteitId}"{if $mededeling->getPrioriteit()==$prioriteitId} selected="selected"{/if}>{$prioriteit|escape:'html'}</option>
 				{/foreach}
 			</select><br />
 		{/if}
-		<input type="checkbox" name="vervaltijdAan"{if $mededeling->getVervaltijd()!==null} checked="checked"{/if} onchange="this.form.vervaltijd.disabled=this.form.vervaltijd.disabled==''?'disabled':''" />
-		Vervalt op
-		<input id="vervaltijd" type="text" name="vervaltijd" value="{if $mededeling->getVervaltijd()!==null}{$mededeling->getVervaltijd()|date_format:$datumtijdFormaat}{else}{$standaardVervaltijd}" disabled="disabled{/if}" />
+		<div class="vervalt">
+			<label>Vervalt op:<input type="checkbox" name="vervaltijdAan"{if $mededeling->getVervaltijd()!==null} checked="checked"{/if} onchange="this.form.vervaltijd.disabled=this.form.vervaltijd.disabled==''?'disabled':''" /></label>
+			<input id="vervaltijd" type="text" name="vervaltijd" value="{if $mededeling->getVervaltijd()!==null}{$mededeling->getVervaltijd()|date_format:$datumtijdFormaat}{else}{$standaardVervaltijd}" disabled="disabled{/if}" />
+		</div><br />
 		{if $mededeling->isModerator() AND $mededeling->getZichtbaarheid()!='wacht_goedkeuring'}
-			<br /><input id="verborgen" type="checkbox" name="verborgen"{if $mededeling->isVerborgen()} checked="checked"{/if} /><label for="verborgen">Verbergen</label> <a title="Verborgen mededelingen zijn alleen voor moderators zichtbaar.">{icon get="vraagteken"}</a>
+			<label for="verborgen">Verbergen <a title="Verborgen mededelingen zijn alleen voor moderators zichtbaar.">{icon get="vraagteken"}</a></label> 
+			<input id="verborgen" type="checkbox" name="verborgen"{if $mededeling->isVerborgen()} checked="checked"{/if} />
 		{/if}
 	</div>
 	<div id="plaatje">
@@ -58,8 +60,8 @@
 		<input type="file" name="plaatje" size="40" /><br />
 		<span>(png, gif of jpg, 200x200 of groter in die verhouding)</span>
 	</div>
-	<div id="knoppen">
-		<input type="submit" name="submit" value="opslaan" />&nbsp;
+	<div class="clear">
+		<label >&nbsp;</label><input type="submit" name="submit" value="opslaan" />
 		<a href="{$nieuws_root}{$mededeling->getId()}" class="knop">annuleren</a>
 	</div>
 </form>
