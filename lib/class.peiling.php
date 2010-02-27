@@ -4,7 +4,6 @@
 # class.peiling.php
 # --------------------------------------------------------------------------
 # Verzorgt het opvragen en opslaan van peilingen en stemmen in de database.
-# Wordt o.a. door NieuwsContent gebruikt
 # --------------------------------------------------------------------------
 class Peiling {
 	private $id=0;
@@ -32,9 +31,8 @@ class Peiling {
 			FROM
 				peiling
 			WHERE
-				peiling.id = ".$iPeilingID;
-		
-		$sPeilingQuery.=';';
+				peiling.id = ".$iPeilingID.';';
+
 		$db = MySql::instance();
 		$rPeiling=$db->query($sPeilingQuery);
 		return $db->next($rPeiling);
@@ -129,32 +127,18 @@ class Peiling {
 		return 0;
 	}
 	
-	//DELETE FROM `peiling` WHERE `id`=1
-	//DELETE FROM `peilingoptie` WHERE `peilingid`=1
-	//DELETE FROM `peiling_stemmen` WHERE `peilingid`=1 
+
 	private function delete(){
 		$pid = $this->id;
 		$db = MySql::instance();
 		
-		$sDelete = "
-			DELETE FROM 
-				`peiling` 
-			WHERE `id`=".$pid.";
-			";
+		$sDelete = "DELETE FROM `peiling` WHERE `id`=".$pid.";";
 		$rDeletePeiling = $db->query($sDelete);
 		
-		$sDeleteOpties = "
-			DELETE FROM 
-				`peilingoptie` 
-			WHERE `peilingid`=".$pid.";
-			";
+		$sDeleteOpties = " DELETE FROM  `peilingoptie` WHERE `peilingid`=".$pid.";";
 		$rDeleteOpties = $db->query($sDeleteOpties);
 		
-		$sDeleteLog = "
-			DELETE FROM 
-				`peiling_stemmen` 
-			WHERE `peilingid`=".$pid."
-			";
+		$sDeleteLog="DELETE FROM `peiling_stemmen` WHERE `peilingid`=".$pid.";";
 		$rDeleteLog = $db->query($sDeleteLog);
 		
 		return $rDeletePeiling && $rDeleteOpties && $rDeleteLog;
@@ -184,7 +168,7 @@ class Peiling {
 				`peiling` 
 				(`id`,`titel`,`tekst`) 
 			VALUES 
-				(NULL,'".$titel."','".$verhaal."')
+				(NULL,'".$db->escape($titel)."','".$db->escape($verhaal)."')
 			";
 		$r = $db->query($sCreate);
 		if(!$r){
@@ -198,7 +182,7 @@ class Peiling {
 					`peilingoptie` 
 					(`id`,`peilingid`,`optie`,`stemmen`) 
 				VALUES 
-					(NULL,".$pid.",'".$optie."',0)
+					(NULL,".$pid.",'".$db->escape($optie)."',0)
 				";
 			$r = $db->query($sCreateOptie);
 		}
