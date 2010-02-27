@@ -22,7 +22,6 @@ etc/soccie.ini.sample -text
 gozerbot/csrdelft.py -text
 htdocs/.htaccess -text
 htdocs/actueel/.htaccess -text
-htdocs/actueel/.htaccess_new -text
 htdocs/actueel/agenda/.htaccess -text
 htdocs/actueel/agenda/index.php -text
 htdocs/actueel/courant/.htaccess -text
@@ -47,7 +46,7 @@ htdocs/actueel/maaltijden/maaltijdlijst.php -text
 htdocs/actueel/maaltijden/saldi.php -text
 htdocs/actueel/maaltijden/voorkeuren.php -text
 htdocs/actueel/mededelingen.php -text
-htdocs/actueel/mededelingen/.htaccess_inactive -text
+htdocs/actueel/mededelingen/.htaccess -text
 htdocs/actueel/mededelingen/goedkeuren.php -text
 htdocs/actueel/mededelingen/index.php -text
 htdocs/actueel/sjaarsacties.php -text
