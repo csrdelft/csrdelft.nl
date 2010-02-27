@@ -330,38 +330,41 @@ class LoginLid{
 		# Let op: de rechten zijn cumulatief en octaal
 
 		$this->_permissions = array(
-			'P_NOBODY'       => 00000000001,
-			'P_LOGGED_IN'    => 00000000003, # Leden-menu, eigen profiel raadplegen
-			'P_ADMIN'        => 00000000007, # Admin dingen algemeen...
-			'P_FORUM_READ'   => 00000000400, # Forum lezen
-			'P_FORUM_POST'   => 00000000500, # Berichten plaatsen op het forum en eigen berichten wijzigen
-			'P_FORUM_MOD'    => 00000000700, # Forum-moderator mag berichten van anderen wijzigen of verwijderen
-			'P_DOCS_READ'    => 00000004000, # Documenten-rubriek lezen
-			'P_DOCS_POST'    => 00000005000, # Documenten verwijderen of erbij plaatsen
-			'P_DOCS_MOD'     => 00000007000, # euh?
-			'P_PROFIEL_EDIT' => 00000010000, # Eigen gegevens aanpassen
-			'P_LEDEN_READ'   => 00000040000, # Gegevens over andere leden raadplegen
-			'P_LEDEN_EDIT'   => 00000020000, # Profiel van andere leden wijzigen
-			'P_LEDEN_MOD'    => 00070070000, # samengestelde om te kunnen lezen en veranderen bij iedereen
-			'P_AGENDA_READ'  => 00000100000, # Agenda bekijken
-			'P_AGENDA_POST'  => 00000300000, # Items toevoegen aan de agenda
-			'P_AGENDA_MOD'   => 00000700000, # Items beheren in de agenda
-			'P_NEWS_POST'    => 00001000000, # Nieuws plaatsen en wijzigen van jezelf
-			'P_NEWS_MOD'     => 00003000000, # Nieuws-moderator mag berichten van anderen wijzigen of verwijderen
-			'P_OUDLEDEN_EDIT'=> 00020000000, # Profiel van andere leden wijzigen
-			'P_OUDLEDEN_READ'=> 00040000000, # Gegevens over andere leden raadplegen
-			'P_OUDLEDEN_MOD' => 00070070000, # samengestelde om te kunnen lezen en veranderen bij iedereen
-			                                 # oudleden-mod is gelijk aan leden-mod
-			'P_MAAL_IK'      => 00100000000, # kan zich aan en afmelden voor maaltijd en eigen abo wijzigen
-			'P_MAAL_WIJ'     => 00500000000, # kan ook anderen aanmelden (niet afmelden!)
-			'P_MAAL_MOD'     => 00700000000, # mag maaltijd aan- en afmeldingen voor iedereen wijzigen
-			'P_MAIL_POST'    => 01000000000, # mag berichtjes in de pubciemail rossen
-			'P_MAIL_COMPOSE' => 03000000000, # mag alle berichtjes in de pubcie-mail bewerken, en volgorde wijzigen
-			'P_MAIL_SEND'    => 07000000000, # mag de C.S.R.-mail verzenden
-			'P_BIEB_READ'    => 00000000010, # Bibliotheek lezen
-			'P_BIEB_EDIT'    => 00000000030, # Bibliotheek wijzigen
-			'P_BIEB_MOD'     => 00000000070, # Bibliotheek zowel wijzigen als lezen
-			# N.B. bij uitbreiding van deze octale getallen met nog een cijfer erbij gaat er iets mis, wat weten we nog niet.
+			'P_NOBODY'       => 000000000001,
+			'P_LOGGED_IN'    => 000000000003, # Leden-menu, eigen profiel raadplegen
+			'P_ADMIN'        => 000000000007, # Admin dingen algemeen...
+			'P_FORUM_READ'   => 000000000400, # Forum lezen
+			'P_FORUM_POST'   => 000000000500, # Berichten plaatsen op het forum en eigen berichten wijzigen
+			'P_FORUM_MOD'    => 000000000700, # Forum-moderator mag berichten van anderen wijzigen of verwijderen
+			'P_DOCS_READ'    => 000000004000, # Documenten-rubriek lezen
+			'P_DOCS_POST'    => 000000005000, # Documenten verwijderen of erbij plaatsen
+			'P_DOCS_MOD'     => 000000007000, # euh?
+			'P_PROFIEL_EDIT' => 000000010000, # Eigen gegevens aanpassen
+			'P_LEDEN_READ'   => 000000040000, # Gegevens over andere leden raadplegen
+			'P_LEDEN_EDIT'   => 000000020000, # Profiel van andere leden wijzigen
+			'P_LEDEN_MOD'    => 000070070000, # samengestelde om te kunnen lezen en veranderen bij iedereen
+			'P_AGENDA_READ'  => 000000100000, # Agenda bekijken
+			'P_AGENDA_POST'  => 000000300000, # Items toevoegen aan de agenda
+			'P_AGENDA_MOD'   => 000000700000, # Items beheren in de agenda
+			'P_NEWS_POST'    => 000001000000, # Nieuws plaatsen en wijzigen van jezelf
+			'P_NEWS_MOD'     => 000003000000, # Nieuws-moderator mag berichten van anderen wijzigen of verwijderen
+			'P_OUDLEDEN_EDIT'=> 000020000000, # Profiel van andere leden wijzigen
+			'P_OUDLEDEN_READ'=> 000040000000, # Gegevens over andere leden raadplegen
+			'P_OUDLEDEN_MOD' => 000070070000, # samengestelde om te kunnen lezen en veranderen bij iedereen
+			                                  # oudleden-mod is gelijk aan leden-mod
+			'P_MAAL_IK'      => 000100000000, # kan zich aan en afmelden voor maaltijd en eigen abo wijzigen
+			'P_MAAL_WIJ'     => 000500000000, # kan ook anderen aanmelden (niet afmelden!)
+			'P_MAAL_MOD'     => 000700000000, # mag maaltijd aan- en afmeldingen voor iedereen wijzigen
+			'P_MAIL_POST'    => 001000000000, # mag berichtjes in de pubciemail rossen
+			'P_MAIL_COMPOSE' => 003000000000, # mag alle berichtjes in de pubcie-mail bewerken, en volgorde wijzigen
+			'P_MAIL_SEND'    => 007000000000, # mag de C.S.R.-mail verzenden
+			'P_BIEB_READ'    => 000000000010, # Bibliotheek lezen
+			'P_BIEB_EDIT'    => 000000000030, # Bibliotheek wijzigen
+			'P_BIEB_MOD'     => 000000000070, # Bibliotheek zowel wijzigen als lezen
+			'P_ALLEEN_OUDLID'=> 010000000000, # Specifiek voor oudleden
+			# N.B. toename van het aantal cijfers is onmogelijk. Een octaal getal moet altijd beginnen met een 0 (dus het meest
+			# linker cijfer is niet te gebruiken) en we hebben de maximum waarde van de integer bereikt. Het getal 017777777777
+			# is namelijk gelijk aan 2.030.043.135 in het decimale stelsel en de max is 2.147.483.647.
 		);
 
 		# Deze waarden worden samengesteld uit bovenstaande permissies en
@@ -371,8 +374,8 @@ class LoginLid{
 		$p = $this->_permissions;
 		$this->_perm_user = array(
 			'P_NOBODY'     => $p['P_NOBODY'] | $p['P_FORUM_READ'] | $p['P_AGENDA_READ'],
-			'P_LID'        => $p['P_LOGGED_IN'] | $p['P_OUDLEDEN_READ'] | $p['P_FORUM_POST'] | $p['P_DOCS_READ'] | $p['P_LEDEN_READ'] | $p['P_PROFIEL_EDIT'] | $p['P_AGENDA_READ'] | $p['P_MAAL_WIJ'] | $p['P_MAIL_POST'] | $p['P_BIEB_READ'],
-			'P_OUDLID'     => $p['P_LOGGED_IN'] | $p['P_LEDEN_READ'] | $p['P_OUDLEDEN_READ'] | $p['P_FORUM_POST'] | $p['P_PROFIEL_EDIT'] | $p['P_FORUM_READ'] | $p['P_MAAL_IK'] | $p['P_MAIL_POST'] | $p['P_AGENDA_READ'],
+			'P_LID'        => $p['P_LOGGED_IN'] | $p['P_OUDLEDEN_READ'] | $p['P_FORUM_POST'] | $p['P_DOCS_READ'] | $p['P_LEDEN_READ'] | $p['P_PROFIEL_EDIT'] | $p['P_AGENDA_READ'] | $p['P_MAAL_WIJ'] | $p['P_MAIL_POST'] | $p['P_BIEB_READ'] | $p['P_NEWS_POST'], 
+			'P_OUDLID'     => $p['P_LOGGED_IN'] | $p['P_LEDEN_READ'] | $p['P_OUDLEDEN_READ'] | $p['P_FORUM_POST'] | $p['P_PROFIEL_EDIT'] | $p['P_FORUM_READ'] | $p['P_MAAL_IK'] | $p['P_MAIL_POST'] | $p['P_AGENDA_READ'] | $p['P_ALLEEN_OUDLID'],
 			'P_MODERATOR'  => $p['P_ADMIN'] | $p['P_FORUM_MOD'] | $p['P_DOCS_MOD'] | $p['P_LEDEN_MOD'] | $p['P_OUDLEDEN_MOD'] | $p['P_AGENDA_MOD'] | $p['P_MAAL_MOD'] | $p['P_MAIL_SEND'] | $p['P_NEWS_MOD'] | $p['P_BIEB_MOD']
 		);
 		# extra dingen, waarvoor de array perm_user zelf nodig is
@@ -382,7 +385,6 @@ class LoginLid{
 		$this->_perm_user['P_VAB']     = $this->_perm_user['P_BESTUUR']  | $p['P_OUDLEDEN_MOD'];
 		$this->_perm_user['P_ETER']	   = $this->_perm_user['P_NOBODY'] | $p['P_LOGGED_IN'] | $p['P_MAAL_IK'] | $p['P_PROFIEL_EDIT'];
 		$this->_perm_user['P_BASF']  = $this->_perm_user['P_LID'] | $p['P_DOCS_MOD'];
-
 	}
 
 	//met een token is het mogelijk rss feeds te zien te krijgen zonder ingelogged te zijn.

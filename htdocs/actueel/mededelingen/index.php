@@ -1,11 +1,6 @@
 <?php
 require_once('include.config.php');
 
-if(!LoginLid::instance()->hasPermission('P_NEWS_MOD')){ //TODO: gehele IF weghalen.
-	header('location: '.CSR_ROOT);
-	exit;
-}
-
 $mededelingId=0;
 if(isset($_GET['mededelingId'])){
 	$mededelingId=(int)$_GET['mededelingId'];
