@@ -5,7 +5,6 @@ class MededelingenContent extends SimpleHTML{
 	private $paginaNummerOpgevraagd;
 	
 	const aantalTopMostBlock=3;
-	const aantalPerPagina=6;
 	const mededelingenRoot='/actueel/mededelingen/';
 	
 	public function __construct($mededelingId){
@@ -17,11 +16,13 @@ class MededelingenContent extends SimpleHTML{
 			try{
 				$this->geselecteerdeMededeling=new Mededeling($mededelingId);
 				// In de volgende gevallen heeft de gebruiker geen rechten om deze mededeling te bekijken:
-				// 1. Indien dit bericht niet bestemd is voor iedereen en de gebruiker geen leden-lees rechten heeft.
-				// 2. Indien het bericht alleen bestemd is voor leden en de gebruiker een oudlid is.
-				// 3. Indien het bericht verborgen is en de gebruiker geen moderator is.
-				// 4. Indien het bericht wacht op goedkeuring en de gebruiker geen moderator is EN het bericht niet van hem is. 
+				// 1. Indien deze mededeling reeds verwijderd is.
+				// 2. Indien deze mededeling niet bestemd is voor iedereen en de gebruiker geen leden-lees rechten heeft.
+				// 3. Indien deze mededeling alleen bestemd is voor leden en de gebruiker een oudlid is.
+				// 4. Indien deze mededeling verborgen is en de gebruiker geen moderator is.
+				// 5. Indien deze mededeling wacht op goedkeuring en de gebruiker geen moderator is EN deze mededeling niet van hem is. 
 				if(
+					($this->geselecteerdeMededeling->getZichtbaarheid()=='verwijderd') OR
 					($this->geselecteerdeMededeling->isPrive() AND !LoginLid::instance()->hasPermission('P_LEDEN_READ')) OR
 					($this->geselecteerdeMededeling->getDoelgroep()=='leden' AND Mededeling::isOudlid()) OR
 					($this->geselecteerdeMededeling->getZichtbaarheid()=='onzichtbaar' AND !Mededeling::isModerator()) OR
@@ -30,7 +31,7 @@ class MededelingenContent extends SimpleHTML{
 							!Mededeling::isModerator() )
 					)
 				){
-					// De gebruiker heeft geen rechten om dit bericht te bekijken, dus we resetten het weer.
+					// De gebruiker heeft geen rechten om deze mededeling te bekijken, dus we resetten het weer.
 					$this->geselecteerdeMededeling=null;
 				}
 			} catch (Exception $e) {
@@ -64,12 +65,12 @@ class MededelingenContent extends SimpleHTML{
 		$content->assign('melding', $this->getMelding());
 		$content->assign('nieuws_root', self::mededelingenRoot);
 		
-		$content->assign('lijst', Mededeling::getLijstVanPagina($this->paginaNummer, self::aantalPerPagina));
+		$content->assign('lijst', Mededeling::getLijstVanPagina($this->paginaNummer, Instelling::get('mededelingen_aantalPerPagina')));
 		$content->assign('geselecteerdeMededeling', $this->geselecteerdeMededeling);
 		$content->assign('wachtGoedkeuring', Mededeling::getLijstWachtGoedkeuring());
 		
 		$content->assign('huidigePagina', $this->paginaNummer);
-		$content->assign('totaalAantalPaginas', (ceil(Mededeling::getAantal()/self::aantalPerPagina)));
+		$content->assign('totaalAantalPaginas', (ceil(Mededeling::getAantal()/Instelling::get('mededelingen_aantalPerPagina'))));
 		
 		$content->assign('datumtijdFormaat', '%d-%m-%Y %H:%M');
 
