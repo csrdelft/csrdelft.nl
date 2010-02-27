@@ -79,6 +79,8 @@ class savedQuery{
 					$return.=substr($kopje, 11);
 				}elseif($kopje=='onderwerp_link'){
 					$return.='Onderwerp';
+				}elseif($kopje=='med_link'){
+					$return.='Mededeling';
 				}else{
 					$return.=$kopje;
 				}
