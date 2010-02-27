@@ -9,7 +9,7 @@
 	<label>Tekst:</label>
 	<div class="indent">
 		<div id="bewerkPreviewContainer" class="previewContainer"><div id="bewerkPreview" class="preview"></div></div>
-		<textarea id="tekst" name="tekst" class="tekst">{$mededeling->getTekst()|escape:'html'}</textarea><br />
+		<textarea id="tekst" name="tekst" rows="12" class="tekst">{$mededeling->getTekst()|escape:'html'}</textarea><br />
 		<a id="voorbeeld" class="handje knop" onclick="return previewPost('tekst', 'bewerkPreview')">Voorbeeld</a>
 		<a id="vergroot" class="handje knop" onclick="vergrootTextarea('tekst', 10)" title="Vergroot het invoerveld"><strong>&uarr;&darr;</strong></a>
 		<a id="opmaakhulp" class="handje knop" onclick="toggleDiv('ubbhulpverhaal')" title="Opmaakhulp weergeven">UBB</a>

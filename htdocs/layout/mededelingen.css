@@ -115,19 +115,12 @@
 	padding: 0px 5px 0px 5px;
 }
 
-label{
-	float: left; clear: left;
-	width: 110px;
-}
+/* Mededelingen bewerken: */
+label{ float: left; clear: left; width: 110px; }
 input.titel{ width: 635px; }
 .indent{ margin-left: 116px; width: 635px;}
-textarea.tekst{ width: 100%; height: 200px; }
-
-
-.knop#vergroot, .knop#opmaakhulp, .knop#voorbeeld{
-	float: right;
-}
-
+textarea.tekst{ width: 100%; }
+.knop#vergroot, .knop#opmaakhulp, .knop#voorbeeld{ float: right; }
 
 #instellingen{
 	height: 300px;
@@ -146,4 +139,3 @@ div#plaatje{
 	float: right;
 	margin-top: 10px;
 }
-
