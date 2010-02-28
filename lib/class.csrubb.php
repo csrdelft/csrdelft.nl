@@ -199,6 +199,22 @@ src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
 		}
 		return $html;
 	}
+	
+		function ubb_vimeo($parameters){
+		$content = $this->parseArray(array('[/vimeo]'), array());
+		if(preg_match('/\d/', $content)){
+			$html='<object width="549" height="309">
+			<param name="allowfullscreen" value="true" />
+			<param name="allowscriptaccess" value="always" />
+			<param name="movie" value="http://vimeo.com/moogaloop.swf?clip_id='.$content.'&amp;server=vimeo.com&amp;show_title=1&amp;show_byline=1&amp;show_portrait=0&amp;color=00ADEF&amp;fullscreen=1" />
+			<embed src="http://vimeo.com/moogaloop.swf?clip_id='.$content.'&amp;server=vimeo.com&amp;show_title=1&amp;show_byline=1&amp;show_portrait=0&amp;color=00ADEF&amp;fullscreen=1" type="application/x-shockwave-flash" allowfullscreen="true" allowscriptaccess="always" width="549" height="309">
+			</embed>
+			</object>';
+		}else{
+			$html='[vimeo] Ongeldig vimeo-id';
+		}
+		return $html;
+	}
 	/*
 	 * ubb_groep()
 	 *
@@ -288,7 +304,7 @@ return <<<UBBVERHAAL
 		<li>[img]http://csrdelft.nl/plaetje.jpg[/img] voor een plaetje</li>
 		<li>[citaat][/citaat] voor een citaat. [citaat=<em>lidnummer</em>][/citaat] voor een citaat van een lid.</li>
 		<li>[lid=<em>lidnummer</em>] voor een link naar het profiel van een lid of oudlid</li>
-		<li>[youtube]<em>youtube-id</em>[/youtube] of [googlevideo]..[/googlevideo] voor een filmpje direct in je post</li>
+		<li>[youtube]<em>youtube-id</em>[/youtube], [googlevideo]..[/googlevideo] of [vimeo]..[/vimeo] voor een filmpje direct in je post</li>
 		<li>[offtopic]...[/offtopic] voor een stukje tekst van-het-onderwerp.</li>
 		<li>[ubboff]...[/ubboff] voor een stukje met ubb-tags zonder dat ze ge&iuml;nterpreteerd worden</li>
 	</ul>
