@@ -202,7 +202,7 @@ src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
 	
 		function ubb_vimeo($parameters){
 		$content = $this->parseArray(array('[/vimeo]'), array());
-		if(preg_match('/\d/', $content)){
+		if(preg_match('/^\d*$/', $content)){
 			$html='<object width="549" height="309">
 			<param name="allowfullscreen" value="true" />
 			<param name="allowscriptaccess" value="always" />
