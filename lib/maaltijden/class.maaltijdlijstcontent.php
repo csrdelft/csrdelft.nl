@@ -33,7 +33,7 @@ class MaaltijdLijstContent extends SimpleHTML {
 		$aMaal['id']=$this->_maaltijd->getMaalId();
 		$aMaal['datum']=$this->_maaltijd->getDatum();
 		$aMaal['gesloten']=$this->_maaltijd->isGesloten();
-		$aMaal['magSluiten']=$loginlid->hasPermission('P_MAAL_MOD') OR opConfide();
+		$aMaal['magSluiten']=($loginlid->hasPermission('P_MAAL_MOD') OR opConfide());
 		$aMaal['taken']=$this->_maaltijd->getTaken();
 		$aMaal['koks']=$this->_maaltijd->getKoks();
 		$aMaal['afwassers']=$this->_maaltijd->getAfwassers();
