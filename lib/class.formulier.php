@@ -283,7 +283,7 @@ class TelefoonField extends InputField{
 class StudieField extends InputField{
 	public function __construct($name, $value, $description){
 		parent::__construct($name, $value, $description, 100);
-		$this->setSuggestions(array('TUDelft - BK', 'TUDelft - CT', 'TUDelft - ET', 'TUDelft - IO', 'TUDelft - LST', 'TUDelft - LR', 'TUDelft - MT', 'TUDelft - MST', 'TUDelft - TA', 'TUDelft - TB', 'TUDelft - TI', 'TUDelft - TN', 'TUDelft - TW', 'TUDelft - WB'));
+		$this->setSuggestions(array('TU Delft - BK', 'TU Delft - CT', 'TU Delft - ET', 'TU Delft - IO', 'TU Delft - LST', 'TU Delft - LR', 'TU Delft - MT', 'TU Delft - MST', 'TU Delft - TA', 'TU Delft - TB', 'TU Delft - TI', 'TU Delft - TN', 'TU Delft - TW', 'TU Delft - WB', 'INHolland', 'Haagse Hogeschool', 'EURotterdam', 'ULeiden'));
 	}
 }
 /*
