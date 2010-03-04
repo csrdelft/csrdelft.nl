@@ -472,6 +472,7 @@ lib/templates/menu.tpl -text
 lib/templates/owee_csrdelft.tpl -text
 lib/templates/owee_menu.tpl -text
 lib/templates/pauper_csrdelft.tpl -text
+lib/templates/peiling.ubb.tpl -text
 lib/templates/profiel/bewerken.tpl -text
 lib/templates/profiel/profiel.tpl -text
 lib/templates/roodschopper/roodschopper.tpl -text

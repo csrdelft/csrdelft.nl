@@ -48,6 +48,8 @@ class LidZoeker{
 	private $result=null;
 	
 	public function __construct(){
+		
+		//wat extra velden voor moderators.
 		if(Loginlid::instance()->hasPermission('P_LEDEN_MOD')){
 			$this->allowVelden=array_merge(
 				$this->allowVelden, 
@@ -57,6 +59,7 @@ class LidZoeker{
 		//parse default values.
 		$this->parseQuery($this->rawQuery);
 	}
+	
 	public function parseQuery($query){
 		if(!is_array($query)){
 			$parts=explode('&', $query);
@@ -116,6 +119,10 @@ class LidZoeker{
 			}
 		}
 	}
+	
+	/*
+	 * Stel een setje WHERE-voorwaarden samen waarin standaard wordt gezocht.
+	 */
 	private function defaultSearch($zoekterm){
 		$query='';
 		$defaults=array();
@@ -152,6 +159,7 @@ class LidZoeker{
 		
 		return $query.' AND ';
 	}
+	
 	/*
 	 * Doe de zoektocht.
 	 */
@@ -168,6 +176,8 @@ class LidZoeker{
 		
 		$this->sqlquery=$query;
 		$result=$db->query2array($query);
+		
+		//De uid's omzetten naar Lid-objectjes
 		$this->result=array();
 		if(is_array($result)){
 			foreach($result as $uid){
@@ -178,21 +188,25 @@ class LidZoeker{
 			}
 		}
 	}
+	
 	public function count(){
 		if($this->result===null){
 			$this->search();
 		}
 		return count($this->result);
 	}
+	
 	public function searched(){
 		return $this->result!==null;
 	}
+	
 	public function getLeden(){
 		if($this->result===null){
 			$this->search();
 		}
 		return $this->result;
 	}
+	
 	public function getQuery(){		return $this->query; }
 	public function getVelden(){ 	return $this->velden; } 
 	public function getWeergave(){ 	return 'LL'.ucfirst($this->weergave); }
@@ -203,13 +217,18 @@ class LidZoeker{
 		}
 		return $this->rawQuery[$key];
 	}
+	/*
+	 * Zet een array met $key => value om in SQL. Als $value een array is,
+	 * komt er een $key IN ( value0, value1, etc. ) uit.
+	 */
 	public function getFilterSQL(){
+		$db=MySql::instance();
 		$filters=array();
 		foreach($this->filters as $key => $value){
 			if(is_array($value)){
-				$filters[]=$key." IN ('".implode("', '", $value)."')";
+				$filters[]=$key." IN ('".implode("', '", $db->escape($value))."')";
 			}else{
-				$filters[]=$key."='".$value."'";
+				$filters[]=$key."='".$db->escape($value)."'";
 			}
 		}
 		$return=implode(' AND ', $filters);
@@ -219,6 +238,7 @@ class LidZoeker{
 			return $return;
 		}
 	}
+	
 	public function getSelectedVelden(){
 		return $this->velden;
 	}
@@ -236,9 +256,11 @@ class LidZoeker{
 		}
 		return $return;
 	}
+	
 	public function getSortableVelden(){
 		return $this->sortable;
 	}
+	
 	public function addFilter($field, $value){
 		if(is_array($value)){
 			$this->filters[$field]=$value;
@@ -246,6 +268,7 @@ class LidZoeker{
 			$this->filters[$field]=array($value);
 		}
 	}
+	
 	public function __toString(){
 		$return='Zoeker:';
 		$return.=print_r($this->rawQuery, true);

@@ -196,27 +196,28 @@ ul.nobullets li{ list-style-type: none; }
 	cursor: pointer;
 }
 #ingelogd{
-	color: #ffffff;
-	margin-top: 2px;
+	color: #fff;
+	margin-top: 7px;
 	width: 133px;
+	text-align: left;
 }
-#ingelogd a{
-	color: #ffffff;
-}
-#profiellink{
-	float: left;
-}
-#uitloggen{
-	float: right;
-}
+#ingelogd a{ color: #fff; }
+#profiellink{ float: left; }
+#uitloggen{ float: right; clear: right; }
+.instellingen{ float: right; }
+
+#saldi {clear: both; padding-top: 4px;}
 #saldi .saldo{ float: right; }
 #saldi .staatrood{ color: red; }
 #zoekveld{
 	width: 127px;
-	text-align: center;
+	text-align: left;
 	padding: 2px;
 	position: absolute;
 	top: 115px;
+	background-image: url('http://plaetjes.csrdelft.nl/search-bg.png');
+	background-position: 100% 50%;
+	background-repeat: no-repeat;
 }
 #login{
 	margin-right: 10px;
@@ -311,25 +312,28 @@ ul.nobullets li{ list-style-type: none; }
 #mainleft a:hover{
 	text-decoration: underline;
 }
-#mainleft #komende_pasfotos{
-	padding-top: 4px;
-	padding-bottom: 4px;
-}
-#mainleft #komende_pasfotos .verjaardag{
-	height: 87px;
+/* Verjaardag in de zijbalk */
+#komende_pasfotos{ padding: 4px 0px;}
+#komende_pasfotos .verjaardag{
+	position: relative;
 	float: left;
-	margin: 1px;
-	border: 1px solid #f5f5f5;;
+	margin: 2px;
 	text-align: center;
+	width: 50px; height: 70px; 
+	overflow: hidden;
 }
-#mainleft #komende_pasfotos .verjaardag:hover{
-	background-color: #bbb;
+#komende_pasfotos .verjaardag .lidfoto{ 
+	width: 50px;
 }
-#mainleft #komende_pasfotos .opvallend{
-	border: 1px solid #b8b8b8;
-}
-#mainleft #komende_pasfotos .verjaardag img.lidfoto{
-	max-height: 70px; width: 50px;
+#komende_pasfotos .opvallend .datum{ font-weight: bold;  }
+.verjaardag .datum{
+	position: absolute;
+	display: block;
+	width: 100%;
+	bottom: 0px; 
+	background-color: white; color: black;
+	font-size: 9px;
+	opacity:0.6;filter:alpha(opacity=60)
 }
 
 /**** FOOTER ******************************************************************/
@@ -372,21 +376,6 @@ pre#pubcie_debug{
 	border: 1px solid darkred;
 	z-index: 100;
 }
-table.ubb_table{
-	padding: 0px; border-collapse: collapse;
-}
-table.ubb_table tr{
-	margin: 0px; padding: 0px;
-}
-table.ubb_table td, th{
-	margin: 0px; padding: 2px;
-}
-pre.ubb_code{
-	max-width: 640px;	
-	margin: 0px; padding-left: 8px;
-	overflow-x:auto;
-	overflow-y:hidden;
-}
 
 table.query_table{
 	margin: 10px;
@@ -422,80 +411,9 @@ table.query_table th{
 	opacity: 0.7;
 	top: 30px;
 }
-/* ubb voorbeeldding */
-div.previewContainer{
-	margin-top: 10px;
-	display: none;
-}
-div.preview{
-	margin: 5px 0px; padding: 2px 4px;
-	width: 99%;
-	background-color: #ffffc1;
-	border: 1px solid #ccc;
-}
-div.preview.pagina{
-	padding: 2px 2px;
-	width: 100%;
-}
 
-/* maaltijd-ubb-tag */
-.ubbMaaltijd{
-	float: left;
-	width: 343px;
-	height: 53px;
-	border: 1px solid gray;
-	background-color: #ddd;
-	padding: 5px;
-}
-#forumtabel td .ubbMaaltijd{ margin: 0px 10px; }
-.ubbMaaltijdFloat{
-	float: right; 
-	background-color: #ccc; 
-	width: 68px; 
-	padding: 4px; margin-left: 10px;
-}
 
-/* google maps ubb-tag */
-.ubb_gmap {
-	width:300px;
-	height: 200px;
-	border:1px solid darkgrey;
-	margin:2px;
-}
 
-.ubb_groep{
-	margin: 10px;
-	padding: 5px 10px;
-	border: 1px solid black;
-}
-.ubb_groep .groepleden{
-	width: 250px;
-	float: right;
-	margin-left: 10px;
-}
-.ubb_groep .groepleden table.leden{ width: 100%; }
-.ubb_groep .groepleden table.leden td{ padding: 0px 5px; text-align: left;}
-.ubb_groep .groepleden .pasfoto{ 
-	width: 50px; height: 67px; 
-	border: 1px solid grey;
-	float: left; margin-left: 10px;}
-
-div.ubb_document{
-	background-color: #ddd;
-	border: 1px solid #ccc;
-	width: 450px;
-	margin: 2px 4px; padding: 4px 6px;
-}
-div.ubb_document span.size{ 
-	color: #777;
-	float: right;
-}
-div.ubb_document .icon{ float: left; }
-div.ubb_document a{
-	display: block; width: 375px;
-	padding-left: 25px;
-	text-align: left;
-}
 /* plaatjes in tekst */
 p img{ margin: 15px 10px; }
 
@@ -504,44 +422,11 @@ p img{ margin: 15px 10px; }
 /* geel blokje */
 div.blokje{ background-color: #FFFFC1; margin: 10px 0px; padding: 10px 10px;}
 
-
-/* profiel */
-table.profiel{ 
-	width: 100%;	
-	border-collapse: collapse; 
-	margin-bottom: 20px;
-}
-table.profiel th{ 
-	text-align: left;
-	vertical-align: bottom;
-	border-bottom: 1px solid black;
-	padding: 0px 0px 1px 5px;
-}
-table.profiel td{
-	border-left: 1px solid black;
-	padding: 5px;
-	text-align: left;
-}
-table.profiel td.foto{
-	margin: 0; padding: 5px;
-	border: 0;
-}
-td.foto img{ border: 2px solid black; }
-
-table.profiel_edit{
-	width: 100%;
-	margin: 5px;
-}
-table.profiel_edit tr td input, textarea{ width: 260px; }
-
-.pasfoto{
-	
-}
-.pasfotomatrix { width: 260px; margin-top: 10px;}
-.pasfotomatrix .pasfoto{
-	width: 50px; height: 67px; float: left;
-	margin-left: 10px; margin-bottom: 10px;
+.pasfotomatrix{ margin-top: 5px; width: 275px; margin-left: 10px;}
+.pasfotomatrix .pasfoto{ 
+	width: 48px; height: 64px; float: left;
 	border: 1px solid grey;
+	margin: 0 5px 5px 0;
 }
 
 /* algemeen hokje voor (fout)meldingen */
@@ -632,47 +517,6 @@ form#streeplijst input, label{ text-align: left; margin: 3px; padding: 0px; line
 
 }
 
-/* Peiling */
-.peiling{
-	border: 1px solid black; 
-	margin: 10px; 
-	padding: 5px 10px;
-}
-.peilingopties{
-	padding: 5px;
-}
-.peilingoptie{
-	display: table-row;
-}
-.peilingoptietekst{
-	display: table-cell;
-	width: 250px;
-	padding: 4px 20px 4px 4px; 
-	float: left;
-	overflow: hidden;
-	border-bottom: 1px solid #eee;
-}
-.peilingoptiebalk{
-	display: table-cell;
-	width: 200px;
-	vertical-align: top;
-	border-bottom: 1px solid #eee;
-	padding: 4px 4px;
-}
-.peilingbalk{	
-	height: 10px; 					 
-	background-color: #6060FF;  
-	border: 1px outset #0A338D;
-}
-.peilingoptieaantal{
-	display: table-cell;
-	vertical-align: top;
-	text-align: right;
-	padding: 4px 4px;
-	border-bottom: 1px solid #eee;
-	
-}
-/* Peilingbeheer */
 
 /* Mededelingen */
 .mededeling-grotebalk{
@@ -703,3 +547,88 @@ form#streeplijst input, label{ text-align: left; margin: 3px; padding: 0px; line
 	margin: 10px 10px 0px 0px;
 	width: 376px;
 }
+#nieuwePeiling label{ clear: left; float: left; width: 150px;}
+#nieuwePeiling input, textarea{ margin-bottom: 4px;}
+#nieuwePeiling textarea{ width: 400px; }
+#peilingOpties input{ width: 400px;}
+
+/* 
+ * ubb voorbeeldding 
+ */
+div.previewContainer{ margin-top: 10px; display: none; }
+div.preview{ margin: 5px 0px; padding: 2px 4px; width: 99%; background-color: #ffffc1; border: 1px solid #ccc; }
+div.preview.pagina{ padding: 2px 2px; width: 100%;}
+
+/* special UBB tags 
+ * 
+ * Alle ubb 'blok-tags' delen de class .ubb_block.
+ * 
+ */
+.ubb_block{
+	border: 1px solid gray;
+	background-color: #ddd;
+	padding: 5px;
+	margin: 10px;
+}
+#forumtabel td .ubb_block{ margin: 2px 0px; }
+
+.ubb_maaltijd{
+	float: left;
+	width: 343px;
+	height: 53px;
+	overflow: auto;
+}
+
+.ubb_maaltijd h2{ white-space: nowrap; overflow: hidden; }
+.ubb_maaltijd .aanmelddata{
+	float: right; 
+	background-color: #ccc; 
+	width: 68px; 
+	padding: 4px; margin-left: 10px;
+}
+
+.ubb_gmap {
+	width:300px;
+	height: 200px;
+	border:1px solid darkgrey;
+	margin:2px;
+}
+
+.ubb_groep{
+	padding: 5px 0px 5px 10px;
+}
+.ubb_groep .groepleden{
+	width: 275px;
+	float: right;
+	margin-left: 10px;
+}
+.ubb_groep .groepleden table.leden{ width: 100%; }
+.ubb_groep .groepleden table.leden td{ padding: 0px 5px 0 0; text-align: left; }
+.ubb_groep .groepleden a.toonmeer{ float: left; }
+.ubb_groep .pasfotomatrix{ margin-left: 0px; }
+
+.ubb_document{ width: 450px; padding: 4px 6px; display: block; text-align: left; }
+.ubb_document .size{ float: right; color: #777; }
+.ubb_document .icon{ float: left; padding-right: 5px; }
+
+.ubb_code{
+	font-family: monospace;
+	background-color: #f1f1f1;
+	margin-top: 4px;
+	border-top: 2px solid #aaa;
+	border-bottom: 2px solid #aaa;
+	max-width: 640px;
+	overflow-x:auto; overflow-y:hidden;
+}
+
+.ubb_peiling{ margin: 10px;  padding: 5px 10px; }
+.ubb_peiling .beheer{ float: right; }
+.ubb_peiling ul{ list-style-type: none; padding: 5px; }
+.ubb_peiling ul li{ border-bottom: 1px solid #eee; margin-left: 0px; clear: both;  padding: 4px;}
+.ubb_peiling ul li .stemmen{ float: right; color: #666; width: 75px; text-align: right; }
+.ubb_peiling .grafisch{ float: right; width: 200px; vertical-align: top; padding: 4px 4px; }
+.ubb_peiling .balk{ height: 10px; background-color: #6060FF;  border: 1px outset #0A338D; float: right;}
+
+.ubb_table{ padding: 0px; border-collapse: collapse; }
+.ubb_table tr{ margin: 0px; padding: 0px; }
+.ubb_table td, th{ margin: 0px; padding: 2px; }

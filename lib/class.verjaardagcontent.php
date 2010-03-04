@@ -128,7 +128,8 @@ class VerjaardagContent extends SimpleHTML {
 						echo '<div class="verjaardag';
 						if($lid->isJarig()){ echo ' opvallend'; }
 						echo '">';
-						echo $lid->getNaamLink('pasfoto', 'link').'<br />'.date('d-m', strtotime($lid->getGeboortedatum()));
+						echo $lid->getNaamLink('pasfoto', 'link');
+						echo '<span class="datum">'.date('d-m', strtotime($lid->getGeboortedatum())).'</span>';
 						echo '</div>';
 					}
 					echo '<div class="clear"></div></div>';

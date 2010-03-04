@@ -1,7 +1,7 @@
 {if $actie=='pasfotos'}
 	<div class="pasfotomatrix">
 		{foreach from=$groep->getLidObjects() item=groeplid name=pasfotos}
-			{if $smarty.foreach.pasfotos.index==16}
+			{if $smarty.foreach.pasfotos.index==20}
 				<a class="toonmeer" onclick="toggleDiv('meerLeden-{$groep->getId()}'); this.parentNode.removeChild(this)">
 					Nog {$smarty.foreach.pasfotos.total-16} leden tonen...
 				</a>

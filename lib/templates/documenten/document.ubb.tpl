@@ -1,5 +1,7 @@
-<div class="ubb_document">
-	<span class="size">{$document->getSize()|filesize}</span>
+<a class="ubb_block ubb_document" href="{$document->getDownloadurl()}" title="{$document->getNaam()|escape:'html'}">
 	<span class="mimetype" title="{$document->getMimetype()}">{$document->getMimetype()|mimeicon}</span>
-	<a href="{$document->getDownloadurl()}">{$document->getNaam()|escape:'html'}</a>
-</div>
+	
+	<span class="size">{$document->getSize()|filesize}</span>
+	{$document->getNaam()|escape:'html'}
+</a>
+

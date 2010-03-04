@@ -584,10 +584,17 @@ class eamBBParser{
 	}
 
 	function ubb_h($args){ //Heading ;)
-
-		$text = '<h' . (isset($args['h']) ? $args['h'] : 1) . '>';
+		$id='';
+		if(isset($args['id'])){
+			$id=' id="'.htmlspecialchars($args['id']).'"';
+		}
+		$h=1;
+		if(isset($args['h'])){
+			$h=(int)$args['h'];
+		}
+		$text = '<h'.$h.$id.'>';
 		$text .= $this->parseArray(array('[/h]'), array('h'));
-		$text .= '</h' . (isset($args['h']) ? $args['h'] : 1) . '>' . "\n\n";
+		$text .= '</h'.$h.'>' . "\n\n";
 
 		// remove trailing br (or even two)
 		$next_tag = array_shift($this->parseArray);
@@ -600,9 +607,6 @@ class eamBBParser{
 				array_unshift($this->parseArray, $next_tag);
 			}
 		}
-
-
-
 		return $text;
 	}
 	function ubb_b(){
@@ -705,8 +709,7 @@ class eamBBParser{
 	function ubb_li($arguments){
 		return '<li>'.$this->parseArray(array('[/li]')).'</li>';
 	}
-	function ubb_me($parameters)
-	{
+	function ubb_me($parameters){
 		$content = $this->parseArray(array('[br]'), array());
 		array_unshift($this->parseArray, '[br]');
 		if(isset($parameters['me'])){
@@ -724,8 +727,8 @@ class eamBBParser{
 
 		return $content;
 	}
-	function ubb_email($parameters)
-	{
+	
+	function ubb_email($parameters){
 		$html = '';
 
 		$mailto = array_shift($this->parseArray);
@@ -736,84 +739,68 @@ class eamBBParser{
 		if($endtag == '[/email]'){
 			if(isset($parameters['email'])){
                 if(!email_like($parameters['email'])){
-                	$html .= "[Ongeldig emailadres]";
+                	$html .= "[email: Ongeldig emailadres]";
                 }else{
                 	$html .= '<a href="mailto:'. $parameters['email'] . '">'.$mailto.'</a>';
                 }
 			} else {
 		        if(!email_like($mailto)){
-		       		$html .= "[Ongeldig emailadres]";
+		       		$html .= "[email: Ongeldig emailadres]";
 		        }else{
 		        	$html .= '<a href="mailto:'. $mailto . '">'.$mailto.'</a>';
 		        }
 			}
 		} else {
 			if(isset($parameters['email'])){
-		       if(!email_like($parameters['email'])){
-                	$html .= "[Ongeldig emailadres]";
-                }else{
+				if(!email_like($parameters['email'])){
+					$html .= "[Ongeldig emailadres]";
+				}else{
 					$html .= '<a href="mailto:'. $parameters['email'] . '">'.$parameters['email'].'</a>';
-		       }
+				}
 			}
 			array_unshift($this->parseArray, $endtag);
 			array_unshift($this->parseArray, $mailto);
-
-
 		}
 		return $html;
 	}
 	function ubb_img($arguments){
+		$style='';
 		if(isset($arguments['float'])){
 			$float='float: ';
 			switch($arguments['float']){
 				case 'left':
-					$float.=' left; margin: 0 10px 10px 0; ';
+					$style.='float: left; margin: 0 10px 10px 0; ';
 				break;
 				case 'right':
-					$float.=' right; margin: 0 0 10px 10px; ';
+					$style.=' right; margin: 0 0 10px 10px; ';
 				break;
-				default;
-					$float='';
 			}
-		}else{
-			$float='';
 		}
 		if(isset($arguments['w'])){
-			if((int) $arguments['w']){ // Int to eliminate scripting
-				$width = 'width="'.((int)$arguments['w']).'" ';
-			}else{
-				$width = '';
-			}
-		} else {
-			$width = '';
+			$style.='width: '.((int)$arguments['w']).'px; ';
 		}
-
 		if(isset($arguments['h'])){
-			if((int) $arguments['h']){ // Int to eliminate scripting
-				$height = 'height="'.((int)$arguments['h']).'" ';
-			}else{
-				$height = '';
-			}
-		} else {
-			$height = '';
+			$style.='height: '.((int)$arguments['h']).'px; ';
 		}
-
-		$content = $this->parseArray(array('[/img]'), array());
+		
+		$content = $this->parseArray(array('[/img]', '[/IMG]'), array());
 
 		// only valid patterns
 		if(!url_like(urldecode($content))){
-			$html = "[Ongeldige URL, tip: gebruik tinyurl.com]";
+			$html = "[img: Ongeldige URL, tip: gebruik tinyurl.com]";
 		}else{
-			$html = '<img class="forum_image" src="'.$content.'" alt="'.$content.'" '.$width . $height.' style="'.$float.'" />';
+			$content=htmlspecialchars($content);
+			$html = '<img class="ubb_image" src="'.$content.'" alt="'.$content.'" style="'.$style.'" />';
 		}
 		return $html;
 
 	}
 	function ubb_table($parameters){
-		$paramstring = '';
-		foreach($parameters as $name=>$value){
-			if(in_array($name, array('border', 'color', 'background-color'))){
-				$paramstring .= ' '.$name.': '.str_replace('_', ' ', $value).'; ';
+		$tableProperties=array('border', 'color', 'background-color', 'border-collapse');
+		$style = '';
+		foreach($parameters as $name => $value){
+			if(in_array($name, $tableProperties)){
+				$style.=$name.': '.str_replace('_', ' ', htmlspecialchars($value)).'; ';
 			}
 		}
 
@@ -821,62 +808,53 @@ class eamBBParser{
 		$html = '<table class="ubb_table" style="'.$paramstring.'">'.$content.'</table>';
 		return $html;
 	}
-	function ubb_tr()
-	{
+	
+	function ubb_tr(){
 		$content = $this->parseArray(array('[/tr]'), array('br'));
 		$html = '<tr>'.$content.'</tr>';
 		return $html;
 	}
+	
 	function ubb_td($parameters=array()){
 		$content = $this->parseArray(array('[/td]'), array());
 
 		$style='';
 		if(isset($parameters['w'])){
-			$style=' style="width: '.(int)$parameters['w'].'px"';
+			$style.='width: '.(int)$parameters['w'].'px; ';
 		}
 
-		$html = '<td'.$style.'>'.$content.'</td>';
+		$html = '<td style="'.$style.'">'.$content.'</td>';
 		return $html;
 	}
+	
 	function ubb_th(){
 		$content = $this->parseArray(array('[/th]'), array());
 		$html = '<th>'.$content.'</th>';
 		return $html;
 	}
+	
 	function ubb_div($arguments=array()){
 		$content=$this->parseArray(array('[/div]'), array());
+		
+		$style='';
 		if(isset($arguments['clear'])){
-			$clear='clear: both;';
+			$style.='clear: both; ';
 		}elseif(isset($arguments['float']) AND $arguments['float']=='left'){
-			$clear='float: left;';
+			$style.='float: left;';
 		}elseif(isset($arguments['float']) AND $arguments['float']=='right'){
-			$clear='float: right;';
-		}else{
-			$clear='';
+			$style.='float: right;';
 		}
-		if(isset($arguments['w'])){
-			if((int) $arguments['w']){ // Int to eliminate scripting
-				$width = 'width: '.((int)$arguments['w']).'px; ';
-			}else{
-				$width = '';
-			}
-		} else {
-			$width = '';
+		if(isset($arguments['w'])){ $style.='width: '.((int)$arguments['w']).'px; '; }
+		if(isset($arguments['h'])){ $style.='height: '.((int)$arguments['h']).'px; '; }
+		if($style!=''){ 
+			$style=' style="'.$style.'" ';
 		}
-
-
-		if(isset($arguments['h'])){
-                        if((int) $arguments['h']){ // Int to eliminate scripting
-                                $height = 'height: '.((int)$arguments['h']).'px; ';
-                        }else{
-                                $height= '';
-                        }
-                } else {
-                        $height = '';
-                }
-
-		return '<div style="'.$clear.' '.$width.' '.$height.'">'.$content.'</div>';
-
+		
+		$class='';
+		if(isset($arguments['class'])){
+			$class=' class="'.htmlspecialchars($arguments['class']).'"';
+		}
+		return '<div'.$style.$class.'>'.$content.'</div>';
 	}
 }
 ?>

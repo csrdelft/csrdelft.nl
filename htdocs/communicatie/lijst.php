@@ -1,7 +1,7 @@
 <?php
 
-# instellingen & rommeltjes
 require_once 'include.config.php';
+require_once 'lid/class.ledenlijstcontent.php';
 
 if(!($loginlid->hasPermission('P_LOGGED_IN') AND $loginlid->hasPermission('P_OUDLEDEN_READ'))){
 	# geen rechten
@@ -11,15 +11,10 @@ if(!($loginlid->hasPermission('P_LOGGED_IN') AND $loginlid->hasPermission('P_OUD
 	exit;
 }
 
-
-require_once 'lid/class.ledenlijstcontent.php';
-
-
 $zoeker=new LidZoeker();
 if(isset($_GET['q'])){
 	$zoeker->parseQuery($_GET);
 }
-
 
 //redirect to profile if only one result.
 if($zoeker->count()==1){

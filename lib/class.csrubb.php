@@ -265,6 +265,7 @@ src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
 		require_once 'maaltijden/class.maaltijdcontent.php';
 		return MaaltijdContent::getMaaltijdubbtag(trim($parameters['maaltijd']));
 	}
+	
 	public function ubb_offtopic(){
 		$content = $this->parseArray(array('[/offtopic]'), array());
 		return '<div class="offtopic">'.$content.'</div>';
@@ -398,14 +399,18 @@ UBBVERHAAL;
 	 * Peiling ubb-tag. Door Piet-Jan Spaans.
 	 * [peiling=2]
 	 */
-	public function ubb_peiling($parameters){		
+	public function ubb_peiling($parameters){
+		require_once 'class.peilingcontent.php';
 		if(isset($parameters['peiling']) AND is_numeric($parameters['peiling'])){
 			$peilingid = (int)$parameters['peiling'];
+			try{
+				$peiling=new Peiling($peilingid);
+			}catch(Execption $e){
+				return '[peiling] Er bestaat geen peiling met (id'.$peilingid.')';
+			}
+			$peilingcontent=new PeilingContent($peiling);
 			
-			require_once 'class.peilingcontent.php';
-			$peilingtag=new PeilingUbbContent($peilingid);
-			
-			return $peilingtag->getHTML();
+			return $peilingcontent->getHTML();
 		}else{
 			return '[peiling] Geen geldig peilingblok.';
 		}		

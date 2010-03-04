@@ -5,20 +5,22 @@
 				{$profhtml.uid|pasfoto}<br />
 				<div class="knopjes">
 					{if $magBewerken}
-						<a href="/communicatie/profiel/{$profhtml.uid}/bewerken" class="knop"><img src="{$csr_pics}forum/bewerken.png" title="Bewerk dit profiel" />Bewerken</a><br />
-						{if $profhtml.uid==$loginlid->getUid()}<a href="/instellingen/" class="knop">{icon get="instellingen"} Webstekinstellingen</a><br />{/if}
+						<a href="/communicatie/profiel/{$profhtml.uid}/bewerken" class="knop" title="Bewerk dit profiel">{icon get="bewerken"}</a>
+						{if $profhtml.uid==$loginlid->getUid()}
+							<a href="/instellingen/" class="knop" title="Webstekinstellingen">{icon get="instellingen"}</a>
+						{/if}
+					{/if}
+					
+					{if $isAdmin}
+						<a href="/tools/stats.php?uid={$profhtml.uid}" class="knop" title="Toon bezoeklog">{icon get="server_chart"}</a>
+						<a href="/communicatie/profiel/{$profhtml.uid}/wachtwoord" class="knop" title="Reset wachtwoord voor {$lid->getNaam()}" onclick="return confirm('Weet u zeker dat u het wachtwoord van deze gebruiker wilt resetten?')">
+							{icon get="resetpassword"}</a>
+						{if $loginlid->maySuTo($lid)}
+							<a href="/su/{$profhtml.uid}/" class="knop" title="Su naar dit lid">{icon get='su'}</a><br />
+						{/if}
 					{/if}
 					{if $lid->getStatus()=='S_NOVIET' AND $loginlid->hasPermission('groep:novcie')}
 						<a href="/communicatie/profiel/{$profhtml.uid}/novietBewerken" class="knop"><img src="{$csr_pics}forum/bewerken.png" title="Bewerk dit profiel" />Noviet bewerken</a><br />
-					{/if}
-					{if $isAdmin}
-						<a href="/tools/stats.php?uid={$profhtml.uid}" class="knop">{icon get="server_chart"} Bezoeklog</a><br />
-						<a href="/communicatie/profiel/{$profhtml.uid}/wachtwoord" class="knop" onclick="return confirm('Weet u zeker dat u het wachtwoord van deze gebruiker wilt resetten?')">
-							{icon get="resetpassword"} Reset wachtwoord
-						</a><br />
-						{if $loginlid->maySuTo($lid)}
-							<a href="/su/{$profhtml.uid}/" class="knop">{icon get='su'} Su naar dit lid</a><br />
-						{/if}
 					{/if}
 				</div>
 			</div>
@@ -42,7 +44,7 @@
 		</div>
 	</div>
 	<div class="profielregel">
-		<div class="left">Adres</div>	
+		<div class="left">Adres</div>
 		<div class="gegevens">
 			<div class="gegevenszelf">
 				<div class="label">
@@ -104,7 +106,10 @@
 					
 				<div class="label">Studie sinds:</div> {$profhtml.studiejaar}<br />
 				<div class="label">Lid sinds:</div> 
-					{$profhtml.lidjaar}{if $isOudlid AND $profhtml.lidafdatum!='0000-00-00'} tot {$profhtml.lidafdatum|substr:0:4}{/if}<br />
+					{if $profhtml.lidjaar!=''}
+						<a href="/communicatie/lijst.php?q={$profhtml.lidjaar|substr:2}&amp;status=ALL" title="Bekijk de leden van deze lichting">{$profhtml.lidjaar}</a>
+					{/if}
+					{if $isOudlid AND $profhtml.lidafdatum!='0000-00-00'} tot {$profhtml.lidafdatum|substr:0:4}{/if}<br />
 				<div class="label">Status:</div> {$lid->getStatusDescription()}<br />
 				<br />
 				

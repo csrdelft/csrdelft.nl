@@ -161,8 +161,16 @@ class MySql{
 		$this->query("DELETE FROM `".$table."` WHERE `id`=".$id.";");
 	}
 
-	public function escape($str) {
-		return mysql_real_escape_string($str, $this->_db);
+	public function escape($in){
+		if(is_array($in)){
+			$return=array();
+			foreach($in as $key => $item){
+				$return[$key]=$this->escape($item);
+			}
+			return $return;
+		}else{
+			return mysql_real_escape_string($in, $this->_db);
+		}
 	}
 	public function dbResource() {
 		return $this->_db;

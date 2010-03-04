@@ -25,12 +25,12 @@
 	<div id="menuright">
 		{if $loginlid->hasPermission('P_LOGGED_IN') }
 			<div id="ingelogd">
+				<a href="/instellingen/" class="instellingen" title="Webstekinstellingen">{icon get="instellingen"}</a>
 				{if $loginlid->isSued()}
 					<a href="/endsu/" style="color: red;">{$loginlid->getSuedFrom()->getNaamLink('civitas','html')} als</a><br />» 
 				{/if}
 				{$loginlid->getUid()|csrnaam}<br />				
-				<div id="uitloggen"><a href="/logout.php">log&nbsp;uit</a></div><br class="clear" />
-				<br />
+				<div id="uitloggen"><a href="/logout.php">log&nbsp;uit</a></div>
 				<div id="saldi">
 					{foreach from=$loginlid->getLid()->getSaldi() item=saldo}
 						<div class="saldoregel">
@@ -45,7 +45,7 @@
 						{if isset($smarty.get.q)}
 							<input type="text" value="{$smarty.get.q|escape:'htmlall'}" name="q" id="zoekveld" />
 						{else}
-							<input type="text" value="naam zoeken" onfocus="this.value=''; this.style.textAlign='left';" name="q" id="zoekveld" />
+							<input type="text" name="q" id="zoekveld" />
 						{/if}
 					</p>
 				</form>

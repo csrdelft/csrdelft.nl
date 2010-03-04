@@ -1,4 +1,4 @@
-<div id="groep{$groep->getId()}" class="ubb_groep">
+<div id="groep{$groep->getId()}" class="ubb_block ubb_groep">
  	<div class="groepleden">
 		{if $groep->toonPasfotos()}
 			{assign var='actie' value='pasfotos'}

@@ -7,117 +7,109 @@
 # --------------------------------------------------------------------------
 class Peiling {
 	private $id=0;
+	private $titel='';
+	private $tekst='';
 	
-	function __construct($init){		
+	private $totaal=0; //totaal aantal stemmen voor deze peiling.
+	private $opties=array();
+	private $hasvoted=false;
+	
+	function __construct($init){
 		$init = (int)$init;
 		if($init!=0){
-			//Check of deze peiling bestaat:Zo ja, sla id op.
-			$this->id = $init; 
+			$this->load($init);
 		}else{
-			//Alleen geschikt voor het maken van een nieuwe peiling?			
+			//nieuwe peiling
 		}
 	}
 	
-	public function getID(){
-		return $this->id;
-	} 
-
-	public function getPeiling(){
-		$iPeilingID=(int)$this->id;
-
+	public function load($id){
+		$this->id=(int)$id;
+		
 		$sPeilingQuery="
-			SELECT
-				*
-			FROM
-				peiling
-			WHERE
-				peiling.id = ".$iPeilingID.';';
+			SELECT 
+				id, titel, tekst, (
+					SELECT uid FROM peiling_stemmen 
+					WHERE peilingid=".$this->getId()." AND uid='".LoginLid::instance()->getUid()."' 
+					LIMIT 1) as has_voted
+			FROM peiling
+			WHERE peiling.id = ".$this->getId().';';
 
 		$db = MySql::instance();
 		$rPeiling=$db->query($sPeilingQuery);
-		return $db->next($rPeiling);
 		
+		if($db->numRows($rPeiling)==1){
+			$data=$db->next($rPeiling);
+			$this->titel=$data['titel'];
+			$this->tekst=$data['tekst'];
+			$this->hasvoted=$data['has_voted'];
+		}else{
+			throw new Exception('Peiling bestaat niet met (id:'.$this->getId().')');
+		}
+		
+		$this->loadOptions();
 	}
-
-	public function getPeilingOpties(){
-		$iPeilingID=(int)$this->id;
-
-		$sPeilingQuery="
-			SELECT
-				*
-			FROM
-				peilingoptie
-			WHERE
-				peilingid = ".$iPeilingID."
-			ORDER BY id ASC	
-			";
+	public function loadOptions(){
+		$optiesQuery="
+			SELECT id, optie, stemmen
+			FROM peilingoptie
+			WHERE peilingid=".$this->getId()."
+			ORDER BY id ASC;";
+		$db=MySql::instance();
+		$opties=$db->query2array($optiesQuery);
 		
-		$sPeilingQuery.=';';
-		$db = MySql::instance();
-		$rPeiling=$db->query($sPeilingQuery);
-		return $db->result2array($rPeiling);		
+		if(!is_array($opties)){
+			$opties=array();
+		}
+		//reken totaal aantal stemmen uit.
+		foreach($opties as $optie){
+			$this->totaal+=$optie['stemmen'];
+		}
+		
+		foreach($opties as $optie){
+			if($this->totaal==0){
+				$optie['percentage']=0;
+			}else{
+				$optie['percentage']=($optie['stemmen']/$this->totaal)*100; 
+			}
+			$this->opties[]=$optie;
+		}
 	}
 	
+	public function getId(){ return $this->id; } 
+	public function getTitel(){ return $this->titel; }
+	public function getTekst(){ return $this->tekst; }
+	public function hasVoted(){ return $this->hasvoted; }
+	
+	public function getOpties(){ return $this->opties; }
+	public function getStemmenAantal(){ return $this->totaal; }
+	
 	public function magStemmen (){
-		$iPeilingID=(int)$this->id;
 		if(!LoginLid::instance()->hasPermission('P_LOGGED_IN')){
 			return false;
 		}
-		$sUserID = LoginLid::instance()->getUid();
-		
-		$sPeilingQuery="
-			SELECT
-				*
-			FROM
-				peiling_stemmen
-			WHERE
-				peilingid = ".$iPeilingID." AND
-				uid = '".$sUserID."'";
-		
-		$sPeilingQuery.=';';
-		$db = MySql::instance();
-		$rPeiling=$db->query($sPeilingQuery);
-		$magStemmen =$db->numRows($rPeiling)==0; 
-		return $magStemmen;	
+		return $this->hasVoted()=='';
 	}
 	
-	public function stem($iOptie){		
-		$iPeilingID = (int)$this->id;
-		$iOptie = (int)$iOptie;
+	public function stem($optieId){
 		if($this->magStemmen()){
-			return $this->addStem($iOptie);
+			return $this->addStem((int)$optieId);
 		}
 		return false;
 	}
-	//UPDATE `peilingoptie` SET `stemmen`=1 WHERE `id`=3
-	private function addStem($iOptie){
-		$sUpdate = "
-			UPDATE 
-				peilingoptie 
-			SET 
-				stemmen = stemmen + 1
-			WHERE 
-				`id`=".$iOptie;		
-		$sUpdate.=';';
-		$db = MySql::instance();
+
+	private function addStem($optieId){
+		$db=MySql::instance();
 		
-		$rUpdate = $db->query($sUpdate);
-		$rLog = $this->logStem();		
-		return $rUpdate && $rLog;
-	}
-	//INSERT INTO `peiling_stemmen` (`peilingid`,`uid`) VALUES (2,'x101')
-	private function logStem(){
-		$uid = LoginLid::instance()->getUid();
-		$iPeilingID = $this->id;
-		$sInsert = "
-			INSERT INTO 
-				peiling_stemmen 
-				(peilingid, uid) 
-			VALUES 
-				(".$iPeilingID.",'".$uid."')";
-		$db = MySql::instance();
-		$r = $db->query($sInsert);
-		return $r;
+		$updateOptie="
+			UPDATE peilingoptie 
+			SET stemmen = stemmen + 1
+			WHERE id=".$optieId.';';
+		$logStem="
+			INSERT INTO peiling_stemmen (peilingid, uid) VALUES 
+			(".$this->getId().",'".LoginLid::instance()->getUid()."');";
+		
+		return $db->query($updateOptie) AND $db->query($logStem);
 	}
 	
 	public function deletePeiling(){
@@ -129,24 +121,19 @@ class Peiling {
 	
 
 	private function delete(){
-		$pid = $this->id;
+
 		$db = MySql::instance();
 		
-		$sDelete = "DELETE FROM `peiling` WHERE `id`=".$pid.";";
-		$rDeletePeiling = $db->query($sDelete);
+		$sDelete = "DELETE FROM `peiling` WHERE `id`=".$this->getId().";";
+		$sDeleteOpties = " DELETE FROM  `peilingoptie` WHERE `peilingid`=".$this->getId().";";
+		$sDeleteLog="DELETE FROM `peiling_stemmen` WHERE `peilingid`=".$this->getId().";";
 		
-		$sDeleteOpties = " DELETE FROM  `peilingoptie` WHERE `peilingid`=".$pid.";";
-		$rDeleteOpties = $db->query($sDeleteOpties);
-		
-		$sDeleteLog="DELETE FROM `peiling_stemmen` WHERE `peilingid`=".$pid.";";
-		$rDeleteLog = $db->query($sDeleteLog);
-		
-		return $rDeletePeiling && $rDeleteOpties && $rDeleteLog;
+		return $db->query($sDelete) AND $db->query($sDeleteOpties) AND $db->query($sDeleteLog);
 	}
 	
-	public function maakPeiling($properties){
-		if($this->magBewerken() && is_array($properties)){			
-			return $this->create($properties);
+	public static function maakPeiling($properties){
+		if(Peiling::magBewerken() && is_array($properties)){
+			return new Peiling(Peiling::create($properties));
 		}
 		return 0;
 	}
@@ -154,22 +141,19 @@ class Peiling {
 	//INSERT INTO `peiling` (`id`,`titel`,`tekst`) VALUES (NULL,'titel','verhaal')
 	//INSERT INTO `peilingoptie` (`id`,`peilingid`,`optie`,`stemmen`) VALUES (NULL,pid,'optietekst',0)
 	//Geeft het id van de nieuwe peiling terug, of NULL.
-	private function create($properties){
+	private static function create($properties){
 		$titel = $properties['titel'];
 		$verhaal = $properties['verhaal'];
-		$opties;
+		$opties=array();
+		
 		if(is_array($properties['opties'])){
 			$opties = $properties['opties'];
 		}
 		$db = MySql::instance();
 		
-		$sCreate = "
-			INSERT INTO 
-				`peiling` 
-				(`id`,`titel`,`tekst`) 
-			VALUES 
-				(NULL,'".$db->escape($titel)."','".$db->escape($verhaal)."')
-			";
+		$sCreate="
+			INSERT INTO `peiling` (`titel`,`tekst`) VALUES 
+				('".$db->escape($titel)."','".$db->escape($verhaal)."');";
 		$r = $db->query($sCreate);
 		if(!$r){
 			return NULL;
@@ -180,9 +164,9 @@ class Peiling {
 			$sCreateOptie = "
 				INSERT INTO 
 					`peilingoptie` 
-					(`id`,`peilingid`,`optie`,`stemmen`) 
+					(`peilingid`,`optie`,`stemmen`) 
 				VALUES 
-					(NULL,".$pid.",'".$db->escape($optie)."',0)
+					(".$pid.",'".$db->escape($optie)."',0)
 				";
 			$r = $db->query($sCreateOptie);
 		}
@@ -190,22 +174,15 @@ class Peiling {
 	}
 	
 	public static function magBewerken(){
-		$magBewerken = false;
-		 //Elk basfcie-lid heeft voorlopig peilingbeheerrechten.		
-		if(LoginLid::instance()->hasPermission('P_ADMIN,groep:BASFcie')){
-			$magBewerken = true; 
-		}			
-		return $magBewerken;	
+		//Elk basfcie-lid heeft voorlopig peilingbeheerrechten.		
+		return LoginLid::instance()->hasPermission('P_ADMIN,groep:BASFcie');
 	}
 	
 	public static function getLijst(){
 		$sSelectQuery="
-			SELECT
-				*
-			FROM
-				peiling
-			ORDER BY id DESC
-			";
+			SELECT *
+			FROM peiling
+			ORDER BY id DESC";
 		
 		$sSelectQuery.=';';
 		$db=MySql::instance();

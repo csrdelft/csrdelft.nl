@@ -71,9 +71,9 @@ class MaaltijdContent extends SimpleHTML {
 		}
 		$maaltijd=new Maaltijd((int)$maalid);
 
-		$html='<div class="ubbMaaltijd" id="maaltijd'.$maaltijd->getID().'">';
+		$html='<div class="ubb_block ubb_maaltijd" id="maaltijd'.$maaltijd->getID().'">';
 		if(LoginLid::instance()->hasPermission('P_LOGGED_IN')){
-			$html.='<div class="ubbMaaltijdFloat">';
+			$html.='<div class="aanmelddata">';
 			$html.='U komt:  <br />';
 
 			$status=$maaltijd->getStatus();
@@ -115,7 +115,7 @@ class MaaltijdContent extends SimpleHTML {
 		$html.='<h2><a href="/actueel/maaltijden/index.php">Maaltijd</a> van '.strftime('%a %e %B %H:%M', strtotime($maaltijd->getMoment())).'</h2>';
 		$html.=$maaltijd->getTekst().'<br />';
 		$html.='<span class="small">Inschrijvingen: <em>'.$maaltijd->getAantalAanmeldingen(). '</em> van <em>'.$maaltijd->getMaxAanmeldingen().'</em></span>';
-		$html.='</div><br style="clear: both;" />';
+		$html.='</div><br class="clear" />';
 		return $html;
 	}
 }

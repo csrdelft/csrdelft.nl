@@ -25,22 +25,12 @@
 
 {foreach from=$groepen->getGroepen() item=groep}
 	<div class="groep clear" id="groep{$groep->getId()}">
-		{if $groep->toonPasfotos()}
-			<div class="pasfotomatrix" style="float: right;">
-				{foreach from=$groep->getLeden() item=groeplid}
-					{$groeplid.uid|pasfoto}
-				{/foreach}
-			</div>
-		{else}
-			<ul class="groepledenlijst nobullets">
-				{foreach from=$groep->getLeden() item=groeplid}
-					<li>{$groeplid.uid|csrnaam:'civitas'}{if $groep->toonFuncties()}&nbsp;<em>{$groeplid.functie|escape:'html'}{/if}</em></li>
-				{/foreach}
-				{if $groep->isAanmeldbaar() AND $groep->isVol()}
-					<li><br />Deze groep is vol, u kunt zich niet meer aanmelden.</li>
-				{/if}
-			</ul>
-		{/if}
+		<div class="groepleden">
+			{if $groep->toonPasfotos()}
+				{assign var='actie' value='pasfotos'}
+			{/if}
+			{include file='groepen/groepleden.tpl'}
+		</div>
 		<h2><a href="/actueel/groepen/{$groepen->getNaam()}/{$groep->getId()}/">{$groep->getNaam()}</a></h2>
 		{$groep->getSbeschrijving()|ubb}
 	</div>
