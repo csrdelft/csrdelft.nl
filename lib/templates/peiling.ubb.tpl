@@ -19,7 +19,8 @@
 			{if $peiling->magStemmen()}
 				<input type="radio" name="optie" value="{$optie.id}"/> 
 			{else}
-				<div class="stemmen">{$optie.percentage|string_format:'%01.1f'}% ({$optie.stemmen})</div>
+				<div class="stemmen">({$optie.stemmen})</div>
+				<div class="percentage">{$optie.percentage|string_format:'%01.1f'}%</div>
 				<div class="grafisch"><div class="balk" style="width: {$optie.percentage*1.8|string_format:'%d'}px;">&nbsp;</div></div>
 			{/if}
 			{$optie.optie|ubb}
