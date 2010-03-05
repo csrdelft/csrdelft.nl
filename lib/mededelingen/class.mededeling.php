@@ -27,8 +27,6 @@ class Mededeling{
 
 	public function __construct($init){
 		if(is_array($init)){
-			if($init['id']>0)
-				$this->load($init['id']);
 			$this->array2properties($init);
 		}else{
 			$init=(int)$init;
@@ -215,15 +213,17 @@ class Mededeling{
 				$doelgroepClause=" AND doelgroep!='leden'";
 			}
 			$topmostQuery="
-				SELECT id
+				SELECT 
+					id, datum, vervaltijd, titel, tekst, categorie, uid, 
+					prioriteit, doelgroep, zichtbaarheid, plaatje, categorie
 				FROM mededeling
 				WHERE (vervaltijd IS NULL OR vervaltijd > '".getDateTime()."')
-				AND zichtbaarheid='zichtbaar'".$doelgroepClause."
+				  AND zichtbaarheid='zichtbaar'".$doelgroepClause."
 				ORDER BY prioriteit ASC, datum DESC
 				LIMIT ".$aantal;
 			$resource=$db->select($topmostQuery);
 			while( $mededeling=$db->next($resource) ){
-				$topmost[]=new Mededeling($mededeling['id']);
+				$topmost[]=new Mededeling($mededeling);
 			}
 		}
 		return $topmost;
@@ -333,19 +333,20 @@ class Mededeling{
 		$db=MySql::instance();
 		$zichtbaarheidClause="zichtbaarheid='zichtbaar'";
 		$doelgroepClause="";
-		if( !LoginLid::instance()->hasPermission('P_LEDEN_READ') ){
+		if(!LoginLid::instance()->hasPermission('P_LEDEN_READ') ){
 			$doelgroepClause=" AND doelgroep='iedereen'";
 		}
 		$laatstenQuery="
-			SELECT id
+			SELECT id, datum, vervaltijd, titel, tekst, categorie, uid, prioriteit, doelgroep, zichtbaarheid, plaatje, categorie
 			FROM mededeling
 			WHERE (vervaltijd IS NULL OR vervaltijd > '".getDateTime()."') 
 			AND ".$zichtbaarheidClause.$doelgroepClause."
 			ORDER BY datum DESC, id DESC
 			LIMIT ".(int)$aantal;
 		$resource=$db->select($laatstenQuery);
+		
 		while($mededelingRecord=$db->next($resource)){
-			$resultaat[]=new Mededeling($mededelingRecord['id']);
+			$resultaat[]=new Mededeling($mededelingRecord);
 		}
 		return $resultaat;
 	}
