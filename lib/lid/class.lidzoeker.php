@@ -142,6 +142,7 @@ class LidZoeker{
 			$defaults[]="voornaam LIKE '%".$zoekterm."%' ";
 			$defaults[]="achternaam LIKE '%".$zoekterm."%' ";
 			$defaults[]="CONCAT_WS(' ', voornaam, tussenvoegsel, achternaam) LIKE '%".$zoekterm."%' ";
+			$defaults[]="CONCAT_WS(' ', voornaam, achternaam) LIKE '%".$zoekterm."%' ";
 			$defaults[]="CONCAT_WS(' ', tussenvoegsel, achternaam) LIKE '%".$zoekterm."%' ";
 			$defaults[]="CONCAT_WS(', ', achternaam, tussenvoegsel) LIKE '%".$zoekterm."%' ";
 			$defaults[]="nickname LIKE '%".$zoekterm."%' ";
