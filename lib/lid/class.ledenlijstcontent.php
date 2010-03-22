@@ -304,8 +304,9 @@ class LLCSV extends LLweergave{
 	}
 	
 	public function viewLid(Lid $lid){
-		$return='';
+		
 		foreach($this->velden as $veld){
+			$return='';
 			switch($veld){
 				case 'adres':
 					$return.=$lid->getProperty('adres').';';

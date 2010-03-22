@@ -59,7 +59,7 @@ class ForumCategorie{
 		$onderwerpen="
 			SELECT
 				id, titel, categorie, uid, datumtijd, lastuser, lastpost, lastpostID,
-				reacties, plakkerig, open, soort, zichtbaar
+				reacties, plakkerig, open, zichtbaar
 			FROM
 				forum_topic topic
 			WHERE

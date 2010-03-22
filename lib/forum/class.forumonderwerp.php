@@ -22,7 +22,6 @@ class ForumOnderwerp{
 	private $zichtbaar='zichtbaar';
 	private $open=1;
 	private $plakkerig=0;
-	private $soort='T_NORMAAL';
 	private $reacties=0;
 	private $lastuser;
 	private $lastpost;
@@ -72,7 +71,6 @@ class ForumOnderwerp{
 		$this->setCategorie($onderwerp['categorie']);
 		$this->open=$onderwerp['open'];
 		$this->plakkerig=$onderwerp['plakkerig'];
-		$this->soort=$onderwerp['soort'];
 		$this->zichtbaar=$onderwerp['zichtbaar'];
 		$this->reacties=$onderwerp['reacties'];
 		$this->lastpost=$onderwerp['lastpost'];
@@ -89,7 +87,7 @@ class ForumOnderwerp{
 
 		$sTopicQuery="
 			SELECT
-				id, titel, uid, categorie, open, plakkerig, soort, zichtbaar,
+				id, titel, uid, categorie, open, plakkerig, zichtbaar,
 				lastpost, lastuser, lastpostID, reacties
 			FROM
 				forum_topic topic
@@ -165,7 +163,6 @@ class ForumOnderwerp{
 	public function isOpen(){ return $this->open==1; }
 	public function isPlakkerig(){ return $this->plakkerig==1; }
 	public function needsModeration(){ return !Forum::isIngelogged(); }
-	public function getSoort(){ return $this->soort; }
 	public function getReacties(){ return $this->reacties; }
 	public function getLastpost(){ return $this->lastpost; }
 	public function getLastpostID(){ return $this->lastpostID; }

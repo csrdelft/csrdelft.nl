@@ -96,7 +96,6 @@ class Forum{
 					categorie.titel AS categorieTitel,
 				topic.open AS open,
 				topic.plakkerig AS plakkerig,
-				topic.soort AS soort,
 				topic.lastpost AS lastpost,
 				topic.reacties AS reacties,
 				post.uid AS uid,
@@ -180,10 +179,9 @@ class Forum{
 				topic.titel AS titel,
 				topic.uid AS startUID,
 				topic.categorie AS categorie,
-					cat.titel AS categorieTitel,
+				cat.titel AS categorieTitel,
 				topic.open AS open,
 				topic.plakkerig AS plakkerig,
-				topic.soort AS soort,
 				post.uid AS uid,
 				post.id AS postID,
 				post.tekst AS tekst,
@@ -198,8 +196,10 @@ class Forum{
 				forum_cat cat ON( topic.categorie=cat.id )
 			WHERE
 				topic.zichtbaar='zichtbaar' AND post.zichtbaar='zichtbaar' AND
-				( ".Forum::getCategorieClause()." ) AND (".$singleCat.") AND
-				MATCH(post.tekst, topic.titel )AGAINST( '".$sZoekQuery."' IN BOOLEAN MODE )
+				( ".Forum::getCategorieClause()." ) AND (".$singleCat.") AND ( 
+				  MATCH(post.tekst)AGAINST('".$sZoekQuery."' IN NATURAL LANGUAGE MODE ) OR
+				  topic.titel LIKE '%".$sZoekQuery."%'
+				)
 			GROUP BY
 				topic.id
 			ORDER BY

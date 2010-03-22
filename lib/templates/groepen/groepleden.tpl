@@ -3,7 +3,7 @@
 		{foreach from=$groep->getLidObjects() item=groeplid name=pasfotos}
 			{if $smarty.foreach.pasfotos.index==20}
 				<a class="toonmeer" onclick="toggleDiv('meerLeden-{$groep->getId()}'); this.parentNode.removeChild(this)">
-					Nog {$smarty.foreach.pasfotos.total-16} leden tonen...
+					Nog {$smarty.foreach.pasfotos.total-20} leden tonen...
 				</a>
 				<div class="verborgen" id="meerLeden-{$groep->getId()}">
 				{assign var='meerisopen' value='true'}
