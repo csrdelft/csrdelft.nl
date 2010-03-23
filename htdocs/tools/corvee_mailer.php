@@ -10,6 +10,8 @@ if(!$loginlid->hasPermission('P_ADMIN')){
 require_once 'maaltijden/class.maaltrack.php';
 $maaltrack = new MaalTrack();
 
-$maaltrack->corveeAutoMailer();
+$debugMode = (isset($_GET['debug']) ? (int)$_GET['debug'] : null);
+
+$maaltrack->corveeAutoMailer($debugMode);
 
 ?>

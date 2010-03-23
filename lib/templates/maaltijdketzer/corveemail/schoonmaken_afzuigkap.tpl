@@ -7,7 +7,7 @@ Kunt u niet de afzuigkappen schoonmaken op deze dag zorg dan zelf voor een verva
 Ik wens u heel veel succes en plezier.
 
 Met vriendelijke groet,
-Am. Nederend
+Am. CorveeCaesar
 
 Corveerooster: http://spreadsheets.google.com/pub?key=tnqni0CY0u_ANruXHspV13w&output=html
 Punten: http://spreadsheets.google.com/pub?key=tD7-hZKpE5aZl0foSgKJbWw&single=true&gid=1&output=html

@@ -44,14 +44,11 @@
 		{foreach from=$maal.maaltijden item=maaltijd}
 			<tr {if $maaltijd.datum<=$smarty.now}class="old"{/if} style="background-color: {cycle values="#e9e9e9, #fff"};{if $maal.formulier.id==$maaltijd.id}background-color: #bfb{/if}">
 			<td>
-					<a href="/actueel/maaltijden/corveebeheer/bewerk/{$maaltijd.id}#corveemaaltijdFormulier">{icon get="bewerken"}</a>					
-					<a href="/actueel/maaltijden/corveebeheer/takenbewerk/{$maaltijd.id}#corveetakenFormulier">{icon get="taken_bewerken"}</a>
+					<a href="/actueel/maaltijden/corveebeheer/bewerk/{$maaltijd.id}#corveemaaltijdFormulier">{icon get="bewerken" title="Bewerk Maaltijd"}</a>					
+					<a href="/actueel/maaltijden/corveebeheer/takenbewerk/{$maaltijd.id}#corveetakenFormulier">{icon get="taken_bewerken" title="Bewerk Taken"}</a>
 					<a href="/actueel/maaltijden/corveebeheer/puntenbewerk/{$maaltijd.id}#corveepuntenFormulier">
-					<img src={if $maaltijd.is_toegekend}
-							"{$csr_pics}knopjes/puntenbewerken_toegekend.png"
-							{else}
-							"{$csr_pics}knopjes/puntenbewerken.png"
-							{/if} /></a>
+						{if !$maaltijd.is_toegekend}{icon get="punten_bewerken" title="Punten Toekennen"}{else}{icon get="punten_bewerken_toegekend" title="Punten Toegekend!"}{/if}
+					</a>
 				</td>
 				<td>{$maaltijd.datum|date_format:$datumFormaat}</td>
 				<td>{$maaltijd.tekst|truncate:20|escape:'html'}</td>
@@ -92,9 +89,9 @@
 				{/if}
 				<td>
 					{if $maaltijd.corvee_gemaild == "1"}
-						<img src="{icon get="gemaild" notag=true}" alt="Gemaild" />
+						<img src="{icon get="gemaild" notag=true}" alt="Gemaild" title="Gemaild" />
 					{else}
-						<img src="{icon get="niet_gemaild" notag=true}" alt="Niet gemaild" />
+						<img src="{icon get="niet_gemaild" notag=true}" alt="Niet gemaild" title="Niet gemaild" />
 					{/if}
 				</td>
 			</tr>

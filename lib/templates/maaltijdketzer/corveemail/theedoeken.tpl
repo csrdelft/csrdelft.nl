@@ -12,7 +12,7 @@ Kunt u in deze periode er niet voor zorgen dat de doeken weer heerlijk schoon wo
 Ik wens u heel veel succes en plezier.
 
 Met vriendelijke groet,
-Am. Nederend
+Am. CorveeCaesar
 
 Corveerooster: http://spreadsheets.google.com/pub?key=tnqni0CY0u_ANruXHspV13w&output=html
 Punten: http://spreadsheets.google.com/pub?key=tD7-hZKpE5aZl0foSgKJbWw&single=true&gid=1&output=html

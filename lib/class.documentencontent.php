@@ -284,7 +284,7 @@ class DocumentenContent extends SimpleHTML {
 						$row.='/'.$catid;
 					}
 					$row.='#bewerk">'."\n" // de jump-ketser
-					.Icon::getTag("bewerken", "button").'</a>'."\n"
+					.Icon::getTag("bewerken", "Bewerken", "button").'</a>'."\n"
 
 					// verwijderen:
 					.'<a onclick="return confirm(\''.$confirmString.'\')" href="'.$sLinkPrefix.'verwijderen/'.$docid.'">'."\n"
@@ -298,7 +298,7 @@ class DocumentenContent extends SimpleHTML {
 						$row.='/'.$catid;
 					}
 					$row.='#voegtoe">'."\n"
-					.Icon::getTag("toevoegen", "button").'</a>'."\n"
+					.Icon::getTag("toevoegen", "Toevoegen", "button").'</a>'."\n"
 
 					.'</td></tr>'."\n";
 

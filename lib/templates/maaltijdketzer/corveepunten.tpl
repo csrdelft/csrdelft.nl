@@ -87,7 +87,7 @@
 					<td>{$leden.$it.corvee_vrijstelling}%</td>
 					<td style="background-color: #{$leden.$it.corvee_punten_rgb}">{$leden.$it.corvee_punten}</td>
 					<td style="background-color: #{$leden.$it.corvee_tekort_rgb}">{$leden.$it.corvee_tekort}</td>
-					<td style="background-color: #{$leden.$it.corvee_prognose_rgb}">{$leden.$it.corvee_prognose}</td>
+					<td style="width: 60px; background-color: #{$leden.$it.corvee_prognose_rgb}">{$leden.$it.corvee_prognose}</td>
 					<td></td>
 				</tr>
 			{/if}

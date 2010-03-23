@@ -32,9 +32,9 @@ require_once('class.icon.php');
 function smarty_function_icon($params, &$smarty){
    if(isset($params['get'])){
 		if(isset($params['notag'])){
-			return Icon::get($params['get']);
+			return Icon::get($params['get'], $params['title']);
 		}else{
-			return Icon::getTag($params['get']);
+			return Icon::getTag($params['get'], $params['title']);
 		}
 	}
 }

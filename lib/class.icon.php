@@ -44,16 +44,16 @@ class Icon{
 		'taken_bewerken' => 'text_list_bullets',
 		'punten_bewerken' => 'award_star_gold_1',
 		'punten_bewerken_toegekend' => 'award_star_gold_2',
-		'gemaild' => 'email_open',
+		'gemaild' => 'email_go',
 		'niet_gemaild' => 'email',
 
-		//profiel
+		// profiel
 		'stats' => 'server_chart',
 		'su' => 'user_go',
 		'resetpassword' => 'user_gray',
 		'instellingen' => 'cog',
 		
-		//mededelingen
+		// mededelingen
 		'legenda' => 'tag_yellow'
 	);
 
@@ -80,7 +80,7 @@ class Icon{
 		return self::$alias[$alias];
 	}
 	
-	public static function get($key){
+	public static function get($key, $title = null){
 		if(!self::has($key)){
 			throw new Exception('Icon ('.$key.') bestaat niet in images/famfamfam/');
 		}
@@ -90,9 +90,10 @@ class Icon{
 			return CSR_PICS.'famfamfam/'.self::$alias[$key].'.png';
 		}
 	}
-	public static function getTag($key, $class='icon'){
+	public static function getTag($key, $title = null, $class='icon'){
 		$icon=self::get($key);
-		return '<img src="'.$icon.'" alt="'.$key.'" class="'.htmlspecialchars($class).'" />';
+		$title = 'title="'.$title.'" ';
+		return '<img src="'.$icon.'" alt="'.$key.'" '.$title.'class="'.htmlspecialchars($class).'" />';
 	}
 
 	/*

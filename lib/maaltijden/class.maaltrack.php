@@ -1222,23 +1222,44 @@ class MaalTrack {
 	}
 	
 	# corvee automailer
-	function corveeAutoMailer()
+	function corveeAutoMailer($debugMode = 0)
 	{
+		// Debug, als enabled dan worden alle emails naar het debugAddr gestuurd, en word maaltijd niet gemarkeerd als gemaild
+		$debugAddr = 'marco@vtwout.net';
+		
 		// get maaltijden waar datum < deze week
 		$maaltijden = $this->getMaaltijdenRaw(0, time()+86400*7);
 		
-		echo "Start<br />Maaltijden ophalen binnen komende 7 dagen..<br />\n";
+		// mail headers
+		setlocale(LC_ALL, 'nl_NL');
+		$headers = "From: noreply@csrdelft.nl\r\n";
+		$headers .= "Reply-To: noreply@csrdelft.nl\r\n";
+		$headers .= "Content-Type: text/plain; charset=UTF-8\r\n";
+		$headers .= "X-Mailer: csrdelft.nl/PubCie"."\r\n";
+							
+		if (strtoupper(substr(PHP_OS, 0, 3)) == 'MAC')
+			$headers = str_replace("\r\n", "\r", $headers);
+		else if (strtoupper(substr(PHP_OS, 0, 3)) != 'WIN')
+			$headers = str_replace("\r\n", "\n", $headers);
+		
+		// start
+		echo '<pre>';
+		$output = "CORVEE-AUTOMAILER: ".date('r')."\n";
+		if ($debugMode)
+			$output .= "DEBUG MODE: Mails gaan naar ".$debugAddr.", maaltijden worden niet gemarkeerd\n";
+		$output .= "Start\nMaaltijden ophalen binnen komende 7 dagen..\n";
 		foreach($maaltijden as $maaltijd)
 		{
-			echo "- Maaltijd ID ".$maaltijd['id'].": ";
+			$output .= "- Maaltijd ID ".$maaltijd['id'].": ";
 			if ($maaltijd['corvee_gemaild']) {
-				echo "Reeds gemaild.";
+				$output .= "Reeds gemaild.";
 			} else {
 				$lMaaltijd = new Maaltijd($maaltijd['id']);
 				
 				// taken ophalen
 				$taken = $lMaaltijd->getTaken();
-				$teller = 0;
+				$teller = array();
+				$foutTeller = array();
 				foreach($taken as $taak => $leden)
 				{
 					$template = null;
@@ -1259,33 +1280,40 @@ class MaalTrack {
 					if (!$template) continue;
 					
 					// mailen
-					setlocale(LC_ALL, 'nl_NL');
-					$onderwerp = 'C.S.R. Delft Corvee - '.strftime('%d-%m-%Y', $maaltijd['datum']);
-					$headers="From: PubCie (niet antwoorden) <noreply@csrdelft.nl>\n";
-					$headers.="BCC: jjnederend@gmail.com\n"; // tijdelijk?
-					$headers.="Content-Type: text/plain; charset=UTF-8\r\n";
-					$headers.='X-Mailer: csrdelft.nl/PubCie'."\n\r";
-					
 					$mail = new Smarty_csr();
+					$onderwerp = 'C.S.R. Delft Corvee - '.strftime('%d-%m-%Y', $maaltijd['datum']);
 					$mail->assign('datum', strftime('%d-%m-%Y (%A)', $maaltijd['datum']));
 					$bericht = $mail->fetch('maaltijdketzer/corveemail/'.$template);
-					foreach($leden as $uid) {			
-						mail($uid.'@csrdelft.nl', $onderwerp, $bericht, $headers);
-						$teller++;
+					foreach($leden as $uid) {
+						$to = ($debugMode ? $debugAddr : $uid.'@csrdelft.nl');
+
+						if (mail($to, $onderwerp, $bericht, $headers))
+							$teller[] = $uid;
+						else
+							$foutTeller[] = $uid;
 					}
 				}
-				echo "Mensen gemaild: ".$teller;
+				$output .= "Mensen gemaild: ".count($teller)." (".implode($teller, ", ").")";
+				if (count($foutTeller))
+					$output .= "\n  FOUT: Mensen NIET gemaild: ".count($foutTeller)." (".implode($foutTeller, ", ").")";
 				
 				// update corvee_gemaild
-				$query = "UPDATE maaltijd SET corvee_gemaild = 1 WHERE id=".$maaltijd['id']."";
-				if(!$this->_db->query($query)){
-					$this->_error="Er is iets mis met de database/query.";
-					return false;
+				if (!$debugMode) {
+					$query = "UPDATE maaltijd SET corvee_gemaild = 1 WHERE id=".$maaltijd['id']."";
+					if(!$this->_db->query($query))
+						$output .= "FOUT: Er is iets mis met de database/query.";
 				}
 			}
-			echo "<br />\n";
+			$output .= "\n";
 		}
-		echo "Klaar!<br />\n";
+		$output .= "Klaar!\n";
+		
+		echo $output;
+		echo '</pre>';
+		
+		// rapport voor beheerder
+		$to = ($debugMode ? $debugAddr : 'corvee@csrdelft.nl');
+		mail($to, 'Corvee-Automailer: Rapport', $output, $headers);
 	}
 
 }
