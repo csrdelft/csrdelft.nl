@@ -34,7 +34,7 @@ class MaalTrack {
 	# abosoort - enum-waarde van een abo dat geldt voor deze maaltijd
 	# tp = tafelpraeses-uid
 	# max - maximaal aantal inschrijvingen
-	function addMaaltijd($datum, $tekst, $abosoort, $tp, $koks, $afwassers, $theedoeken, $max = MAX_MAALTIJD) {
+	function addMaaltijd($datum, $tekst, $abosoort, $tp, $koks, $afwassers, $theedoeken, $max = MAX_MAALTIJD, $punten_kok, $punten_afwas, $punten_theedoek ) {
 		$datum = (int)$datum;
 		$max = (int)$max;
 		$tekst = mb_substr($tekst, 0, 200);
@@ -43,6 +43,9 @@ class MaalTrack {
 		$koks=abs((int)$koks);
 		$afwassers=abs((int)$afwassers);
 		$theedoeken=abs((int)$theedoeken);
+		$punten_kok=abs((int)$punten_kok);
+		$punten_afwas=abs((int)$punten_afwas);
+		$punten_theedoek=abs((int)$punten_theedoek);
 
 		# bij fouten, niet doorgaan, false teruggeven.
 		if(!$this->validateMaaltijd($datum, $tekst, $abosoort, $tp, $max)){
@@ -54,10 +57,11 @@ class MaalTrack {
 			INSERT INTO
 				maaltijd
 			(
-				datum, tekst, abosoort, max, tp, koks, afwassers, theedoeken
+				datum, tekst, abosoort, max, tp, koks, afwassers, theedoeken, punten_kok, punten_afwas, punten_theedoek
 			)VALUES(
 				'".$datum."', '".$tekst."', '".$abosoort."', '".$max."',
-				'".$tp."', '".$koks."', '".$afwassers."', '".$theedoeken."'
+				'".$tp."', '".$koks."', '".$afwassers."', '".$theedoeken."',
+				'".$punten_kok."', '".$punten_afwas."', '".$punten_theedoek."'
 			);";
 
 		if (!$this->_db->query($maaltijd)){

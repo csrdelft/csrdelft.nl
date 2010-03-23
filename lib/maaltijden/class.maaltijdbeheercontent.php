@@ -54,6 +54,11 @@ class MaaltijdbeheerContent extends SimpleHTML {
 			$aForm['koks']=2;
 			$aForm['afwassers']=4;
 			$aForm['theedoeken']=1;
+			
+			//corveepunten voor een standaardmaaltijd
+		    $aForm['punten_kok']=4;
+			$aForm['punten_afwas']=3;
+			$aForm['punten_theedoek']=2;
 		}else{
 			$aForm=$this->_maaltijd;
 			$aForm['actie']='bewerken';

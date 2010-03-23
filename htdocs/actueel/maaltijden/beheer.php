@@ -38,8 +38,9 @@ if(isset($_POST['maalid'], $_POST['datum'], $_POST['tekst'], $_POST['limiet'], $
 
 	# nieuwe maaltijd toevoegen of oude bewerken?
 	if($maalid==0){
-		if($maaltrack->addMaaltijd($datum, $_POST['tekst'], $_POST['abo'],
-				$_POST['tp'], $_POST['koks'], $_POST['afwassers'], $_POST['theedoeken'], $_POST['limiet'])){
+		if($maaltrack->addMaaltijd($datum, $_POST['tekst'], $_POST['abo'], $_POST['tp'], 
+			$_POST['koks'], $_POST['afwassers'], $_POST['theedoeken'], $_POST['limiet'],
+			$_POST['punten_kok'], $_POST['punten_afwas'], $_POST['punten_theedoek'])){
 			header('location: '.CSR_ROOT.'actueel/maaltijden/beheer/');
 			exit;
 		}
