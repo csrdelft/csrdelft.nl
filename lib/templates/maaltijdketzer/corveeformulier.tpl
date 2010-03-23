@@ -94,7 +94,7 @@
 		{/if}
 		<tr>
 			<td>&nbsp;</td>
-			<Td><input type="submit" name="submit" value="opslaan" /></td>
+			<Td><input type="submit" name="submit" value="Opslaan" /></td>
 		</tr>
 	</table>
 </form>

@@ -43,6 +43,6 @@
         <div style="clear:both" />
     </div>
 	<label for="submit">&nbsp;</label>
-	<input type="submit" name="submit" value="opslaan" /><br />
+	<input type="submit" name="submit" value="Opslaan" /><br />
     
 </form>

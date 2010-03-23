@@ -111,7 +111,7 @@
 					{/if}
 					<tr>
 						<td>&nbsp;</td>
-						<Td><input type="submit" name="opslaan" value="opslaan" /> <input type="button" value="Herlaad zonder filter" onClick="document.getElementById('filter').value=0;document.forms['takenbewerk'].submit();" /></td>
+						<Td><input type="submit" name="opslaan" value="Opslaan" /> <input type="button" value="Herlaad zonder filter" onClick="document.getElementById('filter').value=0;document.forms['takenbewerk'].submit();" /></td>
 					</tr>
 			</td>
 		</tr>

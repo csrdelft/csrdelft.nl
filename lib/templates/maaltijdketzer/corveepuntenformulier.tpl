@@ -27,7 +27,7 @@
 		<tr>
 			<td>&nbsp;</td>
 			<td>
-				<input type="submit" name="opslaan" value="opslaan" /> 
+				<input type="submit" name="opslaan" value="Opslaan" /> 
 			</td>
 		</tr>
 	</table>
