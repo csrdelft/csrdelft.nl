@@ -766,29 +766,46 @@ class MaalTrack {
 	
 	# haalt één enkele maaltijd op ter bewerking
 	function getPuntenlijst($sorteer = 'corvee_tekort', $sorteer_richting = 'asc'){
-		// TODO: leden meer filteren
-
-		$sorteer_toegestaan = array('uid', 'kok', 'afwas', 'theedoek', 'schoonmaken_frituur', 'schoonmaken_afzuigkap', 'schoonmaken_keuken', 'corvee_kwalikok', 'corvee_punten', 'corvee_punten_bonus', 'corvee_vrijstelling', 'corvee_ingeroosterd', 'corvee_tekort');
+		$sorteer_toegestaan = array('uid', 'kok', 'afwas', 'theedoek', 'schoonmaken_frituur', 'schoonmaken_afzuigkap', 'schoonmaken_keuken', 'corvee_kwalikok', 'corvee_punten', 'corvee_punten_bonus', 'corvee_vrijstelling', 'corvee_prognose', 'corvee_tekort');
 		$sorteer_volgorde_toegestaan = array('asc', 'desc');
 		if (!in_array($sorteer, $sorteer_toegestaan) || !in_array($sorteer_richting, $sorteer_volgorde_toegestaan))
 			print('Ongeldige sorteeroptie');
 	
-		// TODO: corvee ingeroosterd berekenen...
 		$sLedenQuery="
 			SELECT
-				uid, corvee_kwalikok, corvee_punten, corvee_punten_bonus, corvee_vrijstelling, corvee_voorkeuren,
-				0 AS corvee_ingeroosterd,
-				(".CORVEEPUNTEN."-CEIL(".CORVEEPUNTEN."*.01*corvee_vrijstelling)-corvee_punten_bonus-corvee_punten) AS corvee_tekort,
-				(SELECT COUNT(uid) FROM maaltijdcorvee WHERE uid = lid.uid AND kok = 1) AS kok,
-				(SELECT COUNT(uid) FROM maaltijdcorvee WHERE uid = lid.uid AND afwas = 1) AS afwas,
-				(SELECT COUNT(uid) FROM maaltijdcorvee WHERE uid = lid.uid AND theedoek = 1) AS theedoek,
-				(SELECT COUNT(uid) FROM maaltijdcorvee WHERE uid = lid.uid AND schoonmaken_frituur = 1) AS schoonmaken_frituur,
-				(SELECT COUNT(uid) FROM maaltijdcorvee WHERE uid = lid.uid AND schoonmaken_afzuigkap = 1) AS schoonmaken_afzuigkap,
-				(SELECT COUNT(uid) FROM maaltijdcorvee WHERE uid = lid.uid AND schoonmaken_keuken = 1) AS schoonmaken_keuken
+				lid.uid
+				, corvee_kwalikok, corvee_punten, corvee_punten_bonus, corvee_vrijstelling, corvee_voorkeuren
+				, (".CORVEEPUNTEN."-CEIL(".CORVEEPUNTEN."*.01*corvee_vrijstelling)-corvee_punten_bonus-corvee_punten)
+				  - IFNULL(SUM(
+					punten_kok*kok
+					+ punten_afwas*afwas
+					+ punten_theedoek*theedoek
+					+ punten_schoonmaken_frituur*maaltijdcorvee.schoonmaken_frituur
+					+ punten_schoonmaken_afzuigkap*maaltijdcorvee.schoonmaken_afzuigkap
+					+ punten_schoonmaken_keuken*maaltijdcorvee.schoonmaken_keuken), 0) AS corvee_prognose				
+				, SUM(kok) AS kok
+				, SUM(afwas) AS afwas
+				, SUM(theedoek) AS theedoek
+				, SUM(maaltijdcorvee.schoonmaken_frituur) AS schoonmaken_frituur
+				, SUM(maaltijdcorvee.schoonmaken_afzuigkap) AS schoonmaken_afzuigkap
+				, SUM(maaltijdcorvee.schoonmaken_keuken) AS schoonmaken_keuken
+				, (".CORVEEPUNTEN."-CEIL(".CORVEEPUNTEN."*.01*corvee_vrijstelling)-corvee_punten_bonus-corvee_punten) AS corvee_tekort
 			FROM
 				lid
+			LEFT JOIN
+				maaltijdcorvee
+			ON
+				maaltijdcorvee.uid = lid.uid
+			LEFT JOIN
+				maaltijd
+			ON
+				maaltijd.id = maaltijdcorvee.maalid
+			AND
+				punten_toegekend = 'onbekend'
 			WHERE
 				status='S_LID' OR status='S_NOVIET'
+			GROUP BY
+				lid.uid
 			ORDER BY
 				".$sorteer." ".strtoupper($sorteer_richting).", uid ASC";
 		$rLeden=$this->_db->query($sLedenQuery);
@@ -796,11 +813,22 @@ class MaalTrack {
 		
 		// rood naar geel naar groen
 		foreach($aLeden as &$rLid) {
+			$rLid['corvee_tekort_rgb'] = $this->rgbCalculate($rLid['corvee_tekort']);
+			$rLid['corvee_prognose_rgb'] = $this->rgbCalculate($rLid['corvee_prognose']);
+		}
+
+		return $aLeden;
+	}
+	
+	# rgb overgang berekenen
+	function rgbCalculate($lPunten)		
+	{
 			$kleur_start = 8;
 			$tekort_offset = 2;
 			
-			$rRaw = 2 * (($rLid['corvee_tekort']/(CORVEEPUNTEN+$tekort_offset)));	// waarde tussen 0 en 1
-			$gRaw = 2 * (1-$rLid['corvee_tekort']/(CORVEEPUNTEN+$tekort_offset));	// waarde tussen 0 en 1
+			$rRaw = 2 * (($lPunten/(CORVEEPUNTEN+$tekort_offset)));	// waarde tussen 0 en 1
+			$gRaw = 2 * (1-$lPunten/(CORVEEPUNTEN+$tekort_offset));	// waarde tussen 0 en 1
+			
 			if ($rRaw > 0 && $rRaw < 0.5) $rRaw = 0.5; // verschil tussen 0 en 1 tekort wat duidelijker maken
 			if ($rRaw < 0) $rRaw = 0; if ($rRaw > 1) $rRaw = 1;
 			if ($gRaw < 0) $gRaw = 0; if ($gRaw > 1) $gRaw = 1;
@@ -809,16 +837,13 @@ class MaalTrack {
 			$g = $kleur_start + round($gRaw * (15-1-$kleur_start));
 			$b = $kleur_start;
 						
-			$rLid['corvee_tekort_rgb'] = dechex($r).dechex($g).dechex($b);
-		}
-
-		return $aLeden;
+			return dechex($r).dechex($g).dechex($b);
 	}
 	
 	# bij bestaande maaltijd de taken bewerken
-	function editLid($uid, $corvee_kwalikok, $corvee_punten, $corvee_punten_bonus, $corvee_vrijstelling){		
+	function editLid($uid, $corvee_kwalikok, $corvee_punten_bonus, $corvee_vrijstelling){		
 		// lid bewerken
-		$this->_db->query("UPDATE lid SET corvee_kwalikok='".$corvee_kwalikok."', corvee_punten='".$corvee_punten."', corvee_punten_bonus='".$corvee_punten_bonus."', corvee_vrijstelling='".$corvee_vrijstelling."' WHERE uid = '".$uid."'");
+		$this->_db->query("UPDATE lid SET corvee_kwalikok='".$corvee_kwalikok."', corvee_punten_bonus='".$corvee_punten_bonus."', corvee_vrijstelling='".$corvee_vrijstelling."' WHERE uid = '".$uid."'");
 		return true;
 	}
 	

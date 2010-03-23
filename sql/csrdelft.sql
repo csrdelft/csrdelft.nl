@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Dec 24, 2009 at 02:02 
+-- Generation Time: Mar 23, 2010 at 10:09 
 -- Server version: 5.1.37
 -- PHP Version: 5.3.0
 
@@ -370,9 +370,10 @@ CREATE TABLE IF NOT EXISTS `groep` (
   `begin` date NOT NULL,
   `einde` date NOT NULL,
   `zichtbaar` enum('zichtbaar','onzichtbaar','verwijderd') NOT NULL DEFAULT 'zichtbaar',
-  `aanmeldbaar` tinyint(1) NOT NULL DEFAULT '0',
+  `aanmeldbaar` varchar(50) CHARACTER SET latin1 NOT NULL COMMENT 'permissie(s) voor aanmelden',
   `limiet` int(11) NOT NULL DEFAULT '0',
   `toonFuncties` enum('tonen','verbergen','niet') NOT NULL DEFAULT 'tonen',
+  `functiefilter` varchar(255) NOT NULL,
   `toonPasfotos` int(1) NOT NULL DEFAULT '0',
   `lidIsMod` int(1) NOT NULL DEFAULT '0' COMMENT 'Is elk lid mod',
   PRIMARY KEY (`id`)
@@ -408,6 +409,7 @@ CREATE TABLE IF NOT EXISTS `groeptype` (
   `prioriteit` int(11) NOT NULL,
   `toonHistorie` int(1) NOT NULL DEFAULT '0' COMMENT 'ot-groepen laten zien in overzicht.',
   `toonProfiel` int(1) NOT NULL COMMENT 'Groep in profiel tonen?',
+  `syncWithLDAP` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Synchroniseer groepen in deze groeptype met LDAP-directory',
   PRIMARY KEY (`id`),
   KEY `naam` (`naam`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=10 ;
@@ -448,6 +450,7 @@ CREATE TABLE IF NOT EXISTS `lid` (
   `lidjaar` smallint(6) NOT NULL DEFAULT '0',
   `lidafdatum` date NOT NULL,
   `gebdatum` date NOT NULL DEFAULT '0000-00-00',
+  `sterfdatum` date NOT NULL,
   `bankrekening` varchar(11) NOT NULL DEFAULT '',
   `moot` tinyint(4) NOT NULL DEFAULT '0',
   `verticale` int(4) NOT NULL,
@@ -463,14 +466,14 @@ CREATE TABLE IF NOT EXISTS `lid` (
   `muziek` varchar(100) NOT NULL DEFAULT '',
   `password` varchar(60) NOT NULL DEFAULT '',
   `permissies` enum('P_LID','P_NOBODY','P_PUBCIE','P_OUDLID','P_MODERATOR','P_MAALCIE','P_BESTUUR','P_KNORRIE','P_VAB','P_ETER','P_BASF') NOT NULL DEFAULT 'P_NOBODY',
-  `status` enum('S_CIE','S_GASTLID','S_LID','S_NOBODY','S_NOVIET','S_OUDLID','S_KRINGEL') NOT NULL DEFAULT 'S_CIE',
+  `status` enum('S_CIE','S_GASTLID','S_LID','S_NOBODY','S_NOVIET','S_OUDLID','S_KRINGEL','S_OVERLEDEN') NOT NULL DEFAULT 'S_CIE',
   `eetwens` text NOT NULL,
   `corvee_wens` varchar(255) NOT NULL,
   `corvee_punten` int(11) NOT NULL,
   `corvee_punten_bonus` int(11) NOT NULL,
   `corvee_vrijstelling` int(3) NOT NULL COMMENT 'percentage vrijstelling',
   `corvee_kwalikok` tinyint(1) NOT NULL,
-  `corvee_voorkeuren` varchar(8) NOT NULL DEFAULT '11110111',
+  `corvee_voorkeuren` varchar(8) NOT NULL DEFAULT '11111111',
   `forum_name` enum('nick','civitas') NOT NULL DEFAULT 'civitas',
   `forum_postsortering` enum('ASC','DESC') NOT NULL DEFAULT 'ASC',
   `forum_laatstbekeken` datetime NOT NULL,

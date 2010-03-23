@@ -31,8 +31,8 @@ if(isset($_POST['actie'])){
 
 	# bestaande maaltijd bewerken
 	$corvee_kwalikok = (isset($_POST['corvee_kwalikok'])? 1 : 0);
-	if($actie == 'bewerk' && (isset($_POST['corvee_punten'], $_POST['corvee_punten_bonus'], $_POST['corvee_vrijstelling'])))
-		$maaltrack->editLid($uid, $corvee_kwalikok, $_POST['corvee_punten'], $_POST['corvee_punten_bonus'], $_POST['corvee_vrijstelling']);
+	if($actie == 'bewerk' && (isset($_POST['corvee_punten_bonus'], $_POST['corvee_vrijstelling'])))
+		$maaltrack->editLid($uid, $corvee_kwalikok, $_POST['corvee_punten_bonus'], $_POST['corvee_vrijstelling']);
 }
 
 
