@@ -65,7 +65,6 @@ class EetplanContent extends SimpleHTML {
 				<tr>
 				<th style="width: 150px">Avond</th>
 				<th style="width: 200px">Pheut</th>
-				<th>Telefoon</th>
 				<th>Mobiel</th>
 				<th>E-mail</th>
 				<th>Eetwens</th>
@@ -84,10 +83,9 @@ class EetplanContent extends SimpleHTML {
 					<tr class="kleur'.($row%2).'">
 						<td>'.$ertussen;
 
-				$pheutnaam=$this->_eetplan->getPheutNaam($aEetplanData['pheut']);
+				$lid=LidCache::getLid($aEetplanData['pheut']);
 				$sUitvoer.='</td>
-					<td>'.$pheutnaam.'<br /></td>
-					<td>'.mb_htmlentities($aEetplanData['telefoon']).'</td>
+					<td>'.$lid->getNaamLink('civitas','link').'<br /></td>
 					<td>'.mb_htmlentities($aEetplanData['mobiel']).'</td>
 					<td>'.mb_htmlentities($aEetplanData['email']).'</td>
 					<td>'.mb_htmlentities($aEetplanData['eetwens']).'</td>

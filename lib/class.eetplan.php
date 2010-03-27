@@ -93,7 +93,6 @@ class Eetplan {
 				eetplanhuis.groepid AS groepid,
 				eetplan.uid AS pheut,
 				lid.eetwens AS eetwens,
-				lid.telefoon AS telefoon,
 				lid.mobiel AS mobiel,
 				lid.email AS email
 			FROM
@@ -149,10 +148,5 @@ class Eetplan {
 		}
 		return $aHuizen;
 	}
-	function getPheutNaam($uid){
-		$lid=LidCache::getLid($uid);
-		return (string)$lid;
-	}
-
 }
 ?>
