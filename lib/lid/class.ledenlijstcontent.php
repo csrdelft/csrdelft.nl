@@ -216,6 +216,7 @@ class LLLijst extends LLweergave{
 			$("#zoekResultaat tr:odd").addClass('odd');
 
 			$("#zoekResultaat").dataTable({
+				"aaSorting": [],
 				"oLanguage": {
 					"sSearch": "Zoeken in selectie:"
 				},
@@ -223,9 +224,7 @@ class LLLijst extends LLweergave{
 				"bInfo": false,
 				"bLengthChange": false,
 				"aoColumns": [ <?php echo implode(', ', $aoColumns); ?> ]
-			}
-			
-			);
+			});
 		});
 		</script><?php
 	}
