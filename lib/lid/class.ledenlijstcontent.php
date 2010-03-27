@@ -241,6 +241,8 @@ class LLLijst extends LLweergave{
 					echo $lid->getKring(true);
 				break;
 				case 'naam': 
+					//we stoppen er een verborgen <span> bij waar op gesorteerd wordt door datatables.
+					echo '<span class="verborgen">'.$lid->getNaamLink('streeplijst', 'plain').'</span>';
 					echo $lid->getNaamLink('full', 'link'); 
 				break;
 				case 'pasfoto': 
