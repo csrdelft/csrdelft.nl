@@ -346,7 +346,7 @@ class LLCSV extends LLweergave{
 /*
  * Google wil een CSV met kolomnamen erboven.
  */
-class LLGoogleCSV extends CSV{
+class LLGoogleCSV extends LLCSV{
 	
 }
 
