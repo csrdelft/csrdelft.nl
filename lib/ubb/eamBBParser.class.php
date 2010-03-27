@@ -766,13 +766,12 @@ class eamBBParser{
 	function ubb_img($arguments){
 		$style='';
 		if(isset($arguments['float'])){
-			$float='float: ';
 			switch($arguments['float']){
 				case 'left':
 					$style.='float: left; margin: 0 10px 10px 0; ';
 				break;
 				case 'right':
-					$style.=' right; margin: 0 0 10px 10px; ';
+					$style.='float: right; margin: 0 0 10px 10px; ';
 				break;
 			}
 		}
