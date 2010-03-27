@@ -343,5 +343,11 @@ class LLCSV extends LLweergave{
 		echo "\n";
 	}
 }
+/*
+ * Google wil een CSV met kolomnamen erboven.
+ */
+class LLGoogleCSV extends CSV{
+	
+}
 
 ?>

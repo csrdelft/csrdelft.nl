@@ -155,14 +155,14 @@ class Forum{
 			return 0;
 		}
 	}
-	public static function searchPosts($sZoekQuery, $categorie=null){
-		if(!preg_match('/^[a-zA-Z0-9 \-\+\'\"\.]*$/', $sZoekQuery)){
+	public static function searchPosts($query, $categorie=null){
+		$db=MySql::instance();
+		
+		if(!preg_match('/^[a-zA-Z0-9 \-\+\'\"\.]*$/', $query)){
 			return false;
 		}
-		$db=MySql::instance();
-
-		$sZoekQuery=$db->escape(trim($sZoekQuery));
-
+		$query=$db->escape(trim($query));
+		
 		$singleCat='1';
 		if($categorie!==null AND $categorie!=0){
 			foreach(ForumCategorie::getAll(true) as $cat){
@@ -172,8 +172,7 @@ class Forum{
 			}
 		}
 
-		//zoo, uberdeuberdeuber query om een topic op te halen.
-		$sSearchQuery="
+		$dbQuery="
 			SELECT
 				topic.id AS tid,
 				topic.titel AS titel,
@@ -194,11 +193,13 @@ class Forum{
 				forum_topic topic ON( post.tid=topic.id )
 			INNER JOIN
 				forum_cat cat ON( topic.categorie=cat.id )
-			WHERE
-				topic.zichtbaar='zichtbaar' AND post.zichtbaar='zichtbaar' AND
-				( ".Forum::getCategorieClause()." ) AND (".$singleCat.") AND ( 
-				  MATCH(post.tekst)AGAINST('".$sZoekQuery."' IN NATURAL LANGUAGE MODE ) OR
-				  topic.titel LIKE '%".$sZoekQuery."%'
+			WHERE topic.zichtbaar='zichtbaar' 
+			  AND post.zichtbaar='zichtbaar' 
+			  AND (".Forum::getCategorieClause().") 
+			  AND (".$singleCat.") 
+			  AND ( 
+				  MATCH(post.tekst)AGAINST('".$query."' IN BOOLEAN MODE ) OR
+				  topic.titel LIKE '%".$query."%'
 				)
 			GROUP BY
 				topic.id
@@ -206,7 +207,10 @@ class Forum{
 				post.datum DESC
 			LIMIT
 				".Instelling::get('forum_zoekresultaten').";";
-		return $db->query2array($sSearchQuery);
+		//Als MySQL 5.1.7 op syrinx staat kan er in 'natural language mode' gezocht worden
+		//MATCH(post.tekst)AGAINST('".$query."' IN NATURAL LANGUAGE MODE ) OR
+		
+		return $db->query2array($dbQuery);
 	}
 }
 ?>
