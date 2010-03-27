@@ -94,7 +94,8 @@ class Eetplan {
 				eetplan.uid AS pheut,
 				lid.eetwens AS eetwens,
 				lid.telefoon AS telefoon,
-				lid.mobiel AS mobiel
+				lid.mobiel AS mobiel,
+				lid.email AS email
 			FROM
 				eetplanhuis, eetplan
 			INNER JOIN lid ON(eetplan.uid=lid.uid)

@@ -67,6 +67,7 @@ class EetplanContent extends SimpleHTML {
 				<th style="width: 200px">Pheut</th>
 				<th>Telefoon</th>
 				<th>Mobiel</th>
+				<th>E-mail</th>
 				<th>Eetwens</th>
 				</tr>';
 			$iHuidigAvond=0;
@@ -88,6 +89,7 @@ class EetplanContent extends SimpleHTML {
 					<td>'.$pheutnaam.'<br /></td>
 					<td>'.mb_htmlentities($aEetplanData['telefoon']).'</td>
 					<td>'.mb_htmlentities($aEetplanData['mobiel']).'</td>
+					<td>'.mb_htmlentities($aEetplanData['email']).'</td>
 					<td>'.mb_htmlentities($aEetplanData['eetwens']).'</td>
 					</tr>';
 
