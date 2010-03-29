@@ -57,11 +57,28 @@ class MaalTrack {
 			INSERT INTO
 				maaltijd
 			(
-				datum, tekst, abosoort, max, tp, koks, afwassers, theedoeken, punten_kok, punten_afwas, punten_theedoek
+				datum
+				,tekst
+				,abosoort
+				,max
+				,tp
+				,koks
+				,afwassers
+				,theedoeken
+				,punten_kok
+				,punten_afwas
+				,punten_theedoek
+				,schoonmaken_frituur 
+				,schoonmaken_afzuigkap 
+				,schoonmaken_keuken
+				,punten_schoonmaken_frituur 
+				,punten_schoonmaken_afzuigkap 
+				,punten_schoonmaken_keuken
 			)VALUES(
 				'".$datum."', '".$tekst."', '".$abosoort."', '".$max."',
 				'".$tp."', '".$koks."', '".$afwassers."', '".$theedoeken."',
-				'".$punten_kok."', '".$punten_afwas."', '".$punten_theedoek."'
+				'".$punten_kok."', '".$punten_afwas."', '".$punten_theedoek."',
+				0,0,0,0,0,0
 			);";
 
 		if (!$this->_db->query($maaltijd)){
@@ -299,9 +316,24 @@ class MaalTrack {
 			return false;
 		}
 		
-		//Ophalen voor welke taken men ingedeeld is
-		print_r($punten);
+		//Haal op uit de maaltijdgegevens wie wat gedaan heeft
+		//Dit blijft tijdens de hele functie constant
+		$maaltijd = $this->getMaaltijd($maalid);
 		
+		$kok = array();
+		if(array_key_exists('koks', $maaltijd['taken'])){ 
+			$kok = array_unique($maaltijd['taken']['koks']);
+		}
+		
+		$afwas = array();
+		if(array_key_exists('afwassers', $maaltijd['taken'])){ 
+			$afwas = array_unique($maaltijd['taken']['afwassers']);
+		}
+		$theedoek = array();
+		if(array_key_exists('theedoeken', $maaltijd['taken'])){ 
+			$theedoek = array_unique($maaltijd['taken']['theedoeken']);
+		}		
+
 		//verwerken punten
 		//formulier toegekend 0=onbekend, 1=ja, 2=nee
 		//van en naar 'ja'
@@ -319,10 +351,13 @@ class MaalTrack {
 				AND uid=".$uid."
 			;";
 			$dbresult = $this->_db->query($sToegekendQuery);
+			if(!$dbresult){
+				$this->_error=$this->_db->debug("");
+				return false;
+			}	
 			$dbarray = $this->_db->next($dbresult);
 			$db_toegekend = $dbarray['punten_toegekend'];
-
-			$maaltijd = $this->getMaaltijd($maalid);
+			
 			//Als iemand nog geen punten toegekend had, maar nu wel, ken ze dan tpe
 			if($db_toegekend!='ja' && $form_toegekend=='ja'){				
 				$punten_erbij = (in_array($uid,$kok)?1:0) * $maaltijd['punten_kok'] + 
@@ -603,7 +638,6 @@ class MaalTrack {
 				$strafpunten = (in_array($uid,$frituur)?1:0) * $maaltijd['punten_schoonmaken_frituur'] + 
 								 (in_array($uid,$afzuigkap)?1:0) * $maaltijd['punten_schoonmaken_afzuigkap'] + 
 								 (in_array($uid,$keuken)?1:0) * $maaltijd['punten_schoonmaken_keuken'];
-				echo $strafpunten.' strafpunten voor '.$uid.'<br/>';
 				if(!$this->_db->query("UPDATE lid SET corvee_punten_bonus=corvee_punten_bonus-'".$strafpunten."' WHERE uid=".$uid.";")){
 					$this->_error=$this->_db->debug("");
 					return false;				
