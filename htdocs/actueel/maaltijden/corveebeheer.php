@@ -52,7 +52,7 @@ if(isset($_POST['actie']) && isset($_POST['type'])){
 			&& ($maaltrack->editSchoonmaakMaaltijd($maalid, $_POST['frituur'], $_POST['afzuigkap'], $_POST['keuken'], $_POST['punten_schoonmaken_frituur'], $_POST['punten_schoonmaken_afzuigkap'], $_POST['punten_schoonmaken_keuken']))){
 			header('location: '.CSR_ROOT.'actueel/maaltijden/corveebeheer/bewerk/'.$maalid);
 			exit;
-		} elseif ($actie === 'takenbewerk' && $type === 'normaal' && (isset($_POST['kok'], $_POST['afwas'], $_POST['theedoek']))
+		} elseif ($actie === 'takenbewerk' && $type === 'normaal' && (isset($_POST['kok']) || isset($_POST['afwas']) || isset($_POST['theedoek']))
 			&& ($maaltrack->editCorveeMaaltijdTaken($maalid, $_POST['kok'], $_POST['afwas'], $_POST['theedoek']))){									
 			header('location: '.CSR_ROOT.'actueel/maaltijden/corveebeheer/takenbewerk/'.$maalid.'/'.$_POST['filter']);
 			exit;
