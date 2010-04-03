@@ -28,7 +28,7 @@ class Roodschopper{
 		//er wordt in roodschopper.php (int)-abs($saldogrens) gedaan, dus dat dit voorkomt
 		//is onwaarschijnlijk.
 		if($saldogrens>0){
-			throw new Exception('Saldogrens moet beneden nul zijn');
+			echo "<strong>Let op: Saldogrens is groter dan nul!</strong> <br /><br />";
 		}
 		$this->saldogrens=$saldogrens;
 		$this->onderwerp=htmlspecialchars($onderwerp);
@@ -126,7 +126,7 @@ h.t. Fiscus.';
 		}
 		//zorg dat het onderwerp netjes utf8 in base64 is. Als je dit niet doet krijgt het
 		//spampunten van spamassasin (SUBJECT_NEEDS_ENCODING,SUBJ_ILLEGAL_CHARS)
-		$onderwerp=' =?UTF-8?B?'. base64_encode($bericht['onderwerp']) ."?=\n";
+		$onderwerp=' =?UTF-8?B?'. base64_encode($this->getOnderwerp()) ."?=\n";
 
 		$headers="From: ".$this->getFrom()."\n";
 		if($this->bcc!=''){
