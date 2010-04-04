@@ -19,7 +19,7 @@ if(isset($_POST['commissie'], $_POST['bcc'], $_POST['saldogrens'], $_POST['uitsl
 	if($_POST['commissie']=='maalcie'){
 		$cie='maalcie';
 	}
-	$roodschopper=new Roodschopper($cie, (int)($_POST['saldogrens']), $_POST['onderwerp'], $_POST['bericht']);
+	$roodschopper=new Roodschopper($cie, (int)-abs($_POST['saldogrens']), $_POST['onderwerp'], $_POST['bericht']);
 	if(email_like($_POST['bcc'])){
 		$roodschopper->setBcc($_POST['bcc']);
 	}

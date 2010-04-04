@@ -28,7 +28,7 @@ class Roodschopper{
 		//er wordt in roodschopper.php (int)-abs($saldogrens) gedaan, dus dat dit voorkomt
 		//is onwaarschijnlijk.
 		if($saldogrens>0){
-			echo "<strong>Let op: Saldogrens is groter dan nul!</strong> <br /><br />";
+			throw new Exception('Saldogrens moet beneden nul zijn'); 
 		}
 		$this->saldogrens=$saldogrens;
 		$this->onderwerp=htmlspecialchars($onderwerp);
