@@ -158,15 +158,17 @@ function namen2uid($sNamen, $filter='leden'){
 	}
 	return $return;
 }
-function getOrPost($key){
-	if (isset($_POST[$key])){
+//$type: null, post, get (gebruik om alléén post of alléén get te checken)
+function getOrPost($key, $type = null, $default = ''){
+	if ($type != 'get' && isset($_POST[$key])){
 		return $_POST[$key];
-	}elseif (isset($_GET[$key])){
+	}elseif ($type != 'post' && isset($_GET[$key])){
 		return $_GET[$key];
 	}else{
-		return '';
+		return $default;
 	}
 }
+
 function sort_achternaam_uid($a, $b) {
 	//sorteer op achternaam ASC, uid DESC
 	$vals = array('achternaam' => 'ASC', 'uid' => 'DESC');
@@ -236,4 +238,5 @@ function reldate($datum){
 	}
 	return $return;
 }
+
 ?>

@@ -262,7 +262,7 @@ class MaalTrack {
 	}
 	
 	# bij bestaande maaltijd de taken bewerken
-	function editCorveeMaaltijdTaken($maalid, $kok, $afwas, $theedoek){
+	function editCorveeMaaltijdTaken($maalid, $kok = array(), $afwas = array(), $theedoek = array()){
 		if($maalid!=(int)$maalid){
 			$this->_error="Ongeldig maaltijdID opgegeven.";
 			return false;
