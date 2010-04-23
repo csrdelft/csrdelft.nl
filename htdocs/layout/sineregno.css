@@ -18,3 +18,26 @@
 #submenu {
 	background: url('http://plaetjes.csrdelft.nl/layout/sineregno/submenubg.png') repeat-x !important;
 }
+
+a{
+	color: #8B0C0C; 
+}
+a:hover{
+	color: #8B0C0C;  
+}
+
+h1, h2, h3, h4 {
+	color: #8B0C0C;
+}
+
+.mainleft .h1 {
+	color: #8B0C0C !important; 
+}
+
+#mainleft .block h1 a {
+	color: #8B0C0C;
+}
+
+#mainleft .block h1 {
+	color: #8B0C0C;
+}
