@@ -54,6 +54,7 @@ class csrdelft extends SimpleHTML {
 		}else{
 			$this->addStylesheet('undohtml.css');
 			$this->addStylesheet('default.css');
+			$this->addStylesheet('sineregno.css');
 			$this->addScript('csrdelft.js');
 			$this->addScript('menu.js');
 			if(Instelling::get('algemeen_sneltoetsen')=='ja'){

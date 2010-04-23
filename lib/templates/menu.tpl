@@ -51,7 +51,7 @@
 				</form>
 			</div>
 		{else}
-			<div id="key"><img src="http://plaetjes.csrdelft.nl/layout/key.gif" onclick="toggleDiv('login')" alt="Inloggen" /></div>
+			<div id="key"><img src="http://plaetjes.csrdelft.nl/layout/key.png" onclick="toggleDiv('login')" alt="Inloggen" /></div>
 			<div id="login">			
 				{if isset($smarty.session.auth_error)}
 					<span class="waarschuwing">{$smarty.session.auth_error}</span>

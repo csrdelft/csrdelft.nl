@@ -1,0 +1,20 @@
+/**** GENERAL *****************************************************************/
+#container {
+	background: url('http://plaetjes.csrdelft.nl/layout/sineregno/containerbg_top.png') no-repeat !important;
+}
+
+#menu {
+	background: url('http://plaetjes.csrdelft.nl/layout/sineregno/menubg.png') repeat-x !important;
+}
+
+#mainmenu a {
+	background: url('http://plaetjes.csrdelft.nl/layout/sineregno/menubutton.png') no-repeat !important;
+}
+
+#mainmenu a:hover, #mainmenu a:active, #mainmenu a.active {
+	background: url('http://plaetjes.csrdelft.nl/layout/sineregno/menubutton_hover.png') no-repeat !important;
+}
+
+#submenu {
+	background: url('http://plaetjes.csrdelft.nl/layout/sineregno/submenubg.png') repeat-x !important;
+}
