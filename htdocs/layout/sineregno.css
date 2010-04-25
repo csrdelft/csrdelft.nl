@@ -23,6 +23,10 @@
 	background: url('http://plaetjes.csrdelft.nl/layout/sineregno/mainbg.png') repeat-y !important;
 }
 
+#footer {
+	background: url('http://plaetjes.csrdelft.nl/layout/footerbg.png') no-repeat #fff !important;
+}
+
 a{
 	color: #8B0C0C; 
 }
