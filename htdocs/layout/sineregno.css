@@ -19,6 +19,10 @@
 	background: url('http://plaetjes.csrdelft.nl/layout/sineregno/submenubg.png') repeat-x !important;
 }
 
+#main {
+	background: url('http://plaetjes.csrdelft.nl/layout/sineregno/mainbg.png') repeat-y !important;
+}
+
 a{
 	color: #8B0C0C; 
 }
@@ -41,3 +45,4 @@ h1, h2, h3, h4 {
 #mainleft .block h1 {
 	color: #8B0C0C;
 }
+
