@@ -12,8 +12,9 @@ require_once('ubb/eamBBParser.class.php');
 class CsrUBB extends eamBBParser{
 
 	static private $instance;
+	
+	
 	public function instance(){
-		
 		return new CsrUBB();
 	}
 	
@@ -200,7 +201,7 @@ src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
 		return $html;
 	}
 	
-		function ubb_vimeo($parameters){
+	function ubb_vimeo($parameters){
 		$content = $this->parseArray(array('[/vimeo]'), array());
 		if(preg_match('/^\d*$/', $content)){
 			$html='<object width="549" height="309">

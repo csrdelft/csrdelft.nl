@@ -251,7 +251,16 @@ class ForumOnderwerp{
 		}
 
 		if(is_array($this->posts)){
-			return $this->posts;
+			//nobold for berr vanaf nu
+			$return=array();
+			foreach($this->posts as $post){
+				if($post['uid']=='0308' AND $post['datum']>'2010-05-19 13:30:00'){
+					$post['tekst']='[nobold]'.$post['tekst'].'[/nobold]';
+				}
+				$return[]=$post;
+			}
+			
+			return $return;
 		}else{
 			return false;
 		}

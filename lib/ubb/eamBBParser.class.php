@@ -609,8 +609,20 @@ class eamBBParser{
 		}
 		return $text;
 	}
+	protected $nobold=false;
+	function ubb_nobold($arguments=array()){
+		$this->nobold=true;
+		$return=$this->parseArray(array('[/nobold]'), array());
+		$this->nobold=false;
+		
+		return $return;
+	}
 	function ubb_b(){
-		return '<strong>' . $this->parseArray(array('[/b]'), array('b')) . '</strong>';
+		if($this->nobold===true AND $this->quote_level==0){
+			return $this->parseArray(array('[/b]'), array('b'));
+		}else{
+			return '<strong>' . $this->parseArray(array('[/b]'), array('b')) . '</strong>';
+		}
 	}
 	function ubb_sub(){
 		return '<sub>'. $this->parseArray(array('[/sub]'), array('sub', 'sup')) . '</sub>';
