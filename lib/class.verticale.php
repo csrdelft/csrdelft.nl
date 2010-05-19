@@ -1,7 +1,7 @@
 <?php
 
 class Verticale{
-	public static $namen=array('Geen', 'Archibald', 'Faculteit', 'Billy', 'Diagonaal', 'E', 'Lekker', 'Securis', 'H');
+	public static $namen=array('Geen', 'Archibald', 'Faculteit', 'Billy', 'Diagonaal', 'Vrøgd', 'Lekker', 'Securis', 'H');
 	public static $letters=array('Geen', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H');
 	
 	public $nummer;
