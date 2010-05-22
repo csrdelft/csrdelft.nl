@@ -198,7 +198,7 @@ $("#saldografiek").bind("plothover", function (event, pos, item) {
 			
 			thedate=new Date(item.datapoint[0]);
 			var x = thedate.getDay()+'-'+(thedate.getMonth()+1)+'-'+thedate.getFullYear();
-			var y = item.datapoint[1].toFixed(2);
+			var y = item.datapoint[1];
 			
 			//geen puntjes als er geen echt datapuntje is, maar een thresholdpuntje
 			if(item.series.label==null){
