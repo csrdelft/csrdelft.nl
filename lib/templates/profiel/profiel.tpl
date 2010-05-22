@@ -157,7 +157,7 @@
 			<div style="clear: left;"></div>
 		</div>
 	</div>
-	{if $profhtml.saldografiek!='' OR $profhtml.bankrekening!=''}
+	{if $saldografiek!='' OR $profhtml.bankrekening!=''}
 		<div class="profielregel">
 			<div class="left">Financi&euml;el</div>	
 			<div class="gegevens">		
@@ -166,6 +166,7 @@
 				<div id="saldografiek" style="width: 600px; height: 220px;"></div>
 				<!--[if IE]><script language="javascript" type="text/javascript" src="/layout/js/flot/excanvas.js"></script><![endif]-->
 <script>
+
 jQuery.plot(
 	jQuery("#saldografiek"), 
 	{$saldografiek}, 
