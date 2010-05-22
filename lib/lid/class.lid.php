@@ -479,7 +479,7 @@ class Lid implements Serializable, Agendeerbaar{
 						$naam.=' '.$this->profiel['postfix'];
 					}
 				}elseif($this->profiel['status']=='S_KRINGEL' OR $this->profiel['status']=='S_NOBODY'){
-					$naam=$sVolledigeNaam;
+					$naam=$this->profiel['voorletters'].' '.$this->profiel['achternaam'];
 				}else{
 					if(LoginLid::instance()->getLid()->getStatus()=='S_NOVIET'){
 						$naam=($this->getGeslacht()=='v') ? 'Mevr. ' : 'Dhr. ';
