@@ -8,7 +8,7 @@
 
 class Saldi{
 	private $uid;
-	private $cie;
+	public $cie;
 
 	private $data;
 	public function __construct($uid, $cie='soccie', $timespan=40){
