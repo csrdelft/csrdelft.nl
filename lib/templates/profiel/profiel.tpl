@@ -164,7 +164,7 @@
 				{if $profhtml.bankrekening!=''}<div class="label">Bankrekening:</div> {$profhtml.bankrekening}<br />{/if}
 				{if $saldografiek!=''}
 				<div id="saldografiek" style="width: 600px; height: 220px;"></div>
-				<!--[if IE]><script language="javascript" type="text/javascript" src="/layout/js/flot/excanvas.pack.js"></script><![endif]-->
+				<!--[if IE]><script language="javascript" type="text/javascript" src="/layout/js/flot/excanvas.js"></script><![endif]-->
 <script>
 $.plot(
 	$("#saldografiek"), 
