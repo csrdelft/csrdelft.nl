@@ -166,8 +166,8 @@
 				<div id="saldografiek" style="width: 600px; height: 220px;"></div>
 				<!--[if IE]><script language="javascript" type="text/javascript" src="/layout/js/flot/excanvas.js"></script><![endif]-->
 <script>
-$.plot(
-	$("#saldografiek"), 
+jQuery.plot(
+	jQuery("#saldografiek"), 
 	{$saldografiek}, 
 	{literal}
 		{
@@ -177,7 +177,7 @@ $.plot(
 		}
 );
 function showTooltip(x, y, contents) {
-	$('<div id="tooltip">' + contents + '</div>').css( {
+	jQuery('<div id="tooltip">' + contents + '</div>').css( {
 		position: 'absolute',
 		display: 'none',
 		top: y + 5,
@@ -190,12 +190,12 @@ function showTooltip(x, y, contents) {
 }
 
 var previousPoint = null;
-$("#saldografiek").bind("plothover", function (event, pos, item) {
+jQuery("#saldografiek").bind("plothover", function (event, pos, item) {
 	if(item){
 		if (previousPoint != item.datapoint) {
 			previousPoint = item.datapoint;
 			
-			$("#tooltip").remove();
+			jQuery("#tooltip").remove();
 			
 			thedate=new Date(item.datapoint[0]);
 			var x = thedate.getDate()+'-'+(thedate.getMonth()+1)+'-'+thedate.getFullYear();
@@ -208,7 +208,7 @@ $("#saldografiek").bind("plothover", function (event, pos, item) {
 			showTooltip(item.pageX, item.pageY, item.series.label + " @ " + x + " = € " + y);
 		}
 	}else{
-		$("#tooltip").remove();
+		jQuery("#tooltip").remove();
 		previousPoint = null;            
 	}
 });
