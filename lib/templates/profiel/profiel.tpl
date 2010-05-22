@@ -16,12 +16,13 @@
 						<a href="/communicatie/profiel/{$profhtml.uid}/wachtwoord" class="knop" title="Reset wachtwoord voor {$lid->getNaam()}" onclick="return confirm('Weet u zeker dat u het wachtwoord van deze gebruiker wilt resetten?')">
 							{icon get="resetpassword"}</a>
 						{if $loginlid->maySuTo($lid)}
-							<a href="/su/{$profhtml.uid}/" class="knop" title="Su naar dit lid">{icon get='su'}</a><br />
+							<a href="/su/{$profhtml.uid}/" class="knop" title="Su naar dit lid">{icon get='su'}</a>
 						{/if}
 					{/if}
 					{if $lid->getStatus()=='S_NOVIET' AND $loginlid->hasPermission('groep:novcie')}
 						<a href="/communicatie/profiel/{$profhtml.uid}/novietBewerken" class="knop"><img src="{$csr_pics}forum/bewerken.png" title="Bewerk dit profiel" />Noviet bewerken</a><br />
 					{/if}
+					
 				</div>
 			</div>
 			{if $melding!=''}{$melding}<br />{/if}
@@ -161,16 +162,58 @@
 			<div class="left">Financi&euml;el</div>	
 			<div class="gegevens">		
 				{if $profhtml.bankrekening!=''}<div class="label">Bankrekening:</div> {$profhtml.bankrekening}<br />{/if}
-				{if $profhtml.saldi!=''}
-					<br />
-					{foreach from=$profhtml.saldi item=saldo}
-						{if $saldo.saldo!=0}
-							<div class="label">{$saldo.naam}saldo:</div> 
-								<div {if $saldo.saldo < 0} style="color: red;"{/if}>&euro; {$saldo.saldo|number_format:2:",":"."}</div>
-						{/if}
-					{/foreach}
-				{/if}
-				{$profhtml.saldografiek}
+				{if $saldografiek!=''}
+				<div id="saldografiek" style="width: 600px; height: 220px;"></div>
+<script>
+$.plot(
+	$("#saldografiek"), 
+	{$saldografiek}, 
+	{literal}
+		{
+			grid: { hoverable: true, clickable: true },
+			xaxis: { mode: "time", timeformat: "%y/%m/%d"},
+			yaxis: { tickFormatter: function(v, axis){ return '€ '+v.toFixed(axis.tickDecimals); }}
+		}
+);
+function showTooltip(x, y, contents) {
+	$('<div id="tooltip">' + contents + '</div>').css( {
+		position: 'absolute',
+		display: 'none',
+		top: y + 5,
+		left: x + 5,
+		border: '1px solid #fdd',
+		padding: '2px',
+		'background-color': '#fee',
+		opacity: 0.80
+	}).appendTo("body").fadeIn(200);
+}
+
+var previousPoint = null;
+$("#saldografiek").bind("plothover", function (event, pos, item) {
+	if(item){
+		if (previousPoint != item.datapoint) {
+			previousPoint = item.datapoint;
+			
+			$("#tooltip").remove();
+			
+			thedate=new Date(item.datapoint[0]);
+			var x = thedate.getDay()+'-'+(thedate.getMonth()+1)+'-'+thedate.getFullYear();
+			var y = item.datapoint[1].toFixed(2);
+			
+			//geen puntjes als er geen echt datapuntje is, maar een thresholdpuntje
+			if(item.series.label==null){
+				item.series.label='rood!';
+			}
+			showTooltip(item.pageX, item.pageY, item.series.label + " @ " + x + " = € " + y);
+		}
+	}else{
+		$("#tooltip").remove();
+		previousPoint = null;            
+	}
+});
+{/literal}
+</script>
+{/if} {* laten we een saldografiek zien? *}
 			</div>
 		</div>
 	{/if}

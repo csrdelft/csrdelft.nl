@@ -36,15 +36,6 @@ class ProfielContent extends SimpleHTML {
 		require_once('groepen/class.groepcontent.php');
 		$profhtml['groepen']=new GroepenProfielContent($this->lid->getUid());
 
-		//soccie saldo
-		$profhtml['saldi']='';
-		//alleen als men het eigen profiel bekijkt.
-		if(LoginLid::instance()->isSelf($this->lid->getUid())){
-			$profhtml['saldi']=$this->lid->getSaldi();
-		}
-		require_once 'lid/class.saldi.php';
-		$profhtml['saldografiek']=Saldi::getGrafiektags($this->lid->getUid());
-		
 		$profhtml['abos']=array();
 		require_once 'maaltijden/class.maaltrack.php';
 		require_once 'maaltijden/class.maaltijd.php';
@@ -61,6 +52,11 @@ class ProfielContent extends SimpleHTML {
 
 		$profiel->assign('lid', $this->lid);
 		$profiel->assign('profhtml', $profhtml);
+
+		require_once 'lid/class.saldi.php';
+		if(Saldi::magGrafiekZien($this->lid->getUid())){
+			$profiel->assign('saldografiek', Saldi::getDatapoints($this->lid->getUid(), 60));
+		}
 		
 		$profiel->assign('isOudlid', $this->lid->getStatus()=='S_OUDLID');
 

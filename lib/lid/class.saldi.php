@@ -35,7 +35,7 @@ class Saldi{
 		}
 		$this->data=MySql::instance()->query2array($sQuery);
 		if(!is_array($this->data)){
-			throw new Exception('Saldi::load() gefaald.');
+			throw new Exception('Saldi::load() gefaald.'.$sQuery);
 		}
 	}
 	public function getNaam(){
@@ -43,6 +43,9 @@ class Saldi{
 			case 'maalcie':	return 'MaalCie'; break;
 			case 'soccie':	return 'SocCie'; break;
 		}
+	}
+	public function getData(){
+		return $this->data;
 	}
 	public function getValues(){
 		foreach($this->data as $row){
@@ -56,47 +59,52 @@ class Saldi{
 		}
 		return $return;
 	}
+
+	public static function magGrafiekZien($uid, $cie=null){
+		//mogen we uberhaupt een grafiek zien?
+		if($cie==null){
+			return LoginLid::instance()->isSelf($uid) OR LoginLid::instance()->hasPermission('P_ADMIN,groep:soccie,groep:maalcie');
+		}
+		if(LoginLid::instance()->hasPermission('P_ADMIN,groep:'.$cie)){
+			return true;
+		}
+		return false;
+	}
 	/*
-	 * Geef de grafiektags terug voor in het profiel van een bepaald uid.
-	 *  - zelf zie je beide grafieken meteen.
-	 *  - maalcie ziet bij iedereen de maalciegrafiek;
-	 *  - soccie ziet bij iedereen de socciegrafiek;
+	 * Geef wat javascriptcode terug met data-series defenities voor Flot
 	 */
-	public static function getGrafiektags($uid){
-		$show=false;
-		$status=array('S_LID', 'S_NOVIET', 'S_GASTLID');
-		if($uid=='9808' OR in_array(LidCache::getLid($uid)->getStatus(), $status)){
-			$defer=true; //moeten we er expliciet om vragen (knopje indrukken)
-			$show['maalcie']=$show['soccie']=false;
-			if(LoginLid::instance()->isSelf($uid)){
-				$show['maalcie']=$show['soccie']=true;
-				$defer=false;
-			}else{
-				if(LoginLid::instance()->hasPermission('P_ADMIN,groep:soccie')){
-					$show['soccie']=true;
-				}
-				if(LoginLid::instance()->hasPermission('P_ADMIN,groep:maalcie')){
-					$show['maalcie']=true;
-				}
-			}
+	public static function getDatapoints($uid, $timespan){
+		$s=array();
+		try{
+			$s['maalcie']=new Saldi($uid, 'maalcie', $timespan);
+			$s['soccie']=new Saldi($uid, 'soccie', $timespan);
+		}catch(Exception $d){
+			//dan niet hoor!
 		}
-		$return='';
-		if(is_array($show)){
-			foreach($show as $cie => $value){
-				if($value){
-					$imgtag='<img class="handje" id="'.$cie.'grafiek" src="http://csrdelft.nl/tools/saldografiek.php?uid='.$uid.'&amp;'.$cie.'" onclick="verbreedSaldografiek(\''.$cie.'\');" title="Klik op de grafiek om de tijdspanne te vergroten" />';
-					if($defer){
-						$return.='<a id="'.$cie.'link" onclick="document.getElementById(\'saldoGrafiek\').innerHTML+=\''.htmlspecialchars(str_replace("'", "\'", $imgtag)).'\'; this.parentNode.removeChild(this);" class="knop">'.ucfirst($cie).'grafiek weergeven</a> ';
-					}else{
-						$return.=$imgtag;
-					}
-				}
+		$series=array();
+		foreach($s as $cie){
+			if(!Saldi::magGrafiekZien($uid, $cie->cie)){
+				//deze slaan we over, die mogen we niet zien kennelijk
+				continue;
 			}
-			if($defer){
-				$return.='<br /> <div id="saldoGrafiek"></div>';
+			$points=array();
+			foreach($cie->getData() as $data){
+				$p='[';
+				$p.=strtotime($data['moment'])*1000;
+				$p.=',';
+				$p.=round($data['saldo'],2);
+				$p.="]";
+				$points[]=$p;
 			}
+			
+			$series[]='{
+				label: "'.$cie->getNaam().'", 
+				data: ['.implode(",\n", $points).'],
+				threshold: { below: 0, color: "rgb(200, 20, 30)" },
+				lines: { steps: true }
+			}';
 		}
-		return $return;
+		return '['.implode(',', $series).']';
 	}
 	public static function putSoccieXML($xml){
 		$db=MySql::instance();
