@@ -106,8 +106,8 @@ $pagina->addStylesheet('profiel.css');
 $pagina->addScript('profiel.js');
 $pagina->addScript('suggest.js');
 $pagina->addScript('jquery.js');
-$pagina->addScript('flot/jquery.flot.js');
-$pagina->addScript('flot/jquery.flot.threshold.js');
+$pagina->addScript('flot/jquery.flot.min.js');
+$pagina->addScript('flot/jquery.flot.threshold.min.js');
 //$pagina->addScript('http://www.google.com/jsapi');
 $pagina->view();
 

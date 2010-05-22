@@ -185,7 +185,7 @@ function showTooltip(x, y, contents) {
 		padding: '2px',
 		'background-color': '#fee',
 		opacity: 0.80
-	}).appendTo("body").fadeIn(200);
+	}).appendTo("body").fadeIn(150);
 }
 
 var previousPoint = null;
@@ -200,9 +200,9 @@ $("#saldografiek").bind("plothover", function (event, pos, item) {
 			var x = thedate.getDay()+'-'+(thedate.getMonth()+1)+'-'+thedate.getFullYear();
 			var y = item.datapoint[1];
 			
-			//geen puntjes als er geen echt datapuntje is, maar een thresholdpuntje
+			//door de threshold-plugin is er een andere serie gemaakt, we nemen het oude label over.
 			if(item.series.label==null){
-				item.series.label='rood!';
+				item.series.label=item.series.originSeries.label+': ROOD!';
 			}
 			showTooltip(item.pageX, item.pageY, item.series.label + " @ " + x + " = € " + y);
 		}
