@@ -162,60 +162,10 @@
 			<div class="left">Financi&euml;el</div>	
 			<div class="gegevens">		
 				{if $profhtml.bankrekening!=''}<div class="label">Bankrekening:</div> {$profhtml.bankrekening}<br />{/if}
+				
 				{if $saldografiek!=''}
-				<div id="saldografiek" style="width: 600px; height: 220px;"></div>
-				<!--[if IE]><script language="javascript" type="text/javascript" src="/layout/js/flot/excanvas.js"></script><![endif]-->
-<script>
-
-jQuery.plot(
-	jQuery("#saldografiek"), 
-	{$saldografiek}, 
-	{literal}
-		{
-			grid: { hoverable: true, clickable: true },
-			xaxis: { mode: "time", timeformat: "%y/%m/%d"},
-			yaxis: { tickFormatter: function(v, axis){ return '€ '+v.toFixed(axis.tickDecimals); }}
-		}
-);
-function showTooltip(x, y, contents) {
-	jQuery('<div id="tooltip">' + contents + '</div>').css( {
-		position: 'absolute',
-		display: 'none',
-		top: y + 5,
-		left: x + 5,
-		border: '1px solid #fdd',
-		padding: '2px',
-		'background-color': '#fee',
-		opacity: 0.80
-	}).appendTo("body").fadeIn(150);
-}
-
-var previousPoint = null;
-jQuery("#saldografiek").bind("plothover", function (event, pos, item) {
-	if(item){
-		if (previousPoint != item.datapoint) {
-			previousPoint = item.datapoint;
-			
-			jQuery("#tooltip").remove();
-			
-			thedate=new Date(item.datapoint[0]);
-			var x = thedate.getDate()+'-'+(thedate.getMonth()+1)+'-'+thedate.getFullYear();
-			var y = item.datapoint[1].toFixed(2);
-			
-			//door de threshold-plugin is er een andere serie gemaakt, we nemen het oude label over.
-			if(item.series.label==null){
-				item.series.label=item.series.originSeries.label+': ROOD!';
-			}
-			showTooltip(item.pageX, item.pageY, item.series.label + " @ " + x + " = € " + y);
-		}
-	}else{
-		jQuery("#tooltip").remove();
-		previousPoint = null;            
-	}
-});
-{/literal}
-</script>
-{/if} {* laten we een saldografiek zien? *}
+					{include file='profiel/_saldografiek.tpl'}
+				{/if}
 			</div>
 		</div>
 	{/if}
