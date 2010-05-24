@@ -90,9 +90,9 @@ class Saldi{
 			$points=array();
 			foreach($cie->getData() as $data){
 				$p='[';
-				$p.=strtotime($data['moment'])*1000;
+				$p.=sprintf('%d', strtotime($data['moment'])*1000);
 				$p.=',';
-				$p.=round($data['saldo'],2);
+				$p.=sprintf('%.2F', $data['saldo']);
 				$p.="]";
 				$points[]=$p;
 			}
