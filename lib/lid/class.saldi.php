@@ -81,6 +81,7 @@ class Saldi{
 		}catch(Exception $d){
 			//dan niet hoor!
 		}
+	//		ini_set('precision', 20);
 		$series=array();
 		foreach($s as $cie){
 			if(!Saldi::magGrafiekZien($uid, $cie->cie)){
@@ -90,10 +91,11 @@ class Saldi{
 			$points=array();
 			foreach($cie->getData() as $data){
 				$p='[ ';
-				$p.=strtotime($data['moment'])*1000;
+				$p.=strtotime(substr($data['moment'],0, 16).':11')*1000;
 				$p.=', ';
 				$p.=sprintf('%.2F', $data['saldo']);
-				$p.=", '".$data['moment']."']";
+				//$p.=", '".$data['moment']."'";
+				$p.="]";
 				$points[]=$p;
 			}
 			
