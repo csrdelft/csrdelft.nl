@@ -81,7 +81,6 @@ class Saldi{
 		}catch(Exception $d){
 			//dan niet hoor!
 		}
-	//		ini_set('precision', 20);
 		$series=array();
 		foreach($s as $cie){
 			if(!Saldi::magGrafiekZien($uid, $cie->cie)){
@@ -90,7 +89,7 @@ class Saldi{
 			}
 			$points=array();
 			foreach($cie->getData() as $data){
-				$p='[ ';
+				$p='[';
 				$p.=strtotime(substr($data['moment'],0, 16).':11')*1000;
 				$p.=', ';
 				$p.=sprintf('%.2F', $data['saldo']);
@@ -99,14 +98,14 @@ class Saldi{
 				$points[]=$p;
 			}
 			
-			$series[]='{
-				label: "'.$cie->getNaam().'", 
-				data: ['.implode(",\n", $points).'],
-				threshold: { below: 0, color: "rgb(200, 20, 30)" },
-				lines: { steps: true }
-			}';
+$series[]='{
+	"label": "'.$cie->getNaam().'", 
+	"data": [ '.implode(", ", $points).' ],
+	"threshold": { "below": 0, "color": "red" },
+	"lines": { "steps": true }
+}';
 		}
-		return '['.implode(',', $series).']';
+		return '['.implode(', ', $series).']';
 	}
 	public static function putSoccieXML($xml){
 		$db=MySql::instance();

@@ -1,15 +1,34 @@
 <!--[if IE]><script language="javascript" type="text/javascript" src="/layout/js/flot/excanvas.js"></script><![endif]-->
 <script type="text/javascript">{literal}
 function makePlot(){
-	jQuery.plot(
-		jQuery("#saldografiek"), 
-		{/literal}{$saldografiek}{literal},
-			{
-				grid: { hoverable: true, clickable: true },
-				xaxis: { mode: "time", timeformat: "%y/%m/%d"},
-				yaxis: { tickFormatter: function(v, axis){ return '€ '+v.toFixed(axis.tickDecimals); }}
+	
+	var timespan=40;
+	var options={
+		grid: { hoverable: true, clickable: true },
+		xaxis: { mode: "time", timeformat: "%y/%m/%d"},
+		yaxis: { tickFormatter: function(v, axis){ return '€ '+v.toFixed(axis.tickDecimals); }}
+	};
+	var plot=jQuery.plot('#saldografiek', {/literal}{$saldografiek}{literal}, options);
+
+
+	function updateData(timespan){
+		jQuery.ajax({
+			url:'/tools/saldodata.php?uid={/literal}{$lid->getUid()}{literal}&timespan='+timespan,
+			dataType: 'json',
+			success: function(data){
+				plot.setData(data);
+				plot.setupGrid();
+				plot.draw();
 			}
-	);
+		});
+	}
+	
+	jQuery('<div class="button" style="cursor: pointer; font-size: 12px; line-height: 12px; position: absolute; padding: 0px; left:10px;bottom:0px" title="Verder terug in de tijd...">&laquo;</div>').appendTo("#saldografiek").click(function (e) {
+		timespan=timespan*2;
+		updateData(timespan);
+	});
+
+	
 	var previousPoint = null;
 	jQuery("#saldografiek").bind("plothover", function (event, pos, item) {
 		if(item){
