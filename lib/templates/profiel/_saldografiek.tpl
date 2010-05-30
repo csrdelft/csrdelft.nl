@@ -25,6 +25,9 @@ function makePlot(){
 	
 	jQuery('<div class="button" style="cursor: pointer; font-size: 12px; line-height: 12px; position: absolute; padding: 0px; left:10px;bottom:0px" title="Verder terug in de tijd...">&laquo;</div>').appendTo("#saldografiek").click(function (e) {
 		timespan=timespan*2;
+		if(timespan>(15*365)){
+			return;
+		}
 		updateData(timespan);
 	});
 
