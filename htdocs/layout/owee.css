@@ -1,63 +1,54 @@
 /**** GENERAL *****************************************************************/
 a, a:HOVER{
-	color: #ee2561;
+	color: #782f9a;
 }
 h1, h2, h3, h4 {
 	color: #555555;
 }
 body{
-background-image:url("http://plaetjes.csrdelft.nl/owee/2009/streepjes.png");
+background-image:url("http://plaetjes.csrdelft.nl/owee/2010/streepjes.png");
 }
 
 #container {
-	background: url('http://plaetjes.csrdelft.nl/owee/2009/containerbg_top.png') no-repeat;
-	margin: auto;
+	background: url('http://plaetjes.csrdelft.nl/owee/2010/containerbg_top.png') no-repeat;
 }
 
 /**** MENU ********************************************************************/
 #menu {
-	background: url('http://plaetjes.csrdelft.nl/owee/2009/menubg.png') repeat-x;
+	background: url('http://plaetjes.csrdelft.nl/owee/2010/menubg.png') repeat-x;
 }
 
 /**** MAIN MENU ***************************************************************/
 #mainmenu a {
-	background: url('http://plaetjes.csrdelft.nl/owee/2009/menubutton.png') no-repeat;
+	background: url('http://plaetjes.csrdelft.nl/owee/2010/menubutton.png') no-repeat;
 }	
 #mainmenu a:link, #mainmenu a:visited {
-	color: #ee2561;
+	color: #ffffff;
 }
 #mainmenu a:hover, #mainmenu a:active, #mainmenu a.active {
-	background: url('http://plaetjes.csrdelft.nl/owee/2009/menubutton_hover.png') no-repeat;
+	background: url('http://plaetjes.csrdelft.nl/owee/2010/menubutton_hover.png') no-repeat;
 }
 
 /**** SUBMENU *****************************************************************/
 #submenu {
-	background: url('http://plaetjes.csrdelft.nl/owee/2009/submenubg.png') repeat-x;
+	background: url('http://plaetjes.csrdelft.nl/owee/2010/submenubg.png') repeat-x;
 }
 #submenu a:hover, #submenu a:active, #submenu a.active {
-	color: #ee2561;
+	color: #fbc71a;
 }
 
 /**** MAIN ********************************************************************/
-#main {
-	background: url('http://plaetjes.csrdelft.nl/owee/2009/mainbg.png') repeat-y;
+
+#mainleft .block h1 {
+	color: #61267d;
 }
 
-/**** BLOCK *******************************************************************/
-#mainleft .block h1 {
-	background: url('http://plaetjes.csrdelft.nl/owee/2009/blocktitle.png') no-repeat;
-	color: #ee2561;
-}
 #mainleft .block h1 a {
-	color: #ee2561;
+	color: #61267d;
 }
-/**** FOOTER ******************************************************************/
-#footer {
-	background: none;
-	/*url('http://plaetjes.csrdelft.nl/owee/2009/footerbg.png') no-repeat #fff;*/
-}
+
 /**** INLOGKNOP ***************************************************************/
 #login input.submit {
-	background-color: #c5efcf;
-	color: #000; 
+	background-color: #AA5ECE;
+	color: #FFF; 
 }
