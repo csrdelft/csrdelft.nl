@@ -39,7 +39,7 @@
 					{if $groep->isAdmin() OR $groeplid.uid!=$loginlid->getUid()} {* We kunnen onzelf niet uit een groep gooien gooien *}
 						<a href="/actueel/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/verwijderLid/{$groeplid.uid}" title="Verwijder lid uit groep">X</a>
 					{/if}
-					</td>					
+					</td>
 				{/if}
 			</tr>
 		{/foreach}

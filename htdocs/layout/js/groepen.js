@@ -54,6 +54,7 @@ function showTab(groepid, tabid){
 	}
 	//huidige actief maken.
 	document.getElementById(tabid).className='active';
+	window.location.hash='#'+tabid;
 
 	//request doen voor de tab-inhoud
 	http.abort();

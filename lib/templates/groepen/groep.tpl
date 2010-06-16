@@ -38,10 +38,24 @@
 		{include file='groepen/groepleden.tpl'}
 	</div>
 	<br />
-	{* we laden meteen de pasfoto-tab als dat ingesteld is. *}
-	{if $groep->toonPasfotos()}
-		<script type="text/javascript">	showTab('{$groep->getId()}','pasfotos');</script>
-	{/if}
+	{* 	we laden het juiste tabje adh van de hashtag, als er niets 
+		ingesteld is kiezen we tussen pasfoto's en ledenlijst aan de hand
+		van de instelling van de gebruiker.
+	 *}
+	<script type="text/javascript">
+		{literal}
+		if(window.location.hash!=''){
+			showTab('{/literal}{$groep->getId()}{literal}', window.location.hash.substring(1));
+		}else{
+			{/literal}
+			{if $groep->toonPasfotos()}
+				showTab('{$groep->getId()}', 'pasfotos');
+			{/if}
+			{literal}
+		}
+		{/literal}
+	</script>
+	
 	
 	<div class="clear"></div>
 	{if $groep->magBewerken() AND $action!='edit'}

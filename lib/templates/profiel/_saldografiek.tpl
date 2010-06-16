@@ -8,7 +8,7 @@ function makePlot(){
 		xaxis: { mode: "time", timeformat: "%y/%m/%d"},
 		yaxis: { tickFormatter: function(v, axis){ return '€ '+v.toFixed(axis.tickDecimals); }}
 	};
-	var plot=jQuery.plot('#saldografiek', {/literal}{$saldografiek}{literal}, options);
+	var plot=jQuery.plot('#saldografiek', [], options);
 
 
 	function updateData(timespan){
@@ -30,7 +30,7 @@ function makePlot(){
 		}
 		updateData(timespan);
 	});
-
+	updateData(timespan);
 	
 	var previousPoint = null;
 	jQuery("#saldografiek").bind("plothover", function (event, pos, item) {

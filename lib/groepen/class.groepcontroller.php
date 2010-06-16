@@ -306,7 +306,7 @@ class Groepcontroller extends Controller{
 			}else{
 				$melding='Niet alle leden met succes toegevoegd. Wellicht waren sommigen al lid van deze groep? (Groepcontroller::action_addLid())';
 			}
-			$this->content->invokeRefresh($melding, $this->getUrl('default'));
+			$this->content->invokeRefresh($melding, $this->getUrl('default').'#lidlijst');
 		}
 	}
 	public function action_verwijderLid(){
@@ -316,7 +316,7 @@ class Groepcontroller extends Controller{
 			}else{
 				$melding='Lid uit groep verwijderen mislukt (GroepController::action_verwijderLid()).';
 			}
-			$this->content->invokeRefresh($melding, $this->getUrl('default'));
+			$this->content->invokeRefresh($melding, $this->getUrl('default').'#lidlijst');
 		}
 	}
 	public function action_maakLidOt(){
@@ -326,7 +326,7 @@ class Groepcontroller extends Controller{
 			}else{
 				$melding='Lid naar o.t.-groep verplaatsen mislukt. ['. $this->groep->getError().']  (GroepController::action_maakLidOt())';
 			}
-			$this->content->invokeRefresh($melding, $this->getUrl('default'));
+			$this->content->invokeRefresh($melding, $this->getUrl('default').'#lidlijst');
 		}
 	}
 	public function action_maakGroepOt(){
