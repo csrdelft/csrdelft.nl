@@ -23,23 +23,28 @@
 <div id="container">
 	{$csrdelft->_menu->view()}
 	<div id="main">
-		{if $csrdelft->_zijkolom!==false}
-			<div id="mainleft">
-				{if is_object($csrdelft->_zijkolom)}
-					<div class="block">
-						{$csrdelft->_zijkolom->view()}
-					</div>
-				{else}
-					{section name=object loop=$csrdelft->_zijkolom}
+		<div id="mainbg">
+			{if $csrdelft->_zijkolom!==false}
+				<div id="mainleft">
+					{if is_object($csrdelft->_zijkolom)}
 						<div class="block">
-							{$object->view()}
+							{$csrdelft->_zijkolom->view()}
 						</div>
-					{/section}
-				{/if}
+					{else}
+						{section name=object loop=$csrdelft->_zijkolom}
+							<div class="block">
+								{$object->view()}
+							</div>
+						{/section}
+					{/if}
+				</div>
+			{/if}
+			<div id="mainright"{if $csrdelft->_zijkolom===false} style="width: 958px;"{/if}>
+				{$csrdelft->_body->view()}
 			</div>
-		{/if}
-		<div id="mainright"{if $csrdelft->_zijkolom===false} style="width: 958px;"{/if}>
-			{$csrdelft->_body->view()}
+			<div id="mainbgfooter">
+			</div>
+			
 		</div>
 		<div id="footer">
 			Gemaakt door <a href="mailto:pubcie@csrdelft.nl" title="PubCie der C.S.R. Delft">PubCie der C.S.R. Delft</a> | <a href="http://validator.w3.org/check/referrer" title="Valideer">XHTML 1.0</a>

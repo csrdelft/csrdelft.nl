@@ -6,7 +6,7 @@ h1, h2, h3, h4 {
 	color: #555555;
 }
 body{
-background-image:url("http://plaetjes.csrdelft.nl/owee/2010/streepjes.png");
+background-image:url("http://plaetjes.csrdelft.nl/owee/2010/achtergrond.jpg");
 }
 
 #container {
@@ -15,10 +15,20 @@ background-image:url("http://plaetjes.csrdelft.nl/owee/2010/streepjes.png");
 
 /**** MENU ********************************************************************/
 #menu {
-	background: url('http://plaetjes.csrdelft.nl/owee/2010/menubg.png') repeat-x;
+	background: url('http://plaetjes.csrdelft.nl/owee/2010/menubg.png') repeat-x #FFF;
+}
+
+#menubanner {
+	margin: 0px;
+	height: 110px;
+	z-index: 2;
 }
 
 /**** MAIN MENU ***************************************************************/
+#mainmenu a{
+	z-index: 10;
+}
+
 #mainmenu a {
 	background: url('http://plaetjes.csrdelft.nl/owee/2010/menubutton.png') no-repeat;
 }	
@@ -39,6 +49,20 @@ background-image:url("http://plaetjes.csrdelft.nl/owee/2010/streepjes.png");
 
 /**** MAIN ********************************************************************/
 
+#main {
+	background:none;
+}
+
+#mainbg {
+	width: 1004px;
+	background: url('http://plaetjes.csrdelft.nl/owee/2010/mainbg.png') repeat-y;
+}
+
+#mainbgfooter {
+	clear:both
+}
+
+
 #mainleft .block h1 {
 	color: #61267d;
 }
@@ -51,4 +75,9 @@ background-image:url("http://plaetjes.csrdelft.nl/owee/2010/streepjes.png");
 #login input.submit {
 	background-color: #AA5ECE;
 	color: #FFF; 
+}
+
+
+#footer {
+	background: url('http://plaetjes.csrdelft.nl/owee/2010/footerbg.png') no-repeat;
 }

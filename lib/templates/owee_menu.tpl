@@ -2,7 +2,7 @@
 	<div id="menuleft"><a href="/"><img src="http://plaetjes.csrdelft.nl/owee/2010/logo.png" alt="Logo" id="logo" /></a></div>
 	<div id="menucenter">
 		<div id="menubanner">
-			<div id="banner0" style="margin-left: 60px;padding-top: 5px;"><img src="http://plaetjes.csrdelft.nl/owee/2010/banner.png" id="imgbanner0" alt="banner0" /></div>
+			<div id="banner0"><img src="http://plaetjes.csrdelft.nl/owee/2010/banner.png" id="imgbanner0" alt="banner0" /></div>
 			<div id="banner1"></div>
 			<div id="banner2"></div>
 			<div id="banner3"></div>
