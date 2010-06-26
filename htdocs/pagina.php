@@ -41,13 +41,13 @@ if (isset($_GET['bewerken']) && $pagina->magBewerken()){
 }
 
 # pagina weergeven
-if($_GET['naam']=='owee'){
+if($_GET['naam']=='owee' OR $_GET['naam']=='video' OR $_GET['naam']=='interesse'){
 	$prefix='owee_';
 }else{
 	$prefix='';
 }
 $depagina=new csrdelft($paginacontent,$prefix);
-if($_GET['naam']=='owee'){
+if($_GET['naam']=='owee' OR $_GET['naam']=='video' OR $_GET['naam']=='interesse'){
 	$depagina->addStylesheet('owee.css');
 }
 if($_GET['naam']=='video'){
