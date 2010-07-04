@@ -5,7 +5,7 @@ function makePlot(){
 	var timespan=40;
 	var options={
 		grid: { hoverable: true, clickable: true },
-		xaxis: { mode: "time", timeformat: "%y/%m/%d"},
+		xaxis: { mode: "time", timeformat: "%d-%m %y"},
 		yaxis: { tickFormatter: function(v, axis){ return '€ '+v.toFixed(axis.tickDecimals); }}
 	};
 	var plot=jQuery.plot('#saldografiek', [], options);
