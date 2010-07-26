@@ -33,7 +33,7 @@ $sendmail['referer_error'] = "Error: U submit niet vanaf de C.S.R. Delft website
 # ;
 
 $form['lidworden']['referer']      = 'http://csrdelft.nl/vereniging/interesse/';
-$form['lidworden']['submit_to']    = 'pubcie@csrdelft.nl,vice-praeses@csrdelft.nl,owee@csrdelft.nl';
+$form['lidworden']['submit_to']    = 'pubcie@csrdelft.nl,owee@csrdelft.nl';
 $form['lidworden']['subject']      = 'Interesseformulier Website';
 $form['lidworden']['required']     = 'naam';
 $form['lidworden']['data_order']   = 'naam,straat,postcode,plaats,telefoon,submit_by,interesse1,interesse2,interesse3,interesse4,interesse5,interesse6,opmerking';
