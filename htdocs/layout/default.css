@@ -635,3 +635,56 @@ div.preview.pagina{ padding: 2px 2px; width: 100%;}
 .ubb_table{ padding: 0px; border-collapse: collapse; }
 .ubb_table tr{ margin: 0px; padding: 0px; }
 .ubb_table td, th{ margin: 0px; padding: 2px; }
+
+
+/* Slider voorpagina */
+/* Slider: Main Container */
+.main_view {
+	float: left;
+	position: relative;
+	margin-bottom: 20px;
+}
+/* Slider: Window/Masking Styles */
+.window {
+	width:355px; height:237px;
+	overflow: hidden; /*--Hides anything outside of the set width/height--*/
+	position: relative;
+}
+.image_reel {
+	position: absolute;
+	top: 0; left: 0;
+}
+.image_reel img {float: left;width:355px;}
+ 
+/* Slider: Paging Styles */
+.paging {
+	position: absolute;
+	bottom: 5px; right: 0px;
+	width: 190px; height:25px;
+	z-index: 100; /*--Assures the paging stays on the top layer--*/
+	text-align: center;
+	line-height: 21px;
+	background: #000 ;
+	border: #000;
+	opacity:0.4;filter:alpha(opacity=40);
+	display: none; /*--Hidden by default, will be later shown with jQuery--*/
+	-moz-border-radius: 8px;
+	-khtml-border-radius: 8px;
+	-webkit-border-radius: 8px;
+}
+.paging a {
+	padding: 4px;
+	text-decoration: none;
+	color: #FFF;
+	font: normal 8px Verdana, Arial, Helvetica, sans-serif;
+}
+.paging a.active {
+	background: #000066; 
+	border: 1px solid #006666;
+	-moz-border-radius: 3px;
+	-khtml-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	color: #FFF;
+}
+.paging a:hover {
+	text-decoration: underline;}
