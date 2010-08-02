@@ -660,10 +660,10 @@ div.preview.pagina{ padding: 2px 2px; width: 100%;}
 .paging {
 	position: absolute;
 	bottom: 5px; right: 0px;
-	width: 190px; height:25px;
+	width: 170px; height:15px;
 	z-index: 100; /*--Assures the paging stays on the top layer--*/
 	text-align: center;
-	line-height: 21px;
+	line-height: 9px;
 	background: #000 ;
 	border: #000;
 	opacity:0.4;filter:alpha(opacity=40);
@@ -679,12 +679,12 @@ div.preview.pagina{ padding: 2px 2px; width: 100%;}
 	font: normal 8px Verdana, Arial, Helvetica, sans-serif;
 }
 .paging a.active {
-	background: #000066; 
-	border: 1px solid #006666;
+	background: #777; 
+	border: 1px solid #000;
 	-moz-border-radius: 3px;
 	-khtml-border-radius: 3px;
 	-webkit-border-radius: 3px;
-	color: #FFF;
+	color: #000;
 }
 .paging a:hover {
 	text-decoration: underline;}
