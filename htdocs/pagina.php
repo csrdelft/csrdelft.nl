@@ -41,7 +41,7 @@ if (isset($_GET['bewerken']) && $pagina->magBewerken()){
 }
 
 # pagina weergeven
-if($_GET['naam']=='owee' OR $_GET['naam']=='video' OR $_GET['naam']=='interesse'){
+if($_GET['naam']=='owee' OR $_GET['naam']=='oweeprogramma' OR $_GET['naam']=='video' OR $_GET['naam']=='interesse'){
 	$prefix='owee_';
 }else{
 	$prefix='';
