@@ -659,7 +659,7 @@ div.preview.pagina{ padding: 2px 2px; width: 100%;}
 /* Slider: Paging Styles */
 .paging {
 	position: absolute;
-	bottom: 5px; right: 0px;
+	bottom: 5px; right: 5px;
 	width: 170px; height:15px;
 	z-index: 100; /*--Assures the paging stays on the top layer--*/
 	text-align: center;

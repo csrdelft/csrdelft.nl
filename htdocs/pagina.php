@@ -47,7 +47,7 @@ if($_GET['naam']=='owee' OR $_GET['naam']=='video' OR $_GET['naam']=='interesse'
 	$prefix='';
 }
 $depagina=new csrdelft($paginacontent,$prefix);
-if($_GET['naam']=='owee' OR $_GET['naam']=='video' OR $_GET['naam']=='interesse'){
+if($_GET['naam']=='owee' OR $_GET['naam']=='oweeprogramma' OR $_GET['naam']=='video' OR $_GET['naam']=='interesse'){
 	$depagina->addStylesheet('owee.css');
 }
 if($_GET['naam']=='video'){
