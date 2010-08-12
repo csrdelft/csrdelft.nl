@@ -27,12 +27,12 @@
 	<div id="menuright">
 		{if $loginlid->hasPermission('P_LOGGED_IN') }
 			<div id="ingelogd">
+				<a href="/instellingen/" class="instellingen" title="Webstekinstellingen">{icon get="instellingen"}</a>
 				{if $loginlid->isSued()}
 					<a href="/endsu/" style="color: red;">{$loginlid->getSuedFrom()->getNaamLink('civitas','html')} als</a><br />» 
 				{/if}
 				{$loginlid->getUid()|csrnaam}<br />				
-				<div id="uitloggen"><a href="/logout.php">log&nbsp;uit</a></div><br class="clear" />
-				<br />
+				<div id="uitloggen"><a href="/logout.php">log&nbsp;uit</a></div>
 				<div id="saldi">
 					{foreach from=$loginlid->getLid()->getSaldi() item=saldo}
 						<div class="saldoregel">
@@ -42,21 +42,12 @@
 					{/foreach}
 				</div>
 				<br />
-				<form method="post" action="/communicatie/lijst.php" name="lidzoeker">
+				<form method="get" action="/communicatie/lijst.php" name="lidzoeker">
 					<p>
-						<input type="hidden" name="a" value="zoek" />
-						<input type="hidden" name="waar" value="naam" />
-						<input type="hidden" name="moot" value="alle" />
-						<input type="hidden" name="status" value="(oud)?leden" />
-						<input type="hidden" name="sort" value="achternaam" />
-						<input type="hidden" name="kolom[]" value="adres" />
-						<input type="hidden" name="kolom[]" value="email" />
-						<input type="hidden" name="kolom[]" value="telefoon" />
-						<input type="hidden" name="kolom[]" value="mobiel" />
-						{if isset($smarty.post.wat)}
-							<input type="text" value="{$smarty.post.wat|escape:'htmlall'}" name="wat" id="zoekveld" />
+						{if isset($smarty.get.q)}
+							<input type="text" value="{$smarty.get.q|escape:'htmlall'}" name="q" id="zoekveld" />
 						{else}
-							<input type="text" value="naam zoeken" onfocus="this.value=''; this.style.textAlign='left';" name="wat" id="zoekveld" />
+							<input type="text" name="q" id="zoekveld" />
 						{/if}
 					</p>
 				</form>
