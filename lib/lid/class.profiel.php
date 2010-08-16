@@ -197,7 +197,7 @@ class Profiel{
 		}
 		
 		if($profiel['status']=='S_OUDLID' OR $hasLedenMod OR $this->editNoviet){
-			$form[]=new Comment('Studie en Civitas:');
+			$form[]=new Comment('Studie:');
 			$form[]=new StudieField('studie', $profiel['studie'], 'Studie');
 			$form[]=new IntField('studiejaar', $profiel['studiejaar'], 'Beginjaar studie', date('Y'), $beginjaar);
 		}
@@ -229,14 +229,19 @@ class Profiel{
 		}
 		
 		if($hasLedenMod OR $this->editNoviet){
+			$form[]=new Comment('Persoonlijk:');
 			$form[]=new InputField('eetwens', $profiel['eetwens'], 'Dieet', 200);
-			$form[]=new Comment('Overig');
 			//wellicht binnenkort voor iedereen beschikbaar?
 			$form[]=new InputField('kerk', $profiel['kerk'], 'Kerk', 50);
 			$form[]=new InputField('muziek', $profiel['muziek'], 'Muziekinstrument', 50);
 		}
 		
-		if(LoginLid::instance()->hasPermission('P_BESTUUR,groep:novcie')){
+		if(LoginLid::instance()->hasPermission('P_ADMIN,P_BESTUUR,groep:novcie')){
+			$form[]=new InputField('gewicht', $profiel['gewicht'], 'Gewicht', 10);
+			$form[]=new InputField('maat', $profiel['maat'], 'Pak/Confeciemaat', 10);
+			$form[]=new SelectField('relatie', $profiel['relatie'], 'Relatie', array('vrijgezel' => 'Vrijgezel','verliefd' => 'Verliefd', 'verkering' => 'Verkering','verloofd' => 'Verloofd', 'getrouwd' => 'Getrouwd','geen' => 'Geen van bovenstaande'));
+			$form[]=new SelectField('ovkaart', $profiel['ovkaart'], 'OV-kaart', array('week' => 'Week','weekend' => 'Weekend','niet' => 'Niet geactiveerd','geen' => 'Nog geen OV-kaart'));
+			$form[]=new SelectField('zingen', $profiel['zingen'], 'Zingen', array('ja' => 'Ja, ik zing in een band/koor','nee' => 'Nee, ik houd niet van zingen','soms' => 'Alleen onder de douche','anders' => 'Anders'));
 			$form[]=new TextField('kgb', $profiel['kgb'], 'NovCie-opmerking');
 		}
 

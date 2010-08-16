@@ -561,5 +561,6 @@ sql/1837_groepaanmeldfilter.sql -text
 sql/1854_groeptype.sql -text
 sql/1870-ticket252-overlijden-leden.sql -text
 sql/1886-Groepen-functiefilter.sql -text
+sql/1995-novcievragen.sql -text
 sql/csrdelft.sql -text
 sql/csrdelft_oud.sql -text
