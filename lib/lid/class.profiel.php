@@ -238,10 +238,13 @@ class Profiel{
 		
 		if(LoginLid::instance()->hasPermission('P_ADMIN,P_BESTUUR,groep:novcie')){
 			$form[]=new InputField('gewicht', $profiel['gewicht'], 'Gewicht', 10);
-			$form[]=new InputField('maat', $profiel['maat'], 'Pak/Confeciemaat', 10);
+			$form[]=new InputField('maat', $profiel['maat'], 'Pak/Confectiemaat', 10);
 			$form[]=new SelectField('relatie', $profiel['relatie'], 'Relatie', array('vrijgezel' => 'Vrijgezel','verliefd' => 'Verliefd', 'verkering' => 'Verkering','verloofd' => 'Verloofd', 'getrouwd' => 'Getrouwd','geen' => 'Geen van bovenstaande'));
+			$form[]=new InputField('naamrelatie', $profiel['naamrelatie'], 'Relatie met', 50);
 			$form[]=new SelectField('ovkaart', $profiel['ovkaart'], 'OV-kaart', array('week' => 'Week','weekend' => 'Weekend','niet' => 'Niet geactiveerd','geen' => 'Nog geen OV-kaart'));
 			$form[]=new SelectField('zingen', $profiel['zingen'], 'Zingen', array('ja' => 'Ja, ik zing in een band/koor','nee' => 'Nee, ik houd niet van zingen','soms' => 'Alleen onder de douche','anders' => 'Anders'));
+			$form[]=new TextField('novitiaat', $profiel['novitiaat'], 'Wat verwacht je van het novitiaat?');
+			$form[]=new Comment('<br>Einde vragenlijst<br><br><br><br><br>');
 			$form[]=new TextField('kgb', $profiel['kgb'], 'NovCie-opmerking');
 		}
 
