@@ -28,7 +28,7 @@
 				<a onclick="showTab({$groep->getId()}, 'stats')">%</a>
 			</li>
 		{/if}
-		{if $groep->isAdmin() OR $groep->isOp()}
+		{if $groep->isIngelogged()}
 			<li id="emails">
 				<a class="tab" onclick="showTab({$groep->getId()}, 'emails')">@</a>
 			</li>

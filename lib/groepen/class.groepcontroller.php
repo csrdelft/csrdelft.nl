@@ -344,7 +344,8 @@ class Groepcontroller extends Controller{
 			$this->content->invokeRefresh($melding, $this->getUrl('default'));
 		}
 	}
-
+	
+	
 	public function action_geschiedenis(){
 		$this->content=new Groepgeschiedeniscontent(new Groepen($_GET['gtype']));
 	}
@@ -362,7 +363,7 @@ class Groepcontroller extends Controller{
 		exit;
 	}
 	public function action_emails(){
-		if($this->groep->isAdmin() OR $this->groep->isOp()){
+		if($this->groep->isIngelogged()){
 			$this->content=new GroepEmailContent($this->groep);
 			$this->content->view();
 		}

@@ -20,6 +20,11 @@
 <div class="clear">
 	{if $groepen->isAdmin()}
 		<a href="/actueel/groepen/{$groepen->getNaam()}/0/bewerken" class="knop">Nieuwe groep</a>
+		
+		<a href="/actueel/groepen/{$groepen->getNaam()}/?maakOt=true" class="knop" 
+			onclick="return confirm('Weet u zeker dat alle h.t. groepen in deze categorie o.t. moeten worden?')">
+			Maak h.t. groepen o.t.
+		</a>
 	{/if}
 </div>
 

@@ -68,7 +68,7 @@ class Groepen{
 			SELECT
 				groep.id AS groepId, groep.gtype as gtypeId, groep.snaam AS snaam, groep.naam AS naam,
 				groep.sbeschrijving AS sbeschrijving, groep.beschrijving AS beschrijving, groep.zichtbaar AS zichtbaar,
-				groep.status AS status, begin, einde, aanmeldbaar, limiet, toonFuncties, toonPasfotos, lidIsMod,
+				groep.status AS status, begin, einde, aanmeldbaar, functiefilter, limiet, toonFuncties, toonPasfotos, lidIsMod,
 				groeplid.uid AS uid, groeplid.op AS op, groeplid.functie AS functie, groeplid.prioriteit AS prioriteit
 			FROM groep
 			LEFT JOIN groeplid ON(groep.id=groeplid.groepid)
@@ -173,6 +173,24 @@ class Groepen{
 		}
 		return $groepen;
 	}
+	//Alle h.t. groepen in een categorie o.t. maken.
+	public function maakGroepenOt(){
+		$error='';
+		if($this->groepen===null){
+			$this->loadGroepen();
+		}
+		if(count($this->groepen)==0){
+			return true;
+		}
+		foreach($this->groepen as $groep){
+			if(!$groep->maakOt()){
+				$error.='';
+			}
+		}
+		return $error=='';
+	}
+
+	
 	/*
 	 * Haal de huidige groepen van een bebaald type voor een bepaald lid.
 	 */
