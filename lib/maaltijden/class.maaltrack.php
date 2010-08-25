@@ -875,10 +875,13 @@ class MaalTrack {
 	}
 	
 	# bij bestaande maaltijd de taken bewerken
-	function editLid($uid, $corvee_kwalikok, $corvee_punten_bonus, $corvee_vrijstelling){		
+	function editLid($lid, $corvee_kwalikok, $corvee_punten_bonus, $corvee_vrijstelling){		
 		// lid bewerken
-		$this->_db->query("UPDATE lid SET corvee_kwalikok='".$corvee_kwalikok."', corvee_punten_bonus='".$corvee_punten_bonus."', corvee_vrijstelling='".$corvee_vrijstelling."' WHERE uid = '".$uid."'");
-		return true;
+		$isgelukt = $lid->setProperty('corvee_kwalikok', $corvee_kwalikok);
+		$isgelukt = $isgelukt && $lid->setProperty('corvee_punten_bonus', $corvee_punten_bonus);
+		$isgelukt = $isgelukt && $lid->setProperty('corvee_vrijstelling', $corvee_vrijstelling);
+		$isgelukt = $isgelukt && $lid->save();
+		return $isgelukt;
 	}
 	
 	# haalt maaltijden uit de maaltijdentabel op, voor uitgebreidere info
