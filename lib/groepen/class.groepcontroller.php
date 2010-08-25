@@ -165,12 +165,19 @@ class Groepcontroller extends Controller{
 	public function action_bewerken(){
 		$this->content->setAction('edit');
 
-		//Als er een derde argument meegegeven wordt is dat een korte naam
-		//die we invullen in het formulier.
-		if($this->hasParam(2) AND preg_match('/\w{3,20}/', $this->getParam(2))){
-			$this->groep->setValue('status', 'ot');
-			$this->groep->setValue('snaam', $this->getParam(2));
+		/* Als er een derde argument meegegeven wordt is dat het id van de groep waar 
+		 * een opvolger voor gemaakt moet worden. We nemen wat dingen over van die oude groep,
+		 * vaak erg handig.
+		 */
+		if($this->hasParam(2) AND preg_match('/[0-9]*/', $this->getParam(2))){
+			$oudeGroep=new Groep($this->getParam(2));
+			if($oudeGroep instanceof Groep){
+				$this->groep->setValue('snaam', $oudeGroep->getSnaam());
+				$this->groep->setValue('naam', $oudeGroep->getNaam());
+				$this->groep->setValue('sbeschrijving', $oudeGroep->getSbeschrijving());
+			}
 		}
+		
 
 		if($this->isPOSTed()){
 			if($this->groepValidator()){
@@ -238,8 +245,9 @@ class Groepcontroller extends Controller{
 			}
 		}
 	}
+	
 	/*
-	 * een groep verwijderen.
+	 * Een groep permanent verwijderen.
 	 */
 	public function action_verwijderen(){
 		if($this->groep->isAdmin()){
@@ -279,6 +287,7 @@ class Groepcontroller extends Controller{
 		}
 		$this->content->invokeRefresh($melding, $url);
 	}
+	
 	/*
 	 * Leden toevoegen aan een groep.
 	 */
@@ -309,6 +318,10 @@ class Groepcontroller extends Controller{
 			$this->content->invokeRefresh($melding, $this->getUrl('default').'#lidlijst');
 		}
 	}
+	
+	/*
+	 * Leden verwijderen uit een groep
+	 */
 	public function action_verwijderLid(){
 		if($this->hasParam(2) AND Lid::isValidUid($this->getParam(2)) AND $this->groep->magBewerken()){
 			if($this->groep->verwijderLid($this->getParam(2))){
@@ -319,6 +332,10 @@ class Groepcontroller extends Controller{
 			$this->content->invokeRefresh($melding, $this->getUrl('default').'#lidlijst');
 		}
 	}
+	
+	/*
+	 * Een lid naar de eerstvolgende o.t. groep verplaatsen.
+	 */
 	public function action_maakLidOt(){
 		if($this->hasParam(2) AND Lid::isValidUid($this->getParam(2)) AND $this->groep->magBewerken()){
 			if($this->groep->maakLidOt($this->getParam(2))){
@@ -329,6 +346,10 @@ class Groepcontroller extends Controller{
 			$this->content->invokeRefresh($melding, $this->getUrl('default').'#lidlijst');
 		}
 	}
+	
+	/*
+	 * De groep o.t. maken.
+	 */
 	public function action_maakGroepOt(){
 		if($this->groep->isAdmin()){
 			if($this->groep->getStatus()=='ht'){

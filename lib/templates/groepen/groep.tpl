@@ -102,7 +102,9 @@
 			{/if}
 		{/if}
 		{if $groep->isAdmin()}
-			<li style="margin-top: 20px;" ><a href="/actueel/groepen/{$groep->getType()->getNaam()}/0/bewerken/{$groep->getSnaam()}/">Opvolger toevoegen</a></li>
+			<li style="margin-top: 20px;">
+				<a href="/actueel/groepen/{$groep->getType()->getNaam()}/0/bewerken/{$groep->getId()}">Opvolger toevoegen</a>
+			</li>
 		{/if}
 		</ul>	
 	</div> 
