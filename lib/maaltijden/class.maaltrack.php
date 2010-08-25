@@ -333,13 +333,16 @@ class MaalTrack {
 		if(array_key_exists('theedoeken', $maaltijd['taken'])){ 
 			$theedoek = array_unique($maaltijd['taken']['theedoeken']);
 		}		
-
+		
 		//verwerken punten
 		//formulier toegekend 0=onbekend, 1=ja, 2=nee
 		//van en naar 'ja'
 		//van en naar 'nee'
-		foreach($punten as $uid=>$form_toegekend){
-			if (!$form_toegekend) continue;
+		$naartekst = array('onbekend','ja','nee');
+		
+		foreach($punten as $uid=>$form_toegekend){			
+			$form_toegekend=$naartekst[$form_toegekend];
+			
 			//haal op of punten al toegekend waren
 			$sToegekendQuery="
 			SELECT 
@@ -357,8 +360,9 @@ class MaalTrack {
 			}	
 			$dbarray = $this->_db->next($dbresult);
 			$db_toegekend = $dbarray['punten_toegekend'];
+
 			
-			//Als iemand nog geen punten toegekend had, maar nu wel, ken ze dan tpe
+			//Als iemand nog geen punten toegekend had, maar nu wel, ken ze dan toe
 			if($db_toegekend!='ja' && $form_toegekend=='ja'){				
 				$punten_erbij = (in_array($uid,$kok)?1:0) * $maaltijd['punten_kok'] + 
 								 (in_array($uid,$afwas)?1:0) * $maaltijd['punten_afwas'] + 
@@ -404,9 +408,8 @@ class MaalTrack {
 		
 		//Punten_toegekend updaten
 		foreach($punten as $uid=>$form_toegekend){
-			if (!$uid) continue;
-			//$toekenning = array('onbekend','ja','nee');
-			$db_toegekend = $form_toegekend;
+			if (!$uid) continue;			
+			$db_toegekend = $naartekst[$form_toegekend];
 			$this->_db->query("INSERT INTO	maaltijdcorvee (maalid, uid, punten_toegekend) VALUES('".$maalid."', '".$uid."', '".$db_toegekend."') ON DUPLICATE KEY UPDATE punten_toegekend = '".$db_toegekend."'");
 		}
 		
@@ -874,15 +877,7 @@ class MaalTrack {
 			return dechex($r).dechex($g).dechex($b);
 	}
 	
-	# bij bestaande maaltijd de taken bewerken
-	function editLid($lid, $corvee_kwalikok, $corvee_punten_bonus, $corvee_vrijstelling){		
-		// lid bewerken
-		$isgelukt = $lid->setProperty('corvee_kwalikok', $corvee_kwalikok);
-		$isgelukt = $isgelukt && $lid->setProperty('corvee_punten_bonus', $corvee_punten_bonus);
-		$isgelukt = $isgelukt && $lid->setProperty('corvee_vrijstelling', $corvee_vrijstelling);
-		$isgelukt = $isgelukt && $lid->save();
-		return $isgelukt;
-	}
+	
 	
 	# haalt maaltijden uit de maaltijdentabel op, voor uitgebreidere info
 	# voor in de kolommen op de maaltijdencontent pagina, zie getMaaltijden hieronder

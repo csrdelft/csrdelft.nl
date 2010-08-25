@@ -11,10 +11,8 @@
 
 require_once 'include.config.php';
 
-
-
+require_once 'maaltijden/class.corveelid.php';
 require_once 'maaltijden/class.maaltrack.php';
-require_once 'maaltijden/class.maaltijd.php';
 $maaltrack = new MaalTrack();
 
 
@@ -33,10 +31,10 @@ if(isset($_POST['actie'])){
 	$corvee_kwalikok = (isset($_POST['corvee_kwalikok'])? 1 : 0);
 	if($actie == 'bewerk' && (isset($_POST['corvee_punten_bonus'], $_POST['corvee_vrijstelling']))){
 		$lid=LidCache::getLid($uid);
-		$maaltrack->editLid($lid, $corvee_kwalikok, $_POST['corvee_punten_bonus'], $_POST['corvee_vrijstelling']);
+		$corveelid=new CorveeLid($lid);
+		$corveelid->setAlles($corvee_kwalikok, $_POST['corvee_punten_bonus'], $_POST['corvee_vrijstelling']);
 	}
 }
-
 
 $page=new csrdelft($punten);
 $page->view();

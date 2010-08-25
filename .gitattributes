@@ -315,6 +315,7 @@ lib/lid/class.profielcontent.php -text
 lib/lid/class.saldi.php -text
 lib/lid/class.stamboomcontent.php -text
 lib/maaltijden/class.corveebeheercontent.php -text
+lib/maaltijden/class.corveelid.php -text
 lib/maaltijden/class.corveepuntencontent.php -text
 lib/maaltijden/class.maaltijd.php -text
 lib/maaltijden/class.maaltijdabocontent.php -text
