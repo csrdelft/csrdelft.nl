@@ -329,7 +329,7 @@ class LLCSV extends LLweergave{
 					$return.=$lid->getPatroonUid();
 				break;
 				case 'verticale':
-					$return.=$this->getVerticale();
+					$return.=$lid->getVerticale();
 				break;
 				default:
 					try{
