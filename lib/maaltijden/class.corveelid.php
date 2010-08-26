@@ -19,8 +19,20 @@ class CorveeLid {
 		$this->lid = $lid;
 	}	
 	
+	public function getCorveePunten(){
+		return $this->lid->getProperty('corvee_punten');
+	}
+	
+	public function getBonusPunten(){
+		return $this->lid->getProperty('corvee_punten_bonus');
+	}
+	
 	public function setKwalikok($corvee_kwalikok){
-		return $this->lid->setProperty('corvee_kwalikok', $corvee_kwalikok) && $this->lid->save();
+		return $this->lid->setProperty('corvee_kwalikok', $corvee_kwalikok);
+	}
+
+	public function setCorveePunten($corvee_punten){
+		return $this->lid->setProperty('corvee_punten', $corvee_punten);
 	}
 	
 	public function setBonusPunten($corvee_punten_bonus){
