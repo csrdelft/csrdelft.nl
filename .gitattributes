@@ -41,6 +41,7 @@ htdocs/actueel/maaltijden/archief.php -text
 htdocs/actueel/maaltijden/beheer.php -text
 htdocs/actueel/maaltijden/corveebeheer.php -text
 htdocs/actueel/maaltijden/corveepunten.php -text
+htdocs/actueel/maaltijden/corveevoorkeurenlijst.php -text
 htdocs/actueel/maaltijden/index.php -text
 htdocs/actueel/maaltijden/maaltijdlijst.php -text
 htdocs/actueel/maaltijden/saldi.php -text
@@ -317,6 +318,8 @@ lib/lid/class.stamboomcontent.php -text
 lib/maaltijden/class.corveebeheercontent.php -text
 lib/maaltijden/class.corveelid.php -text
 lib/maaltijden/class.corveepuntencontent.php -text
+lib/maaltijden/class.corveevoorkeurencontent.php -text
+lib/maaltijden/class.corveevoorkeurenlijst.php -text
 lib/maaltijden/class.maaltijd.php -text
 lib/maaltijden/class.maaltijdabocontent.php -text
 lib/maaltijden/class.maaltijdbeheercontent.php -text
@@ -488,6 +491,7 @@ lib/templates/maaltijdketzer/corveemail/theedoeken.tpl -text
 lib/templates/maaltijdketzer/corveepunten.tpl -text
 lib/templates/maaltijdketzer/corveepuntenformulier.tpl -text
 lib/templates/maaltijdketzer/corveetakenformulier.tpl -text
+lib/templates/maaltijdketzer/corveevoorkeurenlijst.tpl -text
 lib/templates/maaltijdketzer/formulier.tpl -text
 lib/templates/maaltijdketzer/lijst.tpl -text
 lib/templates/maaltijdketzer/lijst_fiscaal.tpl -text
