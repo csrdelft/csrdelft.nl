@@ -7,7 +7,7 @@
 # Het weergeven van de lijst met corveevoorkeuren van alle leden
 # -------------------------------------------------------------------
 
-require_once 'maaltijden\class.corveevoorkeurenlijst.php';
+require_once 'maaltijden/class.corveevoorkeurenlijst.php';
 
 class CorveevoorkeurenContent extends SimpleHTML {
 
