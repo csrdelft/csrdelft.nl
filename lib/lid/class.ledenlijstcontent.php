@@ -182,15 +182,14 @@ class LLLijst extends LLweergave{
 	}
 	public function viewHeader(){
 		echo '<table class="zoekResultaat" id="zoekResultaat">';
-		echo '<thead class="above">';
+		echo '<thead>';
 		$this->viewVeldnamen();
 		echo '</thead><tbody>';
 	}
 
 	public function viewFooter(){
-		echo '</tbody><tfoot class="below">';
+		echo "</tbody>\n<tfoot>";
 		$this->viewVeldnamen();
-		
 		echo '</tfoot></table>';
 		
 		//fix jQuery datatables op deze tabel.
