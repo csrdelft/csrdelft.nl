@@ -192,7 +192,7 @@
 {if $loginlid->hasPermission('P_LEDEN_READ')}
 	{literal}
 	<script type="text/javascript">
-	$(document).ready(function() {
+	jQuery(document).ready(function($) {
 		$('.togglePasfoto').each(function(){
 			var postid=$(this).attr('id').substr(1).split('-')[1];
 			var pasfoto=$('#p'+postid);
