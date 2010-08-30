@@ -4,6 +4,9 @@
  */
 header('content-type: image/jpeg');
 
+echo file_get_contents('gebedsgenezingreclametegeltje.jpg');
+exit;
+
 $width=370;
 $height=62;
 if(isset($_GET['width'])){
