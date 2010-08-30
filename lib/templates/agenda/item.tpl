@@ -23,6 +23,7 @@ function setTijd(begin, einde){
 	<label for="beginMoment">Beginmoment</label> 
 		<input type="text" id="beginMoment" name="beginMoment" value="{$item->getBeginMoment()|date_format:"%Y-%m-%d %H:%M"}" /> 
 		<div class="standaardtijden">
+			&laquo; <a onclick="setTijd('00:00', '23:59');">Hele dag</a> <br />
 			&laquo; <a onclick="setTijd('09:00', '17:30');">Dag</a> <br />
 			&laquo; <a onclick="setTijd('18:30', '22:30');">Kring</a> <br />
 			&laquo; <a onclick="setTijd('20:00', '22:00');">Avond</a>

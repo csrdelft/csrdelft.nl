@@ -102,14 +102,14 @@ class LedenlijstContent extends SimpleHTML{
 		?>
 		<script type="text/javascript">
 			function updateVeldselectie(){
-				if($('#fweergave').val()=='kaartje'){
-					$('#veldselectiecontainer').hide('fast');
+				if(jQuery('#fweergave').val()=='kaartje'){
+					jQuery('#veldselectiecontainer').hide('fast');
 				}else{
-					$('#veldselectiecontainer').show('fast');
+					jQuery('#veldselectiecontainer').show('fast');
 				}
 			}
 			
-			$(document).ready(function(){
+			jQuery(document).ready(function($){
 				$('#toggleAdvanced').click(function(){
 					adv=$('#advanced');
 					adv.toggleClass('verborgen');
@@ -188,10 +188,10 @@ class LLLijst extends LLweergave{
 	}
 
 	public function viewFooter(){
-		echo '</tbody><thead class="below">';
+		echo '</tbody><tfoot class="below">';
 		$this->viewVeldnamen();
 		
-		echo '</thead></table>';
+		echo '</tfoot></table>';
 		
 		//fix jQuery datatables op deze tabel.
 		$aoColumns=array();
@@ -207,16 +207,19 @@ class LLLijst extends LLweergave{
 				case 'verticale':
 					$aoColumns[]='{"sType": \'html\'}';
 				break;
+				case 'woonoord':
+					$aoColumns[]='{"sType": \'html\'}';
+				break;
 				default:
 					$aoColumns[]='null';
 			}
 		}
-		?><script type="text/javascript">
-		$(document).ready(function(){
-			$("#zoekResultaat tr:odd").addClass('odd');
-
+		?>
+		<script type="text/javascript">
+		jQuery(document).ready(function($){
 			$("#zoekResultaat").dataTable({
 				"aaSorting": [],
+				"bStateSave": true,
 				"oLanguage": {
 					"sSearch": "Zoeken in selectie:"
 				},
@@ -262,8 +265,16 @@ class LLLijst extends LLweergave{
 				case 'verticale':
 					echo mb_htmlentities($lid->getVerticale());
 				break;
+				case 'woonoord':
+					echo $lid->getWoonoord();
+				break;
 				default:
-					echo mb_htmlentities($lid->getProperty($veld));
+					try{
+						echo mb_htmlentities($lid->getProperty($veld));
+					}catch(Exception $e){
+						echo ' - ';
+					}
+					
 			}
 			echo '</td>';
 		}

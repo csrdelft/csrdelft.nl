@@ -6,10 +6,10 @@
 	<meta name="author" content="PubCie C.S.R. Delft" />
 	<meta name="robots" content="index, follow" />
 	{foreach from=$csrdelft->getStylesheets() item=sheet}
-		<link rel="stylesheet" href="/layout/{$sheet.naam}?{$sheet.datum}" type="text/css" />
+		<link rel="stylesheet" href="{if $sheet.local}/layout/{/if}{$sheet.naam}?{$sheet.datum}" type="text/css" />
 	{/foreach}
 	{foreach from=$csrdelft->getScripts() item=script}
-		<script type="text/javascript" src="/layout/js/{$script.naam}?{$script.datum}"></script>
+		<script type="text/javascript" src="{if $script.local}/layout/js/{/if}{$script.naam}?{$script.datum}"></script>
 	{/foreach}
 	<!--[if lt IE 7.]>
 		<script defer type="text/javascript" src="/layout/pngfix.js"></script>

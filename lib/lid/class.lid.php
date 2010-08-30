@@ -226,15 +226,18 @@ class Lid implements Serializable, Agendeerbaar{
 	public function getTitel(){ return  $this->getNaamLink('civitas', 'link'); }
 	public function getBeschrijving(){ return $this->getTitel().' wordt n'; }
 	
-	//Verticale: respectievelijk naam, letter en id. Bijvooreeld voor 'Diagonaal', 4, 'D'
+	//Verticale: respectievelijk naam, letter en id. Bijvooreeld voor 'Diagonaal', 'D', 4
 	public function getVerticale(){			return Verticale::$namen[$this->getVerticaleID()]; } 
 	public function getVerticaleLetter(){	return Verticale::$letters[$this->getVerticaleID()]; }
-	public function getVerticaleID(){ return $this->profiel['verticale']; }
+	public function getVerticaleID(){ 		return $this->profiel['verticale']; }
 	
-	public function isKringleider(){ return $this->profiel['kringleider']!='n'; }
-	public function isVerticaan(){ return $this->profiel['motebal']==1; }
+	public function isKringleider(){ 		return $this->profiel['kringleider']!='n'; }
+	public function isVerticaan(){ 			return $this->profiel['motebal']==1; }
 	
 	public function getKring($link=false){
+		if($this->getVerticaleLetter()=='Geen'){
+			return 'Geen kring';
+		}
 		$vertkring=$this->getVerticaleLetter().'.'.$this->profiel['kring'];
 		
 		if($this->getStatus()=='S_KRINGEL'){
@@ -252,7 +255,7 @@ class Lid implements Serializable, Agendeerbaar{
 			return $vertkring.' '.$postfix;
 		}
 	}
-		
+	
 	
 	public function getPassword(){	return $this->profiel['password']; }
 	public function checkpw($pass){
@@ -320,7 +323,10 @@ class Lid implements Serializable, Agendeerbaar{
 	 * ontstaat. PHP geeft daar geen foutmeldingen van. Uit de bugtracker
 	 * van PHP: "This was requested before, and this can NOT be done in a
 	 * nice way.", wat je dus krijgt is een 500 internal server error,
-	 * met in de apache errorlog iets als "premature end of script headers" 
+	 * met in de apache errorlog iets als "premature end of script headers"
+	 * 
+	 * 2010-08-30 (Jieter) Het lijkt erop dat de fix niet zo moeilijk was, 
+	 * namelijk checken of een kind toevallig hetzelfde uid als de patroon heeft.
 	 */
 	public function getKinderen($force=false){
 		if($this->kinderen===null or $force){
@@ -330,7 +336,11 @@ class Lid implements Serializable, Agendeerbaar{
 			$this->kinderen=array();
 			if(is_array($result)){
 				foreach($result as $row){
-					$this->kinderen[]=LidCache::getLid($row['uid']);
+					//als het kind gelijk is aan het patroon ontstaat oneindige 
+					//recursie, dat willen we niet.
+					if($row['uid']!=$this->getPatroonUid()){
+						$this->kinderen[]=LidCache::getLid($row['uid']);
+					}
 				}
 			}
 		}

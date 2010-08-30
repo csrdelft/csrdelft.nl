@@ -2,12 +2,12 @@
  *	Documentenketzerjavascriptcode.
  */
 function updateForm(){
-	var methodenaam=$("input[name='methode']:checked").val();
+	var methodenaam=jQuery("input[name='methode']:checked").val();
 	id="#"+methodenaam;
-	$(".keuze").fadeOut(100);
-	$(id).fadeIn(100);
+	jQuery(".keuze").fadeOut(100);
+	jQuery(id).fadeIn(100);
 }
-$(document).ready(function() {
+jQuery(document).ready(function($) {
 	if($("#documentForm").length > 0){
 		updateForm();
 		//bij het wijzigen van een input doen we weer een update op het formulier.
@@ -26,7 +26,7 @@ $(document).ready(function() {
 		"iDisplayLength": 20,
 		"bInfo": false,
 		"bLengthChange": false,
-		"aaSorting": [3, 'desc'], //sorteren op de vierde kolom, [datum]
+		"aaSorting": [[3, 'desc']],
 		"aoColumns": [
 			{'sType': 'html'}, // documentnaam
 			//Bestandstgrootte naar B/KB omzetten.
@@ -39,7 +39,6 @@ $(document).ready(function() {
 			null, //mime-type
 			{'sType': 'html'}, //moment toegevoegd
 			null //Eigenaar
-			]
-		});
-
+		]
+	});
 });

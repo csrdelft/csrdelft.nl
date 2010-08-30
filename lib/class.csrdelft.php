@@ -71,20 +71,45 @@ class csrdelft extends SimpleHTML {
 	function addStylesheet($sheet){
 		$this->_stylesheets[]=array(
 			'naam' => $sheet,
+			'local' => true,
 			'datum' => filemtime(HTDOCS_PATH.'/layout/'.$sheet)
 		);
 	}
 	function getStylesheets(){		return $this->_stylesheets; }
 
 
+	/*
+	 * Zorg dat de template een script inlaadt. Er zijn twee verianten:
+	 * 
+	 * - lokaal:
+	 * een timestamp van de creatie van het bestand wordt toegoevoegd, 
+	 * zodat de browsercache het bestand vernieuwt.
+	 * 
+	 * - extern:
+	 * Buiten de huidige server, gewoon een url dus. Google jsapi 
+	 * bijvoorbeeld.
+	 */
 	function addScript($script){
-		//geen twee keer hetzelfde script toevoegen.
-		if(!$this->hasScript($script)){
-			$this->_scripts[]=array(
+		$localJsPath=HTDOCS_PATH.'/layout/js/';
+				
+		if(substr($script, 0, 7)=='http://'){
+			//extern script
+			$add=array(
 				'naam' => $script,
-				//voeg geen datum toe als er al een '?' in de scriptnaam staat
-				'datum' => (strstr($script,'?')?'':filemtime(HTDOCS_PATH.'/layout/js/'.$script))
+				'local' => false,
+				'datum' => ''
 			);
+		}else{
+			//lokaal script
+			$add=array(
+				'naam' => $script,
+				'local' => true,
+				//voeg geen datum toe als er al een '?' in de scriptnaam staat
+				'datum' => (strstr($script,'?')?'':filemtime($localJsPath.$script))
+			);
+		}
+		if(!$this->hasScript($add['naam'])){
+			$this->_scripts[]=$add;
 		}
 	}
 	public function hasScript($filename){

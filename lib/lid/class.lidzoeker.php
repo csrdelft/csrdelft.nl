@@ -8,9 +8,9 @@
 class LidZoeker{
 	
 	private $allowVelden=array(
-		'pasfoto', 'uid', 'naam', 'voornaam', 'tussenvoegsel', 'achternaam', 'nickname', 'geslacht',
+		'pasfoto', 'uid', 'naam', 'voorletters', 'voornaam', 'tussenvoegsel', 'achternaam', 'nickname', 'geslacht',
 		'email', 'adres', 'telefoon', 'mobiel', 'msn', 'jid', 'skype', 'studie', 'status',
-		'gebdatum', 'beroep', 'verticale', 'lidjaar', 'kring', 'patroon');
+		'gebdatum', 'beroep', 'verticale', 'lidjaar', 'kring', 'patroon', 'woonoord', 'bankrekening');
 	
 	//deze velden kunnen we niet selecteren voor de ledenlijst, ze zijn wel te 
 	//filteren en te sorteren.
@@ -129,16 +129,16 @@ class LidZoeker{
 		
 		$zoekterm=MySql::instance()->escape($zoekterm);
 		
-		if(preg_match('/^\d{2}$/', $zoekterm)){ //lichting bij een sting van 2 cijfers
+		if($zoekterm=='*'){
+			$query='1 ';
+		}elseif(preg_match('/^\d{2}$/', $zoekterm)){ //lichting bij een string van 2 cijfers
 			$query="RIGHT(lidjaar,2)=".(int)$zoekterm." ";
 		}elseif(preg_match('/^[a-z0-9][0-9]{3}$/', $zoekterm)){ //uid's is ook niet zo moeilijk.
 			$query="uid='".$zoekterm."' ";
-		}elseif(preg_match('/^[\-0-9]+$/', $zoekterm)){
-			$defaults[]="telefoon LIKE '%".$zoekterm."%' ";
-			$defaults[]="mobiel LIKE '%".$zoekterm."%' ";
-			
-			$query.='( '.implode(' OR ', $defaults).' )';
-		}else{
+		}elseif(preg_match('/^([a-z0-9][0-9]{3} ?,?)*([a-z0-9][0-9]{3})$/', $zoekterm)){ //meerdere uid's gescheiden door komma's.
+			$uids=explode(',', $zoekterm);
+			$query="uid IN('".implode("','", $uids)."') ";
+		}else{ //als niets van hierboven toepasselijk is zoeken we in zo ongeveer alles
 			$defaults[]="voornaam LIKE '%".$zoekterm."%' ";
 			$defaults[]="achternaam LIKE '%".$zoekterm."%' ";
 			$defaults[]="CONCAT_WS(' ', voornaam, tussenvoegsel, achternaam) LIKE '%".$zoekterm."%' ";
@@ -171,7 +171,7 @@ class LidZoeker{
 		
 		if($this->query!=''){
 			$query.=$this->defaultSearch($this->query);
-		}		
+		}
 		$query.=$this->getFilterSQL();
 		$query.=' ORDER BY '.implode($this->sort).';';
 		

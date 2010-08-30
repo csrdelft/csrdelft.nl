@@ -56,12 +56,21 @@ class AgendaController extends Controller {
 	 * we die, anders laten we de huidige maand zien.
 	 */
 	public function action_maand() {
-		if ($this->hasParam(0) AND preg_match('/^[0-9]{4}\-[0-9]{1,2}$/', $this->getParam(0))) {
-			$jaar = (int) substr($this->getParam(0), 0, 4);
-			$maand = (int) substr($this->getParam(0), 5);
-		} else {
-			$jaar = date('Y');
-			$maand = date('n');
+		//Standaard tonen we het huidige jaar en maand.
+		$jaar=date('Y');
+		$maand=date('n');
+		
+		//is er een andere datum opgegeven? Dan gebruiken we die.
+		$weergavedatum='';
+		if($this->hasParam(0) AND $this->getParam(0)=='maand'){
+			$weergavedatum=$this->getParam(1);
+		}elseif($this->hasParam(0)){
+			$weergavedatum=$this->getParam(0);
+		}
+		
+		if(preg_match('/^[0-9]{4}\-[0-9]{1,2}$/', $weergavedatum)){
+			$jaar = (int) substr($weergavedatum, 0, 4);
+			$maand = (int) substr($weergavedatum, 5);
 		}
 		
 		$this->content = new AgendaMaandContent($this->agenda, $jaar, $maand);
