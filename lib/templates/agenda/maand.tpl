@@ -22,8 +22,8 @@
 		<tr id="{if strftime('%U', $dag.datum) == strftime('%U')-1}dezeweek{/if}">
 			<th>{$weeknr}</th>
 			{foreach from=$dagen key=dagnr item=dag}
-				<td class="dag {if strftime('%m', $dag.datum) != strftime('%m', $datum)}anderemaand{/if}"
-					{if date('d-m', $dag.datum)==date('d-m')}id="vandaag"{/if}>
+				<td class="dag {if strftime('%m', $dag.datum) != strftime('%m', $datum)}anderemaand{/if}{if date('d-m', $dag.datum)==date('d-m')} vandaag{/if}"
+				id="dag-{$dag.datum|date_format:"%Y-%m-%d"}">
 					<div class="meta">
 						{if	$magToevoegen}
 							<a class="toevoegen" href="/actueel/agenda/toevoegen/{$dag.datum|date_format:"%Y-%m-%d"}/" 

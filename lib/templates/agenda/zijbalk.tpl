@@ -10,7 +10,7 @@
 			{else}
 				{$item->getBeginMoment()|date_format:"%d-%m"}
 			{/if}
-			<a href="/actueel/agenda/maand/{$item->getBeginMoment()|date_format:"%Y-%m"}/" title="{$item->getTitel()|htmlspecialchars}">
+			<a href="/actueel/agenda/maand/{$item->getBeginMoment()|date_format:"%Y-%m"}/#dag-{$item->getBeginMoment()|date_format:"%Y-%m-%d"}" title="{$item->getTitel()|htmlspecialchars}">
 				{$item->getTitel()|truncate:23:"…":true}
 			</a>
 		</div>
