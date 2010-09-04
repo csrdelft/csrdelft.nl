@@ -2,43 +2,43 @@
 
 # koppel de sjaarsnummers aan de sjaars
 #
-# één oud uid, 30 mist, 38 mist, 43 mist, 47 sjaars dus.
+# 0 oud uid, 2,31,32,33,45,46 mist, 42 sjaars dus.
 
-for ($es=1;$es<=29;$es++) {
-	$uid=str_pad($es+900, 4, "0", STR_PAD_LEFT);
+for ($es=1;$es<=1;$es++) {
+	$uid=str_pad($es+1000, 4, "0", STR_PAD_LEFT);
 	$ks[$uid] = $uid;
 }
-for ($es=31;$es<=37;$es++) {
-	$uid=str_pad($es+900, 4, "0", STR_PAD_LEFT);
+for ($es=3;$es<=30;$es++) {
+	$uid=str_pad($es+1000, 4, "0", STR_PAD_LEFT);
 	$ks[$uid] = $uid;
 }
-for ($es=39;$es<=42;$es++) {
-	$uid=str_pad($es+900, 4, "0", STR_PAD_LEFT);
+for ($es=34;$es<=44;$es++) {
+	$uid=str_pad($es+1000, 4, "0", STR_PAD_LEFT);
 	$ks[$uid] = $uid;
 }
-for ($es=44;$es<=49;$es++) {
-	$uid=str_pad($es+900, 4, "0", STR_PAD_LEFT);
+for ($es=47;$es<=48;$es++) {
+	$uid=str_pad($es+1000, 4, "0", STR_PAD_LEFT);
 	$ks[$uid] = $uid;
 }
-$ks['0624']='0624'; //dennis Lakerveld
+// $ks['0624']='0624'; dennis Lakerveld
 
 
 # koppel de huizennummers aan huizen
 //$kh = array(0,3,6,7,10,11,13,1,15,16,17,19,21,2,22,8,18,5);
-$kh = array(0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21);
+$kh = array(0,1,3,5,7,8,10,11,12,13,15,16,17,19,20,21,22,23);
 $khd = array(
-	1 => array ("'t Ailand ", 5, ''),
+	1 => array ("t Ailand ", 5, ''),
 	2 => array ('Huize Adam', 554,''),
 	3 => array ("De Ambassade", 6, "2614111"),
-	4 => array('Balpol', 0, 'Remco Bos'),
+	4 => array ('Balpol', 0, 'Remco Bos'),
 	5 => array ("Caesarea", 7,''),
 	6 => array ('Das Haus', 49, ''),
 	7 => array ("De Molshoop", 34, ''),
 	8 => array ("De Gouden Leeuw", 8, ''),
 	9 => array ('Huisje boompje beestje', 0, ''),
-	10=> array ('t\' Internaat', 9 ,"2125825"),
+	10=> array ('t Internaat', 9 ,"2125825"),
 	11=> array ("De Koornmarkt",33 ,""),
-	12=> array ("Lachai-Roi",57 ,"-"),
+	12=> array ("Lachai-Roi",57 ,""),
 	13=> array ("OD11",14 ,""),
 	14=> array ("De Preekstoel", 62,""),
 	15=> array ("Sonnenvanck",36 ,''),
@@ -46,8 +46,10 @@ $khd = array(
 	17=> array ("Huize Van Speijk", 39,"2146067"),
 	18=> array ("De Tolhuis-Alliantie", 10, '015-2160585'),
 	19=> array ("Villa Delphia", 37, '015-2137153'),
-	20=> array('Huize * Asterix', 46, ''),
-	21=> array('Lindenburg', 58,'')
+	20=> array ('Huize * Asterix', 46, ''),
+	21=> array ('Lindenburg', 58,''),
+	22=> array ('Het Roze Nest', 788,''),
+	23=> array ('Huize den Hertog', 52,'')
 );
 
 # namen opzoeken in de database
@@ -61,9 +63,9 @@ ini_set('error_reporting', E_ALL & ~E_NOTICE);
 #}
 echo '<pre>';
 
-$s = 47; # $s = (int)$_GET['s']; # aantal sjaars
-$h = 21; # $h = (int)$_GET['h']; # aantal huizen
-$a = 8;  # $a = (int)$_GET['a']; # aantal avonden
+$s = 42; # $s = (int)$_GET['s']; # aantal sjaars
+$h = 17; # $h = (int)$_GET['h']; # aantal huizen
+$a = 4;  # $a = (int)$_GET['a']; # aantal avonden
 #$m = (int)floor($s/$h);
 #$m = (int)$_GET['m']; # max aantal sjaars per huis per avond
 $r = 1;  # $r = (int)$_GET['r']; # wel of niet random
@@ -80,16 +82,14 @@ $seen = array(); # $seen[sjaars][] = sjaars
 
 # sjaars die al in huizen wonen alvast rekening mee houden
 # voorbeeld: $visited_sh[$sjaarsuid][$huisuid]=true;
-$visited_sh[2][2]=true; //Kees Jan > niet op adam.
-$visited_sh[8][15]=true;	//Ido niet naar sonnenvanck
-$visited_sh[9][12]=true; //RickJ niet naar L-Roi
-$visited_sh[10][17]=true; //Maarten niet naar vSpeijk
-$visited_sh[11][17]=true; //Stefan niet naar vSpeijk
-$visited_sh[14][1]=true; //Gaap niet naar taitailand
-$visited_sh[16][3]=true; //Mirjam niet naar Ambassade
-$visited_sh[17][3]=true; //Annelies niet naar Ambassade
-$visited_sh[20][13]=true; //Maaie niet naar OD11
-$visited_sh[44][4]=true; //Anne niet naar Balpol
+$visited_sh[7][23]=true; //Bart Bossenbroek HdH 
+$visited_sh[8][11]=true;	//Sanne Heinen Koornmarkt 
+$visited_sh[20][9]=true; //Selma van Berkel HBB
+$visited_sh[13][11]=true; //Gabrielle van der Jagt Koornmarkt
+$visited_sh[22][16]=true; //Maurits Stoffer Sint Joris 
+$visited_sh[34][15]=true; //Joris Booms SSS
+$visited_sh[35][15]=true; //Fabian van Doeselaar SSS
+$visited_sh[1][9]=true; //Mandy HBB
 
 
 # het uiteindelijke rooster
