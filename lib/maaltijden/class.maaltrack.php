@@ -307,6 +307,11 @@ class MaalTrack {
 		return $maalid;
 	}
 
+	/* Functie die de corveepunten van een gewone maaltijd bijwerkt, gegeven een maaltijd en een toekenningsarray
+	 * Argumenten: 
+	 * het id van de maaltijd 
+	 * een array van uid's, met voor elk met 'onbekend','ja' of 'nee' aangegeven of het corvee door die persoon uitgevoerd is.  
+	 */
 	function editCorveeMaaltijdPunten($maalid, $punten){
 		if($maalid!=(int)$maalid){
 			$this->_error="Ongeldig maaltijdID opgegeven.";
@@ -336,15 +341,8 @@ class MaalTrack {
 			$theedoek = array_unique($maaltijd['taken']['theedoeken']);
 		}		
 		
-		//verwerken punten
-		//formulier toegekend 0=onbekend, 1=ja, 2=nee
-		//van en naar 'ja'
-		//van en naar 'nee'
-		$naartekst = array('onbekend','ja','nee');
-		
+		//Verwerken punten: vergelijk het formulier met de toekenning in de database		
 		foreach($punten as $uid=>$form_toegekend){			
-			$form_toegekend=$naartekst[$form_toegekend];
-			
 			//haal op of punten al toegekend waren
 			$sToegekendQuery="
 			SELECT 
@@ -416,7 +414,7 @@ class MaalTrack {
 		//Punten_toegekend updaten
 		foreach($punten as $uid=>$form_toegekend){
 			if (!$uid) continue;			
-			$db_toegekend = $naartekst[$form_toegekend];
+			$db_toegekend = $form_toegekend;
 			$this->_db->query("INSERT INTO	maaltijdcorvee (maalid, uid, punten_toegekend) VALUES('".$maalid."', '".$uid."', '".$db_toegekend."') ON DUPLICATE KEY UPDATE punten_toegekend = '".$db_toegekend."'");
 		}
 		
@@ -573,7 +571,13 @@ class MaalTrack {
 		return $maalid;
 	}
 
-	# bij bestaande maaltijd de taken bewerken
+	/* Functie die de corveepunten van een schoonmaakmaaltijd (ook wel corveevrijdag) bijwerkt, 
+	 * gegeven een maaltijd en een toekenningsarray
+	 * 
+	 * Argumenten: 
+	 * het id van de maaltijd 
+	 * een array van uid's, met voor elk met 'onbekend','ja' of 'nee' aangegeven of het corvee door die persoon uitgevoerd is.  
+	 */
 	function editSchoonmaakMaaltijdPunten($maalid, $punten){
 		if($maalid!=(int)$maalid){
 			$this->_error="Ongeldig maaltijdID opgegeven.";
@@ -603,10 +607,7 @@ class MaalTrack {
 			$keuken = array_unique($maaltijd['taken']['schoonmaken_keuken']);
 		}		
 		
-		//verwerken punten
-		//formulier toegekend 0=onbekend, 1=ja, 2=nee
-		//van en naar 'ja'
-		//van en naar 'nee'
+		//Verwerken punten: vergelijk het formulier met de toekenning in de database
 		foreach($punten as $uid=>$form_toegekend){
 			if (!$form_toegekend) continue;
 			//haal op of punten al toegekend waren

@@ -1,12 +1,14 @@
 <?php
 # C.S.R. Delft | pubcie@csrdelft.nl
 # -------------------------------------------------------------------
-# htdocs/actueel/maaltijden/beheer.php
+# htdocs/actueel/maaltijden/corveebeheer.php
 # -------------------------------------------------------------------
-# Zo, maaltijden beheren. Dit kan:
-# - Maaltijden toevoegen
-# - Maaltijden bewerken
-# - Maaltijden verwijderen
+# Dit geeft alle corvee-activiteiten weer, dus normale maaltijden en 
+# corvee-vrijdagen. Aan beiden kan hiermee het volgende aangepast 
+# worden:
+# - De hoeveelheid punten en het aantal benodigde corveeërs
+# - Welke leden zijn ingedeeld voor welke taak
+# - Of deze leden punten verdiend hebben voor de taak 
 # -------------------------------------------------------------------
 
 require_once 'include.config.php';
