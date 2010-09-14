@@ -152,6 +152,9 @@ class LidZoeker{
 			$defaults[]="postcode LIKE '%".$zoekterm."%' ";
 			$defaults[]="woonplaats LIKE '%".$zoekterm."%' ";
 			
+			$defaults[]="mobiel LIKE '%".$zoekterm."%' ";
+			$defaults[]="telefoon LIKE '%".$zoekterm."%' ";
+			
 			$defaults[]="studie LIKE '%".$zoekterm."%' ";
 			$defaults[]="email LIKE '%".$zoekterm."%' ";
 			
