@@ -652,6 +652,8 @@ class Maaltijd implements Agendeerbaar {
 		return $aan;
 	}
 	
+	/* implement interface Agendeerbaar
+	 */
 	public function getBeginMoment() {
 		return $this->_maaltijd['datum'];
 	}
@@ -664,6 +666,7 @@ class Maaltijd implements Agendeerbaar {
 	public function getBeschrijving() {
 		return 'Maaltijd met '.$this->getAantalAanmeldingen().' eters.';
 	}
+	public function isHeledag(){ return false; }
 	
 	/*
 	 * Haal de $aantal meest recente maaltijden op voor een gegeven lid.

@@ -45,8 +45,8 @@ END:VTIMEZONE
 *}{else}
 BEGIN:VEVENT
 SUMMARY:{$item->getTitel()}
-DTSTART;TZID=Europe/Amsterdam:{$item->getBeginMoment()|date_format:"%Y%m%dT%H%M%S"}
-DTEND;TZID=Europe/Amsterdam:{$item->getEindMoment()|date_format:"%Y%m%dT%H%M%S"}
+DTSTART;TZID=Europe/Amsterdam:{if $item->isHeledag()}{$item->getBeginMoment()|date_format:'%Y%m%d'}{else}{$item->getBeginMoment()|date_format:'%Y%m%dT%H%M%S'}{/if} 
+DTEND;TZID=Europe/Amsterdam:{if $item->isHeledag()}{$item->getEindMoment()|date_format:'%Y%m%d'}{else}{$item->getEindMoment()|date_format:'%Y%m%dT%H%M%S'}{/if} 
 {*
 X-GOOGLE-CALENDAR-CONTENT-TITLE:{$item->getTitel()}
 {if $item instanceof Maaltijd}

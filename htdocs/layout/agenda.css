@@ -100,6 +100,9 @@ form.agendaitem label {
 	float: left;
 	width: 120px;
 }
+form.agendaitem input.tijd{
+	width: 70px;
+}
 div.standaardtijden{
 	float: right; margin-right: 450px; width: 200px; 
 }

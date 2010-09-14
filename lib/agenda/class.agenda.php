@@ -18,6 +18,7 @@ interface Agendeerbaar {
 	public function getEindMoment();  //timestamp van eindmoment
 	public function getTitel();
 	public function getBeschrijving();
+	public function isHeledag();
 }
 
 /**
@@ -79,6 +80,12 @@ class AgendaItem implements Agendeerbaar {
 
 	public function magBekijken() {
 		return LoginLid::instance()->hasPermission($this->getRechtenBekijken());
+	}
+	//lekker fies
+	public function isHeledag(){
+		return 
+			date('H:i', $this->getBeginMoment())=='00:00' AND
+			date('H:i', $this->getEindMoment())=='23:59';
 	}
 	
 	public function opslaan() {

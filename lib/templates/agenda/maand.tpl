@@ -52,9 +52,11 @@
 										{icon get="bewerken"}
 									</a>
 								{/if}
-								<div class="tijd">
-									{$item->getBeginMoment()|date_format:"%R"}-{$item->getEindMoment()|date_format:"%R"}
-								</div>
+								{if !$item->isHeledag()}
+									<div class="tijd">
+										{$item->getBeginMoment()|date_format:"%R"}-{$item->getEindMoment()|date_format:"%R"}
+									</div>
+								{/if}
 								<span title="{$item->getBeschrijving()|escape:'htmlall'}">{$item->getTitel()}</span>
 							{/if}{* end if $item instance of ?? *}
 							</li>

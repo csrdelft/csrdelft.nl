@@ -225,6 +225,7 @@ class Lid implements Serializable, Agendeerbaar{
 	public function getEindMoment(){ return $this->getBeginMoment()+60; }
 	public function getTitel(){ return  $this->getNaamLink('civitas', 'link'); }
 	public function getBeschrijving(){ return $this->getTitel().' wordt n'; }
+	public function isHeledag(){ return true; } //verjaardagen altijd als whole day event.
 	
 	//Verticale: respectievelijk naam, letter en id. Bijvooreeld voor 'Diagonaal', 'D', 4
 	public function getVerticale(){			return Verticale::$namen[$this->getVerticaleID()]; } 

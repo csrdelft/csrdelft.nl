@@ -197,8 +197,13 @@ class AgendaController extends Controller {
 	 * Maakt een nieuw AgendaItem met de gePOSTe gegevens.
 	 */
 	private function maakItem($itemId=0) {
-		$beginMoment = strtotime($_POST['beginMoment']);
-		$eindMoment = strtotime($_POST['eindMoment']);				
+		if(isset($_POST['heledag'])){
+			$beginMoment = strtotime($_POST['datum'].' 00:00');
+			$eindMoment = strtotime($_POST['datum'].' 23:59');
+		}else{
+			$beginMoment = strtotime($_POST['datum'].' '.$_POST['beginMoment']);
+			$eindMoment = strtotime($_POST['datum'].' '.$_POST['eindMoment']);
+		}
 		return new AgendaItem($itemId, $beginMoment, $eindMoment, $_POST['titel'], $_POST['beschrijving'], 'P_NOBODY');
 	}
 	
