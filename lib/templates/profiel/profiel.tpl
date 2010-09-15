@@ -50,7 +50,7 @@
 			<div class="gegevenszelf">
 				<div class="label">
 					{if $profhtml.adres!=''}
-						<a href="http://maps.google.nl/maps?daddr={$profhtml.adres|urlencode}+{$profhtml.woonplaats|urlencode}+{$profhtml.land|urlencode}">
+						<a href="http://maps.google.nl/maps?q={$profhtml.adres|urlencode}+{$profhtml.woonplaats|urlencode}+{$profhtml.land|urlencode} ({if $profhtml.woonoord!=''}{$lid->getWoonoord()->getNaam()}{else}{$lid->getNaamLink('civitas', 'html')}{/if})">
 							<img src="{$csr_pics}layout/googlemaps.gif" width="35px" alt="googlemap voor dit adres" />
 						</a>
 					{/if}
@@ -68,7 +68,7 @@
 			<div class="gegevensouders">			
 				{if $profhtml.o_adres!=''}
 					<div class="label">
-						<a href="http://maps.google.nl/maps?daddr={$profhtml.o_adres|urlencode}+{$profhtml.o_woonplaats|urlencode}+{$profhtml.o_land|urlencode}">
+						<a href="http://maps.google.nl/maps?q={$profhtml.o_adres|urlencode}+{$profhtml.o_woonplaats|urlencode}+{$profhtml.o_land|urlencode} (ouders van {$lid->getNaamLink('civitas', 'html')})">
 							<img src="{$csr_pics}layout/googlemaps.gif" width="35px" alt="googlemap voor dit adres" />
 						</a>
 					</div>

@@ -81,6 +81,9 @@ if(!($loginlid->hasPermission('P_LEDEN_READ') or $loginlid->hasPermission('P_OUD
 			}
 			ProfielContent::invokeRefresh($melding, '/communicatie/profiel/'.$uid);
 		break;
+		case 'addToGoogleContacts';
+			
+		break;
 		case 'rssToken':
 			if($uid==$loginlid->getUid()){
 				$loginlid->getToken();
@@ -98,6 +101,7 @@ if(!($loginlid->hasPermission('P_LEDEN_READ') or $loginlid->hasPermission('P_OUD
 				ProfielContent::invokeRefresh('<h2>Helaas</h2>Dit lid bestaat niet.<br /> U kunt verder zoeken in deze ledenlijst.', '/communicatie/ledenlijst/');
 			}
 		break;
+		
 	}
 }
 
