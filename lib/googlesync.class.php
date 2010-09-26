@@ -37,12 +37,13 @@ class GoogleSync{
 	
 		$this->loadContactFeed();
 		$this->loadGroupFeed();
+
 	}
 
 	/* Laad de contact-feed in van google.
 	 */
 	private function loadContactFeed(){
-		$query = new Zend_Gdata_Query('http://www.google.com/m8/feeds/contacts/default/full');
+		$query = new Zend_Gdata_Query('http://www.google.com/m8/feeds/contacts/default/full?max-results=400');
 		$this->googleContacts=$this->gdata->getFeed($query);
 	}
 	/* Laad de group-feed in van google.
@@ -89,6 +90,8 @@ class GoogleSync{
 		foreach($this->getGoogleContacts() as $contact){
 			if(strtolower($contact['name'])==$name){
 				return $contact['id'];
+
+			//zonder spaties kijken...
 			}elseif(str_replace(' ', '', strtolower($contact['name'])) == str_replace(' ', '', $name)){
 				return $contact['id'];
 			}
@@ -101,10 +104,13 @@ class GoogleSync{
 	 *
 	 * @return string met het google group-id.
 	 */
-	private function getGroupId(){
+	private function getGroupId($groupname=null){
+		if($groupname==null){
+			$groupname=$this->groupname;
+		}
 		//kijken of we al een grop hebben met de naam
 		foreach($this->groupFeed as $group){
-			if((string)$group->title==$this->groupname){
+			if((string)$group->title==$groupname){
 				return (string)$group->id;
 			}
 		}
@@ -117,7 +123,7 @@ class GoogleSync{
 		$entry->setAttributeNS('http://www.w3.org/2000/xmlns/' , 'xmlns:gd', 'http://schemas.google.com/g/2005');
 		$doc->appendChild($entry);
 		
-		$title=$doc->createElement('atom:title', $this->groupname);
+		$title=$doc->createElement('atom:title', $groupname);
 		$title->setAttribute('type', 'text');
 		$entry->appendChild($title);
 		
@@ -172,10 +178,13 @@ class GoogleSync{
 		}
 		$googleid=$this->existsInGoogleContacts($lid->getNaam());
 
-		if($googleid!==null){
+		if($googleid!=''){
 			//update
 			//echo '<br /> updating '.$lid->getNaam().' -- not yet implemented, omitting <br />';
+			return $lid->getNaam().' bestaat al.';
+
 		}else{
+		
 			//insert.
 			$doc=new DOMDocument();
 			$doc->formatOutput = true;
@@ -244,6 +253,7 @@ class GoogleSync{
 			$email=$doc->createElement('gd:email');
 			$email->setAttribute('address' , $lid->getEmail());
 			$email->setAttribute('rel' ,'http://schemas.google.com/g/2005#home');
+			$email->setAttribute('primary', 'true');
 			$entry->appendChild($email);
 			
 			// add IM adresses.
@@ -307,16 +317,16 @@ class GoogleSync{
 				$eetwens->setAttribute('value', $lid->getProperty('eetwens'));
 				$entry->appendChild($eetwens);
 			}
+			//system group 'my contacts' er bij.
+			$systemgroup=$doc->createElement('gContact:groupMembershipInfo');
+			$systemgroup->setAttribute('href', $this->getGroupId('My Contacts'));
+			$entry->appendChild($systemgroup);
 
 			//in de groep $this->groepname en in de system group my contacts stoppen
 			$group=$doc->createElement('gContact:groupMembershipInfo');
 			$group->setAttribute('href', $this->getGroupId());
 			$entry->appendChild($group);
 
-			//system group ook erbij.
-			$systemgroup=$doc->createElement('gContact:systemGroup');
-			$systemgroup->setAttribute('id', 'Contacts');
-			
 			try{
 				//echo $doc->saveXML();
 				$entryResult = $this->gdata->insertEntry($doc->saveXML(), 'http://www.google.com/m8/feeds/contacts/default/full');
