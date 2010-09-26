@@ -173,7 +173,7 @@ class GoogleSync{
 				$address->appendChild($doc->createElement('gd:formattedAddress', $lid->getFormattedAddress()));
 				$entry->appendChild($address);
 			}
-			if($lid->getProperty('o_adres')!=''){
+			if($lid->getProperty('o_adres')!='' AND $lid->getProperty('adres')!=$lid->getProperty('o_adres')){
 				$address=$doc->createElement('gd:structuredPostalAddress');
 				//$address->setAttribute('rel', 'http://schemas.google.com/g/2005#other');
 				$address->setAttribute('label', 'Adres ouders');
