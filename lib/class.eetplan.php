@@ -55,6 +55,9 @@ class Eetplan {
 	}
 
 	function getEetplanVoorPheut($iPheutID){
+		if(!Lid::isValidUid($iPheutID)){
+			return false;
+		}
 		$sEetplanQuery="
 			SELECT DISTINCT
 				eetplan.avond AS avond,
@@ -67,7 +70,7 @@ class Eetplan {
 				eetplanhuis, eetplan
 			WHERE
 				eetplan.huis=eetplanhuis.id AND
-				eetplan.uid='".$iPheutID."'
+				eetplan.uid='".$this->_db->escape($iPheutID)."'
 			ORDER BY
 				eetplan.avond;";
 		$rEetplanVoorPheut=$this->_db->select($sEetplanQuery);

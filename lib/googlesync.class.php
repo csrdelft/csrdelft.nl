@@ -215,7 +215,7 @@ class GoogleSync{
 				array('skype', 'http://schemas.google.com/g/2005#SKYPE'),
 				array('icq', 'http://schemas.google.com/g/2005#ICQ'),
 				array('jid', 'http://schemas.google.com/g/2005#JABBER')
-			);			
+			);
 			foreach($ims as $im){
 				if($lid->getProperty($im[0])!=''){
 					$imEntry=$doc->createElement('gd:im');
@@ -230,12 +230,17 @@ class GoogleSync{
 			$telefoons=array(
 				array('telefoon', 'http://schemas.google.com/g/2005#home'),
 				array('mobiel', 'http://schemas.google.com/g/2005#mobile'),
-				array('o_telefoon', 'label:Ouders')
 			);
+			//als het een huidig lid betreft ook het nummer van de ouders erin.
+			if($lid->isLid()){
+				$telefoons[]=array('o_telefoon', 'label:Ouders');
+			}
 			foreach($telefoons as $telefoon){
 				if($lid->getProperty($telefoon[0])!=''){
 					$number=$doc->createElement('gd:phoneNumber', internationalizePhonenumber($lid->getProperty($telefoon[0])));
-
+					if($telefoon[0]=='telefoon'){
+						$number->setAttribute('primary', 'true');
+					}
 					if(substr($telefoon[1],0, 5)=='label'){
 						$number->setAttribute('label', substr($telefoon[1],6));
 					}else{

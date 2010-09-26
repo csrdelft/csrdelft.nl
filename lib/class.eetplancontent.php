@@ -162,7 +162,7 @@ class EetplanContent extends SimpleHTML {
 		//kijken of er een pheut of een huis gevraagd wordt, of een overzicht.
 		if(isset($_GET['pheutID'])){
 			//eetplanavonden voor een pheut tonen
-			$iPheutID='0'.(int)$_GET['pheutID'];
+			$iPheutID=$_GET['pheutID'];
 			$this->viewEetplanVoorPheut($iPheutID);
 		}elseif(isset($_GET['huisID'])){
 			//pheuten voor een huis tonen
