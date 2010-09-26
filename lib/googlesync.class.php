@@ -274,7 +274,7 @@ class GoogleSync{
 				
 				return true;
 			}catch(Exception $e){
-				echo 'Fout in Google-sync (graag even mailen naar PubCie): <br /> '.$e->getMessage();
+				echo 'Fout in Google-sync (graag even mailen naar PubCie): <br /> invoeren van lid: '.$lid->getNaam().'<br />Foutmelding: '.$e->getMessage().'<br />';
 			}
 			
 			
