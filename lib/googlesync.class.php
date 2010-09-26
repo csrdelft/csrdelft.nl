@@ -241,7 +241,7 @@ class GoogleSync{
 				}
 			}
 
-			if($lid->getGeboortedatum()!=''){
+			if($lid->getGeboortedatum()!='' AND $lid->getGeboortedatum()!='0000-00-00' ){
 				$geboortedatum=$doc->createElement('gContact:birthday');
 				$geboortedatum->setAttribute('when', $lid->getGeboortedatum());
 				$entry->appendChild($geboortedatum);
