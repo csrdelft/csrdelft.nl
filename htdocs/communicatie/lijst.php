@@ -32,7 +32,7 @@ if(isset($_GET['addToGoogle'])){
 	$gSync=new GoogleSync();
 	$message=$gSync->syncLidBatch($zoeker->getLeden());
 	
-	LedenlijstContent::invokeRefresh($message, $_SERVER['REQUEST_URI']);
+	LedenlijstContent::invokeRefresh($message, CSR_ROOT.'communicatie/lijst.php');
 }
 
 $pagina=new csrdelft(new LedenlijstContent($zoeker));
