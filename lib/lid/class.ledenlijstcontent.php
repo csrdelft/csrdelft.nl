@@ -56,7 +56,19 @@ class LedenlijstContent extends SimpleHTML{
 	<li><a href="/communicatie/verjaardagen" title="Overzicht verjaardagen">Verjaardagen</a></li>
 	<li><a href="/communicatie/verticalen/">Kringen</a></li>
 </ul>';
-		echo '<hr /><h1>Ledenlijst</h1>';
+		echo '<hr />';
+		
+		if(strstr($_SERVER['REQUEST_URI'], '?')!==false){
+			$url=$_SERVER['REQUEST_URI'].'&amp;addToGoogle=true';
+		}else{
+			$url=$_SERVER['REQUEST_URI'].'?addToGoogle=true';
+		}
+		echo '<a href="'.$_SERVER['REQUEST_URI'].'&amp;addToGoogle=true" class="knop" style="float: right" title="Huidige selectie exporteren naar Google Contacts" onclick="return confirm(\'Weet u zeker dat u deze '.$this->zoeker->count().' leden wilt importeren in uw Google-contacts?\')"><img src="http://code.google.com/favicon.ico" alt="google"/></a>';
+		$melding=$this->getMelding();
+		if($melding!=''){
+			echo $melding.'<br />';
+		}
+		echo '<h1>Ledenlijst</h1>';
 		echo '<form method="get" id="zoekform">';
 		echo '<label for="q"></label><input type="text" name="q" value="'.htmlspecialchars($this->zoeker->getQuery()).'" /> ';
 		echo '<input type="submit" class="submit" value="zoeken" /> <a class="knop" id="toggleAdvanced" href="#geavanceerd">Geavanceerd</a>';

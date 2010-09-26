@@ -112,7 +112,13 @@ class MaaltijdContent extends SimpleHTML {
 			}
 			$html.='</div>';
 		}
-		$html.='<h2><a href="/actueel/maaltijden/index.php">Maaltijd</a> van '.strftime('%a %e %B %H:%M', strtotime($maaltijd->getMoment())).'</h2>';
+		$html.='<h2>';
+		if(LoginLid::instance()->hasPermission('P_MAAL_MOD') or opConfide()){
+			echo '<a href="/actueel/maaltijden/lijst/'.$maaltijd->getId().'" title="Direct naar de maaltijdlijst">Maaltijd</a>';
+		}else{
+			echo '<a href="/actueel/maaltijden/index.php">Maaltijd</a>';
+		}
+		echo ' van '.strftime('%a %e %B %H:%M', strtotime($maaltijd->getMoment())).'</h2>';
 		$html.=$maaltijd->getTekst().'<br />';
 		$html.='<span class="small">Inschrijvingen: <em>'.$maaltijd->getAantalAanmeldingen(). '</em> van <em>'.$maaltijd->getMaxAanmeldingen().'</em></span>';
 		$html.='</div><br class="clear" />';

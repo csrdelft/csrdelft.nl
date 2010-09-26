@@ -196,7 +196,14 @@ class Lid implements Serializable, Agendeerbaar{
 
 	public function isJarig(){			return substr($this->profiel['gebdatum'], 5, 5)==date('m-d'); }
 	public function getGeboortedatum(){ return $this->profiel['gebdatum']; }
-	
+
+	public function getFormattedAddress($ouders=false){	
+		$ouders ? $prefix='o_' : $prefix='';
+		return
+			$this->getProperty($prefix.'adres')."\n".
+			$this->getProperty($prefix.'postcode')." ".$this->getProperty($prefix.'woonplaats')."\n".
+			$this->getProperty($prefix.'land');
+	}
 	/*
 	 * implements Agendeerbaar
 	 * 
@@ -416,9 +423,11 @@ class Lid implements Serializable, Agendeerbaar{
 	 * getPasfoto()
 	 *
 	 * Kijkt of er een pasfoto voor het gegeven uid is, en geef die terug.
-	 * Geef anders een standaard-plaatje weer, meestal het logo van C.S.R.
+	 * Geef anders een standaard-plaatje weer.
+	 * 
+	 * bool $square		Geef een pad naar een vierkante (150x150px) versie terug. (voor google contacts sync)
 	 */
-	function getPasfotoPath(){
+	function getPasfotoPath($vierkant=false){
 		$pasfoto='pasfoto/geen-foto.jpg';
 		foreach(array('png', 'jpeg', 'jpg', 'gif') as $validExtension){
 			if(file_exists(PICS_PATH.'/pasfoto/'.$this->getUid().'.'.$validExtension)){
@@ -426,10 +435,18 @@ class Lid implements Serializable, Agendeerbaar{
 				break;
 			}
 		}
+		if($vierkant){
+			$vierkant=PICS_PATH.'/pasfoto/'.$this->getUid().'.vierkant.png';
+			if(!file_exists($vierkant)){
+				square_crop(PICS_PATH.'/'.$pasfoto, $vierkant, 150);
+			}
+			return '/pasfoto/'.$this->getUid().'.vierkant.png';
+		}
 		return $pasfoto;
 	}
-	function getPasfoto($imgTag=true, $cssClass='pasfoto'){
-		$pasfoto=CSR_PICS.$this->getPasfotoPath();
+	
+	function getPasfoto($imgTag=true, $cssClass='pasfoto', $vierkant=false){
+		$pasfoto=CSR_PICS.$this->getPasfotoPath($vierkant);
 
 		if($imgTag===true OR $imgTag==='small'){
 			$html='<img class="'.mb_htmlentities($cssClass).'" src="'.$pasfoto.'" ';

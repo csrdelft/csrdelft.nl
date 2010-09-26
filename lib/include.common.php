@@ -21,12 +21,12 @@ function email_like($email) {
 }
 
 function url_like($url) {
-    #                      http://          user:pass@
-    return preg_match('#^(([a-zA-z]{1,6}\://)(\w+:\w+@)?' .
-    #    f            oo.bar.   org       :80
-        '([a-zA-Z0-9]([-\w]+\.)+(\w{2,5}))(:\d{1,5})?)?' .
-    #    /path       ?file=http://foo:bar@w00t.l33t.h4x0rz/
-        '(/~)?[-\w./]*([-@()\#?/&;:+,._\w= ]+)?$#', $url);
+	#					  http://		  user:pass@
+	return preg_match('#^(([a-zA-z]{1,6}\://)(\w+:\w+@)?' .
+	#	f			oo.bar.   org	   :80
+		'([a-zA-Z0-9]([-\w]+\.)+(\w{2,5}))(:\d{1,5})?)?' .
+	#	/path	   ?file=http://foo:bar@w00t.l33t.h4x0rz/
+		'(/~)?[-\w./]*([-@()\#?/&;:+,._\w= ]+)?$#', $url);
 }
 
 //http://nl.php.net/manual/en/function.in_array.php
@@ -82,14 +82,14 @@ function is_utf8($string) {
 
    // From http://w3.org/International/questions/qa-forms-utf-8.html
    return preg_match('%^(?:
-         [\x09\x0A\x0D\x20-\x7E]            # ASCII
-       | [\xC2-\xDF][\x80-\xBF]            # non-overlong 2-byte
-       |  \xE0[\xA0-\xBF][\x80-\xBF]        # excluding overlongs
-       | [\xE1-\xEC\xEE\xEF][\x80-\xBF]{2}  # straight 3-byte
-       |  \xED[\x80-\x9F][\x80-\xBF]        # excluding surrogates
-       |  \xF0[\x90-\xBF][\x80-\xBF]{2}    # planes 1-3
-       | [\xF1-\xF3][\x80-\xBF]{3}          # planes 4-15
-       |  \xF4[\x80-\x8F][\x80-\xBF]{2}    # plane 16
+		 [\x09\x0A\x0D\x20-\x7E]			# ASCII
+	   | [\xC2-\xDF][\x80-\xBF]			# non-overlong 2-byte
+	   |  \xE0[\xA0-\xBF][\x80-\xBF]		# excluding overlongs
+	   | [\xE1-\xEC\xEE\xEF][\x80-\xBF]{2}  # straight 3-byte
+	   |  \xED[\x80-\x9F][\x80-\xBF]		# excluding surrogates
+	   |  \xF0[\x90-\xBF][\x80-\xBF]{2}	# planes 1-3
+	   | [\xF1-\xF3][\x80-\xBF]{3}		  # planes 4-15
+	   |  \xF4[\x80-\x8F][\x80-\xBF]{2}	# plane 16
    )*$%xs', $string);
 
 } // function is_utf8
@@ -174,12 +174,12 @@ function sort_achternaam_uid($a, $b) {
 	$vals = array('achternaam' => 'ASC', 'uid' => 'DESC');
 	while(list($key, $val) = each($vals)) {
 	  if($val == 'DESC') {
-	    if($a[$key] > $b[$key]){ return -1; }
-	    if($a[$key] < $b[$key]){ return 1;  }
+		if($a[$key] > $b[$key]){ return -1; }
+		if($a[$key] < $b[$key]){ return 1;  }
 	  }
 	  if($val == 'ASC') {
-	    if($a[$key] < $b[$key]){ return -1; }
-	    if($a[$key] > $b[$key]){ return 1;  }
+		if($a[$key] < $b[$key]){ return -1; }
+		if($a[$key] > $b[$key]){ return 1;  }
 	  }
 	}
 }
@@ -188,10 +188,10 @@ function strNthPos($haystack, $needle, $nth = 1){
    //It also changes all input to that of a string ^.~
    $haystack = ' '.$haystack;
    if (!strpos($haystack, $needle))
-       return false;
+	   return false;
    $offset=0;
    for($i = 1; $i < $nth; $i++)
-       $offset = strpos($haystack, $needle, $offset) + 1;
+	   $offset = strpos($haystack, $needle, $offset) + 1;
    return strpos($haystack, $needle, $offset) - 1;
 }
 /*
@@ -246,5 +246,91 @@ function internationalizePhonenumber($phonenumber, $prefix='+31'){
 	}else{
 		return $phonenumber;
 	}
+}
+
+/* plaatje vierkant croppen.
+ * http://abeautifulsite.net/blog/2009/08/cropping-an-image-to-make-square-thumbnails-in-php/
+ */
+function square_crop($src_image, $dest_image, $thumb_size = 64, $jpg_quality = 90) {
+ 
+	// Get dimensions of existing image
+	$image = getimagesize($src_image);
+ 
+	// Check for valid dimensions
+	if( $image[0] <= 0 || $image[1] <= 0 ) return false;
+ 
+	// Determine format from MIME-Type
+	$image['format'] = strtolower(preg_replace('/^.*?\//', '', $image['mime']));
+ 
+	// Import image
+	switch( $image['format'] ) {
+		case 'jpg':
+		case 'jpeg':
+			$image_data = imagecreatefromjpeg($src_image);
+		break;
+		case 'png':
+			$image_data = imagecreatefrompng($src_image);
+		break;
+		case 'gif':
+			$image_data = imagecreatefromgif($src_image);
+		break;
+		default:
+			// Unsupported format
+			return false;
+		break;
+	}
+ 
+	// Verify import
+	if( $image_data == false ) return false;
+ 
+	// Calculate measurements
+	if( $image[0] > $image[1] ) {
+		// For landscape images
+		$x_offset = ($image[0] - $image[1]) / 2;
+		$y_offset = 0;
+		$square_size = $image[0] - ($x_offset * 2);
+	} else {
+		// For portrait and square images
+		$x_offset = 0;
+		$y_offset = ($image[1] - $image[0]) / 2;
+		$square_size = $image[1] - ($y_offset * 2);
+	}
+ 
+	// Resize and crop
+	$canvas = imagecreatetruecolor($thumb_size, $thumb_size);
+	if( imagecopyresampled(
+		$canvas,
+		$image_data,
+		0,
+		0,
+		$x_offset,
+		$y_offset,
+		$thumb_size,
+		$thumb_size,
+		$square_size,
+		$square_size
+	)) {
+ 
+		// Create thumbnail
+		switch( strtolower(preg_replace('/^.*\./', '', $dest_image)) ) {
+			case 'jpg':
+			case 'jpeg':
+				return imagejpeg($canvas, $dest_image, $jpg_quality);
+			break;
+			case 'png':
+				return imagepng($canvas, $dest_image);
+			break;
+			case 'gif':
+				return imagegif($canvas, $dest_image);
+			break;
+			default:
+				// Unsupported format
+				return false;
+			break;
+		}
+	} else {
+		return false;
+	}
+ 
 }
 ?>
