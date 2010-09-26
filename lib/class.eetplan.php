@@ -119,10 +119,10 @@ class Eetplan {
 
 	function getDatum($iAvond){
 		$aAvonden=array(
-			'29-9-2009',
-			'27-10-2009',
-			'24-11-2009',
-			'19-1-2010');
+			'29-9-2010',
+			'27-10-2010',
+			'24-11-2010',
+			'19-1-2011');
 		return $aAvonden[$iAvond-1];
 	}
 
