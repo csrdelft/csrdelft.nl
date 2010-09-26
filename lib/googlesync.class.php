@@ -150,10 +150,12 @@ class GoogleSync{
 			$fullName = $doc->createElement('gd:fullName', $lid->getNaam());
 			$name->appendChild($fullName);
 
+			//nickname
 			if($lid->getNickname()!=''){
 				$nick=$doc->createElement('gContact:nickname', $lid->getNickname());
 				$entry->appendChild($nick);
 			}
+			
 			//add home address
 			if($lid->getProperty('adres')!=''){
 				$address=$doc->createElement('gd:structuredPostalAddress');
@@ -167,21 +169,31 @@ class GoogleSync{
 					$address->setAttribute('rel', 'http://schemas.google.com/g/2005#home');
 				}
 				$address->appendChild($doc->createElement('gd:street', $lid->getProperty('adres')));
-				$address->appendChild($doc->createElement('gd:postcode', $lid->getProperty('postcode')));
+				if($lid->getProperty('postcode')!=''){
+					$address->appendChild($doc->createElement('gd:postcode', $lid->getProperty('postcode')));
+				}
 				$address->appendChild($doc->createElement('gd:city', $lid->getProperty('woonplaats')));
-				$address->appendChild($doc->createElement('gd:country', $lid->getProperty('land')));
+				if($lid->getProperty('land')!=''){
+					$address->appendChild($doc->createElement('gd:country', $lid->getProperty('land')));
+				}
 				$address->appendChild($doc->createElement('gd:formattedAddress', $lid->getFormattedAddress()));
 				$entry->appendChild($address);
 			}
-			if($lid->getProperty('o_adres')!='' AND $lid->getProperty('adres')!=$lid->getProperty('o_adres')){
+
+			//adres ouders toevoegen, alleen bij leden...
+			if($lid->isLid() AND $lid->getProperty('o_adres')!='' AND $lid->getProperty('adres')!=$lid->getProperty('o_adres')){
 				$address=$doc->createElement('gd:structuredPostalAddress');
 				//$address->setAttribute('rel', 'http://schemas.google.com/g/2005#other');
-				$address->setAttribute('label', 'Adres ouders');
+				$address->setAttribute('label', 'Ouders');
 
 				$address->appendChild($doc->createElement('gd:street', $lid->getProperty('o_adres')));
-				$address->appendChild($doc->createElement('gd:postcode', $lid->getProperty('o_postcode')));
+				if($lid->getProperty('o_postcode')!=''){
+					$address->appendChild($doc->createElement('gd:postcode', $lid->getProperty('o_postcode')));
+				}				
 				$address->appendChild($doc->createElement('gd:city', $lid->getProperty('o_woonplaats')));
-				$address->appendChild($doc->createElement('gd:country', $lid->getProperty('o_land')));
+				if($lid->getProperty('o_land')!=''){
+					$address->appendChild($doc->createElement('gd:country', $lid->getProperty('o_land')));
+				}
 				$address->appendChild($doc->createElement('gd:formattedAddress', $lid->getFormattedAddress($ouders=true)));
 				$entry->appendChild($address);
 			}
@@ -193,14 +205,13 @@ class GoogleSync{
 			$email->setAttribute('rel' ,'http://schemas.google.com/g/2005#home');
 			$entry->appendChild($email);
 			
-			
+			// add IM adresses.
 			$ims=array(
 				array('msn', 'http://schemas.google.com/g/2005#MSN'),
 				array('skype', 'http://schemas.google.com/g/2005#SKYPE'),
 				array('icq', 'http://schemas.google.com/g/2005#ICQ'),
 				array('jid', 'http://schemas.google.com/g/2005#JABBER')
-			);
-			
+			);			
 			foreach($ims as $im){
 				if($lid->getProperty($im[0])!=''){
 					$imEntry=$doc->createElement('gd:im');
@@ -210,25 +221,30 @@ class GoogleSync{
 					$entry->appendChild($imEntry);
 				}
 			}
-			
+
+			//add phone numbers
 			$telefoons=array(
 				array('telefoon', 'http://schemas.google.com/g/2005#home'),
-				array('mobiel', 'http://schemas.google.com/g/2005#mobile')
-			);
-			
+				array('mobiel', 'http://schemas.google.com/g/2005#mobile'),
+				array('o_telefoon', 'http://schemas.google.com/g/2005#other')
+			);			
 			foreach($telefoons as $telefoon){
 				if($lid->getProperty($telefoon[0])!=''){
 					$number=$doc->createElement('gd:phoneNumber', internationalizePhonenumber($lid->getProperty($telefoon[0])));
 					$number->setAttribute('rel', $telefoon[1]);
+					if($telefoon[0]=='o_telefoon'){
+						$number->setAttribute('label', 'Ouders');
+					}
 					$entry->appendChild($number);
 				}
 			}
-			
+
 			if($lid->getGeboortedatum()!=''){
 				$geboortedatum=$doc->createElement('gContact:birthday');
 				$geboortedatum->setAttribute('when', $lid->getGeboortedatum());
 				$entry->appendChild($geboortedatum);
 			}
+			
 			if($lid->getProperty('website')!=''){
 				$website=$doc->createElement('gContact:website');
 				
@@ -236,6 +252,7 @@ class GoogleSync{
 				$website->setAttribute('rel', 'home');
 				$entry->appendChild($website);
 			}
+			
 			if($lid->getProperty('eetwens')!=''){
 				$eetwens=$doc->createElement('gContact:userDefinedField');
 				$eetwens->setAttribute('key', 'Eetwens');
@@ -247,7 +264,6 @@ class GoogleSync{
 			$group->setAttribute('href', $this->getGroupId());
 			$entry->appendChild($group);
 			
-			
 			try{
 				//echo $doc->saveXML();
 				$entryResult = $this->gdata->insertEntry($doc->saveXML(), 'http://www.google.com/m8/feeds/contacts/default/full');
@@ -256,7 +272,7 @@ class GoogleSync{
 				
 				return true;
 			}catch(Exception $e){
-				echo 'Fout in Google-sync (graag even mailen naar PubCie: <br /> '.$e->getMessage();
+				echo 'Fout in Google-sync (graag even mailen naar PubCie): <br /> '.$e->getMessage();
 			}
 			
 			
