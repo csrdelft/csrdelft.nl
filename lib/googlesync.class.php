@@ -60,6 +60,7 @@ class GoogleSync{
 	private function putPhoto($photolink, $filename){
 		$this->gdata->put(file_get_contents($filename), $photolink, null, 'image/*');
 	}
+
 	public function existsInGoogleContacts($name){
 		$name=strtolower($name);
 		foreach($this->getGoogleContacts() as $contact){
@@ -71,6 +72,7 @@ class GoogleSync{
 		}
 		return null;
 	}
+	
 	/*
 	 * Get the groupid for the group $this->groupname, or create and return groupname.
 	 */
@@ -115,14 +117,15 @@ class GoogleSync{
 				}
 			}
 		}
-		
+		$message='';
 		//dit zou netjes kunnen door één xml-bestand te maken en dat één 
 		//keer te posten, maar daar heb ik nu even geen zin in.
 		//btw: google heeft een batch-limit van 100 acties.
 		//zie ook: http://code.google.com/apis/gdata/docs/batch.html
 		foreach($lidBatch as $lid){
-			$this->syncLid($lid);
+			$message.=$this->syncLid($lid).'<br />';
 		}
+		return $message;
 	}
 	
 	
@@ -131,6 +134,7 @@ class GoogleSync{
 			$lid=LidCache::getLid($lid);
 		}
 		$googleid=$this->existsInGoogleContacts($lid->getNaam());
+
 		if($googleid!==null){
 			//update
 			//echo '<br /> updating '.$lid->getNaam().' -- not yet implemented, omitting <br />';
@@ -261,20 +265,23 @@ class GoogleSync{
 				$eetwens->setAttribute('value', $lid->getProperty('eetwens'));
 				$entry->appendChild($eetwens);
 			}
-			
+
+			//in de groep $this->groepname en in de system group my contacts stoppen
 			$group=$doc->createElement('gContact:groupMembershipInfo');
 			$group->setAttribute('href', $this->getGroupId());
 			$entry->appendChild($group);
+
+			$systemgroup=$doc->createElement('gContact:systemGroup');
+			$systemgroup->setAttribute('id', 'Contacts');
 			
 			try{
 				//echo $doc->saveXML();
 				$entryResult = $this->gdata->insertEntry($doc->saveXML(), 'http://www.google.com/m8/feeds/contacts/default/full');
 				$photolink=$entryResult->getLink('http://schemas.google.com/contacts/2008/rel#photo')->getHref();
 				$this->putPhoto($photolink, PICS_PATH.'/'.$lid->getPasfotoPath($square=true));
-				
 				return true;
 			}catch(Exception $e){
-				echo 'Fout in Google-sync (graag even mailen naar PubCie): <br /> invoeren van lid: '.$lid->getNaam().'<br />Foutmelding: '.$e->getMessage().'<br />';
+				return 'Fout in Google-sync (graag even mailen naar PubCie): <br /> invoeren van lid: '.$lid->getNaam().'<br />Foutmelding: '.$e->getMessage().'<br />';
 			}
 			
 			

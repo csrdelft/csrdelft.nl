@@ -30,7 +30,7 @@ if(isset($_GET['addToGoogle'])){
 	GoogleSync::doRequestToken($_SERVER['REQUEST_URI']);
 	
 	$gSync=new GoogleSync();
-	$message=$gSync->syncLidBatch($zoeker->getLeden());
+	$message='<h2>Sync naar Google-contacts uitgevoerd</h2>'.$gSync->syncLidBatch($zoeker->getLeden());
 	
 	LedenlijstContent::invokeRefresh($message, CSR_ROOT.'communicatie/lijst.php');
 }
