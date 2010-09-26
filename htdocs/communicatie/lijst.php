@@ -23,11 +23,22 @@ if($zoeker->count()==1){
 	header('location: '.CSR_ROOT.'communicatie/profiel/'.$lid->getUid());
 }
 
+
+
+if(isset($_GET['addToGoogle'])){
+	require_once('googlesync.class.php');
+	GoogleSync::doRequestToken($_SERVER['REQUEST_URI']);
+	
+	$gSync=new GoogleSync();
+	$message=$gSync->syncLidBatch($zoeker->getLeden());
+	
+	LedenlijstContent::invokeRefresh($message, $_SERVER['REQUEST_URI']);
+}
+
 $pagina=new csrdelft(new LedenlijstContent($zoeker));
 
 $pagina->addStylesheet('js/datatables/css/datatables_basic.css');
 $pagina->addStylesheet('ledenlijst.css');
-$pagina->addScript('jquery.js');
 $pagina->addScript('datatables/jquery.dataTables.min.js');
 
 $pagina->view();

@@ -83,15 +83,8 @@ if(!($loginlid->hasPermission('P_LEDEN_READ') or $loginlid->hasPermission('P_OUD
 		break;
 		case 'addToGoogleContacts';
 			require_once('googlesync.class.php');
-			if(isset($_GET['token'])){
-				$_SESSION['google_token']=Zend_Gdata_AuthSub::getAuthSubSessionToken($_GET['token']);
-			}
-			if(!isset($_SESSION['google_token'])){
-				$self=CSR_ROOT.'communicatie/profiel/'.$uid.'/addToGoogleContacts';
-				$scope = 'http://www.google.com/m8/feeds';
-				header('Location: '.Zend_Gdata_AuthSub::getAuthSubTokenUri($self, $scope, 0, 1));
-				exit;
-			}
+			GoogleSync::doRequestToken(CSR_ROOT.'communicatie/profiel/'.$uid.'/addToGoogleContacts');
+			
 			$gSync=new GoogleSync();
 			$gSync->syncLid($uid);
 			
