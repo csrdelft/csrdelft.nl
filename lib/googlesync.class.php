@@ -123,7 +123,7 @@ class GoogleSync{
 		//btw: google heeft een batch-limit van 100 acties.
 		//zie ook: http://code.google.com/apis/gdata/docs/batch.html
 		foreach($lidBatch as $lid){
-			$message.=$this->syncLid($lid).'<br />';
+			$message.=$this->syncLid($lid).', ';
 		}
 		return $message;
 	}
@@ -279,7 +279,7 @@ class GoogleSync{
 				$entryResult = $this->gdata->insertEntry($doc->saveXML(), 'http://www.google.com/m8/feeds/contacts/default/full');
 				$photolink=$entryResult->getLink('http://schemas.google.com/contacts/2008/rel#photo')->getHref();
 				$this->putPhoto($photolink, PICS_PATH.'/'.$lid->getPasfotoPath($square=true));
-				return true;
+				return $lid->getNaam();
 			}catch(Exception $e){
 				return 'Fout in Google-sync (graag even mailen naar PubCie): <br /> invoeren van lid: '.$lid->getNaam().'<br />Foutmelding: '.$e->getMessage().'<br />';
 			}
