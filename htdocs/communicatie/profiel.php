@@ -82,7 +82,21 @@ if(!($loginlid->hasPermission('P_LEDEN_READ') or $loginlid->hasPermission('P_OUD
 			ProfielContent::invokeRefresh($melding, '/communicatie/profiel/'.$uid);
 		break;
 		case 'addToGoogleContacts';
+			require_once('googlesync.class.php');
+			if(isset($_GET['token'])){
+				$_SESSION['google_token']=Zend_Gdata_AuthSub::getAuthSubSessionToken($_GET['token']);
+			}
+			if(!isset($_SESSION['google_token'])){
+				$self=CSR_ROOT.'communicatie/profiel/'.$uid.'/addToGoogleContacts';
+				$scope = 'http://www.google.com/m8/feeds';
+				header('Location: '.Zend_Gdata_AuthSub::getAuthSubTokenUri($self, $scope, 0, 1));
+				exit;
+			}
+			$gSync=new GoogleSync();
+			$gSync->syncLid($uid);
 			
+			ProfielContent::invokeRefresh('<h2>Opgeslagen in Google Contacts</h2><a href="http://google.com/contacts">Ga naar Google contacts</a>', CSR_ROOT.'communicatie/profiel/'.$uid);
+			exit;
 		break;
 		case 'rssToken':
 			if($uid==$loginlid->getUid()){
@@ -112,7 +126,6 @@ $pagina->addScript('suggest.js');
 $pagina->addScript('jquery.js');
 $pagina->addScript('flot/jquery.flot.min.js');
 $pagina->addScript('flot/jquery.flot.threshold.min.js');
-//$pagina->addScript('http://www.google.com/jsapi');
 $pagina->view();
 
 ?>

@@ -20,7 +20,7 @@ RewriteRule ^verticalen/? verticalen.php
 # Profielen
 RewriteRule ^profiel/?$ profiel.php
 RewriteRule ^profiel/([0-9a-z]+)/?$ profiel.php?uid=$1
-RewriteRule ^profiel/([0-9a-z]+)/([a-zA-Z]+)/?$ profiel.php?uid=$1&a=$2
+RewriteRule ^profiel/([0-9a-z]+)/([a-zA-Z]+)/?$ profiel.php?uid=$1&a=$2 [QSA]
 
 # Pagina's met tekst
 RewriteRule ^irc/? ../pagina.php?naam=irc

@@ -239,4 +239,12 @@ function reldate($datum){
 	return $return;
 }
 
+function internationalizePhonenumber($phonenumber, $prefix='+31'){
+	$number=str_replace(array(' ', '-'), '', $phonenumber);
+	if($number[0]==0){
+		return $prefix.substr($number, 1);
+	}else{
+		return $phonenumber;
+	}
+}
 ?>
