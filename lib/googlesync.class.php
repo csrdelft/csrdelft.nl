@@ -226,14 +226,16 @@ class GoogleSync{
 			$telefoons=array(
 				array('telefoon', 'http://schemas.google.com/g/2005#home'),
 				array('mobiel', 'http://schemas.google.com/g/2005#mobile'),
-				array('o_telefoon', 'http://schemas.google.com/g/2005#other')
-			);			
+				array('o_telefoon', 'label:Ouders')
+			);
 			foreach($telefoons as $telefoon){
 				if($lid->getProperty($telefoon[0])!=''){
 					$number=$doc->createElement('gd:phoneNumber', internationalizePhonenumber($lid->getProperty($telefoon[0])));
-					$number->setAttribute('rel', $telefoon[1]);
-					if($telefoon[0]=='o_telefoon'){
-						$number->setAttribute('label', 'Ouders');
+
+					if(substr($telefoon[1],0, 5)=='label'){
+						$number->setAttribute('label', substr($telefoon[1],6));
+					}else{
+						$number->setAttribute('rel', $telefoon[1]);
 					}
 					$entry->appendChild($number);
 				}
