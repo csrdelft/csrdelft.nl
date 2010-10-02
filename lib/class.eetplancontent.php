@@ -25,7 +25,7 @@ class EetplanContent extends SimpleHTML {
 		//huizen voor een feut tonen
 		$aEetplan=$this->_eetplan->getEetplanVoorPheut($uid);
 		if($aEetplan===false){
-			echo '<h1>Ongeldig pheutID</h1>';
+			echo '<h1>Ongeldig NovietID</h1>';
 		}else{
 			$lid=LidCache::getLid($uid);
 			echo '<h2><a class="forumGrootlink" href="/actueel/eetplan/">Eetplan</a> &raquo; voor '.$lid->getNaamLink('full', 'plain').'</h2>
@@ -64,7 +64,7 @@ class EetplanContent extends SimpleHTML {
 			$sUitvoer='<table class="eetplantabel">
 				<tr>
 				<th style="width: 150px">Avond</th>
-				<th style="width: 200px">Pheut</th>
+				<th style="width: 200px">Noviet</th>
 				<th>Mobiel</th>
 				<th>E-mail</th>
 				<th>Eetwens</th>
@@ -110,7 +110,7 @@ class EetplanContent extends SimpleHTML {
 				Van eerstejaers die niet komen opdagen op het eetplan wordt verwacht dat zij minstens &eacute;&eacute;n keer komen koken op het huis waarbij zij gefaeld hebben.
 			</div>
 			<table class="eetplantabel">
-			<tr><th style="width: 200px;">Pheut/Avond</td>';
+			<tr><th style="width: 200px;">Noviet/Avond</td>';
 		//kopjes voor tabel
 		for($iTeller=1;$iTeller<=4;$iTeller++){
 			echo '<th class="huis">'.$this->_eetplan->getDatum($iTeller).'</th>';
@@ -138,7 +138,7 @@ class EetplanContent extends SimpleHTML {
 
 		echo '<br /><h1>Huizen met hun nummers:</h1>
 			<table class="eetplantabel">
-				<tr><th>Naam</th><th>huizenpagina</th><th>Adres</th><th>Telefoon</th></tr>';
+				<tr><th>Naam</th><th>Huizenpagina</th><th>Telefoon</th></tr>';
 
 		foreach($aHuizenArray as $aHuis){
 			try{
@@ -152,7 +152,7 @@ class EetplanContent extends SimpleHTML {
 			if($huis instanceof Groep AND $huis->getId()!=0){
 				echo $huis->getLink();
 			}
-			echo '</td><td>'.$aHuis['adres'].'</td>
+			echo '</td>
 				<td>'.$aHuis['telefoon'].'</td></tr>';
 			$row++;
 		}
