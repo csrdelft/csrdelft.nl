@@ -7,7 +7,8 @@
 # -------------------------------------------------------------------
 
 # instellingen & rommeltjes
-require_once('include.config.php');
+require_once 'configuratie.include.php';
+
 require_once('vb/class.vb.php');
 require_once('vb/class.vbcontent.php');
 require_once('vb/class.vbmain.php');
@@ -33,7 +34,7 @@ if ($vb->isLid()) {
 	$midden = new VBContent($vb, $action,$id); //toon root thema's
 } else {
 	# geen rechten
-	require_once 'class.paginacontent.php';
+	require_once 'paginacontent.class.php';
 	$pagina=new Pagina('geentoegang');
 	$midden = new PaginaContent($pagina);
 }

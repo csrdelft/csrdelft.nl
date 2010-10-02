@@ -7,15 +7,15 @@
 # -------------------------------------------------------------------
 
 # instellingen & rommeltjes
-require_once('include.config.php');
+require_once 'configuratie.include.php';
 
 
 ## de pagina-inhoud
 $body=new kolom();
 
 # Tekst
-require_once 'class.pagina.php';
-require_once 'class.paginacontent.php';
+require_once 'pagina.class.php';
+require_once 'paginacontent.class.php';
 $thuis=new Pagina('thuis');
 $paginacontent = new PaginaContent($thuis);
 $paginacontent->setActie('bekijken');

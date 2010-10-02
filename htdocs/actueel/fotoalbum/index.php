@@ -6,10 +6,10 @@
 # Pagina's weergeven uit het fotoalbum
 # -------------------------------------------------------------------
 
-require_once 'include.config.php';
+require_once 'configuratie.include.php';
 
-require_once 'class.fotoalbum.php';
-require_once 'class.fotoalbumcontent.php';
+require_once 'fotoalbum.class.php';
+require_once 'fotoalbumcontent.class.php';
 
 $pad=htmlspecialchars(urldecode(substr($_SERVER['REQUEST_URI'], 19)));
 if($pad==''){
@@ -34,7 +34,7 @@ if($fotoalbum->magBekijken()){
 	$pagina->setZijkolom(false);
 	$pagina->view();
 }else{
-	require_once 'class.paginacontent.php';
+	require_once 'paginacontent.class.php';
 	$pagina=new Pagina('geentoegang');
 	$midden=new PaginaContent($pagina);
 	$page=new csrdelft($midden);

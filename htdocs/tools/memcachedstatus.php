@@ -4,7 +4,7 @@
  *
  *
  */
-require_once('include.config.php');
+require_once 'configuratie.include.php';
 
 if($loginlid->hasPermission('P_ADMIN')){
 	echo '<h1>MemCached statuspagina</h1>';

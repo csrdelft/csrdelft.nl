@@ -1,13 +1,12 @@
 <?php
 
-# instellingen & rommeltjes
-require_once('include.config.php');
+require_once 'configuratie.include.php';
 
-require_once('courant/class.courant.php');
+require_once('courant/courant.class.php');
 $courant = new Courant();
 if(!$courant->magToevoegen()){ header('location: '.CSR_ROOT); exit; }
 
-require_once('courant/class.courantbeheercontent.php');
+require_once('courant/courantbeheercontent.class.php');
 $body = new CourantBeheerContent($courant);
 
 //url waarheen standaard gerefreshed wordt
@@ -21,6 +20,9 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
 			//nieuw bericht invoeren
 			if($courant->addBericht($_POST['titel'], $_POST['categorie'], $_POST['bericht'] )){
 				$melding='<h3>Dank u</h3>Uw bericht is opgenomen in ons databeest, en het zal in de komende C.S.R.-courant verschijnen.';
+				if(isset($_SESSION['compose_snapshot'])){
+					$_SESSION['compose_snapshot']=null;
+				}
 			}else{
 				$melding='<h1>Fout</h1>Er ging iets mis met het invoeren van uw bericht. Probeer opnieuw, of stuur uw bericht in een mail naar <a href="mailto:pubcie@csrdelft.nl">pubcie@csrdelft.nl</a>.';
 				$courant_url.='/?ID=0';
@@ -30,6 +32,9 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
 			//bericht bewerken.
 			if($courant->bewerkBericht($iBerichtID, $_POST['titel'], $_POST['categorie'], $_POST['bericht'])){
 				$melding='<h3>Dank u</h3>Uw bericht is opgenomen in ons databeest, en het zal in de komende C.S.R.-courant verschijnen.';
+				if(isset($_SESSION['compose_snapshot'])){
+					$_SESSION['compose_snapshot']=null;
+				}
 			}else{
 				$melding='<h1>Fout</h1>Er ging iets mis met het invoeren van uw bericht. Probeer opnieuw, of stuur uw bericht in een mail naar <a href="mailto:pubcie@csrdelft.nl">pubcie@csrdelft.nl</a>.';
 				$courant_url.='/bewerken/'.$iBerichtID;

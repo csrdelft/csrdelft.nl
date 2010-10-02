@@ -1,7 +1,6 @@
 <?php
 
-# instellingen & rommeltjes
-require_once 'include.config.php';
+require_once 'configuratie.include.php';
 
 
 if(!LoginLid::instance()->hasPermission('P_ADMIN,groep:soccie,groep:maalcie')){

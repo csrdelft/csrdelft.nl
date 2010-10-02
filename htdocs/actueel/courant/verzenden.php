@@ -1,9 +1,9 @@
 <?php
 
-require_once 'include.config.php';
+require_once 'configuratie.include.php';
 
-require_once 'courant/class.courant.php';
-require_once 'courant/class.courantcontent.php';
+require_once 'courant/courant.class.php';
+require_once 'courant/courantcontent.class.php';
 $courant=new Courant();
 
 //niet verzenden bij geen rechten, en niet bij een lege courant.

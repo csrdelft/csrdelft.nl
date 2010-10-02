@@ -1,6 +1,6 @@
 <?php
-require_once 'include.config.php';
-require_once 'mededelingen/class.mededeling.php';
+require_once 'configuratie.include.php';
+require_once 'mededelingen/mededeling.class.php';
 
 define('MEDEDELINGEN_ROOT','actueel/mededelingen/');
 

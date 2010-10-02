@@ -3,7 +3,7 @@
 # login.php
 
 
-require_once 'include.config.php';
+require_once 'configuratie.include.php';
 
 
 # ok_url en user/pass invoer checken

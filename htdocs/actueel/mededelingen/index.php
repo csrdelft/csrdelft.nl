@@ -1,5 +1,5 @@
 <?php
-require_once('include.config.php');
+require_once 'configuratie.include.php';
 
 $mededelingId=0;
 if(isset($_GET['mededelingId'])){
@@ -15,9 +15,9 @@ if(isset($_GET['pagina'])){
 	$pagina=(int)$_GET['pagina'];
 }
 
-require_once('mededelingen/class.mededeling.php');
-require_once('mededelingen/class.mededelingcontent.php');
-require_once('mededelingen/class.mededelingencontent.php');
+require_once 'mededelingen/mededeling.class.php';
+require_once 'mededelingen/mededelingcontent.class.php';
+require_once 'mededelingen/mededelingencontent.class.php';
 
 define('MEDEDELINGEN_ROOT', CSR_ROOT.'actueel/mededelingen/');
 

@@ -6,8 +6,8 @@
 # Verwerkt het openen en sluiten ondewerpen in het forum.
 # -------------------------------------------------------------------
 
-require_once 'include.config.php';
-require_once 'forum/class.forum.php';
+require_once 'configuratie.include.php';
+require_once 'forum/forum.class.php';
 
 if(!Forum::isModerator()){
 	header('location: '.CSR_ROOT.'forum/');
@@ -16,7 +16,7 @@ if(!Forum::isModerator()){
 }
 
 if(isset($_GET['topic'])){
-	require_once('forum/class.forumonderwerp.php');
+	require_once('forum/forumonderwerp.class.php');
 	$forumonderwerp = new ForumOnderwerp((int)$_GET['topic']);
 
 	if(!$forumonderwerp->toggleOpenheid()){

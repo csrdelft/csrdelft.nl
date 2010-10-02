@@ -6,11 +6,11 @@
 # Weergave van categorieën en het forumoverzicht
 # -------------------------------------------------------------------
 
-require_once 'include.config.php';
-require_once 'forum/class.forumcontent.php';
+require_once 'configuratie.include.php';
+require_once 'forum/forumcontent.class.php';
 
 if($loginlid->hasPermission('P_FORUM_READ')) {
-	require_once 'forum/class.forum.php';
+	require_once 'forum/forum.class.php';
 
 	if(isset($_GET['forum'])){
 		if($_GET['forum']==0){
@@ -21,8 +21,8 @@ if($loginlid->hasPermission('P_FORUM_READ')) {
 			}else{
 				$pagina=1;
 			}
-			require_once 'forum/class.forumcategorie.php';
-			require_once 'forum/class.forumcategoriecontent.php';
+			require_once 'forum/forumcategorie.class.php';
+			require_once 'forum/forumcategoriecontent.class.php';
 			$forumcategorie=new ForumCategorie((int)$_GET['forum'], $pagina);
 			$body=new ForumCategorieContent($forumcategorie);
 		}
@@ -31,7 +31,7 @@ if($loginlid->hasPermission('P_FORUM_READ')) {
 	}
 }else{
 	# geen rechten
-	require_once 'class.paginacontent.php';
+	require_once 'paginacontent.class.php';
 	$pagina=new Pagina('geentoegang');
 	$body=new PaginaContent($pagina);
 }

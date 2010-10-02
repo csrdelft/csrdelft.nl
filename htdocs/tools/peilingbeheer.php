@@ -3,9 +3,9 @@
  * Peiling beheerpagina
  * 
  */
-require_once 'include.config.php';
-require_once 'class.peilingcontent.php' ;
-require_once 'class.peiling.php';
+require_once 'configuratie.include.php';
+require_once 'peilingcontent.class.php' ;
+require_once 'peiling.class.php';
 
 $resultaat ='';
 if(isset($_GET['action'])){
@@ -56,7 +56,7 @@ if(isset($_GET['action'])){
 }
 
 
-require_once 'class.peilingbeheercontent.php';
+require_once 'peilingbeheercontent.class.php';
 $beheer = new PeilingBeheerContent();
 
 $beheer->setMelding($resultaat);

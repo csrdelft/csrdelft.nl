@@ -4,9 +4,9 @@
  *
  * Documentenketzerding.
  */
-require_once 'include.config.php';
+require_once 'configuratie.include.php';
 
-require_once 'documenten/class.documentcontroller.php';
+require_once 'documenten/documentcontroller.class.php';
 
 if(isset($_GET['querystring'])){
 	$docControl=new DocumentController($_GET['querystring']);
@@ -18,7 +18,6 @@ $pagina=new csrdelft($docControl->getContent());
 $pagina->addStylesheet('documenten.css');
 $pagina->addStylesheet('js/datatables/css/datatables_basic.css');
 
-$pagina->addScript('jquery.js');
 $pagina->addScript('datatables/jquery.dataTables.min.js');
 
 $pagina->addScript('documenten.js');

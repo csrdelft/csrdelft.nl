@@ -1,6 +1,6 @@
 <?php
-require_once 'include.config.php';
-require_once 'class.fotoalbum.php';
+require_once 'configuratie.include.php';
+require_once 'fotoalbum.class.php';
 
 if(!$loginlid->hasPermission('P_LOGGED_IN')){
         header('location: '.CSR_ROOT);

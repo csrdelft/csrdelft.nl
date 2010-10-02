@@ -7,7 +7,7 @@
 # -------------------------------------------------------------------
 
 
-require_once('class.csrdelft.php');
+require_once('csrdelft.class.php');
 
 class vbmain extends csrdelft {
 
@@ -16,7 +16,7 @@ class vbmain extends csrdelft {
 		parent::__construct($body,'vb/vb',99);
 		$this->addStylesheet('vb.css');
 		$this->addScript('../../vb/jsonencode.js');
-		require_once('class.menu.php');
+		require_once('menu.class.php');
 	}
 
 function view() {

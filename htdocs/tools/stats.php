@@ -3,8 +3,7 @@
 error_reporting(E_ALL);
 
 
-require_once 'include.config.php';
-
+require_once 'configuratie.include.php';
 
 if(!$loginlid->hasPermission('P_ADMIN')){
 	header('location: '.CSR_ROOT);

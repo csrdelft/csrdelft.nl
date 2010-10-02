@@ -5,11 +5,12 @@
  * Overzicht van de h.t. groepen per groepcategorie
  */
 
-require_once 'include.config.php';
+require_once 'configuratie.include.php';
 
-require_once 'groepen/class.groepen.php';
-require_once 'groepen/class.groep.php';
-require_once 'groepen/class.groepcontent.php';
+require_once 'groepen/groep.class.php';
+require_once 'groepen/groepcontent.class.php';
+require_once 'groepen/groepcontroller.class.php';
+
 
 if(isset($_GET['gtype'])){
 	$gtype=$_GET['gtype'];

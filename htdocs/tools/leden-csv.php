@@ -6,8 +6,7 @@
 # Geeft de leden, gastleden, kringels en novieten terug in een csv-bestand.
 
 
-require_once('include.config.php');
-
+require_once 'configuratie.include.php';
 
 if(!$loginlid->hasPermission('P_LEDEN_READ')){ header('location: '.CSR_ROOT); }
 

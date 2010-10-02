@@ -6,11 +6,11 @@
 # Voorkeuren voor maaltijden en corvee opgeven
 # -------------------------------------------------------------------
 
-require_once 'include.config.php';
+require_once 'configuratie.include.php';
 
 # MaaltijdenSysteem
-require_once 'maaltijden/class.maaltrack.php';
-require_once 'maaltijden/class.maaltijd.php';
+require_once 'maaltijden/maaltrack.class.php';
+require_once 'maaltijden/maaltijd.class.php';
 $maaltrack = new MaalTrack();
 
 # Moeten er acties uitgevoerd worden?
@@ -93,10 +93,10 @@ if ($error == 0) switch($action) {
 
 
 if ($error == 0  or $error == 2) {
-	require_once 'maaltijden/class.maaltijdvoorkeurcontent.php';
+	require_once 'maaltijden/maaltijdvoorkeurcontent.class.php';
 	$midden = new MaaltijdVoorkeurContent($maaltrack);
 }else{
-	require_once 'class.paginacontent.php';
+	require_once 'paginacontent.class.php';
 	$midden=new PaginaContent(new Pagina('maaltijden'));
 	$midden->setActie('bekijken');
 }

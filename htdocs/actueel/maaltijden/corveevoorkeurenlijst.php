@@ -7,7 +7,7 @@
 # CorveeCaesar kan gebruiken bij het roostermaken. 
 # -------------------------------------------------------------------
 
-require_once 'include.config.php';
+require_once 'configuratie.include.php';
 
 // Deze pagina is (voorlopig) alleen voor de maalcie bedoeld.
 if(!$loginlid->hasPermission('P_MAAL_MOD')){ header('location: '.CSR_ROOT.'actueel/maaltijden/'); exit; }
@@ -20,7 +20,7 @@ elseif (isset($_POST['sorteer'])) $sorteer = $_POST['sorteer'];
 if (isset($_GET['sorteer_richting'])) $sorteer_richting = $_GET['sorteer_richting'];
 elseif (isset($_POST['sorteer_richting'])) $sorteer_richting = $_POST['sorteer_richting'];
 
-require_once 'maaltijden/class.corveevoorkeurencontent.php';
+require_once 'maaltijden/corveevoorkeurencontent.class.php';
 $lijst = new CorveevoorkeurenContent($sorteer, $sorteer_richting);
 
 $page=new csrdelft($lijst);

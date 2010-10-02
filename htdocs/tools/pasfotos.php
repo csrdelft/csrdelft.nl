@@ -4,7 +4,7 @@
  *
  * Zet een stel uid's om in pasfoto's
  */
-require_once 'include.config.php';
+require_once 'configuratie.include.php';
 
 if(isset($_GET['string'])){
 	if($loginlid->hasPermission('P_LEDEN_READ')){

@@ -7,8 +7,8 @@
 # Het formulier bevat: (bericht en topic of title)
 # -------------------------------------------------------------------
 
-require_once 'include.config.php';
-require_once 'forum/class.forumonderwerp.php';
+require_once 'configuratie.include.php';
+require_once 'forum/forumonderwerp.class.php';
 
 
 //als er geen bericht is gaan we sowieso niets doen.
@@ -81,6 +81,9 @@ if($forumonderwerp->magToevoegen()){
 		}
 
 		if($forumonderwerp->addPost($bericht)!==false){
+			if(isset($_SESSION['compose_snapshot'])){
+				$_SESSION['compose_snapshot']=null;
+			}
 			if($forumonderwerp->needsModeration()){
 				header('location: '.CSR_ROOT.'communicatie/forum/categorie/'.$forumonderwerp->getCategorieID());
 				$_SESSION['melding']='Uw bericht is verwerkt, het zal binnenkort goedgekeurd worden.';

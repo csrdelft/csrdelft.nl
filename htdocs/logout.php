@@ -2,7 +2,7 @@
 
 # logout.php
 
-require_once('include.config.php');
+require_once 'configuratie.include.php';
 
 $loginlid->logout();
 

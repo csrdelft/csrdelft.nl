@@ -5,8 +5,8 @@
  * serves json with saldi
  */
 
-require_once 'include.config.php';
-require_once 'lid/class.saldi.php';
+require_once 'configuratie.include.php';
+require_once 'lid/saldi.class.php';
 
 
 if(!isset($_GET['uid'])){

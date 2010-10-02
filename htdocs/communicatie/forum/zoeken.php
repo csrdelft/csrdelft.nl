@@ -5,14 +5,14 @@
  * Zoeken in het csrdelft.nl-forum
  */
 
-require_once 'include.config.php';
+require_once 'configuratie.include.php';
 
 if($loginlid->hasPermission('P_FORUM_READ')) {
-	require_once 'forum/class.forumcontent.php';
+	require_once 'forum/forumcontent.class.php';
 	$midden = new ForumContent('zoeken');
 } else {
 	# geen rechten
-	require_once 'class.paginacontent.php';
+	require_once 'paginacontent.class.php';
 	$pagina=new Pagina('geentoegang');
 	$midden = new PaginaContent($pagina);
 }

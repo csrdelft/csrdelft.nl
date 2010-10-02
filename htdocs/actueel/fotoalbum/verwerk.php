@@ -1,8 +1,9 @@
 <?php
-require_once 'include.config.php';
 
-require_once 'class.fotoalbum.php';
-require_once 'class.fotoalbumcontent.php';
+require_once 'configuratie.include.php';
+
+require_once 'fotoalbum.class.php';
+require_once 'fotoalbumcontent.class.php';
 
 $album=new Fotoalbum('','');
 $album->verwerkFotos();

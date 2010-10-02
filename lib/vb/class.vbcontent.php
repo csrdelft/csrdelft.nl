@@ -311,7 +311,7 @@ class VBContent extends SimpleHTML {
 			} else {
 			# geen rechten
 			#	echo "denied";
-				require_once 'class.paginacontent.php';
+				require_once 'paginacontent.class.php';
 				$pagina=new Pagina('geentoegang');
 				$midden = new PaginaContent($pagina);
 			}	

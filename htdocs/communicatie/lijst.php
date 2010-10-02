@@ -1,11 +1,11 @@
 <?php
 
-require_once 'include.config.php';
-require_once 'lid/class.ledenlijstcontent.php';
+require_once 'configuratie.include.php';
+require_once 'lid/ledenlijstcontent.class.php';
 
 if(!($loginlid->hasPermission('P_LOGGED_IN') AND $loginlid->hasPermission('P_OUDLEDEN_READ'))){
 	# geen rechten
-	require_once 'class.paginacontent.php';
+	require_once 'paginacontent.class.php';
 	$pagina=new csrdelft(new PaginaContent(new Pagina('geentoegang')));
 	$pagina->view();
 	exit;

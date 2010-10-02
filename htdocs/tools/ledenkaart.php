@@ -6,7 +6,7 @@
  * googlemaps-probeerseltje.
  * 
  */
-include('include.config.php');
+require_once 'configuratie.include.php';
 
 if(!$loginlid->hasPermission('P_LEDEN_READ')){ header('location: '.CSR_ROOT); }
 if(isset($_GET['xml'])){

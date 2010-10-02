@@ -9,14 +9,14 @@
 # - Maaltijden verwijderen
 # -------------------------------------------------------------------
 
-require_once 'include.config.php';
+require_once 'configuratie.include.php';
 
-require_once 'maaltijden/class.corveelid.php';
-require_once 'maaltijden/class.maaltrack.php';
+require_once 'maaltijden/corveelid.class.php';
+require_once 'maaltijden/maaltrack.class.php';
 $maaltrack = new MaalTrack();
 
 
-require_once 'maaltijden/class.corveepuntencontent.php';
+require_once 'maaltijden/corveepuntencontent.class.php';
 $punten = new CorveepuntenContent($maaltrack);
 
 

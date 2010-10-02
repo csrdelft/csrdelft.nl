@@ -5,9 +5,9 @@
  * 
  */
 
-require_once 'include.config.php';
-require_once 'class.roodschopper.php';
-require_once 'class.roodschoppercontent.php';
+require_once 'configuratie.include.php';
+require_once 'roodschopper.class.php';
+require_once 'roodschoppercontent.class.php';
 
 //Alleen voor admins, maalcie en Soccie. LET OP: SocCie kan nu ook een maalciemail versturen.
 if(!Loginlid::instance()->hasPermission('P_ADMIN,groep:MaalCie') AND !Loginlid::instance()->hasPermission('groep:SocCie')){

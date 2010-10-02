@@ -5,8 +5,7 @@
 # -------------------------------------------------------------------
 
 
-require_once 'include.config.php';
-
+require_once 'configuratie.include.php';
 
 $maalid=(int)$_GET['maalid'];
 
@@ -15,9 +14,9 @@ if($maalid==0){
 }
 
 # MaaltijdenSysteem
-require_once 'maaltijden/class.maaltrack.php';
-require_once 'maaltijden/class.maaltijd.php';
-$maaltrack = new MaalTrack();
+require_once 'maaltijden/class.maaltrack.class.php';
+require_once 'maaltijden/class.maaltijd.class.php';
+$maaltrack = new MaalTrack();           
 
 # bestaat de maaltijd?
 if (!$maaltrack->isMaaltijd($maalid)){
@@ -33,7 +32,7 @@ if(($loginlid->hasPermission('P_MAAL_MOD') OR opConfide()) AND isset($_GET['slui
 	exit;
 }
 
-require_once 'maaltijden/class.maaltijdlijstcontent.php';
+require_once 'maaltijden/maaltijdlijstcontent.class.php';
 $page = new MaaltijdLijstContent($maaltijd);
 
 # Moeten we de fiscaal-lijst weergeven?

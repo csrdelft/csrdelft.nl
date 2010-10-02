@@ -35,7 +35,8 @@
 
 header("content-type: text/plain");
 define('MODE', 'BOT');
-require_once('include.config.php');
+
+require_once 'configuratie.include.php';
 
 # verplichte parameters
 if ( !defined('ENABLE_BOT_CMND') or
@@ -127,7 +128,7 @@ $cmnds['getsaldo'] = array();
  */
 function abolijst($uid, $params) {
     global $lid,$db;
-    require_once('maaltijden/class.maaltrack.php');
+    require_once('maaltijden/maaltrack.class.php');
     $maaltrack = new MaalTrack();
     $myabos = $maaltrack->getAbo();
     if (count($myabos) > 0 ) return array_values($myabos);
@@ -145,7 +146,7 @@ $cmnds['abolijst'] = array();
  */
 function getwelabos($uid, $params) {
     global $lid,$db;
-    require_once('maaltijden/class.maaltrack.php');
+    require_once('maaltijden/maaltrack.class.php');
     $maaltrack = new MaalTrack();
     $result = array();
     $abos = $maaltrack->getAbo();
@@ -166,7 +167,7 @@ $cmnds['getwelabos'] = array();
  */
 function getnotabos($uid, $params) {
     global $lid,$db;
-    require_once('maaltijden/class.maaltrack.php');
+    require_once('maaltijden/maaltrack.class.php');
     $maaltrack = new MaalTrack();
     $result = array();
     $abos = $maaltrack->getNotAboSoort();
@@ -186,7 +187,7 @@ $cmnds['getnotabos'] = array();
  */
 function addabo($uid, $params) {
     global $lid,$db;
-    require_once('maaltijden/class.maaltrack.php');
+    require_once('maaltijden/maaltrack.class.php');
     $maaltrack = new MaalTrack();
     $abosoort = 'A_' . strtoupper($params['abosoort']);
     if ($maaltrack->addAbo($abosoort))
@@ -204,7 +205,7 @@ $cmnds['addabo'] = array('abosoort' => true);
  */
 function delabo($uid, $params) {
     global $lid,$db;
-    require_once('maaltijden/class.maaltrack.php');
+    require_once('maaltijden/maaltrack.class.php');
     $maaltrack = new MaalTrack();
     $abosoort = 'A_' . strtoupper($params['abosoort']);
     if ($maaltrack->delAbo($abosoort))
@@ -221,7 +222,7 @@ $cmnds['delabo'] = array('abosoort' => true);
  *
  */
 function getjarig($uid, $params) {
-	require_once('lid/class.mootverjaardag.php');
+	require_once('lid/verjaardag.class.php');
 	$verj10 = Verjaardag::getKomendeVerjaardagen(10);
     $result = array();
     foreach ($verj10 as $verj) {
@@ -355,7 +356,7 @@ $cmnds['zoekoud'] = array('zoekterm' => true);
  */
 function maallijst($uid, $params) {
     global $lid,$db;
-    require_once('maaltijden/class.maaltrack.php');
+    require_once('maaltijden/maaltrack.class.php');
     $maaltrack = new MaalTrack();
     # opvragen komende maaltijden + onze status (zijn we ingeschreven etc)
     $nu = time();
@@ -387,7 +388,7 @@ $cmnds['maallijst'] = array();
  */
 function maalinfo($uid, $params) {
     global $lid,$db;
-    require_once('maaltijden/class.maaltrack.php');
+    require_once('maaltijden/maaltrack.class.php');
     $maaltrack = new MaalTrack();
     $result = array();
 
@@ -473,7 +474,7 @@ exit(0);
 
 function maalaanaf($uid, $params, $aanaf) {
     global $lid,$db;
-    require_once('maaltijden/class.maaltrack.php');
+    require_once('maaltijden/maaltrack.class.php');
     $maaltrack = new MaalTrack();
     $proxyuid = ($params['proxyuid'] == $uid or $params['proxyuid'] == '') ? '' : $params['proxyuid'];
 

@@ -5,11 +5,11 @@
 # tools/streeplijst.php
 # -------------------------------------------------------------------
 
-require_once 'include.config.php';
+require_once 'configuratie.include.php';
 
 if(!$loginlid->hasPermission('P_LOGGED_IN')){ header('location: '.CSR_ROOT); exit; }
 
-require_once 'class.streeplijstcontent.php';
+require_once 'streeplijstcontent.class.php';
 $body=new Streeplijstcontent();
 
 

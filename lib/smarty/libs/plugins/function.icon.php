@@ -27,7 +27,7 @@
  * @param    Smarty
  * @return   string
  */
-require_once('class.icon.php');
+require_once 'icon.class.php';
 
 function smarty_function_icon($params, &$smarty){
    if(isset($params['get'])){

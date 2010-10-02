@@ -6,10 +6,10 @@
 # Weergeven van pagina's met tekst uit de database
 # -------------------------------------------------------------------
 
-require_once 'include.config.php';
+require_once 'configuratie.include.php';
 
-require_once 'class.pagina.php';
-require_once 'class.paginacontent.php';
+require_once 'pagina.class.php';
+require_once 'paginacontent.class.php';
 
 $zijkolom=new kolom();
 

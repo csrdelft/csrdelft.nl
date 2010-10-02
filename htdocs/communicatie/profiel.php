@@ -15,9 +15,9 @@
  * 
  */
 
-require_once 'include.config.php';
+require_once 'configuratie.include.php';
 
-require_once 'lid/class.profiel.php';
+require_once 'lid/profiel.class.php';
 
 if(isset($_GET['uid'])){
 	$uid=$_GET['uid'];
@@ -34,12 +34,12 @@ if(isset($_GET['a'])){
 }
 
 if(!($loginlid->hasPermission('P_LEDEN_READ') or $loginlid->hasPermission('P_OUDLEDEN_READ'))){
-	require_once 'class.paginacontent.php';
+	require_once 'paginacontent.class.php';
 	$midden=new PaginaContent(new Pagina('geentoegang'));
 	$midden->setActie('bekijken');
 }else{
-	require_once 'lid/class.profielcontent.php';
-	require_once 'lid/class.profiel.php';
+	require_once 'lid/profielcontent.class.php';
+	require_once 'lid/profiel.class.php';
 	
 	switch($actie){
 		case 'novietBewerken':
@@ -115,7 +115,6 @@ $pagina=new csrdelft($midden);
 $pagina->addStylesheet('profiel.css');
 $pagina->addScript('profiel.js');
 $pagina->addScript('suggest.js');
-$pagina->addScript('jquery.js');
 $pagina->addScript('flot/jquery.flot.min.js');
 $pagina->addScript('flot/jquery.flot.threshold.min.js');
 $pagina->view();

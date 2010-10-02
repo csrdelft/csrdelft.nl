@@ -8,9 +8,9 @@
 # -------------------------------------------------------------------
 
 
-require_once 'include.config.php';
-require_once 'forum/class.forumonderwerp.php';
-require_once 'forum/class.forumonderwerpcontent.php';
+require_once 'configuratie.include.php';
+require_once 'forum/forumonderwerp.class.php';
+require_once 'forum/forumonderwerpcontent.class.php';
 
 if($loginlid->hasPermission('P_FORUM_READ')) {
 	if(isset($_GET['topic'])){
@@ -36,7 +36,7 @@ if($loginlid->hasPermission('P_FORUM_READ')) {
 		$midden->citeer((int)$_GET['post']);
 	}
 } else {
-	require_once 'class.paginacontent.php';
+	require_once 'paginacontent.class.php';
 	$pagina=new Pagina('geentoegang');
 	$midden = new PaginaContent($pagina);
 }
@@ -44,6 +44,5 @@ if($loginlid->hasPermission('P_FORUM_READ')) {
 $page=new csrdelft($midden);
 $page->addStylesheet('forum.css');
 
-$page->addScript('jquery.js');
 $page->view();
 ?>

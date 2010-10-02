@@ -7,6 +7,8 @@ Zend_Loader::loadClass('Zend_Uri_Http');
 Zend_Loader::loadClass('Zend_Gdata_Query');
 Zend_Loader::loadClass('Zend_Gdata_Feed');
 
+require_once 'groepen/groep.class.php';
+
 /*
  * Documentatie voor google GData protocol:
  * algemeen, interactie: http://code.google.com/apis/contacts/docs/3.0/developers_guide_protocol.html

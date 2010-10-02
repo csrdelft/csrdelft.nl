@@ -1,17 +1,17 @@
 <?php
 
 
-require_once 'include.config.php';
+require_once 'configuratie.include.php';
 
 
 if($loginlid->hasPermission('P_LEDEN_READ')) {
-	require_once 'class.eetplan.php';
+	require_once 'eetplan.class.php';
 	$eetplan = new Eetplan();
-	require_once 'class.eetplancontent.php';
+	require_once 'eetplancontent.class.php';
 	$midden = new EetplanContent($eetplan);
 } else {
 	# geen rechten
-	require_once 'class.paginacontent.php';
+	require_once 'paginacontent.class.php';
 	$pagina=new Pagina('geentoegang');
 	$midden = new PaginaContent($pagina);
 }

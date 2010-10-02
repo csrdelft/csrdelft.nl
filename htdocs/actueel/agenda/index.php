@@ -6,11 +6,11 @@
 # Agenda.
 # -------------------------------------------------------------------
 
-require_once('include.config.php');
+require_once('configuratie.include.php');
 
-require_once('agenda/class.agenda.php');
-require_once('agenda/class.agendacontent.php');
-require_once('agenda/class.agendacontroller.php');
+require_once('agenda/agenda.class.php');
+require_once('agenda/agendacontent.class.php');
+require_once('agenda/agendacontroller.class.php');
 
 $controller=new AgendaController($_GET['query']);
 $pagina=new csrdelft($controller->getContent());

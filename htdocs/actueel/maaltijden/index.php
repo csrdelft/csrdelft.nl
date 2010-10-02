@@ -6,13 +6,13 @@
 # Aanmelden en afmelden voor maaltijden.
 # -------------------------------------------------------------------
 
-require_once 'include.config.php' ;
-require_once 'class.paginacontent.php';
+require_once 'configuratie.include.php';
+require_once 'paginacontent.class.php';
 
 # MaaltijdenSysteem
-require_once 'maaltijden/class.maaltrack.php';
-require_once 'maaltijden/class.maaltijd.php';
-$maaltrack = new MaalTrack();
+require_once 'maaltijden/class.maaltrack.class.php';
+require_once 'maaltijden/class.maaltijd.class.php';
+$maaltrack = new MaalTrack();           
 
 # Moeten er acties uitgevoerd worden?
 $action=getOrPost('a');
@@ -101,7 +101,7 @@ if ($error == 0) switch($action) {
 # De pagina opbouwen, met mKetzer, of met foutmelding
 if($error == 0  or $error == 2) {
 	# Het middenstuk
-	require_once('maaltijden/class.maaltijdcontent.php');
+	require_once 'maaltijden/maaltijdcontent.class.php';
 	$midden = new MaaltijdContent($maaltrack);
 } else {
 	# geen rechten

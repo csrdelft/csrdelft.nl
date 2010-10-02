@@ -6,12 +6,12 @@
 # Geeft een rss-feed terug.
 # -------------------------------------------------------------------
 
-require_once 'include.config.php';
+require_once 'configuratie.include.php';
 
 header('Content-Type: text/xml; charset=UTF-8');
 if($loginlid->hasPermission('P_FORUM_READ') OR isset($_GET['token'])){
-	require_once 'forum/class.forum.php';
-	require_once 'forum/class.forumcontent.php';
+	require_once 'forum/forum.class.php';
+	require_once 'forum/forumcontent.class.php';
 	$rss=new ForumContent('rss');
 
 	$rss->view();

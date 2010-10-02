@@ -5,8 +5,7 @@
  * geeft een naamlink voor een gegeven uid.
  */
 
-require_once 'include.config.php';
-
+require_once 'configuratie.include.php';
 
 if(!LoginLid::instance()->hasPermission('P_LEDEN_READ')){
 	echo 'Niet voldoende rechten';

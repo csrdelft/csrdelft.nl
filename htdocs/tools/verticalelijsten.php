@@ -1,8 +1,8 @@
 <?php
 # Mootlijsten maken
 
-require_once 'include.config.php';
-require_once 'class.verticale.php';
+require_once 'configuratie.include.php';
+require_once 'verticale.class.php';
 
 if(!$loginlid->hasPermission('P_ADMIN')){
 	header('location: '.CSR_ROOT);

@@ -6,17 +6,17 @@
 # Geeft een lijstje met de geärchiveerde couranten weer
 # -------------------------------------------------------------------
 
-require_once 'include.config.php';
+require_once 'configuratie.include.php';
 
 if ($loginlid->hasPermission('P_LEDEN_READ')) {
-	require_once 'courant/class.courant.php';
+	require_once 'courant/courant.class.php';
 	$courant=new Courant();
 
-	require_once 'courant/class.courantarchiefcontent.php';
+	require_once 'courant/courantarchiefcontent.class.php';
 	$body = new CourantArchiefContent($courant);
 }else{
 	# geen rechten
-	require_once 'class.paginacontent.php';
+	require_once 'paginacontent.class.php';
 	$pagina=new Pagina('geentoegang');
 	$body = new PaginaContent($pagina);
 }

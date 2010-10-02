@@ -26,7 +26,7 @@
  * @param    Smarty
  * @return   string
  */
-require_once('class.knop.php');
+require_once 'knop.class.php';
 
 function smarty_function_knop($params, &$smarty){
     if(!isset($params['url'])){

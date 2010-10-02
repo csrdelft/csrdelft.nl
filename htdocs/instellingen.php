@@ -5,8 +5,8 @@
  *
  */
 
-require_once 'include.config.php';
-require_once 'lid/class.instellingencontent.php';
+require_once 'configuratie.include.php';
+require_once 'lid/instellingencontent.class.php';
 
 if(!$loginlid->hasPermission('P_LOGGED_IN')){
 	header('location: '.CSR_ROOT);

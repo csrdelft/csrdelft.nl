@@ -1,8 +1,8 @@
 <?php
 
 
-require_once 'include.config.php';
-require_once 'class.verticalencontent.php';
+require_once 'configuratie.include.php';
+require_once 'verticalencontent.class.php';
 
 
 
@@ -16,7 +16,7 @@ if($loginlid->hasPermission('P_LEDEN_READ')) {
 	}
 }else{
 	# geen rechten
-	require_once 'class.paginacontent.php';
+	require_once 'paginacontent.class.php';
 	$pagina=new Pagina('geentoegang');
 	$midden = new PaginaContent($pagina);
 }

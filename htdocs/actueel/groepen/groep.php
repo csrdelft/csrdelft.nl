@@ -6,11 +6,11 @@
  */
 
 
-require_once('include.config.php');
+require_once 'configuratie.include.php';
 
-require_once('groepen/class.groep.php');
-require_once('groepen/class.groepcontent.php');
-require_once('groepen/class.groepcontroller.php');
+require_once 'groepen/groep.class.php';
+require_once 'groepen/groepcontent.class.php';
+require_once 'groepen/groepcontroller.class.php';
 
 if(!isset($_GET['query'])){
 	echo 'querystring niet aanwezig, dat gaat hiet werken (htdocs/groep.php)';

@@ -1,10 +1,10 @@
 <?php
 
-require_once 'include.config.php';
+require_once 'configuratie.include.php';
 
 # Het middenstuk
 if ($loginlid->hasPermission('P_LEDEN_READ')) {
-	require_once('class.sjaarsactie.php');
+	require_once('sjaarsactie.class.php');
 	$sjaarsactie = new Sjaarsactie();
 
 	//nieuwe aanmelding voor een bestaande sjaarsactie
@@ -22,11 +22,11 @@ if ($loginlid->hasPermission('P_LEDEN_READ')) {
 		exit;
 	}
 
-	require_once 'class.sjaarsactiecontent.php';
+	require_once 'sjaarsactiecontent.class.php';
 	$midden = new SjaarsactieContent($sjaarsactie);
 } else {
 	# geen rechten
-	require_once 'class.paginacontent.php';
+	require_once 'paginacontent.class.php';
 	$pagina=new Pagina('geentoegang');
 	$midden = new PaginaContent($pagina);
 }

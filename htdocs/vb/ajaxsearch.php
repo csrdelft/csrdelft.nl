@@ -7,7 +7,8 @@
 # -------------------------------------------------------------------
 
 # instellingen & rommeltjes
-require_once('include.config.php');
+require_once 'configuratie.include.php';
+
 require_once('vb/class.vb.php');
 require_once('vb/class.vbsearch.php');
 

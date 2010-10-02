@@ -11,16 +11,16 @@
 # - Of deze leden punten verdiend hebben voor de taak 
 # -------------------------------------------------------------------
 
-require_once 'include.config.php';
+require_once 'configuratie.include.php';
 
 if(!$loginlid->hasPermission('P_MAAL_MOD')){ header('location: '.CSR_ROOT.'actueel/maaltijden/'); exit; }
 
-require_once 'maaltijden/class.maaltrack.php';
-require_once 'maaltijden/class.maaltijd.php';
+require_once 'maaltijden/maaltrack.class.php';
+require_once 'maaltijden/maaltijd.class.php';
 $maaltrack = new MaalTrack();
 
 
-require_once 'maaltijden/class.corveebeheercontent.php';
+require_once 'maaltijden/corveebeheercontent.class.php';
 $beheer = new CorveebeheerContent($maaltrack);
 
 

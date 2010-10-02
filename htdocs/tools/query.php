@@ -6,8 +6,8 @@
 # Geeft de in savedquery opgeslagen query's weer
 
 
-require_once 'include.config.php';
-require_once 'class.savedquery.php';
+require_once 'configuratie.include.php';
+require_once 'savedquery.class.php';
 
 if(!$loginlid->hasPermission('P_LOGGED_IN')){ header('location: '.CSR_ROOT); }
 
@@ -24,7 +24,6 @@ $html.=SavedQuery::getQueryselector($id);
 if(isset($savedquery) AND $savedquery->magBekijken()){
 	$html.=$savedquery->getHtml();
 }
-require_once 'class.stringincluder.php';
 
 $pagina=new csrdelft(new stringincluder($html, 'Opgeslagen query\'s'));
 $pagina->setZijkolom(false);

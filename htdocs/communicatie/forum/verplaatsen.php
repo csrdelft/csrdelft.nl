@@ -7,8 +7,8 @@
 # Verwerkt het verplaatsen van berichten in het forum
 # -------------------------------------------------------------------
 
-require_once 'include.config.php';
-require_once 'forum/class.forum.php';
+require_once 'configuratie.include.php';
+require_once 'forum/forum.class.php';
 
 if(!Forum::isModerator()) {
 	header('location: '.CSR_ROOT.'forum/');
@@ -16,7 +16,7 @@ if(!Forum::isModerator()) {
 	exit;
 }
 
-require_once 'forum/class.forumonderwerp.php';
+require_once 'forum/forumonderwerp.class.php';
 
 if(isset($_GET['topic'])){
 	$forumonderwerp=new ForumOnderwerp((int)$_GET['topic']);

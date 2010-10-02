@@ -5,9 +5,9 @@
  * Geef een post -met eventuele citaattags erom- terug.
  */
 
-require_once 'include.config.php';
+require_once 'configuratie.include.php';
 
-require_once 'forum/class.forumonderwerp.php';
+require_once 'forum/forumonderwerp.class.php';
 
 
 if(isset($_GET['post'])){
