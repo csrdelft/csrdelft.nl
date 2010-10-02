@@ -878,7 +878,7 @@ lib/vb/class.vbsubject.php -text
 lib/vb/class.vbsubjectsource.php -text
 lib/vb/features.txt -text
 lib/verticale.class.php -text
-lib/verticalecontent.php -text
+lib/verticalecontent.class.php -text
 sql/1542_peiling.sql -text
 sql/1548_corvee.sql -text
 sql/1563_corvee.sql -text

@@ -2,7 +2,7 @@
 
 
 require_once 'configuratie.include.php';
-require_once 'verticalencontent.class.php';
+require_once 'verticalecontent.class.php';
 
 
 
