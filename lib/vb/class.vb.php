@@ -10,8 +10,8 @@ require_once("class.vbsourceopinion.php");
 require_once("class.vbsourcesource.php");
 require_once("class.vbsubjectsource.php");
 //we laden hier forumonderwerp omdat we in onderwerpen werken.
-require_once('forum/class.forumonderwerp.php');
-require_once('groepen/class.groep.php');
+require_once('forum/forumonderwerp.class.php');
+require_once('groepen/groep.class.php');
 
 class VB {
 	var $_db;		//De database connectie
