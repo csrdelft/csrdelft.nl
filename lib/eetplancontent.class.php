@@ -110,7 +110,7 @@ class EetplanContent extends SimpleHTML {
 				Van eerstejaers die niet komen opdagen op het eetplan wordt verwacht dat zij minstens &eacute;&eacute;n keer komen koken op het huis waarbij zij gefaeld hebben.
 			</div>
 			<table class="eetplantabel">
-			<tr><th style="width: 200px;">Pheut/Avond</td>';
+			<tr><th style="width: 200px;">Noviet/Avond</td>';
 		//kopjes voor tabel
 		for($iTeller=1;$iTeller<=4;$iTeller++){
 			echo '<th class="huis">'.$this->_eetplan->getDatum($iTeller).'</th>';
