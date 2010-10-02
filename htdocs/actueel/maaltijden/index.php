@@ -10,8 +10,8 @@ require_once 'configuratie.include.php';
 require_once 'paginacontent.class.php';
 
 # MaaltijdenSysteem
-require_once 'maaltijden/class.maaltrack.class.php';
-require_once 'maaltijden/class.maaltijd.class.php';
+require_once 'maaltijden/maaltrack.class.php';
+require_once 'maaltijden/maaltijd.class.php';
 $maaltrack = new MaalTrack();           
 
 # Moeten er acties uitgevoerd worden?
