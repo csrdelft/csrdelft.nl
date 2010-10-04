@@ -8,7 +8,7 @@
 # -------------------------------------------------------------------
 
 
-require_once ('maaltijden/class.maaltrack.php');
+require_once ('maaltijden/maaltrack.class.php');
 
 class MaaltijdVoorkeurContent extends SimpleHTML {
 
