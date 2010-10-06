@@ -183,7 +183,7 @@ class AgendaController extends Controller {
 		}
 	}
 	function action_courant(){
-		require_once 'courant/class.courant.php';
+		require_once 'courant/courant.class.php';
 		if(Courant::magBeheren()){
 			$content=new AgendaCourantContent($this->agenda, 2);
 			
