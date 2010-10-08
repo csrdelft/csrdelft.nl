@@ -5,9 +5,9 @@
  *
  */
 
-require_once 'include.config.php';
+require_once 'configuratie.include.php';
 require_once 'chart-0.8/chart.php';
-require_once 'lid/class.saldi.php';
+require_once 'lid/saldi.class.php';
 
 
 if(isset($_GET['uid']) AND (Lid::isValidUid($_GET['uid']) OR $_GET['uid']=='0000')){
