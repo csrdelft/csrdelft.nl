@@ -22,7 +22,7 @@
 					{if $lid->getStatus()=='S_NOVIET' AND $loginlid->hasPermission('groep:novcie')}
 						<a href="/communicatie/profiel/{$profhtml.uid}/novietBewerken" class="knop"><img src="{$csr_pics}forum/bewerken.png" title="Bewerk dit profiel" />Noviet bewerken</a><br />
 					{/if}
-					<a href="/communicatie/profiel/{$profhtml.uid}/addToGoogleContacts/" class="knop" title="Voeg dit profiel toe aan mijn google adresboek"><img src="http://code.google.com/favicon.ico" /></a>
+					<a href="/communicatie/profiel/{$profhtml.uid}/addToGoogleContacts/" class="knop{if $lid->isInGoogleContacts()} inGoogleContacts{/if}" title="{if $lid->isInGoogleContacts()}Er bestaat al een contact met deze naam in je Google-contacts. Klik om te updaten.{else}Voeg dit profiel toe aan mijn google adresboek{/if}"><img src="http://code.google.com/favicon.ico" /></a>
 					<br />
 				</div>
 			</div>
@@ -109,7 +109,7 @@
 				<div class="label">Studie sinds:</div> {$profhtml.studiejaar}<br />
 				<div class="label">Lid sinds:</div> 
 					{if $profhtml.lidjaar!=''}
-						<a href="/communicatie/lijst.php?q={$profhtml.lidjaar|substr:2}&amp;status=ALL" title="Bekijk de leden van deze lichting">{$profhtml.lidjaar}</a>
+						<a href="/communicatie/lijst.php?q=lichting:{$profhtml.lidjaar}&amp;status=ALL" title="Bekijk de leden van lichting {$profhtml.lidjaar}">{$profhtml.lidjaar}</a>
 					{/if}
 					{if $isOudlid AND $profhtml.lidafdatum!='0000-00-00'} tot {$profhtml.lidafdatum|substr:0:4}{/if}<br />
 				<div class="label">Status:</div> {$lid->getStatusDescription()}<br />
@@ -126,7 +126,7 @@
 				{/if}
 				{if $profhtml.moot!=0}
 					<div class="label">Oude moot:</div>
-					{$profhtml.moot}
+					<a href="/communicatie/lijst.php?q=moot:{$profhtml.moot}">{$profhtml.moot}</a>
 				{/if}
 			</div>
 			<div class="familie">

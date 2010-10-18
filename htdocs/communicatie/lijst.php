@@ -23,12 +23,10 @@ if($zoeker->count()==1){
 	header('location: '.CSR_ROOT.'communicatie/profiel/'.$lid->getUid());
 }
 
-
-
 if(isset($_GET['addToGoogle'])){
 	require_once('googlesync.class.php');
-	GoogleSync::doRequestToken($_SERVER['REQUEST_URI']);
-	
+	GoogleSync::doRequestToken(CSR_ROOT.$_SERVER['REQUEST_URI']);
+
 	$gSync=new GoogleSync();
 	$message='<h2>Sync naar Google-contacts uitgevoerd</h2>'.$gSync->syncLidBatch($zoeker->getLeden());
 	

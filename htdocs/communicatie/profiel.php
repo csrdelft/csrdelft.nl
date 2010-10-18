@@ -85,7 +85,7 @@ if(!($loginlid->hasPermission('P_LEDEN_READ') or $loginlid->hasPermission('P_OUD
 			require_once('googlesync.class.php');
 			GoogleSync::doRequestToken(CSR_ROOT.'communicatie/profiel/'.$uid.'/addToGoogleContacts');
 			
-			$gSync=new GoogleSync();
+			$gSync=GoogleSync::instance();
 			$message=$gSync->syncLid($uid);
 			ProfielContent::invokeRefresh('<h2>Opgeslagen in Google Contacts:</h2>'.$message, CSR_ROOT.'communicatie/profiel/'.$uid);
 			exit;

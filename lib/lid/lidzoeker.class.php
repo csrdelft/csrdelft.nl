@@ -131,8 +131,26 @@ class LidZoeker{
 		
 		if($zoekterm=='*'){
 			$query='1 ';
+		}elseif(preg_match('/^moot:[1-4]$/', $zoekterm)){ //moten
+			$query="moot=".(int)substr($zoekterm, 5).' ';
+		}elseif(preg_match('/^verticale:\w*$/', $zoekterm)){ //verticale, id, letter
+			$verticale=substr($zoekterm, 10);
+			//id opzoeken als het een letter of naam betreft.
+			if(in_array($verticale, Verticale::$namen)){
+				$verticale=array_search($verticale, Verticale::$namen);
+			}elseif(in_array($verticale, Verticale::$letters)){
+				$verticale=array_search($verticale, Verticale::$letters);
+			}
+			$query="verticale=".(int)$verticale.' ';
 		}elseif(preg_match('/^\d{2}$/', $zoekterm)){ //lichting bij een string van 2 cijfers
 			$query="RIGHT(lidjaar,2)=".(int)$zoekterm." ";
+		}elseif(preg_match('/^lichting:\d\d(\d\d)?$/', $zoekterm)){ //lichting op de explicite manier
+			$lichting=substr($zoekterm, 9);
+			if(strlen($lichting)==4){
+				$query="lidjaar=".$lichting." ";
+			}else{
+				$query="RIGHT(lidjaar,2)=".(int)$lichting." ";
+			}
 		}elseif(preg_match('/^[a-z0-9][0-9]{3}$/', $zoekterm)){ //uid's is ook niet zo moeilijk.
 			$query="uid='".$zoekterm."' ";
 		}elseif(preg_match('/^([a-z0-9][0-9]{3} ?,?)*([a-z0-9][0-9]{3})$/', $zoekterm)){ //meerdere uid's gescheiden door komma's.

@@ -147,17 +147,16 @@ class Groepen{
 	 * statische functie om de groepen bij een gebruiker te zoeken.
 	 *
 	 * @param	$uid	Gebruiker waarvoor groepen moeten worden opgezocht
-	 * @return			Array met groepen
+	 * @return			Array met Groep-objectjes
 	 */
-	public static function getGroepenByUid($uid){
+	public static function getByUid($uid){
 		$db=MySql::instance();
 
 		$groepen=array();
 		if(Lid::isValidUid($uid)){
 			$qGroepen="
 				SELECT
-					groep.id AS id, groep.snaam AS snaam, groep.naam AS naam, groep.status AS status,
-					groeptype.naam AS gtype, groeptype.id AS gtypeId
+					groep.id AS id
 				FROM groep
 				INNER JOIN groeptype ON(groep.gtype=groeptype.id)
 				WHERE groeptype.toonProfiel=1
@@ -168,7 +167,9 @@ class Groepen{
 
 			$rGroepen=$db->query($qGroepen);
 			if ($rGroepen !== false and $db->numRows($rGroepen) > 0){
-				$groepen=$db->result2array($rGroepen);
+				while($row=$db->next($rGroepen)){
+					$groepen[]=new Groep($row['id']);
+				}
 			}
 		}
 		return $groepen;
@@ -194,20 +195,31 @@ class Groepen{
 	/*
 	 * Haal de huidige groepen van een bebaald type voor een bepaald lid.
 	 */
-	public static function getGroepenByType($type, $uid){
-		$type=(int)$type;
-		$groepenByUid=Groepen::getGroepenByUid($uid);
-		if(is_array($groepenByUid)){
-			$groepen=array();
-			foreach($groepenByUid as $groep){
-				if($groep['gtypeId']==$type AND $groep['status']=='ht'){
-					$groepen[]=$groep;
+	public static function getByTypeAndUid($type, $uid){
+		$db=MySql::instance();
+
+		$groepen=array();
+		if(Lid::isValidUid($uid)){
+			$qGroepen="
+				SELECT id
+				FROM groep
+				WHERE gtype IN (
+					SELECT id
+					FROM groeptype
+					WHERE id=".(int)$type."
+				) AND id IN (
+					SELECT groepid FROM groeplid WHERE uid = '".$uid."'
+				);";
+			$rGroepen=$db->query($qGroepen);
+			if ($rGroepen !== false and $db->numRows($rGroepen) > 0){
+				while($row=$db->next($rGroepen)){
+					$groepen[]=new Groep($row['id']);
 				}
 			}
-			return $groepen;
 		}
-
+		return $groepen;
 	}
+	
 	/*
 	 * Statische functie om een verzameling van groeptypes terug te geven
 	 *

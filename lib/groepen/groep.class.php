@@ -523,9 +523,18 @@ class Groep{
 		return $return;
 
 	}
+
+	public function getUrl(){
+		return '/actueel/groepen/'.$this->getType()->getNaam().'/'.$this->getId();
+	}
 	
-	public function getLink(){
-		return '<a class="groeplink" href="/actueel/groepen/'.$this->getType()->getNaam().'/'.$this->getId().'">'.$this->getNaam().'</a>';
+	public function getLink($class=''){
+		if($class!=''){
+			$class='groeplink '.$class;
+		}else{
+			$class='groeplink';
+		}
+		return '<a href="'.$this->getUrl().'" class="'.$class.'">'.mb_htmlentities($this->getNaam()).'</a>';
 	}
 	
 	public function __toString(){

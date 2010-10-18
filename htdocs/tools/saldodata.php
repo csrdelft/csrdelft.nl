@@ -1,13 +1,12 @@
 <?php
 /*
- * saldodata.php	| 	Jan Pieter Waagmeester (jieter@jpwaag.com)
+ * saldodata.php	|	Jan Pieter Waagmeester (jieter@jpwaag.com)
  *
- * serves json with saldi
+ * Serves a json-object with saldi
  */
 
 require_once 'configuratie.include.php';
 require_once 'lid/saldi.class.php';
-
 
 if(!isset($_GET['uid'])){
 	echo 'no valid uid';
@@ -25,11 +24,13 @@ $timespan=40;
 if(isset($_GET['timespan'])){
 	$timespan=(int)$_GET['timespan'];
 }
+//niet over de 10 jaar heen.
 if($timespan>(10*365)){
 	$timespan=(10*365);
 }
 
-
 if(Saldi::magGrafiekZien($loginlid->getUid())){
 	echo Saldi::getDatapoints($uid, $timespan);
 }
+
+?>

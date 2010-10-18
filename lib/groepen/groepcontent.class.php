@@ -233,32 +233,53 @@ class Groepgeschiedeniscontent extends SimpleHTML{
 
 	}
 }
+/*
+ * Weergave van groepen in het profiel.
+ */
 class GroepenProfielContent extends SimpleHTML{
 	private $uid;
+
+	private $display_limit=10;
+	
 	public function __construct($uid){
 		$this->uid=$uid;
 	}
-	public function getHTML(){
-		$return='';
 
-		$aGroepen=Groepen::getGroepenByUid($this->uid);
-		if (count($aGroepen) != 0) {
-			$currentStatus=null;
-			foreach ($aGroepen as $groep) {
-				if($currentStatus!=$groep['status']){
-					if($currentStatus!=null){
-						$return.='</div>';
-					}
-					$return.='<div class="groep'.$groep['status'].'"><strong>'.str_replace(array('ht','ot', 'ft'), array('h.t.', 'o.t.', 'f.t.'),$groep['status']).' groepen:</strong><br />';
-					$currentStatus=$groep['status'];
+	
+	public function getHTML(){
+		//per status in een array rammen
+		$groepenPerStatus=array();
+		foreach(Groepen::getByUid($this->uid) as $groep){
+			$groepenPerStatus[$groep->getStatus()][]=$groep;
+		}
+
+		$return='';
+		foreach($groepenPerStatus as $status => $groepen){
+			$return.='<div class="groep'.$status.'">';
+			$return.='<h6>'.str_replace(array('ht','ot', 'ft'), array('h.t.', 'o.t.', 'f.t.'), $status).' groepen:</h6>';
+			$return.='<ul class="groeplijst nobullets">';
+			$i=0;
+			$style='';
+			foreach($groepen as $groep){
+				if($i>$this->display_limit){
+					$style='style="display: none;" ';
 				}
-				$groepnaam=mb_htmlentities($groep['naam']);
-				$return.='<a href="/actueel/groepen/'.$groep['gtype'].'/'.$groep['id'].'/">'.$groepnaam."</a><br />\n";
+				//op een of andere manier werkt het hier niet als ik een class-property gebruik,
+				//dus daarom maar met inline style.
+				$return.='<li '.$style.'>'.$groep->getLink().'</li>'; 
+				$i++;
 			}
+
+			$return.='</ul>';
+			if($i>$this->display_limit){
+				$return.='<a onclick="jQuery(this).parent().children(\'ul\').children().show(); jQuery(this).remove();" class="handje">&raquo; meer </a>';
+			}
+			
 			$return.='</div>';
 		}
 		return $return;
 	}
+	
 	public function view(){
 		echo $this->getHTML();
 	}
@@ -270,12 +291,20 @@ class GroepUbbContent extends SimpleHTML{
 	private $groep;
 	private $style;
 	public function __construct($groepid, $style='default'){
-		$this->groep=new Groep((int)$groepid);
+		try{
+			$this->groep=new Groep((int)$groepid);
+		}catch(Exception $e){
+			$this->groep='[groep] Groep [groepid:'.(int)$groepid.'] bestaat niet.';
+		}
 	}
 	public function getHTML(){
-		$content=new Smarty_csr();
-		$content->assign('groep', $this->groep);
-		return $content->fetch('groepen/groep.ubb.tpl');
+		if($this->groep instanceof Groep){
+			$content=new Smarty_csr();
+			$content->assign('groep', $this->groep);
+			return $content->fetch('groepen/groep.ubb.tpl');
+		}else{
+			return $this->groep;
+		}
 	}
 	public function view(){
 		echo $this->getHTML();

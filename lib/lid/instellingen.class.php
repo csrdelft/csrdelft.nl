@@ -33,7 +33,8 @@ class Instelling{
 			'groepen_toonPasfotos' => array('ja', 'Standaard pasfotos tonen', 'enum', array('ja', 'nee')),
 			'agenda_toonVerjaardagen' => array('ja', 'Verjaardagen in agenda', 'enum', array('ja', 'nee')),
 			'agenda_toonMaaltijden' => array('ja', 'Maaltijden in agenda', 'enum', array('ja', 'nee')),
-			'mededelingen_aantalPerPagina' => array(10, 'Aantal mededeling per pagina', 'int', 5)
+			'mededelingen_aantalPerPagina' => array(10, 'Aantal mededeling per pagina', 'int', 5),
+			'googleContacts_groepnaam' => array('C.S.R.-leden', 'Naam van groep voor contacten in Google contacts', 'string')
 	);
 
 	//hebben we een instelling die $key heet?
@@ -72,6 +73,10 @@ class Instelling{
 			throw new Exception('Deze instelling  bestaat niet');
 		}
 		switch(self::getType($key)){
+			case 'string':
+				if(!preg_match('/^[\w\-_ ]*$/', $value)){
+					$value=self::getDefault($key);
+				}
 			case 'int':
 				$value=(int)$value;
 				//check op minimum

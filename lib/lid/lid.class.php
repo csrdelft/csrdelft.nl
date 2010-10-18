@@ -246,7 +246,7 @@ class Lid implements Serializable, Agendeerbaar{
 		if($this->getVerticaleLetter()=='Geen'){
 			return 'Geen kring';
 		}
-		$vertkring=$this->getVerticaleLetter().'.'.$this->profiel['kring'];
+		$vertkring=$this->getVerticale().' '.$this->getVerticaleLetter().'.'.$this->profiel['kring'];
 		
 		if($this->getStatus()=='S_KRINGEL'){
 			$postfix='(kringel)';
@@ -258,7 +258,7 @@ class Lid implements Serializable, Agendeerbaar{
 			$postfix='';
 		}
 		if($link){
-			return '<a href="/communicatie/verticalen#kring'.$vertkring.'">'.$vertkring.'</a> '.$postfix;
+			return '<a href="/communicatie/verticalen#kring'.$vertkring.'" title="Verticale '.$this->getVerticale().' ('.$this->getVerticaleLetter().') - kring '.$this->profiel['kring'].'">'.$vertkring.'</a> '.$postfix;
 		}else{
 			return $vertkring.' '.$postfix;
 		}
@@ -386,10 +386,9 @@ class Lid implements Serializable, Agendeerbaar{
 	
 	public function getWoonoord(){
 		require_once 'groepen/groepen.class.php';
-		$groepen=Groepen::getGroepenByType(2, $this->getUid());
-
-		if(is_array($groepen) AND isset($groepen[0]['id'])){
-			return new Groep($groepen[0]['id']);
+		$groepen=Groepen::getByTypeAndUid(2, $this->getUid());
+		if(is_array($groepen) AND $groepen[0] instanceof Groep){
+			return $groepen[0];
 		}
 		return false;
 	}
@@ -582,6 +581,19 @@ class Lid implements Serializable, Agendeerbaar{
 		}
 	}
 
+	/**
+	 * Controleer of een lid al in de google-contacts-lijst staat.
+	 */
+	public function isInGoogleContacts(){
+		require_once 'googlesync.class.php';
+		if(!GoogleSync::isAuthenticated()){
+			return null;
+		}
+		$sync=GoogleSync::instance();
+
+		return $sync->existsInGoogleContacts($this->getNaam());
+	}
+	
 	/*
 	 * We kunnen het lid-object type-casten naar string, dan wordt de
 	 * naam weeergegeven. We kunnen aangeven op wat voor manier dat moet,
@@ -726,27 +738,29 @@ class Lid implements Serializable, Agendeerbaar{
 	}
 }
 
+/**
+ * Lid-objectjes bewaren in Memcached, en in een lokale array.
+ */
 class LidCache{
-	private static $instance;
-
-	public static function instance(){
-		if(!isset(self::$instance)){
-			self::$instance=new LidCache();
-		}
-		return self::$instance;
-	}
+	private static $localCache=array();
 
 	public static function getLid($uid){
 		if(!Lid::isValidUid($uid)){
 			return false;
 		}
-		//kijken of we dit lid al in memcached hebben zitten.
+		//als de lokale cache het lid-object al heeft scheelt het weer
+		//een tripje naar memcached.
+		if(isset(LidCache::$localCache[$uid])){
+			return LidCache::$localCache[$uid];
+		}
+		//kijken of we dit lid al in memcached hebben zitten
 		$lid=Memcached::instance()->get($uid);
 		if($lid===false){
 			try{
-				//nieuw lid maken, in memcache stoppen en teruggeven.
+				//nieuw lid maken, in memcache & local cache stoppen en teruggeven.
 				$lid=new Lid($uid);
 				Memcached::instance()->set($uid, serialize($lid));
+				LidCache::$localCache[$uid]=$lid;
 				return $lid;
 			}catch(Exception $e){
 				return null;
@@ -754,19 +768,25 @@ class LidCache{
 		}
 		return unserialize($lid);
 	}
+
 	public static function flushLid($uid){
 		if(!Lid::isValidUid($uid)){
 			return false;
 		}
+		if(isset(LidCache::$localCache[$uid])){
+			unset(LidCache::$localCache[$uid]);
+		}
 		return Memcached::instance()->delete($uid);
 	}
+	
 	public static function updateLid($uid){
 		self::flushLid($uid);
 		Memcached::instance()->set($uid, serialize(new Lid($uid)));
 		return true;
 	}
+	
 	public static function flushAll(){
-		return Memcached::instance()->flush();
+		return Memcached::instance()->flush() AND LidCache::$localCache=array();
 	}
 }
 

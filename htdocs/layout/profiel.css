@@ -6,6 +6,8 @@
 #profiel h1{ margin-bottom: 10px; }
 #profiel img.pasfoto{ border: 1px solid black; margin-left: 20px;}
 #profiel .knopjes{ margin-left: 20px; line-height: 2.5em;}
+
+#profiel .knopjes .inGoogleContacts{ border: 1px solid darkblue; background-color: lightblue; }
 .jarig {
 	background-image: url(http://plaetjes.csrdelft.nl/layout/jarig.jpg);
 	background-repeat: none;
@@ -33,6 +35,7 @@
 
 #profiel .groepht{ float: left; width: 50%; }
 #profiel .groepot{ margin-left: 50%; }
+
 #profiel #recenteForumberichten{ width: 600px; }
 #profiel #recenteForumberichten td{ text-align: left; }
 
@@ -79,3 +82,4 @@ p.profielBewerken .pasfoto{ float: right; margin-left: 10px;}
 	margin-top: 8px;
 	margin-bottom: 1px;
 }
+li.verborgen{ display: none; }

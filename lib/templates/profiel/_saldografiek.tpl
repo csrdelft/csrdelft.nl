@@ -5,11 +5,10 @@ function makePlot(){
 	var timespan=40;
 	var options={
 		grid: { hoverable: true, clickable: true },
-		xaxis: { mode: "time", timeformat: "%d-%m %y"},
+		xaxis: { mode: "time", timeformat: "%d-%m<br />%y"},
 		yaxis: { tickFormatter: function(v, axis){ return '€ '+v.toFixed(axis.tickDecimals); }}
 	};
 	var plot=jQuery.plot('#saldografiek', [], options);
-
 
 	function updateData(timespan){
 		jQuery.ajax({
@@ -56,6 +55,7 @@ function makePlot(){
 		}
 	});
 }
+
 function showTooltip(x, y, contents) {
 	jQuery('<div id="tooltip">' + contents + '</div>').css( {
 		position: 'absolute',
@@ -70,7 +70,7 @@ function showTooltip(x, y, contents) {
 }
 {/literal}
 </script>
-<div id="saldografiek" style="display: none; width: 600px; height: 220px;"></div>
+<div id="saldografiek" style="display: none; width: 670px; height: 220px;"></div>
 
 {if !$loginlid->isSelf($lid->getUid())}
 	<br /><a class="knop" onclick="jQuery('#saldografiek').show(); makePlot(); jQuery(this).remove()">Toon saldografiek</a>

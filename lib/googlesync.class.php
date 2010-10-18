@@ -24,13 +24,23 @@ class GoogleSync{
 	//feed contents
 	private $contactFeed=null;
 	private $groupFeed=null;
+
+	private static $instance;
+	public static function instance(){
+		if(!isset(self::$instance)){
+			self::$instance=new GoogleSync();
+		}
+		return self::$instance;
+	}
 	
-	public function __construct(){
+	private function __construct(){
 		if(!isset($_SESSION['google_token'])){
 			throw new Exception('Authsub token not available');
 		}
-		
-		//$client=Zend_Gdata_ClientLogin::getHttpClient($user, $password, 'cp');
+
+		if(Instelling::get('googleContacts_groepnaam')!=''){
+			$this->groupname=Instelling::get('googleContacts_groepnaam');
+		}
 		$client=Zend_Gdata_AuthSub::getHttpClient($_SESSION['google_token']);
 
 		//$client->setHeaders('If-Match: *'); //delete or update only if not changed since it was last read.
@@ -44,22 +54,34 @@ class GoogleSync{
 
 	/* Laad de contact-feed in van google.
 	 */
-	private function loadContactFeed(){
+	private function loadContactFeed($force=false){
+		if(!$force AND isset($_SESSION['google_contactfeed'])){
+			$this->contactFeed=unserialize($_SESSION['google_contactfeed']);
+			return;
+		}
+		
 		$query = new Zend_Gdata_Query('http://www.google.com/m8/feeds/contacts/default/full?max-results=400');
-		$this->googleContacts=$this->gdata->getFeed($query);
+		$this->contactFeed=$this->gdata->getFeed($query);
+		//gaat nu session in, maar wellicht beter om het gewoon in de memcache te rossen...
+		$_SESSION['google_contactfeed']=serialize($this->contactFeed);
 	}
 	/* Laad de group-feed in van google.
 	 */
-	private function loadGroupFeed(){
+	private function loadGroupFeed($force=false){
+		if(!$force AND isset($_SESSION['google_groupfeed'])){
+			$this->groupFeed=unserialize($_SESSION['google_groupfeed']);
+			return;
+		}
 		$query=new Zend_Gdata_Query('http://www.google.com/m8/feeds/groups/default/full');
 		$this->groupFeed=$this->gdata->getFeed($query);
+		$_SESSION['google_groupfeed']=serialize($this->groupFeed);
 	}
 	
 	/* Trek naam en google-id uit de feed, de rest is niet echt nodig.
 	 */
 	public function getGoogleContacts(){
 		$return=array();
-		foreach($this->googleContacts as $contact){
+		foreach($this->contactFeed as $contact){
 			//typecast naar string, dan komt het relevante veld uit het Zend-objectje rollen
 			$return[]=array(
 				'name'=>(string)$contact->title,
@@ -144,6 +166,9 @@ class GoogleSync{
 	 * @return string met foutmeldingen en de namen van de gesyncte leden.
 	 */
 	public function syncLidBatch($leden){
+		//kan veel tijd kosten, dus time_limit naar 0 zodat het oneindig door kan gaan.
+		set_time_limit(0);
+
 		$lidBatch=array();
 		foreach($leden as $lid){
 			if($lid instanceof Lid){
@@ -342,7 +367,10 @@ class GoogleSync{
 			
 		}
 	}
-	
+
+	public static function isAuthenticated(){
+		return isset($_SESSION['google_token']);
+	}
 	/*
 	 * Vraag een Authsub-token aan bij google, plaats bij ontvangen in _SESSION['google_token'].
 	 */
