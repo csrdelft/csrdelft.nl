@@ -27,7 +27,7 @@ if(isset($_GET['addToGoogle'])){
 	require_once('googlesync.class.php');
 	GoogleSync::doRequestToken(CSR_ROOT.$_SERVER['REQUEST_URI']);
 
-	$gSync=new GoogleSync();
+	$gSync=GoogleSync::instance();
 	$message='<h2>Sync naar Google-contacts uitgevoerd</h2>'.$gSync->syncLidBatch($zoeker->getLeden());
 	
 	LedenlijstContent::invokeRefresh($message, CSR_ROOT.'communicatie/lijst.php');
