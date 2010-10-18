@@ -22,7 +22,7 @@
 					{if $lid->getStatus()=='S_NOVIET' AND $loginlid->hasPermission('groep:novcie')}
 						<a href="/communicatie/profiel/{$profhtml.uid}/novietBewerken" class="knop"><img src="{$csr_pics}forum/bewerken.png" title="Bewerk dit profiel" />Noviet bewerken</a><br />
 					{/if}
-					<a href="/communicatie/profiel/{$profhtml.uid}/addToGoogleContacts/" class="knop{if $lid->isInGoogleContacts()} inGoogleContacts{/if}" title="{if $lid->isInGoogleContacts()}Er bestaat al een contact met deze naam in je Google-contacts. Klik om te updaten.{else}Voeg dit profiel toe aan mijn google adresboek{/if}"><img src="http://code.google.com/favicon.ico" /></a>
+					<a href="/communicatie/profiel/{$profhtml.uid}/addToGoogleContacts/" class="knop{*if $lid->isInGoogleContacts()} inGoogleContacts{/if*}" title="{*if $lid->isInGoogleContacts()}Er bestaat al een contact met deze naam in je Google-contacts. Klik om te updaten.{else*}Voeg dit profiel toe aan mijn google adresboek{*/if*}"><img src="http://code.google.com/favicon.ico" /></a>
 					<br />
 				</div>
 			</div>
