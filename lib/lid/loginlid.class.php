@@ -273,7 +273,7 @@ class LoginLid{
 				}catch(Exception $e){
 					//de groep bestaat niet, we gaan verder.
 				}
-			//Is een lid man, vrouw en/of geslacht?		
+			//Is een lid man, vrouw en/of geslacht?
 			}elseif(substr($permissie, 0, 8)=='geslacht'){
 				$geslacht=strtolower(substr($permissie, 9));
 				if($geslacht==$this->lid->getGeslacht()){
@@ -285,6 +285,11 @@ class LoginLid{
 			//Behoort een lid tot een bepaalde lichting?
 			}elseif(substr($permissie, 0, 7)=='lidjaar'){
 				$lidjaar=substr($permissie, 8);
+				if($lidjaar==$this->lid->getProperty('lidjaar')){
+					return true;
+				}
+			}elseif(substr($permissie, 0, 8)=='lichting'){
+				$lidjaar=substr($permissie, 9);
 				if($lidjaar==$this->lid->getProperty('lidjaar')){
 					return true;
 				}
