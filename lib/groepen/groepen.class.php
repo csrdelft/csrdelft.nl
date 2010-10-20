@@ -195,11 +195,16 @@ class Groepen{
 	/*
 	 * Haal de huidige groepen van een bebaald type voor een bepaald lid.
 	 */
-	public static function getByTypeAndUid($type, $uid){
+	public static function getByTypeAndUid($type, $uid, $status='ht'){
 		$db=MySql::instance();
 
 		$groepen=array();
 		if(Lid::isValidUid($uid)){
+			if($status!=null AND in_array($status, array('ht', 'ft', 'ot'))){
+				$statusfilter=" AND status='".$status."' ";
+			}else{
+				$statusfilter='';
+			}
 			$qGroepen="
 				SELECT id
 				FROM groep
@@ -207,6 +212,7 @@ class Groepen{
 					SELECT id
 					FROM groeptype
 					WHERE id=".(int)$type."
+					".$statusfilter."
 				) AND id IN (
 					SELECT groepid FROM groeplid WHERE uid = '".$uid."'
 				);";
