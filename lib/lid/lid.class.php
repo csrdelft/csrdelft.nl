@@ -387,7 +387,7 @@ class Lid implements Serializable, Agendeerbaar{
 	public function getWoonoord(){
 		require_once 'groepen/groepen.class.php';
 		$groepen=Groepen::getByTypeAndUid(2, $this->getUid());
-		if(is_array($groepen) AND $groepen[0] instanceof Groep){
+		if(is_array($groepen) AND isset($groepen[0]) AND $groepen[0] instanceof Groep){
 			return $groepen[0];
 		}
 		return false;
