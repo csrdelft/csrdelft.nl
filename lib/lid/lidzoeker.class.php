@@ -48,7 +48,7 @@ class LidZoeker{
 	private $result=null;
 	
 	public function __construct(){
-		
+
 		//wat extra velden voor moderators.
 		if(Loginlid::instance()->hasPermission('P_LEDEN_MOD')){
 			$this->allowVelden=array_merge(
@@ -65,6 +65,12 @@ class LidZoeker{
 			$parts=explode('&', $query);
 		}
 		$this->rawQuery=$query;
+
+		//als er geen explicite status is opgegeven, en het zoekende lid is oudlid, dan zoeken we automagisch
+		//ook in de oudleden.
+		if(!isset($query['status']) AND LoginLid::instance()->getLid()->getStatus()=='S_OUDLID'){
+			$this->rawQuery['status']='LEDEN|OUDLID';
+		}
 		
 		foreach($query as $key => $value){
 			switch($key){
@@ -89,7 +95,9 @@ class LidZoeker{
 				break;
 				case 'status':
 					$value=strtoupper($value);
-					
+
+					//als op alle lid-statussen moet worden gezocht verwijderen we
+					//eventueel aanwezige filters en zoeken we in alles.
 					if($value=='*' OR $value=='ALL'){
 						if(isset($this->filters['status'])){
 							unset($this->filters['status']);
