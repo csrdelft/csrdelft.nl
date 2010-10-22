@@ -62,7 +62,7 @@ class LidZoeker{
 	
 	public function parseQuery($query){
 		if(!is_array($query)){
-			$parts=explode('&', $query);
+			$query=explode('&', $query);
 		}
 		$this->rawQuery=$query;
 
@@ -72,7 +72,7 @@ class LidZoeker{
 			$this->rawQuery['status']='LEDEN|OUDLID';
 		}
 		
-		foreach($query as $key => $value){
+		foreach($this->rawQuery as $key => $value){
 			switch($key){
 				case 'q':
 					$this->query=$value;
@@ -105,7 +105,6 @@ class LidZoeker{
 						break;
 					}
 					$filters=explode('|', $value);
-					
 					
 					$add=array();
 					foreach($filters as $filter){
