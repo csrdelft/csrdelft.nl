@@ -57,13 +57,15 @@ class LedenlijstContent extends SimpleHTML{
 	<li><a href="/communicatie/verticalen/">Kringen</a></li>
 </ul>';
 		echo '<hr />';
-		
-		if(strstr($_SERVER['REQUEST_URI'], '?')!==false){
-			$url=$_SERVER['REQUEST_URI'].'&amp;addToGoogle=true';
-		}else{
-			$url=$_SERVER['REQUEST_URI'].'?addToGoogle=true';
+
+		if($this->zoeker->count()>0){
+			if(strstr($_SERVER['REQUEST_URI'], '?')!==false){
+				$url=$_SERVER['REQUEST_URI'].'&amp;addToGoogle=true';
+			}else{
+				$url=$_SERVER['REQUEST_URI'].'?addToGoogle=true';
+			}
+			echo '<a href="'.$_SERVER['REQUEST_URI'].'&amp;addToGoogle=true" class="knop" style="float: right" title="Huidige selectie exporteren naar Google Contacts" onclick="return confirm(\'Weet u zeker dat u deze '.$this->zoeker->count().' leden wilt importeren in uw Google-contacts?\')"><img src="http://code.google.com/favicon.ico" alt="google"/></a>';
 		}
-		echo '<a href="'.$_SERVER['REQUEST_URI'].'&amp;addToGoogle=true" class="knop" style="float: right" title="Huidige selectie exporteren naar Google Contacts" onclick="return confirm(\'Weet u zeker dat u deze '.$this->zoeker->count().' leden wilt importeren in uw Google-contacts?\')"><img src="http://code.google.com/favicon.ico" alt="google"/></a>';
 		$melding=$this->getMelding();
 		if($melding!=''){
 			echo $melding.'<br />';
@@ -77,8 +79,9 @@ class LedenlijstContent extends SimpleHTML{
 		echo '<label for="status">Status:</label>';
 		$this->viewSelect('status', array(
 			'LEDEN'=>'Leden', 
-			'NOVIET'=>'Novieten', 'GASTLID'=>'Gastlid', 
-			'LEDEN|OUDLID'=>'Leden & oudleden', 'ALL'=>'Alles'));
+			'NOVIET'=>'Novieten', 'GASTLID'=>'Gastlid',
+			'OUDLEDEN'=> 'Oudleden', 
+			'LEDEN|OUDLEDEN'=>'Leden & oudleden', 'ALL'=>'Alles'));
 		echo '<br />';
 		echo '<label for="weergave">Weergave:</label>';
 		$this->viewSelect('weergave', array(

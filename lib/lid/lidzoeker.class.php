@@ -35,7 +35,8 @@ class LidZoeker{
 	private $sortable=array(
 		'achternaam' => 'Achternaam', 'email' => 'Email', 'gebdatum' => 'Geboortedatum',
 		'lidjaar' => 'lichting', 'studie' => 'Studie');
-	
+
+	//standaardwaarden voor het zoeken zonder parameters
 	private $rawQuery=array('status'=>'LEDEN', 'sort'=>'achternaam');
 	
 	private $query='';
@@ -61,16 +62,19 @@ class LidZoeker{
 	}
 	
 	public function parseQuery($query){
+		$this->result=null; //nieuwe parameters, oude resultaat wegmikken.
+
 		if(!is_array($query)){
 			$query=explode('&', $query);
 		}
 		$this->rawQuery=$query;
-
+	
 		//als er geen explicite status is opgegeven, en het zoekende lid is oudlid, dan zoeken we automagisch
 		//ook in de oudleden.
 		if(!isset($query['status']) AND LoginLid::instance()->getLid()->getStatus()=='S_OUDLID'){
-			$this->rawQuery['status']='LEDEN|OUDLID';
+			$this->rawQuery['status']='LEDEN|OUDLEDEN';
 		}
+
 		
 		foreach($this->rawQuery as $key => $value){
 			switch($key){
@@ -95,7 +99,6 @@ class LidZoeker{
 				break;
 				case 'status':
 					$value=strtoupper($value);
-
 					//als op alle lid-statussen moet worden gezocht verwijderen we
 					//eventueel aanwezige filters en zoeken we in alles.
 					if($value=='*' OR $value=='ALL'){
@@ -110,7 +113,10 @@ class LidZoeker{
 					foreach($filters as $filter){
 						if($filter=='LEDEN'){
 							$add=array_merge($add, array('S_LID', 'S_NOVIET', 'S_GASTLID'));
+							continue;
 						}
+						if($filter=='OUDLEDEN') $filter='OUDLID';
+
 						$filter='S_'.$filter;
 						if(in_array($filter, $this->allowStatus)){
 							$add[]=$filter;
