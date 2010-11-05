@@ -723,7 +723,7 @@ class Lid implements Serializable, Agendeerbaar{
 			) AND
 			(status='S_NOVIET' OR status='S_GASTLID' OR status='S_LID' OR status='S_KRINGEL') AND
 			NOT gebdatum = '0000-00-00'
-			ORDER BY verjaardag ASC
+			ORDER BY verjaardag ASC, lidjaar, gebdatum, achternaam
 			".$limitclause.";";
 
 		$leden=MySql::instance()->query2array($query);
