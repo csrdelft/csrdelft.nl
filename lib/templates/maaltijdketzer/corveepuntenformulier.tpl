@@ -10,7 +10,7 @@
 		{foreach from=$maal.formulier.taken.toegekend key=lid item=selected}
 		<tr>
 			<td>
-				{$lid|csrnaam}
+				{$lid|string_format:'%04d'|csrnaam}
 			</td>
 			<td>
 				{$selected}

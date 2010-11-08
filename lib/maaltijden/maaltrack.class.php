@@ -320,8 +320,7 @@ class MaalTrack {
 		if(!$this->isMaaltijd($maalid)){
 			$this->_error="Opgegeven maaltijd bestaat niet.";
 			return false;
-		}
-		$lidcache = LidCache::instance();
+		}		
 		
 		//Haal op uit de maaltijdgegevens wie wat gedaan heeft
 		//Dit blijft tijdens de hele functie constant
@@ -361,7 +360,7 @@ class MaalTrack {
 			$dbarray = $this->_db->next($dbresult);
 			$db_toegekend = $dbarray['punten_toegekend'];
 
-			$corveelid = new CorveeLid($lidcache->getLid($uid));			
+			$corveelid = new CorveeLid(LidCache::getLid((string)$uid));						
 			
 			//Als iemand nog geen punten toegekend had, maar nu wel, ken ze dan toe
 			if($db_toegekend!='ja' && $form_toegekend=='ja'){				
@@ -587,7 +586,7 @@ class MaalTrack {
 			$this->_error="Opgegeven maaltijd bestaat niet.";
 			return false;
 		}
-		$lidcache = LidCache::instance();
+		
 		
 		//Haal op uit de maaltijdgegevens wie wat gedaan heeft
 		//Dit blijft tijdens de hele functie constant
@@ -624,7 +623,7 @@ class MaalTrack {
 			$dbarray = $this->_db->next($dbresult);
 			$db_toegekend = $dbarray['punten_toegekend'];
 			
-			$corveelid = new CorveeLid($lidcache->getLid($uid));	
+			$corveelid = new CorveeLid(LidCache::getLid($uid));	
 
 			//Als iemand nog geen punten toegekend had, maar nu wel, ken ze dan toe
 			if($db_toegekend!='ja' && $form_toegekend=='ja'){				

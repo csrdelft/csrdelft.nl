@@ -4,7 +4,7 @@
 # maaltijden/class.corveelid.php
 # -------------------------------------------------------------------
 # CorveeLid bevat functies om de eigenschappen
-# van Lid die met corvee te maken hebben aan
+# van een Lid die met corvee te maken hebben aan
 # te passen. Dit zijn onder meer:
 # - Het kwalikok zijn
 # - Het aantal corvee-bonuspunten
@@ -14,8 +14,10 @@
 class CorveeLid {
 	private $lid;
 	
-	//Deze klasse is bedoeld om maar één instantie te hebben, voor het ingelogde lid.	
 	public function __construct($lid){
+		if(!$lid instanceof Lid){
+			throw new Exception('Geen correct Lid-object opgegeven.');
+		}
 		$this->lid = $lid;
 	}	
 	
