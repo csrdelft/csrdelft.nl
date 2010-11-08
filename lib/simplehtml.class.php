@@ -94,11 +94,17 @@ class Kolom extends SimpleHTML {
 		}
 	}
 	private function defaultView(){
-
 			# ishetalvrijdag
-			if(Instelling::get('zijbalk_ishetalvrijdag')=='ja'){
-				echo '<div id="ishetalvrijdag">Is het al vrijdag?<br />';
-				if(date('w')==5){
+			if(Instelling::get('zijbalk_ishetal')!='niet weergeven'){
+				echo '<div id="ishetalvrijdag">Is het al '.Instelling::get('zijbalk_ishetal').'?<br />';
+
+				switch(Instelling::get('zijbalk_ishetal')){
+					case 'vrijdag': $ja=(date('w')==5); break;
+					case 'donderdag': $ja=(date('w')==4); break;
+					case 'zondag': $ja=(date('w')==0); break;
+					case 'borrel': $ja=(date('w')==4 AND date('H')>21); break;
+				}
+				if($ja){
 					echo '<div class="ja">JA!</div>';
 				}else{
 					echo '<div class="nee">NEE.</div>';
