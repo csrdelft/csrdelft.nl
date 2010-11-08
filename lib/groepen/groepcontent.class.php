@@ -239,7 +239,8 @@ class Groepgeschiedeniscontent extends SimpleHTML{
 class GroepenProfielContent extends SimpleHTML{
 	private $uid;
 
-	private $display_limit=10;
+	private $display_lower_limit=8;
+	private $display_upper_limit=12;
 	
 	public function __construct($uid){
 		$this->uid=$uid;
@@ -260,8 +261,15 @@ class GroepenProfielContent extends SimpleHTML{
 			$return.='<ul class="groeplijst nobullets">';
 			$i=0;
 			$style='';
+
+			//zorg dat als het aantal tussen onder en bovengrens in zit gewoon alles wordt weergegeven,
+			$display_limit=$this->display_lower_limit;
+			if(count($groepen)>$this->display_lower_limit AND count($groepen)<$this->display_upper_limit){
+				$display_limit=$this->display_upper_limit;
+			}
+			
 			foreach($groepen as $groep){
-				if($i>$this->display_limit){
+				if($i>$display_limit){
 					$style='style="display: none;" ';
 				}
 				//op een of andere manier werkt het hier niet als ik een class-property gebruik,
@@ -271,7 +279,7 @@ class GroepenProfielContent extends SimpleHTML{
 			}
 
 			$return.='</ul>';
-			if($i>$this->display_limit){
+			if($i>$display_limit){
 				$return.='<a onclick="jQuery(this).parent().children(\'ul\').children().show(); jQuery(this).remove();" class="handje">&raquo; meer </a>';
 			}
 			

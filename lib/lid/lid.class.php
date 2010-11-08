@@ -246,7 +246,7 @@ class Lid implements Serializable, Agendeerbaar{
 		if($this->getVerticaleLetter()=='Geen'){
 			return 'Geen kring';
 		}
-		$vertkring=$this->getVerticale().' '.$this->getVerticaleLetter().'.'.$this->profiel['kring'];
+		$vertkring=$this->getVerticaleLetter().'.'.$this->profiel['kring'];
 		
 		if($this->getStatus()=='S_KRINGEL'){
 			$postfix='(kringel)';
@@ -258,7 +258,7 @@ class Lid implements Serializable, Agendeerbaar{
 			$postfix='';
 		}
 		if($link){
-			return '<a href="/communicatie/verticalen#kring'.$vertkring.'" title="Verticale '.$this->getVerticale().' ('.$this->getVerticaleLetter().') - kring '.$this->profiel['kring'].'">'.$vertkring.'</a> '.$postfix;
+			return '<a href="/communicatie/verticalen#kring'.$vertkring.'" title="Verticale '.$this->getVerticale().' ('.$this->getVerticaleLetter().') - kring '.$this->profiel['kring'].'">'.$this->getVerticale().' '.$vertkring.'</a> '.$postfix;
 		}else{
 			return $vertkring.' '.$postfix;
 		}

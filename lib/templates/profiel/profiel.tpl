@@ -6,9 +6,6 @@
 				<div class="knopjes">
 					{if $magBewerken}
 						<a href="/communicatie/profiel/{$profhtml.uid}/bewerken" class="knop" title="Bewerk dit profiel">{icon get="bewerken"}</a>
-						{if $profhtml.uid==$loginlid->getUid()}
-							<a href="/instellingen/" class="knop" title="Webstekinstellingen">{icon get="instellingen"}</a>
-						{/if}
 					{/if}
 					
 					{if $isAdmin}
@@ -66,7 +63,7 @@
 				</div>
 			</div>
 			{if $isOudlid===false}
-			<div class="gegevensouders">			
+			<div class="gegevensouders">
 				{if $profhtml.o_adres!=''}
 					<div class="label">
 						<a href="http://maps.google.nl/maps?q={$profhtml.o_adres|urlencode}+{$profhtml.o_woonplaats|urlencode}+{$profhtml.o_land|urlencode} (ouders van {$lid->getNaamLink('civitas', 'html')})">

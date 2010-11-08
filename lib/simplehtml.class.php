@@ -95,6 +95,16 @@ class Kolom extends SimpleHTML {
 	}
 	private function defaultView(){
 
+			# ishetalvrijdag
+			if(Instelling::get('zijbalk_ishetalvrijdag')=='ja'){
+				echo '<div id="ishetalvrijdag">Is het al vrijdag?<br />';
+				if(date('w')==5){
+					echo '<div class="ja">JA!</div>';
+				}else{
+					echo '<div class="nee">NEE.</div>';
+				}
+				echo '</div><br />';
+			}
 			# Ga snel naar
 			if(Instelling::get('zijbalk_gasnelnaar')=='ja'){
 				require_once('menu.class.php');

@@ -16,5 +16,4 @@ function toggleEmails(vertkring){
 		document.getElementById('leden'+vertkring).innerHTML=kringen[vertkring];
 		delete kringen[vertkring];
 	}
-	console.log(kringen);
 }
