@@ -19,6 +19,7 @@ interface Agendeerbaar {
 	public function getTitel();
 	public function getBeschrijving();
 	public function isHeledag();
+
 }
 
 /**
@@ -210,10 +211,15 @@ class Agenda {
 
 		return $this->getItems($van, $tot);
 	}
-
-	public function getItemsByMaand($jaar, $maand, $filter) {		
+	public function getItemsByDay($jaar, $maand, $dag){
+		$van=mktime(0, 0, 0, $maand, $dag, $jaar);
+		$tot=mktime(0, 0, 0, $maand, $dag+1, $jaar);
+		
+		return $this->getItems($van, $tot, true);
+	}
+	public function getItemsByMaand($jaar, $maand, $filter) {
 		// Zondag van de eerste week van de maand uitrekenen
-		$startMoment = mktime(0, 0, 0, $maand, 1, $jaar);		
+		$startMoment = mktime(0, 0, 0, $maand, 1, $jaar);
 		if (date('w', $startMoment) != 0) {
 			$startMoment = strtotime('last Sunday', $startMoment);
 		}
@@ -249,6 +255,20 @@ class Agenda {
 		}	
 		
 		return $agenda;
+	}
+	/*
+	 * Zoek in de activiteiten (titel en beschrijving) van vandaag
+	 * naar het woord $woord, geef de eerste terug.
+	 */
+	public function isActiviteitGaande($woord){
+		foreach($this->getItemsByDay(date('Y'), date('m'), date('d')) as $item){
+			if(	stristr($item->getTitel(), $woord)!==false OR
+				stristr($item->getBeschrijving(), $woord)!==false ){
+				return $item;
+				break;
+			}
+		}
+		return null;
 	}
 	
 	/**

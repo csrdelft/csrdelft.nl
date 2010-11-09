@@ -96,13 +96,42 @@ class Kolom extends SimpleHTML {
 	private function defaultView(){
 			# ishetalvrijdag
 			if(Instelling::get('zijbalk_ishetal')!='niet weergeven'){
-				echo '<div id="ishetalvrijdag">Is het al '.Instelling::get('zijbalk_ishetal').'?<br />';
+				//random dingen.
+				if(Instelling::get('zijbalk_ishetal')=='willekeurig'){
+					$opties=array('jarig', 'vrijdag', 'donderdag', 'zondag', 'borrel', 'lunch', 'avond');
+					$ishetal=$opties[array_rand($opties)];
+				}else{
+					$ishetal=Instelling::get('zijbalk_ishetal');
+				}
+				switch($ishetal){
+					case 'jarig':
+						echo '<div id="ishetalvrijdag">Bent u al jarig?<br />';
+					break;
+					case 'borrel':
+					case 'lezing':
+						echo '<div id="ishetalvrijdag">Is er een '.$ishetal.'?<br />';
+					break;
+					default:
+						echo '<div id="ishetalvrijdag">Is het al '.$ishetal.'?<br />';
+					break;
+				}
 
-				switch(Instelling::get('zijbalk_ishetal')){
+				$ja=false;
+				switch($ishetal){
+					case 'jarig': $ja=LoginLid::instance()->getLid()->isJarig(); break;
+					case 'lunch': $ja=(date('Hi')>'1245' AND date('Hi')<'1345'); break;
+					case 'avond': $ja=(date('Hi')>'1700'); break;
 					case 'vrijdag': $ja=(date('w')==5); break;
 					case 'donderdag': $ja=(date('w')==4); break;
 					case 'zondag': $ja=(date('w')==0); break;
-					case 'borrel': $ja=(date('w')==4 AND date('H')>21); break;
+					case 'borrel':
+						require_once 'agenda/agenda.class.php';
+						$agenda=new Agenda();
+						$borrelvandaag=$agenda->isActiviteitGaande('borrel');
+						if($borrelvandaag instanceof AgendaItem){
+							$ja=time()>$borrelvandaag->getBeginMoment();
+						}
+					break;
 				}
 				if($ja){
 					echo '<div class="ja">JA!</div>';
