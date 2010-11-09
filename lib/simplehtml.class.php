@@ -105,7 +105,7 @@ class Kolom extends SimpleHTML {
 				}
 				switch($ishetal){
 					case 'jarig':
-						echo '<div id="ishetalvrijdag">Bent u al jarig?<br />';
+						echo '<div id="ishetalvrijdag">Ben ik al jarig?<br />';
 					break;
 					case 'borrel':
 					case 'lezing':
