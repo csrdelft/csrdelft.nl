@@ -147,7 +147,7 @@ class csrdelft extends SimpleHTML {
 		//als $this->_zijkolom geen Kolom-object bevat en niet false is
 		//$this->_zijkolom vullen met een standaard lege kolom.
 		if($this->_zijkolom!==false AND !($this->_zijkolom instanceof Kolom)){
-			$this->_zijkolom=new Kolom();
+			$this->_zijkolom=new Kolom(true);
 		}
 
 		header('Content-Type: text/html; charset=UTF-8');

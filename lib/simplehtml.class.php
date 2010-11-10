@@ -72,6 +72,81 @@ class string2object{
 		echo $this->_string;
 	}
 }
+class IsHetAlContent extends SimpleHTML{
+
+	private $ishetal=null;
+	private $opties=array('jarig', 'vrijdag', 'donderdag', 'zondag', 'borrel', 'lezing', 'lunch', 'avond');
+
+	private $ja=false; //ja of nee.
+	
+	public function __construct($ishetal){
+		if($ishetal=='willekeurig'){
+			$this->ishetal=$this->opties[array_rand($this->opties)];
+		}else{
+			$this->ishetal=Instelling::get('zijbalk_ishetal');
+		}
+		switch($this->ishetal){
+			case 'jarig': $this->ja=LoginLid::instance()->getLid()->isJarig(); break;
+			case 'lunch': $this->ja=(date('Hi')>'1245' AND date('Hi')<'1345'); break;
+			case 'avond': $this->ja=(date('Hi')>'1700'); break;
+			case 'vrijdag': $this->ja=(date('w')==5); break;
+			case 'donderdag': $this->ja=(date('w')==4); break;
+			case 'zondag': $this->ja=(date('w')==0); break;
+			case 'borrel':
+				require_once 'agenda/agenda.class.php';
+				$agenda=new Agenda();
+				$vandaag=$agenda->isActiviteitGaande($ishetal);
+				if($vandaag instanceof AgendaItem){
+					if($ishetal=='borrel'){
+						$this->ja=time()>$vandaag->getBeginMoment();
+					}else{
+						$this->ja=time()>$vandaag->getBeginMoment() AND time()<$vandaag->getEindMoment();
+					}
+				}
+			break;
+			case 'studeren':
+				if(isset($_COOKIE['studeren'])){
+					$this->ja=time()>($_COOKIE['studeren']+5*60);
+					$tijd=$_COOKIE['studeren'];
+				}else{
+					$tijd=time();
+				}
+				setcookie('studeren', $tijd, time()+30*60);
+			break;
+		}
+	}
+	
+	public function view(){
+		switch($this->ishetal){
+			case 'jarig':
+				echo '<div id="ishetalvrijdag">Ben ik al jarig?<br />';
+			break;
+			case 'studeren':
+				echo '<div id="ishetalvrijdag">Moet ik alweer studeren?<br />';
+			break;
+			case 'borrel':
+			case 'lezing':
+				echo '<div id="ishetalvrijdag">Is er een '.$this->ishetal.'?<br />';
+			break;
+			default:
+				echo '<div id="ishetalvrijdag">Is het al '.$this->ishetal.'?<br />';
+			break;
+		}
+
+		if($this->ja){
+			echo '<div class="ja">JA!</div>';
+			
+		}else{
+			if($this->ishetal=='jarig'){
+				echo '<div class="nee">NOG LANG NIET.</div>';
+			}else{
+				echo '<div class="nee">NEE.</div>';
+			}
+		}
+		echo '</div><br />';
+	}
+
+}
 
 class Kolom extends SimpleHTML {
 
@@ -79,8 +154,10 @@ class Kolom extends SimpleHTML {
 	# stuk pagina zit, wat we er met view() uit kunnen krijgen.
 	var $_objects = array();
 
-	public function __construct(){
-
+	public function __construct($default=false){
+		if($default){
+			$this->defaultView();
+		}
 	}
 
 	public function addObject($object){ $this->_objects[]=$object; }
@@ -96,49 +173,7 @@ class Kolom extends SimpleHTML {
 	private function defaultView(){
 			# ishetalvrijdag
 			if(Instelling::get('zijbalk_ishetal')!='niet weergeven'){
-				//random dingen.
-				if(Instelling::get('zijbalk_ishetal')=='willekeurig'){
-					$opties=array('jarig', 'vrijdag', 'donderdag', 'zondag', 'borrel', 'lunch', 'avond');
-					$ishetal=$opties[array_rand($opties)];
-				}else{
-					$ishetal=Instelling::get('zijbalk_ishetal');
-				}
-				switch($ishetal){
-					case 'jarig':
-						echo '<div id="ishetalvrijdag">Ben ik al jarig?<br />';
-					break;
-					case 'borrel':
-					case 'lezing':
-						echo '<div id="ishetalvrijdag">Is er een '.$ishetal.'?<br />';
-					break;
-					default:
-						echo '<div id="ishetalvrijdag">Is het al '.$ishetal.'?<br />';
-					break;
-				}
-
-				$ja=false;
-				switch($ishetal){
-					case 'jarig': $ja=LoginLid::instance()->getLid()->isJarig(); break;
-					case 'lunch': $ja=(date('Hi')>'1245' AND date('Hi')<'1345'); break;
-					case 'avond': $ja=(date('Hi')>'1700'); break;
-					case 'vrijdag': $ja=(date('w')==5); break;
-					case 'donderdag': $ja=(date('w')==4); break;
-					case 'zondag': $ja=(date('w')==0); break;
-					case 'borrel':
-						require_once 'agenda/agenda.class.php';
-						$agenda=new Agenda();
-						$borrelvandaag=$agenda->isActiviteitGaande('borrel');
-						if($borrelvandaag instanceof AgendaItem){
-							$ja=time()>$borrelvandaag->getBeginMoment();
-						}
-					break;
-				}
-				if($ja){
-					echo '<div class="ja">JA!</div>';
-				}else{
-					echo '<div class="nee">NEE.</div>';
-				}
-				echo '</div><br />';
+				$this->add(new IsHetAlContent(Instelling::get('zijbalk_ishetal')));
 			}
 			# Ga snel naar
 			if(Instelling::get('zijbalk_gasnelnaar')=='ja'){
@@ -184,11 +219,6 @@ class Kolom extends SimpleHTML {
 			}
 	}
 	public function view() {
-		# Als er geen balk is laten we de standaard-inhoud zien
-		if (count($this->_objects)==0){
-			$this->defaultView();
-		}
-
 		foreach ($this->_objects as $object) {
 			$object->view();
 			echo '<br />';
