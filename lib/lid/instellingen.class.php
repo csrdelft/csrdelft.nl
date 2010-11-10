@@ -21,7 +21,7 @@ class Instelling{
 			'forum_naamWeergave' => array('civitas', 'Naamweergave', 'enum', array('civitas', 'volledig', 'bijnaam', 'aaidrom')),
 			'forum_zoekresultaten' => array(40, 'Zoekresultaten', 'int'),
 			'forum_toonpasfotos' => array('nee', 'Pasfoto\'s standaard weergeven', 'enum', array('ja', 'nee')),
-			'zijbalk_ishetal' => array('niet weergeven', 'Is het al.', 'enum', array('niet weergeven', 'donderdag', 'vrijdag', 'zondag', 'lunch', 'avond', 'borrel', 'lezeing', 'jarig', 'studeren', 'willekeurig')),
+			'zijbalk_ishetal' => array('niet weergeven', 'Is het al.', 'enum', array('niet weergeven', 'donderdag', 'vrijdag', 'zondag', 'lunch', 'avond', 'borrel', 'lezing', 'jarig', 'studeren', 'willekeurig')),
 			'zijbalk_gasnelnaar' => array('ja', 'Ga snel naar weergeven', 'enum', array('ja', 'nee')),
 			'zijbalk_agendaweken' => array(2, 'Aantal weken vooruit agenda weergeven', 'int'),
 			'zijbalk_agenda_max' => array(15, 'Maximaal aantal agenda-items in zijbalk', 'int'),
