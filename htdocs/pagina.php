@@ -11,7 +11,6 @@ require_once 'configuratie.include.php';
 require_once 'pagina.class.php';
 require_once 'paginacontent.class.php';
 
-$zijkolom=new kolom();
 
 # de pagina-inhoud
 $pagina = new Pagina($_GET['naam']);
@@ -32,6 +31,7 @@ if (isset($_GET['bewerken']) && $pagina->magBewerken()){
 	
 	$zijkolomlijst = new PaginaContent($pagina);
 	$zijkolomlijst->setActie('zijkolom');
+	$zijkolom=new Kolom();
 	$zijkolom->add($zijkolomlijst);
 }elseif($pagina->magBekijken()){
 	$paginacontent->setActie('bekijken');
@@ -39,6 +39,7 @@ if (isset($_GET['bewerken']) && $pagina->magBewerken()){
 	$pagina = new Pagina('geentoegang');
 	$paginacontent = new PaginaContent($pagina);
 }
+
 
 # pagina weergeven
 if($_GET['naam']=='owee' OR $_GET['naam']=='oweeprogramma' OR $_GET['naam']=='video' OR $_GET['naam']=='interesse'){
@@ -53,7 +54,9 @@ if($_GET['naam']=='owee' OR $_GET['naam']=='oweeprogramma' OR $_GET['naam']=='vi
 if($_GET['naam']=='video'){
 	$depagina->setZijkolom(false);
 }else{
-	$depagina->setZijkolom($zijkolom);
+	if(isset($zijkolom)){
+		$depagina->setZijkolom($zijkolom);
+	}
 }
 
 $depagina->view();

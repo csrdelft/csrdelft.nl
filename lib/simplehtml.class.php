@@ -154,10 +154,8 @@ class Kolom extends SimpleHTML {
 	# stuk pagina zit, wat we er met view() uit kunnen krijgen.
 	var $_objects = array();
 
-	public function __construct($default=false){
-		if($default){
-			$this->defaultView();
-		}
+	public function __construct(){
+
 	}
 
 	public function addObject($object){ $this->_objects[]=$object; }
@@ -170,58 +168,61 @@ class Kolom extends SimpleHTML {
 			return $this->_objects[0]->getTitel();
 		}
 	}
-	private function defaultView(){
-			# ishetalvrijdag
-			if(Instelling::get('zijbalk_ishetal')!='niet weergeven'){
-				$this->add(new IsHetAlContent(Instelling::get('zijbalk_ishetal')));
-			}
-			# Ga snel naar
-			if(Instelling::get('zijbalk_gasnelnaar')=='ja'){
-				require_once('menu.class.php');
-				$this->add(new stringincluder(Menu::getGaSnelNaar()));
-			}
-
-			# Agenda
-			if(LoginLid::instance()->hasPermission('P_AGENDA_READ')){
-				if(Instelling::get('zijbalk_agendaweken')>0){
-					require_once('agenda/agenda.class.php');
-					require_once('agenda/agendacontent.class.php');
-					$agenda=new Agenda();
-					$agendacontent=new AgendaZijbalkContent($agenda, Instelling::get('zijbalk_agendaweken'));
-					$this->add($agendacontent);
-				}
-			}
-
-			# Laatste mededelingen
-			if(Instelling::get('zijbalk_mededelingen')>0){
-				require_once('mededelingen/mededeling.class.php');
-				require_once('mededelingen/mededelingencontent.class.php');
-				$content=new MededelingenZijbalkContent(Instelling::get('zijbalk_mededelingen'));
-				$this->add($content);
-			}
-
-			# Laatste forumberichten
-			if(Instelling::get('zijbalk_forum')>0){
-				require_once 'forum/forumcontent.class.php';
-				$forumcontent=new ForumContent('lastposts');
-				$this->add($forumcontent);
-			}
-			if(Instelling::get('zijbalk_forum_zelf')>0){
-				require_once 'forum/forumcontent.class.php';
-				$forumcontent=new ForumContent('lastposts_zelf');
-				$this->add($forumcontent);
-			}
-
-			# Komende 10 verjaardagen
-			if(Instelling::get('zijbalk_verjaardagen')>0){
-				require_once 'lid/verjaardagcontent.class.php';
-				$this->add(new VerjaardagContent('komende'));
-			}
-	}
 	public function view() {
 		foreach ($this->_objects as $object) {
 			$object->view();
 			echo '<br />';
+		}
+	}
+}
+class DefaultKolom extends Kolom{
+
+	public function __construct(){
+		# ishetalvrijdag
+		if(Instelling::get('zijbalk_ishetal')!='niet weergeven'){
+			$this->add(new IsHetAlContent(Instelling::get('zijbalk_ishetal')));
+		}
+		# Ga snel naar
+		if(Instelling::get('zijbalk_gasnelnaar')=='ja'){
+			require_once('menu.class.php');
+			$this->add(new stringincluder(Menu::getGaSnelNaar()));
+		}
+
+		# Agenda
+		if(LoginLid::instance()->hasPermission('P_AGENDA_READ')){
+			if(Instelling::get('zijbalk_agendaweken')>0){
+				require_once('agenda/agenda.class.php');
+				require_once('agenda/agendacontent.class.php');
+				$agenda=new Agenda();
+				$agendacontent=new AgendaZijbalkContent($agenda, Instelling::get('zijbalk_agendaweken'));
+				$this->add($agendacontent);
+			}
+		}
+
+		# Laatste mededelingen
+		if(Instelling::get('zijbalk_mededelingen')>0){
+			require_once('mededelingen/mededeling.class.php');
+			require_once('mededelingen/mededelingencontent.class.php');
+			$content=new MededelingenZijbalkContent(Instelling::get('zijbalk_mededelingen'));
+			$this->add($content);
+		}
+
+		# Laatste forumberichten
+		if(Instelling::get('zijbalk_forum')>0){
+			require_once 'forum/forumcontent.class.php';
+			$forumcontent=new ForumContent('lastposts');
+			$this->add($forumcontent);
+		}
+		if(Instelling::get('zijbalk_forum_zelf')>0){
+			require_once 'forum/forumcontent.class.php';
+			$forumcontent=new ForumContent('lastposts_zelf');
+			$this->add($forumcontent);
+		}
+
+		# Komende 10 verjaardagen
+		if(Instelling::get('zijbalk_verjaardagen')>0){
+			require_once 'lid/verjaardagcontent.class.php';
+			$this->add(new VerjaardagContent('komende'));
 		}
 	}
 }
