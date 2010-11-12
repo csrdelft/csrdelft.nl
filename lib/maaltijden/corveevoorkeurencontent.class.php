@@ -35,6 +35,7 @@ class CorveevoorkeurenContent extends SimpleHTML {
 		$aLeden = $lijst->getCorveeLedenGesorteerd($this->_sorteer, $this->_sorteer_richting);
 		
 		//arrays toewijzen en weergeven
+		$corveevoorkeuren->assign('voorkeurenheaders', array('Ma Kok','Ma Afw','Do Kok','Do afw','Theedk','Sc Fri','Sc Afz','Sc Keu'));
 		$corveevoorkeuren->assign('leden', $aLeden);
 		$corveevoorkeuren->assign('sorteer', $this->_sorteer);
 		$corveevoorkeuren->assign('sorteer_richting', $this->_sorteer_richting);

@@ -21,47 +21,40 @@
 	{/if}
 </ul>
 <hr />
+
 <h1>Corveevoorkeuren</h1>
 
 <table class="maaltijden">
 	{section name=leden loop=$leden}
-		{assign var='it' value=$smarty.section.leden.iteration-1}
-		{if $it%30 == 0}
-			<tr>
-				<th>&nbsp;</th>
+		{assign var='index' value=$smarty.section.leden.index}
+		{if $index%30 == 0}
+			<tr>				
+                <th>&nbsp;</th>
 				<th><a href="/actueel/maaltijden/corveevoorkeurenlijst/sorteer/uid/{if $sorteer_richting=='asc'}desc{else}asc{/if}">Naam</a></th>
-				<th style="width: 15px"><a href="/actueel/maaltijden/corveevoorkeurenlijst/sorteer/voorkeur_0/{if $sorteer_richting=='asc'}desc{else}asc{/if}">Ma Kok</a></th>
-                <th style="width: 15px"><a href="/actueel/maaltijden/corveevoorkeurenlijst/sorteer/voorkeur_1/{if $sorteer_richting=='asc'}desc{else}asc{/if}">Ma Afw</a></th>
-                <th style="width: 15px"><a href="/actueel/maaltijden/corveevoorkeurenlijst/sorteer/voorkeur_2/{if $sorteer_richting=='asc'}desc{else}asc{/if}">Do Kok</a></th>
-                <th style="width: 15px"><a href="/actueel/maaltijden/corveevoorkeurenlijst/sorteer/voorkeur_3/{if $sorteer_richting=='asc'}desc{else}asc{/if}">Do Afw</a></th>
-                <th style="width: 15px"><a href="/actueel/maaltijden/corveevoorkeurenlijst/sorteer/voorkeur_4/{if $sorteer_richting=='asc'}desc{else}asc{/if}">Theedk</a></th>
-                <th style="width: 15px"><a href="/actueel/maaltijden/corveevoorkeurenlijst/sorteer/voorkeur_5/{if $sorteer_richting=='asc'}desc{else}asc{/if}">Sc Fri</a></th>
-                <th style="width: 15px"><a href="/actueel/maaltijden/corveevoorkeurenlijst/sorteer/voorkeur_6/{if $sorteer_richting=='asc'}desc{else}asc{/if}">Sc Afz</a></th>
-                <th style="width: 15px"><a href="/actueel/maaltijden/corveevoorkeurenlijst/sorteer/voorkeur_7/{if $sorteer_richting=='asc'}desc{else}asc{/if}">Sc Keu</a></th>
-                
-				<th style="width: 75px"><a href="/actueel/maaltijden/corveevoorkeurenlijst/sorteer/corvee_vrijstelling/{if $sorteer_richting=='asc'}desc{else}asc{/if}">Vrijstelling</a></th>
-				<th style="width: 60px"><a href="/actueel/maaltijden/corveevoorkeurenlijst/sorteer/corvee_punten/{if $sorteer_richting=='asc'}desc{else}asc{/if}">Punten</a></th>
+                {section name=header loop=$voorkeurenheaders}                    
+                <th style="width: 15px"><a href="/actueel/maaltijden/corveevoorkeurenlijst/sorteer/voorkeur_{$smarty.section.header.index}/{if $sorteer_richting=='asc'}desc{else}asc{/if}">{$voorkeurenheaders[header]}</a></th>    
+                {/section}                
+				<th><a href="/actueel/maaltijden/corveevoorkeurenlijst/sorteer/corvee_vrijstelling/{if $sorteer_richting=='asc'}desc{else}asc{/if}">Vrijstelling</a></th>
+				<th><a href="/actueel/maaltijden/corveevoorkeurenlijst/sorteer/corvee_punten/{if $sorteer_richting=='asc'}desc{else}asc{/if}">Punten</a></th>
+                <th><a href="/actueel/maaltijden/corveevoorkeurenlijst/sorteer/corvee_prognose/{if $sorteer_richting=='asc'}desc{else}asc{/if}">Prognose</a></th>
 			</tr>
 		{/if}
-		{assign var='lid' value=$leden.$it.uid}
-		{if $lid!=''}
-			{if $loginlid->hasPermission('P_MAAL_MOD')}				
-				<tr style="background-color: {cycle values="#e9e9e9, #fff"};{if $bewerkt_lid==$lid}background-color: #bfb{else}{/if}">
-					<td><a name="lid_{$lid}"></a></td>
-					<td>{$lid|csrnaam}</td>                    
-                    {assign var='voorkeuren' value=$leden.$it.corvee_voorkeuren}
-                    {section name=voorkeuren loop=$voorkeuren}
-                        {assign var='it_voorkeuren' value=$smarty.section.voorkeuren.iteration-1}
-                            <td>{if $voorkeuren.$it_voorkeuren}{$voorkeuren.$it_voorkeuren}{/if}</td>
-					{/section}
-                    <td>{$leden.$it.corvee_vrijstelling}%</td>
-					<td>{$leden.$it.corvee_punten}</td>								
-				</tr>
-				
-				</form>
-			{else}				
-			{/if}
-		{else}FOUT{/if}
+		{assign var='lid' value=$leden.$index.uid}
+		{if $lid!='' and $loginlid->hasPermission('P_MAAL_MOD')}				
+            <tr style="background-color: {cycle values='#e9e9e9, #fff'};{if $bewerkt_lid==$lid}background-color: #bfb{else}{/if}">
+                <td><a name="lid_{$lid}"></a></td>
+                <td>{$lid|csrnaam}</td>                    
+                {assign var='voorkeuren' value=$leden.$index.corvee_voorkeuren}
+                {section name=voorkeuren loop=$voorkeuren}
+                    {assign var='it_voorkeuren' value=$smarty.section.voorkeuren.iteration-1}
+                        <td>{if $voorkeuren.$it_voorkeuren}{$voorkeuren.$it_voorkeuren}{/if}</td>
+                {/section}
+                <td>{$leden.$index.corvee_vrijstelling}%</td>
+                <td>{$leden.$index.corvee_punten}</td>								
+                <td>{$leden.$index.corvee_prognose}</td>								
+            </tr>
+		{else}
+        {/if}
 	{/section}
 </table>
 <br />
