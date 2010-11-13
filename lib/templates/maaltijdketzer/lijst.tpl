@@ -45,8 +45,7 @@ Regels omtrent het betalen van de maaltijden op Confide:
 <ul>
 	<li>maaltijdprijs: &euro; {$maaltijd.prijs|string_format:"%.2f"}</li>
 	<li>niet betaald = nb</li>
-	<li>&euro; {$maaltijd.prijs|string_format:"%.2f"} betaald = kruisje (x)</li>
-	<li>ander bedrag ingelegd: schrijf duidelijk in het hokje hoeveel je in de helm hebt gegooid.</li>
+	<li>Schrijf duidelijk in het hokje hoeveel je in de helm hebt gegooid.</li>
 	<li>bevat derde kolom 'ok'? Dan hebt u nog voldoende tegoed voor deze maaltijd</li>
 	<li>als je géén tegoed hebt bij de maalcie betekent een niet direct betaalde maaltijd 20 cent boete!</li>
 </ul>
