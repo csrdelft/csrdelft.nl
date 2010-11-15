@@ -200,7 +200,7 @@
 					<div class="label">Recent:</div>
 					<ul class="nobullets data">
 						{foreach from=$profhtml.recenteMaaltijden item=maaltijd}
-							<li><em>{$maaltijd.datum|date_format:"%a %d-%m"}</em> - {$maaltijd.tekst|escape:'html'}</li>
+							<li><em title="{$maaltijd.datum|date_format:"%Y-%m-%d"}">{$maaltijd.datum|date_format:"%a %d-%m"}</em> - {$maaltijd.tekst|escape:'html'}</li>
 						{/foreach}
 					</ul>
 				{/if}
