@@ -237,8 +237,8 @@ class Profiel{
 		}
 		
 		if(LoginLid::instance()->hasPermission('P_ADMIN,P_BESTUUR,groep:novcie')){
-			$form[]=new SelectField('ovkaart', $profiel['ovkaart'], 'OV-kaart', array('' => '','geen' => '(Nog) geen OV-kaart','week' => 'Week','weekend' => 'Weekend','niet' => 'Niet geactiveerd'));
-			$form[]=new SelectField('zingen', $profiel['zingen'], 'Zingen', array('' => '','ja' => 'Ja, ik zing in een band/koor','nee' => 'Nee, ik houd niet van zingen','soms' => 'Alleen onder de douche','anders' => 'Anders'));
+			$form[]=new SelectField('ovkaart', $profiel['ovkaart'], 'OV-kaart', array('' => 'Kies...','geen' => '(Nog) geen OV-kaart','week' => 'Week','weekend' => 'Weekend','niet' => 'Niet geactiveerd'));
+			$form[]=new SelectField('zingen', $profiel['zingen'], 'Zingen', array('' => 'Kies...','ja' => 'Ja, ik zing in een band/koor','nee' => 'Nee, ik houd niet van zingen','soms' => 'Alleen onder de douche','anders' => 'Anders'));
 			$form[]=new TextField('novitiaat', $profiel['novitiaat'], 'Wat verwacht je van het novitiaat?');
 			$form[]=new Comment('<br>Einde vragenlijst<br><br><br><br><br>');
 			$form[]=new TextField('kgb', $profiel['kgb'], 'NovCie-opmerking');
