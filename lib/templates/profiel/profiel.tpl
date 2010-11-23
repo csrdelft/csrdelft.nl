@@ -178,12 +178,7 @@
 		<div class="gegevens">
 			{if $profhtml.eetwens!=''}
 				<div class="label">Dieet:</div>
-				<div class="data">{$profhtml.eetwens|escape:'html'}</div>
-				<br />
-			{/if}
-			{if $profhtml.corvee_wens!=''}
-				<div class="label">Corveewens:</div>
-				<div class="data">{$profhtml.corvee_wens|escape:'html'}</div>
+				<div class="data">{$profhtml.eetwens}</div>
 				<br />
 			{/if}
 			{if $profhtml.abos|@count > 0}
