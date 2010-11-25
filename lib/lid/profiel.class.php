@@ -156,7 +156,7 @@ class Profiel{
 			if(in_array($profiel['status'], array('S_NOBODY', 'S_OVERLEDEN'))){
 				$form[]=new DatumField('sterfdatum', $profiel['sterfdatum'], 'Overleden op:');
 			}
-			if($hasLedenMod){
+			if($hasLedenMod OR $profiel['status']=='S_OUDLID'){
 				$form[]=new UidField('echtgenoot', $profiel['echtgenoot'], 'Echtgenoot (lidnummer):');
 				$form[]=new InputField('adresseringechtpaar',$profiel['adresseringechtpaar'], 'Tenaamstelling post echtpaar:',250);
 			}

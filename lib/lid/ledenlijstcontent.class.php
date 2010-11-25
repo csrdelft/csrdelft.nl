@@ -359,7 +359,19 @@ class LLCSV extends LLweergave{
 					$return.=$lid->getPasfoto(false);
 				break;
 				case 'patroon':
-					$return.=$lid->getPatroonUid();
+					$patroon=$lid->getPatroon();
+					if($patroon instanceof Lid){
+						$return.=$patroon->getNaamLink('full', 'plain');
+					}
+				break;
+				case 'echtgenoot':
+					$echtgenoot=$lid->getEchtgenoot();
+					if($echtgenoot instanceof Lid){
+						$return.=$echtgenoot->getNaamLink('full', 'plain');
+					}
+				break;
+				case 'adresseringechtpaar':
+					$return.=$lid->getAdresseringechtpaar();
 				break;
 				case 'verticale':
 					$return.=$lid->getVerticale();

@@ -320,7 +320,14 @@ class Lid implements Serializable, Agendeerbaar{
 			return null;
 		}
 	}
-	
+	public function getAdresseringechtpaar(){
+		if($this->profiel['adresseringechtpaar'] == ''){
+			return $this->getNaamLink('voorletters','plain');
+		}else{
+			return $this->profiel['adresseringechtpaar'];
+		}
+	}
+			
 	public function getPatroonUid(){	return $this->profiel['patroon']; }
 	public function getPatroon(){
 		if($this->getPatroonUid()!=''){
@@ -507,6 +514,11 @@ class Lid implements Serializable, Agendeerbaar{
 			case 'full':
 			case 'volledig':
 				$naam=$sVolledigeNaam;
+			break;
+			case 'voorletters':
+				$naam=$this->profiel['voorletters'].' ';
+				if($this->profiel['tussenvoegsel']!=''){ $naam.=$this->profiel['tussenvoegsel'].' '; }
+				$naam.=$this->profiel['achternaam'];
 			break;
 			case 'civitas':
 				if($this->profiel['status']=='S_NOVIET'){
