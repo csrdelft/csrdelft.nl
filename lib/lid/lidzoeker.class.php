@@ -25,7 +25,8 @@ class LidZoeker{
 		'gebdatum' => 'Geb.datum',
 		'studienr' => 'StudieNr.',
 		'jid' => 'Jabber',
-		'ontvangtcontactueel' => 'Contactueel?');
+		'ontvangtcontactueel' => 'Contactueel?',
+		'adresseringechtpaar' => 'Post echtpaar t.n.v.');
 	
 	//toegestane opties voor het statusfilter.
 	private $allowStatus=array('S_LID', 'S_NOVIET', 'S_GASTLID', 'S_NOBODY', 'S_OUDLID', 'S_KRINGEL', 'S_OVERLEDEN');
@@ -54,7 +55,7 @@ class LidZoeker{
 		if(Loginlid::instance()->hasPermission('P_LEDEN_MOD')){
 			$this->allowVelden=array_merge(
 				$this->allowVelden, 
-				array('studienr', 'bankrekening', 'muziek', 'ontvangtcontactueel', 'kerk', 'lidafdatum'));
+				array('studienr', 'bankrekening', 'muziek', 'ontvangtcontactueel', 'kerk', 'lidafdatum','echtgenoot', 'adresseringechtpaar', 'land'));
 		}
 		
 		//parse default values.

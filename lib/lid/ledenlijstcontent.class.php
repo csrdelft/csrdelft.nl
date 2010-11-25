@@ -273,6 +273,14 @@ class LLLijst extends LLweergave{
 						echo '-';
 					}
 				break;
+				case 'echtgenoot':
+					$echtgenoot=$lid->getEchtgenoot();
+					if($echtgenoot instanceof Lid){
+						echo $echtgenoot->getNaamLink('full', 'link');
+					}else{
+						echo '-';
+					}
+				break;
 				case 'status':
 					echo $lid->getStatusDescription();
 				break;

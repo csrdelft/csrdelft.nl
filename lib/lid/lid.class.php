@@ -312,6 +312,15 @@ class Lid implements Serializable, Agendeerbaar{
 		}
 	}
 	
+	public function getEchtgenootUid(){	return $this->profiel['echtgenoot']; }
+	public function getEchtgenoot(){
+		if($this->getEchtgenootUid()!=''){
+			return LidCache::getLid($this->getEchtgenootUid());
+		}else{
+			return null;
+		}
+	}
+	
 	public function getPatroonUid(){	return $this->profiel['patroon']; }
 	public function getPatroon(){
 		if($this->getPatroonUid()!=''){

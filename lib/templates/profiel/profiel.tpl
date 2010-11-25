@@ -40,6 +40,10 @@
 			{if $profhtml.voorletters!=''}<div class="label">Voorletters:</div> {$profhtml.voorletters}<br />{/if}
 			{if $profhtml.gebdatum!='0000-00-00'}<div class="label">Geb.datum:</div> {$profhtml.gebdatum|date_format:"%d-%m-%Y"}<br />{/if}
 			{if $lid->getStatus()=='S_OVERLEDEN' AND $profhtml.sterfdatum!='0000-00-00'}<div class="label">Overleden op:</div> {$profhtml.sterfdatum|date_format:"%d-%m-%Y"}<br />{/if}
+			{if $lid->getEchtgenoot() instanceof Lid}
+					<div class="label">{if $lid->getEchtgenoot()->getGeslacht()=='v'}Echtgenote{else}Echtgenoot{/if}:</div>
+					{$lid->getEchtgenoot()->getNaamLink('civitas', 'link')}<br />
+			{/if}
 		</div>
 	</div>
 	<div class="profielregel">
