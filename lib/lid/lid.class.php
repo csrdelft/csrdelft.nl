@@ -413,8 +413,8 @@ class Lid implements Serializable, Agendeerbaar{
 	// (25-11-2010) $alleenRood-parameter weggehaald, werd nergens gebruikt.
 	public function getSaldi(){
 		return array(
-			'soccieSaldo' => $this->profiel['soccieSaldo'],
-			'maalcieSaldo' => $this->profiel['maalcieSaldo']);
+			array('naam' =>'SocCie', 'saldo' => $this->profiel['soccieSaldo']),
+			array('naam' =>'MaalCie', 'saldo' => $this->profiel['maalcieSaldo']));
 	}
 
 	/*

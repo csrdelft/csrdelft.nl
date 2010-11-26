@@ -31,7 +31,7 @@ function smarty_modifier_mimeicon($mimetype){
 	}elseif(strpos($mimetype, 'officedocument.spre')!==false OR
 			strpos($mimetype, 'ms-excel')!==false){		return Icon::getTag('mime-excel');
 	}elseif(strpos($mimetype, 'msword')!==false OR
-			strpos($mimetype, 'officedocument.word')!==false
+			strpos($mimetype, 'officedocument.word')!==false OR
 			strpos($mimetype, 'rtf')!==false){			return Icon::getTag('mime-word');
 	}elseif(strpos($mimetype, 'officedocument.pres')!==false OR
 			strpos($mimetype, 'ms-powerpoint')!==false){return Icon::getTag('mime-powerpoint');
