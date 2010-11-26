@@ -26,7 +26,7 @@ class Document{
 
 
 	public $documentroot;
-	
+
 	public function __construct($init){
 		$this->load($init);
 
@@ -108,7 +108,7 @@ class Document{
 	public function delete(){
 		$deletequery='DELETE FROM document WHERE ID='.$this->getID();
 		//zorg dat $this->deleteFile geen exceptions gooit als er geen bestand bestaat
-		//voor het huidige document, zodat verwijderen gewoon lukt. 
+		//voor het huidige document, zodat verwijderen gewoon lukt.
 		return $this->deleteFile(false) && MySql::instance()->query($deletequery);
 	}
 	public function getID(){			return $this->ID; }
@@ -157,12 +157,14 @@ class Document{
 	public function magVerwijderen(){
 		return LoginLid::instance()->hasPermission('P_DOCS_MOD');
 	}
-	
+
 	public function getFriendlyMimetype(){
 		if(strpos($this->getMimetype(), 'pdf')){
 			return 'pdf';
-		}elseif(strpos($this->getMimetype(), 'msword')){
+		}elseif(strpos($this->getMimetype(), 'msword') OR strpos($this->getMimetype(), 'officedocument.word')){
 			return 'doc';
+		}elseif(strpos($this->getMimetype(), 'officedocument.pres')){
+			return 'ppt';
 		}elseif(strpos($this->getMimetype(), 'html')){
 			return 'html';
 		}elseif(strpos($this->getMimetype(), 'jpeg')){
@@ -186,14 +188,14 @@ class Document{
 	public function getDownloadurl(){
 		return '/communicatie/documenten/download/'.$this->getID().'/'.$this->getBestandsnaam();
 	}
-	
+
 	/*
 	 * bestand opslaan vanuit een string in de juiste map.
 	 */
 	public function putFile($file){
 		$this->throwExceptionWhenUnsaved();
 		$this->throwExceptionWhenDestNotWriteable();
-		
+
 		return file_put_contents($this->getFullPath(), $file);
 	}
 	/*
@@ -202,7 +204,7 @@ class Document{
 	public function copyFile($source){
 		$this->throwExceptionWhenUnsaved();
 		$this->throwExceptionWhenDestNotWriteable();
-		
+
 		if(file_exists($source)){
 			return copy($source, $this->getFullPath());
 		}else{
@@ -215,7 +217,7 @@ class Document{
 	public function moveUploaded($source){
 		$this->throwExceptionWhenUnsaved();
 		$this->throwExceptionWhenDestNotWriteable();
-		
+
 		if(is_uploaded_file($source)){
 			return move_uploaded_file($source, $this->getFullPath());
 		}
