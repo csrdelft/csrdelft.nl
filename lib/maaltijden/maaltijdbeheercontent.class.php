@@ -82,7 +82,7 @@ class MaaltijdbeheerContent extends SimpleHTML {
 		$maaltijdbeheer->assign('maal', $aMaal);
 		$maaltijdbeheer->assign('toonLijsten', $loginlid->hasPermission('P_MAAL_MOD') or opConfide());
 		$maaltijdbeheer->assign('datumFormaat', '%a %e %b %H:%M');
-		$maaltijdbeheer->assign('datumFormaatInvoer', '%Y-%m-%d %H:%M');
+		$maaltijdbeheer->assign('datumFormaatInvoer', '%Y-%m-%d 18:00');
 		if($this->_error!=''){ $maaltijdbeheer->assign('error', $this->_error); }
 		$maaltijdbeheer->display('maaltijdketzer/beheer.tpl');
 	}

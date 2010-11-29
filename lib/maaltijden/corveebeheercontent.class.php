@@ -126,7 +126,7 @@ class CorveebeheerContent extends SimpleHTML {
 		$corveebeheer->assign('maal', $aMaal);
 		$corveebeheer->assign('toonLijsten', $loginlid->hasPermission('P_MAAL_MOD') or opConfide());
 		$corveebeheer->assign('datumFormaat', '%a %e %b %H:%M');
-		$corveebeheer->assign('datumFormaatInvoer', '%Y-%m-%d %H:%M');
+		$corveebeheer->assign('datumFormaatInvoer', '%Y-%m-%d 15:00');
 		if($this->_error!=''){ $corveebeheer->assign('error', $this->_error); }
 		$corveebeheer->display('maaltijdketzer/corveebeheer.tpl');
 	}
