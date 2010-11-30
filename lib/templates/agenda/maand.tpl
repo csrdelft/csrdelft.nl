@@ -1,4 +1,4 @@
-<a href="/actueel/agenda/icalendar/" class="knop" style="float: right" title="Link naar Icalender export">{icon get="calendar_link"}</a><h1>Agenda {$datum|date_format:"%B %Y"}</h1>
+<a href="/actueel/agenda/icalendar/" class="knop" style="float: right" title="Icalender export (Google calendar)">{icon get="calendar_link"}</a><h1>Agenda {$datum|date_format:"%B %Y"}</h1>
 
 {$melding}
 
