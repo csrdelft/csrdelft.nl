@@ -1,4 +1,4 @@
-<h1>Agenda {$datum|date_format:"%B %Y"}</h1>
+<a href="/actueel/agenda/icalendar/" class="knop" style="float: right" title="Link naar Icalender export">{icon get="calendar_link"}</a><h1>Agenda {$datum|date_format:"%B %Y"}</h1>
 
 {$melding}
 
@@ -7,7 +7,7 @@
 	<a class="knop" href="{$urlVolgende}" style="float: right;">Volgende maand &raquo;</a>
 </div>
 <table class="agenda" id="maand">
-	
+
 	<tr>
 		<th> </th>
 		<th>Zondag</th>
@@ -26,7 +26,7 @@
 				id="dag-{$dag.datum|date_format:"%Y-%m-%d"}">
 					<div class="meta">
 						{if	$magToevoegen}
-							<a class="toevoegen" href="/actueel/agenda/toevoegen/{$dag.datum|date_format:"%Y-%m-%d"}/" 
+							<a class="toevoegen" href="/actueel/agenda/toevoegen/{$dag.datum|date_format:"%Y-%m-%d"}/"
 								title="Item toevoegen">
 								{icon get="toevoegen"}
 							</a>
