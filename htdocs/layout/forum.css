@@ -3,10 +3,10 @@
 	width: 100%;
 }
 #forumtabel td{ border: 0px; }
-#forumtabel tr.tussenschot td{ 
-	height: 2px; 
-	margin: 0px; padding: 0px; 
-	background-color: lightgrey; 
+#forumtabel tr.tussenschot td{
+	height: 2px;
+	margin: 0px; padding: 0px;
+	background-color: lightgrey;
 }
 #forumtabel td.auteur{
 	vertical-align: top;
@@ -77,10 +77,10 @@ span.togglePasfoto:hover, a.postlink:hover{
 	vertical-align: middle; text-align: left;
 }
 #forumtabel td.reactiemoment {
-	margin: 0px; padding: 0.2em 0.6em 0.2em 0.6em;	
-	vertical-align: top; text-align: left;	
+	margin: 0px; padding: 0.2em 0.6em 0.2em 0.6em;
+	vertical-align: top; text-align: left;
 	width: 180px;
-	
+
 }
 #forumtabel label{ float: left; width: 170px; }
 #forumtabel #textareaContainer{ margin-left: 176px; width: 574px;}
@@ -97,7 +97,7 @@ a.forumGrootlink{
 	color: black;
 }
 textarea.forumBericht{
-	width: 100%; 
+	width: 100%;
 }
 form.gesloten{
 	display: none;
@@ -107,7 +107,7 @@ form.gesloten{
 div.citaatContainer{
 	margin: 5px 5px 5px 20px;
 }
-div.citaat{ 
+div.citaat{
 	background-color: #e1e1e1;
 	padding: 5px 10px 5px 10px;
 	font-size: 0.98em;
@@ -122,20 +122,20 @@ img.ubb_image{
 	max-width: 586px; border: 0;
 }
 /* zorg dat de plaatjes ook in citaten niet te breed worden */
-div.citaatContainer div.citaat img.forum_image{ max-width: 546px; }
-div.citaatContainer div.citaat div.citaatContainer div.citaat img.forum_image{ max-width: 516px; }
+div.citaatContainer div.citaat img.ubb_image{ max-width: 545px; }
+div.citaatContainer div.citaat div.citaatContainer div.citaat img.ubb_image{ max-width: 516px; }
 
 #pollTabel{
-	width: 100%; 
-	margin: 10px 10px 10px 10px; 
-	background-color: #f1f1f1; 
+	width: 100%;
+	margin: 10px 10px 10px 10px;
+	background-color: #f1f1f1;
 	border: 0px;
 }
 fieldset{
 	border: 0;
 }
 fieldset#modereren{
-	padding: 10px; 
+	padding: 10px;
 	margin-bottom: 10px;
 	border: 1px solid grey;
 }
@@ -178,4 +178,4 @@ div.forum_paginering a:hover{
 div.forum_paginering span.curpage{
 	padding: 4px 5px;
 	font-weight: bold;
-}	
+}
