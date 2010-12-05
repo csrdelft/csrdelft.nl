@@ -50,8 +50,8 @@ class Instelling{
 		}
 		return false;
 	}
-	
-	
+
+
 	public static function get($key){
 		//als er nog niets in SESSION staat, herladen.
 		if(!isset($_SESSION['instellingen'])){
@@ -66,7 +66,7 @@ class Instelling{
 		}
 		return $_SESSION['instellingen'][$key];
 	}
-	
+
 	public static function set($key, $value){
 		if(!isset($_SESSION['instellingen'])){
 			self::reload();
@@ -79,6 +79,7 @@ class Instelling{
 				if(!preg_match('/^[\w\-_ ]*$/', $value)){
 					$value=self::getDefault($key);
 				}
+			break;
 			case 'int':
 				$value=(int)$value;
 				//check op minimum
@@ -97,7 +98,7 @@ class Instelling{
 		$_SESSION['instellingen'][$key]=$value;
 	}
 	public static function clear(){
-		unset($_SESSION['instellingen']);		
+		unset($_SESSION['instellingen']);
 	}
 	public static function reload(){
 		if(is_array(LoginLid::instance()->getLid()->getInstellingen())){
@@ -110,7 +111,7 @@ class Instelling{
 		$lid=LoginLid::instance()->getLid();
 		$lid->setProperty('instellingen', $_SESSION['instellingen']);
 		return $lid->save();
-	}	
+	}
 
 	//standaardwaarden teruggeven.
 	public static function getDefaults(){
