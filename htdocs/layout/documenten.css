@@ -5,7 +5,7 @@
 #documentForm fieldset{ background-color: #eee; padding: 5px 10px; margin-bottom: 10px;}
 #documentForm fieldset label.metadata{ width: 150px; float: left; }
 
-#documentForm .uploadmethode, #documentForm .uploadmethode:hover{ 
+#documentForm .uploadmethode, #documentForm .uploadmethode:hover{
 	width: 100; min-height: 1.5em; padding: 4px 8px; margin: 4px 0px;
 	clear: both;
 }
@@ -49,7 +49,10 @@ tbody a.toevoegen{
 .documenten tr td{
 	padding: 2px 3px;
 }
-.documenten tr td a.verwijderen{ float: right; }
+
+.documenten tr td a.filenotfound{ text-decoration: none; color: #888;}
+.documenten tr td a.verwijderen, .documenten tr td a.bewerken{ float: right; margin-left: 3px;}
+
 .documenten tr.odd td{
 	background-color: #efefef;
 }

@@ -146,7 +146,7 @@ class Document{
 		return $uid==$this->getEigenaar();
 	}
 	public function magBewerken(){
-		return $this->isEigenaar() OR LoginLid::instance()->hasPermisson('P_DOCS_MOD');
+		return $this->isEigenaar() OR LoginLid::instance()->hasPermission('P_DOCS_MOD');
 	}
 	public function getLeesrechten(){
 		return $this->leesrechten;
@@ -236,10 +236,10 @@ class Document{
 		}
 		if(@unlink($this->getFullPath())){
 			$this->setBestandsnaam('');
-			return true;
+			return $this->save();
 		}else{
 			if(is_writable($this->getFullPath())){
-				throw new Exception('Kan bestand niet verwijderen, lijkt wel beschrijfbaar');
+				throw new Exception('Kan bestand niet verwijderen, lijkt wel beschrijfbaar'.$this->getFullPath());
 			}else{
 				throw new Exception('Kan bestand niet verwijderen, niet beschrijfbaar');
 			}

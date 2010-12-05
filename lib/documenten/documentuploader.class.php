@@ -19,7 +19,7 @@ abstract class DocumentUploader{
 	public $filename;
 	public $mimetype='application/octet-stream';
 	public $size;
-	
+
 	public function __construct(){
 	}
 	public function getNaam(){ return get_class($this); }
@@ -29,7 +29,7 @@ abstract class DocumentUploader{
 
 	abstract public function valid();						//is de formulierinvoer geldig voor deze methode?
 	abstract public function movefile(Document $document);	//bestand uiteindelijk opslaan op de juiste plek.
-	
+
 	public function getFilename(){ return $this->filename; }
 	public function getMimetype(){ return $this->mimetype; }
 	public function getSize(){ 	   return $this->size; }
@@ -40,7 +40,7 @@ abstract class DocumentUploader{
 		echo ' />';
 		echo '<label for="r'.$this->getNaam().'">'.$this->beschrijving.'</label>';
 	}
-	
+
 	abstract public function view();
 
 	/*
@@ -48,15 +48,15 @@ abstract class DocumentUploader{
 	 * Bij een nieuw document willen we geen bestand behouden, want er
 	 * is nog helemaal geen bestand, dus die kunnen we uitsluiten.
 	 */
-	
-	public static function getAll($active, $includeKeepfile=true){
+
+	public static function getAll($document, $active, $includeKeepfile=true){
 		$methodes=array('DUKeepfile', 'DUFileupload', 'DUFromurl', 'DUFromftp');
 		$return=array();
 		foreach($methodes as $methode){
 			if(!$includeKeepfile AND $methode=='DUKeepfile'){
 				continue;
 			}
-			$return[$methode]=new $methode();
+			$return[$methode]=new $methode($document);
 			if($active==$methode){
 				$return[$methode]->isActive=true;
 			}
@@ -65,7 +65,14 @@ abstract class DocumentUploader{
 	}
 }
 class DUKeepfile extends DocumentUploader{
-	public function __construct(){
+	public $document=null;
+	public function __construct(Document $document){
+		$this->document=$document;
+
+		$this->filename=$document->getBestandsnaam();
+		$this->mimetype=$document->getMimetype();
+		$this->size=$document->getSize();
+
 		$this->beschrijving='Huidige behouden';
 	}
 
@@ -76,15 +83,15 @@ class DUKeepfile extends DocumentUploader{
 	}
 
 	public function view(){
-		echo $this->getFilename();
+		echo $this->document->getBestandsnaam().' ('.format_filesize($this->document->getSize()).')';
 	}
-	
+
 }
 
 class DUFileupload extends DocumentUploader{
 
 	private $file; //relevante inhoud van $_FILES;
-	
+
 	public function __construct(){
 		$this->beschrijving='Uploaden in browser';
 	}
@@ -121,13 +128,13 @@ class DUFileupload extends DocumentUploader{
 
 	public function view(){
 		echo '<label for="fromUrl">Selecteer bestand: </label><input type="file" name="file_upload" />';
-	}		
+	}
 }
 class DUFromurl extends DocumentUploader{
-	
+
 	private $file; //string met het hele bestand.
 	private $url='http://';
-	
+
 	public function __construct(){
 		$this->beschrijving='Ophalen vanaf url';
 	}
@@ -140,7 +147,7 @@ class DUFromurl extends DocumentUploader{
 			$this->addError('Dit lijkt niet op een url...');
 		}
 		$this->url=$_POST['url'];
-		
+
 		if($this->getErrors()==''){
 			$this->file=@file_get_contents($this->url);
 			if(strlen($this->file)==0){
@@ -176,14 +183,14 @@ class DUFromurl extends DocumentUploader{
 				<input type="text" name="url" class="fromurl" value="'.$this->url.'" /><br />
 				<span class="small">Bestanden zullen met het mime-type <code>application/octet-stream</code> worden opgeslagen.</span>
 			</div>';
-				
+
 	}
 }
 class DUFromftp extends DocumentUploader{
 
 	private $file;	//naam van het gekozen bestand.
 	private $path;	//pad naar de public-ftp documentenmap.
-	
+
 	public function __construct(){
 		$this->path=PUBLIC_FTP.'/documenten/';
 		$this->beschrijving='Uit publieke FTP-map';
@@ -199,7 +206,7 @@ class DUFromftp extends DocumentUploader{
 
 		closedir($handler);
 		return $results;
-	}	
+	}
 
 	public function valid(){
 		if(!isset($_POST['ftpfile'])){
@@ -241,9 +248,9 @@ class DUFromftp extends DocumentUploader{
 			echo '<input type="checkbox" name="deleteFiles" /> <label for="deleteFiles">Bestand verwijderen uit FTP-map.</label>';
 		}else{
 			echo 'Geen bestanden gevonden in:<br /> <code class="small">ftp://csrdelft.nl/incoming/csrdelft/documenten/</code>';
-		}	
+		}
 		echo '</div>';
 	}
-	
+
 }
 ?>

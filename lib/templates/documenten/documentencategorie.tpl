@@ -21,9 +21,18 @@
 	{foreach from=$categorie->getDocumenten() item=document}
 		<tr class="document">
 			<td>
-				<a href="{$document->getDownloadurl()}">{$document->getNaam()|escape:'html'}</a>
+				{if $document->hasFile()}
+					<a href="{$document->getDownloadurl()}">
+				{else}
+					<a title="Bestand niet gevonden..." class="filenotfound">
+				{/if}
+				{$document->getNaam()|escape:'html'|wordwrap:70:'<br />'}}
+				</a>
 				{if $document->magVerwijderen()}
-					<a class="verwijderen" href="/communicatie/documenten/verwijderen/{$document->getID()}" title="Document verwijderen">{icon get="verwijderen"}</a>
+					<a class="verwijderen" href="/communicatie/documenten/verwijderen/{$document->getID()}" title="Document verwijderen" onclick="confirm('Weet u zeker dat u dit document wilt verwijderen')">{icon get="verwijderen"}</a>
+				{/if}
+				{if $document->magBewerken()}
+					<a class="bewerken" href="/communicatie/documenten/bewerken/{$document->getID()}" title="Document bewerken">{icon get="bewerken"}</a>
 				{/if}
 			</td>
 			<td class="size">{$document->getSize()}</td>
@@ -37,5 +46,5 @@
 		<tr><th>Document</th><th>Grootte</th><th>Type</th><th>Toegevoegd</th><th>Eigenaar</th></tr>
 	</tfoot>
 </table>
-	
+
 {/if}

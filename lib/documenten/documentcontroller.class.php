@@ -25,7 +25,7 @@ class DocumentController extends Controller{
 	 */
 	public function __construct($querystring){
 		parent::__construct($querystring);
-		
+
 		//wat zullen we eens gaan doen? Hier bepalen we welke actie we gaan uitvoeren
 		//en of de ingelogde persoon dat mag.
 		if(Loginlid::instance()->hasPermission('P_DOCS_READ')){
@@ -50,7 +50,7 @@ class DocumentController extends Controller{
 
 		$this->performAction();
 	}
-	
+
 	//ga er van uit dat in getParam(1) een documentid staat en laad dat in.
 	private function loadDocument(){
 		if($this->hasParam(1)){
@@ -67,7 +67,7 @@ class DocumentController extends Controller{
 	protected function action_default(){
 		$this->content=new DocumentenContent();
 	}
-	
+
 	protected function action_verwijderen(){
 		$this->loadDocument();
 		try{
@@ -82,7 +82,7 @@ class DocumentController extends Controller{
 	}
 	public function action_download(){
 		$this->loadDocument();
-		
+
 		if($this->document->hasFile()){
 			$this->content=new DocumentDownloadContent($this->document);
 			$this->content->view();
@@ -104,50 +104,60 @@ class DocumentController extends Controller{
 
 		$this->content=new DocumentCategorieContent($categorie);
 	}
-	
+
 	protected function action_bewerken(){
 		$this->loadDocument();
+		$this->action_toevoegen(true);
+
 	}
-	
+
 	private $uploaders;	//array met uploaders.
-	protected function action_toevoegen(){
-		//maak een nieuw, leeg document aan.
-		$this->document=new Document(0);
+	protected function action_toevoegen($edit=false){
+		if(!$edit){
+			//maak een nieuw, leeg document aan.
+			$this->document=new Document(0);
+		}
 
 		if(isset($_POST['methode'])){
 			$methode=$_POST['methode'];
 		}else{
+			//pr($this->document); echo $this->document->hasFile() ? 'ja' : 'nee'; exit;
 			if($this->document->hasFile()){
 				$methode='DUKeepfile';
 			}else{
 				$methode='DUFileupload';
 			}
 		}
-		$this->uploaders=DocumentUploader::getAll($methode, $this->document->hasFile());
+		$this->uploaders=DocumentUploader::getAll($this->document, $methode, $this->document->hasFile());
 
 		if($this->isPosted()){
 			$this->document->setNaam($_POST['naam']);
 			$this->document->setCatID($_POST['categorie']);
 
-			//als we al een bestand hebben voor dit document, moet die natuurlijk eerst hdb.
-			if($this->document->hasFile() AND !$this->uploaders['DUKeepfile']->isActive()){
-				$this->document->deleteFile();
-			}
-			
 			if($this->validate_document()){
+				//als we al een bestand hebben voor dit document, moet die natuurlijk eerst hdb.
+				if($this->document->hasFile() AND $methode!='DUKeepfile'){
+					try{
+						$this->document->deleteFile();
+					}catch(Exception $e){
+						DocumentContent::invokeRefresh($e->getMessage(), $this->baseurl);
+					}
+				}
 				//Actieve methode selecteren.
 				$uploader=$this->uploaders[$_POST['methode']];
 
-				$this->document->setBestandsnaam($uploader->getFilename());
-				$this->document->setSize($uploader->getSize());
-				$this->document->setMimetype($uploader->getMimetype());
-				
+				if($methode!=='DUKeepfile'){
+					$this->document->setBestandsnaam($uploader->getFilename());
+					$this->document->setSize($uploader->getSize());
+					$this->document->setMimetype($uploader->getMimetype());
+				}
+
 				if($this->document->save()){
 					try{
 						if($uploader->moveFile($this->document)){
-							$melding='Document met succes toegevoegd';
+							$melding='Document met succes opgeslagen.';
 						}else{
-							$melding='Fout bij het opslaan van het bestand in het bestandsysteem';
+							$melding='Fout bij het opslaan van het bestand in het bestandsysteem. Bewerk het document om het bestand alsnog toe te voegen.';
 						}
 					}catch(Exception $e){
 						$melding='Bestand aan document toevoegen mislukt: '.$e->getMessage();
@@ -164,10 +174,8 @@ class DocumentController extends Controller{
 		}
 		$this->content=new DocumentContent($this->document, $this->uploaders);
 		$this->content->setMelding($this->errors);
-		
-		
 	}
-	
+
 	private function validate_document(){
 		if(isset($_POST['naam'], $_POST['categorie'])){
 			if(strlen(trim($_POST['naam']))<3){
