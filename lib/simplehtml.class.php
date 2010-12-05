@@ -106,7 +106,7 @@ class IsHetAlContent extends SimpleHTML{
 			break;
 			case 'studeren':
 				if(isset($_COOKIE['studeren'])){
-					$this->ja=time()>($_COOKIE['studeren']+5*60);
+					$this->ja=time()>($_COOKIE['studeren']+5*60) AND date('w')!=0;
 					$tijd=$_COOKIE['studeren'];
 				}else{
 					$tijd=time();
