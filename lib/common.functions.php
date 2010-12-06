@@ -117,7 +117,7 @@ function isGeldigeDatum($datum){
 	if(!is_numeric($maand) OR strlen($maand)!=2){ return false; }
 	$dag=substr($delen[2], 0, 2); // Alleen de eerste twee karakters pakken.
 	if(!is_numeric($dag) OR strlen($dag)!=2){ return false; }
-	
+
 	// De strings casten naar ints en de datum laten checken.
 	return checkdate((int)$maand, (int)$dag, (int)$jaar);
 }
@@ -252,16 +252,16 @@ function internationalizePhonenumber($phonenumber, $prefix='+31'){
  * http://abeautifulsite.net/blog/2009/08/cropping-an-image-to-make-square-thumbnails-in-php/
  */
 function square_crop($src_image, $dest_image, $thumb_size = 64, $jpg_quality = 90) {
- 
+
 	// Get dimensions of existing image
 	$image = getimagesize($src_image);
- 
+
 	// Check for valid dimensions
 	if( $image[0] <= 0 || $image[1] <= 0 ) return false;
- 
+
 	// Determine format from MIME-Type
 	$image['format'] = strtolower(preg_replace('/^.*?\//', '', $image['mime']));
- 
+
 	// Import image
 	switch( $image['format'] ) {
 		case 'jpg':
@@ -279,10 +279,10 @@ function square_crop($src_image, $dest_image, $thumb_size = 64, $jpg_quality = 9
 			return false;
 		break;
 	}
- 
+
 	// Verify import
 	if( $image_data == false ) return false;
- 
+
 	// Calculate measurements
 	if( $image[0] > $image[1] ) {
 		// For landscape images
@@ -295,7 +295,7 @@ function square_crop($src_image, $dest_image, $thumb_size = 64, $jpg_quality = 9
 		$y_offset = ($image[1] - $image[0]) / 2;
 		$square_size = $image[1] - ($y_offset * 2);
 	}
- 
+
 	// Resize and crop
 	$canvas = imagecreatetruecolor($thumb_size, $thumb_size);
 	if( imagecopyresampled(
@@ -310,7 +310,7 @@ function square_crop($src_image, $dest_image, $thumb_size = 64, $jpg_quality = 9
 		$square_size,
 		$square_size
 	)) {
- 
+
 		// Create thumbnail
 		switch( strtolower(preg_replace('/^.*\./', '', $dest_image)) ) {
 			case 'jpg':
@@ -328,7 +328,7 @@ function square_crop($src_image, $dest_image, $thumb_size = 64, $jpg_quality = 9
 				$return=false;
 			break;
 		}
-		
+
 		//plaatje ook voor de webserver leesbaar maken.
 		if($return){
 			chmod($dest_image,  0644);
@@ -337,6 +337,10 @@ function square_crop($src_image, $dest_image, $thumb_size = 64, $jpg_quality = 9
 	} else {
 		return false;
 	}
- 
+}
+function format_filesize($size) {
+	$units = array(' B', ' KB', ' MB', ' GB', ' TB');
+	for ($i = 0; $size >= 1024 && $i < 4; $i++) $size /= 1024;
+	return round($size, 2).$units[$i];
 }
 ?>
