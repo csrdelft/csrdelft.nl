@@ -67,7 +67,8 @@ Regels omtrent het betalen van de maaltijden op Confide:
 	{table_foreach from=$maaltijd.aanmeldingen inner=rows item=aanmelding table_attr='class="inschrijvingen"' cols=2 name=aanmeldingen}
 		{$nummer++}</td>
 		<td>{$aanmelding.naam}
-			{if $aanmelding.eetwens!=''}<br /><strong>{$aanmelding.eetwens}</strong>{/if}
+			{if $aanmelding.eetwens!=''}<br 
+/><strong>{$aanmelding.eetwens|wordwrap:35:"<br />":true}</strong>{/if}
 			{if $aanmelding.gasten_opmerking!=''}<br /><strong>Gasten opmerking: {$aanmelding.gasten_opmerking}</strong>{/if}
 		</td>
 		<td style="width: 20px; text-align: right;">
