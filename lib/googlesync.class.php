@@ -6,9 +6,49 @@ Zend_Loader::loadClass('Zend_Http_Client');
 Zend_Loader::loadClass('Zend_Uri_Http');
 Zend_Loader::loadClass('Zend_Gdata_Query');
 Zend_Loader::loadClass('Zend_Gdata_Feed');
+Zend_Loader::loadClass('Zend_Gdata_App_Entry');
 
 require_once 'groepen/groep.class.php';
 
+class GContact extends Zend_Gdata_App_Entry{
+	private $entry=null;
+
+	private $xml;
+	public function __construct($entry=null){
+		$this->entry=$entry;
+
+		if($this->entry==null){
+
+		}else{
+			$this->xml=$entry->getXML();
+		}
+	}
+
+
+	private function createFrom(Lid $lid, Zend_Gdata, $gdata){
+
+		$doc=new DOMDocument();
+		$doc->formatOutput = true;
+
+		$entry = $doc->createElement('atom:entry');
+		$entry->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:atom', 'http://www.w3.org/2005/Atom');
+		$entry->setAttributeNS('http://www.w3.org/2000/xmlns/' , 'xmlns:gd', 'http://schemas.google.com/g/2005');
+		$entry->setAttributeNS('http://www.w3.org/2000/xmlns/' , 'xmlns:gContact', 'http://schemas.google.com/contact/2008');
+		$doc->appendChild($entry);
+
+		// add name element
+		$name = $doc->createElement('gd:name');
+		$entry->appendChild($name);
+		$fullName = $doc->createElement('gd:fullName', $lid->getNaam());
+		$name->appendChild($fullName);
+
+		try{
+			$entryResult = $gdata->insertEntry($doc->saveXML(), );
+		return new Gdata_Zend_Gdata_App_Entry($response->getXml());
+
+	}
+
+}
 /*
  * Documentatie voor google GData protocol:
  * algemeen, interactie: http://code.google.com/apis/contacts/docs/3.0/developers_guide_protocol.html
@@ -18,21 +58,26 @@ require_once 'groepen/groep.class.php';
 class GoogleSync{
 
 	private $groupname='C.S.R.-import';
-	
+
+	public $contactFeedUrl='http://www.google.com/m8/feeds/contacts/default/full';
+	public $groupFeedUrl='http://www.google.com/m8/feeds/groups/default/full';
+
 	private $gdata=null;
-	
+
 	//feed contents
 	private $contactFeed=null;
 	private $groupFeed=null;
 
 	private static $instance;
+
+
 	public static function instance(){
 		if(!isset(self::$instance)){
 			self::$instance=new GoogleSync();
 		}
 		return self::$instance;
 	}
-	
+
 	private function __construct(){
 		if(!isset($_SESSION['google_token'])){
 			throw new Exception('Authsub token not available');
@@ -46,37 +91,30 @@ class GoogleSync{
 		//$client->setHeaders('If-Match: *'); //delete or update only if not changed since it was last read.
 		$this->gdata=new Zend_Gdata($client);
 		$this->gdata->setMajorProtocolVersion(3);
-	
-		$this->loadContactFeed();
-		$this->loadGroupFeed();
 
+		//force loading contacts and groups
+		$this->loadContactFeed(true);
+		$this->loadGroupFeed(true);
 	}
 
 	/* Laad de contact-feed in van google.
 	 */
 	private function loadContactFeed($force=false){
-		if(!$force AND isset($_SESSION['google_contactfeed'])){
-			$this->contactFeed=unserialize($_SESSION['google_contactfeed']);
-			return;
+		if($force OR $this->contactFeed==null){
+			$query=new Zend_Gdata_Query($this->contactFeedUrl.'?max-results=100000');
+			$this->contactFeed=$this->gdata->getFeed($query);
 		}
-		
-		$query = new Zend_Gdata_Query('http://www.google.com/m8/feeds/contacts/default/full?max-results=400');
-		$this->contactFeed=$this->gdata->getFeed($query);
-		//gaat nu session in, maar wellicht beter om het gewoon in de memcache te rossen...
-		$_SESSION['google_contactfeed']=serialize($this->contactFeed);
 	}
+
 	/* Laad de group-feed in van google.
 	 */
 	private function loadGroupFeed($force=false){
-		if(!$force AND isset($_SESSION['google_groupfeed'])){
-			$this->groupFeed=unserialize($_SESSION['google_groupfeed']);
-			return;
+		if($force OR $this->groupFeed==null){
+			$query=new Zend_Gdata_Query($this->groupFeedUrl);
+			$this->groupFeed=$this->gdata->getFeed($query);
 		}
-		$query=new Zend_Gdata_Query('http://www.google.com/m8/feeds/groups/default/full');
-		$this->groupFeed=$this->gdata->getFeed($query);
-		$_SESSION['google_groupfeed']=serialize($this->groupFeed);
 	}
-	
+
 	/* Trek naam en google-id uit de feed, de rest is niet echt nodig.
 	 */
 	public function getGoogleContacts(){
@@ -92,7 +130,17 @@ class GoogleSync{
 		return $return;
 	}
 
-	
+	/* get Contact Entry
+	 */
+	private function getContactEntry($id){
+		foreach($this->contactFeed as $contact){
+			if($contact->getId()==$id){
+				return $contact;
+			}
+		}
+		return null;
+	}
+
 	/* plaats een foto voor een google contact.
 	 *
 	 * @param $photolink link uit een google-entry waar de foto naartoe moet.
@@ -122,7 +170,7 @@ class GoogleSync{
 		}
 		return null;
 	}
-	
+
 	/*
 	 * Get the groupid for the group $this->groupname, or create and return groupname.
 	 *
@@ -138,31 +186,54 @@ class GoogleSync{
 				return (string)$group->id;
 			}
 		}
-		
 		//zo niet, dan maken deze groep nieuw aan.
+		return $this->createGroup($groupname);
+	}
+
+	/*
+	 * Geef het id terug van de groep met system group id $id.
+	 * id kan bijvoorbeeld zijn 'contacts', 'friends'.
+	 *
+	 * Een beetje vies zo, maar de Zend GData API ondersteunt de systemGroup niet.
+	 */
+	public function getSystemgroupId($id){
+		$id=ucfirst($id);
+
+		foreach($this->groupFeed as $group){
+			$groupXML=simplexml_load_string($group->getXML());
+			if($groupXML->systemGroup AND $groupXML->systemGroup->attributes()->id==$id){
+				return $group->getId();
+			}
+		}
+		return null;
+	}
+
+	/* Create a new group in Google contacts.
+	 */
+	private function createGroup($name){
 		$doc=new DOMDocument();
 		$doc->formatOutput=true;
 		$entry = $doc->createElement('atom:entry');
 		$entry->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:atom', 'http://www.w3.org/2005/Atom');
 		$entry->setAttributeNS('http://www.w3.org/2000/xmlns/' , 'xmlns:gd', 'http://schemas.google.com/g/2005');
 		$doc->appendChild($entry);
-		
-		$title=$doc->createElement('atom:title', $groupname);
+
+		$title=$doc->createElement('atom:title', $name);
 		$title->setAttribute('type', 'text');
 		$entry->appendChild($title);
-		
-		$response=$this->gdata->insertEntry($doc->saveXML(), 'http://www.google.com/m8/feeds/groups/default/full');
-		
+
+		$response=$this->gdata->insertEntry($doc->saveXML(), $this->groupFeedUrl);
+
 		//herlaad groupFeed om de nieuw gemaakte daar ook in te hebben.
-		$this->loadGroupFeed();
-		
+		$this->loadGroupFeed(true);
+
 		return (string)$response->id;
 	}
 
 	/* Een hele serie leden syncen naar google contacts.
 	 *
 	 * @param $leden array van uid's of Lid-objecten die moeten worden gesynced
-	 * 
+	 *
 	 * @return string met foutmeldingen en de namen van de gesyncte leden.
 	 */
 	public function syncLidBatch($leden){
@@ -183,16 +254,17 @@ class GoogleSync{
 		}
 		$message='';
 
-		//dit zou netjes kunnen door één xml-bestand te maken en dat één 
+		//dit zou netjes kunnen door één xml-bestand te maken en dat één
 		//keer te posten, maar daar heb ik nu even geen zin in.
-		//btw: google heeft een batch-limit van 100 acties.
-		//zie ook: http://code.google.com/apis/gdata/docs/batch.html
+		//btw: als dit toch gedaan gaat worden: google heeft een
+		//batch-limit van 100 acties. zie ook:
+		//http://code.google.com/apis/gdata/docs/batch.html
 		foreach($lidBatch as $lid){
 			$message.=$this->syncLid($lid).', ';
 		}
 		return $message;
 	}
-	
+
 	/* Een enkel lid syncen naar Google contacts.
 	 *
 	 * @param $lid uid of Lid-object
@@ -205,166 +277,164 @@ class GoogleSync{
 		}
 		$googleid=$this->existsInGoogleContacts($lid->getNaam());
 
+		$doc=new DOMDocument();
+		$doc->formatOutput = true;
 		if($googleid!=''){
-			//update
-			//echo '<br /> updating '.$lid->getNaam().' -- not yet implemented, omitting <br />';
-			return $lid->getNaam().' bestaat al.';
-
+			$entry=$this->getContactEntry($googleid);
 		}else{
-		
-			//insert.
-			$doc=new DOMDocument();
-			$doc->formatOutput = true;
+
 			$entry = $doc->createElement('atom:entry');
 			$entry->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:atom', 'http://www.w3.org/2005/Atom');
 			$entry->setAttributeNS('http://www.w3.org/2000/xmlns/' , 'xmlns:gd', 'http://schemas.google.com/g/2005');
 			$entry->setAttributeNS('http://www.w3.org/2000/xmlns/' , 'xmlns:gContact', 'http://schemas.google.com/contact/2008');
 			$doc->appendChild($entry);
 
-			// add name element
-			$name = $doc->createElement('gd:name');
-			$entry->appendChild($name);
-			$fullName = $doc->createElement('gd:fullName', $lid->getNaam());
-			$name->appendChild($fullName);
 
-			//nickname
-			if($lid->getNickname()!=''){
-				$nick=$doc->createElement('gContact:nickname', $lid->getNickname());
-				$entry->appendChild($nick);
+		}
+
+
+
+		//nickname
+		if($lid->getNickname()!=''){
+			$nick=$doc->createElement('gContact:nickname', $lid->getNickname());
+			$entry->appendChild($nick);
+		}
+
+		//add home address
+		if($lid->getProperty('adres')!=''){
+			$address=$doc->createElement('gd:structuredPostalAddress');
+			$address->setAttribute('primary', 'true');
+
+			//only rel OR label (XOR) can (and must) be set
+			if($lid->getWoonoord() instanceof Groep){
+				$address->appendChild($doc->createElement('gd:housename', $lid->getWoonoord()->getNaam()));
+				$address->setAttribute('label', $lid->getWoonoord()->getNaam());
+			}else{
+				$address->setAttribute('rel', 'http://schemas.google.com/g/2005#home');
 			}
-			
-			//add home address
-			if($lid->getProperty('adres')!=''){
-				$address=$doc->createElement('gd:structuredPostalAddress');
-				$address->setAttribute('primary', 'true');
+			$address->appendChild($doc->createElement('gd:street', $lid->getProperty('adres')));
+			if($lid->getProperty('postcode')!=''){
+				$address->appendChild($doc->createElement('gd:postcode', $lid->getProperty('postcode')));
+			}
+			$address->appendChild($doc->createElement('gd:city', $lid->getProperty('woonplaats')));
+			if($lid->getProperty('land')!=''){
+				$address->appendChild($doc->createElement('gd:country', $lid->getProperty('land')));
+			}
+			$address->appendChild($doc->createElement('gd:formattedAddress', $lid->getFormattedAddress()));
+			$entry->appendChild($address);
+		}
 
-				//only rel OR label (XOR) can (and must) be set
-				if($lid->getWoonoord() instanceof Groep){
-					$address->appendChild($doc->createElement('gd:housename', $lid->getWoonoord()->getNaam()));
-					$address->setAttribute('label', $lid->getWoonoord()->getNaam());
+		//adres ouders toevoegen, alleen bij leden...
+		if($lid->isLid() AND $lid->getProperty('o_adres')!='' AND $lid->getProperty('adres')!=$lid->getProperty('o_adres')){
+			$address=$doc->createElement('gd:structuredPostalAddress');
+			//$address->setAttribute('rel', 'http://schemas.google.com/g/2005#other');
+			$address->setAttribute('label', 'Ouders');
+
+			$address->appendChild($doc->createElement('gd:street', $lid->getProperty('o_adres')));
+			if($lid->getProperty('o_postcode')!=''){
+				$address->appendChild($doc->createElement('gd:postcode', $lid->getProperty('o_postcode')));
+			}
+			$address->appendChild($doc->createElement('gd:city', $lid->getProperty('o_woonplaats')));
+			if($lid->getProperty('o_land')!=''){
+				$address->appendChild($doc->createElement('gd:country', $lid->getProperty('o_land')));
+			}
+			$address->appendChild($doc->createElement('gd:formattedAddress', $lid->getFormattedAddress($ouders=true)));
+			$entry->appendChild($address);
+		}
+
+
+		// add email element
+		$email=$doc->createElement('gd:email');
+		$email->setAttribute('address' , $lid->getEmail());
+		$email->setAttribute('rel' ,'http://schemas.google.com/g/2005#home');
+		$email->setAttribute('primary', 'true');
+		$entry->appendChild($email);
+
+		// add IM adresses.
+		$ims=array(
+			array('msn', 'http://schemas.google.com/g/2005#MSN'),
+			array('skype', 'http://schemas.google.com/g/2005#SKYPE'),
+			array('icq', 'http://schemas.google.com/g/2005#ICQ'),
+			array('jid', 'http://schemas.google.com/g/2005#JABBER')
+		);
+		foreach($ims as $im){
+			if($lid->getProperty($im[0])!=''){
+				$imEntry=$doc->createElement('gd:im');
+				$imEntry->setAttribute('address', $lid->getProperty($im[0]));
+				$imEntry->setAttribute('protocol', $im[1]);
+				$imEntry->setAttribute('rel', 'http://schemas.google.com/g/2005#home');
+				$entry->appendChild($imEntry);
+			}
+		}
+
+		//add phone numbers
+		$telefoons=array(
+			array('telefoon', 'http://schemas.google.com/g/2005#home'),
+			array('mobiel', 'http://schemas.google.com/g/2005#mobile'),
+		);
+		//als het een huidig lid betreft ook het nummer van de ouders erin.
+		if($lid->isLid()){
+			$telefoons[]=array('o_telefoon', 'label:Ouders');
+		}
+		foreach($telefoons as $telefoon){
+			if($lid->getProperty($telefoon[0])!=''){
+				$number=$doc->createElement('gd:phoneNumber', internationalizePhonenumber($lid->getProperty($telefoon[0])));
+				if($telefoon[0]=='telefoon'){
+					$number->setAttribute('primary', 'true');
+				}
+				if(substr($telefoon[1],0, 5)=='label'){
+					$number->setAttribute('label', substr($telefoon[1],6));
 				}else{
-					$address->setAttribute('rel', 'http://schemas.google.com/g/2005#home');
+					$number->setAttribute('rel', $telefoon[1]);
 				}
-				$address->appendChild($doc->createElement('gd:street', $lid->getProperty('adres')));
-				if($lid->getProperty('postcode')!=''){
-					$address->appendChild($doc->createElement('gd:postcode', $lid->getProperty('postcode')));
-				}
-				$address->appendChild($doc->createElement('gd:city', $lid->getProperty('woonplaats')));
-				if($lid->getProperty('land')!=''){
-					$address->appendChild($doc->createElement('gd:country', $lid->getProperty('land')));
-				}
-				$address->appendChild($doc->createElement('gd:formattedAddress', $lid->getFormattedAddress()));
-				$entry->appendChild($address);
+				$entry->appendChild($number);
+			}
+		}
+
+		if($lid->getGeboortedatum()!='' AND $lid->getGeboortedatum()!='0000-00-00' ){
+			$geboortedatum=$doc->createElement('gContact:birthday');
+			$geboortedatum->setAttribute('when', $lid->getGeboortedatum());
+			$entry->appendChild($geboortedatum);
+		}
+
+		if($lid->getProperty('website')!=''){
+			$website=$doc->createElement('gContact:website');
+
+			$website->setAttribute('href', $lid->getProperty('website'));
+			$website->setAttribute('rel', 'home');
+			$entry->appendChild($website);
+		}
+
+		if($lid->getProperty('eetwens')!=''){
+			$eetwens=$doc->createElement('gContact:userDefinedField');
+			$eetwens->setAttribute('key', 'Eetwens');
+			$eetwens->setAttribute('value', $lid->getProperty('eetwens'));
+			$entry->appendChild($eetwens);
+		}
+
+		//system group 'my contacts' er bij.
+		$systemgroup=$doc->createElement('gContact:groupMembershipInfo');
+		$systemgroup->setAttribute('href', $this->getSystemgroupId('contacts'));
+		$entry->appendChild($systemgroup);
+
+		//in de groep $this->groepname en in de system group my contacts stoppen
+		$group=$doc->createElement('gContact:groupMembershipInfo');
+		$group->setAttribute('href', $this->getGroupId());
+		$entry->appendChild($group);
+
+		try{
+			//echo $doc->saveXML();
+			if($googleid!=''){
+				$entryResult=$this->gdata->updateEntry($doc->saveXML(), $entry->getEditLink());
+			}else{
+				$entryResult = $this->gdata->insertEntry($doc->saveXML(), $this->contactFeedUrl);
 			}
 
-			//adres ouders toevoegen, alleen bij leden...
-			if($lid->isLid() AND $lid->getProperty('o_adres')!='' AND $lid->getProperty('adres')!=$lid->getProperty('o_adres')){
-				$address=$doc->createElement('gd:structuredPostalAddress');
-				//$address->setAttribute('rel', 'http://schemas.google.com/g/2005#other');
-				$address->setAttribute('label', 'Ouders');
-
-				$address->appendChild($doc->createElement('gd:street', $lid->getProperty('o_adres')));
-				if($lid->getProperty('o_postcode')!=''){
-					$address->appendChild($doc->createElement('gd:postcode', $lid->getProperty('o_postcode')));
-				}				
-				$address->appendChild($doc->createElement('gd:city', $lid->getProperty('o_woonplaats')));
-				if($lid->getProperty('o_land')!=''){
-					$address->appendChild($doc->createElement('gd:country', $lid->getProperty('o_land')));
-				}
-				$address->appendChild($doc->createElement('gd:formattedAddress', $lid->getFormattedAddress($ouders=true)));
-				$entry->appendChild($address);
-			}
-				
-			
-			// add email element
-			$email=$doc->createElement('gd:email');
-			$email->setAttribute('address' , $lid->getEmail());
-			$email->setAttribute('rel' ,'http://schemas.google.com/g/2005#home');
-			$email->setAttribute('primary', 'true');
-			$entry->appendChild($email);
-			
-			// add IM adresses.
-			$ims=array(
-				array('msn', 'http://schemas.google.com/g/2005#MSN'),
-				array('skype', 'http://schemas.google.com/g/2005#SKYPE'),
-				array('icq', 'http://schemas.google.com/g/2005#ICQ'),
-				array('jid', 'http://schemas.google.com/g/2005#JABBER')
-			);
-			foreach($ims as $im){
-				if($lid->getProperty($im[0])!=''){
-					$imEntry=$doc->createElement('gd:im');
-					$imEntry->setAttribute('address', $lid->getProperty($im[0]));
-					$imEntry->setAttribute('protocol', $im[1]);
-					$imEntry->setAttribute('rel', 'http://schemas.google.com/g/2005#home');
-					$entry->appendChild($imEntry);
-				}
-			}
-
-			//add phone numbers
-			$telefoons=array(
-				array('telefoon', 'http://schemas.google.com/g/2005#home'),
-				array('mobiel', 'http://schemas.google.com/g/2005#mobile'),
-			);
-			//als het een huidig lid betreft ook het nummer van de ouders erin.
-			if($lid->isLid()){
-				$telefoons[]=array('o_telefoon', 'label:Ouders');
-			}
-			foreach($telefoons as $telefoon){
-				if($lid->getProperty($telefoon[0])!=''){
-					$number=$doc->createElement('gd:phoneNumber', internationalizePhonenumber($lid->getProperty($telefoon[0])));
-					if($telefoon[0]=='telefoon'){
-						$number->setAttribute('primary', 'true');
-					}
-					if(substr($telefoon[1],0, 5)=='label'){
-						$number->setAttribute('label', substr($telefoon[1],6));
-					}else{
-						$number->setAttribute('rel', $telefoon[1]);
-					}
-					$entry->appendChild($number);
-				}
-			}
-
-			if($lid->getGeboortedatum()!='' AND $lid->getGeboortedatum()!='0000-00-00' ){
-				$geboortedatum=$doc->createElement('gContact:birthday');
-				$geboortedatum->setAttribute('when', $lid->getGeboortedatum());
-				$entry->appendChild($geboortedatum);
-			}
-			
-			if($lid->getProperty('website')!=''){
-				$website=$doc->createElement('gContact:website');
-				
-				$website->setAttribute('href', $lid->getProperty('website'));
-				$website->setAttribute('rel', 'home');
-				$entry->appendChild($website);
-			}
-			
-			if($lid->getProperty('eetwens')!=''){
-				$eetwens=$doc->createElement('gContact:userDefinedField');
-				$eetwens->setAttribute('key', 'Eetwens');
-				$eetwens->setAttribute('value', $lid->getProperty('eetwens'));
-				$entry->appendChild($eetwens);
-			}
-			//system group 'my contacts' er bij.
-			$systemgroup=$doc->createElement('gContact:groupMembershipInfo');
-			$systemgroup->setAttribute('href', $this->getGroupId('My Contacts'));
-			$entry->appendChild($systemgroup);
-
-			//in de groep $this->groepname en in de system group my contacts stoppen
-			$group=$doc->createElement('gContact:groupMembershipInfo');
-			$group->setAttribute('href', $this->getGroupId());
-			$entry->appendChild($group);
-
-			try{
-				//echo $doc->saveXML();
-				$entryResult = $this->gdata->insertEntry($doc->saveXML(), 'http://www.google.com/m8/feeds/contacts/default/full');
-				$photolink=$entryResult->getLink('http://schemas.google.com/contacts/2008/rel#photo')->getHref();
-				$this->putPhoto($photolink, PICS_PATH.'/'.$lid->getPasfotoPath($square=true));
-				return $lid->getNaam();
-			}catch(Exception $e){
-				return 'Fout in Google-sync (graag even mailen naar PubCie): <br /> invoeren van lid: '.$lid->getNaam().'<br />Foutmelding: '.$e->getMessage().'<br />';
-			}
-			
-			
+			$photolink=$entryResult->getLink('http://schemas.google.com/contacts/2008/rel#photo')->getHref();
+			$this->putPhoto($photolink, PICS_PATH.'/'.$lid->getPasfotoPath($square=true));
+			return $lid->getNaam();
+		}catch(Exception $e){
+			return 'Fout in Google-sync (graag even mailen naar PubCie): <br /> invoeren van lid: '.$lid->getNaam().'<br />Foutmelding: '.$e->getMessage().'<br />';
 		}
 	}
 

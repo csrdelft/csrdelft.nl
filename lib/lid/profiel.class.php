@@ -16,7 +16,7 @@ class Profiel{
 
 	//zijn we een nieuwe noviet aan het toevoegen?
 	private $editNoviet=false;
-	
+
 	private $form=array();
 	public function __construct($uid, $actie='bewerken'){
 		$this->lid=LidCache::getLid($uid);
@@ -36,7 +36,7 @@ class Profiel{
 				//is het wel een wijziging?
 				if($field->getValue()!=$this->lid->getProperty($field->getName())){
 					$this->bewerktLid->setProperty($field->getName(), $field->getValue());
-				}	
+				}
 			}
 		}
 		if(count($this->diff())>0){
@@ -52,7 +52,7 @@ class Profiel{
 		}
 		return false;
 	}
-	
+
 	public function magBewerken(){
 		//lid-moderator
 		if(LoginLid::instance()->hasPermission('P_LEDEN_MOD')){
@@ -70,7 +70,7 @@ class Profiel{
 		if(LoginLid::instance()->isSelf($this->lid->getUid())){
 			return true;
 		}
-		return false;		
+		return false;
 	}
 
 	public function diff(){
@@ -119,7 +119,7 @@ class Profiel{
 		}
 		return $valid;
 	}
-	
+
 	public function getCurrent($key){
 		if(!$this->lid->hasProperty($key)){
 			throw new Exception($key.' niet aanwezig in profiel');
@@ -161,7 +161,7 @@ class Profiel{
 				$form[]=new InputField('adresseringechtpaar',$profiel['adresseringechtpaar'], 'Tenaamstelling post echtpaar:',250);
 			}
 		}
-		
+
 		$form[]=new Comment('Adres:');
 		$form[]=new RequiredInputField('adres', $profiel['adres'], 'Straatnaam', 100);
 		$form[]=new RequiredInputField('postcode', $profiel['postcode'], 'Postcode', 20);
@@ -178,11 +178,11 @@ class Profiel{
 			$form[]=new LandField('o_land', $profiel['o_land'], 'Land', 50);
 			$form[]=new TelefoonField('o_telefoon', $profiel['o_telefoon'], 'Telefoonnummer', 20);
 		}
-			
+
 		$form[]=new Comment('Contact:');
 		$email=new RequiredEmailField('email', $profiel['email'], 'Emailadres');
 		if(LoginLid::instance()->isSelf($this->lid->getUid())){
-			//als we ons eigen profiel bewerken is het email-adres verplicht
+			//als we ons *eigen* profiel bewerken is het email-adres verplicht
 			$email->notnull=true;
 		}
 		$form[]=$email;
@@ -194,28 +194,28 @@ class Profiel{
 		$form[]=new InputField('bankrekening', $profiel['bankrekening'], 'Bankrekening', 11); //TODO specifiek ding voor maken
 
 
-		if($profiel['status']=='S_OUDLID' OR $profiel['status']=='S_NOBODY' OR $this->lid->getUid()=='6601'){ //vd Wekken mag wel eerder begonnen zijn.
+		if(in_array($profiel['status'], array('S_OUDLID', 'S_NOBODY')) OR $this->lid->getUid()=='6601'){ //vd Wekken mag wel eerder begonnen zijn.
 			$beginjaar=1950;
 		}else{
 			$beginjaar=date('Y')-20;
 		}
-		
+
 		if($profiel['status']=='S_OUDLID' OR $hasLedenMod OR $this->editNoviet){
 			$form[]=new Comment('Studie:');
 			$form[]=new StudieField('studie', $profiel['studie'], 'Studie');
 			$form[]=new IntField('studiejaar', $profiel['studiejaar'], 'Beginjaar studie', date('Y'), $beginjaar);
 		}
-		
+
 		if($profiel['status']!='S_OUDLID'){
 			$form[]=new InputField('studienr', $profiel['studienr'], 'Studienummer (TU)', 20);
 		}
-		
+
 		if(!$this->editNoviet AND ($profiel['status']=='S_OUDLID' OR $hasLedenMod)){
 			$form[]=new InputField('beroep', $profiel['beroep'], 'Beroep/werk', 4096);
 			$form[]=new IntField('lidjaar', $profiel['lidjaar'], 'Lid sinds', date('Y'), $beginjaar);
 		}
-		
-		if($profiel['status']=='S_OUDLID' OR $profiel['status']=='S_NOBODY'){
+
+		if(in_array($profiel['status'], array('S_OUDLID', 'S_NOBODY'))){
 			$form[]=new DatumField('lidafdatum', $profiel['lidafdatum'], 'Oudlid sinds');
 		}
 		if($profiel['status']=='S_OUDLID' AND $hasLedenMod){
@@ -231,7 +231,7 @@ class Profiel{
 			}
 			$form[]=new UidField('patroon', $profiel['patroon'], 'Patroon');
 		}
-		
+
 		if($hasLedenMod OR $this->editNoviet){
 			$form[]=new Comment('Persoonlijk:');
 			$form[]=new InputField('eetwens', $profiel['eetwens'], 'Dieet', 200);
@@ -239,7 +239,7 @@ class Profiel{
 			$form[]=new InputField('kerk', $profiel['kerk'], 'Kerk', 50);
 			$form[]=new InputField('muziek', $profiel['muziek'], 'Muziekinstrument', 50);
 		}
-		
+
 		if(LoginLid::instance()->hasPermission('P_ADMIN,P_BESTUUR,groep:novcie')){
 			$form[]=new SelectField('ovkaart', $profiel['ovkaart'], 'OV-kaart', array('' => 'Kies...','geen' => '(Nog) geen OV-kaart','week' => 'Week','weekend' => 'Weekend','niet' => 'Niet geactiveerd'));
 			$form[]=new SelectField('zingen', $profiel['zingen'], 'Zingen', array('' => 'Kies...','ja' => 'Ja, ik zing in een band/koor','nee' => 'Nee, ik houd niet van zingen','soms' => 'Alleen onder de douche','anders' => 'Anders'));
@@ -257,18 +257,18 @@ class Profiel{
 		}
 		$this->form=$form;
 	}
-	
+
 	public function getFields(){ return $this->form; }
 
 	public static function resetWachtwoord($uid){
 		if(!Lid::exists($uid)){ return false; }
 		$lid=LidCache::getLid($uid);
-		
+
 		$password=substr(md5(time()), 0, 8);
 		$passwordhash=makepasswd($password);
 
 		$sNieuwWachtwoord="UPDATE lid SET password='".$passwordhash."' WHERE uid='".$uid."' LIMIT 1;";
-		
+
 		$mail="
 Hallo ".$lid->getNaam().",
 
@@ -286,9 +286,9 @@ Namens de PubCie,
 ".LoginLid::instance()->getLid()->getNaam()."
 
 P.S.: Mocht u nog vragen hebben, dan kan u natuurlijk altijd e-posts sturen naar pubcie@csrdelft.nl";
-		return 
-			MySql::instance()->query($sNieuwWachtwoord) AND 
-			LidCache::flushLid($uid) AND 
+		return
+			MySql::instance()->query($sNieuwWachtwoord) AND
+			LidCache::flushLid($uid) AND
 			$lid->save_ldap() AND
 			mail($lid->getEmail(), 'Nieuw wachtwoord voor de C.S.R.-stek', $mail, "Bcc: pubcie@csrdelft.nl");
 
