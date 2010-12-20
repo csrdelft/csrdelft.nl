@@ -508,7 +508,7 @@ function anderprofiel($getuid) {
     # er permissie is om profiel van anderen in te zien en de andere uid bestaat
     if ( !$lid->hasPermission('P_LEDEN_READ') and !$lid->hasPermission('P_OUDLEDEN_READ')
          or !Lid::exists($getuid) ) return false;
-    require_once('lid/class.profiel.php');
+    require_once('lid/profiel.class.php');
     $anderlid =LidCache::getLid($getuid);
     if ($anderlid instanceof Lid){
 		return $anderlid->getProfiel();
