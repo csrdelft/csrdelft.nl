@@ -1,0 +1,23 @@
+.verborgen{ display: none;}
+.handje{ cursor: pointer; }
+td{ vertical-align: top; }
+td.euro{ text-align: right;}
+table{ border-collapse: collapse;}
+table.weken{ width: 100%; margin-top: 20px;}
+
+table.artikelen{ width: 250px; font-size: 10px; float: right;}
+
+table.weken th{
+	padding: 2px;
+	border-bottom: 1px solid black;
+	text-align: left;
+	font-size: 12px;
+
+}
+table.weken td{
+	padding: 2px;
+	border-bottom: 1px solid #aaa;
+}
+table.weken tr:hover td{
+	background-color: #efefef;
+}

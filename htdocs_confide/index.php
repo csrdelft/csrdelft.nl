@@ -3,55 +3,27 @@
  * Ding om dingen uit de socciestreeplijst-db te halen.
  */
 
-
 define('ETC_PATH', '.');
 require_once 'common.functions.php';
 require_once 'mysql.class.php';
-require_once 'simplehtml.class.php';
+require_once 'streeplijstrapportage.php';
 
-function parse_bestelstring($string){
-	$ptr=0;
-	$return=array();
-
-	$multiplier=1;
-
-	while($ptr<strlen($string)){
-
-		$current=substr($string, $ptr, 1);
-		echo $ptr.' - '.$current.'<br />';
-		if($current=='h'){
-			$multiplier=0.5;
-		}elseif(is_numeric($current)){
-			$numptr=$ptr+1;
-			$num=$current;
-			while(is_numeric(substr($string, $numptr, 1))){
-				$num.=substr($string, $numptr, 1);
-				$numptr++;
-			}
-			$multiplier=$num;
-			//sla het gelezen getal over.
-			$ptr=$numptr-1;
-		}else{
-			$add=($multiplier*1);
-			if(isset($return[$current])){
-				$return[$current]+=$add;
-			}else{
-				$return[$current]=$add;
-			}
-			$multiplier=1;
-		}
-		$ptr++;
-	}
-	return $return;
-}
-pr(parse_bestelstring('30bbhihi'));
-exit;
 $db=MySql::instance();
 
+//lijstje met artikelen regelen.
+$artikelenResult=$db->query("SELECT Naam as naam, Sneltoets as letter, Prijs as prijs FROM Artikelen;");
+$artikelen=array();
+while($art=$db->next($artikelenResult)){
+	$artikelen[$art['letter']]=$art;
+}
 
-$start=date('Y-m-d H:i:s', strtotime('2 months ago'));
-
-$query="
+//lijst met omzetten voor de afgelopen weken regelen.
+if(isset($_GET['start'])){
+	$start=date('Y-m-d H:i:s', strtotime(((int)$_GET['start']).' months ago'));
+}else{
+	$start=date('Y-m-d H:i:s', strtotime('4 months ago'));
+}
+$weekrapportQuery="
 	SELECT week(Tijdstip) as week, SUM(Bedrag) as omzet, count(*) as aantal_bestellingen, GROUP_CONCAT(Artikelen SEPARATOR '') as bestelstring
 	FROM Bestellingen
 	WHERE Tijdstip>'".$start."' AND Bedrag!=0
@@ -69,21 +41,63 @@ array(
 	'omzet' => "70.00",
 	'aantal_bestellingen' => "29",
 	'bestelstring' => "zllssssssssssgffxbbxdddlllffxfxgfbbxgfxlgff4bgw6b2f2l3l1b2l"));
-
-echo '<table>
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xml:lang="nl" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>SocCie streeepcomputerrapportage</title>
+	<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
+	<meta name="author" content="PubCie C.S.R. Delft - Jieter" />
+	<meta name="robots" content="nfollow" />
+	<link rel="stylesheet" href="default.css" type="text/css" />
+	<link rel="shortcut icon" href="http://plaetjes.csrdelft.nl/layout/favicon.ico" />
+</head>
+<body>
+<h1>Streeplijstrapportage SocCie</h1>
+Let op: omzetcijfers kloppen niet voor de weken  de geschiedenis v&oacute;&oacute;r prijswijzigingen.
+<?php
+echo '<table class="weken">
 		<tr>
-			<th>Week</th><th>Omzet</th><th>#bestellingen</th><th>detail</th>
+			<th>Week</th><th>#bestellingen</th><th>detail</th><th>inleg</th><th>Omzet</th>
 		</tr>';
 
 foreach($res as $row){
+	$week=$row['week'];
 	echo '<tr>';
-	echo '<td>'.$row['week'].'</td>';
-	echo '<td>'.$row['omzet'].'</td>';
+	echo '<td>'.$week.'</td>';
 	echo '<td>'.$row['aantal_bestellingen'].'</td>';
-	echo '<td>'.parse_bestelstring($row['bestelstring']).'</td>';
+
+	$bestellingen=parse_bestelstring($row['bestelstring']);
+
+	$inleg=0;
+	$omzet=0;
+
+	echo '<td>';
+
+	echo '<a class="handje" onclick="document.getElementById(\'details-'.$week.'\').style.display=\'block\'; this.parentNode.removeChild(this);">Toon details</a>';
+	echo '<table id="details-'.$week.'" class="artikelen verborgen"><tr><th>artikel</th><th>aantal</th><th>omzet</th></tr>';
+	foreach($bestellingen as $letter => $aantal){
+		$artikelomzet=$artikelen[$letter]['prijs']*$aantal;
+		echo '<tr><td>'.$artikelen[$letter]['naam'].'</td>';
+		echo '<td>'.$aantal.'</td>';
+		echo '<td class="euro">'.euro($artikelomzet).'</td>';
+		echo '</tr>';
+		if($artikelomzet<0){
+			$inleg+=$artikelomzet;
+		}else{
+			$omzet+=$artikelomzet;
+		}
+
+	}
+	echo '</table></td>';
+	echo '<td>'.euro(0-$inleg).'</td>';
+		echo '<td>'.euro($omzet).'</td>';
 
 
 	echo '</tr>';
 
 }
-echo '</table>';
+?>
+</table>
+</body>
+</html>
