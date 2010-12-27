@@ -51,7 +51,9 @@ class CorveevoorkeurenLijst{
 		}		
 		return $bewerkteLeden;
 	}
-		
+	
+	public static $sorteer, $sorteer_voorkeur, $sorteer_richting;
+	
 	//Geef een lijst met alle leden terug, gesorteerd op het gegeven veld.
 	//Staat toe om op corvee-voorkeur te sorteren.
 	public function getCorveeLedenGesorteerd($sorteer, $sorteer_richting){
@@ -80,9 +82,16 @@ class CorveevoorkeurenLijst{
 			$sorteer_op_voorkeur = array('voorkeur_0', 'voorkeur_1', 'voorkeur_2', 'voorkeur_3', 'voorkeur_4', 'voorkeur_5', 'voorkeur_6', 'voorkeur_7');
 			$sorteer_richting = ($sorteer_richting === 'asc')? 1 : -1;				
 			$comparef = null;
-			if(in_array($sorteer, $sorteer_op_voorkeur)){
-				$sorteer_voorkeur = (int)substr($sorteer, strlen($sorteer)-1);				
-				$comparef = function($lidentry_a, $lidentry_b) use ($sorteer_voorkeur,$sorteer_richting){
+			
+			Corveevoorkeurenlijst::$sorteer = $sorteer;
+			Corveevoorkeurenlijst::$sorteer_richting = $sorteer_richting;
+			if(in_array($sorteer, $sorteer_op_voorkeur)){				
+				CorveevoorkeurenLijst::$sorteer_voorkeur = (int)substr($sorteer, strlen($sorteer)-1);
+				
+				function compare_voorkeur($lidentry_a, $lidentry_b){
+					$sorteer_voorkeur = Corveevoorkeurenlijst::$sorteer_voorkeur;
+					$sorteer_richting = Corveevoorkeurenlijst::$sorteer_richting;
+					
 					$a = $lidentry_a['corvee_voorkeuren'][$sorteer_voorkeur]; 
 					$b = $lidentry_b['corvee_voorkeuren'][$sorteer_voorkeur]; 
 				    					
@@ -97,7 +106,10 @@ class CorveevoorkeurenLijst{
 				};				
 			}else {
 				//Sorteer op prognose of tekort							
-				$comparef = function($lidentry_a, $lidentry_b) use ($sorteer,$sorteer_richting){
+				function compare_voorkeur($lidentry_a, $lidentry_b){
+					$sorteer = Corveevoorkeurenlijst::$sorteer;
+					$sorteer_richting = Corveevoorkeurenlijst::$sorteer_richting;
+					
 					$a = $lidentry_a[$sorteer]; 
 					$b = $lidentry_b[$sorteer];
 				    					
@@ -112,7 +124,7 @@ class CorveevoorkeurenLijst{
 				}; 										
 			}
 			//Sorteer de lijst met de bepaalde functie
-			if(!usort($leden, $comparef)){
+			if(!usort($leden, 'compare_voorkeur')){
 				return false;
 			}
 		}
