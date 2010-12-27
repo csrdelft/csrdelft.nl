@@ -225,7 +225,6 @@ htdocs_confide/default.css -text
 htdocs_confide/index.php -text
 htdocs_confide/mysql.class.php -text
 htdocs_confide/mysql.ini.sample -text
-htdocs_confide/simplehtml.class.php -text
 htdocs_confide/streeplijstrapportage.php -text
 images/famfamfam/.index -text
 lib/Zend/Exception.php -text

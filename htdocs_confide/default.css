@@ -1,11 +1,17 @@
 .verborgen{ display: none;}
 .handje{ cursor: pointer; }
+.knop{
+
+background-color: #eee;
+padding: 2px;
+margin: 2px;
+}
 td{ vertical-align: top; }
 td.euro{ text-align: right;}
 table{ border-collapse: collapse;}
 table.weken{ width: 100%; margin-top: 20px;}
 
-table.artikelen{ width: 250px; font-size: 10px; float: right;}
+table.artikelen{ font-size: 10px; float: right;}
 
 table.weken th{
 	padding: 2px;
