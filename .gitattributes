@@ -220,7 +220,6 @@ htdocs/vb/images/vormingsbank_vb_beta.png -text
 htdocs/vb/images/zoekveld_vb.png -text
 htdocs/vb/index.php -text
 htdocs/vb/jsonencode.js -text
-htdocs_confide/common.functions.php -text
 htdocs_confide/default.css -text
 htdocs_confide/index.php -text
 htdocs_confide/streeplijstrapportage.php -text
