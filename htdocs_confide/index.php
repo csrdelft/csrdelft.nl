@@ -94,7 +94,7 @@ while($row=$db->next($weekResult)){
 	foreach($bestellingen as $letter => $aantal){
 		$artikelomzet=$artikelen[$letter]['prijs']*$aantal;
 		echo '<tr><td>'.$artikelen[$letter]['naam'].'</td>';
-		echo '<tr><td>'.$letter.'</td>';
+		echo '<td>'.$letter.'</td>';
 		echo '<td>'.$aantal.'</td>';
 		echo '<td class="euro">'.euro($artikelomzet).'</td>';
 		echo '</tr>';
