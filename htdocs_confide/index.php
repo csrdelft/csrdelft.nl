@@ -66,7 +66,7 @@ if(!(isset($_SESSION['authenticated']) AND $_SESSION['authenticated'])){
 
 ?>
 <h1>Streeplijstrapportage SocCie</h1>
-Let op: cijfers kloppen na prijswijzigingen niet voor de weken v&oacute;&oacute;r de wijziging. Weeknummer zijn <a href="http://en.wikipedia.org/wiki/ISO_week_date">ISO-weken</a>: van maandag tot zondag dus...
+Let op: cijfers kloppen na prijswijzigingen niet voor de weken v&oacute;&oacute;r de wijziging. Weeknummer zijn <a href="http://en.wikipedia.org/wiki/ISO_week_date">ISO-weken</a>: van maandag tot zondag dus...<br /><br />
 <a href="?start=6">half jaar</a>
 <a href="?start=12">1 jaar</a>
 <a href="?start=24">2 jaar</a>
