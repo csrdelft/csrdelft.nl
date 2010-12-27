@@ -90,10 +90,11 @@ while($row=$db->next($weekResult)){
 	echo '<td>';
 
 	echo '<a class="handje knop" onclick="document.getElementById(\'details-'.$week.'\').style.display=\'block\'; this.parentNode.removeChild(this);">&raquo; Toon details</a>';
-	echo '<table id="details-'.$week.'" class="artikelen verborgen"><tr><th>artikel</th><th>#</th><th>omzet</th></tr>';
+	echo '<table id="details-'.$week.'" class="artikelen verborgen"><tr><th>artikel</th><th>letter</th><th>#</th><th>omzet</th></tr>';
 	foreach($bestellingen as $letter => $aantal){
 		$artikelomzet=$artikelen[$letter]['prijs']*$aantal;
 		echo '<tr><td>'.$artikelen[$letter]['naam'].'</td>';
+		echo '<tr><td>'.$letter.'</td>';
 		echo '<td>'.$aantal.'</td>';
 		echo '<td class="euro">'.euro($artikelomzet).'</td>';
 		echo '</tr>';
