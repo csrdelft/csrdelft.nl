@@ -45,12 +45,13 @@ class CorveeLid {
 		return $this->lid->setProperty('corvee_vrijstelling', $corvee_vrijstelling);	
 	}
 	
-	//Wijzig het kwalikok zijn, het aantal bonuspunten en het percentage vrijstelling van corvee. 
-	public function setAlles($corvee_kwalikok, $corvee_punten_bonus, $corvee_vrijstelling){		
+	//Wijzig het kwalikok zijn, het aantal bonuspunten het percentage vrijstelling van corvee en het aantal corveepunten 
+	public function setAlles($corvee_kwalikok, $corvee_punten_bonus, $corvee_vrijstelling, $corvee_punten){		
 		// lid bewerken
 		$isgelukt = $this->setKwalikok($corvee_kwalikok);
 		$isgelukt = $isgelukt && $this->setBonusPunten($corvee_punten_bonus);
 		$isgelukt = $isgelukt && $this->setVrijstelling($corvee_vrijstelling);
+		$isgelukt = $isgelukt && $this->setCorveePunten($corvee_punten);
 		$isgelukt = $isgelukt && $this->save();
 		return $isgelukt;
 	}

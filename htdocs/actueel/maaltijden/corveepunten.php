@@ -29,10 +29,10 @@ if(isset($_POST['actie'])){
 
 	# bestaande maaltijd bewerken
 	$corvee_kwalikok = (isset($_POST['corvee_kwalikok'])? 1 : 0);
-	if($actie == 'bewerk' && (isset($_POST['corvee_punten_bonus'], $_POST['corvee_vrijstelling']))){
+	if($actie == 'bewerk' && (isset($_POST['corvee_punten_bonus'], $_POST['corvee_vrijstelling'], $_POST['corvee_punten']))){
 		$lid=LidCache::getLid($uid);
 		$corveelid=new CorveeLid($lid);
-		$corveelid->setAlles($corvee_kwalikok, $_POST['corvee_punten_bonus'], $_POST['corvee_vrijstelling']);
+		$corveelid->setAlles($corvee_kwalikok, $_POST['corvee_punten_bonus'], $_POST['corvee_vrijstelling'], $_POST['corvee_punten']);
 	}
 }
 
