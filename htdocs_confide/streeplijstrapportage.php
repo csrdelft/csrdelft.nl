@@ -41,4 +41,21 @@ function parse_bestelstring($string){
 	}
 	return $return;
 }
+function wait_for_login(){
+	if(!(isset($_SESSION['authenticated']) AND $_SESSION['authenticated'])){
+		if(isset($_POST['password']) AND md5($_POST['password'])=='3f83075f710a248c7786cf72d0e501ce'){
+			$_SESSION['authenticated']=true;
+		}else{
+			?>
+			<h1>SoccieStreeplijstrapportagegeneratortool login</h1>
+
+			<form method="post">
+				<input type="password" name="password" /><input type="submit" value="inloggen" />
+			</form>
+			<?php
+
+			exit;
+		}
+	}
+}
 ?>

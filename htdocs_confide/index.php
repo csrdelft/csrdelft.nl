@@ -44,40 +44,56 @@ $weekResult=$db->query($weekrapportQuery);
 	<meta name="author" content="PubCie C.S.R. Delft - Jieter" />
 	<meta name="robots" content="nfollow" />
 	<link rel="stylesheet" href="default.css" type="text/css" />
+	<script type="text/javascript" src="http://csrdelft.nl/layout/js/jquery.js"></script>
+	<script type="text/javascript" src="http://csrdelft.nl/layout/js/datatables/jquery.dataTables.min.js"></script>
+
+	<script type="text/javascript">
+		jQuery(document).ready(function($) {
+			$('.details').click(function(e){
+
+				$('#table-'+this.id).show();
+				$('#'+this.id).remove();
+			});
+			$('.zebra tr:even').addClass('even');
+
+			$('#weken').dataTable({
+				'aaSorting':[[0, 'desc']],
+				'aoColumns': [
+					null,
+					null,
+					null,
+					{'bSortable': false},
+					null,
+					null
+				],
+				'bSearch': false,
+				'bFilter': false,
+				'bPaginate': false,
+				'bInfo': false
+			});
+		});
+	</script>
+
 	<link rel="shortcut icon" href="http://plaetjes.csrdelft.nl/layout/favicon.ico" />
 </head>
 <body>
 
-<?php
-// 'inloggen'
-if(!(isset($_SESSION['authenticated']) AND $_SESSION['authenticated'])){
-	if(isset($_POST['password']) AND md5($_POST['password'])=='3f83075f710a248c7786cf72d0e501ce'){
-		$_SESSION['authenticated']=true;
-	}else{
-		?>
-		<h1>SoccieStreeplijstrapportagegeneratortool login</h1>
+<?php wait_for_login(); ?>
 
-		<form method="post">
-			<input type="password" name="password" /><input type="submit" value="inloggen" />
-		</form>
-		<?php
-
-		exit;
-	}
-}
-
-?>
 <h1>Streeplijstrapportage SocCie</h1>
 Let op: cijfers kloppen na prijswijzigingen niet voor de weken v&oacute;&oacute;r de wijziging. Weeknummer zijn <a href="http://en.wikipedia.org/wiki/ISO_week_date">ISO-weken</a>: van maandag tot zondag dus...<br /><br />
 <a href="?start=6">half jaar</a>
 <a href="?start=12">1 jaar</a>
 <a href="?start=24">2 jaar</a>
-<?php
-echo '<table class="weken">
-		<tr>
-			<th>Week</th><th>#bestellingen</th><th>som omzet+inleg <br />(streeplijst)</th><th>detail</th><th>inleg</th><th>Omzet</th>
-		</tr>';
 
+<table class="weken zebra" id="weken">
+	<thead>
+		<tr>
+			<th>Week</th><th>#bestellingen</th><th>som omzet+inleg <br />(streepcompu)</th><th>detail</th><th>inleg</th><th>Omzet</th>
+		</tr>
+	</thead>
+
+<?php
 while($row=$db->next($weekResult)){
 	$week=$row['week'];
 	echo '<tr>';
@@ -92,8 +108,8 @@ while($row=$db->next($weekResult)){
 
 	echo '<td>';
 
-	echo '<a class="handje knop" onclick="document.getElementById(\'details-'.$week.'\').style.display=\'block\'; this.parentNode.removeChild(this);">&raquo; Toon details</a>';
-	echo '<table id="details-'.$week.'" class="artikelen verborgen"><tr><th>artikel</th><th>letter</th><th>#</th><th>omzet</th></tr>';
+	echo '<a class="details handje knop" id="details-'.$week.'">&raquo; Toon details</a>';
+	echo '<table id="table-details-'.$week.'" class="artikelen verborgen"><tr><th>artikel</th><th>letter</th><th>#</th><th>omzet</th></tr>';
 	foreach($bestellingen as $letter => $aantal){
 		$artikelomzet=$artikelen[$letter]['prijs']*$aantal;
 		echo '<tr><td>'.$artikelen[$letter]['naam'].'</td>';
