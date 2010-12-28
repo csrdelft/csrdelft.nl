@@ -99,7 +99,7 @@ while($row=$db->next($weekResult)){
 	echo '<tr>';
 	echo '<td>'.$row['jaar'].'-'.$week.'</td>';
 	echo '<td>'.$row['aantal_bestellingen'].'</td>';
-	echo '<td>'.$row['omzet'].'</td>';
+	echo '<td>'.euro($row['omzet']).'</td>';
 
 	$bestellingen=parse_bestelstring($row['bestelstring']);
 
