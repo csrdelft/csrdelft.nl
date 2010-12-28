@@ -26,11 +26,13 @@ if(isset($_GET['start'])){
 	$start=date('Y-m-d H:i:s', strtotime('4 months ago'));
 }
 $weekrapportQuery="
-	SELECT week(Tijdstip) as week, SUM(Bedrag) as omzet, count(*) as aantal_bestellingen, GROUP_CONCAT(Artikelen SEPARATOR '') as bestelstring
+	SELECT
+		year(Tijdstip) as jaar, week(Tijdstip) as week,
+		SUM(Bedrag) as omzet, count(*) as aantal_bestellingen, GROUP_CONCAT(Artikelen SEPARATOR '') as bestelstring
 	FROM Bestellingen
 	WHERE Tijdstip>'".$start."' AND Bedrag!=0
-	GROUP BY week
-	ORDER BY week DESC;";
+	GROUP BY jaar, week
+	ORDER BY jaar DESC, week DESC;";
 $weekResult=$db->query($weekrapportQuery);
 
 ?>
@@ -73,14 +75,15 @@ Let op: cijfers kloppen na prijswijzigingen niet voor de weken v&oacute;&oacute;
 <?php
 echo '<table class="weken">
 		<tr>
-			<th>Week</th><th>#bestellingen</th><th>detail</th><th>inleg</th><th>Omzet</th>
+			<th>Week</th><th>#bestellingen</th><th>som omzet+inleg <br />(streeplijst)</th><th>detail</th><th>inleg</th><th>Omzet</th>
 		</tr>';
 
 while($row=$db->next($weekResult)){
 	$week=$row['week'];
 	echo '<tr>';
-	echo '<td>'.$week.'</td>';
+	echo '<td>'.$row['jaar'].'-'.$week.'</td>';
 	echo '<td>'.$row['aantal_bestellingen'].'</td>';
+	echo '<td>'.$row['omzet'].'</td>';
 
 	$bestellingen=parse_bestelstring($row['bestelstring']);
 
