@@ -23,7 +23,7 @@ while($art=$db->next($artikelenResult)){
 if(isset($_GET['start'])){
 	$start=date('Y-m-d H:i:s', strtotime(((int)$_GET['start']).' months ago'));
 }else{
-	$start=date('Y-m-d H:i:s', strtotime('4 months ago'));
+	$start=date('Y-m-d H:i:s', strtotime('3 months ago'));
 }
 $weekrapportQuery="
 	SELECT
@@ -79,7 +79,8 @@ $weekResult=$db->query($weekrapportQuery);
 				],
 				'bSearch': false,
 				'bFilter': false,
-				'bPaginate': false,
+				'bPaginate': true,
+				"bLengthChange": false,
 				'bInfo': false
 			});
 		});
@@ -94,13 +95,18 @@ $weekResult=$db->query($weekrapportQuery);
 <h1>Rapportage's streepcompu SocCie</h1>
 <a href="#weken">Weekoverzicht</a><br />
 <a href="#bestellingen">Laatste bestellingen</a><br />
+<br />
+
+
+<strong>Periode:</strong>
+<em>3 maanden terug (standaard)</em> |
+<a href="?start=6">half jaar</a> |
+<a href="?start=12">1 jaar</a> |
+<a href="?start=24">2 jaar</a>
+
 
 <h2>Weekoverzichten</h2>
 Let op: cijfers kloppen na prijswijzigingen niet voor de weken v&oacute;&oacute;r de wijziging. Weeknummer zijn <a href="http://en.wikipedia.org/wiki/ISO_week_date">ISO-weken</a>: van maandag tot zondag dus...<br /><br />
-<a href="?start=6">half jaar</a>
-<a href="?start=12">1 jaar</a>
-<a href="?start=24">2 jaar</a>
-
 <table class="weken zebra" id="weken">
 	<thead>
 		<tr>
@@ -147,7 +153,7 @@ while($row=$db->next($weekResult)){
 ?>
 </table>
 <h2>Laatste bestellingen</h2>
-Zoeken in de laatste 500 bestellingen:
+Zoeken in de laatste bestellingen: <em>(Met een limiet van 3000 bestellingen)</em>
 <table class="bestellingen zebra" id="bestellingen">
 <thead>
 		<tr>
@@ -156,7 +162,11 @@ Zoeken in de laatste 500 bestellingen:
 	</thead>
 <?php
 
-$weekResult=$db->query('SELECT Tijdstip, Lid, Bedrag, Artikelen FROM Bestellingen WHERE bedrag!=0 ORDER BY Tijdstip DESC LIMIT 500');
+$weekResult=$db->query('
+	SELECT Tijdstip, Lid, Bedrag, Artikelen
+	FROM Bestellingen
+	WHERE Tijdstip>\''.$start.'\' AND bedrag!=0
+	ORDER BY Tijdstip DESC LIMIT 3000;');
 
 while($row=$db->next($weekResult)){
 	echo '<tr>';
