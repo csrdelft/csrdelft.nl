@@ -74,7 +74,7 @@ $weekResult=$db->query($weekrapportQuery);
 					null,
 					null,
 					{'bSortable': false},
-					{'sType': 'numeric'},
+					{'sType': 'html'},
 					null
 				],
 				'bSearch': false,
