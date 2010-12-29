@@ -56,6 +56,17 @@ $weekResult=$db->query($weekrapportQuery);
 			});
 			$('.zebra tr:even').addClass('even');
 
+			$('#bestellingen').dataTable({
+				'aaSorting':[[0, 'desc']],
+				"bInfo": false,
+				'bSearch': true,
+				"bLengthChange": false,
+
+				"oLanguage": {
+					"sSearch": "Zoeken:"
+				},
+
+			});
 			$('#weken').dataTable({
 				'aaSorting':[[0, 'desc']],
 				'aoColumns': [
@@ -80,7 +91,11 @@ $weekResult=$db->query($weekrapportQuery);
 
 <?php wait_for_login(); ?>
 
-<h1>Streeplijstrapportage SocCie</h1>
+<h1>Rapportage's streepcompu SocCie</h1>
+<a href="#weken">Weekoverzicht</a><br />
+<a href="#bestellingen">Laatste bestellingen</a><br />
+
+<h2>Weekoverzichten</h2>
 Let op: cijfers kloppen na prijswijzigingen niet voor de weken v&oacute;&oacute;r de wijziging. Weeknummer zijn <a href="http://en.wikipedia.org/wiki/ISO_week_date">ISO-weken</a>: van maandag tot zondag dus...<br /><br />
 <a href="?start=6">half jaar</a>
 <a href="?start=12">1 jaar</a>
@@ -107,7 +122,6 @@ while($row=$db->next($weekResult)){
 	$omzet=0;
 
 	echo '<td>';
-
 	echo '<a class="details handje knop" id="details-'.$week.'">&raquo; Toon details</a>';
 	echo '<table id="table-details-'.$week.'" class="artikelen verborgen"><tr><th>artikel</th><th>letter</th><th>#</th><th>omzet</th></tr>';
 	foreach($bestellingen as $letter => $aantal){
@@ -117,22 +131,44 @@ while($row=$db->next($weekResult)){
 		echo '<td>'.$aantal.'</td>';
 		echo '<td class="euro">'.euro($artikelomzet).'</td>';
 		echo '</tr>';
-		if($letter=='h'){
+		if($letter=='h' OR $artikelomzet<0){
 			$inleg+=$artikelomzet;
 		}else{
-			if($artikelomzet<0){
-				$inleg+=$artikelomzet;
-			}else{
-				$omzet+=$artikelomzet;
-			}
+			$omzet+=$artikelomzet;
 		}
 	}
-	echo '</table></td>';
+	echo '</table>';
+
+	echo '</td>';
 	echo '<td>'.euro(0-$inleg).'</td>';
 	echo '<td>'.euro($omzet).'</td>';
 	echo '</tr>';
 }
 ?>
 </table>
+<h2>Laatste bestellingen</h2>
+Zoeken in de laatste 500 bestellingen:
+<table class="bestellingen zebra" id="bestellingen">
+<thead>
+		<tr>
+			<th>Tijdstip</th><th>Lid</th><th>bedrag </th><th>Artikelen</th>
+		</tr>
+	</thead>
+<?php
+
+$weekResult=$db->query('SELECT Tijdstip, Lid, Bedrag, Artikelen FROM Bestellingen WHERE bedrag!=0 ORDER BY Tijdstip DESC LIMIT 500');
+
+while($row=$db->next($weekResult)){
+	echo '<tr>';
+	echo '<td>'.$row['Tijdstip'].'</td>';
+	echo '<td>'.$row['Lid'].'</td>';
+	echo '<td>'.euro($row['Bedrag']).'</td>';
+	echo '<td>'.$row['Artikelen'].'</td>';
+	echo '</tr>';
+}
+?>
+</table>
+
+
 </body>
 </html>
