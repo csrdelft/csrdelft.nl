@@ -12,7 +12,7 @@ RewriteRule ^eetplan/sjaars/([0-9]*) eetplan.php?pheutID=$1
 RewriteRule ^eetplan/huis/([0-9]*) eetplan.php?huisID=$1
 
 # Pagina's met tekst
-RewriteRule ^owee/programma/? ../pagina.php?naam=oweeintern
+RewriteRule ^owee/programma/? ../pagina.php?naam=oweeprogramma
 RewriteRule ^owee/? ../pagina.php?naam=owee
 
 #RewriteRule ^agenda/? ../pagina.php?naam=agenda
