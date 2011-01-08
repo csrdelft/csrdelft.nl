@@ -12,12 +12,12 @@ require_once 'ubb/eamBBParser.class.php';
 class CsrUBB extends eamBBParser{
 
 	static private $instance;
-	
-	
+
+
 	public function instance(){
 		return new CsrUBB();
 	}
-	
+
 	private function __construct(){
 		$this->eamBBParser();
 		$this->paragraph_mode = false;
@@ -41,7 +41,7 @@ class CsrUBB extends eamBBParser{
 			$lid=LidCache::getLid($arguments['citaat']);
 			if($lid instanceof Lid){
 				$text.=' van '.$lid->getNaamLink('user', 'link');
-			}	
+			}
 		}elseif(isset($arguments['citaat']) AND trim($arguments['citaat'])!=''){
 			$text.=' van '.str_replace('_', '&nbsp;', $arguments['citaat']);
 		}else{
@@ -121,7 +121,7 @@ class CsrUBB extends eamBBParser{
 			}
 		}catch(Exception $e){
 			return '[instelling]: '.$e->getMessage();
-		}	
+		}
 	}
 	/*
 	 * Omdat we niet willen dat dingen die in privé staan alsnog gezien
@@ -200,7 +200,7 @@ src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
 		}
 		return $html;
 	}
-	
+
 	function ubb_vimeo($parameters){
 		$content = $this->parseArray(array('[/vimeo]'), array());
 		if(preg_match('/^\d*$/', $content)){
@@ -230,17 +230,17 @@ src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
 		$groeptag=new GroepUbbContent((int)$content);
 		return $groeptag->getHTML();
 	}
-	
+
 	/*
 	 * ubb_document();
-	 * 
+	 *
 	 * [document]1234[/document]
-	 * 
+	 *
 	 * Geeft een blokje met een documentnaam, link, bestandsgrootte en formaat.
 	 */
 	protected function ubb_document($parameters){
 		$id=(int)$this->parseArray(array('[/document]'), array());
-		
+
 		require_once 'documenten/documentcontent.class.php';
 		try{
 			$document=new Document($id);
@@ -250,7 +250,7 @@ src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
 			return '<div class="ubb_document">[document] Ongeldig document (id:'.$id.')</div>';
 		}
 	}
-	 
+
 	/*
 	 * ubb_maaltijd();
 	 *
@@ -266,7 +266,7 @@ src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
 		require_once 'maaltijden/maaltijdcontent.class.php';
 		return MaaltijdContent::getMaaltijdubbtag(trim($parameters['maaltijd']));
 	}
-	
+
 	public function ubb_offtopic(){
 		$content = $this->parseArray(array('[/offtopic]'), array());
 		return '<div class="offtopic">'.$content.'</div>';
@@ -390,7 +390,7 @@ UBBVERHAAL;
 
 		return $html;
 	}
-	
+
 	/*
 	 * Peiling ubb-tag. Door Piet-Jan Spaans.
 	 * [peiling=2]
@@ -401,15 +401,15 @@ UBBVERHAAL;
 			$peilingid = (int)$parameters['peiling'];
 			try{
 				$peiling=new Peiling($peilingid);
-			}catch(Execption $e){
-				return '[peiling] Er bestaat geen peiling met (id'.$peilingid.')';
+			}catch(Exception $e){
+				return '[peiling] Er bestaat geen peiling met (id:'.$peilingid.')';
 			}
 			$peilingcontent=new PeilingContent($peiling);
-			
+
 			return $peilingcontent->getHTML();
 		}else{
 			return '[peiling] Geen geldig peilingblok.';
-		}		
+		}
 	}
 }
 //we staan normaal geen HTML toe, met deze kan dat wel.
