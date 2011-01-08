@@ -50,7 +50,7 @@ class Fotoalbum{
 	function getThumbURL(){
 		# Foto uit album zelf
 		$fotos=$this->getFotos();
-		if($fotos!==false){
+		if(is_array($fotos) AND count($fotos)>0){
 			$foto=$fotos[0];
 			return $foto->getThumbURL();
 		}
