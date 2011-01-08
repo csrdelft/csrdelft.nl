@@ -28,7 +28,7 @@ class AgendaMaandContent extends SimpleHTML {
 
 	public function view(){
 		$filter = !LoginLid::instance()->hasPermission('P_AGENDA_MOD');
-		
+
 		$content = new Smarty_csr();
 		$content->assign('datum', strtotime($this->jaar.'-'.$this->maand.'-01'));
 		$content->assign('weken', $this->agenda->getItemsByMaand($this->jaar, $this->maand, $filter));
@@ -69,11 +69,11 @@ class AgendaItemContent extends SimpleHTML {
 		$this->item = $item;
 		$this->actie = $actie;
 	}
-	
+
 	public function getTitel() {
 		return 'Agenda - Item toevoegen';
 	}
-	
+
 	public function view() {
 		$content = new Smarty_csr();
 		$content->assign('item', $this->item);
@@ -84,31 +84,31 @@ class AgendaItemContent extends SimpleHTML {
 }
 
 class AgendaZijbalkContent extends SimpleHTML {
-	
+
 	private $agenda;
 	private $aantalWeken;
-	
+
 	public function __construct($agenda, $aantalWeken) {
 		$this->agenda = $agenda;
 		$this->aantalWeken = $aantalWeken;
 	}
-	
+
 	public function getTitel() {
 		return 'Agenda - Zijbalk';
 	}
-	
+
 	public function view() {
 		$filter = !LoginLid::instance()->hasPermission('P_AGENDA_MOD');
-		
+
 		$beginMoment = strtotime(date('Y-m-d'));
 		$eindMoment = strtotime('+'.$this->aantalWeken.' weeks', $beginMoment);
 		$eindMoment = strtotime('next saturday', $eindMoment);
 		$items = $this->agenda->getItems($beginMoment, $eindMoment, $filter);
-		
+
 		if(count($items)>Instelling::get('zijbalk_agenda_max')){
 			$items=array_slice($items, 0, Instelling::get('zijbalk_agenda_max'));
 		}
-		
+
 		$content = new Smarty_csr();
 		$content->assign('items', $items);
 		$content->display('agenda/zijbalk.tpl');
@@ -117,37 +117,37 @@ class AgendaZijbalkContent extends SimpleHTML {
 class AgendaCourantContent extends SimpleHTML{
 	private $agenda;
 	private $aantalWeken;
-	
+
 	public function __construct($agenda, $aantalWeken) {
 		$this->agenda = $agenda;
 		$this->aantalWeken = $aantalWeken;
-		
+
 		$filter = !LoginLid::instance()->hasPermission('P_AGENDA_MOD');
-		
+
 		$beginMoment = strtotime(date('Y-m-d'));
 		$eindMoment = strtotime('+'.$this->aantalWeken.' weeks', $beginMoment);
 		$eindMoment = strtotime('next saturday', $eindMoment);
 		$items = $this->agenda->getItems($beginMoment, $eindMoment, $filter);
-		
+
 		$content = new Smarty_csr();
 		$content->assign('items', $items);
 		$content->display('agenda/courant.tpl');
 	}
-	
+
 }
 
 class AgendaIcalendarContent extends SimpleHTML {
-	
+
 	private $agenda;
-	
+
 	public function __construct($agenda) {
 		$this->agenda = $agenda;
 	}
-	
+
 	public function view() {
 		$filter = !LoginLid::instance()->hasPermission('P_AGENDA_MOD');
 		$items = $this->agenda->getItems(null, null, $filter);
-		
+
 		$content = new Smarty_csr();
 		$content->assign('items', $items);
 		$content->display('agenda/icalendar.tpl');
