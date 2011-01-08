@@ -79,6 +79,7 @@ htdocs/layout/documenten.css -text
 htdocs/layout/forum.css -text
 htdocs/layout/fotoalbum.css -text
 htdocs/layout/groepen.css -text
+htdocs/layout/jquery.prettyPhoto.css -text
 htdocs/layout/js/builder.js -text
 htdocs/layout/js/csrdelft.js -text
 htdocs/layout/js/datatables/css/datatables_basic.css -text
@@ -123,6 +124,7 @@ htdocs/layout/js/flot/jquery.min.js -text
 htdocs/layout/js/gmaps.js -text
 htdocs/layout/js/groepen.js -text
 htdocs/layout/js/jquery.js -text
+htdocs/layout/js/jquery.prettyPhoto.js -text
 htdocs/layout/js/lightbox.js -text
 htdocs/layout/js/menu.js -text
 htdocs/layout/js/peilingbeheer.js -text

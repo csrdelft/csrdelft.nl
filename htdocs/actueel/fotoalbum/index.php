@@ -12,6 +12,7 @@ require_once 'fotoalbum.class.php';
 require_once 'fotoalbumcontent.class.php';
 
 $pad=htmlspecialchars(urldecode(substr($_SERVER['REQUEST_URI'], 19)));
+
 if($pad==''){
 	$mapnaam='Fotoalbum';
 }else{
@@ -27,10 +28,8 @@ if($fotoalbum->magBekijken()){
 
 	$pagina=new csrdelft($fotoalbumcontent);
 	$pagina->addStylesheet('fotoalbum.css');
-	$pagina->addStylesheet('lightbox.css');
-	$pagina->addScript('prototype.js');
-	$pagina->addScript('scriptaculous.js?load=effects,builder');
-	$pagina->addScript('fastlightbox.js');
+	$pagina->addStylesheet('jquery.prettyPhoto.css');
+	$pagina->addScript('jquery.prettyPhoto.js');
 	$pagina->setZijkolom(false);
 	$pagina->view();
 }else{

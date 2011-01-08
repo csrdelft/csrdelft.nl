@@ -69,13 +69,17 @@ class Fotoalbum{
 	function getSubAlbums(){
 		# Mappenlijst ophalen en sorteren
 		$mappen=array();
-		$handle=opendir(PICS_PATH.'/fotoalbum/'.$this->pad);
-		while(false!==($file=readdir($handle))){
-			if(is_dir(PICS_PATH.'/fotoalbum/'.$this->pad.$file)&&!preg_match('/^(\.|\_)(.*)$/',$file)){
-				$mappen[]=$file;
+
+		if(is_dir(PICS_PATH.'/fotoalbum/'.$this->pad)){
+			$handle=opendir(PICS_PATH.'/fotoalbum/'.$this->pad);
+
+			while(false!==($file=readdir($handle))){
+				if(is_dir(PICS_PATH.'/fotoalbum/'.$this->pad.$file)&&!preg_match('/^(\.|\_)(.*)$/',$file)){
+					$mappen[]=$file;
+				}
 			}
+			sort($mappen);
 		}
-		sort($mappen);
 		//$mappen=array_reverse($mappen);
 
 		# Albums aanmaken en teruggeven
@@ -96,13 +100,16 @@ class Fotoalbum{
 
 	function getFotos($compleet=true){
 		$bestanden=array();
-		$handle=opendir(PICS_PATH.'/fotoalbum/'.$this->pad);		
+		if(!is_dir(PICS_PATH.'/fotoalbum/'.$this->pad)){
+			return false;
+		}
+		$handle=opendir(PICS_PATH.'/fotoalbum/'.$this->pad);
 		while(false!==($bestand=readdir($handle))){
 			$bestanden[]=$bestand;
 		}
 		sort($bestanden);
+
 		$fotos=array();
-		$handle=opendir(PICS_PATH.'/fotoalbum/'.$this->pad);
 		foreach($bestanden as $bestand){
 			if(preg_match('/^[^_].*\.(jpg|jpeg)$/i',$bestand)){
 				$foto=new Foto($this->pad,$bestand);
@@ -111,11 +118,7 @@ class Fotoalbum{
 				}
 			}
 		}
-		if(count($fotos)>0){
-			return $fotos;
-		}else{
-			return false;
-		}
+		return $fotos;
 	}
 
 	function magBekijken(){
@@ -227,7 +230,7 @@ class Foto{
 	function isCompleet(){
 		return ($this->bestaatThumb() && $this->bestaatResized());
 	}
-	
+
 	function urlencode($url){
 		//urlencode() maar dan de slashes niet
 		return str_replace('%2F', '/', rawurlencode($url));

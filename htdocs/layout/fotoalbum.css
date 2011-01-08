@@ -24,5 +24,8 @@ a.album:hover{
 }
 a.album img{
 	height: 150px;
-	border: 1px solid #777777;	
+	border: 1px solid #777777;
+}
+#fullsizeLink{
+	float: right;
 }
