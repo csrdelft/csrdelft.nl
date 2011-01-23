@@ -15,8 +15,8 @@ exit();
 function main() {
 
 	# instellingen & rommeltjes
-	require_once('include.config.php');
-	require_once('include.common.php');
+	require_once('configuratie.include.php');
+	require_once('common.functions.php');
 
 	require_once("maildata.php");
 
