@@ -32,13 +32,13 @@ img{
 	border: 0px;
 }
 h4{
-	background-color: #777;
+	background-color: #6d6b81;
 	font-size: 15px;
 	margin: 10px 0px 0px 0px; padding: 5px 5px 5px 10px;
-	color: white;
+	color: #efcf1c;
 }
 p{
-	background-color: #eee;
+	background-color: #b9b8c0;
 	margin: 0px 0px 0px 0px;
 	padding: 10px 5px 5px 10px;
 	font-size: 11px; font-face: verdana, arial, sans-serif;
