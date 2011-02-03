@@ -98,8 +98,9 @@ class Courant {
 	}
 	public function getTemplatePath(){
 		$return=SMARTY_TEMPLATE_DIR.'courant/mail/';
-		if(isset($this->berichten[0]['template']) AND file_exists($return.$this->berichten[0]['template'])){
-			$return.=$this->berichten[0]['template'];
+		$firstbericht = array_slice ( $this->berichten , 0 , 1 );
+		if(isset($firstbericht[0]['template']) AND file_exists($return.$firstbericht[0]['template'])){
+			$return.=$firstbericht[0]['template'];
 		}else{
 			$return.=COURANT_TEMPLATE;
 		}
