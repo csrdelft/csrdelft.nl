@@ -27,9 +27,9 @@
 			<div id="ingelogd">
 				<a href="/instellingen/" class="instellingen" title="Webstekinstellingen">{icon get="instellingen"}</a>
 				{if $loginlid->isSued()}
-					<a href="/endsu/" style="color: red;">{$loginlid->getSuedFrom()->getNaamLink('civitas','html')} als</a><br />» 
+					<a href="/endsu/" style="color: red;">{$loginlid->getSuedFrom()->getNaamLink('civitas','html')} als</a><br />»
 				{/if}
-				{$loginlid->getUid()|csrnaam}<br />				
+				{$loginlid->getUid()|csrnaam}<br />
 				<div id="uitloggen"><a href="/logout.php">log&nbsp;uit</a></div>
 				<div id="saldi">
 					{foreach from=$loginlid->getLid()->getSaldi() item=saldo}
@@ -52,7 +52,7 @@
 			</div>
 		{else}
 			<div id="key"><img src="http://plaetjes.csrdelft.nl/layout/key.png" onclick="toggleDiv('login')" alt="Inloggen" /></div>
-			<div id="login">			
+			<div id="login">
 				{if isset($smarty.session.auth_error)}
 					<span class="waarschuwing">{$smarty.session.auth_error}</span>
 				{/if}
@@ -61,15 +61,15 @@
 						<input type="hidden" name="url" value="{$smarty.server.REQUEST_URI}" />
 						<input type="text" name="user" value="naam" onfocus="if(this.value=='naam')this.value='';" />
 						<input type="password" name="pass" value="" />
-						<input type="checkbox" name="checkip" class="checkbox" value="true" id="login-checkip" checked="checked" />
+						<input type="checkbox" name="checkip" class="checkbox" value="true" id="login-checkip" />
 						<label for="login-checkip">Koppel IP</label>
 						<input type="submit" class="submit" name="submit" value="Inloggen" />
 					</fieldset>
-				</form>			
+				</form>
 			</div>
 			{if !isset($smarty.session.auth_error)}
 				<script type="text/javascript">hideDiv(document.getElementById('login'));</script>
-			{/if}			
+			{/if}
 		{/if}
 	</div>
 </div>
@@ -84,7 +84,7 @@
 					{assign var='showseperator' value=true}
 					<a href="{$subitem.link}" title="{$subitem.tekst}"{if $subitem.huidig} class="active"{/if}>{$subitem.tekst}</a>
 				{/foreach}
-			</div>						
+			</div>
 		{/foreach}
 	</div>
 </div>
