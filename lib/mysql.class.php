@@ -26,7 +26,15 @@ class MySql{
     	return self::$Mysql;
 	}
 	private function connect() {
-		$cred = parse_ini_file(ETC_PATH.'/mysql.ini');
+		if(defined('ETC_PATH')){
+			$cred = parse_ini_file(ETC_PATH.'/mysql.ini');
+		}else{
+			$cred=array(
+				'host' => 'localhost',
+				'user' => 'foo',
+				'pass' => 'bar',
+				'db' => 'csrdelft');
+		}
 		$this->_db = mysql_connect($cred['host'], $cred['user'], $cred['pass'])
 		or die ("Kan geen verbinding maken met host {$cred['host']}\n");
 		mysql_select_db($cred['db'], $this->_db)
