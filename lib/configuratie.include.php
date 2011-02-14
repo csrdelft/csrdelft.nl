@@ -37,7 +37,7 @@ if (constant('MODE') == 'WEB') {
 setlocale(LC_ALL, 'nl_NL.utf8');
 
 //standaard templaat voor de C.S.R.-courant
-define('COURANT_TEMPLATE', 'courant_triomphedor2011.tpl');
+define('COURANT_TEMPLATE', 'courant.tpl');
 
 # wordt gebruikt om pagina's alleen op Confide te laten zien
 define('CONFIDE_IP', '145.94.88.238');
