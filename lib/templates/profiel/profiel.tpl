@@ -7,7 +7,7 @@
 					{if $magBewerken}
 						<a href="/communicatie/profiel/{$profhtml.uid}/bewerken" class="knop" title="Bewerk dit profiel">{icon get="bewerken"}</a>
 					{/if}
-					
+
 					{if $isAdmin}
 						<a href="/tools/stats.php?uid={$profhtml.uid}" class="knop" title="Toon bezoeklog">{icon get="server_chart"}</a>
 						<a href="/communicatie/profiel/{$profhtml.uid}/wachtwoord" class="knop" title="Reset wachtwoord voor {$lid->getNaam()}" onclick="return confirm('Weet u zeker dat u het wachtwoord van deze gebruiker wilt resetten?')">
@@ -30,7 +30,7 @@
 			</h1>
 		</div>
 	</div>
-	
+
 	<div class="profielregel">
 		<div class="left">Naam</div>
 		<div class="gegevens">
@@ -46,6 +46,7 @@
 			{/if}
 		</div>
 	</div>
+	{if $lid->getStatus()!='S_OVERLEDEN' AND ($profhtml.adres!='' OR $profhtml.o_adres!='')}
 	<div class="profielregel">
 		<div class="left">Adres</div>
 		<div class="gegevens">
@@ -66,7 +67,7 @@
 					{if $profhtml.mobiel!=''}{$profhtml.mobiel}<br />{/if}
 				</div>
 			</div>
-			{if $isOudlid===false}
+			{if $lid->isLid()}
 			<div class="gegevensouders">
 				{if $profhtml.o_adres!=''}
 					<div class="label">
@@ -89,38 +90,43 @@
 			<div style="clear: left;"></div>
 		</div>
 	</div>
+	{/if}
+	{if  $profhtml.email!='' OR $profhtml.msn!='' OR $profhtml.website!=''}
 	<div class="profielregel">
-		<div class="left">Contact</div>	
+		<div class="left">Contact</div>
 		<div class="gegevens">
-			<div class="label">Email:</div><a href="mailto:{$profhtml.email}">{$profhtml.email}</a><br />	
+			{if $profhtml.email!=''}<div class="label">Email:</div><a href="mailto:{$profhtml.email}">{$profhtml.email}</a><br />{/if}
 			{if $profhtml.icq!=''}<div class="label">ICQ:</div> {$profhtml.icq}<br />{/if}
 			{if $profhtml.msn!=''}<div class="label">MSN:</div> {$profhtml.msn}<br />{/if}
 			{if $profhtml.jid!=''}<div class="label">Jabber/GTalk:</div> {$profhtml.jid}<br />{/if}
 			{if $profhtml.skype!=''}<div class="label">Skype:</div> {$profhtml.skype}<br />{/if}
 			{if $profhtml.website!=''}<div class="label">Website:</div> <a href="{$profhtml.website}" class="linkExt">{$profhtml.website|truncate:30}</a><br />{/if}
-		</div>	
+		</div>
 	</div>
+	{/if}
 	<div class="profielregel">
-		<div class="left">Civitas</div>	
-		
+		<div class="left">Civitas</div>
+
 		<div class="gegevens">
 			<div class="half">
-				<div class="label">Studie:</div> <div class="data">{$profhtml.studie}</div>
-					
-				<div class="label">Studie sinds:</div> {$profhtml.studiejaar}<br />
-				<div class="label">Lid sinds:</div> 
-					{if $profhtml.lidjaar!=''}
+				{if $profhtml.studie!=''}
+					<div class="label">Studie:</div> <div class="data">{$profhtml.studie}</div>
+
+					<div class="label">Studie sinds:</div> {$profhtml.studiejaar}<br />
+				{/if}
+				<div class="label">Lid sinds:</div>
+					{if $profhtml.lidjaar!=0}
 						<a href="/communicatie/lijst.php?q=lichting:{$profhtml.lidjaar}&amp;status=ALL" title="Bekijk de leden van lichting {$profhtml.lidjaar}">{$profhtml.lidjaar}</a>
 					{/if}
 					{if $isOudlid AND $profhtml.lidafdatum!='0000-00-00'} tot {$profhtml.lidafdatum|substr:0:4}{/if}<br />
 				<div class="label">Status:</div> {$lid->getStatusDescription()}<br />
 				<br />
-				
+
 				{if $isOudlid}
 					{if $profhtml.beroep!=''}<div class="label">Beroep/werk:</div><div class="data">{$profhtml.beroep}</div><br />{/if}
 				{else}
 					{if $profhtml.kring!=0}
-						<div class="label">Kring:</div> 
+						<div class="label">Kring:</div>
 						{$lid->getKring(true)}
 						<br />
 					{/if}
@@ -152,33 +158,33 @@
 			<div style="clear: left;"></div>
 		</div>
 	</div>
-	<div class="profielregel" id="groepen">
-		<div class="left">Groepen</div>	
-		<div class="gegevens">		
+	<div class="profielregel" id="groepen" style="clear: right;">
+		<div class="left">Groepen</div>
+		<div class="gegevens">
 			{$profhtml.groepen->view()}
 			<div style="clear: left;"></div>
 		</div>
 	</div>
-	{if $saldografiek!='' OR $profhtml.bankrekening!=''}
+	{if $lid->isLid() AND ($saldografiek!='' OR $profhtml.bankrekening!='')}
 		<div class="profielregel">
-			<div class="left">Financi&euml;el</div>	
-			<div class="gegevens">		
+			<div class="left">Financi&euml;el</div>
+			<div class="gegevens">
 				{if $profhtml.bankrekening!=''}<div class="label">Bankrekening:</div> {$profhtml.bankrekening}<br />{/if}
-				
+
 				{if $saldografiek!=''}
 					{include file='profiel/_saldografiek.tpl'}
 				{/if}
 			</div>
 		</div>
 	{/if}
-	
+
 	{if $loginlid->getUid()==$profhtml.uid OR $profhtml.eetwens!='' OR is_array($profhtml.recenteMaaltijden)}
 	<div class="profielregel" id="maaltijden">
 		<div class="left">Maaltijden
 			{if $loginlid->getUid()==$profhtml.uid}
 				<br /><a href="/actueel/maaltijden/voorkeuren/" class="knop" ><img src="{$csr_pics}forum/bewerken.png" title="Maaltijdvoorkeuren bewerken" /></a>
 			{/if}
-		</div>	
+		</div>
 		<div class="gegevens">
 			{if $profhtml.eetwens!=''}
 				<div class="label">Dieet:</div>
@@ -224,7 +230,7 @@
 				</div>
 			<br />
 			{/if}
-			
+
 			{if $profhtml.berichtCount>0}
 				<div class="label"># bijdragen:</div>
 				<div class="data">
