@@ -52,7 +52,7 @@ class MaaltijdbeheerContent extends SimpleHTML {
 			$aForm['tp']='x101';
 
 			$aForm['koks']=2;
-			$aForm['afwassers']=4;
+			$aForm['afwassers']=3;
 			$aForm['theedoeken']=1;
 			
 			//corveepunten voor een standaardmaaltijd
