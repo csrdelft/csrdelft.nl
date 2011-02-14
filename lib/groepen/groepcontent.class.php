@@ -45,6 +45,7 @@ class Groepcontent extends SimpleHTML{
 			}
 			if(isset($_POST['filterNobody']) AND $this->groep->isAdmin()){
 				$zoekin[]='S_NOBODY';
+				$zoekin[]='S_OVERLEDEN';
 			}
 
 			$leden=namen2uid($_POST['rawNamen'], $zoekin);
