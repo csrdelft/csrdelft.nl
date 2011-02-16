@@ -135,7 +135,7 @@ class Forum{
 
 	public static function getPostsVoorUid($uid=null, $aantal=false){
 		if($uid==null){ LoginLid::instance()->getUid(); }
-		return Forum::getPostsVoorRss($aantal, false, null, $uid);
+		return Forum::getPostsVoorRss($aantal, true, null, $uid);
 	}
 	public static function getUserPostCount($uid=null){
 		if($uid==null){ LoginLid::instance()->getUid(); }
