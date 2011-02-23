@@ -183,6 +183,10 @@ class MaalTrack {
 		}
 		return true;
 	}
+
+	function removeCorveeMaaltijd($maalid) {
+		return $this->removeMaaltijd($maalid);
+	}
 	
 	function removeMaaltijd($maalid) {
 		if (!is_numeric($maalid)) {
@@ -198,6 +202,9 @@ class MaalTrack {
 		# verwijder alle aan/afmeldingen voor deze maaltijd
 		# ...van leden met de bijbehoorende gasten.
 		$aanmeldingen="DELETE FROM maaltijdaanmelding WHERE maalid=".$maalid;
+
+		# verwijder corvee-aanmeldingen
+		$aanmeldingen="DELETE FROM maaltijdcorvee WHERE maalid=".$maalid;
 
 		# verwijder de maaltijd zelf
 		$maaltijd="DELETE FROM maaltijd WHERE id=".$maalid;

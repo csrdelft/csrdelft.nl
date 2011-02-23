@@ -38,7 +38,7 @@
 			<tr {if $maaltijd.datum<=$smarty.now}class="old"{/if} style="background-color: {cycle values="#e9e9e9, #fff"}">
 				<td>
 					<a href="/actueel/maaltijden/beheer/bewerk/{$maaltijd.id}#maaltijdFormulier">{icon get="bewerken"}</a>
-					<a href="/actueel/maaltijden/beheer/verwijder/{$maaltijd.id}" onclick="return confirm(\'Weet u zeker dat u deze maaltijd wilt verwijderen?\')">{icon get="verwijderen"}</a>
+					<a href="/actueel/maaltijden/beheer/verwijder/{$maaltijd.id}" onclick="return confirm('Weet u zeker dat u deze maaltijd wilt verwijderen?')">{icon get="verwijderen"}</a>
 					<a href="/actueel/maaltijden/lijst/{$maaltijd.id}" class="knop">lijst</a>
 					<a href="/actueel/maaltijden/lijst/{$maaltijd.id}/fiscaal" class="knop">&euro;</a>
 				</td>

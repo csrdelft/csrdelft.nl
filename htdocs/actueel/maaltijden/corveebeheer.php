@@ -23,6 +23,12 @@ $maaltrack = new MaalTrack();
 require_once 'maaltijden/corveebeheercontent.class.php';
 $beheer = new CorveebeheerContent($maaltrack);
 
+# verwijderen we een corvee-maaltijd?
+if(isset($_GET['verwijder']) AND (isset($_POST['type']) && $_POST['type'] === 'corvee') && $_GET['verwijder']==(int)$_GET['verwijder'] AND $_GET['verwijder']!=0){
+	$maaltrack->removeCorveeMaaltijd($_GET['verwijder']);
+	header('location: '.CSR_ROOT.'actueel/maaltijden/corveebeheer/');
+	exit;
+}
 
 # actie is bewerken, kijken of velden ingevuld zijn
 if(isset($_POST['actie']) && isset($_POST['type'])){

@@ -49,6 +49,9 @@
 					<a href="/actueel/maaltijden/corveebeheer/puntenbewerk/{$maaltijd.id}#corveepuntenFormulier">
 						{if !$maaltijd.is_toegekend}{icon get="punten_bewerken" title="Punten Toekennen"}{else}{icon get="punten_bewerken_toegekend" title="Punten Toegekend!"}{/if}
 					</a>
+					{if $maaltijd.type == 'corvee'}
+						<a href="/actueel/maaltijden/corveebeheer/verwijder/{$maaltijd.id}" onclick="return confirm('Weet u zeker dat u deze corveemaaltijd wilt verwijderen?')">{icon get="verwijderen"}</a>
+					{/if}
 				</td>
 				<td>{$maaltijd.datum|date_format:$datumFormaat}</td>
 				<td>{$maaltijd.tekst|truncate:20|escape:'html'}</td>
