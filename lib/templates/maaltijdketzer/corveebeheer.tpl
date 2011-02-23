@@ -1,5 +1,5 @@
 {assign var='actief' value='corveebeheer'}
-{include file='maaltijdketzer\menu.tpl'}
+{include file='maaltijdketzer/menu.tpl'}
 
 <h1>Corveebeheer</h1>
 {if $maal.zelf.error!=''}<span class="waarschuwing">N.B.: {$maal.zelf.error|escape:'htmlall'}</span><br /><br />{/if}

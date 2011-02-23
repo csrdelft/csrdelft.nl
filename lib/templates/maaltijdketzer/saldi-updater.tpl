@@ -1,5 +1,5 @@
 {assign var='actief' value='saldi'}
-{include file='maaltijdketzer\menu.tpl'}
+{include file='maaltijdketzer/menu.tpl'}
 
 <h1>MaalCie-saldi invoeren met een CSV-bestand.</h1>
 {if $status!=''}

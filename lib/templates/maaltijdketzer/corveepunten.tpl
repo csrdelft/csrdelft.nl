@@ -1,5 +1,5 @@
 {assign var='actief' value='corveepunten'}
-{include file='maaltijdketzer\menu.tpl'}
+{include file='maaltijdketzer/menu.tpl'}
 
 <h1>Corveepunten</h1>
 

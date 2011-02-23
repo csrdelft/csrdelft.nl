@@ -1,5 +1,5 @@
 {assign var='actief' value='maaltijdbeheer'}
-{include file='maaltijdketzer\menu.tpl'}
+{include file='maaltijdketzer/menu.tpl'}
 
 <h1>Maaltijdbeheer</h1>
 {if $maal.maaltijden|@count==0}
