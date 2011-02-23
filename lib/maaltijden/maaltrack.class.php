@@ -1276,10 +1276,9 @@ class MaalTrack {
 	}
 	
 	# corvee automailer
-	function corveeAutoMailer($debugMode = 0)
+	function corveeAutoMailer($debugMode = 0, $debugAddr = 'pubcie@csrdelft.nl')
 	{
 		// Debug, als enabled dan worden alle emails naar het debugAddr gestuurd, en word maaltijd niet gemarkeerd als gemaild
-		$debugAddr = 'marco@vtwout.net';
 		
 		// get maaltijden waar datum < deze week
 		$maaltijden = $this->getMaaltijdenRaw(0, time()+86400*7);
