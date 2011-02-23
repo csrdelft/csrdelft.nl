@@ -757,6 +757,9 @@ class LidCache{
 	private static $localCache=array();
 
 	public static function getLid($uid){
+		//kek-2010ers. euhm. we hebben dus een string nodig, niet een int
+		$uid = (string)$uid;
+		
 		if(!Lid::isValidUid($uid)){
 			return false;
 		}

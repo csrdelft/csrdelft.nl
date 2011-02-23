@@ -535,6 +535,14 @@ class MaalTrack {
 			$this->_error="Opgegeven maaltijd bestaat niet.";
 			return false;
 		}
+
+		// check parameters
+		if (!is_array($frituur))
+			$frituur = array();
+		if (!is_array($afzuigkap))
+			$afzuigkap = array();
+		if (!is_array($keuken))
+			$keuken = array();
 		
 		//verwijder dubbele uids
 		$frituur = array_unique($frituur);

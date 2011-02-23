@@ -6,7 +6,7 @@
 # Dit geeft alle corvee-activiteiten weer, dus normale maaltijden en 
 # corvee-vrijdagen. Aan beiden kan hiermee het volgende aangepast 
 # worden:
-# - De hoeveelheid punten en het aantal benodigde corveeërs
+# - De hoeveelheid punten en het aantal benodigde corveeÃ«rs
 # - Welke leden zijn ingedeeld voor welke taak
 # - Of deze leden punten verdiend hebben voor de taak 
 # -------------------------------------------------------------------
@@ -59,7 +59,7 @@ if(isset($_POST['actie']) && isset($_POST['type'])){
 			header('location: '.CSR_ROOT.'actueel/maaltijden/corveebeheer/takenbewerk/'.$maalid.'/'.$_POST['filter']);
 			exit;
 		} elseif ($actie === 'takenbewerk' && $type === 'corvee' && (isset($_POST['frituur']) || isset($_POST['afzuigkap']) || isset($_POST['keuken']))
-			&& ($maaltrack->editSchoonmaakMaaltijdTaken($maalid, $_POST['frituur'], $_POST['afzuigkap'], $_POST['keuken']))) {
+			&& ($maaltrack->editSchoonmaakMaaltijdTaken($maalid, (isset($_POST['frituur']) ? $_POST['frituur'] : null), (isset($_POST['afzuigkap']) ? $_POST['afzuigkap'] : null), (isset($_POST['keuken']) ? $_POST['keuken'] : null)))) {
 			header('location: '.CSR_ROOT.'actueel/maaltijden/corveebeheer/takenbewerk/'.$maalid.'/'.$_POST['filter']);
 			exit;	
 		} elseif ($actie === 'puntenbewerk' && $type === 'normaal' 
