@@ -1,6 +1,6 @@
 Beste {$lidnaam},
 
-Gefeliciteerd! U bent de gelukkige die op {$datum} de biba’s weer laat sissen in nieuwe olie!
+Gefeliciteerd! U bent de gelukkige die op {$datum} de bibaâ€™s weer laat sissen in nieuwe olie!
 
 Om alles zo goed mogelijk te laten verlopen krijg u van mij een document over het FRITUUR SCHOONMAKEN. Lees dit door en hou u hieraan. Het belangrijkste in dit document zijn de volgende zaken:
 

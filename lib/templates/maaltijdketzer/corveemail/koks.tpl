@@ -4,12 +4,12 @@ Gefeliciteerd! U bent de gelukkige die op {$datum} een heerlijke maaltijd gaat b
 
 Om alles zo goed mogelijk te laten verlopen krijg u van mij een document over het KOKEN (staat ook op Confide). Lees dit door en hou u hieraan. Het belangrijkste in dit document zijn de volgende zaken:
 
-- Werk hygiënisch;
+- Werk hygiÃ«nisch;
 - Maak een smaakvolle en gezonde maaltijd (en let op eetwensen);
 - Vul de HACCP lijsten in;
 - Laat alles schoon achter (en meld het als het niet schoon achter gelaten was).
 - Kun je niet op deze dag, zorg dan zelf voor een vervanger, dat doe ik niet.
-- Gebruik niet meer dan één geel doekje.
+- Gebruik niet meer dan Ã©Ã©n geel doekje.
  
 Kunt u niet koken op deze dag zorg dan zelf voor een vervanger, dat doe ik niet.
 
