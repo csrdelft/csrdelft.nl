@@ -24,6 +24,7 @@ require_once 'maaltijden/corveevoorkeurencontent.class.php';
 $lijst = new CorveevoorkeurenContent($sorteer, $sorteer_richting);
 
 $page=new csrdelft($lijst);
+$page->setZijkolom(false);
 $page->view();
 
 ?>
