@@ -988,7 +988,7 @@ class MaalTrack {
 	}
 
 	# haalt maaltijden op en voegt extra info toe voor op de maaltijdenpagina
-	function getMaaltijden($van = 0, $tot = 0, $mootfilter = true, $corveefilter = true, $uid=null, $alsArray=true) {
+	function getMaaltijden($van = 0, $tot = 0, $mootfilter = true, $corveefilter = true, $uid=null, $alsArray=true, $koppelTaken=false) {
 		if($uid==null){
 			$uid=LoginLid::instance()->getUid();
 		}
@@ -1046,7 +1046,7 @@ class MaalTrack {
 					}
 				}
 				
-				# Corvee
+				# Corvee voor user?
 				$sCorvee="
 					SELECT
 						kok, afwas, theedoek
@@ -1060,6 +1060,13 @@ class MaalTrack {
 					$maaltijd['kok'] = $record['kok'];
 					$maaltijd['afwas'] = $record['afwas'];
 					$maaltijd['theedoek'] = $record['theedoek'];
+				}
+
+				# Koppel corveetaken aan array?
+				if ($koppelTaken)
+				{
+					$maaltijdObject = new Maaltijd($maaltijd['id']);
+					$maaltijd['taken'] = $maaltijdObject->getTaken();
 				}
 	
 				# 2. actie is afhankelijk van status en evt. gesloten zijn van de maaltijd

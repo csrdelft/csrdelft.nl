@@ -106,6 +106,7 @@ if(isset($_GET['takenbewerk']) AND $_GET['takenbewerk']==(int)$_GET['takenbewerk
 }
 
 $page=new csrdelft($beheer);
+$page->setZijkolom(false);
 $page->view();
 
 ?>

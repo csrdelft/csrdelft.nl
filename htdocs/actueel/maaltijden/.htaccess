@@ -21,5 +21,7 @@ RewriteRule ^corveebeheer/verwijder/([0-9]+)/?$ corveebeheer.php?verwijder=$1
 RewriteRule ^corveepunten/?$ corveepunten.php
 RewriteRule ^corveepunten/sorteer/([a-z_]+)/([a-z]+)/?$ corveepunten.php?sorteer=$1&sorteer_richting=$2
 
+RewriteRule ^corveerooster/?$ corveerooster.php
+
 RewriteRule ^corveevoorkeurenlijst/?$ corveevoorkeurenlijst.php
 RewriteRule ^corveevoorkeurenlijst/sorteer/([0-9a-z_]+)/([a-z]+)/?$ corveevoorkeurenlijst.php?sorteer=$1&sorteer_richting=$2

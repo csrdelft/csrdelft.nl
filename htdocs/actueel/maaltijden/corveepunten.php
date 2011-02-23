@@ -37,6 +37,7 @@ if(isset($_POST['actie'])){
 }
 
 $page=new csrdelft($punten);
+$page->setZijkolom(false);
 $page->view();
 
 ?>

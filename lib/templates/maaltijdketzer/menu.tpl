@@ -6,6 +6,9 @@
 	<li {if $actief == 'instellingen'}class="active"{/if}>
 		<a href="/actueel/maaltijden/voorkeuren/" title="Instellingen">Instellingen</a>
 	</li>
+	<li {if $actief == 'corveerooster'}class="active"{/if}>
+		<a href="/actueel/maaltijden/corveerooster.php" title="Corveerooster">Corveerooster</a>
+	</li>
 	<li {if $actief == 'corveepunten'}class="active"{/if}>
 		<a href="/actueel/maaltijden/corveepunten/" title="Corveepunten">Corveepunten</a>
 	</li>
