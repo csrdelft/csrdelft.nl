@@ -840,6 +840,7 @@ lib/templates/maaltijdketzer/formulier.tpl -text
 lib/templates/maaltijdketzer/lijst.tpl -text
 lib/templates/maaltijdketzer/lijst_fiscaal.tpl -text
 lib/templates/maaltijdketzer/maaltijdketzer.tpl -text
+lib/templates/maaltijdketzer/menu.tpl -text
 lib/templates/maaltijdketzer/saldi-updater.tpl -text
 lib/templates/maaltijdketzer/voorkeuren.tpl -text
 lib/templates/mededelingen/mededeling.tpl -text

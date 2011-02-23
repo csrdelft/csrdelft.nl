@@ -1,26 +1,6 @@
-<ul class="horizontal nobullets">
-	<li class="active">
-		<a href="/actueel/maaltijden/" title="Maaltijdketzer">Maaltijdketzer</a>
-	</li>
-	<li>
-		<a href="/actueel/maaltijden/voorkeuren/" title="Instellingen">Instellingen</a>
-	</li>
-	<li>
-		<a href="/actueel/maaltijden/corveepunten/" title="Corveepunten">Corveepunten</a>
-	</li>
-	{if $loginlid->hasPermission('P_MAAL_MOD')}
-		<li>
-			<a href="/actueel/maaltijden/corveebeheer/" title="Corveebeheer">Corveebeheer</a>
-		</li>
-		<li>
-			<a href="/actueel/maaltijden/beheer/" title="Beheer">Maaltijdbeheer</a>
-		</li>
-		<li>
-			<a href="/actueel/maaltijden/saldi.php" title="Saldo's updaten">Saldo's updaten</a>
-		</li>
-	{/if}
-</ul>
-<hr />
+{assign var='actief' value='maaltijden'}
+{include file='maaltijdketzer\menu.tpl'}
+
 <h1>Maaltijden</h1>
 <p>
 Op deze pagina kunt u zich inschrijven voor maaltijden op Confide. Onderstaande tabel toont de maaltijden in de

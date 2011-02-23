@@ -86,6 +86,7 @@ class CorveevoorkeurenLijst{
 			Corveevoorkeurenlijst::$sorteer = $sorteer;
 			Corveevoorkeurenlijst::$sorteer_richting = $sorteer_richting;
 			if(in_array($sorteer, $sorteer_op_voorkeur)){				
+				//Bij sorteren op voorkeur: als 2e sorteren op prognose (degenen met de minste punten bovenaan)
 				CorveevoorkeurenLijst::$sorteer_voorkeur = (int)substr($sorteer, strlen($sorteer)-1);
 				
 				function compare_voorkeur($lidentry_a, $lidentry_b){
@@ -96,7 +97,17 @@ class CorveevoorkeurenLijst{
 					$b = $lidentry_b['corvee_voorkeuren'][$sorteer_voorkeur]; 
 				    					
 					if ($a == $b) {
-				        return 0;
+						//echo 'Sort ('.$a.'='.$b.') now $a2='.$a2.' and $b2='.$b2.';\n';
+						//De corveevoorkeur is hetzelfde, nu als 2e sorteren op prognose
+						$a2 = $lidentry_a['corvee_prognose'];
+						$b2 = $lidentry_b['corvee_prognose'];
+						if ($a2 == $b2) {
+							return 0;
+						}												
+						$result = (($a2 < $b2) ? 1 : -1); 						
+						if (!is_numeric($a2)) { $result = 1; }
+						if (!is_numeric($b2)) { $result = -1; }
+				    	return $result;	
 				    }
 				    $result = (($a < $b) ? -1 : 1);
 					if (!is_numeric($a)) { $result = -1; }

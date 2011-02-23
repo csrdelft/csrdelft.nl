@@ -1,26 +1,6 @@
-<ul class="horizontal nobullets">
-	<li>
-		<a href="/actueel/maaltijden/" title="Maaltijdketzer">Maaltijdketzer</a>
-	</li>
-	<li>
-		<a href="/actueel/maaltijden/voorkeuren/" title="Instellingen">Instellingen</a>
-	</li>
-	<li>
-		<a href="/actueel/maaltijden/corveepunten/" title="Corveepunten">Corveepunten</a>
-	</li>
-	{if $loginlid->hasPermission('P_MAAL_MOD')}
-		<li class="active">
-			<a href="/actueel/maaltijden/corveebeheer/" title="Corveebeheer">Corveebeheer</a>
-		</li>
-		<li>
-			<a href="/actueel/maaltijden/beheer/" title="Beheer">Maaltijdbeheer</a>
-		</li>
-		<li>
-			<a href="/actueel/maaltijden/saldi.php" title="Saldo's updaten">Saldo's updaten</a>
-		</li>
-	{/if}
-</ul>
-<hr />
+{assign var='actief' value='corveebeheer'}
+{include file='maaltijdketzer\menu.tpl'}
+
 <h1>Corveebeheer</h1>
 {if $maal.zelf.error!=''}<span class="waarschuwing">N.B.: {$maal.zelf.error|escape:'htmlall'}</span><br /><br />{/if}
 {if $maal.maaltijden|@count==0}
