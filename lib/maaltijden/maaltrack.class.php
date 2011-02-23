@@ -1299,11 +1299,11 @@ class MaalTrack {
 		echo '<pre>';
 		$output = "CORVEE-AUTOMAILER: ".date('r')."\n";
 		if ($debugMode)
-			$output .= "DEBUG MODE: Mails gaan naar ".$debugAddr.", maaltijden worden niet gemarkeerd\n";
+			$output .= "DEBUG MODE: Mails gaan naar ".$debugAddr.", maaltijden worden niet gemarkeerd als gemaild\n";
 		$output .= "Start\nMaaltijden ophalen binnen komende 7 dagen..\n";
 		foreach($maaltijden as $maaltijd)
 		{
-			$output .= "- Maaltijd ID ".$maaltijd['id'].": ";
+			$output .= "- Maaltijd van ".strftime('%d-%m-%Y', $maaltijd['datum'])." (ID ".$maaltijd['id']."): ";
 			if ($maaltijd['corvee_gemaild']) {
 				$output .= "Reeds gemaild.";
 			} else {
@@ -1337,16 +1337,18 @@ class MaalTrack {
 					foreach($leden as $uid) {
 						$to = ($debugMode ? $debugAddr : $uid.'@csrdelft.nl');
 
+						$lid = LidCache::getLid($uid);
+
 						// persoonlijk mailen
 						$mail = new Smarty_csr();
 						$mail->assign('datum', strftime('%d-%m-%Y (%A)', $maaltijd['datum']));
-						$mail->assign('lidnaam', LidCache::getLid($uid)->getNaamLink('civitas'));
+						$mail->assign('lidnaam', $lid->getNaamLink('civitas'));
 						$bericht = $mail->fetch('maaltijdketzer/corveemail/'.$template);
 
 						if (mail($to, $onderwerp, $bericht, $headers))
-							$teller[] = $uid;
+							$teller[] = $lid->getNaam().' ('.$uid.')';
 						else
-							$foutTeller[] = $uid;
+							$foutTeller[] = $lid->getNaam().' ('.$uid.')';
 					}
 				}
 				$output .= "Mensen gemaild: ".count($teller)." (".implode($teller, ", ").")";
