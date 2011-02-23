@@ -1281,7 +1281,7 @@ class MaalTrack {
 		// Debug, als enabled dan worden alle emails naar het debugAddr gestuurd, en word maaltijd niet gemarkeerd als gemaild
 		
 		// get maaltijden waar datum < deze week
-		$maaltijden = $this->getMaaltijdenRaw(0, time()+86400*7);
+		$maaltijden = $this->getMaaltijdenRaw(0, time()+86400*7, true, false);
 		
 		// mail headers
 		setlocale(LC_ALL, 'nl_NL');
@@ -1333,12 +1333,15 @@ class MaalTrack {
 					if (!$template) continue;
 					
 					// mailen
-					$mail = new Smarty_csr();
 					$onderwerp = 'C.S.R. Delft Corvee - '.strftime('%d-%m-%Y', $maaltijd['datum']);
-					$mail->assign('datum', strftime('%d-%m-%Y (%A)', $maaltijd['datum']));
-					$bericht = $mail->fetch('maaltijdketzer/corveemail/'.$template);
 					foreach($leden as $uid) {
 						$to = ($debugMode ? $debugAddr : $uid.'@csrdelft.nl');
+
+						// persoonlijk mailen
+						$mail = new Smarty_csr();
+						$mail->assign('datum', strftime('%d-%m-%Y (%A)', $maaltijd['datum']));
+						$mail->assign('lidnaam', LidCache::getLid($uid)->getNaamLink('civitas'));
+						$bericht = $mail->fetch('maaltijdketzer/corveemail/'.$template);
 
 						if (mail($to, $onderwerp, $bericht, $headers))
 							$teller[] = $uid;
