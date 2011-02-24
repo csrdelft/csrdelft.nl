@@ -46,7 +46,7 @@ class ForumContent extends SimpleHTML {
 	public function lastPostsZijbalk($zelf=false){
 		if($zelf){
 			$uid=LoginLid::instance()->getUid();
-			$aPosts=Forum::getPostsVoorUid($uid, Instelling::get('zijbalk_forum_zelf'), true);
+			$aPosts=Forum::getPostsVoorUid($uid, Instelling::get('zijbalk_forum_zelf'), false);
 			echo '<h1><a href="/communicatie/profiel/'.$uid.'/#forum">Forum (zelf gepost)</a></h1>';
 		}else{
 			$aPosts=Forum::getPostsVoorRss(Instelling::get('zijbalk_forum'), true);
