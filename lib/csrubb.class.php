@@ -157,6 +157,94 @@ class CsrUBB extends eamBBParser{
 		return $return;
 	}
 
+
+	/*
+	 * ubb_video();
+	 *
+	 * universele videotag, gewoon urls erin stoppen. Ik heb een poging
+	 * gedaan hem een beetje vergevingsgezind te laten zijn...
+	 *
+	 * Tot nu toe youtube, vimeo, dailymotion, 123video
+	 * [video]http://www.youtube.com/watch?v=Zo0LJrw5nCs[/video]
+	 * [video]Zo0LJrw5nCs[/video]
+	 * [video]http://vimeo.com/1582112[/video]
+	 */
+
+	function ubb_video($parameters){
+		$content = $this->parseArray(array('[/video]'), array());
+
+		//determine type and id
+		$id='';
+		if(preg_match('/^[0-9a-zA-Z\-_]{11}$/', $content) OR strstr($content, 'youtube')){
+			$type='youtube';
+			if(strlen($content)==11){
+				$id=$content;
+			}else{
+				if(preg_match('|^(http://)?(www\.)?youtube\.com/watch\?v=([0-9a-zA-Z\-_]{11}).*$|', $content, $matches)>0){
+					$id=$matches[3];
+				}
+			}
+		}elseif(strstr($content, 'vimeo')){
+			$type='vimeo';
+			if(preg_match('|^(http://)?(www\.)?vimeo\.com/(clip\:)?(\d+).*$|', $content, $matches)>0){
+				$id=$matches[4];
+			}
+		}elseif(strstr($content, '123video')){
+			$type='123video';
+			//http://www.123video.nl/playvideos.asp?MovieID=946848
+			if(preg_match('|^(http://)?(www\.)?123video\.nl/playvideos\.asp\?MovieID=(\d+)(.*)$|', $content, $matches)>0){
+				$id=$matches[3];
+			}
+		}elseif(strstr($content, 'dailymotion')){
+			$type='dailymotion';
+			if(preg_match('|^(http://)?(www\.)?dailymotion\.com/video/([a-z0-9]+)(_.*)?$|', $content, $matches)>0){
+				$id=$matches[3];
+			}
+		}else{
+			$type='unknown';
+		}
+
+		if($id==''){
+			return '[video ('.$type.')] ongeldige url: ('.mb_htmlentities($content).')';
+		}
+
+		//render embed html
+		switch($type){
+			case 'youtube':
+				if(isset($this->youtube[$id]) AND !isset($parameters['nodefer'])){
+					return '<a href="#youtube'.$content.'" onclick="youtubeDisplay(\''.$content.'\')" >&raquo; youtube-filmpje (ergens anders op deze pagina)</a>';
+				}else{
+					//sla het youtube-id op in een array, dan plaatsen we de tweede keer dat
+					//het filmpje in een topic geplaatst wordt een linkje.
+					$this->youtube[$id]=$id;
+					return '<div id="youtube'.$id.'" class="youtubeVideo">
+						<a href="http://www.youtube.com/watch?v='.$id.'" class="afspelen" onclick="return youtubeDisplay(\''.$id.'\')"><img width="36" height="36" src="'.CSR_PICS.'forum/afspelen.gif" alt="afspelen" /></a>
+						<img src="http://img.youtube.com/vi/'.$id.'/default.jpg" style="width: 130px; height: 97px;"
+							alt="klik op de afbeelding om de video te starten"/></div>';
+				}
+			break;
+			case 'vimeo':
+				$html=
+				'<object width="549" height="309">
+					<param name="allowfullscreen" value="true" /><param name="allowscriptaccess" value="always" /><param name="movie" value="http://vimeo.com/moogaloop.swf?clip_id='.$id.'&amp;server=vimeo.com&amp;show_title=1&amp;show_byline=1&amp;show_portrait=0&amp;color=00ADEF&amp;fullscreen=1" />
+					<embed src="http://vimeo.com/moogaloop.swf?clip_id='.$id.'&amp;server=vimeo.com&amp;show_title=1&amp;show_byline=1&amp;show_portrait=0&amp;color=00ADEF&amp;fullscreen=1" type="application/x-shockwave-flash" allowfullscreen="true" allowscriptaccess="always" width="549" height="309">
+					</embed>
+				</object>';
+				return $html;
+
+			break;
+			case 'dailymotion':
+				return '<object width="560" height="420"><param name="movie" value="http://www.dailymotion.com/swf/video/'.$id.'?width=560&theme=none"></param><param name="allowFullScreen" value="true"></param><param name="allowScriptAccess" value="always"></param><embed type="application/x-shockwave-flash" src="http://www.dailymotion.com/swf/video/'.$id.'?width=560&theme=none" width="560" height="420" allowfullscreen="true" allowscriptaccess="always"></embed></object>';
+			break;
+			case '123video':
+				return '<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=7,0,0,0" id="123movie_'.$id.'" width="420" height="339"><param name="movie" value="http://www.123video.nl/123video_emb.swf?mediaSrc='.$id.'" /><param name="quality" value="high" /><param name="allowScriptAccess" value="always"/> <param name="allowFullScreen" value="true"></param><embed src="http://www.123video.nl/123video_emb.swf?mediaSrc='.$id.'" quality="high" width="420" height="339" allowfullscreen="true" type="application/x-shockwave-flash"  allowscriptaccess="always" pluginspage="http://www.macromedia.com/go/getflashplayer" /></object>';
+			break;
+			default:
+				return '[video] Niet-ondersteunde video-website ('.mb_htmlentities($content).')';
+			break;
+		}
+	}
+
 	/*
 	 * ubb_youtube();
 	 *
