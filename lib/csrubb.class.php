@@ -164,7 +164,8 @@ class CsrUBB extends eamBBParser{
 	 * universele videotag, gewoon urls erin stoppen. Ik heb een poging
 	 * gedaan hem een beetje vergevingsgezind te laten zijn...
 	 *
-	 * Tot nu toe youtube, vimeo, dailymotion, 123video
+	 * Tot nu toe youtube, vimeo, dailymotion, 123video, godtube
+	 *
 	 * [video]http://www.youtube.com/watch?v=Zo0LJrw5nCs[/video]
 	 * [video]Zo0LJrw5nCs[/video]
 	 * [video]http://vimeo.com/1582112[/video]
@@ -191,13 +192,19 @@ class CsrUBB extends eamBBParser{
 			}
 		}elseif(strstr($content, '123video')){
 			$type='123video';
-			//http://www.123video.nl/playvideos.asp?MovieID=946848
+			//example url: http://www.123video.nl/playvideos.asp?MovieID=946848
 			if(preg_match('|^(http://)?(www\.)?123video\.nl/playvideos\.asp\?MovieID=(\d+)(.*)$|', $content, $matches)>0){
 				$id=$matches[3];
 			}
 		}elseif(strstr($content, 'dailymotion')){
 			$type='dailymotion';
 			if(preg_match('|^(http://)?(www\.)?dailymotion\.com/video/([a-z0-9]+)(_.*)?$|', $content, $matches)>0){
+				$id=$matches[3];
+			}
+		}elseif(strstr($content, 'godtube')){
+			$type='godtube';
+			//example: http://www.godtube.com/watch/?v=9CFEMMNU
+			if(preg_match('|^(http://)?(www\.)?godtube\.com/watch/\?v=([a-zA-Z0-9]+)$|', $content, $matches)>0){
 				$id=$matches[3];
 			}
 		}else{
@@ -239,6 +246,8 @@ class CsrUBB extends eamBBParser{
 			case '123video':
 				return '<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=7,0,0,0" id="123movie_'.$id.'" width="420" height="339"><param name="movie" value="http://www.123video.nl/123video_emb.swf?mediaSrc='.$id.'" /><param name="quality" value="high" /><param name="allowScriptAccess" value="always"/> <param name="allowFullScreen" value="true"></param><embed src="http://www.123video.nl/123video_emb.swf?mediaSrc='.$id.'" quality="high" width="420" height="339" allowfullscreen="true" type="application/x-shockwave-flash"  allowscriptaccess="always" pluginspage="http://www.macromedia.com/go/getflashplayer" /></object>';
 			break;
+			case 'godtube':
+				return '<object height="255" width="400" type="application/x-shockwave-flash" data="http://www.godtube.com/resource/mediaplayer/5.3/player.swf"><param name="movie" value="http://www.godtube.com/resource/mediaplayer/5.3/player.swf"><param name="allowfullscreen" value="true"><param name="allowscriptaccess" value="always"><param name="wmode" value="opaque"><param name="flashvars" value="file=http://www.godtube.com/resource/mediaplayer/'.$id.'.file&image=http://www.godtube.com/resource/mediaplayer/'.$id.'.jpg&screencolor=000000&type=video&autostart=false&playonce=true&skin=http://www.godtube.com//resource/mediaplayer/skin/carbon/carbon.zip&logo.file=http://media.salemwebnetwork.com/godtube/theme/default/media/embed-logo.png&logo.link=http://www.godtube.com/watch/?v='.$id.'&logo.position=top-left&logo.hide=false&controlbar.position=over"></object>';
 			default:
 				return '[video] Niet-ondersteunde video-website ('.mb_htmlentities($content).')';
 			break;
