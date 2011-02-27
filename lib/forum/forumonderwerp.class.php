@@ -112,10 +112,13 @@ class ForumOnderwerp{
 
 	//posts inladen voor het huidige onderwerp. Kan enkel intern aangeroepen worden.
 	//geeft true terug als er berichten zijn ingeladen.
-	private function loadPosts(){
+	private function loadPosts($postOffset=null){
 		$zichtBaarClause="post.zichtbaar='zichtbaar'";
 		if(Forum::isModerator()){
 			$zichtBaarClause.=" OR post.zichtbaar='wacht_goedkeuring' OR post.zichtbaar='spam'";
+		}
+		if($postOffset===null){
+			$postOffset=($this->pagina-1)*Forum::getPostsPerPagina();
 		}
 		$sPostsQuery="
 			SELECT
@@ -129,9 +132,13 @@ class ForumOnderwerp{
 			ORDER BY
 				post.datum ASC
 			LIMIT
-				".($this->pagina-1)*Forum::getPostsPerPagina().", ".Forum::getPostsPerPagina().";";
+				".$postOffset.", ".Forum::getPostsPerPagina().";";
 		$this->posts=MySql::instance()->query2array($sPostsQuery);
 		if(!is_array($this->posts)){
+			//er is wellicht een niet bestaande pagina opgevraagd, hoogst mogelijke pagina terug....
+			if($postOffset>0){
+				return $this->loadPosts(($this->getPaginaCount()-1)*Forum::getPostsPerPagina());
+			}
 			$this->error='Er konden geen berichten worden ingeladen. (ForumOnderwerp::loadPosts())';
 		}
 		return is_array($this->posts);
@@ -259,7 +266,7 @@ class ForumOnderwerp{
 				}
 				$return[]=$post;
 			}
-			
+
 			return $return;
 		}else{
 			return false;
