@@ -169,6 +169,11 @@ class CsrUBB extends eamBBParser{
 	 * [video]http://www.youtube.com/watch?v=Zo0LJrw5nCs[/video]
 	 * [video]Zo0LJrw5nCs[/video]
 	 * [video]http://vimeo.com/1582112[/video]
+	 *
+	 * tag parameters:
+	 * 		force	Forceer weergave filmpje ook als het al een keer op de pagina voorkomt.
+	 * 		width	Breedte van het filmpje
+	 * 		height	Hoogte van het filmpje
 	 */
 
 	function ubb_video($parameters){
@@ -211,14 +216,25 @@ class CsrUBB extends eamBBParser{
 			$type='unknown';
 		}
 
+		//error message if no valid id found in tag content.
 		if($id==''){
 			return '[video ('.$type.')] ongeldige url: ('.mb_htmlentities($content).')';
+		}
+
+		//video size
+		$width=560;
+		$height=420;
+		if(isset($parameters['width']) AND (int)$parameters['width']>100){
+			$width=$parameters['width'];
+		}
+		if(isset($parameters['height']) AND (int)$parameters['height']>100){
+			$height=$parameters['height'];
 		}
 
 		//render embed html
 		switch($type){
 			case 'youtube':
-				if(isset($this->youtube[$id]) AND !isset($parameters['nodefer'])){
+				if(isset($this->youtube[$id]) AND !isset($parameters['force'])){
 					return '<a href="#youtube'.$content.'" onclick="youtubeDisplay(\''.$content.'\')" >&raquo; youtube-filmpje (ergens anders op deze pagina)</a>';
 				}else{
 					//sla het youtube-id op in een array, dan plaatsen we de tweede keer dat
@@ -231,23 +247,20 @@ class CsrUBB extends eamBBParser{
 				}
 			break;
 			case 'vimeo':
-				$html=
-				'<object width="549" height="309">
+				return '<object width="'.$width.'" height="'.$height.'">
 					<param name="allowfullscreen" value="true" /><param name="allowscriptaccess" value="always" /><param name="movie" value="http://vimeo.com/moogaloop.swf?clip_id='.$id.'&amp;server=vimeo.com&amp;show_title=1&amp;show_byline=1&amp;show_portrait=0&amp;color=00ADEF&amp;fullscreen=1" />
-					<embed src="http://vimeo.com/moogaloop.swf?clip_id='.$id.'&amp;server=vimeo.com&amp;show_title=1&amp;show_byline=1&amp;show_portrait=0&amp;color=00ADEF&amp;fullscreen=1" type="application/x-shockwave-flash" allowfullscreen="true" allowscriptaccess="always" width="549" height="309">
+					<embed src="http://vimeo.com/moogaloop.swf?clip_id='.$id.'&amp;server=vimeo.com&amp;show_title=1&amp;show_byline=1&amp;show_portrait=0&amp;color=00ADEF&amp;fullscreen=1" type="application/x-shockwave-flash" allowfullscreen="true" allowscriptaccess="always" width="'.$width.'" height="'.$height.'">
 					</embed>
 				</object>';
-				return $html;
-
 			break;
 			case 'dailymotion':
-				return '<object width="560" height="420"><param name="movie" value="http://www.dailymotion.com/swf/video/'.$id.'?width=560&theme=none"></param><param name="allowFullScreen" value="true"></param><param name="allowScriptAccess" value="always"></param><embed type="application/x-shockwave-flash" src="http://www.dailymotion.com/swf/video/'.$id.'?width=560&theme=none" width="560" height="420" allowfullscreen="true" allowscriptaccess="always"></embed></object>';
+				return '<object width="'.$width.'" height="'.$height.'"><param name="movie" value="http://www.dailymotion.com/swf/video/'.$id.'?width=560&theme=none"></param><param name="allowFullScreen" value="true"></param><param name="allowScriptAccess" value="always"></param><embed type="application/x-shockwave-flash" src="http://www.dailymotion.com/swf/video/'.$id.'?width=560&theme=none" width="'.$width.'" height="'.$height.'" allowfullscreen="true" allowscriptaccess="always"></embed></object>';
 			break;
 			case '123video':
-				return '<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=7,0,0,0" id="123movie_'.$id.'" width="420" height="339"><param name="movie" value="http://www.123video.nl/123video_emb.swf?mediaSrc='.$id.'" /><param name="quality" value="high" /><param name="allowScriptAccess" value="always"/> <param name="allowFullScreen" value="true"></param><embed src="http://www.123video.nl/123video_emb.swf?mediaSrc='.$id.'" quality="high" width="420" height="339" allowfullscreen="true" type="application/x-shockwave-flash"  allowscriptaccess="always" pluginspage="http://www.macromedia.com/go/getflashplayer" /></object>';
+				return '<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=7,0,0,0" id="123movie_'.$id.'" width="'.$width.'" height="'.$height.'"><param name="movie" value="http://www.123video.nl/123video_emb.swf?mediaSrc='.$id.'" /><param name="quality" value="high" /><param name="allowScriptAccess" value="always"/> <param name="allowFullScreen" value="true"></param><embed src="http://www.123video.nl/123video_emb.swf?mediaSrc='.$id.'" quality="high" width="'.$width.'" height="'.$height.'" allowfullscreen="true" type="application/x-shockwave-flash"  allowscriptaccess="always" pluginspage="http://www.macromedia.com/go/getflashplayer" /></object>';
 			break;
 			case 'godtube':
-				return '<object height="255" width="400" type="application/x-shockwave-flash" data="http://www.godtube.com/resource/mediaplayer/5.3/player.swf"><param name="movie" value="http://www.godtube.com/resource/mediaplayer/5.3/player.swf"><param name="allowfullscreen" value="true"><param name="allowscriptaccess" value="always"><param name="wmode" value="opaque"><param name="flashvars" value="file=http://www.godtube.com/resource/mediaplayer/'.$id.'.file&image=http://www.godtube.com/resource/mediaplayer/'.$id.'.jpg&screencolor=000000&type=video&autostart=false&playonce=true&skin=http://www.godtube.com//resource/mediaplayer/skin/carbon/carbon.zip&logo.file=http://media.salemwebnetwork.com/godtube/theme/default/media/embed-logo.png&logo.link=http://www.godtube.com/watch/?v='.$id.'&logo.position=top-left&logo.hide=false&controlbar.position=over"></object>';
+				return '<object height="'.$height.'" width="'.$width.'" type="application/x-shockwave-flash" data="http://www.godtube.com/resource/mediaplayer/5.3/player.swf"><param name="movie" value="http://www.godtube.com/resource/mediaplayer/5.3/player.swf"><param name="allowfullscreen" value="true"><param name="allowscriptaccess" value="always"><param name="wmode" value="opaque"><param name="flashvars" value="file=http://www.godtube.com/resource/mediaplayer/'.$id.'.file&image=http://www.godtube.com/resource/mediaplayer/'.$id.'.jpg&screencolor=000000&type=video&autostart=false&playonce=true&skin=http://www.godtube.com//resource/mediaplayer/skin/carbon/carbon.zip&logo.file=http://media.salemwebnetwork.com/godtube/theme/default/media/embed-logo.png&logo.link=http://www.godtube.com/watch/?v='.$id.'&logo.position=top-left&logo.hide=false&controlbar.position=over"></object>';
 			default:
 				return '[video] Niet-ondersteunde video-website ('.mb_htmlentities($content).')';
 			break;
