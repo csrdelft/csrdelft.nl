@@ -143,7 +143,7 @@ class DUFromurl extends DocumentUploader{
 		if(!isset($_POST['url'])){
 			$this->addError('Formulier niet compleet');
 		}
-		if(!url_like($_POST['url'])){
+		if(!url_like(urldecode($_POST['url']))){
 			$this->addError('Dit lijkt niet op een url...');
 		}
 		if(!in_array(ini_get('allow_url_fopen'), array('On', 'Yes', 1))){
