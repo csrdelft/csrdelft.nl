@@ -56,7 +56,8 @@
 				txt_first="&laquo;" txt_prev="&lt;" separator=" " txt_next="&gt;" txt_last="&raquo;"}
 		</th>
 	</tr>
-	{if $categorie->magPosten()}
+	
+	{* {if $categorie->magPosten()}
 		<tr>
 			<td colspan="4" class="tekst">
 				<form method="post" action="/communicatie/forum/onderwerp-toevoegen/{$categorie->getID()}" id="forumForm">
@@ -64,8 +65,8 @@
 						Hier kunt u een onderwerp toevoegen in deze categorie van het forum. Kijkt u vooraf goed of het 
 						onderwerp waarover u post hier wel thuishoort.<br /><br />
 					{else}
-						{*	melding voor niet ingelogde gebruikers die toch willen posten. Ze worden 'gemodereerd', dat 
-							wil zeggen, de topics zijn nog niet direct zichtbaar. *}
+						{ *	melding voor niet ingelogde gebruikers die toch willen posten. Ze worden 'gemodereerd', dat 
+							wil zeggen, de topics zijn nog niet direct zichtbaar. * }
 						Hier kunt u een bericht toevoegen aan het forum. Het zal echter niet direct zichtbaar worden, maar
 						&eacute;&eacute;rst door de PubCie worden goedgekeurd. <br />
 						<span style="text-decoration: underline;">Het is hierbij verplicht om uw naam in het bericht te plaatsen.</span><br /><br />
@@ -84,6 +85,6 @@
 				</form>
 			</td>
 		</tr>
-	{/if}
+	{/if} *}
 </table>
 {$smarty.capture.navlinks}
