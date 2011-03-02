@@ -3,9 +3,9 @@
 
 <html>
 <head>
-  <title>C.S.R.-courant</title>
+  <title>Delphia Daily</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-  <meta name="author" content="PubCie der C.S.R. Delft" />
+  <meta name="author" content="Broeders van Delphia" />
   <meta name="robots" content="index, follow" />
   <style type="text/css">{literal}<!--
 body{
