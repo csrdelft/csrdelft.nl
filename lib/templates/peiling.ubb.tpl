@@ -7,6 +7,9 @@
 		{$peiling->getTitel()|escape:'html'}
 	{if $peiling->magBewerken()}</a>{/if}
 </h3>
+{if $peiling->getStemmenAantal()>0}
+<div class="totaal">({$peiling->getStemmenAantal()} stem{if $peiling->getStemmenAantal()!=1}men{/if})</div>
+{/if}
 {$peiling->getTekst()|ubb}
 
 {if $peiling->magStemmen()}
@@ -17,7 +20,7 @@
 	{foreach from=$peiling->getOpties() item=optie}
 		<li>
 			{if $peiling->magStemmen()}
-				<input type="radio" name="optie" value="{$optie.id}"/> 
+				<input type="radio" name="optie" value="{$optie.id}"/>
 			{else}
 				<div class="stemmen">({$optie.stemmen})</div>
 				<div class="percentage">{$optie.percentage|string_format:'%01.1f'}%</div>

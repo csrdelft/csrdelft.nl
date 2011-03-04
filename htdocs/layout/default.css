@@ -15,7 +15,7 @@ body {
 	background: url('http://plaetjes.csrdelft.nl/layout/containerbg_top.png') no-repeat;
 }
 
-body, textarea, input, select, option, tr, td, th, div, p  { 
+body, textarea, input, select, option, tr, td, th, div, p  {
 	text-align: justify;
 }
 
@@ -38,7 +38,7 @@ textarea{
 	font-size: 1em;
 	border: 1px solid #A9A9A9;
 }
-input, select{ padding-left: 2px; padding-right: 2px;	border: 1px solid #A9A9A9; font-size: 1em;} 
+input, select{ padding-left: 2px; padding-right: 2px;	border: 1px solid #A9A9A9; font-size: 1em;}
 select{ padding-right: 0px; }
 input.checkbox{ border: 0px; }
 
@@ -110,7 +110,7 @@ ul.nobullets li{ list-style-type: none; }
 	line-height: 27px;
 	overflow: none;
 	display: block;
-	
+
 	text-align: center;
 	font-size: 13px;
 	width: 122px;
@@ -119,7 +119,7 @@ ul.nobullets li{ list-style-type: none; }
 	font-weight: bold;
 	text-decoration: none;
 	background: url('http://plaetjes.csrdelft.nl/layout/menubutton.png') no-repeat;
-}	
+}
 #mainmenu a:link, #mainmenu a:visited {
 	color: #ffffff;
 }
@@ -146,20 +146,20 @@ ul.nobullets li{ list-style-type: none; }
 	text-align: center;
 }
 #sub1{
-	margin-left: 0px; 
-	text-align: left !important; 
+	margin-left: 0px;
+	text-align: left !important;
 }
 #sub2{
-	margin-left: 0px; 
-	text-align: left !important; 
+	margin-left: 0px;
+	text-align: left !important;
 }
-#sub3{	
+#sub3{
 	width: 650px;
-	margin-left: 90px; 
+	margin-left: 90px;
 }
 #sub4{
 	width: 600px;
-	margin-left: 160px; 
+	margin-left: 160px;
 	text-align: right !important;
 }
 
@@ -173,7 +173,7 @@ ul.nobullets li{ list-style-type: none; }
 #submenu a {
 	padding: 3px 2px;
 	font-size: 12px;
-	text-decoration: none;	
+	text-decoration: none;
 }
 #submenu a:link, #submenu a:visited {
 	color: #ffffff;
@@ -267,7 +267,7 @@ ul.nobullets li{ list-style-type: none; }
 	margin-left: 17px; _margin-left: 7px; /*IE6 Fix*/
 	width: 200px;
 }
-#mainright { 
+#mainright {
 	float: right;
 	margin-right: 24px;
 	padding: 10px 0;
@@ -332,10 +332,10 @@ ul.nobullets li{ list-style-type: none; }
 	float: left;
 	margin: 2px;
 	text-align: center;
-	width: 50px; height: 70px; 
+	width: 50px; height: 70px;
 	overflow: hidden;
 }
-#komende_pasfotos .verjaardag .lidfoto{ 
+#komende_pasfotos .verjaardag .lidfoto{
 	width: 50px;
 }
 #komende_pasfotos .opvallend .datum{ font-weight: bold;  }
@@ -343,7 +343,7 @@ ul.nobullets li{ list-style-type: none; }
 	position: absolute;
 	display: block;
 	width: 100%;
-	bottom: 0px; 
+	bottom: 0px;
 	background-color: white; color: black;
 	font-size: 9px;
 	opacity:0.6;filter:alpha(opacity=60)
@@ -368,7 +368,7 @@ ul.nobullets li{ list-style-type: none; }
 
 /**** OVERIG ******************************************************************/
 a.knop, div.knop{
-	background-color: #f5f5f5;  
+	background-color: #f5f5f5;
 	border: 1px solid #A9A9A9;
 	margin: 2px; padding: 0px 2px 0px 2px;
 	line-height: 1.1em;
@@ -420,7 +420,7 @@ table.query_table th{
 .afspelen{
 	cursor: pointer; cursor: hand;
 	position: absolute;
-	left: 45px; 
+	left: 45px;
 	opacity: 0.7;
 	top: 30px;
 }
@@ -436,7 +436,7 @@ p img{ margin: 15px 10px; }
 div.blokje{ background-color: #FFFFC1; margin: 10px 0px; padding: 10px 10px;}
 
 .pasfotomatrix{ margin-top: 5px; width: 275px; margin-left: 10px;}
-.pasfotomatrix .pasfoto{ 
+.pasfotomatrix .pasfoto{
 	width: 48px; height: 64px; float: left;
 	border: 1px solid grey;
 	margin: 0 5px 5px 0;
@@ -452,12 +452,12 @@ div#melding{
 }
 /* ubb-hulp */
 div#ubbhulpverhaal{
-	display: none; 
+	display: none;
 	z-index: 999;
 	position: fixed;
 	left: 50px;
 	top: 50px;
-	width: 330px; 
+	width: 330px;
 	border: 1px solid #bbb;
 	margin-top: -13px;
 	padding: 5px;
@@ -465,13 +465,13 @@ div#ubbhulpverhaal{
 	text-align: left;
 }
 span#ubbsluiten{
-	display: block; 
+	display: block;
 	width: 18px; height: 18px;
 	float: right;
 	margin: 0px; padding: 0px;
 	font-weight: bold; font-size: 14px;
-	text-align: center;	vertical-align: middle; 
-	color: black; 
+	text-align: center;	vertical-align: middle;
+	color: black;
 	cursor: pointer; cursor: hand;
 	border: 1px solid white;
 }
@@ -510,10 +510,10 @@ form#streeplijst input, label{ text-align: left; margin: 3px; padding: 0px; line
 
 
 #eetplanLETOP{
-	color: darkred; font-size: 1.8em; 
+	color: darkred; font-size: 1.8em;
 	line-height: 1.1em;
-	padding: 10px; font-weight: bold; 
-	text-align: justify; display: block; 
+	padding: 10px; font-weight: bold;
+	text-align: justify; display: block;
 	border: 1px solid black; background-color: lightgrey;
 }
 .eetplantabel{
@@ -565,17 +565,17 @@ form#streeplijst input, label{ text-align: left; margin: 3px; padding: 0px; line
 #nieuwePeiling textarea{ width: 400px; }
 #peilingOpties input{ width: 400px;}
 
-/* 
- * ubb voorbeeldding 
+/*
+ * ubb voorbeeldding
  */
 div.previewContainer{ margin-top: 10px; display: none; }
 div.preview{ margin: 5px 0px; padding: 2px 4px; width: 99%; background-color: #ffffc1; border: 1px solid #ccc; }
 div.preview.pagina{ padding: 2px 2px; width: 100%;}
 
-/* special UBB tags 
- * 
+/* special UBB tags
+ *
  * Alle ubb 'blok-tags' delen de class .ubb_block.
- * 
+ *
  */
 .ubb_block{
 	border: 1px solid gray;
@@ -594,9 +594,9 @@ div.preview.pagina{ padding: 2px 2px; width: 100%;}
 
 .ubb_maaltijd h2{ white-space: nowrap; overflow: hidden; }
 .ubb_maaltijd .aanmelddata{
-	float: right; 
-	background-color: #ccc; 
-	width: 68px; 
+	float: right;
+	background-color: #ccc;
+	width: 68px;
 	padding: 4px; margin-left: 10px;
 }
 
@@ -638,6 +638,7 @@ div.preview.pagina{ padding: 2px 2px; width: 100%;}
 
 .ubb_peiling{ margin: 10px;  padding: 5px 10px; }
 .ubb_peiling .beheer{ float: right; }
+.ubb_peiling .totaal{ clear: right; float: right; color: #666; padding:5px 9px; }
 .ubb_peiling ul{ list-style-type: none; padding: 5px; }
 .ubb_peiling ul li{ border-bottom: 1px solid #eee; margin-left: 0px; clear: both;  padding: 4px;}
 .ubb_peiling ul li .stemmen{ float: right; color: #666; width: 30px; text-align: right; }
@@ -668,7 +669,7 @@ div.preview.pagina{ padding: 2px 2px; width: 100%;}
 	top: 0; left: 0;
 }
 .image_reel img {float: left;width:355px;}
- 
+
 /* Slider: Paging Styles */
 .paging {
 	position: absolute;
@@ -692,7 +693,7 @@ div.preview.pagina{ padding: 2px 2px; width: 100%;}
 	font: normal 8px Verdana, Arial, Helvetica, sans-serif;
 }
 .paging a.active {
-	background: #777; 
+	background: #777;
 	border: 1px solid #000;
 	-moz-border-radius: 3px;
 	-khtml-border-radius: 3px;
