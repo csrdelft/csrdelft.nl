@@ -6,7 +6,7 @@
 # -------------------------------------------------------------------
 # Verwerkt het bewerken van berichten in het forum.
 # -------------------------------------------------------------------
-die('Dat mag niet!');
+
 require_once 'configuratie.include.php';
 
 require_once 'forum/forumonderwerp.class.php';

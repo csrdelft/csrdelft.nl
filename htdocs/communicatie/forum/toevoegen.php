@@ -6,7 +6,7 @@
 # Verwerkt het toevoegen van berichten en ondewerpen in het forum.
 # Het formulier bevat: (bericht en topic of title)
 # -------------------------------------------------------------------
-die('Dat mag niet!');
+
 require_once 'configuratie.include.php';
 require_once 'forum/forumonderwerp.class.php';
 

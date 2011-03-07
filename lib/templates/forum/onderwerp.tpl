@@ -91,17 +91,18 @@
 
 				{* knopjes bij elke post *}
 				{* citeerknop enkel als het onderwerp open is en als men mag posten, of als men mod is. *}
-				{* {if $onderwerp->magCiteren()}
+				{if $onderwerp->magCiteren()}
+					{* {knop url="reactie/`$bericht.id`#laatste" type=citeren} *}
 					<a onclick="return forumCiteren({$bericht.id})" href="/communicatie/forum/reactie/{$bericht.id}#laatste">
 						<img src="{icon get="citeren" notag=true}" title="Citeer bericht" alt="Citeer bericht" style="border: 0px;" />
 					</a>
-				{/if} *}
+				{/if}
 				{* bewerken als bericht van gebruiker is, of als men mod is. *}
-				{*{if $onderwerp->magBewerken($bericht.id)}
+				{if $onderwerp->magBewerken($bericht.id)}
 					<a onclick="forumBewerken({$bericht.id})">
 						<img src="{icon get="bewerken" notag=true}" title="Bewerk bericht" alt="Bewerk bericht" style="border: 0px;" />
 					</a>
-				{/if}*}
+				{/if}
 				
 				{if $onderwerp->isModerator()}{* verwijderlinkje *}
 					{knop url="verwijder-bericht/`$bericht.id`" type=verwijderen confirm='Weet u zeker dat u dit bericht wilt verwijderen?'}
@@ -156,11 +157,10 @@
 			{/if}
 		</td>
 		<td class="forumtekst">
-			In verband met de C.S.R.-loze week is het op dit moment niet mogelijk een reactie te plaatsen.
-			{*{if $onderwerp->magToevoegen()} 
+			{if $onderwerp->magToevoegen()} 
 				<form method="post" action="/communicatie/forum/toevoegen/{$onderwerp->getID()}" id="forumReageren" {if !$onderwerp->isOpen()}class="gesloten"{/if}>
 					<fieldset>
-						{* berichtje weergeven voor niet-ingeloggede gebruikers dat ze een naam moeten vermelden. * }
+						{* berichtje weergeven voor niet-ingeloggede gebruikers dat ze een naam moeten vermelden. *}
 						{if $onderwerp->needsModeration()}
 							<strong>Uw bericht wordt pas geplaatst nadat het bekeken en goedgekeurd is door de <a href="http://csrdelft.nl/actueel/groepen/Commissies/PubCie/">PubCie</a>. 
 							Het vermelden van <em>uw naam en email-adres</em> is verplicht.</strong><br /><br />
@@ -181,7 +181,7 @@
 				{else}
 					U kunt hier niet meer reageren omdat dit onderwerp gesloten is.
 				{/if}
-			{/if}*}
+			{/if}
 		</td>
 	</tr>
 </table>
