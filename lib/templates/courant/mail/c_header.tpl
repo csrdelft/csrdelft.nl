@@ -1,6 +1,6 @@
-From: o.t. PubCie <pubcie@csrdelft.nl>
+From: PubCie <pubcie@csrdelft.nl>
 To: leden@csrdelft.nl
-Organization: Herenhuis Villa Delphia
+Organization: C.S.R. Delft
 MIME-Version: 1.0
 Content-Type: text/html; charset=utf-8
 User-Agent: telnet localhost 25
