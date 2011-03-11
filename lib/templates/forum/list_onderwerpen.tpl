@@ -22,10 +22,10 @@
 		</tr>
 	{else}
 		{foreach from=$categorie->getOnderwerpen() item=onderwerp}
-			<tr class="kleur{cycle values="0,1"}">
+			<tr class="kleur{cycle values="0,1"}">				
 				<td class="titel">
 					{if $onderwerp->getZichtbaarheid()=='wacht_goedkeuring'}[ter goedkeuring...]{/if}
-					<a href="/communicatie/forum/onderwerp/{$onderwerp->getID()}">
+					<a href="/communicatie/forum/onderwerp/{$onderwerp->getID()}"{if $onderwerp->isUpdated()} class="updatedTopic"{/if}>
 						{if $onderwerp->isPlakkerig()}
 							<img src="{icon get="plakkerig" notag=true}" title="Dit onderwerp is plakkerig, het blijft bovenaan." alt="plakkerig" />&nbsp;&nbsp;
 						{/if}

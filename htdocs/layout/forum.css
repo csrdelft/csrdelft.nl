@@ -88,7 +88,9 @@ span.togglePasfoto:hover, a.postlink:hover{
 	margin: 0px; padding: 0.2em 0.6em 0.2em 0.6em;
 	vertical-align: top; text-align: left;
 	width: 180px;
-
+}
+#forumtabel td.titel a.updatedTopic {
+	font-style: italic;
 }
 #forumtabel label{ float: left; width: 170px; }
 #forumtabel #textareaContainer{ margin-left: 176px; width: 574px;}

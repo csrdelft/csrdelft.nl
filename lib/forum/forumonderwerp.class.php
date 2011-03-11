@@ -26,6 +26,7 @@ class ForumOnderwerp{
 	private $lastuser;
 	private $lastpost;
 	private $lastpostID;
+	private $momentGelezen;
 
 	private $pagina=1;
 	private $paginaCount=null;
@@ -77,6 +78,9 @@ class ForumOnderwerp{
 		$this->lastpost=$onderwerp['lastpost'];
 		$this->lastpostID=$onderwerp['lastpostID'];
 		$this->lastuser=$onderwerp['lastuser'];
+		if (isset($onderwerp['momentGelezen'])){
+			$this->momentGelezen=$onderwerp['momentGelezen'];
+		}
 	}
 
 	//een onderwerp laden aan de hand van een ID.
@@ -189,6 +193,17 @@ class ForumOnderwerp{
 
 	public function getPagina(){ return $this->pagina; }
 
+	/**
+	 * @returns true als het onderwerp geupdate is nadat het voor het laatst
+	 * 			bekeken is door de user.
+	 */
+	public function isUpdated(){
+		if($this->momentGelezen==''){
+			return true;
+		}
+		return ($this->momentGelezen<$this->lastpost);
+	}
+	
 	function getPaginaCount($force=false){
 		if($this->paginaCount===null){
 			$db=MySql::instance();
@@ -525,6 +540,22 @@ class ForumOnderwerp{
 				id=".$this->getID()."
 			LIMIT 1;";
 		return MySql::instance()->query($sTopicQuery);
+	}
+	
+	public function updateLaatstGelezen(){
+		$sql="
+			REPLACE INTO
+				forum_gelezen
+			(
+				tid,
+				uid,
+				moment
+			) VALUES (
+				".$this->getID().",
+				'".LoginLid::instance()->getUid()."',
+				NOW()
+			);";
+		MySql::instance()->query($sql);
 	}
 
 	public function keurGoed($iPostID){

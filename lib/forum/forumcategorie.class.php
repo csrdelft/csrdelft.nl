@@ -58,10 +58,15 @@ class ForumCategorie{
 		}
 		$onderwerpen="
 			SELECT
-				id, titel, categorie, uid, datumtijd, lastuser, lastpost, lastpostID,
-				reacties, plakkerig, open, zichtbaar
+				id, titel, categorie, topic.uid, datumtijd, lastuser, lastpost, lastpostID,
+				reacties, plakkerig, open, zichtbaar, gelezen.moment AS momentGelezen
 			FROM
 				forum_topic topic
+			LEFT JOIN
+				forum_gelezen AS gelezen
+			ON 
+				gelezen.tid = topic.id AND
+				gelezen.uid = '".LoginLid::instance()->getUid()."'
 			WHERE
 				topic.categorie=".$this->getID()."
 			AND

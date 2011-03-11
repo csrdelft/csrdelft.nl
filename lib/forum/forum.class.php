@@ -102,13 +102,19 @@ class Forum{
 				post.id AS postID,
 				post.tekst AS tekst,
 				post.datum AS datum,
-				post.bewerkDatum AS bewerkDatum
+				post.bewerkDatum AS bewerkDatum, 
+				gelezen.moment AS momentGelezen
 			FROM
 				forum_topic topic
 			INNER JOIN
 				forum_cat categorie ON(categorie.id=topic.categorie)
 			LEFT JOIN
 				forum_post post ON( topic.id=post.tid )
+			LEFT JOIN
+				forum_gelezen AS gelezen
+			ON 
+				gelezen.tid = topic.id AND
+				gelezen.uid = '".LoginLid::instance()->getUid()."'
 			WHERE
 				topic.zichtbaar='zichtbaar' AND
 				post.zichtbaar='zichtbaar' AND

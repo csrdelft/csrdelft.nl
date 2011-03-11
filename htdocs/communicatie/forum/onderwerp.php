@@ -21,6 +21,7 @@ if($loginlid->hasPermission('P_FORUM_READ')) {
 		}
 	
 		$forumonderwerp=new ForumOnderwerp((int)$_GET['topic'], $pagina);
+		$forumonderwerp->updateLaatstGelezen();
 	}elseif(isset($_GET['post'])){
 		// zoek bijbehorende topic en redirect
 		ForumOnderwerp::redirectByPostID((int)$_GET['post']);
@@ -29,7 +30,6 @@ if($loginlid->hasPermission('P_FORUM_READ')) {
 		$_SESSION['melding']='Geen onderwerp- of bericht-id opgegeven.';
 		exit;
 	}
-	Forum::updateLaatstBekeken();
 
 	if(Instelling::get('forum_filter2008')){
 		$forumonderwerp->filter2008();
