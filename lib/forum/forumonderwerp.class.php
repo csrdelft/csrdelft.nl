@@ -242,7 +242,7 @@ class ForumOnderwerp{
 	public function magBewerken($iPostID){
 		$uid=LoginLid::instance()->getUid();
 
-		//if(Forum::isModerator()){ return true;}
+		if(Forum::isModerator()){ return true;}
 		if($uid=='x999'){ return false;}
 
 		//intern, nu nog of de huidige post mag.
