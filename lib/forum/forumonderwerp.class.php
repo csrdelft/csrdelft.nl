@@ -198,6 +198,9 @@ class ForumOnderwerp{
 	 * 			bekeken is door de user.
 	 */
 	public function isUpdated(){
+		if(LoginLid::instance()->getUid()=='x999'){
+			return false;
+		}
 		if($this->momentGelezen==''){
 			return true;
 		}

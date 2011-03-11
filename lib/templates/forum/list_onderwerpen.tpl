@@ -58,7 +58,6 @@
 	</tr>
 
 	{if $categorie->magPosten()}
-	{if $categorie->magPosten()}
 		<tr>
 			<td colspan="4" class="tekst">
 				<form method="post" action="/communicatie/forum/onderwerp-toevoegen/{$categorie->getID()}" id="forumForm">

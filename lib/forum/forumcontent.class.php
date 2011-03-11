@@ -70,7 +70,7 @@ class ForumContent extends SimpleHTML {
 				echo '<a href="/communicatie/forum/reactie/'.$aPost['postID'].'"
 					title="['.htmlspecialchars($aPost['titel']).'] '.
 						Forum::getForumNaam($aPost['uid'], false, false).': '.mb_htmlentities($postfragment).'"';
-				if($aPost['momentGelezen']==''||$aPost['momentGelezen']<$aPost['lastpost']) { echo ' class="opvallend"'; }
+				if(LoginLid::instance()->getUid()!='x999'&&($aPost['momentGelezen']==''||$aPost['momentGelezen']<$aPost['lastpost'])) { echo ' class="opvallend"'; }
 				echo '>'.$tekst.'</a><br />'."\n";
 				echo '</div>';
 			}
