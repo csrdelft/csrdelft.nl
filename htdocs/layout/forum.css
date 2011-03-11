@@ -25,7 +25,13 @@
 #forumtabel tr.kleur0 td{ background-color: #fff; }
 #forumtabel tr.kleur1 td{ background-color: #f4f4f4; }
 
-#forumtabel tr td.filtered{
+#forumtabel tr td.filtered a{
+	display: block;
+	background-color: #ddd;
+	color: black;
+	padding: 6px;
+	left: 10px; right; 10px;
+	text-align: center;
 }
 #forumtabel th{
 	font-weight: bold;

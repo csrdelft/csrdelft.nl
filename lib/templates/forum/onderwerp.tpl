@@ -118,7 +118,7 @@
 			</td>
 			<td class="bericht{cycle values="0,1"}{if $bericht.filtered} filtered{/if}" id="post{$bericht.id}">
 				{if $bericht.filtered}
-					<a onclick="jQuery('#filtered{$bericht.id}').show(100); jQuery(this).hide().remove()">Bericht van 2008, klik om weer te geven.</a>
+					<a onclick="jQuery('#filtered{$bericht.id}').fadeIn(2000); jQuery(this).hide().remove()"> &gt;&gt Bericht van 2008, klik om weer te geven. &lt;&lt;</a>
 					<div id="filtered{$bericht.id}" class="verborgen">
 				{/if}
 				{$bericht.tekst|ubb}
