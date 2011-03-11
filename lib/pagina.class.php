@@ -80,6 +80,10 @@ class Pagina{
 		return $this->sRechtenBewerken;
 	}
 	public function magBewerken(){
+		//bestuur mag thuispagina niet bewerkerken.
+		if(LoginLid::instance()->hasPermission('groep:bestuur') AND $this->sNaam=='thuis'){
+			return false;
+		}
 		return $this->_lid->hasPermission($this->sRechtenBewerken);
 	}
 	public function magPermissiesBewerken(){
