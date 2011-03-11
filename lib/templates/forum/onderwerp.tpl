@@ -93,7 +93,7 @@
 				{* citeerknop enkel als het onderwerp open is en als men mag posten, of als men mod is. *}
 				{if $onderwerp->magCiteren()}
 					{* {knop url="reactie/`$bericht.id`#laatste" type=citeren} *}
-					<a class="weergeeflink" onclick="return forumCiteren({$bericht.id})" href="/communicatie/forum/reactie/{$bericht.id}#laatste">
+					<a onclick="return forumCiteren({$bericht.id})" href="/communicatie/forum/reactie/{$bericht.id}#laatste">
 						<img src="{icon get="citeren" notag=true}" title="Citeer bericht" alt="Citeer bericht" style="border: 0px;" />
 					</a>
 				{/if}
@@ -118,7 +118,7 @@
 			</td>
 			<td class="bericht{cycle values="0,1"}{if $bericht.filtered} filtered{/if}" id="post{$bericht.id}">
 				{if $bericht.filtered}
-					<a onclick="jQuery('#filtered{$bericht.id}').fadeIn(2000); jQuery(this).hide().remove()"> &gt;&gt Bericht van 2008, klik om weer te geven. &lt;&lt;</a>
+					<a class="weergeeflink" onclick="jQuery('#filtered{$bericht.id}').fadeIn(1000); jQuery(this).hide().remove()"> &gt;&gt Bericht van 2008, klik om weer te geven. &lt;&lt;</a>
 					<div id="filtered{$bericht.id}" class="verborgen">
 				{/if}
 				{$bericht.tekst|ubb}
