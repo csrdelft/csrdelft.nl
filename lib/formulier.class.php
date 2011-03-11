@@ -273,7 +273,7 @@ class TelefoonField extends InputField{
 	public function valid(){
 		if(!parent::valid()){ return false; }
 		if($this->getValue()==''){ return true; }
-		if(!preg_match('/^(\d{4}-\d{6}|\d{3}-\d{7}|\d{2}-\d{8}|\+\d{10,20})$/', $this->getValue())){
+		if(!preg_match('/^([\d\+\-]{10,20})$/', $this->getValue())){
 			$this->error='Geen geldig telefoonnummer.';
 		}		
 
