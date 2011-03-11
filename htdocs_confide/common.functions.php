@@ -338,6 +338,7 @@ function square_crop($src_image, $dest_image, $thumb_size = 64, $jpg_quality = 9
 		return false;
 	}
 }
+
 function format_filesize($size) {
 	$units = array(' B', ' KB', ' MB', ' GB', ' TB');
 	for ($i = 0; $size >= 1024 && $i < 4; $i++) $size /= 1024;

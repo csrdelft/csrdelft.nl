@@ -28,13 +28,13 @@
 					<a href="/communicatie/forum/onderwerp/{$onderwerp->getID()}">
 						{if $onderwerp->isPlakkerig()}
 							<img src="{icon get="plakkerig" notag=true}" title="Dit onderwerp is plakkerig, het blijft bovenaan." alt="plakkerig" />&nbsp;&nbsp;
-						{/if}	
+						{/if}
 						{if !$onderwerp->isOpen()}
 							<img src="{icon get="slotje" notag=true}" title="Dit onderwerp is gesloten, u kunt niet meer reageren" alt="sluiten" />&nbsp;&nbsp;
 						{/if}
 						{$onderwerp->getTitel()|wordwrap:60:"\n":true|escape:'html'}
 					</a>
-						{sliding_pager baseurl="/communicatie/forum/onderwerp/`$onderwerp->getID()`/" 
+						{sliding_pager baseurl="/communicatie/forum/onderwerp/`$onderwerp->getID()`/"
 						pagecount=$onderwerp->getPaginaCount() curpage=$onderwerp->getPagina()
 						link_current=true txt_pre="[ " txt_prev="&lt;" separator=" " txt_next="&gt;" txt_post=" ]" show_first_last=false show_prev_next=false}
 				</td>
@@ -42,7 +42,7 @@
 				<td class="reacties">{$onderwerp->getUid()|csrnaam:'user'}</td>
 				<td class="reactiemoment">
 					{$onderwerp->getLastpost()|reldate}<br />
-					<a href="/communicatie/forum/reactie/{$onderwerp->getLastpostID()}">bericht</a> door 
+					<a href="/communicatie/forum/reactie/{$onderwerp->getLastpostID()}">bericht</a> door
 					{$onderwerp->getLastuser()|csrnaam:'user'}
 				</td>
 			</tr>
@@ -51,17 +51,19 @@
 	<tr>
 		<th colspan="2">&nbsp;</th>
 		<th colspan="2">
-			{sliding_pager baseurl="/communicatie/forum/categorie/`$categorie->getID()`/" 
+			{sliding_pager baseurl="/communicatie/forum/categorie/`$categorie->getID()`/"
 				pagecount=$categorie->getPaginaCount() curpage=$categorie->getPagina()
 				txt_first="&laquo;" txt_prev="&lt;" separator=" " txt_next="&gt;" txt_last="&raquo;"}
 		</th>
 	</tr>
+
+	{if $categorie->magPosten()}
 	{if $categorie->magPosten()}
 		<tr>
 			<td colspan="4" class="tekst">
 				<form method="post" action="/communicatie/forum/onderwerp-toevoegen/{$categorie->getID()}" id="forumForm">
 					{if $loginlid->hasPermission('P_LOGGED_IN')}
-						Hier kunt u een onderwerp toevoegen in deze categorie van het forum. Kijkt u vooraf goed of het 
+						Hier kunt u een onderwerp toevoegen in deze categorie van het forum. Kijkt u vooraf goed of het
 						onderwerp waarover u post hier wel thuishoort.<br /><br />
 					{else}
 						{*	melding voor niet ingelogde gebruikers die toch willen posten. Ze worden 'gemodereerd', dat 

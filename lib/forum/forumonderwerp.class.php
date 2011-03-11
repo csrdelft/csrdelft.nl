@@ -33,6 +33,7 @@ class ForumOnderwerp{
 	protected $posts=null;
 
 	private $error;
+
 	function __construct($init, $pagina=1){
 		if(is_array($init)){
 			$this->array2properties($init);
@@ -108,6 +109,7 @@ class ForumOnderwerp{
 			$this->error='Gebruiker mag dit onderwerp niet bekijken. (ForumOnderwerp::load())';
 			return false;
 		}
+		$this->loadPosts();
 	}
 
 	//posts inladen voor het huidige onderwerp. Kan enkel intern aangeroepen worden.
@@ -134,6 +136,7 @@ class ForumOnderwerp{
 			LIMIT
 				".$postOffset.", ".Forum::getPostsPerPagina().";";
 		$this->posts=MySql::instance()->query2array($sPostsQuery);
+
 		if(!is_array($this->posts)){
 			//er is wellicht een niet bestaande pagina opgevraagd, hoogst mogelijke pagina terug....
 			if($postOffset>0){
@@ -144,6 +147,13 @@ class ForumOnderwerp{
 		return is_array($this->posts);
 	}
 
+	public function filter2008(){
+		foreach($this->posts as $key => $post){
+			if(LidCache::getLid($post['uid'])->getLichting()=='2008'){
+				$this->posts[$key]['filtered']=true;
+			}
+		}
+	}
 	//als de categorie handmatig moet worden ingesteld
 	//(bij het toevoegen van een nieuw onderwerp bijvoorbeeld)
 	public function setCategorie($iCatID){
@@ -159,7 +169,9 @@ class ForumOnderwerp{
 		return $this->categorie;
 	}
 	public function getRechtenPost(){ return $this->getCategorie()->getRechten_post(); }
-	public function magPosten(){ return LoginLid::instance()->hasPermission($this->getRechtenPost()); }
+	public function magPosten(){
+		return LoginLid::instance()->hasPermission($this->getRechtenPost());
+	}
 
 	//topic
 	public function getID(){ return $this->ID; }
@@ -223,14 +235,14 @@ class ForumOnderwerp{
 	public function isModerator(){ return Forum::isModerator(); }
 	public function magCiteren(){ return $this->magToevoegen(); }
 	public function magToevoegen(){
-		if(Forum::isModerator()){ return true; }
+		//if(Forum::isModerator()){ return true; }
 		return $this->magPosten() AND $this->isOpen();
 	}
 
 	public function magBewerken($iPostID){
 		$uid=LoginLid::instance()->getUid();
 
-		if(Forum::isModerator()){ return true;}
+		//if(Forum::isModerator()){ return true;}
 		if($uid=='x999'){ return false;}
 
 		//intern, nu nog of de huidige post mag.

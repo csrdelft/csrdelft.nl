@@ -3,7 +3,7 @@
 
 {capture name='navlinks'}
 	<div class="forumNavigatie">
-		<a href="/communicatie/forum/" class="forumGrootlink">Forum</a> &raquo; 
+		<a href="/communicatie/forum/" class="forumGrootlink">Forum</a> &raquo;
 		<a href="/communicatie/forum/categorie/{$onderwerp->getCategorieID()}" class="forumGrootlink">
 			{$onderwerp->getCategorie()->getNaam()|escape:'html'}
 		</a><br />
@@ -17,7 +17,7 @@
 	<fieldset id="modereren">
 		<legend>Modereren</legend>
 		<div style="float: left; width: 30%;">
-			{knop url="verwijder-onderwerp/`$onderwerp->getID()`" confirm="Weet u zeker dat u dit onderwerp wilt verwijderen?" type=verwijderen text=Verwijderen class=knop} 
+			{knop url="verwijder-onderwerp/`$onderwerp->getID()`" confirm="Weet u zeker dat u dit onderwerp wilt verwijderen?" type=verwijderen text=Verwijderen class=knop}
 			<br /><br />
 			{if $onderwerp->isOpen()}
 				{knop url="openheid/`$onderwerp->getID()`" class=knop type=slotje text="sluiten (geen reactie mogelijk)"}
@@ -29,11 +29,11 @@
 				{knop url="plakkerigheid/`$onderwerp->getID()`" class=knop type=plakkerig text="verwijder plakkerigheid"}
 			{else}
 				{knop url="plakkerigheid/`$onderwerp->getID()`" class=knop type=plakkerig text="maak plakkerig"}
-			{/if}	
+			{/if}
 		</div>
 		<div style="float: right; width: 60%;">
 			<form action="/communicatie/forum/verplaats/{$onderwerp->getID()}/" method="post">
-				<div>Verplaats naar: <br /> 
+				<div>Verplaats naar: <br />
 					<select name="newCat">
 						<optgroup label="selecteer...">
 						{foreach from=$onderwerp->getCategorie()->getAll() item='cat'}
@@ -44,7 +44,7 @@
 								{if $cat.id!=$onderwerp->getCategorieID()}<option value="{$cat.id}">{$cat.titel|escape:'html'}</option>{/if}
 							{/if}
 						{/foreach}
-					</select> 
+					</select>
 					<input type="submit" value="opslaan" />
 				</div>
 			</form>
@@ -68,14 +68,14 @@
 			<td>&nbsp;</td>
 			<td>
 				<div class="forum_paginering">
-					Pagina: {sliding_pager baseurl="/communicatie/forum/onderwerp/`$onderwerp->getID()`/" 
+					Pagina: {sliding_pager baseurl="/communicatie/forum/onderwerp/`$onderwerp->getID()`/"
 						pagecount=$onderwerp->getPaginaCount() curpage=$onderwerp->getPagina()
 						txt_prev="&lt;" separator="" txt_next="&gt;" show_always=true show_first_last=false show_prev_next=false}
 				</div>
 			</td>
 		</tr>
 	{/if}
-	
+
 	<tr class="tussenschot">
 		<td colspan="2"></td>
 	</tr>
@@ -103,7 +103,7 @@
 						<img src="{icon get="bewerken" notag=true}" title="Bewerk bericht" alt="Bewerk bericht" style="border: 0px;" />
 					</a>
 				{/if}
-				
+
 				{if $onderwerp->isModerator()}{* verwijderlinkje *}
 					{knop url="verwijder-bericht/`$bericht.id`" type=verwijderen confirm='Weet u zeker dat u dit bericht wilt verwijderen?'}
 					{if $bericht.zichtbaar=='wacht_goedkeuring'}
@@ -114,14 +114,21 @@
 						<h1>SPAM</h1>
 					{/if}
 				{/if}
-				
+
 			</td>
-			<td class="bericht{cycle values="0,1"}" id="post{$bericht.id}"> 
+			<td class="bericht{cycle values="0,1"}{if $bericht.filtered} filtered{/if}" id="post{$bericht.id}">
+				{if $bericht.filtered}
+					<a onclick="jQuery('#filtered{$bericht.id}').show(100); jQuery(this).hide().remove()">Bericht van 2008, klik om weer te geven.</a>
+					<div id="filtered{$bericht.id}" class="verborgen">
+				{/if}
 				{$bericht.tekst|ubb}
 				{if $bericht.bewerkt!=''}
 					<div class="bewerkt clear">
 						<hr />
 						{$bericht.bewerkt|ubb}
+					</div>
+				{/if}
+				{if $bericht.filtered}
 					</div>
 				{/if}
 			</td>
@@ -130,13 +137,13 @@
 			<td colspan="2"></td>
 		</tr>
 	{/foreach}
-	
+
 	{if $onderwerp->getPaginaCount()>1}
 		<tr>
 			<td>&nbsp;</td>
 			<td>
 				<div class="forum_paginering">
-					Pagina: {sliding_pager baseurl="/communicatie/forum/onderwerp/`$onderwerp->getID()`/" 
+					Pagina: {sliding_pager baseurl="/communicatie/forum/onderwerp/`$onderwerp->getID()`/"
 						pagecount=$onderwerp->getPaginaCount() curpage=$onderwerp->getPagina()
 						txt_prev="&lt;" separator="" txt_next="&gt;" show_always=true show_first_last=false show_prev_next=false}
 				</div>
@@ -162,13 +169,13 @@
 					<fieldset>
 						{* berichtje weergeven voor niet-ingeloggede gebruikers dat ze een naam moeten vermelden. *}
 						{if $onderwerp->needsModeration()}
-							<strong>Uw bericht wordt pas geplaatst nadat het bekeken en goedgekeurd is door de <a href="http://csrdelft.nl/actueel/groepen/Commissies/PubCie/">PubCie</a>. 
+							<strong>Uw bericht wordt pas geplaatst nadat het bekeken en goedgekeurd is door de <a href="http://csrdelft.nl/actueel/groepen/Commissies/PubCie/">PubCie</a>.
 							Het vermelden van <em>uw naam en email-adres</em> is verplicht.</strong><br /><br />
 							<label for="email">Email-adres:</label><input type="text" name="email" /><br />
 						{/if}
 						<div id="berichtPreviewContainer" class="previewContainer"><div id="berichtPreview" class="preview"></div></div>
 						<textarea name="bericht" id="forumBericht" class="forumBericht" rows="12">{$textarea}</textarea>
-						
+
 						<a style="float: right;" class="handje knop" onclick="toggleDiv('ubbhulpverhaal')" title="Opmaakhulp weergeven">UBB</a>
 						<a style="float: right;" class="handje knop" onclick="vergrootTextarea('forumBericht', 10)" title="Vergroot het invoerveld"><strong>&uarr;&darr;</strong></a>
 						<input type="submit" name="submit" value="opslaan" id="forumOpslaan" />
@@ -186,7 +193,7 @@
 	</tr>
 </table>
 {* linkjes voor het forum nogeens weergeven, maar alleen als het aantal berichten in het onderwerp groter is dan 4 *}
-{if $onderwerp->getSize()>4} 
+{if $onderwerp->getSize()>4}
 	{$smarty.capture.navlinks}
 {/if}
 {if $loginlid->hasPermission('P_LEDEN_READ')}
@@ -209,7 +216,7 @@
 				pasfoto.html('<img src="/tools/pasfoto/'+parts[0]+'.png" class="lidfoto" />');
 			}
 			if(!pasfoto.hasClass('verborgen')){
-				$(this).html("&raquo;"); 
+				$(this).html("&raquo;");
 			}else{
 				$(this).html('v');
 			}

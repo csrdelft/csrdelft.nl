@@ -31,6 +31,9 @@ if($loginlid->hasPermission('P_FORUM_READ')) {
 	}
 	Forum::updateLaatstBekeken();
 
+	if(Instelling::get('forum_filter2008')){
+		$forumonderwerp->filter2008();
+	}
 	$midden = new ForumOnderwerpContent($forumonderwerp);
 	if(isset($_GET['post'])){
 		$midden->citeer((int)$_GET['post']);

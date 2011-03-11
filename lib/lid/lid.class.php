@@ -194,6 +194,7 @@ class Lid implements Serializable, Agendeerbaar{
 	public function getEmail(){ 		return $this->profiel['email']; }
 	public function getAdres(){			return $this->profiel['adres'].' '.$this->profiel['postcode'].' '.$this->profiel['woonplaats']; }
 	public function getMoot(){ 			return $this->profiel['moot']; }
+	public function getLichting(){		return $this->profiel['lidjaar']; }
 
 	public function isJarig(){			return substr($this->profiel['gebdatum'], 5, 5)==date('m-d'); }
 	public function getGeboortedatum(){ return $this->profiel['gebdatum']; }
@@ -759,7 +760,7 @@ class LidCache{
 	public static function getLid($uid){
 		//kek-2010ers. euhm. we hebben dus een string nodig, niet een int
 		$uid = (string)$uid;
-		
+
 		if(!Lid::isValidUid($uid)){
 			return false;
 		}
