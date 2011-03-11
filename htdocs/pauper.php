@@ -18,8 +18,8 @@ $paginacontent = new PaginaContent(new Pagina('mobiel'));
 $paginacontent->setActie('bekijken');
 $body->addObject($paginacontent);
 # Laatste forumberichten
-require_once 'forum/forum.class.php');
-require_once 'forum/forumcontent.class.php');
+require_once 'forum/forum.class.php';
+require_once 'forum/forumcontent.class.php';
 $forum=new forum();
 $forumcontent=new forumcontent($forum, 'lastposts');
 $body->add(new stringincluder('<div class="recent">'));
