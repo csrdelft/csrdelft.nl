@@ -1,22 +1,22 @@
 <?php
 /*
  * LidZoeker
- * 
+ *
  * de array's die in deze class staan bepalen wat er in het formulier te zien is.
  */
 
 class LidZoeker{
-	
+
 	private $allowVelden=array(
 		'pasfoto', 'uid', 'naam', 'voorletters', 'voornaam', 'tussenvoegsel', 'achternaam', 'nickname', 'geslacht',
 		'email', 'adres', 'telefoon', 'mobiel', 'msn', 'jid', 'skype', 'studie', 'status',
 		'gebdatum', 'beroep', 'verticale', 'lidjaar', 'kring', 'patroon', 'woonoord', 'bankrekening');
-	
-	//deze velden kunnen we niet selecteren voor de ledenlijst, ze zijn wel te 
+
+	//deze velden kunnen we niet selecteren voor de ledenlijst, ze zijn wel te
 	//filteren en te sorteren.
 	private $veldenNotSelectable=array('voornaam', 'achternaam', 'tussenvoegsel');
-	
-	//nette aliassen voor kolommen, als ze niet beschikbaar zijn wordt gewoon 
+
+	//nette aliassen voor kolommen, als ze niet beschikbaar zijn wordt gewoon
 	//de naam uit $this->allowVelden gebruikt
 	private $veldNamen=array(
 		'telefoon' => 'Nummer',
@@ -27,10 +27,10 @@ class LidZoeker{
 		'jid' => 'Jabber',
 		'ontvangtcontactueel' => 'Contactueel?',
 		'adresseringechtpaar' => 'Post echtpaar t.n.v.');
-	
+
 	//toegestane opties voor het statusfilter.
 	private $allowStatus=array('S_LID', 'S_NOVIET', 'S_GASTLID', 'S_NOBODY', 'S_OUDLID', 'S_KRINGEL', 'S_OVERLEDEN');
-	
+
 	//toegestane opties voor de weergave.
 	private $allowWeergave=array('lijst', 'kaartje', 'CSV');
 	private $sortable=array(
@@ -39,29 +39,29 @@ class LidZoeker{
 
 	//standaardwaarden voor het zoeken zonder parameters
 	private $rawQuery=array('status'=>'LEDEN', 'sort'=>'achternaam');
-	
+
 	private $query='';
 	private $zoekveld=array('default');
 	private $filters=array();
 	private $sort=array('achternaam');
 	private $velden=array('naam', 'email', 'telefoon', 'mobiel');
 	private $weergave='lijst';
-	
+
 	private $result=null;
-	
+
 	public function __construct(){
 
 		//wat extra velden voor moderators.
 		if(Loginlid::instance()->hasPermission('P_LEDEN_MOD')){
 			$this->allowVelden=array_merge(
-				$this->allowVelden, 
-				array('studienr', 'bankrekening', 'muziek', 'ontvangtcontactueel', 'kerk', 'lidafdatum','echtgenoot', 'adresseringechtpaar', 'land'));
+				$this->allowVelden,
+				array('studienr', 'bankrekening', 'muziek', 'ontvangtcontactueel', 'kerk', 'lidafdatum','echtgenoot', 'adresseringechtpaar', 'land', 'permissies'));
 		}
-		
+
 		//parse default values.
 		$this->parseQuery($this->rawQuery);
 	}
-	
+
 	public function parseQuery($query){
 		$this->result=null; //nieuwe parameters, oude resultaat wegmikken.
 
@@ -69,14 +69,14 @@ class LidZoeker{
 			$query=explode('&', $query);
 		}
 		$this->rawQuery=$query;
-	
+
 		//als er geen explicite status is opgegeven, en het zoekende lid is oudlid, dan zoeken we automagisch
 		//ook in de oudleden.
 		if(!isset($query['status']) AND LoginLid::instance()->getLid()->getStatus()=='S_OUDLID'){
 			$this->rawQuery['status']='LEDEN|OUDLEDEN';
 		}
 
-		
+
 		foreach($this->rawQuery as $key => $value){
 			switch($key){
 				case 'q':
@@ -109,7 +109,7 @@ class LidZoeker{
 						break;
 					}
 					$filters=explode('|', $value);
-					
+
 					$add=array();
 					foreach($filters as $filter){
 						if($filter=='LEDEN'){
@@ -133,17 +133,17 @@ class LidZoeker{
 			}
 		}
 	}
-	
+
 	/*
 	 * Stel een setje WHERE-voorwaarden samen waarin standaard wordt gezocht.
 	 */
 	private function defaultSearch($zoekterm){
 		$query='';
 		$defaults=array();
-		
+
 		$zoekterm=MySql::instance()->escape($zoekterm);
-		
-		if($zoekterm=='*'){
+
+		if($zoekterm=='*' OR trim($zoekterm)==''){
 			$query='1 ';
 		}elseif(preg_match('/^moot:[1-4]$/', $zoekterm)){ //moten
 			$query="moot=".(int)substr($zoekterm, 5).' ';
@@ -170,6 +170,10 @@ class LidZoeker{
 		}elseif(preg_match('/^([a-z0-9][0-9]{3} ?,?)*([a-z0-9][0-9]{3})$/', $zoekterm)){ //meerdere uid's gescheiden door komma's.
 			$uids=explode(',', $zoekterm);
 			$query="uid IN('".implode("','", $uids)."') ";
+		}elseif(substr($zoekterm, 0, 2)=='P_' AND LoginLid::instance()->hasPermission('P_ADMIN')){ //permissies
+			$query="permissies='".$zoekterm."' ";
+		}elseif(substr($zoekterm, 0, 2)=='S_' AND LoginLid::instance()->hasPermission('P_ADMIN')){ //status
+			$query="status='".$zoekterm."' ";
 		}else{ //als niets van hierboven toepasselijk is zoeken we in zo ongeveer alles
 			$defaults[]="voornaam LIKE '%".$zoekterm."%' ";
 			$defaults[]="achternaam LIKE '%".$zoekterm."%' ";
@@ -178,24 +182,24 @@ class LidZoeker{
 			$defaults[]="CONCAT_WS(' ', tussenvoegsel, achternaam) LIKE '%".$zoekterm."%' ";
 			$defaults[]="CONCAT_WS(', ', achternaam, tussenvoegsel) LIKE '%".$zoekterm."%' ";
 			$defaults[]="nickname LIKE '%".$zoekterm."%' ";
-			
+
 			$defaults[]="CONCAT_WS(' ', adres, postcode, woonplaats) LIKE '%".$zoekterm."%' ";
 			$defaults[]="adres LIKE '%".$zoekterm."%' ";
 			$defaults[]="postcode LIKE '%".$zoekterm."%' ";
 			$defaults[]="woonplaats LIKE '%".$zoekterm."%' ";
-			
+
 			$defaults[]="mobiel LIKE '%".$zoekterm."%' ";
 			$defaults[]="telefoon LIKE '%".$zoekterm."%' ";
-			
+
 			$defaults[]="studie LIKE '%".$zoekterm."%' ";
 			$defaults[]="email LIKE '%".$zoekterm."%' ";
-			
+
 			$query.='( '.implode(' OR ', $defaults).' )';
 		}
-		
+
 		return $query.' AND ';
 	}
-	
+
 	/*
 	 * Doe de zoektocht.
 	 */
@@ -203,16 +207,16 @@ class LidZoeker{
 		$db=MySql::instance();
 
 		$query="SELECT uid FROM lid WHERE ";
-		
+
 		if($this->query!=''){
 			$query.=$this->defaultSearch($this->query);
 		}
 		$query.=$this->getFilterSQL();
 		$query.=' ORDER BY '.implode($this->sort).';';
-		
+
 		$this->sqlquery=$query;
 		$result=$db->query2array($query);
-		
+
 		//De uid's omzetten naar Lid-objectjes
 		$this->result=array();
 		if(is_array($result)){
@@ -224,29 +228,29 @@ class LidZoeker{
 			}
 		}
 	}
-	
+
 	public function count(){
 		if($this->result===null){
 			$this->search();
 		}
 		return count($this->result);
 	}
-	
+
 	public function searched(){
 		return $this->result!==null;
 	}
-	
+
 	public function getLeden(){
 		if($this->result===null){
 			$this->search();
 		}
 		return $this->result;
 	}
-	
+
 	public function getQuery(){		return $this->query; }
-	public function getVelden(){ 	return $this->velden; } 
+	public function getVelden(){ 	return $this->velden; }
 	public function getWeergave(){ 	return 'LL'.ucfirst($this->weergave); }
-	
+
 	public function getRawQuery($key){
 		if(!isset($this->rawQuery[$key])){
 			return false;
@@ -274,7 +278,7 @@ class LidZoeker{
 			return $return;
 		}
 	}
-	
+
 	public function getSelectedVelden(){
 		return $this->velden;
 	}
@@ -292,11 +296,11 @@ class LidZoeker{
 		}
 		return $return;
 	}
-	
+
 	public function getSortableVelden(){
 		return $this->sortable;
 	}
-	
+
 	public function addFilter($field, $value){
 		if(is_array($value)){
 			$this->filters[$field]=$value;
@@ -304,7 +308,7 @@ class LidZoeker{
 			$this->filters[$field]=array($value);
 		}
 	}
-	
+
 	public function __toString(){
 		$return='Zoeker:';
 		$return.=print_r($this->rawQuery, true);

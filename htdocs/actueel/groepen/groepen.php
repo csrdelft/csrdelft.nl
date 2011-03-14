@@ -20,21 +20,21 @@ if(isset($_GET['gtype'])){
 
 try{
 	$groepen=new Groepen($gtype);
-	
+
 	$content=new Groepencontent($groepen);
 }catch(Exception $e){
 	GroepenContent::invokeRefresh('Groeptype ('.mb_htmlentities($gtype).') bestaat niet', '/actueel/groepen/');
 }
 
-if(isset($_GET['maakOt']) AND LoginLid::instance()->hasPermission('P_ADMIN')){
+if(isset($_GET['maakOt']) AND $groepen->isAdmin()){
 	if($groepen->maakGroepenOt()){
 		GroepenContent::invokeRefresh('De h.t. groepen in deze categorie zijn met succes o.t. gemaakt.', '/actueel/groepen/'.$groepen->getNaam());
 	}else{
 		GroepenContent::invokeRefresh('De h.t. groepen zijn niet allemaal met succes o.t. gemaakt.', '/actueel/groepen/'.$groepen->getNaam());
 	}
 }
-	
-	
+
+
 
 $pagina=new csrdelft($content);
 $pagina->addStylesheet('groepen.css');

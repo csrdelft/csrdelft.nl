@@ -44,7 +44,7 @@ class Groep{
 			}
 		}
 	}
-	
+
 	/*
 	 * Laad een groep in aan de hand van het id of de snaam
 	 *
@@ -195,7 +195,7 @@ class Groep{
 	}
 	public function getAanmeldbaar(){	return $this->groep['aanmeldbaar']; }
 	public function isAanmeldbaar(){
-		return LoginLid::instance()->hasPermission($this->getAanmeldbaar()); 
+		return LoginLid::instance()->hasPermission($this->getAanmeldbaar());
 	}
 	public function getLimiet(){		return $this->groep['limiet']; }
 	public function getToonFuncties(){	return $this->groep['toonFuncties']; }
@@ -223,7 +223,7 @@ class Groep{
 		}
 		return false;
 	}
-	
+
 	//zet get groeptype, oftewel, groepcategorie.
 	public function setGtype($groepen){
 		if($groepen instanceof Groepen){
@@ -251,7 +251,7 @@ class Groep{
 		}
 		return isset($this->leden[$uid]);
 	}
-	
+
 	/*
 	 * LidIsMod houdt in dat élk lid van een groep leden kan toevoegen
 	 * en de groepsbeschrijving kan aanpassen.
@@ -277,7 +277,7 @@ class Groep{
 			foreach($this->getLeden() as $lid){
 				if(Lid::Exists($lid['uid'])){
 					$leden[]=LidCache::getLid($lid['uid']);
-					
+
 				}
 			}
 		}
@@ -304,6 +304,12 @@ class Groep{
 	}
 	public function magBewerken(){
 		return $this->isAdmin() OR $this->isOp(LoginLid::instance()->getUid());
+	}
+	public function magStatsBekijken(){
+		return
+			$this->isAdmin() OR
+			$this->isOp() OR
+			($this->isAanmeldbaar() AND $this->isIngelogged());
 	}
 	/*
 	 * Kijkt of er naast de huidige groep al een andere groep h.t. is
@@ -353,7 +359,7 @@ class Groep{
 		if(!$this->isAanmeldbaar()) 	return false;
 		if(!$this->isIngelogged()) 		return false;
 		if($this->isLid()) 				return false;
-		
+
 		if($this->getEinde()=='0000-00-00' OR $this->getEinde()>date('Y-m-d')){
 			if($this->getLimiet()==0){
 				return true;
@@ -410,7 +416,7 @@ class Groep{
 		}
 		return $ot->addLid($uid) AND $this->verwijderLid($uid);
 	}
-	
+
 	public function meldAan($functie){
 		if($this->magAanmelden()){
 			return $this->addLid(LoginLid::instance()->getUid(), $functie);
@@ -421,7 +427,7 @@ class Groep{
 	/*
 	 * Functiefilters.
 	 * Groepen worden steeds vaker als inschrijfketzer gebruikt, daardoor
-	 * komt er vaak allerlei onzin in het functieveld terecht. Door het 
+	 * komt er vaak allerlei onzin in het functieveld terecht. Door het
 	 * groepfilter
 	 */
 	public function hasFunctiefilter(){ return $this->getFunctiefilter()!=''; }
@@ -439,9 +445,9 @@ class Groep{
 			$this->groep['functiefilter']=implode('|', trim($filters));
 		}
 	}
-	
-	
-	
+
+
+
 	public function addLid($uid, $functie=''){
 		$op=0;
 		$functie=str_replace(array("\n","\r"), '', trim($functie));
@@ -490,7 +496,7 @@ class Groep{
 			return false;
 		}
 	}
-	
+
 	/*
 	 * Geef een array met een vorige en een volgende terug.
 	 * Dit levert dus vier query's op, niet erg efficient, maar optimaliseren kan altijd nog
@@ -527,7 +533,7 @@ class Groep{
 	public function getUrl(){
 		return '/actueel/groepen/'.$this->getType()->getNaam().'/'.$this->getId();
 	}
-	
+
 	public function getLink($class=''){
 		if($class!=''){
 			$class='groeplink '.$class;
@@ -536,14 +542,14 @@ class Groep{
 		}
 		return '<a href="'.$this->getUrl().'" class="'.$class.'">'.mb_htmlentities($this->getNaam()).'</a>';
 	}
-	
+
 	public function __toString(){
 		return $this->getLink();
 	}
-	
+
 	/*
 	 * Geef een serie links terug voor de in $string gegeven groepid's.
-	 * 
+	 *
 	 * $string		Door comma's gescheiden groepid's.
 	 */
 	public static function ids2links($string, $separator=','){
@@ -561,7 +567,7 @@ class Groep{
 		}
 		return implode($separator, $groeplinks);
 	}
-	
+
 	/*
 	 * Groepstatistiekjes.
 	 * Worden weergegeven in een tabje bij de groepleden.
@@ -583,10 +589,10 @@ class Groep{
 		}
 		return $this->stats;
 	}
-	
+
 	/*
 	 * Deze functie geeft een array terug met functies en aantallen.
-	 * 
+	 *
 	 * Handig als de functie gebruikt wordt voor maten oid.
 	 */
 	public function getFunctieAantal(){
@@ -601,7 +607,7 @@ class Groep{
 		}
 		return $functies;
 	}
-	
+
 	/*
 	 * Experimentele groepgeschiedenis.
 	 * Een tijdbalkje klussen met de opeenvolgende groepen. Niet afgemaakt.
@@ -624,7 +630,7 @@ class Groep{
 		}
 		return $groepen;
 	}
-	
+
 	public static function isIngelogged(){
 		return LoginLid::instance()->hasPermission('P_LEDEN_READ');
 	}

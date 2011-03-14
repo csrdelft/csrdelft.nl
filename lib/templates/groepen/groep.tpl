@@ -12,7 +12,7 @@
 		{if $groep->isIngelogged()}
 			<li id="lidlijst" class="active" onclick="return showTab({$groep->getId()}, 'lidlijst');">
 				<img src="{$csr_pics}knopjes/lijst.png" title="Lidlijst tonen" />
-			</li>			
+			</li>
 			<li id="pasfotos" onclick="return showTab({$groep->getId()}, 'pasfotos');">
 				<img src="{$csr_pics}/knopjes/pasfoto.png" title="schakel naar pasfoto's" />
 			</li>
@@ -22,8 +22,8 @@
 				<strong>+</strong>
 			</li>
 		{/if *}
-		
-		{if $groep->isAdmin() OR $groep->isOp() OR ($groep->isAanmeldbaar() AND $groep->isIngelogged())}
+
+		{if $groep->magStatsBekijken}
 			<li id="stats">
 				<a onclick="showTab({$groep->getId()}, 'stats')">%</a>
 			</li>
@@ -38,7 +38,7 @@
 		{include file='groepen/groepleden.tpl'}
 	</div>
 	<br />
-	{* 	we laden het juiste tabje adh van de hashtag, als er niets 
+	{* 	we laden het juiste tabje adh van de hashtag, als er niets
 		ingesteld is kiezen we tussen pasfoto's en ledenlijst aan de hand
 		van de instelling van de gebruiker.
 	 *}
@@ -55,8 +55,8 @@
 		}
 		{/literal}
 	</script>
-	
-	
+
+
 	<div class="clear"></div>
 	{if $groep->magBewerken() AND $action!='edit'}
 		{if $action=='addLid' AND $lidAdder!=false}
@@ -71,7 +71,7 @@
 				<h2>Leden toevoegen</h2>
 				Voer hier door komma's gescheiden namen of uid's in:<br /><br />
 				Zoek ook in: <input type="checkbox" name="filterOud" id="filterOud" /> <label for="filterOud">oudleden</label>
-				
+
 				{if $groep->isAdmin()}
 					<input type="checkbox" name="filterNobody" id="filterNobody" /> <label for="filterNobody">nobodies</label>
 				{/if}<br /><br />
@@ -106,8 +106,8 @@
 				<a href="/actueel/groepen/{$groep->getType()->getNaam()}/0/bewerken/{$groep->getId()}">Opvolger toevoegen</a>
 			</li>
 		{/if}
-		</ul>	
-	</div> 
+		</ul>
+	</div>
 	{if $groep->isAdmin() OR $groep->magBewerken()}
 		<div id="groepAdmin">
 			{if $groep->isAdmin() AND $groep->getStatus()=='ht'}
