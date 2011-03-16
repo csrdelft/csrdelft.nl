@@ -23,7 +23,7 @@
 			</li>
 		{/if *}
 
-		{if $groep->magStatsBekijken}
+		{if $groep->magStatsBekijken()}
 			<li id="stats">
 				<a onclick="showTab({$groep->getId()}, 'stats')">%</a>
 			</li>
