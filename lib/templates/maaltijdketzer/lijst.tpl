@@ -73,7 +73,7 @@ Regels omtrent het betalen van de maaltijden op Confide:
 		</td>
 		<td style="width: 20px; text-align: right;">
 			{if $aanmelding.saldo!=''}
-				{if $aanmelding.saldo>=$maaltijd.prijs}ok{elseif $aanmelding.saldo>=0}&lt;{$maaltijd.prijs|string_format:"%.2f"}{else}&lt;0{/if}
+				{if $aanmelding.saldo>$maaltijd.prijs}ok{elseif $aanmelding.saldo>($maaltijd.prijs-0.001)}{$maaltijd.prijs|string_format:"%.2f"}{elseif $aanmelding.saldo>0.001}&lt;{$maaltijd.prijs|string_format:"%.2f"}{elseif $aanmelding.saldo>-0.001}0{else}&lt;0{/if}
 			{/if}
 		</td><td style="width: 40px;">&nbsp;
 	{/table_foreach}
