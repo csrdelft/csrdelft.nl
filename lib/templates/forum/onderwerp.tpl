@@ -83,7 +83,7 @@
 	{foreach from=$onderwerp->getPosts() item='bericht' name='berichten'}
 		<tr>
 			<td class="auteur">
-				<span class="togglePasfoto" id="t{$bericht.uid}-{$bericht.id}" title="Toon pasfoto van dit lid">&raquo;</span>&nbsp;<a href="/communicatie/forum/reactie/{$bericht.id}" class="postlink" title="Link naar deze post">&rarr;</a>
+				<span tabindex="0" class="togglePasfoto" id="t{$bericht.uid}-{$bericht.id}" title="Toon pasfoto van dit lid">&raquo;</span>&nbsp;<a href="/communicatie/forum/reactie/{$bericht.id}" class="postlink" title="Link naar deze post">&rarr;</a>
 				{$bericht.uid|csrnaam:'user'}<br />
 				<span class="moment">{$bericht.datum|reldate}</span>
 				<br />
@@ -99,7 +99,7 @@
 				{/if}
 				{* bewerken als bericht van gebruiker is, of als men mod is. *}
 				{if $onderwerp->magBewerken($bericht.id)}
-					<a onclick="forumBewerken({$bericht.id})">
+					<a href="javascript:;" onclick="forumBewerken({$bericht.id})">
 						<img src="{icon get="bewerken" notag=true}" title="Bewerk bericht" alt="Bewerk bericht" style="border: 0px;" />
 					</a>
 				{/if}
@@ -118,7 +118,7 @@
 			</td>
 			<td class="bericht{cycle values="0,1"}{if $bericht.filtered} filtered{/if}" id="post{$bericht.id}">
 				{if $bericht.filtered}
-					<a class="weergeeflink" onclick="jQuery('#filtered{$bericht.id}').slideDown(1000); jQuery(this).hide().remove()"> &gt;&gt Bericht van 2008, klik om weer te geven. &lt;&lt;</a>
+					<a href="javascript:;" class="weergeeflink" onclick="jQuery('#filtered{$bericht.id}').slideDown(1000); jQuery(this).hide().remove()"> &gt;&gt Bericht van 2008, klik om weer te geven. &lt;&lt;</a>
 					<div id="filtered{$bericht.id}" class="verborgen">
 				{/if}
 				{$bericht.tekst|ubb}
@@ -164,7 +164,7 @@
 			{/if}
 		</td>
 		<td class="forumtekst">
-			{if $onderwerp->magToevoegen()} 
+			{if $onderwerp->magToevoegen()}
 				<form method="post" action="/communicatie/forum/toevoegen/{$onderwerp->getID()}" id="forumReageren" {if !$onderwerp->isOpen()}class="gesloten"{/if}>
 					<fieldset>
 						{* berichtje weergeven voor niet-ingeloggede gebruikers dat ze een naam moeten vermelden. *}
