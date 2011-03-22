@@ -35,6 +35,7 @@ if (isset($_POST['submit']))
 }
 
 echo '<form method="post">
+	<p>Debug: Mails gaan naar debugAddr en maaltijden worden niet gemarkeerd als gemaild<br /></p>
 	<label>Debug</label><input type="checkbox" name="debug" value="1" '.($debugMode?'checked="checked"':'').' /><br />
 	<label>DebugAddr</label><input type="text" name="debugAddr"  value="'.$debugAddr.'"/><br />
 	<input type="submit" name="submit" value="Verzenden" />';
