@@ -232,7 +232,9 @@ class Groepcontroller extends Controller{
 			}else{
 				//geposte waarden in het object stoppen zodat de template ze zo in het
 				//formulier kan knallen
-				$fields=array('snaam', 'naam', 'sbeschrijving', 'beschrijving', 'zichtbaar', 'status', 'begin', 'einde', 'aanmeldbaar', 'limiet');
+				$fields=array('snaam', 'naam', 'sbeschrijving', 'beschrijving', 'zichtbaar', 
+					'status', 'begin', 'einde', 'aanmeldbaar', 'limiet', 'toonFuncties', 'functiefilter',
+					'toonPasfotos', 'lidIsMod', 'makeruid');
 
 				foreach($fields as $field){
 					if(isset($_POST[$field])){

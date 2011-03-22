@@ -258,8 +258,9 @@ class Groep{
 	/*
 	 * Maker mag bij voldoende permissies voor die groeptype groepen aanmaken en zijn groepbewerken
 	 */
-	public function isMaker(){
-		return $this->groep['makeruid'] == LoginLid::instance()->getUid() AND $this->getType()->isGroepAanmaker();
+	public function isMaker($uid=null){
+		if($uid===null){ $uid=LoginLid::instance()->getUid(); }
+		return $this->groep['makeruid'] == $uid AND $this->getType()->isGroepAanmaker();
 	}
 	/*
 	 * LidIsMod houdt in dat élk lid van een groep leden kan toevoegen
