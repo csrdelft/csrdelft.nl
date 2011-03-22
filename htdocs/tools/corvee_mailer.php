@@ -25,9 +25,18 @@ if(!($loginlid->hasPermission('P_ADMIN') || $loginlid->hasPermission('P_MAALCIE'
 require_once 'maaltijden/maaltrack.class.php';
 $maaltrack = new MaalTrack();
 
-$debugMode = (isset($_GET['debug']) ? (int)$_GET['debug'] : null);
-$debugAddr = (isset($_GET['debugAddr']) ? $_GET['debugAddr'] : 'pubcie@csrdelft.nl');
+$debugMode = (isset($_POST['debug']) ? (int)$_POST['debug'] : null);
+$debugAddr = (isset($_POST['debugAddr']) ? $_POST['debugAddr'] : 'pubcie@csrdelft.nl');
 
-$maaltrack->corveeAutoMailer($debugMode, $debugAddr);
+if (isset($_POST['submit']))
+{
+	$maaltrack->corveeAutoMailer($debugMode, $debugAddr);
+	echo '<strong>Klaar!</strong><br /><br />';
+}
+
+echo '<form method="post">
+	<label>Debug</label><input type="checkbox" name="debug" value="1" '.($debugMode?'checked="checked"':'').' /><br />
+	<label>DebugAddr</label><input type="text" name="debugAddr"  value="'.$debugAddr.'"/><br />
+	<input type="submit" name="submit" value="Verzenden" />';
 
 ?>

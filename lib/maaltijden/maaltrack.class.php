@@ -1327,23 +1327,21 @@ class MaalTrack {
 				$taken = $lMaaltijd->getTaken();
 				$teller = array();
 				$foutTeller = array();
+
+				print_r($taken);
+
+				$takenTemplates = array(
+					'afwassers' => 'afwas.tpl',
+					'koks' => 'koks.tpl',
+					'theedoeken' => 'theedoeken.tpl',
+					'schoonmaken_frituur' => 'schoonmaken_frituur.tpl',
+					'schoonmaken_afzuigkap' => 'schoonmaken_afzuigkap.tpl',
+					'schoonmaken_keuken' => 'schoonmaken_keuken.tpl'
+				);
+				
 				foreach($taken as $taak => $leden)
 				{
-					$template = null;
-					switch ($taak) {
-						case 'afwassers':
-							$template = 'afwas.tpl';
-						case 'koks' :
-							$template = 'koks.tpl';
-						case 'theedoeken':
-							$template = 'theedoeken.tpl';
-						case 'schoonmaken_frituur':
-							$template = 'schoonmaken_frituur.tpl';
-						case 'schoonmaken_afzuigkap':
-							$template = 'schoonmaken_afzuigkap.tpl';
-						case 'schoonmaken_keuken':
-							$template = 'schoonmaken_keuken.tpl';
-					}
+					$template = (isset($takenTemplates[$taak]) ? $takenTemplates[$taak] : null);
 					if (!$template) continue;
 					
 					// mailen
@@ -1352,17 +1350,21 @@ class MaalTrack {
 						$to = ($debugMode ? $debugAddr : $uid.'@csrdelft.nl');
 
 						$lid = LidCache::getLid($uid);
-
+						
 						// persoonlijk mailen
-						$mail = new Smarty_csr();
-						$mail->assign('datum', strftime('%d-%m-%Y (%A)', $maaltijd['datum']));
-						$mail->assign('lidnaam', $lid->getNaamLink('civitas'));
-						$bericht = $mail->fetch('maaltijdketzer/corveemail/'.$template);
+						if ($lid != null) {
+							$mail = new Smarty_csr();
+							$mail->assign('datum', strftime('%d-%m-%Y (%A)', $maaltijd['datum']));
+							$mail->assign('lidnaam', $lid->getNaamLink('civitas'));
+							$bericht = $mail->fetch('maaltijdketzer/corveemail/'.$template);
 
-						if (mail($to, $onderwerp, $bericht, $headers))
-							$teller[] = $lid->getNaam().' ('.$uid.')';
-						else
-							$foutTeller[] = $lid->getNaam().' ('.$uid.')';
+							if (mail($to, $onderwerp, $bericht, $headers))
+								$teller[] = $lid->getNaam().' ('.$uid.')';
+							else
+								$foutTeller[] = $lid->getNaam().' ('.$uid.')';
+						} else {
+							$foutTeller[] = 'Onbekend lid met id '.$uid;
+						}
 					}
 				}
 				$output .= "Mensen gemaild: ".count($teller)." (".implode($teller, ", ").")";

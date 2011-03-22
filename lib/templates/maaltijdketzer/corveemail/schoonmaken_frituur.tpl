@@ -1,6 +1,6 @@
 Beste {$lidnaam},
 
-Je hebt de eervolle taak om op vrijdag {$datum} zorg te dragen voor het schoonmaken der vetput.
+Je hebt de eervolle taak om op {$datum} zorg te dragen voor het schoonmaken der vetput.
 Mede stuur ik je de instructie voor het schoonmaken.
 De taak hoeft niet persee vrijdagmiddag gedaan te worden maar zorg dat het voor de daaropvolgende donderdagmiddag gedaan is.
 
