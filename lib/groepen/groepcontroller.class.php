@@ -79,8 +79,8 @@ class Groepcontroller extends Controller{
 	 * Beetje gecompliceerd door de verschillende permissielagen, maargoed.
 	 */
 	public function groepValidator(){
-		//Velden beschikbaar voor groepadmins.
-		if($this->groep->isAdmin()){
+		//Velden beschikbaar voor groepadmins en voor leden die hun groep mogen aanpassen/maken
+		if($this->groep->isAdmin() OR $this->groep->isMaker()){
 			//snaam is alleen relevant bij het maken van een nieuwe groep
 			if($this->groep->getId()==0 AND !isset($_POST['snaam'])){
 				$this->addError("Korte naam is verplicht bij een nieuwe groep.");
@@ -186,8 +186,8 @@ class Groepcontroller extends Controller{
 					$this->groep->setValue('snaam', $_POST['snaam']);
 				}
 
-				//velden alleen voor admins
-				if($this->groep->isAdmin()){
+				//velden alleen voor admins of makers van groep
+				if($this->groep->isAdmin() OR $this->groep->isMaker()){
 					$this->groep->setValue('naam', $_POST['naam']);
 					$this->groep->setValue('sbeschrijving', $_POST['sbeschrijving']);
 					$this->groep->setValue('begin', $_POST['begin']);
@@ -351,7 +351,7 @@ class Groepcontroller extends Controller{
 	 * De groep o.t. maken.
 	 */
 	public function action_maakGroepOt(){
-		if($this->groep->isAdmin()){
+		if($this->groep->isAdmin() OR $this->groep->isMaker()){
 			if($this->groep->getStatus()=='ht'){
 				if($this->groep->maakOt()){
 					$melding='Groep o.t. maken gelukt.';
@@ -391,7 +391,7 @@ class Groepcontroller extends Controller{
 		exit;
 	}
 	public function action_stats(){
-		if($this->groep->isAdmin() OR $this->groep->isOp() OR ($this->groep->isAanmeldbaar() AND $this->groep->isIngelogged())){
+		if($this->groep->isAdmin() OR $this->groep->isOp() OR $this->groep->isMaker() OR ($this->groep->isAanmeldbaar() AND $this->groep->isIngelogged())){
 			$this->content=new GroepStatsContent($this->groep);
 			$this->content->view();
 		}

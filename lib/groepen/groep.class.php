@@ -12,7 +12,7 @@ class Groep{
 	private $groepseigenschappen=
 		array('groepId', 'gtypeId', 'gtype', 'snaam', 'naam', 'sbeschrijving', 'beschrijving',
 			'zichtbaar', 'status', 'begin', 'einde', 'aanmeldbaar', 'limiet', 'toonFuncties', 'functiefilter',
-			'toonPasfotos', 'lidIsMod');
+			'toonPasfotos', 'lidIsMod', 'makeruid');
 	private $gtype=null;
 	private $groep=null;
 	private $leden=null;
@@ -29,7 +29,7 @@ class Groep{
 					'groepId'=>0, 'snaam'=>'', 'naam'=>'', 'sbeschrijving'=>'', 'beschrijving'=>'',
 					'zichtbaar'=>'zichtbaar', 'begin'=>date('Y-m-d'), 'einde'=>'0000-00-00',
 					'aanmeldbaar'=>'', 'limiet'=>0, 'toonFuncties'=>'tonen', 'functiefilter',
-					'toonPasfotos'=>0, 'lidIsMod'=>0);
+					'toonPasfotos'=>0, 'lidIsMod'=>0, 'makeruid'=>LoginLid::instance()->getUid());
 			}else{
 				$this->load($init);
 			}
@@ -66,7 +66,7 @@ class Groep{
 				groep.sbeschrijving AS sbeschrijving, groep.beschrijving AS beschrijving, groep.zichtbaar AS zichtbaar,
 				groep.status AS status, begin, einde, aanmeldbaar, limiet, toonFuncties, functiefilter, toonPasfotos, lidIsMod,
 				groeplid.uid AS uid, groeplid.op AS op, groeplid.functie AS functie, groeplid.prioriteit AS prioriteit,
-				groeptype.id AS gtypeId, groeptype.naam AS gtype
+				groeptype.id AS gtypeId, groeptype.naam AS gtype, groep.makeruid AS makeruid
 			FROM groep
 			LEFT JOIN groeplid ON(groep.id=groeplid.groepid)
 			INNER JOIN groeptype ON(groep.gtype=groeptype.id)
@@ -104,7 +104,7 @@ class Groep{
 			$qSave="
 				INSERT INTO groep (
 					snaam, naam, sbeschrijving, beschrijving, gtype, zichtbaar, status, begin, einde,
-					aanmeldbaar, limiet, toonFuncties, functiefilter, toonPasfotos, lidIsMod
+					aanmeldbaar, limiet, toonFuncties, functiefilter, toonPasfotos, lidIsMod, makeruid
 				) VALUES (
 					'".$db->escape($this->getSnaam())."',
 					'".$db->escape($this->getNaam())."',
@@ -120,7 +120,8 @@ class Groep{
 					'".$this->getToonFuncties()."',
 					'".$db->escape($this->getFunctiefilter())."',
 					'".$this->getToonPasfotos()."',
-					'".$this->getLidIsMod()."'
+					'".$this->getLidIsMod()."',
+					'".$db->escape($this->getMakerUid())."'
 				);";
 		}else{
 			$qSave="
@@ -138,7 +139,8 @@ class Groep{
 					toonFuncties='".$this->getToonFuncties()."',
 					functiefilter='".$db->escape($this->getFunctiefilter())."',
 					toonPasfotos='".$this->getToonPasfotos()."',
-					lidIsMod='".$this->getLidIsMod()."'
+					lidIsMod='".$this->getLidIsMod()."',
+					makeruid='".$db->escape($this->getMakerUid())."'
 				WHERE id=".$this->getId()."
 				LIMIT 1;";
 		}
@@ -205,6 +207,7 @@ class Groep{
 			LoginLid::instance()->getLid()->instelling('groepen_toonPasfotos')=='ja';
 	}
 	public function getLidIsMod(){ 		return $this->groep['lidIsMod']; }
+	public function getMakerUid(){ 		return $this->groep['makeruid']; }
 
 	/*
 	 * Geef een bool terug of de functies getoond worden of niet.
@@ -251,7 +254,13 @@ class Groep{
 		}
 		return isset($this->leden[$uid]);
 	}
-
+	
+	/*
+	 * Maker mag bij voldoende permissies voor die groeptype groepen aanmaken en zijn groepbewerken
+	 */
+	public function isMaker(){
+		return $this->groep['makeruid'] == LoginLid::instance()->getUid() AND $this->getType()->isGroepAanmaker();
+	}
 	/*
 	 * LidIsMod houdt in dat élk lid van een groep leden kan toevoegen
 	 * en de groepsbeschrijving kan aanpassen.
@@ -303,12 +312,16 @@ class Groep{
 		return LoginLid::instance()->hasPermission('P_LEDEN_MOD');
 	}
 	public function magBewerken(){
-		return $this->isAdmin() OR $this->isOp(LoginLid::instance()->getUid());
+		return 
+			$this->isAdmin() OR 
+			$this->isMaker() OR 
+			$this->isOp(LoginLid::instance()->getUid());
 	}
 	public function magStatsBekijken(){
 		return
 			$this->isAdmin() OR
 			$this->isOp() OR
+			$this->isMaker() OR
 			($this->isAanmeldbaar() AND $this->isIngelogged());
 	}
 	/*
