@@ -14,15 +14,13 @@
 		{/if}
 		<label for="groepNaam" class="clear"><strong>Naam:</strong></label>
 		<input type="text" id="groepNaam" maxlength="50" name="naam" style="width: 70%" value="{$groep->getNaam()|escape:'html'}" /><br />
-	{/if}
-	{if $groep->isAdmin()}
-		<label for="makerUid" class="clear"><strong>Maker van de groep:</strong></label>
-		<input type="text" id="makerUid" maxlength="4" name="makeruid" style="width: 5%" value="{$groep->getMakerUid()|escape:'html'}" /><br />
-	{/if}	
-	{if $groep->isMaker()}
-		<input type="hidden" id="makerUid" maxlength="4" name="makeruid" value="{$groep->getMakerUid()|escape:'html'}" />
-	{/if}
-	{if $groep->isAdmin() OR $groep->isMaker()}
+	
+		{if $groep->isAdmin()}
+			<label for="makerUid" class="clear"><strong>Maker van de groep:</strong></label>
+			<input type="text" id="makerUid" maxlength="4" name="makeruid" style="width: 5%" value="{$groep->getMakerUid()|escape:'html'}" /><br />
+		{else}	
+			<input type="hidden" id="makerUid" maxlength="4" name="makeruid" value="{$groep->getMakerUid()|escape:'html'}" />
+		{/if}
 		<label for="groepStatus"><strong>Status:</strong></label>
 		<select name="status" id="groepStatus" onchange="updateGroepform();">
 			<option value="ht" {if $groep->getStatus()=="ht"}selected="selected"{/if}>h.t.</option>
@@ -65,7 +63,7 @@
 		<input type="checkbox" name="toonPasfotos" id="toonPasfotos" {if $groep->getToonPasfotos()}checked="checked"{/if} /> <em>(Pasfoto komt in plaats van naam)</em>
 		<br />
 		<label for="lidIsMod"><strong>Groepslid is mod?</strong></label>
-		<input type="checkbox" name="lidIsMod" id="lidIsMod" {if $groep->lidIsMod()}checked="checked"{/if} /> <em>(Elk lid kan groepsleden toevoegen en het grote verhaal aanpassen.)</em>
+		<input type="checkbox" name="lidIsMod" id="lidIsMod" {if $groep->getlidIsMod()}checked="checked"{/if} /> <em>(Elk lid kan groepsleden toevoegen en het grote verhaal aanpassen.)</em>
 		<br />
 		<label for="sbeschrijving"><strong>Korte beschrijving:</strong><br /><br />UBB staat aan.</label>
 		<textarea id="sbeschrijving" name="sbeschrijving" style="width: 70%; height: 100px;">{$groep->getSbeschrijving()|escape:'html'}</textarea>

@@ -120,7 +120,9 @@ class Groepcontroller extends Controller{
 				if(!in_array($_POST['toonFuncties'], array('tonen', 'verbergen', 'niet'))){
 					$this->addError("ToonFuncties mag deze waarden niet hebben.");
 				}
-
+				if(strlen(trim($_POST['makeruid']))!=4){
+						$this->addError("lidnummer van groepmaker moet 4 tekens zijn.");
+				}
 				if(!preg_match('/(h|f|o)t/', $_POST['status'])){
 					$this->addError("De status is niet geldig.");
 				}else{
@@ -220,6 +222,8 @@ class Groepcontroller extends Controller{
 					}else{
 						$this->groep->setValue('lidIsMod', 0);
 					}
+					$this->groep->setValue('makeruid', $_POST['makeruid']);
+						
 				}
 				$this->groep->setValue('beschrijving', $_POST['beschrijving']);
 
@@ -232,14 +236,18 @@ class Groepcontroller extends Controller{
 			}else{
 				//geposte waarden in het object stoppen zodat de template ze zo in het
 				//formulier kan knallen
-				$fields=array('snaam', 'naam', 'sbeschrijving', 'beschrijving', 'zichtbaar', 
-					'status', 'begin', 'einde', 'aanmeldbaar', 'limiet', 'toonFuncties', 'functiefilter',
-					'toonPasfotos', 'lidIsMod', 'makeruid');
+								
+				$fields=array('snaam', 'naam', 'sbeschrijving', 'beschrijving', 'zichtbaar', 'status', 
+					'begin', 'einde', 'aanmeldbaar', 'limiet', 'toonFuncties', 'toonPasfotos',
+					'lidIsMod', 'makeruid');
 
 				foreach($fields as $field){
 					if(isset($_POST[$field])){
 						$this->groep->setValue($field, $_POST[$field]);
 					}
+				}
+				if(isset($_POST['functiefilter'])){
+					$this->groep->setFunctiefilter($_POST['functiefilter']);
 				}
 				//de eventuele fouten van de groepValidator aan de melding toevoegen.
 				$this->content->setMelding($this->errors);

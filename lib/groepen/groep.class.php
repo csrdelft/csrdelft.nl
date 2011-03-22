@@ -241,7 +241,7 @@ class Groep{
 
 	public function setValue($key, $value){
 		$fields=array('snaam', 'naam', 'sbeschrijving', 'beschrijving',
-			'zichtbaar', 'status', 'begin', 'einde', 'aanmeldbaar', 'limiet', 'toonFuncties', 'toonPasfotos', 'lidIsMod');
+			'zichtbaar', 'status', 'begin', 'einde', 'aanmeldbaar', 'limiet', 'toonFuncties', 'toonPasfotos', 'lidIsMod', 'makeruid');
 		if(!in_array($key, $fields)){
 			throw new Exception('Veld ['.$key.'] is niet toegestaan Groep::setValue()');
 		}
