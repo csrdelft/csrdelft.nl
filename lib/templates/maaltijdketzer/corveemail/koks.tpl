@@ -1,17 +1,11 @@
-Beste {$lidnaam},
+Geachte {$lidnaam},
 
-Gefeliciteerd! U bent de gelukkige die op {$datum} een heerlijke maaltijd gaat bereiden op Confide.
-
-Om alles zo goed mogelijk te laten verlopen krijg u van mij een document over het KOKEN (staat ook op Confide). Lees dit door en hou u hieraan. Het belangrijkste in dit document zijn de volgende zaken:
-
-- Werk hygiënisch;
-- Maak een smaakvolle en gezonde maaltijd (en let op eetwensen);
-- Vul de HACCP lijsten in;
-- Laat alles schoon achter (en meld het als het niet schoon achter gelaten was).
-- Kun je niet op deze dag, zorg dan zelf voor een vervanger, dat doe ik niet.
-- Gebruik niet meer dan één geel doekje.
- 
-Kunt u niet koken op deze dag zorg dan zelf voor een vervanger, dat doe ik niet.
+U zult op {$datum} een heerlijke maaltijd mogen bereiden op Confide.
+Bijgevoegd stuur ik de instructie voor koks en de handleiding voor de oven.
+Bijgezegd moet worden dat alleen de oven-functie van de combi-steamer te gebruiken is, de steam en de schoonmaakfunctie dus niet.
+Verandert dit, dan licht ik jullie zo snel mogelijk in.
+Door het hygiëne-commissariaat is bepaald dat de koks verantwoordelijk zijn voor de schoonmaak van de oven, dus bij deze.
+Daarnaast nog een punt om op te letten, alle overgebleven etenswaren moeten worden geveild, niets mag er in de keuken blijven liggen.
 
 Ik wens u heel veel succes en plezier.
 

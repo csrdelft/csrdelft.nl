@@ -1,12 +1,9 @@
 Beste {$lidnaam},
 
-Gefeliciteerd! U bent de gelukkige die op {$datum} de keuken van Confide laat sprankelen.
-
-Om alles zo goed mogelijk te laten verlopen krijg u van mij een document over het SCHOONMAKEN VAN DE KEUKEN. Lees dit door en hou u hieraan.
-
-Het is de bedoeling dat u samen met uw schoonmaakpartner een goed moment op deze dag uitkiest wanneer u uw taak wilt doen. 
- 
-Kunt u niet de keuken schoonmaken op deze dag zorg dan zelf voor een vervanger, dat doe ik niet.
+Je bent bevoorrecht om op vrijdag {$datum} de keuken schoon te maken.
+Als bijlage stuur ik u mede de keuken-schoonmaak-instructie, deze instructie is slechts een richtlijn.
+Komt u dus dingen tegen die schoongemaakt moeten worden maar niet specifiek in de instructie staan, maakt u dit dan aub schoon.
+Vindt u dat er andere dingen zijn die wel specifieker in de instructie moeten komen te staan. Bericht het mij.
 
 Ik wens u heel veel succes en plezier.
 

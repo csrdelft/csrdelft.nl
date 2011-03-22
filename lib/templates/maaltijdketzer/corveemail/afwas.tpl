@@ -1,19 +1,20 @@
-Beste {$lidnaam},
+Geachte {$lidnaam},
 
-Gefeliciteerd! U bent de gelukkige die op {$datum} de vuile vaat weer laat schitteren op Confide.
+U bent uitverkoren om op op {$datum} de vaat weer schoon te maken op Confide.
+Dit gebeurt uiteraard met behulp van onze prachtig nieuwe vaatwasser.
+De kwali-afwasser is eindverantwoordelijke en zal met behulp van jullie allen er voor zorgen dat alle taken die op de afwas-instructie uitgevoerd zijn.
+Ik stuur je dan ook mede de instructie voor het afwassen, lees deze goed door, hij is namelijk vernieuwd in verband met de nieuwe keuken.
 
-Om alles zo goed mogelijk te laten verlopen krijg u van mij een document over het AFWASSEN (kopie staat op Confide in de kookmap). Lees dit door en hou u hieraan. Het belangrijkste in dit document zijn de volgende zaken:
+Let vooral op de volgend punten:
+ - de braadslede is in z'n geheel ingevet
+ - de afwasmachine is na gebruik compleet gereinigd, alle roosters ( 3 stuks) geleegd. Naderhand open laten staan.
+ - vloer schoon, putje schoon.
+ - de oven, als hij gebruikt is, droog van binnen en ook open
+ - laat de volle vuilniszakken niet in de service-gang staan maar ruim ze op in het afvalhok
 
-- Coördineer het afruimen goed (taak van de kwali-afwasser);
-- Wees aanwezig op de maaltijd;
-- Help de tafelpraeses met het opruimen van de tafels;
-- Verdeel de taken goed in de keuken;
-- Vul de HACCP in;
-- Maak het aanrecht in zijn geheel leeg;
-- Laat alles schoon achter (en meld het als het niet schoon achter gelaten was).
-- Gebruik maar één geel doekje.
- 
-Kunt u niet afwassen op deze dag zorg dan zelf voor een vervanger, dat doe ik niet.
+Tips:
+ - zet de vaatwasser aan voor het toetje het duur meestal even voordat hij opgewarmt is.
+ - coordineer bij het afruimen van de borden in de keuken en zet het handig neer dat scheelt later een hoop werk.
 
 Ik wens u heel veel succes en plezier.
 

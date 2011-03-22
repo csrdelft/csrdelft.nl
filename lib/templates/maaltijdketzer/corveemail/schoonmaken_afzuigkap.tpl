@@ -1,10 +1,12 @@
-Beste {$lidnaam},
+Geachte {$lidnaam},
 
-Gefeliciteerd! U bent de gelukkige die op {$datum} het mogelijk maakt dat de lucht weer fris is in de keuken van Confide.
+U hebt de eervolle taak om op {$datum} de afzuigkappen van de nieuwe keuken van Confide schoon te maken
+Dit is een stuk gemakkelijker geworden doordat u gebruik kunt maken van de hypermoderne vaatwasser.
+Mede stuur ik u de instructies voor het schoonmaken van de afzuigkappen.
 
-Om alles zo goed mogelijk te laten verlopen krijg u van mij een document over het SCHOONMAKEN VAN DE AFZUIGKAPPEN. Lees dit door en hou u hieraan.
-
-Kunt u niet de afzuigkappen schoonmaken op deze dag zorg dan zelf voor een vervanger, dat doe ik niet.
+Let vooral op de volgende dingen:
+ - De behuizing van de afzuigkappen moeten ook schoon worden gemaakt.
+ - De vaatwasser moet nadien ook schoon zijn.(filters leeg enz.)
 
 Ik wens u heel veel succes en plezier.
 
