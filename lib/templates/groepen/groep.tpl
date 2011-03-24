@@ -108,7 +108,7 @@
 		{/if}
 		</ul>
 	</div>
-	{if $groep->isEigenaar()}wel{/if}magbewerken.{if $groep->isAdmin() OR $groep->magBewerken()}
+	{if $groep->isAdmin() OR $groep->magBewerken()}
 		<div id="groepAdmin">
 			{if ($groep->isAdmin() OR $groep->isEigenaar()) AND $groep->getStatus()=='ht'}
 				<a class="knop" href="/actueel/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/maakGroepOt" onclick="return confirm('Weet u zeker dat u deze groep o.t. wilt maken?')" title="Groep o.t. maken? Eindatum wordt indien niet ingevuld naar vandaag gezet.">
