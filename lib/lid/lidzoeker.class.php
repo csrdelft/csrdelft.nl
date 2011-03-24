@@ -7,10 +7,16 @@
 
 class LidZoeker{
 
+	//velden die door gewone leden geselecteerd mogen worden.
 	private $allowVelden=array(
 		'pasfoto', 'uid', 'naam', 'voorletters', 'voornaam', 'tussenvoegsel', 'achternaam', 'nickname', 'geslacht',
 		'email', 'adres', 'telefoon', 'mobiel', 'msn', 'jid', 'skype', 'studie', 'status',
 		'gebdatum', 'beroep', 'verticale', 'lidjaar', 'kring', 'patroon', 'woonoord', 'bankrekening');
+	//velden die ook door mensen met P_LEDEN_MOD bekeken mogen worden
+	//(merge in de constructor)
+	private $allowVeldenLEDENMOD=array(
+		'studienr', 'bankrekening', 'muziek', 'ontvangtcontactueel', 'kerk',
+		'lidafdatum', 'echtgenoot', 'adresseringechtpaar', 'land', 'permissies', 'machtiging');
 
 	//deze velden kunnen we niet selecteren voor de ledenlijst, ze zijn wel te
 	//filteren en te sorteren.
@@ -26,6 +32,7 @@ class LidZoeker{
 		'studienr' => 'StudieNr.',
 		'jid' => 'Jabber',
 		'ontvangtcontactueel' => 'Contactueel?',
+		'machtiging' => 'Machtiging getekend?',
 		'adresseringechtpaar' => 'Post echtpaar t.n.v.');
 
 	//toegestane opties voor het statusfilter.
@@ -53,9 +60,7 @@ class LidZoeker{
 
 		//wat extra velden voor moderators.
 		if(Loginlid::instance()->hasPermission('P_LEDEN_MOD')){
-			$this->allowVelden=array_merge(
-				$this->allowVelden,
-				array('studienr', 'bankrekening', 'muziek', 'ontvangtcontactueel', 'kerk', 'lidafdatum','echtgenoot', 'adresseringechtpaar', 'land', 'permissies'));
+			$this->allowVelden=array_merge($this->allowVelden, $this->allowVeldenLEDENMOD);
 		}
 
 		//parse default values.

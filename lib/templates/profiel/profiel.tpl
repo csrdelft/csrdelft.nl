@@ -169,7 +169,13 @@
 		<div class="profielregel">
 			<div class="left">Financi&euml;el</div>
 			<div class="gegevens">
-				{if $profhtml.bankrekening!=''}<div class="label">Bankrekening:</div> {$profhtml.bankrekening}<br />{/if}
+				{if $profhtml.bankrekening!=''}
+					<div class="label">Bankrekening:</div> {$profhtml.bankrekening}
+					{if $loginlid->hasPermission('P_MAAL_MOD')}
+						<span style="color: gray;">({if $profhtml.machtiging=='nee'}geen {/if}machtiging getekend)</span>
+					{/if}
+					<br />
+				{/if}
 
 				{if $saldografiek!=''}
 					{include file='profiel/_saldografiek.tpl'}

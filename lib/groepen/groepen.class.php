@@ -35,7 +35,7 @@ class Groepen{
 		}else{
 			$where="groeptype.naam='".$db->escape($groeptype)."'";
 		}
-	
+
 		//we laden eerst de gegevens over de groep op
 		$query="
 			SELECT id, naam, beschrijving, toonHistorie, groepenAanmaakbaar FROM groeptype
@@ -44,7 +44,11 @@ class Groepen{
 		if(is_array($categorie)){
 			$this->type=$categorie;
 		}else{
-			throw new Exception('Groeptype ('.$groeptype.') bestaat niet! Groepen::__construct()');
+			$message='Groeptype ('.$groeptype.') bestaat niet! Groepen::__construct()';
+			if(LoginLid::instance()->hasPermission('P_ADMIN')){
+				$message.="\n".mysql_error();
+			}
+			throw new Exception($message);
 		}
 	}
 
@@ -128,7 +132,7 @@ class Groepen{
 	public function getNaam(){ 			return $this->type['naam']; }
 	public function getBeschrijving(){	return $this->type['beschrijving']; }
 	public function getToonHistorie(){	return $this->type['toonHistorie']==1; }
-	
+
 	public function isGroepAanmaker(){
 		return LoginLid::instance()->hasPermission($this->type['groepenAanmaakbaar']);
 	}
@@ -195,7 +199,7 @@ class Groepen{
 		return $error=='';
 	}
 
-	
+
 	/*
 	 * Haal de huidige groepen van een bebaald type voor een bepaald lid.
 	 */
@@ -229,7 +233,7 @@ class Groepen{
 		}
 		return $groepen;
 	}
-	
+
 	/*
 	 * Statische functie om een verzameling van groeptypes terug te geven
 	 *

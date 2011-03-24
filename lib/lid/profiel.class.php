@@ -192,7 +192,9 @@ class Profiel{
 		$form[]=new InputField('skype', $profiel['skype'], 'Skype', 20); //TODO specifiek ding voor maken
 		$form[]=new UrlField('website', $profiel['website'], 'Website');
 		$form[]=new InputField('bankrekening', $profiel['bankrekening'], 'Bankrekening', 11); //TODO specifiek ding voor maken
-
+		if($hasLedenMod){
+			$form[]=new SelectField('machtiging', $profiel['machtiging'], 'Machtiging getekend?', array('ja'=> 'Ja', 'nee' => 'Nee'));
+		}
 
 		if(in_array($profiel['status'], array('S_OUDLID', 'S_NOBODY')) OR $this->lid->getUid()=='6601'){ //vd Wekken mag wel eerder begonnen zijn.
 			$beginjaar=1950;
