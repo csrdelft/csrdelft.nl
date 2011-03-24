@@ -1,6 +1,6 @@
 <form action="/actueel/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/bewerken" method="post">
 <div id="groepFormulier" class="clear">
-	{if $groep->isAdmin() OR $groep->isMaker()}
+	{if $groep->isAdmin() OR $groep->isEigenaar()}
 		{if $groep->getId()==0}
 			<h2>Nieuwe groep toevoegen in context {$groep->getType()->getNaam()}</h2>
 			
@@ -16,10 +16,10 @@
 		<input type="text" id="groepNaam" maxlength="50" name="naam" style="width: 70%" value="{$groep->getNaam()|escape:'html'}" /><br />
 	
 		{if $groep->isAdmin()}
-			<label for="makerUid" class="clear"><strong>Maker van de groep:</strong></label>
-			<input type="text" id="makerUid" maxlength="4" name="makeruid" style="width: 5%" value="{$groep->getMakerUid()|escape:'html'}" /><br />
+			<label for="eigenaar" class="clear"><strong>Groepseigenaar:</strong></label>
+			<input type="text" id="eigenaar" maxlength="255" name="eigenaar" style="width: 20%" value="{$groep->getEigenaar()|escape:'html'}" /><br />
 		{else}	
-			<input type="hidden" id="makerUid" maxlength="4" name="makeruid" value="{$groep->getMakerUid()|escape:'html'}" />
+			<input type="hidden" id="eigenaar" maxlength="255" name="eigenaar" value="{$groep->getEigenaar()|escape:'html'}" />
 		{/if}
 		<label for="groepStatus"><strong>Status:</strong></label>
 		<select name="status" id="groepStatus" onchange="updateGroepform();">

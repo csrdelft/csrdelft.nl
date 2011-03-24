@@ -101,20 +101,21 @@
 				<li class="volgendeGroep"><a href="/actueel/groepen/{$groep->getType()->getNaam()}/{$opvolgerVoorganger.voorganger->getId()}/">{$opvolgerVoorganger.voorganger->getNaam()}</a></li>
 			{/if}
 		{/if}
-		{if $groep->isAdmin() OR $groep->isMaker()}
+		{if $groep->isAdmin() OR $groep->isEigenaar()}
 			<li style="margin-top: 20px;">
 				<a href="/actueel/groepen/{$groep->getType()->getNaam()}/0/bewerken/{$groep->getId()}">Opvolger toevoegen</a>
 			</li>
 		{/if}
 		</ul>
 	</div>
-	{if $groep->isAdmin() OR $groep->magBewerken()}
+	{if $groep->isEigenaar()}wel{/if}magbewerken.{if $groep->isAdmin() OR $groep->magBewerken()}
 		<div id="groepAdmin">
-			{if ($groep->isAdmin() OR $groep->isMaker()) AND $groep->getStatus()=='ht'}
+			{if ($groep->isAdmin() OR $groep->isEigenaar()) AND $groep->getStatus()=='ht'}
 				<a class="knop" href="/actueel/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/maakGroepOt" onclick="return confirm('Weet u zeker dat u deze groep o.t. wilt maken?')" title="Groep o.t. maken? Eindatum wordt indien niet ingevuld naar vandaag gezet.">
 					<strong>&raquo;</strong>
 				</a>
 			{/if}
+			
 			{if $groep->magBewerken()}
 				<a class="knop" href="/actueel/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/bewerken#groepFormulier">
 					<img src="{$csr_pics}knopjes/bewerken.png" title="Bewerk groep" />

@@ -80,7 +80,7 @@ class Groepcontroller extends Controller{
 	 */
 	public function groepValidator(){
 		//Velden beschikbaar voor groepadmins en voor leden die hun groep mogen aanpassen/maken
-		if($this->groep->isAdmin() OR $this->groep->isMaker()){
+		if($this->groep->isAdmin() OR $this->groep->isEigenaar()){
 			//snaam is alleen relevant bij het maken van een nieuwe groep
 			if($this->groep->getId()==0 AND !isset($_POST['snaam'])){
 				$this->addError("Korte naam is verplicht bij een nieuwe groep.");
@@ -120,13 +120,14 @@ class Groepcontroller extends Controller{
 				if(!in_array($_POST['toonFuncties'], array('tonen', 'verbergen', 'niet'))){
 					$this->addError("ToonFuncties mag deze waarden niet hebben.");
 				}
-				if(isset($_POST['makeruid'])){
-					if($_POST['makeruid']!=''){
-						if(!Lid::isValidUid($_POST['makeruid'])){
-							$this->addError("Geen geldig uid voor groepmaker opgegeven.");
-						}else{
-							if(!Lid::exists($_POST['makeruid'])){
-								$this->addError("Niet bestaande uid voor groepmaker opgegeven.");
+				if(isset($_POST['eigenaar'])){
+					if($_POST['eigenaar']!=''){
+						if(strlen(trim($_POST['eigenaar']))>255){
+							$this->addError("Eigenaar mag maximaal 255 tekens zijn.");
+						}
+						if(Lid::isValidUid($_POST['eigenaar'])){
+							if(!Lid::exists($_POST['eigenaar'])){
+								$this->addError("Niet bestaande uid voor eigenaar opgegeven.");
 							}
 						}
 					}
@@ -191,6 +192,9 @@ class Groepcontroller extends Controller{
 				$this->groep->setValue('toonPasfotos', $oudeGroep->getToonPasfotos());
 				$this->groep->setValue('lidIsMod', $oudeGroep->getLidIsMod());
 				$this->groep->setFunctiefilter($oudeGroep->getFunctiefilter());
+				if(!Lid::isValidUid($oudeGroep->getEigenaar())){
+					 $this->groep->setValue('eigenaar', $oudeGroep->getEigenaar());
+				}
 			}
 		}
 		
@@ -202,8 +206,8 @@ class Groepcontroller extends Controller{
 					$this->groep->setValue('snaam', $_POST['snaam']);
 				}
 
-				//velden alleen voor admins of makers van groep
-				if($this->groep->isAdmin() OR $this->groep->isMaker()){
+				//velden alleen voor admins of eigenaars van groep
+				if($this->groep->isAdmin() OR $this->groep->isEigenaar()){
 					$this->groep->setValue('naam', $_POST['naam']);
 					$this->groep->setValue('sbeschrijving', $_POST['sbeschrijving']);
 					$this->groep->setValue('begin', $_POST['begin']);
@@ -236,7 +240,7 @@ class Groepcontroller extends Controller{
 					}else{
 						$this->groep->setValue('lidIsMod', 0);
 					}
-					$this->groep->setValue('makeruid', $_POST['makeruid']);
+					$this->groep->setValue('eigenaar', $_POST['eigenaar']);
 						
 				}
 				$this->groep->setValue('beschrijving', $_POST['beschrijving']);
@@ -253,7 +257,7 @@ class Groepcontroller extends Controller{
 								
 				$fields=array('snaam', 'naam', 'sbeschrijving', 'beschrijving', 'zichtbaar', 'status', 
 					'begin', 'einde', 'aanmeldbaar', 'limiet', 'toonFuncties', 'toonPasfotos',
-					'lidIsMod', 'makeruid');
+					'lidIsMod', 'eigenaar');
 
 				foreach($fields as $field){
 					if(isset($_POST[$field])){
@@ -375,7 +379,7 @@ class Groepcontroller extends Controller{
 	 * De groep o.t. maken.
 	 */
 	public function action_maakGroepOt(){
-		if($this->groep->isAdmin() OR $this->groep->isMaker()){
+		if($this->groep->isAdmin() OR $this->groep->isEigenaar()){
 			if($this->groep->getStatus()=='ht'){
 				if($this->groep->maakOt()){
 					$melding='Groep o.t. maken gelukt.';
@@ -415,7 +419,7 @@ class Groepcontroller extends Controller{
 		exit;
 	}
 	public function action_stats(){
-		if($this->groep->isAdmin() OR $this->groep->isOp() OR $this->groep->isMaker() OR ($this->groep->isAanmeldbaar() AND $this->groep->isIngelogged())){
+		if($this->groep->isAdmin() OR $this->groep->isOp() OR $this->groep->isEigenaar() OR ($this->groep->isAanmeldbaar() AND $this->groep->isIngelogged())){
 			$this->content=new GroepStatsContent($this->groep);
 			$this->content->view();
 		}
