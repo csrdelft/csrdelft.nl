@@ -120,8 +120,10 @@ class Groepcontroller extends Controller{
 				if(!in_array($_POST['toonFuncties'], array('tonen', 'verbergen', 'niet'))){
 					$this->addError("ToonFuncties mag deze waarden niet hebben.");
 				}
-				if(strlen(trim($_POST['makeruid']))!=4){
+				if($_POST['makeruid']!=''){
+					if(strlen(trim($_POST['makeruid']))!=4){
 						$this->addError("lidnummer van groepmaker moet 4 tekens zijn.");
+					}
 				}
 				if(!preg_match('/(h|f|o)t/', $_POST['status'])){
 					$this->addError("De status is niet geldig.");
@@ -177,6 +179,12 @@ class Groepcontroller extends Controller{
 				$this->groep->setValue('snaam', $oudeGroep->getSnaam());
 				$this->groep->setValue('naam', $oudeGroep->getNaam());
 				$this->groep->setValue('sbeschrijving', $oudeGroep->getSbeschrijving());
+				$this->groep->setValue('aanmeldbaar', $oudeGroep->getAanmeldbaar());
+				$this->groep->setValue('limiet', $oudeGroep->getLimiet());
+				$this->groep->setValue('toonFuncties', $oudeGroep->getToonFuncties());
+				$this->groep->setValue('toonPasfotos', $oudeGroep->getToonPasfotos());
+				$this->groep->setValue('lidIsMod', $oudeGroep->getLidIsMod());
+				$this->groep->setFunctiefilter($oudeGroep->getFunctiefilter());
 			}
 		}
 		
