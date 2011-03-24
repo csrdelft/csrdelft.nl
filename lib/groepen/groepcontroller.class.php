@@ -120,9 +120,15 @@ class Groepcontroller extends Controller{
 				if(!in_array($_POST['toonFuncties'], array('tonen', 'verbergen', 'niet'))){
 					$this->addError("ToonFuncties mag deze waarden niet hebben.");
 				}
-				if($_POST['makeruid']!=''){
-					if(strlen(trim($_POST['makeruid']))!=4){
-						$this->addError("lidnummer van groepmaker moet 4 tekens zijn.");
+				if(isset($_POST['makeruid'])){
+					if($_POST['makeruid']!=''){
+						if(!Lid::isValidUid($_POST['makeruid'])){
+							$this->addError("Geen geldig uid voor groepmaker opgegeven.");
+						}else{
+							if(!Lid::exists($_POST['makeruid'])){
+								$this->addError("Niet bestaande uid voor groepmaker opgegeven.");
+							}
+						}
 					}
 				}
 				if(!preg_match('/(h|f|o)t/', $_POST['status'])){
