@@ -213,16 +213,17 @@ class Groep{
 	 * Geef een bool terug of de functies getoond worden of niet.
 	 * Elke groep heeft een veld wat drie waarden kan hebben:
 	 *
-	 * tonen		Iedereen ziet de functies
-	 * verbergen	Alleen admins en groepOps mogen de functies zien.
-	 * niet			Functies worden in het geheel verborgen.
+	 * tonen				Iedereen ziet de functies
+	 * tonenzonderinvoer	Iedereen ziet de functies, maar leden mogen niet ze invoeren bij aanmelden
+	 * verbergen			Alleen admins en groepOps mogen de functies zien.
+	 * niet					Functies worden in het geheel verborgen.
 	 */
 	public function toonFuncties(){
 		if($this->getToonFuncties()!='niet'){
 			if($this->magBewerken()){
 				return true;
 			}
-			return $this->groep['toonFuncties']=='tonen';
+			return $this->groep['toonFuncties']=='tonen' OR $this->groep['toonFuncties']=='tonenzonderinvoer';
 		}
 		return false;
 	}

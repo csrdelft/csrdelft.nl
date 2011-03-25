@@ -13,21 +13,30 @@ function updateGroepform(){
 			//eventueel een opmerking weergeven bij de gekozen optie in de select.
 			switch(document.getElementById('toonFuncties').selectedIndex){
 				case 1:
-					displayDiv(document.getElementById('functieOpmVerbergen'));
+					displayDiv(document.getElementById('functieOpmTonenzonderinvoer'));
+					hideDiv(document.getElementById('functieOpmVerbergen'));
 					hideDiv(document.getElementById('functieOpmNiet'));
 				break;
 				case 2:
+					displayDiv(document.getElementById('functieOpmVerbergen'));
+					hideDiv(document.getElementById('functieOpmNiet'));
+					hideDiv(document.getElementById('functieOpmTonenzonderinvoer'));
+				break;
+				case 3:
 					displayDiv(document.getElementById('functieOpmNiet'));
 					hideDiv(document.getElementById('functieOpmVerbergen'));
+					hideDiv(document.getElementById('functieOpmTonenzonderinvoer'));				
 				break;
 				default:
 					hideDiv(document.getElementById('functieOpmVerbergen'));
 					hideDiv(document.getElementById('functieOpmNiet'));
+					hideDiv(document.getElementById('functieOpmTonenzonderinvoer'));
 			}
 		}else{
 			hideDiv(gLimietDiv);
 			hideDiv(document.getElementById('functieOpmVerbergen'));
 			hideDiv(document.getElementById('functieOpmNiet'));
+			hideDiv(document.getElementById('functieOpmTonenzonderinvoer'));
 		}
 	}else{
 		hideDiv(gAanmeldDiv);

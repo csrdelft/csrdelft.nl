@@ -50,8 +50,10 @@
 		<label for="toonFuncties"><strong>Toon functies?</strong></label>
 		<div id="functieOpmVerbergen" class="opmerking verborgen">Functies zijn verborgen voor leden, ze kunnen wel opgegeven worden.</div>
 			<div id="functieOpmNiet" class="opmerking verborgen">Er kunnen nu geen functies worden opgegeven.</div>
+			<div id="functieOpmTonenzonderinvoer" class="opmerking verborgen">Functies altijd zichtbaar, maar ze kunnen niet opgegeven worden.</div>
 		<select name="toonFuncties" id="toonFuncties" onchange="updateGroepform();">
 			<option value="tonen" {if $groep->getToonFuncties()=="tonen"}selected="selected"{/if}>Altijd</option>
+			<option value="tonenzonderinvoer" {if $groep->getToonFuncties()=="tonenzonderinvoer"}selected="selected"{/if}>Altijd. Maar geen invoer.</option>
 			<option value="verbergen" {if $groep->getToonFuncties()=="verbergen"}selected="selected"{/if}>Alleen voor groepadmins</option>
 			<option value="niet" {if $groep->getToonFuncties()=="niet"}selected="selected"{/if}>Nooit</option>
 		</select><br />

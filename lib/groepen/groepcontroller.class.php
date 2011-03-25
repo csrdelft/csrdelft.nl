@@ -117,7 +117,7 @@ class Groepcontroller extends Controller{
 				if(!preg_match('/\d{4}-\d{2}-\d{2}/', trim($_POST['einde']))){
 					$this->addError("De begindatum is niet geldig. Gebruik JJJJ-mm-dd.");
 				}
-				if(!in_array($_POST['toonFuncties'], array('tonen', 'verbergen', 'niet'))){
+				if(!in_array($_POST['toonFuncties'], array('tonen', 'verbergen', 'niet','tonenzonderinvoer'))){
 					$this->addError("ToonFuncties mag deze waarden niet hebben.");
 				}
 				if(isset($_POST['eigenaar'])){
