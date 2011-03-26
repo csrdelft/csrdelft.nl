@@ -238,8 +238,8 @@ class Lid implements Serializable, Agendeerbaar{
 	//einde implements Agendeerbaar
 
 	//Verticale: respectievelijk naam, letter en id. Bijvooreeld voor 'Diagonaal', 'D', 4
-	public function getVerticale(){			return Verticale::$namen[$this->getVerticaleID()]; }
-	public function getVerticaleLetter(){	return Verticale::$letters[$this->getVerticaleID()]; }
+	public function getVerticale(){			return Verticale::getNaamById($this->getVerticaleID()); }
+	public function getVerticaleLetter(){	return Verticale::getLetterById($this->getVerticaleID()); }
 	public function getVerticaleID(){ 		return $this->profiel['verticale']; }
 
 	public function isKringleider(){ 		return $this->profiel['kringleider']!='n'; }

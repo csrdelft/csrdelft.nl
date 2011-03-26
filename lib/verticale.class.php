@@ -1,9 +1,6 @@
 <?php
 
 class Verticale{
-	public static $namen=array('Geen', 'Archibald', 'Faculteit', 'Billy', 'Diagonaal', 'Vrøgd', 'Lekker', 'Securis', 'Primitus');
-	public static $letters=array('Geen', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H');
-	
 	public $nummer;
 	public $naam;
 	public $kringen=array();
@@ -11,14 +8,14 @@ class Verticale{
 	
 	public function __construct($nummer, $kringen=array()){
 		if(preg_match('/^[A-Z]{1}$/', $nummer)){
-			$nummer=array_search($nummer, Verticale::$letters);
+			$nummer=array_search($nummer, Verticale::getLetters());
 		}
 
-		if(!array_key_exists($nummer, Verticale::$namen)){
+		if(!array_key_exists($nummer, Verticale::getNamen())){
 			throw new Exception('Verticale bestaat niet');
 		}
 		$this->nummer=$nummer;
-		$this->naam=Verticale::$namen[$nummer];
+		$this->naam=Verticale::getNaamById($nummer);
 
 	}
 	public function loadKringen(){
@@ -39,7 +36,7 @@ class Verticale{
 		return $this->naam;
 	}
 	public function getLetter(){
-		return self::$letters[$this->nummer];
+		return self::getLetterById($this->nummer);
 	}
 	
 	public function getKringen(){
@@ -63,7 +60,38 @@ class Verticale{
 			$this->kringen[$kring][]=LidCache::getLid($uid);
 		}
 	}
-
+	public static function getNaamById($nummer){
+		$namen=self::getNamen();
+		return $namen[$nummer];
+	}
+	public static function getLetterById($nummer){
+		$letters=self::getLetters();
+		return $letters[$nummer];
+	}
+		
+	public static function getNamen(){
+		$db=MySql::instance();
+		$query="
+			SELECT naam
+			FROM verticale";
+		$result=$db->query($query);
+		while($row=$db->next($result)){
+			$namen[]=$row['naam'];
+		}
+		return $namen;
+	}
+	public static function getLetters(){
+		$db=MySql::instance();
+		$letters=array();
+		$query="
+			SELECT letter
+			FROM verticale";
+		$result=$db->query($query);
+		while($row=$db->next($result)){
+			$letters[]=$row['letter'];
+		}	
+		return $letters;
+	}
 		
 	public static function getAll(){
 		$db=MySql::instance();

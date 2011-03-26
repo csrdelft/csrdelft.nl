@@ -139,7 +139,7 @@ class Streeplijstcontent {
 			echo '<input type="radio" name="moot" id="m'.$moot.'" value="'.$moot.'" ';
 			if($moot==$this->moot){ echo 'checked="checked" '; }
 			echo '/> <label for="m'.$moot.'">';
-			if($moot=='alle'){ echo $moot; }else{ echo Verticale::$namen[$moot]; }
+			if($moot=='alle'){ echo $moot; }else{ echo Verticale::getNaamById($moot); }
 			echo '</label>';
 		}
 		echo '<br />';

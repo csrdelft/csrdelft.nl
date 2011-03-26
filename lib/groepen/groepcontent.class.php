@@ -106,10 +106,10 @@ class Groepcontent extends SimpleHTML{
 			'geslacht:v' => 'Alleen vrouwen');
 		
 		//verticalen.
-		foreach(Verticale::$letters as $key => $verticale){
+		foreach(Verticale::getLetters() as $key => $verticale){
 			if($verticale=='Geen'){ continue; }
 			$filter='verticale:'.$verticale;
-			$filters[$filter] = 'Verticale '.Verticale::$namen[$key];
+			$filters[$filter] = 'Verticale '.Verticale::getNaamById($key);
 		}
 		
 		//lichtingen

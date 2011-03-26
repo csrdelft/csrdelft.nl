@@ -154,11 +154,10 @@ class LidZoeker{
 			$query="moot=".(int)substr($zoekterm, 5).' ';
 		}elseif(preg_match('/^verticale:\w*$/', $zoekterm)){ //verticale, id, letter
 			$verticale=substr($zoekterm, 10);
-			//id opzoeken als het een letter of naam betreft.
-			if(in_array($verticale, Verticale::$namen)){
-				$verticale=array_search($verticale, Verticale::$namen);
-			}elseif(in_array($verticale, Verticale::$letters)){
-				$verticale=array_search($verticale, Verticale::$letters);
+			if(in_array($verticale, Verticale::getNamen())){
+				$verticale=array_search($verticale, Verticale::getNamen());
+			}elseif(in_array($verticale, Verticale::getLetters())){
+				$verticale=array_search($verticale, Verticale::getLetters());
 			}
 			$query="verticale=".(int)$verticale.' ';
 		}elseif(preg_match('/^\d{2}$/', $zoekterm)){ //lichting bij een string van 2 cijfers

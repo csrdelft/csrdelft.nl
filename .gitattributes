@@ -924,6 +924,7 @@ sql/2078_echtpaar.sql -text
 sql/2184_lidMaaktGroep.sql -text
 sql/2194_eigenaarGroep.sql -text
 sql/2197_functiestonen.sql -text
+sql/2199_verticale.sql -text
 sql/21xx_forum_gelezen.sql -text
 sql/21xx_machtiging.sql -text
 sql/csrdelft.sql -text

@@ -244,6 +244,12 @@ class LoginLid{
 				if($verticale==$this->lid->getVerticaleLetter()){
 					return true;
 				}
+				if($verticale==strtoupper($this->lid->getVerticale())){
+					return true;
+				}
+				if($verticale==$this->lid->getVerticaleID()){
+					return true;
+				}
 			//Behoort een lid tot een bepaalde (h.t.) groep?
 			//als een string als bijvoorbeeld 'pubcie' wordt meegegeven zoekt de ketzer
 			//de h.t. groep met die korte naam erbij, als het getal is uiteraard de groep
@@ -450,10 +456,16 @@ class LoginLid{
 				if($groep->getId()!=0){
 					$return[]=$groep->getLink();
 				}
-			}elseif(substr($permissie, 0, 9)=='verticale'){
-				$verticale=strtoupper(substr($permissie, 10));
-				if(isset(Verticale::$namen[$verticale])){
-					$return[]=Verticale::$namen[$verticale];
+			}elseif(substr($part, 0, 9)=='verticale'){
+				$verticale=substr($part, 10);
+				$namen=Verticale::getNamen();
+				$letters=Verticale::getLetters();
+				if(isset($namen[$verticale])){
+					$return[]='Verticale '.$namen[$verticale];
+				}elseif(in_array(strtoupper($verticale), $letters)){
+					$return[]='Verticale '.$namen[array_search($verticale, $letters)];
+				}elseif(in_array($verticale, $namen)){
+					$return[]='Verticale '.$namen[array_search($verticale, $namen)];
 				}else{
 					$return[]='Onbekende verticale';
 				}
@@ -472,6 +484,8 @@ class LoginLid{
 					default;
 						$return[]='onbekend geslacht';
 				}
+			}elseif(substr($part, 0, 7)=='P_ADMIN'){
+				$return[]='Admin';
 			}
 		}
 		return implode(', ', $return);
