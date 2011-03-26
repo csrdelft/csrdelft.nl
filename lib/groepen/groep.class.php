@@ -589,14 +589,9 @@ class Groep{
 	public function getStats($force=false){
 		if($force OR $this->stats===null){
 			$db=MySql::instance();
-			$verticalenummer2naam = "verticale";
-			foreach(Verticale::getNamen() as $key => $verticale){
-				if($verticale=='Geen'){ continue; }
-				$verticalenummer2naam="REPLACE(".$verticalenummer2naam.", '".$key."', '".$verticale."')";
-			}
 			$statqueries=array(
 				'totaal' => "SELECT 'Totaal' as totaal, count(*) AS aantal FROM groeplid WHERE groepid=".$this->getId().";",
-				'verticale' => "SELECT CONCAT('Verticale ', ".$verticalenummer2naam.") AS verticale, count(*) as aantal FROM lid WHERE uid IN(".$this->getLedenCSV(true).") GROUP BY verticale;",
+				'verticale' => "SELECT CONCAT('Verticale ', verticale.naam) AS verticale, count(*) as aantal FROM lid LEFT JOIN verticale ON(lid.verticale=verticale.id) WHERE uid IN(".$this->getLedenCSV(true).") GROUP BY verticale;",
 				'geslacht' => "SELECT REPLACE(REPLACE(geslacht, 'm', 'Man'), 'v', 'Vrouw') AS geslacht, count(*) as aantal FROM lid WHERE uid IN( ".$this->getLedenCSV(true).") group by geslacht;",
 				'lidjaar' => "SELECT lidjaar, count(*) as aantal FROM lid WHERE uid IN( ".$this->getLedenCSV(true).") group by lidjaar;"
 			);
