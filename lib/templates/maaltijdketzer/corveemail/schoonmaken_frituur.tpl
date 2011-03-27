@@ -2,7 +2,9 @@ Beste {$lidnaam},
 
 Je hebt de eervolle taak om op {$datum} zorg te dragen voor het schoonmaken der vetput.
 Mede stuur ik je de instructie voor het schoonmaken.
-De taak hoeft niet persee vrijdagmiddag gedaan te worden maar zorg dat het voor de daaropvolgende donderdagmiddag gedaan is.
+De taak hoeft niet per se vrijdagmiddag gedaan te worden maar zorg dat het voor de daaropvolgende donderdagmiddag gedaan is.
+
+Instructies frituur schoonmaken:https://docs.google.com/document/d/1eybt2L4YsliHKUPg6gkpZN5fJVAZdYw1QTyUkSqI1RY/edit?hl=en&authkey=CIHgx7AO#
 
 Let vooral op de volgende punten:
  - Trek oude kleren aan

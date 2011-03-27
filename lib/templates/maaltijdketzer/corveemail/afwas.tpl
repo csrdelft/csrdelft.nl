@@ -5,6 +5,8 @@ Dit gebeurt uiteraard met behulp van onze prachtig nieuwe vaatwasser.
 De kwali-afwasser is eindverantwoordelijke en zal met behulp van jullie allen er voor zorgen dat alle taken die op de afwas-instructie uitgevoerd zijn.
 Ik stuur je dan ook mede de instructie voor het afwassen, lees deze goed door, hij is namelijk vernieuwd in verband met de nieuwe keuken.
 
+Instructies afwas: https://docs.google.com/document/d/1swbyjJcGqKBN-r2Wvjd7BToroMkbNYbNUpEitgZ-Eb8/edit?hl=en&authkey=CMG8u8sG#
+
 Let vooral op de volgend punten:
  - de braadslede is in z'n geheel ingevet
  - de afwasmachine is na gebruik compleet gereinigd, alle roosters ( 3 stuks) geleegd. Naderhand open laten staan.

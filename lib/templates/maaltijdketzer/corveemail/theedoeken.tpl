@@ -3,6 +3,8 @@ Beste {$lidnaam},
 U bent bevoorrecht om op {$datum} de theedoeken van Confide te wassen.
 Mede stuur ik u de instructie daarvoor.
 
+Instructies theedoeken: https://docs.google.com/document/d/1WNvuYP75wIE0ZwOzjixaV-uz74ngk47C3lZsz_puoVI/edit?hl=en&authkey=CLyTnNYG#
+
 Let vooral op de volgende punten:
 - zorg dat je alle SCHORTEN en theedoeken heb meegenomen.
 - zorg dat ze voor maandagmiddag 3 UUR schoon terug zijn.

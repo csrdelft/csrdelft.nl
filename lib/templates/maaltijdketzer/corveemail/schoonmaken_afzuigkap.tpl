@@ -4,6 +4,8 @@ U hebt de eervolle taak om op {$datum} de afzuigkappen van de nieuwe keuken van 
 Dit is een stuk gemakkelijker geworden doordat u gebruik kunt maken van de hypermoderne vaatwasser.
 Mede stuur ik u de instructies voor het schoonmaken van de afzuigkappen.
 
+Instructies schoonmaken: https://docs.google.com/document/d/1rv1-zhQwl3GluIUxvRV-QqDFYZ-v84DD6fSKb1wlLkk/edit?hl=en&authkey=CJTr7o4M#
+
 Let vooral op de volgende dingen:
  - De behuizing van de afzuigkappen moeten ook schoon worden gemaakt.
  - De vaatwasser moet nadien ook schoon zijn.(filters leeg enz.)
