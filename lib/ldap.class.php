@@ -164,7 +164,7 @@ class LDAP {
 		return ldap_add($this->_conn, $dn, $entry);
 	}
 
-	# Wijzig de informatie van een lid
+	# Wijzig de informatie van een groep
 	# N.B. $entry is een array die al in het juiste formaat moet zijn opgemaakt
 	# http://nl2.php.net/manual/en/function.ldap-add.php
 	function modifyGroep($cn, $entry) {

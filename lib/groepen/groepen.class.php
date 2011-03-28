@@ -38,7 +38,7 @@ class Groepen{
 
 		//we laden eerst de gegevens over de groep op
 		$query="
-			SELECT id, naam, beschrijving, toonHistorie, groepenAanmaakbaar FROM groeptype
+			SELECT id, naam, beschrijving, toonHistorie, groepenAanmaakbaar, syncWithLDAP FROM groeptype
 			WHERE ".$where." LIMIT 1;";
 		$categorie=$db->getRow($query);
 		if(is_array($categorie)){
@@ -132,6 +132,7 @@ class Groepen{
 	public function getNaam(){ 			return $this->type['naam']; }
 	public function getBeschrijving(){	return $this->type['beschrijving']; }
 	public function getToonHistorie(){	return $this->type['toonHistorie']==1; }
+	public function getSyncWithLDAP(){	return $this->type['syncWithLDAP']==1; }
 
 	public function isGroepAanmaker(){
 		return LoginLid::instance()->hasPermission($this->type['groepenAanmaakbaar']);

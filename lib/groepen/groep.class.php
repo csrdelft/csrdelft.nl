@@ -668,9 +668,8 @@ class Groep{
 		require_once 'ldap.class.php';
 
 		$ldap=new LDAP();
-
-		# Alleen ft, ht en 1 generatie ot groepen staan in LDAP 
-		if($this->getStatus()=='ft' OR $this->getStatus()=='ht' OR $this->isNieuwsteOtGroep()){
+		# Alleen ft, ht en 1 generatie ot groepen staan in LDAP van de groeptypes die mogen
+		if( $this->getType()->getSyncWithLDAP() AND ($this->getStatus()=='ft' OR $this->getStatus()=='ht' OR $this->isNieuwsteOtGroep())){
 			# ldap entry in elkaar snokken
 			$entry = array();
 			$entry['cn'] = $this->getId();
@@ -679,11 +678,7 @@ class Groep{
 					$entry['member'][] = 'uid='.$lid['uid'].',ou=leden,dc=csrdelft,dc=nl';
 				}
 			}
-
-			# lege velden er uit gooien
-			foreach($entry as $i => $e){
-				if($e == ''){ unset ($entry[$i]); }
-			}
+			
 			# bestaat dit groepid al in ldap? dan wijzigen, anders aanmaken
 			if($ldap->isGroep($entry['cn'])){
 				$ldap->modifyGroep($entry['cn'], $entry);
