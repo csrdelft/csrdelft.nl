@@ -121,9 +121,18 @@ function isGeldigeDatum($datum){
 	// De strings casten naar ints en de datum laten checken.
 	return checkdate((int)$maand, (int)$dag, (int)$jaar);
 }
+
+/*
+ * print_r een variabele met <pre>-tags eromheen als:
+ *  - het ip van de gebruiker een admin-ip is
+ * of
+ *  - de gebruiker het recht P_ADMIN heeft.
+ */
 function pr($sString, $cssID='pubcie_debug'){
-	$admin=array('145.94.61.229', '145.94.59.158', '192.168.16.101', '127.0.0.1');
-	if(in_array($_SERVER['REMOTE_ADDR'], $admin)){
+	$adminIPs=array('145.94.61.229', '145.94.59.158', '192.168.16.101', '127.0.0.1');
+	$isFromAdminIP=isset($_SERVER['REMOTE_ADDR']) AND in_array($_SERVER['REMOTE_ADDR'], $admin);
+
+	if($isFromAdminIP OR LoginLid::instance()->hasPermission('P_ADMIN')){
 		echo '<pre id="'.$cssID.'">'.print_r($sString, true).'</pre>';
 	}
 }
