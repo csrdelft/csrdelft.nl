@@ -247,6 +247,9 @@ class Groepcontroller extends Controller{
 
 				if($this->groep->save()){
 					$melding='Opslaan van groep gelukt!';
+					if(!$this->groep->save_ldap()){
+						$melding.=' Maar het opslaan in LDAP mislukt.';
+					}
 				}else{
 					$melding='Opslaan van groep mislukt. (returned from Groep::save() called by Groepcontroller::action_bewerken())';
 				}
