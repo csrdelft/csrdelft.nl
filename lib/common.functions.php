@@ -130,7 +130,7 @@ function isGeldigeDatum($datum){
  */
 function pr($sString, $cssID='pubcie_debug'){
 	$adminIPs=array('145.94.61.229', '145.94.59.158', '192.168.16.101', '127.0.0.1');
-	$isFromAdminIP=isset($_SERVER['REMOTE_ADDR']) AND in_array($_SERVER['REMOTE_ADDR'], $admin);
+	$isFromAdminIP=isset($_SERVER['REMOTE_ADDR']) AND in_array($_SERVER['REMOTE_ADDR'], $adminIPs);
 
 	if($isFromAdminIP OR LoginLid::instance()->hasPermission('P_ADMIN')){
 		echo '<pre id="'.$cssID.'">'.print_r($sString, true).'</pre>';
