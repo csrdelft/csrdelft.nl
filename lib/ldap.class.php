@@ -16,7 +16,8 @@ class LDAP {
 	var $_conn = false;
 	
 	var $_base_leden;
-
+	var $_base_groepen;
+	
    	function LDAP($dobind = true) {
    		# bepaal of we alleen verbinding maken, of ook meteen inloggen.
    		# standaard is dit gewenst, in het geval dat deze klasse gebruikt
@@ -42,6 +43,8 @@ class LDAP {
 		# Onthouden van wat instellingen
 		$this->_conn = $conn;
 		$this->_base_leden = $ldapini['ldap_base_leden'];
+		$this->_base_groepen = $ldapini['ldap_base_groepen'];
+
 		return true;
 	}
 
@@ -121,6 +124,58 @@ class LDAP {
 	function removeLid($uid) {
 		$base = $this->_base_leden;
 		$dn = 'uid=' . $this->ldap_escape_dn($uid) . ', '. $base;
+		return ldap_delete($this->_conn, $dn);
+	}
+
+	#### Groepen ####
+
+	# controleert of een groep met de betreffende 'cn' voorkomt
+	function isGroep($cn) {
+		$base = $this->_base_groepen;
+		$filter = sprintf("(cn=%s)", $this->ldap_escape_filter($cn));
+		$result = ldap_search($this->_conn, $base, $filter);
+		$num = ldap_count_entries($this->_conn, $result);
+		if ($num == 0 or $num === false) return false;
+		return true;
+	}
+
+	# een, of alle records opvragen
+	function getGroep($cn = '') {
+		$base = $this->_base_groepen;
+		if ($cn == '') $filter = "(cn=*)" ;
+		else $filter = sprintf("(cn=%s)", $this->ldap_escape_filter($cn));
+		$result = ldap_search($this->_conn, $base, $filter);
+		$groepen = ldap_get_entries($this->_conn, $result);
+		return $groepen;
+	}
+
+	# Voeg een nieuw record toe
+	# N.B. $entry is een array die al in het juiste formaat moet zijn opgemaakt
+	# http://nl2.php.net/manual/en/function.ldap-add.php
+	function addGroep($cn, $entry) {
+		$base = $this->_base_groepen;
+		$dn = 'cn=' . $this->ldap_escape_dn($cn) . ', '. $base;
+
+		# objectClass definities
+		unset($entry['objectClass']);
+		$entry['objectClass'][] = 'top';
+		$entry['objectClass'][] = 'groupOfNames';
+		
+		return ldap_add($this->_conn, $dn, $entry);
+	}
+
+	# Wijzig de informatie van een lid
+	# N.B. $entry is een array die al in het juiste formaat moet zijn opgemaakt
+	# http://nl2.php.net/manual/en/function.ldap-add.php
+	function modifyGroep($cn, $entry) {
+		$base = $this->_base_groepen;
+		$dn = 'cn=' . $this->ldap_escape_dn($cn) . ', '. $base;
+		return ldap_modify($this->_conn, $dn, $entry);
+	}
+
+	function removeGroep($cn) {
+		$base = $this->_base_groepen;
+		$dn = 'cn=' . $this->ldap_escape_dn($cn) . ', '. $base;
 		return ldap_delete($this->_conn, $dn);
 	}
 

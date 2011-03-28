@@ -541,7 +541,20 @@ class Groep{
 			$return['opvolger']=new Groep($opvolger['id']);
 		}
 		return $return;
+	}
 
+	public function isNieuwsteOtGroep(){
+		$db=MySql::instance();
+		$query="
+			SELECT id 
+			FROM groep 
+			WHERE status='ot' 
+			  AND snaam='".$this->getSnaam()."' 
+			ORDER BY begin DESC 
+			LIMIT 1;";
+		$result=$db->getRow($query);
+		$otgroepid = $result['id'];
+		return $otgroepid == $this->getId();
 	}
 
 	public function getUrl(){
@@ -646,6 +659,45 @@ class Groep{
 
 	public static function isIngelogged(){
 		return LoginLid::instance()->hasPermission('P_LEDEN_READ');
+	}
+
+	/*
+	 * Sla huidige objectstatus op in LDAP
+	 */
+	public function save_ldap() {
+		require_once 'ldap.class.php';
+
+		$ldap=new LDAP();
+
+		# Alleen ft, ht en 1 generatie ot groepen staan in LDAP 
+		if($this->getStatus()=='ft' OR $this->getStatus()=='ht' OR $this->isNieuwsteOtGroep()){
+			# ldap entry in elkaar snokken
+			$entry = array();
+			$entry['cn'] = $this->getId();
+			if(is_array($this->getLeden())){
+				foreach($this->getLeden() as $lid){
+					$entry['member'][] = 'uid='.$lid['uid'].',ou=leden,dc=csrdelft,dc=nl';
+				}
+			}
+
+			# lege velden er uit gooien
+			foreach($entry as $i => $e){
+				if($e == ''){ unset ($entry[$i]); }
+			}
+			# bestaat dit groepid al in ldap? dan wijzigen, anders aanmaken
+			if($ldap->isGroep($entry['cn'])){
+				$ldap->modifyGroep($entry['cn'], $entry);
+			}else{
+				$ldap->addGroep($entry['cn'], $entry);
+			}
+		}else{
+			# Als het een andere status is even kijken of de groepid in ldap voorkomt, zo ja wissen
+			if($ldap->isGroep($this->getId())){
+				$ldap->removeGroep($this->getId());
+			}
+		}
+		$ldap->disconnect();
+		return true;
 	}
 
 	public function getError(){
