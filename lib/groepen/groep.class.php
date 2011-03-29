@@ -654,21 +654,29 @@ class Groep{
 		require_once 'ldap.class.php';
 		
 		$ldap=new LDAP();
-if($this->getSnaam()=='vaancie'){ //test
+
 		# kijken of er naar LDAP gesyncd mag worden
 		if($this->getType()->getSyncWithLDAP()){
 			#groepsleden verzamelen. De ft, ht en 1 generatie ot-groepsleden worden meegenomen.
+			$groepsleden = array();
 			$db=MySql::instance();
 			$query="
 				SELECT groeplid.uid
 				FROM groep
 				RIGHT JOIN groeplid ON (groeplid.groepid=groep.id)
-				WHERE snaam='".$db->escape($this->getSnaam())."' AND begin>=
-				(SELECT begin	FROM groep 
-							WHERE status='ot' 
-							  AND snaam='".$db->escape($this->getSnaam())."' 
-							ORDER BY begin DESC 
-							LIMIT 1);";
+				WHERE snaam='".$db->escape($this->getSnaam())."' 
+				AND (
+					begin>=(
+						SELECT begin
+						FROM groep 
+						WHERE status='ot' 
+						AND snaam='".$db->escape($this->getSnaam())."' 
+						ORDER BY begin DESC 
+						LIMIT 1
+					) 
+					OR status='ft' 
+					OR status='ht'
+				);";
 			$result=$db->query($query);
 			if ($result !== false and $db->numRows($result) > 0){
 				$groepsleden=$db->result2array($result);
@@ -677,30 +685,25 @@ if($this->getSnaam()=='vaancie'){ //test
 			# ldap entry in elkaar snokken
 			$entry = array();
 			$entry['cn'] = $this->getSnaam();
-			if(is_array($groepsleden)){
+			if(count($groepsleden)!=0){
 				foreach($groepsleden as $lid){
 					$entry['member'][] = 'uid='.$lid['uid'].',ou=leden,dc=csrdelft,dc=nl';
 				}
 			}
-print_r($ldap->getGroep($entry['cn']));
+
 			# bestaat dit groepid al in ldap? dan wijzigen, anders aanmaken
 			if($ldap->isGroep($entry['cn'])){
-//				$ldap->modifyGroep($entry['cn'], $entry);
-echo 'modify groep';
-print_r($ldap->getGroep($entry['cn']));
-
+				$ldap->modifyGroep($entry['cn'], $entry);
 			}else{
-//				$ldap->addGroep($entry['cn'], $entry);
-echo 'add groep';
+				$ldap->addGroep($entry['cn'], $entry);
 			}
 		}else{
 			# als deze groep niet gesyncd moet worden even kijken of de groepid in ldap voorkomt, zo ja wissen
 			if($ldap->isGroep($this->getSnaam())){
-//				$ldap->removeGroep($this->getSnaam());
-echo 'remove groep';
+				$ldap->removeGroep($this->getSnaam());
 			}
 		}
-}
+
 		$ldap->disconnect();
 		return true;
 	}
