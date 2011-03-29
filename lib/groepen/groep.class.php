@@ -661,7 +661,7 @@ class Groep{
 			$groepsleden = array();
 			$db=MySql::instance();
 			$query="
-				SELECT groeplid.uid
+				SELECT DISTINCT groeplid.uid
 				FROM groep
 				RIGHT JOIN groeplid ON (groeplid.groepid=groep.id)
 				WHERE snaam='".$db->escape($this->getSnaam())."' 
@@ -670,7 +670,7 @@ class Groep{
 						SELECT begin
 						FROM groep 
 						WHERE status='ot' 
-						AND snaam='".$db->escape($this->getSnaam())."' 
+							AND snaam='".$db->escape($this->getSnaam())."' 
 						ORDER BY begin DESC 
 						LIMIT 1
 					) 
