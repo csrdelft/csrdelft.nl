@@ -1,7 +1,8 @@
 <form action="/actueel/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/bewerken" method="post">
 <div id="groepFormulier" class="clear">
 	{if $groep->isAdmin() OR $groep->isEigenaar()}
-		{if $groep->getId()==0}
+		{* alleen Korte naam invullen bij een nieuwe groep als de korte naam niet bekend is. Admins mogen wel aanpassen.*}
+		{if $groep->getId()==0 AND ( $groep->getSnaam()=='' OR $groep->isAdmin())}
 			<h2>Nieuwe groep toevoegen in context {$groep->getType()->getNaam()}</h2>
 			
 			<label for="groepSnaam"><strong>Korte naam:</strong></label>
@@ -30,6 +31,9 @@
 		
 		<label for="begin"><strong>Periode:</strong></label> 
 		<input type="text" id="begin" name="begin" value="{$groep->getBegin()}" /> - <input type="text" name="einde" id="einde" value="{$groep->getEinde()}" />
+		<div id="einde" class="opmerking" style="width: 295px">
+			Einddatum is ook sluitdatum aanmelden.<br />
+		</div>
 		<br />
 		<hr />
 		<div id="groepAanmeldbaarContainer" style="display: none;">

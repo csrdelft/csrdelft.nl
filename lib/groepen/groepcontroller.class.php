@@ -247,8 +247,10 @@ class Groepcontroller extends Controller{
 
 				if($this->groep->save()){
 					$melding='Opslaan van groep gelukt!';
-					if(!$this->groep->save_ldap()){
-						$melding.=' Maar opslaan in LDAP mislukt.';
+					try{
+						$this->groep->save_ldap();
+					}catch(Exception $e){
+						//todo: loggen dat LDAP niet beschikbaar is in een mooi eventlog wat ook nog gemaakt moet worden...
 					}
 				}else{
 					$melding='Opslaan van groep mislukt. (returned from Groep::save() called by Groepcontroller::action_bewerken())';
@@ -284,8 +286,10 @@ class Groepcontroller extends Controller{
 		if($this->groep->isAdmin()){
 			if($this->groep->delete()){
 				$melding='Groep met succes verwijderd.';
-				if(!$this->groep->save_ldap()){
-					$melding.=' Maar opslaan in LDAP mislukt.';
+				try{
+					$this->groep->save_ldap();
+				}catch(Exception $e){
+					//todo: loggen dat LDAP niet beschikbaar is in een mooi eventlog wat ook nog gemaakt moet worden...
 				}
 			}else{
 				$melding='Groep verwijderen mislukt Groepcontroller::action_deleteGroep()';
@@ -307,8 +311,10 @@ class Groepcontroller extends Controller{
 			}
 			if($this->groep->meldAan($functie)){
 				$melding='';
-				if(!$this->groep->save_ldap()){
-					$melding.='Aanmelden gelukt, maar het opslaan in LDAP mislukt.';
+				try{
+					$this->groep->save_ldap();
+				}catch(Exception $e){
+					//todo: loggen dat LDAP niet beschikbaar is in een mooi eventlog wat ook nog gemaakt moet worden...
 				}
 			}else{
 				$melding='Aanmelden voor groep mislukt.';
@@ -352,8 +358,10 @@ class Groepcontroller extends Controller{
 			}else{
 				$melding='Niet alle leden met succes toegevoegd. Wellicht waren sommigen al lid van deze groep? (Groepcontroller::action_addLid())';
 			}
-			if(!$this->groep->save_ldap()){
-				$melding.=' Het opslaan in LDAP is mislukt.';
+			try{
+				$this->groep->save_ldap();
+			}catch(Exception $e){
+				//todo: loggen dat LDAP niet beschikbaar is in een mooi eventlog wat ook nog gemaakt moet worden...
 			}
 			$this->content->invokeRefresh($melding, $this->getUrl('default').'#lidlijst');
 		}
@@ -366,8 +374,10 @@ class Groepcontroller extends Controller{
 		if($this->hasParam(2) AND Lid::isValidUid($this->getParam(2)) AND $this->groep->magBewerken()){
 			if($this->groep->verwijderLid($this->getParam(2))){
 				$melding='';
-				if(!$this->groep->save_ldap()){
-					$melding.='Lid is met succes verwijderd, maar opslaan in LDAP is mislukt.';
+				try{
+					$this->groep->save_ldap();
+				}catch(Exception $e){
+					//todo: loggen dat LDAP niet beschikbaar is in een mooi eventlog wat ook nog gemaakt moet worden...
 				}
 			}else{
 				$melding='Lid uit groep verwijderen mislukt (GroepController::action_verwijderLid()).';
@@ -383,8 +393,10 @@ class Groepcontroller extends Controller{
 		if($this->hasParam(2) AND Lid::isValidUid($this->getParam(2)) AND $this->groep->magBewerken()){
 			if($this->groep->maakLidOt($this->getParam(2))){
 				$melding='Lid naar o.t.-groep verplaatsen gelukt.';
-				if(!$this->groep->save_ldap()){
-					$melding.=' Maar opslaan in LDAP mislukt.';
+				try{
+					$this->groep->save_ldap();
+				}catch(Exception $e){
+					//todo: loggen dat LDAP niet beschikbaar is in een mooi eventlog wat ook nog gemaakt moet worden...
 				}
 			}else{
 				$melding='Lid naar o.t.-groep verplaatsen mislukt. ['. $this->groep->getError().']  (GroepController::action_maakLidOt())';
@@ -401,8 +413,10 @@ class Groepcontroller extends Controller{
 			if($this->groep->getStatus()=='ht'){
 				if($this->groep->maakOt()){
 					$melding='Groep o.t. maken gelukt.';
-					if(!$this->groep->save_ldap()){
-						$melding.=' Maar opslaan in LDAP mislukt.';
+					try{
+						$this->groep->save_ldap();
+					}catch(Exception $e){
+						//todo: loggen dat LDAP niet beschikbaar is in een mooi eventlog wat ook nog gemaakt moet worden...
 					}
 				}else{
 					$melding='Groep o.t. maken mislukt ['. $this->groep->getError().'] (GroepController::action_maakGroepOt())';
