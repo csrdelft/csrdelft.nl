@@ -4,7 +4,7 @@
 
 function updateGroepform(){
 	var gAanmeldDiv=document.getElementById('groepAanmeldbaarContainer');
-	if(document.getElementById('groepStatus').selectedIndex==0){
+	if(document.getElementById('groepStatus').value=='ht'){
 		displayDiv(gAanmeldDiv);
 		var gLimietDiv=document.getElementById('groepLimietContainer');
 

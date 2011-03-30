@@ -284,6 +284,12 @@ class LoginLid{
 				if($lidjaar==$this->lid->getProperty('lidjaar')){
 					return true;
 				}
+			}elseif(substr($permissie, 0, 10)=='Ouderjaars'){
+				$sjaarslichting=date('Y');
+				if(date('m')<=8){ $sjaarslichting--; }
+				if($sjaarslichting>$this->lid->getProperty('lidjaar')){
+					return true;
+				}
 			}
 			//vervolgens nog testen op de 'normale' permissies.
 			# ga alleen verder als er een geldige permissie wordt gevraagd

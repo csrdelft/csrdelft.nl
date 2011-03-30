@@ -4,7 +4,7 @@
 		{* alleen Korte naam invullen bij een nieuwe groep als de korte naam niet bekend is. Admins mogen wel aanpassen.*}
 		{if $groep->getId()==0 AND ( $groep->getSnaam()=='' OR $groep->isAdmin())}
 			<h2>Nieuwe groep toevoegen in context {$groep->getType()->getNaam()}</h2>
-			
+			<br />
 			<label for="groepSnaam"><strong>Korte naam:</strong></label>
 			<div id="groepSnaam" class="opmerking">
 				Voor gebruik in urls &eacute;n ter sortering. Alleen letters en cijfers, geen spaties. Voor elkaar opvolgende groepen dezelfde naam gebruiken.<br />
@@ -22,12 +22,16 @@
 		{else}	
 			<input type="hidden" id="eigenaar" maxlength="255" name="eigenaar" value="{$groep->getEigenaar()|escape:'html'}" />
 		{/if}
-		<label for="groepStatus"><strong>Status:</strong></label>
-		<select name="status" id="groepStatus" onchange="updateGroepform();">
-			<option value="ht" {if $groep->getStatus()=="ht"}selected="selected"{/if}>h.t.</option>
-			<option value="ot" {if $groep->getStatus()=="ot"}selected="selected"{/if}>o.t.</option>
-			<option value="ft" {if $groep->getStatus()=="ft"}selected="selected"{/if}>f.t.</option>
-		</select><br />
+		{if $groep->getType()->getId()==11 AND !$groep->isAdmin()}
+			<input type="hidden" id="groepStatus" name="status" value="{if $groep->getId()==0}ht{else}{$groep->getStatus()}{/if}" />
+		{else}
+			<label for="groepStatus"><strong>Status:</strong></label>
+			<select name="status" id="groepStatus" onchange="updateGroepform();">
+				<option value="ht" {if $groep->getStatus()=="ht"}selected="selected"{/if}>h.t.</option>
+				<option value="ot" {if $groep->getStatus()=="ot"}selected="selected"{/if}>o.t.</option>
+				<option value="ft" {if $groep->getStatus()=="ft"}selected="selected"{/if}>f.t.</option>
+			</select><br />
+		{/if}
 		
 		<label for="begin"><strong>Periode:</strong></label> 
 		<input type="text" id="begin" name="begin" value="{$groep->getBegin()}" /> - <input type="text" name="einde" id="einde" value="{$groep->getEinde()}" />
@@ -40,11 +44,15 @@
 			<label for="groepAanmeldbaar"><strong>Aanmeldbaar?</strong></label>
 			
 			<select name="aanmeldbaar" id="groepAanmeldbaar" onchange="updateGroepform();"  /> 
-			{foreach from=$aanmeldfilters key=filtervalue item=filtertekst}
-				<option value="{$filtervalue}" {if $filtervalue==$groep->getAanmeldbaar()}selected="selected"{/if}>
-					{$filtertekst}
-				</option>
-			{/foreach}
+			{if $groep->getId()==0 AND $groep->getType()->getId()==11}
+				<option value="lichting:{$jongstelichting}" selected="selected">Lichting {$jongstelichting}</option>
+			{else}
+				{foreach from=$aanmeldfilters key=filtervalue item=filtertekst}
+					<option value="{$filtervalue}" {if $filtervalue==$groep->getAanmeldbaar()}selected="selected"{/if}>
+						{$filtertekst}
+					</option>
+				{/foreach}
+			{/if}
 			</select>
 		</div>
 		<div id="groepLimietContainer" style="display: none;">
@@ -56,10 +64,10 @@
 			<div id="functieOpmNiet" class="opmerking verborgen">Er kunnen nu geen functies worden opgegeven.</div>
 			<div id="functieOpmTonenzonderinvoer" class="opmerking verborgen">Functies altijd zichtbaar, maar ze kunnen niet opgegeven worden.</div>
 		<select name="toonFuncties" id="toonFuncties" onchange="updateGroepform();">
-			<option value="tonen" {if $groep->getToonFuncties()=="tonen"}selected="selected"{/if}>Altijd</option>
+			<option value="tonen" {if $groep->getToonFuncties()=="tonen" AND !($groep->getId()==0 AND $groep->getType()->getId()==11)}selected="selected"{/if}>Altijd</option>
 			<option value="tonenzonderinvoer" {if $groep->getToonFuncties()=="tonenzonderinvoer"}selected="selected"{/if}>Altijd. Maar geen invoer.</option>
 			<option value="verbergen" {if $groep->getToonFuncties()=="verbergen"}selected="selected"{/if}>Alleen voor groepadmins</option>
-			<option value="niet" {if $groep->getToonFuncties()=="niet"}selected="selected"{/if}>Nooit</option>
+			<option value="niet" {if $groep->getToonFuncties()=="niet" OR ($groep->getId()==0 AND $groep->getType()->getId()==11)}selected="selected"{/if}>Nooit</option>
 		</select><br />
 		<label for="functiefilter"><strong>Functiefilter:</strong></label>
 		<input type="text" name="functiefilter" value="{$groep->getFunctiefilter()|escape:'html'}" /><div class="opmerking">Door '|' gescheiden mogelijke opties (eerste is de standaard). Veld leeglaten voor vrije invoer.</div>
@@ -68,9 +76,13 @@
 		<label for="toonPasfotos"><strong>Toon pasfoto's?</strong></label>
 		<input type="checkbox" name="toonPasfotos" id="toonPasfotos" {if $groep->getToonPasfotos()}checked="checked"{/if} /> <em>(Pasfoto komt in plaats van naam)</em>
 		<br />
-		<label for="lidIsMod"><strong>Groepslid is mod?</strong></label>
-		<input type="checkbox" name="lidIsMod" id="lidIsMod" {if $groep->getlidIsMod()}checked="checked"{/if} /> <em>(Elk lid kan groepsleden toevoegen en het grote verhaal aanpassen.)</em>
-		<br />
+		{if $groep->getType()->getId()==11 AND !$groep->isAdmin()}
+			{if $groep->getlidIsMod()}<input type="hidden" id="lidIsMod" name="lidIsMod" value="something" />{/if}
+		{else}
+			<label for="lidIsMod"><strong>Groepslid is mod?</strong></label>
+			<input type="checkbox" name="lidIsMod" id="lidIsMod" {if $groep->getlidIsMod()}checked="checked"{/if} /> <em>(Elk lid kan groepsleden toevoegen en het grote verhaal aanpassen.)</em>
+			<br />
+		{/if}
 		<label for="sbeschrijving"><strong>Korte beschrijving:</strong><br /><br />UBB staat aan.</label>
 		<textarea id="sbeschrijving" name="sbeschrijving" style="width: 70%; height: 100px;">{$groep->getSbeschrijving()|escape:'html'}</textarea>
 		<br />
