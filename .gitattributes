@@ -631,6 +631,7 @@ lib/icon.class.php -text
 lib/include.defines.php.sample -text
 lib/knop.class.php -text
 lib/ldap.class.php -text
+lib/lichting.class.php -text
 lib/lid/instellingen.class.php -text
 lib/lid/instellingencontent.class.php -text
 lib/lid/ledenlijstcontent.class.php -text
