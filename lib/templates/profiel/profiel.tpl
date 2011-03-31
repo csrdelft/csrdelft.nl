@@ -48,7 +48,6 @@
 	</div>
 	{if $lid->getStatus()!='S_OVERLEDEN' AND ($profhtml.adres!='' OR $profhtml.o_adres!='')}
 	<div class="profielregel">
-		<div class="left">Adres</div>
 		<div class="gegevens">
 			<div class="gegevenszelf">
 				<div class="label">
@@ -93,7 +92,6 @@
 	{/if}
 	{if  $profhtml.email!='' OR $profhtml.msn!='' OR $profhtml.website!=''}
 	<div class="profielregel">
-		<div class="left">Contact</div>
 		<div class="gegevens">
 			{if $profhtml.email!=''}<div class="label">Email:</div><a href="mailto:{$profhtml.email}">{$profhtml.email}</a><br />{/if}
 			{if $profhtml.icq!=''}<div class="label">ICQ:</div> {$profhtml.icq}<br />{/if}
@@ -105,8 +103,6 @@
 	</div>
 	{/if}
 	<div class="profielregel">
-		<div class="left">Civitas</div>
-
 		<div class="gegevens">
 			<div class="half">
 				{if $profhtml.studie!=''}
@@ -159,7 +155,6 @@
 		</div>
 	</div>
 	<div class="profielregel" id="groepen" style="clear: right;">
-		<div class="left">Groepen</div>
 		<div class="gegevens">
 			{$profhtml.groepen->view()}
 			<div style="clear: left;"></div>
@@ -167,7 +162,6 @@
 	</div>
 	{if $lid->isLid() AND ($saldografiek!='' OR $profhtml.bankrekening!='')}
 		<div class="profielregel">
-			<div class="left">Financi&euml;el</div>
 			<div class="gegevens">
 				{if $profhtml.bankrekening!=''}
 					<div class="label">Bankrekening:</div> {$profhtml.bankrekening}
@@ -186,15 +180,12 @@
 
 	{if $loginlid->getUid()==$profhtml.uid OR $profhtml.eetwens!='' OR is_array($profhtml.recenteMaaltijden)}
 	<div class="profielregel" id="maaltijden">
-		<div class="left">Maaltijden
-			{if $loginlid->getUid()==$profhtml.uid}
-				<br /><a href="/actueel/maaltijden/voorkeuren/" class="knop" ><img src="{$csr_pics}forum/bewerken.png" title="Maaltijdvoorkeuren bewerken" /></a>
-			{/if}
-		</div>
 		<div class="gegevens">
 			{if $profhtml.eetwens!=''}
 				<div class="label">Dieet:</div>
-				<div class="data">{$profhtml.eetwens}</div>
+				<div class="data">{$profhtml.eetwens}{if $loginlid->getUid()==$profhtml.uid}&nbsp;
+				 <a href="/actueel/maaltijden/voorkeuren/" class="knop" ><img src="{$csr_pics}forum/bewerken.png" title="Maaltijdvoorkeuren bewerken" /></a>
+			{/if}</div>
 				<br />
 			{/if}
 			{if $profhtml.abos|@count > 0}
@@ -219,10 +210,8 @@
 		</div>
 	</div>
 	{/if}
-	<div style="clear: left;"></div>
 	{if is_array($profhtml.recenteForumberichten) OR $loginlid->getUid()==$lid->getUid()}
 	<div class="profielregel" id="forum">
-		<div class="left">Forum</div>
 		<div class="gegevens" id="forum_gegevens">
 			{if $loginlid->getUid()==$lid->getUid()}
 				<div class="label">RSS-feed:</div>
@@ -261,16 +250,17 @@
 	{/if}
 	{if $loginlid->hasPermission('P_ADMIN,P_BESTUUR,groep:novcie') AND $lid->getStatus()=='S_NOVIET' AND $profhtml.kgb!=''}
 		<div class="profielregel" id="novcieopmerking">
-			<div class="left handje" onclick="toggleDiv('novcie_gegevens')">NovCie-Opmerking &raquo;</div>
+			<div class="handje" onclick="toggleDiv('novcie_gegevens')">NovCie-Opmerking &raquo;</div>
 			<div class="gegevens verborgen" id="novcie_gegevens">{$profhtml.kgb|ubb}</div>
 		</div>
 	{/if}
 	{if ($isAdmin OR $isLidMod) AND $profhtml.changelog!=''}
-		<div style="clear: left;"></div>
 		<div class="profielregel" id="changelog">
-			<div class="left handje" onclick="toggleDiv('changelog_gegevens')">Bewerklog &raquo;</div>
-			<div class="gegevens verborgen" id="changelog_gegevens">
-				{$profhtml.changelog|ubb}
+			<div class="gegevens">
+				<div class="handje" onclick="toggleDiv('changelog_gegevens'); this.remove()">Bewerklog &raquo;</div>
+				<div class="verborgen" id="changelog_gegevens">
+					{$profhtml.changelog|ubb}
+				</div>
 			</div>
 		</div>
 	{/if}
