@@ -13,6 +13,7 @@
  */
 
 require_once 'groepen/groep.class.php';
+require_once 'lichting.class.php';
 
 class Groepcontent extends SimpleHTML{
 
@@ -113,18 +114,14 @@ class Groepcontent extends SimpleHTML{
 		}
 		
 		//lichtingen
-		$nu = $this->getJongsteLichting();
+		$nu = Lichting::getJongsteLichting();
 		for($lichting=$nu; $lichting>=($nu-7); $lichting--){
 			$filters['lichting:'.$lichting]='Lichting '.$lichting;
 		}
 
 		return $filters;
 	}
-	public function getJongsteLichting(){
-		$lichting=date('Y');
-		if(date('m')<=8){ $lichting--; }
-		return $lichting;
-	}
+	
 	public function view(){
 		$content=new Smarty_csr();
 
@@ -134,7 +131,7 @@ class Groepcontent extends SimpleHTML{
 		$content->assign('action', $this->action);
 		$content->assign('groeptypes', Groepen::getGroeptypes());
 		$content->assign('aanmeldfilters', $this->getAanmeldfilters()); 
-		$content->assign('jongstelichting', $this->getJongsteLichting());
+		$content->assign('jongstelichting', Lichting::getJongsteLichting());
 
 		if($this->action=='addLid'){
 			$content->assign('lidAdder', $this->getLidAdder());

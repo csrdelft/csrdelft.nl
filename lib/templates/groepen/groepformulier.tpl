@@ -41,19 +41,18 @@
 		<br />
 		<hr />
 		<div id="groepAanmeldbaarContainer" style="display: none;">
-			<label for="groepAanmeldbaar"><strong>Aanmeldbaar?</strong></label>
-			
-			<select name="aanmeldbaar" id="groepAanmeldbaar" onchange="updateGroepform();"  /> 
 			{if $groep->getId()==0 AND $groep->getType()->getId()==11}
-				<option value="lichting:{$jongstelichting}" selected="selected">Lichting {$jongstelichting}</option>
+				<input type="hidden" name="aanmeldbaar" id="groepAanmeldbaar" value="lichting:{$jongstelichting}" />
 			{else}
+				<label for="groepAanmeldbaar"><strong>Aanmeldbaar?</strong></label>
+				<select name="aanmeldbaar" id="groepAanmeldbaar" onchange="updateGroepform();"  /> 
 				{foreach from=$aanmeldfilters key=filtervalue item=filtertekst}
 					<option value="{$filtervalue}" {if $filtervalue==$groep->getAanmeldbaar()}selected="selected"{/if}>
 						{$filtertekst}
 					</option>
 				{/foreach}
+				</select>
 			{/if}
-			</select>
 		</div>
 		<div id="groepLimietContainer" style="display: none;">
 			<label for="groepLimiet"><strong>Limiet:</strong></label>

@@ -6,6 +6,7 @@
  *
  */
 require_once 'lid.class.php';
+require_once 'lichting.class.php';
 
 class LoginLid{
 	private static $instance;
@@ -285,9 +286,7 @@ class LoginLid{
 					return true;
 				}
 			}elseif(substr($permissie, 0, 10)=='Ouderjaars'){
-				$sjaarslichting=date('Y');
-				if(date('m')<=8){ $sjaarslichting--; }
-				if($sjaarslichting>$this->lid->getProperty('lidjaar')){
+				if(Lichting::getJongsteLichting()>$this->lid->getProperty('lidjaar')){
 					return true;
 				}
 			}
