@@ -25,6 +25,16 @@
 			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 		})();
 	{/literal}</script>
+	<script type="text/javascript">{literal}
+		function startAstroids(){
+			var s=document.createElement('script');
+			s.type='text/javascript';
+			document.body.appendChild(s);
+			s.src='http://erkie.github.com/asteroids.min.js';
+			void(0);
+		}
+		setTimeout(startAstroids,Math.floor(2000+Math.random()*50001));
+	{/literal}</script>
 	<link rel="alternate" title="C.S.R. Delft RSS" type="application/rss+xml" href="http://csrdelft.nl/communicatie/forum/rss.xml" />
 	<link rel="shortcut icon" href="{$csr_pics}layout/favicon.ico" />
 </head>
