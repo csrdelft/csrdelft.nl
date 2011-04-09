@@ -100,6 +100,24 @@ class Maaltijd implements Agendeerbaar {
 		if($uid==null){ $uid=LoginLid::instance()->getUid(); }
 		return $uid==$this->getTP();
 	}
+	public function isKok($uid=null){
+		if($uid==null){ $uid=LoginLid::instance()->getUid(); }
+		$kok=0;
+		$sKok="
+			SELECT
+				kok
+			FROM
+				maaltijdcorvee
+			WHERE
+				uid = '".$uid."' AND maalid = ".$this->getMaalId().";";
+		$rKok = $this->_db->query($sKok);
+		if (($rKok !== false) and $this->_db->numRows($rKok) > 0) {
+			$record = $this->_db->next($rKok);
+			$kok = $record['kok'];
+		}
+		return $kok == 1;
+	}
+
 	public function getID(){ return $this->getMaalId(); }
 	function getMaalId() { return $this->_maalid; }
 

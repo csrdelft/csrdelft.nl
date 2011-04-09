@@ -39,7 +39,7 @@ $page = new MaaltijdLijstContent($maaltijd);
 if(isset($_GET['fiscaal']) && $_GET['fiscaal']==1){
 	$page->setFiscaal(true);
 }
-if($loginlid->hasPermission('P_MAAL_MOD') OR opConfide() OR $maaltijd->isTp()){
+if($loginlid->hasPermission('P_MAAL_MOD') OR opConfide() OR $maaltijd->isTp() OR $maaltijd->isKok()){
 	$page->view();
 }else{
 	SimpleHTML::invokeRefresh('U mag de maaltijdlijst niet bekijken.', '/actueel/maaltijden/');
