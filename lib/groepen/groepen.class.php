@@ -70,17 +70,26 @@ class Groepen{
 
 		$qGroepen="
 			SELECT
-				groep.id AS groepId, groep.gtype as gtypeId, groep.snaam AS snaam, groep.naam AS naam,
+				groep.id AS groepId, groep.gtype AS gtypeId, groep.snaam AS snaam, groep.naam AS naam,
 				groep.sbeschrijving AS sbeschrijving, groep.beschrijving AS beschrijving, groep.zichtbaar AS zichtbaar,
 				groep.status AS status, begin, einde, aanmeldbaar, functiefilter, limiet, toonFuncties, toonPasfotos, lidIsMod,
-				groeplid.uid AS uid, groeplid.op AS op, groeplid.functie AS functie, groeplid.prioriteit AS prioriteit
+				groeplid.uid AS uid, groeplid.op AS op, groeplid.functie AS functie, groeplid.prioriteit AS prioriteit,
+				IF(einde>CURRENT_DATE() OR einde = 0000-00-00,
+					IF(limiet = 0 OR (count(gl.uid)-limiet) < 0,
+							0,
+							1
+					),
+				1 
+				)AS vol
 			FROM groep
 			LEFT JOIN groeplid ON(groep.id=groeplid.groepid)
 			LEFT JOIN lid ON(groeplid.uid=lid.uid)
+			LEFT JOIN groeplid gl ON (groep.id = gl.groepid)
 			WHERE groep.gtype=".$this->getId()."
 			  AND groep.zichtbaar='zichtbaar'
 			  AND (".$htotFilter.")
-			ORDER BY ".$sort." groep.snaam ASC, groeplid.prioriteit ASC, lid.achternaam ASC, lid.voornaam;";
+			GROUP BY gl.groepid, uid
+			ORDER BY ".$sort." vol ASC, groep.snaam ASC, groeplid.prioriteit ASC, lid.achternaam ASC, lid.voornaam;";
 		$rGroepen=$db->query($qGroepen);
 		//nu een beetje magic om een stapeltje groepobjecten te genereren:
 		$currentGroepId=null;
