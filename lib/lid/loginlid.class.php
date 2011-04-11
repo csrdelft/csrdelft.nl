@@ -221,7 +221,6 @@ class LoginLid{
 	 * hasPermission:
 	 *
 	 * @descr				een string met permissie(s).
-	 * @liddescr			permissies van het lid waarop we willen testen.
 	 * @token_authorizable	als false dan werkt hasPermission alsof gebruiker
 	 * 						x999 is, als true dan wordt op de permissies van
 	 * 						de met de token geäuthenticeerde gebruiker getest
@@ -239,11 +238,9 @@ class LoginLid{
 	 *  verticale:d					geeft true voor alle leden van verticale d.
 	 *  !lichting:2009				geeft true voor iedereen behalve lichting 2009.
 	 */
-	public function hasPermission($descr, $liddescr=null, $token_authorizable=false) {
+	public function hasPermission($descr, $token_authorizable=false) {
 		# zoek de rechten van de gebruiker op
-		if($liddescr==null){
-			$liddescr=$this->lid->getPermissies();
-		}
+		$liddescr=$this->lid->getPermissies();
 
 		//alleen als $token_athorizable true is testen we met de permissies van het
 		//geauthenticeerde lid, anders met P_NOBODY
@@ -265,7 +262,7 @@ class LoginLid{
 			$permissies=trim($permissie);
 
 			//een negatie van een permissie.
-			if(substr($permissie, 0, 1)=='!' && !$this->hasPermission(substr($permissie,1), $liddescr, $token_authorizable)){
+			if(substr($permissie, 0, 1)=='!' && !$this->hasPermission(substr($permissie,1),$token_authorizable)){
 				return true;
 			//als een uid ingevoerd wordt true teruggeven als het om de huidige gebruiker gaat.
 			}elseif($permissie==$this->getUid()){
