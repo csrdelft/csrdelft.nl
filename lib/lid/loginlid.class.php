@@ -45,25 +45,32 @@ class LoginLid{
 
 		//Staat er een gebruiker in de sessie?
 		if(!$this->userIsActive()){
-			//check of er een token in de $_GET staat, en of er een lid bestaat met die token.
+			# zo nee, dan nobody user er in gooien...
+			# in dit geval is het de eerste keer dat we een pagina opvragen
+			# of er is net uitgelogd waardoor de gegevens zijn leeggegooid
+			$this->login('x999', 'x999', false);
+		}
+		/* Als we x999 zijn checken we of er misschien een validatietoken in de $_GET staat
+		 * om zonder sessie bepaalde rechten te krijgen.
+		 */
+		if($this->getUid()=='x999'){
 			if(isset($_GET['validate_token']) AND preg_match('/^[a-z0-9]{25}$/', $_GET['validate_token'])){
+				$db=MySql::instance();
+				$query="
+					SELECT uid
+					FROM lid
+					WHERE rssToken='".$db->escape($_GET['validate_token'])."'
+					LIMIT 1;";
+				$lid=$db->getRow($query);
 
-				$query="SELECT uid FROM lid WHERE rssToken='".$token."' LIMIT 1;";
-				$lid=MySql::instance()->getRow($query);
-				$lid=LidCache::getLid($lid);
+				$lid=LidCache::getLid($lid['uid']);
 				if($lid instanceof Lid){
 					$this->lid=$lid;
 					$this->authenticatedByToken=true;
-				}else{
-					$this->login('x999', 'x999', false);
 				}
-			}else{
-				# zo nee, dan nobody user er in gooien...
-				# in dit geval is het de eerste keer dat we een pagina opvragen
-				# of er is net uitgelogd waardoor de gegevens zijn leeggegooid
-				$this->login('x999', 'x999', false);
 			}
 		}
+
 		$this->logBezoek();
 	}
 	/*
