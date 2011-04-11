@@ -306,7 +306,7 @@ class LoginLid{
 				if($geslacht==$this->lid->getGeslacht()){
 					return true;
 				//we zijn toch zeker niet geslacht??
-				}elseif($geslacht=='nee' AND $this->hasPermission('P_LOGGED_IN')){
+				}elseif($geslacht=='nee' AND $this->hasPermission('P_LOGGED_IN', $token_authorizable)){
 					return true;
 				}
 			//Behoort een lid tot een bepaalde lichting?
