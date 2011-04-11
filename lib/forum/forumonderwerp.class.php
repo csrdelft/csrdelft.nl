@@ -78,6 +78,7 @@ class ForumOnderwerp{
 		$this->lastpost=$onderwerp['lastpost'];
 		$this->lastpostID=$onderwerp['lastpostID'];
 		$this->lastuser=$onderwerp['lastuser'];
+
 		if (isset($onderwerp['momentGelezen'])){
 			$this->momentGelezen=$onderwerp['momentGelezen'];
 		}
@@ -92,14 +93,21 @@ class ForumOnderwerp{
 
 		$sTopicQuery="
 			SELECT
-				id, titel, uid, categorie, open, plakkerig, zichtbaar,
-				lastpost, lastuser, lastpostID, reacties
+				id, titel, topic.uid as uid, categorie, open, plakkerig, zichtbaar,
+				lastpost, lastuser, lastpostID, reacties,
+				gelezen.moment as momentGelezen
 			FROM
 				forum_topic topic
+			LEFT JOIN
+				forum_gelezen gelezen
+			ON(
+				topic.id=gelezen.tid AND gelezen.uid='".LoginLid::instance()->getUid()."'
+			)
 			WHERE
 				topic.id=".$this->getID()."
 			LIMIT 1;";
 		$onderwerp=$db->getRow($sTopicQuery);
+
 		if(!is_array($onderwerp)){
 			$this->error='Dit onderwerp bestaat niet. (ForumOnderwerp::load())';
 			return false;
@@ -206,7 +214,11 @@ class ForumOnderwerp{
 		}
 		return ($this->momentGelezen<$this->lastpost);
 	}
-	
+
+	public function ignoreNewPosts(){
+		//todo: implement
+	}
+
 	function getPaginaCount($force=false){
 		if($this->paginaCount===null){
 			$db=MySql::instance();
@@ -544,8 +556,12 @@ class ForumOnderwerp{
 			LIMIT 1;";
 		return MySql::instance()->query($sTopicQuery);
 	}
-	
+
 	public function updateLaatstGelezen(){
+		if($this->momentGelezen>getDateTime()){
+			//in de db is het moment groter, we doen geen update.
+			return;
+		}
 		$sql="
 			REPLACE INTO
 				forum_gelezen
@@ -565,11 +581,14 @@ class ForumOnderwerp{
 		$db=MySql::instance();
 		$iPostID=(int)$iPostID;
 
+		$bewerkt='Goedgekeurd door [lid='.LoginLid::instance()->getUid().'] [reldate]'.getDateTime().'[/reldate]'."\n";
+
 		$sPostQuery="
 			UPDATE
 				forum_post
 			SET
-				zichtbaar='zichtbaar'
+				zichtbaar='zichtbaar',
+				bewerkt=CONCAT(bewerkt, '".$bewerkt."')
 			WHERE
 				id=".$iPostID."
 			LIMIT 1;";

@@ -56,7 +56,7 @@ class CsrUBB extends eamBBParser{
 	 */
 	function ubb_reldate($parameters=array()){
 		$content = $this->parseArray(array('[/reldate]'), array());
-		return reldate($content);
+		return '<span title="'.mb_htmlentities($content).'">'.reldate($content).'</span>';
 
 	}
 	/*
@@ -520,6 +520,22 @@ UBBVERHAAL;
 		}else{
 			return '[peiling] Geen geldig peilingblok.';
 		}
+	}
+
+	/*
+	 */
+	public function ubb_slideshow($parameters){
+		$content = $this->parseArray(array('[/slideshow]'), array());
+
+		$slides_tainted=explode(array(';', "\n"), $content);
+		$slides=array();
+		foreach($slides_tainted as $slide){
+			$slide=trim($slide);
+			if(url_like($slide)){
+				$slides[]=$slide;
+			}
+		}
+
 	}
 }
 //we staan normaal geen HTML toe, met deze kan dat wel.

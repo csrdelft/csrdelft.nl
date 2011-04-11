@@ -18,17 +18,19 @@ if(!Forum::isModerator()){
 require_once 'forum/forumonderwerp.class.php';
 
 if(isset($_GET['post'])){
-	$forumonderwerp=ForumOnderwerp::loadByPostID((int)$_GET['post']);
-	if($forumonderwerp->keurGoed((int)$_GET['post'])){
-		header('location: '.CSR_ROOT.'forum/onderwerp/'.$forumonderwerp->getID());
+	$postID=(int)$_GET['post'];
+	$forumonderwerp=ForumOnderwerp::loadByPostID($postID);
+
+	if($forumonderwerp->keurGoed($postID)){
 		$_SESSION['melding']='Onderwerp of bericht nu voor iedereen zichtbaar.';
+		ForumOnderwerp::redirectByPostID($postID);
 	}else{
 		header('location: '.CSR_ROOT.'forum/onderwerp/'.$forumonderwerp->getID());
-		$_SESSION['melding']='Goedkeuren ging mis.';
+		$_SESSION['melding']='Goedkeuren ging mis (forum/goedkeuren.php).';
 	}
 }else{
 	header('location: '.CSR_ROOT.'forum/');
-	$_SESSION['melding']='Geen postID gezet.';
+	$_SESSION['melding']='Geen postID gezet (forum/goedkeuren.php).';
 }
 
 ?>

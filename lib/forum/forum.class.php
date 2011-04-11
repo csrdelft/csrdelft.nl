@@ -57,20 +57,20 @@ class Forum{
 		return $iTopicInfo;
 	}
 
-	private function getCategorieClause($token=null){
+	private function getCategorieClause(){
 		$loginlid=LoginLid::instance();
 
 		$cats=array();
 		foreach(ForumCategorie::getAll() as $cat){
-			if($loginlid->hasPermission($cat['rechten_read'])){// OR $loginlid->validateWithToken($token, $cat['rechten_read'])){
+			if($loginlid->hasPermission($cat['rechten_read'], null, $token_authorizable=true)){
 				$cats[]='topic.categorie='.$cat['id'];
 			}
 
 		}
-		
+
 		return implode(' OR ', $cats);
 	}
-	
+
 	public static function getPostsVoorRss($iAantal=false, $bDistinct=true, $token=null, $uid=null){
 		if($iAantal===false){
 			$iAantal=Forum::$_postsPerRss;
@@ -102,7 +102,7 @@ class Forum{
 				post.id AS postID,
 				post.tekst AS tekst,
 				post.datum AS datum,
-				post.bewerkDatum AS bewerkDatum, 
+				post.bewerkDatum AS bewerkDatum,
 				gelezen.moment AS momentGelezen
 			FROM
 				forum_topic topic
@@ -112,7 +112,7 @@ class Forum{
 				forum_post post ON( topic.id=post.tid )
 			LEFT JOIN
 				forum_gelezen AS gelezen
-			ON 
+			ON
 				gelezen.tid = topic.id AND
 				gelezen.uid = '".LoginLid::instance()->getUid()."'
 			WHERE
@@ -129,10 +129,10 @@ class Forum{
 	public static function isIngelogged(){ return LoginLid::instance()->hasPermission('P_LOGGED_IN'); }
 	public static function isModerator(){ return LoginLid::instance()->hasPermission('P_FORUM_MOD'); }
 	public static function getLaatstBekeken(){ return LoginLid::instance()->getForumLaatstBekeken(); }
-	
+
 	public static function getTopicsPerPagina(){ return Instelling::get('forum_onderwerpenPerPagina'); }
 	public static function getPostsPerPagina(){ return Instelling::get('forum_postsPerPagina'); }
-	
+
 	public static function getForumNaam($uid=false, $aNaam=false, $aLink=true, $bHtmlentities=true ){
 		return LidCache::getLid($uid)->getNaamLink('user', ($aLink ? 'link' : 'html'));
 	}
@@ -152,7 +152,7 @@ class Forum{
 			INNER JOIN forum_cat as categorie ON(onderwerp.categorie=categorie.id)
 			WHERE post.uid='".$uid."'
 			  AND post.zichtbaar='zichtbaar' AND categorie.id!=6;";
-		
+
 		$data=$db->getRow($query);
 		if(is_array($data)){
 			return $data['aantal'];
@@ -162,12 +162,12 @@ class Forum{
 	}
 	public static function searchPosts($query, $categorie=null){
 		$db=MySql::instance();
-		
+
 		if(!preg_match('/^[a-zA-Z0-9 \-\+\'\"\.]*$/', $query)){
 			return false;
 		}
 		$query=$db->escape(trim($query));
-		
+
 		$singleCat='1';
 		if($categorie!==null AND $categorie!=0){
 			foreach(ForumCategorie::getAll(true) as $cat){
@@ -198,11 +198,11 @@ class Forum{
 				forum_topic topic ON( post.tid=topic.id )
 			INNER JOIN
 				forum_cat cat ON( topic.categorie=cat.id )
-			WHERE topic.zichtbaar='zichtbaar' 
-			  AND post.zichtbaar='zichtbaar' 
-			  AND (".Forum::getCategorieClause().") 
-			  AND (".$singleCat.") 
-			  AND ( 
+			WHERE topic.zichtbaar='zichtbaar'
+			  AND post.zichtbaar='zichtbaar'
+			  AND (".Forum::getCategorieClause().")
+			  AND (".$singleCat.")
+			  AND (
 				  MATCH(post.tekst)AGAINST('".$query."' IN BOOLEAN MODE ) OR
 				  topic.titel LIKE '%".$query."%'
 				)
@@ -214,7 +214,7 @@ class Forum{
 				".Instelling::get('forum_zoekresultaten').";";
 		//Als MySQL 5.1.7 op syrinx staat kan er in 'natural language mode' gezocht worden
 		//MATCH(post.tekst)AGAINST('".$query."' IN NATURAL LANGUAGE MODE ) OR
-		
+
 		return $db->query2array($dbQuery);
 	}
 }

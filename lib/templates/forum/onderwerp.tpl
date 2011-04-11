@@ -172,6 +172,8 @@
 							<strong>Uw bericht wordt pas geplaatst nadat het bekeken en goedgekeurd is door de <a href="http://csrdelft.nl/actueel/groepen/Commissies/PubCie/">PubCie</a>.
 							Het vermelden van <em>uw naam en email-adres</em> is verplicht.</strong><br /><br />
 							<label for="email">Email-adres:</label><input type="text" name="email" /><br />
+							{* spam trap, must be kept empty! *}
+							<input type="hidden" name="firstname" value="" />
 						{/if}
 						<div id="berichtPreviewContainer" class="previewContainer"><div id="berichtPreview" class="preview"></div></div>
 						<textarea name="bericht" id="forumBericht" class="forumBericht" rows="12">{$textarea}</textarea>

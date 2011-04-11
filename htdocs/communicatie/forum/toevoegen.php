@@ -43,10 +43,17 @@ if(!isset($_GET['topic']) AND isset($_GET['forum'])){
 		$_SESSION['melding']='U heeft niet voldoende rechten om onderwerpen toe te voegen (ForumOnderwerp::magToevoegen(); forum/toevoegen.php).';
 		exit;
 	}
-	if($forumonderwerp->needsModeration() AND !isset($email)){
-		header('location: '.CSR_ROOT.'communicatie/forum/');
-		$_SESSION['melding']='Email-adres opgeven is verplicht!';
-		exit;	
+	if($forumonderwerp->needsModeration()){
+		if(!isset($email)){
+			$_SESSION['melding']='Email-adres opgeven is verplicht!';
+			header('location: '.CSR_ROOT.'communicatie/forum/');
+			exit;
+		}
+		//spam detection. if hidden field 'firstname' is not empty, fail.
+		if(isset($_POST['firstname']) && $_POST['firstname']!=''){
+			header('location: '.CSR_ROOT.'communicatie/forum/');
+			exit;
+		}
 	}
 
 	//addTopic laadt zelf de boel in die hij net heeft toegevoegd...
@@ -77,6 +84,12 @@ if($forumonderwerp->magToevoegen()){
 				exit;
 			}else{
 				$bericht=$bericht.$email;
+			}
+
+			//spam detection. if hidden field 'firstname' is not empty, fail.
+			if(isset($_POST['firstname']) AND $_POST['firstname']!=''){
+				header('location: '.CSR_ROOT.'communicatie/forum/');
+				exit;
 			}
 		}
 

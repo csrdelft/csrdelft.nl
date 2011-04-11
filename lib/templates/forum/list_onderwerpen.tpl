@@ -22,7 +22,7 @@
 		</tr>
 	{else}
 		{foreach from=$categorie->getOnderwerpen() item=onderwerp}
-			<tr class="kleur{cycle values="0,1"}">				
+			<tr class="kleur{cycle values="0,1"}">
 				<td class="titel">
 					{if $onderwerp->getZichtbaarheid()=='wacht_goedkeuring'}[ter goedkeuring...]{/if}
 					<a href="/communicatie/forum/onderwerp/{$onderwerp->getID()}"{if $onderwerp->isUpdated()} class="updatedTopic"{/if}>
@@ -65,12 +65,14 @@
 						Hier kunt u een onderwerp toevoegen in deze categorie van het forum. Kijkt u vooraf goed of het
 						onderwerp waarover u post hier wel thuishoort.<br /><br />
 					{else}
-						{*	melding voor niet ingelogde gebruikers die toch willen posten. Ze worden 'gemodereerd', dat 
+						{*	melding voor niet ingelogde gebruikers die toch willen posten. Ze worden 'gemodereerd', dat
 							wil zeggen, de topics zijn nog niet direct zichtbaar. *}
 						Hier kunt u een bericht toevoegen aan het forum. Het zal echter niet direct zichtbaar worden, maar
 						&eacute;&eacute;rst door de PubCie worden goedgekeurd. <br />
 						<span style="text-decoration: underline;">Het is hierbij verplicht om uw naam in het bericht te plaatsen.</span><br /><br />
 						<label for="email">Email-adres:</label><input type="text" name="email" /><br /><br />
+						{* spam trap, must be kept empty! *}
+						<input type="hidden" name="firstname" value="" />
 					{/if}
 					<label><a class="forumpostlink" name="laatste">Titel</a></label>
 						<input type="text" name="titel" value="" class="tekst" style="width: 70%" tabindex="1" /><br /><br />

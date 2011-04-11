@@ -28,12 +28,12 @@ RewriteRule ^verwijder-onderwerp/([0-9]+)$ verwijderen.php?topic=$1
 ##andere mod dingen:
 RewriteRule ^openheid/([0-9]+)$ sluiten.php?topic=$1
 RewriteRule ^plakkerigheid/([0-9]+)$ plakkerig.php?topic=$1
-#goedkeuren gaat aan de hand van posts, wordt een post goedgekeurd, 
+#goedkeuren gaat aan de hand van posts, wordt een post goedgekeurd,
 #dan het topic automatisch ook.
 RewriteRule ^keur-goed/([0-9]+)$ goedkeuren.php?post=$1
 
 RewriteRule ^verplaats/([0-9]+)/?$ verplaatsen.php?topic=$1
 
-RewriteRule ^rss/([0-9a-z]*).xml rss.php?token=$1
+RewriteRule ^rss/([0-9a-z]*).xml rss.php?validate_token=$1
 RewriteRule ^rss.xml$ rss.php
 

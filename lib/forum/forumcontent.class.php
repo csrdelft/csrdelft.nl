@@ -32,11 +32,7 @@ class ForumContent extends SimpleHTML {
 *
 ***********************************************************************************************************/
 	function rssFeed(){
-		$token='';
-		if(isset($_GET['token']) AND preg_match('/[a-z0-9]{15}/', $_GET['token'])){
-			$token=$_GET['token'];
-		}
-		$aPosts=Forum::getPostsVoorRss(false, false, $token);
+		$aPosts=Forum::getPostsVoorRss(false, false);
 
 		$rss=new Smarty_csr();
 		$rss->assign('aPosts', $aPosts);
@@ -52,7 +48,7 @@ class ForumContent extends SimpleHTML {
 			$aPosts=Forum::getPostsVoorRss(Instelling::get('zijbalk_forum'), true);
 			echo '<div id="zijbalk_forum"><h1><a href="/communicatie/forum/categorie/laatste">Forum</a></h1>';
 		}
-		
+
 		if(!is_array($aPosts)){
 			echo '<div class="item">Geen items gevonden</div>';
 		}else{
@@ -108,7 +104,7 @@ class ForumContent extends SimpleHTML {
 				$aZoekOnderdelen=explode(' ', $sZoekQuery);
 				//escape +-en in zoekterm
 				$sEersteTerm=str_replace('+', '\+', $aZoekOnderdelen[0]);
-				
+
 				echo '<br />In <em>'.count($aZoekResultaten).'</em> onderwerpen kwam de volgende zoekterm voor: <strong>'.mb_htmlentities($sZoekQuery).'</strong>';
 				echo '<br /><br /><table id="forumtabel"><tr><th>Onderwerp</th><th>Auteur</th>';
 				echo '<th>categorie</th><th>datum</th></tr>';
@@ -137,7 +133,7 @@ class ForumContent extends SimpleHTML {
 					$sPostFragment=mb_htmlentities($sPostFragment);
 					//zoektermen hooglichten
 					$sPostFragment=preg_replace('/('.$sEersteTerm.')/i', '<strong>\\1</strong>', $sPostFragment);
-						
+
 					echo '<tr class="kleur'.($row%2).'"><td class="forumtitel">';
 					echo '<a href="/communicatie/forum/reactie/'.$aZoekResultaat['postID'].'">';
 					echo $aZoekResultaat['titel'].'</a>';

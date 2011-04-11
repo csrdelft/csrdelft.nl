@@ -18,10 +18,17 @@ class LoginLid{
 
 	# $lid bevat het Lid-object van het lid dat op dit moment is ingelogd.
 	private $lid;
-	
+
 	# mocht er gesued zijn, dan bevat suedFrom het oorspronkelijk ingelogde Lid,
 	# dus het lid dat de su heeft geïnitieerd.
 	private $suedFrom=null;
+
+	/* Komt de authenticatie van de huidige gebruiker uit een token in de url
+	 * dan staat dit aan. aan LoginLid::hasPermission() moet expliciet worden
+	 * meegegeven dat we dit goed vinden, zodat deze validatie precies daar werkt
+	 * waar we het willen, en niet op andere plekken.
+	 */
+	private $authenticatedByToken=false;
 
 	public static function instance(){
 		//als er nog geen instantie gemaakt is, die nu maken
@@ -38,16 +45,30 @@ class LoginLid{
 
 		//Staat er een gebruiker in de sessie?
 		if(!$this->userIsActive()){
-			# zo nee, dan nobody user er in gooien...
-			# in dit geval is het de eerste keer dat we een pagina opvragen
-			# of er is net uitgelogd waardoor de gegevens zijn leeggegooid
-			$this->login('x999', 'x999', false);
+			//check of er een token in de $_GET staat, en of er een lid bestaat met die token.
+			if(isset($_GET['validate_token']) AND preg_match('/^[a-z0-9]{25}$/', $_GET['validate_token'])){
+
+				$query="SELECT uid FROM lid WHERE rssToken='".$token."' LIMIT 1;";
+				$lid=MySql::instance()->getRow($query);
+				$lid=LidCache::getLid($lid);
+				if($lid instanceof Lid){
+					$this->lid=$lid;
+					$this->authenticatedByToken=true;
+				}else{
+					$this->login('x999', 'x999', false);
+				}
+			}else{
+				# zo nee, dan nobody user er in gooien...
+				# in dit geval is het de eerste keer dat we een pagina opvragen
+				# of er is net uitgelogd waardoor de gegevens zijn leeggegooid
+				$this->login('x999', 'x999', false);
+			}
 		}
 		$this->logBezoek();
 	}
 	/*
 	 * Is de huidige gebruiker al actief in een sessie?
-	 */	
+	 */
 	private function userIsActive(){
 		//er is geen _uid gezet in _SESSION dus er is nog niemand ingelogged.
 		if(!isset($_SESSION['_uid'])){
@@ -60,7 +81,7 @@ class LoginLid{
 		$lid=LidCache::getLid($_SESSION['_uid']);
 		if($lid instanceof Lid){
 			$this->lid=$lid;
-			
+
 			if(isset($_SESSION['_suedFrom'])){
 				$this->suedFrom=LidCache::getLid($_SESSION['_suedFrom']);
 			}
@@ -78,7 +99,7 @@ class LoginLid{
 	public function isSelf($uid){
 		return $this->lid->getUid()==$uid;
 	}
-	
+
 	/**
 	 * Switch-user-functies, handig om de webstek snel even te bekijken alsof
 	 * je iemand anders bent.
@@ -199,7 +220,11 @@ class LoginLid{
 	/*
 	 * hasPermission:
 	 *
-	 * @descr	een string met permissie(s).
+	 * @descr				een string met permissie(s).
+	 * @liddescr			permissies van het lid waarop we willen testen.
+	 * @token_authorizable	als false dan werkt hasPermission alsof gebruiker
+	 * 						x999 is, als true dan wordt op de permissies van
+	 * 						de met de token geäuthenticeerde gebruiker getest
 	 *
 	 * Met deze functies kan op één of meerdere permissies worden getest,
 	 * onderling gescheiden door komma's. Als een lid één van de
@@ -214,10 +239,16 @@ class LoginLid{
 	 *  verticale:d					geeft true voor alle leden van verticale d.
 	 *  !lichting:2009				geeft true voor iedereen behalve lichting 2009.
 	 */
-	public function hasPermission($descr, $liddescr=null) {
+	public function hasPermission($descr, $liddescr=null, $token_authorizable=false) {
 		# zoek de rechten van de gebruiker op
 		if($liddescr==null){
 			$liddescr=$this->lid->getPermissies();
+		}
+
+		//alleen als $token_athorizable true is testen we met de permissies van het
+		//geauthenticeerde lid, anders met P_NOBODY
+		if($this->authenticatedByToken AND !$token_authorizable){
+			$liddescr='P_NOBODY';
 		}
 
 		# ga alleen verder als er een geldige permissie wordt teruggegeven
@@ -234,7 +265,7 @@ class LoginLid{
 			$permissies=trim($permissie);
 
 			//een negatie van een permissie.
-			if(substr($permissie, 0, 1)=='!' && !$this->hasPermission(substr($permissie,1), $liddescr)){			
+			if(substr($permissie, 0, 1)=='!' && !$this->hasPermission(substr($permissie,1), $liddescr, $token_authorizable)){
 				return true;
 			//als een uid ingevoerd wordt true teruggeven als het om de huidige gebruiker gaat.
 			}elseif($permissie==$this->getUid()){
@@ -375,7 +406,7 @@ class LoginLid{
 		$p = $this->_permissions;
 		$this->_perm_user = array(
 			'P_NOBODY'     => $p['P_NOBODY'] | $p['P_FORUM_READ'] | $p['P_AGENDA_READ'],
-			'P_LID'        => $p['P_LOGGED_IN'] | $p['P_OUDLEDEN_READ'] | $p['P_FORUM_POST'] | $p['P_DOCS_READ'] | $p['P_LEDEN_READ'] | $p['P_PROFIEL_EDIT'] | $p['P_AGENDA_READ'] | $p['P_MAAL_WIJ'] | $p['P_MAIL_POST'] | $p['P_BIEB_READ'] | $p['P_NEWS_POST'], 
+			'P_LID'        => $p['P_LOGGED_IN'] | $p['P_OUDLEDEN_READ'] | $p['P_FORUM_POST'] | $p['P_DOCS_READ'] | $p['P_LEDEN_READ'] | $p['P_PROFIEL_EDIT'] | $p['P_AGENDA_READ'] | $p['P_MAAL_WIJ'] | $p['P_MAIL_POST'] | $p['P_BIEB_READ'] | $p['P_NEWS_POST'],
 			'P_OUDLID'     => $p['P_LOGGED_IN'] | $p['P_LEDEN_READ'] | $p['P_OUDLEDEN_READ'] | $p['P_FORUM_POST'] | $p['P_PROFIEL_EDIT'] | $p['P_FORUM_READ'] | $p['P_MAAL_IK'] | $p['P_MAIL_POST'] | $p['P_AGENDA_READ'] | $p['P_ALLEEN_OUDLID'],
 			'P_MODERATOR'  => $p['P_ADMIN'] | $p['P_FORUM_MOD'] | $p['P_DOCS_MOD'] | $p['P_LEDEN_MOD'] | $p['P_OUDLEDEN_MOD'] | $p['P_AGENDA_MOD'] | $p['P_MAAL_MOD'] | $p['P_MAIL_SEND'] | $p['P_NEWS_MOD'] | $p['P_BIEB_MOD']
 		);
@@ -386,21 +417,6 @@ class LoginLid{
 		$this->_perm_user['P_VAB']     = $this->_perm_user['P_BESTUUR']  | $p['P_OUDLEDEN_MOD'];
 		$this->_perm_user['P_ETER']	   = $this->_perm_user['P_NOBODY'] | $p['P_LOGGED_IN'] | $p['P_MAAL_IK'] | $p['P_PROFIEL_EDIT'];
 		$this->_perm_user['P_BASF']  = $this->_perm_user['P_LID'] | $p['P_DOCS_MOD'];
-	}
-
-	//met een token is het mogelijk rss feeds te zien te krijgen zonder ingelogged te zijn.
-	//permissies worden overgenomen van het lid dat het token heeft, het token staat in het profiel
-	//van een lid.
-	private $tokenCache;
-	public function validateWithToken($token, $perm){
-		if(!preg_match('/[a-z0-9:,]*/', $token)){
-			return false;
-		}
-		if(!isset($this->tokenCache[$token])){
-			$query="SELECT uid, permissies FROM lid WHERE rssToken='".$token."' LIMIT 1;";
-			$this->tokenCache[$token]=MySql::instance()->getRow($query);
-		}
-		return $this->hasPermission($perm, $this->tokenCache[$token]['permissies']);
 	}
 
 	public function getToken($uid=null){
