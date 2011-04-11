@@ -33,18 +33,28 @@ class Roodschopper{
 		$this->saldogrens=$saldogrens;
 		$this->onderwerp=htmlspecialchars($onderwerp);
 		$this->bericht=htmlspecialchars($bericht);
-		
-		$this->from=$this->cie.'@csrdelft.nl';
+
+		if($this->cie=='maalcie'){
+			$this->from='maalcie-fiscus@csrdelft.nl';
+		}else{
+			$this->from=$this->cie.'@csrdelft.nl';
+		}
 	}
 
 	public static function getDefaults(){
-
+		$cie='soccie';
+		$naam='SocCie';
+		if(Loginlid::instance()->hasPermission('groep:MaalCie')){
+			$cie='maalcie';
+			$naam='MaalCie';
+		}		
 		$bericht='Beste LID,
-Uw saldo bij de ~ is SALDO, dat is negatief. Inleggen met je hoofd.
+Uw saldo bij de '.$naam.' is SALDO, dat is negatief. Inleggen met je hoofd.
 
 Bij voorbaat dank,
 h.t. Fiscus.';
-		$return=new Roodschopper('soccie', -5, 'U staat rood', $bericht);
+
+		$return=new Roodschopper($cie, -5, 'U staat rood', $bericht);
 		$return->setBcc(LoginLid::instance()->getLid()->getEmail());
 		$return->setUitgesloten('x101');
 		return $return;
