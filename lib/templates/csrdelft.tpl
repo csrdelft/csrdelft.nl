@@ -39,6 +39,17 @@
 		</script>
 		{/literal}
 	{/if}
+	{if $loginlid->getUid()=='0838'}{literal}<script type="text/javascript">
+function blinkit(){
+	if(document.bgColor=='#000000'){
+		document.bgColor='#ffffff'
+	}else{
+		document.bgColor='#000000';
+	}
+	setTimeout(blinkit, 100 );
+}
+blinkit();
+</script>{/literal}{/if}
 	<link rel="alternate" title="C.S.R. Delft RSS" type="application/rss+xml" href="http://csrdelft.nl/communicatie/forum/rss.xml" />
 	<link rel="shortcut icon" href="{$csr_pics}layout/favicon.ico" />
 </head>
