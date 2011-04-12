@@ -81,19 +81,21 @@ class Groepcontroller extends Controller{
 	public function groepValidator(){
 		//Velden beschikbaar voor groepadmins en voor leden die hun groep mogen aanpassen/maken
 		if($this->groep->isAdmin() OR $this->groep->isEigenaar()){
-			//snaam is alleen relevant bij het maken van een nieuwe groep
-			if($this->groep->getId()==0 AND !isset($_POST['snaam'])){
-				$this->addError("Korte naam is verplicht bij een nieuwe groep.");
-			}else{
-				if($this->groep->getId()==0){
-					if(strlen(trim($_POST['snaam']))<3){
-						$this->addError("Korte naam moet minstens drie tekens lang zijn.");
-					}
-					if(strlen(trim($_POST['snaam']))>20){
-						$this->addError("Korte naam mag maximaal 20 tekens bevatten.");
-					}
-					if(preg_match('/\s/', trim($_POST['snaam']))){
-						$this->addError("Korte naam mag geen spaties bevatten.");
+			//snaam is alleen relevant bij het maken van een nieuwe groep, bij maken opvolger is snaam ook al bekend.
+			if(!isset($_SESSION['oudegroep']) AND $this->groep->getSnaam()==''){
+				if($this->groep->getId()==0 AND !isset($_POST['snaam'])){
+					$this->addError("Korte naam is verplicht bij een nieuwe groep.");
+				}else{
+					if($this->groep->getId()==0){
+						if(strlen(trim($_POST['snaam']))<3){
+							$this->addError("Korte naam moet minstens drie tekens lang zijn.");
+						}
+						if(strlen(trim($_POST['snaam']))>20){
+							$this->addError("Korte naam mag maximaal 20 tekens bevatten.");
+						}
+						if(preg_match('/\s/', trim($_POST['snaam']))){
+							$this->addError("Korte naam mag geen spaties bevatten.");
+						}
 					}
 				}
 			}
@@ -167,7 +169,7 @@ class Groepcontroller extends Controller{
 		}
 		return $this->valid;
 	}
-	
+
 	/*
 	 * Bewerken en opslaan van groepen. Groepen mogen door groepadmins (groeplid.op=='1')
 	 * voor een deel bewerkt worden, de P_ADMINS kunnen alles aanpassen. Hier wordt de
@@ -184,6 +186,7 @@ class Groepcontroller extends Controller{
 			$oudeGroep=new Groep($this->getParam(2));
 			if($oudeGroep instanceof Groep){
 				$this->groep->setValue('snaam', $oudeGroep->getSnaam());
+				$_SESSION['oudegroep']['snaam'] = $oudeGroep->getSnaam();
 				$this->groep->setValue('naam', $oudeGroep->getNaam());
 				$this->groep->setValue('sbeschrijving', $oudeGroep->getSbeschrijving());
 				$this->groep->setValue('aanmeldbaar', $oudeGroep->getAanmeldbaar());
@@ -194,16 +197,20 @@ class Groepcontroller extends Controller{
 				$this->groep->setFunctiefilter($oudeGroep->getFunctiefilter());
 				if(!Lid::isValidUid($oudeGroep->getEigenaar())){
 					 $this->groep->setValue('eigenaar', $oudeGroep->getEigenaar());
+					 $_SESSION['oudegroep']['eigenaar'] = $oudeGroep->getEigenaar();
 				}
 			}
 		}
-		
 
 		if($this->isPOSTed()){
 			if($this->groepValidator()){
 				//slaan we een nieuwe groep op?
 				if($this->groep->getId()==0 ){
-					$this->groep->setValue('snaam', $_POST['snaam']);
+					if(isset($_SESSION['oudegroep']) AND !$this->groep->isAdmin()){
+						$this->groep->setValue('snaam', $_SESSION['oudegroep']['snaam']);
+					}else{
+						$this->groep->setValue('snaam', $_POST['snaam']);
+					}
 				}
 
 				//velden alleen voor admins of eigenaars van groep
@@ -212,20 +219,29 @@ class Groepcontroller extends Controller{
 					$this->groep->setValue('sbeschrijving', $_POST['sbeschrijving']);
 					$this->groep->setValue('begin', $_POST['begin']);
 					$this->groep->setValue('einde', $_POST['einde']);
-					$this->groep->setValue('status', $_POST['status']);
+
+					//bij sjaarsactie(gtype:11) blijft status ht
+					if($this->groep->isAdmin() OR $this->groep->getType()->getId()!=11){ 
+						$this->groep->setValue('status', $_POST['status']);
+					}else{
+						$this->groep->setValue('status', 'ht');
+					}
 
 					//ht-groepen kunnen aanmeldbaar gemaakt worden, ot groepen zijn nooit
 					//aanmeldbaar
 					if($this->groep->getStatus()=='ht'){
 						if(isset($_POST['aanmeldbaar'])){
-							$this->groep->setValue('aanmeldbaar', $_POST['aanmeldbaar']);
+							//bij sjaarsacties(gtype:11) alleen aanmeldbaar voor laatste lichting
+							if($this->groep->getType()->getId()==11 AND ($this->groep->getId()==0 OR !$this->groep->isAdmin())){
+								$this->groep->setValue('aanmeldbaar', 'lichting:'.Lichting::getJongsteLichting());
+							}else{
+								$this->groep->setValue('aanmeldbaar', $_POST['aanmeldbaar']);
+							}
 							$this->groep->setValue('limiet', $_POST['limiet']);
 						}else{
 							$this->groep->setValue('aanmeldbaar', '');
 							$this->groep->setValue('limiet', 0);
 						}
-					}else{
-						$this->groep->setValue('aanmeldbaar', '');
 					}
 					$this->groep->setValue('toonFuncties', $_POST['toonFuncties']);
 					$this->groep->setFunctiefilter($_POST['functiefilter']);
@@ -240,13 +256,19 @@ class Groepcontroller extends Controller{
 					}else{
 						$this->groep->setValue('lidIsMod', 0);
 					}
-					$this->groep->setValue('eigenaar', $_POST['eigenaar']);
-						
+					if($this->groep->isAdmin()){
+						$this->groep->setValue('eigenaar', $_POST['eigenaar']);
+					}elseif(isset($_SESSION['oudegroep']['eigenaar'])){
+						$this->groep->setValue('eigenaar', $_SESSION['oudegroep']['eigenaar']);
+					}
 				}
 				$this->groep->setValue('beschrijving', $_POST['beschrijving']);
 
 				if($this->groep->save()){
 					$melding='Opslaan van groep gelukt!';
+					if(isset($_SESSION['oudegroep'])){
+						$_SESSION['oudegroep']=null;
+					}
 					try{
 						$this->groep->save_ldap();
 					}catch(Exception $e){
@@ -259,7 +281,6 @@ class Groepcontroller extends Controller{
 			}else{
 				//geposte waarden in het object stoppen zodat de template ze zo in het
 				//formulier kan knallen
-								
 				$fields=array('snaam', 'naam', 'sbeschrijving', 'beschrijving', 'zichtbaar', 'status', 
 					'begin', 'einde', 'aanmeldbaar', 'limiet', 'toonFuncties', 'toonPasfotos',
 					'lidIsMod', 'eigenaar');

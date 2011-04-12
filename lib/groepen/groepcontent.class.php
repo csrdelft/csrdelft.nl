@@ -131,7 +131,7 @@ class Groepcontent extends SimpleHTML{
 		$content->assign('action', $this->action);
 		$content->assign('groeptypes', Groepen::getGroeptypes());
 		$content->assign('aanmeldfilters', $this->getAanmeldfilters()); 
-		$content->assign('jongstelichting', Lichting::getJongsteLichting());
+		$content->assign('oudegroep',$_SESSION['oudegroep']);
 
 		if($this->action=='addLid'){
 			$content->assign('lidAdder', $this->getLidAdder());
