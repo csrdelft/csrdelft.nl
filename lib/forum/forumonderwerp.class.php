@@ -581,7 +581,7 @@ class ForumOnderwerp{
 		$db=MySql::instance();
 		$iPostID=(int)$iPostID;
 
-		$bewerkt='Goedgekeurd door [lid='.LoginLid::instance()->getUid().'] [reldate]'.getDateTime().'[/reldate]'."\n";
+		$bewerkt='[prive=P_FORUM_MOD]Goedgekeurd door [lid='.LoginLid::instance()->getUid().'] [reldate]'.getDateTime().'[/reldate][/prive]'."\n";
 
 		$sPostQuery="
 			UPDATE
