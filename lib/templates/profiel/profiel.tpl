@@ -98,6 +98,7 @@
 			{if $profhtml.msn!=''}<div class="label">MSN:</div> {$profhtml.msn}<br />{/if}
 			{if $profhtml.jid!=''}<div class="label">Jabber/GTalk:</div> {$profhtml.jid}<br />{/if}
 			{if $profhtml.skype!=''}<div class="label">Skype:</div> {$profhtml.skype}<br />{/if}
+			{if $profhtml.linkedin!=''}<div class="label">LinkedIn:</div> <a href="{$profhtml.linkedin}" class="linkExt">{$profhtml.linkedin|truncate:50}</a><br />{/if}
 			{if $profhtml.website!=''}<div class="label">Website:</div> <a href="{$profhtml.website}" class="linkExt">{$profhtml.website|truncate:30}</a><br />{/if}
 		</div>
 	</div>

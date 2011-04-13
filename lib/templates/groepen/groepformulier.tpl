@@ -20,6 +20,7 @@
 			<label for="eigenaar" class="clear"><strong>Groepseigenaar:</strong></label>
 			<input type="text" id="eigenaar" maxlength="255" name="eigenaar" style="width: 20%" value="{$groep->getEigenaar()|escape:'html'}" /><br />
 		{/if}
+		{* Sjaarsactie (gtype:11) is altijd ht *}
 		{if $groep->getType()->getId()==11 AND !$groep->isAdmin()}
 			<input type="hidden" id="groepStatus" name="status" value="ht" />
 		{else}
@@ -39,6 +40,7 @@
 		<br />
 		<hr />
 		<div id="groepAanmeldbaarContainer" style="display: none;">
+		{* Sjaarsactie (gtype:11) is alleen aanmeldbaar voor de jongstelichting *}
 		{if $groep->getType()->getId()==11 AND ($groep->getId()==0 OR !$groep->isAdmin())}
 			<input type="hidden" id="groepAanmeldbaar" name="aanmeldbaar" value="niet-leeg-zodat-js-aanmeldopties-weergeeft" />
 		{else}
@@ -73,6 +75,7 @@
 		<label for="toonPasfotos"><strong>Toon pasfoto's?</strong></label>
 		<input type="checkbox" name="toonPasfotos" id="toonPasfotos" {if $groep->getToonPasfotos()}checked="checked"{/if} /> <em>(Pasfoto komt in plaats van naam)</em>
 		<br />
+		{* Sjaarsactie (gtype:11) heeft geen lidmods *}
 		{if $groep->getType()->getId()!=11 OR $groep->isAdmin()}
 			<label for="lidIsMod"><strong>Groepslid is mod?</strong></label>
 			<input type="checkbox" name="lidIsMod" id="lidIsMod" {if $groep->getlidIsMod()}checked="checked"{/if} /> <em>(Elk lid kan groepsleden toevoegen en het grote verhaal aanpassen.)</em>
