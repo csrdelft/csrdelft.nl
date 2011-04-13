@@ -72,7 +72,7 @@
 						<span style="text-decoration: underline;">Het is hierbij verplicht om uw naam in het bericht te plaatsen.</span><br /><br />
 						<label for="email">Email-adres:</label><input type="text" name="email" /><br /><br />
 						{* spam trap, must be kept empty! *}
-						<input type="hidden" name="firstname" value="" />
+						<input type="text" name="firstname" value="" class="verborgen" />
 					{/if}
 					<label><a class="forumpostlink" name="laatste">Titel</a></label>
 						<input type="text" name="titel" value="" class="tekst" style="width: 70%" tabindex="1" /><br /><br />

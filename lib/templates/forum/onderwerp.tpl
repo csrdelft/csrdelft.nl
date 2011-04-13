@@ -173,7 +173,7 @@
 							Het vermelden van <em>uw naam en email-adres</em> is verplicht.</strong><br /><br />
 							<label for="email">Email-adres:</label><input type="text" name="email" /><br />
 							{* spam trap, must be kept empty! *}
-							<input type="hidden" name="firstname" value="" />
+							<input type="text" name="firstname" value="" class="verborgen" />
 						{/if}
 						<div id="berichtPreviewContainer" class="previewContainer"><div id="berichtPreview" class="preview"></div></div>
 						<textarea name="bericht" id="forumBericht" class="forumBericht" rows="12">{$textarea}</textarea>
