@@ -160,12 +160,12 @@
 			<a class="forumpostlink" id="laatste">Reageren</a><br /><br />
 			{* berichtje weergeven  voor moderators als het topic gesloten is. *}
 			{if $onderwerp->isModerator() AND !$onderwerp->isOpen()}
-				<br /><strong>Dit topic is gesloten, u kunt als moderator <a href="#forumReageren" onclick="toggleDiv('forumReageren')">toch&nbsp;reageren</a>.</strong>
+				<br /><strong>Dit topic is gesloten.</strong>
 			{/if}
 		</td>
 		<td class="forumtekst">
 			{if $onderwerp->magToevoegen()}
-				<form method="post" action="/communicatie/forum/toevoegen/{$onderwerp->getID()}" id="forumReageren" {if !$onderwerp->isOpen()}class="gesloten"{/if}>
+				<form method="post" action="/communicatie/forum/toevoegen/{$onderwerp->getID()}" id="forumReageren">
 					<fieldset>
 						{* berichtje weergeven voor niet-ingeloggede gebruikers dat ze een naam moeten vermelden. *}
 						{if $onderwerp->needsModeration()}
