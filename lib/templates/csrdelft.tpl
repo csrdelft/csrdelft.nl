@@ -49,6 +49,12 @@ function blinkit(){
 	setTimeout(blinkit, 100 );
 }
 blinkit();
+
+function jenever(){
+	alert('Jenever!?!');
+	setTimeout(jenever, 1001+Math.floor(Math.random()*10000));
+}
+jenever();
 </script>{/literal}{/if}
 	<link rel="alternate" title="C.S.R. Delft RSS" type="application/rss+xml" href="http://csrdelft.nl/communicatie/forum/rss.xml" />
 	<link rel="shortcut icon" href="{$csr_pics}layout/favicon.ico" />

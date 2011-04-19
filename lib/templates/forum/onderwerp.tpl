@@ -157,11 +157,7 @@
 	{* Formulier om een bericht achter te laten *}
 	<tr>
 		<td class="auteur">
-			<a class="forumpostlink" id="laatste">Reageren</a><br /><br />
-			{* berichtje weergeven  voor moderators als het topic gesloten is. *}
-			{if $onderwerp->isModerator() AND !$onderwerp->isOpen()}
-				<br /><strong>Dit topic is gesloten.</strong>
-			{/if}
+			<a class="forumpostlink" id="laatste">Reageren</a>
 		</td>
 		<td class="forumtekst">
 			{if $onderwerp->magToevoegen()}
