@@ -10,7 +10,7 @@ INSERT INTO  `csrdelft`.`verticale` (
 `naam`
 )
 VALUES (
-'0',  'Geen',  'Geen'
+'0',  '_',  'Geen'
 ), (
 '1',  'A',  'Archibald'
 ), (

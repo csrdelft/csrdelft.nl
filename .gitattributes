@@ -930,5 +930,6 @@ sql/21xx_forum_gelezen.sql -text
 sql/21xx_machtiging.sql -text
 sql/2211_aanmaakbaargroepen.sql -text
 sql/2230_linkedin.sql -text
+sql/2235_fixverticaleletterGeen.sql -text
 sql/csrdelft.sql -text
 sql/csrdelft_oud.sql -text
