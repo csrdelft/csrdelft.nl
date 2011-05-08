@@ -233,7 +233,7 @@ class Mededeling{
 				if(self::isOudlid()){
 					$doelgroepClause.="doelgroep!='leden'";
 				}elseif(self::magPriveLezen()){
-					$doelgroepClause.="doelgroep='leden'";
+					$doelgroepClause.="doelgroep!='oudleden'";
 				}else{
 					$doelgroepClause.="doelgroep='iedereen'";
 				}
