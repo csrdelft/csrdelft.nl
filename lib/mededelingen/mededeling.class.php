@@ -202,29 +202,56 @@ class Mededeling{
 		return $this->categorie;
 	}
 
-	public static function getTopmost($aantal, $oudledenVersie=false){
+	public static function getTopmost($aantal, $doelgroep=null){
 		$topmost=array();
-		if(is_numeric($aantal) and $aantal>0){
-			$db=MySql::instance();
-			$doelgroepClause="";
-			if( !LoginLid::instance()->hasPermission('P_LEDEN_READ') ){
-				$doelgroepClause=" AND doelgroep='iedereen'";
-			}else if($oudledenVersie OR self::isOudlid()){
-				$doelgroepClause=" AND doelgroep!='leden'";
-			}
-			$topmostQuery="
-				SELECT 
-					id, datum, vervaltijd, titel, tekst, categorie, uid, 
-					prioriteit, doelgroep, zichtbaarheid, plaatje, categorie
-				FROM mededeling
-				WHERE (vervaltijd IS NULL OR vervaltijd > '".getDateTime()."')
-				  AND zichtbaarheid='zichtbaar'".$doelgroepClause."
-				ORDER BY prioriteit ASC, datum DESC
-				LIMIT ".$aantal;
-			$resource=$db->select($topmostQuery);
-			while( $mededeling=$db->next($resource) ){
-				$topmost[]=new Mededeling($mededeling);
-			}
+		if(!is_numeric($aantal) OR $aantal<=0){
+			return $topmost;
+		}
+		
+		$db=MySql::instance();
+		
+		// Doelgroep bepalen en checken.
+		$doelgroepClause=" AND ";
+		switch($doelgroep){
+			case 'nietleden':
+				$doelgroepClause.="doelgroep='iedereen'";
+				break;
+			case 'leden': // De gebruiker mag alleen leden-berichten zien als hij daar rechten toe heeft.
+				$doelgroepClause.=self::magPriveLezen() ? "doelgroep!='oudleden'" : "doelgroep='iedereen'"; // Let op de != en =
+				break;
+			case 'oudleden': // De gebruiker mag alleen oudlid-berichten zien als hij oudlid of moderator is.
+				if(self::isOudlid() OR self::isModerator()){
+					$doelgroepClause.="doelgroep!='leden'";
+				}elseif(self::magPriveLezen()){ // Anders mag een normaal lid ledenberichten zien én de berichten voor iedereen.
+					$doelgroepClause.="doelgroep!='oudleden'";
+				}else{ // Anders mag een niet-lid alleen de berichten zien die voor iedereen bestemd zijn.
+					$doelgroepClause.="doelgroep='iedereen'";
+				}
+				break;
+			default:
+				// Indien $doelgroep niet is opgegeven of ongeldig is, kijken we wat het beste past bij de huidige gebruiker.
+				if(self::isOudlid()){
+					$doelgroepClause.="doelgroep!='leden'";
+				}elseif(self::magPriveLezen()){
+					$doelgroepClause.="doelgroep='leden'";
+				}else{
+					$doelgroepClause.="doelgroep='iedereen'";
+				}
+				break;
+		}
+		
+		$topmostQuery="
+			SELECT 
+				id, datum, vervaltijd, titel, tekst, categorie, uid, 
+				prioriteit, doelgroep, zichtbaarheid, plaatje, categorie
+			FROM mededeling
+			WHERE (vervaltijd IS NULL OR vervaltijd > '".getDateTime()."')
+			  AND zichtbaarheid='zichtbaar'".$doelgroepClause."
+			ORDER BY prioriteit ASC, datum DESC
+			LIMIT ".$aantal;
+		$resource=$db->select($topmostQuery);
+		while( $mededeling=$db->next($resource) ){
+			$topmost[]=new Mededeling($mededeling);
 		}
 		return $topmost;
 	}
@@ -384,6 +411,10 @@ class Mededeling{
 	
 	public static function isOudlid(){ return LoginLid::instance()->hasPermission('P_ALLEEN_OUDLID'); }
 
+	// function magPriveLezen()
+	// post: geeft true terug als het huidige lid prive-Mededelingen mag lezen (berichten die voor leden bestemd zijn).
+	public static function magPriveLezen(){ return LoginLid::instance()->hasPermission('P_LEDEN_READ'); }
+	
 	// function magToevoegen()
 	// post: geeft true terug als het huidige lid Mededelingen mag toevoegen.
 	public static function magToevoegen(){ return LoginLid::instance()->hasPermission('P_NEWS_POST'); }

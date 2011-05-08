@@ -1,3 +1,14 @@
+{if $geselecteerdeMededeling->isModerator()}
+<ul class="horizontal nobullets">
+	<li class="active">
+		<a href="{$nieuws_root}" title="Mededelingenketzer">Mededelingenketzer</a>
+	</li>
+	<li>
+		<a href="{$nieuws_root}top3overzicht" title="Top 3 Overzicht">Top 3 Overzicht</a>
+	</li>
+</ul>
+<hr />
+{/if}
 <div class="mededelingen-overzichtlijst">
 {$melding}
 {if $geselecteerdeMededeling!==null}		{*	Check of er een mededeling geselecteerd is.	Zo niet, dan

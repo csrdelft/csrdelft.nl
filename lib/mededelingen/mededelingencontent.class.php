@@ -77,10 +77,10 @@ class MededelingenContent extends SimpleHTML{
 		$content->display('mededelingen/mededelingen.tpl');
 	}
 	
-	public function getTopBlock($oudledenVersie=false){
+	public function getTopBlock($doelgroep){
 		$content=new Smarty_csr();
 		
-		$topMost=Mededeling::getTopmost(self::aantalTopMostBlock, $oudledenVersie);
+		$topMost=Mededeling::getTopmost(self::aantalTopMostBlock, $doelgroep);
 
 		$content->assign('mededelingenRoot', self::mededelingenRoot);
 		$content->assign('topmost', $topMost);

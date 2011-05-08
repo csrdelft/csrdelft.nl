@@ -438,14 +438,20 @@ UBBVERHAAL;
 			require_once('mededelingen/mededeling.class.php');
 			require_once('mededelingen/mededelingencontent.class.php');
 			$type=$parameters['mededelingen'];
-			if($type=='top3leden'){
-				$mededelingenContent=new MededelingenContent(0);
-				$return=$mededelingenContent->getTopBlock();
-			}else if($type=='top3oudleden'){
-				$mededelingenContent=new MededelingenContent(0);
-				$return=$mededelingenContent->getTopBlock(true);
-			}else{
-				$return='Geen geldig type ('.$type.').';
+			$mededelingenContent=new MededelingenContent(0);
+			switch($type){
+				case 'top3nietleden':
+					$return=$mededelingenContent->getTopBlock('nietleden');
+					break;
+				case 'top3leden':
+					$return=$mededelingenContent->getTopBlock('leden');
+					break;
+				case 'top3oudleden':
+					$return=$mededelingenContent->getTopBlock('oudleden');
+					break;
+				default:
+					$return='Geen geldig type ('.$type.').';
+					break;
 			}
 		}else{
 			$return='[mededelingen] Geen geldig mededelingenblok.';

@@ -139,3 +139,13 @@ div#plaatje{
 	float: right;
 	margin-top: 10px;
 }
+
+/* Mededelingen Top 3 Overzicht*/
+div#top3overzicht{
+	width:700px;
+	/*margin-top:18px;*/
+}
+div#top3overzicht div.top3container{
+	float: left;
+	margin-top: 15px;
+}
