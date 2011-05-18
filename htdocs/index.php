@@ -5,7 +5,7 @@
 # -------------------------------------------------------------------
 # htdocs/index.php
 # -------------------------------------------------------------------
-
+echo '<!-- test -->';
 # instellingen & rommeltjes
 require_once 'configuratie.include.php';
 
