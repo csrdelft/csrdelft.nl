@@ -36,7 +36,7 @@ class LidZoeker{
 		'adresseringechtpaar' => 'Post echtpaar t.n.v.');
 
 	//toegestane opties voor het statusfilter.
-	private $allowStatus=array('S_LID', 'S_NOVIET', 'S_GASTLID', 'S_NOBODY', 'S_OUDLID', 'S_KRINGEL', 'S_OVERLEDEN');
+	private $allowStatus=array('S_LID', 'S_NOVIET', 'S_GASTLID', 'S_NOBODY', 'S_OUDLID', 'S_ERELID', 'S_KRINGEL', 'S_OVERLEDEN');
 
 	//toegestane opties voor de weergave.
 	private $allowWeergave=array('lijst', 'kaartje', 'CSV');
@@ -77,7 +77,7 @@ class LidZoeker{
 
 		//als er geen explicite status is opgegeven, en het zoekende lid is oudlid, dan zoeken we automagisch
 		//ook in de oudleden.
-		if(!isset($query['status']) AND LoginLid::instance()->getLid()->getStatus()=='S_OUDLID'){
+		if(!isset($query['status']) AND in_array(LoginLid::instance()->getLid()->getStatus(), array('S_OUDLID', 'S_ERELID'))){
 			$this->rawQuery['status']='LEDEN|OUDLEDEN';
 		}
 
@@ -121,8 +121,10 @@ class LidZoeker{
 							$add=array_merge($add, array('S_LID', 'S_NOVIET', 'S_GASTLID'));
 							continue;
 						}
-						if($filter=='OUDLEDEN') $filter='OUDLID';
-
+						if($filter=='OUDLEDEN'){
+							$add=array_merge($add, array('S_OUDLID', 'S_ERELID'));
+							continue;
+						}
 						$filter='S_'.$filter;
 						if(in_array($filter, $this->allowStatus)){
 							$add[]=$filter;

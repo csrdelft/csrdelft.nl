@@ -24,7 +24,7 @@ if(isset($_POST['namenRaw'])){
 		echo '<th>Abo\'s weg</th><th>status naar</th>';
 		echo '</tr>';
 
-		require_once('maaltijden/class.maaltrack.php');
+		require_once('maaltijden/maaltrack.class.php');
 		$maaltrack=new Maaltrack();
 		foreach($aUids as $aLid){
 			if(isset($aLid['uid'])){

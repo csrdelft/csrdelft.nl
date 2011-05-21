@@ -285,7 +285,9 @@ class Lid implements Serializable, Agendeerbaar{
 	public function isLid(){
 		return in_array($this->getStatus(), array('S_NOVIET', 'S_LID', 'S_GASTLID'));
 	}
-
+	public function isOudlid(){
+		return in_array($this->getStatus(), array('S_OUDLID', 'S_ERELID'));
+	}
 	/*
 	 * Geef een karakter terug om de status van het huidige lid aan te
 	 * duiden. In de loop der tijd zijn ~ voor kringel en • voor oudlid
@@ -300,6 +302,7 @@ class Lid implements Serializable, Agendeerbaar{
 			case 'S_NOVIET':
 			case 'S_GASTLID':
 			case 'S_LID': return '∈';
+			case 'S_ERELID': return '☀';
 			case 'S_OVERLEDEN': return '✝';
 		}
 	}
@@ -311,6 +314,7 @@ class Lid implements Serializable, Agendeerbaar{
 			case 'S_NOVIET': return 'Noviet';
 			case 'S_GASTLID': return 'Gastlid';
 			case 'S_LID': return 'Lid';
+			case 'S_ERELID': return 'Erelid';
 			case 'S_OVERLEDEN': return 'Overleden';
 		}
 	}
@@ -539,7 +543,7 @@ class Lid implements Serializable, Agendeerbaar{
 					}
 					$naam.=$this->profiel['achternaam'];
 					if($this->profiel['postfix'] != '') $naam.=' '.$this->profiel['postfix'];
-					if($this->profiel['status']=='S_OUDLID' OR $this->profiel['status']=='S_KRINGEL'){
+					if($this->profiel['status']=='S_OUDLID' OR $this->profiel['status']=='S_ERELID' OR $this->profiel['status']=='S_KRINGEL'){
 						$naam.=' '.$this->getStatusChar();
 					}
 				}
@@ -885,7 +889,7 @@ class Zoeker{
 				(LoginLid::instance()->hasPermission('P_LEDEN_READ') and LoginLid::instance()->hasPermission('P_OUDLEDEN_READ') and $zoekstatus != 'leden')
 			   ) {
 				if ($statusfilter != '') $statusfilter .= " OR ";
-				$statusfilter .= "status='S_OUDLID'";
+				$statusfilter .= "status='S_OUDLID' OR status='S_ERELID'";
 			}
 			# we zoeken in nobodies als
 			# de ingelogde persoon dat mag EN daarom gevraagd heeft

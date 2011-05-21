@@ -1261,8 +1261,8 @@ class MaalTrack {
 	}
 
 	# alle abosoorten die de ingelogde gebruiker *niet* heeft aanstaan
-	function getNotAboSoort($mootfilter = true) {
-		$abos = $this->getAbo();
+	function getNotAboSoort($mootfilter = true, $uid=null) {
+		$abos = $this->getAbo($uid);
 		$abosoorten = $this->getAboSoort($mootfilter);
 		return array_diff_key($abosoorten, $abos);
 	}

@@ -17,7 +17,7 @@ rekening mee houden. <strong>Dit is niet de plek om aan te geven dat u iets niet
 	<input type="text" name="eetwens" value="{$maal.eetwens}" size="50" /> <input type="submit" name="opslaan" value="opslaan" />
 </form>
 <br />
-{if $loginlid->getLid()->getStatus()!='S_OUDLID'}
+{if !in_array($loginlid->getLid()->getStatus(), array('S_OUDLID', 'S_ERELID'))}
 <h2>Corveevoorkeuren</h2>
 	<p>Hier kunt u voorkeuren opgeven waar am. CorveeCaesar rekening mee kan houden bij het indelen
 	van u bij maaltijden.<br />Kruis minstens één vakje aan.

@@ -58,7 +58,7 @@ class ProfielContent extends SimpleHTML {
 			$profiel->assign('saldografiek', Saldi::getDatapoints($this->lid->getUid(), 60));
 		}
 		
-		$profiel->assign('isOudlid', $this->lid->getStatus()=='S_OUDLID');
+		$profiel->assign('isOudlid', in_array($this->lid->getStatus(), array('S_OUDLID', 'S_ERELID')));
 
 		$loginlid=LoginLid::instance();
 		$profiel->assign('magBewerken', ($loginlid->hasPermission('P_PROFIEL_EDIT') AND $loginlid->isSelf($this->lid->getUid())) OR $loginlid->hasPermission('P_LEDEN_EDIT'));

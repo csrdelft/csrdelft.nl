@@ -59,7 +59,7 @@ class Profiel{
 			return true;
 		}
 		//oudlid-moderator
-		if(LoginLid::instance()->hasPermission('P_OUDLEDEN_MOD') AND $this->lid->getStatus()=='S_OUDLID'){
+		if(LoginLid::instance()->hasPermission('P_OUDLEDEN_MOD') AND in_array($this->lid->getStatus(), array('S_OUDLID', 'S_ERELID'))){
 			return true;
 		}
 		//novietenbewerker (de novCie dus)
@@ -139,7 +139,7 @@ class Profiel{
 		$hasLedenMod=LoginLid::instance()->hasPermission('P_LEDEN_MOD');
 
 		//zaken bewerken als we oudlid zijn of P_LEDEN_MOD hebben
-		if($profiel['status']=='S_OUDLID' OR $hasLedenMod OR $this->editNoviet){
+		if(in_array($profiel['status'], array('S_OUDLID', 'S_ERELID')) OR $hasLedenMod OR $this->editNoviet){
 			$form[]=new Comment('Identiteit:');
 			$form[]=new RequiredInputField('voornaam', $profiel['voornaam'], 'Voornaam', 50);
 			$form[]=new RequiredInputField('voorletters', $profiel['voorletters'], 'Voorletters', 10);
@@ -156,7 +156,7 @@ class Profiel{
 			if(in_array($profiel['status'], array('S_NOBODY', 'S_OVERLEDEN'))){
 				$form[]=new DatumField('sterfdatum', $profiel['sterfdatum'], 'Overleden op:');
 			}
-			if($hasLedenMod OR $profiel['status']=='S_OUDLID'){
+			if($hasLedenMod OR in_array($profiel['status'], array('S_OUDLID', 'S_ERELID'))){
 				$form[]=new UidField('echtgenoot', $profiel['echtgenoot'], 'Echtgenoot (lidnummer):');
 				$form[]=new InputField('adresseringechtpaar',$profiel['adresseringechtpaar'], 'Tenaamstelling post echtpaar:',250);
 			}
@@ -170,7 +170,7 @@ class Profiel{
 		$form[]=new TelefoonField('telefoon', $profiel['telefoon'], 'Telefoonnummer (vast)', 20);
 		$form[]=new TelefoonField('mobiel', $profiel['mobiel'], 'Paupernummer', 20);
 
-		if($profiel['status']!='S_OUDLID'){
+		if(in_array($profiel['status'], array('S_OUDLID', 'S_ERELID'))){
 			$form[]=new Comment('Adres ouders:');
 			$form[]=new InputField('o_adres', $profiel['o_adres'], 'Straatnaam', 100);
 			$form[]=new InputField('o_postcode', $profiel['o_postcode'], 'Postcode', 20);
@@ -197,31 +197,33 @@ class Profiel{
 			$form[]=new SelectField('machtiging', $profiel['machtiging'], 'Machtiging getekend?', array('ja'=> 'Ja', 'nee' => 'Nee'));
 		}
 
-		if(in_array($profiel['status'], array('S_OUDLID', 'S_NOBODY', 'S_OVERLEDEN')) OR $this->lid->getUid()=='6601'){ //vd Wekken mag wel eerder begonnen zijn.
+		if(in_array($profiel['status'], array('S_OUDLID', 'S_ERELID', 'S_NOBODY', 'S_OVERLEDEN')) OR $this->lid->getUid()=='6601'){ //vd Wekken mag wel eerder begonnen zijn.
 			$beginjaar=1950;
 		}else{
 			$beginjaar=date('Y')-20;
 		}
 
-		if($profiel['status']=='S_OUDLID' OR $hasLedenMod OR $this->editNoviet){
+		if(in_array($profiel['status'], array('S_OUDLID', 'S_ERELID')) OR $hasLedenMod OR $this->editNoviet){
 			$form[]=new Comment('Studie:');
-			$form[]=new StudieField('studie', $profiel['studie'], 'Studie');
+		}
+		$form[]=new StudieField('studie', $profiel['studie'], 'Studie');
+		if(in_array($profiel['status'], array('S_OUDLID', 'S_ERELID')) OR $hasLedenMod OR $this->editNoviet){
 			$form[]=new IntField('studiejaar', $profiel['studiejaar'], 'Beginjaar studie', date('Y'), $beginjaar);
 		}
 
-		if($profiel['status']!='S_OUDLID'){
+		if(!in_array($profiel['status'], array('S_OUDLID', 'S_ERELID'))){
 			$form[]=new InputField('studienr', $profiel['studienr'], 'Studienummer (TU)', 20);
 		}
 
-		if(!$this->editNoviet AND ($profiel['status']=='S_OUDLID' OR $hasLedenMod)){
+		if(!$this->editNoviet AND (in_array($profiel['status'], array('S_OUDLID', 'S_ERELID')) OR $hasLedenMod)){
 			$form[]=new InputField('beroep', $profiel['beroep'], 'Beroep/werk', 4096);
 			$form[]=new IntField('lidjaar', $profiel['lidjaar'], 'Lid sinds', date('Y'), $beginjaar);
 		}
 
-		if(in_array($profiel['status'], array('S_OUDLID', 'S_NOBODY'))){
+		if(in_array($profiel['status'], array('S_OUDLID', 'S_ERELID', 'S_NOBODY'))){
 			$form[]=new DatumField('lidafdatum', $profiel['lidafdatum'], 'Oudlid sinds');
 		}
-		if($profiel['status']=='S_OUDLID' AND $hasLedenMod){
+		if(in_array($profiel['status'], array('S_OUDLID', 'S_ERELID')) AND $hasLedenMod){
 			$form[]=new SelectField('ontvangtcontactueel', $profiel['ontvangtcontactueel'], 'Ontvangt Contactueel', array('ja'=> 'Ja', 'nee' => 'Nee'));
 		}
 
@@ -293,7 +295,7 @@ P.S.: Mocht u nog vragen hebben, dan kan u natuurlijk altijd e-posts sturen naar
 			MySql::instance()->query($sNieuwWachtwoord) AND
 			LidCache::flushLid($uid) AND
 			$lid->save_ldap() AND
-			mail($lid->getEmail(), 'Nieuw wachtwoord voor de C.S.R.-stek', $mail, "Bcc: pubcie@csrdelft.nl");
+			mail($lid->getEmail(), 'Nieuw wachtwoord voor de C.S.R.-stek', $mail, "From: pubcie@csrdelft.nl\n Bcc: pubcie@csrdelft.nl");
 
 	}
 }
