@@ -197,7 +197,7 @@ class Profiel{
 			$form[]=new SelectField('machtiging', $profiel['machtiging'], 'Machtiging getekend?', array('ja'=> 'Ja', 'nee' => 'Nee'));
 		}
 
-		if(in_array($profiel['status'], array('S_OUDLID', 'S_ERELID', 'S_NOBODY', 'S_OVERLEDEN')) OR $this->lid->getUid()=='6601'){ //vd Wekken mag wel eerder begonnen zijn.
+		if(in_array($profiel['status'], array('S_OUDLID', 'S_ERELID', 'S_NOBODY', 'S_OVERLEDEN', 'S_CIE')) OR $this->lid->getUid()=='6601'){ //vd Wekken mag wel eerder begonnen zijn.
 			$beginjaar=1950;
 		}else{
 			$beginjaar=date('Y')-20;
