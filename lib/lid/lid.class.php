@@ -112,14 +112,18 @@ class Lid implements Serializable, Agendeerbaar{
 		$ldap=new LDAP();
 
 		# Alleen leden, gastleden, novieten en kringels staan in LDAP ( en Knorrie öO~ )
-		if(preg_match('/^S_(LID|GASTLID|NOVIET|KRINGEL)$/', $this->getStatus()) or $this->getUid()=='9808') {
+		if(preg_match('/^S_(LID|GASTLID|NOVIET|KRINGEL|CIE)$/', $this->getStatus()) or $this->getUid()=='9808') {
 
 			# ldap entry in elkaar snokken
 			$entry = array();
 			$entry['uid'] = $this->getUid();
 			$entry['givenname'] = $this->profiel['voornaam'];
 			$entry['sn'] = $this->profiel['achternaam'];
-			$entry['cn'] = $this->getNaam();
+			if(substr($entry['uid'], 0, 2)=='x2'){
+				$entry['cn'] = $entry['sn'];
+			}else{
+				$entry['cn'] = $this->getNaam();
+			}
 			$entry['mail'] = $this->getEmail();
 			$entry['homephone'] = $this->profiel['telefoon'];
 			$entry['mobile'] = $this->profiel['mobiel'];
