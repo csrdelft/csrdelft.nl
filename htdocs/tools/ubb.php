@@ -15,7 +15,7 @@ if(isset($_GET['string'])){
 	$string='b0rkb0rkb0rk: geen invoer in htdocs/tools/ubb.php';
 }
 
-$_SESSION['compose_snapshot']=$string;
+//$_SESSION['compose_snapshot']=$string;
 
 $string=trim($string);
 echo CsrUBB::instance()->getHTML($string);

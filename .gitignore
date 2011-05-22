@@ -1,5 +1,6 @@
 /.project
 /.settings
+bin/ldap/settings.py
 data/*
 data/smarty/*
 data/smarty/cache/*
@@ -17,8 +18,10 @@ htdocs/enquete
 htdocs/handelingen
 htdocs/happening
 htdocs/owee
-/images
+htdocs/tools/alphabanner/alphabanner.cache.*
+images/*
 images/famfamfam/*.png
 lib/include.defines.php
 sessie/*
 /tmp
+/wiki
