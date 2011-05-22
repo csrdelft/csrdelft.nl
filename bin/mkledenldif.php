@@ -3,8 +3,8 @@
 #!/usr/bin/php5 -c /etc/php5/vhosts/csrdelft/
 
 # instellingen & rommeltjes
-require_once('/srv/www/www.csrdelft.nl/lib/include.config.php');
-require_once('include.common.php');
+require_once('/srv/www/www.csrdelft.nl/lib/configuratie.include.php');
+require_once('configuratie.include.php');
 
 # open database
 require_once('class.mysql.php');

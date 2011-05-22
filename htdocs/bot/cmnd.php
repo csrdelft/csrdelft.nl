@@ -7,7 +7,7 @@
 #
 # Authenticatie van de bot moet buiten het script om gebeuren, door permissies
 # op het uitvoeren van het script via de webserver, en het definieren van een
-# constante in include.config.php, ENABLE_BOT_CMND, die de waarde true moet
+# constante in configuratie.include.php, ENABLE_BOT_CMND, die de waarde true moet
 # hebben.Deze constante is standaard (lees: in vers uitgechekte svn) op false
 # ingesteld uit veiligheidsoverwegingen.
 #

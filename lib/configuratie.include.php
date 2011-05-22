@@ -4,7 +4,7 @@
 # C.S.R. Delft
 #
 # -------------------------------------------------------------------
-# include.config.php
+# configuratie.include.php
 # -------------------------------------------------------------------
 # Instellingen van het include_path enzo...
 # -------------------------------------------------------------------
@@ -95,7 +95,7 @@ switch (constant('MODE')) {
 	break;
 
 	default:
-		die("include.config.php:: unsupported MODE");
+		die("configuratie.include.php:: unsupported MODE");
 }
 
 ?>

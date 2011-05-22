@@ -298,10 +298,10 @@ class VBContent extends SimpleHTML {
 		//TODO: fourm hangt er nog niet echt lekker in..... redirecten is een ramp nu
 		if ($source->sourceType=="discussion") {
 			//copied from forumonderwerp.php
-			require_once('include.config.php');
-			require_once('forum/class.forumonderwerp.php');
-			require_once('forum/class.forumcontent.php');
-			require_once('forum/class.forumonderwerpcontent.php');
+			require_once('configuratie.include.php');
+			require_once('forum/forumonderwerp.class.php');
+			require_once('forum/forumcontent.class.php');
+			require_once('forum/forumonderwerpcontentclass..php');
 			# Het middenstuk
 			if($this->_vb->_lid->hasPermission('P_FORUM_READ')) {
 				$forum = new ForumOnderwerp();

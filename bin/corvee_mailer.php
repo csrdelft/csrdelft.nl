@@ -17,7 +17,7 @@ session_id('maaltrack-cli');
 
 # instellingen & rommeltjes
 chdir('../lib/');
-require_once 'include.config.php';
+require_once 'configuratie.include.php';
 
 require_once 'maaltijden/class.maaltrack.php';
 $maaltrack = new MaalTrack();

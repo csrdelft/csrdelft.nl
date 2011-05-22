@@ -8,7 +8,7 @@
 	session_id('maaltrack-cli');
 
 	# instellingen & rommeltjes
-	require_once('include.config.php');
+	require_once('configuratie.include.php');
 
 	//Siri, Wouter K., Thomas Abrahamse
 	$aGeenAbo=array('9101', '0016', '0401');

@@ -3,7 +3,7 @@
 error_reporting(E_ALL);
 
 
-require_once('/srv/www/www.csrdelft.nl/lib/include.config.php');
+require_once('/srv/www/www.csrdelft.nl/lib/configuratie.include.php');
 
 define('STATS_DIR', PICS_PATH.'/stats/');
 

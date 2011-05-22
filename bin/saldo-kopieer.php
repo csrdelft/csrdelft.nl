@@ -1,6 +1,6 @@
 #!/usr/bin/php
 <?php 
-require_once('include.config.php');
+require_once('configuratie.include.php');
 
 $saldiQuery="SELECT uid, soccieID, saldo, createTerm, maalSaldo FROM socciesaldi;";
 

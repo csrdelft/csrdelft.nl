@@ -15,12 +15,12 @@ x002;Praeses;C.S.R. Delft;Praeses C.S.R. Delft;praeses@
 x003;Abactis;C.S.R. Delft;Abactis C.S.R. Delft;abactis@
 x004;Fiscus;C.S.R. Delft;Fiscus C.S.R. Delft;fiscus@
 x005;Vice-Praeses;C.S.R. Delft;Vice-Praeses C.S.R. Delft;vice-praeses@
-x006;Vice-Abactis;C.S.R. Delft;Vice-Abactis C.s.R. Delft;vice-abactis@
+x006;Vice-Abactis;C.S.R. Delft;Vice-Abactis C.S.R. Delft;vice-abactis@
 
 x010;AcqCie;AcquisitieCommissie;;acqcie@
 x011;ArCie;Arro Kopij Commissie;;arcie@
 x012;AlmanakCie;AlmanakCommissie;;almanakcie@
-x013;Alpha;Alpha Cursus;;alpha@
+x013;Alpha;Alpha Cursus;;info@studentalphadelft.nl
 x014;BASFCie;Bibliotheek, Archief, Statistiek en FotoCommissie;;basfcie@
 x015;DiesCie;DiesCommissie;;diescie@
 x016;LeOCie;Laudate et Orate Commissie;;leocie@
@@ -35,17 +35,30 @@ x024;N.B.G.;Netwerk Beheer Groep;;nbg@
 x025;NovCie;NovitiaatsCommissie;;novcie@
 x026;OWeeCie;OWeeCommissie;;oweecie@
 x027;PubCie;PubliciteitsCommissie;;pubcie@
-x028;SocCie;SocieteitsCommissie;;soccie@
-x029;RestauraCie;RestauratieCommissie;;restauracie@
+x035;SocCie;SocieteitsCommissie;;soccie@
+x036;RestauraCie;RestauratieCommissie;;restauracie@
+x037;OnderhoudCie;OnderhoudCommissie;;onderhoudcie@
+
 
 x040;Fotocommissaris;Fotocommissaris (BASFCie);;fotocommissaris@
 x041;Archivaris;Archivaris (BASFCie);;archivaris@
 x042;Bibliothecaris;Bibliothecaris (BASFCie);;bibliothecaris@
 x043;Statisticus;Statisticus (BASFCie);;statisticus@
-x044;Corvee;CorveeManager;;corvee@
+x044;Corvee;CorveeCaeser;;corvee@
 x045;Oudleden;Oudledenbestuur;;oudleden@
+x046;Stichting CC; Stichting Civitas Centrum;;stichtingcc@
 
 x050;Moot 1;Moot 1;;moot1@
 x051;Moo2;Moo2;;moo2@
 x052;Moot 3;Moot 3;;moot3@
 x053;Moot 4;Moot 4;;moot4@
+
+x061;Verticale Archibald;Verticale Archibald;;archibald@
+x062;Verticale Faculteit;Verticale Faculteit;;faculteit@
+x063;Verticale Billy;Verticale Billy;;billy@
+x064;Verticale Diagonaal;Verticale Diagonaal;;diagonaal@
+x065;Verticale Vrøgd;Verticale Vrøgd;;vrogd@
+x066;Verticale Lekker;Verticale Lekker;;lekker@
+x067;Verticale Securis;Verticale Securis;;securis@
+x068;Verticale Primitus;Verticale Primitus;;primitus@
+

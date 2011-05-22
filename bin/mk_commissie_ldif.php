@@ -2,7 +2,7 @@
 <?php
 
 # instellingen & rommeltjes
-require_once('/srv/www/www.csrdelft.nl/lib/include.config.php');
+require_once('/srv/www/www.csrdelft.nl/lib/configuratie.include.php');
 
 while ($xaccount = fgetcsv(STDIN, 1024, ";")) {
 	if (substr(trim($xaccount[0]),0,1) == '#' or trim($xaccount[0]) == '') continue;
