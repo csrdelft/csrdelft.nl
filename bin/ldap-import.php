@@ -2,8 +2,7 @@
 <?php
 # Zorgt ervoor dat alle leden worden toegevoegd aan de LDAP
 
-//require_once('configuratie.include.php');
-require_once('../../../home/gerrit/csrdelft.nl/trunk/lib/configuratie.include.php');
+require_once('configuratie.include.php');
 
 # databaseconnectie openen
 $db=MySql::instance();
