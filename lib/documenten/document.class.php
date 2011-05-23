@@ -186,7 +186,7 @@ class Document{
 		return $this->documentroot.'/'.$this->getID().'_'.$this->bestandsnaam;
 	}
 	public function getDownloadurl(){
-		return '/communicatie/documenten/download/'.$this->getID().'/'.$this->getBestandsnaam();
+		return CSR_ROOT.'communicatie/documenten/download/'.$this->getID().'/'.$this->getBestandsnaam();
 	}
 
 	/*

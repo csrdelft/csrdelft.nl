@@ -1,9 +1,9 @@
 <div class="ubb_block ubb_peiling" id="peiling{$peiling->getId()}">
 {if $beheer AND $peiling->magBewerken()}
-	<a href="peilingbeheer.php?action=verwijder&amp;id={$peiling->getId()}" class="knop beheer" >Verwijder</a>
+	<a href="{$CSR_ROOT}tools/peilingbeheer.php?action=verwijder&amp;id={$peiling->getId()}" class="knop beheer" >Verwijder</a>
 {/if}
 <h3>
-	{if $peiling->magBewerken()}<a href="/tools/peilingbeheer.php">#{$peiling->getId()} {/if}
+	{if $peiling->magBewerken()}<a href="{$CSR_ROOT}/tools/peilingbeheer.php">#{$peiling->getId()} {/if}
 		{$peiling->getTitel()|escape:'html'}
 	{if $peiling->magBewerken()}</a>{/if}
 </h3>
@@ -13,7 +13,7 @@
 {$peiling->getTekst()|ubb}
 
 {if $peiling->magStemmen()}
-	<form id="peiling{$peiling->getId()}" action="/tools/peilingbeheer.php?action=stem" method="post">
+	<form id="peiling{$peiling->getId()}" action="{$CSR_ROOT}tools/peilingbeheer.php?action=stem" method="post">
 	<input type="hidden" name="id" value="{$peiling->getId()}"/>
 {/if}
 	<ul class="peilingopties">

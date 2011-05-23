@@ -255,7 +255,7 @@ class Groep{
 		}
 		return isset($this->leden[$uid]);
 	}
-	
+
 	/*
 	 * Eigenaar mag bij voldoende permissies voor die groeptype groepen aanmaken en zijn groepbewerken
 	 */
@@ -313,9 +313,9 @@ class Groep{
 		return LoginLid::instance()->hasPermission('P_LEDEN_MOD');
 	}
 	public function magBewerken(){
-		return 
-			$this->isAdmin() OR 
-			$this->isEigenaar() OR 
+		return
+			$this->isAdmin() OR
+			$this->isEigenaar() OR
 			$this->isOp(LoginLid::instance()->getUid());
 	}
 	public function magStatsBekijken(){
@@ -544,7 +544,7 @@ class Groep{
 	}
 
 	public function getUrl(){
-		return '/actueel/groepen/'.$this->getType()->getNaam().'/'.$this->getId();
+		return CSR_ROOT.'actueel/groepen/'.$this->getType()->getNaam().'/'.$this->getId();
 	}
 
 	public function getLink($class=''){
@@ -652,7 +652,7 @@ class Groep{
 	 */
 	public function save_ldap() {
 		require_once 'ldap.class.php';
-		
+
 		$ldap=new LDAP();
 
 		# kijken of er naar LDAP gesyncd mag worden
@@ -664,17 +664,17 @@ class Groep{
 				SELECT DISTINCT groeplid.uid
 				FROM groep
 				RIGHT JOIN groeplid ON (groeplid.groepid=groep.id)
-				WHERE snaam='".$db->escape($this->getSnaam())."' 
+				WHERE snaam='".$db->escape($this->getSnaam())."'
 				AND (
 					begin>=(
 						SELECT begin
-						FROM groep 
-						WHERE status='ot' 
-							AND snaam='".$db->escape($this->getSnaam())."' 
-						ORDER BY begin DESC 
+						FROM groep
+						WHERE status='ot'
+							AND snaam='".$db->escape($this->getSnaam())."'
+						ORDER BY begin DESC
 						LIMIT 1
-					) 
-					OR status='ft' 
+					)
+					OR status='ft'
 					OR status='ht'
 				);";
 			$result=$db->query($query);

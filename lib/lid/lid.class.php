@@ -587,7 +587,7 @@ class Lid implements Serializable, Agendeerbaar{
 					if($vorm!='pasfoto'){
 						$naam=mb_htmlentities($naam);
 					}
-					return '<a href="/communicatie/profiel/'.$this->getUid().'" title="'.$sVolledigeNaam.'" class="lidLink '.$this->profiel['status'].'">'.$naam.'</a>';
+					return '<a href="'.CSR_ROOT.'communicatie/profiel/'.$this->getUid().'" title="'.$sVolledigeNaam.'" class="lidLink '.$this->profiel['status'].'">'.$naam.'</a>';
 				}
 			case 'html':
 				if($vorm='pasfoto'){

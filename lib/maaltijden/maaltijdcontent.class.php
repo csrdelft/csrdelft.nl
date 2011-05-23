@@ -100,11 +100,11 @@ class MaaltijdContent extends SimpleHTML {
 				if(LoginLid::instance()->hasPermission('P_MAAL_IK')){
 					switch($status){
 						case 'AAN':
-							$html.='<a href="/actueel/maaltijden/index.php?forum&amp;a=af&amp;m='.$maaltijd->getId().'"><strong>af</strong>melden</a>';
+							$html.='<a href="'.CSR_ROOT.'actueel/maaltijden/index.php?forum&amp;a=af&amp;m='.$maaltijd->getId().'"><strong>af</strong>melden</a>';
 						break;
 						case 'AF':
 						default:
-							$html.='<a href="/actueel/maaltijden/index.php?forum&amp;a=aan&amp;m='.$maaltijd->getId().'"><strong>aan</strong>melden</a>';
+							$html.='<a href="'.CSR_ROOT.'actueel/maaltijden/index.php?forum&amp;a=aan&amp;m='.$maaltijd->getId().'"><strong>aan</strong>melden</a>';
 						break;
 					}
 				}
@@ -113,9 +113,9 @@ class MaaltijdContent extends SimpleHTML {
 		}
 		$html.='<h2>';
 		if(LoginLid::instance()->hasPermission('P_MAAL_MOD') or opConfide()){
-			$html.='<a href="/actueel/maaltijden/lijst/'.$maaltijd->getId().'" title="Direct naar de maaltijdlijst">Maaltijd</a>';
+			$html.='<a href="'.CSR_ROOT.'actueel/maaltijden/lijst/'.$maaltijd->getId().'" title="Direct naar de maaltijdlijst">Maaltijd</a>';
 		}else{
-			$html.='<a href="/actueel/maaltijden/index.php">Maaltijd</a>';
+			$html.='<a href="'.CSR_ROOT.'actueel/maaltijden/index.php">Maaltijd</a>';
 		}
 		$html.=' van '.strftime('%a %e %B %H:%M', strtotime($maaltijd->getMoment())).'</h2>';
 		$html.=$maaltijd->getTekst().'<br />';
