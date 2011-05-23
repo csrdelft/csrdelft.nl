@@ -8,7 +8,7 @@ require_once('configuratie.include.php');
 $db=MySql::instance();
 
 # Profiel-object maken
-require_once('class.lid.php');
+require_once('lid/lid.class.php');
 
 # Alle leden ophalen en opslaan in de LDAP
 $result = $db->select("SELECT uid FROM `lid` WHERE status = 'S_LID' OR status = 'S_GASTLID' OR status = 'S_NOVIET' OR status = 'S_KRINGEL' OR status = 'S_CIE'");
