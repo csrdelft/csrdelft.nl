@@ -60,6 +60,7 @@ htdocs/communicatie/forum/bewerken.php -text
 htdocs/communicatie/forum/getPost.php -text
 htdocs/communicatie/forum/goedkeuren.php -text
 htdocs/communicatie/forum/index.php -text
+htdocs/communicatie/forum/markeerofftopic.php -text
 htdocs/communicatie/forum/onderwerp.php -text
 htdocs/communicatie/forum/plakkerig.php -text
 htdocs/communicatie/forum/rss.php -text
