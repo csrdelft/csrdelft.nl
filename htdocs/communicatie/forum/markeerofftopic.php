@@ -31,7 +31,7 @@ if(isset($_GET['post'])){
 		}else{
 			$reden='';
 		}
-		if($forumonderwerp->markOfftopicPost($postID, $reden)){
+		if($forumonderwerp->markPostOfftopic($postID, $reden)){
 			header('location: '.CSR_ROOT.'forum/reactie/'.$postID);
 		}
 	}

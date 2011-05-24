@@ -510,8 +510,8 @@ class ForumOnderwerp{
 
 	}
 
-	//posts offtopic markeren
-	public function markOfftopicPost($iPostID, $reden=''){
+	//posts offtopic markeren door te wrappen in [offtopic]-tags
+	public function markPostOfftopic($iPostID, $reden=''){
 		$db=MySql::instance();
 
 		$oldPost=$this->getSinglePost($iPostID);
