@@ -25,6 +25,9 @@ RewriteRule ^onderwerp/hernoem/([0-9]+)/?$ bewerken.php?topic=$1
 RewriteRule ^verwijder-bericht/([0-9]+)$ verwijderen.php?post=$1
 RewriteRule ^verwijder-onderwerp/([0-9]+)$ verwijderen.php?topic=$1
 
+##offtopic markeren
+RewriteRule ^markeer-bericht-offtopic/([0-9]+)$ markeerofftopic.php?post=$1
+
 ##andere mod dingen:
 RewriteRule ^openheid/([0-9]+)$ sluiten.php?topic=$1
 RewriteRule ^plakkerigheid/([0-9]+)$ plakkerig.php?topic=$1

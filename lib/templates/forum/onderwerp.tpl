@@ -104,7 +104,8 @@
 					</a>
 				{/if}
 
-				{if $onderwerp->isModerator()}{* verwijderlinkje *}
+				{if $onderwerp->isModerator()}{* verwijderlinkje emoticon_unhappy sound_delete*}
+					{knop url="markeer-bericht-offtopic/`$bericht.id`" type=offtopic confirm='Weet u zeker dat u dit bericht offtopic wil markeren?'}
 					{knop url="verwijder-bericht/`$bericht.id`" type=verwijderen confirm='Weet u zeker dat u dit bericht wilt verwijderen?'}
 					{if $bericht.zichtbaar=='wacht_goedkeuring'}
 						<br />

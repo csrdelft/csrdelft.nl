@@ -125,7 +125,8 @@ class Mededeling{
 			if($this->getId()==0 AND $this->getZichtbaarheid()=='wacht_goedkeuring'){
 				mail('pubcie@csrdelft.nl', 'Nieuwe mededeling wacht op goedkeuring',
 		 			 	CSR_ROOT."actueel/mededelingen/".$return."\r\n".
-		 			 	"\r\nDe inhoud van de mededeling is als volgt: \r\n\r\n".str_replace('\r\n', "\n", $this->getTekst())."\r\n\r\nEINDE BERICHT");
+		 			 	"\r\nDe inhoud van de mededeling is als volgt: \r\n\r\n".str_replace('\r\n', "\n", $this->getTekst())."\r\n\r\nEINDE BERICHT",
+		 			 	"From: pubcie@csrdelft.nl\nReply-To: ".$this->getUid()."@csrdelft.nl");
 			}
 		}
 		return $return;

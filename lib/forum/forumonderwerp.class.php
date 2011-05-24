@@ -378,7 +378,7 @@ class ForumOnderwerp{
 
 	//Een post toevoegen aan het huidige onderwerp.
 	//Indien succesvol: nieuwe post-id komt terug. Anders false.
-	public function addPost($tekst){
+	public function addPost($tekst, $emailnietingelogd=''){
 		$db=MySql::instance();
 
 		$tekst=$db->escape(trim($tekst));
@@ -388,6 +388,11 @@ class ForumOnderwerp{
 
 		//het ip-adres bepalen van de post.
 		if(isset($_SERVER['REMOTE_ADDR'])){ $ip=$_SERVER['REMOTE_ADDR']; }else{ $ip='0.0.0.0'; }
+
+		//emailadres van niet-ingelogd
+		if($emailnietingelogd!=''){
+				$email=$db->escape("[prive]email: [email]".$emailnietingelogd."[/email][/prive]\n");
+		}
 
 		require_once 'simplespamfilter.class.php';
 		$filter=new SimpleSpamfilter($tekst);
@@ -408,14 +413,15 @@ class ForumOnderwerp{
 			INSERT INTO
 				forum_post
 			(
-				tid, uid, tekst, datum, ip, zichtbaar
+				tid, uid, tekst, datum, ip, zichtbaar, bewerkt
 			)VALUES(
 				".$this->getID().",
 				'".LoginLid::instance()->getUid()."',
 				'".ucfirst($tekst)."',
 				'".getDateTime()."',
 				'".$ip."',
-				'".$zichtbaarheid."'
+				'".$zichtbaarheid."',
+				'".$email."'
 			);";
 
 		if($db->query($sPostQuery)){
@@ -424,7 +430,8 @@ class ForumOnderwerp{
 				//bericht sturen naar pubcie@csrdelft dat er een bericht op goedkeuring wacht
 	 			mail('pubcie@csrdelft.nl', 'Nieuw bericht in extern wacht op goedkeuring',
 	 			 	"http://csrdelft.nl/communicatie/forum/onderwerp/".$this->getID()."\r\n".
-	 			 	"\r\nDe inhoud van het bericht is als volgt: \r\n\r\n".str_replace('\r\n', "\n", $tekst)."\r\n\r\nEINDE BERICHT");
+	 			 	"\r\nDe inhoud van het bericht is als volgt: \r\n\r\n".str_replace('\r\n', "\n", $tekst)."\r\n\r\nEINDE BERICHT",
+	 			 	"From: pubcie@csrdelft.nl\nReply-To: ".$emailnietingelogd);
 	 		}
 	 		//de getalletjes updaten
 	 		$this->recount();
@@ -501,6 +508,30 @@ class ForumOnderwerp{
 			return true;
 		}
 
+	}
+
+	//posts offtopic markeren
+	public function markOfftopicPost($iPostID, $reden=''){
+		$db=MySql::instance();
+
+		$oldPost=$this->getSinglePost($iPostID);
+		$bewerkt='offtopic door [lid='.LoginLid::instance()->getUid().'] [reldate]'.getDateTime().'[/reldate]';
+
+		if($reden!=''){
+			$bewerkt.=': '.$db->escape($reden);
+		}
+		$bewerkt.="\n";
+		$sEditQuery="
+			UPDATE
+				forum_post
+			SET
+				tekst='[offtopic]".$db->escape($oldPost['tekst'])."[/offtopic]',
+				bewerkDatum='".getDateTime()."',
+				bewerkt=CONCAT(bewerkt, '".$bewerkt."')
+			WHERE
+				id=".$iPostID."
+			LIMIT 1;";
+		return $db->query($sEditQuery);
 	}
 
 	//post 'verwijderen'.

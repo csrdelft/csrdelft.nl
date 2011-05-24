@@ -20,7 +20,7 @@ if(!isset($_POST['bericht'])){
 
 if(isset($_POST['email'])){
 	if(email_like($_POST['email'])){
-		$email="\n[prive][offtopic]email: [email]".mb_htmlentities($_POST['email'])."[/email][/offtopic][/prive]";
+		$email=mb_htmlentities($_POST['email']);
 	}else{
 		header('location: '.CSR_ROOT.'communicatie/forum/');
 		$_SESSION['melding']='U moet een geldig email-adres opgeven.';
@@ -82,8 +82,6 @@ if($forumonderwerp->magToevoegen()){
 				header('location: '.CSR_ROOT.'communicatie/forum/');
 				$_SESSION['melding']='Email-adres opgeven is verplicht!';
 				exit;
-			}else{
-				$bericht=$bericht.$email;
 			}
 
 			//spam detection. if hidden field 'firstname' is not empty, fail.
@@ -93,7 +91,7 @@ if($forumonderwerp->magToevoegen()){
 			}
 		}
 
-		if($forumonderwerp->addPost($bericht)!==false){
+		if($forumonderwerp->addPost($bericht,$email)!==false){
 			if(isset($_SESSION['compose_snapshot'])){
 				$_SESSION['compose_snapshot']=null;
 			}
