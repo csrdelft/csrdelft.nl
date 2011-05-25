@@ -89,6 +89,8 @@ if($forumonderwerp->magToevoegen()){
 				header('location: '.CSR_ROOT.'communicatie/forum/');
 				exit;
 			}
+		}else{
+			$email='';
 		}
 
 		if($forumonderwerp->addPost($bericht,$email)!==false){

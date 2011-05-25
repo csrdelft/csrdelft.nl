@@ -391,7 +391,11 @@ class ForumOnderwerp{
 
 		//emailadres van niet-ingelogd
 		if($emailnietingelogd!=''){
-				$email=$db->escape("[prive]email: [email]".$emailnietingelogd."[/email][/prive]\n");
+			$bewerkveld=", bewerkt";
+			$bewerkvalue=",'".$db->escape("[prive]email: [email]".$emailnietingelogd."[/email][/prive]\n")."'";
+		}else{
+			$bewerkveld="";
+			$bewerkvalue="";
 		}
 
 		require_once 'simplespamfilter.class.php';
@@ -413,15 +417,14 @@ class ForumOnderwerp{
 			INSERT INTO
 				forum_post
 			(
-				tid, uid, tekst, datum, ip, zichtbaar, bewerkt
+				tid, uid, tekst, datum, ip, zichtbaar".$bewerkveld."
 			)VALUES(
 				".$this->getID().",
 				'".LoginLid::instance()->getUid()."',
 				'".ucfirst($tekst)."',
 				'".getDateTime()."',
 				'".$ip."',
-				'".$zichtbaarheid."',
-				'".$email."'
+				'".$zichtbaarheid."'".$bewerkvalue."
 			);";
 
 		if($db->query($sPostQuery)){
