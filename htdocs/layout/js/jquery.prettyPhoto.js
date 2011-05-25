@@ -32,7 +32,7 @@
             <a href="#" class="pp_arrow_next">Next</a> \
            </div> \
            <p class="pp_description"></p> \
-           <!--<a class="pp_close" href="#">Close</a>--> \
+           <a class="pp_close" href="#">Close</a> \
           </div> \
          </div> \
         </div> \
