@@ -213,7 +213,7 @@ class Foto{
 
 	function maakThumb(){
 		set_time_limit(0);
-		$command=IMAGEMAGICK_PATH.'convert '.escapeshellarg($this->getPad()).' -thumbnail 150x150^^ -gravity center -extent 150x150 -format jpg -quality 80 '.escapeshellarg($this->getThumbPad()).'';
+		$command=IMAGEMAGICK_PATH.' '.escapeshellarg($this->getPad()).' -thumbnail 150x150^^ -gravity center -extent 150x150 -format jpg -quality 80 '.escapeshellarg($this->getThumbPad()).'';
 		echo $command.'<br />';
 		echo shell_exec($command).'<hr />';
 		chmod($this->getThumbPad(), 0644);
@@ -221,7 +221,7 @@ class Foto{
 
 	function maakResized(){
 		set_time_limit(0);
-		$command=IMAGEMAGICK_PATH.'convert '.escapeshellarg($this->getPad()).' -resize 800x800 -format jpg -quality 70 '.escapeshellarg($this->getResizedPad()).'';
+		$command=IMAGEMAGICK_PATH.' '.escapeshellarg($this->getPad()).' -resize 800x800 -format jpg -quality 70 '.escapeshellarg($this->getResizedPad()).'';
 		echo $command.'<br />';
 		echo shell_exec($command).'<hr />';
 		chmod($this->getResizedPad(), 0644);

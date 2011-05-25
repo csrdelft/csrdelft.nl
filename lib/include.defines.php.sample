@@ -35,7 +35,7 @@ define('SMARTY_COMPILE_DIR', DATA_PATH.'/smarty/compiled/');
 define('SMARTY_CACHE_DIR', DATA_PATH.'/smarty/cache/');
 
 # ImageMagick
-define('IMAGEMAGICK_PATH', '/usr/bin/');
+define('IMAGEMAGICK_PATH', '/usr/bin/convert');
 
 # security... default is het bot/cmnd.php script niet actief
 define('ENABLE_BOT_CMND', false);
