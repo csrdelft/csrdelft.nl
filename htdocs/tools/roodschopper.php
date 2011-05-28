@@ -1,8 +1,8 @@
 <?php
 /*
  * roodschopper.php	| 	Jan Pieter Waagmeester (jieter@jpwaag.com)
- * 
- * 
+ *
+ *
  */
 
 require_once 'configuratie.include.php';
@@ -19,7 +19,7 @@ if(isset($_POST['commissie'], $_POST['bcc'], $_POST['saldogrens'], $_POST['uitsl
 	if($_POST['commissie']=='maalcie'){
 		$cie='maalcie';
 	}
-	$roodschopper=new Roodschopper($cie, (int)-abs($_POST['saldogrens']), $_POST['onderwerp'], $_POST['bericht']);
+	$roodschopper=new Roodschopper($cie, -abs($_POST['saldogrens']), $_POST['onderwerp'], $_POST['bericht']);
 	if(email_like($_POST['bcc'])){
 		$roodschopper->setBcc($_POST['bcc']);
 	}
@@ -58,8 +58,8 @@ if(isset($_POST['actie'])){
 			$roodschopper->doit();
 			$_SESSION['melding']='Roodschopmails met succes verzonden.';
 		break;
-		
-	}			
+
+	}
 	exit; //exit voor de XHR-acties.
 }
 
@@ -68,5 +68,5 @@ $pagina->addStylesheet('roodschopper.css');
 $pagina->addScript('roodschopper.js');
 $pagina->view();
 
-	
+
 ?>
