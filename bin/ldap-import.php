@@ -11,11 +11,11 @@ $db=MySql::instance();
 require_once('lid/lid.class.php');
 
 # Alle leden ophalen en opslaan in de LDAP
-$result = $db->select("SELECT uid FROM `lid` WHERE status = 'S_LID' OR status = 'S_GASTLID' OR status = 'S_NOVIET' OR status = 'S_KRINGEL' OR status = 'S_CIE'");
+$result = $db->select("SELECT uid FROM `lid`");
 if ($result !== false and $db->numRows($result) > 0) {
 	while ($uid = $db->next($result)){
 		$uid = $uid['uid'];
-		echo $uid.' toevoegen';
+		echo $uid.' toevoegen. ';
 		$lid=new Lid($uid);
 		$lid->save_ldap();
 	}
