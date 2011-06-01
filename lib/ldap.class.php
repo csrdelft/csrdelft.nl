@@ -16,6 +16,7 @@ class LDAP {
 	var $_conn = false;
 	
 	var $_base_leden;
+	var $_base_oudleden;
 	var $_base_groepen;
 	
    	function LDAP($dobind = true) {
@@ -43,6 +44,7 @@ class LDAP {
 		# Onthouden van wat instellingen
 		$this->_conn = $conn;
 		$this->_base_leden = $ldapini['ldap_base_leden'];
+		$this->_base_oudleden = $ldapini['ldap_base_oudleden'];
 		$this->_base_groepen = $ldapini['ldap_base_groepen'];
 
 		return true;
@@ -73,7 +75,7 @@ class LDAP {
 	}
 
 	#### Ledenlijst ####
-
+	##Leden##
 	# controleert of een gebruiker met de betreffende 'uid' voorkomt
 	function isLid($uid) {
 		$base = $this->_base_leden;
@@ -126,6 +128,61 @@ class LDAP {
 		$dn = 'uid=' . $this->ldap_escape_dn($uid) . ', '. $base;
 		return ldap_delete($this->_conn, $dn);
 	}
+
+	##Oudleden##
+	# controleert of een gebruiker met de betreffende 'uid' voorkomt
+	function isOudlid($uid) {
+		$base = $this->_base_oudleden;
+		$filter = sprintf("(uid=%s)", $this->ldap_escape_filter($uid));
+		$result = ldap_search($this->_conn, $base, $filter);
+		$num = ldap_count_entries($this->_conn, $result);
+		if ($num == 0 or $num === false) return false;
+		return true;
+	}
+
+	# een, of alle records opvragen
+	function getOudlid($uid = '') {
+		$base = $this->_base_oudleden;
+		if ($uid == '') $filter = "(uid=*)" ;
+		else $filter = sprintf("(uid=%s)", $this->ldap_escape_filter($uid));
+		$result = ldap_search($this->_conn, $base, $filter);
+		$leden = ldap_get_entries($this->_conn, $result);
+		return $leden;
+	}
+
+	# Voeg een nieuw record toe
+	# N.B. $entry is een array die al in het juiste formaat moet zijn opgemaakt
+	# http://nl2.php.net/manual/en/function.ldap-add.php
+	function addOudlid($uid, $entry) {
+		$base = $this->_base_oudleden;
+		$dn = 'uid=' . $this->ldap_escape_dn($uid) . ', '. $base;
+
+		# objectClass definities
+		unset($entry['objectClass']);
+		$entry['objectClass'][] = 'top';
+		$entry['objectClass'][] = 'person';
+		$entry['objectClass'][] = 'organizationalPerson';
+		$entry['objectClass'][] = 'inetOrgPerson';
+		$entry['objectClass'][] = 'mozillaAbPersonObsolete';
+		
+		return ldap_add($this->_conn, $dn, $entry);
+	}
+
+	# Wijzig de informatie van een lid
+	# N.B. $entry is een array die al in het juiste formaat moet zijn opgemaakt
+	# http://nl2.php.net/manual/en/function.ldap-add.php
+	function modifyOudlid($uid, $entry) {
+		$base = $this->_base_oudleden;
+		$dn = 'uid=' . $this->ldap_escape_dn($uid) . ', '. $base;
+		return ldap_modify($this->_conn, $dn, $entry);
+	}
+
+	function removeOudlid($uid) {
+		$base = $this->_base_oudleden;
+		$dn = 'uid=' . $this->ldap_escape_dn($uid) . ', '. $base;
+		return ldap_delete($this->_conn, $dn);
+	}
+
 
 	#### Groepen ####
 
