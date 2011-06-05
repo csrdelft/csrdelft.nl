@@ -357,8 +357,8 @@ class action_plugin_discussion extends DokuWiki_Action_Plugin{
         if($cnt > 1 || ($cnt == 1 && $data['comments'][$keys[0]]['show'] == 1) || $this->getConf('allowguests') || isset($_SERVER['REMOTE_USER'])) {
             $show = true;
             // section title
-            $title = ($data['title'] ? hsc($data['title']) : $this->getLang('discussion'));
-            ptln('<div class="comment_wrapper">');
+            $title = ($data['title'] ? hsc($data['title']) : 'Opmerkingen');
+            ptln('<div class="comment_wrapper noprint">');
             ptln('<h2><a name="discussion__section" id="discussion__section">', 2);
             ptln($title, 4);
             ptln('</a></h2>', 2);
@@ -712,20 +712,18 @@ class action_plugin_discussion extends DokuWiki_Action_Plugin{
         } else {
             $head .= '<span class="fn">'.$showname.'</span>';
         }
-
         if ($address) $head .= ', <span class="adr">'.$address.'</span>';
         $head .= '</span>, '.
-            '<abbr class="published" title="'. strftime('%Y-%m-%dT%H:%M:%SZ', $created) .'">'.
-            dformat($created, $conf['dformat']).'</abbr>';
+            '<abbr class="published" title="'.strftime('%Y-%m-%dT%H:%M:%SZ', $created).'">'.
+            strftime($conf['dformat'], $created).'</abbr>';
         if ($comment['edited']) $head .= ' (<abbr class="updated" title="'.
-                strftime('%Y-%m-%dT%H:%M:%SZ', $modified).'">'.dformat($modified, $conf['dformat']).
+                strftime('%Y-%m-%dT%H:%M:%SZ', $modified).'">'.strftime($conf['dformat'], $modified).
                 '</abbr>)';
         ptln($head, 8);
         ptln('</div>', 6); // class="comment_head"
 
         // main comment content
-        ptln('<div class="comment_body entry-content"'.
-                ($this->getConf('useavatar') ? $this->_get_style() : '').'>', 6);
+        ptln('<div class="comment_body entry-content">', 6);
         echo ($HIGH?html_hilight($comment['xhtml'],$HIGH):$comment['xhtml']).DOKU_LF;
         ptln('</div>', 6); // class="comment_body"
 
@@ -891,18 +889,13 @@ class action_plugin_discussion extends DokuWiki_Action_Plugin{
         <?php
         }
         ?>
-                <div class="comment_text">
-                  <?php echo $this->getLang('entercomment'); echo ($this->getConf('wikisyntaxok') ? "" : ":");
-                        if($this->getConf('wikisyntaxok')) echo '. ' . $this->getLang('wikisyntax') . ':'; ?>
-                 
-                  <!-- Fix for disable the toolbar when wikisyntaxok is set to false. See discussion's script.jss -->
-                  <?php if($this->getConf('wikisyntaxok')) { ?>                
-                    <div id="discussion__comment_toolbar">
-                  <?php } else { ?>
-                    <div id="discussion__comment_toolbar_disabled">
-                  <?php } ?>
-                </div>
-                <textarea class="edit<?php if($_REQUEST['comment'] == 'add' && empty($_REQUEST['text'])) echo ' error'?>" name="text" cols="80" rows="10" id="discussion__comment_text" tabindex="5"><?php
+              <div class="comment_text">
+             <!-- <div id="discussion__comment_toolbar">
+               *   <?php echo $this->getLang('entercomment')?>
+                 * <?php if($this->getLang('wikisyntaxok')) echo ', ' . $this->getLang('wikisyntax') . ':';?>
+                *</div> -->
+               
+                <textarea class="edit<?php if($_REQUEST['comment'] == 'add' && empty($_REQUEST['text'])) echo ' error'?>" name="text" cols="80" rows="4" id="discussion__comment_text" tabindex="5"><?php
                   if($raw) {
                       echo formText($raw);
                   } else {
@@ -921,7 +914,7 @@ class action_plugin_discussion extends DokuWiki_Action_Plugin{
               <div class="comment_subscribe">
                 <input type="checkbox" id="discussion__comment_subscribe" name="subscribe" tabindex="6" />
                 <label class="block" for="discussion__comment_subscribe">
-                  <span><?php echo $this->getLang('subscribe') ?></span>
+                  <span>Aanmelden voor opmerkingen via e-mail</span>
                 </label>
               </div>
         <?php } ?>
@@ -1135,7 +1128,7 @@ class action_plugin_discussion extends DokuWiki_Action_Plugin{
             $replace = array(
                     $ID,
                     $conf['title'],
-                    dformat($comment['date']['created'], $conf['dformat']),
+                    strftime($conf['dformat'], $comment['date']['created']),
                     $comment['user']['name'],
                     $comment['raw'],
                     wl($ID, '', true) . '#comment_' . $comment['cid'],
@@ -1157,7 +1150,7 @@ class action_plugin_discussion extends DokuWiki_Action_Plugin{
                     $replace = array(
                             $ID,
                             $conf['title'],
-                            dformat($comment['date']['created'], $conf['dformat']),
+                            strftime($conf['dformat'], $comment['date']['created']),
                             $comment['user']['name'],
                             $comment['raw'],
                             wl($ID, '', true) . '#comment_' . $comment['cid'],
@@ -1307,7 +1300,7 @@ class action_plugin_discussion extends DokuWiki_Action_Plugin{
                 '@USER@' => $user,
                 '@NAME@' => $INFO['userinfo']['name'],
                 '@MAIL@' => $INFO['userinfo']['mail'],
-                '@DATE@' => dformat($conf['dformat']),
+                '@DATE@' => strftime($conf['dformat']),
                 );
 
         // additional replacements
