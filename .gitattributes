@@ -1821,6 +1821,10 @@ wiki/lib/plugins/indexmenu/syntax/indexmenu.php -text
 wiki/lib/plugins/indexmenu/syntax/tag.php -text
 wiki/lib/plugins/info/lang/sl/lang.php -text
 wiki/lib/plugins/info/syntax.php -text
+wiki/lib/plugins/navi/action.php -text
+wiki/lib/plugins/navi/manager.dat -text
+wiki/lib/plugins/navi/plugin.info.txt -text
+wiki/lib/plugins/navi/syntax.php -text
 wiki/lib/plugins/pagelist/COPYING -text
 wiki/lib/plugins/pagelist/README -text
 wiki/lib/plugins/pagelist/conf/default.php -text
