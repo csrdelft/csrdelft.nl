@@ -1434,6 +1434,7 @@ wiki/lib/plugins/confmanager/lang/de/lang.php -text
 wiki/lib/plugins/confmanager/lang/en/lang.php -text
 wiki/lib/plugins/confmanager/plugin.info.txt -text
 wiki/lib/plugins/confmanager/style.css -text
+wiki/lib/plugins/csv/manager.dat -text
 wiki/lib/plugins/csv/plugin.info.txt -text
 wiki/lib/plugins/csv/syntax.php -text
 wiki/lib/plugins/data/_test/types.group.php -text
@@ -1596,8 +1597,11 @@ wiki/lib/plugins/fontcolor/images/toolbar/silver.png -text
 wiki/lib/plugins/fontcolor/images/toolbar/teal.png -text
 wiki/lib/plugins/fontcolor/images/toolbar/white.png -text
 wiki/lib/plugins/fontcolor/images/toolbar/yellow.png -text
+wiki/lib/plugins/fontcolor/images/toolbar_icon.png -text
 wiki/lib/plugins/fontcolor/lang/de/lang.php -text
 wiki/lib/plugins/fontcolor/lang/en/lang.php -text
+wiki/lib/plugins/fontcolor/manager.dat -text
+wiki/lib/plugins/fontcolor/script.js -text
 wiki/lib/plugins/fontcolor/syntax.php -text
 wiki/lib/plugins/imagebox/conf/default.php -text
 wiki/lib/plugins/imagebox/conf/metadata.php -text
@@ -1775,6 +1779,8 @@ wiki/lib/plugins/indexmenu/syntax/tag.php -text
 wiki/lib/plugins/info/lang/sl/lang.php -text
 wiki/lib/plugins/info/syntax.php -text
 wiki/lib/plugins/navi/action.php -text
+wiki/lib/plugins/navi/info.txt -text
+wiki/lib/plugins/navi/manager.dat -text
 wiki/lib/plugins/navi/plugin.info.txt -text
 wiki/lib/plugins/navi/syntax.php -text
 wiki/lib/plugins/pagelist/COPYING -text

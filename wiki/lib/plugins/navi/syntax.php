@@ -14,6 +14,13 @@ require_once(DOKU_PLUGIN.'syntax.php');
 class syntax_plugin_navi extends DokuWiki_Syntax_Plugin {
 
     /**
+     * return some info
+     */
+    function getInfo(){
+        return confToHash(dirname(__FILE__).'/info.txt');
+    }
+
+    /**
      * What kind of syntax are we?
      */
     function getType(){
@@ -77,9 +84,9 @@ class syntax_plugin_navi extends DokuWiki_Syntax_Plugin {
                 $page = cleanID($instructions[$i][1][0]);
                 $list[$page] = array(
                                      'parents' => $parents,
-                                     'page'    => $page,
-                                     'title'   => $instructions[$i][1][1],
-                                     'lvl'     => $lvl
+                                     'page' => cleanID($instructions[$i][1][0]),
+                                     'title' => $instructions[$i][1][1],
+                                     'lvl' => $lvl
                                     );
             }
         }

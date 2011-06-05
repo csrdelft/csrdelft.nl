@@ -120,7 +120,6 @@ class syntax_plugin_csv extends DokuWiki_Syntax_Plugin {
                     return true;
                 }
             }else{
-                $opt['file'] = cleanID($opt['file']);
                 $renderer->info['cache'] = false; //no caching
                 if (auth_quickaclcheck(getNS($opt['file']).':*') < AUTH_READ) {
                     $renderer->cdata('Access denied to CSV data');
