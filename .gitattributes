@@ -2097,3 +2097,17 @@ wiki/lib/tpl/vector/static/index.html -text
 wiki/lib/tpl/vector/static/js/index.html -text
 wiki/lib/tpl/vector/style.ini -text
 wiki/lib/tpl/vector/template.info.txt -text
+wiki/lib/tpl/vector/user/.htaccess -text
+wiki/lib/tpl/vector/user/boxes.php -text
+wiki/lib/tpl/vector/user/button-css.png -text
+wiki/lib/tpl/vector/user/button-xhtml.png -text
+wiki/lib/tpl/vector/user/buttons.php -text
+wiki/lib/tpl/vector/user/favicon.ico -text
+wiki/lib/tpl/vector/user/index.html -text
+wiki/lib/tpl/vector/user/logo.png -text
+wiki/lib/tpl/vector/user/print.css -text
+wiki/lib/tpl/vector/user/rtl.css -text
+wiki/lib/tpl/vector/user/screen.css -text
+wiki/lib/tpl/vector/user/tabs.php -text
+wiki/lib/tpl/vector/user/tracker.php -text
+wiki/lib/tpl/vector/user/user.js -text

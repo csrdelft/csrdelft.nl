@@ -646,7 +646,7 @@ if (file_exists(DOKU_TPLINC."lang/".$conf["lang"]."/style.css")){
       }else{
           //username and userpage
           echo "      <li id=\"pt-userpage\">".(tpl_getConf("vector_userpage")
-                                                ? html_wikilink(tpl_getConf("vector_userpage_ns").$loginname, hsc($loginname))
+                                                ? html_wikilink(tpl_getConf("vector_userpage_ns").$loginname, $INFO['userinfo']['name']." (".hsc($loginname).")")
                                                 : hsc($loginname))."</li>";
           //personal discussion
           if (tpl_getConf("vector_discuss") &&

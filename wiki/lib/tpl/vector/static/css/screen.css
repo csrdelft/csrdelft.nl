@@ -680,6 +680,7 @@ div#simpleSearch input#qsearch__in {
   padding: 0;
   position: static;
 }
+
 #qsearch__out ul {
   padding: 0;
   margin: 0;
@@ -705,7 +706,6 @@ div#simpleSearch input#qsearch__in {
   color: windowtext;
   text-decoration: none;
 }
-
 
 /* --------------- footer --------------- */
 div#footer a.wikilink1,
