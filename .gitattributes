@@ -1002,6 +1002,7 @@ wiki/conf/lang/nl/revisions.txt -text
 wiki/conf/lang/nl/searchpage.txt -text
 wiki/conf/license.php -text
 wiki/conf/local.php.dist -text
+wiki/conf/local.php.sample -text
 wiki/conf/local.protected.php.example -text
 wiki/conf/mediameta.php -text
 wiki/conf/mime.conf -text
