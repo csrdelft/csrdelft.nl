@@ -36,6 +36,7 @@ wiki/data/locks/*
 wiki/data/media/*
 wiki/data/meta/*
 wiki/data/pages/*
+wiki/data/pages/wiki/*
 wiki/data/tmp/*
 wiki/inc/geshi/*
 wiki/inc/lang/af

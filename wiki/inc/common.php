@@ -828,7 +828,9 @@ function pageTemplate($id){
             if(empty($data['tplfile'])){
                 $path = dirname(wikiFN($id));
                 $tpl = '';
-                if(@file_exists($path.'/_template.txt')){
+                if(@file_exists($path.'/template.txt')){
+                    $data['tplfile'] = $path.'/template.txt';
+                }elseif(@file_exists($path.'/_template.txt')){
                     $data['tplfile'] = $path.'/_template.txt';
                 }else{
                     // search upper namespaces for templates
