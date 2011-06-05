@@ -1,0 +1,32 @@
+/*Custom style for the doku theme*/
+ 
+/* 
+ a.nodeFdUrl	        Namespace with url link (headpage)	        js
+ a.node 	        Namespace without url link        	        js
+ a.nodeUrl	        Page	                                        js
+ a.nodeSel 	        Last visited page            	                js
+ a.navSel 	        Current page            	                js
+ a.indexmenu_idx_head	link style of a namespace with url (headpage)	nojs
+ a.indexmenu_idx	link style of a namespace without url	        nojs
+ */ 
+ 
+
+.dtree .doku{
+	font-size: 12px;
+}
+
+.dtree .doku a.nodeFdUrl, .dtree .doku a.node {
+	font-weight: bold;
+}
+
+.dtree .doku a.nodeUrl{
+	color:#009900;
+}
+
+
+.dtree .doku a.navSel {
+  background-color: #000;
+  color: #fff
+}
+
+
