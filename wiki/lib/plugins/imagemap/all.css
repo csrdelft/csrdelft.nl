@@ -1,0 +1,13 @@
+
+.dokuwiki div.imapcontent {
+    display: none;
+}
+
+@media aural,braille,tty {
+  .dokuwiki div.imapcontent {
+	  display: block;
+  }
+  .dokuwiki img.imap {
+	  display: none;
+  }
+}
