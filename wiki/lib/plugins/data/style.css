@@ -46,6 +46,7 @@ div.dataplugin_entry.hidden {
 /* default styles for the tag cloud */
 ul.dataplugin_cloud {
     overflow: auto;
+    list-style: none inside;
 }
 
 ul.dataplugin_cloud li {

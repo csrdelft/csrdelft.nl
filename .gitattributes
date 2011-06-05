@@ -1430,6 +1430,7 @@ wiki/lib/plugins/data/admin/clean.php -text
 wiki/lib/plugins/data/bureaucracy_field.php -text
 wiki/lib/plugins/data/conf/default.php -text
 wiki/lib/plugins/data/conf/metadata.php -text
+wiki/lib/plugins/data/conf/userstyle.css -text
 wiki/lib/plugins/data/db/latest.version -text
 wiki/lib/plugins/data/db/update0001.sql -text
 wiki/lib/plugins/data/db/update0002.sql -text
@@ -1448,6 +1449,7 @@ wiki/lib/plugins/data/lang/en/edit_intro_contentonly.txt -text
 wiki/lib/plugins/data/lang/en/intro_clean.txt -text
 wiki/lib/plugins/data/lang/en/lang.php -text
 wiki/lib/plugins/data/lang/en/settings.php -text
+wiki/lib/plugins/data/manager.dat -text
 wiki/lib/plugins/data/plugin.info.txt -text
 wiki/lib/plugins/data/renderer_data_edit.php -text
 wiki/lib/plugins/data/script.js -text
@@ -1457,6 +1459,7 @@ wiki/lib/plugins/data/syntax/entry.php -text
 wiki/lib/plugins/data/syntax/list.php -text
 wiki/lib/plugins/data/syntax/related.php -text
 wiki/lib/plugins/data/syntax/table.php -text
+wiki/lib/plugins/data/syntax/taglist.php -text
 wiki/lib/plugins/discussion/COPYING -text
 wiki/lib/plugins/discussion/README -text
 wiki/lib/plugins/discussion/_template.txt -text

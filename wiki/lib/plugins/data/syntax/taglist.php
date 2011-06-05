@@ -8,7 +8,7 @@
 if(!defined('DOKU_INC')) die();
 require_once(dirname(__FILE__).'/table.php');
 
-class syntax_plugin_data_cloud extends syntax_plugin_data_table {
+class syntax_plugin_data_taglist extends syntax_plugin_data_table {
 
     /**
      * will hold the data helper plugin
@@ -18,7 +18,7 @@ class syntax_plugin_data_cloud extends syntax_plugin_data_table {
     /**
      * Constructor. Load helper plugin
      */
-    function syntax_plugin_data_cloud(){
+    function syntax_plugin_data_taglist(){
         $this->dthlp =& plugin_load('helper', 'data');
         if(!$this->dthlp) msg('Loading the data helper failed. Make sure the data plugin is installed.',-1);
     }
@@ -49,7 +49,7 @@ class syntax_plugin_data_cloud extends syntax_plugin_data_table {
      * Connect pattern to lexer
      */
     function connectTo($mode) {
-        $this->Lexer->addSpecialPattern('----+ *datacloud(?: [ a-zA-Z0-9_]*)?-+\n.*?\n----+',$mode,'plugin_data_cloud');
+        $this->Lexer->addSpecialPattern('----+ *datataglist(?: [ a-zA-Z0-9_]*)?-+\n.*?\n----+',$mode,'plugin_data_taglist');
     }
 
     function _buildSQL(&$data){
@@ -131,32 +131,11 @@ class syntax_plugin_data_cloud extends syntax_plugin_data_table {
         $this->_cloud_weight($tags,$min,$max,5);
 
         // output cloud
-        $renderer->doc .= '<ul class="dataplugin_cloud '.hsc($data['classes']).'">';
+        $renderer->doc .= '<ul class="dataplugin_taglist '.hsc($data['classes']).'">';
         foreach($tags as $tag => $lvl){
-            $renderer->doc .= '<li class="cl'.$lvl.'">';
-            
-            $cur_params = array();
-            if (isset($_REQUEST['dataflt'])) {
-                if(!is_array($_REQUEST['dataflt'])){
-	            $cur_params = (array) $_REQUEST['dataflt'];
-	        }else{
-	            $cur_params = $_REQUEST['dataflt'];
-	        }
-                foreach($cur_params as $curdata => $flt){
-                    if(strpos($flt,"$ckey=")===false){
-                    }else{
-                        unset($cur_params[$curdata]);
-                    }
-                }
-            }
-            $cur_params[]="$ckey=$tag";
-            $cur_params = $this->dthlp->_a2ua('dataflt', $cur_params) ;
-            $cur_params['datasrt'] =$_REQUEST['datasrt'];
-            if (isset($_REQUEST['dataofs'])) {
-            	$cur_params['dataofs'] = $_REQUEST['dataofs'];
-            }
-            
-            $renderer->doc .= '<a href="'.wl($data['page'],$cur_params).
+            $renderer->doc .= '<li class="tl">';
+            $renderer->doc .= '<a href="'.wl($data['page'],array('datasrt'=>$_REQUEST['datasrt'],
+                                                                 'dataflt[]'=>"$ckey=$tag" )).
                               '" title="'.sprintf($this->getLang('tagfilter'),hsc($tag)).'" class="wikilink1">'.hsc($tag).'</a>';
             $renderer->doc .= '</li>';
         }
@@ -194,7 +173,7 @@ class syntax_plugin_data_cloud extends syntax_plugin_data_table {
         }
 
         // sort
-        ksort($tags);
+        arsort($tags);
     }
 
 }

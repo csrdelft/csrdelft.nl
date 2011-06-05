@@ -87,7 +87,7 @@ class helper_plugin_data extends DokuWiki_Plugin {
      * Return XHTML formated data, depending on column type
      */
     function _formatData($column, $value, &$R){
-        global $conf;
+        global $conf,$ID;
         $vals = explode("\n",$value);
         $outs = array();
         foreach($vals as $val){
@@ -135,8 +135,19 @@ class helper_plugin_data extends DokuWiki_Plugin {
                     }else{
                         $target = $this->_addPrePostFixes($column['type'],'');
                     }
-
-                    $outs[] = '<a href="'.wl(str_replace('/',':',cleanID($target)),array('dataflt'=>$column['key'].'='.$val )).
+	 	    $key_id=str_replace('/',':',cleanID($target));
+                    if(page_exists($key_id)) {
+                    } elseif (page_exists(getNS($ID).':'.$key_id)){
+                    	$key_id=getNS($ID).':'.$key_id;
+                    } elseif (page_exists(getNS($ID).':zoeken')){
+                    	$key_id=getNS($ID).':zoeken';	
+                    } elseif (page_exists(getNS($ID).':'.$conf['start'])){
+                        $key_id=getNS($ID).':'.$conf['start'];
+                    } elseif (page_exists(getNS($ID))){
+                        $key_id=getNS($ID);
+                    }
+                    $outs[] = '<a href="'.wl($key_id,array('dataflt'=>$column['key'].'='.$val )).
+                     
                               '" title="'.sprintf($this->getLang('tagfilter'),hsc($val)).
                               '" class="wikilink1">'.hsc($val).'</a>';
                     break;
