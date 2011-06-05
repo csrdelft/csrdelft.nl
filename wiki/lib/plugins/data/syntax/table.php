@@ -248,11 +248,9 @@ class syntax_plugin_data_table extends DokuWiki_Syntax_Plugin {
 	        $fltstring.=$aflt.' ';
 	    }
             $text .= '<div class="filter"><span class="filter">Gefilterd op '.hsc($fltstring).'</span>';
-            //$text .= '<div class="resetfilter">
-            		$text .= '<a href="'.wl($ID).
-                        '" title="Geef alles weer(Verwijder filter)">Verwijder filter/sortering</a>
-                      </div>';
-            //$text .= $this->_showMainSearch(&$R, $data);
+            $text .= '<a href="'.wl($ID).
+                     '" title="Geef alles weer(Verwijder filter)">Verwijder filter/sortering</a>
+                     </div>';
         }
         $text .= '<table class="inline dataplugin_table '.$data['classes'].'">';
         // build column headers
@@ -273,8 +271,6 @@ class syntax_plugin_data_table extends DokuWiki_Syntax_Plugin {
             }
 
             // Clickable header for dynamic sorting
-            //print_r($cur_params);
-            //print_r(array('datasrt' => $ckey)+$cur_params);
             $text .= '<a href="'.wl($ID,array('datasrt' => $ckey)+$cur_params).
                        '" title="'.$this->getLang('sort').'">'.hsc($head).'</a>';
             $text .= '</th>';
@@ -493,30 +489,5 @@ class syntax_plugin_data_table extends DokuWiki_Syntax_Plugin {
             $data['sql'] .= ' OFFSET '.((int) $_REQUEST['dataofs']);
         }
     }
-    
-        /**
-     * Output repo table overview/intro and search form
-     */
-     
-     //$this->_showMainSearch(&$R, $data);
-    function _showMainSearch(&$R, $data){
-        global $ID;
-
-        $R->doc .= '<p>';
-        $R->doc .= 'Dit zoekvak zoekt in de vormingsbank';
-        $R->doc .= '<p>';
-
-        $R->doc .= '<div id="repo__searchform">';
-        $R->doc .= '<form action="'.wl().'" accept-charset="utf-8" class="search" id="dw__search2" method="get"><div class="no">';
-        $R->doc .= '<input type="hidden" name="do" value="search" />';
-        $R->doc .= '<input type="hidden" id="dw__ns" name="ns" value="vormingsbank" />';
-        $R->doc .= '<input type="text" id="qsearch2__in" accesskey="f" name="id" class="edit" />';
-        $R->doc .= '<input type="submit" value="Zoek" class="button" title="Zoek in de vormingsbank" />';
-        $R->doc .= '<div id="qsearch2__out" class="ajax_qsearch JSpopup"></div>';
-        $R->doc .= '</div></form>';
-        $R->doc .= '</div>'.DOKU_LF;
-        $R->doc .= '<div class="clearer"></div>';
-    }
-    
 }
 

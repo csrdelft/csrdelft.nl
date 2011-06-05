@@ -133,13 +133,7 @@ class syntax_plugin_data_entry extends DokuWiki_Syntax_Plugin {
             if($val == '' || !count($val)) continue;
             $type = $data['cols'][$key]['type'];
             if (is_array($type)) $type = $type['type'];
-            //switch ($type) {
-            //case 'pageid':
-            //    $type = 'title';
-            //case 'wiki':
-            //    $val = $ID . '|' . $val;
-            //    break;
-            //}
+            
             $ret .= '<dt class="' . hsc($key) . '">'.hsc($data['cols'][$key]['title']).'<span class="sep">: </span></dt>';
             if(is_array($val)){
                 $cnt = count($val);
