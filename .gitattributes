@@ -1485,7 +1485,6 @@ wiki/lib/plugins/data/admin/clean.php -text
 wiki/lib/plugins/data/bureaucracy_field.php -text
 wiki/lib/plugins/data/conf/default.php -text
 wiki/lib/plugins/data/conf/metadata.php -text
-wiki/lib/plugins/data/conf/userstyle.css -text
 wiki/lib/plugins/data/db/latest.version -text
 wiki/lib/plugins/data/db/update0001.sql -text
 wiki/lib/plugins/data/db/update0002.sql -text
