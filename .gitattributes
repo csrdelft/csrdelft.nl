@@ -1436,6 +1436,13 @@ wiki/lib/plugins/acl/script.js -text
 wiki/lib/plugins/acl/style.css -text
 wiki/lib/plugins/action.php -text
 wiki/lib/plugins/admin.php -text
+wiki/lib/plugins/changes/action.php -text
+wiki/lib/plugins/changes/conf/default.php -text
+wiki/lib/plugins/changes/conf/metadata.php -text
+wiki/lib/plugins/changes/lang/en/settings.php -text
+wiki/lib/plugins/changes/manager.dat -text
+wiki/lib/plugins/changes/plugin.info.txt -text
+wiki/lib/plugins/changes/syntax.php -text
 wiki/lib/plugins/columns/action.php -text
 wiki/lib/plugins/columns/conf/default.php -text
 wiki/lib/plugins/columns/conf/metadata.php -text
