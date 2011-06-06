@@ -187,6 +187,8 @@ class syntax_plugin_changes extends DokuWiki_Syntax_Plugin {
         if(!empty($user) && (empty($change['user']) ||
                             !in_array($change['user'], $user))) return false;
 
+        // show only not existing pages for delete
+        if($change['type']!=D &&!page_exists($change['id'])) return false;
 
         // remember in seen to skip additional sights
         $seen[$change['id']] = 1;
