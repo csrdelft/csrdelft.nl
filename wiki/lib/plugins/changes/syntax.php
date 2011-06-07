@@ -54,6 +54,7 @@ class syntax_plugin_changes extends DokuWiki_Syntax_Plugin {
 
         $data = array(
             'ns' => array(),
+            'page' => array(),
             'count' => 10,
             'type' => array(),
             'render' => 'list',
@@ -108,7 +109,15 @@ class syntax_plugin_changes extends DokuWiki_Syntax_Plugin {
                     }
                 }
                 break;
-           case 'user':
+            case 'page':
+                foreach(preg_split('/\s*,\s*/', $value) as $value){
+                    $page = cleanID($value);
+                    if(!empty($value)){
+                        $data[$name][] = $value;
+                    }
+                }
+                break;
+            case 'user':
                foreach(preg_split('/\s*,\s*/', $value) as $value){
                    $data[$name][] = $value;
                }
@@ -132,7 +141,7 @@ class syntax_plugin_changes extends DokuWiki_Syntax_Plugin {
      */
     function render($mode, &$R, $data) {
         if($mode == 'xhtml'){
-            $changes = $this->getChanges($data['count'], $data['ns'], $data['type'], $data['user']);
+            $changes = $this->getChanges($data['count'], $data['ns'], $data['page'], $data['type'], $data['user']);
             if(!count($changes)) return true;
 
             switch($data['render']){
@@ -151,7 +160,7 @@ class syntax_plugin_changes extends DokuWiki_Syntax_Plugin {
     /**
      * Based on getRecents() from inc/changelog.php
      */
-    function getChanges($num, $ns, $type, $user) {
+    function getChanges($num, $ns, $page, $type, $user) {
         global $conf;
         $changes = array();
         $seen = array();
@@ -159,7 +168,7 @@ class syntax_plugin_changes extends DokuWiki_Syntax_Plugin {
         $lines = @file($conf['changelog']);
 
         for($i = count($lines)-1; $i >= 0; $i--){
-            $change = $this->handleChangelogLine($lines[$i], $ns, $type, $user, $seen);
+            $change = $this->handleChangelogLine($lines[$i], $ns, $page, $type, $user, $seen);
             if($change !== false){
                 $changes[] = $change;
                 // break when we have enough entries
@@ -172,7 +181,7 @@ class syntax_plugin_changes extends DokuWiki_Syntax_Plugin {
     /**
      * Based on _handleRecent() from inc/changelog.php
      */
-    function handleChangelogLine($line, $ns, $type, $user, &$seen) {
+    function handleChangelogLine($line, $ns, $page, $type, $user, &$seen) {
         // split the line into parts
         $change = parseChangelogLine($line);
         if($change===false) return false;
@@ -204,6 +213,13 @@ class syntax_plugin_changes extends DokuWiki_Syntax_Plugin {
         // filter excluded namespaces
         if(isset($ns['exclude'])){
             if($this->isInNamespace($ns['exclude'], $change['id'])) return false;
+        }
+
+        // exclude pages
+        if(!empty($page)){
+            foreach($page as $apage){
+                if(noNs($change['id'])==$apage  ) return false;
+            }
         }
 
         // check ACL
