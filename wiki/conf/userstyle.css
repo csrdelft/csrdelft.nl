@@ -11,7 +11,7 @@ div.dokuwiki div.left_sidebar {
 }
 
 div.dokuwiki div.page_right {
-  width: 84%;  
+  width: 84%; 
 }
 
 
@@ -23,17 +23,17 @@ div.dokuwiki div.page_right {
 
 /* hele wiki */
 div.dataplugin_entry dl {
-     width: 60%; 
-     font-size: 100%;
+  width: 60%; 
+  font-size: 100%;
 }
 
 div.dataaggregation div.filter {
-    margin-top:40px;
-    margin-bottom:10px;
+  margin-top:40px;
+  margin-bottom:10px;
 }
 div.dataaggregation span.filter {
-    font-size: 120%;
-    font-weight: bold;
+  font-size: 120%;
+  font-weight: bold;
 }
 
 /* vormingsbank */
@@ -63,12 +63,16 @@ div.vb dl dd.titel{
 /* --- einde dataentry  ---*/
 
 /* tag cloud data plugin */
+ul.dataplugin_cloud{
+  line-height: 1.8em !important; 
+  margin-left: 1.6em !important;
+}
+
 ul.dataplugin_cloud li.cl0 { font-size: 80% }
 ul.dataplugin_cloud li.cl1 { font-size: 95% }
 ul.dataplugin_cloud li.cl2 { font-size: 110% }
 ul.dataplugin_cloud li.cl3 { font-size: 130% }
 ul.dataplugin_cloud li.cl4 { font-size: 150% }
-
 
 /**
  * Search form plugin 
