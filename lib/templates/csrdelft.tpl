@@ -39,7 +39,7 @@
 		</script>
 		{/literal}
 	{/if}
-	{if $loginlid->getUid()=='0838'}{literal}<script type="text/javascript">
+	{if $loginlid->getUid()=='000000'}{literal}<script type="text/javascript">
 function blinkit(){
 	if(document.bgColor=='#000000'){
 		document.bgColor='#ffffff'
