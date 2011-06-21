@@ -90,7 +90,6 @@
 		</div>
 	</div>
 	{/if}
-	{if  $profhtml.email!='' OR $profhtml.msn!='' OR $profhtml.website!=''}
 	<div class="profielregel">
 		<div class="gegevens">
 			{if $profhtml.email!=''}<div class="label">Email:</div><a href="mailto:{$profhtml.email}">{$profhtml.email}</a><br />{/if}
@@ -102,7 +101,6 @@
 			{if $profhtml.website!=''}<div class="label">Website:</div> <a href="{$profhtml.website}" class="linkExt">{$profhtml.website|truncate:30}</a><br />{/if}
 		</div>
 	</div>
-	{/if}
 	<div class="profielregel">
 		<div class="gegevens">
 			<div class="half">
