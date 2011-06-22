@@ -290,6 +290,10 @@ class LLLijst extends LLweergave{
 				case 'woonoord':
 					echo $lid->getWoonoord();
 				break;
+				case 'linkedin':
+				case 'website':
+					echo '<a href="'.mb_htmlentities($lid->getProperty($veld)).'" class="linkExt">'.mb_htmlentities($lid->getProperty($veld)).'</a>';
+				break;
 				default:
 					try{
 						echo mb_htmlentities($lid->getProperty($veld));

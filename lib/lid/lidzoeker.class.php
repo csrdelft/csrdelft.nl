@@ -10,13 +10,13 @@ class LidZoeker{
 	//velden die door gewone leden geselecteerd mogen worden.
 	private $allowVelden=array(
 		'pasfoto', 'uid', 'naam', 'voorletters', 'voornaam', 'tussenvoegsel', 'achternaam', 'nickname', 'geslacht',
-		'email', 'adres', 'telefoon', 'mobiel', 'msn', 'jid', 'skype', 'studie', 'status',
+		'email', 'adres', 'telefoon', 'mobiel', 'msn', 'jid', 'skype', 'linkedin', 'website', 'studie', 'status',
 		'gebdatum', 'beroep', 'verticale', 'lidjaar', 'kring', 'patroon', 'woonoord', 'bankrekening');
 	//velden die ook door mensen met P_LEDEN_MOD bekeken mogen worden
 	//(merge in de constructor)
 	private $allowVeldenLEDENMOD=array(
-		'studienr', 'bankrekening', 'muziek', 'ontvangtcontactueel', 'kerk',
-		'lidafdatum', 'echtgenoot', 'adresseringechtpaar', 'land', 'permissies', 'machtiging');
+		'studienr', 'muziek', 'ontvangtcontactueel', 'kerk', 'lidafdatum', 
+		'echtgenoot', 'adresseringechtpaar', 'land', 'permissies', 'bankrekening', 'machtiging');
 
 	//deze velden kunnen we niet selecteren voor de ledenlijst, ze zijn wel te
 	//filteren en te sorteren.
@@ -33,7 +33,8 @@ class LidZoeker{
 		'jid' => 'Jabber',
 		'ontvangtcontactueel' => 'Contactueel?',
 		'machtiging' => 'Machtiging getekend?',
-		'adresseringechtpaar' => 'Post echtpaar t.n.v.');
+		'adresseringechtpaar' => 'Post echtpaar t.n.v.',
+		'linkedin' => 'LinkedIn');
 
 	//toegestane opties voor het statusfilter.
 	private $allowStatus=array('S_LID', 'S_NOVIET', 'S_GASTLID', 'S_NOBODY', 'S_OUDLID', 'S_ERELID', 'S_KRINGEL', 'S_OVERLEDEN');
