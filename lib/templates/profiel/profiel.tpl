@@ -134,7 +134,7 @@
 				<div class="label">Status:</div> {$profiel->getStatusDescription()}<br />
 				<br />
 
-				{if $isOudlid}
+				{if $profiel->isOudlid()}
 					{if $profhtml.beroep!=''}<div class="label">Beroep/werk:</div><div class="data">{$profhtml.beroep}</div><br />{/if}
 				{else}
 					{if $profhtml.kring!=0}
