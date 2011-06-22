@@ -226,7 +226,7 @@
 		</div>
 	</div>
 	{/if}
-	{if is_array($profhtml.recenteForumberichten) OR $loginlid->getUid()==$profiel->getUid()}
+	{if $profiel->getForumPostCount()>0 OR is_array($profhtml.recenteForumberichten) OR $loginlid->getUid()==$profiel->getUid()}
 	<div class="profielregel" id="forum">
 		<div class="gegevens" id="forum_gegevens">
 			{if $loginlid->getUid()==$profiel->getUid()}
@@ -241,22 +241,21 @@
 				</div>
 			<br />
 			{/if}
-
-			{if $profhtml.berichtCount>0}
+			{if $profiel->getForumPostCount()>0}
 				<div class="label"># bijdragen:</div>
 				<div class="data">
-					{$profhtml.berichtCount} berichten.
+					{$profiel->getForumPostCount()} bericht{if $profiel->getForumPostCount()>1}en{/if}.
 				</div>
-			{/if}
-			{if is_array($profhtml.recenteForumberichten)}
 				<div class="label">Recent:</div>
 				<div class="data">
 					<table id="recenteForumberichten">
-						{foreach from=$profhtml.recenteForumberichten item=bericht}
+						{foreach from=$profiel->getRecenteForumberichten() item=bericht}
 							<tr>
 								<td><a href="/communicatie/forum/reactie/{$bericht.postID}">{$bericht.titel|truncate:75|escape:'html'}</a></td>
 								<td>{$bericht.datum|reldate}</td>
 							</tr>
+						{foreachelse}
+							<tr><td>Geen bijdragen</td></tr>
 						{/foreach}
 					</table>
 				</div>

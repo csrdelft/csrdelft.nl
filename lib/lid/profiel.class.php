@@ -9,6 +9,7 @@
 
 require_once 'ldap.class.php';
 require_once 'formulier.class.php';
+require_once 'forum/forum.class.php';
 
 class Profiel{
 	private $lid;
@@ -40,6 +41,19 @@ class Profiel{
 			throw new Exception('Call to undefined method Profiel::'.$name);
 		}
 	}
+
+	public function getRecenteForumberichten(){
+		return Forum::getPostsVoorUid($this->lid->getUid());
+	}
+
+	private $forumpostcount=-1;
+	public function getForumPostCount(){
+		if($this->forumpostcount==-1){
+			$this->forumpostcount=Forum::getUserPostCount($this->lid->getUid());
+		}
+		return $this->forumpostcount;
+	}
+
 	public function save(){
 		foreach($this->getFields() as $field){
 			if($field instanceof FormField){

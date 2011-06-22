@@ -43,9 +43,7 @@ class ProfielContent extends SimpleHTML {
 		$profhtml['abos']=$maaltrack->getAbo($this->lid->getUid());
 		$profhtml['recenteMaaltijden']=Maaltijd::getRecenteMaaltijden($this->lid->getUid());
 
-		require_once 'forum/forum.class.php';
-		$profhtml['recenteForumberichten']=Forum::getPostsVoorUid($this->lid->getUid());
-		$profhtml['berichtCount']=Forum::getUserPostCount($this->lid->getUid());
+
 
 		//de html template in elkaar draaien en weergeven
 		$profiel=new Smarty_csr();
