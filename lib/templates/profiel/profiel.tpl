@@ -99,6 +99,9 @@
 				{if $key=='website'}
 					<div class="label">Website:</div>
 					<a href="{$contact|escape:'html'}" class="linkExt">{$contact|truncate:30|escape:'htmlall'}</a>
+				{elseif $key=='linkedin'}
+					<div class="label">LinkedIn:</div>
+					<a href="{$contact|escape:'html'}" class="linkExt">{$contact|truncate:50|escape:'htmlall'}</a>
 				{elseif $key=='email'}
 					<div class="label">Email:</div>
 					<a href="mailto:{$contact|escape:'html'}">{$contact|escape:'htmlall'}</a>
