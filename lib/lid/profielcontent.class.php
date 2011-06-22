@@ -50,18 +50,15 @@ class ProfielContent extends SimpleHTML {
 		//de html template in elkaar draaien en weergeven
 		$profiel=new Smarty_csr();
 
-		$profiel->assign('lid', $this->lid);
 		$profiel->assign('profhtml', $profhtml);
 
 		require_once 'lid/saldi.class.php';
 		if(Saldi::magGrafiekZien($this->lid->getUid())){
 			$profiel->assign('saldografiek', Saldi::getDatapoints($this->lid->getUid(), 60));
 		}
-		
-		$profiel->assign('isOudlid', in_array($this->lid->getStatus(), array('S_OUDLID', 'S_ERELID')));
+
 
 		$loginlid=LoginLid::instance();
-		$profiel->assign('magBewerken', ($loginlid->hasPermission('P_PROFIEL_EDIT') AND $loginlid->isSelf($this->lid->getUid())) OR $loginlid->hasPermission('P_LEDEN_EDIT'));
 		$profiel->assign('isAdmin', $loginlid->hasPermission('P_ADMIN'));
 		$profiel->assign('isLidMod', $loginlid->hasPermission('P_LEDEN_MOD'));
 		$profiel->assign('melding', $this->getMelding());
@@ -71,6 +68,9 @@ class ProfielContent extends SimpleHTML {
 		if(LoginLid::instance()->isSelf($this->lid->getUid())){
 			$profiel->caching=false;
 		}
+
+		$profiel->assign('profiel', new Profiel($this->lid));
+
 		$template='profiel/profiel.tpl';
 		$profiel->display($template, $this->lid->getUid());
 	}
@@ -80,7 +80,7 @@ class ProfielContent extends SimpleHTML {
 class ProfielEditContent extends SimpleHTML{
 	private $profiel;
 	private $actie;
-	
+
 	public function __construct($profiel, $actie){
 		$this->profiel=$profiel;
 		$this->actie=$actie;

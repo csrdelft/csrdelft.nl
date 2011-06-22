@@ -1,32 +1,34 @@
-<div id="profiel" {if $lid->isJarig()}class="jarig"{/if}>
+<div id="profiel" {if $profiel->isJarig()}class="jarig"{/if}>
 	<div id="profielregel">
 		<div class="naam">
 			<div class="floatR">
-				{$profhtml.uid|pasfoto}<br />
+				{$profiel->getUid()|pasfoto}<br />
 				<div class="knopjes">
-					{if $magBewerken}
-						<a href="/communicatie/profiel/{$profhtml.uid}/bewerken" class="knop" title="Bewerk dit profiel">{icon get="bewerken"}</a>
+					{if $profiel->magBewerken()}
+						<a href="/communicatie/profiel/{$profiel->getUid()}/bewerken" class="knop" title="Bewerk dit profiel">{icon get="bewerken"}</a>
 					{/if}
 
 					{if $isAdmin}
-						<a href="/tools/stats.php?uid={$profhtml.uid}" class="knop" title="Toon bezoeklog">{icon get="server_chart"}</a>
-						<a href="/communicatie/profiel/{$profhtml.uid}/wachtwoord" class="knop" title="Reset wachtwoord voor {$lid->getNaam()}" onclick="return confirm('Weet u zeker dat u het wachtwoord van deze gebruiker wilt resetten?')">
+						<a href="/tools/stats.php?uid={$profiel->getUid()}" class="knop" title="Toon bezoeklog">{icon get="server_chart"}</a>
+						<a href="/communicatie/profiel/{$profiel->getUid()}/wachtwoord" class="knop"
+							title="Reset wachtwoord voor {$profiel->getNaam()}"
+							onclick="return confirm('Weet u zeker dat u het wachtwoord van deze gebruiker wilt resetten?')">
 							{icon get="resetpassword"}</a>
-						{if $loginlid->maySuTo($lid)}
-							<a href="/su/{$profhtml.uid}/" class="knop" title="Su naar dit lid">{icon get='su'}</a>
+						{if $loginlid->maySuTo($profiel->getLid())}
+							<a href="/su/{$profiel->getUid()}/" class="knop" title="Su naar dit lid">{icon get='su'}</a>
 						{/if}
 					{/if}
-					{if $lid->getStatus()=='S_NOVIET' AND $loginlid->hasPermission('groep:novcie')}
-						<a href="/communicatie/profiel/{$profhtml.uid}/novietBewerken" class="knop"><img src="{$csr_pics}forum/bewerken.png" title="Bewerk dit profiel" />Noviet bewerken</a><br />
+					{if $profiel->getStatus()=='S_NOVIET' AND $loginlid->hasPermission('groep:novcie')}
+						<a href="/communicatie/profiel/{$profiel->getUid()}/novietBewerken" class="knop"><img src="{$csr_pics}forum/bewerken.png" title="Bewerk dit profiel" />Noviet bewerken</a><br />
 					{/if}
-					<a href="/communicatie/profiel/{$profhtml.uid}/addToGoogleContacts/" class="knop{*if $lid->isInGoogleContacts()} inGoogleContacts{/if*}" title="{*if $lid->isInGoogleContacts()}Er bestaat al een contact met deze naam in je Google-contacts. Klik om te updaten.{else*}Voeg dit profiel toe aan mijn google adresboek{*/if*}"><img src="http://code.google.com/favicon.ico" /></a>
+					<a href="/communicatie/profiel/{$profiel->getUid()}/addToGoogleContacts/" class="knop" title="{*if $profiel->isInGoogleContacts()}Er bestaat al een contact met deze naam in je Google-contacts. Klik om te updaten.{else*}Voeg dit profiel toe aan mijn google adresboek{*/if*}"><img src="http://code.google.com/favicon.ico" /></a>
 					<br />
 				</div>
 			</div>
 			{if $melding!=''}{$melding}<br />{/if}
-			<h1 title="Lid-status: {$lid->getStatusDescription()}">
-				<div class="status">{if !$lid->isLid()}{$lid->getStatusChar()}{/if}&nbsp;</div>
-				{$profhtml.uid|csrnaam:'full':'plain'}
+			<h1 title="Lid-status: {$profiel->getStatusDescription()}">
+				<div class="status">{if !$profiel->isLid()}{$profiel->getStatusChar()}{/if}&nbsp;</div>
+				{$profiel->getNaam('full', 'plain')}
 			</h1>
 		</div>
 	</div>
@@ -34,25 +36,25 @@
 	<div class="profielregel">
 		<div class="left">Naam</div>
 		<div class="gegevens">
-			<div class="label">&nbsp;</div> {$lid->getNaamLink('civitas', 'html')}<br />
+			<div class="label">&nbsp;</div> {$profiel->getNaamLink('civitas', 'html')}<br />
 			<div class="label">Lidnummer:</div> {$profhtml.uid}<br />
 			<div class="label">Bijnaam:</div> {$profhtml.nickname}<br />
 			{if $profhtml.voorletters!=''}<div class="label">Voorletters:</div> {$profhtml.voorletters}<br />{/if}
 			{if $profhtml.gebdatum!='0000-00-00'}<div class="label">Geb.datum:</div> {$profhtml.gebdatum|date_format:"%d-%m-%Y"}<br />{/if}
-			{if $lid->getStatus()=='S_OVERLEDEN' AND $profhtml.sterfdatum!='0000-00-00'}<div class="label">Overleden op:</div> {$profhtml.sterfdatum|date_format:"%d-%m-%Y"}<br />{/if}
-			{if $lid->getEchtgenoot() instanceof Lid}
-					<div class="label">{if $lid->getEchtgenoot()->getGeslacht()=='v'}Echtgenote{else}Echtgenoot{/if}:</div>
-					{$lid->getEchtgenoot()->getNaamLink('civitas', 'link')}<br />
+			{if $profiel->getStatus()=='S_OVERLEDEN' AND $profhtml.sterfdatum!='0000-00-00'}<div class="label">Overleden op:</div> {$profhtml.sterfdatum|date_format:"%d-%m-%Y"}<br />{/if}
+			{if $profiel->getEchtgenoot() instanceof Lid}
+					<div class="label">{if $profiel->getEchtgenoot()->getGeslacht()=='v'}Echtgenote{else}Echtgenoot{/if}:</div>
+					{$profiel->getEchtgenoot()->getNaamLink('civitas', 'link')}<br />
 			{/if}
 		</div>
 	</div>
-	{if $lid->getStatus()!='S_OVERLEDEN' AND ($profhtml.adres!='' OR $profhtml.o_adres!='')}
+	{if $profiel->getStatus()!='S_OVERLEDEN' AND ($profhtml.adres!='' OR $profhtml.o_adres!='')}
 	<div class="profielregel">
 		<div class="gegevens">
 			<div class="gegevenszelf">
 				<div class="label">
 					{if $profhtml.adres!=''}
-						<a href="http://maps.google.nl/maps?q={$profhtml.adres|urlencode}+{$profhtml.woonplaats|urlencode}+{$profhtml.land|urlencode} ({if $profhtml.woonoord!=''}{$lid->getWoonoord()->getNaam()}{else}{$lid->getNaamLink('civitas', 'html')}{/if})">
+						<a href="http://maps.google.nl/maps?q={$profhtml.adres|urlencode}+{$profhtml.woonplaats|urlencode}+{$profhtml.land|urlencode} ({if $profhtml.woonoord!=''}{$profiel->getWoonoord()->getNaam()}{else}{$profiel->getNaamLink('civitas', 'html')}{/if})">
 							<img src="{$csr_pics}layout/googlemaps.gif" width="35px" alt="googlemap voor dit adres" />
 						</a>
 					{/if}
@@ -66,11 +68,11 @@
 					{if $profhtml.mobiel!=''}{$profhtml.mobiel}<br />{/if}
 				</div>
 			</div>
-			{if $lid->isLid()}
+			{if $profiel->isLid()}
 			<div class="gegevensouders">
 				{if $profhtml.o_adres!=''}
 					<div class="label">
-						<a href="http://maps.google.nl/maps?q={$profhtml.o_adres|urlencode}+{$profhtml.o_woonplaats|urlencode}+{$profhtml.o_land|urlencode} (ouders van {$lid->getNaamLink('civitas', 'html')})">
+						<a href="http://maps.google.nl/maps?q={$profhtml.o_adres|urlencode}+{$profhtml.o_woonplaats|urlencode}+{$profhtml.o_land|urlencode} (ouders van {$profiel->getNaamLink('civitas', 'html')})">
 							<img src="{$csr_pics}layout/googlemaps.gif" width="35px" alt="googlemap voor dit adres" />
 						</a>
 					</div>
@@ -90,16 +92,29 @@
 		</div>
 	</div>
 	{/if}
-	{if $profhtml.email!='' OR $profhtml.icq!='' OR $profhtml.msn!='' OR $profhtml.jid!='' OR $profhtml.skype!='' OR $profhtml.linkedin!='' OR $profhtml.website!=''}
+	{if count($profiel->getContactgegevens())>0}
 	<div class="profielregel">
 		<div class="gegevens">
-			{if $profhtml.email!=''}<div class="label">Email:</div><a href="mailto:{$profhtml.email}">{$profhtml.email}</a><br />{/if}
-			{if $profhtml.icq!=''}<div class="label">ICQ:</div> {$profhtml.icq}<br />{/if}
-			{if $profhtml.msn!=''}<div class="label">MSN:</div> {$profhtml.msn}<br />{/if}
-			{if $profhtml.jid!=''}<div class="label">Jabber/GTalk:</div> {$profhtml.jid}<br />{/if}
-			{if $profhtml.skype!=''}<div class="label">Skype:</div> {$profhtml.skype}<br />{/if}
-			{if $profhtml.linkedin!=''}<div class="label">LinkedIn:</div> <a href="{$profhtml.linkedin}" class="linkExt">{$profhtml.linkedin|truncate:50}</a><br />{/if}
-			{if $profhtml.website!=''}<div class="label">Website:</div> <a href="{$profhtml.website}" class="linkExt">{$profhtml.website|truncate:30}</a><br />{/if}
+			{foreach from=$profiel->getContactgegevens() key="key" item="contact"}
+				{if $key=='website'}
+					<div class="label">Website:</div>
+					<a href="{$contact|escape:'html'}" class="linkExt">{$contact|truncate:30|escape:'htmlall'}</a>
+				{elseif $key=='email'}
+					<div class="label">Email:</div>
+					<a href="mailto:{$contact|escape:'html'}">{$contact|escape:'htmlall'}</a>
+				{elseif $key=='jid'}
+					<div class="label">Jabber/GTalk:</div>
+					 {$contact|escape:'htmlall'}
+				{elseif in_array($key, array('msn', 'icq'))}
+					<div class="label">{$key|upper}</div>
+					{$contact|escape:'htmlall'}
+				{else}
+					<div class="label">{$key|ucfirst}</div>
+					{$contact|escape:'htmlall'}
+				{/if}
+				<br />
+			{/foreach}
+
 		</div>
 	</div>
 	{/if}
@@ -115,8 +130,8 @@
 					{if $profhtml.lidjaar!=0}
 						<a href="/communicatie/lijst.php?q=lichting:{$profhtml.lidjaar}&amp;status=ALL" title="Bekijk de leden van lichting {$profhtml.lidjaar}">{$profhtml.lidjaar}</a>
 					{/if}
-					{if $isOudlid AND $profhtml.lidafdatum!='0000-00-00'} tot {$profhtml.lidafdatum|substr:0:4}{/if}<br />
-				<div class="label">Status:</div> {$lid->getStatusDescription()}<br />
+					{if $profiel->isOudlid() AND $profhtml.lidafdatum!='0000-00-00'} tot {$profhtml.lidafdatum|substr:0:4}{/if}<br />
+				<div class="label">Status:</div> {$profiel->getStatusDescription()}<br />
 				<br />
 
 				{if $isOudlid}
@@ -124,7 +139,7 @@
 				{else}
 					{if $profhtml.kring!=0}
 						<div class="label">Kring:</div>
-						{$lid->getKring(true)}
+						{$profiel->getKring(true)}
 						<br />
 					{/if}
 				{/if}
@@ -134,19 +149,19 @@
 				{/if}
 			</div>
 			<div class="familie">
-				{if $lid->getPatroon() instanceof Lid OR $lid->getKinderen()|@count > 0}
-					<a class="stamboom" href="/communicatie/stamboom.php?uid={$lid->getUid()}" title="Stamboom van {$lid->getNaam()}">
-						<img src="http://plaetjes.csrdelft.nl/knopjes/stamboom.jpg" alt="Stamboom van {$lid->getNaam()}" />
+				{if $profiel->getPatroon() instanceof Lid OR $profiel->getKinderen()|@count > 0}
+					<a class="stamboom" href="/communicatie/stamboom.php?uid={$profiel->getUid()}" title="Stamboom van {$profiel->getNaam()}">
+						<img src="http://plaetjes.csrdelft.nl/knopjes/stamboom.jpg" alt="Stamboom van {$profiel->getNaam()}" />
 					</a>
 				{/if}
-				{if $lid->getPatroon() instanceof Lid}
-					<div class="label">{if $lid->getPatroon()->getGeslacht()=='v'}M{else}P{/if}atroon:</div>
-					{$lid->getPatroon()->getNaamLink('civitas', 'link')}<br />
+				{if $profiel->getPatroon() instanceof Lid}
+					<div class="label">{if $profiel->getPatroon()->getGeslacht()=='v'}M{else}P{/if}atroon:</div>
+					{$profiel->getPatroon()->getNaamLink('civitas', 'link')}<br />
 				{/if}
-				{if $lid->getKinderen()|@count > 0}
+				{if $profiel->getKinderen()|@count > 0}
 					<div class="label">Kinderen:</div>
 					<div class="data">
-						{foreach from=$lid->getKinderen() item=kind name=kinderen}
+						{foreach from=$profiel->getKinderen() item=kind name=kinderen}
 							{$kind->getNaamLink('civitas', 'link')}<br />
 						{/foreach}
 					</div>
@@ -161,7 +176,7 @@
 			<div style="clear: left;"></div>
 		</div>
 	</div>
-	{if $lid->isLid() AND ($saldografiek!='' OR $profhtml.bankrekening!='')}
+	{if $profiel->isLid() AND ($saldografiek!='' OR $profhtml.bankrekening!='')}
 		<div class="profielregel">
 			<div class="gegevens">
 				{if $profhtml.bankrekening!=''}
@@ -211,10 +226,10 @@
 		</div>
 	</div>
 	{/if}
-	{if is_array($profhtml.recenteForumberichten) OR $loginlid->getUid()==$lid->getUid()}
+	{if is_array($profhtml.recenteForumberichten) OR $loginlid->getUid()==$profiel->getUid()}
 	<div class="profielregel" id="forum">
 		<div class="gegevens" id="forum_gegevens">
-			{if $loginlid->getUid()==$lid->getUid()}
+			{if $loginlid->getUid()==$profiel->getUid()}
 				<div class="label">RSS-feed:</div>
 				<div class="data">
 					{if $profhtml.rssToken!=''}
@@ -222,7 +237,7 @@
 						{icon get='feed'} Persoonlijke RSS-feed forum
 					</a>
 					{/if}
-					<a class="knop" href="/communicatie/profiel/{$lid->getUid()}/rssToken#forum">Nieuwe aanvragen</a>
+					<a class="knop" href="/communicatie/profiel/{$profiel->getUid()}/rssToken#forum">Nieuwe aanvragen</a>
 				</div>
 			<br />
 			{/if}
@@ -249,7 +264,7 @@
 		</div>
 	</div>
 	{/if}
-	{if $loginlid->hasPermission('P_ADMIN,P_BESTUUR,groep:novcie') AND $lid->getStatus()=='S_NOVIET' AND $profhtml.kgb!=''}
+	{if $loginlid->hasPermission('P_ADMIN,P_BESTUUR,groep:novcie') AND $profiel->getStatus()=='S_NOVIET' AND $profhtml.kgb!=''}
 		<div class="profielregel" id="novcieopmerking">
 			<div class="handje" onclick="toggleDiv('novcie_gegevens')">NovCie-Opmerking &raquo;</div>
 			<div class="gegevens verborgen" id="novcie_gegevens">{$profhtml.kgb|ubb}</div>

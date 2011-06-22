@@ -13,14 +13,13 @@
 	background-repeat: none;
 }
 
-
 #profiel .profielregel{ margin-bottom: 20px; clear: left; }
 	#profiel .left{ display: none; float: left; width: 10px; text-align: right; font-style: italic; font-size: 0.9em; }
 	#profiel .gegevens{ margin-left: 20px; padding-left: 15px; border-left: 1px solid #0a338d; }
 	#profiel .half{ width: 270px; float: left;}
 
 #profiel .naam .status{ float: left; color: #aaa; width: 60px; padding: 0px 20px;}
-#profiel .naam h1{ padding-left: 60px; }
+#profiel .naam h1{ padding-left: 10px; }
 #profiel .adres{ margin-left: 75px; text-align: left; }
 #profiel .gegevenszelf{ float: left; width: 250px; }
 #profiel .gegevenszelf .label{ text-align: right; margin-top: 2em; }
@@ -30,7 +29,7 @@
 #profiel .gegevensouders .label{ width: 50px; margin-top: 2em;}
 #profiel .gegevensouders .adres{ margin-left: 50px; }
 
-#profiel .familie{ padding-left: 10px; margin-left: 250px; width: 250px;}
+#profiel .familie{ padding-left: 10px; margin-left: 260px; width: 250px;}
 #profiel .familie .stamboom{ float: right; }
 
 #profiel .groepht{ float: left; width: 50%; }

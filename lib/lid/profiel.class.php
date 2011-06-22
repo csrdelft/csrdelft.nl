@@ -18,8 +18,12 @@ class Profiel{
 	private $editNoviet=false;
 
 	private $form=array();
-	public function __construct($uid, $actie='bewerken'){
-		$this->lid=LidCache::getLid($uid);
+	public function __construct($lid, $actie='bewerken'){
+		if($lid instanceof Lid){
+			$this->lid=$lid;
+		}else{
+			$this->lid=LidCache::getLid($lid);
+		}
 		$this->bewerktLid=clone $this->lid;
 
 		if($actie=='novietBewerken'){
@@ -28,6 +32,14 @@ class Profiel{
 		$this->assignFields();
 	}
 
+	//make al methods from Lid accessible in profiel
+	public function __call($name, $arguments){
+		if(method_exists($this->lid, $name)){
+			return $this->lid->$name();
+		}else{
+			throw new Exception('Call to undefined method Profiel::'.$name);
+		}
+	}
 	public function save(){
 		foreach($this->getFields() as $field){
 			if($field instanceof FormField){
@@ -97,6 +109,13 @@ class Profiel{
 	}
 	public function getLid(){
 		return $this->lid;
+	}
+
+	//return an array met contactgegevens.
+	public function getContactgegevens(){
+		return $this->getProfielFieldsNotEmpty(
+			array('email', 'icq', 'msn', 'jid', 'skype', 'linkedin', 'website'));
+
 	}
 
 	public function isPosted(){
@@ -297,6 +316,16 @@ P.S.: Mocht u nog vragen hebben, dan kan u natuurlijk altijd e-posts sturen naar
 			$lid->save_ldap() AND
 			mail($lid->getEmail(), 'Nieuw wachtwoord voor de C.S.R.-stek', $mail, "From: pubcie@csrdelft.nl\n Bcc: pubcie@csrdelft.nl");
 
+	}
+	public function getProfielFieldsNotEmpty($fields){
+		$ret=array();
+		$profiel=$this->lid->getProfiel();
+		foreach($fields as $field){
+			if(isset($profiel[$field]) && $profiel[$field]!=''){
+				$ret[$field]=$profiel[$field];
+			}
+		}
+		return $ret;
 	}
 }
 
