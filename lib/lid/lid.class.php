@@ -57,6 +57,14 @@ class Lid implements Serializable, Agendeerbaar{
 		}
 	}
 
+	public function getRssLink(){
+		$url='http://csrdelft.nl/communicatie/forum/rss';
+		if($this->getProperty('rssToken')==''){
+			return $url.'.xml';
+		}else{
+			return $url.'/'.$this->getProperty('rssToken').'.xml';
+		}
+	}
 	// sla huidige objectstatus op in db, en update het huidige lid in de LidCache
 	public function save(){
 		$db=MySql::instance();

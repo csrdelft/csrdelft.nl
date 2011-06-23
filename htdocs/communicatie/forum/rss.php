@@ -17,7 +17,7 @@ if(!$loginlid->hasPermission('P_FORUM_READ', $token_authorizable=true)){
 
 $rss=new ForumContent('rss');
 
-header('Content-Type: text/xml; charset=UTF-8');
+header('Content-Type: application/rss+xml; charset=UTF-8');
 $rss->view();
 
 

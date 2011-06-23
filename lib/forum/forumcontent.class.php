@@ -37,6 +37,7 @@ class ForumContent extends SimpleHTML {
 		$rss=new Smarty_csr();
 		$rss->assign('aPosts', $aPosts);
 
+		$rss->assign('selflink', LoginLid::instance()->getLid()->getRssLink());
 		$rss->display('forum/rss.tpl');
 	}
 	public function lastPostsZijbalk($zelf=false){
