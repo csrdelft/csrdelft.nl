@@ -12,6 +12,10 @@ class Fotoalbum{
 	private $pad;
 	private $mapnaam;
 
+	//lazy loader-placeholders
+	private $fotos=null;
+	private $subalbums=null;
+
 	function Fotoalbum($pad,$mapnaam){
 
 		$this->pad=$pad;
@@ -28,6 +32,26 @@ class Fotoalbum{
 
 	function getNaam(){
 		return ucfirst($this->getMapnaam());
+	}
+	function modified(){
+		return filemtime(PICS_PATH.'/fotoalbum/'.$this->getPad());
+	}
+
+	function getMostrecentSubAlbum(){
+		$albums=$this->getSubAlbums();
+
+		//geen subalbums, return self
+		if(!is_array($albums) || count($albums)<1){
+			return $this;
+		}
+
+		$recent=$this;
+		foreach($albums as $album){
+			if($album->modified()>$recent->modified()){
+				$recent=$album->getMostrecentSubAlbum();
+			}
+		}
+		return $recent;
 	}
 
 	function getBreadcrumb(){
@@ -77,58 +101,66 @@ class Fotoalbum{
 	}
 
 	function getSubAlbums(){
-		# Mappenlijst ophalen en sorteren
-		$mappen=array();
+		//lazy-loading...
+		if($this->subalbums===null){
+			//Mappenlijst ophalen en sorteren
+			$mappen=array();
 
-		if(is_dir(PICS_PATH.'/fotoalbum/'.$this->pad)){
-			$handle=opendir(PICS_PATH.'/fotoalbum/'.$this->pad);
+			if(is_dir(PICS_PATH.'/fotoalbum/'.$this->pad)){
+				$handle=opendir(PICS_PATH.'/fotoalbum/'.$this->pad);
 
-			while(false!==($file=readdir($handle))){
-				if(is_dir(PICS_PATH.'/fotoalbum/'.$this->pad.$file)&&!preg_match('/^(\.|\_)(.*)$/',$file)){
-					$mappen[]=$file;
+				while(false!==($file=readdir($handle))){
+					if(is_dir(PICS_PATH.'/fotoalbum/'.$this->pad.$file)&&!preg_match('/^(\.|\_)(.*)$/',$file)){
+						$mappen[]=$file;
+					}
 				}
+				sort($mappen);
 			}
-			sort($mappen);
-		}
-		//$mappen=array_reverse($mappen);
+			//$mappen=array_reverse($mappen);
 
-		# Albums aanmaken en teruggeven
-		$albums=array();
-		foreach($mappen as $map){
-			$album=new Fotoalbum($this->getPad().$map.'/',$map);
-			if($album->magBekijken()){
-				$albums[]=$album;
+			# Albums aanmaken en teruggeven
+			$albums=array();
+			foreach($mappen as $map){
+				$album=new Fotoalbum($this->getPad().$map.'/',$map);
+				if($album->magBekijken()){
+					$albums[]=$album;
+				}
+
 			}
-
+			if(count($albums)>0){
+				$this->subalbums=$albums;
+			}else{
+				$this->subalbums=false;
+			}
 		}
-		if(count($albums)>0){
-			return $albums;
-		}else{
-			return false;
-		}
+		return $this->subalbums;
 	}
 
 	function getFotos($compleet=true){
-		$bestanden=array();
-		if(!is_dir(PICS_PATH.'/fotoalbum/'.$this->pad)){
-			return false;
-		}
-		$handle=opendir(PICS_PATH.'/fotoalbum/'.$this->pad);
-		while(false!==($bestand=readdir($handle))){
-			$bestanden[]=$bestand;
-		}
-		sort($bestanden);
+		//lazy-loading...
+		if($this->fotos===null){
+			$bestanden=array();
+			if(!is_dir(PICS_PATH.'/fotoalbum/'.$this->pad)){
+				$this->fotos=false;
+			}
+			$handle=opendir(PICS_PATH.'/fotoalbum/'.$this->pad);
+			while(false!==($bestand=readdir($handle))){
+				$bestanden[]=$bestand;
+			}
+			sort($bestanden);
 
-		$fotos=array();
-		foreach($bestanden as $bestand){
-			if(preg_match('/^[^_].*\.(jpg|jpeg)$/i',$bestand)){
-				$foto=new Foto($this->pad, $bestand);
-				if($foto->isCompleet()==$compleet){
-					$fotos[]=$foto;
+			$fotos=array();
+			foreach($bestanden as $bestand){
+				if(preg_match('/^[^_].*\.(jpg|jpeg)$/i',$bestand)){
+					$foto=new Foto($this->pad, $bestand);
+					if($foto->isCompleet()==$compleet){
+						$fotos[]=$foto;
+					}
 				}
 			}
+			$this->fotos=$fotos;
 		}
-		return $fotos;
+		return $this->fotos;
 	}
 
 	function magBekijken(){

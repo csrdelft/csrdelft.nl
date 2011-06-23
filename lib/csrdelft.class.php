@@ -53,13 +53,13 @@ class csrdelft extends SimpleHTML {
 			$this->addScript('jquery.js');
 			$this->addScript('csrdelft.js');
 			$this->addScript('menu.js');
-			
+
 			if(Instelling::get('algemeen_sneltoetsen')=='ja'){
 				$this->addScript('prototype.js');
 				$this->addScript('sneltoetsen.js');
 			}
 		}
-		
+
 		//Roze webstek
 		if(Instelling::get('layout_rozeWebstek')=='ja' AND LoginLid::instance()->getUid()!='x999'){
 			$this->addStylesheet('roze.css');
@@ -78,18 +78,18 @@ class csrdelft extends SimpleHTML {
 
 	/*
 	 * Zorg dat de template een script inlaadt. Er zijn twee verianten:
-	 * 
+	 *
 	 * - lokaal:
-	 * een timestamp van de creatie van het bestand wordt toegoevoegd, 
+	 * een timestamp van de creatie van het bestand wordt toegoevoegd,
 	 * zodat de browsercache het bestand vernieuwt.
-	 * 
+	 *
 	 * - extern:
-	 * Buiten de huidige server, gewoon een url dus. Google jsapi 
+	 * Buiten de huidige server, gewoon een url dus. Google jsapi
 	 * bijvoorbeeld.
 	 */
 	function addScript($script){
 		$localJsPath=HTDOCS_PATH.'/layout/js/';
-				
+
 		if(substr($script, 0, 7)=='http://'){
 			//extern script
 			$add=array(
@@ -137,7 +137,7 @@ class csrdelft extends SimpleHTML {
 				$debug .= '<pre>'.htmlentities(print_r($_SESSION, true)).'</pre>';
 			}
 		}
-					
+
 		if ($cookie)      { $debug .= '<hr />COOKIE<hr />';  if (count($_COOKIE) > 0)		$debug .= '<pre>'.htmlentities(print_r($_COOKIE, true)).'</pre>';  }
 		return $debug;
 	}
@@ -147,6 +147,7 @@ class csrdelft extends SimpleHTML {
 		//als $this->_zijkolom geen Kolom-object bevat en niet false is
 		//$this->_zijkolom vullen met een standaard lege kolom.
 		if($this->_zijkolom!==false AND !($this->_zijkolom instanceof Kolom)){
+			//DefaultKolom zit in simplehtml.class.php
 			$this->_zijkolom=new DefaultKolom();
 		}
 

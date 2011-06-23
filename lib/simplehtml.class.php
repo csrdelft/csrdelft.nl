@@ -78,7 +78,7 @@ class IsHetAlContent extends SimpleHTML{
 	private $opties=array('jarig', 'vrijdag', 'donderdag', 'zondag', 'borrel', 'lezing', 'lunch', 'avond');
 
 	private $ja=false; //ja of nee.
-	
+
 	public function __construct($ishetal){
 		if($ishetal=='willekeurig'){
 			$this->ishetal=$this->opties[array_rand($this->opties)];
@@ -115,7 +115,7 @@ class IsHetAlContent extends SimpleHTML{
 			break;
 		}
 	}
-	
+
 	public function view(){
 		switch($this->ishetal){
 			case 'jarig':
@@ -135,7 +135,7 @@ class IsHetAlContent extends SimpleHTML{
 
 		if($this->ja){
 			echo '<div class="ja">JA!</div>';
-			
+
 		}else{
 			if($this->ishetal=='jarig'){
 				echo '<div class="nee">NOG LANG NIET.</div>';
@@ -187,7 +187,10 @@ class DefaultKolom extends Kolom{
 			require_once('menu.class.php');
 			$this->add(new stringincluder(Menu::getGaSnelNaar()));
 		}
-
+		if(LoginLid::instance()->hasPermission('P_ADMIN')){
+			require_once 'fotoalbumcontent.class.php';
+			$this->add(new FotalbumZijbalkContent());
+		}
 		# Agenda
 		if(LoginLid::instance()->hasPermission('P_AGENDA_READ')){
 			if(Instelling::get('zijbalk_agendaweken')>0){

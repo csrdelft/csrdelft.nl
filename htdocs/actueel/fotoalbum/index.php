@@ -22,6 +22,7 @@ if($pad==''){
 }
 
 $fotoalbum = new Fotoalbum($pad, $mapnaam);
+
 if($fotoalbum->magBekijken()){
 	$fotoalbumcontent = new FotoalbumContent($fotoalbum);
 	$fotoalbumcontent->setActie('album');
@@ -32,6 +33,8 @@ if($fotoalbum->magBekijken()){
 	$pagina->addScript('jquery.prettyPhoto.js');
 	$pagina->setZijkolom(false);
 	$pagina->view();
+
+
 }else{
 	require_once 'paginacontent.class.php';
 	$pagina=new Pagina('geentoegang');
