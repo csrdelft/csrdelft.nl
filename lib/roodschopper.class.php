@@ -125,7 +125,7 @@ h.t. Fiscus.';
 			$this->simulate();
 		}
 		$leden=array();
-		if(is_arary($this->teschoppen)){
+		if(is_array($this->teschoppen)){
 			foreach($this->teschoppen as $uid => $bericht){
 				$leden[]=LidCache::getLid($uid);
 			}
