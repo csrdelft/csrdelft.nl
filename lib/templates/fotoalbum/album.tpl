@@ -16,10 +16,10 @@
 	{foreach from=$album->getSubAlbums() item=subalbum}
 		<a class="album" href="{$subalbum->getMapnaam()|urlencode}/">
 			<img src="{$subalbum->getThumbURL()}" />
-			{$subalbum->getNaam()}
+			<span class="albumname">{$subalbum->getNaam()}</span>
 		</a>
 	{/foreach}
-	<br />
+
 {/if}
 
 {if is_array($album->getFotos())}

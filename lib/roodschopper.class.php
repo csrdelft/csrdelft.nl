@@ -88,7 +88,7 @@ h.t. Fiscus.';
 		$query="
 			SELECT uid, ".$this->cie."Saldo AS saldo
 			FROM lid
-			WHERE ".$this->cie."Saldo<".$db->escape($this->saldogrens)."
+			WHERE ".$this->cie."Saldo<".str_replace(',', '.', $this->saldogrens)."
 			 AND (status='S_LID' OR status='S_NOVIET' OR status='S_GASTLID')
 			ORDER BY achternaam, voornaam;";
 
@@ -96,15 +96,19 @@ h.t. Fiscus.';
 
 		$bericht=CsrUBB::instance()->getHtml($this->bericht);
 
-		foreach($data as $lidsaldo){
-			//als het uid in $this->uitsluiten staat sturen we geen mails.
-			if(in_array($lidsaldo['uid'], $this->uitsluiten)){
-				continue;
+		$this->teschoppen=array();
+		if(is_array($data)){
+			foreach($data as $lidsaldo){
+				//als het uid in $this->uitsluiten staat sturen we geen mails.
+				if(in_array($lidsaldo['uid'], $this->uitsluiten)){
+					continue;
+				}
+				$this->teschoppen[$lidsaldo['uid']]=array(
+					'onderwerp'=>$this->replace($this->onderwerp, $lidsaldo['uid'], $lidsaldo['saldo']),
+					'bericht'=>$this->replace($this->bericht, $lidsaldo['uid'], $lidsaldo['saldo']));
 			}
-			$this->teschoppen[$lidsaldo['uid']]=array(
-				'onderwerp'=>$this->replace($this->onderwerp, $lidsaldo['uid'], $lidsaldo['saldo']),
-				'bericht'=>$this->replace($this->bericht, $lidsaldo['uid'], $lidsaldo['saldo']));
 		}
+
 		return count($this->teschoppen);
 
 	}
@@ -121,8 +125,10 @@ h.t. Fiscus.';
 			$this->simulate();
 		}
 		$leden=array();
-		foreach($this->teschoppen as $uid => $bericht){
-			$leden[]=LidCache::getLid($uid);
+		if(is_arary($this->teschoppen)){
+			foreach($this->teschoppen as $uid => $bericht){
+				$leden[]=LidCache::getLid($uid);
+			}
 		}
 		return $leden;
 	}

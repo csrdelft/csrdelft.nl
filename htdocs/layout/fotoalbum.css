@@ -10,21 +10,39 @@ a.thumb{
 
 a.album{
 	width: 154px;
-	height: 195px;
+	height: 154px;
 	padding: 2px;
 	margin: 15px;
 	float: left;
 	text-align: center;
 	font-weight: bold;
 	border: 1px solid #ffffff;
+	overflow: hidden;
+	position: relative;
 }
+
 a.album:hover{
 	text-decoration: none;
 	border-color: #aaaaaa;
 }
 a.album img{
 	height: 150px;
+	width: 150px;
 	border: 1px solid #777777;
+}
+a.album .albumname{
+	display: block;
+	position: absolute;
+	padding: 5px 2px 5px 2px;
+	width: 148px;
+	margin-left: 1px;
+	top: 100px;
+	color: white;
+	background-color: black;
+	opacity: 0.7;
+}
+a.album .albumname:hover{
+	opacity: 0.9;
 }
 #fullsizeLink{
 	float: right;
