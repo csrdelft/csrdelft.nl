@@ -48,9 +48,19 @@ class Fotoalbum{
 	}
 
 	function getThumbURL(){
+
 		# Foto uit album zelf
 		$fotos=$this->getFotos();
 		if(is_array($fotos) AND count($fotos)>0){
+
+			//gebruik folder.jpg als die bestaat.
+			foreach($fotos as $foto){
+				if($foto->getBestandsnaam()=='folder.jpg'){
+					return $foto->getThumbURL();
+				}
+			}
+
+			//anders gewoon de eerste.
 			$foto=$fotos[0];
 			return $foto->getThumbURL();
 		}
@@ -112,7 +122,7 @@ class Fotoalbum{
 		$fotos=array();
 		foreach($bestanden as $bestand){
 			if(preg_match('/^[^_].*\.(jpg|jpeg)$/i',$bestand)){
-				$foto=new Foto($this->pad,$bestand);
+				$foto=new Foto($this->pad, $bestand);
 				if($foto->isCompleet()==$compleet){
 					$fotos[]=$foto;
 				}
@@ -125,7 +135,8 @@ class Fotoalbum{
 		if(LoginLid::instance()->hasPermission('P_LEDEN_READ')){
 			return true;
 		}else{
-			return(!preg_match('/novitiaat/i', $this->getPad()));
+			//geen novitiaatsfoto's voor gewoon volk
+			return (!preg_match('/novitiaat/i', $this->getPad()));
 		}
 
 	}
