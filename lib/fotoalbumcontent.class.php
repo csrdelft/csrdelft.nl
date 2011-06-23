@@ -57,7 +57,7 @@ class FotoalbumUbbContent extends SimpleHTML{
 		$fotos=$this->album->getFotos();
 
 		//afronden op (bijna) hele rijtjes
-		if(count($fotos)%7 < 6){
+		if(count($fotos)<$this->limit && count($fotos)%7 < 6){
 			$this->limit=$this->limit-7;
 		}
 
