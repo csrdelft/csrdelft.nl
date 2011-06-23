@@ -340,7 +340,27 @@ src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
 		$groeptag=new GroepUbbContent((int)$content);
 		return $groeptag->getHTML();
 	}
+	/*
+	 * ubb_fotoalbum
+	 */
+	protected function ubb_fotoalbum($parameters){
+		$content=$this->parseArray(array('[/fotoalbum]'), array());
 
+		require_once 'fotoalbumcontent.class.php';
+
+		if($content!=''){
+			$pad=explode('/', $content);
+			$pad=array_filter($pad);
+
+			$album=new Fotoalbum($content, $pad[count($pad)]);
+			if(!$album->exists()){
+				return '<div class="ubb_block">ubb_fotoalbum: fotoalbum bestaat niet ('.mb_htmlentities($content).')</div>';
+			}
+		}
+
+		$fotoalbumtag=new FotoalbumUbbContent($album);
+		return $fotoalbumtag->getHTML();
+	}
 	/*
 	 * ubb_document();
 	 *

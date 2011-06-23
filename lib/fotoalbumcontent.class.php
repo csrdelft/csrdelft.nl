@@ -19,17 +19,57 @@ class FotalbumZijbalkContent extends SimpleHtml{
 		echo '<div id="zijbalk_fotoalbum">';
 		echo '<h1><a href="/actueel/fotoalbum/">Laatste fotoalbum</a></h1>';
 		echo '<div class="item">';
-		echo '<a href="/actueel/fotoalbum/'.$this->album->getPad().'" style="text-decoration: none;">'.$this->album->getNaam();
+		echo '<a href="/actueel/fotoalbum/'.$this->album->getPad().'" style="text-decoration: none;">';
+		echo $this->album->getNaam();
 		$limit=6;
 		$fotos=$this->album->getFotos();
 		for($i=0; $i<$limit; $i++){
 			$foto=$fotos[$i];
-			echo '<img src="'.$foto->getThumbURL().'" style="float:left; width: 50px; height: 50px; margin: 1px 2px;">';
-
+			if($foto instanceof Foto){
+				echo '<img src="'.$foto->getThumbURL().'" style="float:left; width: 50px; height: 50px; margin: 1px 2px;">';
+			}
 		}
 		echo '</a>';
 		echo '</div>';
 		echo '</div>';
+	}
+}
+class FotoalbumUbbContent extends SimpleHTML{
+
+	private $limit=14;
+
+	public function __construct($album=null){
+		$this->album=$album;
+		if($this->album==null){
+			$this->album=new Fotoalbum('', '');
+			$this->album=$this->album->getMostrecentSubAlbum();
+		}
+	}
+	public function view(){
+		echo $this->getHTML();
+	}
+	public function getHTML(){
+		$ret='<div class="ubb_block ubb_fotoalbum" style="overflow: auto;" >';
+		$ret.='<h2>'.$this->album->getBreadcrumb();
+		$ret.=' &raquo; '.mb_htmlentities($this->album->getNaam());
+		$ret.='</h2>';
+
+		$fotos=$this->album->getFotos();
+
+		if(count($fotos)%7 < 5){
+			$this->limit=$this->limit-7;
+		}
+
+		for($i=0; $i<$this->limit; $i++){
+			$foto=$fotos[$i];
+			if($foto instanceof Foto){
+				$ret.='<a href="/actueel/fotoalbum/'.$this->album->getPad().'#'.$foto->getBestandsnaam().'">';
+				$ret.='<img src="'.$foto->getThumbURL().'">';
+				$ret.='</a>';
+			}
+		}
+		$ret.='</div>';
+		return $ret;
 	}
 }
 class FotoalbumContent extends SimpleHTML{

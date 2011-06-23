@@ -33,6 +33,10 @@ class Fotoalbum{
 	function getNaam(){
 		return ucfirst($this->getMapnaam());
 	}
+	function exists(){
+		$fotoalbumpad=PICS_PATH.'/fotoalbum'.$this->getPad();
+		return file_exists($fotoalbumpad) && is_dir($fotoalbumpad);
+	}
 	function modified(){
 		return filemtime(PICS_PATH.'/fotoalbum/'.$this->getPad());
 	}
@@ -61,9 +65,13 @@ class Fotoalbum{
 			$breadcrumb='<a href="/actueel/fotoalbum/">Fotoalbum</a>';
 			$url='/actueel/fotoalbum/';
 			$mappen=explode('/',$this->getPad());
+
 			array_pop($mappen);
 			array_pop($mappen);
 			foreach($mappen as $map){
+				if($map==''){
+					continue;
+				}
 				$url.=urlencode($map).'/';
 				$breadcrumb.=' » <a href="'.$url.'" title="'.$map.'">'.$map.'</a>';
 			}
