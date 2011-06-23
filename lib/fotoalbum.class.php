@@ -79,7 +79,7 @@ class Fotoalbum{
 
 			//gebruik folder.jpg als die bestaat.
 			foreach($fotos as $foto){
-				if($foto->getBestandsnaam()=='folder.jpg'){
+				if(substr($foto->getBestandsnaam(),-10)=='folder.jpg'){
 					return $foto->getThumbURL();
 				}
 			}
