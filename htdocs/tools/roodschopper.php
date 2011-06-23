@@ -19,7 +19,12 @@ if(isset($_POST['commissie'], $_POST['bcc'], $_POST['saldogrens'], $_POST['uitsl
 	if($_POST['commissie']=='maalcie'){
 		$cie='maalcie';
 	}
-	$roodschopper=new Roodschopper($cie, -abs($_POST['saldogrens']), $_POST['onderwerp'], $_POST['bericht']);
+
+	//do dirty locale conversion.
+	$saldogrens=str_replace(',', '.', $_POST['saldogrens']);
+	$saldogrens=-abs($saldogrens);
+
+	$roodschopper=new Roodschopper($cie, $saldogrens, $_POST['onderwerp'], $_POST['bericht']);
 	if(email_like($_POST['bcc'])){
 		$roodschopper->setBcc($_POST['bcc']);
 	}

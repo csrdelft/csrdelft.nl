@@ -13,7 +13,7 @@ class Roodschopper{
 	private $cie='soccie';
 	private $saldogrens;
 	private $bericht;
-	
+
 	private $uitsluiten=array();
 	private $from;
 	private $bcc;
@@ -25,11 +25,12 @@ class Roodschopper{
 			throw new Exception('Ongeldige commissie');
 		}
 		$this->cie=$cie;
-		//er wordt in roodschopper.php (int)-abs($saldogrens) gedaan, dus dat dit voorkomt
+		//er wordt in roodschopper.php -abs($saldogrens) gedaan, dus dat dit voorkomt
 		//is onwaarschijnlijk.
 		if($saldogrens>0){
-			throw new Exception('Saldogrens moet beneden nul zijn'); 
+			throw new Exception('Saldogrens moet beneden nul zijn');
 		}
+
 		$this->saldogrens=$saldogrens;
 		$this->onderwerp=htmlspecialchars($onderwerp);
 		$this->bericht=htmlspecialchars($bericht);
@@ -47,26 +48,26 @@ class Roodschopper{
 		if(Loginlid::instance()->hasPermission('groep:MaalCie')){
 			$cie='maalcie';
 			$naam='MaalCie';
-		}		
+		}
 		$bericht='Beste LID,
-Uw saldo bij de '.$naam.' is SALDO, dat is negatief. Inleggen met je hoofd.
+Uw saldo bij de '.$naam.' is E SALDO, dat is negatief. Inleggen met je hoofd.
 
 Bij voorbaat dank,
 h.t. Fiscus.';
 
-		$return=new Roodschopper($cie, -5, 'U staat rood', $bericht);
+		$return=new Roodschopper($cie, -5.2 , 'U staat rood', $bericht);
 		$return->setBcc(LoginLid::instance()->getLid()->getEmail());
 		$return->setUitgesloten('x101');
 		return $return;
 	}
 	public function getCommissie(){	return $this->cie; }
-		
+
 	public function getBcc(){			return $this->bcc; }
 	public function setBcc($bcc){		$this->bcc=$bcc; }
 
 	public function getFrom(){			return $this->from; }
 	public function setFrom($from){		$this->from=$from; }
-	
+
 	public function getSaldogrens(){	return $this->saldogrens; }
 
 	public function getUitgesloten(){	return implode(',', $this->uitsluiten); }
@@ -81,20 +82,20 @@ h.t. Fiscus.';
 	}
 	public function getOnderwerp(){		return $this->onderwerp; }
 	public function getBericht(){		return $this->bericht; }
-	
+
 	public function simulate(){
 		$db=MySql::instance();
 		$query="
 			SELECT uid, ".$this->cie."Saldo AS saldo
 			FROM lid
-			WHERE ".$this->cie."Saldo<".$this->saldogrens."
+			WHERE ".$this->cie."Saldo<".$db->escape($this->saldogrens)."
 			 AND (status='S_LID' OR status='S_NOVIET' OR status='S_GASTLID')
 			ORDER BY achternaam, voornaam;";
 
 		$data=$db->query2array($query);
 
 		$bericht=CsrUBB::instance()->getHtml($this->bericht);
-	
+
 		foreach($data as $lidsaldo){
 			//als het uid in $this->uitsluiten staat sturen we geen mails.
 			if(in_array($lidsaldo['uid'], $this->uitsluiten)){
@@ -105,13 +106,16 @@ h.t. Fiscus.';
 				'bericht'=>$this->replace($this->bericht, $lidsaldo['uid'], $lidsaldo['saldo']));
 		}
 		return count($this->teschoppen);
-		
+
 	}
+
+	//'compile' template.
 	public function replace($invoer, $uid, $saldo){
 		$lid=LidCache::getLid($uid);
-		$saldo=number_format($saldo, 2, ',', '');
+		$saldo=number_format($saldo, 2, '.', '');
 		return str_replace(array('LID', 'SALDO'), array($lid->getNaam(), $saldo), $invoer);
 	}
+
 	public function getLeden(){
 		if($this->teschoppen===null){
 			$this->simulate();
@@ -122,6 +126,7 @@ h.t. Fiscus.';
 		}
 		return $leden;
 	}
+
 	public function preview(){
 		if($this->teschoppen===null){
 			$this->simulate();
