@@ -65,7 +65,7 @@ class FotoalbumUbbContent extends SimpleHTML{
 			$foto=$fotos[$i];
 			if($foto instanceof Foto){
 				$ret.='<a href="/actueel/fotoalbum'.$this->album->getPad().'#'.$foto->getBestandsnaam().'">';
-				$ret.='<img src="'.$foto->getThumbURL().'">';
+				$ret.='<img src="'.$foto->getThumbURL().'" alt="'.$foto->getBestandsnaam().'" >';
 				$ret.='</a>';
 			}
 		}

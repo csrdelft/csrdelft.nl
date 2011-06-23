@@ -350,7 +350,10 @@ class ForumOnderwerp{
 		$db=MySql::instance();
 		$uid=LoginLid::instance()->getUid();
 
-		$titel=$db->escape(ucfirst($titel));
+		$titel=ucfirst($titel);
+		$titel=only_printable($titel);
+		$titel=$db->escape($titel);
+
 		if($this->needsModeration()){
 			$this->setZichtbaarheid('wacht_goedkeuring');
 		}
@@ -381,7 +384,8 @@ class ForumOnderwerp{
 	public function addPost($tekst, $emailnietingelogd=''){
 		$db=MySql::instance();
 
-		$tekst=$db->escape(trim($tekst));
+		$tekst=ucfirst(trim($tekst));
+		$tekst=only_printable($tekst);
 		if(!($this->getCategorie() instanceof ForumCategorie)){
 			die('ForumOnderwerp::addPost() geen onderwerp ingeladen.');
 		}
@@ -421,7 +425,7 @@ class ForumOnderwerp{
 			)VALUES(
 				".$this->getID().",
 				'".LoginLid::instance()->getUid()."',
-				'".ucfirst($tekst)."',
+				'".$db->escape($tekst)."',
 				'".getDateTime()."',
 				'".$ip."',
 				'".$zichtbaarheid."'".$bewerkvalue."
