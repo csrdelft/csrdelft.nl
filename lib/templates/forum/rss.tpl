@@ -29,7 +29,7 @@
 		{foreach from=$aPosts item=post}<item>
 			<title>{$post.titel|truncate:30|escape:'html'}</title>
 			<link>http://csrdelft.nl/communicatie/forum/reactie/{$post.postID}</link>
-			<description>{$post.tekst|escape:'html'}</description>
+			<description><![CDATA[{$post.tekst|escape:'html'}]]></description>
 			<dc:creator>{$post.uid|csrnaam:'user':false:false|escape:'html'}</dc:creator>
 			<category>forum/{$post.categorieTitel|escape:'html'}</category>
 			<comments>http://csrdelft.nl/communicatie/forum/onderwerp/{$post.tid}</comments>
