@@ -187,10 +187,7 @@ class DefaultKolom extends Kolom{
 			require_once('menu.class.php');
 			$this->add(new stringincluder(Menu::getGaSnelNaar()));
 		}
-		if(LoginLid::instance()->hasPermission('P_ADMIN')){
-			require_once 'fotoalbumcontent.class.php';
-			$this->add(new FotalbumZijbalkContent());
-		}
+
 		# Agenda
 		if(LoginLid::instance()->hasPermission('P_AGENDA_READ')){
 			if(Instelling::get('zijbalk_agendaweken')>0){
@@ -220,6 +217,11 @@ class DefaultKolom extends Kolom{
 			require_once 'forum/forumcontent.class.php';
 			$forumcontent=new ForumContent('lastposts_zelf');
 			$this->add($forumcontent);
+		}
+
+		if(LoginLid::instance()->hasPermission('P_ADMIN')){
+			require_once 'fotoalbumcontent.class.php';
+			$this->add(new FotalbumZijbalkContent());
 		}
 
 		# Komende 10 verjaardagen

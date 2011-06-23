@@ -19,7 +19,7 @@ class FotalbumZijbalkContent extends SimpleHtml{
 		echo '<div id="zijbalk_fotoalbum">';
 		echo '<h1><a href="/actueel/fotoalbum/">Laatste fotoalbum</a></h1>';
 		echo '<div class="item">';
-		echo '<a href="'.$this->album->getPad().'" style="text-decoration: none;">'.$this->album->getNaam();
+		echo '<a href="/actueel/fotoalbum/'.$this->album->getPad().'" style="text-decoration: none;">'.$this->album->getNaam();
 		$limit=6;
 		$fotos=$this->album->getFotos();
 		for($i=0; $i<$limit; $i++){
