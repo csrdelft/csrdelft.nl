@@ -346,13 +346,19 @@ src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
 	protected function ubb_fotoalbum($parameters){
 		$content=$this->parseArray(array('[/fotoalbum]'), array());
 
+		//we kunnen urls uit de browser direct in de tag kopieren
+		$content=urldecode($content);
+
 		require_once 'fotoalbumcontent.class.php';
 
+		$album=null;
 		if($content!=''){
+			//de albumnaam bedenken. Op een of andere wijze doet het album dat niet zelf :(
 			$pad=explode('/', $content);
 			$pad=array_filter($pad);
-
 			$album=new Fotoalbum($content, $pad[count($pad)]);
+
+			//album bestaat niet, we geven een foutmelding
 			if(!$album->exists()){
 				return '<div class="ubb_block">ubb_fotoalbum: fotoalbum bestaat niet ('.mb_htmlentities($content).')</div>';
 			}
