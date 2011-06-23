@@ -16,6 +16,8 @@ if(file_exists($file)){
 }
 
 echo '<h1>Verwerken wijzigingen in <code>fotoalbum/'.$base.'</code></h1>';
+echo 'Dit kan even duren';
+flush();
 
 $album=new Fotoalbum($base, urldecode($base));
 $album->verwerkFotos();

@@ -338,6 +338,7 @@ src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
 
 		require_once 'groepen/groepcontent.class.php';
 		$groeptag=new GroepUbbContent((int)$content);
+
 		return $groeptag->getHTML();
 	}
 	/*
@@ -365,6 +366,11 @@ src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
 		}
 
 		$fotoalbumtag=new FotoalbumUbbContent($album);
+
+		if(isset($parameters['rows'])){
+			$fotoalbumtag->setRows((int)$parameters['rows']);
+		}
+
 		return $fotoalbumtag->getHTML();
 	}
 	/*

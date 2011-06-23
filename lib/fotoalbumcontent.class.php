@@ -48,17 +48,23 @@ class FotoalbumUbbContent extends SimpleHTML{
 	public function view(){
 		echo $this->getHTML();
 	}
+	public function setRows($rows){
+		$this->limit=7*$rows;
+	}
 	public function getHTML(){
-		$ret='<div class="ubb_block ubb_fotoalbum" style="overflow: auto;" >';
+		$ret='<div class="ubb_block ubb_fotoalbum">';
 		$ret.='<h2>'.$this->album->getBreadcrumb();
 		$ret.=' &raquo; '.mb_htmlentities($this->album->getNaam());
 		$ret.='</h2>';
 
 		$fotos=$this->album->getFotos();
 
-		//afronden op (bijna) hele rijtjes
-		if(count($fotos)<$this->limit && count($fotos)%7 < 6){
-			$this->limit=$this->limit-7;
+		//afronden op hele rijtjes
+		if(count($fotos)<$this->limit){
+			$this->limit=count($fotos)-count($fotos)%7;
+			if($this->limit<7){
+				$this->limit=7;
+			}
 		}
 
 		for($i=0; $i<$this->limit; $i++){
