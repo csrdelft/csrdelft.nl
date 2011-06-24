@@ -370,6 +370,9 @@ src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
 		if(isset($parameters['rows'])){
 			$fotoalbumtag->setRows((int)$parameters['rows']);
 		}
+		if(isset($parameters['bigfirst'])){
+			$fotoalbumtag->setBigfirst();
+		}
 
 		return $fotoalbumtag->getHTML();
 	}

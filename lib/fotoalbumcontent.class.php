@@ -36,7 +36,8 @@ class FotalbumZijbalkContent extends SimpleHtml{
 }
 class FotoalbumUbbContent extends SimpleHTML{
 
-	private $limit=14;
+	private $rows=2;
+	private $bigfirst=false;
 
 	public function __construct($album=null){
 		$this->album=$album;
@@ -48,8 +49,12 @@ class FotoalbumUbbContent extends SimpleHTML{
 	public function view(){
 		echo $this->getHTML();
 	}
+
 	public function setRows($rows){
-		$this->limit=7*$rows;
+		$this->rows=$rows;
+	}
+	public function setBigfirst(){
+		$this->bigfirst=true;
 	}
 	public function getHTML(){
 		$ret='<div class="ubb_block ubb_fotoalbum">';
@@ -59,19 +64,33 @@ class FotoalbumUbbContent extends SimpleHTML{
 
 		$fotos=$this->album->getFotos();
 
+		$limit=$this->rows*7;
+
 		//afronden op hele rijtjes
-		if(count($fotos)<$this->limit){
-			$this->limit=count($fotos)-count($fotos)%7;
-			if($this->limit<7){
-				$this->limit=7;
+		if(count($fotos)<$limit){
+			$limit=count($fotos)-count($fotos)%7;
+			if($limit<7){
+				$limit=7;
 			}
 		}
+		if($this->bigfirst && (count($fotos)<11) || $limit < 11){
+			$this->bigfirst=false;
+		}
 
-		for($i=0; $i<$this->limit; $i++){
+		for($i=0; $i<$limit; $i++){
 			$foto=$fotos[$i];
 			if($foto instanceof Foto){
-				$ret.='<a href="/actueel/fotoalbum'.$this->album->getPad().'#'.$foto->getBestandsnaam().'">';
-				$ret.='<img src="'.$foto->getThumbURL().'" alt="'.$foto->getBestandsnaam().'" >';
+				$url=$this->album->getPad();
+				if(substr($url, 0, 1)!='/'){
+					$url='/'.$url;
+				}
+				$ret.='<a href="/actueel/fotoalbum'.$url.'#'.$foto->getBestandsnaam().'">';
+				$ret.='<img src="'.$foto->getThumbURL().'" alt="'.$foto->getBestandsnaam().'"';
+				if($this->bigfirst && $i==0){
+					$ret.='style="width: 154px; height: 154px;" ';
+					$i=$i+3;
+				}
+				$ret.=' >';
 				$ret.='</a>';
 			}
 		}
