@@ -83,7 +83,7 @@ class FotoalbumUbbContent extends SimpleHTML{
 		$grid=array_fill(0, $this->rows, array_fill(0, $this->per_row, null));
 
 		//put big images on grid.
-		if(count($this->big)>0){
+		if(count($this->big)>0 && $this->rows>1){
 			foreach($this->big as $bigindex){
 
 				$row=floor($bigindex/$this->per_row);
