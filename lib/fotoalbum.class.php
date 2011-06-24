@@ -17,8 +17,13 @@ class Fotoalbum{
 	private $subalbums=null;
 
 	function Fotoalbum($pad,$mapnaam){
-
+		//beetje vies dit, maar er moet natuurlijk een fatsoenlijk pad uitkomen.
+		if(substr($pad, 0, 1)!='/'){
+			$pad='/'.$pad;
+		}
 		$this->pad=$pad;
+
+
 		$this->mapnaam=$mapnaam;
 	}
 

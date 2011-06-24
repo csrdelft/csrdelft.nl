@@ -660,9 +660,13 @@ div.preview.pagina{ padding: 2px 2px; width: 100%;}
 .ubb_table td, th{ margin: 0px; padding: 2px; }
 
 .ubb_fotoalbum{
-	overflow: auto;
+
 }
-.ubb_fotoalbum img{ width: 75px; height: 75px; float:left;  margin: 2px ;}
+.ubb_fotoalbum .images { margin-top: 6px; position: relative;}
+.ubb_fotoalbum .images a{ position: absolute;}
+.ubb_fotoalbum .images a.sml img{ width: 75px; height: 75px; }
+.ubb_fotoalbum .images a.big img{ width: 154px; height: 154px;}
+
 /* Slider voorpagina */
 /* Slider: Main Container */
 .main_view {

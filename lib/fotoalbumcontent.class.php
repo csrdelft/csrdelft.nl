@@ -37,7 +37,8 @@ class FotalbumZijbalkContent extends SimpleHtml{
 class FotoalbumUbbContent extends SimpleHTML{
 
 	private $rows=2;
-	private $bigfirst=false;
+	private $big=array();
+	private $per_row=7;
 
 	public function __construct($album=null){
 		$this->album=$album;
@@ -53,51 +54,116 @@ class FotoalbumUbbContent extends SimpleHTML{
 	public function setRows($rows){
 		$this->rows=$rows;
 	}
-	public function setBigfirst(){
-		$this->bigfirst=true;
+	public function setBig($index){
+		if(count(explode(',', $index))>1){
+			//explode on ',' and convert tot int.
+			$this->big=array_map('intval', explode(',', $index));
+		}else{
+			echo 'kaas';
+			$this->big=array((int)$index);
+		}
 	}
-	public function getHTML(){
-		$ret='<div class="ubb_block ubb_fotoalbum">';
-		$ret.='<h2>'.$this->album->getBreadcrumb();
-		$ret.=' &raquo; '.mb_htmlentities($this->album->getNaam());
-		$ret.='</h2>';
 
+	/*
+	 * Build a grid with Foto-objects.
+	 *
+	 * The index is saved together with the object for correct reference
+	 * in case the image is moved one left or one up in the grid at borders
+	 */
+	private function getGrid(){
 		$fotos=$this->album->getFotos();
 
-		$limit=$this->rows*7;
+		//constant for used places
+		define('USED', 'USED');
 
-		//afronden op hele rijtjes
-		if(count($fotos)<$limit){
-			$limit=count($fotos)-count($fotos)%7;
-			if($limit<7){
-				$limit=7;
+		$grid=array_fill(0, $this->rows, array_fill(0, $this->per_row, null));
+
+		//put big images on grid.
+		if(count($this->big)>0){
+			foreach($this->big as $bigindex){
+
+				$row=floor($bigindex/$this->per_row);
+				$col=($bigindex%$this->per_row);
+
+				//prevent wraparound
+				if($col+1>=$this->per_row){ $col=$this->per_row-2; }
+				if($row+1>=$this->rows){	$row=$this->rows-2; }
+
+				//if valid image, put on grid.
+				if(isset($fotos[$bigindex]) && $fotos[$bigindex] instanceof Foto){
+					//if place already USED, do not put photo in.
+					if($grid[$row][$col]!=null){ continue; }
+					$grid[$row][$col]=array(
+						'index' => $bigindex,
+						'foto' => $fotos[$bigindex]
+					);
+
+					//mark the three places overlapped by this image as used.
+					$grid[$row+1][$col]=$grid[$row][$col+1]=$grid[$row+1][$col+1]=USED;
+				}
 			}
 		}
-		if($this->bigfirst && (count($fotos)<11) || $limit < 11){
-			$this->bigfirst=false;
+		//put small images on grid.
+		$row=$col=0;
+		foreach($fotos as $key => $foto){
+
+			//Do not put big pictures on grid now.
+			if(in_array($key, $this->big)){ continue; }
+
+			//find first free place.
+			while($grid[$row][$col]!=null){
+				$col=$col+1;
+
+				//move to next row if end of row is reached.
+				if($col>=$this->per_row){
+					$row=$row+1;
+					$col=$col%$this->per_row;
+
+					//break out of two loops if reached row limit.
+					if($row>=$this->rows){ break 2; }
+				}
+			}
+			$grid[$row][$col]=array(
+				'index' => $key,
+				'foto' => $foto
+			);
 		}
 
-		for($i=0; $i<$limit; $i++){
-			$foto=$fotos[$i];
-			if($foto instanceof Foto){
-				$url=$this->album->getPad();
+		//check length of last row and remove it if not full and no big images overlap it.
+		if(!in_array(USED, end($grid)) && count(array_filter(end($grid)))<$this->per_row){
+			unset($grid[$this->rows-1]);
+		}
+		if(count(array_filter(end($grid)))==0){
+			unset($grid[count($grid)-1]);
+		}
+		return $grid;
+	}
 
-				//beetje vies dit.
-				if(substr($url, 0, 1)!='/'){
-					$url='/'.$url;
+	public function getHTML(){
+		$grid=$this->getGrid();
+
+		$ret='<div class="images" style="height: '.(count($grid)*79).'px">';
+		foreach($grid as $row => $rowcontents){
+			foreach($rowcontents as $col => $foto){
+				if(is_array($foto) ){
+					$url=$this->album->getPad();
+
+					$ret.='<a href="/actueel/fotoalbum'.$url.'#'.$foto['foto']->getBestandsnaam().'"';
+					$ret.=in_array($foto['index'], $this->big) ? 'class="big"' : 'class="sml"';
+					$ret.='style=" left: '.(79*$col).'px; top: '.(79*$row).'px;">';
+
+					$ret.='<img src="'.$foto['foto']->getThumbURL().'" alt="'.$foto['foto']->getBestandsnaam().'" >';
+					$ret.='</a>'."\n";
 				}
-				$ret.='<a href="/actueel/fotoalbum'.$url.'#'.$foto->getBestandsnaam().'">';
-				$ret.='<img src="'.$foto->getThumbURL().'" alt="'.$foto->getBestandsnaam().'"';
-				if($this->bigfirst && $i==0){
-					$ret.='style="width: 154px; height: 154px;" ';
-					$i=$i+3;
-				}
-				$ret.=' >';
-				$ret.='</a>';
 			}
 		}
 		$ret.='</div>';
-		return $ret;
+
+		return
+			'<div class="ubb_block ubb_fotoalbum">
+				<h2>'.$this->album->getBreadcrumb().' &raquo; '.mb_htmlentities($this->album->getNaam()).'</h2>
+				'.$ret.'
+			</div>';
 	}
 }
 class FotoalbumContent extends SimpleHTML{

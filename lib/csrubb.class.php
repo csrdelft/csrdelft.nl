@@ -359,7 +359,7 @@ src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
 				$pad=substr($pad, 10);
 			}
 			//de albumnaam bedenken. Op een of andere wijze doet het album dat niet zelf :(
-			$albumnaam=end(array_filter(explode('/', $content)));
+			$albumnaam=urldecode(end(array_filter(explode('/', $content))));
 
 			$album=new Fotoalbum($pad, $albumnaam);
 
@@ -375,8 +375,16 @@ src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
 			$fotoalbumtag->setRows((int)$parameters['rows']);
 		}
 		if(isset($parameters['bigfirst'])){
-			$fotoalbumtag->setBigfirst();
+			$fotoalbumtag->setBig(0);
 		}
+		if(isset($parameters['big'])){
+			if($parameters['big']=='first'){
+				$fotoalbumtag->setBig(0);
+			}else{
+				$fotoalbumtag->setBig($parameters['big']);
+			}
+		}
+
 
 		return $fotoalbumtag->getHTML();
 	}
