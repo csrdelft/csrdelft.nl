@@ -219,7 +219,7 @@ class DefaultKolom extends Kolom{
 			$this->add($forumcontent);
 		}
 
-		if(LoginLid::instance()->hasPermission('P_ADMIN')){
+		if(Instelling::get('zijbalk_fotoalbum')=='ja'){
 			require_once 'fotoalbumcontent.class.php';
 			$this->add(new FotalbumZijbalkContent());
 		}

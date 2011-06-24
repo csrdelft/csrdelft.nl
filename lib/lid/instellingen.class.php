@@ -14,6 +14,7 @@ class Instelling{
 	 * Instellingarray, een naampje, met een default-value en een type.
 	 */
 	private static $instellingen=array(
+		//	'name' => array('defaul value', 'beschrijving', 'type', type-opties),
 			'algemeen_sneltoetsen' => array('nee', 'Sneltoetsen op de webstek', 'enum', array('ja', 'nee')),
 			'layout_rozeWebstek' => array('nee', 'Webstek roze maken', 'enum', array('ja', 'nee')),
 			'forum_onderwerpenPerPagina' => array(15, 'Onderwerpen per pagina', 'int', 5), //deze hebben een minimum, anders gaat het forum stuk.
@@ -29,6 +30,7 @@ class Instelling{
 			'zijbalk_mededelingen' => array(8, 'Aantal mededelingen in zijbalk', 'int'),
 			'zijbalk_forum' => array(10, 'Aantal forumberichten in zijbalk', 'int'),
 			'zijbalk_forum_zelf' => array(0, 'Aantal zelf geposte forumberichten zijbalk', 'int'),
+			'zijbalk_fotoalbum' => array('ja', 'Laatste fotoalbum weergeven?', 'enum', array('ja', 'nee')),
 			'zijbalk_verjaardagen_pasfotos' => array('ja', 'Toon pasfoto\'s bij verjaardagen', 'enum', array('ja', 'nee')),
 			'zijbalk_verjaardagen' => array(10, 'Aantal verjaardagen in zijbalk', 'int'),
 			'voorpagina_maaltijdblokje' => array('ja', 'Eerstvolgende maaltijd weergeven', 'enum', array('ja', 'nee')),

@@ -36,9 +36,13 @@ class FotalbumZijbalkContent extends SimpleHtml{
 }
 class FotoalbumUbbContent extends SimpleHTML{
 
-	private $rows=2;
-	private $big=array();
-	private $per_row=7;
+	private $rows=2;		//number of rows
+	private $per_row=7;		//images per row
+
+	private $big=array();	//array with index of the ones to enlarge
+
+	private $picsize=75; 	//size of an image
+	private $rowmargin=2;	//margin between the images
 
 	public function __construct($album=null){
 		$this->album=$album;
@@ -54,6 +58,7 @@ class FotoalbumUbbContent extends SimpleHTML{
 	public function setRows($rows){
 		$this->rows=$rows;
 	}
+	//one integer index or array of integer indexes of images to enlarge
 	public function setBig($index){
 		if(count(explode(',', $index))>1){
 			//explode on ',' and convert tot int.
@@ -140,8 +145,9 @@ class FotoalbumUbbContent extends SimpleHTML{
 
 	public function getHTML(){
 		$grid=$this->getGrid();
+		$delta=$this->picsize+(2*$this->rowmargin);
+		$ret='<div class="images" style="height: '.(count($grid)*$delta).'px">';
 
-		$ret='<div class="images" style="height: '.(count($grid)*79).'px">';
 		foreach($grid as $row => $rowcontents){
 			foreach($rowcontents as $col => $foto){
 				if(is_array($foto) ){
@@ -149,7 +155,8 @@ class FotoalbumUbbContent extends SimpleHTML{
 
 					$ret.='<a href="/actueel/fotoalbum'.$url.'#'.$foto['foto']->getBestandsnaam().'"';
 					$ret.=in_array($foto['index'], $this->big) ? 'class="big"' : 'class="sml"';
-					$ret.='style=" left: '.(79*$col).'px; top: '.(79*$row).'px;">';
+
+					$ret.='style=" left: '.($delta*$col).'px; top: '.($delta*$row).'px;">';
 
 					$ret.='<img src="'.$foto['foto']->getThumbURL().'" alt="'.$foto['foto']->getBestandsnaam().'" >';
 					$ret.='</a>'."\n";
