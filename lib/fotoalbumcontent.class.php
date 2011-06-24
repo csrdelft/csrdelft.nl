@@ -19,14 +19,14 @@ class FotalbumZijbalkContent extends SimpleHtml{
 		echo '<div id="zijbalk_fotoalbum">';
 		echo '<h1><a href="/actueel/fotoalbum/">Laatste fotoalbum</a></h1>';
 		echo '<div class="item">';
-		echo '<a href="/actueel/fotoalbum/'.$this->album->getPad().'" style="text-decoration: none;">';
+		echo '<a href="/actueel/fotoalbum/'.$this->album->getPad().'">';
 		echo $this->album->getNaam();
 		$limit=6;
 		$fotos=$this->album->getFotos();
 		for($i=0; $i<$limit; $i++){
 			$foto=$fotos[$i];
 			if($foto instanceof Foto){
-				echo '<img src="'.$foto->getThumbURL().'" style="float:left; width: 50px; height: 50px; margin: 1px 2px;">';
+				echo '<img src="'.$foto->getThumbURL().'">';
 			}
 		}
 		echo '</a>';
@@ -81,6 +81,8 @@ class FotoalbumUbbContent extends SimpleHTML{
 			$foto=$fotos[$i];
 			if($foto instanceof Foto){
 				$url=$this->album->getPad();
+
+				//beetje vies dit.
 				if(substr($url, 0, 1)!='/'){
 					$url='/'.$url;
 				}

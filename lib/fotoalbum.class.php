@@ -26,6 +26,10 @@ class Fotoalbum{
 		return $this->pad;
 	}
 
+	function getFullpath(){
+		return PICS_PATH.'/fotoalbum/'.$this->pad;
+	}
+
 	function getMapnaam(){
 		return $this->mapnaam;
 	}
@@ -33,12 +37,15 @@ class Fotoalbum{
 	function getNaam(){
 		return ucfirst($this->getMapnaam());
 	}
+
+	//bestaat er een map met de naam van het pad.
 	function exists(){
-		$fotoalbumpad=PICS_PATH.'/fotoalbum'.$this->getPad();
-		return file_exists($fotoalbumpad) && is_dir($fotoalbumpad);
+		return file_exists($this->getFullpath()) && is_dir($this->getFullpath());
 	}
+
+	//file modification time van het album.
 	function modified(){
-		return filemtime(PICS_PATH.'/fotoalbum/'.$this->getPad());
+		return filemtime($this->getFullpath());
 	}
 
 	function getMostrecentSubAlbum(){
@@ -114,11 +121,10 @@ class Fotoalbum{
 			//Mappenlijst ophalen en sorteren
 			$mappen=array();
 
-			if(is_dir(PICS_PATH.'/fotoalbum/'.$this->pad)){
-				$handle=opendir(PICS_PATH.'/fotoalbum/'.$this->pad);
-
+			if(is_dir($this->getFullpath())){
+				$handle=opendir($this->getFullpath());
 				while(false!==($file=readdir($handle))){
-					if(is_dir(PICS_PATH.'/fotoalbum/'.$this->pad.$file)&&!preg_match('/^(\.|\_)(.*)$/',$file)){
+					if(is_dir($this->getFullpath().$file) && !preg_match('/^(\.|\_)(.*)$/',$file)){
 						$mappen[]=$file;
 					}
 				}
@@ -129,12 +135,12 @@ class Fotoalbum{
 			# Albums aanmaken en teruggeven
 			$albums=array();
 			foreach($mappen as $map){
-				$album=new Fotoalbum($this->getPad().$map.'/',$map);
+				$album=new Fotoalbum($this->getPad().$map.'/', $map);
 				if($album->magBekijken()){
 					$albums[]=$album;
 				}
-
 			}
+
 			if(count($albums)>0){
 				$this->subalbums=$albums;
 			}else{
@@ -148,7 +154,7 @@ class Fotoalbum{
 		//lazy-loading...
 		if($this->fotos===null){
 			$bestanden=array();
-			if(!is_dir(PICS_PATH.'/fotoalbum/'.$this->pad)){
+			if(!$this->exists()){
 				$this->fotos=false;
 			}
 			$handle=opendir(PICS_PATH.'/fotoalbum/'.$this->pad);
@@ -194,13 +200,14 @@ class Fotoalbum{
 		$fotos=$this->getFotos(false);
 		if($fotos!==false){
 			# Controleren of _thums en _resized bestaan, zo niet dan maken
-			if(!file_exists(PICS_PATH.'/fotoalbum/'.$this->getPad().'/_thumbs')){
-				mkdir(PICS_PATH.'/fotoalbum/'.$this->getPad().'/_thumbs');
-				chmod(PICS_PATH.'/fotoalbum/'.$this->getPad().'/_thumbs', 0755);
+			if(!file_exists($this->getFullpath().'/_thumbs')){
+				mkdir($this->getFullpath().'/_thumbs');
+				chmod($this->getFullpath().'/_thumbs', 0755);
 			}
-			if(!file_exists(PICS_PATH.'/fotoalbum/'.$this->getPad().'/_resized')){
-				mkdir(PICS_PATH.'/fotoalbum/'.$this->getPad().'/_resized');
-				chmod(PICS_PATH.'/fotoalbum/'.$this->getPad().'/_resized', 0755);
+			if(!file_exists($this->getFullpath().'/_resized')){
+				mkdir($this->getFullpath().'/_resized');
+				chmod($this->getFullpath().'/_resized', 0755);
+				chmod($this->getFullpath().'/_resized', 0755);
 			}
 
 			# Thumbnails en resizeds maken
