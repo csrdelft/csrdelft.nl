@@ -8,6 +8,9 @@
 
 require_once 'fotoalbum.class.php';
 
+//constant for used places
+define('USED', 'USED');
+
 class FotalbumZijbalkContent extends SimpleHtml{
 
 	public function __construct(){
@@ -76,9 +79,6 @@ class FotoalbumUbbContent extends SimpleHTML{
 	 */
 	private function getGrid(){
 		$fotos=$this->album->getFotos();
-
-		//constant for used places
-		define('USED', 'USED');
 
 		$grid=array_fill(0, $this->rows, array_fill(0, $this->per_row, null));
 
