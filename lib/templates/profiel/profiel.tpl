@@ -96,12 +96,9 @@
 	<div class="profielregel">
 		<div class="gegevens">
 			{foreach from=$profiel->getContactgegevens() key="key" item="contact"}
-				{if $key=='website'}
-					<div class="label">Website:</div>
-					<a href="{$contact|escape:'html'}" class="linkExt">{$contact|truncate:30|escape:'htmlall'}</a>
-				{elseif $key=='linkedin'}
-					<div class="label">LinkedIn:</div>
-					<a href="{$contact|escape:'html'}" class="linkExt">{$contact|truncate:50|escape:'htmlall'}</a>
+				{if in_array($key, array('website', 'linkedin'))}
+					<div class="label">{$key|ucfirst}:</div>
+					<a href="{$contact|escape:'html'}" class="linkExt">{$contact|truncate:60|escape:'htmlall'}</a>
 				{elseif $key=='email'}
 					<div class="label">Email:</div>
 					<a href="mailto:{$contact|escape:'html'}">{$contact|escape:'htmlall'}</a>
@@ -109,10 +106,10 @@
 					<div class="label">Jabber/GTalk:</div>
 					 {$contact|escape:'htmlall'}
 				{elseif in_array($key, array('msn', 'icq'))}
-					<div class="label">{$key|upper}</div>
+					<div class="label">{$key|upper}:</div>
 					{$contact|escape:'htmlall'}
 				{else}
-					<div class="label">{$key|ucfirst}</div>
+					<div class="label">{$key|ucfirst}:</div>
 					{$contact|escape:'htmlall'}
 				{/if}
 				<br />
