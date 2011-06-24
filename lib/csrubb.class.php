@@ -384,8 +384,6 @@ src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
 				$fotoalbumtag->setBig($parameters['big']);
 			}
 		}
-
-
 		return $fotoalbumtag->getHTML();
 	}
 	/*

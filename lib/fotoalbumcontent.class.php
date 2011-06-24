@@ -59,7 +59,6 @@ class FotoalbumUbbContent extends SimpleHTML{
 			//explode on ',' and convert tot int.
 			$this->big=array_map('intval', explode(',', $index));
 		}else{
-			echo 'kaas';
 			$this->big=array((int)$index);
 		}
 	}
