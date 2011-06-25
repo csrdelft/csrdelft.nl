@@ -18,21 +18,24 @@ class FotalbumZijbalkContent extends SimpleHtml{
 		$this->album=$this->album->getMostrecentSubAlbum();
 	}
 	public function view(){
-
 		echo '<div id="zijbalk_fotoalbum">';
 		echo '<h1><a href="/actueel/fotoalbum/">Laatste fotoalbum</a></h1>';
 		echo '<div class="item">';
 		echo '<a href="/actueel/fotoalbum/'.$this->album->getPad().'">';
 		echo $this->album->getNaam();
+		echo '</a>';
 		$limit=6;
 		$fotos=$this->album->getFotos();
+
+		$url=$this->album->getPad();
 		for($i=0; $i<$limit; $i++){
 			$foto=$fotos[$i];
 			if($foto instanceof Foto){
-				echo '<img src="'.$foto->getThumbURL().'">';
+				echo '<a href="/actueel/fotoalbum'.$url.'#'.$foto->getBestandsnaam().'">';
+				echo '<img src="'.$foto->getThumbURL().'" alt="'.$foto->getBestandsnaam().'" >';
+				echo '</a>'."\n";
 			}
 		}
-		echo '</a>';
 		echo '</div>';
 		echo '</div>';
 	}
@@ -145,15 +148,15 @@ class FotoalbumUbbContent extends SimpleHTML{
 
 	public function getHTML(){
 		$grid=$this->getGrid();
+		$albumurl=$this->album->getPad();
+
 		$delta=$this->picsize+(2*$this->rowmargin);
 		$ret='<div class="images" style="height: '.(count($grid)*$delta).'px">';
 
 		foreach($grid as $row => $rowcontents){
 			foreach($rowcontents as $col => $foto){
 				if(is_array($foto) ){
-					$url=$this->album->getPad();
-
-					$ret.='<a href="/actueel/fotoalbum'.$url.'#'.$foto['foto']->getBestandsnaam().'"';
+					$ret.='<a href="/actueel/fotoalbum'.$albumurl.'#'.$foto['foto']->getBestandsnaam().'"';
 					$ret.=in_array($foto['index'], $this->big) ? 'class="big"' : 'class="sml"';
 
 					$ret.='style=" left: '.($delta*$col).'px; top: '.($delta*$row).'px;">';
