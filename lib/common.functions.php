@@ -348,10 +348,11 @@ function square_crop($src_image, $dest_image, $thumb_size = 64, $jpg_quality = 9
 	}
 }
 /*
- * return input without unprintable characters (excluding newlines)
+ * return input without unprintable characters
+ * (excluding newlines and tabs)
  */
 function only_printable($string){
-	return preg_replace('/[^\x0A\x20-\x7E]/', '', $string);
+	return preg_replace('/[^\x0A^\x09\x20-\x7E]/', '', $string);
 }
 function format_filesize($size) {
 	$units = array(' B', ' KB', ' MB', ' GB', ' TB');
