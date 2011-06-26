@@ -97,7 +97,7 @@ class Fotoalbum{
 		$fotos=$this->getFotos();
 		if(is_array($fotos) AND count($fotos)>0){
 
-			//gebruik folder.jpg als die bestaat.
+			//gebruik de foto eindigend op folder.jpg als die bestaat.
 			foreach($fotos as $foto){
 				if(substr($foto->getBestandsnaam(),-10)=='folder.jpg'){
 					return $foto->getThumbURL();
@@ -162,10 +162,12 @@ class Fotoalbum{
 			if(!$this->exists()){
 				$this->fotos=false;
 			}
-			$handle=opendir(PICS_PATH.'/fotoalbum/'.$this->pad);
-			while(false!==($bestand=readdir($handle))){
-				$bestanden[]=$bestand;
+			if(is_dir(PICS_PATH.'/fotoalbum/'.$this->pad) && $handle=opendir(PICS_PATH.'/fotoalbum/'.$this->pad)){
+				while(false!==($bestand=readdir($handle))){
+					$bestanden[]=$bestand;
+				}
 			}
+			
 			sort($bestanden);
 
 			$fotos=array();
