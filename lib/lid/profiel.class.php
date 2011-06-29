@@ -7,7 +7,6 @@
 # -------------------------------------------------------------------
 
 
-require_once 'ldap.class.php';
 require_once 'formulier.class.php';
 require_once 'forum/forum.class.php';
 
@@ -36,7 +35,7 @@ class Profiel{
 	//make al methods from Lid accessible in profiel
 	public function __call($name, $arguments){
 		if(method_exists($this->lid, $name)){
-			return $this->lid->$name();
+			return call_user_func_array(array($this->lid, $name), $arguments);
 		}else{
 			throw new Exception('Call to undefined method Profiel::'.$name);
 		}
