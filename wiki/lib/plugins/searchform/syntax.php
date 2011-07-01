@@ -42,13 +42,16 @@ class syntax_plugin_searchform extends DokuWiki_Syntax_Plugin {
     function render($mode, &$renderer, $data) {
  		
  		global $lang;
+		global $INFO;
  		
 		if ($mode == 'xhtml') {
+
+			$ns = $INFO['namespace'];
 
 			$renderer->doc .= '<div id="searchform_plugin">'."\n";
 			$renderer->doc .= '<form action="'.wl().'" accept-charset="utf-8" class="search" id="dw__search2"><div class="no">'."\n";
 			$renderer->doc .= '<input type="hidden" name="do" value="search" />'."\n";
-			$renderer->doc .= '<input type="hidden" id="dw__ns" name="ns" value="vormingsbank" />';
+			$renderer->doc .= '<input type="hidden" id="dw__ns" name="ns" value="' . $ns .'" />';
 			$renderer->doc .= '<input type="text" ';
 			if($ACT == 'search') $renderer->doc .= 'value="'.htmlspecialchars($_REQUEST['id']).'" ';
 			if(!$autocomplete) $renderer->doc .= 'autocomplete="off" ';
