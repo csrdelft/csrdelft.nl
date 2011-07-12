@@ -1021,6 +1021,7 @@ wiki/data/deleted.files -text
 wiki/data/index/_dummy -text
 wiki/data/locks/_dummy -text
 wiki/data/media/wiki/dokuwiki-128.png -text
+wiki/data/media/wiki/test.csv -text
 wiki/data/meta/_dummy -text
 wiki/data/pages/playground/playground.txt -text
 wiki/data/pages/wiki/dokuwiki.txt -text
@@ -1221,6 +1222,7 @@ wiki/lib/images/fileicons/dwg.gif -text
 wiki/lib/images/fileicons/dwg.png -text
 wiki/lib/images/fileicons/eml.png -text
 wiki/lib/images/fileicons/enc.png -text
+wiki/lib/images/fileicons/eps.png -text
 wiki/lib/images/fileicons/file.png -text
 wiki/lib/images/fileicons/gif.png -text
 wiki/lib/images/fileicons/gz.png -text
