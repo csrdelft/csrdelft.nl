@@ -17,48 +17,49 @@ x004;Fiscus;C.S.R. Delft;Fiscus C.S.R. Delft;fiscus@
 x005;Vice-Praeses;C.S.R. Delft;Vice-Praeses C.S.R. Delft;vice-praeses@
 x006;Vice-Abactis;C.S.R. Delft;Vice-Abactis C.S.R. Delft;vice-abactis@
 
-x010;AcqCie;AcquisitieCommissie;;acqcie@
-x011;ArCie;Arro Kopij Commissie;;arcie@
-x012;AlmanakCie;AlmanakCommissie;;almanakcie@
-x013;Alpha;Alpha Cursus;;info@studentalphadelft.nl
-x014;BASFCie;Bibliotheek, Archief, Statistiek en FotoCommissie;;basfcie@
-x015;DiesCie;DiesCommissie;;diescie@
-x016;LeOCie;Laudate et Orate Commissie;;leocie@
-x017;Donacie;DonatieCommissie;;donacie@
-x018;HappeningCie;HappeningCommissie;;happening@
-x019;Bestuur Landelijk;Bestuur C.S.R. Landelijk;;landelijk@
-x020;LustrumboekCie;LustrumboekCommissie;;lustrumboekcie@
-x021;LustrumCie;LustrumCommissie;;lustrumcie@
-x022;MaalCie;MaaltijdCommissie;;maalcie@
-x023;MaalCie-Fiscus;MaalCie-Fiscus (Ransapen pas op!);;maalcie-fiscus@
-x024;N.B.G.;Netwerk Beheer Groep;;nbg@
-x025;NovCie;NovitiaatsCommissie;;novcie@
-x026;OWeeCie;OWeeCommissie;;oweecie@
-x027;PubCie;PubliciteitsCommissie;;pubcie@
-x035;SocCie;SocieteitsCommissie;;soccie@
-x036;RestauraCie;RestauratieCommissie;;restauracie@
-x037;OnderhoudCie;OnderhoudCommissie;;onderhoudcie@
+x200;AcqCie;AcquisitieCommissie;;acqcie@
+x201;ArCie;Arro Kopij Commissie;;arcie@
+x202;AlmanakCie;AlmanakCommissie;;almanakcie@
+x203;Alpha;Alpha Cursus;;info@studentalphadelft.nl
+x204;BASFCie;Bibliotheek, Archief, Statistiek en FotoCommissie;;basfcie@
+x205;DiesCie;DiesCommissie;;diescie@
+x206;LeOCie;Laudate et Orate Commissie;;leocie@
+x207;Donacie;DonatieCommissie;;donacie@
+x208;HappeningCie;HappeningCommissie;;happening@
+x209;LustrumboekCie;LustrumboekCommissie;;lustrumboekcie@
+x210;LustrumCie;LustrumCommissie;;lustrumcie@
+x211;MaalCie;MaaltijdCommissie;;maalcie@
+x212;MaalCie-Fiscus;MaalCie-Fiscus (Ransapen pas op!);;maalcie-fiscus@
+x213;N.B.G.;Netwerk Beheer Groep;;nbg@
+x214;NovCie;NovitiaatsCommissie;;novcie@
+x215;OWeeCie;OWeeCommissie;;oweecie@
+x216;PubCie;PubliciteitsCommissie;;pubcie@
+x217;SocCie;SocieteitsCommissie;;soccie@
+x218;RestauraCie;RestauratieCommissie;;restauracie@
+x219;OnderhoudCie;OnderhoudCommissie;;onderhoudcie@
+x220;Fotocommissaris;Fotocommissaris (BASFCie);;fotocommissaris@
+x221;Archivaris;Archivaris (BASFCie);;archivaris@
+x222;Bibliothecaris;Bibliothecaris (BASFCie);;bibliothecaris@
+x223;Statisticus;Statisticus (BASFCie);;statisticus@
+x224;Corvee;CorveeCaeser;;corvee@
 
 
-x040;Fotocommissaris;Fotocommissaris (BASFCie);;fotocommissaris@
-x041;Archivaris;Archivaris (BASFCie);;archivaris@
-x042;Bibliothecaris;Bibliothecaris (BASFCie);;bibliothecaris@
-x043;Statisticus;Statisticus (BASFCie);;statisticus@
-x044;Corvee;CorveeCaeser;;corvee@
-x045;Oudleden;Oudledenbestuur;;oudleden@
-x046;Stichting CC; Stichting Civitas Centrum;;stichtingcc@
+x270;Bestuur Landelijk;Bestuur C.S.R. Landelijk;;landelijk@
+x271;Oudleden;Oudledenbestuur;;oudleden@
+x272;Stichting CC; Stichting Civitas Centrum;;stichtingcc@
 
-x050;Moot 1;Moot 1;;moot1@
-x051;Moo2;Moo2;;moo2@
-x052;Moot 3;Moot 3;;moot3@
-x053;Moot 4;Moot 4;;moot4@
 
-x061;Verticale Archibald;Verticale Archibald;;archibald@
-x062;Verticale Faculteit;Verticale Faculteit;;faculteit@
-x063;Verticale Billy;Verticale Billy;;billy@
-x064;Verticale Diagonaal;Verticale Diagonaal;;diagonaal@
-x065;Verticale Vrøgd;Verticale Vrøgd;;vrogd@
-x066;Verticale Lekker;Verticale Lekker;;lekker@
-x067;Verticale Securis;Verticale Securis;;securis@
-x068;Verticale Primitus;Verticale Primitus;;primitus@
 
+x111;Verticale Archibald;Verticale Archibald;;archibald@
+x112;Verticale Faculteit;Verticale Faculteit;;faculteit@
+x113;Verticale Billy;Verticale Billy;;billy@
+x114;Verticale Diagonaal;Verticale Diagonaal;;diagonaal@
+x115;Verticale Vrøgd;Verticale Vrøgd;;vrogd@
+x116;Verticale Lekker;Verticale Lekker;;lekker@
+x117;Verticale Securis;Verticale Securis;;securis@
+x118;Verticale Primitus;Verticale Primitus;;primitus@
+
+x130;Moot 1;Moot 1;;moot1@
+x131;Moo2;Moo2;;moo2@
+x132;Moot 3;Moot 3;;moot3@
+x133;Moot 4;Moot 4;;moot4@
