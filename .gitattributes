@@ -2014,8 +2014,10 @@ wiki/lib/tpl/default/images/button-rss.png -text
 wiki/lib/tpl/default/images/button-xhtml.png -text
 wiki/lib/tpl/default/images/buttonshadow.png -text
 wiki/lib/tpl/default/images/closed.gif -text
+wiki/lib/tpl/default/images/csr.png -text svneol=unset#unset
 wiki/lib/tpl/default/images/documenten.png -text svneol=unset#unset
 wiki/lib/tpl/default/images/favicon.ico -text
+wiki/lib/tpl/default/images/forum.png -text svneol=unset#unset
 wiki/lib/tpl/default/images/inputshadow.png -text
 wiki/lib/tpl/default/images/irc.png -text svneol=unset#unset
 wiki/lib/tpl/default/images/link_icon.gif -text
