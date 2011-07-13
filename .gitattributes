@@ -232,8 +232,6 @@ htdocs/tools/sendmail/sendmail.php -text
 htdocs/tools/soccie.php -text
 htdocs/tools/stats.php -text
 htdocs/tools/streeplijst.php -text
-htdocs/tools/test.php -text
-htdocs/tools/test2.php -text
 htdocs/tools/ubb.php -text
 htdocs/tools/verticalelijsten.php -text
 htdocs/vb/ajaxsearch.php -text

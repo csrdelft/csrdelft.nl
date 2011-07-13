@@ -83,9 +83,6 @@ jQuery(document).ready(function(){
 })
 
 function observeClick(){
-	
-	console.log($(".edit_td"));
-	
 	jQuery(".edit_td").click(function(){
 		var ID=jQuery(this).attr('id');
 		jQuery("#functie_"+ID).hide();
@@ -96,7 +93,7 @@ function observeClick(){
 		var uid=jQuery("#uid_"+ID).val();
 		var functie=jQuery("#functie_input_"+ID).val();
 		var dataString = 'functie='+ functie + '&uid=' + uid + '&gid='+gid;
-		$("#functie_"+ID).html('Laad...'); // Loading
+		jQuery("#functie_"+ID).html('Laad...'); // Loading
 
 		jQuery.ajax({
 			type: "POST",
@@ -111,8 +108,7 @@ function observeClick(){
 
 	// Outside click action
 	jQuery(document).mouseup(function(object){
-		if(!$(object.target).hasClass("editbox")) //clicken in editbox is toegestaan
-		{
+		if(!jQuery(object.target).hasClass("editbox")){ //in editbox mag je klikken
 			jQuery(".editbox").hide();
 			jQuery(".text").show();
 		}
