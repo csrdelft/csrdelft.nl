@@ -71,7 +71,51 @@ function showTab(groepid, tabid){
 	http.onreadystatechange=function(){
 		if(http.readyState == 4){
 			document.getElementById('ledenvangroep'+groepid).innerHTML=http.responseText;
+			observeClick();
 		}
 	};
 	http.send(null);
+
 }
+
+jQuery(document).ready(function(){
+	observeClick();
+})
+
+function observeClick(){
+	
+	console.log($(".edit_td"));
+	
+	jQuery(".edit_td").click(function(){
+		var ID=jQuery(this).attr('id');
+		jQuery("#functie_"+ID).hide();
+		jQuery("#functie_input_"+ID).show();
+	}).change(function(){
+		var ID=jQuery(this).attr('id');
+		var gid=jQuery("#gid_"+ID).val();
+		var uid=jQuery("#uid_"+ID).val();
+		var functie=jQuery("#functie_input_"+ID).val();
+		var dataString = 'functie='+ functie + '&uid=' + uid + '&gid='+gid;
+		$("#functie_"+ID).html('Laad...'); // Loading
+
+		jQuery.ajax({
+			type: "POST",
+			url: '/actueel/groepen/XHR/' + gid + '/bewerkfunctieLid/' + uid,
+			data: dataString,
+			cache: false,
+			success: function(result){
+				jQuery("#functie_"+ID).html(result);
+			}
+		});
+	});
+
+	// Outside click action
+	jQuery(document).mouseup(function(object){
+		if(!$(object.target).hasClass("editbox")) //clicken in editbox is toegestaan
+		{
+			jQuery(".editbox").hide();
+			jQuery(".text").show();
+		}
+	});
+
+};

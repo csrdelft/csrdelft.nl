@@ -308,6 +308,14 @@ class Groep{
 	}
 	public function getLidCount(){	return count($this->getLeden()); }
 	public function isVol(){		return $this->getLimiet()!=0 AND $this->getLimiet()<=$this->getLidCount(); }
+	public function getVrijePlaatsen(){
+		$aantal=$this->getLimiet() - $this->getLidCount();
+		if($this->getLimiet()!=0 AND $aantal>0 AND $this->isAanmeldbaar() AND ($this->getEinde()=='0000-00-00' OR $this->getEinde()>date('Y-m-d'))){
+			return $aantal;
+		}else{
+			return 0;
+		}
+	}
 
 	public static function isAdmin(){
 		return LoginLid::instance()->hasPermission('P_LEDEN_MOD');
@@ -461,8 +469,10 @@ class Groep{
 	}
 
 
-
-	public function addLid($uid, $functie=''){
+	/* 
+	 * voegt een nieuw lid aan een groep toe, of functie van groepslid wordt geupdate.
+	 */
+	public function addLid($uid, $functie='', $bewerken=false){
 		$op=0;
 		$functie=str_replace(array("\n","\r"), '', trim($functie));
 		switch(strtolower($functie)){
@@ -497,14 +507,26 @@ class Groep{
 				$prioriteit=5;
 			break;
 		}
-		if(!$this->isLid($uid)){
+
+		if(!$this->isLid($uid) OR $bewerken){
 			$db=MySql::instance();
-			$sCieQuery="
-				INSERT INTO groeplid
-					( groepid, uid, op, functie, prioriteit, moment )
-				VALUES (
-					".$this->getId().", '".$uid."', '".$op."', '".$db->escape($functie)."', ".$prioriteit.", '".getDateTime()."'
-				)";
+			if(!$this->isLid($uid)){
+				$sCieQuery="
+					INSERT INTO groeplid
+						( groepid, uid, op, functie, prioriteit, moment )
+					VALUES (
+						".$this->getId().", '".$uid."', '".$op."', '".$db->escape($functie)."', ".$prioriteit.", '".getDateTime()."'
+					)";
+			}else{
+				$sCieQuery="
+					UPDATE groeplid SET
+						op= '".$op."',
+						functie= '".$db->escape($functie)."',
+						prioriteit= ".$prioriteit.",
+						moment='".getDateTime()."'
+					WHERE groepid= ".$this->getId()." AND uid= '".$uid."'
+					LIMIT 1;";
+			}
 			return $db->query($sCieQuery);
 		}else{
 			return false;
@@ -618,6 +640,15 @@ class Groep{
 			}
 		}
 		return $functies;
+	}
+
+	/*
+	 * Geeft de functie van een lid terug
+	 */
+	public function getFunctie($uid=null){
+		if($uid===null){ $uid=LoginLid::instance()->getUid(); }
+		$leden=$this->leden;
+		return $leden[$uid]['functie'];
 	}
 
 	/*

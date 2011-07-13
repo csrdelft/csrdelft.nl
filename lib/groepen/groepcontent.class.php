@@ -87,7 +87,7 @@ class Groepcontent extends SimpleHTML{
 	 * Niet-admins kunnen kiezen uit een van te voren vastgesteld lijstje met functies, zodat
 	 * we  niet allerlei onzinnamen krijgen zoals Kücherführer enzo.
 	 */
-	private function getFunctieSelector(){
+	private function getFunctieSelector($uid=''){
 		$return='';
 		$aFuncties=array('Q.Q.', 'Praeses', 'Fiscus', 'Redacteur', 'Computeur', 'Archivaris',
 			'Bibliothecaris', 'Statisticus', 'Fotocommissaris','', 'Koemissaris', 'Regisseur',
@@ -96,7 +96,11 @@ class Groepcontent extends SimpleHTML{
 		sort($aFuncties);
 		$return.='<select name="functie[]" class="tekst">';
 		foreach($aFuncties as $sFunctie){
-			$return.='<option value="'.$sFunctie.'">'.$sFunctie.'</option>';
+			$return.='<option value="'.$sFunctie.'"';
+			if($sFunctie==$this->groep->getFunctie($uid)){
+				$return.='selected="selected"';
+			}
+			$return.='>'.$sFunctie.'</option>';
 		}
 		$return.='</select>';
 		return $return;
@@ -134,7 +138,6 @@ class Groepcontent extends SimpleHTML{
 		$content->assign('groeptypes', Groepen::getGroeptypes());
 		$content->assign('aanmeldfilters', $this->getAanmeldfilters()); 
 		$content->assign('oudegroep',$_SESSION['oudegroep']);
-
 		if($this->action=='addLid'){
 			$content->assign('lidAdder', $this->getLidAdder());
 		}

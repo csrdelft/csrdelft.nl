@@ -23,12 +23,30 @@
 		{/foreach}
 	</div>
 {else}
+
 	<table class="leden">
 		{foreach from=$groep->getLeden() item=groeplid}
 			<tr>
 				<td>{$groeplid.uid|csrnaam:'civitas'}</td>
-				{if $groep->toonFuncties()}<td><em>{$groeplid.functie|escape:'html'}</em></td>{/if}
-				{if $groep->magBewerken()}
+				{if $groep->magBewerken() OR ($loginlid->getUid()==$groeplid.uid AND ($groep->getToonFuncties()=='tonen' OR $groep->getToonFuncties()=='verbergen'))}
+					<td  id="{$groep->getId()}{$groeplid.uid}" class="edit_td">
+						<span id="functie_{$groep->getId()}{$groeplid.uid}" class="text">{$groeplid.functie|escape:'html'}</span>
+						{if $groep->hasFunctiefilter()}
+							<select name="functie" class="editbox" id="functie_input_{$groep->getId()}{$groeplid.uid}">
+								{foreach from=$groep->getFunctiefilters() item=filter}
+									<option value="{$filter|escape:'html'}" {if $filter==$groeplid.functie}selected="selected"{/if}>{$filter|escape:'html'}</option>
+								{/foreach}
+							</select>
+						{else}
+							<input type="text" maxlength="25" value="{$groeplid.functie|escape:'html'}" class="editbox" id="functie_input_{$groep->getId()}{$groeplid.uid}" />
+						{/if}
+						<input type="hidden" value="{$groeplid.uid}" id="uid_{$groep->getId()}{$groeplid.uid}"/>
+						<input type="hidden" value="{$groep->getId()}" id="gid_{$groep->getId()}{$groeplid.uid}"/>
+					</td>
+				{else}	
+					{if $groep->toonFuncties()}<td><em>{$groeplid.functie|escape:'html'}</em></td>{/if}
+				{/if}
+				{if $groep->magBewerken() OR $loginlid->getUid()==$groeplid.uid}
 					<td>
 					{if $groep->getTypeId()==2 AND $groep->getStatus()=='ht'}{* maak lid ot voor huizen. Dit kunnen leden ook bij zichzelf doen. *}
 						<a href="/actueel/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/maakLidOt/{$groeplid.uid}" title="Verplaats lid naar o.t.-groep" 
@@ -58,6 +76,7 @@
 						Aanmelden voor deze groep
 					{/if}
 				</a>
+				{if $groep->getVrijeplaatsen()!=0}<br />{/if}{* nog-vrije-plaatsen-melding *}
 			{else}
 				<form action="/actueel/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/aanmelden" method="post" id="aanmeldForm" class="clear">
 					<strong>Aanmelden</strong><br />
@@ -71,10 +90,11 @@
 						<input type="text" name="functie" maxlength="25" class="functie" />
 					{/if}&nbsp;<input type="submit" value="aanmelden" />
 				</form>
+				
 			{/if}
+			{if $groep->getVrijeplaatsen()!=0}nog {$groep->getVrijeplaatsen()} plaatsen vrij{/if}
 		{elseif $groep->isVol()}
 			Deze groep is vol, u kunt zich niet meer aanmelden.
 		{/if}
 	</div>
-{/if}	
-
+{/if}

@@ -394,7 +394,7 @@ class Groepcontroller extends Controller{
 	public function action_verwijderLid(){
 		if($this->hasParam(2) AND Lid::isValidUid($this->getParam(2)) AND $this->groep->magBewerken()){
 			if($this->groep->verwijderLid($this->getParam(2))){
-				$melding='';
+				$melding='Lid is met succes verwijderd uit de groep.';
 				try{
 					$this->groep->save_ldap();
 				}catch(Exception $e){
@@ -406,7 +406,38 @@ class Groepcontroller extends Controller{
 			$this->content->invokeRefresh($melding, $this->getUrl('default').'#lidlijst');
 		}
 	}
-	
+
+	/*
+	 * Opmerking/functie van een lid aanpassen, return functie of een foutmelding
+	 */
+	public function action_bewerkfunctieLid(){
+		if(!$this->groep->magBewerken() AND LoginLid::instance()->getUid()!=$this->getParam(2)){
+			echo '<span class="melding">Onvoldoende rechten voor deze actie</span>';
+			exit;
+		}
+		if($this->hasParam(2) AND isset($_POST['functie'])){
+			if(Lid::isValidUid($this->getParam(2)) AND $this->groep->isLid($this->getParam(2))){
+				$functie=$_POST['functie'];
+				if(is_array($functie)){
+					$functie=$functie[0];
+				}
+				if($this->groep->addLid($this->getParam(2), $functie, $bewerken=true)){
+					try{
+						$this->groep->save_ldap();
+					}catch(Exception $e){
+						//todo: loggen dat LDAP niet beschikbaar is in een mooi eventlog wat ook nog gemaakt moet worden...
+					}
+					echo $functie;
+				}else{
+					echo '<span class="melding">Opmerking opslaan mislukt (GroepController::action_bewerkfunctieLid()).</span>';
+				}
+			}else{
+				echo '<span class="melding">Ongeldig uid of lid niet in groep</span>'; 
+			}
+		}
+		exit;
+	}
+
 	/*
 	 * Een lid naar de eerstvolgende o.t. groep verplaatsen.
 	 */

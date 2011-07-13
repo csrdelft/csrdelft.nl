@@ -89,6 +89,7 @@
 	{* groepformulier naar een apart bestand, is wat overzichtelijker. *}
 	{include file='groepen/groepformulier.tpl'}
 {else}
+	{if $groep->getType()->getId()==11 }Ouderejaars: {$groep->getEigenaar()|perm2string}<br />{/if} {* alleen bij Sjaarsacties *}
 	{$groep->getSbeschrijving()|ubb}
 	<div class="clear" id="voorgangerOpvolger">
 		<ul class="nobullets">

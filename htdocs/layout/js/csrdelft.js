@@ -114,7 +114,7 @@ function forumBewerken(post){
 		}
 	}
 	http.send(null);
-	return false;	
+	return false;
 }
 function restorePost(){
 	bewerkDiv.innerHTML=bewerkDivInnerHTML;

@@ -33,8 +33,9 @@ ul.groepledenlijst{ width: 230px; float: right; padding: 10px 20px 20px 20px; ma
 	background-color: #ddd; float: right; 
 	margin-left: 10px; 
 	border-top: 1px solid #ddd; border-bottom: 1px solid #ddd; }
-.groepleden table.leden{ width: 100%; }
+.groepleden table.leden{ width: 100%; font-size: 11px;}
 .groepleden table.leden td{ padding: 0px 5px; text-align: left;}
+.groepleden table.leden input.functie{ width: 80px; }
 .groepleden .toonmeer{ display: block; padding: 0px 0px 10px 15px;}
 .groepleden .aanmelden { clear: left; padding: 4px 5px; border-top: 1px solid #ddd; line-height: 1.6em;}
 .groepleden .aanmelden input.functie{ width: 160px; }
@@ -50,3 +51,25 @@ ul.groepledenlijst{ width: 230px; float: right; padding: 10px 20px 20px 20px; ma
 #groepFormulier label{ float: left; margin-right: 15px; width: 130px;}
 #groepFormulier input, #groepFormulier textarea, #groepFormulier select{ margin-top: 4px; margin-bottom: 4px; }
 #groepFormulier div.opmerking{  float: right; width: 440px; margin-bottom: 10px; }
+
+
+/* bewerken van opmerking/functie */
+.editbox{
+	display:none
+}
+.editbox{
+	background-color:#ffffcc;
+	border:solid 1px #000;
+	padding:1px;
+}
+.edit_td{
+	background:url(http://plaetjes.csrdelft.nl/knopjes/bewerken.png) right no-repeat;
+	padding-right:18px!important;
+}
+.edit_td:hover{
+	background:url(http://plaetjes.csrdelft.nl/knopjes/bewerken.png) right no-repeat #f5f5f5;
+	cursor:pointer;
+}
+.melding {
+	color:red;
+}

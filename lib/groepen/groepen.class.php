@@ -72,7 +72,7 @@ class Groepen{
 			SELECT
 				groep.id AS groepId, groep.gtype AS gtypeId, groep.snaam AS snaam, groep.naam AS naam,
 				groep.sbeschrijving AS sbeschrijving, groep.beschrijving AS beschrijving, groep.zichtbaar AS zichtbaar,
-				groep.status AS status, begin, einde, aanmeldbaar, functiefilter, limiet, toonFuncties, toonPasfotos, lidIsMod,
+				groep.status AS status, begin, einde, aanmeldbaar, functiefilter, limiet, toonFuncties, toonPasfotos, lidIsMod, eigenaar,
 				groeplid.uid AS uid, groeplid.op AS op, groeplid.functie AS functie, groeplid.prioriteit AS prioriteit,
 				IF(aanmeldbaar = '',
 					1,
