@@ -54,6 +54,7 @@ htdocs/actueel/sjaarsacties.php -text
 htdocs/bot/.htaccess.sample -text
 htdocs/bot/cmnd.php -text
 htdocs/communicatie/.htaccess -text
+htdocs/communicatie/bibliotheek.php -text
 htdocs/communicatie/documenten.php -text
 htdocs/communicatie/forum/.htaccess -text
 htdocs/communicatie/forum/bewerken.php -text
@@ -108,12 +109,14 @@ htdocs/images/prettyPhoto/light_square/sprite.png -text
 htdocs/index.php -text
 htdocs/instellingen.php -text
 htdocs/layout/agenda.css -text
+htdocs/layout/bibliotheek.css -text
 htdocs/layout/default.css -text
 htdocs/layout/documenten.css -text
 htdocs/layout/forum.css -text
 htdocs/layout/fotoalbum.css -text
 htdocs/layout/groepen.css -text
 htdocs/layout/jquery.prettyPhoto.css -text
+htdocs/layout/js/bibliotheek.js -text
 htdocs/layout/js/builder.js -text
 htdocs/layout/js/csrdelft.js -text
 htdocs/layout/js/datatables/css/datatables_basic.css -text
@@ -620,6 +623,12 @@ lib/Zend/Version.php -text
 lib/agenda/agenda.class.php -text
 lib/agenda/agendacontent.class.php -text
 lib/agenda/agendacontroller.class.php -text
+lib/bibliotheek/auteurs.class.php -text
+lib/bibliotheek/bibliotheekcontent.class.php -text
+lib/bibliotheek/bibliotheekcontroller.class.php -text
+lib/bibliotheek/boek.class.php -text
+lib/bibliotheek/catalogus.class.php -text
+lib/bibliotheek/rubriek.class.php -text
 lib/chart-0.8/COPYING -text
 lib/chart-0.8/INSTALLATION -text
 lib/chart-0.8/IsoLatin1.enc -text
@@ -837,6 +846,7 @@ lib/templates/agenda/jaar.tpl -text
 lib/templates/agenda/maand.tpl -text
 lib/templates/agenda/week.tpl -text
 lib/templates/agenda/zijbalk.tpl -text
+lib/templates/bibliotheek/catalogus.tpl -text
 lib/templates/courant/courantbeheer.tpl -text
 lib/templates/courant/mail/c_header.tpl -text
 lib/templates/courant/mail/courant.tpl -text
@@ -969,6 +979,7 @@ sql/2211_aanmaakbaargroepen.sql -text
 sql/2230_linkedin.sql -text
 sql/2235_fixverticaleletterGeen.sql -text
 sql/2240_erelid.sql -text
+sql/biebboektabel_opschonen.sql -text
 sql/csrdelft.sql -text
 sql/csrdelft_oud.sql -text
 wiki/.htaccess -text
