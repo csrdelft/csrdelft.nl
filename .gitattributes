@@ -623,7 +623,7 @@ lib/Zend/Version.php -text
 lib/agenda/agenda.class.php -text
 lib/agenda/agendacontent.class.php -text
 lib/agenda/agendacontroller.class.php -text
-lib/bibliotheek/auteurs.class.php -text
+lib/bibliotheek/auteur.class.php -text
 lib/bibliotheek/bibliotheekcontent.class.php -text
 lib/bibliotheek/bibliotheekcontroller.class.php -text
 lib/bibliotheek/boek.class.php -text
@@ -846,7 +846,9 @@ lib/templates/agenda/jaar.tpl -text
 lib/templates/agenda/maand.tpl -text
 lib/templates/agenda/week.tpl -text
 lib/templates/agenda/zijbalk.tpl -text
+lib/templates/bibliotheek/boek.tpl -text
 lib/templates/bibliotheek/catalogus.tpl -text
+lib/templates/bibliotheek/toevoegen.tpl -text
 lib/templates/courant/courantbeheer.tpl -text
 lib/templates/courant/mail/c_header.tpl -text
 lib/templates/courant/mail/courant.tpl -text

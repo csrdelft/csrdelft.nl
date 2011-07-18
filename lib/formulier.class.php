@@ -131,6 +131,13 @@ class LandField extends FormField{
 		$this->setSuggestions($landsuggesties);
 	}
 }
+class SuggestInputField extends FormField{
+	public function __construct($name, $value, $description, $max_len, $suggestions){
+		parent::__construct($name, $value, $description, $max_len);
+		$this->setSuggestions($suggestions);
+	}
+}
+
 class RequiredLandField extends LandField{
 	public $notnull=true;
 }

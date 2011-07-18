@@ -16,6 +16,7 @@ class Catalogus{
 	/*
 	 * De boeken ophalen. 
 	 * Boeken worden niet automagisch geladen, enkel bij het opvragen
+	 * voor auteur en categorie worden een string opgeslagen ipv id's
 	 * via count() of getDocumenten()
 	 */
 	public function loadBoeken(){
@@ -23,10 +24,10 @@ class Catalogus{
 		$query="
 			SELECT DISTINCT
 				b.id , b.titel , b.uitgavejaar , b.uitgeverij , b.paginas, 
-				b.taal, b.isbn, b.code, a.auteur AS auteur_id,
+				b.taal, b.isbn, b.code, a.auteur,
 				CONCAT(c1.categorie, ' - ',
 					c2.categorie, ' - ',
-					c3.categorie) AS categorie_id
+					c3.categorie) AS categorie
 			FROM 
 				biebboek b, biebauteur a, biebexemplaar e, biebcategorie c1, biebcategorie c2, biebcategorie c3
 			WHERE
@@ -60,5 +61,26 @@ class Catalogus{
 			$this->loadBoeken();
 		}
 		return $this->boeken; 
+	}
+	public function getBoek(){
+		return print_r($this->boeken[40]); 
+	}
+
+	public static function getTalen(){ 
+		$db=MySql::instance();
+		$query="
+			SELECT DISTINCT taal
+			FROM biebboek;";
+		$result=$db->query($query);
+		echo mysql_error();
+		if($db->numRows($result)>0){
+			while($taal=$db->next($result)){
+				$talen[]=$taal;
+			}
+			return $talen;
+		}else{
+			return false;
+		}
+
 	}
 }

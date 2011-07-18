@@ -20,7 +20,7 @@ jQuery(document).ready(function($) {
 		"iDisplayLength": 20,
 		"bInfo": false,
 		"bLengthChange": false,
-		"aaSorting": [[0, 'asc']],
+		"aaSorting": [[1, 'asc']],
 		"sPaginationType": "full_numbers",
 		"aoColumns": [
 			{'sType': 'html'}, // documentnaam
@@ -33,4 +33,40 @@ jQuery(document).ready(function($) {
 			{ "bVisible": false, "aTargets": [ 3,  4] }
 		]
 	});
+	
+	// velden bewerkbaar maken
+	observeClick();
 });
+
+function observeClick(){
+	jQuery(".bewerk").click(function(){
+		var ID=jQuery(this).attr('id');
+		jQuery("#waarde_"+ID).hide();
+		jQuery("#waarde_input_"+ID).show();
+	}).change(function(){
+		var ID=jQuery(this).attr('id');
+		var boekid=jQuery(".boek").attr('id');
+		var waarde=jQuery("#waarde_input_"+ID).val();
+		var dataString = 'id='+ID+'&waarde='+ waarde;
+		jQuery("#waarde_"+ID).html('Laad...'); // Loading
+
+		jQuery.ajax({
+			type: "POST",
+			url: '/communicatie/bewerkboek/'+ boekid,
+			data: dataString,
+			cache: false,
+			success: function(result){
+				jQuery("#waarde_"+ID).html(result);
+			}
+		});
+	});
+
+	// Outside click action
+	jQuery(document).mouseup(function(object){
+		if(!jQuery(object.target).hasClass("editbox")){ //in editbox mag je klikken
+			jQuery(".editbox").hide();
+			jQuery(".text").show();
+		}
+	});
+
+};

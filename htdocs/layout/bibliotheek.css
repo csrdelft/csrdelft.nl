@@ -68,3 +68,34 @@ tbody a.toevoegen{
 .dataTables_paginate {
     width: auto;
 }
+
+/* boek */
+.label{ float: left; width: 75px; font-size: 9px; color: #999; }
+.boek .titel{ margin-left: 20px; padding-left: 15px; float: left; width: 75px; color: #999; }
+.boek .blok{ margin-bottom: 20px; clear: left; }
+.boek .gegevens{ margin-left: 20px; padding-left: 15px; border-left: 1px solid #0a338d; }
+div.boek { width: 700px;}
+.boek.verwijderen { float: right;}
+
+/* bewerkvelden */
+/* bewerken van opmerking/functie */
+.editbox{
+	display:none
+}
+.editbox{
+	background-color:#ffffcc;
+	border:solid 1px #000;
+	padding:1px;
+	width: 560px
+}
+.bewerk{
+	/*background:url(http://plaetjes.csrdelft.nl/knopjes/bewerken.png) right no-repeat;*/
+	padding-right:18px!important;
+}
+.bewerk:hover{
+	background:url(http://plaetjes.csrdelft.nl/knopjes/bewerken.png) right no-repeat #ddd;
+	cursor:pointer;
+}
+.melding {
+	color:red;
+}

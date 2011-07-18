@@ -59,4 +59,24 @@ class BibliotheekController extends Controller{
 	protected function action_default(){
 		$this->content=new BibliotheekCatalogusContent();
 	}
+
+	//ga er van uit dat in getParam(1) een beokid staat en laad dat in.
+	private function loadBoek(){
+		if($this->hasParam(1)){
+			try{
+				$this->boek=new Boek($this->getParam(1));
+			}catch(Exception $e){
+				throw new Exception('Geen geldig id opgegeven of een niet-bestaand boek opgevraagd', $this->baseurl);
+			}
+		}
+	}
+	protected function action_boek(){
+		$this->loadBoek();
+		$this->content=new BibliotheekBoekContent($this->boek);
+	}
+	
+	protected function action_bewerkboek(){
+		
+	}
+
 }
