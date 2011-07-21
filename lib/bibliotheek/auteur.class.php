@@ -13,7 +13,6 @@
 
 
 	public function __construct($auteur){
-echo $auteur;
 		if(is_array($auteur)){
 			$this->array2properties($auteur);
 		}else{
