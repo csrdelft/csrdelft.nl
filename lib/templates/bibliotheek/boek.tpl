@@ -78,7 +78,7 @@
 				<div class="label">Biebcode</div>
 				<div class="bewerk" id="code">
 					<span id="waarde_code" class="text">{if $boek->getCode()=='' AND $boek->getRubriek()==''}<span class="suggestie">Vul eerst de rubriek in</span>{else}{$boek->getCode()|escape:'html'}{/if}&nbsp;</span>
-					<input type="text" maxlength="100" value="{$boek->getCode(true)|escape:'html'}" class="editbox" id="waarde_input_code" /> 
+					<input type="text" maxlength="100" value="{$boek->getCode()|escape:'html'}" class="editbox" id="waarde_input_code" /> 
 				</div>
 			{/if}
 		</div>

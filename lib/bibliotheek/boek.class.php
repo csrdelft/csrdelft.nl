@@ -96,16 +96,7 @@ class Boek{
 	public function getPaginas(){		return $this->paginas;}
 	public function getTaal(){			return $this->taal;}
 	public function getISBN(){			return $this->isbn;}
-	public function getCode($suggestie=false){
-		if($suggestie AND $this->code=="" AND is_int($this->categorie_id)){
-			$code = $this->categorie_id.'.';
-			if($this->getAuteur()!=""){
-				$code .= strtolower(substr($this->getAuteur(),0,3)).'X';
-			}
-			return $code;
-		}
-		return $this->code;
-	}
+	public function getCode(){			return $this->code;}
 
 //	public function getProperty($key){
 //		$allowedkeys = array('id', 'titel', 'uitgavejaar', 'uitgeverij', 'paginas', 'taal', 'isbn', 'code');
@@ -430,7 +421,7 @@ class Boek{
 			$nieuwboekform[]=new SuggestInputField('uitgeverij', $this->getUitgeverij(), 'Uitgeverij', 100, Catalogus::getAllValuesOfProperty('uitgeverij'));
 			$nieuwboekform[]=new IntField('uitgavejaar', $this->getUitgavejaar(), 'Uitgavejaar',2100,0);
 			$nieuwboekform[]=new SelectField('rubriek', $this->getRubriekId(), 'Rubriek',Rubriek::getAllRubrieken($samenvoegen=true,$short=true));
-			$nieuwboekform[]=new CodeField('code', $this->getCode(true), 'Biebcode');
+			$nieuwboekform[]=new CodeField('code', $this->getCode(), 'Biebcode');
 
 			$this->nieuwboekform=$nieuwboekform;
 		}
