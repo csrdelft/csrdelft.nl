@@ -35,7 +35,7 @@
 	public function getRubrieken(){ return implode(" - ", $this->rubriek);}
 	public function getRubriek(){ return $this->rubriek[2];}
 
-	public static function getAllRubrieken($samenvoegen=false){
+	public static function getAllRubrieken($samenvoegen=false,$short=false){
 		$db=MySql::instance();
 		$query="
 			SELECT c3.id, c1.categorie AS cat1, c2.categorie AS cat2, c3.categorie AS cat3
@@ -48,18 +48,39 @@
 		if($db->numRows($result)>0){
 			while($categorie=$db->next($result)){
 				if($samenvoegen){
-					$categorien[]=array(
-						'id'=>$categorie['id'], 
-						'cat'=>implode(" - ", array( $categorie['cat1'], $categorie['cat2'], $categorie['cat3']))
-					);
+					$samengevoegderubrieken = implode(" - ", array( $categorie['cat1'], $categorie['cat2'], $categorie['cat3']));
+					if($short){
+						$categorien[$categorie['id']]=$samengevoegderubrieken;
+					}else{
+						$categorien[]=array(
+							'id'=>$categorie['id'], 
+							'cat'=>$samengevoegderubrieken
+						);
+					}
 				}else{
-					$categorien[]=$categorie;
+						$categorien[]=$categorie;
 				}
-				
 			}
 			return $categorien;
 		}else{
-			return false;
+			return array();
+		}
+	}
+	public static function getAllRubriekIds(){
+		$db=MySql::instance();
+		$query="
+			SELECT id
+			FROM biebcategorie;";
+		$result=$db->query($query);
+		echo mysql_error();
+		if($db->numRows($result)>0){
+			while($catid=$db->next($result)){
+				$catids[]=$catid['id'];
+			}
+			sort($catids);
+			return array_filter($catids);
+		}else{
+			return array();
 		}
 	}
 }

@@ -36,6 +36,7 @@ jQuery(document).ready(function($) {
 	
 	// velden bewerkbaar maken
 	observeClick();
+	biebCodeVakvuller();
 });
 
 function observeClick(){
@@ -70,3 +71,10 @@ function observeClick(){
 	});
 
 };
+
+function biebCodeVakvuller(){
+	$(".knop.genereer").click(function (event) {
+		event.preventDefault();
+		jQuery("#field_code").val(jQuery("#field_rubriek").val() + '.' + jQuery("#field_auteur").val().substring(0,3).toLowerCase());
+	});
+}  

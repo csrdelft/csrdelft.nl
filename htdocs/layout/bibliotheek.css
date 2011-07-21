@@ -72,13 +72,24 @@ tbody a.toevoegen{
 /* boek */
 .label{ float: left; width: 75px; font-size: 9px; color: #999; }
 .boek .titel{ margin-left: 20px; padding-left: 15px; float: left; width: 75px; color: #999; }
-.boek .blok{ margin-bottom: 20px; clear: left; }
-.boek .gegevens{ margin-left: 20px; padding-left: 15px; border-left: 1px solid #0a338d; }
-div.boek { width: 700px;}
-.boek.verwijderen { float: right;}
+.boek .titelwaarde{ float:left; width: 489px;}
+.boek .blok, .beschrijvingen .blok{ margin-bottom: 20px; clear: left; }
+.boek .header { margin-bottom: 0px;}
+.boek .gegevens, .beschrijvingen .gegevens{ margin-left: 20px; padding-left: 15px; border-left: 1px solid #0a338d; }
+div.boek { 
+	float: left;
+	width: 620px;
+}
 
-/* bewerkvelden */
-/* bewerken van opmerking/functie */
+.controls{
+	float: right;
+	width: 120px;
+}
+.boekacties{
+	
+}
+/* bewerkbare velden
+ * bewerken van opmerking/functie */
 .editbox{
 	display:none
 }
@@ -86,7 +97,7 @@ div.boek { width: 700px;}
 	background-color:#ffffcc;
 	border:solid 1px #000;
 	padding:1px;
-	width: 560px
+	width: 481px
 }
 .bewerk{
 	/*background:url(http://plaetjes.csrdelft.nl/knopjes/bewerken.png) right no-repeat;*/
@@ -98,4 +109,108 @@ div.boek { width: 700px;}
 }
 .melding {
 	color:red;
+}
+
+.suggestie{
+	color:grey;
+}
+/*
+ * Formulier voor nieuw boek of boekbeschrijving
+ */
+#boekaddForm label{
+	width: 150px;
+	float: left;
+}
+#addBeschrijving label{
+	float: left; 
+	width: 109px; 
+	height: 20px;/* blijft tekstvak op zijn plek bij waarschuwing*/
+	font-size: 9px; 
+	color: white; 
+	margin: 0px;
+}
+
+.boekForm input.regular{
+	width: 250px;
+}
+.boekForm input.uid{
+	width: 80px;
+}
+.boekForm .uidPreview{
+	display: inline;
+	padding-left: 10px;
+}
+.boekForm .veld, .boekForm h3, .boekForm .password{
+	clear: both;
+}
+.boekForm .veld, .boekForm .submit{
+	margin-left: 10px;
+	padding: 1px 2px;
+	border: 1px solid white;
+}
+#addBeschrijving .veld, #addBeschrijving .submit{
+	margin-left: 0px;
+}
+.boekForm .veld:hover{
+	border: 1px  solid #ddd;
+	background-color: #eee;
+}
+.boekForm .metfouten{
+	background-color: #FFC3CE;
+	padding: 4px 2px;
+}
+.boekForm .veld .waarschuwing{
+	float: right;
+	margin-right: 10px;
+}
+#addBeschrijving .veld .waarschuwing{
+	float: left;
+	margin-right: 10px;
+}
+.boekForm h3{
+	margin-top: 8px;
+	margin-bottom: 1px;
+}
+#addBeschrijving h3, .beschrijvingen h2, .beschrijvingen p{
+	margin-left: 112px;
+}
+.beschrijvingen h2{
+	margin-bottom: 5px;
+}
+.boekForm .preview{
+	width: 496px;
+}
+.boekForm textarea.regular{
+	width: 500px;
+}
+.boekForm .textareaContainer{
+	width: 508px;
+	float:left;
+}
+li.verborgen{ display: none; }
+
+/* boekbeschrijvingen */
+div.beschrijvingen{
+	margin-top: 10px;
+}
+.beschrijvingen .recensist{
+	width: 109px;
+	font-size: 9px;
+}
+.beschrijvingen span.moment{
+	color:grey;
+}
+.beschrijvingen .beschrijving{
+	width: 506px;
+}
+.beschrijvingen .bewerken{
+	background-color: #ffea5c !important;
+}
+.beschrijvingen td.b0{ 
+	background-color: #f4f4f4;
+}
+.beschrijvingen tr td.tussenschot{
+	height: 2px;
+	margin: 0px; padding: 0px; border: 0px;
+	background-color: lightgrey;
 }

@@ -103,7 +103,32 @@ class TextField extends FormField{
 		echo '</div>';
 	}
 }
-
+class PreviewTextField extends FormField{
+	public function view(){
+		echo $this->getDiv();
+		echo $this->getLabel();
+		echo $this->getError();
+		echo '	<div class="textareaContainer">';
+		echo '		<div id="berichtPreviewContainer" class="previewContainer"><div id="berichtPreview" class="preview"></div></div>';
+		echo '		<textarea id="field_'.$this->name.'" name="'.$this->name.'" class="regular" rows="5">'.htmlspecialchars($this->value).'</textarea>';
+		echo '		<a style="float: right;" class="handje knop" onclick="toggleDiv(\'ubbhulpverhaal\')" title="Opmaakhulp weergeven">UBB</a>';
+		echo '		<a style="float: right;" class="handje knop" onclick="vergrootTextarea(\'field_'.$this->name.'\', 10)" title="Vergroot het invoerveld"><strong>&uarr;&darr;</strong></a>';
+		echo '		<input type="button" value="voorbeeld" style="color: #777;" id="textformVoorbeeld" onclick="previewPost(\'field_'.$this->name.'\', \'berichtPreview\')"/>';
+		echo '	</div><div style="clear: left;"></div>';
+		echo '</div>';
+	}
+}
+class RequiredPreviewTextField extends PreviewTextField{
+	public $notnull=true;
+	
+	public function valid(){
+		if(!parent::valid()){ return false; }
+		if($this->getValue()==''){ 
+			$this->error= 'Dit is een verplicht veld.';
+		}
+		return $this->error=='';
+	}
+}
 /*
  * Een InputField heeft een maximale lengte.
  */
@@ -131,16 +156,47 @@ class LandField extends FormField{
 		$this->setSuggestions($landsuggesties);
 	}
 }
+class RequiredLandField extends LandField{
+	public $notnull=true;
+}
+
 class SuggestInputField extends FormField{
 	public function __construct($name, $value, $description, $max_len, $suggestions){
 		parent::__construct($name, $value, $description, $max_len);
 		$this->setSuggestions($suggestions);
 	}
 }
-
-class RequiredLandField extends LandField{
+class RequiredSuggestInputField extends SuggestInputField{
+	public function __construct($name, $value, $description, $max_len, $suggestions){
+		parent::__construct($name, $value, $description, $max_len, $suggestions);
+	}
 	public $notnull=true;
 }
+class BiebSuggestInputField extends SuggestInputField{
+	public function __construct($name, $value, $description, $max_len, $suggestions){
+		parent::__construct($name, $value, $description, $max_len, $suggestions);
+	}
+	public function valid(){
+		if(!parent::valid()){ return false; }
+		
+		if(Catalogus::existsProperty($this->getName(),$this->getValue())){
+			$this->error=$this->getName()." '".substr($this->getValue(),0,35)."' bestaat al.";
+		}
+		return $this->error=='';
+	}
+}
+class RequiredBiebSuggestInputField extends BiebSuggestInputField{
+	public $notnull=true;
+	
+	public function valid(){
+		if(!parent::valid()){ return false; }
+		if($this->getValue()==''){ 
+			$this->error= 'Dit is een verplicht veld.';
+		}
+		return $this->error=='';
+	}
+}
+
 class UidField extends InputField{
 	public function __construct($name, $value, $description){
 		parent::__construct($name, $value, $description, 4);
@@ -162,6 +218,29 @@ class UidField extends InputField{
 		echo ' autocomplete="off" onKeyUp="uidPreview(\''.$this->name.'\')" maxlength="4" />';
 		echo '<div class="uidPreview" id="preview_'.$this->name.'"></div>';
 		echo '<script>uidPreview(\''.$this->name.'\');</script>';
+		echo '</div>';
+	}
+}
+class CodeField extends InputField{
+	public function __construct($name, $value, $description){
+		parent::__construct($name, $value, $description, 7);
+	}
+	public function valid(){
+		if(!parent::valid()){ return false; }
+		//leeg veld wel accepteren.
+		if($this->getValue()==''){ return true; }
+		if($geldig=false){
+			$this->error='Geen geldig code opgegeven';
+		}
+		return $this->error=='';
+	}
+	public function view(){
+		echo $this->getDiv();
+		echo $this->getLabel();
+		echo $this->getError();
+		echo '<input type="text" id="field_'.$this->name.'" name="'.$this->name.'" class="code" value="'.htmlspecialchars($this->value).'" ';
+		echo ' autocomplete="off" maxlength="7" />';
+		echo '<a class="knop genereer" title="Biebcode invullen">Genereer</a>';
 		echo '</div>';
 	}
 }

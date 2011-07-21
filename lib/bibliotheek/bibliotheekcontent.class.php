@@ -24,6 +24,8 @@ class BibliotheekCatalogusContent extends SimpleHtml{
 		$smarty=new Smarty_csr();
 		$smarty->assign('melding', $this->getMelding());
 		$smarty->assign('catalogus', $this->catalogus);
+		$smarty->assign('action', $this->action);
+
 		$smarty->display('bibliotheek/catalogus.tpl');
 	}
 
@@ -35,17 +37,23 @@ class BibliotheekCatalogusContent extends SimpleHtml{
 class BibliotheekBoekContent extends SimpleHtml{
 
 	private $boek;
-	
+	private $action='view';
+
 	public function __construct(Boek $boek){
 		$this->boek=$boek;
 	}
 	public function getTitel(){
 		return 'Bibliotheek | Boek: '.$this->boek->getTitel();
 	}
+	public function setAction($action){
+		$this->action=$action;
+	}
 	public function view(){
 		$smarty=new Smarty_csr();
 		$smarty->assign('melding', $this->getMelding());
 		$smarty->assign('boek', $this->boek);
+		$smarty->assign('action', $this->action);
+
 		$smarty->display('bibliotheek/boek.tpl');
 	}
 

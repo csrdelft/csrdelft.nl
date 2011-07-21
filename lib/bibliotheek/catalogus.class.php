@@ -62,25 +62,45 @@ class Catalogus{
 		}
 		return $this->boeken; 
 	}
-	public function getBoek(){
-		return print_r($this->boeken[40]); 
-	}
+//	public function getBoek(){
+//		return print_r($this->boeken[40]); 
+//	}
 
-	public static function getTalen(){ 
-		$db=MySql::instance();
-		$query="
-			SELECT DISTINCT taal
-			FROM biebboek;";
-		$result=$db->query($query);
-		echo mysql_error();
-		if($db->numRows($result)>0){
-			while($taal=$db->next($result)){
-				$talen[]=$taal;
+	public static function getAllValuesOfProperty($key){
+		$allowedkeys = array('id', 'titel', 'uitgavejaar', 'uitgeverij', 'paginas', 'taal', 'isbn', 'code');
+		if(in_array($key, $allowedkeys)){
+			$db=MySql::instance();
+			$query="
+				SELECT DISTINCT ".$db->escape($key)."
+				FROM biebboek;";
+			$result=$db->query($query);
+			echo mysql_error();
+			if($db->numRows($result)>0){
+				while($prop=$db->next($result)){
+					$properties[]=$prop[$key];
+				}
+				sort($properties);
+				return array_filter($properties);
 			}
-			return $talen;
-		}else{
-			return false;
 		}
-
+		echo 'boeh';
+		return array();
 	}
+	public static function existsProperty($key,$value){
+		$return = false;
+		switch ($key) {
+			case 'titel':
+			case 'isbn':
+				$return = in_array($value, Catalogus::getAllValuesOfProperty($key));
+				break;
+			case 'rubriek':
+				$return = in_array($value, Rubriek::getAllRubriekIds());
+				break;
+			case 'auteur':
+				$return = in_array($value, Auteur::getAllAuteurIds());
+				break;
+		}
+		return $return;
+	}
+
 }

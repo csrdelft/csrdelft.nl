@@ -1,11 +1,11 @@
 {*
  * Toon de catalogus
  *}
-{*<div id="controls">
-	{if $loginlid->hasPermission('P_BIEB_MOD')}
-		<a class="knop" href="/communicatie/bibliotheek/toevoegen/">{icon get="toevoegen"} Toevoegen</a>
-	{/if}
-</div>*}
+{if $loginlid->hasPermission('P_BIEB_READ')}
+	<div class="controls">
+		<a class="knop" href="/communicatie/bibliotheek/nieuwboek">{icon get="book_add"} Toevoegen</a>
+	</div>
+{/if}
 
 <h1>C.S.R. Bibliotheekcatalogus</h1>
 <div class="foutje">{$melding}</div>
