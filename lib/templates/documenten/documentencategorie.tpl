@@ -29,7 +29,7 @@
 				{$document->getNaam()|escape:'html'|wordwrap:70:'<br />'}
 				</a>
 				{if $document->magVerwijderen()}
-					<a class="verwijderen" href="/communicatie/documenten/verwijderen/{$document->getID()}" title="Document verwijderen" onclick="confirm('Weet u zeker dat u dit document wilt verwijderen')">{icon get="verwijderen"}</a>
+					<a class="verwijderen" href="/communicatie/documenten/verwijderen/{$document->getID()}" title="Document verwijderen" onclick="return confirm('Weet u zeker dat u dit document wilt verwijderen')">{icon get="verwijderen"}</a>
 				{/if}
 				{if $document->magBewerken()}
 					<a class="bewerken" href="/communicatie/documenten/bewerken/{$document->getID()}" title="Document bewerken">{icon get="bewerken"}</a>
