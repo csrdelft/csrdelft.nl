@@ -25,7 +25,7 @@
 					{$boek->getTitel()|escape:'html'|wordwrap:60:'<br />'}
 				</a>
 				{if $boek->magVerwijderen()}
-					<a class="verwijderen" href="/communicatie/bibliotheek/verwijderboek/{$boek->getID()}" title="Boek verwijderen" onclick="confirm('Weet u zeker dat u dit boek wilt verwijderen')">{icon get="verwijderen"}</a>
+					<a class="verwijderen" href="/communicatie/bibliotheek/verwijderboek/{$boek->getID()}" title="Boek verwijderen" onclick="return confirm('Weet u zeker dat u dit boek wilt verwijderen')">{icon get="verwijderen"}</a>
 				{/if}
 			</td>
 			<td class="auteur">{$boek->getAuteur()|wordwrap:50:'<br />'}</td>

@@ -87,9 +87,9 @@
 	{* blok rechts met knopjes *}
 	<div class="controls boekacties">	
 		{if $boek->magVerwijderen()}
-			<a class="knop" href="/communicatie/bibliotheek/verwijderboek/{$boek->getID()}" title="Boek verwijderen" onclick="confirm('Weet u zeker dat u dit boek wilt verwijderen')">{icon get="verwijderen"}verwijderen</a><br />
+			<a class="knop verwijderen" href="/communicatie/bibliotheek/verwijderboek/{$boek->getID()}" title="Boek verwijderen" onclick="return confirm('Weet u zeker dat u dit boek wilt verwijderen?')">{icon get="verwijderen"}verwijderen</a><br />
 		{/if}
-		<a class="knop" href="/communicatie/bibliotheek/bezitboek/{$boek->getID()}" title="Ik bezit dit boek ook" onclick="confirm('Weet u zeker dat u dit boek wilt verwijderen')">{icon get="user_add"}ik bezit dit boek</a>
+		<a class="knop" href="/communicatie/bibliotheek/bezitboek/{$boek->getID()}" title="Ik bezit dit boek ook" onclick="confirm('U bezit zelf een exemplaar van dit boek?')">{icon get="user_add"}ik bezit dit boek</a>
 	</div><div style="clear: left;"></div>
 
 
