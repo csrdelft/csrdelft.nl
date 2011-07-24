@@ -38,7 +38,7 @@ class Boek{
 			$this->array2properties($init,$lookup=false);
 		}else{
 			$this->id=(int)$init;
-			if($this->getID()==0){
+			if($this->getId()==0){
 				//Bij $this->id==0 gaat het om een nieuw boek. Hier
 				//zetten we de defaultwaarden voor het nieuwe boek.
 				//$this->setPropss(..);
@@ -48,7 +48,7 @@ class Boek{
 				$query="
 					SELECT id, titel, auteur_id, categorie_id, uitgavejaar, uitgeverij, paginas, taal, isbn, code
 					FROM biebboek
-					WHERE ID=".$this->getID().";";
+					WHERE Id=".$this->getId().";";
 				$boek=$db->getRow($query);
 				if(is_array($boek)){
 					$this->array2properties($boek,$lookup=false);
@@ -66,7 +66,7 @@ class Boek{
 		}
 	}
 
-	public function getID(){			return $this->id;}
+	public function getId(){			return $this->id;}
 	public function getTitel(){			return $this->titel;}
 
 	//retourneert object Auteur
@@ -363,7 +363,7 @@ class Boek{
 				INSERT INTO biebbeschrijving (
 					boek_id, schrijver_uid, beschrijving, toegevoegd
 				) VALUES (
-					'".(int)$this->getID()."',
+					'".(int)$this->getId()."',
 					'".$db->escape(Loginlid::instance()->getUid())."',
 					'".$db->escape($this->getBeschrijving())."',
 					'".getDateTime()."'

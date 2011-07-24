@@ -12,7 +12,7 @@
 <br />
 
 {* nieuw boek formulier *}
-{if $boek->getID()==0}
+{if $boek->getId()==0}
 	<h1>Nieuw boek toevoegen</h1>
 	<p>Vul onderstaande velden</p>
 	<form action="/communicatie/bibliotheek/nieuwboek/0" id="boekaddForm" class="boekForm" method="post">
@@ -27,8 +27,8 @@
 {/if}
 
 {* weergave boek, met bewerkbare velden *}
-{if $boek->getID()!=0}
-	<div class="boek" id="{$boek->getID()}">
+{if $boek->getId()!=0}
+	<div class="boek" id="{$boek->getId()}">
 		<div class="blok header">
 			<h1><div class="titel">Boek</div>	
 			<div class="bewerk titelwaarde" id="titel">
@@ -87,9 +87,9 @@
 	{* blok rechts met knopjes *}
 	<div class="controls boekacties">	
 		{if $boek->magVerwijderen()}
-			<a class="knop verwijderen" href="/communicatie/bibliotheek/verwijderboek/{$boek->getID()}" title="Boek verwijderen" onclick="return confirm('Weet u zeker dat u dit boek wilt verwijderen?')">{icon get="verwijderen"}verwijderen</a><br />
+			<a class="knop verwijderen" href="/communicatie/bibliotheek/verwijderboek/{$boek->getId()}" title="Boek verwijderen" onclick="return confirm('Weet u zeker dat u dit boek wilt verwijderen?')">{icon get="verwijderen"}verwijderen</a><br />
 		{/if}
-		<a class="knop" href="/communicatie/bibliotheek/bezitboek/{$boek->getID()}" title="Ik bezit dit boek ook" onclick="confirm('U bezit zelf een exemplaar van dit boek?')">{icon get="user_add"}ik bezit dit boek</a>
+		<a class="knop" href="/communicatie/bibliotheek/bezitboek/{$boek->getId()}" title="Ik bezit dit boek ook" onclick="confirm('U bezit zelf een exemplaar van dit boek?')">{icon get="user_add"}ik bezit dit boek</a>
 	</div><div style="clear: left;"></div>
 
 
@@ -106,10 +106,10 @@
 
 						{* knopjes bij elke post *}	
 						{if $boek->magBewerken($beschrijving.id)}
-							{knop url="/communicatie/bibliotheek/bewerkbeschrijving/`$boek->getID()`/`$beschrijving.id`" type=bewerken}
+							{knop url="/communicatie/bibliotheek/bewerkbeschrijving/`$boek->getId()`/`$beschrijving.id`" type=bewerken}
 						{/if}
 						{if $boek->magVerwijderen($beschrijving.id)}
-							{knop url="/communicatie/bibliotheek/verwijderbeschrijving/`$boek->getID()`/`$beschrijving.id`" type=verwijderen confirm='Weet u zeker dat u deze beschrijving wilt verwijderen?'}
+							{knop url="/communicatie/bibliotheek/verwijderbeschrijving/`$boek->getId()`/`$beschrijving.id`" type=verwijderen confirm='Weet u zeker dat u deze beschrijving wilt verwijderen?'}
 						{/if}
 					</td>
 					<td class="beschrijving b{cycle values="0,1"}{if $action=='bewerken' AND $boek->getBeschrijvingsId()==$beschrijving.id} bewerken{/if}" id="beschrijving{$beschrijving.id}">
@@ -129,7 +129,7 @@
 		{/if}
 
 		{* formulier voor beschrijvingen    *}
-		<form action="/communicatie/bibliotheek/{if $action=='bewerken'}bewerkbeschrijving/{$boek->getID()}/{$boek->getBeschrijvingsId()}{else}addbeschrijving/{$boek->getID()}{/if}" id="addBeschrijving" class="boekForm" method="post">
+		<form action="/communicatie/bibliotheek/{if $action=='bewerken'}bewerkbeschrijving/{$boek->getId()}/{$boek->getBeschrijvingsId()}{else}addbeschrijving/{$boek->getId()}{/if}" id="addBeschrijving" class="boekForm" method="post">
 			{foreach from=$boek->getFields('beschrijving') item=field}
 				{$field->view()}
 			{/foreach}

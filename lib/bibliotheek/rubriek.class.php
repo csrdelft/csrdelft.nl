@@ -30,7 +30,7 @@
 		}
 	}
 
-	public function getID(){ return $this->id;}
+	public function getId(){ return $this->id;}
 	public function getRubriekArray(){ return $this->rubriek;}
 	public function getRubrieken(){ return implode(" - ", $this->rubriek);}
 	public function getRubriek(){ return $this->rubriek[2];}

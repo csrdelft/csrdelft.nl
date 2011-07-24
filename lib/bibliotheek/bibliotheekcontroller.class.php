@@ -166,7 +166,7 @@ class BibliotheekController extends Controller{
 		if($this->hasParam(2)){
 			$beschrijvingsid=(int)$this->getParam(2);
 			if(!$this->boek->magVerwijderen($beschrijvingsid)){
-				BibliotheekCatalogusContent::invokeRefresh('Onvoldoende rechten voor deze actie. Biebcontrllr::action_verwijderbeschrijving()', CSR_ROOT.'communicatie/bibliotheek/boek/'.$this->boek->getID());
+				BibliotheekCatalogusContent::invokeRefresh('Onvoldoende rechten voor deze actie. Biebcontrllr::action_verwijderbeschrijving()', CSR_ROOT.'communicatie/bibliotheek/boek/'.$this->boek->getId());
 			}
 			if($this->boek->verwijderBeschrijving($beschrijvingsid)){
 				$melding='Beschrijving met succes verwijderd.';
@@ -174,7 +174,7 @@ class BibliotheekController extends Controller{
 				$melding='Beschrijving verwijderen mislukt. '.$this->boek->getError().'Biebcontrllr::action_verwijderbeschrijving()';
 			}
 		}
-		BibliotheekBoekContent::invokeRefresh($melding, CSR_ROOT.'communicatie/bibliotheek/boek/'.$this->boek->getID());
+		BibliotheekBoekContent::invokeRefresh($melding, CSR_ROOT.'communicatie/bibliotheek/boek/'.$this->boek->getId());
 	}
 	/*
 	 * Boekbeschrijving aanpassen
@@ -184,7 +184,7 @@ class BibliotheekController extends Controller{
 		if($this->hasParam(2)){
 			$beschrijvingsid=(int)$this->getParam(2);
 			if(!$this->boek->magBewerken($beschrijvingsid)){
-				BibliotheekCatalogusContent::invokeRefresh('Onvoldoende rechten voor deze actie. Biebcontrllr::action_verwijderbeschrijving()', CSR_ROOT.'communicatie/bibliotheek/boek/'.$this->boek->getID());
+				BibliotheekCatalogusContent::invokeRefresh('Onvoldoende rechten voor deze actie. Biebcontrllr::action_verwijderbeschrijving()', CSR_ROOT.'communicatie/bibliotheek/boek/'.$this->boek->getId());
 			}
 			//beschrijving ophalen en in bewerkveld plaatsen
 			$this->boek->setValue('beschrijvingsid', $beschrijvingsid);
@@ -199,7 +199,7 @@ class BibliotheekController extends Controller{
 				$this->content->setAction('bewerken');
 			}
 		}else{
-			BibliotheekBoekContent::invokeRefresh($melding, CSR_ROOT.'communicatie/bibliotheek/boek/'.$this->boek->getID());
+			BibliotheekBoekContent::invokeRefresh($melding, CSR_ROOT.'communicatie/bibliotheek/boek/'.$this->boek->getId());
 		}
 	}
 	
