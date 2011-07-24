@@ -22,21 +22,21 @@ class Catalogus{
 	public function loadBoeken(){
 		$db=MySql::instance();
 		$query="
-			SELECT DISTINCT
+			SELECT
 				b.id , b.titel , b.uitgavejaar , b.uitgeverij , b.paginas, 
 				b.taal, b.isbn, b.code, a.auteur,
-				CONCAT(c1.categorie, ' - ',
-					c2.categorie, ' - ',
-					c3.categorie) AS categorie
+				CONCAT(c1.categorie, ',',
+					c2.categorie, ',',
+					c3.categorie ) AS categorie
 			FROM 
-				biebboek b, biebauteur a, biebexemplaar e, biebcategorie c1, biebcategorie c2, biebcategorie c3
-			WHERE
-				a.id = b.auteur_id AND
-				b.id = e.boek_id AND
-				c3.id = b.categorie_id AND
-				c1.id = c2.p_id AND
-				c2.id = c3.p_id 
-			ORDER BY titel DESC";
+				biebboek b
+			
+			LEFT JOIN biebauteur a     ON(b.auteur_id = a.id)
+			LEFT JOIN biebcategorie c3 ON(b.categorie_id = c3.id)
+			LEFT JOIN biebcategorie c2 ON(c2.id = c3.p_id)
+			LEFT JOIN biebcategorie c1 ON(c1.id = c2.p_id)
+
+			ORDER BY titel DESC;";
 		$result=$db->query($query);
 		echo mysql_error();
 		if($db->numRows($result)>0){
@@ -62,9 +62,6 @@ class Catalogus{
 		}
 		return $this->boeken; 
 	}
-//	public function getBoek(){
-//		return print_r($this->boeken[40]); 
-//	}
 
 	public static function getAllValuesOfProperty($key){
 		$allowedkeys = array('id', 'titel', 'uitgavejaar', 'uitgeverij', 'paginas', 'taal', 'isbn', 'code');
@@ -83,9 +80,9 @@ class Catalogus{
 				return array_filter($properties);
 			}
 		}
-		echo 'boeh';
 		return array();
 	}
+
 	public static function existsProperty($key,$value){
 		$return = false;
 		switch ($key) {

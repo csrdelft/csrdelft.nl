@@ -17,10 +17,10 @@ jQuery(document).ready(function($) {
 				"sNext": "Volgende",
 				"sLast": "Laatste"}
 		},
-		"iDisplayLength": 20,
+		"iDisplayLength": 40,
 		"bInfo": false,
 		"bLengthChange": false,
-		"aaSorting": [[1, 'asc']],
+		"aaSorting": [[0, 'asc']],
 		"sPaginationType": "full_numbers",
 		"aoColumns": [
 			{'sType': 'html'}, // documentnaam
