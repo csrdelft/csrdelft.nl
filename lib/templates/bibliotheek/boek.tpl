@@ -71,13 +71,13 @@
 		<div class="blok gegevens">
 			<div class="label">Rubriek</div>
 			<div class="bewerk" id="rubriek">
-				<span id="waarde_rubriek" class="text">{$boek->getRubriek()|escape:'html'}&nbsp;</span>
-				<input type="text" maxlength="100" value="{$boek->getRubriek()|escape:'html'}" class="editbox" id="waarde_input_rubriek" /> 
+				<span id="waarde_rubriek" class="text">{$boek->getRubriek()->getRubrieken()|escape:'html'}&nbsp;</span>
+				<input type="text" maxlength="100" value="{$boek->getRubriek()->getRubrieken()|escape:'html'}" class="editbox" id="waarde_input_rubriek" /> 
 			</div>
 			{if $boek->isCSRboek()}
 				<div class="label">Biebcode</div>
 				<div class="bewerk" id="code">
-					<span id="waarde_code" class="text">{if $boek->getCode()=='' AND $boek->getRubriek()==''}<span class="suggestie">Vul eerst de rubriek in</span>{else}{$boek->getCode()|escape:'html'}{/if}&nbsp;</span>
+					<span id="waarde_code" class="text">{if $boek->getCode()=='' AND $boek->getRubriek()->getId()==''}<span class="suggestie">Vul eerst de rubriek in</span>{else}{$boek->getCode()|escape:'html'}{/if}&nbsp;</span>
 					<input type="text" maxlength="100" value="{$boek->getCode()|escape:'html'}" class="editbox" id="waarde_input_code" /> 
 				</div>
 			{/if}

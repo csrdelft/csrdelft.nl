@@ -11,29 +11,36 @@
 	private $id=0;
 	private $rubriek=array();
 	private $blaat;
+	
 	public function __construct($init){
-		$db=MySql::instance();
-		$query="
-			SELECT c3.id, c1.categorie AS cat1, c2.categorie AS cat2, c3.categorie AS cat3
-			FROM biebcategorie c1, biebcategorie c2, biebcategorie c3
-			WHERE c2.p_id = c1.id
-			AND c3.p_id = c2.id
-			AND c1.p_id =0
-			AND c3.id = ".(int)$init.";";
-		$categorie=$db->getRow($query);
-
-		if(is_array($categorie)){
-			$this->id=$categorie['id'];
-			$this->rubriek=array( $categorie['cat1'], $categorie['cat2'], $categorie['cat3']);
+		if(is_array($init)){
+			$this->rubriek=$init;
 		}else{
-			throw new Exception('__contruct() mislukt. Bestaat de rubriek wel?');
+			$db=MySql::instance();
+			$query="
+				SELECT c3.id, c1.categorie AS cat1, c2.categorie AS cat2, c3.categorie AS cat3
+				FROM biebcategorie c1, biebcategorie c2, biebcategorie c3
+				WHERE c2.p_id = c1.id
+				AND c3.p_id = c2.id
+				AND c1.p_id =0
+				AND c3.id = ".(int)$init.";";
+			$categorie=$db->getRow($query);
+
+			if(is_array($categorie)){
+				$this->id=$categorie['id'];
+				$this->rubriek=array( $categorie['cat1'], $categorie['cat2'], $categorie['cat3']);
+			}else{
+				throw new Exception('__contruct() mislukt. Bestaat de rubriek wel?');
+			}
 		}
 	}
 
-	public function getId(){ return $this->id;}
-	public function getRubriekArray(){ return $this->rubriek;}
-	public function getRubrieken(){ return implode(" - ", $this->rubriek);}
-	public function getRubriek(){ return $this->rubriek[2];}
+	private function setId($id){ 	$this->id=(int)$id;}
+
+	public function getId(){ 			return $this->id;}
+	public function getRubriekArray(){ 	return $this->rubriek;}
+	public function getRubrieken(){		return implode(" - ", $this->rubriek);}
+	public function getRubriek(){ 		return $this->rubriek[2];}
 
 	public static function getAllRubrieken($samenvoegen=false,$short=false){
 		$db=MySql::instance();

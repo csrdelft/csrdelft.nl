@@ -14,7 +14,7 @@ class Boek{
 	private $id=0;
 	private $titel;
 	private $auteur=null;
-	private $categorie_id = 108;//categorie_id of concat van 3x biebcategorie.categorie )
+	private $rubriek=null;
 	private $uitgavejaar;
 	private $uitgeverij;
 	private $paginas;
@@ -35,13 +35,14 @@ class Boek{
 
 	public function load($init=0){
 		if(is_array($init)){
-			$this->array2properties($init,$lookup=false);
+			$this->array2properties($init);
 		}else{
 			$this->id=(int)$init;
 			if($this->getId()==0){
 				//Bij $this->id==0 gaat het om een nieuw boek. Hier
 				//zetten we de defaultwaarden voor het nieuwe boek.
-				//$this->setPropss(..);
+				$this->auteur = new Auteur('');
+				$this->rubriek = new Rubriek(108);
 				$this->assignFieldsNieuwboekForm();
 			}else{
 				$db=MySql::instance();
@@ -51,7 +52,7 @@ class Boek{
 					WHERE Id=".$this->getId().";";
 				$boek=$db->getRow($query);
 				if(is_array($boek)){
-					$this->array2properties($boek,$lookup=false);
+					$this->array2properties($boek);
 					$this->assignFieldsBeschrijvingForm();
 				}else{
 					throw new Exception('load() mislukt. Bestaat het boek wel?');
@@ -60,42 +61,23 @@ class Boek{
 		}
 
 	}
-	private function array2properties($properties,$lookup=true){
+	private function array2properties($properties){
 		foreach ($properties as $prop => $value){
-			$this->setValue($prop, $value, $lookup);
+			$this->setValue($prop, $value);
 		}
 	}
 
 	public function getId(){			return $this->id;}
 	public function getTitel(){			return $this->titel;}
-
-	//retourneert object Auteur
-	public function getAuteur(){
-		if(is_null($this->auteur)){
-			$this->auteur = new Auteur('');
-		}
-		return $this->auteur;
-	}
-	public function getRubriekId(){		return $this->categorie_id;}
-	public function getRubriek(){
-		if(is_int($this->categorie_id)){
-			try{
-				$rubriek = new Rubriek($this->categorie_id);
-				return $rubriek->getRubrieken();
-			}catch(Exception $e){
-				return ''; // o.a. voor catid=0
-			}
-		}else{
-			return $this->categorie_id;
-		}
-	}
-
 	public function getUitgavejaar(){	return $this->uitgavejaar;}
 	public function getUitgeverij(){	return $this->uitgeverij;}
 	public function getPaginas(){		return $this->paginas;}
 	public function getTaal(){			return $this->taal;}
 	public function getISBN(){			return $this->isbn;}
 	public function getCode(){			return $this->code;}
+	//retourneer objecten
+	public function getAuteur(){		return $this->auteur;}
+	public function getRubriek(){		return $this->rubriek;}
 
 //	public function getProperty($key){
 //		$allowedkeys = array('id', 'titel', 'uitgavejaar', 'uitgeverij', 'paginas', 'taal', 'isbn', 'code');
@@ -117,14 +99,12 @@ class Boek{
 
 	public function isCSRboek(){return true;} //TODO
 
-	public function setValue($key, $value, $lookup=true){
+	public function setValue($key, $value){
 		switch ($key) {
 			//integers
 			case 'id':
 			case 'uitgavejaar':
 			case 'paginas':
-
-			case 'categorie_id':
 				$this->$key=(int)trim($value);
 				break;
 			//strings
@@ -135,19 +115,14 @@ class Boek{
 				$this->auteur = new Auteur((string)$value);
 				break;
 			case 'categorie':
+				$this->rubriek = new Rubriek(explode(',' , $value));
+				break;
+			case 'categorie_id':
 			case 'rubriek':
-				if($lookup){
-					//object Rubriek maken, als rubriek niet bestaat wordt deze toegevoegd
-					try{
-						$rubriek = new Rubriek($value);
-					}catch(Exception $e){
-						throw new Exception($e->getMessage().' Boek::setValue "categorie"');
-					}
-					$this->categorie_id = $rubriek->getId();
-					break;
-				}elseif($key!='rubriek'){
-					$var = $key.'_id'; // bewaart in $key_id veld de string, niet het id
-					$this->$var=trim($value);
+				try{
+					$this->rubriek = new Rubriek($value);
+				}catch(Exception $e){
+					throw new Exception($e->getMessage().' Boek::setValue "'.$key.'"');
 				}
 				break;
 			case 'titel':
@@ -214,7 +189,7 @@ class Boek{
 	public function save(){
 		//eerst auteur opslaan. 
 		$this->getAuteur()->save();
-		
+
 		$db=MySql::instance();
 		$qSave="
 			INSERT INTO biebboek (
@@ -222,7 +197,7 @@ class Boek{
 			) VALUES (
 				'".$db->escape($this->getTitel())."',
 				'".(int)$this->getAuteur()->getId()."',
-				'".(int)$this->getRubriekId()."',
+				'".(int)$this->getRubriek()->getId()."',
 				'".(int)$this->getUitgavejaar()."',
 				'".$db->escape($this->getUitgeverij())."',
 				'".(int)$this->getPaginas()."',
@@ -417,7 +392,7 @@ class Boek{
 			$nieuwboekform[]=new BiebSuggestInputField('isbn', $this->getISBN(), 'ISBN-nummer',15, Catalogus::getAllValuesOfProperty('isbn'));
 			$nieuwboekform[]=new SuggestInputField('uitgeverij', $this->getUitgeverij(), 'Uitgeverij', 100, Catalogus::getAllValuesOfProperty('uitgeverij'));
 			$nieuwboekform[]=new IntField('uitgavejaar', $this->getUitgavejaar(), 'Uitgavejaar',2100,0);
-			$nieuwboekform[]=new SelectField('rubriek', $this->getRubriekId(), 'Rubriek',Rubriek::getAllRubrieken($samenvoegen=true,$short=true));
+			$nieuwboekform[]=new SelectField('rubriek', $this->getRubriek()->getId(), 'Rubriek',Rubriek::getAllRubrieken($samenvoegen=true,$short=true));
 			$nieuwboekform[]=new CodeField('code', $this->getCode(), 'Biebcode');
 
 			$this->nieuwboekform=$nieuwboekform;

@@ -29,7 +29,7 @@
 				{/if}
 			</td>
 			<td class="auteur">{$boek->getAuteur()->getNaam()|wordwrap:50:'<br />'}</td>
-			<td class="rubriek">{$boek->getRubriek()|wordwrap:70:'<br />'}</td>
+			<td class="rubriek">{$boek->getRubriek()->getRubrieken()|wordwrap:70:'<br />'}</td>
 			<td class="code">{$boek->getCode()}</td>
 			<td class="isbn">{$boek->getISBN()}</td>
 		</tr>
