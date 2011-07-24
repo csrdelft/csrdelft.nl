@@ -113,6 +113,7 @@ div.boek {
 
 .suggestie{
 	color:grey;
+	font-style: italic;
 }
 /*
  * Formulier voor nieuw boek of boekbeschrijving

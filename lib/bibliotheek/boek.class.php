@@ -13,7 +13,7 @@ class Boek{
 
 	private $id=0;
 	private $titel;
-	private $auteur_id; //auteur_id of biebauteur.auteur
+	private $auteur=null;
 	private $categorie_id = 108;//categorie_id of concat van 3x biebcategorie.categorie )
 	private $uitgavejaar;
 	private $uitgeverij;
@@ -68,14 +68,13 @@ class Boek{
 
 	public function getID(){			return $this->id;}
 	public function getTitel(){			return $this->titel;}
-	public function getAuteurId(){		return $this->auteur_id;}
+
+	//retourneert object Auteur
 	public function getAuteur(){
-		if(is_int($this->auteur_id)){
-			$auteur = new Auteur($this->auteur_id);
-			return $auteur->getNaam();
-		}else{
-			return $this->auteur_id;
+		if(is_null($this->auteur)){
+			$this->auteur = new Auteur('');
 		}
+		return $this->auteur;
 	}
 	public function getRubriekId(){		return $this->categorie_id;}
 	public function getRubriek(){
@@ -124,22 +123,17 @@ class Boek{
 			case 'id':
 			case 'uitgavejaar':
 			case 'paginas':
-			case 'auteur_id':
+
 			case 'categorie_id':
 				$this->$key=(int)trim($value);
 				break;
 			//strings
+			case 'auteur_id':
+				$this->auteur = new Auteur((int)$value);
+				break;
 			case 'auteur':
-				if($lookup){
-					//object Auteur maken, als auteur niet bestaat wordt deze toegevoegd
-					try{
-						$auteur = new Auteur($value);
-					}catch(Exception $e){
-						throw new Exception($e->getMessage().' Boek::setValue "auteur"');
-					}
-					$this->auteur_id = $auteur->getId();
-					break;
-				}
+				$this->auteur = new Auteur((string)$value);
+				break;
 			case 'categorie':
 			case 'rubriek':
 				if($lookup){
@@ -218,13 +212,16 @@ class Boek{
 	 * Slaat het object Boek op
 	 */
 	public function save(){
+		//eerst auteur opslaan. 
+		$this->getAuteur()->save();
+		
 		$db=MySql::instance();
 		$qSave="
 			INSERT INTO biebboek (
 				titel, auteur_id, categorie_id, uitgavejaar, uitgeverij, paginas, taal, isbn, code
 			) VALUES (
 				'".$db->escape($this->getTitel())."',
-				'".(int)$this->getAuteurId()."',
+				'".(int)$this->getAuteur()->getId()."',
 				'".(int)$this->getRubriekId()."',
 				'".(int)$this->getUitgavejaar()."',
 				'".$db->escape($this->getUitgeverij())."',
@@ -414,7 +411,7 @@ class Boek{
 		if($this->magBekijken()){
 			$nieuwboekform[]=new Comment('Boekgegevens:');
 			$nieuwboekform[]=new RequiredBiebSuggestInputField('titel', $this->getTitel(), 'Titel', 200,Catalogus::getAllValuesOfProperty('titel'));
-			$nieuwboekform[]=new SuggestInputField('auteur', $this->getAuteurId(),'Auteur',100, Auteur::getAllAuteurs($short=true));
+			$nieuwboekform[]=new SuggestInputField('auteur', $this->getAuteur()->getNaam(),'Auteur',100, Auteur::getAllAuteurs($short=true));
 			$nieuwboekform[]=new IntField('paginas', $this->getPaginas() , "Pagina's", 10000, 0);
 			$nieuwboekform[]=new SuggestInputField('taal', $this->getTaal(), 'Taal', 25, Catalogus::getAllValuesOfProperty('taal'));
 			$nieuwboekform[]=new BiebSuggestInputField('isbn', $this->getISBN(), 'ISBN-nummer',15, Catalogus::getAllValuesOfProperty('isbn'));

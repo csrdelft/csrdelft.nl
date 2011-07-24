@@ -39,8 +39,8 @@
 		<div class="blok gegevens">
 			<div class="label">Auteur</div>		
 			<div class="bewerk" id="auteur">
-				<span id="waarde_auteur" class="text">{if $boek->getAuteur()==''}<span class="suggestie">Achternaam, V.L. van de</span>{else}{$boek->getAuteur()|escape:'html'}{/if}&nbsp;</span>
-				<input type="text" maxlength="100" value="{$boek->getAuteur()|escape:'html'}" class="editbox" id="waarde_input_auteur" /> 
+				<span id="waarde_auteur" class="text">{if $boek->getAuteur()->getNaam()==''}<span class="suggestie">Achternaam, V.L. van de</span>{else}{$boek->getAuteur()->getNaam()|escape:'html'}{/if}&nbsp;</span>
+				<input type="text" maxlength="100" value="{$boek->getAuteur()->getNaam()|escape:'html'}" class="editbox" id="waarde_input_auteur" /> 
 			</div>
 			<div class="label">Pagina's</div>	
 			<div class="bewerk" id="paginas">

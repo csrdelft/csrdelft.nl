@@ -22,3 +22,7 @@ UPDATE  `csrdelft`.`biebbeschrijving` SET  `toegevoegd` =  '2007-07-22 20:42:25'
 UPDATE  `csrdelft`.`biebbeschrijving` SET  `toegevoegd` =  '2007-07-21 20:46:55' WHERE  `biebbeschrijving`.`id` =6;
 
 ALTER TABLE  `biebbeschrijving` ADD  `bewerkdatum` DATETIME NOT NULL DEFAULT  '0000-00-00 00:00:00';
+
+UPDATE biebboek SET
+		auteur_id= 0
+	WHERE `auteur_id`=9;
