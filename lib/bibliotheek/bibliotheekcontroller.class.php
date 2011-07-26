@@ -36,7 +36,10 @@ class BibliotheekController extends Controller{
 			//niet alle acties mag iedereen doen, hier whitelisten voor de gebruikers
 			//zonder P_BIEB_MOD, en gebruikers met, zodat bij niet bestaande acties
 			//netjes gewoon de catalogus getoond wordt.
-			$allow=array('default', 'boek', 'nieuwboek', 'addbeschrijving', 'verwijderbeschrijving', 'bewerkbeschrijving');
+			$allow=array('default', 'boek', 'nieuwboek', 
+						'addbeschrijving', 'verwijderbeschrijving', 'bewerkbeschrijving',
+						'addexemplaar', 'verwijderexemplaar',
+						'exemplaarlenen','exemplaarteruggegeven','exemplaarterugontvangen','exemplaarvermist','exemplaargevonden');
 			if(LoginLid::instance()->hasPermission('P_BIEB_EDIT')){ //TODO eigenaarboek
 				$allow=array_merge($allow, array('bewerkboek'));
 			}
@@ -202,5 +205,158 @@ class BibliotheekController extends Controller{
 			BibliotheekBoekContent::invokeRefresh($melding, CSR_ROOT.'communicatie/bibliotheek/boek/'.$this->boek->getId());
 		}
 	}
-	
+	/*
+	 * Bezitter/exemplaar toevoegen
+	 * /bezitboek/$boekid[/$eigenaarid]
+	 */
+	public function action_bezitboek(){
+		$this->loadBoek();
+		if(!$this->boek->magBekijken()){
+			BibliotheekCatalogusContent::invokeRefresh('Onvoldoende rechten voor deze actie. Biebcontrllr::action_bezitboek()', CSR_ROOT.'communicatie/bibliotheek/boek/'.$this->boek->getId());
+		}
+
+		if($this->hasParam(2)){
+			$eigenaar = $this->getParam(2);
+		}else{
+			$eigenaar = LoginLid::instance()->getUid();
+		}
+		if(Lid::isValidUid($eigenaar)){
+			if($this->boek->addEigenaar($eigenaar)){
+				$melding='Exemplaar met succes toegevoegd.';
+			}else{
+				$melding='Exemplaar toevoegen mislukt. '.$this->boek->getError().'Biebcontrllr::action_bezitboek()';
+			}
+		}else{
+			$melding='Ongeldig uid "'.$eigenaar.'" Biebcontrllr::action_bezitboek()';
+		}
+		BibliotheekBoekContent::invokeRefresh($melding, CSR_ROOT.'communicatie/bibliotheek/boek/'.$this->boek->getId());
+	}
+	/*
+	 * Exemplaar toevoegen
+	 * /addexemplaar/$boekid[/$eigenaarid]
+	 */
+	public function action_addexemplaar(){
+		$this->loadBoek();
+		if(!$this->boek->magBekijken()){
+			BibliotheekCatalogusContent::invokeRefresh('Onvoldoende rechten voor deze actie. Biebcontrllr::action_addexemplaar()', CSR_ROOT.'communicatie/bibliotheek/boek/'.$this->boek->getId());
+		}
+
+		if($this->hasParam(2)){
+			$eigenaar = $this->getParam(2);
+		}else{
+			$eigenaar = LoginLid::instance()->getUid();
+		}
+		if(Lid::isValidUid($eigenaar)){
+			if($this->boek->addExemplaar($eigenaar)){
+				$melding='Exemplaar met succes toegevoegd.';
+			}else{
+				$melding='Exemplaar toevoegen mislukt. '.$this->boek->getError().'Biebcontrllr::action_addexemplaar()';
+			}
+		}else{
+			$melding='Ongeldig uid "'.$eigenaar.'" Biebcontrllr::action_addexemplaar()';
+		}
+		BibliotheekBoekContent::invokeRefresh($melding, CSR_ROOT.'communicatie/bibliotheek/boek/'.$this->boek->getId());
+	}
+	/*
+	 * Exemplaar verwijderen
+	 * /deleteexemplaar/$exemplaarid
+	 */
+	public function action_verwijderexemplaar(){
+		$this->loadBoek();
+		if($this->hasParam(2) AND ($this->boek->isEigenaar() OR $this->magVerwijderen())){
+			if($this->boek->verwijderExemplaar($this->getParam(2))){
+				$melding='Exemplaar met succes verwijderd.';
+			}else{
+				$melding='Exemplaar verwijderen mislukt. '.$this->boek->getError().'Biebcontrllr::action_verwijderexemplaar()';
+			}
+		}else{
+			$melding='Onvoldoende rechten voor deze actie. Biebcontrllr::action_verwijderexemplaar()';
+		}
+		BibliotheekBoekContent::invokeRefresh($melding, CSR_ROOT.'communicatie/bibliotheek/boek/'.$this->boek->getId());
+	}
+	/*
+	 * Exemplaar is geleend
+	 * kan door iedereen, inclusief eigenaar
+	 */
+	public function action_exemplaarlenen(){
+		$this->loadBoek();
+		if($this->hasParam(2) AND $this->boek->magBekijken()){
+			if($this->boek->leenExemplaar($this->getParam(2))){
+				$melding='Exemplaar geleend.';
+			}else{
+				$melding='Exemplaar lenen is mislukt. '.$this->boek->getError().'Biebcontrllr::action_exemplaarlenen()';
+			}
+		}else{
+			$melding='Onvoldoende rechten voor deze actie. Biebcontrllr::action_exemplaarlenen()';
+		}
+		BibliotheekBoekContent::invokeRefresh($melding, CSR_ROOT.'communicatie/bibliotheek/boek/'.$this->boek->getId());
+	}
+	/*
+	 * Lener zegt dat hij/zij exemplaar heeft teruggegeven
+	 * Alleen door lener
+	 */
+	public function action_exemplaarteruggegeven(){
+		$this->loadBoek();
+		if($this->hasParam(2) AND $this->boek->isLener($this->getParam(2))){
+			if($this->boek->teruggevenExemplaar($this->getParam(2))){
+				$melding='Exemplaar is teruggegeven.';
+			}else{
+				$melding='Teruggave van exemplaar melden is mislukt. '.$this->boek->getError().'Biebcontrllr::action_exemplaarteruggegeven()';
+			}
+		}else{
+			$melding='Onvoldoende rechten voor deze actie. '.$this->boek->getError().' Biebcontrllr::action_exemplaarteruggegeven()';
+		}
+		BibliotheekBoekContent::invokeRefresh($melding, CSR_ROOT.'communicatie/bibliotheek/boek/'.$this->boek->getId());
+	}
+	/*
+	 * Exemplaar is terugontvangen van lener
+	 * Alleen door eigenaar
+	 */
+	public function action_exemplaarterugontvangen(){
+		$this->loadBoek();
+		if($this->hasParam(2) AND $this->boek->isEigenaar($this->getParam(2))){
+			if($this->boek->terugontvangenExemplaar($this->getParam(2))){
+				$melding='Exemplaar terugontvangen.';
+			}else{
+				$melding='Exemplaar terugontvangen melden is mislukt. '.$this->boek->getError().'Biebcontrllr::action_exemplaarterugontvangen()';
+			}
+		}else{
+			$melding='Onvoldoende rechten voor deze actie. Biebcontrllr::action_exemplaarterugontvangen()';
+		}
+		BibliotheekBoekContent::invokeRefresh($melding, CSR_ROOT.'communicatie/bibliotheek/boek/'.$this->boek->getId());
+	}
+	/*
+	 * Exemplaar is vermist
+	 * Alleen door eigenaar
+	 */
+	public function action_exemplaarvermist(){
+		$this->loadBoek();
+		if($this->hasParam(2) AND $this->boek->isEigenaar($this->getParam(2))){
+			if($this->boek->vermistExemplaar($this->getParam(2))){
+				$melding='Exemplaar vermist.';
+			}else{
+				$melding='Exemplaar vermist melden is mislukt. '.$this->boek->getError().'Biebcontrllr::action_exemplaarvermist()';
+			}
+		}else{
+			$melding='Onvoldoende rechten voor deze actie. Biebcontrllr::action_exemplaarvermist()';
+		}
+		BibliotheekBoekContent::invokeRefresh($melding, CSR_ROOT.'communicatie/bibliotheek/boek/'.$this->boek->getId());
+	}
+	/*
+	 * Exemplaar is gevonden
+	 * Alleen door eigenaar
+	 */
+	public function action_exemplaargevonden(){
+		$this->loadBoek();
+		if($this->hasParam(2) AND $this->boek->isEigenaar($this->getParam(2))){
+			if($this->boek->gevondenExemplaar($this->getParam(2))){
+				$melding='Exemplaar gevonden.';
+			}else{
+				$melding='Exemplaar gevonden melden is mislukt. '.$this->boek->getError().'Biebcontrllr::action_exemplaargevonden()';
+			}
+		}else{
+			$melding='Onvoldoende rechten voor deze actie. Biebcontrllr::action_exemplaargevonden()';
+		}
+		BibliotheekBoekContent::invokeRefresh($melding, CSR_ROOT.'communicatie/bibliotheek/boek/'.$this->boek->getId());
+	}
 }

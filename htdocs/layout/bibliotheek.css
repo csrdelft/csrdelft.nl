@@ -73,9 +73,9 @@ tbody a.toevoegen{
 .label{ float: left; width: 75px; font-size: 9px; color: #999; }
 .boek .titel{ margin-left: 20px; padding-left: 15px; float: left; width: 75px; color: #999; }
 .boek .titelwaarde{ float:left; width: 489px;}
-.boek .blok, .beschrijvingen .blok{ margin-bottom: 20px; clear: left; }
+.blok { margin-bottom: 20px; clear: left; }
 .boek .header { margin-bottom: 0px;}
-.boek .gegevens, .beschrijvingen .gegevens{ margin-left: 20px; padding-left: 15px; border-left: 1px solid #0a338d; }
+.gegevens { margin-left: 20px; padding-left: 15px; border-left: 1px solid #0a338d; }
 div.boek { 
 	float: left;
 	width: 620px;
@@ -189,6 +189,24 @@ div.boek {
 	float:left;
 }
 li.verborgen{ display: none; }
+
+/* Exemplaren */
+.exemplaren .regel .label{
+	color: white;
+	float:left;
+	
+}
+.exemplaren .label .pasfoto{
+	height: 40px;
+	float:left;
+}
+.exemplaren .regel{
+	margin-bottom: 10px;
+	overflow: auto;
+}
+.exemplaren h2{
+	margin-bottom: 5px;
+}
 
 /* boekbeschrijvingen */
 div.beschrijvingen{

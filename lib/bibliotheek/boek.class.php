@@ -28,6 +28,7 @@ class Boek{
 	private $beschrijving;
 	private $beschrijvingsid;
 	private $beschrijvingen = null;
+	private $exemplaren = null;
 
 	public function __construct($init){
 		$this->load($init);
@@ -179,10 +180,56 @@ class Boek{
 	public function magBekijken(){
 		return Loginlid::instance()->hasPermission('P_BIEB_READ') OR $this->magBewerken();
 	}
-	public function isEigenaar(){
-		return Loginlid::instance()->hasPermission($this->getEigenaar());
-	}
+	/*
+	 * checkt of ingelogd eigenaar is van boek, of van exemplaar
+	 * Basfcieleden zijn eigenaar van biebboeken
+	 */
+	public function isEigenaar($exemplaarid=null){
+		$db=MySql::instance();
+		if($exemplaarid==null){
+			$where="WHERE boek_id =".(int)$this->getId();
+		}else{
+			$where="WHERE id =".(int)$exemplaarid;
+		}
+		$qEigenaar="
+			SELECT eigenaar_uid
+			FROM  `biebexemplaar` 
+			".$where.";";
+		$result=$db->query($qEigenaar);
 
+		if($db->numRows($result)>0){
+			while($lener=$db->next($result)){
+				if($lener['eigenaar_uid']==Loginlid::instance()->getUid()){
+					$return = true;
+				}elseif($lener['eigenaar_uid']=='x222' AND $this->isBASFCie()){
+					$return = true;
+				}
+			}
+		}else{
+			$this->error.= mysql_error();
+		}
+		return $return;
+	}
+	public function isBASFCie(){
+		return Loginlid::instance()->hasPermission('groep:BASFCie');
+	}
+	public function isLener($exemplaarid){
+		$db=MySql::instance();
+		$qLener="
+			SELECT uitgeleend_uid 
+			FROM `biebexemplaar`
+			WHERE id=".(int)$exemplaarid.";";
+		$result=$db->query($qLener);
+		if($db->numRows($result)>0){
+			$lener=$db->next($result);
+			return $lener['uitgeleend_uid']==Loginlid::instance()->getUid();
+		}else{
+			$this->error.= mysql_error();
+			return false;
+		}
+		
+		
+	}
 	/*
 	 * Slaat het object Boek op
 	 */
@@ -196,11 +243,11 @@ class Boek{
 				titel, auteur_id, categorie_id, uitgavejaar, uitgeverij, paginas, taal, isbn, code
 			) VALUES (
 				'".$db->escape($this->getTitel())."',
-				'".(int)$this->getAuteur()->getId()."',
-				'".(int)$this->getRubriek()->getId()."',
-				'".(int)$this->getUitgavejaar()."',
+				".(int)$this->getAuteur()->getId().",
+				".(int)$this->getRubriek()->getId().",
+				".(int)$this->getUitgavejaar().",
 				'".$db->escape($this->getUitgeverij())."',
-				'".(int)$this->getPaginas()."',
+				".(int)$this->getPaginas().",
 				'".$db->escape($this->getTaal())."',
 				'".$db->escape($this->getISBN())."',
 				'".$db->escape($this->getCode())."'
@@ -256,8 +303,9 @@ class Boek{
 	}
 
 
-	/*****************************************
-	 * Boekrecensies/beschrijvingen
+	/********************************
+	 * Boekrecensies/beschrijvingen *
+	 ********************************
 	 * 
 	 * laad beschrijvingen van dit boek
 	 */
@@ -338,7 +386,7 @@ class Boek{
 				INSERT INTO biebbeschrijving (
 					boek_id, schrijver_uid, beschrijving, toegevoegd
 				) VALUES (
-					'".(int)$this->getId()."',
+					".(int)$this->getId().",
 					'".$db->escape(Loginlid::instance()->getUid())."',
 					'".$db->escape($this->getBeschrijving())."',
 					'".getDateTime()."'
@@ -370,6 +418,190 @@ class Boek{
 		$db=MySql::instance();
 	 	$qVerwijderBeschrijving="DELETE FROM biebbeschrijving WHERE id=".(int)$beschrijvingsid." LIMIT 1;";
 		return $db->query($qVerwijderBeschrijving);
+	}
+
+	/**************
+	 * Exemplaren *
+	 **************
+	 * 
+	 * voeg exemplaar toe
+	 */
+	public function addExemplaar($eigenaar){
+		$db=MySql::instance();
+		$qSave="
+			INSERT INTO biebexemplaar (
+				boek_id, eigenaar_uid, toegevoegd, status
+			) VALUES (
+				".(int)$this->getId().",
+				'".$db->escape($eigenaar)."',
+				'".getDateTime()."',
+				'beschikbaar'
+			);";
+		if($db->query($qSave)){
+			return true;
+		}
+		$this->error.='Fout in query, mysql gaf terug: '.mysql_error().' Boek::addExemplaar()';
+		return false;
+	}
+	/*
+	 * verwijder exemplaar
+	 */
+	public function verwijderExemplaar($id){
+		$db=MySql::instance();
+		$qDeleteExemplaar="DELETE FROM biebexemplaar WHERE id=".(int)$id." LIMIT 1;";
+		return $db->query($qDeleteExemplaar);
+	}
+	/*
+	 * 
+
+	 * 
+	 * laad exemplaren van dit boek
+	 */
+	public function loadExemplaren(){
+		$db=MySql::instance();
+		$query="
+			SELECT id, eigenaar_uid, uitgeleend_uid, toegevoegd, status, uitleendatum
+			FROM biebexemplaar
+			WHERE boek_id=".(int)$this->getId()."
+			ORDER BY toegevoegd;";
+		$result=$db->query($query);
+		echo mysql_error();
+		if($db->numRows($result)>0){
+			while($exemplaar=$db->next($result)){
+				$this->exemplaren[]=$exemplaar;
+			}
+		}else{
+			return false;
+		}
+		return $db->numRows($result);
+	}
+	/*
+	 * Geeft alle exemplaren van dit boek
+	 */
+	public function getExemplaren(){
+		if($this->exemplaren===null){
+			$this->loadExemplaren();
+		}
+		return $this->exemplaren; 
+	}
+	/*
+	 * Aantal exemplaren
+	 */
+	public function countExemplaren(){
+		if($this->exemplaren===null){
+			$this->loadExemplaren();
+		}
+		return count($this->exemplaren);
+	}
+	public function getStatusExemplaar($exemplaarid){
+		$db=MySql::instance();
+		$query="
+			SELECT id, status
+			FROM biebexemplaar
+			WHERE id=".(int)$exemplaarid.";";
+		$result=$db->query($query);
+		if($db->numRows($result)>0){
+			$exemplaar=$db->next($result);
+			return $exemplaar['status'];
+		}else{
+			$this->error.= mysql_error();
+			return '';
+		}
+	}
+	public function leenExemplaar($exemplaarid){
+		if($this->getStatusExemplaar($exemplaarid)!='beschikbaar'){
+			$this->error.='Boek is niet beschikbaar. ';
+			return false;
+		}
+
+		$db=MySql::instance();
+		$query="
+			UPDATE biebexemplaar SET
+				uitgeleend_uid = '".Loginlid::instance()->getUid()."',
+				status = 'uitgeleend',
+				uitleendatum = '".getDateTime()."'
+			WHERE id = ".(int)$exemplaarid."
+			LIMIT 1;";
+		if($db->query($query)){
+			return true;
+		}
+		$this->error.='Fout in query, mysql gaf terug: '.mysql_error().' Boek::leenExemplaar()';
+		return false;
+	}
+	public function teruggevenExemplaar($exemplaarid){
+		if($this->getStatusExemplaar($exemplaarid)!='uitgeleend'){
+			$this->error.='Boek is niet uitgeleend. ';
+			return false;
+		}
+
+		$db=MySql::instance();
+		$query="
+			UPDATE biebexemplaar SET
+				status = 'teruggegeven'
+			WHERE id = ".(int)$exemplaarid."
+			LIMIT 1;";
+		if($db->query($query)){
+			return true;
+		}
+		$this->error.='Fout in query, mysql gaf terug: '.mysql_error().' Boek::teruggegevenExemplaar()';
+		return false;
+	}
+	public function terugontvangenExemplaar($exemplaarid){
+		if(!in_array($this->getStatusExemplaar($exemplaarid), array('uitgeleend', 'teruggegeven'))){
+			$this->error.='Boek is niet uitgeleend. ';
+			return false;
+		}
+		$db=MySql::instance();
+		$query="
+			UPDATE biebexemplaar SET
+				uitgeleend_uid = '',
+				status = 'beschikbaar'
+			WHERE id = ".(int)$exemplaarid."
+			LIMIT 1;";
+		if($db->query($query)){
+			return true;
+		}
+		$this->error.='Fout in query, mysql gaf terug: '.mysql_error().' Boek::terugontvangenExemplaar()';
+		return false;
+	}
+	public function vermistExemplaar($exemplaarid){
+		if($this->getStatusExemplaar($exemplaarid)=='vermist'){
+			$this->error.='Boek is al vermist. ';
+			return false;
+		}elseif($this->getStatusExemplaar($exemplaarid)!='beschikbaar'){
+			$this->error.='Boek is nog uitgeleend. ';
+			return false;
+		}
+
+		$db=MySql::instance();
+		$query="
+			UPDATE biebexemplaar SET
+				status = 'vermist'
+			WHERE id = ".(int)$exemplaarid."
+			LIMIT 1;";
+		if($db->query($query)){
+			return true;
+		}
+		$this->error.='Fout in query, mysql gaf terug: '.mysql_error().' Boek::vermistExemplaar()';
+		return false;
+	}
+	public function gevondenExemplaar($exemplaarid){
+		if($this->getStatusExemplaar($exemplaarid)!='vermist'){
+			$this->error.='Boek is niet vermist gemeld. ';
+			return false;
+		}
+
+		$db=MySql::instance();
+		$query="
+			UPDATE biebexemplaar SET
+				status = 'beschikbaar'
+			WHERE id = ".(int)$exemplaarid."
+			LIMIT 1;";
+		if($db->query($query)){
+			return true;
+		}
+		$this->error.='Fout in query, mysql gaf terug: '.mysql_error().' Boek::gevondenExemplaar()';
+		return false;
 	}
 
 	/******************************************

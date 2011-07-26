@@ -21,8 +21,36 @@ UPDATE  `csrdelft`.`biebbeschrijving` SET  `toegevoegd` =  '2007-07-22 20:33:06'
 UPDATE  `csrdelft`.`biebbeschrijving` SET  `toegevoegd` =  '2007-07-22 20:42:25' WHERE  `biebbeschrijving`.`id` =5;
 UPDATE  `csrdelft`.`biebbeschrijving` SET  `toegevoegd` =  '2007-07-21 20:46:55' WHERE  `biebbeschrijving`.`id` =6;
 
-ALTER TABLE  `biebbeschrijving` ADD  `bewerkdatum` DATETIME NOT NULL DEFAULT  '0000-00-00 00:00:00';
+ALTER TABLE  `biebbeschrijving` 
+ADD  `bewerkdatum` DATETIME NOT NULL DEFAULT  '0000-00-00 00:00:00';
 
-UPDATE biebboek SET
-		auteur_id= 0
+UPDATE biebboek 
+	SET auteur_id= 0
 	WHERE `auteur_id`=9;
+
+
+INSERT INTO  `csrdelft`.`menu` (
+`ID` ,
+`pID` ,
+`prioriteit` ,
+`tekst` ,
+`link` ,
+`permission` ,
+`zichtbaar` ,
+`gasnelnaar`
+)
+VALUES (
+NULL ,  '3',  '20',  'Bibliotheek',  '/communicatie/bibliotheek',  'P_LOGGED_IN',  'ja',  'nee'
+);
+
+ALTER TABLE  `biebexemplaar` 
+ADD  `status` ENUM(  'beschikbaar',  'uitgeleend',  'teruggegeven',  'vermist' ) NOT NULL DEFAULT  'beschikbaar',
+ADD  `uitleendatum` DATETIME NOT NULL DEFAULT  '0000-00-00 00:00:00';
+
+ALTER TABLE  `biebexemplaar` 
+DROP  `extern`;
+ALTER TABLE  `biebexemplaar` 
+CHANGE  `toegevoegd`  `toegevoegd` DATETIME NOT NULL DEFAULT  '0000-00-00 00:00:00'
+
+DROP TABLE  `biebbevestiging`
+DROP TABLE  `biebadmingewijzigd`
