@@ -36,13 +36,10 @@ class BibliotheekController extends Controller{
 			//niet alle acties mag iedereen doen, hier whitelisten voor de gebruikers
 			//zonder P_BIEB_MOD, en gebruikers met, zodat bij niet bestaande acties
 			//netjes gewoon de catalogus getoond wordt.
-			$allow=array('default', 'boek', 'nieuwboek', 
+			$allow=array('default', 'boek', 'nieuwboek', 'bewerkboek',
 						'addbeschrijving', 'verwijderbeschrijving', 'bewerkbeschrijving',
 						'addexemplaar', 'verwijderexemplaar',
 						'exemplaarlenen','exemplaarteruggegeven','exemplaarterugontvangen','exemplaarvermist','exemplaargevonden');
-			if(LoginLid::instance()->hasPermission('P_BIEB_EDIT')){ //TODO eigenaarboek
-				$allow=array_merge($allow, array('bewerkboek'));
-			}
 			if(LoginLid::instance()->hasPermission('P_BIEB_MOD','groep:BASFCie')){
 				$allow=array_merge($allow, array('verwijderboek'));
 			}
@@ -95,16 +92,16 @@ class BibliotheekController extends Controller{
 	 */
 	protected function action_bewerkboek(){
 		$this->loadBoek();
-		if(!$this->boek->magBewerken()){
+		if(!$this->boek->isEigenaar()){
 			echo '<span class="melding">Onvoldoende rechten voor deze actie</span>';
 			exit;
 		}
 
 		if(isset($_POST['id'])){
 			if($this->boek->isPostedField($_POST['id']) AND $this->boek->validField($_POST['id']) AND $this->boek->saveField($_POST['id'])){
-				echo $_POST['waarde'];
+				echo $this->boek->getProperty($_POST['id']).'';
 			}else{
-				echo $this->boek->getError();
+				echo '<span class="melding">Fout: '.$this->boek->getField($_POST['id'])->getError().'</span>';
 			}
 		}else{
 			echo '$_POST["id"] is leeg!';
@@ -119,7 +116,7 @@ class BibliotheekController extends Controller{
 		//leeg object Boek laden
 		$this->loadBoek(0); 
 		//Eerst ongewensten de deur wijzen
-		if(!$this->boek->magBewerken()){
+		if(!$this->boek->magBekijken()){
 			BibliotheekCatalogusContent::invokeRefresh('Onvoldoende rechten voor deze actie. Biebcontrllr::action_addboek', CSR_ROOT.'communicatie/bibliotheek/');
 		}
 		//formulier verwerken, als het onvoldoende is terug naar formulier

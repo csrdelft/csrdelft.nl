@@ -7,10 +7,10 @@
  *  - Html voor het formulier
  *  - suggesties voor formuliervelden
  *
- * Alle Veldobjecten stammen af van FormField, dat regelt een hoop basismeuk.
+ * Alle Veldobjecten stammen af van FormAjaxField, dat regelt een hoop basismeuk.
  */
 
-abstract class FormField{
+abstract class FormAjaxField{
 	public $name;				//naam van het veld in POST
 	public $value;				//welke initiele waarde heeft het veld?
 	public $notnull=false; 		//mag het veld leeg zijn?
@@ -55,7 +55,7 @@ abstract class FormField{
 		if($this->error!=''){
 			$cssclass.=' metfouten';
 		}
-		return '<div class="'.$cssclass.'">';
+		return '<div class="tijdelijk bewerk '.$cssclass.'" id="'.$this->name.'">'; 
 	}
 	protected function getLabel(){
 		if($this->description!=null){
@@ -63,9 +63,9 @@ abstract class FormField{
 		}
 	}
 	
-	protected function getError(){
+	public function getError(){
 		if($this->error!=''){
-			return '<div class="waarschuwing">'.$this->error.'</div>';
+			return $this->error;
 		}
 	}
 		
@@ -73,7 +73,8 @@ abstract class FormField{
 		echo $this->getDiv();
 		echo $this->getLabel();
 		echo $this->getError();
-		echo '<input type="text" id="field_'.$this->name.'" name="'.$this->name.'" class="regular" value="'.htmlspecialchars($this->value).'" ';
+		echo '<span class="text">'.htmlspecialchars($this->value).'&nbsp;</span>';
+		echo '<input type="text" id="field_'.$this->name.'" name="'.$this->name.'" class="editbox regular" value="'.htmlspecialchars($this->value).'" style="display: none;" ';
 		if(!$this->autocomplete OR count($this->suggestions)>0){
 			echo 'autocomplete="off" ';
 		}
@@ -88,11 +89,18 @@ abstract class FormField{
 		echo '</div>';
 	}
 }
+//<div class="label">Auteur</div>		
+//			<div class="bewerk" id="auteur">
+//				<span class="text">{if $boek->getAuteur()->getNaam()==''}<span class="suggestie">Achternaam, V.L. van de</span>{else}{$boek->getAuteur()->getNaam()|escape:'html'}{/if}&nbsp;</span>
+//				<input type="text" maxlength="100" value="{$boek->getAuteur()->getNaam()|escape:'html'}" class="editbox" /> 
+//			</div>
+
+
 
 /*
  * Textarea's
  */
-class TextField extends FormField{
+class TextAjaxField extends FormAjaxField{
 
 	public function view(){
 		echo $this->getDiv();
@@ -103,7 +111,17 @@ class TextField extends FormField{
 		echo '</div>';
 	}
 }
-class PreviewTextField extends FormField{
+class NonEditableAjaxField extends FormAjaxField{
+
+	public function view(){
+		echo '<div class="tijdelijk veld" id="ajaxfield_'.$this->name.'">';
+		echo $this->getLabel();
+		echo $this->getError();
+		echo '<span class="nonedit">'.htmlspecialchars($this->value).'&nbsp;</span>';
+		echo '</div>';
+	}
+}
+class PreviewTextAjaxField extends FormAjaxField{
 	public function view(){
 		echo $this->getDiv();
 		echo $this->getLabel();
@@ -118,7 +136,7 @@ class PreviewTextField extends FormField{
 		echo '</div>';
 	}
 }
-class RequiredPreviewTextField extends PreviewTextField{
+class RequiredPreviewTextAjaxField extends PreviewTextAjaxField{
 	public $notnull=true;
 	
 	public function valid(){
@@ -130,9 +148,9 @@ class RequiredPreviewTextField extends PreviewTextField{
 	}
 }
 /*
- * Een InputField heeft een maximale lengte.
+ * Een InputAjaxField heeft een maximale lengte.
  */
-class InputField extends FormField{
+class InputAjaxField extends FormAjaxField{
 	public $max_len=255;
 	
 	public function __construct($name, $value, $description, $max_len=255){
@@ -149,30 +167,30 @@ class InputField extends FormField{
 		return $this->error=='';
 	}
 }
-class LandField extends FormField{
+class LandAjaxField extends FormAjaxField{
 	public function __construct($name, $value, $description){
 		parent::__construct($name, $value, $description);
 		$landsuggesties=array('Nederland', 'België', 'Duitsland', 'Frankrijk', 'Verenigd Koninkrijk', 'Verenigde Staten');
 		$this->setSuggestions($landsuggesties);
 	}
 }
-class RequiredLandField extends LandField{
+class RequiredLandAjaxField extends LandAjaxField{
 	public $notnull=true;
 }
 
-class SuggestInputField extends FormField{
+class SuggestInputAjaxField extends FormAjaxField{
 	public function __construct($name, $value, $description, $max_len, $suggestions){
 		parent::__construct($name, $value, $description, $max_len);
 		$this->setSuggestions($suggestions);
 	}
 }
-class RequiredSuggestInputField extends SuggestInputField{
+class RequiredSuggestInputAjaxField extends SuggestInputAjaxField{
 	public function __construct($name, $value, $description, $max_len, $suggestions){
 		parent::__construct($name, $value, $description, $max_len, $suggestions);
 	}
 	public $notnull=true;
 }
-class BiebSuggestInputField extends SuggestInputField{
+class BiebSuggestInputAjaxField extends SuggestInputAjaxField{
 	public function __construct($name, $value, $description, $max_len, $suggestions){
 		parent::__construct($name, $value, $description, $max_len, $suggestions);
 	}
@@ -185,7 +203,7 @@ class BiebSuggestInputField extends SuggestInputField{
 		return $this->error=='';
 	}
 }
-class RequiredBiebSuggestInputField extends BiebSuggestInputField{
+class RequiredBiebSuggestInputAjaxField extends BiebSuggestInputAjaxField{
 	public $notnull=true;
 	
 	public function valid(){
@@ -196,8 +214,8 @@ class RequiredBiebSuggestInputField extends BiebSuggestInputField{
 		return $this->error=='';
 	}
 }
-
-class UidField extends InputField{
+/*
+class UidAjaxField extends InputAjaxField{
 	public function __construct($name, $value, $description){
 		parent::__construct($name, $value, $description, 4);
 	}
@@ -220,8 +238,8 @@ class UidField extends InputField{
 		echo '<script>uidPreview(\''.$this->name.'\');</script>';
 		echo '</div>';
 	}
-}
-class CodeField extends InputField{
+}*/
+class CodeAjaxField extends InputAjaxField{
 	public function __construct($name, $value, $description){
 		parent::__construct($name, $value, $description, 7);
 	}
@@ -238,17 +256,18 @@ class CodeField extends InputField{
 		echo $this->getDiv();
 		echo $this->getLabel();
 		echo $this->getError();
-		echo '<input type="text" id="field_'.$this->name.'" name="'.$this->name.'" class="code" value="'.htmlspecialchars($this->value).'" ';
+		echo '<span class="text">'.htmlspecialchars($this->value).'</span>';
+		echo '<input type="text" id="field_'.$this->name.'" name="'.$this->name.'" class="editbox code" value="'.htmlspecialchars($this->value).'" style="display: none;" ';
 		echo ' autocomplete="off" maxlength="7" />';
-		echo '<a class="knop genereer" title="Biebcode invullen">Genereer</a>';
+		echo '<a class="editbox knop genereer" title="Biebcode invullen">Genereer</a>';
 		echo '</div>';
 	}
 }
-class RequiredInputField extends InputField{
+class RequiredInputAjaxField extends InputAjaxField{
 	public $notnull=true;
 }
 
-class EmailField extends FormField{
+class EmailAjaxField extends FormAjaxField{
 	public function valid(){
 		if(!parent::valid()){ return false; }
 		if($this->getValue()==''){ return true; }
@@ -278,10 +297,10 @@ class EmailField extends FormField{
 		return $this->error=='';
 	}
 }
-class RequiredEmailField extends EmailField{
+class RequiredEmailAjaxField extends EmailAjaxField{
 	public $notnull=true;
 }
-class UrlField extends FormField{
+class UrlAjaxField extends FormAjaxField{
 	public function valid(){
 		if(!parent::valid()){ return false; }
 		if($this->getValue()==''){ return true; }
@@ -294,7 +313,7 @@ class UrlField extends FormField{
 }
 
 
-class WebsiteField extends InputField{
+class WebsiteAjaxField extends InputAjaxField{
 	public function valid(){
 		if(!parent::valid()){ return false; }
 		if($this->getValue()==''){ return true; }
@@ -309,7 +328,7 @@ class WebsiteField extends InputField{
 	}
 }
 
-class IntField extends FormField{
+class IntAjaxField extends FormAjaxField{
 	public $min=null;
 	public $max=null;
 	
@@ -324,7 +343,7 @@ class IntField extends FormField{
 	
 	public function valid(){
 		if(!parent::valid()){ return false; }
-		//als een veld verplicht is heeft het in FormField::valid() al een foutmelding opgeleverd.
+		//als een veld verplicht is heeft het in FormAjaxField::valid() al een foutmelding opgeleverd.
 		if($this->getValue()==0){ return true; }
 		
 		if(!preg_match('/\d+/', $this->getValue())){
@@ -337,7 +356,7 @@ class IntField extends FormField{
 		return $this->error=='';
 	}
 }
-class NickField extends FormField{
+class NickAjaxField extends FormAjaxField{
 	public $max_len=20;
 	public function valid($lid){
 		if(!parent::valid()){ return false; }
@@ -355,7 +374,7 @@ class NickField extends FormField{
 		return $this->error=='';
 	}
 }
-class TelefoonField extends InputField{
+class TelefoonAjaxField extends InputAjaxField{
 	public function valid(){
 		if(!parent::valid()){ return false; }
 		if($this->getValue()==''){ return true; }
@@ -366,7 +385,7 @@ class TelefoonField extends InputField{
 		return $this->error=='';
 	}
 }
-class StudieField extends InputField{
+class StudieAjaxField extends InputAjaxField{
 	public function __construct($name, $value, $description){
 		parent::__construct($name, $value, $description, 100);
 		$this->setSuggestions(array('TU Delft - BK', 'TU Delft - CT', 'TU Delft - ET', 'TU Delft - IO', 'TU Delft - LST', 'TU Delft - LR', 'TU Delft - MT', 'TU Delft - MST', 'TU Delft - TA', 'TU Delft - TB', 'TU Delft - TI', 'TU Delft - TN', 'TU Delft - TW', 'TU Delft - WB', 'INHolland', 'Haagse Hogeschool', 'EURotterdam', 'ULeiden'));
@@ -375,7 +394,7 @@ class StudieField extends InputField{
 /*
  * Vreemde eend in de 'bijt', deze unit produceert 3 velden: oud, nieuw en bevestiging.
  */
-class PassField extends FormField{
+/*class PassAjaxField extends FormAjaxField{
 	public function __construct($name){
 		$this->name=$name;
 	}
@@ -426,8 +445,8 @@ class PassField extends FormField{
 		echo '<input type="password" autocomplete="off" id="field_'.$this->name.'_confirm" name="'.$this->name.'_confirm" /></div>';
 		echo '</div>';
 	}
-}
-class SelectField extends FormField{
+}*/
+class SelectAjaxField extends FormAjaxField{
 	public $options=array();
 	
 	public function __construct($name, $value, $description=null, $options){
@@ -449,7 +468,8 @@ class SelectField extends FormField{
 		echo $this->getDiv();
 		echo $this->getLabel();
 		echo $this->getError();
-		echo '<select id="field_'.$this->name.'" name="'.$this->name.'" />';
+		echo '<span class="text">'.htmlspecialchars($this->options[$this->value]).'</span>';
+		echo '<select id="field_'.$this->name.'" class="editbox" name="'.$this->name.'" />';
 		foreach($this->options as $value => $description){
 			echo '<option value="'.$value.'"';
 			if($value==$this->value){
@@ -462,12 +482,12 @@ class SelectField extends FormField{
 		echo '</div>';
 	}
 }
-class GeslachtField extends SelectField{
+class GeslachtAjaxField extends SelectAjaxField{
 	public function __construct($name, $value, $description=null){
 		parent::__construct($name, $value, $description, array('m'=> 'Man', 'v'=>'Vrouw'));
 	}
 }
-class VerticaleField extends SelectField{
+class VerticaleAjaxField extends SelectAjaxField{
 	
 	public function __construct($name, $value, $description=null){
 		$verticalen=array_merge(array('Geen'), range('A', 'H'));
@@ -475,8 +495,8 @@ class VerticaleField extends SelectField{
 	}
 }
 
-
-class DatumField extends FormField{
+/*
+class DatumAjaxField extends FormAjaxField{
 	public $maxyear;
 	
 	public function __construct($name, $value, $description, $maxyear=null){
@@ -552,13 +572,13 @@ class DatumField extends FormField{
 		echo '</select>';
 		echo '</div>';
 	}
-}
+}*/
 
 /*
  * Commentaardingen voor formulieren
  */
 
-class HTMLComment{
+class HTMLAjaxComment{
 	public $comment;
 	public function __construct($comment){
 		$this->comment=$comment;
@@ -567,12 +587,12 @@ class HTMLComment{
 		echo $this->comment;
 	}
 }
-class UBBComment extends HTMLComment{
+class UBBAjaxComment extends HTMLAjaxComment{
 	public function view(){
 		echo CsrUBB::instance()->getHtml($this->comment);
 	}
 }
-class Comment extends HTMLComment{
+class AjaxComment extends HTMLAjaxComment{
 	public function view(){
 		echo '<h3>'.$this->comment.'</h3>';
 	}

@@ -30,59 +30,24 @@
 {if $boek->getId()!=0}
 	<div class="boek" id="{$boek->getId()}">
 		<div class="blok header">
-			<h1><div class="titel">Boek</div>	
-			<div class="bewerk titelwaarde" id="titel">
-				<span id="waarde_titel" class="text">{if $boek->getTitel()==''}<span class="suggestie">Geef de titel...</span>{else}{$boek->getTitel()|escape:'html'}{/if}&nbsp;</span>
-				<input type="text" maxlength="100" value="{$boek->getTitel()|escape:'html'}" class="editbox" id="waarde_input_titel" /> 
-			</div></h1>&nbsp;
+			{$boek->getField('titel')->view()}
 		</div>
 		<div class="blok gegevens">
-			<div class="label">Auteur</div>		
-			<div class="bewerk" id="auteur">
-				<span id="waarde_auteur" class="text">{if $boek->getAuteur()->getNaam()==''}<span class="suggestie">Achternaam, V.L. van de</span>{else}{$boek->getAuteur()->getNaam()|escape:'html'}{/if}&nbsp;</span>
-				<input type="text" maxlength="100" value="{$boek->getAuteur()->getNaam()|escape:'html'}" class="editbox" id="waarde_input_auteur" /> 
-			</div>
-			<div class="label">Pagina's</div>	
-			<div class="bewerk" id="paginas">
-				<span id="waarde_paginas" class="text">{$boek->getPaginas()|escape:'html'}&nbsp;</span>
-				<input type="text" maxlength="100" value="{$boek->getPaginas()|escape:'html'}" class="editbox" id="waarde_input_paginas" /> 
-			</div>
-			<div class="label">Taal</div>		
-			<div class="bewerk" id="taal">
-				<span id="waarde_taal" class="text">{$boek->getTaal()|escape:'html'}&nbsp;</span>
-				<input type="text" maxlength="100" value="{$boek->getTaal()|escape:'html'}" class="editbox" id="waarde_input_taal" /> 
-			</div>
-			<div class="label">ISBN</div>		
-			<div class="bewerk" id="isbn">
-				<span id="waarde_isbn" class="text">{$boek->getISBN()|escape:'html'}&nbsp;</span>
-				<input type="text" maxlength="100" value="{$boek->getISBN()|escape:'html'}" class="editbox" id="waarde_input_isbn" /> 
-			</div>
-			<div class="label">Uitgeverij</div>	
-			<div class="bewerk" id="uitgeverij">
-				<span id="waarde_uitgeverij" class="text">{$boek->getUitgeverij()|escape:'html'}&nbsp;</span>
-				<input type="text" maxlength="100" value="{$boek->getUitgeverij()|escape:'html'}" class="editbox" id="waarde_input_uitgeverij" /> 
-			</div>
-			<div class="label">Uitgavejaar</div>
-			<div class="bewerk" id="uitgavejaar">
-				<span id="waarde_uitgavejaar" class="text">{$boek->getUitgavejaar()|escape:'html'} </span>
-				<input type="text" maxlength="100" value="{$boek->getUitgavejaar()|escape:'html'}" class="editbox" id="waarde_input_uitgavejaar" /> 
-			</div>
+			{$boek->getField('auteur')->view()}
+			{$boek->getField('paginas')->view()}
+			{$boek->getField('taal')->view()}
+			{$boek->getField('isbn')->view()}
+			{$boek->getField('uitgeverij')->view()}
+			{$boek->getField('uitgavejaar')->view()}
 		</div>
 		<div class="blok gegevens">
-			<div class="label">Rubriek</div>
-			<div class="bewerk" id="rubriek">
-				<span id="waarde_rubriek" class="text">{$boek->getRubriek()->getRubrieken()|escape:'html'}&nbsp;</span>
-				<input type="text" maxlength="100" value="{$boek->getRubriek()->getRubrieken()|escape:'html'}" class="editbox" id="waarde_input_rubriek" /> 
-			</div>
+			{$boek->getField('rubriek')->view()}
 			{if $boek->isCSRboek()}
-				<div class="label">Biebcode</div>
-				<div class="bewerk" id="code">
-					<span id="waarde_code" class="text">{if $boek->getCode()=='' AND $boek->getRubriek()->getId()==''}<span class="suggestie">Vul eerst de rubriek in</span>{else}{$boek->getCode()|escape:'html'}{/if}&nbsp;</span>
-					<input type="text" maxlength="100" value="{$boek->getCode()|escape:'html'}" class="editbox" id="waarde_input_code" /> 
-				</div>
+				{$boek->getField('code')->view()}
 			{/if}
 		</div>
 	</div>
+
 
 	{* blok rechts met knopjes *}
 	<div class="controls boekacties">	
@@ -125,7 +90,10 @@
 						
 					</div>
 				</div>
+			{foreachelse}
+				<p>Geen exemplaren.</p>
 			{/foreach}
+			
 		</div>
 	</div>
 

@@ -70,7 +70,7 @@ tbody a.toevoegen{
 }
 
 /* boek */
-.label{ float: left; width: 75px; font-size: 9px; color: #999; }
+.label,.boek label{ float: left; width: 75px; font-size: 9px; color: #999; margin:0px;}
 .boek .titel{ margin-left: 20px; padding-left: 15px; float: left; width: 75px; color: #999; }
 .boek .titelwaarde{ float:left; width: 489px;}
 .blok { margin-bottom: 20px; clear: left; }
@@ -190,22 +190,40 @@ div.boek {
 }
 li.verborgen{ display: none; }
 
+/* bewerkbare velden */
+.boek .veld{
+	clear: left;
+}
+.boek .header span, .boek .header label{
+	font-size: 1.6em !important;
+	margin-bottom: 0.2em;
+	font-weight: bold;
+	line-height: normal;
+}
+.boek .header label{
+	margin-left: 35px;
+}
+.boek .header{
+	margin: 20px 0px 20px 0px;
+}
 /* Exemplaren */
-.exemplaren .regel .label{
-	color: white;
-	float:left;
-	
-}
-.exemplaren .label .pasfoto{
-	height: 40px;
-	float:left;
-}
 .exemplaren .regel{
 	margin-bottom: 10px;
 	overflow: auto;
 }
+.exemplaren .label{
+	color: white;
+	float: left;
+}
+.exemplaren .regel .label img.pasfoto{
+	height: 40px;
+	float: left;
+}
 .exemplaren h2{
 	margin-bottom: 5px;
+}
+.exemplaren p{
+	margin-left: 75px;
 }
 
 /* boekbeschrijvingen */

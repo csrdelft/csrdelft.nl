@@ -8,6 +8,7 @@
 require_once 'rubriek.class.php';
 require_once 'auteur.class.php';
 require_once 'formulier.class.php';
+require_once 'ajaxformulier.class.php';
 
 class Boek{
 
@@ -22,9 +23,11 @@ class Boek{
 	private $isbn;
 	private $code;
 
+	private $biebboek = 'nee';
 	private $error;
 	private $nieuwboekform;
 	private $boekbeschrijvingform;
+	private $editablefieldsform;
 	private $beschrijving;
 	private $beschrijvingsid;
 	private $beschrijvingen = null;
@@ -44,6 +47,9 @@ class Boek{
 				//zetten we de defaultwaarden voor het nieuwe boek.
 				$this->auteur = new Auteur('');
 				$this->rubriek = new Rubriek(108);
+				if($this->isBASFCie()){
+					$this->biebboek = 'ja';
+				}
 				$this->assignFieldsNieuwboekForm();
 			}else{
 				$db=MySql::instance();
@@ -55,6 +61,7 @@ class Boek{
 				if(is_array($boek)){
 					$this->array2properties($boek);
 					$this->assignFieldsBeschrijvingForm();
+					$this->assignAjaxFieldsForm();
 				}else{
 					throw new Exception('load() mislukt. Bestaat het boek wel?');
 				}
@@ -80,17 +87,30 @@ class Boek{
 	public function getAuteur(){		return $this->auteur;}
 	public function getRubriek(){		return $this->rubriek;}
 
-//	public function getProperty($key){
-//		$allowedkeys = array('id', 'titel', 'uitgavejaar', 'uitgeverij', 'paginas', 'taal', 'isbn', 'code');
-//		if(in_array($key, $allowedkeys)){
-//			return $this->$key;
-//		}elseif($key=='categorie'){
-//			//TODO
-//		}elseif($key=='rubriek'){
-//			//TODO
-//		}
-//		return null;
-//	}
+	public function getProperty($entry){
+		switch($entry){
+			case 'auteur':
+				return $this->getAuteur()->getNaam();
+			case 'rubriek':
+				return $this->getRubriek()->getRubrieken();
+			case 'titel':
+				return $this->getTitel();
+			case 'uitgavejaar':
+				return $this->getUitgavejaar();
+			case 'uitgeverij':
+				return $this->getUitgeverij();
+			case 'paginas':
+				return $this->getPaginas();
+			case 'taal':
+				return $this->getTaal();
+			case 'isbn':
+				return $this->getISBN();
+			case 'code':
+				return $this->getCode();
+			default:
+				return 'entry "'.$entry.'" is niet toegestaan. Boek::getProperty()';
+		}
+	}
 	public function getEigenaar(){
 		return 'x204';
 	}
@@ -138,6 +158,9 @@ class Boek{
 				break;
 			case 'beschrijvingsid':
 				$this->beschrijvingsid=$value;
+				break;
+			case 'biebboek':
+				$this->biebboek=$value;
 				break;
 			default:
 				throw new Exception('Veld ['.$key.'] is niet toegestaan Boek::setValue()');
@@ -197,6 +220,7 @@ class Boek{
 			".$where.";";
 		$result=$db->query($qEigenaar);
 
+		$return = false;
 		if($db->numRows($result)>0){
 			while($lener=$db->next($result)){
 				if($lener['eigenaar_uid']==Loginlid::instance()->getUid()){
@@ -227,8 +251,6 @@ class Boek{
 			$this->error.= mysql_error();
 			return false;
 		}
-		
-		
 	}
 	/*
 	 * Slaat het object Boek op
@@ -255,7 +277,12 @@ class Boek{
 		if($db->query($qSave)){
 			//id ook opslaan in object Boek.
 			$this->id=$db->insert_id();
-			return true;
+			if($this->biebboek=='ja'){
+				$eigenaar = 'x222';//C.S.R.Bieb is eigenaar
+			}else{
+				$eigenaar = Loginlid::instance()->getUid();
+			}
+			return $this->addExemplaar($eigenaar);
 		}
 		$this->error.='Fout in query, mysql gaf terug: '.mysql_error().' Boek::save()';
 		return false;
@@ -265,26 +292,55 @@ class Boek{
 	/*
 	 * Opslaan van waarde van een bewerkbaar veld 
 	 */
-	public function saveProperty($key, $value){
-		$allowedkeys = array('titel', 'auteur_id', 'categorie_id', 'uitgavejaar', 'uitgeverij', 'paginas', 'taal', 'isbn', 'code');
-		if(in_array($key, $allowedkeys)){
-			$db=MySql::instance();
-			if(in_array(array('auteur_id', 'categorie_id', 'uitgavejaar', 'paginas'))){
-				$value=(int)$value;
-			}else{
-				$value=$db->escape($value);
-			}
-			$qSave="
-				UPDATE biebboek SET
-					.$key.= '".$value."',
-				WHERE id= ".$this->getId()."
-				LIMIT 1;";
-			if($db->query($qSave)){
-				return true;
-			}
-			$this->error.='Fout in query, mysql gaf terug: '.mysql_error().' Boek::saveProperty()';
-			return false;
+	public function saveProperty($entry){
+		$db=MySql::instance();
+		$key = $entry;//op een enkele uitzondering na
+		switch($entry){
+			case 'auteur':
+				//eerst auteur opslaan. 
+				$this->getAuteur()->save();
+				$value = (int)$this->getAuteur()->getId();
+				$key = 'auteur_id';
+				break;
+			case 'rubriek':
+				$value = (int)$this->getRubriek()->getId();
+				$key = 'categorie_id';
+				break;
+			case 'titel':
+				$value = "'".$db->escape($this->getTitel())."'";
+				break;
+			case 'uitgavejaar':
+				$value = (int)$this->getUitgavejaar();
+				break;
+			case 'uitgeverij':
+				$value = "'".$db->escape($this->getUitgeverij())."'";
+				break;
+			case 'paginas':
+				$value = (int)$this->getPaginas();
+				break;
+			case 'taal':
+				$value = "'".$db->escape($this->getTaal())."'";
+				break;
+			case 'isbn':
+				$value = "'".$db->escape($this->getISBN())."'";
+				break;
+			case 'code':
+				$value = "'".$db->escape($this->getCode())."'";
+				break;
+			default:
+				$this->error.='Veld ['.$entry.'] is niet toegestaan Boek::saveProperty()';
+				return false;
 		}
+
+		$qSave="
+			UPDATE biebboek SET
+				".$key."= ".$value."
+			WHERE id= ".$this->getId()."
+			LIMIT 1;";
+		if($db->query($qSave)){
+			return true;
+		}
+		$this->error.='Fout in query, mysql gaf terug: '.mysql_error().' Boek::saveProperty()';
 		return false;
 	}
 	/*
@@ -626,6 +682,9 @@ class Boek{
 			$nieuwboekform[]=new IntField('uitgavejaar', $this->getUitgavejaar(), 'Uitgavejaar',2100,0);
 			$nieuwboekform[]=new SelectField('rubriek', $this->getRubriek()->getId(), 'Rubriek',Rubriek::getAllRubrieken($samenvoegen=true,$short=true));
 			$nieuwboekform[]=new CodeField('code', $this->getCode(), 'Biebcode');
+			if($this->isBASFCie()){
+				$nieuwboekform[]=new SelectField('biebboek', $this->biebboek, 'Is een biebboek?', array('ja'=>'C.S.R. boek', 'nee'=>'Eigen boek'));
+			}
 
 			$this->nieuwboekform=$nieuwboekform;
 		}
@@ -705,96 +764,80 @@ class Boek{
 		return false;
 	}
 
-	/***************************************
+	/******************************************
 	 * methodes voor een javascript formulier *
-	 ***************************************/
-
-	public function validField($id,$waarde){
-		switch ($key) {
-			//integers
-			case 'uitgavejaar':
-			case 'paginas':
-			//objecten
-			case 'auteur':
-			case 'categorie':
-			//strings
-			case 'titel':
-				$this->isMaxlen($waarde,200);
-				break;
-			case 'uitgeverij':
-				$this->isMaxlen($waarde,100);
-				break;
-			case 'taal':
-				$this->isMaxlen($waarde,25);
-				break;
-			case 'isbn':
-				$this->isMaxlen($waarde,15);
-				break;
-			case 'code':
-				$this->isMaxlen($waarde,10);
-				break;
-			default:
-				throw new Exception('Veld ['.$key.'] is niet toegestaan Boek::saveField()');
-		}
-	}
-	private function isMaxlen($value,$max){
-		if(mb_strlen($value)>$max){
-			$this->error='Maximaal '.$max.' karakters toegestaan.';
-			return false;
-		}
-		return true;
-	}
-
-	public function saveField($id,$waarde){
-		switch ($key) {
-			//integers
-			case 'uitgavejaar':
-			case 'paginas':
-			//objecten
-			case 'auteur':
-			case 'categorie':
-			//strings
-			case 'titel':
-				if(mb_strlen($this->getValue())>$this->max_len){
-					$this->error='Maximaal '.$this->max_len.' karakters toegestaan.';
-					return false;
-				}
-			case 'uitgeverij':
-			case 'taal':
-			case 'code':
-			case 'isbn':
-		
-				break;
-			default:
-				throw new Exception('Veld ['.$key.'] is niet toegestaan Boek::saveField()');
-		}
-		$query = "
-		UPDATE biebboek SET
-			op= '".$op."',
-			functie= '".$db->escape($functie)."',
-			prioriteit= ".$prioriteit.",
-			moment='".getDateTime()."'
-		WHERE id= ".$this->getId()." AND uid= '".$uid."'
-		LIMIT 1;";
-	}
+	 ******************************************/
 
 	public function assignAjaxFieldsForm(){
-		//Iedereen die bieb mag bekijken mag nieuwe boeken toevoegen
-		if($this->magBewerken){
-			$form[]=new RequiredInputAjaxField('titel', $this->getTitel(), 'Titel', 200);
-			$form[]=new IntAjaxField('paginas', $this->getPaginas() , "Pagina's", 10000, 0);
-			$form[]=new SuggestInputASField('taal', $this->getTaal(), 'Taal', 25, Catalogus::getTalen());
-			$form[]=new InputAjaxField('isbn', $this->getISBN(), 'ISBN-nummer',15);
-			$form[]=new InputAjaxField('uitgeverij', $this->getUitgeverij(), 'Uitgeverij',100);
-			$form[]=new IntAjaxField('uitgavejaar', $this->getUitgavejaar(), 'Uitgavejaar',4);
-			$form[]=new SelectAjaxField('rubriek', $this->getRubriek(), 'Rubriek',Rubriek::getAllRubrieken($samenvoegen=true));
-			$form[]=new InputAjaxField('code', '000.ach', 'Biebcode',10);
+		//Iedereen die bieb mag bekijken mag nieuwe boeken bewerken TODO
+		if($this->isEigenaar()){
+			$editablefieldsform['titel']=new RequiredBiebSuggestInputAjaxField('titel', $this->getTitel(), 'Boek', 200,Catalogus::getAllValuesOfProperty('titel'));
+			$editablefieldsform['auteur']=new SuggestInputAjaxField('auteur', $this->getAuteur()->getNaam(),'Auteur',100, Auteur::getAllAuteurs($short=true));
+			$editablefieldsform['paginas']=new IntAjaxField('paginas', $this->getPaginas() , "Pagina's", 10000, 0);
+			$editablefieldsform['taal']=new SuggestInputAjaxField('taal', $this->getTaal(), 'Taal', 25, Catalogus::getAllValuesOfProperty('taal'));
+			$editablefieldsform['isbn']=new BiebSuggestInputAjaxField('isbn', $this->getISBN(), 'ISBN-nummer',15, Catalogus::getAllValuesOfProperty('isbn'));
+			$editablefieldsform['uitgeverij']=new SuggestInputAjaxField('uitgeverij', $this->getUitgeverij(), 'Uitgeverij', 100, Catalogus::getAllValuesOfProperty('uitgeverij'));
+			$editablefieldsform['uitgavejaar']=new IntAjaxField('uitgavejaar', $this->getUitgavejaar(), 'Uitgavejaar',2100,0);
+			$editablefieldsform['rubriek']=new SelectAjaxField('rubriek', $this->getRubriek()->getId(), 'Rubriek',Rubriek::getAllRubrieken($samenvoegen=true,$short=true));
+			$editablefieldsform['code']=new CodeAjaxField('code', $this->getCode(), 'Biebcode');
+		}else{
+			$editablefieldsform['titel']=new NonEditableAjaxField('titel', $this->getTitel(), 'Boek');
+			$editablefieldsform['auteur']=new NonEditableAjaxField('auteur', $this->getAuteur()->getNaam(),'Auteur');
+			$editablefieldsform['paginas']=new NonEditableAjaxField('paginas', $this->getPaginas() , "Pagina's");
+			$editablefieldsform['taal']=new NonEditableAjaxField('taal', $this->getTaal(), 'Taal');
+			$editablefieldsform['isbn']=new NonEditableAjaxField('isbn', $this->getISBN(), 'ISBN-nummer');
+			$editablefieldsform['uitgeverij']=new NonEditableAjaxField('uitgeverij', $this->getUitgeverij(), 'Uitgeverij');
+			$editablefieldsform['uitgavejaar']=new NonEditableAjaxField('uitgavejaar', $this->getUitgavejaar(), 'Uitgavejaar');
+			$editablefieldsform['rubriek']=new NonEditableAjaxField('rubriek', $this->getRubriek()->getRubrieken(), 'Rubriek');
+			$editablefieldsform['code']=new NonEditableAjaxField('code', $this->getCode(), 'Biebcode');
 		}
-		$this->form=$form;
+		$this->editablefieldsform=$editablefieldsform;
 	}
-
-	public function assignOpmerkingFieldsForm(){
-		
+	/*
+	 * Geeft object terug
+	 */
+	public function getField($entry){ 
+		return $this->editablefieldsform[$entry];
+	}
+	
+	/*
+	 * Controleren of veld is gePOST
+	 */
+	public function isPostedField($entry){
+		$posted=false;
+		$field = $this->getField($entry);
+		if($field instanceof FormAjaxField AND $field->isPosted()){
+			$posted=true;
+		}
+		return $posted;
+	}
+	/*
+	 * Controleren of de veld correct is
+	 */
+	public function validField($entry){
+		//alle veldjes langslopen, en kijken of ze valideren.
+		$valid=true;
+		$field = $this->getField($entry);
+		//we checken alleen de formfields, niet de comments enzo.
+		if($field instanceof FormAjaxField AND !$field->valid()){
+			$valid=false;
+		}
+		return $valid;
+	}
+	/*
+	 * Slaat het veld op
+	 */
+	public function saveField($entry){
+		//object Boek vullen
+		$field = $this->getField($entry);
+		if($field instanceof FormAjaxField){
+			$this->setValue($field->getName(), $field->getValue());
+		}
+		//object Boek opslaan
+		if($this->saveProperty($entry)){ //TODO
+			return true;
+		}
+		return false;
 	}
 }
 ?>

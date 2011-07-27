@@ -3,10 +3,10 @@
  */
 jQuery(document).ready(function($) {
 	//tabellen naar zebra converteren.
-	$("#boeken tr:odd").addClass('odd');
+	jQuery("#boeken tr:odd").addClass('odd');
 	
 	//hippe sorteerbare tabel fixen.
-	$("#boekencatalogus").dataTable({
+	jQuery("#boekencatalogus").dataTable({
 		"oLanguage": {
 			"sZeroRecords": "Geen boeken gevonden",
 			"sInfoEmtpy": "Geen boeken gevonden",
@@ -42,38 +42,41 @@ jQuery(document).ready(function($) {
 function observeClick(){
 	jQuery(".bewerk").click(function(){
 		var ID=jQuery(this).attr('id');
-		jQuery("#waarde_"+ID).hide();
-		jQuery("#waarde_input_"+ID).show();
+		jQuery("#"+ID+" span").hide();
+		jQuery("#"+ID+" input,#"+ID+" select").show();
 	}).change(function(){
 		var ID=jQuery(this).attr('id');
 		var boekid=jQuery(".boek").attr('id');
-		var waarde=jQuery("#waarde_input_"+ID).val();
-		var dataString = 'id='+ID+'&waarde='+ waarde;
-		jQuery("#waarde_"+ID).html('Laad...'); // Loading
+		var waarde=jQuery("#"+ID+" input,#"+ID+" select").val();
+		var dataString = 'id='+ID+'&'+ID+'='+ waarde;
+		jQuery("#"+ID+" span").html('Laad...'); // Loading
 
 		jQuery.ajax({
 			type: "POST",
-			url: '/communicatie/bewerkboek/'+ boekid,
+			url: '/communicatie/bibliotheek/bewerkboek/'+ boekid,
 			data: dataString,
 			cache: false,
 			success: function(result){
-				jQuery("#waarde_"+ID).html(result);
+				jQuery("#"+ID+" span").html(result);
 			}
 		});
 	});
 
 	// Outside click action
 	jQuery(document).mouseup(function(object){
-		if(!jQuery(object.target).hasClass("editbox")){ //in editbox mag je klikken
+		if(!(jQuery(object.target).hasClass("editbox") || jQuery(object.target).attr('id').substring(0,6)=='tat_td')){ //in editbox mag je klikken
 			jQuery(".editbox").hide();
+			jQuery('#[name^="tat_td"]').hide();
 			jQuery(".text").show();
 		}
 	});
 
 };
 
+
+
 function biebCodeVakvuller(){
-	$(".knop.genereer").click(function (event) {
+	jQuery(".knop.genereer").click(function (event) {
 		event.preventDefault();
 		jQuery("#field_code").val(jQuery("#field_rubriek").val() + '.' + jQuery("#field_auteur").val().substring(0,3).toLowerCase());
 	});
