@@ -42,14 +42,14 @@ jQuery(document).ready(function($) {
 function observeClick(){
 	jQuery(".bewerk").click(function(){
 		var ID=jQuery(this).attr('id');
-		jQuery("#"+ID+" span").hide();
+		jQuery("#"+ID+" span.text").hide();
 		jQuery("#"+ID+" input,#"+ID+" select").show();
 	}).change(function(){
 		var ID=jQuery(this).attr('id');
 		var boekid=jQuery(".boek").attr('id');
 		var waarde=jQuery("#"+ID+" input,#"+ID+" select").val();
 		var dataString = 'id='+ID+'&'+ID+'='+ waarde;
-		jQuery("#"+ID+" span").html('Laad...'); // Loading
+		jQuery("#"+ID+" span.text").html('Laad...'); // Loading
 
 		jQuery.ajax({
 			type: "POST",
@@ -57,7 +57,7 @@ function observeClick(){
 			data: dataString,
 			cache: false,
 			success: function(result){
-				jQuery("#"+ID+" span").html(result);
+				jQuery("#"+ID+" span.text").html(result);
 			}
 		});
 	});
