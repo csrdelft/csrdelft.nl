@@ -14,6 +14,7 @@ require_once 'bibliotheek/bibliotheekcontent.class.php';
 class BibliotheekController extends Controller{
 
 	public $boek;
+	private $zijkolom=true;
 
 	public $baseurl='/communicatie/bibliotheek/';
 
@@ -53,10 +54,15 @@ class BibliotheekController extends Controller{
 		$this->performAction();
 	}
 
+	public function getZijkolom(){
+		return $this->zijkolom;
+	}
+
 	/*
 	 * Catalogus tonen
 	 */
 	protected function action_default(){
+		$this->zijkolom = false;
 		$this->content=new BibliotheekCatalogusContent();
 	}
 
@@ -260,7 +266,7 @@ class BibliotheekController extends Controller{
 	 */
 	public function action_verwijderexemplaar(){
 		$this->loadBoek();
-		if($this->hasParam(2) AND ($this->boek->isEigenaar() OR $this->magVerwijderen())){
+		if($this->hasParam(2) AND $this->boek->isEigenaar($this->getParam(2))){
 			if($this->boek->verwijderExemplaar($this->getParam(2))){
 				$melding='Exemplaar met succes verwijderd.';
 			}else{

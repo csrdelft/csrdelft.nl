@@ -1,5 +1,5 @@
 
-
+/* catalogus */
 .boeken{
 	width: 100%;
 	clear: both;
@@ -31,8 +31,10 @@ tbody a.toevoegen{
 	padding: 2px 3px;
 }
 
-.boeken tr td a.filenotfound{ text-decoration: none; color: #888;}
-.boeken tr td a.verwijderen, .boeken tr td a.bewerken{ float: right; margin-left: 3px;}
+.boeken tr td a.verwijderen, .boeken tr td a.bewerken{ 
+	float: right; 
+	margin-left: 3px;
+}
 
 .boeken tr.odd td{
 	background-color: #efefef;
@@ -80,16 +82,16 @@ div.boek {
 	float: left;
 	width: 620px;
 }
-
+/*knoppen in zijkolom rechts*/
 .controls{
 	float: right;
-	width: 120px;
+	width: 130px;
 }
 .boekacties{
 	
 }
 /* bewerkbare velden
- * bewerken van opmerking/functie */
+ * bewerken van boekinfo */
 .editbox{
 	display:none
 }
@@ -100,7 +102,6 @@ div.boek {
 	width: 481px
 }
 .bewerk{
-	/*background:url(http://plaetjes.csrdelft.nl/knopjes/bewerken.png) right no-repeat;*/
 	padding-right:18px!important;
 }
 .bewerk:hover{
@@ -110,13 +111,28 @@ div.boek {
 .melding {
 	color:red;
 }
-
 .suggestie{
 	color:grey;
 	font-style: italic;
 }
+/* bewerkbare velden */
+.boek .veld{
+	clear: left;
+}
+.boek .header span, .boek .header label{
+	font-size: 1.6em !important;
+	margin-bottom: 0.2em;
+	font-weight: bold;
+	line-height: normal;
+}
+.boek .header label{
+	margin-left: 35px;
+}
+.boek .header{
+	margin: 20px 0px 20px 0px;
+}
 /*
- * Formulier voor nieuw boek of boekbeschrijving
+ * Formulier voor nieuw boek en die voor boekbeschrijving bestaand boek
  */
 #boekaddForm label{
 	width: 150px;
@@ -190,22 +206,7 @@ div.boek {
 }
 li.verborgen{ display: none; }
 
-/* bewerkbare velden */
-.boek .veld{
-	clear: left;
-}
-.boek .header span, .boek .header label{
-	font-size: 1.6em !important;
-	margin-bottom: 0.2em;
-	font-weight: bold;
-	line-height: normal;
-}
-.boek .header label{
-	margin-left: 35px;
-}
-.boek .header{
-	margin: 20px 0px 20px 0px;
-}
+
 /* Exemplaren */
 .exemplaren .regel{
 	margin-bottom: 10px;

@@ -14,6 +14,9 @@ if(isset($_GET['querystring'])){
 }
 
 $pagina=new csrdelft($biebControl->getContent());
+if(!$biebControl->getZijkolom()){
+	$pagina->setZijkolom(false); 
+}
 $pagina->addStylesheet('bibliotheek.css');
 $pagina->addStylesheet('js/datatables/css/datatables_basic.css');
 
