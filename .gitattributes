@@ -623,6 +623,7 @@ lib/Zend/Version.php -text
 lib/agenda/agenda.class.php -text
 lib/agenda/agendacontent.class.php -text
 lib/agenda/agendacontroller.class.php -text
+lib/ajaxformulier.class.php -text
 lib/bibliotheek/auteur.class.php -text
 lib/bibliotheek/bibliotheekcontent.class.php -text
 lib/bibliotheek/bibliotheekcontroller.class.php -text
