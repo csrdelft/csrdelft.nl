@@ -40,7 +40,8 @@ class BibliotheekController extends Controller{
 			$allow=array('default', 'boek', 'nieuwboek', 'bewerkboek',
 						'addbeschrijving', 'verwijderbeschrijving', 'bewerkbeschrijving',
 						'addexemplaar', 'verwijderexemplaar',
-						'exemplaarlenen','exemplaarteruggegeven','exemplaarterugontvangen','exemplaarvermist','exemplaargevonden');
+						'exemplaarlenen','exemplaarteruggegeven','exemplaarterugontvangen','exemplaarvermist','exemplaargevonden',
+						'beheer');
 			if(LoginLid::instance()->hasPermission('P_BIEB_MOD','groep:BASFCie')){
 				$allow=array_merge($allow, array('verwijderboek'));
 			}
@@ -63,7 +64,25 @@ class BibliotheekController extends Controller{
 	 */
 	protected function action_default(){
 		$this->zijkolom = false;
-		$this->content=new BibliotheekCatalogusContent();
+		$filter = 'csr';
+		if($this->hasParam(0)){
+			$filter=$this->getParam(0);
+		}
+		$catalogus = new Catalogus($filter);
+		$this->content=new BibliotheekCatalogusContent($catalogus);
+	}
+
+	/*
+	 * Beheerlijsten tonen
+	 */
+	protected function action_beheer(){
+		$this->zijkolom = false;
+		$filter = 'csr';
+		if($this->hasParam(1)){
+			$filter=$this->getParam(1);
+		}
+		$catalogus = new Catalogus($filter);
+		$this->content=new BibliotheekBeheerContent($catalogus);
 	}
 
 	/*

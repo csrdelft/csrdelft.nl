@@ -3,13 +3,20 @@
  *}
 
 <div class="foutje">{$melding}</div>
-<a href="/communicatie/bibliotheek/" title="Naar de catalogus">Catalogus</a>
+<ul class="horizontal">
+	<li>
+		<a href="/communicatie/bibliotheek/" title="Naar de catalogus">Catalogus</a>
+	</li>
+	<li>
+		<a href="/communicatie/bibliotheek/beheer" title="Naar de beheeroverzicht">Beheer</a>
+	</li>
+</ul>
+
 {if $boek->magBekijken()}
 	<div class="controls">
 		<a class="knop" href="/communicatie/bibliotheek/nieuwboek">{icon get="book_add"} Toevoegen</a>
 	</div>
 {/if}
-<br />
 
 {* nieuw boek formulier *}
 {if $boek->getId()==0}

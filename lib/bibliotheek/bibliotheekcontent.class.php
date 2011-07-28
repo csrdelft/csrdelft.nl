@@ -13,8 +13,8 @@ class BibliotheekCatalogusContent extends SimpleHtml{
 
 	private $catalogus ;
 
-	public function __construct(){
-		$this->catalogus = new Catalogus();
+	public function __construct(Catalogus $catalogus){
+		$this->catalogus = $catalogus;
 	}
 
 	public function getTitel(){
@@ -31,6 +31,29 @@ class BibliotheekCatalogusContent extends SimpleHtml{
 
 }
 
+/*
+ * Catalogus
+ */
+class BibliotheekBeheerContent extends SimpleHtml{
+
+	private $catalogus ;
+
+	public function __construct(Catalogus $catalogus){
+		$this->catalogus = $catalogus;
+	}
+	
+	public function getTitel(){
+		return 'Bibliotheek | Beheerlijsten';
+	}
+	public function view(){
+		$smarty=new Smarty_csr();
+		$smarty->assign('melding', $this->getMelding());
+		$smarty->assign('catalogus', $this->catalogus);
+		$smarty->assign('action', $this->action);
+
+		$smarty->display('bibliotheek/beheer.tpl');
+	}
+}
 /*
  * Boek weergeven
  */

@@ -1,6 +1,14 @@
 {*
  * Toon de catalogus
  *}
+<ul class="horizontal">
+	<li class="active">
+		<a href="/communicatie/bibliotheek/" title="Naar de catalogus">Catalogus</a>
+	</li>
+	<li>
+		<a href="/communicatie/bibliotheek/beheer" title="Naar de beheeroverzicht">Beheer</a>
+	</li>
+</ul>
 {if $loginlid->hasPermission('P_BIEB_READ')}
 	<div class="controls">
 		<a class="knop" href="/communicatie/bibliotheek/nieuwboek">{icon get="book_add"} Toevoegen</a>
@@ -9,10 +17,13 @@
 
 <h1>C.S.R. Bibliotheekcatalogus</h1>
 <div class="foutje">{$melding}</div>
+<div id="filters">
+	Selecteer: <a {if $catalogus->getFilter()=='alle'}class="actief"{/if} href="/communicatie/bibliotheek/alle">Alle boeken</a> - 
+	<a {if $catalogus->getFilter()=='csr'}class="actief"{/if} href="/communicatie/bibliotheek/csr">C.S.R. boeken</a> - 
+	<a {if $catalogus->getFilter()=='leden'}class="actief"{/if} href="/communicatie/bibliotheek/leden">Leden boeken</a>
+</div>
 
-{if !$catalogus->count()>0}
-	Geen boeken.
-{else}
+
 <table id="boekencatalogus" class="boeken">
 	<thead>
 		<tr><th>Titel</th><th>Auteur</th><th>Rubriek</th><th>Code</th><th>ISBN</th></tr>
@@ -21,7 +32,7 @@
 	{foreach from=$catalogus->getBoeken() item=boek}
 		<tr class="document">
 			<td>
-				<a href="/communicatie/bibliotheek/boek/{$boek->getId()}" title="Boek bekijken">
+				<span title="{$boek->getStatus()} boek" class="indicator {$boek->getStatus()}">•</span><a href="/communicatie/bibliotheek/boek/{$boek->getId()}" title="Boek bekijken">
 					{$boek->getTitel()|escape:'html'|wordwrap:60:'<br />'}
 				</a>
 				{*{if $boek->magVerwijderen()}
@@ -40,5 +51,4 @@
 	</tfoot>
 </table>
 
-{/if}
 

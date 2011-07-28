@@ -23,6 +23,7 @@ class Boek{
 	private $isbn;
 	private $code;
 
+	private $status;
 	private $biebboek = 'nee';
 	private $error;
 	private $nieuwboekform;
@@ -111,8 +112,9 @@ class Boek{
 				return 'entry "'.$entry.'" is niet toegestaan. Boek::getProperty()';
 		}
 	}
-	public function getEigenaar(){
-		return 'x204';
+
+	public function getStatus(){
+		return $this->status;
 	}
 	public function getError(){
 		return $this->error;
@@ -151,6 +153,7 @@ class Boek{
 			case 'taal':
 			case 'code':
 			case 'isbn':
+			case 'status':
 				$this->$key=trim($value);
 				break;
 			case 'beschrijving':

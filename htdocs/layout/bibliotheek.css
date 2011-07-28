@@ -39,6 +39,11 @@ tbody a.toevoegen{
 .boeken tr.odd td{
 	background-color: #efefef;
 }
+h1{margin-top: 5px;}
+
+.boeken .indicator.beschikbaar{color:green;}
+.boeken .indicator.teruggegeven{color:orange;}
+.boeken .indicator.geen{color:red;}
 
 .paging_full_numbers .paginate_button {
     padding: 2px 5px;
@@ -73,10 +78,7 @@ tbody a.toevoegen{
 
 /* boek */
 .label,.boek label{ float: left; width: 75px; font-size: 9px; color: #999; margin:0px;}
-.boek .titel{ margin-left: 20px; padding-left: 15px; float: left; width: 75px; color: #999; }
-.boek .titelwaarde{ float:left; width: 489px;}
 .blok { margin-bottom: 20px; clear: left; }
-.boek .header { margin-bottom: 0px;}
 .gegevens { margin-left: 20px; padding-left: 15px; border-left: 1px solid #0a338d; }
 div.boek { 
 	float: left;
@@ -85,10 +87,10 @@ div.boek {
 /*knoppen in zijkolom rechts*/
 .controls{
 	float: right;
-	width: 130px;
 }
 .boekacties{
-	
+	width: 125px;
+
 }
 /* bewerkbare velden
  * bewerken van boekinfo */
@@ -129,7 +131,7 @@ div.boek {
 	margin-left: 35px;
 }
 .boek .header{
-	margin: 20px 0px 20px 0px;
+	margin: 5px 0px 20px 0px;
 }
 /*
  * Formulier voor nieuw boek en die voor boekbeschrijving bestaand boek
@@ -251,4 +253,9 @@ div.beschrijvingen{
 	height: 2px;
 	margin: 0px; padding: 0px; border: 0px;
 	background-color: lightgrey;
+}
+
+/* beheerpagina  */
+#filters .actief{
+	font-weight: bold;
 }

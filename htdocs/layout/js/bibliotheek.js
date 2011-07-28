@@ -17,7 +17,7 @@ jQuery(document).ready(function($) {
 				"sNext": "Volgende",
 				"sLast": "Laatste"}
 		},
-		"iDisplayLength": 40,
+		"iDisplayLength": 30,
 		"bInfo": false,
 		"bLengthChange": false,
 		"aaSorting": [[0, 'asc']],
@@ -34,6 +34,40 @@ jQuery(document).ready(function($) {
 		]
 	});
 	
+	//hippe sorteerbare tabel fixen.
+	jQuery("#boekenbeheerlijsten").dataTable({
+		"oLanguage": {
+			"sZeroRecords": "Geen boeken gevonden",
+			"sInfoEmtpy": "Geen boeken gevonden",
+			"sSearch": "Zoeken:",
+			oPaginate:{
+				"sFirst": "Eerste",
+				"sPrevious": "Vorige",
+				"sNext": "Volgende",
+				"sLast": "Laatste"}
+		},
+		"iDisplayLength": 30,
+		"bInfo": false,
+		"bLengthChange": false,
+		"aaSorting": [[0, 'asc']],
+		"sPaginationType": "full_numbers",
+		"aoColumns": [
+			{'sType': 'html'}, // titel
+			{'sType': 'html'}, // titel
+			{'sType': 'html'}, // auteur
+			{'sType': 'html'}, // rubriek
+			{'sType': 'html'}, // code
+			{'sType': 'html'}, // ISBN
+			{'sType': 'html'}, // Aantal beschrijvingen
+			{'sType': 'html'}, // eigenaars
+			{'sType': 'html'}, // lener
+			{'sType': 'html'} // status
+		],
+		"aoColumnDefs": [ 
+			{ "bVisible": false, "aTargets": [ 1, 2, 3] }
+		]
+	});
+
 	// velden bewerkbaar maken
 	observeClick();
 	biebCodeVakvuller();
