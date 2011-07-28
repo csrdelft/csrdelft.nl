@@ -77,11 +77,12 @@ function observeClick(){
 	jQuery(".bewerk").click(function(){
 		var ID=jQuery(this).attr('id');
 		jQuery("#"+ID+" span.text").hide();
-		jQuery("#"+ID+" input,#"+ID+" select").show();
+//		jQuery("#"+ID+" input,#"+ID+" select,#"+ID+" textarea,#"+ID+" div.textareaContainer").show();
+		jQuery("#"+ID+" .editbox").show();
 	}).change(function(){
 		var ID=jQuery(this).attr('id');
 		var boekid=jQuery(".boek").attr('id');
-		var waarde=jQuery("#"+ID+" input,#"+ID+" select").val();
+		var waarde=jQuery("#"+ID+" input,#"+ID+" select,#"+ID+" textarea").val();
 		var dataString = 'id='+ID+'&'+ID+'='+ waarde;
 		jQuery("#"+ID+" span.text").html('Laad...'); // Loading
 

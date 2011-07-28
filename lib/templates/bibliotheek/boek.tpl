@@ -49,9 +49,7 @@
 		</div>
 		<div class="blok gegevens">
 			{$boek->getField('rubriek')->view()}
-			{if $boek->isCSRboek()}
-				{$boek->getField('code')->view()}
-			{/if}
+			{$boek->getField('code')->view()}
 		</div>
 	</div>
 

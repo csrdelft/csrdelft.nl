@@ -133,6 +133,9 @@ div.boek {
 .boek .header{
 	margin: 5px 0px 20px 0px;
 }
+.boek input#field_code{
+	width: 75px;
+}
 /*
  * Formulier voor nieuw boek en die voor boekbeschrijving bestaand boek
  */
@@ -217,6 +220,9 @@ li.verborgen{ display: none; }
 .exemplaren .label{
 	color: white;
 	float: left;
+}
+.exemplaren .regel .label{
+	height: 50px;
 }
 .exemplaren .regel .label img.pasfoto{
 	height: 40px;

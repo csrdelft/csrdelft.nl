@@ -106,7 +106,8 @@ class TextAjaxField extends FormAjaxField{
 		echo $this->getDiv();
 		echo $this->getLabel();
 		echo $this->getError();
-		echo '<textarea id="field_'.$this->name.'" name="'.$this->name.'" class="regular" rows="5">'.htmlspecialchars($this->value).'</textarea>';
+		echo '<span class="text">'.htmlspecialchars($this->value).'&nbsp;</span>';
+		echo '<textarea id="field_'.$this->name.'" name="'.$this->name.'" class="editbox regular" rows="5">'.htmlspecialchars($this->value).'</textarea>';
 
 		echo '</div>';
 	}
@@ -126,7 +127,8 @@ class PreviewTextAjaxField extends FormAjaxField{
 		echo $this->getDiv();
 		echo $this->getLabel();
 		echo $this->getError();
-		echo '	<div class="textareaContainer">';
+		echo '	<span class="text">'.htmlspecialchars($this->value).'&nbsp;</span>';
+		echo '	<div class="editbox textareaContainer">';
 		echo '		<div id="berichtPreviewContainer" class="previewContainer"><div id="berichtPreview" class="preview"></div></div>';
 		echo '		<textarea id="field_'.$this->name.'" name="'.$this->name.'" class="regular" rows="5">'.htmlspecialchars($this->value).'</textarea>';
 		echo '		<a style="float: right;" class="handje knop" onclick="toggleDiv(\'ubbhulpverhaal\')" title="Opmaakhulp weergeven">UBB</a>';
@@ -214,7 +216,7 @@ class RequiredBiebSuggestInputAjaxField extends BiebSuggestInputAjaxField{
 		return $this->error=='';
 	}
 }
-/*
+
 class UidAjaxField extends InputAjaxField{
 	public function __construct($name, $value, $description){
 		parent::__construct($name, $value, $description, 4);
@@ -232,13 +234,14 @@ class UidAjaxField extends InputAjaxField{
 		echo $this->getDiv();
 		echo $this->getLabel();
 		echo $this->getError();
-		echo '<input type="text" id="field_'.$this->name.'" name="'.$this->name.'" class="uid" value="'.htmlspecialchars($this->value).'" ';
+		echo '<span class="text">'.htmlspecialchars($this->value).'&nbsp;</span>';
+		echo '<input type="text" id="field_'.$this->name.'" name="'.$this->name.'" class="editbox uid" value="'.htmlspecialchars($this->value).'" ';
 		echo ' autocomplete="off" onKeyUp="uidPreview(\''.$this->name.'\')" maxlength="4" />';
-		echo '<div class="uidPreview" id="preview_'.$this->name.'"></div>';
+		echo '<div class="editbox uidPreview" id="preview_'.$this->name.'"></div>';
 		echo '<script>uidPreview(\''.$this->name.'\');</script>';
 		echo '</div>';
 	}
-}*/
+}
 class CodeAjaxField extends InputAjaxField{
 	public function __construct($name, $value, $description){
 		parent::__construct($name, $value, $description, 7);
@@ -256,7 +259,7 @@ class CodeAjaxField extends InputAjaxField{
 		echo $this->getDiv();
 		echo $this->getLabel();
 		echo $this->getError();
-		echo '<span class="text">'.htmlspecialchars($this->value).'</span>';
+		echo '<span class="text">'.htmlspecialchars($this->value).'&nbsp;</span>';
 		echo '<input type="text" id="field_'.$this->name.'" name="'.$this->name.'" class="editbox code" value="'.htmlspecialchars($this->value).'" style="display: none;" ';
 		echo ' autocomplete="off" maxlength="7" />';
 		echo '<a class="editbox knop genereer" title="Biebcode invullen">Genereer</a>';
@@ -495,7 +498,7 @@ class VerticaleAjaxField extends SelectAjaxField{
 	}
 }
 
-/*
+
 class DatumAjaxField extends FormAjaxField{
 	public $maxyear;
 	
@@ -538,7 +541,8 @@ class DatumAjaxField extends FormAjaxField{
 			$mounths[]=0;
 			$days[]=0;
 		}
-		echo '<select id="field_'.$this->name.'" name="'.$this->name.'_jaar" />';
+		echo '<span class="text">'.htmlspecialchars($this->getValue()).'</span>';
+		echo '<select id="field_'.$this->name.'" class="editbox" name="'.$this->name.'_jaar" />';
 		foreach($years as $value){
 			echo '<option value="'.$value.'"';
 			if($value==substr($this->value, 0,4)){
@@ -548,7 +552,7 @@ class DatumAjaxField extends FormAjaxField{
 		}
 		echo '</select>&nbsp;';
 		
-		echo '<select id="field_'.$this->name.'" name="'.$this->name.'_maand" />';
+		echo '<select id="field_'.$this->name.'" class="editbox" name="'.$this->name.'_maand" />';
 		foreach($mounths as $value){
 			$value=sprintf('%02d', $value);
 			echo '<option value="'.$value.'"';
@@ -560,7 +564,7 @@ class DatumAjaxField extends FormAjaxField{
 		}
 		echo '</select>&nbsp;';
 		
-		echo '<select id="field_'.$this->name.'" name="'.$this->name.'_dag" />';
+		echo '<select id="field_'.$this->name.'" class="editbox" name="'.$this->name.'_dag" />';
 		foreach($days as $value){
 			$value=sprintf('%02d', $value);
 			echo '<option value="'.$value.'"';
@@ -572,7 +576,7 @@ class DatumAjaxField extends FormAjaxField{
 		echo '</select>';
 		echo '</div>';
 	}
-}*/
+}
 
 /*
  * Commentaardingen voor formulieren
