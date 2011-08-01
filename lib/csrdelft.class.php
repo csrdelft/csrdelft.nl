@@ -39,12 +39,15 @@ class csrdelft extends SimpleHTML {
 		if($this->_prefix=='' AND isset($_SESSION['pauper'])){
 			$this->_prefix='pauper_';
 		}
-
+		if($this->_prefix=='' AND OWEE){
+			$this->_prefix='owee_';
+		}
 		//nieuw menu-object aanmaken...
 		require_once('menu.class.php');
 		$this->_menu=new menu($this->_prefix, $menuid);
 
 		//Stylesheets en scripts die we altijd gebruiken
+		
 		if($this->_prefix=='pauper_'){
 			$this->addStylesheet('pauper.css');
 		}else{
@@ -58,6 +61,9 @@ class csrdelft extends SimpleHTML {
 				$this->addScript('prototype.js');
 				$this->addScript('sneltoetsen.js');
 			}
+		}
+		if($this->_prefix=='owee_'){
+			$this->addStylesheet('owee.css');
 		}
 
 		//Roze webstek
