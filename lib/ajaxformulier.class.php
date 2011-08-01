@@ -541,7 +541,7 @@ class DatumAjaxField extends FormAjaxField{
 			$mounths[]=0;
 			$days[]=0;
 		}
-		echo '<span class="text">'.htmlspecialchars($this->getValue()).'</span>';
+		echo '<span class="text">'.htmlspecialchars($this->value).'</span>';
 		echo '<select id="field_'.$this->name.'" class="editbox" name="'.$this->name.'_jaar" />';
 		foreach($years as $value){
 			echo '<option value="'.$value.'"';

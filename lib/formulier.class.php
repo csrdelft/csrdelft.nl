@@ -110,7 +110,7 @@ class PreviewTextField extends FormField{
 		echo $this->getError();
 		echo '	<div class="textareaContainer">';
 		echo '		<div id="berichtPreviewContainer" class="previewContainer"><div id="berichtPreview" class="preview"></div></div>';
-		echo '		<textarea id="field_'.$this->name.'" name="'.$this->name.'" class="regular" rows="5">'.htmlspecialchars($this->value).'</textarea>';
+		echo '		<textarea id="field_'.$this->name.'" name="'.$this->name.'" class="regular" rows="8">'.htmlspecialchars($this->value).'</textarea>';
 		echo '		<a style="float: right;" class="handje knop" onclick="toggleDiv(\'ubbhulpverhaal\')" title="Opmaakhulp weergeven">UBB</a>';
 		echo '		<a style="float: right;" class="handje knop" onclick="vergrootTextarea(\'field_'.$this->name.'\', 10)" title="Vergroot het invoerveld"><strong>&uarr;&darr;</strong></a>';
 		echo '		<input type="button" value="voorbeeld" style="color: #777;" id="textformVoorbeeld" onclick="previewPost(\'field_'.$this->name.'\', \'berichtPreview\')"/>';

@@ -9,9 +9,13 @@
  class Rubriek{
 
 	private $id=0;
-	private $rubriek=array();
-	private $blaat;
-	
+	private $rubriek=array(); //de rubrieken
+
+	/*
+	 * constructor
+	 * @param $init	array met de rubrieken
+	 * 				int rubriekid
+	 */
 	public function __construct($init){
 		if(is_array($init)){
 			$this->rubriek=$init;
@@ -42,6 +46,18 @@
 	public function getRubrieken(){		return implode(" - ", $this->rubriek);}
 	public function getRubriek(){ 		return $this->rubriek[2];}
 
+	/*
+	 * geeft alle rubrieken
+	 * 
+	 * @param 	$samenvoegen 	true:geeft een string, 
+	 * 							false: raw array
+	 * 			$short		true:array with rubriekids as key
+	 * 						false: array with subarray('id'=> int, 'cat' => 'string')
+	 * @return	false&(true|false): array with subarrays('id'=> int , 'cat1'=> 'string1', 'cat2=> etc..)
+	 *			true&false: array met  id => 'cat - subcat - subsubcat'
+	 * 			true&true: array met  array('id'=> int, 'cat' => 'cat - subcat - subsubcat')
+	 * 			of een lege array
+	 */
 	public static function getAllRubrieken($samenvoegen=false,$short=false){
 		$db=MySql::instance();
 		$query="
@@ -73,6 +89,12 @@
 			return array();
 		}
 	}
+	/*
+	 * geeft alle rubriekids
+	 * 
+	 * @return	array met id's
+	 * 			of een lege array
+	 */
 	public static function getAllRubriekIds(){
 		$db=MySql::instance();
 		$query="

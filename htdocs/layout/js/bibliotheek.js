@@ -64,7 +64,7 @@ jQuery(document).ready(function($) {
 			{'sType': 'html'} // status
 		],
 		"aoColumnDefs": [ 
-			{ "bVisible": false, "aTargets": [ 1, 2, 3] }
+			{ "bVisible": false, "aTargets": [ 1, 2, 3, 5] }
 		]
 	});
 

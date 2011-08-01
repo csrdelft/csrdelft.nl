@@ -82,6 +82,11 @@
 	}
 	/*
 	 * heeft de auteur boeken in de catalogus?
+	 * 
+	 * @param 	$id auteurid 
+	 * 			of leeg: auteurid uit Boek halen
+	 * @return	true minstens 1 keer gevonden
+	 * 			false niet gevonden
 	 */
 	public function hasAuteurOtherBooks($id=null){
 		if($id===null){
@@ -101,6 +106,11 @@
 	}
 	/*
 	 * Verwijder auteur uit de database
+	 * 
+	 * @param 	$id auteurid
+	 * 			of leeg: auteurid uit Boek halen
+	 * @return	true gelukt
+	 * 			false mislukt
 	 */
 	protected function delete($id=null){
 		if($id===null){
@@ -116,7 +126,10 @@
 	}
 	/*
 	 * Zoekt naam bij een id in de database
-	 * Bij geen resultaat wordt een lege string geretourneerd
+	 * @param $id auteurid
+	 * 			of leeg: auteurid uit Boek halen 
+	 * @return	string auteursnaam
+	 * 			of lege string bij geen resultaat
 	 */
 	public function getNaamFromDb($id=null){
 		if($id===null){
@@ -138,7 +151,10 @@
 	}
 	/*
 	 * Zoekt naar exacte match van $naam
-	 * return: id or false
+	 * 
+	 * @param $naam 
+	 * @return: 	auteurid 
+	 * 				of false
 	 */
 	public function existingAuteurNaam($naam){
 		$db=MySql::instance();
@@ -157,6 +173,9 @@
 	}
 	/*
 	 * update gegevens in db
+	 * 
+	 * @return	true gelukt
+	 * 			false mislukt
 	 */
 	protected function updateDb(){
 		$db=MySql::instance();
@@ -174,6 +193,9 @@
 	}
 	/*
 	 * voegt auteur toe aan database
+	 * 
+	 * @return	true gelukt
+	 * 			false mislukt
 	 */
 	protected function insertDb(){
 		$db=MySql::instance();
@@ -192,7 +214,10 @@
 		}
 	}
 	/*
-	 * return array met alle auteurs in db
+	 * Geeft alle auteurs in db
+	 * 
+	 * @return 	array met alle namen alfabetisch gesorteerd
+	 * 			of lege array
 	 */
 	public static function getAllAuteurs(){
 		$db=MySql::instance();

@@ -14,7 +14,8 @@ if(isset($_GET['querystring'])){
 }
 
 $pagina=new csrdelft($biebControl->getContent());
-if(!$biebControl->getZijkolom()){
+//zijkolom kan uitgezet worden
+if(!$biebControl->hasZijkolom()){
 	$pagina->setZijkolom(false); 
 }
 $pagina->addStylesheet('bibliotheek.css');

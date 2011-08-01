@@ -15,12 +15,12 @@
 	</div>
 {/if}
 
-<h1>C.S.R. Bibliotheekcatalogus</h1>
+<h1>Catalogus van de C.S.R.-bibliotheek</h1>
 <div class="foutje">{$melding}</div>
 <div id="filters">
 	Selecteer: <a {if $catalogus->getFilter()=='alle'}class="actief"{/if} href="/communicatie/bibliotheek/alle">Alle boeken</a> - 
-	<a {if $catalogus->getFilter()=='csr'}class="actief"{/if} href="/communicatie/bibliotheek/csr">C.S.R. boeken</a> - 
-	<a {if $catalogus->getFilter()=='leden'}class="actief"{/if} href="/communicatie/bibliotheek/leden">Leden boeken</a>
+	<a {if $catalogus->getFilter()=='csr'}class="actief"{/if} href="/communicatie/bibliotheek/csr">C.S.R.-boeken</a> - 
+	<a {if $catalogus->getFilter()=='leden'}class="actief"{/if} href="/communicatie/bibliotheek/leden">Boeken van Leden</a>
 </div>
 
 
@@ -29,7 +29,7 @@
 		<tr><th>Titel</th><th>Auteur</th><th>Rubriek</th><th>Code</th><th>ISBN</th></tr>
 	</thead>
 	<tbody>
-	{foreach from=$catalogus->getBoeken() item=boek}
+	{foreach from=$catalogus->getBoeken(true) item=boek}
 		<tr class="document">
 			<td>
 				<span title="{$boek->getStatus()} boek" class="indicator {$boek->getStatus()}">•</span><a href="/communicatie/bibliotheek/boek/{$boek->getId()}" title="Boek bekijken">

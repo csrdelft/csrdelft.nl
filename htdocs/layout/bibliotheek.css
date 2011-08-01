@@ -46,30 +46,32 @@ h1{margin-top: 5px;}
 .boeken .indicator.geen{color:red;}
 
 .paging_full_numbers .paginate_button {
-    padding: 2px 5px;
-    margin: 0;
-    border: 1px solid #d3d3d3; 
-    background: #e6e6e6; 
-    font-weight: normal; 
-    color: #162673; 
-    outline: none;
-    cursor: pointer;
-    * cursor: hand;
+	padding: 2px 5px;
+	margin: 0;
+	border: 1px solid #d3d3d3; 
+	background: #e6e6e6; 
+	font-weight: normal; 
+	color: #162673; 
+	outline: none;
+	cursor: pointer;
+	* cursor: hand;
 }
 .paging_full_numbers .paginate_active {
-    padding: 2px 5px;
-    margin: 0;
+	padding: 2px 5px;
+	margin: 0;
 	border: 1px solid #aaaaaa; 
 	background: #ffffff; 
 	font-weight: normal; 
 	color: #black; 
 	outline: none;
-    cursor: pointer;
-    * cursor: hand;
+	cursor: pointer;
+	* cursor: hand;
 }
-
+.dataTables_paginate{
+	margin-top: 5px;
+}
 .paging_full_numbers {
-    width: 350px !important;
+	width: 350px !important;
 }
 
 .dataTables_paginate {

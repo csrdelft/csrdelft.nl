@@ -55,12 +55,15 @@ class BibliotheekController extends Controller{
 		$this->performAction();
 	}
 
-	public function getZijkolom(){
+	public function hasZijkolom(){
 		return $this->zijkolom;
 	}
 
 	/*
 	 * Catalogus tonen
+	 * 
+	 * /[filters]
+	 * 
 	 */
 	protected function action_default(){
 		$this->zijkolom = false;
@@ -74,6 +77,9 @@ class BibliotheekController extends Controller{
 
 	/*
 	 * Beheerlijsten tonen
+	 * 
+	 * /beheer/[filters]
+	 * 
 	 */
 	protected function action_beheer(){
 		$this->zijkolom = false;
@@ -89,6 +95,8 @@ class BibliotheekController extends Controller{
 	 * Laad een boek object
 	 * 
 	 * ga er van uit dat in getParam(1) een boekid staat en laad dat in.
+	 * @param $boekid	$boekid
+	 * 					of leeg: gebruikt getParam()
 	 */
 	private function loadBoek($boekid=null){
 		if($this->hasParam(1) OR $boekid!==null ){
@@ -106,6 +114,8 @@ class BibliotheekController extends Controller{
 
 	/*
 	 * Boekpagina weergeven
+	 * 
+	 * /boek/id
 	 */
 	protected function action_boek(){
 		$this->loadBoek();
@@ -114,6 +124,8 @@ class BibliotheekController extends Controller{
 
 	/*
 	 * Verwerken van bewerking van een veld op de boekpagina
+	 * 
+	 * /bewerkboek/id
 	 */
 	protected function action_bewerkboek(){
 		$this->loadBoek();
@@ -136,6 +148,10 @@ class BibliotheekController extends Controller{
 
 	/*
 	 * Nieuw boek aanmaken, met formulier
+	 * 
+	 * /nieuwboek
+	 * /boek[/0]
+	 * 
 	 */
 	protected function action_nieuwboek(){
 		//leeg object Boek laden
@@ -153,6 +169,8 @@ class BibliotheekController extends Controller{
 	}
 	/*
 	 * Verwijder boek
+	 * 
+	 * /verwijderboek/id
 	 */
 	protected function action_verwijderboek(){
 		$this->loadBoek(); 
@@ -168,6 +186,8 @@ class BibliotheekController extends Controller{
 	}
 	/*
 	 * Boekbeschrijving toevoegen
+	 * 
+	 * /addbeschrijving/id
 	 */
 	 protected function action_addbeschrijving(){
 		//object Boek laden
@@ -184,6 +204,8 @@ class BibliotheekController extends Controller{
 	}
 	/*
 	 * Boekbeschrijving verwijderen
+	 * 
+	 * /verwijderbeschrijving/id/beschrijvingsid
 	 */
 	protected function action_verwijderbeschrijving(){
 		$this->loadBoek();
@@ -203,6 +225,8 @@ class BibliotheekController extends Controller{
 	}
 	/*
 	 * Boekbeschrijving aanpassen
+	 * 
+	 * /bewerkbeschrijving/id/beschrijvingsid
 	 */
 	protected function action_bewerkbeschrijving(){
 		$this->loadBoek();
@@ -226,32 +250,6 @@ class BibliotheekController extends Controller{
 		}else{
 			BibliotheekBoekContent::invokeRefresh($melding, CSR_ROOT.'communicatie/bibliotheek/boek/'.$this->boek->getId());
 		}
-	}
-	/*
-	 * Bezitter/exemplaar toevoegen
-	 * /bezitboek/$boekid[/$eigenaarid]
-	 */
-	public function action_bezitboek(){
-		$this->loadBoek();
-		if(!$this->boek->magBekijken()){
-			BibliotheekCatalogusContent::invokeRefresh('Onvoldoende rechten voor deze actie. Biebcontrllr::action_bezitboek()', CSR_ROOT.'communicatie/bibliotheek/boek/'.$this->boek->getId());
-		}
-
-		if($this->hasParam(2)){
-			$eigenaar = $this->getParam(2);
-		}else{
-			$eigenaar = LoginLid::instance()->getUid();
-		}
-		if(Lid::isValidUid($eigenaar)){
-			if($this->boek->addEigenaar($eigenaar)){
-				$melding='Exemplaar met succes toegevoegd.';
-			}else{
-				$melding='Exemplaar toevoegen mislukt. '.$this->boek->getError().'Biebcontrllr::action_bezitboek()';
-			}
-		}else{
-			$melding='Ongeldig uid "'.$eigenaar.'" Biebcontrllr::action_bezitboek()';
-		}
-		BibliotheekBoekContent::invokeRefresh($melding, CSR_ROOT.'communicatie/bibliotheek/boek/'.$this->boek->getId());
 	}
 	/*
 	 * Exemplaar toevoegen
@@ -281,7 +279,7 @@ class BibliotheekController extends Controller{
 	}
 	/*
 	 * Exemplaar verwijderen
-	 * /deleteexemplaar/$exemplaarid
+	 * /deleteexemplaar/$boekid/$exemplaarid
 	 */
 	public function action_verwijderexemplaar(){
 		$this->loadBoek();
@@ -299,6 +297,8 @@ class BibliotheekController extends Controller{
 	/*
 	 * Exemplaar is geleend
 	 * kan door iedereen, inclusief eigenaar
+	 * 
+	 * /exemplaarlenen/id/exemplaarid
 	 */
 	public function action_exemplaarlenen(){
 		$this->loadBoek();
@@ -316,6 +316,8 @@ class BibliotheekController extends Controller{
 	/*
 	 * Lener zegt dat hij/zij exemplaar heeft teruggegeven
 	 * Alleen door lener
+	 * 
+	 * /exemplaarteruggegeven/id/exemplaarid
 	 */
 	public function action_exemplaarteruggegeven(){
 		$this->loadBoek();
@@ -333,6 +335,8 @@ class BibliotheekController extends Controller{
 	/*
 	 * Exemplaar is terugontvangen van lener
 	 * Alleen door eigenaar
+	 * 
+	 * /exemplaarterugontvangen/id/exemplaarid
 	 */
 	public function action_exemplaarterugontvangen(){
 		$this->loadBoek();
@@ -350,6 +354,8 @@ class BibliotheekController extends Controller{
 	/*
 	 * Exemplaar is vermist
 	 * Alleen door eigenaar
+	 * 
+	 * /exemplaarvermist/id/exemplaarid
 	 */
 	public function action_exemplaarvermist(){
 		$this->loadBoek();
@@ -367,6 +373,8 @@ class BibliotheekController extends Controller{
 	/*
 	 * Exemplaar is gevonden
 	 * Alleen door eigenaar
+	 * 
+	 * /exemplaargevonden/id/exemplaarid
 	 */
 	public function action_exemplaargevonden(){
 		$this->loadBoek();

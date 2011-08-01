@@ -8,7 +8,7 @@
 class Catalogus{
 
 	private $boeken=null;
-	private $filter;
+	private $filter; 		//het gewenste filter
 
 	public function __construct($init){
 		$allow=array('alle', 'csr', 'leden', 'eigen', 'geleend');
@@ -20,88 +20,13 @@ class Catalogus{
 	}
 
 	/*
-	 * De boeken ophalen. 
-	 * Boeken worden niet automagisch geladen, enkel bij het opvragen
-	 * voor auteur en categorie worden een string opgeslagen ipv id's
-	 * via count() of getDocumenten()
+	 * Laad boeken in object.
+	 * Voor de catalogus
+	 *
+	 * @param $catalogus true: laden voor catalogus, false: laden voor beheerpagina
+	 * @return void
 	 */
-	public function loadBoeken(){
-		$db=MySql::instance();
-		switch($this->filter){
-			case 'csr':
-				$where = "WHERE e.eigenaar_uid='x222'";
-				break;
-			case 'leden':
-				$where = "WHERE e.eigenaar_uid NOT LIKE 'x222'";
-				break;
-			default:
-				$where = "";
-				break;
-		}
-		$query="
-			SELECT DISTINCT
-				b.id , b.titel , b.uitgavejaar , b.uitgeverij , b.paginas, 
-				b.taal, b.isbn, b.code, a.auteur,
-				CONCAT(c1.categorie, ',',
-					c2.categorie, ',',
-					c3.categorie ) AS categorie,
-				IF((
-					SELECT count( * )
-					FROM biebexemplaar e2
-					WHERE e2.boek_id = b.id AND e2.status='beschikbaar'
-				) > 0, 
-				'beschikbaar', 
-				IF((
-					SELECT count( * )
-					FROM biebexemplaar e2
-					WHERE e2.boek_id = b.id AND e2.status='teruggegeven'
-				) > 0,
-				'teruggegeven',
-				'geen')) AS status
-			FROM 
-				biebboek b
-			
-			LEFT JOIN biebauteur a     ON(b.auteur_id = a.id)
-			LEFT JOIN biebcategorie c3 ON(b.categorie_id = c3.id)
-			LEFT JOIN biebcategorie c2 ON(c2.id = c3.p_id)
-			LEFT JOIN biebcategorie c1 ON(c1.id = c2.p_id)
-			LEFT JOIN biebexemplaar e  ON(b.id = e.boek_id)
-			".$where."
-			ORDER BY titel DESC;";
-		$result=$db->query($query);
-		echo mysql_error();
-		if($db->numRows($result)>0){
-			while($boek=$db->next($result)){
-				$this->boeken[]=new Boek($boek);
-			}
-		}else{
-			return false;
-		}
-		return $db->numRows($result);
-	}
-
-	public function getBoeken($force=false){
-		if($this->boeken===null OR $force){
-			$this->loadBoeken();
-		}
-		return $this->boeken; 
-	}
-	public function count(){
-		if($this->boeken===null){
-			$this->loadBoeken();
-		}
-		return count($this->boeken);
-	}
-
-	// retourneert filter
-	public function getFilter(){
-		return $this->filter;
-	}
-
-	/*********************
-	 * Beheer van boeken *
-	 *********************/
-	public function loadBeheerBoeken(){
+	public function loadBoeken($catalogus=true){
 		$db=MySql::instance();
 		switch($this->filter){
 			case 'csr':
@@ -120,13 +45,27 @@ class Catalogus{
 				$where = "";
 				break;
 		}
-		$query="
-			SELECT
-				b.id AS bkid , b.titel , b.uitgavejaar , b.uitgeverij , b.paginas, 
-				b.taal, b.isbn, b.code, a.auteur,
-				CONCAT(c1.categorie, ' - ',
-					c2.categorie, ' - ',
-					c3.categorie ) AS categorie, c3.categorie AS cat,
+
+		if($catalogus){ //catalogus
+			$queryselect = "
+				IF((
+					SELECT count( * )
+					FROM biebexemplaar e2
+					WHERE e2.boek_id = b.id AND e2.status='beschikbaar'
+					) > 0, 
+				'beschikbaar', 
+					IF((
+						SELECT count( * )
+						FROM biebexemplaar e2
+						WHERE e2.boek_id = b.id AND e2.status='teruggegeven'
+						) > 0,
+					'teruggegeven',
+					'geen'
+					)
+				) AS status
+			";
+		}else{ //beheer
+			$queryselect = "
 				e.id AS exid, e.eigenaar_uid AS eigenaar ,e.uitgeleend_uid AS lener, 
 				e.status, e.uitleendatum, 
 				(
@@ -138,58 +77,116 @@ class Catalogus{
 					SELECT count( * )
 					FROM biebbeschrijving s2
 					WHERE s2.boek_id = b.id
-				) AS bsaantal
+				) AS bsaantal ";
+		}
+
+		$query="
+			SELECT DISTINCT
+				b.id , b.titel , b.uitgavejaar , b.uitgeverij , b.paginas, 
+				b.taal, b.isbn, b.code, a.auteur,
+				CONCAT(c1.categorie, ' - ',
+					c2.categorie, ' - ',
+					c3.categorie ) AS categorie,
+				".$queryselect."
+				
 			FROM 
 				biebboek b
 			
-			LEFT JOIN biebauteur a        ON(b.auteur_id = a.id)
-			LEFT JOIN biebcategorie c3    ON(b.categorie_id = c3.id)
-			LEFT JOIN biebcategorie c2    ON(c2.id = c3.p_id)
-			LEFT JOIN biebcategorie c1    ON(c1.id = c2.p_id)
-			LEFT JOIN biebexemplaar e     ON(b.id = e.boek_id)
+			LEFT JOIN biebauteur a     ON(b.auteur_id = a.id)
+			LEFT JOIN biebcategorie c3 ON(b.categorie_id = c3.id)
+			LEFT JOIN biebcategorie c2 ON(c2.id = c3.p_id)
+			LEFT JOIN biebcategorie c1 ON(c1.id = c2.p_id)
+			LEFT JOIN biebexemplaar e  ON(b.id = e.boek_id)
 			".$where."
-			ORDER BY b.titel DESC;";
+			ORDER BY titel DESC;";
 		$result=$db->query($query);
-		echo mysql_error();
 
-		//nu een beetje magic om een stapeltje met boeken te genereren:
-		$aBoek=array('bkid'=>null);
-		$exemplaren=array();
-		$boekeigenschappen=array(
-					'bkid', 'titel', 'uitgavejaar', 'uitgeverij', 'paginas', 
-					'taal', 'isbn', 'code', 'auteur', 'categorie','cat', 'exaantal', 'bsaantal');
-		while($aBoekraw=$db->next($result)){
-			//eerste boekgegevens bewaren
-			if($aBoek['bkid']===null){
-				$aBoek=array_get_keys($aBoekraw, $boekeigenschappen);
+		if($catalogus){ //catalogus
+			if($db->numRows($result)>0){
+				while($boek=$db->next($result)){
+					$this->boeken[]=new Boek($boek);
+				}
+			}else{
+				echo mysql_error();
 			}
 
-			//zijn we bij een volgende boek aangekomen?
-			if($aBoek['bkid']!=$aBoekraw['bkid']){
-				//exemplaren bij boekgegevens stoppen en aan de array toevoegen
-				$aBoek['exemplaren'] = $exemplaren;
-				$this->boeken[$aBoek['bkid']]=$aBoek;
+		}else{ //beheer
 
-				//tenslotte het volgende boek bewaren
-				$aBoek=array_get_keys($aBoekraw, $boekeigenschappen);
+			if($db->numRows($result)>0){
+				//nu een beetje magic om een stapeltje met boeken te genereren:
+				$aBoek=array('id'=>null);
 				$exemplaren=array();
+				$boekeigenschappen=array(
+							'id', 'titel', 'uitgavejaar', 'uitgeverij', 'paginas', 
+							'taal', 'isbn', 'code', 'auteur', 'categorie', 'exaantal', 'bsaantal');
+				while($aBoekraw=$db->next($result)){
+					//eerste boekgegevens bewaren
+					if($aBoek['id']===null){
+						$aBoek=array_get_keys($aBoekraw, $boekeigenschappen);
+					}
+
+					//zijn we bij een volgende boek aangekomen?
+					if($aBoek['id']!=$aBoekraw['id']){
+						//exemplaren bij boekgegevens stoppen en aan de array toevoegen
+						$aBoek['exemplaren'] = $exemplaren;
+						$this->boeken[$aBoek['id']]=$aBoek;
+
+						//tenslotte het volgende boek bewaren
+						$aBoek=array_get_keys($aBoekraw, $boekeigenschappen);
+						$exemplaren=array();
+					}
+					$exemplaren[]=array_get_keys($aBoekraw, array('exid','eigenaar','lener','uitleendatum','status'));
+				}
+				if(isset($aBoek['id'])){
+					//tot slot het laatste boek ook toevoegen
+					$aBoek['exemplaren'] = $exemplaren;
+					$this->boeken[$aBoek['id']]=$aBoek;
+					
+				}
+			}else{
+				echo mysql_error();
 			}
-			$exemplaren[]=array_get_keys($aBoekraw, array('exid','eigenaar','lener','uitleendatum','status'));
-		}
-		if(isset($aBoek['bkid'])){
-			//tot slot het laatste boek ook toevoegen
-			$aBoek['exemplaren'] = $exemplaren;
-			$this->boeken[$aBoek['bkid']]=$aBoek;
+
 		}
 	}
-
-	public function getBeheerboeken(){
-		if($this->boeken===null){
-			$this->loadBeheerBoeken();
+	/*
+	 * Geeft alle boeken
+	 * 
+	 * @param bool $catalogus true: catalogus, false: beheerpagina
+	 * @return 
+	 *		$catalogus=true: array Boek objecten
+	 *		$catalogus=false: array Boeken en subarrays van exemplaren
+	 */
+	public function getBoeken($catalogus, $force=false){
+		if($this->boeken===null OR $force){
+			$this->loadBoeken($catalogus);
 		}
 		return $this->boeken; 
 	}
+	/*
+	 * Telt aantal boeken in object
+	 * 
+	 * @param bool $catalogus: true: catalogus, false: beheerpagina
+	 * @return int aantal boeken
+	 */
+	public function count($catalogus){
+		if($this->boeken===null){
+			$this->loadBoeken($catalogus);
+		}
+		return count($this->boeken);
+	}
 
+	// retourneert filter
+	public function getFilter(){
+		return $this->filter;
+	}
+
+	/*
+	 * geeft alle waardes in db voor $key
+	 * 
+	 * @param $key waarvoor waardes gezocht moeten worden
+	 * @return array van alle waardes, alfabetisch gesorteerd
+	 */
 	public static function getAllValuesOfProperty($key){
 		$allowedkeys = array('id', 'titel', 'uitgavejaar', 'uitgeverij', 'paginas', 'taal', 'isbn', 'code');
 		if(in_array($key, $allowedkeys)){
@@ -210,6 +207,12 @@ class Catalogus{
 		return array();
 	}
 
+	/*
+	 * controleert of gegeven waarde voor de gegeven $key al voorkomt in de db.
+	 * 
+	 * @param $key en $value
+	 * @return bool: $value bestaat in db of niet.
+	 */
 	public static function existsProperty($key,$value){
 		$return = false;
 		switch ($key) {
