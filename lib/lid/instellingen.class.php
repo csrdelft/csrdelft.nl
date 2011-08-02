@@ -79,7 +79,7 @@ class Instelling{
 		}
 		switch(self::getType($key)){
 			case 'string':
-				if(!preg_match('/^[\w\-_ ]*$/', $value)){
+				if(!preg_match('/^[\w\-_\. ]*$/', $value)){
 					$value=self::getDefault($key);
 				}
 			break;
