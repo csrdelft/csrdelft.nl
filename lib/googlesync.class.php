@@ -370,7 +370,9 @@ class GoogleSync{
 
 			//only rel OR label (XOR) can (and must) be set
 			if($lid->getWoonoord() instanceof Groep){
-				$address->appendChild($doc->createElement('gd:housename', $lid->getWoonoord()->getNaam()));
+				$woonoord=$doc->createElement('gd:housename');
+				$woonoord->appendChild(new DOMText($lid->getWoonoord()->getNaam()));
+				$address->appendChild($woonoord);
 				$address->setAttribute('label', $lid->getWoonoord()->getNaam());
 			}else{
 				$address->setAttribute('rel', 'http://schemas.google.com/g/2005#home');

@@ -59,9 +59,6 @@ define('STATISTICUS', '0630' );
 //Feut ip voor de rss feed in #csrdelft
 define('FEUT_IP', '82.94.188.77');
 
-//is het al weer tijd om overal owee stylesheets aan toe te voegen?
-define('OWEE', true);
-
 //stapeltje dingen includeren die toch (bijna) altijd nodig zijn:
 require_once 'common.functions.php';
 require_once 'lid/loginlid.class.php';
