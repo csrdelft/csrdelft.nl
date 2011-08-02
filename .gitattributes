@@ -114,7 +114,6 @@ htdocs/layout/forum.css -text
 htdocs/layout/fotoalbum.css -text
 htdocs/layout/groepen.css -text
 htdocs/layout/jquery.prettyPhoto.css -text
-htdocs/layout/js/builder.js -text
 htdocs/layout/js/csrdelft.js -text
 htdocs/layout/js/datatables/css/datatables_basic.css -text
 htdocs/layout/js/datatables/images/back_disabled.jpg -text
@@ -170,10 +169,8 @@ htdocs/layout/js/sneltoetsen.js -text
 htdocs/layout/js/suggest.js -text
 htdocs/layout/js/verticalen.js -text
 htdocs/layout/ledenlijst.css -text
-htdocs/layout/lightbox.css -text
 htdocs/layout/mededelingen.css -text
 htdocs/layout/owee.css -text
-htdocs/layout/pauper.css -text
 htdocs/layout/profiel.css -text
 htdocs/layout/roodschopper.css -text
 htdocs/layout/roze.css -text
@@ -889,7 +886,6 @@ lib/templates/mededelingen/top3overzicht.tpl -text
 lib/templates/menu.tpl -text
 lib/templates/owee_csrdelft.tpl -text
 lib/templates/owee_menu.tpl -text
-lib/templates/pauper_csrdelft.tpl -text
 lib/templates/peiling.ubb.tpl -text
 lib/templates/profiel/_saldografiek.tpl -text
 lib/templates/profiel/bewerken.tpl -text
