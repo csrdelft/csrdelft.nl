@@ -57,25 +57,26 @@ if(isset($_GET['addToGoogle'])){
 	GoogleSync::doRequestToken(CSR_ROOT.$_SERVER['REQUEST_URI']);
 
 	$gSync=GoogleSync::instance();
-	$message='<h2>Sync naar Google-contacts uitgevoerd</h2>'.$gSync->syncLidBatch($zoeker->getLeden());
+	$message=$gSync->syncLidBatch($zoeker->getLeden());
 	
-	LedenlijstContent::invokeRefresh($message, CSR_ROOT.$_SERVER['REQUEST_URI']);
+	$ledenlijstcontent=new StringIncluder('<h1>Google-sync-resultaat:</h1> '.$message.'<br /><a href="/communicatie/lijst.php?q='.htmlspecialchars($_GET['q']).'">Terug naar de ledenlijst...</a>');
+
+}else{
+
+	//redirect to profile if only one result.
+	if($zoeker->count()==1){
+		$leden=$zoeker->getLeden();
+		$lid=$leden[0];
+		header('location: '.CSR_ROOT.'communicatie/profiel/'.$lid->getUid());
+		exit;
+	}
+
+	$ledenlijstcontent=new LedenlijstContent($zoeker);
+
+	if($message!=''){
+		$ledenlijstcontent->setMelding($message);
+	}
 }
-
-//redirect to profile if only one result.
-if($zoeker->count()==1){
-	$leden=$zoeker->getLeden();
-	$lid=$leden[0];
-	header('location: '.CSR_ROOT.'communicatie/profiel/'.$lid->getUid());
-	exit;
-}
-
-$ledenlijstcontent=new LedenlijstContent($zoeker);
-
-if($message!=''){
-	$ledenlijstcontent->setMelding($message);
-}
-
 $pagina=new csrdelft($ledenlijstcontent);
 
 $pagina->addStylesheet('js/datatables/css/datatables_basic.css');

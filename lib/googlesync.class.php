@@ -307,9 +307,9 @@ class GoogleSync{
 				$photolink=$entryResult->getLink('http://schemas.google.com/contacts/2008/rel#photo')->getHref();
 				$this->putPhoto($photolink, PICS_PATH.'/'.$lid->getPasfotoPath($square=true));
 
-				return 'Update: '.$lid->getNaam().'; ';
+				return 'Update: '.$lid->getNaam().' ';
 			}catch(Exception $e){
-				return sprintf($error_message, 'update', $lid->getNaam(), $e->getMessage().htmlentities($doc->saveXML()));
+				return sprintf($error_message, 'update', $lid->getNaam(), $e->getMessage());
 					
 			}
 		}else{
@@ -318,7 +318,7 @@ class GoogleSync{
 				$photolink=$entryResult->getLink('http://schemas.google.com/contacts/2008/rel#photo')->getHref();
 				$this->putPhoto($photolink, PICS_PATH.'/'.$lid->getPasfotoPath($square=true));
 
-				return 'Ingevoegd: '.$lid->getNaam()'; ';
+				return 'Ingevoegd: '.$lid->getNaam().' ';
 
 			}catch(Exception $e){
 				return sprintf($error_message, 'insert', $lid->getNaam(), $e->getMessage());
