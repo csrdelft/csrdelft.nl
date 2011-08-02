@@ -36,7 +36,9 @@ class csrdelft extends SimpleHTML {
 		}
 		//Prefix opslaan
 		$this->_prefix=$prefix;
-		
+		if(Instelling::get('layout')=='owee'){
+			$this->_prefix='owee_';
+		}		
 		//nieuw menu-object aanmaken...
 		require_once('menu.class.php');
 		$this->_menu=new menu($this->_prefix, $menuid);
@@ -53,17 +55,9 @@ class csrdelft extends SimpleHTML {
 			$this->addScript('sneltoetsen.js');
 		}
 		
-		switch(Instelling::get('layout')){
-			case 'roze':
-				if(LoginLid::instance()->getUid()!='x999'){
-					$this->addStylesheet('roze.css');
-				}
-			break;
-			case 'owee':
-				$this->_prefix='owee_';
-			break;
+		if(Instelling::get('layout')=='roze' AND LoginLid::instance()->getUid()!='x999'){
+			$this->addStylesheet('roze.css');
 		}
-		
 		if($this->_prefix=='owee_'){
 			$this->addStylesheet('owee.css');
 		}
