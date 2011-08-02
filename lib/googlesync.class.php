@@ -352,7 +352,17 @@ class GoogleSync{
 			$nick=$doc->createElement('gContact:nickname', $lid->getNickname());
 			$entry->appendChild($nick);
 		}
-
+		
+		//initialen
+		if($lid->getProperty('voorletters')!=''){
+			$entry->appendChild($doc->createElement('gContact:initials', $lid->getProperty('voorletters')));
+		}
+		
+		//geslacht?
+		$gender=$doc->createElement('gContact:gender');
+		$gender->setAttribute('value', $lid->getGeslacht()=='m' ? 'male' : 'female');
+		//$entry->appendChild($gender);
+		
 		//add home address
 		if($lid->getProperty('adres')!=''){
 			$address=$doc->createElement('gd:structuredPostalAddress');
@@ -479,7 +489,13 @@ class GoogleSync{
 			$group->setAttribute('href', $this->getGroupId());
 			$entry->appendChild($group);
 		}
-		
+		//last updated
+		if(LoginLid::instance()->hasPermission('P_ADMIN')){
+			$update=$doc->createElement('gContact:userDefinedField');
+			$update->setAttribute('key', 'update');
+			$update->setAttribute('value', date('Y-m-d H:i:s'));
+			$entry->appendChild($update);
+		}
 		return $doc;
 	}
 	public static function isAuthenticated(){
