@@ -9,7 +9,8 @@ Zend_Loader::loadClass('Zend_Gdata_Feed');
 
 require_once 'groepen/groep.class.php';
 
-
+define('GOOGLE_CONTACTS_FEED_URL', 'http://www.google.com/m8/feeds/contacts/default/full');
+define('GOOGLE_GROUPS_FEED_URL', 'http://www.google.com/m8/feeds/groups/default/full');
 /*
  * Documentatie voor google GData protocol:
  * algemeen, interactie: http://code.google.com/apis/contacts/docs/3.0/developers_guide_protocol.html
@@ -63,7 +64,7 @@ class GoogleSync{
 		}
 */
 
-		$query = new Zend_Gdata_Query('http://www.google.com/m8/feeds/contacts/default/full?max-results=400');
+		$query = new Zend_Gdata_Query(GOOGLE_CONTACTS_FEED_URL.'?max-results=400');
 		$this->contactFeed=$this->gdata->getFeed($query);
 		//gaat nu session in, maar wellicht beter om het gewoon in de memcache te rossen...
 /*
@@ -79,7 +80,7 @@ class GoogleSync{
 			return;
 		}
 */
-		$query=new Zend_Gdata_Query('http://www.google.com/m8/feeds/groups/default/full');
+		$query=new Zend_Gdata_Query(GOOGLE_GROUPS_FEED_URL);
 		$this->groupFeed=$this->gdata->getFeed($query);
 		//$_SESSION['google_groupfeed']=serialize($this->groupFeed);
 	}
@@ -236,8 +237,7 @@ class GoogleSync{
 		$title->setAttribute('type', 'text');
 		$entry->appendChild($title);
 
-		$response=$this->gdata->insertEntry(
-			$doc->saveXML(), 'http://www.google.com/m8/feeds/groups/default/full');
+		$response=$this->gdata->insertEntry($doc->saveXML(), GOOGLE_GROUPS_FEED_URL);
 
 		//herlaad groupFeed om de nieuw gemaakte daar ook in te hebben.
 		$this->loadGroupFeed();
@@ -293,8 +293,8 @@ class GoogleSync{
 		$googleid=$this->existsInGoogleContacts($lid->getNaam());
 
 		$error_message=
-			'Fout in Google-sync#%s (deze melding exact kopieren in een mailtje naar de pubcie): <br />'.
-			'Lid: %s<br />Foutmelding: %s<br />';
+			'<div>Fout in Google-sync#%s: <br />'.
+			'Lid: %s<br />Foutmelding: %s</div>';
 		
 		$doc=$this->createXML($lid);
 		
@@ -314,7 +314,8 @@ class GoogleSync{
 			}
 		}else{
 			try{
-				$entryResult = $this->gdata->insertEntry($doc->saveXML(), 'http://www.google.com/m8/feeds/contacts/default/full');
+				$header=array('If-Match' => '*');
+				$entryResult=$this->gdata->insertEntry($doc->saveXML(), GOOGLE_CONTACTS_FEED_URL, null, $header);
 				$photolink=$entryResult->getLink('http://schemas.google.com/contacts/2008/rel#photo')->getHref();
 				$this->putPhoto($photolink, PICS_PATH.'/'.$lid->getPasfotoPath($square=true));
 
