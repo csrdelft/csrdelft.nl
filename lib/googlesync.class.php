@@ -289,25 +289,25 @@ class GoogleSync{
 		if(!$lid instanceof Lid){
 			$lid=LidCache::getLid($lid);
 		}
+		//kijk of het lid al bestaat in de googlecontacs-feed.
 		$googleid=$this->existsInGoogleContacts($lid->getNaam());
 
-		
 		$error_message=
 			'Fout in Google-sync#%s (deze melding exact kopieren in een mailtje naar de pubcie): <br />'.
 			'Lid: %s<br />Foutmelding: %s<br />';
 		
-		$doc=$this->createXML($lid, $googleid);
+		$doc=$this->createXML($lid);
+		
 		if($googleid!=''){
 			try{
-				//post to original entry's link[rel=self], set ETag in HTTP-headers
+				//post to original entry's link[rel=self], set ETag in HTTP-headers for versioning
 				$header=array('If-None-Match' => $this->getEtag($googleid));
 				$entryResult=$this->gdata->updateEntry($doc->saveXML(), $this->getLinkSelf($googleid), null, $header);
 				
 				$photolink=$entryResult->getLink('http://schemas.google.com/contacts/2008/rel#photo')->getHref();
 				$this->putPhoto($photolink, PICS_PATH.'/'.$lid->getPasfotoPath($square=true));
 
-				
-				return 'Bestond al, maar weer actueel gemaakt: '.$lid->getNaam().'.';
+				return 'Update: '.$lid->getNaam().'; ';
 			}catch(Exception $e){
 				return sprintf($error_message, 'update', $lid->getNaam(), $e->getMessage().htmlentities($doc->saveXML()));
 					
@@ -318,7 +318,7 @@ class GoogleSync{
 				$photolink=$entryResult->getLink('http://schemas.google.com/contacts/2008/rel#photo')->getHref();
 				$this->putPhoto($photolink, PICS_PATH.'/'.$lid->getPasfotoPath($square=true));
 
-				return $lid->getNaam();
+				return 'Ingevoegd: '.$lid->getNaam()'; ';
 
 			}catch(Exception $e){
 				return sprintf($error_message, 'insert', $lid->getNaam(), $e->getMessage());
@@ -330,10 +330,8 @@ class GoogleSync{
 	/*
 	 *  Create a XML document for this Lid.
 	 * @param $lid 			Lid object to create XML feed for.
-	 * @param $googleid		If this contact is already in google contacts, 
-	 * 						add an etag to the entry to enable version control.
 	 */
-	private function createXML(Lid $lid, $googleid=null){
+	private function createXML(Lid $lid){
 		
 		$doc=new DOMDocument();
 		$doc->formatOutput = true;
@@ -474,20 +472,14 @@ class GoogleSync{
 			$entry->appendChild($systemgroup);
 		}
 
-		//in de groep $this->groepname en in de system group my contacts stoppen
-		$group=$doc->createElement('gContact:groupMembershipInfo');
-		$group->setAttribute('href', $this->getGroupId());
-		$entry->appendChild($group);
-		
-		//add an etag.
-		if($googleid!==null){
-			//$entry->setAttribute('etag', $this->getEtag($googleid));
-			//pr($entry); exit;
-			//$entry->setAttribute('gd:etag', $this->getEtag($googleid));
+		//in de groep $this->groepname en in de system group my contacts stoppen.
+		// (alleen bij niet-lege groepnamen)
+		if($this->groupname!=''){
+			$group=$doc->createElement('gContact:groupMembershipInfo');
+			$group->setAttribute('href', $this->getGroupId());
+			$entry->appendChild($group);
 		}
-
-		//echo $doc->saveXML(); exit;
-
+		
 		return $doc;
 	}
 	public static function isAuthenticated(){
