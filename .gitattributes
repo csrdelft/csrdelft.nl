@@ -126,7 +126,6 @@ htdocs/layout/js/datatables/images/sort_both.jpg -text
 htdocs/layout/js/datatables/images/sort_desc.jpg -text
 htdocs/layout/js/datatables/jquery.dataTables.min.js -text
 htdocs/layout/js/documenten.js -text
-htdocs/layout/js/effects.js -text
 htdocs/layout/js/fastlightbox.js -text
 htdocs/layout/js/flot/API.txt -text
 htdocs/layout/js/flot/FAQ.txt -text
@@ -164,9 +163,7 @@ htdocs/layout/js/menu.js -text
 htdocs/layout/js/peilingbeheer.js -text
 htdocs/layout/js/pngfix.js -text
 htdocs/layout/js/profiel.js -text
-htdocs/layout/js/prototype.js -text
 htdocs/layout/js/roodschopper.js -text
-htdocs/layout/js/scriptaculous.js -text
 htdocs/layout/js/slideshow.js -text
 htdocs/layout/js/slideshow_intern.js -text
 htdocs/layout/js/sneltoetsen.js -text

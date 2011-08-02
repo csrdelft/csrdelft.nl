@@ -26,7 +26,7 @@ class csrdelft extends SimpleHTML {
 	private $_titel='Geen titel gezet.';
 	private $_prefix;
 
-	function __construct($body,$prefix='',$menuid=0){ //mw: param menuid toegevoegd, zodat het goede menu geladen wordt (voor vb=99)
+	function __construct($body, $prefix='', $menuid=0){ //mw: param menuid toegevoegd, zodat het goede menu geladen wordt (voor vb=99)
 		if(is_object($body)){
 			$this->_body=$body;
 			//als de body een methode heeft om een titel mee te geven die gebruiken, anders de standaard.
@@ -36,40 +36,39 @@ class csrdelft extends SimpleHTML {
 		}
 		//Prefix opslaan
 		$this->_prefix=$prefix;
-		if($this->_prefix=='' AND isset($_SESSION['pauper'])){
-			$this->_prefix='pauper_';
-		}
-		if($this->_prefix=='' AND OWEE){
-			$this->_prefix='owee_';
-		}
+		
 		//nieuw menu-object aanmaken...
 		require_once('menu.class.php');
 		$this->_menu=new menu($this->_prefix, $menuid);
 
 		//Stylesheets en scripts die we altijd gebruiken
 		
-		if($this->_prefix=='pauper_'){
-			$this->addStylesheet('pauper.css');
-		}else{
-			$this->addStylesheet('undohtml.css');
-			$this->addStylesheet('default.css');
-			$this->addScript('jquery.js');
-			$this->addScript('csrdelft.js');
-			$this->addScript('menu.js');
-
-			if(Instelling::get('algemeen_sneltoetsen')=='ja'){
-				$this->addScript('prototype.js');
-				$this->addScript('sneltoetsen.js');
-			}
+		$this->addStylesheet('undohtml.css');
+		$this->addStylesheet('default.css');
+		
+		$this->addScript('jquery.js');
+		$this->addScript('csrdelft.js');
+		$this->addScript('menu.js');
+		if(Instelling::get('algemeen_sneltoetsen')=='ja'){
+			$this->addScript('sneltoetsen.js');
 		}
+		
+		switch(Instelling::get('layout')){
+			case 'roze':
+				if(LoginLid::instance()->getUid()!='x999'){
+					$this->addStylesheet('roze.css');
+				}
+			break;
+			case 'owee':
+				$this->_prefix='owee_';
+			break;
+		}
+		
 		if($this->_prefix=='owee_'){
 			$this->addStylesheet('owee.css');
 		}
 
-		//Roze webstek
-		if(Instelling::get('layout_rozeWebstek')=='ja' AND LoginLid::instance()->getUid()!='x999'){
-			$this->addStylesheet('roze.css');
-		}
+		
 	}
 
 	function addStylesheet($sheet){

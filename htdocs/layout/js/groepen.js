@@ -83,30 +83,33 @@ jQuery(document).ready(function(){
 })
 
 function observeClick(){
-	jQuery(".edit_td").click(function(){
-		var ID=jQuery(this).attr('id');
-		jQuery("#functie_"+ID).hide();
-		jQuery("#functie_input_"+ID).show();
+	jQuery(".inline_edit").click(function(){
+		//show edit field.
+		jQuery(this).children('span').hide();
+		jQuery(this).children('input').show();
 	}).change(function(){
-		var ID=jQuery(this).attr('id');
-		var gid=jQuery("#gid_"+ID).val();
-		var uid=jQuery("#uid_"+ID).val();
-		var functie=jQuery("#functie_input_"+ID).val();
-		var dataString = 'functie='+ functie + '&uid=' + uid + '&gid='+gid;
-		jQuery("#functie_"+ID).html('Laad...'); // Loading
-
+		//id = 'bewerk_<gid>|<uid>'
+		var ids=jQuery(this).attr('id').substring(7).split('|');
+		var gid=ids[0];
+		var uid=ids[1];
+		
+		var data={ 'functie': jQuery(this).children('input').val() };
+		//update span
+		jQuery(this).children('span').html(data.functie);
+		
 		jQuery.ajax({
 			type: "POST",
-			url: '/actueel/groepen/XHR/' + gid + '/bewerkfunctieLid/' + uid,
-			data: dataString,
+			url: '/actueel/groepen/XHR/'+gid+'/bewerkfunctieLid/'+uid,
+			data: data,
 			cache: false,
-			success: function(result){
-				jQuery("#functie_"+ID).html(result);
+			success: function(response){
+				jQuery(".editbox").hide();
+				jQuery(".text").show();
 			}
 		});
 	});
 
-	// Outside click action
+	// close editor if clicking outside editfield
 	jQuery(document).mouseup(function(object){
 		if(!jQuery(object.target).hasClass("editbox")){ //in editbox mag je klikken
 			jQuery(".editbox").hide();

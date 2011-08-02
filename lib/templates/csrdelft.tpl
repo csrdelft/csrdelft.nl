@@ -26,6 +26,7 @@
 		})();
 	{/literal}</script>
 	{if date("m-d")=="04-01"}
+		{* 1 april astriods... *}
 		{literal}
 		<script type="text/javascript">
 			function startAstroids(){
@@ -39,24 +40,6 @@
 		</script>
 		{/literal}
 	{/if}
-	{if $loginlid->getUid()=='000000'}{literal}<script type="text/javascript">
-function blinkit(){
-	if(document.bgColor=='#000000'){
-		document.bgColor='#ffffff'
-	}else{
-		document.bgColor='#000000';
-	}
-	setTimeout(blinkit, 100 );
-}
-blinkit();
-
-function jenever(){
-	alert('Jenever!?!');
-	setTimeout(jenever, 1001+Math.floor(Math.random()*10000));
-}
-jenever();
-</script>{/literal}{/if}
-
 	<meta property="og:image" content="http://plaetjes.csrdelft.nl/layout/beeldmerk.jpg" />
 	<meta property="og:title" content="C.S.R. Delft | {$csrdelft->getTitel()}" />
 	<link rel="alternate" title="C.S.R. Delft RSS" type="application/rss+xml" href="http://csrdelft.nl/communicatie/forum/rss.xml" />
