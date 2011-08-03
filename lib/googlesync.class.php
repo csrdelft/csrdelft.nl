@@ -310,12 +310,10 @@ class GoogleSync{
 				return 'Update: '.$lid->getNaam().' ';
 			}catch(Exception $e){
 				return sprintf($error_message, 'update', $lid->getNaam(), $e->getMessage());
-					
 			}
 		}else{
 			try{
-				$header=array('If-Match' => '*');
-				$entryResult=$this->gdata->insertEntry($doc->saveXML(), GOOGLE_CONTACTS_FEED_URL, null, $header);
+				$entryResult=$this->gdata->insertEntry($doc->saveXML(), GOOGLE_CONTACTS_FEED_URL);
 				$photolink=$entryResult->getLink('http://schemas.google.com/contacts/2008/rel#photo')->getHref();
 				$this->putPhoto($photolink, PICS_PATH.'/'.$lid->getPasfotoPath($square=true));
 
