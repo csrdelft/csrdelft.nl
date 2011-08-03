@@ -57,9 +57,18 @@ if(isset($_GET['addToGoogle'])){
 	GoogleSync::doRequestToken(CSR_ROOT.$_SERVER['REQUEST_URI']);
 
 	$gSync=GoogleSync::instance();
-	$message=$gSync->syncLidBatch($zoeker->getLeden());
 	
-	$ledenlijstcontent=new StringIncluder('<h1>Google-sync-resultaat:</h1> '.$message.'<br /><a href="/communicatie/lijst.php?q='.htmlspecialchars($_GET['q']).'">Terug naar de ledenlijst...</a>');
+	$start=microtime();
+	$message=$gSync->syncLidBatch($zoeker->getLeden());
+	$elapsed=microtime()-$start;
+	
+	$ledenlijstcontent=new StringIncluder(
+		'<h1>Google-sync-resultaat:</h1>'.$message.'<br />'.
+		'<a href="/communicatie/lijst.php?q='.htmlspecialchars($_GET['q']).'">Terug naar de ledenlijst...</a>', 'Google-sync resultaat');
+		
+	if($loginlid->hasPermission('P_ADMIN')){
+		$ledenlijstcontent->append('<hr />Tijd nodig voor deze sync: '.$elapsed.'ms');
+	}
 
 }else{
 
