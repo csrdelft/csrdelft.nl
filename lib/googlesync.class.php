@@ -24,9 +24,11 @@ class GoogleSync{
 	private $gdata=null;
 
 	//feed contents
-	private $contactFeed=null;
-	private $groupFeed=null;
-
+	private $groupFeed=null;	// Zend GData feed object for groups
+	private $contactFeed=null;	// Zend GData feed object for contacts
+	private $contactData=null;	// an array containing array's with some date for each contact.
+	
+	//sigleton pattern
 	private static $instance;
 	public static function instance(){
 		if(!isset(self::$instance)){
@@ -57,51 +59,36 @@ class GoogleSync{
 	/* Laad de contact-feed in van google.
 	 */
 	private function loadContactFeed($force=false){
-/*
-		if(!$force AND isset($_SESSION['google_contactfeed'])){
-			$this->contactFeed=unserialize($_SESSION['google_contactfeed']);
-			return;
-		}
-*/
-
 		$query = new Zend_Gdata_Query(GOOGLE_CONTACTS_FEED_URL.'?max-results=400');
 		$this->contactFeed=$this->gdata->getFeed($query);
-		//gaat nu session in, maar wellicht beter om het gewoon in de memcache te rossen...
-/*
-		$_SESSION['google_contactfeed']=serialize($this->contactFeed);
-*/
+	
 	}
 	/* Laad de group-feed in van google.
 	 */
 	private function loadGroupFeed($force=false){
-/*
-		if(!$force AND isset($_SESSION['google_groupfeed'])){
-			$this->groupFeed=unserialize($_SESSION['google_groupfeed']);
-			return;
-		}
-*/
 		$query=new Zend_Gdata_Query(GOOGLE_GROUPS_FEED_URL);
 		$this->groupFeed=$this->gdata->getFeed($query);
-		//$_SESSION['google_groupfeed']=serialize($this->groupFeed);
 	}
 
 	/* Trek naam en google-id uit de feed, de rest is niet echt nodig.
 	 */
 	public function getGoogleContacts(){
-		$return=array();
-		foreach($this->contactFeed as $contact){
-			//typecasts naar string, dan komt het relevante veld uit het Zend-objectje rollen
-			
-			$etag=substr($contact->getEtag(), 1, strlen($contact->getEtag())-2);
-			$return[]=array(
-				'name'=>(string)$contact->title,
-				'etag' => $etag,
-				'id'=>(string)$contact->id,
-				'self' => $contact->getLink('self')->href,
-				'xml'=>mb_htmlentities(str_replace('><', ">\n<", $contact->getXML()))
-			);
+		if($this->contactData==null){
+			$this->contactData=array();
+			foreach($this->contactFeed as $contact){
+				//typecasts naar string, dan komt het relevante veld uit het Zend-objectje rollen
+				
+				$etag=substr($contact->getEtag(), 1, strlen($contact->getEtag())-2);
+				$this->contactData[]=array(
+					'name'=>(string)$contact->title,
+					'etag' => $etag,
+					'id'=>(string)$contact->id,
+					'self' => $contact->getLink('self')->href,
+					'xml'=>mb_htmlentities(str_replace('><', ">\n<", $contact->getXML()))
+				);
+			}
 		}
-		return $return;
+		return $this->contactData;
 	}
 
 
