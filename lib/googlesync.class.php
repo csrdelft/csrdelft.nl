@@ -9,8 +9,10 @@ Zend_Loader::loadClass('Zend_Gdata_Feed');
 
 require_once 'groepen/groep.class.php';
 
-define('GOOGLE_CONTACTS_FEED_URL', 'http://www.google.com/m8/feeds/contacts/default/full');
-define('GOOGLE_GROUPS_FEED_URL', 'http://www.google.com/m8/feeds/groups/default/full');
+define('GOOGLE_CONTACTS_URL', 'http://www.google.com/m8/feeds/contacts/default/full');
+define('GOOGLE_GROUP_CONTACTS_URL', 'http://www.google.com/m8/feeds/contacts/default/base/');
+define('GOOGLE_GROUPS_FEED', 'http://www.google.com/m8/feeds/groups/default/full');
+
 define('GOOGLE_CONTACTS_MAX_RESULTS', 1000);
 /*
  * Documentatie voor google GData protocol:
@@ -19,15 +21,15 @@ define('GOOGLE_CONTACTS_MAX_RESULTS', 1000);
  * gContact-namespace: http://code.google.com/apis/contacts/docs/3.0/reference.html
  */
 class GoogleSync{
-
-	private $groupname='C.S.R.-import';
-
 	private $gdata=null;
 
+	private $groupname='C.S.R.-import';
+	
 	//feed contents
 	private $groupFeed=null;	// Zend GData feed object for groups
+	private $groupid=null;		// google-id van de groep waar alles in terecht moet komen...
 	private $contactFeed=null;	// Zend GData feed object for contacts
-	private $contactData=null;	// an array containing array's with some date for each contact.
+	private $contactData=null;	// an array containing array's with some data for each contact.
 	
 	//sigleton pattern
 	private static $instance;
@@ -44,40 +46,72 @@ class GoogleSync{
 		}
 
 		if(Instelling::get('googleContacts_groepnaam')!=''){
-			$this->groupname=Instelling::get('googleContacts_groepnaam');
+			$this->groupname=trim(Instelling::get('googleContacts_groepnaam'));
+			if($this->groupname==''){
+				$this->groupname='C.S.R.-import';
+			}
 		}
 		$client=Zend_Gdata_AuthSub::getHttpClient($_SESSION['google_token']);
 
 		//$client->setHeaders('If-Match: *'); //delete or update only if not changed since it was last read.
 		$this->gdata=new Zend_Gdata($client);
 		$this->gdata->setMajorProtocolVersion(3);
-
-		$this->loadContactFeed();
+		
+		//first load group feed, find or create the groupname from the user settings.
 		$this->loadGroupFeed();
-
+		$this->groupid=$this->getGroupId();
+		
+		//then load the contacts for this group.
+		$this->loadContactsForGroup($this->groupid);
 	}
 
-	/* Laad de contact-feed in van google.
+	/* 
+	 * Load all contactgroups.
 	 */
-	private function loadContactFeed($force=false){
-		$query = new Zend_Gdata_Query(GOOGLE_CONTACTS_FEED_URL.'?max-results='.GOOGLE_CONTACTS_MAX_RESULTS);
-		$this->contactFeed=$this->gdata->getFeed($query);
-	
-	}
-	/* Laad de group-feed in van google.
-	 */
-	private function loadGroupFeed($force=false){
-		$query=new Zend_Gdata_Query(GOOGLE_GROUPS_FEED_URL);
+	private function loadGroupFeed(){
+		$query=new Zend_Gdata_Query(GOOGLE_GROUPS_FEED);
 		$this->groupFeed=$this->gdata->getFeed($query);
 	}
+	
+	/* 
+	 * Load all google contacts.
+	 */
+	private function loadContactFeed(){
+		$url=GOOGLE_CONTACTS_URL.'?max-results='.GOOGLE_CONTACTS_MAX_RESULTS;
+		
+		$query = new Zend_Gdata_Query($url);
+		$this->contactFeed=$this->gdata->getFeed($query);
+		
+	}
+	
+	/*
+	 * Load contacts from certain contact group.
+	 */
+	private function loadContactsForGroup($groupId){
+		$url=GOOGLE_CONTACTS_URL.'?max-results='.GOOGLE_CONTACTS_MAX_RESULTS;
+		$url.='&group='.urlencode($groupId);
 
+		$query = new Zend_Gdata_Query($url);
+		$this->contactFeed=$this->gdata->getFeed($query);
+	}
+	
 	/* Trek naam en google-id uit de feed, de rest is niet echt nodig.
 	 */
 	public function getGoogleContacts(){
 		if($this->contactData==null){
 			$this->contactData=array();
 			foreach($this->contactFeed as $contact){
-				//typecasts naar string, dan komt het relevante veld uit het Zend-objectje rollen
+				
+				//digg up uid.
+				$uid=null;
+				foreach($contact->getExtensionElements() as $ext){
+					if($ext->rootElement=='userDefinedField'){
+						$attr=$ext->getExtensionAttributes();
+						if(isset($attr['key']['value']) &&$attr['key']['value']=='csruid'){
+							$uid=$attr['value']['value'];
+						}
+					}
+				}
 				
 				$etag=substr($contact->getEtag(), 1, strlen($contact->getEtag())-2);
 				$this->contactData[]=array(
@@ -85,10 +119,12 @@ class GoogleSync{
 					'etag' => $etag,
 					'id'=>(string)$contact->id,
 					'self' => $contact->getLink('self')->href,
-					'xml'=>mb_htmlentities(str_replace('><', ">\n<", $contact->getXML()))
+					'csruid' => $uid
+					//, 'xml'=>mb_htmlentities(str_replace('><', ">\n<", $contact->getXML()))
 				);
 			}
 		}
+		
 		return $this->contactData;
 	}
 
@@ -102,21 +138,22 @@ class GoogleSync{
 		$this->gdata->put(file_get_contents($filename), $photolink, null, 'image/*');
 	}
 
-	/* Check of de naam al voorkomt in de lijst met contacten zoals ingeladen
+	/* Check of een Lid al voorkomt in de lijst met contacten zoals ingeladen
 	 * van google.
 	 *
-	 * @param $name Naam van het contact dat moet worden gecontroleerd.
+	 * @param $lid Lid waarvan de aanwezigheid gechecked moet worden.
 	 *
 	 * @return string met het google-id in het geval van voorkomen, anders null.
 	 */
-	public function existsInGoogleContacts($name){
-		$name=strtolower($name);
+	public function existsInGoogleContacts(Lid $lid){
+		$name=strtolower($lid->getNaam());
 		foreach($this->getGoogleContacts() as $contact){
-			if(strtolower($contact['name'])==$name){
-				return $contact['id'];
-
-			//zonder spaties kijken...
-			}elseif(str_replace(' ', '', strtolower($contact['name'])) == str_replace(' ', '', $name)){
+			
+			if(
+				$contact['csruid']==$lid->getUid() OR
+				strtolower($contact['name'])==$name OR
+				str_replace(' ', '', strtolower($contact['name']))==str_replace(' ', '', $name)
+				){
 				return $contact['id'];
 			}
 		}
@@ -229,7 +266,7 @@ class GoogleSync{
 
 		//herlaad groupFeed om de nieuw gemaakte daar ook in te hebben.
 		$this->loadGroupFeed();
-
+		
 		return (string)$response->id;
 	}
 
@@ -278,7 +315,7 @@ class GoogleSync{
 			$lid=LidCache::getLid($lid);
 		}
 		//kijk of het lid al bestaat in de googlecontacs-feed.
-		$googleid=$this->existsInGoogleContacts($lid->getNaam());
+		$googleid=$this->existsInGoogleContacts($lid);
 
 		$error_message=
 			'<div>Fout in Google-sync#%s: <br />'.
@@ -301,7 +338,7 @@ class GoogleSync{
 			}
 		}else{
 			try{
-				$entryResult=$this->gdata->insertEntry($doc->saveXML(), GOOGLE_CONTACTS_FEED_URL);
+				$entryResult=$this->gdata->insertEntry($doc->saveXML(), GOOGLE_CONTACTS_URL);
 				$photolink=$entryResult->getLink('http://schemas.google.com/contacts/2008/rel#photo')->getHref();
 				$this->putPhoto($photolink, PICS_PATH.'/'.$lid->getPasfotoPath($square=true));
 
@@ -471,13 +508,12 @@ class GoogleSync{
 			$entry->appendChild($systemgroup);
 		}
 
-		//in de groep $this->groepname en in de system group my contacts stoppen.
-		// (alleen bij niet-lege groepnamen)
-		if($this->groupname!=''){
-			$group=$doc->createElement('gContact:groupMembershipInfo');
-			$group->setAttribute('href', $this->getGroupId());
-			$entry->appendChild($group);
-		}
+		//in de groep $this->groepname
+		$group=$doc->createElement('gContact:groupMembershipInfo');
+		$group->setAttribute('href', $this->groupid);
+		$entry->appendChild($group);
+		
+		
 		//last updated
 		if(LoginLid::instance()->hasPermission('P_ADMIN')){
 			$update=$doc->createElement('gContact:userDefinedField');
@@ -485,6 +521,13 @@ class GoogleSync{
 			$update->setAttribute('value', date('Y-m-d H:i:s'));
 			$entry->appendChild($update);
 		}
+		
+		//csr uid
+		$uid=$doc->createElement('gContact:userDefinedField');
+		$uid->setAttribute('key', 'csruid');
+		$uid->setAttribute('value', $lid->getUid());
+		$entry->appendChild($uid);
+		
 		return $doc;
 	}
 	public static function isAuthenticated(){
