@@ -11,6 +11,7 @@ require_once 'groepen/groep.class.php';
 
 define('GOOGLE_CONTACTS_FEED_URL', 'http://www.google.com/m8/feeds/contacts/default/full');
 define('GOOGLE_GROUPS_FEED_URL', 'http://www.google.com/m8/feeds/groups/default/full');
+define('GOOGLE_CONTACTS_MAX_RESULT', 1000);
 /*
  * Documentatie voor google GData protocol:
  * algemeen, interactie: http://code.google.com/apis/contacts/docs/3.0/developers_guide_protocol.html
@@ -59,7 +60,7 @@ class GoogleSync{
 	/* Laad de contact-feed in van google.
 	 */
 	private function loadContactFeed($force=false){
-		$query = new Zend_Gdata_Query(GOOGLE_CONTACTS_FEED_URL.'?max-results=400');
+		$query = new Zend_Gdata_Query(GOOGLE_CONTACTS_FEED_URL.'?max-results='.GOOGLE_CONTACTS_MAX_RESULTS);
 		$this->contactFeed=$this->gdata->getFeed($query);
 	
 	}
