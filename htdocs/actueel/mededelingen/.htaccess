@@ -5,6 +5,7 @@ RewriteRule ^([0-9]+)$ index.php?mededelingId=$1
 
 # Mededelingen beheer
 RewriteRule ^top3overzicht top3overzicht.php
+RewriteRule ^prullenbak prullenbak.php
 RewriteRule ^verwijderen/([0-9]+) index.php?mededelingId=$1&actie=verwijderen
 RewriteRule ^bewerken/([0-9]+)$ index.php?mededelingId=$1&actie=bewerken
 RewriteRule ^toevoegen$ index.php?mededelingId=0&actie=bewerken
