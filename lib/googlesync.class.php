@@ -11,7 +11,7 @@ require_once 'groepen/groep.class.php';
 
 define('GOOGLE_CONTACTS_FEED_URL', 'http://www.google.com/m8/feeds/contacts/default/full');
 define('GOOGLE_GROUPS_FEED_URL', 'http://www.google.com/m8/feeds/groups/default/full');
-define('GOOGLE_CONTACTS_MAX_RESULT', 1000);
+define('GOOGLE_CONTACTS_MAX_RESULTS', 1000);
 /*
  * Documentatie voor google GData protocol:
  * algemeen, interactie: http://code.google.com/apis/contacts/docs/3.0/developers_guide_protocol.html
