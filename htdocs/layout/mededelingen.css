@@ -23,6 +23,9 @@
 .nieuwstitel a{ color:  black;}
 .nieuwsbericht-vast{ height: 100px;	}
 
+#mededelingenketser{
+	float:left;
+}
 #mededelingenketser #kolomlinks{
 	width: 320px;
 	float: left;
@@ -106,6 +109,9 @@
 }
 .mededelingenlijst-block .verborgen-item, .mededelingenlijst-block .verborgen-item a{
 	color: grey;
+}
+.mededelingenlijst-block .verborgen-item, .mededelingenlijst-block .verwijderd-item a{
+	color: #CC0000;
 }
 .mededelingen_paginering{
 	margin-right: 15px;

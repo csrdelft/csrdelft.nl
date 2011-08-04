@@ -3,7 +3,7 @@
 		<div class="mededelingenlijst-block">
 			<div class="mededelingenlijst-block-titel">{$groepering}</div>
 				{foreach from=$mededelingen item=mededeling}
-					<div {if $mededeling->getId()==$geselecteerdeMededeling->getId()}id="actief" {/if}class="mededelingenlijst-item{if $mededeling->isVerborgen()} verborgen-item{/if}">
+					<div {if $mededeling->getId()==$geselecteerdeMededeling->getId()}id="actief" {/if}class="mededelingenlijst-item{if $mededeling->isVerborgen()} verborgen-item{/if}{if $mededeling->isVerwijderd()} verwijderd-item{/if}">
 						{if $mededeling->getCategorie()->getPlaatje() !=''}
 							<div class="mededelingenlijst-plaatje">
 								<a href="{$pagina_root}{$mededeling->getId()}">

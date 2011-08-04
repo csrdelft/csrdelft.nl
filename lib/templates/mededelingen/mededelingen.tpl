@@ -13,7 +13,10 @@
 <hr />
 {/if}
 <div id="mededelingenketser">
-{if $prullenbak}<h1>Mededelingen Prullenbak</h1>{/if}
+{if $prullenbak}
+	<h1>Mededelingen Prullenbak</h1>
+	<span style="display:block; margin-bottom: 10px;">Deze pagina bevat alleen verborgen, verwijderde en verlopen mededelingen.</span>
+{/if}
 {$melding}
 {if $geselecteerdeMededeling!==null}		{*	Check of er een mededeling geselecteerd is.	Zo niet, dan
 												is de database leeg en geven we een nette foutmelding.	*}
@@ -33,7 +36,10 @@
 			<li><strong>dikgedrukte</strong> mededelingen wachten op goedkeuring</li>
 			<li><em>schuingedrukte</em> mededelingen zijn zichtbaar voor iedereen (mits ze goedgekeurd zijn)</li>
 			<li>normale tekst geeft aan dat mededelingen alleen zichtbaar zijn voor (oud)leden</li>
-			<li><span style="color: grey;">grijs gekleurde</span> mededelingen zijn verborgen en dus alleen zichtbaar voor moderators</li>
+		{if $prullenbak}
+			<li><span style="color: grey;">grijs gekleurde</span> mededelingen zijn verborgen en dus alleen zichtbaar in de prullenbak</li>
+			<li><span style="color: #CC0000">rood gekleurde</span> mededelingen zijn verwijderd en dus alleen zichtbaar in de prullenbak</li>
+		{/if}
 		</ul>
 		<br />
 	</div>

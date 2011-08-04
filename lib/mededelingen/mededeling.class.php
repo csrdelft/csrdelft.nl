@@ -194,6 +194,7 @@ class Mededeling{
 	public function isPrive(){ return $this->getDoelgroep()!='iedereen'; }
 	public function getZichtbaarheid(){ return $this->zichtbaarheid; }
 	public function isVerborgen(){ return $this->getZichtbaarheid()=='onzichtbaar'; }
+	public function isVerwijderd(){ return $this->getZichtbaarheid()=='verwijderd'; }
 	public function getPlaatje(){ return $this->plaatje; }
 	public function getCategorieId(){ return $this->categorieId; }
 	public function getCategorie($force=false){
@@ -257,25 +258,22 @@ class Mededeling{
 		return $topmost;
 	}
 
-	public static function getLijstVanPagina($pagina=1, $aantal){
+	public static function getLijstVanPagina($pagina=1, $aantal, $prullenbak=false){
+		// Prullenbak checken.
+		if( $prullenbak AND !Mededeling::isModerator() ){
+			$prullenbak = false;
+		}
+		
+		// Initialisaties.
 		$mededelingen=array();
 		$db=MySql::instance();
-		$doelgroepClause="";
-		$verborgenClause="zichtbaarheid='zichtbaar'";
-		if( Mededeling::isModerator() ){
-			$verborgenClause="zichtbaarheid!='verwijderd'";
-		}
-		if( !LoginLid::instance()->hasPermission('P_LEDEN_READ') ){
-			$doelgroepClause=" AND doelgroep='iedereen'";
-		}else if( self::isOudlid() ){
-			$doelgroepClause=" AND doelgroep!='leden'";
-		}
-			
+		list($vervalClause, $operator, $verborgenClause, $doelgroepClause) = Mededeling::getClauses($prullenbak);
+		
 		$paginaQuery="
 			SELECT id, datum
 			FROM mededeling
-			WHERE (vervaltijd IS NULL OR vervaltijd > '".getDateTime()."')
-			AND ".$verborgenClause.$doelgroepClause."
+			WHERE (".$vervalClause."
+			".$operator." ".$verborgenClause.")".$doelgroepClause."
 			ORDER BY datum DESC
 			LIMIT ".(($pagina-1)*$aantal).", ".$aantal;
 		$resource=$db->select($paginaQuery);
@@ -316,39 +314,30 @@ class Mededeling{
 		return $mededelingen;
 	}
 	
-	public static function getAantal(){
+	public static function getAantal($prullenbak){
 		$db=MySql::instance();
-		$doelgroepClause="";
-		$verborgenClause="zichtbaarheid='zichtbaar'";
-		if( Mededeling::isModerator() )
-			$verborgenClause="zichtbaarheid!='verwijderd'";
-		if( !LoginLid::instance()->hasPermission('P_LEDEN_READ') )
-			$doelgroepClause=" AND doelgroep='iedereen'";
+		list($vervalClause, $operator, $verborgenClause, $doelgroepClause) = Mededeling::getClauses($prullenbak);
+		
 		$aantalQuery="
 			SELECT COUNT(*) as aantal
 			FROM mededeling
-			WHERE (vervaltijd IS NULL OR vervaltijd>'".getDateTime()."')
-			AND ".$verborgenClause.$doelgroepClause;
+			WHERE (".$vervalClause."
+			".$operator." ".$verborgenClause.")".$doelgroepClause;
 		$resource=$db->select($aantalQuery);
 		$resultaat=$db->next($resource);
 		return (int)$resultaat['aantal'];
 	}
 	
-	public function getPaginaNummer(){
+	public function getPaginaNummer($prullenbak){
 		$db=MySql::instance();
-		$doelgroepClause="";
-		$verborgenClause="zichtbaarheid='zichtbaar'";
-		if( Mededeling::isModerator() ){
-			$verborgenClause="zichtbaarheid!='verwijderd'";
-		}
-		if( !LoginLid::instance()->hasPermission('P_LEDEN_READ') ){
-			$doelgroepClause=" AND doelgroep='iedereen'";
-		}
+		list($vervalClause, $operator, $verborgenClause, $doelgroepClause) = Mededeling::getClauses($prullenbak);
+		
 		$positieQuery="
 			SELECT COUNT(*) as positie
 			FROM mededeling
-			WHERE (vervaltijd IS NULL OR vervaltijd > '".getDateTime()."')
-			AND datum>='".$this->getDatum()."' AND ".$verborgenClause.$doelgroepClause;
+			WHERE (".$vervalClause."
+			".$operator." ".$verborgenClause.")".$doelgroepClause."	AND datum>='".$this->getDatum()."'";
+		
 		$resource=$db->select($positieQuery);
 		$record=$db->next($resource);
 		$paginaNummer=ceil(($record['positie'])/Instelling::get('mededelingen_aantalPerPagina'));
@@ -513,6 +502,37 @@ class Mededeling{
 			}
 		}
 		return $sResultaat;
+	}
+	
+	// static function getClauses(bool)
+	// Geeft een array met clause terug, rekening houdend met of we op de prullenbak-pagina zijn of niet.
+	public static function getClauses($prullenbak){
+		// Verval clause.
+		$vervalClause="(vervaltijd IS NULL OR vervaltijd > '".getDateTime()."')";
+		if($prullenbak){
+			$vervalClause="(vervaltijd IS NOT NULL AND vervaltijd <= '".getDateTime()."')";
+		}
+		// Operator tussen de verval clause en verborgen clause.
+		$operator="AND";
+		if($prullenbak){
+			$operator="OR";
+		}
+		// Verborgen clause.
+		$verborgenClause="zichtbaarheid='zichtbaar'";
+		if($prullenbak){
+			$verborgenClause="(zichtbaarheid='verwijderd' OR zichtbaarheid='onzichtbaar')";
+		}elseif(Mededeling::isModerator()){ // Als de gebruiker moderator is, mag hij ook wacht_goedkeuring-berichten zien.
+			$verborgenClause="(zichtbaarheid='zichtbaar' OR zichtbaarheid='wacht_goedkeuring')";
+		}
+		// Doelgroep clause.
+		$doelgroepClause="";
+		if( !LoginLid::instance()->hasPermission('P_LEDEN_READ') ){
+			$doelgroepClause=" AND doelgroep='iedereen'";
+		}else if( self::isOudlid() ){
+			$doelgroepClause=" AND doelgroep!='leden'";
+		}
+		
+		return array($vervalClause, $operator, $verborgenClause, $doelgroepClause);
 	}
 }
 

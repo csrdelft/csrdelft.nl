@@ -19,24 +19,26 @@ class MededelingenContent extends SimpleHTML{
 		if($mededelingId!=0){
 			try{
 				$this->geselecteerdeMededeling=new Mededeling($mededelingId);
-				// In de volgende gevallen heeft de gebruiker geen rechten om deze mededeling te bekijken:
-				// 1. Indien deze mededeling reeds verwijderd is.
-				// 2. Indien deze mededeling niet bestemd is voor iedereen en de gebruiker geen leden-lees rechten heeft.
-				// 3. Indien deze mededeling alleen bestemd is voor leden en de gebruiker een oudlid is.
-				// 4. Indien deze mededeling verborgen is en de gebruiker geen moderator is.
-				// 5. Indien deze mededeling wacht op goedkeuring en de gebruiker geen moderator is EN deze mededeling niet van hem is. 
-				if(
-					($this->geselecteerdeMededeling->getZichtbaarheid()=='verwijderd') OR
-					($this->geselecteerdeMededeling->isPrive() AND !LoginLid::instance()->hasPermission('P_LEDEN_READ')) OR
-					($this->geselecteerdeMededeling->getDoelgroep()=='leden' AND Mededeling::isOudlid()) OR
-					($this->geselecteerdeMededeling->getZichtbaarheid()=='onzichtbaar' AND !Mededeling::isModerator()) OR
-					($this->geselecteerdeMededeling->getZichtbaarheid()=='wacht_goedkeuring' AND
-						( (LoginLid::instance()->getUid()!=$this->geselecteerdeMededeling->getUid()) AND
-							!Mededeling::isModerator() )
-					)
-				){
-					// De gebruiker heeft geen rechten om deze mededeling te bekijken, dus we resetten het weer.
-					$this->geselecteerdeMededeling=null;
+				if(!$this->prullenbak OR !Mededeling::isModerator()){
+					// In de volgende gevallen heeft de gebruiker geen rechten om deze mededeling te bekijken:
+					// 1. Indien deze mededeling reeds verwijderd is.
+					// 2. Indien deze mededeling niet bestemd is voor iedereen en de gebruiker geen leden-lees rechten heeft.
+					// 3. Indien deze mededeling alleen bestemd is voor leden en de gebruiker een oudlid is.
+					// 4. Indien deze mededeling verborgen is en de gebruiker geen moderator is.
+					// 5. Indien deze mededeling wacht op goedkeuring en de gebruiker geen moderator is EN deze mededeling niet van hem is. 
+					if(
+						($this->geselecteerdeMededeling->getZichtbaarheid()=='verwijderd') OR
+						($this->geselecteerdeMededeling->isPrive() AND !LoginLid::instance()->hasPermission('P_LEDEN_READ')) OR
+						($this->geselecteerdeMededeling->getDoelgroep()=='leden' AND Mededeling::isOudlid()) OR
+						($this->geselecteerdeMededeling->getZichtbaarheid()=='onzichtbaar' AND !Mededeling::isModerator()) OR
+						($this->geselecteerdeMededeling->getZichtbaarheid()=='wacht_goedkeuring' AND
+							( (LoginLid::instance()->getUid()!=$this->geselecteerdeMededeling->getUid()) AND
+								!Mededeling::isModerator() )
+						)
+					){
+						// De gebruiker heeft geen rechten om deze mededeling te bekijken, dus we resetten het weer.
+						$this->geselecteerdeMededeling=null;
+					}
 				}
 			} catch (Exception $e) {
 				// Doe niets, zodat $geselecteerdeMededeling gelijk blijft aan null.
@@ -61,7 +63,7 @@ class MededelingenContent extends SimpleHTML{
 
 	public function view(){
 		if(!$this->paginaNummerOpgevraagd){
-			$this->paginaNummer = $this->geselecteerdeMededeling->getPaginaNummer();
+			$this->paginaNummer = $this->geselecteerdeMededeling->getPaginaNummer($this->prullenbak);
 		}
 		
 		$content=new Smarty_csr();
@@ -78,12 +80,12 @@ class MededelingenContent extends SimpleHTML{
 			$content->assign('pagina_root', self::mededelingenRoot.'prullenbak/');
 		}
 		
-		$content->assign('lijst', Mededeling::getLijstVanPagina($this->paginaNummer, Instelling::get('mededelingen_aantalPerPagina')));
+		$content->assign('lijst', Mededeling::getLijstVanPagina($this->paginaNummer, Instelling::get('mededelingen_aantalPerPagina'), $this->prullenbak));
 		$content->assign('geselecteerdeMededeling', $this->geselecteerdeMededeling);
 		$content->assign('wachtGoedkeuring', Mededeling::getLijstWachtGoedkeuring());
 		
 		$content->assign('huidigePagina', $this->paginaNummer);
-		$content->assign('totaalAantalPaginas', (ceil(Mededeling::getAantal()/Instelling::get('mededelingen_aantalPerPagina'))));
+		$content->assign('totaalAantalPaginas', (ceil(Mededeling::getAantal($this->prullenbak)/Instelling::get('mededelingen_aantalPerPagina'))));
 		
 		$content->assign('datumtijdFormaat', '%d-%m-%Y %H:%M');
 
