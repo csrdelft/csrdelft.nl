@@ -23,14 +23,18 @@
 .nieuwstitel a{ color:  black;}
 .nieuwsbericht-vast{ height: 100px;	}
 
+#mededelingenketser #kolomlinks{
+	width: 320px;
+	float: left;
+}
+#mededelingenketser #kolomrechts{
+	width: 400px;
+	float: left;
+}
 #mededelingen-titel{
 	height: 20px;
 	width: 70%;
 	margin: 0px 0px 10px 0px;
-}
-.mededelingen-overzichtlijst{
-	width: 320px;
-	float: left;
 }
 .mededelingen-beheerlink{
 	width: 20%;
@@ -65,7 +69,7 @@
 .mededelingenlijst-block a{	color: black; }
 .mededelingenlijst-plaatje{ margin: 0px 5px 0px 0px; float: left; }
 
-.mededelingen-overzichtlijst .wachtgoedkeuring{
+.wachtgoedkeuring{
 	margin-top: 30px;
 }
 
