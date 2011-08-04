@@ -1,25 +1,53 @@
 {if $geselecteerdeMededeling->isModerator()}
 <ul class="horizontal nobullets">
-	<li class="active">
-		<a href="{$nieuws_root}" title="Mededelingenketzer">Mededelingenketzer</a>
+	<li{if !$prullenbak} class="active"{/if}>
+		<a href="{$mededelingenketser_root}" title="Mededelingenketzer">Mededelingenketzer</a>
 	</li>
 	<li>
-		<a href="{$nieuws_root}top3overzicht" title="Top 3 Overzicht">Top 3 Overzicht</a>
+		<a href="{$pagina_root}top3overzicht/" title="Top 3 Overzicht">Top 3 Overzicht</a>
 	</li>
-	<li>
-		<a href="{$nieuws_root}prullenbak" title="Prullenbak">Prullenbak</a>
+	<li{if $prullenbak} class="active"{/if}>
+		<a href={if !$prullenbak}"{$pagina_root}prullenbak/"{else}"{$pagina_root}"{/if} title="Prullenbak">Prullenbak</a>
 	</li>
 </ul>
 <hr />
 {/if}
 <div id="mededelingenketser">
+{if $prullenbak}<h1>Mededelingen Prullenbak</h1>{/if}
 {$melding}
 {if $geselecteerdeMededeling!==null}		{*	Check of er een mededeling geselecteerd is.	Zo niet, dan
 												is de database leeg en geven we een nette foutmelding.	*}
 <div id="kolomlinks">
+{* Knoppen bovenaan *}
+{if !$prullenbak AND $geselecteerdeMededeling->magToevoegen()}
+	<a class="knop" href="{$pagina_root}toevoegen">{icon get="toevoegen"} Toevoegen</a>
+{/if}
+{if $geselecteerdeMededeling->isModerator()}
+	<a class="knop" href="#" onclick="toggleDiv('legenda')">{icon get="legenda"} Legenda</a>
+	<div id="legenda" style="display:none;">
+		<span id="ubbsluiten" onclick="toggleDiv('legenda')" title="Legenda verbergen">&times;</span>
+		<h2>Legenda Mededelingen</h2>
+		<br />
+		Voor de moderators zijn mededelingen in de lijst gemarkeerd. Dit is de betekenis van de markering:<br />
+		<ul>
+			<li><strong>dikgedrukte</strong> mededelingen wachten op goedkeuring</li>
+			<li><em>schuingedrukte</em> mededelingen zijn zichtbaar voor iedereen (mits ze goedgekeurd zijn)</li>
+			<li>normale tekst geeft aan dat mededelingen alleen zichtbaar zijn voor (oud)leden</li>
+			<li><span style="color: grey;">grijs gekleurde</span> mededelingen zijn verborgen en dus alleen zichtbaar voor moderators</li>
+		</ul>
+		<br />
+	</div>
+{/if}
+{if (!$prullenbak AND $geselecteerdeMededeling->magToevoegen()) OR $geselecteerdeMededeling->isModerator()}
+	<br />
+	<br />	
+{/if}
+
+	{* Lijst met mededelingen *}
 	{include file="mededelingen/lijst.tpl"}
 
-	{if !empty($wachtGoedkeuring)}
+	{* Lijst met (eigen) mededelingen die door de PubCie nog goedgekeurd moeten worden. *}
+	{if !$prullenbak AND !empty($wachtGoedkeuring)}
 	<div class="wachtgoedkeuring">
 		<h2>Wachtend op goedkeuring van de PubCie:</h2><br />
 		{foreach from=$wachtGoedkeuring key=groepering item=mededelingen}
@@ -29,14 +57,14 @@
 					<div {if $mededeling->getId()==$geselecteerdeMededeling->getId()}id="actief" {/if}class="mededelingenlijst-item{if $mededeling->isVerborgen()} verborgen-item{/if}">
 						{if $mededeling->getCategorie()->getPlaatje() !=''}
 							<div class="mededelingenlijst-plaatje">
-								<a href="{$nieuws_root}{$mededeling->getId()}">
+								<a href="{$pagina_root}{$mededeling->getId()}">
 									<img src="{$csr_pics}nieuws/{$mededeling->getCategorie()->getPlaatje()}" width="10px" height="10px" />
 								</a>
 							</div>
 						{/if}
 					<div class="itemtitel">
 						{* {$mededeling->getDatum()} *}
-						<a href="{$nieuws_root}{$mededeling->getId()}"{if $mededeling->isModerator()} style="{if !$mededeling->isPrive()}font-style: italic;{/if}{if $mededeling->getZichtbaarheid()=='wacht_goedkeuring'}font-weight: bold;{/if}"{/if}>{$mededeling->getAfgeknipteTitel()}</a>
+						<a href="{$pagina_root}{$mededeling->getId()}"{if $mededeling->isModerator()} style="{if !$mededeling->isPrive()}font-style: italic;{/if}{if $mededeling->getZichtbaarheid()=='wacht_goedkeuring'}font-weight: bold;{/if}"{/if}>{$mededeling->getAfgeknipteTitel()}</a>
 					</div>
 			</div>
 				{/foreach}
@@ -47,6 +75,7 @@
 </div> {* Einde kolom links *}
 	
 <div id="kolomrechts">
+	{* De mededeling rechtsbovenaan *}
 	<div class="nieuwsbericht">
 		<div class="nieuwsbody">
 			<div class="nieuwstitel">{$geselecteerdeMededeling->getTitel()|escape:'html'}</div>
@@ -68,14 +97,14 @@
 				Verborgen: ja<br />
 			{/if}
 			{if $geselecteerdeMededeling->magBewerken()}
-				<a href="{$nieuws_root}bewerken/{$geselecteerdeMededeling->getId()}">
+				<a href="{$pagina_root}bewerken/{$geselecteerdeMededeling->getId()}">
 					{icon get="bewerken"}
 				</a>
-				<a href="{$nieuws_root}verwijderen/{$geselecteerdeMededeling->getId()}" onclick="return confirm('Weet u zeker dat u deze mededeling wilt verwijderen?');">
+				<a href="{$pagina_root}verwijderen/{$geselecteerdeMededeling->getId()}" onclick="return confirm('Weet u zeker dat u deze mededeling wilt verwijderen?');">
 					{icon get="verwijderen"}
 				</a>
 				{if $geselecteerdeMededeling->isModerator() AND $geselecteerdeMededeling->getZichtbaarheid()=='wacht_goedkeuring'}
-					<a onclick="return confirm('Weet u zeker dat u deze mededeling wilt goedkeuren?')" href="{$nieuws_root}keur-goed/{$geselecteerdeMededeling->getId()}">
+					<a onclick="return confirm('Weet u zeker dat u deze mededeling wilt goedkeuren?')" href="{$pagina_root}keur-goed/{$geselecteerdeMededeling->getId()}">
 						{icon get="goedkeuren"}
 					</a>
 				{/if}
@@ -84,7 +113,9 @@
 	</div>
 	
 	{* Het Topmost block *}
-	{'[mededelingen=top3leden]'|ubb}
+	{if !$prullenbak}
+		{'[mededelingen=top3leden]'|ubb}
+	{/if}
 	
 {else}		{* als $geselecteerdeMededeling===null *}
 	Er zijn geen mededelingen gevonden...

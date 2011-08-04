@@ -4,10 +4,14 @@ class MededelingenContent extends SimpleHTML{
 	private $paginaNummer;
 	private $paginaNummerOpgevraagd;
 	
+	private $prullenbak;
+	
 	const aantalTopMostBlock=3;
 	const mededelingenRoot='/actueel/mededelingen/';
 	
-	public function __construct($mededelingId){
+	public function __construct($mededelingId, $prullenbak=false){
+		$this->prullenbak=$prullenbak;
+		
 		$this->geselecteerdeMededeling=null;
 		$this->paginaNummer=1;
 		$this->paginaNummerOpgevraagd=false;
@@ -63,7 +67,16 @@ class MededelingenContent extends SimpleHTML{
 		$content=new Smarty_csr();
 
 		$content->assign('melding', $this->getMelding());
-		$content->assign('nieuws_root', self::mededelingenRoot);
+		$content->assign('prullenbak', $this->prullenbak);
+		
+		// De link om terug te gaan naar de mededelingenketser.
+		$content->assign('mededelingenketser_root', self::mededelingenRoot);
+		// Het pad naar de paginaroot (mededelingenketser of prullenbak).
+		if(!$this->prullenbak){
+			$content->assign('pagina_root', self::mededelingenRoot);
+		}else{
+			$content->assign('pagina_root', self::mededelingenRoot.'prullenbak/');
+		}
 		
 		$content->assign('lijst', Mededeling::getLijstVanPagina($this->paginaNummer, Instelling::get('mededelingen_aantalPerPagina')));
 		$content->assign('geselecteerdeMededeling', $this->geselecteerdeMededeling);

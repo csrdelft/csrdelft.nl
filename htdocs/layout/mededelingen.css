@@ -73,7 +73,7 @@
 	margin-top: 30px;
 }
 
-.mededelingen-overzichtlijst #legenda{
+#mededelingenketser #legenda{
 	display: none; 
 	z-index: 999;
 	position: fixed;

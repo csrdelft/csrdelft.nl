@@ -6,7 +6,7 @@
 		<a href="{$mededelingen_root}top3overzicht" title="Top 3 Overzicht">Top 3 Overzicht</a>
 	</li>
 	<li>
-		<a href="{$nieuws_root}prullenbak" title="Prullenbak">Prullenbak</a>
+		<a href="{$mededelingen_root}prullenbak/" title="Prullenbak">Prullenbak</a>
 	</li>
 </ul>
 <hr />
