@@ -299,7 +299,6 @@ class Mededeling{
 			SELECT id, datum
 			FROM mededeling
 			WHERE uid='".LoginLid::instance()->getUid()."' 
-			AND (vervaltijd IS NULL OR vervaltijd > '".getDateTime()."')
 			AND zichtbaarheid='wacht_goedkeuring'
 			ORDER BY datum DESC";
 		$resource=$db->select($query);

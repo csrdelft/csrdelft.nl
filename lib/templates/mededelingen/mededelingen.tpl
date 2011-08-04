@@ -15,7 +15,7 @@
 <div id="mededelingenketser">
 {if $prullenbak}
 	<h1>Mededelingen Prullenbak</h1>
-	<span style="display:block; margin-bottom: 10px;">Deze pagina bevat alleen verborgen, verwijderde en verlopen mededelingen.</span>
+	<span style="display:block; margin-bottom: 10px;">Deze pagina bevat alleen verborgen, verwijderde en vervallen mededelingen.</span>
 {/if}
 {$melding}
 {if $geselecteerdeMededeling!==null}		{*	Check of er een mededeling geselecteerd is.	Zo niet, dan
