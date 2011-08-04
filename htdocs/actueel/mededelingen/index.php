@@ -1,5 +1,8 @@
 <?php
 require_once 'configuratie.include.php';
+require_once 'mededelingen/mededeling.class.php';
+require_once 'mededelingen/mededelingcontent.class.php';
+require_once 'mededelingen/mededelingencontent.class.php';
 
 $mededelingId=0;
 if(isset($_GET['mededelingId'])){
@@ -16,13 +19,9 @@ if(isset($_GET['pagina'])){
 }
 
 $prullenbak=false;
-if(isset($_REQUEST['prullenbak']) && $_REQUEST['prullenbak'] == '1'){
+if(isset($_REQUEST['prullenbak']) AND $_REQUEST['prullenbak'] == '1' AND Mededeling::isModerator()){
 	$prullenbak=true;
 }
-
-require_once 'mededelingen/mededeling.class.php';
-require_once 'mededelingen/mededelingcontent.class.php';
-require_once 'mededelingen/mededelingencontent.class.php';
 
 define('MEDEDELINGEN_ROOT', CSR_ROOT.'actueel/mededelingen/');
 
