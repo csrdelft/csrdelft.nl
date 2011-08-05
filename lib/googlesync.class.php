@@ -11,7 +11,7 @@ require_once 'groepen/groep.class.php';
 
 define('GOOGLE_CONTACTS_URL', 'http://www.google.com/m8/feeds/contacts/default/full');
 define('GOOGLE_GROUP_CONTACTS_URL', 'http://www.google.com/m8/feeds/contacts/default/base/');
-define('GOOGLE_GROUPS_FEED', 'http://www.google.com/m8/feeds/groups/default/full');
+define('GOOGLE_GROUPS_URL', 'http://www.google.com/m8/feeds/groups/default/full');
 
 define('GOOGLE_CONTACTS_MAX_RESULTS', 1000);
 /*
@@ -95,7 +95,8 @@ class GoogleSync{
 		$this->contactFeed=$this->gdata->getFeed($query);
 	}
 	
-	/* Trek naam en google-id uit de feed, de rest is niet echt nodig.
+	/* Trek naam googleId en wat andere relevante meuk uit de feed-objecten
+	 * en stop dat in een array.
 	 */
 	public function getGoogleContacts(){
 		if($this->contactData==null){
@@ -262,7 +263,7 @@ class GoogleSync{
 		$title->setAttribute('type', 'text');
 		$entry->appendChild($title);
 
-		$response=$this->gdata->insertEntry($doc->saveXML(), GOOGLE_GROUPS_FEED_URL);
+		$response=$this->gdata->insertEntry($doc->saveXML(), GOOGLE_GROUPS_URL);
 
 		//herlaad groupFeed om de nieuw gemaakte daar ook in te hebben.
 		$this->loadGroupFeed();
