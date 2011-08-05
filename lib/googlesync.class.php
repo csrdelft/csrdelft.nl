@@ -69,7 +69,7 @@ class GoogleSync{
 	 * Load all contactgroups.
 	 */
 	private function loadGroupFeed(){
-		$query=new Zend_Gdata_Query(GOOGLE_GROUPS_FEED);
+		$query=new Zend_Gdata_Query(GOOGLE_GROUPS_URL);
 		$this->groupFeed=$this->gdata->getFeed($query);
 	}
 	
