@@ -31,7 +31,8 @@ abstract class FormField{
 	public function isPosted(){	return isset($_POST[$this->name]); }
 	
 	public function setSuggestions($array){	$this->suggestions=$array; }
-	
+	public function setRecommendation($string){	$this->recommendation=$string; }
+
 	public function getValue(){
 		if($this->isPosted()){
 			return trim($_POST[$this->name]);
@@ -62,7 +63,13 @@ abstract class FormField{
 			echo '<label for="field_'.$this->name.'">'.mb_htmlentities($this->description).'</label>';
 		}
 	}
-	
+		protected function getValueOrRecommendation($value){
+		if($value==''){
+			return '<span class="suggestie">'.htmlspecialchars($this->recommendation).'</span>';
+		}else{
+			return htmlspecialchars($value);
+		}
+	}
 	protected function getError(){
 		if($this->error!=''){
 			return '<div class="waarschuwing">'.$this->error.'</div>';
@@ -219,6 +226,69 @@ class UidField extends InputField{
 		echo '<div class="uidPreview" id="preview_'.$this->name.'"></div>';
 		echo '<script>uidPreview(\''.$this->name.'\');</script>';
 		echo '</div>';
+	}
+}
+class LidField extends FormField{
+	public function __construct($name, $value, $description, $suggestions){
+		parent::__construct($name, $value, $description);
+		
+		$this->setSuggestions($suggestions);
+		$this->setRecommendation('Geef naam of uid van lener');
+	}
+	
+	public function valid(){
+		if(!parent::valid()){ return false; }
+		//leeg veld wel accepteren.
+		if($this->getValue()==''){ return true; }
+
+		$zoekin=array('S_LID', 'S_NOVIET', 'S_GASTLID', 'S_KRINGEL', 'S_OUDLID','S_ERELID');
+		$uid=namen2uid($this->getValue(), $zoekin);
+		if($uid){
+			if(isset($uid[0]['uid'])){ //uid gevonden?
+				if(Lid::isValidUid($uid[0]['uid'])){
+					return true;
+				}else{
+					$this->error='Geen geldig uid gevonden';
+				}
+			}elseif(count($uid[0]['naamOpties'])>0){ //meerdere naamopties?
+				$this->error='Meerdere leden mogelijk';
+			}else{
+				$this->error='Geen geldig lid';
+			}
+		}else{
+			$this->error='Geen geldig lid';
+		}
+
+		return $this->error=='';
+	}
+	public function view(){
+		echo $this->getDiv();
+		echo $this->getLabel();
+		echo $this->getError();
+		echo '<input type="text" id="field_'.$this->name.'" name="'.$this->name.'" class="lid" value="'.htmlspecialchars($this->value).'" ';
+		echo ' autocomplete="off" ';
+		echo 'onKeyUp="naamCheck(\''.$this->name.'\')" onMouseUp="naamCheck(\''.$this->name.'\')" maxlength="255" ';
+		echo ' />';
+		echo '<div class="naamCheck" id="preview_'.$this->name.'"></div>';
+
+		echo '<script language="javascript"> ';
+		echo 'naamCheck(\''.$this->name.'\');';
+		echo 'var sug_'.$this->name.'=new Array("'.implode('","', $this->suggestions).'"); ';
+		echo 'new actb(document.getElementById("field_'.$this->name.'"), sug_'.$this->name.'); ';
+		echo '</script>';
+
+		echo '</div>';
+	}
+}
+class RequiredLidField extends LidField{
+	public $notnull=true;
+	
+	public function valid(){
+		if(!parent::valid()){ return false; }
+		if($this->getValue()==''){ 
+			$this->error= 'Dit is een verplicht veld.';
+		}
+		return $this->error=='';
 	}
 }
 class CodeField extends InputField{

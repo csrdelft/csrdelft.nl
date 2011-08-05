@@ -6,7 +6,7 @@
 		<a href="/communicatie/bibliotheek/" title="Naar de catalogus">Catalogus</a>
 	</li>
 	<li>
-		<a href="/communicatie/bibliotheek/beheer" title="Naar de beheeroverzicht">Beheer</a>
+		<a href="/communicatie/bibliotheek/boekstatus" title="Uitgebreide boekstatus">Boekstatus</a>
 	</li>
 </ul>
 {if $loginlid->hasPermission('P_BIEB_READ')}

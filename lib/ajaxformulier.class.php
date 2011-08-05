@@ -16,6 +16,7 @@ abstract class FormAjaxField{
 	public $notnull=false; 		//mag het veld leeg zijn?
 	public $autocomplete=true; 	//browser laten autoaanvullen?
 	public $error='';			//foutmelding van dit veld
+	public $recommendation;		//aanbeveling voor als veld leeg is
 
 	public $suggestions=array();
 
@@ -30,7 +31,8 @@ abstract class FormAjaxField{
 	public function getName(){	return $this->name; }
 	public function isPosted(){	return isset($_POST[$this->name]); }
 	
-	public function setSuggestions($array){	$this->suggestions=$array; }
+	public function setSuggestions($array){		$this->suggestions=$array; }
+	public function setRecommendation($string){	$this->recommendation=$string; }
 	
 	public function getValue(){
 		if($this->isPosted()){
@@ -62,7 +64,13 @@ abstract class FormAjaxField{
 			echo '<label for="field_'.$this->name.'">'.mb_htmlentities($this->description).'</label>';
 		}
 	}
-	
+	protected function getValueOrRecommendation($value){
+		if($value==''){
+			return '<span class="suggestie">'.htmlspecialchars($this->recommendation).'</span>';
+		}else{
+			return htmlspecialchars($value);
+		}
+	}
 	public function getError(){
 		if($this->error!=''){
 			return $this->error;
@@ -73,7 +81,7 @@ abstract class FormAjaxField{
 		echo $this->getDiv();
 		echo $this->getLabel();
 		echo $this->getError();
-		echo '<span class="text">'.htmlspecialchars($this->value).'&nbsp;</span>';
+		echo '<span class="text">'.$this->getValueOrRecommendation($this->value).'&nbsp;</span>';
 		echo '<input type="text" id="field_'.$this->name.'" name="'.$this->name.'" class="editbox regular" value="'.htmlspecialchars($this->value).'" style="display: none;" ';
 		if(!$this->autocomplete OR count($this->suggestions)>0){
 			echo 'autocomplete="off" ';
@@ -181,20 +189,21 @@ class RequiredLandAjaxField extends LandAjaxField{
 }
 
 class SuggestInputAjaxField extends FormAjaxField{
-	public function __construct($name, $value, $description, $max_len, $suggestions){
+	public function __construct($name, $value, $description, $max_len, $suggestions, $recommendation){
 		parent::__construct($name, $value, $description, $max_len);
 		$this->setSuggestions($suggestions);
+		$this->setRecommendation($recommendation);
 	}
 }
 class RequiredSuggestInputAjaxField extends SuggestInputAjaxField{
-	public function __construct($name, $value, $description, $max_len, $suggestions){
-		parent::__construct($name, $value, $description, $max_len, $suggestions);
+	public function __construct($name, $value, $description, $max_len, $suggestions, $recommendation){
+		parent::__construct($name, $value, $description, $max_len, $suggestions, $recommendation);
 	}
 	public $notnull=true;
 }
 class BiebSuggestInputAjaxField extends SuggestInputAjaxField{
-	public function __construct($name, $value, $description, $max_len, $suggestions){
-		parent::__construct($name, $value, $description, $max_len, $suggestions);
+	public function __construct($name, $value, $description, $max_len, $suggestions, $recommendation){
+		parent::__construct($name, $value, $description, $max_len, $suggestions, $recommendation);
 	}
 	public function valid(){
 		if(!parent::valid()){ return false; }
@@ -240,6 +249,69 @@ class UidAjaxField extends InputAjaxField{
 		echo '<div class="editbox uidPreview" id="preview_'.$this->name.'"></div>';
 		echo '<script>uidPreview(\''.$this->name.'\');</script>';
 		echo '</div>';
+	}
+}
+class LidAjaxField extends FormAjaxField{
+	public function __construct($name, $value, $description, $suggestions, $recommendation){
+		parent::__construct($name, $value, $description);
+		$this->setSuggestions($suggestions);
+		$this->setRecommendation($recommendation);
+	}
+	
+	public function valid(){
+		if(!parent::valid()){ return false; }
+		//leeg veld wel accepteren.
+		if($this->getValue()==''){ return true; }
+
+		$zoekin=array('S_LID', 'S_NOVIET', 'S_GASTLID', 'S_KRINGEL', 'S_OUDLID','S_ERELID');//, 'S_OUDLID','S_ERELID' );
+		$uid=namen2uid($this->getValue(), $zoekin);
+		if($uid){
+			if(isset($uid[0]['uid'])){ //uid gevonden?
+				if(Lid::isValidUid($uid[0]['uid'])){
+					return true;
+				}else{
+					$this->error='Geen geldig uid gevonden';
+				}
+			}elseif(count($uid[0]['naamOpties'])>0){ //meerdere naamopties?
+				$this->error='Meerdere leden mogelijk';
+			}else{
+				$this->error='Geen geldig lid';
+			}
+		}else{
+			$this->error='Geen geldig lid';
+		}
+
+		return $this->error=='';
+	}
+	public function view(){
+		echo $this->getDiv();
+		echo $this->getLabel();
+		echo $this->getError();
+		echo '<span class="text">'.$this->getValueOrRecommendation($this->value).'&nbsp;</span>';
+		echo '<input type="text" id="field_'.$this->name.'" name="'.$this->name.'" class="editbox lid" value="'.htmlspecialchars($this->value).'" ';
+		echo ' autocomplete="off" ';
+		echo 'onKeyUp="naamCheck(\''.$this->name.'\')" maxlength="255" ';
+		echo ' />';
+		echo '<div class="editelements naamCheck" id="preview_'.$this->name.'"></div><div style="clear: left;"></div>';
+
+		echo '<script language="javascript"> ';
+		echo 'naamCheck(\''.$this->name.'\');';
+		echo 'var sug_'.$this->name.'=new Array("'.implode('","', $this->suggestions).'"); ';
+		echo 'new actb(document.getElementById("field_'.$this->name.'"), sug_'.$this->name.'); ';
+		echo '</script>';
+
+		echo '</div>';
+	}
+}
+class RequiredLidAjaxField extends LidAjaxField{
+	public $notnull=true;
+	
+	public function valid(){
+		if(!parent::valid()){ return false; }
+		if($this->getValue()==''){ 
+			$this->error= 'Dit is een verplicht veld.';
+		}
+		return $this->error=='';
 	}
 }
 class CodeAjaxField extends InputAjaxField{

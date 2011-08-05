@@ -8,7 +8,7 @@
 		<a href="/communicatie/bibliotheek/" title="Naar de catalogus">Catalogus</a>
 	</li>
 	<li>
-		<a href="/communicatie/bibliotheek/beheer" title="Naar de beheeroverzicht">Beheer</a>
+		<a href="/communicatie/bibliotheek/boekstatus" title="Uitgebreide boekstatus">Boekstatus</a>
 	</li>
 </ul>
 
@@ -64,24 +64,49 @@
 	</div><div style="clear: left;"></div>
 
 	{* Exemplaren *}
-	<div class="exemplaren" >
+	<div class="exemplaren" id="exemplaren">
 		<div class="blok gegevens">
-			<div class="label">.</div><h2>Exemplaren</h2>
+			<h2>Exemplaren</h2>
 			{foreach from=$boek->getExemplaren() item=exemplaar}
-				<div class="regel">
+				<div class="exemplaar">
 					<div class="label">{$exemplaar.eigenaar_uid|pasfoto}</div>		
-					<div class="exemplaar" id="ex{$exemplaar.id}">
-						{if $exemplaar.eigenaar_uid=='x222'}C.S.R.-bibliotheek{else}{$exemplaar.eigenaar_uid|csrnaam:'civitas'}{/if}<br />
+					<div class="gegevensexemplaar" id="ex{$exemplaar.id}">
+					{* eigenaar *}
+						{if $exemplaar.eigenaar_uid=='x222'}
+							C.S.R.-bibliotheek
+						{else}
+							{$exemplaar.eigenaar_uid|csrnaam:'civitas'}
+						{/if}<br />
+					{* status *}
 						{if $exemplaar.status=='uitgeleend'}
 							Uitgeleend aan {$exemplaar.uitgeleend_uid|csrnaam:'civitas'}<br />
 						{/if}
 						{if $exemplaar.status=='teruggegeven'}
 							Teruggegeven door {$exemplaar.uitgeleend_uid|csrnaam:'civitas'}<br />
 						{/if}
-						{if $exemplaar.status=='beschikbaar'}
-							<a class="knop" href="/communicatie/bibliotheek/exemplaarlenen/{$boek->getId()}/{$exemplaar.id}" title="Leen dit boek" onclick="return confirm('U wilt dit boek van {$exemplaar.eigenaar_uid|csrnaam:'civitas':'plain'} lenen?')">{icon get="lorry"} Lenen</a>
+						{if $exemplaar.status=='vermist'}
+							<span class="melding">Vermist</span><br />
 						{/if}
-						{if $exemplaar.status=='uitgeleend' AND $loginlid->getUid()==$exemplaar.uitgeleend_uid}
+						{if $exemplaar.status=='beschikbaar' AND $boek->isEigenaar($exemplaar.id)}
+							<form action="/communicatie/bibliotheek/exemplaarlenen/{$boek->getId()}/{$exemplaar.id}/ander" id="lener_{$exemplaar.id}" class="lenerForm" method="post">
+								{$boek->getField("lener_`$exemplaar.id`")->view()}{* in dubbele quotes werkt $exemplaar en tussen `` wordt .id gezien *}
+								<input type="hidden" value="lener_{$exemplaar.id}" name="id"/>
+								<div class="submitt">
+									<label for="submit">&nbsp;</label><input type="submit" value="Opslaan" />
+								</div>
+							</form>{* {$boek->getField("lener_`$exemplaar.id`")->view()} *}
+						{/if}
+					{* actieknoppen *}
+						{if $exemplaar.status=='beschikbaar'}
+							{if $exemplaar.eigenaar_uid=='x222'} {* bibliothecaris werkt met kaartjes *}
+								{if !$boek->isEigenaar($exemplaar.id)} {* basfcie hoeft opmerking niet te zien *}
+									Biebboek lenen: <em>laat het kaartje achter voor de bibliothecaris.</em><br />
+								{/if}
+							{else}
+								<a class="knop" href="/communicatie/bibliotheek/exemplaarlenen/{$boek->getId()}/{$exemplaar.id}" title="Leen dit boek" onclick="return confirm('U wilt dit boek van {$exemplaar.eigenaar_uid|csrnaam:'civitas':'plain'} lenen?')">{icon get="lorry"} Lenen</a>
+							{/if}
+						{/if}
+						{if $exemplaar.status=='uitgeleend' AND $loginlid->getUid()==$exemplaar.uitgeleend_uid AND $exemplaar.uitgeleend_uid!=$exemplaar.eigenaar_uid}
 							<a class="knop" href="/communicatie/bibliotheek/exemplaarteruggegeven/{$boek->getId()}/{$exemplaar.id}" title="Boek heb ik teruggegeven" onclick="return confirm('U heeft dit exemplaar van {$exemplaar.eigenaar_uid|csrnaam:'civitas':'plain'} teruggegeven?')">{icon get="lorry_go"} Teruggegeven</a>
 						{/if}
 						{if ($exemplaar.status=='uitgeleend' OR $exemplaar.status=='teruggegeven') AND $boek->isEigenaar($exemplaar.id)}
@@ -96,7 +121,6 @@
 						{if $boek->isEigenaar($exemplaar.id)}
 							<a class="knop" href="/communicatie/bibliotheek/verwijderexemplaar/{$boek->getId()}/{$exemplaar.id}" title="Exemplaar verwijderen" onclick="return confirm('Weet u zeker dat u dit exemplaar van {$exemplaar.eigenaar_uid|csrnaam:'civitas':'plain'} wilt verwijderen?')">{icon get="verwijderen"} Verwijderen</a>
 						{/if}
-						
 					</div>
 				</div>
 			{foreachelse}
@@ -112,8 +136,8 @@
 		{if $boek->countBeschrijvingen()>0}
 			<table id="beschrijvingentabel">
 			{foreach from=$boek->getBeschrijvingen() item=beschrijving}
-				<tr class="{if $action=='bewerken' AND $boek->getBeschrijvingsId()==$beschrijving.id}bewerken{/if}">
-					<td class="recensist">
+				<tr >
+					<td class="recensist {if $action=='bewerken' AND $boek->getBeschrijvingsId()==$beschrijving.id}bewerken{/if}">
 						{$beschrijving.schrijver_uid|csrnaam:'user'}<br />
 						<span class="moment">{$beschrijving.toegevoegd|reldate}</span><br />
 
@@ -126,6 +150,7 @@
 						{/if}
 					</td>
 					<td class="beschrijving b{cycle values="0,1"}{if $action=='bewerken' AND $boek->getBeschrijvingsId()==$beschrijving.id} bewerken{/if}" id="beschrijving{$beschrijving.id}">
+						{if $action=='bewerken' AND $boek->getBeschrijvingsId()==$beschrijving.id} <span class='bewerken'>Deze beschrijving wordt bewerkt</span><br /><br />{/if}
 						{$beschrijving.beschrijving|ubb}
 						{if $beschrijving.bewerkdatum!='0000-00-00 00:00:00'}
 							<br /><div class="offtopic">Bewerkt {$beschrijving.bewerkdatum|reldate}</div>

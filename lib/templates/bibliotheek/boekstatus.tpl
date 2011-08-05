@@ -1,12 +1,12 @@
 {*
- * Toon de beheerlijst
+ * Toon de boekstatuslijst
  *}
 <ul class="horizontal">
 	<li >
 		<a href="/communicatie/bibliotheek/" title="Naar de catalogus">Catalogus</a>
 	</li>
 	<li class="active">
-		<a href="/communicatie/bibliotheek/beheer" title="Naar de beheeroverzicht">Boekstatus</a>
+		<a href="/communicatie/bibliotheek/boekstatus" title="Uitgebreide boekstatus">Boekstatus</a>
 	</li>
 </ul>
 {if $loginlid->hasPermission('P_BIEB_READ')}
@@ -19,11 +19,11 @@
 <div class="foutje">{$melding}</div>
 
 <div id="filters">
-	Selecteer: <a {if $catalogus->getFilter()=='alle'}class="actief"{/if} href="/communicatie/bibliotheek/beheer/alle">Alle boeken</a> - 
-	<a {if $catalogus->getFilter()=='csr'}class="actief"{/if} href="/communicatie/bibliotheek/beheer/csr">C.S.R.-boeken</a> - 
-	<a {if $catalogus->getFilter()=='leden'}class="actief"{/if} href="/communicatie/bibliotheek/beheer/leden">Boeken van Leden</a> - 
-	<a {if $catalogus->getFilter()=='eigen'}class="actief"{/if} href="/communicatie/bibliotheek/beheer/eigen">Eigen boeken</a> - 
-	<a {if $catalogus->getFilter()=='geleend'}class="actief"{/if} href="/communicatie/bibliotheek/beheer/geleend">Geleende boeken</a> 
+	Selecteer: <a {if $catalogus->getFilter()=='alle'}class="actief"{/if} href="/communicatie/bibliotheek/boekstatus/alle">Alle boeken</a> - 
+	<a {if $catalogus->getFilter()=='csr'}class="actief"{/if} href="/communicatie/bibliotheek/boekstatus/csr">C.S.R.-boeken</a> - 
+	<a {if $catalogus->getFilter()=='leden'}class="actief"{/if} href="/communicatie/bibliotheek/boekstatus/leden">Boeken van Leden</a> - 
+	<a {if $catalogus->getFilter()=='eigen'}class="actief"{/if} href="/communicatie/bibliotheek/boekstatus/eigen">Eigen boeken</a> - 
+	<a {if $catalogus->getFilter()=='geleend'}class="actief"{/if} href="/communicatie/bibliotheek/boekstatus/geleend">Geleende boeken</a> 
 </div>
 <table id="boekenbeheerlijsten" class="boeken">
 	<thead>
@@ -63,7 +63,7 @@ Rubriek: {$boek.categorie}">
 			</td>
 		</tr>
 	{foreachelse}
-		Geen boeken
+		 
 	{/foreach}
 	</tbody>
 	<tfoot>

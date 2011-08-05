@@ -34,7 +34,7 @@ class BibliotheekCatalogusContent extends SimpleHtml{
 /*
  * Catalogus
  */
-class BibliotheekBeheerContent extends SimpleHtml{
+class BibliotheekBoekstatusContent extends SimpleHtml{
 
 	private $catalogus ;
 
@@ -43,7 +43,7 @@ class BibliotheekBeheerContent extends SimpleHtml{
 	}
 	
 	public function getTitel(){
-		return 'Bibliotheek | Beheerlijsten';
+		return 'Bibliotheek | Boekstatus';
 	}
 	public function view(){
 		$smarty=new Smarty_csr();
@@ -51,7 +51,7 @@ class BibliotheekBeheerContent extends SimpleHtml{
 		$smarty->assign('catalogus', $this->catalogus);
 		$smarty->assign('action', $this->action);
 
-		$smarty->display('bibliotheek/beheer.tpl');
+		$smarty->display('bibliotheek/boekstatus.tpl');
 	}
 }
 /*

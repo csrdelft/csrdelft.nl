@@ -41,7 +41,7 @@ class BibliotheekController extends Controller{
 						'addbeschrijving', 'verwijderbeschrijving', 'bewerkbeschrijving',
 						'addexemplaar', 'verwijderexemplaar',
 						'exemplaarlenen','exemplaarteruggegeven','exemplaarterugontvangen','exemplaarvermist','exemplaargevonden',
-						'beheer');
+						'boekstatus');
 			if(LoginLid::instance()->hasPermission('P_BIEB_MOD','groep:BASFCie')){
 				$allow=array_merge($allow, array('verwijderboek'));
 			}
@@ -76,19 +76,19 @@ class BibliotheekController extends Controller{
 	}
 
 	/*
-	 * Beheerlijsten tonen
+	 * Boekstatuslijsten tonen
 	 * 
-	 * /beheer/[filters]
+	 * /boekstatus/[filters]
 	 * 
 	 */
-	protected function action_beheer(){
+	protected function action_boekstatus(){
 		$this->zijkolom = false;
 		$filter = 'csr';
 		if($this->hasParam(1)){
 			$filter=$this->getParam(1);
 		}
 		$catalogus = new Catalogus($filter);
-		$this->content=new BibliotheekBeheerContent($catalogus);
+		$this->content=new BibliotheekBoekstatusContent($catalogus);
 	}
 
 	/*
@@ -133,12 +133,11 @@ class BibliotheekController extends Controller{
 			echo '<span class="melding">Onvoldoende rechten voor deze actie</span>';
 			exit;
 		}
-
 		if(isset($_POST['id'])){
 			if($this->boek->isPostedField($_POST['id']) AND $this->boek->validField($_POST['id']) AND $this->boek->saveField($_POST['id'])){
 				echo $this->boek->getProperty($_POST['id']).'';
 			}else{
-				echo '<span class="melding">Fout: '.$this->boek->getField($_POST['id'])->getError().'</span>';
+				echo '<span class="melding">Fout: '.$this->boek->getField($_POST['id'])->getError().'- '.$this->boek->getError().'</span>';
 			}
 		}else{
 			echo '$_POST["id"] is leeg!';
@@ -193,11 +192,11 @@ class BibliotheekController extends Controller{
 		//object Boek laden
 		$this->loadBoek(); 
 		//Eerst ongewensten de deur wijzen
-		if(!$this->boek->magBewerken()){
+		if(!$this->boek->magBekijken()){
 			BibliotheekCatalogusContent::invokeRefresh('Onvoldoende rechten voor deze actie. Biebcontrllr::action_addbeschrijving', CSR_ROOT.'communicatie/bibliotheek/');
 		}
 		if($this->boek->isPostedFields('beschrijving') AND $this->boek->validFields('beschrijving') AND $this->boek->saveFields('beschrijving')){
-			header('location: '.CSR_ROOT.'communicatie/bibliotheek/boek/'.$this->boek->getId().'#beschrijving'.$this->boek->getBeschrijving());
+			header('location: '.CSR_ROOT.'communicatie/bibliotheek/boek/'.$this->boek->getId().'#beschrijving'.$this->boek->getBeschrijvingsId());
 		}else{
 			$this->content=new BibliotheekBoekContent($this->boek);
 		}
@@ -237,7 +236,8 @@ class BibliotheekController extends Controller{
 			}
 			//beschrijving ophalen en in bewerkveld plaatsen
 			$this->boek->setValue('beschrijvingsid', $beschrijvingsid);
-			$this->boek->setValue('beschrijving', $this->boek->getBeschrijving($beschrijvingsid));
+			$aBeschrijving = $this->boek->getBeschrijving($beschrijvingsid);
+			$this->boek->setValue('beschrijving', $aBeschrijving['beschrijving']);
 			$this->boek->assignFieldsBeschrijvingForm();
 			$this->boek->setCommentBeschrijvingForm('Bewerk uw beschrijving of recensie van het boek:'); //header bewerkveld goed zetten
 			//controleer en sla op
@@ -295,23 +295,41 @@ class BibliotheekController extends Controller{
 		BibliotheekBoekContent::invokeRefresh($melding, CSR_ROOT.'communicatie/bibliotheek/boek/'.$this->boek->getId());
 	}
 	/*
-	 * Exemplaar is geleend
+	 * Exemplaar is geleend of wordt uitgeleend door eigenaar
 	 * kan door iedereen, inclusief eigenaar
 	 * 
-	 * /exemplaarlenen/id/exemplaarid
+	 * /exemplaarlenen/id/exemplaarid[/ander]
 	 */
 	public function action_exemplaarlenen(){
 		$this->loadBoek();
 		if($this->hasParam(2) AND $this->boek->magBekijken()){
-			if($this->boek->leenExemplaar($this->getParam(2))){
-				$melding='Exemplaar geleend.';
+			//een exemplaar wordt door eigenaar uitgeleend
+			if($this->hasParam(3) AND $this->getParam(3)=='ander'){
+				if($this->boek->isEigenaar($this->getParam(2))){
+					if(isset($_POST['id'])){
+						if($this->boek->isPostedField($_POST['id']) AND $this->boek->validField($_POST['id']) AND $this->boek->saveField($_POST['id'])){
+							$melding='Exemplaar uitgeleend';
+						}else{
+							$melding='Exemplaar uitlenen is mislukt. '.$this->boek->getField($_POST['id'])->getError().'- '.$this->boek->getError().'Biebcontrllr::action_exemplaarlenen()';
+						}
+					}else{
+						$melding='$_POST[id] is leeg'; 
+					}
+				}else{
+					$melding='U moet eigenaar zijn voor deze actie. Biebcontrllr::action_exemplaarlenen()';
+				}
+			// iemand leent een exemplaar
 			}else{
-				$melding='Exemplaar lenen is mislukt. '.$this->boek->getError().'Biebcontrllr::action_exemplaarlenen()';
+				if($this->boek->leenExemplaar($this->getParam(2))){
+					$melding='Exemplaar geleend.';
+				}else{
+					$melding='Exemplaar lenen is mislukt. '.$this->boek->getError().'Biebcontrllr::action_exemplaarlenen()';
+				}
 			}
 		}else{
 			$melding='Onvoldoende rechten voor deze actie. Biebcontrllr::action_exemplaarlenen()';
 		}
-		BibliotheekBoekContent::invokeRefresh($melding, CSR_ROOT.'communicatie/bibliotheek/boek/'.$this->boek->getId());
+		BibliotheekBoekContent::invokeRefresh($melding, CSR_ROOT.'communicatie/bibliotheek/boek/'.$this->boek->getId().'#exemplaren');
 	}
 	/*
 	 * Lener zegt dat hij/zij exemplaar heeft teruggegeven

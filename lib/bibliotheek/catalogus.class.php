@@ -188,19 +188,27 @@ class Catalogus{
 	 * @return array van alle waardes, alfabetisch gesorteerd
 	 */
 	public static function getAllValuesOfProperty($key){
-		$allowedkeys = array('id', 'titel', 'uitgavejaar', 'uitgeverij', 'paginas', 'taal', 'isbn', 'code');
+		$allowedkeys = array('id', 'titel', 'uitgavejaar', 'uitgeverij', 'paginas', 'taal', 'isbn', 'code', 'naam');
 		if(in_array($key, $allowedkeys)){
 			$db=MySql::instance();
-			$query="
-				SELECT DISTINCT ".$db->escape($key)."
-				FROM biebboek;";
+			if($key=='naam'){
+				$query="
+					SELECT uid, concat(voornaam, ' ', tussenvoegsel,  IF(tussenvoegsel='','',' '), achternaam) as naam  
+					FROM lid 
+					WHERE status IN ('S_LID', 'S_NOVIET', 'S_GASTLID', 'S_KRINGEL', 'S_OUDLID','S_ERELID') 
+					ORDER BY achternaam;";
+			}else{
+				$query="
+					SELECT DISTINCT ".$db->escape($key)."
+					FROM biebboek
+					ORDER BY ".$db->escape($key).";";
+			}
 			$result=$db->query($query);
 			echo mysql_error();
 			if($db->numRows($result)>0){
 				while($prop=$db->next($result)){
 					$properties[]=$prop[$key];
 				}
-				sort($properties);
 				return array_filter($properties);
 			}
 		}
@@ -211,7 +219,8 @@ class Catalogus{
 	 * controleert of gegeven waarde voor de gegeven $key al voorkomt in de db.
 	 * 
 	 * @param $key en $value
-	 * @return bool: $value bestaat in db of niet.
+	 * @return	true $value bestaat in db
+	 * 			false $value bestaat niet
 	 */
 	public static function existsProperty($key,$value){
 		$return = false;
