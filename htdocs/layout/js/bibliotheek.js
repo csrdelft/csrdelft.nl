@@ -75,10 +75,9 @@ jQuery(document).ready(function($) {
 
 function observeClick(){
 	jQuery(".bewerk").click(function(){
-		var ID=jQuery(this).attr('id');
-		jQuery("#"+ID+" span.text").hide();
-		jQuery("#"+ID+" .editbox").show();
-		jQuery("#"+ID+" .editelements").show();
+		//show edit field
+		jQuery(this).children('span.text').hide();
+		jQuery(this).children('.editbox,.editelement').show();
 	}).change(function(){
 		var ID=jQuery(this).attr('id');
 		var boekid=jQuery(".boek").attr('id');
@@ -99,11 +98,13 @@ function observeClick(){
 
 	// Outside click action
 	jQuery(document).mouseup(function(object){
-		if(!(jQuery(object.target).hasClass("editbox") || jQuery(object.target).attr('id').substring(0,6)=='tat_td')){ //in editbox mag je klikken
-			jQuery(".editbox").hide();
-			jQuery('#[name^="tat_td"]').hide();
-			jQuery(".text").show();
-			jQuery(".editelements").hide();
+		if(!(jQuery(object.target).hasClass("editbox") 						//in editbox mag je klikken
+			|| jQuery(object.target).attr('id').substring(0,6)=='tat_td'	//entry van suggestiemenu
+			|| jQuery(object.target).text()=='\\/' 							//movedownarraw suggestiemenu
+			|| jQuery(object.target).text()=='/\\' )){ 						//moveuparrow suggestiemenu 
+				jQuery(".editbox,.editelement").hide();
+				jQuery('[name^="#tat_td"]').hide();
+				jQuery(".text").show();
 		}
 	});
 
@@ -114,7 +115,10 @@ function observeClick(){
 function biebCodeVakvuller(){
 	jQuery(".knop.genereer").click(function (event) {
 		event.preventDefault();
-		jQuery("#field_code").val(jQuery("#field_rubriek").val() + '.' + jQuery("#field_auteur").val().substring(0,3).toLowerCase());
+		jQuery("#field_code").val(
+			jQuery("#field_rubriek").val() + '.' + jQuery("#field_auteur").val().substring(0,3).toLowerCase()
+		);
+		jQuery("#field_code").trigger('change');
 	});
 }  
 function naamCheck(fieldname){

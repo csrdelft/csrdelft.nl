@@ -137,7 +137,7 @@ class BibliotheekController extends Controller{
 			if($this->boek->isPostedField($_POST['id']) AND $this->boek->validField($_POST['id']) AND $this->boek->saveField($_POST['id'])){
 				echo $this->boek->getProperty($_POST['id']).'';
 			}else{
-				echo '<span class="melding">Fout: '.$this->boek->getField($_POST['id'])->getError().'- '.$this->boek->getError().'</span>';
+				echo '<span class="melding">Fout: '.$this->boek->getField($_POST['id'])->getFieldError().'- '.$this->boek->getError().'</span>';
 			}
 		}else{
 			echo '$_POST["id"] is leeg!';
@@ -310,7 +310,7 @@ class BibliotheekController extends Controller{
 						if($this->boek->isPostedField($_POST['id']) AND $this->boek->validField($_POST['id']) AND $this->boek->saveField($_POST['id'])){
 							$melding='Exemplaar uitgeleend';
 						}else{
-							$melding='Exemplaar uitlenen is mislukt. '.$this->boek->getField($_POST['id'])->getError().'- '.$this->boek->getError().'Biebcontrllr::action_exemplaarlenen()';
+							$melding='Exemplaar uitlenen is mislukt. '.$this->boek->getField($_POST['id'])->getFieldError().'- '.$this->boek->getError().'Biebcontrllr::action_exemplaarlenen()';
 						}
 					}else{
 						$melding='$_POST[id] is leeg'; 

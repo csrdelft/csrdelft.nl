@@ -16,6 +16,8 @@ abstract class FormField{
 	public $notnull=false; 		//mag het veld leeg zijn?
 	public $autocomplete=true; 	//browser laten autoaanvullen?
 	public $error='';			//foutmelding van dit veld
+	public $recommendation='';		//aanbeveling voor als veld leeg is
+	public $ajax=false;
 
 	public $suggestions=array();
 
@@ -30,7 +32,7 @@ abstract class FormField{
 	public function getName(){	return $this->name; }
 	public function isPosted(){	return isset($_POST[$this->name]); }
 	
-	public function setSuggestions($array){	$this->suggestions=$array; }
+	public function setSuggestions($array){		$this->suggestions=$array; }
 	public function setRecommendation($string){	$this->recommendation=$string; }
 
 	public function getValue(){
@@ -56,14 +58,18 @@ abstract class FormField{
 		if($this->error!=''){
 			$cssclass.=' metfouten';
 		}
-		return '<div class="'.$cssclass.'">';
+		if($this->ajax){
+			return '<div class="tijdelijk bewerk '.$cssclass.'" id="'.$this->name.'">'; 
+		}else{
+			return '<div class="'.$cssclass.'">';
+		}
 	}
 	protected function getLabel(){
 		if($this->description!=null){
 			echo '<label for="field_'.$this->name.'">'.mb_htmlentities($this->description).'</label>';
 		}
 	}
-		protected function getValueOrRecommendation($value){
+	protected function getValueOrRecommendation($value){
 		if($value==''){
 			return '<span class="suggestie">'.htmlspecialchars($this->recommendation).'</span>';
 		}else{
@@ -75,12 +81,22 @@ abstract class FormField{
 			return '<div class="waarschuwing">'.$this->error.'</div>';
 		}
 	}
-		
+	public function getFieldError(){
+		if($this->error!=''){
+			return $this->error;
+		}
+	}	
 	public function view(){
 		echo $this->getDiv();
 		echo $this->getLabel();
 		echo $this->getError();
-		echo '<input type="text" id="field_'.$this->name.'" name="'.$this->name.'" class="regular" value="'.htmlspecialchars($this->value).'" ';
+		if($this->ajax){
+			echo '<span class="text">'.$this->getValueOrRecommendation($this->value).'&nbsp;</span>';
+			$class='"editbox regular" style="display: none;"';
+		}else{
+			$class='"regular"';
+		}
+		echo '<input type="text" id="field_'.$this->name.'" name="'.$this->name.'" class='.$class.' value="'.htmlspecialchars($this->value).'" ';
 		if(!$this->autocomplete OR count($this->suggestions)>0){
 			echo 'autocomplete="off" ';
 		}
@@ -95,18 +111,21 @@ abstract class FormField{
 		echo '</div>';
 	}
 }
-
 /*
  * Textarea's
  */
 class TextField extends FormField{
-
 	public function view(){
 		echo $this->getDiv();
 		echo $this->getLabel();
 		echo $this->getError();
-		echo '<textarea id="field_'.$this->name.'" name="'.$this->name.'" class="regular" rows="5">'.htmlspecialchars($this->value).'</textarea>';
-
+		if($this->ajax){
+			echo '<span class="text">'.htmlspecialchars($this->value).'&nbsp;</span>';
+			$class='editbox regular';
+		}else{
+			$class='regular';
+		}
+		echo '<textarea id="field_'.$this->name.'" name="'.$this->name.'" class="'.$class.'" rows="5">'.htmlspecialchars($this->value).'</textarea>';
 		echo '</div>';
 	}
 }
@@ -115,7 +134,13 @@ class PreviewTextField extends FormField{
 		echo $this->getDiv();
 		echo $this->getLabel();
 		echo $this->getError();
-		echo '	<div class="textareaContainer">';
+		if($this->ajax){
+			echo '<span class="text">'.htmlspecialchars($this->value).'&nbsp;</span>';
+			$class='editbox textareaContainer';
+		}else{
+			$class='textareaContainer';
+		}
+		echo '	<div class="'.$class.'">';
 		echo '		<div id="berichtPreviewContainer" class="previewContainer"><div id="berichtPreview" class="preview"></div></div>';
 		echo '		<textarea id="field_'.$this->name.'" name="'.$this->name.'" class="regular" rows="8">'.htmlspecialchars($this->value).'</textarea>';
 		echo '		<a style="float: right;" class="handje knop" onclick="toggleDiv(\'ubbhulpverhaal\')" title="Opmaakhulp weergeven">UBB</a>';
@@ -168,21 +193,16 @@ class RequiredLandField extends LandField{
 }
 
 class SuggestInputField extends FormField{
-	public function __construct($name, $value, $description, $max_len, $suggestions){
+	public function __construct($name, $value, $description, $max_len, $suggestions, $recommendation=''){
 		parent::__construct($name, $value, $description, $max_len);
 		$this->setSuggestions($suggestions);
+		$this->setRecommendation($recommendation);
 	}
 }
 class RequiredSuggestInputField extends SuggestInputField{
-	public function __construct($name, $value, $description, $max_len, $suggestions){
-		parent::__construct($name, $value, $description, $max_len, $suggestions);
-	}
 	public $notnull=true;
 }
 class BiebSuggestInputField extends SuggestInputField{
-	public function __construct($name, $value, $description, $max_len, $suggestions){
-		parent::__construct($name, $value, $description, $max_len, $suggestions);
-	}
 	public function valid(){
 		if(!parent::valid()){ return false; }
 		
@@ -221,7 +241,13 @@ class UidField extends InputField{
 		echo $this->getDiv();
 		echo $this->getLabel();
 		echo $this->getError();
-		echo '<input type="text" id="field_'.$this->name.'" name="'.$this->name.'" class="uid" value="'.htmlspecialchars($this->value).'" ';
+		if($this->ajax){
+			echo '<span class="text">'.htmlspecialchars($this->value).'&nbsp;</span>';
+			$class='editbox uid';
+		}else{
+			$class='uid';
+		}
+		echo '<input type="text" id="field_'.$this->name.'" name="'.$this->name.'" class="'.$class.'" value="'.htmlspecialchars($this->value).'" ';
 		echo ' autocomplete="off" onKeyUp="uidPreview(\''.$this->name.'\')" maxlength="4" />';
 		echo '<div class="uidPreview" id="preview_'.$this->name.'"></div>';
 		echo '<script>uidPreview(\''.$this->name.'\');</script>';
@@ -229,11 +255,11 @@ class UidField extends InputField{
 	}
 }
 class LidField extends FormField{
-	public function __construct($name, $value, $description, $suggestions){
+	public function __construct($name, $value, $description, $suggestions, $recommendation){
 		parent::__construct($name, $value, $description);
 		
 		$this->setSuggestions($suggestions);
-		$this->setRecommendation('Geef naam of uid van lener');
+		$this->setRecommendation($recommendation);
 	}
 	
 	public function valid(){
@@ -258,18 +284,28 @@ class LidField extends FormField{
 		}else{
 			$this->error='Geen geldig lid';
 		}
-
 		return $this->error=='';
 	}
 	public function view(){
 		echo $this->getDiv();
 		echo $this->getLabel();
 		echo $this->getError();
-		echo '<input type="text" id="field_'.$this->name.'" name="'.$this->name.'" class="lid" value="'.htmlspecialchars($this->value).'" ';
+		if($this->ajax){
+			echo '<span class="text">'.$this->getValueOrRecommendation($this->value).'&nbsp;</span>';
+			$clear = '<div style="clear: left;"></div>';
+			$class = 'editbox lid';
+			$class2 = 'editelement';
+		}else{
+			$clear = '';
+			$class = 'lid';
+			$class2 = '';
+		}
+		
+		echo '<input type="text" id="field_'.$this->name.'" name="'.$this->name.'" class="'.$class.'" value="'.htmlspecialchars($this->value).'" ';
 		echo ' autocomplete="off" ';
 		echo 'onKeyUp="naamCheck(\''.$this->name.'\')" onMouseUp="naamCheck(\''.$this->name.'\')" maxlength="255" ';
 		echo ' />';
-		echo '<div class="naamCheck" id="preview_'.$this->name.'"></div>';
+		echo '<div class="'.$class2.' naamCheck" id="preview_'.$this->name.'"></div>'.$clear;
 
 		echo '<script language="javascript"> ';
 		echo 'naamCheck(\''.$this->name.'\');';
@@ -308,9 +344,17 @@ class CodeField extends InputField{
 		echo $this->getDiv();
 		echo $this->getLabel();
 		echo $this->getError();
-		echo '<input type="text" id="field_'.$this->name.'" name="'.$this->name.'" class="code" value="'.htmlspecialchars($this->value).'" ';
+		if($this->ajax){
+			echo '<span class="text">'.htmlspecialchars($this->value).'&nbsp;</span>';
+			$class='editbox code" style="display: none;';
+			$class2=' editelement" style="display: none; ';
+		}else{
+			$class='code';
+			$class2='';
+		}
+		echo '<input type="text" id="field_'.$this->name.'" name="'.$this->name.'" class="'.$class.'" value="'.htmlspecialchars($this->value).'" ';
 		echo ' autocomplete="off" maxlength="7" />';
-		echo '<a class="knop genereer" title="Biebcode invullen">Genereer</a>';
+		echo '<a class="knop genereer'.$class2.'" title="Biebcode invullen">Genereer</a>';
 		echo '</div>';
 	}
 }
@@ -519,7 +563,13 @@ class SelectField extends FormField{
 		echo $this->getDiv();
 		echo $this->getLabel();
 		echo $this->getError();
-		echo '<select id="field_'.$this->name.'" name="'.$this->name.'" />';
+		if($this->ajax){
+			echo '<span class="text">'.htmlspecialchars($this->options[$this->value]).'</span>';
+			$class='class="editbox"';
+		}else{
+			$class='';
+		}
+		echo '<select id="field_'.$this->name.'" name="'.$this->name.'" '.$class.' />';
 		foreach($this->options as $value => $description){
 			echo '<option value="'.$value.'"';
 			if($value==$this->value){
@@ -588,7 +638,13 @@ class DatumField extends FormField{
 			$mounths[]=0;
 			$days[]=0;
 		}
-		echo '<select id="field_'.$this->name.'" name="'.$this->name.'_jaar" />';
+		if($this->ajax){
+			echo '<span class="text">'.htmlspecialchars($this->value).'</span>'; //TODO testen!
+			$class=' class="editbox"';
+		}else{
+			$class='';
+		}
+		echo '<select id="field_'.$this->name.'" name="'.$this->name.'_jaar"'.$class.' />';
 		foreach($years as $value){
 			echo '<option value="'.$value.'"';
 			if($value==substr($this->value, 0,4)){
@@ -598,7 +654,7 @@ class DatumField extends FormField{
 		}
 		echo '</select>&nbsp;';
 		
-		echo '<select id="field_'.$this->name.'" name="'.$this->name.'_maand" />';
+		echo '<select id="field_'.$this->name.'" name="'.$this->name.'_maand"'.$class.' />';
 		foreach($mounths as $value){
 			$value=sprintf('%02d', $value);
 			echo '<option value="'.$value.'"';
@@ -610,7 +666,7 @@ class DatumField extends FormField{
 		}
 		echo '</select>&nbsp;';
 		
-		echo '<select id="field_'.$this->name.'" name="'.$this->name.'_dag" />';
+		echo '<select id="field_'.$this->name.'" name="'.$this->name.'_dag"'.$class.' />';
 		foreach($days as $value){
 			$value=sprintf('%02d', $value);
 			echo '<option value="'.$value.'"';
@@ -623,6 +679,131 @@ class DatumField extends FormField{
 		echo '</div>';
 	}
 }
+/*
+ * Ajax velden
+ */
+class FormAjaxField extends FormField{
+	public $ajax=true;
+}
+
+class BiebSuggestInputAjaxField extends BiebSuggestInputField{
+	public $ajax=true;
+}
+class RequiredBiebSuggestInputAjaxField extends BiebSuggestInputAjaxField{
+	public $notnull=true;
+
+	public function valid(){
+		if(!parent::valid()){ return false; }
+		if($this->getValue()==''){ 
+			$this->error= 'Dit is een verplicht veld.';
+		}
+		return $this->error=='';
+	}
+}
+class CodeAjaxField extends CodeField{
+	public $ajax=true;
+}
+class DatumAjaxField extends DatumField{
+	public $ajax=true;
+}
+class EmailAjaxField extends EmailField{
+	public $ajax=true;
+}
+class RequiredEmailAjaxField extends EmailAjaxField{
+	public $notnull=true;
+}
+class GeslachtAjaxField extends GeslachtField{
+	public $ajax=true;
+}
+class InputAjaxField extends InputField{
+	public $ajax=true;
+}
+class RequiredInputAjaxField extends InputAjaxField{
+	public $notnull=true;
+}
+class IntAjaxField extends IntField{
+	public $ajax=true;
+}
+class LandAjaxField extends LandField{
+	public $ajax=true;
+}
+class RequiredLandAjaxField extends LandAjaxField{
+	public $notnull=true;
+}
+class LidAjaxField extends LidField{
+	public $ajax=true;
+}
+class RequiredLidAjaxField extends LidAjaxField{
+	public $notnull=true;
+	
+	public function valid(){
+		if(!parent::valid()){ return false; }
+		if($this->getValue()==''){ 
+			$this->error= 'Dit is een verplicht veld.';
+		}
+		return $this->error=='';
+	}
+}
+class NickAjaxField extends NickField{
+	public $ajax=true;
+}
+//PassAjaxField
+class PreviewTextAjaxField extends PreviewTextField{
+	public $ajax=true;
+}
+class RequiredPreviewTextAjaxField extends PreviewTextAjaxField{
+	public $notnull=true;
+	
+	public function valid(){
+		if(!parent::valid()){ return false; }
+		if($this->getValue()==''){ 
+			$this->error= 'Dit is een verplicht veld.';
+		}
+		return $this->error=='';
+	}
+}
+class SelectAjaxField extends SelectField{
+	public $ajax=true;
+}
+class StudieAjaxField extends StudieField{
+	public $ajax=true;
+}
+class SuggestInputAjaxField extends SuggestInputField{
+	public $ajax=true;
+}
+class RequiredSuggestInputAjaxField extends SuggestInputAjaxField{
+	public $notnull=true;
+}
+class TelefoonAjaxField extends TelefoonField{
+	public $ajax=true;
+}
+class TextAjaxField extends TextField{
+	public $ajax=true;
+}
+class UidAjaxField extends UidField{
+	public $ajax=true;
+}
+class UrlAjaxField extends UrlField{
+	public $ajax=true;
+}
+class VerticaleAjaxField extends VerticaleField{
+	public $ajax=true;
+}
+class WebsiteAjaxField extends WebsiteField{
+	public $ajax=true;
+}
+
+/* niet bewerkbaar veld. Geeft alleen waarde weer */
+class NonEditableAjaxField extends FormAjaxField{
+	public function view(){
+		echo '<div class="tijdelijk veld" id="ajaxfield_'.$this->name.'">';
+		echo $this->getLabel();
+		echo $this->getError();
+		echo '<span class="nonedit">'.htmlspecialchars($this->value).'&nbsp;</span>';
+		echo '</div>';
+	}
+}
+
 
 /*
  * Commentaardingen voor formulieren

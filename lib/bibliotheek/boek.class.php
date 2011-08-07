@@ -8,7 +8,6 @@
 require_once 'rubriek.class.php';
 require_once 'auteur.class.php';
 require_once 'formulier.class.php';
-require_once 'ajaxformulier.class.php';
 
 class Boek{
 
@@ -1001,7 +1000,7 @@ class Boek{
 	public function isPostedField($entry){
 		$posted=false;
 		$field = $this->getField($entry);
-		if(($field instanceof FormAjaxField OR $field instanceof FormField) AND $field->isPosted()){
+		if($field instanceof FormField AND $field->isPosted()){
 			$posted=true;
 		}
 		return $posted;
@@ -1014,7 +1013,7 @@ class Boek{
 		$valid=true;
 		$field = $this->getField($entry);
 		//we checken alleen de formfields, niet de comments enzo.
-		if(($field instanceof FormAjaxField OR $field instanceof FormField) AND !$field->valid()){
+		if($field instanceof FormField AND !$field->valid()){
 			$valid=false;
 		}
 		return $valid;
@@ -1025,10 +1024,10 @@ class Boek{
 	public function saveField($entry){
 		//waarde van $entry in Boek invullen
 		$field = $this->getField($entry);
-		if($field instanceof FormAjaxField OR $field instanceof FormField){
+		if($field instanceof FormField){
 			$this->setValue($field->getName(), $field->getValue());
 		}else{
-			$this->error .= 'saveField(): '.$entry.' Geen instanceof FormAjaxField or FormField';
+			$this->error .= 'saveField(): '.$entry.' Geen instanceof FormField';
 		}
 		//waarde van $entry uit Boek opslaan
 		if($this->saveProperty($entry)){
