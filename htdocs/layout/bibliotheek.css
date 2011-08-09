@@ -215,6 +215,9 @@ h1{
 
 
 /*  Exemplaren */
+.exemplaren{
+	margin-top:10px;
+}
 .exemplaren .exemplaar{
 	margin-bottom: 10px;
 	overflow: auto;
@@ -252,7 +255,7 @@ h1{
 
 /* boekbeschrijvingen */
 .beschrijvingen{
-	margin-top: 10px;
+	margin-top: 30px;
 }
 .beschrijvingen td.recensist{
 	width: 109px;

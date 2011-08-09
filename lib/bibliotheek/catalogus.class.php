@@ -67,7 +67,7 @@ class Catalogus{
 		}else{ //beheer
 			$queryselect = "
 				e.id AS exid, e.eigenaar_uid AS eigenaar ,e.uitgeleend_uid AS lener, 
-				e.status, e.uitleendatum, 
+				e.status, e.uitleendatum, e.leningen,
 				(
 					SELECT count( * )
 					FROM biebexemplaar e2
@@ -135,7 +135,7 @@ class Catalogus{
 						$aBoek=array_get_keys($aBoekraw, $boekeigenschappen);
 						$exemplaren=array();
 					}
-					$exemplaren[]=array_get_keys($aBoekraw, array('exid','eigenaar','lener','uitleendatum','status'));
+					$exemplaren[]=array_get_keys($aBoekraw, array('exid','eigenaar','lener','uitleendatum','status', 'leningen'));
 				}
 				if(isset($aBoek['id'])){
 					//tot slot het laatste boek ook toevoegen

@@ -23,11 +23,11 @@ jQuery(document).ready(function($) {
 		"aaSorting": [[0, 'asc']],
 		"sPaginationType": "full_numbers",
 		"aoColumns": [
-			{'sType': 'html'}, // documentnaam
+			{'sType': 'html',"sWidth": "400px"}, // titel
 			{'sType': 'html'}, // auteur
 			{'sType': 'html'}, // rubriek
-			{'sType': 'html'}, // code
-			{'sType': 'html'} // ISBN
+			{'sType': 'html'}, // code (onzichtbaar)
+			{'sType': 'html'} // ISBN (onzichtbaar)
 		],
 		"aoColumnDefs": [ 
 			{ "bVisible": false, "aTargets": [ 3,  4] }
@@ -53,15 +53,16 @@ jQuery(document).ready(function($) {
 		"sPaginationType": "full_numbers",
 		"aoColumns": [
 			{'sType': 'html'}, // titel
-			{'sType': 'html'}, // titel
-			{'sType': 'html'}, // auteur
-			{'sType': 'html'}, // rubriek
+			{'sType': 'html'}, // titel(onzichtbaar)
+			{'sType': 'html'}, // auteur(onzichtbaar)
+			{'sType': 'html'}, // rubriek(onzichtbaar)
 			{'sType': 'html'}, // code
-			{'sType': 'html'}, // ISBN
+			{'sType': 'html'}, // ISBN(onzichtbaar)
 			{'sType': 'html'}, // Aantal beschrijvingen
 			{'sType': 'html'}, // eigenaars
 			{'sType': 'html'}, // lener
-			{'sType': 'html'} // status
+			{'sType': 'html'}, // status
+			{'sType': 'html'} //aantal leningen
 		],
 		"aoColumnDefs": [ 
 			{ "bVisible": false, "aTargets": [ 1, 2, 3, 5] }

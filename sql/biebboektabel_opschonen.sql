@@ -45,7 +45,9 @@ NULL ,  '3',  '20',  'Bibliotheek',  '/communicatie/bibliotheek',  'P_LOGGED_IN'
 
 ALTER TABLE  `biebexemplaar` 
 ADD  `status` ENUM(  'beschikbaar',  'uitgeleend',  'teruggegeven',  'vermist' ) NOT NULL DEFAULT  'beschikbaar',
-ADD  `uitleendatum` DATETIME NOT NULL DEFAULT  '0000-00-00 00:00:00';
+ADD  `uitleendatum` DATETIME NOT NULL DEFAULT  '0000-00-00 00:00:00',
+ADD  `leningen` INT( 11 ) NOT NULL DEFAULT  '0';
+
 
 ALTER TABLE  `biebexemplaar` 
 DROP  `extern`;

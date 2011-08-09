@@ -49,7 +49,7 @@ class BibliotheekController extends Controller{
 				$this->action='default';
 			}
 		}else{
-			$this->action='geentoegang';
+			$this->action='default';
 		}
 
 		$this->performAction();
@@ -68,7 +68,7 @@ class BibliotheekController extends Controller{
 	protected function action_default(){
 		$this->zijkolom = false;
 		$filter = 'csr';
-		if($this->hasParam(0)){
+		if(Loginlid::instance()->hasPermission('P_BIEB_READ') AND $this->hasParam(0)){
 			$filter=$this->getParam(0);
 		}
 		$catalogus = new Catalogus($filter);

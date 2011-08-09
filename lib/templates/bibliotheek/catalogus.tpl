@@ -5,8 +5,13 @@
 	<li class="active">
 		<a href="/communicatie/bibliotheek/" title="Naar de catalogus">Catalogus</a>
 	</li>
+	{if $loginlid->hasPermission('P_BIEB_READ')}
+		<li>
+			<a href="/communicatie/bibliotheek/boekstatus" title="Uitgebreide boekstatus">Boekstatus</a>
+		</li>
+	{/if}
 	<li>
-		<a href="/communicatie/bibliotheek/boekstatus" title="Uitgebreide boekstatus">Boekstatus</a>
+		<a href="/communicatie/bibliotheek/wenslijst" title="Wenslijst van bibliothecaris">Wenslijst</a>
 	</li>
 </ul>
 {if $loginlid->hasPermission('P_BIEB_READ')}
@@ -17,11 +22,15 @@
 
 <h1>Catalogus van de C.S.R.-bibliotheek</h1>
 <div class="foutje">{$melding}</div>
-<div id="filters">
-	Selecteer: <a {if $catalogus->getFilter()=='alle'}class="actief"{/if} href="/communicatie/bibliotheek/alle">Alle boeken</a> - 
-	<a {if $catalogus->getFilter()=='csr'}class="actief"{/if} href="/communicatie/bibliotheek/csr">C.S.R.-boeken</a> - 
-	<a {if $catalogus->getFilter()=='leden'}class="actief"{/if} href="/communicatie/bibliotheek/leden">Boeken van Leden</a>
-</div>
+{if $loginlid->hasPermission('P_BIEB_READ')}
+	<div id="filters">
+		Selecteer: <a {if $catalogus->getFilter()=='alle'}class="actief"{/if} href="/communicatie/bibliotheek/alle">Alle boeken</a> - 
+		<a {if $catalogus->getFilter()=='csr'}class="actief"{/if} href="/communicatie/bibliotheek/csr">C.S.R.-boeken</a> - 
+		<a {if $catalogus->getFilter()=='leden'}class="actief"{/if} href="/communicatie/bibliotheek/leden">Boeken van Leden</a>
+	</div>
+{else}
+	Log in om meer informatie van de boeken te bekijken.
+{/if}
 
 
 <table id="boekencatalogus" class="boeken">
@@ -32,12 +41,14 @@
 	{foreach from=$catalogus->getBoeken(true) item=boek}
 		<tr class="document">
 			<td>
-				<span title="{$boek->getStatus()} boek" class="indicator {$boek->getStatus()}">•</span><a href="/communicatie/bibliotheek/boek/{$boek->getId()}" title="Boek bekijken">
-					{$boek->getTitel()|escape:'html'|wordwrap:60:'<br />'}
-				</a>
-				{*{if $boek->magVerwijderen()}
-					<a class="verwijderen" href="/communicatie/bibliotheek/verwijderboek/{$boek->getId()}" title="Boek verwijderen" onclick="return confirm('Weet u zeker dat u dit boek wilt verwijderen')">{icon get="verwijderen"}</a>
-				{/if}*}
+				{if $loginlid->hasPermission('P_BIEB_READ')}
+					<span title="{$boek->getStatus()} boek" class="indicator {$boek->getStatus()}">•</span>
+					<a href="/communicatie/bibliotheek/boek/{$boek->getId()}" title="Boek bekijken">
+				{/if}
+				{$boek->getTitel()|escape:'html'}
+				{if $loginlid->hasPermission('P_BIEB_READ')}
+					</a>
+				{/if}
 			</td>
 			<td class="auteur">{$boek->getAuteur()->getNaam()|wordwrap:50:'<br />'}</td>
 			<td class="rubriek">{$boek->getRubriek()->getRubrieken()|wordwrap:70:'<br />'}</td>

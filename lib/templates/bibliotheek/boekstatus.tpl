@@ -8,6 +8,9 @@
 	<li class="active">
 		<a href="/communicatie/bibliotheek/boekstatus" title="Uitgebreide boekstatus">Boekstatus</a>
 	</li>
+	<li>
+		<a href="/communicatie/bibliotheek/wenslijst" title="Wenslijst van bibliothecaris">Wenslijst</a>
+	</li>
 </ul>
 {if $loginlid->hasPermission('P_BIEB_READ')}
 	<div class="controls">
@@ -27,7 +30,7 @@
 </div>
 <table id="boekenbeheerlijsten" class="boeken">
 	<thead>
-		<tr><th>Titel</th><th>Titel2</th><th>Auteur</th><th>Rubriek</th><th>Code</th><th>ISBN</th><th title="Aantal beschrijvingen">#recensies</th><th>Boekeigenaar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th><th>Uitgeleend&nbsp;aan</th><th>Status</th></tr>
+		<tr><th>Titel</th><th>Titel2</th><th>Auteur</th><th>Rubriek</th><th>Code</th><th>ISBN</th><th title="Aantal beschrijvingen">#recensies</th><th>Boekeigenaar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th><th>Uitgeleend&nbsp;aan</th><th>Status</th><th>#leningen</th></tr>
 	</thead>
 	<tbody>
 	{foreach from=$catalogus->getBoeken(false) item=boek}
@@ -56,9 +59,14 @@ Rubriek: {$boek.categorie}">
 					{if $exemplaar.lener==''}-{else}{$exemplaar.lener|csrnaam:'civitas'}{/if}<br />
 				{/foreach}
 			</td>
-			<td class="status">
+			<td class="status" ">
 				{foreach from=$boek.exemplaren item=exemplaar}
-					{$exemplaar.status}<br />
+					<span {if $exemplaar.status=='uitgeleend' OR  $exemplaar.status=='teruggegeven'}title="Geleend sinds {$exemplaar.uitleendatum|reldate|strip_tags}"{elseif $exemplaar.status=='vermist'}title="Vermist sinds {$exemplaar.uitleendatum|reldate|strip_tags}"{/if} >{$exemplaar.status|capitalize}</span><br />
+				{/foreach}
+			</td>
+			<td class="leningen">
+				{foreach from=$boek.exemplaren item=exemplaar}
+					{$exemplaar.leningen}<br />
 				{/foreach}
 			</td>
 		</tr>
@@ -67,7 +75,7 @@ Rubriek: {$boek.categorie}">
 	{/foreach}
 	</tbody>
 	<tfoot>
-		<tr><th>Titel</th><th>Titel2</th><th>Auteur</th><th>Rubriek</th><th>Code</th><th>ISBN</th><th title="Aantal beschrijvingen">#recensies</th><th>Boekeigenaar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th><th>Uitgeleend&nbsp;aan</th><th>Status</th></tr>
+		<tr><th>Titel</th><th>Titel2</th><th>Auteur</th><th>Rubriek</th><th>Code</th><th>ISBN</th><th title="Aantal beschrijvingen">#recensies</th><th>Boekeigenaar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th><th>Uitgeleend&nbsp;aan</th><th>Status</th><th>#leningen</th></tr>
 	</tfoot>
 </table>
 

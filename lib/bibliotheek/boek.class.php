@@ -698,7 +698,8 @@ class Boek{
 			UPDATE biebexemplaar SET
 				uitgeleend_uid = '".$db->escape($lener)."',
 				status = 'uitgeleend',
-				uitleendatum = '".getDateTime()."'
+				uitleendatum = '".getDateTime()."',
+				leningen=leningen +1
 			WHERE id = ".(int)$exemplaarid."
 			LIMIT 1;";
 		if($db->query($query)){
@@ -776,7 +777,8 @@ class Boek{
 		$db=MySql::instance();
 		$query="
 			UPDATE biebexemplaar SET
-				status = 'vermist'
+				status = 'vermist',
+				uitleendatum = '".getDateTime()."'
 			WHERE id = ".(int)$exemplaarid."
 			LIMIT 1;";
 		if($db->query($query)){
