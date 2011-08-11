@@ -195,8 +195,8 @@ h1{
 	margin-bottom: 1px;
 }
 #addBeschrijving h3, 
-.beschrijvingen h2, 
-.beschrijvingen p{
+.beschrijvingen h2.header, 
+.beschrijvingen p.header{
 	margin-left: 112px;
 }
 .beschrijvingen h2{

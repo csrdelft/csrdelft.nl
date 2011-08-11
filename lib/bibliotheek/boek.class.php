@@ -59,7 +59,22 @@ class Boek{
 			}else{
 				$db=MySql::instance();
 				$query="
-					SELECT id, titel, auteur_id, categorie_id, uitgavejaar, uitgeverij, paginas, taal, isbn, code
+					SELECT id, titel, auteur_id, categorie_id, uitgavejaar, uitgeverij, paginas, taal, isbn, code,
+					IF((
+						SELECT count( * )
+						FROM biebexemplaar e2
+						WHERE e2.boek_id = biebboek.id AND e2.status='beschikbaar'
+						) > 0, 
+					'beschikbaar', 
+						IF((
+							SELECT count( * )
+							FROM biebexemplaar e2
+							WHERE e2.boek_id = biebboek.id AND e2.status='teruggegeven'
+							) > 0,
+						'teruggegeven',
+						'geen'
+						)
+					) AS status
 					FROM biebboek
 					WHERE Id=".$this->getId().";";
 				$boek=$db->getRow($query);
@@ -148,6 +163,10 @@ class Boek{
 	//geeft opgeslagen fouten
 	public function getError(){
 		return $this->error;
+	}
+	//url naar dit boek
+	public function getUrl(){
+		return CSR_ROOT.'communicatie/bibliotheek/boek/'.$this->getId();
 	}
 	/* 
 	 * set gegeven waardes in Boek

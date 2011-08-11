@@ -81,5 +81,31 @@ class BibliotheekBoekContent extends SimpleHtml{
 	}
 
 }
-
+/*
+ * Contentclasse voor de boek-ubb-tag
+ */
+class BoekUbbContent extends SimpleHTML{
+	private $boek;
+	private $style;
+	public function __construct($boekid, $style='default'){
+		try{
+			require_once 'bibliotheek/boek.class.php';
+			$this->boek=new Boek((int)$boekid);
+		}catch(Exception $e){
+			$this->boek='[boek] Boek [boekid:'.(int)$boekid.'] bestaat niet.';
+		}
+	}
+	public function getHTML(){
+		if($this->boek instanceof Boek){
+			$content=new Smarty_csr();
+			$content->assign('boek', $this->boek);
+			return $content->fetch('bibliotheek/boek.ubb.tpl');
+		}else{
+			return $this->boek;
+		}
+	}
+	public function view(){
+		echo $this->getHTML();
+	}
+}
 ?>

@@ -151,7 +151,7 @@
 
 	{* beschrijvingen *}
 	<div class="beschrijvingen">
-		<h2>Recensies en beschrijvingen</h2>
+		<h2 class="header">Recensies en beschrijvingen</h2>
 		{if $boek->countBeschrijvingen()>0}
 			<table id="beschrijvingentabel">
 			{foreach from=$boek->getBeschrijvingen() item=beschrijving}
@@ -182,7 +182,7 @@
 			{/foreach}
 			</table>
 		{else}
-			<p>Nog geen beschrijvingen.</p>
+			<p class="header">Nog geen beschrijvingen.</p>
 		{/if}
 
 		{* formulier voor beschrijvingen    *}

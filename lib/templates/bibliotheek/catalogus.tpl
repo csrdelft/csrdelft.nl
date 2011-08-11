@@ -50,10 +50,10 @@
 					</a>
 				{/if}
 			</td>
-			<td class="auteur">{$boek->getAuteur()->getNaam()|wordwrap:50:'<br />'}</td>
-			<td class="rubriek">{$boek->getRubriek()->getRubrieken()|wordwrap:70:'<br />'}</td>
-			<td class="code">{$boek->getCode()}</td>
-			<td class="isbn">{$boek->getISBN()}</td>
+			<td class="auteur">{$boek->getAuteur()->getNaam()|escape:'html'|wordwrap:50:'<br />'}</td>
+			<td class="rubriek">{$boek->getRubriek()->getRubrieken()|escape:'html'|wordwrap:70:'<br />'}</td>
+			<td class="code">{$boek->getCode()|escape:'html'}</td>
+			<td class="isbn">{$boek->getISBN()|escape:'html'}</td>
 		</tr>
 	{/foreach}
 	</tbody>
