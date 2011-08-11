@@ -27,7 +27,7 @@ class Boek{
 	private $error = '';
 	private $nieuwboekform;			// Form objecten voor nieuwboekformulier
 	private $boekbeschrijvingform;	// Form objecten voor recensieformulier
-	private $editablefieldsform;	// AjaxForm objecten
+	private $editablefieldsform;	// Form objecten info v. boek
 	private $beschrijving;			// recensie tijdens toevoegen/bewerken
 	private $beschrijvingsid;		// id van recensie 
 	private $beschrijvingen = null;	// array
@@ -298,17 +298,16 @@ class Boek{
 
 		$return = false;
 		if($db->numRows($result)>0){
-			while($lener=$db->next($result)){
-				if($lener['eigenaar_uid']==Loginlid::instance()->getUid()){
+			while($eigenaar=$db->next($result)){
+				if($eigenaar['eigenaar_uid']==Loginlid::instance()->getUid()){
 					$return = true;
-				}elseif($lener['eigenaar_uid']=='x222' AND $this->isBASFCie()){
+				}elseif($eigenaar['eigenaar_uid']=='x222' AND $this->isBASFCie()){
 					$return = true;
 				}
 			}
 		}else{
 			$this->error.= mysql_error();
 		}
-//		echo 'uid:'.Loginlid::instance()->getUid().',basf:'.$this->isBASFCie().',ex:'.$exemplaarid.'return:'.$return.'.';
 		return $return;
 	}
 
@@ -335,6 +334,26 @@ class Boek{
 			$this->error.= mysql_error();
 			return false;
 		}
+	}
+	public function hasCSRexemplaar(){
+		$db=MySql::instance();
+		$qEigenaar="
+			SELECT eigenaar_uid
+			FROM  `biebexemplaar` 
+			WHERE boek_id =".(int)$this->getId().";";
+		$result=$db->query($qEigenaar);
+
+		$return = false;
+		if($db->numRows($result)>0){
+			while($eigenaar=$db->next($result)){
+				if($eigenaar['eigenaar_uid']=='x222'){
+					$return = true;
+				}
+			}
+		}else{
+			$this->error.= mysql_error();
+		}
+		return $return;
 	}
 	/*
 	 * Slaat het object Boek op in db
@@ -884,28 +903,6 @@ class Boek{
 	public function setCommentBeschrijvingForm($tekst){
 		$this->boekbeschrijvingform['0'] = new Comment($tekst);
 	}
-	/*
-	 * voor lener opslaan
-	 
-	public function assignFieldsLenerForm(){
-		if(true){//$this->isEigenaar()
-
-
-			//voor eigenaars een veldje maken om boek uit te lenen.
-			if($this->exemplaren===null){
-				$this->loadExemplaren();
-			}
-			if(count($this->exemplaren)>0){
-				foreach($this->exemplaren as $exemplaar){//id, eigenaar_uid, uitgeleend_uid, toegevoegd, status, uitleendatum
-					if($exemplaar['status']=='beschikbaar' AND $this->isEigenaar($exemplaar['id'])){
-						$lenerform['lener_'.$exemplaar['id']]=new LidField('lener_'.$exemplaar['id'], $exemplaar['uitgeleend_uid'], 'Exemplaar uitgeleend aan: ', Catalogus::getAllValuesOfProperty('naam'), 'Geef naam of lidnummer van lener');
-					}
-				}
-			}
-
-
-		}
-	}*/
 	/*
 	 * Geeft objecten van het formulier terug
 	 */
