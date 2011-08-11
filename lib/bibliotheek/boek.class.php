@@ -103,6 +103,9 @@ class Boek{
 		if(substr($entry,0,6)=='lener_'){
 			$exemplaarid=substr($entry,6);
 			$entry='lener';
+		}elseif(substr($entry,0,10)=='opmerking_'){
+			$exemplaarid = substr($entry,10);
+			$entry='opmerking';
 		}
 		switch($entry){
 			case 'auteur':
@@ -129,8 +132,11 @@ class Boek{
 				if($lid instanceof Lid){
 					return $lid->getNaamLink('civitas', 'link');
 				}else{
-					return 'Geen geldig lid getProp';
+					return 'Geen geldig lid getProperty';
 				}
+			case 'opmerking':
+				return $this->exemplaren[$exemplaarid]['opmerking'];
+			break;
 			default:
 				return 'entry "'.$entry.'" is niet toegestaan. Boek::getProperty()';
 		}
@@ -149,10 +155,13 @@ class Boek{
 	 * @return	void
 	 */
 	public function setValue($key, $value){
-		//$key voor leners eerst opsplitsen
+		//$key voor leners en opmerkingen eerst opsplitsen
 		if(substr($key,0,6)=='lener_'){
 			$exemplaarid = substr($key,6);
 			$key='lener';
+		}elseif(substr($key,0,10)=='opmerking_'){
+			$exemplaarid = substr($key,10);
+			$key='opmerking';
 		}
 
 		switch ($key) {
@@ -201,6 +210,9 @@ class Boek{
 				$zoekin=array('S_LID', 'S_NOVIET', 'S_GASTLID', 'S_KRINGEL', 'S_OUDLID','S_ERELID');
 				$uid=namen2uid($value, $zoekin);
 				$this->exemplaren[$exemplaarid]['uitgeleend_uid']=$uid[0]['uid'];
+				break;
+			case 'opmerking':
+				$this->exemplaren[$exemplaarid]['opmerking']=$value;
 				break;
 			default:
 				throw new Exception('Veld ['.$key.'] is niet toegestaan Boek::setValue()');
@@ -367,21 +379,28 @@ class Boek{
 	public function saveProperty($entry){
 		$db=MySql::instance();
 		$key = $entry;//op een enkele uitzondering na
-		//$entry voor leners eerst opsplitsen
+		$table = "biebboek";
+		$id = $this->getId();
+
+		//$entry voor leners en opmerkingen eerst opsplitsen
 		if(substr($entry,0,6)=='lener_'){
 			$exemplaarid=substr($entry,6);
 			$entry='lener';
+		}elseif(substr($entry,0,10)=='opmerking_'){
+			$exemplaarid = substr($entry,10);
+			$entry='opmerking';
 		}
+
 		switch($entry){
 			case 'auteur':
 				//eerst auteur opslaan. 
 				$this->getAuteur()->save();
 				$value = (int)$this->getAuteur()->getId();
-				$key = 'auteur_id';
+				$key = "auteur_id";
 				break;
 			case 'rubriek':
 				$value = (int)$this->getRubriek()->getId();
-				$key = 'categorie_id';
+				$key = "categorie_id";
 				break;
 			case 'titel':
 				$value = "'".$db->escape($this->getTitel())."'";
@@ -406,15 +425,21 @@ class Boek{
 				break;
 			case 'lener':
 				return $this->leenExemplaar($exemplaarid, $this->exemplaren[$exemplaarid]['uitgeleend_uid']);
+			case 'opmerking':
+				$table = "biebexemplaar";
+				$key = "opmerking";
+				$value = "'".$db->escape($this->exemplaren[$exemplaarid]['opmerking'])."'";
+				$id = (int)$exemplaarid;
+				break;
 			default:
 				$this->error.='Veld ['.$entry.'] is niet toegestaan Boek::saveProperty()';
 				return false;
 		}
 
 		$qSave="
-			UPDATE biebboek SET
+			UPDATE ".$table." SET
 				".$key."= ".$value."
-			WHERE id= ".$this->getId()."
+			WHERE id= ".$id."
 			LIMIT 1;";
 		if($db->query($qSave)){
 			return true;
@@ -618,7 +643,7 @@ class Boek{
 	public function loadExemplaren(){
 		$db=MySql::instance();
 		$query="
-			SELECT id, eigenaar_uid, uitgeleend_uid, toegevoegd, status, uitleendatum
+			SELECT id, eigenaar_uid, opmerking, uitgeleend_uid, toegevoegd, status, uitleendatum
 			FROM biebexemplaar
 			WHERE boek_id=".(int)$this->getId()."
 			ORDER BY toegevoegd;";
@@ -983,7 +1008,8 @@ class Boek{
 		if(count($this->exemplaren)>0){
 			foreach($this->exemplaren as $exemplaar){//id, eigenaar_uid, uitgeleend_uid, toegevoegd, status, uitleendatum
 				if($this->isEigenaar($exemplaar['id'])){
-					$editablefieldsform['lener_'.$exemplaar['id']]=new LidField('lener_'.$exemplaar['id'], $exemplaar['uitgeleend_uid'], 'Exemplaar uitgeleend aan: ', Catalogus::getAllValuesOfProperty('naam'), 'Geef naam of lidnummer van lener');
+					$editablefieldsform['lener_'.$exemplaar['id']]=new LidField('lener_'.$exemplaar['id'], $exemplaar['uitgeleend_uid'], 'Uitgeleend aan: ', Catalogus::getAllValuesOfProperty('naam'), 'Geef naam of lidnummer van lener');
+					$editablefieldsform['opmerking_'.$exemplaar['id']]=new InputAjaxField('opmerking_'.$exemplaar['id'], $exemplaar['opmerking'], 'Opmerking: ', 255,'Opmerking over exemplaar..');
 				}
 			}
 		}

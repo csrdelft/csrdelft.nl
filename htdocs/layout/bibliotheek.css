@@ -230,6 +230,7 @@ h1{
 .exemplaren .exemplaar .label img.pasfoto{
 	height: 40px;
 	float: left;
+	margin-left: 10px;
 }
 .exemplaren h2{
 	margin-left: 75px;
@@ -252,7 +253,25 @@ h1{
 .exemplaren span.text{
 	margin-left: 5px;
 }
-
+.exemplaren .linkerkolom{
+	float: left;
+	width:150px;
+}
+.exemplaren .veld label{
+	width: 100px;
+}
+.exemplaren .bewerk{
+	padding-right:18px!important;
+}
+.exemplaren .bewerk:hover{
+	background:url(http://plaetjes.csrdelft.nl/knopjes/bewerken.png) right no-repeat #ddd;
+	cursor:pointer;
+	margin-left:225px;
+}
+.exemplaren .bewerk input{
+	margin-left: 5px;
+	width: 200px;
+}
 /* boekbeschrijvingen */
 .beschrijvingen{
 	margin-top: 30px;

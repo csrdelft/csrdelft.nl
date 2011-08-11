@@ -34,10 +34,8 @@
 			<a class="knop" href="/communicatie/bibliotheek/">Annuleren</a>
 		</div>
 	</form>
-{/if}
-
+{else}
 {* weergave boek, met bewerkbare velden *}
-{if $boek->getId()!=0}
 	<div class="boek" id="{$boek->getId()}">
 		<div class="blok header">
 			{$boek->getField('titel')->view()}
@@ -75,11 +73,21 @@
 					<div class="label">{$exemplaar.eigenaar_uid|pasfoto}</div>		
 					<div class="gegevensexemplaar" id="ex{$exemplaar.id}">
 					{* eigenaar *}
-						{if $exemplaar.eigenaar_uid=='x222'}
-							C.S.R.-bibliotheek
+						<div class="linkerkolom">
+							{if $exemplaar.eigenaar_uid=='x222'}
+								C.S.R.-bibliotheek
+							{else}
+								{$exemplaar.eigenaar_uid|csrnaam:'civitas'}
+							{/if}
+						</div>
+					{* opmerking *}
+						{if $boek->isEigenaar($exemplaar.id)}
+							{$boek->getField("opmerking_`$exemplaar.id`")->view()}
 						{else}
-							{$exemplaar.eigenaar_uid|csrnaam:'civitas'}
-						{/if}<br />
+							{if $exemplaar.opmerking != ''}
+							<em>{$exemplaar.opmerking|escape:'html'}</em>
+							{/if}<br />
+						{/if}
 					{* status *}
 						{if $exemplaar.status=='uitgeleend'}
 							Uitgeleend aan {$exemplaar.uitgeleend_uid|csrnaam:'civitas'}<br />
@@ -90,20 +98,25 @@
 						{if $exemplaar.status=='vermist'}
 							<span class="melding">Vermist</span><br />
 						{/if}
-						{if $exemplaar.status=='beschikbaar' AND $boek->isEigenaar($exemplaar.id)}
-							<form action="/communicatie/bibliotheek/exemplaarlenen/{$boek->getId()}/{$exemplaar.id}/ander" id="lener_{$exemplaar.id}" class="lenerForm" method="post">
-								{$boek->getField("lener_`$exemplaar.id`")->view()}{* in dubbele quotes werkt $exemplaar en tussen `` wordt .id gezien *}
-								<input type="hidden" value="lener_{$exemplaar.id}" name="id"/>
-								<div class="submitt">
-									<label for="submit">&nbsp;</label><input type="submit" value="Opslaan" />
-								</div>
-							</form>{* {$boek->getField("lener_`$exemplaar.id`")->view()} *}
+						{if $exemplaar.status=='beschikbaar' }
+							<div class="linkerkolom">Beschikbaar</div>
+							{if $boek->isEigenaar($exemplaar.id)}
+								<form action="/communicatie/bibliotheek/exemplaarlenen/{$boek->getId()}/{$exemplaar.id}/ander" id="lener_{$exemplaar.id}" class="lenerForm" method="post">
+									{$boek->getField("lener_`$exemplaar.id`")->view()}{* in dubbele quotes werkt $exemplaar en tussen `` wordt .id gezien *}
+									<input type="hidden" value="lener_{$exemplaar.id}" name="id"/>
+									<div class="submitt">
+										<label for="submit">&nbsp;</label><input type="submit" value="Opslaan" />
+									</div>
+								</form>{* {$boek->getField("lener_`$exemplaar.id`")->view()} *}
+							{else}
+								<br />
+							{/if}
 						{/if}
 					{* actieknoppen *}
 						{if $exemplaar.status=='beschikbaar'}
 							{if $exemplaar.eigenaar_uid=='x222'} {* bibliothecaris werkt met kaartjes *}
 								{if !$boek->isEigenaar($exemplaar.id)} {* basfcie hoeft opmerking niet te zien *}
-									Biebboek lenen: <em>laat het kaartje achter voor de bibliothecaris.</em><br />
+									<span class="suggestie" style="font-style: normal;">Biebboek lenen: laat het kaartje achter voor de bibliothecaris.</span><br />
 								{/if}
 							{else}
 								<a class="knop" href="/communicatie/bibliotheek/exemplaarlenen/{$boek->getId()}/{$exemplaar.id}" title="Leen dit boek" onclick="return confirm('U wilt dit boek van {$exemplaar.eigenaar_uid|csrnaam:'civitas':'plain'} lenen?')">{icon get="lorry"} Lenen</a>
@@ -144,7 +157,7 @@
 						{$beschrijving.schrijver_uid|csrnaam:'user'}<br />
 						<span class="moment">{$beschrijving.toegevoegd|reldate}</span><br />
 
-						{* knopjes bij elke post *}	
+					{* knopjes bij elke post *}	
 						{if $boek->magBewerken($beschrijving.id)}
 							{knop url="/communicatie/bibliotheek/bewerkbeschrijving/`$boek->getId()`/`$beschrijving.id`" type=bewerken}
 						{/if}
@@ -180,9 +193,3 @@
 		</form>
 	</div>
 {/if}
-
-
-
-
-
-

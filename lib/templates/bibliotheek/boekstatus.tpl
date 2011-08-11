@@ -12,6 +12,7 @@
 		<a href="/communicatie/bibliotheek/wenslijst" title="Wenslijst van bibliothecaris">Wenslijst</a>
 	</li>
 </ul>
+
 {if $loginlid->hasPermission('P_BIEB_READ')}
 	<div class="controls">
 		<a class="knop" href="/communicatie/bibliotheek/nieuwboek">{icon get="book_add"} Toevoegen</a>
@@ -59,9 +60,9 @@ Rubriek: {$boek.categorie}">
 					{if $exemplaar.lener==''}-{else}{$exemplaar.lener|csrnaam:'civitas'}{/if}<br />
 				{/foreach}
 			</td>
-			<td class="status" ">
+			<td class="status">
 				{foreach from=$boek.exemplaren item=exemplaar}
-					<span {if $exemplaar.status=='uitgeleend' OR  $exemplaar.status=='teruggegeven'}title="Geleend sinds {$exemplaar.uitleendatum|reldate|strip_tags}"{elseif $exemplaar.status=='vermist'}title="Vermist sinds {$exemplaar.uitleendatum|reldate|strip_tags}"{/if} >{$exemplaar.status|capitalize}</span><br />
+					<span {if $exemplaar.status=='uitgeleend' OR  $exemplaar.status=='teruggegeven'}title="Uitgeleend sinds {$exemplaar.uitleendatum|reldate|strip_tags}"{elseif $exemplaar.status=='vermist'}title="Vermist sinds {$exemplaar.uitleendatum|reldate|strip_tags}"{/if} >{$exemplaar.status|capitalize}</span><br />
 				{/foreach}
 			</td>
 			<td class="leningen">

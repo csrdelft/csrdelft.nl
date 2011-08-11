@@ -44,6 +44,7 @@ NULL ,  '3',  '20',  'Bibliotheek',  '/communicatie/bibliotheek',  'P_LOGGED_IN'
 );
 
 ALTER TABLE  `biebexemplaar` 
+ADD  `opmerking` VARCHAR( 255 ) NOT NULL AFTER  `eigenaar_uid`,
 ADD  `status` ENUM(  'beschikbaar',  'uitgeleend',  'teruggegeven',  'vermist' ) NOT NULL DEFAULT  'beschikbaar',
 ADD  `uitleendatum` DATETIME NOT NULL DEFAULT  '0000-00-00 00:00:00',
 ADD  `leningen` INT( 11 ) NOT NULL DEFAULT  '0';

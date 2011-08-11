@@ -59,7 +59,7 @@ abstract class FormField{
 			$cssclass.=' metfouten';
 		}
 		if($this->ajax){
-			return '<div class="tijdelijk bewerk '.$cssclass.'" id="'.$this->name.'">'; 
+			return '<div class="bewerk '.$cssclass.'" id="'.$this->name.'">'; 
 		}else{
 			return '<div class="'.$cssclass.'">';
 		}
@@ -167,9 +167,11 @@ class RequiredPreviewTextField extends PreviewTextField{
 class InputField extends FormField{
 	public $max_len=255;
 	
-	public function __construct($name, $value, $description, $max_len=255){
+	public function __construct($name, $value, $description, $max_len=255, $recommendation=''){
 		parent::__construct($name, $value, $description);
 		$this->max_len=(int)$max_len;
+		$this->setRecommendation($recommendation);
+
 	}
 	public function valid(){
 		if(!parent::valid()){ return false; }
