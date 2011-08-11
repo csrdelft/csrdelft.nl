@@ -848,6 +848,7 @@ lib/templates/agenda/maand.tpl -text
 lib/templates/agenda/week.tpl -text
 lib/templates/agenda/zijbalk.tpl -text
 lib/templates/bibliotheek/boek.tpl -text
+lib/templates/bibliotheek/boek.ubb.tpl -text
 lib/templates/bibliotheek/boekstatus.tpl -text
 lib/templates/bibliotheek/catalogus.tpl -text
 lib/templates/courant/courantbeheer.tpl -text
