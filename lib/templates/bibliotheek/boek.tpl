@@ -105,12 +105,12 @@
 							<div class="linkerkolom">Beschikbaar</div>
 							{if $boek->isEigenaar($exemplaar.id)}
 								<form action="/communicatie/bibliotheek/exemplaarlenen/{$boek->getId()}/{$exemplaar.id}/ander" id="lener_{$exemplaar.id}" class="lenerForm" method="post">
-									{$boek->getField("lener_`$exemplaar.id`")->view()}{* in dubbele quotes werkt $exemplaar en tussen `` wordt .id gezien *}
+									{$boek->getField("lener_`$exemplaar.id`")->view()}
 									<input type="hidden" value="lener_{$exemplaar.id}" name="id"/>
 									<div class="submitt">
 										<label for="submit">&nbsp;</label><input type="submit" value="Opslaan" />
 									</div>
-								</form>{* {$boek->getField("lener_`$exemplaar.id`")->view()} *}
+								</form>
 							{else}
 								<br />
 							{/if}
@@ -177,7 +177,7 @@
 					</td>
 				</tr>
 				<tr>
-				<td class="recensist"></td><td class="tussenschot"></td>
+					<td class="recensist"></td><td class="tussenschot"></td>
 				</tr>
 			{/foreach}
 			</table>

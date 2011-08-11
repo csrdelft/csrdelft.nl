@@ -31,7 +31,7 @@
 </div>
 <table id="boekenbeheerlijsten" class="boeken">
 	<thead>
-		<tr><th>Titel</th><th>Titel2</th><th>Auteur</th><th>Rubriek</th><th>Code</th><th>ISBN</th><th title="Aantal beschrijvingen">#recensies</th><th>Boekeigenaar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th><th>Uitgeleend&nbsp;aan</th><th>Status</th><th>#leningen</th></tr>
+		<tr><th>Titel</th><th>Titel2</th><th>Auteur</th><th>Rubriek</th><th>Code</th><th>ISBN</th><th title="Aantal beschrijvingen">#recensies</th><th>Boekeigenaar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th><th>Uitgeleend&nbsp;aan</th><th>Status</th><th title="Hoevaak is exemplaar uitgeleend?">#leningen</th></tr>
 	</thead>
 	<tbody>
 	{foreach from=$catalogus->getBoeken(false) item=boek}
@@ -44,11 +44,11 @@ Rubriek: {$boek.categorie}">
 					{$boek.titel|escape:'html'|truncate:40:"…"}
 				</a>
 			</td>
-			<td class="titel">{$boek.titel}</td>
-			<td class="auteur">{$boek.auteur}</td>
-			<td class="rubriek">{$boek.categorie}</td>
-			<td class="code">{$boek.code}</td>
-			<td class="isbn">{$boek.isbn}</td>
+			<td class="titel">{$boek.titel|escape:'html'}</td>
+			<td class="auteur">{$boek.auteur|escape:'html'}</td>
+			<td class="rubriek">{$boek.categorie|escape:'html'}</td>
+			<td class="code">{$boek.code|escape:'html'}</td>
+			<td class="isbn">{$boek.isbn|escape:'html'}</td>
 			<td class="aantal">{$boek.bsaantal}</td>
 			<td class="eigenaar">
 				{foreach from=$boek.exemplaren item=exemplaar}
@@ -76,7 +76,7 @@ Rubriek: {$boek.categorie}">
 	{/foreach}
 	</tbody>
 	<tfoot>
-		<tr><th>Titel</th><th>Titel2</th><th>Auteur</th><th>Rubriek</th><th>Code</th><th>ISBN</th><th title="Aantal beschrijvingen">#recensies</th><th>Boekeigenaar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th><th>Uitgeleend&nbsp;aan</th><th>Status</th><th>#leningen</th></tr>
+		<tr><th>Titel</th><th>Titel2</th><th>Auteur</th><th>Rubriek</th><th>Code</th><th>ISBN</th><th title="Aantal beschrijvingen">#recensies</th><th>Boekeigenaar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th><th>Uitgeleend&nbsp;aan</th><th>Status</th><th title="Hoevaak is exemplaar uitgeleend?">#leningen</th></tr>
 	</tfoot>
 </table>
 

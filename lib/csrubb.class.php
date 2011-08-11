@@ -345,8 +345,8 @@ src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
 	 * ubb_boek()
 	 *
 	 * [boek]123[/boek]
-	 * Geeft een boek met kortebeschrijving.
-	 * Als de groep aanmeldbaar is komt er ook een aanmeldknopje bij.
+	 * Geeft titel en auteur van een boek. 
+	 * Een kleine indicator geeft met kleuren beschikbaarheid aan
 	 */
 	protected function ubb_boek($parameters){
 		$content=$this->parseArray(array('[/boek]'), array());

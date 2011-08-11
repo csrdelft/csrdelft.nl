@@ -124,37 +124,48 @@ class Boek{
 		}
 		switch($entry){
 			case 'auteur':
-				return $this->getAuteur()->getNaam();
+				$return = $this->getAuteur()->getNaam();
+				break;
 			case 'rubriek':
-				return $this->getRubriek()->getRubrieken();
+				$return = $this->getRubriek()->getRubrieken();
+				break;
 			case 'titel':
-				return $this->getTitel();
+				$return = $this->getTitel();
+				break;
 			case 'uitgavejaar':
-				return $this->getUitgavejaar();
+				$return = $this->getUitgavejaar();
+				break;
 			case 'uitgeverij':
-				return $this->getUitgeverij();
+				$return = $this->getUitgeverij();
+				break;
 			case 'paginas':
-				return $this->getPaginas();
+				$return = $this->getPaginas();
+				break;
 			case 'taal':
-				return $this->getTaal();
+				$return = $this->getTaal();
+				break;
 			case 'isbn':
-				return $this->getISBN();
+				$return = $this->getISBN();
+				break;
 			case 'code':
-				return $this->getCode();
+				$return = $this->getCode();
+				break;
 			case 'lener':
 				$uid=$this->exemplaren[$exemplaarid]['uitgeleend_uid'];
 				$lid=LidCache::getLid($uid);
 				if($lid instanceof Lid){
-					return $lid->getNaamLink('civitas', 'link');
+					$return = $lid->getNaamLink('civitas', 'link');
 				}else{
-					return 'Geen geldig lid getProperty';
+					$return = 'Geen geldig lid getProperty';
 				}
+				break;
 			case 'opmerking':
-				return $this->exemplaren[$exemplaarid]['opmerking'];
-			break;
+				$return = $this->exemplaren[$exemplaarid]['opmerking'];
+				break;
 			default:
 				return 'entry "'.$entry.'" is niet toegestaan. Boek::getProperty()';
 		}
+		return htmlspecialchars($return);
 	}
 	//geeft beschikbaarheid van boek
 	public function getStatus(){

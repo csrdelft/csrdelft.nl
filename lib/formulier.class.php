@@ -209,7 +209,7 @@ class BiebSuggestInputField extends SuggestInputField{
 		if(!parent::valid()){ return false; }
 		
 		if(Catalogus::existsProperty($this->getName(),$this->getValue())){
-			$this->error=$this->getName()." '".substr($this->getValue(),0,35)."' bestaat al.";
+			$this->error=$this->getName()." '".htmlspecialchars(substr($this->getValue(),0,35))."' bestaat al.";
 		}
 		return $this->error=='';
 	}
