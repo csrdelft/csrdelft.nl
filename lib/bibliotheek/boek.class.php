@@ -335,26 +335,6 @@ class Boek{
 			return false;
 		}
 	}
-	public function hasCSRexemplaar(){
-		$db=MySql::instance();
-		$qEigenaar="
-			SELECT eigenaar_uid
-			FROM  `biebexemplaar` 
-			WHERE boek_id =".(int)$this->getId().";";
-		$result=$db->query($qEigenaar);
-
-		$return = false;
-		if($db->numRows($result)>0){
-			while($eigenaar=$db->next($result)){
-				if($eigenaar['eigenaar_uid']=='x222'){
-					$return = true;
-				}
-			}
-		}else{
-			$this->error.= mysql_error();
-		}
-		return $return;
-	}
 	/*
 	 * Slaat het object Boek op in db
 	 */

@@ -62,7 +62,7 @@
 			<a class="knop verwijderen" href="/communicatie/bibliotheek/verwijderboek/{$boek->getId()}" title="Boek verwijderen" onclick="return confirm('Weet u zeker dat u dit boek wilt verwijderen?')">{icon get="verwijderen"} Verwijderen</a><br />
 		{/if}
 		<a class="knop" href="/communicatie/bibliotheek/addexemplaar/{$boek->getId()}" title="Ik bezit dit boek ook" onclick="return confirm('U bezit zelf een exemplaar van dit boek?')">{icon get="user_add"} Ik bezit dit boek</a>
-		{if $boek->isBASFCie() AND !$boek->hasCSRexemplaar()}
+		{if $boek->isBASFCie()}
 			<a class="knop" href="/communicatie/bibliotheek/addexemplaar/{$boek->getId()}/x222" title="C.S.R.-bieb bezit dit boek ook" onclick="return confirm('De C.S.R.-bieb bezit een exemplaar van dit boek?')">{icon get="user_add"} Is een biebboek</a>
 		{/if}
 	</div><div style="clear: left;"></div>
