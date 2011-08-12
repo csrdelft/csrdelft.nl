@@ -9,7 +9,7 @@
 		{if $it%30 == 0}
 			<tr>
 				<th>&nbsp;</th>
-				<th><a href="/actueel/maaltijden/corveepunten/sorteer/uid/{if $sorteer_richting=='asc'}desc{else}asc{/if}">Naam</a></th>
+				<th><a href="/actueel/maaltijden/corveepunten/sorteer/achternaam/{if $sorteer_richting=='asc'}desc{else}asc{/if}">Naam</a></th>
 				<th style="width: 15px"><a href="/actueel/maaltijden/corveepunten/sorteer/kok/{if $sorteer_richting=='asc'}desc{else}asc{/if}">K</a></th>
 				<th style="width: 15px"><a href="/actueel/maaltijden/corveepunten/sorteer/afwas/{if $sorteer_richting=='asc'}desc{else}asc{/if}">A</a></th>
 				<th style="width: 15px"><a href="/actueel/maaltijden/corveepunten/sorteer/theedoek/{if $sorteer_richting=='asc'}desc{else}asc{/if}">T</a></th>

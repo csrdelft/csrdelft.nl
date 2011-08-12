@@ -832,7 +832,7 @@ class MaalTrack {
 	
 	# haalt één enkele maaltijd op ter bewerking
 	function getPuntenlijst($sorteer = 'corvee_tekort', $sorteer_richting = 'asc'){
-		$sorteer_toegestaan = array('uid', 'kok', 'afwas', 'theedoek', 'schoonmaken_frituur', 'schoonmaken_afzuigkap', 'schoonmaken_keuken', 'corvee_kwalikok', 'corvee_punten', 'corvee_punten_bonus', 'corvee_vrijstelling', 'corvee_prognose', 'corvee_tekort');
+		$sorteer_toegestaan = array('achternaam', 'kok', 'afwas', 'theedoek', 'schoonmaken_frituur', 'schoonmaken_afzuigkap', 'schoonmaken_keuken', 'corvee_kwalikok', 'corvee_punten', 'corvee_punten_bonus', 'corvee_vrijstelling', 'corvee_prognose', 'corvee_tekort');
 		$sorteer_volgorde_toegestaan = array('asc', 'desc');
 		if (!in_array($sorteer, $sorteer_toegestaan) || !in_array($sorteer_richting, $sorteer_volgorde_toegestaan))
 			print('Ongeldige sorteeroptie');
@@ -869,7 +869,7 @@ class MaalTrack {
 			AND
 				punten_toegekend = 'onbekend'
 			WHERE
-				status='S_LID' OR status='S_NOVIET'
+				status='S_LID' OR status='S_GASTLID' OR status='S_NOVIET'
 			GROUP BY
 				lid.uid
 			ORDER BY
@@ -885,7 +885,7 @@ class MaalTrack {
 
 		return $aLeden;
 	}
-	
+
 	# rgb overgang berekenen
 	function rgbCalculate($lPunten)		
 	{
@@ -905,9 +905,21 @@ class MaalTrack {
 						
 			return dechex($r).dechex($g).dechex($b);
 	}
-	
-	
-	
+
+	# haalt alle leden met maaltijdabo's op met hun abo
+	function getAboLeden($filter='', $sorteer = 'ma_abo', $sorteer_richting = 'asc'){
+		$sorteer_toegestaan = array('uid', 'kok', 'afwas', 'theedoek', 'schoonmaken_frituur', 'schoonmaken_afzuigkap', 'schoonmaken_keuken', 'corvee_kwalikok', 'corvee_punten', 'corvee_punten_bonus', 'corvee_vrijstelling', 'corvee_prognose', 'corvee_tekort');
+		$sorteer_volgorde_toegestaan = array('asc', 'desc');
+		if (!in_array($sorteer, $sorteer_toegestaan) || !in_array($sorteer_richting, $sorteer_volgorde_toegestaan)){
+			print('Ongeldige sorteeroptie');
+		}
+		$sAboQuery="
+		";
+		$rLeden=$this->_db->query($sLedenQuery);
+		$aLeden=$this->_db->result2array($rLeden);
+		return $aLeden;
+	}
+
 	# haalt maaltijden uit de maaltijdentabel op, voor uitgebreidere info
 	# voor in de kolommen op de maaltijdencontent pagina, zie getMaaltijden hieronder
 	# als de gebruiker uit moot 1-4 is, hou daar dan rekening mee
@@ -1147,7 +1159,10 @@ class MaalTrack {
 	}
 
 	# abo aanzetten voor huidige gebruiker
-	function addAbo($abosoort) {
+	function addAbo($abosoort,$uid=null) {
+		if($uid==null){
+			$uid = LoginLid::instance()->getUid();
+		}
 		# Kijk of deze abosoort geldig is voor deze persoon, en of we m aan kunnen zetten
 		$geenabo = $this->getNotAboSoort();
 		if (!array_key_exists($abosoort, $geenabo)) {
@@ -1156,7 +1171,6 @@ class MaalTrack {
 		}
 
 		# abo toevoegen
-		$uid = LoginLid::instance()->getUid();
 		$result = $this->_db->query("INSERT INTO `maaltijdabo` (`uid`,`abosoort`) VALUES ('{$uid}','{$abosoort}')");
 
 		# kijken of er maaltijden zijn in de toekomst met dit abo die VOL zijn, en daar AFmeldingen voor maken
@@ -1176,7 +1190,10 @@ class MaalTrack {
 	}
 
 	# abo uitzetten voor huidige gebruiker
-	function delAbo($abosoort) {
+	function delAbo($abosoort,$uid=null) {
+		if($uid==null){
+			$uid = LoginLid::instance()->getUid();
+		}
 		# kijk of $abosoort voorkomt in de abo's van deze persoon
 		$abos = $this->getAbo();
 		if (!array_key_exists($abosoort, $abos)) {
@@ -1185,7 +1202,6 @@ class MaalTrack {
 		}
 
 		# abo verwijderen
-		$uid = LoginLid::instance()->getUid();
 		$result = $this->_db->query("DELETE FROM `maaltijdabo` WHERE `uid` = '{$uid}' AND `abosoort` = '{$abosoort}'");
 
 		# bij de maaltijden met dit abo een recount doen
@@ -1245,10 +1261,14 @@ class MaalTrack {
 	# alle abosoorten opvragen, als deze gebruiker uit moot 1-4 is, hou daar dan rekening mee
 	# deze functionaliteit kan uitgezet worden door $mootfilter = false te zetten als argument
 	# het 'Geen' abonnement wordt hier uitgefilterd
-	function getAboSoort($mootfilter = true) {
+	function getAboSoort($mootfilter = true, $uid=null) {
 		$abos = array();
 		if($mootfilter === true){
-			$moot = LoginLid::instance()->getLid()->getVerticaleID();
+			if($uid==null){
+				$uid = LoginLid::instance()->getUid();
+			}
+			$lid=new Lid($uid);
+			$moot = $lid->getVerticaleID();
 		}
 		$result = $this->_db->select("SELECT * FROM maaltijdabosoort WHERE NOT abosoort='A_GEEN'");
 		if (($result !== false) and $this->_db->numRows($result) > 0) {
@@ -1263,7 +1283,7 @@ class MaalTrack {
 	# alle abosoorten die de ingelogde gebruiker *niet* heeft aanstaan
 	function getNotAboSoort($mootfilter = true, $uid=null) {
 		$abos = $this->getAbo($uid);
-		$abosoorten = $this->getAboSoort($mootfilter);
+		$abosoorten = $this->getAboSoort($mootfilter, $uid);
 		return array_diff_key($abosoorten, $abos);
 	}
 
@@ -1300,7 +1320,7 @@ class MaalTrack {
 		// mail headers
 		setlocale(LC_ALL, 'nl_NL');
 		$headers = "From: noreply@csrdelft.nl\r\n";
-		$headers .= "Reply-To: noreply@csrdelft.nl\r\n";
+		$headers .= "Reply-To: corvee@csrdelft.nl\r\n";
 		$headers .= "Content-Type: text/plain; charset=UTF-8\r\n";
 		$headers .= "X-Mailer: csrdelft.nl/PubCie"."\r\n";
 							
@@ -1322,7 +1342,7 @@ class MaalTrack {
 				$output .= "Reeds gemaild.";
 			} else {
 				$lMaaltijd = new Maaltijd($maaltijd['id']);
-				
+
 				// taken ophalen
 				$taken = $lMaaltijd->getTaken();
 				$teller = array();
@@ -1353,9 +1373,32 @@ class MaalTrack {
 						
 						// persoonlijk mailen
 						if ($lid != null) {
+
+							//mededeling over mee-eten inelkaar zetten
+							$meeeten = '';
+							if(in_array($taak, array('afwassers', 'koks', 'theedoeken'))){
+								$meeeten='U komt bij de maaltijd : ';
+								$status=$lMaaltijd->getStatus($uid);
+								switch($status){
+									case 'AAN':
+										$meeeten.='eten';
+									break;
+									case 'AUTO':
+										if($lMaaltijd->heeftAbo($uid)){
+											$meeeten.='eten (abo)';
+											$status='AAN';
+											break;
+										}
+									case 'AF':
+									default:
+										$meeeten.='niet eten';
+								}
+							}
+
 							$mail = new Smarty_csr();
 							$mail->assign('datum', strftime('%d-%m-%Y (%A)', $maaltijd['datum']));
 							$mail->assign('lidnaam', $lid->getNaamLink('civitas'));
+							$mail->assign('meeeten', $meeeten);
 							$bericht = $mail->fetch('maaltijdketzer/corveemail/'.$template);
 
 							if (mail($to, $onderwerp, $bericht, $headers))

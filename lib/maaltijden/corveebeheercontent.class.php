@@ -31,7 +31,7 @@ class CorveebeheerContent extends SimpleHTML {
 		$this->_maaltijd=$this->_maaltrack->getMaaltijd($iMaalID);
 		$this->_filter=$filter;
 	}
-	function addError($error){ $this->_error=$error; }
+	function addError($error){ $this->_error.=$error; }
 
 	function view(){
 		$loginlid=LoginLid::instance();

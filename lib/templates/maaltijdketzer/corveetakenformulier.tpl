@@ -1,5 +1,5 @@
-<h2 id="corveetakenFormulier">Corveevrijdag {$maal.formulier.actie}</h2>
- 
+<h2 id="corveetakenFormulier">{if $maal.formulier.type == "normaal"}Maaltijdcorvee{else}Vrijdagcorvee{/if} {$maal.formulier.actie}</h2>
+
 <form name="takenbewerk" action="/actueel/maaltijden/corveebeheer/" method="post">
 	<input type="hidden" name="actie" value="takenbewerk" />
 	<input type="hidden" name="type" value="{$maal.formulier.type}" />
@@ -74,7 +74,7 @@
 						</tr>
 					{else} {* Corveevrijdag *}
 						<tr>
-							<td>
+							<td style="width: 160px">
 								Frituurschoonmakers({$maal.formulier.schoonmaken_frituur})
 							</td>
 							<td>
@@ -111,7 +111,7 @@
 					{/if}
 					<tr>
 						<td>&nbsp;</td>
-						<Td><input type="submit" name="opslaan" value="Opslaan" /> <input type="button" value="Herlaad zonder filter" onClick="document.getElementById('filter').value=0;document.forms['takenbewerk'].submit();" /></td>
+						<Td><input type="submit" name="opslaan" value="Opslaan" /> <input type="button" value="Opslaan & herlaad zonder filter" onClick="document.getElementById('filter').value=0;document.forms['takenbewerk'].submit();" /></td>
 					</tr>
 			</td>
 		</tr>
