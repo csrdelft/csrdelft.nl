@@ -28,7 +28,7 @@ class CorveepuntenContent extends SimpleHTML {
 		$corveepunten=new Smarty_csr();
 		$corveepunten->caching=false;
 		
-		$sorteer = 'uid';
+		$sorteer = 'achternaam';
 		$sorteer_richting = 'asc';
 		if (isset($_GET['sorteer'])) $sorteer = $_GET['sorteer'];
 		elseif (isset($_POST['sorteer'])) $sorteer = $_POST['sorteer'];

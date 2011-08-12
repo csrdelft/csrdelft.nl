@@ -62,13 +62,16 @@ ul.groepledenlijst{ width: 230px; float: right; padding: 10px 20px 20px 20px; ma
 	border:solid 1px #000;
 	padding:1px;
 }
-.edit_td{
+.inline_edit{
 	background:url(http://plaetjes.csrdelft.nl/knopjes/bewerken.png) right no-repeat;
 	padding-right:18px!important;
 }
-.edit_td:hover{
+.inline_edit:hover{
 	background:url(http://plaetjes.csrdelft.nl/knopjes/bewerken.png) right no-repeat #f5f5f5;
 	cursor:pointer;
+}
+.inline_edit input{
+	width: 120px;
 }
 .melding {
 	color:red;

@@ -19,7 +19,7 @@
 	<input type="text" name="tp" id="field_tp" value="{$maal.formulier.tp}" style="width: 50px;" onKeyUp="uidPreview('tp')" /><div class="uidPreview" id="preview_tp"></div>
 	<script>uidPreview('tp');</script><br />
 	
-    <div>
+    <div id="corveevelden">
         <div style="float:left">
             <br/>
             <label for="koks">Koks</label><br/>
@@ -43,6 +43,6 @@
         <div style="clear:both" />
     </div>
 	<label for="submit">&nbsp;</label>
-	<input type="submit" name="submit" value="Opslaan" /><br />
+	<input type="submit" name="submit" value="Opslaan" /> <a class="knop zetopnul" title="Zet het aantal corveërs en het aantal punten op nul">Zet corveevelden op nul</a><br />
     
 </form>

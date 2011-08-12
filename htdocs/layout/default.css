@@ -498,6 +498,7 @@ div.offtopic hr{ text-align: left; background-color: #bbb; }
 table.maaltijden{ width: 100%; }
 table.maaltijden tr{ height: 1.6em; }
 table.maaltijden tr.old{ opacity: .50; }
+table.maaltijden span.mijzelf a{ color:green !important; font-weight: bold; }
 #maaltijdform label{ width: 150px; float: left; }
 #maaltijdform input, select{ margin-bottom: 3px;}
 #maaltijdform div.uidPreview{ display: inline; padding-left: 10px; }

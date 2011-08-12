@@ -1,5 +1,6 @@
 {assign var='actief' value='corveevoorkeuren'}
 {include file='maaltijdketzer/menu.tpl'}
+{$melding}
 
 <h1>Corveevoorkeuren</h1>
 
@@ -9,7 +10,7 @@
 		{if $index%30 == 0}
 			<tr>				
                 <th>&nbsp;</th>
-				<th><a href="/actueel/maaltijden/corveevoorkeurenlijst/sorteer/uid/{if $sorteer_richting=='asc'}desc{else}asc{/if}">Naam</a></th>
+				<th><a href="/actueel/maaltijden/corveevoorkeurenlijst/sorteer/achternaam/{if $sorteer_richting=='asc'}desc{else}asc{/if}">Naam</a></th>
                 {section name=header loop=$voorkeurenheaders}                    
                 <th style="width: 15px"><a href="/actueel/maaltijden/corveevoorkeurenlijst/sorteer/voorkeur_{$smarty.section.header.index}/{if $sorteer_richting=='asc'}desc{else}asc{/if}">{$voorkeurenheaders[header]}</a></th>    
                 {/section}                

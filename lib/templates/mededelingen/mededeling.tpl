@@ -62,6 +62,7 @@
 		<span>(png, gif of jpg, 200x200 of groter in die verhouding)</span>
 	</div>
 	<div class="clear">
+		{if $prullenbak}<input type="hidden" name="prullenbak" value="1" />{/if}
 		<label >&nbsp;</label><input type="submit" name="submit" value="opslaan" />
 		<a href="{$nieuws_root}{$mededeling->getId()}" class="knop">annuleren</a>
 	</div>

@@ -13,7 +13,7 @@ require_once 'configuratie.include.php';
 if(!$loginlid->hasPermission('P_MAAL_MOD')){ header('location: '.CSR_ROOT.'actueel/maaltijden/'); exit; }
 
 
-$sorteer = 'uid';
+$sorteer = 'achternaam';
 $sorteer_richting = 'asc';
 if (isset($_GET['sorteer'])) $sorteer = $_GET['sorteer'];
 elseif (isset($_POST['sorteer'])) $sorteer = $_POST['sorteer'];

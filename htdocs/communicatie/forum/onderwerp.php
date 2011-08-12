@@ -46,6 +46,8 @@ if($loginlid->hasPermission('P_FORUM_READ')) {
 
 $page=new csrdelft($midden);
 $page->addStylesheet('forum.css');
+$page->addStylesheet('groepen.css');
+$page->addScript('groepen.js');
 
 $page->view();
 ?>

@@ -1,10 +1,11 @@
 <?php
 class MededelingContent extends SimpleHTML{
 	private $mededeling;
+	private $prullenbak;
 
-	public function __construct(Mededeling $mededeling){
+	public function __construct(Mededeling $mededeling, $prullenbak=false){
 		$this->mededeling=$mededeling;
-
+		$this->prullenbak = $prullenbak;
 	}
 
 	public function view(){
@@ -13,6 +14,7 @@ class MededelingContent extends SimpleHTML{
 		define( 'NIEUWS_ROOT', '/actueel/mededelingen/');
 
 		$content->assign('mededeling', $this->mededeling);
+		$content->assign('prullenbak', $this->prullenbak);
 		$content->assign('melding', $this->getMelding());
 		$content->assign('nieuws_root', NIEUWS_ROOT);
 		$content->assign('prioriteiten', Mededeling::getPrioriteiten());

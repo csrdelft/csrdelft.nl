@@ -5,6 +5,9 @@
 	<li class="active">
 		<a href="{$mededelingen_root}top3overzicht" title="Top 3 Overzicht">Top 3 Overzicht</a>
 	</li>
+	<li>
+		<a href="{$mededelingen_root}prullenbak/" title="Prullenbak">Prullenbak</a>
+	</li>
 </ul>
 <hr />
 <h1>Mededelingen Top 3 Overzicht</h1>

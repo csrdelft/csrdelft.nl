@@ -58,8 +58,11 @@ class StringIncluder extends SimpleHTML{
 		$this->string=$string;
 		$this->title=$title;
 	}
-	function getTitel(){ return $this->title; }
-	function view(){
+	public function append($string){
+		$this->string.=$string;
+	}
+	public function getTitel(){ return $this->title; }
+	public function view(){
 		echo $this->string;
 	}
 }

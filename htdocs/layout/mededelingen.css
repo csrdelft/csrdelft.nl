@@ -23,14 +23,22 @@
 .nieuwstitel a{ color:  black;}
 .nieuwsbericht-vast{ height: 100px;	}
 
+#mededelingenketser{
+	float:left;
+}
+#mededelingenketser #kolomlinks{
+	width: 320px;
+	float: left;
+	margin-bottom: 30px;
+}
+#mededelingenketser #kolomrechts{
+	width: 400px;
+	float: left;
+}
 #mededelingen-titel{
 	height: 20px;
 	width: 70%;
 	margin: 0px 0px 10px 0px;
-}
-.mededelingen-overzichtlijst{
-	width: 320px;
-	float: left;
 }
 .mededelingen-beheerlink{
 	width: 20%;
@@ -65,11 +73,11 @@
 .mededelingenlijst-block a{	color: black; }
 .mededelingenlijst-plaatje{ margin: 0px 5px 0px 0px; float: left; }
 
-.mededelingen-overzichtlijst .wachtgoedkeuring{
+.wachtgoedkeuring{
 	margin-top: 30px;
 }
 
-.mededelingen-overzichtlijst #legenda{
+#mededelingenketser #legenda{
 	display: none; 
 	z-index: 999;
 	position: fixed;
@@ -102,6 +110,9 @@
 }
 .mededelingenlijst-block .verborgen-item, .mededelingenlijst-block .verborgen-item a{
 	color: grey;
+}
+.mededelingenlijst-block .verborgen-item, .mededelingenlijst-block .verwijderd-item a{
+	color: #CC0000;
 }
 .mededelingen_paginering{
 	margin-right: 15px;

@@ -117,7 +117,6 @@ htdocs/layout/fotoalbum.css -text
 htdocs/layout/groepen.css -text
 htdocs/layout/jquery.prettyPhoto.css -text
 htdocs/layout/js/bibliotheek.js -text
-htdocs/layout/js/builder.js -text
 htdocs/layout/js/csrdelft.js -text
 htdocs/layout/js/datatables/css/datatables_basic.css -text
 htdocs/layout/js/datatables/images/back_disabled.jpg -text
@@ -129,7 +128,6 @@ htdocs/layout/js/datatables/images/sort_both.jpg -text
 htdocs/layout/js/datatables/images/sort_desc.jpg -text
 htdocs/layout/js/datatables/jquery.dataTables.min.js -text
 htdocs/layout/js/documenten.js -text
-htdocs/layout/js/effects.js -text
 htdocs/layout/js/fastlightbox.js -text
 htdocs/layout/js/flot/API.txt -text
 htdocs/layout/js/flot/FAQ.txt -text
@@ -163,23 +161,20 @@ htdocs/layout/js/groepen.js -text
 htdocs/layout/js/jquery.js -text
 htdocs/layout/js/jquery.prettyPhoto.js -text
 htdocs/layout/js/lightbox.js -text
+htdocs/layout/js/maaltijd.js -text
 htdocs/layout/js/menu.js -text
 htdocs/layout/js/peilingbeheer.js -text
 htdocs/layout/js/pngfix.js -text
 htdocs/layout/js/profiel.js -text
-htdocs/layout/js/prototype.js -text
 htdocs/layout/js/roodschopper.js -text
-htdocs/layout/js/scriptaculous.js -text
 htdocs/layout/js/slideshow.js -text
 htdocs/layout/js/slideshow_intern.js -text
 htdocs/layout/js/sneltoetsen.js -text
 htdocs/layout/js/suggest.js -text
 htdocs/layout/js/verticalen.js -text
 htdocs/layout/ledenlijst.css -text
-htdocs/layout/lightbox.css -text
 htdocs/layout/mededelingen.css -text
 htdocs/layout/owee.css -text
-htdocs/layout/pauper.css -text
 htdocs/layout/profiel.css -text
 htdocs/layout/roodschopper.css -text
 htdocs/layout/roze.css -text
@@ -898,6 +893,7 @@ lib/templates/maaltijdketzer/maaltijdketzer.tpl -text
 lib/templates/maaltijdketzer/menu.tpl -text
 lib/templates/maaltijdketzer/saldi-updater.tpl -text
 lib/templates/maaltijdketzer/voorkeuren.tpl -text
+lib/templates/mededelingen/lijst.tpl -text
 lib/templates/mededelingen/mededeling.tpl -text
 lib/templates/mededelingen/mededelingen.tpl -text
 lib/templates/mededelingen/mededelingentopblock.tpl -text
@@ -906,7 +902,6 @@ lib/templates/mededelingen/top3overzicht.tpl -text
 lib/templates/menu.tpl -text
 lib/templates/owee_csrdelft.tpl -text
 lib/templates/owee_menu.tpl -text
-lib/templates/pauper_csrdelft.tpl -text
 lib/templates/peiling.ubb.tpl -text
 lib/templates/profiel/_saldografiek.tpl -text
 lib/templates/profiel/bewerken.tpl -text

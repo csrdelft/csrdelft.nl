@@ -62,6 +62,7 @@ if(isset($_GET['bewerk']) AND $_GET['bewerk']==(int)$_GET['bewerk'] AND $_GET['b
 }
 
 $page=new csrdelft($beheer);
+$page->addScript('maaltijd.js');
 $page->view();
 
 ?>

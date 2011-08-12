@@ -16,7 +16,7 @@ class Instelling{
 	private static $instellingen=array(
 		//	'name' => array('defaul value', 'beschrijving', 'type', type-opties),
 			'algemeen_sneltoetsen' => array('nee', 'Sneltoetsen op de webstek', 'enum', array('ja', 'nee')),
-			'layout_rozeWebstek' => array('nee', 'Webstek roze maken', 'enum', array('ja', 'nee')),
+			'layout' => array('owee', 'Websteklayout', 'enum', array('normaal', 'owee', 'roze')),
 			'forum_onderwerpenPerPagina' => array(15, 'Onderwerpen per pagina', 'int', 5), //deze hebben een minimum, anders gaat het forum stuk.
 			'forum_postsPerPagina' => array(25, 'Berichten per pagina', 'int', 10),
 			'forum_naamWeergave' => array('civitas', 'Naamweergave', 'enum', array('civitas', 'volledig', 'bijnaam', 'aaidrom')),
@@ -79,7 +79,7 @@ class Instelling{
 		}
 		switch(self::getType($key)){
 			case 'string':
-				if(!preg_match('/^[\w\-_ ]*$/', $value)){
+				if(!preg_match('/^[\w\-_\. ]*$/', $value)){
 					$value=self::getDefault($key);
 				}
 			break;

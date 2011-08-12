@@ -29,8 +29,8 @@
 			<tr>
 				<td>{$groeplid.uid|csrnaam:'civitas'}</td>
 				{if $groep->magBewerken() OR ($loginlid->getUid()==$groeplid.uid AND ($groep->getToonFuncties()=='tonen' OR $groep->getToonFuncties()=='verbergen'))}
-					<td  id="{$groep->getId()}{$groeplid.uid}" class="edit_td">
-						<span id="functie_{$groep->getId()}{$groeplid.uid}" class="text">{$groeplid.functie|escape:'html'}</span>
+					<td id="bewerk_{$groep->getId()}|{$groeplid.uid}" class="inline_edit">
+						<span class="text">{$groeplid.functie|escape:'html'}</span>
 						{if $groep->hasFunctiefilter()}
 							<select name="functie" class="editbox" id="functie_input_{$groep->getId()}{$groeplid.uid}">
 								{foreach from=$groep->getFunctiefilters() item=filter}
@@ -38,10 +38,8 @@
 								{/foreach}
 							</select>
 						{else}
-							<input type="text" maxlength="25" value="{$groeplid.functie|escape:'html'}" class="editbox" id="functie_input_{$groep->getId()}{$groeplid.uid}" />
+							<input type="text" maxlength="25" value="{$groeplid.functie|escape:'html'}" class="editbox"  />
 						{/if}
-						<input type="hidden" value="{$groeplid.uid}" id="uid_{$groep->getId()}{$groeplid.uid}"/>
-						<input type="hidden" value="{$groep->getId()}" id="gid_{$groep->getId()}{$groeplid.uid}"/>
 					</td>
 				{else}	
 					{if $groep->toonFuncties()}<td><em>{$groeplid.functie|escape:'html'}</em></td>{/if}

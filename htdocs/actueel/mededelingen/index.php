@@ -1,5 +1,8 @@
 <?php
 require_once 'configuratie.include.php';
+require_once 'mededelingen/mededeling.class.php';
+require_once 'mededelingen/mededelingcontent.class.php';
+require_once 'mededelingen/mededelingencontent.class.php';
 
 $mededelingId=0;
 if(isset($_GET['mededelingId'])){
@@ -15,9 +18,10 @@ if(isset($_GET['pagina'])){
 	$pagina=(int)$_GET['pagina'];
 }
 
-require_once 'mededelingen/mededeling.class.php';
-require_once 'mededelingen/mededelingcontent.class.php';
-require_once 'mededelingen/mededelingencontent.class.php';
+$prullenbak=false;
+if(isset($_REQUEST['prullenbak']) AND $_REQUEST['prullenbak'] == '1' AND Mededeling::isModerator()){
+	$prullenbak=true;
+}
 
 define('MEDEDELINGEN_ROOT', CSR_ROOT.'actueel/mededelingen/');
 
@@ -41,7 +45,7 @@ switch($actie){
 				exit;
 			}
 		}
-		$content=new MededelingenContent(0);
+		$content=new MededelingenContent(0, $prullenbak);
 		// De eerste pagina laden.
 		$content->setPaginaNummer(1);
 	break; 
@@ -190,7 +194,12 @@ switch($actie){
 				if($realId==-1) // If something went wrong, just go to the main page.
 					$realId='';
 				//TODO: Melding weergeven dat er iets toegevoegd is (?)
-				header('location: '.MEDEDELINGEN_ROOT.$realId); exit;
+				$nieuweLocatie = MEDEDELINGEN_ROOT;
+				if($prullenbak){
+					$nieuweLocatie .= 'prullenbak/';
+				}
+				$nieuweLocatie .= $realId;
+				header('location: '.$nieuweLocatie); exit;
 			}
 		}else{ // User is going to edit an existing Mededeling or fill in an empty form.
 			$mededeling=new Mededeling($mededelingId);
@@ -202,11 +211,11 @@ switch($actie){
 											// de mededelingenpagina? 
 			exit;
 		}
-		$content=new MededelingContent($mededeling);
+		$content=new MededelingContent($mededeling, $prullenbak);
 	break; 
 
 	default:
-		$content=new MededelingenContent($mededelingId);
+		$content=new MededelingenContent($mededelingId, $prullenbak);
 		if(isset($pagina)){	// Als de gebruiker een pagina opvraagt.
 			$content->setPaginaNummer($pagina);
 		}else if($mededelingId==0){	// Als de gebruiker GEEN pagina opvraagt en ook geen mededeling.

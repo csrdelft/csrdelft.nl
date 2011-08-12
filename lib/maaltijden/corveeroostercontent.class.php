@@ -32,6 +32,7 @@ class CorveeroosterContent extends SimpleHTML {
 
 		//arrays toewijzen en weergeven
 		$corveebeheer->assign('maal', $aMaal);
+		$corveebeheer->assign('liduid', LoginLid::instance()->getUid());
 		$corveebeheer->assign('datumWeek', '%W');
 		$corveebeheer->assign('datumWeekdag', '%a');
 		$corveebeheer->assign('datumVol', '%e %b %H:%M');

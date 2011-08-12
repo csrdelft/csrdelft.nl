@@ -1,4 +1,4 @@
-<h2 id="corveepuntenFormulier">Maaltijd Corveepunten bewerken</h2>
+<h2 id="corveepuntenFormulier">{if $maal.formulier.type == "normaal"}Maaltijd{else}Vrijdag{/if}corveepunten bewerken</h2>
  
 <form name="puntenbewerk" action="/actueel/maaltijden/corveebeheer/" method="post">
 	<input type="hidden" name="actie" value="puntenbewerk" />
