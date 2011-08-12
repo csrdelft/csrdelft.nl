@@ -751,20 +751,22 @@ class MaalTrack {
 		return $taakleden;
 	}
 	
-	#haalt de lijst met leden op, en filtert deze op hun corveewensen en kwalikok zijn
+	#haalt de lijst met leden op, en filtert deze op hun corveewensen en kwalikok zijn. Gesorteerd op prognosepunten en dan achternaam.
 	function getTaakLedenGefilterd($taak, $dag='', $puntentekort=0){		
 		// Zet het filter op 
 		//(Ma kok, Ma afw, Do kok, Do afw, Theedoek, Afzuigk, Frituur, Keuken, Puntentekort)
 		
 		// Op dag
 		$dagfilter = bindec('111111110');
-		switch($dag){
-			case 'Mon':
-				$filter = bindec('110000000');
-		 	break;
-			case 'Thu':
-				$filter = bindec('001100000');
-			break;
+		if(in_array($taak,array('kwalikok', 'kok', 'afwas'))){
+			switch($dag){
+				case 'Mon':
+					$dagfilter = bindec('110000000');
+				break;
+				case 'Thu':
+					$dagfilter = bindec('001100000');
+				break;
+			}
 		}
 		// Op taak
 		$taakfilter = bindec('111111110');
@@ -817,15 +819,21 @@ class MaalTrack {
 				$zoekLeden_gefilterd[$lid['uid']]=$lid;
 			}			
 		}
-				
-		//Todo: |csrnaam gebruiken
+
+		//lijst met prognosepunten
+		$prognoselijst = $this->getPuntenlijst('corvee_prognose', 'desc');
+
+		//lijst met de volgorde van prognoselijst, maar met de entries van zoekLeden_gefilterd
 		$taakleden = array('' => '- Geen -');
-		foreach ($zoekLeden_gefilterd as $lid) {
-			$naam = $lid['achternaam'].', '.$lid['voornaam'];
-			if($lid['tussenvoegsel'] != '')
-				$naam .= ' '.$lid['tussenvoegsel'];
-				
-			$taakleden[$lid['uid']] = $naam.' ('.$lid['corvee_punten'].')';	
+		foreach($prognoselijst as $index=>$entry){
+			if(isset($zoekLeden_gefilterd[$entry['uid']])){
+				$lid = $zoekLeden_gefilterd[$entry['uid']];
+				$naam = $lid['achternaam'].', '.$lid['voornaam'];
+				if($lid['tussenvoegsel'] != ''){
+					$naam .= ' '.$lid['tussenvoegsel'];
+				}
+				$taakleden[$lid['uid']] = $naam.' ('.$entry['corvee_prognose'].')';	
+			}
 		}
 		return $taakleden;
 	}
@@ -873,7 +881,7 @@ class MaalTrack {
 			GROUP BY
 				lid.uid
 			ORDER BY
-				".$sorteer." ".strtoupper($sorteer_richting).", uid ASC";
+				".$sorteer." ".strtoupper($sorteer_richting).", achternaam, uid ASC";
 		$rLeden=$this->_db->query($sLedenQuery);
 		$aLeden=$this->_db->result2array($rLeden);
 		
