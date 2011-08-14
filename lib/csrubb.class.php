@@ -342,6 +342,21 @@ src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
 		return $groeptag->getHTML();
 	}
 	/*
+	 * ubb_boek()
+	 *
+	 * [boek]123[/boek]
+	 * Geeft titel en auteur van een boek. 
+	 * Een kleine indicator geeft met kleuren beschikbaarheid aan
+	 */
+	protected function ubb_boek($parameters){
+		$content=$this->parseArray(array('[/boek]'), array());
+
+		require_once 'bibliotheek/bibliotheekcontent.class.php';
+		$boektag=new BoekUbbContent((int)$content);
+
+		return $boektag->getHTML();
+	}
+	/*
 	 * ubb_fotoalbum
 	 */
 	protected function ubb_fotoalbum($parameters){

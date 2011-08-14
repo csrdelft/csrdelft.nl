@@ -816,7 +816,7 @@ class eamBBParser{
 		}
 
 		$content = $this->parseArray(array('[/table]'), array('br'));
-		$html = '<table class="ubb_table" style="'.$paramstring.'">'.$content.'</table>';
+		$html = '<table class="ubb_table" style="'.$style.'">'.$content.'</table>';
 		return $html;
 	}
 	

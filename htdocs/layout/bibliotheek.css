@@ -1,0 +1,311 @@
+
+/*
+ * dataTable layout
+ */
+.boeken{
+	width: 100%;
+	clear: both;
+	border-collapse: collapse;
+}
+.boeken thead tr th{
+	border-bottom: 1px solid black;
+	padding: 5px 3px 3px 3px;
+}
+.boeken tfoot tr th{
+	border-top: 1px solid black;
+	padding: 3px 3px 5px 3px;
+}
+
+.boeken tbody tr th{
+	padding: 3px;
+	border-bottom: 1px solid black;
+	border-top: 1px solid black;
+	background-color: #eee;
+}
+
+.boeken tr td{
+	padding: 2px 3px;
+}
+
+.boeken tr.odd td{
+	background-color: #efefef;
+}
+
+.boeken .indicator.beschikbaar	{color:green;}
+.boeken .indicator.teruggegeven	{color:orange;}
+.boeken .indicator.geen			{color:red;}
+
+.paging_full_numbers .paginate_button {
+	padding: 2px 5px;
+	margin: 0;
+	border: 1px solid #d3d3d3; 
+	background: #e6e6e6; 
+	font-weight: normal; 
+	color: #162673; 
+	outline: none;
+	cursor: pointer;
+	* cursor: hand;
+}
+.paging_full_numbers .paginate_active {
+	padding: 2px 5px;
+	margin: 0;
+	border: 1px solid #aaaaaa; 
+	background: #ffffff; 
+	font-weight: normal; 
+	color: #black; 
+	outline: none;
+	cursor: pointer;
+	* cursor: hand;
+}
+.paging_full_numbers {
+	width: 350px !important;
+}
+
+.dataTables_paginate {
+	margin-top: 5px;
+	width: auto;
+}
+
+/*
+ * layout elementen voor de hele bieb
+ */
+h1{
+	margin-top: 5px;
+}
+.melding {
+	color:red;
+}
+.suggestie{
+	color:grey;
+	font-style: italic;
+}
+/*knoppen in zijkolom rechts*/
+.controls{
+	float: right;
+}
+.boekacties{
+	width: 125px;
+}
+
+
+/***************
+ * boek-pagina *
+ ***************/
+.label,
+.boek label{ float: left; width: 75px; font-size: 9px; color: #999; margin:0px;}
+.blok { margin-bottom: 20px; clear: left; }
+.gegevens { margin-left: 20px; padding-left: 15px; border-left: 1px solid #0a338d; }
+
+/* bewerkbare velden voor bewerken van boekinfo */
+.boek { 
+	float: left;
+	width: 620px;
+}
+.boek .veld{
+	clear: left;
+}
+.boek .editbox{
+	display:none;
+	background-color:#ffffcc;
+	border:solid 1px #000;
+	padding:1px;
+	width: 481px
+}
+.boek .bewerk{
+	padding-right:18px!important;
+}
+.boek .bewerk:hover{
+	background:url(http://plaetjes.csrdelft.nl/knopjes/bewerken.png) right no-repeat #ddd;
+	cursor:pointer;
+}
+.boek input#field_code{
+	width: 75px;
+}
+/*(bewerkbaar)titel boek*/
+.boek .header span.text, 
+.boek .header span.nonedit, 
+.boek .header label{
+	font-size: 1.6em !important;
+	margin-bottom: 0.2em;
+	font-weight: bold;
+	line-height: normal;
+}
+.boek .header label{
+	margin-left: 35px;
+}
+.boek .header{
+	margin: 5px 0px 20px 0px;
+}
+
+
+/* Formulier voor nieuw boek en die voor boekbeschrijving bestaand boek */
+#boekaddForm label{
+	width: 150px;
+	float: left;
+}
+#addBeschrijving label{
+	float: left; 
+	width: 109px; 
+	height: 20px;/* blijft tekstvak op zijn plek bij waarschuwing*/
+	font-size: 9px; 
+	color: white; 
+	margin: 0px;
+}
+
+.boekForm input.regular{
+	width: 250px;
+}
+.boekForm input.uid{
+	width: 80px;
+}
+.boekForm .uidPreview{
+	display: inline;
+	padding-left: 10px;
+}
+.boekForm .veld, .boekForm h3, .boekForm .password{
+	clear: both;
+}
+.boekForm .veld, .boekForm .submit{
+	margin-left: 10px;
+	padding: 1px 2px;
+	border: 1px solid white;
+}
+#addBeschrijving .veld, 
+#addBeschrijving .submit{
+	margin-left: 0px;
+}
+.boekForm .veld:hover{
+	border: 1px  solid #ddd;
+	background-color: #eee;
+}
+.boekForm .metfouten{
+	background-color: #FFC3CE;
+	padding: 4px 2px;
+}
+.boekForm .veld .waarschuwing{
+	float: right;
+	margin-right: 10px;
+}
+#addBeschrijving .veld .waarschuwing{
+	float: left;
+	margin-right: 10px;
+}
+.boekForm h3{
+	margin-top: 8px;
+	margin-bottom: 1px;
+}
+#addBeschrijving h3, 
+.beschrijvingen h2.header, 
+.beschrijvingen p.header{
+	margin-left: 112px;
+}
+.beschrijvingen h2{
+	margin-bottom: 5px;
+}
+.boekForm .preview{
+	width: 496px;
+}
+.boekForm textarea.regular{
+	width: 500px;
+}
+.boekForm .textareaContainer{
+	width: 508px;
+	float:left;
+}
+
+
+/*  Exemplaren */
+.exemplaren{
+	margin-top:10px;
+}
+.exemplaren .exemplaar{
+	margin-bottom: 10px;
+	overflow: auto;
+}
+.exemplaren .exemplaar .label{
+	height: 53px;
+	color: white;
+	float: left;
+}
+.exemplaren .exemplaar .label img.pasfoto{
+	height: 40px;
+	float: left;
+	margin-left: 10px;
+}
+.exemplaren h2{
+	margin-left: 75px;
+	margin-bottom: 5px;
+}
+.exemplaren p{
+	margin-left: 75px;
+}
+ /* uitleenveld */
+.exemplaren input.lid, .exemplaren div.naamCheck{
+	margin-left: 5px;
+	width: 160px;
+	float: left
+}
+.exemplaren label{
+	float: left;
+	margin: 0px;
+	line-height: normal;
+}
+.exemplaren span.text{
+	margin-left: 5px;
+}
+.exemplaren .linkerkolom{
+	float: left;
+	width:150px;
+}
+.exemplaren .veld label{
+	width: 100px;
+}
+.exemplaren .bewerk{
+	padding-right:18px!important;
+}
+.exemplaren .bewerk:hover{
+	background:url(http://plaetjes.csrdelft.nl/knopjes/bewerken.png) right no-repeat #ddd;
+	cursor:pointer;
+	margin-left:225px;
+}
+.exemplaren .bewerk input{
+	margin-left: 5px;
+	width: 200px;
+}
+/* boekbeschrijvingen */
+.beschrijvingen{
+	margin-top: 30px;
+}
+.beschrijvingen td.recensist{
+	width: 109px;
+	font-size: 9px;
+}
+.beschrijvingen td.recensist span.moment{
+	color:grey;
+}
+.beschrijvingen td.beschrijving{
+	width: 506px;
+}
+.beschrijvingen td.beschrijving.b0{ 
+	background-color: #f4f4f4;
+}
+.beschrijvingen td.tussenschot{
+	height: 2px;
+	margin: 0px; padding: 0px; border: 0px;
+	background-color: lightgrey;
+}
+.beschrijvingen td.bewerken{
+	background-color: #ffea5c !important;
+}
+.beschrijvingen td.bewerken span.bewerken{
+	color: grey;
+	font-weight: bold;
+}
+
+
+/*
+ * beheerpagina  
+ */
+#filters .actief{
+	font-weight: bold;
+}

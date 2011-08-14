@@ -523,8 +523,10 @@ function actb(obj,ca){
 			}
 			actb_curr.value = str;
 			setCaret(actb_curr,l);
+			jQuery("#"+jQuery(actb_curr).attr('id').substr(6)).trigger('change');
 		}else{
 			actb_curr.value = a;
+			//jQuery("#"+jQuery(actb_curr).attr('id').substr(6)).trigger('change');
 		}
 		actb_mouse_on_list = 0;
 		actb_removedisp();
