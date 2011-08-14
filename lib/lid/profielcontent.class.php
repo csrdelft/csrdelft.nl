@@ -55,6 +55,8 @@ class ProfielContent extends SimpleHTML {
 			$profiel->assign('saldografiek', Saldi::getDatapoints($this->lid->getUid(), 60));
 		}
 
+		$profiel->assign('corveetaken', $this->lid->getCorveeTaken());
+		$profiel->assign('corveevoorkeuren', $this->lid->getCorveeVoorkeuren());
 
 		$loginlid=LoginLid::instance();
 		$profiel->assign('isAdmin', $loginlid->hasPermission('P_ADMIN'));

@@ -7,7 +7,7 @@
 	<input type="text" name="datum" value="{$maal.formulier.datum|date_format:$datumFormaatInvoer}" /><br />
 
 	<label for="tekst">Omschrijving</label>
-	<input type="text" name="tekst" value="{$maal.formulier.tekst}" /><br />
+	<input type="text" name="tekst" value="{$maal.formulier.tekst}" maxlength="35" /><br />
 
 	<label for="limiet">Limiet</label>
 	<input type="text" name="limiet" value="{$maal.formulier.max}" /><br />

@@ -216,12 +216,73 @@
 			{if $loginlid->getUid()==$profhtml.uid OR $loginlid->hasPermission('P_MAAL_MOD')}
 				{if is_array($profhtml.recenteMaaltijden)}
 					<div class="label">Recent:</div>
-					<ul class="nobullets data">
-						{foreach from=$profhtml.recenteMaaltijden item=maaltijd}
-							<li><em title="{$maaltijd.datum|date_format:"%Y-%m-%d"}">{$maaltijd.datum|date_format:"%a %d-%m"}</em> - {$maaltijd.tekst|escape:'html'}</li>
-						{/foreach}
-					</ul>
+					<div class="data">
+						<table id="recenteMaaltijden">
+							{foreach from=$profhtml.recenteMaaltijden item=maaltijd}
+								<tr>
+									<td><span title="{$maaltijd.datum|date_format:"%Y-%m-%d"}">{$maaltijd.datum|date_format:"%a"}</span></td>
+									<td><span title="{$maaltijd.datum|date_format:"%Y-%m-%d"}">{$maaltijd.datum|date_format:"%d-%m"}</span></td>
+									<td> - {$maaltijd.tekst|truncate:50|escape:'html'}</td>
+								</tr>
+							{foreachelse}
+								<tr><td>Geen maaltijden</td></tr>
+							{/foreach}
+						</table>
+					</div><br />
 				{/if}
+			{/if}
+			{if $profiel->isLid() AND $corveetaken.aantal!==null}
+				<div class="label">Corveepunten:</div>
+				<div class="data">{$corveetaken.lid.corvee_punten} punten</div>
+				<div class="label">Bonuspunten:</div>
+				<div class="data">{$corveetaken.lid.corvee_punten_bonus} punten</div>
+				<div class="label">Vrijstelling:</div>
+				<div class="data">{$corveetaken.lid.corvee_vrijstelling} %</div>
+				<br />
+			{/if}
+			{if $profiel->isLid()}
+				<div class="half">
+					<div class="label">Voorkeuren:</div>
+					<ul class="nobullets data" title="Ik kom graag deze taken doen">
+						{if $corveevoorkeuren.ma_kok}	<li>Maandag koken</li>{/if}
+						{if $corveevoorkeuren.ma_afwas}	<li>Maandag afwassen</li>{/if}
+						{if $corveevoorkeuren.do_kok}	<li>Donderdag koken</li>{/if}
+						{if $corveevoorkeuren.do_afwas}	<li>Donderdag afwassen</li>{/if}
+						{if $corveevoorkeuren.theedoek}	<li>Theedoeken wassen</li>{/if}
+						{if $corveevoorkeuren.afzuigkap}<li>Afzuigkap schoonmaken</li>{/if}
+						{if $corveevoorkeuren.frituur}	<li>Frituur schoonmaken</li>{/if}
+						{if $corveevoorkeuren.keuken}	<li>Keuken schoonmaken</li>{/if}
+					</ul>
+				</div>
+				<div>
+					{if $loginlid->getUid()==$corveetaken.lid.uid}
+						<a href="/actueel/maaltijden/voorkeuren/" class="knop" >
+							<img src="{$csr_pics}forum/bewerken.png" title="Corveevoorkeuren bewerken" />
+						</a>
+					{/if}
+				</div><div style="clear: left;"></div>
+				<br />
+			{/if}
+			{if $profiel->isLid() AND $corveetaken.aantal!==null}
+				<div class="label">Taken:</div>
+				<div class="data">
+					<table id="corveeTaken">
+						{foreach from=$corveetaken.taken item=taak}
+							<tr>
+								{*datum, taak,
+								maalid, tekst, type, punten_toegekend, type,  *}
+								<td><span title="{$taak.datum|date_format:"%Y-%m-%d"}">{$taak.datum|date_format:"%a"}</span></td>
+								<td><span title="{$taak.datum|date_format:"%Y-%m-%d"}">{$taak.datum|date_format:"%d-%m"}</span></td>
+								<td>{$taak.taak}</td>
+								<td title="{$taak.tekst|escape:'html'}">{$taak.tekst|truncate:20|escape:'html'}</td>
+								<td>{$taak.punten} </td>
+								<td>punten {if $taak.punten_toegekend=='onbekend'}(niet toegekend){/if}</td>
+							</tr>
+						{foreachelse}
+							<tr><td>Geen corveetaken</td></tr>
+						{/foreach}
+					</table>
+				</div>
 			{/if}
 		</div>
 	</div>
@@ -239,7 +300,7 @@
 					{/if}
 					<a class="knop" href="/communicatie/profiel/{$profiel->getUid()}/rssToken#forum">Nieuwe aanvragen</a>
 				</div>
-			<br />
+				<br />
 			{/if}
 			{if $profiel->getForumPostCount()>0}
 				<div class="label"># bijdragen:</div>

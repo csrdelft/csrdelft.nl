@@ -1,0 +1,20 @@
+/*
+ * css voor maaltijd
+ */
+
+/* corveeinstellingenpagina */
+.instellingenForm .veld{
+	overflow: auto;
+}
+.instellingenForm h3{
+	margin-top: 10px;
+}
+.instellingenForm label{
+	width: 150px;
+	float:left;
+}
+.instellingenForm textarea.regular{
+	width: 500px;
+	height: 150px;
+}
+

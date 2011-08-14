@@ -39,6 +39,7 @@ htdocs/actueel/groepen/groepen.php -text
 htdocs/actueel/maaltijden/.htaccess -text
 htdocs/actueel/maaltijden/beheer.php -text
 htdocs/actueel/maaltijden/corveebeheer.php -text
+htdocs/actueel/maaltijden/corveeinstellingen.php -text
 htdocs/actueel/maaltijden/corveepunten.php -text
 htdocs/actueel/maaltijden/corveerooster.php -text
 htdocs/actueel/maaltijden/corveevoorkeurenlijst.php -text
@@ -171,6 +172,7 @@ htdocs/layout/js/sneltoetsen.js -text
 htdocs/layout/js/suggest.js -text
 htdocs/layout/js/verticalen.js -text
 htdocs/layout/ledenlijst.css -text
+htdocs/layout/maaltijd.css -text
 htdocs/layout/mededelingen.css -text
 htdocs/layout/owee.css -text
 htdocs/layout/profiel.css -text
@@ -675,6 +677,8 @@ lib/lid/stamboomcontent.class.php -text
 lib/lid/verjaardag.class.php -text
 lib/lid/verjaardagcontent.class.php -text
 lib/maaltijden/corveebeheercontent.class.php -text
+lib/maaltijden/corveeinstellingen.class.php -text
+lib/maaltijden/corveeinstellingencontent.class.php -text
 lib/maaltijden/corveelid.class.php -text
 lib/maaltijden/corveepuntencontent.class.php -text
 lib/maaltijden/corveeroostercontent.class.php -text
@@ -862,6 +866,7 @@ lib/templates/maaltijdketzer/abo-overzicht.tpl -text
 lib/templates/maaltijdketzer/beheer.tpl -text
 lib/templates/maaltijdketzer/corveebeheer.tpl -text
 lib/templates/maaltijdketzer/corveeformulier.tpl -text
+lib/templates/maaltijdketzer/corveeinstellingen.tpl -text
 lib/templates/maaltijdketzer/corveemail/afwas.tpl -text
 lib/templates/maaltijdketzer/corveemail/koks.tpl -text
 lib/templates/maaltijdketzer/corveemail/schoonmaken_afzuigkap.tpl -text
@@ -965,6 +970,7 @@ sql/2211_aanmaakbaargroepen.sql -text
 sql/2230_linkedin.sql -text
 sql/2235_fixverticaleletterGeen.sql -text
 sql/2240_erelid.sql -text
+sql/2400_maaltijdcorveeinstellingen.sql -text
 sql/csrdelft.sql -text
 sql/csrdelft_oud.sql -text
 wiki/.htaccess -text

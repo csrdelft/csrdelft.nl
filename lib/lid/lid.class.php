@@ -434,7 +434,46 @@ class Lid implements Serializable, Agendeerbaar{
 		);
 		return $return;
 	}
-
+	//Corvee punten, vrijstellingen en alle bekende corveetaken opzoeken en teruggeven in een array
+	public function getCorveeTaken(){
+		$taken = array();
+		$return['aantal']=null;
+		$db=MySql::instance();
+		$sTakenquery = "
+			SELECT maalid, lid.uid, datum, tekst, type, punten_toegekend, type , corvee_punten, corvee_punten_bonus, corvee_vrijstelling, corvee_voorkeuren,
+				kok, afwas, theedoek, maaltijdcorvee.schoonmaken_keuken, maaltijdcorvee.schoonmaken_afzuigkap, maaltijdcorvee.schoonmaken_frituur, 
+				punten_kok, punten_afwas, punten_theedoek, punten_schoonmaken_keuken, punten_schoonmaken_afzuigkap, punten_schoonmaken_frituur 
+			FROM lid 
+			LEFT JOIN maaltijdcorvee ON maaltijdcorvee.uid = lid.uid
+			LEFT JOIN maaltijd ON maaltijdcorvee.maalid = maaltijd.id
+			WHERE lid.uid='".$db->escape($this->getUid())."';";
+		$result=$db->query($sTakenquery);
+		if (($result !== false) and $db->numRows($result) > 0) {
+			while ($record = $db->next($result)) {
+				//zoek ingeroosterde taak
+				$takenlijst = array('kok', 'afwas', 'theedoek', 'schoonmaken_keuken', 'schoonmaken_afzuigkap', 'schoonmaken_frituur');
+				foreach($takenlijst as $taak){
+					if($record[$taak] == 1){
+						$taakprops = array('maalid', 'datum', 'tekst', 'type', 'punten_toegekend', 'type');
+						$ataak = array_get_keys($record, $taakprops);
+						$ataak['taak'] = str_replace('_', ' ', $taak);
+						$ataak['punten'] = $record['punten_'.$taak];
+						$taken[] = $ataak;
+					}
+					if(!isset($return['lid'])){
+						$lidprops = array('uid', 'corvee_punten', 'corvee_punten_bonus', 'corvee_vrijstelling');
+						$return['lid'] = array_get_keys($record, $lidprops);
+					}
+				}
+			}
+			//slaat gegevens op
+			$return['taken']=$taken;
+			$return['aantal']=count($taken);
+			return $return;
+		}else{
+			return $return;
+		}
+	}
 	public function isKwalikok(){ return $this->profiel['corvee_punten']==='1'; }
 
 	//deze willen we hebben om vanuit templates handig instellingen op te halen.

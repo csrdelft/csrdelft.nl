@@ -48,8 +48,6 @@ define('MAALTIJD_LIJST_MAX_TOT', 86400*7*4);
 define('MAALTIJD_PROXY_MAX_TOT', 86400*2);
 # wat is het standaard aantal max inschrijvingen voor een maaltijd?
 define('MAX_MAALTIJD', 100);
-# wat is het aantal te behalen corveepunten per lid per jaar?
-define('CORVEEPUNTEN', 11);
 
 # hoeveel dagen van tevoren worden agendapunten standaard getoond?
 define('AGENDA_LIJST_DEFAULT_DAGEN', 70);
