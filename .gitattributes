@@ -985,7 +985,7 @@ sql/2230_linkedin.sql -text
 sql/2235_fixverticaleletterGeen.sql -text
 sql/2240_erelid.sql -text
 sql/2400_maaltijdcorveeinstellingen.sql -text
-sql/biebboektabel_opschonen.sql -text
+sql/2404_bibiotheek.sql -text
 sql/csrdelft.sql -text
 sql/csrdelft_oud.sql -text
 wiki/.htaccess -text
