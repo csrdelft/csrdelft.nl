@@ -31,7 +31,7 @@ uitprinten. Vanaf dat moment zal deze ketzer u niet meer willen aan- of afmelden
 				{/if}
 				</td>
 				<td>{$maaltijd.datum|date_format:$datumFormaat}</td>
-				<td>{$maaltijd.tekst|escape:'html'}</td>
+				<td>{$maaltijd.tekst|truncate:30|escape:'html'}</td>
 				<td>
 					{if $maaltijd.aantal < $maaltijd.max}
 						{$maaltijd.aantal} ({$maaltijd.max})

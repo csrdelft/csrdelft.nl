@@ -9,6 +9,8 @@
 
 
 require_once 'maaltijden/maaltrack.class.php';
+require_once 'maaltijden/corveeinstellingen.class.php';
+
 
 class CorveebeheerContent extends SimpleHTML {
 
@@ -41,7 +43,9 @@ class CorveebeheerContent extends SimpleHTML {
 
 		//Dingen ophalen voor het overzicht van maaltijden...
 		$aMaal['error']=$this->_maaltrack->getError();
-		$aMaal['maaltijden']=$this->_maaltrack->getMaaltijden(time()-3600*24*28, time()+3600*24*100, false, false);
+		$begin = strtotime(Corveeinstellingen::get('periodebegin'));
+		$eind = strtotime(Corveeinstellingen::get('periodeeind'));
+		$aMaal['maaltijden']=$this->_maaltrack->getMaaltijden($begin, $eind, false, false);
 
 		// bewerken
 		if(!isset($this->_maaltijd) OR !is_array($this->_maaltijd)){
@@ -61,9 +65,9 @@ class CorveebeheerContent extends SimpleHTML {
 			$aForm['schoonmaken_frituur']=0;
 			$aForm['schoonmaken_afzuigkap']=0;
 			$aForm['schoonmaken_keuken']=0;
-			$aForm['punten_schoonmaken_frituur']=2;
-			$aForm['punten_schoonmaken_afzuigkap']=2;
-			$aForm['punten_schoonmaken_keuken']=3;
+			$aForm['punten_schoonmaken_frituur']=Corveeinstellingen::get('puntenfrituur');
+			$aForm['punten_schoonmaken_afzuigkap']=Corveeinstellingen::get('puntenafzuigkap');
+			$aForm['punten_schoonmaken_keuken']=Corveeinstellingen::get('puntenkeuken');
 		}else{
 			$aForm=$this->_maaltijd;
 			

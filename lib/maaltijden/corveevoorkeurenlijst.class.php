@@ -16,7 +16,7 @@ class CorveevoorkeurenLijst{
 
 	//Zoek leden met corvee-eigenschappen, geef de corveevoorkeuren terug in een array	
 	private function getCorveeLeden($sort='achternaam'){
-		$zoekLeden = Zoeker::zoekLeden('', 'uid', 'alle', $sort, 'leden', array('uid', 'achternaam', 'voornaam', 'tussenvoegsel', 'corvee_voorkeuren', 'corvee_vrijstelling', 'corvee_punten'));
+		$zoekLeden = Zoeker::zoekLeden('', 'uid', 'alle', $sort, array('S_LID', 'S_NOVIET', 'S_GASTLID'), array('uid', 'achternaam', 'voornaam', 'tussenvoegsel', 'corvee_voorkeuren', 'corvee_vrijstelling', 'corvee_punten'));
 		$bewerkteLeden = array();
 		foreach($zoekLeden as $uid=>$lidentry){	
 			$bewerkteLeden[$uid] = $lidentry;
@@ -32,14 +32,14 @@ class CorveevoorkeurenLijst{
 	private function getCorveeLedenMetPrognose($sort='achternaam'){
 		//Haal de lijst met leden met hun corveeprognose op
 		$track = new MaalTrack();
-		$prognoselijst = $track->getPuntenlijst('uid', 'asc');
+		$prognoselijst = $track->getPuntenlijst('achternaam', 'asc');
 		$prognoselijst_assoc = array();
 		foreach($prognoselijst as $index=>$entry){
 			$prognoselijst_assoc[$entry['uid']] = $entry;
 		}
 		
 		//Haal de lijst met leden met hun corveevoorkeuren op
-		$zoekLeden = Zoeker::zoekLeden('', 'uid', 'alle', $sort, 'leden', array('uid', 'achternaam', 'voornaam', 'tussenvoegsel', 'corvee_voorkeuren', 'corvee_vrijstelling', 'corvee_punten'));
+		$zoekLeden = Zoeker::zoekLeden('', 'uid', 'alle', $sort, array('S_LID', 'S_NOVIET', 'S_GASTLID'), array('uid', 'achternaam', 'voornaam', 'tussenvoegsel', 'corvee_voorkeuren', 'corvee_vrijstelling', 'corvee_punten'));
 		
 		//Combineer de twee lijsten en zet de corveevoorkeuren goed.
 		$bewerkteLeden = array();		

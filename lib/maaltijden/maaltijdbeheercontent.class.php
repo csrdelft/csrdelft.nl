@@ -9,6 +9,8 @@
 
 
 require_once 'maaltijden/maaltrack.class.php';
+require_once 'maaltijden/corveeinstellingen.class.php';
+
 
 class MaaltijdbeheerContent extends SimpleHTML {
 
@@ -56,9 +58,9 @@ class MaaltijdbeheerContent extends SimpleHTML {
 			$aForm['theedoeken']=1;
 			
 			//corveepunten voor een standaardmaaltijd
-		    $aForm['punten_kok']=4;
-			$aForm['punten_afwas']=3;
-			$aForm['punten_theedoek']=2;
+		    $aForm['punten_kok']=Corveeinstellingen::get('puntenkoken');
+			$aForm['punten_afwas']=Corveeinstellingen::get('puntenafwas');
+			$aForm['punten_theedoek']=Corveeinstellingen::get('puntentheedoek');
 		}else{
 			$aForm=$this->_maaltijd;
 			$aForm['actie']='bewerken';

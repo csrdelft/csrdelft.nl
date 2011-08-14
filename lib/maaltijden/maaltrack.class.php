@@ -13,10 +13,12 @@
 
 require_once 'maaltijden/maaltijd.class.php';
 require_once 'maaltijden/corveelid.class.php';
+require_once 'maaltijden/corveeinstellingen.class.php';
 
 class MaalTrack {
 	# MySQL connectie
 	var $_db;
+	private $corveepunten;
 
 
 	# evt. foutboodschap
@@ -25,6 +27,7 @@ class MaalTrack {
 
 	function __construct() {
 		$this->_db =MySql::instance();
+		$this->corveepunten = Corveeinstellingen::get('puntentotaal');
 	}
 
 	function getError() { $error = $this->_error; $this->_error = ""; return $error; }
@@ -734,10 +737,53 @@ class MaalTrack {
 
 		return $aMaal;
 	}
-	
+	//van opgegeven of huidige lid de corveepunten, -vrijstellingen en alle aanwezige corveetaken opzoeken en teruggeven in een array
+	static public function getCorveeTaken($uid=null){
+		if($uid===null){
+			$uid=LoginLid::instance()->getUid();
+		}
+		$taken = array();
+		$return['aantal']=null;
+		$db=MySql::instance();
+		//eerst uit 'lid' corveepunten/bonus/vrijstelling, als er taken zijn die ook verzamelen uit 'maaltijdcorvee' en 'maaltijd'
+		$sTakenquery = "
+			SELECT maalid, lid.uid, datum, tekst, type, punten_toegekend, type , corvee_punten, corvee_punten_bonus, corvee_vrijstelling, corvee_voorkeuren,
+				kok, afwas, theedoek, maaltijdcorvee.schoonmaken_keuken, maaltijdcorvee.schoonmaken_afzuigkap, maaltijdcorvee.schoonmaken_frituur, 
+				punten_kok, punten_afwas, punten_theedoek, punten_schoonmaken_keuken, punten_schoonmaken_afzuigkap, punten_schoonmaken_frituur 
+			FROM lid 
+			LEFT JOIN maaltijdcorvee ON maaltijdcorvee.uid = lid.uid
+			LEFT JOIN maaltijd ON maaltijdcorvee.maalid = maaltijd.id
+			WHERE lid.uid='".$db->escape($uid)."';";
+		$result=$db->query($sTakenquery);
+		if (($result !== false) and $db->numRows($result) > 0) {
+			while ($record = $db->next($result)) {
+				//zoek ingeroosterde taak
+				$takenlijst = array('kok', 'afwas', 'theedoek', 'schoonmaken_keuken', 'schoonmaken_afzuigkap', 'schoonmaken_frituur');
+				foreach($takenlijst as $taak){
+					if($record[$taak] == 1){
+						$taakprops = array('maalid', 'datum', 'tekst', 'type', 'punten_toegekend', 'type');
+						$ataak = array_get_keys($record, $taakprops);
+						$ataak['taak'] = str_replace('_', ' ', $taak);
+						$ataak['punten'] = $record['punten_'.$taak];
+						$taken[] = $ataak;
+					}
+					if(!isset($return['lid'])){
+						$lidprops = array('uid', 'corvee_punten', 'corvee_punten_bonus', 'corvee_vrijstelling');
+						$return['lid'] = array_get_keys($record, $lidprops);
+					}
+				}
+			}
+			//slaat gegevens op
+			$return['taken']=$taken;
+			$return['aantal']=count($taken);
+			return $return;
+		}else{
+			return $return;
+		}
+	}
 	# haalt de lijst met leden op die voor een taak ingedeeld kunnen worden
 	function getTaakLeden(){
-		$zoekLeden = Zoeker::zoekLeden('', 'uid', 'alle', 'achternaam', 'leden', array('uid', 'achternaam', 'voornaam', 'tussenvoegsel', 'corvee_punten'));
+		$zoekLeden = Zoeker::zoekLeden('', 'uid', 'alle', 'achternaam', array('S_LID', 'S_NOVIET', 'S_GASTLID'), array('uid', 'achternaam', 'voornaam', 'tussenvoegsel', 'corvee_punten'));
 		
 		//Todo: |csrnaam gebruiken
 		$taakleden = array('' => '- Geen -');
@@ -797,12 +843,12 @@ class MaalTrack {
 		$filtervoorkeur += $puntentekort;
 		
 		//de ledenlijst ophalen
-		$zoekLeden = Zoeker::zoekLeden('', 'uid', 'alle', 'achternaam', 'leden', array('uid', 'achternaam', 'voornaam', 'tussenvoegsel', 'corvee_kwalikok', 'corvee_voorkeuren', 'corvee_vrijstelling', 'corvee_punten'));
+		$zoekLeden = Zoeker::zoekLeden('', 'uid', 'alle', 'achternaam', array('S_LID', 'S_NOVIET', 'S_GASTLID') , array('uid', 'achternaam', 'voornaam', 'tussenvoegsel', 'corvee_kwalikok', 'corvee_voorkeuren', 'corvee_vrijstelling', 'corvee_punten'));
 		
 		//Voorbewerken van de lijst: puntentekort berekenen, kwalikoks selecteren
 		$zoekLeden_gefilterd = array();
 		foreach ($zoekLeden as $lid){
-			$heefttekort = (CORVEEPUNTEN - round(CORVEEPUNTEN*.01*$lid['corvee_vrijstelling'])-$lid['corvee_punten']) > 0 ? 1 : 0;			
+			$heefttekort = ($this->corveepunten - round($this->corveepunten*.01*$lid['corvee_vrijstelling'])-$lid['corvee_punten']) > 0 ? 1 : 0;			
 			$eigenvoorkeur= bindec($lid['corvee_voorkeuren'] . $heefttekort); //Totaal 8+1 = 9 bits lang
 			
 			if($taak == 'kwalikok' && $lid['corvee_kwalikok']==0){
@@ -837,7 +883,7 @@ class MaalTrack {
 		}
 		return $taakleden;
 	}
-	
+
 	# haalt één enkele maaltijd op ter bewerking
 	function getPuntenlijst($sorteer = 'corvee_tekort', $sorteer_richting = 'asc'){
 		$sorteer_toegestaan = array('achternaam', 'kok', 'afwas', 'theedoek', 'schoonmaken_frituur', 'schoonmaken_afzuigkap', 'schoonmaken_keuken', 'corvee_kwalikok', 'corvee_punten', 'corvee_punten_bonus', 'corvee_vrijstelling', 'corvee_prognose', 'corvee_tekort');
@@ -849,7 +895,7 @@ class MaalTrack {
 			SELECT
 				lid.uid
 				, corvee_kwalikok, corvee_punten, corvee_punten_bonus, corvee_vrijstelling, corvee_voorkeuren
-				, (".CORVEEPUNTEN."-CEIL(".CORVEEPUNTEN."*.01*corvee_vrijstelling)-corvee_punten_bonus-corvee_punten)
+				, (".(int)$this->corveepunten."-CEIL(".(int)$this->corveepunten."*.01*corvee_vrijstelling)-corvee_punten_bonus-corvee_punten)
 				  - IFNULL(SUM(
 					punten_kok*kok
 					+ punten_afwas*afwas
@@ -863,7 +909,7 @@ class MaalTrack {
 				, SUM(maaltijdcorvee.schoonmaken_frituur) AS schoonmaken_frituur
 				, SUM(maaltijdcorvee.schoonmaken_afzuigkap) AS schoonmaken_afzuigkap
 				, SUM(maaltijdcorvee.schoonmaken_keuken) AS schoonmaken_keuken
-				, (".CORVEEPUNTEN."-CEIL(".CORVEEPUNTEN."*.01*corvee_vrijstelling)-corvee_punten_bonus-corvee_punten) AS corvee_tekort
+				, (".(int)$this->corveepunten."-CEIL(".(int)$this->corveepunten."*.01*corvee_vrijstelling)-corvee_punten_bonus-corvee_punten) AS corvee_tekort
 			FROM
 				lid
 			LEFT JOIN
@@ -900,8 +946,8 @@ class MaalTrack {
 			$kleur_start = 8;
 			$tekort_offset = 2;
 			
-			$rRaw = 2 * (($lPunten/(CORVEEPUNTEN+$tekort_offset)));	// waarde tussen 0 en 1
-			$gRaw = 2 * (1-$lPunten/(CORVEEPUNTEN+$tekort_offset));	// waarde tussen 0 en 1
+			$rRaw = 2 * (($lPunten/($this->corveepunten+$tekort_offset)));	// waarde tussen 0 en 1
+			$gRaw = 2 * (1-$lPunten/($this->corveepunten+$tekort_offset));	// waarde tussen 0 en 1
 			
 			if ($rRaw > 0 && $rRaw < 0.5) $rRaw = 0.5; // verschil tussen 0 en 1 tekort wat duidelijker maken
 			if ($rRaw < 0) $rRaw = 0; if ($rRaw > 1) $rRaw = 1;
@@ -1359,18 +1405,18 @@ class MaalTrack {
 				print_r($taken);
 
 				$takenTemplates = array(
-					'afwassers' => 'afwas.tpl',
-					'koks' => 'koks.tpl',
-					'theedoeken' => 'theedoeken.tpl',
-					'schoonmaken_frituur' => 'schoonmaken_frituur.tpl',
-					'schoonmaken_afzuigkap' => 'schoonmaken_afzuigkap.tpl',
-					'schoonmaken_keuken' => 'schoonmaken_keuken.tpl'
+					'afwassers' => 'afwas',
+					'koks' => 'koks',
+					'theedoeken' => 'theedoeken',
+					'schoonmaken_frituur' => 'frituur',
+					'schoonmaken_afzuigkap' => 'afzuigkap',
+					'schoonmaken_keuken' => 'keuken'
 				);
 				
 				foreach($taken as $taak => $leden)
 				{
-					$template = (isset($takenTemplates[$taak]) ? $takenTemplates[$taak] : null);
-					if (!$template) continue;
+					$templateid = (isset($takenTemplates[$taak]) ? $takenTemplates[$taak] : null);
+					if (!$templateid) continue;
 					
 					// mailen
 					$onderwerp = 'C.S.R. Delft Corvee - '.strftime('%d-%m-%Y', $maaltijd['datum']);
@@ -1403,11 +1449,12 @@ class MaalTrack {
 								}
 							}
 
-							$mail = new Smarty_csr();
-							$mail->assign('datum', strftime('%d-%m-%Y (%A)', $maaltijd['datum']));
-							$mail->assign('lidnaam', $lid->getNaamLink('civitas'));
-							$mail->assign('meeeten', $meeeten);
-							$bericht = $mail->fetch('maaltijdketzer/corveemail/'.$template);
+							require_once 'maaltijden/corveeinstellingen.class.php';
+							$template = Corveeinstellingen::get($templateid);
+							$lidnaam = $lid->getNaamLink('civitas');
+							$datum = strftime('%d-%m-%Y (%A)', $maaltijd['datum']);
+
+							$bericht = htmlspecialchars(str_replace(array('LIDNAAM', 'DATUM', 'MEEETEN'), array($lidnaam, $datum, $meeeten), $template));
 
 							if (mail($to, $onderwerp, $bericht, $headers))
 								$teller[] = $lid->getNaam().' ('.$uid.')';

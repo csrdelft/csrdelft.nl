@@ -6,24 +6,27 @@
 {if $maal.maaltijden|@count==0}
 	<p>&#8226; Helaas, er is binnenkort geen maaltijd op Confide.</p>
 {else}
-	<table class="maaltijden">
-		<tr>
-			<th>&nbsp;</th>
-			<th>Maaltijd begint om:</th>
-			<th>Omschrijving</th>						
-			<th>K</th>
-			<th>A</th>
-			<th>T</th>
-			<th>sF</th>
-			<th>sA</th>
-			<th>sK</th>
-			<th>Punten</th>
-			<th># (Max)</th>
-			<th>&nbsp;</th>
-		</tr>
-		{foreach from=$maal.maaltijden item=maaltijd}
-			<tr {if $maaltijd.datum<=$smarty.now}class="old"{/if} style="background-color: {cycle values="#e9e9e9, #fff"};{if $maal.formulier.id==$maaltijd.id}background-color: #bfb{/if}">
-			<td>
+	<table class="maaltijden" id="corveebeheer" cellspacing="0">
+		<thead>
+			<tr>
+				<th>&nbsp;</th>
+				<th>Maaltijd begint om:</th>
+				<th>Omschrijving</th>
+				<th>K</th>
+				<th>A</th>
+				<th>T</th>
+				<th>sF</th>
+				<th>sA</th>
+				<th>sK</th>
+				<th>Punten</th>
+				<th># (Max)</th>
+				<th>&nbsp;</th>
+			</tr>
+		</thead>
+		<tbody>
+			{foreach from=$maal.maaltijden item=maaltijd name=corveebit}
+			<tr class="{if $maaltijd.datum<=$smarty.now}old{/if}{if $smarty.foreach.corveebit.index == 0} first{/if}" style="background-color: {cycle values="#e9e9e9, #fff"};{if $maal.formulier.id==$maaltijd.id}background-color: #bfb{/if}">
+				<td style="width:100px">
 					<a href="/actueel/maaltijden/corveebeheer/bewerk/{$maaltijd.id}#corveemaaltijdFormulier">{icon get="bewerken" title="Bewerk Maaltijd"}</a>					
 					<a href="/actueel/maaltijden/corveebeheer/takenbewerk/{$maaltijd.id}#corveetakenFormulier">{icon get="taken_bewerken" title="Bewerk Taken"}</a>
 					<a href="/actueel/maaltijden/corveebeheer/puntenbewerk/{$maaltijd.id}#corveepuntenFormulier">
@@ -78,7 +81,8 @@
 					{/if}
 				</td>
 			</tr>
-		{/foreach}
+			{/foreach}
+		</tbody>
 	</table>
 	<br />
 {/if}

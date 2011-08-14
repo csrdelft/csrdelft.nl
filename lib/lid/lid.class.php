@@ -434,7 +434,10 @@ class Lid implements Serializable, Agendeerbaar{
 		);
 		return $return;
 	}
-
+	//Corvee punten, vrijstellingen en alle bekende corveetaken opzoeken en teruggeven in een array
+	public function getCorveeTaken(){
+		return Maaltrack::getCorveeTaken($this->getUid());
+	}
 	public function isKwalikok(){ return $this->profiel['corvee_punten']==='1'; }
 
 	//deze willen we hebben om vanuit templates handig instellingen op te halen.
