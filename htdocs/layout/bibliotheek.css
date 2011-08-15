@@ -219,18 +219,32 @@ h1{
 	margin-top:10px;
 }
 .exemplaren .exemplaar{
-	margin-bottom: 10px;
+	margin-bottom: 25px;
 	overflow: auto;
 }
 .exemplaren .exemplaar .label{
-	height: 53px;
 	color: white;
 	float: left;
 }
 .exemplaren .exemplaar .label img.pasfoto{
 	height: 40px;
 	float: left;
-	margin-left: 10px;
+	margin-left: 27px;
+}
+.exemplaren .exemplaar .gegevensexemplaar{
+	float: left;
+	width: 600px;
+}
+.exemplaren .exemplaar .actieknoppen{
+	height: 20px;
+}
+.exemplaren .exemplaar label{
+	float: left;
+	margin: 0px;
+	line-height: normal;
+	width: 75px;
+	font-size: 9px; 
+	color: #999; 
 }
 .exemplaren h2{
 	margin-left: 75px;
@@ -241,50 +255,44 @@ h1{
 }
  /* uitleenveld */
 .exemplaren input.lid, .exemplaren div.naamCheck{
-	margin-left: 5px;
-	width: 160px;
-	float: left
-}
-.exemplaren label{
+	width: 170px;
 	float: left;
-	margin: 0px;
-	line-height: normal;
 }
-.exemplaren span.text{
+.exemplaren .uitleenveld{
+	overflow: auto;
+}
+.exemplaren div.naamCheck{
 	margin-left: 5px;
 }
-.exemplaren .linkerkolom{
-	float: left;
-	width:150px;
-}
-.exemplaren .veld label{
-	width: 100px;
-}
+
 .exemplaren .bewerk{
 	padding-right:18px!important;
 }
 .exemplaren .bewerk:hover{
 	background:url(http://plaetjes.csrdelft.nl/knopjes/bewerken.png) right no-repeat #ddd;
 	cursor:pointer;
-	margin-left:225px;
+	width: 310px;
 }
 .exemplaren .bewerk input{
-	margin-left: 5px;
-	width: 200px;
+	width: 220px;
 }
 /* boekbeschrijvingen */
 .beschrijvingen{
 	margin-top: 30px;
 }
-.beschrijvingen td.recensist{
-	width: 109px;
+.beschrijvingen td.linkerkolom{
+	width: 99px;
 	font-size: 9px;
+}
+.beschrijvingen td.recensist{
+	padding: 2px 10px 5px 0px;
 }
 .beschrijvingen td.recensist span.moment{
 	color:grey;
 }
 .beschrijvingen td.beschrijving{
 	width: 506px;
+	padding: 2px 0px 5px 0px;
 }
 .beschrijvingen td.beschrijving.b0{ 
 	background-color: #f4f4f4;

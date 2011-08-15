@@ -1015,8 +1015,8 @@ class Boek{
 		if(count($this->exemplaren)>0){
 			foreach($this->exemplaren as $exemplaar){//id, eigenaar_uid, uitgeleend_uid, toegevoegd, status, uitleendatum
 				if($this->isEigenaar($exemplaar['id'])){
-					$editablefieldsform['lener_'.$exemplaar['id']]=new LidField('lener_'.$exemplaar['id'], $exemplaar['uitgeleend_uid'], 'Uitgeleend aan: ', Catalogus::getAllValuesOfProperty('naam'), 'Geef naam of lidnummer van lener');
-					$editablefieldsform['opmerking_'.$exemplaar['id']]=new InputAjaxField('opmerking_'.$exemplaar['id'], $exemplaar['opmerking'], 'Opmerking: ', 255,'Opmerking over exemplaar..');
+					$editablefieldsform['lener_'.$exemplaar['id']]=new LidField('lener_'.$exemplaar['id'], $exemplaar['uitgeleend_uid'], 'Uitgeleend aan', Catalogus::getAllValuesOfProperty('naam'), 'Geef naam of lidnummer van lener');
+					$editablefieldsform['opmerking_'.$exemplaar['id']]=new InputAjaxField('opmerking_'.$exemplaar['id'], $exemplaar['opmerking'], 'Opmerking', 255,'Geef opmerking over exemplaar..');
 				}
 			}
 		}
