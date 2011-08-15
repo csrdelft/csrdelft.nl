@@ -47,7 +47,7 @@ ADD  `leningen` INT( 11 ) NOT NULL DEFAULT  '0';
 ALTER TABLE  `biebexemplaar` 
 DROP  `extern`;
 ALTER TABLE  `biebexemplaar` 
-CHANGE  `toegevoegd`  `toegevoegd` DATETIME NOT NULL DEFAULT  '0000-00-00 00:00:00'
+CHANGE  `toegevoegd`  `toegevoegd` DATETIME NOT NULL DEFAULT  '0000-00-00 00:00:00';
 
 DROP TABLE  `biebbevestiging`;
 DROP TABLE  `biebadmingewijzigd`;
