@@ -17,14 +17,14 @@
 
 {if $boek->magBekijken()}
 	<div class="controls">
-		<a class="knop" href="/communicatie/bibliotheek/nieuwboek">{icon get="book_add"} Toevoegen</a>
+		<a class="knop" href="/communicatie/bibliotheek/nieuwboek" title="Nieuw boek toevoegen">{icon get="book_add"} Boek toevoegen</a>
 	</div>
 {/if}
 
 {* nieuw boek formulier *}
 {if $boek->getId()==0}
 	<h1>Nieuw boek toevoegen</h1>
-	<p>Vul onderstaande velden</p>
+	<p>Vul onderstaande velden. <b>Bieb zit nog in testfase. Misschien wordt deze database nog geleegd. Dus wacht nog even met officieel toevoegen van boeken.</b></p>
 	<form action="/communicatie/bibliotheek/nieuwboek/0" id="boekaddForm" class="boekForm" method="post">
 		{foreach from=$boek->getFields('nieuwboek') item=field}
 			{$field->view()}
