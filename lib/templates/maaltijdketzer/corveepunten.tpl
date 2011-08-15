@@ -45,7 +45,8 @@
 					<td><input type="checkbox" name="corvee_kwalikok" value="1" {if $leden.$it.corvee_kwalikok}checked="checked"{/if} /></td>
 					<td><input type="text" name="corvee_punten_bonus" value="{$leden.$it.corvee_punten_bonus}" style="width: 30px;" /></td>
 					<td><input type="text" name="corvee_vrijstelling" value="{$leden.$it.corvee_vrijstelling}" style="width: 30px;" />%</td>
-					<td style="background-color: #{$leden.$it.corvee_punten_rgb}"><input type="text" name="corvee_punten" value="{$leden.$it.corvee_punten}" style="width: 30px;" /></td>
+					<td title="Corveepunten zonder bonuspunten!
+Totaal: {$leden.$it.corvee_punten} + {$leden.$it.corvee_punten_bonus} = {$leden.$it.corvee_punten+$leden.$it.corvee_punten_bonus} punten"><input type="text" name="corvee_punten" value="{$leden.$it.corvee_punten}" style="width: 30px;" /></td>
 					<td style="background-color: #{$leden.$it.corvee_tekort_rgb}">{$leden.$it.corvee_tekort}</td>
 					<td style="width: 60px; background-color: #{$leden.$it.corvee_prognose_rgb}">{$leden.$it.corvee_prognose}</td>
 					<td style="width: 20px;"><input type="submit" name="submit" value="OK" /></td>
@@ -65,7 +66,7 @@
 					<td>{$leden.$it.corvee_kwalikok}</td>
 					<td>{$leden.$it.corvee_punten_bonus}</td>
 					<td>{$leden.$it.corvee_vrijstelling}%</td>
-					<td style="background-color: #{$leden.$it.corvee_punten_rgb}">{$leden.$it.corvee_punten}</td>
+					<td>{$leden.$it.corvee_punten+$leden.$it.corvee_punten_bonus}</td>
 					<td style="background-color: #{$leden.$it.corvee_tekort_rgb}">{$leden.$it.corvee_tekort}</td>
 					<td style="width: 60px; background-color: #{$leden.$it.corvee_prognose_rgb}">{$leden.$it.corvee_prognose}</td>
 					<td></td>

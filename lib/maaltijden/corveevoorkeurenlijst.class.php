@@ -16,7 +16,7 @@ class CorveevoorkeurenLijst{
 
 	//Zoek leden met corvee-eigenschappen, geef de corveevoorkeuren terug in een array	
 	private function getCorveeLeden($sort='achternaam'){
-		$zoekLeden = Zoeker::zoekLeden('', 'uid', 'alle', $sort, array('S_LID', 'S_NOVIET', 'S_GASTLID'), array('uid', 'achternaam', 'voornaam', 'tussenvoegsel', 'corvee_voorkeuren', 'corvee_vrijstelling', 'corvee_punten'));
+		$zoekLeden = Zoeker::zoekLeden('', 'uid', 'alle', $sort, array('S_LID', 'S_NOVIET', 'S_GASTLID'), array('uid', 'achternaam', 'voornaam', 'tussenvoegsel', 'corvee_voorkeuren', 'corvee_vrijstelling', 'corvee_punten_totaal'));
 		$bewerkteLeden = array();
 		foreach($zoekLeden as $uid=>$lidentry){	
 			$bewerkteLeden[$uid] = $lidentry;
@@ -39,7 +39,7 @@ class CorveevoorkeurenLijst{
 		}
 		
 		//Haal de lijst met leden met hun corveevoorkeuren op
-		$zoekLeden = Zoeker::zoekLeden('', 'uid', 'alle', $sort, array('S_LID', 'S_NOVIET', 'S_GASTLID'), array('uid', 'achternaam', 'voornaam', 'tussenvoegsel', 'corvee_voorkeuren', 'corvee_vrijstelling', 'corvee_punten'));
+		$zoekLeden = Zoeker::zoekLeden('', 'uid', 'alle', $sort, array('S_LID', 'S_NOVIET', 'S_GASTLID'), array('uid', 'achternaam', 'voornaam', 'tussenvoegsel', 'corvee_voorkeuren', 'corvee_vrijstelling', 'corvee_punten_totaal', 'corvee_punten', 'corvee_punten_bonus'));
 		
 		//Combineer de twee lijsten en zet de corveevoorkeuren goed.
 		$bewerkteLeden = array();		
@@ -62,21 +62,21 @@ class CorveevoorkeurenLijst{
 	//Geef een lijst met alle leden terug, gesorteerd op het gegeven veld.
 	//Staat toe om op corvee-voorkeur te sorteren.
 	public function getCorveeLedenGesorteerd($sorteer, $sorteer_richting){
-		$sorteer_toegestaan = array('achternaam', 'voorkeur_0', 'voorkeur_1', 'voorkeur_2', 'voorkeur_3', 'voorkeur_4', 'voorkeur_5', 'voorkeur_6', 'voorkeur_7', 'corvee_kwalikok', 'corvee_punten', 'corvee_punten_bonus', 'corvee_vrijstelling', 'corvee_prognose', 'corvee_tekort');
+		$sorteer_toegestaan = array('achternaam', 'voorkeur_0', 'voorkeur_1', 'voorkeur_2', 'voorkeur_3', 'voorkeur_4', 'voorkeur_5', 'voorkeur_6', 'voorkeur_7', 'corvee_kwalikok', 'corvee_punten_totaal', 'corvee_punten_bonus', 'corvee_vrijstelling', 'corvee_prognose', 'corvee_tekort');
 		$sorteer_volgorde_toegestaan = array('asc', 'desc');
 		if (!in_array($sorteer, $sorteer_toegestaan) || !in_array($sorteer_richting, $sorteer_volgorde_toegestaan)){
 			$this->_error = 'Ongeldige sorteeroptie: ['.$sorteer.' '.$sorteer_richting.']';
 			return false;
 		}
 		
-		$sorteer_meteen = array('achternaam', 'corvee_kwalikok', 'corvee_punten', 'corvee_punten_bonus', 'corvee_vrijstelling');
+		$sorteer_meteen = array('achternaam', 'corvee_kwalikok', 'corvee_punten_totaal', 'corvee_punten', 'corvee_punten_bonus', 'corvee_vrijstelling');
 		$sorteer_achteraf = array('corvee_prognose', 'corvee_tekort', 'voorkeur_0', 'voorkeur_1', 'voorkeur_2', 'voorkeur_3', 'voorkeur_4', 'voorkeur_5', 'voorkeur_6', 'voorkeur_7');
 		
 		//Bepaal met welke sortering de lijst opgehaald moet worden
-		$sortering = 'corvee_punten desc';
+		$sortering = 'corvee_punten_totaal desc';
 		if(in_array($sorteer, $sorteer_meteen)){
 			$sortering = $sorteer.' '.$sorteer_richting;
-			$sortering = $sortering.', corvee_punten DESC';
+			$sortering = $sortering.', corvee_punten_totaal DESC';
 		}
 		//Haal de lijst met leden op
 		$leden = $this->getCorveeLedenMetPrognose($sortering);

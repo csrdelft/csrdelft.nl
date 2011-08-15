@@ -747,7 +747,7 @@ class MaalTrack {
 		$db=MySql::instance();
 		//eerst uit 'lid' corveepunten/bonus/vrijstelling, als er taken zijn die ook verzamelen uit 'maaltijdcorvee' en 'maaltijd'
 		$sTakenquery = "
-			SELECT maalid, lid.uid, datum, tekst, type, punten_toegekend, type , corvee_punten, corvee_punten_bonus, corvee_vrijstelling, corvee_voorkeuren,
+			SELECT maalid, lid.uid, datum, tekst, type, punten_toegekend, type , corvee_punten+corvee_punten_bonus AS corvee_punten_totaal, corvee_punten_bonus, corvee_vrijstelling, corvee_voorkeuren,
 				kok, afwas, theedoek, maaltijdcorvee.schoonmaken_keuken, maaltijdcorvee.schoonmaken_afzuigkap, maaltijdcorvee.schoonmaken_frituur, 
 				punten_kok, punten_afwas, punten_theedoek, punten_schoonmaken_keuken, punten_schoonmaken_afzuigkap, punten_schoonmaken_frituur 
 			FROM lid 
@@ -768,7 +768,7 @@ class MaalTrack {
 						$taken[] = $ataak;
 					}
 					if(!isset($return['lid'])){
-						$lidprops = array('uid', 'corvee_punten', 'corvee_punten_bonus', 'corvee_vrijstelling');
+						$lidprops = array('uid', 'corvee_punten_totaal', 'corvee_punten_bonus', 'corvee_vrijstelling');
 						$return['lid'] = array_get_keys($record, $lidprops);
 					}
 				}

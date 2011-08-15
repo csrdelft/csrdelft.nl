@@ -232,8 +232,8 @@
 				{/if}
 			{/if}
 			{if $profiel->isLid() AND $corveetaken.aantal!==null}
-				<div class="label">Corveepunten:</div>
-				<div class="data">{$corveetaken.lid.corvee_punten} punten</div>
+				<div class="label" title="Punten van vorig jaar + punten uit taken + bonuspunten">Corveepunten:</div>
+				<div class="data" title="Punten van vorig jaar + punten uit taken + bonuspunten">{$corveetaken.lid.corvee_punten_totaal} punten</div>
 				<div class="label">Bonuspunten:</div>
 				<div class="data">{$corveetaken.lid.corvee_punten_bonus} punten</div>
 				<div class="label">Vrijstelling:</div>

@@ -92,9 +92,13 @@ class Corveeinstellingen{
 	 * @return void
 	 */
 	public function assignInstellingenForm(){
-		$instellingForm[] = new Comment('Corveebeheer');
+		$instellingForm[] = new Comment('Corveebeheerpagina - weergegeven periode');
 		$instellingForm[] = new DatumField('periodebegin',$this->getValue('periodebegin') , 'Begin periode',2020);
 		$instellingForm[] = new DatumField('periodeeind',$this->getValue('periodeeind') , 'Einde periode',2020);
+
+		$instellingForm[] = new Comment('Corveerooster - weergegeven periode');
+		$instellingForm[] = new DatumField('roosterbegin',$this->getValue('roosterbegin') , 'Begin (Alleen MaalCie)',2020);
+		$instellingForm[] = new DatumField('roostereind',$this->getValue('roostereind') , 'Einde periode',2020);
 
 		$instellingForm[] = new Comment('Corveepunten');
 		$instellingForm[] = new IntField('puntentotaal',$this->getValue('puntentotaal') , 'Totaal per jaar', 30, 0); 

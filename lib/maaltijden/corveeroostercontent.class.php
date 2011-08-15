@@ -9,6 +9,7 @@
 
 
 require_once 'maaltijden/maaltrack.class.php';
+require_once 'maaltijden/corveeinstellingen.class.php';
 
 class CorveeroosterContent extends SimpleHTML {
 
@@ -26,13 +27,21 @@ class CorveeroosterContent extends SimpleHTML {
 		$corveebeheer=new Smarty_csr();
 		$corveebeheer->caching=false;
 
-		//Alle maaltijden vanaf vorige maand tot een jaar vooruit
+
 		$aMaal['error']=$this->_maaltrack->getError();
-		$aMaal['maaltijden']=$this->_maaltrack->getMaaltijden(time()-3600*24*28, time()+3600*24*365, false, false, null, true, true);
+		// Voor leden: Alle maaltijden vanaf vorige maand tot einddatum corveeinstellingen.
+		// Voor MaalCie: het tijdvak zoals ingesteld bij corveeinstellingen.
+		if($loginlid->hasPermission('P_MAAL_MOD')){
+			$roosterbegin = strtotime(Corveeinstellingen::get('roosterbegin'));
+		}else{
+			$roosterbegin = time()-3600*24*28;
+		}
+		$roostereind = strtotime(Corveeinstellingen::get('roostereind'));
+		$aMaal['maaltijden']=$this->_maaltrack->getMaaltijden($roosterbegin, $roostereind, false, false, null, true, true);
 
 		//arrays toewijzen en weergeven
 		$corveebeheer->assign('maal', $aMaal);
-		$corveebeheer->assign('liduid', LoginLid::instance()->getUid());
+		$corveebeheer->assign('liduid', $loginlid->getUid());
 		$corveebeheer->assign('datumWeek', '%W');
 		$corveebeheer->assign('datumWeekdag', '%a');
 		$corveebeheer->assign('datumVol', '%e %b %H:%M');
