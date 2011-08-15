@@ -53,4 +53,6 @@ INSERT INTO `maaltijdcorveeinstellingen` (`instelling`, `type`, `datum`, `tekst`
 ('puntentheedoek', 'int', '0000-00-00', '', 2),
 ('puntenafzuigkap', 'int', '0000-00-00', '', 2),
 ('puntenfrituur', 'int', '0000-00-00', '', 2),
-('puntenkeuken', 'int', '0000-00-00', '', 3);
+('puntenkeuken', 'int', '0000-00-00', '', 3),
+('roosterbegin',  'datum',  '2011-08-01',  '',  '0'), 
+('roostereind',  'datum',  '2012-08-01',  '',  '0');
