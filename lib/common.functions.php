@@ -352,6 +352,9 @@ function square_crop($src_image, $dest_image, $thumb_size = 64, $jpg_quality = 9
  * (excluding newlines and tabs)
  */
 function only_printable($string){
+	return $string;
+	//er gaat nog wat mis, want ik postte net iets met á erin, en die 
+	//snoepte dit ding ook weg. Niet de bedoeling natuurlijk, dus ff hdb ermee...
 	return preg_replace('/[^\x0A^\x09\x20-\x7E]/', '', $string);
 }
 function format_filesize($size) {
