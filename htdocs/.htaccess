@@ -2,6 +2,9 @@
 AddDefaultCharset utf-8
 RewriteEngine On
 
+### Tijdelijk OWee redirect
+Redirect 302 http://csrdelft.nl/ http://csrdelft.nl/actueel/owee
+
 ### mod_rewrite-dingen
 RewriteRule ^instellingen/?$			instellingen.php
 RewriteRule ^pauper/?$				pauper.php
