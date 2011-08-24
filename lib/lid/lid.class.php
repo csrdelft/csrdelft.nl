@@ -951,6 +951,7 @@ class Zoeker{
 
 			# velden kiezen om terug te geven
 			$velden_sql = implode(', ', $velden);
+			$velden_sql = str_replace('corvee_punten_totaal', 'corvee_punten+corvee_punten_bonus AS corvee_punten_totaal', $velden_sql);
 			$sZoeken="
 				SELECT
 					".$velden_sql."
