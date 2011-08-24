@@ -202,7 +202,7 @@ class Profiel{
 		$form[]=new TelefoonField('telefoon', $profiel['telefoon'], 'Telefoonnummer (vast)', 20);
 		$form[]=new TelefoonField('mobiel', $profiel['mobiel'], 'Paupernummer', 20);
 
-		if(in_array($profiel['status'], array('S_OUDLID', 'S_ERELID'))){
+		if(!in_array($profiel['status'], array('S_OUDLID', 'S_ERELID'))){
 			$form[]=new Comment('Adres ouders:');
 			$form[]=new InputField('o_adres', $profiel['o_adres'], 'Straatnaam', 100);
 			$form[]=new InputField('o_postcode', $profiel['o_postcode'], 'Postcode', 20);
