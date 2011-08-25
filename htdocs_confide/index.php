@@ -26,7 +26,7 @@ if(isset($_GET['start'])){
 	$start=date('Y-m-d H:i:s', strtotime('3 months ago'));
 }
 
-$db->query("SET SESSION group_concat_max_len=2048");
+$db->query("SET SESSION group_concat_max_len=6000");
 
 $weekrapportQuery="
 	SELECT
@@ -115,7 +115,8 @@ jQuery.fn.dataTableExt.oSort['currency-desc'] = function(a,b) {
 					{'sType': 'currency'},
 					{'bSortable': false},
 					{'sType': 'currency'},
-					{'sType': 'currency'}
+					{'sType': 'currency'},
+					null
 				],
 				'bSearch': false,
 				'bFilter': false,
@@ -151,7 +152,7 @@ Let op: cijfers kloppen na prijswijzigingen niet voor de weken v&oacute;&oacute;
 	<thead>
 		<tr>
 			<th>Week</th><th>#bestellingen</th><th>som omzet+inleg <br />(streepcompu)</th><th>detail</th><th>inleg</th><th>Omzet</th>
-			<th title="Verschil tussen omzet uit detaillijst en omzet uit streeplijstcompu">controle</th>
+			<th title="Verschil tussen omzet uit detaillijst en omzet uit streeplijstcompu. Zou 0 moeten zijn">controle</th>
 		</tr>
 	</thead>
 
@@ -191,7 +192,7 @@ while($row=$db->next($weekResult)){
 	echo '</td>';
 	echo '<td>'.euro(0-$inleg).'</td>';
 	echo '<td>'.euro($omzet).'</td>';
-	echo '<td>'.round($totaal-$row['omzet'].'</td>';
+	echo '<td>'.round($totaal-$row['omzet']).'</td>';
 	echo '</tr>';
 }
 ?>
