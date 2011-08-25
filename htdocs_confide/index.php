@@ -25,10 +25,14 @@ if(isset($_GET['start'])){
 }else{
 	$start=date('Y-m-d H:i:s', strtotime('3 months ago'));
 }
+
+$db->query("SET SESSION group_concat_max_len=2048");
+
 $weekrapportQuery="
 	SELECT
 		year(Tijdstip) as jaar, week(Tijdstip) as week,
-		SUM(Bedrag) as omzet, count(*) as aantal_bestellingen, GROUP_CONCAT(Artikelen SEPARATOR '') as bestelstring
+		SUM(Bedrag) as omzet, count(*) as aantal_bestellingen, 
+		GROUP_CONCAT(Artikelen SEPARATOR '') as bestelstring
 	FROM Bestellingen
 	WHERE Tijdstip>'".$start."' AND Bedrag!=0
 	GROUP BY jaar, week
