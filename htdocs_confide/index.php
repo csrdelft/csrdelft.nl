@@ -151,6 +151,7 @@ Let op: cijfers kloppen na prijswijzigingen niet voor de weken v&oacute;&oacute;
 	<thead>
 		<tr>
 			<th>Week</th><th>#bestellingen</th><th>som omzet+inleg <br />(streepcompu)</th><th>detail</th><th>inleg</th><th>Omzet</th>
+			<th title="Verschil tussen omzet uit detaillijst en omzet uit streeplijstcompu">controle</th>
 		</tr>
 	</thead>
 
@@ -166,6 +167,7 @@ while($row=$db->next($weekResult)){
 
 	$inleg=0;
 	$omzet=0;
+	$totaal=0;
 
 	echo '<td>';
 	echo '<a class="details handje knop" id="details-'.$week.'">&raquo; Toon details</a>';
@@ -182,12 +184,14 @@ while($row=$db->next($weekResult)){
 		}else{
 			$omzet+=$artikelomzet;
 		}
+		$totaal+=$artikelomzet;
 	}
 	echo '</table>';
 
 	echo '</td>';
 	echo '<td>'.euro(0-$inleg).'</td>';
 	echo '<td>'.euro($omzet).'</td>';
+	echo '<td>'.round($totaal-$row['omzet'].'</td>';
 	echo '</tr>';
 }
 ?>
