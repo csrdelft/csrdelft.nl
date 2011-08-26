@@ -11,6 +11,9 @@ class Fotoalbum{
 
 	private $pad;
 	private $mapnaam;
+	
+	//als deze regexp matched is het album alleen voor leden
+	private $alleenLeden='/(novitiaat|ontvoering|feuten|slachten|zuipen)/i';
 
 	//lazy loader-placeholders
 	private $fotos=null;
@@ -188,8 +191,8 @@ class Fotoalbum{
 		if(LoginLid::instance()->hasPermission('P_LEDEN_READ')){
 			return true;
 		}else{
-			//geen novitiaatsfoto's voor gewoon volk
-			return (!preg_match('/novitiaat/i', $this->getPad()));
+			//Deze foto's niet voor gewoon volk
+			return (!preg_match($this->alleenLeden, $this->getPad()));
 		}
 
 	}
