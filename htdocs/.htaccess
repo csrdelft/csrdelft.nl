@@ -2,8 +2,8 @@
 AddDefaultCharset utf-8
 RewriteEngine On
 
-### Tijdelijk OWee redirect
-RewriteRule ^$ /actueel/owee [R=302,NC,L]
+### Tijdelijk OWee redirect(nu niet!)
+### RewriteRule ^$ /actueel/owee [R=302,NC,L]
 
 ### mod_rewrite-dingen
 RewriteRule ^instellingen/?$			instellingen.php
