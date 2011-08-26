@@ -66,7 +66,7 @@ class Fotoalbum{
 
 		$recent=$this;
 		foreach($albums as $album){
-			if($album->modified()>$recent->modified()){
+			if($album->modified()>$recent->modified() && $recent->magBekijken()){
 				$recent=$album->getMostrecentSubAlbum();
 			}
 		}
