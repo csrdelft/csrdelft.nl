@@ -884,13 +884,60 @@ class MaalTrack {
 		return $taakleden;
 	}
 
+	/*
+	 * 
+	 */
+	public function getAlleTaken($datum, $puntentoekenningsstatus='onbekend'){
+		//alleen bij toekenstatus onbekend/ja/nee een filter toevoegen, anders alle taken zoeken
+		$where = "";
+		if ($puntentoekenningsstatus!==null AND in_array($puntentoekenningsstatus, array('onbekend', 'ja','nee'))){
+			$where = "AND punten_toegekend = '".$puntentoekenningsstatus."'";
+		}
+		$db=MySql::instance();
+		$sTakenQuery="
+			SELECT maalid, uid, punten_toegekend, datum, tekst, type
+			FROM maaltijdcorvee
+			LEFT JOIN maaltijd ON (maaltijd.id=maaltijdcorvee.maalid)
+			WHERE maaltijd.datum <= UNIX_TIMESTAMP('".$datum." 23:59:59') ".$where."
+			ORDER BY datum, maalid;";
+
+		$result=$db->query($sTakenQuery);
+		if (($result !== false) and $db->numRows($result) > 0) {
+			$corveedag['maalid']=null;
+			$dagprops = array('maalid', 'datum', 'tekst', 'type');
+			$corveeerprops = array('uid','punten_toegekend');
+
+			while ($corveeer = $db->next($result)) {
+				if($corveedag['maalid']===null){
+					//eerste loop
+					$corveedag = array_get_keys($corveeer, $dagprops);
+				}
+				if($corveeer['maalid']!=$corveedag['maalid']){
+					//nieuwe corveedag: vorige opslaan en naar de nieuwe
+					
+					$corveedag['corveeers']=$corveeers;
+					$corveeers=array();
+					$corveedagen[$corveedag['maalid']] = $corveedag;
+					$corveedag = array_get_keys($corveeer, $dagprops);
+				}
+				$corveeers[]= array_get_keys($corveeer, $corveeerprops);
+			}
+			//na laatste loop
+			$corveedag['corveeers']=$corveeers;
+			$corveedagen[$corveedag['maalid']] = $corveedag;
+			return $corveedagen;
+		}else{
+			return array();
+		}
+	}
+
 	# haalt één enkele maaltijd op ter bewerking
 	function getPuntenlijst($sorteer = 'corvee_tekort', $sorteer_richting = 'asc'){
 		$sorteer_toegestaan = array('achternaam', 'kok', 'afwas', 'theedoek', 'schoonmaken_frituur', 'schoonmaken_afzuigkap', 'schoonmaken_keuken', 'corvee_kwalikok', 'corvee_punten', 'corvee_punten_bonus', 'corvee_vrijstelling', 'corvee_prognose', 'corvee_tekort');
 		$sorteer_volgorde_toegestaan = array('asc', 'desc');
 		if (!in_array($sorteer, $sorteer_toegestaan) || !in_array($sorteer_richting, $sorteer_volgorde_toegestaan))
 			print('Ongeldige sorteeroptie');
-	
+
 		$sLedenQuery="
 			SELECT
 				lid.uid
@@ -923,7 +970,7 @@ class MaalTrack {
 			AND
 				punten_toegekend = 'onbekend'
 			WHERE
-				status='S_LID' OR status='S_GASTLID' OR status='S_NOVIET'
+				status='S_LID' OR status='S_GASTLID' OR status='S_NOVIET'  
 			GROUP BY
 				lid.uid
 			ORDER BY

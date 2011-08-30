@@ -276,7 +276,7 @@
 								<td>{$taak.taak}</td>
 								<td title="{$taak.tekst|escape:'html'}">{$taak.tekst|truncate:20|escape:'html'}</td>
 								<td>{$taak.punten} </td>
-								<td>punten {if $taak.punten_toegekend=='onbekend'}(niet toegekend){/if}</td>
+								<td>punten {if $taak.punten_toegekend=='onbekend'}({if $loginlid->hasPermission('P_MAAL_MOD')}<a href="/actueel/maaltijden/corveebeheer/puntenbewerk/{$taak.maalid}#corveepuntenFormulier">niet toegekend</a>{else}niet toegekend{/if}){/if}</td>
 							</tr>
 						{foreachelse}
 							<tr><td>Geen corveetaken</td></tr>

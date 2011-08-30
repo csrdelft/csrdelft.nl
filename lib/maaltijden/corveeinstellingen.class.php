@@ -204,4 +204,73 @@ class Corveeinstellingen{
 		return false;
 	}
 }
+
+/*
+ * Zorgt voor de reset van het corveejaar
+ * 
+ * Reset omvat: 
+ *  - Alle corveetaken t/m datum worden verwijderd.
+ *  - Hertelling: NieuwPuntentotaal = Corveepunten + bonus + ceil(teBehalenCorveepunten * %Vrijstelling) - teBehalenCorveepunten.
+ *  - Bonus op nul zetten.
+ */
+class CorveeResetter {
+	private $datum = null;
+	private $melding = '';
+
+	public function setDatum($datum){	$this->datum = $datum;}
+	public function getDatum(){			return $this->datum;}
+	public function getMelding(){		return $this->melding;}
+
+	public function resetCorveeJaar(){
+		if($this->datum!==null){
+			$success = true;
+			$db=MySql::instance();
+			$sTakenDeleteQuery = "
+				DELETE 
+				FROM `maaltijdcorvee` 
+				WHERE maalid = 
+				(
+					SELECT id 
+					FROM maaltijd
+					WHERE maaltijdcorvee.maalid = maaltijd.id 
+						AND datum < UNIX_TIMESTAMP('".$this->datum." 23:59:59') 
+				);";
+			$totaalpunten = Corveeinstellingen::get('puntentotaal');
+			$sCorveepuntenUpdateQuery = "
+				UPDATE 
+					lid l1, 
+					(
+						SELECT (corvee_punten_bonus+corvee_punten-".$totaalpunten."+CEIL(".$totaalpunten."*.01*corvee_vrijstelling)) AS corvee_punten_nieuw, uid
+						FROM lid 
+						WHERE status = 'S_LID' OR status = 'S_GASTLID' OR status = 'S_NOVIET'
+					) AS l2
+				SET  
+					l1.corvee_punten =  l2.corvee_punten_nieuw,
+					l1.corvee_punten_bonus = 0
+				WHERE 
+					l1.uid=l2.uid 
+					AND (status = 'S_LID' OR status = 'S_GASTLID' OR status = 'S_NOVIET')";
+			if($db->query($sTakenDeleteQuery)){
+				$this->melding .= 'Taken verwijderd is gelukt.<br/>';
+			}else{
+				$this->melding .= '<span class="melding">Taken verwijderen mislukt. '.mysql_error().'</span><br/>';
+				$success = false;
+			}
+			if($db->query($sCorveepuntenUpdateQuery)){
+				$this->melding .= 'Corvee- en bonuspunten zijn bijgewerkt.<br/>';
+			}else{
+				$this->melding .= '<span class="melding">Corvee- en bonuspunten bijwerken mislukt. '.mysql_error().'</span><br/>';
+				$success = false;
+			}
+			if($success==false){
+				$this->melding .= 'Neem contact op met de PubCie voor het fixen...als het nog kan..:S';
+			}
+			return $success;
+		}else{
+			$this->melding .= 'Geen datum. Reset is niet gestart. ';
+			return false;
+		}
+	}
+}
+
 ?>

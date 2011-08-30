@@ -2,7 +2,11 @@
  * css voor maaltijd
  */
 
-/* corveeinstellingenpagina */
+.melding {
+	color:red;
+}
+
+/* corveeinstellingenpagina: instellingen */
 .instellingenForm .veld{
 	overflow: auto;
 }
@@ -10,7 +14,7 @@
 	margin-top: 10px;
 }
 .instellingenForm label{
-	width: 150px;
+	width: 157px;
 	float:left;
 }
 .instellingenForm textarea.regular{
@@ -18,3 +22,18 @@
 	height: 150px;
 }
 
+/*corveeinstellingenpagina: corveeresetter */
+.resetForm label{
+	width: 155px;
+	float:left;
+}
+.resetForm tr.odd td{
+	background-color: #efefef;
+}
+.resetForm #melding{
+	font-size: 11px;
+	margin: 10px 10px 10px 160px;
+}
+.resetForm .notred #melding{
+	color: black;
+}
