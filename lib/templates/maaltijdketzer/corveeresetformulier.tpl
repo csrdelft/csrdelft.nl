@@ -49,8 +49,8 @@
 	<br/>
 	<label for="submit">&nbsp;</label>
 	<input type="button" value="Periodeeinde aanpassen" onclick="restoreCorveeResetter()" />&nbsp;
-	<input type="button" name="submit2" id="submit" value="Vorige corveeperiode resetten" 
-		onclick="{literal}if(confirm('De reset wist corveetaken en verlaagt corveepunten. Wilt u de reset uitvoeren?')){corveeResetter('resetcorveejaar');} return false;{/literal}" />
+	<input type="button" name="submit2" id="submit" value="Afgelopen corveeperiode resetten" 
+		onclick="{literal}if(confirm('De reset verlaagt corveepunten. Wilt u de reset uitvoeren?')){corveeResetter('resetcorveejaar');} return false;{/literal}" />
 
 {elseif $actie=='resetcorveejaar'}
 	<label for="submit">&nbsp;</label><div class="notred">{$melding}</div>

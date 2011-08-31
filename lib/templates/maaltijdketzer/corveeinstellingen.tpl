@@ -18,12 +18,12 @@
 
 <h1>Corveejaarresetter</h1>
 <p>
-	Met deze tool verwijder je alle corveetaken t/m de ingevulde datum. 
+	{*Met deze tool verwijder je alle corveetaken t/m de ingevulde datum. *}
 	Vul einddatum van de vorige corveeperiode in en controleer of alle punten zijn toegekend. 
 	Als alle toekenningen naar wens zijn, kunt u het vorige corveejaar resetten.<br/> 
 	Reset omvat: 
 	<ul>
-		<li>Alle corveetaken t/m datum worden verwijderd.</li>
+		{*<li>Alle corveetaken t/m datum worden verwijderd.</li>*}
 		<li>Hertelling: NieuwPuntentotaal = Corveepunten + bonus + ceil(teBehalenCorveepunten * %Vrijstelling) - teBehalenCorveepunten.</li>
 		<li>Bonus op nul zetten.</li>
 	</ul>

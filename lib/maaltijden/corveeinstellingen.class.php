@@ -108,6 +108,7 @@ class Corveeinstellingen{
 		$instellingForm[] = new IntField('puntenafzuigkap',$this->getValue('puntenafzuigkap') , 'Afzuigkapschoonmaken', 30, 0); 
 		$instellingForm[] = new IntField('puntenfrituur',$this->getValue('puntenfrituur') , 'Frituurschoonmaken', 30, 0); 
 		$instellingForm[] = new IntField('puntenkeuken',$this->getValue('puntenkeuken') , 'Keukenschoonmaken', 30, 0); 
+		$instellingForm[] = new DatumField('startpuntentelling',$this->getValue('startpuntentelling') , 'Start puntentelling',2020);
 
 		$instellingForm[] = new Comment('E-mails voor automailer');
 		$instellingForm[] = new TextField('koks',$this->getValue('koks') , 'Kwali-/gewone koks 
@@ -209,7 +210,7 @@ class Corveeinstellingen{
  * Zorgt voor de reset van het corveejaar
  * 
  * Reset omvat: 
- *  - Alle corveetaken t/m datum worden verwijderd.
+ *  DISABLED- Alle corveetaken t/m datum worden verwijderd.
  *  - Hertelling: NieuwPuntentotaal = Corveepunten + bonus + ceil(teBehalenCorveepunten * %Vrijstelling) - teBehalenCorveepunten.
  *  - Bonus op nul zetten.
  */
@@ -225,7 +226,7 @@ class CorveeResetter {
 		if($this->datum!==null){
 			$success = true;
 			$db=MySql::instance();
-			$sTakenDeleteQuery = "
+			/* $sTakenDeleteQuery = "
 				DELETE 
 				FROM `maaltijdcorvee` 
 				WHERE maalid = 
@@ -235,6 +236,7 @@ class CorveeResetter {
 					WHERE maaltijdcorvee.maalid = maaltijd.id 
 						AND datum < UNIX_TIMESTAMP('".$this->datum." 23:59:59') 
 				);";
+			*/
 			$totaalpunten = Corveeinstellingen::get('puntentotaal');
 			$sCorveepuntenUpdateQuery = "
 				UPDATE 
@@ -250,20 +252,17 @@ class CorveeResetter {
 				WHERE 
 					l1.uid=l2.uid 
 					AND (status = 'S_LID' OR status = 'S_GASTLID')";
-			if($db->query($sTakenDeleteQuery)){
+			/*if($db->query($sTakenDeleteQuery)){
 				$this->melding .= 'Taken verwijderd is gelukt.<br/>';
 			}else{
 				$this->melding .= '<span class="melding">Taken verwijderen mislukt. '.mysql_error().'</span><br/>';
 				$success = false;
-			}
+			}*/
 			if($db->query($sCorveepuntenUpdateQuery)){
 				$this->melding .= 'Corvee- en bonuspunten zijn bijgewerkt.<br/>';
 			}else{
 				$this->melding .= '<span class="melding">Corvee- en bonuspunten bijwerken mislukt. '.mysql_error().'</span><br/>';
 				$success = false;
-			}
-			if($success==false){
-				$this->melding .= 'Neem contact op met de PubCie voor het fixen...als het nog kan..:S';
 			}
 			return $success;
 		}else{

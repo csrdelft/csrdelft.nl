@@ -938,24 +938,26 @@ class MaalTrack {
 		if (!in_array($sorteer, $sorteer_toegestaan) || !in_array($sorteer_richting, $sorteer_volgorde_toegestaan))
 			print('Ongeldige sorteeroptie');
 
+		$startdatumpuntentelling = Corveeinstellingen::get('startpuntentelling');
 		$sLedenQuery="
 			SELECT
 				lid.uid
 				, corvee_kwalikok, corvee_punten, corvee_punten_bonus, corvee_vrijstelling, corvee_voorkeuren
 				, (".(int)$this->corveepunten."-CEIL(".(int)$this->corveepunten."*.01*corvee_vrijstelling)-corvee_punten_bonus-corvee_punten)
 				  - IFNULL(SUM(
-					punten_kok*kok
-					+ punten_afwas*afwas
-					+ punten_theedoek*theedoek
-					+ punten_schoonmaken_frituur*maaltijdcorvee.schoonmaken_frituur
-					+ punten_schoonmaken_afzuigkap*maaltijdcorvee.schoonmaken_afzuigkap
-					+ punten_schoonmaken_keuken*maaltijdcorvee.schoonmaken_keuken), 0) AS corvee_prognose				
-				, SUM(kok) AS kok
-				, SUM(afwas) AS afwas
-				, SUM(theedoek) AS theedoek
-				, SUM(maaltijdcorvee.schoonmaken_frituur) AS schoonmaken_frituur
-				, SUM(maaltijdcorvee.schoonmaken_afzuigkap) AS schoonmaken_afzuigkap
-				, SUM(maaltijdcorvee.schoonmaken_keuken) AS schoonmaken_keuken
+					punten_kok*IF(punten_toegekend = 'onbekend',kok,0)
+					+ punten_afwas*IF(punten_toegekend = 'onbekend',afwas,0)
+					+ punten_theedoek*IF(punten_toegekend = 'onbekend',theedoek,0)
+					+ punten_schoonmaken_frituur*IF(punten_toegekend = 'onbekend',maaltijdcorvee.schoonmaken_frituur,0)
+					+ punten_schoonmaken_afzuigkap*IF(punten_toegekend = 'onbekend',maaltijdcorvee.schoonmaken_afzuigkap,0)
+					+ punten_schoonmaken_keuken*IF(punten_toegekend = 'onbekend',maaltijdcorvee.schoonmaken_keuken,0)
+					), 0) AS corvee_prognose				
+				, IFNULL(SUM(kok*punten_kok DIV punten_kok ),0) AS kok
+				, IFNULL(SUM(afwas*punten_afwas DIV punten_afwas),0) AS afwas
+				, IFNULL(SUM(punten_theedoek*theedoek DIV punten_theedoek),0) AS theedoek
+				, IFNULL(SUM(punten_schoonmaken_frituur*maaltijdcorvee.schoonmaken_frituur DIV punten_schoonmaken_frituur),0) AS schoonmaken_frituur
+				, IFNULL(SUM(punten_schoonmaken_afzuigkap*maaltijdcorvee.schoonmaken_afzuigkap DIV punten_schoonmaken_afzuigkap),0) AS schoonmaken_afzuigkap
+				, IFNULL(SUM(punten_schoonmaken_keuken*maaltijdcorvee.schoonmaken_keuken DIV punten_schoonmaken_keuken),0) AS schoonmaken_keuken
 				, (".(int)$this->corveepunten."-CEIL(".(int)$this->corveepunten."*.01*corvee_vrijstelling)-corvee_punten_bonus-corvee_punten) AS corvee_tekort
 			FROM
 				lid
@@ -968,7 +970,7 @@ class MaalTrack {
 			ON
 				maaltijd.id = maaltijdcorvee.maalid
 			AND
-				punten_toegekend = 'onbekend'
+				maaltijd.datum > UNIX_TIMESTAMP('".$startdatumpuntentelling." 00:00:00')
 			WHERE
 				status='S_LID' OR status='S_GASTLID' OR status='S_NOVIET'  
 			GROUP BY
