@@ -242,14 +242,14 @@ class CorveeResetter {
 					(
 						SELECT (corvee_punten_bonus+corvee_punten-".$totaalpunten."+CEIL(".$totaalpunten."*.01*corvee_vrijstelling)) AS corvee_punten_nieuw, uid
 						FROM lid 
-						WHERE status = 'S_LID' OR status = 'S_GASTLID' OR status = 'S_NOVIET'
+						WHERE status = 'S_LID' OR status = 'S_GASTLID'
 					) AS l2
 				SET  
 					l1.corvee_punten =  l2.corvee_punten_nieuw,
 					l1.corvee_punten_bonus = 0
 				WHERE 
 					l1.uid=l2.uid 
-					AND (status = 'S_LID' OR status = 'S_GASTLID' OR status = 'S_NOVIET')";
+					AND (status = 'S_LID' OR status = 'S_GASTLID')";
 			if($db->query($sTakenDeleteQuery)){
 				$this->melding .= 'Taken verwijderd is gelukt.<br/>';
 			}else{
