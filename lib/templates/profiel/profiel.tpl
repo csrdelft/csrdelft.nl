@@ -268,7 +268,7 @@
 				<div class="data">
 					<table id="corveeTaken">
 						{foreach from=$corveetaken.taken item=taak}
-							<tr>
+							<tr{if $taak.datum<$startpuntentelling} class="old"{/if}>
 								{*datum, taak,
 								maalid, tekst, type, punten_toegekend, type,  *}
 								<td><span title="{$taak.datum|date_format:"%Y-%m-%d"}">{$taak.datum|date_format:"%a"}</span></td>

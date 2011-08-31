@@ -57,6 +57,7 @@ class ProfielContent extends SimpleHTML {
 
 		$profiel->assign('corveetaken', $this->lid->getCorveeTaken());
 		$profiel->assign('corveevoorkeuren', $this->lid->getCorveeVoorkeuren());
+		$profiel->assign('startpuntentelling',strtotime(Corveeinstellingen::get('startpuntentelling')));
 
 		$loginlid=LoginLid::instance();
 		$profiel->assign('isAdmin', $loginlid->hasPermission('P_ADMIN'));

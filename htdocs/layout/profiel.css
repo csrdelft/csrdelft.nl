@@ -36,6 +36,7 @@
 #profiel .groepot{ margin-left: 50%; }
 
 #profiel #corveeTaken{ width: 550px; }
+#profiel #corveeTaken tr.old{ opacity: .50; }
 
 #profiel #recenteForumberichten{ width: 600px; }
 #profiel #recenteForumberichten td{ text-align: left; }
