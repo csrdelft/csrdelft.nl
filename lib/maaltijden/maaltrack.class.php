@@ -207,12 +207,12 @@ class MaalTrack {
 		$aanmeldingen="DELETE FROM maaltijdaanmelding WHERE maalid=".$maalid;
 
 		# verwijder corvee-aanmeldingen
-		$aanmeldingen="DELETE FROM maaltijdcorvee WHERE maalid=".$maalid;
+		$corveeaanmeldingen="DELETE FROM maaltijdcorvee WHERE maalid=".$maalid;
 
 		# verwijder de maaltijd zelf
 		$maaltijd="DELETE FROM maaltijd WHERE id=".$maalid;
 
-		return $this->_db->query($aanmeldingen) AND $this->_db->query($maaltijd);
+		return $this->_db->query($aanmeldingen) AND $this->_db->query($corveeaanmeldingen) AND $this->_db->query($maaltijd);
 	}
 	
 	# bij bestaande maaltijd de relevante corveevelden bewerken
