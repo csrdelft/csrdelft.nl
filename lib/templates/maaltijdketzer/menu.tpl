@@ -7,7 +7,7 @@
 		<a href="/actueel/maaltijden/voorkeuren/" title="Instellingen">Instellingen</a>
 	</li>
 	<li {if $actief == 'corveerooster'}class="active"{/if}>
-		<a href="/actueel/maaltijden/corveerooster.php" title="Corveerooster">Corveerooster</a>
+		<a href="/actueel/maaltijden/corveerooster/" title="Corveerooster">Corveerooster</a>
 	</li>
 	<li {if $actief == 'corveepunten'}class="active"{/if}>
 		<a href="/actueel/maaltijden/corveepunten/" title="Corveepunten">Corveepunten</a>
@@ -30,7 +30,7 @@
 <div style="margin-top: 10px;">
 <ul class="horizontal">   
 	<li {if $actief == 'corveerooster'}class="active"{/if}>
-		<a href="/actueel/maaltijden/corveerooster.php" title="Corveerooster">Corveerooster</a>
+		<a href="/actueel/maaltijden/corveerooster/" title="Corveerooster">Corveerooster</a>
 	</li>
 	<li {if $actief == 'corveepunten'}class="active"{/if}>
 		<a href="/actueel/maaltijden/corveepunten/" title="Corveepunten">Corveepunten</a>
