@@ -51,7 +51,7 @@ h.t. PubCie-Praeses der Civitas Studiosorum Reformatorum
 EOD;
 		$nanonovieten = array(1101,1103,1114,1125,1133,1142,1143,1144,1148,1152,1154,1155);
 		if(!(in_array($sjaars['uid'], $nanonovieten))){
-			//mail ($sjaars['email'],"Inloggegevens C.S.R.-webstek",$tekst,"From: PubliciteitsCommissie C.S.R. Delft <pubcie@csrdelft.nl>\nContent-Type: text/plain; charset=utf-8\nBcc: pubcie@csrdelft.nl");
+			cd mail ($sjaars['email'],"Inloggegevens C.S.R.-webstek",$tekst,"From: PubliciteitsCommissie C.S.R. Delft <pubcie@csrdelft.nl>\nContent-Type: text/plain; charset=utf-8\nBcc: pubcie@csrdelft.nl");
 			echo $sjaars['email']."\n";
 		}
 	}
