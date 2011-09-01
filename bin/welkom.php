@@ -29,10 +29,11 @@ Beste noviet {$sjaars['voornaam']},
 Bij je lidmaatschap van C.S.R. hoort ook de mogelijkheid om in te loggen op de C.S.R.-webstek.
 
 Via de webstek kun je onder andere:
-- Je aanmelden voor verenigingsmaaltijden, en je maaltijdabonnementen beheren. (Direct doen onder: Actueel->Maaltijden->Instellingen)
 - Berichten lezen en plaatsen op het forum
 - Berichten plaatsen in de C.S.R.-courant, die wekelijks aan alle leden wordt verzonden
 - Gegevens van andere leden opzoeken
+
+Je hebt een abbonement op de donderdag maaltijd. Als je een donderdag niet kan, kun je je afmelden op de webstek. Doe dit voor de maaltijd sluit, anders sta je toch ingeschreven en kost je dit dus €3. 
 
 Je inloggegevens zijn als volgt:
 Lidnummer: {$sjaars['uid']}
@@ -48,9 +49,11 @@ Met vriendelijke groet,
 Jurjen de Jong
 h.t. PubCie-Praeses der Civitas Studiosorum Reformatorum
 EOD;
-
-		mail ($sjaars['email'],"Inloggegevens C.S.R.-webstek",$tekst,"From: PubliciteitsCommissie C.S.R. Delft <pubcie@csrdelft.nl>\nContent-Type: text/plain; charset=utf-8\nBcc: pubcie@csrdelft.nl");
-		echo $sjaars['email']."\n";
+		$nanonovieten = array(1101,1103,1114,1125,1133,1142,1143,1144,1148,1152,1154,1155);
+		if(!(in_array($sjaars['uid'], $nanonovieten))){
+			//mail ($sjaars['email'],"Inloggegevens C.S.R.-webstek",$tekst,"From: PubliciteitsCommissie C.S.R. Delft <pubcie@csrdelft.nl>\nContent-Type: text/plain; charset=utf-8\nBcc: pubcie@csrdelft.nl");
+			echo $sjaars['email']."\n";
+		}
 	}
 }
 
