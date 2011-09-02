@@ -94,9 +94,13 @@ class CsrUBB extends eamBBParser{
 		}
 		//content moet altijd geparsed worden, anders blijft de inhoud van de
 		//tag gewoon staan.
+		if(!LoginLid::instance()->hasPermission($permissie)){
+			$this->ubb_mode = false;
+		}
 		$content = $this->parseArray(array('[/prive]'), array());
 		if(!LoginLid::instance()->hasPermission($permissie)){
 			$content='';
+			$this->ubb_mode = true;
 		}
 		return $content;
 	}
@@ -476,7 +480,7 @@ return <<<UBBVERHAAL
 		<li>[img]http://csrdelft.nl/plaetje.jpg[/img] voor een plaetje</li>
 		<li>[citaat][/citaat] voor een citaat. [citaat=<em>lidnummer</em>][/citaat] voor een citaat van een lid.</li>
 		<li>[lid=<em>lidnummer</em>] voor een link naar het profiel van een lid of oudlid</li>
-		<li>[video]<em>url</em>[/youtube], de url van een youtube, vimeo, dailymotion of godtube voor een filmpje direct in je post.</li>
+		<li>[video]<em>url</em>[/video], de url van een youtube, vimeo, dailymotion of godtube voor een filmpje direct in je post.</li>
 		<li>[offtopic]...[/offtopic] voor een stukje tekst van-het-onderwerp.</li>
 		<li>[ubboff]...[/ubboff] voor een stukje met ubb-tags zonder dat ze ge&iuml;nterpreteerd worden</li>
 	</ul><br />
@@ -522,7 +526,9 @@ UBBVERHAAL;
 
 	# Commentaar-tag
 	public function ubb_commentaar(){
+		$this->ubb_mode = false;
 		$content = $this->parseArray(array('[/commentaar]'), array());
+		$this->ubb_mode = true;
 		return '';
 	}
 
