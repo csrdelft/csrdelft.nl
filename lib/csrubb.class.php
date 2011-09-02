@@ -529,7 +529,7 @@ UBBVERHAAL;
 	# Commentaar-tag
 	public function ubb_commentaar(){
 		$this->ubb_mode = false;
-		$content = $this->parseArray(array('[/commentaar]'), array());
+		$content = $this->parseArray(array('[/commentaar]'), array('commentaar'));
 		$this->ubb_mode = true;
 		return '';
 	}

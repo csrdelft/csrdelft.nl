@@ -132,6 +132,7 @@ class eamBBParser{
 	* Keep track of ubb status
 	*
 	* When we're in a [ubboff] block, this will be false. Otherwise true.
+	* Also used by [commentaar] and [prive]
 	* @access private
 	*/
 	var $ubb_mode;
