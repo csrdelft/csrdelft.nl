@@ -277,13 +277,13 @@ class LoginLid{
 			//Behoort een lid tot een bepaalde verticale?
 			}elseif(substr($permissie, 0, 9)=='verticale'){
 				$verticale=strtoupper(substr($permissie, 10));
-				if($verticale==$this->lid->getVerticaleLetter()){
+				if(is_numeric($verticale)){
+					if($verticale==$this->lid->getVerticaleID()){
+						return true;
+					}
+				}elseif($verticale==$this->lid->getVerticaleLetter()){
 					return true;
-				}
-				if($verticale==strtoupper($this->lid->getVerticale())){
-					return true;
-				}
-				if($verticale==$this->lid->getVerticaleID()){
+				}elseif($verticale==strtoupper($this->lid->getVerticale())){
 					return true;
 				}
 			//Behoort een lid tot een bepaalde (h.t.) groep?
