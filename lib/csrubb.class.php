@@ -94,10 +94,12 @@ class CsrUBB extends eamBBParser{
 		}
 		//content moet altijd geparsed worden, anders blijft de inhoud van de
 		//tag gewoon staan.
+		$forbidden = array();
 		if(!LoginLid::instance()->hasPermission($permissie)){
 			$this->ubb_mode = false;
+			$forbidden = array('prive');
 		}
-		$content = $this->parseArray(array('[/prive]'), array());
+		$content = $this->parseArray(array('[/prive]'), $forbidden);
 		if(!LoginLid::instance()->hasPermission($permissie)){
 			$content='';
 			$this->ubb_mode = true;
