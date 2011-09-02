@@ -848,7 +848,7 @@ class MaalTrack {
 		//Voorbewerken van de lijst: puntentekort berekenen, kwalikoks selecteren
 		$zoekLeden_gefilterd = array();
 		foreach ($zoekLeden as $lid){
-			$heefttekort = ($this->corveepunten - round($this->corveepunten*.01*$lid['corvee_vrijstelling'])-$lid['corvee_punten']) > 0 ? 1 : 0;			
+			$heefttekort = ($this->corveepunten - ceil($this->corveepunten*.01*$lid['corvee_vrijstelling'])-$lid['corvee_punten']-$lid['corvee_punten_bonus']) > 0 ? 1 : 0;			
 			$eigenvoorkeur= bindec($lid['corvee_voorkeuren'] . $heefttekort); //Totaal 8+1 = 9 bits lang
 			
 			if($taak == 'kwalikok' && $lid['corvee_kwalikok']==0){
@@ -869,16 +869,20 @@ class MaalTrack {
 		//lijst met prognosepunten
 		$prognoselijst = $this->getPuntenlijst('corvee_prognose', 'desc');
 
-		//lijst met de volgorde van prognoselijst, maar met de entries van zoekLeden_gefilterd
+		//lijst met de volgorde van prognoselijst, maar met de entries van zoekLeden_gefilterd en >99%vrijstellingen gefilterd
 		$taakleden = array('' => '- Geen -');
 		foreach($prognoselijst as $index=>$entry){
+			//lid zit in gefilterde leden?
 			if(isset($zoekLeden_gefilterd[$entry['uid']])){
 				$lid = $zoekLeden_gefilterd[$entry['uid']];
-				$naam = $lid['achternaam'].', '.$lid['voornaam'];
-				if($lid['tussenvoegsel'] != ''){
-					$naam .= ' '.$lid['tussenvoegsel'];
+				//lid heeft minder dan 100% vrijstelling?
+				if($lid['corvee_vrijstelling']<100){
+					$naam = $lid['achternaam'].', '.$lid['voornaam'];
+					if($lid['tussenvoegsel'] != ''){
+						$naam .= ' '.$lid['tussenvoegsel'];
+					}
+					$taakleden[$lid['uid']] = $naam.' ('.$entry['corvee_prognose'].')';	
 				}
-				$taakleden[$lid['uid']] = $naam.' ('.$entry['corvee_prognose'].')';	
 			}
 		}
 		return $taakleden;

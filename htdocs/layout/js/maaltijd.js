@@ -6,8 +6,6 @@ jQuery(document).ready(function(){
 	//reset knopje maaltijdtoevoegformulier
 	corveeVeldResetter();
 
-	//scrolbare tabel maken op corveebeheerpagina
-	//$('#corveebeheer').tableScroll({height:320});
 })
 
 //zet inputs voor corveetaken op nul
@@ -18,6 +16,7 @@ function corveeVeldResetter(){
 	});
 } 
 
+//regelt de ajaxrequest als actieknoppen van corveeresetter worden gebruikt
 function corveeResetter(actie){
 	//data verzamelen
 	var data="resetactie="+actie;
@@ -41,6 +40,7 @@ function corveeResetter(actie){
 		}
 	});
 }
+//zet corveeresetter terug naar datuminvulveld
 function restoreCorveeResetter(){
 	//enable datumveld
 	jQuery('#resetForm').children("fieldset").children("select").removeAttr('disabled');

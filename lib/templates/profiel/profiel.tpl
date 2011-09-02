@@ -194,7 +194,7 @@
 		</div>
 	{/if}
 
-	{if $loginlid->getUid()==$profhtml.uid OR $profhtml.eetwens!='' OR is_array($profhtml.recenteMaaltijden)}
+	{if $loginlid->getUid()==$profhtml.uid OR $profhtml.eetwens!='' OR is_array($profhtml.recenteMaaltijden) OR $corveetaken!==null}
 	<div class="profielregel" id="maaltijden">
 		<div class="gegevens">
 			{if $profhtml.eetwens!=''}

@@ -39,7 +39,9 @@ class MaaltijdbeheerContent extends SimpleHTML {
 
 		//Dingen ophalen voor het overzicht van maaltijden...
 		$aMaal['error']=$this->_maaltrack->getError();
-		$aMaal['maaltijden']=$this->_maaltrack->getMaaltijden(time()-3600*24*28, time()+3600*24*100, false);
+		$begin = strtotime(Corveeinstellingen::get('periodebegin'));
+		$eind = strtotime(Corveeinstellingen::get('periodeeind'));
+		$aMaal['maaltijden']=$this->_maaltrack->getMaaltijden($begin, $eind, false);
 
 
 		//nieuwe maaltijd, of oude bewerken?

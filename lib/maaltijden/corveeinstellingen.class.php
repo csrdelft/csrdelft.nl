@@ -92,7 +92,7 @@ class Corveeinstellingen{
 	 * @return void
 	 */
 	public function assignInstellingenForm(){
-		$instellingForm[] = new Comment('Corveebeheerpagina - weergegeven periode');
+		$instellingForm[] = new Comment('Corvee- en Maaltijdbeheerpagina - weergegeven periode');
 		$instellingForm[] = new DatumField('periodebegin',$this->getValue('periodebegin') , 'Begin periode',2020);
 		$instellingForm[] = new DatumField('periodeeind',$this->getValue('periodeeind') , 'Einde periode',2020);
 
