@@ -3,7 +3,7 @@
 # Scriptje om voor sjaars een wachtwoord te genereren en dat toe te mailen.
 # Vergeet niet voor gebruik hieronder het jaar aan te passen.
 
-$jaar = '10';
+$jaar = '11';
 
 require_once('configuratie.include.php');
 
