@@ -63,7 +63,8 @@
 			{if $action=='addLid' AND $lidAdder!=false}
 				<form action="/actueel/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/addLid" method="post" >
 					<h2>Leden toevoegen</h2>
-					Hier kunt u eventueel een zinnige functie opgeven, laat het anders leeg!<br /><br />
+					Hier kunt u eventueel een zinnige functie opgeven, laat het anders leeg!<br />(bij meerdere selectiemenu's opties scheiden met &&)<br />
+					<br />
 					{$lidAdder}<input type="submit" value="toevoegen" />
 				</form>
 			{else}

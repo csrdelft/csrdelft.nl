@@ -69,7 +69,7 @@
 			<option value="niet" {if $groep->getToonFuncties()=="niet" OR ($groep->getId()==0 AND $groep->getType()->getId()==11)}selected="selected"{/if}>Nooit</option>
 		</select><br />
 		<label for="functiefilter"><strong>Opmerkingfilter:</strong></label>
-		<input type="text" name="functiefilter" value="{$groep->getFunctiefilter()|escape:'html'}" /><div class="opmerking">Door '|' gescheiden mogelijke opties (eerste is de standaard). Veld leeglaten voor vrije invoer.</div>
+		<input type="text" name="functiefilter" value="{$groep->getFunctiefilter()|escape:'html'}" /><div class="opmerking">Scheid met '|' mogelijke opties (1e is de standaard) en met '&amp;&amp;' verschillende keuzevelden. Veld leeglaten voor vrije invoer.</div>
 		
 		<hr class="clear" />
 		<label for="toonPasfotos"><strong>Toon pasfoto's?</strong></label>

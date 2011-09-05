@@ -40,6 +40,7 @@ class Groep{
 			foreach($init as $lid){
 				if($lid['uid']!=''){
 					$this->leden[$lid['uid']]=array_get_keys($lid, array('uid', 'op', 'functie'));
+					$this->leden[$lid['uid']]['functie'] = explode('&&', $this->leden[$lid['uid']]['functie']);
 				}
 			}
 		}
@@ -85,6 +86,7 @@ class Groep{
 			//en ook de leden inladen.
 			if($aGroep['uid']!=''){
 				$this->leden[$aGroep['uid']]=array_get_keys($aGroep, array('uid', 'op', 'functie'));
+				$this->leden[$aGroep['uid']]['functie'] = explode('&&', $this->leden[$aGroep['uid']]['functie']);
 			}
 		}
 
@@ -456,7 +458,11 @@ class Groep{
 	public function getFunctiefilter(){ return $this->groep['functiefilter']; }
 	public function getFunctiefilters(){
 		if($this->hasFunctiefilter()){
-			return explode('|', $this->getFunctiefilter());
+			$filters = explode('&&', $this->getFunctiefilter());
+			foreach($filters as $filter){
+				$return[] = explode('|', $filter);
+			}
+			return $return;
 		}
 		return false;
 	}
@@ -464,12 +470,15 @@ class Groep{
 		if(!is_array($filters)){
 			$this->groep['functiefilter']=$filters;
 		}else{
-			$this->groep['functiefilter']=implode('|', trim($filters));
+			foreach($filters as $filter){
+				$select[] = implode('|', trim($filter));
+			}
+			$this->groep['functiefilter']=implode('&&', trim($select));
 		}
 	}
 
 
-	/* 
+	/*
 	 * voegt een nieuw lid aan een groep toe, of functie van groepslid wordt geupdate.
 	 */
 	public function addLid($uid, $functie='', $bewerken=false){

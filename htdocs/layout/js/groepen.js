@@ -86,16 +86,19 @@ function observeClick(){
 	jQuery(".inline_edit").click(function(){
 		//show edit field.
 		jQuery(this).children('span').hide();
-		jQuery(this).children('input').show();
+		jQuery(this).children('input,select').show();
 	}).change(function(){
 		//id = 'bewerk_<gid>|<uid>'
 		var ids=jQuery(this).attr('id').substring(7).split('|');
 		var gid=ids[0];
 		var uid=ids[1];
-		
-		var data={ 'functie': jQuery(this).children('input').val() };
+		var values=[];
+		jQuery(this).children('input,select').each(function(index){
+			values.push(jQuery(this).val());
+		});
+		var data = {'functie[]': values}
 		//update span
-		jQuery(this).children('span').html(data.functie);
+		jQuery(this).children('span').html(values.join(" - "));
 		
 		jQuery.ajax({
 			type: "POST",

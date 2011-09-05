@@ -329,6 +329,9 @@ class Groepcontroller extends Controller{
 			$functie='';
 			if(isset($_POST['functie'])){
 				$functie=$_POST['functie'];
+				if(is_array($functie)){
+					$functie=implode('&&',$functie);
+				}
 			}
 			if($this->groep->meldAan($functie)){
 				$melding='';
@@ -419,7 +422,7 @@ class Groepcontroller extends Controller{
 			if(Lid::isValidUid($this->getParam(2)) AND $this->groep->isLid($this->getParam(2))){
 				$functie=$_POST['functie'];
 				if(is_array($functie)){
-					$functie=$functie[0];
+					$functie=implode('&&',$functie);
 				}
 				if($this->groep->addLid($this->getParam(2), $functie, $bewerken=true)){
 					try{

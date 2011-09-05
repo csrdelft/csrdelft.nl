@@ -30,19 +30,33 @@
 				<td>{$groeplid.uid|csrnaam:'civitas'}</td>
 				{if $groep->magBewerken() OR ($loginlid->getUid()==$groeplid.uid AND ($groep->getToonFuncties()=='tonen' OR $groep->getToonFuncties()=='verbergen'))}
 					<td id="bewerk_{$groep->getId()}|{$groeplid.uid}" class="inline_edit">
-						<span class="text">{$groeplid.functie|escape:'html'}</span>
+						<span class="text">
+							{foreach from=$groeplid.functie item=glfunctie name=glfunctie}
+								{if $smarty.foreach.glfunctie.iteration > 1} - {/if}{$glfunctie|escape:'html'}
+							{/foreach}
+						</span>
 						{if $groep->hasFunctiefilter()}
-							<select name="functie" class="editbox" id="functie_input_{$groep->getId()}{$groeplid.uid}">
-								{foreach from=$groep->getFunctiefilters() item=filter}
-									<option value="{$filter|escape:'html'}" {if $filter==$groeplid.functie}selected="selected"{/if}>{$filter|escape:'html'}</option>
-								{/foreach}
-							</select>
+							{foreach from=$groep->getFunctiefilters() item=filter name=filter}
+								<select name="functie[]" class="editbox" id="functie_input_{$groep->getId()}{$groeplid.uid}">
+									{foreach from=$filter item=filteroption}
+										<option value="{$filteroption|escape:'html'}" {if $filteroption==$groeplid.functie[$smarty.foreach.filter.index]}selected="selected"{/if}>{$filteroption|escape:'html'}</option>
+									{/foreach}
+								</select>
+							{/foreach}
 						{else}
-							<input type="text" maxlength="25" value="{$groeplid.functie|escape:'html'}" class="editbox"  />
+							<input type="text" maxlength="25" 
+								value="{foreach from=$groeplid.functie item=glfunctie name=glfunctie}{if $smarty.foreach.glfunctie.iteration > 1} - {/if}{$glfunctie|escape:'html'}{/foreach}"
+								class="editbox"  />
 						{/if}
 					</td>
 				{else}	
-					{if $groep->toonFuncties()}<td><em>{$groeplid.functie|escape:'html'}</em></td>{/if}
+					{if $groep->toonFuncties()}
+						<td><em>
+							{foreach from=$groeplid.functie item=glfunctie name=glfunctie}
+								{if $smarty.foreach.glfunctie.iteration > 1} - {/if}{$glfunctie|escape:'html'}
+							{/foreach}
+						</em></td>
+					{/if}
 				{/if}
 				{if $groep->magBewerken() OR $loginlid->getUid()==$groeplid.uid}
 					<td>
@@ -79,11 +93,13 @@
 				<form action="/actueel/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/aanmelden" method="post" id="aanmeldForm" class="clear">
 					<strong>Aanmelden</strong><br />
 					{if $groep->hasFunctiefilter()}
-						<select name="functie">
-							{foreach from=$groep->getFunctiefilters() item=filter}
-								<option value="{$filter|escape:'html'}">{$filter|escape:'html'}</option>
-							{/foreach}
-						</select>
+						{foreach from=$groep->getFunctiefilters() item=filter}
+							<select name="functie[]">
+								{foreach from=$filter item=filteroption}
+									<option value="{$filteroption|escape:'html'}">{$filteroption|escape:'html'}</option>
+								{/foreach}
+							</select>
+						{/foreach}
 					{else}
 						<input type="text" name="functie" maxlength="25" class="functie" />
 					{/if}&nbsp;<input type="submit" value="aanmelden" />
