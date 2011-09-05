@@ -4,6 +4,7 @@ bin/ldap-import.php -text
 bin/ldap/settings.py.example -text
 bin/ldap/sync_ldap_groepen.py -text
 bin/maalcie.php -text
+bin/maaltijdabbonovietmailer.php -text
 bin/mk_commissie_ldif.php -text
 bin/mk_commissie_ldif.txt -text
 bin/mkledenldif.php -text
