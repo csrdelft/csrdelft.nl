@@ -64,8 +64,28 @@ class FotoalbumUbbContent extends SimpleHTML{
 	public function setRows($rows){
 		$this->rows=$rows;
 	}
-	//one integer index or array of integer indexes of images to enlarge
+	
+	//one integer index or array of integer indexes of images to enlarge.
+	//possible 'macro' enlargements for up to 8 rows: 
+	// - a (diagonals), 
+	// - b (diagonals), 
+	// - c (odd/even)
 	public function setBig($index){
+		
+		if(in_array($index, array('a', 'b', 'c'))){
+			switch($index){
+				case 'a':
+					$this->big=array(0,9,18,28,37,46);
+				break;
+				case 'b': 
+					$this->big=array(0,4,15,19, 28, 32, 43,47); 
+				break;
+				case 'c':
+					$this->big=array(0,16,4,28,44,32); 
+				break;
+			}		
+			return; 
+		}
 		if(count(explode(',', $index))>1){
 			//explode on ',' and convert tot int.
 			$this->big=array_map('intval', explode(',', $index));
@@ -92,14 +112,18 @@ class FotoalbumUbbContent extends SimpleHTML{
 				$row=floor($bigindex/$this->per_row);
 				$col=($bigindex%$this->per_row);
 
-				//prevent wraparound
-				if($col+1>=$this->per_row){ $col=$this->per_row-2; }
-				if($row+1>=$this->rows){	$row=$this->rows-2; }
-
+				//remove images that will cause wrap around
+				if($col+1>=$this->per_row){ continue; }
+				if($row+1>=$this->rows){	continue; }
+				
+				//remove images that will cause overlap with a big image one row up.
+				if($grid[$row][$col+1]==USED){	continue; }
+				
 				//if valid image, put on grid.
 				if(isset($fotos[$bigindex]) && $fotos[$bigindex] instanceof Foto){
 					//if place already USED, do not put photo in.
-					if($grid[$row][$col]!=null){ continue; }
+					if($grid[$row][$col]==USED){ continue; }
+					
 					$grid[$row][$col]=array(
 						'index' => $bigindex,
 						'foto' => $fotos[$bigindex]
@@ -110,11 +134,12 @@ class FotoalbumUbbContent extends SimpleHTML{
 				}
 			}
 		}
+		
 		//put small images on grid.
 		$row=$col=0;
 		foreach($fotos as $key => $foto){
 
-			//Do not put big pictures on grid now.
+			//Do not put big pictures on grid again.
 			if(in_array($key, $this->big)){ continue; }
 
 			//find first free place.
