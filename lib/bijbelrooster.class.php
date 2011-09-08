@@ -27,9 +27,10 @@ class Bijbelrooster{
 			if($row['dag']<date('Y-m-d')){
 				$class = 'lichtgrijs';
 			}
-			$return.= '<span class="' .$class. '">' . date('d-m-Y:', strtotime($row['dag'])) . '</span> ' .$this::getLink($row['stukje']). "<br />";
+			$return.= '<span class="' .$class. '">' . date('d-m-Y', strtotime($row['dag'])) . ':</span> ' .$this->getLink($row['stukje']). "<br />";
 		}
 		echo '</p>'.$return;
 	}
 	
 }
+?>
