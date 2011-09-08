@@ -6,6 +6,9 @@ RewriteRule ^/?$ /actueel/mededelingen/ [R]
 # Sjaarsacties
 RewriteRule ^sjaarsacties/?$ sjaarsacties.php
 
+# Bijbelleesrooster
+RewriteRule ^bijbelrooster/$ bijbelrooster.php
+
 # Eetplan
 RewriteRule ^eetplan/$ eetplan.php
 RewriteRule ^eetplan/sjaars/([0-9]*) eetplan.php?pheutID=$1

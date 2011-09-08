@@ -25,6 +25,7 @@ htdocs/.htaccess -text
 htdocs/actueel/.htaccess -text
 htdocs/actueel/agenda/.htaccess -text
 htdocs/actueel/agenda/index.php -text
+htdocs/actueel/bijbelrooster.php -text
 htdocs/actueel/courant/.htaccess -text
 htdocs/actueel/courant/archief.php -text
 htdocs/actueel/courant/courant.php -text
@@ -628,6 +629,7 @@ lib/bibliotheek/bibliotheekcontroller.class.php -text
 lib/bibliotheek/boek.class.php -text
 lib/bibliotheek/catalogus.class.php -text
 lib/bibliotheek/rubriek.class.php -text
+lib/bijbelrooster.class.php -text
 lib/chart-0.8/COPYING -text
 lib/chart-0.8/INSTALLATION -text
 lib/chart-0.8/IsoLatin1.enc -text
