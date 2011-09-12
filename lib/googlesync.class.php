@@ -63,6 +63,10 @@ class GoogleSync{
 		
 		//then load the contacts for this group.
 		$this->loadContactsForGroup($this->groupid);
+		
+		//copy setting from settings manager.
+		$this->extendedExport=Instelling::get('googleContacts_extended')=='ja';
+			
 	}
 
 	/* 
@@ -382,21 +386,24 @@ class GoogleSync{
 		$fullName = $doc->createElement('gd:fullName', $lid->getNaam());
 		$name->appendChild($fullName);
 
-		//nickname
-		if($lid->getNickname()!=''){
-			$nick=$doc->createElement('gContact:nickname', $lid->getNickname());
-			$entry->appendChild($nick);
-		}
 		
-		//initialen
-		if($lid->getProperty('voorletters')!=''){
-			$entry->appendChild($doc->createElement('gContact:initials', $lid->getProperty('voorletters')));
+		if($this->extendedExport){
+			//nickname
+			if($lid->getNickname()!=''){
+				$nick=$doc->createElement('gContact:nickname', $lid->getNickname());
+				$entry->appendChild($nick);
+			}
+			
+			//initialen
+			if($lid->getProperty('voorletters')!=''){
+				$entry->appendChild($doc->createElement('gContact:initials', $lid->getProperty('voorletters')));
+			}
+			
+			//geslacht?
+			$gender=$doc->createElement('gContact:gender');
+			$gender->setAttribute('value', $lid->getGeslacht()=='m' ? 'male' : 'female');
+			//$entry->appendChild($gender);
 		}
-		
-		//geslacht?
-		$gender=$doc->createElement('gContact:gender');
-		$gender->setAttribute('value', $lid->getGeslacht()=='m' ? 'male' : 'female');
-		//$entry->appendChild($gender);
 		
 		//add home address
 		if($lid->getProperty('adres')!=''){
@@ -412,6 +419,7 @@ class GoogleSync{
 			}else{
 				$address->setAttribute('rel', 'http://schemas.google.com/g/2005#home');
 			}
+			
 			$address->appendChild($doc->createElement('gd:street', $lid->getProperty('adres')));
 			if($lid->getProperty('postcode')!=''){
 				$address->appendChild($doc->createElement('gd:postcode', $lid->getProperty('postcode')));
@@ -424,24 +432,25 @@ class GoogleSync{
 			$entry->appendChild($address);
 		}
 
-		//adres ouders toevoegen, alleen bij leden...
-		if($lid->isLid() AND $lid->getProperty('o_adres')!='' AND $lid->getProperty('adres')!=$lid->getProperty('o_adres')){
-			$address=$doc->createElement('gd:structuredPostalAddress');
-			//$address->setAttribute('rel', 'http://schemas.google.com/g/2005#other');
-			$address->setAttribute('label', 'Ouders');
+		if($this->extendedExport){
+			//adres ouders toevoegen, alleen bij leden...
+			if($lid->isLid() AND $lid->getProperty('o_adres')!='' AND $lid->getProperty('adres')!=$lid->getProperty('o_adres')){
+				$address=$doc->createElement('gd:structuredPostalAddress');
+				//$address->setAttribute('rel', 'http://schemas.google.com/g/2005#other');
+				$address->setAttribute('label', 'Ouders');
 
-			$address->appendChild($doc->createElement('gd:street', $lid->getProperty('o_adres')));
-			if($lid->getProperty('o_postcode')!=''){
-				$address->appendChild($doc->createElement('gd:postcode', $lid->getProperty('o_postcode')));
+				$address->appendChild($doc->createElement('gd:street', $lid->getProperty('o_adres')));
+				if($lid->getProperty('o_postcode')!=''){
+					$address->appendChild($doc->createElement('gd:postcode', $lid->getProperty('o_postcode')));
+				}
+				$address->appendChild($doc->createElement('gd:city', $lid->getProperty('o_woonplaats')));
+				if($lid->getProperty('o_land')!=''){
+					$address->appendChild($doc->createElement('gd:country', $lid->getProperty('o_land')));
+				}
+				$address->appendChild($doc->createElement('gd:formattedAddress', $lid->getFormattedAddress($ouders=true)));
+				$entry->appendChild($address);
 			}
-			$address->appendChild($doc->createElement('gd:city', $lid->getProperty('o_woonplaats')));
-			if($lid->getProperty('o_land')!=''){
-				$address->appendChild($doc->createElement('gd:country', $lid->getProperty('o_land')));
-			}
-			$address->appendChild($doc->createElement('gd:formattedAddress', $lid->getFormattedAddress($ouders=true)));
-			$entry->appendChild($address);
 		}
-
 
 		// add email element
 		$email=$doc->createElement('gd:email');
@@ -450,32 +459,37 @@ class GoogleSync{
 		$email->setAttribute('primary', 'true');
 		$entry->appendChild($email);
 
-		// add IM adresses.
-		$ims=array(
-			array('msn', 'http://schemas.google.com/g/2005#MSN'),
-			array('skype', 'http://schemas.google.com/g/2005#SKYPE'),
-			array('icq', 'http://schemas.google.com/g/2005#ICQ'),
-			array('jid', 'http://schemas.google.com/g/2005#JABBER')
-		);
-		foreach($ims as $im){
-			if($lid->getProperty($im[0])!=''){
-				$imEntry=$doc->createElement('gd:im');
-				$imEntry->setAttribute('address', $lid->getProperty($im[0]));
-				$imEntry->setAttribute('protocol', $im[1]);
-				$imEntry->setAttribute('rel', 'http://schemas.google.com/g/2005#home');
-				$entry->appendChild($imEntry);
+		if($this->extendedExport){
+			// add IM adresses.
+			$ims=array(
+				array('msn', 'http://schemas.google.com/g/2005#MSN'),
+				array('skype', 'http://schemas.google.com/g/2005#SKYPE'),
+				array('icq', 'http://schemas.google.com/g/2005#ICQ'),
+				array('jid', 'http://schemas.google.com/g/2005#JABBER')
+			);
+			foreach($ims as $im){
+				if($lid->getProperty($im[0])!=''){
+					$imEntry=$doc->createElement('gd:im');
+					$imEntry->setAttribute('address', $lid->getProperty($im[0]));
+					$imEntry->setAttribute('protocol', $im[1]);
+					$imEntry->setAttribute('rel', 'http://schemas.google.com/g/2005#home');
+					$entry->appendChild($imEntry);
+				}
 			}
 		}
-
+		
 		//add phone numbers
 		$telefoons=array(
 			array('telefoon', 'http://schemas.google.com/g/2005#home'),
 			array('mobiel', 'http://schemas.google.com/g/2005#mobile'),
 		);
-		//als het een huidig lid betreft ook het nummer van de ouders erin.
-		if($lid->isLid()){
-			$telefoons[]=array('o_telefoon', 'label:Ouders');
+		if($this->extendedExport){
+			//als het een huidig lid betreft ook het nummer van de ouders erin.
+			if($lid->isLid()){
+				$telefoons[]=array('o_telefoon', 'label:Ouders');
+			}
 		}
+		
 		foreach($telefoons as $telefoon){
 			if($lid->getProperty($telefoon[0])!=''){
 				$number=$doc->createElement('gd:phoneNumber', internationalizePhonenumber($lid->getProperty($telefoon[0])));
@@ -497,19 +511,21 @@ class GoogleSync{
 			$entry->appendChild($geboortedatum);
 		}
 
-		if($lid->getProperty('website')!=''){
-			$website=$doc->createElement('gContact:website');
+		if($this->extendedExport){
+			if($lid->getProperty('website')!=''){
+				$website=$doc->createElement('gContact:website');
 
-			$website->setAttribute('href', $lid->getProperty('website'));
-			$website->setAttribute('rel', 'home');
-			$entry->appendChild($website);
-		}
+				$website->setAttribute('href', $lid->getProperty('website'));
+				$website->setAttribute('rel', 'home');
+				$entry->appendChild($website);
+			}
 
-		if($lid->getProperty('eetwens')!=''){
-			$eetwens=$doc->createElement('gContact:userDefinedField');
-			$eetwens->setAttribute('key', 'Eetwens');
-			$eetwens->setAttribute('value', $lid->getProperty('eetwens'));
-			$entry->appendChild($eetwens);
+			if($lid->getProperty('eetwens')!=''){
+				$eetwens=$doc->createElement('gContact:userDefinedField');
+				$eetwens->setAttribute('key', 'Eetwens');
+				$eetwens->setAttribute('value', $lid->getProperty('eetwens'));
+				$entry->appendChild($eetwens);
+			}
 		}
 		
 		//system group 'my contacts' er bij, als die bestaat..

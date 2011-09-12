@@ -40,7 +40,8 @@ class Instelling{
 			'agenda_toonVerjaardagen' => array('ja', 'Verjaardagen in agenda', 'enum', array('ja', 'nee')),
 			'agenda_toonMaaltijden' => array('ja', 'Maaltijden in agenda', 'enum', array('ja', 'nee')),
 			'mededelingen_aantalPerPagina' => array(10, 'Aantal mededeling per pagina', 'int', 5),
-			'googleContacts_groepnaam' => array('C.S.R.-leden', 'Naam van groep voor contacten in Google contacts', 'string')
+			'googleContacts_groepnaam' => array('C.S.R.-leden', 'Naam van groep voor contacten in Google contacts', 'string'),
+			'googleContacts_extended' => array('ja', 'Uitgebreide export (nickname, voorletters, adres/tel ouders, website, chataccounts, eetwens) ', 'enum', array('ja', 'nee'))
 	);
 
 	//hebben we een instelling die $key heet?
