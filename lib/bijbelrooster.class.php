@@ -19,17 +19,21 @@ class Bijbelrooster{
 		$db=MySql::instance();
 		$query="SELECT * FROM bijbelrooster ORDER BY dag ASC";
 		$res=$db->select($query);
+		$itemsEachRow = ceil(mysql_num_rows($res)/3);
 		$return='
 			<h1>Bijbelrooster</h1>
-			<p>Hier vindt u het bijbelrooster der C.S.R.. Uw favoriete bijbelvertaling kunt u instellen bij uw instellingen.</p><p>';
+			<p>Hier vindt u het bijbelrooster der C.S.R.. Uw favoriete bijbelvertaling kunt u instellen bij uw instellingen.</p><p class="oneThirth">';
+		$i = 0;
 		while($row = mysql_fetch_array($res, MYSQL_ASSOC)){
+			if($i++ % $itemsEachRow == 0 && $i != 1)
+				$return .= '</p><p class="oneThirth">';
 			$class = '';
 			if($row['dag']<date('Y-m-d')){
 				$class = 'lichtgrijs';
 			}
 			$return.= '<span class="' .$class. '">' . date('d-m-Y', strtotime($row['dag'])) . ':</span> ' .$this->getLink($row['stukje']). "<br />";
 		}
-		echo '</p>'.$return;
+		echo $return.'</p><div class="clear"></div>';
 	}
 	
 }

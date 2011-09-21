@@ -434,7 +434,10 @@ table.query_table th{
 	top: 30px;
 }
 
-
+.oneThirth{
+	width: 253px;
+	float: left;
+}
 
 /* plaatjes in tekst */
 p img{ margin: 15px 10px; }
