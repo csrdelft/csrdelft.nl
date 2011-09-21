@@ -231,6 +231,21 @@ class Lid implements Serializable, Agendeerbaar{
 
 	public function isJarig(){			return substr($this->profiel['gebdatum'], 5, 5)==date('m-d'); }
 	public function getGeboortedatum(){ return $this->profiel['gebdatum']; }
+	public function getJarigOver(){
+		$verjaardag = strtotime(date('Y').'-'.date('m-d', strtotime($this->getGeboortedatum())));
+		$nu = strtotime(date('Y-m-d'));
+		if ($verjaardag < $nu) {
+			$verjaardag = strtotime('+1 year', $verjaardag);
+		}
+		
+		$dagen = round(($verjaardag - $nu) / 86400);
+		
+		if ($dagen == 0) {
+			return true;
+		} else { 
+			return $dagen;
+		}
+	}
 
 	public function getFormattedAddress($ouders=false){
 		$ouders ? $prefix='o_' : $prefix='';

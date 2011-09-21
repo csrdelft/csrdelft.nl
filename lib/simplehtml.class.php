@@ -89,7 +89,7 @@ class IsHetAlContent extends SimpleHTML{
 			$this->ishetal=Instelling::get('zijbalk_ishetal');
 		}
 		switch($this->ishetal){
-			case 'jarig': $this->ja=LoginLid::instance()->getLid()->isJarig(); break;
+			case 'jarig': $this->ja=LoginLid::instance()->getLid()->getJarigOver(); break;
 			case 'lunch': $this->ja=(date('Hi')>'1245' AND date('Hi')<'1345'); break;
 			case 'avond': $this->ja=(date('Hi')>'1700'); break;
 			case 'vrijdag': $this->ja=(date('w')==5); break;
@@ -136,12 +136,12 @@ class IsHetAlContent extends SimpleHTML{
 			break;
 		}
 
-		if($this->ja){
+		if($this->ja===true){
 			echo '<div class="ja">JA!</div>';
 
 		}else{
 			if($this->ishetal=='jarig'){
-				echo '<div class="nee">NOG LANG NIET.</div>';
+				echo '<div class="nee">OVER '.$this->ja.' DAGEN!</div>';
 			}else{
 				echo '<div class="nee">NEE.</div>';
 			}
