@@ -574,8 +574,8 @@ form#streeplijst input, label{ text-align: left; margin: 3px; padding: 0px; line
 }
 #mededelingen-top3block{
 	float: left;
-	margin: 0 10px 0px 0px;
-	width: 376px;
+	margin: 0 0 0px 0px;
+	width: 380px;
 }
 #nieuwePeiling label{ clear: left; float: left; width: 150px;}
 #nieuwePeiling input, textarea{ margin-bottom: 4px;}
