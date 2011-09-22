@@ -8,18 +8,22 @@ class Bijbelrooster{
 	function ubbContent($aantal){
 		$aantal= max($aantal,2);
 		$begin = Date('y:m:d', strtotime("-".min(abs($aantal/2), 2)." days"));
-		$return = '<div class="ubb_block"><a href="/actueel/bijbelrooster/"><h1>Bijbelleesrooster</h1></a>';
+		$return = '<div class="mededeling-grotebalk"><div class="titel"><a href="/actueel/bijbelrooster/">Bijbelleesrooster</a></div><p class="half">';
 		$db=MySql::instance();
 		$query='SELECT * FROM bijbelrooster WHERE dag >= "'.$begin.'" ORDER BY dag ASC LIMIT 0,'.$aantal;
 		$res=$db->select($query);
+		$itemsEachRow = ceil(mysql_num_rows($res)/2);
+		$i = 0;
 		while($row = mysql_fetch_array($res, MYSQL_ASSOC)){
+			if($i++ % $itemsEachRow == 0 && $i != 1)
+				$return .= '</p><p class="half">';
 			$class = '';
 			if($row['dag']<date('Y-m-d')){
 				$class = 'lichtgrijs';
 			}
 			$return.= '<span class="' .$class. '">' . date('d-m-Y', strtotime($row['dag'])) . ':</span> ' .$this->getLink($row['stukje']). "<br />";
 		}
-		return $return. '</div>';
+		return $return. '</p><div class="clear"></div></div>';
 	}
 	
 	function getLink($stukje){

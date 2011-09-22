@@ -546,13 +546,11 @@ form#streeplijst input, label{ text-align: left; margin: 3px; padding: 0px; line
 
 /* Mededelingen */
 .mededeling-grotebalk{
-	height: 70px;
 	padding: 8px 12px 8px 6px;
 	margin-bottom: 10px;
 	border-top: 1px solid #B8B8B8;
 	border-left: 1px solid #B8B8B8;
 	background-color: #F0F0F0;
-	overflow: hidden;
 }
 .mededeling-grotebalk .plaatje{
 	width: 70px;
@@ -564,13 +562,19 @@ form#streeplijst input, label{ text-align: left; margin: 3px; padding: 0px; line
 .mededeling-grotebalk .titel{
 	font-weight: bold;
 	font-size: 1.1em;
+	padding: 0 0 3px;
 }
 .mededeling-grotebalk .bericht{
 	text-align: left;
 }
+.mededeling-grotebalk .half{
+	width: 180px;
+	float: left;
+	margin-bottom: 0;
+}
 #mededelingen-top3block{
 	float: left;
-	margin: 10px 10px 0px 0px;
+	margin: 0 10px 0px 0px;
 	width: 376px;
 }
 #nieuwePeiling label{ clear: left; float: left; width: 150px;}

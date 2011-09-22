@@ -13,6 +13,7 @@
 				</a>
 			</div>
 		<div class="bericht">{$mededeling->getAfgeknipteTekst()}</div>
+		<div class="clear"></div>
 	</div>
 {/foreach}
 </div>
