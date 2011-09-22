@@ -5,7 +5,22 @@ require_once 'memcached.class.php';
 class Bijbelrooster{
 	
 	
-	
+	function ubbContent($aantal){
+		$aantal= max($aantal,2);
+		$begin = Date('y:m:d', strtotime("-".min(abs($aantal/2), 2)." days"));
+		$return = '<div class="ubb_block"><a href="/actueel/bijbelrooster/"><h1>Bijbelleesrooster</h1></a>';
+		$db=MySql::instance();
+		$query='SELECT * FROM bijbelrooster WHERE dag >= "'.$begin.'" ORDER BY dag ASC LIMIT 0,'.$aantal;
+		$res=$db->select($query);
+		while($row = mysql_fetch_array($res, MYSQL_ASSOC)){
+			$class = '';
+			if($row['dag']<date('Y-m-d')){
+				$class = 'lichtgrijs';
+			}
+			$return.= '<span class="' .$class. '">' . date('d-m-Y', strtotime($row['dag'])) . ':</span> ' .$this->getLink($row['stukje']). "<br />";
+		}
+		return $return. '</div>';
+	}
 	
 	function getLink($stukje){
 		$bijbelvertalingen= array("NBV"=>"id18=1", "NBG" => "id16=1", "Herziene Statenvertaling" => "id47=1", "Statenvertaling (Jongbloed)" => "id37=1", "Groot Nieuws Bijbel" => "id17=1", "Willibrordvertaling"=>"id35=1");

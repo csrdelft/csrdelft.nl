@@ -611,6 +611,14 @@ UBBVERHAAL;
 		}
 
 	}
+	
+	public function ubb_bijbelrooster($dagen){
+		$content = $this->parseArray(array('[/bijbelrooster]'), array());
+		require_once 'bijbelrooster.class.php';
+		$bijbel = new Bijbelrooster();
+		return $bijbel->ubbContent($content);
+	}
+
 }
 //we staan normaal geen HTML toe, met deze kan dat wel.
 class CsrHtmlUBB extends CsrUBB{
