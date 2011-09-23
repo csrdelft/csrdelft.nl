@@ -231,10 +231,10 @@ class CsrUBB extends eamBBParser{
 		$width=560;
 		$height=420;
 		if(isset($parameters['width']) AND (int)$parameters['width']>100){
-			$width=$parameters['width'];
+			$width=(int)$parameters['width'];
 		}
 		if(isset($parameters['height']) AND (int)$parameters['height']>100){
-			$height=$parameters['height'];
+			$height=(int)$parameters['height'];
 		}
 
 		//render embed html
@@ -551,10 +551,10 @@ UBBVERHAAL;
 		$height=200;
 		$style='';
 		if(isset($parameters['w']) && $parameters['w']<800){
-			$width = $parameters['w'];
+			$width=(int)$parameters['w'];
 		}
 		if(isset($parameters['h']) && $parameters['h']<600){
-			$height= $parameters['h'];
+			$height=(int)$parameters['h'];
 		}
 		if(isset($parameters['w']) || isset($parameters['h'])){
 			$style='style="width:'.$width.'px;height:'.$height.'px;"';
@@ -596,20 +596,63 @@ UBBVERHAAL;
 		}
 	}
 
-	/*
+	/* slideshow-tag.
+	 * 
+	 * example:
+	 * [slideshow]http://example.com/image_1.jpg[/
 	 */
+	private $slideshowJsIncluded=false;
 	public function ubb_slideshow($parameters){
 		$content = $this->parseArray(array('[/slideshow]'), array());
-
-		$slides_tainted=explode(array(';', "\n"), $content);
+		
+		$slides_tainted=explode('[br]', $content);
 		$slides=array();
 		foreach($slides_tainted as $slide){
 			$slide=trim($slide);
-			if(url_like($slide)){
+			if(url_like($slide) && $slide!=''){
 				$slides[]=$slide;
 			}
 		}
+		
+		
+		$width=355;
+		$height=238;
+		if(isset($parameters['w']) && $parameters['w']<800){
+			$width=(int)$parameters['w'];
+		}
+		if(isset($parameters['h']) && $parameters['h']<600){
+			$height=$parameters['h'];
+		}
+		
+		$style='style="width:'.$width.'px;height:'.$height.'px;';
+		if(isset($parameters['float']) && in_array($parameters['float'], array('left', 'right'))){
+			$style=' float="'.$parameters['float'].'"';
+		}
+		$style.='"';
 
+		if(count($slides)==0){
+			$content='[slideshow]: geen geldige afbeeldingen gegeven';
+		}else{
+			$content='
+				<div class="image_reel">';
+			
+			foreach($slides as $slide){
+				$content.='<img src="'.$slide.'" alt="slide" />'."\n";
+			}
+			$content.='</div>';//end image_reel
+			$content.='<div class="paging">';
+			for($i=1; $i<=count($slides); $i++){
+				$content.='<a href="#" rel="'.$i.'">&bullet;</a>'."\n";
+			}
+			
+			$content.='</div>'."\n"; //end paging
+			if($this->slideshowJsIncluded===false){
+				$content.='<script type="text/javascript" src="/layout/js/ubb_slideshow.js"></script>';
+				$this->slideshowJsIncluded=true;
+			}
+		}
+		
+		return '<div class="ubb_slideshow" '.$style.'>'.$content.'</div>';
 	}
 	
 	public function ubb_bijbelrooster($dagen){

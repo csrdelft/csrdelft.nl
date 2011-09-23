@@ -720,19 +720,18 @@ div.preview.pagina{ padding: 2px; width: 100%;}
 	margin-bottom: 10px;
 }
 /* Slider: Window/Masking Styles */
-.window {
-	width:355px; height:237px;
+.ubb_slideshow {
 	overflow: hidden; /*--Hides anything outside of the set width/height--*/
 	position: relative;
 }
-.image_reel {
+.ubb_slideshow .image_reel {
 	position: absolute;
 	top: 0; left: 0;
 }
-.image_reel img {float: left;width:355px;}
+.ubb_slideshow .image_reel img {float: left;width:355px;}
 
 /* Slider: Paging Styles */
-.paging {
+.ubb_slideshow .paging {
 	position: absolute;
 	bottom: 5px; right: 5px;
 	width: 170px; height:15px;
@@ -747,13 +746,13 @@ div.preview.pagina{ padding: 2px; width: 100%;}
 	-khtml-border-radius: 8px;
 	-webkit-border-radius: 8px;
 }
-.paging a {
+.ubb_slideshow .paging a {
 	padding: 4px;
 	text-decoration: none;
 	color: #fff;
 	font: normal 8px Verdana, Arial, Helvetica, sans-serif;
 }
-.paging a.active {
+.ubb_slideshow .paging a.active {
 	background: #777;
 	border: 1px solid #000;
 	-moz-border-radius: 3px;
@@ -761,5 +760,5 @@ div.preview.pagina{ padding: 2px; width: 100%;}
 	-webkit-border-radius: 3px;
 	color: #000;
 }
-.paging a:hover {
+.ubb_slideshow .paging a:hover {
 	text-decoration: underline;}
