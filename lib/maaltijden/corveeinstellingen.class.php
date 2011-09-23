@@ -118,7 +118,8 @@ class Corveeinstellingen{
 		$instellingForm[] = new TextField('afzuigkap',$this->getValue('afzuigkap') , 'Afzuigkapschoonmakers');
 		$instellingForm[] = new TextField('frituur',$this->getValue('frituur') , 'Frituurschoonmakers');
 		$instellingForm[] = new TextField('keuken',$this->getValue('keuken') , 'Keukenschoonmakers');
-
+		$instellingForm[] = new TextField('tafelp',$this->getValue('tafelp') , 'Tafelpraeses');
+		
 		$this->instellingForm=$instellingForm;
 	}
 

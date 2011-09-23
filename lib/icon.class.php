@@ -45,6 +45,7 @@ class Icon{
 		'punten_bewerken' => 'award_star_gold_1',
 		'punten_bewerken_toegekend' => 'award_star_gold_2',
 		'gemaild' => 'email_go',
+		'gemaildoranje' => 'email_go_orange',
 		'niet_gemaild' => 'email',
 
 		// profiel

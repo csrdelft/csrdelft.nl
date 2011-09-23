@@ -72,7 +72,9 @@
 			{/if}
 			<td>
 				{if $maaltijd.corvee_gemaild == "1"}
-					<img src="{icon get="gemaild" notag=true}" alt="Gemaild" title="Gemaild" />
+					<img src="{icon get="gemaildoranje" notag=true}" alt="Een keer gemaild" title="Eén keer gemaild" />
+				{elseif  $maaltijd.corvee_gemaild == "2"}
+					<img src="{icon get="gemaild" notag=true}" alt="Twee keer gemaild" title="Twee keer gemaild" />
 				{else}
 					<img src="{icon get="niet_gemaild" notag=true}" alt="Niet gemaild" title="Niet gemaild" />
 				{/if}

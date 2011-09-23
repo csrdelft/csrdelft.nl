@@ -1417,12 +1417,19 @@ class MaalTrack {
 	}
 	
 	# corvee automailer
-	function corveeAutoMailer($debugMode = 0, $debugAddr = 'pubcie@csrdelft.nl')
+	function corveeAutoMailer($debugMode = 0, $debugAddr = 'pubcie@csrdelft.nl', $monthMailing=false)
 	{
 		// Debug, als enabled dan worden alle emails naar het debugAddr gestuurd, en word maaltijd niet gemarkeerd als gemaild
 		
-		// get maaltijden waar datum < deze week
-		$maaltijden = $this->getMaaltijdenRaw(0, time()+86400*7, true, false);
+		// get maaltijden waar datum < deze week/maand
+		if($monthMailing){
+			$van = 0;
+			$tot = time()+86400*7*5;
+		}else{
+			$van = 0;
+			$tot = time()+86400*7;
+		}
+		$maaltijden = $this->getMaaltijdenRaw($van, $tot, true, false);
 		
 		// mail headers
 		setlocale(LC_ALL, 'nl_NL');
@@ -1441,17 +1448,24 @@ class MaalTrack {
 		$output = "CORVEE-AUTOMAILER: ".date('r')."\n";
 		if ($debugMode)
 			$output .= "DEBUG MODE: Mails gaan naar ".$debugAddr.", maaltijden worden niet gemarkeerd als gemaild\n";
-		$output .= "Start\nMaaltijden ophalen binnen komende 7 dagen..\n";
+		$output .= "Start\n";
+		if($monthMailing){
+			$output .= "Maaltijden ophalen binnen komende 35 dagen..\n";
+		}else{
+			$output .= "Maaltijden ophalen binnen komende 7 dagen..\n";
+		}
 		foreach($maaltijden as $maaltijd)
 		{
 			$output .= "- Maaltijd van ".strftime('%d-%m-%Y', $maaltijd['datum'])." (ID ".$maaltijd['id']."): ";
-			if ($maaltijd['corvee_gemaild']) {
+			if(($monthMailing AND $maaltijd['corvee_gemaild']>0) OR (!$monthMailing AND $maaltijd['corvee_gemaild']==2)){
 				$output .= "Reeds gemaild.";
-			} else {
+			}else{
 				$lMaaltijd = new Maaltijd($maaltijd['id']);
 
 				// taken ophalen
 				$taken = $lMaaltijd->getTaken();
+				// tafelpraeses toevoegen
+				$taken['tp'][] = $lMaaltijd->getTP();
 				$teller = array();
 				$foutTeller = array();
 
@@ -1463,16 +1477,25 @@ class MaalTrack {
 					'theedoeken' => 'theedoeken',
 					'schoonmaken_frituur' => 'frituur',
 					'schoonmaken_afzuigkap' => 'afzuigkap',
-					'schoonmaken_keuken' => 'keuken'
+					'schoonmaken_keuken' => 'keuken',
+					'tp' => 'tafelp'
 				);
 				
 				foreach($taken as $taak => $leden)
 				{
 					$templateid = (isset($takenTemplates[$taak]) ? $takenTemplates[$taak] : null);
 					if (!$templateid) continue;
-					
+
 					// mailen
-					$onderwerp = 'C.S.R. Delft Corvee - '.strftime('%d-%m-%Y', $maaltijd['datum']);
+					if($templateid=='tafelp'){
+						$onderwerp = 'C.S.R. Delft Tafelpraeses - ';
+						$headers = str_replace("corvee@csrdelft.nl", "maalcie@csrdelft.nl", $headers);
+					}else{
+						$onderwerp = 'C.S.R. Delft Corvee - ';
+						$headers = str_replace("maalcie@csrdelft.nl", "corvee@csrdelft.nl", $headers);
+					}
+					$onderwerp .= strftime('%d-%m-%Y', $maaltijd['datum']);
+
 					foreach($leden as $uid) {
 						$to = ($debugMode ? $debugAddr : $uid.'@csrdelft.nl');
 
@@ -1508,7 +1531,7 @@ class MaalTrack {
 							$datum = strftime('%d-%m-%Y (%A)', $maaltijd['datum']);
 
 							$bericht = htmlspecialchars(str_replace(array('LIDNAAM', 'DATUM', 'MEEETEN'), array($lidnaam, $datum, $meeeten), $template));
-
+print_r($headers);
 							if (mail($to, $onderwerp, $bericht, $headers))
 								$teller[] = $lid->getNaam().' ('.$uid.')';
 							else
@@ -1524,7 +1547,7 @@ class MaalTrack {
 				
 				// update corvee_gemaild
 				if (!$debugMode) {
-					$query = "UPDATE maaltijd SET corvee_gemaild = 1 WHERE id=".$maaltijd['id']."";
+					$query = "UPDATE maaltijd SET corvee_gemaild = corvee_gemaild + 1 WHERE id=".$maaltijd['id']."";
 					if(!$this->_db->query($query))
 						$output .= "FOUT: Er is iets mis met de database/query.";
 				}
