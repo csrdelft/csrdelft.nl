@@ -17,10 +17,12 @@ function makepasswd($pass) {
 	return "{SSHA}" . base64_encode(mhash(MHASH_SHA1, $pass.$salt).$salt);
 }
 function email_like($email) {
+	if($email==''){ return false; }
 	return preg_match("/^[a-z0-9]+([_\\.-][a-z0-9]+)*@([a-z0-9]+([\.-][a-z0-9]+)*)+\\.[a-z]{2,}$/i", $email);
 }
 
 function url_like($url) {
+	if($url==''){ return false; }
 	#					  http://		  user:pass@
 	return preg_match('#^(([a-zA-z]{1,6}\://)(\w+:\w+@)?' .
 	#	f			oo.bar.   org	   :80

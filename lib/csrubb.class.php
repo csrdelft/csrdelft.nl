@@ -599,7 +599,7 @@ UBBVERHAAL;
 	/* slideshow-tag.
 	 * 
 	 * example:
-	 * [slideshow]http://example.com/image_1.jpg[/
+	 * [slideshow]http://example.com/image_1.jpg[/slideshow]
 	 */
 	private $slideshowJsIncluded=false;
 	public function ubb_slideshow($parameters){
