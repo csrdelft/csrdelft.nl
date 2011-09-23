@@ -626,7 +626,7 @@ UBBVERHAAL;
 		
 		$style='style="width:'.$width.'px;height:'.$height.'px;';
 		if(isset($parameters['float']) && in_array($parameters['float'], array('left', 'right'))){
-			$style=' float="'.$parameters['float'].'"';
+			$style=' float: '.$parameters['float'].'';
 		}
 		$style.='"';
 
