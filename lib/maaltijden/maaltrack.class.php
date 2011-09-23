@@ -1502,7 +1502,7 @@ class MaalTrack {
 						$lid = LidCache::getLid($uid);
 						
 						// persoonlijk mailen
-						if ($lid != null) {
+						if ($lid != null AND $uid !='x101') {
 
 							//mededeling over mee-eten inelkaar zetten
 							$meeeten = '';
@@ -1531,7 +1531,7 @@ class MaalTrack {
 							$datum = strftime('%d-%m-%Y (%A)', $maaltijd['datum']);
 
 							$bericht = htmlspecialchars(str_replace(array('LIDNAAM', 'DATUM', 'MEEETEN'), array($lidnaam, $datum, $meeeten), $template));
-print_r($headers);
+
 							if (mail($to, $onderwerp, $bericht, $headers))
 								$teller[] = $lid->getNaam().' ('.$uid.')';
 							else
