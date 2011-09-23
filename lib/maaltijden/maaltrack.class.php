@@ -1506,7 +1506,7 @@ class MaalTrack {
 
 							//mededeling over mee-eten inelkaar zetten
 							$meeeten = '';
-							if(in_array($taak, array('afwassers', 'koks', 'theedoeken'))){
+							if(in_array($taak, array('afwassers', 'koks', 'theedoeken','tp'))){
 								$meeeten='U komt bij de maaltijd : ';
 								$status=$lMaaltijd->getStatus($uid);
 								switch($status){
