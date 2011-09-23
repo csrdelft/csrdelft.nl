@@ -160,7 +160,7 @@ class csrdelft extends SimpleHTML {
 		if(defined('DEBUG') AND ($loginlid->hasPermission('P_ADMIN') OR $loginlid->isSued())){
 			$csrdelft->assign('db', MySql::instance());
 		}
-
+		
 		$csrdelft->caching=false;
 		$csrdelft->display($this->_prefix.'csrdelft.tpl');
 

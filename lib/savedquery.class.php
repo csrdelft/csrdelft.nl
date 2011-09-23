@@ -10,6 +10,7 @@ class savedQuery{
 	private $beschrijving;
 	private $permissie='P_ADMIN';
 	private $result=null;
+	private $resultCount=0;
 
 	public function __construct($id){
 		$this->queryID=(int)$id;
@@ -45,6 +46,7 @@ class savedQuery{
 						$this->result[]=array('Leeg resultaatset' => 'Query leverde geen resultaten terug.');
 					}else{
 						$this->result=$db->result2array($queryResult);
+						$this->resultCount=count($this->result);
 					}
 				}elseif(LoginLid::instance()->hasPermission('P_ADMIN')){
 					$this->result[]=array('Mysql_error' => mysql_error());
@@ -52,11 +54,14 @@ class savedQuery{
 			}
 		}
 	}
+	
 
 	public function magBekijken(){
 		return $this->magWeergeven($this->permissie);
-
 	}
+	
+	public function getID(){ return $this->queryID; }
+	public function count(){ return $this->resultCount; }
 	//Query's mogen worden weergegeven als de permissiestring toegelaten wordt door Lid::hasPermission()'
 	//of als gebruiker P_ADMIN heeft.
 	public static function magWeergeven($permissie){

@@ -141,6 +141,13 @@ class Menu {
 		//if($bHuidig===false){$aMenuItems[0]['huidig']=true;}
 
 		$menu->assign('items', $aMenuItems);
+		
+		if(Loginlid::instance()->hasPermission('P_ADMIN')){
+			require_once 'savedquery.class.php';
+			$menu->assign('queues', array(
+				'forum' => new SavedQuery(38), //magic numbers
+				'meded.' => new SavedQuery(62)));
+		}
 		$menu->display($this->_prefix.'menu.tpl');
 	}
 

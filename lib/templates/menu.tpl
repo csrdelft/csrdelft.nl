@@ -39,6 +39,36 @@
 						</div>
 					{/foreach}
 				</div>
+				{if $loginlid->hasPermission('P_ADMIN')}
+				<div id="adminding">
+					Beheer
+					<div>
+						<span class="queues">
+							{foreach from=$queues item=queue key=name}
+								<a href="/tools/query.php?id={$queue->getID()}">
+									{$name|ucfirst}: <span class="count">{$queue->count()}</span><br />
+								</a>
+							{/foreach}
+						</span>
+						<a href="/su/x101">&raquo; SU Jan Lid.</a><br />
+						<a href="/pagina/beheer">&raquo; Beheeroverzicht</a><br />
+						<a href="/tools/query.php">&raquo; Opgeslagen queries</a><br />
+						<br />
+						<a href="/actueel/maaltijden/beheer/">&raquo; Maaltijdbeheer</a><br />
+					</div>
+				</div>
+				{literal}
+				<script>
+					jQuery(document).ready(function($){
+						
+						$('#adminding').click(function(){
+							$(this).children('div').toggle();
+						});
+						$('#adminding div').hide();
+					});
+				</script>
+				{/literal}
+				{/if}
 				<br />
 				<form method="get" action="/communicatie/lijst.php" name="lidzoeker">
 					<p>

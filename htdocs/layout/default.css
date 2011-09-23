@@ -213,6 +213,37 @@ ul.nobullets li{ list-style-type: none; }
 #saldi {clear: both; padding-top: 4px;}
 #saldi .saldo{ float: right; }
 #saldi .staatrood{ color: red; }
+
+#adminding{
+	border: 1px solid white;
+	background-color: #3262D7;
+	padding: 1px 2px;
+	margin-top: 4px;
+	cursor: pointer;
+	height: 13px;
+	padding: 2px;
+	text-align: center;
+}
+
+
+#adminding div{
+	display: none;
+	
+	position: relative; 
+	left: -3px; top: 1px;
+	width: 200px; min-height: 50px;
+	z-index: 99;
+	border: 1px solid white; 
+	background-color: #3262D7;
+	padding: 5px;
+}
+#adminding span.queues{
+	float: right;
+	display: block;
+	width: 60px;
+	overflow-x: hidden;
+}
+
 #zoekveld{
 	width: 127px;
 	text-align: left;
