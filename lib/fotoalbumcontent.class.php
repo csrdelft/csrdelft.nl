@@ -24,6 +24,8 @@ class FotalbumZijbalkContent extends SimpleHtml{
 		echo '<a href="/actueel/fotoalbum/'.$this->album->getPad().'">';
 		echo $this->album->getNaam();
 		echo '</a>';
+		
+		echo '<div class="fotos">';
 		$limit=6;
 		$fotos=$this->album->getFotos();
 
@@ -36,8 +38,9 @@ class FotalbumZijbalkContent extends SimpleHtml{
 				echo '</a>'."\n";
 			}
 		}
-		echo '</div>';
-		echo '</div>';
+		echo '</div>'; //class="fotos"
+		echo '</div>'; //class="item"
+		echo '</div>'; //id="zijbalk_fotoalbum"
 	}
 }
 class FotoalbumUbbContent extends SimpleHTML{
