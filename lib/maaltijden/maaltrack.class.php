@@ -1500,44 +1500,46 @@ class MaalTrack {
 						$to = ($debugMode ? $debugAddr : $uid.'@csrdelft.nl');
 
 						$lid = LidCache::getLid($uid);
-						
-						// persoonlijk mailen
-						if ($lid != null AND $uid !='x101') {
 
-							//mededeling over mee-eten inelkaar zetten
-							$meeeten = '';
-							if(in_array($taak, array('afwassers', 'koks', 'theedoeken','tp'))){
-								$meeeten='U komt bij de maaltijd : ';
-								$status=$lMaaltijd->getStatus($uid);
-								switch($status){
-									case 'AAN':
-										$meeeten.='eten';
-									break;
-									case 'AUTO':
-										if($lMaaltijd->heeftAbo($uid)){
-											$meeeten.='eten (abo)';
-											$status='AAN';
-											break;
-										}
-									case 'AF':
-									default:
-										$meeeten.='niet eten';
+						// persoonlijk mailen (muv Jan Lid (x101))
+						if($uid !='x101'){ 
+							if ($lid != null ) {
+
+								//mededeling over mee-eten inelkaar zetten
+								$meeeten = '';
+								if(in_array($taak, array('afwassers', 'koks', 'theedoeken','tp'))){
+									$meeeten='U komt bij de maaltijd : ';
+									$status=$lMaaltijd->getStatus($uid);
+									switch($status){
+										case 'AAN':
+											$meeeten.='eten';
+										break;
+										case 'AUTO':
+											if($lMaaltijd->heeftAbo($uid)){
+												$meeeten.='eten (abo)';
+												$status='AAN';
+												break;
+											}
+										case 'AF':
+										default:
+											$meeeten.='niet eten';
+									}
 								}
+
+								require_once 'maaltijden/corveeinstellingen.class.php';
+								$template = Corveeinstellingen::get($templateid);
+								$lidnaam = $lid->getNaamLink('civitas');
+								$datum = strftime('%d-%m-%Y (%A)', $maaltijd['datum']);
+
+								$bericht = htmlspecialchars(str_replace(array('LIDNAAM', 'DATUM', 'MEEETEN'), array($lidnaam, $datum, $meeeten), $template));
+
+								if (mail($to, $onderwerp, $bericht, $headers))
+									$teller[] = $lid->getNaam().' ('.$uid.')';
+								else
+									$foutTeller[] = $lid->getNaam().' ('.$uid.')';
+							} else {
+								$foutTeller[] = 'Onbekend lid met id '.$uid;
 							}
-
-							require_once 'maaltijden/corveeinstellingen.class.php';
-							$template = Corveeinstellingen::get($templateid);
-							$lidnaam = $lid->getNaamLink('civitas');
-							$datum = strftime('%d-%m-%Y (%A)', $maaltijd['datum']);
-
-							$bericht = htmlspecialchars(str_replace(array('LIDNAAM', 'DATUM', 'MEEETEN'), array($lidnaam, $datum, $meeeten), $template));
-
-							if (mail($to, $onderwerp, $bericht, $headers))
-								$teller[] = $lid->getNaam().' ('.$uid.')';
-							else
-								$foutTeller[] = $lid->getNaam().' ('.$uid.')';
-						} else {
-							$foutTeller[] = 'Onbekend lid met id '.$uid;
 						}
 					}
 				}
@@ -1561,6 +1563,7 @@ class MaalTrack {
 		
 		// rapport voor beheerder
 		$to = ($debugMode ? $debugAddr : 'corvee@csrdelft.nl');
+		$headers = str_replace("corvee@csrdelft.nl", "maalcie@csrdelft.nl", $headers); //kan corveekeizer direct naar maalcieP mailen
 		mail($to, 'Corvee-Automailer: Rapport', $output, $headers);
 	}
 
