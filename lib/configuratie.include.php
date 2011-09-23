@@ -57,6 +57,11 @@ define('STATISTICUS', '0630' );
 //Feut ip voor de rss feed in #csrdelft
 define('FEUT_IP', '82.94.188.77');
 
+//id's van de regeltjes in de databasetabel savedquery voor de queues van forum en mededelingen
+define('ROWID_QUEUE_FORUM', 38);
+define('ROWID_QUEUE_MEDEDELINGEN', 62);
+
+
 //stapeltje dingen includeren die toch (bijna) altijd nodig zijn:
 require_once 'common.functions.php';
 require_once 'lid/loginlid.class.php';

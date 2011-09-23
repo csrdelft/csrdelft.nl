@@ -145,8 +145,8 @@ class Menu {
 		if(Loginlid::instance()->hasPermission('P_ADMIN')){
 			require_once 'savedquery.class.php';
 			$menu->assign('queues', array(
-				'forum' => new SavedQuery(38), //magic numbers
-				'meded.' => new SavedQuery(62)));
+				'forum' => new SavedQuery(ROWID_QUEUE_FORUM),
+				'meded.' => new SavedQuery(ROWID_QUEUE_MEDEDELINGEN)));
 		}
 		$menu->display($this->_prefix.'menu.tpl');
 	}
