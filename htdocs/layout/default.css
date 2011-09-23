@@ -7,11 +7,7 @@ body, html, p, a, img, h1, h2, h3, h4, ul, li, form, fieldset, input {
 body {
 	font-family : Verdana, Geneva, Arial, Helvetica, sans-serif;
 	font-size: 11px;
-	background: url('http://plaetjes.csrdelft.nl/layout/menubg.png') repeat-x;
-}
-
-html{
-	background: url('http://plaetjes.csrdelft.nl/layout/submenubg.png') 0 152px repeat-x;
+	background: url('http://plaetjes.csrdelft.nl/layout/body.png') repeat-x;
 }
 
 #container {
@@ -136,7 +132,6 @@ ul.nobullets li{ list-style-type: none; }
 	margin: 0 auto;
 	width: 966px;
 	height: 24px;
-	background: url('http://plaetjes.csrdelft.nl/layout/submenubg.png') repeat-x;
 }
 #submenuitems {
 	padding-top: 5px;
@@ -293,7 +288,6 @@ ul.nobullets li{ list-style-type: none; }
 /**** MAIN ********************************************************************/
 #main {
 	width: 1004px;
-	/* background: url('http://plaetjes.csrdelft.nl/layout/mainbg.png') repeat-y; */
 }
 
 #mainleft {
@@ -327,7 +321,7 @@ ul.nobullets li{ list-style-type: none; }
 	color:  #162673;
 }
 #mainleft .block .item {
-	padding: 0px 5px 0px 5px;
+	padding: 0px 5px;
 	font-size: 10px;
 	background-color: #f5f5f5;
 	border: 1px solid #b8b8b8;
@@ -381,7 +375,8 @@ ul.nobullets li{ list-style-type: none; }
 	bottom: 0px;
 	background-color: white; color: black;
 	font-size: 9px;
-	opacity:0.6;filter:alpha(opacity=60)
+	opacity:0.6;
+	filter:alpha(opacity=60);
 }
 #zijbalk_fotoalbum a{
 	text-decoration: none;
@@ -400,7 +395,7 @@ ul.nobullets li{ list-style-type: none; }
 	width: 1004px;
 	height: 22px;
 	text-align: center;
-	background: url('http://plaetjes.csrdelft.nl/layout/footerbg.png') no-repeat #fff;
+	background: #fff url('http://plaetjes.csrdelft.nl/layout/footerbg.png') no-repeat;
 }
 #footer a {
 	color: #000;
@@ -413,8 +408,8 @@ ul.nobullets li{ list-style-type: none; }
 /**** OVERIG ******************************************************************/
 a.knop, div.knop{
 	background-color: #f5f5f5;
-	border: 1px solid #A9A9A9;
-	margin: 2px; padding: 0px 2px 0px 2px;
+	border: 1px solid #a9a9a9;
+	margin: 2px; padding: 0px 2px;
 	line-height: 1.1em;
 	cursor: pointer;
 }
@@ -429,32 +424,31 @@ pre#pubcie_debug{
 	margin: 10px;
 	overflow: auto;
 	font-size: 1.2em;
-	color: black; background-color: white;
+	color: #000; background-color: #fff;
 	border: 1px solid darkred;
 	z-index: 100;
 }
 
 table.query_table{
 	margin: 10px;
-	padding: 0px;	border-collapse: collapse;
+	padding: 0;	border-collapse: collapse;
 	border: 1px solid black;
 }
 
 table.query_table td{
-	margin: 0px;
+	margin: 0;
 	padding: 4px;
 	padding-left: 10px; padding-right: 10px;
 	background-color: #bbbbbb;
 }
 
 table.query_table th{
-	margin: 0px; padding: 4px;
+	margin: 0; padding: 4px;
 	padding-left: 10px; padding-right: 10px;
-	border-top: 1px solid black;
-	border-bottom: 1px solid black;
+	border-top: 1px solid #000;
+	border-bottom: 1px solid #000;
 	background-color: #3262d7;
-	color: #ffffff
-
+	color: #fff;
 }
 
 .youtubeVideo{
@@ -465,8 +459,8 @@ table.query_table th{
 	cursor: pointer; cursor: hand;
 	position: absolute;
 	left: 45px;
-	opacity: 0.7;
 	top: 30px;
+	opacity: 0.7;
 }
 
 .oneThirth{
@@ -480,7 +474,7 @@ p img{ margin: 15px 10px; }
 /* waarschuwing */
 .waarschuwing{ color: red;}
 /* geel blokje */
-div.blokje{ background-color: #FFFFC1; margin: 10px 0px; padding: 10px 10px;}
+div.blokje{ background-color: #ffffc1; margin: 10px 0; padding: 0;}
 
 .pasfotomatrix{ margin-top: 5px; width: 275px; margin-left: 10px;}
 .pasfotomatrix .pasfoto{
@@ -515,15 +509,15 @@ span#ubbsluiten{
 	display: block;
 	width: 18px; height: 18px;
 	float: right;
-	margin: 0px; padding: 0px;
+	margin: 0; padding: 0;
 	font-weight: bold; font-size: 14px;
 	text-align: center;	vertical-align: middle;
 	color: black;
 	cursor: pointer; cursor: hand;
-	border: 1px solid white;
+	border: 1px solid #fff;
 }
 span#ubbsluiten:hover{
-	border: 1px solid black;
+	border: 1px solid #000;
 	background-color: #eee;
 }
 div.offtopic{ font-size: 9px; color: #bbb; }
@@ -562,17 +556,17 @@ form#streeplijst input, label{ text-align: left; margin: 3px; padding: 0px; line
 	line-height: 1.1em;
 	padding: 10px; font-weight: bold;
 	text-align: justify; display: block;
-	border: 1px solid black; background-color: lightgrey;
+	border: 1px solid #000; background-color: lightgrey;
 }
 .eetplantabel{
 	width: 100%; border-collapse: collapse;
 }
-.eetplantabel tr{ margin: 0px; padding: 0px;}
-.eetplantabel tr td{ margin: 0px; padding: 0px; text-align: left;}
+.eetplantabel tr{ margin: 0; padding: 0;}
+.eetplantabel tr td{ margin: 0; padding: 0; text-align: left;}
 .eetplantabel tr th{ border-bottom: 1px solid black; }
 .eetplantabel tr.kleur0 td{ background-color: #fff; }
 .eetplantabel tr.kleur1 td{ background-color: #f4f4f4; }
-.eetplantabel tr .huis{ border-left: 1px solid black; padding:3px 4px; margin: 0px; font-size: 10px;}
+.eetplantabel tr .huis{ border-left: 1px solid #000; padding:3px 4px; margin: 0; font-size: 10px;}
 
 #shoutbox{
 
@@ -583,9 +577,9 @@ form#streeplijst input, label{ text-align: left; margin: 3px; padding: 0px; line
 .mededeling-grotebalk{
 	padding: 8px 12px 8px 6px;
 	margin-bottom: 10px;
-	border-top: 1px solid #B8B8B8;
-	border-left: 1px solid #B8B8B8;
-	background-color: #F0F0F0;
+	border-top: 1px solid #b8b8b8;
+	border-left: 1px solid #b8b8b8;
+	background-color: #f0f0f0;
 }
 .mededeling-grotebalk .plaatje{
 	width: 70px;
@@ -609,7 +603,7 @@ form#streeplijst input, label{ text-align: left; margin: 3px; padding: 0px; line
 }
 #mededelingen-top3block{
 	float: left;
-	margin: 0 0 0px 0px;
+	margin: 0;
 	width: 395px;
 }
 #nieuwePeiling label{ clear: left; float: left; width: 150px;}
@@ -621,8 +615,8 @@ form#streeplijst input, label{ text-align: left; margin: 3px; padding: 0px; line
  * ubb voorbeeldding
  */
 div.previewContainer{ margin-top: 10px; display: none; }
-div.preview{ margin: 5px 0px; padding: 2px 4px; width: 99%; background-color: #ffffc1; border: 1px solid #ccc; }
-div.preview.pagina{ padding: 2px 2px; width: 100%;}
+div.preview{ margin: 5px 0; padding: 2px 4px; width: 99%; background-color: #ffffc1; border: 1px solid #ccc; }
+div.preview.pagina{ padding: 2px; width: 100%;}
 
 /* special UBB tags
  *
@@ -633,9 +627,9 @@ div.preview.pagina{ padding: 2px 2px; width: 100%;}
 	border: 1px solid #b8b8b8;
 	background-color: #f0f0f0;
 	padding: 8px 12px;
-	margin: 0 0 10px 0;
+	margin: 0 0 10px;
 }
-#forumtabel td .ubb_block{ margin: 2px 0px; }
+#forumtabel td .ubb_block{ margin: 2px 0; }
 
 .ubb_maaltijd{
 	float: left;
@@ -659,7 +653,7 @@ div.preview.pagina{ padding: 2px 2px; width: 100%;}
 }
 
 .ubb_groep{
-	padding: 5px 0px 5px 10px;
+	padding: 5px 0 5px 10px;
 }
 .ubb_groep .groepleden{
 	width: 275px;
@@ -667,9 +661,9 @@ div.preview.pagina{ padding: 2px 2px; width: 100%;}
 	margin-left: 10px;
 }
 .ubb_groep .groepleden table.leden{ width: 100%; }
-.ubb_groep .groepleden table.leden td{ padding: 0px 5px 0 0; text-align: left; }
+.ubb_groep .groepleden table.leden td{ padding: 0 5px 0 0; text-align: left; }
 .ubb_groep .groepleden a.toonmeer{ float: left; }
-.ubb_groep .pasfotomatrix{ margin-left: 0px; }
+.ubb_groep .pasfotomatrix{ margin-left: 0; }
 .ubb_groep .aanmelden{ clear: left; padding-top: 6px; }
 .ubb_groep .pasfoto{ width: 48px; height: 64px; float: left; border: 1px solid grey; margin: 0 5px 5px 0; }
 
@@ -700,15 +694,15 @@ div.preview.pagina{ padding: 2px 2px; width: 100%;}
 .ubb_peiling .beheer{ float: right; }
 .ubb_peiling .totaal{ clear: right; float: right; color: #666; padding:5px 9px; }
 .ubb_peiling ul{ list-style-type: none; padding: 5px; }
-.ubb_peiling ul li{ border-bottom: 1px solid #eee; margin-left: 0px; clear: both;  padding: 4px;}
+.ubb_peiling ul li{ border-bottom: 1px solid #eee; margin-left: 0; clear: both;  padding: 4px;}
 .ubb_peiling ul li .stemmen{ float: right; color: #666; width: 30px; text-align: right; }
 .ubb_peiling ul li .percentage{ float: right; color: #666; width: 50px; text-align: right; }
-.ubb_peiling .grafisch{ float: right; width: 200px; vertical-align: top; padding: 4px 4px; }
-.ubb_peiling .balk{ height: 10px; background-color: #6060FF;  border: 1px outset #0A338D; float: right;}
+.ubb_peiling .grafisch{ float: right; width: 200px; vertical-align: top; padding: 4px; }
+.ubb_peiling .balk{ height: 10px; background-color: #6060FF;  border: 1px outset #0a338d; float: right;}
 
-.ubb_table{ padding: 0px; border-collapse: collapse; }
-.ubb_table tr{ margin: 0px; padding: 0px; }
-.ubb_table td, .ubb_table th{ margin: 0px; padding: 2px; }
+.ubb_table{ padding: 0; border-collapse: collapse; }
+.ubb_table tr{ margin: 0; padding: 0; }
+.ubb_table td, .ubb_table th{ margin: 0; padding: 2px; }
 
 .ubb_fotoalbum{
 
@@ -745,7 +739,7 @@ div.preview.pagina{ padding: 2px 2px; width: 100%;}
 	z-index: 100; /*--Assures the paging stays on the top layer--*/
 	text-align: center;
 	line-height: 9px;
-	background: #000 ;
+	background: #000;
 	border: #000;
 	opacity:0.4;filter:alpha(opacity=40);
 	display: none; /*--Hidden by default, will be later shown with jQuery--*/
@@ -756,7 +750,7 @@ div.preview.pagina{ padding: 2px 2px; width: 100%;}
 .paging a {
 	padding: 4px;
 	text-decoration: none;
-	color: #FFF;
+	color: #fff;
 	font: normal 8px Verdana, Arial, Helvetica, sans-serif;
 }
 .paging a.active {
