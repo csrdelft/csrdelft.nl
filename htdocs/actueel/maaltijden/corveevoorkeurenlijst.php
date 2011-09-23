@@ -9,8 +9,8 @@
 
 require_once 'configuratie.include.php';
 
-// Deze pagina is (voorlopig) alleen voor de maalcie bedoeld.
-if(!$loginlid->hasPermission('P_MAAL_MOD')){ header('location: '.CSR_ROOT.'actueel/maaltijden/'); exit; }
+// Deze pagina is alleen voor de leden bedoeld.
+if(!$loginlid->hasPermission('P_LOGGED_IN')){ header('location: '.CSR_ROOT.'actueel/maaltijden/'); exit; }
 
 
 $sorteer = 'achternaam';

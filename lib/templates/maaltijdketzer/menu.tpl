@@ -12,6 +12,9 @@
 	<li {if $actief == 'corveepunten'}class="active"{/if}>
 		<a href="/actueel/maaltijden/corveepunten/" title="Corveepunten">Corveepunten</a>
 	</li>
+	<li {if $actief == 'corveevoorkeuren'}class="active"{/if}>
+		<a href="/actueel/maaltijden/corveevoorkeurenlijst/" title="Corveevoorkeuren">Corveevoorkeuren</a>
+	</li>
 {else}
 	<li {if $actief == 'maaltijden'}class="active"{/if}>
 		<a href="/actueel/maaltijden/" title="Maaltijdketzer">Maaltijdketzer</a>

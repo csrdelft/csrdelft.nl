@@ -20,7 +20,7 @@
 			</tr>
 		{/if}
 		{assign var='lid' value=$leden.$index.uid}
-		{if $lid!='' and $loginlid->hasPermission('P_MAAL_MOD')}
+		{if $lid!='' and $loginlid->hasPermission('P_LOGGED_IN')}
             <tr style="background-color: {cycle values='#e9e9e9, #fff'};{if $bewerkt_lid==$lid}background-color: #bfb{else}{/if}">
                 <td><a name="lid_{$lid}"></a></td>
                 <td>{$lid|csrnaam}</td>                    

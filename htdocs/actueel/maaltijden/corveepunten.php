@@ -11,6 +11,9 @@
 
 require_once 'configuratie.include.php';
 
+// Deze pagina is alleen voor de leden bedoeld.
+if(!$loginlid->hasPermission('P_LOGGED_IN')){ header('location: '.CSR_ROOT.'actueel/maaltijden/'); exit; }
+
 require_once 'maaltijden/corveelid.class.php';
 require_once 'maaltijden/maaltrack.class.php';
 $maaltrack = new MaalTrack();
