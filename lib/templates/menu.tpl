@@ -42,6 +42,9 @@
 				{if $loginlid->hasPermission('P_ADMIN')}
 				<div id="adminding">
 					Beheer
+					{if $queues.forum->count()>0 OR $queues.meded->count()>0}
+						({$queues.forum->count()}/{$queues.meded->count()})
+					{/if}
 					<div>
 						<span class="queues">
 							{foreach from=$queues item=queue key=name}
