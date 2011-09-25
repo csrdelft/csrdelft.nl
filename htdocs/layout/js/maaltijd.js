@@ -13,7 +13,7 @@ jQuery(document).ready(function(){
 	jQuery("#abolijst tr:odd").addClass('odd');
 
 	//hippe sorteerbare tabel fixen.
-	jQuery("#abolijst").dataTable({
+	var oTable = jQuery("#abolijst").dataTable({
 		"oLanguage": {
 			"sZeroRecords": "Geen leden gevonden",
 			"sInfoEmtpy": "Geen leden gevonden",
@@ -30,20 +30,21 @@ jQuery(document).ready(function(){
 		"aaSorting": [[1, 'asc']],
 		"sPaginationType": "full_numbers",
 		"aoColumns": [
-			{'iDataSort': 8},	// naam
-			null, 				// waarschuwing
-			{'sType': 'html'},	// status
+			{'iDataSort': 7},	// naam
+			{'sType': 'html'}, 				// waarschuwing
 			{'sType': 'html'},	// jaar
-			{'sType': 'html'},	// verticale
 			{'sSortDataType': 'dom-checkbox' }, // maandagabo
 			{'sSortDataType': 'dom-checkbox' }, // donderdagabo
+			{'sType': 'html'},	// verticale
 			{'sSortDataType': 'dom-checkbox' }, // verticaleabo
 			{'sType': 'html'}	// achternaam(verborgen)
 		],
 		"aoColumnDefs": [ 
-			{ "bVisible": false, "aTargets": [ 8] }
+			{ "bVisible": false, "aTargets": [ 7] }
 		]
 	});
+	/* Add event listeners to the two range filtering inputs */
+	$('#filterwaarschuwingen').click( function() { oTable.fnDraw(); } );
 })
 /* Create an array with the values of all the checkboxes in a column */
 $.fn.dataTableExt.afnSortData['dom-checkbox'] = function  ( oSettings, iColumn )
@@ -54,7 +55,19 @@ $.fn.dataTableExt.afnSortData['dom-checkbox'] = function  ( oSettings, iColumn )
 	} );
 	return aData;
 }
-
+$.fn.dataTableExt.afnFiltering.push(
+	function( oSettings, aData, iDataIndex ) {
+		if(jQuery('#filterwaarschuwingen').is(':checked')){
+			if(aData[1].length >6){ //de standaardwaarde &nbsp; is 6 tekens
+				return true;
+			}else{
+				return false;
+			}
+		}else{
+			return true;
+		}
+	}
+);
 function observeCheckboxesAbos(){
 	jQuery(".abovinkje").change(function(){
 		var ID =jQuery(this).attr('id');
