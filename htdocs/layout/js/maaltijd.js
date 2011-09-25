@@ -31,7 +31,7 @@ jQuery(document).ready(function(){
 		"sPaginationType": "full_numbers",
 		"aoColumns": [
 			{'iDataSort': 7},	// naam
-			{'sType': 'html'}, 				// waarschuwing
+			{'sType': 'string'}, 				// waarschuwing
 			{'sType': 'html'},	// jaar
 			{'sSortDataType': 'dom-checkbox' }, // maandagabo
 			{'sSortDataType': 'dom-checkbox' }, // donderdagabo

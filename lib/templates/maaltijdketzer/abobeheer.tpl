@@ -14,11 +14,11 @@
 	</thead>
 	<tbody>
 	{foreach from=$leden item=lid}
-		<tr class="abo {if !($lid.status=='S_NOVIET' OR $lid.status=='S_GASTLID' OR $lid.status=='S_LID')}geenlid{/if}">
+		<tr class="abo {if !($lid.status=='S_NOVIET' OR $lid.status=='S_GASTLID' OR $lid.status=='S_LID')}geenlid{elseif $lid.kring==0 AND $lid.abos.verticale}geenkring{/if}">
 			<td>{$lid.uid|csrnaam:'civitas'}</td>
 			<td>
 				{if !($lid.status=='S_NOVIET' OR $lid.status=='S_GASTLID' OR $lid.status=='S_LID')}
-					<img src="{icon get="fout" notag=true}" alt="Geen lid!" title="Geen lid. Lidstatus: {$lid.status}" />{/if}&nbsp;
+					<img src="{icon get="fout" notag=true}" alt="Geen lid!" title="Geen lid. Lidstatus: {$lid.status}" />{elseif $lid.kring==0 AND $lid.abos.verticale}<img src="{icon get="fout" notag=true}" alt="Kring.0" title="Geen actief kringlid (kring.0)" />{/if}&nbsp;
 			</td>
 			<td>{$lid.lidjaar}</td>
 			<td id="{$lid.uid}-A_MAANDAG" class="abovinkje"><input type="checkbox" name="abo_ma" value="1" {if $lid.abos.maandag}checked="checked"{/if} /></td>

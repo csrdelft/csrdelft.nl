@@ -1016,7 +1016,7 @@ class MaalTrack {
 	# haalt alle leden met maaltijdabo's op met hun abo
 	function getLedenAbo(){
 		$sAboQuery="
-			SELECT lid.uid AS uid, lid.achternaam, lid.lidjaar, lid.status, lid.verticale, verticale.naam AS verticalenaam,
+			SELECT lid.uid AS uid, lid.achternaam, lid.lidjaar, lid.status, lid.verticale, lid.kring, verticale.naam AS verticalenaam,
 				GROUP_CONCAT( 
 					maaltijdabo.abosoort
 					ORDER BY maaltijdabo.abosoort

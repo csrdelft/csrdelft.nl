@@ -43,6 +43,9 @@
 .abolijst tr.geenlid td{
 	background-color: #ffda53 !important;
 }
+.abolijst tr.geenkring td{
+	background-color: #ffffc1 !important;
+}
 /*
  * dataTable layout
  */
