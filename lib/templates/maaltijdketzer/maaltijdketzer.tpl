@@ -154,9 +154,11 @@ uitprinten. Vanaf dat moment zal deze ketzer u niet meer willen aan- of afmelden
 		<th>Opmerking</th>
 		<th>&nbsp;</th>
 	</tr>
+	{assign var=counter value=`0`}
 	{foreach from=$maal.zelf.maaltijden item=maaltijd}
 		{if $maaltijd.status=='AAN' || $maaltijd.status=='ABO'}
 			<tr>
+				{assign var=counter value=`$counter+1`}
 				<td>{$maaltijd.datum|date_format:$datumFormaat}</td>
 				<td>{$maaltijd.tekst|escape:'html'}</td>
 				{if $maaltijd.gesloten == 1}
@@ -174,4 +176,7 @@ uitprinten. Vanaf dat moment zal deze ketzer u niet meer willen aan- of afmelden
 			</tr>
 		{/if}
 	{/foreach}
+	{if $counter==0}
+		<tr><td colspan=5><em>Als u zich aanmeldt voor een maaltijd, kunt u hier gasten aanmelden.</em></td></tr>
+	{/if}
 </table>
