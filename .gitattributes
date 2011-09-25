@@ -39,6 +39,7 @@ htdocs/actueel/groepen/.htaccess -text
 htdocs/actueel/groepen/groep.php -text
 htdocs/actueel/groepen/groepen.php -text
 htdocs/actueel/maaltijden/.htaccess -text
+htdocs/actueel/maaltijden/abobeheer.php -text
 htdocs/actueel/maaltijden/beheer.php -text
 htdocs/actueel/maaltijden/corveebeheer.php -text
 htdocs/actueel/maaltijden/corveeinstellingen.php -text
@@ -698,7 +699,7 @@ lib/maaltijden/corveeroostercontent.class.php -text
 lib/maaltijden/corveevoorkeurencontent.class.php -text
 lib/maaltijden/corveevoorkeurenlijst.class.php -text
 lib/maaltijden/maaltijd.class.php -text
-lib/maaltijden/maaltijdabocontant.php -text
+lib/maaltijden/maaltijdabobeheercontent.class.php -text
 lib/maaltijden/maaltijdbeheercontent.class.php -text
 lib/maaltijden/maaltijdcontent.class.php -text
 lib/maaltijden/maaltijdlijstcontent.class.php -text
@@ -879,7 +880,7 @@ lib/templates/groepen/groepen.tpl -text
 lib/templates/groepen/groepformulier.tpl -text
 lib/templates/groepen/groepleden.tpl -text
 lib/templates/maalciemail.tpl -text
-lib/templates/maaltijdketzer/abo-overzicht.tpl -text
+lib/templates/maaltijdketzer/abobeheer.tpl -text
 lib/templates/maaltijdketzer/beheer.tpl -text
 lib/templates/maaltijdketzer/corveebeheer.tpl -text
 lib/templates/maaltijdketzer/corveeformulier.tpl -text

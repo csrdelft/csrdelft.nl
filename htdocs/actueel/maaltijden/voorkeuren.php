@@ -26,7 +26,7 @@ $error = 0;
 # 2 -> er treden (vorm)fouten op in bijv de invoer.
 
 # controleren of we wel mogen doen wat er gevraagd wordt...
-$actionsToegestaan=array('', 'editEetwens', 'editCorveewens', 'editCorveevoorkeuren', 'addabo', 'delabo');
+$actionsToegestaan=array('', 'editEetwens', 'editCorveevoorkeuren', 'addabo', 'delabo');
 if(in_array($action, $actionsToegestaan)){
 	if(!$loginlid->hasPermission('P_MAAL_IK')){ $error = 1; }
 }else{

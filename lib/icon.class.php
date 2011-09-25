@@ -23,6 +23,7 @@ class Icon{
 		'goedkeuren' => 'tick',
 		'verjaardag' => 'cake',
 		'vraagteken' => 'help',
+		'fout' => 'error',
 
 		//documumenten
 		'mime-audio' => 'ipod',

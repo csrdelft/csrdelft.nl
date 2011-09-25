@@ -1014,16 +1014,47 @@ class MaalTrack {
 	}
 
 	# haalt alle leden met maaltijdabo's op met hun abo
-	function getAboLeden($filter='', $sorteer = 'ma_abo', $sorteer_richting = 'asc'){
-		$sorteer_toegestaan = array('uid', 'kok', 'afwas', 'theedoek', 'schoonmaken_frituur', 'schoonmaken_afzuigkap', 'schoonmaken_keuken', 'corvee_kwalikok', 'corvee_punten', 'corvee_punten_bonus', 'corvee_vrijstelling', 'corvee_prognose', 'corvee_tekort');
-		$sorteer_volgorde_toegestaan = array('asc', 'desc');
-		if (!in_array($sorteer, $sorteer_toegestaan) || !in_array($sorteer_richting, $sorteer_volgorde_toegestaan)){
-			print('Ongeldige sorteeroptie');
-		}
+	function getLedenAbo(){
 		$sAboQuery="
+			SELECT lid.uid AS uid, lid.achternaam, lid.lidjaar, lid.status, lid.verticale, verticale.naam AS verticalenaam,
+				GROUP_CONCAT( 
+					maaltijdabo.abosoort
+					ORDER BY maaltijdabo.abosoort
+					SEPARATOR ', ' 
+				) AS abosoort
+			FROM lid
+			LEFT JOIN maaltijdabo ON ( lid.uid = maaltijdabo.uid )
+			LEFT JOIN verticale ON ( lid.verticale = verticale.id )
+			WHERE 
+				lid.status IN('S_LID','S_GASTLID','S_NOVIET') 
+				OR (lid.status NOT IN('S_LID','S_GASTLID','S_NOVIET') AND abosoort IS NOT NULL)
+			GROUP BY lid.uid
+			ORDER BY lid.achternaam, lid.voornaam ASC
 		";
-		$rLeden=$this->_db->query($sLedenQuery);
+		$rLeden=$this->_db->query($sAboQuery);
 		$aLeden=$this->_db->result2array($rLeden);
+		foreach($aLeden as &$rLid) {
+			$abos = array('maandag'=>0,'donderdag'=>0,'verticale'=>0,'verticaleabonaam'=>'A_VERT'.$rLid['verticale']);
+			if($rLid['abosoort']!==NULL){
+				$lidabos = explode(', ', $rLid['abosoort']);
+				foreach($lidabos as $lidabo){
+					switch($lidabo){
+						case 'A_MAANDAG':
+							$abos['maandag'] = 1;
+						break;
+						case 'A_DONDERDAG':
+							$abos['donderdag'] = 1;
+						break;
+						default:
+							if(substr($lidabo, 0, 6)=='A_VERT'){
+								$abos['verticaleabonaam']=$lidabo;
+								$abos['verticale'] = 1;
+							}
+					}
+				}
+			}
+			$rLid['abos'] = $abos;
+		}
 		return $aLeden;
 	}
 
@@ -1271,7 +1302,7 @@ class MaalTrack {
 			$uid = LoginLid::instance()->getUid();
 		}
 		# Kijk of deze abosoort geldig is voor deze persoon, en of we m aan kunnen zetten
-		$geenabo = $this->getNotAboSoort();
+		$geenabo = $this->getNotAboSoort($mootfilter=true,$uid);
 		if (!array_key_exists($abosoort, $geenabo)) {
 			$this->_error = "Er is een ongeldige abonnementsvorm opgegeven, of dit abo is al ingeschakeld voor u.";
 			return false;
@@ -1302,7 +1333,7 @@ class MaalTrack {
 			$uid = LoginLid::instance()->getUid();
 		}
 		# kijk of $abosoort voorkomt in de abo's van deze persoon
-		$abos = $this->getAbo();
+		$abos = $this->getAbo($uid);
 		if (!array_key_exists($abosoort, $abos)) {
 			$this->_error = "Er is een ongeldige abonnementsvorm opgegeven, of dit abo is niet ingeschakeld voor u.";
 			return false;
@@ -1319,7 +1350,7 @@ class MaalTrack {
 				$maaltijd = new Maaltijd ($record['id']);
 				# als gebruiker geen expliciete AAN of AF heeft kan het aantal inschrijvingen
 				# veranderen doordat zijn abo's veranderen
-				if ($maaltijd->getStatus() == 'AUTO') $maaltijd->recount();
+				if ($maaltijd->getStatus($uid) == 'AUTO') $maaltijd->recount();
 				unset($maaltijd);
 			}
 		}
@@ -1389,6 +1420,9 @@ class MaalTrack {
 
 	# alle abosoorten die de ingelogde gebruiker *niet* heeft aanstaan
 	function getNotAboSoort($mootfilter = true, $uid=null) {
+		if($uid==null){
+			$uid = LoginLid::instance()->getUid();
+		}
 		$abos = $this->getAbo($uid);
 		$abosoorten = $this->getAboSoort($mootfilter, $uid);
 		return array_diff_key($abosoorten, $abos);

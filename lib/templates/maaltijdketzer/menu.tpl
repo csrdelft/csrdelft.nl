@@ -25,6 +25,9 @@
 	<li {if $actief == 'maaltijdbeheer'}class="active"{/if}>
 		<a href="/actueel/maaltijden/beheer/" title="Beheer">Maaltijdbeheer</a>
 	</li>
+	<li {if $actief == 'abonnementenbeheer'}class="active"{/if}>
+		<a href="/actueel/maaltijden/abonnementenbeheer/" title="Abonnementenbeheer">Abonnementenbeheer</a>
+	</li>
 	<li {if $actief == 'saldi'}class="active"{/if}>
 		<a href="/actueel/maaltijden/saldi.php" title="Saldo's updaten">Saldo's updaten</a>
 	</li>

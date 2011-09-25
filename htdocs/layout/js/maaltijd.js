@@ -6,8 +6,86 @@ jQuery(document).ready(function(){
 	//reset knopje maaltijdtoevoegformulier
 	corveeVeldResetter();
 
-})
+	//wijzigingen van checkboxes op abobeheerpagina verwerken
+	observeCheckboxesAbos();
 
+	//tabellen naar zebra converteren.
+	jQuery("#abolijst tr:odd").addClass('odd');
+
+	//hippe sorteerbare tabel fixen.
+	jQuery("#abolijst").dataTable({
+		"oLanguage": {
+			"sZeroRecords": "Geen leden gevonden",
+			"sInfoEmtpy": "Geen leden gevonden",
+			"sSearch": "Zoeken:",
+			oPaginate:{
+				"sFirst": "Eerste",
+				"sPrevious": "Vorige",
+				"sNext": "Volgende",
+				"sLast": "Laatste"}
+		},
+		"iDisplayLength": 30,
+		"bInfo": false,
+		"bLengthChange": false,
+		"aaSorting": [[1, 'asc']],
+		"sPaginationType": "full_numbers",
+		"aoColumns": [
+			{'iDataSort': 8},	// naam
+			null, 				// waarschuwing
+			{'sType': 'html'},	// status
+			{'sType': 'html'},	// jaar
+			{'sType': 'html'},	// verticale
+			{'sSortDataType': 'dom-checkbox' }, // maandagabo
+			{'sSortDataType': 'dom-checkbox' }, // donderdagabo
+			{'sSortDataType': 'dom-checkbox' }, // verticaleabo
+			{'sType': 'html'}	// achternaam(verborgen)
+		],
+		"aoColumnDefs": [ 
+			{ "bVisible": false, "aTargets": [ 8] }
+		]
+	});
+})
+/* Create an array with the values of all the checkboxes in a column */
+$.fn.dataTableExt.afnSortData['dom-checkbox'] = function  ( oSettings, iColumn )
+{
+	var aData = [];
+	$( 'td:eq('+iColumn+') input', oSettings.oApi._fnGetTrNodes(oSettings) ).each( function () {
+		aData.push( this.checked==true ? "1" : "0" );
+	} );
+	return aData;
+}
+
+function observeCheckboxesAbos(){
+	jQuery(".abovinkje").change(function(){
+		var ID =jQuery(this).attr('id');
+		var ids=ID.split('-');
+		var uid=ids[0];
+		var abo=ids[1];
+		var actie;
+		jQuery(this).children('input').each(function(index){
+			if(jQuery(this).is(':checked')){
+				actie = 'add';
+			}else{
+				actie = 'delete';
+			}
+		});
+		var data = 'uid='+uid+'&'+'abo='+abo;
+
+		jQuery.ajax({
+			type: "POST",
+			url: '/actueel/maaltijden/abonnementenbeheer/abo/'+actie,
+			data: data,
+			cache: false,
+			success: function(result){
+				if(result=='Abonnementwijziging gelukt'){
+					jQuery("#"+ID).css({'background-color': 'green !important'}).attr('title', result);
+				}else{
+					jQuery("#"+ID).css({'background-color': 'red !important'}).attr('title', result);
+				}
+			}
+		});
+	});
+}
 //zet inputs voor corveetaken op nul
 function corveeVeldResetter(){
 	jQuery(".knop.zetopnul").click(function (event) {
