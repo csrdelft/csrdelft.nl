@@ -39,13 +39,16 @@
 						</div>
 					{/foreach}
 				</div>
-				{if $loginlid->hasPermission('P_ADMIN')}
+				{if $loginlid->hasPermission('P_LEDEN_MOD')}
 				<div id="adminding">
 					Beheer
-					{if $queues.forum->count()>0 OR $queues.meded->count()>0}
-						({$queues.forum->count()}/{$queues.meded->count()})
+					{if $loginlid->hasPermission('P_ADMIN')}
+						{if $queues.forum->count()>0 OR $queues.meded->count()>0}
+							({$queues.forum->count()}/{$queues.meded->count()})
+						{/if}
 					{/if}
 					<div>
+						{if $loginlid->hasPermission('P_ADMIN')}
 						<span class="queues">
 							{foreach from=$queues item=queue key=name}
 								<a href="/tools/query.php?id={$queue->getID()}">
@@ -54,6 +57,7 @@
 							{/foreach}
 						</span>
 						<a href="/su/x101">&raquo; SU Jan Lid.</a><br />
+						{/if}
 						<a href="/pagina/beheer">&raquo; Beheeroverzicht</a><br />
 						<a href="/tools/query.php">&raquo; Opgeslagen queries</a><br />
 						<br />
