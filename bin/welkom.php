@@ -41,16 +41,18 @@ Wachtwoord: {$pass}
 
 Nadat je bent ingelogd kun je het wachtwoord veranderen, en een bijnaam instellen die je in plaats van je lidnummer kunt gebruiken om in te loggen.
 
+
+
 Wanneer je problemen hebt met inloggen, of andere vragen over de webstek, kun je terecht bij de PubliciteitsCommissie.
 Stuur dan een e-mail of kom even langs in ons IRC-kanaal #pubcie (zie Communicatie->IRC), of stuur een e-mail.
 
 Met vriendelijke groet,
 
-Jurjen de Jong
+Arie Bovenberg
 h.t. PubCie-Praeses der Civitas Studiosorum Reformatorum
 EOD;
-		$nanonovieten = array(1101,1103,1114,1125,1133,1142,1143,1144,1148,1152,1154,1155);
-		if(!(in_array($sjaars['uid'], $nanonovieten))){
+		$nanonovieten = array(1114,1154,1155,1133,1103,1148,1143,1125,1144,1159,1163,1165);
+		if((in_array($sjaars['uid'], $nanonovieten))){
 			mail ($sjaars['email'],"Inloggegevens C.S.R.-webstek",$tekst,"From: PubliciteitsCommissie C.S.R. Delft <pubcie@csrdelft.nl>\nContent-Type: text/plain; charset=utf-8\nBcc: pubcie@csrdelft.nl");
 			echo $sjaars['email']."\n";
 		}

@@ -26,9 +26,9 @@ if ($result !== false and $db->numRows($result) > 0) {
 			Tot op de maaltijden!
 
 			Benjamin Komen
-			h.t. Maalcie fiscus
+			o.t. Maalcie fiscus
 EOD;
-		$nanonovieten = array(1101,1103,1114,1125,1133,1142,1143,1144,1148,1152,1154,1155);
+		$nanonovieten = array(1114,1154,1155,1133,1103,1148,1143,1125,1144,1159,1163,1165);
 		if(!(in_array($sjaars['uid'], $nanonovieten))){
 			mail ($sjaars['email'],"Maaltijdabbonement C.S.R.",$tekst,"From: Maalcie Fiscus C.S.R. Delft <maalcie-fiscus@csrdelft.nl>\nContent-Type: text/plain; charset=utf-8\nBcc: pubcie@csrdelft.nl, maalcie-fiscus@csrdelft.nl");
 			echo $sjaars['email']."\n";
