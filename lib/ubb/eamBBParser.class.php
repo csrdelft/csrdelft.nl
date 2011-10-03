@@ -747,35 +747,43 @@ class eamBBParser{
 		$mailto = array_shift($this->parseArray);
 		$endtag = array_shift($this->parseArray);
 
+		$email='';
+		$text='';
+		
 		// only valid patterns
-
 		if($endtag == '[/email]'){
 			if(isset($parameters['email'])){
-                if(!email_like($parameters['email'])){
-                	$html .= "[email: Ongeldig emailadres]";
-                }else{
-                	$html .= '<a href="mailto:'. $parameters['email'] . '">'.$mailto.'</a>';
+                if(email_like($parameters['email'])){
+                	$email=$parameters['email'];
+                	$text=$mailto;
                 }
-			} else {
-		        if(!email_like($mailto)){
-		       		$html .= "[email: Ongeldig emailadres]";
-		        }else{
-		        	$html .= '<a href="mailto:'. $mailto . '">'.$mailto.'</a>';
-		        }
+			}else{
+				if(email_like($mailto)){
+					$email=$text=$mailto;
+				}
 			}
-		} else {
+		}else{
 			if(isset($parameters['email'])){
-				if(!email_like($parameters['email'])){
-					$html .= "[Ongeldig emailadres]";
-				}else{
-					$html .= '<a href="mailto:'. $parameters['email'] . '">'.$parameters['email'].'</a>';
+				if(email_like($parameters['email'])){
+					$email=$text=$parameters['email'];
 				}
 			}
 			array_unshift($this->parseArray, $endtag);
 			array_unshift($this->parseArray, $mailto);
 		}
+		if($email!=''){
+			$html='<a href="mailto:'.$email.'">'.$text.'</a>';
+			
+			//spamprotectie: rot13 de email-tags, en voeg javascript toe om dat weer terug te rot13-en.
+			if(isset($parameters['spamsafe'])){
+				$html='<script>document.write("'.str_rot13(addslashes($html)).'".replace(/[a-zA-Z]/g, function(c){ return String.fromCharCode((c<="Z"?90:122)>=(c=c.charCodeAt(0)+13)?c:c-26);}));</script>';
+			}
+		}else{
+			$html='[email] Ongeldig email-adres ('.mb_htmlentities($mailto).')';
+		}
 		return $html;
 	}
+	
 	function ubb_img($arguments){
 		$style='';
 		if(isset($arguments['float'])){
