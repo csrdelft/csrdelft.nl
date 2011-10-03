@@ -27,7 +27,7 @@ class Eetplan {
 				eetplan
 			INNER JOIN lid ON(eetplan.uid=lid.uid)
 			ORDER BY
- 				lid.achternaam, avond;"
+ 				lid.achternaam, uid, avond;"
 			);
 		$aEetplan=array();
 		$aEetplanRegel=array();
