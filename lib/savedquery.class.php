@@ -92,7 +92,7 @@ class savedQuery{
 			return '<a href="/actueel/mededelingen/'.$contents.'">'.$contents.'</a>';
 		}
 		
-		return mb_htmlentities($veld);
+		return mb_htmlentities($contents);
 	}
 	public function getHtml(){
 
