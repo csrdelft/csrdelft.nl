@@ -19,7 +19,6 @@
 			<span class="albumname">{$subalbum->getNaam()}</span>
 		</a>
 	{/foreach}
-
 {/if}
 
 {if is_array($album->getFotos())}

@@ -1,10 +1,7 @@
 <?php
 # C.S.R. Delft | pubcie@csrdelft.nl
 # -------------------------------------------------------------------
-# class.csrubb.php
-# -------------------------------------------------------------------
-#  wrapper
-# -------------------------------------------------------------------
+# csrubb.class.php
 
 require_once 'ubb/eamBBParser.class.php';
 
@@ -340,12 +337,15 @@ src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
 	 * Als de groep aanmeldbaar is komt er ook een aanmeldknopje bij.
 	 */
 	protected function ubb_groep($parameters){
-		$content=$this->parseArray(array('[/groep]'), array());
+		$groepid=$this->parseArray(array('[/groep]'), array());
 
 		require_once 'groepen/groepcontent.class.php';
-		$groeptag=new GroepUbbContent((int)$content);
-
-		return $groeptag->getHTML();
+		try{
+			$groeptag=new GroepUbbContent((int)$groepid);
+			return $groeptag->getHTML();
+		}catch(Exception $e){
+			return '[groep] Geen geldig groep-id ('.mb_htmlentities($groepid).')';
+		}
 	}
 	/*
 	 * ubb_boek()
@@ -366,12 +366,12 @@ src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
 	 * ubb_fotoalbum
 	 */
 	protected function ubb_fotoalbum($parameters){
-		$content=$this->parseArray(array('[/fotoalbum]'), array());
+		$album=$this->parseArray(array('[/fotoalbum]'), array());
 
 		require_once 'fotoalbumcontent.class.php';
 
 		//we kunnen urls uit de browser direct in de tag kopieren
-		$pad=urldecode($content);
+		$pad=urldecode($album);
 
 		$album=null;
 		if($pad!=''){
@@ -386,7 +386,7 @@ src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
 
 			//album bestaat niet, we geven een foutmelding
 			if(!$album->exists()){
-				return '<div class="ubb_block">ubb_fotoalbum: fotoalbum bestaat niet ('.mb_htmlentities($content).')</div>';
+				return '<div class="ubb_block">ubb_fotoalbum: fotoalbum bestaat niet ('.mb_htmlentities($album).')</div>';
 			}
 		}
 

@@ -1,9 +1,7 @@
 <?php
 # C.S.R. Delft | pubcie@csrdelft.nl
 # -------------------------------------------------------------------
-# class.savedqery.php
-# -------------------------------------------------------------------
-
+# (Jieter) dit is een slecht voorbeeld van de toepassing van het MVC-paradigma. Dit is een model+view in elkaar...
 class savedQuery{
 
 	private $queryID;
@@ -68,30 +66,46 @@ class savedQuery{
 		$loginlid=LoginLid::instance();
 		return $loginlid->hasPermission($permissie) OR $loginlid->hasPermission('P_ADMIN');
 	}
+	
+	public static function render_header($name){
+		switch($name){
+			case 'uid_naam': return 'Naam'; break;
+			case 'groep_naam': return 'Groep'; break;
+			case 'onderwerp_link': return 'Onderwerp'; break;
+			case 'med_link': return 'Mededeling'; break;
+			default:
+				if(substr($name, 0, 10)=='groep_naam'){
+					return substr($name, 11);
+				}
+		}
+		return $name;
+	}
+	public static function render_field($name, $contents){
+		if($name=='uid_naam'){
+			return LidCache::getLid($contents)->getNaamLink('full', 'link');
+		}elseif($name=='onderwerp_link'){ //link naar het forum.
+			$return='<a href="/communicatie/forum/onderwerp/'.$contents.'">'.$contents.'</a>';
+		}elseif(substr($name, 0, 10)=='groep_naam' AND $contents!=''){
+			require_once('groepen/groep.class.php');
+			return Groep::ids2links($contents, '<br />');
+		}elseif($name=='med_link'){ //link naar een mededeling.
+			return '<a href="/actueel/mededelingen/'.$contents.'">'.$contents.'</a>';
+		}
+		
+		return mb_htmlentities($veld);
+	}
 	public function getHtml(){
 
 		if(is_array($this->result)){
 			$return=$this->beschrijving.' ('.count($this->result).' regels)<br /><table class="query_table">';
-			$keysPrinted=false;
+			
+			//header
 			$return.='<tr>';
 			foreach(array_keys($this->result[0]) as $kopje){
-				$return.='<th>';
-				if($kopje=='uid_naam'){
-					$return.='Naam';
-				}elseif($kopje=='groep_naam'){
-					$return.='Groep';
-				}elseif(substr($kopje, 0, 10)=='groep_naam'){
-					$return.=substr($kopje, 11);
-				}elseif($kopje=='onderwerp_link'){
-					$return.='Onderwerp';
-				}elseif($kopje=='med_link'){
-					$return.='Mededeling';
-				}else{
-					$return.=$kopje;
-				}
-				$return.='</th>';
+				$return.='<th>'.self::render_header($kopje).'</th>';
 			}
 			$return.='</tr>';
+			
 			$rowColor=false;
 			foreach($this->result as $rij){
 				//kleurtjes omwisselen
@@ -102,29 +116,9 @@ class savedQuery{
 				}
 				$rowColor=(!$rowColor);
 
-				//uit te poepen html maken
 				$return.='<tr>';
 				foreach($rij as $key => $veld){
-					$return.='<td '.$style.'>';
-					//als het veld uid als uid_naam geselecteerd wordt, een linkje
-					//weergeven
-					if($key=='uid_naam'){
-						$return.=LidCache::getLid($veld)->getNaamLink('full', 'link');
-					}elseif($key=='onderwerp_link'){ //link naar het forum.
-						$return.='<a href="/communicatie/forum/onderwerp/'.$veld.'">'.$veld.'</a>';
-						//neem een verwijderlinkje op als het om spam gaat, lekker ranzige hardcoded meuk.
-						if(isset($rij['zichtbaar'], $rij['id']) AND $rij['zichtbaar']=='spam' AND LoginLid::instance()->hasPermission('P_FORUM_MOD')){
-							$return.='<br /><a href="/communicatie/forum/verwijder-bericht/'.$rij['id'].'">verwijder&nbsp;bericht</a>';
-						}
-					}elseif(substr($key, 0, 10)=='groep_naam' AND $veld!=''){
-						require_once('groepen/groep.class.php');
-						$return.=Groep::ids2links($veld, '<br />');
-					}elseif($key=='med_link'){ //link naar een mededeling.
-						$return.='<a href="/actueel/mededelingen/'.$veld.'">'.$veld.'</a>';
-					}else{
-						$return.=mb_htmlentities($veld);
-					}
-					$return.='</td>';
+					$return.='<td '.$style.'>'.self::render_field($key, $veld).'</td>';
 				}
 				$return.='</tr>';
 			}
@@ -136,6 +130,7 @@ class savedQuery{
 		}
 		return $return;
 	}
+
 	//geef een array terug met de query's die de huidige gebruiker mag bekijken.
 	static public function getQuerys(){
 		$db=MySql::instance();
