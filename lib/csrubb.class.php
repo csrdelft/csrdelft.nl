@@ -642,7 +642,7 @@ UBBVERHAAL;
 			$content.='</div>';//end image_reel
 			$content.='<div class="paging">';
 			for($i=1; $i<=count($slides); $i++){
-				$content.='<a href="#" rel="'.$i.'">&bullet;</a>'."\n";
+				$content.='<a href="#" rel="'.$i.'">&bull;</a>'."\n";
 			}
 			
 			$content.='</div>'."\n"; //end paging

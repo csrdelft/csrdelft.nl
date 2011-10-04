@@ -160,6 +160,7 @@ class ForumOnderwerp{
 	}
 
 	public function filter2008(){
+		if(!is_array($this->posts)){ return; }
 		foreach($this->posts as $key => $post){
 			if(LidCache::getLid($post['uid'])->getLichting()=='2008'){
 				$this->posts[$key]['filtered']=true;
