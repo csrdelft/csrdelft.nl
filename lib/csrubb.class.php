@@ -60,21 +60,30 @@ class CsrUBB extends eamBBParser{
 	 * ubb_lid().
 	 *
 	 * [lid=0436] => Am. Waagmeester
+	 * 
+	 * of
+	 * [lid]0436[/lid]
 	 *
 	 * Geef een link weer naar het profiel van het lid-nummer wat opgegeven is.
 	 */
 	function ubb_lid($parameters){
-		if(isset($parameters['lid']) AND Lid::isValidUid($parameters['lid'])){
-			$lid=LidCache::getLid($parameters['lid']);
+		if(isset($parameters['lid'])){ 
+			$uid=$parameters['lid'];
+		}else{
+			$uid = $this->parseArray(array('[/lid]'), array());
+		}
+		$uid=trim($uid);
+		
+		if(Lid::isValidUid($uid)){
+			$lid=LidCache::getLid($uid);
 			if($lid instanceof Lid){
-				$text=$lid->getNaamLink('user', 'link');
+				return $lid->getNaamLink('user', 'link');
 			}else{
-				$text='Dit lid bestaat niet';
+				return '[lid] Dit lid bestaat niet ('.mb_htmlentities($uid).').<br />';
 			}
 		}else{
-			$text='[lid] Geen correct uid opgegeven ('.mb_htmlentities($parameters['lid']).').<br />';
+			return '[lid] Geen correct uid opgegeven ('.mb_htmlentities($uid).').<br />';
 		}
-		return $text;
 	}
 
 	/*
@@ -147,17 +156,24 @@ class CsrUBB extends eamBBParser{
 	 * Deze methode kan resultaten van query's die in de database staan printen in een
 	 * tabelletje.
 	 *
-	 * [query=1]
+	 * [query=1] of [query]1[/query]
 	 */
 	function ubb_query($parameters){
 		if(isset($parameters['query'])){
-			require_once 'savedquery.class.php';
-			$query=new SavedQuery((int)$parameters['query']);
-			$return=$query->getHtml();
+			$queryID=$parameters['query'];
 		}else{
-			$return='[query] Geen geldig query-id opgegeven.<br />';
+			$queryID=$this->parseArray(array('[/query]'), array());
 		}
-		return $return;
+		$queryID=(int)$queryID;
+		
+		if($queryID!=0){
+			require_once 'savedquery.class.php';
+			$sqc=new SavedQueryContent(new SavedQuery((int)$parameters['query']));
+			
+			return $sqc->getHtml();
+		}else{
+			return '[query] Geen geldig query-id opgegeven.<br />';
+		}
 	}
 
 
@@ -431,22 +447,36 @@ src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
 	 * ubb_maaltijd();
 	 *
 	 * [maaltijd=next], [maaltijd=1234]
+	 * 
+	 * of
+	 * 
+	 * [maaltijd]next[/maaldijd], [maaltijd]123[/maaltijd]
 	 *
 	 * Geeft een blokje met maaltijdgegevens, aantal aanmeldingen en een
 	 * aanmeldknopje weer.
 	 */
 	public function ubb_maaltijd($parameters){
-		if(!isset($parameters['maaltijd']) OR ($parameters['maaltijd']!='next' AND !preg_match('/\d+/', $parameters['maaltijd']))){
-			return '[maaltijd] Geen maaltijdID opgegeven of ongeldig ID (id:'.mb_htmlentities($parameters['maaltijd']).')';
+		if(isset($parameters['maaltijd'])){
+			$id=$parameters['maaltijd'];
+		}else{
+			$id=$this->parseArray(array('[/maaltijd]'), array());
 		}
+		
+		$id=trim($id);
+		
+		if($id!='next' AND !preg_match('/\d+/', $id)){
+			return '[maaltijd] Geen maaltijdID opgegeven of ongeldig ID (id:'.mb_htmlentities($id).')';
+		}
+		
 		require_once 'maaltijden/maaltijdcontent.class.php';
-		return MaaltijdContent::getMaaltijdubbtag(trim($parameters['maaltijd']));
+		return MaaltijdContent::getMaaltijdubbtag($id);
 	}
 
 	public function ubb_offtopic(){
 		$content = $this->parseArray(array('[/offtopic]'), array());
 		return '<div class="offtopic">'.$content.'</div>';
 	}
+	
 	function ubb_1337(){
         $html = $this->parseArray(array('[/1337]'), array());
 
@@ -481,7 +511,7 @@ return <<<UBBVERHAAL
 		<li>[url=http://csrdelft.nl]Webstek van C.S.R.[/url] voor een verwijzing</li>
 		<li>[img]http://csrdelft.nl/plaetje.jpg[/img] voor een plaetje</li>
 		<li>[citaat][/citaat] voor een citaat. [citaat=<em>lidnummer</em>][/citaat] voor een citaat van een lid.</li>
-		<li>[lid=<em>lidnummer</em>] voor een link naar het profiel van een lid of oudlid</li>
+		<li>[lid]<em>lidnummer</em>[/lid] voor een link naar het profiel van een lid of oudlid</li>
 		<li>[video]<em>url</em>[/video], de url van een youtube, vimeo, dailymotion of godtube voor een filmpje direct in je post.</li>
 		<li>[offtopic]...[/offtopic] voor een stukje tekst van-het-onderwerp.</li>
 		<li>[ubboff]...[/ubboff] voor een stukje met ubb-tags zonder dat ze ge&iuml;nterpreteerd worden</li>
@@ -501,28 +531,27 @@ UBBVERHAAL;
 	 */
 	public function ubb_mededelingen($parameters){
 		if(isset($parameters['mededelingen'])){
-			require_once('mededelingen/mededeling.class.php');
-			require_once('mededelingen/mededelingencontent.class.php');
 			$type=$parameters['mededelingen'];
-			$mededelingenContent=new MededelingenContent(0);
-			switch($type){
-				case 'top3nietleden':
-					$return=$mededelingenContent->getTopBlock('nietleden');
-					break;
-				case 'top3leden':
-					$return=$mededelingenContent->getTopBlock('leden');
-					break;
-				case 'top3oudleden':
-					$return=$mededelingenContent->getTopBlock('oudleden');
-					break;
-				default:
-					$return='Geen geldig type ('.$type.').';
-					break;
-			}
 		}else{
-			$return='[mededelingen] Geen geldig mededelingenblok.';
+			$type=$this->parseArray(array('[/mededelingen]'), array());
 		}
-		return $return;
+		if($type==''){
+			return '[mededelingen] Geen geldig mededelingenblok.';
+		}
+		
+		require_once 'mededelingen/mededeling.class.php';
+		require_once 'mededelingen/mededelingencontent.class.php';
+
+		$mededelingenContent=new MededelingenContent(0);
+		switch($type){
+			case 'top3nietleden': //lekker handig om dit intern dan weer anders te noemen...
+				return $mededelingenContent->getTopBlock('nietleden');
+			case 'top3leden':
+				return $mededelingenContent->getTopBlock('leden');
+			case 'top3oudleden': 
+				return $mededelingenContent->getTopBlock('oudleden');
+		} 
+		return '[mededelingen] Geen geldig type ('.mb_htmlentities($type).').';
 	}
 
 

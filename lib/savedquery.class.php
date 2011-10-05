@@ -1,8 +1,8 @@
 <?php
 # C.S.R. Delft | pubcie@csrdelft.nl
 # -------------------------------------------------------------------
-# (Jieter) dit is een slecht voorbeeld van de toepassing van het MVC-paradigma. Dit is een model+view in elkaar...
-class savedQuery{
+
+class SavedQuery{
 
 	private $queryID;
 	private $beschrijving;
@@ -53,18 +53,57 @@ class savedQuery{
 		}
 	}
 	
-
+	public function getID(){ return $this->queryID; }
+	public function getBeschrijving(){ return $this->beschrijving; }
+	public function getHeaders(){ 
+		if($this->hasResult()){
+			return array_keys($this->result[0]);
+		}else{
+			return array();
+		}
+	}
+	
+	public function hasResult(){ return is_array($this->result); }
+	public function getResult(){
+		return $this->result;
+	}
+	
+	public function count(){ return $this->resultCount; }
+	
+	//Query's mogen worden weergegeven als de permissiestring toegelaten wordt door 
+	//Lid::hasPermission()' of als gebruiker P_ADMIN heeft.
+	public static function magWeergeven($permissie){
+		$loginlid=LoginLid::instance();
+		return $loginlid->hasPermission($permissie) OR $loginlid->hasPermission('P_ADMIN');
+	}
 	public function magBekijken(){
 		return $this->magWeergeven($this->permissie);
 	}
 	
-	public function getID(){ return $this->queryID; }
-	public function count(){ return $this->resultCount; }
-	//Query's mogen worden weergegeven als de permissiestring toegelaten wordt door Lid::hasPermission()'
-	//of als gebruiker P_ADMIN heeft.
-	public static function magWeergeven($permissie){
-		$loginlid=LoginLid::instance();
-		return $loginlid->hasPermission($permissie) OR $loginlid->hasPermission('P_ADMIN');
+	//geef een array terug met de query's die de huidige gebruiker mag bekijken.
+	static public function getQueries(){
+		$db=MySql::instance();
+		$selectQuery="
+			SELECT
+				ID, beschrijving, permissie, categorie
+			FROM
+				savedquery
+			ORDER BY categorie, beschrijving;";
+		$result=$db->query($selectQuery);
+		$return=array();
+		while($data=$db->next($result)){
+			if(self::magWeergeven($data['permissie'])){
+				$return[]=$data;
+			}
+		}
+		return $return;
+	}
+}
+
+class SavedQueryContent extends SimpleHTML{
+	
+	public function __construct(SavedQuery $sq){
+		$this->sq=$sq;
 	}
 	
 	public static function render_header($name){
@@ -94,26 +133,23 @@ class savedQuery{
 		
 		return mb_htmlentities($contents);
 	}
-	public function getHtml(){
-
-		if(is_array($this->result)){
-			$return=$this->beschrijving.' ('.count($this->result).' regels)<br /><table class="query_table">';
+	
+	public function render_queryResult(){
+		if($this->sq->hasResult()){
+			$sq=$this->sq;
+			$return=$sq->getBeschrijving().' ('.$sq->count().' regels)<br /><table class="query_table">';
 			
-			//header
+			//table header
 			$return.='<tr>';
-			foreach(array_keys($this->result[0]) as $kopje){
+			foreach($sq->getHeaders() as $kopje){
 				$return.='<th>'.self::render_header($kopje).'</th>';
 			}
 			$return.='</tr>';
 			
 			$rowColor=false;
-			foreach($this->result as $rij){
+			foreach($sq->getResult() as $rij){
 				//kleurtjes omwisselen
-				if($rowColor){
-					$style='style="background-color: #ccc;"';
-				}else{
-					$style='';
-				}
+				$style=$rowColor ? 'style="background-color: #ccc;"' : '';
 				$rowColor=(!$rowColor);
 
 				$return.='<tr>';
@@ -126,37 +162,20 @@ class savedQuery{
 		}else{
 			//foutmelding in geval van geen resultaat, dus of geen query die bestaat, of niet
 			//voldoende rechten.
-			$return='Query ('.$this->queryID.') bestaat niet, geeft een fout, of u heeft niet voldoende rechten.';
+			$return='Query ('.$this->sq->getID().') bestaat niet, geeft een fout, of u heeft niet voldoende rechten.';
 		}
 		return $return;
 	}
 
-	//geef een array terug met de query's die de huidige gebruiker mag bekijken.
-	static public function getQuerys(){
-		$db=MySql::instance();
-		$selectQuery="
-			SELECT
-				ID, beschrijving, permissie, categorie
-			FROM
-				savedquery
-			ORDER BY categorie, beschrijving;";
-		$result=$db->query($selectQuery);
-		$return=array();
-		while($data=$db->next($result)){
-			if(savedQuery::magWeergeven($data['permissie'])){
-				$return[]=$data;
-			}
-		}
-		return $return;
-	}
-	static public function getQueryselector($id=0){
-
+	public function getQueryselector(){
+		
+		$id=$this->sq->getID();
 		$return='<a class="knop" href="#" onclick="toggleDiv(\'sqSelector\')">Laat queryselector zien.</a>';
 		$return.='<div id="sqSelector" ';
 		if($id!=0){ $return.='class="verborgen"'; }
 		$return.='>';
 		$current='';
-		foreach(self::getQuerys() as $query){
+		foreach(SavedQuery::getQueries() as $query){
 			if($current!=$query['categorie']){
 				if($current!=''){ $return.='</ul></div>'; }
 				$return.='<div class="sqCategorie" style="float: left; width: 450px; margin-right: 20px; margin-bottom: 10px;"><strong>'.$query['categorie'].'</strong><ul>';
@@ -171,5 +190,17 @@ class savedQuery{
 		$return.='</ul></div></div><div class="clear"></div>';
 		return $return;
 	}
+	
+	
+	public function view(){
+		echo '<h1>Opgeslagen query\'s</h1>';
+		echo $this->getQueryselector();
+		
+		//render query if selected and allowed
+		if($this->sq!=null && $this->sq->magBekijken()){
+			echo $this->render_queryResult();
+		}
+	}
+
 }
 ?>

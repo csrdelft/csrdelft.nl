@@ -15,17 +15,13 @@ $id=0;
 if(isset($_GET['id']) AND (int)$_GET['id']==$_GET['id']){
 	$id=(int)$_GET['id'];
 	$savedquery=new savedQuery($id);
+}else{
+	$savedquery=null;
 }
 
-$html='<h1>Opgeslagen Query\'s</h1>';
 
-$html.=SavedQuery::getQueryselector($id);
 
-if(isset($savedquery) AND $savedquery->magBekijken()){
-	$html.=$savedquery->getHtml();
-}
-
-$pagina=new csrdelft(new stringincluder($html, 'Opgeslagen query\'s'));
+$pagina=new csrdelft(new SavedQueryContent($savedquery));
 $pagina->setZijkolom(false);
 
 $pagina->view();
