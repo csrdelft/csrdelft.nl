@@ -701,11 +701,15 @@ class Groep{
 			#groepsleden verzamelen. De ft, ht en 1 generatie ot-groepsleden worden meegenomen.
 			$groepsleden = array();
 			$db=MySql::instance();
+			//htleden is een groep om voor de wiki met alle h.t. leden van C.S.R..
+			//Bij deze groep wordt niet gekeken naar de groepleden op de webstek.
 			if($this->getSnaam()=='htleden'){
 				$query="
 					SELECT uid 
 					FROM lid
-					WHERE status IN ('S_LID','S_GASTLID','S_NOVIET');";
+					WHERE 
+						status IN ('S_LID','S_GASTLID','S_NOVIET')
+						OR uid IN ('x271', 'x030');";
 			}else{
 				$query="
 					SELECT DISTINCT groeplid.uid
@@ -738,7 +742,7 @@ class Groep{
 					$entry['member'][] = 'uid='.$lid['uid'].',ou=leden,dc=csrdelft,dc=nl';
 				}
 			}
-			
+
 			# bestaat dit groepid al in ldap? dan wijzigen, anders aanmaken
 			if($ldap->isGroep($entry['cn'])){
 				$ldap->modifyGroep($entry['cn'], $entry);
