@@ -701,23 +701,30 @@ class Groep{
 			#groepsleden verzamelen. De ft, ht en 1 generatie ot-groepsleden worden meegenomen.
 			$groepsleden = array();
 			$db=MySql::instance();
-			$query="
-				SELECT DISTINCT groeplid.uid
-				FROM groep
-				RIGHT JOIN groeplid ON (groeplid.groepid=groep.id)
-				WHERE snaam='".$db->escape($this->getSnaam())."'
-				AND (
-					begin>=(
-						SELECT begin
-						FROM groep
-						WHERE status='ot'
-							AND snaam='".$db->escape($this->getSnaam())."'
-						ORDER BY begin DESC
-						LIMIT 1
-					)
-					OR status='ft'
-					OR status='ht'
-				);";
+			if($this->getSnaam()=='htleden'){
+				$query="
+					SELECT uid 
+					FROM lid
+					WHERE status IN ('S_LID','S_GASTLID','S_NOVIET');";
+			}else{
+				$query="
+					SELECT DISTINCT groeplid.uid
+					FROM groep
+					RIGHT JOIN groeplid ON (groeplid.groepid=groep.id)
+					WHERE snaam='".$db->escape($this->getSnaam())."'
+					AND (
+						begin>=(
+							SELECT begin
+							FROM groep
+							WHERE status='ot'
+								AND snaam='".$db->escape($this->getSnaam())."'
+							ORDER BY begin DESC
+							LIMIT 1
+						)
+						OR status='ft'
+						OR status='ht'
+					);";
+			}
 			$result=$db->query($query);
 			if ($result !== false and $db->numRows($result) > 0){
 				$groepsleden=$db->result2array($result);
@@ -731,7 +738,7 @@ class Groep{
 					$entry['member'][] = 'uid='.$lid['uid'].',ou=leden,dc=csrdelft,dc=nl';
 				}
 			}
-
+			
 			# bestaat dit groepid al in ldap? dan wijzigen, anders aanmaken
 			if($ldap->isGroep($entry['cn'])){
 				$ldap->modifyGroep($entry['cn'], $entry);
