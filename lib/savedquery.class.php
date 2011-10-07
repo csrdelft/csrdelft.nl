@@ -102,7 +102,7 @@ class SavedQuery{
 
 class SavedQueryContent extends SimpleHTML{
 	
-	public function __construct(SavedQuery $sq){
+	public function __construct(SavedQuery $sq=null){
 		$this->sq=$sq;
 	}
 	
@@ -168,8 +168,9 @@ class SavedQueryContent extends SimpleHTML{
 	}
 
 	public function getQueryselector(){
+		//als er een query ingeladen is, die highlighten
+		$id=$this->sq instanceof SavedQuery ? $this->sq->getID() : 0;
 		
-		$id=$this->sq->getID();
 		$return='<a class="knop" href="#" onclick="toggleDiv(\'sqSelector\')">Laat queryselector zien.</a>';
 		$return.='<div id="sqSelector" ';
 		if($id!=0){ $return.='class="verborgen"'; }
