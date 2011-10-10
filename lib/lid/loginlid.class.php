@@ -321,7 +321,7 @@ class LoginLid{
 					return true;
 				}
 			}elseif(substr($permissie, 0, 10)=='Ouderjaars'){
-				if(Lichting::getJongsteLichting()>$this->lid->getProperty('lidjaar')){
+				if(Lichting::getJongsteLichting()>$this->lid->getProperty('lidjaar') AND $this->hasPermission('P_LOGGED_IN', $token_authorizable)){
 					return true;
 				}
 			}

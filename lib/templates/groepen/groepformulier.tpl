@@ -7,7 +7,7 @@
 			<br />
 			<label for="groepSnaam"><strong>Korte naam:</strong></label>
 			<div id="groepSnaam" class="opmerking">
-				Voor gebruik in urls &eacute;n ter sortering. Alleen letters en cijfers, geen spaties. Voor elkaar opvolgende groepen dezelfde naam gebruiken.<br />
+				Voor gebruik in urls &eacute;n ter sortering. Alleen letters en cijfers, geen spaties. Voor elkaar opvolgende {$groep->getType()->getNaam()} dezelfde naam gebruiken.<br />
 			</div>
 			<input type="text" maxlength="20" name="snaam" value="{$groep->getSnaam()|escape:'html'}" />
 		{else}
@@ -58,23 +58,29 @@
 			<label for="groepLimiet"><strong>Limiet:</strong></label>
 			<input type="input" name="limiet" id="groepLimiet" value="{$groep->getLimiet()}" /> <em>Vul een 0 voor geen limiet.</em>
 		</div>
-		<label for="toonFuncties"><strong>Toon opmerkingen?</strong></label>
-		<div id="functieOpmVerbergen" class="opmerking verborgen">Opmerkingen zijn verborgen voor leden, ze kunnen wel opgegeven worden.</div>
-			<div id="functieOpmNiet" class="opmerking verborgen">Er kunnen nu geen opmerkingen worden opgegeven.</div>
-			<div id="functieOpmTonenzonderinvoer" class="opmerking verborgen">Opmerkingen altijd zichtbaar, maar ze kunnen niet opgegeven worden.</div>
-		<select name="toonFuncties" id="toonFuncties" onchange="updateGroepform();">
-			<option value="tonen" {if $groep->getToonFuncties()=="tonen" AND !($groep->getId()==0 AND $groep->getType()->getId()==11)}selected="selected"{/if}>Altijd</option>
-			<option value="tonenzonderinvoer" {if $groep->getToonFuncties()=="tonenzonderinvoer"}selected="selected"{/if}>Altijd. Maar geen invoer.</option>
-			<option value="verbergen" {if $groep->getToonFuncties()=="verbergen"}selected="selected"{/if}>Alleen voor groepadmins</option>
-			<option value="niet" {if $groep->getToonFuncties()=="niet" OR ($groep->getId()==0 AND $groep->getType()->getId()==11)}selected="selected"{/if}>Nooit</option>
-		</select><br />
-		<label for="functiefilter"><strong>Opmerkingfilter:</strong></label>
-		<input type="text" name="functiefilter" value="{$groep->getFunctiefilter()|escape:'html'}" /><div class="opmerking">Scheid met '|' mogelijke opties (1e is de standaard) en met '&amp;&amp;' verschillende keuzevelden. Veld leeglaten voor vrije invoer.</div>
-		
-		<hr class="clear" />
-		<label for="toonPasfotos"><strong>Toon pasfoto's?</strong></label>
-		<input type="checkbox" name="toonPasfotos" id="toonPasfotos" {if $groep->getToonPasfotos()}checked="checked"{/if} /> <em>(Pasfoto komt in plaats van naam)</em>
-		<br />
+		{* bij Sjaarsactie (gtype:11) standaard geen opmerkingfilter en wel altijd pasfotos zichtbaar *}
+		{if $groep->getType()->getId()==11 AND ($groep->getId()==0 OR !$groep->isAdmin())}
+			<input type="hidden" id="toonFuncties" name="toonFuncties" value="niet" />
+			<input type="hidden" id="toonPasfotos" name="toonPasfotos" value="1" />
+		{else}
+			<label for="toonFuncties"><strong>Toon opmerkingen?</strong></label>
+			<div id="functieOpmVerbergen" class="opmerking verborgen">Opmerkingen zijn verborgen voor leden, ze kunnen wel opgegeven worden.</div>
+				<div id="functieOpmNiet" class="opmerking verborgen">Er kunnen nu geen opmerkingen worden opgegeven.</div>
+				<div id="functieOpmTonenzonderinvoer" class="opmerking verborgen">Opmerkingen altijd zichtbaar, maar ze kunnen niet opgegeven worden.</div>
+			<select name="toonFuncties" id="toonFuncties" onchange="updateGroepform();">
+				<option value="tonen" {if $groep->getToonFuncties()=="tonen" AND !($groep->getId()==0 AND $groep->getType()->getId()==11)}selected="selected"{/if}>Altijd</option>
+				<option value="tonenzonderinvoer" {if $groep->getToonFuncties()=="tonenzonderinvoer"}selected="selected"{/if}>Altijd. Maar geen invoer.</option>
+				<option value="verbergen" {if $groep->getToonFuncties()=="verbergen"}selected="selected"{/if}>Alleen voor groepadmins</option>
+				<option value="niet" {if $groep->getToonFuncties()=="niet" OR ($groep->getId()==0 AND $groep->getType()->getId()==11)}selected="selected"{/if}>Nooit</option>
+			</select><br />
+			<label for="functiefilter"><strong>Opmerkingfilter:</strong></label>
+			<input type="text" name="functiefilter" value="{$groep->getFunctiefilter()|escape:'html'}" /><div class="opmerking">Scheid met '|' mogelijke opties (1e is de standaard) en met '&amp;&amp;' verschillende keuzevelden. Veld leeglaten voor vrije invoer.</div>
+
+			<hr class="clear" />
+			<label for="toonPasfotos"><strong>Toon pasfoto's?</strong></label>
+			<input type="checkbox" name="toonPasfotos" id="toonPasfotos" {if $groep->getToonPasfotos()}checked="checked"{/if} /> <em>(Pasfoto komt in plaats van naam)</em>
+			<br />
+		{/if}
 		{* Sjaarsactie (gtype:11) heeft geen lidmods *}
 		{if $groep->getType()->getId()!=11 OR $groep->isAdmin()}
 			<label for="lidIsMod"><strong>Groepslid is mod?</strong></label>
@@ -85,8 +91,13 @@
 		<textarea id="sbeschrijving" name="sbeschrijving" style="width: 70%; height: 100px;">{$groep->getSbeschrijving()|escape:'html'}</textarea>
 		<br />
 	{/if}
-	<label for="sbeschrijving"><strong>Lange beschrijving:</strong><br /><br />UBB staat aan.</label>
-	<textarea id="sbeschrijving" name="beschrijving" style="width: 70%; height: 200px;">{$groep->getBeschrijving()|escape:'html'}</textarea><br />
+	{* voor sjaarsactie geen lange beschrijving *}
+	{if $groep->getType()->getId()==11 AND ($groep->getId()==0 OR !$groep->isAdmin())}
+		<input type="hidden" id="beschrijving" name="beschrijving" value="" />
+	{else}
+		<label for="beschrijving"><strong>Lange beschrijving:</strong><br /><br />UBB staat aan.</label>
+		<textarea id="beschrijving" name="beschrijving" style="width: 70%; height: 200px;">{$groep->getBeschrijving()|escape:'html'}</textarea><br />
+	{/if}
 	<hr />
 	<label for="submit"></label><input type="submit" id="submit" value="Opslaan" /> <a href="/actueel/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/" class="knop">terug</a>
 </div>

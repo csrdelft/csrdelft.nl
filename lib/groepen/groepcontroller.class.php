@@ -176,6 +176,9 @@ class Groepcontroller extends Controller{
 	 * toegangscontrole voor verschillende velden geregeld.
 	 */
 	public function action_bewerken(){
+		if(!LoginLid::instance()->hasPermission('P_LOGGED_IN')){
+			$this->content->invokeRefresh('Niet voldoende rechten voor deze actie', $this->getUrl('default'));
+		}
 		$this->content->setAction('edit');
 
 		/* Als er een derde argument meegegeven wordt is dat het id van de groep waar 
