@@ -145,6 +145,23 @@ class Groepen{
 	}
 	public function getId(){			return $this->type['id']; }
 	public function getNaam(){ 			return $this->type['naam']; }
+	public function getNaamEnkelvoud($lcfirst=false){
+		//genereer enkelvoud
+		if($this->type['naam']=='Besturen'){
+			$naam = 'Bestuur';
+		}elseif(substr($this->type['naam'],-2)=='en'){
+			$naam = substr($this->type['naam'],0,-2);
+		}elseif(substr($this->type['naam'],-1)=='s' AND $this->type['naam']!='Dies'){
+			$naam = substr($this->type['naam'],0,-1);
+		}else{
+			$naam = $this->type['naam'].'-ketzer';
+		}
+		//Eerste letter geen hoofdletter
+		if($lcfirst){
+			$naam = lcfirst($naam);
+		}
+		return $naam;
+	}
 	public function getBeschrijving(){	return $this->type['beschrijving']; }
 	public function getToonHistorie(){	return $this->type['toonHistorie']==1; }
 	public function getSyncWithLDAP(){	return $this->type['syncWithLDAP']==1; }

@@ -19,7 +19,7 @@
 {$groepen->getBeschrijving()|ubb}
 <div class="clear">
 	{if $groepen->isAdmin() OR $groepen->isGroepAanmaker()}
-		<a href="/actueel/groepen/{$groepen->getNaam()}/0/bewerken" class="knop">Nieuwe groep</a>
+		<a href="/actueel/groepen/{$groepen->getNaam()}/0/bewerken" class="knop">Nieuwe {$groepen->getNaamEnkelvoud()}</a>
 	{/if}	
 	{if $groepen->isAdmin()}
 		<a href="/actueel/groepen/{$groepen->getNaam()}/?maakOt=true" class="knop" 
