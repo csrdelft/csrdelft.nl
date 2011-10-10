@@ -1,5 +1,5 @@
 <form action="/actueel/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/bewerken" method="post">
-<div id="groepFormulier" class="clear">
+<div id="groepFormulier" class="groepFormulier clear">
 	{if $groep->isAdmin() OR $groep->isEigenaar()}
 		{* alleen Korte naam invullen bij een nieuwe groep als de korte naam niet bekend is. Admins mogen wel aanpassen.*}
 		{if $groep->getId()==0 AND ( !isset($oudegroep) OR $groep->isAdmin())}
@@ -87,16 +87,24 @@
 			<input type="checkbox" name="lidIsMod" id="lidIsMod" {if $groep->getlidIsMod()}checked="checked"{/if} /> <em>(Elk lid kan groepsleden toevoegen en het grote verhaal aanpassen.)</em>
 			<br />
 		{/if}
+		<div id="sbewerkPreviewContainer" class="previewContainer"><div id="sbewerkPreview" class="preview"></div></div>
 		<label for="sbeschrijving"><strong>Korte beschrijving:</strong><br /><br />UBB staat aan.</label>
-		<textarea id="sbeschrijving" name="sbeschrijving" style="width: 70%; height: 100px;">{$groep->getSbeschrijving()|escape:'html'}</textarea>
+		<textarea id="sbeschrijving" name="sbeschrijving" style="width: 70%;" rows="7">{$groep->getSbeschrijving()|escape:'html'}</textarea>
 		<br />
+		<label for="submit"></label><input type="button" id="voorbeeld" value="voorbeeld" onclick="return previewPost('sbeschrijving', 'sbewerkPreview')" />
+		<a style="float: right; margin-right: 74px;" class="handje knop" onclick="toggleDiv('ubbhulpverhaal')" title="Opmaakhulp weergeven">UBB</a>
+		<a style="float: right;" class="handje knop" onclick="vergrootTextarea('sbeschrijving', 5)" title="Vergroot het invoerveld"><strong>&uarr;&darr;</strong></a><br />
 	{/if}
 	{* voor sjaarsactie geen lange beschrijving *}
 	{if $groep->getType()->getId()==11 AND ($groep->getId()==0 OR !$groep->isAdmin())}
 		<input type="hidden" id="beschrijving" name="beschrijving" value="" />
 	{else}
+		<div id="bewerkPreviewContainer" class="previewContainer"><div id="bewerkPreview" class="preview"></div></div>
 		<label for="beschrijving"><strong>Lange beschrijving:</strong><br /><br />UBB staat aan.</label>
-		<textarea id="beschrijving" name="beschrijving" style="width: 70%; height: 200px;">{$groep->getBeschrijving()|escape:'html'}</textarea><br />
+		<textarea id="beschrijving" name="beschrijving" style="width: 70%;" rows="15">{$groep->getBeschrijving()|escape:'html'}</textarea><br />
+		<label for="submit"></label><input type="button" id="voorbeeld" value="voorbeeld" onclick="return previewPost('beschrijving', 'bewerkPreview')" /> 
+		<a style="float: right; margin-right: 74px;" class="handje knop" onclick="toggleDiv('ubbhulpverhaal')" title="Opmaakhulp weergeven">UBB</a>
+		<a style="float: right;" class="handje knop" onclick="vergrootTextarea('typeBeschrijving', 10)" title="Vergroot het invoerveld"><strong>&uarr;&darr;</strong></a><br />
 	{/if}
 	<hr />
 	<label for="submit"></label><input type="submit" id="submit" value="Opslaan" /> <a href="/actueel/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/" class="knop">terug</a>

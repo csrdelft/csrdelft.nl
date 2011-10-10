@@ -163,6 +163,7 @@ class Groepen{
 		return $naam;
 	}
 	public function getBeschrijving(){	return $this->type['beschrijving']; }
+	public function setBeschrijving($beschrijving){ $this->type['beschrijving']=trim($beschrijving); }
 	public function getToonHistorie(){	return $this->type['toonHistorie']==1; }
 	public function getSyncWithLDAP(){	return $this->type['syncWithLDAP']==1; }
 

@@ -16,7 +16,22 @@
 		</ul>
 	</div>
 {/if}
-{$groepen->getBeschrijving()|ubb}
+{if $action=='edit'}
+	<h1>{$groepen->getNaam()}</h1>
+	<form action="/actueel/groepen/{$groepen->getNaam()}/?bewerken=true" method="post">
+		<div id="groepenFormulier" class="groepFormulier">
+			<div id="bewerkPreviewContainer" class="previewContainer"><div id="bewerkPreview" class="preview"></div></div>
+			<label for="beschrijving"><strong>Beschrijving:</strong><br /><br />UBB staat aan.</label>
+			<textarea id="typeBeschrijving" name="beschrijving" style="width:444px;" rows="15">{$groepen->getBeschrijving()|escape:'html'}</textarea><br />
+			<label for="submit"></label><input type="submit" id="submit" value="Opslaan" /> <input type="button" value="voorbeeld" onclick="return previewPost('typeBeschrijving', 'bewerkPreview')" /> <a href="/actueel/groepen/{$groepen->getNaam()}/" class="knop">terug</a>
+			<a style="float: right;" class="handje knop" onclick="toggleDiv('ubbhulpverhaal')" title="Opmaakhulp weergeven">UBB</a>
+			<a style="float: right;" class="handje knop" onclick="vergrootTextarea('typeBeschrijving', 10)" title="Vergroot het invoerveld"><strong>&uarr;&darr;</strong></a>
+			<hr />
+		</div>
+	</form>
+{else}
+	{$groepen->getBeschrijving()|ubb}
+{/if}
 <div class="clear">
 	{if $groepen->isAdmin() OR $groepen->isGroepAanmaker()}
 		<a href="/actueel/groepen/{$groepen->getNaam()}/0/bewerken" class="knop">Nieuwe {$groepen->getNaamEnkelvoud()}</a>
@@ -27,7 +42,11 @@
 			Maak h.t. groepen o.t.
 		</a>
 	{/if}
-	
+	{if $loginlid->hasPermission('P_ADMIN') AND $action!='edit'}
+		<a class="knop" href="/actueel/groepen/{$groepen->getNaam()}/?bewerken=true">
+			<img src="{$csr_pics}knopjes/bewerken.png" title="Bewerk beschrijving" />
+		</a>
+	{/if}
 </div>
 
 {foreach from=$groepen->getGroepen() item=groep}
@@ -45,6 +64,6 @@
 {/foreach}
 <hr class="clear" />
 {if $groepen->isAdmin() OR $groepen->isGroepAanmaker()}
-	<a href="/actueel/groepen/{$groepen->getNaam()}/0/bewerken" class="knop">Nieuwe groep</a>
+	<a href="/actueel/groepen/{$groepen->getNaam()}/0/bewerken" class="knop">Nieuwe {$groepen->getNaamEnkelvoud()}</a>
 {/if}
 

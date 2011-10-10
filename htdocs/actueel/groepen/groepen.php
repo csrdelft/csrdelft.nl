@@ -33,7 +33,21 @@ if(isset($_GET['maakOt']) AND $groepen->isAdmin()){
 		GroepenContent::invokeRefresh('De h.t. groepen zijn niet allemaal met succes o.t. gemaakt.', '/actueel/groepen/'.$groepen->getNaam());
 	}
 }
-
+if(isset($_GET['bewerken']) AND $groepen->isAdmin()){
+	$content->setAction('edit');
+	if($_SERVER['REQUEST_METHOD']=='POST'){
+		if(isset($_POST['beschrijving'])){
+			$groepen->setBeschrijving($_POST['beschrijving']);
+			if($groepen->save()){
+				GroepenContent::invokeRefresh('Beschrijving van groepstype met succes opgeslagen.', '/actueel/groepen/'.$groepen->getNaam());
+			}else{
+				$content->setMelding('Opslaan mislukt');
+			}
+		}else{
+			$content->setMelding('Opslaan mislukt. Geen inhoud gevonden. ');
+		}
+	}
+}
 
 
 $pagina=new csrdelft($content);
