@@ -58,7 +58,7 @@
 			{include file='groepen/groepleden.tpl'}
 		</div>
 		<h2><a href="/actueel/groepen/{$groepen->getNaam()}/{$groep->getId()}/">{$groep->getNaam()}</a></h2>
-		{if $groep->getType()->getId()==11 }Ouderejaars: {$groep->getEigenaar()|perm2string}<br />{/if} {* alleen bij Sjaarsacties *}
+		{if $groep->getType()->getId()==11 }Ouderejaars: {$groep->getEigenaar()|perm2string}<br /><br />{/if} {* alleen bij Sjaarsacties *}
 		{$groep->getSbeschrijving()|ubb}
 	</div>
 {/foreach}
