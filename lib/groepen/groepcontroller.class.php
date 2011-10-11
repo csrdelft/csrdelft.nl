@@ -307,6 +307,7 @@ class Groepcontroller extends Controller{
 	 * Een groep permanent verwijderen.
 	 */
 	public function action_verwijderen(){
+		$groeptypenaam = $this->groep->getType()->getNaam();
 		if($this->groep->isAdmin()){
 			if($this->groep->delete()){
 				$melding='Groep met succes verwijderd.';
@@ -321,7 +322,7 @@ class Groepcontroller extends Controller{
 		}else{
 			$melding='Niet voldoende rechten voor deze actie';
 		}
-		$this->content->invokeRefresh($melding, CSR_ROOT.'actueel/groepen/');
+		$this->content->invokeRefresh($melding, CSR_ROOT.'actueel/groepen/'.$groeptypenaam.'/');
 	}
 
 	/*
