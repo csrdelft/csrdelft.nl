@@ -61,6 +61,7 @@
 		{* bij Sjaarsactie (gtype:11) standaard geen opmerkingfilter en wel altijd pasfotos zichtbaar *}
 		{if $groep->getType()->getId()==11 AND ($groep->getId()==0 OR !$groep->isAdmin())}
 			<input type="hidden" id="toonFuncties" name="toonFuncties" value="niet" />
+			<input type="hidden" name="functiefilter" value="" />
 			<input type="hidden" id="toonPasfotos" name="toonPasfotos" value="1" />
 		{else}
 			<label for="toonFuncties"><strong>Toon opmerkingen?</strong></label>
