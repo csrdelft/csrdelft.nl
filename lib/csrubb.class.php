@@ -382,12 +382,12 @@ src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
 	 * ubb_fotoalbum
 	 */
 	protected function ubb_fotoalbum($parameters){
-		$album=$this->parseArray(array('[/fotoalbum]'), array());
+		$albuminvoer=$this->parseArray(array('[/fotoalbum]'), array());
 
 		require_once 'fotoalbumcontent.class.php';
 
 		//we kunnen urls uit de browser direct in de tag kopieren
-		$pad=urldecode($album);
+		$pad=urldecode($albuminvoer);
 
 		$album=null;
 		if($pad!=''){
@@ -396,8 +396,8 @@ src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
 				$pad=substr($pad, 10);
 			}
 			//de albumnaam bedenken. Op een of andere wijze doet het album dat niet zelf :(
-			$albumnaam=urldecode(end(array_filter(explode('/', $content))));
-
+			$albumnaam=urldecode(end(array_filter(explode('/', $albuminvoer))));
+			
 			$album=new Fotoalbum($pad, $albumnaam);
 
 			//album bestaat niet, we geven een foutmelding

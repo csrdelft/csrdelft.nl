@@ -55,8 +55,8 @@ class ForumContent extends SimpleHTML {
 		}else{
 			foreach($aPosts as $aPost){
 				$tekst=$aPost['titel'];
-				if(strlen($tekst)>20){
-					$tekst=trim(substr($tekst, 0, 18)).'…';
+				if(strlen($tekst)>40){
+					$tekst=trim(substr($tekst, 0, 38)).'…';
 				}
 				$tekst=mb_htmlentities($tekst);
 				$tekst=str_replace(' ', '&nbsp;', $tekst);

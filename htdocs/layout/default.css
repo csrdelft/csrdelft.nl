@@ -2,7 +2,8 @@
 body, html, p, a, img, h1, h2, h3, h4, ul, li, form, fieldset, input {
 	margin: 0;
 	padding: 0;
-}div{border: 0px solid red;}
+}
+div{border: 0px solid red;}
 
 body {
 	font-family : Verdana, Geneva, Arial, Helvetica, sans-serif;
@@ -305,7 +306,7 @@ ul.nobullets li{ list-style-type: none; }
 
 /**** BLOCK *******************************************************************/
 #mainleft .block {
-	margin: 10px 15px 0px 10px;
+	margin: 10px 15px 0 10px;
 }
 #mainleft .block h1 {
 	margin: 0;
@@ -321,14 +322,15 @@ ul.nobullets li{ list-style-type: none; }
 	color:  #162673;
 }
 #mainleft .block .item {
-	padding: 0px 5px;
+	padding: 0px 5px; 
 	font-size: 10px;
 	background-color: #f5f5f5;
 	border: 1px solid #b8b8b8;
 	border-top: 0;
 	text-align: left;
-	text-overflow: ellipsis;
 	overflow:hidden;
+	text-overflow: ellipsis;
+	-o-text-overflow: ellipsis; 
 	white-space:nowrap;
 }
 #mainleft a {
