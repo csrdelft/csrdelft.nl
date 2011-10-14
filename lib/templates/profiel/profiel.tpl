@@ -176,7 +176,7 @@
 			<div style="clear: left;"></div>
 		</div>
 	</div>
-	{if ($profiel->isLid() OR ($loginlid->hasPermission('P_LEDEN_MOD') AND $profhtml.soccieSaldo < 0)) AND ($saldografiek!='' OR $profhtml.bankrekening!='')}
+	{if ($profiel->isLid() OR ($loginlid->hasPermission('P_LEDEN_MOD') AND ($profhtml.soccieSaldo < 0 OR $profhtml.maalcieSaldo < 0))) AND ($saldografiek!='' OR $profhtml.bankrekening!='')}
 		<div class="profielregel">
 			<div class="gegevens">
 				{if $profhtml.bankrekening!=''}
