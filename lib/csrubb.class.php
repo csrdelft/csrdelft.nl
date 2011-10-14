@@ -170,7 +170,7 @@ class CsrUBB extends eamBBParser{
 			require_once 'savedquery.class.php';
 			$sqc=new SavedQueryContent(new SavedQuery((int)$parameters['query']));
 			
-			return $sqc->getHtml();
+			return $sqc->render_queryResult();
 		}else{
 			return '[query] Geen geldig query-id opgegeven.<br />';
 		}
