@@ -809,7 +809,10 @@ class eamBBParser{
 		if(!url_like(urldecode($content))){
 			$html = "[img: Ongeldige URL, tip: gebruik tinyurl.com]";
 		}else{
-			$content=htmlspecialchars($content);
+			//als de html toegestaan is hebben we genoeg vertrouwen om sommige karakters niet te encoderen
+			if(!$this->allow_html){
+				$content=htmlspecialchars($content);
+			}
 			$html = '<img class="ubb_image" src="'.$content.'" alt="'.$content.'" style="'.$style.'" />';
 		}
 		return $html;
