@@ -155,6 +155,19 @@ class LidZoeker{
 			$query='1 ';
 		}elseif(preg_match('/^moot:[1-4]$/', $zoekterm)){ //moten
 			$query="moot=".(int)substr($zoekterm, 5).' ';
+		}elseif(preg_match('/^groep:([0-9]+|[a-z]+)$/i', $zoekterm)){ //leden van een groep
+			$uids=array();
+			try{
+				require_once 'groepen/groep.class.php';
+				$groep=new Groep(substr($zoekterm, 6));
+				$uids=array_keys($groep->getLeden());
+			}catch(Exception $e){
+				//care.
+			}
+			
+			$query="uid IN('".implode("','", $uids)."') ";
+		}elseif(preg_match('/^geslacht:(m|v)$/i', $zoekterm)){ //geslacht
+			$query="geslacht='".substr($zoekterm, -1)."' ";
 		}elseif(preg_match('/^verticale:\w*$/', $zoekterm)){ //verticale, id, letter
 			$verticale=substr($zoekterm, 10);
 			if(in_array($verticale, Verticale::getNamen())){
@@ -174,8 +187,9 @@ class LidZoeker{
 			}
 		}elseif(preg_match('/^[a-z0-9][0-9]{3}$/', $zoekterm)){ //uid's is ook niet zo moeilijk.
 			$query="uid='".$zoekterm."' ";
-		}elseif(preg_match('/^([a-z0-9][0-9]{3} ?,?)*([a-z0-9][0-9]{3})$/', $zoekterm)){ //meerdere uid's gescheiden door komma's.
-			$uids=explode(',', $zoekterm);
+		}elseif(preg_match('/^([a-z0-9][0-9]{3} ?,? ?)*([a-z0-9][0-9]{3})$/', $zoekterm)){ //meerdere uid's gescheiden door komma's.
+			//explode en trim() elke waarde van de array.
+			$uids=array_map('trim', explode(',', $zoekterm));
 			$query="uid IN('".implode("','", $uids)."') ";
 		}elseif(substr($zoekterm, 0, 2)=='P_' AND LoginLid::instance()->hasPermission('P_ADMIN')){ //permissies
 			$query="permissies='".$zoekterm."' ";
