@@ -30,9 +30,9 @@ class BibliotheekController extends Controller{
 		//en of de ingelogde persoon dat mag.
 
 		if($this->hasParam(0) AND $this->getParam(0)!=''){
-			$this->action=$this->getParam(0);
+			$this->action = $this->getParam(0);
 		}else{
-			$this->action='default';
+			$this->action = 'default';
 		}
 		/* 
 		 * niet alle acties mag iedereen doen, hier whitelisten voor de gebruikers
@@ -40,21 +40,21 @@ class BibliotheekController extends Controller{
 		 * netjes gewoon de catalogus getoond wordt. 
 		 */
 		//iedereen(ook uitgelogd) mag catalogus bekijken.
-		$allow=array('default','catalogusdata');
+		$allow=array('default', 'catalogusdata');
 		//met biebrechten mag je meer
 		if(LoginLid::instance()->hasPermission('P_BIEB_READ')){
 			$allow=array_merge($allow, array('default', 'boek', 'nieuwboek', 'bewerkboek',
 					'addbeschrijving', 'verwijderbeschrijving', 'bewerkbeschrijving',
 					'addexemplaar', 'verwijderexemplaar',
-					'exemplaarlenen','exemplaarteruggegeven','exemplaarterugontvangen','exemplaarvermist','exemplaargevonden',
+					'exemplaarlenen', 'exemplaarteruggegeven', 'exemplaarterugontvangen', 'exemplaarvermist', 'exemplaargevonden',
 					'boekstatus', 'boekstatusdata'));
 		}
 		// beheerders mogen boeken weggooien
-		if(LoginLid::instance()->hasPermission('P_BIEB_MOD','groep:BASFCie')){
-			$allow=array_merge($allow, array('verwijderboek'));
+		if(LoginLid::instance()->hasPermission('P_BIEB_MOD,groep:BASFCie')){
+			$allow[] = 'verwijderboek';
 		}
 		if(!in_array($this->action, $allow)){
-			$this->action='default';
+			$this->action = 'default';
 		}
 
 		$this->performAction();
@@ -90,18 +90,21 @@ class BibliotheekController extends Controller{
 	/*
 	 * Inhoud voor tabel op de cataloguspagina ophalen
 	 */
-	protected function action_catalogusdata($exemplaarinfo=false){
-		echo Catalogus::getJSONcatalogusdata($exemplaarinfo);
-		exit;
+	protected function action_catalogusdata(){
+		$this->catalogusdata($exemplaarinfo=false);
 	}
 
 	/*
 	 * Inhoud voor tabel op de boekstatuspagina ophalen
 	 */
 	 protected function action_boekstatusdata(){
-		 $this->action_catalogusdata($exemplaarinfo=true);
+		$this->catalogusdata($exemplaarinfo=true);
 	 }
 
+	protected function catalogusdata($exemplaarinfo){
+		echo Catalogus::getJSONcatalogusdata($exemplaarinfo);
+		exit;
+	}
 
 	/*
 	 * Laad een boek object

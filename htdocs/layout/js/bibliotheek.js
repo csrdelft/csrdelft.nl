@@ -21,7 +21,7 @@ jQuery(document).ready(function($) {
 		"bServerSide": true,
 		"sAjaxSource": "/communicatie/bibliotheek/catalogusdata",
 		"fnServerParams": function ( aoData ) {
-			aoData.push( { "name": "sFilter", "value": $('input:radio[name=filter]:checked').val() } );
+			aoData.push( { "name": "sFilter", "value": $('input:radio[name=filter-catalogus]:checked').val() } );
 		},
 		"iDisplayLength": 30,
 		"bInfo": false,
@@ -37,7 +37,7 @@ jQuery(document).ready(function($) {
 	});
 
 	//update de tabel als de radiobuttons worden gebruikt
-	$('input:radio[name=filter]').click( function() { oTableCatalogus.fnDraw(); } );
+	$('input:radio[name=filter-catalogus]').click( function() { oTableCatalogus.fnDraw(); } );
 
 
 	//hippe sorteerbare tabel fixen.
@@ -56,7 +56,7 @@ jQuery(document).ready(function($) {
 		"bServerSide": true,
 		"sAjaxSource": "/communicatie/bibliotheek/boekstatusdata",
 		"fnServerParams": function ( aoData ) {
-			aoData.push( { "name": "sFilter", "value": $('input:radio[name=filter2]:checked').val() } );
+			aoData.push( { "name": "sFilter", "value": $('input:radio[name=filter-boekstatus]:checked').val() } );
 		},
 		"iDisplayLength": 30,
 		"bInfo": false,
@@ -75,7 +75,7 @@ jQuery(document).ready(function($) {
 	});
 
 	//update de tabel als de radiobuttons worden gebruikt
-	$('input:radio[name=filter2]').click( function() { oTableBoekstatus.fnDraw(); } );
+	$('input:radio[name=filter-boekstatus]').click( function() { oTableBoekstatus.fnDraw(); } );
 
 	// velden bewerkbaar maken
 	observeClick();
