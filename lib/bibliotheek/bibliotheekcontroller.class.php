@@ -28,27 +28,32 @@ class BibliotheekController extends Controller{
 
 		//wat zullen we eens gaan doen? Hier bepalen we welke actie we gaan uitvoeren
 		//en of de ingelogde persoon dat mag.
-		if(Loginlid::instance()->hasPermission('P_BIEB_READ')){
-			if($this->hasParam(0) AND $this->getParam(0)!=''){
-				$this->action=$this->getParam(0);
-			}else{
-				$this->action='default';
-			}
-			//niet alle acties mag iedereen doen, hier whitelisten voor de gebruikers
-			//zonder P_BIEB_MOD, en gebruikers met, zodat bij niet bestaande acties
-			//netjes gewoon de catalogus getoond wordt.
-			$allow=array('default', 'boek', 'nieuwboek', 'bewerkboek',
-						'addbeschrijving', 'verwijderbeschrijving', 'bewerkbeschrijving',
-						'addexemplaar', 'verwijderexemplaar',
-						'exemplaarlenen','exemplaarteruggegeven','exemplaarterugontvangen','exemplaarvermist','exemplaargevonden',
-						'boekstatus');
-			if(LoginLid::instance()->hasPermission('P_BIEB_MOD','groep:BASFCie')){
-				$allow=array_merge($allow, array('verwijderboek'));
-			}
-			if(!in_array($this->action, $allow)){
-				$this->action='default';
-			}
+
+		if($this->hasParam(0) AND $this->getParam(0)!=''){
+			$this->action=$this->getParam(0);
 		}else{
+			$this->action='default';
+		}
+		/* 
+		 * niet alle acties mag iedereen doen, hier whitelisten voor de gebruikers
+		 * zonder P_BIEB_MOD, en gebruikers met, zodat bij niet bestaande acties
+		 * netjes gewoon de catalogus getoond wordt. 
+		 */
+		//iedereen(ook uitgelogd) mag catalogus bekijken.
+		$allow=array('default','catalogusdata');
+		//met biebrechten mag je meer
+		if(LoginLid::instance()->hasPermission('P_BIEB_READ')){
+			$allow=array_merge($allow, array('default', 'boek', 'nieuwboek', 'bewerkboek',
+					'addbeschrijving', 'verwijderbeschrijving', 'bewerkbeschrijving',
+					'addexemplaar', 'verwijderexemplaar',
+					'exemplaarlenen','exemplaarteruggegeven','exemplaarterugontvangen','exemplaarvermist','exemplaargevonden',
+					'boekstatus', 'boekstatusdata'));
+		}
+		// beheerders mogen boeken weggooien
+		if(LoginLid::instance()->hasPermission('P_BIEB_MOD','groep:BASFCie')){
+			$allow=array_merge($allow, array('verwijderboek'));
+		}
+		if(!in_array($this->action, $allow)){
 			$this->action='default';
 		}
 
@@ -67,12 +72,7 @@ class BibliotheekController extends Controller{
 	 */
 	protected function action_default(){
 		$this->zijkolom = false;
-		$filter = 'csr';
-		if(Loginlid::instance()->hasPermission('P_BIEB_READ') AND $this->hasParam(0)){
-			$filter=$this->getParam(0);
-		}
-		$catalogus = new Catalogus($filter);
-		$this->content=new BibliotheekCatalogusContent($catalogus);
+		$this->content=new BibliotheekCatalogusContent();
 	}
 
 	/*
@@ -83,13 +83,25 @@ class BibliotheekController extends Controller{
 	 */
 	protected function action_boekstatus(){
 		$this->zijkolom = false;
-		$filter = 'csr';
-		if($this->hasParam(1)){
-			$filter=$this->getParam(1);
-		}
-		$catalogus = new Catalogus($filter);
-		$this->content=new BibliotheekBoekstatusContent($catalogus);
+
+		$this->content=new BibliotheekBoekstatusContent();
 	}
+
+	/*
+	 * Inhoud voor tabel op de cataloguspagina ophalen
+	 */
+	protected function action_catalogusdata($exemplaarinfo=false){
+		echo Catalogus::getJSONcatalogusdata($exemplaarinfo);
+		exit;
+	}
+
+	/*
+	 * Inhoud voor tabel op de boekstatuspagina ophalen
+	 */
+	 protected function action_boekstatusdata(){
+		 $this->action_catalogusdata($exemplaarinfo=true);
+	 }
+
 
 	/*
 	 * Laad een boek object

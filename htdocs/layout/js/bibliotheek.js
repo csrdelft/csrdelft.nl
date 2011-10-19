@@ -4,9 +4,9 @@
 jQuery(document).ready(function($) {
 	//tabellen naar zebra converteren.
 	jQuery("#boeken tr:odd").addClass('odd');
-	
+
 	//hippe sorteerbare tabel fixen.
-	jQuery("#boekencatalogus").dataTable({
+	var oTableCatalogus = jQuery("#boekencatalogus").dataTable({
 		"oLanguage": {
 			"sZeroRecords": "Geen boeken gevonden",
 			"sInfoEmtpy": "Geen boeken gevonden",
@@ -16,6 +16,12 @@ jQuery(document).ready(function($) {
 				"sPrevious": "Vorige",
 				"sNext": "Volgende",
 				"sLast": "Laatste"}
+		},
+		"bProcessing": true,
+		"bServerSide": true,
+		"sAjaxSource": "/communicatie/bibliotheek/catalogusdata",
+		"fnServerParams": function ( aoData ) {
+			aoData.push( { "name": "sFilter", "value": $('input:radio[name=filter]:checked').val() } );
 		},
 		"iDisplayLength": 30,
 		"bInfo": false,
@@ -25,17 +31,17 @@ jQuery(document).ready(function($) {
 		"aoColumns": [
 			{'sType': 'html',"sWidth": "400px"}, // titel
 			{'sType': 'html'}, // auteur
-			{'sType': 'html'}, // rubriek
-			{'sType': 'html'}, // code (onzichtbaar)
-			{'sType': 'html'} // ISBN (onzichtbaar)
-		],
-		"aoColumnDefs": [ 
-			{ "bVisible": false, "aTargets": [ 3,  4] }
+			{'sType': 'html',"sWidth": "300px"}, // rubriek
+
 		]
 	});
-	
+
+	//update de tabel als de radiobuttons worden gebruikt
+	$('input:radio[name=filter]').click( function() { oTableCatalogus.fnDraw(); } );
+
+
 	//hippe sorteerbare tabel fixen.
-	jQuery("#boekenbeheerlijsten").dataTable({
+	var oTableBoekstatus = jQuery("#boekenbeheerlijsten").dataTable({
 		"oLanguage": {
 			"sZeroRecords": "Geen boeken gevonden",
 			"sInfoEmtpy": "Geen boeken gevonden",
@@ -46,28 +52,30 @@ jQuery(document).ready(function($) {
 				"sNext": "Volgende",
 				"sLast": "Laatste"}
 		},
+		"bProcessing": true,
+		"bServerSide": true,
+		"sAjaxSource": "/communicatie/bibliotheek/boekstatusdata",
+		"fnServerParams": function ( aoData ) {
+			aoData.push( { "name": "sFilter", "value": $('input:radio[name=filter2]:checked').val() } );
+		},
 		"iDisplayLength": 30,
 		"bInfo": false,
 		"bLengthChange": false,
 		"aaSorting": [[0, 'asc']],
 		"sPaginationType": "full_numbers",
 		"aoColumns": [
-			{'sType': 'html'}, // titel
-			{'sType': 'html'}, // titel(onzichtbaar)
-			{'sType': 'html'}, // auteur(onzichtbaar)
-			{'sType': 'html'}, // rubriek(onzichtbaar)
+			{'sType': 'html',"sWidth": "250px"}, // titel
 			{'sType': 'html'}, // code
-			{'sType': 'html'}, // ISBN(onzichtbaar)
 			{'sType': 'html'}, // Aantal beschrijvingen
-			{'sType': 'html'}, // eigenaars
-			{'sType': 'html'}, // lener
+			{'sType': 'html',"sWidth": "150px"}, // eigenaars
+			{'sType': 'html',"sWidth": "150px"}, // lener
 			{'sType': 'html'}, // status
 			{'sType': 'html'} //aantal leningen
-		],
-		"aoColumnDefs": [ 
-			{ "bVisible": false, "aTargets": [ 1, 2, 3, 5] }
 		]
 	});
+
+	//update de tabel als de radiobuttons worden gebruikt
+	$('input:radio[name=filter2]').click( function() { oTableBoekstatus.fnDraw(); } );
 
 	// velden bewerkbaar maken
 	observeClick();

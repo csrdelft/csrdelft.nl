@@ -7,47 +7,172 @@
 
 class Catalogus{
 
-	private $boeken=null;
-	private $filter; 		//het gewenste filter
-
-	public function __construct($init){
-		$allow=array('alle', 'csr', 'leden', 'eigen', 'geleend');
-		if(in_array($init, $allow)){
-			$this->filter=$init;
-		}else{
-			$this->filter='csr';
-		}
-	}
-
 	/*
-	 * Laad boeken in object.
-	 * Voor de catalogus
+	 * Zet json in elkaar voor dataTables om catalogus of boekstatus tabel mee te vullen
+	 * 
 	 *
-	 * @param $catalogus true: laden voor catalogus, false: laden voor beheerpagina
-	 * @return void
+	 * @param $exemplaarinfo false: laden voor catalogus, true: laden voor boekstatuspagina
+	 * @return json
 	 */
-	public function loadBoeken($catalogus=true){
+	static public function getJSONcatalogusdata($exemplaarinfo=false){
+		/*
+		 * Script:    DataTables server-side script for PHP and MySQL
+		 * Copyright: 2010 - Allan Jardine
+		 * License:   GPL v2 or BSD (3-point)
+		 */
+
+		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+		 * Easy set variables
+		 */
+
+		/* Array of database columns which should be read and sent back to DataTables. Use a space where
+		 * you want to insert a non-database field (for example a counter or static image)
+		 */
+		if($exemplaarinfo){
+			//boekstatus
+			$aColumns = array( 'titel', 'code', 'bsaantal', 'eigenaar', 'lener', 'status', 'leningen', 'isbn', 'auteur', 'categorie');
+			$iColumnsZichtbaar = 7;
+		}else{
+			//catalogus
+			$aColumns = array( 'titel', 'auteur', 'categorie', 'code', 'isbn');
+			$iColumnsZichtbaar = 3;
+		}
+
+		/* Indexed column (used for fast and accurate table cardinality) */
+		$sIndexTable = "biebboek";
+
+		/* MySQL */
 		$db=MySql::instance();
-		switch($this->filter){
+
+		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+		 * If you just want to use the basic configuration for DataTables with PHP server-side, there is
+		 * no need to edit below this line
+		 */
+
+		/* 
+		 * Paging
+		 */
+		$sLimit = "";
+		if ( isset( $_GET['iDisplayStart'] ) && $_GET['iDisplayLength'] != '-1' ){
+			$sLimit = "LIMIT ".$db->escape( $_GET['iDisplayStart'] ).", ".$db->escape( $_GET['iDisplayLength'] );
+		}
+
+
+		/*
+		 * Ordering
+		 */
+
+		//sorteer key voor mysql
+		$aSortColumns = array('titel'=>"titel", 'auteur'=>"auteur", 'categorie'=>"categorie",'code'=>"code", 'isbn'=>"isbn", 'bsaantal'=>"bsaantal", 
+			'status'=>"status", 'leningen'=>"leningen", 'eigenaar'=>"eigenaar", 'lener'=>"lener");
+
+		//is er een kolom gegeven om op te sorteren?
+		//zichtbaren kolommen lopen van 0 t/m 2 en 0 t/m  
+		if( isset($_GET['iSortCol_0']) ){
+			$sOrder = "ORDER BY ";
+			//loop voor het aantal kolommen dat gesorteerd moet worden
+			for( $i=0 ; $i<intval( $_GET['iSortingCols'] ) ; $i++ ){
+				//mag kolom gesorteerd worden?
+				if( $_GET[ 'bSortable_'.intval($_GET['iSortCol_'.$i]) ] == "true" ){
+					$sOrder .= $aSortColumns[$aColumns[ intval( $_GET['iSortCol_'.$i] ) ]]." ".$db->escape( $_GET['sSortDir_'.$i] ) .", ";
+				}
+			}
+			$sOrder = substr_replace( $sOrder, "", -2 );
+
+			if( $sOrder == "ORDER BY " ){
+				$sOrder = "";
+			}
+		}
+
+
+		/* 
+		 * Filtering
+		 * NOTE this does not match the built-in DataTables filtering which does it
+		 * word by word on any field. It's possible to do here, but concerned about efficiency
+		 * on very large tables, and MySQL's regex functionality is very limited
+		 */
+		//sorteer key voor mysql
+		$aFilterColumns = array('titel'=> "titel", 'auteur'=>"auteur", 'categorie'=>"CONCAT(c1.categorie, ' - ', c2.categorie, ' - ', c3.categorie )",
+			'code'=>"code", 'isbn'=>"isbn", 'bsaantal'=>"bsaantal", 'status'=>"e.status", 'leningen'=>"leningen", 
+			'eigenaar'=>"CONCAT(l1.voornaam, ' ', l1.tussenvoegsel,IFNULL(l1.tussenvoegsel, ' '),l1.achternaam)", 
+			'lener'=> "CONCAT(l2.voornaam, ' ',l2.tussenvoegsel, IFNULL(l1.tussenvoegsel, ' '),l2.achternaam)");
+
+		$sWhere = "";
+		if( $_GET['sSearch'] != "" ){
+			$sWhere = "WHERE (";
+			for( $i=0 ; $i<count($aColumns) ; $i++ ){
+				//beschrijvingenaantal skippen, die heeft een subquery nodig
+				if($aColumns[$i]!='bsaantal'){
+					$sWhere .= $aFilterColumns[$aColumns[$i]]." LIKE '%".$db->escape( $_GET['sSearch'] )."%' OR ";
+				}
+			}
+			$sWhere = substr_replace( $sWhere, "", -3 );
+			$sWhere .= ')';
+		}
+
+		/* Individual column filtering */
+		/*for ( $i=0 ; $i<count($aColumns) ; $i++ )
+		{
+			if ( $_GET['bSearchable_'.$i] == "true" && $_GET['sSearch_'.$i] != '' ){
+				if ( $sWhere == "" ){
+					$sWhere = "WHERE ";
+				}else{
+					$sWhere .= " AND ";
+				}
+				$sWhere .= $filterColumns[$aColumns[$i]]." LIKE '%".$db->escape($_GET['sSearch_'.$i])."%' ";
+			}
+		}*/
+
+		/* 
+		 * filtert op eigenaar
+		 */
+
+		//filter bepalen
+		$allow=array('alle', 'csr', 'leden', 'eigen', 'geleend');
+		if(in_array($_GET['sFilter'], $allow)){
+			$filter=$_GET['sFilter'];
+		}else{
+			$filter='csr';
+		}
+
+		if($sWhere == ""){
+			$sBeginWh = "WHERE ";
+		}else{
+			$sBeginWh = " AND ";
+		}
+		switch($filter){
 			case 'csr':
-				$where = "WHERE e.eigenaar_uid='x222'";
+				$sWhere .= $sBeginWh."e.eigenaar_uid='x222'";
 				break;
 			case 'leden':
-				$where = "WHERE e.eigenaar_uid NOT LIKE 'x222'";
+				$sWhere .= $sBeginWh."e.eigenaar_uid NOT LIKE 'x222'";
 				break;
 			case 'eigen':
-				$where = "WHERE e.eigenaar_uid='".$db->escape(Loginlid::instance()->getUid())."'";
+				$sWhere .= $sBeginWh."e.eigenaar_uid='".$db->escape(Loginlid::instance()->getUid())."'";
 				break;
 			case 'geleend':
-				$where = "WHERE (e.status = 'uitgeleend' OR e.status = 'teruggegeven')AND e.uitgeleend_uid='".$db->escape(Loginlid::instance()->getUid())."'";
-				break;
-			default:
-				$where = "";
+				$sWhere .= $sBeginWh."(e.status = 'uitgeleend' OR e.status = 'teruggegeven')AND e.uitgeleend_uid='".$db->escape(Loginlid::instance()->getUid())."'";
 				break;
 		}
 
-		if($catalogus){ //catalogus
-			$queryselect = "
+		/*
+		 * SQL queries
+		 * Get data to display
+		 */
+		if($exemplaarinfo){
+			//boekstatus
+			$sSelect="
+				GROUP_CONCAT(e.eigenaar_uid SEPARATOR ',') AS eigenaar, GROUP_CONCAT(e.uitgeleend_uid SEPARATOR ',') AS lener, 
+				GROUP_CONCAT(e.status SEPARATOR ',') AS status, GROUP_CONCAT(e.uitleendatum SEPARATOR ',') AS uitleendatum, GROUP_CONCAT(e.leningen SEPARATOR ',') AS leningen,
+				( SELECT count( * ) FROM biebexemplaar e2 WHERE e2.boek_id = b.id ) AS exaantal, 
+				( SELECT count( * ) FROM biebbeschrijving s2 WHERE s2.boek_id = b.id ) AS bsaantal";
+			$sLeftjoin="
+				LEFT JOIN lid l1 ON(l1.uid=e.eigenaar_uid)
+				LEFT JOIN lid l2 ON(l2.uid=e.uitgeleend_uid)";
+			$sGroupby="GROUP BY b.id";
+		}else{
+			//catalogus
+			$sSelect="
 				IF((
 					SELECT count( * )
 					FROM biebexemplaar e2
@@ -62,123 +187,131 @@ class Catalogus{
 					'teruggegeven',
 					'geen'
 					)
-				) AS status
-			";
-		}else{ //beheer
-			$queryselect = "
-				e.id AS exid, e.eigenaar_uid AS eigenaar ,e.uitgeleend_uid AS lener, 
-				e.status, e.uitleendatum, e.leningen,
-				(
-					SELECT count( * )
-					FROM biebexemplaar e2
-					WHERE e2.boek_id = b.id
-				) AS exaantal, 
-				(
-					SELECT count( * )
-					FROM biebbeschrijving s2
-					WHERE s2.boek_id = b.id
-				) AS bsaantal ";
+				) AS status";
+			$sLeftjoin="";
+			$sGroupby="";
 		}
 
-		$query="
-			SELECT DISTINCT
-				b.id , b.titel , b.uitgavejaar , b.uitgeverij , b.paginas, 
-				b.taal, b.isbn, b.code, a.auteur,
-				CONCAT(c1.categorie, ' - ',
-					c2.categorie, ' - ',
-					c3.categorie ) AS categorie,
-				".$queryselect."
-				
-			FROM 
-				biebboek b
-			
-			LEFT JOIN biebauteur a     ON(b.auteur_id = a.id)
+		$sQuery = "
+			SELECT SQL_CALC_FOUND_ROWS DISTINCT 
+				b.id, b.titel, b.isbn, b.code, a.auteur, 
+				CONCAT(c1.categorie, ' - ', c2.categorie, ' - ', c3.categorie ) AS categorie,
+				".$sSelect."
+			FROM biebboek b
+			LEFT JOIN biebauteur a ON(b.auteur_id = a.id)
 			LEFT JOIN biebcategorie c3 ON(b.categorie_id = c3.id)
 			LEFT JOIN biebcategorie c2 ON(c2.id = c3.p_id)
 			LEFT JOIN biebcategorie c1 ON(c1.id = c2.p_id)
-			LEFT JOIN biebexemplaar e  ON(b.id = e.boek_id)
-			".$where."
-			ORDER BY titel DESC;";
-		$result=$db->query($query);
+			LEFT JOIN biebexemplaar e ON(b.id = e.boek_id)
+			".$sLeftjoin." 
+			".$sWhere." 
+			".$sGroupby." 
+			".$sOrder." 
+			".$sLimit."";
+		$rResult = $db->query($sQuery) or die($sQuery.' '.mysql_error());
+		
+		/* Data set length after filtering */
+		$sQuery = "
+			SELECT FOUND_ROWS()";
+		$rResultFilterTotal = $db->query( $sQuery ) or die(mysql_error());
+		$aResultFilterTotal = $db->next_array($rResultFilterTotal);
+		$iFilteredTotal = $aResultFilterTotal[0];
+		
+		/* Total data set length */
+		$sQuery = "
+			SELECT COUNT(id)
+			FROM   $sIndexTable ";
+		$rResultTotal = $db->query( $sQuery, $gaSql['link'] ) or die(mysql_error());
+		$aResultTotal = $db->next_array($rResultTotal);
+		$iTotal = $aResultTotal[0];
 
-		if($catalogus){ //catalogus
-			if($db->numRows($result)>0){
-				while($boek=$db->next($result)){
-					$this->boeken[]=new Boek($boek);
+
+		/*
+		 * Output
+		 */
+		$output = array(
+			"sEcho" => intval($_GET['sEcho']),
+			"iTotalRecords" => $iTotal,
+			"iTotalDisplayRecords" => $iFilteredTotal,
+			"aaData" => array()
+		);
+
+		while($aRow = $db->next_array($rResult) ){
+			$row = array();
+			//loopt over de zichtbare kolommen
+			for($i=0 ; $i<$iColumnsZichtbaar ; $i++ ){
+				//van sommige kolommen wordt de inhoud verfraaid
+				switch($aColumns[$i]){
+					case 'titel':
+						//statusindicator op cataloguspagina en title van url
+						if($exemplaarinfo){
+							//boekstatus
+							$titel = '';
+							$urltitle='title="Boek: '.$aRow['titel'].'
+Auteur: '.$aRow['auteur'].' 
+Rubriek: '.$aRow['categorie'].'"';
+						}else{
+							//catalogus
+							$titel = '<span title="'.$aRow['status'].' boek" class="indicator '.$aRow['status'].'">•</span> ';
+							$urltitle='title="Boek bekijken"';
+						}
+						//url
+						if(Loginlid::instance()->hasPermission('P_BIEB_READ')){
+							$titel .= '<a href="/communicatie/bibliotheek/boek/'.$aRow['id'].'" '.$urltitle.'>'.htmlspecialchars($aRow['titel']).'</a>';
+						}else{
+							$titel .= htmlspecialchars($aRow['titel']);
+						}
+						$row[] = $titel;
+						break;
+					case 'eigenaar':
+					case 'lener':
+						$aUid = explode(',', $aRow[$aColumns[$i]]);
+						$naamlijst = '';
+						foreach( $aUid as $uid ){
+							if($uid=='x222'){
+								$naamlijst .= 'C.S.R.-bibliotheek';
+							}else{
+								if(Lid::isValidUid($uid)){
+								$lid=LidCache::getLid($uid);
+									if($lid instanceof Lid){
+										$naamlijst .= $lid->getNaamLink('civitas', 'link');
+									}else{
+										$naamlijst .= '-';
+									}
+								}else{
+									$naamlijst .= '-';
+								}
+							}
+							$naamlijst .= '<br />';
+						}
+						$row[] = $naamlijst;
+						break;
+					case 'status':
+						$aStatus = explode(',', $aRow['status']);
+						$statuslijst = '';
+						foreach( $aStatus as $status ){
+							if($status=='uitgeleend' OR  $status=='teruggegeven'){
+								$statuslijst .= '<span title="Uitgeleend sinds '.strip_tags(reldate($aRow['uitleendatum'])).'">'.ucfirst($status).'</span>';
+							}elseif($status=='vermist'){
+								$statuslijst .= '<span title="Vermist sinds '.strip_tags(reldate($aRow['uitleendatum'])).'">'.ucfirst($status).'</span>';
+							}else{
+								$statuslijst .= ucfirst($status);
+							}
+							$statuslijst .= '<br />';
+						}
+						$row[] = $statuslijst;
+						break;
+					case 'leningen':
+						$row[] = str_replace(',','<br />',$aRow['leningen']);
+						break;
+					default:
+						$row[] = htmlspecialchars($aRow[ $aColumns[$i] ]);
 				}
-			}else{
-				echo mysql_error();
 			}
-
-		}else{ //beheer
-
-			if($db->numRows($result)>0){
-				//nu een beetje magic om een stapeltje met boeken te genereren:
-				$aBoek=array('id'=>null);
-				$exemplaren=array();
-				$boekeigenschappen=array(
-							'id', 'titel', 'uitgavejaar', 'uitgeverij', 'paginas', 
-							'taal', 'isbn', 'code', 'auteur', 'categorie', 'exaantal', 'bsaantal');
-				while($aBoekraw=$db->next($result)){
-					//eerste boekgegevens bewaren
-					if($aBoek['id']===null){
-						$aBoek=array_get_keys($aBoekraw, $boekeigenschappen);
-					}
-
-					//zijn we bij een volgende boek aangekomen?
-					if($aBoek['id']!=$aBoekraw['id']){
-						//exemplaren bij boekgegevens stoppen en aan de array toevoegen
-						$aBoek['exemplaren'] = $exemplaren;
-						$this->boeken[$aBoek['id']]=$aBoek;
-
-						//tenslotte het volgende boek bewaren
-						$aBoek=array_get_keys($aBoekraw, $boekeigenschappen);
-						$exemplaren=array();
-					}
-					$exemplaren[]=array_get_keys($aBoekraw, array('exid','eigenaar','lener','uitleendatum','status', 'leningen'));
-				}
-				if(isset($aBoek['id'])){
-					//tot slot het laatste boek ook toevoegen
-					$aBoek['exemplaren'] = $exemplaren;
-					$this->boeken[$aBoek['id']]=$aBoek;
-					
-				}
-			}else{
-				echo mysql_error();
-			}
-
+			$output['aaData'][] = $row;
 		}
-	}
-	/*
-	 * Geeft alle boeken
-	 * 
-	 * @param bool $catalogus true: catalogus, false: beheerpagina
-	 * @return 
-	 *		$catalogus=true: array Boek objecten
-	 *		$catalogus=false: array Boeken en subarrays van exemplaren
-	 */
-	public function getBoeken($catalogus, $force=false){
-		if($this->boeken===null OR $force){
-			$this->loadBoeken($catalogus);
-		}
-		return $this->boeken; 
-	}
-	/*
-	 * Telt aantal boeken in object
-	 * 
-	 * @param bool $catalogus: true: catalogus, false: beheerpagina
-	 * @return int aantal boeken
-	 */
-	public function count($catalogus){
-		if($this->boeken===null){
-			$this->loadBoeken($catalogus);
-		}
-		return count($this->boeken);
-	}
 
-	// retourneert filter
-	public function getFilter(){
-		return $this->filter;
+		return json_encode( $output );
 	}
 
 	/*

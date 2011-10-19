@@ -11,11 +11,6 @@ require_once 'catalogus.class.php';
  */
 class BibliotheekCatalogusContent extends SimpleHtml{
 
-	private $catalogus ;
-
-	public function __construct(Catalogus $catalogus){
-		$this->catalogus = $catalogus;
-	}
 
 	public function getTitel(){
 		return 'Bibliotheek | Catalogus';
@@ -23,7 +18,6 @@ class BibliotheekCatalogusContent extends SimpleHtml{
 	public function view(){
 		$smarty=new Smarty_csr();
 		$smarty->assign('melding', $this->getMelding());
-		$smarty->assign('catalogus', $this->catalogus);
 		$smarty->assign('action', $this->action);
 
 		$smarty->display('bibliotheek/catalogus.tpl');
@@ -36,19 +30,12 @@ class BibliotheekCatalogusContent extends SimpleHtml{
  */
 class BibliotheekBoekstatusContent extends SimpleHtml{
 
-	private $catalogus ;
-
-	public function __construct(Catalogus $catalogus){
-		$this->catalogus = $catalogus;
-	}
-	
 	public function getTitel(){
 		return 'Bibliotheek | Boekstatus';
 	}
 	public function view(){
 		$smarty=new Smarty_csr();
 		$smarty->assign('melding', $this->getMelding());
-		$smarty->assign('catalogus', $this->catalogus);
 		$smarty->assign('action', $this->action);
 
 		$smarty->display('bibliotheek/boekstatus.tpl');
