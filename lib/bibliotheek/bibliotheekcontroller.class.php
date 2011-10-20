@@ -83,7 +83,6 @@ class BibliotheekController extends Controller{
 	 */
 	protected function action_boekstatus(){
 		$this->zijkolom = false;
-
 		$this->content=new BibliotheekBoekstatusContent();
 	}
 

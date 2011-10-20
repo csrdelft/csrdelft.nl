@@ -48,8 +48,9 @@ class Catalogus{
 		 */
 
 		//sorteerkeys voor mysql
-		$aSortColumns = array('titel'=>"titel", 'auteur'=>"auteur", 'categorie'=>"categorie",'code'=>"code", 'isbn'=>"isbn", 'bsaantal'=>"bsaantal", 
-			'status'=>"status", 'leningen'=>"leningen", 'eigenaar'=>"eigenaar", 'lener'=>"lener");
+		$aSortColumns = array(	'titel'=>"titel", 	'auteur'=>"auteur", 	'categorie'=>"categorie",
+								'code'=>"code", 	'isbn'=>"isbn", 		'bsaantal'=>"bsaantal", 
+								'status'=>"status", 'leningen'=>"leningen", 'eigenaar'=>"eigenaar", 'lener'=>"lener");
 
 		//is er een kolom gegeven om op te sorteren?
 		if( isset($_GET['iSortCol_0']) ){
@@ -76,10 +77,10 @@ class Catalogus{
 		 * on very large tables, and MySQL's regex functionality is very limited
 		 */
 		//sorteer key voor mysql
-		$aFilterColumns = array('titel'=> "titel", 'auteur'=>"auteur", 'categorie'=>"CONCAT(c1.categorie, ' - ', c2.categorie, ' - ', c3.categorie )",
-			'code'=>"code", 'isbn'=>"isbn", 'bsaantal'=>"bsaantal", 'status'=>"e.status", 'leningen'=>"leningen", 
-			'eigenaar'=>"CONCAT(l1.voornaam, ' ', l1.tussenvoegsel,IFNULL(l1.tussenvoegsel, ' '),l1.achternaam)", 
-			'lener'=> "CONCAT(l2.voornaam, ' ',l2.tussenvoegsel, IFNULL(l1.tussenvoegsel, ' '),l2.achternaam)");
+		$aFilterColumns = array('titel'=> "titel", 	'auteur'=>"auteur", 'categorie'=>"CONCAT(c1.categorie, ' - ', c2.categorie, ' - ', c3.categorie )",
+								'code'=>"code", 	'isbn'=>"isbn", 	'bsaantal'=>"bsaantal", 'status'=>"e.status", 'leningen'=>"leningen", 
+								'eigenaar'=>"CONCAT(l1.voornaam, ' ', l1.tussenvoegsel,IFNULL(l1.tussenvoegsel, ' '),l1.achternaam)", 
+								'lener'=> "CONCAT(l2.voornaam, ' ',l2.tussenvoegsel, IFNULL(l1.tussenvoegsel, ' '),l2.achternaam)");
 
 		$sWhere = "";
 		if( $_GET['sSearch'] != "" ){

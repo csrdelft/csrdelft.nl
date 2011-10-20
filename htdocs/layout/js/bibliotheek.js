@@ -17,7 +17,7 @@ jQuery(document).ready(function($) {
 				"sNext": "Volgende",
 				"sLast": "Laatste"}
 		},
-		"bProcessing": true,
+		//"bProcessing": true,
 		"bServerSide": true,
 		"sAjaxSource": "/communicatie/bibliotheek/catalogusdata",
 		"fnServerParams": function ( aoData ) {
@@ -52,7 +52,7 @@ jQuery(document).ready(function($) {
 				"sNext": "Volgende",
 				"sLast": "Laatste"}
 		},
-		"bProcessing": true,
+		//"bProcessing": true,
 		"bServerSide": true,
 		"sAjaxSource": "/communicatie/bibliotheek/boekstatusdata",
 		"fnServerParams": function ( aoData ) {
