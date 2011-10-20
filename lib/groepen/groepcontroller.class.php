@@ -149,7 +149,7 @@ class Groepcontroller extends Controller{
 					}
 					if($_POST['status']=='ht'){
 						if($this->groep->hasHt($snaam)){
-							$this->addError("Er is al een h.t.-groep met deze 'korte naam'. Wijzig naar o.t. of f.t. (of kies een andere 'korte naam')");
+							$this->addError("Er is al een h.t.-groep met deze 'korte naam'. Wijzig status naar o.t. of f.t. (of kies een andere 'korte naam')");
 						}
 						if(isset($_POST['aanmeldbaar'], $_POST['limiet'])){
 							if($_POST['limiet']<0 OR $_POST['limiet']>200){
