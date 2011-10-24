@@ -216,6 +216,7 @@ private $iKolommenZichtbaar; //aantal kolommen zichtbaar in de tabel.
 	}
 
 	//get info van object Catalogus
+	public function getExemplaarinfo()		{ return $this->exemplaarinfo; }
 	public function getTotaal()				{ return $this->iTotaal; }
 	public function getGefilterdTotaal()	{ return $this->iGefilterdTotaal; }
 	public function getBoeken()				{ return $this->aBoeken; }

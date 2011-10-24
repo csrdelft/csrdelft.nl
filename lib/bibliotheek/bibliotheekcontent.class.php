@@ -98,7 +98,7 @@ class BibliotheekCatalogusDatatableContent extends SimpleHtml{
 	// Geeft html voor titel-celinhoud
 	protected function render_titel($aBoek){
 		//statusindicator op cataloguspagina en title van url
-		if($this->exemplaarinfo){
+		if($this->catalogus->getExemplaarinfo()){
 			//boekstatus
 			$titel = '';
 			$urltitle = 'title="Boek: '.$aBoek['titel'].'
