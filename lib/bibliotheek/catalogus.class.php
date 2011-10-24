@@ -7,13 +7,25 @@
 
 class Catalogus{
 
+private $exemplaarinfo = false;
+private $aBoeken = array();
+private $iTotaal;
+private $iGefilterdTotaal;
+private $aKolommen = array(); // kolommen van de tabel. De laatste velden die niet in tabel staan worden gebruik om op te filteren.
+private $iKolommenZichtbaar; //aantal kolommen zichtbaar in de tabel.
+
+	public function __construct($exemplaarinfo){
+		$this->exemplaarinfo = $exemplaarinfo;
+		$this->loadCatalogusdata();
+	}
+
 	/*
 	 * Zet json in elkaar voor dataTables om catalogus of boekstatus tabel mee te vullen
 	 * 
 	 * @param $exemplaarinfo false: laden voor catalogus, true: laden voor boekstatuspagina
 	 * @return json
 	 */
-	static public function getJSONcatalogusdata($exemplaarinfo=false){
+	protected function loadCatalogusdata(){
 		/*
 		 * Script:    DataTables server-side script for PHP and MySQL
 		 * Copyright: 2010 - Allan Jardine
@@ -21,14 +33,14 @@ class Catalogus{
 		 */
 
 		// kolommen van de tabel. De laatste velden die niet in tabel staan worden gebruik om op te filteren.
-		if($exemplaarinfo){
+		if($this->exemplaarinfo){
 			//boekstatus
-			$aColumns = array( 'titel', 'code', 'bsaantal', 'eigenaar', 'lener', 'status', 'leningen', 'isbn', 'auteur', 'categorie');
-			$iColumnsZichtbaar = 7;
+			$this->aKolommen = array( 'titel', 'code', 'bsaantal', 'eigenaar', 'lener', 'status', 'leningen', 'isbn', 'auteur', 'categorie');
+			$this->iKolommenZichtbaar = 7;
 		}else{
 			//catalogus
-			$aColumns = array( 'titel', 'auteur', 'categorie', 'code', 'isbn');
-			$iColumnsZichtbaar = 3;
+			$this->aKolommen = array( 'titel', 'auteur', 'categorie', 'code', 'isbn');
+			$this->iKolommenZichtbaar = 3;
 		}
 
 		/* MySQL */
@@ -59,7 +71,7 @@ class Catalogus{
 			for( $i=0 ; $i<intval( $_GET['iSortingCols'] ) ; $i++ ){
 				//mag kolom gesorteerd worden?
 				if( $_GET[ 'bSortable_'.intval($_GET['iSortCol_'.$i]) ] == "true" ){
-					$sOrder .= $aSortColumns[$aColumns[ intval( $_GET['iSortCol_'.$i] ) ]]." ".$db->escape( $_GET['sSortDir_'.$i] ) .", ";
+					$sOrder .= $aSortColumns[$this->aKolommen[ intval( $_GET['iSortCol_'.$i] ) ]]." ".$db->escape( $_GET['sSortDir_'.$i] ) .", ";
 				}
 			}
 			$sOrder = substr_replace( $sOrder, "", -2 );
@@ -85,10 +97,10 @@ class Catalogus{
 		$sWhere = "";
 		if( $_GET['sSearch'] != "" ){
 			$sWhere = "WHERE (";
-			for( $i=0 ; $i<count($aColumns) ; $i++ ){
+			for( $i=0 ; $i<count($this->aKolommen) ; $i++ ){
 				//beschrijvingenaantal skippen, die heeft een subquery nodig
-				if($aColumns[$i]!='bsaantal'){
-					$sWhere .= $aFilterColumns[$aColumns[$i]]." LIKE '%".$db->escape( $_GET['sSearch'] )."%' OR ";
+				if($this->aKolommen[$i]!='bsaantal'){
+					$sWhere .= $aFilterColumns[$this->aKolommen[$i]]." LIKE '%".$db->escape( $_GET['sSearch'] )."%' OR ";
 				}
 			}
 			$sWhere = substr_replace( $sWhere, "", -3 );
@@ -131,7 +143,7 @@ class Catalogus{
 		 * SQL queries
 		 * Get data to display
 		 */
-		if($exemplaarinfo){
+		if($this->exemplaarinfo){
 			//boekstatus
 			$sSelect = "
 				GROUP_CONCAT(e.eigenaar_uid SEPARATOR ', ') AS eigenaar, GROUP_CONCAT(e.uitgeleend_uid SEPARATOR ', ') AS lener, 
@@ -180,114 +192,36 @@ class Catalogus{
 			".$sGroupby." 
 			".$sOrder." 
 			".$sLimit."";
+
 		$rResult = $db->query($sQuery) or die($sQuery.' '.mysql_error());
-		
+		while($aRow = $db->next_array($rResult) ){
+			$this->aBoeken[] = $aRow;
+		}
+
 		/* Data set length after filtering */
 		$sQuery = "
 			SELECT FOUND_ROWS()";
 		$rResultFilterTotal = $db->query( $sQuery ) or die(mysql_error());
 		$aResultFilterTotal = $db->next_array($rResultFilterTotal);
-		$iFilteredTotal = $aResultFilterTotal[0];
-		
+		$this->iFilteredTotal = $aResultFilterTotal[0];
+
 		/* Total data set length */
 		$sQuery = "
 			SELECT COUNT(id)
 			FROM   biebboek";
 		$rResultTotal = $db->query( $sQuery ) or die(mysql_error());
 		$aResultTotal = $db->next_array($rResultTotal);
-		$iTotal = $aResultTotal[0];
+		$this->iTotal = $aResultTotal[0];
 
-
-		/*
-		 * Output
-		 */
-		$output = array(
-			"sEcho" => intval($_GET['sEcho']),
-			"iTotalRecords" => $iTotal,
-			"iTotalDisplayRecords" => $iFilteredTotal,
-			"aaData" => array()
-		);
-
-		while($aRow = $db->next_array($rResult) ){
-			$row = array();
-			//loopt over de zichtbare kolommen
-			for($i=0 ; $i<$iColumnsZichtbaar ; $i++ ){
-				//van sommige kolommen wordt de inhoud verfraaid
-				switch($aColumns[$i]){
-					case 'titel':
-						//statusindicator op cataloguspagina en title van url
-						if($exemplaarinfo){
-							//boekstatus
-							$titel = '';
-							$urltitle = 'title="Boek: '.$aRow['titel'].'
-Auteur: '.$aRow['auteur'].' 
-Rubriek: '.$aRow['categorie'].'"';
-						}else{
-							//catalogus
-							$titel = '<span title="'.$aRow['status'].' boek" class="indicator '.$aRow['status'].'">•</span> ';
-							$urltitle = 'title="Boek bekijken"';
-						}
-						//url
-						if(Loginlid::instance()->hasPermission('P_BIEB_READ')){
-							$titel .= '<a href="/communicatie/bibliotheek/boek/'.$aRow['id'].'" '.$urltitle.'>'.htmlspecialchars($aRow['titel']).'</a>';
-						}else{
-							$titel .= htmlspecialchars($aRow['titel']);
-						}
-						$row[] = $titel;
-						break;
-					case 'eigenaar':
-					case 'lener':
-						$aUid = explode(', ', $aRow[$aColumns[$i]]);
-						$naamlijst = '';
-						foreach( $aUid as $uid ){
-							if($uid == 'x222'){
-								$naamlijst .= 'C.S.R.-bibliotheek';
-							}else{
-								if(Lid::isValidUid($uid)){
-								$lid=LidCache::getLid($uid);
-									if($lid instanceof Lid){
-										$naamlijst .= $lid->getNaamLink('civitas', 'link');
-									}else{
-										$naamlijst .= '-';
-									}
-								}else{
-									$naamlijst .= '-';
-								}
-							}
-							$naamlijst .= '<br />';
-						}
-						$row[] = $naamlijst;
-						break;
-					case 'status':
-						$aStatus = explode(', ', $aRow['status']);
-						$aUitleendatum = explode(', ', $aRow['uitleendatum']);
-						$statuslijst = '';
-						$j=0;
-						foreach( $aStatus as $status ){
-							if($status == 'uitgeleend' OR  $status == 'teruggegeven'){
-								$statuslijst .= '<span title="Uitgeleend sinds '.strip_tags(reldate($aUitleendatum[$j])).'">'.ucfirst($status).'</span>';
-							}elseif($status == 'vermist'){
-								$statuslijst .= '<span title="Vermist sinds '.strip_tags(reldate($aRow[$aUitleendatum[$j]])).'">'.ucfirst($status).'</span>';
-							}else{
-								$statuslijst .= ucfirst($status);
-							}
-							$statuslijst .= '<br />';
-							$j++;
-						}
-						$row[] = $statuslijst;
-						break;
-					case 'leningen':
-						$row[] = str_replace(', ', '<br />', $aRow['leningen']);
-						break;
-					default:
-						$row[] = htmlspecialchars($aRow[ $aColumns[$i] ]);
-				}
-			}
-			$output['aaData'][] = $row;
-		}
-
-		return json_encode( $output );
 	}
+
+	//get info van object Catalogus
+	public function getTotaal()				{ return $this->iTotaal; }
+	public function getGefilterdTotaal()	{ return $this->iGefilterdTotaal; }
+	public function getBoeken()				{ return $this->aBoeken; }
+	public function getKolommen()			{ return $this->aKolommen; }
+	public function getKolommenZichtbaar()	{ return $this->iKolommenZichtbaar; }
+
 
 	/*
 	 * geeft alle waardes in db voor $key

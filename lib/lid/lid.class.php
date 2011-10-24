@@ -699,6 +699,20 @@ class Lid implements Serializable, Agendeerbaar{
 	}
 
 	/*
+	 * Geeft Naamlink voor uid
+	 */
+	public function getNaamLinkFromUid($uid=null,$vorm='full', $mode='plain'){
+		if($uid===null){ $uid=LoginLid::instance()->getUid(); }
+		if(Lid::isValidUid($uid)){
+			$lid=LidCache::getLid($uid);
+			if($lid instanceof Lid){
+				return $lid->getNaamLink($vorm, $mode);
+			}
+		}
+		return false;
+	}
+
+	/*
 	 * Simpel testje voor juistheid van een uid. Dit houdt niet in dat een lid
 	 * ook werkelijk bestaat, gebruik daarvoor Lid::exists();
 	 */

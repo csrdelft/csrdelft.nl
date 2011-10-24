@@ -26,7 +26,7 @@ class BibliotheekCatalogusContent extends SimpleHtml{
 }
 
 /*
- * Catalogus
+ * Boekstatus
  */
 class BibliotheekBoekstatusContent extends SimpleHtml{
 
@@ -41,6 +41,129 @@ class BibliotheekBoekstatusContent extends SimpleHtml{
 		$smarty->display('bibliotheek/boekstatus.tpl');
 	}
 }
+
+class BibliotheekCatalogusDatatableContent extends SimpleHtml{
+	private $catalogus;
+
+	public function __construct(Catalogus $catalogus){
+		$this->catalogus=$catalogus;
+	}
+
+	public function view(){
+		/*
+		 * Output
+		 */
+		$output = array(
+			"sEcho" => intval($_GET['sEcho']),
+			"iTotalRecords" => $this->catalogus->getTotaal(),
+			"iTotalDisplayRecords" => $this->catalogus->getGefilterdTotaal(),
+			"aaData" => array()
+		);
+
+		//kolommen van de dataTable
+		$aKolommen = $this->catalogus->getKolommen();
+		//Vult de array aaData met htmlcontent. Entries van aaData corresponderen met tabelcellen.
+		foreach($this->catalogus->getBoeken() as $aBoek){
+			$boek = array();
+			//loopt over de zichtbare kolommen
+			for($i=0 ; $i<$this->catalogus->getKolommenZichtbaar() ; $i++ ){
+				//van sommige kolommen wordt de inhoud verfraaid
+				switch($aKolommen[$i]){
+					case 'titel':
+						$boek[] = $this->render_titel($aBoek);
+						break;
+					case 'eigenaar':
+					case 'lener':
+						$boek[] = $this->render_lidlink($aBoek, $aKolommen[$i]);
+						break;
+					case 'status':
+						$boek[] = $this->render_status($aBoek);
+						break;
+					case 'leningen':
+						$boek[] = str_replace(', ', '<br />', $aBoek['leningen']);
+						break;
+					default:
+						$boek[] = htmlspecialchars($aBoek[ $aKolommen[$i] ]);
+				}
+			}
+			$output['aaData'][] = $boek;
+		}
+
+		echo json_encode( $output );
+	}
+
+	/*
+	 * methodes om htmlinhoud van cellen te maken
+	 */
+	// Geeft html voor titel-celinhoud
+	protected function render_titel($aBoek){
+		//statusindicator op cataloguspagina en title van url
+		if($this->exemplaarinfo){
+			//boekstatus
+			$titel = '';
+			$urltitle = 'title="Boek: '.$aBoek['titel'].'
+Auteur: '.$aBoek['auteur'].' 
+Rubriek: '.$aBoek['categorie'].'"';
+		}else{
+			//catalogus
+			$titel = '<span title="'.$aBoek['status'].' boek" class="indicator '.$aBoek['status'].'">•</span> ';
+			$urltitle = 'title="Boek bekijken"';
+		}
+
+		//url
+		if(Loginlid::instance()->hasPermission('P_BIEB_READ')){
+			$titel .= '<a href="/communicatie/bibliotheek/boek/'.$aBoek['id'].'" '.$urltitle.'>'
+						.htmlspecialchars($aBoek['titel'])
+						.'</a>';
+		}else{
+			$titel .= htmlspecialchars($aBoek['titel']);
+		}
+		return $titel;
+	}
+	//Geeft html voor lener- of eigenaar-celinhoud
+	protected function render_lidlink($aBoek, $key){
+		$aUid = explode(', ', $aBoek[$key]);
+		$naamlijst = '';
+		foreach( $aUid as $uid ){
+			if($uid == 'x222'){
+				$naamlijst .= 'C.S.R.-bibliotheek';
+			}else{
+				if($naam = Lid::getNaamLinkFromUid($uid, $vorm='civitas', $mode='link')){
+					$naamlijst .= $naam;
+				}else{
+					$naamlijst .= '-';
+				}
+			}
+			$naamlijst .= '<br />';
+		}
+		return $naamlijst;
+	}
+	//Geeft html voor status-celinhoud
+	protected function render_status($aBoek){
+		$aStatus = explode(', ', $aBoek['status']);
+		$aUitleendatum = explode(', ', $aBoek['uitleendatum']);
+		$statuslijst = '';
+		$j=0;
+		foreach( $aStatus as $status ){
+			if($status == 'uitgeleend' OR  $status == 'teruggegeven'){
+				$statuslijst .= '<span title="Uitgeleend sinds '.strip_tags(reldate($aUitleendatum[$j])).'">'
+								.ucfirst($status)
+								.'</span>';
+			}elseif($status == 'vermist'){
+				$statuslijst .= '<span title="Vermist sinds '.strip_tags(reldate($aRow[$aUitleendatum[$j]])).'">'
+								.ucfirst($status)
+								.'</span>';
+			}else{
+				$statuslijst .= ucfirst($status);
+			}
+			$statuslijst .= '<br />';
+			$j++;
+		}
+		return $statuslijst;
+	}
+	
+}
+
 /*
  * Boek weergeven
  */

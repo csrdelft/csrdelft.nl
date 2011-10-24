@@ -90,20 +90,21 @@ class BibliotheekController extends Controller{
 	 * Inhoud voor tabel op de cataloguspagina ophalen
 	 */
 	protected function action_catalogusdata(){
-		$this->catalogusdata($exemplaarinfo=false);
+		$catalogus = new Catalogus($exemplaarinfo=false);
+		$this->content=new BibliotheekCatalogusDatatableContent($catalogus);
+		$this->content->view();
+		exit;
 	}
 
 	/*
 	 * Inhoud voor tabel op de boekstatuspagina ophalen
 	 */
 	 protected function action_boekstatusdata(){
-		$this->catalogusdata($exemplaarinfo=true);
-	 }
-
-	protected function catalogusdata($exemplaarinfo){
-		echo Catalogus::getJSONcatalogusdata($exemplaarinfo);
+		$catalogus = new Catalogus($exemplaarinfo=true);
+		$this->content=new BibliotheekCatalogusDatatableContent($catalogus);
+		$this->content->view();
 		exit;
-	}
+	 }
 
 	/*
 	 * Laad een boek object
