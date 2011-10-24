@@ -203,7 +203,7 @@ private $iKolommenZichtbaar; //aantal kolommen zichtbaar in de tabel.
 			SELECT FOUND_ROWS()";
 		$rResultFilterTotal = $db->query( $sQuery ) or die(mysql_error());
 		$aResultFilterTotal = $db->next_array($rResultFilterTotal);
-		$this->iFilteredTotal = $aResultFilterTotal[0];
+		$this->iGefilterdTotaal = $aResultFilterTotal[0];
 
 		/* Total data set length */
 		$sQuery = "
@@ -211,7 +211,7 @@ private $iKolommenZichtbaar; //aantal kolommen zichtbaar in de tabel.
 			FROM   biebboek";
 		$rResultTotal = $db->query( $sQuery ) or die(mysql_error());
 		$aResultTotal = $db->next_array($rResultTotal);
-		$this->iTotal = $aResultTotal[0];
+		$this->iTotaal = $aResultTotal[0];
 
 	}
 
