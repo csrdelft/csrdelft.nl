@@ -23,6 +23,9 @@ class LidZoeker{
 	//filteren en te sorteren.
 	private $veldenNotSelectable=array('voornaam', 'achternaam', 'tussenvoegsel');
 
+	//velden die wel selecteerbaar zijn, maar niet in de db bestaan
+	private $veldenNotindb=array('pasfoto');
+	
 	//nette aliassen voor kolommen, als ze niet beschikbaar zijn wordt gewoon
 	//de naam uit $this->allowVelden gebruikt
 	private $veldNamen=array(
@@ -142,7 +145,13 @@ class LidZoeker{
 			}
 		}
 	}
-
+	
+	//lijst met velden die bruikbaar zijn in een '<veld>:=?<zoekterm>'-zoekopdracht.
+	private function getDBVeldenAllowed(){
+		
+		//hier staat eigenlijk $a - $b, maar die heeft php niet.
+		return array_intersect(array_diff($this->allowVelden, $this->veldenNotindb), $this->allowVelden);
+	}
 	/*
 	 * Stel een setje WHERE-voorwaarden samen waarin standaard wordt gezocht.
 	 */
@@ -190,10 +199,12 @@ class LidZoeker{
 			//explode en trim() elke waarde van de array.
 			$uids=array_map('trim', explode(',', $zoekterm));
 			$query="uid IN('".implode("','", $uids)."') ";
-		}elseif(preg_match('/^('.implode('|', $this->allowVelden).'):=?([a-z0-9\-_])+$/i', $zoekterm)){
-			//zoeken in de velden van $this->allowVelden. Zoektermen met 'veld:' ervoor.
+		
+		}elseif(preg_match('/^('.implode('|', $this->getDBVeldenAllowed()).'):=?([a-z0-9\-_])+$/i', $zoekterm)){
+			//Zoeken in de velden van $this->allowVelden. Zoektermen met 'veld:' ervoor.
 			//met 'veld:=<zoekterm> wordt exact gezocht.
 			$parts=explode(':', $zoekterm);
+			
 			if($parts[1][0]=='='){
 				$query=$parts[0]."='".substr($parts[1], 1)."'";
 			}else{
