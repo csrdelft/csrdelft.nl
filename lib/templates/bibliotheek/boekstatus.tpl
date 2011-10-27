@@ -33,13 +33,13 @@
 
 <table id="boekenbeheerlijsten" class="boeken">
 	<thead>
-		<tr><th>Titel</th><th>Code</th><th title="Aantal beschrijvingen">#recensies</th><th>Boekeigenaar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th><th>Uitgeleend&nbsp;aan</th><th>Status</th><th title="Hoevaak is exemplaar uitgeleend?">#leningen</th></tr>
+		<tr><th>Titel</th><th>Code</th><th title="Aantal beschrijvingen">#recensies</th><th>Boekeigenaar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th><th>Uitgeleend&nbsp;aan</th><th>Uitleendatum</th><th>Status</th><th title="Hoevaak is exemplaar uitgeleend?">#leningen</th></tr>
 	</thead>
 	<tbody>
 		<tr><td colspan="7">Inhoud komt eraan..</td></tr>
 	</tbody>
 	<tfoot>
-		<tr><th>Titel</th><th>Code</th><th title="Aantal beschrijvingen">#recensies</th><th>Boekeigenaar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th><th>Uitgeleend&nbsp;aan</th><th>Status</th><th title="Hoevaak is exemplaar uitgeleend?">#leningen</th></tr>
+		<tr><th>Titel</th><th>Code</th><th title="Aantal beschrijvingen">#recensies</th><th>Boekeigenaar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th><th>Uitgeleend&nbsp;aan</th><th>Uitleendatum</th><th>Status</th><th title="Hoevaak is exemplaar uitgeleend?">#leningen</th></tr>
 	</tfoot>
 </table>
 

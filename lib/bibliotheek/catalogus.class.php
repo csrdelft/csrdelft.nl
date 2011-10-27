@@ -35,8 +35,8 @@ private $iKolommenZichtbaar; //aantal kolommen zichtbaar in de tabel.
 		// kolommen van de tabel. De laatste velden die niet in tabel staan worden gebruik om op te filteren.
 		if($this->exemplaarinfo){
 			//boekstatus
-			$this->aKolommen = array( 'titel', 'code', 'bsaantal', 'eigenaar', 'lener', 'status', 'leningen', 'isbn', 'auteur', 'categorie');
-			$this->iKolommenZichtbaar = 7;
+			$this->aKolommen = array( 'titel', 'code', 'bsaantal', 'eigenaar', 'lener', 'uitleendatum', 'status', 'leningen', 'isbn', 'auteur', 'categorie');
+			$this->iKolommenZichtbaar = 8;
 		}else{
 			//catalogus
 			$this->aKolommen = array( 'titel', 'auteur', 'categorie', 'code', 'isbn');
@@ -62,7 +62,8 @@ private $iKolommenZichtbaar; //aantal kolommen zichtbaar in de tabel.
 		//sorteerkeys voor mysql
 		$aSortColumns = array(	'titel'=>"titel", 	'auteur'=>"auteur", 	'categorie'=>"categorie",
 								'code'=>"code", 	'isbn'=>"isbn", 		'bsaantal'=>"bsaantal", 
-								'status'=>"status", 'leningen'=>"leningen", 'eigenaar'=>"eigenaar", 'lener'=>"lener");
+								'status'=>"status", 'leningen'=>"leningen", 'eigenaar'=>"eigenaar", 
+								'lener'=>"lener", 'uitleendatum'=>"uitleendatum");
 
 		//is er een kolom gegeven om op te sorteren?
 		if( isset($_GET['iSortCol_0']) ){
@@ -92,7 +93,8 @@ private $iKolommenZichtbaar; //aantal kolommen zichtbaar in de tabel.
 		$aFilterColumns = array('titel'=> "titel", 	'auteur'=>"auteur", 'categorie'=>"CONCAT(c1.categorie, ' - ', c2.categorie, ' - ', c3.categorie )",
 								'code'=>"code", 	'isbn'=>"isbn", 	'bsaantal'=>"bsaantal", 'status'=>"e.status", 'leningen'=>"leningen", 
 								'eigenaar'=>"CONCAT(l1.voornaam, ' ', l1.tussenvoegsel,IFNULL(l1.tussenvoegsel, ' '),l1.achternaam)", 
-								'lener'=> "CONCAT(l2.voornaam, ' ',l2.tussenvoegsel, IFNULL(l1.tussenvoegsel, ' '),l2.achternaam)");
+								'lener'=> "CONCAT(l2.voornaam, ' ',l2.tussenvoegsel, IFNULL(l1.tussenvoegsel, ' '),l2.achternaam)",
+								'uitleendatum'=>"uitleendatum");
 
 		$sWhere = "";
 		if( $_GET['sSearch'] != "" ){

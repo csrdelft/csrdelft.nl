@@ -82,6 +82,9 @@ class BibliotheekCatalogusDatatableContent extends SimpleHtml{
 					case 'leningen':
 						$boek[] = str_replace(', ', '<br />', $aBoek['leningen']);
 						break;
+					case 'uitleendatum':
+						$boek[] = $this->render_uitleendatum($aBoek);
+						break;
 					default:
 						$boek[] = htmlspecialchars($aBoek[ $aKolommen[$i] ]);
 				}
@@ -123,45 +126,59 @@ Rubriek: '.$aBoek['categorie'].'"';
 	//Geeft html voor lener- of eigenaar-celinhoud
 	protected function render_lidlink($aBoek, $key){
 		$aUid = explode(', ', $aBoek[$key]);
-		$naamlijst = '';
+		$sNaamlijst = '';
 		foreach( $aUid as $uid ){
 			if($uid == 'x222'){
-				$naamlijst .= 'C.S.R.-bibliotheek';
+				$sNaamlijst .= 'C.S.R.-bibliotheek';
 			}else{
 				if($naam = Lid::getNaamLinkFromUid($uid, $vorm='civitas', $mode='link')){
-					$naamlijst .= $naam;
+					$sNaamlijst .= $naam;
 				}else{
-					$naamlijst .= '-';
+					$sNaamlijst .= '-';
 				}
 			}
-			$naamlijst .= '<br />';
+			$sNaamlijst .= '<br />';
 		}
-		return $naamlijst;
+		return $sNaamlijst;
 	}
 	//Geeft html voor status-celinhoud
 	protected function render_status($aBoek){
 		$aStatus = explode(', ', $aBoek['status']);
 		$aUitleendatum = explode(', ', $aBoek['uitleendatum']);
-		$statuslijst = '';
+		$sStatuslijst = '';
 		$j=0;
 		foreach( $aStatus as $status ){
 			if($status == 'uitgeleend' OR  $status == 'teruggegeven'){
-				$statuslijst .= '<span title="Uitgeleend sinds '.strip_tags(reldate($aUitleendatum[$j])).'">'
+				$sStatuslijst .= '<span title="Uitgeleend sinds '.strip_tags(reldate($aUitleendatum[$j])).'">'
 								.ucfirst($status)
 								.'</span>';
 			}elseif($status == 'vermist'){
-				$statuslijst .= '<span title="Vermist sinds '.strip_tags(reldate($aRow[$aUitleendatum[$j]])).'">'
+				$sStatuslijst .= '<span title="Vermist sinds '.strip_tags(reldate($aUitleendatum[$j])).'">'
 								.ucfirst($status)
 								.'</span>';
 			}else{
-				$statuslijst .= ucfirst($status);
+				$sStatuslijst .= ucfirst($status);
 			}
-			$statuslijst .= '<br />';
+			$sStatuslijst .= '<br />';
 			$j++;
 		}
-		return $statuslijst;
+		return $sStatuslijst;
 	}
-	
+	//Geeft html voor status-celinhoud
+	protected function render_uitleendatum($aBoek){
+		$aStatus = explode(', ', $aBoek['status']);
+		$aUitleendatum = explode(', ', $aBoek['uitleendatum']);
+		$sUitleendatalijst = '';
+		$j=0;
+		foreach( $aUitleendatum as $uitleendatum ){
+			if($aStatus[$j] == 'uitgeleend' OR  $aStatus[$j] == 'teruggegeven' OR $aStatus[$j] == 'vermist'){
+				$sUitleendatalijst .= strftime("%d %b %Y", strtotime($uitleendatum));//date("j M Y", strtotime($uitleendatum)); //strip_tags(reldate($uitleendatum));
+			}
+			$sUitleendatalijst .= '<br />';
+			$j++;
+		}
+		return $sUitleendatalijst;
+	}
 }
 
 /*

@@ -69,6 +69,7 @@ jQuery(document).ready(function($) {
 			{'sType': 'html'}, // Aantal beschrijvingen
 			{'sType': 'html',"sWidth": "150px"}, // eigenaars
 			{'sType': 'html',"sWidth": "150px"}, // lener
+			{'sType': 'html',"sWidth": "90px"}, //uitleendatum
 			{'sType': 'html'}, // status
 			{'sType': 'html'} //aantal leningen
 		]

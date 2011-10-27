@@ -94,13 +94,13 @@
 					{* status *}
 						<label>Status</label>
 						{if $exemplaar.status=='uitgeleend'}
-							Uitgeleend aan {$exemplaar.uitgeleend_uid|csrnaam:'civitas'}<br />
+							<span title="Sinds {$exemplaar.uitleendatum|reldate|strip_tags}">Uitgeleend aan {$exemplaar.uitgeleend_uid|csrnaam:'civitas'}</span><br />
 						{/if}
 						{if $exemplaar.status=='teruggegeven'}
-							Teruggegeven door {$exemplaar.uitgeleend_uid|csrnaam:'civitas'}<br />
+							<span title="Was uitgeleend sinds {$exemplaar.uitleendatum|reldate|strip_tags}">Teruggegeven door {$exemplaar.uitgeleend_uid|csrnaam:'civitas'}</span><br />
 						{/if}
 						{if $exemplaar.status=='vermist'}
-							<span class="melding">Vermist</span><br />
+							<span class="melding" title="Sinds {$exemplaar.uitleendatum|reldate|strip_tags}">Vermist</span><br />
 						{/if}
 						{if $exemplaar.status=='beschikbaar' }
 							Beschikbaar<br />
