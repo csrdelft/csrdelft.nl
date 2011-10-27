@@ -11,7 +11,8 @@ class LidZoeker{
 	private $allowVelden=array(
 		'pasfoto', 'uid', 'naam', 'voorletters', 'voornaam', 'tussenvoegsel', 'achternaam', 'nickname', 'geslacht',
 		'email', 'adres', 'telefoon', 'mobiel', 'msn', 'jid', 'skype', 'linkedin', 'website', 'studie', 'status',
-		'gebdatum', 'beroep', 'verticale', 'lidjaar', 'kring', 'patroon', 'woonoord', 'bankrekening');
+		'gebdatum', 'beroep', 'verticale', 'moot', 'lidjaar', 'kring', 'patroon', 'woonoord', 'bankrekening');
+	
 	//velden die ook door mensen met P_LEDEN_MOD bekeken mogen worden
 	//(merge in de constructor)
 	private $allowVeldenLEDENMOD=array(
@@ -153,8 +154,6 @@ class LidZoeker{
 
 		if($zoekterm=='*' OR trim($zoekterm)==''){
 			$query='1 ';
-		}elseif(preg_match('/^moot:[1-4]$/', $zoekterm)){ //moten
-			$query="moot=".(int)substr($zoekterm, 5).' ';
 		}elseif(preg_match('/^groep:([0-9]+|[a-z]+)$/i', $zoekterm)){ //leden van een groep
 			$uids=array();
 			try{
@@ -166,8 +165,6 @@ class LidZoeker{
 			}
 			
 			$query="uid IN('".implode("','", $uids)."') ";
-		}elseif(preg_match('/^geslacht:(m|v)$/i', $zoekterm)){ //geslacht
-			$query="geslacht='".substr($zoekterm, -1)."' ";
 		}elseif(preg_match('/^verticale:\w*$/', $zoekterm)){ //verticale, id, letter
 			$verticale=substr($zoekterm, 10);
 			if(in_array($verticale, Verticale::getNamen())){
@@ -187,14 +184,22 @@ class LidZoeker{
 			}
 		}elseif(preg_match('/^[a-z0-9][0-9]{3}$/', $zoekterm)){ //uid's is ook niet zo moeilijk.
 			$query="uid='".$zoekterm."' ";
-		}elseif(preg_match('/^([a-z0-9][0-9]{3} ?,? ?)*([a-z0-9][0-9]{3})$/', $zoekterm)){ //meerdere uid's gescheiden door komma's.
+		}elseif(preg_match('/^([a-z0-9][0-9]{3} ?,? ?)*([a-z0-9][0-9]{3})$/', $zoekterm)){ 
+			//meerdere uid's gescheiden door komma's.
+			
 			//explode en trim() elke waarde van de array.
 			$uids=array_map('trim', explode(',', $zoekterm));
 			$query="uid IN('".implode("','", $uids)."') ";
-		}elseif(substr($zoekterm, 0, 2)=='P_' AND LoginLid::instance()->hasPermission('P_ADMIN')){ //permissies
-			$query="permissies='".$zoekterm."' ";
-		}elseif(substr($zoekterm, 0, 2)=='S_' AND LoginLid::instance()->hasPermission('P_ADMIN')){ //status
-			$query="status='".$zoekterm."' ";
+		}elseif(preg_match('/^('.implode('|', $this->allowVelden).'):=?([a-z0-9\-_])+$/i', $zoekterm)){
+			//zoeken in de velden van $this->allowVelden. Zoektermen met 'veld:' ervoor.
+			//met 'veld:=<zoekterm> wordt exact gezocht.
+			$parts=explode(':', $zoekterm);
+			if($parts[1][0]=='='){
+				$query=$parts[0]."='".substr($parts[1], 1)."'";
+			}else{
+				$query=$parts[0]." LIKE '%".$parts[1]."%'";
+			}
+			
 		}else{ //als niets van hierboven toepasselijk is zoeken we in zo ongeveer alles
 			$defaults[]="voornaam LIKE '%".$zoekterm."%' ";
 			$defaults[]="achternaam LIKE '%".$zoekterm."%' ";
