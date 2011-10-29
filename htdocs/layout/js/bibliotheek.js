@@ -26,6 +26,7 @@ jQuery(document).ready(function($) {
 		"iDisplayLength": 30,
 		"bInfo": false,
 		"bLengthChange": false,
+		"bStateSave": true,
 		"aaSorting": [[0, 'asc']],
 		"sPaginationType": "full_numbers",
 		"aoColumns": [
@@ -61,6 +62,7 @@ jQuery(document).ready(function($) {
 		"iDisplayLength": 30,
 		"bInfo": false,
 		"bLengthChange": false,
+		"bStateSave": true,
 		"aaSorting": [[0, 'asc']],
 		"sPaginationType": "full_numbers",
 		"aoColumns": [
