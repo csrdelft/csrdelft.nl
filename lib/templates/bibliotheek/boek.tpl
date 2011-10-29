@@ -24,7 +24,7 @@
 {* nieuw boek formulier *}
 {if $boek->getId()==0}
 	<h1>Nieuw boek toevoegen</h1>
-	<p>Vul onderstaande velden. <b>Bieb zit nog in testfase. Misschien wordt deze database nog geleegd. Dus wacht nog even met officieel toevoegen van boeken.</b></p>
+	<p>Vul onderstaande velden. </p>
 	<form action="/communicatie/bibliotheek/nieuwboek/0" id="boekaddForm" class="boekForm" method="post">
 		{foreach from=$boek->getFields('nieuwboek') item=field}
 			{$field->view()}
