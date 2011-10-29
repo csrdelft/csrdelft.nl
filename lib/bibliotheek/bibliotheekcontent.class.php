@@ -109,7 +109,11 @@ Auteur: '.$aBoek['auteur'].'
 Rubriek: '.$aBoek['categorie'].'"';
 		}else{
 			//catalogus
-			$titel = '<span title="'.$aBoek['status'].' boek" class="indicator '.$aBoek['status'].'">•</span> ';
+			if(Loginlid::instance()->hasPermission('P_BIEB_READ')){
+				$titel = '<span title="'.$aBoek['status'].' boek" class="indicator '.$aBoek['status'].'">•</span> ';
+			}else{
+				$titel = '';
+			}
 			$urltitle = 'title="Boek bekijken"';
 		}
 
