@@ -349,15 +349,24 @@ src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
 	 * ubb_groep()
 	 *
 	 * [groep]123[/groep]
+	 * of 
+	 * [groep=123]
+	 * 
 	 * Geeft een groep met kortebeschrijving en een lijstje met leden weer.
 	 * Als de groep aanmeldbaar is komt er ook een aanmeldknopje bij.
 	 */
 	protected function ubb_groep($parameters){
-		$groepid=$this->parseArray(array('[/groep]'), array());
+		if(isset($parameters['groep'])){ 
+			$groepid=$parameters['groep'];
+		}else{
+			$groepid=$this->parseArray(array('[/groep]'), array());
+		}
 
+		require_once 'groepen/groep.class.php';
 		require_once 'groepen/groepcontent.class.php';
 		try{
-			$groeptag=new GroepUbbContent((int)$groepid);
+			$groep = new Groep($groepid);
+			$groeptag = new GroepUbbContent($groep);
 			return $groeptag->getHTML();
 		}catch(Exception $e){
 			return '[groep] Geen geldig groep-id ('.mb_htmlentities($groepid).')';
@@ -367,16 +376,28 @@ src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
 	 * ubb_boek()
 	 *
 	 * [boek]123[/boek]
+	 * of
+	 * [boek=123]
+	 * 
 	 * Geeft titel en auteur van een boek. 
 	 * Een kleine indicator geeft met kleuren beschikbaarheid aan
 	 */
 	protected function ubb_boek($parameters){
-		$content=$this->parseArray(array('[/boek]'), array());
+		if(isset($parameters['boek'])){ 
+			$boekid=$parameters['boek'];
+		}else{
+			$boekid=$this->parseArray(array('[/boek]'), array());
+		}
 
+		require_once 'bibliotheek/boek.class.php';
 		require_once 'bibliotheek/bibliotheekcontent.class.php';
-		$boektag=new BoekUbbContent((int)$content);
-
-		return $boektag->getHTML();
+		try{
+			$boek=new Boek((int)$boekid);
+			$content=new BoekUbbContent($boek);
+			return $content->getHTML();
+		}catch(Exception $e){
+			return '[boek] Boek [boekid:'.(int)$boekid.'] bestaat niet.';
+		}
 	}
 	/*
 	 * ubb_fotoalbum
@@ -427,15 +448,21 @@ src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
 	 * ubb_document();
 	 *
 	 * [document]1234[/document]
+	 * of
+	 * [document=1234]
 	 *
 	 * Geeft een blokje met een documentnaam, link, bestandsgrootte en formaat.
 	 */
 	protected function ubb_document($parameters){
-		$id=(int)$this->parseArray(array('[/document]'), array());
+		if(isset($parameters['document'])){ 
+			$id=$parameters['document'];
+		}else{
+			$id=$this->parseArray(array('[/document]'), array());
+		}
 
 		require_once 'documenten/documentcontent.class.php';
 		try{
-			$document=new Document($id);
+			$document=new Document((int)$id);
 			$content=new DocumentUbbContent($document);
 			return $content->getHTML();
 		}catch(Exception $e){
@@ -461,13 +488,13 @@ src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
 		}else{
 			$id=$this->parseArray(array('[/maaltijd]'), array());
 		}
-		
+
 		$id=trim($id);
-		
+
 		if($id!='next' AND !preg_match('/\d+/', $id)){
 			return '[maaltijd] Geen maaltijdID opgegeven of ongeldig ID (id:'.mb_htmlentities($id).')';
 		}
-		
+
 		require_once 'maaltijden/maaltijdcontent.class.php';
 		return MaaltijdContent::getMaaltijdubbtag($id);
 	}
@@ -534,6 +561,8 @@ UBBVERHAAL;
 	 * Deze methode kan de belangrijkste mededelingen (doorgaans een top3) weergeven.
 	 *
 	 * [mededelingen=top3]
+	 * of
+	 * [mededeling]top3[/mededeling]
 	 */
 	public function ubb_mededelingen($parameters){
 		if(isset($parameters['mededelingen'])){
@@ -613,21 +642,23 @@ UBBVERHAAL;
 	/*
 	 * Peiling ubb-tag. Door Piet-Jan Spaans.
 	 * [peiling=2]
+	 * of
+	 * [peiling]2[/peiling]
 	 */
 	public function ubb_peiling($parameters){
-		require_once 'peilingcontent.class.php';
-		if(isset($parameters['peiling']) AND is_numeric($parameters['peiling'])){
-			$peilingid = (int)$parameters['peiling'];
-			try{
-				$peiling=new Peiling($peilingid);
-			}catch(Exception $e){
-				return '[peiling] Er bestaat geen peiling met (id:'.$peilingid.')';
-			}
-			$peilingcontent=new PeilingContent($peiling);
-
-			return $peilingcontent->getHTML();
+		if(isset($parameters['peiling'])){ 
+			$peilingid=$parameters['peiling'];
 		}else{
-			return '[peiling] Geen geldig peilingblok.';
+			$peilingid=$this->parseArray(array('[/peiling]'), array());
+		}
+
+		require_once 'peilingcontent.class.php';
+		try{
+			$peiling=new Peiling((int)$peilingid);
+			$peilingcontent=new PeilingContent($peiling);
+			return $peilingcontent->getHTML();
+		}catch(Exception $e){
+			return '[peiling] Er bestaat geen peiling met (id:'.(int)$peilingid.')';
 		}
 	}
 
@@ -689,12 +720,23 @@ UBBVERHAAL;
 		
 		return '<div class="ubb_slideshow" '.$style.'>'.$content.'</div>';
 	}
-	
-	public function ubb_bijbelrooster($dagen){
-		$content = $this->parseArray(array('[/bijbelrooster]'), array());
+	/*
+	 * Blokje met bijbelrooster voor opgegeven aantal dagen
+	 * 
+	 * [bijbelrooster=10]
+	 * of
+	 * [bijbelrooster]10[/bijbelrooster]
+	 */
+	public function ubb_bijbelrooster($parameters){
+		if(isset($parameters['bijbelrooster'])){ 
+			$dagen = $parameters['bijbelrooster'];
+		}else{
+			$dagen = $this->parseArray(array('[/bijbelrooster]'), array());
+		}
+
 		require_once 'bijbelrooster.class.php';
 		$bijbel = new Bijbelrooster();
-		return $bijbel->ubbContent($content);
+		return $bijbel->ubbContent($dagen);
 	}
 
 }

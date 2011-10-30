@@ -6,7 +6,7 @@ class Bijbelrooster{
 	
 	
 	function ubbContent($aantal){
-		$aantal= max($aantal,2);
+		$aantal= (int)max($aantal,2);
 		$begin = Date('y:m:d', strtotime("-".min(abs($aantal/2), 2)." days"));
 		$return = '<div class="mededeling-grotebalk"><div class="titel"><a href="/actueel/bijbelrooster/">Bijbelleesrooster</a></div><p class="half">';
 		$db=MySql::instance();

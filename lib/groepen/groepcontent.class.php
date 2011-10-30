@@ -305,22 +305,13 @@ class GroepenProfielContent extends SimpleHTML{
  */
 class GroepUbbContent extends SimpleHTML{
 	private $groep;
-	private $style;
-	public function __construct($groepid, $style='default'){
-		try{
-			$this->groep=new Groep((int)$groepid);
-		}catch(Exception $e){
-			$this->groep='[groep] Groep [groepid:'.(int)$groepid.'] bestaat niet.';
-		}
+	public function __construct(Groep $groep){
+		$this->groep = $groep;
 	}
 	public function getHTML(){
-		if($this->groep instanceof Groep){
 			$content=new Smarty_csr();
 			$content->assign('groep', $this->groep);
 			return $content->fetch('groepen/groep.ubb.tpl');
-		}else{
-			return $this->groep;
-		}
 	}
 	public function view(){
 		echo $this->getHTML();
