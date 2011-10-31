@@ -29,6 +29,8 @@
 		Selecteer: 	<input id="alle" type="radio" name="filter-catalogus" value="alle"><label for="alle">Alle boeken</label> 
 					<input id="csr"  type="radio" name="filter-catalogus" value="csr" checked><label for="csr">C.S.R.-boeken</label> 
 					<input id="leden" type="radio" name="filter-catalogus" value="leden"><label for="leden">Boeken van Leden</label>
+					<input id="eigen" type="radio" name="filter-catalogus" value="eigen"><label for="eigen">Eigen boeken</label>
+					<input id="geleend" type="radio" name="filter-catalogus" value="geleend"><label for="geleend">Geleende boeken</label>
 	</div>
 {else}
 	Log in om meer informatie van de boeken te bekijken.

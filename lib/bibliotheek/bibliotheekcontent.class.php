@@ -110,7 +110,14 @@ Rubriek: '.$aBoek['categorie'].'"';
 		}else{
 			//catalogus
 			if(Loginlid::instance()->hasPermission('P_BIEB_READ')){
-				$titel = '<span title="'.$aBoek['status'].' boek" class="indicator '.$aBoek['status'].'">•</span> ';
+				if($aBoek['status']=='beschikbaar'){
+					$statusomschrijving = 'Er is een exemplaar van dit boek beschikbaar';
+				}elseif($aBoek['status']=='teruggegeven'){
+					$statusomschrijving = 'Er is een exemplaar, teruggeven door de lener, maar ontvangst is nog niet bevestigd door eigenaar';
+				}else{
+					$statusomschrijving = 'Geen exemplaar beschikbaar van dit boek';
+				}
+				$titel = '<span title="'.$statusomschrijving.'" class="indicator '.$aBoek['status'].'">• </span>';
 			}else{
 				$titel = '';
 			}
