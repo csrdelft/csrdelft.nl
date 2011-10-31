@@ -21,12 +21,21 @@ jQuery(document).ready(function($) {
 		"bServerSide": true,
 		"sAjaxSource": "/communicatie/bibliotheek/catalogusdata",
 		"fnServerParams": function ( aoData ) {
-			aoData.push( { "name": "sFilter", "value": $('input:radio[name=filter-catalogus]:checked').val() } );
+			aoData.push( { "name": "sEigenaarFilter", "value": $('input:radio[name=filter-catalogus]:checked').val() } );
 		},
 		"iDisplayLength": 30,
 		"bInfo": false,
 		"bLengthChange": false,
 		"bStateSave": true,
+		"iCookieDuration": 60*15, // 15 min
+		"fnStateSaveCallback": function ( oSettings, sValue ) {
+			sValue += ',"sEigenaarFilter": "'+$('input:radio[name=filter-catalogus]:checked').val()+'"';
+			return sValue;
+		},
+		"fnStateLoadCallback": function ( oSettings, oData ) {
+			$('input:radio[name=filter-catalogus]').val([oData.sEigenaarFilter]);
+			return true;
+		},
 		"aaSorting": [[0, 'asc']],
 		"sPaginationType": "full_numbers",
 		"aoColumns": [
@@ -57,12 +66,21 @@ jQuery(document).ready(function($) {
 		"bServerSide": true,
 		"sAjaxSource": "/communicatie/bibliotheek/boekstatusdata",
 		"fnServerParams": function ( aoData ) {
-			aoData.push( { "name": "sFilter", "value": $('input:radio[name=filter-boekstatus]:checked').val() } );
+			aoData.push( { "name": "sEigenaarFilter", "value": $('input:radio[name=filter-boekstatus]:checked').val() } );
 		},
 		"iDisplayLength": 30,
 		"bInfo": false,
 		"bLengthChange": false,
 		"bStateSave": true,
+		"iCookieDuration": 60*15, // 15 min
+		"fnStateSaveCallback": function ( oSettings, sValue ) {
+			sValue += ',"sEigenaarFilter": "'+$('input:radio[name=filter-boekstatus]:checked').val()+'"';
+			return sValue;
+		},
+		"fnStateLoadCallback": function ( oSettings, oData ) {
+			$('input:radio[name=filter-boekstatus]').val([oData.sEigenaarFilter]);
+			return true;
+		},
 		"aaSorting": [[0, 'asc']],
 		"sPaginationType": "full_numbers",
 		"aoColumns": [
@@ -111,7 +129,7 @@ function observeClick(){
 	// Outside click action
 	jQuery(document).mouseup(function(object){
 		if(!(jQuery(object.target).hasClass("editbox") 						//in editbox mag je klikken
-			|| jQuery(object.target).attr('id').substring(0,6)=='tat_td'	//entry van suggestiemenu
+			|| object.target.id.substring(0,6)=='tat_td'	//entry van suggestiemenu
 			|| jQuery(object.target).text()=='\\/' 							//movedownarraw suggestiemenu
 			|| jQuery(object.target).text()=='/\\' )){ 						//moveuparrow suggestiemenu 
 				jQuery(".editbox,.editelement").hide();

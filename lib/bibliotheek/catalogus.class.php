@@ -115,8 +115,8 @@ private $iKolommenZichtbaar; //aantal kolommen zichtbaar in de tabel.
 
 		//filter bepalen
 		$allow = array('alle', 'csr', 'leden', 'eigen', 'geleend');
-		if(in_array($_GET['sFilter'], $allow)){
-			$filter = $_GET['sFilter'];
+		if(in_array($_GET['sEigenaarFilter'], $allow)){
+			$filter = $_GET['sEigenaarFilter'];
 		}else{
 			$filter = 'csr';
 		}
