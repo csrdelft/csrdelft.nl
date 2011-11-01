@@ -5,6 +5,7 @@ jQuery(document).ready(function($) {
 	//tabellen naar zebra converteren.
 	jQuery("#boeken tr:odd").addClass('odd');
 
+
 	//hippe sorteerbare tabel fixen.
 	var oTableCatalogus = jQuery("#boekencatalogus").dataTable({
 		"oLanguage": {
@@ -22,6 +23,7 @@ jQuery(document).ready(function($) {
 		"sAjaxSource": "/communicatie/bibliotheek/catalogusdata",
 		"fnServerParams": function ( aoData ) {
 			aoData.push( { "name": "sEigenaarFilter", "value": $('input:radio[name=filter-catalogus]:checked').val() } );
+			aoData.push( { "name": "sView", "value": $('input[name=boekstatus]').is(':checked') } );
 		},
 		"iDisplayLength": 30,
 		"bInfo": false,
@@ -30,73 +32,52 @@ jQuery(document).ready(function($) {
 		"iCookieDuration": 60*15, // 15 min
 		"fnStateSaveCallback": function ( oSettings, sValue ) {
 			sValue += ',"sEigenaarFilter": "'+$('input:radio[name=filter-catalogus]:checked').val()+'"';
+			sValue += ',"sView": '+$('input[name=boekstatus]').is(':checked');
 			return sValue;
 		},
 		"fnStateLoadCallback": function ( oSettings, oData ) {
 			$('input:radio[name=filter-catalogus]').val([oData.sEigenaarFilter]);
+			$('input[name=boekstatus]').attr('checked', oData.sView);
 			return true;
 		},
 		"aaSorting": [[0, 'asc']],
 		"sPaginationType": "full_numbers",
-		"aoColumns": [
-			{'sType': 'html',"sWidth": "400px"}, // titel
-			{'sType': 'html'}, // auteur
-			{'sType': 'html',"sWidth": "300px"}, // rubriek
-
-		]
+		"aoColumns": getKolommen()
 	});
 
-	//update de tabel als de radiobuttons worden gebruikt
+	function getKolommen() {
+		var kolommen;
+		if($("#boekencatalogus").hasClass("lid")){
+			kolommen = {"aoKolommen": [
+				{'sType': 'html'}, // titel
+				{'sType': 'html'}, // auteur
+				{'sType': 'html'}, // rubriek
+				{'sType': 'html',"sWidth": "40px"},
+				{'sType': 'html',"sWidth": "125px", "bVisible": false}, // eigenaar
+				{'sType': 'html',"sWidth": "125px", "bVisible": false}, //uitgeleend aan
+				{'sType': 'html',"sWidth": "100px", "bVisible": false} // uitleendatum
+			]};
+		}else{
+			kolommen = {"aoKolommen": [
+				{'sType': 'html',"sWidth": "400px"}, // titel
+				{'sType': 'html'}, // auteur
+				{'sType': 'html',"sWidth": "300px"} // rubriek
+			]};
+		}
+		return kolommen.aoKolommen;
+	}
+
+	//update de tabel als de radiobuttons of checkbox worden gebruikt
 	$('input:radio[name=filter-catalogus]').click( function() { oTableCatalogus.fnDraw(); } );
-
-
-	//hippe sorteerbare tabel fixen.
-	var oTableBoekstatus = jQuery("#boekenbeheerlijsten").dataTable({
-		"oLanguage": {
-			"sZeroRecords": "Geen boeken gevonden",
-			"sInfoEmtpy": "Geen boeken gevonden",
-			"sSearch": "Zoeken:",
-			oPaginate:{
-				"sFirst": "Eerste",
-				"sPrevious": "Vorige",
-				"sNext": "Volgende",
-				"sLast": "Laatste"}
-		},
-		//"bProcessing": true,
-		"bServerSide": true,
-		"sAjaxSource": "/communicatie/bibliotheek/boekstatusdata",
-		"fnServerParams": function ( aoData ) {
-			aoData.push( { "name": "sEigenaarFilter", "value": $('input:radio[name=filter-boekstatus]:checked').val() } );
-		},
-		"iDisplayLength": 30,
-		"bInfo": false,
-		"bLengthChange": false,
-		"bStateSave": true,
-		"iCookieDuration": 60*15, // 15 min
-		"fnStateSaveCallback": function ( oSettings, sValue ) {
-			sValue += ',"sEigenaarFilter": "'+$('input:radio[name=filter-boekstatus]:checked').val()+'"';
-			return sValue;
-		},
-		"fnStateLoadCallback": function ( oSettings, oData ) {
-			$('input:radio[name=filter-boekstatus]').val([oData.sEigenaarFilter]);
-			return true;
-		},
-		"aaSorting": [[0, 'asc']],
-		"sPaginationType": "full_numbers",
-		"aoColumns": [
-			{'sType': 'html',"sWidth": "250px"}, // titel
-			{'sType': 'html'}, // code
-			{'sType': 'html'}, // Aantal beschrijvingen
-			{'sType': 'html',"sWidth": "150px"}, // eigenaars
-			{'sType': 'html',"sWidth": "150px"}, // lener
-			{'sType': 'html',"sWidth": "90px"}, //uitleendatum
-			{'sType': 'html'}, // status
-			{'sType': 'html'} //aantal leningen
-		]
-	});
-
-	//update de tabel als de radiobuttons worden gebruikt
-	$('input:radio[name=filter-boekstatus]').click( function() { oTableBoekstatus.fnDraw(); } );
+	$('input#boekstatus').click( function() { 
+		/* Get the DataTables object again - this is not a recreation, just a get of the object */
+		var oTable = $('#boekencatalogus').dataTable();
+	
+		var bVis = $('input[name=boekstatus]').is(':checked');
+		oTable.fnSetColumnVis( 6, bVis, false);
+		oTable.fnSetColumnVis( 5, bVis, false);
+		oTable.fnSetColumnVis( 4, bVis, true );
+	 } );
 
 	// velden bewerkbaar maken
 	observeClick();

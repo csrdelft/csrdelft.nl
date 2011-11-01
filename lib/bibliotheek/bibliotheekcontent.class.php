@@ -25,23 +25,6 @@ class BibliotheekCatalogusContent extends SimpleHtml{
 
 }
 
-/*
- * Boekstatus
- */
-class BibliotheekBoekstatusContent extends SimpleHtml{
-
-	public function getTitel(){
-		return 'Bibliotheek | Boekstatus';
-	}
-	public function view(){
-		$smarty=new Smarty_csr();
-		$smarty->assign('melding', $this->getMelding());
-		$smarty->assign('action', $this->action);
-
-		$smarty->display('bibliotheek/boekstatus.tpl');
-	}
-}
-
 class BibliotheekCatalogusDatatableContent extends SimpleHtml{
 	private $catalogus;
 
@@ -76,9 +59,6 @@ class BibliotheekCatalogusDatatableContent extends SimpleHtml{
 					case 'lener':
 						$boek[] = $this->render_lidlink($aBoek, $aKolommen[$i]);
 						break;
-					case 'status':
-						$boek[] = $this->render_status($aBoek);
-						break;
 					case 'leningen':
 						$boek[] = str_replace(', ', '<br />', $aBoek['leningen']);
 						break;
@@ -100,37 +80,17 @@ class BibliotheekCatalogusDatatableContent extends SimpleHtml{
 	 */
 	// Geeft html voor titel-celinhoud
 	protected function render_titel($aBoek){
-		//statusindicator op cataloguspagina en title van url
-		if($this->catalogus->getExemplaarinfo()){
-			//boekstatus
-			$titel = '';
-			$urltitle = 'title="Boek: '.$aBoek['titel'].'
+		//urltitle
+		$urltitle = 'title="Boek: '.$aBoek['titel'].'
 Auteur: '.$aBoek['auteur'].' 
 Rubriek: '.$aBoek['categorie'].'"';
-		}else{
-			//catalogus
-			if(Loginlid::instance()->hasPermission('P_BIEB_READ')){
-				if($aBoek['status']=='beschikbaar'){
-					$statusomschrijving = 'Er is een exemplaar van dit boek beschikbaar';
-				}elseif($aBoek['status']=='teruggegeven'){
-					$statusomschrijving = 'Er is een exemplaar, teruggeven door de lener, maar ontvangst is nog niet bevestigd door eigenaar';
-				}else{
-					$statusomschrijving = 'Geen exemplaar beschikbaar van dit boek';
-				}
-				$titel = '<span title="'.$statusomschrijving.'" class="indicator '.$aBoek['status'].'">• </span>';
-			}else{
-				$titel = '';
-			}
-			$urltitle = 'title="Boek bekijken"';
-		}
-
 		//url
 		if(Loginlid::instance()->hasPermission('P_BIEB_READ')){
-			$titel .= '<a href="/communicatie/bibliotheek/boek/'.$aBoek['id'].'" '.$urltitle.'>'
+			$titel = '<a href="/communicatie/bibliotheek/boek/'.$aBoek['id'].'" '.$urltitle.'>'
 						.htmlspecialchars($aBoek['titel'])
 						.'</a>';
 		}else{
-			$titel .= htmlspecialchars($aBoek['titel']);
+			$titel = htmlspecialchars($aBoek['titel']);
 		}
 		return $titel;
 	}
@@ -153,39 +113,33 @@ Rubriek: '.$aBoek['categorie'].'"';
 		return $sNaamlijst;
 	}
 	//Geeft html voor status-celinhoud
-	protected function render_status($aBoek){
-		$aStatus = explode(', ', $aBoek['status']);
-		$aUitleendatum = explode(', ', $aBoek['uitleendatum']);
-		$sStatuslijst = '';
-		$j=0;
-		foreach( $aStatus as $status ){
-			if($status == 'uitgeleend' OR  $status == 'teruggegeven'){
-				$sStatuslijst .= '<span title="Uitgeleend sinds '.strip_tags(reldate($aUitleendatum[$j])).'">'
-								.ucfirst($status)
-								.'</span>';
-			}elseif($status == 'vermist'){
-				$sStatuslijst .= '<span title="Vermist sinds '.strip_tags(reldate($aUitleendatum[$j])).'">'
-								.ucfirst($status)
-								.'</span>';
-			}else{
-				$sStatuslijst .= ucfirst($status);
-			}
-			$sStatuslijst .= '<br />';
-			$j++;
-		}
-		return $sStatuslijst;
-	}
-	//Geeft html voor status-celinhoud
 	protected function render_uitleendatum($aBoek){
 		$aStatus = explode(', ', $aBoek['status']);
 		$aUitleendatum = explode(', ', $aBoek['uitleendatum']);
 		$sUitleendatalijst = '';
 		$j=0;
 		foreach( $aUitleendatum as $uitleendatum ){
-			if($aStatus[$j] == 'uitgeleend' OR  $aStatus[$j] == 'teruggegeven' OR $aStatus[$j] == 'vermist'){
-				$sUitleendatalijst .= strftime("%d %b %Y", strtotime($uitleendatum));//date("j M Y", strtotime($uitleendatum)); //strip_tags(reldate($uitleendatum));
+			//title met omschrijvingstatus
+			switch($aStatus[$j]){
+				case 'uitgeleend':
+					$sUitleendatalijst .= '<span title="Uitgeleend sinds '.strip_tags(reldate($uitleendatum)).'">';
+					break;
+				case 'teruggegeven':
+					$sUitleendatalijst .= '<span title="Teruggegeven door lener. Uitgeleend sinds '.strip_tags(reldate($uitleendatum)).'">';
+					break;
+				case 'vermist':
+					$sUitleendatalijst .= '<span title="Vermist sinds '.strip_tags(reldate($uitleendatum)).'">';
+					break;
+				default:
+					$sUitleendatalijst .= '<span title="Exemplaar is beschikbaar">';
 			}
-			$sUitleendatalijst .= '<br />';
+			//indicator
+			$sUitleendatalijst .= '<span class="indicator '.$aStatus[$j].'">• </span>';
+			//datum
+			if($aStatus[$j] == 'uitgeleend' OR  $aStatus[$j] == 'teruggegeven' OR $aStatus[$j] == 'vermist'){
+				$sUitleendatalijst .= strftime("%d %b %Y", strtotime($uitleendatum));
+			}
+			$sUitleendatalijst .= '</span><br />';
 			$j++;
 		}
 		return $sUitleendatalijst;

@@ -46,8 +46,7 @@ class BibliotheekController extends Controller{
 			$allow=array_merge($allow, array('default', 'boek', 'nieuwboek', 'bewerkboek',
 					'addbeschrijving', 'verwijderbeschrijving', 'bewerkbeschrijving',
 					'addexemplaar', 'verwijderexemplaar',
-					'exemplaarlenen', 'exemplaarteruggegeven', 'exemplaarterugontvangen', 'exemplaarvermist', 'exemplaargevonden',
-					'boekstatus', 'boekstatusdata'));
+					'exemplaarlenen', 'exemplaarteruggegeven', 'exemplaarterugontvangen', 'exemplaarvermist', 'exemplaargevonden'));
 		}
 		// beheerders mogen boeken weggooien
 		if(LoginLid::instance()->hasPermission('P_BIEB_MOD,groep:BASFCie')){
@@ -76,35 +75,14 @@ class BibliotheekController extends Controller{
 	}
 
 	/*
-	 * Boekstatuslijsten tonen
-	 * 
-	 * /boekstatus/[filters]
-	 * 
-	 */
-	protected function action_boekstatus(){
-		$this->zijkolom = false;
-		$this->content=new BibliotheekBoekstatusContent();
-	}
-
-	/*
 	 * Inhoud voor tabel op de cataloguspagina ophalen
 	 */
 	protected function action_catalogusdata(){
-		$catalogus = new Catalogus($exemplaarinfo=false);
+		$catalogus = new Catalogus();
 		$this->content=new BibliotheekCatalogusDatatableContent($catalogus);
 		$this->content->view();
 		exit;
 	}
-
-	/*
-	 * Inhoud voor tabel op de boekstatuspagina ophalen
-	 */
-	 protected function action_boekstatusdata(){
-		$catalogus = new Catalogus($exemplaarinfo=true);
-		$this->content=new BibliotheekCatalogusDatatableContent($catalogus);
-		$this->content->view();
-		exit;
-	 }
 
 	/*
 	 * Laad een boek object

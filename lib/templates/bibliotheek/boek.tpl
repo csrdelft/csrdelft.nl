@@ -8,9 +8,6 @@
 		<a href="/communicatie/bibliotheek/" title="Naar de catalogus">Catalogus</a>
 	</li>
 	<li>
-		<a href="/communicatie/bibliotheek/boekstatus" title="Uitgebreide boekstatus">Boekstatus</a>
-	</li>
-	<li>
 		<a href="/communicatie/bibliotheek/wenslijst" title="Wenslijst van bibliothecaris">Wenslijst</a>
 	</li>
 </ul>

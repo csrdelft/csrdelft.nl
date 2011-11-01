@@ -6,6 +6,11 @@
 #filters input:checked + label {
 	font-weight: bold;
 }
+#filters{
+	position: absolute;
+	margin: 15px 0px;
+	z-index: 2;
+}
 
 .boeken{
 	width: 100%;
@@ -41,9 +46,16 @@
 	background-color: #efefef;
 }
 
-.boeken .indicator.beschikbaar	{color:green;}
-.boeken .indicator.teruggegeven	{color:orange;}
-.boeken .indicator.geen			{color:red;}
+#boekencatalogus_filter {
+	margin: 15px 0px;
+}
+#boekencatalogus_filter input{
+	width: 250px;
+}
+
+.boeken .indicator.beschikbaar								{color:green;}
+.boeken .indicator.teruggegeven								{color:orange;}
+.boeken .indicator.vermist, .boeken .indicator.uitgeleend	{color:red;}
 
 /*
  * layout elementen voor de hele bieb

@@ -7,22 +7,20 @@
 
 class Catalogus{
 
-private $exemplaarinfo = false;
 private $aBoeken = array();
 private $iTotaal;
 private $iGefilterdTotaal;
 private $aKolommen = array(); // kolommen van de tabel. De laatste velden die niet in tabel staan worden gebruik om op te filteren.
 private $iKolommenZichtbaar; //aantal kolommen zichtbaar in de tabel.
 
-	public function __construct($exemplaarinfo){
-		$this->exemplaarinfo = $exemplaarinfo;
+	public function __construct(){
 		$this->loadCatalogusdata();
 	}
 
 	/*
-	 * Zet json in elkaar voor dataTables om catalogus of boekstatus tabel mee te vullen
+	 * Zet json in elkaar voor dataTables om catalogustabel mee te vullen
+	 * Filters en sortering worden aan de hand van parameters uit _GET ingesteld
 	 * 
-	 * @param $exemplaarinfo false: laden voor catalogus, true: laden voor boekstatuspagina
 	 * @return json
 	 */
 	protected function loadCatalogusdata(){
@@ -32,11 +30,12 @@ private $iKolommenZichtbaar; //aantal kolommen zichtbaar in de tabel.
 		 * License:   GPL v2 or BSD (3-point)
 		 */
 
+
 		// kolommen van de tabel. De laatste velden die niet in tabel staan worden gebruik om op te filteren.
-		if($this->exemplaarinfo){
+		if(LoginLid::instance()->hasPermission('P_BIEB_READ')){
 			//boekstatus
-			$this->aKolommen = array( 'titel', 'code', 'bsaantal', 'eigenaar', 'lener', 'uitleendatum', 'status', 'leningen', 'isbn', 'auteur', 'categorie');
-			$this->iKolommenZichtbaar = 8;
+			$this->aKolommen = array( 'titel', 'auteur', 'categorie', 'bsaantal', 'eigenaar', 'lener', 'uitleendatum', 'status', 'code', 'isbn', 'auteur', 'categorie');
+			$this->iKolommenZichtbaar = 7;
 		}else{
 			//catalogus
 			$this->aKolommen = array( 'titel', 'auteur', 'categorie', 'code', 'isbn');
@@ -115,7 +114,7 @@ private $iKolommenZichtbaar; //aantal kolommen zichtbaar in de tabel.
 
 		//filter bepalen
 		$allow = array('alle', 'csr', 'leden', 'eigen', 'geleend');
-		if(in_array($_GET['sEigenaarFilter'], $allow)){
+		if(LoginLid::instance()->hasPermission('P_BIEB_READ') AND in_array($_GET['sEigenaarFilter'], $allow)){
 			$filter = $_GET['sEigenaarFilter'];
 		}else{
 			$filter = 'csr';
@@ -145,10 +144,10 @@ private $iKolommenZichtbaar; //aantal kolommen zichtbaar in de tabel.
 		 * SQL queries
 		 * Get data to display
 		 */
-		if($this->exemplaarinfo){
-			//boekstatus
+		if(LoginLid::instance()->hasPermission('P_BIEB_READ')){
+			//ingelogden
 			$sSelect = "
-				GROUP_CONCAT(e.eigenaar_uid SEPARATOR ', ') AS eigenaar, GROUP_CONCAT(e.uitgeleend_uid SEPARATOR ', ') AS lener, 
+				, GROUP_CONCAT(e.eigenaar_uid SEPARATOR ', ') AS eigenaar, GROUP_CONCAT(e.uitgeleend_uid SEPARATOR ', ') AS lener, 
 				GROUP_CONCAT(e.status SEPARATOR ', ') AS status, GROUP_CONCAT(e.uitleendatum SEPARATOR ', ') AS uitleendatum, GROUP_CONCAT(e.leningen SEPARATOR ', ') AS leningen,
 				( SELECT count( * ) FROM biebexemplaar e2 WHERE e2.boek_id = b.id ) AS exaantal, 
 				( SELECT count( * ) FROM biebbeschrijving s2 WHERE s2.boek_id = b.id ) AS bsaantal";
@@ -157,23 +156,8 @@ private $iKolommenZichtbaar; //aantal kolommen zichtbaar in de tabel.
 				LEFT JOIN lid l2 ON(l2.uid=e.uitgeleend_uid)";
 			$sGroupby = "GROUP BY b.id";
 		}else{
-			//catalogus
-			$sSelect = "
-				IF((
-					SELECT count( * )
-					FROM biebexemplaar e2
-					WHERE e2.boek_id = b.id AND e2.status='beschikbaar'
-					) > 0, 
-				'beschikbaar', 
-					IF((
-						SELECT count( * )
-						FROM biebexemplaar e2
-						WHERE e2.boek_id = b.id AND e2.status='teruggegeven'
-						) > 0,
-					'teruggegeven',
-					'geen'
-					)
-				) AS status";
+			//uitgelogden
+			$sSelect = "";
 			$sLeftjoin = "";
 			$sGroupby = "";
 		}
@@ -181,7 +165,7 @@ private $iKolommenZichtbaar; //aantal kolommen zichtbaar in de tabel.
 		$sQuery = "
 			SELECT SQL_CALC_FOUND_ROWS DISTINCT 
 				b.id, b.titel, b.isbn, b.code, a.auteur, 
-				CONCAT(c1.categorie, ' - ', c2.categorie, ' - ', c3.categorie ) AS categorie,
+				CONCAT(c1.categorie, ' - ', c2.categorie, ' - ', c3.categorie ) AS categorie
 				".$sSelect."
 			FROM biebboek b
 			LEFT JOIN biebauteur a ON(b.auteur_id = a.id)
@@ -218,7 +202,6 @@ private $iKolommenZichtbaar; //aantal kolommen zichtbaar in de tabel.
 	}
 
 	//get info van object Catalogus
-	public function getExemplaarinfo()		{ return $this->exemplaarinfo; }
 	public function getTotaal()				{ return $this->iTotaal; }
 	public function getGefilterdTotaal()	{ return $this->iGefilterdTotaal; }
 	public function getBoeken()				{ return $this->aBoeken; }
