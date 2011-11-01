@@ -49,7 +49,7 @@ Regels omtrent het betalen van de maaltijden op Confide:
 	<li>contant betaald = bedrag invullen</li>
 	<li>Schrijf duidelijk in het hokje hoeveel je in de helm hebt gegooid.</li>
 	<li>bevat derde kolom 'ok'? Dan hebt u nog voldoende tegoed voor deze maaltijd</li>
-	<li>als je géén tegoed hebt bij de maalcie betekent een niet direct betaalde maaltijd 20 cent boete!</li>
+	<li>als je géén tegoed hebt bij de maalcie betekent een niet direct betaalde maaltijd een boete van 20 cent, 1 euro of 2 euro, afhankelijk van hoe negatief je saldo is!</li>
 </ul>
 <p>
 {if $maaltijd.tafelpraeses!='Am. Lid'}Tafelpraeses is vandaag {$maaltijd.tafelpraeses}{/if}
@@ -78,7 +78,7 @@ Regels omtrent het betalen van de maaltijden op Confide:
 				{if $aanmelding.saldo>$maaltijd.prijs}ok{elseif $aanmelding.saldo>($maaltijd.prijs-0.001)}{$maaltijd.prijs|string_format:"%.2f"}{elseif $aanmelding.saldo>0.001}&lt;{$maaltijd.prijs|string_format:"%.2f"}{elseif $aanmelding.saldo>-0.001}0{else}&lt;0{/if}
 			{/if}
 		</td><td style="width: 40px;">&nbsp
-		</td><td style="width: 20px;">m
+		</td><td style="width: 20px; color: #AAAAAA">m
 	{/table_foreach}
 {else}
 	Nog geen aanmeldingen voor deze maaltijd.
