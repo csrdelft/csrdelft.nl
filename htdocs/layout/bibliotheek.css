@@ -86,7 +86,7 @@ h1{
  * boek-pagina *
  ***************/
 .label,
-.boek label{ float: left; width: 75px; font-size: 9px; color: #999; margin:0px;}
+.boek label{ float: left; width: 73px; font-size: 9px; color: #999; margin:0px;	padding-left: 2px;}
 .blok { margin-bottom: 20px; clear: left; }
 .gegevens { margin-left: 20px; padding-left: 15px; border-left: 1px solid #0a338d; }
 
@@ -110,8 +110,13 @@ h1{
 }
 .boek .bewerk:hover{
 	background:url(http://plaetjes.csrdelft.nl/knopjes/bewerken.png) right no-repeat #ddd;
+	background-position: 564px;
 	cursor:pointer;
 }
+.boek .bewerk#titel:hover{
+	background-position: 598px;
+}
+
 .boek input#field_code{
 	width: 75px;
 }
@@ -136,6 +141,7 @@ h1{
 #boekaddForm label{
 	width: 150px;
 	float: left;
+
 }
 #addBeschrijving label{
 	float: left; 
@@ -144,6 +150,7 @@ h1{
 	font-size: 9px; 
 	color: white; 
 	margin: 0px;
+
 }
 
 .boekForm input.regular{
@@ -239,9 +246,10 @@ h1{
 	width: 75px;
 	font-size: 9px; 
 	color: #999; 
+	padding-left: 2px;
 }
 .exemplaren h2{
-	margin-left: 75px;
+	margin-left: 77px;
 	margin-bottom: 5px;
 }
 .exemplaren p{
@@ -260,12 +268,15 @@ h1{
 }
 
 .exemplaren .bewerk{
-	padding-right:18px!important;
+	/*padding-right:18px!important;
+	margin-right:2px;*/
+	width: 330px;
 }
 .exemplaren .bewerk:hover{
 	background:url(http://plaetjes.csrdelft.nl/knopjes/bewerken.png) right no-repeat #ddd;
+	background-position: 310px;
 	cursor:pointer;
-	width: 310px;
+
 }
 .exemplaren .bewerk input{
 	width: 220px;
