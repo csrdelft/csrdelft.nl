@@ -18,7 +18,7 @@
 			<td>{$lid.uid|csrnaam:'civitas'}</td>
 			<td>
 				{if !($lid.status=='S_NOVIET' OR $lid.status=='S_GASTLID' OR $lid.status=='S_LID')}
-					<img src="{icon get="fout" notag=true}" alt="Geen lid!" title="Geen lid. Lidstatus: {$lid.status}" />{elseif $lid.kring==0 AND $lid.abos.verticale}<img src="{icon get="fout" notag=true}" alt="Kring.0" title="Geen actief kringlid (kring.0)" />{/if}&nbsp;
+					<img src="{icon get="fout" notag=true}" alt="Geen lid!" title="Geen lid. Lidstatus: {$lid.status}{if $lid.kring==0 AND $lid.abos.verticale} én geen actief kringlid (kring.0){/if}" />{elseif $lid.kring==0 AND $lid.abos.verticale}<img src="{icon get="fout" notag=true}" alt="Kring.0" title="Geen actief kringlid (kring.0)" />{/if}&nbsp;
 			</td>
 			<td>{$lid.lidjaar}</td>
 			<td id="{$lid.uid}-A_MAANDAG" class="abovinkje"><input type="checkbox" name="abo_ma" value="1" {if $lid.abos.maandag}checked="checked"{/if} /></td>

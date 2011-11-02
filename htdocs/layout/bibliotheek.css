@@ -11,6 +11,9 @@
 	margin: 15px 0px;
 	z-index: 2;
 }
+#filters label{
+	margin: 0px;
+}
 
 .boeken{
 	width: 100%;
