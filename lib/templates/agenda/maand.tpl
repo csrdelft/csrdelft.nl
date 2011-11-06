@@ -57,7 +57,7 @@
 										{$item->getBeginMoment()|date_format:"%R"}-{$item->getEindMoment()|date_format:"%R"}
 									</div>
 								{/if}
-								<span title="{$item->getBeschrijving()|escape:'htmlall'}">{$item->getTitel()}</span>
+								<span title="{$item->getBeschrijving()|ubb|strip_tags|escape:'htmlall'}">{$item->getTitel()|ubb}</span>
 							{/if}{* end if $item instance of ?? *}
 							</li>
 						{/foreach}
