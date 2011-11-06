@@ -50,8 +50,16 @@ ul.groepledenlijst{ width: 230px; float: right; padding: 10px 20px 20px 20px; ma
 .groepFormulier{ width: 100%;}
 .groepFormulier label{ float: left; margin-right: 15px; width: 130px;}
 .groepFormulier input, .groepFormulier textarea, .groepFormulier select{ margin-top: 4px; margin-bottom: 4px; }
-.groepFormulier div.opmerking{  float: right; width: 440px; margin-bottom: 10px; }
-#groepFormulier input#voorbeeld{ margin-top: 0px; }
+.groepFormulier input[type=text]{ width: 144px; }
+.groepFormulier input[type=text]#groepNaam{ width: 604px; }
+.groepFormulier textarea{ width: 604px; }
+.groepFormulier select#groepAanmeldbaar, .groepFormulier select#toonFuncties { width:150px; }
+.groepFormulier div.opmerking{ float: right; width: 440px; margin-bottom: 10px; }
+.groepFormulier div.opmerking#periode{ width: 280px; }
+.groepFormulier .extraknopjespreview { float: right; }
+.groepFormulier input.voorbeeld{ margin-top: 0px; }
+.groepFormulier div.preview{ width: 748px; }
+
 #groepenFormulier{ width: 600px; }
 
 
