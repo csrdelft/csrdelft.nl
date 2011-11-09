@@ -1,0 +1,59 @@
+
+<!DOCTYPE html>
+<html >
+    <head>
+        <title>CivitasMobiel</title>
+        <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta names="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    </head>
+    <body>
+    <div id="mobl-loading">
+      Loading... <img src="data:image/gif;base64,R0lGODlhCgAKAJEDAMzMzP9mZv8AAP///yH/C05FVFNDQVBFMi4wAwEAAAAh+QQFAAADACwAAAAACgAKAAACF5wncgaAGgJzJ647cWua4sOBFEd62VEAACH5BAUAAAMALAEAAAAIAAMAAAIKnBM2IoMDAFMQFAAh+QQFAAADACwAAAAABgAGAAACDJwHMBGofKIRItJYAAAh+QQFAAADACwAAAEAAwAIAAACChxgOBPBvpYQYxYAIfkEBQAAAwAsAAAEAAYABgAAAgoEhmPJHOGgEGwWACH5BAUAAAMALAEABwAIAAMAAAIKBIYjYhOhRHqpAAAh+QQFAAADACwEAAQABgAGAAACDJwncqi7EQYAA0p6CgAh+QQJAAADACwHAAEAAwAIAAACCpRmoxoxvQAYchQAOw==" width="10" height="10">
+      <p>(If this message still shows after a few seconds, probably something went wrong. Does your browser support Javascript?)</p>
+    </div>
+    <script src="js/jquery-1.4.min.js" type="application/x-javascript" charset="utf-8"></script>
+    <script src="js/persistence.js" type="application/x-javascript" charset="utf-8"></script>
+    <script src="js/persistence.store.sql.js" type="application/x-javascript" charset="utf-8"></script>
+    <script src="js/persistence.store.websql.js" type="application/x-javascript" charset="utf-8"></script>
+    <script src="js/persistence.store.memory.js" type="application/x-javascript" charset="utf-8"></script>
+    <script src="js/persistence.search.js" type="application/x-javascript" charset="utf-8"></script>
+    <script type="application/x-javascript" charset="utf-8">
+    if (window && window.google && google.gears || window.openDatabase) {
+      try {
+        persistence.store.websql.config(persistence, 'CivitatsMobiel', 'mobl database', 1024 * 1024, '1.0');
+      } catch(e) {
+        alert("Could not connect to the database, sometimes a refresh helps.");
+      }
+
+      persistence.search.config(persistence, persistence.store.websql.sqliteDialect);
+    } else {
+      persistence.store.memory.config(persistence);
+    }
+    </script>
+    <link rel="stylesheet" type="text/css" href="mobl/ui/generic_ext.css"/>
+    <script src="js/gears_init.js" type="application/x-javascript" charset="utf-8"></script>
+    <script src="js/jquery-ui-1.7.2.custom.min.js" type="application/x-javascript" charset="utf-8"></script>
+    <script src="js/mobl.boot.js" type="application/x-javascript" charset="utf-8"></script>
+    <script src="js/gestures.js" type="application/x-javascript" charset="utf-8"></script>
+    <script src="mobl.js" type="application/x-javascript" charset="utf-8"></script>
+    <script src="mobl/ui/stylemixin.js" type="application/x-javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="mobl/ui/generic.css"/>
+    <script src="mobl/ui/generic.js" type="application/x-javascript" charset="utf-8"></script>
+    <script src="CivitatsMobiel.js" type="application/x-javascript" charset="utf-8"></script>
+    
+    <script type="application/x-javascript" charset="utf-8">
+    mobl.icon = "img/default-icon.png";
+    $(function(){
+      persistence.schemaSync(function(tx) {
+        if(persistence.loadFromLocalStorage) {
+          persistence.loadFromLocalStorage();
+        }
+        $("#mobl-loading").remove();
+        mobl.call("CivitatsMobiel.root", [mobl.ref(false), mobl.ref("none")], function() {});
+      });
+    });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,144 @@
+application CivitatsMobiel
+
+import mobl::ui::generic
+
+var ingelogd = false;
+var loginNaam ="";
+var ww = "";
+
+
+type LoginType{
+	loginState : String
+}
+
+type Maaltijd{
+	aantal : Num
+	datum : Num
+	gesloten : Num
+	id : Num
+	max : Num
+	status : String
+	tekst : String
+	
+	
+	
+	
+}
+
+function loginMapper(json : JSON) : [LoginType]{
+	return json.login;
+}
+
+function maaltijdMapper(json : JSON) : [Maaltijd]{
+	return json.maaltijden;
+}
+
+function tekstKnopMaaltijd(maaltijd : Maaltijd) : String{
+	if(maaltijd.status=="AF" || maaltijd.status==""){
+		if( maaltijd.max-maaltijd.aantal<=0){
+			return "VOL";
+		}else{
+			return "aanmelden";
+		}
+	}else{
+		return "afmelden";
+	}
+}
+
+function aanAfmelden(maaltijd : Maaltijd) : String {
+	if(maaltijd.gesloten=="0"){
+		if(maaltijd.status=="AF"|| maaltijd.status==""){
+			 if( maaltijd.max-maaltijd.aantal<=0){
+				return "Maaltijd vol";
+			 }else{
+			 	var a = Maal.aanmelden(maaltijd.id);
+			 	if(a==1 || a=="true"){
+			 		maaltijd.status="AAN";
+			 		return "aanmelden succesvol";
+			 	}else{
+			 		return "aanmelden niet gelukt";
+			 	}
+			 
+			 }
+		}else{
+			var a = Maal.afmelden(maaltijd.id);
+			 	if(a==1 || a=="true"){
+			 		maaltijd.status="AF";
+			 		return "afmelden succesvol";
+			 	}else{
+			 		return "afmelden niet gelukt";
+			 	}
+		}
+	}
+}
+
+service Login{
+	resource login() : JSON{
+		uri = "/tools/ajax/ajax.php"
+		encoding = "json"
+		mapper = loginMapper
+	}
+	resource inloggen(naam : String, ww : String) : JSON {
+		uri = "/tools/ajax/login.php?user=" + naam + "&pass=" + ww + "&url=/civitasmobiel/www/civitasmobiel.html"
+		encoding = "json"
+	}
+}
+
+service Maal {
+	resource next10() : JSON {
+		uri = "/tools/ajax/ajax.php?next10maal=1"
+		encoding = "json"
+		mapper  = maaltijdMapper
+	}
+	resource afmelden(maaltijd : Num) : JSON {
+		uri = "/tools/ajax/ajax.php?afmelden=" + maaltijd
+		encoding = "json"
+	}
+	resource aanmelden(maaltijd : Num) : JSON {
+		uri = "/tools/ajax/ajax.php?aanmelden=" + maaltijd
+		encoding = "json"
+	}
+}
+
+screen root() {
+	
+	var ajaxlogin = async(Login.inloggen(loginNaam, ww))
+	whenLoaded(ajaxlogin){
+		var login = async(Login.login())
+		whenLoaded(login){
+			when(login=="true"){
+				group{
+					tabSet([("Maaltijden", "lib/toolbar/icon_users.png", maaltijden)])
+					
+					
+				}
+			}
+			when(login=="false"){
+				group{
+					item{label("U kunt hier inloggen")}
+					item{textField(loginNaam,placeholder="naam")}
+					item{passwordField(ww,placeholder="wachtwoord")}
+					item{button("inloggen", onclick={root();})}
+				}
+				
+				
+			}
+		}
+	}
+}
+
+control maaltijden(){
+	header("meld je aan of af voor een maatlijd"){ }
+	var aj = async(Maal.next10())
+	whenLoaded(aj){
+		list(maaltijd in aj){
+			item{
+				var date = DateTime.fromTimestamp(maaltijd.datum*1000)
+				label(date.getDate()+"-"+date.getMonth()+"-"+date.getFullYear() + " " + maaltijd.tekst)
+				var a = tekstKnopMaaltijd(maaltijd)
+				sideButton(a , onclick ={alert(aanAfmelden(maaltijd));a=tekstKnopMaaltijd(maaltijd); })
+			}
+		}
+	}
+}
+
