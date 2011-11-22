@@ -58,6 +58,8 @@ class ProfielContent extends SimpleHTML {
 		$profiel->assign('corveetaken', $this->lid->getCorveeTaken());
 		$profiel->assign('corveevoorkeuren', $this->lid->getCorveeVoorkeuren());
 		$profiel->assign('startpuntentelling',strtotime(Corveeinstellingen::get('startpuntentelling')));
+		require_once 'bibliotheek/catalogus.class.php';
+		$profiel->assign('boeken', Catalogus::getBoekenByUid($this->lid->getUid()));
 
 		$loginlid=LoginLid::instance();
 		$profiel->assign('isAdmin', $loginlid->hasPermission('P_ADMIN'));

@@ -324,6 +324,24 @@
 		</div>
 	</div>
 	{/if}
+	
+	<div class="profielregel" id="boeken">
+		<div class="gegevens">
+			<div class="label">Boeken:</div>
+			<ul class="nobullets data">
+				{foreach from=$boeken item=boek}
+					<li>
+						<a href="/communicatie/bibliotheek/boek/{$boek.id}" title="Boek: {$boek.titel|escape:'html'}">
+							<span title="{$boek.status} boek" class="boekindicator {$boek.status}">•</span><span class="titel">{$boek.titel|escape:'html'}</span><span class="auteur">{$boek.auteur|escape:'html'}</span>
+						</a>
+					</li>
+				{foreachelse}
+					<li>Geen boeken</li>
+				{/foreach}
+			</ul>
+		</div>
+	</div>
+	
 	{if $loginlid->hasPermission('P_ADMIN,P_BESTUUR,groep:novcie') AND $profiel->getStatus()=='S_NOVIET' AND $profhtml.kgb!=''}
 		<div class="profielregel" id="novcieopmerking">
 			<div class="handje" onclick="toggleDiv('novcie_gegevens')">NovCie-Opmerking &raquo;</div>

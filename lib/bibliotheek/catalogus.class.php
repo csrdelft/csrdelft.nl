@@ -267,4 +267,52 @@ private $iKolommenZichtbaar; //aantal kolommen zichtbaar in de tabel.
 		return $return;
 	}
 
+	/* 
+	 * Boeken opvragen van een lid
+	 * 
+	 * @param uid van een lid of leeglaten, zodat uid van ingelogd lid wordt gebruikt
+	 * @return array met boeken van lid
+	 */
+	public static function getBoekenByUid($uid=null){
+		if($uid===null){
+			$uid=LoginLid::instance()->getUid();
+		}
+		$db=MySql::instance();
+		$query="
+			SELECT DISTINCT 
+				b.id, b.titel, a.auteur,
+				IF(
+					(SELECT count( * )
+					FROM biebexemplaar e2
+					WHERE e2.boek_id = b.id AND e2.status='beschikbaar'
+					) > 0, 
+					'beschikbaar', 
+					IF(
+						(SELECT count( * )
+						FROM biebexemplaar e2
+						WHERE e2.boek_id = b.id AND e2.status='teruggegeven'
+						) > 0,
+					'teruggegeven',
+					'geen'
+					)
+				) AS status
+			FROM biebboek b
+			LEFT JOIN biebauteur a ON(b.auteur_id = a.id)
+			LEFT JOIN biebexemplaar e ON(b.id = e.boek_id)
+			WHERE e.eigenaar_uid = '".$db->escape($uid)."'
+			GROUP BY b.id
+			ORDER BY titel;";
+
+		$result=$db->query($query);
+
+		if($db->numRows($result)>0){
+			while($boek=$db->next($result)){
+				$boeken[] = $boek;
+			}
+			return $boeken;
+		}else{
+			return false;
+		}
+	}
+
 }
