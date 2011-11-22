@@ -175,7 +175,7 @@ class Peiling {
 
 	public static function magBewerken(){
 		//Elk basfcie-lid heeft voorlopig peilingbeheerrechten.
-		return LoginLid::instance()->hasPermission('P_ADMIN,groep:BASFcie');
+		return LoginLid::instance()->hasPermission('P_ADMIN,groep:bestuur,groep:BASFcie');
 	}
 
 	public static function getLijst(){
