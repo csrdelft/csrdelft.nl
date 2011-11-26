@@ -266,21 +266,22 @@ h1{
 .exemplaren div.naamCheck{
 	margin-left: 5px;
 }
-
+/* opmerking veld */
 .exemplaren .bewerk{
-	/*padding-right:18px!important;
-	margin-right:2px;*/
-	width: 330px;
+	width: 509px;
 }
 .exemplaren .bewerk:hover{
-	background:url(http://plaetjes.csrdelft.nl/knopjes/bewerken.png) right no-repeat #ddd;
-	background-position: 310px;
+	background:url(http://plaetjes.csrdelft.nl/knopjes/bewerken.png) no-repeat 487px #ddd;
 	cursor:pointer;
-
 }
 .exemplaren .bewerk input{
-	width: 220px;
+	width: 400px;
 }
+.exemplaren .bewerk span.text,.exemplaren span.opmerking {
+	width: 406px;
+	float: left;
+}
+
 /* boekbeschrijvingen */
 .beschrijvingen{
 	margin-top: 30px;

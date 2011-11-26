@@ -107,7 +107,9 @@ abstract class FormField{
 			echo 'new actb(document.getElementById("field_'.$this->name.'"), sug_'.$this->name.'); ';
 			echo '</script>';
 		}
-		
+		if($this->ajax){
+			echo '<div style="clear: both;"></div>';
+		}
 		echo '</div>';
 	}
 }
@@ -196,7 +198,8 @@ class RequiredLandField extends LandField{
 
 class SuggestInputField extends FormField{
 	public function __construct($name, $value, $description, $max_len, $suggestions, $recommendation=''){
-		parent::__construct($name, $value, $description, $max_len);
+		parent::__construct($name, $value, $description);
+		$this->max_len=(int)$max_len;
 		$this->setSuggestions($suggestions);
 		$this->setRecommendation($recommendation);
 	}

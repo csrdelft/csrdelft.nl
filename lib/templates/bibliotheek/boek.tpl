@@ -84,9 +84,9 @@
 							{$boek->getField("opmerking_`$exemplaar.id`")->view()}
 						{else}
 							{if $exemplaar.opmerking != ''}
-							<br /><label>Opmerking</label>{$exemplaar.opmerking|escape:'html'}
+							<br /><label>Opmerking</label><span class="opmerking">{$exemplaar.opmerking|escape:'html'}</span>
 							{/if}
-							<br />
+							<br /><div style="clear: both;"></div>
 						{/if}
 					{* status *}
 						<label>Status</label>
