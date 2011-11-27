@@ -798,14 +798,19 @@ class WebsiteAjaxField extends WebsiteField{
 	public $ajax=true;
 }
 
-/* niet bewerkbaar veld. Geeft alleen waarde weer */
+/* 
+ * Niet bewerkbaar veld. 
+ * Geeft alleen waarde weer. Als het veld leegblijft wordt het veld weggelaten, uitzondering: titel.
+ */
 class NonEditableAjaxField extends FormAjaxField{
 	public function view(){
-		echo '<div class="tijdelijk veld" id="ajaxfield_'.$this->name.'">';
-		echo $this->getLabel();
-		echo $this->getError();
-		echo '<span class="nonedit">'.htmlspecialchars($this->value).'&nbsp;</span>';
-		echo '</div>';
+		if($this->value != '' OR $this->name == 'titel'){
+			echo '<div class="tijdelijk veld" id="ajaxfield_'.$this->name.'">';
+			echo $this->getLabel();
+			echo $this->getError();
+			echo '<span class="nonedit">'.htmlspecialchars($this->value).'&nbsp;</span>';
+			echo '</div>';
+		}
 	}
 }
 
