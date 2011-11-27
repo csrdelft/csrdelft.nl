@@ -20,15 +20,10 @@
 <br/>
 
 {if $loginlid->hasPermission('P_BIEB_READ')}
-	<div id="filters">
-		Selecteer: 	<input id="alle" type="radio" name="filter-catalogus" value="alle"> <label for="alle">Alle</label> 
-					<input id="csr"  type="radio" name="filter-catalogus" value="csr" checked> <label for="csr">C.S.R.</label> 
-					<input id="leden" type="radio" name="filter-catalogus" value="leden"> <label for="leden">Leden</label>
-					<input id="eigen" type="radio" name="filter-catalogus" value="eigen"> <label for="eigen">Eigen</label>
-					<input id="geleend" type="radio" name="filter-catalogus" value="geleend"> <label for="geleend">Geleende boeken</label>
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="boekstatus" type="checkbox" name="boekstatus" value="boekstatus"  /> <label for="boekstatus">Boekstatus weergeven</label>
-
-	</div>
+		<div id="filters">
+			Selecteer: 	<span id="alle" class="filter button">Alle</span><span id="csr" class="filter actief">C.S.R.</span><span id="leden" class="filter button">Leden</span><span id="eigen" class="filter button">Eigen</span><span id="geleend" class="filter button">Geleende boeken</span>
+			<input id="boekstatus" type="checkbox" name="boekstatus" value="boekstatus"  /> <label for="boekstatus">Boekstatus weergeven</label>
+		</div>
 {else}
 	Log in om meer informatie van de boeken te bekijken.
 {/if}

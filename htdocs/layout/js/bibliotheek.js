@@ -22,7 +22,7 @@ jQuery(document).ready(function($) {
 		"bServerSide": true,
 		"sAjaxSource": "/communicatie/bibliotheek/catalogusdata",
 		"fnServerParams": function ( aoData ) {
-			aoData.push( { "name": "sEigenaarFilter", "value": $('input:radio[name=filter-catalogus]:checked').val() } );
+			aoData.push( { "name": "sEigenaarFilter", "value": $('span.filter.actief').attr('id') } );
 			aoData.push( { "name": "sView", "value": $('input[name=boekstatus]').is(':checked') } );
 		},
 		"iDisplayLength": 30,
@@ -31,12 +31,17 @@ jQuery(document).ready(function($) {
 		"bStateSave": true,
 		"iCookieDuration": 60*15, // 15 min
 		"fnStateSaveCallback": function ( oSettings, sValue ) {
-			sValue += ',"sEigenaarFilter": "'+$('input:radio[name=filter-catalogus]:checked').val()+'"';
+			sValue += ',"sEigenaarFilter": "'+$('span.filter.actief').attr('id')+'"';
 			sValue += ',"sView": '+$('input[name=boekstatus]').is(':checked');
 			return sValue;
 		},
 		"fnStateLoadCallback": function ( oSettings, oData ) {
-			$('input:radio[name=filter-catalogus]').val([oData.sEigenaarFilter]);
+			if(typeof oData.sEigenaarFilter == "undefined"){
+				oData.sEigenaarFilter = 'csr';
+			}
+			$('span.filter').removeClass('actief').addClass('button');
+			$('span.filter#'+oData.sEigenaarFilter).removeClass('button').addClass('actief');
+
 			$('input[name=boekstatus]').attr('checked', oData.sView);
 			return true;
 		},
@@ -68,7 +73,13 @@ jQuery(document).ready(function($) {
 	}
 
 	//update de tabel als de radiobuttons of checkbox worden gebruikt
-	$('input:radio[name=filter-catalogus]').click( function() { oTableCatalogus.fnDraw(); } );
+	$('span.filter').click( function() { 
+		//opmaak van knoppen aanpassen
+		$('span.filter').removeClass('actief').addClass('button');
+		$(this).removeClass('button').addClass('actief');
+		//actie
+		oTableCatalogus.fnDraw(); 
+	});
 	$('input#boekstatus').click( function() { 
 		/* Get the DataTables object again - this is not a recreation, just a get of the object */
 		var oTable = $('#boekencatalogus').dataTable();

@@ -265,11 +265,14 @@ td.details {
 	padding: 2px 5px;
 	cursor: pointer;
 	*cursor: hand;
+	position: relative;
+	margin-left: -1px;
 }
 
 .paging_full_numbers span.paginate_button {
 	background-color: #e6e6e6;
 	border: 1px solid #d3d3d3;
+	z-index: 1;
 }
 
 .paging_full_numbers span.paginate_button:hover {
@@ -279,6 +282,11 @@ td.details {
 .paging_full_numbers span.paginate_active {
 	background-color: #fff;
 	border: 1px solid #aaa; 
+	z-index: 2;
+}
+
+.paging_full_numbers span.paginate_button_disabled {
+	color: #aaa;
 }
 
 table.display tr.even.row_selected td {

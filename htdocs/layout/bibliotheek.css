@@ -1,20 +1,81 @@
+/*
+ * layout elementen voor de hele bieb
+ */
+h1{
+	margin-top: 5px;
+}
+.melding {
+	color:red;
+}
+.suggestie{
+	color:grey;
+	font-style: italic;
+}
+/*knoppen in zijkolom rechts*/
+.controls{
+	float: right;
+}
+.boekacties{
+	width: 125px;
+}
+
+/****************************
+ *  cataloguspagina			*
+ ****************************/
 
 /*
- * dataTable layout
+ * eigenaarfilter
  */
- 
 #filters input:checked + label {
 	font-weight: bold;
 }
-#filters{
+#filters {
 	position: absolute;
 	margin: 15px 0px;
-	z-index: 2;
+	z-index: 2;	
+	line-height: 22px;
 }
 #filters label{
 	margin: 0px;
 }
 
+#filters span {
+	padding: 2px 5px;
+	cursor: pointer;
+	color: #162673;
+	margin-right: -1px;
+	position:relative;
+}
+#filters span.button {
+	background-color: #E6E6E6;
+	border: 1px solid lightGrey;
+	z-index: 1;
+}
+#filters span.button:hover {
+	background-color: #CCC;
+}
+#filters span.actief{
+	background-color: white;
+	border: 1px solid #AAA;
+	z-index: 2;
+}
+/* boekstatusschakelaar wat ruimte geven */
+#filters input#boekstatus {
+	margin-left: 50px;
+}
+
+/*
+ * dataTable layout
+ */
+/* zoekvakje uitlijnen met eigenaarfilter */
+#boekencatalogus_filter {
+	margin: 15px 0px;
+	line-height: 22px;
+}
+#boekencatalogus_filter input{
+	width: 250px;
+}
+/* tabel */
 .boeken{
 	width: 100%;
 	clear: both;
@@ -49,42 +110,16 @@
 	background-color: #efefef;
 }
 
-#boekencatalogus_filter {
-	margin: 15px 0px;
-}
-#boekencatalogus_filter input{
-	width: 250px;
-}
-
 .boeken .indicator.beschikbaar								{color:green;}
 .boeken .indicator.teruggegeven								{color:orange;}
 .boeken .indicator.vermist, .boeken .indicator.uitgeleend	{color:red;}
 
-/*
- * layout elementen voor de hele bieb
- */
-h1{
-	margin-top: 5px;
-}
-.melding {
-	color:red;
-}
-.suggestie{
-	color:grey;
-	font-style: italic;
-}
-/*knoppen in zijkolom rechts*/
-.controls{
-	float: right;
-}
-.boekacties{
-	width: 125px;
-}
 
 
-/***************
- * boek-pagina *
- ***************/
+
+/********************************
+ * boek-pagina					*
+ ********************************/
 .label,
 .boek label{ float: left; width: 73px; font-size: 9px; color: #999; margin:0px;	padding-left: 2px;}
 .blok { margin-bottom: 20px; clear: left; }
@@ -317,9 +352,4 @@ h1{
 }
 
 
-/*
- * beheerpagina  
- */
-#filters .actief{
-	font-weight: bold;
-}
+
