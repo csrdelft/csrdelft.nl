@@ -68,7 +68,14 @@ class MaaltijdContent extends SimpleHTML {
 				return 'Geen aankomende maaltijd.';
 			}
 		}
-		$maaltijd=new Maaltijd((int)$maalid);
+
+		# bestaat de maaltijd?
+		$maaltrack = new MaalTrack();           
+		if (!$maaltrack->isMaaltijd($maalid)){
+			return '[maaltijd] '.$maaltrack->getError().' (id: '.mb_htmlentities($maalid).')';
+		}
+
+		$maaltijd = new Maaltijd((int)$maalid);
 
 		$html='<div class="ubb_block ubb_maaltijd" id="maaltijd'.$maaltijd->getID().'">';
 		if(LoginLid::instance()->hasPermission('P_LOGGED_IN')){
