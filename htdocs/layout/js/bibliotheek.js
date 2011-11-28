@@ -36,7 +36,8 @@ jQuery(document).ready(function($) {
 			return sValue;
 		},
 		"fnStateLoadCallback": function ( oSettings, oData ) {
-			if(typeof oData.sEigenaarFilter == "undefined"){
+			var aEigenaarfilters = [ "alle", "csr", "leden", "eigen", "geleend"];
+			if($.inArray(oData.sEigenaarFilter, aEigenaarfilters) == -1) {
 				oData.sEigenaarFilter = 'csr';
 			}
 			$('span.filter').removeClass('actief').addClass('button');

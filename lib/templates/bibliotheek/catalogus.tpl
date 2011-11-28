@@ -21,8 +21,8 @@
 
 {if $loginlid->hasPermission('P_BIEB_READ')}
 		<div id="filters">
-			Selecteer: 	<span id="alle" class="filter button">Alle</span><span id="csr" class="filter actief">C.S.R.</span><span id="leden" class="filter button">Leden</span><span id="eigen" class="filter button">Eigen</span><span id="geleend" class="filter button">Geleende boeken</span>
-			<input id="boekstatus" type="checkbox" name="boekstatus" value="boekstatus"  /> <label for="boekstatus">Boekstatus weergeven</label>
+			<span id="alle" class="filter button">Alle</span><span id="csr" class="filter actief">C.S.R.</span><span id="leden" class="filter button">Leden</span><span id="eigen" class="filter button">Eigen</span><span id="geleend" class="filter button">Geleende boeken</span>
+			<input id="boekstatus" type="checkbox" name="boekstatus" value="boekstatus"  /> <label for="boekstatus">Eigenaar en lener</label>
 		</div>
 {else}
 	Log in om meer informatie van de boeken te bekijken.
