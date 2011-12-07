@@ -151,6 +151,17 @@ class IsHetAlContent extends SimpleHTML{
 
 }
 
+class Reclame extends SimpleHTML {
+	
+	public function __construct(){
+	
+	}
+	
+	public function view(){
+		echo '<script type=\'text/javascript\'><!--// <![CDATA[/* [id1377] Delft CSR - Standaard */ OA_show(1377);// ]]> --></script><a target=\'_blank\' href=\'http://ads2.bom-media.nl/www/delivery/ck.php?n=7533f3f\'><img border=\'0\' alt=\'\' src=\'http://ads2.bom-media.nl/www/delivery/avw.php?zoneid=1377&amp;n=7533f3f\' /></a>';
+	}
+}
+
 class Kolom extends SimpleHTML {
 
 	# Een object is een van SimpleHTML afgeleid object waarin een
@@ -231,6 +242,9 @@ class DefaultKolom extends Kolom{
 		if(Instelling::get('zijbalk_verjaardagen')>0){
 			require_once 'lid/verjaardagcontent.class.php';
 			$this->add(new VerjaardagContent('komende'));
+		}
+		if(true){
+			$this->add(new Reclame());
 		}
 	}
 }
