@@ -9,7 +9,7 @@
 <hr />
 <h1>C.S.R.-courant</h1>
 <p>
-	De C.S.R.-courant wordt elke woensdagavond verzonden naar alle leden van C.S.R.. 
+	De C.S.R.-courant wordt elke maandagavond verzonden naar alle leden van C.S.R.. 
 	Als u uw bericht voor 22:00 invoert, kunt u tamelijk zeker zijn van plaatsing in de courant.
 	De PubCie streeft ernaar de courant rond 23:00/24:00 bij u in uw postvak te krijgen.
 </p>
