@@ -126,6 +126,63 @@ class Forum{
 				".$iAantal.";";
 		return MySql::instance()->query2array($query);
 	}
+
+	public static function getPostsZijbalkBelangrijk($iAantal=false, $bDistinct=true, $token=null, $uid=null){
+		if($iAantal===false){
+			$iAantal=Forum::$_postsPerRss;
+		}
+		$sDistinctClause=' AND 1';
+		if($bDistinct){
+			$sDistinctClause='AND topic.lastpostID=post.id';
+		}
+		$uidClause=' AND 1';
+		if($uid!=null){
+			$uidClause=" AND post.uid='".$uid."'";
+		}
+
+		//zoo, uberdeuberdeuber query om een topic op te halen. Namen worden
+		//ook opgehaald in deze query, die worden door forumcontent weer
+		//doorgegeven aan getForumNaam();
+		$query="
+			SELECT
+				topic.id AS tid,
+				topic.titel AS titel,
+				topic.uid AS startUID,
+				topic.categorie AS categorie,
+					categorie.titel AS categorieTitel,
+				topic.open AS open,
+				topic.plakkerig AS plakkerig,
+				topic.lastpost AS lastpost,
+				topic.reacties AS reacties,
+				post.uid AS uid,
+				post.id AS postID,
+				post.tekst AS tekst,
+				post.datum AS datum,
+				post.bewerkDatum AS bewerkDatum,
+				gelezen.moment AS momentGelezen
+			FROM
+				forum_topic topic
+			INNER JOIN
+				forum_cat categorie ON(categorie.id=topic.categorie)
+			LEFT JOIN
+				forum_post post ON( topic.id=post.tid )
+			LEFT JOIN
+				forum_gelezen AS gelezen
+			ON
+				gelezen.tid = topic.id AND
+				gelezen.uid = '".LoginLid::instance()->getUid()."'
+			WHERE
+				topic.belangrijk = '1' AND
+				topic.zichtbaar='zichtbaar' AND
+				post.zichtbaar='zichtbaar' AND
+				( ".Forum::getCategorieClause($token)." )
+				".$sDistinctClause." ".$uidClause."
+			ORDER BY
+				post.datum DESC
+			LIMIT
+				".$iAantal.";";
+		return MySql::instance()->query2array($query);
+	}
 	public static function isIngelogged(){ return LoginLid::instance()->hasPermission('P_LOGGED_IN'); }
 	public static function isModerator(){ return LoginLid::instance()->hasPermission('P_FORUM_MOD'); }
 	public static function getLaatstBekeken(){ return LoginLid::instance()->getForumLaatstBekeken(); }

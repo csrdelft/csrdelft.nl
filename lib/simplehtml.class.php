@@ -224,6 +224,11 @@ class DefaultKolom extends Kolom{
 		# Laatste forumberichten
 		if(Instelling::get('zijbalk_forum')>0){
 			require_once 'forum/forumcontent.class.php';
+			$forumcontent=new ForumContent('lastposts_belangrijk');
+			$this->add($forumcontent);
+		}
+		if(Instelling::get('zijbalk_forum')>0){
+			require_once 'forum/forumcontent.class.php';
 			$forumcontent=new ForumContent('lastposts');
 			$this->add($forumcontent);
 		}

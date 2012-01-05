@@ -30,6 +30,12 @@
 			{else}
 				{knop url="plakkerigheid/`$onderwerp->getID()`" class=knop type=plakkerig text="maak plakkerig"}
 			{/if}
+			<br /><br />
+			{if $onderwerp->isBelangrijk()}
+				{knop url="belangrijk/`$onderwerp->getID()`" class=knop type=plakkerig text="maak niet belangrijk"}
+			{else}
+				{knop url="belangrijk/`$onderwerp->getID()`" class=knop type=plakkerig text="maak belangrijk"}
+			{/if}
 		</div>
 		<div style="float: right; width: 60%;">
 			<form action="/communicatie/forum/verplaats/{$onderwerp->getID()}/" method="post">

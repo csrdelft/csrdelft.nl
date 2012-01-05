@@ -76,6 +76,37 @@ class ForumContent extends SimpleHTML {
 			echo '</div>';
 		}
 	}
+	public function lastPostsZijbalkBelangrijk($zelf=false){
+		
+		$aPosts=Forum::getPostsZijbalkBelangrijk(Instelling::get('zijbalk_forum'), true);
+		echo '<div id="zijbalk_forum"><h1><a href="/communicatie/forum/categorie/laatste">Forum belangrijk</a></h1>';
+
+		if(!is_array($aPosts)){
+			echo '<div class="item">Geen items gevonden</div>';
+		}else{
+			foreach($aPosts as $aPost){
+				$tekst=$aPost['titel'];
+				if(strlen($tekst)>40){
+					$tekst=trim(substr($tekst, 0, 38)).'…';
+				}
+				$tekst=mb_htmlentities($tekst);
+				$tekst=str_replace(' ', '&nbsp;', $tekst);
+
+				$post=preg_replace('/(\[(|\/)\w+\])/', '|', $aPost['tekst']);
+				$postfragment=substr(str_replace(array("\n", "\r", ' '), ' ', $post), 0, 40);
+				echo '<div class="item"><span class="tijd">'.date('H:i', strtotime($aPost['datum'])).'</span>&nbsp;';
+				echo '<a href="/communicatie/forum/reactie/'.$aPost['postID'].'"
+					title="['.htmlspecialchars($aPost['titel']).'] '.
+						Forum::getForumNaam($aPost['uid'], false, false).': '.mb_htmlentities($postfragment).'"';
+				if(LoginLid::instance()->getUid()!='x999'&&($aPost['momentGelezen']==''||$aPost['momentGelezen']<$aPost['lastpost'])) { echo ' class="opvallend"'; }
+				echo '>'.$tekst.'</a><br />'."\n";
+				echo '</div>';
+			}
+		}
+		if(!$zelf){
+			echo '</div>';
+		}
+	}
 	public function lastPosts(){
  		$smarty=new Smarty_csr();
 		$smarty->assign('berichten', Forum::getPostsVoorRss(Instelling::get('forum_zoekresultaten')));
@@ -188,6 +219,7 @@ class ForumContent extends SimpleHTML {
 		switch($this->actie){
 			case 'recent': $this->lastPosts(); break;
 			case 'rss': $this->rssFeed();	break;
+			case 'lastposts_belangrijk': $this->lastPostsZijbalkBelangrijk(); break;
 			case 'lastposts': $this->lastPostsZijbalk(); break;
 			case 'lastposts_zelf': $this->lastPostsZijbalk(true); break;
 			case 'zoeken': $this->zoeken(); break;

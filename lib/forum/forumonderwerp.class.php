@@ -22,6 +22,7 @@ class ForumOnderwerp{
 	private $zichtbaar='zichtbaar';
 	private $open=1;
 	private $plakkerig=0;
+	private $belangrijk=0;
 	private $reacties=0;
 	private $lastuser;
 	private $lastpost;
@@ -73,6 +74,7 @@ class ForumOnderwerp{
 		$this->setCategorie($onderwerp['categorie']);
 		$this->open=$onderwerp['open'];
 		$this->plakkerig=$onderwerp['plakkerig'];
+		$this->belangrijk=$onderwerp['belangrijk'];
 		$this->zichtbaar=$onderwerp['zichtbaar'];
 		$this->reacties=$onderwerp['reacties'];
 		$this->lastpost=$onderwerp['lastpost'];
@@ -93,7 +95,7 @@ class ForumOnderwerp{
 
 		$sTopicQuery="
 			SELECT
-				id, titel, topic.uid as uid, categorie, open, plakkerig, zichtbaar,
+				id, titel, topic.uid as uid, categorie, open, plakkerig, belangrijk, zichtbaar,
 				lastpost, lastuser, lastpostID, reacties,
 				gelezen.moment as momentGelezen
 			FROM
@@ -194,6 +196,7 @@ class ForumOnderwerp{
 	public function setZichtbaarheid($zichtbaarheid){ $this->zichtbaar=$zichtbaarheid; }
 	public function isOpen(){ return $this->open==1; }
 	public function isPlakkerig(){ return $this->plakkerig==1; }
+	public function isBelangrijk(){ return $this->belangrijk==1; }
 	public function needsModeration(){ return !Forum::isIngelogged(); }
 	public function getReacties(){ return $this->reacties; }
 	public function getLastpost(){ return $this->lastpost; }
@@ -590,6 +593,19 @@ class ForumOnderwerp{
 				forum_topic
 			SET
 				plakkerig='".$status."'
+			WHERE
+				id=".$this->getID()."
+			LIMIT 1;";
+		return MySql::instance()->query($sTopicQuery);
+	}
+
+	function toggleBelangrijkheid(){
+		$status=$this->isBelangrijk() ? '0' : '1';
+		$sTopicQuery="
+			UPDATE
+				forum_topic
+			SET
+				belangrijk='".$status."'
 			WHERE
 				id=".$this->getID()."
 			LIMIT 1;";

@@ -31,6 +31,7 @@ RewriteRule ^markeer-bericht-offtopic/([0-9]+)$ markeerofftopic.php?post=$1
 ##andere mod dingen:
 RewriteRule ^openheid/([0-9]+)$ sluiten.php?topic=$1
 RewriteRule ^plakkerigheid/([0-9]+)$ plakkerig.php?topic=$1
+RewriteRule ^belangrijk/([0-9]+)$ belangrijk.php?topic=$1
 #goedkeuren gaat aan de hand van posts, wordt een post goedgekeurd,
 #dan het topic automatisch ook.
 RewriteRule ^keur-goed/([0-9]+)$ goedkeuren.php?post=$1
