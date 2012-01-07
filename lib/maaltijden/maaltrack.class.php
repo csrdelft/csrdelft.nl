@@ -1499,7 +1499,9 @@ class MaalTrack {
 				// taken ophalen
 				$taken = $lMaaltijd->getTaken();
 				// tafelpraeses toevoegen
-				$taken['tp'][] = $lMaaltijd->getTP();
+				if($tp = $lMaaltijd->getTP()){
+					$taken['tp'][] = $tp;
+				}
 				$teller = array();
 				$foutTeller = array();
 

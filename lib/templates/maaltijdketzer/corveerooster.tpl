@@ -20,7 +20,7 @@
 			<td>{$maaltijd.datum|date_format:$datumWeek}</td>
 			<td>{$maaltijd.datum|date_format:$datumWeekdag}</td>
 			<td><a href="javascript:void" title="{$maaltijd.tekst|truncate:20|escape:'html'}">{$maaltijd.datum|date_format:$datumVol}</a></td>
-			<td><span class="{if $maaltijd.tp==$liduid}mijzelf{/if}">{$maaltijd.tp|csrnaam}</span></td>
+			<td>{if $maaltijd.tp!=''}<span class="{if $maaltijd.tp==$liduid}mijzelf{/if}">{$maaltijd.tp|csrnaam}</span>{else}{if $maaltijd.type=='corvee'}{else}...{/if}{/if}</td>
 			<td>
 				{section name=koks loop=$maaltijd.koks}
 					{assign var='it' value=$smarty.section.koks.iteration-1}
