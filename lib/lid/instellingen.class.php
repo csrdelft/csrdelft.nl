@@ -31,6 +31,7 @@ class Instelling{
 			'zijbalk_mededelingen' => array(8, 'Aantal mededelingen in zijbalk', 'int'),
 			'zijbalk_forum' => array(10, 'Aantal forumberichten in zijbalk', 'int'),
 			'zijbalk_forum_zelf' => array(0, 'Aantal zelf geposte forumberichten zijbalk', 'int'),
+			'zijbalk_forum_belangrijk' => array('ja', 'Blokje met \'belangrijke\' forumberichten weergeven', 'enum', array('ja', 'nee')),
 			'zijbalk_fotoalbum' => array('ja', 'Laatste fotoalbum weergeven?', 'enum', array('ja', 'nee')),
 			'zijbalk_verjaardagen_pasfotos' => array('ja', 'Toon pasfoto\'s bij verjaardagen', 'enum', array('ja', 'nee')),
 			'zijbalk_verjaardagen' => array(10, 'Aantal verjaardagen in zijbalk', 'int'),
