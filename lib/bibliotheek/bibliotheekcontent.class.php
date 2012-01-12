@@ -134,7 +134,7 @@ Rubriek: '.$aBoek['categorie'].'"';
 					$sUitleendatalijst .= '<span title="Exemplaar is beschikbaar">';
 			}
 			//indicator
-			$sUitleendatalijst .= '<span class="indicator '.$aStatus[$j].'">• </span>';
+			$sUitleendatalijst .= '<span class="biebindicator '.$aStatus[$j].'">• </span>';
 			//datum
 			if($aStatus[$j] == 'uitgeleend' OR  $aStatus[$j] == 'teruggegeven' OR $aStatus[$j] == 'vermist'){
 				$sUitleendatalijst .= strftime("%d %b %Y", strtotime($uitleendatum));

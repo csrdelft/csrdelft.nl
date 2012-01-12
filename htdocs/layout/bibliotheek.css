@@ -110,9 +110,9 @@ h1{
 	background-color: #efefef;
 }
 
-.boeken .indicator.beschikbaar								{color:green;}
-.boeken .indicator.teruggegeven								{color:orange;}
-.boeken .indicator.vermist, .boeken .indicator.uitgeleend	{color:red;}
+.biebindicator.beschikbaar							{color:green;}
+.biebindicator.teruggegeven							{color:orange;}
+.biebindicator.vermist, .biebindicator.uitgeleend	{color:red;}
 
 
 
@@ -314,6 +314,18 @@ h1{
 }
 .exemplaren .bewerk span.text,.exemplaren span.opmerking {
 	width: 406px;
+	float: left;
+}
+.exemplaren .exemplaar.compact a {
+	float: left;
+	margin-right: 5px;
+}
+.exemplaren .exemplaar.compact img.pasfoto{
+	height: 40px;
+}
+.exemplaren .exemplaar.compact .statusmarkering {
+	margin-left:-35px;
+	font-size: 18px;
 	float: left;
 }
 
