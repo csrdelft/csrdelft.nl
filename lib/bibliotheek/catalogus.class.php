@@ -270,17 +270,29 @@ private $iKolommenZichtbaar; //aantal kolommen zichtbaar in de tabel.
 	/* 
 	 * Boeken opvragen van een lid
 	 * 
-	 * @param uid van een lid of leeglaten, zodat uid van ingelogd lid wordt gebruikt
+	 * @param 	uid van een lid of leeglaten, zodat uid van ingelogd lid wordt gebruikt
+	 * 			gerecenseerdeboeken: false zoekt boeken in eigendom, true zoekt gerecenseerde boeken
 	 * @return array met boeken van lid
 	 */
-	public static function getBoekenByUid($uid=null){
+	public static function getBoekenByUid($uid=null,$gerecenseerdeboeken=false){
 		if($uid===null){
 			$uid=LoginLid::instance()->getUid();
 		}
 		$db=MySql::instance();
+		if($gerecenseerdeboeken){
+			//zoekt boeken gerecenseerd door $uid
+			$select = " bs.beschrijving,";
+			$join = "biebbeschrijving bs ON(b.id = bs.boek_id)";
+			$where = "bs.schrijver_uid = '".$db->escape($uid)."'";
+		}else{
+			//zoekt boeken in bezit van $uid
+			$select = "";
+			$join = "biebexemplaar e ON(b.id = e.boek_id)";
+			$where = "e.eigenaar_uid = '".$db->escape($uid)."'";
+		}
 		$query="
 			SELECT DISTINCT 
-				b.id, b.titel, a.auteur,
+				b.id, b.titel, a.auteur,".$select."
 				IF(
 					(SELECT count( * )
 					FROM biebexemplaar e2
@@ -298,8 +310,8 @@ private $iKolommenZichtbaar; //aantal kolommen zichtbaar in de tabel.
 				) AS status
 			FROM biebboek b
 			LEFT JOIN biebauteur a ON(b.auteur_id = a.id)
-			LEFT JOIN biebexemplaar e ON(b.id = e.boek_id)
-			WHERE e.eigenaar_uid = '".$db->escape($uid)."'
+			LEFT JOIN ".$join."
+			WHERE ".$where."
 			GROUP BY b.id
 			ORDER BY titel;";
 

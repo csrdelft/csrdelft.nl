@@ -41,9 +41,15 @@
 #profiel #recenteForumberichten{ width: 600px; }
 #profiel #recenteForumberichten td{ text-align: left; }
 
-#profiel #boeken a { text-align: left; text-decoration: none !important;}
-#profiel #boeken a .auteur { color: #777; margin-left:10px; }
-#profiel #boeken a .titel:hover{color: #0a338d; text-decoration: underline;}
+#profiel .boeken a { text-align: left; text-decoration: none !important;}
+#profiel .boeken a .auteur { color: #777; margin-left:10px; }
+#profiel .boeken a .titel:hover{color: #0a338d; text-decoration: underline;}
+#profiel .boeken li {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	-o-text-overflow: ellipsis;
+	white-space: nowrap;
+}
 
 p.profielBewerken .pasfoto{ float: right; margin-left: 10px;}
 #profielForm label{

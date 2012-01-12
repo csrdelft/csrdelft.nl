@@ -60,6 +60,7 @@ class ProfielContent extends SimpleHTML {
 		$profiel->assign('startpuntentelling',strtotime(Corveeinstellingen::get('startpuntentelling')));
 		require_once 'bibliotheek/catalogus.class.php';
 		$profiel->assign('boeken', Catalogus::getBoekenByUid($this->lid->getUid()));
+		$profiel->assign('gerecenseerdeboeken', Catalogus::getBoekenByUid($this->lid->getUid(),$gerecenseerdeboeken=true));
 
 		$loginlid=LoginLid::instance();
 		$profiel->assign('isAdmin', $loginlid->hasPermission('P_ADMIN'));

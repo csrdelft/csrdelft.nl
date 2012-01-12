@@ -325,7 +325,7 @@
 	</div>
 	{/if}
 	{if $boeken}
-		<div class="profielregel" id="boeken">
+		<div class="profielregel boeken" id="boeken">
 			<div class="gegevens">
 				<div class="label">Boeken:</div>
 				<ul class="nobullets data">
@@ -334,6 +334,24 @@
 							<a href="/communicatie/bibliotheek/boek/{$boek.id}" title="Boek: {$boek.titel|escape:'html'}">
 								<span title="{$boek.status} boek" class="boekindicator {$boek.status}">•</span><span class="titel">{$boek.titel|escape:'html'}</span><span class="auteur">{$boek.auteur|escape:'html'}</span>
 							</a>
+						</li>
+					{foreachelse}
+						<li>Geen boeken</li>
+					{/foreach}
+				</ul>
+			</div>
+		</div>
+	{/if}
+	{if $gerecenseerdeboeken}
+		<div class="profielregel boeken" id="gerecenseerdeboeken">
+			<div class="gegevens">
+				<div class="label">Boekrecensies:</div>
+				<ul class="nobullets data">
+					{foreach from=$gerecenseerdeboeken item=boek}
+						<li>
+							<a href="/communicatie/bibliotheek/boek/{$boek.id}" title="Boek: {$boek.titel|escape:'html'}">
+								<span title="{$boek.status} boek" class="boekindicator {$boek.status}">•</span><span class="titel">{$boek.titel|escape:'html'}</span><span class="auteur">{$boek.auteur|escape:'html'}</span>
+							</a> {$boek.beschrijving|ubb|strip_tags}
 						</li>
 					{foreachelse}
 						<li>Geen boeken</li>
