@@ -75,7 +75,7 @@
 		<div class="blok gegevens">
 			<h2>Exemplaren</h2>
 			{foreach from=$boek->getExemplaren() item=exemplaar name=exemplaren}
-				<div class="exemplaar uitgebreid" {if $smarty.foreach.exemplaren.total>4 AND ($exemplaar.eigenaar_uid!='x222' OR $total_exemplaren_bibliotheek>0)}style="display: none;"{/if}>
+				<div class="exemplaar uitgebreid" {if $smarty.foreach.exemplaren.total>4 AND !$boek->isEigenaar($exemplaar.id) AND ($exemplaar.eigenaar_uid!='x222' OR $total_exemplaren_bibliotheek>0 )}style="display: none;"{/if}>
 					<div class="label">{$exemplaar.eigenaar_uid|pasfoto}</div>		
 					<div class="gegevensexemplaar" id="ex{$exemplaar.id}">
 					{* eigenaar *}
@@ -153,13 +153,19 @@
 				<p>Geen exemplaren.</p>
 			{/foreach}
 
-			{* compacte weergave *}
+			{* compacte weergave met alleen foto's *}
+			{assign var=total_exemplaren_bibliotheek value=0} {* teller nodig om in compacte weergave slechts 1 biebboek te laten zien. *}
 			{if $smarty.foreach.exemplaren.total>4}
 				<div class="exemplaar compact">
 					<label>&nbsp;</label>
 					{foreach from=$boek->getExemplaren() item=exemplaar}
-						{$exemplaar.eigenaar_uid|pasfoto} 
-						<div class="statusmarkering"><span class="biebindicator {$exemplaar.status}">• </span></div>
+						{if !$boek->isEigenaar($exemplaar.id) AND ($exemplaar.eigenaar_uid!='x222' OR $total_exemplaren_bibliotheek>0 )}
+							{$exemplaar.eigenaar_uid|pasfoto} 
+							<div class="statusmarkering"><span class="biebindicator {$exemplaar.status}" title="Boek is {$exemplaar.status}">• </span></div>
+						{/if}
+						{if $exemplaar.eigenaar_uid=='x222'}
+							{assign var=total_exemplaren_bibliotheek value=`$total_exemplaren_bibliotheek+1`}
+						{/if}
 					{/foreach}
 					<br /><div style="clear: both;"></div>
 					<label>&nbsp;</label><a onclick="jQuery(this).parent().parent().children('div.exemplaar.uitgebreid').show(); jQuery(this).parent().remove();"class="handje" >» meer informatie</a>
