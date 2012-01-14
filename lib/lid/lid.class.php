@@ -740,7 +740,7 @@ class Lid implements Serializable, Agendeerbaar{
 	 * Voeg een nieuw regeltje in de lid-tabel in met alleen een nieuw lid-nummer.
 	 * PAS OP: niet multi-user safe.
 	 */
-	public static function createNew($lichting){
+	public static function createNew($lichting,$lidstatus){
 		$db=MySql::instance();
 		$lichtingid=substr($lichting, 2, 2);
 		$query="SELECT max(uid) AS uid FROM lid WHERE LEFT(uid, 2)='".$lichtingid."' LIMIT 1;";
@@ -758,18 +758,50 @@ class Lid implements Serializable, Agendeerbaar{
 
 		$newuid=$lichtingid.sprintf('%02d', $volgnummer);
 
-		$changelog='Aangemaakt door [lid='.LoginLid::instance()->getUid().'] op [reldate]'.getDatetime().'[/reldate][br]';
-
-		if($lichting==date('Y')){
-			$status='S_NOVIET';
-			$perm='P_LID';
+		$studiejaar = 0;
+		if(in_array($lidstatus, array('Gastlid','Lid','Noviet','Oudlid','Erelid','Kringel','Exlid'))){
+			switch($lidstatus){
+				case 'Gastlid':
+					$status = 'S_GASTLID';
+					$perm 	= 'P_LID';
+				break;
+				case 'Lid':
+					$status = 'S_LID';
+					$perm 	= 'P_LID';
+				break;
+				case 'Noviet': 
+					$status = 'S_NOVIET';
+					$perm 	= 'P_LID';
+					$studiejaar = $lichting;
+				break;
+				case 'Oudlid':
+					$status = 'S_OUDLID';
+					$perm 	= 'P_OUDLID';
+				break;
+				case 'Erelid':
+					$status = 'S_ERELID';
+					$perm 	= 'P_OUDLID';
+				break;
+				case 'Kringel':
+					$status = 'S_KRINGEL';
+					$perm 	= 'P_LID';
+				break;
+				case 'Exlid':
+					$status = 'S_NOBODY';
+					$perm 	= 'P_NOBODY';
+					$lidstatus = 'Ex-lid';
+				break;
+			}
 		}else{
-			$status='S_NOBODY';
-			$perm='P_NOBODY';
+			throw new Exception('Onbekende status.');
 		}
+
+		$changelog='Aangemaakt als '.$lidstatus.' door [lid='.LoginLid::instance()->getUid().'] op [reldate]'.getDatetime().'[/reldate][br]';
+
+
 		$query="
 			INSERT INTO lid (uid, lidjaar, studiejaar, status, permissies, changelog, land, o_land)
-			VALUE ('".$newuid."', '".$lichting."', '".$lichting."', '".$status."', '".$perm."', '".$changelog."', 'Nederland', 'Nederland');";
+			VALUE ('".$newuid."', '".$lichting."', '".$studiejaar."', '".$status."', '".$perm."', '".$changelog."', 'Nederland', 'Nederland');";
 		if($db->query($query)){
 			return $newuid;
 		}else{
