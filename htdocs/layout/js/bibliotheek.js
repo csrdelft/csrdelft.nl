@@ -94,6 +94,106 @@ jQuery(document).ready(function($) {
 	// velden bewerkbaar maken
 	observeClick();
 	biebCodeVakvuller();
+	
+	// Suggesties voor zoekveld uit Google books. 
+	// Kiezen van een suggestie plaatst in alle velden de juiste info.
+	$("#boekzoeker").autocomplete("https://www.googleapis.com/books/v1/volumes",{
+		dataType: 'jsonp',
+		parse: function(data) {
+			var rows = new Array();
+			data = data.items;
+			for(var i=0; i<data.length; i++){
+				var datarow = data[i].volumeInfo;
+				rows[i] = { data:datarow, value:datarow.title, result: datarow.title+' '+(datarow.authors ? datarow.authors.join(', ') : '') };
+			}
+			return rows;
+		},
+		formatItem: function(row, i, n) {
+			return row.title+'<br /><i>'+(row.authors ? row.authors.join(', ') : '')+'</i>';
+		},
+		formatResult: function(row) {
+			return row.title+' '+(row.authors ? row.authors.join(', ') : '');
+		},
+		extraParams: {
+			limit: '',
+			fields: 'items(volumeInfo(authors,industryIdentifiers,language,pageCount,publishedDate,publisher,title))',
+			key: 'AIzaSyC7zu4-25xbizddFWuIbn107WTTPr37jos',
+			maxResults: 25,
+			qq: 1
+		},
+		minChars: 7,
+		delay: 1000,
+		max: 25
+	}).result(function(event, datarow, formatted) {
+		var isbn = '';
+		if(datarow.industryIdentifiers[1] && datarow.industryIdentifiers[1].type == "ISBN_13"){
+			isbn = datarow.industryIdentifiers[1].identifier;
+		}
+		var lang = {
+			nl: "Nederlands",
+			en: "Engels",
+			fr: "Frans",
+			de: "Duits",
+			bg: "Bulgaars",
+			es: "Spaans",
+			cs: "Tsjechisch",
+			da: "Deens",
+			et: "Ests",
+			el: "Grieks",
+			ga: "Iers",
+			it: "Italiaans",
+			lv: "Lets",
+			lt: "Litouws",
+			hu: "Hongaars",
+			mt: "Maltees",
+			pl: "Pools",
+			pt: "Portugees",
+			ro: "Roemeens",
+			sk: "Slowaaks",
+			sl: "Sloveens",
+			fi: "Fins",
+			sv: "Zweeds"
+		};
+		//gegevens in invulvelden plaatsen
+		$("#field_titel").val(datarow.title);
+		$("#field_auteur").val((datarow.authors ? datarow.authors.join(', ') : ''));
+		$("#field_paginas").val(datarow.pageCount);
+		$("#field_taal").val(lang[datarow.language] ? lang[datarow.language] : datarow.language);
+		$("#field_isbn").val(isbn);
+		$("#field_uitgeverij").val(datarow.publisher);
+		$("#field_uitgavejaar").val(datarow.publishedDate ? datarow.publishedDate.substring(0,4) : '');
+		
+	})
+	//autocomplete voor bewerkvelden uit C.S.R.-database.
+	var options = {
+		dataType: 'json',
+		parse: function(data) {
+			var rows = new Array();
+			for(var i=0; i<data.length; i++){
+				var datarow = data[i];
+				rows[i] = { data:datarow, value:datarow, result: datarow };
+			}
+			return rows;
+		},
+		formatItem: function(row, i, n) {
+			return row;
+		},
+		max: 20
+	};
+	function opslaanGekozenWaarde(event, datarow, formatted){
+		var ID = jQuery(this).attr('id').substring(6);
+		var waarde = datarow;
+		console.log("result"+ID+"|"+waarde);
+		saveChange(ID,waarde)
+	};
+	$("#field_titel").autocomplete("/communicatie/bibliotheek/autocomplete/titel",options)
+	$(".bewerk #field_titel").result(opslaanGekozenWaarde);
+	$("#field_auteur").autocomplete("/communicatie/bibliotheek/autocomplete/auteur",options)
+	$(".bewerk #field_auteur").result(opslaanGekozenWaarde);
+	$("#field_taal").autocomplete("/communicatie/bibliotheek/autocomplete/taal",options)
+	$(".bewerk #field_taal").result(opslaanGekozenWaarde);
+	$("#field_uitgeverij").autocomplete("/communicatie/bibliotheek/autocomplete/uitgeverij",options)
+	$(".bewerk #field_uitgeverij").result(opslaanGekozenWaarde);
 });
 
 function observeClick(){
@@ -103,19 +203,8 @@ function observeClick(){
 		jQuery(this).children('.editbox,.editelement').show();
 	}).change(function(){
 		var ID=jQuery(this).attr('id');
-		var boekid=jQuery(".boek").attr('id');
 		var waarde=jQuery("#"+ID+" input,#"+ID+" select,#"+ID+" textarea").val();
-		var dataString = 'id='+ID+'&'+ID+'='+ waarde;
-
-		jQuery.ajax({
-			type: "POST",
-			url: '/communicatie/bibliotheek/bewerkboek/'+ boekid,
-			data: dataString,
-			cache: false,
-			success: function(result){
-				jQuery("#"+ID+" span.text").html(result);
-			}
-		});
+		saveChange(ID,waarde);
 	});
 
 
@@ -130,9 +219,21 @@ function observeClick(){
 				jQuery(".text").show();
 		}
 	});
-
 };
+function saveChange(ID,waarde){
+		var boekid=jQuery(".boek").attr('id');
+		var dataString = 'id='+ID+'&'+ID+'='+ waarde;
 
+		jQuery.ajax({
+			type: "POST",
+			url: '/communicatie/bibliotheek/bewerkboek/'+ boekid,
+			data: dataString,
+			cache: false,
+			success: function(result){
+				jQuery("#"+ID+" span.text").html(result);
+			}
+		});
+};
 
 
 function biebCodeVakvuller(){

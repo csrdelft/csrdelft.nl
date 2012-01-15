@@ -143,6 +143,10 @@ htdocs/layout/forum.css -text
 htdocs/layout/fotoalbum.css -text
 htdocs/layout/groepen.css -text
 htdocs/layout/jquery.prettyPhoto.css -text
+htdocs/layout/js/autocomplete/indicator.gif -text
+htdocs/layout/js/autocomplete/jquery.autocomplete.css -text
+htdocs/layout/js/autocomplete/jquery.autocomplete.js -text
+htdocs/layout/js/autocomplete/jquery.autocomplete.min.js -text
 htdocs/layout/js/bibliotheek.js -text
 htdocs/layout/js/csrdelft.js -text
 htdocs/layout/js/datatables/css/datatables_basic.css -text

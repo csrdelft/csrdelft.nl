@@ -20,12 +20,13 @@ if(!$biebControl->hasZijkolom()){
 }
 $pagina->addStylesheet('bibliotheek.css');
 $pagina->addStylesheet('js/datatables/css/datatables_basic.css');
+$pagina->addStylesheet('js/autocomplete/jquery.autocomplete.css');
 
 $pagina->addScript('datatables/jquery.dataTables.min.js');
+$pagina->addScript('autocomplete/jquery.autocomplete.min.js');
 
 $pagina->addScript('csrdelft.js');
 $pagina->addScript('bibliotheek.js');
-$pagina->addScript('suggest.js');
 
 $pagina->view();
 ?>

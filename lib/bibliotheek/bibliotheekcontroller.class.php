@@ -46,7 +46,8 @@ class BibliotheekController extends Controller{
 			$allow=array_merge($allow, array('default', 'boek', 'nieuwboek', 'bewerkboek',
 					'addbeschrijving', 'verwijderbeschrijving', 'bewerkbeschrijving',
 					'addexemplaar', 'verwijderexemplaar',
-					'exemplaarlenen', 'exemplaarteruggegeven', 'exemplaarterugontvangen', 'exemplaarvermist', 'exemplaargevonden'));
+					'exemplaarlenen', 'exemplaarteruggegeven', 'exemplaarterugontvangen', 'exemplaarvermist', 'exemplaargevonden',
+					'autocomplete'));
 		}
 		// beheerders mogen boeken weggooien
 		if(LoginLid::instance()->hasPermission('P_BIEB_MOD,groep:BASFCie')){
@@ -248,7 +249,7 @@ class BibliotheekController extends Controller{
 	 * Exemplaar toevoegen
 	 * /addexemplaar/$boekid[/$eigenaarid]
 	 */
-	public function action_addexemplaar(){
+	protected function action_addexemplaar(){
 		$this->loadBoek();
 		if(!$this->boek->magBekijken()){
 			BibliotheekCatalogusContent::invokeRefresh('Onvoldoende rechten voor deze actie. Biebcontrllr::action_addexemplaar()', CSR_ROOT.'communicatie/bibliotheek/boek/'.$this->boek->getId());
@@ -274,7 +275,7 @@ class BibliotheekController extends Controller{
 	 * Exemplaar verwijderen
 	 * /deleteexemplaar/$boekid/$exemplaarid
 	 */
-	public function action_verwijderexemplaar(){
+	protected function action_verwijderexemplaar(){
 		$this->loadBoek();
 		if($this->hasParam(2) AND $this->boek->isEigenaar($this->getParam(2))){
 			if($this->boek->verwijderExemplaar($this->getParam(2))){
@@ -293,7 +294,7 @@ class BibliotheekController extends Controller{
 	 * 
 	 * /exemplaarlenen/id/exemplaarid[/ander]
 	 */
-	public function action_exemplaarlenen(){
+	protected function action_exemplaarlenen(){
 		$this->loadBoek();
 		if($this->hasParam(2) AND $this->boek->magBekijken()){
 			//een exemplaar wordt door eigenaar uitgeleend
@@ -330,7 +331,7 @@ class BibliotheekController extends Controller{
 	 * 
 	 * /exemplaarteruggegeven/id/exemplaarid
 	 */
-	public function action_exemplaarteruggegeven(){
+	protected function action_exemplaarteruggegeven(){
 		$this->loadBoek();
 		if($this->hasParam(2) AND $this->boek->isLener($this->getParam(2))){
 			if($this->boek->teruggevenExemplaar($this->getParam(2))){
@@ -349,7 +350,7 @@ class BibliotheekController extends Controller{
 	 * 
 	 * /exemplaarterugontvangen/id/exemplaarid
 	 */
-	public function action_exemplaarterugontvangen(){
+	protected function action_exemplaarterugontvangen(){
 		$this->loadBoek();
 		if($this->hasParam(2) AND $this->boek->isEigenaar($this->getParam(2))){
 			if($this->boek->terugontvangenExemplaar($this->getParam(2))){
@@ -368,7 +369,7 @@ class BibliotheekController extends Controller{
 	 * 
 	 * /exemplaarvermist/id/exemplaarid
 	 */
-	public function action_exemplaarvermist(){
+	protected function action_exemplaarvermist(){
 		$this->loadBoek();
 		if($this->hasParam(2) AND $this->boek->isEigenaar($this->getParam(2))){
 			if($this->boek->vermistExemplaar($this->getParam(2))){
@@ -387,7 +388,7 @@ class BibliotheekController extends Controller{
 	 * 
 	 * /exemplaargevonden/id/exemplaarid
 	 */
-	public function action_exemplaargevonden(){
+	protected function action_exemplaargevonden(){
 		$this->loadBoek();
 		if($this->hasParam(2) AND $this->boek->isEigenaar($this->getParam(2))){
 			if($this->boek->gevondenExemplaar($this->getParam(2))){
@@ -399,5 +400,18 @@ class BibliotheekController extends Controller{
 			$melding='Onvoldoende rechten voor deze actie. Biebcontrllr::action_exemplaargevonden()';
 		}
 		BibliotheekBoekContent::invokeRefresh($melding, CSR_ROOT.'communicatie/bibliotheek/boek/'.$this->boek->getId());
+	}
+	/*
+	 * Genereert suggesties voor jquery-autocomplete
+	 * 
+	 * /autocomplete/auteur
+	 * 
+	 * @return json
+	 */
+	protected function action_autocomplete(){
+		if($this->hasParam(1)){
+			Catalogus::getAutocompleteSuggesties($this->getParam(1));
+		}
+		exit;
 	}
 }

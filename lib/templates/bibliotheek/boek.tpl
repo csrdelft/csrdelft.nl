@@ -24,7 +24,11 @@
 
 {if $boek->getId()==0}
 	<h1>Nieuw boek toevoegen</h1>
-	<p>Vul onderstaande velden. </p>
+	<p>Zoek en selecteer je boek om de boekgegevens in te vullen en vul het zelf verder aan.</p>
+	<div class="boekzoeker">
+		<label for="boekzoeker">Google Books:</label><input type="text" id="boekzoeker">
+	</div>
+	
 	<form action="/communicatie/bibliotheek/nieuwboek/0" id="boekaddForm" class="boekForm" method="post">
 		{foreach from=$boek->getFields('nieuwboek') item=field}
 			{$field->view()}

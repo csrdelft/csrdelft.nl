@@ -207,17 +207,22 @@ class SuggestInputField extends FormField{
 class RequiredSuggestInputField extends SuggestInputField{
 	public $notnull=true;
 }
-class BiebSuggestInputField extends SuggestInputField{
+class BiebInputField extends FormField{
+	public function __construct($name, $value, $description, $max_len, $recommendation=''){
+		parent::__construct($name, $value, $description);
+		$this->max_len=(int)$max_len;
+		$this->setRecommendation($recommendation);
+	}
 	public function valid(){
 		if(!parent::valid()){ return false; }
 		
 		if(Catalogus::existsProperty($this->getName(),$this->getValue())){
-			$this->error=$this->getName()." '".htmlspecialchars(substr($this->getValue(),0,35))."' bestaat al.";
+			$this->error=ucfirst($this->getName())." bestaat al.";
 		}
 		return $this->error=='';
 	}
 }
-class RequiredBiebSuggestInputField extends BiebSuggestInputField{
+class RequiredBiebInputField extends BiebInputField{
 	public $notnull=true;
 	
 	public function valid(){
@@ -691,10 +696,10 @@ class FormAjaxField extends FormField{
 	public $ajax=true;
 }
 
-class BiebSuggestInputAjaxField extends BiebSuggestInputField{
+class BiebInputAjaxField extends BiebInputField{
 	public $ajax=true;
 }
-class RequiredBiebSuggestInputAjaxField extends BiebSuggestInputAjaxField{
+class RequiredBiebInputAjaxField extends BiebInputAjaxField{
 	public $notnull=true;
 
 	public function valid(){

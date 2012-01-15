@@ -243,6 +243,46 @@ private $iKolommenZichtbaar; //aantal kolommen zichtbaar in de tabel.
 		return array();
 	}
 
+	public static function getAutocompleteSuggesties($sKey){
+		$properties = array();
+		$allowedkeys = array('id', 'titel', 'uitgavejaar', 'uitgeverij', 'paginas', 'taal', 'isbn', 'code', 'naam','auteur');
+		if(in_array($sKey, $allowedkeys)){
+			$db=MySql::instance();
+			if($sKey=='naam'){
+				$query = "
+					SELECT uid, CONCAT(voornaam, ' ', tussenvoegsel,  IF(tussenvoegsel='','',' '), achternaam) as naam  
+					FROM lid 
+					WHERE status IN ('S_LID', 'S_NOVIET', 'S_GASTLID', 'S_KRINGEL', 'S_OUDLID','S_ERELID') 
+						AND CONCAT(voornaam, ' ', tussenvoegsel,  IF(tussenvoegsel='','',' '), achternaam) LIKE  '%".$db->escape($_GET['q'])."%'
+					ORDER BY achternaam
+					LIMIT 0, ".(int)$_GET['limit']." ;";
+			}elseif($sKey=='auteur'){
+				$query = "
+					SELECT id, auteur
+					FROM biebauteur
+					WHERE auteur LIKE  '%".$db->escape($_GET['q'])."%'
+					ORDER BY auteur
+					LIMIT 0, ".(int)$_GET['limit']." ;";
+			}else{
+				$query = "
+					SELECT DISTINCT ".$db->escape($sKey)."
+					FROM biebboek
+					WHERE ".$db->escape($sKey)." LIKE  '%".$db->escape($_GET['q'])."%'
+					ORDER BY ".$db->escape($sKey)."
+					LIMIT 0, ".(int)$_GET['limit']." ;";
+			}
+			$result=$db->query($query);
+			echo mysql_error();
+			if($db->numRows($result)>0){
+				while($prop=$db->next($result)){
+					$properties[]=$prop[$sKey];
+				}
+				$properties = array_filter($properties);
+			}
+		}
+		echo json_encode($properties);
+	}
+
 	/*
 	 * controleert of gegeven waarde voor de gegeven $key al voorkomt in de db.
 	 * 

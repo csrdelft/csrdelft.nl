@@ -882,12 +882,12 @@ class Boek{
 		//Iedereen die bieb mag bekijken mag nieuwe boeken toevoegen
 		if($this->magBekijken()){
 			$nieuwboekform[]=new Comment('Boekgegevens:');
-			$nieuwboekform[]=new RequiredBiebSuggestInputField('titel', $this->getTitel(), 'Titel', 200,Catalogus::getAllValuesOfProperty('titel'));
-			$nieuwboekform[]=new SuggestInputField('auteur', $this->getAuteur()->getNaam(),'Auteur',100, Auteur::getAllAuteurs($short=true));
+			$nieuwboekform[]=new RequiredBiebInputField('titel', $this->getTitel(), 'Titel', 200);
+			$nieuwboekform[]=new InputField('auteur', $this->getAuteur()->getNaam(),'Auteur',100);
 			$nieuwboekform[]=new IntField('paginas', $this->getPaginas() , "Pagina's", 10000, 0);
-			$nieuwboekform[]=new SuggestInputField('taal', $this->getTaal(), 'Taal', 25, Catalogus::getAllValuesOfProperty('taal'));
-			$nieuwboekform[]=new BiebSuggestInputField('isbn', $this->getISBN(), 'ISBN',15, Catalogus::getAllValuesOfProperty('isbn'));
-			$nieuwboekform[]=new SuggestInputField('uitgeverij', $this->getUitgeverij(), 'Uitgeverij', 100, Catalogus::getAllValuesOfProperty('uitgeverij'));
+			$nieuwboekform[]=new InputField('taal', $this->getTaal(), 'Taal', 25);
+			$nieuwboekform[]=new BiebInputField('isbn', $this->getISBN(), 'ISBN',15);
+			$nieuwboekform[]=new InputField('uitgeverij', $this->getUitgeverij(), 'Uitgeverij', 100);
 			$nieuwboekform[]=new IntField('uitgavejaar', $this->getUitgavejaar(), 'Uitgavejaar',2100,0);
 			$nieuwboekform[]=new SelectField('rubriek', $this->getRubriek()->getId(), 'Rubriek',Rubriek::getAllRubrieken($samenvoegen=true,$short=true));
 			$nieuwboekform[]=new CodeField('code', $this->getCode(), 'Biebcode');
@@ -987,12 +987,12 @@ class Boek{
 	public function assignAjaxFieldsForm(){
 		//Eigenaar een exemplaar v.h. boek mag alleen bewerken
 		if($this->isEigenaar()){
-			$editablefieldsform['titel']=new RequiredBiebSuggestInputAjaxField('titel', $this->getTitel(), 'Boek', 200,Catalogus::getAllValuesOfProperty('titel'), 'Titel ontbreekt!');
-			$editablefieldsform['auteur']=new SuggestInputAjaxField('auteur', $this->getAuteur()->getNaam(),'Auteur',100, Auteur::getAllAuteurs($short=true), 'Achternaam, V.L. van de');
+			$editablefieldsform['titel']=new RequiredBiebInputAjaxField('titel', $this->getTitel(), 'Boek', 200, 'Titel ontbreekt!');
+			$editablefieldsform['auteur']=new InputAjaxField('auteur', $this->getAuteur()->getNaam(),'Auteur',100, 'Achternaam, V.L. van de');
 			$editablefieldsform['paginas']=new IntAjaxField('paginas', $this->getPaginas() , "Pagina's", 10000, 0);
-			$editablefieldsform['taal']=new SuggestInputAjaxField('taal', $this->getTaal(), 'Taal', 25, Catalogus::getAllValuesOfProperty('taal'), '');
-			$editablefieldsform['isbn']=new BiebSuggestInputAjaxField('isbn', $this->getISBN(), 'ISBN',15, Catalogus::getAllValuesOfProperty('isbn'), 'Uniek nummer');
-			$editablefieldsform['uitgeverij']=new SuggestInputAjaxField('uitgeverij', $this->getUitgeverij(), 'Uitgeverij', 100, Catalogus::getAllValuesOfProperty('uitgeverij') , '');
+			$editablefieldsform['taal']=new InputAjaxField('taal', $this->getTaal(), 'Taal', 25, '');
+			$editablefieldsform['isbn']=new BiebInputAjaxField('isbn', $this->getISBN(), 'ISBN',15, 'Uniek nummer');
+			$editablefieldsform['uitgeverij']=new InputAjaxField('uitgeverij', $this->getUitgeverij(), 'Uitgeverij', 100, '');
 			$editablefieldsform['uitgavejaar']=new IntAjaxField('uitgavejaar', $this->getUitgavejaar(), 'Uitgavejaar',2100,0);
 			$editablefieldsform['rubriek']=new SelectAjaxField('rubriek', $this->getRubriek()->getId(), 'Rubriek',Rubriek::getAllRubrieken($samenvoegen=true,$short=true));
 			$editablefieldsform['code']=new CodeAjaxField('code', $this->getCode(), 'Biebcode');

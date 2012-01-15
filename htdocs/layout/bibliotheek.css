@@ -173,7 +173,7 @@ h1{
 
 
 /* Formulier voor nieuw boek en die voor boekbeschrijving bestaand boek */
-#boekaddForm label{
+.boekForm label, .boekzoeker label{
 	width: 150px;
 	float: left;
 
@@ -187,9 +187,8 @@ h1{
 	margin: 0px;
 
 }
-
-.boekForm input.regular{
-	width: 250px;
+.boekForm input.regular, .boekzoeker input{
+	width: 400px;
 }
 .boekForm input.uid{
 	width: 80px;
@@ -201,16 +200,19 @@ h1{
 .boekForm .veld, .boekForm h3, .boekForm .password{
 	clear: both;
 }
-.boekForm .veld, .boekForm .submit{
+.boekForm .veld, .boekForm .submit, .boekzoeker{
 	margin-left: 10px;
 	padding: 1px 2px;
 	border: 1px solid white;
+}
+.boekzoeker {
+	margin: 5px 0 15px 10px;
 }
 #addBeschrijving .veld, 
 #addBeschrijving .submit{
 	margin-left: 0px;
 }
-.boekForm .veld:hover{
+.boekForm .veld:hover,.boekzoeker:hover{
 	border: 1px  solid #ddd;
 	background-color: #eee;
 }
