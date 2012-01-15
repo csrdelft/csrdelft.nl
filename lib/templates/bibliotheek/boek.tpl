@@ -24,9 +24,9 @@
 
 {if $boek->getId()==0}
 	<h1>Nieuw boek toevoegen</h1>
-	<p>Zoek en selecteer je boek om de boekgegevens in te vullen en vul het zelf verder aan.</p>
+	<p>Zoek via het Google Books-zoekveld en selecteer een van de suggesties om de boekgegevens hieronder in te vullen.</p>
 	<div class="boekzoeker">
-		<label for="boekzoeker">Google Books:</label><input type="text" id="boekzoeker">
+		<label for="boekzoeker"><img src="http://code.google.com/favicon.ico" />&nbsp;Google Books zoeken:</label><input type="text" id="boekzoeker">
 	</div>
 	
 	<form action="/communicatie/bibliotheek/nieuwboek/0" id="boekaddForm" class="boekForm" method="post">

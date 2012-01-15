@@ -183,7 +183,6 @@ jQuery(document).ready(function($) {
 	function opslaanGekozenWaarde(event, datarow, formatted){
 		var ID = jQuery(this).attr('id').substring(6);
 		var waarde = datarow;
-		console.log("result"+ID+"|"+waarde);
 		saveChange(ID,waarde)
 	};
 	$("#field_titel").autocomplete("/communicatie/bibliotheek/autocomplete/titel",options)
@@ -210,10 +209,7 @@ function observeClick(){
 
 	// Outside click action
 	jQuery(document).mouseup(function(object){
-		if(!(jQuery(object.target).hasClass("editbox") 						//in editbox mag je klikken
-			|| object.target.id.substring(0,6)=='tat_td'	//entry van suggestiemenu
-			|| jQuery(object.target).text()=='\\/' 							//movedownarraw suggestiemenu
-			|| jQuery(object.target).text()=='/\\' )){ 						//moveuparrow suggestiemenu 
+		if(!(jQuery(object.target).hasClass("editbox"))){					//in editbox mag je klikken
 				jQuery(".editbox,.editelement").hide();
 				jQuery('[name^="#tat_td"]').hide();
 				jQuery(".text").show();

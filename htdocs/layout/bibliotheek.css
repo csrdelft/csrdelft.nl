@@ -176,7 +176,10 @@ h1{
 .boekForm label, .boekzoeker label{
 	width: 150px;
 	float: left;
-
+}
+.boekzoeker label img{
+	float: left;
+	margin-top:-3px;
 }
 #addBeschrijving label{
 	float: left; 
