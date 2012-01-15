@@ -165,9 +165,6 @@ jQuery(document).ready(function($) {
 		
 	}).keyup(function(event){
 		var inputl = $(this).val().length
-		console.log(this);
-		console.log(inputl);
-		console.log($(this).val());
 		if(inputl>0 && inputl < 7){
 			$(this).css("background-color","#ffded1");
 		}else{
@@ -193,16 +190,19 @@ jQuery(document).ready(function($) {
 	function opslaanGekozenWaarde(event, datarow, formatted){
 		var ID = jQuery(this).attr('id').substring(6);
 		var waarde = datarow;
-		saveChange(ID,waarde)
+		saveChange(ID,waarde);
 	};
-	$("#field_titel").autocomplete("/communicatie/bibliotheek/autocomplete/titel",options)
+	$("#field_titel").autocomplete("/communicatie/bibliotheek/autocomplete/titel",options);
 	$(".bewerk #field_titel").result(opslaanGekozenWaarde);
-	$("#field_auteur").autocomplete("/communicatie/bibliotheek/autocomplete/auteur",options)
+	$("#field_auteur").autocomplete("/communicatie/bibliotheek/autocomplete/auteur",options);
 	$(".bewerk #field_auteur").result(opslaanGekozenWaarde);
-	$("#field_taal").autocomplete("/communicatie/bibliotheek/autocomplete/taal",options)
+	$("#field_taal").autocomplete("/communicatie/bibliotheek/autocomplete/taal",options);
 	$(".bewerk #field_taal").result(opslaanGekozenWaarde);
-	$("#field_uitgeverij").autocomplete("/communicatie/bibliotheek/autocomplete/uitgeverij",options)
+	$("#field_uitgeverij").autocomplete("/communicatie/bibliotheek/autocomplete/uitgeverij",options);
 	$(".bewerk #field_uitgeverij").result(opslaanGekozenWaarde);
+
+	//opmerking veld aan auteur veld toegevoegd
+	$("#field_auteur.regular").parent().append('<div class="suggestieveld suggestie">Achternaam, Voornaam L. van</div>');
 });
 
 function observeClick(){

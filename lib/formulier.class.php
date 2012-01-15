@@ -18,6 +18,7 @@ abstract class FormField{
 	public $error='';			//foutmelding van dit veld
 	public $recommendation='';		//aanbeveling voor als veld leeg is
 	public $ajax=false;
+	public $max_len=0;			//maximale lengte invoer
 
 	public $suggestions=array();
 
@@ -99,6 +100,9 @@ abstract class FormField{
 		echo '<input type="text" id="field_'.$this->name.'" name="'.$this->name.'" class='.$class.' value="'.htmlspecialchars($this->value).'" ';
 		if(!$this->autocomplete OR count($this->suggestions)>0){
 			echo 'autocomplete="off" ';
+		}
+		if($this->max_len>0){
+			echo 'maxlength='.$this->max_len;
 		}
 		echo ' />';
 		if(count($this->suggestions)>0){
