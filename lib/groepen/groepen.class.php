@@ -167,8 +167,11 @@ class Groepen{
 	public function getToonHistorie(){	return $this->type['toonHistorie']==1; }
 	public function getSyncWithLDAP(){	return $this->type['syncWithLDAP']==1; }
 
+	public function getGroepAanmaakbaarPermissies(){
+		return $this->type['groepenAanmaakbaar'];
+	}
 	public function isGroepAanmaker(){
-		return LoginLid::instance()->hasPermission($this->type['groepenAanmaakbaar']);
+		return LoginLid::instance()->hasPermission($this->getGroepAanmaakbaarPermissies());
 	}
 
 	public static function isAdmin(){

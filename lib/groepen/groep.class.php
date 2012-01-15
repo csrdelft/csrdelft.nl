@@ -25,11 +25,31 @@ class Groep{
 		if(!is_array($init) AND preg_match('/^\d+$/', $init)){
 			if((int)$init===0){
 				//dit zijn de defaultwaarden voor een nieuwe groep.
+
+				/* set eigenaar naar uid van aanmaker. 
+				 * Als iemand groepen in een rubriek mag maken vanwege adminrechten zijn uid niet invullen.
+				 * Commissiecategorien permissies voor commissie houden, niet voor de idividuen.
+				 */
+				$eigenaar = LoginLid::instance()->getUid();
+				if(isset($_GET['gtype'])){
+					try{
+						$groepen=new Groepen($_GET['gtype']);
+						if(in_array($groepen->getId(), array(1,2,3,4,5,6,10))){ 
+							//cies, woonoorden, onderver, werkgrpn, overig, bestrn, sjaarscies mogen aangemaakt worden als admin, niet als individu.
+							$eigenaar = '';
+						}elseif(in_array($groepen->getId(), array(7,8))){ 
+							//in categorien OWee & Dies/Lustrum categorie zetten we commissies als eigenaar.
+							$eigenaar = $groepen->getGroepAanmaakbaarPermissies();
+						}
+					}catch(Exception $e){
+						// jammer dan.
+					}
+				}
 				$this->groep=array(
 					'groepId'=>0, 'snaam'=>'', 'naam'=>'', 'sbeschrijving'=>'', 'beschrijving'=>'',
 					'zichtbaar'=>'zichtbaar', 'begin'=>date('Y-m-d'), 'einde'=>'0000-00-00',
 					'aanmeldbaar'=>'', 'limiet'=>0, 'toonFuncties'=>'tonen', 'functiefilter',
-					'toonPasfotos'=>0, 'lidIsMod'=>0, 'eigenaar'=>LoginLid::instance()->getUid());
+					'toonPasfotos'=>0, 'lidIsMod'=>0, 'eigenaar'=>$eigenaar);
 			}else{
 				$this->load($init);
 			}
@@ -259,10 +279,11 @@ class Groep{
 	}
 
 	/*
-	 * Eigenaar mag bij voldoende permissies voor die groeptype groepen aanmaken en zijn groepbewerken
+	 * Eigenaar mag alles van groep aanpassen. Eigenaar wordt je door invullen door admin of 
+	 * automatisch bij aanmaken van activiteit in groepstype waar dat toegestaan is.
 	 */
 	public function isEigenaar(){
-		return LoginLid::instance()->hasPermission($this->groep['eigenaar']) AND $this->getType()->isGroepAanmaker();
+		return LoginLid::instance()->hasPermission($this->groep['eigenaar']);
 	}
 	/*
 	 * LidIsMod houdt in dat élk lid van een groep leden kan toevoegen
