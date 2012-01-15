@@ -163,7 +163,17 @@ jQuery(document).ready(function($) {
 		$("#field_uitgeverij").val(datarow.publisher);
 		$("#field_uitgavejaar").val(datarow.publishedDate ? datarow.publishedDate.substring(0,4) : '');
 		
-	})
+	}).keyup(function(event){
+		var inputl = $(this).val().length
+		console.log(this);
+		console.log(inputl);
+		console.log($(this).val());
+		if(inputl>0 && inputl < 7){
+			$(this).css("background-color","#ffded1");
+		}else{
+			$(this).css("background-color","white");
+		}
+	});
 	//autocomplete voor bewerkvelden uit C.S.R.-database.
 	var options = {
 		dataType: 'json',

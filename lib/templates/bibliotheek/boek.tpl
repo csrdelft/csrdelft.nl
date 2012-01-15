@@ -24,8 +24,8 @@
 
 {if $boek->getId()==0}
 	<h1>Nieuw boek toevoegen</h1>
-	<p>Zoek via het Google Books-zoekveld en selecteer een van de suggesties om de boekgegevens hieronder in te vullen.</p>
-	<div class="boekzoeker">
+	<p>Zoek via het Google Books-zoekveld je boek en kies een van de suggesties om de boekgegevens hieronder in te vullen.</p>
+	<div class="boekzoeker" title="Geef titel, auteur, isbn of een ander kenmerk van het boek. Minstens 7 tekens, na 1 seconde verschijnen suggesties.">
 		<label for="boekzoeker"><img src="http://code.google.com/favicon.ico" />&nbsp;Google Books zoeken:</label><input type="text" id="boekzoeker">
 	</div>
 	
