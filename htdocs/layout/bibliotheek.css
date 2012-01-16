@@ -214,13 +214,14 @@ h1{
 	border: 1px solid white;
 }
 .boekzoeker {
-	margin: 5px 0 15px 10px;
+	margin: 0px 0 10px 10px;
+	padding: 7px 2px 7px 2px;
 }
 #addBeschrijving .veld, 
 #addBeschrijving .submit{
 	margin-left: 0px;
 }
-.boekForm .veld:hover,.boekzoeker:hover{
+.boekForm .veld:hover,.boekzoeker{
 	border: 1px  solid #ddd;
 	background-color: #eee;
 }
