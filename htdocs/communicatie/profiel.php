@@ -28,6 +28,12 @@ if(isset($_GET['uid'])){
 //welke actie gaan we doen?
 if(isset($_GET['a'])){
 	$actie=$_GET['a'];
+	//is er een status opgegeven
+	if(isset($_GET['s'])){
+		$status=$_GET['s'];
+	}else{
+		$status=null;
+	}
 }else{
 	//default-actie.
 	$actie='view';
@@ -56,27 +62,20 @@ if(!($loginlid->hasPermission('P_LEDEN_READ') or $loginlid->hasPermission('P_OUD
 				$midden=new ProfielContent(LidCache::getLid($uid));
 			}
 		break;
-		case 'nieuwNoviet':
-		case 'nieuwGastlid':
-		case 'nieuwLid':
-		case 'nieuwOudlid':
-		case 'nieuwErelid':
-		case 'nieuwExlid':
-		case 'nieuwKringel':
-			if($loginlid->hasPermission('P_ADMIN,P_LEDEN_MOD') OR ($actie=='nieuwNoviet' AND $loginlid->hasPermission('groep:novcie'))){
+		case 'nieuw':
+			if($loginlid->hasPermission('P_ADMIN,P_LEDEN_MOD') OR ($status=='noviet' AND $loginlid->hasPermission('groep:novcie'))){
 				try{
 					//maak het nieuwe uid aan.
-					$status = ucfirst(substr($actie, 5));
 					$nieuwUid = Lid::createNew($_GET['uid'],$status);
 
-					if($actie=='nieuwNoviet'){
+					if($status=='noviet'){
 						$bewerkactie = 'novietBewerken';
 					}else{
 						$bewerkactie = 'bewerken';
 					}
 					ProfielContent::invokeRefresh(null, '/communicatie/profiel/'.$nieuwUid.'/'.$bewerkactie);
 				}catch(Exception $e){
-					ProfielContent::invokeRefresh('<h2>Nieuw lidnummer aanmaken mislukt.</h2>'.$e->getMessage());
+					ProfielContent::invokeRefresh('<h2>Nieuw lidnummer aanmaken mislukt.</h2>'.$e->getMessage(), '/communicatie/profiel/');
 				}	
 			}else{
 				ProfielContent::invokeRefresh('U mag geen nieuwe leden aanmaken', '/communicatie/profiel/');

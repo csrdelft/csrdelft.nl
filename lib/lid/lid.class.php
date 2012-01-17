@@ -759,44 +759,42 @@ class Lid implements Serializable, Agendeerbaar{
 		$newuid=$lichtingid.sprintf('%02d', $volgnummer);
 
 		$studiejaar = 0;
-		if(in_array($lidstatus, array('Gastlid','Lid','Noviet','Oudlid','Erelid','Kringel','Exlid'))){
-			switch($lidstatus){
-				case 'Gastlid':
-					$status = 'S_GASTLID';
-					$perm 	= 'P_LID';
-				break;
-				case 'Lid':
-					$status = 'S_LID';
-					$perm 	= 'P_LID';
-				break;
-				case 'Noviet': 
-					$status = 'S_NOVIET';
-					$perm 	= 'P_LID';
-					$studiejaar = $lichting;
-				break;
-				case 'Oudlid':
-					$status = 'S_OUDLID';
-					$perm 	= 'P_OUDLID';
-				break;
-				case 'Erelid':
-					$status = 'S_ERELID';
-					$perm 	= 'P_OUDLID';
-				break;
-				case 'Kringel':
-					$status = 'S_KRINGEL';
-					$perm 	= 'P_LID';
-				break;
-				case 'Exlid':
-					$status = 'S_NOBODY';
-					$perm 	= 'P_NOBODY';
-					$lidstatus = 'Ex-lid';
-				break;
-			}
-		}else{
-			throw new Exception('Onbekende status.');
+		switch($lidstatus){
+			case 'gastlid':
+				$status = 'S_GASTLID';
+				$perm 	= 'P_LID';
+			break;
+			case 'lid':
+				$status = 'S_LID';
+				$perm 	= 'P_LID';
+			break;
+			case 'noviet': 
+				$status = 'S_NOVIET';
+				$perm 	= 'P_LID';
+				$studiejaar = $lichting;
+			break;
+			case 'oudlid':
+				$status = 'S_OUDLID';
+				$perm 	= 'P_OUDLID';
+			break;
+			case 'erelid':
+				$status = 'S_ERELID';
+				$perm 	= 'P_OUDLID';
+			break;
+			case 'kringel':
+				$status = 'S_KRINGEL';
+				$perm 	= 'P_LID';
+			break;
+			case 'exlid':
+				$status = 'S_NOBODY';
+				$perm 	= 'P_NOBODY';
+				$lidstatus = 'Ex-lid';
+			break;
+			default:
+				throw new Exception('Onbekende status.');
 		}
 
-		$changelog='Aangemaakt als '.$lidstatus.' door [lid='.LoginLid::instance()->getUid().'] op [reldate]'.getDatetime().'[/reldate][br]';
+		$changelog='Aangemaakt als '.ucfirst($lidstatus).' door [lid='.LoginLid::instance()->getUid().'] op [reldate]'.getDatetime().'[/reldate][br]';
 
 
 		$query="
