@@ -422,7 +422,7 @@ Met amicale groet,
 			$form[]=new Comment('Persoonlijk:');
 			$form[]=new InputField('eetwens', $profiel['eetwens'], 'Dieet', 200);
 			//wellicht binnenkort voor iedereen beschikbaar?
-			$form[]=new SuggestInputField('kerk', $profiel['kerk'], 'Kerk', 50);
+			$form[]=new InputField('kerk', $profiel['kerk'], 'Kerk', 50);
 			$form[]=new InputField('muziek', $profiel['muziek'], 'Muziekinstrument', 50);
 		}
 
