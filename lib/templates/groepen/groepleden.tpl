@@ -101,7 +101,7 @@
 							</select>
 						{/foreach}
 					{else}
-						<input type="text" name="functie" maxlength="25" class="functie" />
+						<input type="text" name="functie" maxlength="60" class="functie" />
 					{/if}&nbsp;<input type="submit" value="aanmelden" />
 				</form>
 				
