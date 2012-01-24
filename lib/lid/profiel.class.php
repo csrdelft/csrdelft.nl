@@ -110,15 +110,17 @@ class Profiel{
 			require_once 'maaltijden/maaltrack.class.php';
 			$maaltrack = new MaalTrack();
 			$abos = $maaltrack->getAbo($this->lid->getUid());
-			$maalabolog = 'Afmelden abo\'s: ';
-			foreach($abos as $abo => $abonaam){
-				if($maaltrack->delAbo($abo,$this->lid->getUid())){
-					$maalabolog.= $abonaam.' uitgezet. ';
-				}else{
-					$maalabolog.= $abonaam.' staat nog aan. ';
+			if($abos){
+				$maalabolog = 'Afmelden abo\'s: ';
+				foreach($abos as $abo => $abonaam){
+					if($maaltrack->delAbo($abo,$this->lid->getUid())){
+						$maalabolog.= $abonaam.' uitgezet. ';
+					}else{
+						$maalabolog.= $abonaam.' staat nog aan. ';
+					}
 				}
+				$maalabolog.='[br]';
 			}
-			$maalabolog.='[br]';
 		}
 		//velden resetten e.d.
 		if(!in_array($status, array('S_LID','S_GASTLID','S_NOVIET'))){
@@ -173,7 +175,7 @@ De volgende saldi zijn bekend:
 Met amicale groet,
 ".LoginLid::instance()->getLid()->getNaamLink('full','plain');
 				
-				$this->fiscusmailer('pubcie@csrdelft.nl,vice-abactis@csrdelft.nl','','Melding lid-af worden',$bericht);
+				$this->fiscusmailer('pubcie@csrdelft.nl,vice-abactis@csrdelft.nl','pubcie@csrdelft.nl','Melding lid-af worden',$bericht);
 			}
 			return true;
 		}
@@ -212,8 +214,7 @@ Met amicale groet,
 		return $keep;
 	}
 	private function fiscusmailer($from,$bcc,$onderwerp,$bericht){
-		//$to = 'ficcus@csrdelft.nl,maalcie-fiscus@csrdelft.nl,soccie@csrdelft.nl';
-		$to = 'pubcie@csrdelft.nl';
+		$to = 'fiscus@csrdelft.nl,maalcie-fiscus@csrdelft.nl,soccie@csrdelft.nl';
 		$onderwerp = ' =?UTF-8?B?'. base64_encode(htmlspecialchars($onderwerp)) ."?=\n";
 		$bericht = htmlspecialchars($bericht);
 		$headers = "From: ".$from."\n";
