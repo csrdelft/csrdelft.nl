@@ -52,46 +52,65 @@
 }
 
 p.profielBewerken .pasfoto{ float: right; margin-left: 10px;}
-#profielForm label{
+
+.profielForm label{
 	width: 150px;
 	float: left;
 }
-#profielForm input.regular{
+.profielForm input.regular{
 	width: 250px;
 }
-#profielForm input.uid{
+.profielForm input.uid{
 	width: 80px;
 }
-#profielForm .uidPreview{
+.profielForm .uidPreview{
 	display: inline;
 	padding-left: 10px;
 }
-#profielForm .veld, #profielForm h3, #profielForm .password{
+.profielForm .veld, .profielForm h3, .profielForm .password{
 	clear: both;
 }
-#profielForm .veld, #profielForm .submit{
+.profielForm .veld, .profielForm .submit{
 	margin-left: 10px;
 	padding: 1px 2px;
 	border: 1px solid white;
 }
 
-#profielForm .veld:hover{
+.profielForm .veld:hover{
 	border: 1px  solid #ddd;
 	background-color: #eee;
 }
-#profielForm .metfouten{
+.profielForm .metfouten{
 	background-color: #FFC3CE;
 	padding: 4px 2px;
 }
-#profielForm .veld .waarschuwing{
+.profielForm .veld .waarschuwing{
 	float: right;
 	margin-right: 10px;
 }
-#profielForm .password{
+.profielForm .password{
 	padding: 2px 1px;
 }
-#profielForm h3{
+.profielForm h3{
 	margin-top: 8px;
 	margin-bottom: 1px;
 }
 li.verborgen{ display: none; }
+
+
+
+#wijzigstatus label {
+	width: 153px;
+	margin: 0px;
+	float: left;
+}
+#wijzigstatus .lidgegevens {
+	margin: 10px 0 15px 13px;
+	padding: 2px;
+}
+#wijzigstatus .novieten, #wijzigstatus .leden {
+	margin: 0px 0px 5px 167px;
+}
+#statusForm input#field_postfix.regular{
+	width: 100px;
+}

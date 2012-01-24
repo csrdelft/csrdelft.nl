@@ -22,7 +22,7 @@
 	gevraagde formaat. Een aantal velden kan leeg gelaten worden als er geen zinvolle informatie voor is.
 </p>
 
-<form action="/communicatie/profiel/{$profiel->getUid()}/{$actie}/" id="profielForm" method="post">
+<form action="/communicatie/profiel/{$profiel->getUid()}/{$actie}/" id="profielForm" class="profielForm" method="post">
 	{foreach from=$profiel->getFields() item=field}
 		{$field->view()}
 	{/foreach}

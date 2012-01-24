@@ -30,6 +30,7 @@ class Profiel{
 			$this->editNoviet=true;
 		}
 		$this->assignFields();
+		$this->assignFieldsStatus();
 	}
 
 	//make al methods from Lid accessible in profiel
@@ -53,8 +54,8 @@ class Profiel{
 		return $this->forumpostcount;
 	}
 
-	public function save(){
-		foreach($this->getFields() as $field){
+	public function save($formName='form'){
+		foreach($this->getFields($formName) as $field){
 			if($field instanceof FormField){
 				//als een wachtwoordveld leeg is doen we er niets mee
 				if($field instanceof PassField AND $field->getValue()==''){ continue; }
@@ -64,6 +65,7 @@ class Profiel{
 				}
 			}
 		}
+
 		if(count($this->diff())>0){
 			$this->bewerktLid->logChange($this->ubbDiff());
 		}
@@ -76,6 +78,153 @@ class Profiel{
 			return true;
 		}
 		return false;
+	}
+	public function saveStatus(){
+		//relevante gegevens uit velden verwerken
+		foreach($this->getFields('formStatus') as $field){
+			if($field instanceof FormField){
+				//aan de hand van status bepalen welke POSTed velden worden bewaard van het formulier
+				if($field->getName()=='status'){
+					$keepfields = $this->keepFields($field->getValue());
+				}
+				//is het wel een wijziging?
+				if($keepfields[$field->getName()]==true AND $field->getValue()!=$this->lid->getProperty($field->getName())){
+					$this->bewerktLid->setProperty($field->getName(), $field->getValue());
+				}
+			}
+		}
+
+		$oudestatus = $this->lid->getProperty('status');
+		$status = $this->bewerktLid->getProperty('status');
+		//Alleen admin past beheerrechten aan.
+		if(!LoginLid::instance()->hasPermission('P_ADMIN') AND in_array($perm=$this->lid->getProperty('permissies'), array('P_PUBCIE','P_MODERATOR','P_BESTUUR','P_VAB'))){
+			if($perm!=$this->bewerktLid->getProperty('permissies')){
+				$this->bewerktLid->setProperty('permissies', $perm);
+			}
+		}
+		//maaltijdabo's uitzetten
+		$maalabolog = '';
+		if(in_array($status,array('S_OUDLID','S_ERELID','S_NOBODY','S_CIE','S_OVERLEDEN')) 
+			AND $this->bewerktLid->getProperty('permissies')!='P_ETER'){
+
+			require_once 'maaltijden/maaltrack.class.php';
+			$maaltrack = new MaalTrack();
+			$abos = $maaltrack->getAbo($this->lid->getUid());
+			$maalabolog = 'Afmelden abo\'s: ';
+			foreach($abos as $abo => $abonaam){
+				if($maaltrack->delAbo($abo,$this->lid->getUid())){
+					$maalabolog.= $abonaam.' uitgezet. ';
+				}else{
+					$maalabolog.= $abonaam.' staat nog aan. ';
+				}
+			}
+			$maalabolog.='[br]';
+		}
+		//velden resetten e.d.
+		if(!in_array($status, array('S_LID','S_GASTLID','S_NOVIET'))){
+			$this->bewerktLid->setProperty('postfix', '');
+		}
+		if(in_array($status, array('S_LID','S_GASTLID','S_NOVIET','S_KRINGEL','S_CIE'))){
+			$this->bewerktLid->setProperty('lidafdatum', '0000-00-00');
+		}
+		if(in_array($status, array('S_OVERLEDEN','S_NOBODY','S_CIE'))){
+			$this->bewerktLid->setProperty('kring', 0);
+		}
+		if(!LoginLid::instance()->hasPermission('P_ADMIN') 
+			AND in_array($status, array('S_OUDLID','S_ERELID','S_NOBODY')) 
+			AND in_array($this->bewerktLid->getProperty('permissies'), array('P_PUBCIE','P_MODERATOR','P_BESTUUR','P_VAB'))){
+
+			if($status=='S_NOBODY'){
+				$st = 'P_NOBODY';
+			}else{
+				$st = 'P_OUDLID';
+			}
+			$this->bewerktLid->setProperty('status', $st);
+		}
+		//changelog
+		if(count($this->diff())>0){
+			$ubbdiff = $this->ubbDiff();
+			if($maalabolog){
+				$ubbdiff = substr($ubbdiff,0,-4).$maalabolog.'[hr]';
+			}
+			$this->bewerktLid->logChange($ubbdiff);
+		}
+
+		//opslaan
+		if($this->bewerktLid->save()){
+			try{
+				$this->bewerktLid->save_ldap();
+			}catch(Exception $e){
+				//todo: loggen dat LDAP niet beschikbaar is in een mooi eventlog wat ook nog gemaakt moet worden...
+			}
+			//mailen naar fisci
+			if(in_array($status, array('S_OUDLID','S_ERELID','S_NOBODY','S_OVERLEDEN'))){
+				$saldi = '';
+				foreach($this->bewerktLid->getSaldi() as $saldo){
+					$saldi .= $saldo['naam'].': '.$saldo['saldo']."\n";
+				}
+$bericht = "Beste fisci,
+
+De lidstatus van ".$this->bewerktLid->getNaamLink('full','plain')." (".$this->bewerktLid->getUid().") is gewijzigd van ".$oudestatus." in ".$status.".
+
+De volgende saldi zijn bekend:
+".$saldi."
+
+Met amicale groet,
+".LoginLid::instance()->getLid()->getNaamLink('full','plain');
+				
+				$this->fiscusmailer('pubcie@csrdelft.nl,vice-abactis@csrdelft.nl','','Melding lid-af worden',$bericht);
+			}
+			return true;
+		}
+		
+		return false;
+	}
+	private function keepFields($status){
+		$keep = array();
+		$keep['status'] = true;
+		$keep['permissies'] = true;
+		
+		if(in_array($status, array('S_OUDLID','S_ERELID','S_NOBODY'))){
+			$toggle = true;
+		}else{	
+			$toggle = false;
+		}
+		$keep['postfix'] = !$toggle;
+
+		$keep['lidafdatum'] = $toggle;
+		$keep['kring'] = $toggle;
+		if($status=='S_NOBODY'){
+			$toggle = false;
+		}
+		$keep['ontvangtcontactueel'] = $toggle;
+		$keep['echtgenoot'] = $toggle;
+		$keep['adresseringechtpaar'] = $toggle;
+
+		if($status=='S_OVERLEDEN'){
+			$keep['sterfdatum']=true;
+		}else{
+			$keep['sterfdatum']=false;
+		}
+		if($status=='S_KRINGEL' OR $status=='S_CIE'){
+			$keep['postfix'] = false;
+		}
+		return $keep;
+	}
+	private function fiscusmailer($from,$bcc,$onderwerp,$bericht){
+		//$to = 'ficcus@csrdelft.nl,maalcie-fiscus@csrdelft.nl,soccie@csrdelft.nl';
+		$to = 'pubcie@csrdelft.nl';
+		$onderwerp = ' =?UTF-8?B?'. base64_encode(htmlspecialchars($onderwerp)) ."?=\n";
+		$bericht = htmlspecialchars($bericht);
+		$headers = "From: ".$from."\n";
+		if($bcc!=''){
+			$headers .= "BCC: ".$bcc."\n";
+		}
+		//content-type en charset zetten zodat rare tekens in wazige griekse namen
+		//en euro-tekens correct weergegeven worden in de mails.
+		$headers .= "Content-Type: text/plain; charset=UTF-8\r\n";
+		$headers .= 'X-Mailer: csrdelft.nl/Lidstatuswijzigjetzer'."\n\r";
+		return mail($to, $onderwerp, $bericht, $headers);
 	}
 
 	public function magBewerken(){
@@ -131,19 +280,19 @@ class Profiel{
 
 	}
 
-	public function isPosted(){
+	public function isPosted($formName='form'){
 		$posted=false;
-		foreach($this->form as $field){
+		foreach($this->getFields($formName) as $field){
 			if($field instanceof FormField AND $field->isPosted()){
 				$posted=true;
 			}
 		}
 		return $posted;
 	}
-	public function valid(){
+	public function valid($formName='form'){
 		//alle veldjes langslopen, en kijken of ze valideren.
 		$valid=true;
-		foreach($this->form as $field){
+		foreach($this->getFields($formName) as $field){
 			//we checken alleen de formfields, niet de comments enzo.
 			if($field instanceof FormField AND !$field->valid($this->getLid())){
 				$valid=false;
@@ -198,7 +347,7 @@ class Profiel{
 		$form[]=new RequiredInputField('adres', $profiel['adres'], 'Straatnaam', 100);
 		$form[]=new RequiredInputField('postcode', $profiel['postcode'], 'Postcode', 20);
 		$form[]=new RequiredInputField('woonplaats', $profiel['woonplaats'], 'Woonplaats', 50);
-		$form[]=new RequiredLandField('land', $profiel['land'], 'Land', 50);
+		$form[]=new RequiredInputField('land', $profiel['land'], 'Land', 50);
 		$form[]=new TelefoonField('telefoon', $profiel['telefoon'], 'Telefoonnummer (vast)', 20);
 		$form[]=new TelefoonField('mobiel', $profiel['mobiel'], 'Paupernummer', 20);
 
@@ -207,7 +356,7 @@ class Profiel{
 			$form[]=new InputField('o_adres', $profiel['o_adres'], 'Straatnaam', 100);
 			$form[]=new InputField('o_postcode', $profiel['o_postcode'], 'Postcode', 20);
 			$form[]=new InputField('o_woonplaats', $profiel['o_woonplaats'], 'Woonplaats', 50);
-			$form[]=new LandField('o_land', $profiel['o_land'], 'Land', 50);
+			$form[]=new InputField('o_land', $profiel['o_land'], 'Land', 50);
 			$form[]=new TelefoonField('o_telefoon', $profiel['o_telefoon'], 'Telefoonnummer', 20);
 		}
 
@@ -238,7 +387,7 @@ class Profiel{
 		if(in_array($profiel['status'], array('S_OUDLID', 'S_ERELID')) OR $hasLedenMod OR $this->editNoviet){
 			$form[]=new Comment('Studie:');
 		}
-		$form[]=new StudieField('studie', $profiel['studie'], 'Studie');
+		$form[]=new InputField('studie', $profiel['studie'], 'Studie');
 		if(in_array($profiel['status'], array('S_OUDLID', 'S_ERELID')) OR $hasLedenMod OR $this->editNoviet){
 			$form[]=new IntField('studiejaar', $profiel['studiejaar'], 'Beginjaar studie', date('Y'), $beginjaar);
 		}
@@ -253,7 +402,7 @@ class Profiel{
 		}
 
 		if(in_array($profiel['status'], array('S_OUDLID', 'S_ERELID', 'S_NOBODY'))){
-			$form[]=new DatumField('lidafdatum', $profiel['lidafdatum'], 'Oudlid sinds');
+			$form[]=new DatumField('lidafdatum', $profiel['lidafdatum'], 'Lid-af sinds');
 		}
 		if(in_array($profiel['status'], array('S_OUDLID', 'S_ERELID')) AND $hasLedenMod){
 			$form[]=new SelectField('ontvangtcontactueel', $profiel['ontvangtcontactueel'], 'Ontvangt Contactueel', array('ja'=> 'Ja', 'nee' => 'Nee'));
@@ -273,7 +422,7 @@ class Profiel{
 			$form[]=new Comment('Persoonlijk:');
 			$form[]=new InputField('eetwens', $profiel['eetwens'], 'Dieet', 200);
 			//wellicht binnenkort voor iedereen beschikbaar?
-			$form[]=new InputField('kerk', $profiel['kerk'], 'Kerk', 50);
+			$form[]=new SuggestInputField('kerk', $profiel['kerk'], 'Kerk', 50);
 			$form[]=new InputField('muziek', $profiel['muziek'], 'Muziekinstrument', 50);
 		}
 
@@ -294,8 +443,40 @@ class Profiel{
 		}
 		$this->form=$form;
 	}
+	/*
+	 * Defineert de velden van formulier voor het wijzigen van lidstatus
+	 */
+	public function assignFieldsStatus(){
+		LidCache::updateLid($this->lid->getUid());
+		$profiel=$this->lid->getProfiel();
 
-	public function getFields(){ return $this->form; }
+		//permissies
+		$perm = array('P_LID'=>'Lid', 'P_OUDLID'=>'Oudlid', 'P_NOBODY'=>'Ex-lid', 'P_MAALCIE'=>'MaalCierechten', 'P_BASF'=>'BAS-FCierechten', 'P_ETER'=>'Eter (mag abo\'s) - geen inlog');
+		$permbeheer = array('P_BESTUUR'=>'Bestuur', 'P_VAB'=>'Vice-Abactis', 'P_PUBCIE'=>'PubCierechten');
+		if(LoginLid::instance()->hasPermission('P_ADMIN')){
+			//admin mag alle permissies toekennen
+			$perm = array_merge($perm, $permbeheer);
+		}elseif(in_array($profiel['permissies'],array('P_BESTUUR', 'P_VAB', 'P_PUBCIE', 'P_MODERATOR'))){
+			//niet admin mag geen beheerpermissies aanpassen
+			$perm = array($permbeheer[$profiel['permissies']],$permbeheer[$profiel['permissies']]);
+		}
+		//stati
+		$status = array('S_LID'=>'Lid', 'S_GASTLID'=>'Gastlid', 'S_NOVIET'=>'Noviet', 'S_OUDLID'=>'Oudlid', 'S_ERELID'=>'Erelid', 'S_KRINGEL'=>'Kringel', 'S_NOBODY'=>'Ex-lid', 'S_OVERLEDEN'=>'Overleden', 'S_CIE'=>'Commissie & in LDAP adresboek');
+
+		$formStatus[]=new SelectField('status', $profiel['status'], 'Lidstatus', $status);
+		$formStatus[]=new SelectField('permissies', $profiel['permissies'], 'Permissies', $perm);
+		$formStatus[]=new DatumField('lidafdatum', $profiel['lidafdatum'], 'Lid-af sinds');
+		$formStatus[]=new SelectField('kring', $profiel['kring'], 'Kringnummer', range(0,9));
+		$formStatus[]=new InputField('postfix', $profiel['postfix'], 'Postfix', 7);
+		$formStatus[]=new SelectField('ontvangtcontactueel', $profiel['ontvangtcontactueel'], 'Ontvangt contactueel?', array('ja'=>'ja','nee'=>'nee'));
+		$formStatus[]=new UidField('echtgenoot', $profiel['echtgenoot'], 'Echtgenoot (lidnummer):');
+		$formStatus[]=new InputField('adresseringechtpaar',$profiel['adresseringechtpaar'], 'Tenaamstelling post echtpaar:',250);
+		$formStatus[]=new DatumField('sterfdatum', $profiel['sterfdatum'], 'Overleden op:');
+
+		$this->formStatus=$formStatus;
+	}
+
+	public function getFields($formName='form'){ return $this->$formName; }
 
 	public static function resetWachtwoord($uid){
 		if(!Lid::exists($uid)){ return false; }

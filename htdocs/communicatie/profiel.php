@@ -39,6 +39,7 @@ if(isset($_GET['a'])){
 	$actie='view';
 }
 
+
 if(!($loginlid->hasPermission('P_LEDEN_READ') or $loginlid->hasPermission('P_OUDLEDEN_READ'))){
 	require_once 'paginacontent.class.php';
 	$midden=new PaginaContent(new Pagina('geentoegang'));
@@ -55,6 +56,7 @@ if(!($loginlid->hasPermission('P_LEDEN_READ') or $loginlid->hasPermission('P_OUD
 			if($profiel->magBewerken()){
 				if($profiel->isPosted() AND $profiel->valid() AND $profiel->save()){
 					header('location: '.CSR_ROOT.'communicatie/profiel/'.$uid);
+					exit;
 				}else{
 					$midden=new ProfielEditContent($profiel, $actie);
 				}
@@ -79,6 +81,20 @@ if(!($loginlid->hasPermission('P_LEDEN_READ') or $loginlid->hasPermission('P_OUD
 				}	
 			}else{
 				ProfielContent::invokeRefresh('U mag geen nieuwe leden aanmaken', '/communicatie/profiel/');
+			}
+		break;
+		case 'wijzigstatus':
+			if($loginlid->hasPermission('P_ADMIN,P_LEDEN_MOD')){
+				$profiel=new Profiel($uid, $actie);
+
+				if($profiel->isPosted('formStatus') AND $profiel->valid('formStatus') AND $profiel->saveStatus()){
+					header('location: '.CSR_ROOT.'communicatie/profiel/'.$uid);
+					exit;
+				}else{
+					$midden=new ProfielStatusContent($profiel, $actie);
+				}
+			}else{
+				ProfielContent::invokeRefresh('U mag lidstatus niet aanpassen', '/communicatie/profiel/');
 			}
 		break;
 		case 'wachtwoord':
@@ -123,8 +139,10 @@ if(!($loginlid->hasPermission('P_LEDEN_READ') or $loginlid->hasPermission('P_OUD
 
 $pagina=new csrdelft($midden);
 $pagina->addStylesheet('profiel.css');
+$pagina->addStylesheet('js/autocomplete/jquery.autocomplete.css');
 $pagina->addScript('profiel.js');
 $pagina->addScript('suggest.js');
+$pagina->addScript('autocomplete/jquery.autocomplete.min.js');
 $pagina->addScript('flot/jquery.flot.min.js');
 $pagina->addScript('flot/jquery.flot.threshold.min.js');
 $pagina->view();

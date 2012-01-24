@@ -6,6 +6,7 @@
 				<div class="knopjes">
 					{if $profiel->magBewerken()}
 						<a href="/communicatie/profiel/{$profiel->getUid()}/bewerken" class="knop" title="Bewerk dit profiel">{icon get="bewerken"}</a>
+						<a href="/communicatie/profiel/{$profiel->getUid()}/wijzigstatus" class="knop" title="Wijzig de lidstatus">{icon get="group_edit"}</a>
 					{/if}
 
 					{if $isAdmin}
@@ -136,12 +137,14 @@
 
 				{if $profiel->isOudlid()}
 					{if $profhtml.beroep!=''}<div class="label">Beroep/werk:</div><div class="data">{$profhtml.beroep}</div><br />{/if}
+				{/if}
+				{if $profhtml.kring!=0}
+					<div class="label">Kring:</div>
+					{$profiel->getKring(true)}
+					<br />
 				{else}
-					{if $profhtml.kring!=0}
-						<div class="label">Kring:</div>
-						{$profiel->getKring(true)}
-						<br />
-					{/if}
+					<div class="label">Verticale:</div>
+					<a href="/communicatie/lijst.php?q=verticale:{$profiel->getVerticale()}">{$profiel->getVerticale()}</a><br />
 				{/if}
 				{if $profhtml.moot!=0}
 					<div class="label">Oude moot:</div>

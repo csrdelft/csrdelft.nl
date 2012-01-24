@@ -102,4 +102,34 @@ class ProfielEditContent extends SimpleHTML{
 		$profiel->display('profiel/bewerken.tpl');
 	}
 }
+
+
+class ProfielStatusContent extends SimpleHTML{
+	private $profiel;
+	private $actie;
+
+	public function __construct($profiel, $actie){
+		$this->profiel=$profiel;
+		$this->actie=$actie;
+	}
+	public function getTitel(){
+		return 'lidstatus van '.$this->profiel->getLid()->getNaam().' aanpassen.';
+	}
+	public function view(){
+
+
+		$gelijknamigenovieten = Zoeker::zoekLeden($this->profiel->getLid()->getProperty('voornaam'), 'voornaam', 'alle', 'achternaam', array('S_NOVIET'), array('uid'));
+		$gelijknamigeleden = Zoeker::zoekLeden($this->profiel->getLid()->getProperty('achternaam'), 'achternaam', 'alle', 'lidjaar', array('S_LID', 'S_GASTLID'), array('uid'));
+
+		require_once 'formulier.class.php';
+		$profiel=new Smarty_csr();
+		$profiel->assign('profiel', $this->profiel);
+		$profiel->assign('gelijknamigenovieten', $gelijknamigenovieten);
+		$profiel->assign('gelijknamigeleden', $gelijknamigeleden);
+
+		$profiel->assign('melding', $this->getMelding());
+		$profiel->assign('actie', $this->actie);
+		$profiel->display('profiel/wijzigstatus.tpl');
+	}
+}
 ?>
