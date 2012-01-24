@@ -380,6 +380,11 @@ class LLCSV extends LLweergave{
 				case 'verticale':
 					$return.=$lid->getVerticale();
 				break;
+				case 'woonoord':
+					$woonoord=$lid->getWoonoord();
+					if($woonoord instanceof Groep){
+						$return.=$woonoord->getNaam();
+					}
 				default:
 					try{
 						$return.=$lid->getProperty($veld);
