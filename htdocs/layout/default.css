@@ -656,7 +656,7 @@ div.preview.pagina{ padding: 2px; width: 100%;}
 }
 
 .ubb_groep{
-	padding: 5px 0 5px 10px;
+	padding: 5px 10px 5px 10px;
 }
 .ubb_groep .groepleden{
 	width: 275px;
@@ -668,7 +668,7 @@ div.preview.pagina{ padding: 2px; width: 100%;}
 .ubb_groep .groepleden a.toonmeer{ float: left; }
 .ubb_groep .pasfotomatrix{ margin-left: 0; }
 .ubb_groep .aanmelden{ clear: left; padding-top: 6px; }
-.ubb_groep .pasfoto{ width: 48px; height: 64px; float: left; border: 1px solid grey; margin: 0 5px 5px 0; }
+.ubb_groep .pasfoto{ width: 48px; height: 64px; float: left; border: 1px solid grey; margin: 0 0 5px 5px; }
 
 .ubb_document{ width: 450px; padding: 4px 6px; display: block; text-align: left; }
 .ubb_document .size{ float: right; color: #777; }
