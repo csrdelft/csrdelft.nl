@@ -403,18 +403,18 @@ class ProfielStatus extends Profiel{
 		//relevante gegevens uit velden verwerken
 		foreach($this->getFields('formStatus') as $field){
 			if($field instanceof FormField){
-				//aan de hand van status bepalen welke POSTed velden worden bewaard van het formulier
+				//aan de hand van status bepalen welke POSTed velden worden opgeslagen van het formulier
 				if($field->getName()=='status'){
-					$keepfields = $this->keepFields($field->getValue());
+					$fieldsToSave = $this->getFieldsToSave($field->getValue());
 				}
-				//is het wel een wijziging?
-				if($keepfields[$field->getName()]['keep']==true){
+				//mag het opgeslagen worden en is het wel een wijziging?
+				if($fieldsToSave[$field->getName()]['save']==true){
 					if($field->getValue()!=$this->lid->getProperty($field->getName())){
 						$this->bewerktLid->setProperty($field->getName(), $field->getValue());
 					}
 				}else{
 					//als het niet bewaard wordt, checken of veld gereset moet worden.
-					if($keepfields[$field->getName()]['reset']!==null){
+					if($fieldsToSave[$field->getName()]['reset']!==null){
 						$this->bewerktLid->setProperty($field->getName(), $keepfields[$field->getName()]['reset']);
 					}
 				}
@@ -507,57 +507,61 @@ Met amicale groet,
 	}
 
 	/*
-	 * Geeft array waarin per veld is bepaald of die bewaard moet worden afhankelijk van de status 
+	 * Geeft array met per veld afhankelijk van status een boolean voor wel/niet bewaren en een resetwaarde.
+	 * 
 	 * @param $status string lidstatus
-	 * @return array($veld=>bool) array met per veld een boolean voor wel/niet bewaren
+	 * @return array met per veld array met de entries 
+	 * 		'save': boolean voor wel/niet opslaan van gePOSTe waarde 
+	 * 		'reset': mixed waarde in te vullen bij reset (null is nooit resetten)
 	 */
-	private function keepFields($status){
-		$keep = array();
-		$keep['status']['keep'] = true;
-		$keep['permissies']['keep'] = true;
+	private function getFieldsToSave($status){
+		//true/false is wel/niet bewaren van gePOSTe veldwaarde
+		$return = array();
+		$return['status']['save'] = true;
+		$return['permissies']['save'] = true;
 		
 		if(in_array($status, array('S_OUDLID','S_ERELID','S_NOBODY','S_OVERLEDEN'))){
 			$toggle = true;
 		}else{	
 			$toggle = false;
 		}
-		$keep['postfix']['keep'] = !$toggle;
-		$keep['lidafdatum']['keep'] = $toggle;
+		$return['postfix']['save'] = !$toggle;
+		$return['lidafdatum']['save'] = $toggle;
 
 		if($status=='S_OVERLEDEN'){ $toggle = false; }
 
-		$keep['kring']['keep'] = $toggle;
+		$return['kring']['save'] = $toggle;
 
 		if($status=='S_NOBODY'){ $toggle = false; }
 
-		$keep['ontvangtcontactueel']['keep'] = $toggle;
-		$keep['echtgenoot']['keep'] = $toggle;
-		$keep['adresseringechtpaar']['keep'] = $toggle;
+		$return['ontvangtcontactueel']['save'] = $toggle;
+		$return['echtgenoot']['save'] = $toggle;
+		$return['adresseringechtpaar']['save'] = $toggle;
 
 		if($status=='S_OVERLEDEN'){
-			$keep['sterfdatum']['keep'] = true;
+			$return['sterfdatum']['save'] = true;
 		}else{
-			$keep['sterfdatum']['keep'] = false;
+			$return['sterfdatum']['save'] = false;
 		}
 		if(in_array($status, array('S_KRINGEL','S_OVERLEDEN','S_CIE'))){
-			$keep['postfix']['keep'] = false;
+			$return['postfix']['save'] = false;
 		}
 		if(in_array($status, array('S_LID','S_GASTLID','S_NOVIET','S_KRINGEL'))){
-			$keep['kring']['keep'] = true;
+			$return['kring']['save'] = true;
 		}
 
-		//resetwaardes
-		$keep['status']['reset'] = null;
-		$keep['permissies']['reset'] = null;
-		$keep['lidafdatum']['reset'] = '0000-00-00';
-		$keep['postfix']['reset'] = '';
-		$keep['ontvangtcontactueel']['reset'] = null;
-		$keep['adresseringechtpaar']['reset'] = null;
-		$keep['echtgenoot']['reset'] = null;
-		$keep['sterfdatum']['reset'] = null;
-		$keep['kring']['reset'] = 0;
+		//waardes die ingevuld worden bij een reset (null = nooit resetten)
+		$return['status']['reset'] 				= null;
+		$return['permissies']['reset'] 			= null;
+		$return['lidafdatum']['reset'] 			= '0000-00-00';
+		$return['postfix']['reset'] 			= '';
+		$return['ontvangtcontactueel']['reset'] = null;
+		$return['adresseringechtpaar']['reset'] = null;
+		$return['echtgenoot']['reset'] 			= null;
+		$return['sterfdatum']['reset'] 			= null;
+		$return['kring']['reset'] 				= 0;
 
-		return $keep;
+		return $return;
 	}
 
 	/*
