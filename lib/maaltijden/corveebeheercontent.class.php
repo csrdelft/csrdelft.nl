@@ -58,7 +58,7 @@ class CorveebeheerContent extends SimpleHTML {
 			$aForm['max']=0;
 			//alles standaard naar jan lid.
 			$aForm['tp']='x101';
-			$aForm['tekst']='Corveevrijdag';
+			$aForm['tekst']='Huishoudelijke taak';
 			$aForm['frituur_aangemeld']=0;
 			$aForm['afzuigkap_aangemeld']=0;
 			$aForm['keuken_aangemeld']=0;
