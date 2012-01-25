@@ -20,7 +20,7 @@
 			{$field->view()}
 			{if $field->getName()=='postfix'}
 				<div class="novieten">
-					{if $gelijknamigenovieten|@count>1}
+					{if $gelijknamigenovieten|@count>1 OR ($profiel->getStatus()!='S_NOVIET' AND $gelijknamigenovieten|@count>0)}
 						Gelijknamige novieten:
 						<ul class="nobullets">
 								{foreach from=$gelijknamigenovieten item=uid name=novieten}
@@ -32,7 +32,7 @@
 					{/if}
 				</div>
 				<div class="leden">
-					{if $gelijknamigeleden|@count>1}
+					{if $gelijknamigeleden|@count>1 OR (!($profiel->getStatus()=='S_LID' OR $profiel->getStatus()=='S_GASTLID') AND $gelijknamigenovieten|@count>0)}
 					Gelijknamige (gast)leden:
 					<ul class="nobullets">
 						{foreach from=$gelijknamigeleden item=uid name=leden}

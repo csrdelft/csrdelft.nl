@@ -10,14 +10,15 @@
 require_once 'formulier.class.php';
 require_once 'forum/forum.class.php';
 
-class Profiel{
-	private $lid;
-	private $bewerktLid;
+class Profiel {
+	protected $lid;
+	protected $bewerktLid;
 
 	//zijn we een nieuwe noviet aan het toevoegen?
-	private $editNoviet=false;
+	protected $editNoviet=false;
 
-	private $form=array();
+	protected $form=array();
+
 	public function __construct($lid, $actie='bewerken'){
 		if($lid instanceof Lid){
 			$this->lid=$lid;
@@ -29,8 +30,6 @@ class Profiel{
 		if($actie=='novietBewerken'){
 			$this->editNoviet=true;
 		}
-		$this->assignFields();
-		$this->assignFieldsStatus();
 	}
 
 	//make al methods from Lid accessible in profiel
@@ -54,8 +53,8 @@ class Profiel{
 		return $this->forumpostcount;
 	}
 
-	public function save($formName='form'){
-		foreach($this->getFields($formName) as $field){
+	public function save(){
+		foreach($this->getFields() as $field){
 			if($field instanceof FormField){
 				//als een wachtwoordveld leeg is doen we er niets mee
 				if($field instanceof PassField AND $field->getValue()==''){ continue; }
@@ -78,154 +77,6 @@ class Profiel{
 			return true;
 		}
 		return false;
-	}
-	public function saveStatus(){
-		//relevante gegevens uit velden verwerken
-		foreach($this->getFields('formStatus') as $field){
-			if($field instanceof FormField){
-				//aan de hand van status bepalen welke POSTed velden worden bewaard van het formulier
-				if($field->getName()=='status'){
-					$keepfields = $this->keepFields($field->getValue());
-				}
-				//is het wel een wijziging?
-				if($keepfields[$field->getName()]==true AND $field->getValue()!=$this->lid->getProperty($field->getName())){
-					$this->bewerktLid->setProperty($field->getName(), $field->getValue());
-				}
-			}
-		}
-
-		$oudestatus = $this->lid->getProperty('status');
-		$status = $this->bewerktLid->getProperty('status');
-		//Alleen admin past beheerrechten aan.
-		if(!LoginLid::instance()->hasPermission('P_ADMIN') AND in_array($perm=$this->lid->getProperty('permissies'), array('P_PUBCIE','P_MODERATOR','P_BESTUUR','P_VAB'))){
-			if($perm!=$this->bewerktLid->getProperty('permissies')){
-				$this->bewerktLid->setProperty('permissies', $perm);
-			}
-		}
-		//maaltijdabo's uitzetten
-		$maalabolog = '';
-		if(in_array($status,array('S_OUDLID','S_ERELID','S_NOBODY','S_CIE','S_OVERLEDEN')) 
-			AND $this->bewerktLid->getProperty('permissies')!='P_ETER'){
-
-			require_once 'maaltijden/maaltrack.class.php';
-			$maaltrack = new MaalTrack();
-			$abos = $maaltrack->getAbo($this->lid->getUid());
-			if($abos){
-				$maalabolog = 'Afmelden abo\'s: ';
-				foreach($abos as $abo => $abonaam){
-					if($maaltrack->delAbo($abo,$this->lid->getUid())){
-						$maalabolog.= $abonaam.' uitgezet. ';
-					}else{
-						$maalabolog.= $abonaam.' staat nog aan. ';
-					}
-				}
-				$maalabolog.='[br]';
-			}
-		}
-		//velden resetten e.d.
-		if(!in_array($status, array('S_LID','S_GASTLID','S_NOVIET'))){
-			$this->bewerktLid->setProperty('postfix', '');
-		}
-		if(in_array($status, array('S_LID','S_GASTLID','S_NOVIET','S_KRINGEL','S_CIE'))){
-			$this->bewerktLid->setProperty('lidafdatum', '0000-00-00');
-		}
-		if(in_array($status, array('S_OVERLEDEN','S_NOBODY','S_CIE'))){
-			$this->bewerktLid->setProperty('kring', 0);
-		}
-		if(!LoginLid::instance()->hasPermission('P_ADMIN') 
-			AND in_array($status, array('S_OUDLID','S_ERELID','S_NOBODY')) 
-			AND in_array($this->bewerktLid->getProperty('permissies'), array('P_PUBCIE','P_MODERATOR','P_BESTUUR','P_VAB'))){
-
-			if($status=='S_NOBODY'){
-				$st = 'P_NOBODY';
-			}else{
-				$st = 'P_OUDLID';
-			}
-			$this->bewerktLid->setProperty('status', $st);
-		}
-		//changelog
-		if(count($this->diff())>0){
-			$ubbdiff = $this->ubbDiff();
-			if($maalabolog){
-				$ubbdiff = substr($ubbdiff,0,-4).$maalabolog.'[hr]';
-			}
-			$this->bewerktLid->logChange($ubbdiff);
-		}
-
-		//opslaan
-		if($this->bewerktLid->save()){
-			try{
-				$this->bewerktLid->save_ldap();
-			}catch(Exception $e){
-				//todo: loggen dat LDAP niet beschikbaar is in een mooi eventlog wat ook nog gemaakt moet worden...
-			}
-			//mailen naar fisci
-			if(in_array($status, array('S_OUDLID','S_ERELID','S_NOBODY','S_OVERLEDEN'))){
-				$saldi = '';
-				foreach($this->bewerktLid->getSaldi() as $saldo){
-					$saldi .= $saldo['naam'].': '.$saldo['saldo']."\n";
-				}
-$bericht = "Beste fisci,
-
-De lidstatus van ".$this->bewerktLid->getNaamLink('full','plain')." (".$this->bewerktLid->getUid().") is gewijzigd van ".$oudestatus." in ".$status.".
-
-De volgende saldi zijn bekend:
-".$saldi."
-
-Met amicale groet,
-".LoginLid::instance()->getLid()->getNaamLink('full','plain');
-				
-				$this->fiscusmailer('pubcie@csrdelft.nl,vice-abactis@csrdelft.nl','pubcie@csrdelft.nl','Melding lid-af worden',$bericht);
-			}
-			return true;
-		}
-		
-		return false;
-	}
-	private function keepFields($status){
-		$keep = array();
-		$keep['status'] = true;
-		$keep['permissies'] = true;
-		
-		if(in_array($status, array('S_OUDLID','S_ERELID','S_NOBODY'))){
-			$toggle = true;
-		}else{	
-			$toggle = false;
-		}
-		$keep['postfix'] = !$toggle;
-
-		$keep['lidafdatum'] = $toggle;
-		$keep['kring'] = $toggle;
-		if($status=='S_NOBODY'){
-			$toggle = false;
-		}
-		$keep['ontvangtcontactueel'] = $toggle;
-		$keep['echtgenoot'] = $toggle;
-		$keep['adresseringechtpaar'] = $toggle;
-
-		if($status=='S_OVERLEDEN'){
-			$keep['sterfdatum']=true;
-		}else{
-			$keep['sterfdatum']=false;
-		}
-		if($status=='S_KRINGEL' OR $status=='S_CIE'){
-			$keep['postfix'] = false;
-		}
-		return $keep;
-	}
-	private function fiscusmailer($from,$bcc,$onderwerp,$bericht){
-		$to = 'fiscus@csrdelft.nl,maalcie-fiscus@csrdelft.nl,soccie@csrdelft.nl';
-		$onderwerp = ' =?UTF-8?B?'. base64_encode(htmlspecialchars($onderwerp)) ."?=\n";
-		$bericht = htmlspecialchars($bericht);
-		$headers = "From: ".$from."\n";
-		if($bcc!=''){
-			$headers .= "BCC: ".$bcc."\n";
-		}
-		//content-type en charset zetten zodat rare tekens in wazige griekse namen
-		//en euro-tekens correct weergegeven worden in de mails.
-		$headers .= "Content-Type: text/plain; charset=UTF-8\r\n";
-		$headers .= 'X-Mailer: csrdelft.nl/Lidstatuswijzigjetzer'."\n\r";
-		return mail($to, $onderwerp, $bericht, $headers);
 	}
 
 	public function magBewerken(){
@@ -281,19 +132,19 @@ Met amicale groet,
 
 	}
 
-	public function isPosted($formName='form'){
+	public function isPosted(){
 		$posted=false;
-		foreach($this->getFields($formName) as $field){
+		foreach($this->getFields() as $field){
 			if($field instanceof FormField AND $field->isPosted()){
 				$posted=true;
 			}
 		}
 		return $posted;
 	}
-	public function valid($formName='form'){
+	public function valid(){
 		//alle veldjes langslopen, en kijken of ze valideren.
 		$valid=true;
-		foreach($this->getFields($formName) as $field){
+		foreach($this->getFields() as $field){
 			//we checken alleen de formfields, niet de comments enzo.
 			if($field instanceof FormField AND !$field->valid($this->getLid())){
 				$valid=false;
@@ -308,8 +159,64 @@ Met amicale groet,
 		}
 		return $this->lid->getProperty($key);
 	}
+
+
+
+	public function getFields(){ return $this->form; }
+
+	public static function resetWachtwoord($uid){
+		if(!Lid::exists($uid)){ return false; }
+		$lid=LidCache::getLid($uid);
+
+		$password=substr(md5(time()), 0, 8);
+		$passwordhash=makepasswd($password);
+
+		$sNieuwWachtwoord="UPDATE lid SET password='".$passwordhash."' WHERE uid='".$uid."' LIMIT 1;";
+
+		$mail="
+Hallo ".$lid->getNaam().",
+
+U heeft een nieuw wachtwoord aangevraagd voor http://csrdelft.nl. U kunt nu inloggen met de volgende combinatie:
+
+".$uid."
+".$password."
+
+U kunt uw wachtwoord wijzigen in uw profiel: http://csrdelft.nl/communicatie/profiel/".$uid." .
+
+Met vriendelijke groet,
+
+Namens de PubCie,
+
+".LoginLid::instance()->getLid()->getNaam()."
+
+P.S.: Mocht u nog vragen hebben, dan kan u natuurlijk altijd e-posts sturen naar pubcie@csrdelft.nl";
+		return
+			MySql::instance()->query($sNieuwWachtwoord) AND
+			LidCache::flushLid($uid) AND
+			$lid->save_ldap() AND
+			mail($lid->getEmail(), 'Nieuw wachtwoord voor de C.S.R.-stek', $mail, "From: pubcie@csrdelft.nl\n Bcc: pubcie@csrdelft.nl");
+
+	}
+	public function getProfielFieldsNotEmpty($fields){
+		$ret=array();
+		$profiel=$this->lid->getProfiel();
+		foreach($fields as $field){
+			if(isset($profiel[$field]) && $profiel[$field]!=''){
+				$ret[$field]=$profiel[$field];
+			}
+		}
+		return $ret;
+	}
+}
+
+class ProfielBewerken extends Profiel {
+
+	public function __construct($lid, $actie){
+		parent::__construct($lid, $actie);
+		$this->assignFields();
+	}
 	/*
-	 * Alle profielvelden die bewerkt kunnen worden hier defenieren.
+	 * Alle profielvelden die bewerkt kunnen worden hier definieren.
 	 * Als we ze hier toevoegen, dan verschijnen ze ook automagisch in het profiel-bewerkding,
 	 * en ze worden gecontroleerd met de eigen valideerfuncties.
 	 */
@@ -444,10 +351,19 @@ Met amicale groet,
 		}
 		$this->form=$form;
 	}
+}
+
+class ProfielStatus extends Profiel{
+
+	public function __construct($lid, $actie){
+		parent::__construct($lid, $actie);
+		$this->assignFields();
+	}
+
 	/*
 	 * Defineert de velden van formulier voor het wijzigen van lidstatus
 	 */
-	public function assignFieldsStatus(){
+	public function assignFields(){
 		LidCache::updateLid($this->lid->getUid());
 		$profiel=$this->lid->getProfiel();
 
@@ -464,64 +380,208 @@ Met amicale groet,
 		//stati
 		$status = array('S_LID'=>'Lid', 'S_GASTLID'=>'Gastlid', 'S_NOVIET'=>'Noviet', 'S_OUDLID'=>'Oudlid', 'S_ERELID'=>'Erelid', 'S_KRINGEL'=>'Kringel', 'S_NOBODY'=>'Ex-lid', 'S_OVERLEDEN'=>'Overleden', 'S_CIE'=>'Commissie & in LDAP adresboek');
 
-		$formStatus[]=new SelectField('status', $profiel['status'], 'Lidstatus', $status);
-		$formStatus[]=new SelectField('permissies', $profiel['permissies'], 'Permissies', $perm);
-		$formStatus[]=new DatumField('lidafdatum', $profiel['lidafdatum'], 'Lid-af sinds');
-		$formStatus[]=new SelectField('kring', $profiel['kring'], 'Kringnummer', range(0,9));
-		$formStatus[]=new InputField('postfix', $profiel['postfix'], 'Postfix', 7);
-		$formStatus[]=new SelectField('ontvangtcontactueel', $profiel['ontvangtcontactueel'], 'Ontvangt contactueel?', array('ja'=>'ja','nee'=>'nee'));
-		$formStatus[]=new UidField('echtgenoot', $profiel['echtgenoot'], 'Echtgenoot (lidnummer):');
-		$formStatus[]=new InputField('adresseringechtpaar',$profiel['adresseringechtpaar'], 'Tenaamstelling post echtpaar:',250);
-		$formStatus[]=new DatumField('sterfdatum', $profiel['sterfdatum'], 'Overleden op:');
+		//status-select is eerste veld omdat die bij opslaan als eerste uitgelezen moet worden.
+		$form[]=new SelectField('status', $profiel['status'], 'Lidstatus', $status);
+		$form[]=new SelectField('permissies', $profiel['permissies'], 'Permissies', $perm);
+		$form[]=new DatumField('lidafdatum', $profiel['lidafdatum'], 'Lid-af sinds');
+		$form[]=new SelectField('kring', $profiel['kring'], 'Kringnummer', range(0,9));
+		$form[]=new InputField('postfix', $profiel['postfix'], 'Postfix', 7);
+		$form[]=new SelectField('ontvangtcontactueel', $profiel['ontvangtcontactueel'], 'Ontvangt contactueel?', array('ja'=>'ja','nee'=>'nee'));
+		$form[]=new UidField('echtgenoot', $profiel['echtgenoot'], 'Echtgenoot (lidnummer):');
+		$form[]=new InputField('adresseringechtpaar',$profiel['adresseringechtpaar'], 'Tenaamstelling post echtpaar:',250);
+		$form[]=new DatumField('sterfdatum', $profiel['sterfdatum'], 'Overleden op:');
 
-		$this->formStatus=$formStatus;
+		$this->form=$form;
 	}
 
-	public function getFields($formName='form'){ return $this->$formName; }
-
-	public static function resetWachtwoord($uid){
-		if(!Lid::exists($uid)){ return false; }
-		$lid=LidCache::getLid($uid);
-
-		$password=substr(md5(time()), 0, 8);
-		$passwordhash=makepasswd($password);
-
-		$sNieuwWachtwoord="UPDATE lid SET password='".$passwordhash."' WHERE uid='".$uid."' LIMIT 1;";
-
-		$mail="
-Hallo ".$lid->getNaam().",
-
-U heeft een nieuw wachtwoord aangevraagd voor http://csrdelft.nl. U kunt nu inloggen met de volgende combinatie:
-
-".$uid."
-".$password."
-
-U kunt uw wachtwoord wijzigen in uw profiel: http://csrdelft.nl/communicatie/profiel/".$uid." .
-
-Met vriendelijke groet,
-
-Namens de PubCie,
-
-".LoginLid::instance()->getLid()->getNaam()."
-
-P.S.: Mocht u nog vragen hebben, dan kan u natuurlijk altijd e-posts sturen naar pubcie@csrdelft.nl";
-		return
-			MySql::instance()->query($sNieuwWachtwoord) AND
-			LidCache::flushLid($uid) AND
-			$lid->save_ldap() AND
-			mail($lid->getEmail(), 'Nieuw wachtwoord voor de C.S.R.-stek', $mail, "From: pubcie@csrdelft.nl\n Bcc: pubcie@csrdelft.nl");
-
-	}
-	public function getProfielFieldsNotEmpty($fields){
-		$ret=array();
-		$profiel=$this->lid->getProfiel();
-		foreach($fields as $field){
-			if(isset($profiel[$field]) && $profiel[$field]!=''){
-				$ret[$field]=$profiel[$field];
+	/*
+	 * Slaat waardes uit de velden op. Voor opslaan worden sommige velden nog geconditioneerd.
+	 * @return bool wel/niet slagen van opslaan van lidgegevens
+	 * acties: verwerkt velden, conditioneert die, zet abo's uit, slaat lidgegevens op en mailt fisci.
+	 */
+	public function save(){
+		//relevante gegevens uit velden verwerken
+		foreach($this->getFields('formStatus') as $field){
+			if($field instanceof FormField){
+				//aan de hand van status bepalen welke POSTed velden worden bewaard van het formulier
+				if($field->getName()=='status'){
+					$keepfields = $this->keepFields($field->getValue());
+				}
+				//is het wel een wijziging?
+				if($keepfields[$field->getName()]['keep']==true){
+					if($field->getValue()!=$this->lid->getProperty($field->getName())){
+						$this->bewerktLid->setProperty($field->getName(), $field->getValue());
+					}
+				}else{
+					//als het niet bewaard wordt, checken of veld gereset moet worden.
+					if($keepfields[$field->getName()]['reset']!==null){
+						$this->bewerktLid->setProperty($field->getName(), $keepfields[$field->getName()]['reset']);
+					}
+				}
 			}
 		}
-		return $ret;
-	}
-}
 
+		$oudestatus = $this->lid->getProperty('status');
+		$status = $this->bewerktLid->getProperty('status');
+
+		//bij niet-admins worden aanpassingen aan permissies ongedaan gemaakt
+		if(!LoginLid::instance()->hasPermission('P_ADMIN')){
+			if(in_array($perm=$this->lid->getProperty('permissies'), array('P_PUBCIE','P_MODERATOR','P_BESTUUR','P_VAB'))){
+				if($perm!=$this->bewerktLid->getProperty('permissies')){
+					$this->bewerktLid->setProperty('permissies', $perm);
+				}
+			}
+
+			//uitzondering: bij aanpassing door een niet-admin automatisch oudlid-permissies instellen voor *hogere* admins bij lid-af maken.
+			if(in_array($status, array('S_OUDLID','S_ERELID','S_NOBODY')) 
+			AND in_array($this->bewerktLid->getProperty('permissies'), array('P_PUBCIE','P_MODERATOR','P_BESTUUR','P_VAB'))){
+				if($status=='S_NOBODY'){
+					$st = 'P_NOBODY';
+				}else{
+					$st = 'P_OUDLID';
+				}
+				$this->bewerktLid->setProperty('status', $st);
+			}
+		}
+		//maaltijdabo's uitzetten
+		$maalabolog = '';
+		if(in_array($status,array('S_OUDLID','S_ERELID','S_NOBODY','S_CIE','S_OVERLEDEN')) 
+			AND $this->bewerktLid->getProperty('permissies')!='P_ETER'){
+
+			require_once 'maaltijden/maaltrack.class.php';
+			$maaltrack = new MaalTrack();
+			if($abos = $maaltrack->getAbo($this->lid->getUid())){
+				$maalabolog = 'Afmelden abo\'s: ';
+				foreach($abos as $abo => $abonaam){
+					if($maaltrack->delAbo($abo,$this->lid->getUid())){
+						$maalabolog.= $abonaam.' uitgezet. ';
+					}else{
+						$maalabolog.= $abonaam.' staat nog aan. ';
+					}
+				}
+				$maalabolog.='[br]';
+			}
+		}
+
+		//changelog, voegt ook log van uitzetten maaltijdabo's toe
+		if(count($this->diff())>0){
+			$ubbdiff = $this->ubbDiff();
+			if($maalabolog){
+				$ubbdiff = substr($ubbdiff,0,-4).$maalabolog.'[hr]';
+			}
+			$this->bewerktLid->logChange($ubbdiff);
+		}
+
+		//opslaan
+		if($this->bewerktLid->save()){
+			try{
+				$this->bewerktLid->save_ldap();
+			}catch(Exception $e){
+				//todo: loggen dat LDAP niet beschikbaar is in een mooi eventlog wat ook nog gemaakt moet worden...
+			}
+
+			//mailen naar fisci
+			if(in_array($status, array('S_OUDLID','S_ERELID','S_NOBODY','S_OVERLEDEN'))){
+				$saldi = '';
+				foreach($this->bewerktLid->getSaldi() as $saldo){
+					$saldi .= $saldo['naam'].': '.$saldo['saldo']."\n";
+				}
+$bericht = "Beste fisci,
+
+De lidstatus van ".$this->bewerktLid->getNaamLink('full','plain')." (".$this->bewerktLid->getUid().") is gewijzigd van ".$oudestatus." in ".$status.".
+
+De volgende saldi zijn bekend:
+".$saldi."
+
+Met amicale groet,
+".LoginLid::instance()->getLid()->getNaamLink('full','plain');
+				$from = 'pubcie@csrdelft.nl,vice-abactis@csrdelft.nl';
+				$to = 'fiscus@csrdelft.nl,maalcie-fiscus@csrdelft.nl,soccie@csrdelft.nl';
+				$bcc = 'pubcie@csrdelft.nl';
+				$this->fiscusmailer($from, $to, $bcc, 'Melding lid-af worden', $bericht);
+			}
+
+			return true;
+		}
+		return false;
+	}
+
+	/*
+	 * Geeft array waarin per veld is bepaald of die bewaard moet worden afhankelijk van de status 
+	 * @param $status string lidstatus
+	 * @return array($veld=>bool) array met per veld een boolean voor wel/niet bewaren
+	 */
+	private function keepFields($status){
+		$keep = array();
+		$keep['status']['keep'] = true;
+		$keep['permissies']['keep'] = true;
+		
+		if(in_array($status, array('S_OUDLID','S_ERELID','S_NOBODY','S_OVERLEDEN'))){
+			$toggle = true;
+		}else{	
+			$toggle = false;
+		}
+		$keep['postfix']['keep'] = !$toggle;
+		$keep['lidafdatum']['keep'] = $toggle;
+
+		if($status=='S_OVERLEDEN'){ $toggle = false; }
+
+		$keep['kring']['keep'] = $toggle;
+
+		if($status=='S_NOBODY'){ $toggle = false; }
+
+		$keep['ontvangtcontactueel']['keep'] = $toggle;
+		$keep['echtgenoot']['keep'] = $toggle;
+		$keep['adresseringechtpaar']['keep'] = $toggle;
+
+		if($status=='S_OVERLEDEN'){
+			$keep['sterfdatum']['keep'] = true;
+		}else{
+			$keep['sterfdatum']['keep'] = false;
+		}
+		if(in_array($status, array('S_KRINGEL','S_OVERLEDEN','S_CIE'))){
+			$keep['postfix']['keep'] = false;
+		}
+		if(in_array($status, array('S_LID','S_GASTLID','S_NOVIET','S_KRINGEL'))){
+			$keep['kring']['keep'] = true;
+		}
+
+		//resetwaardes
+		$keep['status']['reset'] = null;
+		$keep['permissies']['reset'] = null;
+		$keep['lidafdatum']['reset'] = '0000-00-00';
+		$keep['postfix']['reset'] = '';
+		$keep['ontvangtcontactueel']['reset'] = null;
+		$keep['adresseringechtpaar']['reset'] = null;
+		$keep['echtgenoot']['reset'] = null;
+		$keep['sterfdatum']['reset'] = null;
+		$keep['kring']['reset'] = 0;
+
+		return $keep;
+	}
+
+	/*
+	 * Mailt de fisci een bericht
+	 * @param 	$from string of sender(s) email  ('abc@ml.com,de@gf.nl')
+	 * 			$to string of receiver(s) email
+	 * 			$bcc string of blind receiver(s) email
+	 * 			$onderwerp string
+	 * 			$bericht string bericht meerregelig gescheiden met \n. Advies is max 70 tekens per regel.
+	 * @return bool het mailen is wel/niet succes
+	 */
+	private function fiscusmailer($from, $to, $bcc, $onderwerp, $bericht){
+		$onderwerp = ' =?UTF-8?B?'. base64_encode(htmlspecialchars($onderwerp)) ."?=\n";
+		$bericht = htmlspecialchars($bericht);
+		$headers = "From: ".$from."\n";
+		if($bcc != ''){
+			$headers .= "BCC: ".$bcc."\n";
+		}
+		//content-type en charset zetten zodat rare tekens in wazige griekse namen
+		//en euro-tekens correct weergegeven worden in de mails.
+		$headers .= "Content-Type: text/plain; charset=UTF-8\r\n";
+		$headers .= 'X-Mailer: csrdelft.nl/Lidstatuswijzigjetzer'."\n\r";
+		return mail($to, $onderwerp, $bericht, $headers);
+	}
+
+}
 ?>

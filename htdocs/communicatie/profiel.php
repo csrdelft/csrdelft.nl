@@ -51,7 +51,7 @@ if(!($loginlid->hasPermission('P_LEDEN_READ') or $loginlid->hasPermission('P_OUD
 	switch($actie){
 		case 'novietBewerken':
 		case 'bewerken':
-			$profiel=new Profiel($uid, $actie);
+			$profiel=new ProfielBewerken($uid, $actie);
 			
 			if($profiel->magBewerken()){
 				if($profiel->isPosted() AND $profiel->valid() AND $profiel->save()){
@@ -85,9 +85,9 @@ if(!($loginlid->hasPermission('P_LEDEN_READ') or $loginlid->hasPermission('P_OUD
 		break;
 		case 'wijzigstatus':
 			if($loginlid->hasPermission('P_ADMIN,P_LEDEN_MOD')){
-				$profiel=new Profiel($uid, $actie);
+				$profiel=new ProfielStatus($uid, $actie);
 
-				if($profiel->isPosted('formStatus') AND $profiel->valid('formStatus') AND $profiel->saveStatus()){
+				if($profiel->isPosted() AND $profiel->valid() AND $profiel->save()){
 					header('location: '.CSR_ROOT.'communicatie/profiel/'.$uid);
 					exit;
 				}else{
