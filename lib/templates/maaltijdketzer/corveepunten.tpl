@@ -15,7 +15,9 @@
 				<th style="width: 15px"><a href="/actueel/maaltijden/corveepunten/sorteer/theedoek/{if $sorteer_richting=='asc'}desc{else}asc{/if}">T</a></th>
 				<th style="width: 15px"><a href="/actueel/maaltijden/corveepunten/sorteer/schoonmaken_frituur/{if $sorteer_richting=='asc'}desc{else}asc{/if}">sF</a></th>
 				<th style="width: 15px"><a href="/actueel/maaltijden/corveepunten/sorteer/schoonmaken_afzuigkap/{if $sorteer_richting=='asc'}desc{else}asc{/if}">sA</a></th>
-				<th style="width: 30px"><a href="/actueel/maaltijden/corveepunten/sorteer/schoonmaken_keuken/{if $sorteer_richting=='asc'}desc{else}asc{/if}">sK</a></th>
+				<th style="width: 15px"><a href="/actueel/maaltijden/corveepunten/sorteer/schoonmaken_keuken/{if $sorteer_richting=='asc'}desc{else}asc{/if}">sK</a></th>
+				<th style="width: 15px"><a href="/actueel/maaltijden/corveepunten/sorteer/klussen_licht/{if $sorteer_richting=='asc'}desc{else}asc{/if}">kL</a></th>
+				<th style="width: 30px"><a href="/actueel/maaltijden/corveepunten/sorteer/klussen_zwaar/{if $sorteer_richting=='asc'}desc{else}asc{/if}">kZ</a></th>
 				<th style="width: 60px"><a href="/actueel/maaltijden/corveepunten/sorteer/corvee_kwalikok/{if $sorteer_richting=='asc'}desc{else}asc{/if}">Kwalikok</a></th>
 				<th style="width: 50px"><a href="/actueel/maaltijden/corveepunten/sorteer/corvee_punten_bonus/{if $sorteer_richting=='asc'}desc{else}asc{/if}">Bonus</a></th>
 				<th style="width: 75px"><a href="/actueel/maaltijden/corveepunten/sorteer/corvee_vrijstelling/{if $sorteer_richting=='asc'}desc{else}asc{/if}">Vrijstelling</a></th>
@@ -42,6 +44,8 @@
 					<td>{if $leden.$it.schoonmaken_frituur}{$leden.$it.schoonmaken_frituur}{/if}</td>
 					<td>{if $leden.$it.schoonmaken_afzuigkap}{$leden.$it.schoonmaken_afzuigkap}{/if}</td>
 					<td>{if $leden.$it.schoonmaken_keuken}{$leden.$it.schoonmaken_keuken}{/if}</td>
+					<td>{if $leden.$it.klussen_licht}{$leden.$it.klussen_licht}{/if}</td>
+					<td>{if $leden.$it.klussen_zwaar}{$leden.$it.klussen_zwaar}{/if}</td>
 					<td><input type="checkbox" name="corvee_kwalikok" value="1" {if $leden.$it.corvee_kwalikok}checked="checked"{/if} /></td>
 					<td><input type="text" name="corvee_punten_bonus" value="{$leden.$it.corvee_punten_bonus}" style="width: 30px;" /></td>
 					<td><input type="text" name="corvee_vrijstelling" value="{$leden.$it.corvee_vrijstelling}" style="width: 30px;" />%</td>
@@ -63,6 +67,8 @@ Totaal: {$leden.$it.corvee_punten} + {$leden.$it.corvee_punten_bonus} = {$leden.
 					<td>{if $leden.$it.schoonmaken_frituur}{$leden.$it.schoonmaken_frituur}{/if}</td>
 					<td>{if $leden.$it.schoonmaken_afzuigkap}{$leden.$it.schoonmaken_afzuigkap}{/if}</td>
 					<td>{if $leden.$it.schoonmaken_keuken}{$leden.$it.schoonmaken_keuken}{/if}</td>
+					<td>{if $leden.$it.klussen_licht}{$leden.$it.klussen_licht}{/if}</td>
+					<td>{if $leden.$it.klussen_zwaar}{$leden.$it.klussen_zwaar}{/if}</td>
 					<td>{$leden.$it.corvee_kwalikok}</td>
 					<td>{$leden.$it.corvee_punten_bonus}</td>
 					<td>{$leden.$it.corvee_vrijstelling}%</td>

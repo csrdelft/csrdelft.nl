@@ -30,17 +30,16 @@ jQuery(document).ready(function(){
 		"aaSorting": [[1, 'asc']],
 		"sPaginationType": "full_numbers",
 		"aoColumns": [
-			{'iDataSort': 7},	// naam
+			{'iDataSort': 6},	// naam
 			{'sType': 'string'}, 				// waarschuwing
 			{'sType': 'html'},	// jaar
-			{'sSortDataType': 'dom-checkbox' }, // maandagabo
 			{'sSortDataType': 'dom-checkbox' }, // donderdagabo
 			{'sType': 'html'},	// verticale
 			{'sSortDataType': 'dom-checkbox' }, // verticaleabo
 			{'sType': 'html'}	// achternaam(verborgen)
 		],
 		"aoColumnDefs": [ 
-			{ "bVisible": false, "aTargets": [ 7] }
+			{ "bVisible": false, "aTargets": [ 6] }
 		]
 	});
 	/* Add event listeners to the two range filtering inputs */

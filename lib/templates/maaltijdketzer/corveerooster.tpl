@@ -14,6 +14,8 @@
 		<th>Frituur</th>
 		<th>Afzuigkap</th>
 		<th>Keuken</th>
+		<th>Lichte Klus</th>
+		<th>Zware Klus</th>
 	</tr>
 	{foreach from=$maal.maaltijden item=maaltijd}
 		<tr {if $maaltijd.datum<=$smarty.now}class="old"{/if} style="background-color: {cycle values="#e9e9e9, #fff"}">
@@ -61,6 +63,20 @@
 					{assign var='it' value=$smarty.section.schoonmaken_keuken.iteration-1}
 					{assign var='keuken' value=$maaltijd.taken.schoonmaken_keuken.$it}
 					{if $keuken!=''}<span class="{if $keuken==$liduid}mijzelf{/if}">{$keuken|csrnaam}</span>{/if}<br />
+				{/section}
+			</td>
+			<td>
+				{section name=klussen_licht loop=$maaltijd.klussen_licht}
+					{assign var='it' value=$smarty.section.klussen_licht.iteration-1}
+					{assign var='lichteklus' value=$maaltijd.taken.klussen_licht.$it}
+					{if $lichteklus!=''}<span class="{if $lichteklus==$liduid}mijzelf{/if}">{$lichteklus|csrnaam}</span>{/if}<br />
+				{/section}
+			</td>
+			<td>
+				{section name=klussen_zwaar loop=$maaltijd.klussen_zwaar}
+					{assign var='it' value=$smarty.section.klussen_zwaar.iteration-1}
+					{assign var='zwareklus' value=$maaltijd.taken.klussen_zwaar.$it}
+					{if $zwareklus!=''}<span class="{if $zwareklus==$liduid}mijzelf{/if}">{$zwareklus|csrnaam}</span>{/if}<br />
 				{/section}
 			</td>
 		</tr>

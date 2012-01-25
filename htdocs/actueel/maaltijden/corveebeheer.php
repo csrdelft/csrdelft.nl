@@ -44,10 +44,11 @@ if(isset($_POST['actie']) && isset($_POST['type'])){
 		$datum=strtotime($_POST['datum']);
 		
 	# nieuwe maaltijd toevoegen of oude bewerken?
-	if($actie == 'toevoegen' && $type=='corvee' && isset($datum, $_POST['tekst'], $_POST['frituur'], $_POST['afzuigkap'], $_POST['keuken'],$_POST['punten_schoonmaken_frituur'], $_POST['punten_schoonmaken_afzuigkap'], $_POST['punten_schoonmaken_keuken'])
+	if($actie == 'toevoegen' && $type=='corvee' && isset($datum, $_POST['tekst'], $_POST['frituur'], $_POST['afzuigkap'], $_POST['keuken'], $_POST['lichteklus'], $_POST['zwareklus'], $_POST['punten_schoonmaken_frituur'], $_POST['punten_schoonmaken_afzuigkap'], $_POST['punten_schoonmaken_keuken'], $_POST['punten_klussen_licht'], $_POST['punten_klussen_zwaar'])
 	   	&& $maaltrack->addSchoonmaakMaaltijd($datum, $_POST['tekst'], 
-		$_POST['frituur'], $_POST['afzuigkap'], $_POST['keuken'],
-		$_POST['punten_schoonmaken_frituur'], $_POST['punten_schoonmaken_afzuigkap'], $_POST['punten_schoonmaken_keuken']
+		$_POST['frituur'], $_POST['afzuigkap'], $_POST['keuken'], $_POST['lichteklus'], $_POST['zwareklus'],
+		$_POST['punten_schoonmaken_frituur'], $_POST['punten_schoonmaken_afzuigkap'], $_POST['punten_schoonmaken_keuken'],
+		$_POST['punten_klussen_licht'], $_POST['punten_klussen_zwaar']
 		)){
 		header('location: '.CSR_ROOT.'actueel/maaltijden/corveebeheer/');
 		exit;
@@ -57,16 +58,16 @@ if(isset($_POST['actie']) && isset($_POST['type'])){
 			&& ($maaltrack->editCorveeMaaltijd($maalid, $_POST['koks'], $_POST['afwassers'], $_POST['theedoeken'], $_POST['punten_kok'], $_POST['punten_afwas'], $_POST['punten_theedoek']))){
 			header('location: '.CSR_ROOT.'actueel/maaltijden/corveebeheer/bewerk/'.$maalid);
 			exit;
-		} elseif ($actie === 'bewerk' && $type === 'corvee' && (isset($_POST['frituur'], $_POST['afzuigkap'], $_POST['keuken'], $_POST['punten_schoonmaken_frituur'], $_POST['punten_schoonmaken_afzuigkap'], $_POST['punten_schoonmaken_keuken']))
-			&& ($maaltrack->editSchoonmaakMaaltijd($maalid, $_POST['frituur'], $_POST['afzuigkap'], $_POST['keuken'], $_POST['punten_schoonmaken_frituur'], $_POST['punten_schoonmaken_afzuigkap'], $_POST['punten_schoonmaken_keuken']))){
+		} elseif ($actie === 'bewerk' && $type === 'corvee' && (isset($_POST['frituur'], $_POST['afzuigkap'], $_POST['keuken'], $_POST['lichteklus'], $_POST['zwareklus'], $_POST['punten_schoonmaken_frituur'], $_POST['punten_schoonmaken_afzuigkap'], $_POST['punten_schoonmaken_keuken'], $_POST['punten_klussen_licht'], $_POST['punten_klussen_zwaar']))
+			&& ($maaltrack->editSchoonmaakMaaltijd($maalid, $_POST['frituur'], $_POST['afzuigkap'], $_POST['keuken'], $_POST['lichteklus'], $_POST['zwareklus'], $_POST['punten_schoonmaken_frituur'], $_POST['punten_schoonmaken_afzuigkap'], $_POST['punten_schoonmaken_keuken'], $_POST['punten_klussen_licht'], $_POST['punten_klussen_zwaar']))){
 			header('location: '.CSR_ROOT.'actueel/maaltijden/corveebeheer/bewerk/'.$maalid);
 			exit;
 		} elseif ($actie === 'takenbewerk' && $type === 'normaal' && (isset($_POST['kok']) || isset($_POST['afwas']) || isset($_POST['theedoek']))
 			&& ($maaltrack->editCorveeMaaltijdTaken($maalid, getOrPost('kok', 'post', array()), getOrPost('afwas', 'post', array()), getOrPost('theedoek', 'post', array())))){									
 			header('location: '.CSR_ROOT.'actueel/maaltijden/corveebeheer/takenbewerk/'.$maalid.'/'.$_POST['filter']);
 			exit;
-		} elseif ($actie === 'takenbewerk' && $type === 'corvee' && (isset($_POST['frituur']) || isset($_POST['afzuigkap']) || isset($_POST['keuken']))
-			&& ($maaltrack->editSchoonmaakMaaltijdTaken($maalid, (isset($_POST['frituur']) ? $_POST['frituur'] : null), (isset($_POST['afzuigkap']) ? $_POST['afzuigkap'] : null), (isset($_POST['keuken']) ? $_POST['keuken'] : null)))) {
+		} elseif ($actie === 'takenbewerk' && $type === 'corvee' && (isset($_POST['frituur']) || isset($_POST['afzuigkap']) || isset($_POST['keuken']) || isset($_POST['lichteklus']) || isset($_POST['zwareklus']))
+			&& ($maaltrack->editSchoonmaakMaaltijdTaken($maalid, (isset($_POST['frituur']) ? $_POST['frituur'] : null), (isset($_POST['afzuigkap']) ? $_POST['afzuigkap'] : null), (isset($_POST['keuken']) ? $_POST['keuken'] : null), (isset($_POST['lichteklus']) ? $_POST['lichteklus'] : null), (isset($_POST['zwareklus']) ? $_POST['zwareklus'] : null)))) {
 			header('location: '.CSR_ROOT.'actueel/maaltijden/corveebeheer/takenbewerk/'.$maalid.'/'.$_POST['filter']);
 			exit;	
 		} elseif ($actie === 'puntenbewerk' && $type === 'normaal' 

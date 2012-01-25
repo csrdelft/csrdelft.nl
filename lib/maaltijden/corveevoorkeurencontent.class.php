@@ -37,7 +37,7 @@ class CorveevoorkeurenContent extends SimpleHTML {
 		$this->setMelding($lijst->getError());
 
 		//arrays toewijzen en weergeven
-		$corveevoorkeuren->assign('voorkeurenheaders', array('Ma Kok','Ma Afw','Do Kok','Do afw','Theedk','Sc Afz','Sc Fri','Sc Keu'));
+		$corveevoorkeuren->assign('voorkeurenheaders', array('Kl Li','Kl Zw','Do Kok','Do Afw','Theedk','Sc Afz','Sc Fri','Sc Keu'));
 		$corveevoorkeuren->assign('leden', $aLeden);
 		$corveevoorkeuren->assign('sorteer', $this->_sorteer);
 		$corveevoorkeuren->assign('sorteer_richting', $this->_sorteer_richting);

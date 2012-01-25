@@ -438,8 +438,8 @@ class Lid implements Serializable, Agendeerbaar{
 	public function getCorveeVoorkeuren(){
 		$corvee_voorkeuren = $this->profiel['corvee_voorkeuren'];
 		$return = array(
-			'ma_kok' => $corvee_voorkeuren[0],
-			'ma_afwas' => $corvee_voorkeuren[1],
+			'lichteklus' => $corvee_voorkeuren[0],
+			'zwareklus' => $corvee_voorkeuren[1],
 			'do_kok' => $corvee_voorkeuren[2],
 			'do_afwas' => $corvee_voorkeuren[3],
 			'theedoek' => $corvee_voorkeuren[4],

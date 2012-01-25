@@ -62,12 +62,18 @@ class CorveebeheerContent extends SimpleHTML {
 			$aForm['frituur_aangemeld']=0;
 			$aForm['afzuigkap_aangemeld']=0;
 			$aForm['keuken_aangemeld']=0;
+			$aForm['lichteklus_aangemeld']=0;
+			$aForm['zwareklus_aangemeld']=0;
 			$aForm['schoonmaken_frituur']=0;
 			$aForm['schoonmaken_afzuigkap']=0;
 			$aForm['schoonmaken_keuken']=0;
+			$aForm['klussen_licht']=0;
+			$aForm['klussen_zwaar']=0;
 			$aForm['punten_schoonmaken_frituur']=Corveeinstellingen::get('puntenfrituur');
 			$aForm['punten_schoonmaken_afzuigkap']=Corveeinstellingen::get('puntenafzuigkap');
 			$aForm['punten_schoonmaken_keuken']=Corveeinstellingen::get('puntenkeuken');
+			$aForm['punten_klussen_licht']=Corveeinstellingen::get('puntenlichteklus');
+			$aForm['punten_klussen_zwaar']=Corveeinstellingen::get('puntenzwareklus');
 		}else{
 			$aForm=$this->_maaltijd;
 			
@@ -107,6 +113,8 @@ class CorveebeheerContent extends SimpleHTML {
 						$aForm['frituurleden']=$this->_maaltrack->getTaakLeden();
 						$aForm['afzuigkapleden']=$this->_maaltrack->getTaakLeden();
 						$aForm['keukenleden']=$this->_maaltrack->getTaakLeden();
+						$aForm['lichteklusleden']=$this->_maaltrack->getTaakLeden();
+						$aForm['zwareklusleden']=$this->_maaltrack->getTaakLeden();
 					}
 				} else {
 					if($aForm['type'] == "normaal"){
@@ -119,6 +127,8 @@ class CorveebeheerContent extends SimpleHTML {
 						$aForm['frituurleden']=$this->_maaltrack->getTaakLedenGefilterd('frituur',$dag,0);
 						$aForm['afzuigkapleden']=$this->_maaltrack->getTaakLedenGefilterd('afzuigkap',$dag,0);
 						$aForm['keukenleden']=$this->_maaltrack->getTaakLedenGefilterd('keuken',$dag,0);
+						$aForm['lichteklusleden']=$this->_maaltrack->getTaakLedenGefilterd('lichteklus',$dag,0);
+						$aForm['zwareklusleden']=$this->_maaltrack->getTaakLedenGefilterd('zwareklus',$dag,0);
 					}
 				}
 							

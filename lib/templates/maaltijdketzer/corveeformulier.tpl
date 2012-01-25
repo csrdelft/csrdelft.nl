@@ -80,6 +80,14 @@
 				<td><input type="text" name="keuken" value="{$maal.formulier.schoonmaken_keuken}" style="width: 50px;" /> ({$maal.formulier.keuken_aangemeld} aangemeld)</td>
 			</tr>
 			<tr>
+				<td>Klussers (Licht)</td>
+				<td><input type="text" name="lichteklus" value="{$maal.formulier.klussen_licht}" style="width: 50px;" /> ({$maal.formulier.lichteklus_aangemeld} aangemeld)</td>
+			</tr>
+			<tr>
+				<td>Klussers (Zwaar)</td>
+				<td><input type="text" name="zwareklus" value="{$maal.formulier.klussen_zwaar}" style="width: 50px;" /> ({$maal.formulier.zwareklus_aangemeld} aangemeld)</td>
+			</tr>
+			<tr>
 				<td>Punten Frituur</td>
 				<td><input type="text" name="punten_schoonmaken_frituur" value="{$maal.formulier.punten_schoonmaken_frituur}" style="width: 50px;"  /></td>
 			</tr>
@@ -90,6 +98,14 @@
 			<tr>
 				<td>Punten Keuken</td>
 				<td><input type="text" name="punten_schoonmaken_keuken" value="{$maal.formulier.punten_schoonmaken_keuken}" style="width: 50px;" /></td>
+			</tr>
+			<tr>
+				<td>Punten Lichte Klus</td>
+				<td><input type="text" name="punten_klussen_licht" value="{$maal.formulier.punten_klussen_licht}" style="width: 50px;" /></td>
+			</tr>
+			<tr>
+				<td>Punten Zware Klus</td>
+				<td><input type="text" name="punten_klussen_zwaar" value="{$maal.formulier.punten_klussen_zwaar}" style="width: 50px;" /></td>
 			</tr>
 		{/if}
 		<tr>

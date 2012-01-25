@@ -108,6 +108,8 @@ class Corveeinstellingen{
 		$instellingForm[] = new IntField('puntenafzuigkap',$this->getValue('puntenafzuigkap') , 'Afzuigkapschoonmaken', 30, 0); 
 		$instellingForm[] = new IntField('puntenfrituur',$this->getValue('puntenfrituur') , 'Frituurschoonmaken', 30, 0); 
 		$instellingForm[] = new IntField('puntenkeuken',$this->getValue('puntenkeuken') , 'Keukenschoonmaken', 30, 0); 
+		$instellingForm[] = new IntField('puntenlichteklus',$this->getValue('puntenlichteklus') , 'Klussen (Licht)', 30, 0); 
+		$instellingForm[] = new IntField('puntenzwareklus',$this->getValue('puntenzwareklus') , 'Klussen (Zwaar)', 30, 0); 
 		$instellingForm[] = new DatumField('startpuntentelling',$this->getValue('startpuntentelling') , 'Start puntentelling',2020);
 
 		$instellingForm[] = new Comment('E-mails voor automailer');
@@ -118,6 +120,8 @@ class Corveeinstellingen{
 		$instellingForm[] = new TextField('afzuigkap',$this->getValue('afzuigkap') , 'Afzuigkapschoonmakers');
 		$instellingForm[] = new TextField('frituur',$this->getValue('frituur') , 'Frituurschoonmakers');
 		$instellingForm[] = new TextField('keuken',$this->getValue('keuken') , 'Keukenschoonmakers');
+		$instellingForm[] = new TextField('lichteklus',$this->getValue('lichteklus') , 'Klussers (Licht)');
+		$instellingForm[] = new TextField('zwareklus',$this->getValue('zwareklus') , 'Klussers (Zwaar)');
 		$instellingForm[] = new TextField('tafelp',$this->getValue('tafelp') , 'Tafelpraeses');
 		
 		$this->instellingForm=$instellingForm;

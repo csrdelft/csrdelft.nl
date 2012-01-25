@@ -108,6 +108,26 @@
 								{/section}
 							</td>
 						</tr>
+						<tr>
+							<td>Klussers (Licht) ({$maal.formulier.klussen_licht})</td>
+							<td>{section name=klussen_licht loop=$maal.formulier.klussen_licht}					
+									{assign var='it' value=$smarty.section.klussen_licht.iteration-1}
+									{assign var='lichteklus' value=$maal.formulier.taken.klussen_licht.$it}
+									{html_options name=lichteklus[$it] options=$maal.formulier.lichteklusleden selected=$lichteklus}
+									{if $lichteklus!=''}{$lichteklus|csrnaam}{/if}<br />
+								{/section}
+							</td>
+						</tr>
+						<tr>
+							<td>Klussers (Zwaar) ({$maal.formulier.klussen_zwaar})</td>
+							<td>{section name=klussen_zwaar loop=$maal.formulier.klussen_zwaar}					
+									{assign var='it' value=$smarty.section.klussen_zwaar.iteration-1}
+									{assign var='zwareklus' value=$maal.formulier.taken.klussen_zwaar.$it}
+									{html_options name=zwareklus[$it] options=$maal.formulier.zwareklusleden selected=$zwareklus}
+									{if $zwareklus!=''}{$zwareklus|csrnaam}{/if}<br />
+								{/section}
+							</td>
+						</tr>
 					{/if}
 					<tr>
 						<td>&nbsp;</td>

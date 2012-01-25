@@ -59,7 +59,7 @@ class Maaltijd implements Agendeerbaar {
 		$taken = array();
 		$sMaaltijdTakenQuery="
 			SELECT
-				uid, kok, afwas, theedoek, schoonmaken_frituur, schoonmaken_afzuigkap, schoonmaken_keuken, punten_toegekend
+				uid, kok, afwas, theedoek, schoonmaken_frituur, schoonmaken_afzuigkap, schoonmaken_keuken, klussen_licht, klussen_zwaar, punten_toegekend
 			FROM
 				maaltijdcorvee
 			WHERE
@@ -73,6 +73,8 @@ class Maaltijd implements Agendeerbaar {
 				if ($record['schoonmaken_frituur']) $taken['schoonmaken_frituur'][] = $record['uid'];
 				if ($record['schoonmaken_afzuigkap']) $taken['schoonmaken_afzuigkap'][] = $record['uid'];
 				if ($record['schoonmaken_keuken']) $taken['schoonmaken_keuken'][] = $record['uid'];
+				if ($record['klussen_licht']) $taken['klussen_licht'][] = $record['uid'];
+				if ($record['klussen_zwaar']) $taken['klussen_zwaar'][] = $record['uid'];
 				if ($record['punten_toegekend']) $taken['toegekend'][$record['uid']] = $record['punten_toegekend'];				
 			}
 		}

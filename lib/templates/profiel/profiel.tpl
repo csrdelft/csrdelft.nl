@@ -249,14 +249,14 @@
 				<div class="half">
 					<div class="label">Voorkeuren:</div>
 					<ul class="nobullets data" title="Ik kom graag deze taken doen">
-						{if $corveevoorkeuren.ma_kok}	<li>Maandag koken</li>{/if}
-						{if $corveevoorkeuren.ma_afwas}	<li>Maandag afwassen</li>{/if}
 						{if $corveevoorkeuren.do_kok}	<li>Donderdag koken</li>{/if}
 						{if $corveevoorkeuren.do_afwas}	<li>Donderdag afwassen</li>{/if}
 						{if $corveevoorkeuren.theedoek}	<li>Theedoeken wassen</li>{/if}
 						{if $corveevoorkeuren.afzuigkap}<li>Afzuigkap schoonmaken</li>{/if}
 						{if $corveevoorkeuren.frituur}	<li>Frituur schoonmaken</li>{/if}
 						{if $corveevoorkeuren.keuken}	<li>Keuken schoonmaken</li>{/if}
+						{if $corveevoorkeuren.lichteklus}	<li>Lichte klussen</li>{/if}
+						{if $corveevoorkeuren.zwareklus}	<li>Zware klussen</li>{/if}
 					</ul>
 				</div>
 				<div>
