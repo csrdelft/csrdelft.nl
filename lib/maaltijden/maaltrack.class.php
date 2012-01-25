@@ -774,8 +774,8 @@ class MaalTrack {
 				(SELECT COUNT(uid) FROM maaltijdcorvee WHERE maalid = id AND kok = 1) AS koks_aangemeld,
 				(SELECT COUNT(uid) FROM maaltijdcorvee WHERE maalid = id AND afwas = 1) AS afwassers_aangemeld,
 				(SELECT COUNT(uid) FROM maaltijdcorvee WHERE maalid = id AND theedoek = 1) AS theedoeken_aangemeld,
-				schoonmaken_frituur, schoonmaken_afzuigkap, schoonmaken_keuken, 
-				punten_schoonmaken_frituur, punten_schoonmaken_afzuigkap, punten_schoonmaken_keuken,
+				schoonmaken_frituur, schoonmaken_afzuigkap, schoonmaken_keuken, klussen_licht,	klussen_zwaar,
+				punten_schoonmaken_frituur, punten_schoonmaken_afzuigkap, punten_schoonmaken_keuken,punten_klussen_licht,	punten_klussen_zwaar,
 				(SELECT COUNT(uid) FROM maaltijdcorvee WHERE maalid = id AND schoonmaken_frituur = 1) AS frituur_aangemeld,
 				(SELECT COUNT(uid) FROM maaltijdcorvee WHERE maalid = id AND schoonmaken_afzuigkap = 1) AS afzuigkap_aangemeld,
 				(SELECT COUNT(uid) FROM maaltijdcorvee WHERE maalid = id AND schoonmaken_keuken = 1) AS keuken_aangemeld,
@@ -873,18 +873,18 @@ class MaalTrack {
 		// Op taak
 		$taakfilter = bindec('111111110');
 		switch($taak){
-			case 'kwalikok':
 			case 'lichteklus':
 				$taakfilter = bindec('100000000');
 			break;
 			case 'zwareklus':
 				$taakfilter = bindec('010000000');
 			break;
+			case 'kwalikok':
 			case 'kok':
-				$taakfilter = bindec('101000000');
+				$taakfilter = bindec('001000000');
 			break;
 			case 'afwas':
-				$taakfilter = bindec('010100000');
+				$taakfilter = bindec('000100000');
 			break;
 			case 'theedoek':
 				$taakfilter = bindec('000010000');

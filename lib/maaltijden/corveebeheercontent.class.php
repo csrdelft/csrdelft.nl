@@ -75,8 +75,9 @@ class CorveebeheerContent extends SimpleHTML {
 			$aForm['punten_klussen_licht']=Corveeinstellingen::get('puntenlichteklus');
 			$aForm['punten_klussen_zwaar']=Corveeinstellingen::get('puntenzwareklus');
 		}else{
+			//voegt maaltijdgegevens, aantal aanmeldingen en punten per taak toe aan aForm
 			$aForm=$this->_maaltijd;
-			
+
 			if ($this->_actie == 'bewerk') {
 				$aForm['actie']='bewerk';
 				$aForm['abos']=$this->_maaltrack->getAbos();
