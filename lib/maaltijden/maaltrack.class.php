@@ -630,7 +630,7 @@ class MaalTrack {
 		return $maalid;
 	}
 
-	/* Functie die de corveepunten van een schoonmaakmaaltijd (ook wel corveevrijdag) bijwerkt, 
+	/* Functie die de corveepunten van een schoonmaakmaaltijd (ook wel huishoudelijke taak) bijwerkt, 
 	 * gegeven een maaltijd en een toekenningsarray
 	 * 
 	 * Argumenten: 
@@ -774,8 +774,8 @@ class MaalTrack {
 				(SELECT COUNT(uid) FROM maaltijdcorvee WHERE maalid = id AND kok = 1) AS koks_aangemeld,
 				(SELECT COUNT(uid) FROM maaltijdcorvee WHERE maalid = id AND afwas = 1) AS afwassers_aangemeld,
 				(SELECT COUNT(uid) FROM maaltijdcorvee WHERE maalid = id AND theedoek = 1) AS theedoeken_aangemeld,
-				schoonmaken_frituur, schoonmaken_afzuigkap, schoonmaken_keuken, klussen_licht,	klussen_zwaar,
-				punten_schoonmaken_frituur, punten_schoonmaken_afzuigkap, punten_schoonmaken_keuken,punten_klussen_licht,	punten_klussen_zwaar,
+				schoonmaken_frituur, schoonmaken_afzuigkap, schoonmaken_keuken, klussen_licht, klussen_zwaar,
+				punten_schoonmaken_frituur, punten_schoonmaken_afzuigkap, punten_schoonmaken_keuken, punten_klussen_licht, punten_klussen_zwaar,
 				(SELECT COUNT(uid) FROM maaltijdcorvee WHERE maalid = id AND schoonmaken_frituur = 1) AS frituur_aangemeld,
 				(SELECT COUNT(uid) FROM maaltijdcorvee WHERE maalid = id AND schoonmaken_afzuigkap = 1) AS afzuigkap_aangemeld,
 				(SELECT COUNT(uid) FROM maaltijdcorvee WHERE maalid = id AND schoonmaken_keuken = 1) AS keuken_aangemeld,

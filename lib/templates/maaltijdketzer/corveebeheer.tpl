@@ -56,7 +56,7 @@
 				<td>
 					{$maaltijd.aantal} ({$maaltijd.max})
 				</td>
-			{else} {* Corveevrijdag *}	
+			{else} {* Huishoudelijke taak *}	
 				<td />
 				<td />
 				<td />
@@ -69,13 +69,13 @@
 				<td {if $maaltijd.schoonmaken_keuken - $maaltijd.keuken_aangemeld > 0}style="color: red;"{/if}>
 					{$maaltijd.keuken_aangemeld}/{$maaltijd.schoonmaken_keuken}
 				</td>
-				<td {if $maaltijd.klussen_licht - $maaltijd.klussen_licht_aangemeld > 0}style="color: red;"{/if}>
+				<td {if $maaltijd.klussen_licht - $maaltijd.lichteklus_aangemeld > 0}style="color: red;"{/if}>
 					{$maaltijd.lichteklus_aangemeld}/{$maaltijd.klussen_licht}
 				</td>
-				<td {if $maaltijd.klussen_zwaar - $maaltijd.klussen_zwaar_aangemeld > 0}style="color: red;"{/if}>
+				<td {if $maaltijd.klussen_zwaar - $maaltijd.zwareklus_aangemeld > 0}style="color: red;"{/if}>
 					{$maaltijd.zwareklus_aangemeld}/{$maaltijd.klussen_zwaar}
 				</td>
-				<td>
+				<td {if $maaltijd.is_toegekend}style="color: #0D0;"{/if}>
 					({$maaltijd.punten_schoonmaken_frituur}/{$maaltijd.punten_schoonmaken_afzuigkap}/{$maaltijd.punten_schoonmaken_keuken}/{$maaltijd.punten_klussen_licht}/{$maaltijd.punten_klussen_zwaar})
 				</td>
 				<td />
