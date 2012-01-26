@@ -1,4 +1,4 @@
-<h2 id="corveetakenFormulier">{if $maal.formulier.type == "normaal"}Maaltijdcorvee{else}Huishoudelijke taak{/if} taken bewerken</h2>
+<h2 id="corveetakenFormulier">{if $maal.formulier.type == "normaal"}Maaltijdcorvee{else}Huishoudelijke {/if}taken bewerken</h2>
 
 <form name="takenbewerk" action="/actueel/maaltijden/corveebeheer/" method="post">
 	<input type="hidden" name="actie" value="takenbewerk" />
