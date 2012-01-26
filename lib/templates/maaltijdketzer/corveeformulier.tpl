@@ -26,10 +26,6 @@
 				<td colspan="4">{$maal.formulier.tekst}</td>
 			</tr>
 		{/if}
-			<tr>
-				<td />
-				<td />
-			</tr>
 		{if $maal.formulier.type == "normaal"}
 			<tr>
 				<td>Limiet</td>
