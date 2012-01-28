@@ -102,6 +102,7 @@ class Corveeinstellingen{
 
 		$instellingForm[] = new Comment('Corveepunten');
 		$instellingForm[] = new IntField('puntentotaal',$this->getValue('puntentotaal') , 'Totaal per jaar', 30, 0); 
+		$instellingForm[] = new IntField('puntenkwalikoken',$this->getValue('puntenkwalikoken') , 'Kwalikoken', 30, 0); 
 		$instellingForm[] = new IntField('puntenkoken',$this->getValue('puntenkoken') , 'Koken', 30, 0); 
 		$instellingForm[] = new IntField('puntenafwas',$this->getValue('puntenafwas') , 'Afwas', 30, 0); 
 		$instellingForm[] = new IntField('puntentheedoek',$this->getValue('puntentheedoek') , 'Theedoeken', 30, 0); 
@@ -114,7 +115,7 @@ class Corveeinstellingen{
 
 		$instellingForm[] = new Comment('E-mails voor automailer');
 		$instellingForm[] = new TextField('koks',$this->getValue('koks') , 'Kwali-/gewone koks 
-		Toegestane variabelen: LIDNAAM, DATUM, MEEETEN');
+		Toegestane variabelen: LIDNAAM, DATUM, MEEETEN,KWALIAFWASSER');
 		$instellingForm[] = new TextField('afwas',$this->getValue('afwas') , 'Afwassers');
 		$instellingForm[] = new TextField('theedoeken',$this->getValue('theedoeken') , 'Theedoekwassers');
 		$instellingForm[] = new TextField('afzuigkap',$this->getValue('afzuigkap') , 'Afzuigkapschoonmakers');

@@ -40,7 +40,10 @@ class CorveepuntenContent extends SimpleHTML {
 		
 		$bewerkt_lid = (isset($_POST['uid']) ? $_POST['uid'] : '');
 
+		$this->setMelding($this->_maaltrack->getError());
+		
 		//arrays toewijzen en weergeven
+		$corveepunten->assign('melding', $this->getMelding());
 		$corveepunten->assign('leden', $aLeden);
 		$corveepunten->assign('sorteer', $sorteer);
 		$corveepunten->assign('sorteer_richting', $sorteer_richting);

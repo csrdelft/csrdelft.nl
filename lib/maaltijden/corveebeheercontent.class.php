@@ -49,7 +49,7 @@ class CorveebeheerContent extends SimpleHTML {
 
 		// bewerken
 		if(!isset($this->_maaltijd) OR !is_array($this->_maaltijd)){
-			//nieuwe maaltijd, standaardwaarden
+			//een huishoudelijke taak (ook wel corveemaaltijd genaamd), standaardwaarden
 			$aForm['id']=0;
 			$aForm['actie']='toevoegen';
 			$aForm['type'] = 'corvee';
@@ -85,9 +85,11 @@ class CorveebeheerContent extends SimpleHTML {
 				# als er een error gegeven wordt, is er hoogstwaarschijnlijk wat mis gegaan bij het bewerken of toevoegen
 				# van een nieuwe maaltijd. Daarom kijken we hier of er nog zinnige invoer uit de post te halen valt.
 				if($this->_error!=''){
+					if(isset($_POST['kwalikoks'])){  $aForm['kwalikoks']=(int)$_POST['kwalikoks']; }
 					if(isset($_POST['koks'])){  $aForm['koks']=(int)$_POST['koks']; }
 					if(isset($_POST['afwassers'])){  $aForm['afwassers']=(int)$_POST['afwassers']; }
 					if(isset($_POST['theedoeken'])){  $aForm['theedoeken']=(int)$_POST['theedoeken']; }
+					if(isset($_POST['punten_kwalikok'])){  $aForm['punten_kwalikok']=(int)$_POST['punten_kwalikok']; }
 					if(isset($_POST['punten_kok'])){  $aForm['punten_kok']=(int)$_POST['punten_kok']; }
 					if(isset($_POST['punten_afwas'])){  $aForm['punten_afwas']=(int)$_POST['punten_afwas']; }
 					if(isset($_POST['punten_theedoek'])){  $aForm['punten_theedoek']=(int)$_POST['punten_theedoek']; }
@@ -106,8 +108,9 @@ class CorveebeheerContent extends SimpleHTML {
 				if($this->_filter == 0 || $aForm['datum'] <= time()){
 					if($aForm['type'] == "normaal"){
 						//Oude maaltijden
-						$aForm['kwalikoks']=$this->_maaltrack->getTaakLeden();
+						$aForm['kwalikokleden']=$this->_maaltrack->getTaakLeden();
 						$aForm['kokleden']=$this->_maaltrack->getTaakLeden();
+						$aForm['kwaliafwasleden']=$this->_maaltrack->getTaakLeden();
 						$aForm['afwasleden']=$this->_maaltrack->getTaakLeden();
 						$aForm['theedoekleden']=$this->_maaltrack->getTaakLeden();
 					} else {
@@ -120,8 +123,9 @@ class CorveebeheerContent extends SimpleHTML {
 				} else {
 					if($aForm['type'] == "normaal"){
 						//Toekomstige maaltijden
-						$aForm['kwalikoks']=$this->_maaltrack->getTaakLedenGefilterd('kwalikok',$dag,0);
+						$aForm['kwalikokleden']=$this->_maaltrack->getTaakLedenGefilterd('kwalikok',$dag,0);
 						$aForm['kokleden']=$this->_maaltrack->getTaakLedenGefilterd('kok',$dag,0);
+						$aForm['kwaliafwasleden']=$this->_maaltrack->getTaakLedenGefilterd('kwaliafwas',$dag,0);
 						$aForm['afwasleden']=$this->_maaltrack->getTaakLedenGefilterd('afwas',$dag,0);
 						$aForm['theedoekleden']=$this->_maaltrack->getTaakLedenGefilterd('theedoek',$dag,0);
 					} else {
@@ -139,6 +143,7 @@ class CorveebeheerContent extends SimpleHTML {
 
 		//arrays toewijzen en weergeven
 		$corveebeheer->assign('maal', $aMaal);
+
 		$corveebeheer->assign('toonLijsten', $loginlid->hasPermission('P_MAAL_MOD') or opConfide());
 		$corveebeheer->assign('datumFormaat', '%a %e %b %H:%M');
 		$corveebeheer->assign('datumFormaatInvoer', '%Y-%m-%d 15:00');

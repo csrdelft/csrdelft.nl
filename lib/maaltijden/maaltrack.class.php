@@ -38,15 +38,17 @@ class MaalTrack {
 	# abosoort - enum-waarde van een abo dat geldt voor deze maaltijd
 	# tp = tafelpraeses-uid
 	# max - maximaal aantal inschrijvingen
-	function addMaaltijd($datum, $tekst, $abosoort, $tp, $koks, $afwassers, $theedoeken, $max = MAX_MAALTIJD, $punten_kok, $punten_afwas, $punten_theedoek ) {
+	function addMaaltijd($datum, $tekst, $abosoort, $tp, $kwalikoks, $koks, $afwassers, $theedoeken, $max = MAX_MAALTIJD, $punten_kwalikok, $punten_kok, $punten_afwas, $punten_theedoek ) {
 		$datum = (int)$datum;
 		$max = (int)$max;
 		$tekst = mb_substr($tekst, 0, 200);
 		$tekst = $this->_db->escape($tekst);
 
+		$kwalikoks=abs((int)$kwalikoks);
 		$koks=abs((int)$koks);
 		$afwassers=abs((int)$afwassers);
 		$theedoeken=abs((int)$theedoeken);
+		$punten_kwalikok=abs((int)$punten_kwalikok);
 		$punten_kok=abs((int)$punten_kok);
 		$punten_afwas=abs((int)$punten_afwas);
 		$punten_theedoek=abs((int)$punten_theedoek);
@@ -66,9 +68,11 @@ class MaalTrack {
 				,abosoort
 				,max
 				,tp
+				,kwalikoks
 				,koks
 				,afwassers
 				,theedoeken
+				,punten_kwalikok
 				,punten_kok
 				,punten_afwas
 				,punten_theedoek
@@ -84,8 +88,8 @@ class MaalTrack {
 				,punten_klussen_zwaar
 			)VALUES(
 				'".$datum."', '".$tekst."', '".$abosoort."', '".$max."',
-				'".$tp."', '".$koks."', '".$afwassers."', '".$theedoeken."',
-				'".$punten_kok."', '".$punten_afwas."', '".$punten_theedoek."',
+				'".$tp."', '".$kwalikoks."', '".$koks."', '".$afwassers."', '".$theedoeken."',
+				'".$punten_kwalikok."', '".$punten_kok."', '".$punten_afwas."', '".$punten_theedoek."',
 				0,0,0,0,0,0,0,0,0,0
 			);";
 
@@ -102,7 +106,7 @@ class MaalTrack {
 
 	# bestaande maaltijd bewerken. Niet veel verschil met addMaaltijd, behalve dat hier nog even
 	# gekeken wordt of de maaltijd wel bestaat.
-	function editMaaltijd($maalid, $datum, $tekst, $abosoort, $tp, $koks, $afwassers, $theedoeken, $max=MAX_MAALTIJD){
+	function editMaaltijd($maalid, $datum, $tekst, $abosoort, $tp, $kwalikoks, $koks, $afwassers, $theedoeken, $max=MAX_MAALTIJD){
 		if($maalid!=(int)$maalid){
 			$this->_error="Ongeldig maaltijdID opgegeven.";
 			return false;
@@ -116,6 +120,7 @@ class MaalTrack {
 		$tekst = mb_substr($tekst, 0, 200);
 		$tekst = $this->_db->escape($tekst);
 
+		$kwalikoks=abs((int)$kwalikoks);
 		$koks=abs((int)$koks);
 		$afwassers=abs((int)$afwassers);
 		$theedoeken=abs((int)$theedoeken);
@@ -132,6 +137,7 @@ class MaalTrack {
 				tekst='".$tekst."',
 				abosoort='".$abosoort."',
 				tp='".$tp."',
+				kwalikoks='".$kwalikoks."',
 				koks='".$koks."',
 				afwassers='".$afwassers."',
 				theedoeken='".$theedoeken."',
@@ -220,7 +226,7 @@ class MaalTrack {
 	}
 	
 	# bij bestaande maaltijd de relevante corveevelden bewerken
-	function editCorveeMaaltijd($maalid, $koks, $afwassers, $theedoeken, $punten_kok, $punten_afwas, $punten_theedoek){
+	function editCorveeMaaltijd($maalid, $kwalikoks, $koks, $afwassers, $theedoeken, $punten_kwalikok, $punten_kok, $punten_afwas, $punten_theedoek){
 		
 		if($maalid!=(int)$maalid){
 			$this->_error="Ongeldig maaltijdID opgegeven.";
@@ -231,12 +237,17 @@ class MaalTrack {
 			return false;
 		}
 
+		$kwalikoks=abs((int)$kwalikoks);
 		$koks=abs((int)$koks);
 		$afwassers=abs((int)$afwassers);
 		$theedoeken=abs((int)$theedoeken);
 
 		// controleer aantal aangemelde taken
 		$maaltijd = $this->getMaaltijd($maalid);
+		if($kwalikoks < $maaltijd['kwalikoks_aangemeld']){
+			$this->_error="Het aantal kwalikoks kan niet lager zijn dan het aantal ingedeelde kwalikoks.";
+			return false;
+		}
 		if($koks < $maaltijd['koks_aangemeld']){
 			$this->_error="Het aantal koks kan niet lager zijn dan het aantal ingedeelde koks.";
 			return false;
@@ -250,6 +261,7 @@ class MaalTrack {
 			return false;
 		}
 
+		$punten_kwalikok=abs((int)$punten_kwalikok);
 		$punten_kok=abs((int)$punten_kok);
 		$punten_afwas=abs((int)$punten_afwas);
 		$punten_theedoek=abs((int)$punten_theedoek);
@@ -258,9 +270,11 @@ class MaalTrack {
 			UPDATE
 				maaltijd
 			SET
+				kwalikoks='".$kwalikoks."',
 				koks='".$koks."',
 				afwassers='".$afwassers."',
 				theedoeken='".$theedoeken."',
+				punten_kwalikok='".$punten_kwalikok."',
 				punten_kok='".$punten_kok."',
 				punten_afwas='".$punten_afwas."',
 				punten_theedoek='".$punten_theedoek."'
@@ -277,7 +291,7 @@ class MaalTrack {
 	}
 	
 	# bij bestaande maaltijd de taken bewerken
-	function editCorveeMaaltijdTaken($maalid, $kok = array(), $afwas = array(), $theedoek = array()){
+	function editCorveeMaaltijdTaken($maalid, $kwalikok = array(), $kok = array(), $kwaliafwas = array(), $afwas = array(), $theedoek = array()){
 		if($maalid!=(int)$maalid){
 			$this->_error="Ongeldig maaltijdID opgegeven.";
 			return false;
@@ -288,7 +302,9 @@ class MaalTrack {
 		}
 		
 		//verwijder dubbele uids
+		$kwalikok = array_unique($kwalikok);
 		$kok = array_unique($kok);
+		$kwaliafwas = array_unique($kwaliafwas);
 		$afwas = array_unique($afwas);
 		$theedoek = array_unique($theedoek);
 		
@@ -304,9 +320,17 @@ class MaalTrack {
 		}
 				
 		//aanmeldingen toevoegen
+		foreach($kwalikok as $uid) {
+			if (!$uid) continue;
+			$this->_db->query("INSERT INTO maaltijdcorvee (maalid, uid, kwalikok) VALUES('".$maalid."', '".$uid."', 1) ON DUPLICATE KEY UPDATE kwalikok = 1");
+		}
 		foreach($kok as $uid) {
 			if (!$uid) continue;
 			$this->_db->query("INSERT INTO maaltijdcorvee (maalid, uid, kok) VALUES('".$maalid."', '".$uid."', 1) ON DUPLICATE KEY UPDATE kok = 1");
+		}
+		foreach($kwaliafwas as $uid) {
+			if (!$uid) continue;
+			$this->_db->query("INSERT INTO	maaltijdcorvee (maalid, uid, kwaliafwas) VALUES('".$maalid."', '".$uid."', 1) ON DUPLICATE KEY UPDATE kwaliafwas = 1");
 		}
 		foreach($afwas as $uid) {
 			if (!$uid) continue;
@@ -340,11 +364,18 @@ class MaalTrack {
 		//Dit blijft tijdens de hele functie constant
 		$maaltijd = $this->getMaaltijd($maalid);
 		
+		$kwalikok = array();
+		if(array_key_exists('kwalikoks', $maaltijd['taken'])){ 
+			$kwalikok = array_unique($maaltijd['taken']['kwalikoks']);
+		}
 		$kok = array();
 		if(array_key_exists('koks', $maaltijd['taken'])){ 
 			$kok = array_unique($maaltijd['taken']['koks']);
 		}
-		
+		$kwaliafwas = array();
+		if(array_key_exists('kwaliafwassers', $maaltijd['taken'])){ 
+			$kwaliafwas = array_unique($maaltijd['taken']['kwaliafwassers']);
+		}
 		$afwas = array();
 		if(array_key_exists('afwassers', $maaltijd['taken'])){ 
 			$afwas = array_unique($maaltijd['taken']['afwassers']);
@@ -374,22 +405,26 @@ class MaalTrack {
 			$dbarray = $this->_db->next($dbresult);
 			$db_toegekend = $dbarray['punten_toegekend'];
 
-			$corveelid = new CorveeLid(LidCache::getLid((string)$uid));						
-			
+			$corveelid = new CorveeLid(LidCache::getLid((string)$uid));
+
 			//Als iemand nog geen punten toegekend had, maar nu wel, ken ze dan toe
-			if($db_toegekend!='ja' && $form_toegekend=='ja'){				
-				$punten_erbij = (in_array($uid,$kok)?1:0) * $maaltijd['punten_kok'] + 
+			if($db_toegekend!='ja' && $form_toegekend=='ja'){
+				$punten_erbij = (in_array($uid,$kwalikok)?1:0) * $maaltijd['punten_kwalikok'] + 
+								 (in_array($uid,$kok)?1:0) * $maaltijd['punten_kok'] + 
+								 (in_array($uid,$kwaliafwas)?1:0) * $maaltijd['punten_afwas'] + 
 								 (in_array($uid,$afwas)?1:0) * $maaltijd['punten_afwas'] + 
 								 (in_array($uid,$theedoek)?1:0) * $maaltijd['punten_theedoek'];
 				$punten_nu = $corveelid->getCorveePunten();
 				if(!$corveelid->setCorveePunten($punten_nu + $punten_erbij)){
 					return false;
 				}
-				$corveelid->save();				 				
+				$corveelid->save();
 			}
 			//van ja naar iets anders: punten intrekken
 			if($db_toegekend=='ja' && $form_toegekend!='ja'){
-				$punten_eraf = (in_array($uid,$kok)?1:0) * $maaltijd['punten_kok'] + 
+				$punten_eraf = (in_array($uid,$kwalikok)?1:0) * $maaltijd['punten_kwalikok'] + 
+								 (in_array($uid,$kok)?1:0) * $maaltijd['punten_kok'] + 
+								 (in_array($uid,$kwaliafwas)?1:0) * $maaltijd['punten_afwas'] + 
 								 (in_array($uid,$afwas)?1:0) * $maaltijd['punten_afwas'] + 
 								 (in_array($uid,$theedoek)?1:0) * $maaltijd['punten_theedoek'];
 				$punten_nu = $corveelid->getCorveePunten();
@@ -401,7 +436,9 @@ class MaalTrack {
 
 			//Als iemand niet gefaald had, maar nu wel, ken dan strafpunten toe
 			if($db_toegekend!='nee' && $form_toegekend=='nee'){
-				$strafpunten = (in_array($uid,$kok)?1:0) * $maaltijd['punten_kok'] + 
+				$strafpunten = (in_array($uid,$kwalikok)?1:0) * $maaltijd['punten_kwalikok'] + 
+								 (in_array($uid,$kok)?1:0) * $maaltijd['punten_kok'] + 
+								 (in_array($uid,$kwaliafwas)?1:0) * $maaltijd['punten_afwas'] + 
 								 (in_array($uid,$afwas)?1:0) * $maaltijd['punten_afwas'] + 
 								 (in_array($uid,$theedoek)?1:0) * $maaltijd['punten_theedoek'];
 				$bonuspunten_nu = $corveelid->getBonusPunten();
@@ -412,14 +449,16 @@ class MaalTrack {
 			}
 			//van nee naar iets anders, dus strafpunten intrekken
 			if($db_toegekend=='nee' && $form_toegekend!='nee'){
-				$strafpunten = (in_array($uid,$kok)?1:0) * $maaltijd['punten_kok'] + 
+				$strafpunten = (in_array($uid,$kwalikok)?1:0) * $maaltijd['punten_kwalikok'] + 
+								 (in_array($uid,$kok)?1:0) * $maaltijd['punten_kok'] + 
+								 (in_array($uid,$kwaliafwas)?1:0) * $maaltijd['punten_afwas'] + 
 								 (in_array($uid,$afwas)?1:0) * $maaltijd['punten_afwas'] + 
 								 (in_array($uid,$theedoek)?1:0) * $maaltijd['punten_theedoek'];
 				$bonuspunten_nu = $corveelid->getBonusPunten();
 				if(!$corveelid->setBonusPunten($bonuspunten_nu + $strafpunten)){
 					return false;
 				}
-				$corveelid->save();				
+				$corveelid->save();
 			}
 			
 		}
@@ -770,8 +809,10 @@ class MaalTrack {
 		$sMaaltijdQuery="
 			SELECT
 				id, type, datum, gesloten, tekst, abosoort, max, aantal,
-				tp, koks, afwassers, theedoeken, punten_kok, punten_afwas, punten_theedoek,
+				tp, kwalikoks, koks, afwassers, theedoeken, punten_kwalikok, punten_kok, punten_afwas, punten_theedoek,
+				(SELECT COUNT(uid) FROM maaltijdcorvee WHERE maalid = id AND kwalikok = 1) AS kwalikoks_aangemeld,
 				(SELECT COUNT(uid) FROM maaltijdcorvee WHERE maalid = id AND kok = 1) AS koks_aangemeld,
+				(SELECT COUNT(uid) FROM maaltijdcorvee WHERE maalid = id AND kwaliafwas = 1) AS kwaliafwassers_aangemeld,
 				(SELECT COUNT(uid) FROM maaltijdcorvee WHERE maalid = id AND afwas = 1) AS afwassers_aangemeld,
 				(SELECT COUNT(uid) FROM maaltijdcorvee WHERE maalid = id AND theedoek = 1) AS theedoeken_aangemeld,
 				schoonmaken_frituur, schoonmaken_afzuigkap, schoonmaken_keuken, klussen_licht, klussen_zwaar,
@@ -789,7 +830,15 @@ class MaalTrack {
 			LIMIT 1;";
 		$rMaaltijd=$this->_db->query($sMaaltijdQuery);
 		$aMaal=$this->_db->next($rMaaltijd);
-		
+
+		//er is één kwaliafwasser, de rest is een gewone afwasser
+		if($aMaal['afwassers']>0){
+			$aMaal['kwaliafwassers'] = 1;
+			$aMaal['afwassers'] = $aMaal['afwassers']-1;
+		}else{
+			$aMaal['kwaliafwassers'] = 0;
+		}
+
 		//taken ophalen
 		$maaltijd = new Maaltijd ($maalid);
 		$aMaal['taken'] = $maaltijd->getTaken();
@@ -807,8 +856,8 @@ class MaalTrack {
 		//eerst uit 'lid' corveepunten/bonus/vrijstelling, als er taken zijn die ook verzamelen uit 'maaltijdcorvee' en 'maaltijd'
 		$sTakenquery = "
 			SELECT maalid, lid.uid, datum, tekst, type, punten_toegekend, type , corvee_punten+corvee_punten_bonus AS corvee_punten_totaal, corvee_punten_bonus, corvee_vrijstelling, corvee_voorkeuren,
-				kok, afwas, theedoek, maaltijdcorvee.klussen_zwaar, maaltijdcorvee.klussen_licht, maaltijdcorvee.schoonmaken_keuken, maaltijdcorvee.schoonmaken_afzuigkap, maaltijdcorvee.schoonmaken_frituur,
-				punten_kok, punten_afwas, punten_theedoek, punten_klussen_zwaar, punten_klussen_licht, punten_schoonmaken_keuken, punten_schoonmaken_afzuigkap, punten_schoonmaken_frituur
+				kwalikok, kok, kwaliafwas, afwas, theedoek, maaltijdcorvee.klussen_zwaar, maaltijdcorvee.klussen_licht, maaltijdcorvee.schoonmaken_keuken, maaltijdcorvee.schoonmaken_afzuigkap, maaltijdcorvee.schoonmaken_frituur,
+				punten_kwalikok, punten_kok, punten_afwas, punten_theedoek, punten_klussen_zwaar, punten_klussen_licht, punten_schoonmaken_keuken, punten_schoonmaken_afzuigkap, punten_schoonmaken_frituur
 			FROM lid 
 			LEFT JOIN maaltijdcorvee ON maaltijdcorvee.uid = lid.uid
 			LEFT JOIN maaltijd ON maaltijdcorvee.maalid = maaltijd.id
@@ -817,13 +866,18 @@ class MaalTrack {
 		if (($result !== false) and $db->numRows($result) > 0) {
 			while ($record = $db->next($result)) {
 				//zoek ingeroosterde taak
-				$takenlijst = array('kok', 'afwas', 'theedoek', 'klussen_zwaar', 'klussen_licht', 'schoonmaken_keuken', 'schoonmaken_afzuigkap', 'schoonmaken_frituur');
+				$takenlijst = array('kwalikok', 'kok', 'kwaliafwas', 'afwas', 'theedoek', 'klussen_zwaar', 'klussen_licht', 'schoonmaken_keuken', 'schoonmaken_afzuigkap', 'schoonmaken_frituur');
 				foreach($takenlijst as $taak){
 					if($record[$taak] == 1){
 						$taakprops = array('maalid', 'datum', 'tekst', 'type', 'punten_toegekend', 'type');
 						$ataak = array_get_keys($record, $taakprops);
 						$ataak['taak'] = str_replace('_', ' ', $taak);
-						$ataak['punten'] = $record['punten_'.$taak];
+						//kwaliafwas levert evenveel punten op als een gewone afwas
+						if($taak=='kwaliafwas'){
+							$ataak['punten'] = $record['punten_afwas'];
+						}else{
+							$ataak['punten'] = $record['punten_'.$taak];
+						}
 						$taken[] = $ataak;
 					}
 					if(!isset($return['lid'])){
@@ -835,6 +889,7 @@ class MaalTrack {
 			//slaat gegevens op
 			$return['taken']=$taken;
 			$return['aantal']=count($taken);
+
 			return $return;
 		}else{
 			return $return;
@@ -883,6 +938,7 @@ class MaalTrack {
 			case 'kok':
 				$taakfilter = bindec('001000000');
 			break;
+			case 'kwaliafwas':
 			case 'afwas':
 				$taakfilter = bindec('000100000');
 			break;
@@ -905,27 +961,31 @@ class MaalTrack {
 		$filtervoorkeur += $puntentekort;
 		
 		//de ledenlijst ophalen
-		$zoekLeden = Zoeker::zoekLeden('', 'uid', 'alle', 'achternaam', array('S_LID', 'S_NOVIET', 'S_GASTLID') , array('uid', 'achternaam', 'voornaam', 'tussenvoegsel', 'corvee_kwalikok', 'corvee_voorkeuren', 'corvee_vrijstelling', 'corvee_punten'));
+		$zoekLeden = Zoeker::zoekLeden('', 'uid', 'alle', 'achternaam', array('S_LID', 'S_NOVIET', 'S_GASTLID') , array('uid', 'achternaam', 'voornaam', 'tussenvoegsel', 'status', 'corvee_kwalikok', 'corvee_voorkeuren', 'corvee_vrijstelling', 'corvee_punten'));
 		
 		//Voorbewerken van de lijst: puntentekort berekenen, kwalikoks selecteren
 		$zoekLeden_gefilterd = array();
 		foreach ($zoekLeden as $lid){
 			$heefttekort = ($this->corveepunten - ceil($this->corveepunten*.01*$lid['corvee_vrijstelling'])-$lid['corvee_punten']-$lid['corvee_punten_bonus']) > 0 ? 1 : 0;			
 			$eigenvoorkeur= bindec($lid['corvee_voorkeuren'] . $heefttekort); //Totaal 8+1 = 9 bits lang
-			
+
+			//als een lid die taak niet mag doen wordt eigenvoorkeur op nul gezet
 			if($taak == 'kwalikok' && $lid['corvee_kwalikok']==0){
 				$eigenvoorkeur=bindec('000000000');
 			}
 			if($taak == 'kok' && $lid['corvee_kwalikok']==1){
 				$eigenvoorkeur=bindec('000000000');
 			}
-			
+			if($taak == 'kwaliafwas' && $lid['status']=='S_NOVIET'){
+				$eigenvoorkeur=bindec('000000000');
+			}
+
 			/* Combineer de eigen voorkeur met de gezochte taak*/
 			$bitstring = ''.decbin($eigenvoorkeur & $filtervoorkeur);
 			// Tel het aantal enen
 			if ((count(explode('1',$bitstring))-1) >= 1){
 				$zoekLeden_gefilterd[$lid['uid']]=$lid;
-			}			
+			}
 		}
 
 		//lijst met prognosepunten
@@ -950,8 +1010,31 @@ class MaalTrack {
 		return $taakleden;
 	}
 
-	/*
-	 * 
+	/* 
+	 * Geeft een array met alle maaltijden mèt hun corveers die de gevraagde status hebben
+	 * @param	$datum JJJJ-MM-DD
+	 * 			$puntentoekenningsstatus string onbekend/ja/nee/alles
+	 * @return Array (
+		[921] => Array (
+			[maalid] => 921
+			[datum] => 1320339600
+			[tekst] => donderdag maaltijd tentamenweek
+			[type] => normaal
+			[corveeers] => Array
+				(
+					[0] => Array
+						(
+							[uid] => 1146
+							[punten_toegekend] => onbekend
+						)
+					[1] => Array
+						(
+							[uid] => 0835
+							[punten_toegekend] => onbekend
+						)
+				)
+		)
+		[935] => Array (
 	 */
 	public function getAlleTaken($datum, $puntentoekenningsstatus='onbekend'){
 		//alleen bij toekenstatus onbekend/ja/nee een filter toevoegen, anders alle taken zoeken
@@ -980,7 +1063,6 @@ class MaalTrack {
 				}
 				if($corveeer['maalid']!=$corveedag['maalid']){
 					//nieuwe corveedag: vorige opslaan en naar de nieuwe
-					
 					$corveedag['corveeers']=$corveeers;
 					$corveeers=array();
 					$corveedagen[$corveedag['maalid']] = $corveedag;
@@ -999,10 +1081,17 @@ class MaalTrack {
 
 	# haalt één enkele maaltijd op ter bewerking
 	function getPuntenlijst($sorteer = 'corvee_tekort', $sorteer_richting = 'asc'){
-		$sorteer_toegestaan = array('achternaam', 'kok', 'afwas', 'theedoek', 'schoonmaken_frituur', 'schoonmaken_afzuigkap', 'schoonmaken_keuken', 'klussen_licht', 'klussen_zwaar', 'corvee_kwalikok', 'corvee_punten', 'corvee_punten_bonus', 'corvee_vrijstelling', 'corvee_prognose', 'corvee_tekort');
+		//invoer zuiveren
+		$sorteer_toegestaan = array('achternaam', 'kwalikok', 'kok', 'afwas', 'theedoek', 'schoonmaken_frituur', 'schoonmaken_afzuigkap', 'schoonmaken_keuken', 'klussen_licht', 'klussen_zwaar', 'corvee_kwalikok', 'corvee_punten', 'corvee_punten_bonus', 'corvee_vrijstelling', 'corvee_prognose', 'corvee_tekort');
+		if (!in_array($sorteer, $sorteer_toegestaan)){
+			$this->_error .= 'Ongeldige sorteeroptie. ';
+			$sorteer = $sorteer_toegestaan[0];
+		}
 		$sorteer_volgorde_toegestaan = array('asc', 'desc');
-		if (!in_array($sorteer, $sorteer_toegestaan) || !in_array($sorteer_richting, $sorteer_volgorde_toegestaan))
-			print('Ongeldige sorteeroptie');
+		if (!in_array($sorteer_richting, $sorteer_volgorde_toegestaan)){
+			$this->_error .= 'Ongeldige sorteerrichting. ';
+			$sorteer_richting = $sorteer_volgorde_toegestaan[0];
+		}
 
 		$startdatumpuntentelling = Corveeinstellingen::get('startpuntentelling');
 		$sLedenQuery="
@@ -1011,7 +1100,9 @@ class MaalTrack {
 				, corvee_kwalikok, corvee_punten, corvee_punten_bonus, corvee_vrijstelling, corvee_voorkeuren
 				, (".(int)$this->corveepunten."-CEIL(".(int)$this->corveepunten."*.01*corvee_vrijstelling)-corvee_punten_bonus-corvee_punten)
 				  - IFNULL(SUM(
-					punten_kok*IF(punten_toegekend = 'onbekend',kok,0)
+					punten_kwalikok*IF(punten_toegekend = 'onbekend',kwalikok,0)
+					+ punten_kok*IF(punten_toegekend = 'onbekend',kok,0)
+					+ punten_afwas*IF(punten_toegekend = 'onbekend',kwaliafwas,0)
 					+ punten_afwas*IF(punten_toegekend = 'onbekend',afwas,0)
 					+ punten_theedoek*IF(punten_toegekend = 'onbekend',theedoek,0)
 					+ punten_schoonmaken_frituur*IF(punten_toegekend = 'onbekend',maaltijdcorvee.schoonmaken_frituur,0)
@@ -1020,8 +1111,10 @@ class MaalTrack {
 					+ punten_klussen_licht*IF(punten_toegekend = 'onbekend',maaltijdcorvee.klussen_licht,0)
 					+ punten_klussen_zwaar*IF(punten_toegekend = 'onbekend',maaltijdcorvee.klussen_zwaar,0)
 					), 0) AS corvee_prognose				
+				, IFNULL(SUM(kwalikok*punten_kwalikok DIV punten_kwalikok ),0) AS kwalikok
 				, IFNULL(SUM(kok*punten_kok DIV punten_kok ),0) AS kok
-				, IFNULL(SUM(afwas*punten_afwas DIV punten_afwas),0) AS afwas
+				, ( IFNULL(SUM(kwaliafwas*punten_afwas DIV punten_afwas),0) +
+					IFNULL(SUM(afwas*punten_afwas DIV punten_afwas),0)		) AS afwas
 				, IFNULL(SUM(punten_theedoek*theedoek DIV punten_theedoek),0) AS theedoek
 				, IFNULL(SUM(punten_schoonmaken_frituur*maaltijdcorvee.schoonmaken_frituur DIV punten_schoonmaken_frituur),0) AS schoonmaken_frituur
 				, IFNULL(SUM(punten_schoonmaken_afzuigkap*maaltijdcorvee.schoonmaken_afzuigkap DIV punten_schoonmaken_afzuigkap),0) AS schoonmaken_afzuigkap
@@ -1167,8 +1260,10 @@ class MaalTrack {
 		$maaltijden = array();
 		$sMaaltijdQuery="
 			SELECT
-				id, datum, type, gesloten, tekst, abosoort, max, aantal, tp, koks, afwassers, theedoeken, punten_kok, punten_afwas, punten_theedoek, corvee_gemaild,
+				id, datum, type, gesloten, tekst, abosoort, max, aantal, tp, kwalikoks, koks, afwassers, theedoeken, punten_kwalikok, punten_kok, punten_afwas, punten_theedoek, corvee_gemaild,
+				(SELECT COUNT(uid) FROM maaltijdcorvee WHERE maalid = id AND kwalikok = 1) AS kwalikoks_aangemeld,
 				(SELECT COUNT(uid) FROM maaltijdcorvee WHERE maalid = id AND kok = 1) AS koks_aangemeld,
+				(SELECT COUNT(uid) FROM maaltijdcorvee WHERE maalid = id AND kwaliafwas = 1) AS kwaliafwassers_aangemeld,
 				(SELECT COUNT(uid) FROM maaltijdcorvee WHERE maalid = id AND afwas = 1) AS afwassers_aangemeld,
 				(SELECT COUNT(uid) FROM maaltijdcorvee WHERE maalid = id AND theedoek = 1) AS theedoeken_aangemeld,
 				(SELECT COUNT(*)>0 FROM maaltijdcorvee WHERE maalid = id AND punten_toegekend = 'ja') AS is_toegekend
@@ -1183,8 +1278,15 @@ class MaalTrack {
 		if (($result !== false) and $db->numRows($result) > 0) {
 			while ($record = $db->next($result)) {
 				if(!($mootfilter===true AND preg_match("/(VERT)[^{$moot}]{1}/", $record['abosoort']))){
-					$maaltijden[] = $record;
+					//maximaal 1 kwaliafwasser, de rest is gewoon afwasser
+					if($record['afwassers'] >0){
+						$record['kwaliafwassers'] = 1;
+						$record['afwassers'] = $record['afwassers']-1;
+					}else{
+						$record['kwaliafwassers'] = 0;
+					}
 
+					$maaltijden[] = $record;
 				}
 			}
 		}
@@ -1264,7 +1366,7 @@ class MaalTrack {
 				# Corvee voor user?
 				$sCorvee="
 					SELECT
-						kok, afwas, theedoek
+						kwalikok, kok, kwaliafwas, afwas, theedoek
 					FROM
 						maaltijdcorvee
 					WHERE
@@ -1272,7 +1374,9 @@ class MaalTrack {
 				$rCorvee = $this->_db->query($sCorvee);
 				if (($rCorvee !== false) and $this->_db->numRows($rCorvee) > 0) {
 					$record = $this->_db->next($rCorvee);
+					$maaltijd['kwalikok'] = $record['kwalikok'];
 					$maaltijd['kok'] = $record['kok'];
+					$maaltijd['kwaliafwas'] = $record['kwaliafwas'];
 					$maaltijd['afwas'] = $record['afwas'];
 					$maaltijd['theedoek'] = $record['theedoek'];
 				}
@@ -1573,7 +1677,9 @@ class MaalTrack {
 				print_r($taken);
 
 				$takenTemplates = array(
+					'kwaliafwassers' => 'afwas',
 					'afwassers' => 'afwas',
+					'kwalikoks' => 'koks',
 					'koks' => 'koks',
 					'theedoeken' => 'theedoeken',
 					'schoonmaken_frituur' => 'frituur',
@@ -1610,7 +1716,7 @@ class MaalTrack {
 
 								//mededeling over mee-eten inelkaar zetten
 								$meeeten = '';
-								if(in_array($taak, array('afwassers', 'koks', 'theedoeken','tp'))){
+								if(in_array($taak, array('kwaliafwassers', 'afwassers', 'kwalikoks', 'koks', 'theedoeken','tp'))){
 									$meeeten='U komt bij de maaltijd : ';
 									$status=$lMaaltijd->getStatus($uid);
 									switch($status){
@@ -1628,13 +1734,19 @@ class MaalTrack {
 											$meeeten.='niet eten';
 									}
 								}
+								//mededeling voor de kwaliafwasser
+								if($taak=='kwaliafwassers'){
+									$kwaliafwassser = 'U bent kwaliafwasser. ';
+								}else{
+									$kwaliafwassser = '';
+								}
 
 								require_once 'maaltijden/corveeinstellingen.class.php';
 								$template = Corveeinstellingen::get($templateid);
 								$lidnaam = $lid->getNaamLink('civitas');
 								$datum = strftime('%d-%m-%Y (%A)', $maaltijd['datum']);
 
-								$bericht = htmlspecialchars(str_replace(array('LIDNAAM', 'DATUM', 'MEEETEN'), array($lidnaam, $datum, $meeeten), $template));
+								$bericht = htmlspecialchars(str_replace(array('LIDNAAM', 'DATUM', 'MEEETEN','KWALIAFWASSER'), array($lidnaam, $datum, $meeeten, $kwaliafwasser), $template));
 
 								if (mail($to, $onderwerp, $bericht, $headers))
 									$teller[] = $lid->getNaam().' ('.$uid.')';

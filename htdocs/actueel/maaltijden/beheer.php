@@ -30,7 +30,7 @@ if(isset($_GET['verwijder']) AND $_GET['verwijder']==(int)$_GET['verwijder'] AND
 
 # maaltijd opslaan, of nieuwe toevoegen?
 if(isset($_POST['maalid'], $_POST['datum'], $_POST['tekst'], $_POST['limiet'], $_POST['abo'],
-	$_POST['tp'], $_POST['koks'], $_POST['afwassers'], $_POST['theedoeken'] )){
+	$_POST['tp'], $_POST['kwalikoks'], $_POST['koks'], $_POST['afwassers'], $_POST['theedoeken'] )){
 	//datum omzetten naar timestamp.
 	$datum=strtotime($_POST['datum']);
 	$maalid=(int)$_POST['maalid'];
@@ -39,14 +39,14 @@ if(isset($_POST['maalid'], $_POST['datum'], $_POST['tekst'], $_POST['limiet'], $
 	# nieuwe maaltijd toevoegen of oude bewerken?
 	if($maalid==0){
 		if($maaltrack->addMaaltijd($datum, $_POST['tekst'], $_POST['abo'], $_POST['tp'], 
-			$_POST['koks'], $_POST['afwassers'], $_POST['theedoeken'], $_POST['limiet'],
-			$_POST['punten_kok'], $_POST['punten_afwas'], $_POST['punten_theedoek'])){
+			$_POST['kwalikoks'], $_POST['koks'], $_POST['afwassers'], $_POST['theedoeken'], $_POST['limiet'],
+			$_POST['punten_kwalikok'], $_POST['punten_kok'], $_POST['punten_afwas'], $_POST['punten_theedoek'])){
 			header('location: '.CSR_ROOT.'actueel/maaltijden/beheer/');
 			exit;
 		}
 	}else{
 		if($maaltrack->editMaaltijd($maalid, $datum, $_POST['tekst'], $_POST['abo'],
-				$_POST['tp'], $_POST['koks'], $_POST['afwassers'], $_POST['theedoeken'],  $_POST['limiet'])){
+				$_POST['tp'], $_POST['kwalikoks'], $_POST['koks'], $_POST['afwassers'], $_POST['theedoeken'],  $_POST['limiet'])){
 			header('location: '.CSR_ROOT.'actueel/maaltijden/beheer/');
 			exit;
 		}

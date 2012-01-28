@@ -5,9 +5,9 @@
 	<input type="hidden" name="type" value="{$maal.formulier.type}" />
 	<input type="hidden" name="maalid" value="{$maal.formulier.id}" />
 	<input type="hidden" id="filter" name="filter" value="{$maal.formulier.filter}" />
-	
+
 	{if isset($error)}<div class="waarschuwing">{$error}</div>{/if}
-	<table>
+	<table class="corveetakenselects">
 		<tr>
 			<td style="width: 120px">Beginmoment</td>
 			<td>{$maal.formulier.datum|date_format:$datumFormaatInvoer}</td>
@@ -23,26 +23,36 @@
 		{if $maal.formulier.type == "normaal"}
 			<tr>
 				<td>
-					Koks ({$maal.formulier.koks})
+					Koks ({$maal.formulier.koks + $maal.formulier.kwalikoks})
 				</td>
 				<td>
-					{section name=koks loop=$maal.formulier.koks}			
+					{section name=kwalikoks loop=$maal.formulier.kwalikoks}
+						{assign var='it' value=$smarty.section.kwalikoks.iteration-1}
+						{assign var='kwalikok' value=$maal.formulier.taken.kwalikoks.$it}
+						{html_options name=kwalikok[$it] options=$maal.formulier.kwalikokleden selected=$kwalikok} 
+						{if $kwalikok!=''}{$kwalikok|csrnaam}{/if} (Kwalikok)<br />
+					{/section}
+					{section name=koks loop=$maal.formulier.koks}
 						{assign var='it' value=$smarty.section.koks.iteration-1}
 						{assign var='kok' value=$maal.formulier.taken.koks.$it}
-						{html_options name=kok[$it] options=$maal.formulier.kwalikoks selected=$kok}
-						{if $kok!=''}{$kok|csrnaam}{/if}
-						{if $it==0} (Kwalikok){/if}<br />
+						{html_options name=kok[$it] options=$maal.formulier.kokleden selected=$kok} 
+						{if $kok!=''}{$kok|csrnaam}{/if}<br />
 					{/section}
-				</td>											
+				</td>
 			</tr>
 			<tr>
-				<td>Afwassers ({$maal.formulier.afwassers})</td>
-				<td>{section name=afwassers loop=$maal.formulier.afwassers}					
+				<td>Afwassers ({$maal.formulier.afwassers+$maal.formulier.kwaliafwassers})</td>
+				<td>
+					{if $maal.formulier.kwaliafwassers>0}
+						{assign var='kwaliafwasser' value=$maal.formulier.taken.kwaliafwassers.0}
+						{html_options name=kwaliafwas[0] options=$maal.formulier.kwaliafwasleden selected=$kwaliafwasser} 
+						{if $kwaliafwasser!=''}{$kwaliafwasser|csrnaam}{/if} (Kwali-afwasser)<br />
+					{/if}
+					{section name=afwassers loop=$maal.formulier.afwassers}
 						{assign var='it' value=$smarty.section.afwassers.iteration-1}
 						{assign var='afwasser' value=$maal.formulier.taken.afwassers.$it}
-						{html_options name=afwas[$it] options=$maal.formulier.afwasleden selected=$afwasser}
-						{if $afwasser!=''}{$afwasser|csrnaam}{/if}
-						{if $it==0}(Kwali-afwasser){/if}<br />
+						{html_options name=afwas[$it] options=$maal.formulier.afwasleden selected=$afwasser} 
+						{if $afwasser!=''}{$afwasser|csrnaam}{/if}<br />
 					{/section}
 				</td>
 			</tr>
@@ -113,7 +123,7 @@
 		{/if}
 		<tr>
 			<td>&nbsp;</td>
-			<td><input type="submit" name="opslaan" value="Opslaan" /> <input type="button" value="Opslaan & herlaad zonder filter" onClick="document.getElementById('filter').value=0;document.forms['takenbewerk'].submit();" /></td>
+			<td><input type="submit" name="opslaan" value="Opslaan" /> <input type="button" value="Opslaan & herlaad {if $maal.formulier.filter==1}zonder{else}met{/if} voorkeurenfilter" onClick="document.getElementById('filter').value={if $maal.formulier.filter==1}0{else}1{/if};document.forms['takenbewerk'].submit();" /> <input type="button" value="Herlaad {if $maal.formulier.filter==1}zonder{else}met{/if} voorkeurenfilter" onClick="document.getElementById('filter').value=0;location.href = '/actueel/maaltijden/corveebeheer/takenbewerk/{$maal.formulier.id}/{if $maal.formulier.filter==1}0{else}1{/if}#corveetakenFormulier';" /></td>
 		</tr>
 	</table>
 </form>

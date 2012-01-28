@@ -24,6 +24,11 @@
 			<td><a href="javascript:void" title="{$maaltijd.tekst|truncate:20|escape:'html'}">{$maaltijd.datum|date_format:$datumVol}</a></td>
 			<td>{if $maaltijd.tp!=''}<span class="{if $maaltijd.tp==$liduid}mijzelf{/if}">{$maaltijd.tp|csrnaam}</span>{else}{if $maaltijd.type=='corvee'}{else}...{/if}{/if}</td>
 			<td>
+				{section name=kwalikoks loop=$maaltijd.kwalikoks}
+					{assign var='it' value=$smarty.section.kwalikoks.iteration-1}
+					{assign var='kwalikok' value=$maaltijd.taken.kwalikoks.$it}
+					{if $kwalikok!=''}<span class="{if $kwalikok==$liduid}mijzelf{/if}">{$kwalikok|csrnaam}</span>{else}...{/if}<span title="Kwalikok">(k)</span><br />
+				{/section}
 				{section name=koks loop=$maaltijd.koks}
 					{assign var='it' value=$smarty.section.koks.iteration-1}
 					{assign var='kok' value=$maaltijd.taken.koks.$it}
@@ -31,6 +36,11 @@
 				{/section}
 			</td>
 			<td>
+				{section name=kwaliafwassers loop=$maaltijd.kwaliafwassers}
+					{assign var='it' value=$smarty.section.kwaliafwassers.iteration-1}
+					{assign var='kwaliafwasser' value=$maaltijd.taken.kwaliafwassers.$it}
+					{if $kwaliafwasser!=''}<span class="{if $kwaliafwasser==$liduid}mijzelf{/if}">{$kwaliafwasser|csrnaam}</span>{else}...{/if}<span title="Kwaliafwasser">(k)</span><br />
+				{/section}
 				{section name=afwassers loop=$maaltijd.afwassers}
 					{assign var='it' value=$smarty.section.afwassers.iteration-1}
 					{assign var='afwasser' value=$maaltijd.taken.afwassers.$it}

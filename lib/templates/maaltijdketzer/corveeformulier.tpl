@@ -46,6 +46,13 @@
 				</td>
 			</tr>
 			<tr>
+				<td>Kwalikoks</td>
+				<td><input type="text" name="kwalikoks" value="{$maal.formulier.kwalikoks}" style="width: 50px;"  /> ({$maal.formulier.kwalikoks_aangemeld} aangemeld)</td>
+				<td>&nbsp;</td>
+				<td>Punten Kwalikok</td>
+				<td><input type="text" name="punten_kwalikok" value="{$maal.formulier.punten_kwalikok}" style="width: 50px;"  /></td>
+			</tr>
+			<tr>
 				<td>Koks</td>
 				<td><input type="text" name="koks" value="{$maal.formulier.koks}" style="width: 50px;"  /> ({$maal.formulier.koks_aangemeld} aangemeld)</td>
 				<td>&nbsp;</td>
@@ -54,7 +61,7 @@
 			</tr>
 			<tr>
 				<td>Afwassers</td>
-				<td><input type="text" name="afwassers" value="{$maal.formulier.afwassers}" style="width: 50px;" /> ({$maal.formulier.afwassers_aangemeld} aangemeld)</td>
+				<td><input type="text" name="afwassers" value="{$maal.formulier.afwassers+$maal.formulier.kwaliafwassers}" style="width: 50px;" /> ({$maal.formulier.afwassers_aangemeld} aangemeld)</td>
 				<td>&nbsp;</td>
 				<td>Punten Afwas</td>
 				<td><input type="text" name="punten_afwas" value="{$maal.formulier.punten_afwas}" style="width: 50px;" /></td>

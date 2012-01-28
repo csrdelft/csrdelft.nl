@@ -100,7 +100,14 @@ Regels omtrent het betalen van de maaltijden op Confide:
 					<tr>
 						<td>Koks:</td>
 						<td>
-						{section name=koks loop=$maaltijd.koks}					
+						{* kwalikok *}
+						{section name=kwalikoks loop=$maaltijd.kwalikoks}
+							{assign var='it' value=$smarty.section.kwalikoks.iteration-1}
+							{assign var='kwalikok' value=$maaltijd.taken.kwalikoks.$it}
+							{if $kwalikok!=''}{$kwalikok|csrnaam}{else}...{/if} (Kwalikok)<br />
+						{/section}
+						{* koks *}
+						{section name=koks loop=$maaltijd.koks}
 							{assign var='it' value=$smarty.section.koks.iteration-1}
 							{assign var='kok' value=$maaltijd.taken.koks.$it}
 							{if $kok!=''}{$kok|csrnaam}{else}...{/if}<br />
@@ -110,7 +117,13 @@ Regels omtrent het betalen van de maaltijden op Confide:
 					<tr>
 						<td>Afwassers:</td>
 						<td>
-						{section name=afwassers loop=$maaltijd.afwassers}					
+						{* kwaliafwassers (maximaal 1) *}
+						{if $maaltijd.kwaliafwassers > 0 }
+							{assign var='kwaliafwas' value=$maaltijd.taken.kwaliafwassers.0}
+							{if $kwaliafwas!=''}{$kwaliafwas|csrnaam}{else}...{/if} (kwaliafwasser)<br />
+						{/if}
+						{* afwassers *}
+						{section name=afwassers loop=$maaltijd.afwassers}
 							{assign var='it' value=$smarty.section.afwassers.iteration-1}
 							{assign var='afwas' value=$maaltijd.taken.afwassers.$it}
 							{if $afwas!=''}{$afwas|csrnaam}{else}...{/if}<br />

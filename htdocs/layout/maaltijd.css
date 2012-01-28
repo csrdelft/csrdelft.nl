@@ -6,6 +6,11 @@
 	color:red;
 }
 
+/* corveebeheer */
+table.corveetakenselects tr td{
+	vertical-align: baseline;
+}
+
 /* corveeinstellingenpagina: instellingen */
 .instellingenForm .veld{
 	overflow: auto;

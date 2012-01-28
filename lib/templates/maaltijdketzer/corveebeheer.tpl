@@ -38,11 +38,11 @@
 			<td>{$maaltijd.datum|date_format:$datumFormaat}</td>
 			<td>{$maaltijd.tekst|truncate:20|escape:'html'}</td>
 			{if $maaltijd.type == "normaal"}
-				<td {if $maaltijd.koks - $maaltijd.koks_aangemeld > 0}style="color: red;"{/if}>
-					{$maaltijd.koks_aangemeld}/{$maaltijd.koks}
+				<td {if ($maaltijd.kwalikoks+$maaltijd.koks) - ($maaltijd.kwalikoks_aangemeld+$maaltijd.koks_aangemeld) > 0}style="color: red;"{/if}>
+					{$maaltijd.kwalikoks_aangemeld+$maaltijd.koks_aangemeld}/{$maaltijd.kwalikoks+$maaltijd.koks}
 				</td>				
-				<td {if $maaltijd.afwassers - $maaltijd.afwassers_aangemeld > 0}style="color: red;"{/if}>
-					{$maaltijd.afwassers_aangemeld}/{$maaltijd.afwassers}
+				<td {if ($maaltijd.kwaliafwassers+$maaltijd.afwassers) - ($maaltijd.kwaliafwassers_aangemeld+$maaltijd.afwassers_aangemeld) > 0}style="color: red;"{/if}>
+					{$maaltijd.kwaliafwassers_aangemeld+$maaltijd.afwassers_aangemeld}/{$maaltijd.kwaliafwassers+$maaltijd.afwassers}
 				</td>	
 				<td {if $maaltijd.theedoeken - $maaltijd.theedoeken_aangemeld > 0}style="color: red;"{/if}>
 					{$maaltijd.theedoeken_aangemeld}/{$maaltijd.theedoeken}

@@ -1029,6 +1029,7 @@ sql/2422_nogEenCorveeinstelling.sql -text
 sql/2460.sql -text
 sql/2542.sql -text
 sql/2568_kluspunten_erbij_ma_abbo_weg.sql -text
+sql/2575_adds_kwaliafwasser_kwalikok.sql -text
 sql/csrdelft.sql -text
 sql/csrdelft_oud.sql -text
 wiki/.htaccess -text

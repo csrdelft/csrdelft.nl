@@ -59,7 +59,7 @@ class Maaltijd implements Agendeerbaar {
 		$taken = array();
 		$sMaaltijdTakenQuery="
 			SELECT
-				uid, kok, afwas, theedoek, schoonmaken_frituur, schoonmaken_afzuigkap, schoonmaken_keuken, klussen_licht, klussen_zwaar, punten_toegekend
+				uid, kwalikok, kok, kwaliafwas, afwas, theedoek, schoonmaken_frituur, schoonmaken_afzuigkap, schoonmaken_keuken, klussen_licht, klussen_zwaar, punten_toegekend
 			FROM
 				maaltijdcorvee
 			WHERE
@@ -67,7 +67,9 @@ class Maaltijd implements Agendeerbaar {
 		$rMaaltijdTaken=$this->_db->query($sMaaltijdTakenQuery);
 		if (($rMaaltijdTaken !== false) and $this->_db->numRows($rMaaltijdTaken) > 0) {
 			while ($record = $this->_db->next($rMaaltijdTaken)) {
+				if ($record['kwalikok']) $taken['kwalikoks'][] = $record['uid'];
 				if ($record['kok']) $taken['koks'][] = $record['uid'];
+				if ($record['kwaliafwas']) $taken['kwaliafwassers'][] = $record['uid'];
 				if ($record['afwas']) $taken['afwassers'][] = $record['uid'];
 				if ($record['theedoek']) $taken['theedoeken'][] = $record['uid'];
 				if ($record['schoonmaken_frituur']) $taken['schoonmaken_frituur'][] = $record['uid'];
@@ -104,10 +106,9 @@ class Maaltijd implements Agendeerbaar {
 	}
 	public function isKok($uid=null){
 		if($uid==null){ $uid=LoginLid::instance()->getUid(); }
-		$kok=0;
 		$sKok="
 			SELECT
-				kok
+				kwalikok, kok
 			FROM
 				maaltijdcorvee
 			WHERE
@@ -115,9 +116,9 @@ class Maaltijd implements Agendeerbaar {
 		$rKok = $this->_db->query($sKok);
 		if (($rKok !== false) and $this->_db->numRows($rKok) > 0) {
 			$record = $this->_db->next($rKok);
-			$kok = $record['kok'];
+			return $record['kwalikok']===1 OR $record['kok']===1;
 		}
-		return $kok == 1;
+		return false;
 	}
 
 	public function getID(){ return $this->getMaalId(); }
@@ -125,8 +126,11 @@ class Maaltijd implements Agendeerbaar {
 
 	public function getMoment(){ return date('Y-m-d H:i', $this->_maaltijd['datum']); }
 	public function getTekst(){ return $this->_maaltijd['tekst']; }
+	public function getKwalikoks(){ return $this->_maaltijd['kwalikoks']; }
 	public function getKoks(){ return $this->_maaltijd['koks']; }
-	public function getAfwassers(){ return $this->_maaltijd['afwassers']; }
+	# altijd maximaal 1 kwaliafwasser, de rest is gewoon afwasser
+	public function getKwaliafwassers(){ return ($this->_maaltijd['afwassers']>0) ? 1 : 0; }
+	public function getAfwassers(){ return ($this->_maaltijd['afwassers']>0) ? $this->_maaltijd['afwassers']-1 : 0; }
 	public function getTheedoeken(){ return $this->_maaltijd['theedoeken']; }
 	# alle info...
 	public function getInfo() { return $this->_maaltijd; }

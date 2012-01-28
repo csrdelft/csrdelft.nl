@@ -1,6 +1,6 @@
 {assign var='actief' value='corveepunten'}
 {include file='maaltijdketzer/menu.tpl'}
-
+{if $melding!=''}{$melding}<br />{/if}
 <h1>Corveepunten</h1>
 
 <table class="maaltijden">
@@ -10,6 +10,7 @@
 			<tr>
 				<th>&nbsp;</th>
 				<th><a href="/actueel/maaltijden/corveepunten/sorteer/achternaam/{if $sorteer_richting=='asc'}desc{else}asc{/if}">Naam</a></th>
+				<th style="width: 15px"><a href="/actueel/maaltijden/corveepunten/sorteer/kwalikok/{if $sorteer_richting=='asc'}desc{else}asc{/if}">Kk</a></th>
 				<th style="width: 15px"><a href="/actueel/maaltijden/corveepunten/sorteer/kok/{if $sorteer_richting=='asc'}desc{else}asc{/if}">K</a></th>
 				<th style="width: 15px"><a href="/actueel/maaltijden/corveepunten/sorteer/afwas/{if $sorteer_richting=='asc'}desc{else}asc{/if}">A</a></th>
 				<th style="width: 15px"><a href="/actueel/maaltijden/corveepunten/sorteer/theedoek/{if $sorteer_richting=='asc'}desc{else}asc{/if}">T</a></th>
@@ -38,6 +39,7 @@
 				<tr style="background-color: {cycle values="#e9e9e9, #fff"};{if $bewerkt_lid==$lid}background-color: #bfb{else}{/if}">
 					<td><a name="lid_{$lid}"></a></td>
 					<td>{$lid|csrnaam}</td>
+					<td>{if $leden.$it.kwalikok}{$leden.$it.kwalikok}{/if}</td>
 					<td>{if $leden.$it.kok}{$leden.$it.kok}{/if}</td>
 					<td>{if $leden.$it.afwas}{$leden.$it.afwas}{/if}</td>
 					<td>{if $leden.$it.theedoek}{$leden.$it.theedoek}{/if}</td>
@@ -61,6 +63,7 @@ Totaal: {$leden.$it.corvee_punten} + {$leden.$it.corvee_punten_bonus} = {$leden.
 				<tr style="background-color: {cycle values="#e9e9e9, #fff"}">
 					<td></td>
 					<td>{$lid|csrnaam}</td>
+					<td>{if $leden.$it.kwalikok}{$leden.$it.kwalikok}{/if}</td>
 					<td>{if $leden.$it.kok}{$leden.$it.kok}{/if}</td>
 					<td>{if $leden.$it.afwas}{$leden.$it.afwas}{/if}</td>
 					<td>{if $leden.$it.theedoek}{$leden.$it.theedoek}{/if}</td>

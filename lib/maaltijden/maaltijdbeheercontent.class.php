@@ -55,12 +55,14 @@ class MaaltijdbeheerContent extends SimpleHTML {
 			//alles standaard naar jan lid.
 			$aForm['tp']='x101';
 
-			$aForm['koks']=2;
+			$aForm['kwalikoks']=1;
+			$aForm['koks']=1;
 			$aForm['afwassers']=3;
 			$aForm['theedoeken']=1;
 			
 			//corveepunten voor een standaardmaaltijd
-		    $aForm['punten_kok']=Corveeinstellingen::get('puntenkoken');
+			$aForm['punten_kwalikok']=Corveeinstellingen::get('puntenkwalikoken');
+			$aForm['punten_kok']=Corveeinstellingen::get('puntenkoken');
 			$aForm['punten_afwas']=Corveeinstellingen::get('puntenafwas');
 			$aForm['punten_theedoek']=Corveeinstellingen::get('puntentheedoek');
 		}else{
@@ -75,6 +77,7 @@ class MaaltijdbeheerContent extends SimpleHTML {
 			if(isset($_POST['limiet']) AND $_POST['limiet']==(int)$_POST['limiet']){ $aForm['max']=$_POST['limiet']; }
 			if(isset($_POST['abo']) AND $this->_maaltrack->isValidAbo($_POST['abo'])){ $aForm['abosoort']=$_POST['abo']; }
 			if(isset($_POST['tp']) AND Lid::exists($_POST['tp']) ){ $aForm['tp']=$_POST['tp']; }
+			if(isset($_POST['kwalikoks'])){  $aForm['kwalikoks']=(int)$_POST['kwalikoks']; }
 			if(isset($_POST['koks'])){  $aForm['koks']=(int)$_POST['koks']; }
 			if(isset($_POST['afwassers'])){  $aForm['afwassers']=(int)$_POST['afwassers']; }
 			if(isset($_POST['theedoeken'])){  $aForm['theedoeken']=(int)$_POST['theedoeken']; }
