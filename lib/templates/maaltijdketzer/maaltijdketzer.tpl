@@ -53,16 +53,16 @@ uitprinten. Vanaf dat moment zal deze ketzer u niet meer willen aan- of afmelden
 					</strong>
 				</td>
 				<td>
-						{if $maaltijd.kok==1}
+						{if $maaltijd.kok==1 OR $maaltijd.kwalikok==1}
 							<strong><span style="color: green;">Koken</span></strong>
 						{/if}
-						{if $maaltijd.afwas==1}
+						{if $maaltijd.afwas==1 OR $maaltijd.kwaliafwas==1}
 							<strong><span style="color: green;">Afwassen</span></strong>
 						{/if}
 						{if $maaltijd.theedoek==1}
 							<strong><span style="color: green;">Theedoeken</span></strong>
 						{/if}
-						{if !$maaltijd.kok && !$maaltijd.afwas && !$maaltijd.theedoek}
+						{if !$maaltijd.kwalikok &&!$maaltijd.kok && !$maaltijd.kwaliafwas && !$maaltijd.afwas && !$maaltijd.theedoek}
 							Geen
 						{/if}
 					</strong>
