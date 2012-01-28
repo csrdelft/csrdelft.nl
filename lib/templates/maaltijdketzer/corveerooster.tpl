@@ -27,7 +27,7 @@
 				{section name=kwalikoks loop=$maaltijd.kwalikoks}
 					{assign var='it' value=$smarty.section.kwalikoks.iteration-1}
 					{assign var='kwalikok' value=$maaltijd.taken.kwalikoks.$it}
-					{if $kwalikok!=''}<span class="{if $kwalikok==$liduid}mijzelf{/if}">{$kwalikok|csrnaam}</span>{else}...{/if}<span title="Kwalikok">(k)</span><br />
+					{if $kwalikok!=''}<span class="{if $kwalikok==$liduid}mijzelf{/if}">{$kwalikok|csrnaam}</span>{else}...{/if} <span title="Kwalikok">(k)</span><br />
 				{/section}
 				{section name=koks loop=$maaltijd.koks}
 					{assign var='it' value=$smarty.section.koks.iteration-1}
@@ -39,7 +39,7 @@
 				{section name=kwaliafwassers loop=$maaltijd.kwaliafwassers}
 					{assign var='it' value=$smarty.section.kwaliafwassers.iteration-1}
 					{assign var='kwaliafwasser' value=$maaltijd.taken.kwaliafwassers.$it}
-					{if $kwaliafwasser!=''}<span class="{if $kwaliafwasser==$liduid}mijzelf{/if}">{$kwaliafwasser|csrnaam}</span>{else}...{/if}<span title="Kwaliafwasser">(k)</span><br />
+					{if $kwaliafwasser!=''}<span class="{if $kwaliafwasser==$liduid}mijzelf{/if}">{$kwaliafwasser|csrnaam}</span>{else}...{/if} <span title="Kwaliafwasser">(k)</span><br />
 				{/section}
 				{section name=afwassers loop=$maaltijd.afwassers}
 					{assign var='it' value=$smarty.section.afwassers.iteration-1}
