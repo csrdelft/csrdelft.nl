@@ -1736,9 +1736,9 @@ class MaalTrack {
 								}
 								//mededeling voor de kwaliafwasser
 								if($taak=='kwaliafwassers'){
-									$kwaliafwassser = 'U bent kwaliafwasser. ';
+									$kwaliafwasser = 'U bent kwaliafwasser. ';
 								}else{
-									$kwaliafwassser = '';
+									$kwaliafwasser = '';
 								}
 
 								require_once 'maaltijden/corveeinstellingen.class.php';
