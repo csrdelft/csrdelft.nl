@@ -473,7 +473,64 @@ class MaalTrack {
 		$maaltijd = new Maaltijd ($maalid);
 		return $maalid;
 	}
-	
+
+	/**
+	 * Verwijder corveeta(a)k(en) van lid voor opgegeven maaltijd
+	 * @param 	$maalid maaltijdid
+	 * 			$uid lidnummer
+	 * @return bool succes/faal
+	 */
+	public function removeCorveelid($maalid, $uid=null){
+		if($uid===null){
+			$uid=LoginLid::instance()->getUid();
+		}
+		$sDelete = "
+			DELETE FROM
+				maaltijdcorvee
+			WHERE
+				maalid=".(int)$maalid."
+				AND uid='".$this->_db->escape($uid)."';";
+		if (!$this->_db->query($sDelete)){
+			$this->_error .= mysql_error();
+			return false;
+		}else{
+			return true;
+		}
+	}
+
+	/**
+	 * Verwijder toekomstige corveetaken van lid waarvan de punten nog niet zijn toegekend
+	 * @param	$uid lidnummer
+	 * @return Array (
+					[0] => Array (
+							[maalid] => 894
+							[datum] => 1314720000
+							[tekst] => novitiaat
+							[type] => normaal
+							[punten_toegekend] => nee
+							[taak] => kok
+							[punten] => 4
+						)
+					[1] => Array (..)
+			)
+	 */
+	public function removeToekomstigeCorveetaken($uid=null){
+		if($uid===null){
+			$uid=LoginLid::instance()->getUid();
+		}
+		$taken = array();
+		$corvee = $this->getCorveeTaken($uid);
+		foreach($corvee['taken'] as $corveetaak){
+			//bewaart de taak als het lukt om taak te verwijderen
+			if($corveetaak['datum'] > time() //toekomst?
+			AND $corveetaak['punten_toegekend']!='ja' 
+			AND $this->removeCorveelid($corveetaak['maalid'], $uid)){
+				$taken[] = $corveetaak;
+			}
+		}
+		return $taken;
+	}
+
 	function addSchoonmaakMaaltijd($datum, $tekst, $schoonmaken_frituur, $schoonmaken_afzuigkap, $schoonmaken_keuken, $klussen_licht, $klussen_zwaar, $punten_schoonmaken_frituur, $punten_schoonmaken_afzuigkap, $punten_schoonmaken_keuken, $punten_klussen_licht, $punten_klussen_zwaar) {
 		$datum = (int)$datum;
 		$tekst = mb_substr($tekst, 0, 200);
@@ -845,7 +902,32 @@ class MaalTrack {
 
 		return $aMaal;
 	}
-	//van opgegeven of huidige lid de corveepunten, -vrijstellingen en alle aanwezige corveetaken opzoeken en teruggeven in een array
+	/**
+	 * Opzoeken van corveepunten, -vrijstellingen en alle aanwezige corveetaken van opgegeven of huidige lid
+	 * 
+	 * @param $uid lidnummer of null voor ingelogd lid
+	 * @return Array (
+			[aantal] => 2
+			[lid] => Array (
+					[uid] => 0431
+					[corvee_punten_totaal] => -1
+					[corvee_punten_bonus] => 0
+					[corvee_vrijstelling] => 0
+			)
+			[taken] => Array (
+					[0] => Array (
+							[maalid] => 894
+							[datum] => 1314720000
+							[tekst] => novitiaat
+							[type] => normaal
+							[punten_toegekend] => ja
+							[taak] => kok
+							[punten] => 4
+						)
+					[1] => Array (..)
+			)
+		)
+	 */
 	static public function getCorveeTaken($uid=null){
 		if($uid===null){
 			$uid=LoginLid::instance()->getUid();

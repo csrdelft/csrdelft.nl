@@ -28,7 +28,7 @@ if(isset($_GET['verwijder']) AND $_GET['verwijder']==(int)$_GET['verwijder'] AND
 	exit;
 }
 
-# maaltijd opslaan, of nieuwe toevoegen?
+# zijn er genoeg velden gevuld voor toevoegen/bewerken van maaltijd (puntenvelden worden niet gecheckt)
 if(isset($_POST['maalid'], $_POST['datum'], $_POST['tekst'], $_POST['limiet'], $_POST['abo'],
 	$_POST['tp'], $_POST['kwalikoks'], $_POST['koks'], $_POST['afwassers'], $_POST['theedoeken'] )){
 	//datum omzetten naar timestamp.
@@ -50,6 +50,9 @@ if(isset($_POST['maalid'], $_POST['datum'], $_POST['tekst'], $_POST['limiet'], $
 			header('location: '.CSR_ROOT.'actueel/maaltijden/beheer/');
 			exit;
 		}
+		// voor de herkansing de maaltijd die we bewerken opnieuw inladen 
+		// MaaltijdbeheerContent probeert ingevulde gegevens terug te winnen
+		$beheer->load($maalid);
 	}
 	#als we hier terecht komen is het niet goed gegaan, dan maar de foutmelding weergeven...
 	$beheer->addError($maaltrack->getError());
