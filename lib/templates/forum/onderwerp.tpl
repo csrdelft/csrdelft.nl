@@ -178,7 +178,7 @@
 							{* spam trap, must be kept empty! *}
 							<input type="text" name="firstname" value="" class="verborgen" />
 						{* ingelogde gebruikers vertellen dat iedereen hun bericht mag lezen inclusief Google. *}
-						{else if $onderwerp->isOpenbaar()} 
+						{elseif $onderwerp->isOpenbaar()} 
 							Openbaar forum: Iedereen mag dit lezen en zoekmachines nemen het op in hun zoekresultaten.
 						{/if}
 						<div id="berichtPreviewContainer" class="previewContainer"><div id="berichtPreview" class="preview"></div></div>
