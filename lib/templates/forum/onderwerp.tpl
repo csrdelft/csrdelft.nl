@@ -177,6 +177,9 @@
 							<label for="email">Email-adres:</label><input type="text" name="email" /><br />
 							{* spam trap, must be kept empty! *}
 							<input type="text" name="firstname" value="" class="verborgen" />
+						{* ingelogde gebruikers vertellen dat iedereen hun bericht mag lezen inclusief Google. *}
+						{else if $onderwerp->isOpenbaar()} 
+							Openbaar forum: Iedereen mag dit lezen en zoekmachines nemen het op in hun zoekresultaten.
 						{/if}
 						<div id="berichtPreviewContainer" class="previewContainer"><div id="berichtPreview" class="preview"></div></div>
 						<textarea name="bericht" id="forumBericht" class="forumBericht" rows="12">{$textarea}</textarea>

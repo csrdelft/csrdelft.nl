@@ -183,6 +183,7 @@ class ForumOnderwerp{
 		}
 		return $this->categorie;
 	}
+	public function getRechtenRead(){ return $this->getCategorie()->getRechten_read(); }
 	public function getRechtenPost(){ return $this->getCategorie()->getRechten_post(); }
 	public function magPosten(){
 		return LoginLid::instance()->hasPermission($this->getRechtenPost());
@@ -197,6 +198,7 @@ class ForumOnderwerp{
 	public function isOpen(){ return $this->open==1; }
 	public function isPlakkerig(){ return $this->plakkerig==1; }
 	public function isBelangrijk(){ return $this->belangrijk==1; }
+	public function isOpenbaar(){ return strpos($this->getRechtenRead(),'P_FORUM_READ')!==false; }
 	public function needsModeration(){ return !Forum::isIngelogged(); }
 	public function getReacties(){ return $this->reacties; }
 	public function getLastpost(){ return $this->lastpost; }

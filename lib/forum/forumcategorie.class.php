@@ -92,6 +92,7 @@ class ForumCategorie{
 	public function getNaam(){			return $this->naam; }
 	public function getRechten_read(){	return $this->rechten_read; }
 	public function magBekijken(){		return LoginLid::instance()->hasPermission($this->getRechten_read()); }
+	public function isOpenbaar(){ 		return strpos($this->getRechten_read(),'P_FORUM_READ')!==false; }
 	public function getRechten_post(){	return $this->rechten_post; }
 	public function magPosten(){ 		return LoginLid::instance()->hasPermission($this->getRechten_post()); }
 
