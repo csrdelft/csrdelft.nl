@@ -173,7 +173,8 @@
 						{* berichtje weergeven voor niet-ingeloggede gebruikers dat ze een naam moeten vermelden. *}
 						{if $onderwerp->needsModeration()}
 							<strong>Uw bericht wordt pas geplaatst nadat het bekeken en goedgekeurd is door de <a href="http://csrdelft.nl/actueel/groepen/Commissies/PubCie/">PubCie</a>.
-							Het vermelden van <em>uw naam en email-adres</em> is verplicht.</strong><br /><br />
+							Het vermelden van <em>uw naam en email-adres</em> is verplicht.</strong> 
+							Zoekmachines nemen berichten van dit openbare forumdeel op in hun zoekresultaten.<br /><br />
 							<label for="email">Email-adres:</label><input type="text" name="email" /><br />
 							{* spam trap, must be kept empty! *}
 							<input type="text" name="firstname" value="" class="verborgen" />
