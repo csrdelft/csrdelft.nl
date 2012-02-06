@@ -914,6 +914,8 @@ lib/templates/groepen/groep.ubb.tpl -text
 lib/templates/groepen/groepen.tpl -text
 lib/templates/groepen/groepformulier.tpl -text
 lib/templates/groepen/groepleden.tpl -text
+lib/templates/lustrum_csrdelft.tpl -text
+lib/templates/lustrum_menu.tpl -text
 lib/templates/maalciemail.tpl -text
 lib/templates/maaltijdketzer/abobeheer.tpl -text
 lib/templates/maaltijdketzer/beheer.tpl -text

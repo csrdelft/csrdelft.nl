@@ -3,7 +3,7 @@ body{
 	color: white;
 }
 
-#container, #mainleft *, #adminding, #adminding *{
+#container, #mainleft *, #adminding, #adminding *, #footer{
 	background-color: black !important;
 	background-image: none !important;
 }
@@ -11,7 +11,7 @@ body{
 
 h1, h2, h3, h4, h5, h6{ color: #ebc474 !important; }
 h1 a, h2 a, h3 a, h4 a, h5 a, h6 a{ color: #ebc474 !important; }
-a{ color: white; }
+a, #footer a{ color: white; }
 a:hover{ color: #ebc474 !important; }
 
 #container{
@@ -53,7 +53,10 @@ h1,h2,h3,h4,strong, #menu *, #submenu *{
 }
 #mainleft h1{ border: 1px solid #bbb !important; }
 .item a{color: #ebc474 !important; }
-a.knop, textarea, input, select{ background-color: black !important; color: white !important; }
+a.knop, textarea, input, select, #filters span, #boekencatalogus_wrapper *{ background-color: black !important; color: white !important; }
+
+#boekencatalogus thead tr th{ border-bottom: 1px solid #eee !important; }
+#boekencatalogus tfoot tr th{ border-top: 1px solid #eee !important; }
 
 #forumtabel th td{ color: #222;}
 #forumtabel tbody tr.tussenschot td{ background-color: #555; }
@@ -64,3 +67,5 @@ a.knop, textarea, input, select{ background-color: black !important; color: whit
 .ubb_block, .ubb_block .groepleden{
 	background-color: #444 !important;
 }
+#profielForm div.veld{ border: 0 !important; }
+#profielForm div.veld:hover{ background-color: #222 !important; }
