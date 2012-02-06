@@ -130,3 +130,11 @@ body{
 #zoekResultaat .sorting{
 	color: #fff !important;
 }
+
+#forumtabel td{
+	background: #1c1c1c !important;
+}
+
+#forumtabel th{
+	background: #f9b233 !important;
+}
