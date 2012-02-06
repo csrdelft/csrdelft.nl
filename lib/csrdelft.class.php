@@ -59,7 +59,7 @@ class csrdelft extends SimpleHTML {
 		if(Instelling::get('layout')=='roze' AND LoginLid::instance()->getUid()!='x999'){
 			$this->addStylesheet('roze.css');
 		}
-		if(Instelling::get('layout')=='lustrum' || LoginLid::instance()->getUid()=='x999'){
+		if(Instelling::get('layout')=='lustrum'){ // || LoginLid::instance()->getUid()=='x999'){
 			$this->addStylesheet('lustrum.css');
 		}
 		if($this->_prefix=='owee_'){
