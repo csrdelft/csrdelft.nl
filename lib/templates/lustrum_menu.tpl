@@ -1,5 +1,5 @@
 <div id="menu" onmouseover="ResetTimer()" onmouseout="StartTimer()">
-	<div id="menuleft"><a href="/"><img src="http://plaetjes.csrdelft.nl/layout/logo.gif" alt="Logo" id="logo" /></a></div>
+	<div id="menuleft"><a href="/"><img src="http://plaetjes.csrdelft.nl/lustrum/logo.png" alt="Logo" id="logo" /></a></div>
 	<div id="menucenter">
 		<div id="menubanner">
 			<div id="banner1"><img src="http://plaetjes.csrdelft.nl/menubalk/banner1.png" id="imgbanner1" alt="banner1" width="553" height="106" /></div>
@@ -67,6 +67,7 @@
 				{literal}
 				<script>
 					jQuery(document).ready(function($){
+						
 						$('#adminding').click(function(){
 							$(this).children('div').toggle();
 						});
@@ -113,10 +114,10 @@
 <div id="submenu" onmouseover="ResetTimer()" onmouseout="StartTimer()">
 	<div id="submenuitems">
 		{foreach from=$items item=item}
-			<div id="sub{$item.ID}" {if $item.huidig}class="active"{/if}>
+			<div id="sub{$item.ID}"{if $item.huidig} class="active"{/if}>
 				{assign var='showseperator' value=false}
 				{foreach from=$item.subitems item=subitem}
-					{if $showseperator} <img src="http://plaetjes.csrdelft.nl/layout/submenuseperator.gif" alt="|" /> {/if}
+					{if $showseperator}<img src="http://plaetjes.csrdelft.nl/lustrum/spacer.png" alt="|" /> {/if}
 					{assign var='showseperator' value=true}
 					<a href="{$subitem.link}" title="{$subitem.tekst}"{if $subitem.huidig} class="active"{/if}>{$subitem.tekst}</a>
 				{/foreach}

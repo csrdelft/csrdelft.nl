@@ -1,11 +1,13 @@
 body{
-	background: black;
 	color: white;
 }
 
 #container, #mainleft *, #adminding, #adminding *, #footer{
-	background-color: black !important;
 	background-image: none !important;
+}
+
+#mainleft *, #adminding, #adminding *, #footer{
+	background-color: #000 !important;
 }
 
 
@@ -15,8 +17,7 @@ a, #footer a{ color: white; }
 a:hover{ color: #ebc474 !important; }
 
 #container{
-	border: 1px solid #b8b8b8;
-	border-width: 0 1px 1px 1px;
+	border: none;
 	margin-top: 0;
 }
 #menu,#submenu{
@@ -24,11 +25,9 @@ a:hover{ color: #ebc474 !important; }
 	padding: 0 19px 0 19px;
 }
 #menu{
-	border-top: 1px solid #b8b8b8;
-	padding-top: 5px
+	padding-top: 10px
 }
 #submenu{
-	border-bottom: 1px solid #b8b8b8;
 }
 #menu,#menu *,#submenu,#submenu *{
 	
@@ -36,14 +35,6 @@ a:hover{ color: #ebc474 !important; }
 
 h1,h2,h3,h4,strong, #menu *, #submenu *{
 	
-}
-#logo{
-	background-image: url('http://plaetjes.csrdelft.nl/layout/lustrum/logo.png') !important;
-	padding: 133px 0 0 133px !important;
-	margin: 4px 0 0 30px;
-	overflow: hidden !important;
-	width: 0px !important;
-	height: 0px !important;
 }
 
 /* zooitje extra uitzonderingen */
@@ -69,3 +60,52 @@ a.knop, textarea, input, select, #filters span, #boekencatalogus_wrapper *{ back
 }
 #profielForm div.veld{ border: 0 !important; }
 #profielForm div.veld:hover{ background-color: #222 !important; }
+
+
+
+	
+/* Lustrum style, later te veranderen in aparte stylesheet */
+/* Temp quick fix */
+body{
+	background: #000 url('http://plaetjes.csrdelft.nl/lustrum/body.png') repeat-x !important;
+}
+
+#menubanner{
+	position: relative;
+	top: -10px;
+}
+
+#mainmenu{
+	position: relative;
+	top: 2px;
+}
+
+#mainmenu li{
+	float: left;
+}
+
+#mainmenu a {
+	float: left;
+	color: #000 !important;
+	height: 30px !important;
+	background: url('http://plaetjes.csrdelft.nl/lustrum/nav.png') no-repeat;
+}
+
+#mainmenu a:hover, #mainmenu a:active, #mainmenu a.active {
+	padding: 11px 0 0 5px;
+	margin: -11px 0 0 -5px;
+	background: url('http://plaetjes.csrdelft.nl/lustrum/nav_active.png') no-repeat;
+}
+
+#logo{
+	position: relative;
+	top: -9px;
+}
+
+#submenu a:link, #submenu a:visited{
+	color: #000;
+}
+
+#ingelogd, #ingelogd a{
+	color: #000;
+}
