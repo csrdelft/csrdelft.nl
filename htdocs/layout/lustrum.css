@@ -93,13 +93,13 @@ body{
 #mainmenu a {
 	float: left;
 	color: #000 !important;
-	height: 30px !important;
+	height: 31px !important;
 	background: url('http://plaetjes.csrdelft.nl/lustrum/nav.png') no-repeat;
 }
 
 #mainmenu a:hover, #mainmenu a:active, #mainmenu a.active {
-	padding: 11px 0 0 5px;
-	margin: -11px 0 0 -5px;
+	padding: 10px 0 0 6px;
+	margin: -10px 0 0 -6px;
 	background: url('http://plaetjes.csrdelft.nl/lustrum/nav_active.png') no-repeat;
 }
 
