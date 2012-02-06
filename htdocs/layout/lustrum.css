@@ -122,3 +122,11 @@ body{
 #forumtabel a{
 	color: #ebc474;
 }
+
+#zoekResultaat, #zoekResultaat a{
+	color: #000 !important;
+}
+
+#zoekResultaat .sorting{
+	color: #fff !important;
+}
