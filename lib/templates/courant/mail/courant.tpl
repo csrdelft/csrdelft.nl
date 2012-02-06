@@ -7,99 +7,81 @@
   <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
   <meta name="author" content="PubCie der C.S.R. Delft" />
   <meta name="robots" content="index, follow" />
-  <link href='http://fonts.googleapis.com/css?family=Parisienne' rel='stylesheet' type='text/css'>
   <style type="text/css">{literal}<!--
 body{
-    font-family: 'Parisienne', cursive;
-    font-size: 12px;
-    margin: 0px 0px 20px 0px; padding: 0px ;
+	font-face: verdana, arial, sans-serif;
+	font-size: 12px;
+	margin: 0px 0px 20px 0px; padding: 0px ;
 }
 table{
-    border: 0px;
-    margin: 0px; padding: 0px;
-    margin-top: 0px;
-    width: 100%
+	border: 0px;
+	margin: 0px; padding: 0px;
+	margin-top: 0px;
+	width: 100%
 }
 td{
-    vertical-align: top;
-    font-size: 11px;
-    font-family: 'Parisienne', cursive;
+	vertical-align: top;
+	font-size: 11px; font-face: verdana, arial, sans-serif;
 }
 .zijKolom{
-    width: 150px;
-    margin: 0px; padding: 0px;
-    vertical-align: top;
+	width: 150px;
+	margin: 0px; padding: 0px;
+	vertical-align: top;
 
-    background-repeat: repeat-y;
+	background-repeat: repeat-y;
 }
 .hoofdKolom{
-    margin: 0px; 
-    padding: 23px 20px 0px 0px;
-    vertical-align: top;
+	margin: 0px; 
+	padding: 23px 20px 0px 0px;
+	vertical-align: top;
 }
 img{
-    border: 0px;
+	border: 0px;
 }
 h4{
-    background-color: #E0A937;
-    font-size: 15px;
-    margin: 10px 0px 0px 0px; padding: 5px 5px 5px 10px;
-    font-family: 'Parisienne' cursive;
-    color: black;
+	background-color: #CAD6FF;
+	font-size: 15px;
+	margin: 10px 0px 0px 0px; padding: 5px 5px 5px 10px;
+	color: black;
 }
 div.p{
-    background-color: #FAFAFF;
-    margin: 0px 0px 0px 0px;
-    padding: 10px 5px 5px 10px;
-    color: #000000;
-    font-family: 'Parisienne' cursive;
-    line-height: 1.4em;
+	background-color: #FAFAFF;
+	margin: 0px 0px 0px 0px;
+	padding: 10px 5px 5px 10px;
+	color: #020883;
+	font-size: 11px; font-face: verdana, arial, sans-serif;
+	line-height: 1.4em;
 }
 .inhoud{
-    border: 0px;
-    width: 100%;
-    background-color: #FAFAFF;
-    margin: 0px 0px 15px 0px;
-    padding: 0px;
+	border: 0px;
+	width: 100%;
+	background-color: #FAFAFF;
+	margin: 0px 0px 15px 0px;
+	padding: 0px;
 }
 .inhoudKolom{
-    margin: 0px 0px 10px 0px; padding: 5px 5px 5px 10px;
-    font-size: 11px;
-    vertical-align: top;
-    width: 33%;
+	margin: 0px 0px 10px 0px; padding: 5px 5px 5px 10px;
+	font-size: 11px;
+	vertical-align: top;
+	width: 33%;
 }
 .inhoudKop{
-    font-weight: bold;
-    font-size: 11px;
+	font-weight: bold;
+	font-size: 11px;
 }
 ul{
-    margin: 0px 0px 0px 10px; padding: 0px 0px 0px 5px;
-    
+	margin: 0px 0px 0px 10px; padding: 0px 0px 0px 5px;
+	
 }
 .onderlijn{
-    text-decoration: underline;
-}
-a{
-	font-family: 'Parisienne' cursive;
-}
-a:link{
-	color:  #E0A937;
-}
-a:visited{
-	color:  #EDA137;
-}
-a:hover{
-	color:  #000000;
-}
-a:active{
-	color:  #000000;
+	text-decoration: underline;
 }
 li{
-    margin: 0px 0px 0px 00px;
-    color: #000000;
-    font-size: 11px;
+	margin: 0px 0px 0px 00px;
+	color: #020883;
+	font-size: 11px;
 }div.citaatContainer{
-    margin: 5px 5px 5px 20px;
+	margin: 5px 5px 5px 20px;
 } -->{/literal}
 </style>
 </head>
@@ -107,38 +89,38 @@ li{
 <table>
 <tr>
 <td class="zijKolom" valign="top">
-<img src="http://plaetjes.csrdelft.nl/csrmail/logoLustrum.png" width="150px" alt="Logo van C.S.R." />
-<img src="http://plaetjes.csrdelft.nl/csrmail/balkjeLustrum.png" width="150px" height="100%" />
+<img src="http://plaetjes.csrdelft.nl/csrmail/logo.jpg" width="150px" height="197px" alt="Logo van C.S.R." />
+<img src="http://plaetjes.csrdelft.nl/csrmail/balk.gif" width="150px" height="100%" />
 </td>
 <td class="hoofdKolom">
 <h4><font size="-3" face="verdana">Inhoud</font></h4>
 <table class="inhoud">
 <tr>
 {*
-    Weergave van de kopjes bovenaan. Beetje een raar verhaal geworden, maar zo is het wel lekker dynamisch
+	Weergave van de kopjes bovenaan. Beetje een raar verhaal geworden, maar zo is het wel lekker dynamisch
 *}
 {foreach from=$indexCats item=categorie key=catKey}
-    {if $categorie!='voorwoord' AND $categorie!='sponsor'}
-        <td class="inhoudKolom" valign="top">
-        <font face="verdana" size="-1">
-        <div class="inhoudKop"><b>{$catNames[$catKey]}</b></div>
-        <ul>
-        {foreach from=$courant->getBerichten() item=bericht}
-            {if $bericht.categorie==$categorie}
-                <li><a href="#{$bericht.ID}" style="text-decoration: none;">{$bericht.titel|ubb}</a></li>
-            {/if}
-        {/foreach}
-        </ul>
-        </font>
-        </td>
-    {/if}
+	{if $categorie!='voorwoord' AND $categorie!='sponsor'}
+		<td class="inhoudKolom" valign="top">
+		<font face="verdana" size="-1">
+		<div class="inhoudKop"><b>{$catNames[$catKey]}</b></div>
+		<ul>
+		{foreach from=$courant->getBerichten() item=bericht}
+			{if $bericht.categorie==$categorie}
+				<li><a href="#{$bericht.ID}" style="text-decoration: none;">{$bericht.titel|ubb}</a></li>
+			{/if}
+		{/foreach}
+		</ul>
+		</font>
+		</td>
+	{/if}
 {/foreach}
 </tr>
 </table>
-<font face="verdana" size="-1">
+<font face="verdana" size="-1">	
 {foreach from=$courant->getBerichten() item=bericht}
-    <h4><a name="{$bericht.ID}"></a>{$bericht.titel|ubb}</h4>
-    <div class="p">{$bericht.bericht|ubb}</div>
+	<h4><a name="{$bericht.ID}"></a>{$bericht.titel|ubb}</h4>
+	<div class="p">{$bericht.bericht|ubb}</div>
 {/foreach}
 </font>
 </td>

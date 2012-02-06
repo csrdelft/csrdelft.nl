@@ -892,6 +892,7 @@ lib/templates/bibliotheek/catalogus.tpl -text
 lib/templates/courant/courantbeheer.tpl -text
 lib/templates/courant/mail/c_header.tpl -text
 lib/templates/courant/mail/courant.tpl -text
+lib/templates/courant/mail/courant_LustrumX.tpl -text
 lib/templates/courant/mail/courant_delphiadaily2011.tpl -text
 lib/templates/courant/mail/courant_draadloos2009.tpl -text
 lib/templates/courant/mail/courant_triomphedor2011.tpl -text
