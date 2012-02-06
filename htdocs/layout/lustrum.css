@@ -1,0 +1,66 @@
+body{
+	background: black;
+	color: white;
+}
+
+#container, #mainleft *, #adminding, #adminding *{
+	background-color: black !important;
+	background-image: none !important;
+}
+
+
+h1, h2, h3, h4, h5, h6{ color: #ebc474 !important; }
+h1 a, h2 a, h3 a, h4 a, h5 a, h6 a{ color: #ebc474 !important; }
+a{ color: white; }
+a:hover{ color: #ebc474 !important; }
+
+#container{
+	border: 1px solid #b8b8b8;
+	border-width: 0 1px 1px 1px;
+	margin-top: 0;
+}
+#menu,#submenu{
+	margin: 0;
+	padding: 0 19px 0 19px;
+}
+#menu{
+	border-top: 1px solid #b8b8b8;
+	padding-top: 5px
+}
+#submenu{
+	border-bottom: 1px solid #b8b8b8;
+}
+#menu,#menu *,#submenu,#submenu *{
+	
+}
+
+h1,h2,h3,h4,strong, #menu *, #submenu *{
+	
+}
+#logo{
+	background-image: url('http://plaetjes.csrdelft.nl/layout/lustrum/logo.png') !important;
+	padding: 133px 0 0 133px !important;
+	margin: 4px 0 0 30px;
+	overflow: hidden !important;
+	width: 0px !important;
+	height: 0px !important;
+}
+
+/* zooitje extra uitzonderingen */
+
+#zoekveld{
+	color: white;
+}
+#mainleft h1{ border: 1px solid #bbb !important; }
+.item a{color: #ebc474 !important; }
+a.knop, textarea, input, select{ background-color: black !important; color: white !important; }
+
+#forumtabel th td{ color: #222;}
+#forumtabel tbody tr.tussenschot td{ background-color: #555; }
+.auteur{ background-color: black !important; }
+.bericht1, .forumtekst{ background-color: #333 !important; }
+.citaat{ background-color: #444 !important; }
+
+.ubb_block, .ubb_block .groepleden{
+	background-color: #444 !important;
+}
