@@ -27,6 +27,9 @@ class csrdelft extends SimpleHTML {
 	private $_prefix;
 
 	function __construct($body, $prefix='', $menuid=0){ //mw: param menuid toegevoegd, zodat het goede menu geladen wordt (voor vb=99)
+	
+		Instelling::set('layout', 'lustrum'); // Geforeceerd lustrum lay-out
+	
 		if(is_object($body)){
 			$this->_body=$body;
 			//als de body een methode heeft om een titel mee te geven die gebruiken, anders de standaard.
