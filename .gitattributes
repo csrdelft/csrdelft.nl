@@ -2035,6 +2035,16 @@ wiki/lib/plugins/usermanager/lang/nl/lang.php -text
 wiki/lib/plugins/usermanager/lang/nl/list.txt -text
 wiki/lib/plugins/usermanager/script.js -text
 wiki/lib/plugins/usermanager/style.css -text
+wiki/lib/plugins/vshare/README -text
+wiki/lib/plugins/vshare/button.png -text
+wiki/lib/plugins/vshare/lang/en/lang.php -text
+wiki/lib/plugins/vshare/manager.dat -text
+wiki/lib/plugins/vshare/plugin.info.txt -text
+wiki/lib/plugins/vshare/script.js -text
+wiki/lib/plugins/vshare/sites.conf -text
+wiki/lib/plugins/vshare/sites.js -text
+wiki/lib/plugins/vshare/style.css -text
+wiki/lib/plugins/vshare/syntax.php -text
 wiki/lib/scripts/ajax.js -text
 wiki/lib/scripts/cookie.js -text
 wiki/lib/scripts/delay.js -text
