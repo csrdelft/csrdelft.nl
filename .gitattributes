@@ -1087,7 +1087,6 @@ wiki/data/locks/_dummy -text
 wiki/data/media/wiki/dokuwiki-128.png -text
 wiki/data/media/wiki/test.csv -text
 wiki/data/meta/_dummy -text
-wiki/data/pages/playground/playground.txt -text
 wiki/data/pages/wiki/dokuwiki.txt -text
 wiki/data/pages/wiki/syntax.txt -text
 wiki/data/security.png -text
