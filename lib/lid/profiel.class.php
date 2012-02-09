@@ -415,7 +415,7 @@ class ProfielStatus extends Profiel{
 				}else{
 					//als het niet bewaard wordt, checken of veld gereset moet worden.
 					if($fieldsToSave[$field->getName()]['reset']!==null){
-						$this->bewerktLid->setProperty($field->getName(), $keepfields[$field->getName()]['reset']);
+						$this->bewerktLid->setProperty($field->getName(), $fieldsToSave[$field->getName()]['reset']);
 					}
 				}
 			}
