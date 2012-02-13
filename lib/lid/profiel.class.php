@@ -194,7 +194,7 @@ P.S.: Mocht u nog vragen hebben, dan kan u natuurlijk altijd e-posts sturen naar
 			MySql::instance()->query($sNieuwWachtwoord) AND
 			LidCache::flushLid($uid) AND
 			$lid->save_ldap() AND
-			mail($lid->getEmail(), 'Nieuw wachtwoord voor de C.S.R.-stek', $mail, "From: pubcie@csrdelft.nl\n Bcc: pubcie@csrdelft.nl");
+			mail($lid->getEmail(), 'Nieuw wachtwoord voor de C.S.R.-stek', $mail, "From: pubcie@csrdelft.nl"."\r\n"."Bcc: pubcie@csrdelft.nl");
 
 	}
 	public function getProfielFieldsNotEmpty($fields){
