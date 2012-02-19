@@ -289,7 +289,7 @@ class Foto{
 
 	function maakResized(){
 		set_time_limit(0);
-		$command=IMAGEMAGICK_PATH.' '.escapeshellarg($this->getPad()).' -resize 800x800 -format jpg -quality 70 '.escapeshellarg($this->getResizedPad()).'';
+		$command=IMAGEMAGICK_PATH.' '.escapeshellarg($this->getPad()).' -resize 1024x1024 -format jpg -quality 85 '.escapeshellarg($this->getResizedPad()).'';
 		echo $command.'<br />';
 		echo shell_exec($command).'<hr />';
 		chmod($this->getResizedPad(), 0644);
