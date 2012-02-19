@@ -89,9 +89,7 @@ jQuery(document).ready(function($){
 
 		},
 		callback: function(){
-			if(window.location.hash!=''){
-				window.location.hash='';
-			}
+			return false;
 		}
 	});
 
