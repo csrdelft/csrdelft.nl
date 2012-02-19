@@ -136,7 +136,7 @@ class Fotoalbum{
 						$mappen[]=$file;
 					}
 				}
-				sort($mappen);
+				rsort($mappen);
 			}
 			//$mappen=array_reverse($mappen);
 
