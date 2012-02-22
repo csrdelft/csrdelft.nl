@@ -8,6 +8,10 @@ a.thumb{
 	text-align: center;
 }
 
+a.thumb img{
+	clip: rect(75px,75px,75px,75px);
+}
+
 a.album{
 	width: 154px;
 	height: 154px;
@@ -26,7 +30,6 @@ a.album:hover{
 	border-color: #aaaaaa;
 }
 a.album img{
-	clip: rect(75px,75px,75px,75px);
 	height: 150px;
 	width: 150px;
 	border: 1px solid #777777;
