@@ -423,7 +423,7 @@ src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
 
 			//album bestaat niet, we geven een foutmelding
 			if(!$album->exists()){
-				return '<div class="ubb_block">ubb_fotoalbum: fotoalbum bestaat niet ('.mb_htmlentities($album).')</div>';
+				return '<div class="ubb_block">ubb_fotoalbum: fotoalbum bestaat niet ('.mb_htmlentities($pad).')</div>';
 			}
 		}
 
