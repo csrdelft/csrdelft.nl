@@ -83,6 +83,9 @@ h.t. Fiscus.';
 	public function getOnderwerp(){		return $this->onderwerp; }
 	public function getBericht(){		return $this->bericht; }
 
+	/**
+	 * Voor een simulatierun uit. Er worden dan geen mails gestuurd.
+	 */
 	public function simulate(){
 		$db=MySql::instance();
 		$query="
@@ -110,7 +113,6 @@ h.t. Fiscus.';
 		}
 
 		return count($this->teschoppen);
-
 	}
 
 	//'compile' template.
@@ -120,6 +122,10 @@ h.t. Fiscus.';
 		return str_replace(array('LID', 'SALDO'), array($lid->getNaam(), $saldo), $invoer);
 	}
 
+	/**
+	 * Geef een array van Lid-objecten terug van de te schoppen leden.
+	 * 
+	 */
 	public function getLeden(){
 		if($this->teschoppen===null){
 			$this->simulate();
@@ -133,6 +139,10 @@ h.t. Fiscus.';
 		return $leden;
 	}
 
+	/**
+	 * Geef een lijstje met het onderwerp en de body van de te verzenden
+	 * mails.
+	 */
 	public function preview(){
 		if($this->teschoppen===null){
 			$this->simulate();
@@ -141,24 +151,20 @@ h.t. Fiscus.';
 			echo '<strong>'.$bericht['onderwerp'].'</strong><br /'.nl2br($bericht['bericht']).'<hr />';
 		}
 	}
+
+	/**
+	 * Verstuurt uiteindelijk de mails.
+	 */
 	public function doit(){
 		if($this->teschoppen===null){
 			$this->simulate();
 		}
-		//zorg dat het onderwerp netjes utf8 in base64 is. Als je dit niet doet krijgt het
-		//spampunten van spamassasin (SUBJECT_NEEDS_ENCODING,SUBJ_ILLEGAL_CHARS)
-		$onderwerp=' =?UTF-8?B?'. base64_encode($this->getOnderwerp()) ."?=\n";
-
-		$headers="From: ".$this->getFrom()."\n";
-		if($this->bcc!=''){
-			$headers.="BCC: ".$this->getBcc()."\n";
-		}
-		//content-type en charset zetten zodat rare tekens in wazige griekse namen
-		//en euro-tekens correct weergegeven worden in de mails.
-		$headers.="Content-Type: text/plain; charset=UTF-8\r\n";
-		$headers.='X-Mailer: csrdelft.nl/Jieter'."\n\r";
+		
 		foreach($this->teschoppen as $uid => $bericht){
-			mail($uid.'@csrdelft.nl', $onderwerp, $bericht['bericht'], $headers);
+			$mail=new Mail($uid.'@csrdelft.nl', $this->getOnderwerp(), $bericht['bericht']);
+			$mail->setFrom($this->GetFrom());
+			$mail->setBcc($this->getBcc());
+			$mail->send();
 		}
 		exit;
 	}

@@ -54,7 +54,7 @@ if(!($loginlid->hasPermission('P_LEDEN_READ') or $loginlid->hasPermission('P_OUD
 			$profiel=new ProfielBewerken($uid, $actie);
 			
 			if($profiel->magBewerken()){
-				if($profiel->isPosted() AND $profiel->valid() AND $profiel->save()){
+				if($profiel->valid() AND $profiel->save()){
 					header('location: '.CSR_ROOT.'communicatie/profiel/'.$uid);
 					exit;
 				}else{
@@ -65,36 +65,40 @@ if(!($loginlid->hasPermission('P_LEDEN_READ') or $loginlid->hasPermission('P_OUD
 			}
 		break;
 		case 'nieuw':
-			if($loginlid->hasPermission('P_ADMIN,P_LEDEN_MOD') OR ($status=='noviet' AND $loginlid->hasPermission('groep:novcie'))){
-				try{
-					//maak het nieuwe uid aan.
-					$nieuwUid = Lid::createNew($_GET['uid'],$status);
+			if(!
+				($loginlid->hasPermission('P_ADMIN,P_LEDEN_MOD') OR
+				($status=='noviet' AND $loginlid->hasPermission('groep:novcie')))
+			  ){
 
-					if($status=='noviet'){
-						$bewerkactie = 'novietBewerken';
-					}else{
-						$bewerkactie = 'bewerken';
-					}
-					ProfielContent::invokeRefresh(null, '/communicatie/profiel/'.$nieuwUid.'/'.$bewerkactie);
-				}catch(Exception $e){
-					ProfielContent::invokeRefresh('<h2>Nieuw lidnummer aanmaken mislukt.</h2>'.$e->getMessage(), '/communicatie/profiel/');
-				}	
-			}else{
+				// nieuwe leden mogen worden aangemaakt door P_ADMIN,P_LEDEN_MOD,
+				// novieten ook door de novcie.
 				ProfielContent::invokeRefresh('U mag geen nieuwe leden aanmaken', '/communicatie/profiel/');
 			}
+			try{
+				//maak het nieuwe uid aan.
+				$nieuwUid = Lid::createNew($_GET['uid'],$status);
+
+				if($status=='noviet'){
+					$bewerkactie = 'novietBewerken';
+				}else{
+					$bewerkactie = 'bewerken';
+				}
+				ProfielContent::invokeRefresh(null, '/communicatie/profiel/'.$nieuwUid.'/'.$bewerkactie);
+			}catch(Exception $e){
+				ProfielContent::invokeRefresh('<h2>Nieuw lidnummer aanmaken mislukt.</h2>'.$e->getMessage(), '/communicatie/profiel/');
+			}	
 		break;
 		case 'wijzigstatus':
-			if($loginlid->hasPermission('P_ADMIN,P_LEDEN_MOD')){
-				$profiel=new ProfielStatus($uid, $actie);
-
-				if($profiel->isPosted() AND $profiel->valid() AND $profiel->save()){
-					header('location: '.CSR_ROOT.'communicatie/profiel/'.$uid);
-					exit;
-				}else{
-					$midden=new ProfielStatusContent($profiel, $actie);
-				}
-			}else{
+			if(!$loginlid->hasPermission('P_ADMIN,P_LEDEN_MOD')){
 				ProfielContent::invokeRefresh('U mag lidstatus niet aanpassen', '/communicatie/profiel/');
+			}
+			$profiel=new ProfielStatus($uid, $actie);
+
+			if($profiel->isPosted() AND $profiel->valid() AND $profiel->save()){
+				header('location: '.CSR_ROOT.'communicatie/profiel/'.$uid);
+				exit;
+			}else{
+				$midden=new ProfielStatusContent($profiel, $actie);
 			}
 		break;
 		case 'wachtwoord':
@@ -127,11 +131,10 @@ if(!($loginlid->hasPermission('P_LEDEN_READ') or $loginlid->hasPermission('P_OUD
 		case 'view':
 		default;
 			$lid=LidCache::getLid($uid);
-			if($lid instanceof Lid){
-				$midden=new ProfielContent($lid);
-			}else{
+			if(!$lid instanceof Lid){
 				ProfielContent::invokeRefresh('<h2>Helaas</h2>Dit lid bestaat niet.<br /> U kunt verder zoeken in deze ledenlijst.', '/communicatie/ledenlijst/');
 			}
+			$midden=new ProfielContent($lid);
 		break;
 		
 	}
@@ -141,10 +144,12 @@ $pagina=new csrdelft($midden);
 $pagina->addStylesheet('profiel.css');
 $pagina->addStylesheet('js/autocomplete/jquery.autocomplete.css');
 $pagina->addScript('profiel.js');
-$pagina->addScript('suggest.js');
+
 $pagina->addScript('autocomplete/jquery.autocomplete.min.js');
-$pagina->addScript('flot/jquery.flot.min.js');
-$pagina->addScript('flot/jquery.flot.threshold.min.js');
+if($actie=='view'){
+	$pagina->addScript('flot/jquery.flot.min.js');
+	$pagina->addScript('flot/jquery.flot.threshold.min.js');
+}
 $pagina->view();
 
 ?>

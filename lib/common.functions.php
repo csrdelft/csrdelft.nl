@@ -95,12 +95,28 @@ function is_utf8($string) {
    )*$%xs', $string);
 
 } // function is_utf8
+
+/**
+ * Wordt de request vanaf een confide-ip gedaan?
+ */
 function opConfide() {
 	return ( isset($_SERVER['REMOTE_ADDR']) and defined('CONFIDE_IP') and in_array($_SERVER['REMOTE_ADDR'],explode(':',CONFIDE_IP)) );
 }
+
+/**
+ * Komt de request van Feut (irc-bot)?
+ */
 function isFeut(){
 	return isset($_SERVER['REMOTE_ADDR']) and defined('FEUT_IP') and $_SERVER['REMOTE_ADDR']==FEUT_IP;
 }
+
+/**
+ * Is de huidige server syrinx?
+ */
+function isSyrinx(){
+	return stristr($_SERVER['SERVER_NAME'], 'syrinx')!==false;
+}
+
 function getDateTime(){
 	return date('Y-m-d H:i:s');
 }
@@ -138,6 +154,8 @@ function pr($sString, $cssID='pubcie_debug'){
 		echo '<pre id="'.$cssID.'">'.print_r($sString, true).'</pre>';
 	}
 }
+
+
 function namen2uid($sNamen, $filter='leden'){
 
 	$return=array();
@@ -205,6 +223,7 @@ function strNthPos($haystack, $needle, $nth = 1){
 	   $offset = strpos($haystack, $needle, $offset) + 1;
    return strpos($haystack, $needle, $offset) - 1;
 }
+
 /*
  * Geeft een array terug met alleen de opgegeven keys.
  *

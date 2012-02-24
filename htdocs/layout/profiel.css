@@ -53,45 +53,67 @@
 
 p.profielBewerken .pasfoto{ float: right; margin-left: 10px;}
 
-.profielForm label{
+.Formulier label{
 	width: 150px;
 	float: left;
 }
-.profielForm input.regular{
+.Formulier input.regular{
 	width: 250px;
 }
-.profielForm input.uid{
-	width: 80px;
+.Formulier input.UidField{
+	width: 70px;
 }
-.profielForm .uidPreview{
+.Formulier input.LidField{
+	width: 90px;
+}
+
+.Formulier textarea{
+	width: 250px;
+}
+
+.Formulier .UBBpreview{
+	margin-left: 156px;
+}
+.Formulier .knop{
+	float: right;
+	width: 80px;
+	text-align: center;
+	padding: 2px;
+	margin-right: 0;
+	
+}
+.Formulier .uidPreview{
 	display: inline;
 	padding-left: 10px;
 }
-.profielForm .veld, .profielForm h3, .profielForm .password{
+.Formulier .veld, .Formulier h3, .Formulier .password{
 	clear: both;
 }
-.profielForm .veld, .profielForm .submit{
+.Formulier .veld, .Formulier .submit{
 	margin-left: 10px;
 	padding: 1px 2px;
 	border: 1px solid white;
 }
 
-.profielForm .veld:hover{
+.Formulier .veld{
+	overflow: auto;
+}
+.Formulier .veld:hover{
 	border: 1px  solid #ddd;
 	background-color: #eee;
 }
-.profielForm .metfouten{
+.Formulier .metfouten{
 	background-color: #FFC3CE;
 	padding: 4px 2px;
 }
-.profielForm .veld .waarschuwing{
+.Formulier .veld .waarschuwing{
 	float: right;
 	margin-right: 10px;
 }
-.profielForm .password{
+.Formulier .password{
 	padding: 2px 1px;
 }
-.profielForm h3{
+.Formulier h3{
 	margin-top: 8px;
 	margin-bottom: 1px;
 }

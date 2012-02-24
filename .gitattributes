@@ -228,6 +228,7 @@ htdocs/pagina.php -text
 htdocs/pauper.php -text
 htdocs/robots.txt -text
 htdocs/su.php -text
+htdocs/testform.php -text
 htdocs/tools/.htaccess -text
 htdocs/tools/ajax/ajax.php -text
 htdocs/tools/ajax/login.php -text
@@ -740,6 +741,7 @@ lib/maaltijden/maaltijdcontent.class.php -text
 lib/maaltijden/maaltijdlijstcontent.class.php -text
 lib/maaltijden/maaltijdvoorkeurcontent.class.php -text
 lib/maaltijden/maaltrack.class.php -text
+lib/mail.class.php -text
 lib/mededelingen/mededeling.class.php -text
 lib/mededelingen/mededelingcategorie.class.php -text
 lib/mededelingen/mededelingcontent.class.php -text
@@ -941,6 +943,7 @@ lib/templates/maaltijdketzer/maaltijdketzer.tpl -text
 lib/templates/maaltijdketzer/menu.tpl -text
 lib/templates/maaltijdketzer/saldi-updater.tpl -text
 lib/templates/maaltijdketzer/voorkeuren.tpl -text
+lib/templates/mails/nieuwwachtwoord.mail -text
 lib/templates/mededelingen/lijst.tpl -text
 lib/templates/mededelingen/mededeling.tpl -text
 lib/templates/mededelingen/mededelingen.tpl -text

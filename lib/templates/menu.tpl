@@ -67,7 +67,6 @@
 				{literal}
 				<script>
 					jQuery(document).ready(function($){
-						
 						$('#adminding').click(function(){
 							$(this).children('div').toggle();
 						});
@@ -114,7 +113,7 @@
 <div id="submenu" onmouseover="ResetTimer()" onmouseout="StartTimer()">
 	<div id="submenuitems">
 		{foreach from=$items item=item}
-			<div id="sub{$item.ID}"{if $item.huidig} class="active"{/if}>
+			<div id="sub{$item.ID}" {if $item.huidig}class="active"{/if}>
 				{assign var='showseperator' value=false}
 				{foreach from=$item.subitems item=subitem}
 					{if $showseperator} <img src="http://plaetjes.csrdelft.nl/layout/submenuseperator.gif" alt="|" /> {/if}

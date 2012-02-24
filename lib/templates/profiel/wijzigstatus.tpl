@@ -13,9 +13,9 @@
 	<p>
 		Na het selecteren van lidstatus verschijnen de juiste velden, die u verder mag aanpassen. Bij opslaan worden ook overbodige gegevens verwijderd en abonnementen uitgezet, onomkeerbaar, opletten dus!
 	</p>
-
-
-	<form action="/communicatie/profiel/{$profiel->getUid()}/{$actie}/" id="statusForm" class="form" method="post">
+	{$profiel->getFormulier()->view()}
+	
+	{*<form action="/communicatie/profiel/{$profiel->getUid()}/{$actie}/" id="statusForm" class="form" method="post">
 		{foreach from=$profiel->getFields('formStatus') item=field}
 			{$field->view()}
 			{if $field->getName()=='postfix'}
@@ -49,5 +49,5 @@
 			<input type="reset" value="reset formulier" />
 			<a class="knop" href="/communicatie/profiel/{$profiel->getUid()}">Annuleren</a>
 		</div>
-	</form>
+	</form>*}
 </div>

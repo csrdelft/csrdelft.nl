@@ -193,6 +193,7 @@
 				{/if}
 
 				{if $saldografiek!=''}
+					<br />
 					{include file='profiel/_saldografiek.tpl'}
 				{/if}
 			</div>
