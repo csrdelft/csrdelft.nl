@@ -38,7 +38,8 @@ class Memcached{
 	}
 	public function delete($key){
 		if($this->connected){
-			return $this->memcache->delete($key);
+			//second parameter is deprecated, but leaving out shows warnings. http://www.php.net/manual/en/memcache.delete.php#98826
+			return $this->memcache->delete($key, 0);
 		}
 	}
 	public function getStats(){
