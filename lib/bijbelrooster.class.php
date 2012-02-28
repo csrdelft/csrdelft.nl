@@ -37,7 +37,7 @@ class Bijbelrooster extends SimpleHTML{
 			"Groot Nieuws Bijbel" => "id17=1",
 			"Willibrordvertaling"=>"id35=1"
 		);
-		$link = 'http://www.biblija.net/biblija.cgi?m='.urlencode($link).'&'.$bijbelvertalingen[Instelling::get('algemeen_bijbel')].'&l=nl&set=10';
+		$link = 'http://www.biblija.net/biblija.cgi?m='.urlencode($stukje).'&'.$bijbelvertalingen[Instelling::get('algemeen_bijbel')].'&l=nl&set=10';
 		
 		return '<a href='.$link.'>'.$stukje.'</a>';
 	}
