@@ -30,7 +30,7 @@ function verbreedSaldografiek(cie){
 jQuery(document).ready(function($) {
 
 	jQuery("#statusForm #field_status").click( function() {
-
+		
 		var status = $(this).val();
 		switch(status){
 			case "S_OUDLID":
@@ -112,7 +112,7 @@ jQuery(document).ready(function($) {
 	});
 
 	//Originele waarden van een aantal velden opslaan in een array, zodat
-	//we ze later nog kunnen raadplegen.	
+	//we ze later nog kunnen raadplegen.
 	var original=[];
 	$('#field_permissies, #field_kring, #field_lidafdatum_jaar, #field_lidafdatum_maand, #field_lidafdatum_dag, #field_status')
 		.each(function(){

@@ -390,7 +390,7 @@ $('.wantsPreview').each(function(){
 		$('#preview_'+fieldname).show();
 	};
 	
-	textarea.wrap('<div class="UBBpreview regular"  style="width: '+(textarea.width()+6)+'px" />')
+	textarea.wrap('<div class="UBBpreview regular"  style="width: '+textarea.width()+'px" />')
 			.before('<div id="preview_'+fieldname+'" class="preview" style="display: none;"></div>')
 			.after($('<a class="knop">voorbeeld</a>').click(triggerPreview));
 

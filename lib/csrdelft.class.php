@@ -65,8 +65,6 @@ class csrdelft extends SimpleHTML {
 		if($this->_prefix=='owee_'){
 			$this->addStylesheet('owee.css');
 		}
-
-		
 	}
 
 	function addStylesheet($sheet){
@@ -79,7 +77,7 @@ class csrdelft extends SimpleHTML {
 	function getStylesheets(){		return $this->_stylesheets; }
 
 
-	/*
+	/**
 	 * Zorg dat de template een script inlaadt. Er zijn twee verianten:
 	 *
 	 * - lokaal:

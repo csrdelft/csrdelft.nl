@@ -211,7 +211,7 @@ class Profiel {
 		$mail=new TemplatedMail($lid->getEmail(), 'Nieuw wachtwoord voor de C.S.R.-stek', $template);
 		$mail->setBcc("pubcie@csrdelft.nl");
 		$mail->setValues($values);
-
+		
 		return
 			MySql::instance()->query($sNieuwWachtwoord) AND
 			LidCache::flushLid($uid) AND
@@ -219,7 +219,7 @@ class Profiel {
 			$mail->send();
 
 	}
-	
+
 	/**
 	 * Geef een array terug met de velden in het profiel in $fields als
 	 * ze niet leeg zijn. Velden krijgen veldnaam als key.
@@ -447,9 +447,7 @@ class ProfielStatus extends Profiel{
 		$form[]=new UidField('echtgenoot', $profiel['echtgenoot'], 'Echtgenoot (lidnummer):');
 		$form[]=new InputField('adresseringechtpaar',$profiel['adresseringechtpaar'], 'Tenaamstelling post echtpaar:',250);
 		$form[]=new DatumField('sterfdatum', $profiel['sterfdatum'], 'Overleden op:');
-		
-		$form[]=new SubmitButton('opslaan', '<a class="knop" href="/communicatie/profiel/'.$this->getUid().'">Annuleren</a>');
-
+		$form[]=new SubmitButton();
 		$this->form=new Formulier('/communicatie/profiel/'.$this->getUid().'/wijzigStatus/', $form);
 
 		$this->form->cssID='statusForm';
