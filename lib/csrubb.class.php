@@ -429,6 +429,10 @@ src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
 
 		$fotoalbumtag=new FotoalbumUbbContent($album);
 
+		if($this->quote_level>0 || isset($parameters['compact'])){
+			$fotoalbumtag->makeCompact();
+		}
+		
 		if(isset($parameters['rows'])){
 			$fotoalbumtag->setRows((int)$parameters['rows']);
 		}

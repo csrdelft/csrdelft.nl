@@ -45,6 +45,7 @@ class FotalbumZijbalkContent extends SimpleHtml{
 }
 class FotoalbumUbbContent extends SimpleHTML{
 
+	private $compact=false;	//compact or expanded tag.
 	private $rows=2;		//number of rows
 	private $per_row=7;		//images per row
 
@@ -64,6 +65,10 @@ class FotoalbumUbbContent extends SimpleHTML{
 		echo $this->getHTML();
 	}
 
+	public function makeCompact(){
+		$this->compact=true;
+	}
+	
 	public function setRows($rows){
 		$this->rows=$rows;
 	}
@@ -173,12 +178,12 @@ class FotoalbumUbbContent extends SimpleHTML{
 		}
 		return $grid;
 	}
-
-	public function getHTML(){
+	public function getGridHtml(){
 		$grid=$this->getGrid();
 		$albumurl=$this->album->getPad();
 
 		$delta=$this->picsize+(2*$this->rowmargin);
+		
 		$ret='<div class="images" style="height: '.(count($grid)*$delta).'px">';
 
 		foreach($grid as $row => $rowcontents){
@@ -195,11 +200,25 @@ class FotoalbumUbbContent extends SimpleHTML{
 			}
 		}
 		$ret.='</div>';
+		return $ret;
+	}
 
+	public function getHTML(){
+		$albumurl=$this->album->getPad();
+		
+		if($this->compact){
+			$content='<a href="'.$albumurl.'"><img src="'.$this->album->getThumbURL().'" class="compact" /></a><div class="clear"></div>';
+		}else{
+			$content=$this->getGridHtml();
+		}
+		
 		return
 			'<div class="ubb_block ubb_fotoalbum">
-				<h2>'.$this->album->getBreadcrumb().' &raquo; '.mb_htmlentities($this->album->getNaam()).'</h2>
-				'.$ret.'
+				<h2>
+					'.$this->album->getBreadcrumb().'
+					&raquo; <a href="'.$albumurl.'">'.mb_htmlentities($this->album->getNaam()).'</a>
+				</h2>
+				'.$content.'
 			</div>';
 	}
 }
