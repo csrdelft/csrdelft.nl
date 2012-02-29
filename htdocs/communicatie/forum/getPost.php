@@ -14,14 +14,21 @@ if(isset($_GET['post'])){
 	$iPostID=(int)$_GET['post'];
 	$forumonderwerp=ForumOnderwerp::loadByPostID($iPostID);
 
+	$citaat=isset($_GET['citaat']);
 
-	if($forumonderwerp->magCiteren()){
+	// Geef bericht terug als
+	// - er gevraagd wordt om een citaat en de gebruiker deze post mag citeren.
+	// of
+	// - de gebruiker deze post mag bewerken.
+	if(	($forumonderwerp->magCiteren() && $citaat) OR
+		$forumonderwerp->magBewerken($iPostID)
+	){
 		$post=$forumonderwerp->getSinglePost($iPostID);
 
 		if(!$loginlid->hasPermission('P_LOGGED_IN')){
 			$post=CsrUBB::filterPrive($post);
 		}
-		$citaat=isset($_GET['citaat']);
+	
 		if($citaat){ echo '[citaat='.$post['uid'].']'; }
 		echo $post['tekst'];
 		if($citaat){ echo '[/citaat]'; }
