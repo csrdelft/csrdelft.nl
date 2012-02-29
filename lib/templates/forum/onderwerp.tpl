@@ -169,7 +169,7 @@
 		<td class="forumtekst">
 			{if $onderwerp->magToevoegen()}
 				<form method="post" action="/communicatie/forum/toevoegen/{$onderwerp->getID()}" id="forumReageren">
-					<fieldset>
+					<fieldset style="position: relative;">
 						{* berichtje weergeven voor niet-ingeloggede gebruikers dat ze een naam moeten vermelden. *}
 						{if $onderwerp->needsModeration()}
 							<strong>Uw bericht wordt pas geplaatst nadat het bekeken en goedgekeurd is door de <a href="http://csrdelft.nl/actueel/groepen/Commissies/PubCie/">PubCie</a>.
@@ -208,7 +208,19 @@
 {if $loginlid->hasPermission('P_LEDEN_READ')}
 	{literal}
 	<script type="text/javascript">
-	jQuery(document).ready(function($) {
+	jQuery(document).ready(function($){
+		$('#forumBericht').keyup(function(event){
+			if(event.keyCode==13){ //enter == 13
+				var textarea=$(this);
+				if(/\[.*\]/.test(textarea.val())){
+					//detected ubb tag use, message and trigger preview.
+					previewPost('forumBericht', 'berichtPreview');
+					
+					textarea.before('<div style="width: 130px; position: absolute; left: -141px; color: white; background-color: #f66; padding: 4px 8px 4px 4px; text-align: right; margin-top: 1px;">UBB-tags gevonden:<br /> controleer het voorbeeld.</div>');
+					textarea.css('border-color', '#f66');
+				}
+			}
+		});
 		$('.togglePasfoto').each(function(){
 			var postid=$(this).attr('id').substr(1).split('-')[1];
 			var pasfoto=$('#p'+postid);
