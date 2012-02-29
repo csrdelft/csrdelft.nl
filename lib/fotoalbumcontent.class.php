@@ -207,6 +207,7 @@ class FotoalbumUbbContent extends SimpleHTML{
 		$albumurl=$this->album->getPad();
 		
 		if($this->compact){
+			//compacte versie van de tag is alleen een thumbnail.
 			$content='<a href="'.$albumurl.'"><img src="'.$this->album->getThumbURL().'" class="compact" /></a><div class="clear"></div>';
 		}else{
 			$content=$this->getGridHtml();
@@ -222,6 +223,7 @@ class FotoalbumUbbContent extends SimpleHTML{
 			</div>';
 	}
 }
+
 class FotoalbumContent extends SimpleHTML{
 
 	private $_fotoalbum;
