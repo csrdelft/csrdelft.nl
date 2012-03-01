@@ -210,15 +210,20 @@
 	<script type="text/javascript">
 	jQuery(document).ready(function($){
 		$('#forumBericht').keyup(function(event){
+			var textarea=$(this);
 			if(event.keyCode==13){ //enter == 13
-				var textarea=$(this);
 				if(/\[.*\]/.test(textarea.val())){
 					//detected ubb tag use, message and trigger preview.
 					previewPost('forumBericht', 'berichtPreview');
-					
-					textarea.before('<div style="width: 130px; position: absolute; left: -141px; color: white; background-color: #f66; padding: 4px 8px 4px 4px; text-align: right; margin-top: 1px;">UBB-tags gevonden:<br /> controleer het voorbeeld.</div>');
-					textarea.css('border-color', '#f66');
+
+					if($('#ubb_melding').length==0){
+						textarea.before('<div id="ubb_melding">UBB-tags gevonden:<br /> controleer het voorbeeld.</div>');
+						textarea.css('border-color', '#f66');
+					}
 				}
+			}
+			if($('#ketzer_melding').length==0 && /ketzer/.test(textarea.val())){
+				textarea.before('<div id="ketzer_melding">Ketzer hebben?<br /><a href="/actueel/groepen/Ketzers" target="_blank">&raquo; Maak er zelf een aan.</a></div>');
 			}
 		});
 		$('.togglePasfoto').each(function(){
