@@ -765,3 +765,7 @@ div.preview.pagina{ padding: 2px; width: 100%;}
 }
 .ubb_slideshow .paging a:hover {
 	text-decoration: underline;}
+	
+html{
+	background: url('http://plaetjes.csrdelft.nl/layout/roze.png') !important;
+}

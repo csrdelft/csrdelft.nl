@@ -138,3 +138,7 @@ body{
 #forumtabel th{
 	background: #f9b233 !important;
 }
+
+body{
+	background-color: transparent !important;
+}
