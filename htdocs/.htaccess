@@ -33,3 +33,4 @@ RewriteRule ^endsu/?$ su.php?actie=endSu
 
 # Facebook link voor BINAS voor de Owee(Cie)
 RewriteRule ^facebook/?$   http://www.facebook.com/group.php?gid=10294513917&ref=ts
+

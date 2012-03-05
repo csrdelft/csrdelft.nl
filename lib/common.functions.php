@@ -95,7 +95,7 @@ function is_utf8($string) {
    )*$%xs', $string);
 
 } // function is_utf8
-function opConfide() {
+function opConfide() {//echo $_SERVER['REMOTE_ADDR'];
 	return ( isset($_SERVER['REMOTE_ADDR']) and defined('CONFIDE_IP') and in_array($_SERVER['REMOTE_ADDR'],explode(':',CONFIDE_IP)) );
 }
 function isFeut(){

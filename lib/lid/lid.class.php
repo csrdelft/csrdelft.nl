@@ -119,8 +119,8 @@ class Lid implements Serializable, Agendeerbaar{
 
 		$ldap=new LDAP();
 
-		#alleen voor ledenldap of oudledenldap
-		if(!in_array($this->getStatus(), array('S_NOBODY', 'S_OVERLEDEN', 'S_CIE'))){
+		# Alleen leden, gastleden, novieten en kringels staan in LDAP ( en Knorrie öO~ )
+		if(preg_match('/^S_(LID|GASTLID|NOVIET|KRINGEL|CIE)$/', $this->getStatus()) or $this->getUid()=='9808') {
 
 			# ldap entry in elkaar snokken
 			$entry = array();
@@ -157,10 +157,6 @@ class Lid implements Serializable, Agendeerbaar{
 			foreach($entry as $i => $e){
 				if($e == ''){ unset ($entry[$i]); }
 			}
-		}
-
-		# Alleen leden, gastleden, novieten en kringels staan in ledenLDAP ( en Knorrie öO~ )
-		if(preg_match('/^S_(LID|GASTLID|NOVIET|KRINGEL)$/', $this->getStatus()) or $this->getUid()=='9808') {
 
 			# bestaat deze uid al in ldap? dan wijzigen, anders aanmaken
 			if($ldap->isLid($entry['uid'])){
@@ -174,23 +170,6 @@ class Lid implements Serializable, Agendeerbaar{
 				$ldap->removeLid($this->getUid());
 			}
 		}
-
-		# Alleen oudleden staan in oudledenLDAP
-		if(preg_match('/^S_(OUDLID|ERELID)$/', $this->getStatus())) {
-
-			# bestaat deze uid al in ldap? dan wijzigen, anders aanmaken
-			if($ldap->isOudlid($entry['uid'])){
-				$ldap->modifyOudlid($entry['uid'], $entry);
-			}else{
-				$ldap->addOudlid($entry['uid'], $entry);
-			}
-		}else{
-			# Als het een andere status is even kijken of de uid in ldap voorkomt, zo ja wissen
-			if($ldap->isOudlid($this->getUid())){
-				$ldap->removeOudlid($this->getUid());
-			}
-		}
-
 		$ldap->disconnect();
 		return true;
 	}
