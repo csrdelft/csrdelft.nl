@@ -666,8 +666,10 @@ div.preview.pagina{ padding: 2px; width: 100%;}
 .ubb_groep .groepleden table.leden{ width: 100%; }
 .ubb_groep .groepleden table.leden td{ padding: 0 5px 0 0; text-align: left; }
 .ubb_groep .groepleden a.toonmeer{ float: left; }
+.ubb_groep .groepleden .editbox{ display:none; }
 .ubb_groep .pasfotomatrix{ margin-left: 0; }
 .ubb_groep .aanmelden{ clear: left; padding-top: 6px; }
+.ubb_groep .aanmelden .pasfoto{ margin-right: 10px; }
 .ubb_groep .pasfoto{ width: 48px; height: 64px; float: left; border: 1px solid grey; margin: 0 0 5px 5px; }
 
 .ubb_document{ width: 450px; padding: 4px 6px; display: block; text-align: left; }

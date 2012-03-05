@@ -89,7 +89,7 @@
 	{foreach from=$onderwerp->getPosts() item='bericht' name='berichten'}
 		<tr>
 			<td class="auteur">
-				<span tabindex="0" class="togglePasfoto" id="t{$bericht.uid}-{$bericht.id}" title="Toon pasfoto van dit lid">&raquo;</span>&nbsp;<a href="/communicatie/forum/reactie/{$bericht.id}" class="postlink" title="Link naar deze post">&rarr;</a>
+				<span tabindex="0" {if $loginlid->hasPermission('P_LEDEN_READ')}class="togglePasfoto"{/if} id="t{$bericht.uid}-{$bericht.id}">&raquo;</span>&nbsp;<a href="/communicatie/forum/reactie/{$bericht.id}" class="postlink" title="Link naar deze post">&rarr;</a>
 				{$bericht.uid|csrnaam:'user'}<br />
 				<span class="moment">{$bericht.datum|reldate}</span>
 				<br />
@@ -169,7 +169,7 @@
 		<td class="forumtekst">
 			{if $onderwerp->magToevoegen()}
 				<form method="post" action="/communicatie/forum/toevoegen/{$onderwerp->getID()}" id="forumReageren">
-					<fieldset style="position: relative;">
+					<fieldset>
 						{* berichtje weergeven voor niet-ingeloggede gebruikers dat ze een naam moeten vermelden. *}
 						{if $onderwerp->needsModeration()}
 							<strong>Uw bericht wordt pas geplaatst nadat het bekeken en goedgekeurd is door de <a href="http://csrdelft.nl/actueel/groepen/Commissies/PubCie/">PubCie</a>.
@@ -204,51 +204,4 @@
 {* linkjes voor het forum nogeens weergeven, maar alleen als het aantal berichten in het onderwerp groter is dan 4 *}
 {if $onderwerp->getSize()>4}
 	{$smarty.capture.navlinks}
-{/if}
-{if $loginlid->hasPermission('P_LEDEN_READ')}
-	{literal}
-	<script type="text/javascript">
-	jQuery(document).ready(function($){
-		$('#forumBericht').keyup(function(event){
-			var textarea=$(this);
-			if(event.keyCode==13){ //enter == 13
-				if(/\[.*\]/.test(textarea.val())){
-					//detected ubb tag use, message and trigger preview.
-					previewPost('forumBericht', 'berichtPreview');
-
-					if($('#ubb_melding').length==0){
-						textarea.before('<div id="ubb_melding">UBB-tags gevonden:<br /> controleer het voorbeeld.</div>');
-						textarea.css('border-color', '#f66');
-					}
-				}
-			}
-			if($('#ketzer_melding').length==0 && /ketzer/.test(textarea.val())){
-				textarea.before('<div id="ketzer_melding">Ketzer hebben?<br /><a href="/actueel/groepen/Ketzers" target="_blank">&raquo; Maak er zelf een aan.</a></div>');
-			}
-		});
-		$('.togglePasfoto').each(function(){
-			var postid=$(this).attr('id').substr(1).split('-')[1];
-			var pasfoto=$('#p'+postid);
-			if(pasfoto.html()!=''){
-				pasfoto.toggleClass('verborgen');
-				$(this).html('v');
-			}
-		});
-		$('.togglePasfoto').click(function(){
-			var parts=$(this).attr('id').substr(1).split('-');
-			var pasfoto=$('#p'+parts[1]);
-
-			if(pasfoto.html()==''){
-				pasfoto.html('<img src="/tools/pasfoto/'+parts[0]+'.png" class="lidfoto" />');
-			}
-			if(!pasfoto.hasClass('verborgen')){
-				$(this).html("&raquo;");
-			}else{
-				$(this).html('v');
-			}
-			pasfoto.toggleClass('verborgen');
-		});
-	});
-	</script>
-	{/literal}
 {/if}
