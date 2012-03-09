@@ -348,15 +348,12 @@ class Lid implements Serializable, Agendeerbaar{
 		return false;
 	}
 	public function getPermissies(){return $this->profiel['permissies']; }
+
 	//Geeft object Status (door de magic functie __toString kan object een string geven als dat gevraagd wordt)
-	public function getStatus(){ return $this->profiel['status']; } 
-	// Is het huidige lid 'gewoon' lid?
-	public function isLid(){
-		return in_array($this->getStatus(), array('S_NOVIET', 'S_LID', 'S_GASTLID'));
-	}
-	public function isOudlid(){
-		return in_array($this->getStatus(), array('S_OUDLID', 'S_ERELID'));
-	}
+	public function getStatus(){ return $this->profiel['status']; }
+	
+	public function isLid(){	return $this->getStatus()->isLid(); }
+	public function isOudlid(){ return $this->getStatus()->isOudlid(); }
 
 	public function getEchtgenootUid(){	return $this->profiel['echtgenoot']; }
 	public function getEchtgenoot(){
@@ -602,7 +599,7 @@ class Lid implements Serializable, Agendeerbaar{
 					if($this->profiel['postfix']!=''){
 						$naam.=' '.$this->profiel['postfix'];
 					}
-				}elseif($this->profiel['status']=='S_KRINGEL' OR $this->profiel['status']=='S_NOBODY'){
+				}elseif(in_array($this->profiel['status'], array('S_KRINGEL', 'S_NOBODY'))){
 					if(LoginLid::instance()->hasPermission('P_LEDEN_READ')){
 						$naam=$this->profiel['voornaam'].' ';
 					}else{

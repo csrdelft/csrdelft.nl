@@ -725,6 +725,7 @@ lib/lid/profiel.class.php -text
 lib/lid/profielcontent.class.php -text
 lib/lid/saldi.class.php -text
 lib/lid/stamboomcontent.class.php -text
+lib/lid/status.class.php -text
 lib/lid/verjaardag.class.php -text
 lib/lid/verjaardagcontent.class.php -text
 lib/maaltijden/corveebeheercontent.class.php -text
@@ -881,7 +882,6 @@ lib/smarty/unit_test/templates/index.tpl -text
 lib/smarty/unit_test/templates/parse_math.tpl -text
 lib/smarty/unit_test/templates/parse_obj_meth.tpl -text
 lib/smarty/unit_test/test_cases.php -text
-lib/status.class.php -text
 lib/streeplijstcontent.class.php -text
 lib/templates/agenda/courant.tpl -text
 lib/templates/agenda/icalendar.tpl -text
