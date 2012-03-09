@@ -771,14 +771,15 @@ class Lid implements Serializable, Agendeerbaar{
 	/**
 	 * Voeg een nieuw regeltje in de lid-tabel in met alleen een nieuw lid-nummer.
 	 * PAS OP: niet multi-user safe.
-	 *
-	 * @@Uitslag: waarom is status hier ineens een nieuw soort tekst?
 	 */
 	public static function createNew($lichting, $lidstatus){
 		$db=MySql::instance();
-		$lichtingid=substr($lichting, 2, 2);
-		$query="SELECT max(uid) AS uid FROM lid WHERE LEFT(uid, 2)='".$lichtingid."' LIMIT 1;";
 
+		//lichtingid zijn eerste 2 cijfers van lidnummer
+		$lichtingid=substr($lichting, 2, 2);
+
+		//volgnummer zijn de laatste 2 cijfers van lidnummer
+		$query="SELECT max(uid) AS uid FROM lid WHERE LEFT(uid, 2)='".$lichtingid."' LIMIT 1;";
 		$result=$db->query($query);
 		if($db->numRows($result)==1){
 			$lid=$db->result2array($result);
@@ -789,47 +790,21 @@ class Lid implements Serializable, Agendeerbaar{
 		if($volgnummer>99){
 			throw new Exception('Teveel leden dit jaar!');
 		}
-
+		//lidnummer samenstellen
 		$newuid=$lichtingid.sprintf('%02d', $volgnummer);
 
+		//probeer de nieuwe status te maken en zoek daarvoor de permissie
+		$status = new Status($lidstatus);
+		$perm = Status::getDefaultPermission();
+
+		//alleen bij novieten studiejaar invullen
 		$studiejaar = 0;
-		switch($lidstatus){
-			case 'gastlid':
-				$status = 'S_GASTLID';
-				$perm 	= 'P_LID';
-			break;
-			case 'lid':
-				$status = 'S_LID';
-				$perm 	= 'P_LID';
-			break;
-			case 'noviet': 
-				$status = 'S_NOVIET';
-				$perm 	= 'P_LID';
-				$studiejaar = $lichting;
-			break;
-			case 'oudlid':
-				$status = 'S_OUDLID';
-				$perm 	= 'P_OUDLID';
-			break;
-			case 'erelid':
-				$status = 'S_ERELID';
-				$perm 	= 'P_OUDLID';
-			break;
-			case 'kringel':
-				$status = 'S_KRINGEL';
-				$perm 	= 'P_LID';
-			break;
-			case 'exlid':
-				$status = 'S_NOBODY';
-				$perm 	= 'P_NOBODY';
-				$lidstatus = 'Ex-lid';
-			break;
-			default:
-				throw new Exception('Onbekende status.');
+		if($status=='S_NOVIET'){
+			$studiejaar = $lichting;
 		}
 
-		$changelog='Aangemaakt als '.ucfirst($lidstatus).' door [lid='.LoginLid::instance()->getUid().'] op [reldate]'.getDatetime().'[/reldate][br]';
-
+		//opslaan in lid tabel
+		$changelog = 'Aangemaakt als '.$status->getDescription().' door [lid='.LoginLid::instance()->getUid().'] op [reldate]'.getDatetime().'[/reldate][br]';
 
 		$query="
 			INSERT INTO lid (uid, lidjaar, studiejaar, status, permissies, changelog, land, o_land)

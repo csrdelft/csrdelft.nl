@@ -4,7 +4,7 @@ class Status{
 	private $status;
 
 	public function __construct($status){
-		if(!in_array($status, Status::getStatussen())){
+		if(!Status::exists($status)){
 			throw new Exception('Status bestaat niet');
 		}
 		$this->status=$status;
@@ -14,7 +14,8 @@ class Status{
 		return $this->get();
 	}
 
-	public function get(){	return $this->status;	}
+	public function get(){						return $this->status; }
+	static public function exists($sStatus){	return in_array($sStatus, Status::getStatussen()); }
 
 	/**
 	 * Geef array met alle mogelijke statussen
@@ -29,6 +30,7 @@ class Status{
 			'S_CIE'
 		);
 	}
+
 	/**
 	 * Geef array met statusbeschrijvingen met statussen als key
 	 * @return array(
@@ -45,6 +47,23 @@ class Status{
 	}
 
 	/**
+	 * Geef standaard permissie die bij de status hoort
+	 */
+	 static public function getDefaultPermission($sStatus){
+		switch($sStatus){
+			case 'S_KRINGEL':
+			case 'S_NOVIET':
+			case 'S_GASTLID':
+			case 'S_LID': 		return 'P_LID';
+			case 'S_OUDLID':
+			case 'S_ERELID': 	return 'P_OUDLID';
+			case 'S_NOBODY':
+			case 'S_OVERLEDEN': 
+			case 'S_CIE':		return 'P_NOBODY';
+		}
+	}
+
+	/**
 	 * Geef een karakter terug om de status van het huidige lid aan te
 	 * duiden. In de loop der tijd zijn ~ voor kringel en • voor oudlid
 	 * ingeburgerd. Handig om in leden snel te zien om wat voor soort
@@ -52,6 +71,7 @@ class Status{
 	 */
 	public function getChar($sStatus=null){
 		if($sStatus===null){ $sStatus=$this->get(); }
+
 		switch($sStatus){
 			case 'S_OUDLID':	return '•';
 			case 'S_KRINGEL':	return '~';
@@ -69,6 +89,7 @@ class Status{
 	 */
 	public function getDescription($sStatus=null){
 		if($sStatus===null){ $sStatus=$this->get(); }
+
 		switch($sStatus){
 			case 'S_OUDLID': 	return 'Oudlid';
 			case 'S_KRINGEL': 	return 'Kringel';

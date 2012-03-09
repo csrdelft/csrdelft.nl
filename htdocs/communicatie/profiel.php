@@ -6,8 +6,8 @@
 
 /*
  * Even wat uitleg over het toevoegen van nieuwe leden:
- * Door naar de url http://csrdelft.nl/communicatie/profiel/0000/nieuwLid/ te gaan wordt er een
- * nieuw uid aangemaakt in het huidige jaar. Vervolgens wordt de browser meteen naar het
+ * Door naar de url http://csrdelft.nl/communicatie/profiel/2005/nieuw/Lid/ te gaan wordt er een
+ * nieuw uid aangemaakt in het opgegeven jaar en status. Vervolgens wordt de browser meteen naar het
  * bewerken van het nieuwe profiel gestuurd, waar de gegevens van de noviet ingevoerd kunnen
  * worden. De code daarvoor is gelijk aan die van het bewerken van een bestaand profiel, met
  * een ander tekstje erboven. Ook worden de wachtwoordvelden en het bijnaamveld nog niet
@@ -65,9 +65,11 @@ if(!($loginlid->hasPermission('P_LEDEN_READ') or $loginlid->hasPermission('P_OUD
 			}
 		break;
 		case 'nieuw':
+			//maak van een standaard statusstring van de input
+			$status = 'S_'.strtoupper($status);
 			if(!
 				($loginlid->hasPermission('P_ADMIN,P_LEDEN_MOD') OR
-				($status=='noviet' AND $loginlid->hasPermission('groep:novcie')))
+				($status=='S_NOVIET' AND $loginlid->hasPermission('groep:novcie')))
 			  ){
 
 				// nieuwe leden mogen worden aangemaakt door P_ADMIN,P_LEDEN_MOD,
@@ -76,9 +78,9 @@ if(!($loginlid->hasPermission('P_LEDEN_READ') or $loginlid->hasPermission('P_OUD
 			}
 			try{
 				//maak het nieuwe uid aan.
-				$nieuwUid = Lid::createNew($_GET['uid'],$status);
+				$nieuwUid = Lid::createNew($_GET['uid'], $status);
 
-				if($status=='noviet'){
+				if($status=='S_NOVIET'){
 					$bewerkactie = 'novietBewerken';
 				}else{
 					$bewerkactie = 'bewerken';
