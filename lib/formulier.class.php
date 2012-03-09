@@ -895,7 +895,7 @@ class KerkField extends SelectField{
  */
 class DatumField extends FormField{
 	protected $maxyear;
-	
+
 	public function __construct($name, $value, $description, $maxyear=null){
 		parent::__construct($name, $value, $description);
 		if($maxyear===null){
@@ -911,7 +911,7 @@ class DatumField extends FormField{
 	public function getJaar(){ return $_POST[$this->name.'_jaar']; }
 	public function getMaand(){ return $_POST[$this->name.'_maand']; }
 	public function getDag(){ return $_POST[$this->name.'_dag']; }
-	
+
 	public function getValue(){
 		if($this->isPosted()){
 			return $this->getJaar().'-'.$this->getMaand().'-'.$this->getDag();
@@ -927,12 +927,12 @@ class DatumField extends FormField{
 			$this->error='Ongeldige datum';
 		}elseif(substr($this->getValue(), 0, 4)>$this->maxyear){
 			$this->error='Er kunnen geen data later dan '.$this->maxyear.' worden weergegeven';
-		}elseif(!checkdate($this->getMaand(), $this->getDag(), $this->getJaar())){
+		}elseif($this->getValue()!='0000-00-00' AND !checkdate($this->getMaand(), $this->getDag(), $this->getJaar())){
 			$this->error='Datum bestaat niet';
 		}
 		return $this->error=='';
 	}
-	
+
 	public function view(){
 		echo $this->getDiv();
 		echo $this->getLabel();
@@ -941,7 +941,7 @@ class DatumField extends FormField{
 		$years=range(1940, $this->maxyear);
 		$mounths=range(1,12);
 		$days=range(1,31);
-		
+	
 		//als de datum al nul is, moet ie dat ook weer kunnen worden...
 		if($this->getValue()=='0000-00-00' OR $this->getValue()==0){
 			$years[]='0000';
@@ -958,7 +958,7 @@ class DatumField extends FormField{
 			echo '>'.$value.'</option>';
 		}
 		echo '</select>&nbsp;';
-		
+
 		echo '<select id="field_'.$this->name.'_maand" name="'.$this->name.'_maand" '.$this->getInputAttribute('class').' />';
 		foreach($mounths as $value){
 			$value=sprintf('%02d', $value);
@@ -966,11 +966,11 @@ class DatumField extends FormField{
 			if($value==substr($this->value, 5, 2)){
 				echo 'selected="selected" ';
 			}
-			
+
 			echo '>'.$value.'</option>';
 		}
 		echo '</select>&nbsp;';
-		
+
 		echo '<select id="field_'.$this->name.'_dag" name="'.$this->name.'_dag" '.$this->getInputAttribute('class').' />';
 		foreach($days as $value){
 			$value=sprintf('%02d', $value);

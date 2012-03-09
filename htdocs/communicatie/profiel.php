@@ -94,7 +94,7 @@ if(!($loginlid->hasPermission('P_LEDEN_READ') or $loginlid->hasPermission('P_OUD
 			}
 			$profiel=new ProfielStatus($uid, $actie);
 
-			if($profiel->isPosted() AND $profiel->valid() AND $profiel->save()){
+			if($profiel->valid() AND $profiel->save()){
 				header('location: '.CSR_ROOT.'communicatie/profiel/'.$uid);
 				exit;
 			}else{

@@ -29,8 +29,8 @@
 				</div>
 			</div>
 			{if $melding!=''}{$melding}<br />{/if}
-			<h1 title="Lid-status: {$profiel->getStatusDescription()}">
-				<div class="status">{if !$profiel->isLid()}{$profiel->getStatusChar()}{/if}&nbsp;</div>
+			<h1 title="Lid-status: {$profiel->getStatus()->getDescription()}">
+				<div class="status">{if !$profiel->isLid()}{$profiel->getStatus()->getChar()}{/if}&nbsp;</div>
 				{$profiel->getNaam('full', 'plain')}
 			</h1>
 		</div>
@@ -134,7 +134,7 @@
 						<a href="/communicatie/lijst.php?q=lichting:{$profhtml.lidjaar}&amp;status=ALL" title="Bekijk de leden van lichting {$profhtml.lidjaar}">{$profhtml.lidjaar}</a>
 					{/if}
 					{if $profiel->isOudlid() AND $profhtml.lidafdatum!='0000-00-00'} tot {$profhtml.lidafdatum|substr:0:4}{/if}<br />
-				<div class="label">Status:</div> {$profiel->getStatusDescription()}<br />
+				<div class="label">Status:</div> {$profiel->getStatus()->getDescription()}<br />
 				<br />
 
 				{if $profiel->isOudlid()}

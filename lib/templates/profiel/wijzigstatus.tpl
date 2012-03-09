@@ -5,7 +5,7 @@
 			<h1>Lidstatus wijzigen</h1>
 			<div class="lidgegevens">
 				<label for="">Naam:</label>{$profiel->getUid()|csrnaam:'full'}<br />
-				<label for="">Huidige status:</label>{$profiel->getStatusDescription()}
+				<label for="">Huidige status:</label>{$profiel->getStatus()->getDescription()}
 			</div>
 		</div>
 	</div>

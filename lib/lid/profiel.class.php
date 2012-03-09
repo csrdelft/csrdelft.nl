@@ -74,21 +74,11 @@ class Profiel {
 	 * 
 	 */
 	public function save(){
-		foreach($this->form->getFields() as $field){
-			if($field instanceof FormField){
-				//als een wachtwoordveld leeg is doen we er niets mee
-				if($field instanceof PassField AND $field->getValue()==''){ continue; }
-				//is het wel een wijziging?
-				if($field->getValue()!=$this->lid->getProperty($field->getName())){
-					$this->bewerktLid->setProperty($field->getName(), $field->getValue());
-				}
-			}
-		}
 
 		if(count($this->diff())>0){
 			$this->bewerktLid->logChange($this->changelog());
 		}
-		
+
 		if($this->bewerktLid->save()){
 			try{
 				$this->bewerktLid->save_ldap();
@@ -243,13 +233,6 @@ class ProfielBewerken extends Profiel {
 		$this->createFormulier();
 	}
 
-
-	public function save(){
-		$this->changelog[]='Bewerking van [lid='.LoginLid::instance()->getUid().'] op [reldate]'.getDatetime().'[/reldate][br]';
-
-		return parent::save();
-	}
-	
 	/**
 	 * Alle profielvelden die bewerkt kunnen worden hier definieren.
 	 * Als we ze hier toevoegen, dan verschijnen ze ook automagisch in het profiel-bewerkding,
@@ -392,7 +375,7 @@ class ProfielBewerken extends Profiel {
 		
 		$this->form->cssID='profielForm';
 	}
-	
+
 	/**
 	 * We defenieren een valid-functie voor deze profieleditpagina.
 	 * De velden die we gebruiken willen graag een lid hebben om bepaalde
@@ -401,6 +384,24 @@ class ProfielBewerken extends Profiel {
 	public function valid(){
 		return $this->form->valid($this->lid);
 	}
+
+	public function save(){
+		$this->changelog[]='Bewerking van [lid='.LoginLid::instance()->getUid().'] op [reldate]'.getDatetime().'[/reldate]';
+
+		foreach($this->form->getFields() as $field){
+			if($field instanceof FormField){
+				//als een wachtwoordveld leeg is doen we er niets mee
+				if($field instanceof PassField AND $field->getValue()==''){ continue; }
+				//is het wel een wijziging?
+				if($field->getValue()!=$this->lid->getProperty($field->getName())){
+					$this->bewerktLid->setProperty($field->getName(), $field->getValue());
+				}
+			}
+		}
+
+		return parent::save();
+	}
+
 }
 
 /**
@@ -432,10 +433,9 @@ class ProfielStatus extends Profiel{
 			//niet admin mag geen beheerpermissies aanpassen
 			$perm = array($permbeheer[$profiel['permissies']],$permbeheer[$profiel['permissies']]);
 		}
-		
+
 		//stati
-		//@@Uitslag: waarom niet gebruik maken van Lid::getStatusDescription()
-		$status = array('S_LID'=>'Lid', 'S_GASTLID'=>'Gastlid', 'S_NOVIET'=>'Noviet', 'S_OUDLID'=>'Oudlid', 'S_ERELID'=>'Erelid', 'S_KRINGEL'=>'Kringel', 'S_NOBODY'=>'Ex-lid', 'S_OVERLEDEN'=>'Overleden', 'S_CIE'=>'Commissie & in LDAP adresboek');
+		$status = Status::getAllDescriptions();
 
 		//status-select is eerste veld omdat die bij opslaan als eerste uitgelezen moet worden.
 		$form[]=new SelectField('status', $profiel['status'], 'Lidstatus', $status);
@@ -448,11 +448,19 @@ class ProfielStatus extends Profiel{
 		$form[]=new InputField('adresseringechtpaar',$profiel['adresseringechtpaar'], 'Tenaamstelling post echtpaar:',250);
 		$form[]=new DatumField('sterfdatum', $profiel['sterfdatum'], 'Overleden op:');
 		$form[]=new SubmitButton();
-		$this->form=new Formulier('/communicatie/profiel/'.$this->getUid().'/wijzigStatus/', $form);
 
+		$this->form=new Formulier('/communicatie/profiel/'.$this->getUid().'/wijzigstatus/', $form);
 		$this->form->cssID='statusForm';
 
-		
+	}
+
+	/**
+	 * We defenieren een valid-functie voor deze statuswijzigpagina.
+	 * De velden die we gebruiken willen graag een lid hebben om bepaalde
+	 * dingen te controleren, dus die geven we mee.
+	 */
+	public function valid(){
+		return $this->form->valid($this->lid);
 	}
 
 	/*
@@ -461,14 +469,12 @@ class ProfielStatus extends Profiel{
 	 * acties: verwerkt velden, conditioneert die, zet abo's uit, slaat lidgegevens op en mailt fisci.
 	 */
 	public function save(){
-		$this->changelog[]='Statusverandering van [lid='.LoginLid::instance()->getUid().'] op [reldate]'.getDatetime().'[/reldate][br]';
+		$this->changelog[]='Statusverandering van [lid='.LoginLid::instance()->getUid().'] op [reldate]'.getDatetime().'[/reldate]';
 
 
 		//aan de hand van status bepalen welke POSTed velden worden opgeslagen van het formulier
 		$fieldsToSave = $this->getFieldsToSave($this->form->findByName('status'));
-		
-		
-		
+
 		//relevante gegevens uit velden verwerken
 		foreach($this->form->getFields() as $field){
 			if($field instanceof FormField){
@@ -490,17 +496,21 @@ class ProfielStatus extends Profiel{
 		$oudestatus = $this->lid->getProperty('status');
 		$status = $this->bewerktLid->getProperty('status');
 
+		$oudepermissie = $this->lid->getProperty('permissies');
+		$permissie = $this->bewerktLid->getProperty('permissies');
+
 		//bij niet-admins worden aanpassingen aan permissies ongedaan gemaakt
 		if(!LoginLid::instance()->hasPermission('P_ADMIN')){
-			if(in_array($perm=$this->lid->getProperty('permissies'), array('P_PUBCIE','P_MODERATOR','P_BESTUUR','P_VAB'))){
-				if($perm!=$this->bewerktLid->getProperty('permissies')){
-					$this->bewerktLid->setProperty('permissies', $perm);
+			$adminperms = array('P_PUBCIE','P_MODERATOR','P_BESTUUR','P_VAB');
+			if(in_array($oudepermissie, $adminperms)){
+				if($oudepermissie!=$permissie){
+					$this->bewerktLid->setProperty('permissies', $oudepermissie);
+					$permissie = $this->bewerktLid->getProperty('permissies');
 				}
 			}
 
 			//uitzondering: bij aanpassing door een niet-admin automatisch oudlid-permissies instellen voor *hogere* admins bij lid-af maken.
-			if(in_array($status, array('S_OUDLID','S_ERELID','S_NOBODY')) 
-			AND in_array($this->bewerktLid->getProperty('permissies'), array('P_PUBCIE','P_MODERATOR','P_BESTUUR','P_VAB'))){
+			if(in_array($status, array('S_OUDLID','S_ERELID','S_NOBODY')) AND in_array($permissie, $adminperms)){
 				if($status=='S_NOBODY'){
 					$st = 'P_NOBODY';
 				}else{
@@ -509,13 +519,12 @@ class ProfielStatus extends Profiel{
 				$this->bewerktLid->setProperty('status', $st);
 			}
 		}
-		//maaltijdabo's uitzetten
+		//maaltijdabo's uitzetten (P_ETER is een S_NOBODY die toch een abo mag hebben)
 		$geenabovoor=array('S_OUDLID','S_ERELID','S_NOBODY','S_CIE','S_OVERLEDEN');
-		if(in_array($status, $geenabovoor) AND $this->bewerktLid->getProperty('permissies')!='P_ETER'){
+		if(in_array($status, $geenabovoor) AND $permissie!='P_ETER'){
 			$this->changelog[]=$this->disableMaaltijdabos();
 		}
 
-		
 		//hop, saven met die hap
 		if(parent::save()){
 			//mailen naar fisci...
@@ -541,7 +550,6 @@ class ProfielStatus extends Profiel{
 					$return.= $abonaam.' staat nog aan. ';
 				}
 			}
-			$return.='[br]';
 		}
 		return $return;
 	}
@@ -569,6 +577,7 @@ Met amicale groet,
 
 		return $mail->send();
 	}
+
 	/*
 	 * Geeft array met per veld afhankelijk van status een boolean voor wel/niet bewaren en een resetwaarde.
 	 * 

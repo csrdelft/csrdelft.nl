@@ -282,7 +282,7 @@ class LLLijst extends LLweergave{
 					}
 				break;
 				case 'status':
-					echo $lid->getStatusDescription();
+					echo $lid->getStatus()->getDescription();
 				break;
 				case 'verticale':
 					echo mb_htmlentities($lid->getVerticale());

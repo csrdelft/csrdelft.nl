@@ -14,6 +14,7 @@ require_once 'ldap.class.php';
 require_once 'memcached.class.php';
 require_once 'instellingen.class.php';
 require_once 'verticale.class.php';
+require_once 'status.class.php';
 require_once 'agenda/agenda.class.php';
 require_once 'groepen/groep.class.php';
 
@@ -41,6 +42,7 @@ class Lid implements Serializable, Agendeerbaar{
 			if($this->profiel['instellingen']!=''){
 				$this->profiel['instellingen']=unserialize($this->profiel['instellingen']);
 			}
+			$this->profiel['status']=new Status($this->profiel['status']);
 		}else{
 			throw new Exception('Lid [uid:'.$uid.'] kon niet geladen worden.');
 		}
@@ -215,10 +217,20 @@ class Lid implements Serializable, Agendeerbaar{
 		if(!array_key_exists($property, $this->profiel)){ return false; }
 		if(in_array($property, $disallowedProps)){ return false; }
 		if(is_string($contents)){ $contents=trim($contents); }
-		if($property=='password'){
-			$this->profiel[$property]=makepasswd($contents);
-		}else{
-			$this->profiel[$property]=$contents;
+		switch($property){
+			case 'password':
+				$this->profiel[$property]=makepasswd($contents);
+			break;
+			case 'status':
+				//TODO wat als een niet-bestaand?
+				try{
+					$this->profiel[$property]=new Status($contents);
+				}catch(Exception $e){
+					$this->profiel[$property]=null;
+				}
+			break;
+			default:
+				$this->profiel[$property]=$contents;
 		}
 		return true;
 	}
@@ -336,50 +348,14 @@ class Lid implements Serializable, Agendeerbaar{
 		return false;
 	}
 	public function getPermissies(){return $this->profiel['permissies']; }
-	public function getStatus(){ return $this->profiel['status']; }
+	//Geeft object Status (door de magic functie __toString kan object een string geven als dat gevraagd wordt)
+	public function getStatus(){ return $this->profiel['status']; } 
 	// Is het huidige lid 'gewoon' lid?
 	public function isLid(){
 		return in_array($this->getStatus(), array('S_NOVIET', 'S_LID', 'S_GASTLID'));
 	}
 	public function isOudlid(){
 		return in_array($this->getStatus(), array('S_OUDLID', 'S_ERELID'));
-	}
-	
-	/**
-	 * Geef een karakter terug om de status van het huidige lid aan te
-	 * duiden. In de loop der tijd zijn ~ voor kringel en • voor oudlid
-	 * ingeburgerd. Handig om in leden snel te zien om wat voor soort
-	 * lid het gaat.
-	 */
-	public function getStatusChar($status=null){
-		if($status===null){ $status=$this->getStatus(); }
-		switch($status){
-			case 'S_OUDLID':	return '•';
-			case 'S_KRINGEL':	return '~';
-			case 'S_NOBODY':	return '∉';
-			case 'S_NOVIET':
-			case 'S_GASTLID':
-			case 'S_LID': 		return '∈';
-			case 'S_ERELID': 	return '☀';
-			case 'S_OVERLEDEN': return '✝';
-		}
-	}
-	
-	/**
-	 * Geef een omschrijving van een status terug.
-	 */
-	public function getStatusDescription($status=null){
-		if($status===null){ $status=$this->getStatus(); }
-		switch($status){
-			case 'S_OUDLID': 	return 'Oudlid';
-			case 'S_KRINGEL': 	return 'Kringel';
-			case 'S_NOBODY':	return 'Nobody';
-			case 'S_NOVIET':	return 'Noviet';
-			case 'S_GASTLID':	return 'Gastlid';
-			case 'S_LID':		return 'Lid';
-			case 'S_ERELID':	return 'Erelid';
-			case 'S_OVERLEDEN': return 'Overleden';
-		}
 	}
 
 	public function getEchtgenootUid(){	return $this->profiel['echtgenoot']; }
@@ -651,7 +627,7 @@ class Lid implements Serializable, Agendeerbaar{
 
 					//Statuschar weergeven bij oudleden, ereleden en kringels.
 					if(in_array($this->profiel['status'], array('S_OUDLID', 'S_ERELID', 'S_KRINGEL'))){
-						$naam.=' '.$this->getStatusChar();
+						$naam.=' '.$this->getStatus()->getChar();
 					}
 				}
 			break;
@@ -1026,8 +1002,16 @@ class Zoeker{
 
 		$sort = $db->escape($sort);
 
-		# in welke status wordt gezocht, is afhankelijk van wat voor rechten de
-		# ingelogd persoon heeft
+		# In welke status wordt gezocht, is afhankelijk van wat voor rechten de
+		# ingelogd persoon heeft. 
+		#
+		# P_LID en P_OUDLID hebben beide P_LEDEN_READ en P_OUDLEDEN_READ en kunnen 
+		# de volgende afkortingen gebruiken:
+		#  - '' (lege string): 	novieten, (gast)leden, kringels, ere- en oudleden
+		#  - leden :  			novieten, (gast)leden en kringels
+		#  - oudleden : 		oud- en ereleden
+		# én alleen voor OUDLEDENMOD:
+		#  - nobodies : 		novieten, (gast)leden, kringels, ere- en oudleden én nobodies 
 
 		$statusfilter = '';
 
