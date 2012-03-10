@@ -113,7 +113,7 @@ class Status{
 	 */
 	static public function getAllDescriptions(){
 		$return = array();
-		foreach(self::getStatussen() as $status){
+		foreach(self::getAll() as $status){
 			$return[$status] = Status::getDescription($status);
 		}
 		return $return;

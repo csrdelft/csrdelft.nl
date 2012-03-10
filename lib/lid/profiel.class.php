@@ -473,7 +473,7 @@ class ProfielStatus extends Profiel{
 
 
 		//aan de hand van status bepalen welke POSTed velden worden opgeslagen van het formulier
-		$fieldsToSave = $this->getFieldsToSave($this->form->findByName('status'));
+		$fieldsToSave = $this->getFieldsToSave($this->form->findByName('status')->getValue());
 
 		//relevante gegevens uit velden verwerken
 		foreach($this->form->getFields() as $field){
@@ -499,9 +499,11 @@ class ProfielStatus extends Profiel{
 		$oudepermissie = $this->lid->getProperty('permissies');
 		$permissie = $this->bewerktLid->getProperty('permissies');
 
-		//bij niet-admins worden aanpassingen aan permissies ongedaan gemaakt
+		//bij wijzigingen door niet-admins worden aanpassingen aan permissies ongedaan gemaakt
 		if(!LoginLid::instance()->hasPermission('P_ADMIN')){
+
 			$adminperms = array('P_PUBCIE','P_MODERATOR','P_BESTUUR','P_VAB');
+
 			if(in_array($oudepermissie, $adminperms)){
 				if($oudepermissie!=$permissie){
 					$this->bewerktLid->setProperty('permissies', $oudepermissie);
@@ -509,16 +511,14 @@ class ProfielStatus extends Profiel{
 				}
 			}
 
-			//uitzondering: bij aanpassing door een niet-admin automatisch oudlid-permissies instellen voor *hogere* admins bij lid-af maken.
+			//uitzondering: bij aanpassing door een niet-admin automatisch oudlid-permissies instellen 
+			//voor *hogere* admins bij lid-af maken.
 			if(in_array($status, array('S_OUDLID','S_ERELID','S_NOBODY')) AND in_array($permissie, $adminperms)){
-				if($status=='S_NOBODY'){
-					$st = 'P_NOBODY';
-				}else{
-					$st = 'P_OUDLID';
-				}
-				$this->bewerktLid->setProperty('status', $st);
+				$permissie = Status::getDefaultPermission($status);
+				$this->bewerktLid->setProperty('permissies', $permissie);
 			}
 		}
+
 		//maaltijdabo's uitzetten (P_ETER is een S_NOBODY die toch een abo mag hebben)
 		$geenabovoor=array('S_OUDLID','S_ERELID','S_NOBODY','S_CIE','S_OVERLEDEN');
 		if(in_array($status, $geenabovoor) AND $permissie!='P_ETER'){
@@ -536,6 +536,11 @@ class ProfielStatus extends Profiel{
 		return false;
 	}
 
+	/**
+	 * Zet alle abo's uit en geeft een changelog regel terug
+	 * 
+	 * @return string changelogregel
+	 */
 	private function disableMaaltijdabos(){
 		$return='';
 	
@@ -555,6 +560,11 @@ class ProfielStatus extends Profiel{
 	}
 
 	//@@Uitslag: beetje mosterd na de maaltijd, dat moet natuurlijk voor decharge duidelijk zijn...
+	/**
+	 * Mail naar fisci over statuswijzigingen. Kunnen zij hun systemen weer mee updaten.
+	 * 
+	 * @return bool mailen is wel/niet verzonden
+	 */
 	private function notifyFisci(){
 		$saldi = '';
 		foreach($this->bewerktLid->getSaldi() as $saldo){
@@ -578,60 +588,47 @@ Met amicale groet,
 		return $mail->send();
 	}
 
-	/*
+	/**
 	 * Geeft array met per veld afhankelijk van status een boolean voor wel/niet bewaren en een resetwaarde.
 	 * 
 	 * @param $status string lidstatus
-	 * @return array met per veld array met de entries 
+	 * @return array met per veld array met de entries: 
 	 * 		'save': boolean voor wel/niet opslaan van gePOSTe waarde 
 	 * 		'reset': mixed waarde in te vullen bij reset (null is nooit resetten)
+	 *  Array(
+			...
+			[postfix] => Array(		[save] =>	 1
+									[reset] => )
+			[lidafdatum] => Array(	[save] => 
+									[reset] => 0000-00-00 )
+			...
+		)
 	 */
 	private function getFieldsToSave($status){
-		//true/false is wel/niet bewaren van gePOSTe veldwaarde
-		$return = array();
-		$return['status']['save'] = true;
-		$return['permissies']['save'] = true;
-		
-		if(in_array($status, array('S_OUDLID','S_ERELID','S_NOBODY','S_OVERLEDEN'))){
-			$toggle = true;
-		}else{	
-			$toggle = false;
-		}
-		$return['postfix']['save'] = !$toggle;
-		$return['lidafdatum']['save'] = $toggle;
+		//per status: wel/niet bewaren van gePOSTe veldwaarde
+		//Veldnamen:				status,	perm,	lidaf,	postfx,	ontvCntl,adr,	echtg,	strfd,	kring
+		$bool['S_LID'] 		= array( true,	true,	false,	true,	false,	false,	false,	false,	true );
+		$bool['S_NOVIET'] 	= $bool['S_LID'];
+		$bool['S_GASTLID'] 	= $bool['S_LID'];
+		$bool['S_OUDLID'] 	= array( true,	true,	true,	false,	true,	true,	true,	false,	true );
+		$bool['S_ERELID'] 	= $bool['S_OUDLID'];
+		$bool['S_KRINGEL'] 	= array( true,	true,	false,	false,	false,	false,	false,	false,	true );
+		$bool['S_OVERLEDEN']= array( true,	true,	true,	false,	false,	false,	false,	true,	false );
+		$bool['S_NOBODY'] 	= array( true,	true,	true,	false,	false,	false,	false,	false,	true );
+		$bool['S_CIE'] 		= array( true,	true,	false,	false,	false,	false,	false,	false,	false );
 
-		if($status=='S_OVERLEDEN'){ $toggle = false; }
 
-		$return['kring']['save'] = $toggle;
-
-		if($status=='S_NOBODY'){ $toggle = false; }
-
-		$return['ontvangtcontactueel']['save'] = $toggle;
-		$return['echtgenoot']['save'] = $toggle;
-		$return['adresseringechtpaar']['save'] = $toggle;
-
-		if($status=='S_OVERLEDEN'){
-			$return['sterfdatum']['save'] = true;
-		}else{
-			$return['sterfdatum']['save'] = false;
-		}
-		if(in_array($status, array('S_KRINGEL','S_OVERLEDEN','S_CIE'))){
-			$return['postfix']['save'] = false;
-		}
-		if(in_array($status, array('S_LID','S_GASTLID','S_NOVIET','S_KRINGEL'))){
-			$return['kring']['save'] = true;
-		}
-
-		//waardes die ingevuld worden bij een reset (null = nooit resetten)
-		$return['status']['reset'] 				= null;
-		$return['permissies']['reset'] 			= null;
-		$return['lidafdatum']['reset'] 			= '0000-00-00';
-		$return['postfix']['reset'] 			= '';
-		$return['ontvangtcontactueel']['reset'] = null;
-		$return['adresseringechtpaar']['reset'] = null;
-		$return['echtgenoot']['reset'] 			= null;
-		$return['sterfdatum']['reset'] 			= null;
-		$return['kring']['reset'] 				= 0;
+		//'save' wordt gevuld met bovenstaande waardes
+		//'reset' is waarde die ingevuld worden bij een reset (null = nooit resetten)
+		$return['status'] 				= array('save'=>$bool[$status][0], 'reset'=>null);
+		$return['permissies'] 			= array('save'=>$bool[$status][1], 'reset'=>null);
+		$return['lidafdatum'] 			= array('save'=>$bool[$status][2], 'reset'=>'0000-00-00');
+		$return['postfix'] 				= array('save'=>$bool[$status][3], 'reset'=>'');
+		$return['ontvangtcontactueel'] 	= array('save'=>$bool[$status][4], 'reset'=>null);
+		$return['adresseringechtpaar'] 	= array('save'=>$bool[$status][5], 'reset'=>null);
+		$return['echtgenoot'] 			= array('save'=>$bool[$status][6], 'reset'=>null);
+		$return['sterfdatum'] 			= array('save'=>$bool[$status][7], 'reset'=>null);
+		$return['kring'] 				= array('save'=>$bool[$status][8], 'reset'=>0);
 
 		return $return;
 	}
