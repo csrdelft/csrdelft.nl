@@ -9,6 +9,7 @@
 
 require_once 'formulier.class.php';
 require_once 'forum/forum.class.php';
+require_once 'mail.class.php';
 
 /**
  * Profiel defenieert een stel functies om het aanpassen en weergeven
@@ -191,7 +192,7 @@ class Profiel {
 
 		$sNieuwWachtwoord="UPDATE lid SET password='".$passwordhash."' WHERE uid='".$uid."' LIMIT 1;";
 
-		$template=file_get_contents(LIB_PATH.'/templates/profiel/nieuwwachtwoord.mail');
+		$template=file_get_contents(LIB_PATH.'/templates/mails/nieuwwachtwoord.mail');
 		$values=array(
 			'naam' => $lid->getNaam(),
 			'uid' => $lid->getUid(),
@@ -471,7 +472,6 @@ class ProfielStatus extends Profiel{
 	public function save(){
 		$this->changelog[]='Statusverandering van [lid='.LoginLid::instance()->getUid().'] op [reldate]'.getDatetime().'[/reldate]';
 
-
 		//aan de hand van status bepalen welke POSTed velden worden opgeslagen van het formulier
 		$fieldsToSave = $this->getFieldsToSave($this->form->findByName('status')->getValue());
 
@@ -519,17 +519,26 @@ class ProfielStatus extends Profiel{
 			}
 		}
 
-		//maaltijdabo's uitzetten (P_ETER is een S_NOBODY die toch een abo mag hebben)
-		$geenabovoor=array('S_OUDLID','S_ERELID','S_NOBODY','S_CIE','S_OVERLEDEN');
-		if(in_array($status, $geenabovoor) AND $permissie!='P_ETER'){
-			$this->changelog[]=$this->disableMaaltijdabos();
+		//maaltijd en corvee bijwerken
+		$geenAboEnCorveeVoor=array('S_OUDLID','S_ERELID','S_NOBODY','S_CIE','S_OVERLEDEN');
+		if(in_array($status, $geenAboEnCorveeVoor)){
+			//maaltijdabo's uitzetten (P_ETER is een S_NOBODY die toch een abo mag hebben)
+			if($permissie!='P_ETER'){
+				$this->changelog[]=$this->disableMaaltijdabos();
+			}
+
+			//toekomstige corveetaken verwijderen
+			$removedcorvee=$this->removeToekomstigeCorvee($oudestatus, $status);
+			if($removedcorvee!=''){
+				$this->changelog[]=$removedcorvee;
+			}
 		}
 
 		//hop, saven met die hap
 		if(parent::save()){
 			//mailen naar fisci...
 			if(in_array($status, array('S_OUDLID','S_ERELID','S_NOBODY','S_OVERLEDEN'))){
-				$this->notifyFisci();
+				$this->notifyFisci($oudestatus, $status);
 			}
 			return true;
 		}
@@ -542,48 +551,82 @@ class ProfielStatus extends Profiel{
 	 * @return string changelogregel
 	 */
 	private function disableMaaltijdabos(){
-		$return='';
+		$changelog='';
 	
 		require_once 'maaltijden/maaltrack.class.php';
 		$maaltrack = new MaalTrack();
 		if($abos = $maaltrack->getAbo($this->lid->getUid())){
-			$return = 'Afmelden abo\'s: ';
+			$changelog = 'Afmelden abo\'s: ';
 			foreach($abos as $abo => $abonaam){
 				if($maaltrack->delAbo($abo, $this->lid->getUid())){
-					$maalabolog.= $abonaam.' uitgezet. ';
+					$changelog.= $abonaam.' uitgezet. ';
 				}else{
-					$return.= $abonaam.' staat nog aan. ';
+					$changelog.= $abonaam.' staat nog aan. ';
 				}
 			}
 		}
-		return $return;
+		return $changelog;
 	}
 
-	//@@Uitslag: beetje mosterd na de maaltijd, dat moet natuurlijk voor decharge duidelijk zijn...
+	/**
+	 * Verwijder toekomstige corveetaken en geef changelogregel terug
+	 * @param statussen van voor en na wijziging
+	 * @return string changelogregel
+	 */
+	private function removeToekomstigeCorvee($oudestatus, $nieuwestatus){
+		//f.t.corvee verwijderen
+		$changelog='';
+		require_once 'maaltijden/maaltrack.class.php';
+		$maaltrack = new MaalTrack();
+		if($taken = $maaltrack->removeToekomstigeCorveetaken($this->lid->getUid())){
+			$changelog = 'Verwijderde corveetaken:';
+			foreach($taken as $taak){
+				$changelog .= '[br]'.strftime("%a %H:%M %e-%m-%Y", $taak['datum']).' '.$taak['taak'].' '.$taak['tekst'].' ('.$taak['punten'].')';
+ 			}
+
+			//corveeceasar mailen over vrijvallende corveetaken.
+			$template=file_get_contents(LIB_PATH.'/templates/mails/toekomstigcorveeverwijderd.mail');
+			$values=array(
+				'naam' => $this->bewerktLid->getNaamLink('full','plain'),
+				'uid' => $this->bewerktLid->getUid(),
+				'oudestatus' => $oudestatus,
+				'nieuwestatus' => $nieuwestatus,
+				'changelog' => str_replace('[br]', "\n", $changelog),
+				'admin_naam' => LoginLid::instance()->getLid()->getNaam());
+
+			$mail=new TemplatedMail('corvee@csrdelft.nl', 'Lid-af: toekomstig corvee verwijderd', $template);
+			$mail->setBcc("pubcie@csrdelft.nl");
+			$mail->setValues($values);
+			$mail->send();
+		}
+		return $changelog;
+	}
+
 	/**
 	 * Mail naar fisci over statuswijzigingen. Kunnen zij hun systemen weer mee updaten.
 	 * 
 	 * @return bool mailen is wel/niet verzonden
 	 */
-	private function notifyFisci(){
+	private function notifyFisci($oudestatus, $nieuwestatus){
+		//saldi ophalen
 		$saldi = '';
 		foreach($this->bewerktLid->getSaldi() as $saldo){
 			$saldi .= $saldo['naam'].': '.$saldo['saldo']."\n";
 		}
-$bericht = "Beste fisci,
 
-De lidstatus van ".$this->bewerktLid->getNaamLink('full','plain')." (".$this->bewerktLid->getUid().") is gewijzigd van ".$oudestatus." in ".$status.".
-
-De volgende saldi zijn bekend:
-".$saldi."
-
-Met amicale groet,
-".LoginLid::instance()->getLid()->getNaamLink('full','plain');
-		
+		$template=file_get_contents(LIB_PATH.'/templates/mails/lidafmeldingfisci.mail');
+		$values=array(
+			'naam' => $this->bewerktLid->getNaamLink('full','plain'),
+			'uid' => $this->bewerktLid->getUid(),
+			'oudestatus' => $oudestatus,
+			'nieuwestatus' => $nieuwestatus,
+			'saldi' => $saldi,
+			'admin_naam' => LoginLid::instance()->getLid()->getNaam());
 		$to='fiscus@csrdelft.nl,maalcie-fiscus@csrdelft.nl,soccie@csrdelft.nl';
 
-		$mail=new Mail($to, 'Melding lid-af worden', $bericht);
-		$mail->setBcc('pubcie@csrdelft.nl');
+		$mail=new TemplatedMail($to, 'Melding lid-af worden', $template);
+		$mail->setBcc("pubcie@csrdelft.nl");
+		$mail->setValues($values);
 
 		return $mail->send();
 	}
