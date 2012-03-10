@@ -27,6 +27,8 @@ function verbreedSaldografiek(cie){
 	}
 }
 
+
+
 jQuery(document).ready(function($) {
 
 	jQuery("#statusForm #field_status").click( function() {
@@ -36,6 +38,7 @@ jQuery(document).ready(function($) {
 			case "S_OUDLID":
 			case "S_ERELID":
 			case "S_NOBODY":
+				//show&hide
 				$('#sterfdatum, #postfix').hide();
 				$(".novieten, .leden").hide();
 
@@ -61,6 +64,7 @@ jQuery(document).ready(function($) {
 			case "S_LID":
 			case "S_GASTLID":
 			case "S_NOVIET":
+				//show&hide
 				$('#lidafdatum, #kring, #ontvangtcontactueel, #echtgenoot, #adresseringechtpaar, #sterfdatum').hide();
 				
 				$('#postfix').show();
@@ -82,8 +86,8 @@ jQuery(document).ready(function($) {
 			case "S_OVERLEDEN":
 			case "S_CIE":
 			case "S_KRINGEL":
+				//show&hide
 				$('#kring, #ontvangtcontactueel, #echtgenoot, #adresseringechtpaar, #postfix').hide();
-				
 				$(".novieten, .leden").hide();
 				
 				if(status=="S_OVERLEDEN"){
@@ -99,7 +103,7 @@ jQuery(document).ready(function($) {
 					$("#field_permissies").val('P_NOBODY');
 				}
 				if(status=="S_OVERLEDEN"){
-					setLidaf(lidaf_jaar,lidaf_maand,lidaf_dag);
+					setLidaf(original['lidafdatum_jaar'],original['lidafdatum_maand'],original['lidafdatum_dag']);
 				}
 			break;
 		} //end switch(status)
