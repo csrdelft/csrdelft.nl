@@ -17,30 +17,30 @@
 	{$profiel->getFormulier()->view()}
 
 	<script type="text/javascript">{literal}$("#postfix").after(
-		'{/literal}<div class="novieten"> \
+		{/literal}'<div class="novieten">'+
 			{if $gelijknamigenovieten|@count>1 OR ($profiel->getStatus()!='S_NOVIET' AND $gelijknamigenovieten|@count>0)}
-				Gelijknamige novieten: \
-				<ul class="nobullets"> \
+				'Gelijknamige novieten:'+
+				'<ul class="nobullets">'+
 						{foreach from=$gelijknamigenovieten item=uid name=novieten}
-							<li>{$uid.uid|csrnaam:'civitas'}</li> \
+							'<li>{$uid.uid|csrnaam:"civitas"}</li>'+
 						{/foreach}
-				</ul>\
+				'</ul>'+
 			{else}
-				Geen novieten met overeenkomstige namen. \
+				'Geen novieten met overeenkomstige namen.'+
 			{/if}
-		</div> \
-		<div class="leden"> \
+		'</div>'+
+		'<div class="leden">'+
 			{if $gelijknamigeleden|@count>1 OR (!($profiel->getStatus()=='S_LID' OR $profiel->getStatus()=='S_GASTLID') AND $gelijknamigenovieten|@count>0)}
-			Gelijknamige (gast)leden: \
-			<ul class="nobullets"> \
+			'Gelijknamige (gast)leden:'+
+			'<ul class="nobullets">'+
 				{foreach from=$gelijknamigeleden item=uid name=leden}
-					<li>{$uid.uid|csrnaam:'civitas'}</li> \
+					'<li>{$uid.uid|csrnaam:"civitas"}</li>'+
 				{/foreach}
-			</ul> \
+			'</ul>'+
 			{else}
-				Geen (gast)leden met overeenkomstige namen. \
+				'Geen (gast)leden met overeenkomstige namen.'+
 			{/if}
-		</div>{literal}'
+		'</div>'{literal}
 	);{/literal}</script>
 
 </div>
