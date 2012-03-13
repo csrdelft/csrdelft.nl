@@ -271,8 +271,37 @@ class LoginLid{
 			//een negatie van een permissie.
 			if(substr($permissie, 0, 1)=='!' && !$this->hasPermission(substr($permissie,1),$token_authorizable)){
 				return true;
+			}
+			
+			//Normale permissies.
+			# ga alleen verder als er een geldige permissie wordt gevraagd
+			if (array_key_exists($permissie, $this->_permissions)){
+				# zoek de code op
+				$gevraagd = (int) $this->_permissions[$permissie];
+
+				# $p is de gevraagde permissie als octaal getal
+				# de permissies van de gebruiker kunnen we bij $this->_lid opvragen
+				# als we die 2 met elkaar AND-en, dan moet het resultaat hetzelfde
+				# zijn aan de gevraagde permissie. In dat geval bestaat de permissie
+				# van het lid dus minimaal uit de gevraagde permissie
+				#
+				# voorbeeld:
+				#  gevraagd:   P_FORUM_MOD: 0000000700
+				#  lid heeft:  P_LID      : 0005544500
+				#  AND resultaat          : 0000000500 -> is niet wat gevraagd is -> weiger
+				#
+				#  gevraagd:  P_DOCS_READ : 0000004000
+				#  gebr heeft: P_LID      : 0005544500
+				#  AND resultaat          : 0000004000 -> ja!
+				$resultaat=$gevraagd & $lidheeft;
+
+				if($resultaat==$gevraagd){
+					return true;
+				}
+			}
+			
 			//als een uid ingevoerd wordt true teruggeven als het om de huidige gebruiker gaat.
-			}elseif($permissie==$this->getUid()){
+			if($permissie==$this->getUid()){
 				return true;
 			//Behoort een lid tot een bepaalde verticale?
 			}elseif(substr($permissie, 0, 9)=='verticale'){
@@ -325,32 +354,7 @@ class LoginLid{
 					return true;
 				}
 			}
-			//vervolgens nog testen op de 'normale' permissies.
-			# ga alleen verder als er een geldige permissie wordt gevraagd
-			if (array_key_exists($permissie, $this->_permissions)){
-				# zoek de code op
-				$gevraagd = (int) $this->_permissions[$permissie];
-
-				# $p is de gevraagde permissie als octaal getal
-				# de permissies van de gebruiker kunnen we bij $this->_lid opvragen
-				# als we die 2 met elkaar AND-en, dan moet het resultaat hetzelfde
-				# zijn aan de gevraagde permissie. In dat geval bestaat de permissie
-				# van het lid dus minimaal uit de gevraagde permissie
-				#
-				# voorbeeld:
-				#  gevraagd:   P_FORUM_MOD: 0000000700
-				#  lid heeft:  P_LID      : 0005544500
-				#  AND resultaat          : 0000000500 -> is niet wat gevraagd is -> weiger
-				#
-				#  gevraagd:  P_DOCS_READ : 0000004000
-				#  gebr heeft: P_LID      : 0005544500
-				#  AND resultaat          : 0000004000 -> ja!
-				$resultaat=$gevraagd & $lidheeft;
-
-				if($resultaat==$gevraagd){
-					return true;
-				}
-			}
+			
 		}
 		# Zo niet... dan niet
 		return false;
