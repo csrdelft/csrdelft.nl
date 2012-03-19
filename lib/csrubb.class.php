@@ -399,8 +399,25 @@ src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
 			return '[boek] Boek [boekid:'.(int)$boekid.'] bestaat niet.';
 		}
 	}
-	/*
+	
+	/**
 	 * ubb_fotoalbum
+	 *
+	 * [fotoalbum]/pad/naar/album[/fotoalbum]
+	 *
+	 * Parameters:
+	 * 	rows	Aantal regels weergeven
+	 * 			rows=4
+	 * 
+	 * 	big		Lijstje met indexen van afbeeldingen die groot moeten
+	 * 			worden.
+	 * 			big=0,5,14 | big=a | big=b |
+	 * 
+	 *	compact	Compacte versie van de tag weergeven
+	 * 			compact=true
+	 * 
+	 * 
+	 * 
 	 */
 	protected function ubb_fotoalbum($parameters){
 		$albuminvoer=$this->parseArray(array('[/fotoalbum]'), array());
@@ -429,6 +446,10 @@ src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
 
 		$fotoalbumtag=new FotoalbumUbbContent($album);
 
+		if($this->quote_level>0 || isset($parameters['compact'])){
+			$fotoalbumtag->makeCompact();
+		}
+		
 		if(isset($parameters['rows'])){
 			$fotoalbumtag->setRows((int)$parameters['rows']);
 		}

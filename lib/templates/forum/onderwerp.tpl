@@ -89,7 +89,7 @@
 	{foreach from=$onderwerp->getPosts() item='bericht' name='berichten'}
 		<tr>
 			<td class="auteur">
-				<span tabindex="0" class="togglePasfoto" id="t{$bericht.uid}-{$bericht.id}" title="Toon pasfoto van dit lid">&raquo;</span>&nbsp;<a href="/communicatie/forum/reactie/{$bericht.id}" class="postlink" title="Link naar deze post">&rarr;</a>
+				<span tabindex="0" {if $loginlid->hasPermission('P_LEDEN_READ')}class="togglePasfoto"{/if} id="t{$bericht.uid}-{$bericht.id}">&raquo;</span>&nbsp;<a href="/communicatie/forum/reactie/{$bericht.id}" class="postlink" title="Link naar deze post">&rarr;</a>
 				{$bericht.uid|csrnaam:'user'}<br />
 				<span class="moment">{$bericht.datum|reldate}</span>
 				<br />
@@ -204,34 +204,4 @@
 {* linkjes voor het forum nogeens weergeven, maar alleen als het aantal berichten in het onderwerp groter is dan 4 *}
 {if $onderwerp->getSize()>4}
 	{$smarty.capture.navlinks}
-{/if}
-{if $loginlid->hasPermission('P_LEDEN_READ')}
-	{literal}
-	<script type="text/javascript">
-	jQuery(document).ready(function($) {
-		$('.togglePasfoto').each(function(){
-			var postid=$(this).attr('id').substr(1).split('-')[1];
-			var pasfoto=$('#p'+postid);
-			if(pasfoto.html()!=''){
-				pasfoto.toggleClass('verborgen');
-				$(this).html('v');
-			}
-		});
-		$('.togglePasfoto').click(function(){
-			var parts=$(this).attr('id').substr(1).split('-');
-			var pasfoto=$('#p'+parts[1]);
-
-			if(pasfoto.html()==''){
-				pasfoto.html('<img src="/tools/pasfoto/'+parts[0]+'.png" class="lidfoto" />');
-			}
-			if(!pasfoto.hasClass('verborgen')){
-				$(this).html("&raquo;");
-			}else{
-				$(this).html('v');
-			}
-			pasfoto.toggleClass('verborgen');
-		});
-	});
-	</script>
-	{/literal}
 {/if}
