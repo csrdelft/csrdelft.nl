@@ -93,8 +93,8 @@ $sah = array();
 $ahs = array();
 
 # !!!!! LET OP: data voor 2e halfjaar verwijderen uit database
-$sql='DELETE FROM `eetplan` WHERE `avond` > 4';
-$result=$db->query($sql);
+//$sql='DELETE FROM `eetplan` WHERE `avond` > 4';
+//$result=$db->query($sql);
 
 # data die al in de tabel zit om later feuten toe te kunnen voegen
 $sql='SELECT avond, huis, GROUP_CONCAT(uid) AS uids FROM `eetplan` GROUP BY avond, huis';
@@ -238,8 +238,8 @@ echo "<b># Eetplanrooster SQL:</b>\n\n";
 foreach ($ks as $is) {
 	for ($ia = 1 + $hist_a; $ia <= $a + $hist_a; $ia++) {
 		if(isset($ks[$is])){
-			$sql = "INSERT INTO `eetplan` (`avond`,`uid`,`huis`) VALUES ({$ia},'{$ks[$is]}',{$sah[$is][$ia]});";
-			$result=$db->query($sql);
+			echo "INSERT INTO `eetplan` (`avond`,`uid`,`huis`) VALUES ({$ia},'{$ks[$is]}',{$sah[$is][$ia]});";
+			//$result=$db->query($sql);
 		}
 	}
 }
