@@ -78,14 +78,14 @@ $seen = array(); # $seen[sjaars][] = sjaars
 # sjaars die al in huizen wonen alvast rekening mee houden
 # voorbeeld: $visited_sh[$sjaarsuid][$huisuid]=true;
 $visited_sh[1138][5]=true;//Martijn van den Berg (De Lindenburgh)
-$visited_sh[0946][13]=true;//Niels Brandhorst (OD11)
-$visited_sh[1109][13]=true;//Melanie Schippers (OD11)
-$visited_sh[1113][15]=true;//Job van Stiphout (SSS)
-$visited_sh[1112][10]=true;//Matthias Floor (internaat)
-$visited_sh[1045][10]=true;//Vlot sr. (internaat)
-$visited_sh[1151][11]=true;//Kirsten Neels (KMT)
+$visited_sh[0946][11]=true;//Niels Brandhorst (OD11)
+$visited_sh[1109][11]=true;//Melanie Schippers (OD11)
+$visited_sh[1113][13]=true;//Job van Stiphout (SSS)
+$visited_sh[1112][16]=true;//Matthias Floor (internaat)
+$visited_sh[1045][16]=true;//Vlot sr. (internaat)
+$visited_sh[1151][9]=true;//Kirsten Neels (KMT)
 $visited_sh[1139][1]=true;//Roos van Riggelen (Oranje Boven)
-$visited_sh[1144][12]=true;//Margriet Vlot (Lacha-Roi)
+$visited_sh[1144][10]=true;//Margriet Vlot (Lacha-Roi)
 
 # het uiteindelijke rooster
 # $sah[sjaars][avond] = huis.. etc...

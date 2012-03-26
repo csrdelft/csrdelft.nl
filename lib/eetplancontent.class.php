@@ -64,7 +64,7 @@ class EetplanContent extends SimpleHTML {
 			$sUitvoer='<table class="eetplantabel">
 				<tr>
 				<th style="width: 150px">Avond</th>
-				<th style="width: 200px">Noviet</th>
+				<th style="width: 200px">&Uuml;bersjaarsch </th>
 				<th>Mobiel</th>
 				<th>E-mail</th>
 				<th>Eetwens</th>
@@ -110,7 +110,7 @@ class EetplanContent extends SimpleHTML {
 				Van eerstejaers die niet komen opdagen op het eetplan wordt verwacht dat zij minstens &eacute;&eacute;n keer komen koken op het huis waarbij zij gefaeld hebben.
 			</div>
 			<table class="eetplantabel">
-			<tr><th style="width: 200px;">Noviet/Avond</td>';
+			<tr><th style="width: 200px;">&Uuml;bersjaarsch/Avond</td>';
 		//kopjes voor tabel
 		for($iTeller=5;$iTeller<=8;$iTeller++){
 			echo '<th class="huis">'.$this->_eetplan->getDatum($iTeller).'</th>';
