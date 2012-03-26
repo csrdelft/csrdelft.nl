@@ -22,26 +22,29 @@ for ($es=1;$es<=65;$es++) {
 
 # koppel de huizennummers aan huizen
 //$kh = array(0,3,6,7,10,11,13,1,15,16,17,19,21,2,22,8,18,5);
-$kh = array(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16);
-$khd = array(# WORDT UIT DE DATABASE GEHAALD
-	1 => array("Oranje Boven", 1016, ''),
-	2 => array("Villa Veel Vaudt", 954,''),
-	3 => array("De Ambassade", 6, ''),
-//	4 => array("De Zilveren Hinde", 1017, ''),
-	5 => array("Lindenburgh", 58,''),
-	6 => array("De Molshoop", 34, ''),
-	7 => array("Villa Delphia", 37, ''),
-	8 => array('Huize * Asterix', 46, ''),
-	9 => array("De Koornmarkt",33 ,''),
-	10=> array("Lachai-Roi",57 ,''),
-	11=> array("OD11",14 ,""),
-//	12=> array("De Preekstoel", 62,''),
-	13=> array("Sonnenvanck",36 ,''),
-	14=> array("Huize Van Speijk", 39,''),
-	15=> array("Hotel Vlaams Gaius", 32, ''),
-	16=> array("t Internaat", 9 ,''),
-	4=> array("Residentes in Vita Detissima", 494, ''),
-	12=> array("Caesarea", 7, '')
+$kh = array(0,1,2,3,5,7,8,9,10,11,12,13,15,16,18,19,20);// 4, 6, 14, 17 missen
+$khd = array(
+	0 => array('','',''),
+	1 => array ('Oranje Boven', 1016, ''),
+	2 => array ('Villa Veel Vaudt', 954,''),
+	3 => array ("De Ambassade", 6, ""),
+	4 => array ('De Zilveren Hinde', 1017, ''),
+	5 => array ('Lindenburgh', 58,''),
+	6 => array ('Het Roze Nest', 788,''),
+	7 => array ("De Molshoop", 34, ''),
+	8 => array ("Villa Delphia", 37, ''),
+	9 => array ('Huize * Asterix', 46, ''),
+	10=> array ('t Internaat', 9 ,""),
+	11=> array ("De Koornmarkt",33 ,""),
+	12=> array ("Lachai-Roi",57 ,""),
+	13=> array ("OD11",14 ,""),
+	14=> array ("De Preekstoel", 62,""),
+	15=> array ("Sonnenvanck",36 ,''),
+	16=> array ("Huize Van Speijk", 39,""),
+	17=> array ("De Tolhuis-Alliantie", 10, ''),
+	18=> array ("Hotel Vlaams Gaius", 32, ''),
+	19=> array ("Residentes in Vita Detissima", 494, ''),
+	20=> array ("Caesarea", 7, '')
 );
 
 # namen opzoeken in de database
@@ -89,9 +92,9 @@ $visited_sh[1144][12]=true;//Margriet Vlot (Lacha-Roi)
 $sah = array();
 $ahs = array();
 
-# data die al in de tabel zit om later feuten toe te kunnen voegen
-//$sql='DELETE FROM `eetplan` WHERE `avond` > 4';
-//$result=$db->query($sql);
+# !!!!! LET OP: data voor 2e halfjaar verwijderen uit database
+$sql='DELETE FROM `eetplan` WHERE `avond` > 4';
+$result=$db->query($sql);
 
 # data die al in de tabel zit om later feuten toe te kunnen voegen
 $sql='SELECT avond, huis, GROUP_CONCAT(uid) AS uids FROM `eetplan` GROUP BY avond, huis';
@@ -235,8 +238,8 @@ echo "<b># Eetplanrooster SQL:</b>\n\n";
 foreach ($ks as $is) {
 	for ($ia = 1 + $hist_a; $ia <= $a + $hist_a; $ia++) {
 		if(isset($ks[$is])){
-			echo "INSERT INTO `eetplan` (`avond`,`uid`,`huis`) VALUES ({$ia},'{$ks[$is]}',{$sah[$is][$ia]});";
-			//$result=$db->query($sql);
+			$sql = "INSERT INTO `eetplan` (`avond`,`uid`,`huis`) VALUES ({$ia},'{$ks[$is]}',{$sah[$is][$ia]});";
+			$result=$db->query($sql);
 		}
 	}
 }
