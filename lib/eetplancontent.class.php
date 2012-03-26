@@ -112,7 +112,7 @@ class EetplanContent extends SimpleHTML {
 			<table class="eetplantabel">
 			<tr><th style="width: 200px;">Noviet/Avond</td>';
 		//kopjes voor tabel
-		for($iTeller=1;$iTeller<=4;$iTeller++){
+		for($iTeller=5;$iTeller<=8;$iTeller++){
 			echo '<th class="huis">'.$this->_eetplan->getDatum($iTeller).'</th>';
 		}
 		echo '</tr>';
@@ -121,7 +121,7 @@ class EetplanContent extends SimpleHTML {
 
 
 			echo '<tr class="kleur'.($row%2).'"><td><a href="/actueel/eetplan/sjaars/'.$aEetplanVoorPheut[0]['uid'].'">'.$aEetplanVoorPheut[0]['naam'].'</a></td>';
-			for($iTeller=1;$iTeller<=4;$iTeller++){
+			for($iTeller=5;$iTeller<=8;$iTeller++){
 				$huisnaam=$aHuizenArray[$aEetplanVoorPheut[$iTeller]-1]['huisNaam'];
 				$huisnaam=str_replace(array('Huize ', 'De '), '', $huisnaam);
 				$huisnaam=substr($huisnaam, 0, 15);
