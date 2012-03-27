@@ -242,7 +242,7 @@ class FormField extends FormElement{
 	/**
 	 * Geef een foutmelding voor dit veld terug.
 	 */
-	protected function getError($html=true){
+	public function getError($html=true){
 		if($html===false){
 			return $this->error;
 		}
@@ -332,6 +332,13 @@ $('.hasSuggestions').each(function(index, tag){
 });
 JS;
 	}
+}
+class AutocompleteField extends FormField{
+	
+	
+	
+	
+	
 }
 
 /*
@@ -573,6 +580,9 @@ $('.wantsLidPreview').each(function(index, tag){
 JS;
 	}
 }
+
+
+
 class RequiredLidField extends LidField{
 	public $notnull=true;
 	

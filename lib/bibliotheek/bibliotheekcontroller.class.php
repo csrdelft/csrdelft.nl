@@ -128,14 +128,25 @@ class BibliotheekController extends Controller{
 			exit;
 		}
 		if(isset($_POST['id'])){
-			if($this->boek->isPostedField($_POST['id']) AND $this->boek->validField($_POST['id']) AND $this->boek->saveField($_POST['id'])){
-				echo $this->boek->getProperty($_POST['id']).'';
+			if($this->boek->validField($_POST['id']) AND $this->boek->saveField($_POST['id'])){
+				$return=array(
+					'value'=>$this->boek->getProperty($_POST['id']).'', 
+					'success'=>true, 
+					'melding'=>'Opgeslagen'
+				);
 			}else{
-				echo '<span class="melding">Fout: '.$this->boek->getField($_POST['id'])->getFieldError().'- '.$this->boek->getError().'</span>';
+				$return=array(
+					'success'=>false,
+					'melding'=>'Fout: '.$this->boek->getField($_POST['id'])->getError($html=false).' '.$this->boek->getError()
+				);
 			}
 		}else{
-			echo '$_POST["id"] is leeg!';
+			$return=array(
+					'success'=>false,
+					'melding'=>'$_POST["id"] is leeg!'
+			);
 		}
+		echo json_encode($return);
 		exit;
 	}
 
@@ -154,7 +165,7 @@ class BibliotheekController extends Controller{
 			BibliotheekCatalogusContent::invokeRefresh('Onvoldoende rechten voor deze actie. Biebcontrllr::action_addboek', CSR_ROOT.'communicatie/bibliotheek/');
 		}
 		//formulier verwerken, als het onvoldoende is terug naar formulier
-		if($this->boek->isPostedFields('nieuwboek') AND $this->boek->validFields('nieuwboek') AND $this->boek->saveFields('nieuwboek')){
+		if($this->boek->validForm('nieuwboek') AND $this->boek->saveForm('nieuwboek')){
 			header('location: '.CSR_ROOT.'communicatie/bibliotheek/boek/'.$this->boek->getId());
 		}else{
 			$this->content=new BibliotheekBoekContent($this->boek);
@@ -189,7 +200,7 @@ class BibliotheekController extends Controller{
 		if(!$this->boek->magBekijken()){
 			BibliotheekCatalogusContent::invokeRefresh('Onvoldoende rechten voor deze actie. Biebcontrllr::action_addbeschrijving', CSR_ROOT.'communicatie/bibliotheek/');
 		}
-		if($this->boek->isPostedFields('beschrijving') AND $this->boek->validFields('beschrijving') AND $this->boek->saveFields('beschrijving')){
+		if($this->boek->validForm('beschrijving') AND $this->boek->saveForm('beschrijving')){
 			header('location: '.CSR_ROOT.'communicatie/bibliotheek/boek/'.$this->boek->getId().'#beschrijving'.$this->boek->getBeschrijvingsId());
 		}else{
 			$this->content=new BibliotheekBoekContent($this->boek);
@@ -225,17 +236,21 @@ class BibliotheekController extends Controller{
 		$this->loadBoek();
 		if($this->hasParam(2)){
 			$beschrijvingsid=(int)$this->getParam(2);
+
 			if(!$this->boek->magBewerken($beschrijvingsid)){
-				BibliotheekCatalogusContent::invokeRefresh('Onvoldoende rechten voor deze actie. Biebcontrllr::action_verwijderbeschrijving()', CSR_ROOT.'communicatie/bibliotheek/boek/'.$this->boek->getId());
+				BibliotheekCatalogusContent::invokeRefresh('Onvoldoende rechten voor deze actie. Biebcontrllr::action_bewerkbeschrijving()', CSR_ROOT.'communicatie/bibliotheek/boek/'.$this->boek->getId());
 			}
+
 			//beschrijving ophalen en in bewerkveld plaatsen
 			$this->boek->setValue('beschrijvingsid', $beschrijvingsid);
 			$aBeschrijving = $this->boek->getBeschrijving($beschrijvingsid);
 			$this->boek->setValue('beschrijving', $aBeschrijving['beschrijving']);
-			$this->boek->assignFieldsBeschrijvingForm();
-			$this->boek->setCommentBeschrijvingForm('Bewerk uw beschrijving of recensie van het boek:'); //header bewerkveld goed zetten
-			//controleer en sla op
-			if($this->boek->isPostedFields('beschrijving') AND $this->boek->validFields('beschrijving') AND $this->boek->saveFields('beschrijving',$bewerken=true)){
+			$this->boek->assignFieldsBeschrijvingForm($bewerken=true);
+			//header bewerkveld goed zetten
+			$this->boek->setCommentBeschrijvingForm('Bewerk uw beschrijving of recensie van het boek:');
+
+			//controleer en sla op of geef de bewerkvelden met eventuele foutmeldingen
+			if($this->boek->validForm('beschrijving') AND $this->boek->saveForm('beschrijving', $bewerken=true)){
 				header('location: '.CSR_ROOT.'communicatie/bibliotheek/boek/'.$this->boek->getId().'#beschrijving'.$this->boek->getBeschrijvingsid());
 			}else{
 				$this->content=new BibliotheekBoekContent($this->boek);

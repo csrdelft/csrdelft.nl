@@ -2,11 +2,11 @@
  *	Bibliotheekjavascriptcode.
  */
 jQuery(document).ready(function($) {
-	//tabellen naar zebra converteren.
+	//catalogus: tabellen naar zebra converteren.
 	jQuery("#boeken tr:odd").addClass('odd');
 
 
-	//hippe sorteerbare tabel fixen.
+	//catalogus: hippe sorteerbare tabel fixen.
 	var oTableCatalogus = jQuery("#boekencatalogus").dataTable({
 		"oLanguage": {
 			"sZeroRecords": "Geen boeken gevonden",
@@ -73,7 +73,7 @@ jQuery(document).ready(function($) {
 		return kolommen.aoKolommen;
 	}
 
-	//update de tabel als de radiobuttons of checkbox worden gebruikt
+	//catalogus: update de tabel bij kiezen van een filteroptie
 	$('span.filter').click( function() { 
 		//opmaak van knoppen aanpassen
 		$('span.filter').removeClass('actief').addClass('button');
@@ -81,6 +81,7 @@ jQuery(document).ready(function($) {
 		//actie
 		oTableCatalogus.fnDraw(); 
 	});
+	//catalogus: update de tabel als 'eigenaar&lener' wordt aangevinkt
 	$('input#boekstatus').click( function() { 
 		/* Get the DataTables object again - this is not a recreation, just a get of the object */
 		var oTable = $('#boekencatalogus').dataTable();
@@ -91,12 +92,14 @@ jQuery(document).ready(function($) {
 		oTable.fnSetColumnVis( 4, bVis, true );
 	 } );
 
-	// velden bewerkbaar maken
-	observeClick();
+	// boekpagina: vult code-veld
 	biebCodeVakvuller();
-	
-	// Suggesties voor zoekveld uit Google books. 
-	// Kiezen van een suggestie plaatst in alle velden de juiste info.
+
+	// boekpagina: 
+	//   Suggesties voor zoekveld uit Google books. 
+	//   Kiezen van een suggestie plaatst in alle velden de juiste info.
+
+	//suggestiemenu configureren
 	$("#boekzoeker").autocomplete("https://www.googleapis.com/books/v1/volumes",{
 		dataType: 'jsonp',
 		parse: function(data) {
@@ -124,35 +127,22 @@ jQuery(document).ready(function($) {
 		minChars: 7,
 		delay: 1000,
 		max: 25
+
+	//invullen van info van gekozen suggestie in de boekvelden
 	}).result(function(event, datarow, formatted) {
 		var isbn = '';
 		if(datarow.industryIdentifiers[1] && datarow.industryIdentifiers[1].type == "ISBN_13"){
 			isbn = datarow.industryIdentifiers[1].identifier;
 		}
 		var lang = {
-			nl: "Nederlands",
-			en: "Engels",
-			fr: "Frans",
-			de: "Duits",
-			bg: "Bulgaars",
-			es: "Spaans",
-			cs: "Tsjechisch",
-			da: "Deens",
-			et: "Ests",
-			el: "Grieks",
-			ga: "Iers",
-			it: "Italiaans",
-			lv: "Lets",
-			lt: "Litouws",
-			hu: "Hongaars",
-			mt: "Maltees",
-			pl: "Pools",
-			pt: "Portugees",
-			ro: "Roemeens",
-			sk: "Slowaaks",
-			sl: "Sloveens",
-			fi: "Fins",
-			sv: "Zweeds"
+			nl: "Nederlands", 	en: "Engels", 	fr: "Frans",
+			de: "Duits", 		bg: "Bulgaars", es: "Spaans",
+			cs: "Tsjechisch", 	da: "Deens", 	et: "Ests",
+			el: "Grieks", 		ga: "Iers", 	it: "Italiaans",
+			lv: "Lets", 		lt: "Litouws", 	hu: "Hongaars",
+			mt: "Maltees", 		pl: "Pools", 	pt: "Portugees",
+			ro: "Roemeens", 	sk: "Slowaaks", sl: "Sloveens",
+			fi: "Fins", 		sv: "Zweeds"
 		};
 		//gegevens in invulvelden plaatsen
 		$("#field_titel").val(datarow.title);
@@ -162,7 +152,8 @@ jQuery(document).ready(function($) {
 		$("#field_isbn").val(isbn);
 		$("#field_uitgeverij").val(datarow.publisher);
 		$("#field_uitgavejaar").val(datarow.publishedDate ? datarow.publishedDate.substring(0,4) : '');
-		
+
+	//kleurt invoerveld rood bij te korte zoekterm
 	}).keyup(function(event){
 		var inputl = $(this).val().length
 		if(inputl>0 && inputl < 7){
@@ -171,7 +162,9 @@ jQuery(document).ready(function($) {
 			$(this).css("background-color","white");
 		}
 	});
-	//autocomplete voor bewerkvelden uit C.S.R.-database.
+
+	//boekpagina: autocomplete voor bewerkvelden uit C.S.R.-database. 
+	// TODO naar standaard formuliervelden opzetten.
 	var options = {
 		dataType: 'json',
 		parse: function(data) {
@@ -185,6 +178,7 @@ jQuery(document).ready(function($) {
 		formatItem: function(row, i, n) {
 			return row;
 		},
+		clickFire: true, 
 		max: 20
 	};
 	function opslaanGekozenWaarde(event, datarow, formatted){
@@ -201,47 +195,63 @@ jQuery(document).ready(function($) {
 	$("#field_uitgeverij").autocomplete("/communicatie/bibliotheek/autocomplete/uitgeverij",options);
 	$(".bewerk #field_uitgeverij").result(opslaanGekozenWaarde);
 
-	//opmerking veld aan auteur veld toegevoegd
-	$("#field_auteur.regular").parent().append('<div class="suggestieveld suggestie">Achternaam, Voornaam L. van</div>');
+	//boekpagina: opmerkingveld aan auteurveld toevoegen
+	$("#auteur").append('<div class="suggestieveld suggestie">Achternaam, Voornaam L. van</div>');
+
+	//boekpagina: meldingsvelden toevoegen bewerkbare velden
+	$('.blok .veld').append('<div class="melding"></div>');
+	//boekpagina: asynchroon opslaan toevoegen
+	$('.blok .veld input,.blok .veld select').each(function(index, input){
+		$(this).after(
+			//opslaan-knop toevoegen, met event die met ajax input opslaat
+			$('<div class="knop opslaan">Opslaan</div>').mousedown(function(){
+				var fieldname = input.id.substring(6);
+				var waarde=$(this).prev().val();
+				var boekid=jQuery(".boek").attr('id');
+				var dataString='id='+ fieldname +'&'+ fieldname +'='+ waarde;
+				jQuery.ajax({
+					type: "POST",
+					url: '/communicatie/bibliotheek/bewerkboek/'+ boekid,
+					data: dataString,
+					cache: false,
+					dataType: "json",
+					success: function(result){
+						var field = $("#"+fieldname);
+						if(result.success){
+							//opgeslagen waarde in input zetten
+							$("#"+input.id).val(result.value);
+							//tijdelijke groene bevestiging
+							field.removeClass('metfouten').addClass('opgeslagen');
+							window.setTimeout(function(){
+								field.removeClass('opgeslagen');
+								//field.find(".melding").fadeOut();
+							}, 3000);
+						}else{
+							//rode foutmelding
+							field.removeClass('opgeslagen').addClass('metfouten');
+						}
+						field.find(".melding").html(result.melding).show();
+						//verwijder bewerkt-markering
+						$("#"+input.id).removeClass('nonsavededits')
+					}
+				});
+			})
+		).keydown(function(){
+			//bewerkte velden markeren
+			$(this).addClass('nonsavededits');
+		}).change(function(){
+			//lege velden krijgen een border
+			if($(this).val().length==0){
+				$(this).addClass("leeg");
+			}else{
+				$(this).removeClass("leeg");
+			}
+		}).change();
+	}); 
+
 });
 
-function observeClick(){
-	jQuery(".bewerk").click(function(){
-		//show edit field
-		jQuery(this).children('span.text').hide();
-		jQuery(this).children('.editbox,.editelement').show();
-	}).change(function(){
-		var ID=jQuery(this).attr('id');
-		var waarde=jQuery("#"+ID+" input,#"+ID+" select,#"+ID+" textarea").val();
-		saveChange(ID,waarde);
-	});
-
-
-	// Outside click action
-	jQuery(document).mouseup(function(object){
-		if(!(jQuery(object.target).hasClass("editbox"))){					//in editbox mag je klikken
-				jQuery(".editbox,.editelement").hide();
-				jQuery('[name^="#tat_td"]').hide();
-				jQuery(".text").show();
-		}
-	});
-};
-function saveChange(ID,waarde){
-		var boekid=jQuery(".boek").attr('id');
-		var dataString = 'id='+ID+'&'+ID+'='+ waarde;
-
-		jQuery.ajax({
-			type: "POST",
-			url: '/communicatie/bibliotheek/bewerkboek/'+ boekid,
-			data: dataString,
-			cache: false,
-			success: function(result){
-				jQuery("#"+ID+" span.text").html(result);
-			}
-		});
-};
-
-
+//geneert biebcode met waardes uit andere velden
 function biebCodeVakvuller(){
 	jQuery(".knop.genereer").click(function (event) {
 		event.preventDefault();
@@ -250,7 +260,8 @@ function biebCodeVakvuller(){
 		);
 		jQuery("#field_code").trigger('change');
 	});
-}  
+}
+//zoekt naam op
 function naamCheck(fieldname){
 	field=document.getElementById('field_'+fieldname);
 	if(field.value.length>2){

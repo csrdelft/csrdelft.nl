@@ -21,40 +21,34 @@
 
 
 {* nieuw boek formulier *}
-
 {if $boek->getId()==0}
 	<h1>Nieuw boek toevoegen</h1>
 	<p>Zoek via het Google Books-zoekveld je boek en kies een van de suggesties om de boekgegevens hieronder in te vullen.</p>
 	<div class="boekzoeker" title="Geef titel, auteur, isbn of een ander kenmerk van het boek. Minstens 7 tekens, na 1 seconde verschijnen suggesties.">
 		<label for="boekzoeker"><img src="http://code.google.com/favicon.ico" />&nbsp;Google Books zoeken:</label><input type="text" id="boekzoeker">
 	</div>
-	
-	<form action="/communicatie/bibliotheek/nieuwboek/0" id="boekaddForm" class="boekForm" method="post">
-		{foreach from=$boek->getFields('nieuwboek') item=field}
-			{$field->view()}
-		{/foreach}
-		<div class="submit"><label for="submit">&nbsp;</label><input type="submit" value="opslaan" />
-			<input type="reset" value="reset formulier" />
-			<a class="knop" href="/communicatie/bibliotheek/">Annuleren</a>
-		</div>
-	</form>
+
+	{$boek->getFormulier('nieuwboek')->view()}
+
+
 {else}
-{* weergave boek, met bewerkbare velden *}
+{* weergave bestaand boek, soms met bewerkbare velden *}
+
 	<div class="boek" id="{$boek->getId()}">
 		<div class="blok header">
-			{$boek->getField('titel')->view()}
+	 		{$boek->getFormulier('bewerkboek')->findByName('titel')->view()}
 		</div>
 		<div class="blok gegevens">
-			{$boek->getField('auteur')->view()}
-			{$boek->getField('paginas')->view()}
-			{$boek->getField('taal')->view()}
-			{$boek->getField('isbn')->view()}
-			{$boek->getField('uitgeverij')->view()}
-			{$boek->getField('uitgavejaar')->view()}
+			{$boek->getFormulier('bewerkboek')->findByName('auteur')->view()}
+			{$boek->getFormulier('bewerkboek')->findByName('paginas')->view()}
+			{$boek->getFormulier('bewerkboek')->findByName('taal')->view()}
+			{$boek->getFormulier('bewerkboek')->findByName('isbn')->view()}
+			{$boek->getFormulier('bewerkboek')->findByName('uitgeverij')->view()}
+			{$boek->getFormulier('bewerkboek')->findByName('uitgavejaar')->view()}
 		</div>
 		<div class="blok gegevens">
-			{$boek->getField('rubriek')->view()}
-			{$boek->getField('code')->view()}
+			{$boek->getFormulier('bewerkboek')->findByName('rubriek')->view()}
+			{* {$boek->getFormulier('bewerkboek')->findByName('code')->view()} *}
 		</div>
 	</div>
 
@@ -74,55 +68,50 @@
 
 
 	{* Exemplaren *}
+
 	{assign var=total_exemplaren_bibliotheek value=0} {* teller nodig om in compacte weergave slechts 1 biebboek te laten zien. *}
 	<div class="exemplaren" id="exemplaren">
 		<div class="blok gegevens">
 			<h2>Exemplaren</h2>
 			{foreach from=$boek->getExemplaren() item=exemplaar name=exemplaren}
 				<div class="exemplaar uitgebreid" {if $smarty.foreach.exemplaren.total>4 AND !$boek->isEigenaar($exemplaar.id) AND ($exemplaar.eigenaar_uid!='x222' OR $total_exemplaren_bibliotheek>0 )}style="display: none;"{/if}>
-					<div class="label">{$exemplaar.eigenaar_uid|pasfoto}</div>		
+					<div class="fotolabel">{$exemplaar.eigenaar_uid|pasfoto}</div>
 					<div class="gegevensexemplaar" id="ex{$exemplaar.id}">
 					{* eigenaar *}
-						<label>Eigenaar</label>
-						{if $exemplaar.eigenaar_uid=='x222'}
-							{assign var=total_exemplaren_bibliotheek value=`$total_exemplaren_bibliotheek+1`}
-							C.S.R.-bibliotheek
-						{else}
-							{$exemplaar.eigenaar_uid|csrnaam:'civitas'}
-						{/if}
+						<div class="regel">
+							<label>Eigenaar</label>
+							{if $exemplaar.eigenaar_uid=='x222'}
+								{assign var=total_exemplaren_bibliotheek value=`$total_exemplaren_bibliotheek+1`}
+								C.S.R.-bibliotheek
+							{else}
+								{$exemplaar.eigenaar_uid|csrnaam:'civitas'}
+							{/if}
+						</div>
 					{* opmerking *}
 						{if $boek->isEigenaar($exemplaar.id)}
-							{$boek->getField("opmerking_`$exemplaar.id`")->view()}
+							{$boek->getFormulier('bewerkboek')->findByName("opmerking_`$exemplaar.id`")->view()}
 						{else}
 							{if $exemplaar.opmerking != ''}
-							<br /><label>Opmerking</label><span class="opmerking">{$exemplaar.opmerking|escape:'html'}</span>
-							{/if}
-							<br /><div style="clear: both;"></div>
-						{/if}
-					{* status *}
-						<label>Status</label>
-						{if $exemplaar.status=='uitgeleend'}
-							<span title="Sinds {$exemplaar.uitleendatum|reldate|strip_tags}">Uitgeleend aan {$exemplaar.uitgeleend_uid|csrnaam:'civitas'}</span><br />
-						{/if}
-						{if $exemplaar.status=='teruggegeven'}
-							<span title="Was uitgeleend sinds {$exemplaar.uitleendatum|reldate|strip_tags}">Teruggegeven door {$exemplaar.uitgeleend_uid|csrnaam:'civitas'}</span><br />
-						{/if}
-						{if $exemplaar.status=='vermist'}
-							<span class="melding" title="Sinds {$exemplaar.uitleendatum|reldate|strip_tags}">Vermist</span><br />
-						{/if}
-						{if $exemplaar.status=='beschikbaar' }
-							Beschikbaar<br />
-							{if $boek->isEigenaar($exemplaar.id)}
-								<div class="uitleenveld">
-									<form action="/communicatie/bibliotheek/exemplaarlenen/{$boek->getId()}/{$exemplaar.id}/ander" id="lener_{$exemplaar.id}" class="lenerForm" method="post">
-										{$boek->getField("lener_`$exemplaar.id`")->view()}
-										<input type="hidden" value="lener_{$exemplaar.id}" name="id"/>
-										<div class="submitt">
-											&nbsp;<input type="submit" value="Opslaan" />
-										</div>
-									</form>
+								<div class="regel">
+									<label>Opmerking</label><span class="opmerking">{$exemplaar.opmerking|escape:'html'}</span>
 								</div>
 							{/if}
+						{/if}
+					{* status *}
+						<div class="regel">
+							<label>Status</label>
+							{if $exemplaar.status=='uitgeleend'}
+								<span title="Sinds {$exemplaar.uitleendatum|reldate|strip_tags}">Uitgeleend aan {$exemplaar.uitgeleend_uid|csrnaam:'civitas'}</span>
+							{elseif $exemplaar.status=='teruggegeven'}
+								<span title="Was uitgeleend sinds {$exemplaar.uitleendatum|reldate|strip_tags}">Teruggegeven door {$exemplaar.uitgeleend_uid|csrnaam:'civitas'}</span>
+							{elseif $exemplaar.status=='vermist'}
+								<span class="waarschuwing" title="Sinds {$exemplaar.uitleendatum|reldate|strip_tags}">Vermist</span>
+							{elseif $exemplaar.status=='beschikbaar' }
+								Beschikbaar
+							{/if}
+						</div>
+						{if $exemplaar.status=='beschikbaar' AND $boek->isEigenaar($exemplaar.id)}
+							{$boek->getFormulier('bewerkboek')->findByName("lener_`$exemplaar.id`")->view()}
 						{/if}
 					{* actieknoppen *}
 						<label>&nbsp;</label><div class="actieknoppen">
@@ -216,14 +205,9 @@
 			<p class="header">Nog geen beschrijvingen.</p>
 		{/if}
 
-		{* formulier voor beschrijvingen    *}
-		<form action="/communicatie/bibliotheek/{if $action=='bewerken'}bewerkbeschrijving/{$boek->getId()}/{$boek->getBeschrijvingsId()}{else}addbeschrijving/{$boek->getId()}{/if}" id="addBeschrijving" class="boekForm" method="post">
-			{foreach from=$boek->getFields('beschrijving') item=field}
-				{$field->view()}
-			{/foreach}
-			<div class="submit"><label for="submit">&nbsp;</label><input type="submit" value="opslaan" />
-				<input type="reset" value="reset" />
-			</div>
-		</form>
+		{* formulier voor toevoegen/bewerken van beschrijvingen *}
+
+		{$boek->getFormulier('beschrijving')->view()}
+
 	</div>
 {/if}

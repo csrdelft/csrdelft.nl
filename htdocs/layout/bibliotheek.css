@@ -4,9 +4,6 @@
 h1{
 	margin-top: 5px;
 }
-.melding {
-	color:red;
-}
 .suggestie{
 	color:grey;
 	font-style: italic;
@@ -125,60 +122,105 @@ h1{
 /********************************
  * boek-pagina					*
  ********************************/
-.label,
-.boek label{ float: left; width: 73px; font-size: 9px; color: #999; margin:0px;	padding-left: 2px;}
-.blok { margin-bottom: 20px; clear: left; }
-.gegevens { margin-left: 20px; padding-left: 15px; border-left: 1px solid #0a338d; }
-
-/* bewerkbare velden voor bewerken van boekinfo */
-.boek { 
+.boek{ 
 	float: left;
 	width: 620px;
 }
-.boek .veld{
-	clear: left;
+.fotolabel,
+.exemplaren .exemplaar label,
+.boek label{ 
+	float: left;
+	width: 73px;
+	font-size: 9px;
+	color: #999;
+	margin: 2px 0px 0px 0px;
+	padding-left: 2px;
 }
-.boek .editbox{
-	display:none;
-	background-color:#ffffcc;
-	border:solid 1px #000;
-	padding:1px;
-	width: 481px
+.exemplaren .exemplaar .veld label,
+.boek .veld label{ 
+	width: 70px; /* uitlijnen tekst in inputs */
 }
-.boek .bewerk{
-	padding-right:18px!important;
+.blok { margin-bottom: 20px; clear: left; }
+.gegevens { margin-left: 20px; padding-left: 15px; border-left: 1px solid #0a338d; }
+.regel { height: 15px; }
+
+/* formuliervelden in .blok-div zijn bewerkbaar met ajax (mits gebruiker de rechten heeft) */
+.blok .veld input{
+	background: none;
+	border: 1px solid white;
+	font-size: 11px;
+	font-family : Verdana, Geneva, Arial, Helvetica, sans-serif;
+	width: 250px;
 }
-.boek .bewerk:hover{
-	background:url(http://plaetjes.csrdelft.nl/knopjes/bewerken.png) right no-repeat #ddd;
-	background-position: 564px;
-	cursor:pointer;
+.blok .veld div.opslaan{
+	display: none;
+	margin: 0px 0px 0px 2px;
+	cursor: pointer;
 }
-.boek .bewerk#titel:hover{
-	background-position: 598px;
+.blok .veld:hover{
+	background: url(http://plaetjes.csrdelft.nl/knopjes/bewerken.png) no-repeat 310px #f3f3f3;
+}
+.blok .veld input:focus,
+.blok .veld select:focus{
+	background-color: #FFC;
+	border: 1px solid black;
 }
 
-.boek input#field_code{
-	width: 75px;
+.blok .veld input:focus+div.opslaan,
+.blok .veld select:focus+div.opslaan{
+	display: inline;
 }
+/* waarschuwing bij veld*/
+.blok .veld.metfouten{
+	background-color: #FFC3CE;
+	padding: 4px 2px;
+}
+.blok .veld .melding{
+	float: right;
+	margin-right: 10px;
+	display:none
+}
+
+.blok .veld.opgeslagen input{ background-color: #BFB; }
+.blok .veld.metfouten input{ background-color: #E88; }
+.blok .veld.opgeslagen .melding{ color: green; display: inline; }
+.blok .veld.metfouten .melding{ color: red; display: inline; }
+
+.blok .veld input.leeg{
+	border: 1px solid #D9D9D9;
+}
+.blok .veld input.nonsavededits{
+	background-color: #ea8;
+}
+.blok .veld:hover input,
+.blok .veld:hover select{
+	border: 1px solid #999;
+}
+
+
 /*(bewerkbaar)titel boek*/
-.boek .header span.text, 
-.boek .header span.nonedit, 
+.boek .header input, 
 .boek .header label{
 	font-size: 1.6em !important;
-	margin-bottom: 0.2em;
 	font-weight: bold;
 	line-height: normal;
 }
 .boek .header label{
 	margin-left: 35px;
 }
+.boek .header input{
+	width: 448px;
+}
 .boek .header{
 	margin: 5px 0px 20px 0px;
 }
-
+/* opmaak velden */
+.boek input#field_code{
+	width: 75px;
+}
 
 /* Formulier voor nieuw boek en die voor boekbeschrijving bestaand boek */
-.boekForm label, .boekzoeker label{
+.Formulier label, .boekzoeker label{
 	width: 150px;
 	float: left;
 }
@@ -190,25 +232,23 @@ h1{
 	float: left; 
 	width: 109px; 
 	height: 20px;/* blijft tekstvak op zijn plek bij waarschuwing*/
-	font-size: 9px; 
 	color: white; 
 	margin: 0px;
-
 }
-.boekForm input.regular, .boekzoeker input{
+.Formulier input.regular, .boekzoeker input{
 	width: 400px;
 }
-.boekForm input.uid{
+.Formulier input.uid{
 	width: 80px;
 }
-.boekForm .uidPreview{
+.Formulier .uidPreview{
 	display: inline;
 	padding-left: 10px;
 }
-.boekForm .veld, .boekForm h3, .boekForm .password{
+.Formulier .veld, .Formulier h3, .Formulier .password{
 	clear: both;
 }
-.boekForm .veld, .boekForm .submit, .boekzoeker{
+.Formulier .veld, .Formulier .submit, .boekzoeker{
 	margin-left: 10px;
 	padding: 1px 2px;
 	border: 1px solid white;
@@ -221,15 +261,15 @@ h1{
 #addBeschrijving .submit{
 	margin-left: 0px;
 }
-.boekForm .veld:hover,.boekzoeker{
+.Formulier .veld:hover,.boekzoeker{
 	border: 1px  solid #ddd;
 	background-color: #eee;
 }
-.boekForm .metfouten{
+.Formulier .metfouten{
 	background-color: #FFC3CE;
 	padding: 4px 2px;
 }
-.boekForm .veld .waarschuwing{
+.Formulier .veld .waarschuwing{
 	float: right;
 	margin-right: 10px;
 }
@@ -237,7 +277,7 @@ h1{
 	float: left;
 	margin-right: 10px;
 }
-.boekForm h3{
+.Formulier h3{
 	margin-top: 8px;
 	margin-bottom: 1px;
 }
@@ -249,13 +289,13 @@ h1{
 .beschrijvingen h2{
 	margin-bottom: 5px;
 }
-.boekForm .preview{
+.Formulier .preview{
 	width: 496px;
 }
-.boekForm textarea.regular{
+.Formulier textarea.regular{
 	width: 500px;
 }
-.boekForm .textareaContainer{
+.Formulier .textareaContainer{
 	width: 508px;
 	float:left;
 }
@@ -269,31 +309,27 @@ h1{
 	margin-bottom: 25px;
 	overflow: auto;
 }
-.exemplaren .exemplaar .label{
+.exemplaren .exemplaar .fotolabel{
 	color: white;
 	float: left;
 }
-.exemplaren .exemplaar .label img.pasfoto{
+.exemplaren .exemplaar .fotolabel img.pasfoto{
 	height: 40px;
 	float: left;
 	margin-left: 27px;
 }
 .exemplaren .exemplaar .gegevensexemplaar{
 	float: left;
-	width: 600px;
+	width: 649px;
 }
 .exemplaren .exemplaar .actieknoppen{
 	height: 20px;
 }
 .exemplaren .exemplaar label{
-	float: left;
-	margin: 0px;
 	line-height: normal;
 	width: 75px;
-	font-size: 9px; 
-	color: #999; 
-	padding-left: 2px;
 }
+
 .exemplaren h2{
 	margin-left: 77px;
 	margin-bottom: 5px;
@@ -311,21 +347,6 @@ h1{
 }
 .exemplaren div.naamCheck{
 	margin-left: 5px;
-}
-/* opmerking veld */
-.exemplaren .bewerk{
-	width: 509px;
-}
-.exemplaren .bewerk:hover{
-	background:url(http://plaetjes.csrdelft.nl/knopjes/bewerken.png) no-repeat 487px #ddd;
-	cursor:pointer;
-}
-.exemplaren .bewerk input{
-	width: 400px;
-}
-.exemplaren .bewerk span.text,.exemplaren span.opmerking {
-	width: 406px;
-	float: left;
 }
 .exemplaren .exemplaar.compact a {
 	float: left;
