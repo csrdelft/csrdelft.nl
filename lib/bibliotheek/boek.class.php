@@ -980,6 +980,7 @@ class Boek{
 	 * 
 	 */
 	public function assignAjaxFieldsForm(){
+		$editablefieldsform=array();
 		//Eigenaar een exemplaar v.h. boek mag alleen bewerken
 		if($this->isEigenaar()){
 			$editablefieldsform['titel']=new RequiredInputField('titel', $this->getTitel(), 'Boek', 200, 'Titel ontbreekt!');
@@ -991,17 +992,6 @@ class Boek{
 			$editablefieldsform['uitgavejaar']=new IntField('uitgavejaar', $this->getUitgavejaar(), 'Uitgavejaar',2100,0);
 			$editablefieldsform['rubriek']=new SelectField('rubriek', $this->getRubriek()->getId(), 'Rubriek',Rubriek::getAllRubrieken($samenvoegen=true,$short=true));
 			//$editablefieldsform['code']=new CodeField('code', $this->getCode(), 'Biebcode');
-		}else{ //anderen mogen niet bewerken
-			$editablefieldsform['titel']=new NonEditableAjaxField('titel', $this->getTitel(), 'Boek');
-			$editablefieldsform['auteur']=new NonEditableAjaxField('auteur', $this->getAuteur()->getNaam(),'Auteur');
-			$editablefieldsform['paginas']=new NonEditableAjaxField('paginas', $this->getPaginas() , "Pagina's");
-			$editablefieldsform['taal']=new NonEditableAjaxField('taal', $this->getTaal(), 'Taal');
-			$editablefieldsform['isbn']=new NonEditableAjaxField('isbn', $this->getISBN(), 'ISBN');
-			$editablefieldsform['uitgeverij']=new NonEditableAjaxField('uitgeverij', $this->getUitgeverij(), 'Uitgeverij');
-			$editablefieldsform['uitgavejaar']=new NonEditableAjaxField('uitgavejaar', $this->getUitgavejaar(), 'Uitgavejaar');
-			$editablefieldsform['rubriek']=new NonEditableAjaxField('rubriek', $this->getRubriek()->getRubrieken(), 'Rubriek');
-			$editablefieldsform['code']=new NonEditableAjaxField('code', $this->getCode(), 'Biebcode');
-			
 		}
 
 		//voor eigenaars een veldje maken om boek uit te lenen.

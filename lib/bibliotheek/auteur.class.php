@@ -37,6 +37,9 @@
 			}
 		}
 	}
+	public function __toString(){
+		return $this->getNaam();
+	}
 
 	public function getId(){			return $this->id;}
 	public function getNaam(){			return $this->naam;}

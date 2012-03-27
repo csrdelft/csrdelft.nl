@@ -35,21 +35,39 @@
 {* weergave bestaand boek, soms met bewerkbare velden *}
 
 	<div class="boek" id="{$boek->getId()}">
-		<div class="blok header">
-	 		{$boek->getFormulier('bewerkboek')->findByName('titel')->view()}
-		</div>
-		<div class="blok gegevens">
-			{$boek->getFormulier('bewerkboek')->findByName('auteur')->view()}
-			{$boek->getFormulier('bewerkboek')->findByName('paginas')->view()}
-			{$boek->getFormulier('bewerkboek')->findByName('taal')->view()}
-			{$boek->getFormulier('bewerkboek')->findByName('isbn')->view()}
-			{$boek->getFormulier('bewerkboek')->findByName('uitgeverij')->view()}
-			{$boek->getFormulier('bewerkboek')->findByName('uitgavejaar')->view()}
-		</div>
-		<div class="blok gegevens">
-			{$boek->getFormulier('bewerkboek')->findByName('rubriek')->view()}
-			{* {$boek->getFormulier('bewerkboek')->findByName('code')->view()} *}
-		</div>
+		{if $boek->isEigenaar()}
+			<div class="blok header">
+				{$boek->getFormulier('bewerkboek')->findByName('titel')->view()}
+			</div>
+			<div class="blok gegevens">
+				{$boek->getFormulier('bewerkboek')->findByName('auteur')->view()}
+				{$boek->getFormulier('bewerkboek')->findByName('paginas')->view()}
+				{$boek->getFormulier('bewerkboek')->findByName('taal')->view()}
+				{$boek->getFormulier('bewerkboek')->findByName('isbn')->view()}
+				{$boek->getFormulier('bewerkboek')->findByName('uitgeverij')->view()}
+				{$boek->getFormulier('bewerkboek')->findByName('uitgavejaar')->view()}
+			</div>
+			<div class="blok gegevens">
+				{$boek->getFormulier('bewerkboek')->findByName('rubriek')->view()}
+				{* {$boek->getFormulier('bewerkboek')->findByName('code')->view()} *}
+			</div>
+		{else}
+			<div class="blok header">
+				<div><label>Boek</label>{$boek->getTitel()}</div>
+			</div>
+			<div class="blok gegevens">
+				<div class="regel"><label>Auteur</label>{$boek->getAuteur()}</div>
+				<div class="regel"><label>Pagina's</label>{$boek->getPaginas()}</div>
+				<div class="regel"><label>Taal</label>{$boek->getTaal()}</div>
+				<div class="regel"><label>ISBN</label>{$boek->getISBN()}</div>
+				<div class="regel"><label>Uitgeverij</label>{$boek->getUitgeverij()}</div>
+				<div class="regel"><label>Uitgavejaar</label>{$boek->getUitgavejaar()}</div>
+			</div>
+			<div class="blok gegevens">
+				<div class="regel"><label>Rubriek</label>{$boek->getRubriek()}</div>
+				{if $boek->getCode()!=''}<div class="regel"><label>Code</label>{$boek->getCode()}</div>{/if}
+			</div>
+		{/if}
 	</div>
 
 

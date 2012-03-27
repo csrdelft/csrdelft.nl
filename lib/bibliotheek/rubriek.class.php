@@ -38,6 +38,9 @@
 			}
 		}
 	}
+	public function __toString(){
+		return $this->getRubrieken();
+	}
 
 	private function setId($id){ 	$this->id=(int)$id;}
 
