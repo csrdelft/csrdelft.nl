@@ -28,16 +28,44 @@
 	{if date("m-d")=="04-01"}
 		{* 1 april astriods... *}
 		{literal}
-		<script type="text/javascript">
-			function startAstroids(){
-				var s=document.createElement('script');
-				s.type='text/javascript';
-				document.body.appendChild(s);
-				s.src='http://erkie.github.com/asteroids.min.js';
-				void(0);
-			}
-			setTimeout(startAstroids,Math.floor(2000+Math.random()*50001));
-		</script>
+	<script type="text/javascript">
+	$(function() {
+	$("#container").css({
+		position: "relative",
+		left: 0
+	}).each(function() {
+	
+		function shuffle() {
+			$("#container").animate({left: -100}, 50);
+			$("#container").animate({left: 100}, 50);
+			$("#container").animate({left: -200}, 50);
+			$("#container").animate({left: 200}, 50);
+			$("#container").animate({left: -300}, 50);
+			$("#container").animate({left: 300}, 50);
+			$("#container").animate({left: -200}, 50);
+			$("#container").animate({left: 200}, 50);
+			$("#container").animate({left: -100}, 50);
+			$("#container").animate({left: 100}, 50);
+			$("#container").animate({left: 0}, 50);
+			
+	
+			setTimeout(function() {
+			
+				shuffle();
+			
+			}, Math.random() * 10000);
+		
+		}
+	
+		setTimeout(function() {
+		
+			shuffle();
+		
+		}, Math.random() * 10000);
+	
+	});
+	});
+	</script>
 		{/literal}
 	{/if}
 	<meta property="og:image" content="http://plaetjes.csrdelft.nl/layout/beeldmerk.jpg" />
