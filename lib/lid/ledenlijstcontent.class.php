@@ -294,6 +294,13 @@ class LLLijst extends LLweergave{
 				case 'website':
 					echo '<a href="'.mb_htmlentities($lid->getProperty($veld)).'" class="linkExt">'.mb_htmlentities($lid->getProperty($veld)).'</a>';
 				break;
+				case 'corvee_kwalikok':
+					if($lid->getProperty($veld)==1){
+						echo 'ja';
+					}else{
+						echo 'nee';
+					}
+				break;
 				default:
 					try{
 						echo mb_htmlentities($lid->getProperty($veld));
