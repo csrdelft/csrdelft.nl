@@ -13,7 +13,13 @@
 //uncomment de volgende regel om de boel in onderhoudsmode te ketzen
 //define('MODE', 'ONDERHOUD');
 
-define('DEBUG', 'DEBUG');
+# de wiki genereert de nodige notices. En heeft daarom de error_reporting 
+# anders ingesteld.
+global $conf;
+if(!(isset($conf['authtype']) AND $conf['authtype']=='csr')){
+	define('DEBUG', 'DEBUG');
+}
+
 if(defined('DEBUG')){
 	error_reporting(E_ALL);
 }
@@ -77,7 +83,6 @@ switch (constant('MODE')) {
 	case 'WEB':
 		//als er een wikiconfiguratie is en hierin is de csr-wikiauthicatie geselecteerd 
 		//dan is de sessie al gestart en zijn sommige includes niet nodig.
-		global $conf;
 		if(!(isset($conf['authtype']) AND $conf['authtype']=='csr')){
 			//sessie starten
 			require_once 'simplehtml.class.php';
