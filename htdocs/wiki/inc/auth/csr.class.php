@@ -147,6 +147,33 @@ class auth_csr extends auth_basic {
     $loginlid->logout();
   }
 
+    /**
+     * Return user info [required function]
+     *
+     * Returns info about the given user needs to contain
+     * at least these fields:
+     *
+     * name string  full name of the user
+     * mail string  email addres of the user
+     * grps array   list of groups the user is in
+     *
+     */
+    function getUserData($useruid){
+      
+      if(Lid::isValidUid($useruid)){
+        $lid=LidCache::getLid($useruid);
+
+        $info['name']=$lid->getNaam();
+        $info['mail']=$lid->getEmail();
+        require_once 'groepen/groep.class.php';
+        $info['grps']=Groepen::getWikigroupsByUid($useruid);
+
+        return $info;
+      }else{
+        return false;
+      }
+    }
+
 }
 
 //Setup VIM: ex: et ts=2 :
