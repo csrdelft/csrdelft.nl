@@ -219,6 +219,56 @@ class Groepen{
 		}
 		return $groepen;
 	}
+	/*
+	 * statische functie om de groepen bij een gebruiker te zoeken 
+	 * waarvan ie in de wiki pagina's mag wijzigen
+	 *
+	 * @param	$uid	Gebruiker waarvoor groepen moeten worden opgezocht
+	 * @return			Array met de kortenamen van de groepen
+	 */
+	public static function getWikigroupsByUid($uid){
+		$db=MySql::instance();
+
+		$groepen=array();
+		if(Lid::isValidUid($uid)){
+			$qGroepen="
+				SELECT
+					DISTINCT g.snaam as kortenaam
+				FROM 
+					groep g
+				INNER JOIN 
+					groeptype ON(g.gtype=groeptype.id)
+				WHERE 
+					groeptype.syncWithLDAP=1
+					AND g.id IN (
+						SELECT groepid FROM groeplid WHERE uid = '0431'
+					)
+					AND (
+						g.status IN ('ft', 'ht')
+						OR g.id = (
+							SELECT id
+							FROM groep
+							WHERE status='ot' AND snaam=g.snaam
+							ORDER BY begin DESC
+							LIMIT 1
+						)
+					);";
+			$rGroepen=$db->query($qGroepen);
+			if ($rGroepen !== false and $db->numRows($rGroepen) > 0){
+				while($row=$db->next($rGroepen)){
+					$groepen[]=$row['kortenaam'];
+				}
+			}
+			//leden en oudleden krijgen een extra groep 'htleden'
+			$lid=LidCache::getLid($uid);
+			//S_CIEs die wel als normaal lid mogen inloggen
+			$magLidtoegang = array('x271', 'x030'); //oudledenbestuur & stichting CC
+			if ($lid->isLid() OR $lid->isOudlid OR in_array($lid->getUid(), $magLidtoegang)){
+				$groepen[]='htleden';
+			}
+		}
+		return $groepen;
+	}
 	//Alle h.t. groepen in een categorie o.t. maken.
 	public function maakGroepenOt(){
 		$error='';

@@ -75,16 +75,26 @@ switch (constant('MODE')) {
 			exit;
 		}
 	case 'WEB':
-		require_once 'simplehtml.class.php';
-		require_once 'csrdelft.class.php';
-		require_once 'csrubb.class.php';
-		require_once 'csrsmarty.class.php';
-		require_once 'icon.class.php';
+		//als er een wikiconfiguratie is en hierin is de csr-wikiauthicatie geselecteerd 
+		//dan is de sessie al gestart en zijn sommige includes niet nodig.
+		global $conf;
+		if(!(isset($conf['authtype']) AND $conf['authtype']=='csr')){
+			//sessie starten
+			require_once 'simplehtml.class.php';
+			require_once 'csrdelft.class.php';
+			require_once 'csrubb.class.php';
+			require_once 'csrsmarty.class.php';
+			require_once 'icon.class.php';
 
-		# N.B. het is van belang dat na het starten van de sessie meteen het databaseobject en het
-		# Lid-object worden aangemaakt, omdat die de ingelogde gebruiker controleert, en tevens
-		# sess_deleted bugs ondervangt en ip-checks doet
-		session_start();
+			//volgt de defaults van webserver Syrinx, zodat testen met een workcopy overeenkomt.
+			session_name("PHPSESSID");
+			session_set_cookie_params(1036800, '/', '', false,false);
+
+			# N.B. het is van belang dat na het starten van de sessie meteen het databaseobject en het
+			# Lid-object worden aangemaakt, omdat die de ingelogde gebruiker controleert, en tevens
+			# sess_deleted bugs ondervangt en ip-checks doet
+			session_start();
+		}
 		//database & lid initialiseren...
 		$db = MySQL::instance();
 		$loginlid = LoginLid::instance();

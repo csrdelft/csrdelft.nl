@@ -758,17 +758,24 @@ class Groep{
 			# ldap entry in elkaar snokken
 			$entry = array();
 			$entry['cn'] = $this->getSnaam();
+			# zijn er groepsleden?
 			if(count($groepsleden)!=0){
 				foreach($groepsleden as $lid){
 					$entry['member'][] = 'uid='.$lid['uid'].',ou=leden,dc=csrdelft,dc=nl';
 				}
-			}
 
-			# bestaat dit groepid al in ldap? dan wijzigen, anders aanmaken
-			if($ldap->isGroep($entry['cn'])){
-				$ldap->modifyGroep($entry['cn'], $entry);
+				# bestaat dit groepid al in ldap? dan wijzigen, anders aanmaken
+				if($ldap->isGroep($entry['cn'])){
+					$ldap->modifyGroep($entry['cn'], $entry);
+				}else{
+					$ldap->addGroep($entry['cn'], $entry);
+				}
 			}else{
-				$ldap->addGroep($entry['cn'], $entry);
+				# ldap_add() slaat geen groepen zonder members op.
+				# om het consequent te houden ook groepen die helemaal leeglopen verwijderen
+				if($ldap->isGroep($entry['cn'])){
+					$ldap->removeGroep($entry['cn']);
+				}
 			}
 		}else{
 			# als deze groep niet gesyncd moet worden even kijken of de groepid in ldap voorkomt, zo ja wissen

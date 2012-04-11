@@ -1,0 +1,128 @@
+/**
+ * Eigen aanpassingen op default opmaak
+ * /
+
+/** 
+ * CSS edits for the DokuWiki SidebarNG plugin
+ */
+
+div.dokuwiki div.left_sidebar {
+  width: 14%;
+}
+
+div.dokuwiki div.page_right {
+  width: 84%; 
+}
+
+
+/**
+ * CSS edits for data plugin
+ */
+ 
+/* ----dataentry data plugin--- */
+
+/* hele wiki */
+div.dataplugin_entry dl {
+  width: 60%; 
+  font-size: 100%;
+}
+
+div.dataaggregation div.filter {
+  margin-top:40px;
+  margin-bottom:10px;
+}
+div.dataaggregation span.filter {
+  font-size: 120%;
+  font-weight: bold;
+}
+
+/* vormingsbank */
+div.vb {
+  /* code for the container block, such as position, layout and borders, goes here */
+}
+ 
+div.vb dl {
+  /* vakje om de dataentry */
+  border: 0px;
+  margin-left:0em;
+  padding-left:0em;
+}
+
+div.vb dl > dt { 
+  /* this will allow you to style the definition terms */
+  text-align: left;
+}
+ 
+div.vb dl > dt + dd {
+  /* this will allow you to style to the definition values */
+}
+div.vb dl dd.titel{
+  /* individual entries of dataentry */
+  /* font-size: 200%;*/
+}
+/* --- einde dataentry  ---*/
+
+/* tag cloud data plugin */
+ul.dataplugin_cloud{
+  line-height: 1.8em !important; 
+  margin-left: 1.6em !important;
+}
+
+ul.dataplugin_cloud li.cl0 { font-size: 80% }
+ul.dataplugin_cloud li.cl1 { font-size: 95% }
+ul.dataplugin_cloud li.cl2 { font-size: 110% }
+ul.dataplugin_cloud li.cl3 { font-size: 130% }
+ul.dataplugin_cloud li.cl4 { font-size: 150% }
+
+/**
+ * Search form plugin 
+ * extra zoekvakje dat in pagina geplaatst kan worden
+ */
+ 
+
+div#qsearch2__out {
+    position: absolute;
+    right: auto;
+    left: 0;
+}
+
+#qsearch2__out {
+  top: 35px;
+  display: none;
+  left: auto;
+  right: 7.93335px;
+  bottom: auto;
+  height: auto;
+  font-family: sans-serif;
+  font-size: 0.8em;
+  background-color: window;
+  border: 1px solid #aaa;
+  padding: 0;
+  position: static;
+}
+
+#qsearch2__out ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+#qsearch2__out li {
+  color: windowtext;
+  margin: 0;
+  width: 100%;
+  padding: 1px;
+}
+#qsearch2__out li a {
+  width: 97%; /* leave some space for browser rounding errors */
+  display: block;
+}
+#qsearch2__out li:hover {
+  background-color: #bbb;
+}
+#qsearch2__out li a,
+#qsearch2__out li a:link,
+#qsearch2__out li a:visited,
+#qsearch2__out li a:hover {
+  color: windowtext;
+  text-decoration: none;
+}
