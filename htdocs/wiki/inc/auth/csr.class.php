@@ -88,6 +88,7 @@ class auth_csr extends auth_basic {
     global $USERINFO;
     global $lang;
     global $loginlid;
+    global $conf;
 
     # als er een gebruiker is gegeven willen we graag eerst proberen in te loggen via inlogformulier
     if(!empty($user)){
@@ -110,6 +111,10 @@ class auth_csr extends auth_basic {
       $USERINFO['mail'] = $loginlid->getLid()->getEmail();
       require_once 'groepen/groep.class.php';
       $USERINFO['grps'] = Groepen::getWikigroupsByUid($loginlid->getUid());
+      // always add the default group to the list of groups
+      if(!in_array($conf['defaultgroup'],$USERINFO['grps'])){
+        $USERINFO['grps'][] = $conf['defaultgroup'];
+      }
 
       $_SERVER['REMOTE_USER'] = $loginlid->getUid();
       $_SESSION[DOKU_COOKIE]['auth']['user'] = $loginlid->getUid();
@@ -159,7 +164,8 @@ class auth_csr extends auth_basic {
      *
      */
     function getUserData($useruid){
-      
+      global $conf;
+
       if(Lid::isValidUid($useruid)){
         $lid=LidCache::getLid($useruid);
 
@@ -167,6 +173,10 @@ class auth_csr extends auth_basic {
         $info['mail']=$lid->getEmail();
         require_once 'groepen/groep.class.php';
         $info['grps']=Groepen::getWikigroupsByUid($useruid);
+        // always add the default group to the list of groups
+        if(!in_array($conf['defaultgroup'],$info['grps']) AND $useruid!='x999'){
+          $info['grps'][] = $conf['defaultgroup'];
+        }
 
         return $info;
       }else{

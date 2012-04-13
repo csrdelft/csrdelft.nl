@@ -263,7 +263,7 @@ class Groepen{
 			$lid=LidCache::getLid($uid);
 			//S_CIEs die wel als normaal lid mogen inloggen
 			$magLidtoegang = array('x271', 'x030'); //oudledenbestuur & stichting CC
-			if ($lid->isLid() OR $lid->isOudlid OR in_array($lid->getUid(), $magLidtoegang)){
+			if ($lid->isLid() OR $lid->isOudlid() OR in_array($lid->getUid(), $magLidtoegang)){
 				$groepen[]='htleden-oudleden';
 			}
 		}
