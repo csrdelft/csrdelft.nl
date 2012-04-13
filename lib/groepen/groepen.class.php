@@ -241,7 +241,7 @@ class Groepen{
 				WHERE 
 					groeptype.syncWithLDAP=1
 					AND g.id IN (
-						SELECT groepid FROM groeplid WHERE uid = '0431'
+						SELECT groepid FROM groeplid WHERE uid = '".$uid."'
 					)
 					AND (
 						g.status IN ('ft', 'ht')
@@ -264,7 +264,7 @@ class Groepen{
 			//S_CIEs die wel als normaal lid mogen inloggen
 			$magLidtoegang = array('x271', 'x030'); //oudledenbestuur & stichting CC
 			if ($lid->isLid() OR $lid->isOudlid OR in_array($lid->getUid(), $magLidtoegang)){
-				$groepen[]='htleden';
+				$groepen[]='htleden-oudleden';
 			}
 		}
 		return $groepen;
