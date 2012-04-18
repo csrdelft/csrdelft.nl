@@ -667,14 +667,15 @@ class Lid implements Serializable, Agendeerbaar{
 	public function serialize(){
 		$lid['uid']=$this->getUid();
 		$lid['profiel']=$this->getProfiel();
-		$lid['kinderen']=$this->getKinderen();
+		//$lid['kinderen']=$this->getKinderen();
 		return serialize($lid);
 	}
 	public function unserialize($serialized){
 		$lid=unserialize($serialized);
 		$this->uid=$lid['uid'];
 		$this->profiel=$lid['profiel'];
-		$this->kinderen=$lid['kinderen'];
+		//$this->kinderen=$lid['kinderen'];
+		$this->kinderen=null;
 	}
 
 	/*
@@ -844,9 +845,11 @@ class LidCache{
 		}
 		//als de lokale cache het lid-object al heeft scheelt het weer
 		//een tripje naar memcached.
+/*
 		if(isset(LidCache::$localCache[$uid])){
 			return LidCache::$localCache[$uid];
 		}
+*/
 		//kijken of we dit lid al in memcached hebben zitten
 		$lid=Memcached::instance()->get($uid);
 		if($lid===false){
@@ -854,7 +857,7 @@ class LidCache{
 				//nieuw lid maken, in memcache & local cache stoppen en teruggeven.
 				$lid=new Lid($uid);
 				Memcached::instance()->set($uid, serialize($lid));
-				LidCache::$localCache[$uid]=$lid;
+				//LidCache::$localCache[$uid]=$lid;
 				return $lid;
 			}catch(Exception $e){
 				return null;
@@ -867,9 +870,11 @@ class LidCache{
 		if(!Lid::isValidUid($uid)){
 			return false;
 		}
+/*
 		if(isset(LidCache::$localCache[$uid])){
 			unset(LidCache::$localCache[$uid]);
 		}
+*/
 		return Memcached::instance()->delete($uid);
 	}
 
@@ -880,7 +885,7 @@ class LidCache{
 	}
 
 	public static function flushAll(){
-		return Memcached::instance()->flush() AND LidCache::$localCache=array();
+		return Memcached::instance()->flush();// AND LidCache::$localCache=array();
 	}
 }
 
