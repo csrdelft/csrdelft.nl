@@ -3,7 +3,6 @@ jQuery(document).ready(function($){
 		$(this).wrap('<div id="meldingen"></div>');
 		
 		if($(this).hasClass('extern')){
-			console.log($('#meldingen'));
 			$('#meldingen').prepend('<div id="extern_melding"><strong>Openbaar forum</strong><br />Voor iedereen leesbaar, doorzoekbaar door zoekmachines.</div>');
 		}
 	}).keyup(function(event){
