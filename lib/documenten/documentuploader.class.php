@@ -27,6 +27,8 @@ abstract class DocumentUploader{
 	protected function addError($error){ $this->errors.=$error."\n"; }
 	public function getErrors(){ return $this->errors; }
 
+	
+	public function available(){ return true; }				//is deze uploadmethode beschikbaar?
 	abstract public function valid();						//is de formulierinvoer geldig voor deze methode?
 	abstract public function movefile(Document $document);	//bestand uiteindelijk opslaan op de juiste plek.
 
@@ -52,13 +54,16 @@ abstract class DocumentUploader{
 	public static function getAll($document, $active, $includeKeepfile=true){
 		$methodes=array('DUKeepfile', 'DUFileupload', 'DUFromurl', 'DUFromftp');
 		$return=array();
-		foreach($methodes as $methode){
-			if(!$includeKeepfile AND $methode=='DUKeepfile'){
+		foreach($methodes as $methodenaam){
+			if(!$includeKeepfile AND $methodenaam=='DUKeepfile'){
 				continue;
 			}
-			$return[$methode]=new $methode($document);
-			if($active==$methode){
-				$return[$methode]->isActive=true;
+			$methode=new $methodenaam($document);
+			if($methode->available()){
+				$return[$methodenaam]=$methode;
+				if($active==$methodenaam){
+					$return[$methodenaam]->isActive=true;
+				}
 			}
 		}
 		return $return;
@@ -130,6 +135,14 @@ class DUFileupload extends DocumentUploader{
 		echo '<label for="fromUrl">Selecteer bestand: </label><input type="file" name="file_upload" />';
 	}
 }
+
+/**
+ * DUFromurl
+ *
+ * Kan een bestand downloaden van een url, met file_get_contents of de
+ * cURL-extensie. Als beide niet beschikbaar zijn wordt het formulier-
+ * element niet weergegeven.
+ */
 class DUFromurl extends DocumentUploader{
 
 	private $file; //string met het hele bestand.
@@ -139,20 +152,45 @@ class DUFromurl extends DocumentUploader{
 		$this->beschrijving='Ophalen vanaf url';
 	}
 
+	public function available(){
+		return $this->file_get_contents_available() OR function_exists('curl_init');
+	}
+	
+	protected function file_get_contents_available(){
+		return in_array(ini_get('allow_url_fopen'), array('On', 'Yes', 1));
+	}
+	
+	protected function curl_file_get_contents($url){
+		$ch=curl_init();
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
+		return curl_exec($ch);
+	}
+	
+	protected function file_get_contents($url){
+		if($this->file_get_contents_available()){
+			return @file_get_contents($url);
+		}else{
+			return $this->curl_file_get_contents($url);
+		}
+	}
+	
+	
 	public function valid(){
+		if(!$this->available()){
+			$this->addError('PHP.ini configuratie: cURL of allow_url_fopen moet aan staan...');
+		}
 		if(!isset($_POST['url'])){
 			$this->addError('Formulier niet compleet');
 		}
 		if(!url_like(urldecode($_POST['url']))){
 			$this->addError('Dit lijkt niet op een url...');
 		}
-		if(!in_array(ini_get('allow_url_fopen'), array('On', 'Yes', 1))){
-			$this->addError('PHP.ini configuratie fout: allow_url_fopen moet op On staan...');
-		}
+		
 		$this->url=$_POST['url'];
 
 		if($this->getErrors()==''){
-			$this->file=@file_get_contents($this->url);
+			$this->file=$this->file_get_contents($this->url);
 			if(strlen($this->file)==0){
 				$this->addError('Bestand is leeg, check de url.');
 			}else{
@@ -175,6 +213,7 @@ class DUFromurl extends DocumentUploader{
 		}
 		return $this->getErrors()=='';
 	}
+	
 	public function moveFile(Document $document){
 		return $document->putFile($this->file);
 	}
@@ -186,7 +225,6 @@ class DUFromurl extends DocumentUploader{
 				<input type="text" name="url" class="fromurl" value="'.$this->url.'" /><br />
 				<span class="small">Bestanden zullen met het mime-type <code>application/octet-stream</code> worden opgeslagen.</span>
 			</div>';
-
 	}
 }
 class DUFromftp extends DocumentUploader{
