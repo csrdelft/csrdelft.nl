@@ -180,10 +180,10 @@
 							<input type="text" name="firstname" value="" class="verborgen" />
 						{* ingelogde gebruikers vertellen dat iedereen hun bericht mag lezen inclusief Google. *}
 						{elseif $onderwerp->isOpenbaar()} 
-							Openbaar forum: Iedereen mag dit lezen en zoekmachines nemen het op in hun zoekresultaten.
+							{* Openbaar forum: Iedereen mag dit lezen en zoekmachines nemen het op in hun zoekresultaten. *}
 						{/if}
 						<div id="berichtPreviewContainer" class="previewContainer"><div id="berichtPreview" class="preview"></div></div>
-						<textarea name="bericht" id="forumBericht" class="forumBericht" rows="12">{$textarea}</textarea>
+						<textarea name="bericht" id="forumBericht" class="forumBericht {if $onderwerp->isOpenbaar()}extern{/if}" rows="12">{$textarea}</textarea>
 
 						<a style="float: right;" class="handje knop" onclick="toggleDiv('ubbhulpverhaal')" title="Opmaakhulp weergeven">UBB</a>
 						<a style="float: right;" class="handje knop" onclick="vergrootTextarea('forumBericht', 10)" title="Vergroot het invoerveld"><strong>&uarr;&darr;</strong></a>

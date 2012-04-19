@@ -1,6 +1,11 @@
 jQuery(document).ready(function($){
 	$('#forumBericht').each(function(){
-		$(this).wrap('<div style="position: relative"></div>');
+		$(this).wrap('<div id="meldingen"></div>');
+		
+		if($(this).hasClass('extern')){
+			console.log($('#meldingen'));
+			$('#meldingen').prepend('<div id="extern_melding"><strong>Openbaar forum</strong><br />Voor iedereen leesbaar, doorzoekbaar door zoekmachines.</div>');
+		}
 	}).keyup(function(event){
 		var textarea=$(this);
 		
@@ -13,7 +18,7 @@ jQuery(document).ready(function($){
 					textarea.before('<div id="ubb_melding">UBB gevonden:<br /> controleer het voorbeeld.</div>');
 					
 					$('#ubb_melding').click(function(){
-						toggleDiv('ubbhulpverhaal');
+						$('#ubbhulpverhaal').toggle();
 					});
 				}
 			}
