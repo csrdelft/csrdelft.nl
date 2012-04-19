@@ -107,17 +107,19 @@ class auth_csr extends auth_basic {
     if($loginlid->getUid()!='x999'){
       // okay we're logged in - set the globals
       //$USERINFO['pass'] = ''; // niet nodig.
-      $USERINFO['name'] = $loginlid->getLid()->getNaam();
-      $USERINFO['mail'] = $loginlid->getLid()->getEmail();
+      $lid = $loginlid->getLid();
+      $USERINFO['name'] = $lid->getNaam();
+      $USERINFO['mail'] = $lid->getEmail();
+      $USERINFO['pasfoto'] = $lid->getPasfoto($imgTag=false);
       require_once 'groepen/groep.class.php';
-      $USERINFO['grps'] = Groepen::getWikigroupsByUid($loginlid->getUid());
+      $USERINFO['grps'] = Groepen::getWikigroupsByUid($lid->getUid());
       // always add the default group to the list of groups
       if(!in_array($conf['defaultgroup'],$USERINFO['grps'])){
         $USERINFO['grps'][] = $conf['defaultgroup'];
       }
 
-      $_SERVER['REMOTE_USER'] = $loginlid->getUid();
-      $_SESSION[DOKU_COOKIE]['auth']['user'] = $loginlid->getUid();
+      $_SERVER['REMOTE_USER'] = $lid->getUid();
+      $_SESSION[DOKU_COOKIE]['auth']['user'] = $lid->getUid();
       $_SESSION[DOKU_COOKIE]['auth']['info'] = $USERINFO;
       return true;
 
@@ -171,6 +173,7 @@ class auth_csr extends auth_basic {
 
         $info['name']=$lid->getNaam();
         $info['mail']=$lid->getEmail();
+        $info['pasfoto'] = $lid->getPasfoto($imgTag=false);
         require_once 'groepen/groep.class.php';
         $info['grps']=Groepen::getWikigroupsByUid($useruid);
         // always add the default group to the list of groups
