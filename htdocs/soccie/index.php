@@ -27,11 +27,15 @@
           startTime: '<?php echo $time; ?>'
         });
 		
+		$(window).resize(function() {
+		
 		$("#container").each(function() {
 		
 			$(this).css({paddingTop: ($(document).height() - $(this).height()) / 2});
 		
 		});
+		
+		}).resize();
 		
       });
     </script>
