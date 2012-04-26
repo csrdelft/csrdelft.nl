@@ -148,6 +148,7 @@ htdocs/layout/js/autocomplete/jquery.autocomplete.css -text
 htdocs/layout/js/autocomplete/jquery.autocomplete.js -text
 htdocs/layout/js/autocomplete/jquery.autocomplete.min.js -text
 htdocs/layout/js/bibliotheek.js -text
+htdocs/layout/js/countdown.js -text
 htdocs/layout/js/csrdelft.js -text
 htdocs/layout/js/datatables/css/datatables_basic.css -text
 htdocs/layout/js/datatables/images/back_disabled.jpg -text
@@ -229,6 +230,8 @@ htdocs/logout.php -text
 htdocs/pagina.php -text
 htdocs/pauper.php -text
 htdocs/robots.txt -text
+htdocs/soccie/count.png -text
+htdocs/soccie/index.php -text
 htdocs/su.php -text
 htdocs/tools/.htaccess -text
 htdocs/tools/ajax/ajax.php -text

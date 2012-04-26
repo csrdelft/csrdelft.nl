@@ -8,6 +8,10 @@ RewriteEngine On
 ### mod_rewrite-dingen
 RewriteRule ^instellingen/?$			instellingen.php
 RewriteRule ^pauper/?$				pauper.php
+
+# SocCie
+RewriteRule ^soccie/?$				soccie/index.php
+
 # Pagina
 RewriteRule ^pagina/([a-z]+)/bewerken? pagina.php?naam=$1&bewerken=ja
 RewriteRule ^pagina/([a-z]+)/? pagina.php?naam=$1
