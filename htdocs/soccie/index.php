@@ -6,11 +6,25 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <script type="text/javascript" src="../layout/js/jquery.js"></script>
 <script type="text/javascript" src="../layout/js/countdown.js"></script>
+	<?php
+	
+		$now = mktime(23, 0, 0, 5, 2, 2012) - 3600 - date(time());
+		if($now > 0) {
+		
+			$time = date("d:H:i:s", $now);
+		
+		} else {
+		
+			$time = '00:00:00:00';
+		
+		}
+	
+	?>
     <script type="text/javascript">
       $(function(){
         $('#counter').countdown({
           image: 'count.png',
-          startTime: '01:12:12:00'
+          startTime: '<?php echo $time; ?>'
         });
 		
 		$("#container").each(function() {
