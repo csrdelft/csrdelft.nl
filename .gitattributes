@@ -814,6 +814,15 @@ htdocs/wiki/lib/plugins/confmanager/lang/en/lang.php -text
 htdocs/wiki/lib/plugins/confmanager/manager.dat -text
 htdocs/wiki/lib/plugins/confmanager/plugin.info.txt -text
 htdocs/wiki/lib/plugins/confmanager/style.css -text
+htdocs/wiki/lib/plugins/csrgroepgeschiedenis/README -text
+htdocs/wiki/lib/plugins/csrgroepgeschiedenis/conf/default.php -text
+htdocs/wiki/lib/plugins/csrgroepgeschiedenis/conf/metadata.php -text
+htdocs/wiki/lib/plugins/csrgroepgeschiedenis/lang/en/lang.php -text
+htdocs/wiki/lib/plugins/csrgroepgeschiedenis/lang/en/settings.php -text
+htdocs/wiki/lib/plugins/csrgroepgeschiedenis/lang/nl/lang.php -text
+htdocs/wiki/lib/plugins/csrgroepgeschiedenis/lang/nl/settings.php -text
+htdocs/wiki/lib/plugins/csrgroepgeschiedenis/plugin.info.txt -text
+htdocs/wiki/lib/plugins/csrgroepgeschiedenis/syntax.php -text
 htdocs/wiki/lib/plugins/csv/manager.dat -text
 htdocs/wiki/lib/plugins/csv/plugin.info.txt -text
 htdocs/wiki/lib/plugins/csv/syntax.php -text

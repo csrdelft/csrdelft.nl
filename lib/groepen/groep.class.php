@@ -692,9 +692,10 @@ class Groep{
 		$groepen=array();
 		$qGroepen="
 			SELECT
-				id, naam, begin, einde,
+				g.id, g.naam AS naam, begin, einde, groeptype.naam AS type,
 				EXTRACT( MONTH FROM einde-begin) AS duration
-			FROM groep
+			FROM groep g
+			LEFT JOIN groeptype ON(g.gtype=groeptype.id)
 			WHERE snaam='".$db->escape($snaam)."'
 			ORDER BY begin DESC
 			LIMIT ".$limiet.";";
