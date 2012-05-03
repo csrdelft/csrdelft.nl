@@ -8,10 +8,10 @@
 <script type="text/javascript" src="../layout/js/countdown.js"></script>
 	<?php
 	
-		$now = mktime(23, 0, 0, 5, 2, 2012) - 3600 - date(time());
+		$now = mktime(23, 0, 0, 5, 3, 2012) - 7200 - date(time());
 		if($now > 0) {
 		
-			$time = date("d:H:i:s", $now);
+			$time = date("00:H:i:s", $now);
 		
 		} else {
 		
