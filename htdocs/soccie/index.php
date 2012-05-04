@@ -2,13 +2,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 
-<title>SocCie</title>
+<title>SocCie Grenzeloos</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <script type="text/javascript" src="../layout/js/jquery.js"></script>
 <script type="text/javascript" src="../layout/js/countdown.js"></script>
 	<?php
 	
-		$now = mktime(23, 0, 0, 5, 3, 2012) - 7200 - date(time());
+		/* $now = mktime(23, 0, 0, 5, 3, 2012) - 7200 - date(time());
 		if($now > 0) {
 		
 			$time = date("00:H:i:s", $now);
@@ -17,21 +17,25 @@
 		
 			$time = '00:00:00:00';
 		
-		}
+		} */
 	
 	?>
     <script type="text/javascript">
-      $(function(){
+    $(function(){/*  
         $('#counter').countdown({
           image: 'count.png',
           startTime: '<?php echo $time; ?>'
-        });
+        });  */
 		
 		$(window).resize(function() {
 		
 		$("#container").each(function() {
-		
-			$(this).css({paddingTop: ($(document).height() - $(this).height()) / 2});
+			
+			top2 = (parseInt($(document).height() - $(this).height()) / 2);
+			if(top2 > 0)
+				$(this).css({paddingTop: top2});
+			else
+				$(this).css({paddingTop: 0});
 		
 		});
 		
@@ -41,8 +45,9 @@
     </script>
     <style type="text/css">
 	body{
-		width: 551px;
+		width: 840px;
 		margin: 0 auto;
+		background: #da352f;
 	}
       .cntSeparator {
         font-size: 54px;
@@ -59,17 +64,27 @@
         font-weight: bold;
         color: #000;
       }
+	  img, iframe{
+		float: left;
+		margin: 20px;
+	  }
+	  .clear{
+		clear: both;
+	  }
     </style>
   </head>
 <body>
 	<div id="container">
-  <div id="counter"></div>
+		<img src="logo.png" alt="Grenzeloos" width="800" height="241" />
+		<iframe class="youtube-player" type="text/html" width="800" height="480" src="http://www.youtube.com/embed/7YJWQVY5htc?hd=1" frameborder="0"></iframe>
+		<div class="clear"></div>
+ <!-- <div id="counter"></div>
   <div class="desc">
     <div>Dagen</div>
     <div>Uren</div>
     <div>Minuten</div>
     <div>Seconden</div>
-  </div>
+  </div>-->
   </div>
 </body>
 </html>

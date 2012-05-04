@@ -232,6 +232,7 @@ htdocs/pauper.php -text
 htdocs/robots.txt -text
 htdocs/soccie/count.png -text
 htdocs/soccie/index.php -text
+htdocs/soccie/logo.png -text
 htdocs/su.php -text
 htdocs/tools/.htaccess -text
 htdocs/tools/ajax/ajax.php -text
