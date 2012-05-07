@@ -662,7 +662,6 @@ lib/agenda/agenda.class.php -text
 lib/agenda/agendacontent.class.php -text
 lib/agenda/agendacontroller.class.php -text
 lib/ajaxformulier.class.php -text
-lib/bibliotheek/auteur.class.php -text
 lib/bibliotheek/bibliotheekcontent.class.php -text
 lib/bibliotheek/bibliotheekcontroller.class.php -text
 lib/bibliotheek/boek.class.php -text
@@ -1041,6 +1040,7 @@ sql/2460.sql -text
 sql/2542.sql -text
 sql/2568_kluspunten_erbij_ma_abbo_weg.sql -text
 sql/2575_adds_kwaliafwasser_kwalikok.sql -text
+sql/2669_biebauteur_weg.sql -text
 sql/csrdelft.sql -text
 sql/csrdelft_oud.sql -text
 wiki/.htaccess -text

@@ -610,15 +610,15 @@ form#streeplijst input, form#streeplijst label{ text-align: left; margin: 3px; p
 	width: 395px;
 }
 #nieuwePeiling label{ clear: left; float: left; width: 150px;}
-#nieuwePeiling input, textarea{ margin-bottom: 4px;}
+#nieuwePeiling input, #nieuwePeiling textarea{ margin-bottom: 4px;}
 #nieuwePeiling textarea{ width: 400px; }
 #peilingOpties input{ width: 400px;}
 
 /*
  * ubb voorbeeldding
  */
-div.previewContainer{ margin-top: 10px; display: none; }
-div.preview{ margin: 5px 0; padding: 2px 4px; width: 99%; background-color: #ffffc1; border: 1px solid #ccc; }
+div.previewContainer{ margin-top: 10px; display: none;}
+div.preview{ margin: 5px 0; padding: 2px; width: 100%; background-color: #ffffc1; border: 1px solid #ccc; }
 div.preview.pagina{ padding: 2px; width: 100%;}
 
 /* special UBB tags

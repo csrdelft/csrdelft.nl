@@ -2,6 +2,9 @@
  *	Bibliotheekjavascriptcode.
  */
 jQuery(document).ready(function($) {
+	/*********************************************
+	 * Catalogus
+	 *********************************************/
 	//catalogus: tabellen naar zebra converteren.
 	jQuery("#boeken tr:odd").addClass('odd');
 
@@ -92,6 +95,11 @@ jQuery(document).ready(function($) {
 		oTable.fnSetColumnVis( 4, bVis, true );
 	 } );
 
+
+
+	/************************************************
+	 * Boekpagina
+	 ************************************************/
 	// boekpagina: vult code-veld
 	biebCodeVakvuller();
 
@@ -164,46 +172,29 @@ jQuery(document).ready(function($) {
 	});
 
 	//boekpagina: autocomplete voor bewerkvelden uit C.S.R.-database. 
-	// TODO naar standaard formuliervelden opzetten.
+	/* result = array(
+	 *		array(data:array(..,..,..), value: "string", result:"string"),
+	 * 		array(... )
+	 * )
+	 * formatItem geneert html-items voor de suggestielijst, afstemmen op data-array
+	 */
 	var options = {
 		dataType: 'json',
-		parse: function(data) {
-			var rows = new Array();
-			for(var i=0; i<data.length; i++){
-				var datarow = data[i];
-				rows[i] = { data:datarow, value:datarow, result: datarow };
-			}
-			return rows;
-		},
-		formatItem: function(row, i, n) {
-			return row;
-		},
+		parse: function(result) { return result; },
+		formatItem: function(row, i, n) { return row; },
 		clickFire: true, 
 		max: 20
 	};
-	function opslaanGekozenWaarde(event, datarow, formatted){
-		var ID = jQuery(this).attr('id').substring(6);
-		var waarde = datarow;
-		saveChange(ID,waarde);
-	};
-	$("#field_titel").autocomplete("/communicatie/bibliotheek/autocomplete/titel",options);
-	$(".bewerk #field_titel").result(opslaanGekozenWaarde);
-	$("#field_auteur").autocomplete("/communicatie/bibliotheek/autocomplete/auteur",options);
-	$(".bewerk #field_auteur").result(opslaanGekozenWaarde);
-	$("#field_taal").autocomplete("/communicatie/bibliotheek/autocomplete/taal",options);
-	$(".bewerk #field_taal").result(opslaanGekozenWaarde);
-	$("#field_uitgeverij").autocomplete("/communicatie/bibliotheek/autocomplete/uitgeverij",options);
-	$(".bewerk #field_uitgeverij").result(opslaanGekozenWaarde);
 
-	//boekpagina: opmerkingveld aan auteurveld toevoegen
-	$("#auteur").append('<div class="suggestieveld suggestie">Achternaam, Voornaam L. van</div>');
+	$("#field_titel").autocomplete("/communicatie/bibliotheek/autocomplete/titel", options);
 
 	//boekpagina: meldingsvelden toevoegen bewerkbare velden
 	$('.blok .veld').append('<div class="melding"></div>');
+
 	//boekpagina: asynchroon opslaan toevoegen
-	$('.blok .veld input,.blok .veld select').each(function(index, input){
+	//opslaan-knop toevoegen, met event die met ajax de veldwaarde opslaat
+	$('.blok .veld input,.blok .veld textarea,.blok .veld select').each(function(index, input){
 		$(this).after(
-			//opslaan-knop toevoegen, met event die met ajax input opslaat
 			$('<div class="knop opslaan">Opslaan</div>').mousedown(function(){
 				var fieldname = input.id.substring(6);
 				var waarde=$(this).prev().val();
@@ -218,20 +209,18 @@ jQuery(document).ready(function($) {
 					success: function(result){
 						var field = $("#"+fieldname);
 						if(result.success){
-							//opgeslagen waarde in input zetten
+							//opgeslagen waarde in input zetten en een tijdelijke succesmelding
 							$("#"+input.id).val(result.value);
-							//tijdelijke groene bevestiging
 							field.removeClass('metfouten').addClass('opgeslagen');
 							window.setTimeout(function(){
 								field.removeClass('opgeslagen');
-								//field.find(".melding").fadeOut();
 							}, 3000);
 						}else{
 							//rode foutmelding
 							field.removeClass('opgeslagen').addClass('metfouten');
 						}
+						//meldingsboodschap plaatsen, en verwijder bewerkt-markering
 						field.find(".melding").html(result.melding).show();
-						//verwijder bewerkt-markering
 						$("#"+input.id).removeClass('nonsavededits')
 					}
 				});
@@ -251,15 +240,15 @@ jQuery(document).ready(function($) {
 
 });
 
-//geneert biebcode met waardes uit andere velden
+//voeg 'genereer'-knop toe aan codefield, die een biebcode geneert met waardes uit andere velden
 function biebCodeVakvuller(){
-	jQuery(".knop.genereer").click(function (event) {
+	var codeknop=$('<a class="knop genereer" title="Biebcode invullen">Genereer</a>').mousedown(function (event) {
 		event.preventDefault();
-		jQuery("#field_code").val(
-			jQuery("#field_rubriek").val() + '.' + jQuery("#field_auteur").val().substring(0,3).toLowerCase()
-		);
-		jQuery("#field_code").trigger('change');
+		$("#field_code").val(
+			$("#field_rubriek").val() + '.' + $("#field_auteur").val().substring(0,3).toLowerCase()
+		).focus();
 	});
+	$("#field_code").after(codeknop);
 }
 //zoekt naam op
 function naamCheck(fieldname){

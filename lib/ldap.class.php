@@ -206,9 +206,26 @@ class LDAP {
 		return $groepen;
 	}
 
-	# Voeg een nieuw record toe
-	# N.B. $entry is een array die al in het juiste formaat moet zijn opgemaakt
-	# http://nl2.php.net/manual/en/function.ldap-add.php
+	/* Voeg een nieuw record toe
+	 * N.B. $entry is een array die al in het juiste formaat moet zijn opgemaakt
+	 * http://nl2.php.net/manual/en/function.ldap-add.php
+	 * 
+	 * @param string $cn kortegroepnaam
+	 * @param array $entry onderstaande array zonder [objectClass]
+	 * @return bool gelukt/mislukt
+	 * 
+	 * $entry zoals die door ldap_add() wordt toegevoegd:
+	 * $entry = Array ( 
+			[cn] => kortenaamcommissie 
+			[member] => Array ( 
+				[0] => uid=0431,ou=leden,dc=csrdelft,dc=nl 
+			) 
+			[objectClass] => Array ( 
+				[0] => top 
+				[1] => groupOfNames 
+			) 
+		)
+	*/
 	function addGroep($cn, $entry) {
 		$base = $this->_base_groepen;
 		$dn = 'cn=' . $this->ldap_escape_dn($cn) . ', '. $base;
@@ -221,15 +238,28 @@ class LDAP {
 		return ldap_add($this->_conn, $dn, $entry);
 	}
 
-	# Wijzig de informatie van een groep
-	# N.B. $entry is een array die al in het juiste formaat moet zijn opgemaakt
-	# http://nl2.php.net/manual/en/function.ldap-add.php
+	/*
+	 * Wijzig de informatie van een groep
+	 * N.B. $entry is een array die al in het juiste formaat moet zijn opgemaakt
+	 * http://nl2.php.net/manual/en/function.ldap-add.php
+	 * 
+	 * @param string $cn kortegroepnaam
+	 * @param array $entry array zoals in addGroep maar zonder [objectClass]
+	 * @return bool gelukt/mislukt
+	 * 
+	 * ldap_modify overschrijft de members-array in ldap met nieuwe array.
+	 */
 	function modifyGroep($cn, $entry) {
 		$base = $this->_base_groepen;
 		$dn = 'cn=' . $this->ldap_escape_dn($cn) . ', '. $base;
 		return ldap_modify($this->_conn, $dn, $entry);
 	}
-
+	/*
+	 * verwijder de hele groep uit ldap
+	 * 
+	 * @param string kortegroepnaam
+	 * @return bool gelukt/mislukt
+	 */
 	function removeGroep($cn) {
 		$base = $this->_base_groepen;
 		$dn = 'cn=' . $this->ldap_escape_dn($cn) . ', '. $base;

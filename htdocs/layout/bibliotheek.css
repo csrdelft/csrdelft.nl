@@ -145,81 +145,120 @@ h1{
 .regel { height: 15px; }
 
 /* formuliervelden in .blok-div zijn bewerkbaar met ajax (mits gebruiker de rechten heeft) */
-.blok .veld input{
+.blok .veld input,
+.blok .veld textarea {
 	background: none;
 	border: 1px solid white;
 	font-size: 11px;
 	font-family : Verdana, Geneva, Arial, Helvetica, sans-serif;
-	width: 250px;
+	width: 428px;
+	padding: 1px 2px 1px 2px;
+	margin: 0px 0px;
+}
+.blok .veld select {
+	width: 432px;
 }
 .blok .veld div.opslaan{
 	display: none;
-	margin: 0px 0px 0px 2px;
+	margin: 2px 12px 0px 0px;
 	cursor: pointer;
+	width: 46px;
+	float: right;
 }
 .blok .veld:hover{
-	background: url(http://plaetjes.csrdelft.nl/knopjes/bewerken.png) no-repeat 310px #f3f3f3;
+	background: url(http://plaetjes.csrdelft.nl/knopjes/bewerken.png) no-repeat 485px #f3f3f3;
 }
 .blok .veld input:focus,
+.blok .veld textarea:focus,
 .blok .veld select:focus{
 	background-color: #FFC;
 	border: 1px solid black;
 }
-
+/* opslaan-knopje weergeven bij focus*/
 .blok .veld input:focus+div.opslaan,
+.blok .veld textarea:focus+div.opslaan,
 .blok .veld select:focus+div.opslaan{
 	display: inline;
 }
-/* waarschuwing bij veld*/
-.blok .veld.metfouten{
-	background-color: #FFC3CE;
-	padding: 4px 2px;
-}
-.blok .veld .melding{
-	float: right;
-	margin-right: 10px;
-	display:none
-}
+/* melding bij veld
+ * opslagen: groen, nog niet opgeslagen: geel, fout bij opslaan: rood */
+.blok .veld.opgeslagen input,
+.blok .veld.opgeslagen textarea 	{ background-color: #BFB; }
 
-.blok .veld.opgeslagen input{ background-color: #BFB; }
-.blok .veld.metfouten input{ background-color: #E88; }
-.blok .veld.opgeslagen .melding{ color: green; display: inline; }
-.blok .veld.metfouten .melding{ color: red; display: inline; }
+.blok .veld.metfouten 				{ background-color: #FFC3CE; padding: 4px 2px; }
+.blok .veld.metfouten input,
+.blok .veld.metfouten textarea 		{ background-color: #E88; }
 
-.blok .veld input.leeg{
+.blok .veld .melding				{ float: right; margin-right: 10px; display:none }
+.blok .veld.opgeslagen .melding 	{ color: green; display: inline; }
+.blok .veld.metfouten .melding		{ color: red; display: inline; }
+
+.blok .veld input.nonsavededits,
+.blok .veld textarea.nonsavededits 	{ background-color: #FFFFC1; }
+
+/* borders weergeven: voor leeg veld of bij hoveren */
+.blok .veld input.leeg,
+.blok .veld textarea.leeg{
 	border: 1px solid #D9D9D9;
 }
-.blok .veld input.nonsavededits{
-	background-color: #ea8;
-}
 .blok .veld:hover input,
+.blok .veld:hover textarea,
 .blok .veld:hover select{
 	border: 1px solid #999;
 }
 
-
-/*(bewerkbaar)titel boek*/
-.boek .header input, 
-.boek .header label{
-	font-size: 1.6em !important;
+/*titel boek*/
+.boek .header{
+	margin-top: 5px;
+}
+.boek .header span,
+.boek .header label,
+.boek .header textarea{
+	font-size: 18px !important;
 	font-weight: bold;
 	line-height: normal;
+	min-height: 22px;
 }
 .boek .header label{
-	margin-left: 35px;
+	margin: 0px 0px 20px 35px;
 }
-.boek .header input{
-	width: 448px;
-}
-.boek .header{
-	margin: 5px 0px 20px 0px;
+.blok.header .veld:hover{
+	background: url(http://plaetjes.csrdelft.nl/knopjes/bewerken.png) no-repeat 520px #f3f3f3;
 }
 /* opmaak velden */
-.boek input#field_code{
-	width: 75px;
+.veld .wantsAutoresize {
+	min-height: 14px;
+	overflow: hidden;
+	resize: none;
+}
+.hiddendiv {
+	display: none;
+	white-space: pre-wrap;
+	width: 428px;
+	text-align: justify;
+	min-height: 14px;
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	overflow: hidden;
+	word-wrap: break-word;
+	padding: 1px 2px;
+	border: 1px solid white;
 }
 
-/* Formulier voor nieuw boek en die voor boekbeschrijving bestaand boek */
+.veld input#field_code{
+	width: 100px;
+}
+.blok .veld .genereer {
+	display: none;
+}
+.blok .veld input:focus~a.genereer {
+	display: inline;
+}
+
+
+/* 
+ * Formulier voor nieuw boek en die voor boekbeschrijving bestaand boek
+ */
 .Formulier label, .boekzoeker label{
 	width: 150px;
 	float: left;
@@ -235,8 +274,9 @@ h1{
 	color: white; 
 	margin: 0px;
 }
-.Formulier input.regular, .boekzoeker input{
+.Formulier input.regular,.Formulier textarea, .boekzoeker input{
 	width: 400px;
+	padding: 1px 2px;
 }
 .Formulier input.uid{
 	width: 80px;
@@ -289,15 +329,15 @@ h1{
 .beschrijvingen h2{
 	margin-bottom: 5px;
 }
-.Formulier .preview{
-	width: 496px;
-}
-.Formulier textarea.regular{
+.Formulier textarea#field_beschrijving {
 	width: 500px;
 }
-.Formulier .textareaContainer{
-	width: 508px;
-	float:left;
+.Formulier .preview{
+	word-wrap: break-word; 
+}
+.Formulier .UBBpreview{
+	width: 500px;
+	display: inline-block;
 }
 
 
@@ -336,6 +376,9 @@ h1{
 }
 .exemplaren p{
 	margin-left: 75px;
+}
+.exemplaren .blok .veld div.opslaan {
+	margin-right: 77px;
 }
  /* uitleenveld */
 .exemplaren input.lid, .exemplaren div.naamCheck{

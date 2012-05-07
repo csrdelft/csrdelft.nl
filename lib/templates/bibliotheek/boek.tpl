@@ -33,27 +33,28 @@
 
 {else}
 {* weergave bestaand boek, soms met bewerkbare velden *}
-
+	<script type="text/javascript">var FieldSuggestions=[]; </script>
 	<div class="boek" id="{$boek->getId()}">
 		{if $boek->isEigenaar()}
+			
 			<div class="blok header">
 				{$boek->getFormulier('bewerkboek')->findByName('titel')->view()}
 			</div>
 			<div class="blok gegevens">
-				{$boek->getFormulier('bewerkboek')->findByName('auteur')->view()}
-				{$boek->getFormulier('bewerkboek')->findByName('paginas')->view()}
-				{$boek->getFormulier('bewerkboek')->findByName('taal')->view()}
-				{$boek->getFormulier('bewerkboek')->findByName('isbn')->view()}
-				{$boek->getFormulier('bewerkboek')->findByName('uitgeverij')->view()}
-				{$boek->getFormulier('bewerkboek')->findByName('uitgavejaar')->view()}
+				{assign var='fields' value=','|explode:"auteur,paginas,taal,isbn,uitgeverij,uitgavejaar"}
+				{foreach from=$fields item=field}
+					{$boek->getFormulier('bewerkboek')->findByName($field)->view()}
+				{/foreach}
 			</div>
 			<div class="blok gegevens">
 				{$boek->getFormulier('bewerkboek')->findByName('rubriek')->view()}
-				{* {$boek->getFormulier('bewerkboek')->findByName('code')->view()} *}
+				{$boek->getFormulier('bewerkboek')->findByName('code')->view()}
 			</div>
+
 		{else}
+
 			<div class="blok header">
-				<div><label>Boek</label>{$boek->getTitel()}</div>
+				<div><label>Boek</label><span>{$boek->getTitel()}</span></div>
 			</div>
 			<div class="blok gegevens">
 				<div class="regel"><label>Auteur</label>{$boek->getAuteur()}</div>
@@ -72,7 +73,7 @@
 
 
 	{* blok rechts met knopjes *}
-	<div class="controls boekacties">	
+	<div class="controls boekacties">
 		<br /><br />
 		{if $boek->magVerwijderen()}
 			<a class="knop verwijderen" href="/communicatie/bibliotheek/verwijderboek/{$boek->getId()}" title="Boek verwijderen" onclick="return confirm('Weet u zeker dat u dit boek wilt verwijderen?')">{icon get="verwijderen"} Verwijderen</a><br />
@@ -112,7 +113,7 @@
 							{if $exemplaar.opmerking != ''}
 								<div class="regel">
 									<label>Opmerking</label><span class="opmerking">{$exemplaar.opmerking|escape:'html'}</span>
-								</div>
+								</div><br />
 							{/if}
 						{/if}
 					{* status *}
@@ -184,7 +185,10 @@
 			{/if}
 		</div>
 	</div>
-
+{if $boek->isEigenaar()}
+	{* javascript invoegen van de fields *}
+	{$boek->getFormulier('bewerkboek')->view(false)}
+{/if}
 
 	{* beschrijvingen *}
 

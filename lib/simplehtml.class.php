@@ -248,7 +248,7 @@ class DefaultKolom extends Kolom{
 			require_once 'lid/verjaardagcontent.class.php';
 			$this->add(new VerjaardagContent('komende'));
 		}
-		if(true){
+		if(false){
 			$this->add(new Reclame());
 		}
 	}

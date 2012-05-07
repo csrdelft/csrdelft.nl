@@ -245,9 +245,8 @@ class BibliotheekController extends Controller{
 			$this->boek->setValue('beschrijvingsid', $beschrijvingsid);
 			$aBeschrijving = $this->boek->getBeschrijving($beschrijvingsid);
 			$this->boek->setValue('beschrijving', $aBeschrijving['beschrijving']);
+			//formulier laden
 			$this->boek->assignFieldsBeschrijvingForm($bewerken=true);
-			//header bewerkveld goed zetten
-			$this->boek->setCommentBeschrijvingForm('Bewerk uw beschrijving of recensie van het boek:');
 
 			//controleer en sla op of geef de bewerkvelden met eventuele foutmeldingen
 			if($this->boek->validForm('beschrijving') AND $this->boek->saveForm('beschrijving', $bewerken=true)){
@@ -316,7 +315,7 @@ class BibliotheekController extends Controller{
 			if($this->hasParam(3) AND $this->getParam(3)=='ander'){
 				if($this->boek->isEigenaar($this->getParam(2))){
 					if(isset($_POST['id'])){
-						if($this->boek->isPostedField($_POST['id']) AND $this->boek->validField($_POST['id']) AND $this->boek->saveField($_POST['id'])){
+						if($this->boek->validField($_POST['id']) AND $this->boek->saveField($_POST['id'])){
 							$melding='Exemplaar uitgeleend';
 						}else{
 							$melding='Exemplaar uitlenen is mislukt. '.$this->boek->getField($_POST['id'])->getFieldError().'- '.$this->boek->getError().'Biebcontrllr::action_exemplaarlenen()';

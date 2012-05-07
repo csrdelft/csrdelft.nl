@@ -74,7 +74,7 @@ class Formulier{
 	public function getFields(){
 		return $this->fields;
 	}
-	
+
 	public function addFields($fields){
 		array_merge($this->fields, $fields);
 	}
@@ -125,19 +125,24 @@ class Formulier{
 	 * Poept het formulier uit, inclusief <form>-tag, en de javascript
 	 * voor de autocomplete...
 	 */
-	public function view(){
-		echo '<form action="'.$this->action.'" id="'.$this->cssID.'" class="'.$this->cssClass.'" method="post">'."\n";
-		echo '<script type="text/javascript">var FieldSuggestions=[]; </script>';
+	public function view($compleetformulier=true){
+		if($compleetformulier){
+			echo '<form action="'.$this->action.'" id="'.$this->cssID.'" class="'.$this->cssClass.'" method="post">'."\n";
+			echo '<script type="text/javascript">if(FieldSuggestions==undefined){var FieldSuggestions=[];} </script>';
+		}
 
 		$javascript=array();
 		foreach($this->getFields() as $field){
-			$field->view();
+			if($compleetformulier){
+				$field->view();
+			}
 			$js=$field->getJavascript();
 			$javascript[md5($js)]=$js."\n";
 		}
 
 		echo '<script type="text/javascript">jQuery(document).ready(function($){'."\n".implode($javascript)."\n".'});</script>';
 	}
+
 }
 
 /**
@@ -160,15 +165,18 @@ class FormField extends FormElement{
 	public $value;					//welke initiele waarde heeft het veld?
 	public $notnull=false; 			//mag het veld leeg zijn?
 	public $autocomplete=true; 		//browser laten autoaanvullen?
+	public $placeholder=null;		//plaats een grijze placeholdertekst in leeg veld
 	public $error='';				//foutmelding van dit veld
 	
 	public $max_len=0;				//maximale lengte van de invoer.
+	public $rows=5;					//aantal rijen van textarea
 
 	//array met classnames die later in de class-tag komen.
 	public $inputClasses=array('regular');
 
 	//array met suggesties die de javascript-autocomplete aan gaat bieden.
 	public $suggestions=array();
+	public $remotedatasource='';
 
 	public function __construct($name, $value, $description=null){
 		$this->name=$name;
@@ -185,8 +193,11 @@ class FormField extends FormElement{
 	public function getType(){	return get_class($this); }
 	public function getName(){	return $this->name; }
 	public function isPosted(){	return isset($_POST[$this->name]); }
-	
-	public function setSuggestions($array){		$this->suggestions=$array; }
+
+	//een remotedatasource instellen overruled suggestions
+	public function setRemoteSuggestionsSource($url){	$this->remotedatasource=$url; }
+	public function setSuggestions($array){				$this->suggestions=$array; }
+	public function setPlaceholder($bericht){			$this->placeholder=$bericht; }
 
 	public function getValue(){
 		if($this->isPosted()){
@@ -238,6 +249,24 @@ class FormField extends FormElement{
 		}
 	}
 
+	/**
+	 * Zorg dat de suggesties gegeven gaan worden.
+	 */
+	protected function getFieldSuggestions(){
+		$return='';
+
+		if(count($this->suggestions)>0 OR $this->remotedatasource!=''){
+			if($this->remotedatasource!=''){
+				$suggestions=$this->remotedatasource;
+			}else{
+				$suggestions=$this->suggestions;
+			}
+			$return .= '<script language="javascript"> '."\n";
+			$return .= 'FieldSuggestions["'.$this->name.'"]='.json_encode($suggestions)."; \n";
+			$return .= '</script>';
+		}
+		return $return;
+	}
 
 	/**
 	 * Geef een foutmelding voor dit veld terug.
@@ -257,7 +286,9 @@ class FormField extends FormElement{
 	 * terug...
 	 */
 	protected function getInputClasses(){
-		if(count($this->suggestions)>0){
+		if($this->remotedatasource!=''){
+			$this->inputClasses[]='hasRemoteSuggestions';
+		}elseif(count($this->suggestions)>0){
 			$this->inputClasses[]='hasSuggestions';
 		}
 		return $this->inputClasses;
@@ -283,9 +314,24 @@ class FormField extends FormElement{
 			case 'class': return 'class="'.implode(' ', $this->getInputClasses()).'"'; break;
 			case 'value': return 'value="'.htmlspecialchars($this->value).'"'; break;
 			case 'name': return 'name="'.$this->name.'"'; break;
+			case 'placeholder': 
+				if($this->placeholder!=null){
+					return 'placeholder="'.$this->placeholder.'"';
+				}
+			break;
+			case 'rows': 
+				if($this->rows>0){
+					return 'rows="'.$this->rows.'"'; break;
+				}
+			break;
 			case 'maxlength':
 				if($this->max_len>0){
 					return 'maxlength="'.$this->max_len.'"';
+				}
+			break;
+			case 'autocomplete':
+				if(!$this->autocomplete OR count($this->suggestions)>0 OR $this->remotedatasource!=''){
+					return 'autocomplete="off" ';
 				}
 			break;
 		}
@@ -300,20 +346,9 @@ class FormField extends FormElement{
 		echo $this->getLabel();
 		echo $this->getError();
 		
-		echo '<input type="text" '.$this->getInputAttribute(array('id', 'name', 'class', 'value', 'maxlength'));
-		
-		if(!$this->autocomplete OR count($this->suggestions)>0){
-			echo 'autocomplete="off" ';
-		}
-		echo ' />';
+		echo '<input type="text" '.$this->getInputAttribute(array('id', 'name', 'class', 'value', 'maxlength', 'placeholder', 'autocomplete')).' />';
 
-		//zorg dat de suggesties gegeven gaan worden.
-		if(count($this->suggestions)>0){
-			echo '<script language="javascript"> '."\n";
-			echo 'FieldSuggestions["'.$this->name.'"]='.json_encode($this->suggestions)."; \n";
-			echo '</script>';
-		}
-
+		echo $this->getFieldSuggestions();
 		//afsluiten van de div om de hele tag heen.
 		echo '</div>';
 	}
@@ -321,6 +356,14 @@ class FormField extends FormElement{
 	/**
 	 * Javascript nodig voor dit *Field. Dit wordt één keer per *Field
 	 * geprint door het Formulier-object.
+	 */
+	/**
+	 * Toelichting op options voor RemoteSuggestions
+	 * result = array(
+	 *		array(data:array(..,..,..), value: "string", result:"string"),
+	 * 		array(... )
+	 * )
+	 * formatItem geneert html-items voor de suggestielijst, afstemmen op data-array
 	 */
 	public function getJavascript(){
 		return <<<JS
@@ -330,31 +373,83 @@ $('.hasSuggestions').each(function(index, tag){
 		{clickFire: true, max: 20, matchContains: true }
 	);
 });
+$('.hasRemoteSuggestions').each(function(index, tag){
+	$('#'+tag.id).autocomplete(
+		FieldSuggestions[tag.id.substring(6)], {
+			dataType: 'json',
+			parse: function(result) { return result; },
+			formatItem: function(row, i, n) { return row; },
+			clickFire: true, 
+			max: 20
+		}
+	);
+});
 JS;
 	}
-}
-class AutocompleteField extends FormField{
-	
-	
-	
-	
-	
 }
 
 /*
  * een TextField levert een textarea.
  */
 class TextField extends FormField{
+
 	public function view(){
 		echo $this->getDiv();
 		echo $this->getLabel();
 		echo $this->getError();
 
-		echo '<textarea '.$this->getInputAttribute(array('id', 'name', 'class')).' rows="5">';
+		echo '<textarea '.$this->getInputAttribute(array('id', 'name', 'class', 'rows', 'maxlength', 'placeholder', 'autocomplete')).' />';
 		echo htmlspecialchars($this->value);
 		echo '</textarea>';
+
+		echo $this->getFieldSuggestions();
 		echo '</div>';
 	}
+}
+/*
+ * een Textarea die groter wordt als de inhoud niet meer in het veld past.
+ */
+class AutoresizeTextField extends TextField{
+
+	public function __construct($name, $value, $description=null, $max_len=255, $placeholder=null){
+		parent::__construct($name, $value, $description);
+			$this->max_len=(int)$max_len;
+			$this->rows=0;
+			$this->inputClasses[]='wantsAutoresize';
+			$this->placeholder=$placeholder;
+	}
+
+	public function getJavascript(){
+		// maakt een verborgen div met dezelfde eigenschappen als de textarea
+		// en gebruikt autoresize eigenschappen van de div om de hoogte te bepalen voor de textarea
+		return <<<JS
+$('.wantsAutoresize').each(function(){
+	var textarea=$(this);
+	var fieldname=textarea.attr('id').substring(6);
+	var hiddenDiv = $(document.createElement('div')),  
+	content = null;  
+  
+	hiddenDiv.addClass('hiddendiv '+fieldname)
+		.css({'font-size': textarea.css('font-size'), 
+			'font-weight': textarea.css('font-size'), 
+			'width': textarea.css('width')});
+	$('body').append(hiddenDiv);  
+  
+	textarea.bind('keyup', function() {  
+  
+		content = textarea.val();  
+		content = content.replace(/\\n/g, '<br>');  
+		hiddenDiv.html(content);  
+  
+		textarea.css('height', hiddenDiv.height());  
+  
+	}).keyup();  
+});
+JS;
+	}
+}
+class RequiredAutoresizeTextField extends AutoresizeTextField{
+	public $notnull=true;
 }
 
 /**
@@ -396,10 +491,16 @@ $('.wantsPreview').each(function(){
 		applyUBB(textarea.val(), document.getElementById('preview_'+fieldname));
 		$('#preview_'+fieldname).show();
 	};
+	var vergrootTextarea=function(){
+		var currentRows=parseInt(textarea.attr('rows'));
+		textarea.attr('rows', 10 + currentRows);
+	}
 	
 	textarea.wrap('<div class="UBBpreview regular"  style="width: '+textarea.width()+'px" />')
 			.before('<div id="preview_'+fieldname+'" class="preview" style="display: none;"></div>')
-			.after($('<a class="knop">voorbeeld</a>').click(triggerPreview));
+			.after($('<a class="knop">voorbeeld</a>').click(triggerPreview))
+			.after($('<a style="float: right;" class="knop" title="Opmaakhulp weergeven" onclick="toggleDiv(\'ubbhulpverhaal\')">UBB</a>'))
+			.after($('<a style="float: right;" class="knop" title="Vergroot het invoerveld"><strong>&uarr;&darr;</strong></a>').click(vergrootTextarea));
 
 JS;
 		//We voegen een keyup-event toe dat bij elke enter een nieuwe

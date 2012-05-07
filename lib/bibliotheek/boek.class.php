@@ -6,14 +6,13 @@
  *
  */
 require_once 'rubriek.class.php';
-require_once 'auteur.class.php';
 require_once 'formulier.class.php';
 
 class Boek{
 
 	private $id=0;			//boekId
 	private $titel;			//String
-	private $auteur=null;	//Auteur object
+	private $auteur;		//String Auteur
 	private $rubriek=null;	//Rubriek object
 	private $uitgavejaar;
 	private $uitgeverij;
@@ -50,7 +49,6 @@ class Boek{
 			if($this->getId()==0){
 				//Bij $this->id==0 gaat het om een nieuw boek. Hier
 				//zetten we de defaultwaarden voor het nieuwe boek.
-				$this->auteur = new Auteur('');
 				$this->rubriek = new Rubriek(108);
 				if($this->isBASFCie()){
 					$this->biebboek = 'ja';
@@ -59,7 +57,7 @@ class Boek{
 			}else{
 				$db=MySql::instance();
 				$query="
-					SELECT id, titel, auteur_id, categorie_id, uitgavejaar, uitgeverij, paginas, taal, isbn, code,
+					SELECT id, titel, auteur, categorie_id, uitgavejaar, uitgeverij, paginas, taal, isbn, code,
 					IF((
 						SELECT count( * )
 						FROM biebexemplaar e2
@@ -108,11 +106,15 @@ class Boek{
 	public function getTaal(){			return $this->taal;}
 	public function getISBN(){			return $this->isbn;}
 	public function getCode(){			return $this->code;}
-	//retourneert objecten
 	public function getAuteur(){		return $this->auteur;}
+	//retourneert object
 	public function getRubriek(){		return $this->rubriek;}
 
-	//retourneert strings.
+	/*
+	 * retourneert strings.
+	 * @param $entry string eigenschapnaam, waarbij leners en opmerkingen ook exemplaarid bevatten 
+	 * @return string waarde zals in object opgeslagen
+	 */
 	public function getProperty($entry){
 		//$entry voor leners eerst opsplitsen
 		if(substr($entry,0,6)=='lener_'){
@@ -122,10 +124,8 @@ class Boek{
 			$exemplaarid = substr($entry,10);
 			$entry='opmerking';
 		}
+
 		switch($entry){
-			case 'auteur':
-				$return = $this->getAuteur()->getNaam();
-				break;
 			case 'rubriek':
 				$return = $this->getRubriek()->getId();
 				break;
@@ -133,25 +133,14 @@ class Boek{
 				$return = $this->getRubriek()->getId();
 				break;
 			case 'titel':
-				$return = $this->getTitel();
-				break;
 			case 'uitgavejaar':
-				$return = $this->getUitgavejaar();
-				break;
 			case 'uitgeverij':
-				$return = $this->getUitgeverij();
-				break;
 			case 'paginas':
-				$return = $this->getPaginas();
-				break;
 			case 'taal':
-				$return = $this->getTaal();
-				break;
 			case 'isbn':
-				$return = $this->getISBN();
-				break;
 			case 'code':
-				$return = $this->getCode();
+			case 'auteur':
+				$return = $this->$entry;
 				break;
 			case 'lener':
 				$uid=$this->exemplaren[$exemplaarid]['uitgeleend_uid'];
@@ -205,12 +194,6 @@ class Boek{
 				$this->$key=(int)trim($value);
 				break;
 			//strings
-			case 'auteur_id':
-				$this->auteur = new Auteur((int)$value);
-				break;
-			case 'auteur':
-				$this->auteur = new Auteur((string)$value);
-				break;
 			case 'categorie':
 				$this->rubriek = new Rubriek(explode(' - ' , $value));
 				break;
@@ -228,6 +211,7 @@ class Boek{
 			case 'code':
 			case 'isbn':
 			case 'status':
+			case 'auteur':
 				$this->$key=trim($value);
 				break;
 			case 'beschrijving':
@@ -372,16 +356,14 @@ class Boek{
 	 * Slaat het object Boek op in db
 	 */
 	public function save(){
-		//eerst auteur opslaan. 
-		$this->getAuteur()->save();
 
 		$db=MySql::instance();
 		$qSave="
 			INSERT INTO biebboek (
-				titel, auteur_id, categorie_id, uitgavejaar, uitgeverij, paginas, taal, isbn, code
+				titel, auteur, categorie_id, uitgavejaar, uitgeverij, paginas, taal, isbn, code
 			) VALUES (
 				'".$db->escape($this->getTitel())."',
-				".(int)$this->getAuteur()->getId().",
+				'".$db->escape($this->getAuteur())."',
 				".(int)$this->getRubriek()->getId().",
 				".(int)$this->getUitgavejaar().",
 				'".$db->escape($this->getUitgeverij())."',
@@ -416,7 +398,7 @@ class Boek{
 
 		//$entry voor leners en opmerkingen eerst opsplitsen
 		if(substr($entry,0,6)=='lener_'){
-			$exemplaarid=substr($entry,6);
+			$exemplaarid = substr($entry,6);
 			$entry='lener';
 		}elseif(substr($entry,0,10)=='opmerking_'){
 			$exemplaarid = substr($entry,10);
@@ -424,36 +406,21 @@ class Boek{
 		}
 
 		switch($entry){
-			case 'auteur':
-				//eerst auteur opslaan. 
-				$this->getAuteur()->save();
-				$value = (int)$this->getAuteur()->getId();
-				$key = "auteur_id";
-				break;
 			case 'rubriek':
 				$value = (int)$this->getRubriek()->getId();
 				$key = "categorie_id";
 				break;
-			case 'titel':
-				$value = "'".$db->escape($this->getTitel())."'";
-				break;
 			case 'uitgavejaar':
-				$value = (int)$this->getUitgavejaar();
-				break;
-			case 'uitgeverij':
-				$value = "'".$db->escape($this->getUitgeverij())."'";
-				break;
 			case 'paginas':
-				$value = (int)$this->getPaginas();
+				$value = (int)$this->$entry;
 				break;
+			case 'titel':
+			case 'uitgeverij':
 			case 'taal':
-				$value = "'".$db->escape($this->getTaal())."'";
-				break;
 			case 'isbn':
-				$value = "'".$db->escape($this->getISBN())."'";
-				break;
 			case 'code':
-				$value = "'".$db->escape($this->getCode())."'";
+			case 'auteur':
+				$value = "'".$db->escape($this->$entry)."'";
 				break;
 			case 'lener':
 				return $this->leenExemplaar($exemplaarid, $this->exemplaren[$exemplaarid]['uitgeleend_uid']);
@@ -881,23 +848,32 @@ class Boek{
 	 * Als we ze hier toevoegen, dan verschijnen ze ook automagisch in het boekaddding,
 	 * en ze worden gecontroleerd met de eigen valideerfuncties.
 	 */
+	protected function getCommonFields($naamtitelveld='Titel'){
+		$fields['titel']=new RequiredAutoresizeTextField('titel', $this->getTitel(), $naamtitelveld, 200, 'Titel ontbreekt!');
+		$fields['auteur']=new InputField('auteur', $this->getAuteur(), 'Auteur', 100);
+		$fields['auteur']->setRemoteSuggestionsSource("/communicatie/bibliotheek/autocomplete/auteur");
+		$fields['auteur']->setPlaceholder('Achternaam, Voornaam V.L. van de');
+		$fields['paginas']=new IntField('paginas', $this->getPaginas() , "Pagina's", 10000, 0);
+		$fields['taal']=new InputField('taal', $this->getTaal(), 'Taal', 25);
+		$fields['taal']->setRemoteSuggestionsSource("/communicatie/bibliotheek/autocomplete/taal");
+		$fields['isbn']=new InputField('isbn', $this->getISBN(), 'ISBN',15);
+		$fields['isbn']->setPlaceholder('Uniek nummer');
+		$fields['uitgeverij']=new InputField('uitgeverij', $this->getUitgeverij(), 'Uitgeverij', 100);
+		$fields['uitgeverij']->setRemoteSuggestionsSource("/communicatie/bibliotheek/autocomplete/uitgeverij");
+		$fields['uitgavejaar']=new IntField('uitgavejaar', $this->getUitgavejaar(), 'Uitgavejaar', 2100, 0);
+		$fields['rubriek']=new SelectField('rubriek', $this->getRubriek()->getId(), 'Rubriek', Rubriek::getAllRubrieken($samenvoegen=true,$short=true));
+		$fields['code']=new InputField('code', $this->getCode(), 'Biebcode', 7);
+		return $fields;
+	}
 	public function assignFieldsNieuwboekForm(){
 		//Iedereen die bieb mag bekijken mag nieuwe boeken toevoegen
 		if($this->magBekijken()){
-			$nieuwboekform[]=new Comment('Boekgegevens:');
-			//$nieuwboekform[]=new RequiredBiebInputField('titel', $this->getTitel(), 'Titel', 200);
-			$nieuwboekform[]=new InputField('auteur', $this->getAuteur()->getNaam(),'Auteur',100);
-			$nieuwboekform[]=new IntField('paginas', $this->getPaginas() , "Pagina's", 10000, 0);
-			$nieuwboekform[]=new InputField('taal', $this->getTaal(), 'Taal', 25);
-			//$nieuwboekform[]=new BiebInputField('isbn', $this->getISBN(), 'ISBN',15);
-			$nieuwboekform[]=new InputField('uitgeverij', $this->getUitgeverij(), 'Uitgeverij', 100);
-			$nieuwboekform[]=new IntField('uitgavejaar', $this->getUitgavejaar(), 'Uitgavejaar',2100,0);
-			$nieuwboekform[]=new SelectField('rubriek', $this->getRubriek()->getId(), 'Rubriek',Rubriek::getAllRubrieken($samenvoegen=true,$short=true));
-			//$nieuwboekform[]=new CodeField('code', $this->getCode(), 'Biebcode');
+			$nieuwboekform['boekgeg']=new Comment('Boekgegevens:');
+			$nieuwboekform=$nieuwboekform+$this->getCommonFields();
 			if($this->isBASFCie()){
-				$nieuwboekform[]=new SelectField('biebboek', $this->biebboek, 'Is een biebboek?', array('ja'=>'C.S.R. boek', 'nee'=>'Eigen boek'));
+				$nieuwboekform['biebboek']=new SelectField('biebboek', $this->biebboek, 'Is een biebboek?', array('ja'=>'C.S.R. boek', 'nee'=>'Eigen boek'));
 			}
-			$nieuwboekform[]=new SubmitButton('opslaan', '<a class="knop" href="/communicatie/bibliotheek/">Annuleren</a>');
+			$nieuwboekform['submit']=new SubmitButton('opslaan', '<a class="knop" href="/communicatie/bibliotheek/">Annuleren</a>');
 
 			$this->nieuwboekform=new Formulier('/communicatie/bibliotheek/nieuwboek/0', $nieuwboekform);
 			$this->nieuwboekform->cssID='boekaddForm';
@@ -908,8 +884,14 @@ class Boek{
 	 */
 	public function assignFieldsBeschrijvingForm($bewerken=false){
 		if($this->magBekijken()){
-			$boekbeschrijvingform[]=new Comment('Geef uw beschrijving of recensie van het boek:');
-			$boekbeschrijvingform[]=new RequiredPreviewTextField('beschrijving', $this->getBeschrijving(), '.');
+			if($bewerken){
+				$boekbeschrijvingform[]=new Comment('Bewerk uw beschrijving of recensie van het boek:');
+			}else{
+				$boekbeschrijvingform[]=new Comment('Geef uw beschrijving of recensie van het boek:');
+			}
+				$textfield=new RequiredPreviewTextField('beschrijving', $this->getBeschrijving(), '.');
+				$textfield->previewOnEnter();
+			$boekbeschrijvingform[]=$textfield;
 			$boekbeschrijvingform[]=new SubmitButton();
 
 			$posturl='/communicatie/bibliotheek/';
@@ -922,12 +904,33 @@ class Boek{
 			$this->boekbeschrijvingform->cssID='addBeschrijving';
 		}
 	}
-	//kopje boven invoervakje kunnen aanpassen
-	public function setCommentBeschrijvingForm($tekst){
-		$this->boekbeschrijvingform['0'] = new Comment($tekst);
+	/*
+	 * maakt objecten voor de bewerkbare velden van een boek
+	 * 
+	 */
+	public function assignAjaxFieldsForm(){
+		$editablefieldsform=array();
+		//Eigenaar een exemplaar v.h. boek mag alleen bewerken
+		if($this->isEigenaar()){
+			$editablefieldsform=$this->getCommonFields('Boek');
+		}
+
+		//voor eigenaars een veldje maken om boek uit te lenen.
+		if($this->exemplaren===null){
+			$this->loadExemplaren();
+		}
+		if(count($this->exemplaren)>0){
+			foreach($this->exemplaren as $exemplaar){//id, eigenaar_uid, uitgeleend_uid, toegevoegd, status, uitleendatum
+				if($this->isEigenaar($exemplaar['id'])){
+					$editablefieldsform['lener_'.$exemplaar['id']]=new LidField('lener_'.$exemplaar['id'], $exemplaar['uitgeleend_uid'], 'Uitgeleend aan');//, Catalogus::getAllValuesOfProperty('naam'), 'Geef naam of lidnummer van lener');
+					$editablefieldsform['opmerking_'.$exemplaar['id']]=new AutoresizeTextField('opmerking_'.$exemplaar['id'], $exemplaar['opmerking'], 'Opmerking', 255, 'Geef opmerking over exemplaar..');
+				}
+			}
+		}
+		$this->editablefieldsform=new Formulier('', $editablefieldsform);
 	}
 	/*
-	 * Geeft objecten van het formulier terug
+	 * Geeft formulier terug
 	 */
 	public function getFormulier($form){
 		switch($form){
@@ -940,16 +943,33 @@ class Boek{
 		}
 		return null;
 	}
+	/*
+	 * Geeft één veldobject $entry terug
+	 */
+	public function getField($entry){ 
+		return $this->editablefieldsform->findByName($entry);
+	}
 
 	/**
-	 * Controleren of de velden van formulier correct zijn
+	 * Controleren of alle velden van formulier correct zijn
 	 */
 	public function validForm($form){
 		return $this->getFormulier($form)->valid();
 	}
+	/*
+	 * Controleren of het gevraagde veld $entry correct is
+	 */
+	public function validField($entry){
+		//we checken alleen de formfields, niet de comments enzo.
+		$field = $this->getField($entry);
+		return $field instanceof FormField AND $field->valid();
+	}
 
 	/*
-	 * Slaat de velden van formulier op
+	 * Slaat alle velden van formulier op
+	 * @param $form string formuliernaam
+	 * @param $bewerken bool Alleen voor formulier 'beschrijving'. true=bewerken,false=nieuw.
+	 * @return bool gelukt/mislukt
 	 */
 	public function saveForm($form, $bewerken=false){
 		//object Boek vullen
@@ -971,76 +991,8 @@ class Boek{
 		}
 		return false;
 	}
-
-	/******************************************
-	 * methodes voor een javascript formulier *
-	 ******************************************/
 	/*
-	 * maakt objecten voor de bewerkbare velden van een boek
-	 * 
-	 */
-	public function assignAjaxFieldsForm(){
-		$editablefieldsform=array();
-		//Eigenaar een exemplaar v.h. boek mag alleen bewerken
-		if($this->isEigenaar()){
-			$editablefieldsform['titel']=new RequiredInputField('titel', $this->getTitel(), 'Boek', 200, 'Titel ontbreekt!');
-			$editablefieldsform['auteur']=new InputField('auteur', $this->getAuteur()->getNaam(),'Auteur',100, 'Achternaam, V.L. van de');
-			$editablefieldsform['paginas']=new IntField('paginas', $this->getPaginas() , "Pagina's", 10000, 0);
-			$editablefieldsform['taal']=new InputField('taal', $this->getTaal(), 'Taal', 25, '');
-			$editablefieldsform['isbn']=new InputField('isbn', $this->getISBN(), 'ISBN',15, 'Uniek nummer');
-			$editablefieldsform['uitgeverij']=new InputField('uitgeverij', $this->getUitgeverij(), 'Uitgeverij', 100, '');
-			$editablefieldsform['uitgavejaar']=new IntField('uitgavejaar', $this->getUitgavejaar(), 'Uitgavejaar',2100,0);
-			$editablefieldsform['rubriek']=new SelectField('rubriek', $this->getRubriek()->getId(), 'Rubriek',Rubriek::getAllRubrieken($samenvoegen=true,$short=true));
-			//$editablefieldsform['code']=new CodeField('code', $this->getCode(), 'Biebcode');
-		}
-
-		//voor eigenaars een veldje maken om boek uit te lenen.
-		if($this->exemplaren===null){
-			$this->loadExemplaren();
-		}
-		if(count($this->exemplaren)>0){
-			foreach($this->exemplaren as $exemplaar){//id, eigenaar_uid, uitgeleend_uid, toegevoegd, status, uitleendatum
-				if($this->isEigenaar($exemplaar['id'])){
-					$editablefieldsform['lener_'.$exemplaar['id']]=new LidField('lener_'.$exemplaar['id'], $exemplaar['uitgeleend_uid'], 'Uitgeleend aan');//, Catalogus::getAllValuesOfProperty('naam'), 'Geef naam of lidnummer van lener');
-					$editablefieldsform['opmerking_'.$exemplaar['id']]=new InputField('opmerking_'.$exemplaar['id'], $exemplaar['opmerking'], 'Opmerking', 255,'Geef opmerking over exemplaar..');
-				}
-			}
-		}
-		$this->editablefieldsform=new Formulier('', $editablefieldsform);
-	}
-	/*
-	 * Geeft object $entry terug
-	 */
-	public function getField($entry){ 
-		return $this->editablefieldsform->findByName($entry);
-	}
-	
-	/*
-	 * Controleren of veld $entry is gePOST
-	 */
-	public function isPostedField($entry){
-		$posted=false;
-		$field = $this->getField($entry);
-		if($field instanceof FormField AND $field->isPosted()){
-			$posted=true;
-		}
-		return $posted;
-	}
-	/*
-	 * Controleren of de veld $entry correct is
-	 */
-	public function validField($entry){
-		//alle veldjes langslopen, en kijken of ze valideren.
-		$valid=true;
-		$field = $this->getField($entry);
-		//we checken alleen de formfields, niet de comments enzo.
-		if($field instanceof FormField AND !$field->valid()){
-			$valid=false;
-		}
-		return $valid;
-	}
-	/*
-	 * Slaat het veld $entry op in db
+	 * Slaat één veld $entry op in db
 	 */
 	public function saveField($entry){
 		//waarde van $entry in Boek invullen
@@ -1049,6 +1001,7 @@ class Boek{
 			$this->setValue($field->getName(), $field->getValue());
 		}else{
 			$this->error .= 'saveField(): '.$entry.' Geen instanceof FormField';
+			return false;
 		}
 		//waarde van $entry uit Boek opslaan
 		if($this->saveProperty($entry)){
@@ -1058,5 +1011,6 @@ class Boek{
 		}
 		return false;
 	}
+
 }
 ?>
