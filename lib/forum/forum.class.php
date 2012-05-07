@@ -126,7 +126,10 @@ class Forum{
 				".$iAantal.";";
 		return MySql::instance()->query2array($query);
 	}
-
+	//foei: herhaling is dan misschien wel de kracht van de
+	//indoctrinatie, maar ik kan niet vaak genoeg herhalen dat jezelf
+	//herhalen en in het bijzonder twee keer dezelfde functie schrijven
+	//met bijna dezelfde signature en body uit den boze is!
 	public static function getPostsZijbalkBelangrijk($iAantal=false, $bDistinct=true, $token=null, $uid=null){
 		if($iAantal===false){
 			$iAantal=Forum::$_postsPerRss;

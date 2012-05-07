@@ -64,7 +64,7 @@ class EetplanContent extends SimpleHTML {
 			$sUitvoer='<table class="eetplantabel">
 				<tr>
 				<th style="width: 150px">Avond</th>
-				<th style="width: 200px">Noviet</th>
+				<th style="width: 200px">&Uuml;bersjaarsch </th>
 				<th>Mobiel</th>
 				<th>E-mail</th>
 				<th>Eetwens</th>
@@ -110,9 +110,9 @@ class EetplanContent extends SimpleHTML {
 				Van eerstejaers die niet komen opdagen op het eetplan wordt verwacht dat zij minstens &eacute;&eacute;n keer komen koken op het huis waarbij zij gefaeld hebben.
 			</div>
 			<table class="eetplantabel">
-			<tr><th style="width: 200px;">Noviet/Avond</td>';
+			<tr><th style="width: 200px;">&Uuml;bersjaarsch/Avond</td>';
 		//kopjes voor tabel
-		for($iTeller=1;$iTeller<=4;$iTeller++){
+		for($iTeller=5;$iTeller<=8;$iTeller++){
 			echo '<th class="huis">'.$this->_eetplan->getDatum($iTeller).'</th>';
 		}
 		echo '</tr>';
@@ -121,7 +121,7 @@ class EetplanContent extends SimpleHTML {
 
 
 			echo '<tr class="kleur'.($row%2).'"><td><a href="/actueel/eetplan/sjaars/'.$aEetplanVoorPheut[0]['uid'].'">'.$aEetplanVoorPheut[0]['naam'].'</a></td>';
-			for($iTeller=1;$iTeller<=4;$iTeller++){
+			for($iTeller=5;$iTeller<=8;$iTeller++){
 				$huisnaam=$aHuizenArray[$aEetplanVoorPheut[$iTeller]-1]['huisNaam'];
 				$huisnaam=str_replace(array('Huize ', 'De '), '', $huisnaam);
 				$huisnaam=substr($huisnaam, 0, 15);

@@ -113,7 +113,10 @@ form.gesloten{
 	display: none;
 }
 
-#ubb_melding, #ketzer_melding{
+#meldingen{
+	position: relative;
+}
+#meldingen div{
 	width: 130px;
 	position: absolute;
 	left: -141px;
@@ -129,6 +132,10 @@ form.gesloten{
 #ketzer_melding{
 	background-color: #4b4;
 	margin-top: 34px;
+}
+#extern_melding{
+	margin-top: 67px;
+	background-color: #f66;
 }
 /* ubb-code */
 div.citaatContainer{

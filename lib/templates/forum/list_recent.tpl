@@ -18,9 +18,8 @@
 	{foreach from=$berichten item=bericht}
 		<tr class="kleur{cycle values="0,1"}">
 			<td class="titel">
-				{if $bericht.soort=='T_POLL'}[peiling]{/if}
 				{if $bericht.zichtbaar=='wacht_goedkeuring'}[ter goedkeuring...]{/if}
-				<a href="/communicatie/forum/reactie/{$bericht.postID}">
+				<a href="/communicatie/forum/reactie/{$bericht.postID}" {if $bericht.momentGelezen<$bericht.lastpost} class="updatedTopic"{/if}>
 					{if $bericht.plakkerig==1}
 						<img src="{icon get="plakkerig" notag=true}" title="Dit onderwerp is plakkerig, het blijft bovenaan." alt="plakkerig" />&nbsp;&nbsp;
 					{/if}	

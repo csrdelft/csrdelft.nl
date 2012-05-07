@@ -11,7 +11,7 @@ class LidZoeker{
 	private $allowVelden=array(
 		'pasfoto', 'uid', 'naam', 'voorletters', 'voornaam', 'tussenvoegsel', 'achternaam', 'nickname', 'geslacht',
 		'email', 'adres', 'telefoon', 'mobiel', 'msn', 'jid', 'skype', 'linkedin', 'website', 'studie', 'status',
-		'gebdatum', 'beroep', 'verticale', 'moot', 'lidjaar', 'kring', 'patroon', 'woonoord', 'bankrekening');
+		'gebdatum', 'beroep', 'verticale', 'moot', 'lidjaar', 'kring', 'patroon', 'woonoord', 'bankrekening', 'corvee_kwalikok');
 	
 	//velden die ook door mensen met P_LEDEN_MOD bekeken mogen worden
 	//(merge in de constructor)
@@ -28,7 +28,7 @@ class LidZoeker{
 	
 	//nette aliassen voor kolommen, als ze niet beschikbaar zijn wordt gewoon
 	//de naam uit $this->allowVelden gebruikt
-	private $veldNamen=array(
+	public $veldNamen=array(
 		'telefoon' => 'Nummer',
 		'mobiel' => 'Pauper',
 		'studie' => 'Studie',
@@ -38,7 +38,8 @@ class LidZoeker{
 		'ontvangtcontactueel' => 'Contactueel?',
 		'machtiging' => 'Machtiging getekend?',
 		'adresseringechtpaar' => 'Post echtpaar t.n.v.',
-		'linkedin' => 'LinkedIn');
+		'linkedin' => 'LinkedIn',
+		'corvee_kwalikok' => 'Kwalikok');
 
 	//toegestane opties voor het statusfilter.
 	private $allowStatus=array('S_LID', 'S_NOVIET', 'S_GASTLID', 'S_NOBODY', 'S_OUDLID', 'S_ERELID', 'S_KRINGEL', 'S_OVERLEDEN');

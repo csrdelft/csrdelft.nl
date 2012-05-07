@@ -1,0 +1,18 @@
+.hl {
+    background-color:#DEE7EC;
+}
+
+table.confmanager {
+/*    width:100%;*/
+}
+
+table.confmanager td {
+	padding-left:5px;
+	padding-right:5px;
+}
+input.key {
+	width:100px;
+}
+input.val {
+	width:300px;
+}

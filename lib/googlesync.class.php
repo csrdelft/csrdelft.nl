@@ -478,26 +478,24 @@ class GoogleSync{
 			}
 		}
 		
-		//add phone numbers
-		$telefoons=array(
-			array('telefoon', 'http://schemas.google.com/g/2005#home'),
-			array('mobiel', 'http://schemas.google.com/g/2005#mobile'),
-		);
-		if($this->extendedExport){
-			//als het een huidig lid betreft ook het nummer van de ouders erin.
-			if($lid->isLid()){
-				$telefoons[]=array('o_telefoon', 'label:Ouders');
-			}
-		}
+		//phone numbers
+		$telefoons=array();
+
+		//ouders nummer...
+		if($this->extendedExport && $lid->isLid()){
+                        $telefoons[]=array('o_telefoon', 'http://schemas.google.com/g/2005#other');
+                }
+		$telefoons[]=array('telefoon', 'http://schemas.google.com/g/2005#home');
+		$telefoons[]=array('mobiel', 'http://schemas.google.com/g/2005#mobile');
 		
 		foreach($telefoons as $telefoon){
 			if($lid->getProperty($telefoon[0])!=''){
 				$number=$doc->createElement('gd:phoneNumber', internationalizePhonenumber($lid->getProperty($telefoon[0])));
-				if($telefoon[0]=='telefoon'){
+				if($telefoon[0]=='mobiel'){
 					$number->setAttribute('primary', 'true');
 				}
-				if(substr($telefoon[1],0, 5)=='label'){
-					$number->setAttribute('label', substr($telefoon[1],6));
+				if($telefoon[0]=='o_telefoon'){
+					$number->setAttribute('label', 'Ouders');
 				}else{
 					$number->setAttribute('rel', $telefoon[1]);
 				}

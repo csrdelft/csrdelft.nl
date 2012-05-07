@@ -124,8 +124,8 @@ class Lid implements Serializable, Agendeerbaar{
 
 		$ldap=new LDAP();
 
-		#alleen voor ledenldap of oudledenldap
-		if(!in_array($this->getStatus(), array('S_NOBODY', 'S_OVERLEDEN', 'S_CIE'))){
+		# Alleen leden, gastleden, novieten en kringels staan in LDAP ( en Knorrie öO~ )
+		if(preg_match('/^S_(LID|GASTLID|NOVIET|KRINGEL|CIE)$/', $this->getStatus()) or $this->getUid()=='9808') {
 
 			# ldap entry in elkaar snokken
 			$entry = array();
@@ -162,10 +162,6 @@ class Lid implements Serializable, Agendeerbaar{
 			foreach($entry as $i => $e){
 				if($e == ''){ unset ($entry[$i]); }
 			}
-		}
-
-		# Alleen leden, gastleden, novieten en kringels staan in ledenLDAP ( en Knorrie öO~ )
-		if(preg_match('/^S_(LID|GASTLID|NOVIET|KRINGEL)$/', $this->getStatus()) or $this->getUid()=='9808') {
 
 			# bestaat deze uid al in ldap? dan wijzigen, anders aanmaken
 			if($ldap->isLid($entry['uid'])){
@@ -179,23 +175,6 @@ class Lid implements Serializable, Agendeerbaar{
 				$ldap->removeLid($this->getUid());
 			}
 		}
-
-		# Alleen oudleden staan in oudledenLDAP
-		if(preg_match('/^S_(OUDLID|ERELID)$/', $this->getStatus())) {
-
-			# bestaat deze uid al in ldap? dan wijzigen, anders aanmaken
-			if($ldap->isOudlid($entry['uid'])){
-				$ldap->modifyOudlid($entry['uid'], $entry);
-			}else{
-				$ldap->addOudlid($entry['uid'], $entry);
-			}
-		}else{
-			# Als het een andere status is even kijken of de uid in ldap voorkomt, zo ja wissen
-			if($ldap->isOudlid($this->getUid())){
-				$ldap->removeOudlid($this->getUid());
-			}
-		}
-
 		$ldap->disconnect();
 		return true;
 	}
@@ -716,20 +695,23 @@ class Lid implements Serializable, Agendeerbaar{
 	 * unserializen moet gebeuren.
 	 */
 	public function serialize(){
-		$lid['uid']=$this->getUid();
-		$lid['profiel']=$this->getProfiel();
-		$lid['kinderen']=$this->getKinderen();
+		$lid=array(
+			'uid' => $this->getUid(),
+			'profiel' => $this->getProfiel()
+		);
+		
 		return serialize($lid);
 	}
 	public function unserialize($serialized){
 		$lid=unserialize($serialized);
 		$this->uid=$lid['uid'];
 		$this->profiel=$lid['profiel'];
-		$this->kinderen=$lid['kinderen'];
 	}
 
 	/**
 	 * Geeft Naamlink voor uid
+	 *
+	 * 2012-04-18, Jieter: Zou deze niet static moeten zijn?
 	 */
 	public static function getNaamLinkFromUid($uid=null, $vorm='full', $mode='plain'){
 		if($uid===null){ $uid=LoginLid::instance()->getUid(); }
@@ -858,10 +840,9 @@ class Lid implements Serializable, Agendeerbaar{
 }
 
 /**
- * Lid-objectjes bewaren in Memcached, en in een lokale array.
+ * Lid-objectjes bewaren in Memcached
  */
 class LidCache{
-	private static $localCache=array();
 
 	/**
 	 * Deze methode gebruiken op Lid-objecten te maken. Er wordt dan
@@ -874,19 +855,14 @@ class LidCache{
 		if(!Lid::isValidUid($uid)){
 			return false;
 		}
-		//als de lokale cache het lid-object al heeft scheelt het weer
-		//een tripje naar memcached.
-		if(isset(LidCache::$localCache[$uid])){
-			return LidCache::$localCache[$uid];
-		}
+
 		//kijken of we dit lid al in memcached hebben zitten
 		$lid=Memcached::instance()->get($uid);
 		if($lid===false){
 			try{
-				//nieuw lid maken, in memcache & local cache stoppen en teruggeven.
+				//nieuw lid maken, in memcache stoppen en teruggeven.
 				$lid=new Lid($uid);
 				Memcached::instance()->set($uid, serialize($lid));
-				LidCache::$localCache[$uid]=$lid;
 				return $lid;
 			}catch(Exception $e){
 				return null;
@@ -902,9 +878,6 @@ class LidCache{
 		if(!Lid::isValidUid($uid)){
 			return false;
 		}
-		if(isset(LidCache::$localCache[$uid])){
-			unset(LidCache::$localCache[$uid]);
-		}
 		return Memcached::instance()->delete($uid);
 	}
 
@@ -918,7 +891,7 @@ class LidCache{
 	}
 
 	public static function flushAll(){
-		return Memcached::instance()->flush() AND LidCache::$localCache=array();
+		return Memcached::instance()->flush();
 	}
 }
 

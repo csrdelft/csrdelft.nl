@@ -1,0 +1,35 @@
+div.dokuwiki a.profiellink_plugin:link,
+div.dokuwiki a.profiellink_plugin:active,
+div.dokuwiki a.profiellink_plugin:hover,
+div.dokuwiki a.profiellink_plugin:visited {
+    position: relative;
+    background: transparent url(user.png) no-repeat left top;
+    padding-left: 18px;
+    z-index: 10;
+}
+
+div.dokuwiki a.profiellink_plugin:link span.profiellink_popup,
+div.dokuwiki a.profiellink_plugin:active span.profiellink_popup,
+div.dokuwiki a.profiellink_plugin:visited span.profiellink_popup {
+    display: none;
+}
+
+div.dokuwiki a.profiellink_plugin:hover {
+    text-decoration: none !important;
+    z-index: 15;
+}
+
+div.dokuwiki a.profiellink_plugin:hover span.profiellink_popup {
+    display: block;
+    position: absolute;
+    top: 1.2em;
+    left: 18px;
+    width: 20em;
+    height: 64px;
+    min-height: 64px;
+    height: auto;
+    background-color: __background__;
+    border: 1px solid __border__;
+    padding: 0.5em;
+    font-size: 90%;
+}

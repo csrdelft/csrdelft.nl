@@ -1,0 +1,109 @@
+/* en: Place for user defined CSS rules (screen media) - this file can safely be
+   preserved when updating. See README for details.
+   
+   de: Ort für benutzerdefinierte CSS-Regeln (screen media) - Diese Datei kann
+   beim Durchführen von Updates ohne Risiko beibehalten werden. Konsultieren Sie
+   die README für Detailinformationen. */
+
+/* Search bar to the left */
+#p-search2 {
+  width: inherit;
+  height: auto;
+}
+
+/* highlight footer buttons on hover */
+#footer #footer-places a img {
+  opacity: 0.5;
+  border: 0;
+}
+#footer #footer-places a:hover img {
+  opacity: 1;
+}
+
+/* "you are here" and "breadcrumbs" -- minder hoog*/
+.catlinks {
+  border: 0px solid #aaa;
+  background-color: #f3f3e1;/*#f3f3f3;*/
+}
+
+.catlinks p {
+  line-height: 1em;
+}
+
+/* breadcrumbs */
+.bchead,
+.bcsep {
+  color:#444444; 
+}
+
+/* header of toc */
+#toc__header {
+  background-color: #E8F2F8;
+}
+
+/*headlines */
+div#content .dokuwiki h1 {
+  font-size:200%;
+}
+
+/* lists */
+div#content .dokuwiki ul {
+	margin-left: 3.2em;
+	padding-left: 0.5em;
+}
+/* disccussion plugin */
+div.dokuwiki div.comment_wrapper {
+	background-color: #fff;
+	margin: 0em;
+	color: #474747;
+	padding: 0.5em 0 0 0;
+}
+div.dokuwiki div.level2 {
+	padding: 0 0.5em 0 0.5em;
+}
+div.dokuwiki div.comment_form {
+    margin-right: 0.5em;
+    margin-left: 0em;
+    margin-top: 0em;
+}
+
+div.dokuwiki div#discussion__comment_preview {
+    margin-top: 0em;
+    padding: 0em;
+}
+
+#discussion__section {
+	color: #474747 !important;
+}
+div#content .dokuwiki div.comment_wrapper h2 {
+	border-bottom: 0px;
+    background-color: #f3f3e1;
+    padding: 5px;
+    font-size: 1.5em;
+    margin-bottom: 0.6em;
+}
+
+div.dokuwiki .comment_head {
+    color: #888;
+}
+div.dokuwiki .comment_head abbr.published {
+	color: #888;
+}
+.comment_body entry-content {
+	margin-left: 0em;
+}
+
+div.dokuwiki div.comment_buttons input.button {
+    background: none repeat scroll 0 0 transparent;
+    border: 0 none;
+    color: #002BB8;
+    cursor: pointer;
+    margin: 0;
+    padding: 0;
+    text-transform: lowercase;
+}
+
+div.dokuwiki label.block {
+    font-weight: normal;
+    font-size: 0.8em;
+}

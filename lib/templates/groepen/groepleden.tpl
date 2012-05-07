@@ -60,7 +60,7 @@
 				{/if}
 				{if $groep->magBewerken() OR $loginlid->getUid()==$groeplid.uid}
 					<td>
-					{if $groep->getTypeId()==2 AND $groep->getStatus()=='ht'}{* maak lid ot voor huizen. Dit kunnen leden ook bij zichzelf doen. *}
+					{if in_array($groep->getTypeId(), array(2, 3)) AND $groep->getStatus()=='ht'}{* maak lid ot voor huizen/onderverenigingen. Dit kunnen leden ook bij zichzelf doen. *}
 						<a href="/actueel/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/maakLidOt/{$groeplid.uid}" title="Verplaats lid naar o.t.-groep" 
 							{if !$groep->isAdmin()}onclick="return confirm('Weet u zeker dat u deze bewoner naar de oudbewonersgroep wilt verplaatsen?')"{/if}>
 							&raquo;
