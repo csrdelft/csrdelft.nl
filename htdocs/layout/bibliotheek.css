@@ -14,12 +14,9 @@ h1{
 	font-size: 10px;
 }
 /*knoppen in zijkolom rechts*/
-.controls{
-	float: right;
-}
-.boekacties{
-	width: 125px;
-}
+.controls		{float: right;}
+.controls .knop {line-height: 2em;}
+.boekacties		{width: 125px;}
 
 /****************************
  *  cataloguspagina			*
@@ -138,7 +135,7 @@ h1{
 }
 .exemplaren .exemplaar .veld label,
 .boek .veld label{ 
-	width: 70px; /* uitlijnen tekst in inputs */
+	width: 72px; /* uitlijnen tekst in inputs */
 }
 .blok { margin-bottom: 20px; clear: left; }
 .gegevens { margin-left: 20px; padding-left: 15px; border-left: 1px solid #0a338d; }
@@ -189,9 +186,9 @@ h1{
 .blok .veld.metfouten input,
 .blok .veld.metfouten textarea 		{ background-color: #E88; }
 
-.blok .veld .melding				{ float: right; margin-right: 10px; display:none }
-.blok .veld.opgeslagen .melding 	{ color: green; display: inline; }
-.blok .veld.metfouten .melding		{ color: red; display: inline; }
+.blok .veld .melding				{ margin-right: 10px; display:none }
+.blok .veld.opgeslagen .melding 	{ color: green; display: inline; float: right; }
+.blok .veld.metfouten .melding		{ color: red; display: block; margin-left: 76px;}
 
 .blok .veld input.nonsavededits,
 .blok .veld textarea.nonsavededits 	{ background-color: #FFFFC1; }
@@ -262,7 +259,10 @@ h1{
 	display: inline;
 	padding-left: 10px;
 }
-
+/* InputField voor titel */
+li.ac_over a, li.ac_over a:hover { 
+	color: #0071D9;
+}
 
 /* 
  * Formulier voor nieuw boek en die voor boekbeschrijving bestaand boek

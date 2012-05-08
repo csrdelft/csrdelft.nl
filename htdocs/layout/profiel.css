@@ -50,6 +50,7 @@
 	-o-text-overflow: ellipsis;
 	white-space: nowrap;
 }
+#profiel .boeken a.knop{margin-left: 75px;}
 
 p.profielBewerken .pasfoto{ float: right; margin-left: 10px;}
 

@@ -251,56 +251,54 @@ private $iKolommenZichtbaar; //aantal kolommen zichtbaar in de tabel.
 	 */
 	public static function getAutocompleteSuggesties($sKey){
 		$properties = array();
-		$allowedkeys = array('id', 'titel', 'uitgavejaar', 'uitgeverij', 'paginas', 'taal', 'isbn', 'code', 'naam','auteur');
+		$allowedkeys = array('id', 'titel', 'uitgavejaar', 'uitgeverij', 'paginas', 'taal', 'isbn', 'code','auteur');
 		if(in_array($sKey, $allowedkeys)){
 			$db=MySql::instance();
-			if($sKey=='naam'){
-				$query = "
-					SELECT uid, CONCAT(voornaam, ' ', tussenvoegsel,  IF(tussenvoegsel='','',' '), achternaam) as naam  
-					FROM lid 
-					WHERE status IN ('S_LID', 'S_NOVIET', 'S_GASTLID', 'S_KRINGEL', 'S_OUDLID','S_ERELID') 
-						AND CONCAT(voornaam, ' ', tussenvoegsel,  IF(tussenvoegsel='','',' '), achternaam) LIKE  '%".$db->escape($_GET['q'])."%'
-					ORDER BY achternaam
-					LIMIT 0, ".(int)$_GET['limit']." ;";
-			}else{
-				$query = "
-					SELECT DISTINCT ".$db->escape($sKey)."
-					FROM biebboek
-					WHERE ".$db->escape($sKey)." LIKE  '%".$db->escape($_GET['q'])."%'
-					ORDER BY ".$db->escape($sKey)."
-					LIMIT 0, ".(int)$_GET['limit']." ;";
-			}
+			$query = "
+				SELECT ".$db->escape($sKey).", id
+				FROM biebboek
+				WHERE ".$db->escape($sKey)." LIKE  '%".$db->escape($_GET['q'])."%'
+				GROUP BY ".$db->escape($sKey)."
+				ORDER BY ".$db->escape($sKey)."
+				LIMIT 0, ".(int)$_GET['limit']." ;";
 			$result=$db->query($query);
 			echo mysql_error();
 			if($db->numRows($result)>0){
 				while($prop=$db->next($result)){
-					$properties[]=array('data'=>array($prop[$sKey]), 'value'=>$prop[$sKey], 'result'=>$prop[$sKey]);
+					if($sKey=='titel'){
+						$data=array('titel'=>$prop['titel'],'id'=>$prop['id']);
+					}else{
+						$data=array($prop[$sKey]);
+					}
+					$properties[]=array('data'=>$data, 'value'=>$prop[$sKey], 'result'=>$prop[$sKey]);
 				}
 			}
 		}
 		echo json_encode($properties);
 	}
 
-	/*
+	/**
 	 * controleert of gegeven waarde voor de gegeven $key al voorkomt in de db.
 	 * 
 	 * @param $key en $value
 	 * @return	true $value bestaat in db
 	 * 			false $value bestaat niet
 	 */
-	public static function existsProperty($key,$value){
-		$return = false;
-		switch ($key) {
-			case 'titel':
-			case 'isbn':
-			case 'auteur':
-				$return = in_array($value, Catalogus::getAllValuesOfProperty($key));
-				break;
-			case 'rubriek':
-				$return = in_array($value, Rubriek::getAllRubriekIds());
-				break;
+	public static function existsProperty($key, $value){
+		$allowedkeys = array('id', 'titel', 'uitgavejaar', 'uitgeverij', 'paginas', 'taal', 'isbn', 'code','auteur');
+		if(in_array($key, $allowedkeys)){
+			$db=MySql::instance();
+			$query = "
+				SELECT  ".$db->escape($key)."
+				FROM  `biebboek` 
+				WHERE  `".$db->escape($key)."` LIKE  '".$db->escape($value)."'
+				LIMIT 0 , 1;";
+			$result=$db->query($query);
+			return $db->numRows($result)>0;
+		}elseif($key=='rubriek'){
+			return in_array($value, Rubriek::getAllRubriekIds());
 		}
-		return $return;
+		return false;
 	}
 
 	/* 

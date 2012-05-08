@@ -243,7 +243,7 @@ class Boek{
 	 */
 	public function magVerwijderen($beschrijvingid=null){
 		$uid=LoginLid::instance()->getUid();
-		if(Loginlid::instance()->hasPermission('groep:BASFCie','P_BIEB_MOD')){ return true;}
+		if(Loginlid::instance()->hasPermission('groep:BASFCie,P_BIEB_MOD,P_ADMIN')){ return true;}
 		if($uid=='x999'){ return false;}
 		
 		//of boekbeschrijving mag verwijderen
@@ -847,7 +847,7 @@ class Boek{
 	 * en ze worden gecontroleerd met de eigen valideerfuncties.
 	 */
 	protected function getCommonFields($naamtitelveld='Titel'){
-		$fields['titel']=new RequiredAutoresizeTextField('titel', $this->getTitel(), $naamtitelveld, 200, 'Titel ontbreekt!');
+		$fields['titel']=new TitelField('titel', $this->getTitel(), $naamtitelveld, 200, 'Titel ontbreekt!');
 		$fields['auteur']=new InputField('auteur', $this->getAuteur(), 'Auteur', 100);
 		$fields['auteur']->setRemoteSuggestionsSource("/communicatie/bibliotheek/autocomplete/auteur");
 		$fields['auteur']->setPlaceholder('Achternaam, Voornaam V.L. van de');
@@ -952,7 +952,7 @@ class Boek{
 	 * Controleren of alle velden van formulier correct zijn
 	 */
 	public function validForm($form){
-		return $this->getFormulier($form)->valid();
+		return $this->getFormulier($form)->valid('');
 	}
 	/*
 	 * Controleren of het gevraagde veld $entry correct is
@@ -960,7 +960,7 @@ class Boek{
 	public function validField($entry){
 		//we checken alleen de formfields, niet de comments enzo.
 		$field = $this->getField($entry);
-		return $field instanceof FormField AND $field->valid();
+		return $field instanceof FormField AND $field->valid('');
 	}
 
 	/*
@@ -998,7 +998,7 @@ class Boek{
 		if($field instanceof FormField){
 			$this->setValue($field->getName(), $field->getValue());
 		}else{
-			$this->error .= 'saveField(): '.$entry.' Geen instanceof FormField';
+			$this->error .= 'saveField(): '.$entry.' Geen instanceof FormField.';
 			return false;
 		}
 		//waarde van $entry uit Boek opslaan
@@ -1010,5 +1010,16 @@ class Boek{
 		return false;
 	}
 
+}
+class TitelField extends RequiredAutoresizeTextField {
+	public function valid(){
+		if(!parent::valid()){ return false; }
+		if($this->notnull AND $this->getValue()==''){
+			$this->error='Dit is een verplicht veld.';
+		}elseif(Catalogus::existsProperty('titel', $this->getValue())){
+			$this->error='Titel bestaat al.';
+		}
+		return $this->error=='';
+	}
 }
 ?>

@@ -50,7 +50,7 @@ class BibliotheekController extends Controller{
 					'autocomplete'));
 		}
 		// beheerders mogen boeken weggooien
-		if(LoginLid::instance()->hasPermission('P_BIEB_MOD,groep:BASFCie')){
+		if(LoginLid::instance()->hasPermission('P_BIEB_MOD,groep:BASFCie,P_ADMIN')){
 			$allow[] = 'verwijderboek';
 		}
 		if(!in_array($this->action, $allow)){

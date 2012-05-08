@@ -25,7 +25,7 @@
 	<h1>Nieuw boek toevoegen</h1>
 	<p>Zoek via het Google Books-zoekveld je boek en kies een van de suggesties om de boekgegevens hieronder in te vullen.</p>
 	<div class="boekzoeker" title="Geef titel, auteur, isbn of een ander kenmerk van het boek. Minstens 7 tekens, na 1 seconde verschijnen suggesties.">
-		<label for="boekzoeker"><img src="http://code.google.com/favicon.ico" />&nbsp;Google Books zoeken:</label><input type="text" id="boekzoeker">
+		<label for="boekzoeker"><img src="http://code.google.com/favicon.ico" />&nbsp;Google Books zoeken:</label><input type="text" placeholder="Zoek en kies een suggestie om de velden te vullen" id="boekzoeker">
 	</div>
 
 	{$boek->getFormulier('nieuwboek')->view()}
@@ -57,12 +57,12 @@
 				<div><label>Boek</label><span>{$boek->getTitel()}</span></div>
 			</div>
 			<div class="blok gegevens">
-				<div class="regel"><label>Auteur</label>{$boek->getAuteur()}</div>
-				<div class="regel"><label>Pagina's</label>{$boek->getPaginas()}</div>
-				<div class="regel"><label>Taal</label>{$boek->getTaal()}</div>
-				<div class="regel"><label>ISBN</label>{$boek->getISBN()}</div>
-				<div class="regel"><label>Uitgeverij</label>{$boek->getUitgeverij()}</div>
-				<div class="regel"><label>Uitgavejaar</label>{$boek->getUitgavejaar()}</div>
+				{if $boek->getAuteur()!=''}<div class="regel"><label>Auteur</label>{$boek->getAuteur()}</div>{/if}
+				{if $boek->getPaginas()!=0}<div class="regel"><label>Pagina's</label>{$boek->getPaginas()}</div>{/if}
+				{if $boek->getTaal()!=''}<div class="regel"><label>Taal</label>{$boek->getTaal()}</div>{/if}
+				{if $boek->getISBN()!=''}<div class="regel"><label>ISBN</label>{$boek->getISBN()}</div>{/if}
+				{if $boek->getUitgeverij()!=''}<div class="regel"><label>Uitgeverij</label>{$boek->getUitgeverij()}</div>{/if}
+				{if $boek->getUitgavejaar()!=0}<div class="regel"><label>Uitgavejaar</label>{$boek->getUitgavejaar()}</div>{/if}
 			</div>
 			<div class="blok gegevens">
 				<div class="regel"><label>Rubriek</label>{$boek->getRubriek()}</div>

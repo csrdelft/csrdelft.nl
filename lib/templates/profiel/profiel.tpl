@@ -144,7 +144,7 @@
 					<div class="label">Kring:</div>
 					{$profiel->getKring(true)}
 					<br />
-				{else}
+				{elseif $profhtml.verticale!=0}
 					<div class="label">Verticale:</div>
 					<a href="/communicatie/lijst.php?q=verticale:{$profiel->getVerticale()}">{$profiel->getVerticale()}</a><br />
 				{/if}
@@ -330,39 +330,42 @@
 		</div>
 	</div>
 	{/if}
-	{if $boeken}
+	{if $boeken OR $loginlid->getUid()==$profhtml.uid OR $gerecenseerdeboeken}
 		<div class="profielregel boeken" id="boeken">
 			<div class="gegevens">
-				<div class="label">Boeken:</div>
-				<ul class="nobullets data">
-					{foreach from=$boeken item=boek}
-						<li>
-							<a href="/communicatie/bibliotheek/boek/{$boek.id}" title="Boek: {$boek.titel|escape:'html'}">
-								<span title="{$boek.status} boek" class="boekindicator {$boek.status}">•</span><span class="titel">{$boek.titel|escape:'html'}</span><span class="auteur">{$boek.auteur|escape:'html'}</span>
-							</a>
-						</li>
-					{foreachelse}
-						<li>Geen boeken</li>
-					{/foreach}
-				</ul>
-			</div>
-		</div>
-	{/if}
-	{if $gerecenseerdeboeken}
-		<div class="profielregel boeken" id="gerecenseerdeboeken">
-			<div class="gegevens">
-				<div class="label">Boekrecensies:</div>
-				<ul class="nobullets data">
-					{foreach from=$gerecenseerdeboeken item=boek}
-						<li>
-							<a href="/communicatie/bibliotheek/boek/{$boek.id}" title="Boek: {$boek.titel|escape:'html'}">
-								<span title="{$boek.status} boek" class="boekindicator {$boek.status}">•</span><span class="titel">{$boek.titel|escape:'html'}</span><span class="auteur">{$boek.auteur|escape:'html'}</span>
-							</a> {$boek.beschrijving|ubb|strip_tags}
-						</li>
-					{foreachelse}
-						<li>Geen boeken</li>
-					{/foreach}
-				</ul>
+				{if $boeken}
+					<div class="label">Boeken:</div>
+					<ul class="nobullets data">
+						{foreach from=$boeken item=boek}
+							<li>
+								<a href="/communicatie/bibliotheek/boek/{$boek.id}" title="Boek: {$boek.titel|escape:'html'}">
+									<span title="{$boek.status} boek" class="boekindicator {$boek.status}">•</span><span class="titel">{$boek.titel|escape:'html'}</span><span class="auteur">{$boek.auteur|escape:'html'}</span>
+								</a>
+							</li>
+						{foreachelse}
+							<li>Geen boeken</li>
+						{/foreach}
+					</ul>
+				{/if}
+				{if $loginlid->getUid()==$profhtml.uid}
+					<a class="knop" href="/communicatie/bibliotheek/nieuwboek" title="Nieuw boek toevoegen">{icon get="book_add"} Boek toevoegen</a>
+					<br />
+				{/if}
+				{if $gerecenseerdeboeken}
+					<br />
+					<div class="label">Boekrecensies:</div>
+					<ul class="nobullets data">
+						{foreach from=$gerecenseerdeboeken item=boek}
+							<li>
+								<a href="/communicatie/bibliotheek/boek/{$boek.id}" title="Boek: {$boek.titel|escape:'html'}">
+									<span title="{$boek.status} boek" class="boekindicator {$boek.status}">•</span><span class="titel">{$boek.titel|escape:'html'}</span><span class="auteur">{$boek.auteur|escape:'html'}</span>
+								</a> {$boek.beschrijving|ubb|strip_tags}
+							</li>
+						{foreachelse}
+							<li>Geen boeken</li>
+						{/foreach}
+					</ul>
+				{/if}
 			</div>
 		</div>
 	{/if}

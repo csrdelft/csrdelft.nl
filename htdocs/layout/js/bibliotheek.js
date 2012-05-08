@@ -84,6 +84,7 @@ jQuery(document).ready(function($) {
 		//actie
 		oTableCatalogus.fnDraw(); 
 	});
+
 	//catalogus: update de tabel als 'eigenaar&lener' wordt aangevinkt
 	$('input#boekstatus').click( function() { 
 		/* Get the DataTables object again - this is not a recreation, just a get of the object */
@@ -106,6 +107,28 @@ jQuery(document).ready(function($) {
 	// boekpagina: 
 	//   Suggesties voor zoekveld uit Google books. 
 	//   Kiezen van een suggestie plaatst in alle velden de juiste info.
+	function getAuteur(datarow){ 		return datarow.authors ? datarow.authors.join(', ') : ''; }
+	function getPublishedDate(datarow){ return datarow.publishedDate ? datarow.publishedDate.substring(0,4) : ''; }
+	function getIsbn(datarow){
+		var isbn = '';
+		if(datarow.industryIdentifiers && datarow.industryIdentifiers[1] && datarow.industryIdentifiers[1].type == "ISBN_13"){
+			isbn = datarow.industryIdentifiers[1].identifier;
+		}
+		return isbn;
+	}
+	function getLanguage(datarow){
+		var lang = {
+			nl: "Nederlands", 	en: "Engels", 	fr: "Frans",
+			de: "Duits", 		bg: "Bulgaars", es: "Spaans",
+			cs: "Tsjechisch", 	da: "Deens", 	et: "Ests",
+			el: "Grieks", 		ga: "Iers", 	it: "Italiaans",
+			lv: "Lets", 		lt: "Litouws", 	hu: "Hongaars",
+			mt: "Maltees", 		pl: "Pools", 	pt: "Portugees",
+			ro: "Roemeens", 	sk: "Slowaaks", sl: "Sloveens",
+			fi: "Fins", 		sv: "Zweeds"
+		};
+		return lang[datarow.language] ? lang[datarow.language] : datarow.language;
+	}
 
 	//suggestiemenu configureren
 	$("#boekzoeker").autocomplete("https://www.googleapis.com/books/v1/volumes",{
@@ -115,15 +138,18 @@ jQuery(document).ready(function($) {
 			data = data.items;
 			for(var i=0; i<data.length; i++){
 				var datarow = data[i].volumeInfo;
-				rows[i] = { data:datarow, value:datarow.title, result: datarow.title+' '+(datarow.authors ? datarow.authors.join(', ') : '') };
+				rows[i] = { data:datarow, value:datarow.title, result: datarow.title+' '+getAuteur(datarow) };
 			}
 			return rows;
 		},
 		formatItem: function(row, i, n) {
-			return row.title+'<br /><i>'+(row.authors ? row.authors.join(', ') : '')+'</i>';
+			var item = '<span style="display:block" title="titel: '+row.title+"\nAuteur: "+getAuteur(row)+"\nPagina's: "+row.pageCount+"\nTaal: "+getLanguage(row)+"\nISBN: "+getIsbn(row)+"\nUitgeverij: "+row.publisher+"\nUitgavejaar: "+getPublishedDate(row)+'">';
+			item 	+= row.title+'<br /><i>'+getAuteur(row)+'</i>';
+			item 	+= '</span>'
+			return item;
 		},
 		formatResult: function(row) {
-			return row.title+' '+(row.authors ? row.authors.join(', ') : '');
+			return row.title+' '+getAuteur(row);
 		},
 		extraParams: {
 			limit: '',
@@ -137,35 +163,21 @@ jQuery(document).ready(function($) {
 		max: 25
 
 	//invullen van info van gekozen suggestie in de boekvelden
-	}).result(function(event, datarow, formatted) {
-		var isbn = '';
-		if(datarow.industryIdentifiers[1] && datarow.industryIdentifiers[1].type == "ISBN_13"){
-			isbn = datarow.industryIdentifiers[1].identifier;
-		}
-		var lang = {
-			nl: "Nederlands", 	en: "Engels", 	fr: "Frans",
-			de: "Duits", 		bg: "Bulgaars", es: "Spaans",
-			cs: "Tsjechisch", 	da: "Deens", 	et: "Ests",
-			el: "Grieks", 		ga: "Iers", 	it: "Italiaans",
-			lv: "Lets", 		lt: "Litouws", 	hu: "Hongaars",
-			mt: "Maltees", 		pl: "Pools", 	pt: "Portugees",
-			ro: "Roemeens", 	sk: "Slowaaks", sl: "Sloveens",
-			fi: "Fins", 		sv: "Zweeds"
-		};
+	}).result(function(event, row, formatted) {
 		//gegevens in invulvelden plaatsen
-		$("#field_titel").val(datarow.title);
-		$("#field_auteur").val((datarow.authors ? datarow.authors.join(', ') : ''));
-		$("#field_paginas").val(datarow.pageCount);
-		$("#field_taal").val(lang[datarow.language] ? lang[datarow.language] : datarow.language);
-		$("#field_isbn").val(isbn);
-		$("#field_uitgeverij").val(datarow.publisher);
-		$("#field_uitgavejaar").val(datarow.publishedDate ? datarow.publishedDate.substring(0,4) : '');
+		$("#field_titel").val(row.title);
+		$("#field_auteur").val(getAuteur(row));
+		$("#field_paginas").val(row.pageCount);
+		$("#field_taal").val(getLanguage(row));
+		$("#field_isbn").val(getIsbn(row));
+		$("#field_uitgeverij").val(row.publisher);
+		$("#field_uitgavejaar").val(getPublishedDate(row));
 
 	//kleurt invoerveld rood bij te korte zoekterm
 	}).keyup(function(event){
 		var inputl = $(this).val().length
 		if(inputl>0 && inputl < 7){
-			$(this).css("background-color","#ffded1");
+			$(this).css("background-color","#ffcc96");
 		}else{
 			$(this).css("background-color","white");
 		}
@@ -181,12 +193,15 @@ jQuery(document).ready(function($) {
 	var options = {
 		dataType: 'json',
 		parse: function(result) { return result; },
-		formatItem: function(row, i, n) { return row; },
+		formatItem: function(row, i, n) { return 'Ga naar: <a href="/communicatie/bibliotheek/boek/'+row.id+'" target="_blank">'+row.titel+'</a>'; },
 		clickFire: true, 
 		max: 20
 	};
 
-	$("#field_titel").autocomplete("/communicatie/bibliotheek/autocomplete/titel", options);
+	$("#field_titel").autocomplete("/communicatie/bibliotheek/autocomplete/titel", options)
+		.result(function(event, row){
+			window.open('/communicatie/bibliotheek/boek/'+row.id)
+		});
 
 	//boekpagina: meldingsvelden toevoegen bewerkbare velden
 	$('.blok .veld').append('<div class="melding"></div>');
@@ -252,20 +267,4 @@ function biebCodeVakvuller(){
 	});
 	$("#field_code").after(codeknop);
 }
-//zoekt naam op
-function naamCheck(fieldname){
-	field=document.getElementById('field_'+fieldname);
-	if(field.value.length>2){
-		http.abort();
-		http.open("GET", "/tools/naamlink.php?naam="+field.value, true);
-		http.onreadystatechange=function(){
-			if(http.readyState == 4){
-				document.getElementById('preview_'+fieldname).innerHTML=http.responseText;
-			}
-		}
-		http.send(null);
-	}else{
-		document.getElementById('preview_'+fieldname).innerHTML='';
-	}
-	return null;
-}
+

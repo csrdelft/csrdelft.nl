@@ -18,6 +18,7 @@
  * Uitbreidingen van FormField:
  * 		- TextField					Textarea
  * 			* PreviewTextField		Textarea met ubb voorbeeld 
+ * 			* AutoresizeTextField	Textarea die automagisch uitbreidt bij typen, lijkt een autoresizing input
  * 		- InputField				Simpele input
  * 			* CountryField			Landjes 
  * 			* UidField				Uid's  met preview
