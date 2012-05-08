@@ -274,7 +274,7 @@ private $iKolommenZichtbaar; //aantal kolommen zichtbaar in de tabel.
 			echo mysql_error();
 			if($db->numRows($result)>0){
 				while($prop=$db->next($result)){
-					$properties[]=array('data'=>$prop[$sKey], 'value'=>$prop[$sKey], 'result'=>$prop[$sKey]);
+					$properties[]=array('data'=>array($prop[$sKey]), 'value'=>$prop[$sKey], 'result'=>$prop[$sKey]);
 				}
 			}
 		}

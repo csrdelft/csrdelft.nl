@@ -378,11 +378,11 @@ $('.hasRemoteSuggestions').each(function(index, tag){
 		FieldSuggestions[tag.id.substring(6)], {
 			dataType: 'json',
 			parse: function(result) { return result; },
-			formatItem: function(row, i, n) { return row; },
+			formatItem: function(row, i, n) { return row[0]; },
 			clickFire: true, 
 			max: 20
 		}
-	);
+	).result(function(){ $(this).keyup(); });
 });
 JS;
 	}
@@ -622,66 +622,95 @@ JS;
  * LidField
  * één lid selecteren zonder een uid te hoeven typen.
  *
- * TODO: fixme, dit moet veel beter.
  */
 class LidField extends FormField{
+	// zoekfilter voor door namen2uid gebruikte Zoeker::zoekLeden. 
+	// geaccepteerde input: 'leden', 'oudleden', 'alleleden', 'nobodies'
+	private $zoekin;
 
-	public function __construct($name, $value, $description=null){
+	public function __construct($name, $value, $description=null,$zoekin='leden'){
+		$lid=LidCache::getLid($value);
+		if($lid instanceof Lid){
+			$value=$lid->getNaamLink('full', 'plain');
+		}
 		parent::__construct($name, $value, $description);
-		
+		if(!in_array($zoekin, array('leden', 'oudleden', 'alleleden', 'nobodies'))){
+			$zoekin='leden';
+		}
+		$this->zoekin=$zoekin;
+		$this->setRemoteSuggestionsSource('/tools/naamsuggesties/'.$this->zoekin);
 		$this->inputClasses[]='wantsLidPreview';
 	}
 	/**
 	 * LidField::getValue() levert altijd een uid of '' op.
 	 */
 	public function getValue(){
-		//TODO: fixme
-		return namen2uid($this->getOriginalValue());
+		//leeg veld meteen teruggeven
+		if($this->getOriginalValue()==''){ return ''; }
+		//uid opzoeken
+		if($uid = namen2uid($this->getOriginalValue(), $this->zoekin) ){//AND isset($uid[0]['uid'])
+			return $uid[0]['uid'];
+		}
+		return '';
 	}
-	
+
 	/**
 	 * getOriginalValue() levert het ingevoerde.
 	 */
 	public function getOriginalValue(){
 		return parent::getValue();
 	}
-		
+	/**
+	 * checkt of er een uniek lid wordt gevonden
+	 */
 	public function valid(){
 		if(!parent::valid()){ return false; }
 
 		//leeg veld wel accepteren.
-		if($this->getValue()==''){ return true; }
+		if($this->getOriginalValue()==''){ return true; }
 
-		$zoekin=array('S_LID', 'S_NOVIET', 'S_GASTLID', 'S_KRINGEL', 'S_OUDLID','S_ERELID');
-		$uid=namen2uid($this->getValue(), $zoekin);
+		$uid=namen2uid($this->getOriginalValue(), $this->zoekin);
 		if($uid){
-			if(isset($uid[0]['uid'])){ //uid gevonden?
-				if(Lid::isValidUid($uid[0]['uid'])){
-					return true;
-				}else{
-					$this->error='Geen geldig uid gevonden';
-				}
+			if(isset($uid[0]['uid']) AND Lid::exists($uid[0]['uid'])){
+				return true;
 			}elseif(count($uid[0]['naamOpties'])>0){ //meerdere naamopties?
 				$this->error='Meerdere leden mogelijk';
-			}else{
-				$this->error='Geen geldig lid';
+				return false;
 			}
-		}else{
-			$this->error='Geen geldig lid';
 		}
+		$this->error='Geen geldig lid';
 		return $this->error=='';
 	}
-	
+
+	/**
+	 * Voeg een preview-div toe achter het veld, defenier een
+	 * keyup-event op het veld, en trigger het event meteen om de boel
+	 * meteen te vullen.
+	 */
 	public function getJavascript(){
-		return <<<JS
+		$zoekin='';
+		$js=parent::getJavascript();
+		$js.=<<<JS
 $('.wantsLidPreview').each(function(index, tag){
-	var fieldname=tag.id.substring(6);
-	
+	var suggesties=FieldSuggestions[$(this).attr('id').substring(6)].split("/");
+
+	$(this).after('<div id="lidPreview_'+$(this).attr('id').substring(6)+'" class="lidPreview" />');
+	$(this).keyup(function(){
+		var field=$(this);
+		if(field.val().length>2){
+			$.ajax({
+				url: "/tools/naamlink.php?naam="+field.val()+ "&"+$.param({ zoekin: suggesties[suggesties.length-1] }),
+				success: function(response){
+					$('#lidPreview_'+field.attr('id').substring(6)).html(response);
+				}
+			});
+		}
+	}).keyup();
 });
 JS;
+	return $js;
 	}
 }
-
 
 
 class RequiredLidField extends LidField{

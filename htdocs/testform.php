@@ -23,6 +23,9 @@ $form[]=new UidField('uidtest', '0436', 'Wie ben jij?');
 $form[]=new VerticaleField('verticale', '4', 'Welke verticale?');
 $form[]=new DatumField('datum', '2011-08-11', 'Welke datum?');
 $form[]=new SubmitButton('opslaan', '<a class="knop" href="/communicatie/profiel/'.$uid.'">Annuleren</a>');
+$form[]=new LidField('lidtest', 'x101', 'Wat is je naam?', 'alleleden');
+$form[]=new LidField('lid2test', 'Gra', 'Wat is je naam?', 'nobodies');
+
 
 $form=new Formulier('/testform.php', $form);
 

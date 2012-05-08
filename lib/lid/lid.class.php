@@ -903,7 +903,7 @@ class LidCache{
  * TODO dus: een statische functie bouwen in lidZoeker die dit overneemt.
  */
 class Zoeker{
-	function zoekLeden($zoekterm, $zoekveld, $verticale, $sort, $zoekstatus = '', $velden = array()) {
+	function zoekLeden($zoekterm, $zoekveld, $verticale, $sort, $zoekstatus = '', $velden = array(), $aantalresultaten=null) {
 		$db=MySql::instance();
 		$leden = array();
 		$zoekfilter='';
@@ -952,14 +952,14 @@ class Zoeker{
 		#
 		# P_LID en P_OUDLID hebben beide P_LEDEN_READ en P_OUDLEDEN_READ en kunnen 
 		# de volgende afkortingen gebruiken:
-		#  - '' (lege string): 	novieten, (gast)leden, kringels, ere- en oudleden
-		#  - leden :  			novieten, (gast)leden en kringels
-		#  - oudleden : 		oud- en ereleden
+		#  - '' (lege string) of alleleden: 	novieten, (gast)leden, kringels, ere- en oudleden
+		#  - leden :  						novieten, (gast)leden en kringels
+		#  - oudleden : 					oud- en ereleden
 		# én alleen voor OUDLEDENMOD:
-		#  - nobodies : 		novieten, (gast)leden, kringels, ere- en oudleden én nobodies 
+		#  - nobodies : 					novieten, (gast)leden, kringels, ere- en oudleden én nobodies 
 
 		$statusfilter = '';
-
+		if($zoekstatus=='alleleden'){ $zoekstatus=''; }
 		if(is_array($zoekstatus)){
 			//we gaan nu gewoon simpelweg statussen aan elkaar plakken. LET OP: deze functie doet nu
 			//geen controle of een gebruiker dat mag, dat moet dus eerder gebeuren.
@@ -994,6 +994,8 @@ class Zoeker{
 
 		# als er een specifieke moot is opgegeven, gaan we alleen in die moot zoeken
 		$mootfilter = ($verticale != 'alle') ? 'AND verticale=\''.$verticale.'\' ' : '';
+		# is er een maximum aantal resultaten gewenst
+		$limiet = ($aantalresultaten===null) ? '' : 'LIMIT '.(int)$aantalresultaten;
 
 		# controleer of we ueberhaupt wel wat te zoeken hebben hier
 		if ($statusfilter != '') {
@@ -1020,7 +1022,8 @@ class Zoeker{
 					($statusfilter)
 				{$mootfilter}
 				ORDER BY
-					{$sort}";
+					{$sort}
+				{$limiet}";
 			$result = $db->select($sZoeken);
 			if ($result !== false and $db->numRows($result) > 0) {
 				while ($lid = $db->next($result)) $leden[] = $lid;

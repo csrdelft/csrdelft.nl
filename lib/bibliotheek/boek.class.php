@@ -146,9 +146,9 @@ class Boek{
 				$uid=$this->exemplaren[$exemplaarid]['uitgeleend_uid'];
 				$lid=LidCache::getLid($uid);
 				if($lid instanceof Lid){
-					$return = $lid->getNaamLink('civitas', 'link');
+					$return = $lid->getNaamLink('full', 'plain');
 				}else{
-					$return = 'Geen geldig lid getProperty';
+					$return = 'Geen geldig lid getProperty()';
 				}
 				break;
 			case 'opmerking':
@@ -224,9 +224,7 @@ class Boek{
 				$this->biebboek=$value;
 				break;
 			case 'lener':
-				$zoekin=array('S_LID', 'S_NOVIET', 'S_GASTLID', 'S_KRINGEL', 'S_OUDLID','S_ERELID');
-				$uid=namen2uid($value, $zoekin);
-				$this->exemplaren[$exemplaarid]['uitgeleend_uid']=$uid[0]['uid'];
+				$this->exemplaren[$exemplaarid]['uitgeleend_uid']=$value;
 				break;
 			case 'opmerking':
 				$this->exemplaren[$exemplaarid]['opmerking']=$value;
@@ -922,7 +920,7 @@ class Boek{
 		if(count($this->exemplaren)>0){
 			foreach($this->exemplaren as $exemplaar){//id, eigenaar_uid, uitgeleend_uid, toegevoegd, status, uitleendatum
 				if($this->isEigenaar($exemplaar['id'])){
-					$editablefieldsform['lener_'.$exemplaar['id']]=new LidField('lener_'.$exemplaar['id'], $exemplaar['uitgeleend_uid'], 'Uitgeleend aan');//, Catalogus::getAllValuesOfProperty('naam'), 'Geef naam of lidnummer van lener');
+					$editablefieldsform['lener_'.$exemplaar['id']]=new RequiredLidField('lener_'.$exemplaar['id'], $exemplaar['uitgeleend_uid'], 'Uitgeleend aan', 'alleleden');
 					$editablefieldsform['opmerking_'.$exemplaar['id']]=new AutoresizeTextField('opmerking_'.$exemplaar['id'], $exemplaar['opmerking'], 'Opmerking', 255, 'Geef opmerking over exemplaar..');
 				}
 			}

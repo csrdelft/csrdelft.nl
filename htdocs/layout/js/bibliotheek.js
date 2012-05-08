@@ -197,7 +197,7 @@ jQuery(document).ready(function($) {
 		$(this).after(
 			$('<div class="knop opslaan">Opslaan</div>').mousedown(function(){
 				var fieldname = input.id.substring(6);
-				var waarde=$(this).prev().val();
+				var waarde=$("#"+input.id).val();
 				var boekid=jQuery(".boek").attr('id');
 				var dataString='id='+ fieldname +'&'+ fieldname +'='+ waarde;
 				jQuery.ajax({
@@ -215,6 +215,8 @@ jQuery(document).ready(function($) {
 							window.setTimeout(function(){
 								field.removeClass('opgeslagen');
 							}, 3000);
+							//bij boek uitlenen pagina herladen
+							if(input.id.substring(6,11)=='lener'){ location.reload(); }
 						}else{
 							//rode foutmelding
 							field.removeClass('opgeslagen').addClass('metfouten');
