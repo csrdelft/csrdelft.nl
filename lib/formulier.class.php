@@ -497,7 +497,7 @@ $('.wantsPreview').each(function(){
 		textarea.attr('rows', 10 + currentRows);
 	}
 	
-	textarea.wrap('<div class="UBBpreview regular"  style="width: '+textarea.width()+'px" />')
+	textarea.wrap('<div class="UBBpreview regular"  style="width: '+(textarea.width()+6)+'px" />')
 			.before('<div id="preview_'+fieldname+'" class="preview" style="display: none;"></div>')
 			.after($('<a class="knop">voorbeeld</a>').click(triggerPreview))
 			.after($('<a style="float: right;" class="knop" title="Opmaakhulp weergeven" onclick="toggleDiv(\'ubbhulpverhaal\')">UBB</a>'))
@@ -649,7 +649,7 @@ class LidField extends FormField{
 		//leeg veld meteen teruggeven
 		if($this->getOriginalValue()==''){ return ''; }
 		//uid opzoeken
-		if($uid = namen2uid($this->getOriginalValue(), $this->zoekin) ){//AND isset($uid[0]['uid'])
+		if($uid = namen2uid($this->getOriginalValue(), $this->zoekin) AND isset($uid[0]['uid'])){
 			return $uid[0]['uid'];
 		}
 		return '';

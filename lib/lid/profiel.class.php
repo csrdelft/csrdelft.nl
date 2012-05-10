@@ -494,10 +494,10 @@ class ProfielStatus extends Profiel{
 		}
 
 		$oudestatus = $this->lid->getProperty('status');
-		$status = $this->bewerktLid->getProperty('status');
+		$nieuwestatus = $this->bewerktLid->getProperty('status');
 
 		$oudepermissie = $this->lid->getProperty('permissies');
-		$permissie = $this->bewerktLid->getProperty('permissies');
+		$nieuwepermissie = $this->bewerktLid->getProperty('permissies');
 
 		//bij wijzigingen door niet-admins worden aanpassingen aan permissies ongedaan gemaakt
 		if(!LoginLid::instance()->hasPermission('P_ADMIN')){
@@ -505,30 +505,30 @@ class ProfielStatus extends Profiel{
 			$adminperms = array('P_PUBCIE','P_MODERATOR','P_BESTUUR','P_VAB');
 
 			if(in_array($oudepermissie, $adminperms)){
-				if($oudepermissie!=$permissie){
+				if($oudepermissie!=$nieuwepermissie){
 					$this->bewerktLid->setProperty('permissies', $oudepermissie);
-					$permissie = $this->bewerktLid->getProperty('permissies');
+					$nieuwepermissie = $this->bewerktLid->getProperty('permissies');
 				}
 			}
 
 			//uitzondering: bij aanpassing door een niet-admin automatisch oudlid-permissies instellen 
 			//voor *hogere* admins bij lid-af maken.
-			if(in_array($status, array('S_OUDLID','S_ERELID','S_NOBODY')) AND in_array($permissie, $adminperms)){
-				$permissie = Status::getDefaultPermission($status);
-				$this->bewerktLid->setProperty('permissies', $permissie);
+			if(in_array($nieuwestatus, array('S_OUDLID','S_ERELID','S_NOBODY')) AND in_array($nieuwepermissie, $adminperms)){
+				$nieuwepermissie = Status::getDefaultPermission($nieuwestatus);
+				$this->bewerktLid->setProperty('permissies', $nieuwepermissie);
 			}
 		}
 
 		//maaltijd en corvee bijwerken
 		$geenAboEnCorveeVoor=array('S_OUDLID','S_ERELID','S_NOBODY','S_CIE','S_OVERLEDEN');
-		if(in_array($status, $geenAboEnCorveeVoor)){
+		if(in_array($nieuwestatus, $geenAboEnCorveeVoor)){
 			//maaltijdabo's uitzetten (P_ETER is een S_NOBODY die toch een abo mag hebben)
-			if($permissie!='P_ETER'){
+			if($nieuwepermissie!='P_ETER'){
 				$this->changelog[]=$this->disableMaaltijdabos();
 			}
 
 			//toekomstige corveetaken verwijderen
-			$removedcorvee=$this->removeToekomstigeCorvee($oudestatus, $status);
+			$removedcorvee=$this->removeToekomstigeCorvee($oudestatus, $nieuwestatus);
 			if($removedcorvee!=''){
 				$this->changelog[]=$removedcorvee;
 			}
@@ -537,8 +537,10 @@ class ProfielStatus extends Profiel{
 		//hop, saven met die hap
 		if(parent::save()){
 			//mailen naar fisci...
-			if(in_array($status, array('S_OUDLID','S_ERELID','S_NOBODY','S_OVERLEDEN'))){
-				$this->notifyFisci($oudestatus, $status);
+			$maggeensaldimeer=array('S_OUDLID','S_ERELID','S_NOBODY','S_OVERLEDEN');;
+			$hadsaldi=array('S_NOVIET','S_GASTLID','S_LID','S_KRINGEL');
+			if(in_array($nieuwestatus, $maggeensaldimeer) AND in_array($oudestatus, $hadsaldi)){
+				$this->notifyFisci($oudestatus, $nieuwestatus);
 			}
 			return true;
 		}
@@ -634,7 +636,7 @@ class ProfielStatus extends Profiel{
 	/**
 	 * Geeft array met per veld afhankelijk van status een boolean voor wel/niet bewaren en een resetwaarde.
 	 * 
-	 * @param $status string lidstatus
+	 * @param $nieuwestatus string lidstatus
 	 * @return array met per veld array met de entries: 
 	 * 		'save': boolean voor wel/niet opslaan van gePOSTe waarde 
 	 * 		'reset': mixed waarde in te vullen bij reset (null is nooit resetten)
@@ -647,7 +649,7 @@ class ProfielStatus extends Profiel{
 			...
 		)
 	 */
-	private function getFieldsToSave($status){
+	private function getFieldsToSave($nieuwestatus){
 		//per status: wel/niet bewaren van gePOSTe veldwaarde
 		//Veldnamen:				status,	perm,	lidaf,	postfx,	ontvCntl,adr,	echtg,	strfd,	kring
 		$bool['S_LID'] 		= array( true,	true,	false,	true,	false,	false,	false,	false,	true );
@@ -660,18 +662,18 @@ class ProfielStatus extends Profiel{
 		$bool['S_NOBODY'] 	= array( true,	true,	true,	false,	false,	false,	false,	false,	true );
 		$bool['S_CIE'] 		= array( true,	true,	false,	false,	false,	false,	false,	false,	false );
 
-
+		$bools = $bool[$nieuwestatus];
 		//'save' wordt gevuld met bovenstaande waardes
 		//'reset' is waarde die ingevuld worden bij een reset (null = nooit resetten)
-		$return['status'] 				= array('save'=>$bool[$status][0], 'reset'=>null);
-		$return['permissies'] 			= array('save'=>$bool[$status][1], 'reset'=>null);
-		$return['lidafdatum'] 			= array('save'=>$bool[$status][2], 'reset'=>'0000-00-00');
-		$return['postfix'] 				= array('save'=>$bool[$status][3], 'reset'=>'');
-		$return['ontvangtcontactueel'] 	= array('save'=>$bool[$status][4], 'reset'=>null);
-		$return['adresseringechtpaar'] 	= array('save'=>$bool[$status][5], 'reset'=>null);
-		$return['echtgenoot'] 			= array('save'=>$bool[$status][6], 'reset'=>null);
-		$return['sterfdatum'] 			= array('save'=>$bool[$status][7], 'reset'=>null);
-		$return['kring'] 				= array('save'=>$bool[$status][8], 'reset'=>0);
+		$return['status'] 				= array('save'=>$bools[0], 'reset'=>null);
+		$return['permissies'] 			= array('save'=>$bools[1], 'reset'=>null);
+		$return['lidafdatum'] 			= array('save'=>$bools[2], 'reset'=>'0000-00-00');
+		$return['postfix'] 				= array('save'=>$bools[3], 'reset'=>'');
+		$return['ontvangtcontactueel'] 	= array('save'=>$bools[4], 'reset'=>null);
+		$return['adresseringechtpaar'] 	= array('save'=>$bools[5], 'reset'=>null);
+		$return['echtgenoot'] 			= array('save'=>$bools[6], 'reset'=>null);
+		$return['sterfdatum'] 			= array('save'=>$bools[7], 'reset'=>null);
+		$return['kring'] 				= array('save'=>$bools[8], 'reset'=>0);
 
 		return $return;
 	}

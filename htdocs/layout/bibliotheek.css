@@ -186,7 +186,7 @@ h1{
 .blok .veld.metfouten input,
 .blok .veld.metfouten textarea 		{ background-color: #E88; }
 
-.blok .veld .melding				{ margin-right: 10px; display:none }
+.blok .veld .melding				{ margin-right: 5px; display:none; }
 .blok .veld.opgeslagen .melding 	{ color: green; display: inline; float: right; }
 .blok .veld.metfouten .melding		{ color: red; display: block; margin-left: 76px;}
 
@@ -275,11 +275,10 @@ li.ac_over a, li.ac_over a:hover {
 	float: left;
 	margin-top:-3px;
 }
-#addBeschrijving label{
+#Beschrijvingsformulier label{
 	float: left; 
 	width: 109px; 
 	height: 20px;/* blijft tekstvak op zijn plek bij waarschuwing*/
-	color: white; 
 	margin: 0px;
 }
 .Formulier input.regular,.Formulier textarea, .boekzoeker input{
@@ -301,8 +300,8 @@ li.ac_over a, li.ac_over a:hover {
 	margin: 0px 0 10px 10px;
 	padding: 7px 2px 7px 2px;
 }
-#addBeschrijving .veld, 
-#addBeschrijving .submit{
+#Beschrijvingsformulier .veld, 
+#Beschrijvingsformulier .submit{
 	margin-left: 0px;
 }
 .Formulier .veld:hover,.boekzoeker{
@@ -317,7 +316,7 @@ li.ac_over a, li.ac_over a:hover {
 	float: right;
 	margin-right: 10px;
 }
-#addBeschrijving .veld .waarschuwing{
+#Beschrijvingsformulier .veld .waarschuwing{
 	float: left;
 	margin-right: 10px;
 }
@@ -325,7 +324,7 @@ li.ac_over a, li.ac_over a:hover {
 	margin-top: 8px;
 	margin-bottom: 1px;
 }
-#addBeschrijving h3, 
+#Beschrijvingsformulier h3, 
 .beschrijvingen h2.header, 
 .beschrijvingen p.header{
 	margin-left: 112px;
@@ -340,7 +339,7 @@ li.ac_over a, li.ac_over a:hover {
 	word-wrap: break-word; 
 }
 .Formulier .UBBpreview{
-	width: 500px;
+	width: 506px;
 	display: inline-block;
 }
 
@@ -434,13 +433,3 @@ li.ac_over a, li.ac_over a:hover {
 	margin: 0px; padding: 0px; border: 0px;
 	background-color: lightgrey;
 }
-.beschrijvingen td.bewerken{
-	background-color: #ffea5c !important;
-}
-.beschrijvingen td.bewerken span.bewerken{
-	color: grey;
-	font-weight: bold;
-}
-
-
-

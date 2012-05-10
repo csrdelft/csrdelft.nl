@@ -28,7 +28,7 @@
 		<label for="boekzoeker"><img src="http://code.google.com/favicon.ico" />&nbsp;Google Books zoeken:</label><input type="text" placeholder="Zoek en kies een suggestie om de velden te vullen" id="boekzoeker">
 	</div>
 
-	{$boek->getFormulier('nieuwboek')->view()}
+	{$boek->getFormulier()->view()}
 
 
 {else}
@@ -38,17 +38,17 @@
 		{if $boek->isEigenaar()}
 			
 			<div class="blok header">
-				{$boek->getFormulier('bewerkboek')->findByName('titel')->view()}
+				{$boek->ajaxformuliervelden->findByName('titel')->view()}
 			</div>
 			<div class="blok gegevens">
 				{assign var='fields' value=','|explode:"auteur,paginas,taal,isbn,uitgeverij,uitgavejaar"}
 				{foreach from=$fields item=field}
-					{$boek->getFormulier('bewerkboek')->findByName($field)->view()}
+					{$boek->ajaxformuliervelden->findByName($field)->view()}
 				{/foreach}
 			</div>
 			<div class="blok gegevens">
-				{$boek->getFormulier('bewerkboek')->findByName('rubriek')->view()}
-				{$boek->getFormulier('bewerkboek')->findByName('code')->view()}
+				{$boek->ajaxformuliervelden->findByName('rubriek')->view()}
+				{$boek->ajaxformuliervelden->findByName('code')->view()}
 			</div>
 
 		{else}
@@ -108,7 +108,7 @@
 						</div>
 					{* opmerking *}
 						{if $boek->isEigenaar($exemplaar.id)}
-							{$boek->getFormulier('bewerkboek')->findByName("opmerking_`$exemplaar.id`")->view()}
+							{$boek->ajaxformuliervelden->findByName("opmerking_`$exemplaar.id`")->view()}
 						{else}
 							{if $exemplaar.opmerking != ''}
 								<div class="regel">
@@ -130,7 +130,7 @@
 							{/if}
 						</div>
 						{if $exemplaar.status=='beschikbaar' AND $boek->isEigenaar($exemplaar.id)}
-							{$boek->getFormulier('bewerkboek')->findByName("lener_`$exemplaar.id`")->view()}
+							{$boek->ajaxformuliervelden->findByName("lener_`$exemplaar.id`")->view()}
 						{/if}
 					{* actieknoppen *}
 						<label>&nbsp;</label><div class="actieknoppen">
@@ -187,7 +187,7 @@
 	</div>
 {if $boek->isEigenaar()}
 	{* javascript invoegen van de fields *}
-	{$boek->getFormulier('bewerkboek')->view(false)}
+	{$boek->ajaxformuliervelden->view(false)}
 {/if}
 
 	{* beschrijvingen *}
@@ -196,27 +196,34 @@
 		<h2 class="header">Recensies en beschrijvingen</h2>
 		{if $boek->countBeschrijvingen()>0}
 			<table id="beschrijvingentabel">
-			{foreach from=$boek->getBeschrijvingen() item=beschrijving}
+			{foreach from=$boek->getBeschrijvingen() item=beschr}
+				{assign var=beschrijving value=$beschr->getBeschrijving()}
 				<tr >
-					<td class="linkerkolom recensist {if $action=='bewerken' AND $boek->getBeschrijvingsId()==$beschrijving.id}bewerken{/if}">
-						{$beschrijving.schrijver_uid|csrnaam:'user'}<br />
-						<span class="moment">{$beschrijving.toegevoegd|reldate}</span><br />
+					{if isset($beschrijving.bewerk)}
+						<td colspan="2">
+							{* formulier voor toevoegen/bewerken van beschrijvingen *}
+							{$boek->getFormulier()->view()}
+						</td>
+					{else}
+						<td class="linkerkolom recensist">
+							{$beschrijving.schrijver_uid|csrnaam:'user'}<br />
+							<span class="moment">{$beschrijving.toegevoegd|reldate}</span><br />
 
-					{* knopjes bij elke post *}	
-						{if $boek->magBewerken($beschrijving.id)}
-							{knop url="/communicatie/bibliotheek/bewerkbeschrijving/`$boek->getId()`/`$beschrijving.id`" type=bewerken}
-						{/if}
-						{if $boek->magVerwijderen($beschrijving.id)}
-							{knop url="/communicatie/bibliotheek/verwijderbeschrijving/`$boek->getId()`/`$beschrijving.id`" type=verwijderen confirm='Weet u zeker dat u deze beschrijving wilt verwijderen?'}
-						{/if}
-					</td>
-					<td class="beschrijving b{cycle values="0,1"}{if $action=='bewerken' AND $boek->getBeschrijvingsId()==$beschrijving.id} bewerken{/if}" id="beschrijving{$beschrijving.id}">
-						{if $action=='bewerken' AND $boek->getBeschrijvingsId()==$beschrijving.id} <span class='bewerken'>Deze beschrijving wordt bewerkt</span><br /><br />{/if}
-						{$beschrijving.beschrijving|ubb}
-						{if $beschrijving.bewerkdatum!='0000-00-00 00:00:00'}
-							<br /><div class="offtopic">Bewerkt {$beschrijving.bewerkdatum|reldate}</div>
-						{/if}
-					</td>
+						{* knopjes bij elke post *}	
+							{if $boek->magBeschrijvingVerwijderen($beschrijving.id)}
+								{knop url="/communicatie/bibliotheek/bewerkbeschrijving/`$boek->getId()`/`$beschrijving.id`#Beschrijvingsformulier" type=bewerken}
+							{/if}
+							{if $boek->magBeschrijvingVerwijderen($beschrijving.id)}
+								{knop url="/communicatie/bibliotheek/verwijderbeschrijving/`$boek->getId()`/`$beschrijving.id`" type=verwijderen confirm='Weet u zeker dat u deze beschrijving wilt verwijderen?'}
+							{/if}
+						</td>
+						<td class="beschrijving b{cycle values="0,1"}" id="beschrijving{$beschrijving.id}">
+							{$beschrijving.beschrijving|ubb}
+							{if $beschrijving.bewerkdatum!='0000-00-00 00:00:00'}
+								<br /><div class="offtopic">Bewerkt {$beschrijving.bewerkdatum|reldate}</div>
+							{/if}
+						</td>
+					{/if}
 				</tr>
 				<tr>
 					<td class="linkerkolom"></td><td class="tussenschot"></td>
@@ -226,10 +233,6 @@
 		{else}
 			<p class="header">Nog geen beschrijvingen.</p>
 		{/if}
-
-		{* formulier voor toevoegen/bewerken van beschrijvingen *}
-
-		{$boek->getFormulier('beschrijving')->view()}
 
 	</div>
 {/if}

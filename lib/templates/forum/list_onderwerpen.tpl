@@ -59,7 +59,7 @@
 
 	{if $categorie->magPosten()}
 		<tr>
-			<td colspan="4" class="tekst">
+			<td colspan="4" class="forumtekst">
 				<form method="post" action="/communicatie/forum/onderwerp-toevoegen/{$categorie->getID()}" id="forumForm">
 					{if $loginlid->hasPermission('P_LOGGED_IN')}
 						{ if $categorie->isOpenbaar()} 
@@ -79,7 +79,7 @@
 						<input type="text" name="firstname" value="" class="verborgen" />
 					{/if}
 					<label><a class="forumpostlink" name="laatste">Titel</a></label>
-						<input type="text" name="titel" value="" class="tekst" style="width: 70%" tabindex="1" /><br /><br />
+						<input type="text" name="titel" value="" class="tekst" style="width: 578px;" tabindex="1" /><br /><br />
 					<label for="bericht">Bericht</label><div id="textareaContainer">
 						<div id="berichtPreviewContainer" class="previewContainer"><div id="berichtPreview" class="preview"></div></div>
 						<textarea name="bericht" id="forumBericht" rows="10" cols="80" class="forumBericht" tabindex="2"></textarea>

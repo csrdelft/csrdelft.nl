@@ -32,22 +32,17 @@ function verbreedSaldografiek(cie){
 jQuery(document).ready(function($) {
 
 	jQuery("#statusForm #field_status").click( function() {
-		
+		//standaard alle velden verbergen
+		$('#lidafdatum, #kring, #postfix, #ontvangtcontactueel, #echtgenoot, #adresseringechtpaar, #sterfdatum').hide();
+		$(".novieten, .leden").hide();
 		var status = $(this).val();
 		switch(status){
 			case "S_OUDLID":
 			case "S_ERELID":
+				$('#kring, #ontvangtcontactueel, #echtgenoot, #adresseringechtpaar').show();
 			case "S_NOBODY":
-				//show&hide
-				$('#sterfdatum, #postfix').hide();
-				$(".novieten, .leden").hide();
+				$('#lidafdatum').show();
 
-				$('#lidafdatum, #kring, #ontvangtcontactueel, #echtgenoot, #adresseringechtpaar').show();
-				
-				if(status=="S_NOBODY"){
-					$('#ontvangtcontactueel, #echtgenoot, #adresseringechtpaar, #kring').hide();
-				}
-				
 				//waardes voorinvullen
 				$("#field_kring").val(status=='S_NOBODY' ? 0 : original['kring']);
 				
@@ -55,56 +50,28 @@ jQuery(document).ready(function($) {
 					var now = new Date();
 					setLidaf(now.getFullYear(), now.getMonth(), now.getDate());
 				}
-				if(status=="S_NOBODY"){
-					$("#field_permissies").val('P_NOBODY');
-				}else{
-					$("#field_permissies").val('P_OUDLID');
-				}
+				$("#field_permissies").val(status=="S_NOBODY" ? 'P_NOBODY' : 'P_OUDLID');
 			break;
 			case "S_LID":
 			case "S_GASTLID":
 			case "S_NOVIET":
-				//show&hide
-				$('#lidafdatum, #kring, #ontvangtcontactueel, #echtgenoot, #adresseringechtpaar, #sterfdatum').hide();
-				
 				$('#postfix').show();
-				
+				//postfix hints weergeven
 				if(status=="S_NOVIET"){
-					$(".leden").hide();
 					$(".novieten").show();
-				}else if(status=="S_LID" || status=="S_GASTLID"){
-					$(".novieten").hide();
+				}else{
 					$(".leden").show();
 				}
 				//waardes voorinvullen
-				if(original['permissies']=='P_OUDLID' || original['permissies']=='P_NOBODY'){
-					$("#field_permissies").val('P_LID');
-				}else{
-					$("#field_permissies").val(original['permissies']);
-				}
+				$("#field_permissies").val(original['permissies']=='P_OUDLID' || original['permissies']=='P_NOBODY' ? 'P_LID' : original['permissies']);
 			break;
 			case "S_OVERLEDEN":
+				$('#lidafdatum, #sterfdatum').show();
+				setLidaf(original['lidafdatum_jaar'],original['lidafdatum_maand'],original['lidafdatum_dag']);
 			case "S_CIE":
 			case "S_KRINGEL":
-				//show&hide
-				$('#kring, #ontvangtcontactueel, #echtgenoot, #adresseringechtpaar, #postfix').hide();
-				$(".novieten, .leden").hide();
-				
-				if(status=="S_OVERLEDEN"){
-					$('#lidafdatum, #sterfdatum').show();
-				}else{
-					$('#lidafdatum, #sterfdatum').hide;
-				}
-				
 				//waardes voorinvullen
-				if(status=="S_KRINGEL"){
-					$("#field_permissies").val('P_LID');
-				}else{
-					$("#field_permissies").val('P_NOBODY');
-				}
-				if(status=="S_OVERLEDEN"){
-					setLidaf(original['lidafdatum_jaar'],original['lidafdatum_maand'],original['lidafdatum_dag']);
-				}
+				$("#field_permissies").val(status=="S_KRINGEL" ? 'P_LID' : 'P_NOBODY');
 			break;
 		} //end switch(status)
 		

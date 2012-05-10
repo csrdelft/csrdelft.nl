@@ -44,13 +44,13 @@ class BibliotheekController extends Controller{
 		//met biebrechten mag je meer
 		if(LoginLid::instance()->hasPermission('P_BIEB_READ')){
 			$allow=array_merge($allow, array('default', 'boek', 'nieuwboek', 'bewerkboek',
-					'addbeschrijving', 'verwijderbeschrijving', 'bewerkbeschrijving',
+					'bewerkbeschrijving', 'verwijderbeschrijving',
 					'addexemplaar', 'verwijderexemplaar',
 					'exemplaarlenen', 'exemplaarteruggegeven', 'exemplaarterugontvangen', 'exemplaarvermist', 'exemplaargevonden',
 					'autocomplete'));
 		}
 		// beheerders mogen boeken weggooien
-		if(LoginLid::instance()->hasPermission('P_BIEB_MOD,groep:BASFCie,P_ADMIN')){
+		if(Boek::magVerwijderen()){
 			$allow[] = 'verwijderboek';
 		}
 		if(!in_array($this->action, $allow)){
@@ -97,8 +97,14 @@ class BibliotheekController extends Controller{
 			if($boekid===null){
 				$boekid=$this->getParam(1);
 			}
+			if($this->hasParam(2) AND in_array($this->action, array('bewerkbeschrijving', 'verwijderbeschrijving'))){
+				$beschrijvingsid=(int)$this->getParam(2);
+			}else{
+				$beschrijvingsid=0; //nieuwe beschrijving
+			}
+
 			try{
-				$this->boek=new Boek($boekid);
+				$this->boek=new BewerkBoek($boekid, $beschrijvingsid);
 			}catch(Exception $e){
 				BibliotheekCatalogusContent::invokeRefresh($e->getMessage(), CSR_ROOT.'communicatie/bibliotheek/');
 			}
@@ -159,13 +165,13 @@ class BibliotheekController extends Controller{
 	 */
 	protected function action_nieuwboek(){
 		//leeg object Boek laden
-		$this->loadBoek(0); 
+		$this->boek=new NieuwBoek();
 		//Eerst ongewensten de deur wijzen
 		if(!$this->boek->magBekijken()){
 			BibliotheekCatalogusContent::invokeRefresh('Onvoldoende rechten voor deze actie. Biebcontrllr::action_addboek', CSR_ROOT.'communicatie/bibliotheek/');
 		}
 		//formulier verwerken, als het onvoldoende is terug naar formulier
-		if($this->boek->validForm('nieuwboek') AND $this->boek->saveForm('nieuwboek')){
+		if($this->boek->validFormulier() AND $this->boek->saveFormulier()){
 			header('location: '.CSR_ROOT.'communicatie/bibliotheek/boek/'.$this->boek->getId());
 		}else{
 			$this->content=new BibliotheekBoekContent($this->boek);
@@ -189,19 +195,20 @@ class BibliotheekController extends Controller{
 		BibliotheekBoekContent::invokeRefresh($melding, CSR_ROOT.'communicatie/bibliotheek/');
 	}
 	/*
-	 * Boekbeschrijving toevoegen
+	 * Boekbeschrijving aanpassen
 	 * 
-	 * /addbeschrijving/id
+	 * /bewerkbeschrijving/id/beschrijvingsid
 	 */
-	 protected function action_addbeschrijving(){
-		//object Boek laden
-		$this->loadBoek(); 
-		//Eerst ongewensten de deur wijzen
-		if(!$this->boek->magBekijken()){
-			BibliotheekCatalogusContent::invokeRefresh('Onvoldoende rechten voor deze actie. Biebcontrllr::action_addbeschrijving', CSR_ROOT.'communicatie/bibliotheek/');
+	protected function action_bewerkbeschrijving(){
+		$this->loadBoek();
+
+		if($this->boek->getEditBeschrijving()->getId()!=0 AND !$this->boek->magBeschrijvingVerwijderen()){
+			BibliotheekCatalogusContent::invokeRefresh('Onvoldoende rechten voor deze actie. Biebcontrllr::action_bewerkbeschrijving()', CSR_ROOT.'communicatie/bibliotheek/boek/'.$this->boek->getId());
 		}
-		if($this->boek->validForm('beschrijving') AND $this->boek->saveForm('beschrijving')){
-			header('location: '.CSR_ROOT.'communicatie/bibliotheek/boek/'.$this->boek->getId().'#beschrijving'.$this->boek->getBeschrijvingsId());
+
+		//controleer en sla op of geef de bewerkvelden met eventuele foutmeldingen
+		if($this->boek->validFormulier() AND $this->boek->saveFormulier()){
+			header('location: '.CSR_ROOT.'communicatie/bibliotheek/boek/'.$this->boek->getId().'#beschrijving'.$this->boek->getEditBeschrijving()->getId());
 		}else{
 			$this->content=new BibliotheekBoekContent($this->boek);
 		}
@@ -214,50 +221,16 @@ class BibliotheekController extends Controller{
 	protected function action_verwijderbeschrijving(){
 		$this->loadBoek();
 		
-		if($this->hasParam(2)){
-			$beschrijvingsid=(int)$this->getParam(2);
-			if(!$this->boek->magVerwijderen($beschrijvingsid)){
-				BibliotheekCatalogusContent::invokeRefresh('Onvoldoende rechten voor deze actie. Biebcontrllr::action_verwijderbeschrijving()', CSR_ROOT.'communicatie/bibliotheek/boek/'.$this->boek->getId());
-			}
-			if($this->boek->verwijderBeschrijving($beschrijvingsid)){
-				$melding='Beschrijving met succes verwijderd.';
-			}else{
-				$melding='Beschrijving verwijderen mislukt. '.$this->boek->getError().'Biebcontrllr::action_verwijderbeschrijving()';
-			}
+		if(!$this->boek->magBeschrijvingVerwijderen()){
+			BibliotheekCatalogusContent::invokeRefresh('Onvoldoende rechten voor deze actie. Biebcontrllr::action_verwijderbeschrijving()', CSR_ROOT.'communicatie/bibliotheek/boek/'.$this->boek->getId());
 		}
-		BibliotheekBoekContent::invokeRefresh($melding, CSR_ROOT.'communicatie/bibliotheek/boek/'.$this->boek->getId());
-	}
-	/*
-	 * Boekbeschrijving aanpassen
-	 * 
-	 * /bewerkbeschrijving/id/beschrijvingsid
-	 */
-	protected function action_bewerkbeschrijving(){
-		$this->loadBoek();
-		if($this->hasParam(2)){
-			$beschrijvingsid=(int)$this->getParam(2);
-
-			if(!$this->boek->magBewerken($beschrijvingsid)){
-				BibliotheekCatalogusContent::invokeRefresh('Onvoldoende rechten voor deze actie. Biebcontrllr::action_bewerkbeschrijving()', CSR_ROOT.'communicatie/bibliotheek/boek/'.$this->boek->getId());
-			}
-
-			//beschrijving ophalen en in bewerkveld plaatsen
-			$this->boek->setValue('beschrijvingsid', $beschrijvingsid);
-			$aBeschrijving = $this->boek->getBeschrijving($beschrijvingsid);
-			$this->boek->setValue('beschrijving', $aBeschrijving['beschrijving']);
-			//formulier laden
-			$this->boek->assignFieldsBeschrijvingForm($bewerken=true);
-
-			//controleer en sla op of geef de bewerkvelden met eventuele foutmeldingen
-			if($this->boek->validForm('beschrijving') AND $this->boek->saveForm('beschrijving', $bewerken=true)){
-				header('location: '.CSR_ROOT.'communicatie/bibliotheek/boek/'.$this->boek->getId().'#beschrijving'.$this->boek->getBeschrijvingsid());
-			}else{
-				$this->content=new BibliotheekBoekContent($this->boek);
-				$this->content->setAction('bewerken');
-			}
+		if($this->boek->verwijderBeschrijving()){
+			$melding='Beschrijving met succes verwijderd.';
 		}else{
-			BibliotheekBoekContent::invokeRefresh($melding, CSR_ROOT.'communicatie/bibliotheek/boek/'.$this->boek->getId());
+			$melding='Beschrijving verwijderen mislukt. '.$this->boek->getError().'Biebcontrllr::action_verwijderbeschrijving()';
 		}
+
+		BibliotheekBoekContent::invokeRefresh($melding, CSR_ROOT.'communicatie/bibliotheek/boek/'.$this->boek->getId());
 	}
 	/*
 	 * Exemplaar toevoegen
