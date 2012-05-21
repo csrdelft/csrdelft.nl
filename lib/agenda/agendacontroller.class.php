@@ -115,7 +115,7 @@ class AgendaController extends Controller {
 				
 			} else {
 				$item->opslaan();
-				AgendaMaandContent::invokeRefresh('Het agenda-item is succesvol toegevoegd.', '/actueel/agenda/'.date('Y-m', $item->getBeginMoment()).'/');
+				AgendaMaandContent::invokeRefresh('/actueel/agenda/'.date('Y-m', $item->getBeginMoment()).'/', 'Het agenda-item is succesvol toegevoegd.', 1);
 			}
 		} else {			
 			if ($this->hasParam(1) AND preg_match('/^[0-9]{4}\-[0-9]{1,2}-[0-9]{1,2}$/', $this->getParam(1))) {
@@ -152,13 +152,13 @@ class AgendaController extends Controller {
 					
 				} else {
 					$item->opslaan();
-					AgendaMaandContent::invokeRefresh('Het agenda-item is succesvol bewerkt.', '/actueel/agenda/'.date('Y-m', $item->getBeginMoment()).'/');
+					AgendaMaandContent::invokeRefresh('/actueel/agenda/'.date('Y-m', $item->getBeginMoment()).'/', 'Het agenda-item is succesvol bewerkt.', 1);
 				}
 			} else {		
 				$item = AgendaItem::getItem($itemID);
 			}
 		} else {
-			AgendaMaandContent::invokeRefresh('Agenda-item niet gevonden.', '/actueel/agenda/');
+			AgendaMaandContent::invokeRefresh('/actueel/agenda/', 'Agenda-item niet gevonden.');
 		}
 		
 		$this->content = new AgendaItemContent($this->agenda, $item, 'toevoegen');
@@ -176,9 +176,9 @@ class AgendaController extends Controller {
 			$item = AgendaItem::getItem((int)$this->getParam(1));
 			$url = '/actueel/agenda/'.date('Y-m', $item->getBeginMoment()).'/';
 			if ($item->verwijder()) {
-				AgendaMaandContent::invokeRefresh('Het agenda-item is succesvol verwijderd.', $url);
+				AgendaMaandContent::invokeRefresh($url, 'Het agenda-item is succesvol verwijderd.', 1);
 			} else {
-				AgendaMaandContent::invokeRefresh('Het agenda-item kon niet worden verwijderd.', $url);
+				AgendaMaandContent::invokeRefresh($url, 'Het agenda-item kon niet worden verwijderd.');
 			}
 		}
 	}

@@ -150,7 +150,31 @@ function pr($sString, $cssID='pubcie_debug'){
 		echo '<pre id="'.$cssID.'">'.print_r($sString, true).'</pre>';
 	}
 }
-
+/**
+ * stores a message
+ *
+ * Levels can be:
+ *
+ * -1 error
+ *  0 info
+ *  1 success
+ *  2 notify
+ *
+ * @see    SimpleHTML::getMelding()
+ * gebaseerd op DokuWiki code
+ */
+function msg($message, $lvl=0){
+	$errors[-1] = 'error';
+	$errors[0]  = 'info';
+	$errors[1]  = 'success';
+	$errors[2]  = 'notify';
+	
+	$message=trim($message);
+	if($message!=''){
+		if(!isset($_SESSION['melding'])) $_SESSION['melding'] = array();
+		$_SESSION['melding'][]=array('lvl' => $errors[$lvl], 'msg' => $message);
+	}
+}
 /**
  * Probeert uit invoer van uids of namen per zoekterm een unieke uid te bepalen, zoniet een lijstje suggesties en anders false.
  * 

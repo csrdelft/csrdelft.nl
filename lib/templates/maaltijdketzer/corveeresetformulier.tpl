@@ -52,10 +52,6 @@
 	<input type="button" name="submit2" id="submit" value="Afgelopen corveeperiode resetten" 
 		onclick="{literal}if(confirm('De reset verlaagt corveepunten. Wilt u de reset uitvoeren?')){corveeResetter('resetcorveejaar');} return false;{/literal}" />
 
-{elseif $actie=='resetcorveejaar'}
-	<label for="submit">&nbsp;</label><div class="notred">{$melding}</div>
-
-
-{elseif $actie=='resetmislukt'}
+{elseif $actie=='resetcorveejaar' OR $actie=='resetmislukt'}
 	<label for="submit">&nbsp;</label><div class="notred">{$melding}</div>
 {/if}

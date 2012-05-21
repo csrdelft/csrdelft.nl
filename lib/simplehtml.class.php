@@ -10,29 +10,40 @@
 
 abstract class SimpleHTML {
 
-	private $_sMelding='';
 	//html voor een pagina uitpoepen.
 	public function view() {
 
 	}
 	public function getMelding(){
-		if(isset($_SESSION['melding']) AND trim($_SESSION['melding'])!=''){
-			$sError='<div id="melding">'.trim($_SESSION['melding']).'</div>';
+		if(isset($_SESSION['melding']) AND is_array($_SESSION['melding'])){
+			$sMelding='<div id="melding">';
+			$shown=array();
+			foreach($_SESSION['melding'] as $msg){
+				$hash = md5($msg['msg']);
+				if(isset($shown[$hash])) continue; // skip double messages
+				$sMelding.='<div class="'.$msg['lvl'].'">';
+				$sMelding.=$msg['msg'];
+				$sMelding.='</div>';
+				$shown[$hash] = 1;
+			}
+			$sMelding.='</div>';
 			//maar één keer tonen, de melding.
 			unset($_SESSION['melding']);
-			return $sError;
-		}elseif($this->_sMelding!=''){
-			return '<div id="melding">'.$this->_sMelding.'</div>';
+			return $sMelding;
 		}else{
 			return '';
 		}
 	}
-	public function setMelding($sMelding){
-		$this->_sMelding.=trim($sMelding);
+	public function setMelding($sMelding, $level=-1){
+		msg($sMelding, $level);
 	}
-	public static function invokeRefresh($sMelding, $url=null){
-		if($sMelding!=''){
-			$_SESSION['melding']=$sMelding;
+	public static function invokeRefresh($url=null, $melding='', $level=-1){
+		//als $melding een array is die uit elkaar halen
+		if(is_array($melding)){
+			list($melding, $level)=$melding;
+		}
+		if($melding!=''){
+			msg($melding, $level);
 		}
 		if($url==null){
 			$url=CSR_ROOT.$_SERVER['REQUEST_URI'];

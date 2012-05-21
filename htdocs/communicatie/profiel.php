@@ -74,7 +74,7 @@ if(!($loginlid->hasPermission('P_LEDEN_READ') or $loginlid->hasPermission('P_OUD
 
 				// nieuwe leden mogen worden aangemaakt door P_ADMIN,P_LEDEN_MOD,
 				// novieten ook door de novcie.
-				ProfielContent::invokeRefresh('U mag geen nieuwe leden aanmaken', '/communicatie/profiel/');
+				ProfielContent::invokeRefresh('/communicatie/profiel/','U mag geen nieuwe leden aanmaken');
 			}
 			try{
 				//maak het nieuwe uid aan.
@@ -85,14 +85,14 @@ if(!($loginlid->hasPermission('P_LEDEN_READ') or $loginlid->hasPermission('P_OUD
 				}else{
 					$bewerkactie = 'bewerken';
 				}
-				ProfielContent::invokeRefresh(null, '/communicatie/profiel/'.$nieuwUid.'/'.$bewerkactie);
+				ProfielContent::invokeRefresh('/communicatie/profiel/'.$nieuwUid.'/'.$bewerkactie);
 			}catch(Exception $e){
-				ProfielContent::invokeRefresh('<h2>Nieuw lidnummer aanmaken mislukt.</h2>'.$e->getMessage(), '/communicatie/profiel/');
+				ProfielContent::invokeRefresh('/communicatie/profiel/', '<h2>Nieuw lidnummer aanmaken mislukt.</h2>'.$e->getMessage());
 			}	
 		break;
 		case 'wijzigstatus':
 			if(!$loginlid->hasPermission('P_ADMIN,P_LEDEN_MOD')){
-				ProfielContent::invokeRefresh('U mag lidstatus niet aanpassen', '/communicatie/profiel/');
+				ProfielContent::invokeRefresh('/communicatie/profiel/', 'U mag lidstatus niet aanpassen');
 			}
 			$profiel=new ProfielStatus($uid, $actie);
 
@@ -106,12 +106,12 @@ if(!($loginlid->hasPermission('P_LEDEN_READ') or $loginlid->hasPermission('P_OUD
 		case 'wachtwoord':
 			if($loginlid->hasPermission('P_ADMIN')){
 				if(Profiel::resetWachtwoord($uid)){
-					$melding='Nieuw wachtwoord met succes verzonden.';
+					$melding=array('Nieuw wachtwoord met succes verzonden.', 1);
 				}else{
 					$melding='Wachtwoord resetten mislukt.';
 				}
 			}
-			ProfielContent::invokeRefresh($melding, '/communicatie/profiel/'.$uid);
+			ProfielContent::invokeRefresh('/communicatie/profiel/'.$uid, $melding);
 		break;
 		case 'addToGoogleContacts';
 			require_once('googlesync.class.php');
@@ -119,7 +119,7 @@ if(!($loginlid->hasPermission('P_LEDEN_READ') or $loginlid->hasPermission('P_OUD
 			
 			$gSync=GoogleSync::instance();
 			$message=$gSync->syncLid($uid);
-			ProfielContent::invokeRefresh('<h2>Opgeslagen in Google Contacts:</h2>'.$message, CSR_ROOT.'communicatie/profiel/'.$uid);
+			ProfielContent::invokeRefresh(CSR_ROOT.'communicatie/profiel/'.$uid, '<h2>Opgeslagen in Google Contacts:</h2>'.$message, 2);
 			exit;
 		break;
 		case 'rssToken':
@@ -134,7 +134,7 @@ if(!($loginlid->hasPermission('P_LEDEN_READ') or $loginlid->hasPermission('P_OUD
 		default;
 			$lid=LidCache::getLid($uid);
 			if(!$lid instanceof Lid){
-				ProfielContent::invokeRefresh('<h2>Helaas</h2>Dit lid bestaat niet.<br /> U kunt verder zoeken in deze ledenlijst.', '/communicatie/ledenlijst/');
+				ProfielContent::invokeRefresh('/communicatie/ledenlijst/', '<h2>Helaas</h2>Dit lid bestaat niet.<br /> U kunt verder zoeken in deze ledenlijst.');
 			}
 			$midden=new ProfielContent($lid);
 		break;
