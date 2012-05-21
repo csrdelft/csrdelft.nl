@@ -14,9 +14,8 @@ h1{
 	font-size: 10px;
 }
 /*knoppen in zijkolom rechts*/
-.controls		{float: right;}
-.controls .knop {line-height: 2em;}
-.boekacties		{width: 125px;}
+.controls		{float: right; width: 125px;}
+.controls .knop {line-height: 2em; width: 125px;}
 
 /****************************
  *  cataloguspagina			*
@@ -119,116 +118,105 @@ h1{
 /********************************
  * boek-pagina					*
  ********************************/
-.boek{ 
-	float: left;
-	width: 620px;
+ 
+ 
+.blok{		margin-bottom: 20px; clear: left;}
+.header{	margin-left:36px; margin-top: 5px;}
+.gegevens{	margin-left: 20px; padding-left: 15px; border-left: 1px solid #0a338d;}
+
+.boekgegevens{
+	width: 586px;
 }
-.fotolabel,
-.exemplaren .exemplaar label,
-.boek label{ 
+
+.boek label{
 	float: left;
-	width: 73px;
+	display: inline-block;
 	font-size: 9px;
 	color: #999;
-	margin: 2px 0px 0px 0px;
-	padding-left: 2px;
+	padding: 2px 0px 0px 2px;
+	margin: 0px;
 }
-.exemplaren .exemplaar .veld label,
-.boek .veld label{ 
-	width: 72px; /* uitlijnen tekst in inputs */
-}
-.blok { margin-bottom: 20px; clear: left; }
-.gegevens { margin-left: 20px; padding-left: 15px; border-left: 1px solid #0a338d; }
-.regel { height: 15px; }
-
-/* formuliervelden in .blok-div zijn bewerkbaar met ajax (mits gebruiker de rechten heeft) */
-.blok .veld input,
-.blok .veld textarea {
+.boek input, .boek textarea{
+	width: 428px;
 	background: none;
 	border: 1px solid white;
 	font-size: 11px;
 	font-family : Verdana, Geneva, Arial, Helvetica, sans-serif;
-	width: 428px;
 	padding: 1px 2px 1px 2px;
 	margin: 0px 0px;
 }
-.blok .veld select {
+select{
 	width: 432px;
 }
-.blok .veld div.opslaan{
+
+/*header boekpagina*/
+.header span,
+.header label,
+.header textarea{
+	font-size: 18px !important;
+	font-weight: bold;
+	line-height: normal;
+	min-height: 22px;
+}
+
+.gegevens .regel{			height: 15px;}
+.regel label{	width:75px;}
+
+
+.veld label{	width:71px;}
+.boek .veld:hover{
+	background: url(http://plaetjes.csrdelft.nl/knopjes/bewerken.png) no-repeat 488px #f3f3f3;
+}
+.veld:hover input,
+.veld:hover textarea,
+.veld:hover select{
+	border: 1px solid #999;
+}
+.veld input:focus,
+.veld textarea:focus,
+.veld select:focus{
+	background-color: #FFC;
+	border: 1px solid black;
+}
+/* opslaan-knopje weergeven bij focus*/
+div.opslaan{
 	display: none;
 	margin: 2px 12px 0px 0px;
 	cursor: pointer;
 	width: 46px;
 	float: right;
 }
-.blok .veld:hover{
-	background: url(http://plaetjes.csrdelft.nl/knopjes/bewerken.png) no-repeat 485px #f3f3f3;
-}
-.blok .veld input:focus,
-.blok .veld textarea:focus,
-.blok .veld select:focus{
-	background-color: #FFC;
-	border: 1px solid black;
-}
-/* opslaan-knopje weergeven bij focus*/
-.blok .veld input:focus~div.opslaan,
-.blok .veld textarea:focus+div.opslaan,
-.blok .veld select:focus+div.opslaan{
+.veld input:focus~div.opslaan,
+.veld textarea:focus+div.opslaan,
+.veld select:focus+div.opslaan{
 	display: inline;
 }
-/* melding bij veld
- * opslagen: groen, nog niet opgeslagen: geel, fout bij opslaan: rood */
-.blok .veld.opgeslagen input,
-.blok .veld.opgeslagen textarea 	{ background-color: #BFB; }
-
-.blok .veld.metfouten 				{ background-color: #FFC3CE; padding: 4px 2px; }
-.blok .veld.metfouten input,
-.blok .veld.metfouten textarea 		{ background-color: #E88; }
-
-.blok .veld .melding				{ margin-right: 5px; display:none; }
-.blok .veld.opgeslagen .melding 	{ color: green; display: inline; float: right; }
-.blok .veld.metfouten .melding		{ color: red; display: block; margin-left: 76px;}
-
-.blok .veld input.nonsavededits,
-.blok .veld textarea.nonsavededits 	{ background-color: #FFFFC1; }
-
-/* borders weergeven: voor leeg veld of bij hoveren */
-.blok .veld input.leeg,
-.blok .veld textarea.leeg{
+.veld input.leeg,
+.veld textarea.leeg{
 	border: 1px solid #D9D9D9;
 }
-.blok .veld:hover input,
-.blok .veld:hover textarea,
-.blok .veld:hover select{
-	border: 1px solid #999;
-}
+/* nog niet opgeslagen: geel, opslagen: groen, fout bij opslaan: rood */
+.veld input.nonsavededits,
+.veld textarea.nonsavededits{ background-color: #FFFFC1; }
 
-/*titel boek*/
-.boek .header{
-	margin-top: 5px;
-}
-.boek .header span,
-.boek .header label,
-.boek .header textarea{
-	font-size: 18px !important;
-	font-weight: bold;
-	line-height: normal;
-	min-height: 22px;
-}
-.boek .header label{
-	margin: 0px 0px 20px 35px;
-}
-.blok.header .veld:hover{
-	background: url(http://plaetjes.csrdelft.nl/knopjes/bewerken.png) no-repeat 520px #f3f3f3;
-}
+.veld .melding	{ margin-right: 3px; display:none; }
+
+.veld.opgeslagen input,
+.veld.opgeslagen textarea 	{ background-color: #BFB; }
+.veld.opgeslagen .melding 	{ color: green; display: inline; float: right; }
+
+.veld.metfouten 			{ background-color: #FFC3CE; padding: 4px 2px; }
+.veld.metfouten input,
+.veld.metfouten textarea 	{ background-color: #E88; }
+.veld.metfouten .melding	{ color: red; display: block; margin-left: 77px;}
+
 /* AutoriseTextField */
 .veld .wantsAutoresize {
 	min-height: 14px;
 	overflow: hidden;
 	resize: none;
 }
-.hiddendiv {
+.hiddendiv { /*clone van wantsAutoresize textarea */
 	display: none;
 	white-space: pre-wrap;
 	width: 428px;
@@ -241,27 +229,87 @@ h1{
 	padding: 1px 2px;
 	border: 1px solid white;
 }
-/* InputFIeld voor biebcode */
+/* InputField voor biebcode */
 .veld input#field_code{
 	width: 100px;
 }
-.blok .veld .genereer {
-	display: none;
-}
-.blok .veld input:focus~a.genereer {
-	display: inline;
-}
+.boek .veld a.genereer {		display: none;}
+.veld input:focus~a.genereer {	display: inline;}
+
 /* LidField */
-.blok .veld input.RequiredLidField {
+.veld input.RequiredLidField {
 	width: 220px;
 }
 .lidPreview, .uidPreview{
 	display: inline;
 	padding-left: 10px;
 }
-/* InputField voor titel */
+/* urls in suggestiemenu (voor titelfield) */
 li.ac_over a, li.ac_over a:hover { 
 	color: #0071D9;
+}
+
+/*  Exemplaren */
+.exemplaren{	margin-top:10px;}
+.exemplaren h2{	margin-left: 77px; margin-bottom: 5px;}
+.exemplaren p{	margin-left: 77px;}
+
+.exemplaar{
+	margin-bottom: 25px;
+	overflow: auto;
+}
+.exemplaar .fotolabel{
+	color: white;
+	float: left;
+	width: 75px;
+}
+.exemplaar .fotolabel img.pasfoto{
+	height: 40px;
+	float: left;
+	margin-left: 27px;
+}
+.exemplaar .gegevensexemplaar{
+	float: left;
+	width: 649px;
+}
+.exemplaar .regel.actieknoppen{
+	height: 20px;
+}
+.exemplaar .actieknoppen .knop{
+	margin-left: 0px;
+	margin-right: 4px;
+}
+
+.exemplaar.compact{ 					margin-left: 77px;}
+.exemplaar.compact a{ 					margin-right: 5px; float: left;}
+.exemplaar.compact img.pasfoto{ 		height: 40px;}
+.exemplaar.compact .statusmarkering{
+	margin-left:-33px;
+	font-size: 18px;
+	float: left;
+}
+
+/* boekbeschrijvingen */
+div.beschrijvingen{ margin-top: 30px;}
+.beschrijvingen table {
+	width: 622px;/* =112(=2+110+2)+506+2 */
+	table-layout: fixed;
+}
+.beschrijvingen td.linkerkolom{
+	width: 110px;
+	font-size: 9px;
+}
+.beschrijvingen td.recensist {		padding-bottom: 5px;}
+.beschrijvingen span.recensist{		padding: 2px 10px 0px 0px;}
+.beschrijvingen span.moment{		color:grey;}
+
+.beschrijvingen td.beschrijving{	width: 506px; padding: 2px 0px 5px 0px; word-wrap: break-word;}
+.beschrijvingen td.beschrijving.b0{	background-color: #f4f4f4;}
+
+.beschrijvingen td.tussenschot{
+	height: 2px;
+	margin: 0px; padding: 0px; border: 0px;
+	background-color: lightgrey;
 }
 
 /* 
@@ -275,19 +323,15 @@ li.ac_over a, li.ac_over a:hover {
 	float: left;
 	margin-top:-3px;
 }
-#Beschrijvingsformulier label{
-	float: left; 
-	width: 109px; 
-	height: 20px;/* blijft tekstvak op zijn plek bij waarschuwing*/
-	margin: 0px;
-}
+
 .Formulier input.regular,.Formulier textarea, .boekzoeker input{
 	width: 400px;
 	padding: 1px 2px;
 }
+/*
 .Formulier input.uid{
 	width: 80px;
-}
+}*/
 .Formulier .veld, .Formulier h3, .Formulier .password{
 	clear: both;
 }
@@ -300,10 +344,7 @@ li.ac_over a, li.ac_over a:hover {
 	margin: 0px 0 10px 10px;
 	padding: 7px 2px 7px 2px;
 }
-#Beschrijvingsformulier .veld, 
-#Beschrijvingsformulier .submit{
-	margin-left: 0px;
-}
+
 .Formulier .veld:hover,.boekzoeker{
 	border: 1px  solid #ddd;
 	background-color: #eee;
@@ -316,120 +357,47 @@ li.ac_over a, li.ac_over a:hover {
 	float: right;
 	margin-right: 10px;
 }
-#Beschrijvingsformulier .veld .waarschuwing{
-	float: left;
-	margin-right: 10px;
-}
+
 .Formulier h3{
 	margin-top: 8px;
 	margin-bottom: 1px;
 }
-#Beschrijvingsformulier h3, 
+.Formulier .preview{
+	word-wrap: break-word; 
+}
+
 .beschrijvingen h2.header, 
 .beschrijvingen p.header{
-	margin-left: 112px;
+	margin-left: 113px;
 }
 .beschrijvingen h2{
 	margin-bottom: 5px;
 }
-.Formulier textarea#field_beschrijving {
-	width: 500px;
+#Beschrijvingsformulier textarea{
+	width: 496px;
 }
-.Formulier .preview{
-	word-wrap: break-word; 
-}
-.Formulier .UBBpreview{
+
+#Beschrijvingsformulier .UBBpreview{
 	width: 506px;
 	display: inline-block;
 }
+#Beschrijvingsformulier .veld, 
+#Beschrijvingsformulier .submit{
+	margin-left: 0px;
+}
+#Beschrijvingsformulier label{
+	float: left; 
+	width: 109px; 
+	height: 20px;/* blijft tekstvak op zijn plek bij waarschuwing*/
+	margin: 0px;
+}
+#Beschrijvingsformulier h3{
+	margin-left: 111px;
+} 
+#Beschrijvingsformulier .veld .waarschuwing{
+	float: left;
+	margin-right: 10px;
+}
 
 
-/*  Exemplaren */
-.exemplaren{
-	margin-top:10px;
-}
-.exemplaren .exemplaar{
-	margin-bottom: 25px;
-	overflow: auto;
-}
-.exemplaren .exemplaar .fotolabel{
-	color: white;
-	float: left;
-}
-.exemplaren .exemplaar .fotolabel img.pasfoto{
-	height: 40px;
-	float: left;
-	margin-left: 27px;
-}
-.exemplaren .exemplaar .gegevensexemplaar{
-	float: left;
-	width: 649px;
-}
-.exemplaren .exemplaar .actieknoppen{
-	height: 20px;
-}
-.exemplaren .exemplaar label{
-	line-height: normal;
-	width: 75px;
-}
 
-.exemplaren h2{
-	margin-left: 77px;
-	margin-bottom: 5px;
-}
-.exemplaren p{
-	margin-left: 75px;
-}
-.exemplaren .blok .veld div.opslaan {
-	margin-right: 77px;
-}
- /* uitleenveld */
-.exemplaren input.lid, .exemplaren div.naamCheck{
-	width: 170px;
-	float: left;
-}
-.exemplaren .uitleenveld{
-	overflow: auto;
-}
-.exemplaren div.naamCheck{
-	margin-left: 5px;
-}
-.exemplaren .exemplaar.compact a {
-	float: left;
-	margin-right: 5px;
-}
-.exemplaren .exemplaar.compact img.pasfoto{
-	height: 40px;
-}
-.exemplaren .exemplaar.compact .statusmarkering {
-	margin-left:-33px;
-	font-size: 18px;
-	float: left;
-}
-
-/* boekbeschrijvingen */
-.beschrijvingen{
-	margin-top: 30px;
-}
-.beschrijvingen td.linkerkolom{
-	width: 99px;
-	font-size: 9px;
-}
-.beschrijvingen td.recensist{
-	padding: 2px 10px 5px 0px;
-}
-.beschrijvingen td.recensist span.moment{
-	color:grey;
-}
-.beschrijvingen td.beschrijving{
-	width: 506px;
-	padding: 2px 0px 5px 0px;
-}
-.beschrijvingen td.beschrijving.b0{ 
-	background-color: #f4f4f4;
-}
-.beschrijvingen td.tussenschot{
-	height: 2px;
-	margin: 0px; padding: 0px; border: 0px;
-	background-color: lightgrey;
-}

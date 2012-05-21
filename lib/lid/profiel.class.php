@@ -445,7 +445,7 @@ class ProfielStatus extends Profiel{
 		$form[]=new SelectField('kring', $profiel['kring'], 'Kringnummer', range(0,9));
 		$form[]=new InputField('postfix', $profiel['postfix'], 'Postfix', 7);
 		$form[]=new SelectField('ontvangtcontactueel', $profiel['ontvangtcontactueel'], 'Ontvangt contactueel?', array('ja'=>'ja','nee'=>'nee'));
-		$form[]=new UidField('echtgenoot', $profiel['echtgenoot'], 'Echtgenoot (lidnummer):');
+		$form[]=new LidField('echtgenoot', $profiel['echtgenoot'], 'Echtgenoot (naam/lidnummer):');
 		$form[]=new InputField('adresseringechtpaar',$profiel['adresseringechtpaar'], 'Tenaamstelling post echtpaar:',250);
 		$form[]=new DatumField('sterfdatum', $profiel['sterfdatum'], 'Overleden op:');
 		$form[]=new SubmitButton();

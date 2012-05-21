@@ -175,8 +175,8 @@ jQuery(document).ready(function($) {
 
 	//kleurt invoerveld rood bij te korte zoekterm
 	}).keyup(function(event){
-		var inputl = $(this).val().length
-		if(inputl>0 && inputl < 7){
+		var inputlen = $(this).val().length
+		if(inputlen>0 && inputlen < 7){
 			$(this).css("background-color","#ffcc96");
 		}else{
 			$(this).css("background-color","white");
@@ -203,13 +203,11 @@ jQuery(document).ready(function($) {
 			window.open('/communicatie/bibliotheek/boek/'+row.id)
 		});
 
-	//boekpagina: meldingsvelden toevoegen bewerkbare velden
-	$('.blok .veld').append('<div class="melding"></div>');
-
 	//boekpagina: asynchroon opslaan toevoegen
 	//opslaan-knop toevoegen, met event die met ajax de veldwaarde opslaat
 	$('.blok .veld input,.blok .veld textarea,.blok .veld select').each(function(index, input){
-		$(this).after(
+		$(this).after('<div class="melding"></div>'
+		).after(
 			$('<div class="knop opslaan">Opslaan</div>').mousedown(function(){
 				var fieldname = input.id.substring(6);
 				var waarde=$("#"+input.id).val();
@@ -223,7 +221,7 @@ jQuery(document).ready(function($) {
 					dataType: "json",
 					success: function(result){
 						var field = $("#"+fieldname);
-						if(result.success){
+						if(result.value){
 							//opgeslagen waarde in input zetten en een tijdelijke succesmelding
 							$("#"+input.id).val(result.value);
 							field.removeClass('metfouten').addClass('opgeslagen');

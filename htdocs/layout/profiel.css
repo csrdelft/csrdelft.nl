@@ -64,9 +64,6 @@ p.profielBewerken .pasfoto{ float: right; margin-left: 10px;}
 .Formulier input.UidField{
 	width: 70px;
 }
-.Formulier input.LidField{
-	width: 90px;
-}
 
 .Formulier textarea{
 	width: 250px;
@@ -83,7 +80,7 @@ p.profielBewerken .pasfoto{ float: right; margin-left: 10px;}
 	margin-right: 0;
 	
 }
-.Formulier .uidPreview{
+.Formulier .uidPreview, .Formulier .lidPreview{
 	display: inline;
 	padding-left: 10px;
 }

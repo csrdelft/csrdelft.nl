@@ -561,7 +561,10 @@ class BewerkBoek extends Boek {
 	 * Geeft één veldobject $entry terug
 	 */
 	public function getField($entry){ 
-		return $this->ajaxformuliervelden->findByName($entry);
+		if(!$field=$this->ajaxformuliervelden->findByName($entry)){
+			throw new Exception('Dit formulier bevat geen veld "'.$entry.'"');
+		}
+		return $field;
 	}
 	/*
 	 * Controleren of het gevraagde veld $entry correct is
@@ -667,8 +670,6 @@ class BewerkBoek extends Boek {
 
 		switch($entry){
 			case 'rubriek':
-				$return = $this->getRubriek()->getId();
-				break;
 			case 'rubriekid':
 				$return = $this->getRubriek()->getId();
 				break;
