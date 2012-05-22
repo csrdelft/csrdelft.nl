@@ -865,7 +865,7 @@ class BewerkBoek extends Boek {
 			$textfield=new RequiredPreviewTextField('beschrijving', $this->getEditBeschrijving()->getTekst(), $schrijver);
 			$textfield->previewOnEnter();
 			$boekbeschrijvingform[]=$textfield;
-			$boekbeschrijvingform[]=new SubmitButton();
+			$boekbeschrijvingform[]=new SubmitButton('opslaan', ($this->editbeschrijving==0 ? '' : '<a class="knop" href="/communicatie/bibliotheek/boek/'.$this->getId().'">Annuleren</a>'));
 
 			$posturl='/communicatie/bibliotheek/bewerkbeschrijving/'.$this->getId();
 			if($this->editbeschrijving!=0){ 
