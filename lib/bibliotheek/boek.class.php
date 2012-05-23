@@ -851,26 +851,27 @@ class BewerkBoek extends Boek {
 	 */
 	public function createBeschrijvingformulier(){
 		if($this->magBekijken()){
-			$schrijver='.';
+			$schrijver='';
+			$annuleerknop='';
+			$posturl='/communicatie/bibliotheek/bewerkbeschrijving/'.$this->getId();
+
 			if($this->editbeschrijving==0){
-				$boekbeschrijvingform[]=new Comment('Geef uw beschrijving of recensie van het boek:');
+				$titeltekst='Geef uw beschrijving of recensie van het boek:';
 			}else{
-				$boekbeschrijvingform[]=new Comment('Bewerk uw beschrijving of recensie van het boek:');
+				$titeltekst='Bewerk uw beschrijving of recensie van het boek:';
 				
 				$lid=LidCache::getLid($this->getEditBeschrijving()->getSchrijver());
 				if($lid instanceof Lid){
 					$schrijver = $lid->getNaamLink('full', 'plain').':';
 				}
+				$annuleerknop='<a class="knop" href="/communicatie/bibliotheek/boek/'.$this->getId().'">Annuleren</a>';
+				$posturl.='/'.$this->editbeschrijving;
 			}
+			$boekbeschrijvingform[]=new Comment($titeltekst);
 			$textfield=new RequiredPreviewTextField('beschrijving', $this->getEditBeschrijving()->getTekst(), $schrijver);
 			$textfield->previewOnEnter();
 			$boekbeschrijvingform[]=$textfield;
-			$boekbeschrijvingform[]=new SubmitButton('opslaan', ($this->editbeschrijving==0 ? '' : '<a class="knop" href="/communicatie/bibliotheek/boek/'.$this->getId().'">Annuleren</a>'));
-
-			$posturl='/communicatie/bibliotheek/bewerkbeschrijving/'.$this->getId();
-			if($this->editbeschrijving!=0){ 
-				$posturl.='/'.$this->editbeschrijving;
-			}
+			$boekbeschrijvingform[]=new SubmitButton('opslaan', $annuleerknop);
 
 			$this->formulier=new Formulier($posturl, $boekbeschrijvingform);
 			$this->formulier->cssID='Beschrijvingsformulier';

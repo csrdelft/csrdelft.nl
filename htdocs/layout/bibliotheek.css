@@ -251,7 +251,7 @@ li.ac_over a, li.ac_over a:hover {
 
 /*  Exemplaren */
 .exemplaren{	margin-top:10px;}
-.exemplaren h2{	margin-left: 77px; margin-bottom: 5px;}
+.exemplaren h2{	color: #999;/*margin-left: 77px;*/ margin-bottom: 20px;}
 .exemplaren p{	margin-left: 77px;}
 
 .exemplaar{
@@ -290,7 +290,7 @@ li.ac_over a, li.ac_over a:hover {
 }
 
 /* boekbeschrijvingen */
-div.beschrijvingen{ margin-top: 30px;}
+div.beschrijvingen{ margin-top: 40px;}
 .beschrijvingen table {
 	width: 622px;/* =112(=2+110+2)+506+2 */
 	table-layout: fixed;
@@ -378,12 +378,13 @@ div.beschrijvingen{ margin-top: 30px;}
 }
 
 #Beschrijvingsformulier .UBBpreview{
+	margin-left: 109px;
 	width: 506px;
-	display: inline-block;
 }
 #Beschrijvingsformulier .veld, 
 #Beschrijvingsformulier .submit{
 	margin-left: 0px;
+	display: inline-block;
 }
 #Beschrijvingsformulier label{
 	float: left; 
