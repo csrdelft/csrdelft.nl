@@ -952,14 +952,16 @@ class Zoeker{
 		#
 		# P_LID en P_OUDLID hebben beide P_LEDEN_READ en P_OUDLEDEN_READ en kunnen 
 		# de volgende afkortingen gebruiken:
-		#  - '' (lege string) of alleleden: 	novieten, (gast)leden, kringels, ere- en oudleden
+		#  - '' (lege string) of alleleden: novieten, (gast)leden, kringels, ere- en oudleden
 		#  - leden :  						novieten, (gast)leden en kringels
 		#  - oudleden : 					oud- en ereleden
+		#  - allepersonen:					novieten, (gast)leden, kringels, oud- en ereleden, overleden leden en nobodies (alleen geen commissies)
 		# én alleen voor OUDLEDENMOD:
-		#  - nobodies : 					novieten, (gast)leden, kringels, ere- en oudleden én nobodies 
+		#  - nobodies : 					alleen nobodies 
 
 		$statusfilter = '';
-		if($zoekstatus=='alleleden'){ $zoekstatus=''; }
+		if($zoekstatus=='alleleden'){ 	 $zoekstatus='';}
+		if($zoekstatus=='allepersonen'){ $zoekstatus=array('S_NOVIET', 'S_LID', 'S_GASTLID', 'S_OUDLID', 'S_ERELID', 'S_KRINGEL', 'S_OVERLEDEN', 'S_NOBODY'); }
 		if(is_array($zoekstatus)){
 			//we gaan nu gewoon simpelweg statussen aan elkaar plakken. LET OP: deze functie doet nu
 			//geen controle of een gebruiker dat mag, dat moet dus eerder gebeuren.

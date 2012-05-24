@@ -265,7 +265,7 @@ class ProfielBewerken extends Profiel {
 				$form[]=new DatumField('sterfdatum', $profiel['sterfdatum'], 'Overleden op:');
 			}
 			if($hasLedenMod OR in_array($profiel['status'], array('S_OUDLID', 'S_ERELID'))){
-				$form[]=new UidField('echtgenoot', $profiel['echtgenoot'], 'Echtgenoot (lidnummer):');
+				$form[]=new LidField('echtgenoot', $profiel['echtgenoot'], 'Echtgenoot (naam/lidnr):', 'allepersonen');
 				$form[]=new InputField('adresseringechtpaar',$profiel['adresseringechtpaar'], 'Tenaamstelling post echtpaar:',250);
 			}
 		}
@@ -344,7 +344,7 @@ class ProfielBewerken extends Profiel {
 				$form[]=new SelectField('kringleider', $profiel['kringleider'], 'Kringleider', array('n' => 'Nee','o' => 'Ouderejaarskring', 'e' => 'Eerstejaarskring'));
 				$form[]=new SelectField('motebal', $profiel['motebal'], 'Verticaan', array('0' => 'Nee','1' => 'Ja'));
 			}
-			$form[]=new UidField('patroon', $profiel['patroon'], 'Patroon');
+			$form[]=new LidField('patroon', $profiel['patroon'], 'Patroon', 'allepersonen');
 		}
 
 		if($hasLedenMod OR $this->editNoviet){
@@ -445,7 +445,7 @@ class ProfielStatus extends Profiel{
 		$form[]=new SelectField('kring', $profiel['kring'], 'Kringnummer', range(0,9));
 		$form[]=new InputField('postfix', $profiel['postfix'], 'Postfix', 7);
 		$form[]=new SelectField('ontvangtcontactueel', $profiel['ontvangtcontactueel'], 'Ontvangt contactueel?', array('ja'=>'ja','nee'=>'nee'));
-		$form[]=new LidField('echtgenoot', $profiel['echtgenoot'], 'Echtgenoot (naam/lidnummer):');
+		$form[]=new LidField('echtgenoot', $profiel['echtgenoot'], 'Echtgenoot (naam/lidnr):', 'allepersonen');
 		$form[]=new InputField('adresseringechtpaar',$profiel['adresseringechtpaar'], 'Tenaamstelling post echtpaar:',250);
 		$form[]=new DatumField('sterfdatum', $profiel['sterfdatum'], 'Overleden op:');
 		$form[]=new SubmitButton();

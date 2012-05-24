@@ -626,16 +626,16 @@ JS;
  */
 class LidField extends FormField{
 	// zoekfilter voor door namen2uid gebruikte Zoeker::zoekLeden. 
-	// geaccepteerde input: 'leden', 'oudleden', 'alleleden', 'nobodies'
+	// geaccepteerde input: 'leden', 'oudleden', 'alleleden', 'allepersonen', 'nobodies'
 	private $zoekin;
 
-	public function __construct($name, $value, $description=null,$zoekin='leden'){
+	public function __construct($name, $value, $description=null, $zoekin='leden'){
 		$lid=LidCache::getLid($value);
 		if($lid instanceof Lid){
 			$value=$lid->getNaamLink('full', 'plain');
 		}
 		parent::__construct($name, $value, $description);
-		if(!in_array($zoekin, array('leden', 'oudleden', 'alleleden', 'nobodies'))){
+		if(!in_array($zoekin, array('leden', 'oudleden', 'alleleden', 'allepersonen', 'nobodies'))){
 			$zoekin='leden';
 		}
 		$this->zoekin=$zoekin;
