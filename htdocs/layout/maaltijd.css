@@ -26,6 +26,14 @@ table.corveetakenselects tr td{
 	width: 500px;
 	height: 150px;
 }
+.instellingenForm .metfouten{
+	background-color: #FFC3CE;
+	padding: 4px 2px;
+}
+.instellingenForm .veld .waarschuwing{
+	float: right;
+	margin-right: 10px;
+}
 
 /*corveeinstellingenpagina: corveeresetter */
 .resetForm label{

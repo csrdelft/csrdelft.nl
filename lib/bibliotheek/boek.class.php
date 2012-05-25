@@ -82,7 +82,7 @@ class Boek{
 	 */ 
 	private function array2properties($properties){
 		foreach ($properties as $prop => $value){
-			$this->setValue($prop, $value);
+			$this->setValue($prop, $value, $initboek=true);
 		}
 	}
 
@@ -378,7 +378,7 @@ class Boek{
 	 * @param	$key moet bekend zijn, anders exception
 	 * @return	void
 	 */
-	public function setValue($key, $value){
+	public function setValue($key, $value, $initboek=false){
 		//$key voor leners en opmerkingen eerst opsplitsen
 		if(substr($key,0,6)=='lener_'){
 			$exemplaarid = substr($key,6);
@@ -404,7 +404,11 @@ class Boek{
 				try{
 					$this->rubriek = new Rubriek($value);
 				}catch(Exception $e){
-					throw new Exception($e->getMessage().' Boek::setValue "'.$key.'"');
+					if($initboek){
+						$this->rubriek = new Rubriek(1002);
+					}else{
+						throw new Exception($e->getMessage().' Boek::setValue "'.$key.'"');
+					}
 				}
 				break;
 			case 'titel':

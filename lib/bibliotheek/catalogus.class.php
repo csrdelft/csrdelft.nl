@@ -89,7 +89,7 @@ private $iKolommenZichtbaar; //aantal kolommen zichtbaar in de tabel.
 		 * on very large tables, and MySQL's regex functionality is very limited
 		 */
 		//sorteer key voor mysql
-		$aFilterColumns = array('titel'=> "titel", 	'auteur'=>"auteur", 'categorie'=>"CONCAT(c1.categorie, ' - ', c2.categorie, ' - ', c3.categorie )",
+		$aFilterColumns = array('titel'=> "titel", 	'auteur'=>"auteur", 'categorie'=>"CONCAT(c1.categorie, ' - ', c2.categorie )",
 								'code'=>"code", 	'isbn'=>"isbn", 	'bsaantal'=>"bsaantal", 'status'=>"e.status", 'leningen'=>"leningen", 
 								'eigenaar'=>"CONCAT(l1.voornaam, ' ', l1.tussenvoegsel,IFNULL(l1.tussenvoegsel, ' '),l1.achternaam)", 
 								'lener'=> "CONCAT(l2.voornaam, ' ',l2.tussenvoegsel, IFNULL(l1.tussenvoegsel, ' '),l2.achternaam)",
@@ -165,11 +165,10 @@ private $iKolommenZichtbaar; //aantal kolommen zichtbaar in de tabel.
 		$sQuery = "
 			SELECT SQL_CALC_FOUND_ROWS DISTINCT 
 				b.id, b.titel, b.isbn, b.code, b.auteur, 
-				CONCAT(c1.categorie, ' - ', c2.categorie, ' - ', c3.categorie ) AS categorie
+				CONCAT(c1.categorie, ' - ', c2.categorie) AS categorie
 				".$sSelect."
 			FROM biebboek b
-			LEFT JOIN biebcategorie c3 ON(b.categorie_id = c3.id)
-			LEFT JOIN biebcategorie c2 ON(c2.id = c3.p_id)
+			LEFT JOIN biebcategorie c2 ON(b.categorie_id = c2.id)
 			LEFT JOIN biebcategorie c1 ON(c1.id = c2.p_id)
 			LEFT JOIN biebexemplaar e ON(b.id = e.boek_id)
 			".$sLeftjoin." 
