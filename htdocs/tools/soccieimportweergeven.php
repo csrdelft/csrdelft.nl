@@ -30,6 +30,9 @@ if(isset($_GET['sorteer']) AND in_array($_GET['sorteer'], $sorteeropties)){
 
 //splitst bestaande en niet-bestaande accounts
 $accounts=array();
+$teller['totaal']=0;
+$teller['inDb']=0;
+$teller['onbekend']=0;
 foreach($soccieinput as $soccielid){
 	//soccieID i.c.m. createTerm is uniek.
 	$key = (int)$soccielid->id . $soccielid->createTerm;
@@ -44,10 +47,12 @@ foreach($soccieinput as $soccielid){
 	}
 
 	if($sorteerkey){
-		$accounts[$filter][(string)$account->$sorteerkey]=$account;
+		$accounts[$filter][(string)$account->$sorteerkey . $key]=$account;
 	}else{
 		$accounts[$filter][]=$account;
 	}
+	$teller[$filter]++;
+	$teller['totaal']++;
 }
 //sortering
 ksort($accounts['onbekend']);
@@ -69,10 +74,14 @@ geautomatiseerd te laten doen.</p>';
 echo '<p>Enkele andere controles:';
 echo '<ul>';
 echo '	<li>query #86: <a href="/tools/query.php?id=86">Novieten, (gast)leden zonder soccieID</a></li>';
-echo '	<li>query #85: <a href="/tools/query.php?id=85">Alle oudleden/nobodies/etc die nog wel in socciepcimport staan</a></li>';
+echo '	<li>query #85: <a href="/tools/query.php?id=85">Alle oudleden/nobodies/etc die nog in socciepcimport staan</a></li>';
 echo '	<li>query #80: <a href="/tools/query.php?id=80">Personen in db met saldo, die ontbreken in socciepcimport</a></li>';
 echo '</ul></p>';
 echo '<p>Onderstaande gegevens zijn van de laatste import uit de socciepc.</p>';
+echo 'Totaal aantal accounts: '.$teller['totaal'].'<br/>';
+echo 'Onbekende accounts: '.$teller['onbekend'].' (weergegeven: '.count($accounts['onbekend']).')<br/>';
+echo 'Bekende accounts: '.$teller['inDb'].' (weergegeven: '.count($accounts['inDb']).')<br/>';
+
 
 echo 'Sorteer tabellen op: ';
 foreach($sorteeropties as $optie){
@@ -82,7 +91,7 @@ foreach($sorteeropties as $optie){
 echo '<h3>SocCieaccounts die niet gekoppeld zijn</h3>';
 echo '<p>Mogelijke oorzaken:<ul>
 	<li>Geen id in database</li> 
-	<li>soccieID-createTerm combinatie klopt niet. </li>
+	<li>De combinatie van soccieID en createTerm klopt niet. </li>
 </ul>';
 viewTable($accounts['onbekend']);
 
