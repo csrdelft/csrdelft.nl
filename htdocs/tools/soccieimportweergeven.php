@@ -38,7 +38,7 @@ foreach($soccieinput as $soccielid){
 	$key = (int)$soccielid->id . $soccielid->createTerm;
 
 	$account=$soccielid;
-	if(array_key_exists($key, $aLeden) ){
+	if(array_key_exists($key, $aLeden)){
 		$filter='inDb';
 		$account->addChild('uid', $aLeden[$key]['uid']);
 		$account->addChild('naam', $aLeden[$key]['voornaam'].' '.$aLeden[$key]['tussenvoegsel'].($aLeden[$key]['tussenvoegsel'] ? ' ':'') .$aLeden[$key]['achternaam']);
@@ -47,7 +47,12 @@ foreach($soccieinput as $soccielid){
 	}
 
 	if($sorteerkey){
-		$accounts[$filter][(string)$account->$sorteerkey . $key]=$account;
+		$prefix="";
+		if($sorteerkey=='id'){
+			$prefix .= ($account->id<10) ? "0" : "";
+			$prefix .= ($account->id<100) ? "0" : "";
+		}
+		$accounts[$filter][$prefix.$account->$sorteerkey.$key]=$account;
 	}else{
 		$accounts[$filter][]=$account;
 	}
