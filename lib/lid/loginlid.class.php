@@ -241,6 +241,7 @@ class LoginLid{
 	 * Voorbeeldjes:
 	 *  groep:novcie				geeft true leden van de h.t. NovCie.
 	 *  groep:pubcie,groep:bestuur	geeft true voor leden van h.t. bestuur en h.t. novcie
+	 *  groep:SocCie>Fiscus			geeft true voor h.t. Soccielid met functie fiscus
 	 *  geslacht:m					geeft true voor alle mannelijke leden
 	 *  verticale:d					geeft true voor alle leden van verticale d.
 	 *  !lichting:2009				geeft true voor iedereen behalve lichting 2009.
@@ -319,12 +320,23 @@ class LoginLid{
 			//als een string als bijvoorbeeld 'pubcie' wordt meegegeven zoekt de ketzer
 			//de h.t. groep met die korte naam erbij, als het getal is uiteraard de groep
 			//met dat id.
+			//met de toevoeging '>Fiscus' kan ook specifieke functie geëist worden binnen een groep
 			}elseif(substr($permissie, 0, 5)=='groep'){
 				require_once 'groepen/groep.class.php';
+				//splitst opgegeven term in groepsnaam en functie
+				$parts=explode(">", substr($permissie, 6), 2);
 				try{
-					$groep=new Groep(substr($permissie, 6));
+					$groep=new Groep($parts[0]);
 					if($groep->isLid()){
-						return true;
+						//wordt er een functie gevraagd?
+						if(isset($parts[1])){
+							$functie=$groep->getFunctie();
+							if(strtolower($functie[0])==strtolower($parts[1])){
+								return true;
+							}
+						}else{
+							return true;
+						}
 					}
 				}catch(Exception $e){
 					//de groep bestaat niet, we gaan verder.

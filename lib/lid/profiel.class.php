@@ -300,9 +300,15 @@ class ProfielBewerken extends Profiel {
 		$form[]=new InputField('skype', $profiel['skype'], 'Skype', 20); //TODO specifiek ding voor maken
 		$form[]=new UrlField('linkedin', $profiel['linkedin'], 'Publiek LinkedIn-profiel');
 		$form[]=new UrlField('website', $profiel['website'], 'Website');
+
+		$form[]=new Comment('Boekhouding:');
 		$form[]=new InputField('bankrekening', $profiel['bankrekening'], 'Bankrekening', 11); //TODO specifiek ding voor maken
 		if($hasLedenMod){
 			$form[]=new JaNeeField('machtiging', $profiel['machtiging'], 'Machtiging getekend?');
+		}
+		if(LoginLid::instance()->hasPermission('P_ADMIN')){
+			$form[]=new IntField('soccieID', $profiel['soccieID'], 'SoccieID (uniek icm. bar)', 10000, 0);
+			$form[]=new SelectField('createTerm', $profiel['createTerm'], 'Aangemaakt bij', array('barvoor'=>'barvoor', 'barmidden'=>'barmidden', 'barachter'=>'barachter'));
 		}
 
 		if(in_array($profiel['status'], array('S_OUDLID', 'S_ERELID', 'S_NOBODY', 'S_OVERLEDEN', 'S_CIE')) OR $this->lid->getUid()=='6601'){ //vd Wekken mag wel eerder begonnen zijn.
@@ -311,9 +317,7 @@ class ProfielBewerken extends Profiel {
 			$beginjaar=date('Y')-20;
 		}
 
-		if(in_array($profiel['status'], array('S_OUDLID', 'S_ERELID')) OR $hasLedenMod OR $this->editNoviet){
-			$form[]=new Comment('Studie:');
-		}
+		$form[]=new Comment('Studie:');
 		$form[]=new StudieField('studie', $profiel['studie'], 'Studie');
 		if(in_array($profiel['status'], array('S_OUDLID', 'S_ERELID')) OR $hasLedenMod OR $this->editNoviet){
 			$form[]=new IntField('studiejaar', $profiel['studiejaar'], 'Beginjaar studie', date('Y'), $beginjaar);
@@ -347,13 +351,13 @@ class ProfielBewerken extends Profiel {
 			$form[]=new LidField('patroon', $profiel['patroon'], 'Patroon', 'allepersonen');
 		}
 
+		$form[]=new Comment('Persoonlijk:');
 		if($hasLedenMod OR $this->editNoviet){
-			$form[]=new Comment('Persoonlijk:');
 			$form[]=new InputField('eetwens', $profiel['eetwens'], 'Dieet', 200);
 			//wellicht binnenkort voor iedereen beschikbaar?
 			$form[]=new InputField('kerk', $profiel['kerk'], 'Kerk', 50);
-			$form[]=new InputField('muziek', $profiel['muziek'], 'Muziekinstrument', 50);
 		}
+		$form[]=new InputField('muziek', $profiel['muziek'], 'Muziekinstrument', 50);
 
 		if(LoginLid::instance()->hasPermission('P_ADMIN,P_BESTUUR,groep:novcie')){
 			$form[]=new SelectField('ovkaart', $profiel['ovkaart'], 'OV-kaart', array('' => 'Kies...','geen' => '(Nog) geen OV-kaart','week' => 'Week','weekend' => 'Weekend','niet' => 'Niet geactiveerd'));
