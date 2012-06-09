@@ -38,8 +38,10 @@ function toggleTijden(){
 			<input type="text" id="eindMoment" name="eindMoment" value="{$item->getEindMoment()|date_format:"%H:%M"}" class="tijd" />
 			<div class="standaardtijden">
 				&laquo; <a onclick="setTijd('09:00', '17:30');">Dag</a> <br />
-				&laquo; <a onclick="setTijd('18:30', '22:30');">Kring</a> <br />
-				&laquo; <a onclick="setTijd('20:00', '22:00');">Avond</a>
+				&laquo; <a onclick="setTijd('18:30', '23:00');">Kring</a> <br />
+				&laquo; <a onclick="setTijd('20:00', '23:59');">Avond</a> <br />
+				&laquo; <a onclick="setTijd('20:00', '22:00');">Lezing</a>
+				
 			</div>
 			<br /><br />
 	</div>

@@ -276,6 +276,7 @@ htdocs/tools/saldografiek.php -text
 htdocs/tools/sendmail/maildata.php -text
 htdocs/tools/sendmail/sendmail.php -text
 htdocs/tools/soccie.php -text
+htdocs/tools/soccieimportweergeven.php -text
 htdocs/tools/stats.php -text
 htdocs/tools/streeplijst.php -text
 htdocs/tools/ubb.php -text
