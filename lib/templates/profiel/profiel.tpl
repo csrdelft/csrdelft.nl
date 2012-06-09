@@ -161,7 +161,9 @@
 				{/if}
 				{if $profiel->getPatroon() instanceof Lid}
 					<div class="label">{if $profiel->getPatroon()->getGeslacht()=='v'}M{else}P{/if}atroon:</div>
-					{$profiel->getPatroon()->getNaamLink('civitas', 'link')}<br />
+					<div class="data">
+						{$profiel->getPatroon()->getNaamLink('civitas', 'link')}<br />
+					</div>
 				{/if}
 				{if $profiel->getKinderen()|@count > 0}
 					<div class="label">Kinderen:</div>
