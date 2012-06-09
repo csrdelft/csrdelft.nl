@@ -66,7 +66,8 @@
 			SELECT c2.id, c1.categorie AS cat1, c2.categorie AS cat2
 			FROM biebcategorie c1, biebcategorie c2
 			WHERE c2.p_id = c1.id
-			AND c1.p_id =0;";
+			AND c1.p_id =0
+			ORDER BY c2.id ASC;";
 		$result=$db->query($query);
 		echo mysql_error();
 		if($db->numRows($result)>0){

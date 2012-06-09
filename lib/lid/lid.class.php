@@ -774,7 +774,7 @@ class Lid implements Serializable, Agendeerbaar{
 
 		//probeer de nieuwe status te maken en zoek daarvoor de permissie
 		$status = new Status($lidstatus);
-		$perm = Status::getDefaultPermission();
+		$perm = Status::getDefaultPermission($lidstatus);
 
 		//alleen bij novieten studiejaar invullen
 		$studiejaar = 0;
