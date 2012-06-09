@@ -628,7 +628,7 @@ class ProfielStatus extends Profiel{
 			'nieuwestatus' => $nieuwestatus,
 			'saldi' => $saldi,
 			'admin_naam' => LoginLid::instance()->getLid()->getNaam());
-		$to='fiscus@csrdelft.nl,maalcie-fiscus@csrdelft.nl,soccie@csrdelft.nl';
+		$to='fiscus@csrdelft.nl';//,maalcie-fiscus@csrdelft.nl,soccie@csrdelft.nl';
 
 		$mail=new TemplatedMail($to, 'Melding lid-af worden', $template);
 		$mail->setBcc("pubcie@csrdelft.nl");
