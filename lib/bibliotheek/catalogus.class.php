@@ -89,7 +89,7 @@ private $iKolommenZichtbaar; //aantal kolommen zichtbaar in de tabel.
 		 * on very large tables, and MySQL's regex functionality is very limited
 		 */
 		//sorteer key voor mysql
-		$aFilterColumns = array('titel'=> "titel", 	'auteur'=>"auteur", 'categorie'=>"CONCAT(c1.categorie, ' - ', c2.categorie, ' - ', c3.categorie )",
+		$aFilterColumns = array('titel'=> "titel", 	'auteur'=>"auteur", 'categorie'=>"CONCAT(c1.categorie, ' - ', c2.categorie )",
 								'code'=>"code", 	'isbn'=>"isbn", 	'bsaantal'=>"bsaantal", 'status'=>"e.status", 'leningen'=>"leningen", 
 								'eigenaar'=>"CONCAT(l1.voornaam, ' ', l1.tussenvoegsel,IFNULL(l1.tussenvoegsel, ' '),l1.achternaam)", 
 								'lener'=> "CONCAT(l2.voornaam, ' ',l2.tussenvoegsel, IFNULL(l1.tussenvoegsel, ' '),l2.achternaam)",
@@ -164,13 +164,11 @@ private $iKolommenZichtbaar; //aantal kolommen zichtbaar in de tabel.
 
 		$sQuery = "
 			SELECT SQL_CALC_FOUND_ROWS DISTINCT 
-				b.id, b.titel, b.isbn, b.code, a.auteur, 
-				CONCAT(c1.categorie, ' - ', c2.categorie, ' - ', c3.categorie ) AS categorie
+				b.id, b.titel, b.isbn, b.code, b.auteur, 
+				CONCAT(c1.categorie, ' - ', c2.categorie) AS categorie
 				".$sSelect."
 			FROM biebboek b
-			LEFT JOIN biebauteur a ON(b.auteur_id = a.id)
-			LEFT JOIN biebcategorie c3 ON(b.categorie_id = c3.id)
-			LEFT JOIN biebcategorie c2 ON(c2.id = c3.p_id)
+			LEFT JOIN biebcategorie c2 ON(b.categorie_id = c2.id)
 			LEFT JOIN biebcategorie c1 ON(c1.id = c2.p_id)
 			LEFT JOIN biebexemplaar e ON(b.id = e.boek_id)
 			".$sLeftjoin." 
@@ -216,7 +214,7 @@ private $iKolommenZichtbaar; //aantal kolommen zichtbaar in de tabel.
 	 * @return array van alle waardes, alfabetisch gesorteerd
 	 */
 	public static function getAllValuesOfProperty($key){
-		$allowedkeys = array('id', 'titel', 'uitgavejaar', 'uitgeverij', 'paginas', 'taal', 'isbn', 'code', 'naam');
+		$allowedkeys = array('id', 'titel', 'auteur', 'uitgavejaar', 'uitgeverij', 'paginas', 'taal', 'isbn', 'code', 'naam');
 		if(in_array($key, $allowedkeys)){
 			$db=MySql::instance();
 			if($key=='naam'){
@@ -243,68 +241,63 @@ private $iKolommenZichtbaar; //aantal kolommen zichtbaar in de tabel.
 		return array();
 	}
 
+	/**
+	 * @return json_encodeerde array(
+	 * 		array(data=>array(...met meuk...), value=>waarde, result=>dit komt in input na kiezen van iets in suggestielijst),
+	 * 		array(..)
+	 *  )
+	 * met formatItem (optie voor jquery.autocomplete) kan uit data-array inhoud worden gegenereerd voor in de li-elementen van de suggestielijst
+	 */
 	public static function getAutocompleteSuggesties($sKey){
 		$properties = array();
-		$allowedkeys = array('id', 'titel', 'uitgavejaar', 'uitgeverij', 'paginas', 'taal', 'isbn', 'code', 'naam','auteur');
+		$allowedkeys = array('id', 'titel', 'uitgavejaar', 'uitgeverij', 'paginas', 'taal', 'isbn', 'code','auteur');
 		if(in_array($sKey, $allowedkeys)){
 			$db=MySql::instance();
-			if($sKey=='naam'){
-				$query = "
-					SELECT uid, CONCAT(voornaam, ' ', tussenvoegsel,  IF(tussenvoegsel='','',' '), achternaam) as naam  
-					FROM lid 
-					WHERE status IN ('S_LID', 'S_NOVIET', 'S_GASTLID', 'S_KRINGEL', 'S_OUDLID','S_ERELID') 
-						AND CONCAT(voornaam, ' ', tussenvoegsel,  IF(tussenvoegsel='','',' '), achternaam) LIKE  '%".$db->escape($_GET['q'])."%'
-					ORDER BY achternaam
-					LIMIT 0, ".(int)$_GET['limit']." ;";
-			}elseif($sKey=='auteur'){
-				$query = "
-					SELECT id, auteur
-					FROM biebauteur
-					WHERE auteur LIKE  '%".$db->escape($_GET['q'])."%'
-					ORDER BY auteur
-					LIMIT 0, ".(int)$_GET['limit']." ;";
-			}else{
-				$query = "
-					SELECT DISTINCT ".$db->escape($sKey)."
-					FROM biebboek
-					WHERE ".$db->escape($sKey)." LIKE  '%".$db->escape($_GET['q'])."%'
-					ORDER BY ".$db->escape($sKey)."
-					LIMIT 0, ".(int)$_GET['limit']." ;";
-			}
+			$query = "
+				SELECT ".$db->escape($sKey).", id
+				FROM biebboek
+				WHERE ".$db->escape($sKey)." LIKE  '%".$db->escape($_GET['q'])."%'
+				GROUP BY ".$db->escape($sKey)."
+				ORDER BY ".$db->escape($sKey)."
+				LIMIT 0, ".(int)$_GET['limit']." ;";
 			$result=$db->query($query);
 			echo mysql_error();
 			if($db->numRows($result)>0){
 				while($prop=$db->next($result)){
-					$properties[]=$prop[$sKey];
+					if($sKey=='titel'){
+						$data=array('titel'=>$prop['titel'],'id'=>$prop['id']);
+					}else{
+						$data=array($prop[$sKey]);
+					}
+					$properties[]=array('data'=>$data, 'value'=>$prop[$sKey], 'result'=>$prop[$sKey]);
 				}
-				$properties = array_filter($properties);
 			}
 		}
 		echo json_encode($properties);
 	}
 
-	/*
+	/**
 	 * controleert of gegeven waarde voor de gegeven $key al voorkomt in de db.
 	 * 
 	 * @param $key en $value
 	 * @return	true $value bestaat in db
 	 * 			false $value bestaat niet
 	 */
-	public static function existsProperty($key,$value){
-		$return = false;
-		switch ($key) {
-			case 'titel':
-			case 'isbn':
-				$return = in_array($value, Catalogus::getAllValuesOfProperty($key));
-				break;
-			case 'rubriek':
-				$return = in_array($value, Rubriek::getAllRubriekIds());
-				break;
-			case 'auteur':
-				$return = in_array($value, Auteur::getAllAuteurIds());
-				break;
+	public static function existsProperty($key, $value){
+		$allowedkeys = array('id', 'titel', 'uitgavejaar', 'uitgeverij', 'paginas', 'taal', 'isbn', 'code','auteur');
+		if(in_array($key, $allowedkeys)){
+			$db=MySql::instance();
+			$query = "
+				SELECT  ".$db->escape($key)."
+				FROM  `biebboek` 
+				WHERE  `".$db->escape($key)."` LIKE  '".$db->escape($value)."'
+				LIMIT 0 , 1;";
+			$result=$db->query($query);
+			return $db->numRows($result)>0;
+		}elseif($key=='rubriek'){
+			return in_array($value, Rubriek::getAllRubriekIds());
 		}
-		return $return;
+		return false;
 	}
 
 	/* 
@@ -332,7 +325,7 @@ private $iKolommenZichtbaar; //aantal kolommen zichtbaar in de tabel.
 		}
 		$query="
 			SELECT DISTINCT 
-				b.id, b.titel, a.auteur,".$select."
+				b.id, b.titel, b.auteur,".$select."
 				IF(
 					(SELECT count( * )
 					FROM biebexemplaar e2
@@ -349,7 +342,6 @@ private $iKolommenZichtbaar; //aantal kolommen zichtbaar in de tabel.
 					)
 				) AS status
 			FROM biebboek b
-			LEFT JOIN biebauteur a ON(b.auteur_id = a.id)
 			LEFT JOIN ".$join."
 			WHERE ".$where."
 			GROUP BY b.id

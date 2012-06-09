@@ -22,7 +22,7 @@ if(isset($_GET['action'])){
 				}
 				$peiling=Peiling::maakPeiling($properties);
 				
-				PeilingContent::invokeRefresh('De nieuwe peiling heeft id '.$peiling->getId().'.', '/tools/peilingbeheer.php');
+				PeilingContent::invokeRefresh('/tools/peilingbeheer.php', 'De nieuwe peiling heeft id '.$peiling->getId().'.', 1);
 				exit;
 			}
 		break;

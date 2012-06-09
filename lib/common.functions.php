@@ -98,9 +98,21 @@ function is_utf8($string) {
 function opConfide() {//echo $_SERVER['REMOTE_ADDR'];
 	return ( isset($_SERVER['REMOTE_ADDR']) and defined('CONFIDE_IP') and in_array($_SERVER['REMOTE_ADDR'],explode(':',CONFIDE_IP)) );
 }
+
+/**
+ * Komt de request van Feut (irc-bot)?
+ */
 function isFeut(){
 	return isset($_SERVER['REMOTE_ADDR']) and defined('FEUT_IP') and $_SERVER['REMOTE_ADDR']==FEUT_IP;
 }
+
+/**
+ * Is de huidige server syrinx?
+ */
+function isSyrinx(){
+	return stristr($_SERVER['SERVER_NAME'], 'syrinx')!==false;
+}
+
 function getDateTime(){
 	return date('Y-m-d H:i:s');
 }
@@ -138,6 +150,61 @@ function pr($sString, $cssID='pubcie_debug'){
 		echo '<pre id="'.$cssID.'">'.print_r($sString, true).'</pre>';
 	}
 }
+/**
+ * stores a message
+ *
+ * Levels can be:
+ *
+ * -1 error
+ *  0 info
+ *  1 success
+ *  2 notify
+ *
+ * @see    SimpleHTML::getMelding()
+ * gebaseerd op DokuWiki code
+ */
+function msg($message, $lvl=0){
+	$errors[-1] = 'error';
+	$errors[0]  = 'info';
+	$errors[1]  = 'success';
+	$errors[2]  = 'notify';
+	
+	$message=trim($message);
+	if($message!=''){
+		if(!isset($_SESSION['melding'])) $_SESSION['melding'] = array();
+		$_SESSION['melding'][]=array('lvl' => $errors[$lvl], 'msg' => $message);
+	}
+}
+/**
+ * Probeert uit invoer van uids of namen per zoekterm een unieke uid te bepalen, zoniet een lijstje suggesties en anders false.
+ * 
+ * @param 	$sNamen string met namen en/of uids op nieuwe regels en/of gescheiden door komma's 
+ * 			$filter zoekfilter voor Zoeker::zoekLeden, toegestane input: '', 'leden', 'oudleden' of array met stati
+ * @return 	false bij geen matches
+ * 			of een array met per zoekterm een entry met een unieke uid en naam òf een array met naamopties.
+ * Voorbeeld: 
+ * Input: $sNamen = 'Lid, Klaassen'
+ * Output: Array(
+		[0] => Array (
+			[naamOpties] => Array (
+				[0] => Array (
+					[uid] => 4444
+					[naam] => Oud Lid
+				)
+				[1] => Array (
+					[uid] => x101
+					[naam] => Jan Lid
+				)
+				[2] => Array (
+					...
+			)
+		)
+		[1] => Array (
+			[uid] => 0431
+			[naam] => Jan Klaassen
+		)
+	) 
+ */
 function namen2uid($sNamen, $filter='leden'){
 
 	$return=array();
@@ -205,6 +272,7 @@ function strNthPos($haystack, $needle, $nth = 1){
 	   $offset = strpos($haystack, $needle, $offset) + 1;
    return strpos($haystack, $needle, $offset) - 1;
 }
+
 /*
  * Geeft een array terug met alleen de opgegeven keys.
  *

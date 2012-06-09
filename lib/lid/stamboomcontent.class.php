@@ -1,4 +1,11 @@
 <?php
+/**
+ * Stamboompjes weergeven...
+ *
+ * Geeft een stamboom weer vanaf een startuid. Met de patroonlinkjes kan
+ * je doorklikken naar boven. Verder niet zo'n spannend ding, zou een
+ * stuk mooier gelayout kunnen worden...
+ */
 
 
 class StamboomContent extends SimpleHTML{

@@ -6,32 +6,27 @@
  *
  */
 require_once 'rubriek.class.php';
-require_once 'auteur.class.php';
 require_once 'formulier.class.php';
+require_once 'beschrijving.class.php';
 
 class Boek{
 
-	private $id=0;			//boekId
-	private $titel;			//String
-	private $auteur=null;	//Auteur object
-	private $rubriek=null;	//Rubriek object
-	private $uitgavejaar;
-	private $uitgeverij;
-	private $paginas;
-	private $taal='Nederlands';
-	private $isbn;
-	private $code;
+	protected $id=0;			//boekId
+	protected $titel;			//String
+	protected $auteur;			//String Auteur
+	protected $rubriek=null;	//Rubriek object
+	protected $uitgavejaar;
+	protected $uitgeverij;
+	protected $paginas;
+	protected $taal='Nederlands';
+	protected $isbn;
+	protected $code;
 
-	private $status;				//'beschikbaar'/'teruggeven'/'geen'
-	private $biebboek = 'nee';		//'ja'/'nee'
-	private $error = '';
-	private $nieuwboekform;			// Form objecten voor nieuwboekformulier
-	private $boekbeschrijvingform;	// Form objecten voor recensieformulier
-	private $editablefieldsform;	// Form objecten info v. boek
-	private $beschrijving;			// recensie tijdens toevoegen/bewerken
-	private $beschrijvingsid;		// id van recensie 
-	private $beschrijvingen = null;	// array
-	private $exemplaren = null;		// array
+	protected $status;				//'beschikbaar'/'teruggeven'/'geen'
+	protected $biebboek = 'nee';	//'ja'/'nee'
+	protected $error = '';
+
+	protected $exemplaren = null;	// array
 
 	public function __construct($init){
 		$this->load($init);
@@ -39,27 +34,18 @@ class Boek{
 	/*
 	 * Laad object Boek afhankelijk van parameters van de constructor
 	 * 
-	 * @param	$array met eigenschappen	integer boekId of boekId = 0
+	 * @param	$array met eigenschappen of integer boekId (niet 0)
 	 * @return	void
 	 */
-	public function load($init=0){
+	private function load($init=0){
 		if(is_array($init)){
 			$this->array2properties($init);
 		}else{
 			$this->id=(int)$init;
-			if($this->getId()==0){
-				//Bij $this->id==0 gaat het om een nieuw boek. Hier
-				//zetten we de defaultwaarden voor het nieuwe boek.
-				$this->auteur = new Auteur('');
-				$this->rubriek = new Rubriek(108);
-				if($this->isBASFCie()){
-					$this->biebboek = 'ja';
-				}
-				$this->assignFieldsNieuwboekForm();
-			}else{
+			if($this->getId()!=0){
 				$db=MySql::instance();
 				$query="
-					SELECT id, titel, auteur_id, categorie_id, uitgavejaar, uitgeverij, paginas, taal, isbn, code,
+					SELECT id, titel, auteur, categorie_id, uitgavejaar, uitgeverij, paginas, taal, isbn, code,
 					IF((
 						SELECT count( * )
 						FROM biebexemplaar e2
@@ -80,15 +66,15 @@ class Boek{
 				$boek=$db->getRow($query);
 				if(is_array($boek)){
 					$this->array2properties($boek);
-					$this->assignFieldsBeschrijvingForm();
-					$this->assignAjaxFieldsForm();
 				}else{
 					throw new Exception('load() mislukt. Bestaat het boek wel? '.mysql_error());
 				}
+			}else{
+				throw new Exception('load() mislukt. Boekid = 0');
 			}
 		}
-
 	}
+
 	/*
 	 * Eigenschappen in object stoppen
 	 * @param	array met eigenschappen, setValue() moet de keys kennen
@@ -96,7 +82,7 @@ class Boek{
 	 */ 
 	private function array2properties($properties){
 		foreach ($properties as $prop => $value){
-			$this->setValue($prop, $value);
+			$this->setValue($prop, $value, $initboek=true);
 		}
 	}
 
@@ -108,193 +94,31 @@ class Boek{
 	public function getTaal(){			return $this->taal;}
 	public function getISBN(){			return $this->isbn;}
 	public function getCode(){			return $this->code;}
-	//retourneert objecten
 	public function getAuteur(){		return $this->auteur;}
 	public function getRubriek(){		return $this->rubriek;}
 
-	//retourneert strings.
-	public function getProperty($entry){
-		//$entry voor leners eerst opsplitsen
-		if(substr($entry,0,6)=='lener_'){
-			$exemplaarid=substr($entry,6);
-			$entry='lener';
-		}elseif(substr($entry,0,10)=='opmerking_'){
-			$exemplaarid = substr($entry,10);
-			$entry='opmerking';
-		}
-		switch($entry){
-			case 'auteur':
-				$return = $this->getAuteur()->getNaam();
-				break;
-			case 'rubriek':
-				$return = $this->getRubriek()->getRubrieken();
-				break;
-			case 'titel':
-				$return = $this->getTitel();
-				break;
-			case 'uitgavejaar':
-				$return = $this->getUitgavejaar();
-				break;
-			case 'uitgeverij':
-				$return = $this->getUitgeverij();
-				break;
-			case 'paginas':
-				$return = $this->getPaginas();
-				break;
-			case 'taal':
-				$return = $this->getTaal();
-				break;
-			case 'isbn':
-				$return = $this->getISBN();
-				break;
-			case 'code':
-				$return = $this->getCode();
-				break;
-			case 'lener':
-				$uid=$this->exemplaren[$exemplaarid]['uitgeleend_uid'];
-				$lid=LidCache::getLid($uid);
-				if($lid instanceof Lid){
-					$return = $lid->getNaamLink('civitas', 'link');
-				}else{
-					$return = 'Geen geldig lid getProperty';
-				}
-				break;
-			case 'opmerking':
-				$return = $this->exemplaren[$exemplaarid]['opmerking'];
-				break;
-			default:
-				return 'entry "'.$entry.'" is niet toegestaan. Boek::getProperty()';
-		}
-		return htmlspecialchars($return);
-	}
-	//geeft beschikbaarheid van boek
-	public function getStatus(){
-		return $this->status;
-	}
-	//geeft opgeslagen fouten
-	public function getError(){
-		return $this->error;
-	}
+	public function getStatus(){		return $this->status;}
+	public function getError(){			return $this->error;}
 	//url naar dit boek
-	public function getUrl(){
-		return CSR_ROOT.'communicatie/bibliotheek/boek/'.$this->getId();
-	}
-	/* 
-	 * set gegeven waardes in Boek
-	 * @param	$key moet bekend zijn, anders exception
-	 * @return	void
-	 */
-	public function setValue($key, $value){
-		//$key voor leners en opmerkingen eerst opsplitsen
-		if(substr($key,0,6)=='lener_'){
-			$exemplaarid = substr($key,6);
-			$key='lener';
-		}elseif(substr($key,0,10)=='opmerking_'){
-			$exemplaarid = substr($key,10);
-			$key='opmerking';
-		}
-
-		switch ($key) {
-			//integers
-			case 'id':
-			case 'uitgavejaar':
-			case 'paginas':
-				$this->$key=(int)trim($value);
-				break;
-			//strings
-			case 'auteur_id':
-				$this->auteur = new Auteur((int)$value);
-				break;
-			case 'auteur':
-				$this->auteur = new Auteur((string)$value);
-				break;
-			case 'categorie':
-				$this->rubriek = new Rubriek(explode(' - ' , $value));
-				break;
-			case 'categorie_id':
-			case 'rubriek':
-				try{
-					$this->rubriek = new Rubriek($value);
-				}catch(Exception $e){
-					throw new Exception($e->getMessage().' Boek::setValue "'.$key.'"');
-				}
-				break;
-			case 'titel':
-			case 'uitgeverij':
-			case 'taal':
-			case 'code':
-			case 'isbn':
-			case 'status':
-				$this->$key=trim($value);
-				break;
-			case 'beschrijving':
-				$this->beschrijving=$value;
-				break;
-			case 'beschrijvingsid':
-				$this->beschrijvingsid=$value;
-				break;
-			case 'biebboek':
-				$this->biebboek=$value;
-				break;
-			case 'lener':
-				$zoekin=array('S_LID', 'S_NOVIET', 'S_GASTLID', 'S_KRINGEL', 'S_OUDLID','S_ERELID');
-				$uid=namen2uid($value, $zoekin);
-				$this->exemplaren[$exemplaarid]['uitgeleend_uid']=$uid[0]['uid'];
-				break;
-			case 'opmerking':
-				$this->exemplaren[$exemplaarid]['opmerking']=$value;
-				break;
-			default:
-				throw new Exception('Veld ['.$key.'] is niet toegestaan Boek::setValue()');
-		}
-	}
+	public function getUrl(){			return CSR_ROOT.'communicatie/bibliotheek/boek/'.$this->getId();}
 
 	/* 
 	 * controleert rechten voor wijderactie
-	 * @param	geen of id van een beschrijving
 	 * @return	bool
 	 * 		boek mag alleen door admins verwijdert worden
-	 * 		een beschrijving mag door eigenaar van beschrijving en door admins verwijdert worden.
 	 */
-	public function magVerwijderen($beschrijvingid=null){
-		$uid=LoginLid::instance()->getUid();
-		if(Loginlid::instance()->hasPermission('groep:BASFCie','P_BIEB_MOD')){ return true;}
-		if($uid=='x999'){ return false;}
-		
-		//of boekbeschrijving mag verwijderen
-		if($beschrijvingid!==null){
-			$aBeschrijving=$this->getBeschrijving($beschrijvingid);
-			return $aBeschrijving['schrijver_uid'] ==$uid;
-		}else{
-			//geen rechten om aan te passen
-			return false;
-		}
+	static public function magVerwijderen(){
+		return Loginlid::instance()->hasPermission('groep:BASFCie,P_BIEB_MOD,P_ADMIN');
 	}
 	/* 
 	 * controleert rechten voor bewerkactie
-	 * @param	geen of id van een beschrijving
 	 * @return	bool
 	 * 		boek mag alleen door admins of door eigenaar v.e. exemplaar bewerkt worden
-	 * 		een beschrijving mag door schrijver van beschrijving en door admins bewerkt worden.
 	 */
-	public function magBewerken($beschrijvingid=null){
-		$uid=LoginLid::instance()->getUid();
-
-		//admin of nobodies
+	public function magBewerken(){
 		if($this->magVerwijderen() OR Loginlid::instance()->hasPermission('P_BIEB_EDIT')){ return true;}
-		if($uid=='x999'){ return false;}
 
-		//of boekbeschrijving mag aanpassen
-		if($beschrijvingid!==null){
-			$aBeschrijving=$this->getBeschrijving($beschrijvingid);
-			return $aBeschrijving['schrijver_uid'] ==$uid;
-		}elseif($this->isEigenaar()){
-			//is eigenaar van boek
-			return true;
-		}else{
-			//geen rechten om aan te passen
-			return false;
-		}
+		return $this->isEigenaar();
 	}
 	/*
 	 * Iedereen met extra rechten en zij met BIEB_READ mogen
@@ -302,6 +126,7 @@ class Boek{
 	public function magBekijken(){
 		return Loginlid::instance()->hasPermission('P_BIEB_READ') OR $this->magBewerken();
 	}
+
 	/*
 	 * Controleert of ingelogd eigenaar is van boek/exemplaar
 	 *  - Basfcieleden zijn eigenaar van boeken van de bibliotheek
@@ -365,117 +190,7 @@ class Boek{
 			return false;
 		}
 	}
-	/*
-	 * Slaat het object Boek op in db
-	 */
-	public function save(){
-		//eerst auteur opslaan. 
-		$this->getAuteur()->save();
 
-		$db=MySql::instance();
-		$qSave="
-			INSERT INTO biebboek (
-				titel, auteur_id, categorie_id, uitgavejaar, uitgeverij, paginas, taal, isbn, code
-			) VALUES (
-				'".$db->escape($this->getTitel())."',
-				".(int)$this->getAuteur()->getId().",
-				".(int)$this->getRubriek()->getId().",
-				".(int)$this->getUitgavejaar().",
-				'".$db->escape($this->getUitgeverij())."',
-				".(int)$this->getPaginas().",
-				'".$db->escape($this->getTaal())."',
-				'".$db->escape($this->getISBN())."',
-				'".$db->escape($this->getCode())."'
-			);";
-		if($db->query($qSave)){
-			//id ook opslaan in object Boek.
-			$this->id=$db->insert_id();
-			if($this->biebboek=='ja'){
-				$eigenaar = 'x222';//C.S.R.Bieb is eigenaar
-			}else{
-				$eigenaar = Loginlid::instance()->getUid();
-			}
-			return $this->addExemplaar($eigenaar);
-		}
-		$this->error.='Fout in query, mysql gaf terug: '.mysql_error().' Boek::save()';
-		return false;
-	}
-
-
-	/*
-	 * Opslaan van waarde van een bewerkbaar veld in db
-	 */
-	public function saveProperty($entry){
-		$db=MySql::instance();
-		$key = $entry;//op een enkele uitzondering na
-		$table = "biebboek";
-		$id = $this->getId();
-
-		//$entry voor leners en opmerkingen eerst opsplitsen
-		if(substr($entry,0,6)=='lener_'){
-			$exemplaarid=substr($entry,6);
-			$entry='lener';
-		}elseif(substr($entry,0,10)=='opmerking_'){
-			$exemplaarid = substr($entry,10);
-			$entry='opmerking';
-		}
-
-		switch($entry){
-			case 'auteur':
-				//eerst auteur opslaan. 
-				$this->getAuteur()->save();
-				$value = (int)$this->getAuteur()->getId();
-				$key = "auteur_id";
-				break;
-			case 'rubriek':
-				$value = (int)$this->getRubriek()->getId();
-				$key = "categorie_id";
-				break;
-			case 'titel':
-				$value = "'".$db->escape($this->getTitel())."'";
-				break;
-			case 'uitgavejaar':
-				$value = (int)$this->getUitgavejaar();
-				break;
-			case 'uitgeverij':
-				$value = "'".$db->escape($this->getUitgeverij())."'";
-				break;
-			case 'paginas':
-				$value = (int)$this->getPaginas();
-				break;
-			case 'taal':
-				$value = "'".$db->escape($this->getTaal())."'";
-				break;
-			case 'isbn':
-				$value = "'".$db->escape($this->getISBN())."'";
-				break;
-			case 'code':
-				$value = "'".$db->escape($this->getCode())."'";
-				break;
-			case 'lener':
-				return $this->leenExemplaar($exemplaarid, $this->exemplaren[$exemplaarid]['uitgeleend_uid']);
-			case 'opmerking':
-				$table = "biebexemplaar";
-				$key = "opmerking";
-				$value = "'".$db->escape($this->exemplaren[$exemplaarid]['opmerking'])."'";
-				$id = (int)$exemplaarid;
-				break;
-			default:
-				$this->error.='Veld ['.$entry.'] is niet toegestaan Boek::saveProperty()';
-				return false;
-		}
-
-		$qSave="
-			UPDATE ".$table." SET
-				".$key."= ".$value."
-			WHERE id= ".$id."
-			LIMIT 1;";
-		if($db->query($qSave)){
-			return true;
-		}
-		$this->error.='Fout in query, mysql gaf terug: '.mysql_error().' Boek::saveProperty()';
-		return false;
-	}
 	/*
 	 * Verwijder een boek
 	 */
@@ -488,184 +203,20 @@ class Boek{
 		$qDeleteBeschrijvingen="DELETE FROM biebbeschrijving WHERE boek_id=".$this->getId().";";
 		$qDeleteExemplaren="DELETE FROM biebexemplaar WHERE boek_id=".$this->getId()." LIMIT 1;";
 		$qDeleteBoek="DELETE FROM biebboek WHERE id=".$this->getId()." LIMIT 1;";
-		return $db->query($qDeleteBeschrijvingen) AND $db->query($qDeleteExemplaren) AND $db->query($qDeleteBoek);
-	}
-
-
-	/********************************
-	 * Boekrecensies/beschrijvingen *
-	 ********************************
-	 * 
-	 * laad beschrijvingen van dit boek
-	 * @return void
-	 */
-	public function loadBeschrijvingen(){
-		$db=MySql::instance();
-		$query="
-			SELECT id, schrijver_uid, beschrijving, toegevoegd, bewerkdatum
-			FROM biebbeschrijving
-			WHERE boek_id=".(int)$this->getId()."
-			ORDER BY toegevoegd;";
-		$result=$db->query($query);
-		if($db->numRows($result)>0){
-			while($beschrijving=$db->next($result)){
-				$this->beschrijvingen[]=$beschrijving;
-			}
-		}else{
-			$this->error .= mysql_error();
-			return false;
-		}
-		return $db->numRows($result);
-	}
-
-	/*
-	 * Geeft beschrijvingen van dit boek
-	 * @return array met beschrijvingen
-	 */
-	public function getBeschrijvingen(){
-		if($this->beschrijvingen===null){
-			$this->loadBeschrijvingen();
-		}
-		return $this->beschrijvingen; 
-	}
-	/*
-	 * Aantal beschrijvingen
-	 * @return int aantal beschrijvingen
-	 */
-	public function countBeschrijvingen(){
-		if($this->beschrijvingen===null){
-			$this->loadBeschrijvingen();
-		}
-		return count($this->beschrijvingen);
-	}
-	/*
-	 * Geeft beschrijving terug
-	 * @param
-	 * 		geen: haalt waarde uit object Boek
-	 * 		$beschrijvingid:  van beschrijving uit db halen
-	 * @return string
-	 */
-	public function getBeschrijving($beschrijvingid=null){
-		if($beschrijvingid===null){
-			return $this->beschrijving;
-		}else{
-			$db=MySql::instance();
-			$query="
-				SELECT id, boek_id, schrijver_uid, beschrijving, toegevoegd, bewerkdatum
-				FROM biebbeschrijving
-				WHERE id=".(int)$beschrijvingid."
-				LIMIT 1;";
-			$result=$db->query($query);
-			
-			if($db->numRows($result)>0){
-				$beschrijving = $db->next($result);
-				return $beschrijving;
-			}else{
-				$this->error .= mysql_error();
-				return 'Mislukt. Boek::getBeschrijving()';
-			}
-		}
-	}
-	/*
-	 * Geeft $beschrijvingsid
-	 */
-	public function getBeschrijvingsId(){
-		return $this->beschrijvingsid;
-	}
-
-	/*
-	 * Sla boekrecensie/beschrijving op
-	 */
-	public function saveBeschrijving($bewerken=false){
-		$db=MySql::instance();
-		if($bewerken==false){
-			$qSave="
-				INSERT INTO biebbeschrijving (
-					boek_id, schrijver_uid, beschrijving, toegevoegd
-				) VALUES (
-					".(int)$this->getId().",
-					'".$db->escape(Loginlid::instance()->getUid())."',
-					'".$db->escape($this->getBeschrijving())."',
-					'".getDateTime()."'
-				);";
-		}else{
-			$qSave="
-				UPDATE biebbeschrijving SET
-					beschrijving= '".$db->escape($this->getBeschrijving())."',
-					bewerkdatum='".getDateTime()."'
-				WHERE id= ".$this->getBeschrijvingsId()."
-				LIMIT 1;";
-		}
-		if($db->query($qSave)){
-			$this->beschrijvingid=$db->insert_id();//id van beschrijving weer tijdelijk opslaan, zodat we beschrijving kunnen linken
+		if($db->query($qDeleteBeschrijvingen) AND $db->query($qDeleteExemplaren) AND $db->query($qDeleteBoek)){
 			return true;
-		}
-		$this->error.='Fout in query, mysql gaf terug: '.mysql_error().' Boek::saveBeschrijving()';
-		return false;
-	}
-
-	/*
-	 * verwijder beschrijving
-	 * 
-	 * @param $beschrijvingsid
-	 * @return	true geslaagd
-	 * 			false mislukt, iig id=0 is false
-	 */
-	public function verwijderBeschrijving($beschrijvingsid){
-		if($beschrijvingsid==0){
-			$this->error.='Beschrijving 0 bestaat niet. Boek::verwijderBeschrijving()';
+		}else{
+			$this->error.='Fout bij verwijderen. Boek::delete() '.mysql_error();
 			return false;
 		}
-		$db=MySql::instance();
-	 	$qVerwijderBeschrijving="DELETE FROM biebbeschrijving WHERE id=".(int)$beschrijvingsid." LIMIT 1;";
-		return $db->query($qVerwijderBeschrijving);
 	}
+
 
 	/**************
 	 * Exemplaren *
 	 **************
-	 * 
-	 * voeg exemplaar toe
-	 * @param $eigenaar
-	 * @return  true geslaagd
-	 * 			false 	mislukt
-	 * 					$eigenaar is ongeldig uid
-	 */
-	public function addExemplaar($eigenaar){
-		if(!Lid::isValidUid($eigenaar)){
-			return false;
-		}
-		$db=MySql::instance();
-		$qSave="
-			INSERT INTO biebexemplaar (
-				boek_id, eigenaar_uid, toegevoegd, status
-			) VALUES (
-				".(int)$this->getId().",
-				'".$db->escape($eigenaar)."',
-				'".getDateTime()."',
-				'beschikbaar'
-			);";
-		if($db->query($qSave)){
-			return true;
-		}
-		$this->error.='Fout in query, mysql gaf terug: '.mysql_error().' Boek::addExemplaar()';
-		return false;
-	}
-	/*
-	 * verwijder exemplaar
-	 * @param $id exemplaarid
-	 * @return 	true geslaagd
-	 * 			false mislukt
-	 */
-	public function verwijderExemplaar($id){
-		$db=MySql::instance();
-		$qDeleteExemplaar="DELETE FROM biebexemplaar WHERE id=".(int)$id." LIMIT 1;";
-		return $db->query($qDeleteExemplaar);
-	}
-	/*
-	 * 
 
-	 * 
+	/* 
 	 * laad exemplaren van dit boek in Boek
 	 * @return void
 	 */
@@ -730,6 +281,435 @@ class Boek{
 			return '';
 		}
 	}
+
+	/* 
+	 * voeg exemplaar toe
+	 * @param $eigenaar
+	 * @return  true geslaagd
+	 * 			false 	mislukt
+	 * 					$eigenaar is ongeldig uid
+	 */
+	public function addExemplaar($eigenaar){
+		if(!Lid::isValidUid($eigenaar)){
+			return false;
+		}
+		$db=MySql::instance();
+		$qSave="
+			INSERT INTO biebexemplaar (
+				boek_id, eigenaar_uid, toegevoegd, status
+			) VALUES (
+				".(int)$this->getId().",
+				'".$db->escape($eigenaar)."',
+				'".getDateTime()."',
+				'beschikbaar'
+			);";
+		if($db->query($qSave)){
+			return true;
+		}
+		$this->error.='Fout in query, mysql gaf terug: '.mysql_error().' Boek::addExemplaar()';
+		return false;
+	}
+	/*
+	 * verwijder exemplaar
+	 * @param $id exemplaarid
+	 * @return 	true geslaagd
+	 * 			false mislukt
+	 */
+	public function verwijderExemplaar($id){
+		$db=MySql::instance();
+		$qDeleteExemplaar="DELETE FROM biebexemplaar WHERE id=".(int)$id." LIMIT 1;";
+		return $db->query($qDeleteExemplaar);
+	}
+
+	/******************************************************************************
+	 * methodes voor gewone formulieren *
+	 ******************************************************************************/
+
+	/*
+	 * Definiëren van de velden van het nieuw boek formulier
+	 * Als we ze hier toevoegen, dan verschijnen ze ook automagisch in het boekaddding,
+	 * en ze worden gecontroleerd met de eigen valideerfuncties.
+	 */
+	protected function getCommonFields($naamtitelveld='Titel'){
+		$fields['titel']=new TitelField('titel', $this->getTitel(), $naamtitelveld, 200, 'Titel ontbreekt!');
+		$fields['auteur']=new InputField('auteur', $this->getAuteur(), 'Auteur', 100);
+		$fields['auteur']->setRemoteSuggestionsSource("/communicatie/bibliotheek/autocomplete/auteur");
+		$fields['auteur']->setPlaceholder('Achternaam, Voornaam V.L. van de');
+		$fields['paginas']=new IntField('paginas', $this->getPaginas() , "Pagina's", 10000, 0);
+		$fields['taal']=new InputField('taal', $this->getTaal(), 'Taal', 25);
+		$fields['taal']->setRemoteSuggestionsSource("/communicatie/bibliotheek/autocomplete/taal");
+		$fields['isbn']=new InputField('isbn', $this->getISBN(), 'ISBN',15);
+		$fields['isbn']->setPlaceholder('Uniek nummer');
+		$fields['uitgeverij']=new InputField('uitgeverij', $this->getUitgeverij(), 'Uitgeverij', 100);
+		$fields['uitgeverij']->setRemoteSuggestionsSource("/communicatie/bibliotheek/autocomplete/uitgeverij");
+		$fields['uitgavejaar']=new IntField('uitgavejaar', $this->getUitgavejaar(), 'Uitgavejaar', 2100, 0);
+		$fields['rubriek']=new SelectField('rubriek', $this->getRubriek()->getId(), 'Rubriek', Rubriek::getAllRubrieken($samenvoegen=true,$short=true));
+		$fields['code']=new InputField('code', $this->getCode(), 'Biebcode', 7);
+		return $fields;
+	}
+
+	/*
+	 * Geeft formulier terug
+	 */
+	public function getFormulier(){
+		return $this->formulier;
+	}
+
+	/**
+	 * Controleren of alle velden van formulier correct zijn
+	 */
+	public function validFormulier(){
+		return $this->getFormulier()->valid('');
+	}
+
+	/*
+	 * Plaats waardes van formulier in object
+	 */
+	public function setValuesFromFormulier(){
+		//object Boek vullen
+		foreach($this->getFormulier()->getFields() as $field){
+			if($field instanceof FormField){
+				$this->setValue($field->getName(), $field->getValue());
+			}
+		}
+	}
+	/* 
+	 * set gegeven waardes in Boek
+	 * @param	$key moet bekend zijn, anders exception
+	 * @return	void
+	 */
+	public function setValue($key, $value, $initboek=false){
+		//$key voor leners en opmerkingen eerst opsplitsen
+		if(substr($key,0,6)=='lener_'){
+			$exemplaarid = substr($key,6);
+			$key='lener';
+		}elseif(substr($key,0,10)=='opmerking_'){
+			$exemplaarid = substr($key,10);
+			$key='opmerking';
+		}
+
+		switch ($key) {
+			//integers
+			case 'id':
+			case 'uitgavejaar':
+			case 'paginas':
+				$this->$key=(int)trim($value);
+				break;
+			//strings
+			case 'categorie':
+				$this->rubriek = new Rubriek(explode(' - ' , $value));
+				break;
+			case 'categorie_id':
+			case 'rubriek':
+				try{
+					$this->rubriek = new Rubriek($value);
+				}catch(Exception $e){
+					if($initboek){
+						$this->rubriek = new Rubriek(1002);
+					}else{
+						throw new Exception($e->getMessage().' Boek::setValue "'.$key.'"');
+					}
+				}
+				break;
+			case 'titel':
+			case 'uitgeverij':
+			case 'taal':
+			case 'code':
+			case 'isbn':
+			case 'status':
+			case 'auteur':
+				$this->$key=trim($value);
+				break;
+			case 'beschrijving':
+				$this->getEditBeschrijving()->setTekst($value);
+				break;
+			case 'biebboek':
+				$this->biebboek=$value;
+				break;
+			case 'lener':
+				$this->exemplaren[$exemplaarid]['uitgeleend_uid']=$value;
+				break;
+			case 'opmerking':
+				$this->exemplaren[$exemplaarid]['opmerking']=$value;
+				break;
+			default:
+				throw new Exception('Veld ['.$key.'] is niet toegestaan Boek::setValue()');
+		}
+	}
+
+}
+
+class NieuwBoek extends Boek {
+
+	protected $formulier;			// Form objecten voor nieuwboekformulier
+
+	public function __construct(){
+		$this->id=0;
+		//zetten we de defaultwaarden voor het nieuwe boek.
+		$this->rubriek = new Rubriek(108);
+		if($this->isBASFCie()){
+			$this->biebboek = 'ja';
+		}
+		$this->createBoekformulier();
+	}
+
+	public function createBoekformulier(){
+		//Iedereen die bieb mag bekijken mag nieuwe boeken toevoegen
+		if($this->magBekijken()){
+			$nieuwboekformulier['boekgeg']=new Comment('Boekgegevens:');
+			$nieuwboekformulier=$nieuwboekformulier+$this->getCommonFields();
+			if($this->isBASFCie()){
+				$nieuwboekformulier['biebboek']=new SelectField('biebboek', $this->biebboek, 'Is een biebboek?', array('ja'=>'C.S.R. boek', 'nee'=>'Eigen boek'));
+			}
+			$nieuwboekformulier['submit']=new SubmitButton('opslaan', '<a class="knop" href="/communicatie/bibliotheek/">Annuleren</a>');
+
+			$this->formulier=new Formulier('/communicatie/bibliotheek/nieuwboek/0', $nieuwboekformulier);
+			$this->formulier->cssID='boekaddForm';
+		}
+	}
+	/*
+	 * waarden uit nieuw boek formulier opslaan
+	 */
+	public function saveFormulier(){
+		$this->setValuesFromFormulier();
+		//object Boek opslaan
+		return $this->save();
+	}
+
+	/*
+	 * Voeg het object Boek toe aan de db
+	 */
+	public function save(){
+
+		$db=MySql::instance();
+		$qSave="
+			INSERT INTO biebboek (
+				titel, auteur, categorie_id, uitgavejaar, uitgeverij, paginas, taal, isbn, code
+			) VALUES (
+				'".$db->escape($this->getTitel())."',
+				'".$db->escape($this->getAuteur())."',
+				".(int)$this->getRubriek()->getId().",
+				".(int)$this->getUitgavejaar().",
+				'".$db->escape($this->getUitgeverij())."',
+				".(int)$this->getPaginas().",
+				'".$db->escape($this->getTaal())."',
+				'".$db->escape($this->getISBN())."',
+				'".$db->escape($this->getCode())."'
+			);";
+		if($db->query($qSave)){
+			//id ook opslaan in object Boek.
+			$this->id=$db->insert_id();
+			if($this->biebboek=='ja'){
+				$eigenaar = 'x222';//C.S.R.Bieb is eigenaar
+			}else{
+				$eigenaar = Loginlid::instance()->getUid();
+			}
+			return $this->addExemplaar($eigenaar);
+		}
+		$this->error.='Fout in query, mysql gaf terug: '.mysql_error().' Boek::save()';
+		return false;
+	}
+
+}
+
+class BewerkBoek extends Boek {
+
+	protected $formulier;				// Form objecten voor recensieformulier
+	public $ajaxformuliervelden;		// Form objecten info v. boek
+	//protected $beschrijving;			// recensie tijdens toevoegen/bewerken
+	protected $beschrijvingen = array();
+	protected $editbeschrijving;		// id van beschrijving die toegevoegd/bewerkt/verwijderd wordt
+
+	public function __construct($init, $beschrijvingid){
+		parent::__construct($init);
+		$this->editbeschrijving=$beschrijvingid;
+
+		$this->createBoekformulier();
+
+		$this->loadBeschrijvingen();
+		$this->getEditBeschrijving()->setEditFlag();
+		$this->createBeschrijvingformulier();
+	}
+
+	/****************************
+	 * Ajax formuliervelden		*
+	 ****************************/
+
+	/*
+	 * maakt objecten voor de bewerkbare velden van een boek
+	 * 
+	 */
+	public function createBoekformulier(){
+		$ajaxformuliervelden=array();
+		//Eigenaar een exemplaar v.h. boek mag alleen bewerken
+		if($this->isEigenaar()){
+			$ajaxformuliervelden=$this->getCommonFields('Boek');
+		}
+
+		//voor eigenaars een veldje maken om boek uit te lenen.
+		if($this->exemplaren===null){
+			$this->loadExemplaren();
+		}
+		if(count($this->exemplaren)>0){
+			foreach($this->exemplaren as $exemplaar){//id, eigenaar_uid, uitgeleend_uid, toegevoegd, status, uitleendatum
+				if($this->isEigenaar($exemplaar['id'])){
+					$ajaxformuliervelden['lener_'.$exemplaar['id']]=new RequiredLidField('lener_'.$exemplaar['id'], $exemplaar['uitgeleend_uid'], 'Uitgeleend aan', 'alleleden');
+					$ajaxformuliervelden['opmerking_'.$exemplaar['id']]=new AutoresizeTextField('opmerking_'.$exemplaar['id'], $exemplaar['opmerking'], 'Opmerking', 255, 'Geef opmerking over exemplaar..');
+				}
+			}
+		}
+		$this->ajaxformuliervelden=new Formulier('', $ajaxformuliervelden);
+	}
+
+	/*
+	 * Geeft één veldobject $entry terug
+	 */
+	public function getField($entry){ 
+		if(!$field=$this->ajaxformuliervelden->findByName($entry)){
+			throw new Exception('Dit formulier bevat geen veld "'.$entry.'"');
+		}
+		return $field;
+	}
+	/*
+	 * Controleren of het gevraagde veld $entry correct is
+	 */
+	public function validField($entry){
+		//we checken alleen de formfields, niet de comments enzo.
+		$field = $this->getField($entry);
+		return $field instanceof FormField AND $field->valid('');
+	}
+	/*
+	 * Slaat één veld $entry op in db
+	 */
+	public function saveField($entry){
+		//waarde van $entry in Boek invullen
+		$field = $this->getField($entry);
+		if($field instanceof FormField){
+			$this->setValue($field->getName(), $field->getValue());
+		}else{
+			$this->error .= 'saveField(): '.$entry.' Geen instanceof FormField.';
+			return false;
+		}
+		//waarde van $entry uit Boek opslaan
+		if($this->saveProperty($entry)){
+			return true;
+		}else{
+			$this->error .= 'saveField(): saveProperty mislukt. ';
+		}
+		return false;
+	}
+	/*
+	 * Opslaan van waarde van een bewerkbaar veld in db
+	 */
+	public function saveProperty($entry){
+		$db=MySql::instance();
+		$key = $entry;//op een enkele uitzondering na
+		$table = "biebboek";
+		$id = $this->getId();
+
+		//$entry voor leners en opmerkingen eerst opsplitsen
+		if(substr($entry,0,6)=='lener_'){
+			$exemplaarid = substr($entry,6);
+			$entry='lener';
+		}elseif(substr($entry,0,10)=='opmerking_'){
+			$exemplaarid = substr($entry,10);
+			$entry='opmerking';
+		}
+
+		switch($entry){
+			case 'rubriek':
+				$value = (int)$this->getRubriek()->getId();
+				$key = "categorie_id";
+				break;
+			case 'uitgavejaar':
+			case 'paginas':
+				$value = (int)$this->$entry;
+				break;
+			case 'titel':
+			case 'uitgeverij':
+			case 'taal':
+			case 'isbn':
+			case 'code':
+			case 'auteur':
+				$value = "'".$db->escape($this->$entry)."'";
+				break;
+			case 'lener':
+				return $this->leenExemplaar($exemplaarid, $this->exemplaren[$exemplaarid]['uitgeleend_uid']);
+			case 'opmerking':
+				$table = "biebexemplaar";
+				$key = "opmerking";
+				$value = "'".$db->escape($this->exemplaren[$exemplaarid]['opmerking'])."'";
+				$id = (int)$exemplaarid;
+				break;
+			default:
+				$this->error.='Veld ['.$entry.'] is niet toegestaan Boek::saveProperty()';
+				return false;
+		}
+
+		$qSave="
+			UPDATE ".$table." SET
+				".$key."= ".$value."
+			WHERE id= ".$id."
+			LIMIT 1;";
+		if($db->query($qSave)){
+			return true;
+		}
+		$this->error.='Fout in query, mysql gaf terug: '.mysql_error().' Boek::saveProperty()';
+		return false;
+	}
+	/*
+	 * retourneert strings.
+	 * @param $entry string eigenschapnaam, waarbij leners en opmerkingen ook exemplaarid bevatten 
+	 * @return string waarde zals in object opgeslagen
+	 */
+	public function getProperty($entry){
+		//$entry voor leners eerst opsplitsen
+		if(substr($entry,0,6)=='lener_'){
+			$exemplaarid=substr($entry,6);
+			$entry='lener';
+		}elseif(substr($entry,0,10)=='opmerking_'){
+			$exemplaarid = substr($entry,10);
+			$entry='opmerking';
+		}
+
+		switch($entry){
+			case 'rubriek':
+			case 'rubriekid':
+				$return = $this->getRubriek()->getId();
+				break;
+			case 'titel':
+			case 'uitgavejaar':
+			case 'uitgeverij':
+			case 'paginas':
+			case 'taal':
+			case 'isbn':
+			case 'code':
+			case 'auteur':
+				$return = $this->$entry;
+				break;
+			case 'lener':
+				$uid=$this->exemplaren[$exemplaarid]['uitgeleend_uid'];
+				$lid=LidCache::getLid($uid);
+				if($lid instanceof Lid){
+					$return = $lid->getNaamLink('full', 'plain');
+				}else{
+					$return = 'Geen geldig lid getProperty()';
+				}
+				break;
+			case 'opmerking':
+				$return = $this->exemplaren[$exemplaarid]['opmerking'];
+				break;
+			default:
+				return 'entry "'.$entry.'" is niet toegestaan. Boek::getProperty()';
+		}
+		return htmlspecialchars($return);
+	}
+
+	/**************
+	 * Exemplaren *
+	 **************/
+
+
 	/*
 	 * slaat op dat een exemplaar is geleend
 	 * 
@@ -867,210 +847,120 @@ class Boek{
 		return false;
 	}
 
-
-
-	/******************************************************************************
-	 * methodes voor gewone formulieren *
-	 ******************************************************************************/
-
-	/*
-	 * Definiëren van de velden van het nieuw boek formulier
-	 * Als we ze hier toevoegen, dan verschijnen ze ook automagisch in het boekaddding,
-	 * en ze worden gecontroleerd met de eigen valideerfuncties.
+	/********************************
+	 * Boekrecensies/beschrijvingen *
+	 ********************************
+	/* 
+	 * maakt objecten van formulier om beschrijving toe te voegen of te bewerken
 	 */
-	public function assignFieldsNieuwboekForm(){
-		//Iedereen die bieb mag bekijken mag nieuwe boeken toevoegen
+	public function createBeschrijvingformulier(){
 		if($this->magBekijken()){
-			$nieuwboekform[]=new Comment('Boekgegevens:');
-			$nieuwboekform[]=new RequiredBiebInputField('titel', $this->getTitel(), 'Titel', 200);
-			$nieuwboekform[]=new InputField('auteur', $this->getAuteur()->getNaam(),'Auteur',100);
-			$nieuwboekform[]=new IntField('paginas', $this->getPaginas() , "Pagina's", 10000, 0);
-			$nieuwboekform[]=new InputField('taal', $this->getTaal(), 'Taal', 25);
-			$nieuwboekform[]=new BiebInputField('isbn', $this->getISBN(), 'ISBN',15);
-			$nieuwboekform[]=new InputField('uitgeverij', $this->getUitgeverij(), 'Uitgeverij', 100);
-			$nieuwboekform[]=new IntField('uitgavejaar', $this->getUitgavejaar(), 'Uitgavejaar',2100,0);
-			$nieuwboekform[]=new SelectField('rubriek', $this->getRubriek()->getId(), 'Rubriek',Rubriek::getAllRubrieken($samenvoegen=true,$short=true));
-			$nieuwboekform[]=new CodeField('code', $this->getCode(), 'Biebcode');
-			if($this->isBASFCie()){
-				$nieuwboekform[]=new SelectField('biebboek', $this->biebboek, 'Is een biebboek?', array('ja'=>'C.S.R. boek', 'nee'=>'Eigen boek'));
-			}
+			$schrijver='';
+			$annuleerknop='';
+			$posturl='/communicatie/bibliotheek/bewerkbeschrijving/'.$this->getId();
 
-			$this->nieuwboekform=$nieuwboekform;
+			if($this->editbeschrijving==0){
+				$titeltekst='Geef uw beschrijving of recensie van het boek:';
+			}else{
+				$titeltekst='Bewerk uw beschrijving of recensie van het boek:';
+				
+				$lid=LidCache::getLid($this->getEditBeschrijving()->getSchrijver());
+				if($lid instanceof Lid){
+					$schrijver = $lid->getNaamLink('full', 'plain').':';
+				}
+				$annuleerknop='<a class="knop" href="/communicatie/bibliotheek/boek/'.$this->getId().'">Annuleren</a>';
+				$posturl.='/'.$this->editbeschrijving;
+			}
+			$boekbeschrijvingform[]=new Comment($titeltekst);
+			$textfield=new RequiredPreviewTextField('beschrijving', $this->getEditBeschrijving()->getTekst(), $schrijver);
+			$textfield->previewOnEnter();
+			$boekbeschrijvingform[]=$textfield;
+			$boekbeschrijvingform[]=new SubmitButton('opslaan', $annuleerknop);
+
+			$this->formulier=new Formulier($posturl, $boekbeschrijvingform);
+			$this->formulier->cssID='Beschrijvingsformulier';
+		}
+	}
+
+	/** 
+	 * laad beschrijvingen van dit boek, inclusief Beschrijving(0) indien nodig.
+	 * @return void
+	 */
+	protected function loadBeschrijvingen(){
+		$db=MySql::instance();
+		$query="
+			SELECT id, boek_id, schrijver_uid, beschrijving, toegevoegd, bewerkdatum
+			FROM biebbeschrijving
+			WHERE boek_id=".(int)$this->getId()."
+			ORDER BY toegevoegd;";
+		$result=$db->query($query);
+		if($db->numRows($result)>0){
+			while($beschrijving=$db->next($result)){
+				$this->beschrijvingen[$beschrijving['id']]=new Beschrijving($beschrijving);
+			}
+		}else{
+			$this->error .= mysql_error();
+		}
+		//als er een nieuwe beschrijving toegevoegd kan worden is een leeg object nodig 
+		if($this->editbeschrijving==0){
+			$this->beschrijvingen[0]=new Beschrijving(0, $this->getId());
+		}
+	}
+	// Geeft array met beschrijvingen van dit boek
+	public function getBeschrijvingen(){	return $this->beschrijvingen;}
+	public function countBeschrijvingen(){	return count($this->beschrijvingen);}
+
+	//geeft Beschrijving-object dat bewerkt/toegevoegd/verwijdert wordt
+	public function getEditBeschrijving(){
+		if(array_key_exists($this->editbeschrijving, $this->beschrijvingen)){
+			return $this->beschrijvingen[$this->editbeschrijving];
+		}else{
+			throw new Exception('Beschrijving niet bij dit boek gevonden! Boek::getEditBeschrijving() mislukt. ');
 		}
 	}
 	/* 
-	 * maakt objecten van formulier om beschrijving toe te voegen
+	 * controleert rechten voor bewerkactie
+	 * @param	id van een beschrijving 
+	 * 			of null: in Boek geladen beschrijving wordt bekeken
+	 * @return	bool
+	 * 		een beschrijving mag door schrijver van beschrijving en door admins bewerkt worden.
 	 */
-	public function assignFieldsBeschrijvingForm(){
-		if($this->magBekijken()){
-			$boekbeschrijvingform[]=new Comment('Geef uw beschrijving of recensie van het boek:');
-			$boekbeschrijvingform[]=new RequiredPreviewTextField('beschrijving', $this->getBeschrijving(), '.');
-
-			$this->boekbeschrijvingform=$boekbeschrijvingform;
+	public function magBeschrijvingVerwijderen($beschrijvingsid=null){
+		if($this->magVerwijderen()){ return true;}
+		if($beschrijvingsid===null){
+			$beschrijvingsid=$this->editbeschrijving;
 		}
+		return $this->beschrijvingen[$beschrijvingsid]->isSchrijver();
 	}
-	//kopje boven invoervakje kunnen aanpassen
-	public function setCommentBeschrijvingForm($tekst){
-		$this->boekbeschrijvingform['0'] = new Comment($tekst);
-	}
-	/*
-	 * Geeft objecten van het formulier terug
+	/**
+	 * verwijdert in Boek geladen beschrijving
 	 */
-	public function getFields($form){ 
-		switch($form){
-			case 'nieuwboek':
-				return $this->nieuwboekform;
-				break;
-			case 'beschrijving':
-				return $this->boekbeschrijvingform;
-				break;
-		}
-		return null;
-	}
-	
-	/*
-	 * Controleren of de velden van formulier zijn gePOST
-	 */
-	public function isPostedFields($form){
-		$posted=false;
-		foreach($this->getFields($form) as $field){
-			if($field instanceof FormField AND $field->isPosted()){
-				$posted=true;
-			}
-		}
-		return $posted;
-	}
-	/*
-	 * Controleren of de velden van formulier correct zijn
-	 */
-	public function validFields($form){
-		//alle veldjes langslopen, en kijken of ze valideren.
-		$valid=true;
-		foreach($this->getFields($form) as $field){
-			//we checken alleen de formfields, niet de comments enzo.
-			if($field instanceof FormField AND !$field->valid()){
-				$valid=false;
-			}
-		}
-		return $valid;
-	}
-	/*
-	 * Slaat de velden van formulier op
-	 */
-	public function saveFields($form,$bewerken=false){
-		//object Boek vullen
-		foreach($this->getFields($form) as $field){
-			if($field instanceof FormField){
-				$this->setValue($field->getName(), $field->getValue());
-			}
-		}
-		//object Boek opslaan
-		if($form=='nieuwboek'){
-			if($this->save()){
-				return true;
-			}
-		}elseif($form=='beschrijving'){
-			if($this->saveBeschrijving($bewerken)){
-				return true;
-			}
-		}
-		return false;
+	public function verwijderBeschrijving(){
+		$this->getEditBeschrijving()->verwijder();
 	}
 
-	/******************************************
-	 * methodes voor een javascript formulier *
-	 ******************************************/
-	/*
-	 * maakt objecten voor de bewerkbare velden van een boek
-	 * 
+	/**
+	 * Plaatst gegevens in geladen object Beschrijving en slaat beschrijving op
 	 */
-	public function assignAjaxFieldsForm(){
-		//Eigenaar een exemplaar v.h. boek mag alleen bewerken
-		if($this->isEigenaar()){
-			$editablefieldsform['titel']=new RequiredBiebInputAjaxField('titel', $this->getTitel(), 'Boek', 200, 'Titel ontbreekt!');
-			$editablefieldsform['auteur']=new InputAjaxField('auteur', $this->getAuteur()->getNaam(),'Auteur',100, 'Achternaam, V.L. van de');
-			$editablefieldsform['paginas']=new IntAjaxField('paginas', $this->getPaginas() , "Pagina's", 10000, 0);
-			$editablefieldsform['taal']=new InputAjaxField('taal', $this->getTaal(), 'Taal', 25, '');
-			$editablefieldsform['isbn']=new BiebInputAjaxField('isbn', $this->getISBN(), 'ISBN',15, 'Uniek nummer');
-			$editablefieldsform['uitgeverij']=new InputAjaxField('uitgeverij', $this->getUitgeverij(), 'Uitgeverij', 100, '');
-			$editablefieldsform['uitgavejaar']=new IntAjaxField('uitgavejaar', $this->getUitgavejaar(), 'Uitgavejaar',2100,0);
-			$editablefieldsform['rubriek']=new SelectAjaxField('rubriek', $this->getRubriek()->getId(), 'Rubriek',Rubriek::getAllRubrieken($samenvoegen=true,$short=true));
-			$editablefieldsform['code']=new CodeAjaxField('code', $this->getCode(), 'Biebcode');
-		}else{ //anderen mogen niet bewerken
-			$editablefieldsform['titel']=new NonEditableAjaxField('titel', $this->getTitel(), 'Boek');
-			$editablefieldsform['auteur']=new NonEditableAjaxField('auteur', $this->getAuteur()->getNaam(),'Auteur');
-			$editablefieldsform['paginas']=new NonEditableAjaxField('paginas', $this->getPaginas() , "Pagina's");
-			$editablefieldsform['taal']=new NonEditableAjaxField('taal', $this->getTaal(), 'Taal');
-			$editablefieldsform['isbn']=new NonEditableAjaxField('isbn', $this->getISBN(), 'ISBN');
-			$editablefieldsform['uitgeverij']=new NonEditableAjaxField('uitgeverij', $this->getUitgeverij(), 'Uitgeverij');
-			$editablefieldsform['uitgavejaar']=new NonEditableAjaxField('uitgavejaar', $this->getUitgavejaar(), 'Uitgavejaar');
-			$editablefieldsform['rubriek']=new NonEditableAjaxField('rubriek', $this->getRubriek()->getRubrieken(), 'Rubriek');
-			$editablefieldsform['code']=new NonEditableAjaxField('code', $this->getCode(), 'Biebcode');
-		}
+	public function saveFormulier(){
+		$this->setValuesFromFormulier();
+		//de beschrijving/recensie opslaan
+		return $this->getEditBeschrijving()->save();
+	}
 
-		//voor eigenaars een veldje maken om boek uit te lenen.
-		if($this->exemplaren===null){
-			$this->loadExemplaren();
+}
+
+class TitelField extends RequiredAutoresizeTextField {
+
+	public function valid(){
+		if(!parent::valid()){ return false; }
+		if($this->notnull AND $this->getValue()==''){
+			$this->error='Dit is een verplicht veld.';
+		}elseif(Catalogus::existsProperty('titel', $this->getValue())){
+			$this->error='Titel bestaat al.';
 		}
-		if(count($this->exemplaren)>0){
-			foreach($this->exemplaren as $exemplaar){//id, eigenaar_uid, uitgeleend_uid, toegevoegd, status, uitleendatum
-				if($this->isEigenaar($exemplaar['id'])){
-					$editablefieldsform['lener_'.$exemplaar['id']]=new LidField('lener_'.$exemplaar['id'], $exemplaar['uitgeleend_uid'], 'Uitgeleend aan', Catalogus::getAllValuesOfProperty('naam'), 'Geef naam of lidnummer van lener');
-					$editablefieldsform['opmerking_'.$exemplaar['id']]=new InputAjaxField('opmerking_'.$exemplaar['id'], $exemplaar['opmerking'], 'Opmerking', 255,'Geef opmerking over exemplaar..');
-				}
-			}
-		}
-		$this->editablefieldsform=$editablefieldsform;
+		return $this->error=='';
 	}
-	/*
-	 * Geeft object $entry terug
-	 */
-	public function getField($entry){ 
-		return $this->editablefieldsform[$entry];
-	}
-	
-	/*
-	 * Controleren of veld $entry is gePOST
-	 */
-	public function isPostedField($entry){
-		$posted=false;
-		$field = $this->getField($entry);
-		if($field instanceof FormField AND $field->isPosted()){
-			$posted=true;
-		}
-		return $posted;
-	}
-	/*
-	 * Controleren of de veld $entry correct is
-	 */
-	public function validField($entry){
-		//alle veldjes langslopen, en kijken of ze valideren.
-		$valid=true;
-		$field = $this->getField($entry);
-		//we checken alleen de formfields, niet de comments enzo.
-		if($field instanceof FormField AND !$field->valid()){
-			$valid=false;
-		}
-		return $valid;
-	}
-	/*
-	 * Slaat het veld $entry op in db
-	 */
-	public function saveField($entry){
-		//waarde van $entry in Boek invullen
-		$field = $this->getField($entry);
-		if($field instanceof FormField){
-			$this->setValue($field->getName(), $field->getValue());
-		}else{
-			$this->error .= 'saveField(): '.$entry.' Geen instanceof FormField';
-		}
-		//waarde van $entry uit Boek opslaan
-		if($this->saveProperty($entry)){
-			return true;
-		}else{
-			$this->error .= 'saveField(): saveProperty mislukt. ';
-		}
-		return false;
-	}
+
 }
 ?>

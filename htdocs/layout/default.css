@@ -490,10 +490,27 @@ div.blokje{ background-color: #ffffc1; margin: 10px 0; padding: 0;}
 div#melding{
 	margin: 10px; padding: 10px;
 	background-color: lightgrey;
-	color: red;
 	border: 1px solid black;
 	font-size: 1.3em;
 }
+#melding div{padding-left: 30px;}
+#melding .error{
+	color: red;
+	background: url(http://plaetjes.csrdelft.nl/famfamfam/exclamation.png) no-repeat;
+}
+#melding .info{
+	color: #0A338D;
+	background: url(http://plaetjes.csrdelft.nl/famfamfam/information.png) no-repeat;
+}
+#melding .success{
+	color: green;
+	background: url(http://plaetjes.csrdelft.nl/famfamfam/accept.png) no-repeat;
+}
+#melding .notify{
+	color: #FFF500;
+	background: url(http://plaetjes.csrdelft.nl/famfamfam/bell.png) no-repeat;
+}
+
 /* ubb-hulp */
 div#ubbhulpverhaal{
 	display: none;
@@ -610,15 +627,15 @@ form#streeplijst input, form#streeplijst label{ text-align: left; margin: 3px; p
 	width: 395px;
 }
 #nieuwePeiling label{ clear: left; float: left; width: 150px;}
-#nieuwePeiling input, textarea{ margin-bottom: 4px;}
+#nieuwePeiling input, #nieuwePeiling textarea{ margin-bottom: 4px;}
 #nieuwePeiling textarea{ width: 400px; }
 #peilingOpties input{ width: 400px;}
 
 /*
  * ubb voorbeeldding
  */
-div.previewContainer{ margin-top: 10px; display: none; }
-div.preview{ margin: 5px 0; padding: 2px 4px; width: 99%; background-color: #ffffc1; border: 1px solid #ccc; }
+div.previewContainer{ margin-top: 10px; display: none;}
+div.preview{ margin: 5px 0; padding: 2px; background-color: #ffffc1; border: 1px solid #ccc; }
 div.preview.pagina{ padding: 2px; width: 100%;}
 
 /* special UBB tags

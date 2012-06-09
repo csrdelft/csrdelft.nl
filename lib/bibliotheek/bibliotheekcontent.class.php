@@ -160,14 +160,10 @@ class BibliotheekBoekContent extends SimpleHtml{
 	public function getTitel(){
 		return 'Bibliotheek | Boek: '.$this->boek->getTitel();
 	}
-	public function setAction($action){
-		$this->action=$action;
-	}
 	public function view(){
 		$smarty=new Smarty_csr();
 		$smarty->assign('melding', $this->getMelding());
 		$smarty->assign('boek', $this->boek);
-		$smarty->assign('action', $this->action);
 
 		$smarty->display('bibliotheek/boek.tpl');
 	}

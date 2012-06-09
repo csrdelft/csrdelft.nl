@@ -22,12 +22,6 @@
 	gevraagde formaat. Een aantal velden kan leeg gelaten worden als er geen zinvolle informatie voor is.
 </p>
 
-<form action="/communicatie/profiel/{$profiel->getUid()}/{$actie}/" id="profielForm" class="profielForm" method="post">
-	{foreach from=$profiel->getFields() item=field}
-		{$field->view()}
-	{/foreach}
-	<div class="submit"><label for="submit">&nbsp;</label><input type="submit" value="opslaan" />
-		<input type="reset" value="reset formulier" />
-		<a class="knop" href="/communicatie/profiel/{$profiel->getUid()}">Annuleren</a>
-	</div>
-</form>
+{* het formulier *}
+{$profiel->getFormulier()->view()}
+	

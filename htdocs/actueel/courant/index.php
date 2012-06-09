@@ -19,28 +19,28 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
 		if($iBerichtID==0){
 			//nieuw bericht invoeren
 			if($courant->addBericht($_POST['titel'], $_POST['categorie'], $_POST['bericht'] )){
-				$melding='<h3>Dank u</h3>Uw bericht is opgenomen in ons databeest, en het zal in de komende C.S.R.-courant verschijnen.';
+				msg('<h3>Dank u</h3>Uw bericht is opgenomen in ons databeest, en het zal in de komende C.S.R.-courant verschijnen.', 1);
 				if(isset($_SESSION['compose_snapshot'])){
 					$_SESSION['compose_snapshot']=null;
 				}
 			}else{
-				$melding='<h1>Fout</h1>Er ging iets mis met het invoeren van uw bericht. Probeer opnieuw, of stuur uw bericht in een mail naar <a href="mailto:pubcie@csrdelft.nl">pubcie@csrdelft.nl</a>.';
+				msg('<h1>Fout</h1>Er ging iets mis met het invoeren van uw bericht. Probeer opnieuw, of stuur uw bericht in een mail naar <a href="mailto:pubcie@csrdelft.nl">pubcie@csrdelft.nl</a>.', -1);
 				$courant_url.='/?ID=0';
 			}
-			$body->invokeRefresh($melding, $courant_url);
 		}else{
 			//bericht bewerken.
 			if($courant->bewerkBericht($iBerichtID, $_POST['titel'], $_POST['categorie'], $_POST['bericht'])){
-				$melding='<h3>Dank u</h3>Uw bericht is opgenomen in ons databeest, en het zal in de komende C.S.R.-courant verschijnen.';
+				msg('<h3>Dank u</h3>Uw bewerkte bericht is opgenomen in ons databeest, en het zal in de komende C.S.R.-courant verschijnen.', 1);
 				if(isset($_SESSION['compose_snapshot'])){
 					$_SESSION['compose_snapshot']=null;
 				}
 			}else{
-				$melding='<h1>Fout</h1>Er ging iets mis met het invoeren van uw bericht. Probeer opnieuw, of stuur uw bericht in een mail naar <a href="mailto:pubcie@csrdelft.nl">pubcie@csrdelft.nl</a>.';
+				msg('<h1>Fout</h1>Er ging iets mis met het invoeren van uw bericht. Probeer opnieuw, of stuur uw bericht in een mail naar <a href="mailto:pubcie@csrdelft.nl">pubcie@csrdelft.nl</a>.', -1);
 				$courant_url.='/bewerken/'.$iBerichtID;
 			}
-			$body->invokeRefresh($courant->getError(), $courant_url);
+			
 		}
+		$body->invokeRefresh($courant_url, $courant->getError());
 	}else{
 		if(isset($_GET['ID']) AND $_GET['ID']==0){
 			//nieuw bericht
@@ -56,9 +56,9 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
 		$iBerichtID=(int)$_GET['ID'];
 		if(isset($_GET['verwijder'])){
 			if($courant->verwijderBericht($iBerichtID)){
-				$body->invokeRefresh('<h3>Uw bericht is verwijderd.</h3>', $courant_url);
+				$body->invokeRefresh($courant_url, '<h3>Uw bericht is verwijderd.</h3>', 1);
 			}else{
-				$body->invokeRefresh('<h3>Er ging iets mis!</h3>Uw bericht is niet verwijderd. Probeer het a.u.b. nog eens.', $courant_url);
+				$body->invokeRefresh($courant_url, '<h3>Er ging iets mis!</h3>Uw bericht is niet verwijderd. Probeer het a.u.b. nog eens.');
 			}
 		}
 		if(isset($_GET['bewerken'])){

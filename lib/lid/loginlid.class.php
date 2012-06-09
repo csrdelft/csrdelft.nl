@@ -241,6 +241,7 @@ class LoginLid{
 	 * Voorbeeldjes:
 	 *  groep:novcie				geeft true leden van de h.t. NovCie.
 	 *  groep:pubcie,groep:bestuur	geeft true voor leden van h.t. bestuur en h.t. novcie
+	 *  groep:SocCie>Fiscus			geeft true voor h.t. Soccielid met functie fiscus
 	 *  geslacht:m					geeft true voor alle mannelijke leden
 	 *  verticale:d					geeft true voor alle leden van verticale d.
 	 *  !lichting:2009				geeft true voor iedereen behalve lichting 2009.
@@ -271,8 +272,37 @@ class LoginLid{
 			//een negatie van een permissie.
 			if(substr($permissie, 0, 1)=='!' && !$this->hasPermission(substr($permissie,1),$token_authorizable)){
 				return true;
+			}
+			
+			//Normale permissies.
+			# ga alleen verder als er een geldige permissie wordt gevraagd
+			if (array_key_exists($permissie, $this->_permissions)){
+				# zoek de code op
+				$gevraagd = (int) $this->_permissions[$permissie];
+
+				# $p is de gevraagde permissie als octaal getal
+				# de permissies van de gebruiker kunnen we bij $this->_lid opvragen
+				# als we die 2 met elkaar AND-en, dan moet het resultaat hetzelfde
+				# zijn aan de gevraagde permissie. In dat geval bestaat de permissie
+				# van het lid dus minimaal uit de gevraagde permissie
+				#
+				# voorbeeld:
+				#  gevraagd:   P_FORUM_MOD: 0000000700
+				#  lid heeft:  P_LID      : 0005544500
+				#  AND resultaat          : 0000000500 -> is niet wat gevraagd is -> weiger
+				#
+				#  gevraagd:  P_DOCS_READ : 0000004000
+				#  gebr heeft: P_LID      : 0005544500
+				#  AND resultaat          : 0000004000 -> ja!
+				$resultaat=$gevraagd & $lidheeft;
+
+				if($resultaat==$gevraagd){
+					return true;
+				}
+			}
+			
 			//als een uid ingevoerd wordt true teruggeven als het om de huidige gebruiker gaat.
-			}elseif($permissie==$this->getUid()){
+			if($permissie==$this->getUid()){
 				return true;
 			//Behoort een lid tot een bepaalde verticale?
 			}elseif(substr($permissie, 0, 9)=='verticale'){
@@ -290,12 +320,23 @@ class LoginLid{
 			//als een string als bijvoorbeeld 'pubcie' wordt meegegeven zoekt de ketzer
 			//de h.t. groep met die korte naam erbij, als het getal is uiteraard de groep
 			//met dat id.
+			//met de toevoeging '>Fiscus' kan ook specifieke functie geëist worden binnen een groep
 			}elseif(substr($permissie, 0, 5)=='groep'){
 				require_once 'groepen/groep.class.php';
+				//splitst opgegeven term in groepsnaam en functie
+				$parts=explode(">", substr($permissie, 6), 2);
 				try{
-					$groep=new Groep(substr($permissie, 6));
+					$groep=new Groep($parts[0]);
 					if($groep->isLid()){
-						return true;
+						//wordt er een functie gevraagd?
+						if(isset($parts[1])){
+							$functie=$groep->getFunctie();
+							if(strtolower($functie[0])==strtolower($parts[1])){
+								return true;
+							}
+						}else{
+							return true;
+						}
 					}
 				}catch(Exception $e){
 					//de groep bestaat niet, we gaan verder.
@@ -324,33 +365,12 @@ class LoginLid{
 				if(Lichting::getJongsteLichting()>$this->lid->getProperty('lidjaar') AND $this->hasPermission('P_LOGGED_IN', $token_authorizable)){
 					return true;
 				}
-			}
-			//vervolgens nog testen op de 'normale' permissies.
-			# ga alleen verder als er een geldige permissie wordt gevraagd
-			if (array_key_exists($permissie, $this->_permissions)){
-				# zoek de code op
-				$gevraagd = (int) $this->_permissions[$permissie];
-
-				# $p is de gevraagde permissie als octaal getal
-				# de permissies van de gebruiker kunnen we bij $this->_lid opvragen
-				# als we die 2 met elkaar AND-en, dan moet het resultaat hetzelfde
-				# zijn aan de gevraagde permissie. In dat geval bestaat de permissie
-				# van het lid dus minimaal uit de gevraagde permissie
-				#
-				# voorbeeld:
-				#  gevraagd:   P_FORUM_MOD: 0000000700
-				#  lid heeft:  P_LID      : 0005544500
-				#  AND resultaat          : 0000000500 -> is niet wat gevraagd is -> weiger
-				#
-				#  gevraagd:  P_DOCS_READ : 0000004000
-				#  gebr heeft: P_LID      : 0005544500
-				#  AND resultaat          : 0000004000 -> ja!
-				$resultaat=$gevraagd & $lidheeft;
-
-				if($resultaat==$gevraagd){
+			}elseif(substr($permissie, 0, 11)=='eerstejaars'){
+				if(Lichting::getJongsteLichting()==$this->lid->getProperty('lidjaar') AND $this->hasPermission('P_LOGGED_IN', $token_authorizable)){
 					return true;
 				}
 			}
+			
 		}
 		# Zo niet... dan niet
 		return false;

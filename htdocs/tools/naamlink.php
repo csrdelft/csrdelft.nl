@@ -31,6 +31,13 @@ if(isset($_GET['uid'])){
 	echo 'Fout in invoer in tools/naamlink.php';
 }
 
+//welke subset van leden?
+$zoekin=array('S_LID', 'S_NOVIET', 'S_GASTLID', 'S_KRINGEL', 'S_OUDLID','S_ERELID');
+$toegestanezoekfilters=array('leden', 'oudleden', 'alleleden', 'allepersonen', 'nobodies');
+if(isset($_GET['zoekin']) AND in_array($_GET['zoekin'], $toegestanezoekfilters)){
+	$zoekin=$_GET['zoekin'];
+}
+
 function uid2naam($uid){
 	$lid=LidCache::getLid($uid);
 	if($lid instanceof Lid){
@@ -41,8 +48,7 @@ function uid2naam($uid){
 }
 
 //zoekt uid op en returnt met uid2naam weer de naam
-function naam2naam($naam){
-	$zoekin=array('S_LID', 'S_NOVIET', 'S_GASTLID', 'S_KRINGEL', 'S_OUDLID','S_ERELID');
+function naam2naam($naam, $zoekin){
 	$rnaam=namen2uid($naam, $zoekin);
 	if($rnaam){
 		if(isset($rnaam[0]['uid'])){
@@ -66,6 +72,6 @@ if($given=='uid'){
 		}
 	}
 }elseif($given=='naam'){
-	echo naam2naam($string);
+	echo naam2naam($string, $zoekin);
 }
 ?>

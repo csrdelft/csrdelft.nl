@@ -14,6 +14,7 @@
 				{section name=header loop=$voorkeurenheaders}
 					<th style="width: 15px"><a href="/actueel/maaltijden/corveevoorkeurenlijst/sorteer/voorkeur_{$smarty.section.header.index}/{if $sorteer_richting=='asc'}desc{else}asc{/if}">{$voorkeurenheaders[header]}</a></th>    
 				{/section}
+				<th><a href="/actueel/maaltijden/corveevoorkeurenlijst/sorteer/corvee_kwalikok/{if $sorteer_richting=='asc'}desc{else}asc{/if}">Kwalikok</a></th>
 				<th><a href="/actueel/maaltijden/corveevoorkeurenlijst/sorteer/corvee_vrijstelling/{if $sorteer_richting=='asc'}desc{else}asc{/if}">Vrijstelling</a></th>
 				<th><a href="/actueel/maaltijden/corveevoorkeurenlijst/sorteer/corvee_punten_totaal/{if $sorteer_richting=='asc'}desc{else}asc{/if}">Punten</a></th>
 				<th><a href="/actueel/maaltijden/corveevoorkeurenlijst/sorteer/corvee_prognose/{if $sorteer_richting=='asc'}desc{else}asc{/if}">Prognose</a></th>
@@ -29,6 +30,7 @@
                     {assign var='it_voorkeuren' value=$smarty.section.voorkeuren.iteration-1}
                         <td>{if $voorkeuren.$it_voorkeuren}{$voorkeuren.$it_voorkeuren}{/if}</td>
                 {/section}
+                <td>{$leden.$index.corvee_kwalikok}</td>
                 <td>{$leden.$index.corvee_vrijstelling}%</td>
                 <td title="{$leden.$index.corvee_punten} + {$leden.$index.corvee_punten_bonus} = {$leden.$index.corvee_punten_totaal}">{$leden.$index.corvee_punten_totaal}</td>
                 <td>{$leden.$index.corvee_prognose}</td>

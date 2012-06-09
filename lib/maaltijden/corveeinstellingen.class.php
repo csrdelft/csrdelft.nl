@@ -228,11 +228,10 @@ class CorveeResetter {
 	public function getDatum(){			return $this->datum;}
 	public function getMelding(){		return $this->melding;}
 
-	public function resetCorveeJaar(){
+	public function verwijderCorveetaken(){
 		if($this->datum!==null){
-			$success = true;
-			$db=MySql::instance();
-			/* $sTakenDeleteQuery = "
+			/* $db=MySql::instance();
+			$sTakenDeleteQuery = "
 				DELETE 
 				FROM `maaltijdcorvee` 
 				WHERE maalid = 
@@ -242,7 +241,23 @@ class CorveeResetter {
 					WHERE maaltijdcorvee.maalid = maaltijd.id 
 						AND datum < UNIX_TIMESTAMP('".$this->datum." 23:59:59') 
 				);";
-			*/
+			if($db->query($sTakenDeleteQuery)){
+				return true;
+			}else{
+				$this->melding .= 'Taken verwijderen mislukt. '.mysql_error();
+				return false;
+			}*/
+			msg('Taken verwijderen is uitgeschakeld.', 0);
+			return true;
+		}else{
+			$this->melding.='Geen datum. Geen taken verwijderd.';
+			return false;
+		}
+	}
+
+	public function resetCorveeJaar(){
+		if($this->datum!==null){
+			$db=MySql::instance();
 			$totaalpunten = Corveeinstellingen::get('puntentotaal');
 			$sCorveepuntenUpdateQuery = "
 				UPDATE 
@@ -258,21 +273,14 @@ class CorveeResetter {
 				WHERE 
 					l1.uid=l2.uid 
 					AND (status = 'S_LID' OR status = 'S_GASTLID')";
-			/*if($db->query($sTakenDeleteQuery)){
-				$this->melding .= 'Taken verwijderd is gelukt.<br/>';
-			}else{
-				$this->melding .= '<span class="melding">Taken verwijderen mislukt. '.mysql_error().'</span><br/>';
-				$success = false;
-			}*/
 			if($db->query($sCorveepuntenUpdateQuery)){
-				$this->melding .= 'Corvee- en bonuspunten zijn bijgewerkt.<br/>';
+				return true;
 			}else{
-				$this->melding .= '<span class="melding">Corvee- en bonuspunten bijwerken mislukt. '.mysql_error().'</span><br/>';
-				$success = false;
+				$this->melding.='Corvee- en bonuspunten bijwerken mislukt. '.mysql_error();
+				return false;
 			}
-			return $success;
 		}else{
-			$this->melding .= 'Geen datum. Reset is niet gestart. ';
+			$this->melding.='Geen datum. Reset is niet gestart. ';
 			return false;
 		}
 	}

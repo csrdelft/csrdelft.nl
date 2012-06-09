@@ -2,11 +2,14 @@
  *	Bibliotheekjavascriptcode.
  */
 jQuery(document).ready(function($) {
-	//tabellen naar zebra converteren.
+	/*********************************************
+	 * Catalogus
+	 *********************************************/
+	//catalogus: tabellen naar zebra converteren.
 	jQuery("#boeken tr:odd").addClass('odd');
 
 
-	//hippe sorteerbare tabel fixen.
+	//catalogus: hippe sorteerbare tabel fixen.
 	var oTableCatalogus = jQuery("#boekencatalogus").dataTable({
 		"oLanguage": {
 			"sZeroRecords": "Geen boeken gevonden",
@@ -73,7 +76,7 @@ jQuery(document).ready(function($) {
 		return kolommen.aoKolommen;
 	}
 
-	//update de tabel als de radiobuttons of checkbox worden gebruikt
+	//catalogus: update de tabel bij kiezen van een filteroptie
 	$('span.filter').click( function() { 
 		//opmaak van knoppen aanpassen
 		$('span.filter').removeClass('actief').addClass('button');
@@ -81,6 +84,8 @@ jQuery(document).ready(function($) {
 		//actie
 		oTableCatalogus.fnDraw(); 
 	});
+
+	//catalogus: update de tabel als 'eigenaar&lener' wordt aangevinkt
 	$('input#boekstatus').click( function() { 
 		/* Get the DataTables object again - this is not a recreation, just a get of the object */
 		var oTable = $('#boekencatalogus').dataTable();
@@ -91,12 +96,41 @@ jQuery(document).ready(function($) {
 		oTable.fnSetColumnVis( 4, bVis, true );
 	 } );
 
-	// velden bewerkbaar maken
-	observeClick();
+
+
+	/************************************************
+	 * Boekpagina
+	 ************************************************/
+	// boekpagina: vult code-veld
 	biebCodeVakvuller();
-	
-	// Suggesties voor zoekveld uit Google books. 
-	// Kiezen van een suggestie plaatst in alle velden de juiste info.
+
+	// boekpagina: 
+	//   Suggesties voor zoekveld uit Google books. 
+	//   Kiezen van een suggestie plaatst in alle velden de juiste info.
+	function getAuteur(datarow){ 		return datarow.authors ? datarow.authors.join(', ') : ''; }
+	function getPublishedDate(datarow){ return datarow.publishedDate ? datarow.publishedDate.substring(0,4) : ''; }
+	function getIsbn(datarow){
+		var isbn = '';
+		if(datarow.industryIdentifiers && datarow.industryIdentifiers[1] && datarow.industryIdentifiers[1].type == "ISBN_13"){
+			isbn = datarow.industryIdentifiers[1].identifier;
+		}
+		return isbn;
+	}
+	function getLanguage(datarow){
+		var lang = {
+			nl: "Nederlands", 	en: "Engels", 	fr: "Frans",
+			de: "Duits", 		bg: "Bulgaars", es: "Spaans",
+			cs: "Tsjechisch", 	da: "Deens", 	et: "Ests",
+			el: "Grieks", 		ga: "Iers", 	it: "Italiaans",
+			lv: "Lets", 		lt: "Litouws", 	hu: "Hongaars",
+			mt: "Maltees", 		pl: "Pools", 	pt: "Portugees",
+			ro: "Roemeens", 	sk: "Slowaaks", sl: "Sloveens",
+			fi: "Fins", 		sv: "Zweeds"
+		};
+		return lang[datarow.language] ? lang[datarow.language] : datarow.language;
+	}
+
+	//suggestiemenu configureren
 	$("#boekzoeker").autocomplete("https://www.googleapis.com/books/v1/volumes",{
 		dataType: 'jsonp',
 		parse: function(data) {
@@ -104,15 +138,18 @@ jQuery(document).ready(function($) {
 			data = data.items;
 			for(var i=0; i<data.length; i++){
 				var datarow = data[i].volumeInfo;
-				rows[i] = { data:datarow, value:datarow.title, result: datarow.title+' '+(datarow.authors ? datarow.authors.join(', ') : '') };
+				rows[i] = { data:datarow, value:datarow.title, result: datarow.title+' '+getAuteur(datarow) };
 			}
 			return rows;
 		},
 		formatItem: function(row, i, n) {
-			return row.title+'<br /><i>'+(row.authors ? row.authors.join(', ') : '')+'</i>';
+			var item = '<span style="display:block" title="titel: '+row.title+"\nAuteur: "+getAuteur(row)+"\nPagina's: "+row.pageCount+"\nTaal: "+getLanguage(row)+"\nISBN: "+getIsbn(row)+"\nUitgeverij: "+row.publisher+"\nUitgavejaar: "+getPublishedDate(row)+'">';
+			item 	+= row.title+'<br /><i>'+getAuteur(row)+'</i>';
+			item 	+= '</span>'
+			return item;
 		},
 		formatResult: function(row) {
-			return row.title+' '+(row.authors ? row.authors.join(', ') : '');
+			return row.title+' '+getAuteur(row);
 		},
 		extraParams: {
 			limit: '',
@@ -124,146 +161,108 @@ jQuery(document).ready(function($) {
 		minChars: 7,
 		delay: 1000,
 		max: 25
-	}).result(function(event, datarow, formatted) {
-		var isbn = '';
-		if(datarow.industryIdentifiers[1] && datarow.industryIdentifiers[1].type == "ISBN_13"){
-			isbn = datarow.industryIdentifiers[1].identifier;
-		}
-		var lang = {
-			nl: "Nederlands",
-			en: "Engels",
-			fr: "Frans",
-			de: "Duits",
-			bg: "Bulgaars",
-			es: "Spaans",
-			cs: "Tsjechisch",
-			da: "Deens",
-			et: "Ests",
-			el: "Grieks",
-			ga: "Iers",
-			it: "Italiaans",
-			lv: "Lets",
-			lt: "Litouws",
-			hu: "Hongaars",
-			mt: "Maltees",
-			pl: "Pools",
-			pt: "Portugees",
-			ro: "Roemeens",
-			sk: "Slowaaks",
-			sl: "Sloveens",
-			fi: "Fins",
-			sv: "Zweeds"
-		};
+
+	//invullen van info van gekozen suggestie in de boekvelden
+	}).result(function(event, row, formatted) {
 		//gegevens in invulvelden plaatsen
-		$("#field_titel").val(datarow.title);
-		$("#field_auteur").val((datarow.authors ? datarow.authors.join(', ') : ''));
-		$("#field_paginas").val(datarow.pageCount);
-		$("#field_taal").val(lang[datarow.language] ? lang[datarow.language] : datarow.language);
-		$("#field_isbn").val(isbn);
-		$("#field_uitgeverij").val(datarow.publisher);
-		$("#field_uitgavejaar").val(datarow.publishedDate ? datarow.publishedDate.substring(0,4) : '');
-		
+		$("#field_titel").val(row.title);
+		$("#field_auteur").val(getAuteur(row));
+		$("#field_paginas").val(row.pageCount);
+		$("#field_taal").val(getLanguage(row));
+		$("#field_isbn").val(getIsbn(row));
+		$("#field_uitgeverij").val(row.publisher);
+		$("#field_uitgavejaar").val(getPublishedDate(row));
+
+	//kleurt invoerveld rood bij te korte zoekterm
 	}).keyup(function(event){
-		var inputl = $(this).val().length
-		if(inputl>0 && inputl < 7){
-			$(this).css("background-color","#ffded1");
+		var inputlen = $(this).val().length
+		if(inputlen>0 && inputlen < 7){
+			$(this).css("background-color","#ffcc96");
 		}else{
 			$(this).css("background-color","white");
 		}
 	});
-	//autocomplete voor bewerkvelden uit C.S.R.-database.
+
+	//boekpagina: autocomplete voor bewerkvelden uit C.S.R.-database. 
+	/* result = array(
+	 *		array(data:array(..,..,..), value: "string", result:"string"),
+	 * 		array(... )
+	 * )
+	 * formatItem geneert html-items voor de suggestielijst, afstemmen op data-array
+	 */
 	var options = {
 		dataType: 'json',
-		parse: function(data) {
-			var rows = new Array();
-			for(var i=0; i<data.length; i++){
-				var datarow = data[i];
-				rows[i] = { data:datarow, value:datarow, result: datarow };
-			}
-			return rows;
-		},
-		formatItem: function(row, i, n) {
-			return row;
-		},
+		parse: function(result) { return result; },
+		formatItem: function(row, i, n) { return 'Ga naar: <a href="/communicatie/bibliotheek/boek/'+row.id+'" target="_blank">'+row.titel+'</a>'; },
+		clickFire: true, 
 		max: 20
 	};
-	function opslaanGekozenWaarde(event, datarow, formatted){
-		var ID = jQuery(this).attr('id').substring(6);
-		var waarde = datarow;
-		saveChange(ID,waarde);
-	};
-	$("#field_titel").autocomplete("/communicatie/bibliotheek/autocomplete/titel",options);
-	$(".bewerk #field_titel").result(opslaanGekozenWaarde);
-	$("#field_auteur").autocomplete("/communicatie/bibliotheek/autocomplete/auteur",options);
-	$(".bewerk #field_auteur").result(opslaanGekozenWaarde);
-	$("#field_taal").autocomplete("/communicatie/bibliotheek/autocomplete/taal",options);
-	$(".bewerk #field_taal").result(opslaanGekozenWaarde);
-	$("#field_uitgeverij").autocomplete("/communicatie/bibliotheek/autocomplete/uitgeverij",options);
-	$(".bewerk #field_uitgeverij").result(opslaanGekozenWaarde);
 
-	//opmerking veld aan auteur veld toegevoegd
-	$("#field_auteur.regular").parent().append('<div class="suggestieveld suggestie">Achternaam, Voornaam L. van</div>');
+	$("#field_titel").autocomplete("/communicatie/bibliotheek/autocomplete/titel", options)
+		.result(function(event, row){
+			window.open('/communicatie/bibliotheek/boek/'+row.id)
+		});
+
+	//boekpagina: asynchroon opslaan toevoegen
+	//opslaan-knop toevoegen, met event die met ajax de veldwaarde opslaat
+	$('.blok .veld input,.blok .veld textarea,.blok .veld select').each(function(index, input){
+		$(this).after('<div class="melding"></div>'
+		).after(
+			$('<div class="knop opslaan">Opslaan</div>').mousedown(function(){
+				var fieldname = input.id.substring(6);
+				var waarde=$("#"+input.id).val();
+				var boekid=jQuery(".boek").attr('id');
+				var dataString='id='+ fieldname +'&'+ fieldname +'='+ waarde;
+				jQuery.ajax({
+					type: "POST",
+					url: '/communicatie/bibliotheek/bewerkboek/'+ boekid,
+					data: dataString,
+					cache: false,
+					dataType: "json",
+					success: function(result){
+						var field = $("#"+fieldname);
+						if(result.value){
+							//opgeslagen waarde in input zetten en een tijdelijke succesmelding
+							$("#"+input.id).val(result.value);
+							field.removeClass('metfouten').addClass('opgeslagen');
+							window.setTimeout(function(){
+								field.removeClass('opgeslagen');
+							}, 3000);
+							//bij boek uitlenen pagina herladen
+							if(input.id.substring(6,11)=='lener'){ location.reload(); }
+						}else{
+							//rode foutmelding
+							field.removeClass('opgeslagen').addClass('metfouten');
+						}
+						//meldingsboodschap plaatsen, en verwijder bewerkt-markering
+						field.find(".melding").html(result.melding).show();
+						$("#"+input.id).removeClass('nonsavededits')
+					}
+				});
+			})
+		).keydown(function(){
+			//bewerkte velden markeren
+			$(this).addClass('nonsavededits');
+		}).change(function(){
+			//lege velden krijgen een border
+			if($(this).val().length==0){
+				$(this).addClass("leeg");
+			}else{
+				$(this).removeClass("leeg");
+			}
+		}).change();
+	}); 
+
 });
 
-function observeClick(){
-	jQuery(".bewerk").click(function(){
-		//show edit field
-		jQuery(this).children('span.text').hide();
-		jQuery(this).children('.editbox,.editelement').show();
-	}).change(function(){
-		var ID=jQuery(this).attr('id');
-		var waarde=jQuery("#"+ID+" input,#"+ID+" select,#"+ID+" textarea").val();
-		saveChange(ID,waarde);
-	});
-
-
-	// Outside click action
-	jQuery(document).mouseup(function(object){
-		if(!(jQuery(object.target).hasClass("editbox"))){					//in editbox mag je klikken
-				jQuery(".editbox,.editelement").hide();
-				jQuery('[name^="#tat_td"]').hide();
-				jQuery(".text").show();
-		}
-	});
-};
-function saveChange(ID,waarde){
-		var boekid=jQuery(".boek").attr('id');
-		var dataString = 'id='+ID+'&'+ID+'='+ waarde;
-
-		jQuery.ajax({
-			type: "POST",
-			url: '/communicatie/bibliotheek/bewerkboek/'+ boekid,
-			data: dataString,
-			cache: false,
-			success: function(result){
-				jQuery("#"+ID+" span.text").html(result);
-			}
-		});
-};
-
-
+//voeg 'genereer'-knop toe aan codefield, die een biebcode geneert met waardes uit andere velden
 function biebCodeVakvuller(){
-	jQuery(".knop.genereer").click(function (event) {
+	var codeknop=$('<a class="knop genereer" title="Biebcode invullen">Genereer</a>').mousedown(function (event) {
 		event.preventDefault();
-		jQuery("#field_code").val(
-			jQuery("#field_rubriek").val() + '.' + jQuery("#field_auteur").val().substring(0,3).toLowerCase()
-		);
-		jQuery("#field_code").trigger('change');
+		$("#field_code").val(
+			$("#field_rubriek").val() + '.' + $("#field_auteur").val().substring(0,3).toLowerCase()
+		).focus();
 	});
-}  
-function naamCheck(fieldname){
-	field=document.getElementById('field_'+fieldname);
-	if(field.value.length>2){
-		http.abort();
-		http.open("GET", "/tools/naamlink.php?naam="+field.value, true);
-		http.onreadystatechange=function(){
-			if(http.readyState == 4){
-				document.getElementById('preview_'+fieldname).innerHTML=http.responseText;
-			}
-		}
-		http.send(null);
-	}else{
-		document.getElementById('preview_'+fieldname).innerHTML='';
-	}
-	return null;
+	$("#field_code").after(codeknop);
 }
+

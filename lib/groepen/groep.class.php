@@ -675,6 +675,7 @@ class Groep{
 
 	/*
 	 * Geeft de functie van een lid terug
+	 * @return array met functies/opmerkingen (scheidingsteken: && )
 	 */
 	public function getFunctie($uid=null){
 		if($uid===null){ $uid=LoginLid::instance()->getUid(); }

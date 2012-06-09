@@ -29,8 +29,8 @@
 				</div>
 			</div>
 			{if $melding!=''}{$melding}<br />{/if}
-			<h1 title="Lid-status: {$profiel->getStatusDescription()}">
-				<div class="status">{if !$profiel->isLid()}{$profiel->getStatusChar()}{/if}&nbsp;</div>
+			<h1 title="Lid-status: {$profiel->getStatus()->getDescription()}">
+				<div class="status">{if !$profiel->isLid()}{$profiel->getStatus()->getChar()}{/if}&nbsp;</div>
 				{$profiel->getNaam('full', 'plain')}
 			</h1>
 		</div>
@@ -41,7 +41,7 @@
 		<div class="gegevens">
 			<div class="label">&nbsp;</div> {$profiel->getNaamLink('civitas', 'html')}<br />
 			<div class="label">Lidnummer:</div> {$profhtml.uid}<br />
-			<div class="label">Bijnaam:</div> {$profhtml.nickname}<br />
+			{if $profhtml.nickname!=''}<div class="label">Bijnaam:</div> {$profhtml.nickname}<br />{/if}
 			{if $profhtml.voorletters!=''}<div class="label">Voorletters:</div> {$profhtml.voorletters}<br />{/if}
 			{if $profhtml.gebdatum!='0000-00-00'}<div class="label">Geb.datum:</div> {$profhtml.gebdatum|date_format:"%d-%m-%Y"}<br />{/if}
 			{if $profiel->getStatus()=='S_OVERLEDEN' AND $profhtml.sterfdatum!='0000-00-00'}<div class="label">Overleden op:</div> {$profhtml.sterfdatum|date_format:"%d-%m-%Y"}<br />{/if}
@@ -133,8 +133,8 @@
 					{if $profhtml.lidjaar!=0}
 						<a href="/communicatie/lijst.php?q=lichting:{$profhtml.lidjaar}&amp;status=ALL" title="Bekijk de leden van lichting {$profhtml.lidjaar}">{$profhtml.lidjaar}</a>
 					{/if}
-					{if $profiel->isOudlid() AND $profhtml.lidafdatum!='0000-00-00'} tot {$profhtml.lidafdatum|substr:0:4}{/if}<br />
-				<div class="label">Status:</div> {$profiel->getStatusDescription()}<br />
+					{if !$profiel->isLid() AND $profhtml.lidafdatum!='0000-00-00'} tot {$profhtml.lidafdatum|substr:0:4}{/if}<br />
+				<div class="label">Status:</div> {$profiel->getStatus()->getDescription()}<br />
 				<br />
 
 				{if $profiel->isOudlid()}
@@ -144,7 +144,7 @@
 					<div class="label">Kring:</div>
 					{$profiel->getKring(true)}
 					<br />
-				{else}
+				{elseif $profhtml.verticale!=0}
 					<div class="label">Verticale:</div>
 					<a href="/communicatie/lijst.php?q=verticale:{$profiel->getVerticale()}">{$profiel->getVerticale()}</a><br />
 				{/if}
@@ -193,6 +193,7 @@
 				{/if}
 
 				{if $saldografiek!=''}
+					<br />
 					{include file='profiel/_saldografiek.tpl'}
 				{/if}
 			</div>
@@ -329,39 +330,42 @@
 		</div>
 	</div>
 	{/if}
-	{if $boeken}
+	{if $boeken OR $loginlid->getUid()==$profhtml.uid OR $gerecenseerdeboeken}
 		<div class="profielregel boeken" id="boeken">
 			<div class="gegevens">
-				<div class="label">Boeken:</div>
-				<ul class="nobullets data">
-					{foreach from=$boeken item=boek}
-						<li>
-							<a href="/communicatie/bibliotheek/boek/{$boek.id}" title="Boek: {$boek.titel|escape:'html'}">
-								<span title="{$boek.status} boek" class="boekindicator {$boek.status}">•</span><span class="titel">{$boek.titel|escape:'html'}</span><span class="auteur">{$boek.auteur|escape:'html'}</span>
-							</a>
-						</li>
-					{foreachelse}
-						<li>Geen boeken</li>
-					{/foreach}
-				</ul>
-			</div>
-		</div>
-	{/if}
-	{if $gerecenseerdeboeken}
-		<div class="profielregel boeken" id="gerecenseerdeboeken">
-			<div class="gegevens">
-				<div class="label">Boekrecensies:</div>
-				<ul class="nobullets data">
-					{foreach from=$gerecenseerdeboeken item=boek}
-						<li>
-							<a href="/communicatie/bibliotheek/boek/{$boek.id}" title="Boek: {$boek.titel|escape:'html'}">
-								<span title="{$boek.status} boek" class="boekindicator {$boek.status}">•</span><span class="titel">{$boek.titel|escape:'html'}</span><span class="auteur">{$boek.auteur|escape:'html'}</span>
-							</a> {$boek.beschrijving|ubb|strip_tags}
-						</li>
-					{foreachelse}
-						<li>Geen boeken</li>
-					{/foreach}
-				</ul>
+				{if $boeken}
+					<div class="label">Boeken:</div>
+					<ul class="nobullets data">
+						{foreach from=$boeken item=boek}
+							<li>
+								<a href="/communicatie/bibliotheek/boek/{$boek.id}" title="Boek: {$boek.titel|escape:'html'}">
+									<span title="{$boek.status} boek" class="boekindicator {$boek.status}">•</span><span class="titel">{$boek.titel|escape:'html'}</span><span class="auteur">{$boek.auteur|escape:'html'}</span>
+								</a>
+							</li>
+						{foreachelse}
+							<li>Geen boeken</li>
+						{/foreach}
+					</ul>
+				{/if}
+				{if $loginlid->getUid()==$profhtml.uid}
+					<a class="knop" href="/communicatie/bibliotheek/nieuwboek" title="Nieuw boek toevoegen">{icon get="book_add"} Boek toevoegen</a>
+					<br />
+				{/if}
+				{if $gerecenseerdeboeken}
+					<br />
+					<div class="label">Boekrecensies:</div>
+					<ul class="nobullets data">
+						{foreach from=$gerecenseerdeboeken item=boek}
+							<li>
+								<a href="/communicatie/bibliotheek/boek/{$boek.id}" title="Boek: {$boek.titel|escape:'html'}">
+									<span title="{$boek.status} boek" class="boekindicator {$boek.status}">•</span><span class="titel">{$boek.titel|escape:'html'}</span><span class="auteur">{$boek.auteur|escape:'html'}</span>
+								</a> {$boek.beschrijving|ubb|strip_tags}
+							</li>
+						{foreachelse}
+							<li>Geen boeken</li>
+						{/foreach}
+					</ul>
+				{/if}
 			</div>
 		</div>
 	{/if}

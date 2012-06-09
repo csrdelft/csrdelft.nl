@@ -29,17 +29,17 @@ class Groepcontroller extends Controller{
 			try{
 				$this->groep=new Groep($this->getParam(0));
 			}catch(Exception $e){
-				GroepContent::invokeRefresh($e->getMessage(), CSR_ROOT.'actueel/groepen/');
+				GroepContent::invokeRefresh(CSR_ROOT.'actueel/groepen/', $e->getMessage());
 			}
 			if($this->groep->getId()==0 AND isset($_GET['gtype'])){
 				try{
 					$groepen=new Groepen($_GET['gtype']);
 				}catch(Exception $e){
-					GroepContent::invokeRefresh($e->getMessage(), CSR_ROOT.'actueel/groepen/');
+					GroepContent::invokeRefresh(CSR_ROOT.'actueel/groepen/', $e->getMessage());
 				}
 				$this->groep->setGtype($groepen);
 				if(!($this->groep->getType() instanceof Groepen)){
-					GroepContent::invokeRefresh('Groeptype bestaat niet;', $this->getUrl());
+					GroepContent::invokeRefresh($this->getUrl(), 'Groeptype bestaat niet;');
 				}
 			}
 		}
@@ -52,7 +52,7 @@ class Groepcontroller extends Controller{
 
 		//controleer dat we geen lege groep weergeven.
 		if($this->action=='default' AND $this->groep->getId()==0){
-			$this->content->invokeRefresh('We geven geen 0-groepen weer! (Groepcontroller::__construct())', CSR_ROOT.'actueel/groepen/');
+			$this->content->invokeRefresh(CSR_ROOT.'actueel/groepen/', 'We geven geen 0-groepen weer! (Groepcontroller::__construct())');
 		}
 
 		$this->performAction();
@@ -177,7 +177,7 @@ class Groepcontroller extends Controller{
 	 */
 	public function action_bewerken(){
 		if(!LoginLid::instance()->hasPermission('P_LOGGED_IN')){
-			$this->content->invokeRefresh('Niet voldoende rechten voor deze actie', $this->getUrl('default'));
+			$this->content->invokeRefresh($this->getUrl('default'), 'Niet voldoende rechten voor deze actie');
 		}
 		$this->content->setAction('edit');
 
@@ -198,7 +198,7 @@ class Groepcontroller extends Controller{
 				$this->groep->setValue('toonPasfotos', $oudeGroep->getToonPasfotos());
 				$this->groep->setValue('lidIsMod', $oudeGroep->getLidIsMod());
 				$this->groep->setFunctiefilter($oudeGroep->getFunctiefilter());
-				if(!Lid::isValidUid($oudeGroep->getEigenaar())){
+				if(LoginLid::instance()->getUid()==$oudeGroep->getEigenaar() OR !Lid::isValidUid($oudeGroep->getEigenaar())){
 					 $this->groep->setValue('eigenaar', $oudeGroep->getEigenaar());
 					 $_SESSION['oudegroep']['eigenaar'] = $oudeGroep->getEigenaar();
 				}
@@ -268,7 +268,7 @@ class Groepcontroller extends Controller{
 				$this->groep->setValue('beschrijving', $_POST['beschrijving']);
 
 				if($this->groep->save()){
-					$melding='Opslaan van groep gelukt!';
+					$melding=array('Opslaan van groep gelukt!', 1);
 					if(isset($_SESSION['oudegroep'])){
 						$_SESSION['oudegroep']=null;
 					}
@@ -280,7 +280,7 @@ class Groepcontroller extends Controller{
 				}else{
 					$melding='Opslaan van groep mislukt. (returned from Groep::save() called by Groepcontroller::action_bewerken())';
 				}
-				$this->content->invokeRefresh($melding, $this->getUrl('default'));
+				$this->content->invokeRefresh($this->getUrl('default'), $melding);
 			}else{
 				//geposte waarden in het object stoppen zodat de template ze zo in het
 				//formulier kan knallen
@@ -310,7 +310,7 @@ class Groepcontroller extends Controller{
 		$groeptypenaam = $this->groep->getType()->getNaam();
 		if($this->groep->isAdmin()){
 			if($this->groep->delete()){
-				$melding='Groep met succes verwijderd.';
+				$melding=array('Groep met succes verwijderd.', 1);
 				try{
 					$this->groep->save_ldap();
 				}catch(Exception $e){
@@ -322,7 +322,7 @@ class Groepcontroller extends Controller{
 		}else{
 			$melding='Niet voldoende rechten voor deze actie';
 		}
-		$this->content->invokeRefresh($melding, CSR_ROOT.'actueel/groepen/'.$groeptypenaam.'/');
+		$this->content->invokeRefresh(CSR_ROOT.'actueel/groepen/'.$groeptypenaam.'/', $melding);
 	}
 
 	/*
@@ -356,7 +356,7 @@ class Groepcontroller extends Controller{
 		}else{
 			$url=$this->getUrl('default');
 		}
-		$this->content->invokeRefresh($melding, $url);
+		$this->content->invokeRefresh($url, $melding);
 	}
 	
 	/*
@@ -364,7 +364,7 @@ class Groepcontroller extends Controller{
 	 */
 	public function action_addLid(){
 		if(!$this->groep->magBewerken()){
-			$this->content->invokeRefresh('Niet voldoende rechten voor deze actie', $this->getUrl('default'));
+			$this->content->invokeRefresh($this->getUrl('default'), 'Niet voldoende rechten voor deze actie');
 		}
 		$this->content->setAction('addLid');
 		if(isset($_POST['naam'], $_POST['functie']) AND is_array($_POST['naam']) AND is_array($_POST['functie']) AND count($_POST['naam'])==count($_POST['functie'])){
@@ -382,7 +382,7 @@ class Groepcontroller extends Controller{
 				}
 			}
 			if($success===true){
-				$melding=$aantal.' leden met succes toegevoegd.';
+				$melding=array($aantal.' leden met succes toegevoegd.', 1);
 			}else{
 				$melding='Niet alle leden met succes toegevoegd. Wellicht waren sommigen al lid van deze groep? (Groepcontroller::action_addLid())';
 			}
@@ -391,7 +391,7 @@ class Groepcontroller extends Controller{
 			}catch(Exception $e){
 				//todo: loggen dat LDAP niet beschikbaar is in een mooi eventlog wat ook nog gemaakt moet worden...
 			}
-			$this->content->invokeRefresh($melding, $this->getUrl('default').'#lidlijst');
+			$this->content->invokeRefresh($this->getUrl('default').'#lidlijst', $melding);
 		}
 	}
 	
@@ -401,7 +401,7 @@ class Groepcontroller extends Controller{
 	public function action_verwijderLid(){
 		if($this->hasParam(2) AND Lid::isValidUid($this->getParam(2)) AND $this->groep->magBewerken()){
 			if($this->groep->verwijderLid($this->getParam(2))){
-				$melding='Lid is met succes verwijderd uit de groep.';
+				$melding=array('Lid is met succes verwijderd uit de groep.', 1);
 				try{
 					$this->groep->save_ldap();
 				}catch(Exception $e){
@@ -410,7 +410,7 @@ class Groepcontroller extends Controller{
 			}else{
 				$melding='Lid uit groep verwijderen mislukt (GroepController::action_verwijderLid()).';
 			}
-			$this->content->invokeRefresh($melding, $this->getUrl('default').'#lidlijst');
+			$this->content->invokeRefresh($this->getUrl('default').'#lidlijst', $melding);
 		}
 	}
 
@@ -451,7 +451,7 @@ class Groepcontroller extends Controller{
 	public function action_maakLidOt(){
 		if($this->hasParam(2) AND Lid::isValidUid($this->getParam(2)) AND $this->groep->magBewerken()){
 			if($this->groep->maakLidOt($this->getParam(2))){
-				$melding='Lid naar o.t.-groep verplaatsen gelukt.';
+				$melding=array('Lid naar o.t.-groep verplaatsen gelukt.', 1);
 				try{
 					$this->groep->save_ldap();
 				}catch(Exception $e){
@@ -460,7 +460,7 @@ class Groepcontroller extends Controller{
 			}else{
 				$melding='Lid naar o.t.-groep verplaatsen mislukt. ['. $this->groep->getError().']  (GroepController::action_maakLidOt())';
 			}
-			$this->content->invokeRefresh($melding, $this->getUrl('default').'#lidlijst');
+			$this->content->invokeRefresh($this->getUrl('default').'#lidlijst', $melding);
 		}
 	}
 	
@@ -471,7 +471,7 @@ class Groepcontroller extends Controller{
 		if($this->groep->isAdmin() OR $this->groep->isEigenaar()){
 			if($this->groep->getStatus()=='ht'){
 				if($this->groep->maakOt()){
-					$melding='Groep o.t. maken gelukt.';
+					$melding=array('Groep o.t. maken gelukt.', 1);
 					try{
 						$this->groep->save_ldap();
 					}catch(Exception $e){
@@ -484,7 +484,7 @@ class Groepcontroller extends Controller{
 			}else{
 				$melding='Groep kan niet o.t. gemaakt worden omdat groep niet h.t. is.';
 			}
-			$this->content->invokeRefresh($melding, $this->getUrl('default'));
+			$this->content->invokeRefresh($this->getUrl('default'), $melding);
 		}
 	}
 	

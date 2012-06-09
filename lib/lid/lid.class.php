@@ -14,6 +14,7 @@ require_once 'ldap.class.php';
 require_once 'memcached.class.php';
 require_once 'instellingen.class.php';
 require_once 'verticale.class.php';
+require_once 'status.class.php';
 require_once 'agenda/agenda.class.php';
 require_once 'groepen/groep.class.php';
 
@@ -31,7 +32,7 @@ class Lid implements Serializable, Agendeerbaar{
 		$this->load($uid);
 	}
 
-	public function load($uid){
+	private function load($uid){
 		$db=MySql::instance();
 		$query="SELECT * FROM lid WHERE uid = '".$db->escape($uid)."' LIMIT 1;";
 		$lid=$db->getRow($query);
@@ -41,6 +42,7 @@ class Lid implements Serializable, Agendeerbaar{
 			if($this->profiel['instellingen']!=''){
 				$this->profiel['instellingen']=unserialize($this->profiel['instellingen']);
 			}
+			$this->profiel['status']=new Status($this->profiel['status']);
 		}else{
 			throw new Exception('Lid [uid:'.$uid.'] kon niet geladen worden.');
 		}
@@ -65,11 +67,12 @@ class Lid implements Serializable, Agendeerbaar{
 			return $url.'/'.$this->getProperty('rssToken').'.xml';
 		}
 	}
+	
 	// sla huidige objectstatus op in db, en update het huidige lid in de LidCache
 	public function save(){
 		$db=MySql::instance();
 		$donotsave=array('uid', 'rssToken');
-		$query='UPDATE lid SET ';
+		
 		$queryfields=array();
 		foreach($this->profiel as $veld => $value){
 			if(!in_array($veld, $donotsave)){
@@ -91,8 +94,9 @@ class Lid implements Serializable, Agendeerbaar{
 				$queryfields[]=$row;
 			}
 		}
-		$query.=implode(', ', $queryfields);
-		$query.=" WHERE uid='".$this->getUid()."';";
+
+		$query='UPDATE lid SET '.implode(', ', $queryfields)." WHERE uid='".$this->getUid()."';";
+		
 		if($db->query($query) AND LidCache::updateLid($this->getUid())){
 			//als er een patroon is die ook even updaten in de cache, zodat de kindertjes kloppen.
 			if($this->getPatroon() instanceof Lid){
@@ -103,6 +107,7 @@ class Lid implements Serializable, Agendeerbaar{
 			return false;
 		}
 	}
+
 	public function logChange($diff){
 		if($this->hasProperty('changelog')){
 			$this->profiel['changelog']=$diff.$this->profiel['changelog'];
@@ -191,13 +196,24 @@ class Lid implements Serializable, Agendeerbaar{
 		if(!array_key_exists($property, $this->profiel)){ return false; }
 		if(in_array($property, $disallowedProps)){ return false; }
 		if(is_string($contents)){ $contents=trim($contents); }
-		if($property=='password'){
-			$this->profiel[$property]=makepasswd($contents);
-		}else{
-			$this->profiel[$property]=$contents;
+		switch($property){
+			case 'password':
+				$this->profiel[$property]=makepasswd($contents);
+			break;
+			case 'status':
+				//TODO wat als een niet-bestaand?
+				try{
+					$this->profiel[$property]=new Status($contents);
+				}catch(Exception $e){
+					$this->profiel[$property]=null;
+				}
+			break;
+			default:
+				$this->profiel[$property]=$contents;
 		}
 		return true;
 	}
+	
 	public function getUid(){			return $this->profiel['uid']; }
 	public function getGeslacht(){ 		return $this->profiel['geslacht']; }
 	public function getProfiel(){		return $this->profiel; }
@@ -226,6 +242,9 @@ class Lid implements Serializable, Agendeerbaar{
 		}
 	}
 
+	/**
+	 * Voor de google-export, een formatted adres.
+	 */
 	public function getFormattedAddress($ouders=false){
 		$ouders ? $prefix='o_' : $prefix='';
 		return
@@ -233,7 +252,8 @@ class Lid implements Serializable, Agendeerbaar{
 			$this->getProperty($prefix.'postcode')." ".$this->getProperty($prefix.'woonplaats')."\n".
 			$this->getProperty($prefix.'land');
 	}
-	/*
+	
+	/**
 	 * implements Agendeerbaar
 	 *
 	 * We maken een lid Agendeerbaar, zodat het in de agenda kan. Het is
@@ -307,44 +327,12 @@ class Lid implements Serializable, Agendeerbaar{
 		return false;
 	}
 	public function getPermissies(){return $this->profiel['permissies']; }
+
+	//Geeft object Status (door de magic functie __toString kan object een string geven als dat gevraagd wordt)
 	public function getStatus(){ return $this->profiel['status']; }
-	// Is het huidige lid 'gewoon' lid?
-	public function isLid(){
-		return in_array($this->getStatus(), array('S_NOVIET', 'S_LID', 'S_GASTLID'));
-	}
-	public function isOudlid(){
-		return in_array($this->getStatus(), array('S_OUDLID', 'S_ERELID'));
-	}
-	/*
-	 * Geef een karakter terug om de status van het huidige lid aan te
-	 * duiden. In de loop der tijd zijn ~ voor kringel en • voor oudlid
-	 * ingeburgerd. Handig om in leden snel te zien om wat voor soort
-	 * lid het gaat.
-	 */
-	public function getStatusChar(){
-		switch($this->getStatus()){
-			case 'S_OUDLID': return '•';
-			case 'S_KRINGEL': return '~';
-			case 'S_NOBODY': return '∉';
-			case 'S_NOVIET':
-			case 'S_GASTLID':
-			case 'S_LID': return '∈';
-			case 'S_ERELID': return '☀';
-			case 'S_OVERLEDEN': return '✝';
-		}
-	}
-	public function getStatusDescription(){
-		switch($this->getStatus()){
-			case 'S_OUDLID': return 'Oudlid';
-			case 'S_KRINGEL': return 'Kringel';
-			case 'S_NOBODY': return 'Nobody';
-			case 'S_NOVIET': return 'Noviet';
-			case 'S_GASTLID': return 'Gastlid';
-			case 'S_LID': return 'Lid';
-			case 'S_ERELID': return 'Erelid';
-			case 'S_OVERLEDEN': return 'Overleden';
-		}
-	}
+	
+	public function isLid(){	return $this->getStatus()->isLid(); }
+	public function isOudlid(){ return $this->getStatus()->isOudlid(); }
 
 	public function getEchtgenootUid(){	return $this->profiel['echtgenoot']; }
 	public function getEchtgenoot(){
@@ -355,9 +343,13 @@ class Lid implements Serializable, Agendeerbaar{
 		}
 	}
 
+	/**
+	 * Adressering echtpaar. Als er geen expliciete addressering is
+	 * opgegeven, geven we '<voorletters> <achternaam>' terug.
+	 */
 	public function getAdresseringechtpaar(){
 		if($this->profiel['adresseringechtpaar'] == ''){
-			return $this->getNaamLink('voorletters','plain');
+			return $this->getNaamLink('voorletters', 'plain');
 		}else{
 			return $this->profiel['adresseringechtpaar'];
 		}
@@ -371,7 +363,8 @@ class Lid implements Serializable, Agendeerbaar{
 			return null;
 		}
 	}
-	/*
+	
+	/**
 	 * Kinderen ophalen voor dit lid. Lazy-loading, er komt een array van
 	 * leden in het object te staan. Herladen kan geforceerd worden met
 	 * $force=true
@@ -407,7 +400,8 @@ class Lid implements Serializable, Agendeerbaar{
 	}
 	public function getAantalKinderen(){
 		if(!is_array($this->getKinderen())){
-			//lazy-loading: bij aanroep van deze methode even forceren dat er een aanroep van this->getKinderen geweest is.
+			//lazy-loading: bij aanroep van deze methode even forceren
+			//dat er een aanroep van this->getKinderen() geweest is.
 			$this->getKinderen();
 		}
 		return count($this->getKinderen());
@@ -438,6 +432,28 @@ class Lid implements Serializable, Agendeerbaar{
 	public function instelling($key){ return Instelling::get($key); }
 	public function getInstellingen(){ return $this->profiel['instellingen']; }
 
+
+	/**
+	 * Recente forumberichten
+	 */
+	public function getRecenteForumberichten(){
+		return Forum::getPostsVoorUid($this->getUid());
+	}
+
+	/**
+	 * Aantal posts op het forum voor deze gebruiker
+	 */
+	private $forumpostcount=-1;
+	public function getForumPostCount(){
+		if($this->forumpostcount==-1){
+			$this->forumpostcount=Forum::getUserPostCount($this->getUid());
+		}
+		return $this->forumpostcount;
+	}
+
+	/**
+	 * Als het lid in een h.t. Woonwoord zit, geef dat woonoord terug.
+	 */
 	public function getWoonoord(){
 		$groepen=Groepen::getByTypeAndUid(2, $this->getUid());
 		if(is_array($groepen) AND isset($groepen[0]) AND $groepen[0] instanceof Groep){
@@ -445,14 +461,20 @@ class Lid implements Serializable, Agendeerbaar{
 		}
 		return false;
 	}
-	// (25-11-2010) $alleenRood-parameter weggehaald, werd nergens gebruikt.
+
+	/**
+	 * Geef de saldi van het lid terug, vanuit de lid-tabel.
+	 * Als het goed is is die waarde actueel.
+	 *
+	 * (25-11-2010) $alleenRood-parameter weggehaald, werd nergens gebruikt.
+	 */
 	public function getSaldi(){
 		return array(
 			array('naam' =>'SocCie', 'saldo' => $this->profiel['soccieSaldo']),
 			array('naam' =>'MaalCie', 'saldo' => $this->profiel['maalcieSaldo']));
 	}
 
-	/*
+	/**
 	 * Zit het huidige lid in de h.t. groep met de korte naam 'bestuur'?
 	 */
 	public function isBestuur(){
@@ -460,7 +482,7 @@ class Lid implements Serializable, Agendeerbaar{
 		return $bestuur->isLid($uid->getUid());
 	}
 
-	/*
+	/**
 	 * getPasfoto()
 	 *
 	 * Kijkt of er een pasfoto voor het gegeven uid is, en geef die terug.
@@ -476,6 +498,7 @@ class Lid implements Serializable, Agendeerbaar{
 				break;
 			}
 		}
+		//als het vierkant moet, kijken of de vierkante bestaat, en anders maken.
 		if($vierkant){
 			$vierkant=PICS_PATH.'/pasfoto/'.$this->getUid().'.vierkant.png';
 			if(!file_exists($vierkant)){
@@ -485,7 +508,10 @@ class Lid implements Serializable, Agendeerbaar{
 		}
 		return $pasfoto;
 	}
-
+	
+	/**
+	 * Geef een url naar een pasfoto terug, of een <img>-tag met die url.
+	 */
 	function getPasfoto($imgTag=true, $cssClass='pasfoto', $vierkant=false){
 		$pasfoto=CSR_PICS.$this->getPasfotoPath($vierkant);
 
@@ -552,7 +578,7 @@ class Lid implements Serializable, Agendeerbaar{
 					if($this->profiel['postfix']!=''){
 						$naam.=' '.$this->profiel['postfix'];
 					}
-				}elseif($this->profiel['status']=='S_KRINGEL' OR $this->profiel['status']=='S_NOBODY'){
+				}elseif(in_array($this->profiel['status'], array('S_KRINGEL', 'S_NOBODY'))){
 					if(LoginLid::instance()->hasPermission('P_LEDEN_READ')){
 						$naam=$this->profiel['voornaam'].' ';
 					}else{
@@ -563,6 +589,7 @@ class Lid implements Serializable, Agendeerbaar{
 					}
 					$naam.=$this->profiel['achternaam'];
 				}else{
+					//voor novieten is het Dhr./ Mevr.
 					if(LoginLid::instance()->getLid()->getStatus()=='S_NOVIET'){
 						$naam=($this->getGeslacht()=='v') ? 'Mevr. ' : 'Dhr. ';
 					}else{
@@ -573,11 +600,14 @@ class Lid implements Serializable, Agendeerbaar{
 					}
 					$naam.=$this->profiel['achternaam'];
 					if($this->profiel['postfix'] != '') $naam.=' '.$this->profiel['postfix'];
-					if($this->profiel['status']=='S_OUDLID' OR $this->profiel['status']=='S_ERELID' OR $this->profiel['status']=='S_KRINGEL'){
-						$naam.=' '.$this->getStatusChar();
+
+					//Statuschar weergeven bij oudleden, ereleden en kringels.
+					if(in_array($this->profiel['status'], array('S_OUDLID', 'S_ERELID', 'S_KRINGEL'))){
+						$naam.=' '.$this->getStatus()->getChar();
 					}
 				}
 			break;
+			//Voor een 1 aprilgrap ooit.
 			case 'aaidrom':
 				$voornaam = strtolower($this->profiel['voornaam']);
 				$achternaam = strtolower($this->profiel['achternaam']);
@@ -659,7 +689,7 @@ class Lid implements Serializable, Agendeerbaar{
 		}
 	}
 
-	/*
+	/**
 	 * Het lid-object wordt geserialized opgeslagen in de LidCache,
 	 * deze twee functies geven expliciet aan hoe dat serializen en
 	 * unserializen moet gebeuren.
@@ -678,12 +708,12 @@ class Lid implements Serializable, Agendeerbaar{
 		$this->profiel=$lid['profiel'];
 	}
 
-	/*
+	/**
 	 * Geeft Naamlink voor uid
 	 *
 	 * 2012-04-18, Jieter: Zou deze niet static moeten zijn?
 	 */
-	public function getNaamLinkFromUid($uid=null,$vorm='full', $mode='plain'){
+	public static function getNaamLinkFromUid($uid=null, $vorm='full', $mode='plain'){
 		if($uid===null){ $uid=LoginLid::instance()->getUid(); }
 		if(Lid::isValidUid($uid)){
 			$lid=LidCache::getLid($uid);
@@ -694,7 +724,7 @@ class Lid implements Serializable, Agendeerbaar{
 		return false;
 	}
 
-	/*
+	/**
 	 * Simpel testje voor juistheid van een uid. Dit houdt niet in dat een lid
 	 * ook werkelijk bestaat, gebruik daarvoor Lid::exists();
 	 */
@@ -702,31 +732,33 @@ class Lid implements Serializable, Agendeerbaar{
 		return is_string($uid) AND preg_match('/^[a-z0-9]{4}$/', $uid) > 0;
 	}
 
-	/*
+	/**
 	 * Bestaat er een lid met uid $uid in de database?
 	 */
 	public static function exists($uid) {
 		if(!Lid::isValidUid($uid)) return false;
-		$lid=LidCache::getLid($uid);
-		return $lid instanceof Lid;
+		return LidCache::getLid($uid) instanceof Lid;
 	}
 
-	/*
+	/**
 	 * Bestaat er al een lid met de bijnaam $nick in de database?
 	 */
 	public static function nickExists($nick){
 		return Lid::loadByNickname($nick) instanceof Lid;
 	}
 
-	/*
+	/**
 	 * Voeg een nieuw regeltje in de lid-tabel in met alleen een nieuw lid-nummer.
 	 * PAS OP: niet multi-user safe.
 	 */
-	public static function createNew($lichting,$lidstatus){
+	public static function createNew($lichting, $lidstatus){
 		$db=MySql::instance();
-		$lichtingid=substr($lichting, 2, 2);
-		$query="SELECT max(uid) AS uid FROM lid WHERE LEFT(uid, 2)='".$lichtingid."' LIMIT 1;";
 
+		//lichtingid zijn eerste 2 cijfers van lidnummer
+		$lichtingid=substr($lichting, 2, 2);
+
+		//volgnummer zijn de laatste 2 cijfers van lidnummer
+		$query="SELECT max(uid) AS uid FROM lid WHERE LEFT(uid, 2)='".$lichtingid."' LIMIT 1;";
 		$result=$db->query($query);
 		if($db->numRows($result)==1){
 			$lid=$db->result2array($result);
@@ -737,47 +769,21 @@ class Lid implements Serializable, Agendeerbaar{
 		if($volgnummer>99){
 			throw new Exception('Teveel leden dit jaar!');
 		}
-
+		//lidnummer samenstellen
 		$newuid=$lichtingid.sprintf('%02d', $volgnummer);
 
+		//probeer de nieuwe status te maken en zoek daarvoor de permissie
+		$status = new Status($lidstatus);
+		$perm = Status::getDefaultPermission();
+
+		//alleen bij novieten studiejaar invullen
 		$studiejaar = 0;
-		switch($lidstatus){
-			case 'gastlid':
-				$status = 'S_GASTLID';
-				$perm 	= 'P_LID';
-			break;
-			case 'lid':
-				$status = 'S_LID';
-				$perm 	= 'P_LID';
-			break;
-			case 'noviet': 
-				$status = 'S_NOVIET';
-				$perm 	= 'P_LID';
-				$studiejaar = $lichting;
-			break;
-			case 'oudlid':
-				$status = 'S_OUDLID';
-				$perm 	= 'P_OUDLID';
-			break;
-			case 'erelid':
-				$status = 'S_ERELID';
-				$perm 	= 'P_OUDLID';
-			break;
-			case 'kringel':
-				$status = 'S_KRINGEL';
-				$perm 	= 'P_LID';
-			break;
-			case 'exlid':
-				$status = 'S_NOBODY';
-				$perm 	= 'P_NOBODY';
-				$lidstatus = 'Ex-lid';
-			break;
-			default:
-				throw new Exception('Onbekende status.');
+		if($status=='S_NOVIET'){
+			$studiejaar = $lichting;
 		}
 
-		$changelog='Aangemaakt als '.ucfirst($lidstatus).' door [lid='.LoginLid::instance()->getUid().'] op [reldate]'.getDatetime().'[/reldate][br]';
-
+		//opslaan in lid tabel
+		$changelog = 'Aangemaakt als '.$status->getDescription().' door [lid='.LoginLid::instance()->getUid().'] op [reldate]'.getDatetime().'[/reldate][br]';
 
 		$query="
 			INSERT INTO lid (uid, lidjaar, studiejaar, status, permissies, changelog, land, o_land)
@@ -789,6 +795,7 @@ class Lid implements Serializable, Agendeerbaar{
 		}
 	}
 
+	
 	public static function getVerjaardagen($van, $tot, $limiet=0){
 		$vanjaar=date('Y', $van);
 		$totjaar=date('Y', $tot);
@@ -837,6 +844,10 @@ class Lid implements Serializable, Agendeerbaar{
  */
 class LidCache{
 
+	/**
+	 * Deze methode gebruiken op Lid-objecten te maken. Er wordt dan
+	 * automagisch voor de caching gezorgd.
+	 */
 	public static function getLid($uid){
 		//kek-2010ers. euhm. we hebben dus een string nodig, niet een int
 		$uid = (string)$uid;
@@ -860,6 +871,9 @@ class LidCache{
 		return unserialize($lid);
 	}
 
+	/**
+	 * Weggooien van een lid uit de cache.
+	 */
 	public static function flushLid($uid){
 		if(!Lid::isValidUid($uid)){
 			return false;
@@ -867,6 +881,9 @@ class LidCache{
 		return Memcached::instance()->delete($uid);
 	}
 
+	/**
+	 * Weggooien, en meteen weer opnieuw inladen.
+	 */
 	public static function updateLid($uid){
 		self::flushLid($uid);
 		Memcached::instance()->set($uid, serialize(new Lid($uid)));
@@ -878,7 +895,7 @@ class LidCache{
 	}
 }
 
-/*
+/**
  * Dit is de oude zoekfunctie, er is vervanging in lib/lid/class.lidzoeker.php,
  * maar deze functie wordt o.a. nog gebruikt door lib/include.common.php:namen2uid()
  * dus ze blijft hier nog even staan.
@@ -886,7 +903,7 @@ class LidCache{
  * TODO dus: een statische functie bouwen in lidZoeker die dit overneemt.
  */
 class Zoeker{
-	function zoekLeden($zoekterm, $zoekveld, $verticale, $sort, $zoekstatus = '', $velden = array()) {
+	function zoekLeden($zoekterm, $zoekveld, $verticale, $sort, $zoekstatus = '', $velden = array(), $aantalresultaten=null) {
 		$db=MySql::instance();
 		$leden = array();
 		$zoekfilter='';
@@ -930,11 +947,21 @@ class Zoeker{
 
 		$sort = $db->escape($sort);
 
-		# in welke status wordt gezocht, is afhankelijk van wat voor rechten de
-		# ingelogd persoon heeft
+		# In welke status wordt gezocht, is afhankelijk van wat voor rechten de
+		# ingelogd persoon heeft. 
+		#
+		# P_LID en P_OUDLID hebben beide P_LEDEN_READ en P_OUDLEDEN_READ en kunnen 
+		# de volgende afkortingen gebruiken:
+		#  - '' (lege string) of alleleden: novieten, (gast)leden, kringels, ere- en oudleden
+		#  - leden :  						novieten, (gast)leden en kringels
+		#  - oudleden : 					oud- en ereleden
+		#  - allepersonen:					novieten, (gast)leden, kringels, oud- en ereleden, overleden leden en nobodies (alleen geen commissies)
+		# én alleen voor OUDLEDENMOD:
+		#  - nobodies : 					alleen nobodies 
 
 		$statusfilter = '';
-
+		if($zoekstatus=='alleleden'){ 	 $zoekstatus='';}
+		if($zoekstatus=='allepersonen'){ $zoekstatus=array('S_NOVIET', 'S_LID', 'S_GASTLID', 'S_OUDLID', 'S_ERELID', 'S_KRINGEL', 'S_OVERLEDEN', 'S_NOBODY'); }
 		if(is_array($zoekstatus)){
 			//we gaan nu gewoon simpelweg statussen aan elkaar plakken. LET OP: deze functie doet nu
 			//geen controle of een gebruiker dat mag, dat moet dus eerder gebeuren.
@@ -969,6 +996,8 @@ class Zoeker{
 
 		# als er een specifieke moot is opgegeven, gaan we alleen in die moot zoeken
 		$mootfilter = ($verticale != 'alle') ? 'AND verticale=\''.$verticale.'\' ' : '';
+		# is er een maximum aantal resultaten gewenst
+		$limiet = ($aantalresultaten===null) ? '' : 'LIMIT '.(int)$aantalresultaten;
 
 		# controleer of we ueberhaupt wel wat te zoeken hebben hier
 		if ($statusfilter != '') {
@@ -995,7 +1024,8 @@ class Zoeker{
 					($statusfilter)
 				{$mootfilter}
 				ORDER BY
-					{$sort}";
+					{$sort}
+				{$limiet}";
 			$result = $db->select($sZoeken);
 			if ($result !== false and $db->numRows($result) > 0) {
 				while ($lid = $db->next($result)) $leden[] = $lid;

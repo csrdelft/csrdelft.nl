@@ -3,6 +3,8 @@
 {if $melding!=''}{$melding}<br />{/if}
 <h1>Corveepunten</h1>
 
+{if $loginlid->hasPermission('P_MAAL_MOD')}<p>Corveecaesar: Punten-kolom is punten zonder de bonus. Houd de muis stil boven het vakje om het totaal te zien.</p>{/if}
+
 <table class="maaltijden">
 	{section name=leden loop=$leden}
 		{assign var='it' value=$smarty.section.leden.iteration-1}

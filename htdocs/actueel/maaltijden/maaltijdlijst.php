@@ -10,7 +10,7 @@ require_once 'configuratie.include.php';
 $maalid=(int)$_GET['maalid'];
 
 if($maalid==0){
-	SimpleHTML::invokeRefresh('Geen maaltijd-id meegegeven', 'actueel/maaltijden/');
+	SimpleHTML::invokeRefresh('actueel/maaltijden/', 'Geen maaltijd-id meegegeven');
 }
 
 # MaaltijdenSysteem
@@ -20,7 +20,7 @@ $maaltrack = new MaalTrack();
 
 # bestaat de maaltijd?
 if (!$maaltrack->isMaaltijd($maalid)){
-	SimpleHTML::invokeRefresh('Maaltijd bestaat niet!', '/actueel/maaltijden/');
+	SimpleHTML::invokeRefresh('/actueel/maaltijden/', 'Maaltijd bestaat niet!');
 }
 
 $maaltijd = new Maaltijd($maalid);
@@ -28,7 +28,7 @@ $maaltijd = new Maaltijd($maalid);
 # Moet deze maaltijd gesloten worden?
 if(($loginlid->hasPermission('P_MAAL_MOD') OR opConfide()) AND isset($_GET['sluit']) and $_GET['sluit'] == 1) {
 	$maaltijd->sluit();
-	SimpleHTML::invokeRefresh(null, '/actueel/maaltijden/lijst/'.$maalid);
+	SimpleHTML::invokeRefresh('/actueel/maaltijden/lijst/'.$maalid);
 	exit;
 }
 
@@ -42,7 +42,7 @@ if(isset($_GET['fiscaal']) && $_GET['fiscaal']==1){
 if($loginlid->hasPermission('P_MAAL_MOD') OR opConfide() OR $maaltijd->isTp() OR $maaltijd->isKok()){
 	$page->view();
 }else{
-	SimpleHTML::invokeRefresh('U mag de maaltijdlijst niet bekijken.', '/actueel/maaltijden/');
+	SimpleHTML::invokeRefresh('/actueel/maaltijden/', 'U mag de maaltijdlijst niet bekijken.');
 }
 
 

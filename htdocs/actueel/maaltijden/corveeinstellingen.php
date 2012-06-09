@@ -30,8 +30,13 @@ if(isset($_POST['resetactie'])){
 		if(isDatumValid()){
 			$corveeresetter->setDatum(getDatum());
 			if($actie=='resetcorveejaar'){
+				if($corveeresetter->verwijderCorveetaken()){
+					msg('Taken verwijderen is gelukt.', 1);
+				}else{
+					$actie = 'resetmislukt';
+				}
 				if($corveeresetter->resetCorveeJaar()){
-					//reset is geslaagd!
+					msg('Corvee- en bonuspunten zijn bijgewerkt.', 1);
 				}else{
 					$actie = 'resetmislukt';
 				}
@@ -55,13 +60,11 @@ if(isset($_POST['resetactie'])){
 	$corveeinstellingen = new Corveeinstellingen();
 
 	if($corveeinstellingen->isPostedFields() AND $corveeinstellingen->validFields() AND $corveeinstellingen->saveFields()){
-		$melding = 'Wijzigingen zijn opgeslagen';
-	}else{
-		$melding = $corveeinstellingen->getError();
+		msg('Wijzigingen zijn opgeslagen', 1);
 	}
 
 	$instellingen = new CorveeinstellingenContent($corveeinstellingen);
-	$instellingen->setMelding($melding);
+	$instellingen->setMelding($corveeinstellingen->getError());
 
 	$page=new csrdelft($instellingen);
 	$page->addStylesheet('maaltijd.css');
