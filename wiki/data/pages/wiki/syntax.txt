@@ -369,7 +369,12 @@ Cellen waarbij de data een komma kan bevatten moeten tussen dubbele quotes %%"..
 ===== Tekstkleur =====
 Aan tekst kan een tekstkleur worden meegegeven.
 
-%%<fc #ffa500> tekst tekst</fc>%% \\ %%<fc kleurnaam> tekst tekst</fc>%% \\ kleur instellen kan met de kleurcode of met een kleurnaam. In onderstaande tabel staat welke kleurcode bij de kleurnamen hoort.
+<fc #ffa500> Dit is kleurcode #ffa500 </fc>\\ 
+<fc red> Dit is kleurnaam rood</fc>
+
+  <fc #ffa500> Dit is kleurcode #ffa500 </fc>
+  <fc red> Dit is kleurnaam rood</fc>
+Kleur instellen kan met de kleurcode of met een kleurnaam. In onderstaande tabel staat welke kleurcode bij de kleurnamen hoort.
 
 ^ Kleurnaam ^Kleurcode ^
 | <fc #ffd015>Yellow</fc>      | #ffff00 |
