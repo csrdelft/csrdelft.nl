@@ -328,10 +328,10 @@ div.beschrijvingen{ margin-top: 40px;}
 	width: 400px;
 	padding: 1px 2px;
 }
-/*
-.Formulier input.uid{
-	width: 80px;
-}*/
+
+.Formulier select{
+	width: 406px;
+}
 .Formulier .veld, .Formulier h3, .Formulier .password{
 	clear: both;
 }
