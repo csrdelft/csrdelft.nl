@@ -41,7 +41,7 @@
 		<div class="gegevens">
 			<div class="label">&nbsp;</div> {$profiel->getNaamLink('civitas', 'html')}<br />
 			<div class="label">Lidnummer:</div> {$profhtml.uid}<br />
-			<div class="label">Bijnaam:</div> {$profhtml.nickname}<br />
+			{if $profhtml.nickname!=''}<div class="label">Bijnaam:</div> {$profhtml.nickname}<br />{/if}
 			{if $profhtml.voorletters!=''}<div class="label">Voorletters:</div> {$profhtml.voorletters}<br />{/if}
 			{if $profhtml.gebdatum!='0000-00-00'}<div class="label">Geb.datum:</div> {$profhtml.gebdatum|date_format:"%d-%m-%Y"}<br />{/if}
 			{if $profiel->getStatus()=='S_OVERLEDEN' AND $profhtml.sterfdatum!='0000-00-00'}<div class="label">Overleden op:</div> {$profhtml.sterfdatum|date_format:"%d-%m-%Y"}<br />{/if}
@@ -133,7 +133,7 @@
 					{if $profhtml.lidjaar!=0}
 						<a href="/communicatie/lijst.php?q=lichting:{$profhtml.lidjaar}&amp;status=ALL" title="Bekijk de leden van lichting {$profhtml.lidjaar}">{$profhtml.lidjaar}</a>
 					{/if}
-					{if $profiel->isOudlid() AND $profhtml.lidafdatum!='0000-00-00'} tot {$profhtml.lidafdatum|substr:0:4}{/if}<br />
+					{if !$profiel->isLid() AND $profhtml.lidafdatum!='0000-00-00'} tot {$profhtml.lidafdatum|substr:0:4}{/if}<br />
 				<div class="label">Status:</div> {$profiel->getStatus()->getDescription()}<br />
 				<br />
 

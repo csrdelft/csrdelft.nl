@@ -198,7 +198,7 @@ class Groepcontroller extends Controller{
 				$this->groep->setValue('toonPasfotos', $oudeGroep->getToonPasfotos());
 				$this->groep->setValue('lidIsMod', $oudeGroep->getLidIsMod());
 				$this->groep->setFunctiefilter($oudeGroep->getFunctiefilter());
-				if(!Lid::isValidUid($oudeGroep->getEigenaar())){
+				if(LoginLid::instance()->getUid()==$oudeGroep->getEigenaar() OR !Lid::isValidUid($oudeGroep->getEigenaar())){
 					 $this->groep->setValue('eigenaar', $oudeGroep->getEigenaar());
 					 $_SESSION['oudegroep']['eigenaar'] = $oudeGroep->getEigenaar();
 				}

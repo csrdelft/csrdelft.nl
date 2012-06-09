@@ -39,7 +39,7 @@ class CorveevoorkeurenLijst{
 		}
 		
 		//Haal de lijst met leden met hun corveevoorkeuren op
-		$zoekLeden = Zoeker::zoekLeden('', 'uid', 'alle', $sort, array('S_LID', 'S_NOVIET', 'S_GASTLID'), array('uid', 'achternaam', 'voornaam', 'tussenvoegsel', 'corvee_voorkeuren', 'corvee_vrijstelling', 'corvee_punten_totaal', 'corvee_punten', 'corvee_punten_bonus'));
+		$zoekLeden = Zoeker::zoekLeden('', 'uid', 'alle', $sort, array('S_LID', 'S_NOVIET', 'S_GASTLID'), array('uid', 'achternaam', 'voornaam', 'tussenvoegsel', 'corvee_voorkeuren', 'corvee_vrijstelling', 'corvee_kwalikok', 'corvee_punten_totaal', 'corvee_punten', 'corvee_punten_bonus'));
 		
 		//Combineer de twee lijsten en zet de corveevoorkeuren goed.
 		$bewerkteLeden = array();		
