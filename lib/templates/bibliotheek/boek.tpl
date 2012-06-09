@@ -61,7 +61,13 @@
 			</div>
 			<div class="blok gegevens boekgegevens">
 				{$boek->ajaxformuliervelden->findByName('rubriek')->view()}
-				{$boek->ajaxformuliervelden->findByName('code')->view()}
+				{if $boek->isBiebboek()}
+					{if $boek->isBASFCie()}
+						{$boek->ajaxformuliervelden->findByName('code')->view()}
+					{else}
+						<div class="regel"><label>Code</label>{$boek->getCode()}</div>
+					{/if}
+				{/if}
 			</div>
 
 		{else}
@@ -79,7 +85,7 @@
 			</div>
 			<div class="blok gegevens boekgegevens">
 				<div class="regel"><label>Rubriek</label>{$boek->getRubriek()}</div>
-				{if $boek->getCode()!=''}<div class="regel"><label>Code</label>{$boek->getCode()}</div>{/if}
+				{if $boek->getCode()!='' AND $boek->isBiebboek()}<div class="regel"><label>Code</label>{$boek->getCode()}</div>{/if}
 			</div>
 		{/if}
 

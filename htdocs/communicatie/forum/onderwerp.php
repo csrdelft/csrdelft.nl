@@ -47,10 +47,6 @@ if($loginlid->hasPermission('P_FORUM_READ')) {
 $page=new csrdelft($midden);
 $page->addStylesheet('forum.css');
 
-//Gerrit: Waarom de hele stylesheet inladen? Alle dingen voor de
-//groeptag worden in default.css geregeld...
-//$page->addStylesheet('groepen.css'); 
-
 $page->addScript('groepen.js');
 $page->addScript('forum.js');
 

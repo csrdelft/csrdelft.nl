@@ -102,6 +102,28 @@ class Boek{
 	//url naar dit boek
 	public function getUrl(){			return CSR_ROOT.'communicatie/bibliotheek/boek/'.$this->getId();}
 
+	//returns an array of eigenaaruids van boek of exemplaar
+	public function getEigenaars($exemplaarid=null){
+		$db=MySql::instance();
+		if($exemplaarid==null){
+			$where="WHERE boek_id =".(int)$this->getId();
+		}else{
+			$where="WHERE id =".(int)$exemplaarid;
+		}
+		$qEigenaar="
+			SELECT eigenaar_uid
+			FROM  `biebexemplaar` 
+			".$where.";";
+		$result=$db->query($qEigenaar);
+		
+		$eigenaars=array();
+		if($db->numRows($result)>0){
+			while($eigenaar=$db->next($result)){
+				$eigenaars[]=$eigenaar['eigenaar_uid'];
+			}
+		}
+		return $eigenaars;
+	}
 	/* 
 	 * controleert rechten voor wijderactie
 	 * @return	bool
@@ -139,35 +161,28 @@ class Boek{
 	 * 				geen geen resultaat of niet de eigenaar
 	 */
 	public function isEigenaar($exemplaarid=null){
-		$db=MySql::instance();
-		if($exemplaarid==null){
-			$where="WHERE boek_id =".(int)$this->getId();
-		}else{
-			$where="WHERE id =".(int)$exemplaarid;
-		}
-		$qEigenaar="
-			SELECT eigenaar_uid
-			FROM  `biebexemplaar` 
-			".$where.";";
-		$result=$db->query($qEigenaar);
-
-		$return = false;
-		if($db->numRows($result)>0){
-			while($eigenaar=$db->next($result)){
-				if($eigenaar['eigenaar_uid']==Loginlid::instance()->getUid()){
-					$return = true;
-				}elseif($eigenaar['eigenaar_uid']=='x222' AND $this->isBASFCie()){
-					$return = true;
-				}
+		$eigenaars=$this->getEigenaars($exemplaarid);
+		foreach($eigenaars as $eigenaar){
+			if($eigenaar==Loginlid::instance()->getUid()){
+				return true;
+			}elseif($eigenaar=='x222' AND $this->isBASFCie()){
+				return true;
 			}
-		}else{
-			$this->error.= mysql_error();
 		}
-		return $return;
+		return false;
 	}
 
 	public function isBASFCie(){
 		return Loginlid::instance()->hasPermission('groep:BASFCie');
+	}
+	public function isBiebboek($exemplaarid=null){
+		$eigenaars=$this->getEigenaars($exemplaarid);
+		foreach($eigenaars as $eigenaar){
+			if($eigenaar=='x222'){
+				return true ;
+			}
+		}
+		return false;
 	}
 	/*
 	 * Check of ingelogd lener is van exemplaar
