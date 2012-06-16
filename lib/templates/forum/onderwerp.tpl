@@ -121,7 +121,7 @@
 						<h1>SPAM</h1>
 					{/if}
 				{/if}
-
+				{if $loginlid->getUid() == "0838"}<a href="/communicatie/forum/markeer-bericht-ontopic/{$bericht.id}" title="Jaco ontopic knop">Jaco ontopic knop</a>{/if}
 			</td>
 			<td class="bericht{cycle values="0,1"}{if $bericht.filtered} filtered{/if}" id="post{$bericht.id}">
 				{if $bericht.filtered}
