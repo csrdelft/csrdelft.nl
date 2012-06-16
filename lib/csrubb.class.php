@@ -345,6 +345,55 @@ src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
 		}
 		return $html;
 	}
+
+	function ubb_twitter($parameters){
+		$content = $this->parseArray(array('[/twitter]'), array());
+		//widget size
+		$lines=4;
+		$width=355;
+		$height=300;
+		if(isset($parameters['lines']) AND (int)$parameters['lines']>0){
+			$height=(int)$parameters['lines'];
+		}
+		if(isset($parameters['width']) AND (int)$parameters['width']>100){
+			$width=(int)$parameters['width'];
+		}
+		if(isset($parameters['height']) AND (int)$parameters['height']>100){
+			$height=(int)$parameters['height'];
+		}
+		
+		$html=<<<HTML
+			<script charset="utf-8" src="http://widgets.twimg.com/j/2/widget.js"></script>
+			<script>
+			new TWTR.Widget({
+			  version: 2,
+			  type: 'profile',
+HTML;
+		$html.=" rpp: ".$lines.",
+			  interval: 30000,
+			  width: ".$width.",
+			  height: ".$height.",
+			  theme: {
+				shell: {
+				  background: '#F0F0F0',
+				  color: '#000000'
+				},
+				tweets: {
+				  background: 'whiteSmoke',
+				  color: '#000000',
+				  links: '#0A338D'
+				}
+			  },
+			  features: {
+				scrollbar: false,
+				loop: false,
+				live: false,
+				behavior: 'all'
+			  }
+			}).render().setUser('".mb_htmlentities($content)."').start();
+			</script>";
+		return $html;
+	}
 	/*
 	 * ubb_groep()
 	 *
