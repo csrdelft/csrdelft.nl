@@ -37,6 +37,7 @@ class Instelling{
 			'zijbalk_verjaardagen' => array(10, 'Aantal verjaardagen in zijbalk', 'int'),
 			'voorpagina_maaltijdblokje' => array('ja', 'Eerstvolgende maaltijd weergeven', 'enum', array('ja', 'nee')),
 			'voorpagina_twitterblokje' => array('ja', 'Twitter-blokje weergeven', 'enum', array('ja', 'nee')),
+			'voorpagina_bijbelroosterblokje' => array('ja', 'Bijbelroosterblokje weergeven', 'enum', array('ja', 'nee')),
 			'groepen_toonPasfotos' => array('ja', 'Standaard pasfotos tonen', 'enum', array('ja', 'nee')),
 			'agenda_toonVerjaardagen' => array('ja', 'Verjaardagen in agenda', 'enum', array('ja', 'nee')),
 			'agenda_toonMaaltijden' => array('ja', 'Maaltijden in agenda', 'enum', array('ja', 'nee')),
