@@ -353,7 +353,7 @@ src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
 		$width=355;
 		$height=300;
 		if(isset($parameters['lines']) AND (int)$parameters['lines']>0){
-			$height=(int)$parameters['lines'];
+			$lines=(int)$parameters['lines'];
 		}
 		if(isset($parameters['width']) AND (int)$parameters['width']>100){
 			$width=(int)$parameters['width'];
