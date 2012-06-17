@@ -516,6 +516,7 @@ class helper_plugin_sqlite extends DokuWiki_Plugin {
         }
         else
         {
+          if(!$res) return $data;
           $data = $res->fetchAll(PDO::FETCH_ASSOC);
           if(!count(data))
           {
@@ -541,6 +542,10 @@ class helper_plugin_sqlite extends DokuWiki_Plugin {
         {
           //very dirty replication of the same functionality (really must look at cursors)
           $data = array();
+          if(!$res)
+          {
+            return false;
+          }
           //do we need to rewind?
           $data = $res->fetchAll(PDO::FETCH_ASSOC);
           if(!count(data))
@@ -570,6 +575,10 @@ class helper_plugin_sqlite extends DokuWiki_Plugin {
       }
       else
       {
+        if(!$res)
+        {
+          return false;
+        }
         $data = $res->fetchAll(PDO::FETCH_NUM);
         if(!count(data))
         {
