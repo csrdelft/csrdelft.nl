@@ -47,6 +47,7 @@ div.dataplugin_entry.hidden {
 ul.dataplugin_cloud {
     overflow: auto;
 }
+
 ul.dataplugin_cloud li {
     float: left;
     list-style-type: none;

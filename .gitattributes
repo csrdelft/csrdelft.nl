@@ -807,6 +807,7 @@ htdocs/wiki/lib/plugins/csrgroepgeschiedenis/syntax.php -text
 htdocs/wiki/lib/plugins/csv/manager.dat -text
 htdocs/wiki/lib/plugins/csv/plugin.info.txt -text
 htdocs/wiki/lib/plugins/csv/syntax.php -text
+htdocs/wiki/lib/plugins/data/README -text
 htdocs/wiki/lib/plugins/data/_test/types.group.php -text
 htdocs/wiki/lib/plugins/data/_test/wiki.test.php -text
 htdocs/wiki/lib/plugins/data/action.php -text
@@ -820,6 +821,7 @@ htdocs/wiki/lib/plugins/data/db/update0001.sql -text
 htdocs/wiki/lib/plugins/data/db/update0002.sql -text
 htdocs/wiki/lib/plugins/data/db/update0003.sql -text
 htdocs/wiki/lib/plugins/data/db/update0004.sql -text
+htdocs/wiki/lib/plugins/data/db/update0005.sql -text
 htdocs/wiki/lib/plugins/data/helper.php -text
 htdocs/wiki/lib/plugins/data/lang/de/admin_intro.txt -text
 htdocs/wiki/lib/plugins/data/lang/de/edit_intro.txt -text
@@ -833,6 +835,12 @@ htdocs/wiki/lib/plugins/data/lang/en/edit_intro_contentonly.txt -text
 htdocs/wiki/lib/plugins/data/lang/en/intro_clean.txt -text
 htdocs/wiki/lib/plugins/data/lang/en/lang.php -text
 htdocs/wiki/lib/plugins/data/lang/en/settings.php -text
+htdocs/wiki/lib/plugins/data/lang/ru/admin_intro.txt -text svneol=unset#application/octet-stream
+htdocs/wiki/lib/plugins/data/lang/ru/edit_intro.txt -text svneol=unset#application/octet-stream
+htdocs/wiki/lib/plugins/data/lang/ru/edit_intro_contentonly.txt -text
+htdocs/wiki/lib/plugins/data/lang/ru/intro_clean.txt -text svneol=unset#application/octet-stream
+htdocs/wiki/lib/plugins/data/lang/ru/lang.php -text
+htdocs/wiki/lib/plugins/data/lang/ru/settings.php -text
 htdocs/wiki/lib/plugins/data/manager.dat -text
 htdocs/wiki/lib/plugins/data/plugin.info.txt -text
 htdocs/wiki/lib/plugins/data/renderer_data_edit.php -text
@@ -3200,6 +3208,7 @@ wiki/lib/plugins/sqlite/lang/fr/intro.txt -text
 wiki/lib/plugins/sqlite/lang/fr/lang.php -text
 wiki/lib/plugins/sqlite/manager.dat -text
 wiki/lib/plugins/sqlite/plugin.info.txt -text
+wiki/lib/plugins/sqlite/style.css -text
 wiki/lib/plugins/syntax.php -text
 wiki/lib/plugins/tablewidth/action.php -text
 wiki/lib/plugins/tablewidth/manager.dat -text

@@ -20,16 +20,20 @@ class helper_plugin_data extends DokuWiki_Plugin {
      * load the sqlite helper
      */
     function _getDB(){
-        $db =& plugin_load('helper', 'sqlite');
-        if (is_null($db)) {
-            msg('The data plugin needs the sqlite plugin', -1);
-            return false;
+        static $db = null;
+        if ($db === null) {
+            $db =& plugin_load('helper', 'sqlite');
+            if ($db === null) {
+                msg('The data plugin needs the sqlite plugin', -1);
+                return false;
+            }
+            if(!$db->init('data',dirname(__FILE__).'/db/')){
+                return false;
+            }
+            $db->fetchmode = DOKU_SQLITE_ASSOC;
+            $db->create_function('DATARESOLVE',array($this,'_resolveData'),2);
         }
-        if($db->init('data',dirname(__FILE__).'/db/')){
-            return $db;
-        }else{
-            return false;
-        }
+        return $db;
     }
 
     /**
@@ -75,6 +79,11 @@ class helper_plugin_data extends DokuWiki_Plugin {
         }
     }
 
+    /**
+     * Add pre and postfixs to the given value
+     *
+     * $type may be an column array with pre and postfixes
+     */
     function _addPrePostFixes($type, $val, $pre='', $post='') {
         if (is_array($type)) {
             if (isset($type['prefix'])) $pre = $type['prefix'];
@@ -84,10 +93,29 @@ class helper_plugin_data extends DokuWiki_Plugin {
     }
 
     /**
+     * Resolve a value according to its column settings
+     *
+     * This function is registered as a SQL function named DATARESOLVE
+     */
+    function _resolveData($value, $colname){
+        // resolve pre and postfixes
+        $column = $this->_column($colname);
+        $value = $this->_addPrePostFixes($column['type'], $value);
+
+        // for pages, resolve title
+        $type = $column['type'];
+        if(is_array($type)) $type = $type['type'];
+        if($type == 'title' || ($type == 'page' && useHeading('content'))){
+            $value = p_get_first_heading($value);
+        }
+        return $value;
+    }
+
+    /**
      * Return XHTML formated data, depending on column type
      */
     function _formatData($column, $value, &$R){
-        global $conf,$ID;
+        global $conf;
         $vals = explode("\n",$value);
         $outs = array();
         foreach($vals as $val){
@@ -135,21 +163,13 @@ class helper_plugin_data extends DokuWiki_Plugin {
                     }else{
                         $target = $this->_addPrePostFixes($column['type'],'');
                     }
-	 	    $key_id=str_replace('/',':',cleanID($target));
-                    if(page_exists($key_id)) {
-                    } elseif (page_exists(getNS($ID).':'.$key_id)){
-                    	$key_id=getNS($ID).':'.$key_id;
-                    } elseif (page_exists(getNS($ID).':zoeken')){
-                    	$key_id=getNS($ID).':zoeken';	
-                    } elseif (page_exists(getNS($ID).':'.$conf['start'])){
-                        $key_id=getNS($ID).':'.$conf['start'];
-                    } elseif (page_exists(getNS($ID))){
-                        $key_id=getNS($ID);
-                    }
-                    $outs[] = '<a href="'.wl($key_id,array('dataflt'=>$column['key'].'='.$val )).
-                     
+
+                    $outs[] = '<a href="'.wl(str_replace('/',':',cleanID($target)),array('dataflt'=>$column['key'].'='.$val )).
                               '" title="'.sprintf($this->getLang('tagfilter'),hsc($val)).
                               '" class="wikilink1">'.hsc($val).'</a>';
+                    break;
+                case 'timestamp':
+                    $outs[] = dformat($val);
                     break;
                 case 'wiki':
                     global $ID;
@@ -183,15 +203,19 @@ class helper_plugin_data extends DokuWiki_Plugin {
      */
     function _column($col){
         preg_match('/^([^_]*)(?:_(.*))?((?<!s)|s)$/', $col, $matches);
-        $column = array('multi' => ($matches[3] === 's'),
-                        'key'   => utf8_strtolower($matches[1]),
-                        'title' => $matches[1],
-                        'type'  => utf8_strtolower($matches[2]));
+        $column = array(
+            'colname' => $col,
+            'multi'   => ($matches[3] === 's'),
+            'key'     => utf8_strtolower($matches[1]),
+            'title'   => $matches[1],
+            'type'    => utf8_strtolower($matches[2])
+        );
 
         // fix title for special columns
-        static $specials = array('%title%'  => array('page', 'title'),
-                                 '%pageid%' => array('title', 'page'),
-                                 '%class%'  => array('class'));
+        static $specials = array('%title%'   => array('page', 'title'),
+                                 '%pageid%'  => array('title', 'page'),
+                                 '%class%'   => array('class'),
+                                 '%lastmod%' => array('lastmod','timestamp'));
         if (isset($specials[$column['title']])) {
             $s = $specials[$column['title']];
             $column['title'] = $this->getLang($s[0]);
@@ -272,11 +296,14 @@ class helper_plugin_data extends DokuWiki_Plugin {
                 // Clean if there are no asterisks I could kill
                 $val = $this->_cleanData($val, $column['type']);
             }
-            $val = sqlite_escape_string($val); //pre escape
+            $sqlite = $this->_getDB();
+            $val = $sqlite->escape_string($val); //pre escape
 
             return array('key'     => $column['key'],
                          'value'   => $val,
                          'compare' => $com,
+                         'colname' => $column['colname'],
+                         'type'    => $column['type']
                         );
         }
         msg('Failed to parse filter "'.hsc($filterline).'"',-1);

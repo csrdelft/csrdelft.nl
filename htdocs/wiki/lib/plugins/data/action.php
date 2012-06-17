@@ -49,7 +49,7 @@ class action_plugin_data extends DokuWiki_Action_Plugin {
 
         // get page id
         $res = $sqlite->query('SELECT pid FROM pages WHERE page = ?',$id);
-        $pid = (int) sqlite_fetch_single($res);
+        $pid = (int) $sqlite->res2single($res);
         if(!$pid) return; // we have no data for this page
 
         $sqlite->query('DELETE FROM data WHERE pid = ?',$pid);
@@ -124,7 +124,15 @@ class action_plugin_data extends DokuWiki_Action_Plugin {
         }
 
         $search = $_POST['search'];
-        $pages = ft_pageLookup($search, false, false);
+
+        $c_search = $search;
+        $in_ns = false;
+        if (!$search) {
+            // No search given, so we just want all pages in the prefix
+            $c_search = $aliases[$type]['prefix'];
+            $in_ns = true;
+        }
+        $pages = ft_pageLookup($c_search, $in_ns, false);
 
         $regexp = '/^';
         if ($aliases[$type]['prefix'] !== '') {
