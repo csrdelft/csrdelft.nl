@@ -417,7 +417,7 @@ class helper_plugin_sqlite extends DokuWiki_Plugin {
         }
         else
         {
-          $this->db->sqliteCreateFunction($this->db,$function_name,$callback,$num_args);
+          $this->db->sqliteCreateFunction($function_name,$callback,$num_args);
         }
     }
 
