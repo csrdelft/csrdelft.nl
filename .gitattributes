@@ -1246,6 +1246,7 @@ htdocs/wiki/lib/plugins/sqlite/lang/fr/intro.txt -text
 htdocs/wiki/lib/plugins/sqlite/lang/fr/lang.php -text
 htdocs/wiki/lib/plugins/sqlite/manager.dat -text
 htdocs/wiki/lib/plugins/sqlite/plugin.info.txt -text
+htdocs/wiki/lib/plugins/sqlite/style.css -text
 htdocs/wiki/lib/plugins/syntax.php -text
 htdocs/wiki/lib/plugins/tablewidth/action.php -text
 htdocs/wiki/lib/plugins/tablewidth/manager.dat -text
