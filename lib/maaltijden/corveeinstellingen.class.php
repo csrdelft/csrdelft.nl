@@ -247,7 +247,7 @@ class CorveeResetter {
 				$this->melding .= 'Taken verwijderen mislukt. '.mysql_error();
 				return false;
 			}*/
-			msg('Taken verwijderen is uitgeschakeld.', 0);
+			setMelding('Taken verwijderen is uitgeschakeld.', 0);
 			return true;
 		}else{
 			$this->melding.='Geen datum. Geen taken verwijderd.';

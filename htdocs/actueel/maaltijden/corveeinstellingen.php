@@ -31,12 +31,12 @@ if(isset($_POST['resetactie'])){
 			$corveeresetter->setDatum(getDatum());
 			if($actie=='resetcorveejaar'){
 				if($corveeresetter->verwijderCorveetaken()){
-					msg('Taken verwijderen is gelukt.', 1);
+					setMelding('Taken verwijderen is gelukt.', 1);
 				}else{
 					$actie = 'resetmislukt';
 				}
 				if($corveeresetter->resetCorveeJaar()){
-					msg('Corvee- en bonuspunten zijn bijgewerkt.', 1);
+					setMelding('Corvee- en bonuspunten zijn bijgewerkt.', 1);
 				}else{
 					$actie = 'resetmislukt';
 				}
@@ -60,7 +60,7 @@ if(isset($_POST['resetactie'])){
 	$corveeinstellingen = new Corveeinstellingen();
 
 	if($corveeinstellingen->isPostedFields() AND $corveeinstellingen->validFields() AND $corveeinstellingen->saveFields()){
-		msg('Wijzigingen zijn opgeslagen', 1);
+		setMelding('Wijzigingen zijn opgeslagen', 1);
 	}
 
 	$instellingen = new CorveeinstellingenContent($corveeinstellingen);

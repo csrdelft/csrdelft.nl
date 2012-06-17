@@ -163,7 +163,7 @@ function pr($sString, $cssID='pubcie_debug'){
  * @see    SimpleHTML::getMelding()
  * gebaseerd op DokuWiki code
  */
-function msg($message, $lvl=0){
+function setMelding($message, $lvl=0){
 	$errors[-1] = 'error';
 	$errors[0]  = 'info';
 	$errors[1]  = 'success';

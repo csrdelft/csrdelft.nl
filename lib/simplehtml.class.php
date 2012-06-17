@@ -35,7 +35,7 @@ abstract class SimpleHTML {
 		}
 	}
 	public function setMelding($sMelding, $level=-1){
-		msg($sMelding, $level);
+		setMelding($sMelding, $level);
 	}
 	public static function invokeRefresh($url=null, $melding='', $level=-1){
 		//als $melding een array is die uit elkaar halen
@@ -43,7 +43,7 @@ abstract class SimpleHTML {
 			list($melding, $level)=$melding;
 		}
 		if($melding!=''){
-			msg($melding, $level);
+			setMelding($melding, $level);
 		}
 		if($url==null){
 			$url=CSR_ROOT.$_SERVER['REQUEST_URI'];
