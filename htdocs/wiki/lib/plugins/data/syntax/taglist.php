@@ -34,9 +34,9 @@ class syntax_plugin_data_taglist extends syntax_plugin_data_cloud {
      * @param $levels int   The number of levels you want. A 5 gives levels 0 to 4.
      */
     function _cloud_weight(&$tags,$min,$max,$levels){
-        $tags=parent::_cloud_weight($tags,$min,$max,$levels);
+        parent::_cloud_weight($tags,$min,$max,$levels);
 
-        // sort by values. Key is count of the single tag.
+        // sort by values. Key is name of the single tag, value the count
         arsort($tags);
     }
 

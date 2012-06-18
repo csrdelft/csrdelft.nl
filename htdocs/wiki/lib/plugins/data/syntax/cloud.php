@@ -128,12 +128,14 @@ class syntax_plugin_data_cloud extends syntax_plugin_data_table {
 
         // build cloud data
         $res = $sqlite->query($data['sql']);
-        $tags = $sqlite->res2arr($res);
+        $rows = $sqlite->res2arr($res);
         $min = 0;
         $max = 0;
-        foreach ($tags as $row) {
-            if(!$max) $max  = $row;
-            $min  = $row;
+        $tags = array();
+        foreach ($rows as $row) {
+            if(!$max) $max  = $row['cnt'];
+            $min  = $row['cnt'];
+            $tags[$row['value']] = $row['cnt'];
         }
         $this->_cloud_weight($tags,$min,$max,5);
 
@@ -182,6 +184,5 @@ class syntax_plugin_data_cloud extends syntax_plugin_data_table {
         // sort
         ksort($tags);
     }
-
 }
 
