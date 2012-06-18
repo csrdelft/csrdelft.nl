@@ -90,7 +90,7 @@ class helper_plugin_sqlite extends DokuWiki_Plugin {
 
         $this->dbname = $dbname;
 
-        $fileextension = '.sqlite';
+        $fileextension = '.sqlite2';
 
         $this->dbfile = $conf['metadir'].'/'.$dbname.$fileextension;
 
@@ -112,7 +112,7 @@ class helper_plugin_sqlite extends DokuWiki_Plugin {
         }
         else
         {
-          $dsn = 'sqlite:'.$this->dbfile;
+          $dsn = 'sqlite2:'.$this->dbfile;
 
           try {
               $this->db = new PDO($dsn);
@@ -153,7 +153,7 @@ class helper_plugin_sqlite extends DokuWiki_Plugin {
         }else{
             $current = $this->_currentDBversion();
             if(!$current){
-                msg('SQLite: no DB version found. '.$this->dbname.' DB probably broken.',-1);
+                msg('SQLite: no DB version found. "'.$this->dbname.'" DB probably broken.',-1);
                 return false;
             }
         }
@@ -488,8 +488,6 @@ class helper_plugin_sqlite extends DokuWiki_Plugin {
         }
         else
         {
-          $result = false;
-
           $res = $this->db->query($sql);
 
           if(!$res){
@@ -540,27 +538,11 @@ class helper_plugin_sqlite extends DokuWiki_Plugin {
         }
         else
         {
-          //very dirty replication of the same functionality (really must look at cursors)
-          $data = array();
           if(!$res)
           {
             return false;
           }
-          //do we need to rewind?
-          $data = $res->fetchAll(PDO::FETCH_ASSOC);
-          if(!count(data))
-          {
-            return false;
-          }
-
-          if(!isset($data[$rownum]))
-          {
-            return false;
-          }
-          else
-          {
-            return $data[$rownum];
-          }
+          return $res->fetch(PDO::FETCH_ASSOC,PDO::FETCH_ORI_ABS,$rownum);
         }
     }
 
@@ -579,12 +561,12 @@ class helper_plugin_sqlite extends DokuWiki_Plugin {
         {
           return false;
         }
-        $data = $res->fetchAll(PDO::FETCH_NUM);
+        $data = $res->fetch(PDO::FETCH_NUM,PDO::FETCH_ORI_ABS,0);
         if(!count(data))
         {
           return false;
         }
-        return $data[0][0];
+        return $data[0];
       }
     }
 
