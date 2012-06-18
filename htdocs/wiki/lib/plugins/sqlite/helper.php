@@ -90,7 +90,7 @@ class helper_plugin_sqlite extends DokuWiki_Plugin {
 
         $this->dbname = $dbname;
 
-        $fileextension = '.sqlite2';
+        $fileextension = '.sqlite';
 
         $this->dbfile = $conf['metadir'].'/'.$dbname.$fileextension;
 
@@ -112,7 +112,7 @@ class helper_plugin_sqlite extends DokuWiki_Plugin {
         }
         else
         {
-          $dsn = 'sqlite2:'.$this->dbfile;
+          $dsn = 'sqlite:'.$this->dbfile;
 
           try {
               $this->db = new PDO($dsn);
