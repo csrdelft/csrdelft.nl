@@ -163,7 +163,7 @@ h.t. Fiscus.';
 		foreach($this->teschoppen as $uid => $bericht){
 			$mail=new Mail($uid.'@csrdelft.nl', $this->getOnderwerp(), $bericht['bericht']);
 			$mail->setFrom($this->GetFrom());
-			$mail->setBcc($this->getBcc());
+			$mail->addBcc($this->getBcc());
 			$mail->send();
 		}
 		exit;

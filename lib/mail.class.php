@@ -13,8 +13,8 @@ class Mail{
 	protected $bericht;
 	
 	protected $from='pubcie@csrdelft.nl';
-	protected $to;
-	protected $bcc;
+	protected $to=array();;
+	protected $bcc=array();
 
 	protected $charset='utf8';
 	
@@ -22,25 +22,46 @@ class Mail{
 		$this->onderwerp=$onderwerp;
 		$this->bericht=$bericht;
 
-		$this->setTo($to);
+		$this->addTo($to);
 	}
-	public function setTo($to){
+
+	public function getTo(){
+		return implode(',', $this->to));
+	}
+
+	public function addTo($to){
+		if(strpos($to, ',') !== false){
+			foreach(explode(',', $to) as $email){
+				$this->addTo($email);
+			}
+		}
 		if(!email_like($to)){
 			throw new Exception('Emailadres in $to geen valide email-adres');
 		}
-		$this->to=$this->production_safe($to);
+		$this->to[]=$this->production_safe($to);
 	}
+	
 	public function setFrom($from){
 		if(!email_like($from)){
 			throw new Exception('Emailadres in $from geen valide email-adres');
 		}
 		$this->from=$from;
 	}
-	public function setBcc($bcc){
+
+	public function getBcc(){
+		return implode(',', $this->bcc);
+	}
+	
+	public function addBcc($bcc){
+		if(strpos($bcc, ',') !== false){
+			foreach(explode(',', $bcc) as $email){
+				$this->addBcc($email);
+			}
+		}
 		if(!email_like($bcc)){
 			throw new Exception('Emailadres in $bcc geen valide email-adres');
 		}
-		$this->bcc=$this->production_safe($bcc);
+		$this->bcc[]=$this->production_safe($bcc);
 	}
 
 	/**
@@ -57,7 +78,7 @@ class Mail{
 	public function getHeaders(){
 		$headers="From: ".$this->from."\n";
 		if($this->bcc!=''){
-			$headers.="BCC: ".$this->bcc."\n";
+			$headers.="BCC: ".$this->getBcc()."\n";
 		}
 
 		if($this->charset='utf8'){
@@ -85,7 +106,7 @@ class Mail{
 			throw new Exception('Geen onderwerp ingevuld');
 		}
 		
-		return mail($this->to, $this->getSubject(), $this->getBody(), $this->getHeaders());
+		return mail($this->getTo(), $this->getSubject(), $this->getBody(), $this->getHeaders());
 	}
 
 	public function __toString(){
