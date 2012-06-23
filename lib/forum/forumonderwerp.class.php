@@ -423,8 +423,6 @@ class ForumOnderwerp{
  			//over van het onderwerp.
  			$zichtbaarheid=$this->getZichtbaarheid();
  		}
-		
-		// Tijdelijk standaard het offtopic maken van elke post
 		$sPostQuery="
 			INSERT INTO
 				forum_post
@@ -433,7 +431,7 @@ class ForumOnderwerp{
 			)VALUES(
 				".$this->getID().",
 				'".LoginLid::instance()->getUid()."',
-				'[offtopic]".$db->escape($tekst)."[/offtopic]',
+				'".$db->escape($tekst)."',
 				'".getDateTime()."',
 				'".$ip."',
 				'".$zichtbaarheid."'".$bewerkvalue."
@@ -541,28 +539,6 @@ class ForumOnderwerp{
 				forum_post
 			SET
 				tekst='[offtopic]".$db->escape($oldPost['tekst'])."[/offtopic]',
-				bewerkDatum='".getDateTime()."',
-				bewerkt=CONCAT(bewerkt, '".$bewerkt."')
-			WHERE
-				id=".$iPostID."
-			LIMIT 1;";
-		return $db->query($sEditQuery);
-	}
-
-	//posts ontopic markeren door het verwijderen van de [offtopic]-tags (tijdelijk)
-	public function markPostOntopic($iPostID, $reden=''){
-		$db=MySql::instance();
-
-		$oldPost=$this->getSinglePost($iPostID);
-		$bewerkt='offtopic door [lid='.LoginLid::instance()->getUid().'] [reldate]'.getDateTime().'[/reldate]';
-		
-		$bewerkt = 'Ontopic (Dit bericht is goedgekeurd door Am. Vice-abactis.)';
-		$bewerkt.="\n";
-		$sEditQuery="
-			UPDATE
-				forum_post
-			SET
-				tekst='[b]".str_replace(array("[/offtopic]", "[offtopic]"), array("", ""), $db->escape($oldPost['tekst']))."\n\n\Dit bericht is goedgekeurd door Am. Vice-abactis.[/b]',
 				bewerkDatum='".getDateTime()."',
 				bewerkt=CONCAT(bewerkt, '".$bewerkt."')
 			WHERE

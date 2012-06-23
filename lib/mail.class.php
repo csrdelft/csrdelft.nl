@@ -13,7 +13,7 @@ class Mail{
 	protected $bericht;
 	
 	protected $from='pubcie@csrdelft.nl';
-	protected $to=array();;
+	protected $to=array();
 	protected $bcc=array();
 
 	protected $charset='utf8';
@@ -26,7 +26,7 @@ class Mail{
 	}
 
 	public function getTo(){
-		return implode(',', $this->to));
+		return implode(',', $this->to);
 	}
 
 	public function addTo($to){
