@@ -834,6 +834,12 @@ htdocs/wiki/lib/plugins/data/lang/en/edit_intro_contentonly.txt -text
 htdocs/wiki/lib/plugins/data/lang/en/intro_clean.txt -text
 htdocs/wiki/lib/plugins/data/lang/en/lang.php -text
 htdocs/wiki/lib/plugins/data/lang/en/settings.php -text
+htdocs/wiki/lib/plugins/data/lang/nl/admin_intro.txt -text
+htdocs/wiki/lib/plugins/data/lang/nl/edit_intro.txt -text
+htdocs/wiki/lib/plugins/data/lang/nl/edit_intro_contentonly.txt -text
+htdocs/wiki/lib/plugins/data/lang/nl/intro_clean.txt -text
+htdocs/wiki/lib/plugins/data/lang/nl/lang.php -text
+htdocs/wiki/lib/plugins/data/lang/nl/settings.php -text
 htdocs/wiki/lib/plugins/data/lang/ru/admin_intro.txt -text svneol=unset#application/octet-stream
 htdocs/wiki/lib/plugins/data/lang/ru/edit_intro.txt -text svneol=unset#application/octet-stream
 htdocs/wiki/lib/plugins/data/lang/ru/edit_intro_contentonly.txt -text

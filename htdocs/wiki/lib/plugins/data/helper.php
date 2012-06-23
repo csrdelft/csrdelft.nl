@@ -41,7 +41,7 @@ class helper_plugin_data extends DokuWiki_Plugin {
      */
     function _cleanData($value, $type){
         $value = trim($value);
-        if(!$value) return '';
+        if(!$value AND $value!=='0') return '';
         if (is_array($type)) {
             if (isset($type['enum']) &&
                 !preg_match('/(^|,\s*)' . preg_quote_cb($value) . '($|\s*,)/', $type['enum'])) {
@@ -115,7 +115,7 @@ class helper_plugin_data extends DokuWiki_Plugin {
      * Return XHTML formated data, depending on column type
      */
     function _formatData($column, $value, &$R){
-        global $conf;
+        global $conf,$ID;
         $vals = explode("\n",$value);
         $outs = array();
         foreach($vals as $val){
@@ -154,7 +154,7 @@ class helper_plugin_data extends DokuWiki_Plugin {
                     break;
                 case 'url':
                     $val = $this->_addPrePostFixes($column['type'], $val);
-                    $outs[] = '<a href="'.hsc($val).'" class="urlextern" title="'.hsc($val).'">'.hsc($val).'</a>';
+                    $outs[] = $this->external_link($val,false,'urlextern');
                     break;
                 case 'tag':
                     // per default use keyname as target page, but prefix on aliases
@@ -162,6 +162,15 @@ class helper_plugin_data extends DokuWiki_Plugin {
                         $target = $column['key'].':';
                     }else{
                         $target = $this->_addPrePostFixes($column['type'],'');
+                    }
+
+                    $ns = getNS($ID);
+                    $targets = array($target, $ns.':'.$target, $ns.':'.$conf['start'], $ns);
+                    foreach($targets as $t){
+                        if(page_exists(cleanID($t))){
+                            $target=$t;
+                            break;
+                        }
                     }
 
                     $outs[] = '<a href="'.wl(str_replace('/',':',cleanID($target)),array('dataflt'=>$column['key'].'='.$val )).
@@ -347,4 +356,29 @@ class helper_plugin_data extends DokuWiki_Plugin {
         return $urlarray;
     }
 
+    /**
+     * get current URL parameters
+     */
+    function _get_current_param($returnURLparams=true){
+        $cur_params = array();
+        if(isset($_REQUEST['dataflt'])){
+            $cur_params = $this->_a2ua('dataflt', $_REQUEST['dataflt']);
+        }
+        if (isset($_REQUEST['datasrt'])) {
+            $cur_params['datasrt'] = $_REQUEST['datasrt'];
+        }
+        if (isset($_REQUEST['dataofs'])) {
+            $cur_params['dataofs'] = $_REQUEST['dataofs'];
+        }
+
+        //combine key and value
+        if(!$returnURLparams){
+            $flat_param=array();
+            foreach($cur_params as $key => $val){
+                $flat_param[]=$key.$val;
+            }
+            $cur_params=$flat_param;
+        }
+        return $cur_params;
+    }
 }
