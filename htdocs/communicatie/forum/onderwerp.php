@@ -27,7 +27,7 @@ if($loginlid->hasPermission('P_FORUM_READ')) {
 		ForumOnderwerp::redirectByPostID((int)$_GET['post']);
 	}else{
 		header('location: '.CSR_ROOT.'communicatie/forum/');
-		$_SESSION['melding']='Geen onderwerp- of bericht-id opgegeven.';
+		setMelding('Geen onderwerp- of bericht-id opgegeven.', -1);
 		exit;
 	}
 

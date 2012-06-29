@@ -12,15 +12,28 @@ require_once 'forum/forum.class.php';
 
 if (!Forum::isModerator()) {
 	header('location: '.CSR_ROOT.'forum/');
-	$_SESSION['melding']='Niets te zoeken hier!';
+	setMelding('Niets te zoeken hier!', -1);
 	exit;
 }
 require_once 'forum/forumonderwerp.class.php';
+
+$forumonderwerp=null;
 if(isset($_GET['post'])){
 	$forumonderwerp=ForumOnderwerp::loadByPostID((int)$_GET['post']);
 }elseif(isset($_GET['topic'])){
 	$forumonderwerp=new ForumOnderwerp((int)$_GET['topic']);
+}else{
+	setMelding('Ik heb niets om te verwijderen'.($forumonderwerp!==null ? $forumonderwerp->getError() : ''), -1);
+	header('location: '.CSR_ROOT.'communicatie/forum?debug_session=1');
+	exit;
 }
+
+if($forumonderwerp!==null AND $forumonderwerp->getError()!=''){
+	setMelding('Verwijderen mislukt. '.$forumonderwerp->getError(), -1);
+	header('location: '.CSR_ROOT.'communicatie/');
+	exit;
+}
+
 
 //het juiste onderwerp of bericht verwijderen
 if(isset($_GET['post'])){
@@ -29,24 +42,24 @@ if(isset($_GET['post'])){
 		//als er maar één bericht in het onderwerp is, verwijderd deletePost() automagisch
 		//het hele onderwerp, dan dus niet weer naar dat onderwerp refreshen.
 		if($forumonderwerp->getSize()<=1){
-			header('location: '.CSR_ROOT.'forum/');
+			setMelding('Verwijderen van onderwerp gelukt.', 1);
+			header('location: '.CSR_ROOT.'communicatie/forum/');
 		}else{
-			header('location: '.CSR_ROOT.'forum/onderwerp/'.$forumonderwerp->getID().'/'.$forumonderwerp->getPaginaCount().'#laatste');
+			setMelding('Verwijderen van post gelukt.', 1);
+			header('location: '.CSR_ROOT.'communicatie/forum/onderwerp/'.$forumonderwerp->getID().'/'.$forumonderwerp->getPaginaCount().'#laatste');
 		}
 	}else{
-		header('location: '.CSR_ROOT.'forum/');
-		$_SESSION['melding']='Verwijderen van bericht mislukt, iets mis met de db ofzo (ForumOnderwerp::deletePost()).';
+		setMelding('Verwijderen van bericht mislukt, bestaat de post wel in de db? (ForumOnderwerp::deletePost()).', -1);
+		header('location: '.CSR_ROOT.'communicatie/forum/');
 	}
 }elseif(isset($_GET['topic'])){
 	if($forumonderwerp->delete()){
-		header('location: '.CSR_ROOT.'forum/categorie/'.$forumonderwerp->getCategorieID());
+		setMelding('Verwijderen van topic gelukt.', 1);
+		header('location: '.CSR_ROOT.'communicatie/forum/categorie/'.$forumonderwerp->getCategorieID());
 	}else{
-		header('location: '.CSR_ROOT.'forum/');
-		$_SESSION['melding']='Verwijderen van topic mislukt, iets mis met de db ofzo (ForumOnderwerp::delete()).';
+		setMelding('Verwijderen van topic mislukt, iets mis met de db ofzo (ForumOnderwerp::delete()).', -1);
+		header('location: '.CSR_ROOT.'communicatie/forum/');
 	}
-}else{
-	header('location: '.CSR_ROOT.'forum/');
-	$_SESSION['melding']='Ik heb niets om te verwijderen';
 }
 
 ?>

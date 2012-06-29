@@ -11,7 +11,7 @@ require_once 'forum/forum.class.php';
 
 if(!Forum::isModerator()){
 	header('location: '.CSR_ROOT.'forum/');
-	$_SESSION['melding']='Geen rechten hier';
+	setMelding('Geen rechten hier');
 	exit;
 }
 
@@ -20,11 +20,11 @@ if(isset($_GET['topic'])){
 	$forumonderwerp = new ForumOnderwerp((int)$_GET['topic']);
 
 	if(!$forumonderwerp->toggleOpenheid()){
-		$_SESSION['melding']='Oeps, feutje, niets gesloten dus.';
+		setMelding('Oeps, feutje, niets gesloten dus.');
 	}
 	header('location: '.CSR_ROOT.'forum/onderwerp/'.$forumonderwerp->getID());
 }else{
-	$_SESSION['melding']='Niets om te sluiten of te openen.';
+	setMelding('Niets om te sluiten of te openen.');
 	header('location: '.CSR_ROOT.'forum/');
 }
 

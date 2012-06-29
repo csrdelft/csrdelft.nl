@@ -3,29 +3,28 @@
 # -------------------------------------------------------------------
 # belangrijk.php
 # -------------------------------------------------------------------
-# Verwerkt het belangrijk maken van ondewerpen in het forum.
+# Verwerkt het belangrijk maken van onderwerpen in het forum.
 # -------------------------------------------------------------------
 
 require_once 'configuratie.include.php';
 require_once 'forum/forum.class.php';
 
 if(!Forum::isModerator()){
-	header('location: '.CSR_ROOT.'forum/');
-	$_SESSION['forum_foutmelding']='Geen rechten voor het aanpassen van belangrijkheid';
+	header('location: '.CSR_ROOT.'communicatie/forum/');
+	setMelding('Geen rechten voor het aanpassen van belangrijkheid', -1);
 	exit;
 }
 
 if(isset($_GET['topic'])){
 	require_once 'forum/forumonderwerp.class.php';
 	$forum = new ForumOnderwerp((int)$_GET['topic']);
-
-	if(!$forum->toggleBelangrijkheid()){
-		$_SESSION['melding']='Oeps, feutje, niet gelukt dus';
+	if($forum->getError()!='' OR !$forum->toggleBelangrijkheid()){
+		setMelding('Oeps, feutje, niet gelukt dus. '.$forum->getError(), -1);
 	}
-	header('location: '.CSR_ROOT.'forum/onderwerp/'.$forum->getID());
+	header('location: '.CSR_ROOT.'communicatie/forum/onderwerp/'.$forum->getID());
 }else{
-	header('location: '.CSR_ROOT.'forum/');
-	$_SESSION['melding']='Niets om te belangrijk of niet belangrijk te maken.';
+	header('location: '.CSR_ROOT.'communicatie/forum/');
+	setMelding('Niets om te belangrijk of niet belangrijk te maken.', -1);
 }
 
 

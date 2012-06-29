@@ -11,7 +11,7 @@ require_once 'forum/forum.class.php';
 
 if(!Forum::isModerator()){
 	header('location: '.CSR_ROOT.'forum/');
-	$_SESSION['forum_foutmelding']='Geen rechten voor het aanpassen van plakkerigheid';
+	setMelding('Geen rechten voor het aanpassen van plakkerigheid', -1);
 	exit;
 }
 
@@ -20,12 +20,12 @@ if(isset($_GET['topic'])){
 	$forum = new ForumOnderwerp((int)$_GET['topic']);
 
 	if(!$forum->togglePlakkerigheid()){
-		$_SESSION['melding']='Oeps, feutje, niet gelukt dus';
+		setMelding('Oeps, feutje, niet gelukt dus', -1);
 	}
 	header('location: '.CSR_ROOT.'forum/onderwerp/'.$forum->getID());
 }else{
 	header('location: '.CSR_ROOT.'forum/');
-	$_SESSION['melding']='Niets om te sluiten of te openen.';
+	setMelding('Niets om te sluiten of te openen.', -1);
 }
 
 

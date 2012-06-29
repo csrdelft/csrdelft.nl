@@ -34,7 +34,7 @@ class ForumOnderwerp{
 
 	protected $posts=null;
 
-	private $error;
+	private $error='';
 
 	function __construct($init, $pagina=1){
 		if(is_array($init)){
@@ -43,7 +43,9 @@ class ForumOnderwerp{
 			$init=(int)$init;
 			if($init!=0){
 				$this->pagina=(int)$pagina;
-				$this->load($init);
+				if($this->load($init)===false){
+					$this->error='Onderwerp laden mislukt. '.$this->error;
+				}
 			}
 			//we laden alleen als topicid!=0, bij 0 willen we een nieuw onderwerp maken,
 			//dus hoeven we nog niets uit de db te halen.
@@ -157,6 +159,7 @@ class ForumOnderwerp{
 				return $this->loadPosts(($this->getPaginaCount()-1)*Forum::getPostsPerPagina());
 			}
 			$this->error='Er konden geen berichten worden ingeladen. (ForumOnderwerp::loadPosts())';
+			return false;
 		}
 		return is_array($this->posts);
 	}
@@ -550,6 +553,8 @@ class ForumOnderwerp{
 	//post 'verwijderen'.
 	function deletePost($iPostID){
 		$iPostID=(int)$iPostID;
+		if($iPostID===0) return false;
+
 		//hele onderwerp wegkekken als er maar één bericht is.
 		if($this->getSize(true)==1){
 			return $this->delete();
@@ -568,6 +573,7 @@ class ForumOnderwerp{
 
 
 	function delete(){
+		if($this->getID()==0) return false;
 		$db=MySql::instance();
 		$deletePosts="UPDATE forum_post SET zichtbaar='verwijderd' WHERE tid=".$this->getID().";";
 		$deleteOnderwerp="UPDATE forum_topic SET zichtbaar='verwijderd' WHERE id=".$this->getID()." LIMIT 1;";

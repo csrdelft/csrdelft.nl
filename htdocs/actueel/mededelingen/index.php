@@ -36,9 +36,9 @@ switch($actie){
 			if(Mededeling::isModerator() OR $mededeling->getUid()==LoginLid::instance()->getUid()){
 				$verwijderd=$mededeling->delete();
 				if($verwijderd===false){
-					$_SESSION['melding']='Het verwijderen is mislukt.';
+					setMelding('Het verwijderen is mislukt.', -1);
 				}else{
-					$_SESSION['melding']='De mededeling is succesvol verwijderd.';
+					setMelding('De mededeling is succesvol verwijderd.', 1);
 				}
 			}else{ // Dit lid mag deze mededeling helemaal niet verwijderen!
 				header('location: '.CSR_ROOT);
@@ -55,7 +55,7 @@ switch($actie){
 			header('location: '.CSR_ROOT);
 			exit;
 		}
-		$_SESSION['melding']='';
+
 		if(	isset($_POST['titel'],$_POST['tekst'],$_POST['categorie']) ){
 			// The user is editing an existing Mededeling or tried adding a new one.
 			// Get properties from $_POST.
@@ -97,15 +97,15 @@ switch($actie){
 							}
 							chmod($pictureFullPath, 0644);
 						}else{
-							$_SESSION['melding'].='Plaatje verplaatsen is mislukt.<br />';
+							setMelding('Plaatje verplaatsen is mislukt.', -1);
 							$allOK=false;
 						}
 					}else{
-						$_SESSION['melding'].='Plaatje is niet in de juiste verhouding.<br />';
+						setMelding('Plaatje is niet in de juiste verhouding.', -1);
 						$allOK=false;
 					}
 				}else{
-					$_SESSION['melding'].='Het is niet gelukt om de resolutie van het plaatje te bepalen.<br />';
+					setMelding('Het is niet gelukt om de resolutie van het plaatje te bepalen.', -1);
 					$allOK=false;
 				}
 			}
@@ -113,11 +113,11 @@ switch($actie){
 			// Check if all values appear to be OK.
 			$tijdelijkeMededeling=$mededelingId>0 ? new Mededeling($mededelingId) : null;
 			if(strlen($mededelingProperties['titel'])<2){
-				$_SESSION['melding'].='Het veld <b>Titel</b> moet minstens 2 tekens bevatten.<br />';
+				setMelding('Het veld <b>Titel</b> moet minstens 2 tekens bevatten.', -1);
 				$allOK=false;
 			}
 			if(strlen($mededelingProperties['tekst'])<5){
-				$_SESSION['melding'].='Het veld <b>Tekst</b> moet minstens 5 tekens bevatten.<br />';
+				setMelding('Het veld <b>Tekst</b> moet minstens 5 tekens bevatten.', -1);
 				$allOK=false;
 			}
 			
@@ -128,12 +128,12 @@ switch($actie){
 			}else{
 				$vervaltijd=strtotime($mededelingProperties['vervaltijd']);
 				if($vervaltijd===false OR !isGeldigeDatum($mededelingProperties['vervaltijd'])){
-					$_SESSION['melding'].='Vervaltijd is ongeldig.<br />';
+					setMelding('Vervaltijd is ongeldig.', -1);
 					$allOK=false;
 				}else{
 					$datum=strtotime($mededelingProperties['datum']);
 					if($vervaltijd<=$datum){
-						$_SESSION['melding'].='Vervaltijd moet groter zijn dan de huidige tijd.<br />';
+						setMelding('Vervaltijd moet groter zijn dan de huidige tijd.', -1);
 						$allOK=false;
 					}
 				}
@@ -155,7 +155,7 @@ switch($actie){
 			
 			// Check doelgroep.
 			if(array_search($mededelingProperties['doelgroep'], Mededeling::getDoelgroepen())===false){
-				$_SESSION['melding'].='De doelgroep is ongeldig.<br />';
+				setMelding('De doelgroep is ongeldig.', -1);
 				$allOK=false;
 			}
 			
@@ -170,14 +170,14 @@ switch($actie){
 			}
 			if(	!$categorieValid ){
 				$mededelingProperties['categorie']=null;
-				$_SESSION['melding'].='De categorie is ongeldig.<br />';
+				setMelding('De categorie is ongeldig.', -1);
 				$allOK=false;
 			}
 			// Check picture.
 			if(empty($mededelingProperties['plaatje']) AND $mededelingId==0){ // If there's no new picture, while there should be.
 				$errorNumber=$_FILES['plaatje']['error'];
 				if($errorNumber==UPLOAD_ERR_NO_FILE){ // If there was no file being uploaded at all. 
-					$_SESSION['melding'].='Het toevoegen van een plaatje is verplicht.<br />';
+					setMelding('Het toevoegen van een plaatje is verplicht.', -1);
 					$allOK=false;
 				}else if($errorNumber!=UPLOAD_ERR_OK){
 					// Uploading the picture failed.

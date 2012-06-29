@@ -32,11 +32,10 @@ class ForumOnderwerpContent extends SimpleHTML {
 	}
 	function view(){
 		if($this->forumonderwerp->getPosts()===false){
+			$this->setMelding($this->forumonderwerp->getError());
+
 			echo '<h2><a href="/communicatie/forum/" class="forumGrootlink">Forum</a> &raquo; Foutje</h2>';
-			echo '<pre>'.$this->forumonderwerp->getError().'</pre>';
-			if($this->forumonderwerp->isModerator()){
-				echo '<h2>Debuginformatie</h2><pre>'.print_r($this, true).'</pre>';
-			}
+			echo $this->getMelding();
 
 		}else{
 			$smarty=new Smarty_csr();

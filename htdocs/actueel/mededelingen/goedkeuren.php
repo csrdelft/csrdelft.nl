@@ -6,7 +6,7 @@ define('MEDEDELINGEN_ROOT','actueel/mededelingen/');
 
 if(!Mededeling::isModerator()){
 	header('location: '.CSR_ROOT.'/actueel/mededelingen');
-	$_SESSION['mededelingen_foutmelding']='U heeft daar niets te zoeken.';
+	setMelding('U heeft daar niets te zoeken.', -1);
 	exit;
 }
 
@@ -15,14 +15,15 @@ if(isset($_GET['mededelingId']) AND is_numeric($_GET['mededelingId']) AND $_GET[
 		$mededeling=new Mededeling((int)$_GET['mededelingId']);
 	} catch (Exception $e) {
 		header('location: '.CSR_ROOT.MEDEDELINGEN_ROOT);
-		$_SESSION['melding']='Mededeling met id '.(int)$_GET['mededelingId'].' bestaat niet.';
+		setMelding('Mededeling met id '.(int)$_GET['mededelingId'].' bestaat niet.', -1);
+		exit;
 	}
 	header('location: '.CSR_ROOT.MEDEDELINGEN_ROOT.$mededeling->getId());
 	$mededeling->keurGoed();
-	$_SESSION['melding']='Mededeling is nu goedgekeurd.';
+	setMelding('Mededeling is nu goedgekeurd.', 1);
 }else{
 	header('location: '.CSR_ROOT.MEDEDELINGEN_ROOT);
-	$_SESSION['melding']='Geen mededelingId gezet.';
+	setMelding('Geen mededelingId gezet.', -1);
 }
 
 ?>

@@ -11,17 +11,22 @@ require_once 'configuratie.include.php';
 
 require_once 'forum/forumonderwerp.class.php';
 
+$forumonderwerp=null;
 if(isset($_GET['post'])){
 	$postID=(int)$_GET['post'];
 	$forumonderwerp=ForumOnderwerp::loadByPostID($postID);
 }elseif(isset($_GET['topic'], $_POST['titel'])){
 	$forumonderwerp= new ForumOnderwerp($_GET['topic']);
 }else{
-	header('location: '.CSR_ROOT.'forum/');
-	$_SESSION['melding']='Onderwerp kan niet geladen worden (ForumOnderwerp::load()).';
+	header('location: '.CSR_ROOT.'communicatie/forum/');
+	setMelding('Onderwerp kan niet geladen worden (ForumOnderwerp::load()).', -1);
 	exit;
 }
-
+if($forumonderwerp!==null AND $forumonderwerp->getError()!=''){
+	setMelding('Verwijderen mislukt. '.$forumonderwerp->getError(), -1);
+	header('location: '.CSR_ROOT.'communicatie/');
+	exit;
+}
 
 
 //is er uberhaupt wel een postID welke bewerkt moet worden
@@ -38,19 +43,19 @@ if(isset($_GET['post'])){
 				$reden='';
 			}
 			if($forumonderwerp->editPost($postID, $bericht, $reden)){
-				header('location: '.CSR_ROOT.'forum/reactie/'.$postID);
+				header('location: '.CSR_ROOT.'communicatie/forum/reactie/'.$postID);
 			}
 		}
 	}
 }elseif(isset($_GET['topic'], $_POST['titel']) AND $forumonderwerp->isModerator()){
 	if(strlen(trim($_POST['titel']))>=2){
 		if(!$forumonderwerp->rename($_POST['titel'])){
-			$_SESSION['melding']='Onderwerptitel wijzigigen mislukt (ForumOnderwerp::rename()).';
+			setMelding('Onderwerptitel wijzigigen mislukt (ForumOnderwerp::rename()).', -1);
 		}
 	}else{
-		$_SESSION['melding']='Titel moet minstens twee tekens lang zijn.';
+		setMelding('Titel moet minstens twee tekens lang zijn.', -1);
 	}
-	header('location: '.CSR_ROOT.'forum/onderwerp/'.$forumonderwerp->getID());
+	header('location: '.CSR_ROOT.'communicatie/forum/onderwerp/'.$forumonderwerp->getID());
 	exit;
 }
 
