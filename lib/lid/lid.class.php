@@ -567,6 +567,9 @@ class Lid implements Serializable, Agendeerbaar{
 			case 'volledig':
 				$naam=$sVolledigeNaam;
 			break;
+			case 'full_uid':
+				$naam=$sVolledigeNaam.' ('.$this->getUid().')';
+			break;
 			case 'voorletters':
 				$naam=$this->profiel['voorletters'].' ';
 				if($this->profiel['tussenvoegsel']!=''){ $naam.=$this->profiel['tussenvoegsel'].' '; }

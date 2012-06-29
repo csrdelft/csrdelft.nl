@@ -14,6 +14,7 @@ class Roodschopper{
 	private $saldogrens;
 	private $bericht;
 
+	private $doelgroep='leden';
 	private $uitsluiten=array();
 	private $from;
 	private $bcc;
@@ -80,6 +81,10 @@ h.t. Fiscus.';
 			$this->uitsluiten=explode(',', $uids);
 		}
 	}
+
+	public function getDoelgroep(){				return $this->doelgroep; }
+	public function setDoelgroep($doelgroep){	$this->doelgroep=$doelgroep; }
+
 	public function getOnderwerp(){		return $this->onderwerp; }
 	public function getBericht(){		return $this->bericht; }
 
@@ -88,11 +93,16 @@ h.t. Fiscus.';
 	 */
 	public function simulate(){
 		$db=MySql::instance();
+		if($this->doelgroep=='oudleden'){
+			$where="status='S_OUDLID' OR status='S_ERELID' OR status='S_NOBODY'";
+		}else{
+			$where="status='S_LID' OR status='S_NOVIET' OR status='S_GASTLID' OR status='S_KRINGEL'";
+		}
 		$query="
 			SELECT uid, ".$this->cie."Saldo AS saldo
 			FROM lid
 			WHERE ".$this->cie."Saldo<".str_replace(',', '.', $this->saldogrens)."
-			 AND (status='S_LID' OR status='S_NOVIET' OR status='S_GASTLID')
+			 AND (".$where.")
 			ORDER BY achternaam, voornaam;";
 
 		$data=$db->query2array($query);
@@ -133,7 +143,9 @@ h.t. Fiscus.';
 		$leden=array();
 		if(is_array($this->teschoppen)){
 			foreach($this->teschoppen as $uid => $bericht){
-				$leden[]=LidCache::getLid($uid);
+				$lid=LidCache::getLid($uid);
+				$lid->tsVorm='full_uid';
+				$leden[]=$lid;
 			}
 		}
 		return $leden;

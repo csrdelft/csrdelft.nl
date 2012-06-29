@@ -14,7 +14,7 @@ if(!Loginlid::instance()->hasPermission('P_ADMIN,groep:MaalCie') AND !Loginlid::
 	header('location: http://csrdelft.nl');
 	exit;
 }
-if(isset($_POST['commissie'], $_POST['bcc'], $_POST['saldogrens'], $_POST['uitsluiten'], $_POST['bericht'], $_POST['from'])){
+if(isset($_POST['commissie'], $_POST['bcc'], $_POST['saldogrens'], $_POST['uitsluiten'], $_POST['bericht'], $_POST['from'], $_POST['doelgroep'])){
 	$cie='soccie';
 	if($_POST['commissie']=='maalcie'){
 		$cie='maalcie';
@@ -33,6 +33,9 @@ if(isset($_POST['commissie'], $_POST['bcc'], $_POST['saldogrens'], $_POST['uitsl
 		$roodschopper->setFrom($_POST['from']);
 	}
 	$roodschopper->setUitgesloten($_POST['uitsluiten']);
+	if(in_array($_POST['doelgroep'], array('leden', 'oudleden'))){
+		$roodschopper->setDoelgroep($_POST['doelgroep']);
+	}
 }else{
 	$roodschopper=Roodschopper::getDefaults();
 }
@@ -62,7 +65,7 @@ if(isset($_POST['actie'])){
 		break;
 		case 'verzenden':
 			$roodschopper->doit();
-			$_SESSION['melding']='Roodschopmails met succes verzonden.';
+			setMelding('Roodschopmails met succes verzonden.', 1);
 		break;
 
 	}

@@ -1,7 +1,7 @@
 {$melding}
 <h1>Roodschopper</h1>
 <p>Met deze tool kan de SocCie en de MaalCie zelf een roodschopmail versturen. U stelt een aantal parameters in, typt een verhaaltje,
-	en drukt op verzenden. Dan krijgt u een overzichtje te zien van de mensen die rood staan, en kunt u het verzenden bevestigen.</p>
+	en drukt op 'Verder gaan'. Dan krijgt u een overzichtje te zien van de mensen die rood staan, en kunt u het verzenden bevestigen.</p>
 
 <form action="roodschopper.php" method="post" id="roodschopper">
 	<fieldset>
@@ -19,6 +19,12 @@
 	
 	<label for="saldogrens">Saldogrens:</label>
 	<input type="text" id="saldogrens" name="saldogrens" value="{$roodschopper->getSaldogrens()}" /> <span class="small">in euro's</span><br />
+
+	<label for="doelgroep">Doelgroep:</label>
+	<select name="doelgroep" id="doelgroep">
+		<option value="leden" {if $roodschopper->getDoelgroep()=='leden'}selected="selected"{/if}>Leden</option>
+		<option value="oudleden" {if $roodschopper->getDoelgroep()=='oudleden'}selected="selected"{/if}>Oudleden en nobodies</option>
+	</select><br />
 
 	<label for="uitsluiten">Geen mail naar:</label>
 	<input type="text" id="uitsluiten" name="uitsluiten" value="{$roodschopper->getUitgesloten()}" /> <span class="small">uid's gescheiden door een komma</span><br /><br />
@@ -51,6 +57,8 @@
 	</fieldset>
 </form>
 <br />
-{* TODO: dit ding met javascript mee laten veranderen met het kiezen van een commissie 
+<br />
+{* TODO: dit ding met javascript mee laten veranderen met het kiezen van een commissie *}
+<p>Kijk aan, hier doen we het voor!</p>
 <img src="http://csrdelft.nl/tools/saldografiek.php?uid=000&timespan=100&{$roodschopper->getCommissie()}" />
-*}
+
