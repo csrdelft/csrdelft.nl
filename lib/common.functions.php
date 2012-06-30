@@ -171,10 +171,10 @@ function setMelding($message, $lvl=0){
 
 	$message=trim($message);
 	if($message!=''){
+		if(!isset($_SESSION['melding'])) $_SESSION['melding'] = array();
 		//gooit verouderde gegevens weg FIXME tijdelijk tot dat iedereen een nieuwe sessie heeft.
 		if(is_string($_SESSION['melding'])) $_SESSION['melding'] = array();
 
-		if(!isset($_SESSION['melding'])) $_SESSION['melding'] = array();
 		$_SESSION['melding'][]=array('lvl' => $errors[$lvl], 'msg' => $message);
 	}
 }
