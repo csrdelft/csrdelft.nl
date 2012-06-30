@@ -168,9 +168,12 @@ function setMelding($message, $lvl=0){
 	$errors[0]  = 'info';
 	$errors[1]  = 'success';
 	$errors[2]  = 'notify';
-	
+
 	$message=trim($message);
 	if($message!=''){
+		//gooit verouderde gegevens weg FIXME tijdelijk tot dat iedereen een nieuwe sessie heeft.
+		if(is_string($_SESSION['melding'])) unset($_SESSION['melding']);
+
 		if(!isset($_SESSION['melding'])) $_SESSION['melding'] = array();
 		$_SESSION['melding'][]=array('lvl' => $errors[$lvl], 'msg' => $message);
 	}
