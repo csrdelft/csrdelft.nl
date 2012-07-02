@@ -11,6 +11,7 @@
 	{foreach from=$csrdelft->getScripts() item=script}
 		<script type="text/javascript" src="{if $script.local}/layout/js/{/if}{$script.naam}?{$script.datum}"></script>
 	{/foreach}
+	<script type='text/javascript' src='http://ads2.bom-media.nl/www/delivery/spcjs.php?id=845'></script>
 	<!--[if lt IE 7.]>
 		<script defer type="text/javascript" src="/layout/pngfix.js"></script>
 	<![endif]-->
@@ -84,11 +85,19 @@
 				{if is_object($csrdelft->_zijkolom)}
 					<div class="block">
 						{$csrdelft->_zijkolom->view()}
+						<script type='text/javascript'><!--// <![CDATA[
+						    /* [id1377] Delft CSR - Standaard */
+						    OA_show(1377);
+						// ]]> --></script><noscript><a target='_blank' href='http://ads2.bom-media.nl/www/delivery/ck.php?n=7533f3f'><img border='0' alt='' src='http://ads2.bom-media.nl/www/delivery/avw.php?zoneid=1377&amp;n=7533f3f' /></a></noscript>
 					</div>
 				{else}
 					{section name=object loop=$csrdelft->_zijkolom}
 						<div class="block">
 							{$object->view()}
+							<script type='text/javascript'><!--// <![CDATA[
+							    /* [id1377] Delft CSR - Standaard */
+							    OA_show(1377);
+							// ]]> --></script><noscript><a target='_blank' href='http://ads2.bom-media.nl/www/delivery/ck.php?n=7533f3f'><img border='0' alt='' src='http://ads2.bom-media.nl/www/delivery/avw.php?zoneid=1377&amp;n=7533f3f' /></a></noscript>
 						</div>
 					{/section}
 				{/if}
