@@ -64,7 +64,7 @@ class LedenlijstContent extends SimpleHTML{
 			}else{
 				$url=$_SERVER['REQUEST_URI'].'?addToGoogle=true';
 			}
-			echo '<a href="'.$_SERVER['REQUEST_URI'].'&amp;addToGoogle=true" class="knop" style="float: right" title="Huidige selectie exporteren naar Google Contacts" onclick="return confirm(\'Weet u zeker dat u deze '.$this->zoeker->count().' leden wilt importeren in uw Google-contacts?\')"><img src="http://code.google.com/favicon.ico" alt="google"/></a>';
+			echo '<a href="'.$url.'" class="knop" style="float: right" title="Huidige selectie exporteren naar Google Contacts" onclick="return confirm(\'Weet u zeker dat u deze '.$this->zoeker->count().' leden wilt importeren in uw Google-contacts?\')"><img src="http://code.google.com/favicon.ico" alt="google"/></a>';
 		}
 		$melding=$this->getMelding();
 		if($melding!=''){
