@@ -37,6 +37,7 @@ RewriteRule ^documenten$ documenten.php?querystring=
 RewriteRule ^documenten/(.*)$ documenten.php?querystring=$1 [QSA]
 
 # Bibliotheek
-RewriteRule ^bibliotheek/wenslijst ../pagina.php?naam=wenslijst
+RewriteRule ^bibliotheek/wenslijst/?$ ../pagina.php?naam=wenslijst
+RewriteRule ^bibliotheek/rubrieken/?$ ../pagina.php?naam=rubrieken
 RewriteRule ^bibliotheek$ bibliotheek.php?querystring=
 RewriteRule ^bibliotheek/(.*)$ bibliotheek.php?querystring=$1 [QSA]
