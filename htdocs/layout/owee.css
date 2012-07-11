@@ -1,12 +1,12 @@
 /**** GENERAL *****************************************************************/
 a, a:HOVER{
-	color: #00bce2;
+	color: #b41e4e;
 }
 h1, h2, h3, h4 {
 	color: #555555;
 }
 body{
-	background:#00bce2;
+	background:#b41e4e;
 }
 
 #container {
@@ -70,16 +70,16 @@ body{
 
 
 #mainleft .block h1 {
-	color: #00bce2;
+	color: #b41e4e;
 }
 
 #mainleft .block h1 a {
-	color: #00bce2;
+	color: #b41e4e;
 }
 
 /**** INLOGKNOP ***************************************************************/
 #login input.submit {
-	background-color: #00BCE2;
+	background-color: #b41e4e;
 	color: #FFF; 
 }
 
@@ -92,7 +92,7 @@ body{
 	height: 13px;
 	padding: 2px;
 	text-align: center;
-	background-color: #00BCE2;
+	background-color: #b41e4e;
 }
 
 #adminding div{
@@ -102,7 +102,7 @@ body{
 	width: 200px; min-height: 50px;
 	z-index: 99;
 	border: 1px solid white; 
-	background-color: #00BCE2;
+	background-color: #b41e4e;
 	padding: 5px;
 }
 
