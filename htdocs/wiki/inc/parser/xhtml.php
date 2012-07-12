@@ -583,11 +583,7 @@ class Doku_Renderer_xhtml extends Doku_Renderer {
         }
 
         // default name is based on $id as given
-        if($linktype='navigation' && noNS($id) == $conf['start']){
-            $default = $conf['start'];
-        }else{
-            $default = $this->_simpleTitle($id);
-        }
+        $default = $this->_simpleTitle($id);
 
         // now first resolve and clean up the $id
         resolve_pageid(getNS($ID),$id,$exists);
@@ -809,8 +805,9 @@ class Doku_Renderer_xhtml extends Doku_Renderer {
         if($hash) $link['url'] .= '#'.$hash;
 
         //markup non existing files
-        if (!$exists)
-          $link['class'] .= ' wikilink2';
+        if (!$exists) {
+            $link['class'] .= ' wikilink2';
+        }
 
         //output formatted
         if ($linking == 'nolink' || $noLink) $this->doc .= $link['name'];

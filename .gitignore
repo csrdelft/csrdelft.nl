@@ -455,6 +455,8 @@ wiki/data/cache/*
 wiki/data/index/*
 wiki/data/locks/*
 wiki/data/media/*
+wiki/data/media_attic/*
+wiki/data/media_meta/*
 wiki/data/meta/*
 wiki/data/pages/*
 wiki/data/pages/wiki/*
