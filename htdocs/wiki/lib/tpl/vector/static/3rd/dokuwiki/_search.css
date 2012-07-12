@@ -71,7 +71,7 @@
     position: absolute;
     top: 0;
     left: -13.5em; /* -( width of #qsearch__in + padding of .ajax_qsearch + a bit more ) */
-    /*width: 12em;*/
+    width: 12em;
     padding: 0.5em;
     font-size: .9em;
     z-index: 20;

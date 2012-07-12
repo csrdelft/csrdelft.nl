@@ -41,26 +41,58 @@ if (empty($conf["useacl"]) || //are there any users?
     $loginname !== "" || //user is logged in?
     !tpl_getConf("vector_closedwiki")){
 
+    //Languages/translations provided by Andreas Gohr's translation plugin,
+    //see <http://www.dokuwiki.org/plugin:translation>. Create plugin object if
+    //needed.
+    if (file_exists(DOKU_PLUGIN."translation/syntax.php") &&
+        !plugin_isdisabled("translation")){
+        $transplugin = &plugin_load("syntax", "translation");
+    } else {
+        $transplugin = false;
+    }
 
     //navigation
     if (tpl_getConf("vector_navigation")){
         //headline
         $_vector_boxes["p-navigation"]["headline"] = $lang["vector_navigation"];
 
+        //detect wiki page to load as content
+        if (!empty($transplugin) &&
+            is_object($transplugin) &&
+            tpl_getConf("vector_navigation_translate")){
+            //translated navigation?
+            $transplugin_langcur = $transplugin->hlp->getLangPart(cleanID(getId())); //current language part
+            $transplugin_langs   = explode(" ", trim($transplugin->getConf("translations"))); //available languages
+            if (empty($transplugin_langs) ||
+                empty($transplugin_langcur) ||
+                !is_array($transplugin_langs) ||
+                !in_array($transplugin_langcur, $transplugin_langs)) {
+                //current page is no translation or something is wrong, load default navigation
+                $nav_location = tpl_getConf("vector_navigation_location");
+            } else {
+                //load language specific navigation
+                $nav_location = tpl_getConf("vector_navigation_location")."_".$transplugin_langcur;
+            }
+        }else{
+            //default navigation, no translation
+            $nav_location = tpl_getConf("vector_navigation_location");
+        }
+
         //content
         if (empty($conf["useacl"]) ||
-            auth_quickaclcheck(cleanID(tpl_getConf("vector_navigation_location"))) >= AUTH_READ){ //current user got access?
+            auth_quickaclcheck(cleanID($nav_location)) >= AUTH_READ){ //current user got access?
             //get the rendered content of the defined wiki article to use as custom navigation
-            $interim = tpl_include_page(tpl_getConf("vector_navigation_location"), false);
+            $interim = tpl_include_page($nav_location, false);
             if ($interim === "" ||
                 $interim === false){
                 //creation/edit link if the defined page got no content
-                $_vector_boxes["p-navigation"]["xhtml"] = "[&#160;".html_wikilink(tpl_getConf("vector_navigation_location"), hsc($lang["vector_fillplaceholder"]." (".tpl_getConf("vector_navigation_location").")"))."&#160;]<br />";
+                $_vector_boxes["p-navigation"]["xhtml"] = "[&#160;".html_wikilink($nav_location, hsc($lang["vector_fillplaceholder"]." (".$nav_location.")"))."&#160;]<br />";
             }else{
                 //the rendered page content
                 $_vector_boxes["p-navigation"]["xhtml"] = $interim;
             }
         }
+        unset($nav_location);
     }
 
     //table of contents (TOC) - show outside the article? (this is a dirty hack but often requested)
@@ -151,7 +183,14 @@ if (empty($conf["useacl"]) || //are there any users?
             if (actionOK("recent")){ //check if action is disabled
                 $_vector_boxes["p-tb"]["xhtml"] .= "        <li id=\"t-recentchanges\"><a href=\"".wl("", array("do" => "recent"))."\" rel=\"nofollow\">".hsc($lang["btn_recent"])."</a></li>\n"; //language comes from DokuWiki core
             }
-            $_vector_boxes["p-tb"]["xhtml"] .= "        <li id=\"t-upload\"><a href=\"".DOKU_BASE."lib/exe/mediamanager.php?ns=".getNS(getID())."\" rel=\"nofollow\">".hsc($lang["vector_toolbxdef_upload"])."</a></li>\n";
+            if (actionOK("media")){ //check if action is disabled
+                if (function_exists("media_managerURL")) {
+                    //use new media manager (available on releases newer than 2011-05-25a "Rincewind" / since 2011-11-10 "Angua" RC1)
+                    $_vector_boxes["p-tb"]["xhtml"] .= "        <li id=\"t-upload\"><a href=\"".wl("", array("do" => "media"))."\" rel=\"nofollow\">".hsc($lang["btn_media"])."</a></li>\n"; //language comes from DokuWiki core
+                } else {
+                    $_vector_boxes["p-tb"]["xhtml"] .= "        <li id=\"t-upload\"><a href=\"".DOKU_BASE."lib/exe/mediamanager.php?ns=".getNS(getID())."\" rel=\"nofollow\">".hsc($lang["vector_toolbxdef_upload"])."</a></li>\n";
+                }
+            }
             if (actionOK("index")){ //check if action is disabled
                 $_vector_boxes["p-tb"]["xhtml"] .= "        <li id=\"t-special\"><a href=\"".wl("", array("do" => "index"))."\" rel=\"nofollow\">".hsc($lang["vector_toolbxdef_siteindex"])."</a></li>\n";
             }

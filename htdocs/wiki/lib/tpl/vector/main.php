@@ -32,8 +32,8 @@ if (!defined("DOKU_INC")){
  * template has to know, what we are doing right now - and that is what this
  * var is for.
  *
- * Please have a look at the "mediamanager.php" and "detail.php" file in the
- * same folder, they are also influencing the var's value.
+ * Please have a look at the "detail.php" file in the same folder, it is also
+ * influencing the var's value.
  *
  * @var string
  * @author Andreas Haerter <development@andreas-haerter.com>
@@ -55,7 +55,6 @@ if (!empty($vector_action) &&
     $vector_action !== "article" &&
     $vector_action !== "print" &&
     $vector_action !== "detail" &&
-    $vector_action !== "mediamanager" &&
     $vector_action !== "cite"){
     //ignore unknown values
     $vector_action = "article";
@@ -117,21 +116,21 @@ if ($rev < 1){
 //get tab config
 include DOKU_TPLINC."/conf/tabs.php";  //default
 if (file_exists(DOKU_TPLINC."/user/tabs.php")){
-   include DOKU_TPLINC."/user/tabs.php"; //add user defined
+    include DOKU_TPLINC."/user/tabs.php"; //add user defined
 }
 
 
 //get boxes config
 include DOKU_TPLINC."/conf/boxes.php"; //default
 if (file_exists(DOKU_TPLINC."/user/boxes.php")){
-   include DOKU_TPLINC."/user/boxes.php"; //add user defined
+    include DOKU_TPLINC."/user/boxes.php"; //add user defined
 }
 
 
 //get button config
 include DOKU_TPLINC."/conf/buttons.php"; //default
 if (file_exists(DOKU_TPLINC."/user/buttons.php")){
-   include DOKU_TPLINC."/user/buttons.php"; //add user defined
+    include DOKU_TPLINC."/user/buttons.php"; //add user defined
 }
 
 
@@ -414,7 +413,7 @@ if ($ACT === "edit" &&
 }
 
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo hsc($conf["lang"]); ?>" lang="<?php echo hsc($conf["lang"]); ?>" dir="<?php echo hsc($lang["direction"]); ?>">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -422,6 +421,7 @@ if ($ACT === "edit" &&
 <?php
 //show meta-tags
 tpl_metaheaders();
+echo "<meta name=\"viewport\" content=\"width=device-width,initial-scale=1\" />";
 
 //manually load needed CSS? this is a workaround for PHP Bug #49642. In some
 //version/os combinations PHP is not able to parse INI-file entries if there
@@ -437,17 +437,26 @@ if (!file_exists(DOKU_TPLINC."style.ini")){
 //note: since 2011-04-22 "Rincewind RC1", there is a core function named
 //      "tpl_getFavicon()". But its functionality is not really fitting the
 //      behaviour of this template, therefore I don't use it here.
-if (file_exists(DOKU_TPLINC."user/favicon.ico")) {
+if (file_exists(DOKU_TPLINC."user/favicon.ico")){
     //user defined - you might find http://tools.dynamicdrive.com/favicon/
     //useful to generate one
     echo "\n<link rel=\"shortcut icon\" href=\"".DOKU_TPL."user/favicon.ico\" />\n";
-} elseif (file_exists(DOKU_TPLINC."user/favicon.png")) {
+}elseif (file_exists(DOKU_TPLINC."user/favicon.png")){
     //note: I do NOT recommend PNG for favicons (cause it is not supported by
     //all browsers), but some users requested this feature.
     echo "\n<link rel=\"shortcut icon\" href=\"".DOKU_TPL."user/favicon.png\" />\n";
 }else{
     //default
     echo "\n<link rel=\"shortcut icon\" href=\"".DOKU_TPL."static/3rd/dokuwiki/favicon.ico\" />\n";
+}
+
+//include default or userdefined Apple Touch Icon (see <http://j.mp/sx3NMT> for
+//details)
+if (file_exists(DOKU_TPLINC."user/apple-touch-icon.png")){
+    echo "<link rel=\"apple-touch-icon\" href=\"".DOKU_TPL."user/apple-touch-icon.png\" />\n";
+}else{
+    //default
+    echo "<link rel=\"apple-touch-icon\" href=\"".DOKU_TPL."static/3rd/dokuwiki/apple-touch-icon.png\" />\n";
 }
 
 //load userdefined js?
@@ -464,6 +473,7 @@ if ($vector_action === "print"){
        ."<link rel=\"stylesheet\" media=\"all\" type=\"text/css\" href=\"".DOKU_TPL."static/css/print.css\" />\n"
        ."<link rel=\"stylesheet\" media=\"all\" type=\"text/css\" href=\"".DOKU_TPL."user/print.css\" />\n";
 }
+
 //load language specific css hacks?
 if (file_exists(DOKU_TPLINC."lang/".$conf["lang"]."/style.css")){
   $interim = trim(file_get_contents(DOKU_TPLINC."lang/".$conf["lang"]."/style.css"));
@@ -479,8 +489,8 @@ if (file_exists(DOKU_TPLINC."lang/".$conf["lang"]."/style.css")){
              switch (true){
                   //special: tech
                   case ($vector_action === "detail"):
-                  case ($vector_action === "mediamanager"):
                   case ($vector_action === "cite"):
+                  case ($ACT === "media"): //var comes from DokuWiki
                   case ($ACT === "search"): //var comes from DokuWiki
                     echo "mediawiki ltr ns-1 ns-special ";
                     break;
@@ -500,12 +510,6 @@ if (file_exists(DOKU_TPLINC."lang/".$conf["lang"]."/style.css")){
                   default:
                     echo "mediawiki ltr capitalize-all-nouns ns-0 ns-subject ";
                     break;
-              }
-              //add additional CSS class to hide some elements when
-              //we have to show the (not) embedded mediamanager
-              if ($vector_action === "mediamanager" &&
-                  !tpl_getConf("vector_mediamanager_embedded")){
-                  echo "mmanagernotembedded ";
               } ?>skin-vector">
 <div id="page-container">
 <div id="page-base" class="noprint"></div>
@@ -546,7 +550,7 @@ if (file_exists(DOKU_TPLINC."lang/".$conf["lang"]."/style.css")){
   }
   //show breadcrumps if enabled and position = top
   if ($conf["breadcrumbs"] == true &&
-      $vector_action !== "mediamanager" &&
+      $ACT !== "media" && //var comes from DokuWiki
       (empty($conf["useacl"]) || //are there any users?
        $loginname !== "" || //user is logged in?
        !tpl_getConf("vector_closedwiki")) &&
@@ -557,7 +561,7 @@ if (file_exists(DOKU_TPLINC."lang/".$conf["lang"]."/style.css")){
   }
   //show hierarchical breadcrumps if enabled and position = top
   if ($conf["youarehere"] == true &&
-      $vector_action !== "mediamanager" &&
+      $ACT !== "media" && //var comes from DokuWiki
       (empty($conf["useacl"]) || //are there any users?
        $loginname !== "" || //user is logged in?
        !tpl_getConf("vector_closedwiki")) &&
@@ -584,10 +588,6 @@ if (file_exists(DOKU_TPLINC."lang/".$conf["lang"]."/style.css")){
         case "detail":
             include DOKU_TPLINC."inc_detail.php";
             break;
-        //file browser/"mediamanager"
-        case "mediamanager":
-            include DOKU_TPLINC."inc_mediamanager.php";
-            break;
         //"cite this article"
         case "cite":
             include DOKU_TPLINC."inc_cite.php";
@@ -606,7 +606,7 @@ if (file_exists(DOKU_TPLINC."lang/".$conf["lang"]."/style.css")){
   <?php
   //show breadcrumps if enabled and position = bottom
   if ($conf["breadcrumbs"] == true &&
-      $vector_action !== "mediamanager" &&
+      $ACT !== "media" && //var comes from DokuWiki
       (empty($conf["useacl"]) || //are there any users?
        $loginname !== "" || //user is logged in?
        !tpl_getConf("vector_closedwiki")) &&
@@ -617,7 +617,7 @@ if (file_exists(DOKU_TPLINC."lang/".$conf["lang"]."/style.css")){
   }
   //show hierarchical breadcrumps if enabled and position = bottom
   if ($conf["youarehere"] == true &&
-      $vector_action !== "mediamanager" &&
+      $ACT !== "media" && //var comes from DokuWiki
       (empty($conf["useacl"]) || //are there any users?
        $loginname !== "" || //user is logged in?
        !tpl_getConf("vector_closedwiki")) &&
@@ -646,13 +646,13 @@ if (file_exists(DOKU_TPLINC."lang/".$conf["lang"]."/style.css")){
       }else{
           //username and userpage
           echo "      <li id=\"pt-userpage\">".(tpl_getConf("vector_userpage")
-                                                ? "<a href=\"".$conf["profiellink"].$loginname."\">".$INFO['userinfo']['name']." (".hsc($loginname).")</a>"
+                                                ? html_wikilink(tpl_getConf("vector_userpage_ns").$loginname, hsc($loginname))
                                                 : hsc($loginname))."</li>";
           //personal discussion
-          //if (tpl_getConf("vector_discuss") &&
-          //    tpl_getConf("vector_userpage")){
-          //    echo "      <li id=\"pt-mytalk\">".html_wikilink(tpl_getConf("vector_discuss_ns").ltrim(tpl_getConf("vector_userpage_ns"), ":").$loginname, hsc($lang["vector_mytalk"]))."</li>";
-          //}
+          if (tpl_getConf("vector_discuss") &&
+              tpl_getConf("vector_userpage")){
+              echo "      <li id=\"pt-mytalk\">".html_wikilink(tpl_getConf("vector_discuss_ns").ltrim(tpl_getConf("vector_userpage_ns"), ":").$loginname, hsc($lang["vector_mytalk"]))."</li>";
+          }
           //admin
           if (!empty($INFO["isadmin"]) ||
               !empty($INFO["ismanager"])){
@@ -662,8 +662,6 @@ if (file_exists(DOKU_TPLINC."lang/".$conf["lang"]."/style.css")){
           if (actionOK("profile")){ //check if action is disabled
               echo  "      <li id=\"pt-preferences\"><a href=\"".wl(cleanID(getId()), array("do" => "profile"))."\" rel=\"nofollow\">".hsc($lang["btn_profile"])."</a></li>\n"; //language comes from DokuWiki core
           }
-          //csrstek
-          echo "      <li><a href=\"http://csrdelft.nl\">csrdelft.nl</a></li>";
           //logout
           echo  "      <li id=\"pt-logout\"><a href=\"".wl(cleanID(getId()), array("do" => "logout"))."\" rel=\"nofollow\">".hsc($lang["btn_logout"])."</a></li>\n"; //language comes from DokuWiki core
       }

@@ -38,26 +38,228 @@
 /******************************************************************************
  ************** Styles/corrections for the template itself ********************
  ******************************************************************************/
-/* --------------- general styling --------------- */
-/* general tags */
+/* --------------- general styling  --------------- */
 html {
   background-color: #f3f3f3;
+  color: __text__;
+  overflow-x: auto;
+  overflow-y: auto;
 }
+body {
+  font: normal 100%/1.4 sans-serif;
+}
+hr {
+  border: 0 none;
+  text-align: center;
+  width: 100%;
+  clear: both;
+}
+caption,
+legend {
+  color: __text_neu__;
+  font-family: sans-serif;
+  background-color: inherit;
+}
+pre,
+code,
+samp,
+kbd {
+  font-family: monospace,sans-serif;
+}
+pre {
+  overflow: auto;
+}
+img {
+  border-width: 0;
+  background-color: transparent;
+}
+blockquote {
+  padding: 0 1.25em;
+  border: solid __border__;
+  border-width: 0 0 0 .25em;
+}
+q:before,
+q:after {
+  content: '';
+}
+sub,
+sup {
+  font-size: .8em;
+  line-height: 1;
+}
+sub {
+  vertical-align: sub;
+}
+sup {
+  vertical-align: super;
+}
+
+/* forms */
+form {
+  display: inline;
+  padding: 0;
+}
+label {
+  vertical-align: middle;
+  cursor: pointer;
+}
+input,
+textarea,
+button,
+select,
+optgroup,
+option {
+  font: inherit;
+  color: inherit;
+  /* background-color destroys button look */
+  line-height: 1;
+  margin: 0;
+  vertical-align: middle;
+}
+input[type=text],
+input[type=password],
+textarea {
+  padding: .1em;
+}
+input[type=radio],
+input[type=checkbox],
+input.check {
+  padding: 0;
+}
+input[type=submit],
+input.button,
+button {
+  cursor: pointer;
+}
+input[disabled],
+button[disabled],
+input[readonly],
+button[readonly] {
+  cursor: auto;
+}
+optgroup {
+  font-style: italic;
+  font-weight: bold;
+}
+option {
+  font-style: normal;
+  font-weight: normal;
+}
+
+/* tables */
+table {
+  border-collapse: collapse;
+  empty-cells: show;
+  border-spacing: 0;
+  border: 1px solid __border__;
+}
+caption {
+  caption-side: top;
+  text-align: left;
+  margin: 0 0 .3em;
+}
+th,
+td {
+  padding: .3em .5em;
+  margin: 0;
+  vertical-align: top;
+  border: 1px solid __border__;
+  text-align: left;
+}
+th {
+  font-weight: bold;
+  background-color: __background_alt__;
+}
+
+/* basic margins and paddings */
+p,
+ul,
+ol,
+dl,
+pre,
+table,
+blockquote,
+fieldset,
+address {
+  margin: 0 0 1.4em 0; /* bottom margin = line-height */
+  padding: 0;
+}
+div {
+  margin: 0;
+  padding: 0;
+}
+
+/* lists */
+ul,
+ol {
+  padding: 0 0 0 1.5em;
+}
+li,
+dd {
+  padding: 0;
+  margin: 0 0 0 1.5em;
+}
+dt {
+  font-weight: bold;
+  margin: 0;
+  padding: 0;
+}
+li ul,
+li ol,
+li dl,
+dl ul,
+dl ol,
+dl dl {
+  margin-bottom: 0;
+  padding: 0;
+}
+li li {
+  font-size: 100%;
+}
+ul             { list-style: square outside; }
+ol             { list-style: decimal outside; }
+ol ol          { list-style-type: lower-alpha; }
+ol ol ol       { list-style-type: upper-roman; }
+ol ol ol ol    { list-style-type: upper-alpha; }
+ol ol ol ol ol { list-style-type: lower-roman; }
+
+/* general classes */
+div.clearer {
+  /* additional to what's already in DokuWiki's lib/styles/all.css: */
+  font-size: 1px;
+  visibility: hidden;
+}
+.a11y {
+  position: absolute;
+  left: -9000px;
+  top: -4000px;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  display: inline;
+}
+
+
+/* --------------- content styling --------------- */
+
+/* embedded images (styles are already partly set in DokuWiki's lib/styles/all.css) */
+.dokuwiki img.media       { }
+.dokuwiki img.medialeft   { margin: .5em 1.5em .5em 0; }
+.dokuwiki img.mediaright  { margin: .5em 0 .5em 1.5em; }
+.dokuwiki img.mediacenter { margin: .5em auto; }
+
 div.dokuwiki p,
 div.dokuwiki blockquote,
 div.dokuwiki table,
 div.dokuwiki pre {
   margin: 0 0 1.0em 0;
 }
-div.dokuwiki caption {
-  font-family: sans-serif;
-}
 
 /* forms */
 div.dokuwiki textarea.edit {
   font-family: monospace, serif;
   /* second generic font fixes problem with font-size, see
-http://meyerweb.com/eric/thoughts/2010/02/12/fixed-monospace-sizing/ */
+     http://meyerweb.com/eric/thoughts/2010/02/12/fixed-monospace-sizing/ */
   font-size: 14px;
   color: __text__;
   background-color: __background__;
@@ -127,26 +329,26 @@ div.dokuwiki select.edit[disabled] {
 /* edit form */
 div.dokuwiki div.toolbar,
 div.dokuwiki div#wiki__editbar {
-   margin: 2px 0;
-   text-align: left;
+  margin: 2px 0;
+  text-align: left;
 }
 div.dokuwiki div#size__ctl {
-   float: right;
-   width: 60px;
-   height: 2.7em;
+  float: right;
+  width: 60px;
+  height: 2.7em;
 }
 div.dokuwiki #size__ctl img {
-   cursor: pointer;
+  cursor: pointer;
 }
 div.dokuwiki div#wiki__editbar div.editButtons {
-   float: left;
-   padding: 0 1.0em 0.7em 0;
+  float: left;
+  padding: 0 1.0em 0.7em 0;
 }
 div.dokuwiki div#wiki__editbar div.summary {
-   float: left;
+  float: left;
 }
 div.dokuwiki .nowrap {
-   white-space: nowrap;
+  white-space: nowrap;
 }
 div.dokuwiki div#draft__status {
   float: right;
@@ -273,6 +475,9 @@ h4,
 h5,
 h6 {
   font-family: sans-serif;
+  background-color: inherit;
+  padding: 0;
+  clear: left; /* ideally 'both', but problems with toc */
 }
 div#content .dokuwiki h1,
 div#content .dokuwiki h2,
@@ -384,6 +589,7 @@ div.dokuwiki li.closed {
 
 div.dokuwiki li {
   margin-left: 0;
+  margin-bottom: 1px;
 }
 
 /* quotes */
@@ -395,19 +601,43 @@ div#content .dokuwiki blockquote {
 }
 
 /* preformatted stuff, source code */
+.dokuwiki dl.code dt,
+.dokuwiki dl.file dt {
+  background-color: __background_alt__;
+  border: solid __border__;
+  border-width: 1px 1px 0;
+  color: inherit;
+  display: inline;
+  padding: 0 .5em;
+  margin-left: 1em;
+}
+.dokuwiki dl.code dd,
+.dokuwiki dl.file dd {
+  margin: 0;
+}
 div#content .dokuwiki code,
 div#content .dokuwiki pre,
 div#content .dokuwiki pre.code,
-div#content .dokuwiki pre.file {
+div#content .dokuwiki pre.file,
+div#content .dokuwiki samp,
+div#content .dokuwiki kbd,
+div#content .dokuwiki tt {
   font-size: 100%;
   background-color: #f9f9f9;
+  color: __text__;
+  font-size: 1em;
+  direction: ltr;
+  text-align: left;
+}
+div#content .dokuwiki em.u code { /* fix if background-color hides underlining */
+  text-decoration: underline;
 }
 div#content .dokuwiki pre,
 div#content .dokuwiki pre.code,
 div#content .dokuwiki pre.file {
   line-height: 1.2em;
   padding: 0.5em;
-  border-style: dashed;
+  border: 1px dashed __border__;
 }
 div#content .dokuwiki dl.file,
 div#content .dokuwiki dl.file dd {
@@ -448,19 +678,20 @@ td[align="right"],
 th[align="right"] {
   text-align: right;
 }
-div.dokuwiki table.inline {
+.dokuwiki table.inline {
   background-color: __background__;
-  min-width: 0;
 }
-div.dokuwiki table.inline th,
-div.dokuwiki table.inline td {
+.dokuwiki table.inline th,
+.dokuwiki table.inline td {
   border: 1px solid __border__;
 }
-div.dokuwiki table.inline th {
+.dokuwiki table.inline th {
+  color: inherit;
   background-color: __background_alt__;
 }
-div.dokuwiki table.inline tr:hover th,
-div.dokuwiki table.inline th:hover {
+.dokuwiki table.inline tr:hover td,
+.dokuwiki table.inline tr:hover th,
+.dokuwiki table.inline th:hover {
   background-color: __background_alt__;
 }
 
@@ -490,8 +721,8 @@ div.dokuwiki div.fn {
 
 /* insitu-footnotes */
 div.insitu-footnote {
-  font-size: 85%;
-  padding: 4px;
+  font-size: 0.938em; /* 12px */
+  padding: 4px 7px 4px 10px;
 }
 div.insitu-footnote code,
 div.insitu-footnote pre {
@@ -516,6 +747,8 @@ div.picker {
   width: 250px;
   border: 1px solid __border__;
   background-color: __background_alt__;
+  font-size: 11px;
+  line-height: 13px;
 }
 
 div.pk_hl {
@@ -550,12 +783,12 @@ div.dokuwiki form.bureaucracy__plugin label span,
 div.dokuwiki form.bureaucracy__plugin input.edit,
 div.dokuwiki form.bureaucracy__plugin textarea.edit,
 div.dokuwiki form.bureaucracy__plugin fieldset textarea.edit {
-   text-align: left;
-   margin: auto 5px;
-   float: none !important;
-   width: 97% !important;
-   min-width: 97% !important;
-   max-width: 97% !important;
+  text-align: left;
+  margin: auto 5px;
+  float: none !important;
+  width: 97% !important;
+  min-width: 97% !important;
+  max-width: 97% !important;
 }
 
 
@@ -680,7 +913,6 @@ div#simpleSearch input#qsearch__in {
   padding: 0;
   position: static;
 }
-
 #qsearch__out ul {
   padding: 0;
   margin: 0;
@@ -706,6 +938,7 @@ div#simpleSearch input#qsearch__in {
   color: windowtext;
   text-decoration: none;
 }
+
 
 /* --------------- footer --------------- */
 div#footer a.wikilink1,
@@ -863,29 +1096,100 @@ div.dokuwiki form#dw__login label.simple {
 }
 
 
-/* --------------- media manager --------------- */
-#media__manager {
-  min-height: 550px;
+/* --------------- media manager popup --------------- */
+html.popup {
+  background-color: #fff;
 }
-* html #media__manager {
-  height: 550px; /* fix MSIE 6 */
+html.popup body {
+  font: 13px/17px sans-serif;
+  background-image: none;
+  background-color: #fff;
 }
-#media__manager h1,
-#media__manager h2,
-#media__popup h1,
-#media__popup h2 {
+html.popup #media__manager {
+  min-height: 465px;
+}
+* html.popup #media__manager {
+  height: 465px; /* fix MSIE 6 */
+}
+html.popup #media__manager h1,
+html.popup #media__manager h2,
+html.popup #media__popup h1,
+html.popup #media__popup h2 {
   font-size: 1em !important;
   line-height: 1em !important;
   font-weight: bold !important;
 }
-/* make a "non-embedded"/fullpage manager possible trough hiding some stuff */
-body.mmanagernotembedded .noprint,
-body.mmanagernotembedded #siteNotice,
-body.mmanagernotembedded #footer {
-  display: none !important;
+html.popup #media__opts {
+  padding-left: 1em;
+  margin-bottom: 0.5em;
 }
-body.mmanagernotembedded #content {
+html.popup #media__opts input {
+  float: left;
+  display: block;
+  margin-top: 4px;
+  position: absolute;
+}
+*+html.popup #media__opts input,
+* html.popup #media__opts input {
+  position: static;
+}
+html.popup #media__opts label {
+  display: block;
+  float: left;
+  margin-left: 20px;
+  margin-bottom: 4px;
+}
+*+html.popup #media__opts label,
+* html.popup #media__opts label {
+  margin-left: 10px;
+}
+html.popup #media__opts br {
+  clear: left;
+}
+
+
+/* --------------- media manager page --------------- */
+#mediamanager__page h2,
+#mediamanager__page h3 {
+  font-size: 1em !important;
+  line-height: 1.5em !important;
+  font-weight: normal !important;
+  padding: 3px 10px !important;
+}
+#mediamanager__page div.namespaces h2 {
+  margin-bottom: 0;
+  border-bottom: 0;
+}
+#mediamanager__page div.namespaces div.panelHeader {
+  padding-top: 11px;
+}
+#mediamanager__page h3,
+#mediamanager__page ul.tabs li {
   margin: 0 !important;
+  padding: 0 !important;
+}
+#mediamanager__page .panelHeader ul {
+  list-style-image: none !important;
+}
+#mediamanager__page .panelHeader ul .ui-buttonset {
+  font-size: 12px;
+}
+#mediamanager__page .panelHeader ul li.ui-buttonset {
+  background-position: 3px 0;
+  padding-bottom: 3px;
+}
+#mediamanager__page .panelHeader div.no input.button {
+  padding: 1px;
+  line-height: 1em;
+}
+
+
+/* --------------- link wizard --------------- */
+#link__wiz {
+  text-align: center;
+}
+#link__wiz_result div.even {
+  background-color: #f5f5f5;
 }
 
 
@@ -896,7 +1200,6 @@ div.dokuwiki .search_result {
 }
 
 div.dokuwiki .search_snippet {
-  color: __text_other__;
   font-size: 12px;
   margin-left: 20px;
 }
@@ -938,31 +1241,35 @@ div.dokuwiki .section_highlight {
   background-color: __background_alt__ !important;
 }
 
-/* --------------- image details ----------------- */
-div.dokuwiki div.img_big {
-  float: left;
-  margin-right: 0.5em;
+
+/* --------------- JS popup ----------------- */
+.JSpopup {
+  background-color: __background__;
+  color: __text__;
+  border: 1px solid __border__;
+  line-height: 1.2;
+  padding: 0 .2em;
+}
+.JSpopup ul,
+.JSpopup ol {
+  padding-left: 0;
 }
 
-div.dokuwiki dl.img_tags dt {
-  font-weight: bold;
-  background-color: __background_alt__;
-}
-div.dokuwiki dl.img_tags dd {
-  background-color: __background_neu__;
-}
 
-div.dokuwiki div.imagemeta {
-  color: __text_neu__;
-  font-size: 70%;
-  line-height: 95%;
+/* --------------- diff view ----------------- */
+.dokuwiki table.diff td {
+  font-size: 12px;
+  line-height: 17px;
 }
-
-div.dokuwiki div.imagemeta img.thumb {
-  float: left;
-  margin-right: 0.1em;
+.dokuwiki table.diff th {
+  font-size: 12px;
 }
-
+.dokuwiki table.diff td.diff-addedline,
+.dokuwiki table.diff td.diff-deletedline,
+.dokuwiki table.diff td.diff-context {
+  padding-left: 2px;
+  padding-right: 2px;
+}
 
 
 /******************************************************************************
@@ -979,6 +1286,11 @@ textarea,
   /* overwrite original vector with fixes for IE6/7 */
   #width: 100% !important;
   border: auto;
+}
+/* MSIE 7: media manager */
+*:first-child+html #mediamanager__page .panelContent li {
+  list-style: none !important;
+  list-style-image: none !important;
 }
 /* ajax quicksearch: MSIE 6/7 */
 * html #qsearch__out {

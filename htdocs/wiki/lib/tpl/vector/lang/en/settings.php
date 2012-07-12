@@ -44,8 +44,9 @@ $lang["vector_sitenotice"]          = "Show site wide notice?";
 $lang["vector_sitenotice_location"] = "If yes, use following wiki page for the site wide notice:";
 
 //navigation
-$lang["vector_navigation"]          = "Show navigation?";
-$lang["vector_navigation_location"] = "If yes, use following wiki page as navigation:";
+$lang["vector_navigation"]           = "Show navigation?";
+$lang["vector_navigation_location"]  = "If yes, use following wiki page as navigation:";
+$lang["vector_navigation_translate"] = "If yes and <a href=\"http://www.dokuwiki.org/plugin:translation\">Translation plugin</a> available: load language specific navigation?<br />The wiki page of the translated navigation(s) is [value of 'vector_navigation_location']_[iso lang code] (e.g. ':wiki:navigation_de').";
 
 //exportbox ("print/export")
 $lang["vector_exportbox"]          = "Show 'print/export' box?";
@@ -71,7 +72,6 @@ $lang["vector_donate_url"]      = "If not default, use following URL for donatio
 $lang["vector_toc_position"] = "Table of contents (TOC) position";
 
 //other stuff
-$lang["vector_mediamanager_embedded"] = "Display mediamanger embedded within the common layout?";
 $lang["vector_breadcrumbs_position"]  = "Position of breadcrumb navigation (if enabled):";
 $lang["vector_youarehere_position"]   = "Position of 'You are here' navigation (if enabled):";
 $lang["vector_cite_author"]           = "Author name in 'Cite this Article':";

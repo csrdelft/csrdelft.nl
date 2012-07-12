@@ -46,8 +46,9 @@ $conf["vector_sitenotice"]          = true; //TRUE: use/show sitenotice
 $conf["vector_sitenotice_location"] = ":wiki:site_notice"; //page/article used to store the sitenotice
 
 //navigation
-$conf["vector_navigation"]          = true; //TRUE: use/show navigation
-$conf["vector_navigation_location"] = ":wiki:navigation"; //page/article used to store the navigation
+$conf["vector_navigation"]           = true; //TRUE: use/show navigation
+$conf["vector_navigation_location"]  = ":wiki:navigation"; //page/article used to store the navigation
+$conf["vector_navigation_translate"] = true; //TRUE: load translated navigation if translation plugin is available (see <http://www.dokuwiki.org/plugin:translation>)
 
 //exportbox ("print/export")
 $conf["vector_exportbox"]          = true; //TRUE: use/show exportbox
@@ -73,7 +74,6 @@ $conf["vector_donate_url"]      = "http://andreas-haerter.com/donate/dokuwiki-te
 $conf["vector_toc_position"] = "article"; //article: show TOC embedded within the article; "sidebar": show TOC near the navigation, left column
 
 //other stuff
-$conf["vector_mediamanager_embedded"] =  false; //TRUE: Show media manager surrounded by the common navigation/tabs and stuff
 $conf["vector_breadcrumbs_position"]  = "bottom"; //position of breadcrumbs navigation ("top" or "bottom")
 $conf["vector_youarehere_position"]   = "top"; //position of "you are here" navigation ("top" or "bottom")
 if (!empty($_SERVER["HTTP_HOST"])){
