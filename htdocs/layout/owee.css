@@ -47,7 +47,7 @@ body{
 
 /**** SUBMENU *****************************************************************/
 #submenu {
-	background: #0da3d2; /* url('http://plaetjes.csrdelft.nl/owee/2010/submenubg.png') repeat-x */
+	background: #b41e4e; /* url('http://plaetjes.csrdelft.nl/owee/2010/submenubg.png') repeat-x */
 }
 #submenu a:hover, #submenu a:active, #submenu a.active {
 	color: #fbc71a;
