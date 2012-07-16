@@ -829,7 +829,9 @@ function pageTemplate($id){
             if(empty($data['tplfile'])){
                 $path = dirname(wikiFN($id));
                 $tpl = '';
-                if(@file_exists($path.'/_template.txt')){
+                if(@file_exists($path.'/template.txt')){
+                    $data['tplfile'] = $path.'/template.txt';
+                }elseif(@file_exists($path.'/_template.txt')){
                     $data['tplfile'] = $path.'/_template.txt';
                 }else{
                     // search upper namespaces for templates
@@ -1409,6 +1411,7 @@ function editorinfo($username){
         case 'username':
         case 'email':
         case 'email_link':
+        case 'username_profiellink':
             if($auth) $info = $auth->getUserData($username);
             break;
         default:
@@ -1424,6 +1427,8 @@ function editorinfo($username){
             case 'email_link':
                 $mail=obfuscate($info['mail']);
                 return '<a href="mailto:'.$mail.'">'.$mail.'</a>';
+            case 'username_profiellink':
+                return '<a href="'.$conf['profiellink'].$username.'">'.hsc($info['name']).'</a>';
             default:
                 return hsc($username);
         }

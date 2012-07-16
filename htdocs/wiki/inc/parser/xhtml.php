@@ -583,8 +583,11 @@ class Doku_Renderer_xhtml extends Doku_Renderer {
         }
 
         // default name is based on $id as given
-        $default = $this->_simpleTitle($id);
-
+        if($linktype='navigation' && noNS($id) == $conf['start']){
+            $default = $conf['start'];
+        }else{
+            $default = $this->_simpleTitle($id);
+        }
         // now first resolve and clean up the $id
         resolve_pageid(getNS($ID),$id,$exists);
 
