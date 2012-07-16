@@ -808,7 +808,6 @@ htdocs/wiki/lib/plugins/csv/manager.dat -text
 htdocs/wiki/lib/plugins/csv/plugin.info.txt -text
 htdocs/wiki/lib/plugins/csv/syntax.php -text
 htdocs/wiki/lib/plugins/data/README -text
-htdocs/wiki/lib/plugins/data/_test/types.group.php -text
 htdocs/wiki/lib/plugins/data/_test/wiki.test.php -text
 htdocs/wiki/lib/plugins/data/action.php -text
 htdocs/wiki/lib/plugins/data/admin/aliases.php -text
@@ -1245,6 +1244,7 @@ htdocs/wiki/lib/plugins/searchform/manager.dat -text
 htdocs/wiki/lib/plugins/searchform/script.js -text
 htdocs/wiki/lib/plugins/searchform/syntax.php -text
 htdocs/wiki/lib/plugins/showlogin/action.php -text
+htdocs/wiki/lib/plugins/sqlite/README -text
 htdocs/wiki/lib/plugins/sqlite/admin.php -text
 htdocs/wiki/lib/plugins/sqlite/db.sql -text
 htdocs/wiki/lib/plugins/sqlite/helper.php -text

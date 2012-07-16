@@ -36,12 +36,36 @@ class admin_plugin_sqlite extends DokuWiki_Admin_Plugin {
 
             echo '<h2>'.$this->getLang('db').' '.hsc($_REQUEST['db']).'</h2>';
             echo '<div class="level2">';
+            
+            $DBI =& plugin_load('helper', 'sqlite');
+            if($_REQUEST['version']=='sqlite2'){
+                if($DBI->isSqlite3db($conf['metadir'].'/'.$_REQUEST['db'].'.sqlite')){
+                    msg('This is a database in sqlite3 format.',2);
+                    msg('This plugin needs your database file has the extension ".sqlite3" 
+                        instead of ".sqlite" before it will be recognized as sqlite3 database.<br /> 
+                        Please rename your file manual.',2);//FIXME action rename
+                }else{
+                    if($DBI->existsPDOSqlite()){
+                        msg('This is a database in sqlite2 format.',2);
+                        if($DBI->existsSqliteExtension()){
+                            
+                            msg('Convert sqlite2 to 3',2);
+                        }else{
+                            msg('Before PDO sqlite can handle this format, it needs a conversion to the sqlite3 format. 
+                                Because PHP sqlite extension is not available, 
+                                you should manual convert in the meta directory "'.hsc($_REQUEST['db']).'.sqlite" to "'.hsc($_REQUEST['db']).'.sqlite3".<br />
+                                See for info about the conversion '.$this->external_link('http://www.sqlite.org/version3.html').'.',2);
+                        }
+                    }
+                }
+            }
 
             echo '<ul>';
             echo '<li><div class="li"><a href="'.
                     wl($ID,array('do'     => 'admin',
                                  'page'   => 'sqlite',
                                  'db'     => $_REQUEST['db'],
+                                 'version'=> $_REQUEST['version'],
                                  'sql'    => 'SELECT name,sql FROM sqlite_master WHERE type=\'table\' ORDER BY name',
                                  'sectok' => getSecurityToken())).
                  '">'.$this->getLang('table').'</a></div></li>';
@@ -49,6 +73,7 @@ class admin_plugin_sqlite extends DokuWiki_Admin_Plugin {
                     wl($ID,array('do'     => 'admin',
                                  'page'   => 'sqlite',
                                  'db'     => $_REQUEST['db'],
+                                 'version'=> $_REQUEST['version'],
                                  'sql'    => 'SELECT name,sql FROM sqlite_master WHERE type=\'index\' ORDER BY name',
                                  'sectok' => getSecurityToken())).
                  '">'.$this->getLang('index').'</a></div></li>';
@@ -60,6 +85,7 @@ class admin_plugin_sqlite extends DokuWiki_Admin_Plugin {
             $form->addHidden('do','admin');
             $form->addHidden('page','sqlite');
             $form->addHidden('db',$_REQUEST['db']);
+            $form->addHidden('version', $_REQUEST['version']);
             $form->addElement('<textarea name="sql" class="edit">'.hsc($_REQUEST['sql']).'</textarea>');
             $form->addElement('<input type="submit" class="button" />');
             $form->endFieldset();
@@ -68,20 +94,27 @@ class admin_plugin_sqlite extends DokuWiki_Admin_Plugin {
 
             if($_REQUEST['sql']){
 
-                $DBI =& plugin_load('helper', 'sqlite');
                 if(!$DBI->init($_REQUEST['db'],'')) return;
 
-                $sql = explode(";",$_REQUEST['sql']);
+                $sql = explode(";;",$_REQUEST['sql']);
+                pr($sql);
                 foreach($sql as $s){
                     $s = preg_replace('!^\s*--.*$!m', '', $s);
                     $s = trim($s);
                     if(!$s) continue;
+                    
+                    $time_start = microtime(true);
+                    
                     $res = $DBI->query("$s;");
                     if ($res === false) continue;
-
-                    msg($DBI->res2count($res).' affected rows',1);
                     $result = $DBI->res2arr($res);
-                    if(!count($result)) continue;
+
+                    $time_end = microtime(true);
+                    $time = $time_end - $time_start;
+                    
+                    $cnt = $DBI->res2count($res);
+                    msg($cnt.' affected rows in '.($time<0.0001 ? substr($time,0,5).substr($time,-3) : substr($time,0,7)).' seconds',1);
+                    if(!$cnt) continue;
 
                     echo '<p>';
                     $ths = array_keys($result[0]);
@@ -103,9 +136,16 @@ class admin_plugin_sqlite extends DokuWiki_Admin_Plugin {
                     echo '</p>';
                 }
 
-            }
+                //test dumping
+                $time_start = microtime(true);
+                if($DBI->dumpDatabase($_REQUEST['db'])){
+                    $time_end = microtime(true);
+                    $time = $time_end - $time_start;
+                    echo 'Database "'.hsc($_REQUEST['db']).'" dumped in '.$time.' seconds.';
+                }
 
-            echo '</div>';
+                echo '</div>';
+            }
         }
     }
 
@@ -114,17 +154,27 @@ class admin_plugin_sqlite extends DokuWiki_Admin_Plugin {
         global $ID;
 
         $toc = array();
-        $dbfiles = glob($conf['metadir'].'/*.sqlite');
+        $fileextensions = array('sqlite2'=>'.sqlite','sqlite3'=>'.sqlite3');
 
-
-        if(is_array($dbfiles)) foreach($dbfiles as $file){
-            $db = basename($file,'.sqlite');
+        foreach($fileextensions as $dbformat => $fileextension){
             $toc[] = array(
-                        'link'  => wl($ID,array('do'=>'admin','page'=>'sqlite','db'=>$db,'sectok'=>getSecurityToken())),
-                        'title' => $this->getLang('db').' '.$db,
-                        'level' => 1,
-                        'type'  => 'ul',
-                     );
+                            'link'  => '',
+                            'title' => $dbformat.':',
+                            'level' => 1,
+                            'type'  => 'ul',
+                         );
+
+            $dbfiles = glob($conf['metadir'].'/*'.$fileextension);
+
+            if(is_array($dbfiles)) foreach($dbfiles as $file){
+                $db = basename($file,$fileextension);
+                $toc[] = array(
+                            'link'  => wl($ID,array('do'=>'admin','page'=>'sqlite','db'=>$db,'version'=>$dbformat,'sectok'=>getSecurityToken())),
+                            'title' => $this->getLang('db').' '.$db,
+                            'level' => 2,
+                            'type'  => 'ul',
+                         );
+            }
         }
 
         return $toc;

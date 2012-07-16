@@ -21,6 +21,8 @@ class helper_plugin_sqlite extends DokuWiki_Plugin {
     var $db     = null;
     var $dbname = '';
     var $extension = null;
+    var $data = array();
+
     function getInfo() {
         return confToHash(dirname(__FILE__).'plugin.info.txt');
     }
@@ -32,33 +34,47 @@ class helper_plugin_sqlite extends DokuWiki_Plugin {
 
       if(!$this->extension)
       {
-        if (!extension_loaded('pdo_sqlite')) {
-            $prefix = (PHP_SHLIB_SUFFIX === 'dll') ? 'php_' : '';
-            if(function_exists('dl')) @dl($prefix . 'pdo_sqlite.' . PHP_SHLIB_SUFFIX);
-        }
-
-        if(class_exists('pdo')){
+        if($this->existsPDOSqlite()){
             $this->extension = DOKU_EXT_PDO;
         }
       }
 
       if(!$this->extension)
       {
+        if($this->existsSqliteExtension()){
+            $this->extension = DOKU_EXT_SQLITE;
+        }
+      }
+
+      if(!$this->extension)
+      {
+        msg('SQLite & PDO SQLite support missing in this PHP install - plugin will not work',-1);
+      }
+    }
+
+    function existsSqliteExtension(){
         if (!extension_loaded('sqlite')) {
             $prefix = (PHP_SHLIB_SUFFIX === 'dll') ? 'php_' : '';
             if(function_exists('dl')) @dl($prefix . 'sqlite.' . PHP_SHLIB_SUFFIX);
         }
 
-        if(function_exists('sqlite_open')){
-           $this->extension = DOKU_EXT_SQLITE;
+        return function_exists('sqlite_open');
+    }
+
+    function existsPDOSqlite(){
+        if (!extension_loaded('pdo_sqlite')) {
+            $prefix = (PHP_SHLIB_SUFFIX === 'dll') ? 'php_' : '';
+            if(function_exists('dl')) @dl($prefix . 'pdo_sqlite.' . PHP_SHLIB_SUFFIX);
         }
-      }
 
-      if(!$this->extension)
-
-      {
-        msg('SQLite & PDO SQLite support missing in this PHP install - plugin will not work',-1);
-      }
+        if(class_exists('pdo')){
+            foreach(PDO::getAvailableDrivers() as $driver){
+                if($driver=='sqlite'){
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**
@@ -90,18 +106,20 @@ class helper_plugin_sqlite extends DokuWiki_Plugin {
 
         $this->dbname = $dbname;
 
-        $fileextension = '.sqlite';
+        // Separate the database files to prevent not-requested autoupgrades.
+        if($this->extension == DOKU_EXT_SQLITE){
+            $fileextension = '.sqlite';
+        }else{
+            $fileextension = '.sqlite3';
+        }
 
         $this->dbfile = $conf['metadir'].'/'.$dbname.$fileextension;
 
         $init   = (!@file_exists($this->dbfile) || ((int) @filesize($this->dbfile)) < 3);
 
-        //first line tell the format of db file http://marc.info/?l=sqlite-users&m=109383875408202
-        $firstline=file_get_contents($this->dbfile,false,null,0,15);
-
         if($this->extension == DOKU_EXT_SQLITE)
         {
-          if($firstline=='SQLite format 3'){
+          if($this->isSqlite3db($this->dbfile)){
               msg("SQLite: failed to open SQLite '".$this->dbname."' database (DB has a sqlite3 format instead of sqlite2 format.)",-1);
               return false;
           }
@@ -120,9 +138,25 @@ class helper_plugin_sqlite extends DokuWiki_Plugin {
         }
         else
         {
-          if($firstline!='SQLite format 3'){
-              msg("SQLite: failed to open SQLite '".$this->dbname."' database (DB has not a sqlite3 format.)",-1);
-              return false;
+          if($init){
+              $oldDbfile = substr($this->dbfile,0,-1);
+
+              if(@file_exists($oldDbfile)){
+                  $notfound_msg="SQLite: '".$this->dbname.$fileextension."' database not found. In the meta directory is '".$this->dbname.substr($fileextension,0,-1)."' available. ";
+
+                  if($this->isSqlite3db($oldDbfile)){
+                      msg($notfound_msg."PDO sqlite needs you rename manual the file extension to '.sqlite3' .",-1);
+                      return false;
+                  }else{
+                      msg($notfound_msg."PDO sqlite needs you upgrade manual this sqlite2 db to sqlite3 format.",-1);
+                      return false;
+                  }
+              }
+          }else{
+              if(!$this->isSqlite3db($this->dbfile)){
+                  msg("SQLite: failed to open SQLite '".$this->dbname."' database (DB has not a sqlite3 format.)",-1);
+                  return false;
+              }
           }
 
           $dsn = 'sqlite:'.$this->dbfile;
@@ -140,6 +174,17 @@ class helper_plugin_sqlite extends DokuWiki_Plugin {
 
         $this->_updatedb($init,$updatedir);
         return true;
+    }
+
+    /**
+     * Checks of given dbfile has Sqlite format 3
+     * 
+     * first line tell the format of db file http://marc.info/?l=sqlite-users&m=109383875408202
+     */
+    function isSqlite3db($dbfile){
+        
+        $firstline=@file_get_contents($dbfile,false,null,0,15);
+        return $firstline=='SQLite format 3';
     }
 
     /**
@@ -228,6 +273,68 @@ class helper_plugin_sqlite extends DokuWiki_Plugin {
         }
 
         return ($version == $this->_currentDBversion());
+    }
+
+    /**
+     * Dump db into a file in meta directory
+     * 
+     */
+    function dumpDatabase($dbname){
+        global $conf;
+
+        $res = $this->query("SELECT name,sql FROM sqlite_master WHERE type='table'");
+        $tables = $this->res2arr($res);
+
+        $filename = 'dumpfile_'.$dbname.'.sql';
+        if($fp = fopen($conf['metadir'].'/'.$filename, 'w')){
+    
+            fwrite($fp, 'BEGIN TRANSACTION;'."\n");
+
+            foreach($tables as $table){
+
+                fwrite($fp, $table['sql'].";\n");
+
+                $sql = "SELECT * FROM ".$table['name'];
+                $res = $this->query($sql);
+
+                $line = '';
+                while($row = $this->res_fetch_array($res)){
+
+                    $line = 'INSERT INTO '.$table['name'].' VALUES(';
+                    foreach($row as $no_entry => $entry){
+                        if($no_entry!==0){
+                            $line .= ',';
+                        }
+
+                        if(is_null($entry)){
+                            $line .= 'NULL';
+                        }elseif(!is_numeric($entry)){
+                            $line .= $this->quote_string($entry);
+                        }else{
+                            //FIXME extra leading zeros are truncated e.g 1.300 (thousand three hunderd)-> 1.3
+                            $line .= $entry;
+                        }
+                    }
+                    $line .= ');'."\n";
+
+                    fwrite($fp, $line);
+                }
+            }
+
+            $res = $this->query("SELECT name,sql FROM sqlite_master WHERE type='index'");
+            $indexes = $this->res2arr($res);
+            foreach($indexes as $index){
+                fwrite($fp, $index['sql'].";\n");
+            }
+
+            fwrite($fp, 'COMMIT;'."\n");
+
+            fclose($fp);
+            return true;
+        }else{
+            msg('Dumping "'.hsc($dbname).'" has failed. Could not open '.$filename);
+            return false;
+        }
     }
 
     /**
@@ -445,6 +552,8 @@ class helper_plugin_sqlite extends DokuWiki_Plugin {
     function query(){
         if(!$this->db) return false;
 
+        $this->data = array();
+
         // get function arguments
         $args = func_get_args();
         $sql  = trim(array_shift($args));
@@ -524,17 +633,18 @@ class helper_plugin_sqlite extends DokuWiki_Plugin {
           while(($row = sqlite_fetch_array($res, SQLITE_ASSOC)) !== false){
               $data[] = $row;
           }
+          return $data;
         }
         else
         {
           if(!$res) return $data;
-          $data = $res->fetchAll(PDO::FETCH_ASSOC);
-          if(!count(data))
-          {
-            return false;
+
+          if(!$this->data){
+              $this->data = $res->fetchAll(PDO::FETCH_ASSOC);
           }
+          return $this->data;
         }
-        return $data;
+
     }
 
     /**
@@ -551,10 +661,8 @@ class helper_plugin_sqlite extends DokuWiki_Plugin {
         }
         else
         {
-          if(!$res)
-          {
-            return false;
-          }
+          if(!$res) return false;
+
           return $res->fetch(PDO::FETCH_ASSOC,PDO::FETCH_ORI_ABS,$rownum);
         }
     }
@@ -570,12 +678,10 @@ class helper_plugin_sqlite extends DokuWiki_Plugin {
       }
       else
       {
-        if(!$res)
-        {
-          return false;
-        }
+        if(!$res) return false;
+        
         $data = $res->fetch(PDO::FETCH_NUM,PDO::FETCH_ORI_ABS,0);
-        if(!count(data))
+        if(!count($data))
         {
           return false;
         }
@@ -696,6 +802,8 @@ class helper_plugin_sqlite extends DokuWiki_Plugin {
       }
       else
       {
+        if(!$res) return false;
+
         return $res->fetch(PDO::FETCH_NUM);
       }
     }
@@ -712,14 +820,19 @@ class helper_plugin_sqlite extends DokuWiki_Plugin {
       }
       else
       {
-       return $res->fetch(PDO::FETCH_ASSOC);
+        if(!$res) return false;
+
+        return $res->fetch(PDO::FETCH_ASSOC);
       }
     }
 
 
     /**
-    * Count the number of records in rsult
-    */
+
+     * Count the number of records in result
+     *
+     * This function is really inperformant in PDO and should be avoided!
+     */
     function res2count($res) {
       if($this->extension == DOKU_EXT_SQLITE )
       {
@@ -727,14 +840,13 @@ class helper_plugin_sqlite extends DokuWiki_Plugin {
       }
       else
       {
-        $regex = '/^SELECT\s+(?:ALL\s+|DISTINCT\s+)?(?:.*?)\s+FROM\s+(.*)$/i';
-        if (preg_match($regex, $res->queryString, $output) > 0) {
-            $stmt = $this->db->query("SELECT COUNT(*) FROM {$output[1]}", PDO::FETCH_NUM);
+        if(!$res) return false;
 
-            return $stmt->fetchColumn();
+        if(!$this->data){
+            $this->data = $res->fetchAll(PDO::FETCH_ASSOC);
         }
 
-        return false;
+        return count($this->data);
       }
     }
 
@@ -750,6 +862,8 @@ class helper_plugin_sqlite extends DokuWiki_Plugin {
       }
       else
       {
+        if(!$res) return false;
+
         return $res->rowCount();
       }
     }
