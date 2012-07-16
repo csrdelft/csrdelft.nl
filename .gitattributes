@@ -331,6 +331,8 @@ htdocs/wiki/data/index/_dummy -text
 htdocs/wiki/data/locks/_dummy -text
 htdocs/wiki/data/media/wiki/dokuwiki-128.png -text
 htdocs/wiki/data/media/wiki/test.csv -text
+htdocs/wiki/data/media_attic/_dummy -text
+htdocs/wiki/data/media_meta/_dummy -text
 htdocs/wiki/data/meta/_dummy -text
 htdocs/wiki/data/pages/wiki/dokuwiki.txt -text
 htdocs/wiki/data/pages/wiki/syntax.txt -text

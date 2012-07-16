@@ -28,6 +28,8 @@ htdocs/wiki/data/cache/*
 htdocs/wiki/data/index/*
 htdocs/wiki/data/locks/*
 htdocs/wiki/data/media/*
+htdocs/wiki/data/media_attic/*
+htdocs/wiki/data/media_meta/*
 htdocs/wiki/data/meta/*
 htdocs/wiki/data/pages/*
 htdocs/wiki/data/pages/wiki/*
