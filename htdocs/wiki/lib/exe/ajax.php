@@ -204,7 +204,7 @@ function ajax_medialist(){
     global $conf;
     global $NS;
 
-    $NS = $_POST['ns'];
+    $NS = cleanID($_POST['ns']);
     if ($_POST['do'] == 'media') {
         tpl_mediaFileList();
     } else {
