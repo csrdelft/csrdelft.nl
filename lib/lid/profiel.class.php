@@ -200,7 +200,7 @@ class Profiel {
 			'admin_naam' => LoginLid::instance()->getLid()->getNaam());
 		
 		$mail=new TemplatedMail($lid->getEmail(), 'Nieuw wachtwoord voor de C.S.R.-stek', $template);
-		$mail->setBcc("pubcie@csrdelft.nl");
+		$mail->addBcc("pubcie@csrdelft.nl");
 		$mail->setValues($values);
 		
 		return
@@ -631,7 +631,7 @@ class ProfielStatus extends Profiel{
 		$to='fiscus@csrdelft.nl,maalcie-fiscus@csrdelft.nl,soccie@csrdelft.nl';
 
 		$mail=new TemplatedMail($to, 'Melding lid-af worden', $template);
-		$mail->setBcc("pubcie@csrdelft.nl");
+		$mail->addBcc("pubcie@csrdelft.nl");
 		$mail->setValues($values);
 
 		return $mail->send();
