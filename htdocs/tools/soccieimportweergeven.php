@@ -81,7 +81,9 @@ echo '<ul>';
 echo '	<li>query #86: <a href="/tools/query.php?id=86">Novieten, (gast)leden zonder soccieID</a></li>';
 echo '	<li>query #85: <a href="/tools/query.php?id=85">Alle oudleden/nobodies/etc die nog in socciepcimport staan</a></li>';
 echo '	<li>query #80: <a href="/tools/query.php?id=80">Personen in db met saldo, die ontbreken in socciepcimport</a></li>';
-echo '</ul></p>';
+echo '</ul>';
+echo '<a href="/pagina/saldostatistiekensoccie">Overzichtpagina voor SocCie met opmerkelijke saldi en statistieken</a>...';
+echo '</p>';
 echo '<p>Onderstaande gegevens zijn van de laatste import uit de socciepc.</p>';
 echo 'Totaal aantal accounts: '.$teller['totaal'].'<br/>';
 echo 'Onbekende accounts: '.$teller['onbekend'].' (weergegeven: '.count($accounts['onbekend']).')<br/>';
@@ -94,10 +96,14 @@ foreach($sorteeropties as $optie){
 }
 
 echo '<h3>SocCieaccounts die niet gekoppeld zijn</h3>';
-echo '<p>Mogelijke oorzaken:<ul>
-	<li>Geen id in database</li> 
-	<li>De combinatie van soccieID en createTerm klopt niet. </li>
-</ul>';
+echo '<p>';
+echo 'Mogelijke oorzaken:';
+echo '<ul>
+		<li>Geen id in database. zie ook query #86</li> 
+		<li>De combinatie van soccieID en createTerm klopt niet. </li>
+	</ul>';
+echo 'De PubCie kan individuele leden bijwerken, NBG zorgt voor uitgebreidere koppelacties.';
+echo '</p>';
 viewTable($accounts['onbekend']);
 
 echo '<h3>SocCieaccounts die gekoppeld zijn aan profielen op de webstek</h3>';
