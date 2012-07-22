@@ -1,4 +1,4 @@
-#!/usr/bin/php5
+#!/usr/bin/php5-cgi
 <?php
 
 
@@ -31,7 +31,8 @@
 	foreach($soccieinput as $soccielid){
 		$sNaam=strtolower($soccielid->voornaam.' '.$soccielid->achternaam);
 		foreach($aLeden as $aLid){
-			$sLidDbNaam=strtolower($aLid['voornaam'].($aLid['tussenvoegsel']=='' ? '' : ' '.$aLid['tussenvoegsel']).' '.$aLid['achternaam']);
+//			$sLidDbNaam=strtolower($aLid['voornaam'].($aLid['tussenvoegsel']=='' ? '' : ' '.$aLid['tussenvoegsel']).' '.$aLid['achternaam']);
+			$sLidDbNaam=strtolower($aLid['voornaam'].' '.$aLid['achternaam']).($aLid['tussenvoegsel']=='' ? '' : ' '.$aLid['tussenvoegsel']);
 			$uid=$aLid['uid'];
 			$soccieID=$soccielid->id;
 			$createTerm=$soccielid->createTerm;
