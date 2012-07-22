@@ -1,7 +1,7 @@
 <?php
 require_once 'configuratie.include.php';
 
-if(!$loginlid->hasPermission('P_LEDEN_MOD,groep:SocCie')){
+if(!$loginlid->hasPermission('P_LEDEN_MOD,groep:SocCie,groep:NBG')){
 	header('location: '.CSR_ROOT);
 	exit;
 }
@@ -103,7 +103,26 @@ echo '<ul>
 		<li>De combinatie van soccieID en createTerm klopt niet. </li>
 	</ul>';
 echo 'De PubCie kan individuele leden bijwerken, NBG zorgt voor uitgebreidere koppelacties.';
+echo '<br /><br />';
+if($loginlid->hasPermission('P_LEDEN_MOD,groep:NBG')){
+	echo '<div style="background: lightgrey;">';
+	echo '<i>Privé opmerking voor PubCie/NBG</i>:<br />';
+	echo 'Op de console kun je een koppelscript runnen die alle soccieIDs in database automatisch probeert te updaten.<br />';
+	echo '<pre>
+	cd lib/
+	../bin/socciesaldi-koppelen.php
+	</pre>';
+	echo '<p>Dit script probeert voor elk account in de soccie-import een 
+match te vinden met gastleden, novieten en h.t. leden. Als naam 86% matcht 
+wordt socciePC-id in database geupdate.<br />Handmatige aanpassen kan in het 
+profiel van een lid.</p>';
+	echo '<p>De saldoimport van SocCie-PC naar webstek is elke dag om half 7. 
+	De NBG heeft toegang tot de server Wesley op Confide en kan daar 
+	handmatig een import doen.</p>';
+	echo '</div>';
+}
 echo '</p>';
+
 viewTable($accounts['onbekend']);
 
 echo '<h3>SocCieaccounts die gekoppeld zijn aan profielen op de webstek</h3>';
