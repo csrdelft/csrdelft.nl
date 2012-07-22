@@ -71,6 +71,8 @@ if ($error == 0) switch($action) {
 		$voorkeuren_array = getOrPost('corvee_voorkeuren');
 		$voorkeuren = (isset($voorkeuren_array['lichteklus']) ? 1 : 0);
 		$voorkeuren .= (isset($voorkeuren_array['zwareklus']) ? 1 : 0);
+		$voorkeuren .= (isset($voorkeuren_array['wo_kok']) ? 1 : 0);
+		$voorkeuren .= (isset($voorkeuren_array['wo_afwas']) ? 1 : 0);
 		$voorkeuren .= (isset($voorkeuren_array['do_kok']) ? 1 : 0);
 		$voorkeuren .= (isset($voorkeuren_array['do_afwas']) ? 1 : 0);
 		$voorkeuren .= (isset($voorkeuren_array['theedoek']) ? 1 : 0);

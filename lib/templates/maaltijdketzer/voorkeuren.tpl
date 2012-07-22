@@ -26,14 +26,16 @@ rekening mee houden. <strong>Dit is niet de plek om aan te geven dat u iets niet
 		<input type="hidden" name="a" value="editCorveevoorkeuren" />
 		
 		<i>Wekelijkse taken:</i><br />
+		<input type="checkbox" name="corvee_voorkeuren[wo_kok]" value="1" {if $maal.corvee_voorkeuren.wo_kok}checked="checked"{/if} /> Woensdag koken<br />
+		<input type="checkbox" name="corvee_voorkeuren[wo_afwas]" value="1" {if $maal.corvee_voorkeuren.wo_afwas}checked="checked"{/if} /> Woensdag afwassen<br />
 		<input type="checkbox" name="corvee_voorkeuren[do_kok]" value="1" {if $maal.corvee_voorkeuren.do_kok}checked="checked"{/if} /> Donderdag koken<br />
-		<input type="checkbox" name="corvee_voorkeuren[do_afwas]" value="1" {if $maal.corvee_voorkeuren.do_afwas}checked="checked"{/if} /> Donderdag afwassen<br />	
+		<input type="checkbox" name="corvee_voorkeuren[do_afwas]" value="1" {if $maal.corvee_voorkeuren.do_afwas}checked="checked"{/if} /> Donderdag afwassen<br />
 		<input type="checkbox" name="corvee_voorkeuren[theedoek]" value="1" {if $maal.corvee_voorkeuren.theedoek}checked="checked"{/if} /> Theedoeken wassen<br />
 		<br />
 		<i>Maandelijkse taken:</i><br />
 		<input type="checkbox" name="corvee_voorkeuren[afzuigkap]" value="1" {if $maal.corvee_voorkeuren.afzuigkap}checked="checked"{/if} /> Afzuigkap schoonmaken<br />
 		<input type="checkbox" name="corvee_voorkeuren[frituur]" value="1" {if $maal.corvee_voorkeuren.frituur}checked="checked"{/if} /> Frituur schoonmaken<br />
-		<input type="checkbox" name="corvee_voorkeuren[keuken]" value="1" {if $maal.corvee_voorkeuren.keuken}checked="checked"{/if} /> Keuken schoonmaken<br />	
+		<input type="checkbox" name="corvee_voorkeuren[keuken]" value="1" {if $maal.corvee_voorkeuren.keuken}checked="checked"{/if} /> Keuken schoonmaken<br />
 		<br />
 		<i>Onderhoudstaken:</i><br />
 		<input type="checkbox" name="corvee_voorkeuren[lichteklus]" value="1" {if $maal.corvee_voorkeuren.lichteklus}checked="checked"{/if} /> Lichte klussen<br />

@@ -996,45 +996,47 @@ class MaalTrack {
 	#haalt de lijst met leden op, en filtert deze op hun corveewensen en kwalikok zijn. Gesorteerd op prognosepunten en dan achternaam.
 	function getTaakLedenGefilterd($taak, $dag='', $puntentekort=0){		
 		// Zet het filter op 
-		//(Kl Li, Kl Zw, Do Kok, Do Afw, Theedoek, Afzuigk, Frituur, Keuken, Puntentekort)
+		//(Kl Li, Kl Zw, Wo Kok, Wo Afw, Do Kok, Do Afw, Theedoek, Afzuigk, Frituur, Keuken, Puntentekort)
 		
 		// Op dag
-		$dagfilter = bindec('111111110');
+		$dagfilter = bindec('11111111110');
 		if(in_array($taak,array('kwalikok', 'kok', 'afwas'))){
 			switch($dag){
+				case 'Wed':
+					$dagfilter = bindec('00110000000');
 				case 'Thu':
-					$dagfilter = bindec('001100000');
+					$dagfilter = bindec('00001100000');
 				break;
 			}
 		}
 		// Op taak
-		$taakfilter = bindec('111111110');
+		$taakfilter = bindec('11111111110');
 		switch($taak){
 			case 'lichteklus':
-				$taakfilter = bindec('100000000');
+				$taakfilter = bindec('10000000000');
 			break;
 			case 'zwareklus':
-				$taakfilter = bindec('010000000');
+				$taakfilter = bindec('01000000000');
 			break;
 			case 'kwalikok':
 			case 'kok':
-				$taakfilter = bindec('001000000');
+				$taakfilter = bindec('00101000000');
 			break;
 			case 'kwaliafwas':
 			case 'afwas':
-				$taakfilter = bindec('000100000');
+				$taakfilter = bindec('00010100000');
 			break;
 			case 'theedoek':
-				$taakfilter = bindec('000010000');
+				$taakfilter = bindec('00000010000');
 			break;
 			case 'frituur':
-				$taakfilter = bindec('000000100');
+				$taakfilter = bindec('00000000100');
 			break;
 			case 'afzuigkap':
-				$taakfilter = bindec('000001000');
+				$taakfilter = bindec('00000001000');
 			break;
 			case 'keuken':
-				$taakfilter = bindec('000000010');
+				$taakfilter = bindec('00000000010');
 			break;
 		}
 		
@@ -1053,13 +1055,13 @@ class MaalTrack {
 
 			//als een lid die taak niet mag doen wordt eigenvoorkeur op nul gezet
 			if($taak == 'kwalikok' && $lid['corvee_kwalikok']==0){
-				$eigenvoorkeur=bindec('000000000');
+				$eigenvoorkeur=bindec('00000000000');
 			}
 			if($taak == 'kok' && $lid['corvee_kwalikok']==1){
-				$eigenvoorkeur=bindec('000000000');
+				$eigenvoorkeur=bindec('00000000000');
 			}
 			if($taak == 'kwaliafwas' && $lid['status']=='S_NOVIET'){
-				$eigenvoorkeur=bindec('000000000');
+				$eigenvoorkeur=bindec('00000000000');
 			}
 
 			/* Combineer de eigen voorkeur met de gezochte taak*/

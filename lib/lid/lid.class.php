@@ -413,12 +413,14 @@ class Lid implements Serializable, Agendeerbaar{
 		$return = array(
 			'lichteklus' => $corvee_voorkeuren[0],
 			'zwareklus' => $corvee_voorkeuren[1],
-			'do_kok' => $corvee_voorkeuren[2],
-			'do_afwas' => $corvee_voorkeuren[3],
-			'theedoek' => $corvee_voorkeuren[4],
-			'afzuigkap' => $corvee_voorkeuren[5],
-			'frituur' => $corvee_voorkeuren[6],
-			'keuken' => $corvee_voorkeuren[7]
+			'wo_kok' => $corvee_voorkeuren[2],
+			'wo_afwas' => $corvee_voorkeuren[3],
+			'do_kok' => $corvee_voorkeuren[4],
+			'do_afwas' => $corvee_voorkeuren[5],
+			'theedoek' => $corvee_voorkeuren[6],
+			'afzuigkap' => $corvee_voorkeuren[7],
+			'frituur' => $corvee_voorkeuren[8],
+			'keuken' => $corvee_voorkeuren[9]
 		);
 		return $return;
 	}
