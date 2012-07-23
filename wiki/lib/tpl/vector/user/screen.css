@@ -107,3 +107,7 @@ div.dokuwiki label.block {
     font-weight: normal;
     font-size: 0.8em;
 }
+/* list in zijbalk niet laten wrappen met spaties */
+div#panel div.portal div.body ul li {
+    white-space: nowrap;
+}
