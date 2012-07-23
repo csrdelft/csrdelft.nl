@@ -277,7 +277,10 @@ class Doku_Renderer extends DokuWiki_Plugin {
             $name = strtr($name,'/',':');
         }
 
-        return noNSorNS($name);
+        $name = noNSorNS($name);
+
+        // replace '_' with ' '
+        return strtr($name,'_',' ');
     }
 
     /**
