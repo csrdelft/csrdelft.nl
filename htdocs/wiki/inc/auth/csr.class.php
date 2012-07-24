@@ -92,7 +92,6 @@ class auth_csr extends auth_basic {
 
     # als er een gebruiker is gegeven willen we graag eerst proberen in te loggen via inlogformulier
     if(!empty($user)){
-
       if ($loginlid->login(strval($user), strval($pass), $checkip=false) AND $loginlid->getUid()!='x999') {
         //success
       }else{
@@ -103,22 +102,22 @@ class auth_csr extends auth_basic {
       }
     }
 
-    # als ingelogd niet nobody is gegevens ophalen en bewaren
-    if($loginlid->getUid()!='x999'){
+    # als ingelogd genoeg permissies heeft gegevens ophalen en bewaren
+    if($loginlid->hasPermission('P_LOGGED_IN,groep:wikitoegang',$token_authorizable=false) 
+        OR ($_SERVER['PHP_SELF']=='/wiki/feed.php' AND $loginlid->hasPermission('P_LOGGED_IN,groep:wikitoegang',$token_authorizable=true))){
       // okay we're logged in - set the globals
-      //$USERINFO['pass'] = ''; // niet nodig.
-      $lid = $loginlid->getLid();
-      $USERINFO['name'] = $lid->getNaam();
-      $USERINFO['mail'] = $lid->getEmail();
-      $USERINFO['pasfoto'] = $lid->getPasfoto($imgTag=false);
       require_once 'groepen/groep.class.php';
-      $USERINFO['grps'] = Groepen::getWikigroupsByUid($lid->getUid());
+      $lid = $loginlid->getLid();
+      $USERINFO['name']    = $lid->getNaam();
+      $USERINFO['mail']    = $lid->getEmail();
+      $USERINFO['pasfoto'] = $lid->getPasfoto($imgTag=false);
+      $USERINFO['grps']    = Groepen::getWikigroupsByUid($lid->getUid());
       // always add the default group to the list of groups
       if(!in_array($conf['defaultgroup'],$USERINFO['grps'])){
         $USERINFO['grps'][] = $conf['defaultgroup'];
       }
 
-      $_SERVER['REMOTE_USER'] = $lid->getUid();
+      $_SERVER['REMOTE_USER']                = $lid->getUid();
       $_SESSION[DOKU_COOKIE]['auth']['user'] = $lid->getUid();
       $_SESSION[DOKU_COOKIE]['auth']['info'] = $USERINFO;
       return true;
@@ -136,6 +135,7 @@ class auth_csr extends auth_basic {
     }
 
     // to be sure
+    msg('Niet genoeg permissies',-1);
     auth_logoff();
     return false;
   }
