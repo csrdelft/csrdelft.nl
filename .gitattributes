@@ -1543,6 +1543,8 @@ htdocs/wiki/lib/tpl/vector/template.info.txt -text
 htdocs/wiki/lib/tpl/vector/user/.htaccess -text
 htdocs/wiki/lib/tpl/vector/user/boxes.php -text
 htdocs/wiki/lib/tpl/vector/user/button-css.png -text
+htdocs/wiki/lib/tpl/vector/user/button-rss-algemeen.png -text
+htdocs/wiki/lib/tpl/vector/user/button-rss-prive.png -text
 htdocs/wiki/lib/tpl/vector/user/button-xhtml.png -text
 htdocs/wiki/lib/tpl/vector/user/buttons.php -text
 htdocs/wiki/lib/tpl/vector/user/favicon.ico -text

@@ -43,7 +43,11 @@ class auth_csr extends auth_basic {
       $this->cando['external'] = true;
       $this->cando['logoff']   = true;
 
-      //login with x999 or when cookie available as lid
+      //login with:
+      // - x999 
+      // - or as lid when: 
+      //      * cookie available
+      //      * validate_token was added to url (checking the permissions by Loginlid::hasPermission, needs setting token_authorizable to true)
       require_once 'configuratie.include.php';  
     }
 
@@ -90,7 +94,7 @@ class auth_csr extends auth_basic {
     global $loginlid;
     global $conf;
 
-    # als er een gebruiker is gegeven willen we graag eerst proberen in te loggen via inlogformulier
+    # als er een gebruiker is gegeven willen we graag proberen in te loggen via inlogformulier
     if(!empty($user)){
       if ($loginlid->login(strval($user), strval($pass), $checkip=false) AND $loginlid->getUid()!='x999') {
         //success
@@ -104,7 +108,8 @@ class auth_csr extends auth_basic {
 
     # als ingelogd genoeg permissies heeft gegevens ophalen en bewaren
     if($loginlid->hasPermission('P_LOGGED_IN,groep:wikitoegang',$token_authorizable=false) 
-        OR ($_SERVER['PHP_SELF']=='/wiki/feed.php' AND $loginlid->hasPermission('P_LOGGED_IN,groep:wikitoegang',$token_authorizable=true))){
+        OR ($loginlid->hasPermission('P_LOGGED_IN,groep:wikitoegang',$token_authorizable=true) AND $_SERVER['PHP_SELF']=='/wiki/feed.php')){
+
       // okay we're logged in - set the globals
       require_once 'groepen/groep.class.php';
       $lid = $loginlid->getLid();
@@ -134,8 +139,10 @@ class auth_csr extends auth_basic {
       #    return true;
     }
 
+    if($loginlid->getUid()!='x999'){
+        msg('Niet genoeg permissies',-1);
+    }
     // to be sure
-    msg('Niet genoeg permissies',-1);
     auth_logoff();
     return false;
   }
