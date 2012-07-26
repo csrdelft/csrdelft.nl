@@ -192,7 +192,6 @@ $lang['showuseras_o_loginname'] = 'loginnaam';
 $lang['showuseras_o_username'] = 'Volledige naam';
 $lang['showuseras_o_email']    = 'E-mailadres (onherkenbaar gemaakt volgens mailguard-instelling)';
 $lang['showuseras_o_email_link'] = 'E-mailadres als mailto: link';
-$lang['showuseras_o_username_profiellink'] = 'Volledige naam met link naar profiel';
 $lang['useheading_o_0']        = 'Nooit';
 $lang['useheading_o_navigation'] = 'Alleen navigatie';
 $lang['useheading_o_content']  = 'Alleen wiki inhoud';
