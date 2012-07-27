@@ -1067,6 +1067,7 @@ function html_diff($text='',$intro=true,$type=null){
     global $REV;
     global $lang;
     global $conf;
+    global $INFO;
 
     if(!$type) $type = $_REQUEST['difftype'];
     if($type != 'inline') $type = 'sidebyside';
@@ -1130,6 +1131,28 @@ function html_diff($text='',$intro=true,$type=null){
         $r_text = rawWiki($ID,$r_rev);
 
         list($l_head, $r_head, $l_minor, $r_minor) = html_diff_head($l_rev, $r_rev);
+
+        //look for previous/next revision
+        if($l_rev || $r_rev){
+            $revs = getRevisions($ID, 0, 300);
+        }
+        $prev_rev = '';
+        if ($l_rev){
+            $revno = array_search($l_rev,$revs);
+            if($revno!==false){
+                $prev_rev = $revs[$revno+1];
+            }
+        }
+        $next_rev = '';
+        if($r_rev){
+            $revno = array_search($r_rev,$revs);
+            if($revno===0){
+                $next_rev = $INFO['lastmod'];
+            }elseif($revno!==false){
+                $next_rev = $revs[$revno-1];
+            }
+        }
+        
     }
 
     $df = new Diff(explode("\n",htmlspecialchars($l_text)),
@@ -1165,14 +1188,35 @@ function html_diff($text='',$intro=true,$type=null){
         $form->addElement(form_makeButton('submit', 'diff','Go'));
         $form->printForm();
 
-
         $diffurl = wl($ID, array(
                         'do'       => 'diff',
                         'rev2[0]'  => $l_rev,
                         'rev2[1]'  => $r_rev,
                         'difftype' => $type,
                       ));
-        ptln('<p><a class="wikilink1" href="'.$diffurl.'">'.$lang['difflink'].'</a></p>');
+        ptln('<p><a class="wikilink1" href="'.$diffurl.'">'.$lang['difflink'].'</a><br />');
+        if($prev_rev){
+            $diffurlprev = wl($ID, array(
+                                'do'       => 'diff',
+                                'rev2[0]'  => $prev_rev,
+                                'rev2[1]'  => $l_rev,
+                                'difftype' => $type,
+                              ));
+            ptln('<a class="wikilink1" href="'.$diffurlprev.'">← '.'Vorige revisie'.'</a> - ');
+        }
+        $recenturl = wl($ID, array(
+                        'do'       => 'revisions'
+                      ));
+        ptln('<a class="wikilink1" href="'.$recenturl.'">'.'Overzicht van revisies'.'</a>');
+        if($next_rev){
+            $diffurlnext = wl($ID, array(
+                                'do'       => 'diff',
+                                'rev2[0]'  => $r_rev,
+                                'rev2[1]'  => $next_rev,
+                                'difftype' => $type,
+                              ));
+            ptln(' - <a class="wikilink1" href="'.$diffurlnext.'">'.'Volgende revisie'.' →</a></p>');
+        }
         ptln('</div>');
     }
     ?>
