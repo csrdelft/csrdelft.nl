@@ -48,7 +48,8 @@ class auth_csr extends auth_basic {
       // - or as lid when: 
       //      * cookie available
       //      * validate_token was added to url (checking the permissions by Loginlid::hasPermission, needs setting token_authorizable to true)
-      require_once 'configuratie.include.php';  
+      require_once 'configuratie.include.php';
+      setlocale(LC_NUMERIC, 'en_US.UTF-8');
     }
 
   /**
