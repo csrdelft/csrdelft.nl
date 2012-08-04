@@ -3,14 +3,10 @@ if(!defined('DOKU_INC')) define('DOKU_INC',realpath(dirname(__FILE__).'/../../')
 if(!defined('DOKU_PLUGIN')) define('DOKU_PLUGIN',DOKU_INC.'lib/plugins/');
 require_once(DOKU_PLUGIN.'admin.php');
 require_once(DOKU_INC.'inc/confutils.php');
- 
+
 class admin_plugin_confmanager extends DokuWiki_Admin_Plugin {
 
     var $cnffiles = array('acronyms','entities','interwiki','mime','smileys');
-
-	function getInfo(){
-        return confToHash(dirname(__FILE__).'/plugin.info.txt');
-    }
 
     function getMenuSort() {
         return 101;
@@ -18,10 +14,10 @@ class admin_plugin_confmanager extends DokuWiki_Admin_Plugin {
 
     function handle() {
         if (isset($_REQUEST['cnf']) && in_array($_REQUEST['cnf'],$this->cnffiles)) {
-			if (isset($_REQUEST['local']))
-				$this->_change($_REQUEST['cnf'],$_REQUEST['local']);
-			if (isset($_REQUEST['newkey']) && isset($_REQUEST['newval']))
-				$this->_add($_REQUEST['newkey'],$_REQUEST['newval']);
+            if (isset($_REQUEST['local']))
+                $this->_change($_REQUEST['cnf'],$_REQUEST['local']);
+            if (isset($_REQUEST['newkey']) && isset($_REQUEST['newval']))
+                $this->_add($_REQUEST['cnf'],$_REQUEST['newkey'],$_REQUEST['newval']);
         }
     }
 
@@ -35,46 +31,49 @@ class admin_plugin_confmanager extends DokuWiki_Admin_Plugin {
         return strnatcmp($k1,$k2);
     }
 
-    function _change($file,$conf) {
-        if (!is_file(DOKU_INC.'conf/'.$file.'.conf')) return;
-        $org = confToHash(DOKU_INC.'conf/'.$file.'.conf');
-        $cnftext = "";
+    /**
+     * Change the whole array
+     *
+     * Writes back to the most local file
+     */
+    function _change($name,$conf) {
+        global $config_cascade;
+
+        $org  = $this->_readConf($name, true); // the defaults
+        $file = end($config_cascade[$name]['local']);
+
+        $cnftext = '';
         uksort( $conf , array( &$this , '_sortConf' ));
         foreach ($conf as $k => $v) {
-            if ( empty($v) ) {
-                // delete a key
-                continue;
-            }
-            if ( ! isset($org[$k]) ) {
-                // if no overwrite
+            $k = str_replace(' ','',$k);
+            $k = str_replace("\t",'',$k);
+            $v = trim($v);
+            if( $k === '' ) continue;
+            if( $v === '' ) continue;
+
+            if ( ! isset($org[$k]) ) { // add new key
                 $cnftext.= sprintf("%-30s %s\n",$this->_escape($k),$this->_escape($v));
                 continue;
             }
-            if ( $org[$k] != $v ) {
+            if ( $org[$k] != $v ) { // overwrite a key
                 $cnftext.= sprintf("%-30s %s\n",$this->_escape($k),$this->_escape($v));
                 continue;
             }
         }
-        if (empty($cnftext)) @unlink(DOKU_INC.'conf/'.$file.'.local.conf');
-        else file_put_contents(DOKU_INC.'conf/'.$file.'.local.conf',$cnftext);
-
+        if (empty($cnftext)){
+            @unlink($file);
+        }else{
+            file_put_contents($file,$cnftext);
+        }
     }
 
-    function _add($key,$val) {
-        if (empty($key) || empty($val)) return;
-        $file = $_REQUEST['cnf'];
-        $conf = $this->_readConf($file);
-        $key = str_replace(' ','',$key);
-        $key = str_replace("\t",'',$key);
-        $cnftext = "";
-        $conf[$key] = array($val,1);
-        uksort( $conf , array( &$this , '_sortConf' ) );
-        foreach ($conf as $k=>$v) {
-            if ($v[1] == 0) continue;
-            $cnftext.= sprintf("%-30s %s\n",$this->_escape($k),$this->_escape($v[0]));
-        }
-        if (empty($cnftext)) @unlink(DOKU_INC.'conf/'.$file.'.local.conf');
-        else file_put_contents(DOKU_INC.'conf/'.$file.'.local.conf',$cnftext);
+    /**
+     * Add a new item pair
+     */
+    function _add($name,$key,$val) {
+        $conf = $this->_readConf($name); // current config
+        $conf[$key] = $val;
+        $this->_change($name,$conf);
     }
 
     function html() {
@@ -87,9 +86,13 @@ class admin_plugin_confmanager extends DokuWiki_Admin_Plugin {
     }
 
     function display($name) {
-        $data = $this->_readConf($name);
+        $data    = $this->_readConf($name);         // all values
+        $default = $this->_readConf($name,true);    // default values
         uksort( $data , array( &$this , '_sortHuman' ) );
+
+
         ptln('<h1>'.$this->getLang('head_'.$name).'</h1>');
+        ptln('<div class="level1">');
         ptln('<p>'.$this->getLang('text_'.$name).'</p>');
         ptln('<p>'.$this->getLang('edit_desc').'</p>');
         ptln('<form method="post" action="doku.php">');
@@ -101,61 +104,72 @@ class admin_plugin_confmanager extends DokuWiki_Admin_Plugin {
         foreach( $data as $k => $v ) {
             ptln('<tr>');
             ptln('<td>');
-            if ($v[1] == 0) ptln('<b>');
+            if (isset($default[$k])) ptln('<b>');
             ptln( hsc($k) );
-            if ($v[1] == 0) ptln('</b>');
+            if (isset($default[$k])) ptln('</b>');
             ptln('</td>');
             ptln('<td>');
-            ptln('<input type="text" name="local['.hsc($k).']" value="'.hsc($v[0]).'" class="edit" style="width:400px" /></td>');
+            ptln('<input type="text" name="local['.hsc($k).']" value="'.hsc($v).'" class="edit val" /></td>');
             ptln('</tr>');
         }
         ptln('</table>');
         ptln('<input class="button" type="submit" value="'.$this->getLang('submitchanges').'" />');
         ptln('<input class="button" type="reset" value="'.$this->getLang('reset').'" />');
         ptln('</form>');
+        ptln('</div>');
+
         ptln('<h2><a name="__add">'.$this->getLang('addvarhead').'</a></h2>');
-		ptln('<p>');
-		ptln($this->getLang('addvartext'));
-		ptln('<form method="post" action="doku.php">');
+        ptln('<div class="level2">');
+        ptln('<p>');
+        ptln($this->getLang('addvartext'));
+        ptln('<form method="post" action="doku.php">');
         ptln('<input type="hidden" name="do" value="'.$_REQUEST['do'].'" />');
         ptln('<input type="hidden" name="page" value="'.$_REQUEST['page'].'" />');
         ptln('<input type="hidden" name="id" value="'.$_REQUEST['id'].'" />');
         ptln('<input type="hidden" name="cnf" value="'.hsc($_REQUEST['cnf']).'" />');
-		ptln('<input type="text" name="newkey" class="edit key" /> ');
-		ptln('<input type="text" name="newval" class="edit val" />');
-		ptln('<input type="submit" value="'.$this->getLang('additem').'" class="button" />');
-		ptln('</form>');
-		ptln('</p>');
+        ptln('<input type="text" name="newkey" class="edit key" /> ');
+        ptln('<input type="text" name="newval" class="edit val" />');
+        ptln('<input type="submit" value="'.$this->getLang('additem').'" class="button" />');
+        ptln('</form>');
+        ptln('</p>');
+        ptln('</div>');
     }
 
-	function _escape($s) {
-		return str_replace('#','\#',$s);
-	}
+    /**
+     * Escape the hash sign for writing to config files
+     */
+    function _escape($s) {
+        return str_replace('#','\#',$s);
+    }
 
-    function _readConf($name) {
-        if (!is_file(DOKU_INC.'conf/'.$name.'.conf')) return array();
-        if (!in_array($name,$this->cnffiles)) return array();
+    /**
+     * Read the wanted config, optionally skip the one we write to
+     */
+    function _readConf($name,$skiplocal=false) {
+        global $config_cascade;
+        $dfiles = (array) $config_cascade[$name]['default'];
+        $lfiles = (array) $config_cascade[$name]['local'];
+        if($skiplocal) array_pop($lfiles); // we write back to this file
+
         $result = array();
-        $cnf = confToHash(DOKU_INC.'conf/'.$name.'.conf');
-        foreach ($cnf as $k => $v) {
-            $result[$k] = array($v,0);
+        foreach (array_merge($dfiles,$lfiles) as $file){
+            $cnf = confToHash($file);
+            $result = array_merge($result,$cnf);
         }
-        if (!is_file(DOKU_INC.'conf/'.$name.'.local.conf')) return $result;
-        $cnf = confToHash(DOKU_INC.'conf/'.$name.'.local.conf');
-        foreach ($cnf as $k => $v) {
-            $result[$k] = array($v,1);
-        }
-        return $result;
 
+        return $result;
     }
 
     function welcome() {
         ptln('<h1>'.$this->getLang('welcomehead').'</h1>');
+        ptln('<div class="level1">');
         ptln('<p>'.$this->getLang('welcome').'</p>');
+        ptln('</div>');
     }
 
     function edit() {
         ptln('<h2>'.$this->getLang('edithead').'</h2>');
+        ptln('<div class="level2">');
         ptln('<p>'.$this->getLang('editdesc').'</p>');
         ptln('<form method="post" action="doku.php">');
         ptln('<input type="hidden" name="do" value="'.$_REQUEST['do'].'" />');
@@ -168,6 +182,6 @@ class admin_plugin_confmanager extends DokuWiki_Admin_Plugin {
         ptln('</select>');
         ptln('<input type="submit" value="'.$this->getLang('editcnf').'" class="button" />');
         ptln('</form>');
+        ptln('</div>');
     }
 }
-?>

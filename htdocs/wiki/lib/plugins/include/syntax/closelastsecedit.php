@@ -1,23 +1,20 @@
 <?php
 /**
- * Include plugin (editbtn header component)
+ * Include plugin (close last section edit)
  *
  * @license GPL 2 (http://www.gnu.org/licenses/gpl.html)
- * @author  Michael Klier <chi@chimeric.de>
+ * @author  Michael Hamann <michael@content-space.de>
  */
 
-if (!defined('DOKU_INC'))
-    define('DOKU_INC', realpath(dirname(__FILE__) . '/../../') . '/');
 if (!defined('DOKU_PLUGIN'))
     define('DOKU_PLUGIN', DOKU_INC . 'lib/plugins/');
-require_once (DOKU_PLUGIN . 'syntax.php');
 
-class syntax_plugin_include_editbtn extends DokuWiki_Syntax_Plugin {
+class syntax_plugin_include_closelastsecedit extends DokuWiki_Syntax_Plugin {
 
     function getType() {
         return 'formatting';
     }
-    
+
     function getSort() {
         return 50;
     }
@@ -27,14 +24,10 @@ class syntax_plugin_include_editbtn extends DokuWiki_Syntax_Plugin {
     }
 
     /**
-     * Renders an include edit button
-     *
-     * @author Michael Klier <chi@chimeric.de>
+     * Finishes the last open section edit
      */
     function render($mode, &$renderer, $data) {
-        list($title) = $data;
         if ($mode == 'xhtml') {
-            $renderer->startSectionEdit(0, 'plugin_include_editbtn', $title);
             $renderer->finishSectionEdit();
             return true;
         }

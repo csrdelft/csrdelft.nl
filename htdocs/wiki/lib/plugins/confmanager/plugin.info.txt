@@ -1,8 +1,8 @@
 base    confmanager
 author  Dominik Eckelmann
 email   dokuwiki@cosmocode.de
-date    2009-01-27
+date    2011-08-18
 name    configuration file manager
-desc    Plugin to manage variouse .conf files 
+desc    Plugin to manage various .conf files
 url     http://www.dokuwiki.org/plugin:confmanager
 

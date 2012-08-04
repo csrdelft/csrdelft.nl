@@ -23,10 +23,10 @@ class syntax_plugin_imagemap extends DokuWiki_Syntax_Plugin {
     return array(
       'author' => 'Tom N Harris',
       'email'  => 'tnharris@whoopdedo.org',
-      'date'   => '2009-05-05',
+      'date'   => '2012-05-31',
       'name'   => 'Image Map Plugin',
       'desc'   => 'Create client-side image maps.',
-      'url'    => 'http://whoopdedo.org/doku/wiki',
+      'url'    => 'http://whoopdedo.org/doku/wiki/imagemap',
     );
   }
 
@@ -130,6 +130,7 @@ class syntax_plugin_imagemap extends DokuWiki_Syntax_Plugin {
           $target = '';
           switch ($type) {
           case 'internallink':
+            if ($url === '') $url = $ID;
             $default = $renderer->_simpleTitle($url);
             resolve_pageid(getNS($ID),$url,$exists);
             $title = $renderer->_getLinkTitle($title, $default, $isImg, $url);
@@ -146,6 +147,11 @@ class syntax_plugin_imagemap extends DokuWiki_Syntax_Plugin {
           break;
           case 'externallink':
             $title = $renderer->_getLinkTitle($title, $url, $isImg);
+            // url might be an attack vector, only allow registered protocols
+            if(is_null($this->schemes)) $this->schemes = getSchemes();
+            list($scheme) = explode('://',$url);
+            $scheme = strtolower($scheme);
+            if(!in_array($scheme,$this->schemes)) $url = '';
             $target = $conf['target']['extern'];
           break;
           case 'interwikilink':
@@ -171,11 +177,13 @@ class syntax_plugin_imagemap extends DokuWiki_Syntax_Plugin {
             $target = $conf['target']['windows'];
           break;
           }
-          $renderer->doc .= '<area href="'.$url.'"';
-          if (!empty($target))
-            $renderer->doc .= ' target="'.$target.'"';
-          $renderer->doc .= ' title="'.$title.'" alt="'.$title.'"';
-          $renderer->doc .= ' shape="'.$shape.'" coords="'.$coords.'" />';
+          if($url){
+            $renderer->doc .= '<area href="'.$url.'"';
+            if (!empty($target))
+              $renderer->doc .= ' target="'.$target.'"';
+            $renderer->doc .= ' title="'.$title.'" alt="'.$title.'"';
+            $renderer->doc .= ' shape="'.$shape.'" coords="'.$coords.'" />';
+          }
         } elseif ($data[1]=='divstart') {
           $renderer->doc .= DOKU_LF.'<div class="imapcontent">'.DOKU_LF;
           $has_content = true;
@@ -331,4 +339,4 @@ class ImageMap_Handler {
 
 }
 
-//Setup VIM: ex: et ts=4 enc=utf-8 :
+//Setup VIM: ex: et ts=4 :

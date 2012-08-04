@@ -31,8 +31,8 @@ $lang['head_interwiki'] = 'InterWiki Links';
 $lang['head_mime']      = 'MIME configuration';
 $lang['head_smileys']   = 'Smileys';
 
-$lang['edit_desc'] = 'You can edit the current settings by simply changeing there value in the listing below.'
-                   . '<br /> To delete a config line just clear the value.  If you want to <a href="#__add">add a value</a> use the from below';
+$lang['edit_desc'] = 'You can edit the current settings by simply changing there value in the listing below.'
+                   . '<br /> To delete a config line just clear the value.  If you want to <a href="#__add">add a value</a> use the form below';
 
 $lang['text_acronyms']  = 'Here you can edit all the acronym hints. For more details see <a class="interwiki iw_doku" href="http://www.dokuwiki.org/abbreviations">abbreviations and acronyms</a>';
 $lang['text_entities']  = 'Here you can edit all entities replacements. For more details see <a class="interwiki iw_doku" href="http://www.dokuwiki.org/entities">entities</a>';
@@ -45,6 +45,6 @@ $lang['reset']          = 'Reset';
 
 $lang['addvarhead'] = 'Add a line';
 $lang['additem'] = 'Add';
-$lang['addvartext'] = 'May you want to add a new item pair.';
+$lang['addvartext'] = 'Here you may add a new item pair.';
 
 $lang['editdesc'] = 'Select another file to edit. (Unsaved changes will be lost)';

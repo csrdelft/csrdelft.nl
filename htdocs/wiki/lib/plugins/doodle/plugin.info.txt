@@ -1,0 +1,7 @@
+base   doodle
+author Jonathan Tsai
+email  tryweb@ichiayi.com
+date   2009-08-10
+name   Doodle Plugin
+desc   helps to schedule meetings
+url    http://wiki.splitbrain.org/plugin:doodle

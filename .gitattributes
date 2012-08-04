@@ -752,6 +752,7 @@ htdocs/wiki/lib/plugins/changes/action.php -text
 htdocs/wiki/lib/plugins/changes/conf/default.php -text
 htdocs/wiki/lib/plugins/changes/conf/metadata.php -text
 htdocs/wiki/lib/plugins/changes/lang/en/settings.php -text
+htdocs/wiki/lib/plugins/changes/lang/hu/settings.php -text
 htdocs/wiki/lib/plugins/changes/manager.dat -text
 htdocs/wiki/lib/plugins/changes/plugin.info.txt -text
 htdocs/wiki/lib/plugins/changes/syntax.php -text
@@ -791,6 +792,7 @@ htdocs/wiki/lib/plugins/config/settings/extra.class.php -text
 htdocs/wiki/lib/plugins/config/style.css -text
 htdocs/wiki/lib/plugins/confmanager/admin.php -text
 htdocs/wiki/lib/plugins/confmanager/lang/de/lang.php -text
+htdocs/wiki/lib/plugins/confmanager/lang/el/lang.php -text
 htdocs/wiki/lib/plugins/confmanager/lang/en/lang.php -text
 htdocs/wiki/lib/plugins/confmanager/manager.dat -text
 htdocs/wiki/lib/plugins/confmanager/plugin.info.txt -text
@@ -960,6 +962,7 @@ htdocs/wiki/lib/plugins/doodle/lang/sv/lang.php -text
 htdocs/wiki/lib/plugins/doodle/lang/zh-cn/lang.php -text
 htdocs/wiki/lib/plugins/doodle/lang/zh-tw/lang.php -text
 htdocs/wiki/lib/plugins/doodle/manager.dat -text
+htdocs/wiki/lib/plugins/doodle/plugin.info.txt -text
 htdocs/wiki/lib/plugins/doodle/style.css -text
 htdocs/wiki/lib/plugins/doodle/syntax.php -text
 htdocs/wiki/lib/plugins/fontcolor/action.php -text
@@ -1037,6 +1040,7 @@ htdocs/wiki/lib/plugins/imagemap/COPYING -text
 htdocs/wiki/lib/plugins/imagemap/README -text
 htdocs/wiki/lib/plugins/imagemap/all.css -text
 htdocs/wiki/lib/plugins/imagemap/manager.dat -text
+htdocs/wiki/lib/plugins/imagemap/plugin.info.txt -text
 htdocs/wiki/lib/plugins/imagemap/syntax.php -text
 htdocs/wiki/lib/plugins/include/COPYING -text
 htdocs/wiki/lib/plugins/include/README -text
@@ -1080,10 +1084,12 @@ htdocs/wiki/lib/plugins/include/plugin.info.txt -text
 htdocs/wiki/lib/plugins/include/script.js -text
 htdocs/wiki/lib/plugins/include/style.css -text
 htdocs/wiki/lib/plugins/include/syntax/close_last_secedit.php -text
+htdocs/wiki/lib/plugins/include/syntax/closelastsecedit.php -text
 htdocs/wiki/lib/plugins/include/syntax/editbtn.php -text
 htdocs/wiki/lib/plugins/include/syntax/footer.php -text
 htdocs/wiki/lib/plugins/include/syntax/header.php -text
 htdocs/wiki/lib/plugins/include/syntax/include.php -text
+htdocs/wiki/lib/plugins/include/syntax/readmore.php -text
 htdocs/wiki/lib/plugins/include/syntax/wrap.php -text
 htdocs/wiki/lib/plugins/index.html -text
 htdocs/wiki/lib/plugins/indexmenu/COPYING -text
@@ -1282,6 +1288,7 @@ htdocs/wiki/lib/plugins/tag/lang/en/settings.php -text
 htdocs/wiki/lib/plugins/tag/lang/es/intro.txt -text
 htdocs/wiki/lib/plugins/tag/lang/es/lang.php -text
 htdocs/wiki/lib/plugins/tag/lang/es/settings.php -text
+htdocs/wiki/lib/plugins/tag/lang/fr/lang.php -text
 htdocs/wiki/lib/plugins/tag/lang/fr/settings.php -text
 htdocs/wiki/lib/plugins/tag/lang/hu/settings.php -text
 htdocs/wiki/lib/plugins/tag/lang/ja/lang.php -text
@@ -1318,15 +1325,18 @@ htdocs/wiki/lib/plugins/usermanager/plugin.info.txt -text
 htdocs/wiki/lib/plugins/usermanager/script.js -text
 htdocs/wiki/lib/plugins/usermanager/style.css -text
 htdocs/wiki/lib/plugins/vshare/README -text
+htdocs/wiki/lib/plugins/vshare/all.css -text
 htdocs/wiki/lib/plugins/vshare/button.png -text
 htdocs/wiki/lib/plugins/vshare/lang/en/lang.php -text
 htdocs/wiki/lib/plugins/vshare/manager.dat -text
+htdocs/wiki/lib/plugins/vshare/pdf.css -text
 htdocs/wiki/lib/plugins/vshare/plugin.info.txt -text
 htdocs/wiki/lib/plugins/vshare/script.js -text
 htdocs/wiki/lib/plugins/vshare/sites.conf -text
 htdocs/wiki/lib/plugins/vshare/sites.js -text
 htdocs/wiki/lib/plugins/vshare/style.css -text
 htdocs/wiki/lib/plugins/vshare/syntax.php -text
+htdocs/wiki/lib/plugins/vshare/video.png -text
 htdocs/wiki/lib/scripts/behaviour.js -text
 htdocs/wiki/lib/scripts/compatibility.js -text
 htdocs/wiki/lib/scripts/cookie.js -text

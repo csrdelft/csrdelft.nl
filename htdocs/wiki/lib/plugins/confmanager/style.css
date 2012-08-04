@@ -7,12 +7,12 @@ table.confmanager {
 }
 
 table.confmanager td {
-	padding-left:5px;
-	padding-right:5px;
+    padding-left:5px;
+    padding-right:5px;
 }
 input.key {
-	width:100px;
+    width:100px;
 }
 input.val {
-	width:300px;
+    width:600px;
 }

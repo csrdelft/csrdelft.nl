@@ -45,6 +45,8 @@ class syntax_plugin_navi extends DokuWiki_Syntax_Plugin {
      * Handle the match
      */
     function handle($match, $state, $pos, &$handler){
+        global $ID;
+
         $id = substr($match,7,-2);
         list($id,$opt) = explode('?',$id,2);
         $id = cleanID($id);
@@ -74,7 +76,9 @@ class syntax_plugin_navi extends DokuWiki_Syntax_Plugin {
             }elseif($instructions[$i][0] == 'listitem_close'){
                 $cnt++;
             }elseif($instructions[$i][0] == 'internallink'){
-                $page = cleanID($instructions[$i][1][0]);
+                $foo = true;
+                $page = $instructions[$i][1][0];
+                resolve_pageid(getNS($ID),$page,$foo); // resolve relative to sidebar ID
                 $list[$page] = array(
                                      'parents' => $parents,
                                      'page'    => $page,
@@ -83,7 +87,6 @@ class syntax_plugin_navi extends DokuWiki_Syntax_Plugin {
                                     );
             }
         }
-
         return array(wikiFN($id),$list,$opt);
     }
 
@@ -115,7 +118,7 @@ class syntax_plugin_navi extends DokuWiki_Syntax_Plugin {
             $ns   = $INFO['id'];
 
             // traverse up for matching namespaces
-            do {
+            if($data) do {
                 $ns = getNS($ns);
                 $try = "$ns:";
                 resolve_pageid('',$try,$foo);

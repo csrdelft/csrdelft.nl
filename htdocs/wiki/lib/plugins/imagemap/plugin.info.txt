@@ -1,0 +1,8 @@
+base    imagemap
+author  Tom N Harris
+email   tnharris@whoopdedo.org
+date    2012-05-31
+name    Image Map Plugin
+desc    Create client-side image maps.
+url     http://whoopdedo.org/doku/wiki/imagemap
+
