@@ -126,3 +126,9 @@ div#qsearch2__out {
   color: windowtext;
   text-decoration: none;
 }
+
+/* different layout for wrap-plugin in sidebar of Vector template*/
+#panel .dokuwiki div.wrap_info, #panel .dokuwiki div.wrap_important, #panel .dokuwiki div.wrap_alert, #panel .dokuwiki div.wrap_tip, #panel .dokuwiki div.wrap_help, #panel .dokuwiki div.wrap_todo, #panel .dokuwiki div.wrap_download {
+    background-position: 10px 10px;
+    padding: 70px 1em .5em 1em;
+}
