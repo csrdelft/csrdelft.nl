@@ -353,9 +353,12 @@ class ProfielBewerken extends Profiel {
 
 		$form[]=new Comment('Persoonlijk:');
 		if($hasLedenMod OR $this->editNoviet){
-			$form[]=new InputField('eetwens', $profiel['eetwens'], 'Dieet', 200);
+			$form[]=new InputField('eetwens', $profiel['eetwens'], 'Dieet/allergie', 200);
 			//wellicht binnenkort voor iedereen beschikbaar?
 			$form[]=new InputField('kerk', $profiel['kerk'], 'Kerk', 50);
+			$form[]=new IntField('lengte', $profiel['lengte'], 'Lengte (cm)', 50);
+			$form[]=new InputField('vrienden', $profiel['vrienden'], 'Vrienden binnnen C.S.R./lichting', 300);
+			$form[]=new InputField('middelbareSchool', $profiel['middelbareSchool'], 'Middelbare school', 200);
 		}
 		$form[]=new InputField('muziek', $profiel['muziek'], 'Muziekinstrument', 50);
 
@@ -363,8 +366,14 @@ class ProfielBewerken extends Profiel {
 			$form[]=new SelectField('ovkaart', $profiel['ovkaart'], 'OV-kaart', array('' => 'Kies...','geen' => '(Nog) geen OV-kaart','week' => 'Week','weekend' => 'Weekend','niet' => 'Niet geactiveerd'));
 			$form[]=new SelectField('zingen', $profiel['zingen'], 'Zingen', array('' => 'Kies...','ja' => 'Ja, ik zing in een band/koor','nee' => 'Nee, ik houd niet van zingen','soms' => 'Alleen onder de douche','anders' => 'Anders'));
 			$form[]=new TextField('novitiaat', $profiel['novitiaat'], 'Wat verwacht je van het novitiaat?');
-			$form[]=new Comment('<br>Einde vragenlijst<br><br><br><br><br>');
-			$form[]=new TextField('kgb', $profiel['kgb'], 'NovCie-opmerking');
+			$form[]=new Comment('<br>Einde vragenlijst<br><br><br><br><br>In te vullen door NovCie:<br>');
+		
+			$form[]=new SelectField('soortNoviet', $profiel['novietSoort'], 'Soort Noviet', array('noviet','nanoviet'));
+			$form[]=new SelectField('matrixPlek', $profiel['matrixPlek'], 'Matrix plek', array('voor','midden','achter'));
+			$form[]=new SelectField('startkamp', $profiel['startkamp'], 'Startkamp', array('ja', 'nee'));
+			$form[]=new TextField('medisch', $profiel['medisch'], 'medisch (NB alleen als relevant voor hele NovCie)');
+			$form[]=new TextField('novitiaatBijz', $profiel['novitiaatBijz'], 'Bijzonderheden novitiaat (op dag x ...)');
+			$form[]=new TextField('kgb', $profiel['kgb'], 'Overige NovCie-opmerking');
 		}
 
 		if(!$this->editNoviet){
@@ -681,5 +690,60 @@ class ProfielStatus extends Profiel{
 
 		return $return;
 	}
+}
+
+class ProfielVoorkeur extends Profiel{
+		
+		public function __construct($lid, $actie){
+			parent::__construct($lid, $actie);
+			$this->assignFields();
+		}
+
+		/*
+		 * Defineert de velden van formulier voor het wijzigen van voorkeur
+		 */
+		public function assignFields(){
+			LidCache::updateLid($this->lid->getUid());
+			$profiel=$this->lid->getProfiel();
+			//permissies
+			$opties = array(0=>'nee', 1=>'misschien', 2=>'ja');
+			require_once('voorkeur/lidvoorkeur.class.php');
+			$lidvoorkeur = new Lidvoorkeur($this->lid->getUid());
+			$commissies = $lidvoorkeur->getCommissies();
+			$voorkeur = $lidvoorkeur->getVoorkeur();
+			//status-select is eerste veld omdat die bij opslaan als eerste uitgelezen moet worden.
+			foreach($commissies as $id => $com){
+				$form[]=new SelectField($id, $this->getVoorkeur($voorkeur,$id), $com, $opties);
+			}
+			
+			$form[]=new TextField('lidOpmerking', $lidvoorkeur->getLidOpmerking(), 'Vul hier je eventuele voorkeur voor functie in, of andere opmerkingen');
+			$this->form=$form;
+		}
+
+		/*
+		 * Slaat waardes uit de velden op. Voor opslaan worden sommige velden nog geconditioneerd.
+		 * @return bool wel/niet slagen van opslaan van lidgegevens
+		 * acties: verwerkt velden, conditioneert die, zet abo's uit, slaat lidgegevens op en mailt fisci.
+		 */
+		public function save(){
+			//relevante gegevens uit velden verwerken
+			$lidvoorkeur = new Lidvoorkeur($this->lid->getUid());
+			foreach($this->getFields('voorkeurForm') as $field){
+				if($field instanceof FormField){
+					//aan de hand van status bepalen welke POSTed velden worden opgeslagen van het formulier
+					if($field->getName() == 'lidOpmerking')
+						$lidvoorkeur->setLidOpmerking($field->getValue());
+					else
+						$lidvoorkeur->setCommissieVoorkeur($field->getName(),$field->getValue());
+				}
+			}
+		}
+		
+		private function getVoorkeur($voorkeur, $id) {
+			if(array_key_exists($id, $voorkeur)){
+				return $voorkeur[$id];
+			}
+			return 0;
+		}
 }
 ?>
