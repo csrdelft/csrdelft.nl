@@ -132,4 +132,28 @@ class ProfielStatusContent extends SimpleHTML{
 		$profiel->display('profiel/wijzigstatus.tpl');
 	}
 }
+
+class ProfielVoorkeurContent extends SimpleHTML{
+	private $profiel;
+	private $actie;
+
+	public function __construct($profiel, $actie){
+		$this->profiel=$profiel;
+		$this->actie=$actie;
+	}
+	public function getTitel(){
+		return 'voorkeur van '.$this->profiel->getLid()->getNaam().' aanpassen.';
+	}
+	public function view(){
+
+
+		require_once 'formulier.class.php';
+		$profiel=new Smarty_csr();
+		$profiel->assign('profiel', $this->profiel);
+
+		$profiel->assign('melding', $this->getMelding());
+		$profiel->assign('actie', $this->actie);
+		$profiel->display('profiel/wijzigvoorkeur.tpl');
+	}
+}
 ?>
