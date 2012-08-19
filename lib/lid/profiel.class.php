@@ -356,7 +356,7 @@ class ProfielBewerken extends Profiel {
 			$form[]=new InputField('eetwens', $profiel['eetwens'], 'Dieet/allergie', 200);
 			//wellicht binnenkort voor iedereen beschikbaar?
 			$form[]=new InputField('kerk', $profiel['kerk'], 'Kerk', 50);
-			$form[]=new IntField('lengte', $profiel['lengte'], 'Lengte (cm)', 50);
+			$form[]=new IntField('lengte', $profiel['lengte'], 'Lengte (cm)', 250);
 			$form[]=new InputField('vrienden', $profiel['vrienden'], 'Vrienden binnnen C.S.R./lichting', 300);
 			$form[]=new InputField('middelbareSchool', $profiel['middelbareSchool'], 'Middelbare school', 200);
 		}
