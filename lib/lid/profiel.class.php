@@ -385,8 +385,12 @@ class ProfielBewerken extends Profiel {
 		}
 		$form[]=new SubmitButton('opslaan', '<a class="knop" href="/communicatie/profiel/'.$this->getUid().'">Annuleren</a>');
 		
-		$this->form=new Formulier('/communicatie/profiel/'.$this->getUid().'/bewerken', $form);
-		
+		if($this->editNoviet){
+			$this->form=new Formulier('/communicatie/profiel/'.$this->getUid().'/novietBewerken', $form);
+		}
+		else{
+			$this->form=new Formulier('/communicatie/profiel/'.$this->getUid().'/bewerken', $form);
+		}
 		$this->form->cssID='profielForm';
 	}
 

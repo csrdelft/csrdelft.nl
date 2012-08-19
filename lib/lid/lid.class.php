@@ -799,6 +799,17 @@ class Lid implements Serializable, Agendeerbaar{
 			throw new Exception('Kon geen nieuw uid aanmaken.');
 		}
 	}
+	
+	public function maakLidAf($datum){
+		$db=MySql::instance();
+		$query='UPDATE lid SET permissies = "P_NOBODY", status = "S_NOBODY", lidafdatum="'.$datum.'"WHERE uid='.$this->uid.';';
+		$lid=$db->getRow($query);
+		$flush=new LidCache();
+		$flush->flushLid($this->uid);
+		
+		
+		
+	}
 
 	
 	public static function getVerjaardagen($van, $tot, $limiet=0){
