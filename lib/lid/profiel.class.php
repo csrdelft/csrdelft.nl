@@ -368,7 +368,7 @@ class ProfielBewerken extends Profiel {
 			$form[]=new TextField('novitiaat', $profiel['novitiaat'], 'Wat verwacht je van het novitiaat?');
 			$form[]=new Comment('<br>Einde vragenlijst<br><br><br><br><br>In te vullen door NovCie:<br>');
 		
-			$form[]=new SelectField('soortNoviet', $profiel['novietSoort'], 'Soort Noviet', array('noviet','nanoviet'));
+			$form[]=new SelectField('novietSoort', $profiel['novietSoort'], 'Soort Noviet', array('noviet','nanoviet'));
 			$form[]=new SelectField('matrixPlek', $profiel['matrixPlek'], 'Matrix plek', array('voor','midden','achter'));
 			$form[]=new SelectField('startkamp', $profiel['startkamp'], 'Startkamp', array('ja', 'nee'));
 			$form[]=new TextField('medisch', $profiel['medisch'], 'medisch (NB alleen als relevant voor hele NovCie)');
@@ -694,6 +694,8 @@ class ProfielStatus extends Profiel{
 
 class ProfielVoorkeur extends Profiel{
 		
+		protected $form=array();
+		
 		public function __construct($lid, $actie){
 			parent::__construct($lid, $actie);
 			$this->assignFields();
@@ -706,7 +708,7 @@ class ProfielVoorkeur extends Profiel{
 			LidCache::updateLid($this->lid->getUid());
 			$profiel=$this->lid->getProfiel();
 			//permissies
-			$opties = array(0=>'nee', 1=>'misschien', 2=>'ja');
+			$opties = array(1=>'nee', 2=>'misschien', 3=>'ja');
 			require_once('voorkeur/lidvoorkeur.class.php');
 			$lidvoorkeur = new Lidvoorkeur($this->lid->getUid());
 			$commissies = $lidvoorkeur->getCommissies();
@@ -717,7 +719,12 @@ class ProfielVoorkeur extends Profiel{
 			}
 			
 			$form[]=new TextField('lidOpmerking', $lidvoorkeur->getLidOpmerking(), 'Vul hier je eventuele voorkeur voor functie in, of andere opmerkingen');
-			$this->form=$form;
+			$form[]=new SubmitButton('opslaan', '<a class="knop" href="/communicatie/profiel/'.$this->getUid().'">Annuleren</a>');
+
+			$this->form=new Formulier('/communicatie/profiel/'.$this->getUid().'/voorkeuren', $form);
+
+			$this->form->cssID='profielForm';
+			
 		}
 
 		/*
@@ -728,7 +735,7 @@ class ProfielVoorkeur extends Profiel{
 		public function save(){
 			//relevante gegevens uit velden verwerken
 			$lidvoorkeur = new Lidvoorkeur($this->lid->getUid());
-			foreach($this->getFields('voorkeurForm') as $field){
+			foreach($this->form->getFields() as $field){
 				if($field instanceof FormField){
 					//aan de hand van status bepalen welke POSTed velden worden opgeslagen van het formulier
 					if($field->getName() == 'lidOpmerking')
@@ -739,11 +746,24 @@ class ProfielVoorkeur extends Profiel{
 			}
 		}
 		
+		public function isPosted(){
+			return $this->form->isPosted();
+		}
+	
+		
 		private function getVoorkeur($voorkeur, $id) {
 			if(array_key_exists($id, $voorkeur)){
 				return $voorkeur[$id];
 			}
 			return 0;
+		}
+		
+		public function getFields(){
+			return $this->form;
+		}
+		
+		public function valid(){
+			return true;
 		}
 }
 ?>
