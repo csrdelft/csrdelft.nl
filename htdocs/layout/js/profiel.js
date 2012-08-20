@@ -96,5 +96,21 @@ jQuery(document).ready(function($) {
 	$('#statusForm').bind("reset", function() {
 		setTimeout("$('#field_status').trigger('click') ", 100);
 	});
+	
+	//Novcie opmerkingen voor de inschrijvers
+	$('#novietSoort').hide();
+	  $('#matrixPlek').hide();
+	  $('#startkamp').hide();
+	  $('#medisch').hide();
+	  $('#novitiaatBijz').hide();
+	  $('#kgb').hide();
+	$('#novcieKnopFormulier').click(function() {
+	  $('#novietSoort').toggle('fast');
+	  $('#matrixPlek').toggle('fast');
+	  $('#startkamp').toggle('fast');
+	  $('#medisch').toggle('fast');
+	  $('#novitiaatBijz').toggle('fast');
+	  $('#kgb').toggle('fast');
+	});
 
 });
