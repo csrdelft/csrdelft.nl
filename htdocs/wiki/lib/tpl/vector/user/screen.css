@@ -22,7 +22,7 @@
 
 /* "you are here" and "breadcrumbs" -- minder hoog*/
 .catlinks {
-  border: 0px solid #aaa;
+  border: 0 solid #aaa;
   background-color: #f3f3e1;/*#f3f3f3;*/
 }
 
@@ -54,7 +54,7 @@ div#content .dokuwiki ul {
 /* disccussion plugin */
 div.dokuwiki div.comment_wrapper {
 	background-color: #fff;
-	margin: 0em;
+	margin: 0;
 	color: #474747;
 	padding: 0.5em 0 0 0;
 }
@@ -63,20 +63,20 @@ div.dokuwiki div.level2 {
 }
 div.dokuwiki div.comment_form {
     margin-right: 0.5em;
-    margin-left: 0em;
-    margin-top: 0em;
+    margin-left: 0;
+    margin-top: 0;
 }
 
 div.dokuwiki div#discussion__comment_preview {
-    margin-top: 0em;
-    padding: 0em;
+    margin-top: 0;
+    padding: 0;
 }
 
 #discussion__section {
 	color: #474747 !important;
 }
 div#content .dokuwiki div.comment_wrapper h2 {
-	border-bottom: 0px;
+	border-bottom: 0;
     background-color: #f3f3e1;
     padding: 5px;
     font-size: 1.5em;
@@ -90,7 +90,7 @@ div.dokuwiki .comment_head abbr.published {
 	color: #888;
 }
 .comment_body entry-content {
-	margin-left: 0em;
+	margin-left: 0;
 }
 
 div.dokuwiki div.comment_buttons input.button {
