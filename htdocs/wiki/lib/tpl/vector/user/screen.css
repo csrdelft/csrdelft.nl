@@ -111,3 +111,11 @@ div.dokuwiki label.block {
 div#panel div.portal div.body ul li {
     white-space: nowrap;
 }
+/* interwiki links naar vormingsbank opmaken als interne links */
+.dokuwiki a.interwiki.iw_vbactiviteit, .dokuwiki a.interwiki.iw_vbactiviteit:visited,
+.dokuwiki a.interwiki.iw_vbcollegejaar, .dokuwiki a.interwiki.iw_vbcollegejaar:visited,
+.dokuwiki a.interwiki.iw_vbrubriek, .dokuwiki a.interwiki.iw_vbrubriek:visited {
+    color: #002BB8 !important;
+    background: none;
+    padding: 0 0 0 0;
+}
