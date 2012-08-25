@@ -165,7 +165,7 @@ class helper_plugin_data extends DokuWiki_Plugin {
                     }
 
                     $ns = getNS($ID);
-                    $targets = array($target, $ns.':'.$target, $ns.':'.$conf['start'], $ns);
+                    $targets = array($target, $ns.':'.$target, $ns.':zoeken', $ns.':'.$conf['start'], $ns);
                     foreach($targets as $t){
                         if(page_exists(cleanID($t))){
                             $target=$t;
