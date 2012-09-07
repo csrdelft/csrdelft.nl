@@ -70,7 +70,7 @@ class LedenlijstContent extends SimpleHTML{
 		if($melding!=''){
 			echo $melding.'<br />';
 		}
-		echo '<h1>Ledenlijst</h1>';
+		echo '<h1>'.(LoginLid::instance()->getLid()->isOudlid() ? 'Oud-leden en l' : 'L').'edenlijst </h1>';
 		echo '<form method="get" id="zoekform">';
 		echo '<label for="q"></label><input type="text" name="q" value="'.htmlspecialchars($this->zoeker->getQuery()).'" /> ';
 		echo '<input type="submit" class="submit" value="zoeken" /> <a class="knop" id="toggleAdvanced" href="#geavanceerd">Geavanceerd</a>';
