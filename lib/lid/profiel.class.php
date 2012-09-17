@@ -754,6 +754,21 @@ class ProfielVoorkeur extends Profiel{
 			return $this->form->isPosted();
 		}
 	
+		Public function magBewerken(){
+			//lid-moderator
+			if(LoginLid::instance()->hasPermission('P_LEDEN_MOD')){
+				return true;
+			}
+			//oudlid-moderator
+			if(LoginLid::instance()->hasPermission('P_OUDLEDEN_MOD') AND in_array($this->lid->getStatus(), array('S_OUDLID', 'S_ERELID'))){
+				return true;
+			}
+			//of het gaat om ons eigen profiel.
+			if(LoginLid::instance()->isSelf($this->lid->getUid())){
+				return true;
+			}
+			return false;
+		}
 		
 		private function getVoorkeur($voorkeur, $id) {
 			if(array_key_exists($id, $voorkeur)){
