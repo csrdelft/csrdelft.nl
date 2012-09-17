@@ -84,7 +84,7 @@ uitprinten. Vanaf dat moment zal deze ketzer u niet meer willen aan- of afmelden
 {if $loginlid->hasPermission('P_MAAL_WIJ')}
 	<h2>Andere verenigingsleden aanmelden</h2>
 	<p>
-		Het is voor leden alleen mogelijk andere leden aan te melden binnen 48 uur voordat de maaltijd plaatsvindt.
+		Het is voor leden alleen mogelijk andere leden aan te melden binnen 48 uur (beheerders 8 dagen) voordat de maaltijd plaatsvindt.
 		U kunt iemand aanmelden met zijn/haar 4-cijferige lid-nummer. Als iemand u vraagt hem/haar in te schrijven,
 		vraag hier dan even naar, of zoek het op in de ledenlijst.<br />
 		<br />

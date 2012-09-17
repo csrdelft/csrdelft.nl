@@ -39,7 +39,12 @@ class MaaltijdContent extends SimpleHTML {
 
 		//...het aanmelden van andere verenigingsleden
 		$aMaal['anderen']['error']=$this->_maaltrack->getProxyError();
-		$aMaal['anderen']['maaltijden']=$this->_maaltrack->getMaaltijden($nu, $nu+MAALTIJD_PROXY_MAX_TOT);
+		//beheerders kunnen al eerder iemand toevoegen
+		if(LoginLid::instance()->hasPermission('P_MAAL_MOD')){
+			$aMaal['anderen']['maaltijden']=$this->_maaltrack->getMaaltijden($nu, $nu+MAALTIJD_PROXY_MAX_TOT_BEHEERDER);
+		}else{
+			$aMaal['anderen']['maaltijden']=$this->_maaltrack->getMaaltijden($nu, $nu+MAALTIJD_PROXY_MAX_TOT);
+		}
 		//de door het huidige lid aangemelde leden ophalen voor de opgehaalde maaltijden...
 		for($i=0; $i<count($aMaal['anderen']['maaltijden']); $i++){
 			$maalID=$aMaal['anderen']['maaltijden'][$i]['id'];
