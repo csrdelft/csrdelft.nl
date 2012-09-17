@@ -2259,6 +2259,7 @@ lib/templates/profiel/_saldografiek.tpl -text
 lib/templates/profiel/bewerken.tpl -text
 lib/templates/profiel/profiel.tpl -text
 lib/templates/profiel/wijzigstatus.tpl -text
+lib/templates/profiel/wijzigvoorkeur.tpl -text
 lib/templates/roodschopper/roodschopper.tpl -text
 lib/templates/socciemail.tpl -text
 lib/ubb/LICENSE -text
