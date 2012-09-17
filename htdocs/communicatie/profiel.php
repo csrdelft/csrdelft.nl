@@ -50,6 +50,18 @@ if(!($loginlid->hasPermission('P_LEDEN_READ') or $loginlid->hasPermission('P_OUD
 	
 	switch($actie){
 		case 'novietBewerken':
+			$profiel=new ProfielBewerken($uid, $actie);
+			
+			if($profiel->magBewerken()){
+				if($profiel->valid() AND $profiel->save()){
+					header('location: '.CSR_ROOT.'communicatie/profiel/'.$uid);
+					exit;
+				}else{
+					$midden=new ProfielEditContent($profiel, $actie);
+				}
+			}else{
+				$midden=new ProfielContent(LidCache::getLid($uid));
+			}
 		case 'bewerken':
 			$profiel=new ProfielBewerken($uid, $actie);
 			
@@ -101,6 +113,21 @@ if(!($loginlid->hasPermission('P_LEDEN_READ') or $loginlid->hasPermission('P_OUD
 				exit;
 			}else{
 				$midden=new ProfielStatusContent($profiel, $actie);
+			}
+		break;
+		case 'voorkeuren':
+			//TODO Rechten goed zetten!
+			$voorkeur = new ProfielVoorkeur($uid, $actie);
+			
+			if($voorkeur->magBewerken()){
+				if($voorkeur->isPosted() AND $voorkeur->valid() AND $voorkeur->save()){
+					header('location: '.CSR_ROOT.'communicatie/profiel/'.$uid);
+					exit;
+				} else {
+					$midden = new ProfielVoorkeurContent($voorkeur, $actie);
+				}
+			}else{
+				$midden=new ProfielContent(LidCache::getLid($uid));
 			}
 		break;
 		case 'wachtwoord':
