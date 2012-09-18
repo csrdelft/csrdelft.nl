@@ -34,11 +34,12 @@ class Mail{
 			foreach(explode(',', $to) as $email){
 				$this->addTo($email);
 			}
+		}else{
+			if(!email_like($to)){
+				throw new Exception('Emailadres in $to geen valide email-adres');
+			}
+			$this->to[]=$this->production_safe($to);
 		}
-		if(!email_like($to)){
-			throw new Exception('Emailadres in $to geen valide email-adres');
-		}
-		$this->to[]=$this->production_safe($to);
 	}
 	
 	public function setFrom($from){
@@ -57,11 +58,12 @@ class Mail{
 			foreach(explode(',', $bcc) as $email){
 				$this->addBcc($email);
 			}
+		}else{
+			if(!email_like($bcc)){
+				throw new Exception('Emailadres in $bcc geen valide email-adres');
+			}
+			$this->bcc[]=$this->production_safe($bcc);
 		}
-		if(!email_like($bcc)){
-			throw new Exception('Emailadres in $bcc geen valide email-adres');
-		}
-		$this->bcc[]=$this->production_safe($bcc);
 	}
 
 	/**
