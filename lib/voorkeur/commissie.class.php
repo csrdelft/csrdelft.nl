@@ -21,7 +21,7 @@ class Commissie {
 	
 	public function getGeinteresseerde() {
 		$db = MySql::instance();
-		$query = 'SELECT uid, voorkeur FROM Commissie JOIN Voorkeur ON Commissie.id = Voorkeur.cid WHERE zichtbaar = 1 
+		$query = 'SELECT uid, voorkeur FROM voorkeurCommissie JOIN voorkeurVoorkeur ON voorkeurCommissie.id = voorkeurVoorkeur.cid WHERE zichtbaar = 1 
 			AND (voorkeur = 2 OR voorkeur = 3) AND cid = '.$this->cid.' ORDER BY voorkeur DESC';
 		$result = $db->select($query);
 		$res = array();
@@ -33,7 +33,7 @@ class Commissie {
 	
 	public static function getCommissie($cid) {
 			$db = MySql::instance();
-			$query = 'SELECT * FROM Commissie WHERE id = ' . $cid .'';
+			$query = 'SELECT * FROM voorkeurCommissie WHERE id = ' . $cid .'';
 			$result = $db->select($query);
 			$res = '';
 			while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
@@ -44,7 +44,7 @@ class Commissie {
 	
 	public static function getCommissies() {
 		$db = MySql::instance();
-		$query = 'SELECT * FROM Commissie WHERE zichtbaar = 1 ';
+		$query = 'SELECT * FROM voorkeurCommissie WHERE zichtbaar = 1 ';
 		$result = $db->select($query);
 		$res = array();
 		while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
