@@ -14,15 +14,15 @@ class Lidvoorkeur {
 	private $uid;
 	
 	public function __construct($uid) {
-		$this->uid = $uid;
+		$this->uid=$uid;
 	}
 	
 	public function setCommissieVoorkeur($cid, $voorkeur) {
 		$db = MySql::instance();
 		$query = 'DELETE FROM Voorkeur WHERE uid =' . $this->uid . ' AND cid = '. $cid;
 		$db->query($query);
-		$query = 'INSERT INTO `Voorkeur` VALUES (' 
-			. $this->uid .','
+		$query = 'INSERT INTO `Voorkeur` VALUES ("' 
+			. $this->uid .'",'
 			. $cid .', 1, ' 
 			. $voorkeur. ', CURRENT_TIMESTAMP )';
 		$db->query($query);
@@ -92,7 +92,7 @@ class Lidvoorkeur {
 	
 	private function insertRow() {
 		$db = MySql::instance();
-		$query = 'INSERT INTO Opmerking VALUES (' . $this->uid . ',"","")';
+		$query = 'INSERT INTO Opmerking VALUES ("' . $this->uid . '","","")';
 		$db->query($query);
 	}
 }

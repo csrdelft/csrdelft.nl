@@ -6,11 +6,14 @@
 				<div class="knopjes">
 					{if $profiel->magBewerken()}
 						<a href="/communicatie/profiel/{$profiel->getUid()}/bewerken" class="knop" title="Bewerk dit profiel">{icon get="bewerken"}</a>
+						<a href="/communicatie/profiel/{$profiel->getUid()}/voorkeuren" class="knop" title="Pas voorkeuren voor commissies aan">{icon get="report_edit"}</a>
 					{/if}
 					{if $isLidMod}
 						<a href="/communicatie/profiel/{$profiel->getUid()}/wijzigstatus" class="knop" title="Wijzig de lidstatus">{icon get="group_edit"}</a>
 					{/if}
-
+					{if $isBestuur}
+							<a href="/communicatie/profiel/{$profiel->getUid()}/dd" class="knop" title="Wijzig de lidstatus">{icon get="group_edit"}</a>
+					{/if}
 					{if $isAdmin}
 						<a href="/tools/stats.php?uid={$profiel->getUid()}" class="knop" title="Toon bezoeklog">{icon get="server_chart"}</a>
 						<a href="/communicatie/profiel/{$profiel->getUid()}/wachtwoord" class="knop"

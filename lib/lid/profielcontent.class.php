@@ -64,9 +64,10 @@ class ProfielContent extends SimpleHTML {
 
 		$loginlid=LoginLid::instance();
 		$profiel->assign('isAdmin', $loginlid->hasPermission('P_ADMIN'));
+		$profiel->assign('isBestuur', $loginlid->hasPermission('P_BESTUUR'));
 		$profiel->assign('isLidMod', $loginlid->hasPermission('P_LEDEN_MOD'));
 		$profiel->assign('melding', $this->getMelding());
-
+		
 		//eigen profiel niet cachen, dan krijgen we namelijk rare dingen
 		//dat we andermans saldo's zien enzo
 		if(LoginLid::instance()->isSelf($this->lid->getUid())){
