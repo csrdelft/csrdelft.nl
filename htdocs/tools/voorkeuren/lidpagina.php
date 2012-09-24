@@ -9,7 +9,7 @@
 require_once('configuratie.include.php');
 
 require_once('voorkeur/overzicht.class.php');
-if(LoginLid::instance()->hasPermission('P_ADMIN,P_BESTUUR') OR LoginLid::instance()->getLid()->isBestuur()){
+if(LoginLid::instance()->hasPermission('P_ADMIN,P_BESTUUR,P_LEDEN_MOD') OR LoginLid::instance()->getLid()->isBestuur()){
 	$inhoud = new LidOverzicht();
 	if(isset($_GET['lid']))
 		$inhoud = new LidOverzicht($_GET['lid']);
