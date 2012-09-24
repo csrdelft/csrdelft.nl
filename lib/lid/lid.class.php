@@ -481,7 +481,7 @@ class Lid implements Serializable, Agendeerbaar{
 	 */
 	public function isBestuur(){
 		$bestuur=new Groep('bestuur');
-		return $bestuur->isLid($uid->getUid());
+		return $bestuur->isLid($this->getUid());
 	}
 
 	/**
