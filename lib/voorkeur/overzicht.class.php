@@ -11,7 +11,7 @@ class CommissieOverzicht{
 	
 	function view(){
 		$res = '';
-		if(LoginLid::instance()->hasPermission('P_ADMIN,P_BESTUUR')){
+		if(LoginLid::instance()->hasPermission('P_ADMIN,P_BESTUUR,P_LEDEN_MOD,groep:bestuur')){
 			require_once('voorkeur/commissie.class.php');
 			if($this->id>=0){
 				$commissie = Commissie::getCommissie($this->id);
