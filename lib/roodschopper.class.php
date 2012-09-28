@@ -8,6 +8,7 @@
  * van overblijven. Wellicht kan er later nog een html-optie ingeklust worden.
  */
 require_once 'csrubb.class.php';
+require_once 'mail.class.php';
 
 class Roodschopper{
 	private $cie='soccie';
@@ -174,7 +175,7 @@ h.t. Fiscus.';
 		
 		foreach($this->teschoppen as $uid => $bericht){
 			$mail=new Mail($uid.'@csrdelft.nl', $this->getOnderwerp(), $bericht['bericht']);
-			$mail->setFrom($this->GetFrom());
+			$mail->setFrom($this->getFrom());
 			$mail->addBcc($this->getBcc());
 			$mail->send();
 		}
