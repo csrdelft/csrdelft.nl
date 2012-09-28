@@ -2323,6 +2323,7 @@ sql/2575_adds_kwaliafwasser_kwalikok.sql -text
 sql/2669_biebauteur_weg.sql -text
 sql/2693_rubrieken.sql -text
 sql/2735_woecorveetakentoegevoegd.sql -text
+sql/2783_lid_wijzigingSoccieIDcreateTerm.sql -text
 sql/csrdelft.sql -text
 sql/csrdelft_oud.sql -text
 wiki/.htaccess -text
