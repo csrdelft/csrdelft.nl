@@ -308,7 +308,7 @@ class ProfielBewerken extends Profiel {
 		}
 		if(LoginLid::instance()->hasPermission('P_ADMIN')){
 			$form[]=new IntField('soccieID', $profiel['soccieID'], 'SoccieID (uniek icm. bar)', 10000, 0);
-			$form[]=new SelectField('createTerm', $profiel['createTerm'], 'Aangemaakt bij', array('barvoor'=>'barvoor', 'barmidden'=>'barmidden', 'barachter'=>'barachter'));
+			$form[]=new SelectField('createTerm', $profiel['createTerm'], 'Aangemaakt bij', array('barvoor'=>'barvoor', 'barmidden'=>'barmidden', 'barachter'=>'barachter', 'soccie'=>'soccie'));
 		}
 
 		if(in_array($profiel['status'], array('S_OUDLID', 'S_ERELID', 'S_NOBODY', 'S_OVERLEDEN', 'S_CIE')) OR $this->lid->getUid()=='6601'){ //vd Wekken mag wel eerder begonnen zijn.
