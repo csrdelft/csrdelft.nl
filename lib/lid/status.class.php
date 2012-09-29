@@ -12,6 +12,7 @@ class Status{
 		'S_OUDLID','S_ERELID',
 		'S_KRINGEL',
 		'S_OVERLEDEN',
+		'S_EXLID',
 		'S_NOBODY',
 		'S_CIE'
 	);
@@ -46,6 +47,7 @@ class Status{
 		switch($status){
 			case 'S_OUDLID':	return '•';
 			case 'S_KRINGEL':	return '~';
+			case 'S_EXLID':
 			case 'S_NOBODY':	return '∉';
 			case 'S_NOVIET':
 			case 'S_GASTLID':
@@ -63,6 +65,7 @@ class Status{
 		switch($status){
 			case 'S_OUDLID': 	return 'Oudlid';
 			case 'S_KRINGEL': 	return 'Kringel';
+			case 'S_EXLID':		return 'Ex-lid';
 			case 'S_NOBODY':	return 'Nobody';
 			case 'S_NOVIET':	return 'Noviet';
 			case 'S_GASTLID':	return 'Gastlid';
@@ -85,6 +88,7 @@ class Status{
 			case 'S_OUDLID':
 			case 'S_ERELID': 	return 'P_OUDLID';
 			case 'S_NOBODY':
+			case 'S_EXLID':
 			case 'S_OVERLEDEN': 
 			case 'S_CIE':		return 'P_NOBODY';
 		}

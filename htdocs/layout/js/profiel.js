@@ -41,16 +41,17 @@ jQuery(document).ready(function($) {
 			case "S_ERELID":
 				$('#kring, #ontvangtcontactueel, #echtgenoot, #adresseringechtpaar').show();
 			case "S_NOBODY":
+			case "S_EXLID":
 				$('#lidafdatum').show();
 
 				//waardes voorinvullen
-				$("#field_kring").val(status=='S_NOBODY' ? 0 : original['kring']);
+				$("#field_kring").val(status=='S_NOBODY' || status=='S_EXLID' ? 0 : original['kring']);
 				
 				if(original['lidafdatum_jaar']=='0000'){
 					var now = new Date();
 					setLidaf(now.getFullYear(), now.getMonth(), now.getDate());
 				}
-				$("#field_permissies").val(status=="S_NOBODY" ? 'P_NOBODY' : 'P_OUDLID');
+				$("#field_permissies").val(status=="S_NOBODY" || status=='S_EXLID' ? 'P_NOBODY' : 'P_OUDLID');
 			break;
 			case "S_LID":
 			case "S_GASTLID":

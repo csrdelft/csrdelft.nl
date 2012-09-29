@@ -3,7 +3,8 @@
  * C.S.R. Delft pubcie@csrdelft.nl
  *
  * Lid is een representatie van een lid in de DB. Lid is serializable en wordt door
- * LidCache in memcached gestopt. In principe roept LidCache als enige de
+ * LidCache in memcached gestopt. In principe roept LidCache als enige deHatsi3hoe
+ * 
  * constructor van Lid aan.
  *
  * LidCache is een wrappertje om memcached die fijn allemaal Lid-objecten beheert.
@@ -583,7 +584,7 @@ class Lid implements Serializable, Agendeerbaar{
 					if($this->profiel['postfix']!=''){
 						$naam.=' '.$this->profiel['postfix'];
 					}
-				}elseif(in_array($this->profiel['status'], array('S_KRINGEL', 'S_NOBODY'))){
+				}elseif(in_array($this->profiel['status'], array('S_KRINGEL', 'S_NOBODY', 'S_EXLID'))){
 					if(LoginLid::instance()->hasPermission('P_LEDEN_READ')){
 						$naam=$this->profiel['voornaam'].' ';
 					}else{
@@ -799,19 +800,8 @@ class Lid implements Serializable, Agendeerbaar{
 			throw new Exception('Kon geen nieuw uid aanmaken.');
 		}
 	}
-	
-	public function maakLidAf($datum){
-		$db=MySql::instance();
-		$query='UPDATE lid SET permissies = "P_NOBODY", status = "S_NOBODY", lidafdatum="'.$datum.'"WHERE uid='.$this->uid.';';
-		$lid=$db->getRow($query);
-		$flush=new LidCache();
-		$flush->flushLid($this->uid);
-		
-		
-		
-	}
 
-	
+
 	public static function getVerjaardagen($van, $tot, $limiet=0){
 		$vanjaar=date('Y', $van);
 		$totjaar=date('Y', $tot);
@@ -977,7 +967,7 @@ class Zoeker{
 
 		$statusfilter = '';
 		if($zoekstatus=='alleleden'){ 	 $zoekstatus='';}
-		if($zoekstatus=='allepersonen'){ $zoekstatus=array('S_NOVIET', 'S_LID', 'S_GASTLID', 'S_OUDLID', 'S_ERELID', 'S_KRINGEL', 'S_OVERLEDEN', 'S_NOBODY'); }
+		if($zoekstatus=='allepersonen'){ $zoekstatus=array('S_NOVIET', 'S_LID', 'S_GASTLID', 'S_OUDLID', 'S_ERELID', 'S_KRINGEL', 'S_OVERLEDEN', 'S_NOBODY', 'S_EXLID'); }
 		if(is_array($zoekstatus)){
 			//we gaan nu gewoon simpelweg statussen aan elkaar plakken. LET OP: deze functie doet nu
 			//geen controle of een gebruiker dat mag, dat moet dus eerder gebeuren.
@@ -1006,7 +996,7 @@ class Zoeker{
 			# de ingelogde persoon dat mag EN daarom gevraagd heeft
 			if (LoginLid::instance()->hasPermission('P_OUDLEDEN_MOD') and $zoekstatus === 'nobodies') {
 				# alle voorgaande filters worden ongedaan gemaakt en er wordt alleen op nobodies gezocht
-				$statusfilter = "status='S_NOBODY'";
+				$statusfilter = "status='S_NOBODY' OR status='S_EXLID'";
 			}
 		}
 

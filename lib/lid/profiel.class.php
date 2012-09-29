@@ -261,7 +261,7 @@ class ProfielBewerken extends Profiel {
 				$form[]=new InputField('voornamen', $profiel['voornamen'], 'Voornamen', 100);
 			}
 			$form[]=new DatumField('gebdatum', $profiel['gebdatum'], 'Geboortedatum', date('Y')-15);
-			if(in_array($profiel['status'], array('S_NOBODY', 'S_OVERLEDEN'))){
+			if(in_array($profiel['status'], array('S_NOBODY', 'S_EXLID', 'S_OVERLEDEN'))){
 				$form[]=new DatumField('sterfdatum', $profiel['sterfdatum'], 'Overleden op:');
 			}
 			if($hasLedenMod OR in_array($profiel['status'], array('S_OUDLID', 'S_ERELID'))){
@@ -311,7 +311,7 @@ class ProfielBewerken extends Profiel {
 			$form[]=new SelectField('createTerm', $profiel['createTerm'], 'Aangemaakt bij', array('barvoor'=>'barvoor', 'barmidden'=>'barmidden', 'barachter'=>'barachter', 'soccie'=>'soccie'));
 		}
 
-		if(in_array($profiel['status'], array('S_OUDLID', 'S_ERELID', 'S_NOBODY', 'S_OVERLEDEN', 'S_CIE')) OR $this->lid->getUid()=='6601'){ //vd Wekken mag wel eerder begonnen zijn.
+		if(in_array($profiel['status'], array('S_OUDLID', 'S_ERELID', 'S_NOBODY', 'S_EXLID', 'S_OVERLEDEN', 'S_CIE')) OR $this->lid->getUid()=='6601'){ //vd Wekken mag wel eerder begonnen zijn.
 			$beginjaar=1950;
 		}else{
 			$beginjaar=date('Y')-20;
@@ -332,7 +332,7 @@ class ProfielBewerken extends Profiel {
 			$form[]=new IntField('lidjaar', $profiel['lidjaar'], 'Lid sinds', date('Y'), $beginjaar);
 		}
 
-		if(in_array($profiel['status'], array('S_OUDLID', 'S_ERELID', 'S_NOBODY'))){
+		if(in_array($profiel['status'], array('S_OUDLID', 'S_ERELID', 'S_NOBODY', 'S_EXLID'))){
 			$form[]=new DatumField('lidafdatum', $profiel['lidafdatum'], 'Lid-af sinds');
 		}
 		
@@ -442,7 +442,7 @@ class ProfielStatus extends Profiel{
 		$profiel=$this->lid->getProfiel();
 
 		//permissies
-		$perm = array('P_LID'=>'Lid', 'P_OUDLID'=>'Oudlid', 'P_NOBODY'=>'Ex-lid', 'P_MAALCIE'=>'MaalCierechten', 'P_BASF'=>'BAS-FCierechten', 'P_ETER'=>'Eter (mag abo\'s) - geen inlog');
+		$perm = array('P_LID'=>'Lid', 'P_OUDLID'=>'Oudlid', 'P_NOBODY'=>'Ex-lid/Nobody', 'P_MAALCIE'=>'MaalCierechten', 'P_BASF'=>'BAS-FCierechten', 'P_ETER'=>'Eter (mag abo\'s) - geen inlog');
 		$permbeheer = array('P_BESTUUR'=>'Bestuur', 'P_VAB'=>'Vice-Abactis', 'P_PUBCIE'=>'PubCierechten');
 		if(LoginLid::instance()->hasPermission('P_ADMIN')){
 			//admin mag alle permissies toekennen
@@ -530,14 +530,14 @@ class ProfielStatus extends Profiel{
 
 			//uitzondering: bij aanpassing door een niet-admin automatisch oudlid-permissies instellen 
 			//voor *hogere* admins bij lid-af maken.
-			if(in_array($nieuwestatus, array('S_OUDLID','S_ERELID','S_NOBODY')) AND in_array($nieuwepermissie, $adminperms)){
+			if(in_array($nieuwestatus, array('S_OUDLID','S_ERELID','S_EXLID','S_NOBODY')) AND in_array($nieuwepermissie, $adminperms)){
 				$nieuwepermissie = Status::getDefaultPermission($nieuwestatus);
 				$this->bewerktLid->setProperty('permissies', $nieuwepermissie);
 			}
 		}
 
 		//maaltijd en corvee bijwerken
-		$geenAboEnCorveeVoor=array('S_OUDLID','S_ERELID','S_NOBODY','S_CIE','S_OVERLEDEN');
+		$geenAboEnCorveeVoor=array('S_OUDLID','S_ERELID','S_NOBODY','S_EXLID','S_CIE','S_OVERLEDEN');
 		if(in_array($nieuwestatus, $geenAboEnCorveeVoor)){
 			//maaltijdabo's uitzetten (P_ETER is een S_NOBODY die toch een abo mag hebben)
 			if($nieuwepermissie!='P_ETER'){
@@ -554,7 +554,7 @@ class ProfielStatus extends Profiel{
 		//hop, saven met die hap
 		if(parent::save()){
 			//mailen naar fisci...
-			$maggeensaldimeer=array('S_OUDLID','S_ERELID','S_NOBODY','S_OVERLEDEN');;
+			$maggeensaldimeer=array('S_OUDLID','S_ERELID','S_NOBODY','S_EXLID','S_OVERLEDEN');;
 			$hadsaldi=array('S_NOVIET','S_GASTLID','S_LID','S_KRINGEL');
 			if(in_array($nieuwestatus, $maggeensaldimeer) AND in_array($oudestatus, $hadsaldi)){
 				$this->notifyFisci($oudestatus, $nieuwestatus);
@@ -677,6 +677,7 @@ class ProfielStatus extends Profiel{
 		$bool['S_KRINGEL'] 	= array( true,	true,	false,	false,	false,	false,	false,	false,	true );
 		$bool['S_OVERLEDEN']= array( true,	true,	true,	false,	false,	false,	false,	true,	false );
 		$bool['S_NOBODY'] 	= array( true,	true,	true,	false,	false,	false,	false,	false,	true );
+		$bool['S_EXLID'] 	= $bool['S_NOBODY'];
 		$bool['S_CIE'] 		= array( true,	true,	false,	false,	false,	false,	false,	false,	false );
 
 		$bools = $bool[$nieuwestatus];

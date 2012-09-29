@@ -122,7 +122,7 @@ class LoginLid{
 			throw new Exception('Ja, log dan maar lekker uit!');
 		}
 		$suNaar=LidCache::getLid($uid);
-		if($suNaar->getStatus()=='S_NOBODY'){
+		if(in_array($suNaar->getStatus(), array('S_NOBODY', 'S_EXLID'))){
 			throw new Exception('Kan niet su-en naar nobodies!');
 		}
 		$_SESSION['_suedFrom']=$this->lid->getUid();
@@ -144,7 +144,7 @@ class LoginLid{
 		return $this->suedFrom;
 	}
 	public function maySuTo(Lid $lid){
-		return !$this->isSelf($lid->getUid()) AND $lid->getUid()!='x999' && !$this->isSued() && $lid->getStatus()!='S_NOBODY';
+		return !$this->isSelf($lid->getUid()) AND $lid->getUid()!='x999' && !$this->isSued() && !in_array($lid->getStatus(), array('S_NOBODY', 'S_EXLID'));
 	}
 
 	# dispatch the login proces to a separate function based on MODE

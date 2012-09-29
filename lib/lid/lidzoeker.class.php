@@ -42,7 +42,7 @@ class LidZoeker{
 		'corvee_kwalikok' => 'Kwalikok');
 
 	//toegestane opties voor het statusfilter.
-	private $allowStatus=array('S_LID', 'S_NOVIET', 'S_GASTLID', 'S_NOBODY', 'S_OUDLID', 'S_ERELID', 'S_KRINGEL', 'S_OVERLEDEN');
+	private $allowStatus=array('S_LID', 'S_NOVIET', 'S_GASTLID', 'S_NOBODY', 'S_EXLID', 'S_OUDLID', 'S_ERELID', 'S_KRINGEL', 'S_OVERLEDEN');
 
 	//toegestane opties voor de weergave.
 	private $allowWeergave=array('lijst', 'kaartje', 'CSV');

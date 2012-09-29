@@ -95,7 +95,7 @@ h.t. Fiscus.';
 	public function simulate(){
 		$db=MySql::instance();
 		if($this->doelgroep=='oudleden'){
-			$where="status='S_OUDLID' OR status='S_ERELID' OR status='S_NOBODY'";
+			$where="status='S_OUDLID' OR status='S_ERELID' OR status='S_NOBODY' OR status='S_EXLID'";
 		}else{
 			$where="status='S_LID' OR status='S_NOVIET' OR status='S_GASTLID' OR status='S_KRINGEL'";
 		}
