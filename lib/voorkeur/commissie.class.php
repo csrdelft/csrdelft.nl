@@ -26,7 +26,8 @@ class Commissie {
 		$result = $db->select($query);
 		$res = array();
 		while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
-			$res[$row['uid']] = $row['voorkeur'];
+			$gedaan = Groepen::isUidLidofGroup($row['uid'], $this->naam, array('ht','ot'));
+			$res[$row['uid']] = array('voorkeur'=>$row['voorkeur'], 'gedaan'=>$gedaan);
 		}
 		return $res;
 	}

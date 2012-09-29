@@ -7,11 +7,14 @@ class CommissieOverzicht{
 	public function __construct($id = -1) {
 		$this->id = $id;
 	}
-	
-	
+
+	public function getTitel(){
+		return 'voorkeuren voor commissies';
+	}
+
 	function view(){
 		$res = '';
-		if(LoginLid::instance()->hasPermission('P_ADMIN,P_BESTUUR,P_LEDEN_MOD,groep:bestuur')){
+		if(LoginLid::instance()->hasPermission('P_LEDEN_MOD')){
 			require_once('voorkeur/commissie.class.php');
 			if($this->id>=0){
 				$commissie = Commissie::getCommissie($this->id);
@@ -20,7 +23,7 @@ class CommissieOverzicht{
 					<table><tr><td><h3>Lid</h3></td><td><h3>Interesse</h3></td></tr>';
 				$geinteresseerde = $commissie->getGeinteresseerde();
 				foreach($geinteresseerde as $uid => $voorkeur) {
-					$res .= '<tr><td><a href="/tools/voorkeuren/lidpagina.php?lid='.$uid.'">' . LidCache::getLid($uid)->getNaam() . '</a></td><td>' . voorkeur($voorkeur) . '</td></tr>';
+					$res .= '<tr '.($voorkeur['gedaan'] ? 'style="opacity: .50"':'').'><td><a href="/tools/voorkeuren/lidpagina.php?lid='.$uid.'">' . LidCache::getLid($uid)->getNaam() . '</a></td><td>' . voorkeur($voorkeur['voorkeur']) . '</td></tr>';
 				}
 				$res .= '</table>';
 			} else{
@@ -53,7 +56,11 @@ class LidOverzicht {
 	public function __construct($id = -1) {
 		$this->lid = $id;
 	}
-	
+
+	public function getTitel(){
+		return 'voorkeur van lid';
+	}
+
 	function view() {
 		$res='';
 		if ($this->lid == -1) {
@@ -71,7 +78,7 @@ class LidOverzicht {
 	function viewProfile() {
 		$res = '<h1> Voorkeuren!</h1>';
 		require_once('voorkeur/lidvoorkeur.class.php');
-		$res .= '<p>Lidnummer: '.$this->lid.'</p>';
+		$res .= '<p>Naam: '.Lid::getNaamLinkFromUid($this->lid,'full','link').'</p>';
 		$voorkeur = new LidVoorkeur($this->lid);
 		$voorkeuren = $voorkeur->getVoorkeur();
 		$commissies = $voorkeur->getCommissies();

@@ -188,6 +188,23 @@ class Groepen{
 		return false;
 	}
 
+	//Alle h.t. groepen in een categorie o.t. maken.
+	public function maakGroepenOt(){
+		$error='';
+		if($this->groepen===null){
+			$this->loadGroepen();
+		}
+		if(count($this->groepen)==0){
+			return true;
+		}
+		foreach($this->groepen as $groep){
+			if(!$groep->maakOt()){
+				$error.='';
+			}
+		}
+		return $error=='';
+	}
+
 	/*
 	 * statische functie om de groepen bij een gebruiker te zoeken.
 	 *
@@ -269,23 +286,6 @@ class Groepen{
 		}
 		return $groepen;
 	}
-	//Alle h.t. groepen in een categorie o.t. maken.
-	public function maakGroepenOt(){
-		$error='';
-		if($this->groepen===null){
-			$this->loadGroepen();
-		}
-		if(count($this->groepen)==0){
-			return true;
-		}
-		foreach($this->groepen as $groep){
-			if(!$groep->maakOt()){
-				$error.='';
-			}
-		}
-		return $error=='';
-	}
-
 
 	/*
 	 * Haal de huidige groepen van een bebaald type voor een bepaald lid.
@@ -319,6 +319,31 @@ class Groepen{
 			}
 		}
 		return $groepen;
+	}
+
+	/*
+	 * Is lid in gevraagde groep
+	 *
+	 */
+	/**
+	 * Is lid van gevraagde groep
+	 * @static
+	 * @param $uid
+	 * @param $groep kortenaam van de groep
+	 * @param array|komma|string $status komma gescheiden lijst van gewenste groepstati
+	 * @return bool wel/niet lid
+	 */
+    public static function isUidLidofGroup($uid,$groep,$status=array('ft','ht','ot')){
+		$db=MySql::instance();
+		$qLookup="
+			SELECT uid
+			FROM groeplid gl
+			LEFT JOIN groep g ON(g.id=gl.groepid)
+			WHERE g.snaam='".$db->escape($groep)."'
+						AND gl.uid='".$db->escape($uid)."'
+							AND g.status IN('".implode("','",$status)."');";
+		$rLookup=$db->query($qLookup);
+		return $rLookup !== false AND $db->numRows($rLookup) > 0;
 	}
 
 	/*

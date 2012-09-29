@@ -130,7 +130,7 @@ class Boek{
 	 * 		boek mag alleen door admins verwijdert worden
 	 */
 	static public function magVerwijderen(){
-		return Loginlid::instance()->hasPermission('groep:BASFCie,P_BIEB_MOD,P_ADMIN');
+		return Loginlid::instance()->hasPermission('groep:BAS-FCie,P_BIEB_MOD,P_ADMIN');
 	}
 	/* 
 	 * controleert rechten voor bewerkactie
@@ -173,7 +173,7 @@ class Boek{
 	}
 
 	public function isBASFCie(){
-		return Loginlid::instance()->hasPermission('groep:BASFCie');
+		return Loginlid::instance()->hasPermission('groep:BAS-FCie');
 	}
 	public function isBiebboek($exemplaarid=null){
 		$eigenaars=$this->getEigenaars($exemplaarid);
