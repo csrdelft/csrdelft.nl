@@ -119,11 +119,11 @@ class Eetplan {
 
 	function getDatum($iAvond){
 		$aAvonden=array(
-			'27-03-2012',
-			'24-04-2012',
-			'22-05-2012',
-			'19-06-2012');
-		return $aAvonden[$iAvond-5];
+			'02-10-2012',
+			'30-10-2012',
+			'27-11-2012',
+			'15-01-2013');
+		return $aAvonden[$iAvond-1];
 	}
 
 	function getHuizen(){

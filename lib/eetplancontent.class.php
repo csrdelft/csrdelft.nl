@@ -121,7 +121,7 @@ class EetplanContent extends SimpleHTML {
 
 
 			echo '<tr class="kleur'.($row%2).'"><td><a href="/actueel/eetplan/sjaars/'.$aEetplanVoorPheut[0]['uid'].'">'.$aEetplanVoorPheut[0]['naam'].'</a></td>';
-			for($iTeller=5;$iTeller<=8;$iTeller++){
+			for($iTeller=1;$iTeller<=4;$iTeller++){
 				$huisnaam=$aHuizenArray[$aEetplanVoorPheut[$iTeller]-1]['huisNaam'];
 				$huisnaam=str_replace(array('Huize ', 'De '), '', $huisnaam);
 				$huisnaam=substr($huisnaam, 0, 15);
