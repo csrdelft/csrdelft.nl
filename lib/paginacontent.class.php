@@ -46,7 +46,8 @@ class PaginaContent extends SimpleHTML{
 
 			# Gewoon de inhoud van een pagina laten zien
 			case 'bekijken':
-				$sInhoud=CsrHtmlUBB::instance()->getHTML($this->_pagina->getInhoud());
+				$sInhoud=$this->getMelding();
+				$sInhoud.=CsrHtmlUBB::instance()->getHTML($this->_pagina->getInhoud());
 							
 				if ($this->_pagina->magBewerken()){
 					$sInhoud='<a href="/pagina/'.$this->_pagina->getNaam().'/bewerken" class="knop" style="float: right;" title="Bewerk pagina">
