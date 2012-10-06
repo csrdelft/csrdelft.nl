@@ -2326,6 +2326,7 @@ sql/2693_rubrieken.sql -text
 sql/2735_woecorveetakentoegevoegd.sql -text
 sql/2783_lid_wijzigingSoccieIDcreateTerm.sql -text
 sql/2785_EXLIDtoegevoegd.sql -text
+sql/2789_Abos-doelgroepen.sql -text
 sql/csrdelft.sql -text
 sql/csrdelft_oud.sql -text
 wiki/.htaccess -text
