@@ -17,7 +17,7 @@
 				<th><a href="/actueel/maaltijden/corveevoorkeurenlijst/sorteer/corvee_kwalikok/{if $sorteer_richting=='asc'}desc{else}asc{/if}">Kwalikok</a></th>
 				<th><a href="/actueel/maaltijden/corveevoorkeurenlijst/sorteer/corvee_vrijstelling/{if $sorteer_richting=='asc'}desc{else}asc{/if}">Vrijstelling</a></th>
 				<th><a href="/actueel/maaltijden/corveevoorkeurenlijst/sorteer/corvee_punten_totaal/{if $sorteer_richting=='asc'}desc{else}asc{/if}">Punten</a></th>
-				<th><a href="/actueel/maaltijden/corveevoorkeurenlijst/sorteer/corvee_prognose/{if $sorteer_richting=='asc'}desc{else}asc{/if}">Prognose</a></th>
+				<th><a href="/actueel/maaltijden/corveevoorkeurenlijst/sorteer/corvee_prognose/{if $sorteer_richting=='asc'}desc{else}asc{/if}">Nog nodig<br />Prognose</a></th>
 			</tr>
 		{/if}
 		{assign var='lid' value=$leden.$index.uid}
