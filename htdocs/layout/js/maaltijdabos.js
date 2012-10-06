@@ -28,16 +28,17 @@ jQuery(document).ready(function(){
         "aaSorting": [[1, 'asc']],
         "sPaginationType": "full_numbers",
         "aoColumns": [
-            {'iDataSort': 6},	// naam
+            {'iDataSort': 7},	// naam
             {'sType': 'string'}, 				// waarschuwing
             {'sType': 'html'},	// jaar
             {'sSortDataType': 'dom-checkbox' }, // donderdagabo
             {'sType': 'html'},	// verticale
             {'sSortDataType': 'dom-checkbox' }, // verticaleabo
+            {'sSortDataType': 'dom-checkbox' }, // vrouwenabo
             {'sType': 'html'}	// achternaam(verborgen)
         ],
         "aoColumnDefs": [
-            { "bVisible": false, "aTargets": [ 6] }
+            { "bVisible": false, "aTargets": [ 7] }
         ]
     });
     /* Add event listeners to the two range filtering inputs */
@@ -88,9 +89,9 @@ function observeCheckboxesAbos(){
             cache: false,
             success: function(result){
                 if(result=='Abonnementwijziging gelukt'){
-                    jQuery("#"+ID).css({'background-color': 'green !important'}).attr('title', result);
+                    jQuery("#"+ID).attr("style", "background-color: green !important").attr('title', result);
                 }else{
-                    jQuery("#"+ID).css({'background-color': 'red !important'}).attr('title', result);
+                    jQuery("#"+ID).attr("style", "background-color: red !important").attr('title', result);
                 }
             }
         });

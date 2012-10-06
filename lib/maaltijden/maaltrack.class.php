@@ -1259,7 +1259,7 @@ class MaalTrack {
 	# haalt alle leden met maaltijdabo's op met hun abo
 	function getLedenAbo(){
 		$sAboQuery="
-			SELECT lid.uid AS uid, lid.achternaam, lid.lidjaar, lid.status, lid.verticale, lid.kring, verticale.naam AS verticalenaam,
+			SELECT lid.uid AS uid, lid.achternaam, lid.lidjaar, lid.status, lid.verticale, lid.geslacht, lid.kring, verticale.naam AS verticalenaam,
 				GROUP_CONCAT( 
 					maaltijdabo.abosoort
 					ORDER BY maaltijdabo.abosoort
@@ -1277,13 +1277,16 @@ class MaalTrack {
 		$rLeden=$this->_db->query($sAboQuery);
 		$aLeden=$this->_db->result2array($rLeden);
 		foreach($aLeden as &$rLid) {
-			$abos = array('donderdag'=>0,'verticale'=>0,'verticaleabonaam'=>'A_VERT'.$rLid['verticale']);
+			$abos = array('donderdag'=>0,'vrouw'=>0,'verticale'=>0,'verticaleabonaam'=>'A_VERT'.$rLid['verticale']);
 			if($rLid['abosoort']!==NULL){
 				$lidabos = explode(', ', $rLid['abosoort']);
 				foreach($lidabos as $lidabo){
 					switch($lidabo){
 						case 'A_DONDERDAG':
 							$abos['donderdag'] = 1;
+						break;
+						case 'A_VROUW':
+							$abos['vrouw'] = 1;
 						break;
 						default:
 							if(substr($lidabo, 0, 6)=='A_VERT'){

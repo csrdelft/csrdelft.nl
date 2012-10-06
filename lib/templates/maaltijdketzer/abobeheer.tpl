@@ -10,7 +10,7 @@
 
 <table id="abolijst" class="abolijst">
 	<thead>
-		<tr><th>Naam</th><th><span title="waarschuwing">&#916;</span></th><th>Jaar</th><th>Donderdag</th><th>Verticale</th><th>Verticale</th><th>Achternaam</th></tr>
+		<tr><th>Naam</th><th><span title="waarschuwing">&#916;</span></th><th>Jaar</th><th>Donderdag</th><th>Verticale</th><th>Verticale</th><th>Vrouw</th><th>Achternaam</th></tr>
 	</thead>
 	<tbody>
 	{foreach from=$leden item=lid}
@@ -24,13 +24,14 @@
 			<td id="{$lid.uid}-A_DONDERDAG" class="abovinkje"><input type="checkbox" name="abo_do" value="1" {if $lid.abos.donderdag}checked="checked"{/if} /></td>
 			<td>{$lid.verticalenaam}</td>
 			<td id="{$lid.uid}-{$lid.abos.verticaleabonaam}" class="abovinkje"><input type="checkbox" name="abo_ve" value="1" {if $lid.abos.verticale}checked="checked"{/if} /></td>
-			<td>{$lid.achternaam}</td>
+            <td id="{$lid.uid}-A_VROUW" class="abovinkje"><input type="checkbox" name="abo_vr" {if $lid.geslacht!='v'}disabled="disabled"{/if}value="1" {if $lid.abos.vrouw}checked="checked"{/if} /></td>
+            <td>{$lid.achternaam}</td>
 		</tr>
 	{foreachelse}
 		<tr><td colspan=5>Geen gegevens gevonden.</td></tr>
 	{/foreach}
 	</tbody>
 	<tfoot>
-		<tr><th>Naam</th><th><span title="waarschuwing">&#916;</span></th><th>Jaar</th><th>Donderdag</th><th>Verticale</th><th>Verticale</th><th>Achternaam</th></tr>
+		<tr><th>Naam</th><th><span title="waarschuwing">&#916;</span></th><th>Jaar</th><th>Donderdag</th><th>Verticale</th><th>Verticale</th><th>Vrouw</th><th>Achternaam</th></tr>
 	</tfoot>
 </table>
