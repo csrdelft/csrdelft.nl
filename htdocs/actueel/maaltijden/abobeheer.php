@@ -52,7 +52,7 @@ $page=new csrdelft($content);
 $page->addStylesheet('js/datatables/css/datatables_basic.css');
 $page->addScript('datatables/jquery.dataTables.min.js');
 $page->addStylesheet('maaltijd.css');
-$page->addScript('maaltijd.js');
+$page->addScript('maaltijdabos.js');
 
 $page->view();
 

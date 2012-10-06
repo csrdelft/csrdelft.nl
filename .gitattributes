@@ -178,6 +178,7 @@ htdocs/layout/js/jquery.js -text
 htdocs/layout/js/jquery.prettyPhoto.js -text
 htdocs/layout/js/lightbox.js -text
 htdocs/layout/js/maaltijd.js -text
+htdocs/layout/js/maaltijdabos.js -text
 htdocs/layout/js/menu.js -text
 htdocs/layout/js/peilingbeheer.js -text
 htdocs/layout/js/pngfix.js -text

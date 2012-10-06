@@ -1303,7 +1303,7 @@ class MaalTrack {
 	# als de gebruiker uit moot 1-4 is, hou daar dan rekening mee
 	# deze functionaliteit kan uitgezet worden door $mootfilter = false te zetten als argument
 	public static function getMaaltijdenRaw($van = 0, $tot = 0, $mootfilter = true, $corveefilter = true) {
-		$lid=LoginLid::instance();
+		$loginlid=LoginLid::instance();
 		$db=MySql::instance();
 		# kijk in db en haal alle maaltijden op waarbij de begintijd
 		# na $van is, en voor $tot
@@ -1318,11 +1318,7 @@ class MaalTrack {
 		$totsql = ($tot != 0) ? "datum < '".$tot."'" : "1";
 
 		# mootfilter
-		if(!$lid->hasPermission('P_MAAL_MOD')){
-			if($mootfilter === true){
-				$moot = $lid->getLid()->getVerticaleID();
-			}
-		}else{
+		if($loginlid->hasPermission('P_MAAL_MOD')){
 			$mootfilter=false;
 		}
 		
@@ -1361,7 +1357,7 @@ class MaalTrack {
 		$result=$db->select($sMaaltijdQuery);
 		if (($result !== false) and $db->numRows($result) > 0) {
 			while ($record = $db->next($result)) {
-				if(!($mootfilter===true AND preg_match("/(VERT)[^{$moot}]{1}/", $record['abosoort']))){
+				if(!($mootfilter===true AND MaalTrack::saveNotAboSoortForUid($record['abosoort'], $loginlid->getUid()))){
 					//maximaal 1 kwaliafwasser, de rest is gewoon afwasser
 					if($record['afwassers'] >0){
 						$record['kwaliafwassers'] = 1;
@@ -1655,16 +1651,14 @@ class MaalTrack {
 	function getAboSoort($mootfilter = true, $uid=null) {
 		$abos = array();
 		if($mootfilter === true){
-			if($uid==null){
+			if($uid===null){
 				$uid = LoginLid::instance()->getUid();
 			}
-			$lid=new Lid($uid);
-			$moot = $lid->getVerticaleID();
 		}
 		$result = $this->_db->select("SELECT * FROM maaltijdabosoort WHERE NOT abosoort='A_GEEN'");
 		if (($result !== false) and $this->_db->numRows($result) > 0) {
 			while ($record = $this->_db->next($result)) {
-				if ($mootfilter === true and preg_match("/VERT[^{$moot}]{1}/", $record['abosoort'])) continue;
+				if ($mootfilter === true AND $this->saveNotAboSoortForUid($record['abosoort'], $uid)) continue;
 				$abos[$record['abosoort']] = $record['tekst'];
 			}
 		}
@@ -1679,6 +1673,21 @@ class MaalTrack {
 		$abos = $this->getAbo($uid);
 		$abosoorten = $this->getAboSoort($mootfilter, $uid);
 		return array_diff_key($abosoorten, $abos);
+	}
+
+	/**
+	 * Geeft aan of abosoort NIET opgeslagen moet worden
+	 * @param $abosoort
+	 * @param $uid lidnummer
+	 * @return int or bool
+	 */
+	function saveNotAboSoortForUid($abosoort,$uid){
+		$lid=new Lid($uid);
+		$moot = $lid->getVerticaleID();
+		$geslacht = $lid->getGeslacht();
+
+		return preg_match("/VERT[^{$moot}]{1}/", $abosoort)
+			OR ($abosoort=='A_VROUW' AND $geslacht!='v');
 	}
 
 	# array van uids/namen maken die (behalve zichzelf) door de ingelogde persoon zijn aangemeld voor deze maaltijd
