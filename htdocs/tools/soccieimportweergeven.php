@@ -33,17 +33,35 @@ $accounts=array();
 $teller['totaal']=0;
 $teller['inDb']=0;
 $teller['onbekend']=0;
+
+$zero=array('negatief'=>0.0,'positief'=>0.0);
+$saldo['bekend']=$zero;
+$saldo['onbekend']=$zero;
+
 foreach($soccieinput as $soccielid){
 	//soccieID i.c.m. createTerm is uniek.
 	$key = (int)$soccielid->id . $soccielid->createTerm;
 
 	$account=$soccielid;
+
+	//saldo sommeren
+	$polariteit=($account->saldo<0 ? 'negatief':'positief');
+
 	if(array_key_exists($key, $aLeden)){
 		$filter='inDb';
+
 		$account->addChild('uid', $aLeden[$key]['uid']);
 		$account->addChild('naam', $aLeden[$key]['voornaam'].' '.$aLeden[$key]['tussenvoegsel'].($aLeden[$key]['tussenvoegsel'] ? ' ':'') .$aLeden[$key]['achternaam']);
+		$account->addChild('saldostek', $aLeden[$key]['socciesaldo']);
+
+		//saldo sommmeren
+		$saldo['bekend'][$polariteit]+=(float)$account->saldo;
 	}else{
 		$filter='onbekend';
+
+		//saldo sommmeren
+		$saldo['onbekend'][$polariteit]+=(float)$account->saldo;
+
 	}
 
 	if($sorteerkey){
@@ -70,12 +88,14 @@ echo '<style type="text/css">
 		td{		border: 1px solid #C0C0C0;}
 		p{ 		width: 700px;}
 	</style>';
+
 echo '<h1>SocCiepc-import controle</h1>';
 echo '<p>Controleer onderstaande lijstjes. De onbekende accounts worden 
 niet op de webstek weergegeven. Om een onbekend account te koppelen moet 
 het soccieID én createTerm (alleen de combinatie is uniek) in het profiel 
 van het betreffende lid geplaatst worden. Neem contact op met de NBG om dit 
 geautomatiseerd te laten doen.</p>';
+
 echo '<p>Enkele andere controles:';
 echo '<ul>';
 echo '	<li>query #86: <a href="/tools/query.php?id=86">Novieten, (gast)leden zonder soccieID</a></li>';
@@ -84,20 +104,22 @@ echo '	<li>query #80: <a href="/tools/query.php?id=80">Personen in db met saldo,
 echo '</ul>';
 echo '<a href="/pagina/saldostatistiekensoccie">Overzichtpagina voor SocCie met opmerkelijke saldi en statistieken</a>...';
 echo '</p>';
+
 echo '<p>Onderstaande gegevens zijn van de laatste import uit de socciepc.</p>';
 echo 'Totaal aantal accounts: '.$teller['totaal'].'<br/>';
 echo 'Onbekende accounts: '.$teller['onbekend'].' (weergegeven: '.count($accounts['onbekend']).')<br/>';
 echo 'Bekende accounts: '.$teller['inDb'].' (weergegeven: '.count($accounts['inDb']).')<br/>';
+echo '<br/>';
+
+$totaalneg=$saldo['bekend']['negatief']+$saldo['onbekend']['negatief'];
+$totaalpos=$saldo['bekend']['positief']+$saldo['onbekend']['positief'];
+echo 'Totaal saldo: € '.($totaalpos+$totaalneg).' (= +'.$totaalpos.'  '.$totaalneg.')<br/>';
+echo 'Saldo van bekende accounts: € '.($saldo['bekend']['positief']+$saldo['bekend']['negatief']).' (= +'.$saldo['bekend']['positief'].'  '.$saldo['bekend']['negatief'].')<br/>';
+echo 'Saldo van onbekende accounts: € '.($saldo['onbekend']['positief']+$saldo['onbekend']['negatief']).' (= +'.$saldo['onbekend']['positief'].'  '.$saldo['onbekend']['negatief'].')<br/>';
 
 
-echo 'Sorteer tabellen op: ';
-foreach($sorteeropties as $optie){
-	echo '<a href="/tools/soccieimportweergeven.php?sorteer='.$optie.'">'.$optie.'</a> ';
-}
-
-echo '<h3>SocCieaccounts die niet gekoppeld zijn</h3>';
+echo '<h4>Mogelijke oorzaken niet-gekoppelde accounts</h4>';
 echo '<p>';
-echo 'Mogelijke oorzaken:';
 echo '<ul>
 		<li>Geen id in database. zie ook query #86</li> 
 		<li>De combinatie van soccieID en createTerm klopt niet. </li>
@@ -123,6 +145,12 @@ profiel van een lid.</p>';
 }
 echo '</p>';
 
+echo 'Sorteer tabellen op: ';
+foreach($sorteeropties as $optie){
+	echo '<a href="/tools/soccieimportweergeven.php?sorteer='.$optie.'">'.$optie.'</a> ';
+}
+
+echo '<h3>SocCieaccounts die niet gekoppeld zijn</h3>';
 viewTable($accounts['onbekend']);
 
 echo '<h3>SocCieaccounts die gekoppeld zijn aan profielen op de webstek</h3>';
@@ -131,7 +159,7 @@ viewTable($accounts['inDb']);
 
 function viewTable($aAccounts){
 	echo '<table>';
-	echo '<tr><th>Naam</th><th>ID</th><th>Saldo</th><th>Account gemaakt bij</th><th>naam op webstek</th><th>uid</th></tr>';
+	echo '<tr><th>Naam</th><th>ID</th><th>Saldo</th><th>Account gemaakt bij</th><th>naam op webstek</th><th>uid</th><th>Saldo op webstek</th></tr>';
 	foreach($aAccounts as $account){
 		echo '<tr>';
 		echo 	'<td>'.$account->voornaam.' '.$account->achternaam.'</td>';
@@ -140,6 +168,7 @@ function viewTable($aAccounts){
 		echo 	'<td style="border-right-color: black;">'.$account->createTerm.'</td>';
 		echo 	'<td>'.$account->naam.'</td>';
 		echo 	'<td><a href="'.CSR_ROOT.'communicatie/profiel/'.$account->uid.'">'.$account->uid.'</a></td>';
+		echo 	'<td>'.$account->saldostek.'</td>';
 		echo '</tr>';
 	}
 	echo '</table>';
