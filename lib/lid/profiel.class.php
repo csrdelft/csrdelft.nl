@@ -260,7 +260,7 @@ class ProfielBewerken extends Profiel {
 				$form[]=new GeslachtField('geslacht', $profiel['geslacht'], 'Geslacht');
 				$form[]=new InputField('voornamen', $profiel['voornamen'], 'Voornamen', 100);
 			}
-			$form[]=new DatumField('gebdatum', $profiel['gebdatum'], 'Geboortedatum', date('Y')-15);
+			$form[]=new DatumField('gebdatum', $profiel['gebdatum'], 'Geboortedatum', date('Y')-50);
 			if(in_array($profiel['status'], array('S_NOBODY', 'S_EXLID', 'S_OVERLEDEN'))){
 				$form[]=new DatumField('sterfdatum', $profiel['sterfdatum'], 'Overleden op:');
 			}
