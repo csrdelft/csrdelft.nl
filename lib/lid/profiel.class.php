@@ -267,6 +267,7 @@ class ProfielBewerken extends Profiel {
 			if($hasLedenMod OR in_array($profiel['status'], array('S_OUDLID', 'S_ERELID'))){
 				$form[]=new LidField('echtgenoot', $profiel['echtgenoot'], 'Echtgenoot (naam/lidnr):', 'allepersonen');
 				$form[]=new InputField('adresseringechtpaar',$profiel['adresseringechtpaar'], 'Tenaamstelling post echtpaar:',250);
+				$form[]=new SelectField('contactueel', $profiel['contactueel'], 'Contactueel?', array('ja', 'ja, digitaal', 'nee'));
 			}
 		}
 
