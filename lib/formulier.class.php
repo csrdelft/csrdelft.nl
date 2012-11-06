@@ -1081,7 +1081,7 @@ class DatumField extends FormField{
 		echo $this->getLabel();
 		echo $this->getError();
 
-		$years=range(1940, $this->maxyear);
+		$years=range(1920, $this->maxyear);
 		$mounths=range(1,12);
 		$days=range(1,31);
 	
