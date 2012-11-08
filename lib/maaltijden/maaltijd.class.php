@@ -116,7 +116,7 @@ class Maaltijd implements Agendeerbaar {
 		$rKok = $this->_db->query($sKok);
 		if (($rKok !== false) and $this->_db->numRows($rKok) > 0) {
 			$record = $this->_db->next($rKok);
-			return $record['kwalikok']===1 OR $record['kok']===1;
+			return $record['kwalikok']==1 OR $record['kok']==1;
 		}
 		return false;
 	}
