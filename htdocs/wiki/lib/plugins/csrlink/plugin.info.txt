@@ -1,7 +1,7 @@
-base   groeplink
+base   csrlink
 author Andreas Gohr, Gerrit Uitslag
 email  andi@splitbrain.org
-date   2012-11-12
-name   groeplink plugin (modified unblink)
+date   2010-09-05
+name   csrlink plugin (modified unblink)
 desc   Ontwikkelomgeving C.S.R.
 url    http://trac.knorrie.org/csrdelft.nl

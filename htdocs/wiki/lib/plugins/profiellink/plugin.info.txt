@@ -1,7 +1,0 @@
-base   profiellink
-author Andreas Gohr, Gerrit Uitslag
-email  andi@splitbrain.org
-date   2010-09-05
-name   profiellink plugin (modified unblink)
-desc   Ontwikkelomgeving C.S.R.
-url    http://trac.knorrie.org/csrdelft.nl

@@ -33,3 +33,8 @@ div.dokuwiki a.profiellink_plugin:hover span.profiellink_popup {
     padding: 0.5em;
     font-size: 90%;
 }
+
+
+.documentlink.size {
+    color: #777;
+}

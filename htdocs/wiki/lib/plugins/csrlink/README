@@ -1,9 +1,10 @@
-groeplink Plugin for DokuWiki
+csrlink Plugin for DokuWiki
 -- This is a modified version of de unblink plugin.--
 
 All documentation for this plugin can be found at
 doesn't exist: http://www.dokuwiki.org/plugin:unblink
 original source code: https://github.com/splitbrain/dokuwiki-plugin-unblink/
+current source code: http://trac.knorrie.org/csrdelft.nl/browser/trunk/htdocs/wiki/lib/plugins/csrlink
 
 If you install this plugin manually, make sure it is installed in
 lib/plugins/unblink/ - if the folder is called different it
