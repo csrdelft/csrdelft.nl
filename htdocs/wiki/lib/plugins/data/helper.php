@@ -20,6 +20,11 @@ class helper_plugin_data extends DokuWiki_Plugin {
      * load the sqlite helper
      */
     function _getDB(){
+
+        /**
+         * static variable: only first time initialised
+         * @var $db helper_plugin_sqlite
+         */
         static $db = null;
         if ($db === null) {
             $db =& plugin_load('helper', 'sqlite');
@@ -28,9 +33,9 @@ class helper_plugin_data extends DokuWiki_Plugin {
                 return false;
             }
             if(!$db->init('data',dirname(__FILE__).'/db/')){
+                $db = null;
                 return false;
             }
-            $db->fetchmode = DOKU_SQLITE_ASSOC;
             $db->create_function('DATARESOLVE',array($this,'_resolveData'),2);
         }
         return $db;
@@ -113,9 +118,14 @@ class helper_plugin_data extends DokuWiki_Plugin {
 
     /**
      * Return XHTML formated data, depending on column type
+     *
+     * @param $column
+     * @param $value
+     * @param $R Doku_Renderer_xhtml
+     * @return string
      */
     function _formatData($column, $value, &$R){
-        global $conf,$ID;
+        global $conf;
         $vals = explode("\n",$value);
         $outs = array();
         foreach($vals as $val){
@@ -125,14 +135,14 @@ class helper_plugin_data extends DokuWiki_Plugin {
             if (is_array($type)) $type = $type['type'];
             switch($type){
                 case 'page':
-                    $val = $this->_addPrePostFixes($column['type'], $val, ':');
+                    $val = $this->_addPrePostFixes($column['type'], $val);
                     $outs[] = $R->internallink($val,null,null,true);
                     break;
                 case 'title':
                 case 'pageid':
                     list($id,$title) = explode('|',$val,2);
-                    $id = $this->_addPrePostFixes($column['type'], $id, ':');
-                    $outs[] = $R->internallink($id,$title,null,true);
+                    $id = $this->_addPrePostFixes($column['type'], $id);
+                $outs[] = $R->internallink($id,$title,null,true);
                     break;
                 case 'nspage':
                     // no prefix/postfix here
@@ -164,6 +174,7 @@ class helper_plugin_data extends DokuWiki_Plugin {
                         $target = $this->_addPrePostFixes($column['type'],'');
                     }
 
+                    global $ID;
                     $ns = getNS($ID);
                     $targets = array($target, $ns.':'.$target, $ns.':zoeken', $ns.':'.$conf['start'], $ns);
                     foreach($targets as $t){
@@ -266,6 +277,7 @@ class helper_plugin_data extends DokuWiki_Plugin {
     /**
      * Parse a filter line into an array
      *
+     * @param $filterline
      * @return mixed - array on success, false on error
      */
     function _parse_filter($filterline){
@@ -284,10 +296,6 @@ class helper_plugin_data extends DokuWiki_Plugin {
             }
 
             $val = trim($matches[3]);
-            // allow current user name in filter:
-            $val = str_replace('%user%',$_SERVER['REMOTE_USER'],$val);
-            // allow current date in filter:
-            $val = str_replace('%now%', dformat(null, '%Y-%m-%d'),$val);
 
             if(strpos($com, '~') !== false) {
                 if ($com === '*~') {
@@ -305,6 +313,7 @@ class helper_plugin_data extends DokuWiki_Plugin {
                 $val = $this->_cleanData($val, $column['type']);
             }
             $sqlite = $this->_getDB();
+            if(!$sqlite) return false;
             $val = $sqlite->escape_string($val); //pre escape
 
             return array('key'     => $column['key'],
@@ -316,6 +325,16 @@ class helper_plugin_data extends DokuWiki_Plugin {
         }
         msg('Failed to parse filter "'.hsc($filterline).'"',-1);
         return false;
+    }
+
+    /**
+     * Replace placeholders in sql
+     */
+    function _replacePlaceholdersInSQL(&$data){
+        // allow current user name in filter:
+        $data['sql'] = str_replace('%user%', $_SERVER['REMOTE_USER'], $data['sql']);
+        // allow current date in filter:
+        $data['sql'] = str_replace('%now%', dformat(null, '%Y-%m-%d'),$data['sql']);
     }
 
     /**

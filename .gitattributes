@@ -819,6 +819,7 @@ htdocs/wiki/lib/plugins/data/db/update0002.sql -text
 htdocs/wiki/lib/plugins/data/db/update0003.sql -text
 htdocs/wiki/lib/plugins/data/db/update0004.sql -text
 htdocs/wiki/lib/plugins/data/db/update0005.sql -text
+htdocs/wiki/lib/plugins/data/db/update0006.sql -text
 htdocs/wiki/lib/plugins/data/helper.php -text
 htdocs/wiki/lib/plugins/data/lang/de/admin_intro.txt -text
 htdocs/wiki/lib/plugins/data/lang/de/edit_intro.txt -text
@@ -1238,7 +1239,13 @@ htdocs/wiki/lib/plugins/searchform/script.js -text
 htdocs/wiki/lib/plugins/searchform/syntax.php -text
 htdocs/wiki/lib/plugins/showlogin/action.php -text
 htdocs/wiki/lib/plugins/sqlite/README -text
+htdocs/wiki/lib/plugins/sqlite/_test/db/latest.version -text
+htdocs/wiki/lib/plugins/sqlite/_test/db/update0001.sql -text
+htdocs/wiki/lib/plugins/sqlite/_test/sqlite_helper_abstract.test.php -text
 htdocs/wiki/lib/plugins/sqlite/admin.php -text
+htdocs/wiki/lib/plugins/sqlite/classes/adapter.php -text
+htdocs/wiki/lib/plugins/sqlite/classes/adapter_pdosqlite.php -text
+htdocs/wiki/lib/plugins/sqlite/classes/adapter_sqlite2.php -text
 htdocs/wiki/lib/plugins/sqlite/db.sql -text
 htdocs/wiki/lib/plugins/sqlite/helper.php -text
 htdocs/wiki/lib/plugins/sqlite/lang/en/intro.txt -text

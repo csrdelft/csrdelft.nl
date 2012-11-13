@@ -11,6 +11,7 @@ class syntax_plugin_data_table extends DokuWiki_Syntax_Plugin {
 
     /**
      * will hold the data helper plugin
+     * @var $dthlp helper_plugin_data
      */
     var $dthlp = null;
 
@@ -70,6 +71,8 @@ class syntax_plugin_data_table extends DokuWiki_Syntax_Plugin {
                       'limit'   => 0,
                       'dynfilters' => false,
                       'summarize'  => false,
+                      'rownumbers' => (bool)$this->getConf('rownumbers'),
+                      'sepbyheaders' => false,
                       'headers' => array());
 
         // parse info
@@ -106,6 +109,9 @@ class syntax_plugin_data_table extends DokuWiki_Syntax_Plugin {
                         $cols = explode(',',$line[1]);
                         foreach($cols as $col){
                             $col = trim($col);
+                            if($col[0]=='"' AND substr($col, -1)=='"'){
+                                $col=substr($col, 1, -1);
+                            }
                             $data['headers'][] = $col;
                         }
                     break;
@@ -166,6 +172,9 @@ class syntax_plugin_data_table extends DokuWiki_Syntax_Plugin {
                 case 'summarize':
                         $data['summarize'] = (bool) $line[1];
                     break;
+                case 'sepbyheaders':
+                        $data['sepbyheaders'] = (bool) $line[1];
+                    break;
                 default:
                     msg("data plugin: unknown option '".hsc($line[0])."'",-1);
             }
@@ -210,6 +219,7 @@ class syntax_plugin_data_table extends DokuWiki_Syntax_Plugin {
         if(!$sqlite) return false;
 
         $this->updateSQLwithQuery($data); // handles request params
+        $this->dthlp->_replacePlaceholdersInSQL($data);
 
         // run query
         $clist = array_keys($data['cols']);
@@ -240,11 +250,11 @@ class syntax_plugin_data_table extends DokuWiki_Syntax_Plugin {
             foreach(array_values($row) as $num => $cval){
                 $num_rn = ($data['rownumbers'] ? $num+1 : $num);
 
-                $R->doc .= sprintf($this->before_val,'class="'.$data['align'][$num_rn].'align"');
+                $R->doc .= sprintf($this->beforeVal($data,$num_rn),'class="'.$data['align'][$num_rn].'align"');
                 $R->doc .= $this->dthlp->_formatData(
                                 $data['cols'][$clist[$num]],
                                 $cval,$R);
-                $R->doc .= $this->after_val;
+                $R->doc .= $this->afterVal($data,$num_rn);
 
                 // clean currency symbols
                 $nval = str_replace('$€₤','',$cval);
@@ -264,6 +274,13 @@ class syntax_plugin_data_table extends DokuWiki_Syntax_Plugin {
         $R->doc .= $this->postList($data, $cnt);
 
         return true;
+    }
+
+    protected function beforeVal(&$data, $colno) {
+        return $this->before_val;
+    }
+    protected function afterVal(&$data, $colno) {
+        return $this->after_val;
     }
 
     function preList($clist, $data) {
@@ -511,6 +528,9 @@ class syntax_plugin_data_table extends DokuWiki_Syntax_Plugin {
         if (!isset($data['filter'])) $data['filter'] = array();
         $filters = array_merge($data['filter'], $this->dthlp->_get_filters());
 
+        // may be disabled from config. as it decreases performance a lot
+        $use_dataresolve = $this->getConf('use_dataresolve');
+
         // prepare filters
         $cnt = 0;
         if(is_array($filters) && count($filters)){
@@ -535,7 +555,7 @@ class syntax_plugin_data_table extends DokuWiki_Syntax_Plugin {
                     $from2  .= ' AND '.$table.".key = " . $sqlite->quote_string($col);
 
                     // apply data resolving?
-                    if($filter['colname'] && (substr($filter['compare'],-4) == 'LIKE')){
+                    if($use_dataresolve && $filter['colname'] && (substr($filter['compare'],-4) == 'LIKE')){
                         $where2 .= ' '.$filter['logic'].' DATARESOLVE('.$table.'.value,\''.$sqlite->escape_string($filter['colname']).'\') '.$filter['compare'].
                                   " '".$filter['value']."'"; //value is already escaped
                     } else {
