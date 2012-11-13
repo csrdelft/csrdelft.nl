@@ -1,3 +1,4 @@
+/* profiellink */
 div.dokuwiki a.profiellink_plugin:link,
 div.dokuwiki a.profiellink_plugin:active,
 div.dokuwiki a.profiellink_plugin:hover,
@@ -34,7 +35,25 @@ div.dokuwiki a.profiellink_plugin:hover span.profiellink_popup {
     font-size: 90%;
 }
 
-
-.documentlink.size {
+/* documentlink */
+div.dokuwiki .documentlink.size {
     color: #777;
 }
+
+/* bieblink */
+div.dokuwiki .bieblink {
+    background: transparent url(book.png) no-repeat left top;
+    padding-left: 18px;
+    text-decoration: none !important;
+}
+div.dokuwiki .bieblink .auteur {
+    color: #777;
+}
+div.dokuwiki .bieblink .titel:hover {
+    text-decoration: underline;
+}
+
+div.dokuwiki .bieblink .boekindicator                  {margin-right: 5px;}
+div.dokuwiki .bieblink .boekindicator.beschikbaar      {color: green;}
+div.dokuwiki .bieblink .boekindicator.teruggegeven     {color: orange;}
+div.dokuwiki .bieblink .boekindicator.geen             {color: red;}

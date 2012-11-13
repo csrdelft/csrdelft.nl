@@ -792,12 +792,14 @@ htdocs/wiki/lib/plugins/csrgroepgeschiedenis/lang/nl/settings.php -text
 htdocs/wiki/lib/plugins/csrgroepgeschiedenis/plugin.info.txt -text
 htdocs/wiki/lib/plugins/csrgroepgeschiedenis/syntax.php -text
 htdocs/wiki/lib/plugins/csrlink/README -text
+htdocs/wiki/lib/plugins/csrlink/book.png -text
 htdocs/wiki/lib/plugins/csrlink/conf/default.php -text
 htdocs/wiki/lib/plugins/csrlink/conf/metadata.php -text
 htdocs/wiki/lib/plugins/csrlink/lang/en/lang.php -text
 htdocs/wiki/lib/plugins/csrlink/lang/en/settings.php -text
 htdocs/wiki/lib/plugins/csrlink/plugin.info.txt -text
 htdocs/wiki/lib/plugins/csrlink/style.css -text
+htdocs/wiki/lib/plugins/csrlink/syntax/bieblink.php -text
 htdocs/wiki/lib/plugins/csrlink/syntax/documentlink.php -text
 htdocs/wiki/lib/plugins/csrlink/syntax/groeplink.php -text
 htdocs/wiki/lib/plugins/csrlink/syntax/profiellink.php -text
