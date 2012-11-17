@@ -3,7 +3,7 @@
  *
  * @author Adrian Lang <lang@cosmocode.de>
  */
-addInitEvent(function () {
+jQuery(function () {
     calendar.month_names = LANG.plugins.bureaucracy.month_names;
     calendar.weekdays = LANG.plugins.bureaucracy.weekdays;
 });
