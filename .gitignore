@@ -21,6 +21,7 @@ htdocs/handelingen
 htdocs/happening
 htdocs/owee
 htdocs/tools/alphabanner/alphabanner.cache.*
+htdocs/wiki/*.iml
 htdocs/wiki/.idea
 htdocs/wiki/conf/acl.auth.php
 htdocs/wiki/conf/local.php
@@ -445,7 +446,6 @@ htdocs/wiki/lib/plugins/usermanager/lang/uk
 htdocs/wiki/lib/plugins/usermanager/lang/vi
 htdocs/wiki/lib/plugins/usermanager/lang/zh
 htdocs/wiki/lib/plugins/usermanager/lang/zh-tw
-htdocs/wiki/wiki.iml
 images/*
 images/famfamfam/*.png
 lib/include.defines.php
