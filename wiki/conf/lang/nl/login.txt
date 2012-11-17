@@ -1,6 +1,0 @@
-====== Login ======
-
-^Wiki is verplaatst! Ga naar http://csrdelft.nl/wiki/ ^
-
-
-Je bent op dit moment niet ingelogd! Gebruik je C.S.R.-**lidnummer** (zie je profiel op de C.S.R.-site) en je wachtwoord van de C.S.R.-site om in te loggen. Je browser moet cookies accepteren om in te kunnen loggen.
