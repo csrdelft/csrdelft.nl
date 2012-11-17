@@ -195,7 +195,7 @@ $.Autocompleter = function(input, options) {
 					}
 				}
 			}
-			console.log(result)
+
 			if( typeof fn == "function" ) fn(result);
 			else $input.trigger("result", result && [result.data, result.value]);
 		}
@@ -295,7 +295,7 @@ $.Autocompleter = function(input, options) {
 			return words[0];
 		var cursorAt = $(input).selection().start;
 		if (cursorAt == value.length) {
-			words = trimWords(value)
+			words = trimWords(value);
 		} else {
 			words = trimWords(value.replace(value.substring(cursorAt), ""));
 		}
