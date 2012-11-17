@@ -1,0 +1,129 @@
+div.dokuwiki div.bureaucracy__plugin {
+    width: 50%;
+    font-size: 120%;
+    padding: 2em;
+}
+
+div.dokuwiki form.bureaucracy__plugin {
+    width: 100%;
+    text-align: center;
+}
+
+div.dokuwiki form.bureaucracy__plugin p,
+div.dokuwiki form.bureaucracy__plugin label span,
+div.dokuwiki form.bureaucracy__plugin input.button {
+    clear: left;
+}
+
+div.dokuwiki form.bureaucracy__plugin p {
+    font-size: 90%;
+    text-align: left;
+}
+
+div.dokuwiki form.bureaucracy__plugin fieldset {
+    width: 80%;
+}
+
+div.dokuwiki form.bureaucracy__plugin label {
+    display: block;
+    margin: 5px;
+    /* AutoCompletion anchor */
+    position: relative;
+/*    overflow: visible;*/
+}
+
+div.dokuwiki form.bureaucracy__plugin label span {
+    width: 48%;
+    text-align: right;
+    display: block;
+    float: left;
+}
+
+div.dokuwiki form.bureaucracy__plugin label .edit {
+    width: 48%;
+}
+
+div.dokuwiki form.bureaucracy__plugin label input.datepicker {
+    width: 8em;
+}
+
+div.dokuwiki form.bureaucracy__plugin label input,
+div.dokuwiki form.bureaucracy__plugin label .edit,
+div.dokuwiki form.bureaucracy__plugin label select {
+    display: block;
+    float: left;
+    margin-left: 5px;
+}
+
+div.dokuwiki form.bureaucracy__plugin label.bureaucracy_error span {
+    color: #F00;
+}
+
+/* CALENDAR */
+.calendar-box {
+    display:none;
+    background-color:#fff;
+    border:1px solid #444;
+    position:absolute;
+    width:250px;
+    padding: 0 5px;
+    z-index: 99;
+}
+.calendar-box select.calendar-month {
+    width:7em;
+}
+.calendar-box select.calendar-year {
+    width:5em;
+}
+.calendar-box .calendar-cancel {
+    width:100%;
+}
+.calendar-box table td {
+    width:14%;
+}
+.calendar-box .calendar-title {
+    text-align:center;
+}
+.calendar-box a {
+    text-decoration:none;
+}
+.calendar-box .today a {
+    padding:0 5px;
+    margin-left:-5px;
+    background-color:#ffe9c6;
+}
+.calendar-box .selected a {
+    padding:0 5px;
+    margin-left:-5px;
+    background-color:#c9ff8b;
+}
+
+/* AUTOCOMPLETION */
+div.dokuwiki ul.autocompletion {
+    background:__background__ none repeat scroll 0 0;
+    border:1px solid;
+    list-style-image:none;
+    list-style-position:outside;
+    list-style-type:none;
+    opacity:0.9;
+    padding:0.3em;
+    margin:0;
+    position:absolute;
+    z-index: 40;
+
+    /* IE 7 fix */
+    text-align: left;
+}
+
+div.dokuwiki ul.autocompletion li {
+    width: 100%;
+}
+
+div.dokuwiki ul.autocompletion li a {
+    width: 100%;
+    display: block;
+}
+
+div.dokuwiki ul.autocompletion li.auto_cur a {
+    background: __background_alt__;
+}
