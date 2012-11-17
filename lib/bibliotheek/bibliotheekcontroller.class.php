@@ -392,7 +392,7 @@ class BibliotheekController extends Controller{
 	 */
 	protected function action_autocomplete(){
 		if($this->hasParam(1)){
-			Catalogus::getAutocompleteSuggesties($this->getParam(1));
+			echo json_encode(Catalogus::getAutocompleteSuggesties($this->getParam(1)));
 		}
 		exit;
 	}

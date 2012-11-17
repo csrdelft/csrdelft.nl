@@ -258,6 +258,7 @@ htdocs/tools/soccie.php -text
 htdocs/tools/soccieimportweergeven.php -text
 htdocs/tools/stats.php -text
 htdocs/tools/streeplijst.php -text
+htdocs/tools/suggesties.php -text
 htdocs/tools/ubb.php -text
 htdocs/tools/verticalelijsten.php -text
 htdocs/tools/voorkeuren/commissies.php -text
@@ -305,6 +306,7 @@ htdocs/wiki/conf/plugins.required.php -text
 htdocs/wiki/conf/scheme.conf -text
 htdocs/wiki/conf/smileys.conf -text
 htdocs/wiki/conf/users.auth.php.dist -text
+htdocs/wiki/conf/userscript.js -text
 htdocs/wiki/conf/userstyle.css -text
 htdocs/wiki/conf/wordblock.conf -text
 htdocs/wiki/data/.htaccess -text

@@ -32,7 +32,12 @@ $result=array();
 foreach($namen as $naam){
 	$tussenvoegsel=($naam['tussenvoegsel']!='') ? $naam['tussenvoegsel'].' ' : '';
 	$fullname=$naam['voornaam'].' '.$tussenvoegsel.$naam['achternaam'];
-	$result[]=array('data'=>array($fullname, $naam['uid']), 'value'=>$fullname, 'result'=>$fullname);
+	if(isset($_GET['result']) AND $_GET['result']=='uid'){
+		$resultstr = $naam['uid'];
+	}else{
+		$resultstr = $fullname;
+	}
+	$result[]=array('data'=>array($fullname, $naam['uid']), 'value'=>$fullname, 'result'=>$resultstr);
 }
 echo json_encode($result);
 exit;

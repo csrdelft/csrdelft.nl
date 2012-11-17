@@ -160,5 +160,37 @@ class DocumentenCategorie{
 		}
 		return $return;
 	}
+
+	/**
+	 * Zoek documenten die matchen op naam, bestandsnaam of bestandsid
+	 *
+	 * @static
+	 * @param $zoekterm
+	 * @param int $categorie
+	 * @param int $limit
+	 * @return array|bool
+	 */
+	public static function zoekDocumenten($zoekterm, $categorie = 0, $limit = 30){
+		$documenten = array();
+		$wherecat = "";
+		if($categorie!=0){
+			$wherecat = "AND catID=".(int)$categorie;
+		}
+		$db=MySql::instance();
+		$zoekterm = $db->escape($zoekterm);
+		$query="
+			SELECT ID, naam, catID, bestandsnaam, size, mimetype, toegevoegd, eigenaar, leesrechten
+			FROM document
+			WHERE (naam LIKE '%".$zoekterm."%' OR bestandsnaam LIKE '%".$zoekterm."%' OR ID = ".(int)$zoekterm.") ".$wherecat."
+			ORDER BY toegevoegd DESC
+			LIMIT ".(int)$limit;
+		$result=$db->query($query);
+		echo mysql_error();
+		if($db->numRows($result)>0) {
+			while($doc=$db->next($result)) {
+				$documenten[] = new Document($doc);
+			}
+		}
+		return $documenten;
+	}
 }
-?>

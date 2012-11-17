@@ -242,46 +242,68 @@ private $iKolommenZichtbaar; //aantal kolommen zichtbaar in de tabel.
 	}
 
 	/**
-	 * @return json_encodeerde array(
-	 * 		array(data=>array(...met meuk...), value=>waarde, result=>dit komt in input na kiezen van iets in suggestielijst),
-	 * 		array(..)
+	 * @param string $sKey is kolom in tabel biebboek, of om via titel&auteur naar id's te zoeken: 'biebboek'
+	 * @return array json_encodeerde array(
+	 *         array(data=>array(...met meuk...), value=>waarde, result=>dit komt in input na kiezen van iets in suggestielijst),
+	 *         array(..)
 	 *  )
 	 * met formatItem (optie voor jquery.autocomplete) kan uit data-array inhoud worden gegenereerd voor in de li-elementen van de suggestielijst
 	 */
-	public static function getAutocompleteSuggesties($sKey){
+	public static function getAutocompleteSuggesties($sKey)	{
 		$properties = array();
-		$allowedkeys = array('id', 'titel', 'uitgavejaar', 'uitgeverij', 'paginas', 'taal', 'isbn', 'code','auteur');
-		if(in_array($sKey, $allowedkeys)){
-			$db=MySql::instance();
-			$query = "
-				SELECT ".$db->escape($sKey).", id
-				FROM biebboek
-				WHERE ".$db->escape($sKey)." LIKE  '%".$db->escape($_GET['q'])."%'
-				GROUP BY ".$db->escape($sKey)."
-				ORDER BY ".$db->escape($sKey)."
-				LIMIT 0, ".(int)$_GET['limit']." ;";
+		$allowedkeys = array('id', 'titel', 'uitgavejaar', 'uitgeverij', 'paginas', 'taal', 'isbn', 'code', 'auteur', 'biebboek');
+		if (in_array($sKey, $allowedkeys)) {
+			$db = MySql::instance();
+			if($sKey=='biebboek'){
+				$query = "
+					SELECT titel, auteur, id
+					FROM biebboek
+					WHERE titel LIKE  '%".$db->escape($_GET['q'])."%' OR auteur LIKE  '%".$db->escape($_GET['q'])."%' OR id = ".(int)$_GET['q']."
+					ORDER BY titel
+					LIMIT 0, ".(int)$_GET['limit']." ;";
+			}else{
+				$query = "
+					SELECT ".$db->escape($sKey).", id
+					FROM biebboek
+					WHERE ".$db->escape($sKey)." LIKE  '%".$db->escape($_GET['q'])."%'
+					GROUP BY ".$db->escape($sKey)."
+					ORDER BY ".$db->escape($sKey)."
+					LIMIT 0, ".(int)$_GET['limit']." ;";
+			}
 			$result=$db->query($query);
 			echo mysql_error();
-			if($db->numRows($result)>0){
-				while($prop=$db->next($result)){
-					if($sKey=='titel'){
-						$data=array('titel'=>$prop['titel'],'id'=>$prop['id']);
+			if ($db->numRows($result) > 0) {
+				while ($prop = $db->next($result)) {
+					if($sKey=='biebboek'){
+						$data = array('titel' => $prop['titel'], 'auteur' => $prop['auteur'], 'id' => $prop['id']);
+						$properties[] = array(
+							'data' => $data,
+							'value' => $prop['titel'],
+							'result' => $prop['id']);
 					}else{
-						$data=array($prop[$sKey]);
+						if ($sKey == 'titel') {
+							$data = array('titel' => $prop['titel'], 'id' => $prop['id']);
+						}else{
+							$data = array($prop[$sKey]);
+						}
+						$properties[] = array(
+							'data' => $data,
+							'value' => $prop[$sKey],
+							'result' => $prop[$sKey]);
 					}
-					$properties[]=array('data'=>$data, 'value'=>$prop[$sKey], 'result'=>$prop[$sKey]);
 				}
 			}
 		}
-		echo json_encode($properties);
+		return $properties;
 	}
 
 	/**
 	 * controleert of gegeven waarde voor de gegeven $key al voorkomt in de db.
-	 * 
-	 * @param $key en $value
-	 * @return	true $value bestaat in db
-	 * 			false $value bestaat niet
+	 *
+	 * @param $key
+	 * @param $value
+	 * @return    true $value bestaat in db
+	 *             false $value bestaat niet
 	 */
 	public static function existsProperty($key, $value){
 		$allowedkeys = array('id', 'titel', 'uitgavejaar', 'uitgeverij', 'paginas', 'taal', 'isbn', 'code','auteur');
