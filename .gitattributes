@@ -1649,6 +1649,7 @@ htdocs/wiki/lib/tpl/vector/static/js/index.html -text
 htdocs/wiki/lib/tpl/vector/style.ini -text
 htdocs/wiki/lib/tpl/vector/template.info.txt -text
 htdocs/wiki/lib/tpl/vector/user/.htaccess -text
+htdocs/wiki/lib/tpl/vector/user/apple-touch-icon.png -text
 htdocs/wiki/lib/tpl/vector/user/boxes.php -text
 htdocs/wiki/lib/tpl/vector/user/button-css.png -text
 htdocs/wiki/lib/tpl/vector/user/button-rss-algemeen.png -text
