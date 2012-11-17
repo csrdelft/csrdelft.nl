@@ -1,5 +1,4 @@
-
-jQuery(function(){
+jQuery(function () {
 
     //user
 
@@ -32,7 +31,8 @@ jQuery(function(){
 
     jQuery('input.lidsuggesties').each(function (index, tag) {
         jQuery(tag).autocomplete(
-            '/tools/naamsuggesties/'+jQuery(tag).data('zoekin'), jQuery.extend({}, options, {
+            '/tools/naamsuggesties/' + jQuery(tag).data('zoekin'),
+            jQuery.extend({}, options, {
                 multiple: jQuery(this).hasClass('multiple'),
                 formatItem: function (row, i, n) {
                     return row[0];
@@ -42,59 +42,62 @@ jQuery(function(){
                 }
             })
         ).result(function () {
-                jQuery(this).keyup();
-            });
+            jQuery(this).keyup();
+        });
     });
 
 
     //boek
     jQuery('input.boeksuggesties').each(function (index, tag) {
         jQuery(tag).autocomplete(
-            '/tools/suggesties/boek', jQuery.extend({}, options, {
+            '/tools/suggesties/boek',
+            jQuery.extend({}, options, {
                 multiple: jQuery(this).hasClass('multiple'),
                 formatItem: function (row, i, n, value) {
                     return row.titel + ' (<i>' + row.auteur + '</i>)';
                 }
             })
         ).result(function () {
-                jQuery(this).keyup();
-            });
+            jQuery(this).keyup();
+        });
     });
 
 
     //document
     jQuery('input.documentsuggesties').each(function (index, tag) {
         jQuery(tag).autocomplete(
-            '/tools/suggesties/document', jQuery.extend({}, options, {
+            '/tools/suggesties/document',
+            jQuery.extend({}, options, {
                 multiple: jQuery(this).hasClass('multiple'),
                 formatItem: function (row, i, n, value) {
                     return row.naam + ' (<i>' + row.bestandsnaam + '</i>)';
                 },
                 extraParams: {
-                    categorie: (jQuery(tag).data('categorie') ? jQuery(tag).data('categorie') : 0)
+                    categorie: jQuery(tag).data('categorie') || 0
                 }
             })
         ).result(function () {
-                jQuery(this).keyup();
-            });
+            jQuery(this).keyup();
+        });
     });
 
 
     //groep
     jQuery('input.groepsuggesties').each(function (index, tag) {
         jQuery(tag).autocomplete(
-            '/tools/suggesties/groep', jQuery.extend({}, options, {
+            '/tools/suggesties/groep',
+            jQuery.extend({}, options, {
                 multiple: jQuery(this).hasClass('multiple'),
                 formatItem: function (row, i, n, value) {
                     return row.naam + ' (<i>' + row.status + ' ' + row.type + ' ' + row.snaam + '</i>)';
                 },
                 extraParams: {
-                    type: (jQuery(tag).data('type') ? jQuery(tag).data('type') : 0)
+                    type: jQuery(tag).data('type') || 0
                 }
             })
         ).result(function () {
-                jQuery(this).keyup();
-            });
+            jQuery(this).keyup();
+        });
     });
 
 });
