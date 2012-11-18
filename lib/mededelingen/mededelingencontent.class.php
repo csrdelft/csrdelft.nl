@@ -61,6 +61,10 @@ class MededelingenContent extends SimpleHTML{
 		}
 	}
 
+	public function getTitel() {
+		return 'Mededelingen overzicht';
+	}
+
 	public function view(){
 		if(!$this->paginaNummerOpgevraagd){
 			$this->paginaNummer = $this->geselecteerdeMededeling->getPaginaNummer($this->prullenbak);

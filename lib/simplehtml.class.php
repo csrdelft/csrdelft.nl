@@ -53,12 +53,8 @@ abstract class SimpleHTML {
 	}
 
 	//eventueel titel voor een pagina geven
-	function getTitel($sTitle=false){
-		if($sTitle===false){
-			return 'C.S.R. Delft';
-		}else{
-			return 'C.S.R. Delft - '.$sTitle;
-		}
+	function getTitel(){
+		return 'C.S.R. Delft';
 	}
 }
 

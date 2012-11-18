@@ -10,8 +10,7 @@ class CsrUBB extends eamBBParser{
 
 	static private $instance;
 
-
-	public function instance(){
+	public static function instance(){
 		return new CsrUBB();
 	}
 
@@ -813,7 +812,7 @@ UBBVERHAAL;
 //we staan normaal geen HTML toe, met deze kan dat wel.
 class CsrHtmlUBB extends CsrUBB{
 	static private $instance;
-	public function instance(){
+	public static function instance(){
 		//als er nog geen instantie gemaakt is, die nu maken
 		if(!isset(self::$instance)){
 			self::$instance=new CsrHtmlUBB();

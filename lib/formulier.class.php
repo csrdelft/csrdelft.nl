@@ -899,7 +899,6 @@ class PassField extends FormField{
 		}
 		return false;
 	}
-		
 	public function valid($lid){
 		if(!$lid instanceof Lid){
 			throw new Exception($this->getType().'::valid() moet een Lid-object meekrijgen');

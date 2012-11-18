@@ -57,7 +57,7 @@ class Forum{
 		return $iTopicInfo;
 	}
 
-	private function getCategorieClause(){
+	private static function getCategorieClause(){
 		$loginlid=LoginLid::instance();
 
 		$cats=array();
