@@ -31,11 +31,11 @@ class syntax_plugin_csrlink_profiellink extends DokuWiki_Syntax_Plugin {
 
 
     function connectTo($mode) {
-        $this->Lexer->addSpecialPattern('\[\[user>.+?\]\]',$mode,'plugin_csrlink_profiellink');
+        $this->Lexer->addSpecialPattern('\[\[lid>.+?\]\]',$mode,'plugin_csrlink_profiellink');
     }
 
     function handle($match, $state, $pos, &$handler){
-        $match = trim(substr($match,7,-2));
+        $match = trim(substr($match,6,-2));
 
 
         list($uid,$title) = explode('|',$match,2);
@@ -58,7 +58,7 @@ class syntax_plugin_csrlink_profiellink extends DokuWiki_Syntax_Plugin {
 
         // nothing found? render as text
         if(!$uinfo){
-            $R->cdata($title?$title:$uid);
+            $R->doc .='<span class="csrlink invalid" title="[[lid>]] Geen geldig lidnummer ('.mb_htmlentities($uid).')">'.mb_htmlentities($title?$title:$uid).'</span>';
             return true;
         }
 

@@ -57,3 +57,8 @@ div.dokuwiki .bieblink .boekindicator                  {margin-right: 5px;}
 div.dokuwiki .bieblink .boekindicator.beschikbaar      {color: green;}
 div.dokuwiki .bieblink .boekindicator.teruggegeven     {color: orange;}
 div.dokuwiki .bieblink .boekindicator.geen             {color: red;}
+
+/* csrlink invalid value */
+div.dokuwiki .csrlink.invalid {
+    color: __missing__;
+}

@@ -58,7 +58,7 @@ class syntax_plugin_csrlink_groeplink extends DokuWiki_Syntax_Plugin {
             $groep =    new Groep($groepid);
         }catch(Exception $e){
             // nothing found? render as text
-            $R->cdata('[[groep>]] Geen geldig groep-id ('.$groepid.')');
+            $R->doc .='<span class="csrlink invalid" title="[[groep>]] Geen geldig groep-id ('.mb_htmlentities($groepid).')">'.mb_htmlentities($title?$title:$groepid).'</span>';
             return true;
         }
 

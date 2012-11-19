@@ -58,7 +58,7 @@ class syntax_plugin_csrlink_bieblink extends DokuWiki_Syntax_Plugin {
             $boek =    new Boek($boekid);
         }catch(Exception $e){
             // nothing found? render as text
-            $R->cdata('[[boek>]] Geen geldig boek-id ('.$boekid.')');
+            $R->doc .='<span class="csrlink invalid" title="[[boek>]] Geen geldig boek-id ('.mb_htmlentities($boekid).')">'.mb_htmlentities($title?$title:$boekid).'</span>';
             return true;
         }
 

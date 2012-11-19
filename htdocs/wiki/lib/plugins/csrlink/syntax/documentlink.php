@@ -57,7 +57,7 @@ class syntax_plugin_csrlink_documentlink extends DokuWiki_Syntax_Plugin {
         try{
             $document=new Document((int)$documentid);
         }catch(Exception $e){
-            $R->cdata( '[[document>]] Ongeldig document (id:'.$documentid.') ');
+            $R->doc .='<span class="csrlink invalid" title="[[document>]] Ongeldig document (id:'.mb_htmlentities($documentid).')">'.mb_htmlentities($title?$title:$documentid).'</span>';
             return true;
         }
 

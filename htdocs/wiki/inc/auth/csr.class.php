@@ -178,21 +178,21 @@ class auth_csr extends auth_basic {
 
       if(Lid::isValidUid($useruid)){
         $lid=LidCache::getLid($useruid);
+        if($lid instanceof Lid){
+            $info['name']=$lid->getNaam();
+            $info['mail']=$lid->getEmail();
+            $info['pasfoto'] = $lid->getPasfoto($imgTag=false);
+            require_once 'groepen/groep.class.php';
+            $info['grps']=Groepen::getWikigroupsByUid($useruid);
+            // always add the default group to the list of groups
+            if(!in_array($conf['defaultgroup'],$info['grps']) AND $useruid!='x999'){
+              $info['grps'][] = $conf['defaultgroup'];
+            }
 
-        $info['name']=$lid->getNaam();
-        $info['mail']=$lid->getEmail();
-        $info['pasfoto'] = $lid->getPasfoto($imgTag=false);
-        require_once 'groepen/groep.class.php';
-        $info['grps']=Groepen::getWikigroupsByUid($useruid);
-        // always add the default group to the list of groups
-        if(!in_array($conf['defaultgroup'],$info['grps']) AND $useruid!='x999'){
-          $info['grps'][] = $conf['defaultgroup'];
+            return $info;
         }
-
-        return $info;
-      }else{
-        return false;
       }
+      return false;
     }
 
 }
