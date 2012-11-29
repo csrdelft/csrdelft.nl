@@ -48,7 +48,7 @@ class syntax_plugin_csrlink_bieblink extends DokuWiki_Syntax_Plugin {
         global $conf;
         extract($data);
 
-        if($mode != 'xhtml' || is_null($auth)){
+        if($mode != 'xhtml' || is_null($auth) || !$auth instanceof auth_csr){
             $R->cdata($title?$title:$boekid);
             return true;
         }
@@ -58,7 +58,7 @@ class syntax_plugin_csrlink_bieblink extends DokuWiki_Syntax_Plugin {
             $boek =    new Boek($boekid);
         }catch(Exception $e){
             // nothing found? render as text
-            $R->doc .='<span class="csrlink invalid" title="[[boek>]] Geen geldig boek-id ('.mb_htmlentities($boekid).')">'.mb_htmlentities($title?$title:$boekid).'</span>';
+            $R->doc .='<span class="csrlink invalid" title="[[boek>]] Geen geldig boek-id ('.hsc($boekid).')">'.hsc($title?$title:$boekid).'</span>';
             return true;
         }
 
@@ -68,8 +68,8 @@ class syntax_plugin_csrlink_bieblink extends DokuWiki_Syntax_Plugin {
         }
 
         //return html
-        $R->doc .= '<a class="bieblink groeplink_plugin" href="'.$boek->getUrl().'" title="Boek: '.mb_htmlentities($boek->getTitel()).'">';
-	    $R->doc .= '<span title="'.$boek->getStatus().' boek" class="boekindicator '.$boek->getStatus().'">•</span><span class="titel">'.$title.'</span> <span class="auteur">('.mb_htmlentities($boek->getAuteur()).')</span>';
+        $R->doc .= '<a class="bieblink groeplink_plugin" href="'.$boek->getUrl().'" title="Boek: '.hsc($boek->getTitel()).'">';
+	    $R->doc .= '<span title="'.$boek->getStatus().' boek" class="boekindicator '.$boek->getStatus().'">•</span><span class="titel">'.$title.'</span> <span class="auteur">('.hsc($boek->getAuteur()).')</span>';
         $R->doc .= '</a>';
         return true;
     }

@@ -48,7 +48,7 @@ class syntax_plugin_csrlink_profiellink extends DokuWiki_Syntax_Plugin {
         global $conf;
         extract($data);
 
-        if($mode != 'xhtml' || is_null($auth)){
+        if($mode != 'xhtml' || is_null($auth) || !$auth instanceof auth_csr){
             $R->cdata($title?$title:$uid);
             return true;
         }
@@ -58,7 +58,7 @@ class syntax_plugin_csrlink_profiellink extends DokuWiki_Syntax_Plugin {
 
         // nothing found? render as text
         if(!$uinfo){
-            $R->doc .='<span class="csrlink invalid" title="[[lid>]] Geen geldig lidnummer ('.mb_htmlentities($uid).')">'.mb_htmlentities($title?$title:$uid).'</span>';
+            $R->doc .='<span class="csrlink invalid" title="[[lid>]] Geen geldig lidnummer ('.hsc($uid).')">'.hsc($title?$title:$uid).'</span>';
             return true;
         }
 

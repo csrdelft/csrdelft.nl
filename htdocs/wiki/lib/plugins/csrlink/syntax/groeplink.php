@@ -48,7 +48,7 @@ class syntax_plugin_csrlink_groeplink extends DokuWiki_Syntax_Plugin {
         global $conf;
         extract($data);
 
-        if($mode != 'xhtml' || is_null($auth)){
+        if($mode != 'xhtml' || is_null($auth) || !$auth instanceof auth_csr){
             $R->cdata($title?$title:$groepid);
             return true;
         }
@@ -58,7 +58,7 @@ class syntax_plugin_csrlink_groeplink extends DokuWiki_Syntax_Plugin {
             $groep =    new Groep($groepid);
         }catch(Exception $e){
             // nothing found? render as text
-            $R->doc .='<span class="csrlink invalid" title="[[groep>]] Geen geldig groep-id ('.mb_htmlentities($groepid).')">'.mb_htmlentities($title?$title:$groepid).'</span>';
+            $R->doc .='<span class="csrlink invalid" title="[[groep>]] Geen geldig groep-id ('.hsc($groepid).')">'.hsc($title?$title:$groepid).'</span>';
             return true;
         }
 
@@ -68,7 +68,7 @@ class syntax_plugin_csrlink_groeplink extends DokuWiki_Syntax_Plugin {
         }
 
         //return html
-        $R->doc .= '<a href="'.$groep->getUrl().'" class="groeplink groeplink_plugin">'.mb_htmlentities($title).'</a>';
+        $R->doc .= '<a href="'.$groep->getUrl().'" class="groeplink groeplink_plugin">'.hsc($title).'</a>';
 
         return true;
     }

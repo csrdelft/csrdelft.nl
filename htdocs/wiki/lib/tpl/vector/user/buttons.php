@@ -43,12 +43,16 @@ $rss["rss"]["nofollow"] = true;
 
 if (auth_quickaclcheck('hoofdpagina') >= AUTH_READ) {
 	global $loginlid;
-	$rsstoken = $loginlid->getLid()->getProperty('rssToken');
+    if($loginlid) {
+        $rsstoken = $loginlid->getLid()->getProperty('rssToken');
 
-	// tip for first-time users
-	if($rsstoken == ''){
-		$rsstoken = 'Maak_EERST_een_sleutel_aan_met_knop_[Nieuwe_aanvragen]_op:_http://csrdelft.nl/communicatie/profiel/'.$loginlid->getLid()->getUid().'#forum_gegevens';
-	}
+        // tip for first-time users
+        if($rsstoken == ''){
+            $rsstoken = 'Maak_EERST_een_sleutel_aan_met_knop_[Nieuwe_aanvragen]_op:_http://csrdelft.nl/communicatie/profiel/'.$loginlid->getLid()->getUid().'#forum_gegevens';
+        }
+    }else{
+        $rsstoken = 'C.S.R. backend niet beschikbaar';
+    }
 	//RSS recent changes button
 	$rss["rss_prive"]["img"]      = DOKU_TPL."user/button-rss-prive.png";
 	$rss["rss_prive"]["href"]     = DOKU_BASE."feed.php?validate_token=".$rsstoken;

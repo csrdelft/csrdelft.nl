@@ -48,7 +48,7 @@ class syntax_plugin_csrlink_documentlink extends DokuWiki_Syntax_Plugin {
         global $conf;
         extract($data);
 
-        if($mode != 'xhtml' || is_null($auth)){
+        if($mode != 'xhtml' || is_null($auth) || !$auth instanceof auth_csr){
             $R->cdata($title?$title:$documentid);
             return true;
         }
@@ -60,7 +60,7 @@ class syntax_plugin_csrlink_documentlink extends DokuWiki_Syntax_Plugin {
                 throw new Exception('no document');
             }
         }catch(Exception $e){
-            $R->doc .='<span class="csrlink invalid" title="[[document>]] Ongeldig document (id:'.mb_htmlentities($documentid).')">'.mb_htmlentities($title?$title:$documentid).'</span>';
+            $R->doc .='<span class="csrlink invalid" title="[[document>]] Ongeldig document (id:'.hsc($documentid).')">'.hsc($title?$title:$documentid).'</span>';
             return true;
         }
 
@@ -77,7 +77,7 @@ class syntax_plugin_csrlink_documentlink extends DokuWiki_Syntax_Plugin {
         $class = preg_replace('/[^_\-a-z0-9]+/i','_',$ext);
 
         //return html
-        $R->doc .= '<a href="'.$documenturl.'" class="documentlink csrlink_plugin mediafile mf_'.$class.'">'.mb_htmlentities($title).'</a> <span class="documentlink csrlink_plugin size">('.format_filesize((int)$document->getSize()).')</span>';
+        $R->doc .= '<a href="'.$documenturl.'" class="documentlink csrlink_plugin mediafile mf_'.$class.'">'.hsc($title).'</a> <span class="documentlink csrlink_plugin size">('.format_filesize((int)$document->getSize()).')</span>';
 
         return true;
     }
