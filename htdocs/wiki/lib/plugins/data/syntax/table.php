@@ -73,7 +73,8 @@ class syntax_plugin_data_table extends DokuWiki_Syntax_Plugin {
                       'summarize'  => false,
                       'rownumbers' => (bool)$this->getConf('rownumbers'),
                       'sepbyheaders' => false,
-                      'headers' => array());
+                      'headers'    => array(),
+                      'widths'     => array());
 
         // parse info
         foreach ( $lines as $line ) {
@@ -128,6 +129,16 @@ class syntax_plugin_data_table extends DokuWiki_Syntax_Plugin {
                             }
                             $data['align'][] = $col;
                         }
+                case 'widths':
+                    $cols = explode(',',$line[1]);
+                    foreach($cols as $col){
+                        $col = trim($col);
+                        if($col[0]=='"' AND substr($col, -1)=='"'){
+                            $col=substr($col, 1, -1);
+                        }
+                        $data['widths'][] = $col;
+                    }
+                    break;
                 case 'min':
                         $data['min']   = abs((int) $line[1]);
                     break;
@@ -324,7 +335,11 @@ class syntax_plugin_data_table extends DokuWiki_Syntax_Plugin {
         foreach($data['headers'] as $num => $head){
             $ckey = $clist[$num];
 
-            $text .= '<th>';
+            $width = '';
+            if(isset($data['widths'][$num]) AND $data['widths'][$num] != '-') {
+                $width = ' style="width: '.$data['widths'][$num].';"';
+            }
+            $text .= '<th'.$width.'>';
 
             // add sort arrow
             if(isset($data['sort']) && $ckey == $data['sort'][0]){
