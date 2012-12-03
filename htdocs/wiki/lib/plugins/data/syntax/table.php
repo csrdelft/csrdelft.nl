@@ -133,9 +133,6 @@ class syntax_plugin_data_table extends DokuWiki_Syntax_Plugin {
                     $cols = explode(',',$line[1]);
                     foreach($cols as $col){
                         $col = trim($col);
-                        if($col[0]=='"' AND substr($col, -1)=='"'){
-                            $col=substr($col, 1, -1);
-                        }
                         $data['widths'][] = $col;
                     }
                     break;
