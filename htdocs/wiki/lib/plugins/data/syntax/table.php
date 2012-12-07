@@ -301,7 +301,7 @@ class syntax_plugin_data_table extends DokuWiki_Syntax_Plugin {
         // Save current request params to not loose them
         $cur_params = $this->dthlp->_get_current_param();
 
-        // build table
+        //show active filters
         $text = '<div class="table dataaggregation">';
         if(isset($_REQUEST['dataflt'])){
             $filters=$this->dthlp->_get_filters();
@@ -326,6 +326,7 @@ class syntax_plugin_data_table extends DokuWiki_Syntax_Plugin {
                         '</div>';
             $text .= '</div>';
         }
+        // build table
         $text .= '<table class="inline dataplugin_table '.$data['classes'].'">';
         // build column headers
         $text .= '<tr>';
@@ -544,9 +545,9 @@ class syntax_plugin_data_table extends DokuWiki_Syntax_Plugin {
 
         // prepare filters
         $cnt = 0;
-        if(is_array($filters) && count($filters)){
+        if(is_array($data['filter']) && count($data['filter'])){
 
-            foreach($filters as $filter){
+            foreach($data['filter'] as $filter){
                 $col = $filter['key'];
 
                 if($col == '%pageid%'){
