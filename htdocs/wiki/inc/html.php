@@ -1147,7 +1147,7 @@ function html_diff($text='',$intro=true,$type=null){
         if($r_rev){
             $revno = array_search($r_rev,$revs);
             if($revno===0){
-                $next_rev = $INFO['lastmod'];
+                $next_rev = 'current';
             }elseif($revno!==false){
                 $next_rev = $revs[$revno-1];
             }
@@ -1202,20 +1202,30 @@ function html_diff($text='',$intro=true,$type=null){
                                 'rev2[1]'  => $l_rev,
                                 'difftype' => $type,
                               ));
-            ptln('<a class="wikilink1" href="'.$diffurlprev.'">← '.'Vorige revisie'.'</a> - ');
+            ptln('<a class="wikilink1" href="'.$diffurlprev.'">← '.$lang['diffpreviousrev'].'</a> - ');
         }
         $recenturl = wl($ID, array(
                         'do'       => 'revisions'
                       ));
-        ptln('<a class="wikilink1" href="'.$recenturl.'">'.'Overzicht van revisies'.'</a>');
+        ptln('<a class="wikilink1" href="'.$recenturl.'">'.$lang['overviewrevs'].'</a>');
         if($next_rev){
-            $diffurlnext = wl($ID, array(
+            if($next_rev=='current') {
+                $diffurlnextparam = array(
+                                'do'       => 'diff',
+                                'rev'      => $r_rev,
+                                'difftype' => $type,
+                           );
+                $navnexttitle = $lang['difflastrev'];
+            } else {
+                $diffurlnextparam = array(
                                 'do'       => 'diff',
                                 'rev2[0]'  => $r_rev,
                                 'rev2[1]'  => $next_rev,
                                 'difftype' => $type,
-                              ));
-            ptln(' - <a class="wikilink1" href="'.$diffurlnext.'">'.'Volgende revisie'.' →</a></p>');
+                           );
+                $navnexttitle = $lang['diffnextrev'];
+            }
+            ptln(' - <a class="wikilink1" href="'.wl($ID, $diffurlnextparam).'">'.$navnexttitle.' →</a></p>');
         }
         ptln('</div>');
     }
