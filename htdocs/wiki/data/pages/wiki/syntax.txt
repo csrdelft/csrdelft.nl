@@ -69,7 +69,18 @@ of naar een kopje op de pagina zelf:
 Opmerking:
   * Links naar niet bestaande pagina's of 'dode' links worden [[rood en onderstreept]] weergegeven. Actieve links zijn groen: [[wiki:syntax]].
 
+==== Csrdelft.nl ====
+Je kunt makkelijk naar enkele dingen van csrdelft.nl linken met:
+  [[boek>boeknummer]]
+  [[document>documentnummer]]
+  [[groep>groepsnummer]]
+  [[lid>lidnummer]]
 
+Voorbeelden
+  * [[boek>521]]
+  * [[document>284]]
+  * [[groep>1]], [[groep>33]] of [[groep>30]] etc..
+  * [[lid>x101]]
 ==== Interwiki ====
 
 DokuWiki ondersteunt [[doku>interwiki]]-links. Dat zijn snelle links naar andere Wiki's. Dit is bijvoorbeeld een link naar Wikipedia's pagina over Wiki's: [[wp>Wiki]]. [[google>Wiki]] links to a google search. En dit is een relatieve link naar de feed hierop de server: [[this>feed.php]]
