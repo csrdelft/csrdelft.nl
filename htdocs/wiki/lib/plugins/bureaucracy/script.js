@@ -4,4 +4,3 @@
 /* DOKUWIKI:include script/datepicker.js */
 /* DOKUWIKI:include script/datepicker-init.js */
 /* DOKUWIKI:include script/datepicker-i18n.js */
-/* DOKUWIKI:include script/autocomplete/jquery.autocomplete.js */
