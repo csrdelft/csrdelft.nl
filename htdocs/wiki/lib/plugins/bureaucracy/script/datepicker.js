@@ -61,7 +61,7 @@ var calendar = {
     /// Called when the user clicks on a date in the calendar.
     selectDate:function(year,month,day) {
         var ths = _calendar_active_instance;
-        jQuery('#'+ths.opt["input"]).val(year + "-" + month + "-" + day); // Date format is :HARDCODE:
+        document.getElementById(ths.opt["input"]).value = year + "-" + month + "-" + day; // Date format is :HARDCODE:
         ths.hideCalendar();
     },
     /// Creates a calendar with the date given in the argument as the selected date.
@@ -156,7 +156,7 @@ var calendar = {
         this.wrt("</table>");
         this.wrt("<input type='button' value='Cancel' class='calendar-cancel' onclick='calendar.hideCalendar();' />");
 
-        jQuery('#'+this.opt['calendar']).html(this.data.join(""));
+        document.getElementById(this.opt['calendar']).innerHTML = this.data.join("");
         this.data = [];
     },
 
@@ -199,7 +199,7 @@ var calendar = {
         if(instance) active_calendar_id = instance.opt['calendar'];
         else active_calendar_id = _calendar_active_instance.opt['calendar'];
 
-        if(active_calendar_id) jQuery('#'+active_calendar_id).hide();
+        if(active_calendar_id) document.getElementById(active_calendar_id).style.display = "none";
         _calendar_active_instance = {};
     },
 

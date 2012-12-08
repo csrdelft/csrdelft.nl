@@ -3,9 +3,12 @@
  *
  * @author Adrian Lang <lang@cosmocode.de>
  */
-jQuery(function () {
-    jQuery('input.datepicker').each(function(i){
-        if(!this.id) this.id = 'datepicker' + i;
-        calendar.set(this.id);
-    });
+addInitEvent(function () {
+    var datepickers = getElementsByClass('datepicker', document, 'input');
+    for (var i = 0 ; i < datepickers.length ; ++i) {
+        if (!datepickers[i].id) {
+            datepickers[i].id = 'datepicker' + i;
+        }
+        calendar.set(datepickers[i].id);
+    }
 });

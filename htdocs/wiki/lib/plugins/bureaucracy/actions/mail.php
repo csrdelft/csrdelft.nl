@@ -17,18 +17,9 @@ class syntax_plugin_bureaucracy_action_mail extends syntax_plugin_bureaucracy_ac
         $sub = sprintf($this->getLang('mailsubject'),$ID);
         $txt = sprintf($this->getLang('mailintro')."\n\n\n", dformat());
 
-        global $conf;
-        $from = $conf['mailfrom'];
-
         foreach($data as $opt){
             $value = $opt->getParam('value');
             $label = $opt->getParam('label');
-
-            // handle sendermail
-            $frommail = $opt->getParam('pagename');
-            if(!is_null($frommail)){
-                $from = $frommail;
-            }
 
             switch($opt->getFieldType()){
                 case 'fieldset':
@@ -41,8 +32,8 @@ class syntax_plugin_bureaucracy_action_mail extends syntax_plugin_bureaucracy_ac
             }
         }
 
-
-        if(!mail_send($to, $sub, $txt, $from)) {
+        global $conf;
+        if(!mail_send($to, $sub, $txt, $conf['mailfrom'])) {
             throw new Exception($this->getLang('e_mail'));
         }
         return $thanks;

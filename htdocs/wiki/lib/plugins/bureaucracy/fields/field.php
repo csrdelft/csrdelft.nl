@@ -210,13 +210,6 @@ class syntax_plugin_bureaucracy_field extends syntax_plugin_bureaucracy {
             global $conf;
             if($conf['useslash']) $value = str_replace('/',' ',$value);
             return str_replace(':',' ',$value);
-        }elseif($name === 'from') {
-            // If $this->opt['from'] is set, return value of the field.
-            $value = $this->getParam('value');
-            if (is_null($value)) {
-                return null;
-            }
-            return $value;
         }
         return $this->opt[$name];
     }
