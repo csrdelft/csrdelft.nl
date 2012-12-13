@@ -27,6 +27,15 @@ div.dataplugin_entry dl {
   font-size: 100%;
 }
 
+div.dataplugin_entry dl dd {
+    /* float: left;
+    margin-left: 0.5em; aligns long values:*/
+    float: none;
+    margin-left: 10.5em;
+    width: auto;
+    word-wrap: break-word;
+}
+
 div.dataaggregation div.filter {
   margin-top:40px;
   margin-bottom:10px;
