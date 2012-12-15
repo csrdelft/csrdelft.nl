@@ -34,7 +34,7 @@ function initLidsuggesties (input, resulthandler) {
     jQuery(input).autocomplete(
         '/tools/naamsuggesties/' + jQuery(input).data('zoekin'),
         jQuery.extend({}, autocompleteoptions, {
-            multiple: jQuery(this).hasClass('multiple'),
+            multiple: jQuery(input).hasClass('multiple'),
             formatItem: function (row, i, n) {
                 return row[0];
             },
@@ -51,7 +51,7 @@ function initBoeksuggesties (input, resulthandler) {
     jQuery(input).autocomplete(
         '/tools/suggesties/boek',
         jQuery.extend({}, autocompleteoptions, {
-            multiple: jQuery(this).hasClass('multiple'),
+            multiple: jQuery(input).hasClass('multiple'),
             formatItem: function (row, i, n, value) {
                 return row.titel + ' (<i>' + row.auteur + '</i>)';
             }
@@ -65,7 +65,7 @@ function initDocumentsuggesties (input, resulthandler) {
     jQuery(input).autocomplete(
         '/tools/suggesties/document',
         jQuery.extend({}, autocompleteoptions, {
-            multiple: jQuery(this).hasClass('multiple'),
+            multiple: jQuery(input).hasClass('multiple'),
             formatItem: function (row, i, n, value) {
                 return row.naam + ' (<i>' + row.bestandsnaam + '</i>)';
             },
@@ -82,7 +82,7 @@ function initGroepsuggesties (input, resulthandler) {
     jQuery(input).autocomplete(
         '/tools/suggesties/groep',
         jQuery.extend({}, autocompleteoptions, {
-            multiple: jQuery(this).hasClass('multiple'),
+            multiple: jQuery(input).hasClass('multiple'),
             formatItem: function (row, i, n, value) {
                 return row.naam + ' (<i>' + row.status + ' ' + row.type + ' ' + row.snaam + '</i>)';
             },
