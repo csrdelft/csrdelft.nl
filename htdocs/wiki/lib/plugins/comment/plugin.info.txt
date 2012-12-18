@@ -1,0 +1,8 @@
+# General Plugin Info do not edit
+base   comment
+author Gina Häußge, Michael Klier
+email  dokuwiki@chimeric.de
+date   2009-02-06
+name   comment
+desc   Add comments/notes to your wiki source that won't be shown on the page.
+url    http://www.dokuwiki.org/plugin:comment
