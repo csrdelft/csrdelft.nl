@@ -807,11 +807,6 @@ htdocs/wiki/lib/plugins/columns/print.css -text
 htdocs/wiki/lib/plugins/columns/rewriter.php -text
 htdocs/wiki/lib/plugins/columns/style.css -text
 htdocs/wiki/lib/plugins/columns/syntax.php -text
-htdocs/wiki/lib/plugins/comment/COPYING -text
-htdocs/wiki/lib/plugins/comment/README -text
-htdocs/wiki/lib/plugins/comment/VERSION -text
-htdocs/wiki/lib/plugins/comment/manager.dat -text
-htdocs/wiki/lib/plugins/comment/syntax.php -text
 htdocs/wiki/lib/plugins/config/admin.php -text
 htdocs/wiki/lib/plugins/config/images/danger.png -text
 htdocs/wiki/lib/plugins/config/images/security.png -text
