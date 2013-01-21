@@ -8,7 +8,7 @@ div{border: 0px solid red;}
 body {
 	font-family : Verdana, Geneva, Arial, Helvetica, sans-serif;
 	font-size: 11px;
-	background: url('http://plaetjes.csrdelft.nl/layout/body.png') repeat-x;
+	background: #4fa54e url('http://plaetjes.csrdelft.nl/layout/body.png') repeat-x; /* Kleur voor gebedsweek */
 }
 
 #container {
