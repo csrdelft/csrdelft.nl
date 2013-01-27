@@ -183,9 +183,9 @@ $lang['difflink']              = 'Link to this comparison view';
 $lang['diff_type']             = 'View differences:';
 $lang['diff_inline']           = 'Inline';
 $lang['diff_side']             = 'Side by Side';
-$lang['diffpreviousrev']       = 'Previous revision';
-$lang['diffnextrev']           = 'Next revision';
-$lang['difflastrev']           = 'Last revision';
+$lang['diffpreviousedit']      = 'Previous edit';
+$lang['diffnextedit']          = 'Next edit';
+$lang['difflastedit']          = 'Last edit';
 $lang['overviewrevs']          = 'Overview of revisions';
 $lang['line']                  = 'Line';
 $lang['breadcrumb']            = 'Trace';
@@ -344,5 +344,5 @@ $lang['media_update']          = 'Upload new version';
 $lang['media_restore']         = 'Restore this version';
 
 $lang['plugin_install_err']    = "Plugin installed incorrectly. Rename plugin directory '%s' to '%s'.";
-
+$lang["vector_exportbxdef_createbook"] = "Add/Remove to selection";
 //Setup VIM: ex: et ts=2 :
