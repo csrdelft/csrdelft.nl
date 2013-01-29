@@ -22,7 +22,7 @@
         <form action="/login.php" method="post">
             <fieldset>
                 <input type="hidden" name="url" value="/leden.php" />
-                <input type="text" name="user" value="Naam of e-mailadres" onfocus="if(this.value=='Naam of e-mailadres')this.value='';" />
+                <input type="text" name="user" value="Bijnaam of lidnummer" onfocus="if(this.value=='Bijnaam of lidnummer')this.value='';" />
                 <input type="password" name="pass" onfocus="this.value='';" value="wachtwoord" />
                 <input type="submit" class="submit" name="submit" value="Inloggen &raquo;" />
             </fieldset>
