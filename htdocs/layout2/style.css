@@ -61,7 +61,7 @@ h1, h2, h3, h4, h5, h6 { font-weight: normal; }
 .box.pad-btm { padding-bottom: 173px; }
 .box.pad-left { margin-left: 254px; }
 
-.blue { background: -webkit-linear-gradient(#1255a3 0%, #063379 100%); background: -moz-linear-gradient(#1255a3 0%, #063379 100%); filter: progid:DXImageTransform.Microsoft.Gradient(startColorStr="#1255a3", endColorStr="#063379"); }
+.blue { background: -webkit-linear-gradient(#1255a3 0%, #063379 100%); background: linear-gradient(#1255a3 0%, #063379 100%); background: -moz-linear-gradient(#1255a3 0%, #063379 100%); filter: progid:DXImageTransform.Microsoft.Gradient(startColorStr="#1255a3", endColorStr="#063379"); }
 
 /* Content */
 .box h1 { font-family: SentinelBold; line-height: 24px; font-size: 24px; text-shadow: 1px 1px 1px rgba(0,0,0,0.1); padding: 30px 25px 0; }
@@ -85,8 +85,8 @@ img.border { width: 224px; border: 6px solid #fff; }
 .w2 img.border { width: 472px; }
 
 /* List box */
-.box.list { width: 216px; height: 141px; color: #46443a; background: #dfd6c6; box-shadow: 0 2px 5px rgba(0,0,0,0.6); border-radius: 10px; -webkit-transform: rotate(-1.5deg); -moz-transform: rotate(-1.5deg); margin: 16px; }
-.box.list.w2 { width: 464px; -webkit-transform: rotate(1deg); -moz-transform: rotate(1deg); }
+.box.list { width: 216px; height: 141px; color: #46443a; background: #dfd6c6; box-shadow: 0 2px 5px rgba(0,0,0,0.6); border-radius: 10px; -webkit-transform: rotate(-1.5deg); transform: rotate(-1.5deg); -moz-transform: rotate(-1.5deg); margin: 16px; }
+.box.list.w2 { width: 464px; -webkit-transform: rotate(1deg); transform: rotate(1deg); -moz-transform: rotate(1deg); }
 .box.list.h2 { height: 314px; }
 .box.list .inner { height: 119px; border: 1px dashed #8a8775; border-radius: 6px; margin: 10px; }
 .box.list.h2 .inner { height: 292px; }
@@ -141,14 +141,14 @@ img.border { width: 224px; border: 6px solid #fff; }
 #pageover input { display: block; }
 #pageover .text { width: 180px; padding: 3px 5px; }
 #pageover .butn { margin: 20px 0 0; }
-#pageover .butn input { display: block; float: right; height: 28px; color: #fff; box-shadow: inset 0 0 30px rgba(0,0,0,0.4); background: -webkit-linear-gradient(#1255a3 0%, #063379 100%); background: -moz-linear-gradient(#1255a3 0%, #063379 100%); filter: progid:DXImageTransform.Microsoft.Gradient(startColorStr="#1255a3", endColorStr="#063379"); border: 1px solid #000; border-radius: 5px; cursor: pointer; padding: 0 10px; margin: 0 0 0 16px; }
+#pageover .butn input { display: block; float: right; height: 28px; color: #fff; box-shadow: inset 0 0 30px rgba(0,0,0,0.4); background: -webkit-linear-gradient(#1255a3 0%, #063379 100%); background: linear-gradient(#1255a3 0%, #063379 100%); background: -moz-linear-gradient(#1255a3 0%, #063379 100%); filter: progid:DXImageTransform.Microsoft.Gradient(startColorStr="#1255a3", endColorStr="#063379"); border: 1px solid #000; border-radius: 5px; cursor: pointer; padding: 0 10px; margin: 0 0 0 16px; }
 #pageover .butn a { float: right; line-height: 28px; font-size: 12px; text-decoration: underline; margin: 0 0 0 16px; }
 #pageover .rdesc { float: right; width: 400px; padding: 32px 0 0; }
 
 /* Videos */
 #pageover .videos { float: left; width: 297px; padding: 4px 0 0; }
 #pageover .videos li { list-style: none; padding: 25px 0 0; }
-#pageover .videos a { display: block; height: 36px; line-height: 36px; font-size: 18px; color: #fff; text-decoration: none; background: -webkit-linear-gradient(#1255a3 0%, #063379 100%); background: -moz-linear-gradient(#1255a3 0%, #063379 100%); filter: progid:DXImageTransform.Microsoft.Gradient(startColorStr="#1255a3", endColorStr="#063379"); border: none; box-shadow: -1px 1px 10px rgba(0,0,0,0.5); opacity: 0.85; padding: 0 15px; }
+#pageover .videos a { display: block; height: 36px; line-height: 36px; font-size: 18px; color: #fff; text-decoration: none; background: -webkit-linear-gradient(#1255a3 0%, #063379 100%); background: linear-gradient(#1255a3 0%, #063379 100%); background: -moz-linear-gradient(#1255a3 0%, #063379 100%); filter: progid:DXImageTransform.Microsoft.Gradient(startColorStr="#1255a3", endColorStr="#063379"); border: none; box-shadow: -1px 1px 10px rgba(0,0,0,0.5); opacity: 0.85; padding: 0 15px; }
 #pageover .videos .active a, #pageover .videos a:hover { opacity: 1; }
 #pageover .video { float: right; width: 494px; height: 402px; overflow: hidden; padding: 29px 0 0; }
 
@@ -156,7 +156,7 @@ img.border { width: 224px; border: 6px solid #fff; }
 
 /* Box flip (moz & webkit)
 ----------------------------------*/
-.flip { position: relative; z-index: 50; box-shadow: none; -webkit-perspective: 600px; -moz-perspective: 600px; }
+.flip { position: relative; z-index: 50; box-shadow: none; -webkit-perspective: 600px; perspective: 600px; -moz-perspective: 600px; }
 .flip > div { width: 236px; height: 169px; box-shadow: inset 0 0 30px rgba(0,0,0,0.4), -1px 1px 10px rgba(0,0,0,0.5); }
 .flip .front {
 	float: none;
@@ -167,6 +167,10 @@ img.border { width: 224px; border: 6px solid #fff; }
 	width: inherit;
 	height: inherit;
 	
+	transform: rotateY(0deg);
+	transform-style: preserve-3d;
+	backface-visibility: hidden;
+
 	-webkit-transform: rotateY(0deg);
 	-webkit-transform-style: preserve-3d;
 	-webkit-backface-visibility: hidden;
@@ -185,6 +189,7 @@ img.border { width: 224px; border: 6px solid #fff; }
 	z-index: 900;
 	border-color: #eee;
 
+	transform: rotateY(180deg);
 	-webkit-transform: rotateY(180deg);
 	-moz-transform: rotateY(180deg);
 }
@@ -196,7 +201,11 @@ img.border { width: 224px; border: 6px solid #fff; }
 	z-index: 800;
 	width: inherit;
 	height: inherit;
-	
+
+	transform: rotateY(-180deg);
+	transform-style: preserve-3d;
+	backface-visibility: hidden;
+
 	-webkit-transform: rotateY(-180deg);
 	-webkit-transform-style: preserve-3d;
 	-webkit-backface-visibility: hidden;
@@ -212,19 +221,23 @@ img.border { width: 224px; border: 6px solid #fff; }
 	transition: all .4s ease-in-out;
 }
 .flip .front {
+	transform: rotateX(0deg);
 	-webkit-transform: rotateX(0deg);
 	-moz-transform: rotateX(0deg);
 }
 .flip:hover .front {
+	transform: rotateX(180deg);
 	-webkit-transform: rotateX(180deg);
 	-moz-transform: rotateX(180deg);
 }
 .flip .back {
+	transform: rotateX(-180deg);
 	-webkit-transform: rotateX(-180deg);
 	-moz-transform: rotateX(-180deg);
 }
 .flip:hover .back {
 	z-index: 1000;
+	transform: rotateY(0deg);
 	-webkit-transform: rotateY(0deg);
 	-moz-transform: rotateY(0deg);
 }

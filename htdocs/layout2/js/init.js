@@ -6,6 +6,7 @@ $(function(){
 		var random = Math.random() * 4 - 2; // Random between -2 and +2 degrees
 		$(this).css('-webkit-transform', 'rotate(' + random + 'deg)');
 		$(this).css('-moz-transform', 'rotate(' + random + 'deg)');
+		$(this).css('transform', 'rotate(' + random + 'deg)');
 	});
 
 
