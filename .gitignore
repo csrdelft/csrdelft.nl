@@ -1,7 +1,10 @@
 /*.iml
+/*.sln
+/*.suo
 /.idea
 /.project
 /.settings
+/C.S.R.[!!-~]Delft.phpproj
 bin/ldap/settings.py
 data/*
 data/smarty/*

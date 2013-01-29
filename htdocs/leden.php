@@ -23,5 +23,5 @@ $body->addObject($paginacontent);
 
 ## pagina weergeven
 $pagina=new csrdelft($body);
-$pagina->view("index");
+$pagina->view(); // als je geen argument meegeeft laadt hij de oude template
 ?>

@@ -145,7 +145,9 @@ class csrdelft extends SimpleHTML {
 		if ($cookie)      { $debug .= '<hr />COOKIE<hr />';  if (count($_COOKIE) > 0)		$debug .= '<pre>'.htmlentities(print_r($_COOKIE, true)).'</pre>';  }
 		return $debug;
 	}
-	function view() {
+    
+    // $template zorgt ervoor dat we pagina's in verschillende templates kunnen renderen. Default is 'old' dat is de layout van voor de 2012-remake
+	function view($template = 'old') {
 		$loginlid=LoginLid::instance();
 
 		//als $this->_zijkolom geen Kolom-object bevat en niet false is
@@ -167,8 +169,14 @@ class csrdelft extends SimpleHTML {
 		}
 		
 		$csrdelft->caching=false;
-		$csrdelft->display($this->_prefix.'csrdelft.tpl');
-
+        
+        // laad oude template of de benoemde nieuwe
+        if($template == 'old') {
+            $csrdelft->display($this->_prefix.'csrdelft.tpl');
+        } else {
+            $csrdelft->display($this->_prefix.'csrdelft2/'.$template.'.tpl');
+        }
+            
 		//als er een error is geweest, die unsetten...
 		if(isset($_SESSION['auth_error'])){ unset($_SESSION['auth_error']); }
 	}
