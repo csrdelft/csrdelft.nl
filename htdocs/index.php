@@ -9,6 +9,9 @@
 # instellingen & rommeltjes
 require_once 'configuratie.include.php';
 
+if($loginlid->hasPermission('P_LOGGED_IN')) {
+    header("Location: ". CSR_SERVER . "/leden.php");
+}
 
 ## de pagina-inhoud
 $body=new kolom();

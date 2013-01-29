@@ -15,11 +15,11 @@
 </head>
 
 <body>
-
+    <!--
 <div id="ad">
 	<a href="http://grolsch.nl" target="_blank"><img src="/images/layout2/advertentie.jpg"></a>
 </div>
-
+    -->
 <div id="inner">
 
 
@@ -106,7 +106,14 @@
 
 
 </div>
-
+    <div class="rommel" style="width: 100%; text-align: center;">
+        <a href="http://www.dosign.nl/">
+            <img class="ubb_image" src="http://plaetjes.csrdelft.nl/banners/dosign_staticbutton_298x77.jpg" alt="http://plaetjes.csrdelft.nl/banners/dosign_staticbutton_298x77.jpg" style=""></a> 
+        <a href="http://www.mechdes.nl/">
+            <img class="ubb_image" src="http://plaetjes.csrdelft.nl/banners/mechdes.gif" alt="http://plaetjes.csrdelft.nl/banners/mechdes.gif" style=""></a>
+        <a href="http://www.lowcostairlines.nl/">
+                <img class="ubb_image" src="http://plaetjes.csrdelft.nl/banners/lowcostairlines.jpg" alt="http://plaetjes.csrdelft.nl/banners/lowcostairlines.jpg" style=""></a>
+    </div>
 </body>
 
 </html>

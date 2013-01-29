@@ -70,6 +70,9 @@ h1, h2, h3, h4, h5, h6 { font-weight: normal; }
 .box p { line-height: 18px; font-size: 13px; text-align: left; padding: 25px 25px 0; }
 .box ul { text-align: left; font-size: 12px; padding: 20px 25px 0; }
 .box a { color: #fff; border-bottom: 1px solid rgba(255,255,255,0.6); }
+header.box a {
+    border-bottom: none!important; /* no line under logo */
+}
 .box a:hover { border-bottom-color: #fff; }
 .box .sign { position: absolute; bottom: 0; right: 0; font-family: SentinelBold; line-height: 112px; font-size: 112px; text-shadow: 1px 1px 1px rgba(0,0,0,0.4); padding: 0 18px; }
 .box.link a { display: block; height: 161px; border: none; }
@@ -228,10 +231,13 @@ img.border { width: 224px; border: 6px solid #fff; }
 
 /* login form */
 ul.login-form input {
-    color:white;
-    padding: 2px 4px;
-    border: none;
-    background: rgba(255,255,255,0.12);
+    color:#555555;
+    padding: 4px;
+    background: white;
+    border:1px solid #a6a6a6;
+    margin:3px;
+    font-size:12px;
+    width:170px;
 }
     ul.login-form input[type=submit] {
         display: inline;
@@ -242,11 +248,14 @@ ul.login-form input {
         text-align: left;
         color:white;
         padding:0;
-        border-bottom: 1px solid rgba(255,255,255,0.6);
+        margin:0;
+        border:none!important;
+        border-bottom: 1px solid rgba(255,255,255,0.6)!important;
+        width:initial;
     }
     ul.login-form input[type=submit]:hover { border-bottom-color: #fff; }
-    input:-webkit-autofill {
-        background-color: rgba(255,255,255,0.25);
-        background-image: none;
-        color: rgb(0, 0, 0);
-    }
+
+    /*advertenties */
+div.rommel {
+    margin-top: 100px;
+}

@@ -843,7 +843,7 @@ class IntField extends FormField{
  */
 class NickField extends FormField{
 	public $max_len=20;
-	public function valid($lid){
+	public function valid($lid = null){
 		if(!parent::valid()){ return false; }
 		
 		//lege nicknames vinden we prima.
@@ -899,7 +899,7 @@ class PassField extends FormField{
 		}
 		return false;
 	}
-	public function valid($lid){
+	public function valid($lid = null){
 		if(!$lid instanceof Lid){
 			throw new Exception($this->getType().'::valid() moet een Lid-object meekrijgen');
 		}

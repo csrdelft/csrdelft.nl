@@ -10,7 +10,7 @@
 			
         <a href="/logout.php" style="margin-left:40px;">uitloggen</a>
         <br />
-        <a href="/leden.php">Ga naar de ledenhomepage &raquo;</a>
+        <a href="/leden.php">Ga naar de ledenpagina &raquo;</a>
     </li>
     {else}
 		
@@ -22,7 +22,7 @@
         <form action="/login.php" method="post">
             <fieldset>
                 <input type="hidden" name="url" value="/leden.php" />
-                <input type="text" name="user" value="naam" onfocus="if(this.value=='naam')this.value='';" />
+                <input type="text" name="user" value="Naam of e-mailadres" onfocus="if(this.value=='Naam of e-mailadres')this.value='';" />
                 <input type="password" name="pass" onfocus="this.value='';" value="wachtwoord" />
                 <input type="submit" class="submit" name="submit" value="Inloggen &raquo;" />
             </fieldset>

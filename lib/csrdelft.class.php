@@ -174,7 +174,7 @@ class csrdelft extends SimpleHTML {
         if($template == 'old') {
             $csrdelft->display($this->_prefix.'csrdelft.tpl');
         } else {
-            $csrdelft->display($this->_prefix.'csrdelft2/'.$template.'.tpl');
+            $csrdelft->display('csrdelft2/'.$template.'.tpl');
         }
             
 		//als er een error is geweest, die unsetten...
