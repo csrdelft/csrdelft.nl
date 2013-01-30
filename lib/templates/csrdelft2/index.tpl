@@ -15,11 +15,7 @@
 </head>
 
 <body>
-    <!--
-<div id="ad">
-	<a href="http://grolsch.nl" target="_blank"><img src="/images/layout2/advertentie.jpg"></a>
-</div>
-    -->
+<div id="outer">
 <div id="inner">
 
 
@@ -53,7 +49,7 @@
 			<h2 class="overlay">(Oud)leden</h2>
 			<img src="/images/layout2/box-icon-oudleden.png">
 		</div>
-		<div class="blue back">
+		<div class="blue back login-form">
 			{include file='partials/_loginForm.tpl'}
 		</div>
 	</div>
@@ -91,6 +87,7 @@
 
 		<ul>
 			<li><a href="/communicatie/forum">Promoot jouw studentenactiviteit bij C.S.R.</a> »</li>
+			<li><a href="/communicatie/forum/categorie/12">Kamers zoeken/aanbieden</a> »</li>
 			<li><a href="/contact">Contactinformatie</a> »</li>
 		</ul>
 	</div>
@@ -106,14 +103,15 @@
 
 
 </div>
-    <div class="rommel" style="width: 100%; text-align: center;">
-        <a href="http://www.dosign.nl/">
-            <img class="ubb_image" src="http://plaetjes.csrdelft.nl/banners/dosign_staticbutton_298x77.jpg" alt="http://plaetjes.csrdelft.nl/banners/dosign_staticbutton_298x77.jpg" style=""></a> 
-        <a href="http://www.mechdes.nl/">
-            <img class="ubb_image" src="http://plaetjes.csrdelft.nl/banners/mechdes.gif" alt="http://plaetjes.csrdelft.nl/banners/mechdes.gif" style=""></a>
-        <a href="http://www.lowcostairlines.nl/">
-                <img class="ubb_image" src="http://plaetjes.csrdelft.nl/banners/lowcostairlines.jpg" alt="http://plaetjes.csrdelft.nl/banners/lowcostairlines.jpg" style=""></a>
-    </div>
+	<div class="push"></div>
+</div>
+
+	<div class="rommel">
+		<a href="http://www.dosign.nl/"><img src="http://plaetjes.csrdelft.nl/banners/dosign_staticbutton_298x77.jpg" alt="Dosign advertentie"></a>
+		<a href="http://www.mechdes.nl/"><img src="http://plaetjes.csrdelft.nl/banners/mechdes.gif" alt="Mechdes advertentie"></a>
+		<a href="http://www.lowcostairlines.nl/"><img src="http://plaetjes.csrdelft.nl/banners/lowcostairlines.jpg" alt="Low Cost Airlines advertentie"></a>
+	</div>
+
 </body>
 
 </html>

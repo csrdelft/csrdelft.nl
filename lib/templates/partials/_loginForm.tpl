@@ -1,24 +1,24 @@
-﻿<ul class="login-form">
-    {if $loginlid->hasPermission('P_LOGGED_IN') }
-		
-    <li id="ingelogd">{if $loginlid->isSued()}
-				
-        <a href="/endsu/" style="color: red;">{$loginlid->getSuedFrom()->getNaamLink('civitas','html')} als</a><br />
-        »
-				{/if}
-				{$loginlid->getUid()|csrnaam}
-			
-        <a href="/logout.php" style="margin-left:40px;">uitloggen</a>
-        <br />
-        <a href="/leden.php">Ga naar de ledenpagina &raquo;</a>
-    </li>
-    {else}
-		
+﻿			<form action="/login.php" method="post">
+				<fieldset>
+					<input type="hidden" name="url" value="/leden.php" />
+					<input class="text" type="text" name="user" value="Bijnaam of lidnummer" />
+					<input class="text" type="password" name="pass" value="wachtwoord" />
+					<input class="submit" type="submit" name="login" value="Inloggen" />
+				</fieldset>{if isset($smarty.session.auth_error)}
+				<p class="error">Login gefaald!</p>{/if}
+			</form>
+			<ul>
+				<li><a href="#" class="login-submit">Inloggen</a> &raquo;</li>
+				<li><a href="/account-aanvragen">Account aanvragen</a> &raquo;</li>
+			</ul>
+{*
+<ul class="login-form">
+
     <li id="login">{if isset($smarty.session.auth_error)}
-				
+
         <span class="waarschuwing">{$smarty.session.auth_error}</span>
         {/if}
-			
+
         <form action="/login.php" method="post">
             <fieldset>
                 <input type="hidden" name="url" value="/leden.php" />
@@ -30,7 +30,8 @@
     </li>
     <li><a href="account-aanvragen.html">Account aanvragen</a> &raquo;</li>
     {if !isset($smarty.session.auth_error)}
-			
+
     {/if}
 		{/if}
 </ul>
+*}
