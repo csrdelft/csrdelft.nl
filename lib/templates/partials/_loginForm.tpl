@@ -1,4 +1,4 @@
-﻿<form action="/login.php" method="post">
+<form action="/login.php" method="post">
 	<fieldset>
 		<input type="hidden" name="url" value="/leden.php" />
 		<input class="text" type="text" name="user" value="Bijnaam of lidnummer" />
