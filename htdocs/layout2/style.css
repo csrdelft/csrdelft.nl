@@ -231,7 +231,6 @@ img.border { width: 224px; border: 6px solid #fff; }
 }
 .login-form input.submit {
 	position: absolute;
-	top: -9999px;
 	left: -9999px;
 }
 .login-form p.error {
