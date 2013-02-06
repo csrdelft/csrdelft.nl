@@ -1,0 +1,7 @@
+base   templatepagename
+author Martin
+email  martin@sound4.biz
+date   2012-07-16
+name   templatepagename plugin
+desc   Set a default template page name
+url    http://dokuwiki.org
