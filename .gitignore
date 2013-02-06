@@ -32,6 +32,7 @@ htdocs/wiki/conf/local.php.bak
 htdocs/wiki/conf/local.protected.php
 htdocs/wiki/conf/plugins.local.php
 htdocs/wiki/conf/plugins.local.php.bak
+htdocs/wiki/conf/plugins.php
 htdocs/wiki/conf/users.auth.php
 htdocs/wiki/data/attic/*
 htdocs/wiki/data/cache/*
