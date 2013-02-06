@@ -10,7 +10,7 @@
  * If they are not existing, copy and translate the English ones (hint: looking
  * at <http://[your lang].wikipedia.org> might be helpful). And don't forget to
  * mail the translation to me,
- * Andreas Haerter <development@andreas-haerter.com>. Thanks :-D.
+ * Andreas Haerter <ah@bitkollektiv.org>. Thanks :-D.
  *
  *
  * LICENSE: This file is open source software (OSS) and may be copied under
@@ -18,8 +18,7 @@
  *          the author(s) of this file in doubt.
  *
  * @license GPLv2 (http://www.gnu.org/licenses/gpl2.html)
- * @author Andreas Haerter <development@andreas-haerter.com>
- * @link http://andreas-haerter.com/projects/dokuwiki-template-vector
+ * @author Andreas Haerter <ah@bitkollektiv.org>
  * @link http://www.dokuwiki.org/template:vector
  * @link http://www.dokuwiki.org/config:lang
  * @link http://www.dokuwiki.org/devel:configuration
@@ -40,8 +39,9 @@ $lang["vector_discuss"]    = "Use discussion tabs/sites?";
 $lang["vector_discuss_ns"] = "If yes, use following ':namespace:' as root for discussions:";
 
 //site notice
-$lang["vector_sitenotice"]          = "Show site wide notice?";
-$lang["vector_sitenotice_location"] = "If yes, use following wiki page for the site wide notice:";
+$lang["vector_sitenotice"]           = "Show site wide notice?";
+$lang["vector_sitenotice_location"]  = "If yes, use following wiki page for the site wide notice:";
+$lang["vector_sitenotice_translate"] = "If yes and <a href=\"http://www.dokuwiki.org/plugin:translation\">Translation plugin</a> available: load language specific site wide notice?<br />The wiki page of the translated site notice(s) is [value of 'vector_sitenotice_location']_[iso lang code] (e.g. ':wiki:site_notice_de').";
 
 //navigation
 $lang["vector_navigation"]           = "Show navigation?";
@@ -58,15 +58,18 @@ $lang["vector_toolbox"]          = "Show toolbox?";
 $lang["vector_toolbox_default"]  = "If yes, use default toolbox?";
 $lang["vector_toolbox_location"] = "If not default, use following wiki page as toolbox location:";
 
+//qr code box
+$lang["vector_qrcodebox"] = "Show box with QR Code of current wiki page URL (for easy URL transfer to mobile browser)?";
+
 //custom copyright notice
-$lang["vector_copyright"]          = "Show copyright notice?";
-$lang["vector_copyright_default"]  = "If yes, use default copyright notice?";
-$lang["vector_copyright_location"] = "If not default, use following wiki page as copyright notice:";
+$lang["vector_copyright"]           = "Show copyright notice?";
+$lang["vector_copyright_default"]   = "If yes, use default copyright notice?";
+$lang["vector_copyright_location"]  = "If not default, use following wiki page as copyright notice:";
+$lang["vector_copyright_translate"] = "If not default and <a href=\"http://www.dokuwiki.org/plugin:translation\">Translation plugin</a> available: load language specific copyright notice?<br />The wiki page of the translated copyright notice(s) is [value of 'vector_copyright_location']_[iso lang code] (e.g. ':wiki:copyright_de').";
 
 //donation link/button
 $lang["vector_donate"]          = "Show donation link/button?";
-$lang["vector_donate_default"]  = "If yes, use default donation target URL?";
-$lang["vector_donate_url"]      = "If not default, use following URL for donations:";
+$lang["vector_donate_url"]      = "Use following URL for donations:";
 
 //TOC
 $lang["vector_toc_position"] = "Table of contents (TOC) position";

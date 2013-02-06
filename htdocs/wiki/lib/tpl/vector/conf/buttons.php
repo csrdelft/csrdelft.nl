@@ -9,8 +9,7 @@
  *          the author(s) of this file in doubt.
  *
  * @license GPLv2 (http://www.gnu.org/licenses/gpl2.html)
- * @author Andreas Haerter <development@andreas-haerter.com>
- * @link http://andreas-haerter.com/projects/dokuwiki-template-vector
+ * @author Andreas Haerter <ah@bitkollektiv.org>
  * @link http://www.dokuwiki.org/template:vector
  * @link http://www.dokuwiki.org/devel:configuration
  */
@@ -59,17 +58,22 @@ $_vector_btns["vecfdw"]["nofollow"] = false;
 //donation button
 if (tpl_getConf("vector_donate")){
     $_vector_btns["donate"]["img"]      = DOKU_TPL."static/img/button-donate.gif";
-    $_vector_btns["donate"]["href"]     = DOKU_BASE."feed.php";
-    if (tpl_getConf("vector_donate_default")){
-        $_vector_btns["donate"]["href"] = "http://andreas-haerter.com/donate/dokuwiki-template-vector"; //default url
-    }else{
-        $_vector_btns["donate"]["href"] = tpl_getConf("vector_donate_url"); //custom url
-    }
+    $_vector_btns["donate"]["href"]     = tpl_getConf("vector_donate_url");
     $_vector_btns["donate"]["width"]    = 80;
     $_vector_btns["donate"]["height"]   = 15;
     $_vector_btns["donate"]["title"]    = $lang["vector_donate"];
-    $_vector_btns["donate"]["nofollow"] = true;
+    $_vector_btns["donate"]["nofollow"] = false;
 }
+
+
+//QR Code button
+//Note: You are NOT allowed to remove this button. Please respect this!
+$_vector_btns["qrcode"]["img"]      = DOKU_TPL."static/img/button-qrcode.png";
+$_vector_btns["qrcode"]["href"]     = "http://goqr.me/".(($conf["lang"] == "de") ? "de/" : "");
+$_vector_btns["qrcode"]["width"]    = 80;
+$_vector_btns["qrcode"]["height"]   = 15;
+$_vector_btns["qrcode"]["title"]    = $lang["vector_qrcodebtn"];
+$_vector_btns["qrcode"]["nofollow"] = false;
 
 
 //DokuWiki button

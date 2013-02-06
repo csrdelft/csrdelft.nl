@@ -9,8 +9,7 @@
  *          the author(s) of this file in doubt.
  *
  * @license GPLv2 (http://www.gnu.org/licenses/gpl2.html)
- * @author Andreas Haerter <development@andreas-haerter.com>
- * @link http://andreas-haerter.com/projects/dokuwiki-template-vector
+ * @author Andreas Haerter <ah@bitkollektiv.org>
  * @link http://www.dokuwiki.org/template:vector
  * @link http://www.dokuwiki.org/devel:configuration
  */
@@ -106,9 +105,13 @@ if (empty($conf["useacl"]) || //are there any users?
             //content
             $_vector_boxes["p-toc"]["xhtml"] = //get rid of some styles and the embedded headline
                                                str_replace(//search
-                                                           array("<div class=\"tocheader toctoggle\" id=\"toc__header\">".$lang["toc"]."</div>", //language comes from DokuWiki core
+                                                           array(//old TOC, until 2012-01-25
+                                                                 "<div class=\"tocheader toctoggle\" id=\"toc__header\">".$lang["toc"]."</div>", //language comes from DokuWiki core
                                                                  " class=\"toc\"",
-                                                                 " id=\"toc__inside\""),
+                                                                 " id=\"toc__inside\"",
+                                                                 //new TOC, since 2012-09-10
+                                                                 " id=\"dw__toc\"",
+                                                                 "<h3 class=\"toggle\">".$lang["toc"]."</h3>"), //language comes from DokuWiki core
                                                            //replace
                                                            "",
                                                            //haystack
@@ -218,6 +221,15 @@ if (empty($conf["useacl"]) || //are there any users?
                 //$_vector_boxes["p-tb"]["xhtml"] = hsc($lang["vector_accessdenied"])." (".tpl_getConf("vector_toolbox_location").")";
             }
         }
+    }
+
+    //QR Code of current page's URL (powered by <http://qrserver.com/api/>)
+    if (tpl_getConf("vector_qrcodebox")){
+        //headline
+        $_vector_boxes["p-qrcode"]["headline"] = $lang["vector_qrcodebox"];
+
+        //content
+        $_vector_boxes["p-qrcode"]["xhtml"] = "        <span id=\"t-qrcode\"><a href=\"http://goqr.me/".(($conf["lang"] == "de") ? "de/" : "")."\" target=\"_blank\"><img src=\"".((!empty($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] === "on") ? "https" : "http")."://api.qrserver.com/v1/create-qr-code/?data=".urlencode(wl(cleanID(getId()), false, true, "&"))."&#38;size=130x130&#38;margin=0&#38;bgcolor=f3f3f3\" alt=\"".hsc($lang["vector_qrcodebox_qrcode"])." ".hsc(tpl_pagetitle(null, true))." (".hsc($lang["vector_qrcodebox_genforcurrentpage"]).")\" title=\"".hsc($lang["vector_qrcodebox_urlofcurrentpage"])."\" /></a></span>";
     }
 
 }else{

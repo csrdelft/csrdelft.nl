@@ -10,7 +10,7 @@
  * If they are not existing, copy and translate the English ones (hint: looking
  * at <http://[your lang].wikipedia.org> might be helpful). And don't forget to
  * mail the translation to me,
- * Andreas Haerter <development@andreas-haerter.com>. Thanks :-D.
+ * Andreas Haerter <ah@bitkollektiv.org>. Thanks :-D.
  *
  *
  * LICENSE: This file is open source software (OSS) and may be copied under
@@ -18,8 +18,7 @@
  *          the author(s) of this file in doubt.
  *
  * @license GPLv2 (http://www.gnu.org/licenses/gpl2.html)
- * @author Andreas Haerter <development@andreas-haerter.com>
- * @link http://andreas-haerter.com/projects/dokuwiki-template-vector
+ * @author Andreas Haerter <ah@bitkollektiv.org>
  * @link http://www.dokuwiki.org/template:vector
  * @link http://www.dokuwiki.org/config:lang
  * @link http://www.dokuwiki.org/devel:configuration
@@ -50,6 +49,7 @@ $lang["vector_translations"] = "Languages";
 $lang["vector_navigation"] = "Navigation";
 $lang["vector_toolbox"] = "Toolbox";
 $lang["vector_exportbox"] = "Print/export";
+$lang["vector_qrcodebox"] = "QR Code";
 $lang["vector_inotherlanguages"] = "Languages";
 $lang["vector_printexport"] = "Print/export";
 $lang["vector_personnaltools"] = "Personal Tools";
@@ -70,6 +70,11 @@ $lang["vector_toolbxdef_upload"] = "Upload file";
 $lang["vector_toolbxdef_siteindex"] = "Site index";
 $lang["vector_toolboxdef_permanent"] = "Permanent link";
 $lang["vector_toolboxdef_cite"] = "Cite this page";
+
+//qr code box
+$lang["vector_qrcodebox_qrcode"] = "QR Code";
+$lang["vector_qrcodebox_genforcurrentpage"] = "generated for current page";
+$lang["vector_qrcodebox_urlofcurrentpage"] = "Current page as QR Code (scan for easy mobile access)";
 
 //cite this article
 $lang["vector_cite_bibdetailsfor"] = "Bibliographic details for";
@@ -98,8 +103,9 @@ $lang["vector_cite_thisversion"] = "this version";
 //other
 $lang["vector_search"] = "Search";
 $lang["vector_accessdenied"] = "Access denied";
-$lang["vector_fillplaceholder"] = "Please fill this placeholder";
+$lang["vector_fillplaceholder"] = "Please fill or disable this placeholder";
 $lang["vector_donate"] = "Donate";
 $lang["vector_mdtemplatefordw"] = "vector template for DokuWiki";
+$lang["vector_qrcodebtn"] = "QR Code generator";
 $lang["vector_recentchanges"] = "Recent changes";
 

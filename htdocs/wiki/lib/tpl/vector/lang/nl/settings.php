@@ -11,7 +11,7 @@
  * If they are not existing, copy and translate the English ones (hint: looking
  * at <http://[your lang].wikipedia.org> might be helpful). And don't forget to
  * mail the translation to me,
- * Andreas Haerter <development@andreas-haerter.com>. Thanks :-D.
+ * Andreas Haerter <ah@bitkollektiv.org>. Thanks :-D.
  *
  *
  * LICENSE: This file is open source software (OSS) and may be copied under
@@ -20,7 +20,6 @@
  *
  * @license GPLv2 (http://www.gnu.org/licenses/gpl2.html)
  * @author Theo Klein
- * @link http://andreas-haerter.com/projects/dokuwiki-template-vector
  * @link http://www.dokuwiki.org/template:vector
  * @link http://www.dokuwiki.org/config:lang
  * @link http://www.dokuwiki.org/devel:configuration
@@ -61,8 +60,7 @@ $lang["vector_copyright_location"] = "Wanneer de standaard niet gebruikt wordt, 
 
 //donation link/button
 $lang["vector_donate"]          = "Toon donatie button?";
-$lang["vector_donate_default"]  = "Indien ja, gebruik de standaard donatie URL?";
-$lang["vector_donate_url"]      = "Indien niet standaard, gebruik de volgende URL voor donaties:";
+$lang["vector_donate_url"]      = "Gebruik de volgende URL voor donaties:";
 
 //TOC
 $lang["vector_toc_position"] = "Positionering van de inhoudopgave";

@@ -11,7 +11,7 @@
  *   menu of DokuWiki, have a look at the file
  *   "/lib/tpl/vector/lang/<your lang>/settings.php". If it does not exists,
  *   copy and translate the English one. And don't forget to mail the
- *   translation to me, Andreas Haerter <development@andreas-haerter.com> :-D.
+ *   translation to me, Andreas Haerter <ah@bitkollektiv.org> :-D.
  * - To change the tab configuration, have a look at the "tabs.php" in the
  *   same directory as this file.
  *
@@ -21,8 +21,7 @@
  *          the author(s) of this file in doubt.
  *
  * @license GPLv2 (http://www.gnu.org/licenses/gpl2.html)
- * @author Andreas Haerter <development@andreas-haerter.com>
- * @link http://andreas-haerter.com/projects/dokuwiki-template-vector
+ * @author Andreas Haerter <ah@bitkollektiv.org>
  * @link http://www.dokuwiki.org/template:vector
  * @link http://www.dokuwiki.org/devel:configuration
  */
@@ -42,8 +41,9 @@ $meta["vector_discuss"]    = array("onoff");
 $meta["vector_discuss_ns"] = array("string", "_pattern" => "/^:.{1,}:$/");
 
 //site notice
-$meta["vector_sitenotice"]          = array("onoff");
-$meta["vector_sitenotice_location"] = array("string");
+$meta["vector_sitenotice"]           = array("onoff");
+$meta["vector_sitenotice_location"]  = array("string");
+$meta["vector_sitenotice_translate"] = array("onoff");
 
 //navigation
 $meta["vector_navigation"]           = array("onoff");
@@ -60,15 +60,18 @@ $meta["vector_toolbox"]          = array("onoff");
 $meta["vector_toolbox_default"]  = array("onoff");
 $meta["vector_toolbox_location"] = array("string");
 
+//qr code box
+$meta["vector_qrcodebox"] = array("onoff");
+
 //custom copyright notice
-$meta["vector_copyright"]          = array("onoff");
-$meta["vector_copyright_default"]  = array("onoff");
-$meta["vector_copyright_location"] = array("string");
+$meta["vector_copyright"]           = array("onoff");
+$meta["vector_copyright_default"]   = array("onoff");
+$meta["vector_copyright_location"]  = array("string");
+$meta["vector_copyright_translate"] = array("onoff");
 
 //donation link/button
-$meta["vector_donate"]          = array("onoff");
-$meta["vector_donate_default"]  = array("onoff");
-$meta["vector_donate_url"]      = array("string", "_pattern" => "/^.{1,6}:\/{2}.+$/");
+$meta["vector_donate"]     = array("onoff");
+$meta["vector_donate_url"] = array("string", "_pattern" => "/^.{1,6}:\/{2}.+$/");
 
 //TOC
 $meta["vector_toc_position"] = array("multichoice", "_choices" => array("article", "sidebar"));

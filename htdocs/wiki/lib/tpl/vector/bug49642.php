@@ -23,10 +23,9 @@
  *          the author(s) of this file in doubt.
  *
  * @license GPLv2 (http://www.gnu.org/licenses/gpl2.html)
- * @author Andreas Haerter <development@andreas-haerter.com>
+ * @author Andreas Haerter <ah@bitkollektiv.org>
  * @link http://bugs.php.net/bug.php?id=49692
  * @link http://forum.dokuwiki.org/thread/4827
- * @link http://andreas-haerter.com/projects/dokuwiki-template-vector
  * @link http://www.dokuwiki.org/template:vector
  * @link http://www.dokuwiki.org/devel:css#styleini
  */
@@ -56,10 +55,7 @@ $placeholder_names = array(//main text and background colors
                            "__existing__",
                            "__missing__",
                            //highlighting search snippets
-                           "__highlight__",
-                           //starter template css base compatibility
-                           "__site_width__",
-                           "__sidebar_width__");
+                           "__highlight__");
 $placeholder_values = array(//main text and background colors
                             "#000",
                             "#fff",
@@ -75,10 +71,7 @@ $placeholder_values = array(//main text and background colors
                             "#002bb8",
                             "#ba0000",
                             //highlighting search snippets
-                            "#ff9",
-                            //starter template css base compatibility
-                            "64em",
-                            "16em");
+                            "#ff9");
 
 //get needed file contents: screen media CSS
 $interim =  trim(file_get_contents("./static/3rd/dokuwiki/_imgdetail.css"))."\n"
@@ -98,18 +91,12 @@ $interim =  trim(file_get_contents("./static/3rd/dokuwiki/_imgdetail.css"))."\n"
            .trim(file_get_contents("./static/3rd/dokuwiki/_admin.css"))."\n";
 if (!empty($_GET["langdir"]) &&
     $_GET["langdir"] === "rtl"){
-  $interim .=  trim(file_get_contents("./static/3rd/dokuwiki/rtl.css"))."\n"
-              .trim(file_get_contents("./static/3rd/vector/main-rtl.css"))."\n";
+  $interim .= trim(file_get_contents("./static/3rd/vector/main-rtl.css"))."\n";
 } else {
   $interim .= trim(file_get_contents("./static/3rd/vector/main-ltr.css"))."\n";
 }
 $interim .=  trim(file_get_contents("./static/css/screen.css"))."\n"
             .trim(file_get_contents("./user/screen.css"))."\n";
-if (!empty($_GET["langdir"]) &&
-    $_GET["langdir"] === "rtl"){
-  $interim .=  trim(file_get_contents("./static/css/rtl.css"))."\n"
-              .trim(file_get_contents("./user/rtl.css"))."\n";
-}
 //replace the placeholders with the corresponding values and send the needed CSS
 echo "@media screen {\n".str_replace(//search
                                      $placeholder_names,

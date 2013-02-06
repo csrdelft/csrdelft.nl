@@ -14,8 +14,7 @@
  *          the author(s) of this file in doubt.
  *
  * @license GPLv2 (http://www.gnu.org/licenses/gpl2.html)
- * @author Andreas Haerter <development@andreas-haerter.com>
- * @link http://andreas-haerter.com/projects/dokuwiki-template-vector
+ * @author Andreas Haerter <ah@bitkollektiv.org>
  * @link http://www.dokuwiki.org/template:vector
  * @link http://www.dokuwiki.org/devel:templates
  */
@@ -34,7 +33,7 @@ if (!defined("DOKU_INC")){
             <h1><?php echo hsc(tpl_img_getTag('IPTC.Headline',$IMG))?></h1>
 
             <div class="content">
-                <?php tpl_img(900,700) ?>
+                <?php tpl_img(900,700); /* parameters: maximum width, maximum height (and more) */ ?>
 
                 <div class="img_detail">
                     <h2><?php print nl2br(hsc(tpl_img_getTag('simple.title'))); ?></h2>
@@ -65,6 +64,14 @@ if (!defined("DOKU_INC")){
                                         echo hsc($value);
                                     }
                                     echo '</dd>';
+                                }
+                            }
+
+                            $t_array = media_inuse(tpl_img_getTag('IPTC.File.Name',$IMG));
+                            if (isset($t_array[0])) {
+                                echo '<dt>'.$lang['reference'].':</dt>';
+                                foreach ($t_array as $t) {
+                                    echo '<dd>'.html_wikilink($t,$t).'</dd>';
                                 }
                             }
                         ?>

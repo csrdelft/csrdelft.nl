@@ -9,8 +9,7 @@
  *          the author(s) of this file in doubt.
  *
  * @license GPLv2 (http://www.gnu.org/licenses/gpl2.html)
- * @author Andreas Haerter <development@andreas-haerter.com>
- * @link http://andreas-haerter.com/projects/dokuwiki-template-vector
+ * @author Andreas Haerter <ah@bitkollektiv.org>
  * @link http://www.dokuwiki.org/template:vector
  * @link http://www.dokuwiki.org/devel:templates
  * @link http://www.dokuwiki.org/devel:coding_style
@@ -36,7 +35,7 @@ if (!defined("DOKU_INC")){
  * influencing the var's value.
  *
  * @var string
- * @author Andreas Haerter <development@andreas-haerter.com>
+ * @author Andreas Haerter <ah@bitkollektiv.org>
  */
 $vector_action = "article";
 //note: I used $_REQUEST before (cause DokuWiki controls and fills it. Normally,
@@ -70,7 +69,7 @@ if (!empty($vector_action) &&
  * page or not.
  *
  * @var string
- * @author Andreas Haerter <development@andreas-haerter.com>
+ * @author Andreas Haerter <ah@bitkollektiv.org>
  */
 $vector_context = "article";
 if (preg_match("/^".tpl_getConf("vector_discuss_ns")."?$|^".tpl_getConf("vector_discuss_ns").".*?$/i", ":".getNS(getID()))){
@@ -82,7 +81,7 @@ if (preg_match("/^".tpl_getConf("vector_discuss_ns")."?$|^".tpl_getConf("vector_
  * Stores the name the current client used to login
  *
  * @var string
- * @author Andreas Haerter <development@andreas-haerter.com>
+ * @author Andreas Haerter <ah@bitkollektiv.org>
  */
 $loginname = "";
 if (!empty($conf["useacl"])){
@@ -172,7 +171,7 @@ if (file_exists(DOKU_TPLINC."/user/buttons.php")){
  *        - "accesskey" (optional)
  *          accesskey="<value>" will be added to the link if "href" is set
  *          (otherwise this option will do nothing).
- * @author Andreas Haerter <development@andreas-haerter.com>
+ * @author Andreas Haerter <ah@bitkollektiv.org>
  * @see _vector_renderButtons()
  * @see _vector_renderBoxes()
  * @link http://www.wikipedia.org/wiki/Nofollow
@@ -255,7 +254,7 @@ function _vector_renderTabs($arr)
  *          aware of XSS and stuff.
  *        - "headline" (optional)
  *          Headline to show above the box. Leave empty/do not set for none.
- * @author Andreas Haerter <development@andreas-haerter.com>
+ * @author Andreas Haerter <ah@bitkollektiv.org>
  * @see _vector_renderButtons()
  * @see _vector_renderTabs()
  * @link http://www.wikipedia.org/wiki/Nofollow
@@ -314,7 +313,7 @@ function _vector_renderBoxes($arr)
  * @param array The button data to render within the snippet. Each element
  *        is represented through a subarray:
  *        $array = array("btn1" => array("img"      => DOKU_TPL."static/img/button-vector.png",
- *                                       "href"     => "http://andreas-haerter.com/projects/dokuwiki-template-vector",
+ *                                       "href"     => "http://andreas-haerter.com/",
  *                                       "width"    => 80,
  *                                       "height"   => 15,
  *                                       "title"    => "vector for DokuWiki",
@@ -342,7 +341,7 @@ function _vector_renderBoxes($arr)
  *        - "title" (optional)
  *          title="<value>"  will be added to the link and image if "title"
  *          is set + alt="<value>".
- * @author Andreas Haerter <development@andreas-haerter.com>
+ * @author Andreas Haerter <ah@bitkollektiv.org>
  * @see _vector_renderButtons()
  * @see _vector_renderBoxes()
  * @link http://www.wikipedia.org/wiki/Nofollow
@@ -526,18 +525,40 @@ if (file_exists(DOKU_TPLINC."lang/".$conf["lang"]."/style.css")){
   html_msgarea();
   //show site notice
   if (tpl_getConf("vector_sitenotice")){
-      //we have to show a custom sitenotice
+      //detect wiki page to load as content
+      if (!empty($transplugin) && //var comes from conf/boxes.php
+          is_object($transplugin) &&
+          tpl_getConf("vector_sitenotice_translate")){
+          //translated site notice?
+          $transplugin_langcur = $transplugin->hlp->getLangPart(cleanID(getId())); //current language part
+          $transplugin_langs   = explode(" ", trim($transplugin->getConf("translations"))); //available languages
+          if (empty($transplugin_langs) ||
+              empty($transplugin_langcur) ||
+              !is_array($transplugin_langs) ||
+              !in_array($transplugin_langcur, $transplugin_langs)) {
+              //current page is no translation or something is wrong, load default site notice
+              $sitenotice_location = tpl_getConf("vector_sitenotice_location");
+          } else {
+              //load language specific site notice
+              $sitenotice_location = tpl_getConf("vector_sitenotice_location")."_".$transplugin_langcur;
+          }
+      }else{
+          //default site notice, no translation
+          $sitenotice_location = tpl_getConf("vector_sitenotice_location");
+      }
+
+      //we have to show a custom site notice
       if (empty($conf["useacl"]) ||
-          auth_quickaclcheck(cleanID(tpl_getConf("vector_sitenotice_location"))) >= AUTH_READ){ //current user got access?
+          auth_quickaclcheck(cleanID($sitenotice_location)) >= AUTH_READ){ //current user got access?
           echo "\n  <div id=\"siteNotice\" class=\"noprint\">\n";
           //get the rendered content of the defined wiki article to use as
-          //custom sitenotice.
-          $interim = tpl_include_page(tpl_getConf("vector_sitenotice_location"), false);
+          //custom site notice.
+          $interim = tpl_include_page($sitenotice_location, false);
           if ($interim === "" ||
               $interim === false){
               //show creation/edit link if the defined page got no content
               echo "[&#160;";
-              tpl_pagelink(tpl_getConf("vector_sitenotice_location"), hsc($lang["vector_fillplaceholder"]." (".tpl_getConf("vector_sitenotice_location").")"));
+              tpl_pagelink($sitenotice_location, hsc($lang["vector_fillplaceholder"]." (".hsc($sitenotice_location).")"));
               echo "&#160;]<br />";
           }else{
               //show the rendered page content
@@ -646,13 +667,13 @@ if (file_exists(DOKU_TPLINC."lang/".$conf["lang"]."/style.css")){
       }else{
           //username and userpage
           echo "      <li id=\"pt-userpage\">".(tpl_getConf("vector_userpage")
-                                                ? "<a href=\"".$conf["profiellink"].$loginname."\">".$INFO['userinfo']['name']." (".hsc($loginname).")</a>"
+                                                ? html_wikilink(tpl_getConf("vector_userpage_ns").$loginname, hsc($loginname))
                                                 : hsc($loginname))."</li>";
           //personal discussion
-        /*  if (tpl_getConf("vector_discuss") &&
+          if (tpl_getConf("vector_discuss") &&
               tpl_getConf("vector_userpage")){
               echo "      <li id=\"pt-mytalk\">".html_wikilink(tpl_getConf("vector_discuss_ns").ltrim(tpl_getConf("vector_userpage_ns"), ":").$loginname, hsc($lang["vector_mytalk"]))."</li>";
-          } */
+          }
           //admin
           if (!empty($INFO["isadmin"]) ||
               !empty($INFO["ismanager"])){
@@ -662,8 +683,6 @@ if (file_exists(DOKU_TPLINC."lang/".$conf["lang"]."/style.css")){
           if (actionOK("profile")){ //check if action is disabled
               echo  "      <li id=\"pt-preferences\"><a href=\"".wl(cleanID(getId()), array("do" => "profile"))."\" rel=\"nofollow\">".hsc($lang["btn_profile"])."</a></li>\n"; //language comes from DokuWiki core
           }
-          //csrstek
-          echo "      <li><a href=\"http://csrdelft.nl\">csrdelft.nl</a></li>";
           //logout
           echo  "      <li id=\"pt-logout\"><a href=\"".wl(cleanID(getId()), array("do" => "logout"))."\" rel=\"nofollow\">".hsc($lang["btn_logout"])."</a></li>\n"; //language comes from DokuWiki core
       }
@@ -776,16 +795,38 @@ if (file_exists(DOKU_TPLINC."lang/".$conf["lang"]."/style.css")){
             echo "</div>\n    </li>\n";
         //show custom notice.
         }else{
+            //detect wiki page to load as content
+            if (!empty($transplugin) && //var comes from conf/boxes.php
+                is_object($transplugin) &&
+                tpl_getConf("vector_copyright_translate")){
+                //translated copyright notice?
+                $transplugin_langcur = $transplugin->hlp->getLangPart(cleanID(getId())); //current language part
+                $transplugin_langs   = explode(" ", trim($transplugin->getConf("translations"))); //available languages
+                if (empty($transplugin_langs) ||
+                    empty($transplugin_langcur) ||
+                    !is_array($transplugin_langs) ||
+                    !in_array($transplugin_langcur, $transplugin_langs)) {
+                    //current page is no translation or something is wrong, load default copyright notice
+                    $copyright_location = tpl_getConf("vector_copyright_location");
+                } else {
+                    //load language specific copyright notice
+                    $copyright_location = tpl_getConf("vector_copyright_location")."_".$transplugin_langcur;
+                }
+            }else{
+                //default copyright notice, no translation
+                $copyright_location = tpl_getConf("vector_copyright_location");
+            }
+
             if (empty($conf["useacl"]) ||
-                auth_quickaclcheck(cleanID(tpl_getConf("vector_copyright_location"))) >= AUTH_READ){ //current user got access?
+                auth_quickaclcheck(cleanID($copyright_location)) >= AUTH_READ){ //current user got access?
                 echo "<li id=\"footer-info-copyright\">\n        ";
                 //get the rendered content of the defined wiki article to use as custom notice
-                $interim = tpl_include_page(tpl_getConf("vector_copyright_location"), false);
+                $interim = tpl_include_page($copyright_location, false);
                 if ($interim === "" ||
                     $interim === false){
                     //show creation/edit link if the defined page got no content
                     echo "[&#160;";
-                    tpl_pagelink(tpl_getConf("vector_copyright_location"), hsc($lang["vector_fillplaceholder"]." (".tpl_getConf("vector_copyright_location").")"));
+                    tpl_pagelink($copyright_location, hsc($lang["vector_fillplaceholder"]." (".hsc($copyright_location).")"));
                     echo "&#160;]<br />";
                 }else{
                     //show the rendered page content

@@ -1658,8 +1658,11 @@ htdocs/wiki/lib/tpl/vector/static/3rd/dokuwiki/_toc.css -text
 htdocs/wiki/lib/tpl/vector/static/3rd/dokuwiki/apple-touch-icon.png -text
 htdocs/wiki/lib/tpl/vector/static/3rd/dokuwiki/bullet.png -text
 htdocs/wiki/lib/tpl/vector/static/3rd/dokuwiki/buttonshadow.png -text
+htdocs/wiki/lib/tpl/vector/static/3rd/dokuwiki/closed-rtl.png -text
 htdocs/wiki/lib/tpl/vector/static/3rd/dokuwiki/closed.gif -text
 htdocs/wiki/lib/tpl/vector/static/3rd/dokuwiki/closed.png -text
+htdocs/wiki/lib/tpl/vector/static/3rd/dokuwiki/email.png -text
+htdocs/wiki/lib/tpl/vector/static/3rd/dokuwiki/external-link.png -text
 htdocs/wiki/lib/tpl/vector/static/3rd/dokuwiki/favicon.ico -text
 htdocs/wiki/lib/tpl/vector/static/3rd/dokuwiki/index.html -text
 htdocs/wiki/lib/tpl/vector/static/3rd/dokuwiki/inputshadow.png -text
@@ -1673,6 +1676,7 @@ htdocs/wiki/lib/tpl/vector/static/3rd/dokuwiki/print.css -text
 htdocs/wiki/lib/tpl/vector/static/3rd/dokuwiki/resizecol.png -text
 htdocs/wiki/lib/tpl/vector/static/3rd/dokuwiki/rtl.css -text
 htdocs/wiki/lib/tpl/vector/static/3rd/dokuwiki/tocdot2.gif -text
+htdocs/wiki/lib/tpl/vector/static/3rd/dokuwiki/unc.png -text
 htdocs/wiki/lib/tpl/vector/static/3rd/dokuwiki/windows.gif -text
 htdocs/wiki/lib/tpl/vector/static/3rd/index.html -text
 htdocs/wiki/lib/tpl/vector/static/3rd/vector/arrow-down-icon.png -text
@@ -1719,6 +1723,7 @@ htdocs/wiki/lib/tpl/vector/static/css/rtl.css -text
 htdocs/wiki/lib/tpl/vector/static/css/screen.css -text
 htdocs/wiki/lib/tpl/vector/static/img/button-donate.gif -text
 htdocs/wiki/lib/tpl/vector/static/img/button-dw.png -text
+htdocs/wiki/lib/tpl/vector/static/img/button-qrcode.png -text
 htdocs/wiki/lib/tpl/vector/static/img/button-rss.png -text
 htdocs/wiki/lib/tpl/vector/static/img/button-vector.png -text
 htdocs/wiki/lib/tpl/vector/static/img/index.html -text
