@@ -178,10 +178,17 @@ Ook kunt u om afbeeldingen een kader met een tekstvakje weergeven.
 
   [{{wiki:dokuwiki-128.png|Dit is een bijschrift}}]
 
+
+Alternatief, met mogelijkheid van genummerde verwijzingen naar de afbeelding.\\ Naar dit Dokuwiki-logo kan worden verwezen met ''%%<imgref image1>%%'' wat er uitziet als: <imgref image1>.
+
+<imgcaption image1|John Doe>{{wiki:dokuwiki-128.png}}</imgcaption>
+
+  <imgcaption image1|John Doe>{{wiki:dokuwiki-128.png}}</imgcaption>
+
+
 Opmerkingen:
   * Als u de naam van een bestand opgeeft (intern of extern), dat geen afbeelding is (''gif, jpeg, png''), dan wordt deze als link weergegeven.
   * Om een afbeelding te linken naar een andere pagina kijkt u op [[#afbeeldingslinks]] hierboven.
-
 ===== Lijsten =====
 
 Dokuwiki ondersteunt opsommingslijsten en genummerde lijsten. Begin een regel met twee spaties om een lijst te maken. Gebruik een * (asterisk) voor een opsomming of een - (koppelteken) voor een genummerde lijst.

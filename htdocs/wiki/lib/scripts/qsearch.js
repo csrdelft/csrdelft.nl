@@ -38,6 +38,7 @@ var dw_qsearch = {
             //dw_qsearch.clear_results();
             var value = dw_qsearch.$inObj.val();
             if (value === '') {
+		dw_qsearch.clear_results();
                 return;
             }
             jQuery.post(
@@ -85,7 +86,10 @@ var dw_qsearch = {
     onCompletion: function(data) {
         var max, $links, too_big;
 
-        if (data === '') { return; }
+        if (data === '') { 
+		dw_qsearch.clear_results();
+		return; 
+	}
 
         dw_qsearch.$outObj
             .html(data)

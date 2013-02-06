@@ -675,7 +675,7 @@ function getRelativeRevision($id, $rev, $direction, $chunk_size = 8192, $media =
         //true when $rev is found, but not the wanted follow-up.
         $checkotherchunck = $uses_chuncks
                             && ($tmp['date'] == $rev || ($revcounter > 0 && !$relrev))
-                            && !(( $tail == $eof && $direction > 0) || ($head == 0 && $direction < 0));//feof($fp)
+                            && !(( $tail == $eof && $direction > 0) || ($head == 0 && $direction < 0));//feof($fp)$tail == $eof
 
         if($checkotherchunck) {
             if($direction > 0) {
@@ -699,6 +699,7 @@ function getRelativeRevision($id, $rev, $direction, $chunk_size = 8192, $media =
 
             //load next chunck
             $lines = readChunk($fp, $head, $tail);
+if(empty($lines)) break;
         }
     }
     if($uses_chuncks) {
