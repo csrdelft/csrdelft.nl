@@ -16,9 +16,10 @@
  *          the author(s) of this file in doubt.
  *
  * @license GPLv2 (http://www.gnu.org/licenses/gpl2.html)
- * @author Andreas Haerter <ah@bitkollektiv.org>
+ * @author Andreas Haerter <andreas.haerter@dev.mail-node.com>
  * @link http://piwik.org/
  * @link http://www.google.com/analytics/
+ * @link http://andreas-haerter.com/projects/dokuwiki-template-vector
  * @link http://www.dokuwiki.org/template:vector
  * @link http://www.dokuwiki.org/devel:configuration
  */
