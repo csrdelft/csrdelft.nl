@@ -1317,6 +1317,12 @@ htdocs/wiki/lib/plugins/navi/action.php -text
 htdocs/wiki/lib/plugins/navi/manager.dat -text
 htdocs/wiki/lib/plugins/navi/plugin.info.txt -text
 htdocs/wiki/lib/plugins/navi/syntax.php -text
+htdocs/wiki/lib/plugins/newpagetemplate/README -text
+htdocs/wiki/lib/plugins/newpagetemplate/action.php -text
+htdocs/wiki/lib/plugins/newpagetemplate/conf/default.php -text
+htdocs/wiki/lib/plugins/newpagetemplate/conf/metadata.php -text
+htdocs/wiki/lib/plugins/newpagetemplate/manager.dat -text
+htdocs/wiki/lib/plugins/newpagetemplate/plugin.info.txt -text
 htdocs/wiki/lib/plugins/pagelist/COPYING -text
 htdocs/wiki/lib/plugins/pagelist/README -text
 htdocs/wiki/lib/plugins/pagelist/conf/default.php -text
@@ -1461,6 +1467,10 @@ htdocs/wiki/lib/plugins/templatepagename/plugin.info.txt -text
 htdocs/wiki/lib/plugins/templater/manager.dat -text
 htdocs/wiki/lib/plugins/templater/syntax.php -text
 htdocs/wiki/lib/plugins/templater/syntax.phps -text
+htdocs/wiki/lib/plugins/testing/_test/dummy_plugin_integration_test.test.php -text
+htdocs/wiki/lib/plugins/testing/_test/dummy_plugin_test.test.php -text
+htdocs/wiki/lib/plugins/testing/action.php -text
+htdocs/wiki/lib/plugins/testing/plugin.info.txt -text
 htdocs/wiki/lib/plugins/usermanager/admin.php -text
 htdocs/wiki/lib/plugins/usermanager/images/search.png -text
 htdocs/wiki/lib/plugins/usermanager/lang/en/add.txt -text
