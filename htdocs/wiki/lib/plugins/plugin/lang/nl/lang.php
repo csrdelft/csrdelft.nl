@@ -13,6 +13,7 @@
  * @author Timon Van Overveldt <timonvo@gmail.com>
  * @author Jeroen
  * @author Ricardo Guijt <ricardoguijt@gmail.com>
+ * @author Gerrit <klapinklapin@gmail.com>
  */
 $lang['menu']                  = 'Plugins beheren';
 $lang['download']              = 'Download en installeer een nieuwe plugin';

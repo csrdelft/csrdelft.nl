@@ -1,116 +1,113 @@
-====== Opmaakregels (syntax) ======
+====== Formatting Syntax ======
 
-[[DokuWiki]] ondersteunt eenvoudige opmaakregels om gegevensbestanden zo leesbaar mogelijk te maken. Deze pagina bevat alle mogelijke regels die u kunt gebruiken om uw teksten vorm te geven. Kijk naar de broncode van deze pagina door op de knop //Pagina aanpassen// onderaan deze pagina te klikken. Je komt dan in de editor. Als u iets wilt uitproberen, gebruik dan de [[speeltuin:speeltuin|speeltuin]]-pagina. In de editor zijn opmaakregels ook makkelijk te verkrijgen via de [[doku>toolbar|werkbalk]] of met [[doku>accesskeys|sneltoetsen]].
-===== Basis tekstopmaak =====
+[[doku>DokuWiki]] supports some simple markup language, which tries to make the datafiles to be as readable as possible. This page contains all possible syntax you may use when editing the pages. Simply have a look at the source of this page by pressing "Edit this page". If you want to try something, just use the [[playground:playground|playground]] page. The simpler markup is easily accessible via [[doku>toolbar|quickbuttons]], too.
 
-DokuWiki ondersteunt opgemaakte teksten:
-| **vetgedrukt** |<nowiki>**vetgedrukt**</nowiki>|
-| //cursief// |<nowiki>//cursief//</nowiki>|
-|__onderstreept__  |<nowiki>  __onderstreept__</nowiki>|
-| ''monospaced'' |<nowiki> ''monospaced''</nowiki>| 
-Uiteraard kunt u al deze mogelijkheden **__//''combineren''//__**.
+===== Basic Text Formatting =====
 
-<code>**__//”combineren”//__**</code>
+DokuWiki supports **bold**, //italic//, __underlined__ and ''monospaced'' texts. Of course you can **__//''combine''//__** all these.
 
-U kunt ook <sub>subscript</sub> en <sup>superscript</sup> gebruiken.
+  DokuWiki supports **bold**, //italic//, __underlined__ and ''monospaced'' texts.
+  Of course you can **__//''combine''//__** all these.
 
-  <sub>subscript</sub> en <sup>superscript</sup> 
+You can use <sub>subscript</sub> and <sup>superscript</sup>, too.
 
-U kunt ook iets als <del>verwijderd</del> aangeven.
+  You can use <sub>subscript</sub> and <sup>superscript</sup>, too.
 
-  <del>verwijderd</del>
+You can mark something as <del>deleted</del> as well.
 
-**Paragrafen** worden gemaakt door witregels (de return toets gebruiken). Als u een **nieuwe regel** wilt beginnen maar geen nieuwe paragraaf gebruikt u twee backslashes aan het eind van de regel.
+  You can mark something as <del>deleted</del> as well.
 
-Dit is een stukje tekst met wat afbrekingen.\\ 
-Let er op dat de backslashes alleen aan het eind van een zin herkend worden of als zij gevolgd worden\\ door een spatie. \\Dit gebeurt er zonder spatie.
+**Paragraphs** are created from blank lines. If you want to **force a newline** without a paragraph, you can use two backslashes followed by a whitespace or the end of line.
 
-  Dit is een stukje tekst met wat afbrekingen.\\
-  Let er op dat de backslashes alleen\\ aan het eind van een zin herkend 
-  worden of als zij gevolgd worden door een spatie. \\Dit gebeurt er zonder spatie.
+This is some text with some linebreaks\\ Note that the
+two backslashes are only recognized at the end of a line\\
+or followed by\\ a whitespace \\this happens without it.
 
-Gebruik geforceerde nieuwe regels alleen bij uitzondering.
+  This is some text with some linebreaks\\ Note that the
+  two backslashes are only recognized at the end of a line\\
+  or followed by\\ a whitespace \\this happens without it.
+
+You should use forced newlines only if really needed.
 
 ===== Links =====
 
-DokuWiki ondersteunt meerdere manieren om een link te maken. 
+DokuWiki supports multiple ways of creating links.
 
-==== Externe ====
+==== External ====
 
-Externe links worden ‘automagisch’ herkend: http://www.google.com of simpelweg www.google.com 
+External links are recognized automagically: http://www.google.com or simply www.google.com - You can set the link text as well: [[http://www.google.com|This Link points to google]]. Email addresses like this one: <andi@splitbrain.org> are recognized, too.
 
-U kunt een link ook een naam geven: [[http://www.google.com|Deze link wijst naar Google]]. E-mailadressen zoals deze: <andi@splitbrain.org> worden ook herkend.
+  DokuWiki supports multiple ways of creating links. External links are recognized
+  automagically: http://www.google.com or simply www.google.com - You can set
+  link text as well: [[http://www.google.com|This Link points to google]]. Email
+  addresses like this one: <andi@splitbrain.org> are recognized, too.
 
-  http://www.google.com of simpelweg www.google.com 
-  [[http://www.google.com|Deze link wijst naar Google]] 
-  <andi@splitbrain.org>
+==== Internal ====
 
-==== Interne ====
+Internal links are created by using square brackets. You can either just give a [[pagename]] or use an additional [[pagename|link text]].
 
-Interne links worden gemaakt door vierkante haken te gebruiken. U kunt een [[paginanaam]] gebruiken of een titel toevoegen [[paginanaam|mooie link tekst]]. 
-  [[paginanaam]] of [[paginanaam|mooie link tekst]]
-Wiki-paginanamen worden automatisch geconverteerd naar onderkast (kleine letters); bijzondere tekens zijn niet toegestaan.
+  Internal links are created by using square brackets. You can either just give
+  a [[pagename]] or use an additional [[pagename|link text]].
 
+[[doku>pagename|Wiki pagenames]] are converted to lowercase automatically, special characters are not allowed.
 
-**Namespaces**\\
-Namespaces zijn de verschillende delen waaruit een Wiki-site kan bestaan. Een soort van mappen. U kunt linken naar [[namespaces:pagina]] door een dubbele punt in de naam van de pagina toe te voegen.
+You can use [[some:namespaces]] by using a colon in the pagename.
 
-  [[namespaces:pagina]]
+  You can use [[some:namespaces]] by using a colon in the pagename.
 
-U kunt ook naar een bepaalde paragraaf op een bepaalde pagina linken door een hekje(#) toe te voegen. Deze linkt naar een alinea op deze pagina: [[syntax#Interne|deze alinea]]. 
-  * Wanneer een kopje verandert, verandert het deel achter een # in een interne link ook.
-  * U kunt eenvoudig zien waar u naartoe zou willen linken door (een deel van) de code uit de adresregel van uw browser te kopiëren. 
-  * Deze linkjes worden ook gebruikt in de inhoudsopgaves rechtsbovenaan de pagina's.
+For details about namespaces see [[doku>namespaces]].
 
-  [[syntax#Interne|deze alinea]] 
-of naar een kopje op de pagina zelf:
-  [[#Interne|deze alinea]]
+Linking to a specific section is possible, too. Just add the section name behind a hash character as known from HTML. This links to [[syntax#internal|this Section]].
 
-Opmerking:
-  * Links naar niet bestaande pagina's of 'dode' links worden [[rood en onderstreept]] weergegeven. Actieve links zijn groen: [[wiki:syntax]].
+  This links to [[syntax#internal|this Section]].
 
-==== Csrdelft.nl ====
-Je kunt makkelijk naar enkele dingen van csrdelft.nl linken met:
-  [[boek>boeknummer]]
-  [[document>documentnummer]]
-  [[groep>groepsnummer]]
-  [[lid>lidnummer]]
+Notes:
 
-Voorbeelden
-  * [[boek>521]]
-  * [[document>284]]
-  * [[groep>1]], [[groep>33]] of [[groep>30]] etc..
-  * [[lid>x101]]
+  * Links to [[syntax|existing pages]] are shown in a different style from [[nonexisting]] ones.
+  * DokuWiki does not use [[wp>CamelCase]] to automatically create links by default, but this behavior can be enabled in the [[doku>config]] file. Hint: If DokuWiki is a link, then it's enabled.
+  * When a section's heading is changed, its bookmark changes, too. So don't rely on section linking too much.
+
 ==== Interwiki ====
 
-DokuWiki ondersteunt [[doku>interwiki]]-links. Dat zijn snelle links naar andere Wiki's. Dit is bijvoorbeeld een link naar Wikipedia's pagina over Wiki's: [[wp>Wiki]]. [[google>Wiki]] links to a google search. En dit is een relatieve link naar de feed hierop de server: [[this>feed.php]]
+DokuWiki supports [[doku>Interwiki]] links. These are quick links to other Wikis. For example this is a link to Wikipedia's page about Wikis: [[wp>Wiki]].
 
-  [[doku>interwiki]]
-  [[wp>Wiki]]
-  [[google>Wiki]] links to a google search,
-  [[this>feed.php]]
+  DokuWiki supports [[doku>Interwiki]] links. These are quick links to other Wikis.
+  For example this is a link to Wikipedia's page about Wikis: [[wp>Wiki]].
 
+==== Windows Shares ====
 
+Windows shares like [[\\server\share|this]] are recognized, too. Please note that these only make sense in a homogeneous user group like a corporate [[wp>Intranet]].
 
-==== Afbeeldingslinks ====
+  Windows Shares like [[\\server\share|this]] are recognized, too.
 
-U kunt ook een afbeelding gebruiken om naar een interne of externe pagina te linken door de syntax voor links en afbeeldingen (zie hieronder) te combineren.
+Notes:
+
+  * For security reasons direct browsing of windows shares only works in Microsoft Internet Explorer per default (and only in the "local zone").
+  * For Mozilla and Firefox it can be enabled through different workaround mentioned in the [[http://kb.mozillazine.org/Links_to_local_pages_do_not_work|Mozilla Knowledge Base]]. However, there will still be a JavaScript warning about trying to open a Windows Share. To remove this warning (for all users), put the following line in ''conf/local.protected.php'':
+
+  $lang['js']['nosmblinks'] = '';
+
+==== Image Links ====
+
+You can also use an image to link to another internal or external page by combining the syntax for links and [[#images_and_other_files|images]] (see below) like this:
 
   [[http://www.php.net|{{wiki:dokuwiki-128.png}}]]
 
 [[http://www.php.net|{{wiki:dokuwiki-128.png}}]]
 
-Let op: de enige afbeeldingsnaam die in een link wordt geaccepteerd is de naam die DokuWiki aan de afbeelding heeft gegeven nadat deze op de server is geplaatst.
-De gehele [[#images_and_other_files|afbeelding]] en [[#links|link]] syntax wordt ondersteund (inclusief vergroten/verkleinen, interne of externe afbeeldingen en URL's naar interwiki links.
+Please note: The image formatting is the only formatting syntax accepted in link names.
 
-===== Voetnoten =====
+The whole [[#images_and_other_files|image]] and [[#links|link]] syntax is supported (including image resizing, internal and external images and URLs and interwiki links).
 
-U kunt voetnoten((Dit is de tekst van een voetnoot)) maken door de tekst van de voetnoot tussen dubbele haakjes te plaatsen. 
-  ((Dit is de tekst van een voetnoot))
+===== Footnotes =====
 
-===== In secties verdelen =====
+You can add footnotes ((This is a footnote)) by using double parentheses.
 
-U kunt uw materiaal tot in vijf verschillende niveaus verdelen om deze te structureren. Als u meer dan drie koppen gebruikt (Headlines 5, 4 en 3) wordt automatisch een inhoudsopgave aangemaakt - dit kan uitgeschakeld worden door het commando ''%%~~NOTOC~~%%'' in het document in te voegen.
+  You can add footnotes ((This is a footnote)) by using double parentheses.
+
+===== Sectioning =====
+
+You can use up to five different levels of headlines to structure your content. If you have more than three headlines, a table of contents is generated automatically -- this can be disabled by including the string ''<nowiki>~~NOTOC~~</nowiki>'' in the document.
 
 ==== Headline Level 3 ====
 === Headline Level 4 ===
@@ -120,42 +117,29 @@ U kunt uw materiaal tot in vijf verschillende niveaus verdelen om deze te struct
   === Headline Level 4 ===
   == Headline Level 5 ==
 
-==== Plaatsen van lijnen ====
+By using four or more dashes, you can make a horizontal line:
 
-Door tenminste vier koppeltekens ( - ) achter elkaar te plaatsen ontstaat automatisch een lijn.
-<code>----</code>
-Het lijntje:
 ----
-===== Afbeeldingen en andere bestanden =====
 
-U kunt interne en externe [[doku>images]] invoegen door accolades ( {{}} )te gebruiken.
-Optioneel kunt u ook de afbeelding vergroten of verkleinen.
+===== Images and Other Files =====
 
-Werkelijke maat:                        {{wiki:dokuwiki-128.png}}
-<code>
-{{wiki:dokuwiki-128.png}}
-</code>
-Een bepaalde breedte aangegeven:            {{wiki:dokuwiki-128.png?50}}
-<code>
-{{wiki:dokuwiki-128.png?50}}
-</code>
-Een bepaalde breedte en hoogte aangegeven: {{wiki:dokuwiki-128.png?200x50}}
-<code>
-{{wiki:dokuwiki-128.png?200x50}}
-</code>
-Een externe afbeelding waarvan de afmetingen zijn veranderd:           {{http://de3.php.net/images/php.gif?200x50}}
-<code>
-{{http://de3.php.net/images/php.gif?200x50}}
-</code>
-Een bepaalde breedte en hoogte aangegeven: {{wiki:dokuwiki-128.png?200x50}}
-<code>
-{{wiki:dokuwiki-128.png?200x50}}
-</code>
-Een externe afbeelding waarvan de afmetingen zijn veranderd:         {{http://de3.php.net/images/php.gif?200x100}}
-<code>
-{{http://de3.php.net/images/php.gif?200x100}}
-</code>
-Door links of rechts spaties toe te voegen kunt u links of rechts uitlijnen of centreren.
+You can include external and internal [[doku>images]] with curly brackets. Optionally you can specify the size of them.
+
+Real size:                        {{wiki:dokuwiki-128.png}}
+
+Resize to given width:            {{wiki:dokuwiki-128.png?50}}
+
+Resize to given width and height((when the aspect ratio of the given width and height doesn't match that of the image, it will be cropped to the new ratio before resizing)): {{wiki:dokuwiki-128.png?200x50}}
+
+Resized external image:           {{http://de3.php.net/images/php.gif?200x50}}
+
+  Real size:                        {{wiki:dokuwiki-128.png}}
+  Resize to given width:            {{wiki:dokuwiki-128.png?50}}
+  Resize to given width and height: {{wiki:dokuwiki-128.png?200x50}}
+  Resized external image:           {{http://de3.php.net/images/php.gif?200x50}}
+
+
+By using left or right whitespaces you can choose the alignment.
 
 {{ wiki:dokuwiki-128.png}}
 
@@ -167,56 +151,53 @@ Door links of rechts spaties toe te voegen kunt u links of rechts uitlijnen of c
   {{wiki:dokuwiki-128.png }}
   {{ wiki:dokuwiki-128.png }}
 
-U kunt ook een titel toevoegen die in de meeste browsers getoond wordt.
+Of course, you can add a title (displayed as a tooltip by most browsers), too.
 
-{{ wiki:dokuwiki-128.png |Dit is de titel}}
+{{ wiki:dokuwiki-128.png |This is the caption}}
 
-  {{ wiki:dokuwiki-128.png |Dit is de titel}}
+  {{ wiki:dokuwiki-128.png |This is the caption}}
 
-Ook kunt u om afbeeldingen een kader met een tekstvakje weergeven.  
-[{{ wiki:dokuwiki-128.png |Dit is een bijschrift}}]
+If you specify a filename (external or internal) that is not an image (''gif, jpeg, png''), then it will be displayed as a link instead.
 
-  [{{wiki:dokuwiki-128.png|Dit is een bijschrift}}]
+For linking an image to another page see [[#Image Links]] above.
 
+===== Lists =====
 
-Alternatief, met mogelijkheid van genummerde verwijzingen naar de afbeelding.\\ Naar dit Dokuwiki-logo kan worden verwezen met ''%%<imgref image1>%%'' wat er uitziet als: <imgref image1>.
+Dokuwiki supports ordered and unordered lists. To create a list item, indent your text by two spaces and use a ''*'' for unordered lists or a ''-'' for ordered ones.
 
-<imgcaption image1|John Doe>{{wiki:dokuwiki-128.png}}</imgcaption>
+  * This is a list
+  * The second item
+    * You may have different levels
+  * Another item
 
-  <imgcaption image1|John Doe>{{wiki:dokuwiki-128.png}}</imgcaption>
-
-
-Opmerkingen:
-  * Als u de naam van een bestand opgeeft (intern of extern), dat geen afbeelding is (''gif, jpeg, png''), dan wordt deze als link weergegeven.
-  * Om een afbeelding te linken naar een andere pagina kijkt u op [[#afbeeldingslinks]] hierboven.
-===== Lijsten =====
-
-Dokuwiki ondersteunt opsommingslijsten en genummerde lijsten. Begin een regel met twee spaties om een lijst te maken. Gebruik een * (asterisk) voor een opsomming of een - (koppelteken) voor een genummerde lijst.
-
-  * Dit is een opsomming
-  * Dit is de tweede regel
-    * U kunt verschillende niveaus gebruiken
-  * Nog een regel
-
-  - Dit is een opsomming
-  - Dit is de tweede regel
-    - U kunt verschillende niveaus gebruiken
-  - Nog een regel
+  - The same list but ordered
+  - Another item
+    - Just use indention for deeper levels
+  - That's it
 
 <code>
-  * Dit is een opsomming
-  * Dit is de tweede regel
-    * U kunt verschillende niveaus gebruiken
-  * Nog een regel
+  * This is a list
+  * The second item
+    * You may have different levels
+  * Another item
 
-  - Dit is een opsomming
-  - Dit is de tweede regel
-    - U kunt verschillende niveaus gebruiken
-  - Nog een regel
+  - The same list but ordered
+  - Another item
+    - Just use indention for deeper levels
+  - That's it
 </code>
 
-===== Smileys =====
-Dokuwiki converteert algemeen gebruikte [[wp>emoticons]] naar hun grafische afbeeldingen. Er kunnen smileys in de 'smiley'-directory bijgeplaatst worden die dan met de ''conf/smileys.conf'' geconfigureerd kunnen worden.
+Also take a look at the [[doku>faq:lists|FAQ on list items]].
+
+===== Text Conversions =====
+
+DokuWiki can convert certain pre-defined characters or strings into images or other text or HTML.
+
+The text to image conversion is mainly done for smileys. And the text to HTML conversion is used for typography replacements, but can be configured to use other HTML as well.
+
+==== Text to Image Conversions ====
+
+DokuWiki converts commonly used [[wp>emoticon]]s to their graphical equivalents. Those [[doku>Smileys]] and other images can be configured and extended. Here is an overview of Smileys included in DokuWiki:
 
   * 8-) %%  8-)  %%
   * 8-O %%  8-O  %%
@@ -239,255 +220,158 @@ Dokuwiki converteert algemeen gebruikte [[wp>emoticons]] naar hun grafische afbe
   * FIXME %%  FIXME %%
   * DELETEME %% DELETEME %%
 
-===== Typografie =====
+==== Text to HTML Conversions ====
 
-[[Dokuwiki]] converteert lettercodes naar hun overeenkomstige typografische afbeelding. Hier een paar voorbeelden.
+Typography: [[DokuWiki]] can convert simple text characters to their typographically correct entities. Here is an example of recognized characters.
 
--> <- -> => <= <=> >> << -- --- 640x480 (c) (tm) (r)
+-> <- <-> => <= <=> >> << -- --- 640x480 (c) (tm) (r)
 "He thought 'It's a man's world'..."
 
 <code>
--> <- -> => <= <=> >> << -- --- 640x480 (c) (tm) (r)
+-> <- <-> => <= <=> >> << -- --- 640x480 (c) (tm) (r)
 "He thought 'It's a man's world'..."
 </code>
 
-===== Citeren =====
+The same can be done to produce any kind of HTML, it just needs to be added to the [[doku>entities|pattern file]].
 
-Soms is het nodig om in een tekst aan te geven of iets een opmerking of een reactie is. 
+There are three exceptions which do not come from that pattern file: multiplication entity (640x480), 'single' and "double quotes". They can be turned off through a [[doku>config:typography|config option]].
 
+===== Quoting =====
 
-Ik geloof dat we het moeten doen
+Some times you want to mark some text to show it's a reply or comment. You can use the following syntax:
 
-> Nee, ik vind van niet
-
->> Nou, ik zeg van wel
-
-> Echt?
-
->> Ja!
-
->>> Laten we het dan maar doen!
-
-  Ik geloof dat we het moeten doen
+  I think we should do it
   
-  > Nee, ik vind van niet
+  > No we shouldn't
   
-  >> Nou, ik zeg van wel
+  >> Well, I say we should
   
-  > Echt?
+  > Really?
   
-  >> Ja!
+  >> Yes!
   
-  >>> Laten we het dan maar doen!
-===== Tabellen =====
+  >>> Then lets do it!
 
-DokuWiki ondersteunt een eenvoudige syntax om tabellen te maken.
+I think we should do it
 
-^ Kopje 1      ^ Kopje 2       ^ Kopje 3          ^
-| Regel 1 kol 1    | Regel 1 kol 2     | Regel 1 kol 3    |
-| Regel 2 kol 1    | Regel 2 kol 2     ^ Regel 2 kol 3    |
-| Regel 3 kol 1    ^ Regel 3 kol 2     | Regel 3 kol 3    |
+> No we shouldn't
 
-  * Begin regels in tabellen met:
-    * een | (stok) voor gewone regels 
-    * of een ^ voor een vetgedrukt kopje in een blauwe cel.
-  * Sluit een tabel altijd af met een omhaal (return).
+>> Well, I say we should
 
-  ^ Kopje 1      ^ Kopje 2       ^ Kopje 3          ^
-  | Regel 1 kol 1    | Regel 1 kol 2     | Regel 1 kol 3   |
-  | Regel 2 kol 1    | Regel 1 kol 2     ^ Regel 2 kol 3   |
-  | Regel 3 kol 1    ^ Regel 2 kol 2     | Regel 3 kol 3   |
+> Really?
 
-=== Verticale kopjes ===
+>> Yes!
 
-|       ^ Kopje 1       ^ Kopje 2          ^
-^ Kopje 3    | Regel 1 kol 2     | Regel 1 kol 3        |
-^ Kopje 4    | Regel 2 kol 2     | Regel 2 kol 3        |
-^ Kopje 5    | Regel 3 kol 2     | Regel 3 kol 3        |
+>>> Then lets do it!
 
-  |       ^ Kopje 1       ^ Kopje 2          ^
-  ^ Kopje 3    | Regel 1 kol 2     | Regel 1 kol 3        |
-  ^ Kopje 4    | Regel 2 kol 2     | Regel 2 kol 3        |
-  ^ Kopje 5    | Regel 3 kol 2     | Regel 3 kol 3        |
+===== Tables =====
 
-===Cellen horizontaal of verticaal combineren===
-Horizontaal: 
-  * plaats de stokken die je overhebt bij elkaar zonder spaties ertussen
-  * Let er op dat er wel altijd hetzelfde aantal stokken gebruikt wordt!
-Verticaal:
-  * Plaats '':::'' op de regel onder te verbinden cel
+DokuWiki supports a simple syntax to create tables.
 
-^ Kopje 1      ^ Kopje 2       ^ Kopje 3          ^
-| Regel 1 kol 1    | Regel 1 kol 2                  | Regel 1 kol 3          |
-| Regel 2 kol 1    | combineert kolommen (let op de twee stokken) ||
-| Regel 3 kol 1    | Regel 2 kol 2                  | Regel 2 kol 3          | 
-| Regel 4 kol 1    | deze cel combineert rijen      | Regel 2 kol 3          |
-| Regel 5 kol 1    | :::                             | Regel 2 kol 3          |
-| Regel 6 kol 1    | :::                             | Regel 2 kol 3          |
+^ Heading 1      ^ Heading 2       ^ Heading 3          ^
+| Row 1 Col 1    | Row 1 Col 2     | Row 1 Col 3        |
+| Row 2 Col 1    | some colspan (note the double pipe) ||
+| Row 3 Col 1    | Row 3 Col 2     | Row 3 Col 3        |
 
-  ^ Kopje 1      ^ Kopje 2       ^ Kopje 3          ^
-  | Regel 1 kol 1    | Regel 1 kol 2                  | Regel 1 kol 3    |
-  | Regel 2 kol 1    | combineert kolommen (let op de twee stokken)     ||
-  | Regel 3 kol 1    | Regel 2 kol 2                  | Regel 2 kol 3    | 
-  | Regel 4 kol 1    | deze cel combineert rijen      | Regel 2 kol 3    |
-  | Regel 5 kol 1    | :::                             | Regel 2 kol 3    |
-  | Regel 6 kol 1    | :::                             | Regel 2 kol 3    |
-=== Tekst uitlijnen ===
+Table rows have to start and end with a ''|'' for normal rows or a ''^'' for headers.
 
-De inhoud van een tabel kan gecentreerd, links of rechts uitgelijnd worden.
-  * Plaats twee spaties achter de tekst om links uit te lijnen
-  * begin de tekst met twee spaties om rechts uit te lijnen 
-  * en plaats tenminste twee spaties voor én na een tekst om te centreren.
+  ^ Heading 1      ^ Heading 2       ^ Heading 3          ^
+  | Row 1 Col 1    | Row 1 Col 2     | Row 1 Col 3        |
+  | Row 2 Col 1    | some colspan (note the double pipe) ||
+  | Row 3 Col 1    | Row 3 Col 2     | Row 3 Col 3        |
 
-^           Tabel met uitlijning           ^^^
-|         rechts|    gecentreerd    |links          |
-|links          |         rechts|    gecentreerd    |
-| xxxxxxxxxxxxxx | xxxxxxxxxxxxxx | xxxxxxxxxxxxxx |
+To connect cells horizontally, just make the next cell completely empty as shown above. Be sure to have always the same amount of cell separators!
 
-En zo ziet de code er uit:
+Vertical tableheaders are possible, too.
 
-  ^           Tabel met uitlijning           ^^^
-  |         rechts|    gecentreerd    |links          |
-  |links          |         rechts|    gecentreerd    |
+|              ^ Heading 1            ^ Heading 2          ^
+^ Heading 3    | Row 1 Col 2          | Row 1 Col 3        |
+^ Heading 4    | no colspan this time |                    |
+^ Heading 5    | Row 2 Col 2          | Row 2 Col 3        |
+
+As you can see, it's the cell separator before a cell which decides about the formatting:
+
+  |              ^ Heading 1            ^ Heading 2          ^
+  ^ Heading 3    | Row 1 Col 2          | Row 1 Col 3        |
+  ^ Heading 4    | no colspan this time |                    |
+  ^ Heading 5    | Row 2 Col 2          | Row 2 Col 3        |
+
+You can have rowspans (vertically connected cells) by adding '':::'' into the cells below the one to which they should connect.
+
+^ Heading 1      ^ Heading 2                  ^ Heading 3          ^
+| Row 1 Col 1    | this cell spans vertically | Row 1 Col 3        |
+| Row 2 Col 1    | :::                        | Row 2 Col 3        |
+| Row 3 Col 1    | :::                        | Row 2 Col 3        |
+
+Apart from the rowspan syntax those cells should not contain anything else.
+
+  ^ Heading 1      ^ Heading 2                  ^ Heading 3          ^
+  | Row 1 Col 1    | this cell spans vertically | Row 1 Col 3        |
+  | Row 2 Col 1    | :::                        | Row 2 Col 3        |
+  | Row 3 Col 1    | :::                        | Row 2 Col 3        |
+
+You can align the table contents, too. Just add at least two whitespaces at the opposite end of your text: Add two spaces on the left to align right, two spaces on the right to align left and two spaces at least at both ends for centered text.
+
+^           Table with alignment           ^^^
+|         right|    center    |left          |
+|left          |         right|    center    |
+| xxxxxxxxxxxx | xxxxxxxxxxxx | xxxxxxxxxxxx |
+
+This is how it looks in the source:
+
+  ^           Table with alignment           ^^^
+  |         right|    center    |left          |
+  |left          |         right|    center    |
   | xxxxxxxxxxxx | xxxxxxxxxxxx | xxxxxxxxxxxx |
-Opmerking: Verticale uitlijning is niet mogelijk
 
-=== Vaste kolombreedtes ===
-Geef aan welke kolommen een vaste afmeting moeten krijgen.
-  * Het eerste getal (500px, 60em of 100%) is breedte van de hele tabel 
-  * De overige waardes geven de breedtes van opeenvolgende kolommen van de tabel.
-    * Een percentage bij de kolombreedte is ten opzichte van de tabelbreedte.
+Note: Vertical alignment is not supported.
 
-  * Een streepje (-) geeft aan dat de kolombreedte vrij is. 
-  * Niet alle kolommen hoeven worden opgegeven
-  * De minimale breedte van een kolom wordt bepaald door het langste woord.
+===== No Formatting =====
 
-
-|< 600px 30% - 10% >|
-^ 30%                       ^ vrij   ^ 10%  ^ ~40% ^
-| Gespecificeerde breedte  | Hier een tekst  | vast |De rest van de tabelbreedte |
-
-  |< 600px 30% - 10% >|
-  ^ 30%                       ^ vrij   ^ 10%  ^ ~40% ^
-  | Gespecificeerde breedte  | Hier een tekst  | vast |De rest van de tabelbreedte |
-=====csv-bestanden=====
-csv-bestanden (comma seperated values) kunnen ook weergegeven worden in een tabel.
-
-  * Data wordt uit een bestand gelezen die je naar de mediamanager hebt geupload (vergelijkbaar met plaatjes) met:
-<code><csv namespace:test.csv></csv></code>
-Testvoorbeeldje:
-<csv :wiki:test.csv></csv>
-^ Extra opties                       ^ Beschrijving ^
-| ''hdr_rows=//<n>//''         | De eerste //<n>// van de data van de CSV worden opgemaakt als tabelkoppen. Standaard: ''1'' |
-| ''span_empty_cols=//[01]//'' | Create colspans for each empty (two adjacent commas) cell following a cell with content. Standaard: ''0'' |
-| ''delim=//<char>//''         | Het scheidingsteken gebruikt tussen de cellen. Vul  ''tab'' voor een tab gescheiden bestand. Standaard: '','' |
-
-Cellen waarbij de data een komma kan bevatten moeten tussen dubbele quotes %%".."%% worden geplaatst. Dit wordt door de meeste systeem die .csv-bestanden exporteren standaard gedaan.
-
-===== Tekstkleur =====
-Aan tekst kan een tekstkleur worden meegegeven.
-
-<fc #ffa500> Dit is kleurcode #ffa500 </fc>\\ 
-<fc red> Dit is kleurnaam rood</fc>
-
-  <fc #ffa500> Dit is kleurcode #ffa500 </fc>
-  <fc red> Dit is kleurnaam rood</fc>
-Kleur instellen kan met de kleurcode of met een kleurnaam. In onderstaande tabel staat welke kleurcode bij de kleurnamen hoort.
-
-^ Kleurnaam ^Kleurcode ^
-| <fc #ffd015>Yellow</fc>      | #ffff00 |
-| <fc #ff0000>Red</fc>         | #ff0000 |
-| <fc #ffa500>Orange</fc>      | #ffa500 |
-| <fc #fa8072>Salmon</fc>      | #fa8072 |
-| <fc #ffc0cb>Pink</fc>        | #ffc0cb |
-| <fc #dda0dd>Plum</fc>        | #dda0dd |
-| <fc #800080>Purple</fc>      | #800080 |
-| <fc #ff00ff>Fuchsia</fc>     | #ff00ff |
-| <fc #c0c0c0>Silver</fc>      | #c0c0c0 |
-| <fc #00ffff>Aqua</fc>        | #00ffff |
-| <fc #008080>Teal</fc>        | #008080 |
-| <fc #6495ed>Cornflower</fc>  | #6495ed |
-| <fc #87ceeb>Sky Blue</fc>    | #87ceeb |
-| <fc #7fffd4>Aquamarine</fc>  | #7fffd4 |
-| <fc #98fb98>Pale Green</fc>  | #98fb98 |
-| <fc #00ff00>Lime</fc>        | #00ff00 |
-| <fc #008000>Green</fc>       | #008000 |
-| <fc #808000>Olive</fc>       | #808000 |
-| <fc #f0e68c>Khaki</fc>       | #f0e68c |
-| <fc #b0e0e6>Powder Blue</fc> | #b0e0e6 |
-| <fc #4682b4>Steel Blue</fc>  | #4682b4 |
-| <fc #d8bfd8>Thistle</fc>     | #d8bfd8 |
-| <fc #9acd32>Yellow Green</fc> | #9acd32 |
-| <fc #9400d3>Dark Violet</fc> | #9400d3 |
-| <fc #f4a460>Sandy Brown</fc> | #f4a460 |
-| <fc #cd5c5c>Indian Red</fc>  | #cd5c5c |
-| <fc #800000>Maroon</fc>      | #800000 |
-===== Niet verwerkte paragrafen =====
-
-U kunt paragrafen in uw documenten invoegen die niet door 'wiki' verwerkt worden door deze met tenminste twee spaties te laten beginnnen (zoals in eerdere voorbeelden getoond) of door de codes ''<code>'' of ''<file>'' te gebruiken.
-
-Er staan twee spaties voor de volgende regel:
-  Er staan twee spaties voor de deze regel
-
-
-''<code></code>''-blok: <code>
-De code is geformatteerd en alle spaties werden bewaard: zoals              <-dit
-</code>
-
-''<file></file>''-blok:<file>
-Deze is ongeveer hetzelfde en kunt u gebruiken door bijvoorbeeld een citaat aan te geven.
-</file>
-
-Om de parser een groter deel van het document te laten negeren (dus niet te verwerken) sluit dat gedeelte dan in met ''<nowiki><nowiki></nowiki>''-tags of, eenvoudiger, met dubbele procent tekens ''<nowiki>%%</nowiki>''.
-
-''%%<nowiki></nowiki>%%''-blok:
+If you need to display text exactly like it is typed (without any formatting), enclose the area either with ''%%<nowiki>%%'' tags or even simpler, with double percent signs ''<nowiki>%%</nowiki>''.
 
 <nowiki>
-Dit is een tekst met een adres: http://www.splitbrain.org en **opmaakregels**, maar er wordt niets mee gedaan.
+This is some text which contains addresses like this: http://www.splitbrain.org and **formatting**, but nothing is done with it.
 </nowiki>
+The same is true for %%//__this__ text// with a smiley ;-)%%.
 
+  <nowiki>
+  This is some text which contains addresses like this: http://www.splitbrain.org and **formatting**, but nothing is done with it.
+  </nowiki>
+  The same is true for %%//__this__ text// with a smiley ;-)%%.
 
-''<nowiki>%% %%</nowiki>''-blok:
+===== Code Blocks =====
 
-%%
-Dit is een tekst met een adres: http://www.splitbrain.org en **opmaakregels**, maar er wordt niets mee gedaan.
-%%
+You can include code blocks into your documents by either indenting them by at least two spaces (like used for the previous examples) or by using the tags ''%%<code>%%'' or ''%%<file>%%''.
 
+  This is text is indented by two spaces.
 
-===== Paginatemplates =====
+<code>
+This is preformatted code all spaces are preserved: like              <-this
+</code>
 
-==== Een template gebruiken ====
-Bij het aanmaken van een pagina in een namespace kun je standaard een template laten toepassen. Zo'n template maak je door in de gewenste namespace een pagina te maken met de naam 'template'. Vanaf dan worden bij alle nieuwe pagina's die worden gemaakt het template ingeladen in de editor, en kun je hierop verder werken.
+<file>
+This is pretty much the same, but you could use it to show that you quoted a file.
+</file>
 
-==== Syntax ====
-Je moet voor de template dezelfde opmaakcode gebruiken als voor een gewone pagina. Wel heb je enkele extra's, zie hieronder.
+Those blocks were created by this source:
 
-==== Automatisch vervangen ====
-In het template-bestand kun je ook variabelen opnemen die bij het toepassen van de template automatisch worden ingevuld.
+    This is text is indented by two spaces.
 
-^ @ID@     | volledige ID van de pagina                                                             |
-^ @NS@     | namespace van de pagina                                                                |
-^ @PAGE@   | paginanaam (ID zonder namespace and underscores vervangen door spaties)                |
-^ @!PAGE@  | hetzelfde als hierboven maar de eerste letter heeft nu een hoofdletter                 |
-^ @!!PAGE@ | hetzelfde als hierboven maar de eerste letter van elk woord heeft nu een hoofdletter [[devel:develonly]] |
-^ @!PAGE!@ | hetzelfde als hierboven maar alle letters zijn nu hoofdletters                         |
-^ @FILE@   | paginanaam (ID zonder namespace, maar underscores zijn behouden)                       |
-^ @!FILE@  | Hhetzelfde als hierboven maar de eerste letter heeft nu een hoofdletter                |
-^ @!FILE!@ | hetzelfde als hierboven maar alle letters zijn nu hoofdletters                         |
-^ @USER@   | ID van de gebruiker die de pagina heeft aangemaakt                                     |
-^ @NAME@   | naam van de gebruiker die de pagina heeft aangemaakt                                   |
-^ @MAIL@   | e-mail van de gebruiker die de pagina heeft aangemaakt                                 |
-^ @DATE@   | datum en tijd van toen de bewerkingsessie begon                                        |
+  <code>
+  This is preformatted code all spaces are preserved: like              <-this
+  </code>
 
-Als toevoeging kun je ook [[phpfn>strftime]] gebruiken om de tijd in te voegen van het pagina aanmaken in elk gewenst formaat. Als je het een ''%''-teken wilt gebruik in je template, dan moet je die verdubbelen.
-===== Syntax benadrukken =====
+  <file>
+  This is pretty much the same, but you could use it to show that you quoted a file.
+  </file>
 
-[[DokuWiki]] kan broncode benadrukken zodat deze beter leesbaar wordt. Het gebruikt daarvoor de [[http://qbnz.com/highlighter/|GeSHi]] Generic Syntax Highlighter -- zodat elke door GeSHi ondersteunde taal wordt ondersteund. De syntax is hetzelfde als in de codeparagraaf in het vorige onderdeel maar deze keer wordt de gebruikte taal aan de tag toegevoegd. \\
+==== Syntax Highlighting ====
 
-''<nowiki><code java><code></nowiki>''-blok:.
+[[wiki:DokuWiki]] can highlight sourcecode, which makes it easier to read. It uses the [[http://qbnz.com/highlighter/|GeSHi]] Generic Syntax Highlighter -- so any language supported by GeSHi is supported. The syntax uses the same code and file blocks described in the previous section, but this time the name of the language syntax to be highlighted is included inside the tag, e.g. ''<nowiki><code java></nowiki>'' or ''<nowiki><file java></nowiki>''.
 
 <code java>
-/** 
+/**
  * The HelloWorldApp class implements an application that
  * simply displays "Hello World!" to the standard output.
  */
@@ -498,11 +382,11 @@ class HelloWorldApp {
 }
 </code>
 
-Momenteel worden de syntaxen van de volgende programmeertaalcodes herkend:\\ \\  4cs, abap, actionscript-french, actionscript, actionscript3, ada, apache, applescript, asm, asp, autoconf, autohotkey, autoit, avisynth, awk, bash, basic4gl, bf, bibtex, blitzbasic, bnf, boo, c, c_mac, caddcl, cadlisp, cfdg, cfm, chaiscript, cil, clojure, cmake, cobol, cpp, cpp-qt, csharp, css, cuesheet, d, dcs, delphi, diff, div, dos, dot, ecmascript, eiffel, email, erlang, fo, fortran, freebasic, fsharp, gambas, genero, genie, gdb, glsl, gml, gnuplot, groovy, gettext, gwbasic, haskell, hicest, hq9plus, html, icon, idl, ini, inno, intercal, io, j, java5, java, javascript, jquery, kixtart, klonec, klonecpp, latex, lisp, locobasic, logtalk, lolcode, lotusformulas, lotusscript, lscript, lsl2, lua, m68k, magiksf, make, mapbasic, matlab, mirc, modula2, modula3, mmix, mpasm, mxml, mysql, newlisp, nsis, oberon2, objc, ocaml-brief, ocaml, oobas, oracle8, oracle11, oxygene, oz, pascal, pcre, perl, perl6, per, pf, php-brief, php, pike, pic16, pixelbender, plsql, postgresql, povray, powerbuilder, powershell, progress, prolog, properties, providex, purebasic, python, q, qbasic, rails, rebol, reg, robots, rpmspec, rsplus, ruby, sas, scala, scheme, scilab, sdlbasic, smalltalk, smarty, sql, systemverilog, tcl, teraterm, text, thinbasic, tsql, typoscript, unicon, vala, vbnet, vb, verilog, vhdl, vim, visualfoxpro, visualprolog, whitespace, winbatch, whois, xbasic, xml, xorg_conf, xpp, z80
+The following language strings are currently recognized: //4cs, 6502acme, 6502kickass, 6502tasm, 68000devpac, abap, actionscript-french, actionscript, actionscript3, ada, algol68, apache, applescript, asm, asp, autoconf, autohotkey, autoit, avisynth, awk, bascomavr, bash, basic4gl, bf, bibtex, blitzbasic, bnf, boo, c, c_loadrunner, c_mac, caddcl, cadlisp, cfdg, cfm, chaiscript, cil, clojure, cmake, cobol, coffeescript, cpp, cpp-qt, csharp, css, cuesheet, d, dcs, delphi, diff, div, dos, dot, e, epc, ecmascript, eiffel, email, erlang, euphoria, f1, falcon, fo, fortran, freebasic, fsharp, gambas, genero, genie, gdb, glsl, gml, gnuplot, go, groovy, gettext, gwbasic, haskell, hicest, hq9plus, html, html5, icon, idl, ini, inno, intercal, io, j, java5, java, javascript, jquery, kixtart, klonec, klonecpp, latex, lb, lisp, llvm, locobasic, logtalk, lolcode, lotusformulas, lotusscript, lscript, lsl2, lua, m68k, magiksf, make, mapbasic, matlab, mirc, modula2, modula3, mmix, mpasm, mxml, mysql, newlisp, nsis, oberon2, objc, objeck, ocaml-brief, ocaml, oobas, oracle8, oracle11, oxygene, oz, pascal, pcre, perl, perl6, per, pf, php-brief, php, pike, pic16, pixelbender, pli, plsql, postgresql, povray, powerbuilder, powershell, proftpd, progress, prolog, properties, providex, purebasic, pycon, python, q, qbasic, rails, rebol, reg, robots, rpmspec, rsplus, ruby, sas, scala, scheme, scilab, sdlbasic, smalltalk, smarty, sql, systemverilog, tcl, teraterm, text, thinbasic, tsql, typoscript, unicon, uscript, vala, vbnet, vb, verilog, vhdl, vim, visualfoxpro, visualprolog, whitespace, winbatch, whois, xbasic, xml, xorg_conf, xpp, yaml, z80, zxbasic//
 
-==== Downloadbare Codeblokken ====
+==== Downloadable Code Blocks ====
 
-Als je de ''%%<code>%%'' of ''%%<file>%%'' syntax gebruik wil je soms die code ook beschikbaar maken om te downloaden. Dit kan door een bestandnaam op te geven na de programmeertaal. 
+When you use the ''%%<code>%%'' or ''%%<file>%%'' syntax as above, you might want to make the shown code available for download as well. You can do this by specifying a file name after language code like this:
 
 <code>
 <file php myexample.php>
@@ -514,26 +398,89 @@ Als je de ''%%<code>%%'' of ''%%<file>%%'' syntax gebruik wil je soms die code o
 <?php echo "hello world!"; ?>
 </file>
 
-Als je geen tekstkleuring wilt, maar wel een downloadbaar bestand, dan kun je een streepje (''-'') opgegeven als programmeertaalcode: ''%%<code - myfile.foo>%%''.
-===== RSS/ATOM Feed aggregation =====
-DokuWiki kan data van externe XML-feeds intergreren. Voor het doorgeven van de XML-feed wordt [[http://simplepie.org/|SimplePie]] gebruikt. Instellingen die opgegeven kunnen worden zijn:
-^ Parameter  ^ Beschrijving ^
-| een getal  | zal gebruikt worden als maximum aantal weer te geven items, standaard 8 |
-| reverse    | geeft de laatste items van de feed het eerst weer |
-| author     | geeft de namen van de item-auteurs weer |
-| date       | geeft itemdatums weer |
-| description| Geeft de itembeschrijving. |
-| //n//[dhm] | vernieuwingsperiode, waar d=dagen, h=uren, m=minuten. (bijv. 12h = 12 uur). \\ Standaard 4 uur, minder dan 10 min wordt naar 10 min afgerond |
+If you don't want any highlighting but want a downloadable file, specify a dash (''-'') as the language code: ''%%<code - myfile.foo>%%''.
 
-  * Er wordt gecached.
 
-**Voorbeeld:**
+===== Embedding HTML and PHP =====
 
-  {{rss>http://csrdelft.nl/communicatie/forum/rss.xml 5 author date 1h }}
+You can embed raw HTML or PHP code into your documents by using the ''%%<html>%%'' or ''%%<php>%%'' tags. (Use uppercase tags if you need to enclose block level elements.)
 
-{{rss>http://csrdelft.nl/communicatie/forum/rss.xml 5 author date 1h }}
+HTML example:
+
+<code>
+<html>
+This is some <span style="color:red;font-size:150%;">inline HTML</span>
+</html>
+<HTML>
+<p style="border:2px dashed red;">And this is some block HTML</p>
+</HTML>
+</code>
+
+<html>
+This is some <span style="color:red;font-size:150%;">inline HTML</span>
+</html>
+<HTML>
+<p style="border:2px dashed red;">And this is some block HTML</p>
+</HTML>
+
+PHP example:
+
+<code>
+<php>
+echo 'A logo generated by PHP:';
+echo '<img src="' . $_SERVER['PHP_SELF'] . '?=' . php_logo_guid() . '" alt="PHP Logo !" />';
+echo '(generated inline HTML)';
+</php>
+<PHP>
+echo '<table class="inline"><tr><td>The same, but inside a block level element:</td>';
+echo '<td><img src="' . $_SERVER['PHP_SELF'] . '?=' . php_logo_guid() . '" alt="PHP Logo !" /></td>';
+echo '</tr></table>';
+</PHP>
+</code>
+
+<php>
+echo 'A logo generated by PHP:';
+echo '<img src="' . $_SERVER['PHP_SELF'] . '?=' . php_logo_guid() . '" alt="PHP Logo !" />';
+echo '(inline HTML)';
+</php>
+<PHP>
+echo '<table class="inline"><tr><td>The same, but inside a block level element:</td>';
+echo '<td><img src="' . $_SERVER['PHP_SELF'] . '?=' . php_logo_guid() . '" alt="PHP Logo !" /></td>';
+echo '</tr></table>';
+</PHP>
+
+**Please Note**: HTML and PHP embedding is disabled by default in the configuration. If disabled, the code is displayed instead of executed.
+
+===== RSS/ATOM Feed Aggregation =====
+[[DokuWiki]] can integrate data from external XML feeds. For parsing the XML feeds, [[http://simplepie.org/|SimplePie]] is used. All formats understood by SimplePie can be used in DokuWiki as well. You can influence the rendering by multiple additional space separated parameters:
+
+^ Parameter  ^ Description ^
+| any number | will be used as maximum number items to show, defaults to 8 |
+| reverse    | display the last items in the feed first |
+| author     | show item authors names |
+| date       | show item dates |
+| description| show the item description. If [[doku>config:htmlok|HTML]] is disabled all tags will be stripped |
+| //n//[dhm] | refresh period, where d=days, h=hours, m=minutes. (e.g. 12h = 12 hours). |
+
+The refresh period defaults to 4 hours. Any value below 10 minutes will be treated as 10 minutes. [[wiki:DokuWiki]] will generally try to supply a cached version of a page, obviously this is inappropriate when the page contains dynamic external content. The parameter tells [[wiki:DokuWiki]] to re-render the page if it is more than //refresh period// since the page was last rendered.
+
+**Example:**
+
+  {{rss>http://slashdot.org/index.rss 5 author date 1h }}
+
+{{rss>http://slashdot.org/index.rss 5 author date 1h }}
+
+
+===== Control Macros =====
+
+Some syntax influences how DokuWiki renders a page without creating any output it self. The following control macros are availble:
+
+^ Macro           ^ Description |
+| %%~~NOTOC~~%%   | If this macro is found on the page, no table of contents will be created |
+| %%~~NOCACHE~~%% | DokuWiki caches all output by default. Sometimes this might not be wanted (eg. when the %%<php>%% syntax above is used), adding this macro will force DokuWiki to rerender a page on every call |
 
 ===== Syntax Plugins =====
-Dokuwiki's syntax kan worden uitgebreid met [[doku>plugins|Plugins]]. De PubCie beheert deze plugins. De volgende syntax plugins zijn in deze wiki beschikbaar:
+
+DokuWiki's syntax can be extended by [[doku>plugins|Plugins]]. How the installed plugins are used is described on their appropriate description pages. The following syntax plugins are available in this particular DokuWiki installation:
 
 ~~INFO:syntaxplugins~~

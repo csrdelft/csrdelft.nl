@@ -35,10 +35,9 @@ var dw_qsearch = {
 
         // attach eventhandler to search field
         do_qsearch = function () {
-            //dw_qsearch.clear_results();
+            dw_qsearch.clear_results();
             var value = dw_qsearch.$inObj.val();
             if (value === '') {
-		dw_qsearch.clear_results();
                 return;
             }
             jQuery.post(
@@ -58,7 +57,7 @@ var dw_qsearch = {
                     window.clearTimeout(dw_qsearch.timer);
                     dw_qsearch.timer = null;
                 }
-                //dw_qsearch.clear_results();
+                dw_qsearch.clear_results();
                 dw_qsearch.timer = window.setTimeout(do_qsearch, 500);
             }
         );
@@ -86,10 +85,7 @@ var dw_qsearch = {
     onCompletion: function(data) {
         var max, $links, too_big;
 
-        if (data === '') { 
-		dw_qsearch.clear_results();
-		return; 
-	}
+        if (data === '') { return; }
 
         dw_qsearch.$outObj
             .html(data)
