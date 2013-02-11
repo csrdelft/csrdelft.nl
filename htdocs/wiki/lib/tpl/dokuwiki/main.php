@@ -42,6 +42,7 @@ $showSidebar = $hasSidebar && ($ACT=='show');
                     <div class="content">
                         <?php tpl_flush() ?>
                         <?php tpl_includeFile('sidebarheader.html') ?>
+                        <?php tpl_include_page(':wiki:navigation', 1, 0) ?>
                         <?php tpl_include_page($conf['sidebar'], 1, 1) ?>
                         <?php tpl_includeFile('sidebarfooter.html') ?>
                     </div>
