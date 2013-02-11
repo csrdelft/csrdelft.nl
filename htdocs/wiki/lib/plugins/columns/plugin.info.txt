@@ -1,0 +1,7 @@
+base   columns
+author Mykola Ostrovskyy
+email  spambox03@mail.ru
+date   2012-10-13
+name   Columns Plugin
+desc   Arrange information in multiple columns.
+url    http://www.dokuwiki.org/plugin:columns
