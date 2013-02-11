@@ -363,7 +363,10 @@ htdocs/wiki/data/cache/_dummy -text
 htdocs/wiki/data/deleted.files -text
 htdocs/wiki/data/index/_dummy -text
 htdocs/wiki/data/locks/_dummy -text
+htdocs/wiki/data/media/wiki/apple-touch-icon.png -text
 htdocs/wiki/data/media/wiki/dokuwiki-128.png -text
+htdocs/wiki/data/media/wiki/favicon.ico -text
+htdocs/wiki/data/media/wiki/logo.png -text
 htdocs/wiki/data/media/wiki/test.csv -text
 htdocs/wiki/data/media_attic/_dummy -text
 htdocs/wiki/data/media_meta/_dummy -text
