@@ -169,8 +169,8 @@ div.dokuwiki div#discussion__comment_preview {
 	color: #888 !important;
 }
 div.dokuwiki div.comment_wrapper h2 {
-	border-bottom: 0;
-    background-color: __background_alt__;
+    border-bottom: 1px solid #ccc;
+    border-top: 1px solid #ccc;
     padding: 5px;
     font-size: 1.5em;
     margin-bottom: 0.6em;
