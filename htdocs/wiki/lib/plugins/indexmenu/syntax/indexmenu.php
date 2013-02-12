@@ -608,12 +608,12 @@ class syntax_plugin_indexmenu_indexmenu extends DokuWiki_Syntax_Plugin {
 	if ($item['open']) $tagid.=' open';
       }
       $ret .= '<a href="'.wl($link,$more).'" class="'.$tagid.'">';
-      $ret .= $item['title'];
+      $ret .= $name = strtr($item['title'], '_', ' ');
       $ret .= '</a>';
     }else{
       //page link
       $ret .= html_wikilink(':'.$item['id']);
-    }  
+    }
     return $ret;
   }
 
