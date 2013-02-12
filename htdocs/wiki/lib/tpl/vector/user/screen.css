@@ -36,10 +36,6 @@
   color:#444444; 
 }
 
-/* header of toc */
-#toc__header {
-  background-color: #E8F2F8;
-}
 
 /*headlines */
 div#content .dokuwiki h1 {
@@ -50,6 +46,10 @@ div#content .dokuwiki h1 {
 div#content .dokuwiki ul {
 	margin-left: 3.2em;
 	padding-left: 0.5em;
+}
+div#content .dokuwiki #dw__toc ul {
+    margin: 0 0 0 5px;
+    padding: 0;
 }
 /* disccussion plugin */
 div.dokuwiki div.comment_wrapper {
