@@ -203,3 +203,8 @@ div.dokuwiki label.block {
 div.li a.indexmenu_idx {
   color: __text_neu__ !important; /* original: __missing__*/
 }
+
+/* interwiki link */
+.dokuwiki a.interwiki.internal {
+    color: __existing__;
+}
