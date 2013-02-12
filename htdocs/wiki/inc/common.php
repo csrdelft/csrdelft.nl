@@ -280,6 +280,7 @@ function breadcrumbs() {
 
     // page names
     $name = noNSorNS($ID);
+    $name = strtr($name, $conf['sepchar'], ' ');
     if(useHeading('navigation')) {
         // get page title
         $title = p_get_first_heading($ID, METADATA_RENDER_USING_SIMPLE_CACHE);
