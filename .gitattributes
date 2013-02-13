@@ -1041,9 +1041,11 @@ htdocs/wiki/lib/plugins/discussion/lang/hu/settings.php -text
 htdocs/wiki/lib/plugins/discussion/lang/it/lang.php -text
 htdocs/wiki/lib/plugins/discussion/lang/it/settings.php -text
 htdocs/wiki/lib/plugins/discussion/lang/it/subscribermail.txt -text
+htdocs/wiki/lib/plugins/discussion/lang/ja/confirmsubscribe.txt -text
 htdocs/wiki/lib/plugins/discussion/lang/ja/lang.php -text
 htdocs/wiki/lib/plugins/discussion/lang/ja/settings.php -text
 htdocs/wiki/lib/plugins/discussion/lang/ja/subscribermail.txt -text
+htdocs/wiki/lib/plugins/discussion/lang/nl/confirmsubscribe.txt -text
 htdocs/wiki/lib/plugins/discussion/lang/nl/lang.php -text
 htdocs/wiki/lib/plugins/discussion/lang/nl/settings.php -text
 htdocs/wiki/lib/plugins/discussion/lang/nl/subscribermail.txt -text
