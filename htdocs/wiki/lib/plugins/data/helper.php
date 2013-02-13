@@ -17,28 +17,63 @@ require_once(DOKU_INC.'inc/infoutils.php');
 class helper_plugin_data extends DokuWiki_Plugin {
 
     /**
-     * load the sqlite helper
+     * @var helper_plugin_sqlite initialized via _getDb()
+     */
+    protected $db = null;
+
+    /**
+     * @var array stores the alias definitions
+     */
+    protected $aliases = null;
+
+    /**
+     * @var array stores custom key localizations
+     */
+    protected $locs = array();
+
+    /**
+     * Constructor
+     *
+     * Loads custom translations
+     */
+    public function __construct(){
+        global $conf;
+
+        $lang = array();
+        $path = DOKU_CONF.'/lang/en/data-plugin.php';
+        if(file_exists($path)) include($path);
+        $path = DOKU_CONF.'/lang/'.$this->determineLang().'/data-plugin.php';
+        if(file_exists($path)) include($path);
+        $this->locs = $lang;
+    }
+
+    protected function  determineLang() {
+        global $ID;
+        $trans = plugin_load('helper','translation');
+        if ($trans) {
+            $values['__trans__'] = $trans->getLangPart($ID);
+        }
+        global $conf;
+        return $conf['lang'];
+    }
+
+    /**
+     * @return helper_plugin_sqlite load the sqlite helper
      */
     function _getDB(){
-
-        /**
-         * static variable: only first time initialised
-         * @var $db helper_plugin_sqlite
-         */
-        static $db = null;
-        if ($db === null) {
-            $db =& plugin_load('helper', 'sqlite');
-            if ($db === null) {
+        if ($this->db === null) {
+            $this->db =& plugin_load('helper', 'sqlite');
+            if ($this->db === null) {
                 msg('The data plugin needs the sqlite plugin', -1);
                 return false;
             }
-            if(!$db->init('data',dirname(__FILE__).'/db/')){
+            if(!$this->db->init('data',dirname(__FILE__).'/db/')){
                 $db = null;
                 return false;
             }
-            $db->create_function('DATARESOLVE',array($this,'_resolveData'),2);
+            $this->db->create_function('DATARESOLVE',array($this,'_resolveData'),2);
         }
-        return $db;
+        return $this->db;
     }
 
     /**
@@ -94,7 +129,9 @@ class helper_plugin_data extends DokuWiki_Plugin {
             if (isset($type['prefix'])) $pre = $type['prefix'];
             if (isset($type['postfix'])) $post = $type['postfix'];
         }
-        return $pre.$val.$post;
+        $val = $pre.$val.$post;
+        $val = $this->replacePlaceholders($val);
+        return $val;
     }
 
     /**
@@ -111,7 +148,12 @@ class helper_plugin_data extends DokuWiki_Plugin {
         $type = $column['type'];
         if(is_array($type)) $type = $type['type'];
         if($type == 'title' || ($type == 'page' && useHeading('content'))){
-            $value = p_get_first_heading($value);
+            $id = $value;
+            if($type == 'title'){
+                list($id,) = explode('|',$value,2);
+            }
+            //DATARESOLVE is only used with the 'LIKE' comparator, so concatenate the different strings is fine.
+            $value .= ' ' . p_get_first_heading($id);
         }
         return $value;
     }
@@ -174,15 +216,6 @@ class helper_plugin_data extends DokuWiki_Plugin {
                         $target = $this->_addPrePostFixes($column['type'],'');
                     }
 
-                    global $ID;
-                    $ns = getNS($ID);
-                    $targets = array($target, $ns.':'.$target, $ns.':zoeken', $ns.':'.$conf['start'], $ns);
-                    foreach($targets as $t){
-                        if(page_exists(cleanID($t))){
-                            $target=$t;
-                            break;
-                        }
-                    }
                     $outs[] = '<a href="'.wl(str_replace('/',':',cleanID($target)), $this->_getTagUrlparam($column, $val)).
                               '" title="'.sprintf($this->getLang('tagfilter'),hsc($val)).
                               '" class="wikilink1">'.hsc($val).'</a>';
@@ -249,6 +282,12 @@ class helper_plugin_data extends DokuWiki_Plugin {
             $column['origtype'] = $column['type'];
             $column['type']     = $aliases[$column['type']];
         }
+
+        // use custom localization for keys
+        if(isset($this->locs[$column['key']])){
+            $column['title'] = $this->locs[$column['key']];
+        }
+
         return $column;
     }
 
@@ -256,22 +295,21 @@ class helper_plugin_data extends DokuWiki_Plugin {
      * Load defined type aliases
      */
     function _aliases(){
-        static $aliases = null;
-        if(!is_null($aliases)) return $aliases;
+        if(!is_null($this->aliases)) return $this->aliases;
 
         $sqlite = $this->_getDB();
         if(!$sqlite) return array();
 
-        $aliases = array();
+        $this->aliases = array();
         $res = $sqlite->query("SELECT * FROM aliases");
         $rows = $sqlite->res2arr($res);
         foreach($rows as $row){
             $name = $row['name'];
             unset($row['name']);
-            $aliases[$name] = array_filter(array_map('trim', $row));
-            if (!isset($aliases[$name]['type'])) $aliases[$name]['type'] = '';
+            $this->aliases[$name] = array_filter(array_map('trim', $row));
+            if (!isset($this->aliases[$name]['type'])) $this->aliases[$name]['type'] = '';
         }
-        return $aliases;
+        return $this->aliases;
     }
 
     /**
@@ -336,6 +374,25 @@ class helper_plugin_data extends DokuWiki_Plugin {
         $data['sql'] = str_replace('%user%', $_SERVER['REMOTE_USER'], $data['sql']);
         // allow current date in filter:
         $data['sql'] = str_replace('%now%', dformat(null, '%Y-%m-%d'),$data['sql']);
+
+        // language filter
+        $data['sql'] = $this->makeTranslationReplacement($data['sql']);
+    }
+
+    public function makeTranslationReplacement($data) {
+        global $conf;
+        global $ID;
+
+        $patterns[] = '%lang%';
+        $values[]   = $conf['lang'];
+
+        // if translation plugin available, get current translation (empty for default lang)
+        $patterns[] = '%trans%';
+        $trans = plugin_load('helper','translation');
+        if($trans) $values[] = $trans->getLangPart($ID);
+        else $values[]   = '';
+
+        return str_replace($patterns, $values, $data);
     }
 
     /**
@@ -433,5 +490,9 @@ class helper_plugin_data extends DokuWiki_Plugin {
         }
 
         return $param;
+    }
+
+    private function replacePlaceholders($value) {
+        return $this->makeTranslationReplacement($value);
     }
 }

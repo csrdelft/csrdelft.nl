@@ -9,10 +9,6 @@
 // must be run within Dokuwiki
 if(!defined('DOKU_INC')) die();
 
-if(!defined('DOKU_LF')) define('DOKU_LF', "\n");
-if(!defined('DOKU_TAB')) define('DOKU_TAB', "\t");
-if(!defined('DOKU_PLUGIN')) define('DOKU_PLUGIN', DOKU_INC.'lib/plugins/');
-
 if(!defined('DOKU_EXT_SQLITE')) define('DOKU_EXT_SQLITE', 'sqlite');
 if(!defined('DOKU_EXT_PDO')) define('DOKU_EXT_PDO', 'pdo');
 
@@ -20,10 +16,6 @@ require_once(DOKU_PLUGIN.'sqlite/classes/adapter.php');
 
 class helper_plugin_sqlite extends DokuWiki_Plugin {
     var $adapter = null;
-
-    public function getInfo() {
-        return confToHash(dirname(__FILE__).'plugin.info.txt');
-    }
 
     public function getAdapter() {
         return $this->adapter;
@@ -42,7 +34,7 @@ class helper_plugin_sqlite extends DokuWiki_Plugin {
     public function helper_plugin_sqlite() {
 
         if(!$this->adapter) {
-            if($this->existsPDOSqlite()) {
+            if($this->existsPDOSqlite() && empty($_ENV['SQLITE_SKIP_PDO'])) {
                 require_once(DOKU_PLUGIN.'sqlite/classes/adapter_pdosqlite.php');
                 $this->adapter = new helper_plugin_sqlite_adapter_pdosqlite();
             }
@@ -187,7 +179,72 @@ class helper_plugin_sqlite extends DokuWiki_Plugin {
      * @return array sql queries
      */
     public function SQLstring2array($sql) {
-        return preg_split("/;(?=([^']*'[^']*')*[^']*$)/", $sql);
+        $statements = array();
+        $len = strlen($sql);
+
+        // Simple state machine to "parse" sql into single statements
+        $in_str = false;
+        $in_com = false;
+        $statement = '';
+        for($i=0; $i<$len; $i++){
+            $prev = $i ? $sql{$i-1} : "\n";
+            $char = $sql{$i};
+            $next = $sql{$i+1};
+
+            // in comment? ignore everything until line end
+            if($in_com){
+                if($char == "\n"){
+                    $in_com = false;
+                }
+                continue;
+            }
+
+            // handle strings
+            if($in_str){
+                if($char == "'"){
+                    if($next == "'"){
+                        // current char is an escape for the next
+                        $statement .= $char . $next;
+                        $i++;
+                        continue;
+                    }else{
+                        // end of string
+                        $statement .= $char;
+                        $in_str = false;
+                        continue;
+                    }
+                }
+                // still in string
+                $statement .= $char;
+                continue;
+            }
+
+            // new comment?
+            if($char == '-' && $next == '-' && $prev == "\n"){
+                $in_com = true;
+                continue;
+            }
+
+            // new string?
+            if($char == "'"){
+                $in_str = true;
+                $statement .= $char;
+                continue;
+            }
+
+            // the real delimiter
+            if($char == ';'){
+                $statements[] = trim($statement);
+                $statement = '';
+                continue;
+            }
+
+            // some standard query stuff
+            $statement .= $char;
+        }
+        if($statement) $statements[] = trim($statement);
+
+        return $statements;
     }
 
     /**

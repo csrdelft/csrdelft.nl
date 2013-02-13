@@ -96,13 +96,10 @@ class helper_plugin_sqlite_adapter_sqlite2 extends helper_plugin_sqlite_adapter 
     }
 
     /**
-     * Return the wanted row from a given result set as
-     * associative array
+     * Return the next row of the given result set as associative array
      */
-    public function res2row($res, $rownum = 0) {
-        if(!@sqlite_seek($res, $rownum)) {
-            return false;
-        }
+    public function res2row($res) {
+        if(!$res) return false;
         return sqlite_fetch_array($res, SQLITE_ASSOC);
     }
 
@@ -185,6 +182,7 @@ class helper_plugin_sqlite_adapter_sqlite2 extends helper_plugin_sqlite_adapter 
      * Don't work after a SELECT statement in PDO
      */
     public function countChanges($res) {
+        if(!$res) return 0;
         return sqlite_changes($this->db);
     }
 }

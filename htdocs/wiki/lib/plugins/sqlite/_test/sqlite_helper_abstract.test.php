@@ -2,6 +2,8 @@
 
 /**
  * Test the abstract functions in the helper to check backend unity and some other functions
+ *
+ * @group plugin_sqlite
  */
 class sqlite_helper_abstract_test extends DokuWikiTest {
     function setup() {
@@ -57,10 +59,41 @@ class sqlite_helper_abstract_test extends DokuWikiTest {
         $sqlarray1  = array("INSERT INTO data VALUES('text','text ;text')");
 
         $sqlstring2 = "INSERT INTO data VALUES('text','text ;text');INSERT INTO data VALUES('text','te''xt ;text');";
-        $sqlarray2  = array("INSERT INTO data VALUES('text','text ;text')", "INSERT INTO data VALUES('text','te''xt ;text')", "");
+        $sqlarray2  = array("INSERT INTO data VALUES('text','text ;text')", "INSERT INTO data VALUES('text','te''xt ;text')");
 
         $this->assertEquals($sqlarray1, $SqliteHelper->SQLstring2array($sqlstring1));
         $this->assertEquals($sqlarray2, $SqliteHelper->SQLstring2array($sqlstring2));
+    }
+
+    function test_SQLstring2array_complex(){
+        $SqliteHelper =& $this->getSqliteHelper();
+
+        $input = <<<EOF
+-- This is test data for the SQLstring2array function
+
+INSERT INTO foo SET bar = '
+some multi''d line string
+-- not a comment
+';
+
+SELECT * FROM bar;
+SELECT * FROM bax;
+
+SELECT * FROM bar; SELECT * FROM bax;
+";
+EOF;
+
+        $statements = $SqliteHelper->SQLstring2array($input);
+
+        $this->assertEquals(6, count($statements), 'number of detected statements');
+
+        $this->assertContains('some multi\'\'d line string', $statements[0]);
+        $this->assertContains('-- not a comment', $statements[0]);
+
+        $this->assertEquals('SELECT * FROM bar', $statements[1]);
+        $this->assertEquals('SELECT * FROM bax', $statements[2]);
+        $this->assertEquals('SELECT * FROM bar', $statements[3]);
+        $this->assertEquals('SELECT * FROM bax', $statements[4]);
     }
 
     function test_prepareSql() {
@@ -153,8 +186,8 @@ class sqlite_helper_abstract_test extends DokuWikiTest {
 
         $this->assertEquals(false, $SqliteHelper->res2row(false));
         $this->assertEquals($result0, $SqliteHelper->res2row($SqliteHelper->res));
-        $this->assertEquals($result2, $SqliteHelper->res2row($SqliteHelper->res, 2));
-        $this->assertEquals($result2, $SqliteHelper->res2row($SqliteHelper->res, 2)); //absolute result set number
+        $SqliteHelper->res2row($SqliteHelper->res); // skip one row
+        $this->assertEquals($result2, $SqliteHelper->res2row($SqliteHelper->res));
     }
 
     function test_res2single() {
@@ -202,7 +235,7 @@ class sqlite_helper_abstract_test extends DokuWikiTest {
     function test_countChanges() {
         $SqliteHelper =& $this->getResultInsertquery();
 
-        $this->assertSame(0, $SqliteHelper->countChanges(false));
-        $this->assertEquals(1, $SqliteHelper->countChanges($SqliteHelper->res));
+        $this->assertSame(0, $SqliteHelper->countChanges(false), 'Empty result');
+        $this->assertEquals(1, $SqliteHelper->countChanges($SqliteHelper->res), 'Insert result');
     }
 }

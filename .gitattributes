@@ -938,6 +938,13 @@ htdocs/wiki/lib/plugins/csv/manager.dat -text
 htdocs/wiki/lib/plugins/csv/plugin.info.txt -text
 htdocs/wiki/lib/plugins/csv/syntax.php -text
 htdocs/wiki/lib/plugins/data/README -text
+htdocs/wiki/lib/plugins/data/_test/action_edit_button.test.php -text
+htdocs/wiki/lib/plugins/data/_test/action_handle.test.php -text
+htdocs/wiki/lib/plugins/data/_test/conf/lang/de/data-plugin.php -text
+htdocs/wiki/lib/plugins/data/_test/conf/lang/en/data-plugin.php -text
+htdocs/wiki/lib/plugins/data/_test/helper.test.php -text
+htdocs/wiki/lib/plugins/data/_test/helperAliases.test.php -text
+htdocs/wiki/lib/plugins/data/_test/syntax_plugin_data_entry.test.php -text
 htdocs/wiki/lib/plugins/data/_test/wiki.test.php -text
 htdocs/wiki/lib/plugins/data/action.php -text
 htdocs/wiki/lib/plugins/data/admin/aliases.php -text
@@ -1404,6 +1411,7 @@ htdocs/wiki/lib/plugins/sqlite/README -text
 htdocs/wiki/lib/plugins/sqlite/_test/db/latest.version -text
 htdocs/wiki/lib/plugins/sqlite/_test/db/update0001.sql -text
 htdocs/wiki/lib/plugins/sqlite/_test/sqlite_helper_abstract.test.php -text
+htdocs/wiki/lib/plugins/sqlite/_test/sqlite_helper_sqlite2.test.php -text
 htdocs/wiki/lib/plugins/sqlite/admin.php -text
 htdocs/wiki/lib/plugins/sqlite/classes/adapter.php -text
 htdocs/wiki/lib/plugins/sqlite/classes/adapter_pdosqlite.php -text
