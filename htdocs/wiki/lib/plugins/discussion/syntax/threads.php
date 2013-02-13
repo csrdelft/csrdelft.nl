@@ -17,17 +17,6 @@ require_once(DOKU_PLUGIN.'syntax.php');
 
 class syntax_plugin_discussion_threads extends DokuWiki_Syntax_Plugin {
 
-    function getInfo() {
-        return array(
-                'author' => 'Gina Häußge, Michael Klier, Esther Brunner',
-                'email'  => 'dokuwiki@chimeric.de',
-                'date'   => @file_get_contents(DOKU_PLUGIN.'discussion/VERSION'),
-                'name'   => 'Discussion Plugin (threads component)',
-                'desc'   => 'Displays a list of recently active discussions',
-                'url'    => 'http://wiki.splitbrain.org/plugin:discussion',
-                );
-    }
-
     function getType() { return 'substition'; }
     function getPType() { return 'block'; }
     function getSort() { return 306; }
@@ -38,23 +27,45 @@ class syntax_plugin_discussion_threads extends DokuWiki_Syntax_Plugin {
 
     function handle($match, $state, $pos, &$handler) {
         global $ID;
+        $customFlags = array();
 
         $match = substr($match, 10, -2); // strip {{threads> from start and }} from end
         list($match, $flags) = explode('&', $match, 2);
         $flags = explode('&', $flags);
+
+        // Identify the count/skipempty flag and remove it before passing it to pagelist
+        foreach($flags as $key => $flag) {
+            if(substr($flag, 0, 5) == "count") {
+                $tmp = explode('=', $flag);
+                $customFlags['count'] = $tmp[1];
+                unset($flags[$key]);
+            }
+            if(substr($flag, 0, 9) == "skipempty") {
+                $customFlags['skipempty'] = true;
+                unset($flags[$key]);
+            }
+        }
+
+        // Ignore params if invalid values have been passed
+        if(!array_key_exists('count', $customFlags) || $customFlags['count'] <= 0 || !is_numeric($customFlags['count'])) $customFlags['count'] = false;
+        if(!array_key_exists('skipempty', $customFlags) && !$customFlags['skipempty']) $customFlags['skipempty'] = false;
+
         list($ns, $refine) = explode(' ', $match, 2);
 
         if (($ns == '*') || ($ns == ':')) $ns = '';
         elseif ($ns == '.') $ns = getNS($ID);
         else $ns = cleanID($ns);
 
-        return array($ns, $flags, $refine);
+        return array($ns, $flags, $refine, $customFlags);
     }
 
     function render($mode, &$renderer, $data) {
-        list($ns, $flags, $refine) = $data;
+        list($ns, $flags, $refine, $customFlags) = $data;
+        $count = $customFlags['count'];
+        $skipEmpty = $customFlags['skipempty'];
+        $i = 0;
 
-        if ($my =& plugin_load('helper', 'discussion')) $pages = $my->getThreads($ns);
+        if ($my =& plugin_load('helper', 'discussion')) $pages = $my->getThreads($ns, NULL, $skipEmpty);
 
         // use tag refinements?
         if ($refine) {
@@ -92,9 +103,12 @@ class syntax_plugin_discussion_threads extends DokuWiki_Syntax_Plugin {
             $pagelist->column['comments'] = true;
             $pagelist->setFlags($flags);
             $pagelist->startList();
-            foreach ($pages as $page) {
+            foreach ($pages as $key => $page) {
                 $page['class'] = 'discussion_status'.$page['status'];
                 $pagelist->addPage($page);
+
+                $i++;
+                if($count != false && $i >= $count) break; // Only display the n discussion threads specified by the count flag
             }
             $renderer->doc .= $pagelist->finishList();
 

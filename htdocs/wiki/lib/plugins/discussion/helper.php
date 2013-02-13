@@ -12,17 +12,6 @@ if (!defined('DOKU_TAB')) define('DOKU_TAB', "\t");
 
 class helper_plugin_discussion extends DokuWiki_Plugin {
 
-    function getInfo() {
-        return array(
-                'author' => 'Gina Häußge, Michael Klier, Esther Brunner',
-                'email'  => 'dokuwiki@chimeric.de',
-                'date'   => @file_get_contents(DOKU_PLUGIN.'discussion/VERSION'),
-                'name'   => 'Discussion Plugin (helper class)',
-                'desc'   => 'Functions to get info about comments to a wiki page',
-                'url'    => 'http://wiki.splitbrain.org/plugin:discussion',
-                );
-    }
-
     function getMethods() {
         $result = array();
         $result[] = array(
@@ -89,7 +78,7 @@ class helper_plugin_discussion extends DokuWiki_Plugin {
     /**
      * Returns an array of pages with discussion sections, sorted by recent comments
      */
-    function getThreads($ns, $num = NULL) {
+    function getThreads($ns, $num = NULL, $skipEmpty = false) {
         global $conf;
 
         require_once(DOKU_INC.'inc/search.php');
@@ -98,7 +87,7 @@ class helper_plugin_discussion extends DokuWiki_Plugin {
 
         // returns the list of pages in the given namespace and it's subspaces
         $items = array();
-        search($items, $dir, 'search_allpages', '');
+        search($items, $dir, 'search_allpages', array());
 
         // add pages with comments to result
         $result = array();
@@ -112,12 +101,14 @@ class helper_plugin_discussion extends DokuWiki_Plugin {
             if (!@file_exists($file)) continue; // skip if no comments file
             $data = unserialize(io_readFile($file, false));
             $status = $data['status'];
-            $number = $data['number']; // skip if comments are off or closed without comments
-            if (!$status || (($status == 2) && (!$number))) continue;
+            $number = $data['number'];
+
+            if (!$status || (($status == 2) && (!$number))) continue; // skip if comments are off or closed without comments
+            if($skipEmpty == 'y' && $number == 0) continue; // skip if discussion is empty and flag is set
 
             $date = filemtime($file);
             $meta = p_get_metadata($id);
-            $result[$date] = array(
+            $result[$date.'_'.$id] = array(
                     'id'       => $id,
                     'file'     => $file,
                     'title'    => $meta['title'],

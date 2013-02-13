@@ -21,20 +21,6 @@ require_once(DOKU_PLUGIN.'syntax.php');
  */
 class syntax_plugin_discussion_comments extends DokuWiki_Syntax_Plugin {
 
-    /**
-     * return some info
-     */
-    function getInfo() {
-        return array(
-                'author' => 'Gina Häußge, Michael Klier, Esther Brunner',
-                'email'  => 'dokuwiki@chimeric.de',
-                'date'   => @file_get_contents(DOKU_PLUGIN.'discussion/VERSION'),
-                'name'   => 'Discussion Plugin (comments component)',
-                'desc'   => 'Enables discussion features',
-                'url'    => 'http://wiki.splitbrain.org/plugin:discussion',
-                );
-    }
-
     function getType() { return 'substition'; }
     function getPType() { return 'block'; }
     function getSort() { return 230; }
@@ -52,7 +38,7 @@ class syntax_plugin_discussion_comments extends DokuWiki_Syntax_Plugin {
      * Handle the match
      */
     function handle($match, $state, $pos, &$handler) {
-        global $ID, $ACT;
+        global $ID, $ACT, $REV;
 
         // strip markup
         $match = substr($match, 12, -2);
@@ -65,7 +51,7 @@ class syntax_plugin_discussion_comments extends DokuWiki_Syntax_Plugin {
         else if ($match == ':closed') $status = 2;
         else $status = 1;
 
-        if ($ACT == 'preview') return;
+        if ($ACT == 'preview' || $REV) return false;
 
         // get discussion meta file name
         $file = metaFN($ID, '.comments');
@@ -74,9 +60,14 @@ class syntax_plugin_discussion_comments extends DokuWiki_Syntax_Plugin {
         if (@file_exists($file)) {
             $data = unserialize(io_readFile($file, false));
         }
-        $data['title']  = $title;
-        $data['status'] = $status;
-        io_saveFile($file, serialize($data));
+        // only save when the status or title was actually changed, the timestamp of the .comments file is used
+        // as sorting criteria for the threads view!
+        // note that isset can't be used for the first test as isset returns false for NULL values!
+        if (!array_key_exists('title', $data) || $data['title'] !== $title || !isset($data['status']) || $data['status'] !== $status) {
+            $data['title']  = $title;
+            $data['status'] = $status;
+            io_saveFile($file, serialize($data));
+        }
 
         return $status;
     }
