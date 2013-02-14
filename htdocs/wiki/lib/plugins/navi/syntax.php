@@ -158,6 +158,8 @@ class syntax_plugin_navi extends DokuWiki_Syntax_Plugin {
             // skip every non readable page
             if(auth_quickaclcheck(cleanID($info['page'])) < AUTH_READ) continue;
 
+            $ID = $oldid;
+
             if($info['lvl'] == $lvl){
                 if($open) $R->listitem_close();
                 $R->listitem_open($lvl);
@@ -189,8 +191,6 @@ class syntax_plugin_navi extends DokuWiki_Syntax_Plugin {
             $R->listu_close();
             $lvl--;
         }
-
-        $ID = $oldid;
 
         return true;
     }

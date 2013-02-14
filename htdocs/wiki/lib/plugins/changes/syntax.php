@@ -54,7 +54,6 @@ class syntax_plugin_changes extends DokuWiki_Syntax_Plugin {
 
         $data = array(
             'ns' => array(),
-            'page' => array(),
             'count' => 10,
             'type' => array(),
             'render' => 'list',
@@ -110,22 +109,14 @@ class syntax_plugin_changes extends DokuWiki_Syntax_Plugin {
                     }
                 }
                 break;
-            case 'user':
-                foreach(preg_split('/\s*,\s*/', $value) as $value){
-                    $data[$name][] = $value;
-                }
-                break;
-            case 'page':
-                foreach(preg_split('/\s*,\s*/', $value) as $value){
-                    $page = cleanID($value);
- 	                if(!empty($value)){
- 	                   $data[$name][] = $value;
- 	                }
- 	            }
- 	            break;
-            case 'maxage':
-                $data[$name] = intval($value);
-                break;
+           case 'user':
+               foreach(preg_split('/\s*,\s*/', $value) as $value){
+                   $data[$name][] = $value;
+               }
+               break;
+           case 'maxage':
+               $data[$name] = intval($value);
+               break;
         }
     }
 
@@ -144,8 +135,10 @@ class syntax_plugin_changes extends DokuWiki_Syntax_Plugin {
      * Create output
      */
     function render($mode, &$R, $data) {
+
         if($mode == 'xhtml'){
-            $changes = $this->getChanges($data['count'], $data['ns'], $data['page'], $data['type'], $data['user'], $data['maxage']);
+            $R->info['cache'] = false;
+            $changes = $this->getChanges($data['count'], $data['ns'], $data['type'], $data['user'], $data['maxage']);
             if(!count($changes)) return true;
 
             switch($data['render']){
@@ -164,7 +157,7 @@ class syntax_plugin_changes extends DokuWiki_Syntax_Plugin {
     /**
      * Based on getRecents() from inc/changelog.php
      */
-    function getChanges($num, $ns, $page, $type, $user, $maxage) {
+    function getChanges($num, $ns, $type, $user, $maxage) {
         global $conf;
         $changes = array();
         $seen = array();
@@ -174,9 +167,11 @@ class syntax_plugin_changes extends DokuWiki_Syntax_Plugin {
         if(is_null($maxage)) $maxage = (int) $this->getConf('maxage');
 
         for($i = count($lines)-1; $i >= 0; $i--){
-            $change = $this->handleChangelogLine($lines[$i], $ns, $page, $type, $user, $maxage, $seen);
+            $change = $this->handleChangelogLine($lines[$i], $ns, $type, $user, $maxage, $seen);
             if($change !== false){
-                $changes[] = $change;
+                if (!isHiddenPage($change['id'])) {
+                    $changes[] = $change;
+                }
                 // break when we have enough entries
                 if(++$count >= $num) break;
             }
@@ -187,7 +182,7 @@ class syntax_plugin_changes extends DokuWiki_Syntax_Plugin {
     /**
      * Based on _handleRecent() from inc/changelog.php
      */
-    function handleChangelogLine($line, $ns, $page, $type, $user, $maxage, &$seen) {
+    function handleChangelogLine($line, $ns, $type, $user, $maxage, &$seen) {
         // split the line into parts
         $change = parseChangelogLine($line);
         if($change===false) return false;
@@ -202,8 +197,6 @@ class syntax_plugin_changes extends DokuWiki_Syntax_Plugin {
         if(!empty($user) && (empty($change['user']) ||
                             !in_array($change['user'], $user))) return false;
 
-        // show only not existing pages for delete
- 	    if($change['type']!=D &&!page_exists($change['id'])) return false;
 
         // remember in seen to skip additional sights
         $seen[$change['id']] = 1;
@@ -224,13 +217,6 @@ class syntax_plugin_changes extends DokuWiki_Syntax_Plugin {
         // filter excluded namespaces
         if(isset($ns['exclude'])){
             if($this->isInNamespace($ns['exclude'], $change['id'])) return false;
-        }
-
- 		// exclude pages
- 		if(!empty($page)){
- 		    foreach($page as $apage){
- 		        if(noNs($change['id'])==$apage  ) return false;
- 		    }
         }
 
         // check ACL
