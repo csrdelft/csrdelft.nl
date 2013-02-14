@@ -1,0 +1,5 @@
+[[doku>DokuWiki]] can mark abbreviations and acronyms (terminology) automatically. If your browser supports the <acronym> tag, you can hover your mouse on an abbreviation to see a short explanation, shown as a tooltip. For example, if the mouse is positioned over ''XML'' (which is included in the default acronyms list), the tooltip displays ''Extensible Markup Language''.
+
+Note: only full words will be marked. Eg. an acronym that is used within a word will not result in a acronym tooltip. Example: XML is an acronym, myXML is not.
+
+More information can be found at [[doku>abbreviations]].

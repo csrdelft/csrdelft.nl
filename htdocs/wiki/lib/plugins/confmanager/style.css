@@ -1,18 +1,172 @@
-.hl {
-    background-color:#DEE7EC;
-}
-
-table.confmanager {
-/*    width:100%;*/
-}
-
 table.confmanager td {
     padding-left:5px;
     padding-right:5px;
 }
+
 input.key {
     width:100px;
 }
+
 input.val {
     width:600px;
+}
+
+.default_value {
+	color:#777;
+}
+
+#confmanager .defaultValue {
+	color: gray;
+}
+
+table.confmanager {
+    overflow: hidden;
+}
+
+.dokuwiki #confmanager div.table {
+    overflow-x: visible;
+}
+
+#confmanager div.table td div {
+    overflow: auto;
+    width: 300px;
+}
+
+#confmanager .heading_appendix {
+	font-size: small;
+	font-weight: normal;
+}
+
+#confmanager div.level1 {
+    background-color: #FBFAF9;
+	margin-bottom: 2em;
+    border: 1px solid #CCC;
+    border-radius: 2px;
+    box-shadow: inset 0 0 .5em #CCC;
+    padding: .7em 1em;
+}
+
+#confmanager table {
+	margin-bottom: 2em;
+}
+
+#confmanager #toggleDescription {
+    cursor: pointer;
+}
+
+#confmanager .formControl {
+	background-color: #FBFAF9;
+	margin-bottom: 2em;
+    border: 1px solid #CCC;
+    border-radius: 2px;
+    box-shadow: inset 0 0 .5em #CCC;
+    padding: .7em 1em;
+}
+
+#confmanager .saveButton {
+	background-image: url(icons/accept.png);
+	background-repeat:no-repeat;
+  	background-position: 2px;
+  	padding-left: 20px;
+}
+
+#confmanager .clickable {
+	cursor: pointer;
+}
+
+#confmanager .hoverFeedback:hover {
+	color: #777;
+	text-decoration: underline;
+}
+
+#confmanager .noscript {
+	padding: 1em 1em 0;
+	margin: 2em auto;
+	color: black;
+	border: 1px solid #f00;
+	background-color: #faa;
+	border-radius: 			4px;
+	moz-border-radius: 		4px;
+	-webkit-border-radius: 	4px;
+	-moz-box-shadow:    inset 0 0 15px #f00;
+  	-webkit-box-shadow: inset 0 0 15px #f00;
+  	box-shadow:         inset 0 0 15px #f00;
+}
+
+#confmanager .right {
+	float: right;
+	margin-left: .3em;
+}
+
+#confmanager .popup {
+	width: 350px;
+	border-radius: 6px;
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
+  	padding: 0 0 1em;
+  	display: none;
+  	position: fixed;
+  	background-color: white;
+  	z-index: 1000;
+}
+
+#confmanager .popupheader {
+	background-color: #ccc;
+	color: white;
+	border-top-left-radius: 6px;
+	border-top-right-radius: 6px;
+	padding: 1em 1.7em 1.5em;
+}
+
+#confmanager .popupcontent {
+	background-color: white;
+	padding: 1em 2em 3em;
+}
+
+#confmanager .popupprompt {
+	padding: 0 0 1em;
+}
+
+#confmanager .progress {
+	width: 100%;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	margin-top: 2em;
+}
+
+#confmanager .progress .bar {
+	width: 50%;
+	background-color: red;
+}
+
+#popup_show_progress {
+	display: none;
+}
+
+#popup_error {
+	display: none;
+}
+
+#popup_success {
+	display: none;
+}
+
+#confmanager .popup_mask {
+	padding: 0;
+	margin: 0;
+	display: none;
+	width: 100%;
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	z-index: 999;
+	background-color: black;
+	-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+	filter: alpha(opacity=50);
+	-moz-opacity:0.5;
+	-khtml-opacity: 0.5;
+	opacity: 0.5;
+	cursor: wait;
 }
