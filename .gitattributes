@@ -1432,6 +1432,7 @@ htdocs/wiki/lib/plugins/tablewidth/plugin.info.txt -text
 htdocs/wiki/lib/plugins/tablewidth/syntax.php -text
 htdocs/wiki/lib/plugins/tag/COPYING -text
 htdocs/wiki/lib/plugins/tag/README -text
+htdocs/wiki/lib/plugins/tag/_test/topic_tag.test.php -text
 htdocs/wiki/lib/plugins/tag/action.php -text
 htdocs/wiki/lib/plugins/tag/admin.php -text
 htdocs/wiki/lib/plugins/tag/ajax.php -text
@@ -1466,6 +1467,7 @@ htdocs/wiki/lib/plugins/tag/plugin.info.txt -text
 htdocs/wiki/lib/plugins/tag/script.js -text
 htdocs/wiki/lib/plugins/tag/style.css -text
 htdocs/wiki/lib/plugins/tag/syntax/count.php -text
+htdocs/wiki/lib/plugins/tag/syntax/searchtags.php -text
 htdocs/wiki/lib/plugins/tag/syntax/tag.php -text
 htdocs/wiki/lib/plugins/tag/syntax/topic.php -text
 htdocs/wiki/lib/plugins/templatepagename/README -text
