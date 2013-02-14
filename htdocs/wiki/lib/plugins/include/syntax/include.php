@@ -24,19 +24,51 @@ require_once(DOKU_PLUGIN.'syntax.php');
  */ 
 class syntax_plugin_include_include extends DokuWiki_Syntax_Plugin { 
 
+    /** @var $helper helper_plugin_include */
     var $helper = null;
 
+    /**
+     * Get syntax plugin type.
+     *
+     * @return string The plugin type.
+     */
     function getType() { return 'substition'; }
+
+    /**
+     * Get sort order of syntax plugin.
+     *
+     * @return int The sort order.
+     */
     function getSort() { return 303; }
+
+    /**
+     * Get paragraph type.
+     *
+     * @return string The paragraph type.
+     */
     function getPType() { return 'block'; }
 
+    /**
+     * Connect patterns/modes
+     *
+     * @param $mode mixed The current mode
+     */
     function connectTo($mode) {  
         $this->Lexer->addSpecialPattern("{{page>.+?}}", $mode, 'plugin_include_include');  
         $this->Lexer->addSpecialPattern("{{section>.+?}}", $mode, 'plugin_include_include'); 
         $this->Lexer->addSpecialPattern("{{namespace>.+?}}", $mode, 'plugin_include_include'); 
         $this->Lexer->addSpecialPattern("{{tagtopic>.+?}}", $mode, 'plugin_include_include'); 
-    } 
+    }
 
+    /**
+     * Handle syntax matches
+     *
+     * @param string       $match   The current match
+     * @param int          $state   The match state
+     * @param int          $pos     The position of the match
+     * @param Doku_Handler $handler The hanlder object
+     * @return array The instructions of the plugin
+     */
     function handle($match, $state, $pos, &$handler) {
 
         $match = substr($match, 2, -2); // strip markup
@@ -44,7 +76,7 @@ class syntax_plugin_include_include extends DokuWiki_Syntax_Plugin {
 
         // break the pattern up into its parts 
         list($mode, $page, $sect) = preg_split('/>|#/u', $match, 3); 
-        $check = null;
+        $check = false;
         if (isset($sect)) $sect = sectionID($sect, $check);
         return array($mode, $page, $sect, explode('&', $flags));
     }
@@ -55,7 +87,7 @@ class syntax_plugin_include_include extends DokuWiki_Syntax_Plugin {
      * @author Michael Hamann <michael@content-space.de>
      */
     function render($format, &$renderer, $data) {
-        global $ID, $conf;
+        global $ID;
 
         // static stack that records all ancestors of the child pages
         static $page_stack = array();
@@ -72,9 +104,10 @@ class syntax_plugin_include_include extends DokuWiki_Syntax_Plugin {
             $this->helper =& plugin_load('helper', 'include');
         $flags = $this->helper->get_flags($flags);
 
-        $pages = $this->helper->_get_included_pages($mode, $page, $sect, $parent_id);
+        $pages = $this->helper->_get_included_pages($mode, $page, $sect, $parent_id, $flags);
 
         if ($format == 'metadata') {
+            /** @var Doku_Renderer_metadata $renderer */
 
             // remove old persistent metadata of previous versions of the include plugin
             if (isset($renderer->persistent['plugin_include'])) {
@@ -82,7 +115,7 @@ class syntax_plugin_include_include extends DokuWiki_Syntax_Plugin {
                 unset($renderer->meta['plugin_include']);
             }
 
-            $renderer->meta['plugin_include']['instructions'][] = compact('mode', 'page', 'sect', 'parent_id');
+            $renderer->meta['plugin_include']['instructions'][] = compact('mode', 'page', 'sect', 'parent_id', $flags);
             if (!isset($renderer->meta['plugin_include']['pages']))
                $renderer->meta['plugin_include']['pages'] = array(); // add an array for array_merge
             $renderer->meta['plugin_include']['pages'] = array_merge($renderer->meta['plugin_include']['pages'], $pages);
@@ -91,13 +124,17 @@ class syntax_plugin_include_include extends DokuWiki_Syntax_Plugin {
 
         foreach ($pages as $page) {
             extract($page);
+            $id = $page['id'];
+            $exists = $page['exists'];
 
             if (in_array($id, $page_stack)) continue;
             array_push($page_stack, $id);
 
             // add references for backlink
-            if ($format == 'metadata')
+            if ($format == 'metadata') {
                 $renderer->meta['relation']['references'][$id] = $exists;
+                $renderer->meta['relation']['haspart'][$id]    = $exists;
+            }
 
             $instructions = $this->helper->_get_instructions($id, $sect, $mode, $level, $flags, $root_id);
 

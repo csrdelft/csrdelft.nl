@@ -1198,8 +1198,11 @@ htdocs/wiki/lib/plugins/imagereference/syntax/imgref.php -text
 htdocs/wiki/lib/plugins/imagereference/syntax/tabcaption.php -text
 htdocs/wiki/lib/plugins/include/COPYING -text
 htdocs/wiki/lib/plugins/include/README -text
+htdocs/wiki/lib/plugins/include/_test/editx_support.test.php -text
 htdocs/wiki/lib/plugins/include/_test/include.group.php -text
+htdocs/wiki/lib/plugins/include/_test/namespace_includes.test.php -text
 htdocs/wiki/lib/plugins/include/_test/nested_include.test.php -text
+htdocs/wiki/lib/plugins/include/_test/safeindex.test.php -text
 htdocs/wiki/lib/plugins/include/action.php -text
 htdocs/wiki/lib/plugins/include/conf/default.php -text
 htdocs/wiki/lib/plugins/include/conf/metadata.php -text
@@ -1244,6 +1247,7 @@ htdocs/wiki/lib/plugins/include/syntax/footer.php -text
 htdocs/wiki/lib/plugins/include/syntax/header.php -text
 htdocs/wiki/lib/plugins/include/syntax/include.php -text
 htdocs/wiki/lib/plugins/include/syntax/readmore.php -text
+htdocs/wiki/lib/plugins/include/syntax/sorttag.php -text
 htdocs/wiki/lib/plugins/include/syntax/wrap.php -text
 htdocs/wiki/lib/plugins/index.html -text
 htdocs/wiki/lib/plugins/indexmenu/COPYING -text
