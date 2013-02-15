@@ -1125,6 +1125,7 @@ htdocs/wiki/lib/plugins/discussion/lang/zh-tw/subscribermail.txt -text
 htdocs/wiki/lib/plugins/discussion/lang/zh/lang.php -text
 htdocs/wiki/lib/plugins/discussion/lang/zh/settings.php -text
 htdocs/wiki/lib/plugins/discussion/lang/zh/subscribermail.txt -text
+htdocs/wiki/lib/plugins/discussion/manager.dat -text
 htdocs/wiki/lib/plugins/discussion/plugin.info.txt -text
 htdocs/wiki/lib/plugins/discussion/print.css -text
 htdocs/wiki/lib/plugins/discussion/script.js -text
