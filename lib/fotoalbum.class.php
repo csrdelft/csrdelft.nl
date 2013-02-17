@@ -13,7 +13,7 @@ class Fotoalbum{
 	private $mapnaam;
 	
 	//als deze regexp matched is het album alleen voor leden
-	private $alleenLeden='/(novitiaat|ontvoering|feuten|slachten|zuipen|prive|privé)/i';
+	private $alleenLeden='/(intern|novitiaat|ontvoering|feuten|slachten|zuipen|prive|privé)/i';
 
 	//lazy loader-placeholders
 	private $fotos=null;
