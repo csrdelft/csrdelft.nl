@@ -2,18 +2,6 @@
  * Eigen aanpassingen op default opmaak
  * /
 
-/** 
- * CSS edits for the DokuWiki SidebarNG plugin
- */
-
-div.dokuwiki div.left_sidebar {
-  width: 14%;
-}
-
-div.dokuwiki div.page_right {
-  width: 84%; 
-}
-
 
 /**
  * CSS edits for data plugin
@@ -151,44 +139,32 @@ div.dokuwiki div.comment_wrapper {
 	color: #5C5B5B;
 	padding: 0.5em 0 0 0;
 }
-div.dokuwiki div.level2 {
-	padding: 0 0.5em 0 0.5em;
-}
-div.dokuwiki div.comment_form {
-    margin-right: 0.5em;
-    margin-left: 0;
-    margin-top: 0;
-}
 
 div.dokuwiki div#discussion__comment_preview {
-    margin-top: 0;
     padding: 0;
 }
 
-#discussion__section {
-	color: #888 !important;
-}
 div.dokuwiki div.comment_wrapper h2 {
     border-bottom: 1px solid #ccc;
     border-top: 1px solid #ccc;
     padding: 5px;
-    font-size: 1.5em;
-    margin-bottom: 0.6em;
+    color: #888
 }
 
 div.dokuwiki .comment_head {
     color: #888;
 }
-div.dokuwiki .comment_head abbr.published {
-	color: #888;
-}
-.comment_body entry-content {
-	margin-left: 0;
-}
 
 div.dokuwiki div.comment_buttons input.button {
     margin: 0;
     padding: .1em .5em;
+}
+div.dokuwiki div.comment_form input.comment_submit {
+    float: left;
+}
+div.dokuwiki div.comment_form input.comment_preview_button {
+    margin-left: 0.5em;
+    float: left;
 }
 
 div.dokuwiki label.block {
@@ -196,6 +172,9 @@ div.dokuwiki label.block {
     font-size: 0.8em;
 }
 
+div.dokuwiki div.comment_form {            margin: 0 0.5em; }
+div.dokuwiki div.comment_subscribe {       padding: 2px 1.5em; }
+div.dokuwiki div.comment_subscribe input { margin: 2px 0 2px 0; }
 /* 
  * plugin indexmenu
  * Namespace without page link in nojs mode. !important has to be used
@@ -204,7 +183,7 @@ div.li a.indexmenu_idx {
   color: __text_neu__ !important; /* original: __missing__*/
 }
 
-/* interwiki link */
+/* interwiki link -- internal referers get also internal color */
 .dokuwiki a.interwiki.internal {
     color: __existing__;
 }
