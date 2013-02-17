@@ -1,7 +1,11 @@
 /**
  * Eigen aanpassingen op default opmaak
- * /
+ */
 
+
+div.dokuwiki .toolbar button {
+    margin: 0 0 1px 0;
+}
 
 /**
  * CSS edits for data plugin
