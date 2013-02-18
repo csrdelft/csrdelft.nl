@@ -1048,6 +1048,7 @@ htdocs/wiki/lib/plugins/discussion/conf/metadata.php -text
 htdocs/wiki/lib/plugins/discussion/convert.php -text
 htdocs/wiki/lib/plugins/discussion/helper.php -text
 htdocs/wiki/lib/plugins/discussion/images/date.gif -text
+htdocs/wiki/lib/plugins/discussion/images/grayuser.gif -text
 htdocs/wiki/lib/plugins/discussion/images/user.gif -text
 htdocs/wiki/lib/plugins/discussion/lang/ar/lang.php -text
 htdocs/wiki/lib/plugins/discussion/lang/ar/settings.php -text
