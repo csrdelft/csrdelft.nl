@@ -93,10 +93,16 @@ function discussion_toggle_visibility() {
 }
 
 // init toolbar
-addInitEvent(function() {
+jQuery(function(){
     if(typeof window.initToolbar == 'function') {
         initToolbar("discussion__comment_toolbar", "discussion__comment_text", toolbar);
     }
+
+    //initial hide, show toolbar on focus
+    jQuery('#discussion__comment_toolbar').hide();
+    jQuery('#discussion__comment_text').focus(function(){
+        jQuery('#discussion__comment_toolbar').show();
+    });
 });
 
 // init preview button

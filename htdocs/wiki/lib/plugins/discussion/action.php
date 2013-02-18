@@ -910,8 +910,6 @@ class action_plugin_discussion extends DokuWiki_Action_Plugin{
                 <!-- Fix for disable the toolbar when wikisyntaxok is set to false. See discussion's script.jss -->
                 <?php if($this->getConf('wikisyntaxok')) { ?>
                     <div id="discussion__comment_toolbar" class="toolbar group">
-                        <div id="tool__bar">
-                        </div>
                 <?php } else { ?>
                     <div id="discussion__comment_toolbar_disabled">
                 <?php } ?>

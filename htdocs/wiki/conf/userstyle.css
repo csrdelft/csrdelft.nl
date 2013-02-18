@@ -158,10 +158,14 @@ div.dokuwiki div.comment_wrapper h2 {
 div.dokuwiki .comment_head {
     color: #888;
 }
+div.dokuwiki .comment_head span.author {
+    background: transparent  url(/wiki/lib/plugins/discussion/images/grayuser.gif) 0px 1px no-repeat;
+}
 
 div.dokuwiki div.comment_buttons input.button {
     margin: 0;
     padding: .1em .5em;
+    color: #555;
 }
 div.dokuwiki div.comment_form input.comment_submit {
     float: left;
@@ -169,6 +173,10 @@ div.dokuwiki div.comment_form input.comment_submit {
 div.dokuwiki div.comment_form input.comment_preview_button {
     margin-left: 0.5em;
     float: left;
+}
+
+div.dokuwiki div.discussion__comment_toolbar {
+    display: none;
 }
 
 div.dokuwiki label.block {
