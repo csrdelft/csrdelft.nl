@@ -181,9 +181,9 @@ function setMelding($message, $lvl=0){
 /**
  * Probeert uit invoer van uids of namen per zoekterm een unieke uid te bepalen, zoniet een lijstje suggesties en anders false.
  * 
- * @param 	$sNamen string met namen en/of uids op nieuwe regels en/of gescheiden door komma's 
- * 			$filter zoekfilter voor Zoeker::zoekLeden, toegestane input: '', 'leden', 'oudleden' of array met stati
- * @return 	false bij geen matches
+ * @param 	string $sNamen string met namen en/of uids op nieuwe regels en/of gescheiden door komma's
+ * @param   array|string $filter zoekfilter voor Zoeker::zoekLeden, toegestane input: '', 'leden', 'oudleden' of array met stati
+ * @return 	bool false bij geen matches
  * 			of een array met per zoekterm een entry met een unieke uid en naam òf een array met naamopties.
  * Voorbeeld: 
  * Input: $sNamen = 'Lid, Klaassen'

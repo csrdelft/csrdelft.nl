@@ -29,12 +29,12 @@ h1{
 }
 #filters {
 	position: absolute;
-	margin: 15px 0px;
+	margin: 7px  0 15px 0;
 	z-index: 2;	
 	line-height: 22px;
 }
 #filters label{
-	margin: 0px;
+	margin: 0;
 }
 
 #filters span {
@@ -46,7 +46,7 @@ h1{
 }
 #filters span.button {
 	background-color: #E6E6E6;
-	border: 1px solid lightGrey;
+	border: 1px solid lightgray;
 	z-index: 1;
 }
 #filters span.button:hover {
@@ -56,6 +56,9 @@ h1{
 	background-color: white;
 	border: 1px solid #AAA;
 	z-index: 2;
+}
+p.biebuitleg {
+    margin-bottom: 0;
 }
 /* boekstatusschakelaar wat ruimte geven */
 #filters input#boekstatus {
@@ -67,7 +70,7 @@ h1{
  */
 /* zoekvakje uitlijnen met eigenaarfilter */
 #boekencatalogus_filter {
-	margin: 15px 0px;
+	margin: 7px 0 15px 0;
 	line-height: 22px;
 }
 #boekencatalogus_filter input{
@@ -133,8 +136,8 @@ h1{
 	display: inline-block;
 	font-size: 9px;
 	color: #999;
-	padding: 2px 0px 0px 2px;
-	margin: 0px;
+	padding: 2px 0 0 2px;
+	margin: 0;
 }
 .boek input, .boek textarea{
 	width: 428px;
@@ -143,7 +146,7 @@ h1{
 	font-size: 11px;
 	font-family : Verdana, Geneva, Arial, Helvetica, sans-serif;
 	padding: 1px 2px 1px 2px;
-	margin: 0px 0px;
+	margin: 0 0;
 }
 select{
 	width: 432px;
@@ -181,7 +184,7 @@ select{
 /* opslaan-knopje weergeven bij focus*/
 div.opslaan{
 	display: none;
-	margin: 2px 12px 0px 0px;
+	margin: 2px 12px 0 0;
 	cursor: pointer;
 	width: 46px;
 	float: right;
@@ -276,7 +279,7 @@ li.ac_over a, li.ac_over a:hover {
 	height: 20px;
 }
 .exemplaar .actieknoppen .knop{
-	margin-left: 0px;
+	margin-left: 0;
 	margin-right: 4px;
 }
 
@@ -300,16 +303,16 @@ div.beschrijvingen{ margin-top: 40px;}
 	font-size: 9px;
 }
 .beschrijvingen td.recensist {		padding-bottom: 5px;}
-.beschrijvingen span.recensist{		padding: 2px 10px 0px 0px;}
+.beschrijvingen span.recensist{		padding: 2px 10px 0 0;}
 .beschrijvingen span.moment{		color:grey;}
 
-.beschrijvingen td.beschrijving{	width: 506px; padding: 2px 0px 5px 0px; word-wrap: break-word;}
+.beschrijvingen td.beschrijving{	width: 506px; padding: 2px 0 5px 0; word-wrap: break-word;}
 .beschrijvingen td.beschrijving.b0{	background-color: #f4f4f4;}
 
 .beschrijvingen td.tussenschot{
 	height: 2px;
-	margin: 0px; padding: 0px; border: 0px;
-	background-color: lightgrey;
+	margin: 0; padding: 0; border: 0;
+	background-color: lightgray;
 }
 
 /* 
@@ -341,7 +344,7 @@ div.beschrijvingen{ margin-top: 40px;}
 	border: 1px solid white;
 }
 .boekzoeker {
-	margin: 0px 0 10px 10px;
+	margin: 0 0 10px 10px;
 	padding: 7px 2px 7px 2px;
 }
 
@@ -383,14 +386,14 @@ div.beschrijvingen{ margin-top: 40px;}
 }
 #Beschrijvingsformulier .veld, 
 #Beschrijvingsformulier .submit{
-	margin-left: 0px;
+	margin-left: 0;
 	display: inline-block;
 }
 #Beschrijvingsformulier label{
 	float: left; 
 	width: 109px; 
 	height: 20px;/* blijft tekstvak op zijn plek bij waarschuwing*/
-	margin: 0px;
+	margin: 0;
 }
 #Beschrijvingsformulier h3{
 	margin-left: 111px;

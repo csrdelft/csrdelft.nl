@@ -22,6 +22,10 @@
 
 <h1>Catalogus van de C.S.R.-bibliotheek</h1>
 <div class="foutje">{$melding}</div>
+<p class="biebuitleg">
+    Zoek hier in de boeken van de C.S.R.-bieb én van leden.<br>
+    Je kunt je eigen boeken ook toevoegen en bijhouden aan wie of van wie jij boeken leent.
+</p>
 <br/>
 
 {if $loginlid->hasPermission('P_BIEB_READ')}

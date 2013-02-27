@@ -18,7 +18,6 @@ class BibliotheekCatalogusContent extends SimpleHtml{
 	public function view(){
 		$smarty=new Smarty_csr();
 		$smarty->assign('melding', $this->getMelding());
-		$smarty->assign('action', $this->action);
 
 		$smarty->display('bibliotheek/catalogus.tpl');
 	}
