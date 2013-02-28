@@ -10,7 +10,7 @@
 require_once 'configuratie.include.php';
 
 if($loginlid->hasPermission('P_LOGGED_IN')) {
-    header("Location: ". CSR_SERVER . "/leden.php");
+    header("Location: ". CSR_SERVER . "/leden");
 }
 
 ## de pagina-inhoud

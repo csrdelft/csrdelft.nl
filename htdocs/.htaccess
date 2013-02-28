@@ -12,6 +12,9 @@ RewriteRule ^pauper/?$				pauper.php
 # SocCie
 RewriteRule ^soccie/?$				soccie/index.php
 
+# leden - interne homepage
+RewriteRule ^leden/?$				leden.php
+
 # Pagina
 RewriteRule ^pagina/([a-z]+)/bewerken? pagina.php?naam=$1&bewerken=ja
 RewriteRule ^pagina/([a-z]+)/? pagina.php?naam=$1
