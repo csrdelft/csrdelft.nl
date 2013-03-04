@@ -1,12 +1,12 @@
 <?php
 /**
  * C.S.R. authentication backend.
- * 
+ *
  * ------------------------------------------------
- * Wijzig in inc/init.php vanaf regel 148, nodig voor session_start(), 
- * de instellingen voor de cookie zodat cookie overeenkomt met cookies 
+ * Wijzig in inc/init.php vanaf regel 148, nodig voor session_start(),
+ * de instellingen voor de cookie zodat cookie overeenkomt met cookies
  * van C.S.R.-stek.
- * 
+ *
  * Aanpassing:
     //bij authenticatie via C.S.R.-site andere instellingen voor de sessiecookie
     if($conf['authtype']=='csr'){
@@ -37,130 +37,131 @@ class auth_csr extends auth_basic {
      * Set capabilities.
      */
     function auth_csr() {
-      global $loginlid;
-      global $conf;
+        global $loginlid;
+        global $conf;
 
-      $this->cando['external'] = true;
-      $this->cando['logoff']   = true;
+        $this->cando['external'] = true;
+        $this->cando['logoff']   = true;
 
-      //login with:
-      // - x999 
-      // - or as lid when: 
-      //      * cookie available
-      //      * validate_token was added to url (checking the permissions by Loginlid::hasPermission, needs setting token_authorizable to true)
-      require_once 'configuratie.include.php';
-      setlocale(LC_NUMERIC, 'en_US.UTF-8');
+        //login with:
+        // - x999
+        // - or as lid when:
+        //      * cookie available
+        //      * validate_token was added to url (checking the permissions by Loginlid::hasPermission, needs setting token_authorizable to true)
+        require_once 'configuratie.include.php';
+        setlocale(LC_NUMERIC, 'en_US.UTF-8');
     }
 
-  /**
-   * Do all authentication
-   *
-   * Set $this->cando['external'] = true when implemented
-   *
-   * If this function is implemented it will be used to
-   * authenticate a user - all other DokuWiki internals
-   * will not be used for authenticating, thus
-   * implementing the checkPass() function is not needed
-   * anymore.
-   *
-   * The function can be used to authenticate against third
-   * party cookies or Apache auth mechanisms and replaces
-   * the auth_login() function
-   *
-   * The function will be called with or without a set
-   * username. If the Username is given it was called
-   * from the login form and the given credentials might
-   * need to be checked. If no username was given it
-   * the function needs to check if the user is logged in
-   * by other means (cookie, environment).
-   *
-   * The function needs to set some globals needed by
-   * DokuWiki like auth_login() does.
-   *
-   * @see auth_login()
-   * 
-   * Controleert via code van de standaard C.S.R.-site of ingelogde geen 
-   * nobody is, vervolgens kunnen gegegens worden opgehaald.
-   * Als er inloggegevens worden meegegeven wordt gepoogd in te loggen.
-   * 
-   * @param   string  $user    Username (uid or nickname)
-   * @param   string  $pass    Cleartext Password
-   * @param   bool    $sticky  Cookie should not expire. Not used.
-   * @return  bool             true on successful auth
-   */
-   
-  function trustExternal($user,$pass,$sticky=false){
-    global $USERINFO;
-    global $lang;
-    global $loginlid;
-    global $conf;
+    /**
+     * Do all authentication
+     *
+     * Set $this->cando['external'] = true when implemented
+     *
+     * If this function is implemented it will be used to
+     * authenticate a user - all other DokuWiki internals
+     * will not be used for authenticating, thus
+     * implementing the checkPass() function is not needed
+     * anymore.
+     *
+     * The function can be used to authenticate against third
+     * party cookies or Apache auth mechanisms and replaces
+     * the auth_login() function
+     *
+     * The function will be called with or without a set
+     * username. If the Username is given it was called
+     * from the login form and the given credentials might
+     * need to be checked. If no username was given it
+     * the function needs to check if the user is logged in
+     * by other means (cookie, environment).
+     *
+     * The function needs to set some globals needed by
+     * DokuWiki like auth_login() does.
+     *
+     * @see auth_login()
+     *
+     * Controleert via code van de standaard C.S.R.-site of ingelogde geen
+     * nobody is, vervolgens kunnen gegegens worden opgehaald.
+     * Als er inloggegevens worden meegegeven wordt gepoogd in te loggen.
+     *
+     * @param   string  $user    Username (uid or nickname)
+     * @param   string  $pass    Cleartext Password
+     * @param   bool    $sticky  Cookie should not expire. Not used.
+     * @return  bool             true on successful auth
+     */
 
-    # als er een gebruiker is gegeven willen we graag proberen in te loggen via inlogformulier
-    if(!empty($user)){
-      if ($loginlid->login(strval($user), strval($pass), $checkip=false) AND $loginlid->getUid()!='x999') {
-        //success
-      }else{
-        //invalid credentials - log off
-        msg($lang['badlogin'],-1);
+    function trustExternal($user, $pass, $sticky = false) {
+        global $USERINFO;
+        global $lang;
+        global $loginlid;
+        global $conf;
+
+        # als er een gebruiker is gegeven willen we graag proberen in te loggen via inlogformulier
+        if(!empty($user)) {
+            if($loginlid->login(strval($user), strval($pass), $checkip = false) AND $loginlid->getUid() != 'x999') {
+                //success
+            } else {
+                //invalid credentials - log off
+                msg($lang['badlogin'], -1);
+                auth_logoff();
+                return false;
+            }
+        }
+
+        # als ingelogd genoeg permissies heeft gegevens ophalen en bewaren
+        if($loginlid->hasPermission('P_LOGGED_IN,groep:wikitoegang', $token_authorizable = false)
+            OR ($loginlid->hasPermission('P_LOGGED_IN,groep:wikitoegang', $token_authorizable = true) AND $_SERVER['PHP_SELF'] == '/wiki/feed.php')
+        ) {
+
+            // okay we're logged in - set the globals
+            require_once 'groepen/groep.class.php';
+            $lid                 = $loginlid->getLid();
+            $USERINFO['name']    = $lid->getNaam();
+            $USERINFO['mail']    = $lid->getEmail();
+            $USERINFO['pasfoto'] = $lid->getPasfoto($imgTag = false);
+            $USERINFO['grps']    = Groepen::getWikigroupsByUid($lid->getUid());
+            // always add the default group to the list of groups
+            if(!in_array($conf['defaultgroup'], $USERINFO['grps'])) {
+                $USERINFO['grps'][] = $conf['defaultgroup'];
+            }
+
+            $_SERVER['REMOTE_USER']                = $lid->getUid();
+            $_SESSION[DOKU_COOKIE]['auth']['user'] = $lid->getUid();
+            $_SESSION[DOKU_COOKIE]['auth']['info'] = $USERINFO;
+            return true;
+
+            # example:
+            #    // set the globals if authed
+            #    $USERINFO['name'] = 'FIXME'; //real name
+            #    $USERINFO['mail'] = 'FIXME';
+            #    $USERINFO['grps'] = array('FIXME');
+            #    $_SERVER['REMOTE_USER'] = $user; //username=uid
+            #    $_SESSION[DOKU_COOKIE]['auth']['user'] = $user;
+            #    $_SESSION[DOKU_COOKIE]['auth']['pass'] = $pass;
+            #    $_SESSION[DOKU_COOKIE]['auth']['info'] = $USERINFO;
+            #    return true;
+        }
+
+        if($loginlid->getUid() != 'x999') {
+            msg('Niet genoeg permissies', -1);
+        }
+        // to be sure
         auth_logoff();
         return false;
-      }
     }
 
-    # als ingelogd genoeg permissies heeft gegevens ophalen en bewaren
-    if($loginlid->hasPermission('P_LOGGED_IN,groep:wikitoegang',$token_authorizable=false) 
-        OR ($loginlid->hasPermission('P_LOGGED_IN,groep:wikitoegang',$token_authorizable=true) AND $_SERVER['PHP_SELF']=='/wiki/feed.php')){
+    /**
+     * Log off the current user. Remove cookie and login as nobody.
+     *
+     * Is run in addition to the ususal logoff method. Should
+     * only be needed when trustExternal is implemented.
+     *
+     * @see     auth_logoff()
+     */
+    function logOff() {
+        global $loginlid;
 
-      // okay we're logged in - set the globals
-      require_once 'groepen/groep.class.php';
-      $lid = $loginlid->getLid();
-      $USERINFO['name']    = $lid->getNaam();
-      $USERINFO['mail']    = $lid->getEmail();
-      $USERINFO['pasfoto'] = $lid->getPasfoto($imgTag=false);
-      $USERINFO['grps']    = Groepen::getWikigroupsByUid($lid->getUid());
-      // always add the default group to the list of groups
-      if(!in_array($conf['defaultgroup'],$USERINFO['grps'])){
-        $USERINFO['grps'][] = $conf['defaultgroup'];
-      }
-
-      $_SERVER['REMOTE_USER']                = $lid->getUid();
-      $_SESSION[DOKU_COOKIE]['auth']['user'] = $lid->getUid();
-      $_SESSION[DOKU_COOKIE]['auth']['info'] = $USERINFO;
-      return true;
-
-      # example:
-      #    // set the globals if authed
-      #    $USERINFO['name'] = 'FIXME'; //real name
-      #    $USERINFO['mail'] = 'FIXME';
-      #    $USERINFO['grps'] = array('FIXME');
-      #    $_SERVER['REMOTE_USER'] = $user; //username=uid
-      #    $_SESSION[DOKU_COOKIE]['auth']['user'] = $user;
-      #    $_SESSION[DOKU_COOKIE]['auth']['pass'] = $pass;
-      #    $_SESSION[DOKU_COOKIE]['auth']['info'] = $USERINFO;
-      #    return true;
+        $loginlid->logout();
     }
-
-    if($loginlid->getUid()!='x999'){
-        msg('Niet genoeg permissies',-1);
-    }
-    // to be sure
-    auth_logoff();
-    return false;
-  }
-
-  /**
-   * Log off the current user. Remove cookie and login as nobody.
-   *
-   * Is run in addition to the ususal logoff method. Should
-   * only be needed when trustExternal is implemented.
-   *
-   * @see     auth_logoff()
-   */
-  function logOff(){
-    global $loginlid;
-
-    $loginlid->logout();
-  }
 
     /**
      * Return user info [required function]
@@ -173,26 +174,26 @@ class auth_csr extends auth_basic {
      * grps array   list of groups the user is in
      *
      */
-    function getUserData($useruid){
-      global $conf;
+    function getUserData($useruid) {
+        global $conf;
 
-      if(Lid::isValidUid($useruid)){
-        $lid=LidCache::getLid($useruid);
-        if($lid instanceof Lid){
-            $info['name']=$lid->getNaam();
-            $info['mail']=$lid->getEmail();
-            $info['pasfoto'] = $lid->getPasfoto($imgTag=false);
-            require_once 'groepen/groep.class.php';
-            $info['grps']=Groepen::getWikigroupsByUid($useruid);
-            // always add the default group to the list of groups
-            if(!in_array($conf['defaultgroup'],$info['grps']) AND $useruid!='x999'){
-              $info['grps'][] = $conf['defaultgroup'];
+        if(Lid::isValidUid($useruid)) {
+            $lid = LidCache::getLid($useruid);
+            if($lid instanceof Lid) {
+                $info['name']    = $lid->getNaam();
+                $info['mail']    = $lid->getEmail();
+                $info['pasfoto'] = $lid->getPasfoto($imgTag = false);
+                require_once 'groepen/groep.class.php';
+                $info['grps'] = Groepen::getWikigroupsByUid($useruid);
+                // always add the default group to the list of groups
+                if(!in_array($conf['defaultgroup'], $info['grps']) AND $useruid != 'x999') {
+                    $info['grps'][] = $conf['defaultgroup'];
+                }
+
+                return $info;
             }
-
-            return $info;
         }
-      }
-      return false;
+        return false;
     }
 
 }
