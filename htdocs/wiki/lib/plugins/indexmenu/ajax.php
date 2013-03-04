@@ -44,18 +44,18 @@ class ajax_indexmenu_plugin {
         header('Cache-Control: public, max-age=3600');
         header('Pragma: public');
         switch($req) {
-            case 'local':
+            case 'local':  //required for admin.php
                 //list themes
                 print $this->local_themes();
                 break;
-            case 'toc':
+            /*case 'toc':
                 //print toc preview
                 if(isset($_REQUEST['id'])) print $this->print_toc($_REQUEST['id']);
                 break;
             case 'index':
                 //print index
                 if(isset($_REQUEST['idx'])) print $this->print_index($_REQUEST['idx']);
-                break;
+                break;   */
         }
     }
 
@@ -75,6 +75,7 @@ class ajax_indexmenu_plugin {
                 && $file != ".."
                 && $file != "repository"
                 && $file != "tmp"
+                && $file != ".svn"
             ) {
                 $data[] = $file;
             }
@@ -94,10 +95,10 @@ class ajax_indexmenu_plugin {
     function print_toc($id) {
         require_once(DOKU_INC.'inc/parser/xhtml.php');
         $id = cleanID($id);
-        if(auth_quickaclcheck($id) < AUTH_READ) return;
+        if(auth_quickaclcheck($id) < AUTH_READ) return '';
         $meta = p_get_metadata($id);
         $toc  = $meta['description']['tableofcontents'];
-        $out .= '<div class="tocheader toctoggle">'.DOKU_LF;
+        $out  = '<div class="tocheader toctoggle">'.DOKU_LF;
         if(count($toc) > 1) {
             $out .= $this->render_toc($toc);
         } else {
@@ -122,9 +123,10 @@ class ajax_indexmenu_plugin {
      */
     function render_toc($toc) {
         global $lang;
-        $r      = new Doku_Renderer_xhtml;
+        $r = new Doku_Renderer_xhtml;
         $r->toc = $toc;
-        $out .= $lang['toc'];
+
+        $out = $lang['toc'];
         $out .= '</div>'.DOKU_LF;
         $out .= '<div class="indexmenu_toc_inside">'.DOKU_LF;
         $out .= html_buildlist($r->toc, 'toc', array($this, '_tocitem'));
@@ -146,15 +148,17 @@ class ajax_indexmenu_plugin {
      *
      * @author Samuele Tognini <samuele@netsons.org>
      * @author Andreas Gohr <andi@splitbrain.org>
+     * @author Rene Hadler <rene.hadler@iteas.at>
      */
     function print_index($ns) {
         require_once(DOKU_PLUGIN.'indexmenu/syntax/indexmenu.php');
         global $conf;
         $idxm  = new syntax_plugin_indexmenu_indexmenu();
-        $ns    = $idxm->_parse_ns($ns);
+		$ns=$idxm->_parse_ns(rawurldecode($ns));
         $level = -1;
         $max   = 0;
         $data  = array();
+        $out   = '';
         if($_REQUEST['max'] > 0) {
             $max   = $_REQUEST['max'];
             $level = $max;
@@ -164,6 +168,7 @@ class ajax_indexmenu_plugin {
         $idxm->msort = $_REQUEST['msort'];
         $idxm->rsort = $_REQUEST['rsort'];
         $idxm->nsort = $_REQUEST['nsort'];
+        $idxm->hsort = $_REQUEST['hsort'];
         $fsdir       = "/".utf8_encodeFN(str_replace(':', '/', $ns));
         $opts        = array(
             'level'         => $level,
@@ -177,7 +182,7 @@ class ajax_indexmenu_plugin {
             'headpage'      => $idxm->getConf('headpage'),
             'hide_headpage' => $idxm->getConf('hide_headpage')
         );
-        if($idxm->sort || $idxm->msort || $idxm->rsort) {
+        if($idxm->sort || $idxm->msort || $idxm->rsort || $idxm->hsort) {
             $idxm->_search($data, $conf['datadir'], array($idxm, '_search_index'), $opts, $fsdir);
         } else {
             search($data, $conf['datadir'], array($idxm, '_search_index'), $opts, $fsdir);
