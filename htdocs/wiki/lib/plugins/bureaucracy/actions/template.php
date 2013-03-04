@@ -11,6 +11,7 @@ class syntax_plugin_bureaucracy_action_template extends syntax_plugin_bureaucrac
         global $ID;
         global $conf;
         global $USERINFO;
+        $myns = getNS($ID);
 
         list($tpl, $pagename, $sep) = $argv;
         if(is_null($sep)) $sep = $conf['sepchar'];
@@ -19,8 +20,20 @@ class syntax_plugin_bureaucracy_action_template extends syntax_plugin_bureaucrac
         $patterns = array();
         $values   = array();
         $templates = array();
+
+        // set LANG var to reference translations
+        $patterns['__lang__'] = '/@LANG@/';
+        $values['__lang__']   = $conf['lang'];
+
+        // if translation plugin available, get current translation (empty for default lang)
+        $patterns['__trans__'] = '/@TRANS@/';
+        $values['__trans__']   = '';
+        $trans = plugin_load('helper','translation');
+        if($trans) $values['__trans__'] = $trans->getLangPart($ID);
+
         // run through fields
         foreach($data as $opt) {
+            /** @var $opt syntax_plugin_bureaucracy_field */
             $label = $opt->getParam('label');
             $value = $opt->getParam('value');
 
@@ -49,21 +62,18 @@ class syntax_plugin_bureaucracy_action_template extends syntax_plugin_bureaucrac
             }
         }
 
-        //handle relative pages
-        if($pagename[0] == '.'){
-            $pagename = getNS($ID).substr($pagename,1);
-        }
-
+        // build target pagename/namespace
         $pagename = $this->replace($patterns, $values, $pagename);
-        // check pagename
-        $pagename = cleanID($pagename);
+        resolve_pageid($myns, $pagename, $junk); // resolve relatives
         if ($pagename === '') {
             throw new Exception($this->getLang('e_pagename'));
         }
 
+        // resolve templates
         $_templates = array();
         foreach($templates as $k => $v) {
-            $_templates[cleanID("$pagename:$k")] = $v;
+            resolve_pageid($myns, $v, $junk); // resolve template
+            $_templates[cleanID("$pagename:$k")] = $v; // $pagename is already resolved
         }
         $templates = $_templates;
 
@@ -82,10 +92,6 @@ class syntax_plugin_bureaucracy_action_template extends syntax_plugin_bureaucrac
                 $backup = array($_SERVER['REMOTE_USER'],$USERINFO['grps']);
                 $_SERVER['REMOTE_USER'] = $runas;
                 $USERINFO['grps'] = array();
-            }
-            //handle relative template
-            if($tpl[0] == '.'){
-                $tpl = getNS($ID).substr($tpl,1);
             }
             $t_pages = array();
             search($t_pages, $conf['datadir'], 'search_universal',

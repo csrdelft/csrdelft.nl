@@ -808,6 +808,8 @@ htdocs/wiki/lib/plugins/acl/style.css -text
 htdocs/wiki/lib/plugins/action.php -text
 htdocs/wiki/lib/plugins/admin.php -text
 htdocs/wiki/lib/plugins/bureaucracy/README -text
+htdocs/wiki/lib/plugins/bureaucracy/_test/input.txt -text
+htdocs/wiki/lib/plugins/bureaucracy/_test/syntax.test.php -text
 htdocs/wiki/lib/plugins/bureaucracy/action.php -text
 htdocs/wiki/lib/plugins/bureaucracy/actions/action.php -text
 htdocs/wiki/lib/plugins/bureaucracy/actions/mail.php -text
@@ -831,6 +833,7 @@ htdocs/wiki/lib/plugins/bureaucracy/fields/textarea.php -text
 htdocs/wiki/lib/plugins/bureaucracy/fields/textbox.php -text
 htdocs/wiki/lib/plugins/bureaucracy/fields/user.php -text
 htdocs/wiki/lib/plugins/bureaucracy/fields/users.php -text
+htdocs/wiki/lib/plugins/bureaucracy/fields/wiki.php -text
 htdocs/wiki/lib/plugins/bureaucracy/fields/yesno.php -text
 htdocs/wiki/lib/plugins/bureaucracy/lang/cs/lang.php -text
 htdocs/wiki/lib/plugins/bureaucracy/lang/cs/settings.php -text
