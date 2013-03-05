@@ -1469,6 +1469,8 @@ htdocs/wiki/lib/plugins/sqlite/lang/en/intro.txt -text
 htdocs/wiki/lib/plugins/sqlite/lang/en/lang.php -text
 htdocs/wiki/lib/plugins/sqlite/lang/fr/intro.txt -text
 htdocs/wiki/lib/plugins/sqlite/lang/fr/lang.php -text
+htdocs/wiki/lib/plugins/sqlite/lang/ru/intro.txt -text
+htdocs/wiki/lib/plugins/sqlite/lang/ru/lang.php -text
 htdocs/wiki/lib/plugins/sqlite/manager.dat -text
 htdocs/wiki/lib/plugins/sqlite/plugin.info.txt -text
 htdocs/wiki/lib/plugins/sqlite/style.css -text
