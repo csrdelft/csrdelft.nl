@@ -24,14 +24,14 @@ class syntax_plugin_docnav_pagenav extends DokuWiki_Syntax_Plugin {
     }
 
     public function connectTo($mode) {
-        $this->Lexer->addSpecialPattern('<.*?\|.*?\|.*?>', $mode, 'plugin_docnav_pagenav');
+        $this->Lexer->addSpecialPattern('<-[^\n]*\|[^\n]*\|[^\n]*->', $mode, 'plugin_docnav_pagenav');
     }
 
     public function handle($match, $state, $pos, &$handler) {
         global $conf, $ID;
 
         //dbg($match);
-        list($prev, $toc, $next) = explode("|", substr($match, 1, -1));
+        list($prev, $toc, $next) = explode("|", substr($match, 2, -2));
         if(!$toc) {
             $ns = getNS($ID);
             if(page_exists($ns.':'.$conf['start'])) {

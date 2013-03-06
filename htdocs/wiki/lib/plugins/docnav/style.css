@@ -1,10 +1,11 @@
 .docnavbar {
     padding: 0.2em 0;
+    overflow:auto;
 }
 .docnavbar.bottom {
     border-top: 1px solid __border__;
     border-bottom: 1px solid __border__;
-    overflow:auto;
+    margin: 1em 0;
 }
 .docnavbar .leftnav {
     float:left;

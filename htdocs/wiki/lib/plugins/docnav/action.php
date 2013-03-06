@@ -17,8 +17,8 @@ class action_plugin_docnav extends DokuWiki_Action_Plugin {
      * @param Doku_Event_Handler $controller
      */
     public function register(Doku_Event_Handler &$controller) {
-        $controller->register_hook('TPL_CONTENT_DISPLAY', 'BEFORE', $this, '_addtopnavigation');
-        $controller->register_hook('TPL_CONTENT_DISPLAY', 'AFTER', $this, '_addbottomnavigation');
+        $controller->register_hook('RENDERER_CONTENT_POSTPROCESS', 'AFTER', $this, '_addtopnavigation');
+        $controller->register_hook('TPL_ACT_RENDER', 'AFTER', $this, '_addbottomnavigation');
     }
 
     /**
@@ -28,7 +28,11 @@ class action_plugin_docnav extends DokuWiki_Action_Plugin {
      * @param            $param
      */
     public function _addtopnavigation(Doku_Event &$event, $param) {
-        $event->data = $this->getNavbar($bottom = false).$event->data;
+        global $ACT;
+        //if($ACT != 'show') return;
+        if($event->data[0] != 'xhtml' || $ACT != 'show') return;
+
+        $event->data[1] = $this->getNavbar($bottom = false).$event->data[1];
     }
 
     /**
@@ -38,8 +42,9 @@ class action_plugin_docnav extends DokuWiki_Action_Plugin {
      * @param            $param
      */
     public function _addbottomnavigation(Doku_Event &$event, $param) {
-        echo $this->getNavbar($bottom = true);
+        if ($event->data != 'show') return;
 
+        echo $this->getNavbar($bottom = true);
     }
 
     /**
@@ -58,7 +63,7 @@ class action_plugin_docnav extends DokuWiki_Action_Plugin {
 
             if($bottom) $out .= '<div class="clearer"></div>';
 
-            $out .= '<div class="docnavbar'.($bottom ? ' bottom':'').'"><div class="leftnav">';
+            $out .= '<div class="docnavbar'.($bottom ? ' bottom' : '').'"><div class="leftnav">';
             if($data['previous']) $out .= '← '.$renderer->internallink($data['previous'], null, null, true);
             $out .= '&nbsp;</div>';
 
