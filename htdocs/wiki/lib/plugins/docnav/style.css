@@ -1,0 +1,22 @@
+.docnavbar {
+    padding: 0.2em 0;
+}
+.docnavbar.bottom {
+    border-top: 1px solid __border__;
+    border-bottom: 1px solid __border__;
+    overflow:auto;
+}
+.docnavbar .leftnav {
+    float:left;
+    width: 33%;
+}
+.docnavbar .centernav {
+    width: 34%;
+    float:left;
+    text-align: center;
+}
+.docnavbar .rightnav {
+    float:right;
+    width: 33%;
+    text-align: right;
+}
