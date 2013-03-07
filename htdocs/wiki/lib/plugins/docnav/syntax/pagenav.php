@@ -30,12 +30,19 @@ class syntax_plugin_docnav_pagenav extends DokuWiki_Syntax_Plugin {
     public function handle($match, $state, $pos, &$handler) {
         global $conf, $ID;
 
-        //dbg($match);
         list($prev, $toc, $next) = explode("|", substr($match, 2, -2));
+
         if(!$toc) {
             $ns = getNS($ID);
             if(page_exists($ns.':'.$conf['start'])) {
+                // start page inside namespace
                 $toc = $ns.':'.$conf['start'];
+            }elseif(page_exists($ns.':'.noNS($ns))) {
+                // page named like the NS inside the NS
+                $toc = $ns.':'.noNS($ns);
+            }elseif(page_exists($ns)) {
+                // page like namespace exists
+                $toc = (!getNS($ns) ? ':':'').$ns;
             }
         }
         $data = array(
