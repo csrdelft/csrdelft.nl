@@ -58,9 +58,7 @@ div.dokuwiki div.comment_wrapper {
 	color: #474747;
 	padding: 0.5em 0 0 0;
 }
-div.dokuwiki div.level2 {
-	padding: 0 0.5em 0 0.5em;
-}
+
 div.dokuwiki div.comment_form {
     margin-right: 0.5em;
     margin-left: 0;
@@ -118,4 +116,13 @@ div#panel div.portal div.body ul li {
     color: #002BB8 !important;
     background: none;
     padding: 0 0 0 0;
+}
+
+/* autocomplete menu */
+.ui-menu {
+    font-size: 0.8em;
+}
+/* calendarpicker */
+.ui-datepicker {
+font-size: 0.8em;
 }
