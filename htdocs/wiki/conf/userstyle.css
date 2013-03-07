@@ -187,9 +187,11 @@ div.dokuwiki label.block {
 div.dokuwiki div.comment_form {            margin: 0 0.5em; }
 div.dokuwiki div.comment_subscribe {       padding: 2px 1.5em; }
 div.dokuwiki div.comment_subscribe input { margin: 2px 0 2px 0; }
-/* 
+
+/**
  * plugin indexmenu
- * Namespace without page link in nojs mode. !important has to be used
+ *
+ * Namespace in index without page link in nojs mode. !important has to be used
  */
 div.li a.indexmenu_idx {
   color: __text_neu__ !important; /* original: __missing__*/
@@ -198,4 +200,11 @@ div.li a.indexmenu_idx {
 /* interwiki link -- internal referers get also internal color */
 .dokuwiki a.interwiki.internal {
     color: __existing__;
+}
+
+/* extra class for Wrap Plugin */
+.dokuwiki div.wrap_blockquote {
+    padding: 0 1.25em;
+    border: solid __border__;
+    border-width: 0 0 0 .25em;
 }
