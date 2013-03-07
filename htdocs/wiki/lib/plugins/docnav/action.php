@@ -18,7 +18,7 @@ class action_plugin_docnav extends DokuWiki_Action_Plugin {
      */
     public function register(Doku_Event_Handler &$controller) {
         $controller->register_hook('RENDERER_CONTENT_POSTPROCESS', 'AFTER', $this, '_addtopnavigation');
-        $controller->register_hook('TPL_ACT_RENDER', 'AFTER', $this, '_addbottomnavigation');
+        $controller->register_hook('TPL_CONTENT_DISPLAY', 'BEFORE', $this, '_addbottomnavigation');
     }
 
     /**
@@ -42,9 +42,16 @@ class action_plugin_docnav extends DokuWiki_Action_Plugin {
      * @param            $param
      */
     public function _addbottomnavigation(Doku_Event &$event, $param) {
-        if ($event->data != 'show') return;
+        global $ACT;
+        if($ACT != 'show') return;
 
-        echo $this->getNavbar($bottom = true);
+        //insert before the discussion plugin
+        $pos = strrpos ( $event->data , '<div class="comment_wrapper" id="comment_wrapper">');
+        if($pos) {
+            $event->data = substr_replace($event->data, $this->getNavbar($bottom = true), $pos, 0);
+        } else {
+            $event->data = $event->data.$this->getNavbar($bottom = true);
+        }
     }
 
     /**
@@ -61,21 +68,21 @@ class action_plugin_docnav extends DokuWiki_Action_Plugin {
         if(!empty($data)) {
             $renderer = new Doku_Renderer_xhtml;
 
-            if($bottom) $out .= '<div class="clearer"></div>';
+            if($bottom) $out .= '<div class="clearer"></div>'.DOKU_LF;
 
-            $out .= '<div class="docnavbar'.($bottom ? ' bottom' : '').'"><div class="leftnav">';
+            $out .= '<div class="docnavbar'.($bottom ? ' bottom' : '').'">'.DOKU_LF.DOKU_TAB.'<div class="leftnav">';
             if($data['previous']) $out .= '← '.$renderer->internallink($data['previous'], null, null, true);
-            $out .= '&nbsp;</div>';
+            $out .= '&nbsp;</div>'.DOKU_LF;
 
             if($bottom) {
-                $out .= '<div class="centernav">';
+                $out .= DOKU_TAB.'<div class="centernav">';
                 if($data['toc']) $out .= $renderer->internallink($data['toc'], null, null, true);
-                $out .= '&nbsp;</div>';
+                $out .= '&nbsp;</div>'.DOKU_LF;
             }
 
-            $out .= '<div class="rightnav">&nbsp;';
+            $out .= DOKU_TAB.'<div class="rightnav">&nbsp;';
             if($data['next']) $out .= $renderer->internallink($data['next'], null, null, true).' →';
-            $out .= '</div></div>';
+            $out .= '</div>'.DOKU_LF.'</div>'.DOKU_LF;
         }
         return $out;
     }
