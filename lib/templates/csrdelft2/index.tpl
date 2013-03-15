@@ -108,7 +108,7 @@
 		<img src="/images/layout2/box-picture-1.jpg" class="rotate">
 	</figure>
 
-	<div class="box h2 link"><a href="http://www.facebook.com/events/337421616386651/">
+	<div class="box h2 link"><a href="http://youtu.be/4Hth7C3BVvQ">
 		<img src="/images/layout2/box-feest-poster.jpg" class="border">
 		<h2 class="overlay">Feest 25 april</h2>
 	</a></div>
