@@ -251,7 +251,8 @@ class Forum{
 				post.tekst AS tekst,
 				post.datum AS datum,
 				post.bewerkDatum AS bewerkDatum,
-				count(*) AS aantal
+				count(*) AS aantal,
+				(MATCH(post.tekst) AGAINST('".$query."' IN NATURAL LANGUAGE MODE) * 0.34 + MATCH(topic.titel) AGAINST ('".$query."' IN NATURAL LANGUAGE MODE) * 0.66) AS relevance
 			FROM
 				forum_post post
 			INNER JOIN
@@ -263,13 +264,13 @@ class Forum{
 			  AND (".Forum::getCategorieClause().")
 			  AND (".$singleCat.")
 			  AND (
-				  MATCH(post.tekst)AGAINST('".$query."' IN BOOLEAN MODE ) OR
+				  MATCH(post.tekst)AGAINST('".$query."' IN NATURAL LANGUAGE MODE ) OR
 				  topic.titel LIKE '%".$query."%'
 				)
 			GROUP BY
 				topic.id
 			ORDER BY
-				post.datum DESC
+				relevance DESC, post.datum DESC
 			LIMIT
 				".Instelling::get('forum_zoekresultaten').";";
 		//Als MySQL 5.1.7 op syrinx staat kan er in 'natural language mode' gezocht worden
