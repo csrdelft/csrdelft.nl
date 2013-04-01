@@ -45,6 +45,6 @@ $(function(){
 		});
 	});
 
-
+	// TO DO: take first image and put it in the clip
 
 });
