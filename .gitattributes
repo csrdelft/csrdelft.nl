@@ -89,6 +89,10 @@ htdocs/images/layout2/bg-image-13.jpg -text
 htdocs/images/layout2/bg-image-14.jpg -text
 htdocs/images/layout2/bg-image-15.jpg -text
 htdocs/images/layout2/bg.png -text
+htdocs/images/layout2/blue-box-h2-w2.png -text
+htdocs/images/layout2/blue-box-h2.png -text
+htdocs/images/layout2/blue-box-h4.png -text
+htdocs/images/layout2/blue-box.png -text
 htdocs/images/layout2/box-dies-poster.jpg -text
 htdocs/images/layout2/box-feest-poster.jpg -text
 htdocs/images/layout2/box-groep.jpg -text
@@ -247,9 +251,12 @@ htdocs/layout/zonderSpikkels.css -text
 htdocs/layout2/fonts/SentinelBold.eot -text
 htdocs/layout2/fonts/SentinelBold.otf -text
 htdocs/layout2/fonts/SentinelBold.woff -text
+htdocs/layout2/foundation.css -text
+htdocs/layout2/js/foundation.min.js -text
 htdocs/layout2/js/init.js -text
 htdocs/layout2/js/jquery.backstretch.js -text
 htdocs/layout2/js/jquery.js -text
+htdocs/layout2/normalize.css -text
 htdocs/layout2/style.css -text
 htdocs/leden.php -text
 htdocs/login.php -text

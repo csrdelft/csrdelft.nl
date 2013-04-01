@@ -33,7 +33,7 @@ h1, h2, h3, h4, h5, h6 { font-weight: normal; }
 ----------------------------------*/
 #outer { min-height: 100%; height: auto !important; height: 100%; margin: 0 0 -97px; }
 #outer .push { height: 97px; }
-#inner { width: 1240px; height: 700px; padding: 20px 10px; margin: 0 auto; }
+#inner { max-width: 1240px; /* height: 700px; */ padding: 20px 10px; margin: 0 auto; }
 
 
 
@@ -44,16 +44,34 @@ h1, h2, h3, h4, h5, h6 { font-weight: normal; }
 .box.w3 { width: 732px; }
 .box.h2 { height: 334px; }
 .box.h3 { height: 507px; }
+.box.h4 { height: 680px; }
 .box.empty { opacity: 0; }
 .box.pad-top { padding-top: 173px; }
 .box.pad-btm { padding-bottom: 173px; }
 .box.pad-left { margin-left: 254px; }
 
-.blue { background: -webkit-linear-gradient(#1255a3 0%, #063379 100%); background: linear-gradient(#1255a3 0%, #063379 100%); background: -moz-linear-gradient(#1255a3 0%, #063379 100%); filter: progid:DXImageTransform.Microsoft.Gradient(startColorStr="#1255a3", endColorStr="#063379"); }
+.blue.h2 {
+    background-image: url(/images/layout2/blue-box-h2.png);
+}
+.blue.h2.w2 {
+    background-image: url(/images/layout2/blue-box-h2-w2.png);
+}
+.blue.h4 {
+    background-image: url(/images/layout2/blue-box-h4.png);
+}
+
+.blue {
+    background: #1255a3;
+    background-image: url(/images/layout2/blue-box.png);
+    background: -webkit-linear-gradient(#1255a3 0%, #063379 100%);
+    background: linear-gradient(#1255a3 0%, #063379 100%);
+    background: -moz-linear-gradient(#1255a3 0%, #063379 100%);
+    filter: progid:DXImageTransform.Microsoft.Gradient(startColorStr="#1255a3", endColorStr="#063379");
+}
 
 /* Content */
-.box h1 { font-family: SentinelBold; line-height: 24px; font-size: 24px; text-shadow: 1px 1px 1px rgba(0,0,0,0.1); padding: 30px 25px 0; }
-.box h2 { font-family: SentinelBold; line-height: 31px; font-size: 28px; text-shadow: 1px 1px 1px rgba(0,0,0,0.4); padding: 12px 15px; }
+.box h1 { font-family: SentinelBold; line-height: 24px; font-size: 24px; text-shadow: 1px 1px 1px rgba(0,0,0,0.1); padding: 30px 25px 0; margin:0; }
+.box h2 { font-family: SentinelBold; line-height: 31px; font-size: 28px; text-shadow: 1px 1px 1px rgba(0,0,0,0.4); padding: 12px 15px; margin:0; }
 .box h2.overlay { position: absolute; left: 0; top: 0; width: 100%; }
 .box p { line-height: 18px; font-size: 13px; text-align: left; padding: 25px 25px 0; }
 .box ul { text-align: left; font-size: 12px; padding: 20px 25px 0; }
@@ -247,7 +265,6 @@ div.rommel {
 	height: 77px;
 	text-align: center;
 	padding: 10px 0;
-	overflow: hidden;
 }
 div.rommel a { padding: 0 3px; }
 div.rommel img { height: 77px; }
