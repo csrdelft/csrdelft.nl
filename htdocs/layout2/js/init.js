@@ -31,6 +31,7 @@ $(function(){
 		e.preventDefault();
 	});
 
+	$('.flip').click(function () { $(this).addClass("flipped"); });
 
 	// TODO: cross-fade images at homepage
 
