@@ -20,17 +20,12 @@ $(function(){
 
 
 	// Login form enhancing
-	$('.login-form input.text').each(function(){
-		$(this).data('initial-text', $(this).val());
-	}).focus(function(){
+	$('.login-form input.text').focus(function(){
 		$(this).parents('.flip').addClass('flipped');
-		if ($(this).val() == $(this).data('initial-text'))
-			$(this).val('');
 	}).blur(function(){
 		$(this).parents('.flip').removeClass('flipped');
-		if ($(this).val() == '')
-			$(this).val($(this).data('initial-text'));
 	});
+	// Submit form by clicking link
 	$('.login-submit').click(function(e){
 		$('.login-form form').submit();
 		e.preventDefault();
