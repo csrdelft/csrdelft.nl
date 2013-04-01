@@ -2536,6 +2536,10 @@ lib/templates/csrdelft.tpl -text
 lib/templates/csrdelft2/content.tpl -text
 lib/templates/csrdelft2/index.tpl -text
 lib/templates/csrdelft2/multi.tpl -text
+lib/templates/csrdelft2/partials/_advertenties.tpl -text
+lib/templates/csrdelft2/partials/_footer.tpl -text
+lib/templates/csrdelft2/partials/_header.tpl -text
+lib/templates/csrdelft2/partials/_homeContent.tpl -text
 lib/templates/documenten/document.tpl -text
 lib/templates/documenten/document.ubb.tpl -text
 lib/templates/documenten/documenten.tpl -text

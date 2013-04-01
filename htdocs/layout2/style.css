@@ -99,7 +99,7 @@ img.border { width: 224px; border: 6px solid #fff; }
 /* Popup */
 #pageover { position: absolute; z-index: 101; left: 50%; width: 851px; margin: 56px 0 0 -425px; }
 #pageover .top { position: relative; z-index: 103; height: 85px; background: url(/images/layout2/page-top.png) no-repeat; }
-#pageover .mid { position: relative; float: left; clear: both; width: 791px; background: url(../images/page-mid.png) repeat-y; padding: 0 30px; }
+#pageover .mid { position: relative; float: left; clear: both; width: 791px; background: url(/images/layout2/page-mid.png) repeat-y; padding: 0 30px; }
 #pageover .btm { clear: both; height: 113px; background: url(/images/layout2/page-btm.png) no-repeat; padding: 0 0 30px; }
 #pageover .close { display: block; position: absolute; right: 35px; top: 30px; font-size: 26px; color: #666; }
 #pageover .close:hover { color: #333; }
@@ -109,7 +109,7 @@ img.border { width: 224px; border: 6px solid #fff; }
 #pageover h2 { font-size: 14px; font-weight: bold; padding: 24px 0 0; }
 #pageover h3 { font-size: 12px; font-weight: bold; }
 #pageover p, #pageover address, #pageover table { padding: 0 0 14px; }
-#pageover .small { font-size: 12px; }
+#pageover .small, .mid { font-size: 12px; }
 #pageover p a, #pageover ul a { text-decoration: underline; color: #000; }
 #pageover ul { list-style: disc; padding: 0 0 14px 20px; }
 
@@ -132,7 +132,7 @@ img.border { width: 224px; border: 6px solid #fff; }
 /* Form */
 #pageover fieldset { float: left; padding: 20px 0 0; }
 #pageover label { display: block; padding: 20px 0 0; }
-#pageover span { display: block; float: left; width: 120px; line-height: 26px; }
+/*#pageover span { display: block; width: 120px; line-height: 26px; }*/
 #pageover input { display: block; }
 #pageover .text { width: 180px; padding: 3px 5px; }
 #pageover .butn { margin: 20px 0 0; }

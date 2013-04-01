@@ -58,7 +58,13 @@ if($_GET['naam']=='video'){
 		$depagina->setZijkolom($zijkolom);
 	}
 }
+// Hier alle namen van pagina's die in de nieuwe layout moeten worden weergegeven
+$nieuwNamen = array("contact");
 
-$depagina->view();
+if(in_array($_GET['naam'],$nieuwNamen)) {
+    $depagina->view("content");
+} else {
+    $depagina->view();
+}
 
 ?>
