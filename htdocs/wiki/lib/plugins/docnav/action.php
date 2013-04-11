@@ -9,6 +9,8 @@
 // must be run within Dokuwiki
 if(!defined('DOKU_INC')) die();
 
+require_once(DOKU_INC.'inc/parser/xhtml.php');
+
 class action_plugin_docnav extends DokuWiki_Action_Plugin {
 
     /**
@@ -71,17 +73,17 @@ class action_plugin_docnav extends DokuWiki_Action_Plugin {
             if($bottom) $out .= '<div class="clearer"></div>'.DOKU_LF;
 
             $out .= '<div class="docnavbar'.($bottom ? ' bottom' : '').'">'.DOKU_LF.DOKU_TAB.'<div class="leftnav">';
-            if($data['previous']) $out .= '← '.$renderer->internallink($data['previous'], null, null, true);
+            if($data['previous']) $out .= '← '.$renderer->internallink($data['previous'][0], $data['previous'][1], null, true);
             $out .= '&nbsp;</div>'.DOKU_LF;
 
             if($bottom) {
                 $out .= DOKU_TAB.'<div class="centernav">';
-                if($data['toc']) $out .= $renderer->internallink($data['toc'], null, null, true);
+                if($data['toc']) $out .= $renderer->internallink($data['toc'][0], $data['toc'][1], null, true);
                 $out .= '&nbsp;</div>'.DOKU_LF;
             }
 
             $out .= DOKU_TAB.'<div class="rightnav">&nbsp;';
-            if($data['next']) $out .= $renderer->internallink($data['next'], null, null, true).' →';
+            if($data['next']) $out .= $renderer->internallink($data['next'][0], $data['next'][1], null, true).' →';
             $out .= '</div>'.DOKU_LF.'</div>'.DOKU_LF;
         }
         return $out;
