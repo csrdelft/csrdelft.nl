@@ -66,7 +66,7 @@
                                 <h2 class="overlay">(Oud)leden</h2>
                                 <img src="/images/layout2/box-icon-oudleden.png">
                             </div>
-                            <div class="blue back login-form">{include file='partials/_loginForm.tpl'}</div>
+                            <div class="blue back login-form">{include file='csrdelft2/partials/_loginForm.tpl'}</div>
                         </div>
 
                     </div>

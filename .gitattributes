@@ -2540,6 +2540,7 @@ lib/templates/csrdelft2/partials/_advertenties.tpl -text
 lib/templates/csrdelft2/partials/_footer.tpl -text
 lib/templates/csrdelft2/partials/_header.tpl -text
 lib/templates/csrdelft2/partials/_homeContent.tpl -text
+lib/templates/csrdelft2/partials/_loginForm.tpl -text
 lib/templates/documenten/document.tpl -text
 lib/templates/documenten/document.ubb.tpl -text
 lib/templates/documenten/documenten.tpl -text
@@ -2595,7 +2596,6 @@ lib/templates/mededelingen/top3overzicht.tpl -text
 lib/templates/menu.tpl -text
 lib/templates/owee_csrdelft.tpl -text
 lib/templates/owee_menu.tpl -text
-lib/templates/partials/_loginForm.tpl -text
 lib/templates/peiling.ubb.tpl -text
 lib/templates/profiel/_saldografiek.tpl -text
 lib/templates/profiel/bewerken.tpl -text
