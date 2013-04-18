@@ -7,11 +7,12 @@
 			<a class="close" href="#">&times;</a>
 		</header>
 		<div class="mid">
-        <!-- Deze moet nog teogevoegd, via JS kan dan het plaatje in de <img gezet worden
             <figure id="clip" class="rotate right">
-            <img id="clip-img" /><div class="clip"></div>
-        </figure>-->
-    {$csrdelft->_body->view()}
+                <img id="clip-img" class="REPLACE-ANCHOR" /><div class="clip"></div>
+            </figure>
+            <div class="content">
+                {$csrdelft->_body->view()}
+            </div>
 		</div>
 		<div class="btm"></div>
 	</div>

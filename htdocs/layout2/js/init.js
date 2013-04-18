@@ -45,6 +45,9 @@ $(function(){
 		});
 	});
 
-	// TO DO: take first image and put it in the clip
-
+	// take first image and put it in the clip
+	var imageHolder = $("div.mid img.REPLACE-ANCHOR");
+	var image = $("div.mid div.content img.ubb_image").first();
+	imageHolder.attr("src", image.attr("src"));
+	image.hide(); 
 });
