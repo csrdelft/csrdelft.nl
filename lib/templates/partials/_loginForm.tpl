@@ -1,3 +1,19 @@
+{if $loginlid->hasPermission('P_LOGGED_IN') }
+<p>
+	<a href="/instellingen/" class="instellingen no-line" title="Webstekinstellingen">{icon get="instellingen"}</a>
+	{if $loginlid->isSued()}
+		<a href="/endsu/" style="color: red;">{$loginlid->getSuedFrom()->getNaamLink('civitas','html')} als</a><br />»
+	{/if}
+	{$loginlid->getUid()|csrnaam}
+	<a href="/logout.php">log&nbsp;uit</a><br />
+		{foreach from=$loginlid->getLid()->getSaldi() item=saldo}
+				{$saldo.naam}: &euro; {$saldo.saldo|number_format:2:",":"."} <br />
+		{/foreach}
+    
+</p>
+<p><a href="/leden">Ga naar ledengedeelte &raquo;</a></p>
+{else}
+
 <form action="/login.php" method="post">
 	<fieldset>
 		<input type="hidden" name="url" value="/leden" />
@@ -11,27 +27,4 @@
 	<li><a href="#" class="login-submit">Inloggen</a> &raquo;</li>
 	<li><a href="/account-aanvragen">Account aanvragen</a> &raquo;</li>
 </ul>
-{*
-<ul class="login-form">
-
-    <li id="login">{if isset($smarty.session.auth_error)}
-
-        <span class="waarschuwing">{$smarty.session.auth_error}</span>
-        {/if}
-
-        <form action="/login.php" method="post">
-            <fieldset>
-                <input type="hidden" name="url" value="/leden.php" />
-                <input type="text" name="user" value="Bijnaam of lidnummer" onfocus="if(this.value=='Bijnaam of lidnummer')this.value='';" />
-                <input type="password" name="pass" onfocus="this.value='';" value="wachtwoord" />
-                <input type="submit" class="submit" name="submit" value="Inloggen &raquo;" />
-            </fieldset>
-        </form>
-    </li>
-    <li><a href="account-aanvragen.html">Account aanvragen</a> &raquo;</li>
-    {if !isset($smarty.session.auth_error)}
-
-    {/if}
-		{/if}
-</ul>
-*}
+{/if}

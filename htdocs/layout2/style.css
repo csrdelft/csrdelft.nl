@@ -6,6 +6,9 @@ html, body { height: 100%; }
 body { line-height: 20px; }
 body, input, textarea { font-family: Helvetica, "Helvetice Neue", Arial; font-size: 14px; }
 a { text-decoration: none; color: #000; }
+    a.no-line {
+        border-bottom:none!important;
+    }
 img, fieldset { border: none; }
 address { font-style: normal; }
 ul { list-style: none; }
