@@ -1,27 +1,27 @@
-/*----------------------------------------------------|
- | dTree 2.05 | www.destroydrop.com/javascript/tree/ |
- |---------------------------------------------------|
- | Copyright (c) 2002-2003 Geir Landro               |
- |                                                   |
- | This script can be used freely as long as all     |
- | copyright messages are intact.                    |
- |                                                   |
- | Updated: 17.04.2003                               |
- |---------------------------------------------------|
- | Modified for Dokuwiki by                          |
- | Samuele Tognini <samuele@netsons.org>             |
- | under GPL 2 license                               |
- | (http://www.gnu.org/licenses/gpl.html)            |
- | Updated: 29.08.2009                               |
- |---------------------------------------------------|
- | Modified for Dokuwiki by                          |
- | Rene Hadler <rene.hadler@iteas.at>                |
- | under GPL 2 license                               |
- | (http://www.gnu.org/licenses/gpl.html)            | 
- | Updated: 07.08.2012                               |
- |---------------------------------------------------|
- | jQuery update - 27 02 2012                        |
- | Gerrit Uitslag <klapinklapin@gmail.com            |
+/*--------------------------------------------------------|
+ | dTree 2.05 | www.destroydrop.com/javascript/tree/      |
+ |--------------------------------------------------------|
+ | Copyright (c) 2002-2003 Geir Landro                    |
+ |                                                        |
+ | This script can be used freely as long as all          |
+ | copyright messages are intact.                         |
+ |                                                        |
+ | Updated: 17.04.2003                                    |
+ |--------------------------------------------------------|
+ | Modified for Dokuwiki by                               |
+ | Samuele Tognini <samuele@samuele.netsons.org>          |
+ | under GPL 2 license                                    |
+ | (http://www.gnu.org/licenses/gpl.html)                 |
+ | Updated: 29.08.2009                                    |
+ |--------------------------------------------------------|
+ | Modified for Dokuwiki by                               |
+ | Rene Hadler <rene.hadler@iteas.at>                     |
+ | under GPL 2 license                                    |
+ | (http://www.gnu.org/licenses/gpl.html)                 | 
+ | Updated: 07.08.2012                                    |
+ |--------------------------------------------------------|
+ | jQuery update - 27 02 2012                             |
+ | Gerrit Uitslag <klapinklapin@gmail.com                 |
  |--------------------------------------------------------|
  | indexmenu  | https://www.dokuwiki.org/plugin:indexmenu |
  |-------------------------------------------------------*/
@@ -106,6 +106,7 @@ dTree.prototype.openAll = function () {
 // Outputs the tree to the page
 dTree.prototype.toString = function () {
     var str = '';
+    this.pageid = this.pageid.replace(/:/g,this.config.sepchar);
     if (this.config.scroll) {
         str += '<div id="cdtree_' + this.obj + '" class="dtree" style="position:relative;overflow:hidden;width:100%;">';
     }
@@ -432,7 +433,8 @@ dTree.prototype.isOpen = function (id) {
 };
 
 dTree.prototype.openCurNS = function (max) {
-    var r, cn, match, t, i, n, cnsa, cna, cns = this.pageid;
+    var r, cn, match, t, i, n, cnsa, cna;
+    cns = this.pageid;
     r = new RegExp("\\b" + this.config.sepchar + "\\b", "g");
     match = cns.match(r) || -1;
     if (max > 0 && match.length >= max) {

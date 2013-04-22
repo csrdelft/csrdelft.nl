@@ -11,6 +11,7 @@ var indexmenu_contextmenu = {'all': new Array()};
 /* DOKUWIKI:include scripts/indexmenu.js */
 
 
+
 /**
  * Add button action for the indexmenu wizard button
  *
@@ -38,11 +39,7 @@ if (window.toolbar != undefined) {
     }
 }
 
-
-// Section below works only in release till 2012-09-10 "Adora Belle". Uncomment to use.
-// - Later releases has removed the old javascript library https://github.com/splitbrain/dokuwiki/commit/99421189
-
-
+/* functions for js renderer and contextmenu */
 
 function indexmenu_findExt(path) {
     var ext = "gif";
@@ -140,22 +137,21 @@ function indexmenu_ajaxmenu(get, $picker, $btn, $container, oncomplete) {
  * @return {Boolean} true if open, false closed
  */
 function indexmenu_togglePicker($picker, $btn) {
-    var x = 3, y = 3;
+    var x = 8, y = 0;
 
     if (!$picker.is(':visible')) {
         var pos = $btn.offset();
-        x += pos.left;
+        //position + width of button
+        x += pos.left + $btn[0].offsetWidth;
         y += pos.top;
-        console.log($btn[0].offsetWidth);
-        x += $btn[0].offsetWidth + 5;
-        y += -3;
 
         $picker
             .show()
-            .css({
-                'left': x + 'px',
-                'top': y + 'px'
+            .offset({
+                left: x,
+                top: y
             });
+
         return true;
     } else {
         $picker.hide();
