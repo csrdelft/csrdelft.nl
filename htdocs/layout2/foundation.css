@@ -1311,8 +1311,10 @@ button.button {
   .button {
     display: inline-block; } }
 /* Standard Forms */
+/*
 form {
   margin: 0 0 1em; }
+*/
 
 /* Using forms within rows, we need to set some defaults */
 form .row .row {
@@ -1487,7 +1489,7 @@ span.postfix {
   border-top-right-radius: 1000px;
   border-bottom-right-radius: 1000px; }
 
-/* We use this to get basic styling on all basic form elements 
+/* We use this to get basic styling on all basic form elements
 input[type="text"],
 input[type="password"],
 input[type="date"],
@@ -1553,7 +1555,7 @@ textarea {
   textarea[disabled] {
     background-color: #dddddd; }
 
-/* We add basic fieldset styling 
+/* We add basic fieldset styling
 fieldset {
   border: solid 1px #dddddd;
   padding: 1.25em;

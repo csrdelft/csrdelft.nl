@@ -31,7 +31,13 @@ $(function(){
 		e.preventDefault();
 	});
 
-	$('.flip').click(function () { $(this).addClass("flipped"); });
+
+	if (is_touch_device()) {
+		$('.flip').click(function(){
+			$(this).addClass("flipped");
+		});
+	}
+
 
 	// TODO: cross-fade images at homepage
 
@@ -49,5 +55,11 @@ $(function(){
 	var imageHolder = $("div.mid img.REPLACE-ANCHOR");
 	var image = $("div.mid div.content img.ubb_image").first();
 	imageHolder.attr("src", image.attr("src"));
-	image.hide(); 
+	image.hide();
 });
+
+
+function is_touch_device() {
+  return !!('ontouchstart' in window) // works on most browsers
+      || !!('onmsgesturechange' in window); // works on ie10
+};
