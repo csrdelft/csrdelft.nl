@@ -8,17 +8,12 @@ div{border: 0px solid red;}
 body {
 	font-family : Verdana, Geneva, Arial, Helvetica, sans-serif;
 	font-size: 11px;
-/*	background: url('http://plaetjes.csrdelft.nl/layout/body.png') repeat-x;*/
-    
-/*BIBA: */
-background:repeat url(http://www.smulwereld.nl/l/library/download/S1ns3NT1KPP18bOB_a_j4b0vvQH48oUBwc/Bitterballen.png?width=440&height=395&ext=.png);
-
+	background: url('http://plaetjes.csrdelft.nl/layout/body.png') repeat-x;
 }
 
 #container {
 	margin: 0 auto 10px;
 	width: 1004px;
-    background:rgba(255, 255, 255, 0.70); /* BIBA*/
 }
 
 body, textarea, input, select, option, tr, td, th, div, p  {
