@@ -111,9 +111,9 @@
                 </div>
                 <div class="columns large-2 small-2">
                     <div class="box h2 link">
-                        <a href="http://youtu.be/4Hth7C3BVvQ">
-                            <img src="/images/layout2/box-feest-poster.jpg" class="border">
-                            <h2 class="overlay">Feest 25 april</h2>
+                        <a href="http://www.veritasforum.nl/delft/index.html">
+                            <img src="/images/layout2/box-promo-veritas.jpg" class="border">
+                            <!-- <h2 class="overlay">Feest 25 april</h2> -->
                         </a>
                     </div>
                 </div>

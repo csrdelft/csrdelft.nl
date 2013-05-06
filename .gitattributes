@@ -93,8 +93,6 @@ htdocs/images/layout2/blue-box-h2-w2.png -text
 htdocs/images/layout2/blue-box-h2.png -text
 htdocs/images/layout2/blue-box-h4.png -text
 htdocs/images/layout2/blue-box.png -text
-htdocs/images/layout2/box-dies-poster.jpg -text
-htdocs/images/layout2/box-feest-poster.jpg -text
 htdocs/images/layout2/box-groep.jpg -text
 htdocs/images/layout2/box-icon-bedrijven.png -text
 htdocs/images/layout2/box-icon-fotos.png -text
@@ -106,7 +104,10 @@ htdocs/images/layout2/box-picture-2.jpg -text
 htdocs/images/layout2/box-picture-3.jpg -text
 htdocs/images/layout2/box-picture-4.jpg -text
 htdocs/images/layout2/box-picture-5.jpg -text
-htdocs/images/layout2/box-poster.jpg -text
+htdocs/images/layout2/box-promo-dies.jpg -text
+htdocs/images/layout2/box-promo-feest.jpg -text
+htdocs/images/layout2/box-promo-owee.jpg -text
+htdocs/images/layout2/box-promo-veritas.jpg -text
 htdocs/images/layout2/contact-1.jpg -text
 htdocs/images/layout2/info-geloof-1.jpg -text
 htdocs/images/layout2/info-geloof-2.jpg -text

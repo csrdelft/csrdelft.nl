@@ -9,7 +9,7 @@
 		{foreach from=$loginlid->getLid()->getSaldi() item=saldo}
 				{$saldo.naam}: &euro; {$saldo.saldo|number_format:2:",":"."} <br />
 		{/foreach}
-    
+
 </p>
 <p><a href="/leden">Ga naar ledengedeelte &raquo;</a></p>
 {else}
@@ -18,7 +18,7 @@
 	<fieldset>
 		<input type="hidden" name="url" value="/leden" />
 		<input class="text" type="text" name="user" placeholder="Bijnaam of lidnummer" />
-		<input class="text" type="password" name="pass" placeholder="wachtwoord" />
+		<input class="text" type="password" name="pass" placeholder="Wachtwoord" />
 		<input class="submit" type="submit" name="login" value="Inloggen" />
 	</fieldset>{if isset($smarty.session.auth_error)}
 	<p class="error">{$smarty.session.auth_error}</p>{/if}
