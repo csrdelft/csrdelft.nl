@@ -1321,6 +1321,7 @@ htdocs/wiki/lib/plugins/include/syntax/wrap.php -text
 htdocs/wiki/lib/plugins/index.html -text
 htdocs/wiki/lib/plugins/indexmenu/COPYING -text
 htdocs/wiki/lib/plugins/indexmenu/CREDITS -text
+htdocs/wiki/lib/plugins/indexmenu/README -text
 htdocs/wiki/lib/plugins/indexmenu/action.php -text
 htdocs/wiki/lib/plugins/indexmenu/admin.php -text
 htdocs/wiki/lib/plugins/indexmenu/ajax.php -text

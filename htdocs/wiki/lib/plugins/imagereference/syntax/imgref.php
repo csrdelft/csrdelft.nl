@@ -63,10 +63,21 @@ class syntax_plugin_imagereference_imgref extends DokuWiki_Syntax_Plugin {
      */
     function handle($match, $state, $pos, &$handler) {
         $reftype = substr($match, 1, 3);
-        $ref = trim(substr($match, 8, -1));
-        if($ref) {
+        $ref = substr($match, 7, -1);
+
+        $parts = explode('#', $ref, 2);
+        if(count($parts) == 1) {
+            $page = '';
+            $ref = $parts[0];
+        } else {
+            $page = $parts[0];
+            $ref = $parts[1];
+        }
+
+        if($ref != '') {
             return array(
-                'caprefname' => $ref,
+                'page' => trim($page),
+                'caprefname' => trim($ref),
                 'type'    => $reftype
             );
         }
@@ -88,15 +99,20 @@ class syntax_plugin_imagereference_imgref extends DokuWiki_Syntax_Plugin {
             case 'xhtml' :
                 /** @var Doku_Renderer_xhtml $renderer */
 
+                if($data['page'] == '') {
+                    $data['page'] = $ID;
+                }
+                resolve_pageid(getNS($ID), $data['page'], $exists);
+
                 //determine referencenumber
-                $caprefs   = p_get_metadata($ID, 'captionreferences '.$data['type']);
+                $caprefs   = p_get_metadata($data['page'], 'captionreferences '.$data['type']);
                 $refNumber = array_search($data['caprefname'], $caprefs);
 
                 if(!$refNumber) {
                     $refNumber = "##";
                 }
 
-                $renderer->doc .= '<a href="#'.$data['type'].'_'.cleanID($data['caprefname']).'">'.$this->getLang($data['type'].'full').' '.$refNumber.'</a>';
+                $renderer->doc .= '<a href="'.wl($data['page']).'#'.$data['type'].'_'.cleanID($data['caprefname']).'">'.$this->getLang($data['type'].'full').' '.$refNumber.'</a>';
                 return true;
 
             case 'latex' :
