@@ -816,6 +816,13 @@ htdocs/wiki/lib/plugins/acl/script.js -text
 htdocs/wiki/lib/plugins/acl/style.css -text
 htdocs/wiki/lib/plugins/action.php -text
 htdocs/wiki/lib/plugins/admin.php -text
+htdocs/wiki/lib/plugins/authcsr/README -text
+htdocs/wiki/lib/plugins/authcsr/auth.php -text
+htdocs/wiki/lib/plugins/authcsr/conf/default.php -text
+htdocs/wiki/lib/plugins/authcsr/conf/metadata.php -text
+htdocs/wiki/lib/plugins/authcsr/lang/en/lang.php -text
+htdocs/wiki/lib/plugins/authcsr/lang/en/settings.php -text
+htdocs/wiki/lib/plugins/authcsr/plugin.info.txt -text
 htdocs/wiki/lib/plugins/bureaucracy/README -text
 htdocs/wiki/lib/plugins/bureaucracy/_test/input.txt -text
 htdocs/wiki/lib/plugins/bureaucracy/_test/syntax.test.php -text

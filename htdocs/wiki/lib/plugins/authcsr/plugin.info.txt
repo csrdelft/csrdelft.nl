@@ -1,0 +1,7 @@
+base   authcsr
+author Gerrit Uitslag
+email  klapinklapin@gmail.com
+date   2013-04-20
+name   authcsr plugin
+desc   SSO authenticatie met C.S.R. stek
+url    https://trac.knorrie.org/csrdelft.nl/browser/trunk/htdocs/wiki/lib/plugins/authcsr
