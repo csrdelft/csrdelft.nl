@@ -868,9 +868,6 @@ htdocs/wiki/lib/plugins/bureaucracy/lang/ru/settings.php -text
 htdocs/wiki/lib/plugins/bureaucracy/manager.dat -text
 htdocs/wiki/lib/plugins/bureaucracy/plugin.info.txt -text
 htdocs/wiki/lib/plugins/bureaucracy/script.js -text
-htdocs/wiki/lib/plugins/bureaucracy/script/autocompletion.js -text
-htdocs/wiki/lib/plugins/bureaucracy/script/datepicker-i18n.js -text
-htdocs/wiki/lib/plugins/bureaucracy/script/datepicker-init.js -text
 htdocs/wiki/lib/plugins/bureaucracy/script/datepicker.js -text
 htdocs/wiki/lib/plugins/bureaucracy/script/fieldsets.js -text
 htdocs/wiki/lib/plugins/bureaucracy/script/user.js -text
