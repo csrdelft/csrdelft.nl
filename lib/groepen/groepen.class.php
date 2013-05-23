@@ -76,7 +76,7 @@ class Groepen{
 				groeplid.uid AS uid, groeplid.op AS op, groeplid.functie AS functie, groeplid.prioriteit AS prioriteit,
 				IF(aanmeldbaar = '',
 					1,
-					IF(einde>CURRENT_DATE() OR einde = 0000-00-00,
+					IF(einde>=CURRENT_DATE() OR einde = 0000-00-00,
 						IF(limiet = 0 OR 
 							((
 								SELECT count( * )

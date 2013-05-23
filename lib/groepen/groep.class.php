@@ -333,7 +333,7 @@ class Groep{
 	public function isVol(){		return $this->getLimiet()!=0 AND $this->getLimiet()<=$this->getLidCount(); }
 	public function getVrijePlaatsen(){
 		$aantal=$this->getLimiet() - $this->getLidCount();
-		if($this->getLimiet()!=0 AND $aantal>0 AND $this->isAanmeldbaar() AND ($this->getEinde()=='0000-00-00' OR $this->getEinde()>date('Y-m-d'))){
+		if($this->getLimiet()!=0 AND $aantal>0 AND $this->isAanmeldbaar() AND ($this->getEinde()=='0000-00-00' OR $this->getEinde()>=date('Y-m-d'))){
 			return $aantal;
 		}else{
 			return 0;
@@ -405,7 +405,7 @@ class Groep{
 		if(!$this->isIngelogged()) 		return false;
 		if($this->isLid()) 				return false;
 
-		if($this->getEinde()=='0000-00-00' OR $this->getEinde()>date('Y-m-d')){
+		if($this->getEinde()=='0000-00-00' OR $this->getEinde()>=date('Y-m-d')){
 			if($this->getLimiet()==0){
 				return true;
 			}else{

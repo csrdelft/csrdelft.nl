@@ -38,7 +38,7 @@
 		<label for="begin"><strong>Periode:</strong></label> 
 		<input type="text" id="begin" name="begin" value="{$groep->getBegin()}" /> - <input type="text" name="einde" id="einde" value="{$groep->getEinde()}" />
 		<div id="periode" class="opmerking">
-			Op einddatum en later is aanmelden gesloten.<br />
+			t/m de einddatum is aanmelden mogelijk.<br />
 		</div>
 		<br />
 
