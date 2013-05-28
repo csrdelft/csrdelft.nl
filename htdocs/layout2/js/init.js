@@ -16,7 +16,7 @@ $(function(){
 
 
 	// Background image
-	$.backstretch('/images/layout2/bg-image-15.jpg');
+	$.backstretch('/images/layout2/bg-image-16.jpg');
 
 
 	// Login form enhancing
