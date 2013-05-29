@@ -24,7 +24,7 @@ class FotalbumZijbalkContent extends SimpleHtml{
 		echo '<a href="/actueel/fotoalbum/'.$this->album->getPad().'">';
 		echo $this->album->getNaam();
 		echo '</a>';
-		
+
 		echo '<div class="fotos">';
 		$limit=6;
 		$fotos=$this->album->getFotos();
@@ -68,31 +68,31 @@ class FotoalbumUbbContent extends SimpleHTML{
 	public function makeCompact(){
 		$this->compact=true;
 	}
-	
+
 	public function setRows($rows){
 		$this->rows=$rows;
 	}
-	
+
 	//one integer index or array of integer indexes of images to enlarge.
-	//possible 'macro' enlargements for up to 8 rows: 
-	// - a (diagonals), 
-	// - b (diagonals), 
+	//possible 'macro' enlargements for up to 8 rows:
+	// - a (diagonals),
+	// - b (diagonals),
 	// - c (odd/even)
 	public function setBig($index){
-		
+
 		if(in_array($index, array('a', 'b', 'c'))){
 			switch($index){
 				case 'a':
 					$this->big=array(0,9,18,28,37,46);
 				break;
-				case 'b': 
-					$this->big=array(0,4,15,19, 28, 32, 43,47); 
+				case 'b':
+					$this->big=array(0,4,15,19, 28, 32, 43,47);
 				break;
 				case 'c':
-					$this->big=array(0,16,4,28,44,32); 
+					$this->big=array(0,16,4,28,44,32);
 				break;
-			}		
-			return; 
+			}
+			return;
 		}
 		if(count(explode(',', $index))>1){
 			//explode on ',' and convert tot int.
@@ -123,15 +123,15 @@ class FotoalbumUbbContent extends SimpleHTML{
 				//remove images that will cause wrap around
 				if($col+1>=$this->per_row){ continue; }
 				if($row+1>=$this->rows){	continue; }
-				
+
 				//remove images that will cause overlap with a big image one row up.
 				if($grid[$row][$col+1]==USED){	continue; }
-				
+
 				//if valid image, put on grid.
 				if(isset($fotos[$bigindex]) && $fotos[$bigindex] instanceof Foto){
 					//if place already USED, do not put photo in.
 					if($grid[$row][$col]==USED){ continue; }
-					
+
 					$grid[$row][$col]=array(
 						'index' => $bigindex,
 						'foto' => $fotos[$bigindex]
@@ -142,7 +142,7 @@ class FotoalbumUbbContent extends SimpleHTML{
 				}
 			}
 		}
-		
+
 		//put small images on grid.
 		$row=$col=0;
 		foreach($fotos as $key => $foto){
@@ -183,7 +183,7 @@ class FotoalbumUbbContent extends SimpleHTML{
 		$albumurl=$this->album->getPad();
 
 		$delta=$this->picsize+(2*$this->rowmargin);
-		
+
 		$ret='<div class="images" style="height: '.(count($grid)*$delta).'px">';
 
 		foreach($grid as $row => $rowcontents){
@@ -205,19 +205,19 @@ class FotoalbumUbbContent extends SimpleHTML{
 
 	public function getHTML(){
 		$albumurl=$this->album->getPad();
-		
+
 		if($this->compact){
 			//compacte versie van de tag is alleen een thumbnail.
-			$content='<a href="'.$albumurl.'"><img src="'.$this->album->getThumbURL().'" class="compact" /></a><div class="clear"></div>';
+			$content='<a href="/actueel/fotoalbum'.$albumurl.'"><img src="'.$this->album->getThumbURL().'" class="compact" /></a><div class="clear"></div>';
 		}else{
 			$content=$this->getGridHtml();
 		}
-		
+
 		return
 			'<div class="ubb_block ubb_fotoalbum">
 				<h2>
 					'.$this->album->getBreadcrumb().'
-					&raquo; <a href="'.$albumurl.'">'.mb_htmlentities($this->album->getNaam()).'</a>
+					&raquo; <a href="/actueel/fotoalbum'.$albumurl.'">'.mb_htmlentities($this->album->getNaam()).'</a>
 				</h2>
 				'.$content.'
 			</div>';
