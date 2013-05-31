@@ -264,10 +264,11 @@ class ProfielBewerken extends Profiel {
 			if(in_array($profiel['status'], array('S_NOBODY', 'S_EXLID', 'S_OVERLEDEN'))){
 				$form[]=new DatumField('sterfdatum', $profiel['sterfdatum'], 'Overleden op:');
 			}
-			if($hasLedenMod OR in_array($profiel['status'], array('S_OUDLID', 'S_ERELID'))){
+			if($hasLedenMod OR in_array($profiel['status'], array('S_OUDLID', 'S_ERELID', 'S_OVERLEDEN'))){
 				$form[]=new LidField('echtgenoot', $profiel['echtgenoot'], 'Echtgenoot (naam/lidnr):', 'allepersonen');
+				$form[]=new Comment('Oudledenpost:');
 				$form[]=new InputField('adresseringechtpaar',$profiel['adresseringechtpaar'], 'Tenaamstelling post echtpaar:',250);
-				$form[]=new SelectField('contactueel', $profiel['contactueel'], 'Contactueel?', array('ja', 'ja, digitaal', 'nee'));
+				$form[] = new SelectField('ontvangtcontactueel', $profiel['ontvangtcontactueel'], 'Ontvangt Contactueel?', array('ja'=>'ja', 'digitaal'=>'ja, digitaal', 'nee'=>'nee'));
 			}
 		}
 
@@ -335,11 +336,6 @@ class ProfielBewerken extends Profiel {
 
 		if(in_array($profiel['status'], array('S_OUDLID', 'S_ERELID', 'S_NOBODY', 'S_EXLID'))){
 			$form[]=new DatumField('lidafdatum', $profiel['lidafdatum'], 'Lid-af sinds');
-		}
-		
-		//Bij oudleden, ereleden en overleden personen kan het veld ontvangtcontactueel worden aangepast.
-		if(in_array($profiel['status'], array('S_OUDLID', 'S_ERELID', 'S_OVERLEDEN')) AND $hasLedenMod){
-			$form[]=new JaNeeField('ontvangtcontactueel', $profiel['ontvangtcontactueel'], 'Ontvangt Contactueel');
 		}
 
 		if($hasLedenMod AND !$this->editNoviet){
