@@ -458,7 +458,7 @@ class ProfielStatus extends Profiel{
 		$form[]=new DatumField('lidafdatum', $profiel['lidafdatum'], 'Lid-af sinds');
 		$form[]=new SelectField('kring', $profiel['kring'], 'Kringnummer', range(0,9));
 		$form[]=new InputField('postfix', $profiel['postfix'], 'Postfix', 7);
-		$form[]=new SelectField('ontvangtcontactueel', $profiel['ontvangtcontactueel'], 'Ontvangt contactueel?', array('ja'=>'ja','nee'=>'nee'));
+		$form[]=new SelectField('ontvangtcontactueel', $profiel['ontvangtcontactueel'], 'Ontvangt Contactueel?', array('ja'=>'ja', 'digitaal'=>'ja, digitaal', 'nee'=>'nee'));
 		$form[]=new LidField('echtgenoot', $profiel['echtgenoot'], 'Echtgenoot (naam/lidnr):', 'allepersonen');
 		$form[]=new InputField('adresseringechtpaar',$profiel['adresseringechtpaar'], 'Tenaamstelling post echtpaar:',250);
 		$form[]=new DatumField('sterfdatum', $profiel['sterfdatum'], 'Overleden op:');
@@ -478,8 +478,9 @@ class ProfielStatus extends Profiel{
 		return $this->form->valid($this->lid);
 	}
 
-	/*
+	/**
 	 * Slaat waardes uit de velden op. Voor opslaan worden sommige velden nog geconditioneerd.
+	 *
 	 * @return bool wel/niet slagen van opslaan van lidgegevens
 	 * acties: verwerkt velden, conditioneert die, zet abo's uit, slaat lidgegevens op en mailt fisci.
 	 */
@@ -586,7 +587,9 @@ class ProfielStatus extends Profiel{
 
 	/**
 	 * Verwijder toekomstige corveetaken en geef changelogregel terug
-	 * @param statussen van voor en na wijziging
+	 *
+	 * @param string $oudestatus    voor wijziging
+	 * @param string $nieuwestatus  na wijziging
 	 * @return string changelogregel
 	 */
 	private function removeToekomstigeCorvee($oudestatus, $nieuwestatus){
@@ -620,7 +623,9 @@ class ProfielStatus extends Profiel{
 
 	/**
 	 * Mail naar fisci over statuswijzigingen. Kunnen zij hun systemen weer mee updaten.
-	 * 
+	 *
+	 * @param string $oudestatus    voor wijziging
+	 * @param string $nieuwestatus  na wijziging
 	 * @return bool mailen is wel/niet verzonden
 	 */
 	private function notifyFisci($oudestatus, $nieuwestatus){
@@ -729,9 +734,11 @@ class ProfielVoorkeur extends Profiel{
 			
 		}
 
-		/*
+		/**
 		 * Slaat waardes uit de velden op. Voor opslaan worden sommige velden nog geconditioneerd.
+		 *
 		 * @return bool wel/niet slagen van opslaan van lidgegevens
+		 *
 		 * acties: verwerkt velden, conditioneert die, zet abo's uit, slaat lidgegevens op en mailt fisci.
 		 */
 		public function save(){
