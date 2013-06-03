@@ -109,17 +109,17 @@ class Groepcontent extends SimpleHTML{
 	public function getAanmeldfilters(){
 		$filters=array(
 			'' => 'Niet aanmeldbaar',
-			'P_LOGGED_IN' => 'Alle leden', 
+			'P_LOGGED_IN' => 'Alle leden',
 			'geslacht:m' => 'Alleen mannen',
 			'geslacht:v' => 'Alleen vrouwen');
-		
+
 		//verticalen.
 		foreach(Verticale::getLetters() as $key => $verticale){
 			if($verticale=='Geen'){ continue; }
 			$filter='verticale:'.$verticale;
 			$filters[$filter] = 'Verticale '.Verticale::getNaamById($key);
 		}
-		
+
 		//lichtingen
 		$nu = Lichting::getJongsteLichting();
 		for($lichting=$nu; $lichting>=($nu-7); $lichting--){
@@ -128,7 +128,7 @@ class Groepcontent extends SimpleHTML{
 
 		return $filters;
 	}
-	
+
 	public function view(){
 		$content=new Smarty_csr();
 
@@ -137,7 +137,7 @@ class Groepcontent extends SimpleHTML{
 
 		$content->assign('action', $this->action);
 		$content->assign('groeptypes', Groepen::getGroeptypes());
-		$content->assign('aanmeldfilters', $this->getAanmeldfilters()); 
+		$content->assign('aanmeldfilters', $this->getAanmeldfilters());
 		$content->assign('oudegroep',$_SESSION['oudegroep']);
 		if($this->action=='addLid'){
 			$content->assign('lidAdder', $this->getLidAdder());
@@ -179,16 +179,16 @@ class Groepencontent extends SimpleHTML{
 class GroepledenContent{
 	private $groep;
 	private $actie='default';
-	
+
 	public function __construct(Groep $groep, $actie='default'){
 		$this->groep=$groep;
 		$this->actie=$actie;
 	}
 	public function view(){
-		$content=new Smarty_csr();	
+		$content=new Smarty_csr();
 		$content->assign('groep', $this->groep);
 		$content->assign('actie', $this->actie);
-		
+
 		$content->display('groepen/groepleden.tpl');
 	}
 }
@@ -250,12 +250,12 @@ class GroepenProfielContent extends SimpleHTML{
 
 	private $display_lower_limit=8;
 	private $display_upper_limit=12;
-	
+
 	public function __construct($uid){
 		$this->uid=$uid;
 	}
 
-	
+
 	public function getHTML(){
 		//per status in een array rammen
 		$groepenPerStatus=array();
@@ -276,14 +276,14 @@ class GroepenProfielContent extends SimpleHTML{
 			if(count($groepen)>$this->display_lower_limit AND count($groepen)<$this->display_upper_limit){
 				$display_limit=$this->display_upper_limit;
 			}
-			
+
 			foreach($groepen as $groep){
 				if($i>$display_limit){
 					$style='style="display: none;" ';
 				}
 				//op een of andere manier werkt het hier niet als ik een class-property gebruik,
 				//dus daarom maar met inline style.
-				$return.='<li '.$style.'>'.$groep->getLink().'</li>'; 
+				$return.='<li '.$style.'>'.$groep->getLink().'</li>';
 				$i++;
 			}
 
@@ -291,12 +291,12 @@ class GroepenProfielContent extends SimpleHTML{
 			if($i>$display_limit){
 				$return.='<a onclick="jQuery(this).parent().children(\'ul\').children().show(); jQuery(this).remove();" class="handje">&raquo; meer </a>';
 			}
-			
+
 			$return.='</div>';
 		}
 		return $return;
 	}
-	
+
 	public function view(){
 		echo $this->getHTML();
 	}
@@ -352,6 +352,7 @@ class GroepStatsContent extends SimpleHTML{
 			}
 		}
 		echo '</table>';
+		echo '<div id="stattotaalscript" data-ontstaan="red-of-slacht-kip-donacie-actie" data-ontstaan-url="http://csrdelft.nl/communicatie/forum/onderwerp/6760/1"><script>var $table = $("#stattotaalscript").parent().find("table"); var total = 0.0; $table.find("tr:has(th)").last().nextAll().each(function(){ total += parseFloat($(this).find("td:first-child").html().replace(",",".")) * parseFloat($(this).find("td:last-child").html());}); if (typeof total === "number"){ $table.append(\'<tr><th colspan="2">opmerkingen som</th></tr><tr><td colspan="2">\'+total.toFixed(2)+\'</td></tr>\'); }</script>';
 	}
 }
 class GroepEmailContent extends SimpleHTML{
