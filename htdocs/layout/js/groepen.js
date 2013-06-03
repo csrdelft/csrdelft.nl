@@ -74,10 +74,10 @@ function showTab(groepid, tabid){
 
 			var $table = $("#stattotaalscript").parent().find("table");
 			var total = 0.0;
-			$table.find("tr:has(th)").last().nextAll().each(function(){
+			$table.find("tr:has(th:contains(opmerking))").last().nextAll().each(function(){
 				total += parseFloat($(this).find("td:first-child").html().replace(",",".")) * parseFloat($(this).find("td:last-child").html());
 			});
-			if (typeof total === "number"){
+			if (typeof total === "number" && !isNaN(total)){
 				$table.append('<tr><th colspan="2">opmerkingen som</th></tr><tr><td colspan="2">'+total.toFixed(2)+'</td></tr>');
 			}
 
