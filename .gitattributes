@@ -2987,6 +2987,7 @@ lib/templates/maaltijdketzer/maaltijdketzer.tpl -text
 lib/templates/maaltijdketzer/menu.tpl -text
 lib/templates/maaltijdketzer/saldi-updater.tpl -text
 lib/templates/maaltijdketzer/voorkeuren.tpl -text
+lib/templates/mails/lidafgeleendebiebboeken.mail -text
 lib/templates/mails/lidafmeldingfisci.mail -text
 lib/templates/mails/nieuwwachtwoord.mail -text
 lib/templates/mails/toekomstigcorveeverwijderd.mail -text

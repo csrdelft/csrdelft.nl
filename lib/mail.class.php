@@ -125,7 +125,7 @@ class Mail{
 	 * Mail::mail('pubcie@csrdelft.nl', 'Test123', "Hoi Pubcie,\nDit is een test.");
 	 */
 	public static function mail($to, $onderwerp, $bericht){
-		$mail=new Mail($to, $subject, $bericht);
+		$mail=new Mail($to, $onderwerp, $bericht);
 		return $mail->send();
 	}
 }
@@ -164,5 +164,3 @@ class TemplatedMail extends Mail{
 		return $body;
 	}
 }
-
-?>

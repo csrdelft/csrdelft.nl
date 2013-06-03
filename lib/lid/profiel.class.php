@@ -551,11 +551,13 @@ class ProfielStatus extends Profiel{
 
 		//hop, saven met die hap
 		if(parent::save()){
-			//mailen naar fisci...
-			$maggeensaldimeer=array('S_OUDLID','S_ERELID','S_NOBODY','S_EXLID','S_OVERLEDEN');;
-			$hadsaldi=array('S_NOVIET','S_GASTLID','S_LID','S_KRINGEL');
-			if(in_array($nieuwestatus, $maggeensaldimeer) AND in_array($oudestatus, $hadsaldi)){
+			//mailen naar fisci,bibliothecaris...
+			$wordtinactief=array('S_OUDLID','S_ERELID','S_NOBODY','S_EXLID','S_OVERLEDEN');;
+			$wasactief=array('S_NOVIET','S_GASTLID','S_LID','S_KRINGEL');
+			if(in_array($nieuwestatus, $wordtinactief) AND in_array($oudestatus, $wasactief)){
 				$this->notifyFisci($oudestatus, $nieuwestatus);
+
+				$this->notifyBibliothecaris($oudestatus, $nieuwestatus);
 			}
 			return true;
 		}
@@ -646,6 +648,65 @@ class ProfielStatus extends Profiel{
 		$to='fiscus@csrdelft.nl,maalcie-fiscus@csrdelft.nl,soccie@csrdelft.nl';
 
 		$mail=new TemplatedMail($to, 'Melding lid-af worden', $template);
+		$mail->addBcc("pubcie@csrdelft.nl");
+		$mail->setValues($values);
+
+		return $mail->send();
+	}
+
+	/**
+	 * Mail naar bibliothecaris en leden over geleende boeken
+	 *
+	 * @param string $oudestatus    voor wijziging
+	 * @param string $nieuwestatus  na wijziging
+	 * @return bool mailen is wel/niet verzonden
+	 */
+	private function notifyBibliothecaris($oudestatus, $nieuwestatus)
+	{
+		require_once 'bibliotheek/catalogus.class.php';
+		$boeken = Catalogus::getBoekenByUid($this->bewerktLid->getUid(), 'geleend');
+
+		//lijst van boeken genereren
+		$bknleden = $bkncsr = array(
+			'kopje' => '',
+			'lijst' => '',
+			'aantal' => 0
+		);
+		foreach ($boeken as $boek) {
+			if ($boek['eigenaar_uid'] == 'x222') {
+				$bkncsr['aantal']++;
+				$bkncsr['lijst'] .= "{$boek['titel']} door {$boek['auteur']}\n";
+				$bkncsr['lijst'] .= " - http://csrdelft.nl/communicatie/bibliotheek/boek/{$boek['id']}\n";
+			} else {
+				$bknleden['aantal']++;
+				$bknleden['lijst'] .= "{$boek['titel']} door {$boek['auteur']}\n";
+				$bknleden['lijst'] .= " - http://csrdelft.nl/communicatie/bibliotheek/boek/{$boek['id']}\n";
+				$naam = LidCache::getLid($boek['eigenaar_uid'])->getNaamLink('full', 'plain');
+				$bknleden['lijst'] .= " - boek is geleend van: $naam\n";
+			}
+		}
+		//kopjes
+		$mv = ($this->bewerktLid->getGeslacht() == 'v') ? 'haar' : 'hem';
+		$enkelvoud = "Het volgende boek is nog door {$mv} geleend";
+		$meervoud = "De volgende boeken zijn nog door {$mv} geleend";
+		if ($bkncsr['aantal'])   $bkncsr['kopje']   = ($bkncsr['aantal'] > 1 ? $meervoud : $enkelvoud) . " van de C.S.R.-bibliotheek:";
+		if ($bknleden['aantal']) $bknleden['kopje'] = ($bknleden['aantal'] > 1 ? $meervoud : $enkelvoud) . " van leden:";
+
+		// Alleen mailen als er C.S.R.boeken zijn
+		if (count($bkncsr['aantal']) == 0) return false;
+
+		$to = 'bibliothecaris@csrdelft.nl,' . $this->bewerktLid->getEmail();
+		$template = file_get_contents(LIB_PATH . '/templates/mails/lidafgeleendebiebboeken.mail');
+		$values = array(
+			'naam' => $this->bewerktLid->getNaamLink('full', 'plain'),
+			'uid' => $this->bewerktLid->getUid(),
+			'oudestatus' => substr($oudestatus, 2),
+			'nieuwestatus' => ($nieuwestatus == 'S_NOBODY' ? 'GEEN LID' : substr($nieuwestatus, 2)),
+			'csrlijst' => $bkncsr['kopje'] . "\n" . $bkncsr['lijst'],
+			'ledenlijst' => ($bkncsr['aantal'] > 0 ? "Verder ter informatie: " . $bknleden['kopje'] . "\n" . $bknleden['lijst'] : ''),
+			'admin_naam' => LoginLid::instance()->getLid()->getNaam());
+
+		$mail = new TemplatedMail($to, 'Geleende boeken - Melding lid-af worden', $template);
 		$mail->addBcc("pubcie@csrdelft.nl");
 		$mail->setValues($values);
 
