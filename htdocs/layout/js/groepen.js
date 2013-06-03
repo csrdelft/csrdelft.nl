@@ -77,7 +77,7 @@ function showTab(groepid, tabid){
 			$table.find("tr:has(th:contains(opmerking))").last().nextAll().each(function(){
 				total += parseFloat($(this).find("td:first-child").html().replace(",",".")) * parseFloat($(this).find("td:last-child").html());
 			});
-			if (typeof total === "number" && !isNaN(total)){
+			if (typeof total === "number" && !isNaN(total) && total > 0.01){
 				$table.append('<tr><th colspan="2">opmerkingen som</th></tr><tr><td colspan="2">'+total.toFixed(2)+'</td></tr>');
 			}
 
