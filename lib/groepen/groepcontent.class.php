@@ -352,7 +352,7 @@ class GroepStatsContent extends SimpleHTML{
 			}
 		}
 		echo '</table>';
-		echo '<div id="stattotaalscript" data-ontstaan="red-of-slacht-kip-donacie-actie" data-ontstaan-url="http://csrdelft.nl/communicatie/forum/onderwerp/6760/1"><script>setTimeout(function(){var $table = $("#stattotaalscript").parent().find("table"); var total = 0.0; $table.find("tr:has(th)").last().nextAll().each(function(){ total += parseFloat($(this).find("td:first-child").html().replace(",",".")) * parseFloat($(this).find("td:last-child").html());}); if (typeof total === "number"){ $table.append(\'<tr><th colspan="2">opmerkingen som</th></tr><tr><td colspan="2">\'+total.toFixed(2)+\'</td></tr>\'); }}, 2000);</script>';
+		echo '<div id="stattotaalscript" data-ontstaan="red-of-slacht-kip-donacie-actie" data-ontstaan-url="http://csrdelft.nl/communicatie/forum/onderwerp/6760/1"><script>$(function(){ var $table = $("#stattotaalscript").parent().find("table"); var total = 0.0; $table.find("tr:has(th)").last().nextAll().each(function(){ total += parseFloat($(this).find("td:first-child").html().replace(",",".")) * parseFloat($(this).find("td:last-child").html());}); if (typeof total === "number"){ $table.append(\'<tr><th colspan="2">opmerkingen som</th></tr><tr><td colspan="2">\'+total.toFixed(2)+\'</td></tr>\'); } });</script>';
 	}
 }
 class GroepEmailContent extends SimpleHTML{
