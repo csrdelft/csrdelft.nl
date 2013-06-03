@@ -25,7 +25,7 @@ function updateGroepform(){
 				case 3:
 					displayDiv(document.getElementById('functieOpmNiet'));
 					hideDiv(document.getElementById('functieOpmVerbergen'));
-					hideDiv(document.getElementById('functieOpmTonenzonderinvoer'));				
+					hideDiv(document.getElementById('functieOpmTonenzonderinvoer'));
 				break;
 				default:
 					hideDiv(document.getElementById('functieOpmVerbergen'));
@@ -71,6 +71,16 @@ function showTab(groepid, tabid){
 	http.onreadystatechange=function(){
 		if(http.readyState == 4){
 			document.getElementById('ledenvangroep'+groepid).innerHTML=http.responseText;
+
+			var $table = $("#stattotaalscript").parent().find("table");
+			var total = 0.0;
+			$table.find("tr:has(th)").last().nextAll().each(function(){
+				total += parseFloat($(this).find("td:first-child").html().replace(",",".")) * parseFloat($(this).find("td:last-child").html());
+			});
+			if (typeof total === "number"){
+				$table.append('<tr><th colspan="2">opmerkingen som</th></tr><tr><td colspan="2">'+total.toFixed(2)+'</td></tr>');
+			}
+
 			observeClick();
 		}
 	};
@@ -99,7 +109,7 @@ function observeClick(){
 		var data = {'functie[]': values}
 		//update span
 		jQuery(this).children('span').html(values.join(" - "));
-		
+
 		jQuery.ajax({
 			type: "POST",
 			url: '/actueel/groepen/XHR/'+gid+'/bewerkfunctieLid/'+uid,
