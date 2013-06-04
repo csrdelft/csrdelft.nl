@@ -352,7 +352,6 @@ class GroepStatsContent extends SimpleHTML{
 			}
 		}
 		echo '</table>';
-		echo '<div id="stattotaalscript" data-ontstaan="red-of-slacht-kip-donacie-actie" data-ontstaan-url="http://csrdelft.nl/communicatie/forum/onderwerp/6760/1"></div>';
 	}
 }
 class GroepEmailContent extends SimpleHTML{

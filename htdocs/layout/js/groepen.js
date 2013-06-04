@@ -72,13 +72,20 @@ function showTab(groepid, tabid){
 		if(http.readyState == 4){
 			document.getElementById('ledenvangroep'+groepid).innerHTML=http.responseText;
 
-			var $table = $("#stattotaalscript").parent().find("table");
-			var total = 0.0;
+			// naar aanleiding van red-of-slacht-kip-donacie-actie
+			// http://csrdelft.nl/communicatie/forum/onderwerp/6760/1
+			var $table = $(".query_table"),
+				total = 0.0;
 			$table.find("tr:has(th:contains(opmerking))").last().nextAll().each(function(){
 				total += parseFloat($(this).find("td:first-child").html().replace(",",".")) * parseFloat($(this).find("td:last-child").html());
 			});
 			if (typeof total === "number" && !isNaN(total) && total > 0.01){
-				$table.append('<tr><th colspan="2">opmerkingen som</th></tr><tr><td colspan="2">'+total.toFixed(2)+'</td></tr>');
+				var omschrijving = "opmerkingen som";
+				if (groepid == "1675")
+					omschrijving = "Red dat kippetje!";
+				else if (groepid == "1674")
+					omschrijving = "Slacht dat ondier!";
+				$table.append('<tr><th colspan="2">'+omschrijving+'</th></tr><tr><td colspan="2">'+total.toFixed(2)+'</td></tr>');
 			}
 
 			observeClick();
