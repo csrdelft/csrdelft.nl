@@ -1,6 +1,6 @@
 <?php
 /**
- * DokuWiki Plugin docnav (Syntax Component)
+ * DokuWiki Plugin DocNavigation (Syntax Component)
  *
  * @license GPL 2 http://www.gnu.org/licenses/gpl-2.0.html
  * @author  Gerrit Uitslag <klapinklapin@gmail.com>
@@ -9,7 +9,7 @@
 // must be run within Dokuwiki
 if(!defined('DOKU_INC')) die();
 
-class syntax_plugin_docnav_pagenav extends DokuWiki_Syntax_Plugin {
+class syntax_plugin_docnavigation_pagenav extends DokuWiki_Syntax_Plugin {
 
     public function getType() {
         return 'substition';
@@ -24,13 +24,13 @@ class syntax_plugin_docnav_pagenav extends DokuWiki_Syntax_Plugin {
     }
 
     public function connectTo($mode) {
-        $this->Lexer->addSpecialPattern('<-[^\n]*\^[^\n]*\^[^\n]*->', $mode, 'plugin_docnav_pagenav');
+        $this->Lexer->addSpecialPattern('<-[^\n]*\^[^\n]*\^[^\n]*->', $mode, 'plugin_docnavigation_pagenav');
     }
 
     public function handle($match, $state, $pos, &$handler) {
         global $conf, $ID;
 
-        // links are: previous, toc, next
+        // links are: 0=previous, 1=toc, 2=next
         $links = explode("^", substr($match, 2, -2), 3);
         foreach($links as &$link) {
             // Split title from URL
@@ -66,11 +66,16 @@ class syntax_plugin_docnav_pagenav extends DokuWiki_Syntax_Plugin {
         return $data;
     }
 
+    /**
+     * @param string                 $mode
+     * @param Doku_Renderer_metadata $renderer
+     * @param array                  $data return of handler
+     * @return bool
+     */
     public function render($mode, &$renderer, $data) {
-
         if($mode == 'metadata') {
             /** @var Doku_Renderer_metadata $renderer */
-            $renderer->meta['docnav'] = $data;
+            $renderer->meta['docnavigation'] = $data;
 
             foreach($data as $url) {
                 if($url) {

@@ -1,6 +1,6 @@
 <?php
 /**
- * Default settings for the docnav plugin
+ * Default settings for the DocNavigation plugin
  *
  * @author Gerrit Uitslag <klapinklapin@gmail.com>
  */

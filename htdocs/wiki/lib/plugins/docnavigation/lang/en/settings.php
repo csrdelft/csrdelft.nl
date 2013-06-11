@@ -1,6 +1,6 @@
 <?php
 /**
- * english language file for docnav plugin
+ * english language file for DocNavigation plugin
  *
  * @author Gerrit Uitslag <klapinklapin@gmail.com>
  */

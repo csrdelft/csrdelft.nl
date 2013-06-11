@@ -2,7 +2,7 @@
     padding: 0.2em 0;
     overflow:auto;
 }
-.docnavbar.bottom {
+.docnavbar.showtoc {
     border-top: 1px solid __border__;
     border-bottom: 1px solid __border__;
     margin: 1em 0;
