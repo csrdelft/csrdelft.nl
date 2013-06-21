@@ -58,10 +58,18 @@ $(function(){
 	imageHolder.attr("src", image.attr("src"));
 	image.hide(); */
 	
-	$("div.mid img.rotate").each(function() {
+	$("div.mid img.rotate-left, div.mid img.rotate-right").each(function() {
 	
-		$(this).wrap('<figure class="' + $(this).attr("class") + '" />').after('<div id="clip"></div>');
+		$(this).css({margin: 0}).wrap('<figure class="' + $(this).attr("class") + '" />').after('<div class="clip"></div>');
 	
+	});
+
+
+	// Random rotation
+	$('figure.rotate-left, figure.rotate-right').each(function(){
+		var random = Math.random() * 4 - 2; // Random between -2 and +2 degrees
+		$(this).css('-webkit-transform', 'rotate(' + random + 'deg)');
+		$(this).css('-moz-transform', 'rotate(' + random + 'deg)');
 	});
 	
 });

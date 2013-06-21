@@ -117,13 +117,13 @@ img.border { width: 224px; border: 6px solid #fff; }
 #pageover ul { list-style: disc; padding: 0 0 14px 20px; }
 
 /* Pictures */
-#pageover figure { position: relative; background: #fff; box-shadow: -1px 1px 10px rgba(0,0,0,0.5); padding: 6px; margin: 28px 0 16px; }
-#pageover figure.right { float: right; right: -45px; }
-#pageover figure.left { float: left; left: -45px; }
-#pageover figure img { display: block; }
-#pageover figure .clip { position: absolute; top: -7px; width: 18px; height: 46px; background: url(/images/layout2/paperclip.png) no-repeat; }
-#pageover figure.right .clip { right: 13px; }
-#pageover figure.left .clip { left: 8px; }
+#pageover figure.rotate-left, #pageover figure.rotate-right { position: relative; background: #fff; box-shadow: -1px 1px 10px rgba(0,0,0,0.5); padding: 6px; margin: 28px 0 16px; }
+#pageover figure.rotate-right { float: right; right: -45px; }
+#pageover figure.rotate-left { float: left; left: -45px; }
+#pageover figure.rotate-left img, #pageover figure.rotate-right img { display: block; }
+#pageover figure.rotate-left .clip, #pageover figure.rotate-right .clip { position: absolute; top: -7px; width: 18px; height: 46px; background: url(/images/layout2/paperclip.png) no-repeat; }
+#pageover figure.rotate-right .clip { right: 13px; }
+#pageover figure.rotate-left .clip { left: 8px; }
 
 /* Tabbed navigation */
 #pageover .tabs { position: absolute; z-index: 102; top: -70px; left: 50%; width: 851px; margin: 36px 0 0 -425px; }
