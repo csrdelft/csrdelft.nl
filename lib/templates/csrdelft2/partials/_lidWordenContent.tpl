@@ -53,7 +53,7 @@
 		<h2 class="overlay">C.S.R in de OWee!</h2>
 	</a></div>
 
-	<div class="box w2 link"><a href="vereniging/video/">
+	<div class="box w2 link"><a href="vereniging/filmpjes/">
 		<img src="images/layout2/box-groep.jpg">
 		<h2 class="overlay">7 filmpjes over C.S.R.</h2>
 	</a></div>
