@@ -802,6 +802,10 @@ class eamBBParser{
 		if(isset($arguments['h'])){
 			$style.='height: '.((int)$arguments['h']).'px; ';
 		}
+		$class='';
+		if(isset($arguments['class'])){
+			$class=' '.htmlspecialchars($arguments['class']);
+		}
 		
 		$content = $this->parseArray(array('[/img]', '[/IMG]'), array());
 
@@ -813,7 +817,7 @@ class eamBBParser{
 			if(!$this->allow_html){
 				$content=htmlspecialchars($content);
 			}
-			$html = '<img class="ubb_image" src="'.$content.'" alt="'.$content.'" style="'.$style.'" />';
+			$html = '<img class="ubb_image'.$class.'" src="'.$content.'" alt="'.$content.'" style="'.$style.'" />';
 		}
 		return $html;
 
