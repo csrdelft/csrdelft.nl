@@ -49,6 +49,7 @@ $(function(){
 		$(this).parents('#blackout').fadeOut(300, function(){
 			$(this).remove();
 		});
+		return false;
 	});
 
 	// take first image and put it in the clip
