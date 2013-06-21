@@ -261,6 +261,7 @@ htdocs/layout2/js/jquery.js -text
 htdocs/layout2/normalize.css -text
 htdocs/layout2/style.css -text
 htdocs/leden.php -text
+htdocs/lidworden.php -text
 htdocs/login.php -text
 htdocs/logout.php -text
 htdocs/pagina.php -text
@@ -2938,11 +2939,13 @@ lib/templates/courant/mail/csrmail_owee.tpl -text
 lib/templates/csrdelft.tpl -text
 lib/templates/csrdelft2/content.tpl -text
 lib/templates/csrdelft2/index.tpl -text
+lib/templates/csrdelft2/lidworden.tpl -text
 lib/templates/csrdelft2/multi.tpl -text
 lib/templates/csrdelft2/partials/_advertenties.tpl -text
 lib/templates/csrdelft2/partials/_footer.tpl -text
 lib/templates/csrdelft2/partials/_header.tpl -text
 lib/templates/csrdelft2/partials/_homeContent.tpl -text
+lib/templates/csrdelft2/partials/_lidWordenContent.tpl -text
 lib/templates/csrdelft2/partials/_loginForm.tpl -text
 lib/templates/documenten/document.tpl -text
 lib/templates/documenten/document.ubb.tpl -text
