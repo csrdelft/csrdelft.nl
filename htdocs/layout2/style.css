@@ -271,3 +271,14 @@ div.rommel {
 }
 div.rommel a { padding: 0 3px; }
 div.rommel img { height: 77px; }
+
+/* List box */
+.box.list { width: 216px; height: 141px; color: #46443a; background: #dfd6c6; box-shadow: 0 2px 5px rgba(0,0,0,0.6); border-radius: 10px; -webkit-transform: rotate(-1.5deg); -moz-transform: rotate(-1.5deg); margin: 16px; }
+.box.list.w2 { width: 464px; -webkit-transform: rotate(1deg); -moz-transform: rotate(1deg); }
+.box.list.h2 { height: 314px; }
+.box.list .inner { height: 119px; border: 1px dashed #8a8775; border-radius: 6px; margin: 10px; }
+.box.list.h2 .inner { height: 292px; }
+.box.list h2 { text-shadow: 1px 1px 1px rgba(255,255,255,0.4); }
+.box.list ul { padding: 0 15px; }
+.box.list a { display: block; height: 32px; line-height: 32px; font-size: 14px; color: #46443a; border-bottom: 0; border-top: 1px solid #cac5aa; padding: 0 8px; }
+.box.list a:hover { background: #d9d0c1; }

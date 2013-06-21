@@ -27,7 +27,7 @@
                             <div class="blue back">
                                 <p>Ga je studeren in Delft? Word lid bij een vereniging!</p>
                                 <ul>
-                                    <li><a href="/vereniging">Informatie over C.S.R.</a> &raquo;</li>
+                                    <li><a href="/lidworden">Informatie over C.S.R.</a> &raquo;</li>
                                 </ul>
                             </div>
                         </div>

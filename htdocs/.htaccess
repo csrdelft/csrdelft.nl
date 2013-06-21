@@ -27,6 +27,9 @@ RewriteRule ^vereniging/([a-z]+)/? 	pagina.php?naam=$1
 RewriteRule ^contact/?$ 			pagina.php?naam=contact
 RewriteRule ^contact/([a-z]+)/? 	pagina.php?naam=$1
 
+# Lid Worden
+RewriteRule ^lidworden/?$ 			lidworden.php
+
 # heleboel 301's voor terugwaarste compatibiliteit.
 RewriteRule ^forum/(.*)$			/communicatie/forum/$1 [R=301]
 RewriteRule ^intern/profiel(.*)		/communicatie/profiel$1 [R=301]
