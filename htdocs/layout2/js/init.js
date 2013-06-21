@@ -53,10 +53,17 @@ $(function(){
 	});
 
 	// take first image and put it in the clip
-	var imageHolder = $("div.mid img.REPLACE-ANCHOR");
+	/* var imageHolder = $("div.mid img.REPLACE-ANCHOR");
 	var image = $("div.mid div.content img.ubb_image").first();
 	imageHolder.attr("src", image.attr("src"));
-	image.hide();
+	image.hide(); */
+	
+	$("div.mid img.rotate").each(function() {
+	
+		$(this).wrap('<figure class="' + $(this).attr("class") + '" />').after('<div id="clip"></div>');
+	
+	});
+	
 });
 
 
