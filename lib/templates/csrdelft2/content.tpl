@@ -3,7 +3,6 @@
 	<div id="pageover">
         
 		<header class="top">
-			<h1>{$csrdelft->getTitel()}</h1>
 			<a class="close" href="#">&times;</a>
 		</header>
 		<div class="mid">

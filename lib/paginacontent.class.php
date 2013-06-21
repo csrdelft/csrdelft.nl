@@ -50,7 +50,7 @@ class PaginaContent extends SimpleHTML{
 				$sInhoud.=CsrHtmlUBB::instance()->getHTML($this->_pagina->getInhoud());
 							
 				if ($this->_pagina->magBewerken()){
-					$sInhoud='<a href="/pagina/'.$this->_pagina->getNaam().'/bewerken" class="knop" style="float: right;" title="Bewerk pagina">
+					$sInhoud='<a href="/pagina/'.$this->_pagina->getNaam().'/bewerken" class="knop editpage" style="float: right;" title="Bewerk pagina">
 						'.Icon::getTag("bewerken").'</a>'.$sInhoud;
 				}
 
