@@ -65,4 +65,3 @@
 
 
 </div>
-<div class="rommel">{include file='csrdelft2/partials/_advertenties.tpl'}</div>
