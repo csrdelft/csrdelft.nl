@@ -126,7 +126,7 @@ img.border { width: 224px; border: 6px solid #fff; }
 #pageover figure.rotate-left .clip { left: 8px; }
 
 /* Tabbed navigation */
-#pageover .tabs { position: absolute; z-index: 102; top: -70px; left: 50%; width: 851px; margin: 36px 0 0 -425px; }
+#pageover .tabs { position: absolute; z-index: 102; top: -50px; left: 50%; width: 851px; margin: 36px 0 0 -425px; }
 #pageover .tabs ul { padding: 0 0 0 24px; }
 #pageover .tabs li { float: left; font-size: 16px; margin: 0 12px 0 0; }
 #pageover .tabs a { position: relative; display: block; float: left; height: 32px; line-height: 32px; text-decoration: none; box-shadow: inset 0 0 30px rgba(0,0,0,0.4), -1px 1px 10px rgba(0,0,0,0.5); background: -webkit-linear-gradient(#1255a3 0%, #063379 100%); background: -moz-linear-gradient(#1255a3 0%, #063379 100%); filter: progid:DXImageTransform.Microsoft.Gradient(startColorStr="#1255a3", endColorStr="#063379"); color: #fff; padding: 0 14px 10px; }
