@@ -43,7 +43,8 @@ $(function(){
 
 
 	// Modal popup closing
-	$("body").css({overflowY: "hidden"});
+	if($("#blackout").size())
+		$("body").css({overflowY: "hidden"});
 	// TODO: close when clicking outside of the pageover
 	$(document).on('click', '.close', function(){
 		$("#blackout").css({overflowY: "hidden"});
