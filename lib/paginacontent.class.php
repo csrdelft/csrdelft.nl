@@ -80,12 +80,14 @@ class PaginaContent extends SimpleHTML{
 					<strong>Inhoud:</strong><br />
 					<div id="bewerkPreviewContainer" class="previewContainer"><h3>Voorbeeld van uw bericht:</h3><div id="bewerkPreview" class="preview pagina"></div></div>
 					<textarea name="inhoud" id="paginaInhoud" style="width: 100%;" rows="40">'.htmlspecialchars($this->_pagina->getInhoud()).'</textarea>
-					<a style="float: right;" class="handje knop" onclick="toggleDiv(\'ubbhulpverhaal\')" title="Opmaakhulp weergeven">UBB</a>
+					<a style="float: right;" class="handje knop" onclick="toggleDiv(\'ubbhulpverhaal\')" title="Opmaakhulp weergeven">Opmaak</a>
 					<a style="float: right;" class="handje knop" onclick="vergrootTextarea(\'paginaInhoud\', 10)" title="Vergroot het invoerveld"><strong>&uarr;&darr;</strong></a> 
+					<div class="butn">
 					<input type="submit" value="Opslaan" />
 					<input type="button" value="voorbeeld" onclick="return previewPost(\'paginaInhoud\', \'bewerkPreview\')" />
 					<a href="/pagina/'.$this->_pagina->getNaam().'/bewerken" class="handje knop">Reset</a>
 					<a href="/pagina/'.$this->_pagina->getNaam().'/" class="knop">Terug</a>
+					</div>
 				</form>';
 
 				echo $sInhoud;
