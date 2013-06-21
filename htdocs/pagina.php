@@ -59,7 +59,7 @@ if($_GET['naam']=='video'){
 	}
 }
 // Hier alle namen van pagina's die in de nieuwe layout moeten worden weergegeven
-$nieuwNamen = array("contact", "vereniging", "lidworden", "geloof");
+$nieuwNamen = array("contact", "vereniging", "lidworden", "geloof", "filmpjes");
 
 if(in_array($_GET['naam'],$nieuwNamen)) {
     $depagina->view("content");
