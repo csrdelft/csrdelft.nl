@@ -1,7 +1,7 @@
 ﻿{include file='csrdelft2/partials/_header.tpl'}
 <section id="blackout">
 	<div id="pageover">
-        
+        {include file='csrdelft2/partials/_menuVereniging.tpl'}
 		<header class="top">
 			<a class="close" href="#">&times;</a>
 		</header>
