@@ -145,7 +145,7 @@ img.border { width: 224px; border: 6px solid #fff; }
 #pageover .rdesc { float: right; width: 400px; padding: 32px 0 0; }
 
 /* Videos */
-#pageover .videos { float: left; width: 297px; padding: 32px 0 0; }
+#pageover .videos { float: left; width: 297px; padding: 4px 0 0; }
 #pageover .videos li { list-style: none; padding: 25px 0 0; }
 #pageover .videos a { display: block; height: 36px; line-height: 36px; font-size: 18px; color: #fff; text-decoration: none; background: -webkit-linear-gradient(#1255a3 0%, #063379 100%); background: linear-gradient(#1255a3 0%, #063379 100%); background: -moz-linear-gradient(#1255a3 0%, #063379 100%); filter: progid:DXImageTransform.Microsoft.Gradient(startColorStr="#1255a3", endColorStr="#063379"); border: none; box-shadow: -1px 1px 10px rgba(0,0,0,0.5); opacity: 0.85; padding: 0 15px; }
 #pageover .videos .active a, #pageover .videos a:hover { opacity: 1; }
