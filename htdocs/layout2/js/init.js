@@ -72,6 +72,26 @@ $(function(){
 		$(this).css('-moz-transform', 'rotate(' + random + 'deg)');
 	});
 	
+	// Filmpjes meuk
+	$("#video_unit").each(function() {
+		
+		el = $(".videos > li");
+		el.find("> a").click(function() {
+		
+			el.removeClass("active");
+			$(this).parent().addClass("active");
+			
+			var index = $(this).parent().parent().find("> li").index($(this).parent());
+			
+			
+			$("#video_unit .video iframe").attr("src", video_unit_videos[index]);
+			
+			return false;
+		
+		});
+	
+	});
+	
 });
 
 
