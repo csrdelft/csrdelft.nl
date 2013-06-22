@@ -47,7 +47,7 @@ $page=new csrdelft($body, $layout);
 $page->addStylesheet('forum.css');
 $page->addScript('forum.js');
 if($layout=='csrdelft2'){
-	$page->addStylesheet('csr2_ubb.css');
+	$page->addStylesheet('ubb.css');
 	$page->addScript('csrdelft.js');
 }
 $page->view();

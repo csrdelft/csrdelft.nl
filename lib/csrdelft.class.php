@@ -53,6 +53,7 @@ class csrdelft extends SimpleHTML {
 
 			$this->addStylesheet('undohtml.css');
 			$this->addStylesheet('default.css');
+			$this->addStylesheet('ubb.css');
 
 			$this->addScript('jquery.js');
 			$this->addScript('csrdelft.js');
