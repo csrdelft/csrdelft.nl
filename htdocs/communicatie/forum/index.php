@@ -36,10 +36,18 @@ if($loginlid->hasPermission('P_FORUM_READ')) {
 	$body=new PaginaContent($pagina);
 }
 
+//uitgelogd heeft nieuwe layout
+if(LoginLid::instance()->hasPermission('P_LOGGED_IN')){
+	$layout = '';
+} else {
+	$layout = 'csrdelft2';
+}
 
-$page=new csrdelft($body);
+$page=new csrdelft($body, $layout);
 $page->addStylesheet('forum.css');
 $page->addScript('forum.js');
+if($layout=='csrdelft2'){
+	$page->addStylesheet('csr2_ubb.css');
+	$page->addScript('csrdelft.js');
+}
 $page->view();
-
-?>

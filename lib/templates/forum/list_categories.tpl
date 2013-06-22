@@ -1,7 +1,7 @@
 <form id="forum_zoeken" action="/communicatie/forum/zoeken.php" method="post"><fieldset><input type="text" name="zoeken" value="zoeken in forum" onfocus="this.value='';" /></fieldset></form>
 
 <div class="forumNavigatie">
-	<h1>Forum</h1>
+	<h1 style="width: 200px;">Forum</h1>
 </div>
 {$melding}
 

@@ -30,7 +30,7 @@
 	background-color: #ddd;
 	color: black;
 	padding: 6px;
-	left: 10px; right; 10px;
+	left: 10px; right: 10px;
 	text-align: center;
 }
 #forumtabel th{
@@ -48,11 +48,12 @@
 	font-size: 0.9em;
 	text-align: left;
 }
-a.postlink{ float:right; }
+a.postlink{ float:right; text-decoration: none; }
 span.togglePasfoto, a.postlink{
 	cursor: pointer;
 	color: #bbb;
 }
+
 span.togglePasfoto:hover, a.postlink:hover{
 	color: black;
 	text-decoration: none;
@@ -214,3 +215,32 @@ div.forum_paginering span.curpage{
 	padding: 4px 5px;
 	font-weight: bold;
 }
+
+
+/*
+ * Nieuwe layout heeft wat extra nodig om over #pageover .content heen te komen
+ */
+#pageover .mid { padding-top: 5px; }
+#pageover .content { width: 760px; margin-left: 15px; }
+#pageover .content h1 { margin-top:0; padding: 4px 0 0 0; }
+#pageover .content fieldset { padding: 0; }
+
+#pageover .content #forumtabel { border-spacing: 2px; border-collapse: separate; }
+#pageover .content table { background: none; border-width: 0; }
+#pageover .content table tr:nth-of-type(even) { background: none; }
+#pageover .content #forumtabel th { background-color: #AFCDFC; }
+#pageover .content td { font-size: 1em; }
+
+/* forumonderwerp */
+#pageover .content a.postlink,
+#pageover .content span.togglePasfoto { color: #bbb; text-decoration: none; }
+#pageover .content textarea { margin-top:10px; }
+#pageover .content hr { margin:4px 0; }
+#pageover .content .bewerkt { line-height: 1em; }
+
+/* formulier onderwerpen pagina */
+#pageover .content #forumtabel label { width: 166px; }
+#pageover .content #forumtabel #titel { margin:0; }
+
+/* forum zoekresultaten */
+#pageover .content select { width: auto; }

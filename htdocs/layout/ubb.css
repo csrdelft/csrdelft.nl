@@ -1,0 +1,182 @@
+/**
+ * CSS voor UBB
+ */
+
+/*
+ * ubb voorbeeldding
+ */
+div.previewContainer{ margin-top: 10px; display: none;}
+div.preview{ margin: 5px 0; padding: 2px; background-color: #ffffc1; border: 1px solid #ccc; }
+div.preview.pagina{ padding: 2px; width: 100%;}
+
+
+
+/* special UBB tags
+ *
+ * Alle ubb 'blok-tags' delen de class .ubb_block.
+ *
+ */
+.ubb_block{
+    border: 1px solid #b8b8b8;
+    background-color: #f0f0f0;
+    padding: 8px 12px;
+    margin: 0 0 10px;
+}
+#forumtabel td .ubb_block{ margin: 2px 0; }
+
+.ubb_maaltijd{
+    float: left;
+    width: 329px;
+    overflow: auto;
+}
+
+.ubb_maaltijd h2{ white-space: nowrap; overflow: hidden; }
+.ubb_maaltijd .aanmelddata{
+    float: right;
+    background-color: #ddd;
+    width: 68px;
+    padding: 4px; margin-left: 10px;
+}
+
+.ubb_gmap {
+    width:300px;
+    height: 200px;
+    border:1px solid darkgrey;
+    margin:2px;
+}
+
+.ubb_groep{
+    padding: 5px 10px 5px 10px;
+}
+.ubb_groep .groepleden{
+    width: 275px;
+    float: right;
+    margin-left: 10px;
+}
+.ubb_groep .groepleden table.leden{ width: 100%; }
+.ubb_groep .groepleden table.leden td{ padding: 0 5px 0 0; text-align: left; }
+.ubb_groep .groepleden a.toonmeer{ float: left; }
+.ubb_groep .groepleden .editbox{ display:none; background-color:#ffffcc; border:solid 1px #000; padding:1px;}
+.ubb_groep .groepleden .inline_edit{
+    background:url(http://plaetjes.csrdelft.nl/knopjes/bewerken.png) right no-repeat;
+    padding-right:18px!important;
+}
+.ubb_groep .groepleden .inline_edit:hover{
+    background:url(http://plaetjes.csrdelft.nl/knopjes/bewerken.png) right no-repeat #f5f5f5;
+    cursor:pointer;
+}
+.ubb_groep .groepleden .inline_edit input{	width: 120px;}
+.ubb_groep .groepleden .melding { color:red;}
+.ubb_groep .pasfotomatrix{ margin-left: 0; }
+.ubb_groep .aanmelden{ clear: left; padding-top: 6px; }
+.ubb_groep .aanmelden .pasfoto{ margin-right: 10px; }
+.ubb_groep .pasfoto{ width: 48px; height: 64px; float: left; border: 1px solid grey; margin: 0 0 5px 5px; }
+
+
+.ubb_document{ width: 450px; padding: 4px 6px; display: block; text-align: left; }
+.ubb_document .size{ float: right; color: #777; }
+.ubb_document .icon{ float: left; padding-right: 5px; }
+
+.ubb_boek{ padding: 4px 6px; display: block; text-align: left; text-decoration: none !important;}
+.ubb_boek .auteur { color: #777; margin-left:10px; }
+.ubb_boek .titel:hover{color: #0a338d; text-decoration: underline;}
+.ubb_boek .icon{ float: left; padding-right: 5px; }
+.boekindicator{ margin-right:5px;}
+.boekindicator.beschikbaar	{color:green;}
+.boekindicator.teruggegeven	{color:orange;}
+.boekindicator.geen			{color:red;}
+
+.ubb_code{
+    font-family: monospace;
+    background-color: #f1f1f1;
+    margin-top: 4px;
+    border-top: 2px solid #aaa;
+    border-bottom: 2px solid #aaa;
+    max-width: 640px;
+    overflow-x:auto; overflow-y:hidden;
+}
+
+.ubb_peiling{ margin: 10px;  padding: 5px 10px; }
+.ubb_peiling .beheer{ float: right; }
+.ubb_peiling .totaal{ clear: right; float: right; color: #666; padding:5px 9px; }
+.ubb_peiling ul{ list-style-type: none; padding: 5px; }
+.ubb_peiling ul li{ border-bottom: 1px solid #eee; margin-left: 0; clear: both;  padding: 4px;}
+.ubb_peiling ul li .stemmen{ float: right; color: #666; width: 30px; text-align: right; }
+.ubb_peiling ul li .percentage{ float: right; color: #666; width: 50px; text-align: right; }
+.ubb_peiling .grafisch{ float: right; width: 200px; vertical-align: top; padding: 4px; }
+.ubb_peiling .balk{ height: 10px; background-color: #6060FF;  border: 1px outset #0a338d; float: right;}
+
+.ubb_table{ padding: 0; border-collapse: collapse; }
+.ubb_table tr{ margin: 0; padding: 0; }
+.ubb_table td, .ubb_table th{ margin: 0; padding: 2px; }
+
+.ubb_fotoalbum{
+
+}
+.ubb_fotoalbum .images { margin-top: 6px; position: relative;}
+.ubb_fotoalbum .images a{ position: absolute;}
+.ubb_fotoalbum .images a.sml img{ width: 75px; height: 75px; }
+.ubb_fotoalbum .images a.big img{ width: 154px; height: 154px;}
+
+.ubb_fotoalbum img.compact{
+    float: right;
+    width: 50px;
+    margin-top: -1em;
+}
+
+/* Slider voorpagina */
+/* Slider: Window/Masking Styles */
+.ubb_slideshow {
+    overflow: hidden; /*--Hides anything outside of the set width/height--*/
+    position: relative;
+}
+.ubb_slideshow .image_reel {
+    position: absolute;
+    top: 0; left: 0;
+}
+.ubb_slideshow .image_reel img {float: left;width:355px;}
+
+/* Slider: Paging Styles */
+.ubb_slideshow .paging {
+    position: absolute;
+    bottom: 5px; right: 5px;
+    width: 170px; height:15px;
+    z-index: 100; /*--Assures the paging stays on the top layer--*/
+    text-align: center;
+    line-height: 9px;
+    background: #000;
+    border: #000;
+    opacity:0.4;filter:alpha(opacity=40);
+    display: none; /*--Hidden by default, will be later shown with jQuery--*/
+    -moz-border-radius: 8px;
+    -khtml-border-radius: 8px;
+    -webkit-border-radius: 8px;
+}
+.ubb_slideshow .paging a {
+    padding: 4px;
+    text-decoration: none;
+    color: #fff;
+    font: normal 8px Verdana, Arial, Helvetica, sans-serif;
+}
+.ubb_slideshow .paging a.active {
+    background: #777;
+    border: 1px solid #000;
+    -moz-border-radius: 3px;
+    -khtml-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    color: #000;
+}
+.ubb_slideshow .paging a:hover {
+    text-decoration: underline;}
+
+.youtubeVideo{
+    position: relative;
+}
+
+.afspelen{
+    cursor: pointer; cursor: hand;
+    position: absolute;
+    left: 45px;
+    top: 30px;
+    opacity: 0.7;
+}

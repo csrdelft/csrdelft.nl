@@ -58,9 +58,9 @@ function previewPost(source, dest){
 }
 /*
  * Apply UBB to a string, and put it in innerHTML of given div.
- * 
+ *
  * Example:
- * applyUBB('[url=http://csrdelft.nl]csrdelft.nl[/url]', document.getElementById('berichtPreview'));	
+ * applyUBB('[url=http://csrdelft.nl]csrdelft.nl[/url]', document.getElementById('berichtPreview'));
  */
 function applyUBB(string, div){
 	http.abort();
@@ -90,10 +90,10 @@ function forumBewerken(post){
 	http.onreadystatechange=function(){
 		if(http.readyState == 4){
 			if(document.getElementById('forumEditForm')){ restorePost(); }
-			
+
 			bewerkDiv=document.getElementById('post'+post);
 			bewerkDivInnerHTML=bewerkDiv.innerHTML;
-			
+
 			bewerkForm ='<form action="/communicatie/forum/bewerken/'+post+'" method="post" id="forumEditForm">';
 			bewerkForm+='<h3>Bericht bewerken</h3>Als u dingen aanpast zet er dan even bij w&aacute;t u aanpast! Gebruik bijvoorbeeld [s]...[/s]<br />';
 			bewerkForm+='<div id="bewerkPreviewContainer" class="previewContainer"><h3>Voorbeeld van uw bericht:</h3><div id="bewerkPreview" class="preview"></div></div>';
@@ -103,10 +103,10 @@ function forumBewerken(post){
 			bewerkForm+='<a style="float: right;" class="handje knop" onclick="vergrootTextarea(\'forumBewerkBericht\', 10)" title="Vergroot het invoerveld"><strong>&uarr;&darr;</strong></a>';
 			bewerkForm+='<input type="submit" value="opslaan" /> <input type="button" value="voorbeeld" onclick="previewPost(\'forumBewerkBericht\', \'bewerkPreview\')" /> <input type="button" value="terug" onclick="restorePost()" />';
 			bewerkForm+='</form>';
-			
+
 			bewerkDiv.innerHTML=bewerkForm;
-			document.getElementById('forumBewerkBericht').value=http.responseText;	
-			
+			document.getElementById('forumBewerkBericht').value=http.responseText;
+
 			//invoerveldjes van het normale toevoegformulier even uitzetten.
 			document.getElementById('forumBericht').disabled=true;
 			document.getElementById('forumOpslaan').disabled=true;
@@ -133,7 +133,7 @@ function forumCiteren(post){
 		}
 	}
 	http.send(null);
-	//we returnen altijd false, dan wordt de href= van <a> niet meer uitgevoerd. 
+	//we returnen altijd false, dan wordt de href= van <a> niet meer uitgevoerd.
 	//Het werkt dan dus nog wel als javascript uit staat.
 	return false;
 }
@@ -151,6 +151,11 @@ function youtubeDisplay(ytID){
 	}
 	return false;
 }
+/**
+ *
+ * @param {Number} x nummer van de maand
+ * @return {String} maand, geprefixt met 0 wanneer nodig
+ */
 function LZ(x) {return(x<0||x>9?"":"0")+x}
 
 function hideDiv(div){ div.style.display="none"; }

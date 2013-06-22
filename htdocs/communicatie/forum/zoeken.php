@@ -17,11 +17,14 @@ if($loginlid->hasPermission('P_FORUM_READ')) {
 	$midden = new PaginaContent($pagina);
 }
 
+//uitgelogd heeft nieuwe layout
+if(LoginLid::instance()->hasPermission('P_LOGGED_IN')){
+	$layout = '';
+} else {
+	$layout = 'csrdelft2';
+}
 
 # pagina weergeven
-$pagina=new csrdelft($midden);
+$pagina=new csrdelft($midden, $layout);
 $pagina->addStylesheet('forum.css');
 $pagina->view();
-
-
-?>
