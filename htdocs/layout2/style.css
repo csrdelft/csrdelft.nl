@@ -113,7 +113,7 @@ img.border { width: 224px; border: 6px solid #fff; }
 #pageover h3 { font-size: 12px; font-weight: bold; }
 #pageover p, #pageover address, #pageover table { padding: 0 0 14px; }
 #pageover .small, .mid { font-size: 12px; }
-#pageover .content a, #pageover .content a { text-decoration: underline; color: #043279; }
+#pageover .content a, #pageover .content a { color: #043279; }
 #pageover ul { list-style: disc; padding: 0 0 14px 20px; }
 
 /* Pictures */
