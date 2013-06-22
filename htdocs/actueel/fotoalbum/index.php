@@ -23,11 +23,19 @@ if($pad==''){
 
 $fotoalbum = new Fotoalbum($pad, $mapnaam);
 
+//uitgelogd heeft nieuwe layout
+if(LoginLid::instance()->hasPermission('P_LEDEN_READ')){
+	$layout = '';
+} else {
+	$layout = 'csrdelft2';
+}
+
+
 if($fotoalbum->magBekijken()){
 	$fotoalbumcontent = new FotoalbumContent($fotoalbum);
 	$fotoalbumcontent->setActie('album');
 
-	$pagina=new csrdelft($fotoalbumcontent);
+	$pagina=new csrdelft($fotoalbumcontent, $layout);
 	$pagina->addStylesheet('fotoalbum.css');
 	$pagina->addStylesheet('jquery.prettyPhoto.css');
 	$pagina->addScript('jquery.prettyPhoto.js');
@@ -39,8 +47,6 @@ if($fotoalbum->magBekijken()){
 	require_once 'paginacontent.class.php';
 	$pagina=new Pagina('geentoegang');
 	$midden=new PaginaContent($pagina);
-	$page=new csrdelft($midden);
+	$page=new csrdelft($midden, $layout);
 	$page->view();
 }
-
-?>

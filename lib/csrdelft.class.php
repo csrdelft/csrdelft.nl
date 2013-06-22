@@ -36,37 +36,43 @@ class csrdelft extends SimpleHTML {
 		}
 		//Prefix opslaan
 		$this->_prefix=$prefix;
-		if(Instelling::get('layout')=='owee'){	$this->_prefix='owee_'; }
-		if(Instelling::get('layout')=='lustrum'){	$this->_prefix='lustrum_'; }
+		if($this->_prefix == 'csrdelft2') {
+			//nieuwe layout
 
-		
-		//nieuw menu-object aanmaken...
-		require_once('menu.class.php');
-		$this->_menu=new menu($this->_prefix, $menuid);
+		} else {
+			//oude layout
+			if(Instelling::get('layout')=='owee'){	$this->_prefix='owee_'; }
+			if(Instelling::get('layout')=='lustrum'){	$this->_prefix='lustrum_'; }
 
-		//Stylesheets en scripts die we altijd gebruiken
-		
-		$this->addStylesheet('undohtml.css');
-		$this->addStylesheet('default.css');
-		
-		$this->addScript('jquery.js');
-		$this->addScript('csrdelft.js');
-		$this->addScript('menu.js');
-		if(Instelling::get('algemeen_sneltoetsen')=='ja'){
-			$this->addScript('sneltoetsen.js');
-		}
-		
-		if(Instelling::get('layout')=='roze' AND LoginLid::instance()->getUid()!='x999'){
-			$this->addStylesheet('roze.css');
-		}
-		if(Instelling::get('layout')=='lustrum'){ // || LoginLid::instance()->getUid()=='x999'){
-			$this->addStylesheet('lustrum.css');
-		}
-		if(Instelling::get('layout')=='zonderSpikkels'){
-			$this->addStylesheet('zonderSpikkels.css');
-		}
-		if($this->_prefix=='owee_'){
-			$this->addStylesheet('owee.css');
+
+			//nieuw menu-object aanmaken...
+			require_once('menu.class.php');
+			$this->_menu=new menu($this->_prefix, $menuid);
+
+			//Stylesheets en scripts die we altijd gebruiken
+
+			$this->addStylesheet('undohtml.css');
+			$this->addStylesheet('default.css');
+
+			$this->addScript('jquery.js');
+			$this->addScript('csrdelft.js');
+			$this->addScript('menu.js');
+			if(Instelling::get('algemeen_sneltoetsen')=='ja'){
+				$this->addScript('sneltoetsen.js');
+			}
+
+			if(Instelling::get('layout')=='roze' AND LoginLid::instance()->getUid()!='x999'){
+				$this->addStylesheet('roze.css');
+			}
+			if(Instelling::get('layout')=='lustrum'){ // || LoginLid::instance()->getUid()=='x999'){
+				$this->addStylesheet('lustrum.css');
+			}
+			if(Instelling::get('layout')=='zonderSpikkels'){
+				$this->addStylesheet('zonderSpikkels.css');
+			}
+			if($this->_prefix=='owee_'){
+				$this->addStylesheet('owee.css');
+			}
 		}
 	}
 
@@ -146,8 +152,13 @@ class csrdelft extends SimpleHTML {
 		return $debug;
 	}
     
-    // $template zorgt ervoor dat we pagina's in verschillende templates kunnen renderen. Default is 'old' dat is de layout van voor de 2012-remake
-	function view($template = 'old') {
+    /**
+	 * $template zorgt ervoor dat we pagina's in verschillende templates kunnen renderen.
+	 * Default is 'content' dat is de layout van de hoofdpagina voor de 2012-remake
+	 *
+	 * @param string $template naam van smarty template
+	 */
+	function view($template = 'content') {
 		$loginlid=LoginLid::instance();
 
 		//als $this->_zijkolom geen Kolom-object bevat en niet false is
@@ -171,7 +182,7 @@ class csrdelft extends SimpleHTML {
 		$csrdelft->caching=false;
         
         // laad oude template of de benoemde nieuwe
-        if($template == 'old') {
+        if($this->_prefix !== 'csrdelft2') {
             $csrdelft->display($this->_prefix.'csrdelft.tpl');
         } else {
             $csrdelft->display('csrdelft2/'.$template.'.tpl');

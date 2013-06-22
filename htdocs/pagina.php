@@ -47,10 +47,15 @@ if($_GET['naam']=='owee' OR $_GET['naam']=='oweeprogramma' OR $_GET['naam']=='vi
 }else{
 	$prefix='';
 }
-$depagina=new csrdelft($paginacontent,$prefix);
-if($_GET['naam']=='owee' OR $_GET['naam']=='oweeprogramma' OR $_GET['naam']=='video' OR $_GET['naam']=='interesse'){
-	$depagina->addStylesheet('owee.css');
+
+// Hier alle namen van pagina's die in de nieuwe layout moeten worden weergegeven
+$nieuwNamen = array("contact", "vereniging", "lidworden", "geloof", "vorming", "filmpjes", "gezelligheid", "sport", "vragen", "officieel", "societeit", "ontspanning", "interesse", "interesseverzonden", "accountaanvragen");
+if(in_array($_GET['naam'],$nieuwNamen)) {
+  	$prefix = 'csrdelft2';
 }
+
+$depagina=new csrdelft($paginacontent,$prefix);
+
 if($_GET['naam']=='video'){
 	$depagina->setZijkolom(false);
 }else{
@@ -58,13 +63,5 @@ if($_GET['naam']=='video'){
 		$depagina->setZijkolom($zijkolom);
 	}
 }
-// Hier alle namen van pagina's die in de nieuwe layout moeten worden weergegeven
-$nieuwNamen = array("contact", "vereniging", "lidworden", "geloof", "vorming", "filmpjes", "gezelligheid", "sport", "vragen", "officieel", "societeit", "ontspanning", "interesse", "interesseverzonden", "accountaanvragen");
 
-if(in_array($_GET['naam'],$nieuwNamen)) {
-    $depagina->view("content");
-} else {
-    $depagina->view();
-}
-
-?>
+$depagina->view();

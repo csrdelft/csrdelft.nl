@@ -21,6 +21,5 @@ $paginacontent->setActie('bekijken');
 $body->addObject($paginacontent);
 
 ## pagina weergeven
-$pagina=new csrdelft($body);
+$pagina=new csrdelft($body, 'csrdelft2');
 $pagina->view("lidworden");
-?>
