@@ -134,7 +134,7 @@ img.border { width: 224px; border: 6px solid #fff; }
 
 /* Form */
 #pageover fieldset { float: left; padding: 20px 0 0; }
-#pageover label { display: block; padding: 20px 0 0; }
+#pageover label { display: block; padding: 0; font-size: 1em; }
 /*#pageover span { display: block; width: 120px; line-height: 26px; }*/
 #pageover input { display: block; float: left; margin-right: 5px; }
 #pageover .text { width: 180px; padding: 3px 5px; }
