@@ -244,3 +244,9 @@ div.forum_paginering span.curpage{
 
 /* forum zoekresultaten */
 #pageover .content select { width: auto; }
+
+#pageover .content div.offtopic{ font-size: 9px; color: #bbb; }
+#pageover .content div.offtopic a{ color: #bbb; }
+#pageover .content div.offtopic hr{ text-align: left; background-color: #bbb; }
+#pageover .content div.offtopic img{ opacity: 0.3; filter:alpha(opacity=30); }
+

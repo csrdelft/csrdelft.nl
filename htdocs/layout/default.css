@@ -541,11 +541,6 @@ span#ubbsluiten:hover{
 	background-color: #eee;
 }
 
-div.offtopic{ font-size: 9px; color: #bbb; }
-div.offtopic a{ color: #bbb; }
-div.offtopic hr{ text-align: left; background-color: #bbb; }
-div.offtopic img{ opacity: 0.3; filter:alpha(opacity=30); }
-
 /* maaltijdketzer */
 table.maaltijden{ width: 100%; }
 table.maaltijden tr{ height: 1.6em; }
