@@ -511,36 +511,6 @@ div#melding{
 	background: url(http://plaetjes.csrdelft.nl/famfamfam/bell.png) no-repeat;
 }
 
-/* ubb-hulp */
-div#ubbhulpverhaal{
-	display: none;
-	z-index: 999;
-	position: fixed;
-	left: 50px;
-	top: 50px;
-	width: 330px;
-	border: 1px solid #bbb;
-	margin-top: -13px;
-	padding: 5px;
-	background-color: white;
-	text-align: left;
-}
-span#ubbsluiten{
-	display: block;
-	width: 18px; height: 18px;
-	float: right;
-	margin: 0; padding: 0;
-	font-weight: bold; font-size: 14px;
-	text-align: center;	vertical-align: middle;
-	color: black;
-	cursor: pointer; cursor: hand;
-	border: 1px solid #fff;
-}
-span#ubbsluiten:hover{
-	border: 1px solid #000;
-	background-color: #eee;
-}
-
 /* maaltijdketzer */
 table.maaltijden{ width: 100%; }
 table.maaltijden tr{ height: 1.6em; }

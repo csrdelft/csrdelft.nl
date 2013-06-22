@@ -2,7 +2,7 @@
     <script>
         $(document).foundation();
   </script>
-
+  {$ubbHulp}
 </body>
 
 </html>

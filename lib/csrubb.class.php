@@ -603,7 +603,7 @@ return <<<UBBVERHAAL
 		<li>[i]...[/i] voor <em>cursieve tekst</em></li>
 		<li>[u]...[/u] voor <span style="text-decoration: underline;">onderstreepte tekst</span></li>
 		<li>[s]...[/s] voor <span style="text-decoration: line-through;">doorgestreepte tekst</span></li>
-		<li>[email=pubcie@csrdelft.nl]Bericht naar de Pubcie[/email] voor een email-verwijzing</li>
+		<li>[email=pubcie@csrdelft.n1]Bericht naar de Pubcie[/email] voor een email-verwijzing</li>
 		<li>[url=http://csrdelft.nl]Webstek van C.S.R.[/url] voor een verwijzing</li>
 		<li>[citaat][/citaat] voor een citaat. [citaat=<em>lidnummer</em>][/citaat] voor een citaat van een lid.</li>
 		<li>[lid]<em>lidnummer</em>[/lid] voor een link naar het profiel van een lid of oudlid</li>

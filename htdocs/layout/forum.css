@@ -250,3 +250,5 @@ div.forum_paginering span.curpage{
 #pageover .content div.offtopic hr{ text-align: left; background-color: #bbb; }
 #pageover .content div.offtopic img{ opacity: 0.3; filter:alpha(opacity=30); }
 
+div#ubbhulpverhaal h2 { font-size: 16px; }
+div#ubbhulpverhaal { font-size: 12px; }
