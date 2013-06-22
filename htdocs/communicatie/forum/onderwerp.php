@@ -54,7 +54,7 @@ if(LoginLid::instance()->hasPermission('P_LOGGED_IN')){
 $page=new csrdelft($midden, $layout);
 $page->addStylesheet('forum.css');
 if($layout=='csrdelft2'){
-	$page->addStylesheet('csr2_ubb.css');
+	$page->addStylesheet('ubb.css');
 	$page->addScript('csrdelft.js');
 }
 
