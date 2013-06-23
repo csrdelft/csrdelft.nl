@@ -494,19 +494,19 @@ div#melding{
 	font-size: 1.3em;
 }
 #melding div{padding-left: 30px;}
-#melding .error{
+div.msgerror{
 	color: red;
 	background: url(http://plaetjes.csrdelft.nl/famfamfam/exclamation.png) no-repeat;
 }
-#melding .info{
+div.msginfo{
 	color: #0A338D;
 	background: url(http://plaetjes.csrdelft.nl/famfamfam/information.png) no-repeat;
 }
-#melding .success{
+div.msgsuccess{
 	color: green;
 	background: url(http://plaetjes.csrdelft.nl/famfamfam/accept.png) no-repeat;
 }
-#melding .notify{
+div.msgnotify{
 	color: #FFF500;
 	background: url(http://plaetjes.csrdelft.nl/famfamfam/bell.png) no-repeat;
 }

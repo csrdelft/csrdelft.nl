@@ -316,3 +316,43 @@ span#ubbsluiten:hover{
     border: 1px solid #000;
     background-color: #eee;
 }
+
+/* messages with setMelding() */
+div.msgerror,
+div.msginfo,
+div.msgsuccess,
+div.msgnotify {
+    color: #000;
+    background-repeat: no-repeat;
+    background-position: 8px 50%;
+    border: 1px solid;
+    margin: 0 0 0.5em;
+    padding: 0.4em;
+    padding-left: 32px;
+    overflow: hidden;
+    border-radius: 5px;
+}
+
+div.msgerror {
+    background-color: #fcc;
+    background-image: url(http://plaetjes.csrdelft.nl/famfamfam/exclamation.png);
+    border-color: #ebb;
+}
+
+div.msginfo {
+    background-color: #ccf;
+    background-image: url(http://plaetjes.csrdelft.nl/famfamfam/information.png);
+    border-color: #bbe;
+}
+
+div.msgsuccess {
+    background-color: #cfc;
+    background-image: url(http://plaetjes.csrdelft.nl/famfamfam/accept.png);
+    border-color: #beb;
+}
+
+div.msgnotify {
+    background-color: #ffc;
+    background-image: url(http://plaetjes.csrdelft.nl/famfamfam/bell.png);
+    border-color: #eeb;
+}

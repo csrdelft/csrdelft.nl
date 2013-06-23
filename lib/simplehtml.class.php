@@ -14,6 +14,18 @@ abstract class SimpleHTML {
 	public function view() {
 
 	}
+
+	/**
+	 * Geeft berichten weer die opgeslagen zijn in de sessie met met setMelding($message, $lvl=0)
+     * Levels can be:
+	 *
+	 * -1 error
+	 *  0 info
+	 *  1 success
+	 *  2 notify
+	 *
+	 * @return string html van melding(en) of lege string
+	 */
 	public function getMelding(){
 		if(isset($_SESSION['melding']) AND is_array($_SESSION['melding'])){
 			$sMelding='<div id="melding">';
@@ -21,7 +33,7 @@ abstract class SimpleHTML {
 			foreach($_SESSION['melding'] as $msg){
 				$hash = md5($msg['msg']);
 				if(isset($shown[$hash])) continue; // skip double messages
-				$sMelding.='<div class="'.$msg['lvl'].'">';
+				$sMelding.='<div class="msg'.$msg['lvl'].'">';
 				$sMelding.=$msg['msg'];
 				$sMelding.='</div>';
 				$shown[$hash] = 1;
