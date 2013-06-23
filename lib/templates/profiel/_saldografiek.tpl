@@ -1,4 +1,4 @@
-<!--[if IE]><script language="javascript" type="text/javascript" src="/layout/js/flot/excanvas.js"></script><![endif]-->
+<!--[if lte IE 8]><script language="javascript" type="text/javascript" src="/layout/js/flot/excanvas.min.js"></script><![endif]-->
 <script type="text/javascript">{literal}
 function makePlot(){
 

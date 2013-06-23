@@ -178,7 +178,6 @@ $pagina->addScript('autocomplete/jquery.autocomplete.min.js');
 if($actie=='view'){
 	$pagina->addScript('flot/jquery.flot.min.js');
 	$pagina->addScript('flot/jquery.flot.threshold.min.js');
+	$pagina->addScript('flot/jquery.flot.time.min.js');
 }
 $pagina->view();
-
-?>
