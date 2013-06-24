@@ -21,6 +21,10 @@ class PaginaContent extends SimpleHTML{
 	function getTitel(){
 		return $this->_pagina->getTitel();
 	}
+	function getMenuTpl(){
+		//TODO ook uit dbtabel pagina
+		return 'Vereniging';
+	}
 
 	function setActie($sActie){
 		$this->sActie=$sActie;
@@ -95,5 +99,3 @@ class PaginaContent extends SimpleHTML{
 		}
 	}
 }
-
-?>

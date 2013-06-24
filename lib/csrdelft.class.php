@@ -18,12 +18,14 @@ class csrdelft extends SimpleHTML {
 	 * Zijkolom is standaard, tenzij met setZijkolom($simplehtml); een ander object
 	 * gezet wordt, of met setZijkolom(false); de zijkolom wordt uitgezet.
 	 */
-	public $_zijkolom=null;
+	public $_zijkolom = null;
 
-	private $_stylesheets=array();
-	private $_scripts=array();
+	private $_stylesheets = array();
+	private $_scripts = array();
 
-	private $_titel='Geen titel gezet.';
+	private $_titel = 'Geen titel gezet.';
+	private $_menutpl = '';
+
 	private $_prefix;
 
 	function __construct($body, $prefix='', $menuid=0){ //mw: param menuid toegevoegd, zodat het goede menu geladen wordt (voor vb=99)
@@ -32,6 +34,9 @@ class csrdelft extends SimpleHTML {
 			//als de body een methode heeft om een titel mee te geven die gebruiken, anders de standaard.
 			if(method_exists($this->_body, 'getTitel')){
 				$this->_titel=$this->_body->getTitel();
+			}
+			if(method_exists($this->_body, 'getMenuTpl')){
+				$this->_menutpl=$this->_body->getMenuTpl();
 			}
 		}
 		//Prefix opslaan
@@ -175,6 +180,7 @@ class csrdelft extends SimpleHTML {
 
 		//SocCie-saldi, MaalCie-saldi
 		$csrdelft->assign('saldi', $loginlid->getLid()->getSaldi());
+		$csrdelft->assign('menutpl', $this->_menutpl);
 
 		if(defined('DEBUG') AND ($loginlid->hasPermission('P_ADMIN') OR $loginlid->isSued())){
 			$csrdelft->assign('db', MySql::instance());
@@ -194,5 +200,3 @@ class csrdelft extends SimpleHTML {
 	}
 
 }
-
-?>

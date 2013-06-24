@@ -1,16 +1,16 @@
 ﻿{include file='csrdelft2/partials/_header.tpl'}
 <section id="blackout">
-	<div id="pageover">
-        {include file='csrdelft2/partials/_menuVereniging.tpl'}
-		<header class="top">
+	<div id="pageover"{if $csrdelft->_zijkolom===false}class="widepage"{/if}">
+        {if $menutpl != ''}{include file="csrdelft2/partials/_menu$menutpl.tpl"}{/if}
+		<header class="pg-top">
 			<a class="close" href="#">&times;</a>
 		</header>
-		<div class="mid">
+		<div class="pg-mid">
             <div class="content">
                 {$csrdelft->_body->view()}
             </div>
 		</div>
-		<div class="btm"></div>
+		<div class="pg-btm"></div>
 	</div>
 </section>
 {include file='csrdelft2/partials/_homeContent.tpl'}

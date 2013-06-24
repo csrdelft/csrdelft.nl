@@ -57,12 +57,12 @@ $(function(){
 	});
 
 	// take first image and put it in the clip
-	/* var imageHolder = $("div.mid img.REPLACE-ANCHOR");
-	var image = $("div.mid div.content img.ubb_image").first();
+	/* var imageHolder = $("div.pg-mid img.REPLACE-ANCHOR");
+	var image = $("div.pg-mid div.content img.ubb_image").first();
 	imageHolder.attr("src", image.attr("src"));
 	image.hide(); */
 	
-	$("div.mid img.rotate-left, div.mid img.rotate-right").each(function() {
+	$("div.pg-mid img.rotate-left, div.pg-mid img.rotate-right").each(function() {
 	
 		$(this).css({margin: 0}).wrap('<figure class="' + $(this).attr("class") + '" />').after('<div class="clip"></div>');
 	

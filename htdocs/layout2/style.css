@@ -101,9 +101,9 @@ img.border { width: 224px; border: 6px solid #fff; }
 
 /* Popup */
 #pageover { position: absolute; z-index: 101; left: 50%; width: 851px; margin: 56px 0 0 -425px; }
-#pageover .top { position: relative; z-index: 103; height: 85px; background: url(/images/layout2/page-top.png) no-repeat; }
-#pageover .mid { position: relative; float: left; clear: both; width: 791px; background: url(/images/layout2/page-mid.png) repeat-y; padding: 0 30px; }
-#pageover .btm { clear: both; height: 113px; background: url(/images/layout2/page-btm.png) no-repeat; padding: 0 0 30px; }
+#pageover .pg-top { position: relative; z-index: 103; height: 85px; background: url(/images/layout2/page-top.png) no-repeat; }
+#pageover .pg-mid { position: relative; float: left; clear: both; width: 791px; background: url(/images/layout2/page-mid.png) repeat-y; padding: 0 30px; }
+#pageover .pg-btm { clear: both; height: 113px; background: url(/images/layout2/page-btm.png) no-repeat; padding: 0 0 30px; }
 #pageover .close { display: block; position: absolute; right: 35px; top: 30px; font-size: 26px; color: #666; z-index:110; }
 #pageover .close:hover { color: #333; }
 
@@ -112,7 +112,7 @@ img.border { width: 224px; border: 6px solid #fff; }
 #pageover h2 { font-size: 14px; font-weight: bold; padding: 24px 0 0; }
 #pageover h3 { font-size: 12px; font-weight: bold; }
 #pageover p, #pageover address, #pageover table { padding: 0 0 14px; }
-#pageover .small, .mid { font-size: 12px; }
+#pageover .small, .pg-mid { font-size: 12px; }
 #pageover .content a { color: #043279; }
 #pageover .content a:hover { text-decoration: underline; }
 #pageover ul { list-style: disc; padding: 0 0 14px 20px; }

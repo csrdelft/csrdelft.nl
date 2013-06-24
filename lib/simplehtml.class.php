@@ -65,9 +65,9 @@ abstract class SimpleHTML {
 	}
 
 	//eventueel titel voor een pagina geven
-	function getTitel(){
-		return 'C.S.R. Delft';
-	}
+	function getTitel(){		return 'C.S.R. Delft'; }
+	// menu, voor csrdelft2 layout
+	function getMenuTpl(){		return '';	}
 }
 
 class StringIncluder extends SimpleHTML{
