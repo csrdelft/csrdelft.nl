@@ -5,17 +5,15 @@
     <meta charset="utf-8">
     <title>C.S.R. Delft - {$csrdelft->getTitel()}</title>
 
-    <link rel="stylesheet" href="/layout2/style.css">
-    <link rel="stylesheet" href="/layout2/foundation.css">
-    <link rel="stylesheet" href="/layout2/normalize.css">
-    <link rel="shortcut icon" href="http://plaetjes.csrdelft.nl/layout/favicon.ico">
     {foreach from=$csrdelft->getStylesheets() item=sheet}
         <link rel="stylesheet" href="{if $sheet.local}/layout/{/if}{$sheet.naam}?{$sheet.datum}" type="text/css" />
     {/foreach}
 
-    <script src="/layout2/js/jquery.js"></script>
-    <script src="/layout2/js/jquery.backstretch.js"></script>
-    <script src="/layout2/js/init.js"></script>
+    <link rel="shortcut icon" href="http://plaetjes.csrdelft.nl/layout/favicon.ico">
+
+    {foreach from=$csrdelft->getScripts() item=script}
+        <script type="text/javascript" src="{if $script.local}/layout/js/{/if}{$script.naam}?{$script.datum}"></script>
+    {/foreach}
 
     {literal}
     <script>
@@ -30,13 +28,7 @@
 	</script>
     {/literal}
 
-
-
     <!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
-
-    {foreach from=$csrdelft->getScripts() item=script}
-        <script type="text/javascript" src="{if $script.local}/layout/js/{/if}{$script.naam}?{$script.datum}"></script>
-    {/foreach}
 </head>
 
 <body>

@@ -43,7 +43,13 @@ class csrdelft extends SimpleHTML {
 		$this->_prefix=$prefix;
 		if($this->_prefix == 'csrdelft2') {
 			//nieuwe layout
+			$this->addStylesheet('style.css', $this->_prefix);
+			$this->addStylesheet('foundation.css', $this->_prefix);
+			$this->addStylesheet('normalize.css', $this->_prefix);
 
+			$this->addScript('jquery.js', $this->_prefix);
+			$this->addScript('jquery.backstretch.js', $this->_prefix);
+			$this->addScript('init.js', $this->_prefix);
 		} else {
 			//oude layout
 			if(Instelling::get('layout')=='owee'){	$this->_prefix='owee_'; }
@@ -81,12 +87,28 @@ class csrdelft extends SimpleHTML {
 			}
 		}
 	}
-
-	function addStylesheet($sheet){
+	/**
+	 * Zorg dat de template een stijl inlaadt. Er zijn twee verianten:
+	 *
+	 * - lokaal:
+	 * een timestamp van de creatie van het bestand wordt toegoevoegd,
+	 * zodat de browsercache het bestand vernieuwt.
+	 *
+	 * - extern:
+	 * Buiten de huidige server, gewoon een url dus.
+	 *
+	 * Merk op: local-entry wordt ook gebruikt om een map buiten /layout/ toe te voegen.
+	 */
+	function addStylesheet($sheet, $layout = ''){
+		//TODO netter fixen, mappen herordenen??
+		$map = '';
+		if($layout == 'csrdelft2') {
+			$map .= '/layout2/';
+		}
 		$this->_stylesheets[]=array(
-			'naam' => $sheet,
-			'local' => true,
-			'datum' => filemtime(HTDOCS_PATH.'/layout/'.$sheet)
+			'naam' => $map.$sheet,
+			'local' => ($map ? false : true ),
+			'datum' => filemtime(HTDOCS_PATH.($map ? $map : '/layout/').$sheet),
 		);
 	}
 	function getStylesheets(){		return $this->_stylesheets; }
@@ -102,9 +124,16 @@ class csrdelft extends SimpleHTML {
 	 * - extern:
 	 * Buiten de huidige server, gewoon een url dus. Google jsapi
 	 * bijvoorbeeld.
+	 *
+	 * Merk op: local-entry wordt ook gebruikt om een map buiten /layout/ toe te voegen.
 	 */
-	function addScript($script){
-		$localJsPath=HTDOCS_PATH.'/layout/js/';
+	function addScript($script, $layout = ''){
+		//TODO netter fixen, mappen herordenen??
+		$map = '';
+		if($layout == 'csrdelft2') {
+			$map .= '/layout2/js/';
+		}
+		$localJsPath=HTDOCS_PATH.($map ? $map : '/layout/js/');
 
 		if(substr($script, 0, 7)=='http://'){
 			//extern script
@@ -116,8 +145,8 @@ class csrdelft extends SimpleHTML {
 		}else{
 			//lokaal script
 			$add=array(
-				'naam' => $script,
-				'local' => true,
+				'naam' => $map.$script,
+				'local' => ($map ? false : true ),
 				//voeg geen datum toe als er al een '?' in de scriptnaam staat
 				'datum' => (strstr($script,'?')?'':filemtime($localJsPath.$script))
 			);
