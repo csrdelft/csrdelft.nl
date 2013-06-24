@@ -37,7 +37,7 @@
 	zoom: 1; /* Feeling sorry for IE */
 }
 
-.dataTables_wrapper .dataTables_processing {
+.dataTables_processing {
 	position: absolute;
 	top: 50%;
 	left: 50%;
@@ -53,23 +53,23 @@
 	background-color: white;
 }
 
-.dataTables_wrapper .dataTables_length {
+.dataTables_length {
 	width: 40%;
 	float: left;
 }
 
-.dataTables_wrapper .dataTables_filter {
+.dataTables_filter {
 	width: 50%;
 	float: right;
 	text-align: right;
 }
 
-.dataTables_wrapper .dataTables_info {
+.dataTables_info {
 	width: 60%;
 	float: left;
 }
 
-.dataTables_wrapper .dataTables_paginate {
+.dataTables_paginate {
 	width: 44px;
 	* width: 50px;
 	float: right;
@@ -253,7 +253,7 @@
 	width: 40%;
 }
 
-.paging_full_numbers {
+.dataTables_wrapper .paging_full_numbers {
 	width: 400px;
 	height: 22px;
 	line-height: 22px;
