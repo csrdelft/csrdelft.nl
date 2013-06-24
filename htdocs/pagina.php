@@ -20,6 +20,7 @@ if (isset($_GET['bewerken']) && $pagina->magBewerken()){
 	if($_SERVER['REQUEST_METHOD']=='POST'){
 		$pagina->setTitel($_POST['titel']);
 		$pagina->setInhoud($_POST['inhoud']);
+		$pagina->setMenu($_POST['menu']);
 		if($pagina->magPermissiesBewerken()){
 			$pagina->setRechtenBekijken($_POST['rechten_bekijken']);
 			$pagina->setRechtenBewerken($_POST['rechten_bewerken']);

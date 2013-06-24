@@ -14,6 +14,7 @@ class Pagina{
 	private $sNaam;
 	private $sTitel;
 	private $sInhoud;
+	private $sMenu;
 	private $sRechtenBekijken='P_NOBODY';
 	private $sRechtenBewerken='P_ADMIN';
 
@@ -39,27 +40,29 @@ class Pagina{
 	}
 
 	public function load(){
-		$sPaginaQuery="SELECT titel, inhoud, rechten_bekijken, rechten_bewerken FROM pagina WHERE naam='".$this->_db->escape($this->sNaam)."'";
+		$sPaginaQuery="SELECT titel, inhoud, menu, rechten_bekijken, rechten_bewerken FROM pagina WHERE naam='".$this->_db->escape($this->sNaam)."'";
 		$rPagina=$this->_db->query($sPaginaQuery);
 		if($this->_db->numRows($rPagina)>0){
 			$aPagina=$this->_db->next($rPagina);
 			$this->setTitel($aPagina['titel']);
 			$this->setInhoud($aPagina['inhoud']);
+			$this->setMenu($aPagina['menu']);
 			$this->sRechtenBekijken=$aPagina['rechten_bekijken'];
 			$this->sRechtenBewerken=$aPagina['rechten_bewerken'];
 		}else{
 			$this->setTitel('');
 			$this->setInhoud('');
+			$this->setMenu('');
 			$this->sRechtenBekijken='P_NOBODY';
 			$this->sRechtenBewerken='P_ADMIN';
 		}
 	}
 
 	public function save(){
-		$sPaginaQuery = "UPDATE pagina SET titel='".$this->_db->escape($this->getTitel())."', inhoud='".$this->_db->escape($this->getInhoud())."', rechten_bekijken='".$this->_db->escape($this->sRechtenBekijken)."', rechten_bewerken='".$this->_db->escape($this->sRechtenBewerken)."' WHERE naam = '".$this->_db->escape($this->getNaam())."'";
+		$sPaginaQuery = "UPDATE pagina SET titel='".$this->_db->escape($this->getTitel())."', inhoud='".$this->_db->escape($this->getInhoud())."', menu='".$this->_db->escape($this->getMenu())."', rechten_bekijken='".$this->_db->escape($this->sRechtenBekijken)."', rechten_bewerken='".$this->_db->escape($this->sRechtenBewerken)."' WHERE naam = '".$this->_db->escape($this->getNaam())."'";
 		$this->_db->query($sPaginaQuery);
 		if($this->_db->affected_rows()==0){
-			$sPaginaQuery = "INSERT INTO pagina (naam, titel, inhoud, rechten_bekijken, rechten_bewerken) VALUES ('".$this->_db->escape($this->getNaam())."', '".$this->_db->escape($this->getTitel())."', '".$this->_db->escape($this->getInhoud())."', '".$this->_db->escape($this->sRechtenBekijken)."', '".$this->_db->escape($this->sRechtenBewerken)."')";
+			$sPaginaQuery = "INSERT INTO pagina (naam, titel, inhoud, menu, rechten_bekijken, rechten_bewerken) VALUES ('".$this->_db->escape($this->getNaam())."', '".$this->_db->escape($this->getTitel())."', '".$this->_db->escape($this->getInhoud())."', '".$this->_db->escape($this->getMenu())."', '".$this->_db->escape($this->sRechtenBekijken)."', '".$this->_db->escape($this->sRechtenBewerken)."')";
 			$rPagina = $this->_db->query($sPaginaQuery);
 		}
 	}
@@ -98,6 +101,10 @@ class Pagina{
 		$this->sInhoud=$sInhoud;
 	}
 
+	public function setMenu($sMenu){
+		$this->sMenu=$sMenu;
+	}
+
 	public function getNaam(){
 		return $this->sNaam;
 	}
@@ -109,5 +116,8 @@ class Pagina{
 	public function getInhoud(){
 		return $this->sInhoud;
 	}
+
+	public function getMenu(){
+		return $this->sMenu;
+	}
 }
-?>

@@ -22,8 +22,7 @@ class PaginaContent extends SimpleHTML{
 		return $this->_pagina->getTitel();
 	}
 	function getMenuTpl(){
-		//TODO ook uit dbtabel pagina
-		return 'Vereniging';
+		return $this->_pagina->getMenu();
 	}
 
 	function setActie($sActie){
@@ -69,8 +68,10 @@ class PaginaContent extends SimpleHTML{
 				$sInhoud.='
 				<form action="/pagina/'.$this->_pagina->getNaam().'/bewerken" method="post">
 					<strong>Titel:</strong><br />
-					<input type="text" name="titel" style="width: 70%" value="'.htmlspecialchars($this->_pagina->getTitel()).'" />';
-
+					<input type="text" name="titel" style="width: 70%" value="'.htmlspecialchars($this->_pagina->getTitel()).'" />
+					<br />
+					<strong>Menunaam:</strong><br />
+					<input type="text" name="menu" style="width: 50%" value="'.htmlspecialchars($this->_pagina->getMenu()).'" />';
 				if($this->_pagina->magPermissiesBewerken()){
 					$sInhoud.='<br />
 						<strong>Rechten voor bekijken:</strong><br />
