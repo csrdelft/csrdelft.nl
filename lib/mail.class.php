@@ -79,6 +79,7 @@ class Mail{
 	}
 	public function getHeaders(){
 		$headers="From: ".$this->from."\n";
+
 		if($this->bcc!=''){
 			$headers.="BCC: ".$this->getBcc()."\n";
 		}
@@ -89,6 +90,9 @@ class Mail{
 		$headers.='X-Mailer: nl.csrdelft.lib.Mail'."\n\r";
 
 		return $headers;
+	}
+	public function getExtraparameters(){
+		return "-f ".$this->from;
 	}
 	public function getSubject(){
 		$onderwerp=$this->onderwerp;
@@ -110,8 +114,8 @@ class Mail{
 		if($this->onderwerp==''){
 			throw new Exception('Geen onderwerp ingevuld');
 		}
-		
-		return mail($this->getTo(), $this->getSubject(), $this->getBody(), $this->getHeaders());
+
+		return mail($this->getTo(), $this->getSubject(), $this->getBody(), $this->getHeaders(), $this->getExtraparameters());
 	}
 
 	public function __toString(){
