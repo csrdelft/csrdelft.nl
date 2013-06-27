@@ -537,6 +537,10 @@ class LoginLid{
 				}
 			}elseif(substr($part, 0, 7)=='P_ADMIN'){
 				$return[]='Admin';
+			}elseif(substr($part, 0, 8)=='P_NOBODY'){
+				$return[]='Niet-ingelogd';
+			}elseif(substr($part, 0, 11)=='P_LOGGED_IN'){
+				$return[]='Ingelogd';
 			}
 		}
 		return implode(', ', $return);

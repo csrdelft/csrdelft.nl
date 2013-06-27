@@ -174,7 +174,13 @@ h.t. Fiscus.';
 		}
 		
 		foreach($this->teschoppen as $uid => $bericht){
-			$mail=new Mail($uid.'@csrdelft.nl', $this->getOnderwerp(), $bericht['bericht']);
+			if($this->doelgroep=='oudleden'){
+				$lid=LidCache::getLid($uid);
+				$to = $lid->getEmail();
+			}else {
+				$to = $uid.'@csrdelft.nl';
+			}
+			$mail=new Mail($to, $this->getOnderwerp(), $bericht['bericht']);
 			$mail->setFrom($this->getFrom());
 			$mail->addBcc($this->getBcc());
 			$mail->send();
