@@ -110,7 +110,7 @@ function isFeut(){
  * Is de huidige server syrinx?
  */
 function isSyrinx(){
-	return stristr($_SERVER['SERVER_NAME'], 'csrdelft.nl')!==false;
+	return $_SERVER['SERVER_NAME'] === 'csrdelft.nl';
 }
 
 function getDateTime(){
