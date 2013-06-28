@@ -15,6 +15,9 @@ class Fotoalbum{
 	//als deze regexp matched is het album alleen voor leden
 	private $alleenLeden='/(intern|novitiaat|ontvoering|feuten|slachten|zuipen|prive|privé)/i';
 
+	//als deze regexp matched is het album alleen voor DéDé
+	private $alleenVrouwen='/(DéDé|DeDe|vrouwen)/i';
+
 	//lazy loader-placeholders
 	private $fotos=null;
 	private $subalbums=null;
@@ -189,12 +192,22 @@ class Fotoalbum{
 
 	function magBekijken(){
 		if(LoginLid::instance()->hasPermission('P_LEDEN_READ')){
+			if(preg_match($this->alleenVrouwen, $this->getPad())){ # Deze foto's alleen voor DéDé
+				if(LoginLid::instance()->getLid()->getGeslacht() == 'v'){
+					return true;
+				}
+				return false;
+			}
 			return true;
 		}else{
-			//Deze foto's niet voor gewoon volk
-			return (!preg_match($this->alleenLeden, $this->getPad()));
+			if(preg_match($this->alleenLeden, $this->getPad())){
+				return false; # Deze foto's niet voor gewoon volk
+			}
+			if(preg_match($this->alleenVrouwen, $this->getPad())){
+				return false; # Deze foto's alleen voor DéDé
+			}
+			return true;
 		}
-
 	}
 
 	function verwerkFotos(){
