@@ -28,7 +28,7 @@ RewriteRule ^contact/?$ 			pagina.php?naam=contact
 RewriteRule ^contact/([a-z]+)/? 	pagina.php?naam=$1
 
 # KoSS
-RewriteRule ^pagina/koss/?$ 		koss/
+RewriteRule ^koss/?$ 				pagina/koss/
 
 # Lid Worden
 RewriteRule ^lidworden/?$ 			lidworden.php
