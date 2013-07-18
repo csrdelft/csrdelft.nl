@@ -27,6 +27,9 @@ RewriteRule ^vereniging/([a-z]+)/? 	pagina.php?naam=$1
 RewriteRule ^contact/?$ 			pagina.php?naam=contact
 RewriteRule ^contact/([a-z]+)/? 	pagina.php?naam=$1
 
+# KoSS
+RewriteRule ^pagina/koss/?$ 		koss/
+
 # Lid Worden
 RewriteRule ^lidworden/?$ 			lidworden.php
 
