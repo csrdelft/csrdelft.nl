@@ -11,12 +11,12 @@ class Fotoalbum{
 
 	private $pad;
 	private $mapnaam;
-	
+
 	//als deze regexp matched is het album alleen voor leden
 	private $alleenLeden='/(intern|novitiaat|ontvoering|feuten|slachten|zuipen|prive|privé)/i';
 
 	//als deze regexp matched is het album alleen voor DéDé
-	private $alleenVrouwen='/(DéDé|DeDe|vrouwen)/i';
+	private $alleenVrouwen='/(DéDé-privé|DeDe-prive|vrouwen-only)/i';
 
 	//lazy loader-placeholders
 	private $fotos=null;
