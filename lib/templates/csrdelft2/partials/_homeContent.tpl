@@ -111,9 +111,9 @@
                 </div>
                 <div class="columns large-2 small-2">
                     <div class="box h2 link">
-                        <a href="http://www.veritasforum.nl/delft/index.html">
-                            <img src="/images/layout2/box-promo-veritas.jpg" class="border">
-                            <!-- <h2 class="overlay">Feest 25 april</h2> -->
+                        <a href="/lidworden">
+                            <img src="http://plaetjes.csrdelft.nl/owee/owee-thema.jpg" class="border">
+                            <h2 class="overlay">OWee pagina!</h2>
                         </a>
                     </div>
                 </div>
