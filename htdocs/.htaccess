@@ -30,6 +30,9 @@ RewriteRule ^contact/([a-z]+)/? 	pagina.php?naam=$1
 # KoSS
 RewriteRule ^koss/?$ 				pagina/koss/
 
+# C.S.R. in de OWee
+RewriteRule ^csrindeowee/?$ 				pagina/csrindeowee/
+
 # Lid Worden
 RewriteRule ^lidworden/?$ 			lidworden.php
 
