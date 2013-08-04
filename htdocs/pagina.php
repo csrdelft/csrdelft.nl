@@ -50,7 +50,7 @@ if($_GET['naam']=='owee' OR $_GET['naam']=='oweeprogramma' OR $_GET['naam']=='vi
 }
 
 // Hier alle namen van pagina's die in de nieuwe layout moeten worden weergegeven
-$nieuwNamen = array("contact", "vereniging", "lidworden", "geloof", "vorming", "filmpjes", "gezelligheid", "sport", "vragen", "officieel", "societeit", "ontspanning", "interesse", "interesseverzonden", "accountaanvragen");
+$nieuwNamen = array("contact", "csrindeowee", "vereniging", "lidworden", "geloof", "vorming", "filmpjes", "gezelligheid", "sport", "vragen", "officieel", "societeit", "ontspanning", "interesse", "interesseverzonden", "accountaanvragen");
 if(in_array($_GET['naam'],$nieuwNamen)) {
   	$prefix = 'csrdelft2';
 }
