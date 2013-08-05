@@ -5,6 +5,8 @@
  * de array's die in deze class staan bepalen wat er in het formulier te zien is.
  */
 
+ require_once 'common.functions.php';
+ 
 class LidZoeker{
 
 	//velden die door gewone leden geselecteerd mogen worden.
@@ -189,8 +191,14 @@ class LidZoeker{
 			$lichting=substr($zoekterm, 9);
 			if(strlen($lichting)==4){
 				$query="lidjaar=".$lichting." ";
+				if((int)$lichting == 2013 AND !Loginlid::instance()->hasPermission('P_ADMIN')) {
+					setMelding('Het is niet toegestaan het aantal nullen te bekijken voor de OweeCie dit heeft bekendgemaakt! Dit zal gebeuren op donderdag 22 augustus rond elf uur.', -1);
+				}
 			}else{
 				$query="RIGHT(lidjaar,2)=".(int)$lichting." ";
+				if((int)$lichting == 13 AND !Loginlid::instance()->hasPermission('P_ADMIN')) {
+					setMelding('Het is niet toegestaan het aantal nullen te bekijken voor de OweeCie dit heeft bekendgemaakt! Dit zal gebeuren op donderdag 22 augustus rond elf uur.', -1);
+				}
 			}
 		}elseif(preg_match('/^[a-z0-9][0-9]{3}$/', $zoekterm)){ //uid's is ook niet zo moeilijk.
 			$query="uid='".$zoekterm."' ";

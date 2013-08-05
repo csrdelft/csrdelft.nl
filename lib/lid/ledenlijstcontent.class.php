@@ -14,6 +14,7 @@
 require_once 'lid/lidzoeker.class.php';
 
 
+
 class LedenlijstContent extends SimpleHTML{
 	private $zoeker;
 	
