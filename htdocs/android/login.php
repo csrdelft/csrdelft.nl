@@ -17,6 +17,6 @@ if (isset($_POST['user']) and isset($_POST['pass'])) {
 	
 	}
 
-} echo 123;
+}
 
 ?>
