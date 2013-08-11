@@ -1,8 +1,18 @@
-{
-    "user": {
-        "id": "213323",
-        "name": "Pietje",
-        "phone": "06-27303545",
-        "address": "Nieuwe Schoolstraat 56\n2613 SJ Delft"
-    }
+<?php
+
+require_once 'configuratie.include.php';
+require_once 'lid/profiel.class.php';
+
+if(!($loginlid->hasPermission('P_LOGGED_IN') AND $loginlid->hasPermission('P_OUDLEDEN_READ'))){
+	# geen rechten
+	echo 'false';
+	exit;
 }
+
+$lid = LidCache::getLid($_GET['id']);
+
+echo '{
+    "user": ' . json_encode(array("id" => $lid->getUid(), "name" => $lid->getNaam(), "phone" => $lid->getProperty('mobiel'))) . '
+}';
+
+?>
