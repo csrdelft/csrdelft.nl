@@ -12,7 +12,14 @@ if(!($loginlid->hasPermission('P_LOGGED_IN') AND $loginlid->hasPermission('P_OUD
 $lid = LidCache::getLid($_GET['id']);
 
 echo '{
-    "user": ' . json_encode(array("id" => $lid->getUid(), "name" => $lid->getNaam(), "mobile" => $lid->getProperty('mobiel'), "phone" => $lid->getProperty('telefoon'))) . '
+    "user": ' . json_encode(array(
+		"id" => $lid->getUid(),
+		"name" => $lid->getNaam(),
+		"email" => $lid->getEmail(),
+		"mobile" => $lid->getProperty('mobiel'),
+		"phone" => $lid->getProperty('telefoon'),
+		"address" => $lid->getProperty('adres') . "\n" . $lid->getProperty('postcode') . " " . $lid->getProperty('woonplaats')
+	)) . '
 }';
 
 ?>
