@@ -693,7 +693,7 @@ class ProfielStatus extends Profiel{
 		if ($bknleden['aantal']) $bknleden['kopje'] = ($bknleden['aantal'] > 1 ? $meervoud : $enkelvoud) . " van leden:";
 
 		// Alleen mailen als er C.S.R.boeken zijn
-		if (count($bkncsr['aantal']) == 0) return false;
+		if ($bkncsr['aantal'] == 0) return false;
 
 		$to = 'bibliothecaris@csrdelft.nl,' . $this->bewerktLid->getEmail();
 		$template = file_get_contents(LIB_PATH . '/templates/mails/lidafgeleendebiebboeken.mail');
