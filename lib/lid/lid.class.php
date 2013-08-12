@@ -125,8 +125,8 @@ class Lid implements Serializable, Agendeerbaar{
 
 		$ldap=new LDAP();
 
-		# Alleen leden, gastleden, novieten en kringels staan in LDAP ( en Knorrie öO~ )
-		if(preg_match('/^S_(LID|GASTLID|NOVIET|KRINGEL|CIE)$/', $this->getStatus()) or $this->getUid()=='9808') {
+		# Alleen leden, gastleden, novieten en kringels staan in LDAP ( en Knorrie öO~ en Gerrit Uitslag )
+		if(preg_match('/^S_(LID|GASTLID|NOVIET|KRINGEL|CIE)$/', $this->getStatus()) or $this->getUid()=='9808' or $this->getUid()=='0431') {
 
 			# ldap entry in elkaar snokken
 			$entry = array();
