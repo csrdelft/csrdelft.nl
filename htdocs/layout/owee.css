@@ -48,8 +48,12 @@ body{
 #submenu {
 	background: #3baa35; /* url('http://plaetjes.csrdelft.nl/owee/2010/submenubg.png') repeat-x */
 }
-#submenu a:hover, #submenu a:active, #submenu a.active {
-	color: #1470b8;
+#submenu a.active  {
+	color: #ffffff;
+	font-weight: bold;
+}
+#submenu a:hover, #submenu a:active {
+	color: #fbea14;
 }
 
 /**** MAIN ********************************************************************/
