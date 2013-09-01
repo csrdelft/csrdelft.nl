@@ -1,4 +1,4 @@
-#!/usr/bin/php
+#!/usr/bin/php5-cgi
 <?php
 # Scriptje om voor sjaars een wachtwoord te genereren en dat toe te mailen.
 # Vergeet niet voor gebruik hieronder het jaar aan te passen.
