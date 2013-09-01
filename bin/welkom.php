@@ -5,7 +5,7 @@
 
 $jaar = '13';
 
-require_once('configuratie.include.php');
+require_once('../lib/configuratie.include.php');
 
 $result = $db->select("SELECT * FROM `lid` WHERE status = 'S_NOVIET'");
 if ($result !== false and $db->numRows($result) > 0) {
