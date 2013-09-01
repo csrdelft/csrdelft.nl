@@ -3,7 +3,7 @@
 # Scriptje om voor sjaars een wachtwoord te genereren en dat toe te mailen.
 # Vergeet niet voor gebruik hieronder het jaar aan te passen.
 
-$jaar = '12';
+$jaar = '13';
 
 require_once('configuratie.include.php');
 
@@ -35,7 +35,7 @@ Via de webstek kun je onder andere:
 - Berichten plaatsen in de C.S.R.-courant, die wekelijks aan alle leden wordt verzonden
 - Gegevens van andere leden opzoeken
 
-Je hebt een abbonement op de donderdag maaltijd. Als je een donderdag niet kan, kun je je afmelden op de webstek. Doe dit voor de maaltijd sluit, anders sta je toch ingeschreven en kost je dit dus €3. 
+Je hebt een abbonement op de donderdag maaltijd (staat z.s.m. aan). Als je een donderdag niet kan, kun je je afmelden op de webstek. Doe dit voor de maaltijd sluit, anders sta je toch ingeschreven en kost je dit dus €3. 
 
 Je inloggegevens zijn als volgt:
 Lidnummer: {$sjaars['uid']}
@@ -50,7 +50,7 @@ Stuur dan een e-mail of kom even langs in ons IRC-kanaal #pubcie (zie Communicat
 
 Met vriendelijke groet,
 
-Ruben Verboon
+René Vennik
 h.t. PubCie-Praeses der Civitas Studiosorum Reformatorum
 EOD;
 				mail ($sjaars['email'],"Inloggegevens C.S.R.-webstek",$tekst,"From: PubliciteitsCommissie C.S.R. Delft <pubcie@csrdelft.nl>\nContent-Type: text/plain; charset=utf-8\nBcc: pubcie@csrdelft.nl");
