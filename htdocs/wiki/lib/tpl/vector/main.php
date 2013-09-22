@@ -667,13 +667,14 @@ if (file_exists(DOKU_TPLINC."lang/".$conf["lang"]."/style.css")){
       }else{
           //username and userpage
           echo "      <li id=\"pt-userpage\">".(tpl_getConf("vector_userpage")
-                                                ? html_wikilink(tpl_getConf("vector_userpage_ns").$loginname, hsc($loginname))
-                                                : hsc($loginname))."</li>";
+                                                 ? "<a href=\"".$conf["profiellink"].$loginname."\">".$INFO['userinfo']['name']." (".hsc($loginname).")</a>"
+                                                  : hsc($loginname))."</li>";
+          /*
           //personal discussion
           if (tpl_getConf("vector_discuss") &&
               tpl_getConf("vector_userpage")){
               echo "      <li id=\"pt-mytalk\">".html_wikilink(tpl_getConf("vector_discuss_ns").ltrim(tpl_getConf("vector_userpage_ns"), ":").$loginname, hsc($lang["vector_mytalk"]))."</li>";
-          }
+          } */
           //admin
           if (!empty($INFO["isadmin"]) ||
               !empty($INFO["ismanager"])){
@@ -683,6 +684,8 @@ if (file_exists(DOKU_TPLINC."lang/".$conf["lang"]."/style.css")){
           if (actionOK("profile")){ //check if action is disabled
               echo  "      <li id=\"pt-preferences\"><a href=\"".wl(cleanID(getId()), array("do" => "profile"))."\" rel=\"nofollow\">".hsc($lang["btn_profile"])."</a></li>\n"; //language comes from DokuWiki core
           }
+          //csrstek
+          	  echo "      <li><a href=\"http://csrdelft.nl\">csrdelft.nl</a></li>";
           //logout
           echo  "      <li id=\"pt-logout\"><a href=\"".wl(cleanID(getId()), array("do" => "logout"))."\" rel=\"nofollow\">".hsc($lang["btn_logout"])."</a></li>\n"; //language comes from DokuWiki core
       }
