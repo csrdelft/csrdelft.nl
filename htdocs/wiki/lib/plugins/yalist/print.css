@@ -1,0 +1,48 @@
+/* plugin: yalist */
+
+div.dokuwiki ul,
+div.dokuwiki ol {
+    //line-height: 1em;
+    padding: 0;
+}
+
+div.dokuwiki dl {
+    //line-height: 1em;
+    margin-bottom: 0.5em;
+    padding: 0;
+}
+
+div.dokuwiki dt {
+    clear: left;
+}
+
+div.dokuwiki .dt {
+    margin-right: 1em;
+    font-weight: bold;
+    max-width: 30%;
+    float: left;
+}
+
+div.dokuwiki .dt,
+div.dokuwiki .dd,
+div.dokuwiki .li {
+    margin-bottom: 0.33em;
+}
+
+div.dokuwiki dd {
+    margin-left: 3em;
+}
+
+div.dokuwiki dl:after,
+div.dokuwiki dl dl:before,
+div.dokuwiki dl ol:before,
+div.dokuwiki dl ul:before {
+    content: '.';
+    display: block;
+    clear: left;
+    width: 0;
+    height: 0;
+    visibility: hidden;
+}
+
+/* end plugin: yalist */
