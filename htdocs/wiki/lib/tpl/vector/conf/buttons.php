@@ -9,7 +9,7 @@
  *          the author(s) of this file in doubt.
  *
  * @license GPLv2 (http://www.gnu.org/licenses/gpl2.html)
- * @author Andreas Haerter <ah@bitkollektiv.org>
+ * @author Andreas Haerter <ah@syn-systems.com>
  * @link http://www.dokuwiki.org/template:vector
  * @link http://www.dokuwiki.org/devel:configuration
  */
@@ -46,9 +46,9 @@ $_vector_btns["rss"]["nofollow"] = true;
 
 
 //"vector for DokuWiki" button
-//Note: You are NOT allowed to remove this button. Please respect this!
+//Note: do NOT remove this button. Please respect this. :-)
 $_vector_btns["vecfdw"]["img"]      = DOKU_TPL."static/img/button-vector.png";
-$_vector_btns["vecfdw"]["href"]     = "http://andreas-haerter.com/";
+$_vector_btns["vecfdw"]["href"]     = "http://syn-systems.com/";
 $_vector_btns["vecfdw"]["width"]    = 80;
 $_vector_btns["vecfdw"]["height"]   = 15;
 $_vector_btns["vecfdw"]["title"]    = $lang["vector_mdtemplatefordw"];
@@ -67,9 +67,9 @@ if (tpl_getConf("vector_donate")){
 
 
 //QR Code button
-//Note: You are NOT allowed to remove this button. Please respect this!
+//Note: do NOT remove this button. Please respect this. :-)
 $_vector_btns["qrcode"]["img"]      = DOKU_TPL."static/img/button-qrcode.png";
-$_vector_btns["qrcode"]["href"]     = "http://goqr.me/".(($conf["lang"] == "de") ? "de/" : "");
+$_vector_btns["qrcode"]["href"]     = "http://".(($conf["lang"] !== "de") ? "goqr.me" : "qr-code-generator.de")."/";
 $_vector_btns["qrcode"]["width"]    = 80;
 $_vector_btns["qrcode"]["height"]   = 15;
 $_vector_btns["qrcode"]["title"]    = $lang["vector_qrcodebtn"];
