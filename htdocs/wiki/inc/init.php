@@ -142,7 +142,7 @@ if ($conf['gzip_output'] &&
 // init session
 if (!headers_sent() && !defined('NOSESSION')) {
  	//bij authenticatie via C.S.R.-site andere instellingen voor de sessiecookie
-    if($conf['authtype']=='csr'){
+    if($conf['authtype']=='authcsr'){
         session_name("PHPSESSID");
         $sessiepath = fullpath(dirname(__FILE__).'/../../../').'/sessie';
         session_save_path($sessiepath);
