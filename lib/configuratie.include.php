@@ -16,7 +16,7 @@
 # de wiki genereert de nodige notices. En heeft daarom de error_reporting 
 # anders ingesteld.
 global $conf;
-if(!(isset($conf['authtype']) AND $conf['authtype']=='csr')){
+if(!(isset($conf['authtype']) AND $conf['authtype']=='authcsr')){
 	define('DEBUG', 'DEBUG');
 }
 
