@@ -267,20 +267,21 @@ class Doku_Renderer extends DokuWiki_Plugin {
      *
      * @author Andreas Gohr <andi@splitbrain.org>
      */
-    function _simpleTitle($name){
+    function _simpleTitle($name) {
         global $conf;
 
         //if there is a hash we use the ancor name only
-        list($name,$hash) = explode('#',$name,2);
+        list($name, $hash) = explode('#', $name, 2);
         if($hash) return $hash;
 
-        if($conf['useslash']){
-            $name = strtr($name,';/',';:');
-        }else{
-            $name = strtr($name,';',':');
-        }
+         if($conf['useslash']) {
+ 		     $name = strtr($name, '/', ':');
+         }
 
-        return noNSorNS($name);
+         $name = noNSorNS($name);
+
+         //replace _, - or . by spaces in titles
+         return strtr($name, $conf['sepchar'], ' ');
     }
 
     /**
