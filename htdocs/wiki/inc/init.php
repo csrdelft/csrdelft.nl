@@ -140,21 +140,13 @@ if ($conf['gzip_output'] &&
 }
 
 // init session
-if (!headers_sent() && !defined('NOSESSION')) {
-    //bij authenticatie via C.S.R.-site andere instellingen voor de sessiecookie
-    if($conf['authtype']=='csr'){
-        session_name("PHPSESSID");
-        $sessiepath = fullpath(dirname(__FILE__).'/../../../').'/sessie';
-        session_save_path($sessiepath);
-        session_set_cookie_params(1036800, '/', '', false,false);
+if (!headers_sent() && !defined('NOSESSION')){
+    session_name("DokuWiki");
+    $cookieDir = empty($conf['cookiedir']) ? DOKU_REL : $conf['cookiedir'];
+    if (version_compare(PHP_VERSION, '5.2.0', '>')) {
+        session_set_cookie_params(0,$cookieDir,'',($conf['securecookie'] && is_ssl()),true);
     }else{
-        session_name("DokuWiki");
-        $cookieDir = empty($conf['cookiedir']) ? DOKU_REL : $conf['cookiedir'];
-        if (version_compare(PHP_VERSION, '5.2.0', '>')) {
-            session_set_cookie_params(0,$cookieDir,'',($conf['securecookie'] && is_ssl()),true);
-        }else{
-            session_set_cookie_params(0,$cookieDir,'',($conf['securecookie'] && is_ssl()));
-        }
+        session_set_cookie_params(0,$cookieDir,'',($conf['securecookie'] && is_ssl()));
     }
     session_start();
 
@@ -204,7 +196,7 @@ init_paths();
 init_files();
 
 // setup plugin controller class (can be overwritten in preload.php)
-$plugin_types = array('admin','syntax','action','renderer', 'helper','remote');
+$plugin_types = array('auth', 'admin','syntax','action','renderer', 'helper','remote');
 global $plugin_controller_class, $plugin_controller;
 if (empty($plugin_controller_class)) $plugin_controller_class = 'Doku_Plugin_Controller';
 
@@ -216,7 +208,6 @@ global $INPUT;
 $INPUT = new Input();
 
 // initialize plugin controller
-/** @var Doku_Plugin_Controller $plugin_controller */
 $plugin_controller = new $plugin_controller_class();
 
 // initialize the event handler

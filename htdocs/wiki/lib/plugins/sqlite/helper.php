@@ -11,6 +11,7 @@ if(!defined('DOKU_INC')) die();
 
 if(!defined('DOKU_EXT_SQLITE')) define('DOKU_EXT_SQLITE', 'sqlite');
 if(!defined('DOKU_EXT_PDO')) define('DOKU_EXT_PDO', 'pdo');
+if(!defined('DOKU_EXT_NULL')) define('DOKU_EXT_NULL', 'null');
 
 require_once(DOKU_PLUGIN.'sqlite/classes/adapter.php');
 
@@ -93,9 +94,12 @@ class helper_plugin_sqlite extends DokuWiki_Plugin {
      * @return bool
      */
     public function init($dbname, $updatedir) {
-
         $init = null; // set by initdb()
-        if(!$this->adapter OR !$this->adapter->initdb($dbname, $init)) return false;
+        if( !$this->adapter or !$this->adapter->initdb($dbname, $init) ){
+            require_once(DOKU_PLUGIN.'sqlite/classes/adapter_null.php');
+            $this->adapter = new helper_plugin_sqlite_adapter_null();
+            return false;
+        }
 
         return $this->_updatedb($init, $updatedir);
     }
@@ -442,6 +446,19 @@ class helper_plugin_sqlite extends DokuWiki_Plugin {
      */
     public function escape_string($str) {
         return $this->adapter->escape_string($str);
+    }
+
+    /**
+     * Closes the result set (and it's cursors)
+     *
+     * If you're doing SELECT queries inside a TRANSACTION, be sure to call this
+     * function on all your results sets, before COMMITing the transaction.
+     *
+     * @param $res
+     * @return bool
+     */
+    public function res_close($res){
+        return $this->adapter->res_close($res);
     }
 
     /**
