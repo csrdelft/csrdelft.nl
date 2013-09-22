@@ -85,7 +85,7 @@ switch (constant('MODE')) {
 	case 'WEB':
 		//als er een wikiconfiguratie is en hierin is de csr-wikiauthicatie geselecteerd 
 		//dan is de sessie al gestart en zijn sommige includes niet nodig.
-		if(!(isset($conf['authtype']) AND $conf['authtype']=='csr')){
+		if(!(isset($conf['authtype']) AND $conf['authtype']=='authcsr')){
 			//sessie starten
 			require_once 'simplehtml.class.php';
 			require_once 'csrdelft.class.php';
