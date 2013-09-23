@@ -867,11 +867,9 @@ function pageTemplate($id) {
             // if the before event did not set a template file, try to find one
             if(empty($data['tplfile'])) {
                 $path = dirname(wikiFN($id));
-                if(@file_exists($path.'/template.txt')){
-        			$data['tplfile'] = $path.'/template.txt';
-    			}elseif(@file_exists($path.'/_template.txt')){
-        			$data['tplfile'] = $path.'/_template.txt';
-    			}else{
+                if(@file_exists($path . '/_template.txt')) {
+                    $data['tplfile'] = $path . '/_template.txt';
+                } else {
                     // search upper namespaces for templates
                     $len = strlen(rtrim($conf['datadir'], '/'));
                     while(strlen($path) >= $len) {
