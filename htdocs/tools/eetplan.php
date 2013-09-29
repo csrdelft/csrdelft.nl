@@ -1,28 +1,27 @@
 <?php
 
-$hist_a = 4;
+$hist_a = 0;
 
 # koppel de sjaarsnummers aan de sjaars
 #
 # 3 oud uid (uit oude lichtingen): 0946, 1045, 1053
-$ks['0946']='0946';
+/* $ks['0946']='0946';
 $ks['1045']='1045';
-$ks['1053']='1053';
+$ks['1053']='1053'; */
 
-# nummers die missen in 11:
-# eerste semester: 1,  4,   22,24,31,   40,42,         60,61,62,64
-# tweede semester: 1,3,4,20,22,24,31,33,40,42,52,56,58,60,61,62,64
+# nummers die missen in 13:
+# eerste semester: 14,42,56,57,58,62,63,68
 for ($es=1;$es<=65;$es++) {
-	if(!in_array($es,array(1,3,4,20,22,24,31,33,40,42,52,56,58,60,61,62,64))){
-		$uid=str_pad($es+1100, 4, "0", STR_PAD_LEFT);
+	if(!in_array($es,array(14,42,56,57,58,62,63,68))){
+		$uid=str_pad($es+1300, 4, "0", STR_PAD_LEFT);
 		$ks[$uid] = $uid;
 	}
 }
 
 
 # koppel de huizennummers aan huizen
-//$kh = array(0,3,6,7,10,11,13,1,15,16,17,19,21,2,22,8,18,5);
-$kh = array(0,1,2,3,5,7,8,9,10,11,12,13,15,16,18,19,20);// 4, 6, 14, 17 missen
+//$kh = array(0,3,6,7,10,11,13,1,15,16,17,19,21,2,22,8,18,5);0,3,5,6,19,20
+$kh = array(1,2,4,6,7,8,9,10,11,12,13,14,15,16,17,18,20,21,22,23,24,25,26,27,28,29,30,31);// 0,3,5,6,19 missen
 $khd = array(
 	0 => array('','',''),
 	1 => array ('Oranje Boven', 1016, ''),
@@ -44,7 +43,18 @@ $khd = array(
 	17=> array ("De Tolhuis-Alliantie", 10, ''),
 	18=> array ("Hotel Vlaams Gaius", 32, ''),
 	19=> array ("Residentes in Vita Detissima", 494, ''),
-	20=> array ("Caesarea", 7, '')
+	20=> array ("Huize A.D.A.M.", 554, ''),
+	21=> array ("C.C.V.", 1303, ''),
+	22=> array ("'t Ailand", 5, ''),
+	23=> array ("Ihnshthabhielh", 1438, ''),
+	24=> array ("Verdiplein 2012-ers", 1683, ''),
+	25=> array ("Huize Op Stand", 512, ''),
+	26=> array ("De Nachtwacht", 1178, ''),
+	27=> array ("Theloneum", 1441, ''),
+	28=> array ("Huize Den Hertog", 52, ''),
+	29=> array ("De Paplepel", 1338, ''),
+	30=> array ("De Zevende Hemel", 1048, ''),
+	31=> array ("Hendrik Tollensstraat 386", 1798, '')
 );
 
 # namen opzoeken in de database
@@ -58,8 +68,8 @@ ini_set('error_reporting', E_ALL & ~E_NOTICE);
 #}
 echo '<pre>';
 
-$s = 51; //(int)$_GET['s']; # aantal sjaars
-$h = 16; // $h = (int)$_GET['h']; # aantal huizen
+$s = 60; //(int)$_GET['s']; # aantal sjaars
+$h = 26; // $h = (int)$_GET['h']; # aantal huizen
 $a = 4;  // $a = (int)$_GET['a']; # aantal avonden
 //$m = (int)floor($s/$h);
 //$m = (int)$_GET['m']; # max aantal sjaars per huis per avond
@@ -77,7 +87,7 @@ $seen = array(); # $seen[sjaars][] = sjaars
 
 # sjaars die al in huizen wonen alvast rekening mee houden
 # voorbeeld: $visited_sh[$sjaarsuid][$huisuid]=true;
-$visited_sh[1138][5]=true;//Martijn van den Berg (De Lindenburgh)
+/*$visited_sh[1138][5]=true;//Martijn van den Berg (De Lindenburgh)
 $visited_sh[0946][11]=true;//Niels Brandhorst (OD11)
 $visited_sh[1109][11]=true;//Melanie Schippers (OD11)
 $visited_sh[1113][13]=true;//Job van Stiphout (SSS)
@@ -85,7 +95,20 @@ $visited_sh[1112][16]=true;//Matthias Floor (internaat)
 $visited_sh[1045][16]=true;//Vlot sr. (internaat)
 $visited_sh[1151][9]=true;//Kirsten Neels (KMT)
 $visited_sh[1139][1]=true;//Roos van Riggelen (Oranje Boven)
-$visited_sh[1144][10]=true;//Margriet Vlot (Lacha-Roi)
+$visited_sh[1144][10]=true;//Margriet Vlot (Lacha-Roi)*/
+$visited_sh[1329][1]=true;
+$visited_sh[1346][21]=true;
+$visited_sh[1320][11]=true;
+$visited_sh[1311][11]=true;
+$visited_sh[1317][14]=true;
+$visited_sh[1304][22]=true;
+$visited_sh[1311][39]=true;
+$visited_sh[1350][39]=true;
+$visited_sh[1307][20]=true;
+$visited_sh[1310][20]=true;
+$visited_sh[1367][20]=true;
+$visited_sh[1344][2]=true;
+$visited_sh[1365][4]=true;
 
 # het uiteindelijke rooster
 # $sah[sjaars][avond] = huis.. etc...
