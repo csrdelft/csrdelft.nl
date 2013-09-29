@@ -267,10 +267,10 @@ foreach ($ks as $is) {
 	}
 }
 
-//echo "\n# <b>De Woonoorden</b>\n\n";
-//for ($ih = 1; $ih <= $h; $ih++) {
-//	echo "INSERT INTO `eetplanhuis` (`id`,`naam`, groepid,`telefoon`) VALUES ({$ih},'{$khd[$kh[$ih]][0]}',{$khd[$kh[$ih]][1]}, '{$khd[$kh[$ih]][2]}');\n";
-//}
+echo "\n# <b>De Woonoorden</b>\n\n";
+for ($ih = 1; $ih <= $h; $ih++) {
+echo "INSERT INTO `eetplanhuis` (`id`,`naam`, groepid,`telefoon`) VALUES ({$ih},'{$khd[$kh[$ih]][0]}',{$khd[$kh[$ih]][1]}, '{$khd[$kh[$ih]][2]}');\n";
+}
 
 ?>
 </pre>
