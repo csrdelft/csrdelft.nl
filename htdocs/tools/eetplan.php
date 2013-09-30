@@ -21,7 +21,7 @@ for ($es=1;$es<=67;$es++) {
 
 # koppel de huizennummers aan huizen
 //$kh = array(0,3,6,7,10,11,13,1,15,16,17,19,21,2,22,8,18,5);0,3,5,6,19,20
-$kh = array(1,2,4,7,8,9,10,11,12,13,14,15,16,17,18,20,21,22,23,24,25,26,27,28,29,30,31);// 0,3,5,6,19 missen
+$kh = array(1,2,4,7,8,9,10,11,12,13,14,15,16,17,18,20,21,22,23,24,25,26,27,28,29,30,31);// 3,5,6,19 missen
 $khd = array(
 	0 => array('','',''),
 	1 => array ('Oranje Boven', 1016, ''),
@@ -69,7 +69,7 @@ ini_set('error_reporting', E_ALL & ~E_NOTICE);
 echo '<pre>';
 
 $s = 60; //(int)$_GET['s']; # aantal sjaars
-$h = 26; // $h = (int)$_GET['h']; # aantal huizen
+$h = 27; // $h = (int)$_GET['h']; # aantal huizen
 $a = 4;  // $a = (int)$_GET['a']; # aantal avonden
 //$m = (int)floor($s/$h);
 //$m = (int)$_GET['m']; # max aantal sjaars per huis per avond
