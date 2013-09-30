@@ -21,7 +21,7 @@ for ($es=1;$es<=67;$es++) {
 
 # koppel de huizennummers aan huizen
 //$kh = array(0,3,6,7,10,11,13,1,15,16,17,19,21,2,22,8,18,5);0,3,5,6,19,20
-$kh = array(1,2,4,7,8,9,10,11,12,13,14,15,16,17,18,20,21,22,23,24,25,26,27,28,29,30,31);// 3,5,6,19 missen
+$kh = array(0,1,2,4,7,8,9,10,11,12,13,14,15,16,17,18,20,21,22,23,24,25,26,27,28,29,30,31);// 3,5,6,19 missen
 $khd = array(
 	0 => array('','',''),
 	1 => array ('Oranje Boven', 1016, ''),
@@ -97,18 +97,18 @@ $visited_sh[1151][9]=true;//Kirsten Neels (KMT)
 $visited_sh[1139][1]=true;//Roos van Riggelen (Oranje Boven)
 $visited_sh[1144][10]=true;//Margriet Vlot (Lacha-Roi)*/
 $visited_sh[1329][1]=true;
-$visited_sh[1346][21]=true;
-$visited_sh[1320][11]=true;
-$visited_sh[1311][11]=true;
-$visited_sh[1317][14]=true;
-$visited_sh[1304][22]=true;
-$visited_sh[1311][39]=true;
-$visited_sh[1350][39]=true;
-$visited_sh[1307][20]=true;
-$visited_sh[1310][20]=true;
-$visited_sh[1367][20]=true;
+$visited_sh[1346][17]=true;
+$visited_sh[1320][8]=true;
+$visited_sh[1311][8]=true;
+$visited_sh[1317][11]=true;
+$visited_sh[1304][19]=true;
+$visited_sh[1311][13]=true;
+$visited_sh[1350][13]=true;
+$visited_sh[1307][16]=true;
+$visited_sh[1310][16]=true;
+$visited_sh[1367][16]=true;
 $visited_sh[1344][2]=true;
-$visited_sh[1365][4]=true;
+$visited_sh[1365][3]=true;
 
 # het uiteindelijke rooster
 # $sah[sjaars][avond] = huis.. etc...
