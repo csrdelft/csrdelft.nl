@@ -71,7 +71,7 @@ class Forum{
 		return implode(' OR ', $cats);
 	}
 
-	public static function getPostsVoorRss($iAantal=false, $bDistinct=true, $token=null, $uid=null){
+	public static function getPostsVoorRss($iAantal=false, $bDistinct=true, $token=null, $uid=null, $bImportant=false){
 		if($iAantal===false){
 			$iAantal=Forum::$_postsPerRss;
 		}
@@ -83,7 +83,10 @@ class Forum{
 		if($uid!=null){
 			$uidClause=" AND post.uid='".$uid."'";
 		}
-
+		$sImportantClause=' AND 1';
+		if($bImportant){
+			$sImportantClause=" AND topic.belangrijk = '1'";
+		}
 		//zoo, uberdeuberdeuber query om een topic op te halen. Namen worden
 		//ook opgehaald in deze query, die worden door forumcontent weer
 		//doorgegeven aan getForumNaam();

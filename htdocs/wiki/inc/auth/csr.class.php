@@ -92,7 +92,8 @@ class auth_csr extends auth_basic {
     function trustExternal($user, $pass, $sticky = false) {
         global $USERINFO;
         global $lang;
-        global $loginlid;
+		/** @var $loginlid LoginLid */
+		global $loginlid;
         global $conf;
 
         # als er een gebruiker is gegeven willen we graag proberen in te loggen via inlogformulier
@@ -194,6 +195,70 @@ class auth_csr extends auth_basic {
             }
         }
         return false;
+    }
+
+    /**
+     * Bulk retrieval of user data [implement only where required/possible]
+     *
+     * Set getUsers capability when implemented
+     *
+     * @author  Chris Smith <chris@jalakai.co.uk>
+     * @param int        $start  of first user to be returned
+     * @param int        $limit  max number of users to be returned
+     * @param array|null $filter of field/pattern pairs, null for no filter
+     *       TODO Er kan slechts een filter te gelijk worden toegepast. Ze overschrijven elkaar nu namelijk.
+     * @return array of userinfo (refer getUserData for internal userinfo details)
+     */
+    function retrieveUsers($start = 0, $limit = 20, $filter = null) {
+        global $conf;
+
+        $query = array(
+            //'q'=>'', // als er op een veld wordt gezocht (veld:/veld:=), kan dat maar in één veld tegelijk
+            //'weergave' => 'lijst',//lijst,kaartje,CSV
+            //'velden' => array('naam', 'adres', 'email', 'mobiel'),
+            'status' =>'ALL', //ALL,LEDEN,OUDLEDEN and specific stati: LID,OUDLID, etc
+            //'sort' => array('achternaam')
+            'start' => $start,
+            'limiet' => $limit
+        );
+        require_once 'lid/lidzoeker.class.php';
+        $zoeker=new LidZoeker();
+
+        if($filter !== null) {
+            foreach ($filter as $item => $pattern) {
+                if ($item == 'user') {
+                    $query['q'] = 'uid:'.$pattern;
+                } else if ($item == 'name') {
+                    $query['q'] = 'naam:'.$pattern; //uses default search which has a broad name search       ipv 'fullplain'
+                } else if ($item == 'mail') {
+                    $query['q'] = 'email:'.$pattern;
+                } else if ($item == 'grps') {
+                    $query['q'] = 'groep:'.$pattern;
+                }
+            }
+        }
+
+        $zoeker->parseQuery($query);
+        $leden = $zoeker->getLeden();
+        //dbg($leden);
+        //dbg($query);
+
+        $return = array();
+        foreach($leden as $lid) {
+            $info['name']    = $lid->getNaam();
+            $info['mail']    = $lid->getEmail();
+            $info['pasfoto'] = $lid->getPasfoto($imgTag = false);
+            require_once 'groepen/groep.class.php';
+            $info['grps'] = Groepen::getWikigroupsByUid($lid->getUid());
+            // always add the default group to the list of groups
+            if(!in_array($conf['defaultgroup'], $info['grps']) AND $lid->getUid() != 'x999') {
+                $info['grps'][] = $conf['defaultgroup'];
+            }
+
+            $return[$lid->getUid()] = $info;
+        }
+
+        return $return;
     }
 
 }
