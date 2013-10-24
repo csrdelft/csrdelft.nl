@@ -3329,3 +3329,5 @@ sql/2785_EXLIDtoegevoegd.sql -text
 sql/2789_Abos-doelgroepen.sql -text
 sql/2968_uitbreidingontvangtcontactueel.sql -text
 sql/3051_menu_voor_pagina.sql -text
+sql/csrdelft.sql -text
+sql/csrdelft_oud.sql -text

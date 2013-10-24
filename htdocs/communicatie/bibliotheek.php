@@ -13,20 +13,11 @@ if(isset($_GET['querystring'])){
 	die('epic fail');
 }
 
-//uitgelogd heeft nieuwe layout
-if(LoginLid::instance()->hasPermission('P_LOGGED_IN')){
-	$layout = '';
-} else {
-	$layout = 'csrdelft2';
-}
-
-$pagina=new csrdelft($biebControl->getContent(), $layout);
+$pagina=new csrdelft($biebControl->getContent());
 //zijkolom kan uitgezet worden
 if(!$biebControl->hasZijkolom()){
 	$pagina->setZijkolom(false); 
 }
-//$pagina->addStylesheet('default.css');
-
 $pagina->addStylesheet('bibliotheek.css');
 $pagina->addStylesheet('js/datatables/css/datatables_basic.css');
 $pagina->addStylesheet('js/autocomplete/jquery.autocomplete.css');
@@ -38,3 +29,4 @@ $pagina->addScript('csrdelft.js');
 $pagina->addScript('bibliotheek.js');
 
 $pagina->view();
+?>

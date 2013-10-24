@@ -61,8 +61,6 @@ class LidZoeker{
 	private $sort=array('achternaam');
 	private $velden=array('naam', 'email', 'telefoon', 'mobiel');
 	private $weergave='lijst';
-	private $start=0;
-	private $limiet=-1;
 
 	private $result=null;
 
@@ -90,6 +88,7 @@ class LidZoeker{
 		if(!isset($query['status']) AND in_array(LoginLid::instance()->getLid()->getStatus(), array('S_OUDLID', 'S_ERELID'))){
 			$this->rawQuery['status']='LEDEN|OUDLEDEN';
 		}
+
 
 		foreach($this->rawQuery as $key => $value){
 			switch($key){
@@ -146,18 +145,6 @@ class LidZoeker{
 						$this->sort=array($value);
 					}
 				break;
-				case 'start':
-					$value = (int)$value;
-					if ($value > 0) {
-						$this->start = $value;
-					}
-					break;
-				case 'limiet':
-					$value = (int)$value;
-					if ($value > 0) {
-						$this->limiet = $value;
-					}
-					break;
 			}
 		}
 	}
@@ -221,29 +208,7 @@ class LidZoeker{
 			//explode en trim() elke waarde van de array.
 			$uids=array_map('trim', explode(',', $zoekterm));
 			$query="uid IN('".implode("','", $uids)."') ";
-		}elseif(preg_match('/^email:=?([a-z0-9\-_\.@])+$/', $zoekterm)){ //email
-			$parts=explode(':', $zoekterm);
-
-			if($parts[1][0]=='='){
-				$query=$parts[0]."='".substr($parts[1], 1)."'";
-			}else{
-				$query=$parts[0]." LIKE '%".$parts[1]."%'";
-			}
-		}elseif(preg_match('/^naam:=?.*$/', $zoekterm)){ //email
-			$parts=explode(':', $zoekterm);
-
-			if($parts[1][0]=='='){
-				$query=$parts[0]."='".substr($parts[1], 1)."'";
-			}else{
-				$query=$parts[0]." LIKE '%".$parts[1]."%'";
-			}
-			$query ="voornaam LIKE '%".$zoekterm."%' ";
-			$query.="achternaam LIKE '%".$zoekterm."%' OR";
-			$query.="CONCAT_WS(' ', voornaam, tussenvoegsel, achternaam) LIKE '%".$zoekterm."%' OR";
-			$query.="CONCAT_WS(' ', voornaam, achternaam) LIKE '%".$zoekterm."%' OR";
-			$query.="CONCAT_WS(' ', tussenvoegsel, achternaam) LIKE '%".$zoekterm."%' OR";
-			$query.="CONCAT_WS(', ', achternaam, tussenvoegsel) LIKE '%".$zoekterm."%' ";
-
+		
 		}elseif(preg_match('/^('.implode('|', $this->getDBVeldenAllowed()).'):=?([a-z0-9\-_])+$/i', $zoekterm)){
 			//Zoeken in de velden van $this->allowVelden. Zoektermen met 'veld:' ervoor.
 			//met 'veld:=<zoekterm> wordt exact gezocht.
@@ -293,11 +258,7 @@ class LidZoeker{
 			$query.=$this->defaultSearch($this->query);
 		}
 		$query.=$this->getFilterSQL();
-		$query.=' ORDER BY '.implode($this->sort);
-		if($this->limiet > 0) {
-			$query.=' LIMIT '.$this->start.', '.$this->limiet;
-		}
-		$query.=';';
+		$query.=' ORDER BY '.implode($this->sort).';';
 
 		$this->sqlquery=$query;
 		$result=$db->query2array($query);
@@ -351,13 +312,7 @@ class LidZoeker{
 		$filters=array();
 		foreach($this->filters as $key => $value){
 			if(is_array($value)){
-				if(isset($value['LIKE'])) {
-					$filters[]=$key." LIKE %".$value['LIKE']."%";
-				} elseif(isset($value['SQL'])){
-					$filters[] = $value['SQL'];
-				} else {
-					$filters[]=$key." IN ('".implode("', '", $db->escape($value))."')";
-				}
+				$filters[]=$key." IN ('".implode("', '", $db->escape($value))."')";
 			}else{
 				$filters[]=$key."='".$db->escape($value)."'";
 			}

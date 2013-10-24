@@ -710,12 +710,8 @@ class Doku_Renderer_xhtml extends Doku_Renderer {
         //do we stay at the same server? Use local target
         if( strpos($url,DOKU_URL) === 0 ){
             $link['target'] = $conf['target']['wiki'];
-            //applying local link color
-            $link['class'] .= " internal";
-
-            list($id, $args) = explode('?', substr($url, strlen(DOKU_URL)), 2);
-            $url = wl($id, $args);
         }
+
         $link['url'] = $url;
         $link['title'] = htmlspecialchars($link['url']);
 

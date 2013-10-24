@@ -34,15 +34,15 @@ class action_plugin_bureaucracy extends DokuWiki_Action_Plugin {
 
         global $auth;
         $users = array();
-        foreach($auth->retrieveUsers(0, 20, array('user' => $search)) as $username => $data) {
-            //if ($search === '' || // No search
-            //    stripos($username, $search) === 0 || // Username (prefix)
-            //    stripos($data['name'], $search) !== false) { // Full name
+        foreach($auth->retrieveUsers() as $username => $data) {
+            if ($search === '' || // No search
+                stripos($username, $search) === 0 || // Username (prefix)
+                stripos($data['name'], $search) !== false) { // Full name
                 $users[$username] = $data['name'];
-           // }
-            //if (count($users) === 10) {
-            //    break;
-            //}
+            }
+            if (count($users) === 10) {
+                break;
+            }
         }
 
         if (count($users) === 1 && key($users) === $search) {

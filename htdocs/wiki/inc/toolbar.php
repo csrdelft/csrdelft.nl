@@ -167,14 +167,6 @@ function toolbar_JSdefines($varname){
                 'sample' => 'http://example.com|'.$lang['qb_extlink'],
                 'block'  => false
                 ),
-   /*        array(
-               'type'   => 'userwiz',
-               'title'  => 'C.S.R.-Lid',
-               'icon'   => 'link.png',
-               'open'   => '[[',
-               'close'  => ']]',
-               'block'  => false
-           ),               */
            array(
                 'type'   => 'formatln',
                 'title'  => $lang['qb_ol'],
