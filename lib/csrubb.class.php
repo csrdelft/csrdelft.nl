@@ -575,7 +575,7 @@ HTML;
 
 	public function ubb_spoiler(){
 		$content = $this->parseArray(array('[/spoiler]'), array());
-		return '<div class="spoiler_button"><button>Toon/verberg spoiler</button></div><div id="'. $postID .'" class="spoiler">'.$content.'</div>';
+		return '<div class="spoiler_button"><button>Toon/verberg spoiler</button></div><div class="spoiler">'.$content.'</div>';
 	}
 
 	function ubb_1337(){
