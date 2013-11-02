@@ -50,4 +50,7 @@ jQuery(document).ready(function($){
 		}
 		pasfoto.toggleClass('verborgen');
 	});
+    $(".spoiler_button").click(function () {
+      $(this).next(".spoiler").toggle('fast');
+    });
 });

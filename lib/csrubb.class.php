@@ -59,20 +59,20 @@ class CsrUBB extends eamBBParser{
 	 * ubb_lid().
 	 *
 	 * [lid=0436] => Am. Waagmeester
-	 * 
+	 *
 	 * of
 	 * [lid]0436[/lid]
 	 *
 	 * Geef een link weer naar het profiel van het lid-nummer wat opgegeven is.
 	 */
 	function ubb_lid($parameters){
-		if(isset($parameters['lid'])){ 
+		if(isset($parameters['lid'])){
 			$uid=$parameters['lid'];
 		}else{
 			$uid = $this->parseArray(array('[/lid]'), array());
 		}
 		$uid=trim($uid);
-		
+
 		if(Lid::isValidUid($uid)){
 			$lid=LidCache::getLid($uid);
 			if($lid instanceof Lid){
@@ -164,11 +164,11 @@ class CsrUBB extends eamBBParser{
 			$queryID=$this->parseArray(array('[/query]'), array());
 		}
 		$queryID=(int)$queryID;
-		
+
 		if($queryID!=0){
 			require_once 'savedquery.class.php';
 			$sqc=new SavedQueryContent(new SavedQuery((int)$parameters['query']));
-			
+
 			return $sqc->render_queryResult();
 		}else{
 			return '[query] Geen geldig query-id opgegeven.<br />';
@@ -360,7 +360,7 @@ src="http://video.google.com/googleplayer.swf?docId='.$content.'"></embed>';
 		if(isset($parameters['height']) AND (int)$parameters['height']>100){
 			$height=(int)$parameters['height'];
 		}
-		
+
 		$html=<<<HTML
 			<script charset="utf-8" src="http://widgets.twimg.com/j/2/widget.js"></script>
 			<script>
@@ -397,14 +397,14 @@ HTML;
 	 * ubb_groep()
 	 *
 	 * [groep]123[/groep]
-	 * of 
+	 * of
 	 * [groep=123]
-	 * 
+	 *
 	 * Geeft een groep met kortebeschrijving en een lijstje met leden weer.
 	 * Als de groep aanmeldbaar is komt er ook een aanmeldknopje bij.
 	 */
 	protected function ubb_groep($parameters){
-		if(isset($parameters['groep'])){ 
+		if(isset($parameters['groep'])){
 			$groepid=$parameters['groep'];
 		}else{
 			$groepid=$this->parseArray(array('[/groep]'), array());
@@ -426,12 +426,12 @@ HTML;
 	 * [boek]123[/boek]
 	 * of
 	 * [boek=123]
-	 * 
-	 * Geeft titel en auteur van een boek. 
+	 *
+	 * Geeft titel en auteur van een boek.
 	 * Een kleine indicator geeft met kleuren beschikbaarheid aan
 	 */
 	protected function ubb_boek($parameters){
-		if(isset($parameters['boek'])){ 
+		if(isset($parameters['boek'])){
 			$boekid=$parameters['boek'];
 		}else{
 			$boekid=$this->parseArray(array('[/boek]'), array());
@@ -447,7 +447,7 @@ HTML;
 			return '[boek] Boek [boekid:'.(int)$boekid.'] bestaat niet.';
 		}
 	}
-	
+
 	/**
 	 * ubb_fotoalbum
 	 *
@@ -456,16 +456,16 @@ HTML;
 	 * Parameters:
 	 * 	rows	Aantal regels weergeven
 	 * 			rows=4
-	 * 
+	 *
 	 * 	big		Lijstje met indexen van afbeeldingen die groot moeten
 	 * 			worden.
 	 * 			big=0,5,14 | big=a | big=b |
-	 * 
+	 *
 	 *	compact	Compacte versie van de tag weergeven
 	 * 			compact=true
-	 * 
-	 * 
-	 * 
+	 *
+	 *
+	 *
 	 */
 	protected function ubb_fotoalbum($parameters){
 		$albuminvoer=$this->parseArray(array('[/fotoalbum]'), array());
@@ -483,7 +483,7 @@ HTML;
 			}
 			//de albumnaam bedenken. Op een of andere wijze doet het album dat niet zelf :(
 			$albumnaam=urldecode(end(array_filter(explode('/', $albuminvoer))));
-			
+
 			$album=new Fotoalbum($pad, $albumnaam);
 
 			//album bestaat niet, we geven een foutmelding
@@ -497,7 +497,7 @@ HTML;
 		if($this->quote_level>0 || isset($parameters['compact'])){
 			$fotoalbumtag->makeCompact();
 		}
-		
+
 		if(isset($parameters['rows'])){
 			$fotoalbumtag->setRows((int)$parameters['rows']);
 		}
@@ -523,7 +523,7 @@ HTML;
 	 * Geeft een blokje met een documentnaam, link, bestandsgrootte en formaat.
 	 */
 	protected function ubb_document($parameters){
-		if(isset($parameters['document'])){ 
+		if(isset($parameters['document'])){
 			$id=$parameters['document'];
 		}else{
 			$id=$this->parseArray(array('[/document]'), array());
@@ -543,9 +543,9 @@ HTML;
 	 * ubb_maaltijd();
 	 *
 	 * [maaltijd=next], [maaltijd=1234]
-	 * 
+	 *
 	 * of
-	 * 
+	 *
 	 * [maaltijd]next[/maaldijd], [maaltijd]123[/maaltijd]
 	 *
 	 * Geeft een blokje met maaltijdgegevens, aantal aanmeldingen en een
@@ -572,7 +572,12 @@ HTML;
 		$content = $this->parseArray(array('[/offtopic]'), array());
 		return '<div class="offtopic">'.$content.'</div>';
 	}
-	
+
+	public function ubb_spoiler(){
+		$content = $this->parseArray(array('[/spoiler]'), array());
+		return '<div class="spoiler_button"><button>Toon/verberg spoiler</button></div><div id="'. $postID .'" class="spoiler">'.$content.'</div>';
+	}
+
 	function ubb_1337(){
         $html = $this->parseArray(array('[/1337]'), array());
 
@@ -642,7 +647,7 @@ UBBVERHAAL;
 		if($type==''){
 			return '[mededelingen] Geen geldig mededelingenblok.';
 		}
-		
+
 		require_once 'mededelingen/mededeling.class.php';
 		require_once 'mededelingen/mededelingencontent.class.php';
 
@@ -652,9 +657,9 @@ UBBVERHAAL;
 				return $mededelingenContent->getTopBlock('nietleden');
 			case 'top3leden':
 				return $mededelingenContent->getTopBlock('leden');
-			case 'top3oudleden': 
+			case 'top3oudleden':
 				return $mededelingenContent->getTopBlock('oudleden');
-		} 
+		}
 		return '[mededelingen] Geen geldig type ('.mb_htmlentities($type).').';
 	}
 
@@ -715,7 +720,7 @@ UBBVERHAAL;
 	 * [peiling]2[/peiling]
 	 */
 	public function ubb_peiling($parameters){
-		if(isset($parameters['peiling'])){ 
+		if(isset($parameters['peiling'])){
 			$peilingid=$parameters['peiling'];
 		}else{
 			$peilingid=$this->parseArray(array('[/peiling]'), array());
@@ -732,14 +737,14 @@ UBBVERHAAL;
 	}
 
 	/* slideshow-tag.
-	 * 
+	 *
 	 * example:
 	 * [slideshow]http://example.com/image_1.jpg[/slideshow]
 	 */
 	private $slideshowJsIncluded=false;
 	public function ubb_slideshow($parameters){
 		$content = $this->parseArray(array('[/slideshow]'), array());
-		
+
 		$slides_tainted=explode('[br]', $content);
 		$slides=array();
 		foreach($slides_tainted as $slide){
@@ -748,8 +753,8 @@ UBBVERHAAL;
 				$slides[]=$slide;
 			}
 		}
-		
-		
+
+
 		$width=355;
 		$height=238;
 		if(isset($parameters['w']) && $parameters['w']<800){
@@ -758,7 +763,7 @@ UBBVERHAAL;
 		if(isset($parameters['h']) && $parameters['h']<600){
 			$height=$parameters['h'];
 		}
-		
+
 		$style='style="width:'.$width.'px;height:'.$height.'px;';
 		if(isset($parameters['float']) && in_array($parameters['float'], array('left', 'right'))){
 			$style=' float: '.$parameters['float'].'';
@@ -770,7 +775,7 @@ UBBVERHAAL;
 		}else{
 			$content='
 				<div class="image_reel">';
-			
+
 			foreach($slides as $slide){
 				$content.='<img src="'.$slide.'" alt="slide" />'."\n";
 			}
@@ -779,25 +784,25 @@ UBBVERHAAL;
 			for($i=1; $i<=count($slides); $i++){
 				$content.='<a href="#" rel="'.$i.'">&bull;</a>'."\n";
 			}
-			
+
 			$content.='</div>'."\n"; //end paging
 			if($this->slideshowJsIncluded===false){
 				$content.='<script type="text/javascript" src="/layout/js/ubb_slideshow.js"></script>';
 				$this->slideshowJsIncluded=true;
 			}
 		}
-		
+
 		return '<div class="ubb_slideshow" '.$style.'>'.$content.'</div>';
 	}
 	/*
 	 * Blokje met bijbelrooster voor opgegeven aantal dagen
-	 * 
+	 *
 	 * [bijbelrooster=10]
 	 * of
 	 * [bijbelrooster]10[/bijbelrooster]
 	 */
 	public function ubb_bijbelrooster($parameters){
-		if(isset($parameters['bijbelrooster'])){ 
+		if(isset($parameters['bijbelrooster'])){
 			$dagen = $parameters['bijbelrooster'];
 		}else{
 			$dagen = $this->parseArray(array('[/bijbelrooster]'), array());
