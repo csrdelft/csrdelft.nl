@@ -94,8 +94,10 @@ class Icon{
 	}
 	public static function getTag($key, $title = null, $class='icon'){
 		$icon=self::get($key);
-		$title = 'title="'.$title.'" ';
-		return '<img src="'.$icon.'" alt="'.$key.'" '.$title.'class="'.htmlspecialchars($class).'" />';
+		if($title !== null){
+			$title = 'title="'.$title.'" ';
+		}
+		return '<img src="'.$icon.'" width="16" height="16" alt="'.$key.'" '.$title.'class="'.htmlspecialchars($class).'" />';
 	}
 
 	/*

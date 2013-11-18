@@ -1,0 +1,59 @@
+/**
+ * maaltijdlijst.css	|	P.W.G. Brussee (brussee@live.nl)
+ * 
+ */
+
+body {
+	font-family: verdana;
+	font-size: 11px;
+	width: 1000px;
+}
+a {
+	text-decoration: none;
+	color: inherit;
+}
+h3 {
+	position: relative;
+	left: -10px;
+}
+table {
+	border-collapse: collapse;
+	width: 100%;
+}
+td {
+	vertical-align: top;
+}
+table.aanmeldingen td {
+	border: 1px solid black;
+	padding: 3px 5px;
+}
+table.aanmeldingen td.clear {
+	border: none;
+	width: 20px;
+}
+table.aanmeldingen td.box {
+	width: 30px;
+	padding: 3px;
+	text-align: center;
+}
+table.aanmeldingen td.naam {
+	width: 260px;
+	padding-left: 10px;
+}
+table.aanmeldingen td.geld {
+	width: 60px;
+	padding-left: 10px;
+}
+div.eetwens {
+	font-weight: bold;
+}
+div.opmerking {
+	font-style: italic;
+}
+div.nummer {
+	width: 30px;
+	text-align: right;
+}
+div.header {
+	width: 590px;
+}

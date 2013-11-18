@@ -27,7 +27,7 @@ $form[]=new LidField('lidtest', 'x101', 'Wat is je naam?', 'alleleden');
 $form[]=new LidField('lid2test', 'Gra', 'Wat is je naam?', 'nobodies');
 
 
-$form=new Formulier('/testform.php', $form);
+$form=new Formulier('test-form', '/testform.php', $form);
 
 class TestFormulierContent extends SimpleHTML{
 	public function __construct($form){

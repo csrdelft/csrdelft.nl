@@ -29,12 +29,14 @@ div.offtopic img{ opacity: 0.3; filter:alpha(opacity=30); }
 #forumtabel td .ubb_block{ margin: 2px 0; }
 
 .ubb_maaltijd{
-    float: left;
     width: 329px;
     overflow: auto;
 }
 
 .ubb_maaltijd h2{ white-space: nowrap; overflow: hidden; }
+.ubb_maaltijd .maaltijdgegevens{
+	line-height: 1.5em;
+}
 .ubb_maaltijd .aanmelddata{
     float: right;
     background-color: #ddd;

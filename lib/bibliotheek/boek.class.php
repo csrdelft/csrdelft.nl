@@ -478,8 +478,7 @@ class NieuwBoek extends Boek {
 			}
 			$nieuwboekformulier['submit']=new SubmitButton('opslaan', '<a class="knop" href="/communicatie/bibliotheek/">Annuleren</a>');
 
-			$this->formulier=new Formulier('/communicatie/bibliotheek/nieuwboek/0', $nieuwboekformulier);
-			$this->formulier->cssID='boekaddForm';
+			$this->formulier=new Formulier('boekaddForm', '/communicatie/bibliotheek/nieuwboek/0', $nieuwboekformulier);
 		}
 	}
 	/*
@@ -573,7 +572,7 @@ class BewerkBoek extends Boek {
 				}
 			}
 		}
-		$this->ajaxformuliervelden=new Formulier('', $ajaxformuliervelden);
+		$this->ajaxformuliervelden=new Formulier('', '', $ajaxformuliervelden);
 	}
 
 	/*
@@ -892,8 +891,7 @@ class BewerkBoek extends Boek {
 			$boekbeschrijvingform[]=$textfield;
 			$boekbeschrijvingform[]=new SubmitButton('opslaan', $annuleerknop);
 
-			$this->formulier=new Formulier($posturl, $boekbeschrijvingform);
-			$this->formulier->cssID='Beschrijvingsformulier';
+			$this->formulier=new Formulier('Beschrijvingsformulier', $posturl, $boekbeschrijvingform);
 		}
 	}
 

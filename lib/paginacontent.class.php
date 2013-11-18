@@ -6,6 +6,7 @@
 # Weergeven en bewerken van pagina's met tekst uit de database
 # -------------------------------------------------------------------
 
+require_once 'simplehtml.class.php';
 require_once 'pagina.class.php';
 
 class PaginaContent extends SimpleHTML{

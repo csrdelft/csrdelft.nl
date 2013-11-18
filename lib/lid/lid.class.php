@@ -408,6 +408,7 @@ class Lid implements Serializable, Agendeerbaar{
 		return count($this->getKinderen());
 	}
 
+	//TODO: deprecated
 	//corvee_voorkeuren splitsen en teruggeven als array
 	public function getCorveeVoorkeuren(){
 		$corvee_voorkeuren = $this->profiel['corvee_voorkeuren'];
@@ -425,16 +426,21 @@ class Lid implements Serializable, Agendeerbaar{
 		);
 		return $return;
 	}
-	//Corvee punten, vrijstellingen en alle bekende corveetaken opzoeken en teruggeven in een array
+
+	/**
+	 * Corvee punten, vrijstellingen en alle bekende corveetaken opzoeken en teruggeven in een array
+	 */
 	public function getCorveeTaken(){
-		return Maaltrack::getCorveeTaken($this->getUid());
+		//return \Taken\CRV\TakenModel::getTakenVoorLid($this->getUid());
+		return Maaltrack::getCorveeTaken($this->getUid()); //TODO: deprecated
 	}
+
+	//TODO: deprecated
 	public function isKwalikok(){ return $this->profiel['corvee_punten']==='1'; }
 
 	//deze willen we hebben om vanuit templates handig instellingen op te halen.
 	public function instelling($key){ return Instelling::get($key); }
 	public function getInstellingen(){ return $this->profiel['instellingen']; }
-
 
 	/**
 	 * Recente forumberichten
@@ -909,7 +915,7 @@ class LidCache{
  * TODO dus: een statische functie bouwen in lidZoeker die dit overneemt.
  */
 class Zoeker{
-	function zoekLeden($zoekterm, $zoekveld, $verticale, $sort, $zoekstatus = '', $velden = array(), $aantalresultaten=null) {
+	static function zoekLeden($zoekterm, $zoekveld, $verticale, $sort, $zoekstatus = '', $velden = array(), $aantalresultaten=null) {
 		$db=MySql::instance();
 		$leden = array();
 		$zoekfilter='';

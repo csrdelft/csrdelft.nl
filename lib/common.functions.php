@@ -4,6 +4,13 @@
 # include.common.php
 # -------------------------------------------------------------------
 
+// http://stackoverflow.com/questions/834303/php-startswith-and-endswith-functions
+function startsWith($haystack, $needle) {
+    return $needle === "" || strpos($haystack, $needle) === 0;
+}
+function endsWith($haystack, $needle) {
+    return $needle === "" || substr($haystack, -strlen($needle)) === $needle;
+}
 
 // http://nl.php.net/manual/en/function.ip2long.php
 // User Contributed Notes

@@ -27,7 +27,7 @@ class Controller{
 
 	}
 	public function hasParam($key){
-		return isset($this->queryparts[$key]);
+		return isset($this->queryparts[$key]) && strlen($this->queryparts[$key]) > 0;
 	}
 	public function getParam($key){
 		if($this->hasParam($key)){
@@ -45,10 +45,14 @@ class Controller{
 		return $_SERVER['REQUEST_METHOD']=='POST';
 	}
 	//call the action
-	protected function performAction(){
+	protected function performAction($args=null){
 		$action='action_'.$this->action;
 		if($this->hasAction($this->action)){
-			$this->$action();
+			if (is_null($args)){
+				$this->$action();
+			}else{
+				$this->$action($args);
+			}
 		}else{
 			throw new Exception('Action ('.$this->action.') undefined');
 		}
@@ -62,6 +66,7 @@ class Controller{
 		return true;
 	}
 	protected function action_geentoegang(){
+		header('HTTP/1.0 403 Forbidden');
 		$this->content=new PaginaContent(new Pagina('geentoegang'));
 	}
 }

@@ -361,11 +361,11 @@ class LoginLid{
 				if($lidjaar==$this->lid->getProperty('lidjaar')){
 					return true;
 				}
-			}elseif(substr($permissie, 0, 10)=='Ouderjaars'){
+			}elseif(substr($permissie, 0, 10)=='Ouderjaars' OR substr($permissie, 0, 10)=='ouderjaars'){
 				if(Lichting::getJongsteLichting()>$this->lid->getProperty('lidjaar') AND $this->hasPermission('P_LOGGED_IN', $token_authorizable)){
 					return true;
 				}
-			}elseif(substr($permissie, 0, 11)=='eerstejaars'){
+			}elseif(substr($permissie, 0, 11)=='eerstejaars' OR substr($permissie, 0, 11)=='eerstejaars'){
 				if(Lichting::getJongsteLichting()==$this->lid->getProperty('lidjaar') AND $this->hasPermission('P_LOGGED_IN', $token_authorizable)){
 					return true;
 				}
@@ -409,8 +409,12 @@ class LoginLid{
 			'P_OUDLEDEN_MOD' => 000070070000, # samengestelde om te kunnen lezen en veranderen bij iedereen
 			                                  # oudleden-mod is gelijk aan leden-mod
 			'P_MAAL_IK'      => 000100000000, # kan zich aan en afmelden voor maaltijd en eigen abo wijzigen
-			'P_MAAL_WIJ'     => 000500000000, # kan ook anderen aanmelden (niet afmelden!)
-			'P_MAAL_MOD'     => 000700000000, # mag maaltijd aan- en afmeldingen voor iedereen wijzigen
+			'P_CORVEE_IK'    => 000200000000, # kan voorkeuren aangeven voor corveetaken
+			'P_MAAL_WIJ'     => 000300000000, # kan ook anderen aanmelden (niet afmelden!) //TODO: deprecated
+			'P_CORVEE_WIJ'   => 000400000000, # kan ook anderen aanmelden (niet afmelden!) //TODO: deprecated
+			'P_CORVEE_MOD'   => 000500000000, # mag corveetaken beheren (CorveeCaesar)
+			'P_MAAL_MOD'     => 000600000000, # mag maaltijden beheren (MaalCie P)
+			'P_MAAL_SALDI'   => 000700000000, # mag het MaalCie saldo aanpassen van iedereen (MaalCie fiscus)
 			'P_MAIL_POST'    => 001000000000, # mag berichtjes in de pubciemail rossen
 			'P_MAIL_COMPOSE' => 003000000000, # mag alle berichtjes in de pubcie-mail bewerken, en volgorde wijzigen
 			'P_MAIL_SEND'    => 007000000000, # mag de C.S.R.-mail verzenden
@@ -430,17 +434,26 @@ class LoginLid{
 		$p = $this->_permissions;
 		$this->_perm_user = array(
 			'P_NOBODY'     => $p['P_NOBODY'] | $p['P_FORUM_READ'] | $p['P_AGENDA_READ'],
-			'P_LID'        => $p['P_LOGGED_IN'] | $p['P_OUDLEDEN_READ'] | $p['P_FORUM_POST'] | $p['P_DOCS_READ'] | $p['P_LEDEN_READ'] | $p['P_PROFIEL_EDIT'] | $p['P_AGENDA_READ'] | $p['P_MAAL_WIJ'] | $p['P_MAIL_POST'] | $p['P_BIEB_READ'] | $p['P_NEWS_POST'],
-			'P_OUDLID'     => $p['P_LOGGED_IN'] | $p['P_LEDEN_READ'] | $p['P_OUDLEDEN_READ'] | $p['P_FORUM_POST'] | $p['P_DOCS_READ'] | $p['P_PROFIEL_EDIT'] | $p['P_FORUM_READ'] | $p['P_MAAL_IK'] | $p['P_MAIL_POST'] | $p['P_BIEB_READ'] | $p['P_AGENDA_READ'] | $p['P_ALLEEN_OUDLID'],
-			'P_MODERATOR'  => $p['P_ADMIN'] | $p['P_FORUM_MOD'] | $p['P_DOCS_MOD'] | $p['P_LEDEN_MOD'] | $p['P_OUDLEDEN_MOD'] | $p['P_AGENDA_MOD'] | $p['P_MAAL_MOD'] | $p['P_MAIL_SEND'] | $p['P_NEWS_MOD'] | $p['P_BIEB_MOD']
+			'P_LID'        => $p['P_LOGGED_IN'] | $p['P_OUDLEDEN_READ'] | $p['P_FORUM_POST'] | $p['P_DOCS_READ'] | $p['P_LEDEN_READ'] | $p['P_PROFIEL_EDIT'] | $p['P_AGENDA_READ'] | $p['P_CORVEE_IK'] | $p['P_MAIL_POST'] | $p['P_BIEB_READ'] | $p['P_NEWS_POST'],
+			'P_OUDLID'     => $p['P_LOGGED_IN'] | $p['P_LEDEN_READ'] | $p['P_OUDLEDEN_READ'] | $p['P_FORUM_POST'] | $p['P_DOCS_READ'] | $p['P_PROFIEL_EDIT'] | $p['P_FORUM_READ'] | $p['P_CORVEE_IK'] | $p['P_MAIL_POST'] | $p['P_BIEB_READ'] | $p['P_AGENDA_READ'] | $p['P_ALLEEN_OUDLID'],
+			'P_MODERATOR'  => $p['P_ADMIN'] | $p['P_FORUM_MOD'] | $p['P_DOCS_MOD'] | $p['P_LEDEN_MOD'] | $p['P_OUDLEDEN_MOD'] | $p['P_AGENDA_MOD'] | $p['P_CORVEE_WIJ'] | $p['P_MAIL_SEND'] | $p['P_NEWS_MOD'] | $p['P_BIEB_MOD']
 		);
 		# extra dingen, waarvoor de array perm_user zelf nodig is
-		$this->_perm_user['P_PUBCIE']  = $this->_perm_user['P_MODERATOR'];
-		$this->_perm_user['P_MAALCIE'] = $this->_perm_user['P_LID'] | $p['P_MAAL_MOD'];
-		$this->_perm_user['P_BESTUUR'] = $this->_perm_user['P_LID'] | $p['P_LEDEN_MOD'] | $p['P_OUDLEDEN_READ'] | $p['P_NEWS_MOD'] | $p['P_MAAL_MOD'] | $p['P_MAIL_COMPOSE'] | $p['P_AGENDA_MOD'] | $p['P_FORUM_MOD'] | $p['P_DOCS_MOD'];
+		$this->_perm_user['P_PUBCIE']  = $this->_perm_user['P_MODERATOR'] | $p['P_MAAL_MOD'] | $p['P_CORVEE_MOD'] | $p['P_MAAL_SALDI']; 
+		$this->_perm_user['P_MAALCIE'] = $this->_perm_user['P_LID'] | $p['P_MAAL_MOD'] | $p['P_CORVEE_MOD'] | $p['P_MAAL_SALDI']; 
+		$this->_perm_user['P_BESTUUR'] = $this->_perm_user['P_LID'] | $p['P_LEDEN_MOD'] | $p['P_OUDLEDEN_READ'] | $p['P_NEWS_MOD'] | $p['P_MAAL_MOD'] | $p['P_CORVEE_MOD'] | $p['P_MAAL_SALDI'] | $p['P_MAIL_COMPOSE'] | $p['P_AGENDA_MOD'] | $p['P_FORUM_MOD'] | $p['P_DOCS_MOD']; 
 		$this->_perm_user['P_VAB']     = $this->_perm_user['P_BESTUUR']  | $p['P_OUDLEDEN_MOD'];
 		$this->_perm_user['P_ETER']	   = $this->_perm_user['P_NOBODY'] | $p['P_LOGGED_IN'] | $p['P_MAAL_IK'] | $p['P_PROFIEL_EDIT'];
 		$this->_perm_user['P_BASF']  = $this->_perm_user['P_LID'] | $p['P_DOCS_MOD'];
+	}
+	public function isValidPerm($key, $user=true) {
+		if (array_key_exists($key, $this->_permissions)){
+			return true;
+		}
+		if ($user && array_key_exists($key, $this->_perm_user)) {
+			return true;
+		}
+		return false;
 	}
 
 	public function getToken($uid=null){
@@ -518,8 +531,10 @@ class LoginLid{
 				$return[]='Lichting '.substr($part, 9);
 			}elseif(substr($part, 0, 7)=='lidjaar'){
 				$return[]='Lichting '.substr($part, 8);
-			}elseif(substr($part, 0, 10)=='Ouderjaars'){
+			}elseif(substr($part, 0, 10)=='Ouderjaars' OR substr($part, 0, 10)=='ouderjaars'){
 				$return[]='Ouderjaars';
+			}elseif(substr($part, 0, 11)=='Eerstejaars' OR substr($part, 0, 11)=='eerstejaars'){
+				$return[]='Eerstejaars';
 			}elseif(substr($part, 0, 8)=='geslacht'){
 				switch(substr($part, 9)){
 					case 'm':

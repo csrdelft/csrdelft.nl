@@ -41,6 +41,7 @@ if (constant('MODE') == 'WEB') {
 }
 
 setlocale(LC_ALL, 'nl_NL.utf8');
+setlocale(LC_ALL, 'nld_nld');
 
 //standaard templaat voor de C.S.R.-courant
 define('COURANT_TEMPLATE', 'courant.tpl');
@@ -48,6 +49,7 @@ define('COURANT_TEMPLATE', 'courant.tpl');
 # wordt gebruikt om pagina's alleen op Confide te laten zien
 define('CONFIDE_IP', '80.112.180.123');
 
+//TODO: deprecated
 # hoe ver van tevoren worden maaltijden getoond?
 define('MAALTIJD_LIJST_MAX_TOT', 86400*7*4);
 # hoe lang van tevoren mogen leden iemand anders voor een maaltijd inschrijven?
@@ -74,6 +76,7 @@ define('ROWID_QUEUE_MEDEDELINGEN', 62);
 require_once 'common.functions.php';
 require_once 'lid/loginlid.class.php';
 require_once 'mysql.class.php';
+require_once 'csrpdo.class.php';
 
 switch (constant('MODE')) {
 	case 'ONDERHOUD':

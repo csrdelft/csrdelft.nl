@@ -1,0 +1,86 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.1//EN' 'http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd'>
+<html>
+<head>
+<title>{$kop} {$maaltijd->getDatum()|date_format:"%A %e %B"}</title>
+<link type="text/css" href="/layout/maaltijdlijst.css" rel="stylesheet">
+<script type="text/javascript" src="/layout/js/jquery.js"></script>
+<script type="text/javascript" src="/layout/js/taken.js"></script>
+</head>
+<body>
+<img alt="Beeldmerk van de Vereniging" src="{$csr_pics}/layout/beeldmerk.jpg" style="float: right; padding: 0px 50px;" />
+<h1>{$kop} op {$maaltijd->getDatum()|date_format:"%A %e %B %Y"}</h1>
+<div class="header">
+	<p>Regels omtrent het betalen van de maaltijden op Confide:</p>
+	<ul>
+		<li>Maaltijdprijs: &euro; {$maaltijd->getPrijs()|string_format:"%.2f"}</li>
+		<li>Niet betaald = nb</li>
+		<li>Betaald met machtiging = omcirkel 'm' en vul bedrag in.</li>
+		<li>Contant betaald = bedrag invullen.</li>
+		<li>Schrijf duidelijk in het hokje hoeveel je in de helm hebt gegooid.</li>
+		<li>Bevat derde kolom 'ok'? Dan hebt u nog voldoende tegoed voor deze maaltijd.</li>
+		<li>Als u onvoldoende saldo hebt bij de MaalCie en u betaalt niet voor deze maaltijd dan krijgt u een boete van 20 cent, 1 euro of 2 euro, afhankelijk van hoe negatief uw saldo is!</li>
+	</ul>
+</div>
+{if !$maaltijd->getIsGesloten()}
+	<h2 style="color: red">De inschrijving voor deze maaltijd is nog niet gesloten
+	{if !$maaltijd->getIsVerwijderd() and !$maaltijd->getIsGesloten() and ($loginlid->hasPermission('P_MAAL_MOD') or opConfide())}
+	<button onclick="if(confirm('Weet u zeker dat u deze maaltijd wil sluiten?'))taken_ajax(this, '/actueel/taken/maaltijdenbeheer/sluit/{$maaltijd->getMaaltijdId()}', page_reload);">Nu sluiten!</button>
+	{/if}
+	</h2>
+{/if}
+{if $maaltijd->getAantalAanmeldingen() > 0}
+	{assign var=teller value=1}
+	{table_foreach from=$aanmeldingen inner=rows item=aanmelding table_attr='class="aanmeldingen"' cols=2 name=aanmeldingen}
+		<div class="nummer">{$teller++}</div></td>
+		{if $aanmelding->getLidId()}
+		<td class="naam">{$aanmelding->getLid()->getNaamLink('civitas', 'link')}
+			{if $aanmelding->getLid()->getProperty('eetwens') !== ''}<div class="eetwens">{$aanmelding->getLid()->getProperty('eetwens')}</div>{/if}
+			{if $aanmelding->getGastenOpmerking() !== ''}<div class="opmerking">Gasten opmerking: {$aanmelding->getGastenOpmerking()}</div>{/if}
+		</td>
+		<td class="box">{$aanmelding->getSaldoMelding()}</td>
+		{elseif $aanmelding->getDoorLidId()}
+		<td class="naam">Gast van {$aanmelding->getDoorLid()->getNaamLink('civitas')|lcfirst}</td>
+		<td class="box">-</td>
+		{else}
+		<td class="naam"></td>
+		<td class="box">-</td>
+		{/if}
+		<td class="geld">&euro;</td>
+		<td class="box" style="color: #AAAAAA">m</td>
+		<td class="clear">
+	{/table_foreach}
+{else}
+	<p>Nog geen aanmeldingen voor deze maaltijd.</p>
+{/if}
+<table><tr>
+<td style="width: 50px;">&nbsp;</td>
+<td style="width: 200px;">
+	<h3>Maaltijdgegevens</h3>
+	<table>
+		<tr><td>Inschrijvingen:</td><td>{$maaltijd->getAantalAanmeldingen()}</td></tr>
+		<tr><td>Marge:</td><td>{$maaltijd->getMarge()}</td></tr>
+		<tr><td>Eters:</td><td>{$eterstotaal}</td></tr>
+		<tr><td>Budget koks:</td><td>&euro; {$maaltijd->getBudget()|string_format:"%.2f"}</td></tr>
+	</table>
+</td>
+
+<td style="width: 150px;">&nbsp;</td>
+<td style="width: 500px;">
+	<h3>Corvee</h3>
+{if $corveetaken}
+	{table_foreach from=$corveetaken inner=rows item=taak table_attr='class="corveetaken"' cols=2 name=corveetaken}
+	&bullet;&nbsp;
+		{if $taak->getLidId()}
+			{$taak->getLid()->getNaamLink()}
+		{else}
+			<i>vacature</i>
+		{/if}
+		({$taak->getCorveeFunctie()->getNaam()})
+	{/table_foreach}
+{else}
+	<p>Geen corveetaken voor deze maaltijd in het systeem.</p>
+{/if}
+</td>
+</tr></table>
+</body>
+</html>

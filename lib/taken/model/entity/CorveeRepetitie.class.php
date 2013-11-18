@@ -1,0 +1,147 @@
+<?php
+namespace Taken\CRV;
+/**
+ * CorveeRepetitie.class.php	| 	P.W.G. Brussee (brussee@live.nl)
+ * 
+ * 
+ * Een crv_repetitie instantie beschrijft een corvee taak die periodiek moet worden uitgevoerd als volgt:
+ *  - uniek identificatienummer
+ *  - bij welke maaltijdrepetitie deze periodieke taken horen (optioneel)
+ *  - op welke dag van de week dit moet gebeuren
+ *  - na hoeveel dagen dit opnieuw moet gebeuren
+ *  - de omschrijving van deze periodieke taak (bijv. Koken op donderdag)
+ *  - welke functie deze taak inhoud (bijv. kwalikok)
+ *  - standaard aantal mensen dat deze taak moeten uitvoeren (bijv. 1 kwalikok, 2 hulpkoks, etc.)
+ *  - of deze taak als voorkeur kan worden opgegeven (bijv. kwalikok is niet voorkeurbaar)
+ * 
+ * Bij het koppelen van corveetaken aan een maaltijd-repetitie wordt een CorveeRepetitie aangemaakt,
+ * zodat een lid deze indien gewenst kan instellen als corvee-voorkeur.
+ * Bijv. bij het kopellen van de functie kok aan een periodieke maaltijd op donderdag wordt de corvee-repetitie-omschrijving: koken op donderdag.
+ * Deze klasse weet dus welke en hoeveel corvee-functies er bij welke maaltijd-repetitie horen,
+ * in verband met het later toewijzen van corvee-functies als taak aan een of meerdere leden.
+ * Een maaltijd die los wordt aangemaakt, dus niet vanuit een maaltijd-repetitie, krijgt dus geen standaard corvee-taken.
+ * Deze zullen met de hand moeten worden toegevoegd. Daarbij kan gebruik gemaakt worden van de dag van de week van de maaltijd en te kijken naar de dag van de week van corvee-repetities.
+ * 
+ * 
+ * Zie ook CorveeTaak.class.php
+ * 
+ */
+class CorveeRepetitie {
+
+	# primary key
+	private $crv_repetitie_id; # int 11
+	
+	private $mlt_repetitie_id; # foreign key mlt_repetitie.id
+	
+	private $dag_vd_week; # int 1
+	private $periode_in_dagen; # int 11
+	
+	private $functie_id; # foreign key crv_functie.id
+	
+	private $standaard_aantal; # int 11
+	private $voorkeurbaar; # boolean
+	
+	private $corvee_functie;
+	
+	public function __construct($crid=0, $mrid=null, $dag=0, $periode=0, $fid=0, $aantal=1, $voorkeur=true) {
+		$this->crv_repetitie_id = (int) $crid;
+		$this->setMaaltijdRepetitieId($mrid);
+		$this->setDagVanDeWeek($dag);
+		$this->setPeriodeInDagen($periode);
+		$this->setFunctieId($fid);
+		$this->setStandaardAantal($aantal);
+		$this->setVoorkeurbaar($voorkeur);
+	}
+	
+	public function getCorveeRepetitieId() {
+		return (int) $this->crv_repetitie_id;
+	}
+	
+	public function getMaaltijdRepetitieId() {
+		if ($this->mlt_repetitie_id === null) {
+			return null;
+		}
+		return (int) $this->mlt_repetitie_id;
+	}
+	/**
+	 * 0: Sunday
+	 * 6: Saturday
+	 */
+	public function getDagVanDeWeek() {
+		return (int) $this->dag_vd_week;
+	}
+	public function getDagVanDeWeekTimestamp() {
+		return (int) ($this->getDagVanDeWeek()+3)*24*3600;
+	}
+	public function getPeriodeInDagen() {
+		return (int) $this->periode_in_dagen;
+	}
+	public function getPeriodeInDagenText() {
+		switch($this->getPeriodeInDagen()) {
+			case 0: return '-';
+			case 1: return 'elke dag';
+			case 7: return 'elke week';
+			default:
+				if ($this->getPeriodeInDagen() % 7 === 0) {
+					return 'elke '. ($this->getPeriodeInDagen() / 7) .' weken';
+				}
+				else {
+					return 'elke '. $this->getPeriodeInDagen() .' dagen';
+				}
+		}
+	}
+	public function getFunctieId() {
+		return (int) $this->functie_id;
+	}
+	public function getStandaardAantal() {
+		return (int) $this->standaard_aantal;
+	}
+	public function getIsVoorkeurbaar() {
+		return (boolean) $this->voorkeurbaar;
+	}
+	public function getCorveeFunctie() {
+		return $this->corvee_functie;
+	}
+	
+	public function setMaaltijdRepetitieId($mrid) {
+		if ($mrid !== null && !is_int($mrid)) {
+			throw new \Exception('Ongeldig id: maaltijd repetitie');
+		}
+		$this->mlt_repetitie_id = $mrid;
+	}
+	public function setDagVanDeWeek($int) {
+		if (!is_int($int) || $int < 0 || $int > 6) {
+			throw new \Exception('Geen integer: dag van de week');
+		}
+		$this->dag_vd_week = $int;
+	}
+	public function setPeriodeInDagen($int) {
+		if (!is_int($int) || $int < 0) {
+			throw new \Exception('Geen integer: periode in dagen');
+		}
+		$this->periode_in_dagen = $int;
+	}
+	public function setFunctieId($int) {
+		if (!is_int($int)) {
+			throw new \Exception('Geen integer: functie id');
+		}
+		$this->functie_id = $int;
+	}
+	public function setStandaardAantal($int) {
+		if (!is_int($int) || $int < 0) {
+			throw new \Exception('Geen integer: standaard aantal');
+		}
+		$this->standaard_aantal = $int;
+	}
+	public function setVoorkeurbaar($bool) {
+		if (!is_bool($bool)) {
+			throw new \Exception('Geen boolean: voorkeurbaar');
+		}
+		$this->voorkeurbaar = $bool;
+	}
+	public function setCorveeFunctie(CorveeFunctie $functie) {
+		$this->corvee_functie = $functie;
+	}
+}
+
+?>

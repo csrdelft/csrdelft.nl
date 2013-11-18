@@ -27,8 +27,9 @@
  * 			* UrlField				Urls
  * 		- LidField					Leden selecteren
  * 		- IntField					Integers 
- * 			* NickField					Nicknames
+ * 			* NickField				Nicknames
  * 			* TelefoonField
+ * 		- FloatField				Bedragen
  * 		- PassField					Wachtwoorden (oude, nieuwe, nieuwe ter bevestiging)
  *		- SelectField
  * 			* GeslachtField
@@ -47,6 +48,7 @@
  * Voorbeeld:
  *
  * $form=new Formulier(
+ * 		'formulier-ID',
  * 		'/index.php',
  * 		array(
  * 			InputField('naam', '', 'Naam'),
@@ -60,10 +62,11 @@ class Formulier{
 	private $action;
 	private $fields;
 
-	public $cssID;
+	private $formId;
 	public $cssClass='Formulier';
 	
-	public function __construct($action='', $fields=array()){
+	public function __construct($formId, $action='', $fields=array()){
+		$this->formId=$formId;
 		$this->action=$action;
 		$this->fields=$fields;
 	}
@@ -71,7 +74,15 @@ class Formulier{
 	public function setAction($action){
 		$this->action=$action;
 	}
+	
+	public function getAction() {
+		return $this->action;
+	}
 
+	public function getFormId() {
+		return $this->formId;
+	}
+	
 	public function getFields(){
 		return $this->fields;
 	}
@@ -92,6 +103,20 @@ class Formulier{
 		}
 		return $posted;
 	}
+
+    /**
+     * Geeft waardes van de formuliervelden terug
+     */
+    public function getValues() {
+        $values = array();
+        /** @var $field FormField */
+        foreach($this->getFields() as $field){
+            if($field instanceof FormField){
+                $values[$field->getName()] = $field->getValue();
+            }
+        }
+        return $values;
+    }
 
 	/**
 	 * alle valid-functies krijgen een argument mee, wat kan wisselen per
@@ -115,7 +140,8 @@ class Formulier{
 
 	public function findByName($fieldname){
 		foreach($this->fields as $field){
-			if($field->getName() == $fieldname){
+			//we checken alleen de formfields, niet de comments enzo.
+			if($field instanceof FormField AND $field->getName() == $fieldname){
 				return $field;
 			}
 		}
@@ -128,7 +154,7 @@ class Formulier{
 	 */
 	public function view($compleetformulier=true){
 		if($compleetformulier){
-			echo '<form action="'.$this->action.'" id="'.$this->cssID.'" class="'.$this->cssClass.'" method="post">'."\n";
+			echo '<form action="'.$this->action.'" id="'.$this->formId.'" class="'.$this->cssClass.'" method="post">'."\n";
 			echo '<script type="text/javascript">if(FieldSuggestions==undefined){var FieldSuggestions=[];} </script>';
 		}
 
@@ -142,6 +168,9 @@ class Formulier{
 		}
 
 		echo '<script type="text/javascript">jQuery(document).ready(function($){'."\n".implode($javascript)."\n".'});</script>';
+		if($compleetformulier){
+			echo '</form>';
+		}
 	}
 
 }
@@ -164,13 +193,16 @@ class FormElement{
 class FormField extends FormElement{
 	public $name;					//naam van het veld in POST
 	public $value;					//welke initiele waarde heeft het veld?
+	public $disabled=false;			//veld uitgeschakeld?
 	public $notnull=false; 			//mag het veld leeg zijn?
+	public $forcenotnull=false;		//mag het veld echt niet leeg zijn? (ook voor LEDEN_MOD)
 	public $autocomplete=true; 		//browser laten autoaanvullen?
 	public $placeholder=null;		//plaats een grijze placeholdertekst in leeg veld
 	public $error='';				//foutmelding van dit veld
-	
+	public $onchange=null;			//javascript onChange
+	public $onclick=null;			//javascript onClick
 	public $max_len=0;				//maximale lengte van de invoer.
-	public $rows=5;					//aantal rijen van textarea
+	public $rows=0;					//aantal rijen van textarea
 
 	//array met classnames die later in de class-tag komen.
 	public $inputClasses=array('regular');
@@ -200,11 +232,14 @@ class FormField extends FormElement{
 	public function setSuggestions($array){				$this->suggestions=$array; }
 	public function setPlaceholder($bericht){			$this->placeholder=$bericht; }
 
+	public function setOnChangeScript($javascript){		$this->onchange=$javascript; }
+	public function setOnClickScript($javascript){		$this->onclick=$javascript; }
+
 	public function getValue(){
 		if($this->isPosted()){
 			return trim($_POST[$this->name]);
 		}
-		return '';
+		return $this->value;
 	}
 	
 	/**
@@ -217,14 +252,14 @@ class FormField extends FormElement{
 	public function valid(){
 		if(!$this->isPosted()){
 			$this->error='Veld is niet gepost.';
-		//vallen over lege velden als dat aangezet is voor het veld en als gebruiker geen LEDEN_MOD heeft.
-		}elseif($this->notnull AND !LoginLid::instance()->hasPermission('P_LEDEN_MOD') AND $this->getValue()==''){
+		//vallen over lege velden als dat aangezet is voor het veld en als gebruiker geen LEDEN_MOD heeft of het geforceerd wordt.
+		}elseif((($this->notnull AND !LoginLid::instance()->hasPermission('P_LEDEN_MOD')) OR $this->forcenotnull) AND $this->getValue()==''){
 			$this->error='Dit is een verplicht veld.';
 		}
 		
 		//als max_len > 0 dan checken of de lengte er niet overheen gaat.
 		if($this->max_len>0 AND strlen($this->getValue())>$this->max_len){
-			$tis->error='Dit veld mag maximaal '.$this->max_len.' tekens lang zijn';
+			$this->error='Dit veld mag maximaal '.$this->max_len.' tekens lang zijn';
 		}
 		
 		return $this->error=='';
@@ -315,26 +350,41 @@ class FormField extends FormElement{
 			case 'class': return 'class="'.implode(' ', $this->getInputClasses()).'"'; break;
 			case 'value': return 'value="'.htmlspecialchars($this->value).'"'; break;
 			case 'name': return 'name="'.$this->name.'"'; break;
+			case 'disabled':
+				if($this->disabled){
+					return 'disabled';
+				}
+				break;
 			case 'placeholder': 
 				if($this->placeholder!=null){
 					return 'placeholder="'.$this->placeholder.'"';
 				}
-			break;
+				break;
 			case 'rows': 
 				if($this->rows>0){
 					return 'rows="'.$this->rows.'"'; break;
 				}
-			break;
+				break;
 			case 'maxlength':
 				if($this->max_len>0){
 					return 'maxlength="'.$this->max_len.'"';
 				}
-			break;
+				break;
 			case 'autocomplete':
 				if(!$this->autocomplete OR count($this->suggestions)>0 OR $this->remotedatasource!=''){
 					return 'autocomplete="off" ';
 				}
-			break;
+				break;
+			case 'onchange':
+				if($this->onchange != null) {
+					return 'onchange="' . $this->onchange . '" ';
+				}
+				break;
+			case 'onclick':
+				if($this->onclick != null) {
+					return 'onclick="' . $this->onclick . '" ';
+				}
+				break;
 		}
 		return '';
 	}
@@ -347,7 +397,7 @@ class FormField extends FormElement{
 		echo $this->getLabel();
 		echo $this->getError();
 		
-		echo '<input type="text" '.$this->getInputAttribute(array('id', 'name', 'class', 'value', 'maxlength', 'placeholder', 'autocomplete')).' />';
+		echo '<input type="text" '.$this->getInputAttribute(array('id', 'name', 'class', 'value', 'disabled', 'maxlength', 'placeholder', 'autocomplete', 'onchange', 'onclick')).' />';
 
 		echo $this->getFieldSuggestions();
 		//afsluiten van de div om de hele tag heen.
@@ -394,12 +444,18 @@ JS;
  */
 class TextField extends FormField{
 
+	public function __construct($name, $value, $description=null, $rows=5, $max_len=0){
+		parent::__construct($name, $value, $description);
+		$this->rows=(int)$rows;
+		$this->max_len=(int)$max_len;
+	}
+	
 	public function view(){
 		echo $this->getDiv();
 		echo $this->getLabel();
 		echo $this->getError();
 
-		echo '<textarea '.$this->getInputAttribute(array('id', 'name', 'class', 'rows', 'maxlength', 'placeholder', 'autocomplete')).' />';
+		echo '<textarea '.$this->getInputAttribute(array('id', 'name', 'class', 'disabled', 'rows', 'maxlength', 'placeholder', 'autocomplete', 'onchange', 'onclick')).'>';
 		echo htmlspecialchars($this->value);
 		echo '</textarea>';
 
@@ -413,9 +469,7 @@ class TextField extends FormField{
 class AutoresizeTextField extends TextField{
 
 	public function __construct($name, $value, $description=null, $max_len=255, $placeholder=null){
-		parent::__construct($name, $value, $description);
-			$this->max_len=(int)$max_len;
-			$this->rows=0;
+		parent::__construct($name, $value, $description, 1, $max_len);
 			$this->inputClasses[]='wantsAutoresize';
 			$this->placeholder=$placeholder;
 	}
@@ -528,16 +582,17 @@ class RequiredPreviewTextField extends PreviewTextField{
 }
 
 /**
- * Een InputField is een elementaire input-tag en heeft een maximale
- * lengte.
+ * Een InputField is een elementaire input-tag en heeft een maximale lengte.
+ * HTML wordt ge-escaped.
  * Uiteraard kunnen er suggesties worden opgegeven.
  */
 class InputField extends FormField{
 	public $max_len=255;
 	
-	public function __construct($name, $value, $description, $max_len=255){
-		parent::__construct($name, $value, $description);
+	public function __construct($name, $value, $description, $max_len=255, $suggestions=array()){
+		parent::__construct($name, htmlspecialchars_decode($value), $description);
 		$this->max_len=(int)$max_len;
+		parent::setSuggestions($suggestions);
 	}
 	
 	public function valid(){
@@ -548,6 +603,10 @@ class InputField extends FormField{
 			$this->error='Maximaal '.$this->max_len.' karakters toegestaan.';
 		}
 		return $this->error=='';
+	}
+	
+	public function getValue(){
+		return htmlspecialchars(parent::getValue());
 	}
 }
 class RequiredInputField extends InputField{
@@ -804,35 +863,100 @@ class UrlField extends FormField{
 }
 
 /**
- * Invoeren van integers. Eventueel met minima/maxima.
+ * Invoeren van een integer. Eventueel met minima/maxima. Leeg evt. toegestaan.
  */
 class IntField extends FormField{
-	public $min=null;
-	public $max=null;
+	public $min = null;
+	public $max = null;
 	
-	public function __construct($name, $value, $description, $max=null, $min=null){
+	public function __construct($name, $value, $description, $max=null, $min=null, $empty=false){
 		parent::__construct($name, $value, $description);
-		$this->max=(int)$max;
-		$this->min=(int)$min;
-
-		$this->notnull=true;
+		
+		if ($max !== null) {
+			$this->max = (int) $max;
+		}
+		if ($min !== null) {
+			$this->min= (int) $min;
+		}
+		$this->notnull = !$empty;
 	}
 	
-	public function getValue(){ return (int)parent::getValue(); }
+	public function getValue() {
+		return (int) parent::getValue();
+	}
 	
 	public function valid(){
-		if(!parent::valid()){ return false; }
-		//als een veld verplicht is heeft het in FormField::valid() al een foutmelding opgeleverd.
-		if($this->getValue()==0){ return true; }
+		if (!parent::valid()) { // als dit een veld verplicht is heeft het in FormField::valid() al een foutmelding opgeleverd.
+			return false;
+		}
 		
-		if(!preg_match('/\d+/', $this->getValue())){
-			$this->error='Alleen getallen toegestaan';
-		}elseif($this->max!==null AND $this->getValue()>$this->max){
-			$this->error='Maximale waarde is '.$this->max.' ';
-		}elseif($this->min!==null AND $this->getValue()<$this->min){
-			$this->error='Minimale waarde is '.$this->min.' ';
+		if (!$this->notnull AND strlen(parent::getValue()) === 0) {
+			// do not check if empty
+		}
+		else if (!preg_match('/\d+/', parent::getValue())) {
+			$this->error = 'Alleen getallen toegestaan';
+		}
+		else if ($this->max !== null AND $this->getValue() > $this->max) {
+			$this->error = 'Maximale waarde is '.$this->max.' ';
+		}
+		else if ($this->min !== null AND $this->getValue() < $this->min) {
+			$this->error = 'Minimale waarde is '.$this->min.' ';
 		}
 		return $this->error=='';
+	}
+}
+
+/**
+ * Invoeren van een float. Eventueel met minima/maxima. Leeg evt. toegestaan.
+ */
+class FloatField extends FormField{
+	public $min = null;
+	public $max = null;
+	
+	public function __construct($name, $value, $description, $max=null, $min=null, $empty=false){
+		parent::__construct($name, $value, $description);
+		
+		if ($max !== null) {
+			$this->max = (float) $max;
+		}
+		if ($min !== null) {
+			$this->min= (float) $min;
+		}
+		$this->notnull = !$empty;
+	}
+	
+	public function getValue() {
+		return (float) str_replace(',', '.', parent::getValue());
+	}
+	
+	public function valid(){
+		if (!parent::valid()) { // als dit een veld verplicht is heeft het in FormField::valid() al een foutmelding opgeleverd.
+			return false;
+		}
+		
+		if (!$this->notnull AND strlen(parent::getValue()) === 0) {
+			// do not check if empty
+		}
+		else if (!preg_match('/\d+(,{1}\d*)?/', str_replace('.', ',', parent::getValue()))) {
+			$this->error = 'Alleen komma-getallen toegestaan';
+		}
+		else if ($this->max !== null AND $this->getValue() > $this->max) {
+			$this->error = 'Maximale waarde is '.$this->max.' ';
+		}
+		else if ($this->min !== null AND $this->getValue() < $this->min) {
+			$this->error = 'Minimale waarde is '.$this->min.' ';
+		}
+		return $this->error=='';
+	}
+}
+
+/**
+ * Verborgen veld voor de gebruiker.
+ */
+class HiddenField extends FormField{
+
+	public function view(){
+		echo '<input type="hidden" '.$this->getInputAttribute(array('id', 'name', 'class', 'value', 'disabled', 'maxlength', 'placeholder', 'autocomplete')).' />';
 	}
 }
 
@@ -944,27 +1068,62 @@ class PassField extends FormField{
 	}
 }
 
+
+class KeuzeRondjeField extends SelectField{
+	public function __construct($name, $value, $description, array $options){
+		parent::__construct($name, $value, $description, $options, array(), 1, false);
+	}
+	
+	public function view(){
+		echo $this->getDiv();
+		echo $this->getLabel();
+		echo $this->getError();
+		
+		echo '<div style="float: left;">';
+		foreach($this->options as $value => $description){
+			echo '<input type="radio" id="field_'.$this->getName().'_option_'.$value.'" value="'.$value.'" '. $this->getInputAttribute(array('name', 'class', 'disabled', 'onchange', 'onclick'));
+			if($value==$this->value){
+				echo ' selected="selected" checked="checked"';
+			}
+			echo '><label for="field_'.$this->getName().'_option_'.$value.'" '.$this->getInputAttribute('class').'> '.htmlspecialchars($description).'</label><br />';
+		}
+		echo '</div>';
+		
+		echo '</div>';
+	}
+}
+
 /**
  * SelectField
  * Basis html-select met een aantal opties.
  *
- * is valid als één van de opties geselecteerd is.
+ * is valid als één van de opties geselecteerd is //TODO: of meerdere
  */
 class SelectField extends FormField{
-	public $options=array();
+	public $options;
+	public $cssOptions;
+	public $size;
+	public $multiple; //TODO
 	
-	public function __construct($name, $value, $description, $options){
+	public function __construct($name, $value, $description, array $options, $cssOptions=array(), $size=1, $multiple=false){
 		parent::__construct($name, $value, $description);
 		$this->options=$options;
-		if(count($this->options)<2){
-			throw new Exception('Tenminste twee opties nodig.');
+		$this->cssOptions=$cssOptions;
+		$this->size=(int)$size;
+		$this->multiple=$multiple;
+		if(count($this->options)<1){
+			throw new Exception('Tenminste 1 optie nodig.');
 		}
 		$this->notnull=true;
 	}
 	public function valid(){
-		if(!parent::valid()){ return false; }
-		if(!array_key_exists($this->getValue(), $this->options)){
-			$this->error='Onbekende optie gekozen';
+		if(!array_key_exists($this->getValue(), $this->options)) {
+			if($this->getValue()!==null) {
+				$this->error='Onbekende optie gekozen';
+			}
+			if($this->size === 1 && !parent::isValid()) {
+				return false;
+			}
 		}
 		return $this->error=='';
 	}
@@ -973,12 +1132,22 @@ class SelectField extends FormField{
 		echo $this->getLabel();
 		echo $this->getError();
 	
-		echo '<select '.$this->getInputAttribute(array('id', 'name', 'class')).' />';
+		echo '<select ';
+		if($this->multiple){
+			echo 'multiple ';
+		}
+		if($this->size>1){
+			echo 'size="'. $this->size.'" ';
+		}
+		echo $this->getInputAttribute(array('id', 'name', 'class', 'disabled', 'onchange', 'onclick')).'>';
 		
 		foreach($this->options as $value => $description){
 			echo '<option value="'.$value.'"';
 			if($value==$this->value){
-				echo 'selected="selected" ';
+				echo ' selected="selected"';
+			}
+			if(array_key_exists($value, $this->cssOptions)) {
+				echo ' class="'. $this->cssOptions[$value] .'"';
 			}
 			echo '>'.htmlspecialchars($description).'</option>';
 		}
@@ -1003,6 +1172,19 @@ class GeslachtField extends SelectField{
 class JaNeeField extends SelectField{
 	public function __construct($name, $value, $description=null){
 		parent::__construct($name, $value, $description, array('ja'=> 'Ja', 'nee'=>'Nee'));
+	}
+}
+
+/**
+ * Dag van de week
+ */
+class WeekdagField extends SelectField{
+	public function __construct($name, $value, $description=null){
+		parent::__construct($name, $value, $description, array('0'=> 'zondag', '1'=>'maandag', '2'=>'dinsdag', '3'=>'woensdag', '4'=>'donderdag', '5'=>'vrijdag', '6'=>'zaterdag'));
+	}
+	
+	public function getValue() {
+		return (int) parent::getValue();
 	}
 }
 
@@ -1037,14 +1219,20 @@ class KerkField extends SelectField{
  */
 class DatumField extends FormField{
 	protected $maxyear;
+    protected $minyear;
 
-	public function __construct($name, $value, $description, $maxyear=null){
+	public function __construct($name, $value, $description, $maxyear=null, $minyear=null){
 		parent::__construct($name, $value, $description);
 		if($maxyear===null){
 			$this->maxyear=date('Y');
 		}else{
 			$this->maxyear=(int)$maxyear;
 		}
+        if($minyear===null){
+            $this->minyear=1920;
+        }else{
+            $this->minyear=(int)$minyear;
+        }
 	}
 	public function isPosted(){
 		return isset($_POST[$this->name.'_jaar'], $_POST[$this->name.'_maand'], $_POST[$this->name.'_dag']);
@@ -1079,46 +1267,46 @@ class DatumField extends FormField{
 		echo $this->getDiv();
 		echo $this->getLabel();
 		echo $this->getError();
-
-		$years=range(1920, $this->maxyear);
+		
+		$years=range($this->minyear, $this->maxyear);
 		$mounths=range(1,12);
 		$days=range(1,31);
-	
+		
 		//als de datum al nul is, moet ie dat ook weer kunnen worden...
 		if($this->getValue()=='0000-00-00' OR $this->getValue()==0){
 			$years[]='0000';
 			$mounths[]=0;
 			$days[]=0;
 		}
-
-		echo '<select id="field_'.$this->name.'_jaar" name="'.$this->name.'_jaar" '.$this->getInputAttribute('class').' />';
-		foreach($years as $value){
-			echo '<option value="'.$value.'"';
-			if($value==substr($this->value, 0,4)){
-				echo 'selected="selected" ';
-			}
-			echo '>'.$value.'</option>';
-		}
-		echo '</select>&nbsp;';
-
-		echo '<select id="field_'.$this->name.'_maand" name="'.$this->name.'_maand" '.$this->getInputAttribute('class').' />';
-		foreach($mounths as $value){
-			$value=sprintf('%02d', $value);
-			echo '<option value="'.$value.'"';
-			if($value==substr($this->value, 5, 2)){
-				echo 'selected="selected" ';
-			}
-
-			echo '>'.$value.'</option>';
-		}
-		echo '</select>&nbsp;';
-
-		echo '<select id="field_'.$this->name.'_dag" name="'.$this->name.'_dag" '.$this->getInputAttribute('class').' />';
+		
+		echo '<select id="field_'.$this->name.'_dag" name="'.$this->name.'_dag" '.$this->getInputAttribute('class').' >';
 		foreach($days as $value){
 			$value=sprintf('%02d', $value);
 			echo '<option value="'.$value.'"';
 			if($value==substr($this->value, 8, 2)){
-				echo 'selected="selected" ';
+				echo ' selected="selected"';
+			}
+			echo '>'.$value.'</option>';
+		}
+		echo '</select> ';
+		
+		echo '<select id="field_'.$this->name.'_maand" name="'.$this->name.'_maand" '.$this->getInputAttribute('class').' >';
+		foreach($mounths as $value){
+			$value=sprintf('%02d', $value);
+			echo '<option value="'.$value.'"';
+			if($value==substr($this->value, 5, 2)){
+				echo ' selected="selected"';
+			}
+
+			echo '>'.$value.'</option>';
+		}
+		echo '</select> ';
+		
+		echo '<select id="field_'.$this->name.'_jaar" name="'.$this->name.'_jaar" '.$this->getInputAttribute('class').' >';
+		foreach($years as $value){
+			echo '<option value="'.$value.'"';
+			if($value==substr($this->value, 0,4)){
+				echo ' selected="selected"';
 			}
 			echo '>'.$value.'</option>';
 		}
@@ -1127,6 +1315,112 @@ class DatumField extends FormField{
 	}
 }
 
+class TijdField extends FormField{
+    protected $minutensteps;
+
+    public function __construct($name, $value, $description, $minutensteps=null){
+        parent::__construct($name, $value, $description);
+        if($minutensteps===null){
+            $this->minutensteps=1;
+        }else{
+            $this->minutensteps=(int)$minutensteps;
+        }
+    }
+
+    public function isPosted(){
+        return isset($_POST[$this->name.'_uur'], $_POST[$this->name.'_minuut']);
+    }
+
+    public function getUur(){ return $_POST[$this->name.'_uur']; }
+    public function getMinuut(){ return $_POST[$this->name.'_minuut']; }
+
+    public function getValue(){
+        if($this->isPosted()){
+            return $this->getUur().':'.$this->getMinuut();
+        }else{
+            return parent::getValue();
+        }
+    }
+
+
+    public function valid(){
+        if(!parent::valid()){ return false; }
+        if(!preg_match('/^(\d\d?):(\d{2})$/', $this->getValue())){
+            $this->error='Ongeldige tijdstip';
+        }elseif(substr($this->getValue(), 0, 2)>23 OR substr($this->getValue(), 3, 5)>59){
+            $this->error='Tijdstip bestaat niet';
+        }
+        return $this->error=='';
+    }
+
+    public function view(){
+        echo $this->getDiv();
+        echo $this->getLabel();
+        echo $this->getError();
+
+        $hours=range(0, 23);
+        $minutes=range(0, 59, $this->minutensteps);
+
+        echo '<select id="field_'.$this->name.'_uur" name="'.$this->name.'_uur" '.$this->getInputAttribute('class').' >';
+        foreach($hours as $value){
+            $value=sprintf('%02d', $value);
+            echo '<option value="'.$value.'"';
+            if($value==substr($this->value, 0,2)){
+                echo ' selected="selected"';
+            }
+            echo '>'.$value.'</option>';
+        }
+        echo '</select> ';
+
+        echo '<select id="field_'.$this->name.'_minuut" name="'.$this->name.'_minuut" '.$this->getInputAttribute('class').' >';
+        $previousvalue = 0;
+        foreach($minutes as $value){
+            $value=sprintf('%02d', $value);
+            echo '<option value="'.$value.'"';
+            if($value>$previousvalue && $value<=substr($this->value, 3, 2)){
+                echo ' selected="selected"';
+            }
+            echo '>'.$value.'</option>';
+            $previousvalue = $value;
+        }
+        echo '</select>';
+        echo '</div>';
+    }
+}
+
+class VinkField extends FormField {
+    
+    public function getValue() {
+        if(parent::isPosted()){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    public function valid(){
+        if($this->notnull AND $this->getValue()==false){
+            $this->error='Dit is een verplicht veld.';
+        }
+        return $this->error=='';
+    }
+    public function view() {
+        echo $this->getDiv();
+        echo $this->getLabel();
+        echo $this->getError();
+
+        echo '<input type="checkbox" '.$this->getInputAttribute(array('id', 'name', 'class', 'disabled', 'onchange', 'onclick')).' value="'.$this->name.'"';
+        if($this->value){
+            echo ' selected="selected" checked="checked" ';
+        }
+        echo '/>';
+
+        echo '</div>';
+    }
+
+}
+class RequiredVinkField extends VinkField {
+    public $notnull=true;
+}
 /**
  * SubmitButton.
  */
@@ -1142,7 +1436,7 @@ class SubmitButton extends FormElement{
 	public function view(){
 		echo <<<HTML
 <div class="submit">
-	<label for="submit">&nbsp;</label>
+	<label for="submit"> </label>
 	<input type="submit" value="{$this->buttontext}" />
 	<input type="reset" value="reset formulier" />
 	{$this->extra}

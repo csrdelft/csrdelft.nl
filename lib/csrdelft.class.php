@@ -172,7 +172,7 @@ class csrdelft extends SimpleHTML {
 
 	public function getDebug($sql=true, $get=true, $post=true, $files=false, $session=true, $cookie=true){
 		$debug = '';
-		if ($sql)         { $debug .= '<hr />SQL<hr />';    $debug .= '<pre>'.htmlentities(print_r(MySql::instance()->getQueries(), true)).'</pre>';     }
+		if ($sql)         { $debug .= '<hr />SQL<hr />';    $debug .= '<pre>'.htmlentities(print_r(array("PDO" => CsrPdo::instance()->getQueries(), "MySql" => MySql::instance()->getQueries()), true)).'</pre>';     }
 		if ($get)         { $debug .= '<hr />GET<hr />';     if (count($_GET) > 0)		$debug .= '<pre>'.htmlentities(print_r($_GET, true)).'</pre>';     }
 		if ($post)        { $debug .= '<hr />POST<hr />';    if (count($_POST) > 0)		$debug .= '<pre>'.htmlentities(print_r($_POST, true)).'</pre>';    }
 		if ($files)       { $debug .= '<hr />FILES<hr />';   if (count($_FILES) > 0)		$debug .= '<pre>'.htmlentities(print_r($_FILES, true)).'</pre>';   }

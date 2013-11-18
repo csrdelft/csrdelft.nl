@@ -41,6 +41,7 @@ class Instelling{
 			'groepen_toonPasfotos' => array('ja', 'Standaard pasfotos tonen', 'enum', array('ja', 'nee')),
 			'agenda_toonVerjaardagen' => array('ja', 'Verjaardagen in agenda', 'enum', array('ja', 'nee')),
 			'agenda_toonMaaltijden' => array('ja', 'Maaltijden in agenda', 'enum', array('ja', 'nee')),
+			'agenda_toonCorvee' => array('eigen', 'Corvee in agenda', 'enum', array('iedereen', 'eigen', 'nee')),
 			'mededelingen_aantalPerPagina' => array(10, 'Aantal mededeling per pagina', 'int', 5),
 			'googleContacts_groepnaam' => array('C.S.R.-leden', 'Naam van groep voor contacten in Google contacts', 'string'),
 			'googleContacts_extended' => array('ja', 'Uitgebreide export (nickname, voorletters, adres/tel ouders, website, chataccounts, eetwens) ', 'enum', array('ja', 'nee'))

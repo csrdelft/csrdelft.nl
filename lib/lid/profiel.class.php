@@ -383,12 +383,11 @@ class ProfielBewerken extends Profiel {
 		$form[]=new SubmitButton('opslaan', '<a class="knop" href="/communicatie/profiel/'.$this->getUid().'">Annuleren</a>');
 		
 		if($this->editNoviet){
-			$this->form=new Formulier('/communicatie/profiel/'.$this->getUid().'/novietBewerken', $form);
+			$this->form=new Formulier('profielForm', '/communicatie/profiel/'.$this->getUid().'/novietBewerken', $form);
 		}
 		else{
-			$this->form=new Formulier('/communicatie/profiel/'.$this->getUid().'/bewerken', $form);
+			$this->form=new Formulier('profielForm', '/communicatie/profiel/'.$this->getUid().'/bewerken', $form);
 		}
-		$this->form->cssID='profielForm';
 	}
 
 	/**
@@ -464,9 +463,7 @@ class ProfielStatus extends Profiel{
 		$form[]=new DatumField('sterfdatum', $profiel['sterfdatum'], 'Overleden op:');
 		$form[]=new SubmitButton();
 
-		$this->form=new Formulier('/communicatie/profiel/'.$this->getUid().'/wijzigstatus/', $form);
-		$this->form->cssID='statusForm';
-
+		$this->form=new Formulier('statusForm', '/communicatie/profiel/'.$this->getUid().'/wijzigstatus/', $form);
 	}
 
 	/**
@@ -789,10 +786,7 @@ class ProfielVoorkeur extends Profiel{
 			$form[]=new TextField('lidOpmerking', $lidvoorkeur->getLidOpmerking(), 'Vul hier je eventuele voorkeur voor functie in, of andere opmerkingen');
 			$form[]=new SubmitButton('opslaan', '<a class="knop" href="/communicatie/profiel/'.$this->getUid().'">Annuleren</a>');
 
-			$this->form=new Formulier('/communicatie/profiel/'.$this->getUid().'/voorkeuren', $form);
-
-			$this->form->cssID='profielForm';
-			
+			$this->form=new Formulier('profielForm', '/communicatie/profiel/'.$this->getUid().'/voorkeuren', $form);
 		}
 
 		/**

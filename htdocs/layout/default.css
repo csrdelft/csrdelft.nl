@@ -541,6 +541,7 @@ span#ubbsluiten:hover{
 	background-color: #eee;
 }
 
+//TODO: deprecated
 /* maaltijdketzer */
 table.maaltijden{ width: 100%; }
 table.maaltijden tr{ height: 1.6em; }
@@ -625,3 +626,73 @@ form#streeplijst input, form#streeplijst label{ text-align: left; margin: 3px; p
 #nieuwePeiling input, #nieuwePeiling textarea{ margin-bottom: 4px;}
 #nieuwePeiling textarea{ width: 400px; }
 #peilingOpties input{ width: 400px;}
+
+/* Formulier */
+
+.Formulier label{
+    width: 150px;
+    float: left;
+}
+.Formulier input.regular{
+    width: 250px;
+}
+.Formulier input[type=checkbox] {
+    width: auto;
+}
+.Formulier input.UidField{
+    width: 70px;
+}
+
+.Formulier textarea{
+    width: 250px;
+}
+.Formulier select{
+   /* width: 250px;*/
+}
+
+.Formulier .UBBpreview{
+    margin-left: 156px;
+}
+.Formulier .knop{
+    float: right;
+    width: 80px;
+    text-align: center;
+    padding: 2px;
+    margin-right: 0;
+
+}
+.Formulier .uidPreview, .Formulier .lidPreview{
+    display: inline;
+    padding-left: 10px;
+}
+.Formulier .veld, .Formulier h3, .Formulier .password{
+    clear: both;
+}
+.Formulier .veld, .Formulier .submit{
+    margin-left: 10px;
+    padding: 1px 2px;
+    border: 1px solid white;
+}
+
+.Formulier .veld{
+    overflow: auto;
+}
+.Formulier .veld:hover{
+    border: 1px  solid #ddd;
+    background-color: #eee;
+}
+.Formulier .metfouten{
+    background-color: #FFC3CE;
+    padding: 4px 2px;
+}
+.Formulier .veld .waarschuwing{
+    float: right;
+    margin-right: 10px;
+}
+.Formulier .password{
+    padding: 2px 1px;
+}
+.Formulier h3{
+    margin-top: 8px;
+    margin-bottom: 1px;
+}
