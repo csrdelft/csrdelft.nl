@@ -434,8 +434,8 @@ class LoginLid{
 		$p = $this->_permissions;
 		$this->_perm_user = array(
 			'P_NOBODY'     => $p['P_NOBODY'] | $p['P_FORUM_READ'] | $p['P_AGENDA_READ'],
-			'P_LID'        => $p['P_LOGGED_IN'] | $p['P_OUDLEDEN_READ'] | $p['P_FORUM_POST'] | $p['P_DOCS_READ'] | $p['P_LEDEN_READ'] | $p['P_PROFIEL_EDIT'] | $p['P_AGENDA_READ'] | $p['P_CORVEE_IK'] | $p['P_MAIL_POST'] | $p['P_BIEB_READ'] | $p['P_NEWS_POST'],
-			'P_OUDLID'     => $p['P_LOGGED_IN'] | $p['P_LEDEN_READ'] | $p['P_OUDLEDEN_READ'] | $p['P_FORUM_POST'] | $p['P_DOCS_READ'] | $p['P_PROFIEL_EDIT'] | $p['P_FORUM_READ'] | $p['P_CORVEE_IK'] | $p['P_MAIL_POST'] | $p['P_BIEB_READ'] | $p['P_AGENDA_READ'] | $p['P_ALLEEN_OUDLID'],
+			'P_LID'        => $p['P_LOGGED_IN'] | $p['P_OUDLEDEN_READ'] | $p['P_FORUM_POST'] | $p['P_DOCS_READ'] | $p['P_LEDEN_READ'] | $p['P_PROFIEL_EDIT'] | $p['P_AGENDA_READ'] | $p['P_CORVEE_WIJ'] | $p['P_MAIL_POST'] | $p['P_BIEB_READ'] | $p['P_NEWS_POST'],
+			'P_OUDLID'     => $p['P_LOGGED_IN'] | $p['P_LEDEN_READ'] | $p['P_OUDLEDEN_READ'] | $p['P_FORUM_POST'] | $p['P_DOCS_READ'] | $p['P_PROFIEL_EDIT'] | $p['P_FORUM_READ'] | $p['P_CORVEE_WIJ'] | $p['P_MAIL_POST'] | $p['P_BIEB_READ'] | $p['P_AGENDA_READ'] | $p['P_ALLEEN_OUDLID'],
 			'P_MODERATOR'  => $p['P_ADMIN'] | $p['P_FORUM_MOD'] | $p['P_DOCS_MOD'] | $p['P_LEDEN_MOD'] | $p['P_OUDLEDEN_MOD'] | $p['P_AGENDA_MOD'] | $p['P_CORVEE_WIJ'] | $p['P_MAIL_SEND'] | $p['P_NEWS_MOD'] | $p['P_BIEB_MOD']
 		);
 		# extra dingen, waarvoor de array perm_user zelf nodig is
