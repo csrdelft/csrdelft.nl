@@ -411,7 +411,6 @@ class LoginLid{
 			'P_MAAL_IK'      => 000100000000, # kan zich aan en afmelden voor maaltijd en eigen abo wijzigen
 			'P_CORVEE_IK'    => 000200000000, # kan voorkeuren aangeven voor corveetaken
 			'P_MAAL_WIJ'     => 000300000000, # kan ook anderen aanmelden (niet afmelden!) //TODO: deprecated
-			'P_CORVEE_WIJ'   => 000400000000, # kan ook anderen aanmelden (niet afmelden!) //TODO: deprecated
 			'P_CORVEE_MOD'   => 000500000000, # mag corveetaken beheren (CorveeCaesar)
 			'P_MAAL_MOD'     => 000600000000, # mag maaltijden beheren (MaalCie P)
 			'P_MAAL_SALDI'   => 000700000000, # mag het MaalCie saldo aanpassen van iedereen (MaalCie fiscus)
@@ -434,9 +433,9 @@ class LoginLid{
 		$p = $this->_permissions;
 		$this->_perm_user = array(
 			'P_NOBODY'     => $p['P_NOBODY'] | $p['P_FORUM_READ'] | $p['P_AGENDA_READ'],
-			'P_LID'        => $p['P_LOGGED_IN'] | $p['P_OUDLEDEN_READ'] | $p['P_FORUM_POST'] | $p['P_DOCS_READ'] | $p['P_LEDEN_READ'] | $p['P_PROFIEL_EDIT'] | $p['P_AGENDA_READ'] | $p['P_CORVEE_WIJ'] | $p['P_MAIL_POST'] | $p['P_BIEB_READ'] | $p['P_NEWS_POST'],
-			'P_OUDLID'     => $p['P_LOGGED_IN'] | $p['P_LEDEN_READ'] | $p['P_OUDLEDEN_READ'] | $p['P_FORUM_POST'] | $p['P_DOCS_READ'] | $p['P_PROFIEL_EDIT'] | $p['P_FORUM_READ'] | $p['P_CORVEE_WIJ'] | $p['P_MAIL_POST'] | $p['P_BIEB_READ'] | $p['P_AGENDA_READ'] | $p['P_ALLEEN_OUDLID'],
-			'P_MODERATOR'  => $p['P_ADMIN'] | $p['P_FORUM_MOD'] | $p['P_DOCS_MOD'] | $p['P_LEDEN_MOD'] | $p['P_OUDLEDEN_MOD'] | $p['P_AGENDA_MOD'] | $p['P_CORVEE_WIJ'] | $p['P_MAIL_SEND'] | $p['P_NEWS_MOD'] | $p['P_BIEB_MOD']
+			'P_LID'        => $p['P_LOGGED_IN'] | $p['P_OUDLEDEN_READ'] | $p['P_FORUM_POST'] | $p['P_DOCS_READ'] | $p['P_LEDEN_READ'] | $p['P_PROFIEL_EDIT'] | $p['P_AGENDA_READ'] | $p['P_MAAL_WIJ'] | $p['P_MAIL_POST'] | $p['P_BIEB_READ'] | $p['P_NEWS_POST'],
+			'P_OUDLID'     => $p['P_LOGGED_IN'] | $p['P_LEDEN_READ'] | $p['P_OUDLEDEN_READ'] | $p['P_FORUM_POST'] | $p['P_DOCS_READ'] | $p['P_PROFIEL_EDIT'] | $p['P_FORUM_READ'] | $p['P_MAAL_WIJ'] | $p['P_MAIL_POST'] | $p['P_BIEB_READ'] | $p['P_AGENDA_READ'] | $p['P_ALLEEN_OUDLID'],
+			'P_MODERATOR'  => $p['P_ADMIN'] | $p['P_FORUM_MOD'] | $p['P_DOCS_MOD'] | $p['P_LEDEN_MOD'] | $p['P_OUDLEDEN_MOD'] | $p['P_AGENDA_MOD'] | $p['P_MAAL_WIJ'] | $p['P_MAIL_SEND'] | $p['P_NEWS_MOD'] | $p['P_BIEB_MOD']
 		);
 		# extra dingen, waarvoor de array perm_user zelf nodig is
 		$this->_perm_user['P_PUBCIE']  = $this->_perm_user['P_MODERATOR'] | $p['P_MAAL_MOD'] | $p['P_CORVEE_MOD'] | $p['P_MAAL_SALDI']; 
