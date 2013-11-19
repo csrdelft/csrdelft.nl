@@ -1,5 +1,8 @@
 <?php
 namespace Taken\CRV;
+
+require_once 'taken/model/VrijstellingenModel.class.php';
+
 /**
  * PuntenModel.class.php	| 	P.W.G. Brussee (brussee@live.nl)
  * 
@@ -7,7 +10,6 @@ namespace Taken\CRV;
 class PuntenModel {
 
 	public static function resetCorveejaar() {
-		require_once 'taken/model/VrijstellingenModel.class.php';
 		$vrijstellingen = VrijstellingenModel::getAlleVrijstellingen(true); // grouped by uid
 		$matrix = self::loadPuntenTotaalVoorAlleLeden();
 		foreach ($matrix as $uid => $totalen) {
@@ -18,7 +20,7 @@ class PuntenModel {
 			$punten = $totalen['puntenTotaal'];
 			$punten += $totalen['bonusTotaal'];
 			if (array_key_exists($uid, $vrijstellingen)) {
-				$punten += (int) ceil($vrijstellingen[$uid]->getPercentage() * (int) $GLOBALS['corveepunten_per_jaar'] / 100);
+				$punten += self::berekenVrijstellingPunten($vrijstellingen[$uid]);
 			}
 			$punten -= intval($GLOBALS['corveepunten_per_jaar']);
 			self::savePuntenVoorLid($lid, $punten, 0);
@@ -92,6 +94,7 @@ class PuntenModel {
 	
 	public static function loadPuntenVoorAlleLeden($functies=null) {
 		$taken = TakenModel::getAlleTaken(true); // grouped by uid
+		$vrijstellingen = VrijstellingenModel::getAlleVrijstellingen(true); // grouped by uid
 		$matrix = self::loadPuntenTotaalVoorAlleLeden();
 		foreach ($matrix as $uid => $totalen) {
 			$lid = \LidCache::getLid($uid); // false if lid does not exist
@@ -102,16 +105,21 @@ class PuntenModel {
 			if (array_key_exists($uid, $taken)) {
 				$lidtaken = $taken[$uid];
 			}
-			$matrix[$uid] = self::loadPuntenVoorLid($lid, $functies, $lidtaken);
+			$vrijstelling = null;
+			if (array_key_exists($uid, $vrijstellingen)) {
+				$vrijstelling = $vrijstellingen[$uid];
+			}
+			$matrix[$uid] = self::loadPuntenVoorLid($lid, $functies, $lidtaken, $vrijstelling);
 		}
 		return $matrix;
 	}
 	
-	public static function loadPuntenVoorLid(\Lid $lid, $functies=null, $lidtaken=null) {
+	public static function loadPuntenVoorLid(\Lid $lid, $functies=null, $lidtaken=null, $vrijstelling=null) {
 		if ($lidtaken === null) {
 			$lidtaken = TakenModel::getTakenVoorLid($lid->getUid());
+			$vrijstelling = VrijstellingenModel::getVrijstelling($lid->getUid());
 		}
-		if ($functies === null) {
+		if ($functies === null) { // niet per functie sommeren
 			$lijst = array();
 			$lijst['prognose'] = 0;
 			foreach ($lidtaken as $taak) {
@@ -121,12 +129,19 @@ class PuntenModel {
 		else {
 			$lijst = self::sumPuntenPerFunctie($functies, $lidtaken);
 		}
+		if ($vrijstelling !== null) {
+			$lijst['prognose'] += self::berekenVrijstellingPunten($vrijstelling);
+		}
 		$lijst['lid'] = $lid;
 		$lijst['puntenTotaal'] = (int) $lid->getProperty('corvee_punten');
 		$lijst['bonusTotaal'] = (int) $lid->getProperty('corvee_punten_bonus');
 		$lijst['prognose'] += $lijst['puntenTotaal'] + $lijst['bonusTotaal'];
 		$lijst['prognoseColor'] = self::rgbCalculate($lijst['prognose']);
 		return $lijst;
+	}
+	
+	private static function berekenVrijstellingPunten(CorveeVrijstelling $vrijstelling) {
+		return (int) ceil($vrijstelling->getPercentage() * (int) $GLOBALS['corveepunten_per_jaar'] / 100);
 	}
 	
 	private static function sumPrognose($taak) {

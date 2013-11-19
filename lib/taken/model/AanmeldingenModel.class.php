@@ -414,7 +414,7 @@ class AanmeldingenModel {
 		}
 		$repetitie = MaaltijdRepetitiesModel::getRepetitie($mrid);
 		if (self::checkAanmeldFilter($lid, $repetitie->getAbonnementFilter())) {
-			return false; // throw new \Exception('Niet toegestaan vanwege aanmeldrestrictie: '. $repetitie->getAbonnementFilter());
+			return false; //throw new \Exception('Niet toegestaan vanwege aanmeldrestrictie: '. $repetitie->getAbonnementFilter());
 		}
 		return self::newAanmelding(null, $uid, 0, '', $mrid, null);
 	}

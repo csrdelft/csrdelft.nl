@@ -36,7 +36,7 @@ class TakenModel {
 					$vrijstelling = $vrijstellingen[$uid];
 					$datum = strtotime($taak->getDatum());
 					if ($datum > strtotime($vrijstelling->getBeginDatum()) && $datum < strtotime($vrijstelling->getEindDatum())) {
-						continue;
+						continue; // taak valt binnen vrijstelling-periode: suggestie niet weergeven
 					}
 				}
 				$leden_punten[$uid] = PuntenModel::loadPuntenVoorLid($lid, array($functie->getFunctieId() => $functie));

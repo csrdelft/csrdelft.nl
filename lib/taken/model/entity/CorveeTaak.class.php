@@ -276,9 +276,6 @@ class CorveeTaak implements \Agendeerbaar {
 	// Agendeerbaar ############################################################
 	
 	public function getBeginMoment() {
-		if ($this->getIsVerwijderd()) {
-			return null;
-		}
 		return strtotime($this->getDatum());
 	}
 	public function getEindMoment() {

@@ -201,9 +201,6 @@ class Maaltijd implements \Agendeerbaar {
 	// Agendeerbaar ############################################################
 	
 	public function getBeginMoment() {
-		if ($this->getIsVerwijderd()) {
-			return null;
-		}
 		return strtotime($this->getDatum() .' '. $this->getTijd());
 	}
 	public function getEindMoment() {

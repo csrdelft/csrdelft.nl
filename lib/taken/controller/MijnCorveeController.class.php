@@ -38,11 +38,6 @@ class MijnCorveeController extends \ACLController {
 	
 	public function action_mijn() {
 		$taken = TakenModel::getKomendeTakenVoorLid();
-		/*$taken = array();
-		foreach ($lidtaken as $taak) {
-			$datum = strtotime($taak->getDatum());
-			$taken = array_merge($taken, TakenModel::getTakenVoorAgenda($datum, $datum, true));
-		}*/
 		$rooster = TakenModel::getRoosterMatrix($taken);
 		$functies = FunctiesModel::getAlleFuncties(true);
 		$punten = PuntenModel::loadPuntenVoorLid(\LoginLid::instance()->getLid(), $functies);
