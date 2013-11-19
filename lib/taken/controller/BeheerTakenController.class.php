@@ -82,15 +82,19 @@ class BeheerTakenController extends \ACLController {
 	
 	public function action_herinneren() {
 		require_once 'taken/model/HerinneringenModel.class.php';
-		$teller_errors = HerinneringenModel::stuurHerinneringen();
-		$aantal = $teller_errors[0];
-		$errors = sizeof($teller_errors[1]);
+		$verstuurd_errors = HerinneringenModel::stuurHerinneringen();
+		$verstuurd = $verstuurd_errors[0];
+		$errors = $verstuurd_errors[1];
+		$aantal = sizeof($errors);
 		$this->action_beheer();
-		if ($errors > 0) {
-			$this->content->setMelding($errors .' herinnering'. ($errors !== 1 ? 'en' : '') .' niet kunnen versturen!');
+		if ($aantal > 0) {
+			$this->content->setMelding($aantal .' herinnering'. ($aantal !== 1 ? 'en' : '') .' niet kunnen versturen!');
+			foreach ($errors as $error) {
+				$this->content->setMelding($error->getMessage(), 2); // toon wat er allemaal fout is gegaan
+			}
 		}
-		elseif ($aantal > 0) {
-			$this->content->setMelding($aantal .' herinnering'. ($aantal !== 1 ? 'en' : '') .' verstuurd!', 1);
+		if ($verstuurd > 0) {
+			$this->content->setMelding($verstuurd .' herinnering'. ($verstuurd !== 1 ? 'en' : '') .' verstuurd!', 1);
 		}
 		else {
 			$this->content->setMelding('Geen herinneringen verstuurd.', 0);
@@ -207,6 +211,7 @@ class BeheerTakenController extends \ACLController {
 	
 	public function action_email($tid) {
 		$taak = TakenModel::getTaak($tid);
+		require_once 'taken/model/HerinneringenModel.class.php';
 		HerinneringenModel::stuurHerinnering($taak);
 		$this->content = new BeheerTakenView($taak);
 	}

@@ -7,10 +7,11 @@ namespace Taken\CRV;
 class HerinneringenModel {
 
 	public static function stuurHerinnering(CorveeTaak $taak) {
+		$datum = date('d-m-Y', strtotime($taak->getDatum()));
 		$uid = $taak->getLidId();
 		$lid = \LidCache::getLid($uid);
 		if (!$lid instanceof \Lid) {
-			throw new \Exception('Taak nog niet toegewezen aan lid! $uid ='. $uid);
+			throw new \Exception('Taak "'. $taak->getCorveeFunctie()->getNaam() .'" op '. $datum .' is nog niet toegewezen aan lid!'. (!empty($uid) ? ' $uid ='. $uid : ''));
 		}
 		//$to = $lid->getEmail();
 		$to = $uid .'@csrdelft.nl';
@@ -28,7 +29,6 @@ class HerinneringenModel {
 			$headers = str_replace('\r\n', '\n', $headers);
 		}
 		
-		$datum = date('d-m-Y', strtotime($taak->getDatum()));
 		$onderwerp = 'C.S.R. Delft Corvee - '. $datum;
 		$bericht = $taak->getCorveeFunctie()->getEmailBericht();
 		$lidnaam = $lid->getNaamLink('civitas');
@@ -48,12 +48,11 @@ class HerinneringenModel {
 			TakenModel::updateGemaild($taak);
 		}
 		else {
-			throw new \Exception('Corvee email faalt!');
+			throw new \Exception('Corvee email faalt voor '. $lidnaam);
 		}
 	}
 	
-	public static function stuurHerinneringen()
-	{
+	public static function stuurHerinneringen() {
 		$van = strtotime(date('Y-m-d'));
 		$tot = strtotime('+5 weeks', $van);
 		$taken = TakenModel::getTakenVoorAgenda($van, $tot, true);

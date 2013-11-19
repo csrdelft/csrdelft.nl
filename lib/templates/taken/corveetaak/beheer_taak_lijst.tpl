@@ -20,7 +20,7 @@
 {if !$taak->getIsVerwijderd() and (!isset($maaltijd) or !$maaltijd->getIsVerwijderd())}
 	{assign var="wijzigbaar" value="true"}
 	{if $taak->getLidId()}
-			<a href="{$module}/email/{$taak->getTaakId()}" title="Stuur herinnering" class="knop post">
+			<a href="{$module}/email/{$taak->getTaakId()}" title="Verstuur een (extra) herinnering voor deze taak" class="knop post confirm">
 	{/if}
 {/if}
 {if $taak->getIsTelaatGemaild()}
