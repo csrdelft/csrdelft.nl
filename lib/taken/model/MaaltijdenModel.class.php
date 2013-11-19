@@ -135,11 +135,9 @@ class MaaltijdenModel {
 				if (!$maaltijd->getIsGesloten() && $maaltijd->getBeginMoment() < strtotime(date('Y-m-d H:i'))) {
 					$maaltijd = MaaltijdenModel::sluitMaaltijd($maaltijd->getMaaltijdId());
 				}
-				if (!$maaltijd->getIsGesloten()) {
-					if (!empty($filter)) {
-						$verwijderd = AanmeldingenModel::checkAanmeldingenFilter($filter, array($maaltijd));
-						$maaltijd->setAantalAanmeldingen($maaltijd->getAantalAanmeldingen() - $verwijderd);
-					}
+				if (!$maaltijd->getIsGesloten() && !$maaltijd->getIsVerwijderd() && !empty($filter)) {
+					$verwijderd = AanmeldingenModel::checkAanmeldingenFilter($filter, array($maaltijd));
+					$maaltijd->setAantalAanmeldingen($maaltijd->getAantalAanmeldingen() - $verwijderd);
 				}
 			}
 			$db->commit();
@@ -255,8 +253,9 @@ class MaaltijdenModel {
 		$db = \CsrPdo::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
-		return $query->rowCount(); // !== 1) {
-			//throw new \Exception('Update maaltijd faalt: $query->rowCount() ='. $query->rowCount());
+		if ($query->rowCount() !== 1) {
+			throw new \Exception('Update maaltijd faalt: $query->rowCount() ='. $query->rowCount());
+		}
 	}
 	
 	private static function newMaaltijd($mrid, $titel, $limiet, $datum, $tijd, $prijs, $filter) {
@@ -348,7 +347,12 @@ class MaaltijdenModel {
 				$repetitie->setStandaardTijd($maaltijd->getTijd());
 				$maaltijd->setPrijs($repetitie->getStandaardPrijs());
 				$maaltijd->setAanmeldFilter($filter);
-				$updated += self::updateMaaltijd($maaltijd);
+				try {
+					self::updateMaaltijd($maaltijd);
+					$updated++;
+				}
+				catch (\Exception $e) {
+				}
 			}
 			$db->commit();
 			return array($updated, $aanmeldingen);

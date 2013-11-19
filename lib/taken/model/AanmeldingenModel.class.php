@@ -17,7 +17,7 @@ class AanmeldingenModel {
 		if (!\Lid::exists($doorUid)) {
 			throw new \Exception('Lid bestaat niet: $doorUid ='. $doorUid);
 		}
-		if ($maaltijd->getBeginMoment() < strtotime(date('Y-m-d H:i'))) {
+		if (!$maaltijd->getIsGesloten() && $maaltijd->getBeginMoment() < strtotime(date('Y-m-d H:i'))) {
 			$maaltijd = MaaltijdenModel::sluitMaaltijd($mid);
 		}
 		if (!$beheer) {
@@ -53,12 +53,21 @@ class AanmeldingenModel {
 		return $aanmelding;
 	}
 	
-	public static function afmeldenDoorAbonnement(array $maaltijden, $uid, $mrid) {
-		$mids = array();
+	/**
+	 * Called when a MaaltijdAbonnement is being deleted (turned off) or a MaaltijdRepetitie is being deleted.
+	 * 
+	 * @param array $maaltijden Komende maaltijden voor een MaaltijdRepetitie
+	 * @param type $uid Lid voor wie het MaaltijdAbonnement wordt uitschakeld
+	 */
+	public static function afmeldenDoorAbonnement(array $maaltijden, $uid=null) {
+		$aantal = 0;
 		foreach ($maaltijden as $maaltijd) {
-			$mids[] = $maaltijd->getMaaltijdId();
+			if (!$maaltijd->getIsGesloten() && !$maaltijd->getIsVerwijderd()) {
+				self::deleteAanmeldingen($maaltijd->getMaaltijdId(), $uid);
+				$aantal++;
+			}
 		}
-		return self::deleteAanmeldingen($mids, $uid, $mrid);
+		return $aantal;
 	}
 	
 	public static function afmeldenDoorLid($mid, $uid, $beheer=false) {
@@ -66,14 +75,14 @@ class AanmeldingenModel {
 			throw new \Exception('Niet aangemeld');
 		}
 		$maaltijd = MaaltijdenModel::getMaaltijd($mid);
-		if ($maaltijd->getBeginMoment() < strtotime(date('Y-m-d H:i'))) {
+		if (!$maaltijd->getIsGesloten() && $maaltijd->getBeginMoment() < strtotime(date('Y-m-d H:i'))) {
 			$maaltijd = MaaltijdenModel::sluitMaaltijd($mid);
 		}
 		if (!$beheer && $maaltijd->getIsGesloten()) {
 			throw new \Exception('Maaltijd is gesloten');
 		}
 		$aanmelding = self::loadAanmelding($mid, $uid);
-		self::deleteAanmeldingen(array($mid), $uid);
+		self::deleteAanmeldingen($mid, $uid);
 		$maaltijd->setAantalAanmeldingen($maaltijd->getAantalAanmeldingen() - 1 - $aanmelding->getAantalGasten());
 		return $maaltijd;
 	}
@@ -248,30 +257,29 @@ class AanmeldingenModel {
 		return $query->rowCount();
 	}
 	
+	/**
+	 * Called when a Maaltijd is being deleted.
+	 * 
+	 * @param int $mid maaltijd-id
+	 */
 	public static function deleteAanmeldingenVoorMaaltijd($mid) {
-		self::deleteAanmeldingen(array($mid));
+		self::deleteAanmeldingen($mid);
 	}
 	
-	private static function deleteAanmeldingen(array $mids, $uid=null, $mrid=null) {
+	private static function deleteAanmeldingen($mid, $uid=null) {
 		$sql = 'DELETE FROM mlt_aanmeldingen';
-		$sql.= ' WHERE (maaltijd_id=?';
-		for ($i = sizeof($mids); $i > 1; $i--) {
-			$sql.= ' OR maaltijd_id=?';
-		}
-		$sql.= ')';
-		$values = $mids;
+		$sql.= ' WHERE maaltijd_id=?';
+		$values = array($mid);
 		if ($uid !== null) {
 			$sql.= ' AND lid_id=?';
 			$values[] = $uid;
 		}
-		if ($mrid !== null) {
-			$sql.= ' AND door_abonnement=?';
-			$values[] = $mrid;
-		}
 		$db = \CsrPdo::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
-		return $query->rowCount();
+		if ($uid !== null && $query->rowCount() !== 1) {
+			throw new \Exception('Delete aanmelding faalt: $query->rowCount() ='. $query->rowCount());
+		}
 	}
 	
 	private static function updateAanmelding(MaaltijdAanmelding $aanmelding) {
@@ -300,18 +308,21 @@ class AanmeldingenModel {
 	 * @param Maaltijd[] $maaltijden
 	 */
 	public static function checkAanmeldingenFilter($filter, array $maaltijden) {
-		$aantal = 0;
 		$mids = array();
 		foreach ($maaltijden as $maaltijd) {
 			if (!$maaltijd->getIsGesloten() && !$maaltijd->getIsVerwijderd()) {
 				$mids[] = $maaltijd->getMaaltijdId();
 			}
 		}
+		if (empty($mids)) {
+			return 0;
+		}
+		$aantal = 0;
 		$aanmeldingen = self::loadAanmeldingen($mids);
-		foreach ($aanmeldingen as $aanmelding) {
+		foreach ($aanmeldingen as $aanmelding) { // check filter voor elk aangemeld lid
 			$lid = \LidCache::getLid($aanmelding->getLidId());
-			if (!self::checkAanmeldFilter($lid, $filter)) {
-				$aantal += self::deleteAanmeldingen($mids, $lid->getUid());
+			if (!self::checkAanmeldFilter($lid, $filter)) { // verwijder aanmelding indien niet toegestaan
+				$aantal += self::deleteAanmeldingen($aanmelding->getMaaltijdId(), $lid->getUid());
 			}
 		}
 		return $aantal;
@@ -390,7 +401,8 @@ class AanmeldingenModel {
 
 		} // /switch
 		} // /try
-		catch(Exception $e) {
+		catch (Exception $e) {
+			setMelding($e->getMessage(), -1);
 		}
 		return false;
 	}

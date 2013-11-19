@@ -12,7 +12,7 @@ require_once 'taken/model/PuntenModel.class.php';
 class TakenModel {
 
 	public static function updateGemaild(CorveeTaak $taak) {
-		$taak->setWanneerGemaild(date('Y-m-d H:i:s'));
+		$taak->setWanneerGemaild(date('Y-m-d H:i'));
 		self::updateTaak($taak);
 	}
 	
@@ -109,7 +109,7 @@ class TakenModel {
 			PuntenModel::puntenToekennen($taak->getLidId(), $taak->getPunten(), $taak->getBonusMalus());
 			$taak->setPuntenToegekend($taak->getPuntenToegekend() + $taak->getPunten());
 			$taak->setBonusToegekend($taak->getBonusToegekend() + $taak->getBonusMalus());
-			$taak->setWanneerToegekend(date('Y-m-d H:i:s'));
+			$taak->setWanneerToegekend(date('Y-m-d H:i'));
 			self::updateTaak($taak);
 			$db->commit();
 		}

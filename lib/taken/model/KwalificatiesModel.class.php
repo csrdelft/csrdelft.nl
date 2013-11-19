@@ -95,7 +95,7 @@ class KwalificatiesModel {
 			$sql = 'INSERT INTO crv_kwalificaties';
 			$sql.= ' (lid_id, functie_id, wanneer_toegewezen)';
 			$sql.= ' VALUES (?, ?, ?)';
-			$wanneer = date('Y-m-d H:i:s');
+			$wanneer = date('Y-m-d H:i');
 			$values = array($uid, $fid, $wanneer);
 			$query = $db->prepare($sql, $values);
 			$query->execute($values);

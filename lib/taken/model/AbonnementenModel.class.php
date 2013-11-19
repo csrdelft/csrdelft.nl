@@ -306,7 +306,7 @@ class AbonnementenModel {
 		// afmelden bij maaltijden waarbij dit abonnement de aanmelding heeft gedaan
 		$maaltijden = MaaltijdenModel::getKomendeOpenRepetitieMaaltijden($mrid);
 		if (!empty($maaltijden)) {
-			$aantal = AanmeldingenModel::afmeldenDoorAbonnement($maaltijden, $uid, $mrid);
+			$aantal = AanmeldingenModel::afmeldenDoorAbonnement($maaltijden, $uid);
 		}
 		$sql = 'DELETE FROM mlt_abonnementen';
 		$sql.= ' WHERE mlt_repetitie_id=?';
