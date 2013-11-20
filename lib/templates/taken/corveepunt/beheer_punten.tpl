@@ -14,7 +14,7 @@ De kolom prognose geeft aan hoeveel punten het lid naar verwachting totaal zal h
 <p>
 Controleer vooraf zelf of alle punten zijn toegekend naar wens.
 Niet toegewenzen punten voor taken in het verleden, waarvoor wel iemand is ingedeeld, worden geel gemarkeerd in het overzicht onder beheer taken.
-De reset omvat een hertelling:<br />NieuwPuntentotaal = Corveepunten + bonus + ceil(teBehalenCorveepunten * %Vrijstelling) - teBehalenCorveepunten<br />
+De reset omvat een hertelling:<br />NieuwPuntentotaal = Corveepunten + bonus + omhoogAfronden(teBehalenCorveepunten * %Vrijstelling) - teBehalenCorveepunten<br />
 En zet vervolgens de bonus/malus weer op nul.
 <p>
 N.B. Alle corveetaken in het verleden worden bij de reset naar de prullenbak verplaatst en alle verlopen vrijstellingen worden definitief verwijderd!
