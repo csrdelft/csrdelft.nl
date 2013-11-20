@@ -233,9 +233,11 @@ var offsetX = 0;
 var offsetY = 0;
 function startDrag(e) {
 	e = e || window.event;
-	offsetX = mouseX(e);
-	offsetY = mouseY(e);
-	window.addEventListener('mousemove', mouseMoveHandler, true);
+	if (e.target.id === 'taken-popup') {
+		offsetX = mouseX(e);
+		offsetY = mouseY(e);
+		window.addEventListener('mousemove', mouseMoveHandler, true);
+	}
 }
 function stopDrag(e) {
 	window.removeEventListener('mousemove', mouseMoveHandler, true);
@@ -248,8 +250,8 @@ function mouseMoveHandler(e) {
 		var p = document.getElementById('taken-popup');
 		var l = parseInt(p.style.left);
 		var t = parseInt(p.style.top);
-		if (isNaN(l)) l = $('#taken-popup').offset().left;
-		if (isNaN(t)) t = $('#taken-popup').offset().top;
+		if (isNaN(l)) l = $('#taken-popup').offset().left - (document.documentElement.scrollLeft ? document.documentElement.scrollLeft : document.body.scrollLeft);
+		if (isNaN(t)) t = $('#taken-popup').offset().top - (document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop);
 		p.style.left = (l + x - offsetX) + 'px';
 		p.style.top  = (t + y - offsetY) + 'px';
 		offsetX = x;

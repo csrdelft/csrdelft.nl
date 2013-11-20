@@ -17,7 +17,7 @@ class InstellingFormView extends \SimpleHtml {
 		
 		$formFields['key'] = new \RequiredInputField('instelling_id', $key, 'Id');
 		$formFields['key']->forcenotnull = true;
-		$formFields[] = new \TextField('waarde', $value, 'Waarde', 1);
+		$formFields[] = new \AutoresizeTextField('waarde', $value, 'Waarde', 0);
 		
 		$this->_form = new \Formulier('taken-instelling-form', '/actueel/taken/instellingen/opslaan', $formFields);
 	}

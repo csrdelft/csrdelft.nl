@@ -8,19 +8,8 @@
 </head>
 <body>
 <img alt="Beeldmerk van de Vereniging" src="{$csr_pics}/layout/beeldmerk.jpg" style="float: right; padding: 0px 50px;" />
-<h1>{$kop} op {$maaltijd->getDatum()|date_format:"%A %e %B %Y"}</h1>
-<div class="header">
-	<p>Regels omtrent het betalen van de maaltijden op Confide:</p>
-	<ul>
-		<li>Maaltijdprijs: &euro; {$maaltijd->getPrijs()|string_format:"%.2f"}</li>
-		<li>Niet betaald = nb</li>
-		<li>Betaald met machtiging = omcirkel 'm' en vul bedrag in.</li>
-		<li>Contant betaald = bedrag invullen.</li>
-		<li>Schrijf duidelijk in het hokje hoeveel je in de helm hebt gegooid.</li>
-		<li>Bevat derde kolom 'ok'? Dan hebt u nog voldoende tegoed voor deze maaltijd.</li>
-		<li>Als u onvoldoende saldo hebt bij de MaalCie en u betaalt niet voor deze maaltijd dan krijgt u een boete van 20 cent, 1 euro of 2 euro, afhankelijk van hoe negatief uw saldo is!</li>
-	</ul>
-</div>
+<h1>{$kop} op {$maaltijd->getDatum()|date_format:"%A %e %B %Y"}</h1>{assign var=prijs value=$maaltijd->getPrijs()|string_format:"%.2f"}
+<div class="header">{$header|replace:'MAALTIJDPRIJS':$prijs}</div>
 {if !$maaltijd->getIsGesloten()}
 	<h2 style="color: red">De inschrijving voor deze maaltijd is nog niet gesloten
 	{if !$maaltijd->getIsVerwijderd() and !$maaltijd->getIsGesloten() and ($loginlid->hasPermission('P_MAAL_MOD') or opConfide())}

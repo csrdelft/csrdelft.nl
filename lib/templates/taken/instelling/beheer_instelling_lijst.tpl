@@ -5,7 +5,7 @@
 	<td>
 		<a href="{$module}/bewerk/{$instelling->getInstellingId()}" title="Instelling wijzigen" class="knop post confirm popup">{icon get="pencil"}</a>
 	</td>
-	<td>{$instelling->getInstellingId()|replace:'_':' '}</td>
+	<td><nobr>{$instelling->getInstellingId()|replace:'_':' '}</nobr></td>
 	<td>{$instelling->getWaarde()}</td>
 	<td style="text-align:center;">
 		<a href="{$module}/reset/{$instelling->getInstellingId()}" title="Instelling resetten" class="knop post confirm">{icon get="arrow_rotate_anticlockwise"}</a>
