@@ -61,6 +61,9 @@ class Maaltijd implements \Agendeerbaar {
 		$this->setDatum($datum);
 		if ($tijd === null) {
 			$tijd = $GLOBALS['standaard_maaltijdaanvang'];
+			if ($tijd === null) {
+				$tijd = date('H:i');
+			}
 		}
 		$this->setTijd($tijd);
 		if ($prijs === null) {

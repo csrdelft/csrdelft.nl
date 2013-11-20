@@ -5,7 +5,7 @@
 Op deze pagina kunt u vrijstellingen aanmaken, wijzigen en verwijderen. Onderstaande tabel toont alle vrijstellingen in het systeem.
 </p>
 <p>
-N.B. Pas bij het resetten van het corveejaar worden de te behalen corveepunten per jaar ({$jaarpunten}) maal het vrijstellingspercentage toegekend.
+N.B. Pas bij het resetten van het corveejaar worden de te behalen corveepunten per jaar maal het vrijstellingspercentage toegekend.
 </p>
 <div style="float: right;"><a href="{$module}/nieuw" title="Nieuwe vrijstelling" class="knop post popup">{icon get="add"} Nieuwe vrijstelling</a></div>
 <table id="taken-tabel" class="taken-tabel">

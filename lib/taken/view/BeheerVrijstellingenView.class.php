@@ -28,7 +28,6 @@ class BeheerVrijstellingenView extends \SimpleHtml {
 			$smarty->display('taken/taken_menu.tpl');
 			
 			$smarty->assign('vrijstellingen', $this->_vrijstellingen);
-			$smarty->assign('jaarpunten', $GLOBALS['corveepunten_per_jaar']);
 			$smarty->display('taken/vrijstelling/beheer_vrijstellingen.tpl');
 		}
 		elseif (is_string($this->_vrijstellingen)) { // id of deleted corveefunctie
