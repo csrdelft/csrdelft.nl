@@ -25,7 +25,9 @@ class InstellingenModel {
 		'standaard_maaltijdlimiet' => '0',
 		'marge_gasten_verhouding' => '10',
 		'marge_gasten_min' => '3',
-		'marge_gasten_max' => '4'
+		'marge_gasten_max' => '4',
+		'weergave_ledennamen_beheer' => 'volledig',
+		'weergave_ledennamen_corveerooster' => 'civitas'
 	);
 	
 	/**

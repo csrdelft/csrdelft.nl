@@ -23,6 +23,7 @@ class BeheerVoorkeurenView extends \SimpleHtml {
 	public function view() {
 		$smarty = new \Smarty_csr();
 		$smarty->assign('module', '/actueel/taken/voorkeurenbeheer');
+		$smarty->assign('ledenweergave', $GLOBALS['weergave_ledennamen_beheer']);
 		
 		if ($this->_repetities === null) { // voor een lid
 			if (is_array($this->_leden_voorkeuren)) { // lijst van voorkeuren

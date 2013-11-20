@@ -43,7 +43,7 @@
 {if isset($wijzigbaar)}
 		<a href="{$module}/toewijzen/{$taak->getTaakId()}" title="Deze taak toewijzen aan een lid&#013;Sleep om te ruilen" class="knop post popup ruilen" id="taak-{$taak->getTaakId()}"{if $taak->getLidId()} lid_id="{$taak->getLidId()}">{icon get="user_green"}{else}>{icon get="user_red"}{/if}</a>
 	{if $taak->getLidId()}
-			&nbsp;{$taak->getLid()->getNaamLink('civitas', 'link')}
+			&nbsp;{$taak->getLid()->getNaamLink($ledenweergave, 'link')}
 	{/if}
 {/if}
 	</td>

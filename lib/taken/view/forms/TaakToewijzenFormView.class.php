@@ -26,7 +26,7 @@ class TaakToewijzenFormView extends \SimpleHtml {
 			else {
 				$suggesties[$uid] = $puntenlijst['prognose'];
 			}
-			$suggesties[$uid] .= ' : '. $lid->getNaamLink('civitas', 'plain');
+			$suggesties[$uid] .= ' : '. $lid->getNaamLink($GLOBALS['weergave_ledennamen_beheer'], 'plain');
 		}
 		$cssClass = 'smile';
 		$css = array();

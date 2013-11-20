@@ -5,7 +5,7 @@
 	{if $voorkeur}
 		{if $smarty.foreach.loop.first}
 <tr id="voorkeur-row-{$voorkeur->getLid()->getUid()}">
-	<td>{$voorkeur->getLid()->getNaamLink('civitas', 'link')}</td>
+	<td>{$voorkeur->getLid()->getNaamLink($ledenweergave, 'link')}</td>
 		{/if}
 		{include file='taken/voorkeur/beheer_voorkeur_veld.tpl' voorkeur=$voorkeur crid=$voorkeur->getCorveeRepetitieId() uid=$voorkeur->getLidId()}
 		{if $smarty.foreach.loop.last}

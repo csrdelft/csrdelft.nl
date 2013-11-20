@@ -2,7 +2,7 @@
 	beheer_punten_lijst.tpl	|	P.W.G. Brussee (brussee@live.nl)
 *}
 <tr id="punten-row-{$puntenlijst.lid->getUid()}">
-	<td>{$puntenlijst.lid->getNaamLink('civitas', 'link')}</td>
+	<td>{$puntenlijst.lid->getNaamLink($ledenweergave, 'link')}</td>
 {foreach from=$puntenlijst.aantal key=fid item=aantal}
 	<td>{if $aantal !== 0}{$puntenlijst.punten[$fid]}{/if}{if $puntenlijst.bonus[$fid] > 0}+{/if}{if $puntenlijst.bonus[$fid] !== 0}{$puntenlijst.bonus[$fid]}{/if}{if $aantal !== 0} ({$aantal}){/if}</td>
 {/foreach}

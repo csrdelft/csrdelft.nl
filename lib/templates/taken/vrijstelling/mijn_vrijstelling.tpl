@@ -8,12 +8,13 @@
 <p>
 In de onderstaande tabel staat de vrijstelling die u heeft gekregen.
 </p>
-<table class="taken-tabel">
+<table class="taken-tabel" style="width: 650px;">
 	<thead>
 		<tr>
 			<th>Van</th>
 			<th>Tot</th>
 			<th>Percentage</th>
+			<th>Punten</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -21,6 +22,7 @@ In de onderstaande tabel staat de vrijstelling die u heeft gekregen.
 			<td>{$vrijstelling->getBeginDatum()|date_format:"%e %b %Y"}</td>
 			<td>{$vrijstelling->getEindDatum()|date_format:"%e %b %Y"}</td>
 			<td>{$vrijstelling->getPercentage()}%</td>
+			<td>{$vrijstelling->getPunten()}</td>
 		</tr>
 	</tbody>
 </table>
