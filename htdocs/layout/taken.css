@@ -25,6 +25,7 @@ select {
 	padding: 1px;
 	padding-left: 3px;
 	height: 20px;
+	margin: 0px;
 }
 select.multiple {
 	height: auto;
@@ -86,10 +87,13 @@ input.IntField, input.FloatField {
 	width: 40px !important;
 	text-align: right;
 }
+input.VinkField {
+	margin-top: 4px !important;
+}
 
 #taken-popup-buttons {
 	float: right;
-	margin-top: 30px;
+	margin-top: 20px;
 }
 
 /* taken menu */

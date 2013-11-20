@@ -19,6 +19,7 @@ class InstellingenModel {
 		'standaard_kwalificatie' => '0',
 		'standaard_functie_punten' => '1',
 		'standaard_aantal_corveers' => '1',
+		'standaard_vrijstelling_percentage' => '100',
 		'standaard_maaltijdaanvang' => '18:00',
 		'standaard_maaltijdprijs' => '3.00',
 		'standaard_maaltijdlimiet' => '0',

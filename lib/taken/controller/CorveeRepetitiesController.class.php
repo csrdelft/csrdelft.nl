@@ -103,7 +103,8 @@ class CorveeRepetitiesController extends \ACLController {
 	public function action_bijwerken($crid) {
 		$this->action_opslaan($crid);
 		if ($this->content instanceof CorveeRepetitiesView) { // opslaan succesvol
-			$aantal = TakenModel::updateRepetitieTaken($this->content->getRepetitie());
+			$verplaats = isset($_POST['verplaats_dag']);
+			$aantal = TakenModel::updateRepetitieTaken($this->content->getRepetitie(), $verplaats);
 			if ($aantal['update'] < $aantal['day']) {
 				$aantal['update'] = $aantal['day'];
 			}

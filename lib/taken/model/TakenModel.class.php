@@ -539,7 +539,7 @@ class TakenModel {
 		return $result;
 	}
 	
-	public static function updateRepetitieTaken(CorveeRepetitie $repetitie) {
+	public static function updateRepetitieTaken(CorveeRepetitie $repetitie, $verplaats) {
 		$functie = FunctiesModel::getFunctie($repetitie->getFunctieId());
 		$db = \CsrPdo::instance();
 		try {
@@ -569,17 +569,19 @@ class TakenModel {
 			$daycount = 0;
 			foreach ($taken as $taak) {
 				$datum = strtotime($taak->getDatum());
-				$shift = $repetitie->getDagVanDeWeek() - date('w', $datum);
-				if ($shift > 0) {
-					$datum = strtotime('+'. $shift .' days', $datum);
-				}
-				elseif ($shift < 0) {
-					$datum = strtotime($shift .' days', $datum);
-				}
-				if ($shift !== 0) {
-					$taak->setDatum(date('Y-m-d', $datum));
-					self::updateTaak($taak);
-					$daycount++;
+				if ($verplaats) {
+					$shift = $repetitie->getDagVanDeWeek() - date('w', $datum);
+					if ($shift > 0) {
+						$datum = strtotime('+'. $shift .' days', $datum);
+					}
+					elseif ($shift < 0) {
+						$datum = strtotime($shift .' days', $datum);
+					}
+					if ($shift !== 0) {
+						$taak->setDatum(date('Y-m-d', $datum));
+						self::updateTaak($taak);
+						$daycount++;
+					}
 				}
 				$mid = $taak->getMaaltijdId();
 				if ($mid !== null) {

@@ -320,7 +320,7 @@ class MaaltijdenModel {
 		return $result;
 	}
 	
-	public static function updateRepetitieMaaltijden(MaaltijdRepetitie $repetitie) {
+	public static function updateRepetitieMaaltijden(MaaltijdRepetitie $repetitie, $verplaats) {
 		$db = \CsrPdo::instance();
 		try {
 			$db->beginTransaction();
@@ -333,17 +333,19 @@ class MaaltijdenModel {
 				$aanmeldingen = AanmeldingenModel::checkAanmeldingenFilter($filter, $maaltijden);
 			}
 			foreach ($maaltijden as $maaltijd) {
-				$datum = strtotime($maaltijd->getDatum());
-				$shift = $repetitie->getDagVanDeWeek() - date('w', $datum);
-				if ($shift > 0) {
-					$datum = strtotime('+'. $shift .' days', $datum);
-				}
-				elseif ($shift < 0) {
-					$datum = strtotime($shift .' days', $datum);
+				if ($verplaats) {
+					$datum = strtotime($maaltijd->getDatum());
+					$shift = $repetitie->getDagVanDeWeek() - date('w', $datum);
+					if ($shift > 0) {
+						$datum = strtotime('+'. $shift .' days', $datum);
+					}
+					elseif ($shift < 0) {
+						$datum = strtotime($shift .' days', $datum);
+					}
+					$maaltijd->setDatum(date('Y-m-d', $datum));
 				}
 				$maaltijd->setTitel($repetitie->getStandaardTitel());
 				$maaltijd->setAanmeldLimiet($repetitie->getStandaardLimiet());
-				$maaltijd->setDatum(date('Y-m-d', $datum));
 				$repetitie->setStandaardTijd($maaltijd->getTijd());
 				$maaltijd->setPrijs($repetitie->getStandaardPrijs());
 				$maaltijd->setAanmeldFilter($filter);

@@ -1,6 +1,7 @@
 {*
 	taken_menu.tpl	|	P.W.G. Brussee (brussee@live.nl)
 *}
+<div id="taken-popup-background"{if $popup} style="display: block;"{/if}></div>{if $popup}{$popup->view()}{/if}
 <div id="taken-menu">
 	<ul class="horizontal">
 		<li{if $module === '/actueel/taken/maaltijden'} class="active"{/if}>
@@ -71,7 +72,5 @@
 	</div>
 </div>
 {/if}
-<div id="taken-popup-background"{if $popup} style="display: block;"{/if}></div>
-{if $popup}{$popup->view()}{/if}
 <table style="width: 100%;"><tr id="taken-melding"><td>{$melding}</td></tr></table>
 <h1>{$kop}</h1>

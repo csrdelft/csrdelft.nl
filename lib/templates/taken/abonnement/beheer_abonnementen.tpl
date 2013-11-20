@@ -13,8 +13,8 @@ Op deze pagina kunt u alle abonnementen beheren en zoeken.
 {/foreach}
 	</select>
 </form>
-<label for="toon" style="margin-right: 101px;">Toon abonnementen:</label>
-<select name="toon" onchange="taken_loading();location.href='{$module}/'+this.value;">
+<div style="width: 30%; display: inline-block;"><label for="toon">Toon abonnementen:</label>
+</div><select name="toon" onchange="taken_loading();location.href='{$module}/'+this.value;" style="margin: 3px 1px;">
 	<option value="beheer" class="arrow"{if $toon === 'waarschuwing'} selected="selected"{/if}>waarschuwingen</option>
 	<option value="ingeschakeld" class="arrow"{if $toon === 'in'} selected="selected"{/if}>ingeschakeld</option>
 	<option value="abonneerbaar" class="arrow"{if $toon === 'abo'} selected="selected"{/if}>abonneerbaar</option>

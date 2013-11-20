@@ -15,7 +15,7 @@ class MaaltijdRepetitieFormView extends \SimpleHtml {
 	private $_form;
 	private $_mrid;
 	
-	public function __construct($mrid, $dag=null, $periode=null, $titel=null, $tijd=null, $prijs=null, $abo=null, $limiet=null, $filter=null) {
+	public function __construct($mrid, $dag=null, $periode=null, $titel=null, $tijd=null, $prijs=null, $abo=null, $limiet=null, $filter=null, $verplaats=null) {
 		$this->_mrid = $mrid;
 		
 		$suggesties = array();
@@ -42,6 +42,10 @@ class MaaltijdRepetitieFormView extends \SimpleHtml {
 		$formFields[] = new \FloatField('standaard_prijs', $prijs, 'Standaard prijs (€)', 50.00, 0.00);
 		$formFields[] = new \IntField('standaard_limiet', $limiet, 'Standaard limiet', 200, 0);
 		$formFields['filter'] = new \InputField('abonnement_filter', $filter, 'Aanmeldrestrictie', 255, $suggesties);
+		if ($this->_mrid !== 0) {
+			$formFields['dag'] = new \VinkField('verplaats_dag', $verplaats, 'Verplaatsen');
+			$formFields['dag']->title = 'Verplaats naar dag v/d week bij bijwerken';
+		}
 		
 		$this->_form = new \Formulier('taken-maaltijd-repetitie-form', '/actueel/taken/maaltijdrepetities/opslaan/'. $mrid, $formFields);
 	}

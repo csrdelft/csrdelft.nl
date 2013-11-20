@@ -21,8 +21,8 @@ class FunctieFormView extends \SimpleHtml {
 		$formFields['naam']->forcenotnull = true;
 		$formFields['afk'] = new \RequiredInputField('afkorting', $afk, 'Afkorting', 3);
 		$formFields['afk']->forcenotnull = true;
-		$formFields[] = new \TextField('omschrijving', $omschrijving, 'Omschrijving', 3);
-		$formFields[] = new \TextField('email_bericht', $email, 'Email', 11);
+		$formFields[] = new \TextField('omschrijving', $omschrijving, 'Omschrijving', 2);
+		$formFields[] = new \TextField('email_bericht', $email, 'Email', 9);
 		$formFields[] = new \IntField('standaard_punten', $punten, 'Standaard punten', 10, 0);
 		$formFields['kwali'] = new \VinkField('kwalificatie_benodigd', $kwali, 'Kwalificatie benodigd');
 		if ($this->_fid !== 0) {

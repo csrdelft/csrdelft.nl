@@ -22,16 +22,19 @@ class CorveeVrijstelling {
 	private $eind_datum; # date
 	private $percentage; # int 3
 	
-	public function __construct($uid=null, $begin='', $eind='', $percentage=100) {
+	public function __construct($uid=null, $begin=null, $eind=null, $percentage=null) {
 		$this->lid_id = $uid;
-		if ($begin === '') {
+		if ($begin === null) {
 			$begin = date('Y-m-d');
 		}
 		$this->setBeginDatum($begin);
-		if ($eind === '') {
+		if ($eind === null) {
 			$eind = date('Y-m-d');
 		}
 		$this->setEindDatum($eind);
+		if ($percentage === null) {
+			$percentage = intval($GLOBALS['standaard_vrijstelling_percentage']);
+		}
 		$this->setPercentage($percentage);
 	}
 	

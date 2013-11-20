@@ -193,6 +193,7 @@ class FormElement{
 class FormField extends FormElement{
 	public $name;					//naam van het veld in POST
 	public $value;					//welke initiele waarde heeft het veld?
+	public $title;					//omschrijving bij mouseover title
 	public $disabled=false;			//veld uitgeschakeld?
 	public $notnull=false; 			//mag het veld leeg zijn?
 	public $forcenotnull=false;		//mag het veld echt niet leeg zijn? (ook voor LEDEN_MOD)
@@ -273,7 +274,7 @@ class FormField extends FormElement{
 		if($this->error!=''){
 			$cssclass.=' metfouten';
 		}
-		return '<div class="'.$cssclass.'" id="'.$this->name.'">';
+		return '<div class="'.$cssclass.'" id="'.$this->name.'" '.$this->getInputAttribute('title').'>';
 	}
 
 	/**
@@ -350,6 +351,7 @@ class FormField extends FormElement{
 			case 'class': return 'class="'.implode(' ', $this->getInputClasses()).'"'; break;
 			case 'value': return 'value="'.htmlspecialchars($this->value).'"'; break;
 			case 'name': return 'name="'.$this->name.'"'; break;
+			case 'title': return 'title="'.$this->title.'"'; break;
 			case 'disabled':
 				if($this->disabled){
 					return 'disabled';

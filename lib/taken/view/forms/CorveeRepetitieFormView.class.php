@@ -14,7 +14,7 @@ class CorveeRepetitieFormView extends \SimpleHtml {
 	private $_form;
 	private $_crid;
 	
-	public function __construct($crid, $mrid=null, $dag=null, $periode=null, $fid=null, $aantal=null, $voorkeur=null) {
+	public function __construct($crid, $mrid=null, $dag=null, $periode=null, $fid=null, $aantal=null, $voorkeur=null, $verplaats=null) {
 		$this->_crid = $crid;
 		
 		$functieNamen = FunctiesModel::getAlleFuncties(true); // grouped by fid
@@ -37,6 +37,10 @@ class CorveeRepetitieFormView extends \SimpleHtml {
 		}
 		$formFields[] = new \SelectField('mlt_repetitie_id', $mrid, 'Maaltijdrepetitie', $repetitieNamen);
 		$formFields[] = new \IntField('standaard_aantal', $aantal, 'Aantal corveeërs', 10, 1);
+		if ($this->_crid !== 0) {
+			$formFields['dag'] = new \VinkField('verplaats_dag', $verplaats, 'Verplaatsen');
+			$formFields['dag']->title = 'Verplaats naar dag v/d week bij bijwerken';
+		}
 		
 		$this->_form = new \Formulier('taken-corvee-repetitie-form', '/actueel/taken/corveerepetities/opslaan/'. $crid, $formFields);
 	}
