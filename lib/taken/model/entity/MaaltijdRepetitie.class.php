@@ -36,20 +36,32 @@ class MaaltijdRepetitie {
 	private $standaard_limiet; # int 11
 	private $abonnement_filter; # string 255
 	
-	public function __construct($mrid=0, $dag=0, $periode=0, $titel='', $tijd='', $prijs=null, $abo=true, $limiet=0, $filter='') {
+	public function __construct($mrid=0, $dag=null, $periode=null, $titel='', $tijd=null, $prijs=null, $abo=null, $limiet=null, $filter='') {
 		$this->mlt_repetitie_id = (int) $mrid;
+		if ($dag === null) {
+			$dag = intval($GLOBALS['standaard_repetitie_weekdag']);
+		}
 		$this->setDagVanDeWeek($dag);
+		if ($periode === null) {
+			$periode = intval($GLOBALS['standaard_repetitie_periode']);
+		}
 		$this->setPeriodeInDagen($periode);
 		$this->setStandaardTitel($titel);
-		if ($tijd === '') {
-			$tijd = date('H:i');
+		if ($tijd === null) {
+			$tijd = $GLOBALS['standaard_maaltijdaanvang'];
 		}
 		$this->setStandaardTijd($tijd);
 		if ($prijs === null) {
 			$prijs = floatval($GLOBALS['standaard_maaltijdprijs']);
 		}
 		$this->setStandaardPrijs($prijs);
+		if ($abo === null) {
+			$abo = (bool) $GLOBALS['standaard_abonneerbaar'];
+		}
 		$this->setAbonneerbaar($abo);
+		if ($limiet === null) {
+			$limiet = intval($GLOBALS['standaard_maaltijdlimiet']);
+		}
 		$this->setStandaardLimiet($limiet);
 		$this->setAbonnementFilter($filter);
 	}

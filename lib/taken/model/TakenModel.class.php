@@ -54,7 +54,7 @@ class TakenModel {
 					}
 					// corrigeer prognose in suggestielijst vóór de aanvang van de vrijstellingsperiode
 					if ($vrijstelling !== null && $datum < strtotime($vrijstelling->getBeginDatum())) {
-						$leden_punten[$uid]['prognose'] -= PuntenModel::berekenVrijstellingPunten($vrijstelling);
+						$leden_punten[$uid]['prognose'] -= $vrijstelling->getPunten();
 					}
 				}
 			}
@@ -271,7 +271,7 @@ class TakenModel {
 	
 	public static function verwijderOudeTaken() {
 		$sql = 'UPDATE crv_taken';
-		$sql.= ' SET verwijderd=true';
+		$sql.= ' SET verwijderd = true';
 		$sql.= ' WHERE datum < ?';
 		$values = array(date('Y-m-d'));
 		$db = \CsrPdo::instance();

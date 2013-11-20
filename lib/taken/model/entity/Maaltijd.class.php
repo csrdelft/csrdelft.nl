@@ -45,19 +45,22 @@ class Maaltijd implements \Agendeerbaar {
 	
 	private $aantal_aanmeldingen;
 	
-	public function __construct($mid=0, $mrid=null, $titel='', $limiet=0, $datum='', $tijd='', $prijs=null, $gesloten=false, $wanneer_gesloten=null, $verwijderd=false, $filter='') {
+	public function __construct($mid=0, $mrid=null, $titel='', $limiet=null, $datum=null, $tijd=null, $prijs=null, $gesloten=false, $wanneer_gesloten=null, $verwijderd=false, $filter='') {
 		$this->maaltijd_id = (int) $mid;
 		if ($mrid !== null) {
 			$this->mlt_repetitie_id = (int) $mrid;
 		}
 		$this->setTitel($titel);
+		if ($limiet === null) {
+			$limiet = intval($GLOBALS['standaard_maaltijdlimiet']);
+		}
 		$this->setAanmeldLimiet($limiet);
-		if ($datum === '') {
+		if ($datum === null) {
 			$datum = date('Y-m-d');
 		}
 		$this->setDatum($datum);
-		if ($tijd === '') {
-			$tijd = date('H:i');
+		if ($tijd === null) {
+			$tijd = $GLOBALS['standaard_maaltijdaanvang'];
 		}
 		$this->setTijd($tijd);
 		if ($prijs === null) {

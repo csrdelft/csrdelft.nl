@@ -48,13 +48,13 @@ class CorveeTaak implements \Agendeerbaar {
 	
 	private $corvee_functie;
 	
-	public function __construct($tid=0, $fid=0, $uid=null, $crid=null, $mid=null, $datum='', $punten=0, $bonus_malus=0, $toegekend=0, $bonus_toegekend=0, $wanneer=null, $gemaild='', $verwijderd=false) {
+	public function __construct($tid=0, $fid=0, $uid=null, $crid=null, $mid=null, $datum=null, $punten=0, $bonus_malus=0, $toegekend=0, $bonus_toegekend=0, $wanneer=null, $gemaild='', $verwijderd=false) {
 		$this->taak_id = (int) $tid;
 		$this->setFunctieId($fid);
 		$this->setLidId($uid);
 		$this->setCorveeRepetitieId($crid);
 		$this->setMaaltijdId($mid);
-		if ($datum === '') {
+		if ($datum === null) {
 			$datum = date('Y-m-d');
 		}
 		$this->setDatum($datum);
@@ -103,6 +103,9 @@ class CorveeTaak implements \Agendeerbaar {
 	}
 	public function getBonusToegekend() {
 		return (int) $this->bonus_toegekend;
+	}
+	public function getPuntenPrognose() {
+		return $this->getPunten() + $this->getBonusMalus() - $this->getPuntenToegekend() - $this->getBonusToegekend();
 	}
 	public function getWanneerToegekend() {
 		return $this->wanneer_toegekend;

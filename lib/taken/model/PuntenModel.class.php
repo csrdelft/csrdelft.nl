@@ -10,6 +10,7 @@ require_once 'taken/model/VrijstellingenModel.class.php';
 class PuntenModel {
 
 	public static function resetCorveejaar() {
+		$aantal = 0;
 		$errors = array();
 		$vrijstellingen = VrijstellingenModel::getAlleVrijstellingen(true); // grouped by uid
 		$matrix = self::loadPuntenTotaalVoorAlleLeden();
@@ -24,19 +25,21 @@ class PuntenModel {
 				$vrijstelling = null;
 				if (array_key_exists($uid, $vrijstellingen) && time() > strtotime($vrijstellingen[$uid]->getEindDatum())) {
 					$vrijstelling = $vrijstellingen[$uid];
-					$punten += self::berekenVrijstellingPunten($vrijstelling);
+					$punten += $vrijstelling->getPunten();
 				}
 				$punten -= intval($GLOBALS['corveepunten_per_jaar']);
 				self::savePuntenVoorLid($lid, $punten, 0);
 				if ($vrijstelling !== null) {
 					VrijstellingenModel::verwijderVrijstelling($vrijstelling->getLidId());
+					$aantal++;
 				}
 			}
 			catch (\Exception $e) {
 				$errors[] = $e;
 			}
 		}
-		return $errors;
+		$taken = TakenModel::verwijderOudeTaken();
+		return array($aantal, $taken, $errors);
 	}
 	
 	public static function puntenToekennen($uid, $punten, $bonus_malus) {
@@ -135,14 +138,14 @@ class PuntenModel {
 			$lijst = array();
 			$lijst['prognose'] = 0;
 			foreach ($lidtaken as $taak) {
-				$lijst['prognose'] += self::sumPrognose($taak);
+				$lijst['prognose'] += $taak->getPuntenPrognose();
 			}
 		}
 		else {
 			$lijst = self::sumPuntenPerFunctie($functies, $lidtaken);
 		}
 		if ($vrijstelling !== null) {
-			$lijst['prognose'] += self::berekenVrijstellingPunten($vrijstelling);
+			$lijst['prognose'] += $vrijstelling->getPunten();
 		}
 		$lijst['lid'] = $lid;
 		$lijst['puntenTotaal'] = (int) $lid->getProperty('corvee_punten');
@@ -150,14 +153,6 @@ class PuntenModel {
 		$lijst['prognose'] += $lijst['puntenTotaal'] + $lijst['bonusTotaal'];
 		$lijst['prognoseColor'] = self::rgbCalculate($lijst['prognose']);
 		return $lijst;
-	}
-	
-	public static function berekenVrijstellingPunten(CorveeVrijstelling $vrijstelling) {
-		return (int) ceil($vrijstelling->getPercentage() * (int) $GLOBALS['corveepunten_per_jaar'] / 100);
-	}
-	
-	private static function sumPrognose($taak) {
-		return $taak->getPunten() + $taak->getBonusMalus() - $taak->getPuntenToegekend() - $taak->getBonusToegekend();
 	}
 	
 	private static function sumPuntenPerFunctie($functies, $taken) {
@@ -177,7 +172,7 @@ class PuntenModel {
 				$sumPunten[$fid] += $taak->getPuntenToegekend();
 				$sumBonus[$fid] += $taak->getBonusToegekend();
 			}
-			$sumPrognose += self::sumPrognose($taak);
+			$sumPrognose += $taak->getPuntenPrognose();
 		}
 		return array('aantal' => $sumAantal, 'punten' => $sumPunten, 'bonus' => $sumBonus, 'prognose' => $sumPrognose, 'prognoseColor' => self::rgbCalculate($sumPrognose));
 	}

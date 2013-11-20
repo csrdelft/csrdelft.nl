@@ -51,6 +51,9 @@ class CorveeVrijstelling {
 	public function getPercentage() {
 		return (int) $this->percentage;
 	}
+	public function getPunten() {
+		return (int) ceil($this->getPercentage() * intval($GLOBALS['corveepunten_per_jaar']) / 100);
+	}
 	
 	public function setBeginDatum($datum) {
 		if (!is_string($datum)) {

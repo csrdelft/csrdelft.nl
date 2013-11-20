@@ -390,7 +390,7 @@ class MaaltijdenModel {
 				$maaltijd = self::newMaaltijd(
 					$repetitie->getMaaltijdRepetitieId(),
 					$repetitie->getStandaardTitel(),
-					intval($repetitie->getStandaardLimiet()),
+					$repetitie->getStandaardLimiet(),
 					date('Y-m-d', $datum),
 					$repetitie->getStandaardTijd(),
 					$repetitie->getStandaardPrijs(),

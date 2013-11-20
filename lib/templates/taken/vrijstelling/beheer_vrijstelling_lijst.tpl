@@ -9,6 +9,7 @@
 	<td>{$vrijstelling->getBeginDatum()|date_format:"%e %b %Y"}</td>
 	<td>{$vrijstelling->getEindDatum()|date_format:"%e %b %Y"}</td>
 	<td>{$vrijstelling->getPercentage()}%</td>
+	<td>{$vrijstelling->getPunten()}</td>
 	<td style="text-align:center;">
 		<a href="{$module}/verwijder" post="voor_lid={$vrijstelling->getLidId()}" title="Vrijstelling definitief verwijderen" class="knop post confirm">{icon get="cross"}</a>
 	</td>

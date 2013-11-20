@@ -43,13 +43,25 @@ class CorveeRepetitie {
 	
 	private $corvee_functie;
 	
-	public function __construct($crid=0, $mrid=null, $dag=0, $periode=0, $fid=0, $aantal=1, $voorkeur=true) {
+	public function __construct($crid=0, $mrid=null, $dag=null, $periode=null, $fid=0, $aantal=null, $voorkeur=null) {
 		$this->crv_repetitie_id = (int) $crid;
 		$this->setMaaltijdRepetitieId($mrid);
+		if ($dag === null) {
+			$dag = intval($GLOBALS['standaard_repetitie_weekdag']);
+		}
 		$this->setDagVanDeWeek($dag);
+		if ($periode === null) {
+			$periode = intval($GLOBALS['standaard_repetitie_periode']);
+		}
 		$this->setPeriodeInDagen($periode);
 		$this->setFunctieId($fid);
+		if ($aantal === null) {
+			$aantal = intval($GLOBALS['standaard_aantal_corveers']);
+		}
 		$this->setStandaardAantal($aantal);
+		if ($voorkeur === null) {
+			$voorkeur = (bool) $GLOBALS['standaard_voorkeurbaar'];
+		}
 		$this->setVoorkeurbaar($voorkeur);
 	}
 	

@@ -11,11 +11,20 @@ class InstellingenModel {
 
 	private static $_instellingen = null;
 	private static $_defaults = array(
+		'corveepunten_per_jaar' => '11',
+		'standaard_repetitie_weekdag' => '4',
+		'standaard_repetitie_periode' => '7',
+		'standaard_abonneerbaar' => '1',
+		'standaard_voorkeurbaar' => '1',
+		'standaard_kwalificatie' => '0',
+		'standaard_functie_punten' => '1',
+		'standaard_aantal_corveers' => '1',
+		'standaard_maaltijdaanvang' => '18:00',
 		'standaard_maaltijdprijs' => '3.00',
+		'standaard_maaltijdlimiet' => '0',
 		'marge_gasten_verhouding' => '10',
 		'marge_gasten_min' => '3',
-		'marge_gasten_max' => '4',
-		'corveepunten_per_jaar' => '11'
+		'marge_gasten_max' => '4'
 	);
 	
 	/**
