@@ -1,7 +1,6 @@
 <?php
 namespace Taken\MLT;
 
-require_once 'taken/model/InstellingenModel.class.php';
 require_once 'taken/view/BeheerInstellingenView.class.php';
 require_once 'taken/view/forms/InstellingFormView.class.php';
 
@@ -20,10 +19,9 @@ class BeheerInstellingenController extends \ACLController {
 		}
 		else {
 			$this->acl = array(
-				'nieuw' => 'P_CORVEE_MOD',
 				'bewerk' => 'P_CORVEE_MOD',
 				'opslaan' => 'P_CORVEE_MOD',
-				'verwijder' => 'P_CORVEE_MOD'
+				'reset' => 'P_CORVEE_MOD'
 			);
 		}
 		$this->action = 'beheer';
@@ -45,11 +43,6 @@ class BeheerInstellingenController extends \ACLController {
 		$this->content->addScript('taken.js');
 	}
 	
-	public function action_nieuw() {
-		$instelling = new Instelling();
-		$this->content = new InstellingFormView($instelling->getInstellingId(), $instelling->getWaarde());
-	}
-	
 	public function action_bewerk($key) {
 		$instelling = InstellingenModel::getInstelling($key);
 		$this->content = new InstellingFormView($instelling->getInstellingId(), $instelling->getWaarde());
@@ -66,9 +59,10 @@ class BeheerInstellingenController extends \ACLController {
 		}
 	}
 	
-	public function action_verwijder($key) {
+	public function action_reset($key) {
 		InstellingenModel::verwijderInstelling($key);
-		$this->content = new BeheerInstellingenView($key);
+		$instelling = InstellingenModel::getInstelling($key);
+		$this->content = new BeheerInstellingenView($instelling);
 	}
 }
 

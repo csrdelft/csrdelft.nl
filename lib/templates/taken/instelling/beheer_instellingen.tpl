@@ -2,19 +2,19 @@
 	beheer_instellingen.tpl	|	P.W.G. Brussee (brussee@live.nl)
 *}
 <p>
-Op deze pagina kunt u instellingen aanmaken, wijzigen en verwijderen. Onderstaande tabel toont alle instellingen in het systeem.
+Op deze pagina kunt u instellingen wijzigen en resetten.
+Onderstaande tabel toont alle instellingen in het systeem.
 </p>
 <p>
 N.B. Deze instellingen zijn essentieel voor het systeem!
 </p>
-<div style="float: right;"><a href="{$module}/nieuw" title="Nieuwe instelling" class="knop post popup">{icon get="add"} Nieuwe instelling</a></div>
 <table id="taken-tabel" class="taken-tabel">
 	<thead>
 		<tr>
 			<th>Wijzig</th>
 			<th>Id</th>
 			<th>Waarde</th>
-			<th title="Definitief verwijderen" style="text-align: center;">{icon get="cross"}</th>
+			<th>Reset</th>
 		</tr>
 	</thead>
 	<tbody>

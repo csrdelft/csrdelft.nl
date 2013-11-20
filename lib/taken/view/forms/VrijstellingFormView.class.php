@@ -18,8 +18,8 @@ class VrijstellingFormView extends \SimpleHtml {
 		$this->_uid = $uid;
 		
 		$formFields[] = new \RequiredLidField('lid_id', $uid, 'Naam of lidnummer');
-		$formFields[] = new \DatumField('begin_datum', $begin, 'Van', date('Y')+2, date('Y')-2);
-		$formFields[] = new \DatumField('eind_datum', $eind, 'Tot', date('Y')+2, date('Y')-2);
+		$formFields[] = new \DatumField('begin_datum', $begin, 'Vanaf', date('Y')+1, date('Y'));
+		$formFields[] = new \DatumField('eind_datum', $eind, 'Tot en met', date('Y')+1, date('Y'));
 		$formFields[] = new \IntField('percentage', $percentage, 'Percentage (%)', 100, 0);
 		
 		$this->_form = new \Formulier('taken-vrijstelling-form', '/actueel/taken/vrijstellingen/opslaan', $formFields);

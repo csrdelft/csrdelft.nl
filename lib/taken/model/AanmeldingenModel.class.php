@@ -75,7 +75,7 @@ class AanmeldingenModel {
 			throw new \Exception('Niet aangemeld');
 		}
 		$maaltijd = MaaltijdenModel::getMaaltijd($mid);
-		if (!$maaltijd->getIsGesloten() && $maaltijd->getBeginMoment() < strtotime(date('Y-m-d H:i'))) {
+		if (!$maaltijd->getIsGesloten() && $maaltijd->getBeginMoment() < time()) {
 			$maaltijd = MaaltijdenModel::sluitMaaltijd($mid);
 		}
 		if (!$beheer && $maaltijd->getIsGesloten()) {
@@ -336,7 +336,6 @@ class AanmeldingenModel {
 		if (sizeof($filter) !== 2) {
 			throw new \Exception('Check aanmeldfilter faalt');
 		}
-		try {
 		switch ($filter[0]) {
 
 		// Behoort een lid tot een bepaalde verticale?
@@ -364,19 +363,23 @@ class AanmeldingenModel {
 		case 'groep':
 			require_once 'groepen/groep.class.php';
 
-			$parts = explode('>', $filter[1], 2); // Splitst opgegeven term in groepsnaam en functie
-			$groep = new \Groep($parts[0]);
-			if ($groep->isLid()) {
-				// Wordt er een functie gevraagd?
-				if (isset($parts[1])) {
-					$functie = $groep->getFunctie();
-					if (strtolower($functie[0]) === strtolower($parts[1])) {
+			try {
+				$parts = explode('>', $filter[1], 2); // Splitst opgegeven term in groepsnaam en functie
+				$groep = new \Groep($parts[0]);
+				if ($groep->isLid()) {
+					// Wordt er een functie gevraagd?
+					if (isset($parts[1])) {
+						$functie = $groep->getFunctie();
+						if (strtolower($functie[0]) === strtolower($parts[1])) {
+							return true;
+						}
+					}
+					else{
 						return true;
 					}
 				}
-				else{
-					return true;
-				}
+			}
+			catch (\Exception $e) { // groep bestaat niet
 			}
 			return false;
 
@@ -399,10 +402,6 @@ class AanmeldingenModel {
 			}
 			return false;
 
-		} // /switch
-		} // /try
-		catch (Exception $e) {
-			setMelding($e->getMessage(), -1);
 		}
 		return false;
 	}

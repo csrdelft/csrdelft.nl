@@ -17,6 +17,7 @@
 	{else}.
 		Onderstaande tabel toont alle corveetaken die niet verwijderd zijn.
 	{/if}
+	Taken in het verleden waarvoor wel iemand is ingedeeld maar geen punten zijn toegekend worden geel gemarkeerd.
 	</p>
 	<p>N.B. U kunt ingedeelde corveeërs eenvoudig ruilen door het icoontje voor de naam te verslepen.</p>
 {/if}

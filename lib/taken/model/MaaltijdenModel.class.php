@@ -64,7 +64,7 @@ class MaaltijdenModel {
 	 * @return Maaltijd[]
 	 */
 	public static function getKomendeMaaltijdenVoorLid(\Lid $lid) {
-		$maaltijden = self::loadMaaltijden('verwijderd = false AND datum >= ? AND datum <= ?', array(date('Y-m-d', time()), date('Y-m-d', strtotime('+1 month', time()))));
+		$maaltijden = self::loadMaaltijden('verwijderd = false AND datum >= ? AND datum <= ?', array(date('Y-m-d'), date('Y-m-d', strtotime('+1 month'))));
 		$maaltijden = self::filterMaaltijdenVoorLid($maaltijden, $lid);
 		return $maaltijden;
 	}
@@ -132,7 +132,7 @@ class MaaltijdenModel {
 				$maaltijd->setPrijs($prijs);
 				$maaltijd->setAanmeldFilter($filter);
 				self::updateMaaltijd($maaltijd);
-				if (!$maaltijd->getIsGesloten() && $maaltijd->getBeginMoment() < strtotime(date('Y-m-d H:i'))) {
+				if (!$maaltijd->getIsGesloten() && $maaltijd->getBeginMoment() < time()) {
 					$maaltijd = MaaltijdenModel::sluitMaaltijd($maaltijd->getMaaltijdId());
 				}
 				if (!$maaltijd->getIsGesloten() && !$maaltijd->getIsVerwijderd() && !empty($filter)) {
@@ -152,6 +152,10 @@ class MaaltijdenModel {
 	public static function verwijderMaaltijd($mid) {
 		$maaltijd = self::loadMaaltijd($mid);
 		if ($maaltijd->getIsVerwijderd()) {
+			if (\Taken\CRV\TakenModel::existMaaltijdCorvee($mid)) {
+				\Taken\CRV\TakenModel::verwijderMaaltijdCorvee($mid); // delete corveetaken first (foreign key)
+				throw new \Exception('Alle bijbehorende corveetaken zijn naar de prullenbak verplaatst. Verwijder die eerst!');
+			}
 			self::deleteMaaltijd($mid); // definitief verwijderen
 		}
 		else {
@@ -161,10 +165,6 @@ class MaaltijdenModel {
 	}
 	
 	private static function deleteMaaltijd($mid) {
-		if (\Taken\CRV\TakenModel::existMaaltijdCorvee($mid)) {
-			\Taken\CRV\TakenModel::verwijderMaaltijdCorvee($mid); // delete corveetaken first (foreign key)
-			throw new \Exception('Alle bijbehorende corveetaken zijn naar de prullenbak verplaatst. Verwijder die eerst!');
-		}
 		$db = \CsrPdo::instance();
 		try {
 			$db->beginTransaction();

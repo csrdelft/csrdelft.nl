@@ -10,21 +10,33 @@ require_once 'taken/model/VrijstellingenModel.class.php';
 class PuntenModel {
 
 	public static function resetCorveejaar() {
+		$errors = array();
 		$vrijstellingen = VrijstellingenModel::getAlleVrijstellingen(true); // grouped by uid
 		$matrix = self::loadPuntenTotaalVoorAlleLeden();
 		foreach ($matrix as $uid => $totalen) {
-			$lid = \LidCache::getLid($uid); // false if lid does not exist
-			if (!$lid instanceof \Lid) {
-				throw new \Exception('Reset corveejaar faalt: ongeldig lid');
+			try {
+				$lid = \LidCache::getLid($uid); // false if lid does not exist
+				if (!$lid instanceof \Lid) {
+					throw new \Exception('Reset corveejaar faalt: ongeldig lid');
+				}
+				$punten = $totalen['puntenTotaal'];
+				$punten += $totalen['bonusTotaal'];
+				$vrijstelling = null;
+				if (array_key_exists($uid, $vrijstellingen) && time() > strtotime($vrijstellingen[$uid]->getEindDatum())) {
+					$vrijstelling = $vrijstellingen[$uid];
+					$punten += self::berekenVrijstellingPunten($vrijstelling);
+				}
+				$punten -= intval($GLOBALS['corveepunten_per_jaar']);
+				self::savePuntenVoorLid($lid, $punten, 0);
+				if ($vrijstelling !== null) {
+					VrijstellingenModel::verwijderVrijstelling($vrijstelling->getLidId());
+				}
 			}
-			$punten = $totalen['puntenTotaal'];
-			$punten += $totalen['bonusTotaal'];
-			if (array_key_exists($uid, $vrijstellingen)) {
-				$punten += self::berekenVrijstellingPunten($vrijstellingen[$uid]);
+			catch (\Exception $e) {
+				$errors[] = $e;
 			}
-			$punten -= intval($GLOBALS['corveepunten_per_jaar']);
-			self::savePuntenVoorLid($lid, $punten, 0);
 		}
+		return $errors;
 	}
 	
 	public static function puntenToekennen($uid, $punten, $bonus_malus) {
@@ -140,7 +152,7 @@ class PuntenModel {
 		return $lijst;
 	}
 	
-	private static function berekenVrijstellingPunten(CorveeVrijstelling $vrijstelling) {
+	public static function berekenVrijstellingPunten(CorveeVrijstelling $vrijstelling) {
 		return (int) ceil($vrijstelling->getPercentage() * (int) $GLOBALS['corveepunten_per_jaar'] / 100);
 	}
 	

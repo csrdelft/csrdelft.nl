@@ -8,7 +8,16 @@ Op deze pagina kunt u voor alle leden de corveepunten beheren.
 De onderstaande tabel bevat een overzicht van de punten die per corveefunctie zijn verdiend.
 Tussen haakjes staat het aantal keer dat het lid is ingedeeld voor de betreffende functie.
 De kolom punten is exclusief bonus/malus.
-De kolom prognose geeft aan hoeveel punten het lid totaal zal hebben na het uitvoeren van de corveetaken waarvoor hij/zij is ingedeeld (inclusief bonus/malus-punten).
+De kolom prognose geeft aan hoeveel punten het lid naar verwachting totaal zal hebben aan het einde van het corveejaar.
+</p>
+<h3>Corveejaar resetten</h3>
+<p>
+Controleer vooraf zelf of alle punten zijn toegekend naar wens.
+Niet toegewenzen punten voor taken in het verleden, waarvoor wel iemand is ingedeeld, worden geel gemarkeerd in het overzicht onder beheer taken.
+De reset omvat een hertelling:<br />NieuwPuntentotaal = Corveepunten + bonus + ceil(teBehalenCorveepunten * %Vrijstelling) - teBehalenCorveepunten<br />
+En zet vervolgens de bonus/malus weer op nul.
+<p>
+N.B. Alle corveetaken in het verleden worden bij de reset naar de prullenbak verplaatst en alle verlopen vrijstellingen worden definitief verwijderd!
 </p>
 <a href="{$module}/resetjaar" title="Reset corveejaar" class="knop get confirm">{icon get="lightning"} Corveejaar resetten</a>
 <table id="taken-tabel" class="taken-tabel">

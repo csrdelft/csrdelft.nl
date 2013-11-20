@@ -35,7 +35,7 @@ class TakenModel {
 				if (array_key_exists($uid, $vrijstellingen)) {
 					$vrijstelling = $vrijstellingen[$uid];
 					$datum = strtotime($taak->getDatum());
-					if ($datum > strtotime($vrijstelling->getBeginDatum()) && $datum < strtotime($vrijstelling->getEindDatum())) {
+					if ($datum >= strtotime($vrijstelling->getBeginDatum()) && $datum <= strtotime($vrijstelling->getEindDatum())) {
 						continue; // taak valt binnen vrijstelling-periode: suggestie niet weergeven
 					}
 				}
@@ -49,8 +49,12 @@ class TakenModel {
 				if (array_key_exists($uid, $vrijstellingen)) {
 					$vrijstelling = $vrijstellingen[$uid];
 					$datum = strtotime($taak->getDatum());
-					if ($datum > strtotime($vrijstelling->getBeginDatum()) && $datum < strtotime($vrijstelling->getEindDatum())) {
-						unset($leden_punten[$uid]);
+					if ($datum >= strtotime($vrijstelling->getBeginDatum()) && $datum <= strtotime($vrijstelling->getEindDatum())) {
+						unset($leden_punten[$uid]); // taak valt binnen vrijstelling-periode: suggestie niet weergeven
+					}
+					// corrigeer prognose in suggestielijst vóór de aanvang van de vrijstellingsperiode
+					if ($vrijstelling !== null && $datum < strtotime($vrijstelling->getBeginDatum())) {
+						$leden_punten[$uid]['prognose'] -= PuntenModel::berekenVrijstellingPunten($vrijstelling);
 					}
 				}
 			}
@@ -90,6 +94,7 @@ class TakenModel {
 		}
 		if ($taak->getLidId() !== $uid) {
 			$taak->setLidId($uid);
+			$taak->setWanneerGemaild('');
 			self::updateTaak($taak);
 		}
 	}
@@ -221,7 +226,7 @@ class TakenModel {
 	 * @return CorveeTaak[]
 	 */
 	public static function getKomendeTakenVoorLid() {
-		return self::loadTaken('verwijderd = false AND lid_id = ? AND datum >= ? AND datum <= ?', array(\LoginLid::instance()->getUid(), date('Y-m-d', time()), date('Y-m-d', strtotime('+1 month', time()))));
+		return self::loadTaken('verwijderd = false AND lid_id = ? AND datum >= ? AND datum <= ?', array(\LoginLid::instance()->getUid(), date('Y-m-d'), date('Y-m-d', strtotime('+1 month'))));
 	}
 	
 	public static function saveTaak($tid, $fid, $uid, $crid, $mid, $datum, $punten, $bonus_malus) {
@@ -233,8 +238,11 @@ class TakenModel {
 			}
 			else {
 				$taak = self::getTaak($tid);
+				if ($taak->getLidId() !== $uid) {
+					$taak->setWanneerGemaild('');
+					$taak->setLidId($uid);
+				}
 				$taak->setFunctieId($fid);
-				$taak->setLidId($uid);
 				$taak->setMaaltijdId($mid);
 				$taak->setDatum($datum);
 				$taak->setPunten($punten);
@@ -261,10 +269,21 @@ class TakenModel {
 		return $taak;
 	}
 	
+	public static function verwijderOudeTaken() {
+		$sql = 'UPDATE crv_taken';
+		$sql.= ' SET verwijderd=true';
+		$sql.= ' WHERE datum < ?';
+		$values = array(date('Y-m-d'));
+		$db = \CsrPdo::instance();
+		$query = $db->prepare($sql, $values);
+		$query->execute($values);
+		return $query->rowCount();
+	}
+	
 	public static function verwijderTaak($tid) {
 		$taak = self::loadTaak($tid);
 		if ($taak->getIsVerwijderd()) {
-			self::deleteTaak($tid); // definitief verwijderen
+			self::deleteTaken($tid); // definitief verwijderen
 		}
 		else {
 			$taak->setVerwijderd(true);
@@ -272,23 +291,15 @@ class TakenModel {
 		}
 	}
 	
-	private static function deleteTaak($tid) {
+	private static function deleteTaken($tid=null) {
+		$sql = 'DELETE FROM crv_taken';
+		$sql.= ' WHERE taak_id = ?';
+		$values = array($tid);
 		$db = \CsrPdo::instance();
-		try {
-			$db->beginTransaction();
-			$sql = 'DELETE FROM crv_taken';
-			$sql.= ' WHERE taak_id = ?';
-			$values = array($tid);
-			$query = $db->prepare($sql, $values);
-			$query->execute($values);
-			if ($query->rowCount() !== 1) {
-				throw new \Exception('Delete taak faalt: $query->rowCount() ='. $query->rowCount());
-			}
-			$db->commit();
-		}
-		catch (\Exception $e) {
-			$db->rollback();
-			throw $e; // rethrow to controller
+		$query = $db->prepare($sql, $values);
+		$query->execute($values);
+		if ($query->rowCount() !== 1) {
+			throw new \Exception('Delete taak faalt: $query->rowCount() ='. $query->rowCount());
 		}
 	}
 	

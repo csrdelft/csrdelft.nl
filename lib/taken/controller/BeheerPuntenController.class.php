@@ -69,8 +69,11 @@ class BeheerPuntenController extends \ACLController {
 	}
 	
 	public function action_resetjaar() {
-		PuntenModel::resetCorveejaar();
+		$errors = PuntenModel::resetCorveejaar();
 		$this->action_beheer();
+		foreach ($errors as $error) {
+			$this->content->setMelding($error->getMessage());
+		}
 	}
 }
 

@@ -12,22 +12,17 @@ require_once 'formulier.class.php';
 class InstellingFormView extends \SimpleHtml {
 
 	private $_form;
-	private $_key;
 	
 	public function __construct($key=null, $value=null) {
-		$this->_key = $key;
 		
 		$formFields['key'] = new \RequiredInputField('instelling_id', $key, 'Id');
 		$formFields['key']->forcenotnull = true;
-		$formFields[] = new \InputField('waarde', $value, 'Waarde');
+		$formFields[] = new \TextField('waarde', $value, 'Waarde', 1);
 		
 		$this->_form = new \Formulier('taken-instelling-form', '/actueel/taken/instellingen/opslaan', $formFields);
 	}
 	
 	public function getTitel() {
-		if ($this->_key === null) {
-			return 'Instelling aanmaken'; 
-		}
 		return 'Instelling wijzigen'; 
 	}
 	
@@ -37,9 +32,6 @@ class InstellingFormView extends \SimpleHtml {
 		$smarty->assign('kop', $this->getTitel());
 		$this->_form->cssClass .= ' popup';
 		$smarty->assign('form', $this->_form);
-		if ($this->_key === null) {
-			$smarty->assign('nieuw', true);
-		}
 		$smarty->display('taken/popup_form.tpl');
 	}
 	

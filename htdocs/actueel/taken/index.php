@@ -10,7 +10,7 @@ try {
 	require_once 'taken/model/InstellingenModel.class.php';
 	require_once 'taken/controller/ModuleController.class.php';
 	
-	\Taken\MLT\InstellingenModel::loadAlleInstellingen();
+	\Taken\MLT\InstellingenModel::getAlleInstellingen();
 	$controller = new \Taken\CRV\ModuleController($_GET['query']);
 	$controller->getContent()->view();
 }

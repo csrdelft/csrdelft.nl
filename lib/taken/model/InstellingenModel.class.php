@@ -11,42 +11,52 @@ class InstellingenModel {
 
 	private static $_instellingen = null;
 	private static $_defaults = array(
-		'standaard_maaltijdprijs' => '3',
+		'standaard_maaltijdprijs' => '3.00',
 		'marge_gasten_verhouding' => '10',
 		'marge_gasten_min' => '3',
 		'marge_gasten_max' => '4',
-		'corveepunten_per_jaar' => '10'
+		'corveepunten_per_jaar' => '11'
 	);
 	
-	public static function loadAlleInstellingen() {
-		$instellingen = self::getAlleInstellingen();
-		foreach ($instellingen as $instelling) {
+	/**
+	 * Laad alle instellingen uit de database.
+	 * Als default instellingen ontbreken worden deze aangemaakt en opgeslagen.
+	 * 
+	 * @return Instelling[]
+	 */
+	public static function getAlleInstellingen() {
+		if (self::$_instellingen === null) { // laad maar 1x
+			self::$_instellingen = self::loadInstellingen();
+		}
+		foreach (self::$_instellingen as $instelling) { // zet publieke toegang
 			$GLOBALS[$instelling->getInstellingId()] = $instelling->getWaarde();
 		}
 		foreach (self::$_defaults as $key => $value) {
 			if (!array_key_exists($key, $GLOBALS)) {
-				self::$_instellingen[] = self::newInstelling($key, $value);
 				$GLOBALS[$key] = $value;
+				self::$_instellingen[] = self::newInstelling($key, $value);
 			}
-		}
-	}
-	
-	public static function getAlleInstellingen() {
-		if (self::$_instellingen === null) {
-			self::$_instellingen = self::loadInstellingen();
 		}
 		return self::$_instellingen;
 	}
 	
+	/**
+	 * Zoek een instelling voor bewerken of na verwijderen.
+	 * Als een default instelling ontbreekt wordt deze aangemaakt en opgeslagen.
+	 * 
+	 * @return Instelling[]
+	 */
 	public static function getInstelling($key) {
-		$instellingen = self::$_instellingen;
-		if ($instellingen === null) {
-			$instellingen = self::loadInstellingen('instelling_id = ?', array($key), 1);
+		foreach (self::$_instellingen as $instelling) {
+			if ($key === $instelling->getInstellingId()) {
+				return $instelling;
+			}
 		}
-		if (!array_key_exists(0, $instellingen)) {
+		if (!array_key_exists($key, self::$_defaults)) { // geen default instelling
 			throw new \Exception('Get instelling faalt: Not found $key ='. $key);
 		}
-		return $instellingen[0];
+		$instelling = self::newInstelling($key, self::$_defaults[$key]);
+		return $instelling;
 	}
 	
 	private static function loadInstellingen($where=null, $values=array(), $limit=null) {
@@ -119,25 +129,19 @@ class InstellingenModel {
 	
 	public static function verwijderInstelling($key) {
 		self::deleteInstelling($key);
+		unset($GLOBALS[$key]);
+		self::$_instellingen = array();
 	}
 	
 	private static function deleteInstelling($key) {
+		$sql = 'DELETE FROM mlt_instellingen';
+		$sql.= ' WHERE instelling_id = ?';
+		$values = array($key);
 		$db = \CsrPdo::instance();
-		try {
-			$db->beginTransaction();
-			$sql = 'DELETE FROM mlt_instellingen';
-			$sql.= ' WHERE instelling_id = ?';
-			$values = array($key);
-			$query = $db->prepare($sql, $values);
-			$query->execute($values);
-			if ($query->rowCount() !== 1) {
-				throw new \Exception('Delete instelling faalt: $query->rowCount() ='. $query->rowCount());
-			}
-			$db->commit();
-		}
-		catch (\Exception $e) {
-			$db->rollback();
-			throw $e; // rethrow to controller
+		$query = $db->prepare($sql, $values);
+		$query->execute($values);
+		if ($query->rowCount() !== 1) {
+			throw new \Exception('Delete instelling faalt: $query->rowCount() ='. $query->rowCount());
 		}
 	}
 }

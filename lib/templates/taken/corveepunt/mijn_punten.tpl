@@ -3,9 +3,10 @@
 *}
 <h2>Corveepunten</h2>
 <p>
-In de onderstaande tabel is een overzicht te vinden van de punten die u per corveefunctie heeft verdiend.
+In de onderstaande tabel is een overzicht te vinden van de punten die u per corveefunctie heeft verdiend met daarachter uw bonus/malus-punten indien van toepassing.
 Tussen haakjes staat het aantal keer dat u bent ingedeeld in deze functie.
-De prognose geeft aan hoeveel punten u totaal zal hebben na het uitvoeren van de corveetaken waarvoor u bent ingedeeld (inclusief bonuspunten).
+Het totaal is uw huidige aantal toegekende corveepunten.
+De prognose geeft aan hoeveel punten u naar verwachting totaal zal hebben aan het einde van het corveejaar.
 </p>
 <table class="taken-tabel" style="width: 350px;">
 	<thead>

@@ -108,26 +108,21 @@ class VrijstellingenModel {
 	}
 	
 	public static function verwijderVrijstelling($uid) {
+		if (!\Lid::exists($uid)) {
+			throw new \Exception('Lid bestaat niet: $uid ='. $uid);
+		}
 		self::deleteVrijstelling($uid);
 	}
 	
 	private static function deleteVrijstelling($uid) {
+		$sql = 'DELETE FROM crv_vrijstellingen';
+		$sql.= ' WHERE lid_id = ?';
+		$values = array($uid);
 		$db = \CsrPdo::instance();
-		try {
-			$db->beginTransaction();
-			$sql = 'DELETE FROM crv_vrijstellingen';
-			$sql.= ' WHERE lid_id = ?';
-			$values = array($uid);
-			$query = $db->prepare($sql, $values);
-			$query->execute($values);
-			if ($query->rowCount() !== 1) {
-				throw new \Exception('Delete vrijstelling faalt: $query->rowCount() ='. $query->rowCount());
-			}
-			$db->commit();
-		}
-		catch (\Exception $e) {
-			$db->rollback();
-			throw $e; // rethrow to controller
+		$query = $db->prepare($sql, $values);
+		$query->execute($values);
+		if ($query->rowCount() !== 1) {
+			throw new \Exception('Delete vrijstelling faalt: $query->rowCount() ='. $query->rowCount());
 		}
 	}
 }
