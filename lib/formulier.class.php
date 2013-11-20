@@ -351,7 +351,11 @@ class FormField extends FormElement{
 			case 'class': return 'class="'.implode(' ', $this->getInputClasses()).'"'; break;
 			case 'value': return 'value="'.htmlspecialchars($this->value).'"'; break;
 			case 'name': return 'name="'.$this->name.'"'; break;
-			case 'title': return 'title="'.$this->title.'"'; break;
+			case 'title':
+				if($this->title){
+					return 'title="'.$this->title.'"';
+				}
+				break;
 			case 'disabled':
 				if($this->disabled){
 					return 'disabled';

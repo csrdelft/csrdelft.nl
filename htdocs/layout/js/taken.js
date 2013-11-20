@@ -8,7 +8,16 @@ $(document).ready(function() {
 	$('#beheer-taken-menu').show();
 	taken_form_init();
 	taken_link_init();
+	taken_popup_init();
 });
+
+function taken_popup_init() {
+	var p = document.getElementById('taken-popup');
+	if (p) {
+		p.addEventListener('mousedown', startDrag, false);
+		window.addEventListener('mouseup', stopDrag, false);
+	}
+}
 
 function taken_link_init() {
 	$('a.knop').each(function() {
@@ -207,12 +216,67 @@ function update_taken(htmlString) {
 	});
 	taken_form_init();
 	taken_link_init();
-	if (!popup) {
+	if (popup) {
+		taken_popup_init();
+	}
+	else {
 		close_taken_popup();
 	}
 }
 
-/*
+
+/**
+ * Drag popup
+ * 
+ */
+var offsetX = 0;
+var offsetY = 0;
+function startDrag(e) {
+	e = e || window.event;
+	offsetX = mouseX(e);
+	offsetY = mouseY(e);
+	window.addEventListener('mousemove', mouseMoveHandler, true);
+}
+function stopDrag(e) {
+	window.removeEventListener('mousemove', mouseMoveHandler, true);
+}
+function mouseMoveHandler(e) {
+	e = e || window.event;
+	var x = mouseX(e);
+	var y = mouseY(e);
+	if (x !== offsetX || y !== offsetY) {
+		var p = document.getElementById('taken-popup');
+		var l = parseInt(p.style.left);
+		var t = parseInt(p.style.top);
+		if (isNaN(l)) l = $('#taken-popup').offset().left;
+		if (isNaN(t)) t = $('#taken-popup').offset().top;
+		p.style.left = (l + x - offsetX) + 'px';
+		p.style.top  = (t + y - offsetY) + 'px';
+		offsetX = x;
+		offsetY = y;
+	}
+}
+function mouseX(e) {
+	if (e.pageX) {
+	  return e.pageX;
+	}
+	if (e.clientX) {
+		return e.clientX + (document.documentElement.scrollLeft ? document.documentElement.scrollLeft : document.body.scrollLeft);
+	}
+	return null;
+}
+function mouseY(e) {
+	if (e.pageY) {
+		return e.pageY;
+	}
+	if (e.clientY) {
+		return e.clientY + (document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop);
+	}
+	return null;
+}
+
+
+/**
  * Ruilen van CorveeTaak
  * 
  */

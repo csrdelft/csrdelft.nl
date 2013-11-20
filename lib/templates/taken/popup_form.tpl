@@ -7,10 +7,10 @@
 {$form->view()}
 <div id="taken-popup-buttons">
 {if isset($bijwerken)}
-	<a href="javascript:void(0);" onclick="taken_submit_form('#{$form->getFormId()}', '{$bijwerken}');" title="Alles bijwerken" class="knop">{icon get="disk_multiple"} Alles bijwerken</a>
+	<a onclick="taken_submit_form('#{$form->getFormId()}', '{$bijwerken}');" title="Alles bijwerken" class="knop">{icon get="disk_multiple"} Alles bijwerken</a>
 {/if}
-	<a href="javascript:void(0);" onclick="$('#{$form->getFormId()}').submit();" title="Invoer opslaan" class="knop">{icon get="disk"} Opslaan</a>
-	<a href="javascript:void(0);" onclick="taken_reset('#{$form->getFormId()}');" title="Invoer ongedaan maken" class="knop">{icon get="arrow_rotate_anticlockwise"} Reset</a>
-	<a href="javascript:void(0);" onclick="close_taken_popup();" title="Annuleren" class="knop">{icon get="delete"} Annuleren</a>
+	<a onclick="$('#{$form->getFormId()}').submit();" title="Invoer opslaan" class="knop">{icon get="disk"} Opslaan</a>
+	<a onclick="taken_reset('#{$form->getFormId()}');" title="Invoer ongedaan maken" class="knop">{icon get="arrow_rotate_anticlockwise"} Reset</a>
+	<a onclick="close_taken_popup();" title="Annuleren" class="knop">{icon get="delete"} Annuleren</a>
 </div>
 </div>

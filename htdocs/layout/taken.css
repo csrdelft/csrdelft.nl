@@ -202,6 +202,9 @@ input.VinkField {
 	background-position: top right;
 	background-repeat: no-repeat;*/
 }
+#taken-popup:active {
+	cursor: move;
+}
 .outer-shadow {
 	-moz-box-shadow: 0 0 20px #000000;
 	-webkit-box-shadow: 0 0 20px #000000;
