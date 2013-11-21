@@ -33,11 +33,11 @@
 	<h2>Maaltijd van {$maaltijd->getDatum()|date_format:"%A %e %b"} {$maaltijd->getTijd()|date_format:"%H:%M"}</h2>
 	{$maaltijd->getTitel()}<br />
 	<span class="small">
-{if $loginlid->hasPermission('P_MAAL_MOD') or opConfide()}
+{if $toonlijst}
 		<a href="/actueel/taken/maaltijdenbeheer/lijst/{$maaltijd->getMaaltijdId()}" title="Toon maaltijdlijst">
 {/if}
 			Inschrijvingen: <em>{$maaltijd->getAantalAanmeldingen()}</em> van <em>{$maaltijd->getAanmeldLimiet()}</em>
-{if $loginlid->hasPermission('P_MAAL_MOD') or opConfide()}
+{if $toonlijst}
 		</a>
 {/if}
 	</span>

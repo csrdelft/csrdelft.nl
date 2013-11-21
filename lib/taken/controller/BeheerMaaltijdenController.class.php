@@ -51,6 +51,15 @@ class BeheerMaaltijdenController extends \ACLController {
 		$this->performAction($mid);
 	}
 	
+	public static function magMaaltijdlijstTonen($taken=array()) {
+		$login = \LoginLid::instance();
+		$permission = opConfide() || $login->hasPermission('P_MAAL_MOD');
+		foreach ($taken as $taak) {
+			$permission |= ($taak->getLidId() === $login->getUid());
+		}
+		return $permission;
+	}
+	
 	public function action_beheer($mid=null) {
 		if (is_int($mid) && $mid > 0) {
 			$this->action_bewerk($mid);
@@ -71,13 +80,14 @@ class BeheerMaaltijdenController extends \ACLController {
 	}
 	
 	public function action_lijst($mid) {
-		if (!(opConfide() || \LoginLid::instance()->hasPermission('P_MAAL_MOD'))) {
+		$taken = \Taken\CRV\TakenModel::getTakenVoorMaaltijd($mid);
+		$toonlijst = self::magMaaltijdlijstTonen($taken);
+		if (!$toonlijst) {
 			$this->action_geentoegang();
 			return;
 		}
 		$maaltijd = MaaltijdenModel::getMaaltijd($mid, true);
 		$aanmeldingen = AanmeldingenModel::getAanmeldingenVoorMaaltijdLijst($maaltijd);
-		$taken = \Taken\CRV\TakenModel::getTakenVoorMaaltijd($mid);
 		$this->content = new MaaltijdLijstView($maaltijd, $aanmeldingen, $taken);
 	}
 	
@@ -88,7 +98,7 @@ class BeheerMaaltijdenController extends \ACLController {
 	}
 	
 	public function action_sluit($mid) {
-		if (!(opConfide() || \LoginLid::instance()->hasPermission('P_MAAL_MOD'))) {
+		if (!self::magMaaltijdlijstTonen()) {
 			$this->action_geentoegang();
 			return;
 		}

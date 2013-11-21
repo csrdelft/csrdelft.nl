@@ -36,6 +36,8 @@ class BeheerTakenView extends \SimpleHtml {
 		$smarty = new \Smarty_csr();
 		$smarty->assign('module', '/actueel/taken/corveebeheer');
 		$smarty->assign('ledenweergave', $GLOBALS['weergave_ledennamen_beheer']);
+		$smarty->assign('vooraf', $GLOBALS['waarschuwing_taaktoewijzing_vooraf']);
+		$smarty->assign('achteraf', $GLOBALS['waarschuwing_puntentoewijzing_achteraf']);
 		
 		if ($this->_maaltijd !== null) {
 			$smarty->assign('maaltijd', $this->_maaltijd);

@@ -16,6 +16,15 @@ class TakenModel {
 		self::updateTaak($taak);
 	}
 	
+	/**
+	 * Bepaald de suggesties voor het toewijzen van een corveetaak.
+	 * Als er een kwalificatie benodigd is worden alleen de
+	 * gekwalificeerde leden teruggegeven.
+	 * 
+	 * @param \Taken\CRV\CorveeTaak $taak
+	 * @return type
+	 * @throws \Exception
+	 */
 	public static function getSuggesties(CorveeTaak $taak) {
 		require_once 'taken/model/VrijstellingenModel.class.php';
 		require_once 'taken/model/KwalificatiesModel.class.php';
@@ -321,7 +330,7 @@ class TakenModel {
 		if ($query->rowCount() === 1) {
 			$result[0]->setCorveeFunctie(FunctiesModel::getFunctie($result[0]->getFunctieId()));
 		}
-		else {
+		elseif ($query->rowCount() > 1) {
 			$functies = FunctiesModel::getAlleFuncties(true); // grouped by fid
 			foreach ($result as $taak) {
 				$taak->setCorveeFunctie($functies[$taak->getFunctieId()]);

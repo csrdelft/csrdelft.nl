@@ -7,7 +7,7 @@
 {$form->view()}
 <div id="taken-popup-buttons">
 {if isset($bijwerken)}
-	<a onclick="taken_submit_form('#{$form->getFormId()}', '{$bijwerken}');" title="Alles bijwerken" class="knop">{icon get="disk_multiple"} Alles bijwerken</a>
+	<a onclick="taken_submit_form('#{$form->getFormId()}', '{$bijwerken}');" title="Alle eigenschappen overschrijven" class="knop">{icon get="disk_multiple"} Alles bijwerken</a>
 {/if}
 	<a onclick="$('#{$form->getFormId()}').submit();" title="Invoer opslaan" class="knop">{icon get="disk"} Opslaan</a>
 	<a onclick="taken_reset('#{$form->getFormId()}');" title="Invoer ongedaan maken" class="knop">{icon get="arrow_rotate_anticlockwise"} Reset</a>

@@ -12,27 +12,25 @@ require_once 'taken/model/AbonnementenModel.class.php';
 class MaaltijdenModel {
 
 	public static function openMaaltijd($mid) {
-		return self::sluitMaaltijd($mid, false);
+		$maaltijd = self::getMaaltijd($mid);
+		if (!$maaltijd->getIsGesloten()) {
+			throw new \Exception('Maaltijd is al geopend');
+		}
+		$maaltijd->setGesloten(false);
+		self::updateMaaltijd($maaltijd);
+		return $maaltijd;
 	}
 	
-	public static function sluitMaaltijd($mid, $gesloten=true) {
+	public static function sluitMaaltijd($mid) {
 		if (!is_int($mid) || $mid <= 0) {
 			throw new \Exception('Sluit maaltijd faalt: Invalid $mid ='. $mid);
 		}
-		$maaltijd = self::loadMaaltijd($mid);
-		if ($maaltijd->getIsVerwijderd()) {
-			throw new \Exception('Maaltijd is verwijderd');
-		}
-		if ($gesloten && $maaltijd->getIsGesloten()) {
+		$maaltijd = self::getMaaltijd($mid);
+		if ($maaltijd->getIsGesloten()) {
 			throw new \Exception('Maaltijd is al gesloten');
 		}
-		elseif (!$gesloten && !$maaltijd->getIsGesloten()) {
-			throw new \Exception('Maaltijd is al geopend');
-		}
-		$maaltijd->setGesloten($gesloten);
-		if ($gesloten) {
-			$maaltijd->setLaatstGesloten(date('Y-m-d H:i'));
-		}
+		$maaltijd->setGesloten(true);
+		$maaltijd->setLaatstGesloten(date('Y-m-d H:i'));
 		self::updateMaaltijd($maaltijd);
 		return $maaltijd;
 	}

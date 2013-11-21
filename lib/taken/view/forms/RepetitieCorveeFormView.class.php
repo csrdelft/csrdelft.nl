@@ -15,7 +15,7 @@ class RepetitieCorveeFormView extends \SimpleHtml {
 	
 	public function __construct(CorveeRepetitie $repetitie, $beginDatum=null, $eindDatum=null, $mid=null) {
 		
-		$formFields[] = new \HTMLComment('<p>Aanmaken op '. strftime('%A', $repetitie->getDagVanDeWeekTimestamp()) .'en voor '. $repetitie->getPeriodeInDagenText() .' in de periode:</p>');
+		$formFields[] = new \HTMLComment('<p>Aanmaken op de eerste '. $repetitie->getDagVanDeWeekText() .'en vervolgens '. $repetitie->getPeriodeInDagenText() .' in de periode:</p>');
 		$formFields['begin'] = new \DatumField('begindatum', $beginDatum, 'Vanaf', date('Y')+1, date('Y'));
 		$formFields['eind'] = new \DatumField('einddatum', $eindDatum, 'Tot en met', date('Y')+1, date('Y'));
 		$formFields[] = new \HiddenField('maaltijd_id', $mid);

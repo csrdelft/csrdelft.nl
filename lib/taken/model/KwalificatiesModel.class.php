@@ -15,6 +15,7 @@ class KwalificatiesModel {
 	
 	/**
 	 * Groepeert alle kwalificaties per functie en zet de property gekwalificeerden.
+	 * 
 	 * @param CorveeFunctie[] $functies
 	 * @return CorveeKwalificatie[]
 	 */
@@ -35,6 +36,10 @@ class KwalificatiesModel {
 		return $result;
 	}
 	
+	public static function getKwalificatiesVoorFunctie(CorveeFunctie $functie) {
+		return self::loadKwalificaties('functie_id = ?', array($functie->getFunctieId()));
+	}
+	
 	public static function getKwalificatiesVanLid($uid) {
 		if (!\Lid::exists($uid)) {
 			throw new \Exception('Lid bestaat niet: $uid ='. $uid);
@@ -42,26 +47,19 @@ class KwalificatiesModel {
 		return self::loadKwalificaties('lid_id = ?', array($uid));
 	}
 	
-	public static function getKwalificatiesVoorFunctie(CorveeFunctie $functie) {
-		return self::loadKwalificaties('functie_id = ?', array($functie->getFunctieId()));
+	public static function getIsLidGekwalificeerd($uid, $fid) {
+		return self::existKwalificatie($uid, $fid);
 	}
 	
-	/*
-	 * Called before a CorveeKwalificatie is added.
-	 * 
-	 * @param String $uid
-	 * @param int $fid
-	 * @return boolean
-	 */
-	public static function existKwalificatie($fid, $uid) {
+	private static function existKwalificatie($uid, $fid) {
 		if (!is_int($fid) || $fid <= 0) {
 			throw new \Exception('Exist corvee-kwalificatie faalt: Invalid $fid ='. $fid);
 		}
 		if (!\Lid::exists($uid)) {
 			throw new \Exception('Lid bestaat niet: $uid ='. $uid);
 		}
-		$sql = 'SELECT EXISTS (SELECT * FROM crv_kwalificaties WHERE functie_id = ? AND lid_id = ?)';
-		$values = array($fid, $uid);
+		$sql = 'SELECT EXISTS (SELECT * FROM crv_kwalificaties WHERE lid_id = ? AND functie_id = ?)';
+		$values = array($uid, $fid);
 		$query = \CsrPdo::instance()->prepare($sql, $values);
 		$query->execute($values);
 		$result = (boolean) $query->fetchColumn();
@@ -86,7 +84,7 @@ class KwalificatiesModel {
 	}
 	
 	public static function kwalificatieToewijzen($fid, $uid) {
-		if (self::existKwalificatie($fid, $uid)) {
+		if (self::existKwalificatie($uid, $fid)) {
 			throw new \Exception('Is al gekwalificeerd!');
 		}
 		$db = \CsrPdo::instance();
@@ -112,7 +110,7 @@ class KwalificatiesModel {
 	}
 	
 	public static function kwalificatieTerugtrekken($fid, $uid) {
-		if (!self::existKwalificatie($fid, $uid)) {
+		if (!self::existKwalificatie($uid, $fid)) {
 			throw new \Exception('Is niet gekwalificeerd!');
 		}
 		self::deleteKwalificatie($fid, $uid);

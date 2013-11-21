@@ -5,6 +5,9 @@
 <link type="text/css" href="/layout/maaltijdlijst.css" rel="stylesheet">
 <script type="text/javascript" src="/layout/js/jquery.js"></script>
 <script type="text/javascript" src="/layout/js/taken.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {ldelim} window.print(); {rdelim});
+</script>
 </head>
 <body>
 <img alt="Beeldmerk van de Vereniging" src="{$csr_pics}/layout/beeldmerk.jpg" style="float: right; padding: 0px 50px;" />
@@ -12,7 +15,7 @@
 <div class="header">{$header|replace:'MAALTIJDPRIJS':$prijs}</div>
 {if !$maaltijd->getIsGesloten()}
 	<h2 style="color: red">De inschrijving voor deze maaltijd is nog niet gesloten
-	{if !$maaltijd->getIsVerwijderd() and !$maaltijd->getIsGesloten() and ($loginlid->hasPermission('P_MAAL_MOD') or opConfide())}
+	{if !$maaltijd->getIsVerwijderd() and !$maaltijd->getIsGesloten()}
 	<button onclick="if(confirm('Weet u zeker dat u deze maaltijd wil sluiten?'))taken_ajax(this, '/actueel/taken/maaltijdenbeheer/sluit/{$maaltijd->getMaaltijdId()}', page_reload);">Nu sluiten!</button>
 	{/if}
 	</h2>

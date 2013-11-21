@@ -50,6 +50,12 @@ class VoorkeurenModel {
 		}
 		foreach ($repById as $crid => $repetitie) {
 			if (!array_key_exists($crid, $voorkeuren)) { // nog niet gehad en uitgeschakeld
+				if ($repetitie->getCorveeFunctie()->getIsKwalificatieBenodigd()) {
+					require_once 'taken/model/KwalificatiesModel.class.php';
+					if (!KwalificatiesModel::getIsLidGekwalificeerd($lid->getUid(), $repetitie->getFunctieId())) {
+						continue;
+					}
+				}
 				$voorkeur = new CorveeVoorkeur($crid, null);
 				$voorkeur->setCorveeRepetitie($repetitie);
 				$voorkeur->setLid($lid);

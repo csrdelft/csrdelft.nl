@@ -1,5 +1,8 @@
 <?php
 namespace Taken\MLT;
+
+require_once 'taken/controller/BeheerMaaltijdenController.class.php';
+
 /**
  * MijnMaaltijdenView.class.php	| 	P.W.G. Brussee (brussee@live.nl)
  * 
@@ -23,6 +26,7 @@ class MijnMaaltijdenView extends \SimpleHtml {
 	public function view() {
 		$smarty = new \Smarty_csr();
 		$smarty->assign('module', '/actueel/taken/maaltijden');
+		$smarty->assign('toonlijst', BeheerMaaltijdenController::magMaaltijdlijstTonen());
 		
 		if (is_array($this->_aanmeldingen)) { // list of aanmeldingen and list of maaltijden
 			$smarty->assign('melding', $this->getMelding());

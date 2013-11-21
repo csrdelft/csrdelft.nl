@@ -82,8 +82,8 @@ class CorveeRepetitie {
 	public function getDagVanDeWeek() {
 		return (int) $this->dag_vd_week;
 	}
-	public function getDagVanDeWeekTimestamp() {
-		return (int) ($this->getDagVanDeWeek()+3)*24*3600;
+	public function getDagVanDeWeekText() {
+		return strftime('%A', ($this->getDagVanDeWeek()+3)*24*3600);
 	}
 	public function getPeriodeInDagen() {
 		return (int) $this->periode_in_dagen;

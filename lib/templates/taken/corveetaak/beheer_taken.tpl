@@ -37,7 +37,7 @@
 	<select name="crid" onchange="taken_submit_dropdown($(this).parent());">
 		<option selected="selected">kies</option>
 	{foreach from=$repetities item=repetitie}
-		<option value="{$repetitie->getCorveeRepetitieId()}">{$repetitie->getCorveeFunctie()->getNaam()} op {$repetitie->getDagVanDeWeekTimestamp()|date_format:"%A"}</option>
+		<option value="{$repetitie->getCorveeRepetitieId()}">{$repetitie->getCorveeFunctie()->getNaam()} op {$repetitie->getDagVanDeWeekText()}</option>
 	{/foreach}
 	</select>
 </form>

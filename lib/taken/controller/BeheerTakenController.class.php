@@ -168,12 +168,14 @@ class BeheerTakenController extends \ACLController {
 		$taak = TakenModel::getTaak($tid);
 		$leden_punten = TakenModel::getSuggesties($taak);
 		$voorkeuren = array();
+		$repetitie = null;
 		if ($taak->getCorveeRepetitieId() !== null) {
 			require_once 'taken/model/VoorkeurenModel.class.php';
 			$voorkeuren = VoorkeurenModel::getVoorkeurenVoorRepetitie($taak->getCorveeRepetitieId());
+			$repetitie = CorveeRepetitiesModel::getRepetitie($taak->getCorveeRepetitieId());
 		}
 		require_once 'taken/view/forms/TaakToewijzenFormView.class.php';
-		$form = new TaakToewijzenFormView($taak, $leden_punten, $voorkeuren); // fetches POST values itself
+		$form = new TaakToewijzenFormView($taak, $leden_punten, $voorkeuren, $repetitie); // fetches POST values itself
 		if ($form->validate()) {
 			$values = $form->getValues();
 			$uid = ($values['lid_id'] === '' ? null : $values['lid_id']);

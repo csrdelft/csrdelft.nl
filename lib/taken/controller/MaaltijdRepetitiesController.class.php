@@ -87,7 +87,7 @@ class MaaltijdRepetitiesController extends \ACLController {
 		if ($this->content instanceof MaaltijdRepetitiesView) { // opslaan succesvol
 			$verplaats = isset($_POST['verplaats_dag']);
 			$updated_aanmeldingen = MaaltijdenModel::updateRepetitieMaaltijden($this->content->getRepetitie(), $verplaats);
-			$this->content->setMelding($updated_aanmeldingen[0] .' maaltijd'. ($updated_aanmeldingen[0] !== 1 ? 'en' : '') .' bijgewerkt.', 1);
+			$this->content->setMelding($updated_aanmeldingen[0] .' maaltijd'. ($updated_aanmeldingen[0] !== 1 ? 'en' : '') .' bijgewerkt'. ($verplaats ? ' en eventueel verplaatst.': '.'), 1);
 			if ($updated_aanmeldingen[1] > 0) {
 				$this->content->setMelding($updated_aanmeldingen[1] .' aanmelding'. ($updated_aanmeldingen[1] !== 1 ? 'en' : '') .' verwijderd vanwege aanmeldrestrictie: '. $this->content->getRepetitie()->getAbonnementFilter(), 2);
 			}

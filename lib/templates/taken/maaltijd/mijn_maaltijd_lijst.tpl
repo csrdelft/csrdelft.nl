@@ -16,7 +16,7 @@
 		</span>
 	</td>
 	<td>
-{if $loginlid->hasPermission('P_MAAL_MOD') or opConfide()}
+{if $toonlijst}
 		<a href="/actueel/taken/maaltijdenbeheer/lijst/{$maaltijd->getMaaltijdId()}" title="Toon maaltijdlijst" class="knop" style="margin-right:10px;">{icon get="table"}</a>
 {/if}
 		{$maaltijd->getAantalAanmeldingen()} ({$maaltijd->getAanmeldLimiet()})

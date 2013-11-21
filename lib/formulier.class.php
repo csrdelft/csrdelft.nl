@@ -1118,7 +1118,7 @@ class SelectField extends FormField{
 		$this->size=(int)$size;
 		$this->multiple=$multiple;
 		if(count($this->options)<1){
-			throw new Exception('Tenminste 1 optie nodig.');
+			throw new Exception('Tenminste 1 optie nodig voor selectieveld: '. $name);
 		}
 		$this->notnull=true;
 	}

@@ -1,7 +1,7 @@
 {*
 	beheer_maaltijd_lijst.tpl	|	P.W.G. Brussee (brussee@live.nl)
 *}
-<tr id="maaltijd-row-{$maaltijd->getMaaltijdId()}"{if $maaltijd->getBeginMoment() < $smarty.now} class="taak-oud"{/if}>
+<tr id="maaltijd-row-{$maaltijd->getMaaltijdId()}"{if strtotime($maaltijd->getDatum()) < strtotime('-1 day')} class="taak-oud"{/if}>
 	<td>
 {if $maaltijd->getIsVerwijderd()}
 		<a href="{$module}/herstel/{$maaltijd->getMaaltijdId()}" title="Maaltijd herstellen" class="knop post">{icon get="arrow_undo"}</a>

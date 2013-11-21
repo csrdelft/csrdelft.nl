@@ -1,5 +1,8 @@
 <?php
 namespace Taken\MLT;
+
+require_once 'taken/controller/BeheerMaaltijdenController.class.php';
+
 /**
  * MaaltijdKetzerView.class.php	| 	P.W.G. Brussee (brussee@live.nl)
  * 
@@ -21,10 +24,11 @@ class MaaltijdKetzerView extends \SimpleHtml {
 	}
 	
 	public function view() {
-		$this->_smarty = new \Smarty_csr();
-		$this->_smarty->assign('maaltijd', $this->_maaltijd);
-		$this->_smarty->assign('aanmelding', $this->_aanmelding);
-		$this->_smarty->display('taken/maaltijd/maaltijd_ketzer.tpl');
+		$smarty = new \Smarty_csr();
+		$smarty->assign('maaltijd', $this->_maaltijd);
+		$smarty->assign('aanmelding', $this->_aanmelding);
+		$smarty->assign('toonlijst', BeheerMaaltijdenController::magMaaltijdlijstTonen());
+		$smarty->display('taken/maaltijd/maaltijd_ketzer.tpl');
 	}
 }
 

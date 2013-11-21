@@ -30,7 +30,8 @@ class CorveeRepetitieFormView extends \SimpleHtml {
 		
 		$formFields[] = new \SelectField('functie_id', $fid, 'Functie', $functieNamen);
 		$formFields[] = new \WeekdagField('dag_vd_week', $dag, 'Dag v/d week');
-		$formFields[] = new \IntField('periode_in_dagen', $periode, 'Periode (in dagen)', 183, 0);
+		$formFields['dag'] = new \IntField('periode_in_dagen', $periode, 'Periode (in dagen)', 183, 0);
+		$formFields['dag']->title = 'Als de periode ongelijk is aan 7 is dit de start-dag bij het aanmaken van periodiek corvee';
 		$formFields['vrk'] = new \VinkField('voorkeurbaar', $voorkeur, 'Voorkeurbaar');
 		if ($this->_crid !== 0) {
 			$formFields['vrk']->setOnChangeScript("if (!this.checked) alert('Alle voorkeuren zullen worden verwijderd!');");
@@ -38,8 +39,8 @@ class CorveeRepetitieFormView extends \SimpleHtml {
 		$formFields[] = new \SelectField('mlt_repetitie_id', $mrid, 'Maaltijdrepetitie', $repetitieNamen);
 		$formFields[] = new \IntField('standaard_aantal', $aantal, 'Aantal corveeërs', 10, 1);
 		if ($this->_crid !== 0) {
-			$formFields['dag'] = new \VinkField('verplaats_dag', $verplaats, 'Verplaatsen');
-			$formFields['dag']->title = 'Verplaats naar dag v/d week bij bijwerken';
+			$formFields['ver'] = new \VinkField('verplaats_dag', $verplaats, 'Ook verplaatsen');
+			$formFields['ver']->title = 'Verplaats naar dag v/d week bij bijwerken';
 		}
 		
 		$this->_form = new \Formulier('taken-corvee-repetitie-form', '/actueel/taken/corveerepetities/opslaan/'. $crid, $formFields);

@@ -67,7 +67,7 @@ class CorveeRepetitiesModel {
 		if ($query->rowCount() === 1) {
 			$result[0]->setCorveeFunctie(FunctiesModel::getFunctie($result[0]->getFunctieId()));
 		}
-		else {
+		elseif ($query->rowCount() > 1) {
 			$functies = FunctiesModel::getAlleFuncties(true); // grouped by fid
 			foreach ($result as $repetitie) {
 				$repetitie->setCorveeFunctie($functies[$repetitie->getFunctieId()]);

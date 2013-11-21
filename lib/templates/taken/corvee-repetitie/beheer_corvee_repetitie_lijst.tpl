@@ -10,7 +10,7 @@
 {/if}
 	</td>
 	<td>{$repetitie->getCorveeFunctie()->getNaam()}</td>
-	<td>{$repetitie->getDagVanDeWeekTimestamp()|date_format:"%A"}</td>
+	<td>{$repetitie->getDagVanDeWeekText()}</td>
 	<td>{$repetitie->getPeriodeInDagenText()}</td>
 	<td>{if $repetitie->getIsVoorkeurbaar()}{icon get="tick" title="Voorkeurbaar"}{/if}</td>
 	<td>{$repetitie->getStandaardAantal()}</td>

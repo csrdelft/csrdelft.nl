@@ -7,7 +7,7 @@
 		<a href="/actueel/taken/corveerepetities/maaltijd/{$repetitie->getMaaltijdRepetitieId()}" title="Corveebeheer maaltijdrepetitie" class="knop get">{icon get="chart_organisation"}</a>
 	</td>
 	<td>{$repetitie->getStandaardTitel()}</td>
-	<td>{$repetitie->getDagVanDeWeekTimestamp()|date_format:"%A"}</td>
+	<td>{$repetitie->getDagVanDeWeekText()}</td>
 	<td>{$repetitie->getPeriodeInDagenText()}</td>
 	<td>{$repetitie->getStandaardTijd()|date_format:"%H:%M"}</td>
 	<td>&euro; {$repetitie->getStandaardPrijs()|string_format:"%.2f"}</td>

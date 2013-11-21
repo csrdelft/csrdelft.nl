@@ -13,7 +13,7 @@ Op deze pagina kunt u voor alle leden de voorkeuren beheren.
 			<th>Lid</th>
 		{foreach from=$repetities item=repetitie}
 			<th>
-				{$repetitie->getCorveeFunctie()->getNaam()} op {$repetitie->getDagVanDeWeekTimestamp()|date_format:"%A"}
+				{$repetitie->getCorveeFunctie()->getNaam()} op {$repetitie->getDagVanDeWeekText()}
 				&nbsp;<a href="/actueel/taken/corveerepetities/beheer/{$repetitie->getCorveeRepetitieId()}" title="Wijzig corveerepetitie" class="knop get">{icon get="calendar_edit"}</a>
 			</th>
 		{/foreach}

@@ -50,7 +50,7 @@
 								</a>
 							{elseif $item|is_a:'\Taken\CRV\CorveeTaak'}
 								{icon get="paintcan"}
-								<a href="/actueel/taken/corveerooster" title="{$item->getBeschrijving()|escape:'htmlall'}">
+								<a href="/actueel/taken/corvee/rooster" title="{$item->getBeschrijving()|escape:'htmlall'}">
 									{$item->getTitel()}
 								</a>
 							{else}
