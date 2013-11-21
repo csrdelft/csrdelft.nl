@@ -45,12 +45,12 @@
 								</a>
 							{elseif $item|is_a:'\Taken\MLT\Maaltijd'}
 								{icon get="cup"} <div class="tijd">{$item->getBeginMoment()|date_format:"%R"}</div>
-								<a href="/actueel/taken/maaltijden" title="{$item->getBeschrijving()|escape:'htmlall'}">
+								<a href="/actueel/taken/maaltijden" title="{$item->getBeschrijving()}">
 									{$item->getTitel()}
 								</a>
 							{elseif $item|is_a:'\Taken\CRV\CorveeTaak'}
 								{icon get="paintcan"}
-								<a href="/actueel/taken/corvee/rooster" title="{$item->getBeschrijving()|escape:'htmlall'}">
+								<a href="/actueel/taken/corvee/rooster" title="{$item->getBeschrijving()}">
 									{$item->getTitel()}
 								</a>
 							{else}
