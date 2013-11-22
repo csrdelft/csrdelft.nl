@@ -185,7 +185,7 @@ input.VinkField {
 	opacity: 0.5;
 	background-color: black;
 	background-image: url("http://plaetjes.csrdelft.nl/layout/loading_bar_black.gif");
-	background-position: 50% 40%;
+	background-position: 50% 300px;
 	background-repeat: no-repeat;
 }
 #taken-popup {
