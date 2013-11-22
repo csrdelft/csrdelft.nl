@@ -43,36 +43,27 @@ class ConversieController extends \ACLController {
 			$this->action_geentoegang();
 			return;
 		}
-		ob_start('self::callback');
+		header( 'Content-type: text/html; charset=utf-8' );
 		
-		echo 'start conversie';
-		ob_flush();
-		flush();
+		$this->show('start conversie');
 		sleep(3);
-		
-		echo 'stap 1';
-		ob_flush();
-		flush();
+		$this->show('stap 1');
 		sleep(3);
-		
-		echo 'stap 2';
-		ob_flush();
-		flush();
+		$this->show('stap 2');
 		sleep(3);
-		
-		echo 'stap 3';
-		ob_flush();
-		flush();
+		$this->show('stap 3');
 		sleep(3);
-		
-		echo 'done';
-		ob_end_flush();
+		$this->show('done');
 		exit();
 	}
 	
-	public static function callback($buffer) {
-		return '<br />'. date('H:i:s') .' '. $buffer;
-	}
+	private function show($string){ 
+		ob_start();
+		echo '<br />'. date('H:i:s') .' '. $string;
+		ob_end_flush();
+		ob_flush();
+		flush();
+	} 
 }
 
 ?>
