@@ -9,7 +9,9 @@ Onderstaande tabel toont alle maaltijden die in de prullenbak zitten.
 <p>
 N.B. Voor het definitief verwijderen van een maaltijd moeten eerst de gekoppelde corveetaken definitief zijn verwijderd.
 </p>
-<div style="float: right;"><a href="{$module}/leegmaken" title="Alle maaltijden in de prullenbak definitief verwijderen" class="knop get confirm">{icon get="cross"} Prullenbak leegmaken</a></div>
+{if $maaltijden}
+<div style="float: right;"><a href="{$module}/leegmaken" title="Alle maaltijden in de prullenbak definitief verwijderen" class="knop get confirm">{icon get="bin"} Prullenbak leegmaken</a></div>
+{/if}
 {else}
 <p>
 Op deze pagina kunt u de maaltijden aanmaken, wijzigen en verwijderen.
