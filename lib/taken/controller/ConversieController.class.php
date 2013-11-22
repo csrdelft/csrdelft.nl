@@ -17,7 +17,7 @@ class ConversieController extends \ACLController {
 		}
 		else {
 			$this->acl = array(
-				'go' => 'P_ADMIN'
+				'do' => 'P_ADMIN'
 			);
 		}
 		$this->action = 'button';
@@ -29,7 +29,7 @@ class ConversieController extends \ACLController {
 	
 	public function action_button() {
 		echo '<html><body style="text-align:center;margin-top:200px;">';
-		echo '<form method="POST" action="/actueel/taken/conversiescript/go">';
+		echo '<form method="POST" action="/actueel/taken/conversie/do">';
 		echo '<input type="image" src="http://plaetjes.csrdelft.nl/knopjes/red_button.gif"';
 		echo ' onmousedown="this.src=\'http://plaetjes.csrdelft.nl/knopjes/red_button_pressed.gif\';"';
 		echo ' onmouseup="this.src=\'http://plaetjes.csrdelft.nl/knopjes/red_button.gif\';" />';
@@ -38,8 +38,16 @@ class ConversieController extends \ACLController {
 	}
 	
 	//TODO
-	public function action_go() {
-		echo 'done';
+	public function action_do() {
+		if (\LoginLid::instance()->getUid() !== '1137') {
+			$this->action_geentoegang();
+			return;
+		}
+		echo '<br />start conversie';
+		ob_flush();
+        flush();
+		sleep(3);
+		echo '<br />done';
 		exit();
 	}
 }

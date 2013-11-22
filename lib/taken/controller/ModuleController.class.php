@@ -133,10 +133,6 @@ class ModuleController extends \ACLController {
 	}
 	
 	public function action_conversie($query) {
-		if (LoginLid::instance()->getUid() !== '1137') {
-			$this->action_geentoegang();
-			return;
-		}
 		require_once 'taken/controller/ConversieController.class.php';
 		$controller = new \Taken\MLT\ConversieController($query);
 		$this->content = $controller->getContent();
