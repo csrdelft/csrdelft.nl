@@ -42,9 +42,9 @@
 	<td class="taak-{if $taak->getLidId()}toegewezen{elseif  strtotime($taak->getDatum()) < strtotime($vooraf)}warning{else}open{/if}" style="font-weight: normal;">
 {if isset($wijzigbaar)}
 		<a href="{$module}/toewijzen/{$taak->getTaakId()}" title="Deze taak toewijzen aan een lid&#013;Sleep om te ruilen" class="knop post popup ruilen" id="taak-{$taak->getTaakId()}"{if $taak->getLidId()} lid_id="{$taak->getLidId()}">{icon get="user_green"}{else}>{icon get="user_red"}{/if}</a>
-	{if $taak->getLidId()}
-			&nbsp;{$taak->getLid()->getNaamLink($ledenweergave, 'link')}
-	{/if}
+{/if}
+{if $taak->getLidId()}
+		&nbsp;{$taak->getLid()->getNaamLink($ledenweergave, 'link')}
 {/if}
 	</td>
 	<td{if $taak->getLidId() and ($taak->getPunten() !== $taak->getPuntenToegekend() or $taak->getBonusMalus() !== $taak->getBonusToegekend()) and strtotime($taak->getDatum()) < strtotime($achteraf)} class="taak-warning"{/if}>
