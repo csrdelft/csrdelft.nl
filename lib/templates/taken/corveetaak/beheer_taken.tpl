@@ -22,6 +22,9 @@
 	<p>N.B. U kunt ingedeelde corveeërs eenvoudig ruilen door het icoontje voor de naam te verslepen.</p>
 {/if}
 <br />
+{if $prullenbak}
+<div style="float: right;"><a href="{$module}/leegmaken" title="Alle taken in de prullenbak definitief verwijderen" class="knop get confirm">{icon get="cross"} Prullenbak leegmaken</a></div>
+{/if}
 {if !($prullenbak or (isset($maaltijd) and $maaltijd->getIsVerwijderd()))}
 <div style="float: right;">
 	{if !$prullenbak and !isset($maaltijd)}

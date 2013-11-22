@@ -49,9 +49,6 @@ class MaaltijdRepetitie {
 		$this->setStandaardTitel($titel);
 		if ($tijd === null) {
 			$tijd = $GLOBALS['standaard_maaltijdaanvang'];
-			if ($tijd === null) {
-				$tijd = date('H:i');
-			}
 		}
 		$this->setStandaardTijd($tijd);
 		if ($prijs === null) {

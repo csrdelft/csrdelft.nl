@@ -68,7 +68,7 @@ class InstellingenModel {
 	 * Zoek een instelling voor bewerken of na verwijderen.
 	 * Als een default instelling ontbreekt wordt deze aangemaakt en opgeslagen.
 	 * 
-	 * @return Instelling[]
+	 * @return Instelling
 	 */
 	public static function getInstelling($key) {
 		foreach (self::$_instellingen as $instelling) {

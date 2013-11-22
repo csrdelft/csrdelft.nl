@@ -22,6 +22,7 @@ class BeheerMaaltijdenController extends \ACLController {
 			$this->acl = array(
 				'beheer' => 'P_MAAL_MOD',
 				'prullenbak' => 'P_MAAL_MOD',
+				'leegmaken' => 'P_MAAL_MOD',
 				'lijst' => 'P_MAAL_IK',
 				'fiscaal' => 'P_MAAL_MOD'
 			);
@@ -186,6 +187,11 @@ class BeheerMaaltijdenController extends \ACLController {
 		} else {
 			$this->content = $form;
 		}
+	}
+	
+	public function action_leegmaken() {
+		$aantal = MaaltijdenModel::prullenbakLeegmaken();
+		\SimpleHTML::invokeRefresh('/actueel/taken/maaltijdenbeheer/prullenbak', $aantal . ($aantal === 1 ? ' maaltijd' : ' maaltijden') .' definitief verwijderd.', ($aantal === 0 ? 0 : 1 ));
 	}
 	
 	// Repetitie-Maaltijden ############################################################

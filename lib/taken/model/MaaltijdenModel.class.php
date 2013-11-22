@@ -47,6 +47,10 @@ class MaaltijdenModel {
 	 * @return Maaltijd[] (implements Agendeerbaar)
 	 */
 	public static function getMaaltijdenVoorAgenda($van, $tot) {
+		// init
+		require_once 'taken/model/InstellingenModel.class.php';
+		\Taken\MLT\InstellingenModel::getAlleInstellingen();
+		
 		if (!is_int($van) || !is_int($tot)) {
 			throw new \Exception('Invalid timestamp: getMaaltijdenVoorAgenda($van, $tot)');
 		}
@@ -145,6 +149,21 @@ class MaaltijdenModel {
 			$db->rollback();
 			throw $e; // rethrow to controller
 		}
+	}
+	
+	public static function prullenbakLeegmaken() {
+		$aantal = 0;
+		$maaltijden = self::getVerwijderdeMaaltijden();
+		foreach ($maaltijden as $maaltijd) {
+			try {
+				self::verwijderMaaltijd($maaltijd->getMaaltijdId());
+				$aantal++;
+			}
+			catch (\Exception $e) {
+				setMelding($e->getMessage(), -1);
+			}
+		}
+		return $aantal;
 	}
 	
 	public static function verwijderMaaltijd($mid) {

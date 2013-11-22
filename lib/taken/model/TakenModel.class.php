@@ -204,6 +204,10 @@ class TakenModel {
 	 * @return CorveeTaak[] (implements Agendeerbaar)
 	 */
 	public static function getTakenVoorAgenda($van, $tot, $iedereen=false) {
+		// init
+		require_once 'taken/model/InstellingenModel.class.php';
+		\Taken\MLT\InstellingenModel::getAlleInstellingen();
+		
 		if (!is_int($van) || !is_int($tot)) {
 			throw new \Exception('Invalid timestamp: getTakenVoorAgenda($van, $tot)');
 		}
@@ -276,6 +280,16 @@ class TakenModel {
 		$taak->setVerwijderd(false);
 		self::updateTaak($taak);
 		return $taak;
+	}
+	
+	public static function prullenbakLeegmaken() {
+		$sql = 'DELETE FROM crv_taken';
+		$sql.= ' WHERE verwijderd = true';
+		$values = array();
+		$db = \CsrPdo::instance();
+		$query = $db->prepare($sql, $values);
+		$query->execute($values);
+		return $query->rowCount();
 	}
 	
 	public static function verwijderOudeTaken() {

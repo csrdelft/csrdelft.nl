@@ -19,6 +19,7 @@ class BeheerTakenController extends \ACLController {
 			$this->acl = array(
 				'beheer' => 'P_CORVEE_MOD',
 				'prullenbak' => 'P_CORVEE_MOD',
+				'leegmaken' => 'P_MAAL_MOD',
 				'maaltijd' => 'P_CORVEE_MOD',
 				'herinneren' => 'P_CORVEE_MOD'
 			);
@@ -34,8 +35,8 @@ class BeheerTakenController extends \ACLController {
 				'koppelen' => 'P_CORVEE_MOD',
 				'puntentoekennen' => 'P_CORVEE_MOD',
 				'puntenintrekken' => 'P_CORVEE_MOD',
-				'aanmaken' => 'P_CORVEE_MOD',
-				'email' => 'P_CORVEE_MOD'
+				'email' => 'P_CORVEE_MOD',
+				'aanmaken' => 'P_CORVEE_MOD'
 			);
 		}
 		$this->action = 'beheer';
@@ -86,19 +87,19 @@ class BeheerTakenController extends \ACLController {
 		$verstuurd = $verstuurd_errors[0];
 		$errors = $verstuurd_errors[1];
 		$aantal = sizeof($errors);
-		$this->action_beheer();
 		if ($aantal > 0) {
-			$this->content->setMelding($aantal .' herinnering'. ($aantal !== 1 ? 'en' : '') .' niet kunnen versturen!');
+			setMelding($aantal .' herinnering'. ($aantal !== 1 ? 'en' : '') .' niet kunnen versturen!', -1);
 			foreach ($errors as $error) {
-				$this->content->setMelding($error->getMessage(), 2); // toon wat er allemaal fout is gegaan
+				setMelding($error->getMessage(), 2); // toon wat er allemaal fout is gegaan
 			}
 		}
 		if ($verstuurd > 0) {
-			$this->content->setMelding($verstuurd .' herinnering'. ($verstuurd !== 1 ? 'en' : '') .' verstuurd!', 1);
+			setMelding($verstuurd .' herinnering'. ($verstuurd !== 1 ? 'en' : '') .' verstuurd!', 1);
 		}
 		else {
-			$this->content->setMelding('Geen herinneringen verstuurd.', 0);
+			setMelding('Geen herinneringen verstuurd.', 0);
 		}
+		\SimpleHTML::invokeRefresh('/actueel/taken/corveebeheer');
 	}
 	
 	public function action_nieuw() {
@@ -216,6 +217,11 @@ class BeheerTakenController extends \ACLController {
 		require_once 'taken/model/HerinneringenModel.class.php';
 		HerinneringenModel::stuurHerinnering($taak);
 		$this->content = new BeheerTakenView($taak);
+	}
+	
+	public function action_leegmaken() {
+		$aantal = TakenModel::prullenbakLeegmaken();
+		\SimpleHTML::invokeRefresh('/actueel/taken/corveebeheer/prullenbak', $aantal . ($aantal === 1 ? ' taak' : ' taken') .' definitief verwijderd.', ($aantal === 0 ? 0 : 1 ));
 	}
 	
 	// Repetitie-Taken ############################################################
