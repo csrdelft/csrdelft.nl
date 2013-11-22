@@ -25,20 +25,20 @@ class InstellingenModel {
 		'standaard_maaltijdlimiet' => '0',
 		'marge_gasten_verhouding' => '10',
 		'marge_gasten_min' => '3',
-		'marge_gasten_max' => '4',
+		'marge_gasten_max' => '6',
 		'weergave_ledennamen_beheer' => 'volledig',
 		'weergave_ledennamen_corveerooster' => 'civitas',
 		'waarschuwing_taaktoewijzing_vooraf' => '+14 days',
 		'waarschuwing_puntentoewijzing_achteraf' => '-1 days',
 		'maaltijdlijst_tekst' => '<p>Regels omtrent het betalen van de maaltijden op Confide:</p>
 <ul>
-	<li>Maaltijdprijs: &euro; MAALTIJDPRIJS</li>
-	<li>Niet betaald = nb</li>
-	<li>Betaald met machtiging = omcirkel "m" en vul bedrag in.</li>
-	<li>Contant betaald = bedrag invullen.</li>
-	<li>Schrijf duidelijk in het hokje hoeveel je in de helm hebt gegooid.</li>
-	<li>Bevat derde kolom "ok"? Dan hebt u nog voldoende tegoed voor deze maaltijd.</li>
-	<li>Als u onvoldoende saldo hebt bij de MaalCie en u betaalt niet voor deze maaltijd dan krijgt u een boete van 20 cent, 1 euro of 2 euro, afhankelijk van hoe negatief uw saldo is!</li>
+<li>Maaltijdprijs: &euro; MAALTIJDPRIJS</li>
+<li>Niet betaald = nb</li>
+<li>Betaald met machtiging = omcirkel "m" en vul bedrag in.</li>
+<li>Contant betaald = bedrag invullen.</li>
+<li>Schrijf duidelijk in het hokje hoeveel je in de helm hebt gegooid.</li>
+<li>Bevat derde kolom "ok"? Dan hebt u nog voldoende tegoed voor deze maaltijd.</li>
+<li>Als u onvoldoende saldo hebt bij de MaalCie en u betaalt niet voor deze maaltijd dan krijgt u een boete van 20 cent, 1 euro of 2 euro, afhankelijk van hoe negatief uw saldo is!</li>
 </ul>'
 	);
 	
