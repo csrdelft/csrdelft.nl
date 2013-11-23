@@ -16,14 +16,16 @@
 	<a href="{$module}/maaltijd/{$taak->getMaaltijdId()}" title="Beheer maaltijdcorvee" class="knop get">{icon get="cup_link"}</a>
 {/if}
 	</td>
-	<td style="text-align: center;">
+	<td style="width: 50px; text-align: center;">
 {assign var=aantal value=$taak->getAantalKeerGemaild()}
 {if !$taak->getIsVerwijderd() and (!isset($maaltijd) or !$maaltijd->getIsVerwijderd())}
 	{assign var="wijzigbaar" value="true"}
 	{if $taak->getLidId()}
 		{$aantal}x
-		<div style="float: right;">
-			<a href="{$module}/email/{$taak->getTaakId()}" title="Verstuur een (extra) herinnering voor deze taak" class="knop post confirm">
+	{/if}
+	<div style="float: right;">
+	{if $taak->getLidId()}
+		<a href="{$module}/email/{$taak->getTaakId()}" title="Verstuur een (extra) herinnering voor deze taak" class="knop post confirm">
 	{/if}
 {/if}
 {if $taak->getIsTelaatGemaild()}
@@ -37,13 +39,15 @@
 {elseif $aantal > 1}
 			{icon get="email_open" title=$taak->getWanneerGemaild()}
 {/if}
-{if isset($wijzigbaar) and $taak->getLidId()}
-			</a>
-		</div>
+{if isset($wijzigbaar)}
+	{if $taak->getLidId()}
+		</a>
+	{/if}
+	</div>
 {/if}
 	</td>
 	<td>{$taak->getDatum()|date_format:"%a %e %b"}</td>
-	<td>{$taak->getCorveeFunctie()->getNaam()}</td>
+	<td style="width: 100px;">{$taak->getCorveeFunctie()->getNaam()}</td>
 	<td class="taak-{if $taak->getLidId()}toegewezen{elseif  strtotime($taak->getDatum()) < strtotime($vooraf)}warning{else}open{/if}" style="font-weight: normal;">
 {if isset($wijzigbaar)}
 		<a href="{$module}/toewijzen/{$taak->getTaakId()}" title="Deze taak toewijzen aan een lid&#013;Sleep om te ruilen" class="knop post popup ruilen" id="taak-{$taak->getTaakId()}"{if $taak->getLidId()} lid_id="{$taak->getLidId()}">{icon get="user_green"}{else}>{icon get="user_red"}{/if}</a>

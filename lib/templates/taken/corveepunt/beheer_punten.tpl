@@ -6,9 +6,10 @@ Op deze pagina kunt u voor alle leden de corveepunten beheren.
 </p>
 <p>
 De onderstaande tabel bevat een overzicht van de punten die per corveefunctie zijn verdiend.
-Tussen haakjes staat het aantal keer dat het lid is ingedeeld voor de betreffende functie.
+Achter de komma staat het aantal keer dat het lid is ingedeeld voor de betreffende functie.
 De kolom punten is exclusief bonus/malus.
 De kolom prognose geeft aan hoeveel punten het lid naar verwachting totaal zal hebben aan het einde van het corveejaar.
+Een * geeft aan dat het lid een vrijstelling heeft.
 </p>
 <h3>Corveejaar resetten</h3>
 <p>
@@ -19,16 +20,24 @@ En zet vervolgens de bonus/malus weer op nul.
 <p>
 N.B. Alle corveetaken in het verleden worden bij de reset naar de prullenbak verplaatst en alle verlopen vrijstellingen worden definitief verwijderd!
 </p>
-<a href="{$module}/resetjaar" title="Reset corveejaar" class="knop get confirm">{icon get="lightning"} Corveejaar resetten</a>
+<div style="float: right;">
+	<a href="{$module}/resetjaar" title="Reset corveejaar" class="knop get confirm">{icon get="lightning"} Corveejaar resetten</a>
+</div>
 <table id="taken-tabel" class="taken-tabel">
 {foreach name=tabel from=$matrix item=puntenlijst}
 	{if $smarty.foreach.tabel.index % 25 === 0}
 		{if !$smarty.foreach.tabel.first}</tbody>{/if}
 	<thead>
-		<tr>
+		<tr style="vertical-align: bottom;">
 			<th>Lid</th>
 		{foreach from=$functies item=functie}
-			<th title="{$functie->getNaam()}">{$functie->getAfkorting()}</th>
+			<th style="padding: 5px; background-color: {cycle values="#F0F0F0,#FAFAFA"};">{strip}
+				<div style="width: 17px; height: 160px;">
+					<div class="vertical" style="font-weight: normal; position: relative; top: 140px;">
+						<nobr>{$functie->getNaam()}</nobr>
+					</div>
+				</div>
+			</th>{/strip}
 		{/foreach}
 			<th>Punten</th>
 			<th>Bonus<br />/malus</th>

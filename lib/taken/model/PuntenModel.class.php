@@ -145,6 +145,7 @@ class PuntenModel {
 			$lijst = self::sumPuntenPerFunctie($functies, $lidtaken);
 		}
 		if ($vrijstelling !== null) {
+			$lijst['vrijstelling'] = $vrijstelling;
 			$lijst['prognose'] += $vrijstelling->getPunten();
 		}
 		$lijst['lid'] = $lid;
