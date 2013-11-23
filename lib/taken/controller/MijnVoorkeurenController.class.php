@@ -57,7 +57,7 @@ class MijnVoorkeurenController extends \ACLController {
 	public function action_eetwens() {
 		$eetwens = htmlspecialchars($_POST['eetwens']);
 		VoorkeurenModel::setEetwens(\LoginLid::instance()->getLid(), $eetwens);
-		$this->content = new MijnVoorkeurenView(null);
+		$this->content = new MijnVoorkeurenView(null, $eetwens);
 	}
 }
 

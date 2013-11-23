@@ -21,13 +21,14 @@ class MijnVoorkeurenView extends \SimpleHtml {
 	}
 	
 	public function view() {
-		if ($this->_voorkeuren === null) { // saved eetwens
-			return;
-		}
 		$smarty = new \Smarty_csr();
 		$smarty->assign('module', '/actueel/taken/voorkeuren');
 		
-		if (is_array($this->_voorkeuren)) { // list of voorkeuren
+		if ($this->_voorkeuren === null) { // eetwens
+			$smarty->assign('eetwens', $this->_eetwens);
+			$smarty->display('taken/voorkeur/mijn_eetwens.tpl');
+		}
+		elseif (is_array($this->_voorkeuren)) { // list of voorkeuren
 			$smarty->assign('melding', $this->getMelding());
 			$smarty->assign('kop', $this->getTitel());
 			$smarty->display('taken/taken_menu.tpl');

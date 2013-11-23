@@ -10,17 +10,11 @@ require_once 'taken/model/CorveeRepetitiesModel.class.php';
  */
 class VoorkeurenModel {
 
-	public static function getEetwens($lid) {
-		if (!$lid instanceof \Lid) {
-			throw new \Exception('Get eetwens faalt: ongeldig lid');
-		}
+	public static function getEetwens(\Lid $lid) {
 		return $lid->getProperty('eetwens');
 	}
 	
-	public static function setEetwens($lid, $eetwens) {
-		if (!$lid instanceof \Lid) {
-			throw new \Exception('Set eetwens faalt: ongeldig lid');
-		}
+	public static function setEetwens(\Lid $lid, $eetwens) {
 		$lid->setProperty('eetwens', $eetwens);
 		if (!$lid->save()) {
 			throw new \Exception('Eetwens opslaan mislukt');

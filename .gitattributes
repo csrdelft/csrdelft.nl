@@ -3383,6 +3383,7 @@ lib/templates/taken/taken_menu.tpl -text
 lib/templates/taken/voorkeur/beheer_voorkeur_lijst.tpl -text
 lib/templates/taken/voorkeur/beheer_voorkeur_veld.tpl -text
 lib/templates/taken/voorkeur/beheer_voorkeuren.tpl -text
+lib/templates/taken/voorkeur/mijn_eetwens.tpl -text
 lib/templates/taken/voorkeur/mijn_voorkeur_lijst.tpl -text
 lib/templates/taken/voorkeur/mijn_voorkeur_veld.tpl -text
 lib/templates/taken/voorkeur/mijn_voorkeuren.tpl -text

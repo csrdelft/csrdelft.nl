@@ -67,6 +67,7 @@ div.vertical {
 	border-bottom: 1px dotted grey;
 	width: 100%;
 	cursor: pointer;
+	font-style: italic;
 }
 .Formulier label {
 	margin: 0px !important;

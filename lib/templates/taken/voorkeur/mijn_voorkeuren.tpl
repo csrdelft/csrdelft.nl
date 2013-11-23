@@ -14,12 +14,7 @@ Dit kunt u hieronder aangeven, de koks zullen er dan rekening mee houden.
 <p>
 N.B. Dit is niet de plek om aan te geven dat u iets niet lekker vindt!
 </p>
-<form action="{$module}/eetwens" class="Formulier popup">
-<div class="veld">
-	<label for="eetwens" style="float: none;">Allergie/diëet:</label>
-	<input type="text" name="eetwens" value="{$eetwens}" size="50" /> <input type="submit" value="Opslaan" />
-</div>
-</form>
+Allergie/diëet: {include file='taken/voorkeur/mijn_eetwens.tpl'}
 <table id="taken-tabel" class="taken-tabel">
 	<thead>
 		<tr>

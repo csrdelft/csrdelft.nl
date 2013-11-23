@@ -173,6 +173,9 @@ class ConversieModel {
 				if ($fid === 4) {
 					$periode = 7;
 				}
+				elseif ($fid === 10 || $fid === 11) {
+					$periode = 0;
+				}
 				$corvee[$fid] = \Taken\CRV\CorveeRepetitiesModel::saveRepetitie(0, null, 1, $periode, $fid, 1, $vrk);
 				$corvee[$fid] = $corvee[$fid][0];
 			}
