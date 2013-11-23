@@ -6,7 +6,7 @@
 {if $maal.maaltijden|@count==0}
 	<p>&#8226; Helaas, er is binnenkort geen maaltijd op Confide.</p>
 {else}
-	<table class="maaltijden" id="corveebeheer" cellspacing="0">
+	<table class="maaltijden" id="corveebeheer" cellspacing="0" width="100%">
 		<tr>
 			<th>&nbsp;</th>
 			<th>Maaltijd begint om:</th>

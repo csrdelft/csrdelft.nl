@@ -227,6 +227,17 @@ class ConversieModel {
 		
 		echo '<br />' . date('H:i:s') . ' converteren: maaltijd => Maaltijd & maaltijdcorvee => CorveeTaak[]';
 		
+		$aantallen = array(
+			7 => 'kwalikoks',
+			1 => 'koks',
+			2 => 'afwassers',
+			4 => 'theedoeken',
+			9 => 'schoonmaken_frituur',
+			6 => 'schoonmaken_afzuigkap',
+			5 => 'schoonmaken_keuken',
+			10 => 'klussen_licht',
+			11 => 'klussen_zwaar'
+		);
 		$rows = self::queryDb('SELECT * FROM maaltijd');
 		$maaltijden = array();
 		foreach ($rows as $row) {
@@ -265,19 +276,36 @@ class ConversieModel {
 				if ($fid === 3) {
 					continue;
 				}
-				
 				$taken = self::queryDb('SELECT * FROM maaltijdcorvee WHERE maalid = ?', array($mid));
+				if ($fid === 8) {
+					$punt = intval($row['punten_afwas']);
+				}
+				else {
+					$punt = intval($row['punten_'. $functie]);
+				}
+				$aantal = 0;
 				foreach ($taken as $taak) {
-					if ($fid === 8) {
-						$punt = intval($row['punten_afwas']);
+					if ($taak[$functie] === '1') {
+						$aantal++;
+						$corveetaak = \Taken\CRV\TakenModel::saveTaak(0, $fid, $taak['uid'], $corvee[$fid]->getCorveeRepetitieId(), $mid, date('Y-m-d', $datum), $punt, 0);
+						if ($taak['punten_toegekend'] === 'ja') {
+							\Taken\CRV\TakenModel::puntenToekennen($corveetaak);
+						}
 					}
-					else {
-						$punt = intval($row['punten_'. $functie]);
+				}
+				if ($fid === 8) {
+					if ($aantal === 0) {
+						$tekort = 1;
 					}
-					$corveetaak = \Taken\CRV\TakenModel::saveTaak(0, $fid, $taak['uid'], $corvee[$fid]->getCorveeRepetitieId(), $mid, date('Y-m-d', $datum), $punt, 0);
-					if ($taak['punten_toegekend'] === 'ja') {
-						\Taken\CRV\TakenModel::puntenToekennen($corveetaak);
-					}
+				}
+				else {
+					$tekort = intval($row[$aantallen[$fid]]) - $aantal;
+				}
+				if ($fid === 2 && $tekort > 0) {
+					$tekort--;
+				}
+				for ($i = 0; $i < $tekort; $i++) {
+					$corveetaak = \Taken\CRV\TakenModel::saveTaak(0, $fid, null, $corvee[$fid]->getCorveeRepetitieId(), $mid, date('Y-m-d', $datum), $punt, 0);
 				}
 			}
 		}
