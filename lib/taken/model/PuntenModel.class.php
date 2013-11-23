@@ -18,7 +18,7 @@ class PuntenModel {
 			try {
 				$lid = \LidCache::getLid($uid); // false if lid does not exist
 				if (!$lid instanceof \Lid) {
-					throw new \Exception('Reset corveejaar faalt: ongeldig lid');
+					throw new \Exception('Lid bestaat niet: $uid ='. $uid);
 				}
 				$punten = $totalen['puntenTotaal'];
 				$punten += $totalen['bonusTotaal'];
@@ -48,7 +48,7 @@ class PuntenModel {
 		}
 		$lid = \LidCache::getLid($uid); // false if lid does not exist
 		if (!$lid instanceof \Lid) {
-			throw new \Exception('Punten toekennen faalt: ongeldig lid');
+			throw new \Exception('Lid bestaat niet: $uid ='. $uid);
 		}
 		self::savePuntenVoorLid($lid, (int) $lid->getProperty('corvee_punten') + $punten, (int) $lid->getProperty('corvee_punten_bonus') + $bonus_malus);
 	}
@@ -59,7 +59,7 @@ class PuntenModel {
 		}
 		$lid = \LidCache::getLid($uid); // false if lid does not exist
 		if (!$lid instanceof \Lid) {
-			throw new \Exception('Punten intrekken faalt: ongeldig lid');
+			throw new \Exception('Lid bestaat niet: $uid ='. $uid);
 		}
 		self::savePuntenVoorLid($lid, (int) $lid->getProperty('corvee_punten') - $punten, (int) $lid->getProperty('corvee_punten_bonus') - $bonus_malus);
 	}
@@ -114,7 +114,7 @@ class PuntenModel {
 		foreach ($matrix as $uid => $totalen) {
 			$lid = \LidCache::getLid($uid); // false if lid does not exist
 			if (!$lid instanceof \Lid) {
-				throw new \Exception('Load punten per functie faalt: ongeldig lid');
+				throw new \Exception('Lid bestaat niet: $uid ='. $uid);
 			}
 			$lidtaken = array();
 			if (array_key_exists($uid, $taken)) {

@@ -49,19 +49,19 @@ class MaaltijdenModel {
 			throw new \Exception('Invalid timestamp: getMaaltijdenVoorAgenda($van, $tot)');
 		}
 		$maaltijden = self::loadMaaltijden('verwijderd = false AND datum >= ? AND datum <= ?', array(date('Y-m-d', $van), date('Y-m-d', $tot)));
-		$maaltijden = self::filterMaaltijdenVoorLid($maaltijden, \LoginLid::instance()->getLid());
+		$maaltijden = self::filterMaaltijdenVoorLid($maaltijden, \LoginLid::instance()->getUid());
 		return $maaltijden;
 	}
 	
 	/**
 	 * Haalt de maaltijden op die beschikbaar zijn voor aanmelding voor het lid in de komende maand.
 	 * 
-	 * @param Lid $lid
+	 * @param string $uid
 	 * @return Maaltijd[]
 	 */
-	public static function getKomendeMaaltijdenVoorLid(\Lid $lid) {
+	public static function getKomendeMaaltijdenVoorLid($uid) {
 		$maaltijden = self::loadMaaltijden('verwijderd = false AND datum >= ? AND datum <= ?', array(date('Y-m-d'), date('Y-m-d', strtotime('+1 month'))));
-		$maaltijden = self::filterMaaltijdenVoorLid($maaltijden, $lid);
+		$maaltijden = self::filterMaaltijdenVoorLid($maaltijden, $uid);
 		return $maaltijden;
 	}
 	
@@ -72,7 +72,7 @@ class MaaltijdenModel {
 	 */
 	public static function getMaaltijdVoorKetzer($mid) {
 		$maaltijden = array(self::getMaaltijd($mid));
-		$maaltijden = self::filterMaaltijdenVoorLid($maaltijden, \LoginLid::instance()->getLid());
+		$maaltijden = self::filterMaaltijdenVoorLid($maaltijden, \LoginLid::instance()->getUid());
 		if (!empty($maaltijden)) {
 			return reset($maaltijden);
 		}
@@ -210,16 +210,13 @@ class MaaltijdenModel {
 	 * Filtert de maaltijden met het aanmeld-filter van de maaltijd op de permissies van het lid.
 	 * 
 	 * @param Maaltijd[] $maaltijden
-	 * @param Lid $lid
+	 * @param string $uid
 	 * @return Maaltijd[]
 	 */
-	private static function filterMaaltijdenVoorLid($maaltijden, \Lid $lid) {
-		if (!$lid instanceof \Lid) {
-			throw new \Exception('Filter maaltijden voor lid faalt: $lid ='. $lid);
-		}
+	private static function filterMaaltijdenVoorLid($maaltijden, $uid) {
 		$result = array();
 		foreach ($maaltijden as $maaltijd) {
-			if (AanmeldingenModel::checkAanmeldFilter($lid, $maaltijd->getAanmeldFilter())) {
+			if (AanmeldingenModel::checkAanmeldFilter($uid, $maaltijd->getAanmeldFilter())) {
 				$result[$maaltijd->getMaaltijdId()] = $maaltijd;
 			}
 		}

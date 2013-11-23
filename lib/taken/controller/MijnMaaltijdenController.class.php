@@ -56,7 +56,7 @@ class MijnMaaltijdenController extends \ACLController {
 	}
 	
 	public function action_mijn() {
-		$maaltijden = MaaltijdenModel::getKomendeMaaltijdenVoorLid(\LoginLid::instance()->getLid());
+		$maaltijden = MaaltijdenModel::getKomendeMaaltijdenVoorLid(\LoginLid::instance()->getUid());
 		$aanmeldingen = AanmeldingenModel::getAanmeldingenVoorLid($maaltijden, \LoginLid::instance()->getUid());
 		$this->content = new MijnMaaltijdenView($maaltijden, $aanmeldingen);
 		$this->content = new \csrdelft($this->getContent());

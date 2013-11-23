@@ -33,7 +33,12 @@ class CorveeKwalificatie {
 	 * @return Lid if exists, false otherwise
 	 */
 	public function getLid() {
-		return \LidCache::getLid($this->getLidId());
+		$uid = $this->getLidId();
+		$lid = \LidCache::getLid($uid); // false if lid does not exist
+		if (!$lid instanceof \Lid) {
+			throw new \Exception('Lid bestaat niet: $uid ='. $uid);
+		}
+		return $lid;
 	}
 	public function getFunctieId() {
 		return (int) $this->functie_id;

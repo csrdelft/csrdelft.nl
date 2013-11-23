@@ -21,8 +21,7 @@
 {/foreach}
 	<td>
 		<div class="inline-edit" onclick="toggle_taken_hiddenform(this);">{$puntenlijst.puntenTotaal}</div>
-		<form method="post" action="{$module}/wijzigpunten" class="Formulier taken-hidden-form taken-subform">
-			<input type="hidden" name="voor_lid" value="{$puntenlijst.lid->getUid()}" />
+		<form method="post" action="{$module}/wijzigpunten/{$puntenlijst.lid->getUid()}" class="Formulier taken-hidden-form taken-subform">
 			<input type="text" name="totaal_punten" value="{$puntenlijst.puntenTotaal}" maxlength="4" size="4" />
 			<a onclick="$(this).parent().submit();" title="Wijzigingen opslaan" class="knop">{icon get="accept"}</a>
 			<a onclick="toggle_taken_hiddenform($(this).parent());" title="Annuleren" class="knop">{icon get="delete"}</a>
@@ -30,8 +29,7 @@
 	</td>
 	<td>
 		<div class="inline-edit" onclick="toggle_taken_hiddenform(this);">{$puntenlijst.bonusTotaal}</div>
-		<form method="post" action="{$module}/wijzigbonus" class="Formulier taken-hidden-form taken-subform">
-			<input type="hidden" name="voor_lid" value="{$puntenlijst.lid->getUid()}" />
+		<form method="post" action="{$module}/wijzigbonus/{$puntenlijst.lid->getUid()}" class="Formulier taken-hidden-form taken-subform">
 			<input type="text" name="totaal_bonus" value="{$puntenlijst.bonusTotaal}" maxlength="4" size="4" />
 			<a onclick="$(this).parent().submit();" title="Wijzigingen opslaan" class="knop">{icon get="accept"}</a>
 			<a onclick="toggle_taken_hiddenform($(this).parent());" title="Annuleren" class="knop">{icon get="delete"}</a>

@@ -165,7 +165,7 @@ class ConversieModel {
 		$corvee = array();
 		foreach ($functies as $functie => $fid) {
 			$vrk = true;
-			if ($fid === 7) {
+			if ($fid === 7 || $fid === 3) {
 				$vrk = false;
 			}
 			if ($fid > 3 && $fid !== 7 && $fid !== 8) {

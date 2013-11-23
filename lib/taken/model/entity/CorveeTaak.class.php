@@ -191,7 +191,12 @@ class CorveeTaak implements \Agendeerbaar {
 	 * @return Lid if exists, false otherwise
 	 */
 	public function getLid() {
-		return \LidCache::getLid($this->getLidId());
+		$uid = $this->getLidId();
+		$lid = \LidCache::getLid($uid); // false if lid does not exist
+		if (!$lid instanceof \Lid) {
+			throw new \Exception('Lid bestaat niet: $uid ='. $uid);
+		}
+		return $lid;
 	}
 	public function getCorveeFunctie() {
 		return $this->corvee_functie;
@@ -204,9 +209,6 @@ class CorveeTaak implements \Agendeerbaar {
 		$this->functie_id = $int;
 	}
 	public function setLidId($uid) {
-		if ($uid !== null && !\Lid::exists($uid)) {
-			throw new \Exception('Lid bestaat niet: set lid id: '. $uid);
-		}
 		$this->lid_id = $uid;
 	}
 	public function setCorveeRepetitieId($int) {

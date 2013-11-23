@@ -11,7 +11,7 @@
 	{if $maaltijd->getMaaltijdRepetitieId()}
 		<a href="/actueel/taken/maaltijdrepetities/beheer/{$maaltijd->getMaaltijdRepetitieId()}" title="Beheer maaltijdrepetities" class="knop get">{icon get="calendar_edit"}</a>
 	{else}
-		<div style="display: inline-block; width: 26px;"></div>
+		<div style="display: inline-block; width: 28px;"></div>
 	{/if}
 {/if}
 		<a href="/actueel/taken/corveebeheer/maaltijd/{$maaltijd->getMaaltijdId()}" title="Beheer maaltijdcorvee" class="knop get">{icon get="chart_organisation"}</a>

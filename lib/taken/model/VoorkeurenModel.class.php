@@ -33,18 +33,18 @@ class VoorkeurenModel {
 	 * Dat laatste kan alleen voor het ingelogde lid.
 	 * Voor elk ander lid worden de permissies niet gefilterd.
 	 * 
-	 * @param Lid $lid
+	 * @param string $uid
 	 * @return CorveeVoorkeur[]
 	 */
-	public static function getVoorkeurenVoorLid(\Lid $lid) {
+	public static function getVoorkeurenVoorLid($uid) {
 		$repById = CorveeRepetitiesModel::getVoorkeurbareRepetities(true); // grouped by crid
 		$voorkeuren = array();
-		$tmp = self::loadVoorkeuren(null, $lid->getUid());
+		$tmp = self::loadVoorkeuren(null, $uid);
 		foreach ($tmp as $voorkeur) {
 			$crid = $voorkeur->getCorveeRepetitieId();
 			if (!array_key_exists($crid, $voorkeuren) && array_key_exists($crid, $repById)) { // nog niet gehad en ingeschakeld
 				$voorkeur->setCorveeRepetitie($repById[$crid]);
-				$voorkeur->setLid($lid);
+				$voorkeur->setVanLid($uid);
 				$voorkeuren[$crid] = $voorkeur;
 			}
 		}
@@ -52,13 +52,13 @@ class VoorkeurenModel {
 			if (!array_key_exists($crid, $voorkeuren)) { // nog niet gehad en uitgeschakeld
 				if ($repetitie->getCorveeFunctie()->getIsKwalificatieBenodigd()) {
 					require_once 'taken/model/KwalificatiesModel.class.php';
-					if (!KwalificatiesModel::getIsLidGekwalificeerd($lid->getUid(), $repetitie->getFunctieId())) {
+					if (!KwalificatiesModel::getIsLidGekwalificeerd($uid, $repetitie->getFunctieId())) {
 						continue;
 					}
 				}
 				$voorkeur = new CorveeVoorkeur($crid, null);
 				$voorkeur->setCorveeRepetitie($repetitie);
-				$voorkeur->setLid($lid);
+				$voorkeur->setVanLid($uid);
 				$voorkeuren[$crid] = $voorkeur;
 			}
 		}
@@ -69,9 +69,6 @@ class VoorkeurenModel {
 	public static function getHeeftVoorkeur($crid, $uid) {
 		if (!is_int($crid) || $crid <= 0) {
 			throw new \Exception('Get heeft voorkeur faalt: Invalid $crid ='. $crid);
-		}
-		if (!\Lid::exists($uid)) {
-			throw new \Exception('Lid bestaat niet: $uid ='. $uid);
 		}
 		$sql = 'SELECT EXISTS (SELECT * FROM crv_voorkeuren WHERE crv_repetitie_id=? AND lid_id=?)';
 		$values = array($crid, $uid);
@@ -93,7 +90,6 @@ class VoorkeurenModel {
 		foreach ($leden_voorkeuren as $lv) {
 			$crid = $lv['crid'];
 			$uid = $lv['uid'];
-			$lid = \LidCache::getLid($uid);
 			if ($lv['voorkeur']) {
 				$voorkeur = new CorveeVoorkeur($crid, $uid);
 			}
@@ -101,7 +97,7 @@ class VoorkeurenModel {
 				$voorkeur = new CorveeVoorkeur($crid, null);
 			}
 			$voorkeur->setCorveeRepetitie($repById[$crid]);
-			$voorkeur->setLid($lid);
+			$voorkeur->setVanLid($uid);
 			$matrix[$uid][$crid] = $voorkeur;
 			ksort($matrix[$uid]);
 		}

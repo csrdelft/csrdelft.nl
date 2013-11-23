@@ -3,7 +3,7 @@
 *}
 <tr id="vrijstelling-row-{$vrijstelling->getLidId()}">
 	<td>
-		<a href="{$module}/bewerk" post="voor_lid={$vrijstelling->getLidId()}" title="Vrijstelling wijzigen" class="knop post popup">{icon get="pencil"}</a>
+		<a href="{$module}/bewerk/{$vrijstelling->getLidId()}" title="Vrijstelling wijzigen" class="knop post popup">{icon get="pencil"}</a>
 	</td>
 	<td>{$vrijstelling->getLid()->getNaamLink($ledenweergave, 'link')}</td>
 	<td>{$vrijstelling->getBeginDatum()|date_format:"%e %b %Y"}</td>
@@ -11,6 +11,6 @@
 	<td>{$vrijstelling->getPercentage()}%</td>
 	<td>{$vrijstelling->getPunten()}</td>
 	<td class="col-del">
-		<a href="{$module}/verwijder" post="voor_lid={$vrijstelling->getLidId()}" title="Vrijstelling definitief verwijderen" class="knop post confirm">{icon get="cross"}</a>
+		<a href="{$module}/verwijder/{$vrijstelling->getLidId()}" title="Vrijstelling definitief verwijderen" class="knop post confirm">{icon get="cross"}</a>
 	</td>
 </tr>

@@ -15,28 +15,22 @@ class AbonnementenModel {
 	 * de abonnementen die nog kunnen worden ingeschakeld op basis
 	 * van de meegegeven maaltijdrepetities.
 	 * 
-	 * @param Lid $lid
+	 * @param string $uid
 	 * @param MaaltijdRepetitie[] $repetities
 	 * @return MaaltijdAbonnement[]
 	 */
-	public static function getAbonnementenVoorLid($lid, $repetities) {
-		if (is_string($lid)) {
-			$lid = \LidCache::getLid($lid);
-		}
-		if (!$lid instanceof \Lid) {
-			throw new \Exception('Lid bestaat niet: $lid ='. $lid);
-		}
+	public static function getAbonnementenVoorLid($uid, $repetities) {
 		$repById = array();
 		foreach ($repetities as $repetitie) { // group by mrid
 			$repById[$repetitie->getMaaltijdRepetitieId()] = $repetitie;
 		}
 		$lijst = array();
-		$abos = self::loadAbonnementen(null, $lid->getUid());
+		$abos = self::loadAbonnementen(null, $uid);
 		foreach ($abos as $abo) { // ingeschakelde abonnementen
 			$mrid = $abo->getMaaltijdRepetitieId();
 			if (array_key_exists($mrid, $repById)) { // weergeven
 				$abo->setMaaltijdRepetitie($repById[$mrid]);
-				$abo->setLid($lid);
+				$abo->setVanLid($uid);
 				$lijst[$mrid] = $abo;
 			}
 		}
@@ -45,7 +39,7 @@ class AbonnementenModel {
 			if (!array_key_exists($mrid, $lijst)) { // uitgeschakelde abonnementen
 				$abo = new MaaltijdAbonnement($repetitie->getMaaltijdRepetitieId(), null);
 				$abo->setMaaltijdRepetitie($repetitie);
-				$abo->setLid($lid);
+				$abo->setVanLid($uid);
 				$lijst[$mrid] = $abo;
 			}
 		}
@@ -56,9 +50,6 @@ class AbonnementenModel {
 	public static function getHeeftAbonnement($mrid, $uid) {
 		if (!is_int($mrid) || $mrid <= 0) {
 			throw new \Exception('Get heeft abonnement faalt: Invalid $mrid ='. $mrid);
-		}
-		if (!\Lid::exists($uid)) {
-			throw new \Exception('Lid bestaat niet: $uid ='. $uid);
 		}
 		$sql = 'SELECT EXISTS (SELECT * FROM mlt_abonnementen WHERE mlt_repetitie_id=? AND lid_id=?)';
 		$values = array($mrid, $uid);
@@ -74,9 +65,6 @@ class AbonnementenModel {
 	 * @return MaaltijdAbonnement[uid][mrid]
 	 */
 	public static function getAbonnementenMatrix($repetities, $alleenNovieten=false, $alleenWaarschuwingen=false, $ingeschakeld=null, $voorLid=null) {
-		if ($voorLid !== null && !\Lid::exists($voorLid)) {
-			throw new \Exception('Lid bestaat niet: $voorLid ='. $voorLid);
-		}
 		$repById = array();
 		foreach ($repetities as $repetitie) {
 			$repById[$repetitie->getMaaltijdRepetitieId()] = $repetitie;
@@ -92,8 +80,7 @@ class AbonnementenModel {
 			else { // uitgeschakelde abonnementen
 				$abonnement = new MaaltijdAbonnement($mrid, null);
 			}
-			$lid = \LidCache::getLid($uid);
-			$abonnement->setLid($lid);
+			$abonnement->setVanLid($uid);
 			$abonnement->setMaaltijdRepetitie($repById[$mrid]);
 			if ($alleenWaarschuwingen) {
 				if ($abo['abo_err']) {
@@ -105,7 +92,7 @@ class AbonnementenModel {
 				elseif ($abo['kring_err']) {
 					$abonnement->setWaarschuwing('Geen actief kringlid');
 				}
-				elseif (!AanmeldingenModel::checkAanmeldFilter($lid, $abo['abonnement_filter'])) {
+				elseif (!AanmeldingenModel::checkAanmeldFilter($uid, $abo['abonnement_filter'])) {
 					$abonnement->setWaarschuwing('Niet toegestaan vanwege aanmeldrestrictie: '. $abo['abonnement_filter']);
 				}
 				else {
@@ -118,7 +105,7 @@ class AbonnementenModel {
 			foreach ($matrix as $uid => $abos) {
 				if (!array_key_exists($mrid, $abos)) {
 					$abonnement = new MaaltijdAbonnement(($ingeschakeld ? $mrid : null), null);
-					$abonnement->setLid(\LidCache::getLid($uid));
+					$abonnement->setVanLid($uid);
 					$abonnement->setMaaltijdRepetitie($repById[$mrid]);
 					$matrix[$uid][$mrid] = $abonnement;
 				}
@@ -208,12 +195,11 @@ class AbonnementenModel {
 		if (self::getHeeftAbonnement($mrid, $uid)) {
 			throw new \Exception('Abonnement al ingeschakeld');
 		}
-		$lid = \LidCache::getLid($uid);
-		if (!AanmeldingenModel::checkAanmeldFilter($lid, $repetitie->getAbonnementFilter())) {
+		if (!AanmeldingenModel::checkAanmeldFilter($uid, $repetitie->getAbonnementFilter())) {
 			throw new \Exception('Niet toegestaan vanwege aanmeldrestrictie: '. $repetitie->getAbonnementFilter());
 		}
-		$abo_aantal = self::newAbonnement($mrid, $lid->getUid());
-		$abo_aantal[0]->setLid($lid);
+		$abo_aantal = self::newAbonnement($mrid, $uid);
+		$abo_aantal[0]->setVanLid($uid);
 		return $abo_aantal;
 	}
 	
@@ -289,7 +275,7 @@ class AbonnementenModel {
 		}
 		$aantal = self::deleteAbonnementen($mrid, $uid);
 		$abo = new MaaltijdAbonnement($mrid, null);
-		$abo->setLid(\LidCache::getLid($uid));
+		$abo->setVanLid($uid);
 		return array($abo, $aantal);
 	}
 	

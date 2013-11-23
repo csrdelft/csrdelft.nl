@@ -11,17 +11,11 @@ class AanmeldingenModel {
 
 	public static function aanmeldenVoorMaaltijd($mid, $uid, $doorUid, $aantalGasten=0, $beheer=false, $gastenOpmerking='') {
 		$maaltijd = MaaltijdenModel::getMaaltijd($mid);
-		if (!\Lid::exists($uid)) {
-			throw new \Exception('Lid bestaat niet: $uid ='. $uid);
-		}
-		if (!\Lid::exists($doorUid)) {
-			throw new \Exception('Lid bestaat niet: $doorUid ='. $doorUid);
-		}
 		if (!$maaltijd->getIsGesloten() && $maaltijd->getBeginMoment() < strtotime(date('Y-m-d H:i'))) {
 			MaaltijdenModel::sluitMaaltijd($maaltijd);
 		}
 		if (!$beheer) {
-			if (!self::checkAanmeldFilter(\LidCache::getLid($uid), $maaltijd->getAanmeldFilter())) {
+			if (!self::checkAanmeldFilter($uid, $maaltijd->getAanmeldFilter())) {
 				throw new \Exception('Niet toegestaan vanwege aanmeldrestrictie: '. $maaltijd->getAanmeldFilter());
 			}
 			if ($maaltijd->getIsGesloten()) {
@@ -179,9 +173,6 @@ class AanmeldingenModel {
 	}
 	
 	public static function getAanmeldingenVoorLid($maaltijdenById, $uid) {
-		if (!\Lid::exists($uid)) {
-			throw new \Exception('Lid bestaat niet: $uid ='. $uid);
-		}
 		if (empty($maaltijdenById)) {
 			return $maaltijdenById; // array()
 		}
@@ -197,9 +188,6 @@ class AanmeldingenModel {
 	public static function getIsAangemeld($mid, $uid, $doorAbo=null) {
 		if (!is_int($mid) || $mid <= 0) {
 			throw new \Exception('Load maaltijd faalt: Invalid $mid ='. $mid);
-		}
-		if (!\Lid::exists($uid)) {
-			throw new \Exception('Lid bestaat niet: $uid ='. $uid);
 		}
 		$sql = 'SELECT EXISTS (SELECT * FROM mlt_aanmeldingen WHERE maaltijd_id=? AND lid_id=?';
 		$values = array($mid, $uid);
@@ -332,20 +320,24 @@ class AanmeldingenModel {
 		$aantal = 0;
 		$aanmeldingen = self::loadAanmeldingen($mids);
 		foreach ($aanmeldingen as $aanmelding) { // check filter voor elk aangemeld lid
-			$lid = \LidCache::getLid($aanmelding->getLidId());
-			if (!self::checkAanmeldFilter($lid, $filter)) { // verwijder aanmelding indien niet toegestaan
-				$aantal += self::deleteAanmeldingen($aanmelding->getMaaltijdId(), $lid->getUid());
+			$uid = $aanmelding->getLidId();
+			if (!self::checkAanmeldFilter($uid, $filter)) { // verwijder aanmelding indien niet toegestaan
+				$aantal += self::deleteAanmeldingen($aanmelding->getMaaltijdId(), $uid);
 			}
 		}
 		return $aantal;
 	}
 	
-	public static function checkAanmeldFilter(\Lid $lid, $filter, $opposite=false) {
+	public static function checkAanmeldFilter($uid, $filter, $opposite=false) {
+		$lid = \LidCache::getLid($uid); // false if lid does not exist
+		if (!$lid instanceof \Lid) {
+			throw new \Exception('Lid bestaat niet: $uid ='. $uid);
+		}
 		if ($filter === '') {
 			return true;
 		}
 		if (!$opposite && strpos($filter, '!') === 0) {
-			return self::checkAanmeldFilter($lid, substr($filter, 1), true);
+			return self::checkAanmeldFilter($uid, substr($filter, 1), true);
 		}
 		
 		$filter = explode(':', $filter);
@@ -382,7 +374,7 @@ class AanmeldingenModel {
 			try {
 				$parts = explode('>', $filter[1], 2); // Splitst opgegeven term in groepsnaam en functie
 				$groep = new \Groep($parts[0]);
-				if ($groep->isLid()) {
+				if ($groep->isLid($uid)) {
 					// Wordt er een functie gevraagd?
 					if (isset($parts[1])) {
 						$functie = $groep->getFunctie();
@@ -435,12 +427,8 @@ class AanmeldingenModel {
 		if (!is_int($mrid) || $mrid <= 0) {
 			throw new \Exception('Invalid abonnement: $voorAbo ='. $mrid);
 		}
-		$lid = \LidCache::getLid($uid);
-		if (!$lid instanceof \Lid) {
-			throw new \Exception('Lid bestaat niet: $uid ='. $uid);
-		}
 		$repetitie = MaaltijdRepetitiesModel::getRepetitie($mrid);
-		if (!self::checkAanmeldFilter($lid, $repetitie->getAbonnementFilter())) {
+		if (!self::checkAanmeldFilter($uid, $repetitie->getAbonnementFilter())) {
 			throw new \Exception('Niet toegestaan vanwege aanmeldrestrictie: '. $repetitie->getAbonnementFilter());
 		}
 		return self::newAanmelding(null, $uid, 0, '', $mrid, null);

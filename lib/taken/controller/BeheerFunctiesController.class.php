@@ -97,6 +97,9 @@ class BeheerFunctiesController extends \ACLController {
 	
 	public function action_dekwalificeer($fid) {
 		$uid = $_POST['voor_lid'];
+		if (!\Lid::exists($uid)) {
+			throw new \Exception('Lid bestaat niet: $uid ='. $uid);
+		}
 		KwalificatiesModel::kwalificatieTerugtrekken($fid, $uid);
 		$functie = FunctiesModel::getFunctie($fid);
 		$functie->setGekwalificeerden(KwalificatiesModel::getKwalificatiesVoorFunctie($functie));

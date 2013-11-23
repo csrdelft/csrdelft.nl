@@ -30,7 +30,11 @@ class BeheerVrijstellingenController extends \ACLController {
 		if ($this->hasParam(1)) {
 			$this->action = $this->getParam(1);
 		}
-		$this->performAction();
+		$uid = null;
+		if ($this->hasParam(2)) {
+			$uid = $this->getParam(2);
+		}
+		$this->performAction($uid);
 	}
 	
 	public function action_beheer() {
@@ -48,8 +52,10 @@ class BeheerVrijstellingenController extends \ACLController {
 		$this->content = new VrijstellingFormView($vrijstelling->getLidId(), $vrijstelling->getBeginDatum(), $vrijstelling->getEindDatum(), $vrijstelling->getPercentage());
 	}
 	
-	public function action_bewerk() {
-		$uid = $_POST['voor_lid'];
+	public function action_bewerk($uid) {
+		if (!\Lid::exists($uid)) {
+			throw new \Exception('Lid bestaat niet: $uid ='. $uid);
+		}
 		$vrijstelling = VrijstellingenModel::getVrijstelling($uid);
 		$this->content = new VrijstellingFormView($vrijstelling->getLidId(), $vrijstelling->getBeginDatum(), $vrijstelling->getEindDatum(), $vrijstelling->getPercentage());
 	}
@@ -66,8 +72,10 @@ class BeheerVrijstellingenController extends \ACLController {
 		}
 	}
 	
-	public function action_verwijder() {
-		$uid = $_POST['voor_lid'];
+	public function action_verwijder($uid) {
+		if (!\Lid::exists($uid)) {
+			throw new \Exception('Lid bestaat niet: $uid ='. $uid);
+		}
 		VrijstellingenModel::verwijderVrijstelling($uid);
 		$this->content = new BeheerVrijstellingenView($uid);
 	}

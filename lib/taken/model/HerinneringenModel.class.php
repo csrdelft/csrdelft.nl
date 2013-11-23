@@ -9,7 +9,7 @@ class HerinneringenModel {
 	public static function stuurHerinnering(CorveeTaak $taak) {
 		$datum = date('d-m-Y', strtotime($taak->getDatum()));
 		$uid = $taak->getLidId();
-		$lid = \LidCache::getLid($uid);
+		$lid = \LidCache::getLid($uid); // false if lid does not exist
 		if (!$lid instanceof \Lid) {
 			throw new \Exception('Taak "'. $taak->getCorveeFunctie()->getNaam() .'" op '. $datum .' is nog niet toegewezen aan lid!'. (!empty($uid) ? ' $uid ='. $uid : ''));
 		}

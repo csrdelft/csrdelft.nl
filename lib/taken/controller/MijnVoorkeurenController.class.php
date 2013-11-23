@@ -36,7 +36,7 @@ class MijnVoorkeurenController extends \ACLController {
 	}
 	
 	public function action_mijn() {
-		$voorkeuren = VoorkeurenModel::getVoorkeurenVoorLid(\LoginLid::instance()->getLid());
+		$voorkeuren = VoorkeurenModel::getVoorkeurenVoorLid(\LoginLid::instance()->getUid());
 		$eetwens = VoorkeurenModel::getEetwens(\LoginLid::instance()->getLid());
 		$this->content = new MijnVoorkeurenView($voorkeuren, $eetwens);
 		$this->content = new \csrdelft($this->getContent());

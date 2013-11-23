@@ -41,9 +41,6 @@ class KwalificatiesModel {
 	}
 	
 	public static function getKwalificatiesVanLid($uid) {
-		if (!\Lid::exists($uid)) {
-			throw new \Exception('Lid bestaat niet: $uid ='. $uid);
-		}
 		return self::loadKwalificaties('lid_id = ?', array($uid));
 	}
 	
@@ -54,9 +51,6 @@ class KwalificatiesModel {
 	private static function existKwalificatie($uid, $fid) {
 		if (!is_int($fid) || $fid <= 0) {
 			throw new \Exception('Exist corvee-kwalificatie faalt: Invalid $fid ='. $fid);
-		}
-		if (!\Lid::exists($uid)) {
-			throw new \Exception('Lid bestaat niet: $uid ='. $uid);
 		}
 		$sql = 'SELECT EXISTS (SELECT * FROM crv_kwalificaties WHERE lid_id = ? AND functie_id = ?)';
 		$values = array($uid, $fid);

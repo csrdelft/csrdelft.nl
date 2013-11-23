@@ -9,10 +9,22 @@ require_once 'taken/model/entity/MaaltijdRepetitie.class.php';
  */
 class MaaltijdRepetitiesModel {
 
-	public static function getAbonneerbareRepetitiesVoorLid(\Lid $lid) {
+	/**
+	 * Filtert de repetities met het abonnement-filter van de maaltijd-repetitie op de permissies van het ingelogde lid.
+	 *
+	 * @param MaaltijdRepetitie[] $repetities
+	 * @param string $uid
+	 * @return MaaltijdRepetitie[]
+	 */
+	public static function getAbonneerbareRepetitiesVoorLid($uid) {
 		$repetities = self::loadRepetities('abonneerbaar = true');
-		$repetities = self::filterRepetitiesVoorLid($repetities, $lid);
-		return $repetities;
+		$result = array();
+		foreach ($repetities as $repetitie) {
+			if (AanmeldingenModel::checkAanmeldFilter($uid, $repetitie->getAbonnementFilter())) {
+				$result[$repetitie->getMaaltijdRepetitieId()] = $repetitie;
+			}
+		}
+		return $result;
 	}
 	
 	public static function getAbonneerbareRepetities() {
@@ -32,26 +44,6 @@ class MaaltijdRepetitiesModel {
 			throw new \Exception('Get maaltijd-repetitie faalt: Not found $mrid ='. $mrid);
 		}
 		return $repetities[0];
-	}
-	
-	/**
-	 * Filtert de repetities met het abonnement-filter van de maaltijd-repetitie op de permissies van het ingelogde lid.
-	 *
-	 * @param MaaltijdRepetitie[] $repetities
-	 * @param Lid $lid
-	 * @return MaaltijdRepetitie[]
-	 */
-	private static function filterRepetitiesVoorLid($repetities, \Lid $lid) {
-		if (!$lid instanceof \Lid) {
-			throw new \Exception('Filter repetities voor lid faalt: $lid ='. $lid);
-		}
-		$result = array();
-		foreach ($repetities as $repetitie) {
-			if (AanmeldingenModel::checkAanmeldFilter($lid, $repetitie->getAbonnementFilter())) {
-				$result[$repetitie->getMaaltijdRepetitieId()] = $repetitie;
-			}
-		}
-		return $result;
 	}
 	
 	private static function loadRepetities($where=null, $values=array(), $limit=null) {

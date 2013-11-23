@@ -42,7 +42,12 @@ class CorveeVrijstelling {
 		return $this->lid_id;
 	}
 	public function getLid() {
-		return \LidCache::getLid($this->getLidId());
+		$uid = $this->getLidId();
+		$lid = \LidCache::getLid($uid); // false if lid does not exist
+		if (!$lid instanceof \Lid) {
+			throw new \Exception('Lid bestaat niet: $uid ='. $uid);
+		}
+		return $lid;
 	}
 	
 	public function getBeginDatum() {

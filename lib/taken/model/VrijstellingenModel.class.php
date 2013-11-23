@@ -22,9 +22,6 @@ class VrijstellingenModel {
 	}
 	
 	public static function getVrijstelling($uid) {
-		if (!\Lid::exists($uid)) {
-			throw new \Exception('Get vrijstelling faalt: Invalid $uid ='. $uid);
-		}
 		$vrijstellingen = self::loadVrijstellingen('lid_id = ?', array($uid), 1);
 		if (!array_key_exists(0, $vrijstellingen)) {
 			return null; //throw new \Exception('Get vrijstelling faalt: Not found $uid ='. $uid);
@@ -50,9 +47,6 @@ class VrijstellingenModel {
 	}
 	
 	public static function saveVrijstelling($uid, $begin, $eind, $percentage) {
-		if (!\Lid::exists($uid)) {
-			throw new \Exception('Save vrijstelling faalt: Invalid $uid ='. $uid);
-		}
 		$db = \CsrPdo::instance();
 		try {
 			$db->beginTransaction();
@@ -108,9 +102,6 @@ class VrijstellingenModel {
 	}
 	
 	public static function verwijderVrijstelling($uid) {
-		if (!\Lid::exists($uid)) {
-			throw new \Exception('Lid bestaat niet: $uid ='. $uid);
-		}
 		self::deleteVrijstelling($uid);
 	}
 	

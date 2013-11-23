@@ -44,16 +44,22 @@ class BeheerVoorkeurenController extends \ACLController {
 	
 	public function action_inschakelen($crid) {
 		$uid = $_POST['voor_lid'];
+		if (!\Lid::exists($uid)) {
+			throw new \Exception('Lid bestaat niet: $uid ='. $uid);
+		}
 		$abonnement = VoorkeurenModel::inschakelenVoorkeur($crid, $uid);
-		$abonnement->setLid(\LidCache::getLid($abonnement->getLidId()));
+		$abonnement->setVanLid($abonnement->getLidId());
 		$this->content = new BeheerVoorkeurenView($abonnement);
 	}
 	
 	public function action_uitschakelen($crid) {
 		$uid = $_POST['voor_lid'];
+		if (!\Lid::exists($uid)) {
+			throw new \Exception('Lid bestaat niet: $uid ='. $uid);
+		}
 		VoorkeurenModel::uitschakelenVoorkeur($crid, $uid);
 		$abonnement = new CorveeVoorkeur($crid, null);
-		$abonnement->setLid(\LidCache::getLid($uid));
+		$abonnement->setVanLid($uid);
 		$this->content = new BeheerVoorkeurenView($abonnement);
 	}
 }

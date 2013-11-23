@@ -19,7 +19,10 @@ class TaakToewijzenFormView extends \SimpleHtml {
 		$kwali = $taak->getCorveeFunctie()->getIsKwalificatieBenodigd();
 		$suggestielijst = array();
 		foreach ($leden_punten as $uid => $puntenlijst) {
-			$lid = \LidCache::getLid($uid);
+			$lid = \LidCache::getLid($uid); // false if lid does not exist
+			if (!$lid instanceof \Lid) {
+				throw new \Exception('Lid bestaat niet: $uid ='. $uid);
+			}
 			if ($kwali) {
 				$suggestielijst[$uid] = '# '. $puntenlijst['aantal'][$taak->getFunctieId()];
 			}

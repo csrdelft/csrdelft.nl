@@ -87,6 +87,9 @@ class BeheerAbonnementenController extends \ACLController {
 	
 	public function action_inschakelen($mrid) {
 		$uid = $_POST['voor_lid'];
+		if (!\Lid::exists($uid)) {
+			throw new \Exception('Lid bestaat niet: $uid ='. $uid);
+		}
 		$abo_aantal = AbonnementenModel::inschakelenAbonnement($mrid, $uid);
 		$this->content = new BeheerAbonnementenView($abo_aantal[0]);
 		if ($abo_aantal[1] > 0) {
@@ -96,6 +99,9 @@ class BeheerAbonnementenController extends \ACLController {
 	
 	public function action_uitschakelen($mrid) {
 		$uid = $_POST['voor_lid'];
+		if (!\Lid::exists($uid)) {
+			throw new \Exception('Lid bestaat niet: $uid ='. $uid);
+		}
 		$abo_aantal = AbonnementenModel::uitschakelenAbonnement($mrid, $uid);
 		$this->content = new BeheerAbonnementenView($abo_aantal[0]);
 		if ($abo_aantal[1] > 0) {

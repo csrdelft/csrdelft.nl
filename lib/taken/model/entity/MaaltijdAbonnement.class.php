@@ -33,7 +33,7 @@ class MaaltijdAbonnement {
 	private $lid_id; # foreign key lid.uid
 	
 	private $maaltijd_repetitie;
-	private $lid;
+	private $van_lid;
 	private $waarschuwing;
 	
 	public function __construct($mrid=0, $uid='') {
@@ -55,14 +55,19 @@ class MaaltijdAbonnement {
 		return $this->maaltijd_repetitie;
 	}
 	public function getLid() {
-		return $this->lid;
+		$uid = $this->van_lid;
+		$lid = \LidCache::getLid($uid); // false if lid does not exist
+		if (!$lid instanceof \Lid) {
+			throw new \Exception('Lid bestaat niet: $uid ='. $uid);
+		}
+		return $lid;
 	}
 	
 	public function setMaaltijdRepetitie(MaaltijdRepetitie $repetitie) {
 		$this->maaltijd_repetitie = $repetitie;
 	}
-	public function setLid(\Lid $lid) {
-		$this->lid = $lid;
+	public function setVanLid($uid) {
+		$this->van_lid = $uid;
 	}
 	public function setWaarschuwing($string) {
 		if (!is_string($string)) {

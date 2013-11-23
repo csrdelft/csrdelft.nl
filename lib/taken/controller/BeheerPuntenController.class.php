@@ -28,11 +28,11 @@ class BeheerPuntenController extends \ACLController {
 		if ($this->hasParam(1)) {
 			$this->action = $this->getParam(1);
 		}
-		$crid = null;
+		$uid = null;
 		if ($this->hasParam(2)) {
-			$crid = intval($this->getParam(2));
+			$uid = $this->getParam(2);
 		}
-		$this->performAction($crid);
+		$this->performAction($uid);
 	}
 	
 	public function action_beheer() {
@@ -44,10 +44,10 @@ class BeheerPuntenController extends \ACLController {
 		$this->content->addScript('taken.js');
 	}
 	
-	public function action_wijzigpunten() {
-		$lid = \LidCache::getLid($_POST['voor_lid']); // false if lid does not exist
+	public function action_wijzigpunten($uid) {
+		$lid = \LidCache::getLid($uid); // false if lid does not exist
 		if (!$lid instanceof \Lid) {
-			throw new \Exception('Wijzig punten faalt: ongeldig lid; $uid ='. $_POST['voor_lid']);
+			throw new \Exception('Lid bestaat niet: $uid ='. $uid);
 		}
 		$punten = intval($_POST['totaal_punten']);
 		PuntenModel::savePuntenVoorLid($lid, $punten, null);
@@ -56,10 +56,10 @@ class BeheerPuntenController extends \ACLController {
 		$this->content = new BeheerPuntenView($lijst);
 	}
 	
-	public function action_wijzigbonus() {
-		$lid = \LidCache::getLid($_POST['voor_lid']); // false if lid does not exist
+	public function action_wijzigbonus($uid) {
+		$lid = \LidCache::getLid($uid); // false if lid does not exist
 		if (!$lid instanceof \Lid) {
-			throw new \Exception('Wijzig bonus faalt: ongeldig lid; $uid ='. $_POST['voor_lid']);
+			throw new \Exception('Lid bestaat niet: $uid ='. $uid);
 		}
 		$bonus = intval($_POST['totaal_bonus']);
 		PuntenModel::savePuntenVoorLid($lid, null, $bonus);

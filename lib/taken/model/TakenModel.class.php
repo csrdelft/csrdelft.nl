@@ -39,7 +39,7 @@ class TakenModel {
 				$uid = $kwali->getLidId();
 				$lid = \LidCache::getLid($uid); // false if lid does not exist
 				if (!$lid instanceof \Lid) {
-					throw new \Exception('Taak toewijzen faalt: ongeldig lid; $uid ='. $uid);
+					throw new \Exception('Lid bestaat niet: $uid ='. $uid);
 				}
 				if (array_key_exists($uid, $vrijstellingen)) {
 					$vrijstelling = $vrijstellingen[$uid];
@@ -98,9 +98,6 @@ class TakenModel {
 	}
 	
 	public static function taakToewijzenAanLid(CorveeTaak $taak, $uid) {
-		if ($uid !== null && !\Lid::exists($uid)) {
-			throw new \Exception('Lid bestaat niet: $uid ='. $uid);
-		}
 		if ($taak->getLidId() !== $uid) {
 			$taak->setLidId($uid);
 			$taak->setWanneerGemaild('');
@@ -227,9 +224,6 @@ class TakenModel {
 	 * @return CorveeTaak[]
 	 */
 	public static function getTakenVoorLid($uid) {
-		if (!\Lid::exists($uid)) {
-			throw new \Exception('Lid bestaat niet: $uid ='. $uid);
-		}
 		return self::loadTaken('verwijderd = false AND lid_id = ?', array($uid));	
 	}
 	

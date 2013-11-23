@@ -74,14 +74,24 @@ class MaaltijdAanmelding {
 	 * @return Lid if exists, false otherwise
 	 */
 	public function getLid() {
-		return \LidCache::getLid($this->getLidId());
+		$uid = $this->getLidId();
+		$lid = \LidCache::getLid($uid); // false if lid does not exist
+		if (!$lid instanceof \Lid) {
+			throw new \Exception('Lid bestaat niet: $uid ='. $uid);
+		}
+		return $lid;
 	}
 	/**
 	 * Laad het Lid object die deze aanmelding heeft gemaakt.
 	 * @return Lid if exists, false otherwise
 	 */
 	public function getDoorLid() {
-		return \LidCache::getLid($this->getDoorLidId());
+		$uid = $this->getLidDoorId();
+		$lid = \LidCache::getLid($uid); // false if lid does not exist
+		if (!$lid instanceof \Lid) {
+			throw new \Exception('Lid bestaat niet: $uid ='. $uid);
+		}
+		return $lid;
 	}
 	/**
 	 * Haal het MaalCie saldo op van het lid van deze aanmelding.
@@ -159,9 +169,6 @@ class MaaltijdAanmelding {
 		$this->door_abonnement = $mrid;
 	}
 	public function setDoorLidId($uid) {
-		if ($uid !== null && !\Lid::exists($uid)) {
-			throw new \Exception('Lid bestaat niet: door lid: '. $uid);
-		}
 		$this->door_lid_id = $uid;
 	}
 	public function setMaaltijd(Maaltijd $maaltijd) {

@@ -17,7 +17,7 @@ class CorveeVoorkeur {
 	private $lid_id; # foreign key lid.uid
 	
 	private $corvee_repetitie;
-	private $lid;
+	private $van_lid;
 	
 	public function __construct($mrid=0, $uid='') {
 		$this->crv_repetitie_id = (int) $mrid;
@@ -35,17 +35,19 @@ class CorveeVoorkeur {
 		return $this->corvee_repetitie;
 	}
 	public function getLid() {
-		return $this->lid;
+		$uid = $this->van_lid;
+		$lid = \LidCache::getLid($uid); // false if lid does not exist
+		if (!$lid instanceof \Lid) {
+			throw new \Exception('Lid bestaat niet: $uid ='. $uid);
+		}
+		return $lid;
 	}
 	
 	public function setCorveeRepetitie(CorveeRepetitie $repetitie) {
 		$this->corvee_repetitie = $repetitie;
 	}
-	public function setLid(\Lid $lid) {
-		if (!($lid instanceof \Lid)) {
-			throw new \Exception('Geen lid: set lid');
-		}
-		$this->lid = $lid;
+	public function setVanLid($uid) {
+		$this->van_lid = $uid;
 	}
 }
 
