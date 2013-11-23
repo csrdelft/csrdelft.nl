@@ -35,12 +35,13 @@ div.offtopic img{ opacity: 0.3; filter:alpha(opacity=30); }
 
 .ubb_maaltijd h2{ white-space: nowrap; overflow: hidden; }
 .ubb_maaltijd .maaltijdgegevens{
-	line-height: 1.5em;
+	line-height: 1.6em;
 }
 .ubb_maaltijd .aanmelddata{
     float: right;
     background-color: #ddd;
     width: 68px;
+	height: 45px;
     padding: 4px; margin-left: 10px;
 }
 

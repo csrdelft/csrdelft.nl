@@ -2,6 +2,36 @@
  * csrdelft.nl javascript libje...
  */
 
+/**
+ * Aan/Af-melden via een ketzer
+ * 
+ * @param {String} url
+ * @param {String} ketzer-id
+ * @returns {Boolean} true
+ */
+function ketzer_post(url, el) {
+	$(el + ' .aanmelddata').html('U komt:<br /><img src="http://plaetjes.csrdelft.nl/layout/loading-arrows.gif" />');
+	$.ajax({
+		type : 'GET',
+		cache : false,
+		url : url,
+		data : '',
+		success : function(response) {
+			var html = $.parseHTML(response);
+			$('.ubb_maaltijd').each(function() {
+				if ($(this).attr('id') === $(html).attr('id')) {
+					$(this).replaceWith(response);
+				}
+			});
+		},
+		error : function(jqXHR, textStatus, errorThrown) {
+			$(el + ' .aanmelddata').html('<span style="color:red;font-weight:bold;">Error:</span><br />' + errorThrown);
+			alert(errorThrown);
+		}
+	});
+	return true;
+}
+
 //we maken een standaard AJAX-ding aan.
 var http = false;
 if(navigator.appName == "Microsoft Internet Explorer") {

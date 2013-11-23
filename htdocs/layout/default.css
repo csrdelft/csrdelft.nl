@@ -541,8 +541,8 @@ span#ubbsluiten:hover{
 	background-color: #eee;
 }
 
-//TODO: deprecated
-/* maaltijdketzer */
+
+/* maaltijdketzer //TODO: deprecated */
 table.maaltijden{ width: 100%; }
 table.maaltijden tr{ height: 1.6em; }
 table.maaltijden tr.old{ opacity: .50; }

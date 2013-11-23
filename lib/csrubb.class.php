@@ -573,26 +573,26 @@ HTML;
 		else{
 			$mid = $this->parseArray(array('[/maaltijd]'), array());
 		}
-		$mid=trim($mid);
+		$mid = trim($mid);
 		require_once 'taken/model/MaaltijdenModel.class.php';
 		require_once 'taken/model/AanmeldingenModel.class.php';
 		require_once 'taken/view/MaaltijdKetzerView.class.php';
 		try {
-			if ($mid == 'next' || $mid == 'eerstvolgende') {
+			if ($mid === 'next' || $mid === 'eerstvolgende') {
 				$maaltijden = \Taken\MLT\MaaltijdenModel::getKomendeMaaltijdenVoorLid(\LoginLid::instance()->getLid()); // met filter
 				if (sizeof($maaltijden) < 1) {
 					return 'Geen aankomende maaltijd.';
 				}
 				$maaltijd = reset($maaltijden);
 			}
-			else if (preg_match('/\d+/', $mid)) {
+			elseif (preg_match('/\d+/', $mid)) {
 				$maaltijd = \Taken\MLT\MaaltijdenModel::getMaaltijdVoorKetzer((int)$mid); // met filter
 				if (!$maaltijd) {
 					return '';
 				}
 			}
 		}
-		catch(Exception $e) {
+		catch (Exception $e) {
 			return $e->getMessage();
 		}
 		if (!isset($maaltijd)) {
@@ -600,14 +600,14 @@ HTML;
 		}
 		$mid = $maaltijd->getMaaltijdId();
 		$aanmeldingen = \Taken\MLT\AanmeldingenModel::getAanmeldingenVoorLid(array($mid => $maaltijd), \LoginLid::instance()->getUid());
-		if (sizeof($aanmeldingen) !== 1) {
+		if (empty($aanmeldingen)) {
 			$aanmelding = null;
 		}
 		else {
 			$aanmelding = $aanmeldingen[$maaltijd->getMaaltijdId()];
 		}
 		$ketzer = new \Taken\MLT\MaaltijdKetzerView($maaltijd, $aanmelding);
-		return $ketzer->view();
+		return $ketzer->fetch();
 	*/
 	}
 

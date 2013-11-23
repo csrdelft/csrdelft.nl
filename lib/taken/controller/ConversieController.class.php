@@ -20,6 +20,7 @@ class ConversieController extends \ACLController {
 		}
 		else {
 			$this->acl = array(
+				'clear' => 'P_ADMIN',
 				'confirm' => 'P_ADMIN'
 			);
 		}
@@ -37,6 +38,15 @@ class ConversieController extends \ACLController {
 		echo ' onmousedown="this.src=\'http://plaetjes.csrdelft.nl/knopjes/red_button_pressed.gif\';"';
 		echo ' onmouseup="this.src=\'http://plaetjes.csrdelft.nl/knopjes/red_button.gif\';" />';
 		echo '</form></body></html>';
+		exit();
+	}
+	
+	public function action_clear() {
+		if (\LoginLid::instance()->getUid() !== '1137') {
+			$this->action_geentoegang();
+			return;
+		}
+		ConversieModel::leegmaken();
 		exit();
 	}
 	

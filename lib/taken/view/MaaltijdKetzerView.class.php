@@ -23,12 +23,16 @@ class MaaltijdKetzerView extends \SimpleHtml {
 		return 'Maaltijdketzer';
 	}
 	
-	public function view() {
+	public function fetch() {
 		$smarty = new \Smarty_csr();
 		$smarty->assign('maaltijd', $this->_maaltijd);
 		$smarty->assign('aanmelding', $this->_aanmelding);
 		$smarty->assign('toonlijst', BeheerMaaltijdenController::magMaaltijdlijstTonen());
-		$smarty->display('taken/maaltijd/maaltijd_ketzer.tpl');
+		return $smarty->fetch('taken/maaltijd/maaltijd_ketzer.tpl');
+	}
+	
+	public function view() {
+		echo $this->fetch();
 	}
 }
 

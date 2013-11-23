@@ -42,25 +42,4 @@
 {/if}
 	</span>
 </div>
-<script type="text/javascript">
-{literal}
-function ketzer_post(url, el) {
-	$(el + ' .aanmelddata').html('U komt:<br /><img src="http://plaetjes.csrdelft.nl/layout/loading-arrows.gif" />');
-	$.ajax({
-		type : 'GET',
-		cache : false,
-		url : url,
-		data : '',
-		success : function(response) {
-			$(el).replaceWith(response);
-		},
-		error : function(jqXHR, textStatus, errorThrown) {
-			$(el + ' .aanmelddata').html('<span style="color:red;font-weight:bold;">Error:</span><br />' + errorThrown);
-			alert(errorThrown);
-		}
-	});
-	return true;
-}
-{/literal}
-</script>
 </div>

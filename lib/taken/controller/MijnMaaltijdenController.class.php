@@ -54,6 +54,7 @@ class MijnMaaltijdenController extends \ACLController {
 			$this->content = new MijnMaaltijdenView($aanmelding->getMaaltijd(), $aanmelding);
 		}
 		else {
+			require_once 'taken/view/MaaltijdKetzerView.class.php';
 			$this->content = new MaaltijdKetzerView($aanmelding->getMaaltijd(), $aanmelding);
 		}
 	}
@@ -64,6 +65,7 @@ class MijnMaaltijdenController extends \ACLController {
 			$this->content = new MijnMaaltijdenView($maaltijd);
 		}
 		else {
+			require_once 'taken/view/MaaltijdKetzerView.class.php';
 			$this->content = new MaaltijdKetzerView($maaltijd);
 		}
 	}
