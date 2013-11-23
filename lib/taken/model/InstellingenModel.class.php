@@ -26,6 +26,8 @@ class InstellingenModel {
 		'marge_gasten_verhouding' => '10',
 		'marge_gasten_min' => '3',
 		'marge_gasten_max' => '6',
+		'vrijstelling_percentage_max' => '200',
+		'vrijstelling_percentage_min' => '0',
 		'weergave_ledennamen_beheer' => 'volledig',
 		'weergave_ledennamen_corveerooster' => 'civitas',
 		'waarschuwing_taaktoewijzing_vooraf' => '+14 days',

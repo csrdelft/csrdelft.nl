@@ -72,5 +72,5 @@
 	</div>
 </div>
 {/if}
-<table style="width: 100%;"><tr id="taken-melding"><td>{$melding}</td></tr></table>
+<table style="width: 100%;"><tr id="taken-melding"><td id="taken-melding-veld">{$melding}</td></tr></table>
 <h1>{$kop}</h1>

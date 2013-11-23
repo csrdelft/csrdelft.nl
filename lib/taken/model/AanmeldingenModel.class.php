@@ -9,7 +9,7 @@ require_once 'taken/model/entity/MaaltijdAanmelding.class.php';
  */
 class AanmeldingenModel {
 
-	public static function aanmeldenVoorMaaltijd($mid, $uid, $doorUid, $aantalGasten=0, $beheer=false) {
+	public static function aanmeldenVoorMaaltijd($mid, $uid, $doorUid, $aantalGasten=0, $beheer=false, $gastenOpmerking='') {
 		$maaltijd = MaaltijdenModel::getMaaltijd($mid);
 		if (!\Lid::exists($uid)) {
 			throw new \Exception('Lid bestaat niet: $uid ='. $uid);
@@ -46,7 +46,7 @@ class AanmeldingenModel {
 			$maaltijd->setAantalAanmeldingen($maaltijd->getAantalAanmeldingen() + $verschil);
 		}
 		else {
-			$aanmelding = self::newAanmelding($mid, $uid, $aantalGasten, '', null, $doorUid);
+			$aanmelding = self::newAanmelding($mid, $uid, $aantalGasten, $gastenOpmerking, null, $doorUid);
 			$maaltijd->setAantalAanmeldingen($maaltijd->getAantalAanmeldingen() + 1 + $aantalGasten);
 		}
 		$aanmelding->setMaaltijd($maaltijd);
@@ -56,14 +56,26 @@ class AanmeldingenModel {
 	/**
 	 * Called when a MaaltijdAbonnement is being deleted (turned off) or a MaaltijdRepetitie is being deleted.
 	 * 
-	 * @param array $maaltijden Komende maaltijden voor een MaaltijdRepetitie
+	 * @param int $mrid id van de betreffede MaaltijdRepetitie
 	 * @param type $uid Lid voor wie het MaaltijdAbonnement wordt uitschakeld
 	 */
-	public static function afmeldenDoorAbonnement(array $maaltijden, $uid=null) {
-		$aantal = 0;
+	public static function afmeldenDoorAbonnement($mrid, $uid=null) {
+		// afmelden bij maaltijden waarbij dit abonnement de aanmelding heeft gedaan
+		$maaltijden = MaaltijdenModel::getKomendeOpenRepetitieMaaltijden($mrid);
+		if (empty($maaltijden)) {
+			return;
+		}
+		$byMid = array();
 		foreach ($maaltijden as $maaltijd) {
 			if (!$maaltijd->getIsGesloten() && !$maaltijd->getIsVerwijderd()) {
-				self::deleteAanmeldingen($maaltijd->getMaaltijdId(), $uid);
+				$byMid[$maaltijd->getMaaltijdId()] = $maaltijd;
+			}
+		}
+		$aanmeldingen = self::getAanmeldingenVoorLid($byMid, $uid);
+		$aantal = 0;
+		foreach ($aanmeldingen as $mid => $aanmelding) {
+			if ($mrid === $aanmelding->getDoorAbonnement()) {
+				self::deleteAanmeldingen($mid, $uid);
 				$aantal++;
 			}
 		}
@@ -329,7 +341,7 @@ class AanmeldingenModel {
 	}
 	
 	public static function checkAanmeldFilter(\Lid $lid, $filter) {
-		if (empty($filter)) {
+		if ($filter === '') {
 			return true;
 		}
 		$filter = explode(':', $filter);
@@ -424,8 +436,8 @@ class AanmeldingenModel {
 			throw new \Exception('Lid bestaat niet: $uid ='. $uid);
 		}
 		$repetitie = MaaltijdRepetitiesModel::getRepetitie($mrid);
-		if (self::checkAanmeldFilter($lid, $repetitie->getAbonnementFilter())) {
-			return false; //throw new \Exception('Niet toegestaan vanwege aanmeldrestrictie: '. $repetitie->getAbonnementFilter());
+		if (!self::checkAanmeldFilter($lid, $repetitie->getAbonnementFilter())) {
+			throw new \Exception('Niet toegestaan vanwege aanmeldrestrictie: '. $repetitie->getAbonnementFilter());
 		}
 		return self::newAanmelding(null, $uid, 0, '', $mrid, null);
 	}

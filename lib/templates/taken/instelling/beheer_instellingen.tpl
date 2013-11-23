@@ -8,7 +8,6 @@ Onderstaande tabel toont alle instellingen in het systeem.
 <p>
 N.B. Deze instellingen zijn essentieel voor het systeem!
 </p>
-<div style="float: right;"><a href="/actueel/taken/conversie" title="Converteer data van oude systeem naar het nieuwe systeem" class="knop get confirm">{icon get="script_go"} Conversiescript</a></div>
 <table id="taken-tabel" class="taken-tabel">
 	<thead>
 		<tr>

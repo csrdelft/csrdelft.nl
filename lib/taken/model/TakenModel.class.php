@@ -251,11 +251,14 @@ class TakenModel {
 			}
 			else {
 				$taak = self::getTaak($tid);
+				if ($taak->getFunctieId() !== $fid) {
+					$taak->setCorveeRepetitieId(null);
+				}
+				$taak->setFunctieId($fid);
 				if ($taak->getLidId() !== $uid) {
 					$taak->setWanneerGemaild('');
 					$taak->setLidId($uid);
 				}
-				$taak->setFunctieId($fid);
 				$taak->setMaaltijdId($mid);
 				$taak->setDatum($datum);
 				$taak->setPunten($punten);
@@ -332,7 +335,7 @@ class TakenModel {
 		if ($where !== null) {
 			$sql.= ' WHERE '. $where;
 		}
-		$sql.= ' ORDER BY datum, functie_id, taak_id DESC';
+		$sql.= ' ORDER BY datum ASC, functie_id ASC';
 		if (is_int($limit) && $limit > 0) {
 			$sql.= ' LIMIT '. $limit;
 		}
@@ -355,11 +358,12 @@ class TakenModel {
 	
 	private static function updateTaak(CorveeTaak $taak) {
 		$sql = 'UPDATE crv_taken';
-		$sql.= ' SET functie_id=?, lid_id=?, maaltijd_id=?, datum=?, punten=?, bonus_malus=?, punten_toegekend=?, bonus_toegekend=?, wanneer_toegekend=?, wanneer_gemaild=?, verwijderd=?';
+		$sql.= ' SET functie_id=?, lid_id=?, crv_repetitie_id=?, maaltijd_id=?, datum=?, punten=?, bonus_malus=?, punten_toegekend=?, bonus_toegekend=?, wanneer_toegekend=?, wanneer_gemaild=?, verwijderd=?';
 		$sql.= ' WHERE taak_id=?';
 		$values = array(
 			$taak->getFunctieId(),
 			$taak->getLidId(),
+			$taak->getCorveeRepetitieId(),
 			$taak->getMaaltijdId(),
 			$taak->getDatum(),
 			$taak->getPunten(),

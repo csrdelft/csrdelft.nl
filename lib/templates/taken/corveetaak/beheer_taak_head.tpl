@@ -3,11 +3,11 @@
 *}
 <thead>
 	<tr>
-		<th>Wijzig</th>
-		<th>Herinnering<br />verstuurd</th>
-		<th>Wanneer</th>
+		<th style="width: 80px;">Wijzig</th>
+		<th>Gemaild</th>
+		<th style="width: 70px;">Wanneer</th>
 		<th>Functie</th>
-		<th>Lid</th>
+		<th style="width: 130px;">Lid</th>
 		<th>Punten<br />toegekend</th>
 		<th title="{if $prullenbak}Definitief verwijderen{else}Naar de prullenbak verplaatsen{/if}" style="text-align: center;">
 			{if $prullenbak}

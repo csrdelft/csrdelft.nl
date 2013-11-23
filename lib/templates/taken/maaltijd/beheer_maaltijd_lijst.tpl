@@ -13,7 +13,7 @@
 {/if}
 		<a href="/actueel/taken/corveebeheer/maaltijd/{$maaltijd->getMaaltijdId()}" title="Beheer maaltijdcorvee" class="knop get">{icon get="chart_organisation"}</a>
 	</td>
-	<td>{$maaltijd->getDatum()|date_format:"%a %e %b"} {$maaltijd->getTijd()|date_format:"%H:%M"}</td>
+	<td>{$maaltijd->getDatum()|date_format:"%a %e/%m/%y"}</td>
 	<td>{$maaltijd->getTitel()}
 		
 	</td>

@@ -37,7 +37,7 @@
 {/if}
 		</div>
 	</td>
-	<td>{$taak->getDatum()|date_format:"%a %e %b"}</td>
+	<td>{$taak->getDatum()|date_format:"%a %e/%m/%y"}</td>
 	<td>{$taak->getCorveeFunctie()->getNaam()}</td>
 	<td class="taak-{if $taak->getLidId()}toegewezen{elseif  strtotime($taak->getDatum()) < strtotime($vooraf)}warning{else}open{/if}" style="font-weight: normal;">
 {if isset($wijzigbaar)}

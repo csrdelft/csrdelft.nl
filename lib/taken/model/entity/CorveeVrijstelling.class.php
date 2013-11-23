@@ -71,7 +71,7 @@ class CorveeVrijstelling {
 		$this->eind_datum = $datum;
 	}
 	public function setPercentage($int) {
-		if (!is_int($int) || $int < 0 || $int > 100) {
+		if (!is_int($int) || $int < intval($GLOBALS['vrijstelling_percentage_min']) || $int > intval($GLOBALS['vrijstelling_percentage_max'])) {
 			throw new \Exception('Geen integer: percentage');
 		}
 		$this->percentage = $int;

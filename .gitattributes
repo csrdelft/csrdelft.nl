@@ -3198,6 +3198,7 @@ lib/taken/controller/MijnVoorkeurenController.class.php -text
 lib/taken/controller/ModuleController.class.php -text
 lib/taken/model/AanmeldingenModel.class.php -text
 lib/taken/model/AbonnementenModel.class.php -text
+lib/taken/model/ConversieModel.class.php -text
 lib/taken/model/CorveeRepetitiesModel.class.php -text
 lib/taken/model/FunctiesModel.class.php -text
 lib/taken/model/HerinneringenModel.class.php -text

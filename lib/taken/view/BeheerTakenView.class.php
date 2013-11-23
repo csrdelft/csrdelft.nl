@@ -15,7 +15,7 @@ class BeheerTakenView extends \SimpleHtml {
 	private $_popup;
 	
 	public function __construct($taken, $maaltijd=null, $prullenbak=false, $repetities=null, $popup=null) {
-		$this->_taken = $taken;
+		$this->_taken = array_reverse($taken);
 		$this->_maaltijd = $maaltijd;
 		$this->_prullenbak = $prullenbak;
 		$this->_repetities = $repetities;

@@ -31,10 +31,12 @@ class MijnAbonnementenView extends \SimpleHtml {
 			$smarty->display('taken/abonnement/mijn_abonnementen.tpl');
 		}
 		elseif (is_int($this->_abonnementen)) { // id of disabled abonnement
+			echo '<td id="taken-melding-veld">'. $this->getMelding() .'</td>';
 			$smarty->assign('mrid', $this->_abonnementen);
 			$smarty->display('taken/abonnement/mijn_abonnement_veld.tpl');
 		}
 		else { // single abonnement
+			echo '<td id="taken-melding-veld">'. $this->getMelding() .'</td>';
 			$smarty->assign('uid', $this->_abonnementen->getLidId());
 			$smarty->assign('mrid', $this->_abonnementen->getMaaltijdRepetitieId());
 			$smarty->display('taken/abonnement/mijn_abonnement_veld.tpl');

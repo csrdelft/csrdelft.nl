@@ -212,9 +212,9 @@ class AbonnementenModel {
 		if (!AanmeldingenModel::checkAanmeldFilter($lid, $repetitie->getAbonnementFilter())) {
 			throw new \Exception('Niet toegestaan vanwege aanmeldrestrictie: '. $repetitie->getAbonnementFilter());
 		}
-		$abo = self::newAbonnement($mrid, $lid->getUid());
-		$abo->setLid($lid);
-		return $abo;
+		$abo_aantal = self::newAbonnement($mrid, $lid->getUid());
+		$abo_aantal[0]->setLid($lid);
+		return $abo_aantal;
 	}
 	
 	public static function inschakelenAbonnementVoorNovieten($mrid) {
@@ -257,8 +257,13 @@ class AbonnementenModel {
 				$query = $db->prepare($sql, $values);
 				$query->execute($values);
 				$result = $query->fetchAll(\PDO::FETCH_COLUMN, 0);
+				$aantal = 0;
 				foreach ($result as $uid) {
-					$aantal = AanmeldingenModel::aanmeldenVoorKomendeRepetitieMaaltijden($mrid, $uid);
+					try {
+						$aantal += AanmeldingenModel::aanmeldenVoorKomendeRepetitieMaaltijden($mrid, $uid);
+					}
+					catch (\Exception $e) { // niet toegestaan
+					}
 				}
 				$db->commit();
 				return $abos;
@@ -269,7 +274,7 @@ class AbonnementenModel {
 				}
 				$aantal = AanmeldingenModel::aanmeldenVoorKomendeRepetitieMaaltijden($mrid, $uid);
 				$db->commit();
-				return new MaaltijdAbonnement($mrid, $uid);
+				return array(new MaaltijdAbonnement($mrid, $uid), $aantal);
 			}
 		}
 		catch (\Exception $e) {
@@ -282,10 +287,10 @@ class AbonnementenModel {
 		if (!self::getHeeftAbonnement($mrid, $uid)) {
 			throw new \Exception('Abonnement al uitgeschakeld');
 		}
-		self::deleteAbonnementen($mrid, $uid);
+		$aantal = self::deleteAbonnementen($mrid, $uid);
 		$abo = new MaaltijdAbonnement($mrid, null);
 		$abo->setLid(\LidCache::getLid($uid));
-		return $abo;
+		return array($abo, $aantal);
 	}
 	
 	/**
@@ -303,11 +308,7 @@ class AbonnementenModel {
 	}
 	
 	private static function deleteAbonnementen($mrid, $uid=null) {
-		// afmelden bij maaltijden waarbij dit abonnement de aanmelding heeft gedaan
-		$maaltijden = MaaltijdenModel::getKomendeOpenRepetitieMaaltijden($mrid);
-		if (!empty($maaltijden)) {
-			$aantal = AanmeldingenModel::afmeldenDoorAbonnement($maaltijden, $uid);
-		}
+		$aantal = AanmeldingenModel::afmeldenDoorAbonnement($mrid, $uid);
 		$sql = 'DELETE FROM mlt_abonnementen';
 		$sql.= ' WHERE mlt_repetitie_id=?';
 		$values = array($mrid);
@@ -318,8 +319,11 @@ class AbonnementenModel {
 		$db = \CsrPdo::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
-		if ($uid !== null && $query->rowCount() !== 1) {
-			throw new \Exception('Delete abonnementen faalt: $query->rowCount() ='. $query->rowCount());
+		if ($uid !== null) {
+			if ($query->rowCount() !== 1) {
+				throw new \Exception('Delete abonnementen faalt: $query->rowCount() ='. $query->rowCount());
+			}
+			return $aantal;
 		}
 		return $query->rowCount();
 	}

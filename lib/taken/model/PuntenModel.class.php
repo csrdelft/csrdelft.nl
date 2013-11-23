@@ -23,13 +23,13 @@ class PuntenModel {
 				$punten = $totalen['puntenTotaal'];
 				$punten += $totalen['bonusTotaal'];
 				$vrijstelling = null;
-				if (array_key_exists($uid, $vrijstellingen) && time() > strtotime($vrijstellingen[$uid]->getEindDatum())) {
+				if (array_key_exists($uid, $vrijstellingen) && time() > strtotime($vrijstellingen[$uid]->getBeginDatum())) {
 					$vrijstelling = $vrijstellingen[$uid];
 					$punten += $vrijstelling->getPunten();
 				}
 				$punten -= intval($GLOBALS['corveepunten_per_jaar']);
 				self::savePuntenVoorLid($lid, $punten, 0);
-				if ($vrijstelling !== null) {
+				if ($vrijstelling !== null && time() > strtotime($vrijstelling->getEindDatum())) {
 					VrijstellingenModel::verwijderVrijstelling($vrijstelling->getLidId());
 					$aantal++;
 				}

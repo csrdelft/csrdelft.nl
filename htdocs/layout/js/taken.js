@@ -124,7 +124,7 @@ function taken_ajax(source, url, successCallback, formdata) {
 		url: url,
 		data: formdata,
 		success: function(response) {
-			$('#taken-melding').html('<td></td>');
+			$('#taken-melding').html('<td id="taken-melding-veld"></td>');
 			successCallback(response);
 		},
 		error: function(jqXHR, textStatus, errorThrown) {

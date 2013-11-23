@@ -1,5 +1,8 @@
 <?php
 namespace Taken\MLT;
+
+require_once 'taken/model/ConversieModel.class.php';
+
 /**
  * ConversieController.class.php 	| 	P.W.G. Brussee (brussee@live.nl)
  * 
@@ -17,7 +20,7 @@ class ConversieController extends \ACLController {
 		}
 		else {
 			$this->acl = array(
-				'do' => 'P_ADMIN'
+				'confirm' => 'P_ADMIN'
 			);
 		}
 		$this->action = 'button';
@@ -29,7 +32,7 @@ class ConversieController extends \ACLController {
 	
 	public function action_button() {
 		echo '<html><body style="text-align:center;margin-top:200px;">';
-		echo '<form method="POST" action="/actueel/taken/conversie/do">';
+		echo '<form method="POST" action="/actueel/taken/conversie/confirm" onsubmit="this.style.display=\'none\';">';
 		echo '<input type="image" src="http://plaetjes.csrdelft.nl/knopjes/red_button.gif"';
 		echo ' onmousedown="this.src=\'http://plaetjes.csrdelft.nl/knopjes/red_button_pressed.gif\';"';
 		echo ' onmouseup="this.src=\'http://plaetjes.csrdelft.nl/knopjes/red_button.gif\';" />';
@@ -37,33 +40,15 @@ class ConversieController extends \ACLController {
 		exit();
 	}
 	
-	//TODO
-	public function action_do() {
+	public function action_confirm() {
 		if (\LoginLid::instance()->getUid() !== '1137') {
 			$this->action_geentoegang();
 			return;
 		}
-		header( 'Content-type: text/html; charset=utf-8' );
-		
-		$this->show('start conversie');
-		sleep(3);
-		$this->show('stap 1');
-		sleep(3);
-		$this->show('stap 2');
-		sleep(3);
-		$this->show('stap 3');
-		sleep(3);
-		$this->show('done');
+		ConversieModel::leegmaken();
+		ConversieModel::converteer();
 		exit();
 	}
-	
-	private function show($string){ 
-		ob_start();
-		echo '<br />'. date('H:i:s') .' '. $string;
-		ob_end_flush();
-		ob_flush();
-		flush();
-	} 
 }
 
 ?>

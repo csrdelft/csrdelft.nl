@@ -17,7 +17,7 @@ try {
 catch (\Exception $e) { //TODO log all exceptions
 	header($_SERVER['SERVER_PROTOCOL'] . ' 500 '. $e->getMessage(), true, 500);
 	if (defined('DEBUG') && (\LoginLid::instance()->hasPermission('P_ADMIN') || \LoginLid::instance()->isSued())) {
-		echo $e; // stacktrace
+		echo str_replace('#', '<br />#', $e); // stacktrace
 	}
 }
 

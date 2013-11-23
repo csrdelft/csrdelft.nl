@@ -87,14 +87,20 @@ class BeheerAbonnementenController extends \ACLController {
 	
 	public function action_inschakelen($mrid) {
 		$uid = $_POST['voor_lid'];
-		$abonnement = AbonnementenModel::inschakelenAbonnement($mrid, $uid);
-		$this->content = new BeheerAbonnementenView($abonnement);
+		$abo_aantal = AbonnementenModel::inschakelenAbonnement($mrid, $uid);
+		$this->content = new BeheerAbonnementenView($abo_aantal[0]);
+		if ($abo_aantal[1] > 0) {
+			$this->content->setMelding('Automatisch aangemeld voor '. $abo_aantal[1] .' maaltijd'. ($abo_aantal[1] === 1 ? '' : 'en'), 2);
+		}
 	}
 	
 	public function action_uitschakelen($mrid) {
 		$uid = $_POST['voor_lid'];
-		$abonnement = AbonnementenModel::uitschakelenAbonnement($mrid, $uid);
-		$this->content = new BeheerAbonnementenView($abonnement);
+		$abo_aantal = AbonnementenModel::uitschakelenAbonnement($mrid, $uid);
+		$this->content = new BeheerAbonnementenView($abo_aantal[0]);
+		if ($abo_aantal[1] > 0) {
+			$this->content->setMelding('Automatisch afgemeld voor '. $abo_aantal[1] .' maaltijd'. ($abo_aantal[1] === 1 ? '' : 'en'), 2);
+		}
 	}
 }
 

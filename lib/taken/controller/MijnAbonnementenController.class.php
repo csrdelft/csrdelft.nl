@@ -45,13 +45,19 @@ class MijnAbonnementenController extends \ACLController {
 	}
 	
 	public function action_inschakelen($mrid) {
-		$abonnement = AbonnementenModel::inschakelenAbonnement($mrid, \LoginLid::instance()->getUid());
-		$this->content = new MijnAbonnementenView($abonnement);
+		$abo_aantal = AbonnementenModel::inschakelenAbonnement($mrid, \LoginLid::instance()->getUid());
+		$this->content = new MijnAbonnementenView($abo_aantal[0]);
+		if ($abo_aantal[1] > 0) {
+			$this->content->setMelding('Automatisch aangemeld voor '. $abo_aantal[1] .' maaltijd'. ($abo_aantal[1] === 1 ? '' : 'en'), 2);
+		}
 	}
 	
 	public function action_uitschakelen($mrid) {
-		AbonnementenModel::uitschakelenAbonnement($mrid, \LoginLid::instance()->getUid());
+		$abo_aantal = AbonnementenModel::uitschakelenAbonnement($mrid, \LoginLid::instance()->getUid());
 		$this->content = new MijnAbonnementenView($mrid);
+		if ($abo_aantal[1] > 0) {
+			$this->content->setMelding('Automatisch afgemeld voor '. $abo_aantal[1] .' maaltijd'. ($abo_aantal[1] === 1 ? '' : 'en'), 2);
+		}
 	}
 }
 

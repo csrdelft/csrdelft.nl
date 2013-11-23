@@ -240,7 +240,7 @@ class MaaltijdenModel {
 			$sql.= ' WHERE '. $where;
 		}
 		$sql.= ' GROUP BY m.maaltijd_id';
-		$sql.= ' ORDER BY datum, tijd ASC';
+		$sql.= ' ORDER BY datum ASC, tijd ASC';
 		if (is_int($limit) && $limit > 0) {
 			$sql.= ' LIMIT '. $limit;
 		}

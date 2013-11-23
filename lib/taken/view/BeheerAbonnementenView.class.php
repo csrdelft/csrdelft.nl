@@ -58,7 +58,7 @@ class BeheerAbonnementenView extends \SimpleHtml {
 				$smarty->display('taken/abonnement/beheer_abonnementen.tpl');
 			}
 			else { // lijst van abonnementen voor novieten of opgegeven lid of lege array bij error
-				echo '<tr id="taken-melding"><td>'. $this->getMelding() .'</td></tr>';
+				echo '<tr id="taken-melding"><td id="taken-melding-veld">'. $this->getMelding() .'</td></tr>';
 				foreach ($this->_leden_abonnementen as $uid => $abonnementen) {
 					$smarty->assign('uid', $uid);
 					$smarty->assign('abonnementen', $abonnementen);
@@ -67,6 +67,7 @@ class BeheerAbonnementenView extends \SimpleHtml {
 			}
 		}
 		else { // abonnement aan/afmelding
+			echo '<td id="taken-melding-veld">'. $this->getMelding() .'</td>';
 			$smarty->assign('abonnement', $this->_leden_abonnementen);
 			$smarty->assign('lidid', $this->_leden_abonnementen->getLidId());
 			$smarty->assign('uid', $this->_leden_abonnementen->getLid()->getUid());

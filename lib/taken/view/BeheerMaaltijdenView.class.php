@@ -14,7 +14,7 @@ class BeheerMaaltijdenView extends \SimpleHtml {
 	private $_popup;
 	
 	public function __construct($maaltijden, $prullenbak=false, $repetities=null, $popup=null) {
-		$this->_maaltijden = $maaltijden;
+		$this->_maaltijden = array_reverse($maaltijden);
 		$this->_prullenbak = $prullenbak;
 		$this->_repetities = $repetities;
 		$this->_popup = $popup;

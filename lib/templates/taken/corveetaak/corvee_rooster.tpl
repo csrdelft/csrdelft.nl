@@ -25,20 +25,20 @@
 		{if $firstOfWeek eq 'true'}
 			{cycle name="firstOfWeek" assign="firstOfWeek"}
 			{cycle name="weekColor" assign="weekColor" values="#EBEBEB,#FAFAFA"}
-			<td rowspan="{$smarty.foreach.datum.total}"{if !isset($mijn)} style="background-color: {$weekColor}"{/if}>{$datum|date_format:"%W"}</td>
+			<td rowspan="{$smarty.foreach.datum.total}"{if !isset($mijn)} style="background-color: {$weekColor}"{/if}><nobr>{$datum|date_format:"%W"}</nobr></td>
 		{elseif $firstOfDatum eq 'true'}
 			<td rowspan="{$smarty.foreach.datum.total}"{if !isset($mijn)} style="background-color: {$weekColor}"{/if}></td>
 		{/if}
 		{if $firstOfDatum eq 'true'}
 			{cycle name="firstOfDatum" assign="firstOfDatum"}
 			{cycle name="datumColor" assign="datumColor" values="#EBEBEB,#FAFAFA"}
-			<td rowspan="{$smarty.foreach.datum.total}"{if !isset($mijn)} style="background-color: {$datumColor}"{/if}>{$datum|date_format:"%a %e %b"}</td>
+			<td rowspan="{$smarty.foreach.datum.total}"{if !isset($mijn)} style="background-color: {$datumColor}"{/if}><nobr>{$datum|date_format:"%a %e/%m/%y"}</nobr></td>
 		{/if}
 		{if $smarty.foreach.taak.first}
-			<td title="{$taak->getCorveeFunctie()->getOmschrijving()}">{$taak->getCorveeFunctie()->getNaam()}</td>
+			<td title="{$taak->getCorveeFunctie()->getOmschrijving()}"><nobr>{$taak->getCorveeFunctie()->getNaam()}</nobr></td>
 		{/if}
 		{if !isset($mijn)}
-				<td{if $smarty.foreach.taak.last} colspan="10"
+				<td{if $smarty.foreach.taak.last} colspan="10"{else} style="width: 150px;"
 			{/if}{if $taak->getLidId()}{if $loginlid->getUid() === $taak->getLidId()} class="taak-self">
 					<a href="/communicatie/forum/zoeken.php?zoeken=corveedraad" title="Ruilen" class="knop" style="margin-right:10px;">{icon get="arrow_switch"}</a>
 				{else}>
