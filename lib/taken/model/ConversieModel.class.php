@@ -243,6 +243,7 @@ class ConversieModel {
 		foreach ($rows as $row) {
 			$mid = null;
 			$datum = intval($row['datum']);
+			$gemailed = intval($row['corvee_gemaild']);
 			if ($datum < time()) {
 				continue;
 			}
@@ -269,7 +270,9 @@ class ConversieModel {
 				$maaltijden[$mid] = $maaltijd;
 				
 				$corveetaak = \Taken\CRV\TakenModel::saveTaak(0, 3, $row['tp'], $corvee[3]->getCorveeRepetitieId(), $mid, date('Y-m-d', $datum), 0, 0);
-				\Taken\CRV\TakenModel::puntenToekennen($corveetaak);
+				for ($i = 0; $i < $gemailed; $i++) {
+					\Taken\CRV\TakenModel::updateGemaild($corveetaak);
+				}
 			}
 			
 			foreach ($functies as $functie => $fid) {
@@ -290,6 +293,9 @@ class ConversieModel {
 						$corveetaak = \Taken\CRV\TakenModel::saveTaak(0, $fid, $taak['uid'], $corvee[$fid]->getCorveeRepetitieId(), $mid, date('Y-m-d', $datum), $punt, 0);
 						if ($taak['punten_toegekend'] === 'ja') {
 							\Taken\CRV\TakenModel::puntenToekennen($corveetaak);
+						}
+						for ($i = 0; $i < $gemailed; $i++) {
+							\Taken\CRV\TakenModel::updateGemaild($corveetaak);
 						}
 					}
 				}

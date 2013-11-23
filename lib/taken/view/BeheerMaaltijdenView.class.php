@@ -14,7 +14,7 @@ class BeheerMaaltijdenView extends \SimpleHtml {
 	private $_popup;
 	
 	public function __construct($maaltijden, $prullenbak=false, $repetities=null, $popup=null) {
-		$this->_maaltijden = array_reverse($maaltijden);
+		$this->_maaltijden = $maaltijden;
 		$this->_prullenbak = $prullenbak;
 		$this->_repetities = $repetities;
 		$this->_popup = $popup;
@@ -41,8 +41,8 @@ class BeheerMaaltijdenView extends \SimpleHtml {
 				$smarty->assign('kop', $this->getTitel());
 				$smarty->display('taken/taken_menu.tpl');
 				
+				$smarty->assign('maaltijden', array_reverse($this->_maaltijden));
 				$smarty->assign('repetities', $this->_repetities);
-				$smarty->assign('maaltijden', $this->_maaltijden);
 				$smarty->display('taken/maaltijd/beheer_maaltijden.tpl');
 			}
 			else { // list of new maaltijden

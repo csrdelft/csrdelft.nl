@@ -15,7 +15,7 @@ class BeheerTakenView extends \SimpleHtml {
 	private $_popup;
 	
 	public function __construct($taken, $maaltijd=null, $prullenbak=false, $repetities=null, $popup=null) {
-		$this->_taken = array_reverse($taken);
+		$this->_taken = $taken;
 		$this->_maaltijd = $maaltijd;
 		$this->_prullenbak = $prullenbak;
 		$this->_repetities = $repetities;
@@ -50,7 +50,7 @@ class BeheerTakenView extends \SimpleHtml {
 				$smarty->assign('kop', $this->getTitel());
 				$smarty->display('taken/taken_menu.tpl');
 				
-				$smarty->assign('taken', $this->_taken);
+				$smarty->assign('taken', array_reverse($this->_taken));
 				$smarty->assign('repetities', $this->_repetities);
 				$smarty->display('taken/corveetaak/beheer_taken.tpl');
 			}
