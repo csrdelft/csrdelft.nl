@@ -15,12 +15,12 @@ class ConversieController extends \ACLController {
 		parent::__construct($query);
 		if (!parent::isPOSTed()) {
 			$this->acl = array(
-				'button' => 'P_ADMIN'
+				'button' => 'P_ADMIN',
+				'clear' => 'P_ADMIN'
 			);
 		}
 		else {
 			$this->acl = array(
-				'clear' => 'P_ADMIN',
 				'confirm' => 'P_ADMIN'
 			);
 		}
