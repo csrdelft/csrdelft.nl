@@ -43,6 +43,7 @@ class MaaltijdRepetitieFormView extends \SimpleHtml {
 		$formFields[] = new \FloatField('standaard_prijs', $prijs, 'Standaard prijs (€)', 50.00, 0.00);
 		$formFields[] = new \IntField('standaard_limiet', $limiet, 'Standaard limiet', 200, 0);
 		$formFields['filter'] = new \InputField('abonnement_filter', $filter, 'Aanmeldrestrictie', 255, $suggesties);
+		$formFields['filter']->title = 'Plaats een ! vooraan om van de restrictie een uitsluiting te maken.';
 		if ($this->_mrid !== 0) {
 			$formFields['ver'] = new \VinkField('verplaats_dag', $verplaats, 'Ook verplaatsen');
 			$formFields['ver']->title = 'Verplaats naar dag v/d week bij bijwerken';

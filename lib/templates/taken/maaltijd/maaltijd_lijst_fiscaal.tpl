@@ -6,18 +6,19 @@
 <body>
 <h1>{$kop} {$maaltijd->getDatum()|date_format:"%Y-%m-%d"} {$maaltijd->getTijd()|date_format:"%H:%M"}</h1>
 <h3>Maaltijdprijs: &euro; {$maaltijd->getPrijs()|string_format:"%.2f"}</h3>
-<pre>
+{strip}
 {if $maaltijd->getAantalAanmeldingen() > 0}
-{foreach from=$aanmeldingen item=aanmelding}
-{if $aanmelding->getLidId()}
-{$aanmelding->getLidId()},{$aanmelding->getLid()->getNaamLink()}
-{else}
-{$aanmelding->getDoorLidId()},Gast van {$aanmelding->getDoorLid()->getNaamLink()}
-{/if}
-{/foreach}
+	{foreach from=$aanmeldingen item=aanmelding}
+		{if $aanmelding->getLidId()}
+			{$aanmelding->getLidId()},{$aanmelding->getLid()->getNaamLink()}
+		{else}
+			{$aanmelding->getDoorLidId()},Gast van {$aanmelding->getDoorLid()->getNaamLink()}
+		{/if}
+		<br />
+	{/foreach}
 {else}
 Nog geen aanmeldingen voor deze maaltijd.
 {/if}
-</pre>
+{/strip}
 </body>
 </html>

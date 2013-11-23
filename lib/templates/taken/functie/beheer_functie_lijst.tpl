@@ -10,7 +10,9 @@
 	<td>{$functie->getStandaardPunten()}</td>
 	<td title="{$functie->getEmailBericht()}">{if strlen($functie->getEmailBericht()) > 0}{icon get="email"}{/if}</td>
 	<td>
-		{if $functie->getIsKwalificatieBenodigd()}<a href="{$module}/kwalificeer/{$functie->getFunctieId()}" title="Kwalificatie toewijzen" class="knop post popup">{icon get="vcard_add"} Kwalificeer</a>{/if}
+		{if $functie->getIsKwalificatieBenodigd()}
+			<a href="{$module}/kwalificeer/{$functie->getFunctieId()}" title="Kwalificatie toewijzen" class="knop post popup">{icon get="vcard_add"} Kwalificeer</a>
+		{/if}
 		{foreach from=$functie->getGekwalificeerden() item=kwali}
 			<div>
 				<a href="{$module}/dekwalificeer/{$functie->getFunctieId()}" title="Kwalificatie intrekken" class="knop post" post="voor_lid={$kwali->getLidId()}">{icon get="vcard_delete"}</a>

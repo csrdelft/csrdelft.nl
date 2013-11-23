@@ -6,7 +6,7 @@ Op deze pagina kunt u zich aan- en afmelden voor maaltijden op Confide door op d
 Onderstaande tabel toont de maaltijden in de komende maand.
 De kolom "Aangemeld" geeft aan of u bent aangemeld voor de maaltijd met "Ja", of niet bent aangemeld met "Nee".
 Als u een abonnement heeft dat u automatisch heeft aangemeld staat er "(abo)" achter.
-In de kolom "Corvee" kunt u zien of u bent ingedeeld voor een corveetaak, zoals kok of afwasser.
+Als u bent ingedeeld voor een corveetaak, zoals kok of afwasser, dan heeft u de mogelijkheid de maaltijdlijst te bekijken.
 </p>
 <h3>Gasten aanmelden</h3>
 <p>Als u staat ingeschreven voor een maaltijd, kunt u op uw naam gasten aanmelden voor de maaltijd.
@@ -32,7 +32,7 @@ Vanaf dat moment zal deze ketzer u niet meer willen aan- of afmelden en bent u a
 	<tbody>
 {foreach from=$maaltijden item=maaltijd}
 	{assign var="mid" value=$maaltijd->getMaaltijdId()}
-	{include file='taken/maaltijd/mijn_maaltijd_lijst.tpl' maaltijd=$maaltijd aanmelding=$aanmeldingen.$mid}
+	{include file='taken/maaltijd/mijn_maaltijd_lijst.tpl' maaltijd=$maaltijd aanmelding=$aanmeldingen.$mid toonlijst=$toonlijst.$mid}
 {/foreach}
 	</tbody>
 </table>

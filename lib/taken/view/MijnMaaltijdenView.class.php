@@ -1,8 +1,5 @@
 <?php
 namespace Taken\MLT;
-
-require_once 'taken/controller/BeheerMaaltijdenController.class.php';
-
 /**
  * MijnMaaltijdenView.class.php	| 	P.W.G. Brussee (brussee@live.nl)
  * 
@@ -26,25 +23,33 @@ class MijnMaaltijdenView extends \SimpleHtml {
 	public function view() {
 		$smarty = new \Smarty_csr();
 		$smarty->assign('module', '/actueel/taken/maaltijden');
-		$smarty->assign('toonlijst', BeheerMaaltijdenController::magMaaltijdlijstTonen());
+		$smarty->assign('standaardprijs', sprintf('%.2f', floatval($GLOBALS['standaard_maaltijdprijs'])));
 		
-		if (is_array($this->_aanmeldingen)) { // list of aanmeldingen and list of maaltijden
+		if (is_array($this->_maaltijden)) { // list of maaltijden and list of aanmeldingen
 			$smarty->assign('melding', $this->getMelding());
 			$smarty->assign('kop', $this->getTitel());
 			$smarty->display('taken/taken_menu.tpl');
 			
+			$toonlijst = array();
+			foreach ($this->_maaltijden as $maaltijd) {
+				$toonlijst[$maaltijd->getMaaltijdId()] = MijnMaaltijdenController::magMaaltijdlijstTonen($maaltijd);
+			}
+			$smarty->assign('toonlijst', $toonlijst);
 			$smarty->assign('maaltijden', $this->_maaltijden);
 			$smarty->assign('aanmeldingen', $this->_aanmeldingen);
 			$smarty->display('taken/maaltijd/mijn_maaltijden.tpl');
 		}
-		elseif ($this->_aanmeldingen === null) { // single maaltijd
-			$smarty->assign('maaltijd', $this->_maaltijden);
-			$smarty->display('taken/maaltijd/mijn_maaltijd_lijst.tpl');
-		}
-		else { // single aanmelding with maaltijd
-			$smarty->assign('maaltijd', $this->_maaltijden);
-			$smarty->assign('aanmelding', $this->_aanmeldingen);
-			$smarty->display('taken/maaltijd/mijn_maaltijd_lijst.tpl');
+		else {
+			$smarty->assign('toonlijst', MijnMaaltijdenController::magMaaltijdlijstTonen($this->_maaltijden));
+			if ($this->_aanmeldingen === null) { // single maaltijd
+				$smarty->assign('maaltijd', $this->_maaltijden);
+				$smarty->display('taken/maaltijd/mijn_maaltijd_lijst.tpl');
+			}
+			else { // single aanmelding with maaltijd
+				$smarty->assign('maaltijd', $this->_maaltijden);
+				$smarty->assign('aanmelding', $this->_aanmeldingen);
+				$smarty->display('taken/maaltijd/mijn_maaltijd_lijst.tpl');
+			}
 		}
 	}
 }

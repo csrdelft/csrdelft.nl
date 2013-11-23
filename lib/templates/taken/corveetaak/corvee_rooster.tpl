@@ -7,7 +7,7 @@
 			<th>Week</th>
 			<th>Datum</th>
 			<th>Functie</th>
-			{if !isset($mijn)}<th colspan="10">Corveeër(s)</th>{/if}
+{if !isset($mijn)}<th colspan="10">Corveeër(s)</th>{/if}
 		</tr>
 	</thead>
 	<tbody>

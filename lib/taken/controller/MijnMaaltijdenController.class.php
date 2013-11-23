@@ -16,12 +16,14 @@ class MijnMaaltijdenController extends \ACLController {
 		if (!parent::isPOSTed()) {
 			$this->acl = array(
 				'mijn' => 'P_MAAL_IK',
+				'lijst' => 'P_MAAL_IK',
 				'aanmelden' => 'P_MAAL_IK',
 				'afmelden' => 'P_MAAL_IK'
 			);
 		}
 		else {
 			$this->acl = array(
+				'sluit' => 'P_MAAL_IK',
 				'aanmelden' => 'P_MAAL_IK',
 				'afmelden' => 'P_MAAL_IK',
 				'gasten' => 'P_MAAL_IK',
@@ -39,6 +41,20 @@ class MijnMaaltijdenController extends \ACLController {
 		$this->performAction($mid);
 	}
 	
+	public static function magMaaltijdlijstTonen(Maaltijd $maaltijd) {
+		$login = \LoginLid::instance();
+		if (opConfide() || $login->hasPermission('P_MAAL_MOD')) {
+			return true;
+		}
+		$taken = \Taken\CRV\TakenModel::getTakenVoorMaaltijd($maaltijd->getMaaltijdId());
+		foreach ($taken as $taak) {
+			if ($taak->getLidId() === $login->getUid()) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public function action_mijn() {
 		$maaltijden = MaaltijdenModel::getKomendeMaaltijdenVoorLid(\LoginLid::instance()->getLid());
 		$aanmeldingen = AanmeldingenModel::getAanmeldingenVoorLid($maaltijden, \LoginLid::instance()->getUid());
@@ -46,6 +62,28 @@ class MijnMaaltijdenController extends \ACLController {
 		$this->content = new \csrdelft($this->getContent());
 		$this->content->addStylesheet('taken.css');
 		$this->content->addScript('taken.js');
+	}
+	
+	public function action_lijst($mid) {
+		$maaltijd = MaaltijdenModel::getMaaltijd($mid, true);
+		$toonlijst = self::magMaaltijdlijstTonen($maaltijd);
+		if (!$toonlijst) {
+			$this->action_geentoegang();
+			return;
+		}
+		$aanmeldingen = AanmeldingenModel::getAanmeldingenVoorMaaltijdLijst($maaltijd);
+		$taken = \Taken\CRV\TakenModel::getTakenVoorMaaltijd($mid);
+		require_once 'taken/view/MaaltijdLijstView.class.php';
+		$this->content = new MaaltijdLijstView($maaltijd, $aanmeldingen, $taken);
+	}
+	
+	public function action_sluit($mid) {
+		$maaltijd = MaaltijdenModel::getMaaltijd($mid);
+		if (!self::magMaaltijdlijstTonen($maaltijd)) {
+			$this->action_geentoegang();
+			return;
+		}
+		MaaltijdenModel::sluitMaaltijd($maaltijd);
 	}
 	
 	public function action_aanmelden($mid) {

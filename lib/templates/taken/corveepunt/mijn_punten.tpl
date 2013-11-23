@@ -19,10 +19,24 @@ De prognose geeft aan hoeveel punten u naar verwachting totaal zal hebben aan he
 {foreach from=$puntenlijst.aantal key=fid item=aantal}
 		<tr>
 			<td>{$functies[$fid]->getNaam()} ({$aantal})</th>
-			<td>{$puntenlijst.punten[$fid]}{if $puntenlijst.bonus[$fid] > 0}+{/if}{if $puntenlijst.bonus[$fid] !== 0}{$puntenlijst.bonus[$fid]}{/if}</td>
+			<td>{strip}{$puntenlijst.punten[$fid]}
+	{if $puntenlijst.bonus[$fid] > 0}
+		+
+	{/if}
+	{if $puntenlijst.bonus[$fid] !== 0}
+		{$puntenlijst.bonus[$fid]}
+	{/if}
+			</td>{/strip}
 		</tr>
 {/foreach}
-		<tr><td style="font-weight: bold;">Totaal</td><td>{$puntenlijst.puntenTotaal}{if $puntenlijst.bonusTotaal > 0}+{/if}{if $puntenlijst.bonusTotaal !== 0}{$puntenlijst.bonusTotaal}{/if}</td></tr>
+		<tr><td style="font-weight: bold;">Totaal</td><td>{strip}{$puntenlijst.puntenTotaal}
+{if $puntenlijst.bonusTotaal > 0}
+	+
+{/if}
+{if $puntenlijst.bonusTotaal !== 0}
+	{$puntenlijst.bonusTotaal}
+{/if}
+		</td></tr>{/strip}
 		<tr><td style="font-weight: bold;">Prognose</td><td style="background-color: #{$puntenlijst.prognoseColor}">{$puntenlijst.prognose}</td></tr>
 	</tbody>
 </table>

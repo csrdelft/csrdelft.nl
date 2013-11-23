@@ -36,9 +36,10 @@ class MaaltijdFormView extends \SimpleHtml {
 		$formFields['req']->forcenotnull = true;
 		$formFields[] = new \DatumField('datum', $datum, 'Datum', date('Y')+2, date('Y')-2);
 		$formFields[] = new \TijdField('tijd', $tijd, 'Tijd', 15);
-		$formFields[] = new \FloatField('prijs', $prijs, 'Prijs (€)', 50.00, 0.00);
+		$formFields[] = new \FloatField('prijs', $prijs, 'Prijs (€)', 50, 0);
 		$formFields[] = new \IntField('aanmeld_limiet', $limiet, 'Aanmeldlimiet', 200, 0);
 		$formFields['filter'] = new \InputField('aanmeld_filter', $filter, 'Aanmeldrestrictie', 255, $suggesties);
+		$formFields['filter']->title = 'Plaats een ! vooraan om van de restrictie een uitsluiting te maken.';
 		
 		$this->_form = new \Formulier('taken-maaltijd-form', '/actueel/taken/maaltijdenbeheer/opslaan/'. $mid, $formFields);
 	}

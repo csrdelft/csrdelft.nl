@@ -2,9 +2,9 @@
 	mijn_voorkeuren.tpl	|	P.W.G. Brussee (brussee@live.nl)
 *}
 <p>
-Op deze pagina kunt u voorkeuren in- en uitschakelen voor periodieke maaltijden op Confide door op de knop te klikken in de kolom "Ingeschakeld".
+Op deze pagina kunt u voorkeuren in- en uitschakelen voor periodieke maaltijden op Confide door op de knop te klikken in de kolom "Voorkeur".
 Onderstaande tabel toont alle voorkeuren die u aan of uit kunt zetten.
-De kolom "Ingeschakeld" geeft aan of uw voorkeur is ingeschakeld met "Aan", of is uitgeschakeld met "Uit".
+De kolom "Voorkeur" geeft aan of uw voorkeur is ingeschakeld met "Ja", of is uitgeschakeld met "Nee".
 </p>
 <h3>Allergie en diëet</h3>
 <p>
@@ -23,7 +23,7 @@ N.B. Dit is niet de plek om aan te geven dat u iets niet lekker vindt!
 <table id="taken-tabel" class="taken-tabel">
 	<thead>
 		<tr>
-			<th>Ingeschakeld</th>
+			<th>Voorkeur</th>
 			<th>Functie</th>
 			<th>Dag v/d week</th>
 			<th>Periode</th>

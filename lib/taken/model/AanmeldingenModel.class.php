@@ -18,7 +18,7 @@ class AanmeldingenModel {
 			throw new \Exception('Lid bestaat niet: $doorUid ='. $doorUid);
 		}
 		if (!$maaltijd->getIsGesloten() && $maaltijd->getBeginMoment() < strtotime(date('Y-m-d H:i'))) {
-			$maaltijd = MaaltijdenModel::sluitMaaltijd($mid);
+			MaaltijdenModel::sluitMaaltijd($maaltijd);
 		}
 		if (!$beheer) {
 			if (!self::checkAanmeldFilter(\LidCache::getLid($uid), $maaltijd->getAanmeldFilter())) {
@@ -88,7 +88,7 @@ class AanmeldingenModel {
 		}
 		$maaltijd = MaaltijdenModel::getMaaltijd($mid);
 		if (!$maaltijd->getIsGesloten() && $maaltijd->getBeginMoment() < time()) {
-			$maaltijd = MaaltijdenModel::sluitMaaltijd($mid);
+			MaaltijdenModel::sluitMaaltijd($maaltijd);
 		}
 		if (!$beheer && $maaltijd->getIsGesloten()) {
 			throw new \Exception('Maaltijd is gesloten');
@@ -340,10 +340,14 @@ class AanmeldingenModel {
 		return $aantal;
 	}
 	
-	public static function checkAanmeldFilter(\Lid $lid, $filter) {
+	public static function checkAanmeldFilter(\Lid $lid, $filter, $opposite=false) {
 		if ($filter === '') {
 			return true;
 		}
+		if (!$opposite && strpos($filter, '!') === 0) {
+			return self::checkAanmeldFilter($lid, substr($filter, 1), true);
+		}
+		
 		$filter = explode(':', $filter);
 		if (sizeof($filter) !== 2) {
 			throw new \Exception('Check aanmeldfilter faalt');
@@ -386,7 +390,7 @@ class AanmeldingenModel {
 							return true;
 						}
 					}
-					else{
+					else {
 						return true;
 					}
 				}

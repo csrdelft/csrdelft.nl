@@ -1,12 +1,10 @@
 <?php
 namespace Taken\MLT;
 
-require_once 'aclcontroller.class.php';
 require_once 'taken/model/MaaltijdenModel.class.php';
 require_once 'taken/model/AanmeldingenModel.class.php';
 require_once 'taken/model/MaaltijdRepetitiesModel.class.php';
 require_once 'taken/view/BeheerMaaltijdenView.class.php';
-require_once 'taken/view/MaaltijdLijstView.class.php';
 require_once 'taken/view/forms/MaaltijdFormView.class.php';
 require_once 'taken/view/forms/RepetitieMaaltijdenFormView.class.php';
 require_once 'taken/view/forms/AanmeldingFormView.class.php';
@@ -24,13 +22,12 @@ class BeheerMaaltijdenController extends \ACLController {
 				'beheer' => 'P_MAAL_MOD',
 				'prullenbak' => 'P_MAAL_MOD',
 				'leegmaken' => 'P_MAAL_MOD',
-				'lijst' => 'P_MAAL_IK',
 				'fiscaal' => 'P_MAAL_MOD'
 			);
 		}
 		else {
 			$this->acl = array(
-				'sluit' => 'P_MAAL_IK',
+				'sluit' => 'P_MAAL_MOD',
 				'open' => 'P_MAAL_MOD',
 				'nieuw' => 'P_MAAL_MOD',
 				'bewerk' => 'P_MAAL_MOD',
@@ -53,15 +50,6 @@ class BeheerMaaltijdenController extends \ACLController {
 		$this->performAction($mid);
 	}
 	
-	public static function magMaaltijdlijstTonen($taken=array()) {
-		$login = \LoginLid::instance();
-		$permission = opConfide() || $login->hasPermission('P_MAAL_MOD');
-		foreach ($taken as $taak) {
-			$permission |= ($taak->getLidId() === $login->getUid());
-		}
-		return $permission;
-	}
-	
 	public function action_beheer($mid=null) {
 		if (is_int($mid) && $mid > 0) {
 			$this->action_bewerk($mid);
@@ -81,35 +69,22 @@ class BeheerMaaltijdenController extends \ACLController {
 		$this->content->addScript('taken.js');
 	}
 	
-	public function action_lijst($mid) {
-		$taken = \Taken\CRV\TakenModel::getTakenVoorMaaltijd($mid);
-		$toonlijst = self::magMaaltijdlijstTonen($taken);
-		if (!$toonlijst) {
-			$this->action_geentoegang();
-			return;
-		}
-		$maaltijd = MaaltijdenModel::getMaaltijd($mid, true);
-		$aanmeldingen = AanmeldingenModel::getAanmeldingenVoorMaaltijdLijst($maaltijd);
-		$this->content = new MaaltijdLijstView($maaltijd, $aanmeldingen, $taken);
-	}
-	
 	public function action_fiscaal($mid) {
 		$maaltijd = MaaltijdenModel::getMaaltijd($mid, true);
 		$aanmeldingen = AanmeldingenModel::getAanmeldingenVoorMaaltijdLijst($maaltijd);
+		require_once 'taken/view/MaaltijdLijstView.class.php';
 		$this->content = new MaaltijdLijstView($maaltijd, $aanmeldingen, null, true);
 	}
 	
 	public function action_sluit($mid) {
-		if (!self::magMaaltijdlijstTonen()) {
-			$this->action_geentoegang();
-			return;
-		}
-		$maaltijd = MaaltijdenModel::sluitMaaltijd($mid);
+		$maaltijd = MaaltijdenModel::getMaaltijd($mid);
+		MaaltijdenModel::sluitMaaltijd($maaltijd);
 		$this->content = new BeheerMaaltijdenView($maaltijd);
 	}
 	
 	public function action_open($mid) {
-		$maaltijd = MaaltijdenModel::openMaaltijd($mid);
+		$maaltijd = MaaltijdenModel::getMaaltijd($mid);
+		MaaltijdenModel::openMaaltijd($maaltijd);
 		$this->content = new BeheerMaaltijdenView($maaltijd);
 	}
 	

@@ -133,11 +133,11 @@ class MaaltijdAanmelding {
 	 */
 	public function getSaldoMelding() {
 		$status = $this->getSaldoStatus();
-		$prijs = $this->getMaaltijd()->getPrijs();
+		$prijs = sprintf('%.2f', $this->getMaaltijd()->getPrijs());
 		switch ($status) {
 			case 3: return 'ok';
 			case 2: return $prijs;
-			case 1: return '&lt; '. number_format($prijs, 2);
+			case 1: return '&lt; '. $prijs;
 			case 0: return '0';
 			case -1: return '&lt; 0';
 		}

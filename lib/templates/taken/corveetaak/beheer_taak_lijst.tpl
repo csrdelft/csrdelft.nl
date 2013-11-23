@@ -1,6 +1,7 @@
 {*
 	beheer_taak_lijst.tpl	|	P.W.G. Brussee (brussee@live.nl)
 *}
+{strip}
 <tr id="corveetaak-row-{$taak->getTaakId()}"{if $taak->getBeginMoment() < strtotime('-1 day')} class="taak-oud"{/if}>
 	<td>
 {if $taak->getIsVerwijderd()}
@@ -48,14 +49,25 @@
 {/if}
 	</td>
 	<td{if $taak->getLidId() and ($taak->getPunten() !== $taak->getPuntenToegekend() or $taak->getBonusMalus() !== $taak->getBonusToegekend()) and strtotime($taak->getDatum()) < strtotime($achteraf)} class="taak-warning"{/if}>
-		{$taak->getPuntenToegekend()}{if $taak->getBonusToegekend() > 0}+{/if}{if $taak->getBonusToegekend() !== 0}{$taak->getBonusToegekend()}{/if}
-		van
-		{$taak->getPunten()}{if $taak->getBonusMalus() > 0}+{/if}{if $taak->getBonusMalus() !== 0}{$taak->getBonusMalus()}{/if}
-	{if isset($wijzigbaar) and $taak->getLidId()}
+		{$taak->getPuntenToegekend()}
+{if $taak->getBonusToegekend() > 0}
+	+
+{/if}
+{if $taak->getBonusToegekend() !== 0}
+	{$taak->getBonusToegekend()}
+{/if}
+&nbsp;van {$taak->getPunten()}
+{if $taak->getBonusMalus() > 0}
+	+
+{/if}
+{if $taak->getBonusMalus() !== 0}
+	{$taak->getBonusMalus()}
+{/if}
+{if isset($wijzigbaar) and $taak->getLidId()}
 		<div style="float: right;">
 		<a href="{$module}/puntentoekennen/{$taak->getTaakId()}" title="Punten toekennen" class="knop post">{icon get="award_star_add"}</a>
 		<a href="{$module}/puntenintrekken/{$taak->getTaakId()}" title="Punten intrekken" class="knop post">{icon get="medal_silver_delete"}</a>
-	{/if}
+{/if}
 		</div>
 	</td>
 	<td class="col-del">
@@ -66,3 +78,4 @@
 {/if}
 	</td>
 </tr>
+{/strip}

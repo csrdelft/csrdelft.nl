@@ -11,7 +11,7 @@ h2 {
 a.knop {
 	color: inherit;
 	padding: 0px 4px;
-	margin: 2px 0px;
+	margin: 1px;
 }
 .knop img {
 	padding: 0px;
@@ -48,6 +48,13 @@ option.warning {
 }
 option.save {
 	background-image: url("http://plaetjes.csrdelft.nl/famfamfam/bullet_disk.png");
+}
+div.vertical {
+	-moz-transform: rotate(-90deg);  /* FF3.5+ */
+	-o-transform: rotate(-90deg);  /* Opera 10.5 */
+	-webkit-transform: rotate(-90deg);  /* Saf3.1+, Chrome */
+	filter:  progid:DXImageTransform.Microsoft.BasicImage(rotation=-0.9);  /* IE6,IE7 */
+	-ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=-0.9)"; /* IE8 */
 }
 
 /* formulier */
@@ -150,14 +157,22 @@ input.VinkField {
 	background-color: #AAEEAA;
 	font-weight: bold;
 	color: green;
+	text-align: center;
 }
 .maaltijd-gesloten, .maaltijd-afgemeld, .abonnement-uitgeschakeld, .voorkeur-uitgeschakeld { /* .taak-open */
 	background-color: #EEAAAA;
 	font-weight: bold;
 	color: red;
+	text-align: center;
+}
+.maaltijd-aangemeld, .maaltijd-afgemeld {
+	text-align: left;
 }
 .abonnement-warning, .taak-warning {
 	background-color: #FFEE66;
+}
+.abonnement-warning {
+	text-align: center;
 }
 .taak-grijs, .taak-grijs a {
 	color: grey;

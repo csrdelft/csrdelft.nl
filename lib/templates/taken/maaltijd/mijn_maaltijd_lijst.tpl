@@ -1,28 +1,28 @@
 {*
 	mijn_maaltijd_lijst.tpl	|	P.W.G. Brussee (brussee@live.nl)
 *}
+{strip}
 <tr id="maaltijd-row-{$maaltijd->getMaaltijdId()}"{if !isset($aanmelding) and $maaltijd->getIsGesloten()} class="taak-grijs"{/if}>
 	<td>{$maaltijd->getDatum()|date_format:"%a %e %b"} {$maaltijd->getTijd()|date_format:"%H:%M"}</td>
 	<td>{$maaltijd->getTitel()}
-		<span style="float: right;">&nbsp;
+		<div style="float: right;">
 {assign var=prijs value=$maaltijd->getPrijs()|string_format:"%.2f"}
 {if isset($aanmelding) and $aanmelding->getSaldoStatus() < 0}
 		{icon get="money_delete" title="U staat rood bij de MaalCie!&#013;Maaltijdprijs: &euro; "|cat:$prijs}
 {elseif isset($aanmelding) and $aanmelding->getSaldoStatus() < 2}
 		{icon get="money_delete" title="Uw MaalCie saldo is te laag!&#013;Maaltijdprijs: &euro; "|cat:$prijs}
+{elseif $prijs !== $standaardprijs}
+		{icon get="money" title="Afwijkende maaltijdprijs: &euro; "|cat:$prijs}
 {else}
 		{icon get="money_euro" title="Maaltijdprijs: &euro; "|cat:$prijs}
 {/if}
-		</span>
+		</div>
 	</td>
-	<td>
-{if $toonlijst}
-		<a href="/actueel/taken/maaltijdenbeheer/lijst/{$maaltijd->getMaaltijdId()}" title="Toon maaltijdlijst" class="knop" style="margin-right:10px;">{icon get="table"}</a>
-{/if}
+	<td style="text-align: center;">
 		{$maaltijd->getAantalAanmeldingen()} ({$maaltijd->getAanmeldLimiet()})
-{if $maaltijd->getAantalAanmeldingen() >= $maaltijd->getAanmeldLimiet()}
+{if $toonlijst}
 		<div style="float: right;">
-			{icon get="stop" title="Maaltijd is vol"}
+			<a href="/actueel/taken/maaltijden/lijst/{$maaltijd->getMaaltijdId()}" title="Toon maaltijdlijst" class="knop">{icon get="table"}</a>
 		</div>
 {/if}
 	</td>
@@ -30,15 +30,15 @@
 	{if $maaltijd->getIsGesloten()}
 	<td class="maaltijd-aangemeld">
 		Ja
-		{if $aanmelding->getDoorAbonnement()}(abo){/if}
-		<span style="float: right;">&nbsp;
+		{if $aanmelding->getDoorAbonnement()} (abo){/if}
+		<div style="float: right;">
 			{assign var=date value=$maaltijd->getLaatstGesloten()|date_format:"%H:%M"}
 			{icon get="lock" title="Maaltijd is gesloten om "|cat:$date}
-		</span>
+		</div>
 	{else}
 	<td class="maaltijd-aangemeld">
 		<a href="{$module}/afmelden/{$maaltijd->getMaaltijdId()}" class="knop post maaltijd-aangemeld"><input type="checkbox" checked="checked" /> Ja</a>
-		{if $aanmelding->getDoorAbonnement()}(abo){/if}
+		{if $aanmelding->getDoorAbonnement()} (abo){/if}
 	{/if}
 	</td>
 	<td>
@@ -57,7 +57,9 @@
 	{if $maaltijd->getIsGesloten()}
 		{$aanmelding->getGastenOpmerking()|truncate:20:"...":true}&nbsp;
 	{else}
-		<div class="inline-edit" onclick="toggle_taken_hiddenform(this);" title="{$aanmelding->getGastenOpmerking()}">{$aanmelding->getGastenOpmerking()|truncate:20:"...":true}&nbsp;</div>
+		<div class="inline-edit" onclick="toggle_taken_hiddenform(this);" title="{$aanmelding->getGastenOpmerking()}">
+			{$aanmelding->getGastenOpmerking()|truncate:20:"...":true}&nbsp;
+		</div>
 		<form method="post" action="{$module}/opmerking/{$maaltijd->getMaaltijdId()}" class="Formulier taken-hidden-form taken-subform">
 			<input type="text" name="gasten_opmerking" value="{$aanmelding->getGastenOpmerking()}" maxlength="255" size="20" />
 			<a onclick="$(this).parent().submit();" title="Wijzigingen opslaan" class="knop">{icon get="accept"}</a>
@@ -68,9 +70,12 @@
 {else}
 	{if $maaltijd->getIsGesloten() or $maaltijd->getAantalAanmeldingen() >= $maaltijd->getAanmeldLimiet()}
 	<td class="maaltijd-afgemeld">
+		{if !$maaltijd->getIsGesloten() and $maaltijd->getAantalAanmeldingen() >= $maaltijd->getAanmeldLimiet()}
+			{icon get="stop" title="Maaltijd is vol"}&nbsp;
+		{/if}
 		Nee
 		{if $maaltijd->getIsGesloten()}
-		<span style="float: right;">&nbsp;
+		<span style="float: right;">
 			{assign var=date value=$maaltijd->getLaatstGesloten()|date_format:"%H:%M"}
 			{icon get="lock" title="Maaltijd is gesloten om "|cat:$date}
 		</span>
@@ -84,3 +89,4 @@
 	<td></td>
 {/if}
 </tr>
+{/strip}

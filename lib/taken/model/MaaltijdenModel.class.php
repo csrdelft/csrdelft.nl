@@ -11,8 +11,7 @@ require_once 'taken/model/AbonnementenModel.class.php';
  */
 class MaaltijdenModel {
 
-	public static function openMaaltijd($mid) {
-		$maaltijd = self::getMaaltijd($mid);
+	public static function openMaaltijd(Maaltijd $maaltijd) {
 		if (!$maaltijd->getIsGesloten()) {
 			throw new \Exception('Maaltijd is al geopend');
 		}
@@ -21,18 +20,13 @@ class MaaltijdenModel {
 		return $maaltijd;
 	}
 	
-	public static function sluitMaaltijd($mid) {
-		if (!is_int($mid) || $mid <= 0) {
-			throw new \Exception('Sluit maaltijd faalt: Invalid $mid ='. $mid);
-		}
-		$maaltijd = self::getMaaltijd($mid);
+	public static function sluitMaaltijd(Maaltijd $maaltijd) {
 		if ($maaltijd->getIsGesloten()) {
 			throw new \Exception('Maaltijd is al gesloten');
 		}
 		$maaltijd->setGesloten(true);
 		$maaltijd->setLaatstGesloten(date('Y-m-d H:i'));
 		self::updateMaaltijd($maaltijd);
-		return $maaltijd;
 	}
 	
 	public static function getAlleMaaltijden() {
@@ -135,7 +129,7 @@ class MaaltijdenModel {
 				$maaltijd->setAanmeldFilter($filter);
 				self::updateMaaltijd($maaltijd);
 				if (!$maaltijd->getIsGesloten() && $maaltijd->getBeginMoment() < time()) {
-					$maaltijd = MaaltijdenModel::sluitMaaltijd($maaltijd->getMaaltijdId());
+					MaaltijdenModel::sluitMaaltijd($maaltijd);
 				}
 				if (!$maaltijd->getIsGesloten() && !$maaltijd->getIsVerwijderd() && !empty($filter)) {
 					$verwijderd = AanmeldingenModel::checkAanmeldingenFilter($filter, array($maaltijd));

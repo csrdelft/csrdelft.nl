@@ -1,7 +1,7 @@
 <?php
 namespace Taken\MLT;
 
-require_once 'taken/controller/BeheerMaaltijdenController.class.php';
+require_once 'taken/controller/MijnMaaltijdenController.class.php';
 
 /**
  * MaaltijdKetzerView.class.php	| 	P.W.G. Brussee (brussee@live.nl)
@@ -27,7 +27,7 @@ class MaaltijdKetzerView extends \SimpleHtml {
 		$smarty = new \Smarty_csr();
 		$smarty->assign('maaltijd', $this->_maaltijd);
 		$smarty->assign('aanmelding', $this->_aanmelding);
-		$smarty->assign('toonlijst', BeheerMaaltijdenController::magMaaltijdlijstTonen());
+		$smarty->assign('toonlijst', MijnMaaltijdenController::magMaaltijdlijstTonen($this->_maaltijd));
 		return $smarty->fetch('taken/maaltijd/maaltijd_ketzer.tpl');
 	}
 	

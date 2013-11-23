@@ -1,6 +1,7 @@
 {*
 	beheer_maaltijd_lijst.tpl	|	P.W.G. Brussee (brussee@live.nl)
 *}
+{strip}
 <tr id="maaltijd-row-{$maaltijd->getMaaltijdId()}"{if strtotime($maaltijd->getDatum()) < strtotime('-1 day')} class="taak-oud"{/if}>
 	<td>
 {if $maaltijd->getIsVerwijderd()}
@@ -9,6 +10,8 @@
 		<a href="{$module}/bewerk/{$maaltijd->getMaaltijdId()}" title="Maaltijd wijzigen" class="knop post popup">{icon get="pencil"}</a>
 	{if $maaltijd->getMaaltijdRepetitieId()}
 		<a href="/actueel/taken/maaltijdrepetities/beheer/{$maaltijd->getMaaltijdRepetitieId()}" title="Beheer maaltijdrepetities" class="knop get">{icon get="calendar_edit"}</a>
+	{else}
+		<div style="display: inline-block; width: 26px;"></div>
 	{/if}
 {/if}
 		<a href="/actueel/taken/corveebeheer/maaltijd/{$maaltijd->getMaaltijdId()}" title="Beheer maaltijdcorvee" class="knop get">{icon get="chart_organisation"}</a>
@@ -19,29 +22,28 @@
 	</td>
 	<td>
 		<a href="{$module}/fiscaal/{$maaltijd->getMaaltijdId()}" title="Toon fiscale maaltijdlijst&#013;Maaltijdprijs: &euro; {$maaltijd->getPrijs()|string_format:"%.2f"}" class="knop">{icon get="money_euro"}</a>
-		<a href="{$module}/lijst/{$maaltijd->getMaaltijdId()}" title="Toon maaltijdlijst" class="knop" style="margin-right:10px;">{icon get="table"}</a>
+		<a href="/actueel/taken/maaltijden/lijst/{$maaltijd->getMaaltijdId()}" title="Toon maaltijdlijst" class="knop" style="margin-right:10px;">{icon get="table"}</a>
 	</td>
-	<td>
+	<td style="text-align: center;">
 		{$maaltijd->getAantalAanmeldingen()} ({$maaltijd->getAanmeldLimiet()})
 {if !$maaltijd->getIsVerwijderd()}
-		<span style="float: right;">
+		<div style="float: right;">
 			<a href="{$module}/anderaanmelden/{$maaltijd->getMaaltijdId()}" title="Aanmelding toevoegen" class="knop post popup">{icon get="user_add"}</a>
 			<a href="{$module}/anderafmelden/{$maaltijd->getMaaltijdId()}" title="Aanmelding verwijderen" class="knop post popup">{icon get="user_delete"}</a>
-		</span>
+		</div>
 {/if}
 {if $maaltijd->getAanmeldFilter()}
-		<span style="float: right;">&nbsp;
-			{icon get="group_key" title="Aanmeldfilter actief:&#013;"|cat:$maaltijd->getAanmeldFilter()}
-			&nbsp;
-		</span>
+		<div style="float: right;">
+			&nbsp;{icon get="group_key" title="Aanmeldfilter actief:&#013;"|cat:$maaltijd->getAanmeldFilter()}&nbsp;
+		</div>
 {/if}
 	</td>
 {if $maaltijd->getIsVerwijderd()}
 	{if $maaltijd->getIsGesloten()}
 	<td class="maaltijd-gesloten">Gesloten
-		<span style="float: right;">&nbsp;
+		<div style="float: right;">
 			{icon get="lock" title="Laatst gesloten: "|cat:$maaltijd->getLaatstGesloten()}
-		</span>
+		</div>
 	{else}
 	<td class="maaltijd-open">Open
 	{/if}
@@ -63,3 +65,4 @@
 {/if}
 	</td>
 </tr>
+{/strip}

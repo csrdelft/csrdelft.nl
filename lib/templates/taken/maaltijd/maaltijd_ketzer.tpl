@@ -1,7 +1,7 @@
 {*
 	maaltijd_ketzer.tpl	|	P.W.G. Brussee (brussee@live.nl)
 *}
-<div class="ubb_block ubb_maaltijd" id="maaltijdketzer-{$maaltijd->getMaaltijdId()}">
+<div class="ubb_block ubb_maaltijd" id="maaltijdketzer-{$maaltijd->getMaaltijdId()}">{strip}
 {if $loginlid->hasPermission('P_LOGGED_IN')}
 	<div class="aanmelddata">U komt:<br />
 	{if $aanmelding}
@@ -31,8 +31,8 @@
 {/if}
 <div class="maaltijdgegevens">
 	<h2>Maaltijd van {$maaltijd->getDatum()|date_format:"%A %e %b"} {$maaltijd->getTijd()|date_format:"%H:%M"}</h2>
-	{$maaltijd->getTitel()}<br />
-	<span class="small">
+	{$maaltijd->getTitel()}
+	<div class="small">
 {if $toonlijst}
 		<a href="/actueel/taken/maaltijdenbeheer/lijst/{$maaltijd->getMaaltijdId()}" title="Toon maaltijdlijst">
 {/if}
@@ -40,6 +40,6 @@
 {if $toonlijst}
 		</a>
 {/if}
-	</span>
+	</div>
 </div>
-</div>
+</div>{/strip}
