@@ -139,12 +139,6 @@ input.VinkField {
 	padding: 2px 7px;
 	vertical-align: text-bottom;
 }
-.taken-tabel .col-center {
-	text-align: center;
-}
-.taken-tabel .col-edit {
-	padding: 2px;
-}
 .taken-tabel .col-del {
 	padding: 2px;
 	text-align: center;

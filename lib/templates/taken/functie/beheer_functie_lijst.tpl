@@ -18,7 +18,7 @@
 			</div>
 		{/foreach}
 	</td>
-	<td style="text-align:center;">
+	<td class="col-del">
 		<a href="{$module}/verwijder/{$functie->getFunctieId()}" title="Functie definitief verwijderen" class="knop post confirm">{icon get="cross"}</a>
 	</td>
 </tr>

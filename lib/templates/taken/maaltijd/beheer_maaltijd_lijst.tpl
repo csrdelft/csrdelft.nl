@@ -55,7 +55,7 @@
 	{/if}
 {/if}
 	</td>
-	<td style="text-align:center;">
+	<td class="col-del">
 {if $maaltijd->getIsVerwijderd()}
 		<a href="{$module}/verwijder/{$maaltijd->getMaaltijdId()}" title="Maaltijd definitief verwijderen" class="knop post confirm">{icon get="cross"}</a>
 {else}

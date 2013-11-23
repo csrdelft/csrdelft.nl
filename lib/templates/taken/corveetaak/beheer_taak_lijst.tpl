@@ -2,7 +2,7 @@
 	beheer_taak_lijst.tpl	|	P.W.G. Brussee (brussee@live.nl)
 *}
 <tr id="corveetaak-row-{$taak->getTaakId()}"{if $taak->getBeginMoment() < strtotime('-1 day')} class="taak-oud"{/if}>
-	<td class="col-edit">
+	<td>
 {if $taak->getIsVerwijderd()}
 		<a href="{$module}/herstel/{$taak->getTaakId()}" title="Corveetaak herstellen" class="knop post">{icon get="arrow_undo"}</a>
 {else}
@@ -15,7 +15,7 @@
 	<a href="{$module}/maaltijd/{$taak->getMaaltijdId()}" title="Beheer maaltijdcorvee" class="knop get">{icon get="cup_link"}</a>
 {/if}
 	</td>
-	<td class="col-center">{assign var=aantal value=$taak->getAantalKeerGemaild()}{$aantal}x
+	<td style="text-align: center;">{assign var=aantal value=$taak->getAantalKeerGemaild()}{$aantal}x
 		<div style="float: right;">
 {if !$taak->getIsVerwijderd() and (!isset($maaltijd) or !$maaltijd->getIsVerwijderd())}
 	{assign var="wijzigbaar" value="true"}

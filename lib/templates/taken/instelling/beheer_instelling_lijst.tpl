@@ -7,7 +7,7 @@
 	</td>
 	<td><nobr>{$instelling->getInstellingId()|replace:'_':' '}</nobr></td>
 	<td>{$instelling->getWaarde()}</td>
-	<td style="text-align:center;">
+	<td class="col-del">
 		<a href="{$module}/reset/{$instelling->getInstellingId()}" title="Instelling resetten" class="knop post confirm">{icon get="arrow_rotate_anticlockwise"}</a>
 	</td>
 </tr>

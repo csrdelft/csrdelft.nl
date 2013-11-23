@@ -243,7 +243,7 @@ class ConversieModel {
 		foreach ($rows as $row) {
 			$mid = null;
 			$datum = intval($row['datum']);
-			if ($datum < strtotime('-1 day')) {
+			if ($datum < time()) {
 				continue;
 			}
 			if ($row['type'] === 'normaal') {
@@ -294,7 +294,7 @@ class ConversieModel {
 					}
 				}
 				if ($fid === 8) {
-					if ($aantal === 0) {
+					if ($aantal === 0 && $mid !== null) {
 						$tekort = 1;
 					}
 				}

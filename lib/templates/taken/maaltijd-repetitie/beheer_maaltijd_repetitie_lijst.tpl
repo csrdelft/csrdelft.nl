@@ -14,5 +14,5 @@
 	<td>{$repetitie->getStandaardLimiet()}</td>
 	<td>{if $repetitie->getIsAbonneerbaar()}{icon get="tick" title="Abonneerbaar"}{/if}</td>
 	<td>{$repetitie->getAbonnementFilter()}</td>
-	<td style="text-align:center;"><a href="{$module}/verwijder/{$repetitie->getMaaltijdRepetitieId()}" title="Maaltijdrepetitie definitief verwijderen" class="knop post confirm">{icon get="cross"}</a></td>
+	<td class="col-del"><a href="{$module}/verwijder/{$repetitie->getMaaltijdRepetitieId()}" title="Maaltijdrepetitie definitief verwijderen" class="knop post confirm">{icon get="cross"}</a></td>
 </tr>

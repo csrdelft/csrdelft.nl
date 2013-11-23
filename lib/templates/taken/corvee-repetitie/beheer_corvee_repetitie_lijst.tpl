@@ -14,5 +14,5 @@
 	<td>{$repetitie->getPeriodeInDagenText()}</td>
 	<td>{if $repetitie->getIsVoorkeurbaar()}{icon get="tick" title="Voorkeurbaar"}{/if}</td>
 	<td>{$repetitie->getStandaardAantal()}</td>
-	<td style="text-align:center;"><a href="{$module}/verwijder/{$repetitie->getCorveeRepetitieId()}" title="Corveerepetitie definitief verwijderen" class="knop post confirm">{icon get="cross"}</a></td>
+	<td class="col-del"><a href="{$module}/verwijder/{$repetitie->getCorveeRepetitieId()}" title="Corveerepetitie definitief verwijderen" class="knop post confirm">{icon get="cross"}</a></td>
 </tr>
