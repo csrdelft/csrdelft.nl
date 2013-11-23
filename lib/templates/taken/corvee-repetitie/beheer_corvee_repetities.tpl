@@ -25,7 +25,7 @@ N.B. Als u kiest voor "Alles bijwerken" worden alle corveetaken die behoren tot 
 <table id="taken-tabel" class="taken-tabel">
 	<thead>
 		<tr>
-			<th>Wijzig</th>
+			<th style="width: 80px;">Wijzig</th>
 			<th>Omschrijving</th>
 			<th>Dag</th>
 			<th>Periode</th>

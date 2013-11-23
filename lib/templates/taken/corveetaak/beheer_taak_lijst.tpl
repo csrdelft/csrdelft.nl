@@ -16,29 +16,33 @@
 	<a href="{$module}/maaltijd/{$taak->getMaaltijdId()}" title="Beheer maaltijdcorvee" class="knop get">{icon get="cup_link"}</a>
 {/if}
 	</td>
-	<td style="text-align: center;">{assign var=aantal value=$taak->getAantalKeerGemaild()}{$aantal}x
-		<div style="float: right;">
+	<td style="text-align: center;">
+{assign var=aantal value=$taak->getAantalKeerGemaild()}
 {if !$taak->getIsVerwijderd() and (!isset($maaltijd) or !$maaltijd->getIsVerwijderd())}
 	{assign var="wijzigbaar" value="true"}
 	{if $taak->getLidId()}
+		{$aantal}x
+		<div style="float: right;">
 			<a href="{$module}/email/{$taak->getTaakId()}" title="Verstuur een (extra) herinnering voor deze taak" class="knop post confirm">
 	{/if}
 {/if}
 {if $taak->getIsTelaatGemaild()}
 			{icon get="email_error" title="Niet op tijd gemaild!&#013;"|cat:$taak->getWanneerGemaild()}
 {elseif $aantal < 1}
+	{if $taak->getLidId()}
 			{icon get="email" title="Niet gemaild"}
+	{/if}
 {elseif $aantal === 1}
 			{icon get="email_go" title=$taak->getWanneerGemaild()}
 {elseif $aantal > 1}
 			{icon get="email_open" title=$taak->getWanneerGemaild()}
 {/if}
-{if isset($wijzigbaar)}
+{if isset($wijzigbaar) and $taak->getLidId()}
 			</a>
-{/if}
 		</div>
+{/if}
 	</td>
-	<td>{$taak->getDatum()|date_format:"%a %e/%m/%y"}</td>
+	<td>{$taak->getDatum()|date_format:"%a %e %b"}</td>
 	<td>{$taak->getCorveeFunctie()->getNaam()}</td>
 	<td class="taak-{if $taak->getLidId()}toegewezen{elseif  strtotime($taak->getDatum()) < strtotime($vooraf)}warning{else}open{/if}" style="font-weight: normal;">
 {if isset($wijzigbaar)}

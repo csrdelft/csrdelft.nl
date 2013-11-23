@@ -12,10 +12,14 @@ Op deze pagina kunt u voor alle leden de voorkeuren beheren.
 		<tr>
 			<th style="vertical-align: bottom;">Lid</th>
 		{foreach from=$repetities item=repetitie}
-			<th style="text-align: center;">{strip}
-				<a href="/actueel/taken/corveerepetities/beheer/{$repetitie->getCorveeRepetitieId()}" title="Wijzig corveerepetitie" class="knop get">{icon get="calendar_edit"}</a>
-				<div style="display: inline-block; vertical-align: bottom; width: 30px; height: 150px;">
-					<div class="vertical" style="position: relative; top: 120px; font-weight: normal;">
+			<th style="width: 30px; background-color: {cycle values="#F0F0F0,#FAFAFA"};">{strip}
+				<div style="width: 28px;">
+					<a href="/actueel/taken/corveerepetities/beheer/{$repetitie->getCorveeRepetitieId()}" title="Wijzig corveerepetitie" class="knop get">
+						{icon get="calendar_edit"}
+					</a>
+				</div>
+				<div style="width: 26px; height: 160px;">
+					<div class="vertical" style="font-weight: normal; position: relative; top: 130px;">
 						<nobr>{$repetitie->getCorveeFunctie()->getNaam()}</nobr>
 						<br /><nobr>op {$repetitie->getDagVanDeWeekText()}</nobr>
 					</div>
