@@ -167,6 +167,7 @@ function taken_reset(parent) {
 }
 
 function taken_loading() {
+	$('#taken-popup-background').css('background-image', 'url("http://plaetjes.csrdelft.nl/layout/loading_bar_black.gif")');
 	$('#taken-popup-background').fadeIn();
 }
 
