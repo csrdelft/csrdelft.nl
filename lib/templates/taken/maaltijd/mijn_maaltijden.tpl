@@ -6,10 +6,12 @@ Op deze pagina kunt u zich aan- en afmelden voor maaltijden op Confide door op d
 Onderstaande tabel toont de maaltijden in de komende maand.
 De kolom "Aangemeld" geeft aan of u bent aangemeld voor de maaltijd met "Ja", of niet bent aangemeld met "Nee".
 Als u een abonnement heeft dat u automatisch heeft aangemeld staat er "(abo)" achter.
-Als u bent ingedeeld voor een corveetaak, zoals kok of afwasser, dan heeft u de mogelijkheid de maaltijdlijst te bekijken.
+Als u bent ingedeeld voor een corveetaak staat dat aangegeven door middel van dit icoon: {icon get="paintcan" title="Corvee"}
+In dat geval heeft u de mogelijkheid de maaltijdlijst te bekijken.
 </p>
 <h3>Gasten aanmelden</h3>
-<p>Als u staat ingeschreven voor een maaltijd, kunt u op uw naam gasten aanmelden voor de maaltijd.
+<p>
+Als u staat ingeschreven voor een maaltijd, kunt u op uw naam gasten aanmelden voor de maaltijd.
 Vul in het vak 'gasten' het aantal in door erop te klikken.
 Het veld 'opmerking' kunt u gebruiken voor eetwensen van uw gasten, zoals allergien.
 Dit kan alleen als de maaltijd nog niet is gesloten. Daarna moet u contact opnemen met de kok!
@@ -24,9 +26,9 @@ Vanaf dat moment zal deze ketzer u niet meer willen aan- of afmelden en bent u a
 			<th>Wanneer</th>
 			<th>Omschrijving</th>
 			<th>Eters (Limiet)</th>
-			<th>Aangemeld</th>
+			<th style="width: 140px;">Aangemeld</th>
 			<th>Gasten</th>
-			<th>Opmerking</th>
+			<th title="Gasten opmerking" style="width: 25px;">{icon get="comment"}</th>
 		</tr>
 	</thead>
 	<tbody>

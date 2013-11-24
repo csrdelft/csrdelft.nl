@@ -41,15 +41,17 @@ class MijnMaaltijdenController extends \ACLController {
 		$this->performAction($mid);
 	}
 	
-	public static function magMaaltijdlijstTonen(Maaltijd $maaltijd) {
-		$login = \LoginLid::instance();
-		if (opConfide() || $login->hasPermission('P_MAAL_MOD')) {
+	public static function magMaaltijdlijstTonen(Maaltijd $maaltijd, $taken=null) {
+		if (opConfide() || \LoginLid::instance()->hasPermission('P_MAAL_MOD')) {
 			return true;
 		}
-		$taken = \Taken\CRV\TakenModel::getTakenVoorMaaltijd($maaltijd->getMaaltijdId());
+		if ($taken === null) {
+			$taken = \Taken\CRV\TakenModel::getTakenVoorMaaltijd($maaltijd->getMaaltijdId());
+		}
+		$uid = \LoginLid::instance()->getUid();
 		foreach ($taken as $taak) {
-			if ($taak->getLidId() === $login->getUid()) {
-				return true;
+			if ($taak->getLidId() === $uid) {
+				return $taak;
 			}
 		}
 		return false;
@@ -66,13 +68,12 @@ class MijnMaaltijdenController extends \ACLController {
 	
 	public function action_lijst($mid) {
 		$maaltijd = MaaltijdenModel::getMaaltijd($mid, true);
-		$toonlijst = self::magMaaltijdlijstTonen($maaltijd);
-		if (!$toonlijst) {
+		$taken = \Taken\CRV\TakenModel::getTakenVoorMaaltijd($mid);
+		if (!self::magMaaltijdlijstTonen($maaltijd, $taken)) {
 			$this->action_geentoegang();
 			return;
 		}
 		$aanmeldingen = AanmeldingenModel::getAanmeldingenVoorMaaltijdLijst($maaltijd);
-		$taken = \Taken\CRV\TakenModel::getTakenVoorMaaltijd($mid);
 		require_once 'taken/view/MaaltijdLijstView.class.php';
 		$this->content = new MaaltijdLijstView($maaltijd, $aanmeldingen, $taken);
 	}

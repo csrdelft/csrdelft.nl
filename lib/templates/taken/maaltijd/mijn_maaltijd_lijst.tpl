@@ -3,7 +3,14 @@
 *}
 {strip}
 <tr id="maaltijd-row-{$maaltijd->getMaaltijdId()}"{if !isset($aanmelding) and $maaltijd->getIsGesloten()} class="taak-grijs"{/if}>
-	<td>{$maaltijd->getDatum()|date_format:"%a %e %b"} {$maaltijd->getTijd()|date_format:"%H:%M"}</td>
+	<td>
+		{$maaltijd->getDatum()|date_format:"%a %e %b"} {$maaltijd->getTijd()|date_format:"%H:%M"}
+{if $toonlijst|is_a:'\Taken\CRV\CorveeTaak'}
+		<div style="float: right;">
+			{icon get="paintcan" title=$toonlijst->getCorveeFunctie()->getNaam()}
+		</div>
+{/if}
+	</td>
 	<td>{$maaltijd->getTitel()}
 		<div style="float: right;">
 {assign var=prijs value=$maaltijd->getPrijs()|string_format:"%.2f"}
@@ -55,10 +62,16 @@
 	</td>
 	<td>
 	{if $maaltijd->getIsGesloten()}
-		{$aanmelding->getGastenOpmerking()|truncate:20:"...":true}&nbsp;
+		{if $aanmelding->getGastenOpmerking()}
+			{icon get="comment" title=$aanmelding->getGastenOpmerking()}
+		{/if}
 	{else}
-		<div class="inline-edit" onclick="toggle_taken_hiddenform(this);" title="{$aanmelding->getGastenOpmerking()}">
-			{$aanmelding->getGastenOpmerking()|truncate:20:"...":true}&nbsp;
+		<div onclick="toggle_taken_hiddenform(this);" title="{$aanmelding->getGastenOpmerking()}">
+		{if $aanmelding->getGastenOpmerking()}
+			<a class="knop">{icon get="comment_edit" title=$aanmelding->getGastenOpmerking()}</a>
+		{else}
+			<a class="knop">{icon get="comment_add" title="Gasten opmerking maken"}</a>
+		{/if}
 		</div>
 		<form method="post" action="{$module}/opmerking/{$maaltijd->getMaaltijdId()}" class="Formulier taken-hidden-form taken-subform">
 			<input type="text" name="gasten_opmerking" value="{$aanmelding->getGastenOpmerking()}" maxlength="255" size="20" />

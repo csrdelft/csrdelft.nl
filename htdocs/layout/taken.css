@@ -13,6 +13,9 @@ a.knop {
 	padding: 0px 4px;
 	margin: 1px;
 }
+p img {
+	margin: 0px;
+}
 .knop img {
 	padding: 0px;
 	margin: 0px;
@@ -166,8 +169,12 @@ input.VinkField {
 	color: red;
 	text-align: center;
 }
-.maaltijd-aangemeld, .maaltijd-afgemeld {
+.taak-self {
 	text-align: left;
+}
+td.maaltijd-aangemeld, td.maaltijd-afgemeld {
+	text-align: left;
+	padding-left: 20px;
 }
 .abonnement-warning, .taak-warning {
 	background-color: #FFEE66;
