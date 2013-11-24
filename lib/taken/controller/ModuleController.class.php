@@ -49,7 +49,7 @@ class ModuleController extends \ACLController {
 		$this->action = $module .'_'. $this->action;
 	}
 	
-	public function performAction($args = null) {
+	public function performAction($args=null) {
 		parent::performAction($args);
 	}
 	
@@ -65,6 +65,7 @@ class ModuleController extends \ACLController {
 	}
 	
 	public function action_maaltijden_lijst($query) {
+		$query = str_replace('lijst/sluit/', 'sluit/', $query);
 		$this->action_maaltijden_ketzer('ketzer/'. $query);
 	}
 	
@@ -151,7 +152,8 @@ class ModuleController extends \ACLController {
 	}
 	
 	public function action_corvee_instellingen($query) {
-		$this->action_maaltijden_instellingen('maaltijden/'. $query);
+		$GLOBALS['taken_module'] = str_replace('corvee', 'maaltijden', $GLOBALS['taken_module']);
+		$this->action_maaltijden_instellingen($query);
 	}
 	
 	public function action_maaltijden_instellingen($query) {

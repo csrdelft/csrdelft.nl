@@ -14,7 +14,7 @@
 {if !$maaltijd->getIsGesloten()}
 	<h2 style="color: red">De inschrijving voor deze maaltijd is nog niet gesloten
 	{if !$maaltijd->getIsVerwijderd() and !$maaltijd->getIsGesloten()}
-	&nbsp;<button onclick="if(confirm('Weet u zeker dat u deze maaltijd wil sluiten?'))taken_ajax(this, '/maaltijdenketzer/sluit/{$maaltijd->getMaaltijdId()}');">Nu sluiten!</button>
+	&nbsp;<button onclick="if(confirm('Weet u zeker dat u deze maaltijd wil sluiten?'))taken_ajax(this, '{$globals.taken_module}/sluit/{$maaltijd->getMaaltijdId()}', page_reload);">Nu sluiten!</button>
 	{/if}
 	</h2>
 {/if}

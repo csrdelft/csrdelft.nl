@@ -115,8 +115,7 @@ function taken_form_init() {
 
 function taken_ajax(source, url, successCallback, formdata) {
 	if (typeof source !== 'undefined' && source !== false) {
-		source = $(source).parent();
-		$(source).html('<img title="'+ url +'" src="http://plaetjes.csrdelft.nl/layout/loading-arrows.gif" />');
+		$(source).parent().html('<img title="'+ url +'" src="http://plaetjes.csrdelft.nl/layout/loading-arrows.gif" />');
 	}
 	$.ajax({
 		type: 'POST',
@@ -124,9 +123,7 @@ function taken_ajax(source, url, successCallback, formdata) {
 		url: url,
 		data: formdata,
 		success: function(response) {
-			if (successCallback) {
-				successCallback(response);
-			}
+			successCallback(response);
 		},
 		error: function(jqXHR, textStatus, errorThrown) {
 			if (errorThrown === '') {

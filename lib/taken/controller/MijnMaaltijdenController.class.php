@@ -86,7 +86,6 @@ class MijnMaaltijdenController extends \ACLController {
 			return;
 		}
 		MaaltijdenModel::sluitMaaltijd($maaltijd);
-		\SimpleHTML::invokeRefresh($GLOBALS['taken_module'] .'/lijst/'. $mid);
 	}
 	
 	public function action_aanmelden($mid) {
