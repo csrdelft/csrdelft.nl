@@ -102,7 +102,7 @@ class BeheerTakenController extends \ACLController {
 		\SimpleHTML::invokeRefresh($GLOBALS['taken_module']);
 	}
 	
-	public function action_nieuw() {
+	public function action_nieuw($mid) {
 		if (array_key_exists('crid', $_POST)) {
 			$crid = intval($_POST['crid']);
 			$repetitie = CorveeRepetitiesModel::getRepetitie($crid);
@@ -115,26 +115,22 @@ class BeheerTakenController extends \ACLController {
 			}
 			$beginDatum = date('Y-m-d', $datum);
 			if ($repetitie->getPeriodeInDagen() > 0) {
-				$this->content = new RepetitieCorveeFormView($repetitie, $beginDatum, $beginDatum); // fetches POST values itself
+				$this->content = new RepetitieCorveeFormView($repetitie, $beginDatum, $beginDatum);
 			}
 			else {
 				$functie = FunctiesModel::getFunctie($repetitie->getFunctieId());
-				$this->content = new TaakFormView(0, $functie->getFunctieId(), null, $crid, null, $beginDatum, $functie->getStandaardPunten(), 0);
+				$this->content = new TaakFormView(0, $functie->getFunctieId(), null, $crid, null, $beginDatum, $functie->getStandaardPunten(), 0); // fetches POST values itself
 			}
 		}
 		else {
-			$mid = null;
-			if (array_key_exists('maaltijd_id', $_POST)) {
-				$mid = intval($_POST['maaltijd_id']);
-			}
 			$taak = new CorveeTaak();
-			$this->content = new TaakFormView($taak->getTaakId(), $taak->getFunctieId(), $taak->getLidId(), $taak->getCorveeRepetitieId(), $mid, $taak->getDatum(), $taak->getPunten(), $taak->getBonusMalus());
+			$this->content = new TaakFormView($taak->getTaakId(), $taak->getFunctieId(), $taak->getLidId(), $taak->getCorveeRepetitieId(), $mid, $taak->getDatum(), $taak->getPunten(), $taak->getBonusMalus()); // fetches POST values itself
 		}
 	}
 	
 	public function action_bewerk($tid) {
 		$taak = TakenModel::getTaak($tid);
-		$this->content = new TaakFormView($taak->getTaakId(), $taak->getFunctieId(), $taak->getLidId(), $taak->getCorveeRepetitieId(), $taak->getMaaltijdId(), $taak->getDatum(), $taak->getPunten(), $taak->getBonusMalus());
+		$this->content = new TaakFormView($taak->getTaakId(), $taak->getFunctieId(), $taak->getLidId(), $taak->getCorveeRepetitieId(), $taak->getMaaltijdId(), $taak->getDatum(), $taak->getPunten(), $taak->getBonusMalus()); // fetches POST values itself
 	}
 	
 	public function action_opslaan($tid) {
@@ -150,7 +146,8 @@ class BeheerTakenController extends \ACLController {
 				$maaltijd = \Taken\MLT\MaaltijdenModel::getMaaltijd($mid);
 			}
 			$this->content = new BeheerTakenView($taak, $maaltijd);
-		} else {
+		}
+		else {
 			$this->content = $form;
 		}
 	}
@@ -182,7 +179,8 @@ class BeheerTakenController extends \ACLController {
 			$uid = ($values['lid_id'] === '' ? null : $values['lid_id']);
 			TakenModel::taakToewijzenAanLid($taak, $uid);
 			$this->content = new BeheerTakenView($taak);
-		} else {
+		}
+		else {
 			$this->content = $form;
 		}
 	}
@@ -195,7 +193,8 @@ class BeheerTakenController extends \ACLController {
 			$values = $form->getValues();
 			TakenModel::taakKoppelenAanMaaltijd($taak, $values['maaltijd_id']);
 			$this->content = new BeheerTakenView($taak);
-		} else {
+		}
+		else {
 			$this->content = $form;
 		}
 	}

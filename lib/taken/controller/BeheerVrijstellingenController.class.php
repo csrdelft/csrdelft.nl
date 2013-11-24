@@ -49,7 +49,7 @@ class BeheerVrijstellingenController extends \ACLController {
 	
 	public function action_nieuw() {
 		$vrijstelling = new CorveeVrijstelling();
-		$this->content = new VrijstellingFormView($vrijstelling->getLidId(), $vrijstelling->getBeginDatum(), $vrijstelling->getEindDatum(), $vrijstelling->getPercentage());
+		$this->content = new VrijstellingFormView($vrijstelling->getLidId(), $vrijstelling->getBeginDatum(), $vrijstelling->getEindDatum(), $vrijstelling->getPercentage()); // fetches POST values itself
 	}
 	
 	public function action_bewerk($uid) {
@@ -57,7 +57,7 @@ class BeheerVrijstellingenController extends \ACLController {
 			throw new \Exception('Lid bestaat niet: $uid ='. $uid);
 		}
 		$vrijstelling = VrijstellingenModel::getVrijstelling($uid);
-		$this->content = new VrijstellingFormView($vrijstelling->getLidId(), $vrijstelling->getBeginDatum(), $vrijstelling->getEindDatum(), $vrijstelling->getPercentage());
+		$this->content = new VrijstellingFormView($vrijstelling->getLidId(), $vrijstelling->getBeginDatum(), $vrijstelling->getEindDatum(), $vrijstelling->getPercentage()); // fetches POST values itself
 	}
 	
 	public function action_opslaan() {
@@ -67,7 +67,8 @@ class BeheerVrijstellingenController extends \ACLController {
 			$uid = ($values['lid_id'] === '' ? null : $values['lid_id']);
 			$vrijstelling = VrijstellingenModel::saveVrijstelling($uid, $values['begin_datum'], $values['eind_datum'], $values['percentage']);
 			$this->content = new BeheerVrijstellingenView($vrijstelling);
-		} else {
+		}
+		else {
 			$this->content = $form;
 		}
 	}

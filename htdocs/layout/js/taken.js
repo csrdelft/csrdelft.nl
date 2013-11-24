@@ -44,7 +44,9 @@ function taken_get_knop(event) {
 		event.preventDefault();
 		return false;
 	}
-	taken_loading();
+	if ($(this).hasClass('popup')) {
+		taken_loading();
+	}
 	return true;
 }
 
@@ -79,7 +81,7 @@ function taken_submit_form(form, url) {
 	}
 	var source = form;
 	if ($(form).hasClass('popup')) {
-		$('#taken-popup-background').fadeIn();
+		taken_loading();
 		$('#taken-popup').remove();
 		source = null;
 	}
@@ -205,8 +207,9 @@ function update_taken(htmlString) {
 				ding.replaceWith($(this));
 			}
 		}
-		else if (id === 'taken-popup') {
-			$('#taken-popup-background').fadeIn();
+		else if (popup) {
+			taken_loading();
+			$('#taken-popup-background').css('background-image', 'none');
 			$('#taken-popup-background').after(htmlString);
 		}
 		else {

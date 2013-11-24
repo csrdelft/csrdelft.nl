@@ -30,12 +30,11 @@
 	{if !$prullenbak and !isset($maaltijd)}
 	<a href="/corveebeheer/herinneren" title="Verstuur herinneringen" class="knop get popup">{icon get="clock"} Herinneringen versturen</a>
 	{/if}
-	<a href="{$globals.taken_module}/nieuw" {if isset($maaltijd)}post="maaltijd_id={$maaltijd->getMaaltijdId()}" {/if}title="Nieuwe taak" class="knop post popup">{icon get="add"} Nieuwe taak</a>
+	<a href="{$globals.taken_module}/nieuw{if isset($maaltijd)}/{$maaltijd->getMaaltijdId()}{/if}" title="Nieuwe taak" class="knop post popup">{icon get="add"} Nieuwe taak</a>
 </div>
 {/if}
 {if isset($repetities) and (!isset($maaltijd) or !$maaltijd->getIsVerwijderd())}
-<form method="post" action="{$globals.taken_module}/nieuw" class="Formulier popup">
-	<input type="hidden" name="maaltijd_id" value="{if isset($maaltijd)}{$maaltijd->getMaaltijdId()}{/if}">
+<form method="post" action="{$globals.taken_module}/nieuw{if isset($maaltijd)}/{$maaltijd->getMaaltijdId()}{/if}" class="Formulier popup">
 	<label for="crid">{icon get="calendar_add"} Periodieke taken aanmaken:</label>
 	<select name="crid" onchange="taken_submit_dropdown($(this).parent());">
 		<option selected="selected">kies</option>

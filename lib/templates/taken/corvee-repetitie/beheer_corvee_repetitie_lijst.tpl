@@ -4,7 +4,7 @@
 <tr id="repetitie-row-{$repetitie->getCorveeRepetitieId()}">
 	<td>{strip}
 		<a href="{$globals.taken_module}/bewerk/{$repetitie->getCorveeRepetitieId()}" title="Corveerepetitie wijzigen" class="knop post popup">{icon get="pencil"}</a>
-		<a href="/corveefuncties/beheer/{$repetitie->getFunctieId()}" title="Wijzig onderliggende functie" class="knop get">{icon get="cog_edit"}</a>
+		<a href="/corveefuncties/beheer/{$repetitie->getFunctieId()}" title="Wijzig onderliggende functie" class="knop get popup">{icon get="cog_edit"}</a>
 {if !isset($maaltijdrepetitie) and $repetitie->getMaaltijdRepetitieId()}
 		<a href="{$globals.taken_module}/maaltijd/{$repetitie->getMaaltijdRepetitieId()}" title="Corveebeheer maaltijdrepetitie" class="knop get">{icon get="calendar_link"}</a>
 {/if}

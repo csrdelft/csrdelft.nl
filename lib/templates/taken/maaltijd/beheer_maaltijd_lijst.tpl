@@ -9,7 +9,7 @@
 {else}
 		<a href="{$globals.taken_module}/bewerk/{$maaltijd->getMaaltijdId()}" title="Maaltijd wijzigen" class="knop post popup">{icon get="pencil"}</a>
 	{if $maaltijd->getMaaltijdRepetitieId()}
-		<a href="/maaltijdenrepetities/beheer/{$maaltijd->getMaaltijdRepetitieId()}" title="Beheer maaltijdrepetities" class="knop get">{icon get="calendar_edit"}</a>
+		<a href="/maaltijdenrepetities/beheer/{$maaltijd->getMaaltijdRepetitieId()}" title="Beheer maaltijdrepetities" class="knop get popup">{icon get="calendar_edit"}</a>
 	{else}
 		<div style="display: inline-block; width: 28px;"></div>
 	{/if}

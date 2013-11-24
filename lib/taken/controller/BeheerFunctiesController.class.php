@@ -57,12 +57,12 @@ class BeheerFunctiesController extends \ACLController {
 	
 	public function action_nieuw() {
 		$functie = new CorveeFunctie();
-		$this->content = new FunctieFormView($functie->getFunctieId(), $functie->getNaam(), $functie->getAfkorting(), $functie->getOmschrijving(), $functie->getEmailBericht(), $functie->getStandaardPunten(), $functie->getIsKwalificatieBenodigd());
+		$this->content = new FunctieFormView($functie->getFunctieId(), $functie->getNaam(), $functie->getAfkorting(), $functie->getOmschrijving(), $functie->getEmailBericht(), $functie->getStandaardPunten(), $functie->getIsKwalificatieBenodigd()); // fetches POST values itself
 	}
 	
 	public function action_bewerk($fid) {
 		$functie = FunctiesModel::getFunctie($fid);
-		$this->content = new FunctieFormView($functie->getFunctieId(), $functie->getNaam(), $functie->getAfkorting(), $functie->getOmschrijving(), $functie->getEmailBericht(), $functie->getStandaardPunten(), $functie->getIsKwalificatieBenodigd());
+		$this->content = new FunctieFormView($functie->getFunctieId(), $functie->getNaam(), $functie->getAfkorting(), $functie->getOmschrijving(), $functie->getEmailBericht(), $functie->getStandaardPunten(), $functie->getIsKwalificatieBenodigd()); // fetches POST values itself
 	}
 	
 	public function action_opslaan($fid) {
@@ -72,7 +72,8 @@ class BeheerFunctiesController extends \ACLController {
 			$functie = FunctiesModel::saveFunctie($fid, $values['naam'], $values['afkorting'], $values['omschrijving'], $values['email_bericht'], $values['standaard_punten'], $values['kwalificatie_benodigd']);
 			$functie->setGekwalificeerden(KwalificatiesModel::getKwalificatiesVoorFunctie($functie));
 			$this->content = new BeheerFunctiesView($functie);
-		} else {
+		}
+		else {
 			$this->content = $form;
 		}
 	}
@@ -90,7 +91,8 @@ class BeheerFunctiesController extends \ACLController {
 			$functie = FunctiesModel::getFunctie($fid);
 			$functie->setGekwalificeerden(KwalificatiesModel::getKwalificatiesVoorFunctie($functie));
 			$this->content = new BeheerFunctiesView($functie);
-		} else {
+		}
+		else {
 			$this->content = $form;
 		}
 	}

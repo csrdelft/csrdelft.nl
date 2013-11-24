@@ -52,12 +52,12 @@ class MaaltijdRepetitiesController extends \ACLController {
 	
 	public function action_nieuw() {
 		$repetitie = new MaaltijdRepetitie();
-		$this->content = new MaaltijdRepetitieFormView($repetitie->getMaaltijdRepetitieId(), $repetitie->getDagVanDeWeek(), $repetitie->getPeriodeInDagen(), $repetitie->getStandaardTitel(), $repetitie->getStandaardTijd(), $repetitie->getStandaardPrijs(), $repetitie->getIsAbonneerbaar(), $repetitie->getStandaardLimiet(), $repetitie->getAbonnementFilter());
+		$this->content = new MaaltijdRepetitieFormView($repetitie->getMaaltijdRepetitieId(), $repetitie->getDagVanDeWeek(), $repetitie->getPeriodeInDagen(), $repetitie->getStandaardTitel(), $repetitie->getStandaardTijd(), $repetitie->getStandaardPrijs(), $repetitie->getIsAbonneerbaar(), $repetitie->getStandaardLimiet(), $repetitie->getAbonnementFilter()); // fetches POST values itself
 	}
 	
 	public function action_bewerk($mrid) {
 		$repetitie = MaaltijdRepetitiesModel::getRepetitie($mrid);
-		$this->content = new MaaltijdRepetitieFormView($repetitie->getMaaltijdRepetitieId(), $repetitie->getDagVanDeWeek(), $repetitie->getPeriodeInDagen(), $repetitie->getStandaardTitel(), $repetitie->getStandaardTijd(), $repetitie->getStandaardPrijs(), $repetitie->getIsAbonneerbaar(), $repetitie->getStandaardLimiet(), $repetitie->getAbonnementFilter());
+		$this->content = new MaaltijdRepetitieFormView($repetitie->getMaaltijdRepetitieId(), $repetitie->getDagVanDeWeek(), $repetitie->getPeriodeInDagen(), $repetitie->getStandaardTitel(), $repetitie->getStandaardTijd(), $repetitie->getStandaardPrijs(), $repetitie->getIsAbonneerbaar(), $repetitie->getStandaardLimiet(), $repetitie->getAbonnementFilter()); // fetches POST values itself
 	}
 	
 	public function action_opslaan($mrid) {
@@ -69,7 +69,8 @@ class MaaltijdRepetitiesController extends \ACLController {
 			if ($repetitie_aantal[1] > 0) {
 				$this->content->setMelding($repetitie_aantal[1] .' abonnement'. ($repetitie_aantal[1] !== 1 ? 'en' : '') .' uitgeschakeld.', 2);
 			}
-		} else {
+		}
+		else {
 			$this->content = $form;
 		}
 	}

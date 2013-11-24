@@ -63,14 +63,14 @@ class CorveeRepetitiesController extends \ACLController {
 		$this->action_beheer(null, $mrid);
 	}
 	
-	public function action_nieuw($mrid=null) {
+	public function action_nieuw($mrid) {
 		$repetitie = new CorveeRepetitie(0, $mrid);
-		$this->content = new CorveeRepetitieFormView($repetitie->getCorveeRepetitieId(), $repetitie->getMaaltijdRepetitieId(), $repetitie->getDagVanDeWeek(), $repetitie->getPeriodeInDagen(), $repetitie->getFunctieId(), $repetitie->getStandaardAantal(), $repetitie->getIsVoorkeurbaar());
+		$this->content = new CorveeRepetitieFormView($repetitie->getCorveeRepetitieId(), $repetitie->getMaaltijdRepetitieId(), $repetitie->getDagVanDeWeek(), $repetitie->getPeriodeInDagen(), $repetitie->getFunctieId(), $repetitie->getStandaardAantal(), $repetitie->getIsVoorkeurbaar()); // fetches POST values itself
 	}
 	
 	public function action_bewerk($crid) {
 		$repetitie = CorveeRepetitiesModel::getRepetitie($crid);
-		$this->content = new CorveeRepetitieFormView($repetitie->getCorveeRepetitieId(), $repetitie->getMaaltijdRepetitieId(), $repetitie->getDagVanDeWeek(), $repetitie->getPeriodeInDagen(), $repetitie->getFunctieId(), $repetitie->getStandaardAantal(), $repetitie->getIsVoorkeurbaar());
+		$this->content = new CorveeRepetitieFormView($repetitie->getCorveeRepetitieId(), $repetitie->getMaaltijdRepetitieId(), $repetitie->getDagVanDeWeek(), $repetitie->getPeriodeInDagen(), $repetitie->getFunctieId(), $repetitie->getStandaardAantal(), $repetitie->getIsVoorkeurbaar()); // fetches POST values itself
 	}
 	
 	public function action_opslaan($crid) {
@@ -87,7 +87,8 @@ class CorveeRepetitiesController extends \ACLController {
 			if ($repetitie_aantal[1] > 0) {
 				$this->content->setMelding($repetitie_aantal[1] .' voorkeur'. ($repetitie_aantal[1] !== 1 ? 'en' : '') .' uitgeschakeld.', 2);
 			}
-		} else {
+		}
+		else {
 			$this->content = $form;
 		}
 	}

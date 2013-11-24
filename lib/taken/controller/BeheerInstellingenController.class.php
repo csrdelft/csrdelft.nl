@@ -45,7 +45,7 @@ class BeheerInstellingenController extends \ACLController {
 	
 	public function action_bewerk($key) {
 		$instelling = InstellingenModel::getInstelling($key);
-		$this->content = new InstellingFormView($instelling->getInstellingId(), $instelling->getWaarde());
+		$this->content = new InstellingFormView($instelling->getInstellingId(), $instelling->getWaarde()); // fetches POST values itself
 	}
 	
 	public function action_opslaan() {
@@ -54,7 +54,8 @@ class BeheerInstellingenController extends \ACLController {
 			$values = $form->getValues();
 			$instelling = InstellingenModel::saveInstelling($values['instelling_id'], $values['waarde']);
 			$this->content = new BeheerInstellingenView($instelling);
-		} else {
+		}
+		else {
 			$this->content = $form;
 		}
 	}
