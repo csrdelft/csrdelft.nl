@@ -3,7 +3,7 @@
 *}
 <tr id="corveefunctie-row-{$functie->getFunctieId()}">
 	<td>
-		<a href="{$module}/bewerk/{$functie->getFunctieId()}" title="Functie wijzigen" class="knop post popup">{icon get="pencil"}</a>
+		<a href="{$globals.taken_module}/bewerk/{$functie->getFunctieId()}" title="Functie wijzigen" class="knop post popup">{icon get="pencil"}</a>
 	</td>
 	<td>{$functie->getAfkorting()}</td>
 	<td>{$functie->getNaam()}</td>
@@ -11,16 +11,16 @@
 	<td title="{$functie->getEmailBericht()}">{if strlen($functie->getEmailBericht()) > 0}{icon get="email"}{/if}</td>
 	<td>
 		{if $functie->getIsKwalificatieBenodigd()}
-			<a href="{$module}/kwalificeer/{$functie->getFunctieId()}" title="Kwalificatie toewijzen" class="knop post popup">{icon get="vcard_add"} Kwalificeer</a>
+			<a href="{$globals.taken_module}/kwalificeer/{$functie->getFunctieId()}" title="Kwalificatie toewijzen" class="knop post popup">{icon get="vcard_add"} Kwalificeer</a>
 		{/if}
 		{foreach from=$functie->getGekwalificeerden() item=kwali}
 			<div>
-				<a href="{$module}/dekwalificeer/{$functie->getFunctieId()}" title="Kwalificatie intrekken" class="knop post" post="voor_lid={$kwali->getLidId()}">{icon get="vcard_delete"}</a>
+				<a href="{$globals.taken_module}/dekwalificeer/{$functie->getFunctieId()}" title="Kwalificatie intrekken" class="knop post" post="voor_lid={$kwali->getLidId()}">{icon get="vcard_delete"}</a>
 				&nbsp;{$kwali->getLid()->getNaamLink('civitas', 'link')}
 			</div>
 		{/foreach}
 	</td>
 	<td class="col-del">
-		<a href="{$module}/verwijder/{$functie->getFunctieId()}" title="Functie definitief verwijderen" class="knop post confirm">{icon get="cross"}</a>
+		<a href="{$globals.taken_module}/verwijder/{$functie->getFunctieId()}" title="Functie definitief verwijderen" class="knop post confirm">{icon get="cross"}</a>
 	</td>
 </tr>

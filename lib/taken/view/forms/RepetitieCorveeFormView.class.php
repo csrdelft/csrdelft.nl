@@ -20,7 +20,7 @@ class RepetitieCorveeFormView extends \SimpleHtml {
 		$formFields['eind'] = new \DatumField('einddatum', $eindDatum, 'Tot en met', date('Y')+1, date('Y'));
 		$formFields[] = new \HiddenField('maaltijd_id', $mid);
 		
-		$this->_form = new \Formulier('taken-repetitie-aanmaken-form', '/actueel/taken/corveebeheer/aanmaken/'. $repetitie->getCorveeRepetitieId(), $formFields);
+		$this->_form = new \Formulier('taken-repetitie-aanmaken-form', $GLOBALS['taken_module'] .'/aanmaken/'. $repetitie->getCorveeRepetitieId(), $formFields);
 	}
 	
 	public function getTitel() {

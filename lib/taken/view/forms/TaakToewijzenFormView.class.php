@@ -61,7 +61,7 @@ class TaakToewijzenFormView extends \SimpleHtml {
 			}
 		}
 		
-		$this->_form = new \Formulier('taken-taak-toewijzen-form', '/actueel/taken/corveebeheer/toewijzen/'. $this->_tid, $formFields);
+		$this->_form = new \Formulier('taken-taak-toewijzen-form', $GLOBALS['taken_module'] .'/toewijzen/'. $this->_tid, $formFields);
 	}
 	
 	public function getTitel() {

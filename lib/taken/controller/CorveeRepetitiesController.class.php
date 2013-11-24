@@ -80,7 +80,7 @@ class CorveeRepetitiesController extends \ACLController {
 			$mrid = ($values['mlt_repetitie_id'] === '' ? null : intval($values['mlt_repetitie_id']));
 			$repetitie_aantal = CorveeRepetitiesModel::saveRepetitie($crid, $mrid, $values['dag_vd_week'], $values['periode_in_dagen'], intval($values['functie_id']), $values['standaard_aantal'], $values['voorkeurbaar']);
 			$maaltijdrepetitie = null;
-			if (endsWith($_SERVER['HTTP_REFERER'], '/actueel/taken/corveerepetities/maaltijd/'. $values['mlt_repetitie_id'])) { // state of gui
+			if (endsWith($_SERVER['HTTP_REFERER'], $GLOBALS['taken_module'] .'/maaltijd/'. $values['mlt_repetitie_id'])) { // state of gui
 				$maaltijdrepetitie = \Taken\MLT\MaaltijdRepetitiesModel::getRepetitie($mrid);
 			}
 			$this->content = new CorveeRepetitiesView($repetitie_aantal[0], $maaltijdrepetitie);
@@ -112,11 +112,9 @@ class CorveeRepetitiesController extends \ACLController {
 				$aantal['update'] .' corveeta'. ($aantal['update'] !== 1 ? 'ken' : 'ak') .' bijgewerkt waarvan '.
 				$aantal['day'] .' van dag verschoven.', 1);
 			$aantal['datum'] += $aantal['maaltijd'];
-			if ($aantal['datum'] > 0) {
-				$this->content->setMelding(
-					$aantal['datum'] .' corveeta'. ($aantal['datum'] !== 1 ? 'ken' : 'ak') .' aangemaakt waarvan '.
-					$aantal['maaltijd'] .' maaltijdcorvee.', 1);
-			}
+			$this->content->setMelding(
+				$aantal['datum'] .' corveeta'. ($aantal['datum'] !== 1 ? 'ken' : 'ak') .' aangemaakt waarvan '.
+				$aantal['maaltijd'] .' maaltijdcorvee.', 1);
 		}
 	}
 }

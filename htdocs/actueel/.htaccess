@@ -1,5 +1,9 @@
 RewriteEngine On
 
+### maaltijden & corvee
+RewriteRule ^maaltijden(.*)$		taken.php?module=maaltijden&query=$1 [QSA]
+RewriteRule ^corvee(.*)$			taken.php?module=corvee&query=$1 [QSA]
+
 # Oude owee redirected
 RewriteRule ^owee/?$		/csrindeowee/ [R=301]
 

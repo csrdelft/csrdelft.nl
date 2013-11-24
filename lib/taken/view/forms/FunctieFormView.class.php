@@ -29,7 +29,7 @@ class FunctieFormView extends \SimpleHtml {
 			$formFields['kwali']->setOnChangeScript("if (!this.checked) alert('Alle kwalificaties zullen worden verwijderd!');");
 		}
 		
-		$this->_form = new \Formulier('taken-functie-form', '/actueel/taken/functies/opslaan/'. $fid, $formFields);
+		$this->_form = new \Formulier('taken-functie-form', $GLOBALS['taken_module'] .'/opslaan/'. $fid, $formFields);
 	}
 	
 	public function getTitel() {

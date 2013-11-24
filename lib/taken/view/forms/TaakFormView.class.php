@@ -30,7 +30,7 @@ class TaakFormView extends \SimpleHtml {
 		$formFields[] = new \IntField('punten', $punten, 'Punten', 10, 0);
 		$formFields[] = new \IntField('bonus_malus', $bonus_malus, 'Bonus/malus', 10, -10);
 		
-		$this->_form = new \Formulier('taken-corveetaak-form', '/actueel/taken/corveebeheer/opslaan/'. $tid, $formFields);
+		$this->_form = new \Formulier('taken-corveetaak-form', $GLOBALS['taken_module'] .'/opslaan/'. $tid, $formFields);
 	}
 	
 	public function getTitel() {

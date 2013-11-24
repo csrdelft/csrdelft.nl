@@ -33,7 +33,7 @@ class ConversieController extends \ACLController {
 	
 	public function action_button() {
 		echo '<html><body style="text-align:center;margin-top:200px;">';
-		echo '<form method="POST" action="/actueel/taken/conversie/confirm" onsubmit="this.style.display=\'none\';">';
+		echo '<form method="POST" action="'. $GLOBALS['taken_module'] .'/confirm" onsubmit="this.style.display=\'none\';">';
 		echo '<input type="image" src="http://plaetjes.csrdelft.nl/knopjes/red_button.gif"';
 		echo ' onmousedown="this.src=\'http://plaetjes.csrdelft.nl/knopjes/red_button_pressed.gif\';"';
 		echo ' onmouseup="this.src=\'http://plaetjes.csrdelft.nl/knopjes/red_button.gif\';" />';

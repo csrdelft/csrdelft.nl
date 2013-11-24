@@ -6,8 +6,12 @@ RewriteEngine On
 ### RewriteRule ^$ /actueel/owee [R=302,NC,L]
 
 ### mod_rewrite-dingen
-RewriteRule ^instellingen/?$			instellingen.php
+RewriteRule ^instellingen/?$		instellingen.php
 RewriteRule ^pauper/?$				pauper.php
+
+### maaltijden & corvee
+RewriteRule ^maaltijden(.*)$		/actueel/maaltijden$1 [R]
+RewriteRule ^corvee(.*)$			/actueel/corvee$1 [R]
 
 # SocCie
 RewriteRule ^soccie/?$				soccie/index.php
@@ -16,8 +20,8 @@ RewriteRule ^soccie/?$				soccie/index.php
 RewriteRule ^leden/?$				leden.php
 
 # Pagina
-RewriteRule ^pagina/([a-z]+)/bewerken? pagina.php?naam=$1&bewerken=ja
-RewriteRule ^pagina/([a-z]+)/? pagina.php?naam=$1
+RewriteRule ^pagina/([a-z]+)/bewerken?	pagina.php?naam=$1&bewerken=ja
+RewriteRule ^pagina/([a-z]+)/?		pagina.php?naam=$1
 
 # Vereniging
 RewriteRule ^vereniging/?$ 			pagina.php?naam=vereniging
@@ -31,7 +35,7 @@ RewriteRule ^contact/([a-z]+)/? 	pagina.php?naam=$1
 RewriteRule ^koss/?$ 				pagina/koss/
 
 # C.S.R. in de OWee
-RewriteRule ^csrindeowee/?$ 				pagina/csrindeowee/
+RewriteRule ^csrindeowee/?$ 		pagina/csrindeowee/
 
 # Lid Worden
 RewriteRule ^lidworden/?$ 			lidworden.php
@@ -44,11 +48,11 @@ RewriteRule ^base.php.*$ 			/ [R=301]
 RewriteRule ^nieuws/(.*)$			/actueel/mededelingen/$1 [R=301]
 
 # su
-RewriteRule ^su/([0-9a-z]+)/?$ su.php?actie=su&uid=$1
-RewriteRule ^endsu/?$ su.php?actie=endSu
+RewriteRule ^su/([0-9a-z]+)/?$		su.php?actie=su&uid=$1
+RewriteRule ^endsu/?$				su.php?actie=endSu
 
 # Facebook link voor BINAS voor de Owee(Cie)
-RewriteRule ^facebook/?$   http://www.facebook.com/group.php?gid=10294513917&ref=ts
+RewriteRule ^facebook/?$			http://www.facebook.com/group.php?gid=10294513917&ref=ts
 
 # Account aanvragen
-RewriteRule ^account-aanvragen/?$               pagina.php?naam=accountaanvragen
+RewriteRule ^account-aanvragen/?$	pagina.php?naam=accountaanvragen

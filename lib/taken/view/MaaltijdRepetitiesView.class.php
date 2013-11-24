@@ -26,7 +26,6 @@ class MaaltijdRepetitiesView extends \SimpleHtml {
 	
 	public function view() {
 		$smarty = new \Smarty_csr();
-		$smarty->assign('module', '/actueel/taken/maaltijdrepetities');
 		
 		if (is_array($this->_repetities)) { // list of repetities
 			$smarty->assign('popup', $this->_popup);

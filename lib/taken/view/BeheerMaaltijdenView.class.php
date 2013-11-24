@@ -31,7 +31,6 @@ class BeheerMaaltijdenView extends \SimpleHtml {
 	
 	public function view() {
 		$smarty = new \Smarty_csr();
-		$smarty->assign('module', '/actueel/taken/maaltijdenbeheer');
 		
 		if (is_array($this->_maaltijden)) { // list of maaltijden
 			if ($this->_prullenbak || $this->_repetities !== null) { // normal view

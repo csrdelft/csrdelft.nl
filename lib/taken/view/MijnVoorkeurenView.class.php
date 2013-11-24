@@ -22,7 +22,6 @@ class MijnVoorkeurenView extends \SimpleHtml {
 	
 	public function view() {
 		$smarty = new \Smarty_csr();
-		$smarty->assign('module', '/actueel/taken/voorkeuren');
 		
 		if ($this->_voorkeuren === null) { // eetwens
 			$smarty->assign('eetwens', $this->_eetwens);

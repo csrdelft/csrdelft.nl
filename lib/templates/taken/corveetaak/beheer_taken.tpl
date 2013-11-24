@@ -11,7 +11,7 @@
 		{/if}
 			maaltijd:<br /><b>{$maaltijd->getTitel()} op {$maaltijd->getDatum()|date_format:"%A %e %B"} om {$maaltijd->getTijd()|date_format:"%H:%M"}</b>
 		{if !$maaltijd->getIsVerwijderd()}
-			<a href="/actueel/taken/maaltijdenbeheer/beheer/{$maaltijd->getMaaltijdId()}" title="Wijzig gekoppelde maaltijd" class="knop get">{icon get="cup_edit"}</a>
+			<a href="/maaltijdenbeheer/beheer/{$maaltijd->getMaaltijdId()}" title="Wijzig gekoppelde maaltijd" class="knop get">{icon get="cup_edit"}</a>
 		{/if}
 		</p><p>Onderstaande tabel toont <i>alleen</i> de corveetaken voor deze maaltijd die <i>niet verwijderd</i> zijn.
 	{else}.
@@ -23,18 +23,18 @@
 {/if}
 <br />
 {if $prullenbak and $taken}
-<div style="float: right;"><a href="{$module}/leegmaken" title="Alle taken in de prullenbak definitief verwijderen" class="knop get confirm">{icon get="bin"} Prullenbak leegmaken</a></div>
+<div style="float: right;"><a href="{$globals.taken_module}/leegmaken" title="Alle taken in de prullenbak definitief verwijderen" class="knop get confirm">{icon get="bin"} Prullenbak leegmaken</a></div>
 {/if}
 {if !($prullenbak or (isset($maaltijd) and $maaltijd->getIsVerwijderd()))}
 <div style="float: right;">
 	{if !$prullenbak and !isset($maaltijd)}
-	<a href="/actueel/taken/corveebeheer/herinneren" title="Verstuur herinneringen" class="knop get popup">{icon get="clock"} Herinneringen versturen</a>
+	<a href="/corveebeheer/herinneren" title="Verstuur herinneringen" class="knop get popup">{icon get="clock"} Herinneringen versturen</a>
 	{/if}
-	<a href="{$module}/nieuw" {if isset($maaltijd)}post="maaltijd_id={$maaltijd->getMaaltijdId()}" {/if}title="Nieuwe taak" class="knop post popup">{icon get="add"} Nieuwe taak</a>
+	<a href="{$globals.taken_module}/nieuw" {if isset($maaltijd)}post="maaltijd_id={$maaltijd->getMaaltijdId()}" {/if}title="Nieuwe taak" class="knop post popup">{icon get="add"} Nieuwe taak</a>
 </div>
 {/if}
 {if isset($repetities) and (!isset($maaltijd) or !$maaltijd->getIsVerwijderd())}
-<form method="post" action="{$module}/nieuw" class="Formulier popup">
+<form method="post" action="{$globals.taken_module}/nieuw" class="Formulier popup">
 	<input type="hidden" name="maaltijd_id" value="{if isset($maaltijd)}{$maaltijd->getMaaltijdId()}{/if}">
 	<label for="crid">{icon get="calendar_add"} Periodieke taken aanmaken:</label>
 	<select name="crid" onchange="taken_submit_dropdown($(this).parent());">

@@ -4,7 +4,7 @@
 <p>
 Op deze pagina kunt u corveerepetities aanmaken, wijzigen en verwijderen{if isset($maaltijdrepetitie)} behorend bij de maaltijdrepetitie:<br />
 <b>{$maaltijdrepetitie->getStandaardTitel()}</b>
-<a href="/actueel/taken/maaltijdrepetities/beheer/{$maaltijdrepetitie->getMaaltijdRepetitieId()}" title="Wijzig gekoppelde maaltijd" class="knop get">{icon get="calendar_edit"}</a>
+<a href="/maaltijdenrepetities/beheer/{$maaltijdrepetitie->getMaaltijdRepetitieId()}" title="Wijzig gekoppelde maaltijd" class="knop get">{icon get="calendar_edit"}</a>
 </p><p>
 {else}.
 {/if}
@@ -20,7 +20,7 @@ Bij het verwijderen van een gekoppelde maaltijdrepetitie blijven de eventuele ge
 N.B. Als u kiest voor "Alles bijwerken" worden alle corveetaken die behoren tot de betreffende corveerepetitie bijgewerkt, ongeacht of ze tot een maaltijd behoren. Er worden ook extra taken aangemaakt tot aan het standaard aantal.
 </p>
 <div style="float: right;">
-	<a href="{$module}/nieuw{if isset($maaltijdrepetitie)}/{$maaltijdrepetitie->getMaaltijdRepetitieId()}{/if}" title="Nieuwe repetitie" class="knop post popup">{icon get="add"} Nieuwe repetitie</a>
+	<a href="{$globals.taken_module}/nieuw{if isset($maaltijdrepetitie)}/{$maaltijdrepetitie->getMaaltijdRepetitieId()}{/if}" title="Nieuwe repetitie" class="knop post popup">{icon get="add"} Nieuwe repetitie</a>
 </div>
 <table id="taken-tabel" class="taken-tabel">
 	<thead>

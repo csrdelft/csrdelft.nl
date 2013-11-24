@@ -16,7 +16,7 @@ class MijnMaaltijdenController extends \ACLController {
 		parent::__construct($query);
 		if (!parent::isPOSTed()) {
 			$this->acl = array(
-				'mijn' => 'P_MAAL_IK',
+				'ketzer' => 'P_MAAL_IK',
 				'lijst' => 'P_MAAL_IK',
 				'aanmelden' => 'P_MAAL_IK',
 				'afmelden' => 'P_MAAL_IK'
@@ -31,7 +31,7 @@ class MijnMaaltijdenController extends \ACLController {
 				'opmerking' => 'P_MAAL_IK'
 			);
 		}
-		$this->action = 'mijn';
+		$this->action = 'ketzer';
 		if ($this->hasParam(1)) {
 			$this->action = $this->getParam(1);
 		}
@@ -58,7 +58,7 @@ class MijnMaaltijdenController extends \ACLController {
 		return false;
 	}
 	
-	public function action_mijn() {
+	public function action_ketzer() {
 		$maaltijden = MaaltijdenModel::getKomendeMaaltijdenVoorLid(\LoginLid::instance()->getUid());
 		$aanmeldingen = AanmeldingenModel::getAanmeldingenVoorLid($maaltijden, \LoginLid::instance()->getUid());
 		$this->content = new MijnMaaltijdenView($maaltijden, $aanmeldingen);
@@ -86,6 +86,7 @@ class MijnMaaltijdenController extends \ACLController {
 			return;
 		}
 		MaaltijdenModel::sluitMaaltijd($maaltijd);
+		\SimpleHTML::invokeRefresh($GLOBALS['taken_module'] .'/lijst/'. $mid);
 	}
 	
 	public function action_aanmelden($mid) {

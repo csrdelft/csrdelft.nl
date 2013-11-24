@@ -49,7 +49,7 @@ class MaaltijdRepetitieFormView extends \SimpleHtml {
 			$formFields['ver']->title = 'Verplaats naar dag v/d week bij bijwerken';
 		}
 		
-		$this->_form = new \Formulier('taken-maaltijd-repetitie-form', '/actueel/taken/maaltijdrepetities/opslaan/'. $mrid, $formFields);
+		$this->_form = new \Formulier('taken-maaltijd-repetitie-form', $GLOBALS['taken_module'] .'/opslaan/'. $mrid, $formFields);
 	}
 	
 	public function getTitel() {
@@ -69,7 +69,7 @@ class MaaltijdRepetitieFormView extends \SimpleHtml {
 			$smarty->assign('nieuw', true);
 		}
 		elseif ($this->_mrid > 0) {
-			$smarty->assign('bijwerken', '/actueel/taken/maaltijdrepetities/bijwerken/'. $this->_mrid);
+			$smarty->assign('bijwerken', $GLOBALS['taken_module'] .'/bijwerken/'. $this->_mrid);
 		}
 		$smarty->display('taken/popup_form.tpl');
 	}

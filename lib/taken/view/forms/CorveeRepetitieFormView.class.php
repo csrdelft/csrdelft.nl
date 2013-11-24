@@ -43,7 +43,7 @@ class CorveeRepetitieFormView extends \SimpleHtml {
 			$formFields['ver']->title = 'Verplaats naar dag v/d week bij bijwerken';
 		}
 		
-		$this->_form = new \Formulier('taken-corvee-repetitie-form', '/actueel/taken/corveerepetities/opslaan/'. $crid, $formFields);
+		$this->_form = new \Formulier('taken-corvee-repetitie-form', $GLOBALS['taken_module'] .'/opslaan/'. $crid, $formFields);
 	}
 	
 	public function getTitel() {
@@ -63,7 +63,7 @@ class CorveeRepetitieFormView extends \SimpleHtml {
 			$smarty->assign('nieuw', true);
 		}
 		elseif ($this->_crid > 0) {
-			$smarty->assign('bijwerken', '/actueel/taken/corveerepetities/bijwerken/'. $this->_crid);
+			$smarty->assign('bijwerken', $GLOBALS['taken_module'] .'/bijwerken/'. $this->_crid);
 		}
 		$smarty->display('taken/popup_form.tpl');
 	}

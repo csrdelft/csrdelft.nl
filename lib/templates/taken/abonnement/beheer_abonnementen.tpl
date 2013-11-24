@@ -4,7 +4,7 @@
 <p>
 Op deze pagina kunt u alle abonnementen beheren en zoeken.
 </p>
-<form method="post" action="{$module}/novieten" class="Formulier popup" style="float: right;">
+<form method="post" action="{$globals.taken_module}/novieten" class="Formulier popup" style="float: right;">
 	Abonneer novieten op:
 	<select name="mrid" onchange="taken_submit_dropdown($(this).parent());">
 		<option selected="selected">kies</option>
@@ -14,7 +14,7 @@ Op deze pagina kunt u alle abonnementen beheren en zoeken.
 	</select>
 </form>
 <div style="width: 30%; display: inline-block;"><label for="toon">Toon abonnementen:</label>
-</div><select name="toon" onchange="taken_loading();location.href='{$module}/'+this.value;" style="margin: 3px 1px;">
+</div><select name="toon" onchange="taken_loading();location.href='{$globals.taken_module}/'+this.value;" style="margin: 3px 1px;">
 	<option value="beheer" class="arrow"{if $toon === 'waarschuwing'} selected="selected"{/if}>waarschuwingen</option>
 	<option value="ingeschakeld" class="arrow"{if $toon === 'in'} selected="selected"{/if}>ingeschakeld</option>
 	<option value="abonneerbaar" class="arrow"{if $toon === 'abo'} selected="selected"{/if}>abonneerbaar</option>

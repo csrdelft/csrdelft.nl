@@ -23,6 +23,7 @@ class Smarty_csr extends Smarty {
 		$this->assign('CSR_ROOT', CSR_ROOT);
 		$this->assign('ubbHulp', CsrUbb::getUbbHelp());
 		$this->assign('loginlid', LoginLid::instance());
+		$this->assign('globals', $GLOBALS);
   }
 
 }

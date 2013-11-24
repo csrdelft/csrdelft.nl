@@ -3,8 +3,8 @@
 *}
 <tr id="repetitie-row-{$repetitie->getMaaltijdRepetitieId()}">
 	<td>{strip}
-		<a href="{$module}/bewerk/{$repetitie->getMaaltijdRepetitieId()}" title="Maaltijdrepetitie wijzigen" class="knop post popup">{icon get="pencil"}</a>
-		<a href="/actueel/taken/corveerepetities/maaltijd/{$repetitie->getMaaltijdRepetitieId()}" title="Corveebeheer maaltijdrepetitie" class="knop get">{icon get="chart_organisation"}</a>
+		<a href="{$globals.taken_module}/bewerk/{$repetitie->getMaaltijdRepetitieId()}" title="Maaltijdrepetitie wijzigen" class="knop post popup">{icon get="pencil"}</a>
+		<a href="/corveerepetities/maaltijd/{$repetitie->getMaaltijdRepetitieId()}" title="Corveebeheer maaltijdrepetitie" class="knop get">{icon get="chart_organisation"}</a>
 	</td>{/strip}
 	<td>{$repetitie->getStandaardTitel()}</td>
 	<td>{$repetitie->getDagVanDeWeekText()}</td>
@@ -14,5 +14,5 @@
 	<td>{$repetitie->getStandaardLimiet()}</td>
 	<td>{if $repetitie->getIsAbonneerbaar()}{icon get="tick" title="Abonneerbaar"}{/if}</td>
 	<td>{$repetitie->getAbonnementFilter()}</td>
-	<td class="col-del"><a href="{$module}/verwijder/{$repetitie->getMaaltijdRepetitieId()}" title="Maaltijdrepetitie definitief verwijderen" class="knop post confirm">{icon get="cross"}</a></td>
+	<td class="col-del"><a href="{$globals.taken_module}/verwijder/{$repetitie->getMaaltijdRepetitieId()}" title="Maaltijdrepetitie definitief verwijderen" class="knop post confirm">{icon get="cross"}</a></td>
 </tr>

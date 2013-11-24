@@ -41,7 +41,7 @@ class MaaltijdFormView extends \SimpleHtml {
 		$formFields['filter'] = new \InputField('aanmeld_filter', $filter, 'Aanmeldrestrictie', 255, $suggesties);
 		$formFields['filter']->title = 'Plaats een ! vooraan om van de restrictie een uitsluiting te maken.';
 		
-		$this->_form = new \Formulier('taken-maaltijd-form', '/actueel/taken/maaltijdenbeheer/opslaan/'. $mid, $formFields);
+		$this->_form = new \Formulier('taken-maaltijd-form', $GLOBALS['taken_module'] .'/opslaan/'. $mid, $formFields);
 	}
 	
 	public function getTitel() {

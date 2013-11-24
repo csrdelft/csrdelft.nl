@@ -7,7 +7,7 @@ Op deze pagina kunt u vrijstellingen aanmaken, wijzigen en verwijderen. Ondersta
 <p>
 N.B. Pas bij het resetten van het corveejaar worden de punten toegekend (te behalen corveepunten per jaar maal het vrijstellingspercentage afgerond naar boven).
 </p>
-<div style="float: right;"><a href="{$module}/nieuw" title="Nieuwe vrijstelling" class="knop post popup">{icon get="add"} Nieuwe vrijstelling</a></div>
+<div style="float: right;"><a href="{$globals.taken_module}/nieuw" title="Nieuwe vrijstelling" class="knop post popup">{icon get="add"} Nieuwe vrijstelling</a></div>
 <table id="taken-tabel" class="taken-tabel">
 	<thead>
 		<tr>

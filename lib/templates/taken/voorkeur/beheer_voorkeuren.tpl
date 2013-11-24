@@ -14,7 +14,7 @@ Op deze pagina kunt u voor alle leden de voorkeuren beheren.
 		{foreach from=$repetities item=repetitie}
 			<th style="width: 30px; background-color: {cycle values="#F0F0F0,#FAFAFA"};">{strip}
 				<div style="width: 28px;">
-					<a href="/actueel/taken/corveerepetities/beheer/{$repetitie->getCorveeRepetitieId()}" title="Wijzig corveerepetitie" class="knop get">
+					<a href="/corveerepetities/beheer/{$repetitie->getCorveeRepetitieId()}" title="Wijzig corveerepetitie" class="knop get">
 						{icon get="calendar_edit"}
 					</a>
 				</div>

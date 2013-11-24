@@ -19,7 +19,7 @@ class RepetitieMaaltijdenFormView extends \SimpleHtml {
 		$formFields['begin'] = new \DatumField('begindatum', $beginDatum, 'Vanaf', date('Y')+1, date('Y'));
 		$formFields['eind'] = new \DatumField('einddatum', $eindDatum, 'Tot en met', date('Y')+1, date('Y'));
 		
-		$this->_form = new \Formulier('taken-repetitie-aanmaken-form', '/actueel/taken/maaltijdenbeheer/aanmaken/'. $repetitie->getMaaltijdRepetitieId(), $formFields);
+		$this->_form = new \Formulier('taken-repetitie-aanmaken-form', $GLOBALS['taken_module'] .'/aanmaken/'. $repetitie->getMaaltijdRepetitieId(), $formFields);
 	}
 	
 	public function getTitel() {

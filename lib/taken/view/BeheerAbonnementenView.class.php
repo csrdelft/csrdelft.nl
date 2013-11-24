@@ -29,7 +29,6 @@ class BeheerAbonnementenView extends \SimpleHtml {
 	
 	public function view() {
 		$smarty = new \Smarty_csr();
-		$smarty->assign('module', '/actueel/taken/abonnementenbeheer');
 		$smarty->assign('ledenweergave', $GLOBALS['weergave_ledennamen_beheer']);
 		
 		$status = 'abo';
@@ -42,7 +41,7 @@ class BeheerAbonnementenView extends \SimpleHtml {
 		$smarty->assign('toon', $status);
 		
 		$field = new \LidField('voor_lid', null, "Toon abonnementen van persoon:", 'allepersonen');
-		$form = new \Formulier('taken-subform-abos', '/actueel/taken/abonnementenbeheer/voorlid', array($field));
+		$form = new \Formulier('taken-subform-abos', $GLOBALS['taken_module'] .'/voorlid', array($field));
 		$form->cssClass .= ' popup';
 		$smarty->assign('form', $form);
 		

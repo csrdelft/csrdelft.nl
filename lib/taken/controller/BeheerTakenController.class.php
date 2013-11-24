@@ -99,7 +99,7 @@ class BeheerTakenController extends \ACLController {
 		else {
 			setMelding('Geen herinneringen verstuurd.', 0);
 		}
-		\SimpleHTML::invokeRefresh('/actueel/taken/corveebeheer');
+		\SimpleHTML::invokeRefresh($GLOBALS['taken_module']);
 	}
 	
 	public function action_nieuw() {
@@ -146,7 +146,7 @@ class BeheerTakenController extends \ACLController {
 			$mid = ($values['maaltijd_id'] === '' ? null : intval($values['maaltijd_id']));
 			$taak = TakenModel::saveTaak($tid, intval($values['functie_id']), $uid, $crid, $mid, $values['datum'], $values['punten'], $values['bonus_malus']);
 			$maaltijd = null;
-			if (endsWith($_SERVER['HTTP_REFERER'], '/actueel/taken/corveebeheer/maaltijd/'. $values['maaltijd_id'])) { // state of gui
+			if (endsWith($_SERVER['HTTP_REFERER'], $GLOBALS['taken_module'] .'/maaltijd/'. $values['maaltijd_id'])) { // state of gui
 				$maaltijd = \Taken\MLT\MaaltijdenModel::getMaaltijd($mid);
 			}
 			$this->content = new BeheerTakenView($taak, $maaltijd);
@@ -221,7 +221,7 @@ class BeheerTakenController extends \ACLController {
 	
 	public function action_leegmaken() {
 		$aantal = TakenModel::prullenbakLeegmaken();
-		\SimpleHTML::invokeRefresh('/actueel/taken/corveebeheer/prullenbak', $aantal . ($aantal === 1 ? ' taak' : ' taken') .' definitief verwijderd.', ($aantal === 0 ? 0 : 1 ));
+		\SimpleHTML::invokeRefresh($GLOBALS['taken_module'] .'/prullenbak', $aantal . ($aantal === 1 ? ' taak' : ' taken') .' definitief verwijderd.', ($aantal === 0 ? 0 : 1 ));
 	}
 	
 	// Repetitie-Taken ############################################################

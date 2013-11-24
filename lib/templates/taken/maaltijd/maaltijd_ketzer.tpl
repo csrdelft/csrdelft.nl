@@ -19,11 +19,11 @@
 	{else}
 		{if $loginlid->hasPermission('P_MAAL_IK')}
 			{if $aanmelding}
-				<a href="javascript:void(0);" onclick="ketzer_post('/actueel/taken/maaltijden/afmelden/{$maaltijd->getMaaltijdId()}', '#maaltijdketzer-{$maaltijd->getMaaltijdId()}');"><strong>af</strong>melden</a>
+				<a href="javascript:void(0);" onclick="ketzer_post('/maaltijden/afmelden/{$maaltijd->getMaaltijdId()}', '#maaltijdketzer-{$maaltijd->getMaaltijdId()}');"><strong>af</strong>melden</a>
 			{elseif $maaltijd->getAantalAanmeldingen() >= $maaltijd->getAanmeldLimiet()}
 				Vol
 			{else}
-				<a href="javascript:void(0);" onclick="ketzer_post('/actueel/taken/maaltijden/aanmelden/{$maaltijd->getMaaltijdId()}', '#maaltijdketzer-{$maaltijd->getMaaltijdId()}');"><strong>aan</strong>melden</a>
+				<a href="javascript:void(0);" onclick="ketzer_post('/maaltijden/aanmelden/{$maaltijd->getMaaltijdId()}', '#maaltijdketzer-{$maaltijd->getMaaltijdId()}');"><strong>aan</strong>melden</a>
 			{/if}
 		{/if}
 	{/if}
@@ -39,7 +39,7 @@
 {/if}
 	<div class="small">
 {if $toonlijst}
-		<a href="/actueel/taken/maaltijdenbeheer/lijst/{$maaltijd->getMaaltijdId()}" title="Toon maaltijdlijst">
+		<a href="/maaltijden/lijst/{$maaltijd->getMaaltijdId()}" title="Toon maaltijdlijst">
 {/if}
 			Inschrijvingen: <em>{$maaltijd->getAantalAanmeldingen()}</em> van <em>{$maaltijd->getAanmeldLimiet()}</em>
 {if $toonlijst}

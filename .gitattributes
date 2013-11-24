@@ -55,8 +55,7 @@ htdocs/actueel/mededelingen/goedkeuren.php -text
 htdocs/actueel/mededelingen/index.php -text
 htdocs/actueel/mededelingen/top3overzicht.php -text
 htdocs/actueel/sjaarsacties.php -text
-htdocs/actueel/taken/.htaccess -text
-htdocs/actueel/taken/index.php -text
+htdocs/actueel/taken.php -text
 htdocs/android/get_user.php -text
 htdocs/android/get_userlist.php -text
 htdocs/android/login.php -text

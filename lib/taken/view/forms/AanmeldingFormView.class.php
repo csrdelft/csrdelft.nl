@@ -24,7 +24,7 @@ class AanmeldingFormView extends \SimpleHtml {
 			$formFields[] = new \IntField('aantal_gasten', $gasten, 'Aantal gasten', 200, 0);
 		}
 		
-		$this->_form = new \Formulier('taken-aanmelding-form', '/actueel/taken/maaltijdenbeheer/ander'. ($nieuw ? 'aanmelden' : 'afmelden') .'/'. $mid, $formFields);
+		$this->_form = new \Formulier('taken-aanmelding-form', $GLOBALS['taken_module'] .'/ander'. ($nieuw ? 'aanmelden' : 'afmelden') .'/'. $mid, $formFields);
 	}
 	
 	public function getTitel() {

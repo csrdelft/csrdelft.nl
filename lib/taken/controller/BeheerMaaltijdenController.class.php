@@ -167,7 +167,7 @@ class BeheerMaaltijdenController extends \ACLController {
 	
 	public function action_leegmaken() {
 		$aantal = MaaltijdenModel::prullenbakLeegmaken();
-		\SimpleHTML::invokeRefresh('/actueel/taken/maaltijdenbeheer/prullenbak', $aantal . ($aantal === 1 ? ' maaltijd' : ' maaltijden') .' definitief verwijderd.', ($aantal === 0 ? 0 : 1 ));
+		\SimpleHTML::invokeRefresh($GLOBALS['taken_module'] .'/prullenbak', $aantal . ($aantal === 1 ? ' maaltijd' : ' maaltijden') .' definitief verwijderd.', ($aantal === 0 ? 0 : 1 ));
 	}
 	
 	// Repetitie-Maaltijden ############################################################

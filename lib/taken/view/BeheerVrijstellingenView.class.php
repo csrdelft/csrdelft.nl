@@ -20,7 +20,6 @@ class BeheerVrijstellingenView extends \SimpleHtml {
 	
 	public function view() {
 		$smarty = new \Smarty_csr();
-		$smarty->assign('module', '/actueel/taken/vrijstellingen');
 		$smarty->assign('ledenweergave', $GLOBALS['weergave_ledennamen_beheer']);
 		
 		if (is_array($this->_vrijstellingen)) {

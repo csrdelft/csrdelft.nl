@@ -22,7 +22,6 @@ class BeheerFunctiesView extends \SimpleHtml {
 	
 	public function view() {
 		$smarty = new \Smarty_csr();
-		$smarty->assign('module', '/actueel/taken/functies');
 		
 		if (is_array($this->_functies)) {
 			$smarty->assign('popup', $this->_popup);

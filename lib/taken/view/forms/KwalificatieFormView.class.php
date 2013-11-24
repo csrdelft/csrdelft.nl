@@ -19,7 +19,7 @@ class KwalificatieFormView extends \SimpleHtml {
 		
 		$formFields[] = new \LidField('voor_lid', $uid, 'Naam of lidnummer', 'leden');
 		
-		$this->_form = new \Formulier('taken-kwalificatie-form', '/actueel/taken/functies/kwalificeer/'. $fid, $formFields);
+		$this->_form = new \Formulier('taken-kwalificatie-form', $GLOBALS['taken_module'] .'/kwalificeer/'. $fid, $formFields);
 	}
 	
 	public function getTitel() {

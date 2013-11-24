@@ -18,7 +18,7 @@ class uploader{
 	function getTitel(){ return "MaalCie-saldi uploaden met een CSV-bestand"; }
 	function view(){
 		$smarty=new Smarty_csr();
-		$smarty->assign('status', $this->sStatus);
+		$smarty->assign('status', $this->sStatus[0]);
 		$smarty->display('maaltijdketzer/saldi-updater.tpl');
 	}
 }

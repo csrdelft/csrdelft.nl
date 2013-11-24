@@ -124,8 +124,9 @@ function taken_ajax(source, url, successCallback, formdata) {
 		url: url,
 		data: formdata,
 		success: function(response) {
-			$('#taken-melding').html('<td id="taken-melding-veld"></td>');
-			successCallback(response);
+			if (successCallback) {
+				successCallback(response);
+			}
 		},
 		error: function(jqXHR, textStatus, errorThrown) {
 			if (errorThrown === '') {
@@ -142,6 +143,7 @@ function taken_ajax(source, url, successCallback, formdata) {
 }
 
 function handle_taken_response(htmlString) {
+	$('#taken-melding').html('<td id="taken-melding-veld"></td>');
 	htmlString = $.trim(htmlString);
 	if (htmlString.substring(0, 9) === '<!DOCTYPE') {
 		alert('response error'); //DEBUG
