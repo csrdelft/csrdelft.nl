@@ -16,7 +16,7 @@
 		<li{if $globals.taken_module === $globals.taken_mainmenu|cat:$link} class="active"{/if}>
 			<a href="/{$link}" title="Corveerooster">Corveerooster</a>
 		</li>
-		{assign var="link" value="corveemijn"}
+		{assign var="link" value="corvee"}
 		<li{if $globals.taken_module === $globals.taken_mainmenu|cat:$link} class="active"{/if}>
 			<a href="/{$link}" title="Mijn corveeoverzicht">Mijn corveeoverzicht</a>
 		</li>

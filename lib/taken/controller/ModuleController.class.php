@@ -28,7 +28,8 @@ class ModuleController extends \ACLController {
 		}
 		elseif ($module === 'corvee') {
 			$this->acl = array(
-				'corvee_mijn' => 'P_CORVEE_IK',
+				'corvee_' => 'P_CORVEE_IK',
+				'corvee_mijn' => 'P_CORVEE_IK', // shortcut
 				'corvee_rooster' => 'P_CORVEE_IK', // shortcut
 				'corvee_beheer' => 'P_CORVEE_MOD',
 				'corvee_repetities' => 'P_CORVEE_MOD',
@@ -40,7 +41,7 @@ class ModuleController extends \ACLController {
 				'corvee_instellingen' => 'P_MAAL_MOD', // shortcut
 				'corvee_conversie' => 'P_ADMIN'
 			);
-			$this->action = 'mijn'; // default
+			$this->action = ''; // default
 		}
 		if ($this->hasParam(0)) {
 			$this->action = $this->getParam(0);
@@ -99,14 +100,19 @@ class ModuleController extends \ACLController {
 		$this->content = $controller->getContent();
 	}
 	
-	public function action_corvee_mijn($query) {
+	public function action_corvee_($query) {
 		require_once 'taken/controller/MijnCorveeController.class.php';
 		$controller = new \Taken\CRV\MijnCorveeController($query);
 		$this->content = $controller->getContent();
 	}
 	
+	public function action_corvee_mijn($query) {
+		$GLOBALS['taken_module'] = str_replace('mijn', '', $GLOBALS['taken_module']);
+		$this->action_corvee_('mijn/'. $query);
+	}
+	
 	public function action_corvee_rooster($query) {
-		$this->action_corvee_mijn('mijn/'. $query);
+		$this->action_corvee_('mijn/'. $query);
 	}
 	
 	public function action_corvee_beheer($query) {
