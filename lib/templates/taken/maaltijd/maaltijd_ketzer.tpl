@@ -32,6 +32,11 @@
 <div class="maaltijdgegevens">
 	<h2>Maaltijd van {$maaltijd->getDatum()|date_format:"%A %e %b"} {$maaltijd->getTijd()|date_format:"%H:%M"}</h2>
 	{$maaltijd->getTitel()}
+{if $toonlijst|is_a:'\Taken\CRV\CorveeTaak'}
+	<div style="float: right; margin: 15px 10px 0px 0px;">
+		{icon get="paintcan" title=$toonlijst->getCorveeFunctie()->getNaam()}
+	</div>
+{/if}
 	<div class="small">
 {if $toonlijst}
 		<a href="/actueel/taken/maaltijdenbeheer/lijst/{$maaltijd->getMaaltijdId()}" title="Toon maaltijdlijst">
