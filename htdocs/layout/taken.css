@@ -53,11 +53,13 @@ option.save {
 	background-image: url("http://plaetjes.csrdelft.nl/famfamfam/bullet_disk.png");
 }
 div.vertical {
-	-moz-transform: rotate(-90deg);  /* FF3.5+ */
-	-o-transform: rotate(-90deg);  /* Opera 10.5 */
-	-webkit-transform: rotate(-90deg);  /* Saf3.1+, Chrome */
-	filter:  progid:DXImageTransform.Microsoft.BasicImage(rotation=-0.9);  /* IE6,IE7 */
-	-ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=-0.9)"; /* IE8 */
+	-webkit-transform: rotate(-90deg); /* Chrome,Saf3.1+ */
+	-moz-transform: rotate(-90deg); /* FF3.5+ */
+	-ms-transform: rotate(-90deg);
+	-o-transform: rotate(-90deg); /* Opera 10.5 */
+	transform: rotate(-90deg);
+	filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3); /* IE6,IE7 */
+	-ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=3)"; /* IE8 */
 }
 
 /* formulier */
