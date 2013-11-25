@@ -4,7 +4,7 @@
 {strip}
 <tr id="corveetaak-row-{$taak->getTaakId()}" class="taak-datum-{$taak->getDatum()}
 {if $taak->getBeginMoment() < strtotime('-1 day')} taak-oud{/if}
-"{if isset($datum)} style="display: none;"{/if}>
+"{if !isset($show) and !$prullenbak} style="display: none;"{/if}>
 	<td>
 {if $taak->getIsVerwijderd()}
 		<a href="{$globals.taken_module}/herstel/{$taak->getTaakId()}" title="Corveetaak herstellen" class="knop post">{icon get="arrow_undo"}</a>
@@ -72,8 +72,11 @@
 {/if}
 {if isset($wijzigbaar) and $taak->getLidId()}
 		<div style="float: right;">
-		<a href="{$globals.taken_module}/puntentoekennen/{$taak->getTaakId()}" title="Punten toekennen" class="knop post">{icon get="award_star_add"}</a>
+	{if $taak->getWanneerToegekend()}
 		<a href="{$globals.taken_module}/puntenintrekken/{$taak->getTaakId()}" title="Punten intrekken" class="knop post">{icon get="medal_silver_delete"}</a>
+	{else}
+		<a href="{$globals.taken_module}/puntentoekennen/{$taak->getTaakId()}" title="Punten toekennen" class="knop post">{icon get="award_star_add"}</a>
+	{/if}
 {/if}
 		</div>
 	</td>

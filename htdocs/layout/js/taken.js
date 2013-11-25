@@ -309,7 +309,7 @@ function handleDrop(e) {
 		elmnt = $(elmnt).parent();
 	}
 	var source = $('#'+e.dataTransfer.getData('Text'));
-	if (!confirm('Eventuele toegekende corveepunten worden niet meegeruild!\n\nDoorgaan met ruilen?')) {
+	if (!confirm('Toegekende corveepunten worden meegeruild!\n\nDoorgaan met ruilen?')) {
 		return;
 	}
 	var attr = $(source).attr('lid_id');

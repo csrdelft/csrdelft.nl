@@ -41,6 +41,7 @@ class BeheerTakenView extends \SimpleHtml {
 		if ($this->_maaltijd !== null) {
 			$smarty->assign('maaltijd', $this->_maaltijd);
 		}
+		
 		if (is_array($this->_taken)) { // list of corveetaken
 			if ($this->_prullenbak || $this->_repetities !== null) { // normal view
 				$smarty->assign('prullenbak', $this->_prullenbak);
@@ -57,15 +58,18 @@ class BeheerTakenView extends \SimpleHtml {
 					}
 					$takenByDate[$datum][$taak->getFunctieId()][] = $taak;
 				}
-				
+				if ($this->_maaltijd !== null) {
+					$smarty->assign('show', true);
+				}
 				$smarty->assign('taken', $takenByDate);
 				$smarty->assign('repetities', $this->_repetities);
 				$smarty->display('taken/corveetaak/beheer_taken.tpl');
 			}
 			else { // list of new corveetaken
 				echo '<tr id="taken-melding"><td>'. $this->getMelding() .'</td></tr>';
-				foreach ($this->_taken as $taak) {
-					$smarty->assign('taak', $taak);
+				foreach ($this->_taken as $taken) {
+					$smarty->assign('taak', $taken);
+					$smarty->assign('show', true);
 					$smarty->display('taken/corveetaak/beheer_taak_lijst.tpl');
 				}
 			}
@@ -75,6 +79,7 @@ class BeheerTakenView extends \SimpleHtml {
 		}
 		else { // single corveetaak
 			$smarty->assign('taak', $this->_taken);
+			$smarty->assign('show', true);
 			$smarty->display('taken/corveetaak/beheer_taak_lijst.tpl');
 		}
 	}

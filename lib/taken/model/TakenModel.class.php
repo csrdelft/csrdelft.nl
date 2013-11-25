@@ -99,9 +99,18 @@ class TakenModel {
 	
 	public static function taakToewijzenAanLid(CorveeTaak $taak, $uid) {
 		if ($taak->getLidId() !== $uid) {
-			$taak->setLidId($uid);
+			$puntenruilen = false;
+			if ($taak->getWanneerToegekend() !== null) {
+				$puntenruilen = true;
+			}
 			$taak->setWanneerGemaild('');
-			self::updateTaak($taak);
+			if ($puntenruilen && $taak->getLidId() !== null) {
+				self::puntenIntrekken($taak);
+			}
+			$taak->setLidId($uid);
+			if ($puntenruilen && $uid !== null) {
+				self::puntenToekennen($taak);
+			}
 		}
 	}
 	
@@ -137,6 +146,7 @@ class TakenModel {
 			PuntenModel::puntenIntrekken($taak->getLidId(), $taak->getPunten(), $taak->getBonusMalus());
 			$taak->setPuntenToegekend($taak->getPuntenToegekend() - $taak->getPunten());
 			$taak->setBonusToegekend($taak->getBonusToegekend() - $taak->getBonusMalus());
+			$taak->setWanneerToegekend(null);
 			self::updateTaak($taak);
 			$db->commit();
 		}

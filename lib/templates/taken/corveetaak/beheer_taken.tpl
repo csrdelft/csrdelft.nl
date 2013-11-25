@@ -45,16 +45,23 @@
 </form>
 {/if}
 <table id="taken-tabel" class="taken-tabel">
-{if !$taken}
-	{include file='taken/corveetaak/beheer_taak_head.tpl' prullenbak=$prullenbak}
-	<tbody></tbody>
+{if $prullenbak or !$taken or isset($maaltijd)}
+	<thead>
+	{include file='taken/corveetaak/beheer_taak_head.tpl'}
+	</thead>
 {/if}
 {foreach name="tabel" from=$taken key=datum item=perdatum}
-	{include file='taken/corveetaak/beheer_taak_datum.tpl' perdatum=$perdatum datum=$datum}
+	{if !$prullenbak and !isset($maaltijd)}
+	<thead>
+		{include file='taken/corveetaak/beheer_taak_datum.tpl' perdatum=$perdatum datum=$datum}
+	</thead>
+	{/if}
+	<tbody>
 	{foreach from=$perdatum key="fid" item=perfunctie}
 		{foreach from=$perfunctie item=taak}
 			{include file='taken/corveetaak/beheer_taak_lijst.tpl' taak=$taak}
 		{/foreach}
 	{/foreach}
+	</tbody>
 {/foreach}
 </table>
