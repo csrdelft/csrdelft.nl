@@ -119,7 +119,7 @@ class BeheerTakenController extends \ACLController {
 			}
 			else {
 				$functie = FunctiesModel::getFunctie($repetitie->getFunctieId());
-				$this->content = new TaakFormView(0, $functie->getFunctieId(), null, $crid, null, $beginDatum, $functie->getStandaardPunten(), 0); // fetches POST values itself
+				$this->content = new TaakFormView(0, $functie->getFunctieId(), null, $crid, $mid, $beginDatum, $functie->getStandaardPunten(), 0); // fetches POST values itself
 			}
 		}
 		else {
