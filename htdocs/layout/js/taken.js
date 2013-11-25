@@ -176,6 +176,10 @@ function close_taken_popup() {
 	$('#taken-popup-background').fadeOut();
 }
 
+function toggle_taken_datum(datum) {
+	$('.taak-datum-' + datum).toggle();
+}
+
 function toggle_taken_hiddenform(source) {
 	var parent = $(source).parent();
 	$(parent).find('div').toggle();

@@ -3357,6 +3357,7 @@ lib/templates/taken/corvee-repetitie/beheer_corvee_repetities.tpl -text
 lib/templates/taken/corveepunt/beheer_punten.tpl -text
 lib/templates/taken/corveepunt/beheer_punten_lijst.tpl -text
 lib/templates/taken/corveepunt/mijn_punten.tpl -text
+lib/templates/taken/corveetaak/beheer_taak_datum.tpl -text
 lib/templates/taken/corveetaak/beheer_taak_head.tpl -text
 lib/templates/taken/corveetaak/beheer_taak_lijst.tpl -text
 lib/templates/taken/corveetaak/beheer_taken.tpl -text

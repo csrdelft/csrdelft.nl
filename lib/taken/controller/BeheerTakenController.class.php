@@ -115,7 +115,7 @@ class BeheerTakenController extends \ACLController {
 			}
 			$beginDatum = date('Y-m-d', $datum);
 			if ($repetitie->getPeriodeInDagen() > 0) {
-				$this->content = new RepetitieCorveeFormView($repetitie, $beginDatum, $beginDatum);
+				$this->content = new RepetitieCorveeFormView($repetitie, $beginDatum, $beginDatum); // fetches POST values itself 
 			}
 			else {
 				$functie = FunctiesModel::getFunctie($repetitie->getFunctieId());

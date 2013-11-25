@@ -159,13 +159,13 @@ input.VinkField {
 
 /* cell style */
 
-.maaltijd-open, .maaltijd-aangemeld, .abonnement-ingeschakeld, .voorkeur-ingeschakeld, .taak-self { /* .taak-toegewezen */
+.maaltijd-open, .maaltijd-aangemeld, .abonnement-ingeschakeld, .voorkeur-ingeschakeld, .taak-self, .functie-toegewezen { /* .taak-toegewezen */
 	background-color: #AAEEAA;
 	font-weight: bold;
 	color: green;
 	text-align: center;
 }
-.maaltijd-gesloten, .maaltijd-afgemeld, .abonnement-uitgeschakeld, .voorkeur-uitgeschakeld { /* .taak-open */
+.maaltijd-gesloten, .maaltijd-afgemeld, .abonnement-uitgeschakeld, .voorkeur-uitgeschakeld, .functie-open { /* .taak-open */
 	background-color: #EEAAAA;
 	font-weight: bold;
 	color: red;

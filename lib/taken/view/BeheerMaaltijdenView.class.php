@@ -40,7 +40,7 @@ class BeheerMaaltijdenView extends \SimpleHtml {
 				$smarty->assign('kop', $this->getTitel());
 				$smarty->display('taken/taken_menu.tpl');
 				
-				$smarty->assign('maaltijden', array_reverse($this->_maaltijden));
+				$smarty->assign('maaltijden', $this->_maaltijden);
 				$smarty->assign('repetities', $this->_repetities);
 				$smarty->display('taken/maaltijd/beheer_maaltijden.tpl');
 			}

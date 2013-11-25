@@ -45,17 +45,16 @@
 </form>
 {/if}
 <table id="taken-tabel" class="taken-tabel">
-{foreach name=tabel from=$taken item=taak}
-	{if $smarty.foreach.tabel.index % 25 === 0}
-		{if !$smarty.foreach.tabel.first}</tbody>{/if}
-		{include file='taken/corveetaak/beheer_taak_head.tpl' prullenbak=$prullenbak}
-	<tbody>
-	{/if}
-	{include file='taken/corveetaak/beheer_taak_lijst.tpl' taak=$taak}
-{/foreach}
 {if !$taken}
 	{include file='taken/corveetaak/beheer_taak_head.tpl' prullenbak=$prullenbak}
-	<tbody>
+	<tbody></tbody>
 {/if}
-	</tbody>
+{foreach name="tabel" from=$taken key=datum item=perdatum}
+	{include file='taken/corveetaak/beheer_taak_datum.tpl' perdatum=$perdatum datum=$datum}
+	{foreach from=$perdatum key="fid" item=perfunctie}
+		{foreach from=$perfunctie item=taak}
+			{include file='taken/corveetaak/beheer_taak_lijst.tpl' taak=$taak}
+		{/foreach}
+	{/foreach}
+{/foreach}
 </table>

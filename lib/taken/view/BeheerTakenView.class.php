@@ -49,7 +49,16 @@ class BeheerTakenView extends \SimpleHtml {
 				$smarty->assign('kop', $this->getTitel());
 				$smarty->display('taken/taken_menu.tpl');
 				
-				$smarty->assign('taken', array_reverse($this->_taken));
+				$takenByDate = array();
+				foreach ($this->_taken as $taak) {
+					$datum = $taak->getDatum();
+					if (!array_key_exists($datum, $takenByDate)) {
+						$takenByDate[$datum] = array();
+					}
+					$takenByDate[$datum][$taak->getFunctieId()][] = $taak;
+				}
+				
+				$smarty->assign('taken', $takenByDate);
 				$smarty->assign('repetities', $this->_repetities);
 				$smarty->display('taken/corveetaak/beheer_taken.tpl');
 			}
