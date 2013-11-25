@@ -1,7 +1,7 @@
 <thead>
 	<tr>
 		<th style="width: 80px;">Wijzig</th>
-		<th style="width: 70px;">Wanneer</th>
+		<th style="width: 70px;">Datum</th>
 		<th>Titel</th>
 		<th style="width: 50px;">Lijst</th>
 		<th>Eters (Limiet)</th>

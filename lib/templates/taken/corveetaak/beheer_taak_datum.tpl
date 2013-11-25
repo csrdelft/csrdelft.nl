@@ -13,7 +13,7 @@
 			{if $first eq "true"}
 			{assign var="first" value="false"}
 			{assign var="mid" value=$taak->getMaaltijdId()}
-		<th style="padding: 7px;">
+		<th style="width: 60px; padding: 2px 7px;">
 				{if $taak->getMaaltijdId()}
 			<a href="/corveebeheer/maaltijd/{$taak->getMaaltijdId()}" title="Beheer maaltijdcorvee" class="knop get">{icon get="cup_link"}</a>
 			<a href="/maaltijdenbeheer/beheer/{$taak->getMaaltijdId()}" title="Wijzig gekoppelde maaltijd" class="knop get">{icon get="cup_edit"}</a>
