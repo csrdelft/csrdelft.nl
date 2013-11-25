@@ -45,12 +45,13 @@
 </form>
 {/if}
 <table id="taken-tabel" class="taken-tabel">
-{if $prullenbak or !$taken or isset($maaltijd)}
-	<thead>
-	{include file='taken/corveetaak/beheer_taak_head.tpl'}
-	</thead>
-{/if}
 {foreach name="tabel" from=$taken key=datum item=perdatum}
+	{if $smarty.foreach.tabel.first}
+	<thead>
+	{include file='taken/corveetaak/beheer_taak_head.tpl' show="true" datum=$datum}
+	</thead>
+	<tbody></tbody>
+	{/if}
 	{if !$prullenbak and !isset($maaltijd)}
 	<thead>
 		{include file='taken/corveetaak/beheer_taak_datum.tpl' perdatum=$perdatum datum=$datum}

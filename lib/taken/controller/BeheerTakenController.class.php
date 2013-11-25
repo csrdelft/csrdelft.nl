@@ -102,7 +102,7 @@ class BeheerTakenController extends \ACLController {
 		\SimpleHTML::invokeRefresh($GLOBALS['taken_module']);
 	}
 	
-	public function action_nieuw($mid) {
+	public function action_nieuw($mid=null) {
 		if (array_key_exists('crid', $_POST)) {
 			$crid = intval($_POST['crid']);
 			$repetitie = CorveeRepetitiesModel::getRepetitie($crid);

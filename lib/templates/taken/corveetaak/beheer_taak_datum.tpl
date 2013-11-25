@@ -15,9 +15,7 @@
 		<a href="/corveebeheer/maaltijd/{$taak->getMaaltijdId()}" title="Beheer maaltijdcorvee" class="knop get">{icon get="cup_link"}</a>
 		<a href="/maaltijdenbeheer/beheer/{$taak->getMaaltijdId()}" title="Wijzig gekoppelde maaltijd" class="knop get">{icon get="cup_edit"}</a>
 				{else}
-		<div style="display: inline-block; width: 28px; text-align: center;">
-				{icon get="paintcan" title="Regulier corvee"}
-		</div>
+		<div style="display: inline-block; width: 28px;"></div>
 					{if $taak->getCorveeRepetitieId()}
 		<a href="/corveerepetities/beheer/{$taak->getCorveeRepetitieId()}" title="Wijzig gekoppelde corveerepetitie" class="knop get popup">{icon get="calendar_edit"}</a>
 					{/if}
