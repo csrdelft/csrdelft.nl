@@ -141,7 +141,7 @@ class ConversieModel {
 			$rep = $rep[0];
 			$repetities[$row['abosoort']] = $rep;
 			if ($row['abosoort'] === 'A_DONDERDAG') {
-				$mrid = $rep->getMaaltijdRepetitieId();
+				$mrid_do = $rep->getMaaltijdRepetitieId();
 			}
 		}
 		$rep_wo = MaaltijdRepetitiesModel::saveRepetitie(0, 3, 7, 'Alpha-cursus', '18:30', $default->getStandaardPrijs(), false, 1, '');
@@ -180,15 +180,19 @@ class ConversieModel {
 				$corvee[$fid] = $corvee[$fid][0];
 			}
 			else {
-				$corvee[$fid] = \Taken\CRV\CorveeRepetitiesModel::saveRepetitie(0, $mrid, 4, 7, $fid, 1, $vrk);
+				$corvee[$fid] = \Taken\CRV\CorveeRepetitiesModel::saveRepetitie(0, $mrid_do, 4, 7, $fid, 1, $vrk);
 				$corvee[$fid] = $corvee[$fid][0];
 			}
 		}
 		$corvee_wo = array();
 		$corvee_wo[1] = \Taken\CRV\CorveeRepetitiesModel::saveRepetitie(0, $rep_wo->getMaaltijdRepetitieId(), $rep_wo->getDagVanDeWeek(), $rep_wo->getPeriodeInDagen(), 1, 1, true);
 		$corvee_wo[1] = $corvee_wo[1][0];
+		$corvee_wo[2] = \Taken\CRV\CorveeRepetitiesModel::saveRepetitie(0, $rep_wo->getMaaltijdRepetitieId(), $rep_wo->getDagVanDeWeek(), $rep_wo->getPeriodeInDagen(), 2, 1, true);
+		$corvee_wo[2] = $corvee_wo[2][0];
 		$corvee_wo[8] = \Taken\CRV\CorveeRepetitiesModel::saveRepetitie(0, $rep_wo->getMaaltijdRepetitieId(), $rep_wo->getDagVanDeWeek(), $rep_wo->getPeriodeInDagen(), 8, 1, true);
 		$corvee_wo[8] = $corvee_wo[8][0];
+		$corvee_wo[7] = \Taken\CRV\CorveeRepetitiesModel::saveRepetitie(0, $rep_wo->getMaaltijdRepetitieId(), $rep_wo->getDagVanDeWeek(), $rep_wo->getPeriodeInDagen(), 7, 1, true);
+		$corvee_wo[7] = $corvee_wo[7][0];
 		
 		echo '<br />' . date('H:i:s') . ' converteren: vrijstelling => CorveeVrijstelling & kwalikok => CorveeKwalificatie & voorkeuren => CorveeVoorkeur';
 		
@@ -216,6 +220,7 @@ class ConversieModel {
 				\Taken\CRV\VoorkeurenModel::inschakelenVoorkeur($corvee_wo[1]->getCorveeRepetitieId(), $row['uid']);
 			}
 			if (array_key_exists(3, $vrk) && $vrk[3] === '1') { // woensdag kwaliafwassen
+				\Taken\CRV\VoorkeurenModel::inschakelenVoorkeur($corvee_wo[2]->getCorveeRepetitieId(), $row['uid']);
 				\Taken\CRV\VoorkeurenModel::inschakelenVoorkeur($corvee_wo[8]->getCorveeRepetitieId(), $row['uid']);
 			}
 			if (array_key_exists(4, $vrk) && $vrk[4] === '1') { // donderdag koken
@@ -266,6 +271,7 @@ class ConversieModel {
 					continue;
 				}
 				$mrid = null;
+				$crid = null;
 				$titel = $row['tekst'];
 				$filter = '';
 				if (array_key_exists($row['abosoort'], $repetities)) {
@@ -275,17 +281,25 @@ class ConversieModel {
 				if ($titel === 'Alpha-Cursus') {
 					$mrid = $rep_wo->getMaaltijdRepetitieId();
 					$titel = 'Alpha-cursus';
+					$crid = null;
 				}
 				if ($titel === 'Donderdag') {
 					$titel .= 'maaltijd';
+					$crid = $corvee[3]->getCorveeRepetitieId();
 				}
 				$maaltijd = self::conversieMaaltijd(intval($row['id']), $mrid, $titel, intval($row['max']), date('Y-m-d', $datum), date('H:i', $datum), floatval($GLOBALS['standaard_maaltijdprijs']), $filter);
 				$mid = $maaltijd->getMaaltijdId();
 				$maaltijden[$mid] = $maaltijd;
 				
-				$corveetaak = \Taken\CRV\TakenModel::saveTaak(0, 3, $row['tp'], $corvee[3]->getCorveeRepetitieId(), $mid, date('Y-m-d', $datum), 0, 0);
-				for ($i = 0; $i < $gemailed; $i++) {
-					\Taken\CRV\TakenModel::updateGemaild($corveetaak);
+				$uid = $row['tp'];
+				if ($uid === 'x101') {
+					$uid = null;
+				}
+				if ($crid !== null) {
+					$corveetaak = \Taken\CRV\TakenModel::saveTaak(0, 3, $uid, $crid, $mid, date('Y-m-d', $datum), 0, 0);
+					for ($i = 0; $i < $gemailed; $i++) {
+						\Taken\CRV\TakenModel::updateGemaild($corveetaak);
+					}
 				}
 			}
 			
@@ -308,7 +322,14 @@ class ConversieModel {
 						if ($uid === 'x101') {
 							$uid = null;
 						}
-						$corveetaak = \Taken\CRV\TakenModel::saveTaak(0, $fid, $uid, $corvee[$fid]->getCorveeRepetitieId(), $mid, date('Y-m-d', $datum), $punt, 0);
+						$crid = $corvee[$fid]->getCorveeRepetitieId();
+						if (date('w', $datum) == 3) {
+							$crid = null;
+							if (array_key_exists($fid, $corvee_wo)) {
+								$crid = $corvee_wo[$fid]->getCorveeRepetitieId();
+							}
+						}
+						$corveetaak = \Taken\CRV\TakenModel::saveTaak(0, $fid, $uid, $crid, $mid, date('Y-m-d', $datum), $punt, 0);
 						if ($taak['punten_toegekend'] === 'ja') {
 							\Taken\CRV\TakenModel::puntenToekennen($corveetaak);
 						}
@@ -328,8 +349,15 @@ class ConversieModel {
 				if ($fid === 2 && $tekort > 0) {
 					$tekort--;
 				}
+				$crid = $corvee[$fid]->getCorveeRepetitieId();
+				if (date('w', $datum) == 3) {
+					$crid = null;
+					if (array_key_exists($fid, $corvee_wo)) {
+						$crid = $corvee_wo[$fid]->getCorveeRepetitieId();
+					}
+				}
 				for ($i = 0; $i < $tekort; $i++) {
-					$corveetaak = \Taken\CRV\TakenModel::saveTaak(0, $fid, null, $corvee[$fid]->getCorveeRepetitieId(), $mid, date('Y-m-d', $datum), $punt, 0);
+					$corveetaak = \Taken\CRV\TakenModel::saveTaak(0, $fid, null, $crid, $mid, date('Y-m-d', $datum), $punt, 0);
 				}
 			}
 		}
