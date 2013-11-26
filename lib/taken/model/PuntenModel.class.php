@@ -153,6 +153,10 @@ class PuntenModel {
 		$lijst['bonusTotaal'] = (int) $lid->getProperty('corvee_punten_bonus');
 		$lijst['prognose'] += $lijst['puntenTotaal'] + $lijst['bonusTotaal'];
 		$lijst['prognoseColor'] = self::rgbCalculate($lijst['prognose']);
+		$lijst['tekort'] = $GLOBALS['corveepunten_per_jaar'] - $lijst['prognose'];
+		if ($lijst['tekort'] < 0) {
+			$lijst['tekort'] = 0;
+		}
 		return $lijst;
 	}
 	

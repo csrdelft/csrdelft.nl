@@ -29,7 +29,7 @@ De prognose geeft aan hoeveel punten u naar verwachting totaal zal hebben aan he
 			</td>{/strip}
 		</tr>
 {/foreach}
-		<tr><td style="font-weight: bold;">Totaal</td><td>{strip}{$puntenlijst.puntenTotaal}
+		<tr style="font-weight: bold;"><td>Totaal</td><td>{strip}{$puntenlijst.puntenTotaal}
 {if $puntenlijst.bonusTotaal > 0}
 	+
 {/if}
@@ -37,6 +37,7 @@ De prognose geeft aan hoeveel punten u naar verwachting totaal zal hebben aan he
 	{$puntenlijst.bonusTotaal}
 {/if}
 		</td></tr>{/strip}
-		<tr><td style="font-weight: bold;">Prognose</td><td style="background-color: #{$puntenlijst.prognoseColor}">{$puntenlijst.prognose}</td></tr>
+		<tr style="font-weight: bold;"><td>Prognose</td><td>{$puntenlijst.prognose}</td></tr>
+		<tr style="font-weight: bold;"><td>Tekort</td><td style="background-color: #{$puntenlijst.prognoseColor};">{$puntenlijst.tekort}</td></tr>
 	</tbody>
 </table>
