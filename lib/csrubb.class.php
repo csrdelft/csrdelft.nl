@@ -579,7 +579,7 @@ HTML;
 		require_once 'taken/view/MaaltijdKetzerView.class.php';
 		try {
 			if ($mid === 'next' || $mid === 'eerstvolgende') {
-				$maaltijden = \Taken\MLT\MaaltijdenModel::getKomendeMaaltijdenVoorLid(\LoginLid::instance()->getLid()); // met filter
+				$maaltijden = \Taken\MLT\MaaltijdenModel::getKomendeMaaltijdenVoorLid(\LoginLid::instance()->getUid()); // met filter
 				if (sizeof($maaltijden) < 1) {
 					return 'Geen aankomende maaltijd.';
 				}
@@ -608,7 +608,7 @@ HTML;
 		}
 		$ketzer = new \Taken\MLT\MaaltijdKetzerView($maaltijd, $aanmelding);
 		return $ketzer->fetch();
-	*/
+	 */
 	}
 
 	public function ubb_offtopic(){

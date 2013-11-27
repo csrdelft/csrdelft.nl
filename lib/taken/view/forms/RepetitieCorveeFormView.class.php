@@ -33,6 +33,7 @@ class RepetitieCorveeFormView extends \SimpleHtml {
 		$smarty->assign('kop', $this->getTitel());
 		$this->_form->cssClass .= ' popup';
 		$smarty->assign('form', $this->_form);
+		$smarty->assign('nocheck', true);
 		$smarty->display('taken/popup_form.tpl');
 	}
 	

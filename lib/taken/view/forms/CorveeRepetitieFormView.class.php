@@ -18,17 +18,25 @@ class CorveeRepetitieFormView extends \SimpleHtml {
 		$this->_crid = $crid;
 		
 		$functieNamen = FunctiesModel::getAlleFuncties(true); // grouped by fid
+		$functieSelectie = array();
 		foreach ($functieNamen as $functie) {
 			$functieNamen[$functie->getFunctieId()] = $functie->getNaam();
+			if ($fid === $functie->getFunctieId()) {
+				$functieSelectie[$fid] = 'arrow';
+			}
 		}
 		
 		$mlt_repetities = \Taken\MLT\MaaltijdRepetitiesModel::getAlleRepetities();
 		$repetitieNamen = array('' => '');
+		$repetitieSelectie = array();
 		foreach ($mlt_repetities as $rep) {
 			$repetitieNamen[$rep->getMaaltijdRepetitieId()] = $rep->getStandaardTitel();
+			if ($mrid === $rep->getMaaltijdRepetitieId()) {
+				$repetitieSelectie[$mrid] = 'arrow';
+			}
 		}
 		
-		$formFields[] = new \SelectField('functie_id', $fid, 'Functie', $functieNamen);
+		$formFields[] = new \SelectField('functie_id', $fid, 'Functie', $functieNamen, $functieSelectie);
 		$formFields[] = new \WeekdagField('dag_vd_week', $dag, 'Dag v/d week');
 		$formFields['dag'] = new \IntField('periode_in_dagen', $periode, 'Periode (in dagen)', 183, 0);
 		$formFields['dag']->title = 'Als de periode ongelijk is aan 7 is dit de start-dag bij het aanmaken van periodiek corvee';
@@ -36,7 +44,7 @@ class CorveeRepetitieFormView extends \SimpleHtml {
 		if ($this->_crid !== 0) {
 			$formFields['vrk']->setOnChangeScript("if (!this.checked) alert('Alle voorkeuren zullen worden verwijderd!');");
 		}
-		$formFields[] = new \SelectField('mlt_repetitie_id', $mrid, 'Maaltijdrepetitie', $repetitieNamen);
+		$formFields[] = new \SelectField('mlt_repetitie_id', $mrid, 'Maaltijdrepetitie', $repetitieNamen, $repetitieSelectie);
 		$formFields[] = new \IntField('standaard_aantal', $aantal, 'Aantal corveeërs', 10, 1);
 		if ($this->_crid !== 0) {
 			$formFields['ver'] = new \VinkField('verplaats_dag', $verplaats, 'Ook verplaatsen');

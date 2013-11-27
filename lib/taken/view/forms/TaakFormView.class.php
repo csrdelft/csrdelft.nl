@@ -18,11 +18,15 @@ class TaakFormView extends \SimpleHtml {
 		$this->_tid = $tid;
 		
 		$functieNamen = FunctiesModel::getAlleFuncties(true); // grouped by fid
+		$functieSelectie = array();
 		foreach ($functieNamen as $functie) {
 			$functieNamen[$functie->getFunctieId()] = $functie->getNaam();
+			if ($fid === $functie->getFunctieId()) {
+				$functieSelectie[$fid] = 'arrow';
+			}
 		}
 		
-		$formFields[] = new \SelectField('functie_id', $fid, 'Functie', $functieNamen);
+		$formFields[] = new \SelectField('functie_id', $fid, 'Functie', $functieNamen, $functieSelectie);
 		$formFields[] = new \LidField('lid_id', $uid, 'Lid');
 		$formFields[] = new \HiddenField('crv_repetitie_id', $crid);
 		$formFields[] = new \HiddenField('maaltijd_id', $mid);

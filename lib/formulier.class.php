@@ -193,6 +193,7 @@ class FormElement{
 class FormField extends FormElement{
 	public $name;					//naam van het veld in POST
 	public $value;					//welke initiele waarde heeft het veld?
+	public $origvalue;				//welke originele waarde had het veld?
 	public $title;					//omschrijving bij mouseover title
 	public $disabled=false;			//veld uitgeschakeld?
 	public $notnull=false; 			//mag het veld leeg zijn?
@@ -215,8 +216,9 @@ class FormField extends FormElement{
 	public function __construct($name, $value, $description=null){
 		$this->name=$name;
 		$this->value=$value;
+		$this->origvalue=$value;
 		$this->description=$description;
-
+		
 		if($this->isPosted()!==false){
 			$this->value=$this->getValue();
 		}
@@ -342,7 +344,7 @@ class FormField extends FormElement{
 		if(is_array($attr)){
 			$return='';
 			foreach($attr as $a){
-				$return.=$this->getInputAttribute($a).' ';
+				$return.=' '.$this->getInputAttribute($a);
 			}
 			return $return;
 		}
@@ -350,6 +352,7 @@ class FormField extends FormElement{
 			case 'id': return 'id="field_'.$this->getName().'"'; break;
 			case 'class': return 'class="'.implode(' ', $this->getInputClasses()).'"'; break;
 			case 'value': return 'value="'.htmlspecialchars($this->value).'"'; break;
+			case 'origvalue': return 'origvalue="'.htmlspecialchars($this->origvalue).'"'; break;
 			case 'name': return 'name="'.$this->name.'"'; break;
 			case 'title':
 				if($this->title){
@@ -378,17 +381,17 @@ class FormField extends FormElement{
 				break;
 			case 'autocomplete':
 				if(!$this->autocomplete OR count($this->suggestions)>0 OR $this->remotedatasource!=''){
-					return 'autocomplete="off" ';
+					return 'autocomplete="off"';
 				}
 				break;
 			case 'onchange':
 				if($this->onchange != null) {
-					return 'onchange="' . $this->onchange . '" ';
+					return 'onchange="' . $this->onchange . '"';
 				}
 				break;
 			case 'onclick':
 				if($this->onclick != null) {
-					return 'onclick="' . $this->onclick . '" ';
+					return 'onclick="' . $this->onclick . '"';
 				}
 				break;
 		}
@@ -403,7 +406,7 @@ class FormField extends FormElement{
 		echo $this->getLabel();
 		echo $this->getError();
 		
-		echo '<input type="text" '.$this->getInputAttribute(array('id', 'name', 'class', 'value', 'disabled', 'maxlength', 'placeholder', 'autocomplete', 'onchange', 'onclick')).' />';
+		echo '<input type="text"'.$this->getInputAttribute(array('id', 'name', 'class', 'value', 'origvalue', 'disabled', 'maxlength', 'placeholder', 'autocomplete', 'onchange', 'onclick')).' />';
 
 		echo $this->getFieldSuggestions();
 		//afsluiten van de div om de hele tag heen.
@@ -461,7 +464,7 @@ class TextField extends FormField{
 		echo $this->getLabel();
 		echo $this->getError();
 
-		echo '<textarea '.$this->getInputAttribute(array('id', 'name', 'class', 'disabled', 'rows', 'maxlength', 'placeholder', 'autocomplete', 'onchange', 'onclick')).'>';
+		echo '<textarea'.$this->getInputAttribute(array('id', 'name', 'origvalue', 'class', 'disabled', 'rows', 'maxlength', 'placeholder', 'autocomplete', 'onchange', 'onclick')).'>';
 		echo htmlspecialchars($this->value);
 		echo '</textarea>';
 
@@ -962,7 +965,7 @@ class FloatField extends FormField{
 class HiddenField extends FormField{
 
 	public function view(){
-		echo '<input type="hidden" '.$this->getInputAttribute(array('id', 'name', 'class', 'value', 'disabled', 'maxlength', 'placeholder', 'autocomplete')).' />';
+		echo '<input type="hidden"'.$this->getInputAttribute(array('id', 'name', 'class', 'value', 'origvalue', 'disabled', 'maxlength', 'placeholder', 'autocomplete')).' />';
 	}
 }
 
@@ -1087,7 +1090,7 @@ class KeuzeRondjeField extends SelectField{
 		
 		echo '<div style="float: left;">';
 		foreach($this->options as $value => $description){
-			echo '<input type="radio" id="field_'.$this->getName().'_option_'.$value.'" value="'.$value.'" '. $this->getInputAttribute(array('name', 'class', 'disabled', 'onchange', 'onclick'));
+			echo '<input type="radio" id="field_'.$this->getName().'_option_'.$value.'" value="'.$value.'"'. $this->getInputAttribute(array('name', 'origvalue', 'class', 'disabled', 'onchange', 'onclick'));
 			if($value==$this->value){
 				echo ' selected="selected" checked="checked"';
 			}
@@ -1143,7 +1146,7 @@ class SelectField extends FormField{
 			echo 'multiple ';
 		}
 		if($this->size>1){
-			echo 'size="'. $this->size.'" ';
+			echo 'size="'. $this->size.'"';
 		}
 		echo $this->getInputAttribute(array('id', 'name', 'class', 'disabled', 'onchange', 'onclick')).'>';
 		
@@ -1285,7 +1288,7 @@ class DatumField extends FormField{
 			$days[]=0;
 		}
 		
-		echo '<select id="field_'.$this->name.'_dag" name="'.$this->name.'_dag" '.$this->getInputAttribute('class').' >';
+		echo '<select id="field_'.$this->name.'_dag" name="'.$this->name.'_dag" origvalue="'.substr($this->origvalue, 8, 2).'" '.$this->getInputAttribute('class').'>';
 		foreach($days as $value){
 			$value=sprintf('%02d', $value);
 			echo '<option value="'.$value.'"';
@@ -1296,7 +1299,7 @@ class DatumField extends FormField{
 		}
 		echo '</select> ';
 		
-		echo '<select id="field_'.$this->name.'_maand" name="'.$this->name.'_maand" '.$this->getInputAttribute('class').' >';
+		echo '<select id="field_'.$this->name.'_maand" name="'.$this->name.'_maand" origvalue="'.substr($this->origvalue, 5, 2).'" '.$this->getInputAttribute('class').'>';
 		foreach($mounths as $value){
 			$value=sprintf('%02d', $value);
 			echo '<option value="'.$value.'"';
@@ -1308,10 +1311,10 @@ class DatumField extends FormField{
 		}
 		echo '</select> ';
 		
-		echo '<select id="field_'.$this->name.'_jaar" name="'.$this->name.'_jaar" '.$this->getInputAttribute('class').' >';
+		echo '<select id="field_'.$this->name.'_jaar" name="'.$this->name.'_jaar" origvalue="'.substr($this->origvalue, 0, 4).'" '.$this->getInputAttribute('class').'>';
 		foreach($years as $value){
 			echo '<option value="'.$value.'"';
-			if($value==substr($this->value, 0,4)){
+			if($value==substr($this->value, 0, 4)){
 				echo ' selected="selected"';
 			}
 			echo '>'.$value.'</option>';
@@ -1367,18 +1370,18 @@ class TijdField extends FormField{
         $hours=range(0, 23);
         $minutes=range(0, 59, $this->minutensteps);
 
-        echo '<select id="field_'.$this->name.'_uur" name="'.$this->name.'_uur" '.$this->getInputAttribute('class').' >';
+        echo '<select id="field_'.$this->name.'_uur" name="'.$this->name.'_uur" origvalue="'.substr($this->origvalue, 0, 2).'" '.$this->getInputAttribute('class').'>';
         foreach($hours as $value){
             $value=sprintf('%02d', $value);
             echo '<option value="'.$value.'"';
-            if($value==substr($this->value, 0,2)){
+            if($value==substr($this->value, 0, 2)){
                 echo ' selected="selected"';
             }
             echo '>'.$value.'</option>';
         }
         echo '</select> ';
 
-        echo '<select id="field_'.$this->name.'_minuut" name="'.$this->name.'_minuut" '.$this->getInputAttribute('class').' >';
+        echo '<select id="field_'.$this->name.'_minuut" name="'.$this->name.'_minuut" origvalue="'.substr($this->origvalue, 3, 2).'" '.$this->getInputAttribute('class').'>';
         $previousvalue = 0;
         foreach($minutes as $value){
             $value=sprintf('%02d', $value);
@@ -1414,7 +1417,7 @@ class VinkField extends FormField {
         echo $this->getLabel();
         echo $this->getError();
 
-        echo '<input type="checkbox" '.$this->getInputAttribute(array('id', 'name', 'class', 'disabled', 'onchange', 'onclick')).' value="'.$this->name.'"';
+        echo '<input type="checkbox"'.$this->getInputAttribute(array('id', 'name', 'value', 'origvalue', 'class', 'disabled', 'onchange', 'onclick'));
         if($this->value){
             echo ' selected="selected" checked="checked" ';
         }

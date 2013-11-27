@@ -20,7 +20,7 @@ Onderstaande tabel toont alle maaltijden die niet verwijderd zijn.
 <div style="float: right;"><a href="{$globals.taken_module}/nieuw" title="Nieuwe maaltijd" class="knop post popup">{icon get="add"} Nieuwe maaltijd</a></div>
 <form method="post" action="{$globals.taken_module}/nieuw" class="Formulier popup">
 	<label for="mrid">{icon get="calendar_add"} Periodieke maaltijden aanmaken:</label>
-	<select name="mrid" onchange="taken_submit_dropdown($(this).parent());">
+	<select name="mrid" class="regular" origvalue="kies" onchange="taken_submit_dropdown($(this).parent());">
 		<option selected="selected">kies</option>
 	{foreach from=$repetities item=repetitie}
 		<option value="{$repetitie->getMaaltijdRepetitieId()}">{$repetitie->getStandaardTitel()}</option>

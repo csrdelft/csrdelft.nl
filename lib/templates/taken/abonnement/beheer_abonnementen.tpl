@@ -6,7 +6,7 @@ Op deze pagina kunt u alle abonnementen beheren en zoeken.
 </p>
 <form method="post" action="{$globals.taken_module}/novieten" class="Formulier popup" style="float: right;">
 	Abonneer novieten op:
-	<select name="mrid" onchange="taken_submit_dropdown($(this).parent());">
+	<select name="mrid" class="regular" origvalue="kies" onchange="taken_submit_dropdown($(this).parent());">
 		<option selected="selected">kies</option>
 {foreach from=$aborepetities item=repetitie}
 		<option value="{$repetitie->getMaaltijdRepetitieId()}" class="save">{$repetitie->getStandaardTitel()}</option>

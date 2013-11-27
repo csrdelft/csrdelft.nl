@@ -11,6 +11,20 @@ $(document).ready(function() {
 	taken_popup_init();
 });
 
+function taken_form_init() {
+	$('.Formulier').each(function() {
+		$(this).submit(taken_post_form); // enter
+		
+		if ($(this).hasClass('taken-hidden-form')) {
+			$(this).keyup(function(e) {
+				if (e.keyCode === 27) { // esc
+					taken_toggle_hiddenform($(this));
+				}
+			});
+		}
+	});
+}
+
 function taken_popup_init() {
 	var p = document.getElementById('taken-popup');
 	if (p) {
@@ -60,22 +74,54 @@ function taken_post_knop(event) {
 		taken_loading();
 		source = null;
 	}
-	taken_ajax(source, $(this).attr('href'), handle_taken_response, $(this).attr('post'));
+	taken_ajax(source, $(this).attr('href'), taken_handle_response, $(this).attr('post'));
 	return false;
 }
 
 function taken_post_form(event) {
 	event.preventDefault();
-	taken_submit_form($(this), $(this).attr('action'));
+	taken_submit_form($(this), false);
 	return false;
 }
 
-function taken_submit_form(form, url) {
-	var formdata = $(form).serialize();
-	if (formdata !== $(form).attr('originaldata')) {
-		$(form).attr('originaldata', formdata);
-	}
-	else if (url.indexOf('/opslaan/0') === -1 && url.indexOf('/aanmaken/') === -1 && url.indexOf('/bijwerken/') === -1) {
+function taken_submit_dropdown(form) {
+	taken_ajax(null, $(form).attr('action'), taken_handle_response, $(form).serialize());
+	taken_reset_form(form);
+}
+
+function taken_reset_form(form) {
+	$(form).find('.regular').each(function() {
+		if (this.value !== $(this).attr('origvalue')) {
+			this.value = $(this).attr('origvalue');
+		}
+	});
+}
+
+function taken_check_form(form) {
+	var changed = false;
+	$(form).find('.regular').each(function() {
+		if  ($(this).is('input:radio')) {
+			if ($(this).is(':checked') && $(this).attr('origvalue') !== $(this).val()) {
+				changed = true;
+				return false;
+			}
+		}
+		else if ($(this).is('input:checkbox')) {
+			if ($(this).is(':checked') && $(this).attr('origvalue') !== '1') {
+				changed = true;
+				return false;
+			}
+		}
+		else if ($(this).val() !== $(this).attr('origvalue')) {
+			changed = true;
+			return false;
+		}
+	});
+	return changed;
+}
+
+function taken_submit_form(form, unchecked) {
+	if (!unchecked && !taken_check_form(form)) {
 		alert('Geen wijzigingen');
 		return false;
 	}
@@ -85,37 +131,10 @@ function taken_submit_form(form, url) {
 		$('#taken-popup').remove();
 		source = null;
 	}
-	taken_ajax(source, url, handle_taken_response, formdata);
+	taken_ajax(source, $(form).attr('action'), taken_handle_response, $(form).serialize());
 }
 
-function taken_submit_dropdown(form) {
-	$(form).removeAttr('originaldata');
-	$(form).submit();
-	taken_reset(form);
-}
-
-function taken_form_init() {
-	$('.Formulier').each(function() {
-		
-		var attr = $(this).attr('originaldata');
-		if (typeof attr !== 'undefined' && attr !== false) {
-			return; // prevent multiple handlers
-		}
-		$(this).attr('originaldata', $(this).serialize());
-		
-		if ($(this).hasClass('taken-hidden-form')) {
-			$(this).keyup(function(e) {
-				if (e.keyCode === 27) { // esc
-					toggle_taken_hiddenform($(this));
-				}
-			});
-		}
-		
-		$(this).submit(taken_post_form); // enter
-	});
-}
-
-function taken_ajax(source, url, successCallback, formdata) {
+function taken_ajax(source, url, successCallback, data) {
 	if (typeof source !== 'undefined' && source !== false) {
 		$(source).parent().html('<img title="'+ url +'" src="http://plaetjes.csrdelft.nl/layout/loading-arrows.gif" />');
 	}
@@ -123,7 +142,7 @@ function taken_ajax(source, url, successCallback, formdata) {
 		type: 'POST',
 		cache: false,
 		url: url,
-		data: formdata,
+		data: data,
 		success: function(response) {
 			successCallback(response);
 		},
@@ -136,12 +155,12 @@ function taken_ajax(source, url, successCallback, formdata) {
 				this.title = errorThrown;
 			});
 			$('#taken-melding').html('<td><div id="melding"><div class="msgerror">'+ errorThrown +'</div></div></td>');
-			close_taken_popup();
+			taken_close_popup();
 		}
 	});
 }
 
-function handle_taken_response(htmlString) {
+function taken_handle_response(htmlString) {
 	$('#taken-melding').html('<td id="taken-melding-veld"></td>');
 	htmlString = $.trim(htmlString);
 	if (htmlString.substring(0, 9) === '<!DOCTYPE') {
@@ -149,10 +168,10 @@ function handle_taken_response(htmlString) {
 		document.write(htmlString);
 	}
 	else if (htmlString.length > 0) {
-		update_taken(htmlString);
+		taken_update_dom(htmlString);
 	}
 	else {
-		close_taken_popup();
+		taken_close_popup();
 	}
 }
 
@@ -160,32 +179,26 @@ function page_reload() {
 	location.reload();
 }
 
-function taken_reset(parent) {
-	$(parent).each(function() {
-		this.reset();
-	});
-}
-
 function taken_loading() {
 	$('#taken-popup-background').css('background-image', 'url("http://plaetjes.csrdelft.nl/layout/loading_bar_black.gif")');
 	$('#taken-popup-background').fadeIn();
 }
 
-function close_taken_popup() {
+function taken_close_popup() {
 	$('#taken-popup').remove();
 	$('#taken-popup-background').fadeOut();
 }
 
-function toggle_taken_datum(datum) {
+function taken_toggle_datum(datum) {
 	$('.taak-datum-' + datum).toggle();
 }
 
-function toggle_taken_hiddenform(source) {
+function taken_toggle_hiddenform(source) {
 	var parent = $(source).parent();
 	$(parent).find('div').toggle();
 	var form = $(parent).find('form');
 	$(form).toggle();
-	taken_reset(form);
+	taken_reset_form(form);
 	var elmnt = $(form).find('input[type=text]');
 	if ($(elmnt).is(':visible')) {
 		var val = $(elmnt).val();
@@ -195,7 +208,7 @@ function toggle_taken_hiddenform(source) {
 	}
 }
 
-function update_taken(htmlString) {
+function taken_update_dom(htmlString) {
 	var popup = false;
 	var html = $.parseHTML(htmlString);
 	$(html).each(function() {
@@ -227,7 +240,7 @@ function update_taken(htmlString) {
 		taken_popup_init();
 	}
 	else {
-		close_taken_popup();
+		taken_close_popup();
 	}
 }
 
@@ -316,10 +329,10 @@ function handleDrop(e) {
 	if (typeof attr === 'undefined' || attr === false) {
 		attr = '';
 	}
-	taken_ajax(elmnt, $(elmnt).attr('href'), handle_taken_response, 'lid_id='+attr);
+	taken_ajax(elmnt, $(elmnt).attr('href'), taken_handle_response, 'lid_id='+attr);
 	attr = $(elmnt).attr('lid_id');
 	if (typeof attr === 'undefined' || attr === false) {
 		attr = '';
 	}
-	taken_ajax(source, $(source).attr('href'), handle_taken_response, 'lid_id='+attr);
+	taken_ajax(source, $(source).attr('href'), taken_handle_response, 'lid_id='+attr);
 }

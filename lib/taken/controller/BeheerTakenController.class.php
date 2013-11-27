@@ -134,9 +134,14 @@ class BeheerTakenController extends \ACLController {
 	}
 	
 	public function action_opslaan($tid) {
-		$form = new TaakFormView($tid); // fetches POST values itself
-		if ($form->validate()) {
-			$values = $form->getValues();
+		if ($tid > 0) {
+			$this->action_bewerk($tid);
+		}
+		else {
+			$this->content = new TaakFormView($tid); // fetches POST values itself
+		}
+		if ($this->content->validate()) {
+			$values = $this->content->getValues();
 			$uid = ($values['lid_id'] === '' ? null : $values['lid_id']);
 			$crid = ($values['crv_repetitie_id'] === '' ? null : intval($values['crv_repetitie_id']));
 			$mid = ($values['maaltijd_id'] === '' ? null : intval($values['maaltijd_id']));
@@ -146,9 +151,6 @@ class BeheerTakenController extends \ACLController {
 				$maaltijd = \Taken\MLT\MaaltijdenModel::getMaaltijd($mid);
 			}
 			$this->content = new BeheerTakenView($taak, $maaltijd);
-		}
-		else {
-			$this->content = $form;
 		}
 	}
 	

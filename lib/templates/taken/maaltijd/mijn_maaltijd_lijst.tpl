@@ -52,11 +52,11 @@
 	{if $maaltijd->getIsGesloten()}
 		{$aanmelding->getAantalGasten()}
 	{else}
-		<div class="inline-edit" onclick="toggle_taken_hiddenform(this);">{$aanmelding->getAantalGasten()}</div>
+		<div class="inline-edit" onclick="taken_toggle_hiddenform(this);">{$aanmelding->getAantalGasten()}</div>
 		<form method="post" action="{$globals.taken_module}/gasten/{$maaltijd->getMaaltijdId()}" class="Formulier taken-hidden-form taken-subform">
 			<input type="text" name="aantal_gasten" value="{$aanmelding->getAantalGasten()}" maxlength="4" size="4" />
 			<a onclick="$(this).parent().submit();" title="Wijzigingen opslaan" class="knop">{icon get="accept"}</a>
-			<a onclick="toggle_taken_hiddenform($(this).parent());" title="Annuleren" class="knop">{icon get="delete"}</a>
+			<a onclick="taken_toggle_hiddenform($(this).parent());" title="Annuleren" class="knop">{icon get="delete"}</a>
 		</form>
 	{/if}
 	</td>
@@ -66,7 +66,7 @@
 			{icon get="comment" title=$aanmelding->getGastenOpmerking()}
 		{/if}
 	{else}
-		<div onclick="toggle_taken_hiddenform(this);" title="{$aanmelding->getGastenOpmerking()}">
+		<div onclick="taken_toggle_hiddenform(this);" title="{$aanmelding->getGastenOpmerking()}">
 		{if $aanmelding->getGastenOpmerking()}
 			<a class="knop">{icon get="comment_edit" title=$aanmelding->getGastenOpmerking()}</a>
 		{else}
@@ -76,7 +76,7 @@
 		<form method="post" action="{$globals.taken_module}/opmerking/{$maaltijd->getMaaltijdId()}" class="Formulier taken-hidden-form taken-subform">
 			<input type="text" name="gasten_opmerking" value="{$aanmelding->getGastenOpmerking()}" maxlength="255" size="20" />
 			<a onclick="$(this).parent().submit();" title="Wijzigingen opslaan" class="knop">{icon get="accept"}</a>
-			<a onclick="toggle_taken_hiddenform($(this).parent());" title="Annuleren" class="knop">{icon get="delete"}</a>
+			<a onclick="taken_toggle_hiddenform($(this).parent());" title="Annuleren" class="knop">{icon get="delete"}</a>
 		</form>
 	{/if}
 	</td>

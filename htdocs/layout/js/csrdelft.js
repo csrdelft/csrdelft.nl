@@ -5,12 +5,9 @@
 /**
  * Aan/Af-melden via een ketzer
  * 
- * @param {String} url
- * @param {String} ketzer-id
- * @returns {Boolean} true
  */
-function ketzer_post(url, el) {
-	$(el + ' .aanmelddata').html('U komt:<br /><img src="http://plaetjes.csrdelft.nl/layout/loading-arrows.gif" />');
+function ketzer_ajax(url, ketzer) {
+	$(ketzer + ' .aanmelddata').html('U komt:<br /><img src="http://plaetjes.csrdelft.nl/layout/loading-arrows.gif" />');
 	$.ajax({
 		type : 'GET',
 		cache : false,
@@ -25,7 +22,7 @@ function ketzer_post(url, el) {
 			});
 		},
 		error : function(jqXHR, textStatus, errorThrown) {
-			$(el + ' .aanmelddata').html('<span style="color:red;font-weight:bold;">Error:</span><br />' + errorThrown);
+			$(ketzer + ' .aanmelddata').html('<span style="color:red;font-weight:bold;">Error:</span><br />' + errorThrown);
 			alert(errorThrown);
 		}
 	});
