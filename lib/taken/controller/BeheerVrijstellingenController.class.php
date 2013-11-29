@@ -60,16 +60,18 @@ class BeheerVrijstellingenController extends \ACLController {
 		$this->content = new VrijstellingFormView($vrijstelling->getLidId(), $vrijstelling->getBeginDatum(), $vrijstelling->getEindDatum(), $vrijstelling->getPercentage()); // fetches POST values itself
 	}
 	
-	public function action_opslaan() {
-		$form = new VrijstellingFormView(); // fetches POST values itself
-		if ($form->validate()) {
-			$values = $form->getValues();
+	public function action_opslaan($uid=null) {
+		if ($uid !== null) {
+			$this->action_bewerk($uid);
+		}
+		else {
+			$this->content = new VrijstellingFormView(); // fetches POST values itself
+		}
+		if ($this->content->validate()) {
+			$values = $this->content->getValues();
 			$uid = ($values['lid_id'] === '' ? null : $values['lid_id']);
 			$vrijstelling = VrijstellingenModel::saveVrijstelling($uid, $values['begin_datum'], $values['eind_datum'], $values['percentage']);
 			$this->content = new BeheerVrijstellingenView($vrijstelling);
-		}
-		else {
-			$this->content = $form;
 		}
 	}
 	

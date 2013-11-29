@@ -61,17 +61,19 @@ class MaaltijdRepetitiesController extends \ACLController {
 	}
 	
 	public function action_opslaan($mrid) {
-		$form = new MaaltijdRepetitieFormView($mrid); // fetches POST values itself
-		if ($form->validate()) {
-			$values = $form->getValues(); 
+		if ($mrid > 0) {
+			$this->action_bewerk($mrid);
+		}
+		else {
+			$this->content = new MaaltijdRepetitieFormView($mrid); // fetches POST values itself
+		}
+		if ($this->content->validate()) {
+			$values = $this->content->getValues(); 
 			$repetitie_aantal = MaaltijdRepetitiesModel::saveRepetitie($mrid, $values['dag_vd_week'], $values['periode_in_dagen'], $values['standaard_titel'], $values['standaard_tijd'], $values['standaard_prijs'], $values['abonneerbaar'], $values['standaard_limiet'], $values['abonnement_filter']);
 			$this->content = new MaaltijdRepetitiesView($repetitie_aantal[0]);
 			if ($repetitie_aantal[1] > 0) {
 				$this->content->setMelding($repetitie_aantal[1] .' abonnement'. ($repetitie_aantal[1] !== 1 ? 'en' : '') .' uitgeschakeld.', 2);
 			}
-		}
-		else {
-			$this->content = $form;
 		}
 	}
 	

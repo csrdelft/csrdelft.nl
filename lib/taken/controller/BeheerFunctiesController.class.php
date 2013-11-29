@@ -66,15 +66,17 @@ class BeheerFunctiesController extends \ACLController {
 	}
 	
 	public function action_opslaan($fid) {
-		$form = new FunctieFormView($fid); // fetches POST values itself
-		if ($form->validate()) {
-			$values = $form->getValues();
+		if ($fid > 0) {
+			$this->action_bewerk($fid);
+		}
+		else {
+			$this->content = new FunctieFormView($fid); // fetches POST values itself
+		}
+		if ($this->content->validate()) {
+			$values = $this->content->getValues();
 			$functie = FunctiesModel::saveFunctie($fid, $values['naam'], $values['afkorting'], $values['omschrijving'], $values['email_bericht'], $values['standaard_punten'], $values['kwalificatie_benodigd']);
 			$functie->setGekwalificeerden(KwalificatiesModel::getKwalificatiesVoorFunctie($functie));
 			$this->content = new BeheerFunctiesView($functie);
-		}
-		else {
-			$this->content = $form;
 		}
 	}
 	

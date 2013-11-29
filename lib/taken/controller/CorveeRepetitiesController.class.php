@@ -74,9 +74,14 @@ class CorveeRepetitiesController extends \ACLController {
 	}
 	
 	public function action_opslaan($crid) {
-		$form = new CorveeRepetitieFormView($crid); // fetches POST values itself
-		if ($form->validate()) {
-			$values = $form->getValues(); 
+		if ($crid > 0) {
+			$this->action_bewerk($crid);
+		}
+		else {
+			$this->content = new CorveeRepetitieFormView($crid); // fetches POST values itself
+		}
+		if ($this->content->validate()) {
+			$values = $this->content->getValues(); 
 			$mrid = ($values['mlt_repetitie_id'] === '' ? null : intval($values['mlt_repetitie_id']));
 			$repetitie_aantal = CorveeRepetitiesModel::saveRepetitie($crid, $mrid, $values['dag_vd_week'], $values['periode_in_dagen'], intval($values['functie_id']), $values['standaard_aantal'], $values['voorkeurbaar']);
 			$maaltijdrepetitie = null;
@@ -87,9 +92,6 @@ class CorveeRepetitiesController extends \ACLController {
 			if ($repetitie_aantal[1] > 0) {
 				$this->content->setMelding($repetitie_aantal[1] .' voorkeur'. ($repetitie_aantal[1] !== 1 ? 'en' : '') .' uitgeschakeld.', 2);
 			}
-		}
-		else {
-			$this->content = $form;
 		}
 	}
 	

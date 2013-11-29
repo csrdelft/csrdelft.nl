@@ -1141,7 +1141,7 @@ class SelectField extends FormField{
 		echo $this->getLabel();
 		echo $this->getError();
 	
-		echo '<select ';
+		echo '<select origvalue="'. $this->origvalue .'" ';
 		if($this->multiple){
 			echo 'multiple ';
 		}

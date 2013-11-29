@@ -119,18 +119,20 @@ class BeheerMaaltijdenController extends \ACLController {
 	}
 	
 	public function action_opslaan($mid) {
-		$form = new MaaltijdFormView($mid); // fetches POST values itself
-		if ($form->validate()) {
-			$values = $form->getValues();
+		if ($mid > 0) {
+			$this->action_bewerk($mid);
+		}
+		else {
+			$this->content = new MaaltijdFormView($mid); // fetches POST values itself
+		}
+		if ($this->content->validate()) {
+			$values = $this->content->getValues();
 			$mrid = ($values['mlt_repetitie_id'] === '' ? null : intval($values['mlt_repetitie_id']));
 			$maaltijd_aanmeldingen = MaaltijdenModel::saveMaaltijd($mid, $mrid, $values['titel'], $values['aanmeld_limiet'], $values['datum'], $values['tijd'], $values['prijs'], $values['aanmeld_filter']);
 			$this->content = new BeheerMaaltijdenView($maaltijd_aanmeldingen[0]);
 			if ($maaltijd_aanmeldingen[1] > 0) {
 				$this->content->setMelding($maaltijd_aanmeldingen[1] .' aanmelding'. ($maaltijd_aanmeldingen[1] !== 1 ? 'en' : '') .' verwijderd vanwege aanmeldrestrictie: '. $maaltijd_aanmeldingen[0]->getAanmeldFilter(), 2);
 			}
-		}
-		else {
-			$this->content = $form;
 		}
 	}
 	

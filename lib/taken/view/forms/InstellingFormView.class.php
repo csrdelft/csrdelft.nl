@@ -19,7 +19,7 @@ class InstellingFormView extends \SimpleHtml {
 		$formFields['key']->forcenotnull = true;
 		$formFields[] = new \AutoresizeTextField('waarde', $value, 'Waarde', 0);
 		
-		$this->_form = new \Formulier('taken-instelling-form', $GLOBALS['taken_module'] .'/opslaan', $formFields);
+		$this->_form = new \Formulier('taken-instelling-form', $GLOBALS['taken_module'] .'/opslaan/'. $key, $formFields);
 	}
 	
 	public function getTitel() {

@@ -22,7 +22,7 @@ class VrijstellingFormView extends \SimpleHtml {
 		$formFields[] = new \DatumField('eind_datum', $eind, 'Tot en met', date('Y')+1, date('Y'));
 		$formFields[] = new \IntField('percentage', $percentage, 'Percentage (%)', $GLOBALS['vrijstelling_percentage_max'], $GLOBALS['vrijstelling_percentage_min']);
 		
-		$this->_form = new \Formulier('taken-vrijstelling-form', $GLOBALS['taken_module'] .'/opslaan', $formFields);
+		$this->_form = new \Formulier('taken-vrijstelling-form', $GLOBALS['taken_module'] .'/opslaan'. ($uid === null ? '' : '/'. $uid), $formFields);
 	}
 	
 	public function getTitel() {
