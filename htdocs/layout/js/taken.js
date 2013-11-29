@@ -123,7 +123,7 @@ function taken_check_form(form) {
 	return changed;
 }
 
-function taken_submit_form(form, unchecked) {
+function taken_submit_form(form, unchecked, url) {
 	if (!unchecked && !taken_check_form(form)) {
 		alert('Geen wijzigingen');
 		return false;
@@ -134,7 +134,10 @@ function taken_submit_form(form, unchecked) {
 		$('#taken-popup').remove();
 		source = null;
 	}
-	taken_ajax(source, $(form).attr('action'), taken_handle_response, $(form).serialize());
+	if (typeof url === 'undefined' || url === false) {
+		url = $(form).attr('action');
+	}
+	taken_ajax(source, url, taken_handle_response, $(form).serialize());
 }
 
 function taken_ajax(source, url, successCallback, data) {
