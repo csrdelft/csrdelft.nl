@@ -111,6 +111,9 @@ class TakenModel {
 			if ($puntenruilen && $uid !== null) {
 				self::puntenToekennen($taak);
 			}
+			else {
+				self::updateTaak($taak);
+			}
 		}
 	}
 	

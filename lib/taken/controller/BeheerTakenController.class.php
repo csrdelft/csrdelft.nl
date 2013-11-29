@@ -166,24 +166,27 @@ class BeheerTakenController extends \ACLController {
 	
 	public function action_toewijzen($tid) {
 		$taak = TakenModel::getTaak($tid);
-		$leden_punten = TakenModel::getSuggesties($taak);
-		$voorkeuren = array();
-		$repetitie = null;
-		if ($taak->getCorveeRepetitieId() !== null) {
-			require_once 'taken/model/VoorkeurenModel.class.php';
-			$voorkeuren = VoorkeurenModel::getVoorkeurenVoorRepetitie($taak->getCorveeRepetitieId());
-			$repetitie = CorveeRepetitiesModel::getRepetitie($taak->getCorveeRepetitieId());
-		}
-		require_once 'taken/view/forms/TaakToewijzenFormView.class.php';
-		$form = new TaakToewijzenFormView($taak, $leden_punten, $voorkeuren, $repetitie); // fetches POST values itself
-		if ($form->validate()) {
-			$values = $form->getValues();
-			$uid = ($values['lid_id'] === '' ? null : $values['lid_id']);
+		$formField = new \LidField('lid_id', null, null, 'leden'); // fetches POST values itself
+		if ($formField->valid()) {
+			$uid = $formField->getValue();
+			if ($uid === '') {
+				$uid = null;
+			}
+			$taak = TakenModel::getTaak($tid);
 			TakenModel::taakToewijzenAanLid($taak, $uid);
 			$this->content = new BeheerTakenView($taak);
 		}
 		else {
-			$this->content = $form;
+			$leden_punten = TakenModel::getSuggesties($taak);
+			$voorkeuren = array();
+			$repetitie = null;
+			if ($taak->getCorveeRepetitieId() !== null) {
+				require_once 'taken/model/VoorkeurenModel.class.php';
+				$voorkeuren = VoorkeurenModel::getVoorkeurenVoorRepetitie($taak->getCorveeRepetitieId());
+				$repetitie = CorveeRepetitiesModel::getRepetitie($taak->getCorveeRepetitieId());
+			}
+			require_once 'taken/view/forms/TaakToewijzenFormView.class.php';
+			$this->content = new TaakToewijzenFormView($taak, $leden_punten, $voorkeuren, $repetitie); // fetches POST values itself
 		}
 	}
 	

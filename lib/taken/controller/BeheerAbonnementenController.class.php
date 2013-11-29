@@ -59,19 +59,18 @@ class BeheerAbonnementenController extends \ACLController {
 	}
 	
 	public function action_voorlid() {
-		$uid = $_POST['voor_lid'];
-		if (!\Lid::exists($uid)) {
-			$uid = namen2uid($uid, 'allepersonen');
-			if (is_array($uid) && array_key_exists(0, $uid) && array_key_exists('uid', $uid[0])) {
-				$uid = $uid[0]['uid'];
-			}
-		}
-		$matrix = array();
-		if (\Lid::exists($uid)) {
+		$formField = new \LidField('voor_lid', null, null, 'allepersonen'); // fetches POST values itself
+		if ($formField->valid()) {
+			$uid = $formField->getValue();
 			$repetities = MaaltijdRepetitiesModel::getAlleRepetities();
+			$matrix = array();
 			$matrix[$uid] = AbonnementenModel::getAbonnementenVoorLid($uid, $repetities);
+			$this->content = new BeheerAbonnementenView($matrix);
 		}
-		$this->content = new BeheerAbonnementenView($matrix);
+		else {
+			$this->content = new BeheerAbonnementenView(array(), null);
+			$this->content->setMelding($formField->error, -1);
+		}
 	}
 	
 	public function action_novieten() {

@@ -209,7 +209,11 @@ class CorveeTaak implements \Agendeerbaar {
 		$this->functie_id = $int;
 	}
 	public function setLidId($uid) {
+		if ($uid !== null && !\Lid::exists($uid)) {
+			throw new \Exception('Geen lid: set lid id');
+		}
 		$this->lid_id = $uid;
+		
 	}
 	public function setCorveeRepetitieId($int) {
 		if ($int !== null && !is_int($int)) {
