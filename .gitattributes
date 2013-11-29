@@ -3447,3 +3447,4 @@ sql/2789_Abos-doelgroepen.sql -text
 sql/2968_uitbreidingontvangtcontactueel.sql -text
 sql/3051_menu_voor_pagina.sql -text
 sql/3496_taken.sql -text
+sql/3560_crv_functies.sql -text
