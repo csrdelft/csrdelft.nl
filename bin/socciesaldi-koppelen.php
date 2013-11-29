@@ -12,7 +12,7 @@
 
 	$sLedenQuery="
 		SELECT
-			voornaam, achternaam, tussenvoegsel, uid
+			voornaam, achternaam, tussenvoegsel, uid, soccieID, createTerm
 		FROM
 			lid
 		WHERE
@@ -28,6 +28,8 @@
 
 	$soccieinput=simplexml_load_file ('../data/soccie.xml');
 	$feutCount=0;
+
+	$store = '';
 	foreach($soccieinput as $soccielid){
 		$sNaam=strtolower($soccielid->voornaam.' '.$soccielid->achternaam);
 		foreach($aLeden as $aLid){
@@ -41,17 +43,21 @@
 			}*/
 			//echo $sLidDbNaam;
 			$gelijkheid=0; similar_text($sNaam, $sLidDbNaam, $gelijkheid);
-			if($gelijkheid >86){
+			if($gelijkheid >88){
 				//echo '  '.$sNaam.'('.$soccieID.') - '.$sLidDbNaam.'('.$uid.') << match';//."\r\n";
 
+				//alleen updaten als er geen soccieID is gegeven
+				if($aLid['soccieID'] == 0) {
+					$query="UPDATE lid SET soccieID = ".$soccieID.", createTerm = '".$createTerm."' WHERE uid = '".$uid."';";
+					$db->query($query);
 
-				$query="UPDATE lid SET soccieID = ".$soccieID.", createTerm = '".$createTerm."' WHERE uid = '".$uid."';";
-				$db->query($query);
+					$store .= 'Opgeslagen: '.$sNaam.'('.$soccieID.' '.$createTerm.') - '.$sLidDbNaam.'('.$uid.') '."\r\n";
+					$store .= $query . "\r\n";
+				}
 
-				//echo $query."\r\n";
 			}elseif($gelijkheid >80){
 				$feutCount++;
-				echo 'niet zeker: '.$sNaam.'('.$soccieID.') - '.$sLidDbNaam.'('.$uid.') '."\r\n";
+				echo 'niet zeker: '.$sNaam.'('.$soccieID.' '.$createTerm.') - '.$sLidDbNaam.'('.$uid.') '."\r\n";
 			}
 		}
 
@@ -59,4 +65,7 @@
 
 	}
 echo "\nfeutcount: ".$feutCount."\n";
-?>
+
+echo "\r\n \r\n".'De volgende leden zonder koppeling (soccieID=0) zijn geupdate naar:'."\r\n \r\n";
+echo $store."\r\n";
+
