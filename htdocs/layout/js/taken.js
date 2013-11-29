@@ -91,8 +91,8 @@ function taken_submit_dropdown(form) {
 
 function taken_reset_form(form) {
 	$(form).find('.regular').each(function() {
-		if (this.value !== $(this).attr('origvalue')) {
-			this.value = $(this).attr('origvalue');
+		if ($(this).val() !== $(this).attr('origvalue')) {
+			$(this).val($(this).attr('origvalue'));
 		}
 	});
 }

@@ -36,7 +36,7 @@
 {if isset($repetities) and (!isset($maaltijd) or !$maaltijd->getIsVerwijderd())}
 <form method="post" action="{$globals.taken_module}/nieuw{if isset($maaltijd)}/{$maaltijd->getMaaltijdId()}{/if}" class="Formulier popup">
 	<label for="crid">{icon get="calendar_add"} Periodieke taken aanmaken:</label>
-	<select name="crid" class="regular" origvalue="kies" onchange="taken_submit_dropdown($(this).parent());">
+	<select name="crid" value="kies" origvalue="kies" class="regular" onchange="taken_submit_dropdown($(this).parent());">
 		<option selected="selected">kies</option>
 	{foreach from=$repetities item=repetitie}
 		<option value="{$repetitie->getCorveeRepetitieId()}">{$repetitie->getCorveeFunctie()->getNaam()} op {$repetitie->getDagVanDeWeekText()}</option>

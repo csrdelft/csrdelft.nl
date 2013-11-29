@@ -22,7 +22,7 @@
 	<td>
 		<div class="inline-edit" onclick="taken_toggle_hiddenform(this);">{$puntenlijst.puntenTotaal}</div>
 		<form method="post" action="{$globals.taken_module}/wijzigpunten/{$puntenlijst.lid->getUid()}" class="Formulier taken-hidden-form taken-subform">
-			<input type="text" name="totaal_punten" value="{$puntenlijst.puntenTotaal}" maxlength="4" size="4" />
+			<input type="text" name="totaal_punten" value="{$puntenlijst.puntenTotaal}" origvalue="{$puntenlijst.puntenTotaal}" class="regular" maxlength="4" size="4" />
 			<a onclick="$(this).parent().submit();" title="Wijzigingen opslaan" class="knop">{icon get="accept"}</a>
 			<a onclick="taken_toggle_hiddenform($(this).parent());" title="Annuleren" class="knop">{icon get="delete"}</a>
 		</form>
@@ -30,7 +30,7 @@
 	<td>
 		<div class="inline-edit" onclick="taken_toggle_hiddenform(this);">{$puntenlijst.bonusTotaal}</div>
 		<form method="post" action="{$globals.taken_module}/wijzigbonus/{$puntenlijst.lid->getUid()}" class="Formulier taken-hidden-form taken-subform">
-			<input type="text" name="totaal_bonus" value="{$puntenlijst.bonusTotaal}" maxlength="4" size="4" />
+			<input type="text" name="totaal_bonus" value="{$puntenlijst.bonusTotaal}" origvalue="{$puntenlijst.bonusTotaal}" class="regular" maxlength="4" size="4" />
 			<a onclick="$(this).parent().submit();" title="Wijzigingen opslaan" class="knop">{icon get="accept"}</a>
 			<a onclick="taken_toggle_hiddenform($(this).parent());" title="Annuleren" class="knop">{icon get="delete"}</a>
 		</form>
