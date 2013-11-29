@@ -177,7 +177,7 @@ class Reclame extends SimpleHTML {
 	}
 	
 	public function view(){
-		echo '<script type=\'text/javascript\'><!--// <![CDATA[/* [id1377] Delft CSR - Standaard */ OA_show(1377);// ]]> --></script><!--<a target=\'_blank\' href=\'http://ads2.bom-media.nl/www/delivery/ck.php?n=7533f3f\'><img border=\'0\' alt=\'\' src=\'http://ads2.bom-media.nl/www/delivery/avw.php?zoneid=1377&amp;n=7533f3f\' /></a>-->';
+		echo '<script type=\'text/javascript\'><!--// <![CDATA[/* [id1377] Delft CSR - Standaard */ OA_show(1377);// ]]> --></script>';
 	}
 }
 
