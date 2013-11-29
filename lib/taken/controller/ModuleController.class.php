@@ -167,12 +167,6 @@ class ModuleController extends \ACLController {
 		$controller = new \Taken\MLT\BeheerInstellingenController($query);
 		$this->content = $controller->getContent();
 	}
-	
-	public function action_corvee_conversie($query) {
-		require_once 'taken/controller/ConversieController.class.php';
-		$controller = new \Taken\MLT\ConversieController($query);
-		$this->content = $controller->getContent();
-	}
 }
 
 ?>

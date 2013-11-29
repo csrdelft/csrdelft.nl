@@ -3176,7 +3176,6 @@ lib/taken/controller/BeheerPuntenController.class.php -text
 lib/taken/controller/BeheerTakenController.class.php -text
 lib/taken/controller/BeheerVoorkeurenController.class.php -text
 lib/taken/controller/BeheerVrijstellingenController.class.php -text
-lib/taken/controller/ConversieController.class.php -text
 lib/taken/controller/CorveeRepetitiesController.class.php -text
 lib/taken/controller/MaalCieSaldiController.class.php -text
 lib/taken/controller/MaaltijdRepetitiesController.class.php -text
