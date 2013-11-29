@@ -144,7 +144,7 @@ class PuntenModel {
 		else {
 			$lijst = self::sumPuntenPerFunctie($functies, $lidtaken);
 		}
-		if ($vrijstelling !== null) {
+		if ($vrijstelling !== null) { // bij suggestielijst wordt de prognose gecorrigeerd voor beginDatum van vrijstelling
 			$lijst['vrijstelling'] = $vrijstelling;
 			$lijst['prognose'] += $vrijstelling->getPunten();
 		}
