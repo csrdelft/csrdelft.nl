@@ -120,7 +120,7 @@ class Maaltijd implements \Agendeerbaar {
 	 */
 	public function getMarge() {
 		$aantal = $this->getAantalAanmeldingen();
-		$marge = $aantal / intval($GLOBALS['marge_gasten_verhouding']);
+		$marge = floor($aantal / floatval($GLOBALS['marge_gasten_verhouding']));
 		$min = intval($GLOBALS['marge_gasten_min']);
 		if ($marge < $min) {
 			$marge = $min;

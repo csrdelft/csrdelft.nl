@@ -86,7 +86,7 @@ class MaaltijdAanmelding {
 	 * @return Lid if exists, false otherwise
 	 */
 	public function getDoorLid() {
-		$uid = $this->getLidDoorId();
+		$uid = $this->getDoorLidId();
 		$lid = \LidCache::getLid($uid); // false if lid does not exist
 		if (!$lid instanceof \Lid) {
 			throw new \Exception('Lid bestaat niet: $uid ='. $uid);
