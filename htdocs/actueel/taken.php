@@ -10,13 +10,6 @@ try {
 	require_once 'taken/model/InstellingenModel.class.php';
 	require_once 'taken/controller/ModuleController.class.php';
 	
-	if (defined('DEBUG') && (\LoginLid::instance()->hasPermission('P_ADMIN') || \LoginLid::instance()->isSued())) {
-		// dit moet weg als we live gaan
-	}
-	else {
-		echo 'Deze BETA-test is voor u niet toegankelijk';
-	}
-	
 	\Taken\MLT\InstellingenModel::getAlleInstellingen();
 	
 	$query = $_GET['query'];
