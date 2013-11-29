@@ -551,22 +551,7 @@ HTML;
 	 * Geeft een blokje met maaltijdgegevens, aantal aanmeldingen en een
 	 * aanmeldknopje weer.
 	 */
-	public function ubb_maaltijd($parameters){ //TODO: deprecated
-		if(isset($parameters['maaltijd'])){
-			$id=$parameters['maaltijd'];
-		}else{
-			$id=$this->parseArray(array('[/maaltijd]'), array());
-		}
-
-		$id=trim($id);
-
-		if($id!='next' AND !preg_match('/\d+/', $id)){
-			return '[maaltijd] Geen maaltijdID opgegeven of ongeldig ID (id:'.mb_htmlentities($id).')';
-		}
-
-		require_once 'maaltijden/maaltijdcontent.class.php';
-		return MaaltijdContent::getMaaltijdubbtag($id);
-	/*
+	public function ubb_maaltijd($parameters){
 		if (isset($parameters['maaltijd'])) {
 			$mid = $parameters['maaltijd'];
 		}
@@ -608,7 +593,6 @@ HTML;
 		}
 		$ketzer = new \Taken\MLT\MaaltijdKetzerView($maaltijd, $aanmelding);
 		return $ketzer->fetch();
-	 */
 	}
 
 	public function ubb_offtopic(){
