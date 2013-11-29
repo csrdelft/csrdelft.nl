@@ -279,9 +279,8 @@ class ConversieModel {
 					$filter = $repetities[$row['abosoort']]->getAbonnementFilter();
 				}
 				if ($titel === 'Alpha-Cursus') {
-					$mrid = $rep_wo->getMaaltijdRepetitieId();
 					$titel = 'Alpha-cursus';
-					$crid = null;
+					$mrid = $rep_wo->getMaaltijdRepetitieId();
 				}
 				if ($titel === 'Donderdag') {
 					$titel .= 'maaltijd';
@@ -295,7 +294,7 @@ class ConversieModel {
 				if ($uid === 'x101') {
 					$uid = null;
 				}
-				if ($crid !== null) {
+				if ($titel !== 'Alpha-cursus') {
 					$corveetaak = \Taken\CRV\TakenModel::saveTaak(0, 3, $uid, $crid, $mid, date('Y-m-d', $datum), 0, 0);
 					for ($i = 0; $i < $gemailed; $i++) {
 						\Taken\CRV\TakenModel::updateGemaild($corveetaak);
