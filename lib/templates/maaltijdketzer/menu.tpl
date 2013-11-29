@@ -41,8 +41,8 @@
 	<li {if $actief == 'corveepunten'}class="active"{/if}>
 		<a href="/actueel/maaltijden/corveepunten/" title="Corveepunten">Corveepunten</a>
 	</li>
-	<li {if $actief == 'corveebeheer'}class="active"{/if}>
-		<a href="/actueel/maaltijden/corveebeheer/" title="Corveebeheer">Corveebeheer</a>
+	<li {if $actief == 'oudcorveebeheer'}class="active"{/if}>
+		<a href="/actueel/oudcorveebeheer/" title="oudcorveebeheer">oudcorveebeheer</a>
 	</li>
 	<li {if $actief == 'corveevoorkeuren'}class="active"{/if}>
 		<a href="/actueel/maaltijden/corveevoorkeurenlijst/" title="Corveevoorkeuren">Corveevoorkeuren</a>

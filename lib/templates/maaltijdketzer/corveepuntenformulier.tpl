@@ -1,6 +1,6 @@
 <h2 id="corveepuntenFormulier">{if $maal.formulier.type == "normaal"}Maaltijd{else}Huishoudelijke taak {/if}corveepunten bewerken</h2>
  
-<form name="puntenbewerk" action="/actueel/maaltijden/corveebeheer/" method="post">
+<form name="puntenbewerk" action="/actueel/oudcorveebeheer/" method="post">
 	<input type="hidden" name="actie" value="puntenbewerk" />
 	<input type="hidden" name="type" value="{$maal.formulier.type}" />
 	<input type="hidden" name="maalid" value="{$maal.formulier.id}" />

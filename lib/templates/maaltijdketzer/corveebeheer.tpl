@@ -1,12 +1,12 @@
-{assign var='actief' value='corveebeheer'}
+{assign var='actief' value='oudcorveebeheer'}
 {include file='maaltijdketzer/menu.tpl'}
 
-<h1>Corveebeheer</h1>
+<h1>oudcorveebeheer</h1>
 {if $maal.zelf.error!=''}<span class="waarschuwing">N.B.: {$maal.zelf.error|escape:'htmlall'}</span><br /><br />{/if}
 {if $maal.maaltijden|@count==0}
 	<p>&#8226; Helaas, er is binnenkort geen maaltijd op Confide.</p>
 {else}
-	<table class="maaltijden" id="corveebeheer" cellspacing="0" width="100%">
+	<table class="maaltijden" id="oudcorveebeheer" cellspacing="0" width="100%">
 		<tr>
 			<th>&nbsp;</th>
 			<th>Maaltijd begint om:</th>
@@ -26,13 +26,13 @@
 		{foreach from=$maal.maaltijden item=maaltijd name=corveebit}
 		<tr class="{if $maaltijd.datum<=$smarty.now}old{/if}{if $smarty.foreach.corveebit.index == 0} first{/if}" style="background-color: {cycle values="#e9e9e9, #fff"};{if $maal.formulier.id==$maaltijd.id}background-color: #bfb{/if}">
 			<td style="width:100px">
-				<a href="/actueel/maaltijden/corveebeheer/bewerk/{$maaltijd.id}#corveemaaltijdFormulier">{icon get="bewerken" title="Bewerk Maaltijd"}</a>					
-				<a href="/actueel/maaltijden/corveebeheer/takenbewerk/{$maaltijd.id}#corveetakenFormulier">{icon get="taken_bewerken" title="Bewerk Taken"}</a>
-				<a href="/actueel/maaltijden/corveebeheer/puntenbewerk/{$maaltijd.id}#corveepuntenFormulier">
+				<a href="/actueel/oudcorveebeheer/bewerk/{$maaltijd.id}#corveemaaltijdFormulier">{icon get="bewerken" title="Bewerk Maaltijd"}</a>					
+				<a href="/actueel/oudcorveebeheer/takenbewerk/{$maaltijd.id}#corveetakenFormulier">{icon get="taken_bewerken" title="Bewerk Taken"}</a>
+				<a href="/actueel/oudcorveebeheer/puntenbewerk/{$maaltijd.id}#corveepuntenFormulier">
 					{if !$maaltijd.is_toegekend}{icon get="punten_bewerken" title="Punten Toekennen"}{else}{icon get="punten_bewerken_toegekend" title="Punten Toegekend!"}{/if}
 				</a>
 				{if $maaltijd.type == 'corvee'}
-					<a href="/actueel/maaltijden/corveebeheer/verwijder/{$maaltijd.id}" onclick="return confirm('Weet u zeker dat u deze corveemaaltijd wilt verwijderen?')">{icon get="verwijderen"}</a>
+					<a href="/actueel/oudcorveebeheer/verwijder/{$maaltijd.id}" onclick="return confirm('Weet u zeker dat u deze corveemaaltijd wilt verwijderen?')">{icon get="verwijderen"}</a>
 				{/if}
 			</td>
 			<td>{$maaltijd.datum|date_format:$datumFormaat}</td>

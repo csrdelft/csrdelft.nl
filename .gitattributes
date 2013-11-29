@@ -38,12 +38,11 @@ htdocs/actueel/fotoalbum/verwerk.php -text
 htdocs/actueel/groepen/.htaccess -text
 htdocs/actueel/groepen/groep.php -text
 htdocs/actueel/groepen/groepen.php -text
-htdocs/actueel/maaltijden/.htaccess -text
-htdocs/actueel/maaltijden/corveebeheer.php -text
 htdocs/actueel/mededelingen/.htaccess -text
 htdocs/actueel/mededelingen/goedkeuren.php -text
 htdocs/actueel/mededelingen/index.php -text
 htdocs/actueel/mededelingen/top3overzicht.php -text
+htdocs/actueel/oudcorveebeheer.php -text
 htdocs/actueel/sjaarsacties.php -text
 htdocs/actueel/taken.php -text
 htdocs/android/get_user.php -text

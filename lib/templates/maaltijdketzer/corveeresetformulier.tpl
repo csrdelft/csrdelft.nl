@@ -26,7 +26,7 @@
 					{/if}
 				</td>
 				<td>
-					<a href="/actueel/maaltijden/corveebeheer/puntenbewerk/{$taak.maalid}#corveepuntenFormulier">
+					<a href="/actueel/oudcorveebeheer/puntenbewerk/{$taak.maalid}#corveepuntenFormulier">
 						{if $taak.tekst===null}
 							<span class="melding">Geen maaltijd gevonden..</span>
 						{else}

@@ -1,6 +1,6 @@
 <h2 id="corveemaaltijdFormulier">{if $maal.formulier.type == "normaal"}Maaltijdcorvee{else}Huishoudelijke taak{/if} {$maal.formulier.actie}</h2>
 
-<form action="/actueel/maaltijden/corveebeheer/" method="post">
+<form action="/actueel/oudcorveebeheer/" method="post">
 	<input type="hidden" name="actie" value="{$maal.formulier.actie}" />
 	<input type="hidden" name="type" value="{$maal.formulier.type}" />
 	<input type="hidden" name="maalid" value="{$maal.formulier.id}" />	

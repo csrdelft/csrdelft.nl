@@ -16,7 +16,6 @@ etc/gozerbot.ini
 etc/ldap.ini
 etc/mysql.ini
 etc/soccie.ini
-htdocs/actueel/maaltijden/test_corveebeheer.php
 htdocs/bot/.htaccess
 htdocs/download
 htdocs/enquete

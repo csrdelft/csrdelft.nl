@@ -21,7 +21,7 @@
 		<tr {if $maaltijd.datum<=$smarty.now}class="old"{/if} style="background-color: {cycle values="#e9e9e9, #fff"}">
 			<td>{$maaltijd.datum|date_format:$datumWeek}</td>
 			<td>{$maaltijd.datum|date_format:$datumWeekdag}</td>
-			<td><a href="{if $loginlid->hasPermission('P_MAAL_MOD')}/actueel/maaltijden/corveebeheer/{if $maaltijd.datum>=$smarty.now}takenbewerk/{$maaltijd.id}#corveetakenFormulier{else}puntenbewerk/{$maaltijd.id}#corveepuntenFormulier{/if}{else}/actueel/maaltijden/{/if}" title="{$maaltijd.tekst|truncate:20|escape:'html'}">{$maaltijd.datum|date_format:$datumVol}</a></td>
+			<td><a href="{if $loginlid->hasPermission('P_MAAL_MOD')}/actueel/oudcorveebeheer/{if $maaltijd.datum>=$smarty.now}takenbewerk/{$maaltijd.id}#corveetakenFormulier{else}puntenbewerk/{$maaltijd.id}#corveepuntenFormulier{/if}{else}/actueel/maaltijden/{/if}" title="{$maaltijd.tekst|truncate:20|escape:'html'}">{$maaltijd.datum|date_format:$datumVol}</a></td>
 			<td>{if $maaltijd.tp!=''}<span class="{if $maaltijd.tp==$liduid}mijzelf{/if}">{$maaltijd.tp|csrnaam}</span>{else}{if $maaltijd.type=='corvee'}{else}...{/if}{/if}</td>
 			<td>
 				{section name=kwalikoks loop=$maaltijd.kwalikoks}

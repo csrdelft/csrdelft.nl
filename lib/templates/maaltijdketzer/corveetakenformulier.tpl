@@ -1,6 +1,6 @@
 <h2 id="corveetakenFormulier">{if $maal.formulier.type == "normaal"}Maaltijdcorvee{else}Huishoudelijke {/if}taken bewerken</h2>
 
-<form name="takenbewerk" action="/actueel/maaltijden/corveebeheer/" method="post">
+<form name="takenbewerk" action="/actueel/oudcorveebeheer/" method="post">
 	<input type="hidden" name="actie" value="takenbewerk" />
 	<input type="hidden" name="type" value="{$maal.formulier.type}" />
 	<input type="hidden" name="maalid" value="{$maal.formulier.id}" />
@@ -123,7 +123,7 @@
 		{/if}
 		<tr>
 			<td>&nbsp;</td>
-			<td><input type="submit" name="opslaan" value="Opslaan" /> <input type="button" value="Opslaan & herlaad {if $maal.formulier.filter==1}zonder{else}met{/if} voorkeurenfilter" onClick="document.getElementById('filter').value={if $maal.formulier.filter==1}0{else}1{/if};document.forms['takenbewerk'].submit();" /> <input type="button" value="Herlaad {if $maal.formulier.filter==1}zonder{else}met{/if} voorkeurenfilter" onClick="document.getElementById('filter').value=0;location.href = '/actueel/maaltijden/corveebeheer/takenbewerk/{$maal.formulier.id}/{if $maal.formulier.filter==1}0{else}1{/if}#corveetakenFormulier';" /></td>
+			<td><input type="submit" name="opslaan" value="Opslaan" /> <input type="button" value="Opslaan & herlaad {if $maal.formulier.filter==1}zonder{else}met{/if} voorkeurenfilter" onClick="document.getElementById('filter').value={if $maal.formulier.filter==1}0{else}1{/if};document.forms['takenbewerk'].submit();" /> <input type="button" value="Herlaad {if $maal.formulier.filter==1}zonder{else}met{/if} voorkeurenfilter" onClick="document.getElementById('filter').value=0;location.href = '/actueel/oudcorveebeheer/takenbewerk/{$maal.formulier.id}/{if $maal.formulier.filter==1}0{else}1{/if}#corveetakenFormulier';" /></td>
 		</tr>
 	</table>
 </form>
