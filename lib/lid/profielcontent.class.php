@@ -56,7 +56,7 @@ class ProfielContent extends SimpleHTML {
 		}
 
 		$profiel->assign('corveetaken', $this->lid->getCorveeTaken());
-		$profiel->assign('corveevoorkeuren', $this->lid->getCorveeVoorkeuren()); //TODO: deprecated
+		$profiel->assign('corveevoorkeuren', $this->lid->getCorveeVoorkeuren());
 		$profiel->assign('startpuntentelling',strtotime(Corveeinstellingen::get('startpuntentelling')));
 		require_once 'bibliotheek/catalogus.class.php';
 		$profiel->assign('boeken', Catalogus::getBoekenByUid($this->lid->getUid(), 'eigendom'));

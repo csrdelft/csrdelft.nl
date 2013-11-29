@@ -6,7 +6,6 @@
 # Dataklassen voor de agenda.
 # -------------------------------------------------------------------
 
-require_once 'maaltijden/maaltrack.class.php'; //TODO: deprecated
 require_once 'taken/model/MaaltijdenModel.class.php';
 require_once 'taken/model/TakenModel.class.php';
 
@@ -187,11 +186,6 @@ class Agenda {
 		}
 
 		if(Instelling::get('agenda_toonMaaltijden')=='ja'){ // Maaltijden ophalen
-			//TODO: deprecated
-			$maaltrack = new Maaltrack();
-			// Ranzige hack met $van+1, anders neemt de maaltijdketzer de huidige tijd
-			$result = array_merge($result, $maaltrack->getMaaltijden($van+1, $tot, $filter, true, null, false));
-			
 			$result = array_merge($result, Taken\MLT\MaaltijdenModel::getMaaltijdenVoorAgenda($van, $tot));
 		}
 

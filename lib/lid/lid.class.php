@@ -408,35 +408,19 @@ class Lid implements Serializable, Agendeerbaar{
 		return count($this->getKinderen());
 	}
 
-	//TODO: deprecated
-	//corvee_voorkeuren splitsen en teruggeven als array
+	/**
+	 * Corveevoorkeuren opzoeken en teruggeven van dit lid
+	 */
 	public function getCorveeVoorkeuren(){
-		$corvee_voorkeuren = $this->profiel['corvee_voorkeuren'];
-		$return = array(
-			'lichteklus' => $corvee_voorkeuren[0],
-			'zwareklus' => $corvee_voorkeuren[1],
-			'wo_kok' => $corvee_voorkeuren[2],
-			'wo_afwas' => $corvee_voorkeuren[3],
-			'do_kok' => $corvee_voorkeuren[4],
-			'do_afwas' => $corvee_voorkeuren[5],
-			'theedoek' => $corvee_voorkeuren[6],
-			'afzuigkap' => $corvee_voorkeuren[7],
-			'frituur' => $corvee_voorkeuren[8],
-			'keuken' => $corvee_voorkeuren[9]
-		);
-		return $return;
+		return \Taken\CRV\VoorkeurenModel::getVoorkeurenVoorLid($this->getUid());
 	}
 
 	/**
-	 * Corvee punten, vrijstellingen en alle bekende corveetaken opzoeken en teruggeven in een array
+	 * Corveetaken opzoeken en teruggeven van dit lid
 	 */
 	public function getCorveeTaken(){
-		//return \Taken\CRV\TakenModel::getTakenVoorLid($this->getUid());
-		return Maaltrack::getCorveeTaken($this->getUid()); //TODO: deprecated
+		return \Taken\CRV\TakenModel::getTakenVoorLid($this->getUid());
 	}
-
-	//TODO: deprecated
-	public function isKwalikok(){ return $this->profiel['corvee_punten']==='1'; }
 
 	//deze willen we hebben om vanuit templates handig instellingen op te halen.
 	public function instelling($key){ return Instelling::get($key); }

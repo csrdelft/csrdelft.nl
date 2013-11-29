@@ -49,16 +49,6 @@ define('COURANT_TEMPLATE', 'courant.tpl');
 # wordt gebruikt om pagina's alleen op Confide te laten zien
 define('CONFIDE_IP', '80.112.180.123');
 
-//TODO: deprecated
-# hoe ver van tevoren worden maaltijden getoond?
-define('MAALTIJD_LIJST_MAX_TOT', 86400*7*4);
-# hoe lang van tevoren mogen leden iemand anders voor een maaltijd inschrijven?
-define('MAALTIJD_PROXY_MAX_TOT', 86400*2);
-# hoe lang van tevoren magen beheerders iemand anders voor een maaltijd inschrijven?
-define('MAALTIJD_PROXY_MAX_TOT_BEHEERDER', 86400*8);
-# wat is het standaard aantal max inschrijvingen voor een maaltijd?
-define('MAX_MAALTIJD', 100);
-
 # hoeveel dagen van tevoren worden agendapunten standaard getoond?
 define('AGENDA_LIJST_DEFAULT_DAGEN', 70);
 

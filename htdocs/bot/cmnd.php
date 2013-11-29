@@ -472,7 +472,7 @@ exit(0);
 # extra helper-functies
 #
 
-function maalaanaf($uid, $params, $aanaf) {
+function maalaanaf($uid, $params, $aanaf) {/* //TODO: deprecated
     global $lid,$db;
     require_once('maaltijden/maaltrack.class.php');
     $maaltrack = new MaalTrack();
@@ -500,7 +500,7 @@ function maalaanaf($uid, $params, $aanaf) {
     # zo niet, dan foutmelding teruggeven
     if ($proxyuid != '') return array($maaltrack->getProxyError());
     else return array($maaltrack->getError());
-}
+*/}
 
 function anderprofiel($getuid) {
     global $lid;

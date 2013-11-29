@@ -30,7 +30,7 @@ class MaaltijdVoorkeurContent extends SimpleHTML {
 		//de html template in elkaar draaien en weergeven
 		$profiel=new Smarty_csr();
 		$profiel->caching=false;
-
+/* //TODO: deprecated
 		//Dingen ophalen voor....
 		//...de abonnementen
 		$aMaal['abo']['abos']=$this->_maaltrack->getAbo();
@@ -44,7 +44,7 @@ class MaaltijdVoorkeurContent extends SimpleHTML {
 
 		//arrays toewijzen en weergeven
 		$profiel->assign('maal', $aMaal);
-		$profiel->display('maaltijdketzer/voorkeuren.tpl');
+		$profiel->display('maaltijdketzer/voorkeuren.tpl');*/
 	}
 }
 
