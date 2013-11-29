@@ -262,10 +262,7 @@ class TakenModel {
 					$taak->setCorveeRepetitieId(null);
 				}
 				$taak->setFunctieId($fid);
-				if ($taak->getLidId() !== $uid) {
-					$taak->setWanneerGemaild('');
-					$taak->setLidId($uid);
-				}
+				self::taakToewijzenAanLid($taak, $uid);
 				$taak->setMaaltijdId($mid);
 				$taak->setDatum($datum);
 				$taak->setPunten($punten);

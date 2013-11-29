@@ -27,7 +27,8 @@ class TaakFormView extends \SimpleHtml {
 		}
 		
 		$formFields[] = new \SelectField('functie_id', $fid, 'Functie', $functieNamen, $functieSelectie);
-		$formFields[] = new \LidField('lid_id', $uid, 'Lid');
+		$formFields['lid'] = new \LidField('lid_id', $uid, 'Lid');
+		$formFields['lid']->title = 'Bij het wijzigen van het toegewezen lid worden ook de corveepunten aan het nieuwe lid gegeven.';
 		$formFields[] = new \HiddenField('crv_repetitie_id', $crid);
 		$formFields[] = new \HiddenField('maaltijd_id', $mid);
 		$formFields[] = new \DatumField('datum', $datum, 'Datum', date('Y')+2, date('Y')-2);
