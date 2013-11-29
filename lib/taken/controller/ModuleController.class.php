@@ -38,8 +38,7 @@ class ModuleController extends \ACLController {
 				'corvee_puntenbeheer' => 'P_CORVEE_MOD',
 				'corvee_vrijstellingen' => 'P_CORVEE_MOD',
 				'corvee_functies' => 'P_CORVEE_MOD',
-				'corvee_instellingen' => 'P_MAAL_MOD', // shortcut
-				'corvee_conversie' => 'P_ADMIN'
+				'corvee_instellingen' => 'P_MAAL_MOD' // shortcut
 			);
 			$this->action = ''; // default
 		}
