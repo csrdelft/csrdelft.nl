@@ -85,6 +85,9 @@ function taken_post_form(event) {
 }
 
 function taken_submit_dropdown(form) {
+	if ($(form).hasClass('popup')) {
+		taken_loading();
+	}
 	taken_ajax(null, $(form).attr('action'), taken_handle_response, $(form).serialize());
 	taken_reset_form(form);
 }

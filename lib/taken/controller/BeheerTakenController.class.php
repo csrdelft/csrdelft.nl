@@ -106,21 +106,27 @@ class BeheerTakenController extends \ACLController {
 		if (array_key_exists('crid', $_POST)) {
 			$crid = intval($_POST['crid']);
 			$repetitie = CorveeRepetitiesModel::getRepetitie($crid);
-			// start at first occurence
-			$datum = time();
-			$shift = $repetitie->getDagVanDeWeek() - date('w', $datum) + 7;
-			$shift %= 7;
-			if ($shift > 0) {
-				$datum = strtotime('+'. $shift .' days', $datum);
-			}
-			$beginDatum = date('Y-m-d', $datum);
-			if ($repetitie->getPeriodeInDagen() > 0) {
-				$this->content = new RepetitieCorveeFormView($repetitie, $beginDatum, $beginDatum); // fetches POST values itself 
+			if ($mid === null) {
+				// start at first occurence
+				$datum = time();
+				$shift = $repetitie->getDagVanDeWeek() - date('w', $datum) + 7;
+				$shift %= 7;
+				if ($shift > 0) {
+					$datum = strtotime('+'. $shift .' days', $datum);
+				}
+				$beginDatum = date('Y-m-d', $datum);
+				
+				if ($repetitie->getPeriodeInDagen() > 0) {
+					$this->content = new RepetitieCorveeFormView($repetitie, $beginDatum, $beginDatum); // fetches POST values itself
+					return;
+				}
 			}
 			else {
-				$functie = FunctiesModel::getFunctie($repetitie->getFunctieId());
-				$this->content = new TaakFormView(0, $functie->getFunctieId(), null, $crid, $mid, $beginDatum, $functie->getStandaardPunten(), 0); // fetches POST values itself
+				$maaltijd = \Taken\MLT\MaaltijdenModel::getMaaltijd($mid);
+				$beginDatum = $maaltijd->getDatum();
 			}
+			$functie = FunctiesModel::getFunctie($repetitie->getFunctieId());
+			$this->content = new TaakFormView(0, $functie->getFunctieId(), null, $crid, $mid, $beginDatum, $functie->getStandaardPunten(), 0); // fetches POST values itself
 		}
 		else {
 			$taak = new CorveeTaak();
