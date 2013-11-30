@@ -49,7 +49,7 @@ class MijnCorveeController extends \ACLController {
 	}
 	
 	public function action_rooster() {
-		$rooster = TakenModel::getRoosterMatrix(TakenModel::getAlleTaken());
+		$rooster = TakenModel::getRoosterMatrix(TakenModel::getKomendeTaken());
 		$this->content = new CorveeRoosterView($rooster);
 		$this->content = new \csrdelft($this->getContent());
 		$this->content->addStylesheet('taken.css');
