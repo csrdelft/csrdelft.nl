@@ -238,7 +238,7 @@
 			<div class="label">Abo's:</div>
 			<ul class="nobullets data">
 			{foreach from=$profhtml.abos item=abonnement}
-				<li>{$abonnement->getMaaltijdRepetitie()->getStandaardTitel()} op {$abonnement->getMaaltijdRepetitie()->getDagVanDeWeekText()} ({$abonnement->getMaaltijdRepetitie()->getPeriodeInDagenText()})</li>
+				<li>{$abonnement->getMaaltijdRepetitie()->getStandaardTitel()}</li>
 			{/foreach}
 			</ul>
 			<br />
