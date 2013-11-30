@@ -26,7 +26,7 @@ N.B. Als u kiest voor "Alles bijwerken" worden alle corveetaken die behoren tot 
 	<thead>
 		<tr>
 			<th style="width: 80px;">Wijzig</th>
-			<th>Omschrijving</th>
+			<th>Functie</th>
 			<th>Dag</th>
 			<th>Periode</th>
 			<th>{icon get="tick" title="Voorkeurbaar"}</th>

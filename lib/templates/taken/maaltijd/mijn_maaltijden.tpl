@@ -13,8 +13,9 @@ In dat geval heeft u de mogelijkheid de maaltijdlijst te bekijken.
 <p>
 Als u staat ingeschreven voor een maaltijd, kunt u op uw naam gasten aanmelden voor de maaltijd.
 Vul in het vak 'gasten' het aantal in door erop te klikken.
-Daarna kunt u een opmerking maken over eventuele allergiën van uw gast(en).
-Dit kan alleen als de maaltijd nog niet is gesloten. Daarna moet u contact opnemen met de kok!
+Ook kunt u een opmerking maken over eventuele allergiën van uw gast(en).
+Dit kan alleen als de maaltijd nog niet is gesloten.
+Daarna moet u contact opnemen met de koks!
 </p>
 <p>
 N.B. De maaltijd sluit op de dag van de maaltijd rond 15:00 (wanneer de koks de lijst met aanmeldingen uitprinten).
