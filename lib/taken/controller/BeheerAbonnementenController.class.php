@@ -62,9 +62,8 @@ class BeheerAbonnementenController extends \ACLController {
 		$formField = new \LidField('voor_lid', null, null, 'allepersonen'); // fetches POST values itself
 		if ($formField->valid()) {
 			$uid = $formField->getValue();
-			$repetities = MaaltijdRepetitiesModel::getAlleRepetities();
 			$matrix = array();
-			$matrix[$uid] = AbonnementenModel::getAbonnementenVoorLid($uid, $repetities);
+			$matrix[$uid] = AbonnementenModel::getAbonnementenVoorLid($uid, true);
 			$this->content = new BeheerAbonnementenView($matrix);
 		}
 		else {

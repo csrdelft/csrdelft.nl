@@ -192,13 +192,30 @@ class VoorkeurenModel {
 	 * Called when a CorveeRepetitie is being deleted.
 	 * This is only possible after all CorveeVoorkeuren are deleted of this CorveeRepetitie (db foreign key)
 	 * 
-	 * @return boolean success
+	 * @return int amount of deleted voorkeuren
 	 */
 	public static function verwijderVoorkeuren($crid) {
 		if (!is_int($crid) || $crid <= 0) {
 			throw new \Exception('Verwijder voorkeuren faalt: Invalid $crid ='. $crid);
 		}
 		return self::deleteVoorkeuren($crid);
+	}
+	
+	/**
+	 * Called when a Lid is being made Lid-af.
+	 * 
+	 * @return int amount of deleted voorkeuren
+	 */
+	public static function verwijderVoorkeurenVoorLid($uid) {
+		$voorkeuren = self::getVoorkeurenVoorLid($uid);
+		$aantal = 0;
+		foreach ($voorkeuren as $voorkeur) {
+			$aantal += self::deleteVoorkeuren($voorkeur->getCorveeRepetitieId(), $uid);
+		}
+		if (sizeof($voorkeuren) !== $aantal) {
+			throw new \Exception('Niet alle voorkeuren zijn uitgeschakeld!');
+		}
+		return $aantal;
 	}
 	
 	private static function deleteVoorkeuren($crid, $uid=null) {

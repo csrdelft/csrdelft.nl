@@ -13,11 +13,11 @@ class CorveeRepetitiesModel {
 	public static function getVoorkeurbareRepetities($groupById=false) {
 		$repetities = self::loadRepetities('voorkeurbaar = true');
 		if ($groupById) {
-			$repById = array();
+			$result = array();
 			foreach ($repetities as $repetitie) {
-				$repById[$repetitie->getCorveeRepetitieId()] = $repetitie;
+				$result[$repetitie->getCorveeRepetitieId()] = $repetitie;
 			}
-			return $repById;
+			return $result;
 		}
 		return $repetities;
 	}

@@ -241,7 +241,7 @@ class TakenModel {
 	 * @return CorveeTaak[]
 	 */
 	public static function getTakenVoorLid($uid) {
-		return self::loadTaken('verwijderd = false AND lid_id = ?', array($uid));	
+		return self::loadTaken('verwijderd = false AND lid_id = ?', array($uid));
 	}
 	
 	/**
@@ -249,8 +249,8 @@ class TakenModel {
 	 * 
 	 * @return CorveeTaak[]
 	 */
-	public static function getKomendeTakenVoorLid() {
-		return self::loadTaken('verwijderd = false AND lid_id = ? AND datum >= ?', array(\LoginLid::instance()->getUid(), date('Y-m-d')));
+	public static function getKomendeTakenVoorLid($uid) {
+		return self::loadTaken('verwijderd = false AND lid_id = ? AND datum >= ?', array($uid, date('Y-m-d')));
 	}
 	
 	public static function saveTaak($tid, $fid, $uid, $crid, $mid, $datum, $punten, $bonus_malus) {
@@ -308,6 +308,17 @@ class TakenModel {
 		$sql.= ' SET verwijderd = true';
 		$sql.= ' WHERE datum < ?';
 		$values = array(date('Y-m-d'));
+		$db = \CsrPdo::instance();
+		$query = $db->prepare($sql, $values);
+		$query->execute($values);
+		return $query->rowCount();
+	}
+	
+	public static function verwijderTakenVoorLid($uid) {
+		$sql = 'UPDATE crv_taken';
+		$sql.= ' SET lid_id = ?';
+		$sql.= ' WHERE lid_id = ? AND datum >= ?';
+		$values = array(null, $uid, date('Y-m-d'));
 		$db = \CsrPdo::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);

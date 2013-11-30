@@ -172,6 +172,11 @@ class AanmeldingenModel {
 		return $lijst;
 	}
 	
+	public static function getRecenteMaaltijdenVoorLid($uid) {
+		$maaltijdenById = MaaltijdenModel::getRecenteMaaltijden();
+		return AanmeldingenModel::getAanmeldingenVoorLid($maaltijdenById, $uid);
+	}
+	
 	public static function getAanmeldingenVoorLid($maaltijdenById, $uid) {
 		if (empty($maaltijdenById)) {
 			return $maaltijdenById; // array()

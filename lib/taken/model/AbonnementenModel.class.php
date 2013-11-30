@@ -3,6 +3,7 @@ namespace Taken\MLT;
 
 require_once 'taken/model/entity/MaaltijdAbonnement.class.php';
 require_once 'taken/model/AanmeldingenModel.class.php';
+require_once 'taken/model/MaaltijdRepetitiesModel.class.php';
 
 /**
  * AbonnementenModel.class.php	| 	P.W.G. Brussee (brussee@live.nl)
@@ -16,10 +17,15 @@ class AbonnementenModel {
 	 * van de meegegeven maaltijdrepetities.
 	 * 
 	 * @param string $uid
-	 * @param MaaltijdRepetitie[] $repetities
 	 * @return MaaltijdAbonnement[]
 	 */
-	public static function getAbonnementenVoorLid($uid, $repetities) {
+	public static function getAbonnementenVoorLid($uid, $alles=false) {
+		if ($alles) {
+			$repetities = MaaltijdRepetitiesModel::getAlleRepetities(true); // grouped by mrid
+		}
+		else {
+			$repetities = MaaltijdRepetitiesModel::getAbonneerbareRepetitiesVoorLid(\LoginLid::instance()->getUid()); // grouped by mrid
+		}
 		$repById = array();
 		foreach ($repetities as $repetitie) { // group by mrid
 			$repById[$repetitie->getMaaltijdRepetitieId()] = $repetitie;
@@ -284,13 +290,31 @@ class AbonnementenModel {
 	 * This is only possible after all MaaltijdAanmeldingen are deleted of this MaaltijdAbonnement,
 	 * by deleting the Maaltijden (db foreign key door_abonnement)
 	 * 
-	 * @return boolean success
+	 * @return int amount of deleted abos
 	 */
 	public static function verwijderAbonnementen($mrid) {
 		if (!is_int($mrid) || $mrid < 0) {
 			throw new \Exception('Verwijder abonnementen faalt: Invalid $mrid ='. $mrid);
 		}
 		return self::deleteAbonnementen($mrid);
+	}
+	
+	/**
+	 * Called when a Lid is being made Lid-af.
+	 * All linked MaaltijdAanmeldingen are deleted of this MaaltijdAbonnement.
+	 * 
+	 * @return int amount of deleted abos
+	 */
+	public static function verwijderAbonnementenVoorLid($uid) {
+		$abos = self::getAbonnementenVoorLid($uid, true);
+		$aantal = 0;
+		foreach ($abos as $abo) {
+			$aantal += self::deleteAbonnementen($abo->getMaaltijdRepetitieId(), $uid);
+		}
+		if (sizeof($abos) !== $aantal) {
+			setMelding('Niet alle abonnementen zijn uitgeschakeld!', -1);
+		}
+		return $aantal;
 	}
 	
 	private static function deleteAbonnementen($mrid, $uid=null) {

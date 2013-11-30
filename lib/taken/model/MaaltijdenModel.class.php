@@ -54,15 +54,29 @@ class MaaltijdenModel {
 	}
 	
 	/**
-	 * Haalt de maaltijden op die beschikbaar zijn voor aanmelding voor het lid in de komende maand.
+	 * Haalt de maaltijden op die beschikbaar zijn voor aanmelding voor het lid in de ingestelde periode vooraf.
 	 * 
 	 * @param string $uid
 	 * @return Maaltijd[]
 	 */
 	public static function getKomendeMaaltijdenVoorLid($uid) {
-		$maaltijden = self::loadMaaltijden('verwijderd = false AND datum >= ? AND datum <= ?', array(date('Y-m-d'), date('Y-m-d', strtotime('+1 month'))));
+		$maaltijden = self::loadMaaltijden('verwijderd = false AND datum >= ? AND datum <= ?', array(date('Y-m-d'), date('Y-m-d', strtotime($GLOBALS['maaltijden_ketzer_vooraf']))));
 		$maaltijden = self::filterMaaltijdenVoorLid($maaltijden, $uid);
 		return $maaltijden;
+	}
+	
+	/**
+	 * Haalt de maaltijden op in de ingestelde periode achteraf.
+	 * 
+	 * @return Maaltijd[]
+	 */
+	public static function getRecenteMaaltijden() {
+		$maaltijden = self::loadMaaltijden('verwijderd = false AND datum <= ?', array(date('Y-m-d', strtotime($GLOBALS['maaltijden_recent_lidprofiel']))));
+		$maaltijdenById = array();
+		foreach ($maaltijden as $maaltijd) {
+			$maaltijdenById[$maaltijd->getMaaltijdId()] = $maaltijd;
+		}
+		return $maaltijdenById;
 	}
 	
 	/**

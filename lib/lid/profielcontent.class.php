@@ -36,14 +36,8 @@ class ProfielContent extends SimpleHTML {
 		require_once('groepen/groepcontent.class.php');
 		$profhtml['groepen']=new GroepenProfielContent($this->lid->getUid());
 
-		$profhtml['abos']=array();
-		require_once 'maaltijden/maaltrack.class.php';
-		require_once 'maaltijden/maaltijd.class.php';
-		$maaltrack=new Maaltrack();
-		$profhtml['abos']=$maaltrack->getAbo($this->lid->getUid());
-		$profhtml['recenteMaaltijden']=Maaltijd::getRecenteMaaltijden($this->lid->getUid());
-
-
+		$profhtml['abos'] = \Taken\MLT\AbonnementenModel::getAbonnementenVoorLid($this->lid->getUid());
+		$profhtml['recenteMaaltijden'] = \Taken\MLT\AanmeldingenModel::getRecenteMaaltijdenVoorLid($this->lid->getUid());
 
 		//de html template in elkaar draaien en weergeven
 		$profiel=new Smarty_csr();
@@ -57,7 +51,9 @@ class ProfielContent extends SimpleHTML {
 
 		$profiel->assign('corveetaken', $this->lid->getCorveeTaken());
 		$profiel->assign('corveevoorkeuren', $this->lid->getCorveeVoorkeuren());
-		$profiel->assign('startpuntentelling',strtotime(Corveeinstellingen::get('startpuntentelling')));
+		$profiel->assign('corveevrijstelling', $this->lid->getCorveeVrijstelling());
+		$profiel->assign('corveekwalificaties', $this->lid->getCorveeKwalificaties());
+
 		require_once 'bibliotheek/catalogus.class.php';
 		$profiel->assign('boeken', Catalogus::getBoekenByUid($this->lid->getUid(), 'eigendom'));
 		$profiel->assign('gerecenseerdeboeken', Catalogus::getBoekenByUid($this->lid->getUid(),'gerecenseerd'));

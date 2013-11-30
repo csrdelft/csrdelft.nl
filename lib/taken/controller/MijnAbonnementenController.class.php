@@ -36,8 +36,7 @@ class MijnAbonnementenController extends \ACLController {
 	}
 	
 	public function action_mijn() {
-		$repetities = MaaltijdRepetitiesModel::getAbonneerbareRepetitiesVoorLid(\LoginLid::instance()->getUid()); // grouped by mrid
-		$abonnementen = AbonnementenModel::getAbonnementenVoorLid(\LoginLid::instance()->getUid(), $repetities);
+		$abonnementen = AbonnementenModel::getAbonnementenVoorLid(\LoginLid::instance()->getUid());
 		$this->content = new MijnAbonnementenView($abonnementen);
 		$this->content = new \csrdelft($this->getContent());
 		$this->content->addStylesheet('taken.css');

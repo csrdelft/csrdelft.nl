@@ -567,21 +567,8 @@ class ProfielStatus extends Profiel{
 	 * @return string changelogregel
 	 */
 	private function disableMaaltijdabos(){
-		$changelog='';
-	
-		require_once 'maaltijden/maaltrack.class.php';
-		$maaltrack = new MaalTrack();
-		if($abos = $maaltrack->getAbo($this->lid->getUid())){
-			$changelog = 'Afmelden abo\'s: ';
-			foreach($abos as $abo => $abonaam){
-				if($maaltrack->delAbo($abo, $this->lid->getUid())){
-					$changelog.= $abonaam.' uitgezet. ';
-				}else{
-					$changelog.= $abonaam.' staat nog aan. ';
-				}
-			}
-		}
-		return $changelog;
+		$aantal = \Taken\MLT\AbonnementenModel::verwijderAbonnementenVoorLid($this->lid->getUid());
+		return 'Afmelden abo\'s: '. $aantal .' uitgezet. ';
 	}
 
 	/**
@@ -592,27 +579,28 @@ class ProfielStatus extends Profiel{
 	 * @return string changelogregel
 	 */
 	private function removeToekomstigeCorvee($oudestatus, $nieuwestatus){
-		//f.t.corvee verwijderen
-		$changelog='';
-		require_once 'maaltijden/maaltrack.class.php';
-		$maaltrack = new MaalTrack();
-		if($taken = $maaltrack->removeToekomstigeCorveetaken($this->lid->getUid())){
-			$changelog = 'Verwijderde corveetaken:';
+		$uid = $this->bewerktLid->getUid();
+		$taken = Taken\CRV\TakenModel::getKomendeTakenVoorLid($uid);
+		$aantal = Taken\CRV\TakenModel::verwijderTakenVoorLid($uid);
+		if (sizeof($taken) !== $aantal) {
+			setMelding('Niet alle toekomstige corveetaken zijn verwijderd!', -1);
+		}
+		$changelog = 'Verwijderde corveetaken:';
+		if ($aantal > 0) {
 			foreach($taken as $taak){
-				$changelog .= '[br]'.strftime("%a %H:%M %e-%m-%Y", $taak['datum']).' '.$taak['taak'].' '.$taak['tekst'].' ('.$taak['punten'].')';
- 			}
-
+				$changelog .= '[br]'. strftime('%a %e-%m-%Y', $taak->getDatum()) .' '. $taak->getCorveeFunctie()->getNaam() .' ('. $taak->getPunten() .')';
+			}
 			//corveeceasar mailen over vrijvallende corveetaken.
-			$template=file_get_contents(LIB_PATH.'/templates/mails/toekomstigcorveeverwijderd.mail');
-			$values=array(
+			$template = file_get_contents(LIB_PATH.'/templates/mails/toekomstigcorveeverwijderd.mail');
+			$values = array(
 				'naam' => $this->bewerktLid->getNaamLink('full','plain'),
-				'uid' => $this->bewerktLid->getUid(),
+				'uid' => $uid,
 				'oudestatus' => $oudestatus,
 				'nieuwestatus' => $nieuwestatus,
-				'changelog' => str_replace('[br]', "\n", $changelog),
-				'admin_naam' => LoginLid::instance()->getLid()->getNaam());
-
-			$mail=new TemplatedMail('corvee@csrdelft.nl', 'Lid-af: toekomstig corvee verwijderd', $template);
+				'changelog' => str_replace('[br]', '\n', $changelog),
+				'admin_naam' => LoginLid::instance()->getLid()->getNaam()
+			);
+			$mail = new TemplatedMail('corvee@csrdelft.nl', 'Lid-af: toekomstig corvee verwijderd', $template);
 			$mail->addBcc("pubcie@csrdelft.nl");
 			$mail->setValues($values);
 			$mail->send();

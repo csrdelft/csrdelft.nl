@@ -409,14 +409,28 @@ class Lid implements Serializable, Agendeerbaar{
 	}
 
 	/**
-	 * Corveevoorkeuren opzoeken en teruggeven van dit lid
+	 * CorveeKwalificaties opzoeken en teruggeven van dit lid
+	 */
+	public function getCorveeKwalificaties(){
+		return Taken\CRV\KwalificatiesModel::getKwalificatiesVanLid($this->getUid());
+	}
+
+	/**
+	 * CorveeVrijstelling opzoeken en teruggeven van dit lid
+	 */
+	public function getCorveeVrijstelling(){
+		return \Taken\CRV\VrijstellingenModel::getVrijstelling($this->getUid());
+	}
+
+	/**
+	 * CorveeVoorkeuren opzoeken en teruggeven van dit lid
 	 */
 	public function getCorveeVoorkeuren(){
 		return \Taken\CRV\VoorkeurenModel::getVoorkeurenVoorLid($this->getUid());
 	}
 
 	/**
-	 * Corveetaken opzoeken en teruggeven van dit lid
+	 * CorveeTaken opzoeken en teruggeven van dit lid
 	 */
 	public function getCorveeTaken(){
 		return \Taken\CRV\TakenModel::getTakenVoorLid($this->getUid());

@@ -205,96 +205,44 @@
 		</div>
 	{/if}
 
-	{if $loginlid->getUid()==$profhtml.uid OR $profhtml.eetwens!='' OR is_array($profhtml.recenteMaaltijden) OR $corveetaken!==null}
+	{if $loginlid->getUid()==$profhtml.uid OR $loginlid->hasPermission('P_MAAL_MOD')}
 	<div class="profielregel" id="maaltijden">
 		<div class="gegevens">
-			{if $profhtml.eetwens!=''}
-				<div class="label">Dieet:</div>
-				<div class="data">{$profhtml.eetwens}{if $loginlid->getUid()==$profhtml.uid}&nbsp;
-				 <a href="/actueel/maaltijden/voorkeuren/" class="knop" ><img src="{$csr_pics}forum/bewerken.png" title="Maaltijdvoorkeuren bewerken" /></a>
-			{/if}</div>
-				<br />
+			<div class="label">Recent:</div>
+			<div class="data">
+			{if $profhtml.recenteMaaltijden}
+				<table id="recenteMaaltijden">
+					{foreach from=$profhtml.recenteMaaltijden item=maaltijd}
+						<tr>
+							<td>{$maaltijd->getBeginMoment()|date_format:"%a %d-%m-%Y %H:%i"}</td>
+							<td>{$maaltijd->getTitel()}</td>
+						</tr>
+					{/foreach}
+				</table>
+			{else}
+				<span style="color: gray;">U heeft zich in het recente verleden niet aangemeld voor een maaltijd.</span>
 			{/if}
-			{if $profhtml.abos|@count > 0}
-				<div class="label">Abo's:</div>
-				<ul class="nobullets data">
-				{foreach from=$profhtml.abos item=abo}
-					<li>{$abo}</li>
-				{/foreach}
-				</ul>
-				<br />
-			{/if}
-			{if $loginlid->getUid()==$profhtml.uid OR $loginlid->hasPermission('P_MAAL_MOD')}
-				{if is_array($profhtml.recenteMaaltijden)}
-					<div class="label">Recent:</div>
-					<div class="data">
-						<table id="recenteMaaltijden">
-							{foreach from=$profhtml.recenteMaaltijden item=maaltijd}
-								<tr>
-									<td><span title="{$maaltijd.datum|date_format:"%Y-%m-%d"}">{$maaltijd.datum|date_format:"%a"}</span></td>
-									<td><span title="{$maaltijd.datum|date_format:"%Y-%m-%d"}">{$maaltijd.datum|date_format:"%d-%m"}</span></td>
-									<td> - {$maaltijd.tekst|truncate:50|escape:'html'}</td>
-								</tr>
-							{foreachelse}
-								<tr><td>Geen maaltijden</td></tr>
-							{/foreach}
-						</table>
-					</div><br />
-				{/if}
-			{/if}
-			{if $profiel->isLid() AND $corveetaken.aantal!==null}
-				<div class="label" title="Punten van vorig jaar + punten uit taken + bonuspunten">Corveepunten:</div>
-				<div class="data" title="Punten van vorig jaar + punten uit taken + bonuspunten">{$corveetaken.lid.corvee_punten_totaal} punten</div>
-				<div class="label">Bonuspunten:</div>
-				<div class="data">{$corveetaken.lid.corvee_punten_bonus} punten</div>
-				<div class="label">Vrijstelling:</div>
-				<div class="data">{$corveetaken.lid.corvee_vrijstelling} %</div>
-				<br />
-			{/if}
-			{if $profiel->isLid()}
-				<div class="half">
-					<div class="label">Voorkeuren:</div>
-					<ul class="nobullets data" title="Ik kom graag deze taken doen">
-						{if $corveevoorkeuren.do_kok}	<li>Donderdag koken</li>{/if}
-						{if $corveevoorkeuren.do_afwas}	<li>Donderdag afwassen</li>{/if}
-						{if $corveevoorkeuren.theedoek}	<li>Theedoeken wassen</li>{/if}
-						{if $corveevoorkeuren.afzuigkap}<li>Afzuigkap schoonmaken</li>{/if}
-						{if $corveevoorkeuren.frituur}	<li>Frituur schoonmaken</li>{/if}
-						{if $corveevoorkeuren.keuken}	<li>Keuken schoonmaken</li>{/if}
-						{if $corveevoorkeuren.lichteklus}	<li>Lichte klussen</li>{/if}
-						{if $corveevoorkeuren.zwareklus}	<li>Zware klussen</li>{/if}
-					</ul>
-				</div>
-				<div>
-					{if $loginlid->getUid()==$corveetaken.lid.uid}
-						<a href="/actueel/maaltijden/voorkeuren/" class="knop" >
-							<img src="{$csr_pics}forum/bewerken.png" title="Corveevoorkeuren bewerken" />
-						</a>
-					{/if}
-				</div><div style="clear: left;"></div>
-				<br />
-			{/if}
-			{if $profiel->isLid() AND $corveetaken.aantal!==null}
-				<div class="label">Taken:</div>
-				<div class="data">
-					<table id="corveeTaken">
-						{foreach from=$corveetaken.taken item=taak}
-							<tr{if $taak.datum<$startpuntentelling} class="old"{/if}>
-								{*datum, taak,
-								maalid, tekst, type, punten_toegekend, type,  *}
-								<td><span title="{$taak.datum|date_format:"%Y-%m-%d"}">{$taak.datum|date_format:"%a"}</span></td>
-								<td><span title="{$taak.datum|date_format:"%Y-%m-%d"}">{$taak.datum|date_format:"%d-%m"}</span></td>
-								<td>{$taak.taak}</td>
-								<td title="{$taak.tekst|escape:'html'}">{$taak.tekst|truncate:20|escape:'html'}</td>
-								<td>{$taak.punten} </td>
-								<td>punten {if $taak.punten_toegekend=='onbekend'}({if $loginlid->hasPermission('P_MAAL_MOD')}<a href="/actueel/maaltijden/corveebeheer/puntenbewerk/{$taak.maalid}#corveepuntenFormulier">niet toegekend</a>{else}niet toegekend{/if}){/if}</td>
-							</tr>
-						{foreachelse}
-							<tr><td>Geen corveetaken</td></tr>
-						{/foreach}
-					</table>
-				</div>
-			{/if}
+			</div>
+			<br />
+			<div class="label">Allergie/dieet:</div>
+			<div class="data">{strip}
+		{if $profhtml.eetwens!=''}
+			{$profhtml.eetwens}
+		{/if}
+		{if $loginlid->getUid()==$profhtml.uid}
+			&nbsp;<a href="/corveevoorkeuren" title="Bewerk voorkeuren" class="knop">{icon get="pencil"}</a>
+		{/if}
+			</div>{/strip}
+			<br />
+		{if $profhtml.abos}
+			<div class="label">Abo's:</div>
+			<ul class="nobullets data">
+			{foreach from=$profhtml.abos item=abonnement}
+				<li>{$abonnement->getMaaltijdRepetitie()->getStandaardTitel()} op {$abonnement->getMaaltijdRepetitie()->getDagVanDeWeekText()} ({$abonnement->getMaaltijdRepetitie()->getPeriodeInDagenText()})</li>
+			{/foreach}
+			</ul>
+			<br />
+		{/if}
 		</div>
 	</div>
 	{/if}

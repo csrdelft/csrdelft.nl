@@ -31,8 +31,16 @@ class MaaltijdRepetitiesModel {
 		return self::loadRepetities('abonneerbaar = true');
 	}
 	
-	public static function getAlleRepetities() {
-		return self::loadRepetities();
+	public static function getAlleRepetities($groupById=false) {
+		$repetities = self::loadRepetities();
+		if ($groupById) {
+			$result = array();
+			foreach ($repetities as $repetitie) {
+				$result[$repetitie->getMaaltijdRepetitieId()] = $repetitie;
+			}
+			return $result;
+		}
+		return $repetities;
 	}
 	
 	public static function getRepetitie($mrid) {
