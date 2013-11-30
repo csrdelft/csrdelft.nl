@@ -20,7 +20,7 @@
 	{if $smarty.foreach.datum.first}
 		{cycle name="firstOfDatum" assign="firstOfDatum" values="true,false"}
 	{/if}
-		<tr{if $datum < strtotime('-1 day')} class="taak-oud"{/if}>
+		<tr>
 	{foreach name=taak from=$taken item=taak}
 		{if $firstOfWeek eq 'true'}
 			{cycle name="firstOfWeek" assign="firstOfWeek"}

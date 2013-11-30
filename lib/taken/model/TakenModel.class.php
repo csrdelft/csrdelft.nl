@@ -168,6 +168,10 @@ class TakenModel {
 		return $matrix;
 	}
 	
+	public static function getKomendeTaken() {
+		return self::loadTaken('verwijderd = false AND datum >= ?', array(date('Y-m-d')));
+	}
+	
 	public static function getAlleTaken($groupByUid=false) {
 		$taken = self::loadTaken('verwijderd = false');
 		if ($groupByUid) {
@@ -241,12 +245,12 @@ class TakenModel {
 	}
 	
 	/**
-	 * Haalt de taken op waarvoor het ingelogde lid in de komende maand is ingedeeld.
+	 * Haalt de komende taken op waarvoor het ingelogde lid is ingedeeld.
 	 * 
 	 * @return CorveeTaak[]
 	 */
 	public static function getKomendeTakenVoorLid() {
-		return self::loadTaken('verwijderd = false AND lid_id = ? AND datum >= ? AND datum <= ?', array(\LoginLid::instance()->getUid(), date('Y-m-d'), date('Y-m-d', strtotime('+1 month'))));
+		return self::loadTaken('verwijderd = false AND lid_id = ? AND datum >= ?', array(\LoginLid::instance()->getUid(), date('Y-m-d')));
 	}
 	
 	public static function saveTaak($tid, $fid, $uid, $crid, $mid, $datum, $punten, $bonus_malus) {
