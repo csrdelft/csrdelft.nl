@@ -77,6 +77,9 @@ div.vertical {
 	display: none;
 	white-space: nowrap;
 }
+.taken-hidden-form input.regular {
+	width: auto;
+}
 .inline-edit {
 	border-bottom: 1px dotted grey;
 	width: 100%;
