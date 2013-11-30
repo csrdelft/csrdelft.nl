@@ -31,7 +31,10 @@ class MaaltijdLijstView extends \SimpleHtml {
 		$smarty->assign('prijs', sprintf('%.2f', $this->_maaltijd->getPrijs()));
 		
 		if (!$this->_fiscaal) {
-			for ($i = $this->_maaltijd->getMarge(); $i > 0; $i--) {
+			for ($i = $this->_maaltijd->getMarge(); $i > 0; $i--) { // ruimte voor marge eters
+				$this->_aanmeldingen[] = new MaaltijdAanmelding();
+			}
+			if (sizeof($this->_aanmeldingen) % 2 === 1) { // altijd even aantal voor lijst
 				$this->_aanmeldingen[] = new MaaltijdAanmelding();
 			}
 			$smarty->assign('eterstotaal', $this->_maaltijd->getAantalAanmeldingen() + $this->_maaltijd->getMarge());

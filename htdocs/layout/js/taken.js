@@ -110,7 +110,7 @@ function taken_check_form(form) {
 			}
 		}
 		else if ($(this).is('input:checkbox')) {
-			if ($(this).is(':checked') && $(this).attr('origvalue') !== '1') {
+			if ($(this).is(':checked') !== ($(this).attr('origvalue') === '1')) {
 				changed = true;
 				return false;
 			}
