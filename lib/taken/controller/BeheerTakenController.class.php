@@ -19,7 +19,7 @@ class BeheerTakenController extends \ACLController {
 			$this->acl = array(
 				'beheer' => 'P_CORVEE_MOD',
 				'prullenbak' => 'P_CORVEE_MOD',
-				'leegmaken' => 'P_MAAL_MOD',
+				//'leegmaken' => 'P_MAAL_MOD',
 				'maaltijd' => 'P_CORVEE_MOD',
 				'herinneren' => 'P_CORVEE_MOD'
 			);

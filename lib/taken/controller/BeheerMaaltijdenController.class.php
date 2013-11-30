@@ -21,7 +21,7 @@ class BeheerMaaltijdenController extends \ACLController {
 			$this->acl = array(
 				'beheer' => 'P_MAAL_MOD',
 				'prullenbak' => 'P_MAAL_MOD',
-				'leegmaken' => 'P_MAAL_MOD',
+				//'leegmaken' => 'P_MAAL_MOD',
 				'fiscaal' => 'P_MAAL_MOD'
 			);
 		}
