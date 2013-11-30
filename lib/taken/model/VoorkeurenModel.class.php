@@ -32,18 +32,18 @@ class VoorkeurenModel {
 	 */
 	public static function getVoorkeurenVoorLid($uid) {
 		$repById = CorveeRepetitiesModel::getVoorkeurbareRepetities(true); // grouped by crid
-		$voorkeuren = array();
-		$tmp = self::loadVoorkeuren(null, $uid);
-		foreach ($tmp as $voorkeur) {
+		$result = array();
+		$voorkeuren = self::loadVoorkeuren(null, $uid);
+		foreach ($voorkeuren as $voorkeur) {
 			$crid = $voorkeur->getCorveeRepetitieId();
-			if (!array_key_exists($crid, $voorkeuren) && array_key_exists($crid, $repById)) { // nog niet gehad en ingeschakeld
+			if (array_key_exists($crid, $repById)) { // ingeschakeld en voorkeurbaar
 				$voorkeur->setCorveeRepetitie($repById[$crid]);
 				$voorkeur->setVanLid($uid);
-				$voorkeuren[$crid] = $voorkeur;
+				$result[$crid] = $voorkeur;
 			}
 		}
 		foreach ($repById as $crid => $repetitie) {
-			if (!array_key_exists($crid, $voorkeuren)) { // nog niet gehad en uitgeschakeld
+			if (!array_key_exists($crid, $result)) { // uitgeschakeld en voorkeurbaar
 				if ($repetitie->getCorveeFunctie()->getIsKwalificatieBenodigd()) {
 					require_once 'taken/model/KwalificatiesModel.class.php';
 					if (!KwalificatiesModel::getIsLidGekwalificeerd($uid, $repetitie->getFunctieId())) {
@@ -53,11 +53,11 @@ class VoorkeurenModel {
 				$voorkeur = new CorveeVoorkeur($crid, null);
 				$voorkeur->setCorveeRepetitie($repetitie);
 				$voorkeur->setVanLid($uid);
-				$voorkeuren[$crid] = $voorkeur;
+				$result[$crid] = $voorkeur;
 			}
 		}
-		ksort($voorkeuren);
-		return $voorkeuren;
+		ksort($result);
+		return $result;
 	}
 	
 	public static function getHeeftVoorkeur($crid, $uid) {
