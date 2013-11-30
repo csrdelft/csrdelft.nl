@@ -29,7 +29,6 @@ class BeheerAbonnementenView extends \SimpleHtml {
 	
 	public function view() {
 		$smarty = new \Smarty_csr();
-		$smarty->assign('ledenweergave', $GLOBALS['weergave_ledennamen_beheer']);
 		
 		$status = 'abo';
 		if (is_bool($this->_ingeschakeld)) {

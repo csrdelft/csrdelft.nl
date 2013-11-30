@@ -12,6 +12,11 @@ class InstellingenModel {
 	private static $_instellingen = null;
 	private static $_defaults = array(
 		'corveepunten_per_jaar' => '11',
+		'herinnering_aantal_mails' => '2',
+		'herinnering_1e_mail' => '-5 weeks',
+		'herinnering_1e_mail_uiterlijk' => '-4 weeks',
+		'herinnering_2e_mail' => '-14 days',
+		'herinnering_2e_mail_uiterlijk' => '-7 days',
 		'standaard_repetitie_weekdag' => '4',
 		'standaard_repetitie_periode' => '7',
 		'standaard_abonneerbaar' => '1',
@@ -30,6 +35,7 @@ class InstellingenModel {
 		'vrijstelling_percentage_min' => '0',
 		'weergave_ledennamen_beheer' => 'volledig',
 		'weergave_ledennamen_corveerooster' => 'civitas',
+		'weergave_ledennamen_maaltijdlijst' => 'civitas',
 		'waarschuwing_taaktoewijzing_vooraf' => '+14 days',
 		'waarschuwing_puntentoewijzing_achteraf' => '-1 days',
 		'maaltijdlijst_tekst' => '<p>Regels omtrent het betalen van de maaltijden op Confide:</p>

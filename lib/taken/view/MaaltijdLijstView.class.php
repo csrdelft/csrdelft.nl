@@ -28,7 +28,7 @@ class MaaltijdLijstView extends \SimpleHtml {
 		$smarty = new \Smarty_csr();
 		$smarty->assign('kop', $this->getTitel());
 		$smarty->assign('maaltijd', $this->_maaltijd);
-		$smarty->assign('header', $GLOBALS['maaltijdlijst_tekst']);
+		$smarty->assign('prijs', sprintf('%.2f', $this->_maaltijd->getPrijs()));
 		
 		if (!$this->_fiscaal) {
 			for ($i = $this->_maaltijd->getMarge(); $i > 0; $i--) {

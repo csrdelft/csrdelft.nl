@@ -22,7 +22,6 @@ class BeheerPuntenView extends \SimpleHtml {
 	
 	public function view() {
 		$smarty = new \Smarty_csr();
-		$smarty->assign('ledenweergave', $GLOBALS['weergave_ledennamen_beheer']);
 		
 		if ($this->_functies === null) { // voor een lid
 			$smarty->assign('puntenlijst', $this->_leden_punten);

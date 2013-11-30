@@ -32,7 +32,7 @@ abstract class SimpleHTML {
 			$shown=array();
 			foreach($_SESSION['melding'] as $msg){
 				$hash = md5($msg['msg']);
-				if(isset($shown[$hash])) continue; // skip double messages
+				//if(isset($shown[$hash])) continue; // skip double messages
 				$sMelding.='<div class="msg'.$msg['lvl'].'">';
 				$sMelding.=$msg['msg'];
 				$sMelding.='</div>';

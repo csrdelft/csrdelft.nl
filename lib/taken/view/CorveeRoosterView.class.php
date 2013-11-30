@@ -25,7 +25,6 @@ class CorveeRoosterView extends \SimpleHtml {
 		$smarty->assign('kop', $this->getTitel());
 		$smarty->display('taken/taken_menu.tpl');
 		
-		$smarty->assign('ledenweergave', $GLOBALS['weergave_ledennamen_corveerooster']);
 		$smarty->assign('rooster', $this->_rooster);
 		$smarty->display('taken/corveetaak/corvee_rooster.tpl');
 	}

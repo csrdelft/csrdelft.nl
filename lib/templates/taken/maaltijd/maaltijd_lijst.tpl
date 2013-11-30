@@ -9,8 +9,7 @@
 <body>
 <img alt="Beeldmerk van de Vereniging" src="{$csr_pics}/layout/beeldmerk.jpg" style="float: right; padding: 0px 50px;" />
 <h1>{$kop} op {$maaltijd->getDatum()|date_format:"%A %e %B %Y"}</h1>
-{assign var=prijs value=$maaltijd->getPrijs()|string_format:"%.2f"}
-<div class="header">{$header|replace:'MAALTIJDPRIJS':$prijs}</div>
+<div class="header">{$globals.maaltijdlijst_tekst|replace:'MAALTIJDPRIJS':$prijs}</div>
 {if !$maaltijd->getIsGesloten()}
 	<h2 style="color: red">De inschrijving voor deze maaltijd is nog niet gesloten
 	{if !$maaltijd->getIsVerwijderd() and !$maaltijd->getIsGesloten()}
@@ -23,7 +22,7 @@
 	{table_foreach from=$aanmeldingen inner=rows item=aanmelding table_attr='class="aanmeldingen"' cols=2 name=aanmeldingen}
 		<div class="nummer">{$teller++}</div></td>
 		{if $aanmelding->getLidId()}
-		<td class="naam">{$aanmelding->getLid()->getNaamLink('civitas', 'link')}
+		<td class="naam">{$aanmelding->getLid()->getNaamLink($globals.weergave_ledennamen_maaltijdlijst, 'link')}
 			{if $aanmelding->getLid()->getProperty('eetwens') !== ''}<div class="eetwens">{$aanmelding->getLid()->getProperty('eetwens')}</div>{/if}
 			{if $aanmelding->getGastenOpmerking() !== ''}<div class="opmerking">Gasten opmerking: {$aanmelding->getGastenOpmerking()}</div>{/if}
 		</td>

@@ -8,6 +8,15 @@ h2 {
 	font-size: 15px;
 	margin: 30px 0px 15px 0px;
 }
+div#melding {
+	background-color: white;
+	-moz-box-shadow: 0 0 20px #000000;
+	-webkit-box-shadow: 0 0 20px #000000;
+	box-shadow: 0 0 20px #000000;
+}
+div.msgnotify {
+	color: #DDAA00;
+}
 a.knop {
 	color: inherit;
 	padding: 0px 4px;

@@ -43,7 +43,7 @@
 					<a href="/communicatie/forum/zoeken.php?zoeken=corveedraad" title="Ruilen" class="knop" style="margin-right:10px;">{icon get="arrow_switch"}</a>
 				{else}>
 				{/if}
-				{$taak->getLid()->getNaamLink('civitas', 'link')}
+				{$taak->getLid()->getNaamLink($globals.weergave_ledennamen_corveerooster, 'link')}
 			{else} class="taak-grijs"><i>vacature</i>
 			{/if}</td>
 		{/if}

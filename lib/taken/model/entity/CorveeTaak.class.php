@@ -132,11 +132,12 @@ class CorveeTaak implements \Agendeerbaar {
 	public function getAantalKeerMoetenMailen() {
 		$nu = strtotime(date('Y-m-d'));
 		$datum = strtotime($this->getDatum());
-		if ($nu >= strtotime('-7 days', $datum)) {
-			return 2;
-		}
-		if ($nu >= strtotime('-4 weeks', $datum)) {
-			return 1;
+		
+		for ($i = intval($GLOBALS['herinnering_aantal_mails']); $i > 0; $i--) {
+			
+			if ($nu >= strtotime($GLOBALS['herinnering_'. $i .'e_mail_uiterlijk'], $datum)) {
+				return $i;
+			}
 		}
 		return 0;
 	}
@@ -160,11 +161,12 @@ class CorveeTaak implements \Agendeerbaar {
 		}
 		$laatst = strtotime(substr($this->wanneer_gemaild, 0, $pos));
 		$datum = strtotime($this->getDatum());
-		if ($moeten >= 2 && $laatst >= strtotime('-7 days', $datum)) {
-			return true;
-		}
-		if ($moeten >= 1 && $laatst >= strtotime('-4 weeks', $datum)) {
-			return true;
+		
+		for ($i = intval($GLOBALS['herinnering_aantal_mails']); $i > 0; $i--) {
+			
+			if ($moeten >= $i && $laatst >= strtotime($GLOBALS['herinnering_'. $i .'e_mail_uiterlijk'], $datum)) {
+				return true;
+			}
 		}
 		return false;
 	}
@@ -178,11 +180,12 @@ class CorveeTaak implements \Agendeerbaar {
 		$nu = strtotime(date('Y-m-d'));
 		$aantal = $this->getAantalKeerGemaild();
 		$moeten = $this->getAantalKeerMoetenMailen();
-		if ($nu >= strtotime('-14 days', $datum) && $moeten > $aantal) {
-			return true;
-		}
-		elseif ($nu >= strtotime('-5 weeks', $datum) && $moeten > $aantal) {
-			return true;
+		
+		for ($i = intval($GLOBALS['herinnering_aantal_mails']); $i > 0; $i--) {
+			
+			if ($nu >= strtotime($GLOBALS['herinnering_'. $i .'e_mail'], $datum) && $moeten > $aantal) {
+				return true;
+			}
 		}
 		return false;
 	}
