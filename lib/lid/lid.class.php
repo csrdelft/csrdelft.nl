@@ -663,11 +663,7 @@ class Lid implements Serializable, Agendeerbaar{
 				if($vorm=='pasfoto'){
 					return $naam;
 				}else{
-					$naam=mb_htmlentities($naam);
-					if($this->getLichting()==2013){
-						$naam=str_replace('o', $neus, $naam);
-					}
-					return $naam;
+					return mb_htmlentities($naam);
 				}
 			break;
 			case 'plain':
