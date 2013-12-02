@@ -68,7 +68,7 @@ class CorveeRepetitieFormView extends \SimpleHtml {
 		$this->_form->cssClass .= ' popup';
 		$smarty->assign('form', $this->_form);
 		if ($this->_crid === 0) {
-			$smarty->assign('nieuw', true);
+			$smarty->assign('nocheck', true);
 		}
 		elseif ($this->_crid > 0) {
 			$smarty->assign('bijwerken', $GLOBALS['taken_module'] .'/bijwerken/'. $this->_crid);

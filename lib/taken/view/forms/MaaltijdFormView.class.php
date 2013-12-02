@@ -58,7 +58,7 @@ class MaaltijdFormView extends \SimpleHtml {
 		$this->_form->cssClass .= ' popup';
 		$smarty->assign('form', $this->_form);
 		if ($this->_mid === 0) {
-			$smarty->assign('nieuw', true);
+			$smarty->assign('nocheck', true);
 		}
 		$smarty->display('taken/popup_form.tpl');
 	}

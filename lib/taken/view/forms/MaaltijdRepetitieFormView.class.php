@@ -66,7 +66,7 @@ class MaaltijdRepetitieFormView extends \SimpleHtml {
 		$this->_form->cssClass .= ' popup';
 		$smarty->assign('form', $this->_form);
 		if ($this->_mrid === 0) {
-			$smarty->assign('nieuw', true);
+			$smarty->assign('nocheck', true);
 		}
 		elseif ($this->_mrid > 0) {
 			$smarty->assign('bijwerken', $GLOBALS['taken_module'] .'/bijwerken/'. $this->_mrid);
