@@ -652,6 +652,10 @@ class Lid implements Serializable, Agendeerbaar{
 				if(LoginLid::instance()->hasPermission('P_LEDEN_READ')){
 					if($vorm!='pasfoto'){
 						$naam=mb_htmlentities($naam);
+						if($this->getLichting()==2013){
+							$icon='<img src="http://plaetjes.csrdelft.nl/famfamfam/bullet_red.png" widht="16" height="16" class="icon" alt="o" style="margin: -5px;">';
+							$naam=str_replace('o', $icon, $naam);
+						}
 					}
 					return '<a href="'.CSR_ROOT.'communicatie/profiel/'.$this->getUid().'" title="'.$sVolledigeNaam.'" class="lidLink '.$this->profiel['status'].'">'.$naam.'</a>';
 				}
@@ -659,6 +663,10 @@ class Lid implements Serializable, Agendeerbaar{
 				if($vorm='pasfoto'){
 					return $naam;
 				}else{
+					if($this->getLichting()==2013){
+						$icon='<img src="http://plaetjes.csrdelft.nl/famfamfam/bullet_red.png" widht="16" height="16" class="icon" alt="o" style="margin: -5px;">';
+						$naam=str_replace('o', $icon, $naam);
+					}
 					return mb_htmlentities($naam);
 				}
 			break;
