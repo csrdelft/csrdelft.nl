@@ -647,27 +647,27 @@ class Lid implements Serializable, Agendeerbaar{
 		if(in_array($this->getUid(), $nolinks) AND $mode=='link'){
 			$mode='html';
 		}
-		$icon='<img src="http://plaetjes.csrdelft.nl/famfamfam/bullet_red.png" widht="16" height="16" alt="o" style="float: none; padding: 0px; margin: -5px; background-color: inherit; border: none;">';
+		$neus='<img src="http://plaetjes.csrdelft.nl/famfamfam/bullet_red.png" width="16" height="16" alt="o" style="float: none; padding: 0px; margin: -5px; background-color: inherit; border: none;">';
 		switch($mode){
 			case 'link':
 				if(LoginLid::instance()->hasPermission('P_LEDEN_READ')){
 					if($vorm!='pasfoto'){
 						$naam=mb_htmlentities($naam);
 						if($this->getLichting()==2013){
-							
-							$naam=str_replace('o', $icon, $naam);
+							$naam=str_replace('o', $neus, $naam);
 						}
 					}
 					return '<a href="'.CSR_ROOT.'communicatie/profiel/'.$this->getUid().'" title="'.$sVolledigeNaam.'" class="lidLink '.$this->profiel['status'].'">'.$naam.'</a>';
 				}
 			case 'html':
-				if($vorm='pasfoto'){
+				if($vorm=='pasfoto'){
 					return $naam;
 				}else{
+					$naam=mb_htmlentities($naam);
 					if($this->getLichting()==2013){
-						$naam=str_replace('o', $icon, $naam);
+						$naam=str_replace('o', $neus, $naam);
 					}
-					return mb_htmlentities($naam);
+					return $naam;
 				}
 			break;
 			case 'plain':
