@@ -36,8 +36,10 @@ class ProfielContent extends SimpleHTML {
 		require_once('groepen/groepcontent.class.php');
 		$profhtml['groepen']=new GroepenProfielContent($this->lid->getUid());
 
-		$profhtml['recenteMaaltijden'] = \Taken\MLT\AanmeldingenModel::getRecenteMaaltijdenVoorLidProfiel($this->lid->getUid());
-		$profhtml['abos'] = \Taken\MLT\AbonnementenModel::getAbonnementenVoorLid($this->lid->getUid());
+		if (LoginLid::instance()->getUid() == $this->lid->getUid() || LoginLid::instance()->hasPermission('P_MAAL_MOD')) {
+			$profhtml['recenteMaaltijden'] = \Taken\MLT\AanmeldingenModel::getRecenteMaaltijdenVoorLidProfiel($this->lid->getUid());
+			$profhtml['abos'] = \Taken\MLT\AbonnementenModel::getAbonnementenVoorLid($this->lid->getUid());
+		}
 
 		//de html template in elkaar draaien en weergeven
 		$profiel=new Smarty_csr();
