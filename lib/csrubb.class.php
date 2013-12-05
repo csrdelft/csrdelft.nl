@@ -559,16 +559,22 @@ HTML;
 			$mid = $this->parseArray(array('[/maaltijd]'), array());
 		}
 		$mid = trim($mid);
+		$maaltijd2 = null;
 		require_once 'taken/model/MaaltijdenModel.class.php';
 		require_once 'taken/model/AanmeldingenModel.class.php';
 		require_once 'taken/view/MaaltijdKetzerView.class.php';
 		try {
-			if ($mid === 'next' || $mid === 'eerstvolgende') {
+			if ($mid === 'next' || $mid === 'eerstvolgende' || $mid === 'next2' || $mid === 'eerstvolgende2') {
 				$maaltijden = \Taken\MLT\MaaltijdenModel::getKomendeMaaltijdenVoorLid(\LoginLid::instance()->getUid()); // met filter
-				if (sizeof($maaltijden) < 1) {
+				$aantal = sizeof($maaltijden);
+				if ($aantal < 1) {
 					return 'Geen aankomende maaltijd.';
 				}
 				$maaltijd = reset($maaltijden);
+				if (endsWith($mid, '2') && $aantal >= 2) {
+					unset($maaltijden[$maaltijd->getMaaltijdId()]);
+					$maaltijd2 = reset($maaltijden);
+				}
 			}
 			elseif (preg_match('/\d+/', $mid)) {
 				$maaltijd = \Taken\MLT\MaaltijdenModel::getMaaltijdVoorKetzer((int)$mid); // met filter
@@ -578,13 +584,15 @@ HTML;
 			}
 		}
 		catch (Exception $e) {
+			if (strpos($e->getMessage(), 'Not found') !== false) {
+				return '[maaltijd] Niet gevonden! (id='. mb_htmlentities($mid) .') [/maaltijd]';
+			}
 			return $e->getMessage();
 		}
 		if (!isset($maaltijd)) {
-			return '(!)Error: Geen maaltijdID opgegeven of ongeldig ID: '. mb_htmlentities($mid);
+			return '[maaltijd] Niet gevonden! (id='. mb_htmlentities($mid) .') [/maaltijd]';
 		}
-		$mid = $maaltijd->getMaaltijdId();
-		$aanmeldingen = \Taken\MLT\AanmeldingenModel::getAanmeldingenVoorLid(array($mid => $maaltijd), \LoginLid::instance()->getUid());
+		$aanmeldingen = \Taken\MLT\AanmeldingenModel::getAanmeldingenVoorLid(array($maaltijd->getMaaltijdId() => $maaltijd), \LoginLid::instance()->getUid());
 		if (empty($aanmeldingen)) {
 			$aanmelding = null;
 		}
@@ -592,7 +600,20 @@ HTML;
 			$aanmelding = $aanmeldingen[$maaltijd->getMaaltijdId()];
 		}
 		$ketzer = new \Taken\MLT\MaaltijdKetzerView($maaltijd, $aanmelding);
-		return $ketzer->fetch();
+		$result = $ketzer->fetch();
+		
+		if ($maaltijd2 !== null) {
+			$aanmeldingen2 = \Taken\MLT\AanmeldingenModel::getAanmeldingenVoorLid(array($maaltijd2->getMaaltijdId() => $maaltijd2), \LoginLid::instance()->getUid());
+			if (empty($aanmeldingen2)) {
+				$aanmelding2 = null;
+			}
+			else {
+				$aanmelding2 = $aanmeldingen2[$maaltijd2->getMaaltijdId()];
+			}
+			$ketzer2 = new \Taken\MLT\MaaltijdKetzerView($maaltijd2, $aanmelding2);
+			$result .= $ketzer2->fetch();
+		}
+		return $result;
 	}
 
 	public function ubb_offtopic(){
