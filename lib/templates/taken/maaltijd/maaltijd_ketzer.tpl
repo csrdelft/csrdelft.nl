@@ -3,30 +3,45 @@
 *}
 <div class="ubb_block ubb_maaltijd" id="maaltijdketzer-{$maaltijd->getMaaltijdId()}">{strip}
 {if $loginlid->hasPermission('P_LOGGED_IN')}
-	<div class="aanmelddata">U komt:<br />
-	{if $aanmelding}
-		{if $aanmelding->getDoorAbonnement()}
-			<em>eten (abo)</em>
+	<div class="aanmelddata maaltijd-{if $aanmelding}aan{else}af{/if}gemeld">Aangemeld:<br />
+
+	{if !$maaltijd->getIsGesloten() && $loginlid->hasPermission('P_MAAL_IK')}
+
+		{if $aanmelding}
+			<a onclick="ketzer_ajax('/maaltijdenketzer/afmelden/{$maaltijd->getMaaltijdId()}', '#maaltijdketzer-{$maaltijd->getMaaltijdId()}');" class="knop maaltijd-aangemeld"><input type="checkbox" checked="checked" /> Ja</a>
+
+		{elseif $maaltijd->getAantalAanmeldingen() >= $maaltijd->getAanmeldLimiet()}
+			{icon get="stop" title="Maaltijd is vol"}&nbsp;
+			<span class="maaltijd-afgemeld">Nee</span>
+
 		{else}
-			<em>eten</em>
+			<a onclick="ketzer_ajax('/maaltijdenketzer/aanmelden/{$maaltijd->getMaaltijdId()}', '#maaltijdketzer-{$maaltijd->getMaaltijdId()}');" class="knop maaltijd-afgemeld"><input type="checkbox" /> Nee</a>
+
 		{/if}
+
 	{else}
-		<em>niet eten</em>
-	{/if}
-		<br />
-	{if $maaltijd->getIsGesloten()}
-		Gesloten
-	{else}
-		{if $loginlid->hasPermission('P_MAAL_IK')}
-			{if $aanmelding}
-				<a onclick="ketzer_ajax('/maaltijdenketzer/afmelden/{$maaltijd->getMaaltijdId()}', '#maaltijdketzer-{$maaltijd->getMaaltijdId()}');"><strong>af</strong>melden</a>
-			{elseif $maaltijd->getAantalAanmeldingen() >= $maaltijd->getAanmeldLimiet()}
-				Vol
-			{else}
-				<a onclick="ketzer_ajax('/maaltijdenketzer/aanmelden/{$maaltijd->getMaaltijdId()}', '#maaltijdketzer-{$maaltijd->getMaaltijdId()}');"><strong>aan</strong>melden</a>
-			{/if}
+
+		{if $aanmelding}
+			<span class="maaltijd-aangemeld">Ja{if $aanmelding->getDoorAbonnement()} (abo){/if}</span>
+		{else}
+			<span class="maaltijd-afgemeld">Nee</span>
 		{/if}
+
 	{/if}
+
+	{if $aanmelding and $aanmelding->getAantalGasten() > 0}
+		+{$aanmelding->getAantalGasten()}
+	{/if}
+
+	{if $aanmelding and $aanmelding->getGastenOpmerking()}
+		{icon get="comment" title=$aanmelding->getGastenOpmerking()}
+	{/if}
+
+	{if $maaltijd->getIsGesloten()}&nbsp;
+		{assign var=date value=$maaltijd->getLaatstGesloten()|date_format:"%H:%M"}
+		{icon get="lock" title="Maaltijd is gesloten om "|cat:$date}
+	{/if}
+
 	</div>
 {/if}
 <div class="maaltijdgegevens">

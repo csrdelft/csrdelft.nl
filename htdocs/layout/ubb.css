@@ -34,15 +34,30 @@ div.offtopic img{ opacity: 0.3; filter:alpha(opacity=30); }
 }
 
 .ubb_maaltijd h2{ white-space: nowrap; overflow: hidden; }
-.ubb_maaltijd .maaltijdgegevens{
-	line-height: 1.6em;
+.ubb_maaltijd{
+	line-height: 1.7em;
 }
 .ubb_maaltijd .aanmelddata{
+	text-align: center;
     float: right;
-    background-color: #ddd;
-    width: 68px;
+    width: 70px;
 	height: 45px;
-    padding: 4px; margin-left: 10px;
+    padding: 4px;
+	border: 1px solid #B8B8B8;
+}
+div.maaltijd-aangemeld {
+	background-color: #AAEEAA;
+}
+div.maaltijd-afgemeld {
+	background-color: #EEAAAA;
+}
+a.maaltijd-aangemeld, span.maaltijd-aangemeld{
+	font-weight: bold;
+	color: green;
+}
+a.maaltijd-afgemeld, span.maaltijd-afgemeld{
+	font-weight: bold;
+	color: red;
 }
 
 .ubb_gmap {

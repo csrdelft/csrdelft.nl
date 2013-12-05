@@ -7,7 +7,7 @@
  * 
  */
 function ketzer_ajax(url, ketzer) {
-	$(ketzer + ' .aanmelddata').html('U komt:<br /><img src="http://plaetjes.csrdelft.nl/layout/loading-arrows.gif" />');
+	$(ketzer + ' .aanmelddata').html('Aangemeld:<br /><img src="http://plaetjes.csrdelft.nl/layout/loading-arrows.gif" />');
 	$.ajax({
 		type : 'GET',
 		cache : false,
