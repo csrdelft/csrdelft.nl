@@ -24,7 +24,7 @@ class AbonnementenModel {
 			$repetities = MaaltijdRepetitiesModel::getAlleRepetities(true); // grouped by mrid
 		}
 		else {
-			$repetities = MaaltijdRepetitiesModel::getAbonneerbareRepetitiesVoorLid(\LoginLid::instance()->getUid()); // grouped by mrid
+			$repetities = MaaltijdRepetitiesModel::getAbonneerbareRepetitiesVoorLid($uid); // grouped by mrid
 		}
 		$repById = array();
 		foreach ($repetities as $repetitie) { // group by mrid
