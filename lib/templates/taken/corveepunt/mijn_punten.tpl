@@ -38,6 +38,6 @@ De prognose geeft aan hoeveel punten u naar verwachting totaal zal hebben aan he
 {/if}
 		</td></tr>{/strip}
 		<tr style="font-weight: bold;"><td>Prognose</td><td>{$puntenlijst.prognose}</td></tr>
-		<tr style="font-weight: bold;"><td>Tekort</td><td style="background-color: #{$puntenlijst.prognoseColor};">{$puntenlijst.tekort}</td></tr>
+		<tr style="font-weight: bold;"><td>Tekort</td><td style="background-color: #{$puntenlijst.tekortColor};">{$puntenlijst.tekort}</td></tr>
 	</tbody>
 </table>

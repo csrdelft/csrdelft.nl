@@ -153,10 +153,16 @@ class PuntenModel {
 		$lijst['bonusTotaal'] = (int) $lid->getProperty('corvee_punten_bonus');
 		$lijst['prognose'] += $lijst['puntenTotaal'] + $lijst['bonusTotaal'];
 		$lijst['prognoseColor'] = self::rgbCalculate($lijst['prognose']);
-		$lijst['tekort'] = $GLOBALS['corveepunten_per_jaar'] - $lijst['prognose'];
+		if ($lid->isLid()) {
+			$lijst['tekort'] = $GLOBALS['corveepunten_per_jaar'] - $lijst['prognose'];
+		}
+		else {
+			$lijst['tekort'] = 0 - $lijst['prognose'];
+		}
 		if ($lijst['tekort'] < 0) {
 			$lijst['tekort'] = 0;
 		}
+		$lijst['tekortColor'] = self::rgbCalculate($lijst['tekort'], true);
 		return $lijst;
 	}
 	
@@ -185,9 +191,12 @@ class PuntenModel {
 	/**
 	 * RGB kleurovergang berekenen
 	 */
-	private static function rgbCalculate($punten) {
+	private static function rgbCalculate($punten, $tekort=false) {
 		$perjaar = intval($GLOBALS['corveepunten_per_jaar']);
-		$verhouding = ($perjaar - $punten) / $perjaar;
+		if (!$tekort) {
+			$punten = $perjaar - $punten;
+		}
+		$verhouding = $punten / $perjaar;
 		
 		$r = 2 * $verhouding;
 		$g = 2 * (1 - $verhouding);
