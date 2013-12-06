@@ -890,9 +890,7 @@ class IntField extends FormField{
 	}
 	
 	public function getValue() {
-		$val = (int) parent::getValue();
-		echo '***'. $val;
-		return $val;
+		return (int) parent::getValue();
 	}
 	
 	public function valid(){
