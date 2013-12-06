@@ -98,22 +98,20 @@ class TakenModel {
 	}
 	
 	public static function taakToewijzenAanLid(CorveeTaak $taak, $uid) {
-		if ($taak->getLidId() !== $uid) {
-			$puntenruilen = false;
-			if ($taak->getWanneerToegekend() !== null) {
-				$puntenruilen = true;
-			}
-			$taak->setWanneerGemaild('');
-			if ($puntenruilen && $taak->getLidId() !== null) {
-				self::puntenIntrekken($taak);
-			}
-			$taak->setLidId($uid);
-			if ($puntenruilen && $uid !== null) {
-				self::puntenToekennen($taak);
-			}
-			else {
-				self::updateTaak($taak);
-			}
+		$puntenruilen = false;
+		if ($taak->getWanneerToegekend() !== null) {
+			$puntenruilen = true;
+		}
+		$taak->setWanneerGemaild('');
+		if ($puntenruilen && $taak->getLidId() !== null) {
+			self::puntenIntrekken($taak);
+		}
+		$taak->setLidId($uid);
+		if ($puntenruilen && $uid !== null) {
+			self::puntenToekennen($taak);
+		}
+		else {
+			self::updateTaak($taak);
 		}
 	}
 	
@@ -266,12 +264,11 @@ class TakenModel {
 					$taak->setCorveeRepetitieId(null);
 				}
 				$taak->setFunctieId($fid);
-				self::taakToewijzenAanLid($taak, $uid);
 				$taak->setMaaltijdId($mid);
 				$taak->setDatum($datum);
 				$taak->setPunten($punten);
 				$taak->setBonusMalus($bonus_malus);
-				self::updateTaak($taak);
+				self::taakToewijzenAanLid($taak, $uid);
 			}
 			$taak->setCorveeFunctie(FunctiesModel::getFunctie($taak->getFunctieId()));
 			$db->commit();

@@ -253,18 +253,17 @@ class FormField extends FormElement{
 	 * testen mogelijk te maken.
 	 */
 	public function valid(){
-		if(!$this->isPosted()){
-			$this->error='Veld is niet gepost.';
 		//vallen over lege velden als dat aangezet is voor het veld en als gebruiker geen LEDEN_MOD heeft of het geforceerd wordt.
-		}elseif((($this->notnull AND !LoginLid::instance()->hasPermission('P_LEDEN_MOD')) OR $this->forcenotnull) AND $this->getValue()==''){
-			$this->error='Dit is een verplicht veld.';
+		if(!$this->isPosted()){
+			$this->error='Veld is niet gepost';
 		}
-		
+		elseif($this->getValue()==='' AND ($this->forcenotnull OR ($this->notnull AND !LoginLid::instance()->hasPermission('P_LEDEN_MOD')))){
+			$this->error='Dit is een verplicht veld';
+		}
 		//als max_len > 0 dan checken of de lengte er niet overheen gaat.
 		if($this->max_len>0 AND strlen($this->getValue())>$this->max_len){
 			$this->error='Dit veld mag maximaal '.$this->max_len.' tekens lang zijn';
 		}
-		
 		return $this->error=='';
 	}
 
@@ -891,7 +890,9 @@ class IntField extends FormField{
 	}
 	
 	public function getValue() {
-		return (int) parent::getValue();
+		$val = (int) parent::getValue();
+		echo '***'. $val;
+		return $val;
 	}
 	
 	public function valid(){
@@ -899,7 +900,7 @@ class IntField extends FormField{
 			return false;
 		}
 		
-		if (!$this->notnull AND strlen(parent::getValue()) === 0) {
+		if (!$this->notnull AND parent::getValue() === '') {
 			// do not check if empty
 		}
 		else if (!preg_match('/\d+/', parent::getValue())) {

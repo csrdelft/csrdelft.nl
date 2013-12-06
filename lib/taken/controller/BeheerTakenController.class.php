@@ -151,7 +151,7 @@ class BeheerTakenController extends \ACLController {
 			$uid = ($values['lid_id'] === '' ? null : $values['lid_id']);
 			$crid = ($values['crv_repetitie_id'] === '' ? null : intval($values['crv_repetitie_id']));
 			$mid = ($values['maaltijd_id'] === '' ? null : intval($values['maaltijd_id']));
-			$taak = TakenModel::saveTaak($tid, intval($values['functie_id']), $uid, $crid, $mid, $values['datum'], $values['punten'], $values['bonus_malus']);
+			$taak = TakenModel::saveTaak($tid, intval($values['functie_id']), $uid, $crid, $mid, $values['datum'], intval($values['punten']), intval($values['bonus_malus']));
 			$maaltijd = null;
 			if (endsWith($_SERVER['HTTP_REFERER'], $GLOBALS['taken_module'] .'/maaltijd/'. $values['maaltijd_id'])) { // state of gui
 				$maaltijd = \Taken\MLT\MaaltijdenModel::getMaaltijd($mid);
@@ -179,7 +179,9 @@ class BeheerTakenController extends \ACLController {
 				$uid = null;
 			}
 			$taak = TakenModel::getTaak($tid);
-			TakenModel::taakToewijzenAanLid($taak, $uid);
+			if ($taak->getLidId() !== $uid) {
+				TakenModel::taakToewijzenAanLid($taak, $uid);
+			}
 			$this->content = new BeheerTakenView($taak);
 		}
 		else {
