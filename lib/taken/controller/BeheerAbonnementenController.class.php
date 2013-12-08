@@ -63,7 +63,7 @@ class BeheerAbonnementenController extends \ACLController {
 		if ($formField->valid()) {
 			$uid = $formField->getValue();
 			$matrix = array();
-			$matrix[$uid] = AbonnementenModel::getAbonnementenVoorLid($uid, true);
+			$matrix[$uid] = AbonnementenModel::getAbonnementenVoorLid($uid, false, true);
 			$this->content = new BeheerAbonnementenView($matrix);
 		}
 		else {

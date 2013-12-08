@@ -36,7 +36,7 @@ class MijnAbonnementenController extends \ACLController {
 	}
 	
 	public function action_mijn() {
-		$abonnementen = AbonnementenModel::getAbonnementenVoorLid(\LoginLid::instance()->getUid());
+		$abonnementen = AbonnementenModel::getAbonnementenVoorLid(\LoginLid::instance()->getUid(), true, true);
 		$this->content = new MijnAbonnementenView($abonnementen);
 		$this->content = new \csrdelft($this->getContent());
 		$this->content->addStylesheet('taken.css');

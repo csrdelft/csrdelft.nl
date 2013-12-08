@@ -17,18 +17,16 @@ class AbonnementenModel {
 	 * van de meegegeven maaltijdrepetities.
 	 * 
 	 * @param string $uid
+	 * @param boolean $abonneerbaar alleen abonneerbare abonnementen
+	 * @param boolean $uitgeschakeld ook uitgeschakelde abonnementen
 	 * @return MaaltijdAbonnement[]
 	 */
-	public static function getAbonnementenVoorLid($uid, $alles=false) {
-		if ($alles) {
-			$repetities = MaaltijdRepetitiesModel::getAlleRepetities(true); // grouped by mrid
+	public static function getAbonnementenVoorLid($uid, $abonneerbaar=false, $uitgeschakeld=false) {
+		if ($abonneerbaar) {
+			$repById = MaaltijdRepetitiesModel::getAbonneerbareRepetitiesVoorLid($uid); // grouped by mrid
 		}
 		else {
-			$repetities = MaaltijdRepetitiesModel::getAbonneerbareRepetitiesVoorLid($uid); // grouped by mrid
-		}
-		$repById = array();
-		foreach ($repetities as $repetitie) { // group by mrid
-			$repById[$repetitie->getMaaltijdRepetitieId()] = $repetitie;
+			$repById = MaaltijdRepetitiesModel::getAlleRepetities(true); // grouped by mrid
 		}
 		$lijst = array();
 		$abos = self::loadAbonnementen(null, $uid);
@@ -40,13 +38,15 @@ class AbonnementenModel {
 				$lijst[$mrid] = $abo;
 			}
 		}
-		foreach ($repById as $repetitie) {
-			$mrid = $repetitie->getMaaltijdRepetitieId();
-			if (!array_key_exists($mrid, $lijst)) { // uitgeschakelde abonnementen
-				$abo = new MaaltijdAbonnement($repetitie->getMaaltijdRepetitieId(), null);
-				$abo->setMaaltijdRepetitie($repetitie);
-				$abo->setVanLid($uid);
-				$lijst[$mrid] = $abo;
+		if ($uitgeschakeld) {
+			foreach ($repById as $repetitie) {
+				$mrid = $repetitie->getMaaltijdRepetitieId();
+				if (!array_key_exists($mrid, $lijst)) { // uitgeschakelde abonnementen weergeven
+					$abo = new MaaltijdAbonnement($repetitie->getMaaltijdRepetitieId(), null);
+					$abo->setMaaltijdRepetitie($repetitie);
+					$abo->setVanLid($uid);
+					$lijst[$mrid] = $abo;
+				}
 			}
 		}
 		ksort($lijst);
@@ -306,7 +306,7 @@ class AbonnementenModel {
 	 * @return int amount of deleted abos
 	 */
 	public static function verwijderAbonnementenVoorLid($uid) {
-		$abos = self::getAbonnementenVoorLid($uid, true);
+		$abos = self::getAbonnementenVoorLid($uid);
 		$aantal = 0;
 		foreach ($abos as $abo) {
 			$aantal += self::deleteAbonnementen($abo->getMaaltijdRepetitieId(), $uid);
