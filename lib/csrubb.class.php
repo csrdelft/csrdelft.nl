@@ -34,13 +34,13 @@ class CsrUBB extends eamBBParser{
 		if (startsWith($href, '/')) { // locale paden
 			$href = CSR_SERVER . $href;
 		}
-		elseif (!filter_var($href, FILTER_VALIDATE_URL)) { // http vergeten
+		elseif (!filter_var($href, FILTER_VALIDATE_URL)) { // http vergeten?
 			$href = 'http://'. $href;
 		}
 		$pos = strpos($href, '://');
 		if ($pos > 2 && $pos < 6 && filter_var($href, FILTER_VALIDATE_URL)) {
 			$confirm = ' class="verlaatstek"';
-			if (startsWith($href, CSR_ROOT)) {
+			if (startsWith($href, CSR_ROOT) || startsWith($href, CSR_PICS)) {
 				$confirm = '';
 			}
 			$result = '<a href="'. $href .'"'. $confirm .'>'. $content .'</a>';
