@@ -32,7 +32,7 @@ class CsrUBB extends eamBBParser{
 		}
 		// only valid patterns
 		if (startsWith($href, '/')) { // locale paden
-			$href = 'http://'. CSR_SERVER . $href;
+			$href = CSR_SERVER . $href;
 		}
 		elseif (!filter_var($href, FILTER_VALIDATE_URL)) { // http vergeten
 			$href = 'http://'. $href;
