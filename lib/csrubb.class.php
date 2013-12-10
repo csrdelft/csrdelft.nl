@@ -86,7 +86,7 @@ class CsrUBB extends eamBBParser{
 			$content = $arguments;
 		}
 		if (Instelling::get('layout_neuzen') != 'nee') {
-			$neus = '<img src="http://plaetjes.csrdelft.nl/famfamfam/bullet_red.png" width="16" height="16" alt="o" style="float: none; padding: 0px; margin: -5px; background-color: inherit; border: none;">';
+			$neus = '<img src="http://plaetjes.csrdelft.nl/famfamfam/bullet_red.png" width="16" height="16" alt="o" style="margin: -5px;">';
 			$content = str_replace('o', $neus, $content);
 		}
 		return $content;
