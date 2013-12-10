@@ -19,6 +19,35 @@ class CsrUBB extends eamBBParser{
 		$this->paragraph_mode = false;
 	}
 
+	function ubb_url($arguments = array()){
+		$content = $this->parseArray(array('[/url]', '[/rul]'), array());
+		//[url=
+		if(isset($arguments['url'])){
+			$href = $arguments['url'];
+		}elseif(isset($arguments['rul'])){
+			$href = $arguments['rul'];
+		}else{
+			//of [url][/url]
+			$href = $content;
+		}
+		// only valid patterns
+		if (!filter_var($href, FILTER_VALIDATE_URL)) {
+			$href = 'http://'.$href;
+		}
+		$pos = strpos($href, '://');
+		if ($pos > 2 && $pos < 6 && filter_var($href, FILTER_VALIDATE_URL)) {
+			$confirm = ' class="verlaatstek"';
+			if (substr($href, 7, 19) === 'csrdelft.nl/' || substr($href, 7, 23) === 'www.csrdelft.nl/') {
+				$confirm = '';
+			}
+			$result = '<a href="'.$href.'"'.$confirm.'>'.$content.'</a>';
+		}
+		else {
+			$result = '[Ongeldige URL, tip: gebruik tinyurl.com]';
+		}
+		return $result;
+	}
+
 	function ubb_citaat($arguments=array()){
 		if($this->quote_level == 0){
 	    	$this->quote_level = 1;

@@ -1,6 +1,7 @@
 /**
  * taken.js	|	P.W.G. Brussee (brussee@live.nl)
  * 
+ * requires jQuery
  */
 
 $(document).ready(function() {

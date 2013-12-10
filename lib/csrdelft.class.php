@@ -50,6 +50,7 @@ class csrdelft extends SimpleHTML {
 			$this->addScript('jquery.js', $this->_prefix);
 			$this->addScript('jquery.backstretch.js', $this->_prefix);
 			$this->addScript('init.js', $this->_prefix);
+			$this->addScript('ubb_url.js');
 		} else {
 			//oude layout
 			if(Instelling::get('layout')=='owee'){	$this->_prefix='owee_'; }
@@ -68,6 +69,7 @@ class csrdelft extends SimpleHTML {
 
 			$this->addScript('jquery.js');
 			$this->addScript('csrdelft.js');
+			$this->addScript('ubb_url.js');
 			$this->addScript('menu.js');
 			if(Instelling::get('algemeen_sneltoetsen')=='ja'){
 				$this->addScript('sneltoetsen.js');

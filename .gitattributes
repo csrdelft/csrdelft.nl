@@ -254,6 +254,7 @@ htdocs/layout/js/sneltoetsen.js -text
 htdocs/layout/js/suggest.js -text
 htdocs/layout/js/taken.js -text
 htdocs/layout/js/ubb_slideshow.js -text
+htdocs/layout/js/ubb_url.js -text
 htdocs/layout/js/verticalen.js -text
 htdocs/layout/ledenlijst.css -text
 htdocs/layout/lustrum.css -text
