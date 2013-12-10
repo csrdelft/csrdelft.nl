@@ -174,17 +174,11 @@ class Mededeling{
 		}
 		return $resultaat;
 	}
-	public function getAfgeknipteTitel(){
-		return Mededeling::knipTekst(mb_htmlentities($this->getTitel(), 34, 1)); //TODO: constanten van maken.
-	}
 	public function getTekst(){ return $this->tekst; }
 	public function getTekstVoorZijbalk(){
 		$tijdelijk=preg_replace('/(\[(|\/)\w+\])/', '|', $this->getTekst());
 		$resultaat=substr(str_replace(array("\n", "\r", ' '), ' ', $tijdelijk), 0, 40); //TODO: constanten van maken?
 		return $resultaat;
-	}
-	public function getAfgeknipteTekst(){
-		return Mededeling::knipTekst(CsrUBB::instance()->getHTML($this->getTekst()), 46, 4); //TODO: constanten van maken.
 	}
 	public function getDatum(){ return $this->datum; }
 	public function getVervaltijd(){ return $this->vervaltijd; }

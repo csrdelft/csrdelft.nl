@@ -9,10 +9,10 @@
 		</div>
 		<div class="titel">
 			<a href="{$mededelingenRoot}{$mededeling->getId()}">
-				{$mededeling->getAfgeknipteTitel()}
+				{$mededeling->getTitel()|ubb|html_substr:"40":"…"}
 				</a>
 			</div>
-		<div class="bericht">{$mededeling->getAfgeknipteTekst()}</div>
+		<div class="bericht">{$mededeling->getTekst()|ubb|html_substr:"170":"…"}</div>
 		<div class="clear"></div>
 	</div>
 {/foreach}

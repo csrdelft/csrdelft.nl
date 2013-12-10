@@ -19,6 +19,33 @@ class CsrUBB extends eamBBParser{
 		$this->paragraph_mode = false;
 	}
 
+	function getHTML($ubb)
+	{
+		parent::getHTML($ubb);
+		
+		if (Instelling::get('layout_neuzen') == 'overal' || LoginLid::instance()->getLid()->getLichting() == 2013) {
+			$pointer = 0;
+			$counter = 0;
+			while ($pointer < strlen($this->HTML)) {
+				$char = substr($this->HTML, $pointer, 1);
+				if ($char == '<') {
+					$counter += 1;;
+				}
+				elseif ($char == '>') {
+					$counter -= 1;
+				}
+				elseif ($char == 'o' && $counter == 0) {
+					$neus = $this->ubb_neuzen($char);
+					$this->HTML = substr($this->HTML, 0, $pointer) . $neus . substr($this->HTML, $pointer+1);
+					$pointer += strlen($neus);
+					continue;
+				}
+				$pointer++;
+			}
+		}
+		return $this->HTML;
+	}
+
 	function ubb_url($arguments = array()){
 		$content = $this->parseArray(array('[/url]', '[/rul]'), array());
 		if (isset($arguments['url'])) { // [url=
@@ -49,6 +76,20 @@ class CsrUBB extends eamBBParser{
 			$result = '[Ongeldige URL, tip: gebruik tinyurl.com]';
 		}
 		return $result;
+	}
+
+	function ubb_neuzen($arguments=array()){
+		if (is_array($arguments)) {
+			$content = $this->parseArray(array('[/neuzen]'), array());
+		}
+		else {
+			$content = $arguments;
+		}
+		if (Instelling::get('layout_neuzen') != 'nee') {
+			$neus = '<img src="http://plaetjes.csrdelft.nl/famfamfam/bullet_red.png" width="16" height="16" alt="o" style="float: none; padding: 0px; margin: -5px; background-color: inherit; border: none;">';
+			$content = str_replace('o', $neus, $content);
+		}
+		return $content;
 	}
 
 	function ubb_citaat($arguments=array()){

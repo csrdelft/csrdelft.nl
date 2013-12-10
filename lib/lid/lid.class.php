@@ -651,14 +651,14 @@ class Lid implements Serializable, Agendeerbaar{
 		if(in_array($this->getUid(), $nolinks) AND $mode=='link'){
 			$mode='html';
 		}
-		$neus='<img src="http://plaetjes.csrdelft.nl/famfamfam/bullet_red.png" width="16" height="16" alt="o" style="float: none; padding: 0px; margin: -5px; background-color: inherit; border: none;">';
+		
 		switch($mode){
 			case 'link':
 				if(LoginLid::instance()->hasPermission('P_LEDEN_READ')){
 					if($vorm!='pasfoto'){
 						$naam=mb_htmlentities($naam);
-						if($this->getLichting()==2013){
-							$naam=str_replace('o', $neus, $naam);
+						if(Instelling::get('layout_neuzen') == 'overal' || (Instelling::get('layout_neuzen') == '2013' && $this->getLichting() == 2013)) {
+							$naam = CsrUBB::instance()->ubb_neuzen($naam);
 						}
 					}
 					return '<a href="'.CSR_ROOT.'communicatie/profiel/'.$this->getUid().'" title="'.$sVolledigeNaam.'" class="lidLink '.$this->profiel['status'].'">'.$naam.'</a>';

@@ -70,7 +70,7 @@
 						{/if}
 					<div class="itemtitel">
 						{* {$mededeling->getDatum()} *}
-						<a href="{$pagina_root}{$mededeling->getId()}"{if $mededeling->isModerator()} style="{if !$mededeling->isPrive()}font-style: italic;{/if}{if $mededeling->getZichtbaarheid()=='wacht_goedkeuring'}font-weight: bold;{/if}"{/if}>{$mededeling->getAfgeknipteTitel()}</a>
+						<a href="{$pagina_root}{$mededeling->getId()}"{if $mededeling->isModerator()} style="{if !$mededeling->isPrive()}font-style: italic;{/if}{if $mededeling->getZichtbaarheid()=='wacht_goedkeuring'}font-weight: bold;{/if}"{/if}>{$mededeling->getTitel()|ubb|html_substr:"40":"…"}</a>
 					</div>
 			</div>
 				{/foreach}
