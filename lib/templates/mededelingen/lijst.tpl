@@ -1,7 +1,7 @@
 <div class="mededelingen-overzichtlijst">
 	{foreach from=$lijst key=groepering item=mededelingen}
 		<div class="mededelingenlijst-block">
-			<div class="mededelingenlijst-block-titel">{$groepering}</div>
+			<div class="mededelingenlijst-block-titel">{$groepering|ucfirst}</div>
 				{foreach from=$mededelingen item=mededeling}
 					<div {if $mededeling->getId()==$geselecteerdeMededeling->getId()}id="actief" {/if}class="mededelingenlijst-item{if $mededeling->isVerborgen()} verborgen-item{/if}{if $mededeling->isVerwijderd()} verwijderd-item{/if}">
 						{if $mededeling->getCategorie()->getPlaatje() !=''}

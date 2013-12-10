@@ -279,8 +279,7 @@ class Mededeling{
 		$resource=$db->select($paginaQuery);
 		while( $mededeling=$db->next($resource) )
 		{
-			$datum=date_create($mededeling['datum']);
-			$groepeerstring=$datum->format('F Y'); // Maand voluit en jaar.
+			$groepeerstring=strftime ('%B %Y', strtotime($mededeling['datum'])); // Maand voluit en jaar.
 			if(!isset($mededelingen[$groepeerstring]))
 				$mededelingen[$groepeerstring]=array();
 			$mededelingen[$groepeerstring][]=new Mededeling($mededeling['id']);
