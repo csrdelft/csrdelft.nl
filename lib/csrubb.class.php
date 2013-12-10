@@ -21,26 +21,29 @@ class CsrUBB extends eamBBParser{
 
 	function ubb_url($arguments = array()){
 		$content = $this->parseArray(array('[/url]', '[/rul]'), array());
-		//[url=
-		if(isset($arguments['url'])){
+		if (isset($arguments['url'])) { // [url=
 			$href = $arguments['url'];
-		}elseif(isset($arguments['rul'])){
+		}
+		elseif (isset($arguments['rul'])) { // [rul=
 			$href = $arguments['rul'];
-		}else{
-			//of [url][/url]
+		}
+		else { // [url][/url]
 			$href = $content;
 		}
 		// only valid patterns
-		if (!filter_var($href, FILTER_VALIDATE_URL)) {
-			$href = 'http://'.$href;
+		if (startsWith($href, '/')) { // locale paden
+			$href = 'http://'. CSR_SERVER . $href;
+		}
+		elseif (!filter_var($href, FILTER_VALIDATE_URL)) { // http vergeten
+			$href = 'http://'. $href;
 		}
 		$pos = strpos($href, '://');
 		if ($pos > 2 && $pos < 6 && filter_var($href, FILTER_VALIDATE_URL)) {
 			$confirm = ' class="verlaatstek"';
-			if (substr($href, 7, 19) === 'csrdelft.nl/' || substr($href, 7, 23) === 'www.csrdelft.nl/') {
+			if (startsWith($href, CSR_ROOT)) {
 				$confirm = '';
 			}
-			$result = '<a href="'.$href.'"'.$confirm.'>'.$content.'</a>';
+			$result = '<a href="'. $href .'"'. $confirm .'>'. $content .'</a>';
 		}
 		else {
 			$result = '[Ongeldige URL, tip: gebruik tinyurl.com]';
@@ -511,13 +514,14 @@ HTML;
 				$pad=substr($pad, 10);
 			}
 			//de albumnaam bedenken. Op een of andere wijze doet het album dat niet zelf :(
-			$albumnaam=urldecode(end(array_filter(explode('/', $albuminvoer))));
+			$albuminvoer=array_filter(explode('/', $albuminvoer));
+			$albumnaam=urldecode(end($albuminvoer));
 
 			$album=new Fotoalbum($pad, $albumnaam);
 
 			//album bestaat niet, we geven een foutmelding
 			if(!$album->exists()){
-				return '<div class="ubb_block">ubb_fotoalbum: fotoalbum bestaat niet ('.mb_htmlentities($pad).')</div>';
+				return '<div class="ubb_block">Fotoalbum niet gevonden: '.mb_htmlentities($pad).'</div>';
 			}
 		}
 
@@ -618,12 +622,12 @@ HTML;
 		}
 		catch (Exception $e) {
 			if (strpos($e->getMessage(), 'Not found') !== false) {
-				return '[maaltijd] Niet gevonden! (id='. mb_htmlentities($mid) .') [/maaltijd]';
+				return '<div class="ubb_block ubb_maaltijd">Maaltijd niet gevonden: '. mb_htmlentities($mid) .'</div>';
 			}
 			return $e->getMessage();
 		}
 		if (!isset($maaltijd)) {
-			return '[maaltijd] Niet gevonden! (id='. mb_htmlentities($mid) .') [/maaltijd]';
+			return '<div class="ubb_block ubb_maaltijd">Maaltijd niet gevonden: '. mb_htmlentities($mid) .'</div>';
 		}
 		$aanmeldingen = \Taken\MLT\AanmeldingenModel::getAanmeldingenVoorLid(array($maaltijd->getMaaltijdId() => $maaltijd), \LoginLid::instance()->getUid());
 		if (empty($aanmeldingen)) {
