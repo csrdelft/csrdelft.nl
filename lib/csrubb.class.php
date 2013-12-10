@@ -23,7 +23,7 @@ class CsrUBB extends eamBBParser{
 	{
 		parent::getHTML($ubb);
 		
-		if (Instelling::get('layout_neuzen') == 'overal' || LoginLid::instance()->getLid()->getLichting() == 2013) {
+		if (Instelling::get('layout_neuzen') == 'overal' || (Instelling::get('layout_neuzen') == '2013' && LoginLid::instance()->getLid()->getLichting() == 2013)) {
 			$pointer = 0;
 			$counter = 0;
 			while ($pointer < strlen($this->HTML)) {
