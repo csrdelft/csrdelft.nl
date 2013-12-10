@@ -41,7 +41,12 @@ class KwalificatiesModel {
 	}
 	
 	public static function getKwalificatiesVanLid($uid) {
-		return self::loadKwalificaties('lid_id = ?', array($uid));
+		$kwalificaties = self::loadKwalificaties('lid_id = ?', array($uid));
+		$functies = FunctiesModel::getAlleFuncties(true); // grouped by fid
+		foreach ($kwalificaties as $kwali) {
+			$kwali->setCorveeFunctie($functies[$kwali->getFunctieId()]);
+		}
+		return $kwalificaties;
 	}
 	
 	public static function getIsLidGekwalificeerd($uid, $fid) {

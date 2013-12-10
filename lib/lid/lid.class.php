@@ -412,6 +412,7 @@ class Lid implements Serializable, Agendeerbaar{
 	 * CorveeKwalificaties opzoeken en teruggeven van dit lid
 	 */
 	public function getCorveeKwalificaties(){
+		require_once 'taken/model/KwalificatiesModel.class.php';
 		return Taken\CRV\KwalificatiesModel::getKwalificatiesVanLid($this->getUid());
 	}
 
@@ -419,6 +420,7 @@ class Lid implements Serializable, Agendeerbaar{
 	 * CorveeVrijstelling opzoeken en teruggeven van dit lid
 	 */
 	public function getCorveeVrijstelling(){
+		require_once 'taken/model/VrijstellingenModel.class.php';
 		return \Taken\CRV\VrijstellingenModel::getVrijstelling($this->getUid());
 	}
 
@@ -426,6 +428,7 @@ class Lid implements Serializable, Agendeerbaar{
 	 * CorveeVoorkeuren opzoeken en teruggeven van dit lid
 	 */
 	public function getCorveeVoorkeuren(){
+		require_once 'taken/model/VoorkeurenModel.class.php';
 		return \Taken\CRV\VoorkeurenModel::getVoorkeurenVoorLid($this->getUid());
 	}
 
@@ -433,6 +436,7 @@ class Lid implements Serializable, Agendeerbaar{
 	 * CorveeTaken opzoeken en teruggeven van dit lid
 	 */
 	public function getCorveeTaken(){
+		require_once 'taken/model/TakenModel.class.php';
 		return \Taken\CRV\TakenModel::getTakenVoorLid($this->getUid());
 	}
 

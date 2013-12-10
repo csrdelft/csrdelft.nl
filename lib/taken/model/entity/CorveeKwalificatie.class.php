@@ -19,6 +19,8 @@ class CorveeKwalificatie {
 	
 	private $wanneer_toegewezen; #datetime
 	
+	private $corvee_functie;
+	
 	public function __construct($uid='', $fid=0, $wanneer='') {
 		$this->lid_id = $uid;
 		$this->functie_id = (int) $fid;
@@ -43,6 +45,9 @@ class CorveeKwalificatie {
 	public function getFunctieId() {
 		return (int) $this->functie_id;
 	}
+	public function getCorveeFunctie() {
+		return $this->corvee_functie;
+	}
 	
 	public function getWanneerToegewezen() {
 		return $this->wanneer_toegewezen;
@@ -53,6 +58,9 @@ class CorveeKwalificatie {
 			throw new \Exception('Geen string: wanneer toegewezen');
 		}
 		$this->wanneer_toegewezen = $datumtijd;
+	}
+	public function setCorveeFunctie(CorveeFunctie $functie) {
+		$this->corvee_functie = $functie;
 	}
 }
 

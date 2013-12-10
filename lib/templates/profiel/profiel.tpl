@@ -243,6 +243,9 @@
 			</ul>
 			<br />
 		{/if}
+			<br />
+			<div class="label">Kwalificaties:</div>
+			<div class="data">{foreach from=$corveekwalificaties item=kwali}{$kwali->getCorveeFunctie()->getNaam()}<span style="color: gray;"> (sinds {$kwali->getWanneerToegewezen()})</span>{/foreach}</div>
 		</div>
 	</div>
 	{/if}
