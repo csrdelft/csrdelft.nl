@@ -28,7 +28,7 @@
 		</td>
 		<td class="box">{$aanmelding->getSaldoMelding()}</td>
 		{elseif $aanmelding->getDoorLidId()}
-		<td class="naam">Gast van {$aanmelding->getDoorLid()->getNaamLink('civitas')|lcfirst}</td>
+		<td class="naam">Gast van {$aanmelding->getDoorLid()->getNaamLink($globals.weergave_ledennamen_maaltijdlijst, 'link')|lcfirst}</td>
 		<td class="box">-</td>
 		{else}
 		<td class="naam"></td>
@@ -60,7 +60,7 @@
 	{table_foreach from=$corveetaken inner=rows item=taak table_attr='class="corveetaken"' cols=2 name=corveetaken}
 			&bullet;&nbsp;
 		{if $taak->getLidId()}
-			{$taak->getLid()->getNaamLink()}
+			{$taak->getLid()->getNaamLink($globals.weergave_ledennamen_maaltijdlijst, 'link')}
 		{else}
 			<i>vacature</i>
 		{/if}
