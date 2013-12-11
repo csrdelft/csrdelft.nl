@@ -32,7 +32,6 @@ class BeheerTakenController extends \ACLController {
 				'verwijder' => 'P_CORVEE_MOD',
 				'herstel' => 'P_CORVEE_MOD',
 				'toewijzen' => 'P_CORVEE_MOD',
-				'koppelen' => 'P_CORVEE_MOD',
 				'puntentoekennen' => 'P_CORVEE_MOD',
 				'puntenintrekken' => 'P_CORVEE_MOD',
 				'email' => 'P_CORVEE_MOD',
@@ -154,7 +153,7 @@ class BeheerTakenController extends \ACLController {
 			$values = $this->content->getValues();
 			$uid = ($values['lid_id'] === '' ? null : $values['lid_id']);
 			$crid = ($values['crv_repetitie_id'] === '' ? null : intval($values['crv_repetitie_id']));
-			$mid = ($values['maaltijd_id'] === '' ? null : intval($values['maaltijd_id']));
+			$mid = ($values['maaltijd_id'] === 0 ? null : $values['maaltijd_id']);
 			$taak = TakenModel::saveTaak($tid, intval($values['functie_id']), $uid, $crid, $mid, $values['datum'], intval($values['punten']), intval($values['bonus_malus']));
 			$maaltijd = null;
 			if (endsWith($_SERVER['HTTP_REFERER'], $GLOBALS['taken_module'] .'/maaltijd/'. $values['maaltijd_id'])) { // state of gui
@@ -199,20 +198,6 @@ class BeheerTakenController extends \ACLController {
 			}
 			require_once 'taken/view/forms/TaakToewijzenFormView.class.php';
 			$this->content = new TaakToewijzenFormView($taak, $leden_punten, $voorkeuren, $repetitie); // fetches POST values itself
-		}
-	}
-	
-	//TODO
-	public function action_koppelen($tid) {
-		$taak = TakenModel::getTaak($tid);
-		$form = new TaakKoppelenFormView($tid, $taak->getMaaltijdId()); // fetches POST values itself
-		if ($form->validate()) {
-			$values = $form->getValues();
-			TakenModel::taakKoppelenAanMaaltijd($taak, $values['maaltijd_id']);
-			$this->content = new BeheerTakenView($taak);
-		}
-		else {
-			$this->content = $form;
 		}
 	}
 	

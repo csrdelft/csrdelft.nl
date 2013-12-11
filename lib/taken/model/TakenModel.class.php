@@ -115,14 +115,6 @@ class TakenModel {
 		}
 	}
 	
-	public static function taakKoppelenAanMaaltijd(CorveeTaak $taak, $mid) {
-		if (!is_int($mid) || $mid <= 0) {
-			throw new \Exception('Taak koppelen aan maaltijd faalt: Invalid $mid ='. $mid);
-		}
-		$taak->setMaaltijdId($mid);
-		self::updateTaak($taak);
-	}
-	
 	public static function puntenToekennen(CorveeTaak $taak) {
 		$db = \CsrPdo::instance();
 		try {
@@ -262,9 +254,12 @@ class TakenModel {
 				$taak = self::getTaak($tid);
 				if ($taak->getFunctieId() !== $fid) {
 					$taak->setCorveeRepetitieId(null);
+					$taak->setFunctieId($fid);
 				}
-				$taak->setFunctieId($fid);
-				$taak->setMaaltijdId($mid);
+				if ($taak->getMaaltijdId() !== $mid) {
+					\Taken\MLT\MaaltijdenModel::getMaaltijd($mid, true);
+					$taak->setMaaltijdId($mid);
+				}
 				$taak->setDatum($datum);
 				$taak->setPunten($punten);
 				$taak->setBonusMalus($bonus_malus);

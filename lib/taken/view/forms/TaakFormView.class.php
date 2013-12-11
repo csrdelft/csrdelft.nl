@@ -29,11 +29,12 @@ class TaakFormView extends \SimpleHtml {
 		$formFields[] = new \SelectField('functie_id', $fid, 'Functie', $functieNamen, $functieSelectie);
 		$formFields['lid'] = new \LidField('lid_id', $uid, 'Lid');
 		$formFields['lid']->title = 'Bij het wijzigen van het toegewezen lid worden ook de corveepunten aan het nieuwe lid gegeven.';
-		$formFields[] = new \HiddenField('crv_repetitie_id', $crid);
-		$formFields[] = new \HiddenField('maaltijd_id', $mid);
 		$formFields[] = new \DatumField('datum', $datum, 'Datum', date('Y')+2, date('Y')-2);
 		$formFields[] = new \IntField('punten', $punten, 'Punten', 10, 0);
 		$formFields[] = new \IntField('bonus_malus', $bonus_malus, 'Bonus/malus', 10, -10);
+		$formFields[] = new \HiddenField('crv_repetitie_id', $crid);
+		$formFields['mid'] = new \IntField('maaltijd_id', $mid, 'Gekoppelde maaltijd', null, 0, true);
+		$formFields['mid']->title = 'Het ID van de maaltijd waar deze taak bij hoort.';
 		
 		$this->_form = new \Formulier('taken-corveetaak-form', $GLOBALS['taken_module'] .'/opslaan/'. $tid, $formFields);
 	}
