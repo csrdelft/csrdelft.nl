@@ -148,11 +148,8 @@ class CorveeTaak implements \Agendeerbaar {
 	 */
 	public function getIsTelaatGemaild() {
 		$moeten = $this->getAantalKeerMoetenMailen();
-		if ($moeten === 0) {
-			return false;
-		}
 		$aantal = $this->getAantalKeerGemaild();
-		if ($aantal < $moeten) {
+		if ($moeten > $aantal) {
 			return true;
 		}
 		$pos = strpos($this->wanneer_gemaild, '&#013;');
@@ -183,7 +180,7 @@ class CorveeTaak implements \Agendeerbaar {
 		
 		for ($i = intval($GLOBALS['herinnering_aantal_mails']); $i > 0; $i--) {
 			
-			if ($nu >= strtotime($GLOBALS['herinnering_'. $i .'e_mail'], $datum) && $moeten > $aantal) {
+			if ($nu >= strtotime($GLOBALS['herinnering_'. $i .'e_mail'], $datum) && $moeten >= $aantal) { // $moeten > $aantal betekent te laat gemaild!
 				return true;
 			}
 		}

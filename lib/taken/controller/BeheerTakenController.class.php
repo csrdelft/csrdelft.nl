@@ -86,15 +86,19 @@ class BeheerTakenController extends \ACLController {
 		$verstuurd_errors = HerinneringenModel::stuurHerinneringen();
 		$verstuurd = $verstuurd_errors[0];
 		$errors = $verstuurd_errors[1];
-		$aantal = sizeof($errors);
-		if ($aantal > 0) {
-			setMelding($aantal .' herinnering'. ($aantal !== 1 ? 'en' : '') .' niet kunnen versturen!', -1);
+		$aantal = sizeof($verstuurd);
+		$count = sizeof($errors);
+		if ($count > 0) {
+			setMelding($count .' herinnering'. ($count !== 1 ? 'en' : '') .' niet kunnen versturen!', -1);
 			foreach ($errors as $error) {
-				setMelding($error->getMessage(), 2); // toon wat er allemaal fout is gegaan
+				setMelding($error->getMessage(), 2); // toon wat fout is gegaan
 			}
 		}
-		if ($verstuurd > 0) {
-			setMelding($verstuurd .' herinnering'. ($verstuurd !== 1 ? 'en' : '') .' verstuurd!', 1);
+		if ($aantal > 0) {
+			setMelding($aantal .' herinnering'. ($aantal !== 1 ? 'en' : '') .' verstuurd!', 1);
+			foreach ($verstuurd as $melding) {
+				setMelding($melding, 1); // toon wat goed is gegaan
+			}
 		}
 		else {
 			setMelding('Geen herinneringen verstuurd.', 0);
