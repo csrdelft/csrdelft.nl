@@ -162,6 +162,10 @@ class TakenModel {
 		return self::loadTaken('verwijderd = false AND datum >= ?', array(date('Y-m-d')));
 	}
 	
+	public static function getVerledenTaken() {
+		return self::loadTaken('verwijderd = false AND datum < ?', array(date('Y-m-d')));
+	}
+	
 	public static function getAlleTaken($groupByUid=false) {
 		$taken = self::loadTaken('verwijderd = false');
 		if ($groupByUid) {

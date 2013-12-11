@@ -29,11 +29,11 @@ class MijnCorveeController extends \ACLController {
 		if ($this->hasParam(1)) {
 			$this->action = $this->getParam(1);
 		}
-		$crid = null;
+		$arg = null;
 		if ($this->hasParam(2)) {
-			$crid = intval($this->getParam(2));
+			$arg = $this->getParam(2);
 		}
-		$this->performAction($crid);
+		$this->performAction($arg);
 	}
 	
 	public function action_mijn() {
@@ -48,9 +48,19 @@ class MijnCorveeController extends \ACLController {
 		$this->content->addScript('taken.js');
 	}
 	
-	public function action_rooster() {
-		$rooster = TakenModel::getRoosterMatrix(TakenModel::getKomendeTaken());
-		$this->content = new CorveeRoosterView($rooster);
+	public function action_rooster($arg=null) {
+		$toonverleden = false;
+		if ($arg === 'verleden') {
+			$taken = TakenModel::getVerledenTaken();
+		}
+		else {
+			$taken = TakenModel::getKomendeTaken();
+			if (\LoginLid::instance()->hasPermission('P_CORVEE_MOD')) {
+				$toonverleden = true;
+			}
+		}
+		$rooster = TakenModel::getRoosterMatrix($taken);
+		$this->content = new CorveeRoosterView($rooster, $toonverleden);
 		$this->content = new \csrdelft($this->getContent());
 		$this->content->addStylesheet('taken.css');
 		$this->content->addScript('taken.js');
