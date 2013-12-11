@@ -123,15 +123,6 @@ class MaaltijdenModel {
 			$verwijderd = 0;
 			if ($mid === 0) {
 				$maaltijd = self::newMaaltijd($mrid, $titel, $limiet, $datum, $tijd, $prijs, $filter);
-				// aanmelden van leden met abonnement op deze repetitie
-				if (!$maaltijd->getIsGesloten() && $mrid !== null) {
-					$abonnementen = AbonnementenModel::getAbonnementenVoorRepetitie($mrid);
-					$aantal = 0;
-					foreach ($abonnementen as $abonnement) {
-						$aantal += AanmeldingenModel::aanmeldenVoorKomendeRepetitieMaaltijden($mrid, $abonnement->getLidId());
-					}
-					$maaltijd->setAantalAanmeldingen($aantal);
-				}
 			}
 			else {
 				$maaltijd = self::getMaaltijd($mid);
@@ -298,7 +289,18 @@ class MaaltijdenModel {
 			throw new \Exception('New maaltijd faalt: $query->rowCount() ='. $query->rowCount());
 		}
 		$maaltijd = new Maaltijd(intval($db->lastInsertId()), $mrid, $titel, $limiet, $datum, $tijd, $prijs, $gesloten, $wanneer, false, $filter);
-		$maaltijd->setAantalAanmeldingen(0);
+		$aantal = 0;
+		// aanmelden van leden met abonnement op deze repetitie
+		if (!$gesloten && $mrid !== null) {
+			$abonnementen = AbonnementenModel::getAbonnementenVoorRepetitie($mrid);
+			foreach ($abonnementen as $abo) {
+				if (AanmeldingenModel::checkAanmeldFilter($abo->getLidId(), $maaltijd->getAanmeldFilter())) {
+					AanmeldingenModel::aanmeldenDoorAbonnement($maaltijd->getMaaltijdId(), $abo->getMaaltijdRepetitieId(), $abo->getLidId());
+					$aantal++;
+				}
+			}
+		}
+		$maaltijd->setAantalAanmeldingen($aantal);
 		return $maaltijd;
 	}
 	
@@ -389,7 +391,7 @@ class MaaltijdenModel {
 	
 	/**
 	 * Maakt nieuwe maaltijden aan volgens de definitie van de maaltijd-repetitie.
-	 * Meld alle leden met een abonnement hierop automatisch aan.
+	 * Alle leden met een abonnement hierop worden automatisch aangemeld.
 	 * 
 	 * @return Maaltijden[]
 	 */
@@ -408,7 +410,6 @@ class MaaltijdenModel {
 			}
 			$datum = $beginDatum;
 			$corveerepetities = \Taken\CRV\CorveeRepetitiesModel::getRepetitiesVoorMaaltijdRepetitie($repetitie->getMaaltijdRepetitieId());
-			$abonnementen = AbonnementenModel::getAbonnementenVoorRepetitie($repetitie->getMaaltijdRepetitieId());
 			$maaltijden = array();
 			while ($datum <= $eindDatum) { // break after one
 				$maaltijd = self::newMaaltijd(
@@ -428,14 +429,6 @@ class MaaltijdenModel {
 					break;
 				}
 				$datum = strtotime('+'. $repetitie->getPeriodeInDagen() .' days', $datum);
-			}
-			// aanmelden van leden met abonnement op deze repetitie
-			$aantal = 0;
-			foreach ($abonnementen as $abonnement) {
-				$aantal += AanmeldingenModel::aanmeldenVoorKomendeRepetitieMaaltijden($repetitie->getMaaltijdRepetitieId(), $abonnement->getLidId());
-			}
-			foreach ($maaltijden as $maaltijd) {
-				$maaltijd->setAantalAanmeldingen($aantal);
 			}
 			$db->commit();
 			return $maaltijden;

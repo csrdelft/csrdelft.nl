@@ -47,6 +47,10 @@ class AanmeldingenModel {
 		return $aanmelding;
 	}
 	
+	public static function aanmeldenDoorAbonnement($mid, $mrid, $uid) {
+		return self::newAanmelding($mid, $uid, 0, '', $mrid, null);
+	}
+	
 	/**
 	 * Called when a MaaltijdAbonnement is being deleted (turned off) or a MaaltijdRepetitie is being deleted.
 	 * 
@@ -426,6 +430,7 @@ class AanmeldingenModel {
 	// Repetitie-Maaltijden ############################################################
 	
 	/**
+	 * Alleen aanroepen voor inschakelen abonnement!
 	 * 
 	 * @param int $mrid
 	 * @param string $uid
