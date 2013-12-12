@@ -216,7 +216,7 @@ class csrdelft extends SimpleHTML {
 		if(Instelling::get('layout_minion')=='ja'){
 			$csrdelft->assign('minion', $csrdelft->fetch('minion.tpl'));
 		}
-		
+
 		//SocCie-saldi, MaalCie-saldi
 		$csrdelft->assign('saldi', $loginlid->getLid()->getSaldi());
 		$csrdelft->assign('menutpl', $this->_menutpl);
@@ -224,16 +224,16 @@ class csrdelft extends SimpleHTML {
 		if(defined('DEBUG') AND ($loginlid->hasPermission('P_ADMIN') OR $loginlid->isSued())){
 			$csrdelft->assign('db', MySql::instance());
 		}
-		
+
 		$csrdelft->caching=false;
-        
+
         // laad oude template of de benoemde nieuwe
         if($this->_prefix !== 'csrdelft2') {
             $csrdelft->display($this->_prefix.'csrdelft.tpl');
         } else {
             $csrdelft->display('csrdelft2/'.$template.'.tpl');
         }
-            
+
 		//als er een error is geweest, die unsetten...
 		if(isset($_SESSION['auth_error'])){ unset($_SESSION['auth_error']); }
 	}
