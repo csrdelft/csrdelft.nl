@@ -244,6 +244,7 @@
 					<li>{$taak->getDatum()} {$taak->getCorveeFunctie()->getNaam()}</li>
 				{/foreach}
 			</ul>
+			<br />
 			<div class="label">Corveepunten:</div>
 			<div class="data">{$corveepunten}{if $corveebonus > 0}+{/if}{if $corveebonus != 0}{$corveebonus}{/if}</div>
 		</div>
