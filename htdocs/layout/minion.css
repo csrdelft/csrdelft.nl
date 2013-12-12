@@ -275,11 +275,11 @@
           box-shadow: inset 0 0 3px 1px #957b43;
      -moz-box-shadow: inset 0 0 3px 1px #957b43;
   -webkit-box-shadow: inset 0 0 3px 1px #957b43;
-  -webkit-animation: mouth 7s infinite step-start 1s;
+/*-webkit-animation: mouth 7s infinite step-start 1s;
      -moz-animation: mouth 7s infinite step-start 1s;
       -ms-animation: mouth 7s infinite step-start 1s;
        -o-animation: mouth 7s infinite step-start 1s;
-          animation: mouth 7s infinite step-start 1s;
+          animation: mouth 7s infinite step-start 1s;*/
 }
 
 #minion .teeth {
