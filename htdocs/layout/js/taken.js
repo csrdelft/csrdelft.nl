@@ -38,8 +38,8 @@ function taken_link_init() {
 		if ($(this).hasClass('ruilen')) {
 			$(this).removeClass('ruilen');
 			$(this).attr('draggable', 'true');
-			$(this).attr('ondragstart', 'handleDragStart(event);');
-			$(this).attr('ondragover', 'handleDragOver(event);');
+			$(this).attr('ondragstart', 'startDrag(event);');
+			$(this).attr('ondragover', 'allowDrop(event);');
 			$(this).attr('ondrop', 'handleDrop(event);');
 		}
 	});
@@ -246,15 +246,11 @@ function taken_update_dom(htmlString) {
  * Ruilen van CorveeTaak
  * 
  */
-function handleDragStart(e) {
-	var id = $(e.target).parent('.dragobject').attr('id');
-	e.dataTransfer.setData('Text', id);
-}
-function handleDragOver(e) {
+function allowDrop(e) {
 	if (e.target.tagName.toUpperCase() === 'IMG') { // over an image inside of anchor
 		e.target = $(e.target).parent();
 	}
-	var source = $('#'+e.dataTransfer.getData('Text'));
+	var source = $('#'+dragobjectID);
 	if ($(source).attr('id') !== $(e.target).attr('id')) {
 		e.preventDefault();
 	}
@@ -265,7 +261,7 @@ function handleDrop(e) {
 	if (elmnt.tagName.toUpperCase() === 'IMG') { // dropped on image inside of anchor
 		elmnt = $(elmnt).parent();
 	}
-	var source = $('#'+e.dataTransfer.getData('Text'));
+	var source = $('#'+dragobjectID);
 	if (!confirm('Toegekende corveepunten worden meegeruild!\n\nDoorgaan met ruilen?')) {
 		return;
 	}
