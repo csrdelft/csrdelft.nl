@@ -9,7 +9,7 @@
      - Wave on the coat.
      - Animation when changing the clothes.
 -->
-<div id="minion" class="dragobject">
+<div id="minion" class="dragobject" onclick="$(this).toggleClass('superman');">
   <ul class="hair hair-left">
     <li></li>
     <li></li>

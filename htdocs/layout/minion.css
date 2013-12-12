@@ -272,12 +272,14 @@
   height: 40px;
   border-radius: 50%;
   background: #FCDA6D;
-  box-shadow: inset 0 0 3px 1px #957b43;
-  /*-webkit-animation: mouth 7s infinite step-start 1s;
+          box-shadow: inset 0 0 3px 1px #957b43;
+     -moz-box-shadow: inset 0 0 3px 1px #957b43;
+  -webkit-box-shadow: inset 0 0 3px 1px #957b43;
+  -webkit-animation: mouth 7s infinite step-start 1s;
      -moz-animation: mouth 7s infinite step-start 1s;
       -ms-animation: mouth 7s infinite step-start 1s;
        -o-animation: mouth 7s infinite step-start 1s;
-          animation: mouth 7s infinite step-start 1s;*/
+          animation: mouth 7s infinite step-start 1s;
 }
 
 #minion .teeth {
@@ -716,26 +718,26 @@
   left: -2px;
 }
 
-#minion .superman .leg {
+#minion.superman .leg {
   background: #222;
 }
 
-#minion .superman .coat {
+#minion.superman .coat {
   visibility: visible;
 }
 
-#minion .superman .mouth {
+#minion.superman .mouth {
   background: #fcda6d;
 }
 
-#minion .superman .mouth:after {
+#minion.superman .mouth:after {
   border-radius: 0;
 }
 
-#minion .superman .arm,
-#minion .superman .arm-left:after,
-#minion .superman .arm-left:before,
-#minion .superman .arm-right:after {
+#minion.superman .arm,
+#minion.superman .arm-left:after,
+#minion.superman .arm-left:before,
+#minion.superman .arm-right:after {
   background: blue;
   background: -webkit-linear-gradient(left, #222 67%,#115278 100%);
   background: -moz-linear-gradient(left, #222 67%,#115278 100%);
@@ -817,11 +819,11 @@
   transform: rotate(-45deg);
 }
 
-#minion .superman .pants {
+#minion.superman .pants {
   visibility: hidden;
 }
 
-#minion .superman .super-pants {
+#minion.superman .super-pants {
   visibility: visible;
 }
 

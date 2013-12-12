@@ -232,7 +232,6 @@
 				<li>{$abonnement->getMaaltijdRepetitie()->getStandaardTitel()}</li>
 			{/foreach}
 			</ul>
-			<br />
 		{/if}
 			<br />
 			<div class="label">Kwalificaties:</div>
