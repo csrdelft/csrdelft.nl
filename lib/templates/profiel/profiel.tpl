@@ -209,20 +209,11 @@
 	<div class="profielregel" id="maaltijden">
 		<div class="gegevens">
 			<div class="label">Recent:</div>
-			<div class="data">
-			{if $profhtml.recenteMaaltijden}
-				<table id="recenteMaaltijden">
-					{foreach from=$profhtml.recenteMaaltijden item=maaltijd}
-						<tr>
-							<td>{$maaltijd->getBeginMoment()|date_format:"%a %d-%m-%Y %H:%i"}</td>
-							<td>{$maaltijd->getTitel()}</td>
-						</tr>
-					{/foreach}
-				</table>
-			{else}
-				<span style="color: gray;">U heeft zich in het recente verleden niet aangemeld voor een maaltijd.</span>
-			{/if}
-			</div>
+			<ul class="nobullets data">
+				{foreach from=$profhtml.recenteMaaltijden item=maaltijd}
+					<li>{$maaltijd->getBeginMoment()|date_format:"%a %d-%m-%Y %H:%i"} {$maaltijd->getTitel()}</li>
+				{/foreach}
+			</ul>
 			<br />
 			<div class="label">Allergie/dieet:</div>
 			<div class="data">{strip}
@@ -246,7 +237,17 @@
 			<br />
 			<div class="label">Kwalificaties:</div>
 			<div class="data">{foreach from=$corveekwalificaties item=kwali}{$kwali->getCorveeFunctie()->getNaam()}<span style="color: gray;"> (sinds {$kwali->getWanneerToegewezen()})</span>{/foreach}</div>
+			<br />
+			<div class="label">Corveetaken:</div>
+			<ul class="nobullets data">
+				{foreach from=$corveetaken item=taak}
+					<li>{$taak->getDatum()} {$taak->getCorveeFunctie()->getNaam()}</li>
+				{/foreach}
+			</ul>
+			<div class="label">Corveepunten:</div>
+			<div class="data">{$corveepunten}{if $corveebonus > 0}+{/if}{if $corveebonus != 0}{$corveebonus}{/if}</div>
 		</div>
+		
 	</div>
 	{/if}
 	{if $profiel->getForumPostCount()>0 OR is_array($profhtml.recenteForumberichten) OR $loginlid->getUid()==$profiel->getUid()}

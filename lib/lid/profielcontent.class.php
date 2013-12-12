@@ -51,6 +51,8 @@ class ProfielContent extends SimpleHTML {
 			$profiel->assign('saldografiek', Saldi::getDatapoints($this->lid->getUid(), 60));
 		}
 
+		$profiel->assign('corveepunten', $this->lid->getProperty('corvee_punten'));
+		$profiel->assign('corveebonus', $this->lid->getProperty('corvee_punten_bonus'));
 		$profiel->assign('corveetaken', $this->lid->getCorveeTaken());
 		$profiel->assign('corveevoorkeuren', $this->lid->getCorveeVoorkeuren());
 		$profiel->assign('corveevrijstelling', $this->lid->getCorveeVrijstelling());
