@@ -9,7 +9,6 @@ $(document).ready(function() {
 	$('#beheer-taken-menu').show();
 	taken_form_init();
 	taken_link_init();
-	taken_popup_init();
 });
 
 function taken_form_init() {
@@ -24,14 +23,6 @@ function taken_form_init() {
 			});
 		}
 	});
-}
-
-function taken_popup_init() {
-	var p = document.getElementById('taken-popup');
-	if (p) {
-		p.addEventListener('mousedown', startDrag, false);
-		window.addEventListener('mouseup', stopDrag, false);
-	}
 }
 
 function taken_link_init() {
@@ -244,81 +235,27 @@ function taken_update_dom(htmlString) {
 	taken_form_init();
 	taken_link_init();
 	if (popup) {
-		taken_popup_init();
+		dragobject_init();
 	}
 	else {
 		taken_close_popup();
 	}
 }
 
-
-/**
- * Drag popup
- * 
- */
-var offsetX = 0;
-var offsetY = 0;
-function startDrag(e) {
-	e = e || window.event;
-	if (e.target.id === 'taken-popup') {
-		offsetX = mouseX(e);
-		offsetY = mouseY(e);
-		window.addEventListener('mousemove', mouseMoveHandler, true);
-	}
-}
-function stopDrag(e) {
-	window.removeEventListener('mousemove', mouseMoveHandler, true);
-}
-function mouseMoveHandler(e) {
-	e = e || window.event;
-	var x = mouseX(e);
-	var y = mouseY(e);
-	if (x !== offsetX || y !== offsetY) {
-		var p = document.getElementById('taken-popup');
-		var l = parseInt(p.style.left);
-		var t = parseInt(p.style.top);
-		if (isNaN(l)) l = $('#taken-popup').offset().left - (document.documentElement.scrollLeft ? document.documentElement.scrollLeft : document.body.scrollLeft);
-		if (isNaN(t)) t = $('#taken-popup').offset().top - (document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop);
-		p.style.left = (l + x - offsetX) + 'px';
-		p.style.top  = (t + y - offsetY) + 'px';
-		offsetX = x;
-		offsetY = y;
-	}
-}
-function mouseX(e) {
-	if (e.pageX) {
-	  return e.pageX;
-	}
-	if (e.clientX) {
-		return e.clientX + (document.documentElement.scrollLeft ? document.documentElement.scrollLeft : document.body.scrollLeft);
-	}
-	return null;
-}
-function mouseY(e) {
-	if (e.pageY) {
-		return e.pageY;
-	}
-	if (e.clientY) {
-		return e.clientY + (document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop);
-	}
-	return null;
-}
-
-
 /**
  * Ruilen van CorveeTaak
  * 
  */
 function handleDragStart(e) {
-	e.dataTransfer.setData('Text', e.target.id);
+	var id = $(e.target).parent('.dragobject').attr('id');
+	e.dataTransfer.setData('Text', id);
 }
 function handleDragOver(e) {
-	var elmnt = e.target;
-	if (elmnt.tagName.toUpperCase() === 'IMG') { // over an image inside of anchor
-		elmnt = $(elmnt).parent();
+	if (e.target.tagName.toUpperCase() === 'IMG') { // over an image inside of anchor
+		e.target = $(e.target).parent();
 	}
 	var source = $('#'+e.dataTransfer.getData('Text'));
-	if ($(source).attr('id') !== $(elmnt).attr('id')) {
+	if ($(source).attr('id') !== $(e.target).attr('id')) {
 		e.preventDefault();
 	}
 }

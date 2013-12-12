@@ -1,7 +1,7 @@
 {*
 	popup_form.tpl	| 	P.W.G. Brussee (brussee@live.nl)
 *}
-<div id="taken-popup" class="outer-shadow">
+<div id="taken-popup" class="outer-shadow dragobject">
 <h1>{$kop}</h1>
 {$melding}<br />
 {$form->view()}

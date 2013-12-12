@@ -50,6 +50,7 @@ class csrdelft extends SimpleHTML {
 			$this->addScript('jquery.js', $this->_prefix);
 			$this->addScript('jquery.backstretch.js', $this->_prefix);
 			$this->addScript('init.js', $this->_prefix);
+			$this->addScript('dragobject.js');
 			$this->addScript('ubb_url.js');
 		} else {
 			//oude layout
@@ -69,12 +70,15 @@ class csrdelft extends SimpleHTML {
 
 			$this->addScript('jquery.js');
 			$this->addScript('csrdelft.js');
+			$this->addScript('dragobject.js');
 			$this->addScript('ubb_url.js');
 			$this->addScript('menu.js');
 			if(Instelling::get('algemeen_sneltoetsen')=='ja'){
 				$this->addScript('sneltoetsen.js');
 			}
-
+			if(Instelling::get('layout_minion')=='ja'){
+				$this->addStylesheet('minion.css');
+			}
 			if(Instelling::get('layout')=='roze' AND LoginLid::instance()->getUid()!='x999'){
 				$this->addStylesheet('roze.css');
 			}
@@ -209,6 +213,10 @@ class csrdelft extends SimpleHTML {
 		$csrdelft=new Smarty_csr();
 		$csrdelft->assign_by_ref('csrdelft', $this);
 
+		if(Instelling::get('layout_minion')=='ja'){
+			$csrdelft->assign('minion', $csrdelft->fetch('minion.tpl'));
+		}
+		
 		//SocCie-saldi, MaalCie-saldi
 		$csrdelft->assign('saldi', $loginlid->getLid()->getSaldi());
 		$csrdelft->assign('menutpl', $this->_menutpl);

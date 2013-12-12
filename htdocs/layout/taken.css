@@ -223,17 +223,13 @@ td.maaltijd-aangemeld, td.maaltijd-afgemeld {
 	position: fixed;
 	z-index: 11;
 	width: 500px;
-	margin-left: auto;
-	margin-right: auto;
 	padding: 50px;
 	background-color: white;/*
 	background-image: url("http://plaetjes.csrdelft.nl/layout/beeldmerk.jpg");
 	background-position: top right;
 	background-repeat: no-repeat;*/
 }
-#taken-popup:active {
-	cursor: move;
-}
+
 .outer-shadow {
 	-moz-box-shadow: 0 0 20px #000000;
 	-webkit-box-shadow: 0 0 20px #000000;

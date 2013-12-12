@@ -66,6 +66,11 @@ ul.horizontal li.active{ font-weight:bold; }
 ul.nobullets li{ list-style-type: none; }
 
 
+.dragobject:active {
+	cursor: move;
+}
+
+
 /**** MENU ********************************************************************/
 #menu {
 	margin: 0 auto;
