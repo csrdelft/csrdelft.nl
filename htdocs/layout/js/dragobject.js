@@ -3,19 +3,21 @@
  * 
  * requires jQuery
  */
+
 $(document).ready(function() {
 	window.addEventListener('mousedown', startDrag, false);
 	window.addEventListener('mouseup', stopDrag, false);
 });
 
 var dragobjectID;
-var offsetX = 0;
-var offsetY = 0;
+var offsetX;
+var offsetY;
+
 function startDrag(e) {
 	e = e || window.event;
 	dragobjectID = $(e.target).attr('id');
 	if (typeof dragobjectID === 'undefined' || dragobjectID === false || !$('#'+dragobjectID).hasClass('dragobject')) {
-		dragobjectID = $(e.target).parent('.dragobject').attr('id');
+		dragobjectID = $(e.target).closest('.dragobject').attr('id');
 	}
 	if (typeof dragobjectID !== 'undefined' && dragobjectID !== false) {
 		offsetX = mouseX(e);
@@ -33,8 +35,8 @@ function mouseMoveHandler(e) {
 	if (x !== offsetX || y !== offsetY) {
 		var left = $('#'+dragobjectID).offset().left;
 		var top = $('#'+dragobjectID).offset().top;
-		$('#'+dragobjectID).css('left', (left + e.clientX - offsetX) + 'px');
-		$('#'+dragobjectID).css('top', (top + e.clientY - offsetY) + 'px');
+		$('#'+dragobjectID).css('left', (left + (x - offsetX)) + 'px');
+		$('#'+dragobjectID).css('top', (top + (y - offsetY)) + 'px');
 		offsetX = x;
 		offsetY = y;
 	}

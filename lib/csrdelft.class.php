@@ -77,6 +77,7 @@ class csrdelft extends SimpleHTML {
 				$this->addScript('sneltoetsen.js');
 			}
 			if(Instelling::get('layout_minion')=='ja'){
+				$this->addScript('minion.js');
 				$this->addStylesheet('minion.css');
 			}
 			if(Instelling::get('layout')=='roze' AND LoginLid::instance()->getUid()!='x999'){
