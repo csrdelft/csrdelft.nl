@@ -40,6 +40,7 @@ class TaakToewijzenFormView extends \SimpleHtml {
 			$uid = $voorkeur->getLidId();
 			if (array_key_exists($uid, $suggestielijst)) {
 				$voorkeurlijst[$uid] = $voorkeurCssClass;
+				$suggestielijst[$uid] .= ' «';
 			}
 		}
 		
