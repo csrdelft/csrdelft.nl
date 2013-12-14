@@ -62,7 +62,7 @@
 			<td colspan="4" class="forumtekst">
 				<form method="post" action="/communicatie/forum/onderwerp-toevoegen/{$categorie->getID()}" id="forumForm">
 					{if $loginlid->hasPermission('P_LOGGED_IN')}
-						{ if $categorie->isOpenbaar()} 
+						{if $categorie->isOpenbaar()} 
 							 <strong>Openbaar forum:</strong> Iedereen mag dit lezen en zoekmachines nemen het op in hun zoekresultaten.<br /><br />
 						{/if}
 						Hier kunt u een onderwerp toevoegen in deze categorie van het forum. Kijkt u vooraf goed of het

@@ -17,17 +17,10 @@ class HerinneringenModel {
 		$to = $uid .'@csrdelft.nl';
 		
 		setlocale(LC_ALL, 'nl_NL');
-		$headers = 'From: noreply@csrdelft.nl\r\n';
-		$headers.= 'Reply-To: corvee@csrdelft.nl\r\n';
-		$headers.= 'Content-Type: text/plain; charset=UTF-8\r\n';
+		$headers = 'From: noreply@csrdelft.nl; \r\n';
+		$headers.= 'Reply-To: corvee@csrdelft.nl; \r\n';
+		$headers.= 'Content-Type: text/plain; charset=UTF-8; \r\n';
 		$headers.= 'X-Mailer: csrdelft.nl/PubCie\r\n';
-		
-		if (strtoupper(substr(PHP_OS, 0, 3)) === 'MAC') {
-			$headers = str_replace('\r\n', '\r', $headers);
-		}
-		elseif (strtoupper(substr(PHP_OS, 0, 3)) !== 'WIN') {
-			$headers = str_replace('\r\n', '\n', $headers);
-		}
 		
 		$onderwerp = 'C.S.R. Delft Corvee - '. $datum;
 		$bericht = $taak->getCorveeFunctie()->getEmailBericht();
