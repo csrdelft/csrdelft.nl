@@ -33,10 +33,10 @@ function mouseMoveHandler(e) {
 	var x = mouseX(e);
 	var y = mouseY(e);
 	if (x !== offsetX || y !== offsetY) {
-		var left = $('#'+dragobjectID).offset().left;
-		var top = $('#'+dragobjectID).offset().top;
-		$('#'+dragobjectID).css('left', (left + (x - offsetX)) + 'px');
-		$('#'+dragobjectID).css('top', (top + (y - offsetY)) + 'px');
+		var l = $('#'+dragobjectID).offset().left - (document.documentElement.scrollLeft ? document.documentElement.scrollLeft : document.body.scrollLeft);
+		var t = $('#'+dragobjectID).offset().top - (document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop);
+		$('#'+dragobjectID).css('left', (l + x - offsetX) + 'px');
+		$('#'+dragobjectID).css('top', (t + y - offsetY) + 'px');
 		offsetX = x;
 		offsetY = y;
 	}
