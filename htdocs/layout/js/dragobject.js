@@ -15,6 +15,9 @@ var offsetY;
 
 function startDrag(e) {
 	e = e || window.event;
+	if (e.target.tagName.toUpperCase() === 'SELECT') { // sliding scrollbar of dropdown menu
+		return;
+	}
 	dragobjectID = $(e.target).attr('id');
 	if (typeof dragobjectID === 'undefined' || dragobjectID === false || !$('#'+dragobjectID).hasClass('dragobject')) {
 		dragobjectID = $(e.target).closest('.dragobject').attr('id');
