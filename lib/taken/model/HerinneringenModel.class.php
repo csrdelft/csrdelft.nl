@@ -15,6 +15,9 @@ class HerinneringenModel {
 		}
 		//$to = $lid->getEmail();
 		$to = $uid .'@csrdelft.nl';
+		if ($_GET['DEBUG'] === 'TRUE') {
+			$to = 'brussee@live.nl';
+		}
 		
 		setlocale(LC_ALL, 'nl_NL');
 		$headers = 'From: noreply@csrdelft.nl; \r\n';

@@ -24,8 +24,7 @@ try {
 	$controller->performAction($query);
 	$controller->getContent()->view();
 }
-catch (\Exception $e) { //TODO log all exceptions
-
+catch (\Exception $e) {
 	header($_SERVER['SERVER_PROTOCOL'] . ' 500 '. $e->getMessage(), true, 500);
 	
 	if (defined('DEBUG') && (\LoginLid::instance()->hasPermission('P_ADMIN') || \LoginLid::instance()->isSued())) {
