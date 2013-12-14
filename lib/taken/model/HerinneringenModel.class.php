@@ -15,16 +15,7 @@ class HerinneringenModel {
 		}
 		//$to = $lid->getEmail();
 		$to = $uid .'@csrdelft.nl';
-		if ($_GET['DEBUG'] === 'TRUE') {
-			$to = 'brussee@live.nl';
-		}
-		
-		setlocale(LC_ALL, 'nl_NL');
-		$headers = 'From: noreply@csrdelft.nl; \r\n';
-		$headers.= 'Reply-To: corvee@csrdelft.nl; \r\n';
-		$headers.= 'Content-Type: text/plain; charset=UTF-8; \r\n';
-		$headers.= 'X-Mailer: csrdelft.nl/PubCie\r\n';
-		
+		$from = 'corvee@csrdelft.nl';
 		$onderwerp = 'C.S.R. Delft Corvee - '. $datum;
 		$bericht = $taak->getCorveeFunctie()->getEmailBericht();
 		$lidnaam = $lid->getNaamLink('civitas');
@@ -39,8 +30,9 @@ class HerinneringenModel {
 			}
 		}
 		$bericht = str_replace(array('LIDNAAM', 'DATUM', 'MEEETEN'), array($lidnaam, $datum, $eten), $bericht);
-		
-		if (mail($to, $onderwerp, $bericht, $headers)) { // false if failed
+		$mail = new \Mail($to, $onderwerp, $bericht);
+		$mail->setFrom($from);
+		if ($mail->send()) { // false if failed
 			TakenModel::updateGemaild($taak);
 			return $datum .' '. $taak->getCorveeFunctie()->getNaam() .' verstuurd! ('. $lidnaam .')';
 		}
@@ -56,20 +48,19 @@ class HerinneringenModel {
 		$van = strtotime(date('Y-m-d'));
 		$tot = strtotime($vooraf, $van);
 		$taken = TakenModel::getTakenVoorAgenda($van, $tot, true);
-		
-		$teller = array();
+		$verzonden = array();
 		$errors = array();
 		foreach ($taken as $taak) {
 			if ($taak->getMoetHerinneren()) {
 				try {
-					$teller[] = self::stuurHerinnering($taak);
+					$verzonden[] = self::stuurHerinnering($taak);
 				}
 				catch (\Exception $e) {
 					$errors[] = $e;
 				}
 			}
 		}
-		return array($teller, $errors);
+		return array($verzonden, $errors);
 	}
 }
 
