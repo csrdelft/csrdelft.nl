@@ -1,7 +1,10 @@
 <?php
 namespace Taken\CRV;
+
+require_once 'mail.class.php';
+
 /**
- * EmailsModel.class.php	| 	P.W.G. Brussee (brussee@live.nl)
+ * HerinneringenModel.class.php	| 	P.W.G. Brussee (brussee@live.nl)
  * 
  */
 class HerinneringenModel {
