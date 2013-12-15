@@ -80,7 +80,12 @@ class ForumContent extends SimpleHTML {
 		}
 	}
 	public function lastPostsZijbalkBelangrijk($zelf=false){
-		$aPosts=Forum::getPostsZijbalkBelangrijk(Instelling::get('zijbalk_forum'), true);
+		$aantal=Instelling::get('zijbalk_forum_belangrijk');
+		if($aantal < 5) {
+			$aantal=5;
+			Instelling::set('zijbalk_forum_belangrijk', 5);
+		}
+		$aPosts=Forum::getPostsZijbalkBelangrijk($aantal, true);
 		echo '<div id="zijbalk_forum"><h1><a href="/communicatie/forum/categorie/laatste">Forum belangrijk</a></h1>';
 		if(!is_array($aPosts)){
 			echo '<div class="item">Geen items gevonden</div>';
