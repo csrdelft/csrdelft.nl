@@ -238,7 +238,6 @@ htdocs/layout/js/groepen.js -text
 htdocs/layout/js/jquery.js -text
 htdocs/layout/js/jquery.prettyPhoto.js -text
 htdocs/layout/js/jquery.timeago.js -text
-htdocs/layout/js/jquery.timeago.nl.js -text
 htdocs/layout/js/layout2/jquery.backstretch.js -text
 htdocs/layout/js/layout2/jquery.js -text
 htdocs/layout/js/lightbox.js -text
@@ -3373,8 +3372,9 @@ lib/templates/taken/maaltijd/maaltijd_lijst.tpl -text
 lib/templates/taken/maaltijd/maaltijd_lijst_fiscaal.tpl -text
 lib/templates/taken/maaltijd/mijn_maaltijd_lijst.tpl -text
 lib/templates/taken/maaltijd/mijn_maaltijden.tpl -text
+lib/templates/taken/menu_beheer.tpl -text
+lib/templates/taken/menu_pagina.tpl -text
 lib/templates/taken/popup_form.tpl -text
-lib/templates/taken/taken_menu.tpl -text
 lib/templates/taken/voorkeur/beheer_voorkeur_lijst.tpl -text
 lib/templates/taken/voorkeur/beheer_voorkeur_veld.tpl -text
 lib/templates/taken/voorkeur/beheer_voorkeuren.tpl -text

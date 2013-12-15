@@ -15,7 +15,7 @@ class BeheerAbonnementenController extends \ACLController {
 		parent::__construct($query);
 		if (!parent::isPOSTed()) {
 			$this->acl = array(
-				'beheer' => 'P_MAAL_MOD',
+				'waarschuwingen' => 'P_MAAL_MOD',
 				'ingeschakeld' => 'P_MAAL_MOD',
 				'abonneerbaar' => 'P_MAAL_MOD'
 			);
@@ -28,7 +28,7 @@ class BeheerAbonnementenController extends \ACLController {
 				'novieten' => 'P_MAAL_MOD'
 			);
 		}
-		$this->action = 'beheer';
+		$this->action = 'waarschuwingen';
 		if ($this->hasParam(1)) {
 			$this->action = $this->getParam(1);
 		}
@@ -39,7 +39,7 @@ class BeheerAbonnementenController extends \ACLController {
 		$this->performAction($mrid);
 	}
 	
-	public function action_beheer($alleenWaarschuwingen=true, $ingeschakeld=null) {
+	private function action_beheer($alleenWaarschuwingen, $ingeschakeld=null) {
 		$repetities = MaaltijdRepetitiesModel::getAlleRepetities();
 		$matrix = AbonnementenModel::getAbonnementenMatrix($repetities, false, $alleenWaarschuwingen, $ingeschakeld);
 		$this->content = new BeheerAbonnementenView($matrix, $repetities, $alleenWaarschuwingen, $ingeschakeld);
@@ -48,6 +48,10 @@ class BeheerAbonnementenController extends \ACLController {
 		$this->content->addStylesheet('taken.css');
 		$this->content->addScript('autocomplete/jquery.autocomplete.min.js');
 		$this->content->addScript('taken.js');
+	}
+	
+	public function action_waarschuwingen() {
+		$this->action_beheer(true, null);
 	}
 	
 	public function action_ingeschakeld() {

@@ -21,7 +21,7 @@ class ACLController extends Controller {
 		$this->acl = $acl;
 	}
 	
-	//call the action
+	//call the action with optional (indexed array of) parameter(s)
 	protected function performAction($args=null) {
 		if (!$this->hasPermission()) {
 			$this->action = 'geentoegang';

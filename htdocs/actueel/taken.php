@@ -11,17 +11,13 @@ try {
 	require_once 'taken/controller/ModuleController.class.php';
 	
 	\Taken\MLT\InstellingenModel::getAlleInstellingen();
+	$GLOBALS['taken_mainmenu'] = '/actueel/';
 	
 	$query = $_GET['query'];
 	if (substr($query, 0, 1) === '/') { // redir /maaltijden/ketzer equal to /maaltijdenketzer
 		$query = substr($query, 1);
 	}
 	$controller = new \Taken\CRV\ModuleController($_GET['module'], $query); // module redir in .htaccess
-	
-	$GLOBALS['taken_mainmenu'] = '/actueel/';
-	$GLOBALS['taken_module'] = $GLOBALS['taken_mainmenu'] . $controller->module;
-	
-	$controller->performAction($query);
 	$controller->getContent()->view();
 }
 catch (\Exception $e) {

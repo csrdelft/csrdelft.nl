@@ -30,7 +30,7 @@ class MijnVoorkeurenView extends \SimpleHtml {
 		elseif (is_array($this->_voorkeuren)) { // list of voorkeuren
 			$smarty->assign('melding', $this->getMelding());
 			$smarty->assign('kop', $this->getTitel());
-			$smarty->display('taken/taken_menu.tpl');
+			$smarty->display('taken/menu_pagina.tpl');
 			
 			$smarty->assign('eetwens', $this->_eetwens);
 			$smarty->assign('voorkeuren', $this->_voorkeuren);

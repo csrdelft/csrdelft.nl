@@ -30,7 +30,7 @@ class BeheerPuntenView extends \SimpleHtml {
 		else { // matrix of repetities and voorkeuren
 			$smarty->assign('melding', $this->getMelding());
 			$smarty->assign('kop', $this->getTitel());
-			$smarty->display('taken/taken_menu.tpl');
+			$smarty->display('taken/menu_pagina.tpl');
 			
 			$smarty->assign('matrix', $this->_leden_punten);
 			$smarty->assign('functies', $this->_functies);

@@ -45,7 +45,7 @@ class BeheerTakenView extends \SimpleHtml {
 				$smarty->assign('popup', $this->_popup);
 				$smarty->assign('melding', $this->getMelding());
 				$smarty->assign('kop', $this->getTitel());
-				$smarty->display('taken/taken_menu.tpl');
+				$smarty->display('taken/menu_pagina.tpl');
 				
 				$takenByDate = array();
 				foreach ($this->_taken as $taak) {

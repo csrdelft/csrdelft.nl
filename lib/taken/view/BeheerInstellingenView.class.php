@@ -24,7 +24,7 @@ class BeheerInstellingenView extends \SimpleHtml {
 		if (is_array($this->_instellingen)) {
 			$smarty->assign('melding', $this->getMelding());
 			$smarty->assign('kop', $this->getTitel());
-			$smarty->display('taken/taken_menu.tpl');
+			$smarty->display('taken/menu_pagina.tpl');
 			
 			$smarty->assign('instellingen', $this->_instellingen);
 			$smarty->display('taken/instelling/beheer_instellingen.tpl');

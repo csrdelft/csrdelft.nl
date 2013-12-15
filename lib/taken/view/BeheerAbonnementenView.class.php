@@ -48,7 +48,7 @@ class BeheerAbonnementenView extends \SimpleHtml {
 			if (is_array($this->_repetities)) {
 				$smarty->assign('melding', $this->getMelding());
 				$smarty->assign('kop', $this->getTitel());
-				$smarty->display('taken/taken_menu.tpl');
+				$smarty->display('taken/menu_pagina.tpl');
 				
 				$smarty->assign('aborepetities', MaaltijdRepetitiesModel::getAbonneerbareRepetities());
 				$smarty->assign('repetities', $this->_repetities);

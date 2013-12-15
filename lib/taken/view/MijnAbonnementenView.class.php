@@ -24,7 +24,7 @@ class MijnAbonnementenView extends \SimpleHtml {
 		if (is_array($this->_abonnementen)) { // list of abonnementen
 			$smarty->assign('melding', $this->getMelding());
 			$smarty->assign('kop', $this->getTitel());
-			$smarty->display('taken/taken_menu.tpl');
+			$smarty->display('taken/menu_pagina.tpl');
 			
 			$smarty->assign('abonnementen', $this->_abonnementen);
 			$smarty->display('taken/abonnement/mijn_abonnementen.tpl');

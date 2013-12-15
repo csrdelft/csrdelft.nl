@@ -44,12 +44,12 @@ class Controller{
 	protected function isPOSTed(){
 		return $_SERVER['REQUEST_METHOD']=='POST';
 	}
-	//call the action
+	//call the action with optional (indexed array of) paramenter(s)
 	protected function performAction($args=null){
 		$action='action_'.$this->action;
 		if($this->hasAction($this->action)){
-			if (is_null($args)){
-				$this->$action();
+			if (is_array($args)){
+				call_user_func_array($action, $args);
 			}else{
 				$this->$action($args);
 			}

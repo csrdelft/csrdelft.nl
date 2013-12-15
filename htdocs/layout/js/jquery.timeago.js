@@ -1,4 +1,7 @@
 /**
+ * AANGEPAST: NLD vertaling & abbr autostart
+ * 
+ * 
  * Timeago is a jQuery plugin that makes it easy to support automatically
  * updating fuzzy timestamps (e.g. "4 minutes ago" or "about 1 day ago").
  *
@@ -47,23 +50,23 @@ jQuery(document).ready(function() {
       localeTitle: false,
       cutoff: 0,
       strings: {
-        prefixAgo: null,
-        prefixFromNow: null,
-        suffixAgo: "ago",
-        suffixFromNow: "from now",
-        seconds: "less than a minute",
-        minute: "about a minute",
-        minutes: "%d minutes",
-        hour: "about an hour",
-        hours: "about %d hours",
-        day: "a day",
-        days: "%d days",
-        month: "about a month",
-        months: "%d months",
-        year: "about a year",
-        years: "%d years",
-        wordSeparator: " ",
-        numbers: []
+		prefixAgo: "",
+		prefixFromNow: "sinds",
+		suffixAgo: "geleden",
+		suffixFromNow: "",
+		seconds: "minder dan een minuut",
+		minute: "1 minuut",
+		minutes: "%d minuten",
+		hour: "1 uur",
+		hours: "%d uur",
+		day: "een dag",
+		days: "%d dagen",
+		month: "een maand",
+		months: "%d maanden",
+		year: "een jaar",
+		years: "%d jaar",
+		wordSeparator: " ",
+		numbers: []
       }
     },
     inWords: function(distanceMillis) {

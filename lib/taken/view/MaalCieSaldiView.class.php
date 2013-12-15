@@ -16,7 +16,7 @@ class MaalCieSaldiView extends \SimpleHtml {
 		$smarty= new \Smarty_csr();
 		$smarty->assign('melding', $this->getMelding());
 		$smarty->assign('kop', $this->getTitel());
-		$smarty->display('taken/taken_menu.tpl');
+		$smarty->display('taken/menu_pagina.tpl');
 		$smarty->display('taken/maalcie_saldi.tpl');
 	}
 }

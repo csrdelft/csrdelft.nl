@@ -24,7 +24,7 @@ class BeheerVrijstellingenView extends \SimpleHtml {
 		if (is_array($this->_vrijstellingen)) {
 			$smarty->assign('melding', $this->getMelding());
 			$smarty->assign('kop', $this->getTitel());
-			$smarty->display('taken/taken_menu.tpl');
+			$smarty->display('taken/menu_pagina.tpl');
 			
 			$smarty->assign('vrijstellingen', $this->_vrijstellingen);
 			$smarty->display('taken/vrijstelling/beheer_vrijstellingen.tpl');

@@ -11,9 +11,7 @@
 abstract class SimpleHTML {
 
 	//html voor een pagina uitpoepen.
-	public function view() {
-
-	}
+	public function view() {}
 
 	/**
 	 * Geeft berichten weer die opgeslagen zijn in de sessie met met setMelding($message, $lvl=0)
@@ -171,14 +169,10 @@ class IsHetAlContent extends SimpleHTML{
 }
 
 class Reclame extends SimpleHTML {
-	
-	public function __construct(){
-	
-	}
-	
-	public function view(){
-		echo '<script type=\'text/javascript\'><!--// <![CDATA[/* [id1377] Delft CSR - Standaard */ OA_show(1377);// ]]> --></script>';
-	}
+
+	public function __construct(){}
+
+	public function view(){}
 }
 
 class Kolom extends SimpleHTML {
@@ -187,9 +181,7 @@ class Kolom extends SimpleHTML {
 	# stuk pagina zit, wat we er met view() uit kunnen krijgen.
 	var $_objects = array();
 
-	public function __construct(){
-
-	}
+	public function __construct(){}
 
 	public function addObject($object){ $this->_objects[]=$object; }
 	public function addTekst($string){ $this->addObject(new string2object($string)); }
@@ -203,8 +195,8 @@ class Kolom extends SimpleHTML {
 	}
 	public function view() {
 		foreach ($this->_objects as $object) {
-			$object->view();
 			echo '<br />';
+			$object->view();
 		}
 	}
 }
@@ -267,9 +259,7 @@ class DefaultKolom extends Kolom{
 			require_once 'lid/verjaardagcontent.class.php';
 			$this->add(new VerjaardagContent('komende'));
 		}
-		if(false){
-			$this->add(new Reclame());
-		}
+		//$this->add(new Reclame());
 	}
 }
 

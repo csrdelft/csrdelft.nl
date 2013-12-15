@@ -27,7 +27,7 @@ class BeheerFunctiesView extends \SimpleHtml {
 			$smarty->assign('popup', $this->_popup);
 			$smarty->assign('melding', $this->getMelding());
 			$smarty->assign('kop', $this->getTitel());
-			$smarty->display('taken/taken_menu.tpl');
+			$smarty->display('taken/menu_pagina.tpl');
 			
 			$smarty->assign('functies', $this->_functies);
 			$smarty->display('taken/functie/beheer_functies.tpl');

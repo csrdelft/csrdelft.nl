@@ -27,7 +27,7 @@ class MijnMaaltijdenView extends \SimpleHtml {
 		if (is_array($this->_maaltijden)) { // list of maaltijden and list of aanmeldingen
 			$smarty->assign('melding', $this->getMelding());
 			$smarty->assign('kop', $this->getTitel());
-			$smarty->display('taken/taken_menu.tpl');
+			$smarty->display('taken/menu_pagina.tpl');
 			
 			$toonlijst = array();
 			foreach ($this->_maaltijden as $maaltijd) {

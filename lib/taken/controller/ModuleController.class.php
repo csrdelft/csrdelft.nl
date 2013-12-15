@@ -9,8 +9,6 @@ require_once 'aclcontroller.class.php';
  */
 class ModuleController extends \ACLController {
 
-	public $module;
-	
 	public function __construct($module, $query) {
 		parent::__construct($query);
 		if ($module === 'maaltijden') {
@@ -28,8 +26,8 @@ class ModuleController extends \ACLController {
 		}
 		elseif ($module === 'corvee') {
 			$this->acl = array(
-				'corvee_' => 'P_CORVEE_IK',
-				'corvee_mijn' => 'P_CORVEE_IK', // shortcut
+				'corvee_' => 'P_CORVEE_IK', // shortcut
+				'corvee_mijn' => 'P_CORVEE_IK',
 				'corvee_rooster' => 'P_CORVEE_IK', // shortcut
 				'corvee_beheer' => 'P_CORVEE_MOD',
 				'corvee_repetities' => 'P_CORVEE_MOD',
@@ -42,15 +40,15 @@ class ModuleController extends \ACLController {
 			);
 			$this->action = ''; // default
 		}
+		else {
+			$module = '';
+		}
 		if ($this->hasParam(0)) {
 			$this->action = $this->getParam(0);
 		}
-		$this->module = $module . $this->action;
+		$GLOBALS['taken_module'] = $GLOBALS['taken_mainmenu'] . $module . $this->action;
 		$this->action = $module .'_'. $this->action;
-	}
-	
-	public function performAction($args=null) {
-		parent::performAction($args);
+		$this->performAction($query);
 	}
 	
 	protected function action_geentoegang() {

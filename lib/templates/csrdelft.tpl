@@ -42,19 +42,11 @@
 				{if is_object($csrdelft->_zijkolom)}
 					<div class="block">
 						{$csrdelft->_zijkolom->view()}
-						<script type='text/javascript'><!--// <![CDATA[
-						    /* [id1377] Delft CSR - Standaard */
-						    OA_show(1377);
-						// ]]> --></script>
 					</div>
 				{else}
 					{section name=object loop=$csrdelft->_zijkolom}
 						<div class="block">
 							{$object->view()}
-							<script type='text/javascript'><!--// <![CDATA[
-							    /* [id1377] Delft CSR - Standaard */
-							    OA_show(1377);
-							// ]]> --></script>
 						</div>
 					{/section}
 				{/if}
