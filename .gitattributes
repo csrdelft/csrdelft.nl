@@ -3283,6 +3283,7 @@ lib/templates/forum/list_onderwerpen.tpl -text
 lib/templates/forum/list_recent.tpl -text
 lib/templates/forum/onderwerp.tpl -text
 lib/templates/forum/rss.tpl -text
+lib/templates/forum/zijbalk_item.tpl -text
 lib/templates/forum/zoeken.tpl -text
 lib/templates/fotoalbum/album.tpl -text
 lib/templates/groepen/groep.tpl -text

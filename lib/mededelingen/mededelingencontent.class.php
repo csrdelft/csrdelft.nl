@@ -119,7 +119,6 @@ class MededelingenZijbalkContent extends SimpleHTML{
 		
 		// Handige variabelen.
 		$content->assign('mededelingenRoot', MededelingenContent::mededelingenRoot);
-		$content->assign('datumFormaat', '%d-%m');
 		
 		// De laatste n mededelingen ophalen en meegeven aan $content.
 		$mededelingen=Mededeling::getLaatsteMededelingen($this->aantal);

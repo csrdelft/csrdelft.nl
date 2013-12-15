@@ -53,23 +53,26 @@ class ForumContent extends SimpleHTML {
 		if(!is_array($aPosts)){
 			echo '<div class="item">Geen items gevonden</div>';
 		}else{
+			$smarty=new Smarty_csr();
 			foreach($aPosts as $aPost){
 				$tekst=$aPost['titel'];
 				if(strlen($tekst)>40){
 					$tekst=trim(substr($tekst, 0, 38)).'…';
 				}
-				$tekst=mb_htmlentities($tekst);
-				$tekst=str_replace(' ', '&nbsp;', $tekst);
-
+				$tekst=str_replace(' ', '&nbsp;', mb_htmlentities($tekst));
 				$post=preg_replace('/(\[(|\/)\w+\])/', '|', $aPost['tekst']);
 				$postfragment=substr(str_replace(array("\n", "\r", ' '), ' ', $post), 0, 40);
-				echo '<div class="item"><span class="tijd">'.date('H:i', strtotime($aPost['datum'])).'</span>&nbsp;';
-				echo '<a href="/communicatie/forum/reactie/'.$aPost['postID'].'"
-					title="['.htmlspecialchars($aPost['titel']).'] '.
-						Forum::getForumNaam($aPost['uid'], false, false).': '.mb_htmlentities($postfragment).'"';
-				if(LoginLid::instance()->getUid()!='x999'&&($aPost['momentGelezen']==''||$aPost['momentGelezen']<$aPost['lastpost'])) { echo ' class="opvallend"'; }
-				echo '>'.$tekst.'</a><br />'."\n";
-				echo '</div>';
+				
+				$smarty->assign('timestamp', strtotime($aPost['datum']));
+				$smarty->assign('postID', $aPost['postID']);
+				$smarty->assign('titel', htmlspecialchars($aPost['titel']));
+				$smarty->assign('naam', Forum::getForumNaam($aPost['uid'], false, false));
+				$smarty->assign('postfragment', mb_htmlentities($postfragment));
+				if(LoginLid::instance()->getUid()!='x999'&&($aPost['momentGelezen']==''||$aPost['momentGelezen']<$aPost['lastpost'])) {
+					$smarty->assign('opvallend', true);
+				}
+				$smarty->assign('linktekst', $tekst);
+				$smarty->display('forum/zijbalk_item.tpl');
 			}
 		}
 		if(!$zelf){
@@ -77,30 +80,31 @@ class ForumContent extends SimpleHTML {
 		}
 	}
 	public function lastPostsZijbalkBelangrijk($zelf=false){
-		
 		$aPosts=Forum::getPostsZijbalkBelangrijk(Instelling::get('zijbalk_forum'), true);
 		echo '<div id="zijbalk_forum"><h1><a href="/communicatie/forum/categorie/laatste">Forum belangrijk</a></h1>';
-
 		if(!is_array($aPosts)){
 			echo '<div class="item">Geen items gevonden</div>';
 		}else{
+			$smarty=new Smarty_csr();
 			foreach($aPosts as $aPost){
 				$tekst=$aPost['titel'];
 				if(strlen($tekst)>40){
 					$tekst=trim(substr($tekst, 0, 38)).'…';
 				}
-				$tekst=mb_htmlentities($tekst);
-				$tekst=str_replace(' ', '&nbsp;', $tekst);
-
+				$tekst=str_replace(' ', '&nbsp;', mb_htmlentities($tekst));
 				$post=preg_replace('/(\[(|\/)\w+\])/', '|', $aPost['tekst']);
 				$postfragment=substr(str_replace(array("\n", "\r", ' '), ' ', $post), 0, 40);
-				echo '<div class="item"><span class="tijd">'.date('H:i', strtotime($aPost['datum'])).'</span>&nbsp;';
-				echo '<a href="/communicatie/forum/reactie/'.$aPost['postID'].'"
-					title="['.htmlspecialchars($aPost['titel']).'] '.
-						Forum::getForumNaam($aPost['uid'], false, false).': '.mb_htmlentities($postfragment).'"';
-				if(LoginLid::instance()->getUid()!='x999'&&($aPost['momentGelezen']==''||$aPost['momentGelezen']<$aPost['lastpost'])) { echo ' class="opvallend"'; }
-				echo '>'.$tekst.'</a><br />'."\n";
-				echo '</div>';
+				
+				$smarty->assign('timestamp', strtotime($aPost['datum']));
+				$smarty->assign('postID', $aPost['postID']);
+				$smarty->assign('titel', htmlspecialchars($aPost['titel']));
+				$smarty->assign('naam', Forum::getForumNaam($aPost['uid'], false, false));
+				$smarty->assign('postfragment', mb_htmlentities($postfragment));
+				if(LoginLid::instance()->getUid()!='x999'&&($aPost['momentGelezen']==''||$aPost['momentGelezen']<$aPost['lastpost'])) {
+					$smarty->assign('opvallend', true);
+				}
+				$smarty->assign('linktekst', $tekst);
+				$smarty->display('forum/zijbalk_item.tpl');
 			}
 		}
 		if(!$zelf){
