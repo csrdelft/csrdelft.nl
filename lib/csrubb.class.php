@@ -634,9 +634,6 @@ HTML;
 		}
 		$mid = trim($mid);
 		$maaltijd2 = null;
-		// init
-		require_once 'taken/model/InstellingenModel.class.php';
-		\Taken\MLT\InstellingenModel::getAlleInstellingen();
 		
 		require_once 'taken/model/MaaltijdenModel.class.php';
 		require_once 'taken/model/AanmeldingenModel.class.php';

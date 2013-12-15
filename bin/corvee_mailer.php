@@ -19,9 +19,7 @@ session_id('maaltrack-cli');
 chdir('../lib/');
 require_once 'configuratie.include.php';
 
-require_once 'maaltijden/class.maaltrack.php';
-$maaltrack = new MaalTrack();
-
-$maaltrack->corveeAutoMailer();
+require_once 'taken/HerinneringenModel.class.php';
+Taken\CRV\HerinneringenModel::stuurHerinneringen();
 
 ?>

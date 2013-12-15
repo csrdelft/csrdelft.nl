@@ -177,10 +177,6 @@ class AanmeldingenModel {
 	}
 	
 	public static function getRecenteMaaltijdenVoorLidProfiel($uid) {
-		// init
-		require_once 'taken/model/InstellingenModel.class.php';
-		\Taken\MLT\InstellingenModel::getAlleInstellingen();
-		
 		$maaltijdenById = MaaltijdenModel::getRecenteMaaltijden();
 		return AanmeldingenModel::getAanmeldingenVoorLid($maaltijdenById, $uid);
 	}

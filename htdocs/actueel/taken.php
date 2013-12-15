@@ -7,10 +7,8 @@
  */
 try {
 	require_once 'configuratie.include.php';
-	require_once 'taken/model/InstellingenModel.class.php';
 	require_once 'taken/controller/ModuleController.class.php';
 	
-	\Taken\MLT\InstellingenModel::getAlleInstellingen();
 	$GLOBALS['taken_mainmenu'] = '/actueel/';
 	
 	$query = $_GET['query'];

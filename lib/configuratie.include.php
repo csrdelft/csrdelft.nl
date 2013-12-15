@@ -68,6 +68,10 @@ require_once 'lid/loginlid.class.php';
 require_once 'mysql.class.php';
 require_once 'csrpdo.class.php';
 
+// instellingen van Taken-module
+require_once 'taken/model/InstellingenModel.class.php';
+\Taken\MLT\InstellingenModel::getAlleInstellingen();
+
 switch (constant('MODE')) {
 	case 'ONDERHOUD':
 		$loginlid = LoginLid::instance();

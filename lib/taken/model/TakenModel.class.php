@@ -212,10 +212,6 @@ class TakenModel {
 	 * @return CorveeTaak[] (implements Agendeerbaar)
 	 */
 	public static function getTakenVoorAgenda($van, $tot, $iedereen=false) {
-		// init
-		require_once 'taken/model/InstellingenModel.class.php';
-		\Taken\MLT\InstellingenModel::getAlleInstellingen();
-		
 		if (!is_int($van) || !is_int($tot)) {
 			throw new \Exception('Invalid timestamp: getTakenVoorAgenda($van, $tot)');
 		}

@@ -41,10 +41,6 @@ class MaaltijdenModel {
 	 * @return Maaltijd[] (implements Agendeerbaar)
 	 */
 	public static function getMaaltijdenVoorAgenda($van, $tot) {
-		// init
-		require_once 'taken/model/InstellingenModel.class.php';
-		\Taken\MLT\InstellingenModel::getAlleInstellingen();
-		
 		if (!is_int($van) || !is_int($tot)) {
 			throw new \Exception('Invalid timestamp: getMaaltijdenVoorAgenda($van, $tot)');
 		}
