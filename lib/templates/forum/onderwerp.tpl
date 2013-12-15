@@ -89,11 +89,15 @@
 	{foreach from=$onderwerp->getPosts() item='bericht' name='berichten'}
 		<tr>
 			<td class="auteur">
-				<span tabindex="0" {if $loginlid->hasPermission('P_LEDEN_READ')}class="togglePasfoto"{/if} id="t{$bericht.uid}-{$bericht.id}">&raquo;</span>&nbsp;<a href="/communicatie/forum/reactie/{$bericht.id}" class="postlink" title="Link naar deze post">&rarr;</a>
-				{$bericht.uid|csrnaam:'user'}<br />
-				<span class="moment"><abbr class="timeago" title="{$bericht.utc}">{$bericht.datum|date_format:"%d %B %Y om %H:%M"}</abbr></span>
-				<br />
-				<div id="p{$bericht.id}" class="forumpasfoto verborgen">{if $loginlid->instelling('forum_toonpasfotos')=='ja'}{$bericht.uid|csrnaam:'pasfoto'}{/if}</div>
+
+				<a href="/communicatie/forum/reactie/{$bericht.id}" class="postlink" title="Link naar deze post">&rarr;</a>
+				{$bericht.uid|csrnaam:'user'}
+			{if $loginlid->hasPermission('P_LEDEN_READ')}
+				<span tabindex="0"  id="t{$bericht.uid}-{$bericht.id}" class="togglePasfoto"
+				{if $loginlid->instelling('forum_toonpasfotos')=='nee'} title="Toon pasfoto">&raquo;{else}>{/if}</span>
+			{/if}<br />
+				<div id="p{$bericht.id}" class="forumpasfoto{if $loginlid->instelling('forum_toonpasfotos')=='nee'} verborgen">{else}">{$bericht.uid|csrnaam:'pasfoto'}{/if}</div>
+				<span class="moment"><abbr class="timeago" title="{$bericht.utc}">{$bericht.datum|date_format:"%d %B %Y om %H:%M"}</abbr></span><br />
 
 				{* knopjes bij elke post *}
 				{* citeerknop enkel als het onderwerp open is en als men mag posten, of als men mod is. *}
@@ -121,7 +125,6 @@
 						<h1>SPAM</h1>
 					{/if}
 				{/if}
-
 			</td>
 			<td class="bericht{cycle values="0,1"}{if $bericht.filtered} filtered{/if}" id="post{$bericht.id}">
 				{if $bericht.filtered}

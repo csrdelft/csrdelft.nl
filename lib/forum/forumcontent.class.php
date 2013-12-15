@@ -70,6 +70,9 @@ class ForumContent extends SimpleHTML {
 				if(LoginLid::instance()->getUid()!='x999'&&($aPost['momentGelezen']==''||$aPost['momentGelezen']<$aPost['lastpost'])) {
 					$smarty->assign('opvallend', true);
 				}
+				else {
+					$smarty->assign('opvallend', false);
+				}
 				$smarty->assign('linktekst', $tekst);
 				$smarty->display('forum/zijbalk_item.tpl');
 			}

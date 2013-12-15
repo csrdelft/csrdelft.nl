@@ -26,29 +26,18 @@ jQuery(document).ready(function($){
 			textarea.before('<div id="ketzer_melding">Ketzer hebben?<br /><a href="/actueel/groepen/Ketzers" target="_blank">&raquo; Maak er zelf een aan.</a></div>');
 		}
 	});
-	
-	$('.togglePasfoto').each(function(){
-		$(this).attr('title', 'Toon pasfoto van dit lid');
-		var postid=$(this).attr('id').substr(1).split('-')[1];
-		var pasfoto=$('#p'+postid);
-		if(pasfoto.html()!=''){
-			pasfoto.toggleClass('verborgen');
-			$(this).html('v');
-		}
-	});
-	$('.togglePasfoto').click(function(){
-		var parts=$(this).attr('id').substr(1).split('-');
-		var pasfoto=$('#p'+parts[1]);
-
-		if(pasfoto.html()==''){
-			pasfoto.html('<img src="/tools/pasfoto/'+parts[0]+'.png" class="lidfoto" />');
-		}
-		if(!pasfoto.hasClass('verborgen')){
-			$(this).html("&raquo;");
-		}else{
-			$(this).html('v');
-		}
-		pasfoto.toggleClass('verborgen');
+	$('.togglePasfoto').each(function() {
+		$(this).click(function(){
+			var parts=$(this).attr('id').substr(1).split('-');
+			var pasfoto=$('#p'+parts[1]);
+			if(pasfoto.html()==''){
+				pasfoto.html('<img src="/tools/pasfoto/'+parts[0]+'.png" class="lidfoto" />');
+			}
+			if(pasfoto.hasClass('verborgen')){
+				pasfoto.toggleClass('verborgen');
+				$(this).html('');
+			}
+		});
 	});
     $(".spoiler_button").click(function () {
       $(this).next(".spoiler").toggle('fast');
