@@ -10,6 +10,6 @@
 		<div style="display: inline-block;">{$timestamp|date_format:"%m"}</div>
 	{/if}
 		&nbsp;
-		<a href="/communicatie/forum/reactie/{$postID}" title="[{$titel}] {$naam}: {$postfragment}"{if isset($opvallend)} class="opvallend"{/if}>{$linktekst}</a><br />
+		<a href="/communicatie/forum/reactie/{$postID}" title="[{$titel}] {$naam}: {$postfragment}"{if $opvallend} class="opvallend"{/if}>{$linktekst}</a><br />
 	</div>
 {/strip}

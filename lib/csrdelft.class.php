@@ -49,6 +49,8 @@ class csrdelft extends SimpleHTML {
 
 			$this->addScript('jquery.js', $this->_prefix);
 			$this->addScript('jquery.backstretch.js', $this->_prefix);
+			$this->addScript('jquery.timeago.js');
+			$this->addScript('jquery.timeago.nl.js');
 			$this->addScript('init.js', $this->_prefix);
 			$this->addScript('dragobject.js');
 			$this->addScript('ubb_url.js');
@@ -69,6 +71,8 @@ class csrdelft extends SimpleHTML {
 			$this->addStylesheet('ubb.css');
 
 			$this->addScript('jquery.js');
+			$this->addScript('jquery.timeago.js');
+			$this->addScript('jquery.timeago.nl.js');
 			$this->addScript('csrdelft.js');
 			$this->addScript('dragobject.js');
 			$this->addScript('ubb_url.js');

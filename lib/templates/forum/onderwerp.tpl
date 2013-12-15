@@ -91,7 +91,7 @@
 			<td class="auteur">
 				<span tabindex="0" {if $loginlid->hasPermission('P_LEDEN_READ')}class="togglePasfoto"{/if} id="t{$bericht.uid}-{$bericht.id}">&raquo;</span>&nbsp;<a href="/communicatie/forum/reactie/{$bericht.id}" class="postlink" title="Link naar deze post">&rarr;</a>
 				{$bericht.uid|csrnaam:'user'}<br />
-				<span class="moment">{$bericht.datum|reldate}</span>
+				<span class="moment"><abbr class="timeago" title="{$bericht.utc}">{$bericht.datum|date_format:"%d %B %Y om %H:%M"}</abbr></span>
 				<br />
 				<div id="p{$bericht.id}" class="forumpasfoto verborgen">{if $loginlid->instelling('forum_toonpasfotos')=='ja'}{$bericht.uid|csrnaam:'pasfoto'}{/if}</div>
 
