@@ -8,7 +8,7 @@
 			{if date('d-m', $item->getBeginMoment()) === date('d-m')}
 				{$item->getBeginMoment()|date_format:"%H:%M"}
 			{elseif strftime('%U', $item->getBeginMoment()) === strftime('%U')}
-				<div style="display: inline-block; width: 20px;">{$item->getBeginMoment()|date_format:"%a"}</div>{$item->getBeginMoment()|date_format:"%d"}
+				<div class="zijbalk-dag">{$item->getBeginMoment()|date_format:"%a"}&nbsp;</div>{$item->getBeginMoment()|date_format:"%d"}
 			{else}
 				{$item->getBeginMoment()|date_format:"%d"}<div style="display: inline-block; width: 6px; text-align: right;">-</div>{$item->getBeginMoment()|date_format:"%m"}
 			{/if}

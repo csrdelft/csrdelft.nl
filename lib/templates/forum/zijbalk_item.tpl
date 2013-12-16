@@ -3,7 +3,7 @@
 	{if date('d-m', $timestamp) === date('d-m')}
 		{$timestamp|date_format:"%H:%M"}
 	{elseif strftime('%U', $timestamp) === strftime('%U')}
-		<div style="display: inline-block; width: 20px;">{$timestamp|date_format:"%a"}</div>{$timestamp|date_format:"%d"}
+		<div class="zijbalk-dag">{$timestamp|date_format:"%a"}&nbsp;</div>{$timestamp|date_format:"%d"}
 	{else}
 		{$timestamp|date_format:"%d"}
 		<div style="display: inline-block; width: 6px; text-align: right;">-</div>
