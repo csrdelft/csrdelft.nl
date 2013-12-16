@@ -22,25 +22,18 @@ if(!($loginlid->hasPermission('P_ADMIN') || $loginlid->hasPermission('P_MAAL_MOD
 	exit;
 }
 
-require_once 'maaltijden/maaltrack.class.php';
-$maaltrack = new MaalTrack();
-
-$debugMode = (isset($_POST['debug']) ? (int)$_POST['debug'] : null);
-$debugAddr = (isset($_POST['debugAddr']) ? $_POST['debugAddr'] : 'pubcie@csrdelft.nl');
-$monthMailing = (isset($_POST['monthMailing']) ? (int)$_POST['monthMailing'] : null);
-
-if (isset($_POST['submit']))
-{
-	$maaltrack->corveeAutoMailer($debugMode, $debugAddr, $monthMailing);
-	echo '<strong>Klaar!</strong><br /><br />';
+try {
+	require_once 'taken/controller/BeheerTakenController.class.php';
+	$controller = new Taken\CRV\BeheerTakenController();
+	$controller->action_herinneren();
+	$controller->getContent()->view();
 }
-
-echo '<form method="post">
-	<p>Debug: Mails gaan naar debugAddr en maaltijden worden niet gemarkeerd als gemaild<br />
-	Maandmailing: Aanvinken stuurt mails naar ingedeelde corveërs binnen de komende 35 dagen. Uitvinken naar ingedeelden binnen komende 7 dagen.</p>
-	<label>Debug</label><input type="checkbox" name="debug" value="1" '.($debugMode?'checked="checked"':'').' /><br />
-	<label>DebugAddr</label><input type="text" name="debugAddr"  value="'.$debugAddr.'"/><br />
-	<label>Maandmailing</label><input type="checkbox" name="monthMailing" value="1" '.($monthMailing?'checked="checked"':'').' /><br />
-	<input type="submit" name="submit" value="Verzenden" />';
+catch (\Exception $e) {
+	header($_SERVER['SERVER_PROTOCOL'] . ' 500 '. $e->getMessage(), true, 500);
+	
+	if (defined('DEBUG') && (\LoginLid::instance()->hasPermission('P_ADMIN') || \LoginLid::instance()->isSued())) {
+		echo str_replace('#', '<br />#', $e); // stacktrace
+	}
+}
 
 ?>

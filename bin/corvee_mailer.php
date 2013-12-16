@@ -19,7 +19,18 @@ session_id('maaltrack-cli');
 chdir('../lib/');
 require_once 'configuratie.include.php';
 
-require_once 'taken/HerinneringenModel.class.php';
-Taken\CRV\HerinneringenModel::stuurHerinneringen();
+try {
+	require_once 'taken/controller/BeheerTakenController.class.php';
+	$controller = new Taken\CRV\BeheerTakenController();
+	$controller->action_herinneren();
+	$controller->getContent()->view();
+}
+catch (\Exception $e) {
+	header($_SERVER['SERVER_PROTOCOL'] . ' 500 '. $e->getMessage(), true, 500);
+	
+	if (defined('DEBUG') && (\LoginLid::instance()->hasPermission('P_ADMIN') || \LoginLid::instance()->isSued())) {
+		echo str_replace('#', '<br />#', $e); // stacktrace
+	}
+}
 
 ?>

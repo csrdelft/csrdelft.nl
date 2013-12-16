@@ -23,9 +23,7 @@ if(isset($_POST['namenRaw'])){
 		echo '<th style="width: 100px;">SocCie</th><th style="width: 110px;">MaalCie</th><th style="width: 200px;">Abo\'s</th>';
 		echo '<th>Abo\'s weg</th><th>status naar</th>';
 		echo '</tr>';
-
-		require_once('maaltijden/maaltrack.class.php');
-		$maaltrack=new Maaltrack();
+		
 		foreach($aUids as $aLid){
 			if(isset($aLid['uid'])){
 				$lid=LidCache::getLid($aLid['uid']);
@@ -39,8 +37,9 @@ if(isset($_POST['namenRaw'])){
 					echo '">'.sprintf('&euro; %01.2f', $saldo['saldo']).'</td>';
 				}
 				
-				$abos=$maaltrack->getAbo();
-				echo '<td>'.implode(', ', $abos).'</td>';
+				require_once('taken/model/AbonnementenModel.class.php');
+				$abos = Taken\MLT\AbonnementenModel::getAbonnementenVoorLid($aLid['uid']);
+				echo '<td>'.print_r($abos).'</td>';
 				echo '<td><input type="checkbox" name="delabos[]" /></td>';
 				echo '<td><select name="status[]"><option value="S_NOBODY">Lid af</option><option value="S_OUDLID">Oudlid</option></select></td>';
 				echo '</tr>';

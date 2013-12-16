@@ -128,10 +128,9 @@ $cmnds['getsaldo'] = array();
  */
 function abolijst($uid, $params) {
     global $lid,$db;
-    require_once('maaltijden/maaltrack.class.php');
-    $maaltrack = new MaalTrack();
-    $myabos = $maaltrack->getAbo();
-    if (count($myabos) > 0 ) return array_values($myabos);
+    require_once('taken/model/AbonnementenModel.class.php');
+    $abos = Taken\MLT\AbonnementenModel::getAbonnementenVoorLid($uid);
+    if (count($abos) > 0 ) return $abos;
     return array();
 }
 $cmnds['abolijst'] = array();
@@ -146,14 +145,10 @@ $cmnds['abolijst'] = array();
  */
 function getwelabos($uid, $params) {
     global $lid,$db;
-    require_once('maaltijden/maaltrack.class.php');
-    $maaltrack = new MaalTrack();
-    $result = array();
-    $abos = $maaltrack->getAbo();
-    foreach ($abos as $key => $value)
-        $result[] = sprintf("%s (%s)", $value, str_replace('a_', '', strtolower($key)));
-    if (count($result) > 0 ) return $result;
-    return array("Er is geen maaltijdabonnement dat geactiveerd is");
+    require_once('taken/model/AbonnementenModel.class.php');
+    $abos = Taken\MLT\AbonnementenModel::getAbonnementenVoorLid($uid, true, true);
+    if (count($abos) > 0 ) return $abos;
+    return array();
 }
 $cmnds['getwelabos'] = array();
 
@@ -167,14 +162,10 @@ $cmnds['getwelabos'] = array();
  */
 function getnotabos($uid, $params) {
     global $lid,$db;
-    require_once('maaltijden/maaltrack.class.php');
-    $maaltrack = new MaalTrack();
-    $result = array();
-    $abos = $maaltrack->getNotAboSoort();
-    foreach ($abos as $key => $value)
-        $result[] = sprintf("%s (%s)", $value, str_replace('a_', '', strtolower($key)));
-    if (count($result) > 0 ) return $result;
-    return array("U heeft alle maaltijdabonnementen inmiddels geactiveerd");
+    require_once('taken/model/AbonnementenModel.class.php');
+    $abos = Taken\MLT\AbonnementenModel::getAbonnementenVoorLid($uid, false, true);
+    if (count($abos) > 0 ) return $abos;
+    return array();
 }
 $cmnds['getnotabos'] = array();
 
@@ -187,12 +178,7 @@ $cmnds['getnotabos'] = array();
  */
 function addabo($uid, $params) {
     global $lid,$db;
-    require_once('maaltijden/maaltrack.class.php');
-    $maaltrack = new MaalTrack();
-    $abosoort = 'A_' . strtoupper($params['abosoort']);
-    if ($maaltrack->addAbo($abosoort))
-        return array(sprintf("Het maaltijdabonnement '%s' is nu geactiveerd.", $maaltrack->getAboTekst($abosoort)));
-    return array($maaltrack->getError());
+    return array('todo');
 }
 $cmnds['addabo'] = array('abosoort' => true);
 
@@ -205,12 +191,7 @@ $cmnds['addabo'] = array('abosoort' => true);
  */
 function delabo($uid, $params) {
     global $lid,$db;
-    require_once('maaltijden/maaltrack.class.php');
-    $maaltrack = new MaalTrack();
-    $abosoort = 'A_' . strtoupper($params['abosoort']);
-    if ($maaltrack->delAbo($abosoort))
-        return array(sprintf("Het maaltijdabonnement '%s' is nu uitgezet.", $maaltrack->getAboTekst($abosoort)));
-    return array($maaltrack->getError());
+    return array('todo');
 }
 $cmnds['delabo'] = array('abosoort' => true);
 
@@ -356,26 +337,10 @@ $cmnds['zoekoud'] = array('zoekterm' => true);
  */
 function maallijst($uid, $params) {
     global $lid,$db;
-    require_once('maaltijden/maaltrack.class.php');
-    $maaltrack = new MaalTrack();
-    # opvragen komende maaltijden + onze status (zijn we ingeschreven etc)
-    $nu = time();
-    $lijst = $maaltrack->getMaaltijden($nu-7200, $nu+MAALTIJD_LIJST_MAX_TOT);
-    # we maken een lijstje met tekst die zo door de bot als list geprint kan worden
-    $botlijst = array();
-    foreach ($lijst as $l) {
-        $error = ($l['max'] <= $l['aantal']) ? ' (VOL)' : '';
-        $error .= ($l['gesloten']) ? ' (GESLOTEN)' : '';
-        if ($l['status'] == '') $l['status'] = 'AF';
-        $botlijst[] = sprintf('%s) %s, %s (%s)%s'
-            , $l['id']
-            , str_replace('  ',' ',strftime("%a %e %b '%y %H:%M", $l['datum']))
-            , $l['tekst']
-            , $l['status']
-            , $error
-        );
-    }
-    return $botlijst;
+    require_once('taken/model/MaaltijdenModel.class.php');
+    $mlt = Taken\MLT\MaaltijdenModel::getKomendeMaaltijdenVoorLid($uid);
+    if (count($mlt) > 0 ) return $mlt;
+    return array();
 }
 $cmnds['maallijst'] = array();
 
