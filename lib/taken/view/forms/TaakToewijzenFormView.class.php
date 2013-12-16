@@ -45,7 +45,6 @@ class TaakToewijzenFormView extends \SimpleHtml {
 		$this->_form->cssClass .= ' popup';
 		
 		$smarty->assign('taak', $this->_taak);
-		$smarty->assign('fid', $this->_taak->getFunctieId());
 		$smarty->assign('suggesties', $this->_suggesties);
 		$smarty->assign('this', $this);
 		$lijst = $smarty->fetch('taken/corveetaak/suggesties_lijst.tpl');

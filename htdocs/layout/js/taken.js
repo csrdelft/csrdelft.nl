@@ -224,8 +224,8 @@ function taken_toggle_suggestie(soort) {
 			$(this).show();
 		}
 	});
-	$('tr:visible:odd').css('background-color', '#EBEBEB');
-	$('tr:visible:even').css('background-color', '#FAFAFA');
+	$('#suggesties-tabel tr:visible:odd').css('background-color', '#FAFAFA');
+	$('#suggesties-tabel tr:visible:even').css('background-color', '#EBEBEB');
 }
 
 function taken_update_dom(htmlString) {

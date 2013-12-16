@@ -29,26 +29,25 @@
 				{if $this->getIsJongsteLichting($uid)} jongste{/if}	
 				">
 				<td style="width: 20px;">
+					<a class="knop" onclick="$('#field_lid_id').val('{$uid}');$('#taken-taak-toewijzen-form').submit();">
 					{if $suggestie.recent}
 						{icon get="time_delete" title="Recent gecorveed"}
 					{elseif $suggestie.voorkeur}
 						{icon get="emoticon_smile" title="Heeft voorkeur"}
+					{else}
+						{icon get="bullet_go" title="Toewijzen aan dit lid"}
 					{/if}
+					</a>
 				</td>
 				<td style="width: 20px;">
 					{if $taak->getCorveeFunctie()->getIsKwalificatieBenodigd()}
-						{$suggestie.aantal.$fid}
+						{$suggestie.aantal}
 					{else}
 						 {$suggestie.prognose}
 					{/if}
 				</td>
 				<td style="width: 150px;">
 					{$this->getLidnaam($uid)}
-					<div style="float: right;">
-						<a class="knop" title="Toewijzen aan dit lid" onclick="$('#field_lid_id').val('{$uid}');$('#taken-taak-toewijzen-form').submit();">
-							{icon get="bullet_go"}
-						</a>
-					</div>
 				</td>
 			{if $suggestie.laatste}
 				<td>{$suggestie.laatste->getBeginMoment()|date_format:"%d %b %Y"}</td>

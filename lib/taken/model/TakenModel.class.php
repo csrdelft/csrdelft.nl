@@ -50,8 +50,9 @@ class TakenModel {
 					}
 				}
 				$lijst[$uid] = PuntenModel::loadPuntenVoorLid($lid, array($functie->getFunctieId() => $functie));
+				$lijst[$uid]['aantal'] = $lijst[$uid]['aantal'][$functie->getFunctieId()];
 			}
-			$sorteer = 'DESC';
+			$sorteer = 'sorteerAantal';
 		}
 		else {
 			$lijst = PuntenModel::loadPuntenVoorAlleLeden();
@@ -68,9 +69,9 @@ class TakenModel {
 					}
 				}
 			}
-			$sorteer = 'ASC';
+			$sorteer = 'sorteerPrognose';
 		}
-		uasort($lijst, array('self', 'sorteerSuggestie'. $sorteer));
+		uasort($lijst, array('self', $sorteer));
 		foreach ($lijst as $uid => $punten) {
 			$lijst[$uid]['laatste'] = self::getLaatsteTaakVanLid($uid);
 			if ($lijst[$uid]['laatste'] !== null && $lijst[$uid]['laatste']->getBeginMoment() >= strtotime($GLOBALS['suggesties_recent_verbergen'])) {
@@ -79,38 +80,28 @@ class TakenModel {
 			else {
 				$lijst[$uid]['recent'] = false;
 			}
-			$lijst[$uid]['voorkeur'] = null;
-		}
-		if ($taak->getCorveeRepetitieId() !== null) {
-			$voorkeuren = VoorkeurenModel::getVoorkeurenVoorRepetitie($taak->getCorveeRepetitieId());
-			foreach ($voorkeuren as $voorkeur) {
-				// Als een lid een voorkeur heeft, maar niet voorkomt in de lijst van suggesties
-				// kan het zijn dat er een kwalificatie benodigd is die dat lid niet heeft.
-				if (array_key_exists($uid, $lijst)) {
-					$lijst[$uid]['voorkeur'] = $voorkeur;
-				}
-			}
+			$lijst[$uid]['voorkeur'] = VoorkeurenModel::getHeeftVoorkeur($taak->getCorveeRepetitieId(), $uid);
 		}
 		return $lijst;
 	}
 	
-	static function sorteerSuggestieDESC($a, $b) {
-		if ($a['prognose'] === $b['prognose']) {
+	static function sorteerAantal($a, $b) {
+		if ($a['aantal'] === $b['aantal']) {
 			return 0;
 		}
-		elseif ($a['prognose'] < $b['prognose']) {
-			return 1;
+		elseif ($a['aantal'] < $b['aantal']) { // < ASC
+			return -1;
 		}
 		else {
-			return -1;
+			return 1;
 		}
 	}
 	
-	static function sorteerSuggestieASC($a, $b) {
+	static function sorteerPrognose($a, $b) {
 		if ($a['prognose'] === $b['prognose']) {
 			return 0;
 		}
-		elseif ($a['prognose'] < $b['prognose']) {
+		elseif ($a['prognose'] < $b['prognose']) { // < ASC
 			return -1;
 		}
 		else {

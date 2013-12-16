@@ -166,6 +166,10 @@ input.VinkField {
 	text-align: center;
 }
 
+#suggesties-tabel tr:hover {
+	background-color: #DDEEFF !important;
+}
+
 /* cell style */
 
 .maaltijd-open, .maaltijd-aangemeld, .abonnement-ingeschakeld, .voorkeur-ingeschakeld, .taak-self, .functie-toegewezen { /* .taak-toegewezen */
