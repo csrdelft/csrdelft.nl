@@ -75,8 +75,8 @@ class TaakToewijzenFormView extends \SimpleHtml {
 		$formFields['recent']->setOnChangeScript("taken_toggle_suggestie('recent');");
 		$formFields[] = new \HTMLComment('<script type="text/javascript">$(document).ready(function(){taken_toggle_suggestie(\'recent\');});</script>');
 		
-		$formFields['jongste'] = new \VinkField('jongste', false, 'Geen novieten/sjaars');
-		$formFields['jongste']->setOnChangeScript("taken_toggle_suggestie('jongste');");
+		$formFields['jongste'] = new \KeuzeRondjeField('jongste', 'ja', 'Toon novieten/sjaars', array('ja' => 'Ja', 'nee' => 'Nee', 'alleen' => 'Alleen'));
+		$formFields['jongste']->setOnChangeScript("taken_toggle_suggestie('oudere', 'alleen' !== $('#field_jongste_option_alleen:checked').val());taken_toggle_suggestie('jongste', 'nee' !== $('#field_jongste_option_nee:checked').val());");
 		
 		$this->_form->addFields($formFields);
 		

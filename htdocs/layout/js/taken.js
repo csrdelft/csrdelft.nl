@@ -213,10 +213,20 @@ function taken_toggle_hiddenform(source) {
 	}
 }
 
-function taken_toggle_suggestie(soort) {
+function taken_toggle_suggestie(soort, show) {
 	$('#suggesties-tabel .'+soort).each(function() {
 		var verborgen = 0;
-		$(this).toggleClass(soort+'verborgen');
+		if (typeof show !== 'undefined' && show !== false) {
+			if (show) {
+				$(this).removeClass(soort+'verborgen');
+			}
+			else {
+				$(this).addClass(soort+'verborgen');
+			}
+		}
+		else {
+			$(this).toggleClass(soort+'verborgen');
+		}
 		if ($(this).hasClass('geenvoorkeurverborgen')) {
 			verborgen++;
 		}
@@ -224,6 +234,9 @@ function taken_toggle_suggestie(soort) {
 			verborgen++;
 		}
 		if ($(this).hasClass('jongsteverborgen')) {
+			verborgen++;
+		}
+		if ($(this).hasClass('oudereverborgen')) {
 			verborgen++;
 		}
 		if (verborgen > 0) {

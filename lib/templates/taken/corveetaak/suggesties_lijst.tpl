@@ -26,7 +26,7 @@
 			<tr class="
 				{if !$suggestie.voorkeur} geenvoorkeur{/if}
 				{if $suggestie.recent} recent{/if}
-				{if $this->getIsJongsteLichting($uid)} jongste{/if}	
+				{if $this->getIsJongsteLichting($uid)} jongste{else} oudere{/if}	
 				">
 				<td style="width: 20px;">
 					<a class="knop" onclick="$('#field_lid_id').val('{$uid}');$('#taken-taak-toewijzen-form').submit();">
