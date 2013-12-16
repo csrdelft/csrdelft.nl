@@ -49,9 +49,6 @@ option {
 	background-repeat: no-repeat;
 	background-position: left;
 }
-option.smile {
-	background-image: url("http://plaetjes.csrdelft.nl/famfamfam/emoticon_smile.png");
-}
 option.arrow {
 	background-image: url("http://plaetjes.csrdelft.nl/famfamfam/bullet_go.png");
 }

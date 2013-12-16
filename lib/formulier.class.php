@@ -88,7 +88,7 @@ class Formulier{
 	}
 
 	public function addFields($fields){
-		array_merge($this->fields, $fields);
+		$this->fields=array_merge($this->fields, $fields);
 	}
 	
 	/**

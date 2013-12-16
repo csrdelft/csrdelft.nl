@@ -16,7 +16,8 @@ var offsetY;
 function startDrag(e) {
 	e = e || window.event;
 	var tag = e.target.tagName.toUpperCase();
-	if (tag === 'SELECT' || tag === 'INPUT') { // sliding scrollbar of dropdown menu or input field
+	var overflow = $(e.target).css('overflow');
+	if (tag === 'SELECT' || tag === 'INPUT' || overflow === 'auto' || overflow === 'scroll') { // sliding scrollbar of dropdown menu or input field
 		return;
 	}
 	dragobjectID = $(e.target).attr('id');

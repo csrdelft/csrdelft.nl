@@ -148,6 +148,9 @@ class CorveeTaak implements \Agendeerbaar {
 	 */
 	public function getIsTelaatGemaild() {
 		$moeten = $this->getAantalKeerMoetenMailen();
+		if ($moeten === 0) {
+			return false;
+		}
 		$aantal = $this->getAantalKeerGemaild();
 		if ($moeten > $aantal) {
 			return true;

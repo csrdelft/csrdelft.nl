@@ -3341,6 +3341,7 @@ lib/templates/taken/corveetaak/beheer_taak_lijst.tpl -text
 lib/templates/taken/corveetaak/beheer_taken.tpl -text
 lib/templates/taken/corveetaak/corvee_rooster.tpl -text
 lib/templates/taken/corveetaak/mijn_rooster.tpl -text
+lib/templates/taken/corveetaak/suggesties_lijst.tpl -text
 lib/templates/taken/functie/beheer_functie_lijst.tpl -text
 lib/templates/taken/functie/beheer_functies.tpl -text
 lib/templates/taken/instelling/beheer_instelling_lijst.tpl -text

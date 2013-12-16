@@ -29,12 +29,13 @@ class TakenModel {
 		require_once 'taken/model/VrijstellingenModel.class.php';
 		require_once 'taken/model/KwalificatiesModel.class.php';
 		require_once 'taken/model/PuntenModel.class.php';
+		require_once 'taken/model/VoorkeurenModel.class.php';
 		
 		$vrijstellingen = VrijstellingenModel::getAlleVrijstellingen(true); // grouped by uid
 		$functie = $taak->getCorveeFunctie();
-		if ($functie->getIsKwalificatieBenodigd()) {
+		if ($functie->getIsKwalificatieBenodigd()) { // laad alleen gekwalificeerde leden
 			$kwalificaties = KwalificatiesModel::getKwalificatiesVoorFunctie($functie);
-			$leden_punten = array();
+			$lijst = array();
 			foreach ($kwalificaties as $kwali) {
 				$uid = $kwali->getLidId();
 				$lid = \LidCache::getLid($uid); // false if lid does not exist
@@ -43,34 +44,54 @@ class TakenModel {
 				}
 				if (array_key_exists($uid, $vrijstellingen)) {
 					$vrijstelling = $vrijstellingen[$uid];
-					$datum = strtotime($taak->getDatum());
+					$datum = $taak->getBeginMoment();
 					if ($datum >= strtotime($vrijstelling->getBeginDatum()) && $datum <= strtotime($vrijstelling->getEindDatum())) {
 						continue; // taak valt binnen vrijstelling-periode: suggestie niet weergeven
 					}
 				}
-				$leden_punten[$uid] = PuntenModel::loadPuntenVoorLid($lid, array($functie->getFunctieId() => $functie));
+				$lijst[$uid] = PuntenModel::loadPuntenVoorLid($lid, array($functie->getFunctieId() => $functie));
 			}
 			$sorteer = 'DESC';
 		}
 		else {
-			$leden_punten = PuntenModel::loadPuntenVoorAlleLeden();
-			foreach ($leden_punten as $uid => $totalen) {
+			$lijst = PuntenModel::loadPuntenVoorAlleLeden();
+			foreach ($lijst as $uid => $punten) {
 				if (array_key_exists($uid, $vrijstellingen)) {
 					$vrijstelling = $vrijstellingen[$uid];
-					$datum = strtotime($taak->getDatum());
+					$datum = $taak->getBeginMoment();
 					if ($datum >= strtotime($vrijstelling->getBeginDatum()) && $datum <= strtotime($vrijstelling->getEindDatum())) {
-						unset($leden_punten[$uid]); // taak valt binnen vrijstelling-periode: suggestie niet weergeven
+						unset($lijst[$uid]); // taak valt binnen vrijstelling-periode: suggestie niet weergeven
 					}
 					// corrigeer prognose in suggestielijst vóór de aanvang van de vrijstellingsperiode
 					if ($vrijstelling !== null && $datum < strtotime($vrijstelling->getBeginDatum())) {
-						$leden_punten[$uid]['prognose'] -= $vrijstelling->getPunten();
+						$lijst[$uid]['prognose'] -= $vrijstelling->getPunten();
 					}
 				}
 			}
 			$sorteer = 'ASC';
 		}
-		uasort($leden_punten, array('self', 'sorteerSuggestie'. $sorteer)); 
-		return $leden_punten;
+		uasort($lijst, array('self', 'sorteerSuggestie'. $sorteer));
+		foreach ($lijst as $uid => $punten) {
+			$lijst[$uid]['laatste'] = self::getLaatsteTaakVanLid($uid);
+			if ($lijst[$uid]['laatste'] !== null && $lijst[$uid]['laatste']->getBeginMoment() >= strtotime($GLOBALS['suggesties_recent_verbergen'])) {
+				$lijst[$uid]['recent'] = true;
+			}
+			else {
+				$lijst[$uid]['recent'] = false;
+			}
+			$lijst[$uid]['voorkeur'] = null;
+		}
+		if ($taak->getCorveeRepetitieId() !== null) {
+			$voorkeuren = VoorkeurenModel::getVoorkeurenVoorRepetitie($taak->getCorveeRepetitieId());
+			foreach ($voorkeuren as $voorkeur) {
+				// Als een lid een voorkeur heeft, maar niet voorkomt in de lijst van suggesties
+				// kan het zijn dat er een kwalificatie benodigd is die dat lid niet heeft.
+				if (array_key_exists($uid, $lijst)) {
+					$lijst[$uid]['voorkeur'] = $voorkeur;
+				}
+			}
+		}
+		return $lijst;
 	}
 	
 	static function sorteerSuggestieDESC($a, $b) {
@@ -225,9 +246,9 @@ class TakenModel {
 	}
 	
 	/**
-	 * Haalt de taken op voor een specifiek lid.
+	 * Haalt de taken op voor een lid.
 	 * 
-	 * @param type $uid
+	 * @param string $uid
 	 * @return CorveeTaak[]
 	 */
 	public static function getTakenVoorLid($uid) {
@@ -235,8 +256,23 @@ class TakenModel {
 	}
 	
 	/**
-	 * Haalt de komende taken op waarvoor het ingelogde lid is ingedeeld.
+	 * Zoekt de laatste taak op van een lid.
 	 * 
+	 * @param string $uid
+	 * @return CorveeTaak[]
+	 */
+	public static function getLaatsteTaakVanLid($uid) {
+		$taken = self::loadTaken('verwijderd = false AND lid_id = ? HAVING datum = MAX(datum)', array($uid), 1);
+		if (!array_key_exists(0, $taken)) {
+			return null;
+		}
+		return $taken[0];
+	}
+	
+	/**
+	 * Haalt de komende taken op waarvoor een lid is ingedeeld.
+	 * 
+	 * @param string $uid
 	 * @return CorveeTaak[]
 	 */
 	public static function getKomendeTakenVoorLid($uid) {

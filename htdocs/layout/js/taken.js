@@ -37,10 +37,8 @@ function taken_link_init() {
 		}
 		if ($(this).hasClass('ruilen')) {
 			$(this).removeClass('ruilen');
-			$(this).attr('draggable', 'true');
-			$(this).attr('ondragstart', 'startDrag(event);');
-			$(this).attr('ondragover', 'allowDrop(event);');
-			$(this).attr('ondrop', 'handleDrop(event);');
+			$(this).attr('ondragover', 'taken_mag_ruilen(event);');
+			$(this).attr('ondrop', 'taken_ruilen(event);');
 		}
 	});
 }
@@ -206,6 +204,30 @@ function taken_toggle_hiddenform(source) {
 	}
 }
 
+function taken_toggle_suggestie(soort) {
+	$('#suggesties-tabel .'+soort).each(function() {
+		var verborgen = 0;
+		$(this).toggleClass(soort+'verborgen');
+		if ($(this).hasClass('geenvoorkeurverborgen')) {
+			verborgen++;
+		}
+		if ($(this).hasClass('recentverborgen')) {
+			verborgen++;
+		}
+		if ($(this).hasClass('jongsteverborgen')) {
+			verborgen++;
+		}
+		if (verborgen > 0) {
+			$(this).hide();
+		}
+		else {
+			$(this).show();
+		}
+	});
+	$('tr:visible:odd').css('background-color', '#EBEBEB');
+	$('tr:visible:even').css('background-color', '#FAFAFA');
+}
+
 function taken_update_dom(htmlString) {
 	var popup = false;
 	var html = $.parseHTML(htmlString);
@@ -234,10 +256,7 @@ function taken_update_dom(htmlString) {
 	});
 	taken_form_init();
 	taken_link_init();
-	if (popup) {
-		dragobject_init();
-	}
-	else {
+	if (!popup) {
 		taken_close_popup();
 	}
 }
@@ -246,7 +265,7 @@ function taken_update_dom(htmlString) {
  * Ruilen van CorveeTaak
  * 
  */
-function allowDrop(e) {
+function taken_mag_ruilen(e) {
 	if (e.target.tagName.toUpperCase() === 'IMG') { // over an image inside of anchor
 		e.target = $(e.target).parent();
 	}
@@ -255,7 +274,7 @@ function allowDrop(e) {
 		e.preventDefault();
 	}
 }
-function handleDrop(e) {
+function taken_ruilen(e) {
 	e.preventDefault();
 	var elmnt = e.target;
 	if (elmnt.tagName.toUpperCase() === 'IMG') { // dropped on image inside of anchor

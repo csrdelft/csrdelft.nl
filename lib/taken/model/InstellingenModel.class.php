@@ -19,6 +19,7 @@ class InstellingenModel {
 		'herinnering_2e_mail_uiterlijk' => '-7 days',
 		'maaltijden_ketzer_vooraf' => '+1 month',
 		'maaltijden_recent_lidprofiel' => '-2 months',
+		'suggesties_recent_verbergen' => '-2 months',
 		'standaard_repetitie_weekdag' => '4',
 		'standaard_repetitie_periode' => '7',
 		'standaard_abonneerbaar' => '1',

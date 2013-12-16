@@ -47,7 +47,7 @@
 	</td>
 	<td>{$taak->getDatum()|date_format:"%a %e %b"}</td>
 	<td style="width: 100px;">{$taak->getCorveeFunctie()->getNaam()}</td>
-	<td class="taak-{if $taak->getLidId()}toegewezen{elseif  strtotime($taak->getDatum()) < strtotime($globals.waarschuwing_taaktoewijzing_vooraf)}warning{else}open{/if}" style="font-weight: normal;">
+	<td class="taak-{if $taak->getLidId()}toegewezen{elseif  $taak->getBeginMoment() < strtotime($globals.waarschuwing_taaktoewijzing_vooraf)}warning{else}open{/if}" style="font-weight: normal;">
 {if isset($wijzigbaar)}
 		<a href="{$globals.taken_module}/toewijzen/{$taak->getTaakId()}" title="Deze taak toewijzen aan een lid&#013;Sleep om te ruilen" class="knop post popup dragobject ruilen" id="taak-{$taak->getTaakId()}"{if $taak->getLidId()} lid_id="{$taak->getLidId()}">{icon get="user_green"}{else}>{icon get="user_red"}{/if}</a>
 {/if}
@@ -55,7 +55,7 @@
 		&nbsp;{$taak->getLid()->getNaamLink($globals.weergave_ledennamen_beheer, 'link')}
 {/if}
 	</td>
-	<td{if $taak->getLidId() and ($taak->getPunten() !== $taak->getPuntenToegekend() or $taak->getBonusMalus() !== $taak->getBonusToegekend()) and strtotime($taak->getDatum()) < strtotime($globals.waarschuwing_puntentoewijzing_achteraf)} class="taak-warning"{/if}>
+	<td{if $taak->getLidId() and ($taak->getPunten() !== $taak->getPuntenToegekend() or $taak->getBonusMalus() !== $taak->getBonusToegekend()) and $taak->getBeginMoment() < strtotime($globals.waarschuwing_puntentoewijzing_achteraf)} class="taak-warning"{/if}>
 		{$taak->getPuntenToegekend()}
 {if $taak->getBonusToegekend() > 0}
 	+
