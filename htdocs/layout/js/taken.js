@@ -18,7 +18,7 @@ function taken_form_init() {
 		if ($(this).hasClass('popup')) {
 			$(this).keyup(function(e) {
 				if (e.keyCode === 27) { // esc
-					if (confirm('Annuleren en sluiten?')) {
+					if (confirm('Sluiten zonder op te slaan?')) {
 						taken_close_popup();
 					}
 				}
