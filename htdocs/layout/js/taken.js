@@ -15,7 +15,16 @@ function taken_form_init() {
 	$('.Formulier').each(function() {
 		$(this).submit(taken_post_form); // enter
 		
-		if ($(this).hasClass('taken-hidden-form')) {
+		if ($(this).hasClass('popup')) {
+			$(this).keyup(function(e) {
+				if (e.keyCode === 27) { // esc
+					if (confirm('Annuleren en sluiten?')) {
+						taken_close_popup();
+					}
+				}
+			});
+		}
+		else if ($(this).hasClass('taken-hidden-form')) {
 			$(this).keyup(function(e) {
 				if (e.keyCode === 27) { // esc
 					taken_toggle_hiddenform($(this));
@@ -256,7 +265,10 @@ function taken_update_dom(htmlString) {
 	});
 	taken_form_init();
 	taken_link_init();
-	if (!popup) {
+	if (popup) {
+		$('#taken-popup input:visible:first').focus();
+	}
+	else {
 		taken_close_popup();
 	}
 }
