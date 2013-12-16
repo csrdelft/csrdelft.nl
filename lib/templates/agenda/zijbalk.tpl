@@ -10,7 +10,7 @@
 			{elseif strftime('%U', $item->getBeginMoment()) === strftime('%U')}
 				<div class="zijbalk-dag">{$item->getBeginMoment()|date_format:"%a"}&nbsp;</div>{$item->getBeginMoment()|date_format:"%d"}
 			{else}
-				{$item->getBeginMoment()|date_format:"%d"}<div style="display: inline-block; width: 6px; text-align: right;">-</div>{$item->getBeginMoment()|date_format:"%m"}
+				{$item->getBeginMoment()|date_format:"%d-%m"}
 			{/if}
 				<a href="/actueel/agenda/maand/{$item->getBeginMoment()|date_format:"%Y-%m"}/#dag-{$item->getBeginMoment()|date_format:"%Y-%m-%d"}" title="{if
 				$item|is_a:'\Taken\MLT\Maaltijd' or $item|is_a:'\Taken\CRV\CorveeTaak'}{$item->getTitel()|unescape:"html"|ubb|strip_tags}{else}{$item->getTitel()|ubb|strip_tags}{/if}">
