@@ -52,14 +52,23 @@ class TaakToewijzenFormView extends \SimpleHtml {
 		
 		$formFields['voorkeur'] = new \VinkField('voorkeur', true, 'Met voorkeur');
 		
-		if ($this->_taak->getCorveeRepetitieId() === null) {
+		if ($this->_taak->getCorveeRepetitieId() !== null) {
+			$repetitie = CorveeRepetitiesModel::getRepetitie($this->_taak->getCorveeRepetitieId());
+			
+			if ($repetitie->getIsVoorkeurbaar()) {
+				$formFields['voorkeur']->setOnChangeScript("taken_toggle_suggestie('geenvoorkeur');");
+				$formFields[] = new \HTMLComment('<script type="text/javascript">$(document).ready(function(){taken_toggle_suggestie(\'geenvoorkeur\');});</script>');
+			}
+			else {
+				$formFields['voorkeur']->value = false;
+				$formFields['voorkeur']->disabled = true;
+				$formFields['voorkeur']->title = 'Deze corveerepetitie is niet voorkeurbaar.';
+			}
+		}
+		else {
 			$formFields['voorkeur']->value = false;
 			$formFields['voorkeur']->disabled = true;
 			$formFields['voorkeur']->title = 'Dit is geen periodieke taak dus zijn er geen voorkeuren.';
-		}
-		else {
-			$formFields['voorkeur']->setOnChangeScript("taken_toggle_suggestie('geenvoorkeur');");
-			$formFields[] = new \HTMLComment('<script type="text/javascript">$(document).ready(function(){taken_toggle_suggestie(\'geenvoorkeur\');});</script>');
 		}
 		
 		$formFields['recent'] = new \VinkField('recent', true, 'Niet recent gecorveed');

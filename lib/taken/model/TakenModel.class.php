@@ -30,7 +30,6 @@ class TakenModel {
 		require_once 'taken/model/KwalificatiesModel.class.php';
 		require_once 'taken/model/PuntenModel.class.php';
 		require_once 'taken/model/VoorkeurenModel.class.php';
-		
 		$vrijstellingen = VrijstellingenModel::getAlleVrijstellingen(true); // grouped by uid
 		$functie = $taak->getCorveeFunctie();
 		if ($functie->getIsKwalificatieBenodigd()) { // laad alleen gekwalificeerde leden
@@ -80,7 +79,9 @@ class TakenModel {
 			else {
 				$lijst[$uid]['recent'] = false;
 			}
-			$lijst[$uid]['voorkeur'] = VoorkeurenModel::getHeeftVoorkeur($taak->getCorveeRepetitieId(), $uid);
+			if ($taak->getCorveeRepetitieId() !== null) {
+				$lijst[$uid]['voorkeur'] = VoorkeurenModel::getHeeftVoorkeur($taak->getCorveeRepetitieId(), $uid);
+			}
 		}
 		return $lijst;
 	}
