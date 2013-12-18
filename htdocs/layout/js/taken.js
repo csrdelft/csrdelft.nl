@@ -306,7 +306,7 @@ function taken_update_dom(htmlString) {
 var lastSelectedId;
 function taken_select_range(e) {
 	var shift = isShiftKeyDown(e);
-	var ctrl = isCtrlKeyDown(e);
+	var ctrl = true; //isCtrlKeyDown(e); // behave like ctrl is always pressed
 	var withinRange = null;
 	var before = false;
 	$('#taken-tabel tbody tr td.col-del a input:visible').each(function() {
