@@ -28,7 +28,7 @@
 	{/if}
 {/if}
 {if $taak->getIsTelaatGemaild()}
-			{icon get="email_error" title="Niet op tijd gemaild!&#013;"|cat:$taak->getWanneerGemaild()}
+			{icon get="email_error" title="Laatste herinnering te laat verstuurd!&#013;"|cat:$taak->getWanneerGemaild()}
 {elseif $aantal < 1}
 	{if $taak->getLidId()}
 			{icon get="email" title="Niet gemaild"}
@@ -82,9 +82,9 @@
 	</td>
 	<td class="col-del">
 {if $taak->getIsVerwijderd()}
-		<a href="{$globals.taken_module}/verwijder/{$taak->getTaakId()}" title="Corveetaak definitief verwijderen" class="knop post confirm">{icon get="cross"}</a>
+		<a href="{$globals.taken_module}/verwijder/{$taak->getTaakId()}" title="Corveetaak definitief verwijderen" class="knop post confirm range"><input type=checkbox id="del-{$taak->getTaakId()}"> {icon get="cross"}</a>
 {else}
-		<a href="{$globals.taken_module}/verwijder/{$taak->getTaakId()}" title="Corveetaak naar prullenbak verplaatsen" class="knop post">{icon get="bin_closed"}</a>
+		<a href="{$globals.taken_module}/verwijder/{$taak->getTaakId()}" title="Corveetaak naar prullenbak verplaatsen" class="knop post range"><input type=checkbox id="del-{$taak->getTaakId()}"> {icon get="bin_closed"}</a>
 {/if}
 	</td>
 </tr>

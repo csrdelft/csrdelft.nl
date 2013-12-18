@@ -6,12 +6,14 @@
 		<th style="width: 60px;">Lijst</th>
 		<th>Eters (Limiet)</th>
 		<th>Status</th>
-		<th title="{if $prullenbak}Definitief verwijderen{else}Naar de prullenbak verplaatsen{/if}" style="text-align: center;">{strip}
+		<th style="text-align: center;">{strip}
+			<a class="knop" onclick="event.stopPropagation();taken_delete_range(this);" title="Selectie {if $prullenbak}definitief verwijderen{else}naar de prullenbak verplaatsen{/if}">
 			{if $prullenbak}
 				{icon get="cross"}
 			{else}
 				{icon get="bin_empty"}
 			{/if}
+			</a>
 		</th>{/strip}
 	</tr>
 </thead>

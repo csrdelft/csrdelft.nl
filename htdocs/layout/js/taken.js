@@ -1,7 +1,7 @@
 /**
  * taken.js	|	P.W.G. Brussee (brussee@live.nl)
  * 
- * requires jQuery
+ * requires jQuery & dragobject.js
  */
 
 $(document).ready(function() {
@@ -10,6 +10,19 @@ $(document).ready(function() {
 	taken_form_init();
 	taken_link_init();
 });
+
+function isShiftKeyDown(event) {
+	if ((window.event && window.event.shiftKey) || event.shiftKey) {
+		return true;
+	}
+	return false;
+}
+function isCtrlKeyDown(event) {
+	if ((window.event && window.event.ctrlKey) || event.ctrlKey) {
+		return true;
+	}
+	return false;
+}
 
 function taken_form_init() {
 	$('.Formulier').each(function() {
@@ -65,6 +78,10 @@ function taken_get_knop(event) {
 
 function taken_post_knop(event) {
 	event.preventDefault();
+	if ($(this).hasClass('range') && event.target.tagName.toUpperCase() === 'INPUT') {
+		taken_select_range(event);
+		return false;
+	}
 	if ($(this).hasClass('confirm') && !confirm($(this).attr('title') +'.\n\nWeet u het zeker?')) {
 		return false;
 	}
@@ -216,7 +233,7 @@ function taken_toggle_hiddenform(source) {
 function taken_toggle_suggestie(soort, show) {
 	$('#suggesties-tabel .'+soort).each(function() {
 		var verborgen = 0;
-		if (typeof show !== 'undefined' && show !== false) {
+		if (typeof show !== 'undefined') {
 			if (show) {
 				$(this).removeClass(soort+'verborgen');
 			}
@@ -284,6 +301,50 @@ function taken_update_dom(htmlString) {
 	else {
 		taken_close_popup();
 	}
+}
+
+var lastSelectedId;
+function taken_select_range(e) {
+	var shift = isShiftKeyDown(e);
+	var ctrl = isCtrlKeyDown(e);
+	var withinRange = null;
+	var before = false;
+	$('#taken-tabel tbody tr td.col-del a input:visible').each(function() {
+		var thisId = $(this).attr('id');
+		if (thisId === lastSelectedId) {
+			withinRange = true;
+		}
+		if (thisId === e.target.id) {
+			if (withinRange === null) {
+				before = true;
+			}
+			withinRange = false;
+			var check = true;
+			if (ctrl) {
+				check = $(this).prop('checked');
+			}
+			setTimeout(function() { // workaround e.preventDefault()
+				$('#'+thisId).prop('checked', check);
+			}, 50);
+		}
+		else if (shift && withinRange) {
+			$(this).prop('checked', !before);
+		}
+		else if ((!ctrl && !shift) || before) {
+			 $(this).prop('checked', false);
+		}
+	});
+	lastSelectedId = e.target.id;
+}
+function taken_delete_range(elmnt) {
+	if (!confirm($(elmnt).attr('title') +'.\n\nWeet u het zeker?')) {
+		return false;
+	}
+	$('#taken-tabel tbody tr td.col-del a input:visible').each(function() {
+		if ($(this).prop('checked')) {
+			taken_ajax($(this).parent(), $(this).parent().attr('href'), taken_handle_response, $(this).parent().attr('post'));
+		}
+	});
 }
 
 /**
