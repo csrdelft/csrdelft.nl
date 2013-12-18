@@ -427,20 +427,14 @@ htdocs/wiki/inc/Tar.class.php -text
 htdocs/wiki/inc/TarLib.class.php -text
 htdocs/wiki/inc/ZipLib.class.php -text
 htdocs/wiki/inc/actions.php -text
-htdocs/wiki/inc/adLDAP.php -text
 htdocs/wiki/inc/auth.php -text
-htdocs/wiki/inc/auth/ad.class.php -text
-htdocs/wiki/inc/auth/basic.class.php -text
 htdocs/wiki/inc/auth/csr.class.php -text
-htdocs/wiki/inc/auth/ldap.class.php -text
-htdocs/wiki/inc/auth/mysql.class.php -text
-htdocs/wiki/inc/auth/pgsql.class.php -text
-htdocs/wiki/inc/auth/plain.class.php -text
 htdocs/wiki/inc/blowfish.php -text
 htdocs/wiki/inc/cache.php -text
 htdocs/wiki/inc/changelog.php -text
 htdocs/wiki/inc/cliopts.php -text
 htdocs/wiki/inc/common.php -text
+htdocs/wiki/inc/compatibility.php -text
 htdocs/wiki/inc/config_cascade.php -text
 htdocs/wiki/inc/confutils.php -text
 htdocs/wiki/inc/events.php -text
@@ -533,6 +527,7 @@ htdocs/wiki/inc/lang/nl/subscr_list.txt -text
 htdocs/wiki/inc/lang/nl/subscr_single.txt -text
 htdocs/wiki/inc/lang/nl/updateprofile.txt -text
 htdocs/wiki/inc/lang/nl/uploadmail.txt -text
+htdocs/wiki/inc/lessc.inc.php -text
 htdocs/wiki/inc/load.php -text
 htdocs/wiki/inc/mail.php -text
 htdocs/wiki/inc/media.php -text
@@ -546,6 +541,13 @@ htdocs/wiki/inc/parser/renderer.php -text
 htdocs/wiki/inc/parser/xhtml.php -text
 htdocs/wiki/inc/parser/xhtmlsummary.php -text
 htdocs/wiki/inc/parserutils.php -text
+htdocs/wiki/inc/phpseclib/Crypt_AES.php -text
+htdocs/wiki/inc/phpseclib/Crypt_Base.php -text
+htdocs/wiki/inc/phpseclib/Crypt_Hash.php -text
+htdocs/wiki/inc/phpseclib/Crypt_Rijndael.php -text
+htdocs/wiki/inc/phpseclib/LICENSE -text
+htdocs/wiki/inc/phpseclib/Math_BigInteger.php -text
+htdocs/wiki/inc/phpseclib/update.sh -text
 htdocs/wiki/inc/plugin.php -text
 htdocs/wiki/inc/plugincontroller.class.php -text
 htdocs/wiki/inc/pluginutils.php -text
@@ -576,17 +578,11 @@ htdocs/wiki/lib/images/admin/plugin.png -text
 htdocs/wiki/lib/images/admin/popularity.png -text
 htdocs/wiki/lib/images/admin/revert.png -text
 htdocs/wiki/lib/images/admin/usermanager.png -text
-htdocs/wiki/lib/images/arrow_down.gif -text
-htdocs/wiki/lib/images/arrow_up.gif -text
-htdocs/wiki/lib/images/at.gif -text
 htdocs/wiki/lib/images/blank.gif -text
 htdocs/wiki/lib/images/bullet.png -text
-htdocs/wiki/lib/images/close.png -text
 htdocs/wiki/lib/images/closed-rtl.png -text
 htdocs/wiki/lib/images/closed.png -text
-htdocs/wiki/lib/images/del.png -text
 htdocs/wiki/lib/images/diff.png -text
-htdocs/wiki/lib/images/edit.gif -text
 htdocs/wiki/lib/images/email.png -text
 htdocs/wiki/lib/images/error.png -text
 htdocs/wiki/lib/images/external-link.png -text
@@ -699,7 +695,6 @@ htdocs/wiki/lib/images/interwiki/coral.gif -text
 htdocs/wiki/lib/images/interwiki/doku.gif -text
 htdocs/wiki/lib/images/interwiki/dokubug.gif -text
 htdocs/wiki/lib/images/interwiki/google.gif -text
-htdocs/wiki/lib/images/interwiki/meatball.gif -text
 htdocs/wiki/lib/images/interwiki/paypal.gif -text
 htdocs/wiki/lib/images/interwiki/phpfn.gif -text
 htdocs/wiki/lib/images/interwiki/sb.gif -text
@@ -707,7 +702,6 @@ htdocs/wiki/lib/images/interwiki/skype.gif -text
 htdocs/wiki/lib/images/interwiki/skype.png -text
 htdocs/wiki/lib/images/interwiki/tag.gif -text
 htdocs/wiki/lib/images/interwiki/wg.png -text
-htdocs/wiki/lib/images/interwiki/wiki.gif -text
 htdocs/wiki/lib/images/interwiki/wp.gif -text
 htdocs/wiki/lib/images/interwiki/wpde.gif -text
 htdocs/wiki/lib/images/interwiki/wpen.gif -text
@@ -738,8 +732,6 @@ htdocs/wiki/lib/images/license/button/cc-zero.png -text
 htdocs/wiki/lib/images/license/button/cc.png -text
 htdocs/wiki/lib/images/license/button/gnufdl.png -text
 htdocs/wiki/lib/images/license/button/publicdomain.png -text
-htdocs/wiki/lib/images/list-minus.gif -text
-htdocs/wiki/lib/images/list-plus.gif -text
 htdocs/wiki/lib/images/loading.gif -text
 htdocs/wiki/lib/images/magnifier.png -text
 htdocs/wiki/lib/images/media_align_center.png -text
@@ -760,7 +752,6 @@ htdocs/wiki/lib/images/notify.png -text
 htdocs/wiki/lib/images/ns.png -text
 htdocs/wiki/lib/images/open.png -text
 htdocs/wiki/lib/images/page.png -text
-htdocs/wiki/lib/images/pencil.png -text
 htdocs/wiki/lib/images/plus.gif -text
 htdocs/wiki/lib/images/resizecol.png -text
 htdocs/wiki/lib/images/smaller.gif -text
@@ -826,8 +817,8 @@ htdocs/wiki/lib/images/unc.png -text
 htdocs/wiki/lib/images/up.png -text
 htdocs/wiki/lib/images/wrap.gif -text
 htdocs/wiki/lib/index.html -text
+htdocs/wiki/lib/plugins/acl/action.php -text
 htdocs/wiki/lib/plugins/acl/admin.php -text
-htdocs/wiki/lib/plugins/acl/ajax.php -text
 htdocs/wiki/lib/plugins/acl/lang/en/help.txt -text
 htdocs/wiki/lib/plugins/acl/lang/en/lang.php -text
 htdocs/wiki/lib/plugins/acl/lang/kk/lang.php -text
@@ -839,6 +830,7 @@ htdocs/wiki/lib/plugins/acl/pix/ns.png -text
 htdocs/wiki/lib/plugins/acl/pix/page.png -text
 htdocs/wiki/lib/plugins/acl/pix/user.png -text
 htdocs/wiki/lib/plugins/acl/plugin.info.txt -text
+htdocs/wiki/lib/plugins/acl/remote.php -text
 htdocs/wiki/lib/plugins/acl/rtl.css -text
 htdocs/wiki/lib/plugins/acl/script.js -text
 htdocs/wiki/lib/plugins/acl/style.css -text
@@ -1944,7 +1936,6 @@ htdocs/wiki/lib/plugins/indexmenu/scripts/toolbarindexwizard.js -text
 htdocs/wiki/lib/plugins/indexmenu/style.css -text
 htdocs/wiki/lib/plugins/indexmenu/syntax/indexmenu.php -text
 htdocs/wiki/lib/plugins/indexmenu/syntax/tag.php -text
-htdocs/wiki/lib/plugins/info/lang/sl/lang.php -text
 htdocs/wiki/lib/plugins/info/plugin.info.txt -text
 htdocs/wiki/lib/plugins/info/syntax.php -text
 htdocs/wiki/lib/plugins/lists/manager.dat -text
@@ -2127,11 +2118,15 @@ htdocs/wiki/lib/plugins/testing/_test/dummy_plugin_integration_test.test.php -te
 htdocs/wiki/lib/plugins/testing/_test/dummy_plugin_test.test.php -text
 htdocs/wiki/lib/plugins/testing/action.php -text
 htdocs/wiki/lib/plugins/testing/plugin.info.txt -text
+htdocs/wiki/lib/plugins/usermanager/_test/csv_export.test.php -text
+htdocs/wiki/lib/plugins/usermanager/_test/csv_import.test.php -text
+htdocs/wiki/lib/plugins/usermanager/_test/mocks.class.php -text
 htdocs/wiki/lib/plugins/usermanager/admin.php -text
 htdocs/wiki/lib/plugins/usermanager/images/search.png -text
 htdocs/wiki/lib/plugins/usermanager/lang/en/add.txt -text
 htdocs/wiki/lib/plugins/usermanager/lang/en/delete.txt -text
 htdocs/wiki/lib/plugins/usermanager/lang/en/edit.txt -text
+htdocs/wiki/lib/plugins/usermanager/lang/en/import.txt -text
 htdocs/wiki/lib/plugins/usermanager/lang/en/intro.txt -text
 htdocs/wiki/lib/plugins/usermanager/lang/en/lang.php -text
 htdocs/wiki/lib/plugins/usermanager/lang/en/list.txt -text
@@ -2140,6 +2135,7 @@ htdocs/wiki/lib/plugins/usermanager/lang/ms/lang.php -text
 htdocs/wiki/lib/plugins/usermanager/lang/nl/add.txt -text
 htdocs/wiki/lib/plugins/usermanager/lang/nl/delete.txt -text
 htdocs/wiki/lib/plugins/usermanager/lang/nl/edit.txt -text
+htdocs/wiki/lib/plugins/usermanager/lang/nl/import.txt -text
 htdocs/wiki/lib/plugins/usermanager/lang/nl/intro.txt -text
 htdocs/wiki/lib/plugins/usermanager/lang/nl/lang.php -text
 htdocs/wiki/lib/plugins/usermanager/lang/nl/list.txt -text
@@ -2263,51 +2259,12 @@ htdocs/wiki/lib/styles/feed.css -text
 htdocs/wiki/lib/styles/index.html -text
 htdocs/wiki/lib/styles/print.css -text
 htdocs/wiki/lib/styles/screen.css -text
-htdocs/wiki/lib/tpl/default/_admin.css -text
-htdocs/wiki/lib/tpl/default/_fileuploader.css -text
-htdocs/wiki/lib/tpl/default/_linkwiz.css -text
-htdocs/wiki/lib/tpl/default/_mediamanager.css -text
-htdocs/wiki/lib/tpl/default/_mediaoptions.css -text
-htdocs/wiki/lib/tpl/default/_subscription.css -text
-htdocs/wiki/lib/tpl/default/_tabs.css -text
-htdocs/wiki/lib/tpl/default/design.css -text
-htdocs/wiki/lib/tpl/default/detail.php -text
-htdocs/wiki/lib/tpl/default/footer.html -text
-htdocs/wiki/lib/tpl/default/images/UWEB.png -text
-htdocs/wiki/lib/tpl/default/images/UWEBshadow.png -text
-htdocs/wiki/lib/tpl/default/images/apple-touch-icon.png -text
 htdocs/wiki/lib/tpl/default/images/back.png -text svneol=unset#unset
-htdocs/wiki/lib/tpl/default/images/bullet.gif -text
-htdocs/wiki/lib/tpl/default/images/button-cc.gif -text
-htdocs/wiki/lib/tpl/default/images/button-css.png -text
-htdocs/wiki/lib/tpl/default/images/button-donate.gif -text
-htdocs/wiki/lib/tpl/default/images/button-dw.png -text
-htdocs/wiki/lib/tpl/default/images/button-php.gif -text
-htdocs/wiki/lib/tpl/default/images/button-rss.png -text
-htdocs/wiki/lib/tpl/default/images/button-xhtml.png -text
-htdocs/wiki/lib/tpl/default/images/buttonshadow.png -text
-htdocs/wiki/lib/tpl/default/images/closed.gif -text
 htdocs/wiki/lib/tpl/default/images/csr.png -text svneol=unset#unset
 htdocs/wiki/lib/tpl/default/images/documenten.png -text svneol=unset#unset
-htdocs/wiki/lib/tpl/default/images/favicon.ico -text
 htdocs/wiki/lib/tpl/default/images/forum.png -text svneol=unset#unset
-htdocs/wiki/lib/tpl/default/images/inputshadow.png -text
 htdocs/wiki/lib/tpl/default/images/irc.png -text svneol=unset#unset
-htdocs/wiki/lib/tpl/default/images/link_icon.gif -text
-htdocs/wiki/lib/tpl/default/images/mail_icon.gif -text
-htdocs/wiki/lib/tpl/default/images/open.gif -text
-htdocs/wiki/lib/tpl/default/images/resizecol.png -text
-htdocs/wiki/lib/tpl/default/images/tocdot2.gif -text
 htdocs/wiki/lib/tpl/default/images/wiki.png -text svneol=unset#unset
-htdocs/wiki/lib/tpl/default/images/windows.gif -text
-htdocs/wiki/lib/tpl/default/layout.css -text
-htdocs/wiki/lib/tpl/default/main.php -text
-htdocs/wiki/lib/tpl/default/media.css -text
-htdocs/wiki/lib/tpl/default/mediamanager.php -text
-htdocs/wiki/lib/tpl/default/print.css -text
-htdocs/wiki/lib/tpl/default/rtl.css -text
-htdocs/wiki/lib/tpl/default/style.ini -text
-htdocs/wiki/lib/tpl/default/template.info.txt -text
 htdocs/wiki/lib/tpl/dokuwiki/css/_admin.css -text
 htdocs/wiki/lib/tpl/dokuwiki/css/_diff.css -text
 htdocs/wiki/lib/tpl/dokuwiki/css/_edit.css -text
@@ -2323,14 +2280,14 @@ htdocs/wiki/lib/tpl/dokuwiki/css/_recent.css -text
 htdocs/wiki/lib/tpl/dokuwiki/css/_search.css -text
 htdocs/wiki/lib/tpl/dokuwiki/css/_tabs.css -text
 htdocs/wiki/lib/tpl/dokuwiki/css/_toc.css -text
-htdocs/wiki/lib/tpl/dokuwiki/css/basic.css -text
-htdocs/wiki/lib/tpl/dokuwiki/css/content.css -text
-htdocs/wiki/lib/tpl/dokuwiki/css/design.css -text
-htdocs/wiki/lib/tpl/dokuwiki/css/includes.css -text
-htdocs/wiki/lib/tpl/dokuwiki/css/mobile.css -text
-htdocs/wiki/lib/tpl/dokuwiki/css/pagetools.css -text
+htdocs/wiki/lib/tpl/dokuwiki/css/basic.less -text
+htdocs/wiki/lib/tpl/dokuwiki/css/content.less -text
+htdocs/wiki/lib/tpl/dokuwiki/css/design.less -text
+htdocs/wiki/lib/tpl/dokuwiki/css/mixins.less -text
+htdocs/wiki/lib/tpl/dokuwiki/css/mobile.less -text
+htdocs/wiki/lib/tpl/dokuwiki/css/pagetools.less -text
 htdocs/wiki/lib/tpl/dokuwiki/css/print.css -text
-htdocs/wiki/lib/tpl/dokuwiki/css/structure.css -text
+htdocs/wiki/lib/tpl/dokuwiki/css/structure.less -text
 htdocs/wiki/lib/tpl/dokuwiki/detail.php -text
 htdocs/wiki/lib/tpl/dokuwiki/images/apple-touch-icon.png -text
 htdocs/wiki/lib/tpl/dokuwiki/images/button-css.png -text
@@ -2551,6 +2508,7 @@ htdocs/wiki/lib/tpl/vector/static/css/index.html -text
 htdocs/wiki/lib/tpl/vector/static/css/print.css -text
 htdocs/wiki/lib/tpl/vector/static/css/rtl.css -text
 htdocs/wiki/lib/tpl/vector/static/css/screen.css -text
+htdocs/wiki/lib/tpl/vector/static/css/screen_iehacks.css -text
 htdocs/wiki/lib/tpl/vector/static/img/button-donate.gif -text
 htdocs/wiki/lib/tpl/vector/static/img/button-dw.png -text
 htdocs/wiki/lib/tpl/vector/static/img/button-qrcode.png -text
@@ -2578,6 +2536,7 @@ htdocs/wiki/lib/tpl/vector/user/screen.css -text
 htdocs/wiki/lib/tpl/vector/user/tabs.php -text
 htdocs/wiki/lib/tpl/vector/user/tracker.php -text
 htdocs/wiki/lib/tpl/vector/user/user.js -text
+htdocs/wiki/lib/tpl/wikichanges.diff -text
 htdocs_confide/common.functions.php -text
 htdocs_confide/default.css -text
 htdocs_confide/index.php -text
