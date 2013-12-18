@@ -47,7 +47,7 @@ jQuery(document).ready(function() {
     settings: {
       refreshMillis: 60000,
       allowFuture: false,
-      localeTitle: false,
+      localeTitle: true,
       cutoff: 0,
       strings: {
 		prefixAgo: "",
