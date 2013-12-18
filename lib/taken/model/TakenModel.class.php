@@ -112,7 +112,7 @@ class TakenModel {
 	
 	public static function taakToewijzenAanLid(CorveeTaak $taak, $uid) {
 		if ($taak->getLidId() === $uid) {
-			return;
+			return false;
 		}
 		$puntenruilen = false;
 		if ($taak->getWanneerToegekend() !== null) {
@@ -129,6 +129,7 @@ class TakenModel {
 		else {
 			self::updateTaak($taak);
 		}
+		return true;
 	}
 	
 	public static function puntenToekennen(CorveeTaak $taak) {
@@ -303,7 +304,9 @@ class TakenModel {
 				$taak->setDatum($datum);
 				$taak->setPunten($punten);
 				$taak->setBonusMalus($bonus_malus);
-				self::taakToewijzenAanLid($taak, $uid);
+				if (!self::taakToewijzenAanLid($taak, $uid)) {
+					self::updateTaak($taak);
+				}
 			}
 			$taak->setCorveeFunctie(FunctiesModel::getFunctie($taak->getFunctieId()));
 			$db->commit();
