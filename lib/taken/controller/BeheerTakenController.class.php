@@ -183,9 +183,7 @@ class BeheerTakenController extends \ACLController {
 				$uid = null;
 			}
 			$taak = TakenModel::getTaak($tid);
-			if ($taak->getLidId() !== $uid) {
-				TakenModel::taakToewijzenAanLid($taak, $uid);
-			}
+			TakenModel::taakToewijzenAanLid($taak, $uid);
 			$this->content = new BeheerTakenView($taak);
 		}
 		else {

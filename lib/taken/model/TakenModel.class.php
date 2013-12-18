@@ -111,6 +111,9 @@ class TakenModel {
 	}
 	
 	public static function taakToewijzenAanLid(CorveeTaak $taak, $uid) {
+		if ($taak->getLidId() === $uid) {
+			return;
+		}
 		$puntenruilen = false;
 		if ($taak->getWanneerToegekend() !== null) {
 			$puntenruilen = true;
