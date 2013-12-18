@@ -67,7 +67,8 @@ jQuery(document).ready(function() {
 		years: "%d jaar",
 		wordSeparator: " ",
 		numbers: [],
-		weekdays: ["zondag", "maandag", "dinsdag", "woensdag", "donderdag", "vrijdag", "zaterdag", "zondag"]
+		weekdays: ["zondag", "maandag", "dinsdag", "woensdag", "donderdag", "vrijdag", "zaterdag", "zondag"],
+		fullmonths: ["januari", "februari", "maart", "april", "mei", "juni", "juli", "augustus", "september", "oktober", "november", "december"]
       }
     },
     inWords: function(distanceMillis) {
@@ -180,8 +181,16 @@ jQuery(document).ready(function() {
       var text = $.trim(element.text());
       if ($t.settings.localeTitle) {
         var date = element.data('timeago').datetime;
-        var string = $t.settings.strings.weekdays[date.getDay()] +' '+ date.getDate() +'-'+ (date.getMonth()+1) +'-'+ date.getFullYear() +' om '+ date.getHours() +':'+date.getMinutes();
-        element.attr("title", string);
+        var string = $t.settings.strings.weekdays[date.getDay()] +' '+ date.getDate() +' '+  $t.settings.strings.fullmonths[date.getMonth()] +' '+ date.getFullYear();
+		var hours = date.getHours();
+		if (hours < 10) {
+			hours = '0'+ hours;
+		}
+		var minutes = date.getMinutes();
+		if (minutes < 10) {
+			minutes = '0'+ minutes;
+		}
+        element.attr("title", string +' om '+ hours +':'+ minutes);
       } else if (text.length > 0 && !($t.isTime(element) && element.attr("title"))) {
         element.attr("title", text);
       }
