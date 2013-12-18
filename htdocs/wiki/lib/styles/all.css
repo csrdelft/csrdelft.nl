@@ -63,14 +63,3 @@ em.u {
 em em.u {
     font-style: italic;
 }
-
-/* custom CSS to make upload button more visisble*/
-.qq-upload-button {
-	background-color: beige;
-	border: 1px solid #AAAAAA;
-	padding: 4px;
-}
-
-.qq-upload-button:hover {
-	background-color: #dee7ec;
-}

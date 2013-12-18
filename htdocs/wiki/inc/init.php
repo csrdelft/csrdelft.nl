@@ -140,21 +140,13 @@ if ($conf['gzip_output'] &&
 }
 
 // init session
-if (!headers_sent() && !defined('NOSESSION')) {
- 	//bij authenticatie via C.S.R.-site andere instellingen voor de sessiecookie
-    if($conf['authtype']=='authcsr'){
-        session_name("PHPSESSID");
-        $sessiepath = fullpath(dirname(__FILE__).'/../../../').'/sessie';
-        session_save_path($sessiepath);
-        session_set_cookie_params(1036800, '/', '', false,false);
+if (!headers_sent() && !defined('NOSESSION')){
+    session_name("DokuWiki");
+    $cookieDir = empty($conf['cookiedir']) ? DOKU_REL : $conf['cookiedir'];
+    if (version_compare(PHP_VERSION, '5.2.0', '>')) {
+        session_set_cookie_params(0,$cookieDir,'',($conf['securecookie'] && is_ssl()),true);
     }else{
-        session_name("DokuWiki");
-        $cookieDir = empty($conf['cookiedir']) ? DOKU_REL : $conf['cookiedir'];
-        if (version_compare(PHP_VERSION, '5.2.0', '>')) {
-            session_set_cookie_params(0,$cookieDir,'',($conf['securecookie'] && is_ssl()),true);
-        }else{
-            session_set_cookie_params(0,$cookieDir,'',($conf['securecookie'] && is_ssl()));
-        }
+        session_set_cookie_params(0,$cookieDir,'',($conf['securecookie'] && is_ssl()));
     }
     session_start();
 
@@ -216,7 +208,6 @@ global $INPUT;
 $INPUT = new Input();
 
 // initialize plugin controller
-/** @var Doku_Plugin_Controller $plugin_controller */
 $plugin_controller = new $plugin_controller_class();
 
 // initialize the event handler
@@ -276,10 +267,10 @@ function init_lang($langCode) {
     $lang = array();
 
     //load the language files
-    require_once(DOKU_INC.'inc/lang/en/lang.php');
+    require(DOKU_INC.'inc/lang/en/lang.php');
     if ($langCode && $langCode != 'en') {
         if (file_exists(DOKU_INC."inc/lang/$langCode/lang.php")) {
-            require_once(DOKU_INC."inc/lang/$langCode/lang.php");
+            require(DOKU_INC."inc/lang/$langCode/lang.php");
         }
     }
 }
@@ -297,7 +288,7 @@ function init_files(){
             $fh = @fopen($file,'a');
             if($fh){
                 fclose($fh);
-                if($conf['fperm']) chmod($file, $conf['fperm']);
+                if(!empty($conf['fperm'])) chmod($file, $conf['fperm']);
             }else{
                 nice_die("$file is not writable. Check your permissions settings!");
             }
