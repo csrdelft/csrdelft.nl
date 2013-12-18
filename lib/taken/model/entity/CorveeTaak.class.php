@@ -125,53 +125,7 @@ class CorveeTaak implements \Agendeerbaar {
 		return substr_count($this->wanneer_gemaild, '&#013;');
 	}
 	/**
-	 * Berekent hoevaak er gemaild had moeten worden op basis van de datum van deze taak.
-	 * 
-	 * @return int
-	 */
-	public function getAantalKeerMoetenMailen() {
-		$nu = strtotime(date('Y-m-d'));
-		$datum = strtotime($this->getDatum());
-		
-		for ($i = intval($GLOBALS['herinnering_aantal_mails']); $i > 0; $i--) {
-			
-			if ($nu >= strtotime($GLOBALS['herinnering_'. $i .'e_mail_uiterlijk'], $datum)) {
-				return $i;
-			}
-		}
-		return 0;
-	}
-	/**
-	 * Bepaalt of er op tijd is gemaild op basis van de laatst verstuurde email.
-	 * 
-	 * @return boolean
-	 */
-	public function getIsTelaatGemaild() {
-		$moeten = $this->getAantalKeerMoetenMailen();
-		if ($moeten === 0) {
-			return false;
-		}
-		$aantal = $this->getAantalKeerGemaild();
-		if ($moeten > $aantal) {
-			return true;
-		}
-		$pos = strpos($this->wanneer_gemaild, '&#013;');
-		if ($pos === false) {
-			return true;
-		}
-		$laatst = strtotime(substr($this->wanneer_gemaild, 0, $pos));
-		$datum = strtotime($this->getDatum());
-		
-		for ($i = intval($GLOBALS['herinnering_aantal_mails']); $i > 0; $i--) {
-			
-			if ($moeten >= $i && $laatst >= strtotime($GLOBALS['herinnering_'. $i .'e_mail_uiterlijk'], $datum)) {
-				return true;
-			}
-		}
-		return false;
-	}
-	/**
-	 * Bepaalt of er een herinnering gemaild moet worden op basis van hoeveel keer er gemaild had moeten worden.
+	 * Bepaalt of er een herinnering gemaild moet worden op basis van het aantal verstuurde herinneringen en de ingestelde periode vooraf.
 	 * 
 	 * @return boolean
 	 */
@@ -179,11 +133,34 @@ class CorveeTaak implements \Agendeerbaar {
 		$datum = strtotime($this->getDatum());
 		$nu = strtotime(date('Y-m-d'));
 		$aantal = $this->getAantalKeerGemaild();
-		$moeten = $this->getAantalKeerMoetenMailen();
 		
 		for ($i = intval($GLOBALS['herinnering_aantal_mails']); $i > 0; $i--) {
 			
-			if ($nu >= strtotime($GLOBALS['herinnering_'. $i .'e_mail'], $datum) && $moeten >= $aantal) { // $moeten > $aantal betekent te laat gemaild!
+			if ($aantal < $i &&
+				$nu >= strtotime($GLOBALS['herinnering_'. $i .'e_mail'], $datum) &&
+				$nu <= strtotime($GLOBALS['herinnering_'. $i .'e_mail_uiterlijk'], $datum)
+			) {
+				return true;
+			}
+		}
+		return false;
+	}
+	/**
+	 * Bepaalt of er op tijd is gemaild op basis van de laatst verstuurde email.
+	 * 
+	 * @return boolean
+	 */
+	public function getIsTelaatGemaild() {
+		$datum = strtotime($this->getDatum());
+		$aantal = $this->getAantalKeerGemaild();
+		$pos = strpos($this->wanneer_gemaild, '&#013;');
+		$laatst = strtotime(substr($this->wanneer_gemaild, 0, $pos));
+		
+		for ($i = intval($GLOBALS['herinnering_aantal_mails']); $i > 0; $i--) {
+			
+			if ($aantal <= $i &&
+				$laatst >= strtotime($GLOBALS['herinnering_'. $i .'e_mail_uiterlijk'], $datum)
+			) {
 				return true;
 			}
 		}

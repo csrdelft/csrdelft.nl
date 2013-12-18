@@ -8,19 +8,18 @@
 <img alt="Beeldmerk van de Vereniging" src="{$csr_pics}/layout/beeldmerk.jpg" style="position: absolute; left: 50px;" />
 <h1>{$kop} {$maaltijd->getDatum()|date_format:"%Y-%m-%d"} {$maaltijd->getTijd()|date_format:"%H:%M"}</h1>
 <h3>Maaltijdprijs: &euro; {$maaltijd->getPrijs()|string_format:"%.2f"}</h3>
+<h3>Aanmeldingen: {$maaltijd->getAantalAanmeldingen()} (inclusief gasten)</h3>
 <br />
-<pre id="lijst">
 {if $maaltijd->getAantalAanmeldingen() > 0}
+<pre id="lijst">
 {foreach from=$aanmeldingen item=aanmelding}
-{if $aanmelding->getLidId()}
-{$aanmelding->getLidId()},{$aanmelding->getLid()->getNaamLink()}
-{else}
-{$aanmelding->getDoorLidId()},Gast van {$aanmelding->getDoorLid()->getNaamLink()}
+{if $aanmelding->getLidId()}{$aanmelding->getLidId()},{$aanmelding->getLid()->getNaamLink()}
+{else}{$aanmelding->getDoorLidId()},Gast van {$aanmelding->getDoorLid()->getNaamLink()}
 {/if}
 {/foreach}
-{else}
-Nog geen aanmeldingen voor deze maaltijd.
-{/if}
 </pre>
+{else}
+<p>Nog geen aanmeldingen voor deze maaltijd.</p>
+{/if}
 </body>
 </html>
