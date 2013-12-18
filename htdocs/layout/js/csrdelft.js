@@ -3,30 +3,55 @@
  */
 
 /**
- * Aan/Af-melden via een ketzer
+ * Aan-/afmelden m.b.v. een ketzer
  * 
+ * @requires jQuery
  */
 function ketzer_ajax(url, ketzer) {
-	$(ketzer + ' .aanmelddata').html('Aangemeld:<br /><img src="http://plaetjes.csrdelft.nl/layout/loading-arrows.gif" />');
-	$.ajax({
+	jQuery(ketzer + ' .aanmelddata').html('Aangemeld:<br /><img src="http://plaetjes.csrdelft.nl/layout/loading-arrows.gif" />');
+	jQuery.ajax({
 		type : 'GET',
 		cache : false,
 		url : url,
 		data : '',
 		success : function(response) {
-			var html = $.parseHTML(response);
-			$('.ubb_maaltijd').each(function() {
-				if ($(this).attr('id') === $(html).attr('id')) {
-					$(this).replaceWith(response);
+			var html = jQuery.parseHTML(response);
+			jQuery('.ubb_maaltijd').each(function() {
+				if (jQuery(this).attr('id') === jQuery(html).attr('id')) {
+					jQuery(this).replaceWith(response);
 				}
 			});
 		},
 		error : function(jqXHR, textStatus, errorThrown) {
-			$(ketzer + ' .aanmelddata').html('<span style="color:red;font-weight:bold;">Error:</span><br />' + errorThrown);
+			jQuery(ketzer + ' .aanmelddata').html('<span style="color: red; font-weight: bold;">Error:</span><br />' + errorThrown);
 			alert(errorThrown);
 		}
 	});
 	return true;
+}
+
+/**
+ * Selecteerd tekst in een element
+ * http://stackoverflow.com/questions/985272/jquery-selecting-text-in-an-element-akin-to-highlighting-with-your-mouse/987376#987376
+ * 
+ * @param DOM-object element
+ */
+function selectText(element) {
+    var doc = document
+        , text = doc.getElementById(element)
+        , range, selection
+    ;    
+    if (doc.body.createTextRange) { //ms
+        range = doc.body.createTextRange();
+        range.moveToElementText(text);
+        range.select();
+    } else if (window.getSelection) { //all others
+        selection = window.getSelection();        
+        range = doc.createRange();
+        range.selectNodeContents(text);
+        selection.removeAllRanges();
+        selection.addRange(range);
+    }
 }
 
 //we maken een standaard AJAX-ding aan.
