@@ -9,7 +9,7 @@
 	<th>Lid</th>
 	<th>Punten<br />toegekend</th>
 	<th style="text-align: center;">{strip}
-		<a class="knop" onclick="event.stopPropagation();taken_delete_range(this);" title="Selectie {if $prullenbak}definitief verwijderen{else}naar de prullenbak verplaatsen{/if}">
+		<a class="knop{if $prullenbak} confirm{/if}" onclick="event.stopPropagation();taken_delete_range(this);" title="Selectie {if $prullenbak}definitief verwijderen{else}naar de prullenbak verplaatsen{/if}">
 		{if $prullenbak}
 			{icon get="cross"}
 		{else}

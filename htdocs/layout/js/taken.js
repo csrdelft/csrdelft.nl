@@ -330,14 +330,14 @@ function taken_select_range(e) {
 		else if (shift && withinRange) {
 			$(this).prop('checked', !before);
 		}
-		else if ((!ctrl && !shift) || before) {
+		else if (!ctrl && (!shift || before)) {
 			 $(this).prop('checked', false);
 		}
 	});
 	lastSelectedId = e.target.id;
 }
 function taken_delete_range(elmnt) {
-	if (!confirm($(elmnt).attr('title') +'.\n\nWeet u het zeker?')) {
+	if ($(elmnt).hasClass('confirm') && !confirm($(elmnt).attr('title') +'.\n\nWeet u het zeker?')) {
 		return false;
 	}
 	$('#taken-tabel tbody tr td.col-del a input:visible').each(function() {
