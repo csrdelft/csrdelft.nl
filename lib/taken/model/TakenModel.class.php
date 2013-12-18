@@ -225,8 +225,17 @@ class TakenModel {
 	 * @return CorveeTaak[] (implements Agendeerbaar)
 	 */
 	public static function getTakenVoorAgenda($van, $tot, $iedereen=false) {
-		if (!is_int($van) || !is_int($tot)) {
-			throw new \Exception('Invalid timestamp: getTakenVoorAgenda($van, $tot)');
+		if ($van === null) {
+			$van = time();
+		}
+		elseif (!is_int($van)) {
+			throw new \Exception('Invalid timestamp: $van getTakenVoorAgenda()');
+		}
+		if ($tot === null) {
+			$tot = strtotime($GLOBALS['maaltijden_ketzer_vooraf']);
+		}
+		elseif (!is_int($tot)) {
+			throw new \Exception('Invalid timestamp: $tot getTakenVoorAgenda()');
 		}
 		$where = 'verwijderd = false AND datum >= ? AND datum <= ?';
 		$values = array(date('Y-m-d', $van), date('Y-m-d', $tot));
