@@ -118,6 +118,9 @@ class CorveeTaak implements \Agendeerbaar {
 	}
 	public function getLaatstGemaildTimestamp() {
 		$pos = strpos($this->wanneer_gemaild, '&#013;');
+		if ($pos === false) {
+			return null;
+		}
 		return strtotime(substr($this->wanneer_gemaild, 0, $pos));
 	}
 	/**
@@ -163,14 +166,20 @@ class CorveeTaak implements \Agendeerbaar {
 		$aantal = $this->getAantalKeerGemaild();
 		$datum = strtotime($this->getDatum());
 		$laatst = $this->getLaatstGemaildTimestamp();
+		$nu = strtotime(date('Y-m-d'));
+		$moeten = 0;
 		
 		for ($i = intval($GLOBALS['herinnering_aantal_mails']); $i > 0; $i--) {
-			
-			if ($aantal <= $i &&
-				$laatst >= strtotime($GLOBALS['herinnering_'. $i .'e_mail_uiterlijk'], $datum)
-			) {
+			$uiterlijk = strtotime($GLOBALS['herinnering_'. $i .'e_mail_uiterlijk'], $datum);
+			if ($nu >= $uiterlijk) {
+				$moeten++;
+			}
+			if ($aantal <= $i && $laatst >= $uiterlijk) {
 				return true;
 			}
+		}
+		if ($moeten > $aantal) {
+			return true;
 		}
 		return false;
 	}
