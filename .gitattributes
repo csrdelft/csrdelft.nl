@@ -2303,6 +2303,7 @@ htdocs/wiki/lib/tpl/dokuwiki/images/page-background.svg -text
 htdocs/wiki/lib/tpl/dokuwiki/images/page-gradient.png -text
 htdocs/wiki/lib/tpl/dokuwiki/images/pagetools-build.php -text
 htdocs/wiki/lib/tpl/dokuwiki/images/pagetools-sprite.png -text
+htdocs/wiki/lib/tpl/dokuwiki/images/pagetools/00_default.png -text
 htdocs/wiki/lib/tpl/dokuwiki/images/pagetools/01_edit.png -text
 htdocs/wiki/lib/tpl/dokuwiki/images/pagetools/02_create.png -text
 htdocs/wiki/lib/tpl/dokuwiki/images/pagetools/03_draft.png -text
