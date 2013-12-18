@@ -52,7 +52,6 @@ class csrdelft extends SimpleHTML {
 			$this->addScript('jquery.timeago.js');
 			$this->addScript('init.js', $this->_prefix);
 			$this->addScript('dragobject.js');
-			$this->addScript('ubb_url.js');
 		} else {
 			//oude layout
 			if(Instelling::get('layout')=='owee'){	$this->_prefix='owee_'; }
@@ -73,7 +72,6 @@ class csrdelft extends SimpleHTML {
 			$this->addScript('jquery.timeago.js');
 			$this->addScript('csrdelft.js');
 			$this->addScript('dragobject.js');
-			$this->addScript('ubb_url.js');
 			$this->addScript('menu.js');
 			if(Instelling::get('algemeen_sneltoetsen')=='ja'){
 				$this->addScript('sneltoetsen.js');

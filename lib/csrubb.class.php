@@ -66,11 +66,11 @@ class CsrUBB extends eamBBParser{
 		}
 		$pos = strpos($href, '://');
 		if ($pos > 2 && $pos < 6 && filter_var($href, FILTER_VALIDATE_URL)) {
-			$confirm = ' class="verlaatstek"';
+			$extern = ' target="_blank" class="external"';
 			if (startsWith($href, CSR_ROOT) || startsWith($href, CSR_PICS)) {
-				$confirm = '';
+				$extern = '';
 			}
-			$result = '<a href="'. $href .'"'. $confirm .'>'. $content .'</a>';
+			$result = '<a href="'. $href .'" title="'. $href .'"'. $extern .'>'. $content .'</a>';
 		}
 		else {
 			$result = '[Ongeldige URL, tip: gebruik tinyurl.com]';
