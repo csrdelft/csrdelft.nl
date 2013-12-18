@@ -41,8 +41,17 @@ class MaaltijdenModel {
 	 * @return Maaltijd[] (implements Agendeerbaar)
 	 */
 	public static function getMaaltijdenVoorAgenda($van, $tot) {
-		if (!is_int($van) || !is_int($tot)) {
-			throw new \Exception('Invalid timestamp: getMaaltijdenVoorAgenda($van, $tot)');
+		if ($van === null) {
+			$van = time();
+		}
+		elseif (!is_int($van)) {
+			throw new \Exception('Invalid timestamp: $van getMaaltijdenVoorAgenda()');
+		}
+		if ($tot === null) {
+			$tot = strtotime($GLOBALS['maaltijden_ketzer_vooraf']);
+		}
+		elseif (!is_int($tot)) {
+			throw new \Exception('Invalid timestamp: $tot getMaaltijdenVoorAgenda()');
 		}
 		$maaltijden = self::loadMaaltijden('verwijderd = false AND datum >= ? AND datum <= ?', array(date('Y-m-d', $van), date('Y-m-d', $tot)));
 		$maaltijden = self::filterMaaltijdenVoorLid($maaltijden, \LoginLid::instance()->getUid());
