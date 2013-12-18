@@ -12,7 +12,7 @@
  *          the author(s) of this file in doubt.
  *
  * @license GPLv2 (http://www.gnu.org/licenses/gpl2.html)
- * @author Andreas Haerter <ah@syn-systems.com>
+ * @author Andreas Haerter <development@andreas-haerter.com>
  * @link http://www.dokuwiki.org/template:vector
  * @link http://www.dokuwiki.org/devel:templates
  */
@@ -82,6 +82,7 @@ if (file_exists(DOKU_TPLINC."lang/".$conf["lang"]."/style.css")){
   }
 }
 ?>
+<!--[if lte IE 8]><link rel="stylesheet" media="all" type="text/css" href="<?php echo DOKU_TPL; ?>static/css/screen_iehacks.css" /><![endif]-->
 <!--[if lt IE 7]><style type="text/css">body{behavior:url("<?php echo DOKU_TPL; ?>static/3rd/vector/csshover.htc")}</style><![endif]-->
 </head>
 
