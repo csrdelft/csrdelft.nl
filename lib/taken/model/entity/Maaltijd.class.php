@@ -137,7 +137,7 @@ class Maaltijd implements \Agendeerbaar {
 	 * @return double
 	 */
 	public function getBudget() {
-		return ((float)($this->getAantalAanmeldingen() + $this->getMarge())) * ($this->getPrijs() - 1.00);
+		return ((float)($this->getAantalAanmeldingen() + $this->getMarge())) * ($this->getPrijs() - floatval($GLOBALS['maaltijd_budget_maalcie']));
 	}
 	
 	public function setTitel($titel) {
