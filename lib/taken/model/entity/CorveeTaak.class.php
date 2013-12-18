@@ -116,6 +116,10 @@ class CorveeTaak implements \Agendeerbaar {
 	public function getIsVerwijderd() {
 		return (boolean) $this->verwijderd;
 	}
+	public function getLaatstGemaildTimestamp() {
+		$pos = strpos($this->wanneer_gemaild, '&#013;');
+		return strtotime(substr($this->wanneer_gemaild, 0, $pos));
+	}
 	/**
 	 * Berekent hoevaak er gemaild is op basis van wanneer er gemaild is.
 	 * 
@@ -130,9 +134,14 @@ class CorveeTaak implements \Agendeerbaar {
 	 * @return boolean
 	 */
 	public function getMoetHerinneren() {
-		$datum = strtotime($this->getDatum());
-		$nu = strtotime(date('Y-m-d'));
 		$aantal = $this->getAantalKeerGemaild();
+		$datum = strtotime($this->getDatum());
+		$laatst = $this->getLaatstGemaildTimestamp();
+		$nu = strtotime(date('Y-m-d'));
+		
+		if ($laatst === $nu) {
+			return false;
+		}
 		
 		for ($i = intval($GLOBALS['herinnering_aantal_mails']); $i > 0; $i--) {
 			
@@ -151,10 +160,9 @@ class CorveeTaak implements \Agendeerbaar {
 	 * @return boolean
 	 */
 	public function getIsTelaatGemaild() {
-		$datum = strtotime($this->getDatum());
 		$aantal = $this->getAantalKeerGemaild();
-		$pos = strpos($this->wanneer_gemaild, '&#013;');
-		$laatst = strtotime(substr($this->wanneer_gemaild, 0, $pos));
+		$datum = strtotime($this->getDatum());
+		$laatst = $this->getLaatstGemaildTimestamp();
 		
 		for ($i = intval($GLOBALS['herinnering_aantal_mails']); $i > 0; $i--) {
 			

@@ -31,7 +31,7 @@ function ketzer_ajax(url, ketzer) {
 }
 
 /**
- * Selecteerd tekst in een element
+ * Selecteer de tekst van een DOM-element
  * http://stackoverflow.com/questions/985272/jquery-selecting-text-in-an-element-akin-to-highlighting-with-your-mouse/987376#987376
  * 
  * @param DOM-object element
