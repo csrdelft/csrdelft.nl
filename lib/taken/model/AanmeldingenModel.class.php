@@ -163,13 +163,11 @@ class AanmeldingenModel {
 		$aanmeldingen = self::loadAanmeldingen(array($maaltijd->getMaaltijdId()));
 		$lijst = array();
 		foreach ($aanmeldingen as $aanmelding) {
-			$aanmelding->setMaaltijd($maaltijd);
-			$naam = $aanmelding->getLid()->getNaamLink('streeplijst');
-			$lijst[$naam] = $aanmelding;
+			$uid = $aanmelding->getLidId();
+			$naam = (string) $aanmelding->getLid();
+			$lijst[$uid] = $naam;
 			for ($i = $aanmelding->getAantalGasten(); $i > 0; $i--) {
-				$gast = new MaaltijdAanmelding();
-				$gast->setDoorLidId($aanmelding->getLidId());
-				$lijst[$naam .' gast '. $i] = $gast;
+				$lijst[$uid .'gast'. $i] = 'Gast van '. $naam;
 			}
 		}
 		ksort($lijst);

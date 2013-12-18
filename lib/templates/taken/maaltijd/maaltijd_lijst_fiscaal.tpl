@@ -12,10 +12,8 @@
 <br />
 {if $maaltijd->getAantalAanmeldingen() > 0}
 <pre id="lijst">
-{foreach from=$aanmeldingen item=aanmelding}
-{if $aanmelding->getLidId()}{$aanmelding->getLidId()},{$aanmelding->getLid()->getNaamLink()}
-{else}{$aanmelding->getDoorLidId()},Gast van {$aanmelding->getDoorLid()->getNaamLink()}
-{/if}
+{foreach from=$aanmeldingen key=uid item=naam}
+{$uid|truncate:4:""},{$naam}
 {/foreach}
 </pre>
 {else}
