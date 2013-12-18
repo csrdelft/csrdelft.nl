@@ -1,5 +1,5 @@
 /**
- * AANGEPAST: NLD vertaling & abbr autostart
+ * AANGEPAST-Paul: NLD vertaling & abbr autostart & custom title Date.toLocaleString()
  * 
  * 
  * Timeago is a jQuery plugin that makes it easy to support automatically
@@ -66,7 +66,8 @@ jQuery(document).ready(function() {
 		year: "een jaar",
 		years: "%d jaar",
 		wordSeparator: " ",
-		numbers: []
+		numbers: [],
+		weekdays: ["zondag", "maandag", "dinsdag", "woensdag", "donderdag", "vrijdag", "zaterdag", "zondag"]
       }
     },
     inWords: function(distanceMillis) {
@@ -178,7 +179,9 @@ jQuery(document).ready(function() {
       element.data("timeago", { datetime: $t.datetime(element) });
       var text = $.trim(element.text());
       if ($t.settings.localeTitle) {
-        element.attr("title", element.data('timeago').datetime.toLocaleString());
+        var date = element.data('timeago').datetime;
+        var string = $t.settings.strings.weekdays[date.getDay()] +' '+ date.getDate() +'-'+ (date.getMonth()+1) +'-'+ date.getFullYear() +' om '+ date.getHours() +':'+date.getMinutes();
+        element.attr("title", string);
       } else if (text.length > 0 && !($t.isTime(element) && element.attr("title"))) {
         element.attr("title", text);
       }
