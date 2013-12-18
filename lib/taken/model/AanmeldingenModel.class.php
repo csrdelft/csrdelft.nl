@@ -159,15 +159,29 @@ class AanmeldingenModel {
 		}
 	}
 	
-	public static function getAanmeldingenVoorMaaltijdLijst(Maaltijd $maaltijd) {
+	public static function getAanmeldingenVoorMaaltijdLijst(Maaltijd $maaltijd, $fiscaal=false) {
 		$aanmeldingen = self::loadAanmeldingen(array($maaltijd->getMaaltijdId()));
 		$lijst = array();
 		foreach ($aanmeldingen as $aanmelding) {
 			$uid = $aanmelding->getLidId();
-			$naam = (string) $aanmelding->getLid();
-			$lijst[$uid] = $naam;
+			if ($fiscaal) {
+				$naam = (string) $aanmelding->getLid();
+				$lijst[$uid] = $naam;
+			}
+			else {
+				 $aanmelding->setMaaltijd($maaltijd); 
+				 $naam = $aanmelding->getLid()->getNaamLink('streeplijst'); 
+				 $lijst[$naam] = $aanmelding; 
+			}
 			for ($i = $aanmelding->getAantalGasten(); $i > 0; $i--) {
-				$lijst[$uid .'gast'. $i] = 'Gast van '. $naam;
+				if ($fiscaal) {
+					$lijst[$uid .'gast'. $i] = 'Gast van '. $naam;
+				}
+				else {
+					$gast = new MaaltijdAanmelding(); 
+					$gast->setDoorLidId($aanmelding->getLidId()); 
+					$lijst[$naam .'gast'. $i] = $gast; 
+				}
 			}
 		}
 		ksort($lijst);
