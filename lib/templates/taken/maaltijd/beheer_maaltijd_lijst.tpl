@@ -59,9 +59,9 @@
 	</td>
 	<td class="col-del">
 {if $maaltijd->getIsVerwijderd()}
-		<a href="{$globals.taken_module}/verwijder/{$maaltijd->getMaaltijdId()}" title="Maaltijd definitief verwijderen" class="knop post confirm range"><input type=checkbox id="del-{$maaltijd->getMaaltijdId()}"> {icon get="cross"}</a>
+		<a href="{$globals.taken_module}/verwijder/{$maaltijd->getMaaltijdId()}" title="Maaltijd definitief verwijderen" class="knop post confirm range"><input type=checkbox id="box-{$maaltijd->getMaaltijdId()}" name="del"> {icon get="cross"}</a>
 {else}
-		<a href="{$globals.taken_module}/verwijder/{$maaltijd->getMaaltijdId()}" title="Maaltijd naar prullenbak verplaatsen" class="knop post range"><input type=checkbox id="del-{$maaltijd->getMaaltijdId()}"> {icon get="bin_closed"}</a>
+		<a href="{$globals.taken_module}/verwijder/{$maaltijd->getMaaltijdId()}" title="Maaltijd naar prullenbak verplaatsen" class="knop post range"><input type=checkbox id="box-{$maaltijd->getMaaltijdId()}" name="del"> {icon get="bin_closed"}</a>
 {/if}
 	</td>
 </tr>

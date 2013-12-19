@@ -82,9 +82,9 @@
 	</td>
 	<td class="col-del">
 {if $taak->getIsVerwijderd()}
-		<a href="{$globals.taken_module}/verwijder/{$taak->getTaakId()}" title="Corveetaak definitief verwijderen" class="knop post confirm range"><input type=checkbox id="del-{$taak->getTaakId()}"> {icon get="cross"}</a>
+		<a href="{$globals.taken_module}/verwijder/{$taak->getTaakId()}" title="Corveetaak definitief verwijderen" class="knop post confirm range"><input type=checkbox id="box-{$taak->getTaakId()}" name="del"> {icon get="cross"}</a>
 {else}
-		<a href="{$globals.taken_module}/verwijder/{$taak->getTaakId()}" title="Corveetaak naar prullenbak verplaatsen" class="knop post range"><input type=checkbox id="del-{$taak->getTaakId()}"> {icon get="bin_closed"}</a>
+		<a href="{$globals.taken_module}/verwijder/{$taak->getTaakId()}" title="Corveetaak naar prullenbak verplaatsen" class="knop post range"><input type=checkbox id="box-{$taak->getTaakId()}" name="del"> {icon get="bin_closed"}</a>
 {/if}
 	</td>
 </tr>

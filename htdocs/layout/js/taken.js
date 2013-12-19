@@ -309,7 +309,7 @@ function taken_select_range(e) {
 	var ctrl = true; //isCtrlKeyDown(e); // behave like ctrl is always pressed
 	var withinRange = null;
 	var before = false;
-	$('#taken-tabel tbody tr td.col-del a input:visible').each(function() {
+	$("#taken-tabel tbody tr td a input[name='"+$(e.target).attr('name')+"']:visible").each(function() {
 		var thisId = $(this).attr('id');
 		if (thisId === lastSelectedId) {
 			withinRange = true;
@@ -336,11 +336,11 @@ function taken_select_range(e) {
 	});
 	lastSelectedId = e.target.id;
 }
-function taken_delete_range(elmnt) {
+function taken_submit_range(elmnt) {
 	if ($(elmnt).hasClass('confirm') && !confirm($(elmnt).attr('title') +'.\n\nWeet u het zeker?')) {
 		return false;
 	}
-	$('#taken-tabel tbody tr td.col-del a input:visible').each(function() {
+	$("#taken-tabel tbody tr td a input[name='"+$(elmnt).attr('name')+"']:visible").each(function() {
 		if ($(this).prop('checked')) {
 			taken_ajax($(this).parent(), $(this).parent().attr('href'), taken_handle_response, $(this).parent().attr('post'));
 		}
