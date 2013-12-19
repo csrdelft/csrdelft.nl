@@ -43,7 +43,7 @@ class MaaltijdRepetitieFormView extends \SimpleHtml {
 		$formFields[] = new \FloatField('standaard_prijs', $prijs, 'Standaard prijs (€)', 50.00, 0.00);
 		$formFields[] = new \IntField('standaard_limiet', $limiet, 'Standaard limiet', 200, 0);
 		$formFields['filter'] = new \InputField('abonnement_filter', $filter, 'Aanmeldrestrictie', 255, $suggesties);
-		$formFields['filter']->title = 'Plaats een ! vooraan om van de restrictie een uitsluiting te maken.';
+		$formFields['filter']->title = 'Plaats een ! vooraan om van de restrictie een uitsluiting te maken en combinaties zijn mogelijk met +.';
 		if ($this->_mrid !== 0) {
 			$formFields['ver'] = new \VinkField('verplaats_dag', $verplaats, 'Ook verplaatsen');
 			$formFields['ver']->title = 'Verplaats naar dag v/d week bij bijwerken';
@@ -77,19 +77,6 @@ class MaaltijdRepetitieFormView extends \SimpleHtml {
 	public function validate() {
 		if (!is_int($this->_mrid) || $this->_mrid < 0) {
 			return false;
-		}
-		$fields = $this->_form->getFields();
-		$filter = $fields['filter']->getValue();
-		if (!empty($filter)) {
-			if (preg_match('/\s/', $filter)) {
-				$fields['filter']->error = 'Mag geen spaties bevatten';
-				return false;
-			}
-			$filter = explode(':', $filter);
-			if (sizeof($filter) !== 2 || empty($filter[0]) || empty($filter[1])) {
-				$fields['filter']->error = 'Ongeldige restrictie';
-				return false;
-			}
 		}
 		return $this->_form->valid(null);
 	}
