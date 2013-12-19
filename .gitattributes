@@ -3370,5 +3370,6 @@ sql/2968_uitbreidingontvangtcontactueel.sql -text
 sql/3051_menu_voor_pagina.sql -text
 sql/3496_taken.sql -text
 sql/3560_crv_functies.sql -text
-sql/3679_mlt_aanmeldingen.sql -text
+sql/3679_wanneer_aangemeld.sql -text
 sql/3682_drop_functie-omschrijving.sql -text
+sql/3683_wanneer_ingeschakeld.txt -text

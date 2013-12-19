@@ -175,7 +175,7 @@ class AbonnementenModel {
 	 * @return MaaltijdAbonnement[]
 	 */
 	private static function loadAbonnementen($mrid=null, $uid=null) {
-		$sql = 'SELECT mlt_repetitie_id, lid_id';
+		$sql = 'SELECT mlt_repetitie_id, lid_id, wanneer_ingeschakeld';
 		$sql.= ' FROM mlt_abonnementen';
 		$values = array();
 		if (is_int($mrid)) {
@@ -230,16 +230,18 @@ class AbonnementenModel {
 		try {
 			$db->beginTransaction();
 			$sql = 'INSERT IGNORE INTO mlt_abonnementen';
-			$sql.= ' (mlt_repetitie_id, lid_id)';
+			$sql.= ' (mlt_repetitie_id, lid_id, wanneer_ingeschakeld)';
 			$values = array($mrid);
 			if ($uid !== null) {
-				$sql.= ' VALUES (?, ?)';
+				$sql.= ' VALUES (?, ?, ?)';
 				$values[] = $uid;
 			}
 			else { // niet voor specifiek lid? dan voor alle novieten
-				$sql.= ' SELECT ?, uid FROM lid';
+				$sql.= ' SELECT ?, uid, ? FROM lid';
 				$sql.= ' WHERE status = "S_NOVIET"';
 			}
+			$wanneer = date('Y-m-d H:i');
+			$values[] = $wanneer;
 			$query = $db->prepare($sql, $values);
 			$query->execute($values);
 			$abos = $query->rowCount();
@@ -266,7 +268,7 @@ class AbonnementenModel {
 				}
 				$aantal = AanmeldingenModel::aanmeldenVoorKomendeRepetitieMaaltijden($mrid, $uid);
 				$db->commit();
-				return array(new MaaltijdAbonnement($mrid, $uid), $aantal);
+				return array(new MaaltijdAbonnement($mrid, $uid, $wanneer), $aantal);
 			}
 		}
 		catch (\Exception $e) {
