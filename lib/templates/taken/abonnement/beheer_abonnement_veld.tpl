@@ -7,7 +7,7 @@
 	title="{$abonnement->getWaarschuwing()}">
 	<a href="{$globals.taken_module}/{if $lidid}uit{else}in{/if}schakelen/{$abonnement->getMaaltijdRepetitieId()}"
 	   post="voor_lid={$uid}"
-	   class="knop range post abonnement-{if $lidid}in{else}uit{/if}geschakeld">
+	   class="knop post abonnement-{if $lidid}in{else}uit{/if}geschakeld">
 		
 		<input type="checkbox"
 			   id="box-{$uid}-{$abonnement->getMaaltijdRepetitieId()}"
