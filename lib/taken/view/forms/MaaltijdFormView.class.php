@@ -39,7 +39,7 @@ class MaaltijdFormView extends \SimpleHtml {
 		$formFields[] = new \FloatField('prijs', $prijs, 'Prijs (€)', 50, 0);
 		$formFields[] = new \IntField('aanmeld_limiet', $limiet, 'Aanmeldlimiet', 200, 0);
 		$formFields['filter'] = new \InputField('aanmeld_filter', $filter, 'Aanmeldrestrictie', 255, $suggesties);
-		$formFields['filter']->title = 'Plaats een ! vooraan om van de restrictie een uitsluiting te maken en combinaties zijn mogelijk met +.';
+		$formFields['filter']->title = 'Plaats een ! vooraan om van de restrictie een uitsluiting te maken.';
 		
 		$this->_form = new \Formulier('taken-maaltijd-form', $GLOBALS['taken_module'] .'/opslaan/'. $mid, $formFields);
 	}
@@ -66,6 +66,19 @@ class MaaltijdFormView extends \SimpleHtml {
 	public function validate() {
 		if (!is_int($this->_mid) || $this->_mid < 0) {
 			return false;
+		}
+		$fields = $this->_form->getFields();
+		$filter = $fields['filter']->getValue();
+		if (!empty($filter)) {
+			if (preg_match('/\s/', $filter)) {
+				$fields['filter']->error = 'Mag geen spaties bevatten';
+				return false;
+			}
+			$filter = explode(':', $filter);
+			if (sizeof($filter) !== 2 || empty($filter[0]) || empty($filter[1])) {
+				$fields['filter']->error = 'Ongeldige restrictie';
+				return false;
+			}
 		}
 		return $this->_form->valid(null);
 	}

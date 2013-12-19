@@ -345,14 +345,6 @@ class AanmeldingenModel {
 		if ($filter === '') {
 			return true;
 		}
-		if (strpos($filter, '+') !== false) {
-			$filters = explode('+', $filter);
-			$result = false;
-			foreach ($filters as $filter) {
-				$result |= self::checkAanmeldFilter($uid, $filter);
-			}
-			return $result;
-		}
 		if (strpos($filter, '!') === 0) {
 			return !self::checkAanmeldFilter($uid, substr($filter, 1));
 		}
