@@ -159,29 +159,17 @@ class AanmeldingenModel {
 		}
 	}
 	
-	public static function getAanmeldingenVoorMaaltijdLijst(Maaltijd $maaltijd, $fiscaal=false) {
+	public static function getAanmeldingenVoorMaaltijdLijst(Maaltijd $maaltijd) {
 		$aanmeldingen = self::loadAanmeldingen(array($maaltijd->getMaaltijdId()));
 		$lijst = array();
 		foreach ($aanmeldingen as $aanmelding) {
-			$uid = $aanmelding->getLidId();
-			if ($fiscaal) {
-				$naam = (string) $aanmelding->getLid();
-				$lijst[$uid] = $naam;
-			}
-			else {
-				 $aanmelding->setMaaltijd($maaltijd); 
-				 $naam = $aanmelding->getLid()->getNaamLink('streeplijst'); 
-				 $lijst[$naam] = $aanmelding; 
-			}
+			$aanmelding->setMaaltijd($maaltijd);
+			$naam = $aanmelding->getLid()->getNaamLink('streeplijst');
+			$lijst[$naam] = $aanmelding;
 			for ($i = $aanmelding->getAantalGasten(); $i > 0; $i--) {
-				if ($fiscaal) {
-					$lijst[$uid .'gast'. $i] = 'Gast van '. $naam;
-				}
-				else {
-					$gast = new MaaltijdAanmelding(); 
-					$gast->setDoorLidId($aanmelding->getLidId()); 
-					$lijst[$naam .'gast'. $i] = $gast; 
-				}
+				$gast = new MaaltijdAanmelding();
+				$gast->setDoorLidId($aanmelding->getLidId());
+				$lijst[$naam .'gast'. $i] = $gast;
 			}
 		}
 		ksort($lijst);
@@ -349,7 +337,7 @@ class AanmeldingenModel {
 		return $aantal;
 	}
 	
-	public static function checkAanmeldFilter($uid, $filter, $opposite=false) {
+	public static function checkAanmeldFilter($uid, $filter) {
 		$lid = \LidCache::getLid($uid); // false if lid does not exist
 		if (!$lid instanceof \Lid) {
 			throw new \Exception('Lid bestaat niet: $uid ='. $uid);
@@ -357,8 +345,8 @@ class AanmeldingenModel {
 		if ($filter === '') {
 			return true;
 		}
-		if (!$opposite && strpos($filter, '!') === 0) {
-			return self::checkAanmeldFilter($uid, substr($filter, 1), true);
+		if (strpos($filter, '!') === 0) {
+			return !self::checkAanmeldFilter($uid, substr($filter, 1));
 		}
 		
 		$filter = explode(':', $filter);

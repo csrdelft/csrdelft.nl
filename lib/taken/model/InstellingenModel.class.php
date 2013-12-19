@@ -39,7 +39,7 @@ class InstellingenModel {
 		'vrijstelling_percentage_min' => '0',
 		'weergave_ledennamen_beheer' => 'volledig',
 		'weergave_ledennamen_corveerooster' => 'civitas',
-		'weergave_ledennamen_maaltijdlijst' => 'civitas',
+		'weergave_ledennamen_maaltijdlijst' => 'streeplijst',
 		'waarschuwing_taaktoewijzing_vooraf' => '+14 days',
 		'waarschuwing_puntentoewijzing_achteraf' => '-1 days',
 		'maaltijdlijst_tekst' => '<p>Regels omtrent het betalen van de maaltijden op Confide:</p>

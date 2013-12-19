@@ -28,7 +28,7 @@
 		</td>
 		<td class="box">{$aanmelding->getSaldoMelding()}</td>
 		{elseif $aanmelding->getDoorLidId()}
-		<td class="naam">Gast van {$aanmelding->getDoorLid()->getNaamLink($globals.weergave_ledennamen_maaltijdlijst)|lcfirst}</td>
+		<td class="naam">Gast van {$aanmelding->getDoorLid()->getNaamLink($globals.weergave_ledennamen_maaltijdlijst)}</td>
 		<td class="box">-</td>
 		{else}
 		<td class="naam"></td>
