@@ -305,9 +305,9 @@ class AanmeldingenModel {
 			$aanmelding->getGastenOpmerking(),
 			$aanmelding->getDoorAbonnement(),
 			$aanmelding->getDoorLidId(),
+			$aanmelding->getLaatstGewijzigd(),
 			$aanmelding->getMaaltijdId(),
-			$aanmelding->getLidId(),
-			$aanmelding->getLaatstGewijzigd()
+			$aanmelding->getLidId()
 		);
 		$db = \CsrPdo::instance();
 		$query = $db->prepare($sql, $values);
