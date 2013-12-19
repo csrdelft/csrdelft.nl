@@ -38,7 +38,7 @@ class MaaltijdAanmelding {
 	
 	private $maaltijd;
 	
-	public function __construct($mid=0, $uid='', $gasten=0, $opmerking='', $door_abo=null, $door_lid=null, $wanneer=null) {
+	public function __construct($mid=0, $uid='', $gasten=0, $opmerking='', $door_abo=null, $door_lid=null, $wanneer='') {
 		$this->maaltijd_id = (int) $mid;
 		$this->lid_id = $uid;
 		$this->setAantalGasten($gasten);
