@@ -11,12 +11,14 @@
 	<td title="{$functie->getEmailBericht()}">{if strlen($functie->getEmailBericht()) > 0}{icon get="email"}{/if}</td>
 	<td>
 		{if $functie->getIsKwalificatieBenodigd()}
-			<a href="{$globals.taken_module}/kwalificeer/{$functie->getFunctieId()}" title="Kwalificatie toewijzen" class="knop post popup">{icon get="vcard_add"} Kwalificeer</a>
+			<div style="float: left;"><a href="{$globals.taken_module}/kwalificeer/{$functie->getFunctieId()}" title="Kwalificatie toewijzen" class="knop post popup">{icon get="vcard_add"} Kwalificeer</a></div>
+			<div class="kwali"><a title="Toon oudleden" class="knop" onclick="$('div.kwali').toggle();">{icon get="eye"} Toon oudleden</a></div>
+			<div class="kwali" style="display: none;"><a title="Toon leden" class="knop" onclick="$('div.kwali').toggle();">{icon get="eye"} Toon leden</a></div>
 		{/if}
 		{foreach from=$functie->getGekwalificeerden() item=kwali}
-			<div>
+			<div class="kwali"{if $kwali->getLid()->isOudlid()} style="display: none;"{/if}>
 				<a href="{$globals.taken_module}/dekwalificeer/{$functie->getFunctieId()}" title="Kwalificatie intrekken" class="knop post" post="voor_lid={$kwali->getLidId()}">{icon get="vcard_delete"}</a>
-				&nbsp;{$kwali->getLid()->getNaamLink('civitas', 'link')}
+				&nbsp;{$kwali->getLid()->getNaamLink($globals.weergave_ledennamen_beheer, 'link')}
 			</div>
 		{/foreach}
 	</td>
