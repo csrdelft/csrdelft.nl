@@ -1,0 +1,1 @@
+ALTER TABLE `mlt_aanmeldingen` ADD `laatst_gewijzigd` DATETIME NOT NULL ;

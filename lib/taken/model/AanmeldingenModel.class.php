@@ -36,6 +36,7 @@ class AanmeldingenModel {
 				throw new \Exception('Al aangemeld met '. $aantalGasten .' gasten');
 			}
 			$aanmelding->setAantalGasten($aantalGasten);
+			$aanmelding->setLaatstGewijzigd(date('Y-m-d H:i'));
 			self::updateAanmelding($aanmelding);
 			$maaltijd->setAantalAanmeldingen($maaltijd->getAantalAanmeldingen() + $verschil);
 		}
@@ -118,6 +119,9 @@ class AanmeldingenModel {
 			$verschil = $gasten - $aanmelding->getAantalGasten();
 			if ($maaltijd->getAantalAanmeldingen() + $verschil > $maaltijd->getAanmeldLimiet()) {
 				throw new \Exception('Maaltijd zit te vol');
+			}
+			if ($aanmelding->getAantalGasten() !== $gasten) {
+				$aanmelding->setLaatstGewijzigd(date('Y-m-d H:i'));
 			}
 			$aanmelding->setAantalGasten($gasten);
 			self::updateAanmelding($aanmelding);
@@ -220,7 +224,7 @@ class AanmeldingenModel {
 	}
 	
 	private static function loadAanmeldingen(array $mids, $uid=null, $limit=null) {
-		$sql = 'SELECT maaltijd_id, lid_id, aantal_gasten, gasten_opmerking, door_abonnement, door_lid_id';
+		$sql = 'SELECT maaltijd_id, lid_id, aantal_gasten, gasten_opmerking, door_abonnement, door_lid_id, laatst_gewijzigd';
 		$sql.= ' FROM mlt_aanmeldingen';
 		$sql.= ' WHERE (maaltijd_id=?';
 		for ($i = sizeof($mids); $i > 1; $i--) {
@@ -244,15 +248,16 @@ class AanmeldingenModel {
 	
 	private static function newAanmelding($mid, $uid, $gasten, $opmerking, $doorAbo, $doorUid) {
 		$sql = 'INSERT IGNORE INTO mlt_aanmeldingen';
-		$sql.= ' (maaltijd_id, lid_id, aantal_gasten, gasten_opmerking, door_abonnement, door_lid_id)';
+		$sql.= ' (maaltijd_id, lid_id, aantal_gasten, gasten_opmerking, door_abonnement, door_lid_id, laatst_gewijzigd)';
+		$wanneer = date('Y-m-d H:i');
 		if ($mid === null) { // niet voor specifieke maaltijd? dan voor alle komende repetitie-maaltijden
 			$sql.= ' SELECT maaltijd_id, ?, ?, ?, ?, ? FROM mlt_maaltijden';
 			$sql.= ' WHERE mlt_repetitie_id = ? AND gesloten = false AND verwijderd = false AND datum >= ?';
-			$values = array($uid, $gasten, $opmerking, $doorAbo, $doorUid, $doorAbo, date('Y-m-d'));
+			$values = array($uid, $gasten, $opmerking, $doorAbo, $doorUid, $wanneer, $doorAbo, date('Y-m-d'));
 		}
 		else {
-			$sql.= ' VALUES (?, ?, ?, ?, ?, ?)';
-			$values = array($mid, $uid, $gasten, $opmerking, $doorAbo, $doorUid);
+			$sql.= ' VALUES (?, ?, ?, ?, ?, ?, ?)';
+			$values = array($mid, $uid, $gasten, $opmerking, $doorAbo, $doorUid, $wanneer);
 		}
 		$db = \CsrPdo::instance();
 		$query = $db->prepare($sql, $values);
@@ -261,7 +266,7 @@ class AanmeldingenModel {
 			if ($query->rowCount() !== 1) {
 				throw new \Exception('New aanmelding faalt: $query->rowCount() ='. $query->rowCount());
 			}
-			return new MaaltijdAanmelding($mid, $uid, $gasten, $opmerking, $doorAbo, $doorUid);
+			return new MaaltijdAanmelding($mid, $uid, $gasten, $opmerking, $doorAbo, $doorUid, $wanneer);
 		}
 		return $query->rowCount();
 	}
@@ -293,7 +298,7 @@ class AanmeldingenModel {
 	
 	private static function updateAanmelding(MaaltijdAanmelding $aanmelding) {
 		$sql = 'UPDATE mlt_aanmeldingen';
-		$sql.= ' SET aantal_gasten=?, gasten_opmerking=?, door_abonnement=?, door_lid_id=?';
+		$sql.= ' SET aantal_gasten=?, gasten_opmerking=?, door_abonnement=?, door_lid_id=?, laatst_gewijzigd=?';
 		$sql.= ' WHERE maaltijd_id=? AND lid_id=?';
 		$values = array(
 			$aanmelding->getAantalGasten(),
@@ -301,7 +306,8 @@ class AanmeldingenModel {
 			$aanmelding->getDoorAbonnement(),
 			$aanmelding->getDoorLidId(),
 			$aanmelding->getMaaltijdId(),
-			$aanmelding->getLidId()
+			$aanmelding->getLidId(),
+			$aanmelding->getLaatstGewijzigd()
 		);
 		$db = \CsrPdo::instance();
 		$query = $db->prepare($sql, $values);

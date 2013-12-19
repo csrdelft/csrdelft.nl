@@ -11,6 +11,7 @@ namespace Taken\MLT;
  *  - opmerkingen met betrekking tot de aangemelde gasten (bijv. allergien)
  *  - of de aanmelding door een abonnement is aangemaakt en zo ja voor welke maaltijd-repetitie
  *  - door welk lid deze aanmelding is gemaakt (bijv. als een lid door een ander lid wordt aangemeld, of door de fiscus achteraf, anders gelijk aan aanmelding lid id)
+ *  - wanneer de aanmelding voor het laatst is aangepast
  * 
  * Een aanmelding wordt verwijderd als een lid zich afmeldt of het abonnement uitschakelt dat deze aanmelding heeft aangemaakt, BEHOUDENS gesloten maaltijden.
  * Een aanmelding blijft verder altijd bestaan, zelfs als de maaltijd wordt aangemerkt als verwijderd. Dus ook als de aanmelding NIET door een abonnement is gemaakt en het abonnement voor deze maaltijd-repetitie uitgeschakeld wordt.
@@ -33,15 +34,18 @@ class MaaltijdAanmelding {
 	private $door_abonnement; # foreign key mlt_repetitie.id
 	private $door_lid_id; # foreign key lid.uid
 	
+	private $laatst_gewijzigd; # datetime
+	
 	private $maaltijd;
 	
-	public function __construct($mid=0, $uid='', $gasten=0, $opmerking='', $door_abo=null, $door_lid=null) {
+	public function __construct($mid=0, $uid='', $gasten=0, $opmerking='', $door_abo=null, $door_lid=null, $wanneer=null) {
 		$this->maaltijd_id = (int) $mid;
 		$this->lid_id = $uid;
 		$this->setAantalGasten($gasten);
 		$this->setGastenOpmerking($opmerking);
 		$this->setDoorAbonnement($door_abo);
 		$this->setDoorLidId($door_lid);
+		$this->setLaatstGewijzigd($wanneer);
 	}
 	
 	public function getMaaltijdId() {
@@ -65,6 +69,9 @@ class MaaltijdAanmelding {
 	}
 	public function getDoorLidId() {
 		return $this->door_lid_id;
+	}
+	public function getLaatstGewijzigd() {
+		return $this->laatst_gewijzigd;
 	}
 	public function getMaaltijd() {
 		return $this->maaltijd;
@@ -170,6 +177,12 @@ class MaaltijdAanmelding {
 	}
 	public function setDoorLidId($uid) {
 		$this->door_lid_id = $uid;
+	}
+	public function setLaatstGewijzigd($datumtijd) {
+		if (!is_string($datumtijd)) {
+			throw new \Exception('Geen string: laatst gewijzigd');
+		}
+		$this->laatst_gewijzigd = $datumtijd;
 	}
 	public function setMaaltijd(Maaltijd $maaltijd) {
 		$this->maaltijd = $maaltijd;
