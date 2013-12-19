@@ -57,12 +57,12 @@ class BeheerFunctiesController extends \ACLController {
 	
 	public function action_nieuw() {
 		$functie = new CorveeFunctie();
-		$this->content = new FunctieFormView($functie->getFunctieId(), $functie->getNaam(), $functie->getAfkorting(), $functie->getOmschrijving(), $functie->getEmailBericht(), $functie->getStandaardPunten(), $functie->getIsKwalificatieBenodigd()); // fetches POST values itself
+		$this->content = new FunctieFormView($functie->getFunctieId(), $functie->getNaam(), $functie->getAfkorting(), $functie->getEmailBericht(), $functie->getStandaardPunten(), $functie->getIsKwalificatieBenodigd()); // fetches POST values itself
 	}
 	
 	public function action_bewerk($fid) {
 		$functie = FunctiesModel::getFunctie($fid);
-		$this->content = new FunctieFormView($functie->getFunctieId(), $functie->getNaam(), $functie->getAfkorting(), $functie->getOmschrijving(), $functie->getEmailBericht(), $functie->getStandaardPunten(), $functie->getIsKwalificatieBenodigd()); // fetches POST values itself
+		$this->content = new FunctieFormView($functie->getFunctieId(), $functie->getNaam(), $functie->getAfkorting(), $functie->getEmailBericht(), $functie->getStandaardPunten(), $functie->getIsKwalificatieBenodigd()); // fetches POST values itself
 	}
 	
 	public function action_opslaan($fid) {
@@ -74,7 +74,7 @@ class BeheerFunctiesController extends \ACLController {
 		}
 		if ($this->content->validate()) {
 			$values = $this->content->getValues();
-			$functie = FunctiesModel::saveFunctie($fid, $values['naam'], $values['afkorting'], $values['omschrijving'], $values['email_bericht'], $values['standaard_punten'], $values['kwalificatie_benodigd']);
+			$functie = FunctiesModel::saveFunctie($fid, $values['naam'], $values['afkorting'], $values['email_bericht'], $values['standaard_punten'], $values['kwalificatie_benodigd']);
 			$functie->setGekwalificeerden(KwalificatiesModel::getKwalificatiesVoorFunctie($functie));
 			$this->content = new BeheerFunctiesView($functie);
 		}

@@ -27,18 +27,16 @@ class CorveeFunctie {
 	
 	private $naam; # string 255
 	private $afkorting; # string 11
-	private $omschrijving; # string 255
 	private $email_bericht; # text
 	private $standaard_punten; # int 11
 	private $kwalificatie_benodigd; # boolean
 	
 	private $gekwalificeerden;
 	
-	public function __construct($fid=0, $naam='', $afk='', $omschrijving='', $email='', $punten=null, $kwali=null) {
+	public function __construct($fid=0, $naam='', $afk='', $email='', $punten=null, $kwali=null) {
 		$this->functie_id = (int) $fid;
 		$this->setNaam($naam);
 		$this->setAfkorting($afk);
-		$this->setOmschrijving($omschrijving);
 		$this->setEmailBericht($email);
 		if ($punten === null) {
 			$punten = intval($GLOBALS['standaard_functie_punten']);
@@ -59,9 +57,6 @@ class CorveeFunctie {
 	}
 	public function getAfkorting() {
 		return $this->afkorting;
-	}
-	public function getOmschrijving() {
-		return $this->omschrijving;
 	}
 	public function getEmailBericht() {
 		return $this->email_bericht;
@@ -88,12 +83,6 @@ class CorveeFunctie {
 			throw new \Exception('Geen string: functie afkorting');
 		}
 		$this->afkorting = $string;
-	}
-	public function setOmschrijving($string) {
-		if (!is_string($string)) {
-			throw new \Exception('Geen string: functie omschrijving');
-		}
-		$this->omschrijving = $string;
 	}
 	public function setEmailBericht($string) {
 		if (!is_string($string)) {

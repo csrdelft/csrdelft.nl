@@ -14,14 +14,13 @@ class FunctieFormView extends \SimpleHtml {
 	private $_form;
 	private $_fid;
 	
-	public function __construct($fid, $naam=null, $afk=null, $omschrijving=null, $email=null, $punten=null, $kwali=null) {
+	public function __construct($fid, $naam=null, $afk=null, $email=null, $punten=null, $kwali=null) {
 		$this->_fid = $fid;
 		
 		$formFields['naam'] = new \RequiredInputField('naam', $naam, 'Naam', 25);
 		$formFields['naam']->forcenotnull = true;
 		$formFields['afk'] = new \RequiredInputField('afkorting', $afk, 'Afkorting', 3);
 		$formFields['afk']->forcenotnull = true;
-		$formFields[] = new \TextField('omschrijving', $omschrijving, 'Omschrijving', 2);
 		$formFields[] = new \TextField('email_bericht', $email, 'Email', 9);
 		$formFields[] = new \IntField('standaard_punten', $punten, 'Standaard punten', 10, 0);
 		$formFields['kwali'] = new \VinkField('kwalificatie_benodigd', $kwali, 'Kwalificatie benodigd');

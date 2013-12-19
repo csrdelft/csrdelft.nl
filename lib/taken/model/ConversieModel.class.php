@@ -72,14 +72,14 @@ class ConversieModel {
 				$fid = $functies[$id];
 				$functie = $byFid[$fid];
 				try {
-					$byFid[$fid] = \Taken\CRV\FunctiesModel::saveFunctie($fid, $functie->getNaam(), $functie->getAfkorting(), $functie->getOmschrijving(), $row['tekst'], $functie->getStandaardPunten(), false);
+					$byFid[$fid] = \Taken\CRV\FunctiesModel::saveFunctie($fid, $functie->getNaam(), $functie->getAfkorting(), $row['tekst'], $functie->getStandaardPunten(), false);
 				}
 				catch (\Exception $e) {
 				}
 				if ($fid === 1) { // email kwalikok
 					$functie = $byFid[7];
 					try {
-						$byFid[7] = \Taken\CRV\FunctiesModel::saveFunctie(7, $functie->getNaam(), $functie->getAfkorting(), $functie->getOmschrijving(), $row['tekst'], $functie->getStandaardPunten(), false);
+						$byFid[7] = \Taken\CRV\FunctiesModel::saveFunctie(7, $functie->getNaam(), $functie->getAfkorting(), $row['tekst'], $functie->getStandaardPunten(), false);
 					}
 					catch (\Exception $e) {
 					}
@@ -87,7 +87,7 @@ class ConversieModel {
 				elseif ($fid === 2) { // email kwaliafwas
 					$functie = $byFid[8];
 					try {
-						$byFid[8] = \Taken\CRV\FunctiesModel::saveFunctie(8, $functie->getNaam(), $functie->getAfkorting(), $functie->getOmschrijving(), $row['tekst'], $functie->getStandaardPunten(), false);
+						$byFid[8] = \Taken\CRV\FunctiesModel::saveFunctie(8, $functie->getNaam(), $functie->getAfkorting(), $row['tekst'], $functie->getStandaardPunten(), false);
 					}
 					catch (\Exception $e) {
 					}
@@ -97,14 +97,14 @@ class ConversieModel {
 				$fid = $punten[$id];
 				$functie = $byFid[$fid];
 				try {
-					$byFid[$fid] = \Taken\CRV\FunctiesModel::saveFunctie($fid, $functie->getNaam(), $functie->getAfkorting(), $functie->getOmschrijving(), $functie->getEmailBericht(), intval($row['int']), false);
+					$byFid[$fid] = \Taken\CRV\FunctiesModel::saveFunctie($fid, $functie->getNaam(), $functie->getAfkorting(), $functie->getEmailBericht(), intval($row['int']), false);
 				}
 				catch (\Exception $e) {
 				}
 				if ($fid === 2) { // puntenkwaliafwas
 					$functie = $byFid[8];
 					try {
-						$byFid[8] = \Taken\CRV\FunctiesModel::saveFunctie(8, $functie->getNaam(), $functie->getAfkorting(), $functie->getOmschrijving(), $functie->getEmailBericht(), intval($row['int']), false);
+						$byFid[8] = \Taken\CRV\FunctiesModel::saveFunctie(8, $functie->getNaam(), $functie->getAfkorting(), $functie->getEmailBericht(), intval($row['int']), false);
 					}
 					catch (\Exception $e) {
 					}

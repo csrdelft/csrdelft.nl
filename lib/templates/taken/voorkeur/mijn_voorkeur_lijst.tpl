@@ -6,5 +6,4 @@
 	<td>{$voorkeur->getCorveeRepetitie()->getCorveeFunctie()->getNaam()}</td>
 	<td>{$voorkeur->getCorveeRepetitie()->getDagVanDeWeekText()}</td>
 	<td>{$voorkeur->getCorveeRepetitie()->getPeriodeInDagenText()}</td>
-	<td title="{$voorkeur->getCorveeRepetitie()->getCorveeFunctie()->getOmschrijving()}">{$voorkeur->getCorveeRepetitie()->getCorveeFunctie()->getOmschrijving()|truncate:30:"...":true}</td>
 </tr>

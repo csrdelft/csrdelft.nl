@@ -33,7 +33,7 @@ class FunctiesModel {
 	}
 	
 	private static function loadFuncties($where=null, $values=array(), $limit=null) {
-		$sql = 'SELECT functie_id, naam, afkorting, omschrijving, email_bericht, standaard_punten, kwalificatie_benodigd';
+		$sql = 'SELECT functie_id, naam, afkorting, email_bericht, standaard_punten, kwalificatie_benodigd';
 		$sql.= ' FROM crv_functies';
 		if ($where !== null) {
 			$sql.= ' WHERE '. $where;
@@ -49,18 +49,17 @@ class FunctiesModel {
 		return $result;
 	}
 	
-	public static function saveFunctie($fid, $naam, $afk, $omschrijving, $email, $punten, $kwali) {
+	public static function saveFunctie($fid, $naam, $afk, $email, $punten, $kwali) {
 		$db = \CsrPdo::instance();
 		try {
 			$db->beginTransaction();
 			if ($fid === 0) {
-				$functie = self::newFunctie($naam, $afk, $omschrijving, $email, $punten, $kwali);
+				$functie = self::newFunctie($naam, $afk, $email, $punten, $kwali);
 			}
 			else {
 				$functie = self::getFunctie($fid);
 				$functie->setNaam($naam);
 				$functie->setAfkorting($afk);
-				$functie->setOmschrijving($omschrijving);
 				$functie->setEmailBericht($email);
 				$functie->setStandaardPunten($punten);
 				$functie->setKwalificatieBenodigd($kwali);
@@ -78,28 +77,27 @@ class FunctiesModel {
 		}
 	}
 	
-	private static function newFunctie($naam, $afk, $omschrijving, $email, $punten, $kwali) {
+	private static function newFunctie($naam, $afk, $email, $punten, $kwali) {
 		$sql = 'INSERT INTO crv_functies';
-		$sql.= ' (functie_id, naam, afkorting, omschrijving, email_bericht, standaard_punten, kwalificatie_benodigd)';
+		$sql.= ' (functie_id, naam, afkorting, email_bericht, standaard_punten, kwalificatie_benodigd)';
 		$sql.= ' VALUES (?, ?, ?, ?, ?, ?, ?)';
-		$values = array(null, $naam, $afk, $omschrijving, $email, $punten, $kwali);
+		$values = array(null, $naam, $afk, $email, $punten, $kwali);
 		$db = \CsrPdo::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		if ($query->rowCount() !== 1) {
 			throw new \Exception('New functie faalt: $query->rowCount() ='. $query->rowCount());
 		}
-		return new CorveeFunctie(intval($db->lastInsertId()), $naam, $afk, $omschrijving, $email, $punten, $kwali);
+		return new CorveeFunctie(intval($db->lastInsertId()), $naam, $afk, $email, $punten, $kwali);
 	}
 	
 	private static function updateFunctie(CorveeFunctie $functie) {
 		$sql = 'UPDATE crv_functies';
-		$sql.= ' SET naam=?, afkorting=?, omschrijving=?, email_bericht=?, standaard_punten=?, kwalificatie_benodigd=?';
+		$sql.= ' SET naam=?, afkorting=?, email_bericht=?, standaard_punten=?, kwalificatie_benodigd=?';
 		$sql.= ' WHERE functie_id=?';
 		$values = array(
 			$functie->getNaam(),
 			$functie->getAfkorting(),
-			$functie->getOmschrijving(),
 			$functie->getEmailBericht(),
 			$functie->getStandaardPunten(),
 			$functie->getIsKwalificatieBenodigd(),

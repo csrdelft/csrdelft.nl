@@ -22,7 +22,6 @@ Allergie/diëet: {include file='taken/voorkeur/mijn_eetwens.tpl'}
 			<th>Functie</th>
 			<th>Dag v/d week</th>
 			<th>Periode</th>
-			<th>Omschrijving</th>
 		</tr>
 	</thead>
 	<tbody>

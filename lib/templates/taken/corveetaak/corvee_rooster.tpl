@@ -40,7 +40,7 @@
 			<td rowspan="{$smarty.foreach.datum.total}"{if !isset($mijn)} style="background-color: {$datumColor}"{/if}><nobr>{$datum|date_format:"%a %e %b"}</nobr></td>
 		{/if}
 		{if $smarty.foreach.taak.first}
-			<td title="{$taak->getCorveeFunctie()->getOmschrijving()}"><nobr>{$taak->getCorveeFunctie()->getNaam()}</nobr></td>
+			<td><nobr>{$taak->getCorveeFunctie()->getNaam()}</nobr></td>
 		{/if}
 		{if !isset($mijn)}
 				<td{if $smarty.foreach.taak.last} colspan="10"{else} style="width: 150px;"

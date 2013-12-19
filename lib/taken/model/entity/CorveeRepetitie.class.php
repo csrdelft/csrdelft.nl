@@ -9,18 +9,18 @@ namespace Taken\CRV;
  *  - bij welke maaltijdrepetitie deze periodieke taken horen (optioneel)
  *  - op welke dag van de week dit moet gebeuren
  *  - na hoeveel dagen dit opnieuw moet gebeuren
- *  - de omschrijving van deze periodieke taak (bijv. Koken op donderdag)
  *  - welke functie deze taak inhoud (bijv. kwalikok)
  *  - standaard aantal mensen dat deze taak moeten uitvoeren (bijv. 1 kwalikok, 2 hulpkoks, etc.)
  *  - of deze taak als voorkeur kan worden opgegeven (bijv. kwalikok is niet voorkeurbaar)
  * 
- * Bij het koppelen van corveetaken aan een maaltijd-repetitie wordt een CorveeRepetitie aangemaakt,
- * zodat een lid deze indien gewenst kan instellen als corvee-voorkeur.
- * Bijv. bij het kopellen van de functie kok aan een periodieke maaltijd op donderdag wordt de corvee-repetitie-omschrijving: koken op donderdag.
+ * Bij het koppelen van corvee-repetities aan een maaltijd-repetitie maakt het mogelijk om bij het aanmaken van
+ * een maaltijd automatisch ook corveetaken aan te maken.
  * Deze klasse weet dus welke en hoeveel corvee-functies er bij welke maaltijd-repetitie horen,
  * in verband met het later toewijzen van corvee-functies als taak aan een of meerdere leden.
  * Een maaltijd die los wordt aangemaakt, dus niet vanuit een maaltijd-repetitie, krijgt dus geen standaard corvee-taken.
- * Deze zullen met de hand moeten worden toegevoegd. Daarbij kan gebruik gemaakt worden van de dag van de week van de maaltijd en te kijken naar de dag van de week van corvee-repetities.
+ * Deze zullen met de hand moeten worden toegevoegd. Daarbij kan gebruik gemaakt worden van de dag van de week
+ * van de maaltijd en te kijken naar de dag van de week van corvee-repetities.
+ * Een lid kan een voorkeur aangeven voor een corvee-repetitie.
  * 
  * 
  * Zie ook CorveeTaak.class.php
