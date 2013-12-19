@@ -306,41 +306,30 @@ function taken_update_dom(htmlString) {
 var lastSelectedId;
 function taken_select_range(e) {
 	var shift = isShiftKeyDown(e);
-	var ctrl = true; //isCtrlKeyDown(e); // behave like ctrl is always pressed
-	var withinRange = null;
-	var before = false;
+	var withinRange = false;
 	$("#taken-tabel tbody tr td a input[name='"+$(e.target).attr('name')+"']:visible").each(function() {
 		var thisId = $(this).attr('id');
 		if (thisId === lastSelectedId) {
-			withinRange = true;
+			withinRange = !withinRange;
 		}
 		if (thisId === e.target.id) {
-			if (withinRange === null) {
-				before = true;
-			}
-			withinRange = false;
-			var check = true;
-			if (ctrl) {
-				check = $(this).prop('checked');
-			}
+			withinRange = !withinRange;
+			var check = $(this).prop('checked');
 			setTimeout(function() { // workaround e.preventDefault()
 				$('#'+thisId).prop('checked', check);
 			}, 50);
 		}
 		else if (shift && withinRange) {
-			$(this).prop('checked', !before);
-		}
-		else if (!ctrl && (!shift || before)) {
-			 $(this).prop('checked', false);
+			$(this).prop('checked', true);
 		}
 	});
 	lastSelectedId = e.target.id;
 }
-function taken_submit_range(elmnt) {
-	if ($(elmnt).hasClass('confirm') && !confirm($(elmnt).attr('title') +'.\n\nWeet u het zeker?')) {
+function taken_submit_range(e) {
+	if ($(e.target).hasClass('confirm') && !confirm($(e.target).attr('title') +'.\n\nWeet u het zeker?')) {
 		return false;
 	}
-	$("#taken-tabel tbody tr td a input[name='"+$(elmnt).attr('name')+"']:visible").each(function() {
+	$("#taken-tabel tbody tr td a input[name='"+$(e.target).attr('name')+"']:visible").each(function() {
 		if ($(this).prop('checked')) {
 			taken_ajax($(this).parent(), $(this).parent().attr('href'), taken_handle_response, $(this).parent().attr('post'));
 		}
