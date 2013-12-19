@@ -71,7 +71,7 @@ class BeheerMaaltijdenController extends \ACLController {
 	
 	public function action_fiscaal($mid) {
 		$maaltijd = MaaltijdenModel::getMaaltijd($mid, true);
-		$aanmeldingen = AanmeldingenModel::getAanmeldingenVoorMaaltijdLijst($maaltijd, true);
+		$aanmeldingen = AanmeldingenModel::getAanmeldingenVoorMaaltijdLijst($maaltijd);
 		require_once 'taken/view/MaaltijdLijstView.class.php';
 		$this->content = new MaaltijdLijstView($maaltijd, $aanmeldingen, null, true);
 	}
