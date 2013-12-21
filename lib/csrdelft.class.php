@@ -57,7 +57,6 @@ class csrdelft extends SimpleHTML {
 			if(Instelling::get('layout')=='owee'){	$this->_prefix='owee_'; }
 			if(Instelling::get('layout')=='lustrum'){	$this->_prefix='lustrum_'; }
 
-
 			//nieuw menu-object aanmaken...
 			require_once('menu.class.php');
 			$this->_menu=new menu($this->_prefix, $menuid);
@@ -67,6 +66,9 @@ class csrdelft extends SimpleHTML {
 			$this->addStylesheet('undohtml.css');
 			$this->addStylesheet('default.css');
 			$this->addStylesheet('ubb.css');
+			if(Instelling::get('layout_sneeuw')=='ja'){
+				$this->addStylesheet('snow.css');
+			}
 
 			$this->addScript('jquery.js');
 			$this->addScript('jquery.timeago.js');

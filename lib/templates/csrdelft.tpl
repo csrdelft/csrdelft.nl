@@ -33,9 +33,8 @@
 </head>
 
 <body onload="ShowMenu(menu_active)">
-
+<div id="header">{$csrdelft->_menu->view()}</div>
 <div id="container">
-	{$csrdelft->_menu->view()}
 	<div id="main">
 		{if $csrdelft->_zijkolom!==false}
 			<div id="mainleft">

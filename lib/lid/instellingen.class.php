@@ -18,6 +18,7 @@ class Instelling{
 			'algemeen_sneltoetsen' => array('nee', 'Sneltoetsen op de webstek', 'enum', array('ja', 'nee')),
 			'algemeen_bijbel' => array('NBV', 'Bijbelvertaling voor bijbelrooster', 'enum', array('NBV', 'NBG', 'Herziene Statenvertaling', 'Statenvertaling (Jongbloed)', 'Groot Nieuws Bijbel', 'Willibrordvertaling')),
 			'layout' => array('normaal', 'Websteklayout', 'enum', array('normaal', 'owee', 'roze', 'lustrum', 'zonderSpikkels')),
+			'layout_sneeuw' => array('ja', 'Sneeuw', 'enum', array('ja', 'nee')),
 			'layout_neuzen' => array('2013', 'Neuzen', 'enum', array('overal', '2013', 'nee')),
 			'layout_minion' => array('nee', 'Minion', 'enum', array('ja', 'nee')),
 			'forum_onderwerpenPerPagina' => array(15, 'Onderwerpen per pagina', 'int', 5), //deze hebben een minimum, anders gaat het forum stuk.
