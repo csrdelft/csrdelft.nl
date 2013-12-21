@@ -30,7 +30,7 @@
     100% { background-position: 500px 1000px, 400px 400px, 300px 300px }
 }
 
-#header {
+#header, div.pp_overlay {
     background-image: url('http://img138.imageshack.us/img138/5230/snowh.png'), url('http://img594.imageshack.us/img594/9146/snow3q.png'), url('http://img196.imageshack.us/img196/5065/snow2l.png');
     -webkit-animation: snow 20s linear infinite;
     -moz-animation: snow 20s linear infinite;
