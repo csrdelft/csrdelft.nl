@@ -1091,7 +1091,7 @@ class KeuzeRondjeField extends SelectField{
 		foreach($this->options as $value => $description){
 			echo '<input type="radio" id="field_'.$this->getName().'_option_'.$value.'" value="'.$value.'"'. $this->getInputAttribute(array('name', 'origvalue', 'class', 'disabled', 'onchange', 'onclick'));
 			if($value==$this->value){
-				echo ' selected="selected" checked="checked"';
+				echo ' checked="checked"';
 			}
 			echo '><label for="field_'.$this->getName().'_option_'.$value.'" '.$this->getInputAttribute('class').'> '.htmlspecialchars($description).'</label><br />';
 		}
@@ -1418,7 +1418,7 @@ class VinkField extends FormField {
 
         echo '<input type="checkbox"'.$this->getInputAttribute(array('id', 'name', 'value', 'origvalue', 'class', 'disabled', 'onchange', 'onclick'));
         if($this->value){
-            echo ' selected="selected" checked="checked" ';
+            echo ' checked="checked" ';
         }
         echo '/>';
 

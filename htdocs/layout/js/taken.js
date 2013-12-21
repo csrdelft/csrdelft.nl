@@ -49,13 +49,16 @@ function taken_form_init() {
 
 function taken_link_init() {
 	$('a.knop').each(function() {
-		if ($(this).hasClass('post')) {
+		if ($(this).hasClass('disabled')) {
+			$(this).click(taken_knop_disabled);
+		}
+		else if ($(this).hasClass('post')) {
 			$(this).removeClass('post');
-			$(this).click(taken_post_knop);
+			$(this).click(taken_knop_post);
 		}
 		else if ($(this).hasClass('get')) {
 			$(this).removeClass('get');
-			$(this).click(taken_get_knop);
+			$(this).click(taken_knop_get);
 		}
 		if ($(this).hasClass('ruilen')) {
 			$(this).removeClass('ruilen');
@@ -65,7 +68,12 @@ function taken_link_init() {
 	});
 }
 
-function taken_get_knop(event) {
+function taken_knop_disabled(event) {
+	event.preventDefault();
+	return false;
+}
+
+function taken_knop_get(event) {
 	if ($(this).hasClass('confirm') && !confirm($(this).attr('title') +'.\n\nWeet u het zeker?')) {
 		event.preventDefault();
 		return false;
@@ -76,7 +84,7 @@ function taken_get_knop(event) {
 	return true;
 }
 
-function taken_post_knop(event) {
+function taken_knop_post(event) {
 	event.preventDefault();
 	if ($(this).hasClass('range') && event.target.tagName.toUpperCase() === 'INPUT') {
 		taken_select_range(event);

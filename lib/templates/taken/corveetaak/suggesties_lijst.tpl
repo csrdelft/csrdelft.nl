@@ -19,7 +19,7 @@
 		</tr>
 	</thead>
 </table>
-<div style="height: 250px; overflow: auto;">
+<div id="scrollpane" style="height: 250px; overflow: auto;">
 	<table id="suggesties-tabel" class="taken-tabel" style="padding: 0px;">
 		<tbody>
 		{foreach name="tabel" from=$suggesties key=uid item=suggestie}
@@ -29,7 +29,7 @@
 				{if $this->getIsJongsteLichting($uid)} jongste{else} oudere{/if}	
 				">
 				<td style="width: 20px;">
-					<a class="knop" onclick="$('#field_lid_id').val('{$uid}');$('#taken-taak-toewijzen-form').submit();">
+					<a class="knop" style="padding: 0px 2px;" onclick="$('#field_lid_id').val('{$uid}');$('#taken-taak-toewijzen-form').submit();">
 					{if $suggestie.recent}
 						{icon get="time_delete" title="Recent gecorveed"}
 					{elseif $suggestie.voorkeur}
@@ -39,7 +39,7 @@
 					{/if}
 					</a>
 				</td>
-				<td style="width: 20px;">
+				<td style="width: 20px; text-align: right;">
 					{if $taak->getCorveeFunctie()->getIsKwalificatieBenodigd()}
 						{$suggestie.aantal}
 					{else}
@@ -61,5 +61,43 @@
 	</table>
 </div>
 </div>
-<br />
+<table style="width: 100%; background-color: #EEEEEE; border: 1px solid #DDDDDD;">
+<tr><td style="width: 45%;">
+	<input type="checkbox" id="voorkeur" style="margin: 7px !important;" 
+	{if isset($voorkeur)}
+		{if $voorkeur}
+			checked="checked" 
+			onchange="taken_toggle_suggestie('geenvoorkeur');" 
+		{else}
+			title="Deze corveerepetitie is niet voorkeurbaar." 
+			disabled 
+		{/if}
+	{else}
+		title="Dit is geen periodieke taak dus zijn er geen voorkeuren." 
+		disabled 
+	{/if}
+	/>
+	<label for="voorkeur" style="float: none; position: relative; top: -4px;">Met voorkeur</label>
+	<script type="text/javascript">$(document).ready(function(){ldelim}taken_toggle_suggestie('geenvoorkeur');{rdelim});</script>
+</td><td rowspan="2">
+	<label style="float: none;">Toon novieten/sjaars</label><br />
+	
+	<input type="radio" id="jongste_ja" name="jongste" value="ja" style="margin: 7px !important;" onchange="taken_toggle_suggestie('oudere', 'alleen' !== $('#jongste_alleen:checked').val());taken_toggle_suggestie('jongste', 'nee' !== $('#jongste_nee:checked').val());" checked="checked" />
+	<label for="jongste_ja" style="float: none; padding-right: 15px !important; position: relative; top: -4px;">Ja</label>
+	
+	<input type="radio" id="jongste_nee" name="jongste" value="nee" style="margin: 7px !important;" onchange="taken_toggle_suggestie('oudere', 'alleen' !== $('#jongste_alleen:checked').val());taken_toggle_suggestie('jongste', 'nee' !== $('#jongste_nee:checked').val());" />
+	<label for="jongste_nee" style="float: none; padding-right: 15px !important; position: relative; top: -4px;">Nee</label>
+	
+	<input type="radio" id="jongste_alleen" name="jongste" value="alleen" style="margin: 7px !important;" onchange="taken_toggle_suggestie('oudere', 'alleen' !== $('#jongste_alleen:checked').val());taken_toggle_suggestie('jongste', 'nee' !== $('#jongste_nee:checked').val());" />
+	<label for="jongste_alleen" style="float: none; padding-right: 15px !important; position: relative; top: -4px;">Alleen</label>
+</td><td rowspan="3" style="width: 25px;">
+	<br />
+	<a class="knop" onclick="$('#scrollpane').animate({ldelim}height: '+=250'{rdelim}, 800, function() {ldelim}{rdelim});" title="Vergroot de lijst met suggesties"><strong>&uarr;&darr;</strong></a>
+</td></tr>
+<tr><td>
+	<input type="checkbox" id="recent" checked="checked" style="margin: 7px !important;" onchange="taken_toggle_suggestie('recent');" />
+	<label for="recent" style="float: none; position: relative; top: -4px;">Niet recent gecorveed</label>
+	<script type="text/javascript">$(document).ready(function(){ldelim}taken_toggle_suggestie('recent');{rdelim});</script>
+</td></tr>
+</table>
 {/strip}

@@ -3141,6 +3141,7 @@ lib/taken/model/MaaltijdRepetitiesModel.class.php -text
 lib/taken/model/MaaltijdenModel.class.php -text
 lib/taken/model/PuntenModel.class.php -text
 lib/taken/model/TakenModel.class.php -text
+lib/taken/model/ToewijzenModel.class.php -text
 lib/taken/model/VoorkeurenModel.class.php -text
 lib/taken/model/VrijstellingenModel.class.php -text
 lib/taken/model/entity/CorveeFunctie.class.php -text
@@ -3183,7 +3184,7 @@ lib/taken/view/forms/MaaltijdRepetitieFormView.class.php -text
 lib/taken/view/forms/RepetitieCorveeFormView.class.php -text
 lib/taken/view/forms/RepetitieMaaltijdenFormView.class.php -text
 lib/taken/view/forms/TaakFormView.class.php -text
-lib/taken/view/forms/TaakToewijzenFormView.class.php -text
+lib/taken/view/forms/ToewijzenFormView.class.php -text
 lib/taken/view/forms/VrijstellingFormView.class.php -text
 lib/templates/agenda/courant.tpl -text
 lib/templates/agenda/icalendar.tpl -text

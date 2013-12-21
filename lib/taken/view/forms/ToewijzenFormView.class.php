@@ -4,12 +4,12 @@ namespace Taken\CRV;
 require_once 'formulier.class.php';
 
 /**
- * TaakToewijzenFormView.class.php	| 	P.W.G. Brussee (brussee@live.nl)
+ * ToewijzenFormView.class.php	| 	P.W.G. Brussee (brussee@live.nl)
  *
  * Formulier om een corveetaak toe te wijzen aan een lid.
  * 
  */
-class TaakToewijzenFormView extends \SimpleHtml {
+class ToewijzenFormView extends \SimpleHtml {
 
 	private $_form;
 	private $_taak;
@@ -44,40 +44,17 @@ class TaakToewijzenFormView extends \SimpleHtml {
 		$smarty->assign('kop', $this->getTitel());
 		$this->_form->cssClass .= ' popup';
 		
+		$smarty->assign('this', $this);
 		$smarty->assign('taak', $this->_taak);
 		$smarty->assign('suggesties', $this->_suggesties);
-		$smarty->assign('this', $this);
-		$lijst = $smarty->fetch('taken/corveetaak/suggesties_lijst.tpl');
-		$formFields[] = new \HTMLComment($lijst);
-		
-		$formFields['voorkeur'] = new \VinkField('voorkeur', true, 'Met voorkeur');
 		
 		if ($this->_taak->getCorveeRepetitieId() !== null) {
 			$repetitie = CorveeRepetitiesModel::getRepetitie($this->_taak->getCorveeRepetitieId());
-			
-			if ($repetitie->getIsVoorkeurbaar()) {
-				$formFields['voorkeur']->setOnChangeScript("taken_toggle_suggestie('geenvoorkeur');");
-				$formFields[] = new \HTMLComment('<script type="text/javascript">$(document).ready(function(){taken_toggle_suggestie(\'geenvoorkeur\');});</script>');
-			}
-			else {
-				$formFields['voorkeur']->value = false;
-				$formFields['voorkeur']->disabled = true;
-				$formFields['voorkeur']->title = 'Deze corveerepetitie is niet voorkeurbaar.';
-			}
-		}
-		else {
-			$formFields['voorkeur']->value = false;
-			$formFields['voorkeur']->disabled = true;
-			$formFields['voorkeur']->title = 'Dit is geen periodieke taak dus zijn er geen voorkeuren.';
+			$smarty->assign('voorkeur', $repetitie->getIsVoorkeurbaar());
 		}
 		
-		$formFields['recent'] = new \VinkField('recent', true, 'Niet recent gecorveed');
-		$formFields['recent']->setOnChangeScript("taken_toggle_suggestie('recent');");
-		$formFields[] = new \HTMLComment('<script type="text/javascript">$(document).ready(function(){taken_toggle_suggestie(\'recent\');});</script>');
-		
-		$formFields['jongste'] = new \KeuzeRondjeField('jongste', 'ja', 'Toon novieten/sjaars', array('ja' => 'Ja', 'nee' => 'Nee', 'alleen' => 'Alleen'));
-		$formFields['jongste']->setOnChangeScript("taken_toggle_suggestie('oudere', 'alleen' !== $('#field_jongste_option_alleen:checked').val());taken_toggle_suggestie('jongste', 'nee' !== $('#field_jongste_option_nee:checked').val());");
-		
+		$lijst = $smarty->fetch('taken/corveetaak/suggesties_lijst.tpl');
+		$formFields[] = new \HTMLComment($lijst);
 		$this->_form->addFields($formFields);
 		
 		$smarty->assign('form', $this->_form);

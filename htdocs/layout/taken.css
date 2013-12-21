@@ -11,6 +11,9 @@ h2 {
 	font-size: 15px;
 	margin: 30px 0px 15px 0px;
 }
+p img {
+	margin: 0px;
+}
 div#melding {
 	background-color: white;
 	-moz-box-shadow: 0 0 20px #000000;
@@ -25,8 +28,10 @@ a.knop {
 	padding: 0px 4px;
 	margin: 1px;
 }
-p img {
-	margin: 0px;
+a.disabled {
+	opacity: .33;
+	text-decoration: none;
+	cursor: default;
 }
 .knop img {
 	padding: 0px;
@@ -170,7 +175,9 @@ input.VinkField {
 	padding: 2px;
 	text-align: center;
 }
-
+tr.taak-datum-summery {
+	cursor: pointer;
+}
 #suggesties-tabel tr:hover, tr.taak-datum-summery:hover th {
 	background-color: #DDEEFF !important;
 }

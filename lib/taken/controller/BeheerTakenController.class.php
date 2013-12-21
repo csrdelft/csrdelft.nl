@@ -188,9 +188,11 @@ class BeheerTakenController extends \ACLController {
 			$this->content = new BeheerTakenView($taak);
 		}
 		else {
-			$suggesties = TakenModel::getSuggesties($taak);
-			require_once 'taken/view/forms/TaakToewijzenFormView.class.php';
-			$this->content = new TaakToewijzenFormView($taak, $suggesties); // fetches POST values itself
+			require_once 'taken/model/ToewijzenModel.class.php';
+			require_once 'taken/view/forms/ToewijzenFormView.class.php';
+			
+			$suggesties = ToewijzenModel::getSuggesties($taak);
+			$this->content = new ToewijzenFormView($taak, $suggesties); // fetches POST values itself
 		}
 	}
 	
