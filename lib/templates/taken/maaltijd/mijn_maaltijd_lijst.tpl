@@ -48,11 +48,11 @@
 		{if $aanmelding->getDoorAbonnement()} (abo){/if}
 	{/if}
 	</td>
-	<td>
+	<td class="maaltijd-gasten">
 	{if $maaltijd->getIsGesloten()}
 		{$aanmelding->getAantalGasten()}
 	{else}
-		<div class="inline-edit" onclick="taken_toggle_hiddenform(this);">{$aanmelding->getAantalGasten()}</div>
+		<div class="inline-edit maaltijd-gasten" onclick="taken_toggle_hiddenform(this);">{$aanmelding->getAantalGasten()}</div>
 		<form method="post" action="{$globals.taken_module}/gasten/{$maaltijd->getMaaltijdId()}" class="Formulier taken-hidden-form taken-subform">
 			<input type="text" name="aantal_gasten" origvalue="{$aanmelding->getAantalGasten()}" class="regular" maxlength="4" size="4" />
 			<a onclick="$(this).parent().submit();" title="Wijzigingen opslaan" class="knop">{icon get="accept"}</a>
