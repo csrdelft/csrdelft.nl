@@ -235,6 +235,7 @@ htdocs/layout/js/gmaps.js -text
 htdocs/layout/js/groepen.js -text
 htdocs/layout/js/jquery.js -text
 htdocs/layout/js/jquery.prettyPhoto.js -text
+htdocs/layout/js/jquery.scrollTo.min.js -text
 htdocs/layout/js/jquery.timeago.js -text
 htdocs/layout/js/layout2/jquery.backstretch.js -text
 htdocs/layout/js/layout2/jquery.js -text

@@ -24,9 +24,7 @@
 <br />
 {if !($prullenbak or (isset($maaltijd) and $maaltijd->getIsVerwijderd()))}
 <div style="float: right;">
-	{if !$prullenbak and !isset($maaltijd)}
-	<a href="/corveebeheer/herinneren" title="Verstuur herinneringen" class="knop get popup">{icon get="clock"} Herinneringen versturen</a>
-	{/if}
+	<a class="knop" onclick="$('tr.taak-datum-oud').show();$(this).hide();$.scrollTo($('tr.taak-datum-oud:last'), 800);">{icon get="eye"} Toon verleden</a>
 	<a href="{$globals.taken_module}/nieuw{if isset($maaltijd)}/{$maaltijd->getMaaltijdId()}{/if}" title="Nieuwe taak" class="knop post popup">{icon get="add"} Nieuwe taak</a>
 </div>
 {/if}
@@ -41,11 +39,16 @@
 	</select>
 </form>
 {/if}
+<br />
+{if !$prullenbak and !isset($maaltijd)}
+	<a href="/corveebeheer/indelen" title="Leden automatisch indelen voor taken" class="knop post">{icon get="date"} Automatisch indelen</a>
+	<a href="/corveebeheer/herinneren" title="Verstuur herinneringen" class="knop get popup">{icon get="clock"} Herinneringen versturen</a>
+{/if}
 <table id="taken-tabel" class="taken-tabel">
 {foreach name="tabel" from=$taken key=datum item=perdatum}
 	{if $smarty.foreach.tabel.first}
 	<thead>
-	{include file='taken/corveetaak/beheer_taak_head.tpl' show="true" datum=$datum}
+	{include file='taken/corveetaak/beheer_taak_head.tpl' show="true" datum='first'}
 	</thead>
 	<tbody></tbody>
 	{/if}

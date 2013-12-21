@@ -59,6 +59,7 @@ class BeheerMaaltijdenController extends \ACLController {
 		$this->content->addStylesheet('js/autocomplete/jquery.autocomplete.css');
 		$this->content->addStylesheet('taken.css');
 		$this->content->addScript('autocomplete/jquery.autocomplete.min.js');
+		$this->content->addScript('jquery.scrollTo.min.js');
 		$this->content->addScript('taken.js');
 	}
 	

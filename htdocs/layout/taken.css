@@ -144,6 +144,7 @@ input.VinkField {
 .taken-tabel {
 	padding: 15px 0px;
 	width: 100%;
+	border-spacing: 0px;
 }
 .taken-tabel tr {
 	height: 25px;
@@ -159,6 +160,7 @@ input.VinkField {
 	background-color: #FAFAFA;
 	font-weight: bold;
 	padding: 10px;
+	border-bottom: 2px solid #FFFFFF;
 }
 .taken-tabel td {
 	padding: 2px 7px;
@@ -205,6 +207,9 @@ td.maaltijd-aangemeld, td.maaltijd-afgemeld {
 }
 .taak-oud {
 	opacity: .50;
+}
+.taak-maaltijd-oud, .taak-datum-oud {
+	display: none;
 }
 
 /* popup formulier */

@@ -212,7 +212,8 @@ function taken_close_popup() {
 }
 
 function taken_toggle_datum(datum) {
-	$('.taak-datum-' + datum).toggle();
+	$('.taak-datum-'+ datum).toggle();
+	$('#taak-datum-head-first').toggle($('#taak-datum-summery-'+ datum).is(':visible'));
 }
 
 function taken_toggle_hiddenform(source) {

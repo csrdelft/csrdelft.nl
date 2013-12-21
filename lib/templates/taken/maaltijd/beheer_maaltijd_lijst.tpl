@@ -2,7 +2,10 @@
 	beheer_maaltijd_lijst.tpl	|	P.W.G. Brussee (brussee@live.nl)
 *}
 {strip}
-<tr id="maaltijd-row-{$maaltijd->getMaaltijdId()}"{if strtotime($maaltijd->getDatum()) < strtotime('-1 day')} class="taak-oud"{/if}>
+<tr id="maaltijd-row-{$maaltijd->getMaaltijdId()}"
+{if strtotime($maaltijd->getDatum()) < strtotime('-1 day')} class="
+	{if !$prullenbak} taak-maaltijd-oud{/if} taak-oud"
+{/if}>
 	<td>
 {if $maaltijd->getIsVerwijderd()}
 		<a href="{$globals.taken_module}/herstel/{$maaltijd->getMaaltijdId()}" title="Maaltijd herstellen" class="knop post">{icon get="arrow_undo"}</a>

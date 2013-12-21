@@ -14,7 +14,10 @@ N.B. Voor het definitief verwijderen van een maaltijd moeten eerst de gekoppelde
 Op deze pagina kunt u de maaltijden aanmaken, wijzigen en verwijderen.
 Onderstaande tabel toont alle maaltijden die niet verwijderd zijn.
 </p>
-<div style="float: right;"><a href="{$globals.taken_module}/nieuw" title="Nieuwe maaltijd" class="knop post popup">{icon get="add"} Nieuwe maaltijd</a></div>
+<div style="float: right;">
+	<a class="knop" onclick="$('tr.taak-maaltijd-oud').show();$(this).hide();$.scrollTo($('tr.taak-maaltijd-oud:last'), 800);">{icon get="eye"} Toon verleden</a>
+	<a href="{$globals.taken_module}/nieuw" title="Nieuwe maaltijd" class="knop post popup">{icon get="add"} Nieuwe maaltijd</a>
+</div>
 <form method="post" action="{$globals.taken_module}/nieuw" class="Formulier popup">
 	<label for="mrid">{icon get="calendar_add"} Periodieke maaltijden aanmaken:</label>
 	<select name="mrid" origvalue="kies" class="regular" onchange="taken_submit_dropdown($(this).parent());">
