@@ -28,9 +28,10 @@ class VoorkeurenModel {
 	 * Voor elk ander lid worden de permissies niet gefilterd.
 	 * 
 	 * @param string $uid
+	 * @param boolean $alleenIngeschakeld 
 	 * @return CorveeVoorkeur[]
 	 */
-	public static function getVoorkeurenVoorLid($uid) {
+	public static function getVoorkeurenVoorLid($uid, $alleenIngeschakeld=false) {
 		$repById = CorveeRepetitiesModel::getVoorkeurbareRepetities(true); // grouped by crid
 		$result = array();
 		$voorkeuren = self::loadVoorkeuren(null, $uid);
@@ -43,7 +44,7 @@ class VoorkeurenModel {
 			}
 		}
 		foreach ($repById as $crid => $repetitie) {
-			if (!array_key_exists($crid, $result)) { // uitgeschakeld en voorkeurbaar
+			if (!$alleenIngeschakeld && !array_key_exists($crid, $result)) { // uitgeschakeld en voorkeurbaar
 				if ($repetitie->getCorveeFunctie()->getIsKwalificatieBenodigd()) {
 					require_once 'taken/model/KwalificatiesModel.class.php';
 					if (!KwalificatiesModel::getIsLidGekwalificeerd($uid, $repetitie->getFunctieId())) {

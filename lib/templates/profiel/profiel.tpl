@@ -210,9 +210,9 @@
 		<div class="gegevens">
 			<div class="label">Recent:</div>
 			<ul class="nobullets data">
-				{foreach from=$profhtml.recenteAanmeldingen item=aanmelding}
-					<li>{$aanmelding->getMaaltijd()->getTitel()} <span style="color: #676767">({$aanmelding->getMaaltijd()->getDatum()|date_format:"%a %e %b"})</span></li>
-				{/foreach}
+			{foreach from=$profhtml.recenteAanmeldingen item=aanmelding}
+				<li>{$aanmelding->getMaaltijd()->getTitel()} <span style="color: #676767">({$aanmelding->getMaaltijd()->getDatum()|date_format:"%a %e %b"})</span></li>
+			{/foreach}
 			</ul>
 			<br />
 			<div class="label">Allergie/dieet:</div>
@@ -234,14 +234,25 @@
 			</ul>
 		{/if}
 			<br />
+			<div class="label">Voorkeuren:</div>
+			<ul class="nobullets data">
+			{foreach from=$corveevoorkeuren item=vrk}
+				<li>{$vrk->getCorveeRepetitie()->getDagVanDeWeekText()|truncate:2:""} {$vrk->getCorveeRepetitie()->getCorveeFunctie()->getNaam()}</span></li>
+			{/foreach}
+			</ul>
+			<br />
 			<div class="label">Kwalificaties:</div>
-			<div class="data">{foreach from=$corveekwalificaties item=kwali}{$kwali->getCorveeFunctie()->getNaam()}<span style="color: gray;"> (sinds {$kwali->getWanneerToegewezen()})</span>{/foreach}</div>
+			<ul class="nobullets data">
+			{foreach from=$corveekwalificaties item=kwali}
+				<li>{$kwali->getCorveeFunctie()->getNaam()}<span style="color: gray;"> (sinds {$kwali->getWanneerToegewezen()})</span></li>
+			{/foreach}
+			</ul>
 			<br />
 			<div class="label">Corveetaken:</div>
 			<ul class="nobullets data">
-				{foreach from=$corveetaken item=taak}
-					<li>{$taak->getCorveeFunctie()->getNaam()} <span style="color: #676767">({$taak->getDatum()|date_format:"%a %e %b"})</span></li>
-				{/foreach}
+			{foreach from=$corveetaken item=taak}
+				<li>{$taak->getCorveeFunctie()->getNaam()} <span style="color: #676767">({$taak->getDatum()|date_format:"%a %e %b"})</span></li>
+			{/foreach}
 			</ul>
 			<br />
 			<div class="label">Corveepunten:</div>
