@@ -37,7 +37,7 @@
 		{if $firstOfDatum eq 'true'}
 			{cycle name="firstOfDatum" assign="firstOfDatum"}
 			{cycle name="datumColor" assign="datumColor" values="#EBEBEB,#FAFAFA"}
-			<td rowspan="{$smarty.foreach.datum.total}"{if !isset($mijn)} style="background-color: {$datumColor}; border-left: 2px solid #FFFFFF;"{/if}><nobr>{$datum|date_format:"%a %e %b"}</nobr></td>
+			<td rowspan="{$smarty.foreach.datum.total}"{if !isset($mijn)} style="background-color: {$datumColor};"{/if}><nobr>{$datum|date_format:"%a %e %b"}</nobr></td>
 		{/if}
 		{if $smarty.foreach.taak.first}
 			<td><nobr>{$taak->getCorveeFunctie()->getNaam()}</nobr></td>
