@@ -41,14 +41,14 @@ class MaaltijdenModel {
 	 * @return Maaltijd[] (implements Agendeerbaar)
 	 */
 	public static function getMaaltijdenVoorAgenda($van, $tot) {
-		if ($van === null) {
-			$van = time();
+		if ($van === null) { // RSS
+			$van = strtotime('-1 year');
 		}
 		elseif (!is_int($van)) {
 			throw new \Exception('Invalid timestamp: $van getMaaltijdenVoorAgenda()');
 		}
-		if ($tot === null) {
-			$tot = strtotime($GLOBALS['maaltijden_ketzer_vooraf']);
+		if ($tot === null) { // RSS
+			$tot = strtotime('+1 year');
 		}
 		elseif (!is_int($tot)) {
 			throw new \Exception('Invalid timestamp: $tot getMaaltijdenVoorAgenda()');
