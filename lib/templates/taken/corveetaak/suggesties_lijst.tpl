@@ -7,15 +7,19 @@
 <table class="taken-tabel" style="padding: 0px;">
 	<thead>
 		<tr>
-			<th style="width: 50px;">
-				{if $taak->getCorveeFunctie()->getIsKwalificatieBenodigd()}
-					Aantal
-				{else}
-					Punten
-				{/if}
+			<th style="width: 65px; padding-right: 0px;">
+{if $taak->getCorveeFunctie()->getIsKwalificatieBenodigd()}
+	Aantal
+{else}
+	Punten{icon get="bullet_arrow_up"}
+{/if}
 			</th>
 			<th style="width: 145px;">Naam</th>
-			<th>Laatste taak</th>
+			<th>Laatste taak
+{if $taak->getCorveeFunctie()->getIsKwalificatieBenodigd()}
+			&nbsp;{icon get="bullet_arrow_up"}
+{/if}
+			</th>
 		</tr>
 	</thead>
 </table>
@@ -39,7 +43,7 @@
 					{/if}
 					</a>
 				</td>
-				<td style="width: 20px; text-align: right;">
+				<td style="width: 30px; padding-right: 10px; text-align: right;">
 					{if $taak->getCorveeFunctie()->getIsKwalificatieBenodigd()}
 						{$suggestie.aantal}
 					{else}
@@ -104,12 +108,12 @@
 </td></tr>
 <tr><td style="padding-left: 7px;">
 	<input type="checkbox" id="recent" onchange="taken_toggle_suggestie('recent');" 
-{if $recent}
+{if !$taak->getCorveeFunctie()->getIsKwalificatieBenodigd()}
 	checked="checked" 
 {/if}
 	/>
 	<label for="recent" style="padding-left: 7px !important; float: none; position: relative; top: -4px;">Niet recent gecorveed</label>
-{if $recent}
+{if !$taak->getCorveeFunctie()->getIsKwalificatieBenodigd()}
 	<script type="text/javascript">$(document).ready(function(){ldelim}taken_toggle_suggestie('recent');{rdelim});</script>
 {/if}
 </td></tr>

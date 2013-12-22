@@ -13,7 +13,7 @@ N.B. Pas bij het resetten van het corveejaar worden de punten toegekend (te beha
 		<tr>
 			<th>Wijzig</th>
 			<th>Lid</th>
-			<th>Van</th>
+			<th>Van {icon get="bullet_arrow_up"}</th>
 			<th>Tot</th>
 			<th>Percentage</th>
 			<th>Punten</th>
