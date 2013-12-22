@@ -29,7 +29,7 @@ class Instelling{
 			'forum_filter2008' => array('nee', 'Berichten van 2008 eerst verbergen', 'enum', array('ja', 'nee')),
 			'zijbalk_ishetal' => array('niet weergeven', 'Is het al…', 'enum', array('niet weergeven', 'donderdag', 'vrijdag', 'zondag', 'lunch', 'avond', 'borrel', 'lezing', 'jarig', 'studeren', 'willekeurig')),
 			'zijbalk_gasnelnaar' => array('ja', 'Ga snel naar weergeven', 'enum', array('ja', 'nee')),
-			'zijbalk_agendaweken' => array(2, 'Aantal weken vooruit agenda weergeven', 'int'),
+			'zijbalk_agendaweken' => array(2, 'Aantal weken weergeven', 'int'),
 			'zijbalk_agenda_max' => array(15, 'Maximaal aantal agenda-items', 'int'),
 			'zijbalk_mededelingen' => array(5, 'Aantal mededelingen', 'int'),
 			'zijbalk_forum' => array(10, 'Aantal forumberichten', 'int'),
