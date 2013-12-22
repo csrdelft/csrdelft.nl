@@ -502,7 +502,7 @@ $('.wantsAutoresize').each(function(){
   
 		content = textarea.val();  
 		content = content.replace(/\\n/g, '<br>');  
-		hiddenDiv.html(content);  
+		hiddenDiv.html(content+'<br>');  
   
 		textarea.css('height', hiddenDiv.height());  
   
