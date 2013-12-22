@@ -232,8 +232,8 @@ function taken_toggle_datum_first(datum, index) {
 	}
 }
 function taken_color_datum() {
-	$('#taken-tabel tr:visible:odd th').css('background-color', '#F0F0F0');
-	$('#taken-tabel tr:visible:even th').css('background-color', '#FAFAFA');
+	$('tr.taak-datum-summary:visible:odd th').css('background-color', '#FAFAFA');
+	$('tr.taak-datum-summary:visible:even th').css('background-color', '#F0F0F0');
 }
 function taken_show_old() {
 	$('#taak-datum-head-first').show();

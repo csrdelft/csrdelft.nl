@@ -2,7 +2,7 @@
 	beheer_taak_datum.tpl	|	P.W.G. Brussee (brussee@live.nl)
 *}
 {strip}
-<tr id="taak-datum-summery-{$datum}" class="taak-datum-summery taak-datum-{$datum}{if strtotime($datum) < strtotime('-1 day')}{if !isset($show) and !$prullenbak}  taak-datum-oud{/if} taak-oud{/if}"{if isset($show)} style="display: none;"{/if} onclick="taken_toggle_datum('{$datum}');">
+<tr id="taak-datum-summary-{$datum}" class="taak-datum-summary taak-datum-{$datum}{if strtotime($datum) < strtotime('-1 day')}{if !isset($show) and !$prullenbak}  taak-datum-oud{/if} taak-oud{/if}"{if isset($show)} style="display: none;"{/if} onclick="taken_toggle_datum('{$datum}');">
 	{foreach name=functie from=$perdatum key=fid item=perfunctie}
 		{if $smarty.foreach.functie.first}
 			{assign var="first" value="true"}
