@@ -14,7 +14,7 @@
 		<th>Titel</th>
 		<th>Reacties</th>
 		<th>Auteur</th>
-		<th>verandering</th>
+		<th>Verandering</th>
 	</tr>
 	{if !is_array($categorie->getOnderwerpen())}
 		<tr>

@@ -29,7 +29,7 @@
 					{$bericht.titel|wordwrap:60:"\n":true|escape:'html'}
 				</a>
 			</td>
-			<td class="reacties">{$bericht.reacties-1}</td>
+			<td class="reacties">{$bericht.reacties}</td>
 			<td class="reactiemoment">
 				{$bericht.lastpost|reldate}<br />
 				<a href="/communicatie/forum/reactie/{$bericht.postID}">bericht</a> door 

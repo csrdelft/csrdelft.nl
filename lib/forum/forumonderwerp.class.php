@@ -697,7 +697,8 @@ class ForumOnderwerp{
 					FROM
 						forum_post
 					WHERE
-						tid=".$this->getID()."
+						tid=".$this->getID()." AND
+						zichtbaar='zichtbaar'
 					LIMIT 1)
 			WHERE
 				id=".$this->getID()."

@@ -8,9 +8,9 @@
 <table id="forumtabel">
 	<tr>
 		<th>Forum</th>
-		<th>onderwerpen</th>
-		<th>berichten</th>
-		<th>verandering</th>
+		<th>Onderwerpen</th>
+		<th>Berichten</th>
+		<th>Verandering</th>
 	</tr>
 	{foreach from=$categories item='categorie'}
 		{if $categorie.titel=='SEPARATOR'}
