@@ -210,8 +210,8 @@
 		<div class="gegevens">
 			<div class="label">Recent:</div>
 			<ul class="nobullets data">
-				{foreach from=$profhtml.recenteMaaltijden item=maaltijd}
-					<li>{$maaltijd->getBeginMoment()|date_format:"%a %d-%m-%Y %H:%i"} {$maaltijd->getTitel()}</li>
+				{foreach from=$profhtml.recenteAanmeldingen item=aanmelding}
+					<li>{$aanmelding->getMaaltijd()->getBeginMoment()|date_format:"%a %d-%m-%Y %H:%i"} {$aanmelding->getMaaltijd()->getTitel()}</li>
 				{/foreach}
 			</ul>
 			<br />

@@ -37,7 +37,7 @@ class ProfielContent extends SimpleHTML {
 		$profhtml['groepen']=new GroepenProfielContent($this->lid->getUid());
 
 		if (LoginLid::instance()->getUid() == $this->lid->getUid() || LoginLid::instance()->hasPermission('P_MAAL_MOD')) {
-			$profhtml['recenteMaaltijden'] = \Taken\MLT\AanmeldingenModel::getRecenteMaaltijdenVoorLidProfiel($this->lid->getUid());
+			$profhtml['recenteAanmeldingen'] = \Taken\MLT\AanmeldingenModel::getRecenteAanmeldingenVoorLid($this->lid->getUid());
 			$profhtml['abos'] = \Taken\MLT\AbonnementenModel::getAbonnementenVoorLid($this->lid->getUid());
 		}
 

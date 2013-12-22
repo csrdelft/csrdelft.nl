@@ -76,7 +76,7 @@ class MaaltijdenModel {
 	 * @return Maaltijd[]
 	 */
 	public static function getRecenteMaaltijden() {
-		$maaltijden = self::loadMaaltijden('verwijderd = false AND datum <= ?', array(date('Y-m-d', strtotime($GLOBALS['maaltijden_recent_lidprofiel']))));
+		$maaltijden = self::loadMaaltijden('verwijderd = false AND datum >= ? AND datum <= ?', array(date('Y-m-d', strtotime($GLOBALS['maaltijden_recent_lidprofiel'])), date('Y-m-d')));
 		$maaltijdenById = array();
 		foreach ($maaltijden as $maaltijd) {
 			$maaltijdenById[$maaltijd->getMaaltijdId()] = $maaltijd;

@@ -180,7 +180,7 @@ class AanmeldingenModel {
 		return $lijst;
 	}
 	
-	public static function getRecenteMaaltijdenVoorLidProfiel($uid) {
+	public static function getRecenteAanmeldingenVoorLid($uid) {
 		$maaltijdenById = MaaltijdenModel::getRecenteMaaltijden();
 		return AanmeldingenModel::getAanmeldingenVoorLid($maaltijdenById, $uid);
 	}
