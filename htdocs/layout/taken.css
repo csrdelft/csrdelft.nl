@@ -175,8 +175,12 @@ input.VinkField {
 	padding: 2px;
 	text-align: center;
 }
-tr.taak-datum-summery {
+tr.taak-datum-head th, tr.taak-datum-summery th {
 	cursor: pointer;
+	border-top: 5px solid #FFFFFF;
+}
+#taak-datum-head-first th {
+	cursor: default;
 }
 #suggesties-tabel tr:hover, tr.taak-datum-summery:hover th {
 	background-color: #DDEEFF !important;
