@@ -220,8 +220,16 @@ function taken_close_popup() {
 }
 
 function taken_toggle_datum(datum) {
+	taken_toggle_datum_first(datum, 0);
 	$('.taak-datum-'+ datum).toggle();
-	$('#taak-datum-head-first').toggle($('#taak-datum-summery-'+ datum).is(':visible'));
+	taken_toggle_datum_first(datum, 1);
+	
+}
+function taken_toggle_datum_first(datum, index) {
+	var attr = $('#taken-tabel tr:visible').eq(index).attr('id');
+	if (typeof attr !== 'undefined' && attr !== false && attr === 'taak-datum-head-'+ datum) {
+		$('#taak-datum-head-first').toggle();
+	}
 }
 
 function taken_toggle_hiddenform(source) {

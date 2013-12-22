@@ -48,7 +48,7 @@
 {foreach name="tabel" from=$taken key=datum item=perdatum}
 	{if $smarty.foreach.tabel.first}
 	<thead>
-	{include file='taken/corveetaak/beheer_taak_head.tpl' show="true" datum='first'}
+	{include file='taken/corveetaak/beheer_taak_head.tpl' show="true" datum=null}
 	</thead>
 	<tbody></tbody>
 	{/if}
