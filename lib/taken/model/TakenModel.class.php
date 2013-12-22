@@ -173,7 +173,7 @@ class TakenModel {
 	 * @return CorveeTaak[]
 	 */
 	public static function getLaatsteTaakVanLid($uid) {
-		$taken = self::loadTaken('verwijderd = false AND lid_id = ? HAVING datum = MAX(datum)', array($uid), 1);
+		$taken = self::loadTaken('verwijderd = false AND lid_id = ? HAVING datum = MAX(datum)', array($uid));
 		if (!array_key_exists(0, $taken)) {
 			return null;
 		}
