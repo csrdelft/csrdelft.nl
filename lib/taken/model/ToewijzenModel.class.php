@@ -33,6 +33,9 @@ class ToewijzenModel {
 				if (!$lid instanceof \Lid) {
 					throw new \Exception('Lid bestaat niet: $uid ='. $uid);
 				}
+				if (!$lid->isLid()) {
+					continue; // geen oud-lid of overleden lid
+				}
 				if (array_key_exists($uid, $vrijstellingen)) {
 					$vrijstelling = $vrijstellingen[$uid];
 					$datum = $taak->getBeginMoment();
