@@ -211,7 +211,7 @@
 			<div class="label">Recent:</div>
 			<ul class="nobullets data">
 				{foreach from=$profhtml.recenteAanmeldingen item=aanmelding}
-					<li>{$aanmelding->getMaaltijd()->getBeginMoment()|date_format:"%a %d-%m-%Y %H:%i"} {$aanmelding->getMaaltijd()->getTitel()}</li>
+					<li>{$aanmelding->getMaaltijd()->getTitel()} <span style="color: #676767">({$aanmelding->getMaaltijd()->getDatum()|date_format:"%a %e %b"})</span></li>
 				{/foreach}
 			</ul>
 			<br />
@@ -240,7 +240,7 @@
 			<div class="label">Corveetaken:</div>
 			<ul class="nobullets data">
 				{foreach from=$corveetaken item=taak}
-					<li>{$taak->getDatum()} {$taak->getCorveeFunctie()->getNaam()}</li>
+					<li>{$taak->getCorveeFunctie()->getNaam()} <span style="color: #676767">({$taak->getDatum()|date_format:"%a %e %b"})</span></li>
 				{/foreach}
 			</ul>
 			<br />
