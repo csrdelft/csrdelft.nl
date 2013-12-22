@@ -223,13 +223,23 @@ function taken_toggle_datum(datum) {
 	taken_toggle_datum_first(datum, 0);
 	$('.taak-datum-'+ datum).toggle();
 	taken_toggle_datum_first(datum, 1);
+	taken_color_datum();
 	
 }
 function taken_toggle_datum_first(datum, index) {
-	var attr = $('#taken-tabel tr:visible').eq(index).attr('id');
-	if (typeof attr !== 'undefined' && attr !== false && attr === 'taak-datum-head-'+ datum) {
+	if ('taak-datum-head-'+ datum === $('#taken-tabel tr:visible').eq(index).attr('id')) {
 		$('#taak-datum-head-first').toggle();
 	}
+}
+function taken_color_datum() {
+	$('#taken-tabel tr:visible:odd th').css('background-color', '#F0F0F0');
+	$('#taken-tabel tr:visible:even th').css('background-color', '#FAFAFA');
+}
+function taken_show_old() {
+	$('#taak-datum-head-first').show();
+	$('tr.taak-datum-oud').show();
+	$.scrollTo($('tr.taak-datum-oud:last'), 800);
+	taken_color_datum();
 }
 
 function taken_toggle_hiddenform(source) {

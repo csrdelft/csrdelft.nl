@@ -1,7 +1,7 @@
 {*
 	beheer_taak_head.tpl	|	P.W.G. Brussee (brussee@live.nl)
 *}
-<tr{if isset($datum)} id="taak-datum-head-{$datum}" class="taak-datum-head taak-datum-{$datum}"{if !isset($show)} style="display: none;" onclick="taken_toggle_datum('{$datum}');"{/if}{else} id="taak-datum-head-first"{/if}>
+<tr{if isset($datum)} id="taak-datum-head-{$datum}" class="taak-datum-head taak-datum-{$datum}"{if !isset($show)} style="display: none;" onclick="taken_toggle_datum('{$datum}');"{/if}{/if}>
 	<th style="width: 50px;">Wijzig</th>
 	<th>Gemaild</th>
 	<th style="width: 60px;">Datum</th>
