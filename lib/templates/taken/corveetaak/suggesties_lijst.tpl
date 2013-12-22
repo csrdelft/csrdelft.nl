@@ -63,30 +63,30 @@
 </div>
 <table style="width: 100%; background-color: #EEEEEE; border: 1px solid #DDDDDD;">
 <tr><td style="width: 45%; padding: 7px !important;" 
-	{if isset($voorkeur)}
-		{if !$voorkeur}
-			title="Deze corveerepetitie is niet voorkeurbaar."
-		{/if}
-	{else}
-		title="Dit is geen periodieke taak dus zijn er geen voorkeuren."
+{if isset($voorkeur)}
+	{if !$voorkeur}
+		title="Deze corveerepetitie is niet voorkeurbaar."
 	{/if}
+{else}
+	title="Dit is geen periodieke taak dus zijn er geen voorkeuren."
+{/if}
 	>
 	<input type="checkbox" id="voorkeur" 
-	{if isset($voorkeur)}
-		{if $voorkeur}
-			checked="checked" 
-			onchange="taken_toggle_suggestie('geenvoorkeur');" 
-		{else}
-			disabled 
-		{/if}
+{if isset($voorkeur)}
+	{if $voorkeur}
+		checked="checked" 
+		onchange="taken_toggle_suggestie('geenvoorkeur');" 
 	{else}
 		disabled 
 	{/if}
+{else}
+	disabled 
+{/if}
 	/>
 	<label for="voorkeur" style="padding-left: 7px !important; float: none; position: relative; top: -4px;">Met voorkeur</label>
-	{if $voorkeur}
-		<script type="text/javascript">$(document).ready(function(){ldelim}taken_toggle_suggestie('geenvoorkeur');{rdelim});</script>
-	{/if}
+{if $voorkeur}
+	<script type="text/javascript">$(document).ready(function(){ldelim}taken_toggle_suggestie('geenvoorkeur');{rdelim});</script>
+{/if}
 </td><td rowspan="2" style="padding: 7px;">
 	<p>Toon novieten/sjaars</p>
 	
@@ -103,9 +103,15 @@
 	<a class="knop" onclick="$('#scrollpane').animate({ldelim}height: '+=250'{rdelim}, 800, function() {ldelim}{rdelim});" title="Vergroot de lijst met suggesties"><strong>&uarr;&darr;</strong></a>
 </td></tr>
 <tr><td style="padding-left: 7px;">
-	<input type="checkbox" id="recent" checked="checked" onchange="taken_toggle_suggestie('recent');" />
+	<input type="checkbox" id="recent" onchange="taken_toggle_suggestie('recent');" 
+{if $recent}
+	checked="checked" 
+{/if}
+	/>
 	<label for="recent" style="padding-left: 7px !important; float: none; position: relative; top: -4px;">Niet recent gecorveed</label>
+{if $recent}
 	<script type="text/javascript">$(document).ready(function(){ldelim}taken_toggle_suggestie('recent');{rdelim});</script>
+{/if}
 </td></tr>
 </table>
 {/strip}

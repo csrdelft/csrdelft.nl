@@ -173,7 +173,7 @@ class TakenModel {
 	 * @return CorveeTaak[]
 	 */
 	public static function getLaatsteTaakVanLid($uid) {
-		$taken = self::loadTaken('verwijderd = false AND lid_id = ? HAVING datum = MAX(datum)', array($uid));
+		$taken = self::loadTaken('verwijderd = false AND lid_id = ?', array($uid), 1, false);
 		if (!array_key_exists(0, $taken)) {
 			return null;
 		}
@@ -289,13 +289,13 @@ class TakenModel {
 		}
 	}
 	
-	private static function loadTaken($where=null, $values=array(), $limit=null) {
+	private static function loadTaken($where=null, $values=array(), $limit=null, $orderAsc=true) {
 		$sql = 'SELECT taak_id, functie_id, lid_id, crv_repetitie_id, maaltijd_id, datum, punten, bonus_malus, punten_toegekend, bonus_toegekend, wanneer_toegekend, wanneer_gemaild, verwijderd';
 		$sql.= ' FROM crv_taken';
 		if ($where !== null) {
 			$sql.= ' WHERE '. $where;
 		}
-		$sql.= ' ORDER BY datum ASC, functie_id ASC';
+		$sql.= ' ORDER BY datum '. ($orderAsc ? 'ASC' : 'DESC') .', functie_id ASC';
 		if (is_int($limit) && $limit > 0) {
 			$sql.= ' LIMIT '. $limit;
 		}

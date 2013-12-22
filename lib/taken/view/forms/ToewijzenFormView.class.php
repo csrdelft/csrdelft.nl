@@ -52,6 +52,7 @@ class ToewijzenFormView extends \SimpleHtml {
 			$repetitie = CorveeRepetitiesModel::getRepetitie($this->_taak->getCorveeRepetitieId());
 			$smarty->assign('voorkeur', $repetitie->getIsVoorkeurbaar());
 		}
+		$smarty->assign('recent', !$this->_taak->getCorveeFunctie()->getIsKwalificatieBenodigd());
 		
 		$lijst = $smarty->fetch('taken/corveetaak/suggesties_lijst.tpl');
 		$formFields[] = new \HTMLComment($lijst);
