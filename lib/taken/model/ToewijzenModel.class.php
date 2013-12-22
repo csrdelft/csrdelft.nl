@@ -46,7 +46,7 @@ class ToewijzenModel {
 				$lijst[$uid] = PuntenModel::loadPuntenVoorLid($lid, array($functie->getFunctieId() => $functie));
 				$lijst[$uid]['aantal'] = $lijst[$uid]['aantal'][$functie->getFunctieId()];
 			}
-			$sorteer = 'sorteerAantal';
+			$sorteer = 'sorteerKwali';
 		}
 		else {
 			$lijst = PuntenModel::loadPuntenVoorAlleLeden();
@@ -65,7 +65,6 @@ class ToewijzenModel {
 			}
 			$sorteer = 'sorteerPrognose';
 		}
-		uasort($lijst, array('self', $sorteer));
 		foreach ($lijst as $uid => $punten) {
 			$lijst[$uid]['laatste'] = TakenModel::getLaatsteTaakVanLid($uid);
 			if ($lijst[$uid]['laatste'] !== null && $lijst[$uid]['laatste']->getBeginMoment() >= strtotime($GLOBALS['suggesties_recent_verbergen'])) {
@@ -78,14 +77,29 @@ class ToewijzenModel {
 				$lijst[$uid]['voorkeur'] = VoorkeurenModel::getHeeftVoorkeur($taak->getCorveeRepetitieId(), $uid);
 			}
 		}
+		uasort($lijst, array('self', $sorteer));
 		return $lijst;
 	}
 	
-	static function sorteerAantal($a, $b) {
-		if ($a['aantal'] === $b['aantal']) {
+	static function sorteerKwali($a, $b) {
+		if ($a['laatste'] !== null && $b['laatste'] !== null) {
+			$a = $a['laatste']->getBeginMoment();
+			$b = $b['laatste']->getBeginMoment();
+		}
+		elseif ($a['laatste'] === null) {
+			return -1;
+		}
+		elseif ($b['laatste'] === null) {
+			return 1;
+		}
+		else {
+			$a = $a['aantal'];
+			$b = $b['aantal'];
+		}
+		if ($a === $b) {
 			return 0;
 		}
-		elseif ($a['aantal'] < $b['aantal']) { // < ASC
+		elseif ($a < $b) { // < ASC
 			return -1;
 		}
 		else {
@@ -94,10 +108,12 @@ class ToewijzenModel {
 	}
 	
 	static function sorteerPrognose($a, $b) {
-		if ($a['prognose'] === $b['prognose']) {
+		$a = $a['prognose'];
+		$b = $b['prognose'];
+		if ($a === $b) {
 			return 0;
 		}
-		elseif ($a['prognose'] < $b['prognose']) { // < ASC
+		elseif ($a < $b) { // < ASC
 			return -1;
 		}
 		else {
