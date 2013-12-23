@@ -14,6 +14,7 @@ class Knop{
 	public $type='default';	//type van de knop, default= zonder plaatje, bij de andere opties hoort een plaatje.
 	public $class='knop'; 	//css class
 	public $text=null;		//eventuele tekst naast het plaatje
+	public $title=null;		//hover text
 	public $confirm=false;	//javascript confirm toevoegen?
 							//Kan true zijn of een string, bij true wordt de vraag 'weet u het zeker'
 							//anders de inhoud van de string.
@@ -23,6 +24,9 @@ class Knop{
 	}
 	public function setText($text){
 		$this->text=mb_htmlentities($text);
+	}
+	public function setTitle($text){
+		$this->title=mb_htmlentities($text);
 	}
 	public function setType($type){
 		if(in_array($type, $this->knoptypes)){
@@ -46,10 +50,15 @@ class Knop{
 		$this->confirm=$confirm;
 	}
 	private function getImgTag(){
-		return '<img src="'.CSR_PICS.'knopjes/'.$this->type.'.png" title="'.ucfirst($this->type).'" alt="'.ucfirst($this->type).'" />';
+		$img='<img src="'.CSR_PICS.'knopjes/'.$this->type.'.png"';
+		if($this->title===null){
+			$img.=' title="'.ucfirst($this->type).'"';
+		}
+		$img.='alt="'.ucfirst($this->type).'" />';
+		return $img;
 	}
 	public function getHtml(){
-		$html='<a href="'.$this->url.'" class="'.$this->class.'" ';
+		$html='<a href="'.$this->url.'" title="'.$this->title.'" class="'.$this->class.'" ';
 		if($this->confirm!==false){
 			if($this->confirm===true){
 				$confirm='Weet u het zeker?';
@@ -61,14 +70,16 @@ class Knop{
 		$html.='>';
 		if($this->type=='default'){
 			//knopje zonder plaatje, checken of er wel een tekst is, anders een foutmelding meegeven
-			if($this->text==null){
-				$this->text=='Knop::getHtml(): Geen tekst opgegeven bij een knop zonder plaatje.';
+			if($this->text===null){
+				$this->text='Knop::getHtml(): Geen tekst opgegeven bij een knop zonder plaatje.';
 			}
 		}else{
 			//we gaan een plaatje erbij doen.
 			$html.=$this->getImgTag();
 		}
-		$html.=' '.$this->text;
+		if ($this->text!==null) {
+			$html.=' '.$this->text;
+		}
 		$html.='</a>';
 		return $html;
 	}

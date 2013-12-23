@@ -1,5 +1,13 @@
 {knopConfig prefix=/communicatie/forum/}
-<form id="forum_zoeken" action="/communicatie/forum/zoeken.php" method="post"><fieldset><input type="text" name="zoeken" value="zoeken in forum" onfocus="this.value='';" /></fieldset></form>
+
+<form id="forum_zoeken" action="/communicatie/forum/zoeken.php" method="post">
+	<input type="text" name="zoeken" value="zoeken in forum" onfocus="this.value='';" />
+{if $onderwerp->isModerator()}
+	<div id="btn_mod">
+		<a class="knop"onclick="$('#modereren').slideDown();$('#btn_mod').toggle();">{icon get="bullet_wrench"} Modereren&nbsp;</a>
+	</div>
+{/if}
+</form>
 
 {capture name='navlinks'}
 	<div class="forumNavigatie">
@@ -7,24 +15,31 @@
 		<a href="/communicatie/forum/categorie/{$onderwerp->getCategorieID()}" class="forumGrootlink">
 			{$onderwerp->getCategorie()->getNaam()|escape:'html'}
 		</a><br />
-		<h1>{$onderwerp->getTitel()|escape:'html'|wordwrap:80:"\n":true}</h1>
+		{if $onderwerp->isModerator()}
+		<div style="display:inline-block;margin-right:3px;">
+		{if $onderwerp->isOpen()}
+			<a href="/communicatie/forum/openheid/{$onderwerp->getID()}" class="knop" title="Sluiten (geen reactie mogelijk)"
+			   onmouseover="$(this).children('img').attr('src', 'http://plaetjes.csrdelft.nl/famfamfam/lock.png');"
+			   onmouseout="$(this).children('img').attr('src', 'http://plaetjes.csrdelft.nl/famfamfam/lock_open.png');"
+			   >{icon get="lock_open"}</a>
+		{else}
+			<a href="/communicatie/forum/openheid/{$onderwerp->getID()}" class="knop" title="Openen (reactie mogelijk)"
+			   onmouseover="$(this).children('img').attr('src', 'http://plaetjes.csrdelft.nl/famfamfam/lock_break.png');"
+			   onmouseout="$(this).children('img').attr('src', 'http://plaetjes.csrdelft.nl/famfamfam/lock.png');"
+			   >{icon get="lock"}</a>
+		{/if}
+		</div>
+		{/if}
+		<h1 style="display:inline-block;">{$onderwerp->getTitel()|escape:'html'|wordwrap:80:"\n":true}</h1><br />
 	</div>
 {/capture}
 {$smarty.capture.navlinks}
 {$melding}
 
 {if $onderwerp->isModerator()}
-	<fieldset id="modereren">
-		<legend>Modereren</legend>
-		<div style="float: left; width: 30%;">
-			{knop url="verwijder-onderwerp/`$onderwerp->getID()`" confirm="Weet u zeker dat u dit onderwerp wilt verwijderen?" type=verwijderen text=Verwijderen class=knop}
-			<br /><br />
-			{if $onderwerp->isOpen()}
-				{knop url="openheid/`$onderwerp->getID()`" class=knop type=slotje text="sluiten (geen reactie mogelijk)"}
-			{else}
-				{knop url="openheid/`$onderwerp->getID()`" class=knop type=slotje text="openen (reactie mogelijk)"}
-			{/if}
-			<br /><br />
+	<div id="modereren" style="display:none;border:1px solid #999;margin:10px;padding:10px;">
+		<table style="width:100%;"><tr>
+		<td>
 			{if $onderwerp->isPlakkerig()}
 				{knop url="plakkerigheid/`$onderwerp->getID()`" class=knop type=plakkerig text="verwijder plakkerigheid"}
 			{else}
@@ -36,8 +51,10 @@
 			{else}
 				{knop url="belangrijk/`$onderwerp->getID()`" class=knop type=plakkerig text="maak belangrijk"}
 			{/if}
-		</div>
-		<div style="float: right; width: 60%;">
+			<br /><br />
+			{knop url="verwijder-onderwerp/`$onderwerp->getID()`" confirm="Weet u zeker dat u dit onderwerp wilt verwijderen?" type=verwijderen text=Verwijderen class=knop}
+		</td>
+		<td>
 			<form action="/communicatie/forum/verplaats/{$onderwerp->getID()}/" method="post">
 				<div>Verplaats naar: <br />
 					<select name="newCat">
@@ -54,16 +71,31 @@
 					<input type="submit" value="opslaan" />
 				</div>
 			</form>
+			<br />
 			<form action="/communicatie/forum/onderwerp/hernoem/{$onderwerp->getID()}/" method="post">
-				<div>
-					Titel aanpassen: <br />
+				<div>Titel aanpassen: <br />
 					<input type="text" name="titel" value="{$onderwerp->getTitel()|escape:'html'}" style="width: 250px;" />
 					<input type="submit" value="opslaan" />
 				</div>
 			</form>
-		</div>
-	</fieldset>
+		</td>
+		<td style="width:25px;cursor:pointer;padding:5px;" onclick="$('#btn_mod').toggle();$('#modereren').slideUp();">X</div>
+		</td>
+		</tr></table>
+	</div>
 {/if}{* einde van moderatordeel *}
+
+{capture name='magreageren'}{strip}
+	{if !$onderwerp->magToevoegen()}
+		<div style="font-style:italic;padding:5px;float:left;">
+		{if !$onderwerp->isOpen()}
+			U kunt hier niet meer reageren omdat dit onderwerp gesloten is.
+		{else}
+			U mag in dit deel van het forum niet reageren.
+		{/if}
+		</div>
+	{/if}
+{/strip}{/capture}
 
 <table id="forumtabel">
 	{if $onderwerp->getPaginaCount()>1}
@@ -72,13 +104,18 @@
 		</tr>
 		<tr>
 			<td>&nbsp;</td>
-			<td>
+			<td>{$smarty.capture.magreageren}
 				<div class="forum_paginering">
 					Pagina: {sliding_pager baseurl="/communicatie/forum/onderwerp/`$onderwerp->getID()`/"
 						pagecount=$onderwerp->getPaginaCount() curpage=$onderwerp->getPagina()
 						txt_prev="&lt;" separator="" txt_next="&gt;" show_always=true show_first_last=false show_prev_next=false}
 				</div>
 			</td>
+		</tr>
+	{elseif $smarty.capture.magreageren!==''}
+		<tr>
+			<td>&nbsp;</td>
+			<td class="forumtekst">{$smarty.capture.magreageren}</td>
 		</tr>
 	{/if}
 
@@ -198,13 +235,8 @@
                         </div>
 					</fieldset>
 				</form>
-			{else}
-				{if $onderwerp->isOpen()}
-					U mag in dit deel van het forum niet reageren.
-				{else}
-					U kunt hier niet meer reageren omdat dit onderwerp gesloten is.
-				{/if}
 			{/if}
+			{$smarty.capture.magreageren}
 		</td>
 	</tr>
 </table>

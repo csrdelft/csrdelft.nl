@@ -20,7 +20,7 @@
 	{knop url="http://example.com" type=verwijderen}
  * </pre>
  * @link http://feuten.csrdelft.nl
- * @version  1.2
+ * @version  1.3
  * @author   Jan Pieter Waagmeester <jpwaag@jpwaag.com>
  * @param    array
  * @param    Smarty
@@ -47,6 +47,9 @@ function smarty_function_knop($params, &$smarty){
 		$knop->setText($params['text']);
 	}elseif(isset($params['tekst'])){
 		$knop->setText($params['tekst']);
+	}
+	if(isset($params['title'])){
+		$knop->setTitle($params['title']);
 	}
 	if(isset($params['confirm'])){
 		$knop->setConfirm($params['confirm']);
