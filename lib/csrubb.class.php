@@ -26,20 +26,28 @@ class CsrUBB extends eamBBParser{
 		if (Instelling::get('layout_neuzen') == 'overal' || (Instelling::get('layout_neuzen') == '2013' && LoginLid::instance()->getLid()->getLichting() == 2013)) {
 			$pointer = 0;
 			$counter = 0;
+			$counter2 =0;
 			while ($pointer < strlen($this->HTML)) {
 				$char = substr($this->HTML, $pointer, 1);
 				if ($char == '<') {
-					$counter += 1;;
+					$counter += 1;
 				}
-				elseif ($char == '>') {
+				elseif ($char == '>' ) {
 					$counter -= 1;
 				}
-				elseif ($char == 'o' && $counter == 0) {
+				elseif ($char == '&') {
+					$counter2 = 5;
+				}
+				elseif ($char == ';') {
+					$counter2 = 0;
+				}
+				elseif ($char == 'o' && $counter == 0 && $counter2 <= 0) {
 					$neus = $this->ubb_neuzen($char);
 					$this->HTML = substr($this->HTML, 0, $pointer) . $neus . substr($this->HTML, $pointer+1);
 					$pointer += strlen($neus);
 					continue;
 				}
+				$counter2--;
 				$pointer++;
 			}
 		}
