@@ -134,7 +134,7 @@
 				{if $loginlid->instelling('forum_toonpasfotos')=='nee'} title="Toon pasfoto">&raquo;{else}>{/if}</span>
 			{/if}<br />
 				<div id="p{$bericht.id}" class="forumpasfoto{if $loginlid->instelling('forum_toonpasfotos')=='nee'} verborgen">{else}">{$bericht.uid|csrnaam:'pasfoto'}{/if}</div>
-				{$bericht.datum|reldate}<br />
+				<span class="moment">{$bericht.datum|reldate}</span><br />
 
 				{* knopjes bij elke post *}
 				{* citeerknop enkel als het onderwerp open is en als men mag posten, of als men mod is. *}

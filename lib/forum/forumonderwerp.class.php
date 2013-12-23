@@ -315,7 +315,6 @@ class ForumOnderwerp{
 				if($post['uid']=='0308' AND $post['datum']>'2010-05-19 13:30:00'){
 					$post['tekst']='[nobold]'.$post['tekst'].'[/nobold]';
 				}
-				$post['utc'] = date('Y-m-d\TH:i:s\ZO', strtotime($post['datum'])); //ISO8601
 				$return[]=$post;
 			}
 

@@ -325,7 +325,7 @@ function reldate($datum){
 	}else{
 		$return=date("G:i j-n-Y", $moment);
 	}
-	return '<span class="moment"><abbr class="timeago" title="'.date('Y-m-d\TG:i:s\ZO', $moment).'">'.$return.'</abbr></span>'; //ISO8601
+	return '<abbr class="timeago" title="'.date('Y-m-d\TG:i:s\ZO', $moment).'">'.$return.'</abbr>'; // ISO8601
 }
 
 function internationalizePhonenumber($phonenumber, $prefix='+31'){
