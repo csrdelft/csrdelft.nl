@@ -309,15 +309,15 @@ function reldate($datum){
 	$moment=strtotime($datum);
 	$verschil=$nu-$moment;
 	if($verschil<=60){
-		$return='<em>'.$verschil.' ';
+		$return=$verschil.' ';
 		if($verschil==1) {$return.='seconde';}else{$return.='seconden';}
-		$return.='</em> geleden';
+		$return.=' geleden';
 	}elseif($verschil<=60*60){
-		$return='<em>'.floor($verschil/60);
+		$return=floor($verschil/60);
 		if(floor($verschil/60)==1){	$return.=' minuut'; }else{$return.=' minuten'; }
-		$return.='</em> geleden';
+		$return.=' geleden';
 	}elseif($verschil<=(60*60*4)){
-		$return='<em>'.floor($verschil/(60*60)).' uur</em> geleden';
+		$return=floor($verschil/(60*60)).' uur geleden';
 	}elseif(date('Y-m-d')==date('Y-m-d', $moment)){
 		$return='vandaag om '.date("G:i", $moment);
 	}elseif(date('Y-m-d', $moment)==date('Y-m-d', strtotime('1 day ago'))){
@@ -325,7 +325,7 @@ function reldate($datum){
 	}else{
 		$return=date("G:i j-n-Y", $moment);
 	}
-	return $return;
+	return '<span class="moment"><abbr class="timeago" title="'.date('Y-m-d\TG:i:s\ZO', $moment).'">'.$return.'</abbr></span>'; //ISO8601
 }
 
 function internationalizePhonenumber($phonenumber, $prefix='+31'){

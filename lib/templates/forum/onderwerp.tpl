@@ -134,7 +134,7 @@
 				{if $loginlid->instelling('forum_toonpasfotos')=='nee'} title="Toon pasfoto">&raquo;{else}>{/if}</span>
 			{/if}<br />
 				<div id="p{$bericht.id}" class="forumpasfoto{if $loginlid->instelling('forum_toonpasfotos')=='nee'} verborgen">{else}">{$bericht.uid|csrnaam:'pasfoto'}{/if}</div>
-				<span class="moment"><abbr class="timeago" title="{$bericht.utc}">{$bericht.datum|reldate}</abbr></span><br />
+				{$bericht.datum|reldate}<br />
 
 				{* knopjes bij elke post *}
 				{* citeerknop enkel als het onderwerp open is en als men mag posten, of als men mod is. *}
@@ -173,7 +173,7 @@
 				{if $bericht.bewerkt!=''}
 					<div class="bewerkt clear">
 						<hr />
-						{$bericht.bewerkt}
+						{$bericht.bewerkt|ubb}
 					</div>
 				{/if}
 				{if $bericht.filtered}

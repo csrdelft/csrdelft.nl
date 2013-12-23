@@ -27,7 +27,7 @@ h1{
 p{
 	margin-bottom: 1em;
 }
-
+abbr.timeago:hover {border-bottom:1px dotted grey;}
 
 a{color: #0a338d; text-decoration: none;}
 a:hover{color: #0a338d; text-decoration: underline;}
