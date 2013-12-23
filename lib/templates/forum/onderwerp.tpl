@@ -173,7 +173,7 @@
 				{if $bericht.bewerkt!=''}
 					<div class="bewerkt clear">
 						<hr />
-						{$bericht.bewerkt|ubb}
+						{$bericht.bewerkt}
 					</div>
 				{/if}
 				{if $bericht.filtered}
