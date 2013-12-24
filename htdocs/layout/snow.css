@@ -37,3 +37,7 @@
     -ms-animation: snow 20s linear infinite;
     animation: snow 20s linear infinite;
 }
+
+#header a:hover, #header a:active, #header a.active {
+	text-shadow: 0 0 100px #FFF, 0 0 25px #FFF, 0 0 10px #FFF;
+}
