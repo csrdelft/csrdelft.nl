@@ -63,9 +63,7 @@ span.togglePasfoto:hover, a.postlink:hover{
 	color: black;
 	text-decoration: none;
 }
-abbr.timeago {
-	border: none;
-}
+
 .moment{
 	font-size: 9px;
 	color: #bbb;
