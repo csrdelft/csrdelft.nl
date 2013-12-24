@@ -17,7 +17,7 @@ class Instelling{
 		//	'name' => array('defaul value', 'beschrijving', 'type', type-opties),
 			'algemeen_sneltoetsen' => array('nee', 'Sneltoetsen op de webstek', 'enum', array('ja', 'nee')),
 			'algemeen_bijbel' => array('NBV', 'Bijbelvertaling voor bijbelrooster', 'enum', array('NBV', 'NBG', 'Herziene Statenvertaling', 'Statenvertaling (Jongbloed)', 'Groot Nieuws Bijbel', 'Willibrordvertaling')),
-			'layout' => array('normaal', 'Websteklayout', 'enum', array('normaal', 'owee', 'roze', 'lustrum', 'zonderSpikkels')),
+			'layout' => array('normaal', 'Websteklayout', 'enum', array('normaal', 'owee', 'roze', 'lustrum')),
 			'layout_sneeuw' => array('ja', 'Sneeuw', 'enum', array('ja', 'nee')),
 			'layout_neuzen' => array('2013', 'Neuzen', 'enum', array('overal', '2013', 'nee')),
 			'layout_minion' => array('nee', 'Minion', 'enum', array('ja', 'nee')),

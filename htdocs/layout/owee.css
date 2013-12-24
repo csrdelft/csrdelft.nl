@@ -45,9 +45,6 @@ body{
 }
 
 /**** SUBMENU *****************************************************************/
-#submenu {
-	background: #3baa35; /* url('http://plaetjes.csrdelft.nl/owee/2010/submenubg.png') repeat-x */
-}
 #submenu a.active  {
 	color: #ffffff;
 	font-weight: bold;

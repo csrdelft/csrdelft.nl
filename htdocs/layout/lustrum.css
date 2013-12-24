@@ -6,7 +6,7 @@ body{
 	background-image: none !important;
 }
 
-#mainleft *, #adminding, #adminding *, #footer{
+#mainleft *, #mainright, #adminding, #adminding *, #footer{
 	background-color: #000 !important;
 }
 
