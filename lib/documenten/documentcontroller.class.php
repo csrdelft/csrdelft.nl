@@ -1,17 +1,14 @@
 <?php
-/*
- * class.documentcontroller.php	| 	Jan Pieter Waagmeester (jieter@jpwaag.com)
- *
- *
- */
-
 require_once 'controller.class.php';
 require_once 'documenten/document.class.php';
 require_once 'documenten/categorie.class.php';
-
 require_once 'documenten/documentuploader.class.php';
 require_once 'documenten/documentcontent.class.php';
 
+/**
+ * class.documentcontroller.php	| 	Jan Pieter Waagmeester (jieter@jpwaag.com)
+ *
+ */
 class DocumentController extends Controller{
 
 	public $document;

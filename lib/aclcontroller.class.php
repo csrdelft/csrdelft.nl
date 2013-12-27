@@ -12,6 +12,7 @@ class ACLController extends Controller {
 	/**
 	 * Example:
 	 * array('mijn' => 'P_MAAL_IK', 'beheer' => 'P_MAAL_MOD', 'verwijder' => 'P_MAAL_MOD');
+	 * @see LoginLid->hasPermission()
 	 * @var array
 	 */
 	protected $acl;
@@ -21,7 +22,9 @@ class ACLController extends Controller {
 		$this->acl = $acl;
 	}
 	
-	//call the action with optional (indexed array of) parameter(s)
+	/**
+	 * Call the action with optional (indexed array of) parameter(s)
+	 */
 	protected function performAction($args=null) {
 		if (!$this->hasPermission()) {
 			$this->action = 'geentoegang';

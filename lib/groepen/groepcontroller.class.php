@@ -1,5 +1,8 @@
 <?php
-/*
+require_once 'groepen.class.php';
+require_once 'controller.class.php';
+
+/**
  * class.groepcontroller.php	| 	Jan Pieter Waagmeester (jieter@jpwaag.com)
  *
  * Groepcontroller wordt ge__construct() met één argument, een querystring.
@@ -14,9 +17,6 @@
  * Het gaat hierbij om GET-parameters, POST-dingen worden gewoon in de
  * controller uit de POST-array getrokken...
  */
-require_once 'groepen.class.php';
-require_once 'controller.class.php';
-
 class Groepcontroller extends Controller{
 
 	private $groep;
