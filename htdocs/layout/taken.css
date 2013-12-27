@@ -134,14 +134,11 @@ input.VinkField {
 #taken-menu td {
 	height: 20px;
 }
-#taken-menu td.active {
+#taken-menu td.active, #beheer-taken-menu div.active {
 	font-weight: bold;
 }
 #beheer-taken-menu {
 	display: none;
-}
-#beheer-taken-menu div.active {
-	font-weight: bold;
 }
 
 /* taken tabel */
