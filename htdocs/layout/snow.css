@@ -6,38 +6,10 @@
         http://cssdeck.com/labs/css3-snow
 */
 
-@keyframes snow { 
-    0% { background-position: 0px 0px, 0px 0px, 0px 0px }
-
-    100% { background-position: 500px 1000px, 400px 400px, 300px 300px }
-}
-
-@-moz-keyframes snow { 
-    0% { background-position: 0px 0px, 0px 0px, 0px 0px }
-
-    100% { background-position: 500px 1000px, 400px 400px, 300px 300px }
-}
-
-@-webkit-keyframes snow { 
-    0% { background-position: 0px 0px, 0px 0px, 0px 0px }
-
-    100% { background-position: 500px 1000px, 400px 400px, 300px 300px }
-}
-
-@-ms-keyframes snow { 
-    0% { background-position: 0px 0px, 0px 0px, 0px 0px }
-
-    100% { background-position: 500px 1000px, 400px 400px, 300px 300px }
-}
-
 #header, div.pp_overlay {
     background-image:  url('http://plaetjes.csrdelft.nl/layout/snow/snowh.png'), url('http://plaetjes.csrdelft.nl/layout/snow/snow3q.png'), url('http://plaetjes.csrdelft.nl/layout/snow/snow2l.png') !important;
-    -webkit-animation: snow 20s linear infinite;
-    -moz-animation: snow 20s linear infinite;
-    -ms-animation: snow 20s linear infinite;
-    animation: snow 20s linear infinite;
 }
 
 #header a:hover, #header a:active, #header a.active {
-	text-shadow: 0 0 100px #FFF, 0 0 25px #FFF, 0 0 10px #FFF;
+	text-shadow: 0 0 50px #FFF, 0 0 25px #FFF, 0 0 10px #FFF;
 }

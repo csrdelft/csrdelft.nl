@@ -66,8 +66,13 @@ class csrdelft extends SimpleHTML {
 			$this->addStylesheet('undohtml.css');
 			$this->addStylesheet('default.css');
 			$this->addStylesheet('ubb.css');
-			if(Instelling::get('layout_sneeuw')=='ja'){
-				$this->addStylesheet('snow.css');
+			if(Instelling::get('layout_sneeuw')!='nee'){
+				if(Instelling::get('layout_sneeuw')=='ja'){
+					$this->addStylesheet('snow.anim.css');
+				}
+				else {
+					$this->addStylesheet('snow.css');
+				}
 			}
 
 			$this->addScript('jquery.js');
