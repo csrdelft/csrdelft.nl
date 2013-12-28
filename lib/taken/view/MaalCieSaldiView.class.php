@@ -8,16 +8,27 @@ namespace Taken\MLT;
  */
 class MaalCieSaldiView extends \SimpleHtml {
 	
+	private $_melding;
+	
+	public function __construct($melding=false) {
+		$this->_melding = $melding;
+	}
+	
 	public function getTitel() {
 		return 'MaalCie-saldi uploaden met een CSV-bestand';
 	}
 	
 	public function view() {
-		$smarty= new \Smarty_csr();
-		$smarty->assign('melding', $this->getMelding());
-		$smarty->assign('kop', $this->getTitel());
-		$smarty->display('taken/menu_pagina.tpl');
-		$smarty->display('taken/maalcie_saldi.tpl');
+		if ($this->_melding) {
+			echo '<tr id="taken-melding"><td>'. $this->getMelding() .'</td></tr>';
+		}
+		else {
+			$smarty= new \Smarty_csr();
+			$smarty->assign('melding', $this->getMelding());
+			$smarty->assign('kop', $this->getTitel());
+			$smarty->display('taken/menu_pagina.tpl');
+			$smarty->display('taken/maalcie_saldi.tpl');
+		}
 	}
 }
 

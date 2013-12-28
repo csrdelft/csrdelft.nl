@@ -2,6 +2,7 @@
 namespace Taken\MLT;
 
 require_once 'taken/model/entity/Maaltijd.class.php';
+require_once 'taken/model/entity/ArchiefMaaltijd.class.php';
 require_once 'taken/model/CorveeRepetitiesModel.class.php';
 require_once 'taken/model/AbonnementenModel.class.php';
 
@@ -351,24 +352,27 @@ class MaaltijdenModel {
 		return $result;
 	}
 	
-	public static function archiveerOudeMaaltijden($tot) {
-		if (!is_int($tot)) {
-			throw new \Exception('Invalid timestamp: $tot archiveerOudeMaaltijden()');
+	public static function archiveerOudeMaaltijden($van, $tot) {
+		if (!is_int($van) || !is_int($tot)) {
+			throw new \Exception('Invalid timestamp: archiveerOudeMaaltijden()');
 		}
-		$maaltijden = self::loadMaaltijden('datum < ?', array(date('Y-m-d', $tot)));
+		$errors = array();
+		$maaltijden = self::loadMaaltijden('datum >= ? AND datum <= ?', array(date('Y-m-d', $van), date('Y-m-d', $tot)));
 		foreach ($maaltijden as $maaltijd) {
-			self::verplaatsNaarArchief($maaltijd);
+			try {
+				self::verplaatsNaarArchief($maaltijd);}
+			catch(\Exception $e) {
+				$errors[] = $e;
+				setMelding($e->getMessage(), -1);
+			}
 		}
-		return sizeof($maaltijden);
+		return array($errors, sizeof($maaltijden));
 	}
 	
 	private static function verplaatsNaarArchief(Maaltijd $maaltijd) {
-		$archief = self::newArchiefMaaltijd($maaltijd); // begins transaction
-		self::deleteMaaltijd($maaltijd->getMaaltijdId()); // commits transaction
-		return $archief;
-	}
-	
-	private static function newArchiefMaaltijd(Maaltijd $maaltijd) {
+		if (\Taken\CRV\TakenModel::existMaaltijdCorvee($maaltijd->getMaaltijdId())) {
+			throw new \Exception('Kan niet archiveren vanwege gekoppelde corveetaken: '. $maaltijd->getDatum() . ' ' . $maaltijd->getTitel());
+		}
 		$aanmeldingen = AanmeldingenModel::getAanmeldingenVoorMaaltijd($maaltijd);
 		$archief = new ArchiefMaaltijd(
 			$maaltijd->getMaaltijdId(),
@@ -378,26 +382,38 @@ class MaaltijdenModel {
 			$maaltijd->getPrijs(),
 			$aanmeldingen
 		);
-		$sql = 'INSERT INTO mlt_archief';
-		$sql.= ' (maaltijd_id, titel, datum, tijd, prijs, aanmeldingen)';
-		$sql.= ' VALUES (?, ?, ?, ?, ?, ?)';
-		$values = array(
-			$archief->getMaaltijdId(),
-			$archief->getTitel(),
-			$archief->getDatum(),
-			$archief->getTijd(),
-			$archief->getPrijs(),
-			$archief->getAanmeldingen()
-		);
-		$db = \CsrPdo::instance();
-		$db->beginTransaction();
-		$query = $db->prepare($sql, $values);
-		$query->execute($values);
-		if ($query->rowCount() !== 1) {
-			$db->rollback();
-			throw new \Exception('New archief-maaltijd faalt: $query->rowCount() ='. $query->rowCount());
-		}
+		self::deleteMaaltijd($maaltijd->getMaaltijdId());
+		self::newArchiefMaaltijd($archief); // alleen als de maaltijd definitief verwijderd is
 		return $archief;
+	}
+	
+	private static function newArchiefMaaltijd(ArchiefMaaltijd $archief) {
+		$db = \CsrPdo::instance();
+		try {
+			$db->beginTransaction();
+			$sql = 'INSERT INTO mlt_archief';
+			$sql.= ' (maaltijd_id, titel, datum, tijd, prijs, aanmeldingen)';
+			$sql.= ' VALUES (?, ?, ?, ?, ?, ?)';
+			$values = array(
+				$archief->getMaaltijdId(),
+				$archief->getTitel(),
+				$archief->getDatum(),
+				$archief->getTijd(),
+				$archief->getPrijs(),
+				$archief->getAanmeldingen()
+			);
+			$query = $db->prepare($sql, $values);
+			$query->execute($values);
+			if ($query->rowCount() !== 1) {
+				$db->rollback();
+				throw new \Exception('New archief-maaltijd faalt: $query->rowCount() ='. $query->rowCount());
+			}
+			$db->commit();
+		}
+		catch (\Exception $e) {
+			$db->rollback();
+			throw $e; // rethrow to controller
+		}
 	}
 	
 	// Repetitie-Maaltijden ############################################################

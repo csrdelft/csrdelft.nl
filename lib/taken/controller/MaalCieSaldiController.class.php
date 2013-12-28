@@ -3,6 +3,7 @@ namespace Taken\MLT;
 
 require_once 'lid/saldi.class.php';
 require_once 'taken/view/MaalCieSaldiView.class.php';
+require_once 'taken/view/forms/BoekjaarSluitenFormView.class.php';
 
 /**
  * MaalCieSaldiController.class.php	| 	P.W.G. Brussee (brussee@live.nl)
@@ -19,7 +20,8 @@ class MaalCieSaldiController extends \ACLController {
 		}
 		else {
 			$this->acl = array(
-				'upload' => 'P_MAAL_SALDI'
+				'upload' => 'P_MAAL_SALDI',
+				'sluitboekjaar' => 'P_MAAL_SALDI'
 			);
 		}
 		$this->action = 'beheer';
@@ -40,6 +42,21 @@ class MaalCieSaldiController extends \ACLController {
 		$this->action_beheer();
 		$melding_level = \Saldi::putMaalcieCsv();
 		$this->content->setMelding($melding_level[0], $melding_level[1]);
+	}
+	
+	public function action_sluitboekjaar() {
+		$form = new BoekjaarSluitenFormView(date('Y-m-d', strtotime('-1 year')), date('Y-m-d')); // fetches POST values itself
+		if ($form->validate()) {
+			$values = $form->getValues();
+			$errors_aantal = MaaltijdenModel::archiveerOudeMaaltijden(strtotime($values['begindatum']), strtotime($values['einddatum']));
+			$this->content = new MaalCieSaldiView(true);
+			if (sizeof($errors_aantal[0]) === 0) {
+				$this->content->setMelding('Boekjaar succesvol gesloten', 1);
+			}
+		}
+		else {
+			$this->content = $form;
+		}
 	}
 }
 

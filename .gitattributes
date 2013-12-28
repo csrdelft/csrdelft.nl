@@ -3177,6 +3177,7 @@ lib/taken/view/MijnCorveeView.class.php -text
 lib/taken/view/MijnMaaltijdenView.class.php -text
 lib/taken/view/MijnVoorkeurenView.class.php -text
 lib/taken/view/forms/AanmeldingFormView.class.php -text
+lib/taken/view/forms/BoekjaarSluitenFormView.class.php -text
 lib/taken/view/forms/CorveeRepetitieFormView.class.php -text
 lib/taken/view/forms/FunctieFormView.class.php -text
 lib/taken/view/forms/InstellingFormView.class.php -text
@@ -3377,4 +3378,5 @@ sql/3496_taken.sql -text
 sql/3560_crv_functies.sql -text
 sql/3679_wanneer_aangemeld.sql -text
 sql/3682_drop_functie-omschrijving.sql -text
-sql/3683_wanneer_ingeschakeld.txt -text
+sql/3683_wanneer_ingeschakeld.sql -text
+sql/3731_mlt_archief.sql -text
