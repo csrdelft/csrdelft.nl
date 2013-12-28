@@ -7,11 +7,14 @@
 {if $loginlid->hasPermission('P_MAAL_MOD')}
 	<h1>Beheer</h1>
 	{assign var="link" value="maaltijdenbeheer"}
-	<div class="item{if !$prullenbak and $globals.taken_module === $globals.taken_mainmenu|cat:$link} active{/if}">»
+	<div class="item{if !$prullenbak and !$archief and $globals.taken_module === $globals.taken_mainmenu|cat:$link} active{/if}">»
 		<a href="/{$link}" title="Beheer maaltijden">Maaltijden</a>
 	</div>
 	<div class="item{if $prullenbak and $globals.taken_module === $globals.taken_mainmenu|cat:$link} active{/if}">»
 		<a href="/{$link}/prullenbak" title="Open prullenbak">Prullenbak</a>
+	</div>
+	<div class="item{if $archief and $globals.taken_module === $globals.taken_mainmenu|cat:$link} active{/if}">»
+		<a href="/{$link}/archief" title="Open archief">Archief</a>
 	</div>
 	{assign var="link" value="maaltijdenrepetities"}
 	<div class="item{if $globals.taken_module === $globals.taken_mainmenu|cat:$link} active{/if}">»

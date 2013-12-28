@@ -9,6 +9,13 @@ Onderstaande tabel toont alle maaltijden die in de prullenbak zitten.
 <p>
 N.B. Voor het definitief verwijderen van een maaltijd moeten eerst de gekoppelde corveetaken definitief zijn verwijderd.
 </p>
+{elseif $archief}
+<p>
+Onderstaande tabel toont alle maaltijden die in het archief zitten.
+</p>
+<p>
+N.B. Het archief is alleen-lezen.
+</p>
 {else}
 <p>
 Op deze pagina kunt u de maaltijden aanmaken, wijzigen en verwijderen.
@@ -32,13 +39,17 @@ Onderstaande tabel toont alle maaltijden die niet verwijderd zijn.
 {foreach name=tabel from=$maaltijden item=maaltijd}
 	{if $smarty.foreach.tabel.index % 25 === 0}
 		{if !$smarty.foreach.tabel.first}</tbody>{/if}
-		{include file='taken/maaltijd/beheer_maaltijd_head.tpl' prullenbak=$prullenbak}
+		{include file='taken/maaltijd/beheer_maaltijd_head.tpl'}
 	<tbody>
 	{/if}
-	{include file='taken/maaltijd/beheer_maaltijd_lijst.tpl' maaltijd=$maaltijd}
+	{if $archief}
+		{include file='taken/maaltijd/beheer_maaltijd_archief.tpl'}
+	{else}
+		{include file='taken/maaltijd/beheer_maaltijd_lijst.tpl'}
+	{/if}
 {/foreach}
 {if !$maaltijden}
-	{include file='taken/maaltijd/beheer_maaltijd_head.tpl' prullenbak=$prullenbak}
+	{include file='taken/maaltijd/beheer_maaltijd_head.tpl'}
 	<tbody>
 {/if}
 	</tbody>

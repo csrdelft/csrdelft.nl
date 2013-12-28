@@ -32,7 +32,7 @@ class ArchiefMaaltijd implements \Agendeerbaar {
 	private $prijs; # float
 	private $aanmeldingen; # text
 	
-	public function __construct($mid=0, $titel=null, $datum=null, $tijd=null, $prijs=null, array $aanmeldingen=null) {
+	public function __construct($mid=0, $titel=null, $datum=null, $tijd=null, $prijs=null, $aanmeldingen=array()) {
 		$this->maaltijd_id = (int) $mid;
 		$this->titel = $titel;
 		$this->datum = $datum;
@@ -71,6 +71,31 @@ class ArchiefMaaltijd implements \Agendeerbaar {
 	}
 	public function getAantalAanmeldingen() {
 		return substr_count($this->aanmeldingen, ',');
+	}
+	public function getAanmeldingenFormatted() {
+		$aanmeldingen = explode(',', $this->aanmeldingen);
+		$string = '<ul>';
+		foreach ($aanmeldingen as $aanmelding) {
+			if ($aanmelding === '') {
+				continue;
+			}
+			$uid = explode('_', $aanmelding);
+			if ($uid[0] === $uid[1] || $uid[1] === 'abo') {
+				$uid[1] = '';
+			}
+			else {
+				$lid = \LidCache::getLid($uid[1]);
+				if ($lid instanceof \Lid) {
+					$uid[1] = $lid->getNaamLink($GLOBALS['weergave_ledennamen_beheer'], 'link');
+				}
+			}
+			$lid = \LidCache::getLid($uid[0]);
+			if ($lid instanceof \Lid) {
+				$uid[0] = $lid->getNaamLink($GLOBALS['weergave_ledennamen_beheer'], 'link');
+			}
+			$string .= '<li>'. $uid[0] .' '. $uid[1] .'</li>';
+		}
+		return $string .'</ul>';
 	}
 	
 	// Agendeerbaar ############################################################

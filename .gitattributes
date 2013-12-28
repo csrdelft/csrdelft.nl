@@ -3287,6 +3287,7 @@ lib/templates/taken/instelling/beheer_instellingen.tpl -text
 lib/templates/taken/maalcie_saldi.tpl -text
 lib/templates/taken/maaltijd-repetitie/beheer_maaltijd_repetitie_lijst.tpl -text
 lib/templates/taken/maaltijd-repetitie/beheer_maaltijd_repetities.tpl -text
+lib/templates/taken/maaltijd/beheer_maaltijd_archief.tpl -text
 lib/templates/taken/maaltijd/beheer_maaltijd_head.tpl -text
 lib/templates/taken/maaltijd/beheer_maaltijd_lijst.tpl -text
 lib/templates/taken/maaltijd/beheer_maaltijden.tpl -text

@@ -319,7 +319,7 @@ class MaaltijdenModel {
 	 * @param timestamp $tot
 	 * @return ArchiefMaaltijd[] (implements Agendeerbaar)
 	 */
-	public static function getArchiefMaaltijden($van, $tot) {
+	public static function getArchiefMaaltijden($van=null, $tot=null) {
 		if ($van === null) { // RSS
 			$van = strtotime('-1 year');
 		}
@@ -341,7 +341,7 @@ class MaaltijdenModel {
 		if ($where !== null) {
 			$sql.= ' WHERE '. $where;
 		}
-		$sql.= ' ORDER BY datum ASC, tijd ASC';
+		$sql.= ' ORDER BY datum DESC, tijd DESC';
 		if (is_int($limit) && $limit > 0) {
 			$sql.= ' LIMIT '. $limit;
 		}

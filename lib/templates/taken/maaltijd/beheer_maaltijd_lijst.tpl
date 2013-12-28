@@ -20,9 +20,7 @@
 		<a href="/corveebeheer/maaltijd/{$maaltijd->getMaaltijdId()}" title="Beheer maaltijdcorvee" class="knop get">{icon get="chart_organisation"}</a>
 	</td>
 	<td>{$maaltijd->getDatum()|date_format:"%a %e %b"}</td>
-	<td>{$maaltijd->getTitel()}
-		
-	</td>
+	<td>{$maaltijd->getTitel()}</td>
 	<td>
 		<a href="{$globals.taken_module}/fiscaal/{$maaltijd->getMaaltijdId()}" title="Toon fiscale maaltijdlijst&#013;Maaltijdprijs: &euro; {$maaltijd->getPrijs()|string_format:"%.2f"}" class="knop">{icon get="money_euro"}</a>
 		<a href="/maaltijdenlijst/{$maaltijd->getMaaltijdId()}" title="Toon maaltijdlijst" class="knop" style="margin-right:10px;">{icon get="table"}</a>

@@ -22,6 +22,7 @@ class BeheerMaaltijdenController extends \ACLController {
 				'beheer' => 'P_MAAL_MOD',
 				'prullenbak' => 'P_MAAL_MOD',
 				//'leegmaken' => 'P_MAAL_MOD',
+				'archief' => 'P_MAAL_MOD',
 				'fiscaal' => 'P_MAAL_MOD'
 			);
 		}
@@ -54,7 +55,7 @@ class BeheerMaaltijdenController extends \ACLController {
 		if (is_int($mid) && $mid > 0) {
 			$this->action_bewerk($mid);
 		}
-		$this->content = new BeheerMaaltijdenView(MaaltijdenModel::getAlleMaaltijden(), false, MaaltijdRepetitiesModel::getAlleRepetities(), $this->getContent());
+		$this->content = new BeheerMaaltijdenView(MaaltijdenModel::getAlleMaaltijden(), false, false, MaaltijdRepetitiesModel::getAlleRepetities(), $this->getContent());
 		$this->content = new \csrdelft($this->getContent());
 		$this->content->addStylesheet('js/autocomplete/jquery.autocomplete.css');
 		$this->content->addStylesheet('taken.css');
@@ -65,6 +66,13 @@ class BeheerMaaltijdenController extends \ACLController {
 	
 	public function action_prullenbak() {
 		$this->content = new BeheerMaaltijdenView(MaaltijdenModel::getVerwijderdeMaaltijden(), true);
+		$this->content = new \csrdelft($this->getContent());
+		$this->content->addStylesheet('taken.css');
+		$this->content->addScript('taken.js');
+	}
+	
+	public function action_archief() {
+		$this->content = new BeheerMaaltijdenView(MaaltijdenModel::getArchiefMaaltijden(), false, true);
 		$this->content = new \csrdelft($this->getContent());
 		$this->content->addStylesheet('taken.css');
 		$this->content->addScript('taken.js');
