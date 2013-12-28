@@ -1,4 +1,7 @@
 <?php
+
+require_once 'mededelingencontent.class.php';
+
 class MededelingTopDrieOverzichtContent extends SimpleHTML {
 	
 	public function __construct(){
