@@ -38,6 +38,36 @@ class ConversieModel {
 		}
 	}
 	
+	public static function archiveer() {
+		$rows = self::queryDb('SELECT id, datum, type, tekst FROM maaltijd');
+		foreach ($rows as $row) {
+			$datum = intval($row['datum']);
+			if ($datum >= strtotime('2013-12-03')) {
+				continue;
+			}
+			if ($row['type'] === 'normaal') {
+				$mid = (int) $row['id'];
+				$titel = $row['tekst'];
+				$maaltijd = new Maaltijd($mid, null, $titel, 0, date('Y-m-d', $datum), date('H:i', $datum));
+				$aanmeldingen = array();
+				$rows2 = self::queryDb('SELECT maalid, uid, door, gasten FROM maaltijdgesloten WHERE maalid="'.$mid.'"');
+				foreach ($rows2 as $row2) {
+					$aanmeldingen[] = new MaaltijdAanmelding($mid, $row2['uid'], (int) $row2['gasten'], '', null, $row2['door'], '');
+				}
+				$archief = new ArchiefMaaltijd(
+					$maaltijd->getMaaltijdId(),
+					$maaltijd->getTitel(),
+					$maaltijd->getDatum(),
+					$maaltijd->getTijd(),
+					$maaltijd->getPrijs(),
+					$aanmeldingen
+				);
+				self::archiefMaaltijd($archief);
+				echo '<br />' . date('H:i:s') . ' converteren: maaltijd (id: '. $mid .')';
+			}
+		}
+	}
+	
 	public static function converteer() {
 		
 		echo '<br />' . date('H:i:s') . ' converteren: maaltijdcorveeinstelligen => CorveeFunctie[]';
@@ -411,6 +441,35 @@ class ConversieModel {
 		$maaltijd = new Maaltijd($mid, $mrid, $titel, $limiet, $datum, $tijd, $prijs, false, null, false, $filter);
 		$maaltijd->setAantalAanmeldingen(0);
 		return $maaltijd;
+	}
+	
+	private static function archiefMaaltijd(ArchiefMaaltijd $archief) {
+		$db = \CsrPdo::instance();
+		try {
+			$db->beginTransaction();
+			$sql = 'INSERT INTO mlt_archief';
+			$sql.= ' (maaltijd_id, titel, datum, tijd, prijs, aanmeldingen)';
+			$sql.= ' VALUES (?, ?, ?, ?, ?, ?)';
+			$values = array(
+				$archief->getMaaltijdId(),
+				$archief->getTitel(),
+				$archief->getDatum(),
+				$archief->getTijd(),
+				$archief->getPrijs(),
+				$archief->getAanmeldingen()
+			);
+			$query = $db->prepare($sql, $values);
+			$query->execute($values);
+			if ($query->rowCount() !== 1) {
+				$db->rollback();
+				throw new \Exception('New archief-maaltijd faalt: $query->rowCount() ='. $query->rowCount());
+			}
+			$db->commit();
+		}
+		catch (\Exception $e) {
+			$db->rollback();
+			throw $e; // rethrow to controller
+		}
 	}
 }
 
