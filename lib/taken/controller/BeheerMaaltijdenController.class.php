@@ -72,7 +72,7 @@ class BeheerMaaltijdenController extends \ACLController {
 	}
 	
 	public function action_archief() {
-		$this->content = new BeheerMaaltijdenView(MaaltijdenModel::getArchiefMaaltijden(), false, true);
+		$this->content = new BeheerMaaltijdenView(MaaltijdenModel::getArchiefMaaltijdenTussen(), false, true);
 		$this->content = new \csrdelft($this->getContent());
 		$this->content->addStylesheet('taken.css');
 		$this->content->addScript('taken.js');

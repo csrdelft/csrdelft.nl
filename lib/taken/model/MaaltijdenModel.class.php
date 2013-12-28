@@ -250,6 +250,9 @@ class MaaltijdenModel {
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		$result = $query->fetchAll(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, '\Taken\MLT\Maaltijd');
+		if ($query->rowCount() > 0) {
+			self::existArchiefMaaltijden($result);
+		}
 		return $result;
 	}
 	
@@ -312,6 +315,21 @@ class MaaltijdenModel {
 	
 	// Archief-Maaltijden ############################################################
 	
+	public static function existArchiefMaaltijden(array $maaltijden) {
+		$where = '(maaltijd_id=?';
+		for ($i = sizeof($maaltijden); $i > 1; $i--) {
+			$where.= ' OR maaltijd_id=?';
+		}
+		$where.= ')';
+		foreach ($maaltijden as $maaltijd) {
+			$maaltijdenById[$maaltijd->getMaaltijdId()] = $maaltijd;
+		}
+		$archief = self::loadArchiefMaaltijden($where, array_keys($maaltijdenById));
+		foreach ($archief as $maaltijd) {
+			$maaltijdenById[$maaltijd->getMaaltijdId()]->setArchief($maaltijd);
+		}
+	}
+	
 	/**
 	 * Haalt de archiefmaaltijden op tussen de opgegeven data.
 	 * 
@@ -319,7 +337,7 @@ class MaaltijdenModel {
 	 * @param timestamp $tot
 	 * @return ArchiefMaaltijd[] (implements Agendeerbaar)
 	 */
-	public static function getArchiefMaaltijden($van=null, $tot=null) {
+	public static function getArchiefMaaltijdenTussen($van=null, $tot=null) {
 		if ($van === null) { // RSS
 			$van = strtotime('-1 year');
 		}
@@ -360,7 +378,11 @@ class MaaltijdenModel {
 		$maaltijden = self::loadMaaltijden('verwijderd = false AND datum >= ? AND datum <= ?', array(date('Y-m-d', $van), date('Y-m-d', $tot)));
 		foreach ($maaltijden as $maaltijd) {
 			try {
-				self::verplaatsNaarArchief($maaltijd);}
+				self::verplaatsNaarArchief($maaltijd);
+				if (\Taken\CRV\TakenModel::existMaaltijdCorvee($maaltijd->getMaaltijdId())) {
+					setMelding($maaltijd->getDatum() . ' ' . $maaltijd->getTitel() .' heeft nog gekoppelde corveetaken!', 2);
+				}
+			}
 			catch(\Exception $e) {
 				$errors[] = $e;
 				setMelding($e->getMessage(), -1);
@@ -370,19 +392,15 @@ class MaaltijdenModel {
 	}
 	
 	private static function verplaatsNaarArchief(Maaltijd $maaltijd) {
-		if (\Taken\CRV\TakenModel::existMaaltijdCorvee($maaltijd->getMaaltijdId())) {
-			throw new \Exception('Kan niet archiveren vanwege gekoppelde corveetaken: '. $maaltijd->getDatum() . ' ' . $maaltijd->getTitel());
-		}
-		$aanmeldingen = AanmeldingenModel::getAanmeldingenVoorMaaltijd($maaltijd);
 		$archief = new ArchiefMaaltijd(
 			$maaltijd->getMaaltijdId(),
 			$maaltijd->getTitel(),
 			$maaltijd->getDatum(),
 			$maaltijd->getTijd(),
 			$maaltijd->getPrijs(),
-			$aanmeldingen
+			AanmeldingenModel::getAanmeldingenVoorMaaltijd($maaltijd)
 		);
-		self::deleteMaaltijd($maaltijd->getMaaltijdId());
+		self::verwijderMaaltijd($maaltijd->getMaaltijdId());
 		self::newArchiefMaaltijd($archief); // alleen als de maaltijd definitief verwijderd is
 		return $archief;
 	}

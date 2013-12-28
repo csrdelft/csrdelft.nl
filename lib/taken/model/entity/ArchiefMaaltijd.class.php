@@ -40,7 +40,12 @@ class ArchiefMaaltijd implements \Agendeerbaar {
 		$this->prijs = $prijs;
 		$this->aanmeldingen = '';
 		foreach ($aanmeldingen as $aanmelding) {
-			$this->aanmeldingen .= $aanmelding->getLidId();
+			if ($aanmelding->getLidId() === '') {
+				$this->aanmeldingen .= 'gast';
+			}
+			else {
+				$this->aanmeldingen .= $aanmelding->getLidId();
+			}
 			if ($aanmelding->getDoorAbonnement()) {
 				$this->aanmeldingen .= '_abo';
 			}
@@ -67,7 +72,10 @@ class ArchiefMaaltijd implements \Agendeerbaar {
 		return (float) $this->prijs;
 	}
 	public function getAanmeldingen() {
-		$result;
+		return $this->aanmeldingen;
+	}
+	public function getAanmeldingenArray() {
+		$result = array();
 		$aanmeldingen = explode(',', $this->aanmeldingen);
 		foreach ($aanmeldingen as $id => $aanmelding) {
 			if ($aanmelding !== '') {

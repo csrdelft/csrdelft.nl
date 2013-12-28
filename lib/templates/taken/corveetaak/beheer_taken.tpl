@@ -6,13 +6,20 @@
 {else}
 	<p>Op deze pagina kunt u de corveetaken aanmaken, wijzigen en verwijderen{if isset($maaltijd)}
 		voor de
-		{if $maaltijd->getIsVerwijderd()}
+		{if $maaltijd->getArchief() !== null}
+			<b>gearchiveerde</b>
+		{elseif $maaltijd->getIsVerwijderd()}
 			<b>verwijderde</b>
 		{/if}
-			maaltijd:<br /><b>{$maaltijd->getTitel()} op {$maaltijd->getDatum()|date_format:"%A %e %B"} om {$maaltijd->getTijd()|date_format:"%H:%M"}</b>
-		{if !$maaltijd->getIsVerwijderd()}
+			maaltijd:<br />
+		{if $maaltijd->getArchief() !== null}
+			{icon get="compress" title="Maaltijd is gearchiveerd"}
+		{elseif $maaltijd->getIsVerwijderd()}
+			{icon get="bin" title="Maaltijd is verwijderd"}
+		{else}
 			<a href="/maaltijdenbeheer/beheer/{$maaltijd->getMaaltijdId()}" title="Wijzig gekoppelde maaltijd" class="knop get">{icon get="cup_edit"}</a>
 		{/if}
+			<b>{$maaltijd->getTitel()} op {$maaltijd->getDatum()|date_format:"%A %e %B"} om {$maaltijd->getTijd()|date_format:"%H:%M"}</b>
 		</p><p>Onderstaande tabel toont <i>alleen</i> de corveetaken voor deze maaltijd die <i>niet verwijderd</i> zijn.
 	{else}.
 		Onderstaande tabel toont alle corveetaken die niet verwijderd zijn.

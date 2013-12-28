@@ -46,6 +46,7 @@ class Maaltijd implements \Agendeerbaar {
 	private $aanmeld_filter; # string 255
 	
 	private $aantal_aanmeldingen;
+	private $archief;
 	
 	public function __construct($mid=0, $mrid=null, $titel='', $limiet=null, $datum=null, $tijd=null, $prijs=null, $gesloten=false, $wanneer_gesloten=null, $verwijderd=false, $filter='') {
 		$this->maaltijd_id = (int) $mid;
@@ -140,6 +141,9 @@ class Maaltijd implements \Agendeerbaar {
 	public function getBudget() {
 		return ((float)($this->getAantalAanmeldingen() + $this->getMarge())) * ($this->getPrijs() - floatval($GLOBALS['maaltijd_budget_maalcie']));
 	}
+	public function getArchief() {
+		return $this->archief;
+	}
 	
 	public function setTitel($titel) {
 		if (!is_string($titel)) {
@@ -200,6 +204,9 @@ class Maaltijd implements \Agendeerbaar {
 			throw new \Exception('Geen integer: aantal aanmeldingen');
 		}
 		$this->aantal_aanmeldingen = $int;
+	}
+	public function setArchief(ArchiefMaaltijd $archief) {
+		$this->archief = $archief;
 	}
 	
 	// Agendeerbaar ############################################################

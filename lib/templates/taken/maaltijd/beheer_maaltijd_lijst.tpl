@@ -7,7 +7,9 @@
 	{if !$prullenbak} taak-maaltijd-oud{/if} taak-oud"
 {/if}>
 	<td>
-{if $maaltijd->getIsVerwijderd()}
+{if $maaltijd->getArchief() !== null}
+		<div style="display: inline-block; width: 28px;">{icon get="compress" title="Maaltijd is gearchiveerd"}</div>
+{elseif $maaltijd->getIsVerwijderd()}
 		<a href="{$globals.taken_module}/herstel/{$maaltijd->getMaaltijdId()}" title="Maaltijd herstellen" class="knop post">{icon get="arrow_undo"}</a>
 {else}
 		<a href="{$globals.taken_module}/bewerk/{$maaltijd->getMaaltijdId()}" title="Maaltijd wijzigen" class="knop post popup">{icon get="pencil"}</a>
@@ -27,7 +29,7 @@
 	</td>
 	<td style="text-align: center;">
 		{$maaltijd->getAantalAanmeldingen()} ({$maaltijd->getAanmeldLimiet()})
-{if !$maaltijd->getIsVerwijderd()}
+{if !$maaltijd->getIsVerwijderd() and $maaltijd->getArchief() === null}
 		<div style="float: right;">
 			<a href="{$globals.taken_module}/anderaanmelden/{$maaltijd->getMaaltijdId()}" title="Aanmelding toevoegen" class="knop post popup">{icon get="user_add"}</a>
 			<a href="{$globals.taken_module}/anderafmelden/{$maaltijd->getMaaltijdId()}" title="Aanmelding verwijderen" class="knop post popup">{icon get="user_delete"}</a>
@@ -39,7 +41,7 @@
 		</div>
 {/if}
 	</td>
-{if $maaltijd->getIsVerwijderd()}
+{if $maaltijd->getIsVerwijderd() or $maaltijd->getArchief() !== null}
 	{if $maaltijd->getIsGesloten()}
 	<td class="maaltijd-gesloten">Gesloten
 		<div style="float: right;">
