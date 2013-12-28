@@ -357,7 +357,7 @@ class MaaltijdenModel {
 			throw new \Exception('Invalid timestamp: archiveerOudeMaaltijden()');
 		}
 		$errors = array();
-		$maaltijden = self::loadMaaltijden('datum >= ? AND datum <= ?', array(date('Y-m-d', $van), date('Y-m-d', $tot)));
+		$maaltijden = self::loadMaaltijden('verwijderd = false AND datum >= ? AND datum <= ?', array(date('Y-m-d', $van), date('Y-m-d', $tot)));
 		foreach ($maaltijden as $maaltijd) {
 			try {
 				self::verplaatsNaarArchief($maaltijd);}

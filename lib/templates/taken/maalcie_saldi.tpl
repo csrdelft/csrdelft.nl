@@ -5,5 +5,5 @@
 </form>
 <br />
 <h2>Boekjaar sluiten</h2>
-<p>Alle maaltijden zullen naar het archief worden verplaatst.</p>
+<p>De maaltijden van het boekjaar zullen naar het archief worden verplaatst.</p>
 <a href="{$globals.taken_module}/sluitboekjaar" title="Boekjaar afsluiten" class="knop post popup">{icon get="door_in"} Sluit boekjaar</a>

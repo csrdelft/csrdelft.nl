@@ -51,7 +51,7 @@ class MaalCieSaldiController extends \ACLController {
 			$errors_aantal = MaaltijdenModel::archiveerOudeMaaltijden(strtotime($values['begindatum']), strtotime($values['einddatum']));
 			$this->content = new MaalCieSaldiView(true);
 			if (sizeof($errors_aantal[0]) === 0) {
-				$this->content->setMelding('Boekjaar succesvol gesloten', 1);
+				$this->content->setMelding('Boekjaar succesvol gesloten: '. $errors_aantal[1] .' maaltijden naar het archief verplaatst.', 1);
 			}
 		}
 		else {
