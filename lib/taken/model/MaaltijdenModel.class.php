@@ -339,13 +339,13 @@ class MaaltijdenModel {
 	 */
 	public static function getArchiefMaaltijdenTussen($van=null, $tot=null) {
 		if ($van === null) { // RSS
-			$van = strtotime('-1 year');
+			$van = 0;
 		}
 		elseif (!is_int($van)) {
 			throw new \Exception('Invalid timestamp: $van getArchiefMaaltijden()');
 		}
 		if ($tot === null) { // RSS
-			$tot = strtotime('+1 year');
+			$tot = time();
 		}
 		elseif (!is_int($tot)) {
 			throw new \Exception('Invalid timestamp: $tot getArchiefMaaltijden()');

@@ -4,7 +4,7 @@
 {strip}
 <tr id="maaltijd-row-{$maaltijd->getMaaltijdId()}">
 	<td>{$maaltijd->getDatum()|date_format:"%d-%m-%Y"} {$maaltijd->getTijd()|date_format:"%H:%M"}</td>
-	<td>{$maaltijd->getTitel()}</td>
+	<td>{$maaltijd->getTitel()} <div style="float: right; color: grey;">{$maaltijd->getMaaltijdId()}</div></td>
 	<td>&euro; {$maaltijd->getPrijs()|string_format:"%.2f"}</td>
 	<td>
 		<div class="aanmeldingen-{$maaltijd->getMaaltijdId()}" style="display: inline-block;">

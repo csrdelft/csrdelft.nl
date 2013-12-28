@@ -23,7 +23,8 @@ class BeheerMaaltijdenController extends \ACLController {
 				'prullenbak' => 'P_MAAL_MOD',
 				//'leegmaken' => 'P_MAAL_MOD',
 				'archief' => 'P_MAAL_MOD',
-				'fiscaal' => 'P_MAAL_MOD'
+				'fiscaal' => 'P_MAAL_MOD',
+				'converteer' => 'P_ADMIN'
 			);
 		}
 		else {
@@ -49,6 +50,12 @@ class BeheerMaaltijdenController extends \ACLController {
 			$mid = intval($this->getParam(2));
 		}
 		$this->performAction($mid);
+	}
+	
+	public function action_converteer() {
+		require_once 'taken/model/ConversieModel.class.php';
+		ConversieModel::archiveer();
+		exit();
 	}
 	
 	public function action_beheer($mid=null) {

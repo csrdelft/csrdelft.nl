@@ -51,14 +51,50 @@ class ConversieModel {
 					$datum = intval($maaltijd['datum']);
 					$maaltijd = new Maaltijd($mid, null, $maaltijd['tekst'], 0, date('Y-m-d', $datum), date('H:i', $datum));
 					$maaltijdenByMid[$mid] = $maaltijd;
+					$aanmeldingenByMid[$mid] = array();
 				}
 				else {
 					$maaltijd = new Maaltijd($mid, null, 'null', 0, date('Y-m-d', 0), date('H:i', 0));
 					$maaltijdenByMid[$mid] = $maaltijd;
+					$aanmeldingenByMid[$mid] = array();
 				}
 			}
-			$aanmeldingenByMid[$mid][] = new MaaltijdAanmelding($mid, $row['uid'], (int) $row['gasten'], '', null, $row['door'], '');
-			
+			$uid = $row['uid'];
+			if (array_key_exists($uid, $aanmeldingenByMid[$mid])) {
+				echo '<br />' . date('H:i:s') . ' ERROR: maaltijd-aanmelding (id: '. $mid .')';
+			}
+			$door = $row['door'];
+			if ($door === '') {
+				$door = 'abo';
+			}
+			$aanmeldingenByMid[$mid][$uid] = new MaaltijdAanmelding($mid, $uid, (int) $row['gasten'], '', null, $door, '');
+		}
+		$rows = self::queryDb('SELECT maalid, uid, status, door, gasten FROM maaltijdaanmelding');
+		foreach ($rows as $row) {
+			$mid = (int) $row['maalid'];
+			if (!array_key_exists($mid, $maaltijdenByMid)) {
+				$maaltijd = self::queryDb('SELECT id, datum, type, tekst FROM maaltijd WHERE id="'.$mid.'"');
+				if (array_key_exists(0, $maaltijd)) {
+					$maaltijd = $maaltijd[0];
+					$datum = intval($maaltijd['datum']);
+					$maaltijd = new Maaltijd($mid, null, $maaltijd['tekst'], 0, date('Y-m-d', $datum), date('H:i', $datum));
+					$maaltijdenByMid[$mid] = $maaltijd;
+					$aanmeldingenByMid[$mid] = array();
+				}
+				else {
+					$maaltijd = new Maaltijd($mid, null, 'null', 0, date('Y-m-d', 0), date('H:i', 0));
+					$maaltijdenByMid[$mid] = $maaltijd;
+					$aanmeldingenByMid[$mid] = array();
+				}
+			}
+			if ($row['status'] !== 'AAN') {
+				continue;
+			}
+			$uid = $row['uid'];
+			if (array_key_exists($uid, $aanmeldingenByMid[$mid])) {
+				echo '<br />' . date('H:i:s') . ' ERROR: maaltijd-aanmelding (id: '. $mid .')';
+			}
+			$aanmeldingenByMid[$mid][$uid] = new MaaltijdAanmelding($mid, $uid, (int) $row['gasten'], '', null, $row['door'], '');
 		}
 		foreach ($maaltijdenByMid as $mid => $maaltijd) {
 			$archief = new ArchiefMaaltijd(
