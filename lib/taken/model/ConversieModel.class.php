@@ -69,6 +69,22 @@ class ConversieModel {
 			}
 			$aanmeldingenByMid[$mid][$uid] = new MaaltijdAanmelding($mid, $uid, (int) $row['gasten'], '', null, $door, '');
 		}
+		foreach ($maaltijdenByMid as $mid => $maaltijd) {
+			$archief = new ArchiefMaaltijd(
+				$maaltijd->getMaaltijdId(),
+				$maaltijd->getTitel(),
+				$maaltijd->getDatum(),
+				$maaltijd->getTijd(),
+				$maaltijd->getPrijs(),
+				$aanmeldingenByMid[$mid]
+			);
+			self::archiefMaaltijd($archief);
+			echo '<br />' . date('H:i:s') . ' converteren: maaltijd (id: '. $mid .')';
+		}
+		echo '<br />' . date('H:i:s') . ' totaal: '. sizeof($maaltijdenByMid);
+		
+		$maaltijdenByMid = array();
+		$aanmeldingenByMid = array();
 		$rows = self::queryDb('SELECT maalid, uid, status, door, gasten FROM maaltijdaanmelding');
 		foreach ($rows as $row) {
 			$mid = (int) $row['maalid'];
