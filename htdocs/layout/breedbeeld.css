@@ -26,6 +26,7 @@ and open the template in the editor.
 	float: left;
 	display: inline;
 	padding-left: 200px;
+	width: auto !important;
 }
 
 #footer {

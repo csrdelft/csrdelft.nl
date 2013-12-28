@@ -219,6 +219,10 @@ class csrdelft extends SimpleHTML {
 			//DefaultKolom zit in simplehtml.class.php
 			$this->_zijkolom=new DefaultKolom();
 		}
+		else if($this->_zijkolom===false AND Instelling::get('layout_beeld')=='breedbeeld'){
+			//DefaultKolom zit in simplehtml.class.php
+			$this->_zijkolom=new DefaultKolom();
+		}
 
 		header('Content-Type: text/html; charset=UTF-8');
 		$csrdelft=new Smarty_csr();
