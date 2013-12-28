@@ -3,7 +3,8 @@
 	<tr>
 	{if $archief}
 		<th style="width: 120px;">Wanneer</th>
-		<th style="width: 250px;">Titel</th>
+		<th style="width: 200px;">Titel</th>
+		<th style="width: 60px;">Id</th>
 		<th style="width: 60px;">Prijs</th>
 		<th>Aanmeldingen</th>
 	{else}
