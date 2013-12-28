@@ -54,6 +54,8 @@ class ConversieModel {
 						$maaltijd->getPrijs(),
 						$aanmeldingen
 					));
+					unset($maaltijd);
+					unset($aanmeldingen);
 				}
 				echo '<br />' . date('H:i:s') . ' converteren: maaltijd (id: '. $mid .')';
 				$maaltijd = self::queryDb('SELECT id, datum, type, tekst FROM maaltijd WHERE id="'.$mid.'"');
@@ -83,7 +85,10 @@ class ConversieModel {
 				$maaltijd->getPrijs(),
 				$aanmeldingen
 			));
+			unset($maaltijd);
+			unset($aanmeldingen);
 		}
+		unset($rows);
 		$maaltijd = null;
 		$aanmeldingen = array();
 		$rows = self::queryDb('SELECT maalid, uid, status, door, gasten FROM maaltijdaanmelding ORDER BY maalid');
@@ -102,6 +107,8 @@ class ConversieModel {
 						$maaltijd->getPrijs(),
 						$aanmeldingen
 					));
+					unset($maaltijd);
+					unset($aanmeldingen);
 				}
 				echo '<br />' . date('H:i:s') . ' converteren: maaltijd (id: '. $mid .')';
 				$maaltijd = self::queryDb('SELECT id, datum, type, tekst FROM maaltijd WHERE id="'.$mid.'"');
