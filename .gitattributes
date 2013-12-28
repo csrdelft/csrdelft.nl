@@ -151,6 +151,7 @@ htdocs/index.php -text
 htdocs/instellingen.php -text
 htdocs/layout/agenda.css -text
 htdocs/layout/bibliotheek.css -text
+htdocs/layout/breedbeeld.css -text
 htdocs/layout/default.css -text
 htdocs/layout/documenten.css -text
 htdocs/layout/forum.css -text

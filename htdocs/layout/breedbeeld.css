@@ -1,0 +1,37 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 28-dec-2013, 1:42:41
+    Author     : Paul Brussee
+*/
+
+#container, #menu, #submenu, #main, #mainright, #footer {
+	margin: initial;
+	width: auto;
+}
+
+#submenuitems {
+	width: 966px;
+}
+
+#mainleft {
+	margin-left: 0;
+	position: absolute;
+}
+
+#mainright {
+	float: left;
+	display: inline;
+	padding-left: 200px;
+}
+
+#footer {
+	background: none;
+}
+
+#top3overzicht, #kolomrechts, div.bericht {
+	width: auto !important;
+}
