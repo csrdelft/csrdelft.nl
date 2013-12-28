@@ -39,33 +39,40 @@ class ConversieModel {
 	}
 	
 	public static function archiveer() {
-		$rows = self::queryDb('SELECT id, datum, type, tekst FROM maaltijd');
+		$maaltijdenByMid = array();
+		$aanmeldingenByMid = array();
+		$rows = self::queryDb('SELECT maalid, uid, door, gasten FROM maaltijdgesloten');
 		foreach ($rows as $row) {
-			$datum = intval($row['datum']);
-			if ($datum >= strtotime('2013-12-03')) {
-				continue;
-			}
-			if ($row['type'] === 'normaal') {
-				$mid = (int) $row['id'];
-				$titel = $row['tekst'];
-				$maaltijd = new Maaltijd($mid, null, $titel, 0, date('Y-m-d', $datum), date('H:i', $datum));
-				$aanmeldingen = array();
-				$rows2 = self::queryDb('SELECT maalid, uid, door, gasten FROM maaltijdgesloten WHERE maalid="'.$mid.'"');
-				foreach ($rows2 as $row2) {
-					$aanmeldingen[] = new MaaltijdAanmelding($mid, $row2['uid'], (int) $row2['gasten'], '', null, $row2['door'], '');
+			$mid = (int) $row['maalid'];
+			if (!array_key_exists($mid, $maaltijdenByMid)) {
+				$maaltijd = self::queryDb('SELECT id, datum, type, tekst FROM maaltijd WHERE id="'.$mid.'"');
+				if (array_key_exists(0, $maaltijd)) {
+					$maaltijd = $maaltijd[0];
+					$datum = intval($maaltijd['datum']);
+					$maaltijd = new Maaltijd($mid, null, $maaltijd['tekst'], 0, date('Y-m-d', $datum), date('H:i', $datum));
+					$maaltijdenByMid[$mid] = $maaltijd;
 				}
-				$archief = new ArchiefMaaltijd(
-					$maaltijd->getMaaltijdId(),
-					$maaltijd->getTitel(),
-					$maaltijd->getDatum(),
-					$maaltijd->getTijd(),
-					$maaltijd->getPrijs(),
-					$aanmeldingen
-				);
-				self::archiefMaaltijd($archief);
-				echo '<br />' . date('H:i:s') . ' converteren: maaltijd (id: '. $mid .')';
+				else {
+					$maaltijd = new Maaltijd($mid, null, 'null', 0, date('Y-m-d', 0), date('H:i', 0));
+					$maaltijdenByMid[$mid] = $maaltijd;
+				}
 			}
+			$aanmeldingenByMid[$mid][] = new MaaltijdAanmelding($mid, $row['uid'], (int) $row['gasten'], '', null, $row['door'], '');
+			
 		}
+		foreach ($maaltijdenByMid as $mid => $maaltijd) {
+			$archief = new ArchiefMaaltijd(
+				$maaltijd->getMaaltijdId(),
+				$maaltijd->getTitel(),
+				$maaltijd->getDatum(),
+				$maaltijd->getTijd(),
+				$maaltijd->getPrijs(),
+				$aanmeldingenByMid[$mid]
+			);
+			self::archiefMaaltijd($archief);
+			echo '<br />' . date('H:i:s') . ' converteren: maaltijd (id: '. $mid .')';
+		}
+		echo '<br />' . date('H:i:s') . ' totaal: '. sizeof($maaltijdenByMid);
 	}
 	
 	public static function converteer() {
