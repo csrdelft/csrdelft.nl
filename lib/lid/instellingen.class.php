@@ -24,6 +24,7 @@ class Instelling{
 			'forum_onderwerpenPerPagina' => array(15, 'Onderwerpen per pagina', 'int', 5), //deze hebben een minimum, anders gaat het forum stuk.
 			'forum_postsPerPagina' => array(25, 'Berichten per pagina', 'int', 10),
 			'forum_naamWeergave' => array('civitas', 'Naamweergave', 'enum', array('civitas', 'volledig', 'bijnaam', 'aaidrom')),
+			'forum_datumWeergave' => array('relatief', 'Datumweergave', 'enum', array('relatief', 'vast')),
 			'forum_zoekresultaten' => array(40, 'Zoekresultaten', 'int'),
 			'forum_toonpasfotos' => array('ja', 'Pasfoto\'s standaard weergeven', 'enum', array('ja', 'nee')),
 			'forum_filter2008' => array('nee', 'Berichten van 2008 eerst verbergen', 'enum', array('ja', 'nee')),

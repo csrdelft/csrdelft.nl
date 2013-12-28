@@ -74,7 +74,7 @@ class MijnMaaltijdenController extends \ACLController {
 			$this->action_geentoegang();
 			return;
 		}
-		$aanmeldingen = AanmeldingenModel::getAanmeldingenVoorMaaltijdLijst($maaltijd);
+		$aanmeldingen = AanmeldingenModel::getAanmeldingenVoorMaaltijd($maaltijd);
 		require_once 'taken/view/MaaltijdLijstView.class.php';
 		$this->content = new MaaltijdLijstView($maaltijd, $aanmeldingen, $taken);
 	}

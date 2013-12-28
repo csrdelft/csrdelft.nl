@@ -309,6 +309,97 @@ class MaaltijdenModel {
 		return $maaltijd;
 	}
 	
+	// Archief-Maaltijden ############################################################
+	
+	/**
+	 * Haalt de archiefmaaltijden op tussen de opgegeven data.
+	 * 
+	 * @param timestamp $van
+	 * @param timestamp $tot
+	 * @return ArchiefMaaltijd[] (implements Agendeerbaar)
+	 */
+	public static function getArchiefMaaltijden($van, $tot) {
+		if ($van === null) { // RSS
+			$van = strtotime('-1 year');
+		}
+		elseif (!is_int($van)) {
+			throw new \Exception('Invalid timestamp: $van getArchiefMaaltijden()');
+		}
+		if ($tot === null) { // RSS
+			$tot = strtotime('+1 year');
+		}
+		elseif (!is_int($tot)) {
+			throw new \Exception('Invalid timestamp: $tot getArchiefMaaltijden()');
+		}
+		return self::loadArchiefMaaltijden('datum >= ? AND datum <= ?', array(date('Y-m-d', $van), date('Y-m-d', $tot)));
+	}
+	
+	private static function loadArchiefMaaltijden($where=null, $values=array(), $limit=null) {
+		$sql = 'SELECT maaltijd_id, titel, datum, tijd, prijs, aanmeldingen';
+		$sql.= ' FROM mlt_archief';
+		if ($where !== null) {
+			$sql.= ' WHERE '. $where;
+		}
+		$sql.= ' ORDER BY datum ASC, tijd ASC';
+		if (is_int($limit) && $limit > 0) {
+			$sql.= ' LIMIT '. $limit;
+		}
+		$db = \CsrPdo::instance();
+		$query = $db->prepare($sql, $values);
+		$query->execute($values);
+		$result = $query->fetchAll(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, '\Taken\MLT\ArchiefMaaltijd');
+		return $result;
+	}
+	
+	public static function archiveerOudeMaaltijden($tot) {
+		if (!is_int($tot)) {
+			throw new \Exception('Invalid timestamp: $tot archiveerOudeMaaltijden()');
+		}
+		$maaltijden = self::loadMaaltijden('datum < ?', array(date('Y-m-d', $tot)));
+		foreach ($maaltijden as $maaltijd) {
+			self::verplaatsNaarArchief($maaltijd);
+		}
+		return sizeof($maaltijden);
+	}
+	
+	private static function verplaatsNaarArchief(Maaltijd $maaltijd) {
+		$archief = self::newArchiefMaaltijd($maaltijd); // begins transaction
+		self::deleteMaaltijd($maaltijd->getMaaltijdId()); // commits transaction
+		return $archief;
+	}
+	
+	private static function newArchiefMaaltijd(Maaltijd $maaltijd) {
+		$aanmeldingen = AanmeldingenModel::getAanmeldingenVoorMaaltijd($maaltijd);
+		$archief = new ArchiefMaaltijd(
+			$maaltijd->getMaaltijdId(),
+			$maaltijd->getTitel(),
+			$maaltijd->getDatum(),
+			$maaltijd->getTijd(),
+			$maaltijd->getPrijs(),
+			$aanmeldingen
+		);
+		$sql = 'INSERT INTO mlt_archief';
+		$sql.= ' (maaltijd_id, titel, datum, tijd, prijs, aanmeldingen)';
+		$sql.= ' VALUES (?, ?, ?, ?, ?, ?)';
+		$values = array(
+			$archief->getMaaltijdId(),
+			$archief->getTitel(),
+			$archief->getDatum(),
+			$archief->getTijd(),
+			$archief->getPrijs(),
+			$archief->getAanmeldingen()
+		);
+		$db = \CsrPdo::instance();
+		$db->beginTransaction();
+		$query = $db->prepare($sql, $values);
+		$query->execute($values);
+		if ($query->rowCount() !== 1) {
+			$db->rollback();
+			throw new \Exception('New archief-maaltijd faalt: $query->rowCount() ='. $query->rowCount());
+		}
+		return $archief;
+	}
+	
 	// Repetitie-Maaltijden ############################################################
 	
 	public static function getKomendeRepetitieMaaltijden($mrid) {

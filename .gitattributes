@@ -3144,6 +3144,7 @@ lib/taken/model/TakenModel.class.php -text
 lib/taken/model/ToewijzenModel.class.php -text
 lib/taken/model/VoorkeurenModel.class.php -text
 lib/taken/model/VrijstellingenModel.class.php -text
+lib/taken/model/entity/ArchiefMaaltijd.class.php -text
 lib/taken/model/entity/CorveeFunctie.class.php -text
 lib/taken/model/entity/CorveeKwalificatie.class.php -text
 lib/taken/model/entity/CorveeRepetitie.class.php -text

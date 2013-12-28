@@ -15,12 +15,13 @@ require_once 'agenda/agenda.class.php';
  *  - datum en tijd waarop de maaltijd plaatsvind (op basis van vandaag en/of repetitie.dag_vd_week en repetitie.periode)
  *  - of de maaltijd gesloten is voor aanmeldingen en afmeldingen
  *  - moment wanneer de maaltijd voor het laatst is gesloten (gebeurt in principe maar 1 keer)
- *  - of de maaltijd verwijderd is (bijv. na fiscale verwerking)
+ *  - of de maaltijd verwijderd is (in de prullenbak zit)
  *  - of er restricties gelden voor wie zich mag aanmelden
  * 
  * Een gesloten maaltijd kan weer heropend worden.
- * Een verwijderde maaltijd mag nooit meer worden teruggehaald, maar blijft in het systeem voor de fiscus.
- * Als de restricties gewijzigt worden nadat er al aangemeldingen zijn (direct na het aanmaken van een maaltijd vanwege abonnementen) kunnen er illegale aanmeldingen ontstaan.
+ * Een verwijderde maaltijd kan weer uit de prullenbak worden gehaald.
+ * Zolang een maaltijd verwijderd is doet en telt deze niet meer mee in het taken-systeem.
+ * Als de restricties gewijzigt worden nadat er al aangemeldingen zijn (direct na het aanmaken van een maaltijd vanwege abonnementen) worden illegale aanmeldingen automatisch verwijderd.
  * In principe worden maaltijden aangemaakt vanuit maaltijd-repetitie in verband met maaltijd-corvee-taken en corvee-voorkeuren van leden.
  * 
  * 
@@ -38,6 +39,7 @@ class Maaltijd implements \Agendeerbaar {
 	private $aanmeld_limiet; # int 11
 	private $datum; # date
 	private $tijd; # time
+	private $prijs; # float
 	private $gesloten; # boolean
 	private $laatst_gesloten; # int 11
 	private $verwijderd; # boolean
@@ -82,7 +84,6 @@ class Maaltijd implements \Agendeerbaar {
 		}
 		return (int) $this->mlt_repetitie_id;
 	}
-	
 	public function getTitel() {
 		return $this->titel;
 	}

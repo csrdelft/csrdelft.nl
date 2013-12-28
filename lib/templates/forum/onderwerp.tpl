@@ -131,11 +131,16 @@
 				{$bericht.uid|csrnaam:'user'}
 			{if $loginlid->hasPermission('P_LEDEN_READ')}
 				<span tabindex="0"  id="t{$bericht.uid}-{$bericht.id}" class="togglePasfoto"
-				{if $loginlid->instelling('forum_toonpasfotos')=='nee'} title="Toon pasfoto">&raquo;{else}>{/if}</span>
+				{if $loginlid->getInstelling('forum_toonpasfotos')=='nee'} title="Toon pasfoto">&raquo;{else}>{/if}</span>
 			{/if}<br />
-				<div id="p{$bericht.id}" class="forumpasfoto{if $loginlid->instelling('forum_toonpasfotos')=='nee'} verborgen">{else}">{$bericht.uid|csrnaam:'pasfoto'}{/if}</div>
-				<span class="moment">{$bericht.datum|reldate}</span><br />
-
+				<div id="p{$bericht.id}" class="forumpasfoto{if $loginlid->getInstelling('forum_toonpasfotos')=='nee'} verborgen">{else}">{$bericht.uid|csrnaam:'pasfoto'}{/if}</div>
+				<span class="moment">
+				{if $loginlid->getInstelling('forum_datumWeergave') === 'relatief'}
+					{$bericht.datum|reldate}
+				{else}
+					{$bericht.datum}
+				{/if}
+				</span><br />
 				{* knopjes bij elke post *}
 				{* citeerknop enkel als het onderwerp open is en als men mag posten, of als men mod is. *}
 				{if $onderwerp->magCiteren()}

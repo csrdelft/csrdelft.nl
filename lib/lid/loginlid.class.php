@@ -220,7 +220,7 @@ class LoginLid{
 		session_unset();
 		$this->login('x999','x999',true);
 	}
-	public function instelling($key){
+	public function getInstelling($key){
 		return Instelling::get($key);
 	}
 

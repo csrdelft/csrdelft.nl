@@ -41,7 +41,12 @@
 				<td class="reacties">{$onderwerp->getReacties()}</td>
 				<td class="reacties">{$onderwerp->getUid()|csrnaam:'user'}</td>
 				<td class="reactiemoment">
-					{$onderwerp->getLastpost()|reldate}<br />
+					{if $loginlid->getInstelling('forum_datumWeergave') === 'relatief'}
+						{$onderwerp->getLastpost()|reldate}
+					{else}
+						{$onderwerp->getLastpost()}
+					{/if}
+					<br />
 					<a href="/communicatie/forum/reactie/{$onderwerp->getLastpostID()}">bericht</a> door
 					{$onderwerp->getLastuser()|csrnaam:'user'}
 				</td>

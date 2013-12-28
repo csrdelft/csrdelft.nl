@@ -238,7 +238,6 @@ function taken_color_datum() {
 function taken_show_old() {
 	$('#taak-datum-head-first').show();
 	$('tr.taak-datum-oud').show();
-	$.scrollTo($('tr.taak-datum-oud:last'), 800);
 	taken_color_datum();
 }
 

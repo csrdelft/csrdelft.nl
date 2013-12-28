@@ -287,7 +287,13 @@
 						{foreach from=$profiel->getRecenteForumberichten() item=bericht}
 							<tr>
 								<td><a href="/communicatie/forum/reactie/{$bericht.postID}">{$bericht.titel|truncate:75|escape:'html'}</a></td>
-								<td>{$bericht.datum|reldate}</td>
+								<td>
+							{if $loginlid->getInstelling('forum_datumWeergave') === 'relatief'}
+								{$bericht.datum|reldate}
+							{else}
+								{$bericht.datum}
+							{/if}
+								</td>
 							</tr>
 						{foreachelse}
 							<tr><td>Geen bijdragen</td></tr>

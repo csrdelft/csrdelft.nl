@@ -15,7 +15,7 @@ Op deze pagina kunt u de maaltijden aanmaken, wijzigen en verwijderen.
 Onderstaande tabel toont alle maaltijden die niet verwijderd zijn.
 </p>
 <div style="float: right;">
-	<a class="knop" onclick="$('tr.taak-maaltijd-oud').show();$(this).hide();$.scrollTo($('tr.taak-maaltijd-oud:last'), 800);">{icon get="eye"} Toon verleden</a>
+	<a class="knop" onclick="$(this).hide();$('tr.taak-maaltijd-oud').show();">{icon get="eye"} Toon verleden</a>
 	<a href="{$globals.taken_module}/nieuw" title="Nieuwe maaltijd" class="knop post popup">{icon get="add"} Nieuwe maaltijd</a>
 </div>
 <form method="post" action="{$globals.taken_module}/nieuw" class="Formulier popup">

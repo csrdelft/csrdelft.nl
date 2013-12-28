@@ -27,7 +27,12 @@
 					{if $categorie.lastpost=='0000-00-00 00:00:00'}
 						nog geen berichten
 					{else} 
-						{$categorie.lastpost|reldate}<br />
+						{if $loginlid->getInstelling('forum_datumWeergave') === 'relatief'}
+							{$categorie.lastpost|reldate}
+						{else}
+							{$categorie.lastpost}
+						{/if}
+						<br />
 						<a href="/communicatie/forum/reactie/{$categorie.lastpostID}">bericht</a> 
 						{if $categorie.lastuser!=''}
 							door {$categorie.lastuser|csrnaam:'user'}

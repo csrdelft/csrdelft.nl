@@ -31,7 +31,12 @@
 			</td>
 			<td class="reacties">{$bericht.reacties}</td>
 			<td class="reactiemoment">
-				{$bericht.lastpost|reldate}<br />
+				{if $loginlid->getInstelling('forum_datumWeergave') === 'relatief'}
+					{$bericht.lastpost|reldate}
+				{else}
+					{$bericht.lastpost}
+				{/if}
+				<br />
 				<a href="/communicatie/forum/reactie/{$bericht.postID}">bericht</a> door 
 				{$bericht.uid|csrnaam:'user'}
 			</td>

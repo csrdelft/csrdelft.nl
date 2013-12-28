@@ -163,7 +163,7 @@ class AanmeldingenModel {
 		}
 	}
 	
-	public static function getAanmeldingenVoorMaaltijdLijst(Maaltijd $maaltijd) {
+	public static function getAanmeldingenVoorMaaltijd(Maaltijd $maaltijd) {
 		$aanmeldingen = self::loadAanmeldingen(array($maaltijd->getMaaltijdId()));
 		$lijst = array();
 		foreach ($aanmeldingen as $aanmelding) {
