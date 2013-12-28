@@ -11,7 +11,13 @@
 			<a title="Toon aanmeldingen" class="knop" onclick="$('div.aanmeldingen-{$maaltijd->getMaaltijdId()}').toggle();">{icon get="eye"} Toon <strong>{$maaltijd->getAantalAanmeldingen()}</strong></a>
 		</div>
 		<div class="aanmeldingen-{$maaltijd->getMaaltijdId()}" style="display: none;">
-			{$maaltijd->getAanmeldingenFormatted()}
+			<a title="Toon aanmeldingen" class="knop" onclick="$('div.aanmeldingen-{$maaltijd->getMaaltijdId()}').toggle();">{icon get="eye"} Verberg <strong>{$maaltijd->getAantalAanmeldingen()}</strong></a>
+		{foreach from=$maaltijd->getAanmeldingen() item=aanmelding}
+			<li>
+				{$this->getLidLink($aanmelding[0])}
+				{if $aanmelding[0] !== $aanmelding[1]} door {$this->getLidLink($aanmelding[1])}{/if}
+			</li>
+		{/foreach}
 		</div>
 	</td>
 </tr>

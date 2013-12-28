@@ -34,6 +34,14 @@ class BeheerMaaltijdenView extends \SimpleHtml {
 		}
 	}
 	
+	public function getLidLink($uid) {
+		$lid = \LidCache::getLid($uid);
+		if ($lid instanceof \Lid) {
+			return $lid->getNaamLink($GLOBALS['weergave_ledennamen_beheer'], 'link');
+		}
+		return $uid;
+	}
+	
 	public function view() {
 		$smarty = new \Smarty_csr();
 		
@@ -41,6 +49,7 @@ class BeheerMaaltijdenView extends \SimpleHtml {
 			if ($this->_prullenbak || $this->_archief || $this->_repetities !== null) { // normal view
 				$smarty->assign('prullenbak', $this->_prullenbak);
 				$smarty->assign('archief', $this->_archief);
+				$smarty->assign('this', $this);
 				$smarty->assign('popup', $this->_popup);
 				$smarty->assign('melding', $this->getMelding());
 				$smarty->assign('kop', $this->getTitel());

@@ -51,7 +51,7 @@
 					{/if}
 				</td>
 				<td style="width: 150px;">
-					{$this->getLidnaam($uid)}
+					{$this->getLidLink($uid)}
 				</td>
 			{if $suggestie.laatste}
 				<td>{$suggestie.laatste->getBeginMoment()|date_format:"%d %b %Y"}</td>

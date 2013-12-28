@@ -2,9 +2,9 @@
 <thead>
 	<tr>
 	{if $archief}
-		<th>Wanneer</th>
-		<th>Titel</th>
-		<th>Prijs</th>
+		<th style="width: 120px;">Wanneer</th>
+		<th style="width: 250px;">Titel</th>
+		<th style="width: 60px;">Prijs</th>
 		<th>Aanmeldingen</th>
 	{else}
 		<th style="width: 80px;">Wijzig</th>

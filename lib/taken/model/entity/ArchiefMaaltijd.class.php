@@ -67,35 +67,17 @@ class ArchiefMaaltijd implements \Agendeerbaar {
 		return (float) $this->prijs;
 	}
 	public function getAanmeldingen() {
-		return $this->aanmeldingen;
+		$result;
+		$aanmeldingen = explode(',', $this->aanmeldingen);
+		foreach ($aanmeldingen as $id => $aanmelding) {
+			if ($aanmelding !== '') {
+				$result[$id] = explode('_', $aanmelding);
+			}
+		}
+		return $result;
 	}
 	public function getAantalAanmeldingen() {
 		return substr_count($this->aanmeldingen, ',');
-	}
-	public function getAanmeldingenFormatted() {
-		$aanmeldingen = explode(',', $this->aanmeldingen);
-		$string = '<ul>';
-		foreach ($aanmeldingen as $aanmelding) {
-			if ($aanmelding === '') {
-				continue;
-			}
-			$uid = explode('_', $aanmelding);
-			if ($uid[0] === $uid[1] || $uid[1] === 'abo') {
-				$uid[1] = '';
-			}
-			else {
-				$lid = \LidCache::getLid($uid[1]);
-				if ($lid instanceof \Lid) {
-					$uid[1] = $lid->getNaamLink($GLOBALS['weergave_ledennamen_beheer'], 'link');
-				}
-			}
-			$lid = \LidCache::getLid($uid[0]);
-			if ($lid instanceof \Lid) {
-				$uid[0] = $lid->getNaamLink($GLOBALS['weergave_ledennamen_beheer'], 'link');
-			}
-			$string .= '<li>'. $uid[0] .' '. $uid[1] .'</li>';
-		}
-		return $string .'</ul>';
 	}
 	
 	// Agendeerbaar ############################################################
