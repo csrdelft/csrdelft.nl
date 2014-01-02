@@ -1,20 +1,20 @@
 <div id="menu" onmouseover="ResetTimer()" onmouseout="StartTimer()">
-	<div id="menuleft"><a href="/"><img src="http://plaetjes.csrdelft.nl/layout/logo.gif" alt="Logo" id="logo" /></a></div>
+	<div id="menuleft"><a href="/"><img src="{$csr_pics}/layout/logo.gif" alt="Logo" id="logo" /></a></div>
 	<div id="menucenter">
 		<div id="menubanner">
-			<div id="banner1"><img src="http://plaetjes.csrdelft.nl/menubalk/banner1.png" id="imgbanner1" alt="banner1" width="553" height="106" /></div>
-			<div id="banner2"><img src="http://plaetjes.csrdelft.nl/menubalk/banner2.png" id="imgbanner2" alt="banner2" width="553" height="106" /></div>
-			<div id="banner3"><img src="http://plaetjes.csrdelft.nl/menubalk/banner3.png" id="imgbanner3" alt="banner3" width="553" height="106" /></div>
-			<div id="banner4"><img src="http://plaetjes.csrdelft.nl/menubalk/banner4.png" id="imgbanner4" alt="banner4" width="553" height="106" /></div>
+			<div id="banner1"><img src="{$csr_pics}/menubalk/banner1.png" id="imgbanner1" alt="banner1" width="553" height="106" /></div>
+			<div id="banner2"><img src="{$csr_pics}/menubalk/banner2.png" id="imgbanner2" alt="banner2" width="553" height="106" /></div>
+			<div id="banner3"><img src="{$csr_pics}/menubalk/banner3.png" id="imgbanner3" alt="banner3" width="553" height="106" /></div>
+			<div id="banner4"><img src="{$csr_pics}/menubalk/banner4.png" id="imgbanner4" alt="banner4" width="553" height="106" /></div>
 		</div>
 		<ul id="mainmenu">
 			{foreach from=$items item=item}
 				<li>
-					<a href="{$item.link}" id="top{$item.ID}" onmouseover="StartShowMenu('{$item.ID}');" onmouseout="ResetShowMenu();" {if $item.huidig}class="active" {/if}title="{$item.tekst}">{$item.tekst}</a>
+					<a href="{$item.link}" id="top{$item.menu_id}" onmouseover="StartShowMenu('{$item.menu_id}');" onmouseout="ResetShowMenu();" {if $item.huidig}class="active" {/if}title="{$item.tekst}">{$item.tekst}</a>
 					{if $item.huidig}
 						<script type="text/javascript">
-							SetActive({$item.ID});
-							document.getElementById('banner'+{$item.ID}).style.display = "inline";
+							SetActive({$item.menu_id});
+							document.getElementById('banner'+{$item.menu_id}).style.display = "inline";
 							fixPNG('imgbanner1')
 						</script>
 					{/if}
@@ -87,7 +87,7 @@
 				</form>
 			</div>
 		{else}
-			<div id="key"><img src="http://plaetjes.csrdelft.nl/layout/key.png" onclick="toggleDiv('login')" alt="Inloggen" /></div>
+			<div id="key"><img src="{$csr_pics}/layout/key.png" onclick="toggleDiv('login')" alt="Inloggen" /></div>
 			<div id="login">
 				{if isset($smarty.session.auth_error)}
 					<span class="waarschuwing">{$smarty.session.auth_error}</span>
@@ -113,10 +113,10 @@
 <div id="submenu" onmouseover="ResetTimer()" onmouseout="StartTimer()">
 	<div id="submenuitems">
 		{foreach from=$items item=item}
-			<div id="sub{$item.ID}" {if $item.huidig}class="active"{/if}>
+			<div id="sub{$item.menu_id}" {if $item.huidig}class="active"{/if}>
 				{assign var='showseperator' value=false}
 				{foreach from=$item.subitems item=subitem}
-					{if $showseperator} <img src="http://plaetjes.csrdelft.nl/layout/submenuseperator.gif" alt="|" /> {/if}
+					{if $showseperator} <img src="{$csr_pics}/layout/submenuseperator.gif" alt="|" /> {/if}
 					{assign var='showseperator' value=true}
 					<a href="{$subitem.link}" title="{$subitem.tekst}"{if $subitem.huidig} class="active"{/if}>{$subitem.tekst}</a>
 				{/foreach}

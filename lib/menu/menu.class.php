@@ -21,7 +21,7 @@ class Menu {
 	private $_prefix;
 
 	/**
-		Michel: param $mainid toegevoegd, de vorminsbank heeft een ander hoofdmenu pID (= 99)
+		Michel: param $mainid toegevoegd, de vorminsbank heeft een ander hoofdmenu parent_id (= 99)
 	**/
 	public function __construct($prefix='', $mainid=0) {
 		$db=MySql::instance();
@@ -38,13 +38,13 @@ class Menu {
 		# menu ophalen
 		$sMenu="
 			SELECT
-				ID, pID, tekst, link, permission
+				menu_id, parent_id, tekst, link, permission
 			FROM
 				menu
 			WHERE
-				zichtbaar='ja'
+				zichtbaar=TRUE AND menu='main'
 			ORDER BY
-				pID ASC, prioriteit ASC, tekst ASC";
+				parent_id ASC, prioriteit ASC, tekst ASC;";
 		$rMenu=$db->query($sMenu);
 
 		//Nu hier een boom-array maken.
@@ -55,15 +55,15 @@ class Menu {
 					($request_uri==$aMenu['link'] AND $aMenu['link']!='/') OR
 					($request_uri_full==$aMenu['link'] AND $aMenu['link']!='/') OR
 					(strpos($request_uri, $aMenu['link'])!==false AND $aMenu['link']!='/')){
-				$this->_huidig=$aMenu['ID'];
-				if($aMenu['pID']!=$mainid){ $this->_huidigTop=$aMenu['pID']; } //mw: 0 --> $mainid
+				$this->_huidig=$aMenu['menu_id'];
+				if($aMenu['parent_id']!=$mainid){ $this->_huidigTop=$aMenu['parent_id']; } //mw: 0 --> $mainid
 				$bHuidig=true;
 			}
-			if($aMenu['pID']==$mainid){  //mw: 0 --> $mainid
+			if($aMenu['parent_id']==$mainid){  //mw: 0 --> $mainid
 				//hoofdniveau
-				$this->_menu[$aMenu['ID']]=array(
-					'ID' => $aMenu['ID'],
-					'pID' => $aMenu['pID'],
+				$this->_menu[$aMenu['menu_id']]=array(
+					'menu_id' => $aMenu['menu_id'],
+					'parent_id' => $aMenu['parent_id'],
 					'tekst' => $aMenu['tekst'],
 					'link' => $aMenu['link'],
 					'subitems' => array(),
@@ -72,15 +72,15 @@ class Menu {
 			}else{
 				// Als een submenuitem huidig is, eventuele voorgaande submenuitems huidig=0 maken, om dubbele huidigen te voorkomen
 				if ($bHuidig) {
-					foreach ($this->_menu[$aMenu['pID']]['subitems'] as $key => $dummy) {
-						$this->_menu[$aMenu['pID']]['subitems'][$key]['huidig'] = 0;
+					foreach ($this->_menu[$aMenu['parent_id']]['subitems'] as $key => $dummy) {
+						$this->_menu[$aMenu['parent_id']]['subitems'][$key]['huidig'] = 0;
 					}
 				}
 
 				//subniveau
-				$this->_menu[$aMenu['pID']]['subitems'][$aMenu['ID']]=array(
-					'ID' => $aMenu['ID'],
-					'pID' => $aMenu['pID'],
+				$this->_menu[$aMenu['parent_id']]['subitems'][$aMenu['menu_id']]=array(
+					'menu_id' => $aMenu['menu_id'],
+					'parent_id' => $aMenu['parent_id'],
 					'tekst' => $aMenu['tekst'],
 					'link' => $aMenu['link'],
 					'subitems' => array(),
@@ -148,7 +148,7 @@ class Menu {
 				'forum' => new SavedQuery(ROWID_QUEUE_FORUM),
 				'meded' => new SavedQuery(ROWID_QUEUE_MEDEDELINGEN)));
 		}
-		$menu->display($this->_prefix.'menu.tpl');
+		$menu->display('menu/'.$this->_prefix.'menu.tpl');
 	}
 
 	public static function getGaSnelNaar(){
@@ -157,7 +157,7 @@ class Menu {
 		$lid=LoginLid::instance();
 		$db=MySql::instance();
 
-		$gasnelnaar="SELECT tekst, link, permission FROM menu WHERE gasnelnaar='ja' ORDER BY tekst;";
+		$gasnelnaar="SELECT tekst, link, permission FROM menu WHERE zichtbaar=TRUE AND menu='gasnelnaar' ORDER BY prioriteit ASC, tekst ASC;";
 		$result=$db->query($gasnelnaar);
 		$return='<div id="zijbalk_gasnelnaar"><h1>Ga snel naar</h1>';
 		if($result!==false AND $db->numRows($result)>0){
