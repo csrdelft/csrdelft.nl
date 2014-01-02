@@ -10,11 +10,11 @@
 		<ul id="mainmenu">
 			{foreach from=$items item=item}
 				<li>
-					<a href="{$item.link}" id="top{$item.ID}" onmouseover="StartShowMenu('{$item.ID}');" onmouseout="ResetShowMenu();" {if $item.huidig}class="active" {/if}title="{$item.tekst}">{$item.tekst}</a>
+					<a href="{$item.link}" id="top{$item.menu_id}" onmouseover="StartShowMenu('{$item.menu_id}');" onmouseout="ResetShowMenu();" {if $item.huidig}class="active" {/if}title="{$item.tekst}">{$item.tekst}</a>
 					{if $item.huidig}
 						<script type="text/javascript">
-							SetActive({$item.ID});
-							document.getElementById('banner'+{$item.ID}).style.display = "inline";
+							SetActive({$item.menu_id});
+							document.getElementById('banner'+{$item.menu_id}).style.display = "inline";
 							fixPNG('imgbanner1')
 						</script>
 					{/if}
@@ -114,7 +114,7 @@
 <div id="submenu" onmouseover="ResetTimer()" onmouseout="StartTimer()">
 	<div id="submenuitems">
 		{foreach from=$items item=item}
-			<div id="sub{$item.ID}"{if $item.huidig} class="active"{/if}>
+			<div id="sub{$item.menu_id}"{if $item.huidig} class="active"{/if}>
 				{assign var='showseperator' value=false}
 				{foreach from=$item.subitems item=subitem}
 					{if $showseperator}<img src="http://plaetjes.csrdelft.nl/lustrum/spacer.png" alt="|" /> {/if}
