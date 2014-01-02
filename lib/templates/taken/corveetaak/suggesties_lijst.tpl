@@ -14,7 +14,7 @@
 	Punten{icon get="bullet_arrow_up"}
 {/if}
 			</th>
-			<th style="width: 145px;">Naam</th>
+			<th style="width: 135px;">Naam</th>
 			<th>Laatste taak
 {if $taak->getCorveeFunctie()->getIsKwalificatieBenodigd()}
 			&nbsp;{icon get="bullet_arrow_up"}
@@ -32,7 +32,7 @@
 				{if $suggestie.recent} recent{/if}
 				{if $this->getIsJongsteLichting($uid)} jongste{else} oudere{/if}	
 				">
-				<td style="width: 20px;">
+				<td style="width: 15px;">
 					<a class="knop" style="padding: 0px 2px;" onclick="$('#field_lid_id').val('{$uid}');$('#taken-taak-toewijzen-form').submit();">
 					{if $suggestie.recent}
 						{icon get="time_delete" title="Recent gecorveed"}
@@ -50,7 +50,7 @@
 						 {$suggestie.prognose}
 					{/if}
 				</td>
-				<td style="width: 150px;">
+				<td style="width: 140px;">
 					{$this->getLidLink($uid)}
 				</td>
 			{if $suggestie.laatste}
