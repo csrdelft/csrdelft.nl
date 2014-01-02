@@ -41,12 +41,12 @@ class BeheerMaaltijdenController extends \ACLController {
 			);
 		}
 		$this->action = 'beheer';
-		if ($this->hasParam(1)) {
-			$this->action = $this->getParam(1);
+		if ($this->hasParam(2)) {
+			$this->action = $this->getParam(2);
 		}
 		$mid = null;
-		if ($this->hasParam(2)) {
-			$mid = intval($this->getParam(2));
+		if ($this->hasParam(3)) {
+			$mid = intval($this->getParam(3));
 		}
 		$this->performAction($mid);
 	}
@@ -99,7 +99,7 @@ class BeheerMaaltijdenController extends \ACLController {
 	
 	public function action_nieuw() {
 		if (array_key_exists('mrid', $_POST)) {
-			$mrid = intval($_POST['mrid']);
+			$mrid = (int) filter_input(INPUT_POST, 'mrid', FILTER_SANITIZE_NUMBER_INT);
 			$repetitie = MaaltijdRepetitiesModel::getRepetitie($mrid);
 			// start at first occurence
 			$datum = time();

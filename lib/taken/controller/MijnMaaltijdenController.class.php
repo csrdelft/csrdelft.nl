@@ -32,12 +32,12 @@ class MijnMaaltijdenController extends \ACLController {
 			);
 		}
 		$this->action = 'ketzer';
-		if ($this->hasParam(1)) {
-			$this->action = $this->getParam(1);
+		if ($this->hasParam(2)) {
+			$this->action = $this->getParam(2);
 		}
 		$mid = null;
-		if ($this->hasParam(2)) {
-			$mid = intval($this->getParam(2));
+		if ($this->hasParam(3)) {
+			$mid = intval($this->getParam(3));
 		}
 		$this->performAction($mid);
 	}
@@ -111,13 +111,13 @@ class MijnMaaltijdenController extends \ACLController {
 	}
 	
 	public function action_gasten($mid) {
-		$gasten = intval($_POST['aantal_gasten']);
+		$gasten = (int) filter_input(INPUT_POST, 'aantal_gasten', FILTER_SANITIZE_NUMBER_INT);
 		$aanmelding = AanmeldingenModel::saveGasten($mid, \LoginLid::instance()->getUid(), $gasten);
 		$this->content = new MijnMaaltijdenView($aanmelding->getMaaltijd(), $aanmelding);
 	}
 	
 	public function action_opmerking($mid) {
-		$opmerking = htmlspecialchars($_POST['gasten_opmerking']);
+		$opmerking = filter_input(INPUT_POST, 'gasten_opmerking', FILTER_SANITIZE_SPECIAL_CHARS);
 		$aanmelding = AanmeldingenModel::saveGastenOpmerking($mid, \LoginLid::instance()->getUid(), $opmerking);
 		$this->content = new MijnMaaltijdenView($aanmelding->getMaaltijd(), $aanmelding);
 	}

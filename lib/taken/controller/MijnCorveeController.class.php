@@ -26,12 +26,12 @@ class MijnCorveeController extends \ACLController {
 			);
 		}
 		$this->action = 'mijn';
-		if ($this->hasParam(1)) {
-			$this->action = $this->getParam(1);
+		if ($this->hasParam(2)) {
+			$this->action = $this->getParam(2);
 		}
 		$arg = null;
-		if ($this->hasParam(2)) {
-			$arg = $this->getParam(2);
+		if ($this->hasParam(3)) {
+			$arg = $this->getParam(3);
 		}
 		$this->performAction($arg);
 	}

@@ -30,12 +30,12 @@ class CorveeRepetitiesController extends \ACLController {
 			);
 		}
 		$this->action = 'beheer';
-		if ($this->hasParam(1)) {
-			$this->action = $this->getParam(1);
+		if ($this->hasParam(2)) {
+			$this->action = $this->getParam(2);
 		}
 		$crid = null;
-		if ($this->hasParam(2)) {
-			$crid = intval($this->getParam(2));
+		if ($this->hasParam(3)) {
+			$crid = intval($this->getParam(3));
 		}
 		$this->performAction($crid);
 	}

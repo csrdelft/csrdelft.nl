@@ -11,6 +11,7 @@ class InstellingenModel {
 
 	private static $_instellingen = null;
 	private static $_defaults = array(
+		'taken_menu_path' => '/actueel/',
 		'maaltijd_budget_maalcie' => '1.00',
 		'corveepunten_per_jaar' => '11',
 		'herinnering_aantal_mails' => '2',

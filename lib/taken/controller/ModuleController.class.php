@@ -9,8 +9,9 @@ require_once 'aclcontroller.class.php';
  */
 class ModuleController extends \ACLController {
 
-	public function __construct($module, $query) {
+	public function __construct($query) {
 		parent::__construct($query);
+		$module = $this->getParam(0);
 		if ($module === 'maaltijden') {
 			$this->acl = array(
 				'maaltijden_ketzer' => 'P_MAAL_IK',
@@ -43,14 +44,17 @@ class ModuleController extends \ACLController {
 		else {
 			$module = '';
 		}
-		if ($this->hasParam(0)) {
-			$this->action = $this->getParam(0);
+		if ($this->hasParam(1)) {
+			$this->action = $this->getParam(1);
 		}
-		$GLOBALS['taken_module'] = $GLOBALS['taken_mainmenu'] . $module . $this->action;
+		$GLOBALS['taken_module'] = '/' . $module . $this->action;
 		$this->action = $module .'_'. $this->action;
 		$this->performAction($query);
 	}
 	
+	/**
+	 * @override
+	 */
 	protected function action_geentoegang() {
 		$this->content = new \PaginaContent(new \Pagina('maaltijden'));
 		$this->content = new \csrdelft($this->getContent());

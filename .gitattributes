@@ -42,7 +42,6 @@ htdocs/actueel/mededelingen/goedkeuren.php -text
 htdocs/actueel/mededelingen/index.php -text
 htdocs/actueel/mededelingen/top3overzicht.php -text
 htdocs/actueel/sjaarsacties.php -text
-htdocs/actueel/taken.php -text
 htdocs/android/get_user.php -text
 htdocs/android/get_userlist.php -text
 htdocs/android/login.php -text
@@ -287,6 +286,7 @@ htdocs/leden.php -text
 htdocs/lidworden.php -text
 htdocs/login.php -text
 htdocs/logout.php -text
+htdocs/menubeheer.php -text
 htdocs/pagina.php -text
 htdocs/pauper.php -text
 htdocs/robots.txt -text
@@ -294,6 +294,7 @@ htdocs/soccie/count.png -text
 htdocs/soccie/index.php -text
 htdocs/soccie/logo.png -text
 htdocs/su.php -text
+htdocs/taken.php -text
 htdocs/testform.php -text
 htdocs/tools/.htaccess -text
 htdocs/tools/ajax/login.php -text
@@ -2979,6 +2980,9 @@ lib/mededelingen/mededelingcontent.class.php -text
 lib/mededelingen/mededelingencontent.class.php -text
 lib/mededelingen/mededelingtopdrieoverzichtcontent.class.php -text
 lib/memcached.class.php -text
+lib/menu/beheer/BeheerMenuController.class.php -text
+lib/menu/beheer/BeheerMenuView.class.php -text
+lib/menu/beheer/MenuItem.class.php -text
 lib/menu/menu.class.php -text
 lib/mimemagic/DjVuImage.php -text
 lib/mimemagic/MimeMagic.php -text
@@ -3237,7 +3241,6 @@ lib/templates/groepen/groepen.tpl -text
 lib/templates/groepen/groepformulier.tpl -text
 lib/templates/groepen/groepleden.tpl -text
 lib/templates/lustrum_csrdelft.tpl -text
-lib/templates/lustrum_menu.tpl -text
 lib/templates/maalciemail.tpl -text
 lib/templates/mails/lidafgeleendebiebboeken.mail -text
 lib/templates/mails/lidafmeldingfisci.mail -text
@@ -3249,10 +3252,13 @@ lib/templates/mededelingen/mededelingen.tpl -text
 lib/templates/mededelingen/mededelingentopblock.tpl -text
 lib/templates/mededelingen/mededelingenzijbalk.tpl -text
 lib/templates/mededelingen/top3overzicht.tpl -text
+lib/templates/menu/beheer/menu-item.tpl -text
+lib/templates/menu/beheer/menu-tree.tpl -text
+lib/templates/menu/lustrum_menu.tpl -text
 lib/templates/menu/menu.tpl -text
+lib/templates/menu/owee_menu.tpl -text
 lib/templates/minion.tpl -text
 lib/templates/owee_csrdelft.tpl -text
-lib/templates/owee_menu.tpl -text
 lib/templates/peiling.ubb.tpl -text
 lib/templates/profiel/_saldografiek.tpl -text
 lib/templates/profiel/bewerken.tpl -text

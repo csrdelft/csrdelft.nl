@@ -40,12 +40,12 @@ class BeheerTakenController extends \ACLController {
 			);
 		}
 		$this->action = 'beheer';
-		if ($this->hasParam(1)) {
-			$this->action = $this->getParam(1);
+		if ($this->hasParam(2)) {
+			$this->action = $this->getParam(2);
 		}
 		$tid = null;
-		if ($this->hasParam(2)) {
-			$tid = intval($this->getParam(2));
+		if ($this->hasParam(3)) {
+			$tid = intval($this->getParam(3));
 		}
 		$this->performAction($tid);
 	}
@@ -109,7 +109,7 @@ class BeheerTakenController extends \ACLController {
 	
 	public function action_nieuw($mid=null) {
 		if (array_key_exists('crid', $_POST)) {
-			$crid = intval($_POST['crid']);
+			$crid = (int) filter_input(INPUT_POST, 'crid', FILTER_SANITIZE_NUMBER_INT);
 			$repetitie = CorveeRepetitiesModel::getRepetitie($crid);
 			if ($mid === null) {
 				// start at first occurence

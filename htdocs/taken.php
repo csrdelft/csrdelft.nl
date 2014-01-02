@@ -9,17 +9,15 @@ try {
 	require_once 'configuratie.include.php';
 	require_once 'taken/controller/ModuleController.class.php';
 	
-	$GLOBALS['taken_mainmenu'] = '/actueel/';
+	$query = filter_input(INPUT_GET, 'q', FILTER_SANITIZE_URL);
+	$_SERVER['REQUEST_URI'] = $GLOBALS['taken_menu_path'] . $query; // fake path for main menu
 	
-	$query = $_GET['query'];
-	if (substr($query, 0, 1) === '/') { // redir /maaltijden/ketzer equal to /maaltijdenketzer
-		$query = substr($query, 1);
-	}
-	$controller = new \Taken\CRV\ModuleController($_GET['module'], $query); // module redir in .htaccess
+	$controller = new \Taken\CRV\ModuleController($query);
 	$controller->getContent()->view();
 }
 catch (\Exception $e) {
-	header($_SERVER['SERVER_PROTOCOL'] . ' 500 '. $e->getMessage(), true, 500);
+	$protocol = filter_input(INPUT_SERVER, 'SERVER_PROTOCOL', FILTER_SANITIZE_STRING);
+	header($protocol . ' 500 '. $e->getMessage(), true, 500);
 	
 	if (defined('DEBUG') && (\LoginLid::instance()->hasPermission('P_ADMIN') || \LoginLid::instance()->isSued())) {
 		echo str_replace('#', '<br />#', $e); // stacktrace

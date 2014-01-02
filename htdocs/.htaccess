@@ -10,8 +10,8 @@ RewriteRule ^instellingen/?$		instellingen.php
 RewriteRule ^pauper/?$				pauper.php
 
 ### maaltijden & corvee
-RewriteRule ^maaltijden(.*)$		/actueel/maaltijden$1 [R]
-RewriteRule ^corvee(.*)$			/actueel/corvee$1 [R]
+RewriteRule ^maaltijden/?(.*)$		taken.php?q=maaltijden/$1
+RewriteRule ^corvee/?(.*)$			taken.php?q=corvee/$1
 
 # SocCie
 RewriteRule ^soccie/?$				soccie/index.php
@@ -50,6 +50,9 @@ RewriteRule ^nieuws/(.*)$			/actueel/mededelingen/$1 [R=301]
 # su
 RewriteRule ^su/([0-9a-z]+)/?$		su.php?actie=su&uid=$1
 RewriteRule ^endsu/?$				su.php?actie=endSu
+
+# menubeheer
+RewriteRule ^menu/?(.*)$			menubeheer.php?q=$1
 
 # Facebook link voor BINAS voor de Owee(Cie)
 RewriteRule ^facebook/?$			http://www.facebook.com/group.php?gid=10294513917&ref=ts

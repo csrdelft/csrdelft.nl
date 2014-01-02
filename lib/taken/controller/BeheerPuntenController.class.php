@@ -25,12 +25,12 @@ class BeheerPuntenController extends \ACLController {
 			);
 		}
 		$this->action = 'beheer';
-		if ($this->hasParam(1)) {
-			$this->action = $this->getParam(1);
+		if ($this->hasParam(2)) {
+			$this->action = $this->getParam(2);
 		}
 		$uid = null;
-		if ($this->hasParam(2)) {
-			$uid = $this->getParam(2);
+		if ($this->hasParam(3)) {
+			$uid = $this->getParam(3);
 		}
 		$this->performAction($uid);
 	}
@@ -49,7 +49,7 @@ class BeheerPuntenController extends \ACLController {
 		if (!$lid instanceof \Lid) {
 			throw new \Exception('Lid bestaat niet: $uid ='. $uid);
 		}
-		$punten = intval($_POST['totaal_punten']);
+		$punten = (int) filter_input(INPUT_POST, 'totaal_punten', FILTER_SANITIZE_NUMBER_INT);
 		PuntenModel::savePuntenVoorLid($lid, $punten, null);
 		$functies = FunctiesModel::getAlleFuncties(true); // grouped by fid
 		$lijst = PuntenModel::loadPuntenVoorLid($lid, $functies);
@@ -61,7 +61,7 @@ class BeheerPuntenController extends \ACLController {
 		if (!$lid instanceof \Lid) {
 			throw new \Exception('Lid bestaat niet: $uid ='. $uid);
 		}
-		$bonus = intval($_POST['totaal_bonus']);
+		$bonus = (int) filter_input(INPUT_POST, 'totaal_bonus', FILTER_SANITIZE_NUMBER_INT);
 		PuntenModel::savePuntenVoorLid($lid, null, $bonus);
 		$functies = FunctiesModel::getAlleFuncties(true); // grouped by fid
 		$lijst = PuntenModel::loadPuntenVoorLid($lid, $functies);

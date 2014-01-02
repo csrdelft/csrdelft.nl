@@ -25,12 +25,12 @@ class MijnVoorkeurenController extends \ACLController {
 			);
 		}
 		$this->action = 'mijn';
-		if ($this->hasParam(1)) {
-			$this->action = $this->getParam(1);
+		if ($this->hasParam(2)) {
+			$this->action = $this->getParam(2);
 		}
 		$crid = null;
-		if ($this->hasParam(2)) {
-			$crid = intval($this->getParam(2));
+		if ($this->hasParam(3)) {
+			$crid = intval($this->getParam(3));
 		}
 		$this->performAction($crid);
 	}
@@ -55,7 +55,7 @@ class MijnVoorkeurenController extends \ACLController {
 	}
 	
 	public function action_eetwens() {
-		$eetwens = htmlspecialchars($_POST['eetwens']);
+		$eetwens = filter_input(INPUT_POST, 'eetwens', FILTER_SANITIZE_SPECIAL_CHARS);
 		VoorkeurenModel::setEetwens(\LoginLid::instance()->getLid(), $eetwens);
 		$this->content = new MijnVoorkeurenView(null, $eetwens);
 	}

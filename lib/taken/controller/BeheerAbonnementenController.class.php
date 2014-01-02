@@ -29,12 +29,12 @@ class BeheerAbonnementenController extends \ACLController {
 			);
 		}
 		$this->action = 'waarschuwingen';
-		if ($this->hasParam(1)) {
-			$this->action = $this->getParam(1);
+		if ($this->hasParam(2)) {
+			$this->action = $this->getParam(2);
 		}
 		$mrid = null;
-		if ($this->hasParam(2)) {
-			$mrid = intval($this->getParam(2));
+		if ($this->hasParam(3)) {
+			$mrid = intval($this->getParam(3));
 		}
 		$this->performAction($mrid);
 	}
@@ -77,7 +77,7 @@ class BeheerAbonnementenController extends \ACLController {
 	}
 	
 	public function action_novieten() {
-		$mrid = intval($_POST['mrid']);
+		$mrid = (int) filter_input(INPUT_POST, 'mrid', FILTER_SANITIZE_NUMBER_INT);
 		$aantal = AbonnementenModel::inschakelenAbonnementVoorNovieten($mrid);
 		$matrix = AbonnementenModel::getAbonnementenVanNovieten();
 		$novieten = sizeof($matrix);
@@ -88,7 +88,7 @@ class BeheerAbonnementenController extends \ACLController {
 	}
 	
 	public function action_inschakelen($mrid) {
-		$uid = $_POST['voor_lid'];
+		$uid = filter_input(INPUT_POST, 'voor_lid', FILTER_SANITIZE_STRING);
 		if (!\Lid::exists($uid)) {
 			throw new \Exception('Lid bestaat niet: $uid ='. $uid);
 		}
@@ -100,7 +100,7 @@ class BeheerAbonnementenController extends \ACLController {
 	}
 	
 	public function action_uitschakelen($mrid) {
-		$uid = $_POST['voor_lid'];
+		$uid = filter_input(INPUT_POST, 'voor_lid', FILTER_SANITIZE_STRING);
 		if (!\Lid::exists($uid)) {
 			throw new \Exception('Lid bestaat niet: $uid ='. $uid);
 		}
