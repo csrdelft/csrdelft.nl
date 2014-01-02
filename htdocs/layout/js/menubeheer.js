@@ -36,14 +36,20 @@ function menubeheer_form_init() {
 }
 function menubeheer_submit(form) {
 	var url = $(form).attr('action');
-	$(form).parent().html('<img title="'+ url +'" src="http://plaetjes.csrdelft.nl/layout/loading-arrows.gif" />');
+	var children = $(form).closest('li').find('ul').children('li').size();
+	$(form).parent().html('<img title="'+ url +'" children="'+ children +'" src="http://plaetjes.csrdelft.nl/layout/loading-arrows.gif" />');
 	$.ajax({
 		type: 'POST',
 		cache: false,
 		url: url,
 		data: $(form).serialize(),
 		success: function(response) {
-			menubeheer_update($.trim(response));
+			if ($('img[title="'+ this.url +'"]').attr('children') > 1) {
+				location.reload();
+			}
+			else {
+				menubeheer_update($.trim(response));
+			}
 		},
 		error: function(jqXHR, textStatus, errorThrown) {
 			if (errorThrown === '') {
@@ -58,11 +64,7 @@ function menubeheer_submit(form) {
 	});
 }
 function menubeheer_update(htmlString) {
-	if (htmlString.substring(0, 9) === '<!DOCTYPE') {
-		alert('response error'); //DEBUG
-		document.write(htmlString);
-	}
-	else if (htmlString.length > 0) {
+	if (htmlString.length > 0) {
 		var html = $.parseHTML(htmlString);
 		$(html).each(function() {
 			var id = $(this).attr('id');
@@ -94,7 +96,4 @@ function menubeheer_clone(id) {
 }
 function menubeheer_toggle(id) {
 	$('.inline-edit-'+ id).toggle();
-}
-function page_reload() {
-	location.reload();
 }

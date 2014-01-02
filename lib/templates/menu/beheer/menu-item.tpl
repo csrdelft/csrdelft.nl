@@ -5,7 +5,9 @@
 <li id="menu-item-{$item->getMenuId()}" parentid="{$item->getParentId()}" class="menu-item"{if $item->getMenuId() === 0} style="list-style-type: none; background: none;"{/if}>
 	<div class="inline-edit-{$item->getMenuId()}">
 		<div style="display: inline-block; width: 25px;">
-{if $item->getMenuId() !== 0}<a title="Item wijzigen" class="knop" onclick="menubeheer_toggle({$item->getMenuId()});">{icon get="pencil"}</a>{/if}
+{if $item->getMenuId() !== 0}
+			<a title="Item wijzigen" class="knop" onclick="menubeheer_toggle({$item->getMenuId()});">{icon get="pencil"}</a>
+{/if}
 		</div>
 		<div style="display: inline-block; width: 40px;">
 			<a title="Nieuw sub-item" class="knop" onclick="menubeheer_clone({$item->getMenuId()});">{icon get="add"}</a>
@@ -19,9 +21,17 @@
 		<div style="display: inline-block; width: 300px;">
 			<a href="{$item->getLink()}">{$item->getLink()}</a>
 		</div>
+{if $item->getMenuId() !== 0}
 		<div style="display: inline-block; width: 25px;">
-{if $item->getMenuId() !== 0}<a href="/menubeheer/verwijder/{$item->getMenuId()}" title="Menu-item definitief verwijderen" class="knop post confirm">{icon get="cross"}</a>{/if}
+			<form method="post" action="/menubeheer/wijzig/{$item->getMenuId()}/zichtbaar">
+				<input type="hidden" name="Zichtbaar" value="{if $item->getIsZichtbaar()}0{else}1{/if}" />
+				<input type="image" src="{$csr_pics}/famfamfam/{if $item->getIsZichtbaar()}eye{else}shading{/if}.png" onclick="menubeheer_submit($(this).parent());" />
+			</form>
 		</div>
+		<div style="display: inline-block; width: 25px;">
+			<a href="/menubeheer/verwijder/{$item->getMenuId()}" title="Menu-item definitief verwijderen" class="knop post confirm">{icon get="cross"}</a>
+		</div>
+{/if}
 	</div>
 {if $item->getMenuId() !== 0}
 	<div class="inline-edit-{$item->getMenuId()}" style="display: none;">

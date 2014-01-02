@@ -10,8 +10,8 @@ RewriteRule ^instellingen/?$		instellingen.php
 RewriteRule ^pauper/?$				pauper.php
 
 ### maaltijden & corvee
-RewriteRule ^maaltijden/?(.*)$		taken.php?q=maaltijden/$1
-RewriteRule ^corvee/?(.*)$			taken.php?q=corvee/$1
+RewriteRule ^maaltijden/?(.*)$		taken.php?taken=maaltijden/$1
+RewriteRule ^corvee/?(.*)$			taken.php?taken=corvee/$1
 
 # SocCie
 RewriteRule ^soccie/?$				soccie/index.php
