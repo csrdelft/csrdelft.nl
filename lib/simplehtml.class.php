@@ -209,7 +209,7 @@ class DefaultKolom extends Kolom{
 		}
 		# Ga snel naar
 		if(Instelling::get('zijbalk_gasnelnaar')=='ja'){
-			require_once('menu.class.php');
+			require_once('menu/menu.class.php');
 			$this->add(new stringincluder(Menu::getGaSnelNaar()));
 		}
 

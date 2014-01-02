@@ -58,8 +58,8 @@ class csrdelft extends SimpleHTML {
 			if(Instelling::get('layout')=='lustrum'){	$this->_prefix='lustrum_'; }
 
 			//nieuw menu-object aanmaken...
-			require_once('menu.class.php');
-			$this->_menu=new menu($this->_prefix, $menuid);
+			require_once('menu/menu.class.php');
+			$this->_menu=new Menu($this->_prefix, $menuid);
 
 			//Stylesheets en scripts die we altijd gebruiken
 
