@@ -59,16 +59,10 @@ class MenuItem {
 	}
 	
 	public function setParentId($int) {
-		if (!is_int($int)) {
-			throw new \Exception('Geen integer: parent id');
-		}
-		$this->parent_id = $int;
+		$this->parent_id = (int) $int;
 	}
 	public function setPrioriteit($int) {
-		if (!is_int($int)) {
-			throw new \Exception('Geen integer: prioriteit');
-		}
-		$this->prioriteit = $int;
+		$this->prioriteit = (int) $int;
 	}
 	public function setTekst($string) {
 		if (!is_string($string)) {
@@ -89,10 +83,7 @@ class MenuItem {
 		$this->permission = $string;
 	}
 	public function setZichtbaar($boolean) {
-		if (!is_bool($boolean)) {
-			throw new \Exception('Geen boolean: zichtbaar');
-		}
-		$this->zichtbaar = $boolean;
+		$this->zichtbaar = (boolean) $boolean;
 	}
 	public function setMenu($string) {
 		if (!is_string($string)) {

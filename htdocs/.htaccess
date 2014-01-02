@@ -52,7 +52,7 @@ RewriteRule ^su/([0-9a-z]+)/?$		su.php?actie=su&uid=$1
 RewriteRule ^endsu/?$				su.php?actie=endSu
 
 # menubeheer
-RewriteRule ^menu/?(.*)$			menubeheer.php?q=$1
+RewriteRule ^menubeheer/?(.*)$		menubeheer.php
 
 # Facebook link voor BINAS voor de Owee(Cie)
 RewriteRule ^facebook/?$			http://www.facebook.com/group.php?gid=10294513917&ref=ts

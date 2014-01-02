@@ -243,6 +243,7 @@ htdocs/layout/js/lightbox.js -text
 htdocs/layout/js/maaltijd.js -text
 htdocs/layout/js/maaltijdabos.js -text
 htdocs/layout/js/menu.js -text
+htdocs/layout/js/menubeheer.js -text
 htdocs/layout/js/minion.js -text
 htdocs/layout/js/peilingbeheer.js -text
 htdocs/layout/js/pngfix.js -text
@@ -259,6 +260,7 @@ htdocs/layout/ledenlijst.css -text
 htdocs/layout/lustrum.css -text
 htdocs/layout/maaltijdlijst.css -text
 htdocs/layout/mededelingen.css -text
+htdocs/layout/menubeheer.css -text
 htdocs/layout/minion.css -text
 htdocs/layout/owee.css -text
 htdocs/layout/profiel.css -text
@@ -2983,6 +2985,7 @@ lib/memcached.class.php -text
 lib/menu/beheer/BeheerMenuController.class.php -text
 lib/menu/beheer/BeheerMenuView.class.php -text
 lib/menu/beheer/MenuItem.class.php -text
+lib/menu/beheer/MenuModel.class.php -text
 lib/menu/menu.class.php -text
 lib/mimemagic/DjVuImage.php -text
 lib/mimemagic/MimeMagic.php -text

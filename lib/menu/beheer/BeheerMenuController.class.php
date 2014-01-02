@@ -1,4 +1,5 @@
 <?php
+require_once 'aclcontroller.class.php';
 require_once 'menu/beheer/MenuModel.class.php';
 require_once 'menu/beheer/BeheerMenuView.class.php';
 
@@ -26,19 +27,19 @@ class BeheerMenuController extends \ACLController {
 		if ($this->hasParam(2)) {
 			$this->action = $this->getParam(2);
 		}
-		$miid = null;
+		$params = null;
 		if ($this->hasParam(3)) {
-			if ($this->action === 'wijzig' || $this->action === 'verwijder') {
-				$miid = intval($this->getParam(3));
-				if ($this->hasParam(4)) {
-					$miid = array('miid' => $miid, 'prop' => $this->getParam(4));
-				}
+			if ($this->action === 'beheer') {
+				$params = $this->getParam(3);
 			}
 			else {
-				$miid = $this->getParam(3);
+				$params = intval($this->getParam(3));
+				if ($this->hasParam(4)) {
+					$params = array('miid' => $params, 'prop' => $this->getParam(4));
+				}
 			}
 		}
-		$this->performAction($miid);
+		$this->performAction($params);
 	}
 	
 	public function action_beheer($menu=null) {
@@ -46,12 +47,11 @@ class BeheerMenuController extends \ACLController {
 		$tree = MenuModel::getMenuTree($menu);
 		$this->content = new BeheerMenuView($menus, $tree);
 		$this->content = new \csrdelft($this->getContent());
-		$this->content->addStylesheet('js/autocomplete/jquery.autocomplete.css');
-		$this->content->addScript('autocomplete/jquery.autocomplete.min.js');
+		$this->content->addStylesheet('menubeheer.css');
+		$this->content->addScript('menubeheer.js');
 	}
 	
-	public function action_nieuw() {
-		$pid = (int) filter_input(INPUT_POST, 'ParentId', FILTER_SANITIZE_NUMBER_INT);
+	public function action_nieuw($pid) {
 		$prio = (int) filter_input(INPUT_POST, 'Prioriteit', FILTER_SANITIZE_NUMBER_INT);
 		$text = filter_input(INPUT_POST, 'Tekst', FILTER_SANITIZE_STRING);
 		$link = filter_input(INPUT_POST, 'Link', FILTER_SANITIZE_URL);
@@ -62,29 +62,23 @@ class BeheerMenuController extends \ACLController {
 		$this->content = new BeheerMenuView($item);
 	}
 	
-	public function action_wijzig($args) {
-		$item = MenuModel::getMenuItem($args['miid']);
-		$prop = ucfirst($args['prop']);
+	public function action_wijzig($miid, $prop) {
+		$item = MenuModel::getMenuItem($miid);
+		$prop = ucfirst($prop);
 		$setter = 'set'. $prop;
 		if (method_exists($item, $setter)) {
 			$val = filter_input(INPUT_POST, $prop);
-			if (is_int($val)) {
-				$val = (int) $val;
-			}
-			else if (is_bool($val)) {
-				$val = (boolean) $val;
-			}
 			$item->$setter($val);
-			MenuModel::saveMenuItem($item);
+			MenuModel::updateMenuItem($item);
 		}
 		else{
-			throw new Exception('Wijzig faalt: '. $setter .' undefined');
+			throw new \Exception('Wijzig faalt: '. $setter .' undefined');
 		}
 		$this->content = new BeheerMenuView($item);
 	}
 	
 	public function action_verwijder($miid) {
-		MenuModel::verwijderMenuItem($miid);
+		MenuModel::deleteMenuItem($miid);
 		$this->content = new BeheerMenuView($miid);
 	}
 }

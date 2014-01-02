@@ -17,7 +17,7 @@ class BeheerMenuView extends \SimpleHtml {
 	
 	public function getTitel() {
 		if ($this->_root !== null) {
-			return 'Beheer '. $this->_root->getTekst() .'-menu';
+			return 'Beheer '. $this->_root->getMenu() .'-menu';
 		}
 		return 'Menubeheer';
 	}

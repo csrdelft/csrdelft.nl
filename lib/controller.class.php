@@ -47,7 +47,7 @@ class Controller{
 		$action='action_'.$this->action;
 		if($this->hasAction($this->action)){
 			if (is_array($args)){
-				call_user_func_array($action, $args);
+				call_user_func_array(array($this, $action), $args);
 			}
 			else{
 				$this->$action($args);
