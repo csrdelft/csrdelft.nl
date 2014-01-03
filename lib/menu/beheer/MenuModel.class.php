@@ -32,7 +32,7 @@ class MenuModel {
 		return $root;
 	}
 	
-	private static function addChildren($parent, &$children) {
+	private static function addChildren($parent, $children) {
 		foreach ($children as $i => $item) {
 			if ($parent->getMenuId() === $item->getParentId()) { // this is the correct parent
 				$parent->children[] = $item;
