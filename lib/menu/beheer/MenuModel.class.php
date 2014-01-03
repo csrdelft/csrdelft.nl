@@ -26,9 +26,9 @@ class MenuModel {
 		$root->setMenu($menu);
 		self::addChildren($root, $items);
 		if (sizeof($items) > 0) {
+			$root->children += $items;
 			setMelding('Er zijn menu-items met niet-bestaande parent', -1);
 		}
-		$root->children += $items;
 		return $root;
 	}
 	
