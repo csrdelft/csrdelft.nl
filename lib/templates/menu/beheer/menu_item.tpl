@@ -6,7 +6,7 @@
 	<div class="inline-edit-{$item->getMenuId()}">
 		<div style="display: inline-block; width: 25px;">
 {if $item->getMenuId() !== 0}
-			<a title="Item wijzigen" class="knop" onclick="$('.inline-edit-{$item->getMenuId()}').toggle()">{icon get="pencil"}</a>
+			<a title="Item wijzigen" class="knop" onclick="$('.inline-edit-{$item->getMenuId()}').slideDown();$(this).parent().parent().slideUp();">{icon get="pencil"}</a>
 {/if}
 		</div>
 		<div style="display: inline-block; width: 40px;">
@@ -42,37 +42,37 @@
 			<div style="display: inline-block; width: 75px;">Parent id:</div>
 			<input type="text" name="ParentId" maxlength="5" size="60" value="{$item->getParentId()}" />
 			&nbsp;<input type="submit" value="opslaan" />
-			&nbsp;<input type="reset" value="annuleren" onclick="$('.inline-edit-{$item->getMenuId()}').toggle()" />
+			&nbsp;<input type="reset" value="annuleren" onclick="$('.inline-edit-{$item->getMenuId()}').slideDown();$(this).parent().parent().slideUp();" />
 		</form>
 		<form method="post" action="/menubeheer/wijzig/{$item->getMenuId()}/prioriteit">
 			<div style="display: inline-block; width: 75px;">Prioriteit:</div>
 			<input type="text" name="Prioriteit" maxlength="5" size="60" value="{$item->getPrioriteit()}" />
 			&nbsp;<input type="submit" value="opslaan" />
-			&nbsp;<input type="reset" value="annuleren" onclick="$('.inline-edit-{$item->getMenuId()}').toggle()" />
+			&nbsp;<input type="reset" value="annuleren" onclick="$('.inline-edit-{$item->getMenuId()}').slideDown();$(this).parent().parent().slideUp();" />
 		</form>
 		<form method="post" action="/menubeheer/wijzig/{$item->getMenuId()}/tekst">
 			<div style="display: inline-block; width: 75px;">Label:</div>
 			<input type="text" name="Tekst" maxlength="255" size="60" value="{$item->getTekst()}" />
 			&nbsp;<input type="submit" value="opslaan" />
-			&nbsp;<input type="reset" value="annuleren" onclick="$('.inline-edit-{$item->getMenuId()}').toggle()" />
+			&nbsp;<input type="reset" value="annuleren" onclick="$('.inline-edit-{$item->getMenuId()}').slideDown();$(this).parent().parent().slideUp();" />
 		</form>
 		<form method="post" action="/menubeheer/wijzig/{$item->getMenuId()}/link">
 			<div style="display: inline-block; width: 75px;">Url:</div>
 			<input type="text" name="Link" maxlength="255" size="60" value="{$item->getLink()}" />
 			&nbsp;<input type="submit" value="opslaan" />
-			&nbsp;<input type="reset" value="annuleren" onclick="$('.inline-edit-{$item->getMenuId()}').toggle()" />
+			&nbsp;<input type="reset" value="annuleren" onclick="$('.inline-edit-{$item->getMenuId()}').slideDown();$(this).parent().parent().slideUp();" />
 		</form>
 		<form method="post" action="/menubeheer/wijzig/{$item->getMenuId()}/permission">
 			<div style="display: inline-block; width: 75px;">Rechten:</div>
 			<input type="text" name="Permission" maxlength="255" size="60" value="{$item->getPermission()}" />
 			&nbsp;<input type="submit" value="opslaan" />
-			&nbsp;<input type="reset" value="annuleren" onclick="$('.inline-edit-{$item->getMenuId()}').toggle()" />
+			&nbsp;<input type="reset" value="annuleren" onclick="$('.inline-edit-{$item->getMenuId()}').slideDown();$(this).parent().parent().slideUp();" />
 		</form>
 		<form method="post" action="/menubeheer/wijzig/{$item->getMenuId()}/menu">
 			<div style="display: inline-block; width: 75px;">Menu:</div>
 			<input type="text" name="Menu" maxlength="255" size="60" value="{$item->getMenu()}" />
 			&nbsp;<input type="submit" value="opslaan" />
-			&nbsp;<input type="reset" value="annuleren" onclick="$('.inline-edit-{$item->getMenuId()}').toggle()" />
+			&nbsp;<input type="reset" value="annuleren" onclick="$('.inline-edit-{$item->getMenuId()}').slideDown();$(this).parent().parent().slideUp();" />
 		</form>
 	</div>
 {/if}
@@ -92,7 +92,7 @@
 				<div style="display: inline-block; width: 75px;">&nbsp</div>
 				<input type="hidden" name="Menu" value="{$item->getMenu()}" />
 				<input type="submit" value="opslaan" />&nbsp;
-				<input type="reset" value="annuleren" onclick="$(this).parent().parent().remove();" />
+				<input type="reset" value="annuleren" onclick="$(this).parent().parent().slideUp(400, function() {ldelim} $(this).remove(); {rdelim});" />
 			</form>
 		</li>
 	{foreach from=$item->children item=child}
