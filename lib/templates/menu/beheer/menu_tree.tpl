@@ -1,5 +1,5 @@
 {*
-	menu-tree.tpl	|	P.W.G. Brussee (brussee@live.nl)
+	menu_tree.tpl	|	P.W.G. Brussee (brussee@live.nl)
 *}
 <h1>{$kop}</h1>
 <div style="float: right;">
@@ -15,5 +15,5 @@
 Op deze pagina kunt u het menu beheren.
 </p>
 <ul class="menubeheer-tree">
-	{include file='menu/beheer/menu-item.tpl' item=$tree}
+	{include file='menu/beheer/menu_item.tpl' item=$tree}
 </ul>

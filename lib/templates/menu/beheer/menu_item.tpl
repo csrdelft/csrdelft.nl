@@ -1,5 +1,5 @@
 {*
-	menu-item.tpl	|	P.W.G. Brussee (brussee@live.nl)
+	menu_item.tpl	|	P.W.G. Brussee (brussee@live.nl)
 *}
 {strip}
 <li id="menu-item-{$item->getMenuId()}" parentid="{$item->getParentId()}" class="menu-item"{if $item->getMenuId() === 0} style="list-style-type: none; background: none;"{/if}>
@@ -27,6 +27,9 @@
 				<input type="hidden" name="Zichtbaar" value="{if $item->getIsZichtbaar()}0{else}1{/if}" />
 				<input type="image" src="{$csr_pics}/famfamfam/{if $item->getIsZichtbaar()}eye{else}shading{/if}.png" onclick="menubeheer_submit($(this).parent());" />
 			</form>
+		</div>
+		<div style="display: inline-block; width: 50px; text-align: center;">
+			{$item->getPrioriteit()}
 		</div>
 		<div style="display: inline-block; width: 25px;">
 			<a href="/menubeheer/verwijder/{$item->getMenuId()}" title="Menu-item definitief verwijderen" class="knop post confirm">{icon get="cross"}</a>
@@ -65,6 +68,12 @@
 			&nbsp;<input type="button" value="opslaan" onclick="menubeheer_submit($(this).parent());" />
 			&nbsp;<input type="reset" value="annuleren" onclick="menubeheer_toggle({$item->getMenuId()});" />
 		</form>
+		<form method="post" action="/menubeheer/wijzig/{$item->getMenuId()}/menu">
+			<div style="display: inline-block; width: 75px;">Menu:</div>
+			<input type="text" name="Menu" maxlength="255" size="60" value="{$item->getMenu()}" />
+			&nbsp;<input type="button" value="opslaan" onclick="menubeheer_submit($(this).parent());" />
+			&nbsp;<input type="reset" value="annuleren" onclick="menubeheer_toggle({$item->getMenuId()});" />
+		</form>
 	</div>
 {/if}
 	<ul id="children-{$item->getMenuId()}">
@@ -80,14 +89,14 @@
 				<input type="text" name="Link" maxlength="255" size="60" value="/url" /><br />
 				<div style="display: inline-block; width: 75px;">Rechten:</div>
 				<input type="text" name="Permission" maxlength="255" size="60" value="P_NOBODY" /><br />
-				<input type="hidden" name="Menu" value="{$item->getMenu()}" />
 				<div style="display: inline-block; width: 75px;">&nbsp</div>
+				<input type="hidden" name="Menu" value="{$item->getMenu()}" />
 				<input type="button" value="opslaan" onclick="menubeheer_submit($(this).parent());" />&nbsp;
 				<input type="reset" value="annuleren" onclick="$(this).parent().parent().remove();" />
 			</form>
 		</li>
 	{foreach from=$item->children item=child}
-		{include file='menu/beheer/menu-item.tpl' item=$child}
+		{include file='menu/beheer/menu_item.tpl' item=$child}
 	{/foreach}
 	</ul>
 	{if $item->children}

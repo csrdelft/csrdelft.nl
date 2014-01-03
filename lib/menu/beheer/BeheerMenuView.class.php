@@ -29,14 +29,14 @@ class BeheerMenuView extends \SimpleHtml {
 			$smarty->assign('kop', $this->getTitel());
 			$smarty->assign('menus', $this->_menus);
 			$smarty->assign('tree', $this->_root);
-			$smarty->display('menu/beheer/menu-tree.tpl');
+			$smarty->display('menu/beheer/menu_tree.tpl');
 		}
 		elseif (is_int($this->_menus)) {
 			echo '<div id="menu-item-'. $this->_menus .'" class="remove"></div>';
 		}
 		else {
 			$smarty->assign('item', $this->_menus);
-			$smarty->display('menu/beheer/menu-item.tpl');
+			$smarty->display('menu/beheer/menu_item.tpl');
 		}
 	}
 }
