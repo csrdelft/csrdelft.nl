@@ -16,9 +16,5 @@
 Op deze pagina kunt u het menu beheren.
 </p>
 <ul class="menubeheer-tree">
-{if $item}
-	{include file='menu/beheer/menu_item.tpl'}
-{else}
-	{include file='menu/beheer/menu_new.tpl'}
-{/if}
+	
 </ul>

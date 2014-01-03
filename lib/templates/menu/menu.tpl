@@ -60,7 +60,6 @@
 						{/if}
 						<a href="/pagina/beheer">&raquo; Beheeroverzicht</a><br />
 						<a href="/tools/query.php">&raquo; Opgeslagen queries</a><br />
-						<br />
 						<a href="/menubeheer">&raquo; Menubeheer</a><br />
 					</div>
 				</div>
