@@ -9,8 +9,7 @@ try {
 	require_once 'configuratie.include.php';
 	require_once 'menu/beheer/BeheerMenusController.class.php';
 	
-	$query = $_SERVER['REQUEST_URI'];
-	echo $query .'<br />';
+	$query = filter_input(INPUT_GET, 'beheer', FILTER_SANITIZE_URL);
 	$controller = new BeheerMenusController($query);
 	$controller->getContent()->view();
 }

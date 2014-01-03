@@ -17,15 +17,10 @@ class MenusModel {
 	}
 	
 	public static function getMenuTree($menu) {
-		if ($menu === null) {
-			$items = array();
-		}
-		else {
-			$items = self::loadMenuItems('menu = ?', array($menu));
-		}
 		$root = new MenuItem();
 		$root->setTekst($menu);
 		$root->setMenu($menu);
+		$items = self::loadMenuItems('menu = ?', array($menu));
 		self::addChildren($root, $items);
 		foreach ($items as $item) {
 			setMelding('Parent '. $item->getParentId() .' bestaat niet: '. $item->getTekst() .' ('. $item->getMenuId() .')', -1);

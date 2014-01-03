@@ -13,38 +13,40 @@ class BeheerMenusController extends \ACLController {
 		parent::__construct($query);
 		if (!parent::isPOSTed()) {
 			$this->acl = array(
-				'beheer' => 'P_ADMIN'
+				'beheer' => 'P_ADMIN',
+				'verwijder' => 'P_ADMIN'
 			);
 		}
 		else {
 			$this->acl = array(
 				'nieuw' => 'P_ADMIN',
-				'wijzig' => 'P_ADMIN',
-				'verwijder' => 'P_ADMIN',
+				'wijzig' => 'P_ADMIN'
 			);
 		}
 		$this->action = 'beheer';
-		if ($this->hasParam(2)) {
-			$this->action = $this->getParam(2);
+		if ($this->hasParam(0)) {
+			$this->action = $this->getParam(0);
 		}
 		$params = null;
-		if ($this->hasParam(3)) {
+		if ($this->hasParam(1)) {
 			if ($this->action === 'beheer') {
-				$params = $this->getParam(3);
+				$params = $this->getParam(1);
 			}
 			else {
-				$params = intval($this->getParam(3));
-				if ($this->hasParam(4)) {
-					$params = array('mid' => $params, 'prop' => $this->getParam(4));
+				$params = intval($this->getParam(1));
+				if ($this->hasParam(2)) {
+					$params = array('mid' => $params, 'prop' => $this->getParam(2));
 				}
 			}
 		}
 		$this->performAction($params);
 	}
 	
-	public function action_beheer($menu=null) {
+	public function action_beheer($tree=null) {
 		$menus = MenusModel::getAlleMenus();
-		$tree = MenusModel::getMenuTree($menu);
+		if ($tree !== null) {
+			$tree = MenusModel::getMenuTree($tree);
+		}
 		$this->content = new BeheerMenusView($menus, $tree);
 		$this->content = new \csrdelft($this->getContent());
 		$this->content->addStylesheet('menubeheer.css');
@@ -59,7 +61,7 @@ class BeheerMenusController extends \ACLController {
 		$show = (boolean) filter_input(INPUT_POST, 'Zichtbaar', FILTER_SANITIZE_STRING);
 		$menu = filter_input(INPUT_POST, 'Menu', FILTER_SANITIZE_STRING);
 		$item = MenusModel::newMenuItem($pid, $prio, $text, $link, $perm, $show, $menu);
-		$this->content = new BeheerMenusView($item);
+		\SimpleHTML::invokeRefresh('/menubeheer/beheer/'. $item->getMenu(), $item->getTekst() .' ('. $item->getMenuId() .') aangemaakt', 1);
 	}
 	
 	public function action_wijzig($mid, $prop) {
@@ -74,12 +76,13 @@ class BeheerMenusController extends \ACLController {
 		else{
 			throw new \Exception('Wijzig faalt: '. $setter .' undefined');
 		}
-		$this->content = new BeheerMenusView($item);
+		\SimpleHTML::invokeRefresh('/menubeheer/beheer/'. $item->getMenu(), $item->getTekst() .' ('. $item->getMenuId() .') opgeslagen', 1);
 	}
 	
 	public function action_verwijder($mid) {
-		MenusModel::deleteMenuItem($mid);
-		$this->content = new BeheerMenusView($mid);
+		$item = MenusModel::getMenuItem($mid);
+		MenusModel::deleteMenuItem($item);
+		\SimpleHTML::invokeRefresh('/menubeheer/beheer/'. $item->getMenu(), $item->getTekst() .' ('. $item->getMenuId() .') verwijderd', 1);
 	}
 }
 

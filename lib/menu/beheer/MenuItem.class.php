@@ -19,7 +19,7 @@ class MenuItem {
 	private $zichtbaar; # boolean
 	private $menu; # string 255
 	
-	public $children;
+	public $children = array();
 	
 	public function __construct($mid=0, $pid=0, $prio=0, $text='', $link='', $perm='', $show=false, $menu='') {
 		$this->menu_id = (int) $mid;
