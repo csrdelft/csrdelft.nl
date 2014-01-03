@@ -10,7 +10,7 @@ class BeheerMenuView extends \SimpleHtml {
 	private $_menus;
 	private $_root;
 	
-	public function __construct($menus, MenuItem $root=null) {
+	public function __construct($menus, $root=null) {
 		$this->_menus = $menus;
 		$this->_root = $root;
 	}
