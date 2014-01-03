@@ -2,7 +2,6 @@
 	menu_item.tpl	|	P.W.G. Brussee (brussee@live.nl)
 *}
 {strip}
-{if !$item}geen{/if}
 <li id="menu-item-{$item->getMenuId()}" parentid="{$item->getParentId()}" class="menu-item"{if $item->getMenuId() === 0} style="list-style-type: none; background: none;"{/if}>
 	<div class="inline-edit-{$item->getMenuId()}">
 		<div style="display: inline-block; width: 25px;">

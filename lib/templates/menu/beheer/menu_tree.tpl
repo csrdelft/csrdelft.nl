@@ -1,6 +1,7 @@
 {*
 	menu_tree.tpl	|	P.W.G. Brussee (brussee@live.nl)
 *}
+{$melding}
 <h1>{$kop}</h1>
 <div style="float: right;">
 	<div style="display: inline-block;"><label for="toon">Toon menu:</label>

@@ -26,12 +26,10 @@ class BeheerMenuView extends \SimpleHtml {
 		$smarty = new \Smarty_csr();
 		
 		if (is_array($this->_menus)) {
+			$smarty->assign('melding', $this->getMelding());
 			$smarty->assign('kop', $this->getTitel());
 			$smarty->assign('menus', $this->_menus);
 			$smarty->assign('tree', $this->_tree);
-			if (empty($this->_tree)) {
-				echo 'alert'; //DEBUG
-			}
 			$smarty->display('menu/beheer/menu_tree.tpl');
 		}
 		elseif (is_int($this->_menus)) {

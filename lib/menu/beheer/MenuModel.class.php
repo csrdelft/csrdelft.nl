@@ -18,16 +18,18 @@ class MenuModel {
 	
 	public static function getMenuTree($menu) {
 		if ($menu === null) {
-			return null;
+			$items = array();
 		}
-		$items = self::loadMenuItems('menu = ?', array($menu));
+		else {
+			$items = self::loadMenuItems('menu = ?', array($menu));
+		}
 		$root = new MenuItem();
 		$root->setTekst($menu);
 		$root->setMenu($menu);
 		self::addChildren($root, $items);
-		if (sizeof($items) > 0) {
-			$root->children += $items;
-			setMelding('Er zijn menu-items met niet-bestaande parent', -1);
+		foreach ($items as $item) {
+			setMelding('Parent '. $item->getParentId() .' bestaat niet: '. $item->getTekst() .' ('. $item->getMenuId() .')', -1);
+			$root->children[] = $item;
 		}
 		return $root;
 	}
