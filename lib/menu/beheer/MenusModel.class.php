@@ -5,7 +5,7 @@ require_once 'menu/beheer/MenuItem.class.php';
  * MenuModel.class.php	| 	P.W.G. Brussee (brussee@live.nl)
  * 
  */
-class MenuModel {
+class MenusModel {
 
 	public static function getAlleMenus() {
 		return self::loadMenuItems(null, array(), true);
@@ -51,7 +51,7 @@ class MenuModel {
 		else {
 			$sql = 'SELECT menu_id, parent_id, prioriteit, tekst, link, permission, zichtbaar, menu';
 		}
-		$sql.= ' FROM menu';
+		$sql.= ' FROM menus';
 		if ($where !== null) {
 			$sql.= ' WHERE '. $where;
 		}
@@ -64,9 +64,9 @@ class MenuModel {
 	}
 	
 	public static function newMenuItem($pid, $prio, $text, $link, $perm, $show, $menu) {
-		$sql = 'INSERT INTO crv_functies';
-		$sql.= ' (functie_id, naam, afkorting, email_bericht, standaard_punten, kwalificatie_benodigd)';
-		$sql.= ' VALUES (?, ?, ?, ?, ?, ?, ?)';
+		$sql = 'INSERT INTO menus';
+		$sql.= ' (menu_id, parent_id, prioriteit, tekst, link, permission, zichtbaar, menu)';
+		$sql.= ' VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
 		$values = array(null, $pid, $prio, $text, $link, $perm, $show, $menu);
 		$db = \CsrPdo::instance();
 		$query = $db->prepare($sql, $values);
@@ -74,12 +74,12 @@ class MenuModel {
 		if ($query->rowCount() !== 1) {
 			throw new \Exception('New functie faalt: $query->rowCount() ='. $query->rowCount());
 		}
-		return new CorveeFunctie(intval($db->lastInsertId()), $naam, $afk, $email, $punten, $kwali);
+		return new MenuItem(intval($db->lastInsertId()), $pid, $prio, $text, $link, $perm, $show, $menu);
 	}
 	
 	public static function updateMenuItem(MenuItem $item) {
-		$sql = 'UPDATE menu';
-		$sql.= ' SET parent_id=?, prioriteit=?, tekst=?, link=?, permission=?, zichtbaar=?';
+		$sql = 'UPDATE menus';
+		$sql.= ' SET parent_id=?, prioriteit=?, tekst=?, link=?, permission=?, zichtbaar=?, menu=?';
 		$sql.= ' WHERE menu_id=?';
 		$values = array(
 			$item->getParentId(),
@@ -88,6 +88,7 @@ class MenuModel {
 			$item->getLink(),
 			$item->getPermission(),
 			$item->getIsZichtbaar(),
+			$item->getMenu(),
 			$item->getMenuId()
 		);
 		$db = \CsrPdo::instance();
@@ -103,7 +104,7 @@ class MenuModel {
 				$child->setParentId($item->getParentId());
 				self::updateMenuItem($child);
 			}
-			$sql = 'DELETE FROM menu';
+			$sql = 'DELETE FROM menus';
 			$sql.= ' WHERE menu_id = ?';
 			$values = array($item->getMenuId());
 			$query = $db->prepare($sql, $values);

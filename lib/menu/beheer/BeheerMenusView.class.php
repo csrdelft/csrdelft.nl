@@ -5,7 +5,7 @@
  * Tonen van alle menus en menu-items om te beheren.
  * 
  */
-class BeheerMenuView extends \SimpleHtml {
+class BeheerMenusView extends \SimpleHtml {
 
 	private $_menus;
 	private $_tree;

@@ -40,7 +40,7 @@ class Menu {
 			SELECT
 				menu_id, parent_id, tekst, link, permission
 			FROM
-				menu
+				menus
 			WHERE
 				zichtbaar=TRUE AND menu='main'
 			ORDER BY
@@ -157,7 +157,7 @@ class Menu {
 		$lid=LoginLid::instance();
 		$db=MySql::instance();
 
-		$gasnelnaar="SELECT tekst, link, permission FROM menu WHERE zichtbaar=TRUE AND menu='gasnelnaar' ORDER BY prioriteit ASC, tekst ASC;";
+		$gasnelnaar="SELECT tekst, link, permission FROM menus WHERE zichtbaar=TRUE AND menu='gasnelnaar' ORDER BY prioriteit ASC, tekst ASC;";
 		$result=$db->query($gasnelnaar);
 		$return='<div id="zijbalk_gasnelnaar"><h1>Ga snel naar</h1>';
 		if($result!==false AND $db->numRows($result)>0){
