@@ -3,6 +3,9 @@
 *}
 {$melding}
 <h1>{$kop}</h1>
+<p>
+Op deze pagina kunt u het menu beheren.
+</p>
 <div style="float: right;">
 	<div style="display: inline-block;"><label for="toon">Toon menu:</label>
 	</div><select name="toon" onchange="location.href='/menubeheer/beheer/'+this.value;">
@@ -13,9 +16,7 @@
 	</select>
 	<a href="/menubeheer/beheer/" title="Nieuw menu" class="knop" onclick="this.href+=prompt('Voer unieke naam in','');">{icon get="add"}</a>
 </div>
-<p>
-Op deze pagina kunt u het menu beheren.
-</p>
+<br />
 {if $tree}
 <ul class="menubeheer-tree">
 	{include file='menu/beheer/menu_item.tpl' item=$tree}
