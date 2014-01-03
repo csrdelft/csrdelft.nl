@@ -17,8 +17,8 @@ Op deze pagina kunt u het menu beheren.
 	<a href="/menubeheer/beheer/" title="Nieuw menu" class="knop" onclick="this.href+=prompt('Voer unieke naam in','');">{icon get="add"}</a>
 </div>
 <br />
-{if $tree}
+{if sizeof($root->children) > 0}
 <ul class="menubeheer-tree">
-	{include file='menu/beheer/menu_item.tpl' item=$tree}
+	{include file='menu/beheer/menu_item.tpl' item=$root}
 </ul>
 {/if}
