@@ -35,7 +35,7 @@ class BeheerMenuController extends \ACLController {
 			else {
 				$params = intval($this->getParam(3));
 				if ($this->hasParam(4)) {
-					$params = array('miid' => $params, 'prop' => $this->getParam(4));
+					$params = array('mid' => $params, 'prop' => $this->getParam(4));
 				}
 			}
 		}
@@ -62,8 +62,8 @@ class BeheerMenuController extends \ACLController {
 		$this->content = new BeheerMenuView($item);
 	}
 	
-	public function action_wijzig($miid, $prop) {
-		$item = MenuModel::getMenuItem($miid);
+	public function action_wijzig($mid, $prop) {
+		$item = MenuModel::getMenuItem($mid);
 		$prop = ucfirst($prop);
 		$setter = 'set'. $prop;
 		if (method_exists($item, $setter)) {
@@ -77,9 +77,9 @@ class BeheerMenuController extends \ACLController {
 		$this->content = new BeheerMenuView($item);
 	}
 	
-	public function action_verwijder($miid) {
-		MenuModel::deleteMenuItem($miid);
-		$this->content = new BeheerMenuView($miid);
+	public function action_verwijder($mid) {
+		MenuModel::deleteMenuItem($mid);
+		$this->content = new BeheerMenuView($mid);
 	}
 }
 

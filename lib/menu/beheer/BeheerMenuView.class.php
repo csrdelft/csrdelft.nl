@@ -8,16 +8,16 @@
 class BeheerMenuView extends \SimpleHtml {
 
 	private $_menus;
-	private $_root;
+	private $_tree;
 	
-	public function __construct($menus, $root=null) {
+	public function __construct($menus, $tree=null) {
 		$this->_menus = $menus;
-		$this->_root = $root;
+		$this->_tree = $tree;
 	}
 	
 	public function getTitel() {
-		if ($this->_root !== null) {
-			return 'Beheer '. $this->_root->getMenu() .'-menu';
+		if ($this->_tree !== null) {
+			return 'Beheer '. $this->_tree->getMenu() .'-menu';
 		}
 		return 'Menubeheer';
 	}
@@ -28,7 +28,10 @@ class BeheerMenuView extends \SimpleHtml {
 		if (is_array($this->_menus)) {
 			$smarty->assign('kop', $this->getTitel());
 			$smarty->assign('menus', $this->_menus);
-			$smarty->assign('item', $this->_root);
+			$smarty->assign('tree', $this->_tree);
+			if (empty($this->_tree)) {
+				echo 'alert'; //DEBUG
+			}
 			$smarty->display('menu/beheer/menu_tree.tpl');
 		}
 		elseif (is_int($this->_menus)) {

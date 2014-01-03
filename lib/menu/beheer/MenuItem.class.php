@@ -21,8 +21,8 @@ class MenuItem {
 	
 	public $children;
 	
-	public function __construct($miid=0, $pid=0, $prio=0, $text='', $link='', $perm='', $show=false, $menu='') {
-		$this->menu_id = (int) $miid;
+	public function __construct($mid=0, $pid=0, $prio=0, $text='', $link='', $perm='', $show=false, $menu='') {
+		$this->menu_id = (int) $mid;
 		$this->setParentId($pid);
 		$this->setPrioriteit($prio);
 		$this->setTekst($text);

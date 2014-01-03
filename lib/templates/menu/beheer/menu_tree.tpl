@@ -16,5 +16,5 @@
 Op deze pagina kunt u het menu beheren.
 </p>
 <ul class="menubeheer-tree">
-	
+	{include file='menu/beheer/menu_item.tpl' item=$tree}
 </ul>

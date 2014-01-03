@@ -2,6 +2,7 @@
 	menu_item.tpl	|	P.W.G. Brussee (brussee@live.nl)
 *}
 {strip}
+{if !$item}geen{/if}
 <li id="menu-item-{$item->getMenuId()}" parentid="{$item->getParentId()}" class="menu-item"{if $item->getMenuId() === 0} style="list-style-type: none; background: none;"{/if}>
 	<div class="inline-edit-{$item->getMenuId()}">
 		<div style="display: inline-block; width: 25px;">
@@ -15,10 +16,10 @@
 		<div style="display: inline-block; width: 50px; color: grey;">
 			{$item->getMenuId()}
 		</div>
-		<div style="display: inline-block; width: 175px;">
+		<div style="display: inline-block; width: 170px;{if $item->children} font-weight: bold;{/if}">
 			{$item->getTekst()}
 		</div>
-		<div style="display: inline-block; width: 300px;">
+		<div style="display: inline-block; width: 310px;">
 			<a href="{$item->getLink()}">{$item->getLink()}</a>
 		</div>
 {if $item->getMenuId() !== 0}
@@ -28,7 +29,7 @@
 				<input type="image" src="{$csr_pics}/famfamfam/{if $item->getIsZichtbaar()}eye{else}shading{/if}.png" onclick="menubeheer_submit($(this).parent());" />
 			</form>
 		</div>
-		<div style="display: inline-block; width: 50px; text-align: center;">
+		<div style="display: inline-block; width: 60px; text-align: center;">
 			{$item->getPrioriteit()}
 		</div>
 		<div style="display: inline-block; width: 25px;">
