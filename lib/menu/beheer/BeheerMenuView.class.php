@@ -28,7 +28,7 @@ class BeheerMenuView extends \SimpleHtml {
 		if (is_array($this->_menus)) {
 			$smarty->assign('kop', $this->getTitel());
 			$smarty->assign('menus', $this->_menus);
-			$smarty->assign('tree', $this->_root);
+			$smarty->assign('item', $this->_root);
 			$smarty->display('menu/beheer/menu_tree.tpl');
 		}
 		elseif (is_int($this->_menus)) {

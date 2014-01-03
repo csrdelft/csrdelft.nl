@@ -10,10 +10,15 @@
 			<option value="{$menu->getMenu()}">{$menu->getMenu()}</option>
 		{/foreach}
 	</select>
+	<a href="/menubeheer/beheer/" title="Nieuw menu" class="knop" onclick="this.href+=prompt('Voer unieke naam in','');">{icon get="add"}</a>
 </div>
 <p>
 Op deze pagina kunt u het menu beheren.
 </p>
 <ul class="menubeheer-tree">
-	{include file='menu/beheer/menu_item.tpl' item=$tree}
+{if $item}
+	{include file='menu/beheer/menu_item.tpl'}
+{else}
+	{include file='menu/beheer/menu_new.tpl'}
+{/if}
 </ul>
