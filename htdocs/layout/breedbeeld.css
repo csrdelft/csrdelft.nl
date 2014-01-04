@@ -8,7 +8,7 @@ and open the template in the editor.
     Author     : Paul Brussee
 */
 
-#container, #menu, #submenu, #main, #mainright, #footer {
+#container, #menu, #menuleft, #submenu, #main, #mainright, #footer {
 	margin: initial;
 	width: auto;
 	overflow-x: hidden;
