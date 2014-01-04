@@ -1,15 +1,15 @@
-### Dingen voor de htdocs-root
+# Dingen voor de htdocs-root
 AddDefaultCharset utf-8
 RewriteEngine On
 
-### Tijdelijk OWee redirect(nu niet!)
-### RewriteRule ^$ /actueel/owee [NC,R=302,L]
+# Tijdelijk OWee redirect(nu niet!)
+# RewriteRule ^$ /actueel/owee [NC,R=302,L]
 
-### mod_rewrite-dingen
+# mod_rewrite-dingen
 RewriteRule ^instellingen/?$		instellingen.php [L]
 RewriteRule ^pauper/?$				pauper.php [L]
 
-### maaltijden & corvee
+# maaltijden & corvee
 RewriteRule ^maaltijden/?(.*)$		taken.php?uri=maaltijden/$1 [L]
 RewriteRule ^corvee/?(.*)$			taken.php?uri=corvee/$1 [L]
 
@@ -52,7 +52,7 @@ RewriteRule ^su/([0-9a-z]+)/?$		su.php?actie=su&uid=$1 [L]
 RewriteRule ^endsu/?$				su.php?actie=endSu [L]
 
 # menubeheer
-RewriteRule ^menubeheer/?(.*)$		menubeheer.php?uri=$1 [L]
+RewriteRule ^menubeheer/?(.*)$		menubeheer.php?uri=$1 [QSA,L]
 
 # Facebook link voor BINAS voor de Owee(Cie)
 RewriteRule ^facebook/?$			http://www.facebook.com/group.php?gid=10294513917&ref=ts [L]
