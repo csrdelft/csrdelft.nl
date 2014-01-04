@@ -18,15 +18,12 @@ body{
 }
 
 /**** MENU ********************************************************************/
-#menubanner {
-	margin: 0px;
-	height: 110px;
-	z-index: 2;
+#menubanners,#banner1,#banner2,#banner3,#banner4{
+	background-image: url('http://plaetjes.csrdelft.nl/owee/2013/banner.png');
 }
 
-#menuleft img {
-	border: 0;
-	padding: 0px 30px 0px;
+#logo{
+	background-image: url('http://plaetjes.csrdelft.nl/owee/2010/logo.png');
 }
 
 /**** MAIN MENU ***************************************************************/
@@ -51,6 +48,9 @@ body{
 }
 #submenu a:hover, #submenu a:active {
 	color: #fbea14;
+}
+#submenuitems span.separator{
+	background-image: url('http://plaetjes.csrdelft.nl/owee/2013/submenuseperator.png');
 }
 
 /**** MAIN ********************************************************************/

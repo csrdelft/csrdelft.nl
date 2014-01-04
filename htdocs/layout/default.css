@@ -92,26 +92,42 @@ ul.nobullets li{ list-style-type: none; }
 	width: 259px;
 	height: 142px;
 }
-#menuleft img{
+#logo{
+	background-image: url('http://plaetjes.csrdelft.nl/layout/logo.gif');
+	background-repeat: no-repeat;
+	width: 133px;
+	height: 133px;
 	border: 0;
-	padding: 4px 30px 0px;
+	margin: 4px 30px 0px;
 }
 #menucenter{
 	float: left;
-	width: 560px;
+	width: 553px;
 	height: 142px;
 }
 
 /**** MENU BANNER *************************************************************/
-#menubanner{
+#menubanners, #menubanners .menubanner {
 	margin: 2px 0;
-	width: 547px;
+	width: 553px;
 	height: 106px;
 }
-#banner1 { display:none; }
-#banner2 { display:none; }
-#banner3 { display:none; }
-#banner4 { display:none; }
+#banner1 {
+	display: none;
+	background-image: url('http://plaetjes.csrdelft.nl/menubalk/banner1.png');
+}
+#banner2 {
+	display: none;
+	background-image: url('http://plaetjes.csrdelft.nl/menubalk/banner2.png');
+}
+#banner3 {
+	display: none;
+	background-image: url('http://plaetjes.csrdelft.nl/menubalk/banner3.png');
+}
+#banner4 {
+	display: none;
+	background-image: url('http://plaetjes.csrdelft.nl/menubalk/banner4.png');
+}
 
 /**** MAIN MENU ***************************************************************/
 #mainmenu {
@@ -149,6 +165,7 @@ ul.nobullets li{ list-style-type: none; }
 	width: 966px;
 	height: 24px;
 }
+
 #submenuitems {
 	padding-top: 5px;
 }
@@ -157,7 +174,14 @@ ul.nobullets li{ list-style-type: none; }
 	float: right;
 	margin-right: 50px;
 }
-#sub1, #sub2, #sub3, #sub4{}
+#submenuitems span.separator{
+	background-image: url('http://plaetjes.csrdelft.nl/layout/submenuseperator.gif');
+	background-repeat: no-repeat;
+	background-position: center;
+}
+#sub1, #sub2, #sub3, #sub4{
+	
+}
 
 #submenuitems div.active {
 	display: block;

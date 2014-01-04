@@ -23,7 +23,7 @@ function ShowMenu(div)
 	if (div > 0) {
 		document.getElementById('sub'+div).style.display = "block";
 		document.getElementById('top'+div).className = 'active';
-		document.getElementById('banner'+div).style.display = "inline";
+		document.getElementById('banner'+div).style.display = "block";
 		if (typeof fixPNG != "undefined") {
 			fixPNG('imgbanner'+div);
 		}

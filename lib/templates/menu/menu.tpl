@@ -1,11 +1,11 @@
 <div id="menu" onmouseover="ResetTimer()" onmouseout="StartTimer()">
-	<div id="menuleft"><a href="/"><img src="{$csr_pics}/layout/logo.gif" alt="Logo" id="logo" /></a></div>
+	<div id="menuleft"><a href="/"><div id="logo"></div></a></div>
 	<div id="menucenter">
-		<div id="menubanner">
-			<div id="banner1"><img src="{$csr_pics}/menubalk/banner1.png" id="imgbanner1" alt="banner1" width="553" height="106" /></div>
-			<div id="banner2"><img src="{$csr_pics}/menubalk/banner2.png" id="imgbanner2" alt="banner2" width="553" height="106" /></div>
-			<div id="banner3"><img src="{$csr_pics}/menubalk/banner3.png" id="imgbanner3" alt="banner3" width="553" height="106" /></div>
-			<div id="banner4"><img src="{$csr_pics}/menubalk/banner4.png" id="imgbanner4" alt="banner4" width="553" height="106" /></div>
+		<div id="menubanners">
+			<div id="banner1" class="menubanner"></div>
+			<div id="banner2" class="menubanner"></div>
+			<div id="banner3" class="menubanner"></div>
+			<div id="banner4" class="menubanner"></div>
 		</div>
 		<ul id="mainmenu">
 			{foreach from=$items item=item}
@@ -115,7 +115,7 @@
 			<div id="sub{$item.menu_id}" {if $item.huidig}class="active"{/if}>
 				{assign var='showseperator' value=false}
 				{foreach from=$item.subitems item=subitem}
-					{if $showseperator} <img src="{$csr_pics}/layout/submenuseperator.gif" alt="|" /> {/if}
+					{if $showseperator} <span class="separator">&nbsp;&nbsp;</span> {/if}
 					{assign var='showseperator' value=true}
 					<a href="{$subitem.link}" title="{$subitem.tekst}"{if $subitem.huidig} class="active"{/if}>{$subitem.tekst}</a>
 				{/foreach}

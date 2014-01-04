@@ -3268,9 +3268,7 @@ lib/templates/mededelingen/mededelingenzijbalk.tpl -text
 lib/templates/mededelingen/top3overzicht.tpl -text
 lib/templates/menu/beheer/menu_item.tpl -text
 lib/templates/menu/beheer/menu_tree.tpl -text
-lib/templates/menu/lustrum_menu.tpl -text
 lib/templates/menu/menu.tpl -text
-lib/templates/menu/owee_menu.tpl -text
 lib/templates/minion.tpl -text
 lib/templates/owee_csrdelft.tpl -text
 lib/templates/peiling.ubb.tpl -text

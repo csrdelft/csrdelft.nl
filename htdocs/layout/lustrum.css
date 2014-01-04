@@ -6,7 +6,7 @@ body{
 	background-image: none !important;
 }
 
-#mainleft *, #mainright, #adminding, #adminding *, #footer{
+#main, #mainleft *, #mainright, #adminding, #adminding *, #footer{
 	background-color: #000 !important;
 }
 
@@ -15,7 +15,12 @@ h1, h2, h3, h4, h5, h6{ color: #ebc474 !important; }
 h1 a, h2 a, h3 a, h4 a, h5 a, h6 a{ color: #ebc474 !important; }
 a, #footer a{ color: white; }
 a:hover{ color: #ebc474 !important; }
-
+#logo{
+	background-image: url('http://plaetjes.csrdelft.nl/lustrum/logo.png');
+}
+#submenuitems span.separator{
+	background-image: url('http://plaetjes.csrdelft.nl/lustrum/spacer.png');
+}
 #container{
 	border: none;
 	margin-top: 0;

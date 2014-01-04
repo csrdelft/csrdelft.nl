@@ -17,13 +17,8 @@ class Menu {
 	private $_huidig=1;
 	//huidigTop is het ID van de menu-optie waaronder de huidige valt
 	private $_huidigTop=0;
-
-	private $_prefix;
-
-	/**
-		Michel: param $mainid toegevoegd, de vorminsbank heeft een ander hoofdmenu parent_id (= 99)
-	**/
-	public function __construct($prefix='', $mainid=0) {
+	
+	public function __construct() {
 		$db=MySql::instance();
 
 		$this->_menu=array();
@@ -56,10 +51,10 @@ class Menu {
 					($request_uri_full==$aMenu['link'] AND $aMenu['link']!='/') OR
 					(strpos($request_uri, $aMenu['link'])!==false AND $aMenu['link']!='/')){
 				$this->_huidig=$aMenu['menu_id'];
-				if($aMenu['parent_id']!=$mainid){ $this->_huidigTop=$aMenu['parent_id']; } //mw: 0 --> $mainid
+				$this->_huidigTop=$aMenu['parent_id'];
 				$bHuidig=true;
 			}
-			if($aMenu['parent_id']==$mainid){  //mw: 0 --> $mainid
+			if($aMenu['parent_id']==0){
 				//hoofdniveau
 				$this->_menu[$aMenu['menu_id']]=array(
 					'menu_id' => $aMenu['menu_id'],
@@ -88,9 +83,6 @@ class Menu {
 					'rechten' => $aMenu['permission'] );
 			}
 		}
-
-		//Prefix opslaan
-		$this->_prefix=$prefix;
 	}
 
 
@@ -148,7 +140,7 @@ class Menu {
 				'forum' => new SavedQuery(ROWID_QUEUE_FORUM),
 				'meded' => new SavedQuery(ROWID_QUEUE_MEDEDELINGEN)));
 		}
-		$menu->display('menu/'.$this->_prefix.'menu.tpl');
+		$menu->display('menu/menu.tpl');
 	}
 
 	public static function getGaSnelNaar(){

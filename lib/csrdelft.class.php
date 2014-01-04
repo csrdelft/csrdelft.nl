@@ -28,7 +28,7 @@ class csrdelft extends SimpleHTML {
 
 	private $_prefix;
 
-	function __construct($body, $prefix='', $menuid=0){ //mw: param menuid toegevoegd, zodat het goede menu geladen wordt (voor vb=99)
+	function __construct($body, $prefix=''){
 		if(is_object($body)){
 			$this->_body=$body;
 			//als de body een methode heeft om een titel mee te geven die gebruiken, anders de standaard.
@@ -59,7 +59,7 @@ class csrdelft extends SimpleHTML {
 
 			//nieuw menu-object aanmaken...
 			require_once('menu/menu.class.php');
-			$this->_menu=new Menu($this->_prefix, $menuid);
+			$this->_menu=new Menu();
 
 			//Stylesheets en scripts die we altijd gebruiken
 

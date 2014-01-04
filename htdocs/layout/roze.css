@@ -7,3 +7,7 @@ body, body * {
 #menu, #menu * {
 	background: none !important;
 }
+
+#logo{
+	background-image: url('http://plaetjes.csrdelft.nl/layout/logop.gif') !important;
+}
