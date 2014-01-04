@@ -37,3 +37,8 @@ and open the template in the editor.
 #top3overzicht, #kolomrechts, div.bericht {
 	width: auto !important;
 }
+
+#adminding {
+	position: absolute;
+	left: -100px;
+}
