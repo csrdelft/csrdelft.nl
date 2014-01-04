@@ -38,7 +38,7 @@ and open the template in the editor.
 	width: auto !important;
 }
 
-#adminding {
+#adminding div {
 	position: absolute;
 	left: -100px;
 }
