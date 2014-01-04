@@ -35,7 +35,7 @@ class BeheerMenusController extends \ACLController {
 			else {
 				$params = intval($this->getParam(1));
 				if ($this->hasParam(2)) {
-					$params = array('mid' => $params, 'prop' => $this->getParam(2));
+					$params = array($params, $this->getParam(2));
 				}
 			}
 		}

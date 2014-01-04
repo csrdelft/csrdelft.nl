@@ -3,59 +3,59 @@ AddDefaultCharset utf-8
 RewriteEngine On
 
 ### Tijdelijk OWee redirect(nu niet!)
-### RewriteRule ^$ /actueel/owee [R=302,NC,L]
+### RewriteRule ^$ /actueel/owee [NC,R=302,L]
 
 ### mod_rewrite-dingen
-RewriteRule ^instellingen/?$		instellingen.php
-RewriteRule ^pauper/?$				pauper.php
+RewriteRule ^instellingen/?$		instellingen.php [L]
+RewriteRule ^pauper/?$				pauper.php [L]
 
 ### maaltijden & corvee
-RewriteRule ^maaltijden/?(.*)$		taken.php?taken=maaltijden/$1
-RewriteRule ^corvee/?(.*)$			taken.php?taken=corvee/$1
+RewriteRule ^maaltijden/?(.*)$		taken.php?uri=maaltijden/$1 [L]
+RewriteRule ^corvee/?(.*)$			taken.php?uri=corvee/$1 [L]
 
 # SocCie
-RewriteRule ^soccie/?$				soccie/index.php
+RewriteRule ^soccie/?$				soccie/index.php [L]
 
 # leden - interne homepage
-RewriteRule ^leden/?$				leden.php
+RewriteRule ^leden/?$				leden.php [L]
 
 # Pagina
-RewriteRule ^pagina/([a-z]+)/bewerken?	pagina.php?naam=$1&bewerken=ja
-RewriteRule ^pagina/([a-z]+)/?		pagina.php?naam=$1
+RewriteRule ^pagina/([a-z]+)/bewerken?	pagina.php?naam=$1&bewerken=ja [L]
+RewriteRule ^pagina/([a-z]+)/?		pagina.php?naam=$1 [L]
 
 # Vereniging
-RewriteRule ^vereniging/?$ 			pagina.php?naam=vereniging
-RewriteRule ^vereniging/([a-z]+)/? 	pagina.php?naam=$1
+RewriteRule ^vereniging/?$ 			pagina.php?naam=vereniging [L]
+RewriteRule ^vereniging/([a-z]+)/? 	pagina.php?naam=$1 [L]
 
 # Contact
-RewriteRule ^contact/?$ 			pagina.php?naam=contact
-RewriteRule ^contact/([a-z]+)/? 	pagina.php?naam=$1
+RewriteRule ^contact/([a-z]+)/? 	pagina.php?naam=$1 [L]
+RewriteRule ^contact/?$ 			pagina.php?naam=contact [L]
 
 # KoSS
-RewriteRule ^koss/?$ 				pagina/koss/
+RewriteRule ^koss/?$ 				pagina/koss/ [L]
 
 # C.S.R. in de OWee
-RewriteRule ^csrindeowee/?$ 		pagina/csrindeowee/
+RewriteRule ^csrindeowee/?$ 		pagina/csrindeowee/ [L]
 
 # Lid Worden
-RewriteRule ^lidworden/?$ 			lidworden.php
+RewriteRule ^lidworden/?$ 			lidworden.php [L]
 
 # heleboel 301's voor terugwaarste compatibiliteit.
-RewriteRule ^forum/(.*)$			/communicatie/forum/$1 [R=301]
-RewriteRule ^intern/profiel(.*)		/communicatie/profiel$1 [R=301]
-RewriteRule ^contact.php$ 			/contact/ [R=301]
-RewriteRule ^base.php.*$ 			/ [R=301]
-RewriteRule ^nieuws/(.*)$			/actueel/mededelingen/$1 [R=301]
+RewriteRule ^forum/(.*)$			/communicatie/forum/$1 [R=301,L]
+RewriteRule ^intern/profiel(.*)		/communicatie/profiel$1 [R=301,L]
+RewriteRule ^contact.php$ 			/contact/ [R=301,L]
+RewriteRule ^base.php.*$ 			/ [R=301,L]
+RewriteRule ^nieuws/(.*)$			/actueel/mededelingen/$1 [R=301,L]
 
 # su
-RewriteRule ^su/([0-9a-z]+)/?$		su.php?actie=su&uid=$1
-RewriteRule ^endsu/?$				su.php?actie=endSu
+RewriteRule ^su/([0-9a-z]+)/?$		su.php?actie=su&uid=$1 [L]
+RewriteRule ^endsu/?$				su.php?actie=endSu [L]
 
 # menubeheer
-RewriteRule ^menubeheer/?(.*)$		menubeheer.php?beheer=$1 [QSA]
+RewriteRule ^menubeheer/(.*)$		menubeheer.php?uri=$1 [L]
 
 # Facebook link voor BINAS voor de Owee(Cie)
-RewriteRule ^facebook/?$			http://www.facebook.com/group.php?gid=10294513917&ref=ts
+RewriteRule ^facebook/?$			http://www.facebook.com/group.php?gid=10294513917&ref=ts [L]
 
 # Account aanvragen
-RewriteRule ^account-aanvragen/?$	pagina.php?naam=accountaanvragen
+RewriteRule ^account-aanvragen/?$	pagina.php?naam=accountaanvragen [L]

@@ -1,19 +1,19 @@
 <?php
 /**
- * menu.php	| 	P.W.G. Brussee (brussee@live.nl)
+ * menubeheer.php	| 	P.W.G. Brussee (brussee@live.nl)
  * 
- * Entry point van het menu-beheer.
- * 
+ * Entry point voor menu-beheer module.
  */
 try {
 	require_once 'configuratie.include.php';
 	require_once 'menu/beheer/BeheerMenusController.class.php';
 	
-	$query = filter_input(INPUT_GET, 'beheer', FILTER_SANITIZE_URL);
+	$query = filter_input(INPUT_GET, 'uri', FILTER_SANITIZE_URL);
 	$controller = new BeheerMenusController($query);
 	$controller->getContent()->view();
 }
-catch (\Exception $e) {
+catch (\Exception $e) { // TODO: logging
+	
 	$protocol = filter_input(INPUT_SERVER, 'SERVER_PROTOCOL', FILTER_SANITIZE_STRING);
 	header($protocol . ' 500 '. $e->getMessage(), true, 500);
 	
