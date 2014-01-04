@@ -70,6 +70,16 @@ htdocs/communicatie/profiel.php -text
 htdocs/communicatie/stamboom.php -text
 htdocs/communicatie/verjaardagen.php -text
 htdocs/communicatie/verticalen.php -text
+htdocs/dies/commissie.html -text
+htdocs/dies/etiquette.html -text
+htdocs/dies/galaaanmelding.php -text
+htdocs/dies/index.html -text
+htdocs/dies/lightbox.js -text
+htdocs/dies/posters.html -text
+htdocs/dies/programma.html -text
+htdocs/dies/styles.css -text
+htdocs/dies/themafilmpje.html -text
+htdocs/dies/thumbnailviewer.js -text
 htdocs/images/layout2/advertentie.jpg -text
 htdocs/images/layout2/bedrijven-1.jpg -text
 htdocs/images/layout2/bedrijven-2.jpg -text
