@@ -36,20 +36,23 @@ background-color:#f1ddbc;
 
 h1 {font-family: rieslingregular;font-size:2em;color:#690f36;white-space: normal;margin: 0px;font-weight:normal}
 h2 {font-family: geosanslightregular;font-size:1.2em;white-space: normal;margin-bottom: 0px;margin-top:5px ;font-weight:bold;}
-h3 {font-family: geosanslightregular;font-size:0.7em; font-weight:lighter;margin:0}
+h3 {font-family: geosanslightregular;font-size:1.2em;white-space: normal;margin-bottom: 5px;margin-top:5px ;font-weight:bold;}
 h4 {font-family: rieslingregular;font-size:2em;color:#690f36;white-space: normal;margin-bottom: 5px;font-weight:normal}
+h5 {font-family: geosanslightregular;font-size:0.7em; font-weight:lighter;margin:0}
 p {font-family: geosanslightregular;font-size:1em;white-space: normal;margin-top: 0px;margin-bottom: 10px;font-weight:normal}
 
 input[type="text"], textarea {
 
   background-color : #f1ddbc; 
   font-family: geosanslightregular;
+  width: 150px;
 
 }
 
 select { 
     background-color: #f1ddbc;
-    font-family: geosanslightregular
+    font-family: geosanslightregular ;
+    width: 150px;
 }
 
 input[type="submit"], input[type="reset"] {
@@ -104,15 +107,16 @@ width: calc(50% - 170px);
 float:left; 
 margin:0;
 margin-left:0; 
+height:460px;
 /* Firefox */
-width: -moz-calc(40% + 170px);
+width: -moz-calc(45% + 170px);
 /* WebKit */
-width: -webkit-calc(40% + 170px);
+width: -webkit-calc(45% + 170px);
 /* Opera */
-width: -o-calc(40% + 170px);
+width: -o-calc(45% + 170px);
 /* Standard */
-width: calc(40% + 170px);
-margin-right:10%;
+width: calc(45% + 170px);
+overflow-y:auto;
 }
 
 #column5

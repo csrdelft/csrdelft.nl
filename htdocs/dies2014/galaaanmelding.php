@@ -93,15 +93,17 @@ staticImage6.src = "./knoppen/posters1.png";
 </div>
 <div id="column4">
 
-<h4>Aanmeldingsformulier gala 21 februari 2014</h4>
-<p>Met behulp van dit formulier kunt u zich aanmelden voor het Dies Natalis gala der Civitas Studiosorum Reformatorum
-op 21 februari 2014. U dient hier de gegevens van u en uw Diesdame of -heer in te vullen. 
-Door u aan te melden gaat u akkoord met het betalen van twee galakaartjes d.m.v. een machtiging (wilt u geen machtiging dan dient u contact op te nemen met de DiesCie).
-Ook gaat u akkoord met de gedragsregels zoals gespecificeerd in de etiquette en de statuten.</p>
 
 <?php
 if($ingelogd){
-
+               ?>
+              <h4>Aanmelding gala 21 februari 2014</h4>
+              <p>Met behulp van dit formulier kunt u zich aanmelden voor het Dies Natalis gala der Civitas Studiosorum Reformatorum
+              op 21 februari 2014. U dient hier de gegevens van u en uw Diesdame of -heer in te vullen. 
+              Door u aan te melden gaat u akkoord met het betalen van twee galakaartjes d.m.v. een machtiging (wilt u geen machtiging dan dient u contact op te nemen met de DiesCie).
+              Ook gaat u akkoord met de gedragsregels zoals gespecificeerd in de etiquette en de statuten.</p>
+              <?php
+              
 $eetopties=array('vlees','vis','vegatarisch');
 $leeftijdopties=array('nee','ja');
 
@@ -109,20 +111,21 @@ $form=array();
 
 $form[]=new Comment('Eigen gegevens:');
 $form[]=new SelectField('eetZelf',$data['eetZelf'],'uw eigen eetvoorkeur',$eetopties);
-$form[]=new InputField('allerZelf', $data['allerZelf'], 'allergien:');
-$form[]=new Comment('Gegevens diesdame, -heer:');
+$form[]=new InputField('allerZelf', $data['allerZelf'], 'allergie-informatie:');
+$form[]=new Comment('Gegevens diesdame of -heer:');
 $form[]=new InputField('naamDate', $data['naamDate'], 'Naam van uw diesdame of diesheer:');
-$form[]=new SelectField('eetDate',$data['eetDate'],'uw eigen eetvoorkeur',$eetopties);
-$form[]=new InputField('allerDate', $data['allerDate'], 'allergien:');
+$form[]=new SelectField('eetDate',$data['eetDate'],'eetvoorkeur van uw diesdame of diesheer',$eetopties);
+$form[]=new InputField('allerDate', $data['allerDate'], 'allergie-informatie van uw diesdame of diesheer:');
 $form[]=new SelectField('date18', $data['date18'], 'Is uw diespartner 18 jaar of ouder op de dag van het gala:', $leeftijdopties);
 $form[]=new SubmitButton('opslaan', '<a class="knop" href="/dies">Annuleren</a>');
 
 
-$form=new Formulier('galaaanmelding', '/dies/galaaanmelding.php', $form);
+$form=new Formulier('galaaanmelding', '/dies2014/galaaanmelding.php', $form);
 $form->view();
 }
 else{
 	?>
+    <h4>Aanmelding gala 21 februari 2014</h4>
 		<h2>U bent niet ingelogd</h2>
 		<p>Als u lid bent van C.S.R. Delft dan dient u eerst in te loggen op de webstek. Daarna kan u zich aanmelden voor het gala.</p>
 		<p>Als u geen lid bent van C.S.R. Delft maar toch naar het gala wilt dan verzoeken wij u contact op te nemen met ons galadatingbureau 'Onder de Panne'. Dit kan u doen door naar <A HREF="http://www.sonnenvanck.com/onderdepanne2014">deze</A> site te gaan of te mailen naar <A HREF="mailto:onderdepanne@sonnenvanck.com">dit</A> e-mail adres.</p>
@@ -130,7 +133,7 @@ else{
 }
 ?>
 
-<h3 align="center">Gemaakt door DiesCie der C.S.R. Delft | Voor vragen neem contact op met de <A HREF="mailto:diescie@csrdelft.nl">DiesCie</A></h3>
+<h5 align="center">Gemaakt door DiesCie der C.S.R. Delft | Voor vragen neem contact op met de <A HREF="mailto:diescie@csrdelft.nl">DiesCie</A></h5>
 </div>
 
 </body>
