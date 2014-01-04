@@ -69,6 +69,11 @@ staticImage6.src = "./knoppen/posters1.png";
 </script>
 
 <link rel="stylesheet" type="text/css" href="styles.css">
+<style>
+p {
+padding-right:8%;
+}
+</style>
 <title>Extraordinair - 52e Dies Natalis der C.S.R. Delft</title>
 </head>
 <body>
@@ -110,12 +115,12 @@ $leeftijdopties=array('nee','ja');
 $form=array();
 
 $form[]=new Comment('Eigen gegevens:');
-$form[]=new SelectField('eetZelf',$data['eetZelf'],'uw eigen eetvoorkeur',$eetopties);
-$form[]=new InputField('allerZelf', $data['allerZelf'], 'allergie-informatie:');
+$form[]=new SelectField('eetZelf',$data['eetZelf'],'Uw eigen eetvoorkeur',$eetopties);
+$form[]=new InputField('allerZelf', $data['allerZelf'], 'Uw allergie-informatie:');
 $form[]=new Comment('Gegevens diesdame of -heer:');
 $form[]=new InputField('naamDate', $data['naamDate'], 'Naam van uw diesdame of diesheer:');
-$form[]=new SelectField('eetDate',$data['eetDate'],'eetvoorkeur van uw diesdame of diesheer',$eetopties);
-$form[]=new InputField('allerDate', $data['allerDate'], 'allergie-informatie van uw diesdame of diesheer:');
+$form[]=new SelectField('eetDate',$data['eetDate'],'Eetvoorkeur van uw diesdame of diesheer',$eetopties);
+$form[]=new InputField('allerDate', $data['allerDate'], 'Allergie-informatie van uw diesdame of diesheer:');
 $form[]=new SelectField('date18', $data['date18'], 'Is uw diespartner 18 jaar of ouder op de dag van het gala:', $leeftijdopties);
 $form[]=new SubmitButton('opslaan', '<a class="knop" href="/dies">Annuleren</a>');
 
@@ -133,6 +138,32 @@ else{
 }
 ?>
 
+</div>
+</div>
+
+<div id="footer">
+<table cellspacing="8" align="center">
+<tr>
+<td><a href="themafilmpje.html" onmouseover="image1.src=loadImage1.src;" onmouseout="image1.src=staticImage1.src;">
+<img name="image1" src="./knoppen/themafilmpje1.png" width="154" height="50" border=0></a></td>
+
+<td><a href="programma.html" onmouseover="image2.src=loadImage2.src;" onmouseout="image2.src=staticImage2.src;">
+<img name="image2" src="./knoppen/programma1.png" width="154" height="50" border=0></a></td>
+
+<td><a href="galaaanmelding.php">
+<img name="image3" src="./knoppen/galaaanmelding3.png" width="154" height="50" border=0></a></td>
+</tr>
+<tr>
+<td><a href="etiquette.html" onmouseover="image4.src=loadImage4.src;" onmouseout="image4.src=staticImage4.src;">
+<img name="image4" src="./knoppen/etiquette1.png" width="154" height="50" border=0></a></td>
+
+<td><a href="commissie.html" onmouseover="image5.src=loadImage5.src;" onmouseout="image5.src=staticImage5.src;">
+<img name="image5" src="./knoppen/commissie1.png" width="154" height="50" border=0></a></td>
+
+<td><a href="posters.html" onmouseover="image6.src=loadImage6.src;" onmouseout="image6.src=staticImage6.src;">
+<img name="image6" src="./knoppen/posters1.png" width="154" height="50" border=0></a></td>
+</tr>
+</table>
 <h5 align="center">Gemaakt door DiesCie der C.S.R. Delft | Voor vragen neem contact op met de <A HREF="mailto:diescie@csrdelft.nl">DiesCie</A></h5>
 </div>
 

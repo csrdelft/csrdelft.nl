@@ -109,13 +109,13 @@ margin:0;
 margin-left:0; 
 height:460px;
 /* Firefox */
-width: -moz-calc(45% + 170px);
+width: -moz-calc(50% + 170px);
 /* WebKit */
-width: -webkit-calc(45% + 170px);
+width: -webkit-calc(50% + 170px);
 /* Opera */
-width: -o-calc(45% + 170px);
+width: -o-calc(50% + 170px);
 /* Standard */
-width: calc(45% + 170px);
+width: calc(50% + 170px);
 overflow-y:auto;
 }
 
