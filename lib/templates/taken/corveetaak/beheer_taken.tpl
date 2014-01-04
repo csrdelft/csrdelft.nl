@@ -20,7 +20,12 @@
 			<a href="/maaltijdenbeheer/beheer/{$maaltijd->getMaaltijdId()}" title="Wijzig gekoppelde maaltijd" class="knop get">{icon get="cup_edit"}</a>
 		{/if}
 			<b>{$maaltijd->getTitel()} op {$maaltijd->getDatum()|date_format:"%A %e %B"} om {$maaltijd->getTijd()|date_format:"%H:%M"}</b>
-		</p><p>Onderstaande tabel toont <i>alleen</i> de corveetaken voor deze maaltijd die <i>niet verwijderd</i> zijn.
+		</p>
+		{if $maaltijd->getIsVerwijderd()}
+			<p>Onderstaande tabel toont de corveetaken voor deze maaltijd, ook die verwijderd zijn.
+		{else}
+			<p>Onderstaande tabel toont <i>alleen</i> de corveetaken voor deze maaltijd die <i>niet verwijderd</i> zijn.
+		{/if}
 	{else}.
 		Onderstaande tabel toont alle corveetaken die niet verwijderd zijn.
 	{/if}
@@ -63,13 +68,15 @@
 	<thead>
 		{include file='taken/corveetaak/beheer_taak_datum.tpl' perdatum=$perdatum datum=$datum}
 	</thead>
-	{/if}
 	<tbody>
+	{/if}
 	{foreach from=$perdatum key="fid" item=perfunctie}
 		{foreach from=$perfunctie item=taak}
 			{include file='taken/corveetaak/beheer_taak_lijst.tpl' taak=$taak}
 		{/foreach}
 	{/foreach}
+	{if !$prullenbak and !isset($maaltijd)}
 	</tbody>
+	{/if}
 {/foreach}
 </table>

@@ -3,7 +3,7 @@
 *}
 {strip}
 <tr id="corveetaak-row-{$taak->getTaakId()}" class="taak-datum-{$taak->getDatum()}
-{if $taak->getBeginMoment() < strtotime('-1 day')} taak-oud{/if}
+{if ($taak->getBeginMoment() < strtotime('-1 day') and !isset($maaltijd)) or $taak->getIsVerwijderd()} taak-oud{/if}
 "{if !isset($show) and !$prullenbak} style="display: none;"{/if}>
 	<td>
 {if $taak->getIsVerwijderd()}

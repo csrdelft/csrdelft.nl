@@ -55,8 +55,8 @@ class BeheerTakenController extends \ACLController {
 			$this->action_bewerk($tid);
 		}
 		elseif (is_int($mid) && $mid > 0) {
-			$taken = TakenModel::getTakenVoorMaaltijd($mid);
 			$maaltijd = \Taken\MLT\MaaltijdenModel::getMaaltijd($mid, true);
+			$taken = TakenModel::getTakenVoorMaaltijd($mid, true);
 		}
 		else {
 			$taken = TakenModel::getAlleTaken();

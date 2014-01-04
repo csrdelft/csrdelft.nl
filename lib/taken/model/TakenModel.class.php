@@ -365,13 +365,17 @@ class TakenModel {
 	
 	/**
 	 * Haalt de taken op die gekoppeld zijn aan een maaltijd.
+	 * Eventueel ook alle verwijderde taken.
 	 * 
 	 * @param int $mid
 	 * @return CorveeTaak[]
 	 */
-	public static function getTakenVoorMaaltijd($mid) {
+	public static function getTakenVoorMaaltijd($mid, $verwijderd=false) {
 		if (!is_int($mid) || $mid <= 0) {
 			throw new \Exception('Load taken voor maaltijd faalt: Invalid $mid ='. $mid);
+		}
+		if ($verwijderd) {
+			return self::loadTaken('maaltijd_id = ?', array($mid));
 		}
 		return self::loadTaken('verwijderd = false AND maaltijd_id = ?', array($mid));
 	}
