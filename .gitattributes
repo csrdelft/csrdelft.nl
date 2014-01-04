@@ -2944,6 +2944,7 @@ lib/csrgozerbot.class.php -text
 lib/csrpdo.class.php -text
 lib/csrsmarty.class.php -text
 lib/csrubb.class.php -text
+lib/diesAanmelding.class.php -text
 lib/documenten/categorie.class.php -text
 lib/documenten/document.class.php -text
 lib/documenten/documentcontent.class.php -text
