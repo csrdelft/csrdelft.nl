@@ -49,7 +49,12 @@ class csrdelft extends SimpleHTML {
 	}
 
 	function setZijkolom($zijkolom) {
-		$this->_zijkolom = $zijkolom;
+		if (is_bool($zijkolom) || is_array($zijkolom)) {
+			$this->_zijkolom = $zijkolom;
+		}
+		else {
+			throw new \Exception('Zijkolom ongeldig');
+		}
 	}
 
 	function addZijkolom(SimpleHTML $block) {
@@ -245,13 +250,10 @@ class csrdelft extends SimpleHTML {
 			$smarty->assign('minion', $smarty->fetch('minion.tpl'));
 		}
 
-		// SocCie-saldi & MaalCie-saldi
-		$smarty->assign('saldi', LoginLid::instance()->getLid()->getSaldi());
-
 		if ($this->_zijkolom !== false || Instelling::get('layout_beeld') === 'breedbeeld') {
 			$this->standaardZijkolom();
-			$smarty->assign('zijkolom', $this->_zijkolom);
 		}
+		$smarty->assign('zijkolom', $this->_zijkolom);
 
 		if (defined('DEBUG') AND (LoginLid::instance()->hasPermission('P_ADMIN') OR LoginLid::instance()->isSued())) {
 			$smarty->assign('db', MySql::instance());

@@ -79,6 +79,9 @@ class Menu extends SimpleHTML {
 		$smarty->assign('huidig', $this->_active_item);
 		
 		if ($this->_level === 0) {
+			// SocCie-saldi & MaalCie-saldi
+			$smarty->assign('saldi', LoginLid::instance()->getLid()->getSaldi());
+			
 			if(Loginlid::instance()->hasPermission('P_ADMIN')){
 				require_once 'savedquery.class.php';
 				$smarty->assign('queues', array(

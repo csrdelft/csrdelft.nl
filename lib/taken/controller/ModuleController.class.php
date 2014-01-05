@@ -47,7 +47,6 @@ class ModuleController extends \ACLController {
 		if ($this->hasParam(1)) {
 			$this->action = $this->getParam(1);
 		}
-		$_SERVER['REQUEST_URI'] = '/' . $module; // fake path for main menu
 		$GLOBALS['taken_module'] = '/' . $module . $this->action;
 		$this->action = $module .'_'. $this->action;
 		$this->performAction($query);

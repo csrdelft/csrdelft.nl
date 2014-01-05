@@ -36,17 +36,11 @@
 <div id="header">{$mainmenu->view()}</div>
 <div id="container">
 	<div id="main">
-		{if $zijkolom!==false}
+		{if is_array($zijkolom)}
 			<div id="mainleft">
-				{section name=block loop=$zijkolom}
-					<div class="block">
-						{if is_object($block)}
-							{$block->view()}
-						{else}
-							{$block}
-						{/if}
-					</div>
-				{/section}
+				{foreach from=$zijkolom item=block}
+					<div class="block"><br />{$block->view()}</div>
+				{/foreach}
 			</div>
 		{/if}
 		<div id="mainright"{if $zijkolom===false} style="width: 958px;"{/if}>
