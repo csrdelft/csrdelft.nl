@@ -23,6 +23,7 @@ class csrdelft extends SimpleHTML {
 
 		$this->addStylesheet('undohtml.css');
 		$this->addStylesheet('ubb.css');
+		$this->addStylesheet('csrdelft.css');
 		$this->addStylesheet(Instelling::get('layout') . '.css');
 		if (Instelling::get('layout_beeld') == 'breedbeeld') {
 			$this->addStylesheet('breedbeeld.css');

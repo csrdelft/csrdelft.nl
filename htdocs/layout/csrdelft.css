@@ -1,0 +1,702 @@
+/**** GENERAL *****************************************************************/
+body, html, p, a, img, h1, h2, h3, h4, ul, li, form, fieldset, input {
+	margin: 0;
+	padding: 0;
+}
+body {
+	font-family : Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+}
+
+#container {
+	margin: 0 auto 10px;
+	width: 1004px;
+}
+
+body, textarea, input, select, option, tr, td, th, div, p  {
+	text-align: justify;
+}
+
+h1{
+	font-size: 1.6em;
+	margin-bottom: 0.2em;
+}
+p{
+	margin-bottom: 1em;
+}
+
+abbr.timeago{ border: none; }
+abbr.timeago:hover{ border-bottom: 1px dotted grey; }
+
+a{color: #0a338d; text-decoration: none;}
+a:hover{color: #0a338d; text-decoration: underline;}
+a.external {
+	background-image: url('http://plaetjes.csrdelft.nl/layout/external-link-blue.png');
+	background-repeat: no-repeat;
+	background-position: center right;
+	padding-right: 14px;
+}
+
+div{ margin: 0px; padding: 0px; }
+
+textarea{
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	padding: 2px;
+	font-size: 1em;
+	border: 1px solid #A9A9A9;
+}
+input, select{ padding-left: 2px; padding-right: 2px;	border: 1px solid #A9A9A9; font-size: 1em;}
+select{ padding-right: 0px; }
+input.checkbox{ border: 0px; }
+label{ text-align: left; margin: 3px; padding: 0px; line-height: 1em;}
+
+th{ text-align: left; }
+td{ vertical-align: top; padding: 0px; }
+ul, ol{ }
+li{margin: 0 0 0 15px;}
+li li{ font-size: 1em;}
+hr{
+	height: 1px; background-color: black;
+	border: 0 none;
+}
+.clear{	clear: both; }
+.verborgen{ display: none; }
+.handje{ cursor: pointer; }
+.small{ font-size: smaller; }
+.lichtgrijs{ color: #aaa; }
+ul.horizontal li{
+	display: inline;
+	padding-right: 20px;
+}
+ul.horizontal li.active{ font-weight:bold; }
+ul.nobullets li{ list-style-type: none; }
+
+
+.dragobject:active {
+	cursor: move;
+}
+
+
+/**** MENU ********************************************************************/
+#menu {
+	margin: 0 auto;
+	padding: 10px 0 0;
+	width: 966px;
+	height: 142px;
+}
+#menuleft{
+	float: left;
+	width: 259px;
+	height: 142px;
+}
+#logo{
+	background-repeat: no-repeat;
+	width: 133px;
+	height: 133px;
+	border: 0;
+	margin: 4px 30px 0px;
+}
+#menucenter{
+	float: left;
+	width: 553px;
+	height: 142px;
+}
+
+/**** MENU BANNER *************************************************************/
+#menubanners, #menubanners .menubanner {
+	margin: 2px 0;
+	width: 553px;
+	height: 106px;
+}
+#banner1 {
+	display: none;
+}
+#banner2 {
+	display: none;
+}
+#banner3 {
+	display: none;
+}
+#banner4 {
+	display: none;
+}
+
+/**** MAIN MENU ***************************************************************/
+#mainmenu {
+	line-height: 0px; /*Fix voor Opera*/
+	list-style-type: none;
+}
+#mainmenu li {
+	display: inline;
+	float: left;
+}
+#mainmenu a {
+	line-height: 27px;
+	overflow: visible;
+	display: block;
+	text-align: center;
+	font-size: 13px;
+	width: 122px;
+	height: 32px !important;
+	height: 30px;
+	font-weight: bold;
+	text-decoration: none;
+	background-repeat: no-repeat;
+}
+#mainmenu a:link, #mainmenu a:visited {
+	color: #ffffff;
+}
+#mainmenu a:hover, #mainmenu a:active, #mainmenu a.active {
+	background-repeat: no-repeat;
+}
+
+/**** SUBMENU *****************************************************************/
+#submenu {
+	margin: 0 auto;
+	width: 966px;
+	height: 24px;
+}
+
+#submenuitems {
+	padding-top: 5px;
+}
+#submenuitems div{
+	display: none;
+	float: right;
+	margin-right: 50px;
+}
+#submenuitems span.separator{
+	background-image: url('http://plaetjes.csrdelft.nl/layout/submenuseperator.gif');
+	background-repeat: no-repeat;
+	background-position: center;
+}
+#sub1, #sub2, #sub3, #sub4{
+	display: none;
+}
+#sub1.active, #sub2.active, #sub3.active, #sub4.active {
+	display: block;
+}
+#submenu img {
+	margin-top: 4px;
+	vertical-align: top;
+}
+#submenu a {
+	padding: 3px 2px;
+	font-size: 12px;
+	text-decoration: none;
+}
+#submenu a:link, #submenu a:visited {
+	color: #ffffff;
+}
+#submenu a:hover, #submenu a:active, #submenu a.active {
+	color: #e8cf2a;
+}
+
+/**** MENU RIGHT **************************************************************/
+#menuright{
+	float: right;
+	width: 138px;
+	height: 142px;
+	position: relative;
+}
+#key img {
+	float: right;
+	padding: 10px;
+	border: 0;
+	cursor: pointer;
+}
+#ingelogd{
+	color: #fff;
+	margin-top: 7px;
+	width: 133px;
+	text-align: left;
+}
+#ingelogd a{ color: #fff; }
+#profiellink{ float: left; }
+#uitloggen{ float: right; clear: right; }
+.instellingen{ float: right; }
+
+#saldi {clear: both; padding-top: 4px;}
+#saldi .saldo{ float: right; }
+#saldi .staatrood{ color: red; }
+
+#adminding{
+	border: 1px solid white;
+	background-color: #3262D7;
+	padding: 1px 2px;
+	margin-top: 4px;
+	cursor: pointer;
+	height: 13px;
+	padding: 2px;
+	text-align: center;
+}
+
+
+#adminding div{
+	display: none;
+	
+	position: relative; 
+	left: -3px; top: 1px;
+	width: 200px; min-height: 50px;
+	z-index: 99;
+	border: 1px solid white; 
+	background-color: #3262D7;
+	padding: 5px;
+}
+#adminding span.queues{
+	float: right;
+	display: block;
+	width: 60px;
+	overflow-x: hidden;
+}
+
+#zoekveld{
+	width: 127px;
+	text-align: left;
+	padding: 2px;
+	position: absolute;
+	top: 115px;
+	background-image: url('http://plaetjes.csrdelft.nl/search-bg.png');
+	background-position: 100% 50%;
+	background-repeat: no-repeat;
+}
+#login{
+	margin-right: 10px;
+	float: right;
+}
+#login fieldset{
+	border: 0;
+}
+#login input{
+	padding: 1px;
+	margin: 1px 0px;
+	width: 125px;
+	_width: 85px; /*IE6 Fix*/
+	border: 1px solid #000;
+	background-color: #fff;
+}
+#login input.checkbox {
+	_margin-left: -3px;
+	width: auto;
+	border: 0;
+	background: none;
+	float: left;
+}
+#login input.submit {
+	background-color: #0178e3;
+	color: #fff;
+	text-align: center;
+	margin-top: 5px;
+}
+#login label{
+	margin: 1px;
+	_margin-top: 5px;
+	padding: 0;
+	float: right;
+	color: #fff;
+}
+
+/**** MAIN ********************************************************************/
+#main {
+	width: 1004px;
+}
+
+#mainleft {
+	float: left;
+	margin-top: 3px;
+	margin-left: 17px; _margin-left: 7px; /*IE6 Fix*/
+	width: 200px;
+}
+#mainright {
+	float: right;
+	margin-right: 24px;
+	padding: 10px 0;
+	width: 760px;
+}
+
+/**** BLOCK *******************************************************************/
+#mainleft .block {
+	margin: 0 15px 0 10px;
+}
+#mainleft .block h1 {
+	margin: 0;
+	padding: 1px 5px;
+	font-size: 11px;
+	height: 13px;
+	color: #162673;
+	font-weight: bold;
+	background: url('http://plaetjes.csrdelft.nl/layout/blocktitle.png') no-repeat;
+	border-bottom: 1px solid #b8b8b8;
+}
+#mainleft .block h1 a{
+	color:  #162673;
+}
+#mainleft .block .item {
+	padding: 0px 5px; 
+	font-size: 10px;
+	background-color: #f5f5f5;
+	border: 1px solid #b8b8b8;
+	border-top: 0;
+	text-align: left;
+	overflow:hidden;
+	text-overflow: ellipsis;
+	-o-text-overflow: ellipsis;
+	white-space:nowrap;
+}
+#mainleft a {
+	color: #000;
+	text-decoration: none;
+}
+#mainleft .opvallend {
+	font-style: italic;
+}
+#mainleft a:hover{
+	text-decoration: underline;
+}
+#ishetalvrijdag{
+	text-align: center;
+}
+#ishetalvrijdag div.ja, #ishetalvrijdag div.nee{
+	font-size: 16px;
+	font-weight: bold;
+	color: red;
+	text-align: center;
+}
+#ishetalvrijdag div.ja{
+	color: green;
+}
+
+/* Verjaardag in de zijbalk */
+#komende_pasfotos{ padding: 4px 0px;}
+#komende_pasfotos .verjaardag{
+	position: relative;
+	float: left;
+	margin: 2px;
+	text-align: center;
+	width: 50px; height: 70px;
+	overflow: hidden;
+}
+#komende_pasfotos .verjaardag .lidfoto{
+	width: 50px;
+}
+#komende_pasfotos .opvallend .datum{ font-weight: bold;  }
+.verjaardag .datum{
+	position: absolute;
+	display: block;
+	width: 100%;
+	bottom: 0px;
+	background-color: white; color: black;
+	font-size: 9px;
+	opacity:0.6;
+	filter:alpha(opacity=60);
+}
+#zijbalk_fotoalbum a{
+	text-decoration: none;
+}
+#zijbalk_fotoalbum img{
+	float:left;
+	width: 50px;
+	height: 50px;
+	margin: 1px 2px;
+}
+.zijbalk-dag{
+	display: inline-block;
+	width: 19px;
+	text-align: right;
+}
+
+/**** FOOTER ******************************************************************/
+#footer {
+	clear: both;
+	padding-top: 7px;
+	width: 1004px;
+	height: 22px;
+	text-align: center;
+	background-image: url('http://plaetjes.csrdelft.nl/layout/footerbg.png');
+}
+#footer a {
+	color: #000;
+	text-decoration: none;
+}
+#footer a:hover{
+	text-decoration: underline;
+}
+
+/**** OVERIG ******************************************************************/
+a.knop, div.knop{
+	background-color: #f5f5f5;
+	border: 1px solid #a9a9a9;
+	margin: 2px; padding: 0px 2px;
+	line-height: 1.1em;
+	cursor: pointer;
+}
+
+h2#mysql_debug_header{
+	text-align: center;
+}
+pre#pubcie_debug{
+	position: absolute;
+	top: 10px;
+	left: 1000px; right: 10px;
+	margin: 10px;
+	overflow: auto;
+	font-size: 1.2em;
+	color: #000; background-color: #fff;
+	border: 1px solid darkred;
+	z-index: 100;
+}
+
+table.query_table{
+	margin: 10px;
+	padding: 0;	border-collapse: collapse;
+	border: 1px solid black;
+}
+
+table.query_table td{
+	margin: 0;
+	padding: 4px;
+	padding-left: 10px; padding-right: 10px;
+	background-color: #bbbbbb;
+}
+
+table.query_table th{
+	margin: 0; padding: 4px;
+	padding-left: 10px; padding-right: 10px;
+	border-top: 1px solid #000;
+	border-bottom: 1px solid #000;
+	background-color: #3262d7;
+	color: #fff;
+}
+
+.youtubeVideo{
+	position: relative;
+}
+
+.afspelen{
+	cursor: pointer; cursor: hand;
+	position: absolute;
+	left: 45px;
+	top: 30px;
+	opacity: 0.7;
+}
+
+.oneThirth{
+	width: 253px;
+	float: left;
+}
+
+/* plaatjes in tekst */
+p img{ margin: 15px 10px; }
+
+/* waarschuwing */
+.waarschuwing{ color: red;}
+/* geel blokje */
+div.blokje{ background-color: #ffffc1; margin: 10px 0; padding: 0;}
+
+.pasfotomatrix{ margin-top: 5px; width: 275px; margin-left: 10px;}
+.pasfotomatrix .pasfoto{
+	width: 48px; height: 64px; float: left;
+	border: 1px solid grey;
+	margin: 0 5px 5px 0;
+}
+
+/* algemeen hokje voor (fout)meldingen */
+div#melding{
+	margin: 10px; padding: 10px;
+	background-color: lightgrey;
+	border: 1px solid black;
+	font-size: 1.3em;
+}
+#melding div{padding-left: 30px;}
+div.msgerror{
+	color: red;
+	background: url(http://plaetjes.csrdelft.nl/famfamfam/exclamation.png) no-repeat;
+}
+div.msginfo{
+	color: #0A338D;
+	background: url(http://plaetjes.csrdelft.nl/famfamfam/information.png) no-repeat;
+}
+div.msgsuccess{
+	color: green;
+	background: url(http://plaetjes.csrdelft.nl/famfamfam/accept.png) no-repeat;
+}
+div.msgnotify{
+	color: #FFF500;
+	background: url(http://plaetjes.csrdelft.nl/famfamfam/bell.png) no-repeat;
+}
+
+/* ubb-hulp */
+div#ubbhulpverhaal{
+	display: none;
+	z-index: 999;
+	position: fixed;
+	left: 50px;
+	top: 50px;
+	width: 330px;
+	border: 1px solid #bbb;
+	margin-top: -13px;
+	padding: 5px;
+	background-color: white;
+	text-align: left;
+}
+span#ubbsluiten{
+	display: block;
+	width: 18px; height: 18px;
+	float: right;
+	margin: 0; padding: 0;
+	font-weight: bold; font-size: 14px;
+	text-align: center;	vertical-align: middle;
+	color: black;
+	cursor: pointer; cursor: hand;
+	border: 1px solid #fff;
+}
+span#ubbsluiten:hover{
+	border: 1px solid #000;
+	background-color: #eee;
+}
+
+/* csrmail */
+div#pubciemail_form{ background-color: #f1f1f1; border: 1px solid lightgray; padding: 10px;}
+
+/* archief C.S.R.-courant */
+div.courantArchiefJaar{
+	width: 100px;
+	float: left;
+}
+
+/* Streeplijstgenereertool */
+form#streeplijst fieldset{ padding: 10px;  }
+form#streeplijst fieldset legend{ font-weight: bold; }
+form#streeplijst input, form#streeplijst label{ text-align: left; margin: 3px; padding: 0px; line-height: 1em;}
+
+
+#eetplanLETOP{
+	color: darkred; font-size: 1.8em;
+	line-height: 1.1em;
+	padding: 10px; font-weight: bold;
+	text-align: justify; display: block;
+	border: 1px solid #000; background-color: lightgrey;
+}
+.eetplantabel{
+	width: 100%; border-collapse: collapse;
+}
+.eetplantabel tr{ margin: 0; padding: 0;}
+.eetplantabel tr td{ margin: 0; padding: 0; text-align: left;}
+.eetplantabel tr th{ border-bottom: 1px solid black; }
+.eetplantabel tr.kleur0 td{ background-color: #fff; }
+.eetplantabel tr.kleur1 td{ background-color: #f4f4f4; }
+.eetplantabel tr .huis{ border-left: 1px solid #000; padding:3px 4px; margin: 0; font-size: 10px;}
+
+#shoutbox{
+
+}
+
+
+/* Mededelingen */
+.mededeling-grotebalk{
+	padding: 8px 12px 8px 6px;
+	margin-bottom: 10px;
+	border-top: 1px solid #b8b8b8;
+	border-left: 1px solid #b8b8b8;
+	background-color: #f0f0f0;
+}
+.mededeling-grotebalk .plaatje{
+	width: 70px;
+	height: 70px;
+	margin-right: 10px;
+	float: left;
+	overflow: hidden;
+}
+.mededeling-grotebalk .titel{
+	font-weight: bold;
+	font-size: 1.1em;
+	padding: 0 0 3px;
+}
+.mededeling-grotebalk .bericht{
+	text-align: left;
+}
+.mededeling-grotebalk .half{
+	width: 49%;
+	float: left;
+	margin-bottom: 0;
+}
+#mededelingen-top3block{
+	float: left;
+	margin: 0;
+	margin-right: 25px;
+	width: 400px;
+}
+#nieuwePeiling label{ clear: left; float: left; width: 150px;}
+#nieuwePeiling input, #nieuwePeiling textarea{ margin-bottom: 4px;}
+#nieuwePeiling textarea{ width: 400px; }
+#peilingOpties input{ width: 400px;}
+
+/* Formulier */
+
+.Formulier label{
+    width: 150px;
+    float: left;
+}
+.Formulier input.regular{
+    width: 250px;
+}
+.Formulier input[type=checkbox] {
+    width: auto;
+}
+.Formulier input.UidField{
+    width: 70px;
+}
+
+.Formulier textarea{
+    width: 250px;
+}
+.Formulier select{
+   /* width: 250px;*/
+}
+
+.Formulier .UBBpreview{
+    margin-left: 156px;
+}
+.Formulier .knop{
+    float: right;
+    width: 80px;
+    text-align: center;
+    padding: 2px;
+    margin-right: 0;
+
+}
+.Formulier .uidPreview, .Formulier .lidPreview{
+    display: inline;
+    padding-left: 10px;
+}
+.Formulier .veld, .Formulier h3, .Formulier .password{
+    clear: both;
+}
+.Formulier .veld, .Formulier .submit{
+    margin-left: 10px;
+    padding: 1px 2px;
+    border: 1px solid white;
+}
+
+.Formulier .veld{
+    overflow: auto;
+}
+.Formulier .veld:hover{
+    border: 1px  solid #ddd;
+    background-color: #eee;
+}
+.Formulier .metfouten{
+    background-color: #FFC3CE;
+    padding: 4px 2px;
+}
+.Formulier .veld .waarschuwing{
+    float: right;
+    margin-right: 10px;
+}
+.Formulier .password{
+    padding: 2px 1px;
+}
+.Formulier h3{
+    margin-top: 8px;
+    margin-bottom: 1px;
+}

@@ -27,9 +27,6 @@ body{
 }
 
 /**** MAIN MENU ***************************************************************/
-#mainmenu a{
-	z-index: 10;
-}
 
 #mainmenu a {
 	background: url('http://plaetjes.csrdelft.nl/owee/2013/menubutton.png') no-repeat;
@@ -55,15 +52,6 @@ body{
 
 /**** MAIN ********************************************************************/
 
-#main {
-	background:none;
-}
-
-#mainbgfooter {
-	clear:both
-}
-
-
 #mainleft .block h1 {
 	color: #3baa35;
 }
@@ -78,36 +66,15 @@ body{
 	color: #FFF; 
 }
 
-
 #adminding{
 	border: 1px solid white;
-	padding: 1px 2px;
-	margin-top: 4px;
-	cursor: pointer;
-	height: 13px;
-	padding: 2px;
-	text-align: center;
 	background-color: #3baa35;
 }
 
 #adminding div{
-	display: none;
-	position: relative; 
-	left: -3px; top: 1px;
-	width: 200px; min-height: 50px;
-	z-index: 99;
 	border: 1px solid white; 
 	background-color: #3baa35;
-	padding: 5px;
 }
-
-#adminding span.queues{
-	float: right;
-	display: block;
-	width: 60px;
-	overflow-x: hidden;
-}
-
 
 #footer {
 	background: url('http://plaetjes.csrdelft.nl/owee/2010/footerbg.png') no-repeat;
