@@ -23,11 +23,6 @@ class MenuView extends SimpleHTML {
 	private $_level;
 	
 	/**
-	 * Requested url
-	 */
-	private $_path;
-	
-	/**
 	 * Root MenuItem of menu tree
 	 */
 	private $_tree_root;
@@ -41,7 +36,11 @@ class MenuView extends SimpleHTML {
 		$this->_menu = $menu;
 		$this->_level = $level;
 		
+		echo $_SERVER['REQUEST_URI'] .'<br />'; //DEBUG
+		
 		$path = filter_input(INPUT_SERVER, 'REQUEST_URI', FILTER_SANITIZE_URL);
+		
+		echo $path .'<br />'; //DEBUG
 		
 		$pos = strpos($path, '.php');
 		if ($pos !== false) {
@@ -51,7 +50,6 @@ class MenuView extends SimpleHTML {
 		if ($pos !== false) {
 			$path = substr($path, 0, $pos);
 		}
-		$this->_path = $path;
 		
 		echo $path .'<br />'; //DEBUG
 		
