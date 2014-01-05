@@ -197,6 +197,7 @@ class csrdelft extends SimpleHTML {
 	private function standaardZijkolom() {
 		// Is het al...
 		if (Instelling::get('zijbalk_ishetal') != 'niet weergeven') {
+			require_once('ishetalcontent.class.php');
 			$this->addZijkolom(new IsHetAlContent(Instelling::get('zijbalk_ishetal')));
 		}
 		// Ga snel naar
