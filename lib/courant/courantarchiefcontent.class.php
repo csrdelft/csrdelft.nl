@@ -8,7 +8,7 @@
 
 require_once 'courant/courantcontent.class.php';
 
-class CourantarchiefContent{
+class CourantarchiefContent extends SimpleHTML{
 
 	var $courant;	
 	
