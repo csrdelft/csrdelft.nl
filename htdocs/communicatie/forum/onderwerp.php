@@ -53,8 +53,8 @@ else {
 	$page->addStylesheet('ubb.css');
 	$page->addScript('csrdelft.js');
 }
-$page->addStylesheet('forum.css');
-$page->addScript('groepen.js');
-$page->addScript('forum.js');
+$page->addStylesheet('forum.css', '/layout/');
+$page->addScript('groepen.js', '/layout/');
+$page->addScript('forum.js', '/layout/');
 
 $page->view();

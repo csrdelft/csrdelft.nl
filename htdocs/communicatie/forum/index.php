@@ -45,6 +45,6 @@ else {
 	$page->addStylesheet('ubb.css');
 	$page->addScript('csrdelft.js');
 }
-$page->addStylesheet('forum.css');
-$page->addScript('forum.js');
+$page->addStylesheet('forum.css', '/layout/');
+$page->addScript('forum.js', '/layout/');
 $page->view();
