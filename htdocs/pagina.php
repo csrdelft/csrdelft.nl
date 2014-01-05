@@ -45,7 +45,8 @@ else {
 
 // Hier alle namen van pagina's die in de nieuwe layout moeten worden weergegeven
 $nieuwNamen = array("contact", "csrindeowee", "vereniging", "lidworden", "geloof", "vorming", "filmpjes", "gezelligheid", "sport", "vragen", "officieel", "societeit", "ontspanning", "interesse", "interesseverzonden", "accountaanvragen");
-if (in_array($_GET['naam'], $nieuwNamen)) {
+if (in_array($_GET['naam'], $nieuwNamen) && !LoginLid::instance()->hasPermission('P_LEDEN_READ')) {
+	// uitgelogde bezoeker heeft nieuwe layout
 	$depagina = new csrdelft2($paginacontent);
 	
 	$nieuwNamen = array("vereniging", "geloof", "vorming", "gezelligheid", "sport", "ontspanning", "societeit", "officieel");
