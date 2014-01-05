@@ -114,7 +114,7 @@
 {foreach from=$root->children item=item}
 	{foreach name=sub from=$item->children item=subitem}
 		{if $smarty.foreach.sub.first}
-			<div id="sub{$item->getMenuId()}"{if $item->isParentOf($subitem)} class="active"{/if}>
+			<div id="sub{$item->getMenuId()}"{if $item->isParentOf($subitem)} class="active"{/if} style="display: none;">
 		{/if}
 			<a href="{$subitem->getLink()}" title="{$subitem->getTekst()}"{if $subitem === $huidig} class="active"{/if}>{$subitem->getTekst()}</a>
 		{if !$smarty.foreach.sub.last}

@@ -2995,11 +2995,11 @@ lib/mededelingen/mededelingcontent.class.php -text
 lib/mededelingen/mededelingencontent.class.php -text
 lib/mededelingen/mededelingtopdrieoverzichtcontent.class.php -text
 lib/memcached.class.php -text
+lib/menu/MenuView.class.php -text
 lib/menu/beheer/BeheerMenusController.class.php -text
 lib/menu/beheer/BeheerMenusView.class.php -text
 lib/menu/beheer/MenuItem.class.php -text
 lib/menu/beheer/MenusModel.class.php -text
-lib/menu/menu.class.php -text
 lib/mimemagic/DjVuImage.php -text
 lib/mimemagic/MimeMagic.php -text
 lib/mimemagic/XmlTypeCheck.php -text

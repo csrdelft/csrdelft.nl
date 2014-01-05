@@ -7,7 +7,7 @@
 # csrdelft is de klasse waarbinnen een pagina in elkaar wordt gezooid
 # -------------------------------------------------------------------
 
-require_once('menu/menu.class.php');
+require_once('menu/MenuView.class.php');
 
 class csrdelft extends SimpleHTML {
 
@@ -19,7 +19,7 @@ class csrdelft extends SimpleHTML {
 
 	function __construct(SimpleHTML $body) {
 		$this->_body = $body;
-		$this->_mainmenu = new Menu('main');
+		$this->_mainmenu = new MenuView('main');
 
 		$this->addStylesheet('undohtml.css');
 		$this->addStylesheet('ubb.css');
@@ -200,7 +200,7 @@ class csrdelft extends SimpleHTML {
 		}
 		// Ga snel naar
 		if (Instelling::get('zijbalk_gasnelnaar') == 'ja') {
-			$this->addZijkolom(new Menu('gasnelnaar', 3));
+			$this->addZijkolom(new MenuView('gasnelnaar', 3));
 		}
 		// Agenda
 		if (LoginLid::instance()->hasPermission('P_AGENDA_READ') && Instelling::get('zijbalk_agendaweken') > 0) {

@@ -1,13 +1,13 @@
 <?php
 require_once 'menu/beheer/MenusModel.class.php';
 /**
- * menu.class.php	| 	P.W.G. Brussee (brussee@live.nl)
+ * MenuView.class.php	| 	P.W.G. Brussee (brussee@live.nl)
  * 
  * Een menu incl. permissies uit de database trekken.
  * De menuopties die niet overeenkomen met de permissies die de
  * gebruiker heeft worden niet getoond.
  */
-class Menu extends SimpleHTML {
+class MenuView extends SimpleHTML {
 
 	/**
 	 * unique short name of the menu
@@ -62,7 +62,7 @@ class Menu extends SimpleHTML {
 			
 			//echo $item->getLink() .'<br />'; //DEBUG
 			
-			if ($path === $item->getLink()) {
+			if (startsWith($path, $item->getLink())) {
 				$this->_active_item = $item;
 			}
 		}
