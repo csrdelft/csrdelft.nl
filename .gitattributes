@@ -3120,8 +3120,6 @@ lib/smarty/libs/plugins/modifier.wordwrap.php -text
 lib/smarty/libs/plugins/outputfilter.trimwhitespace.php -text
 lib/smarty/libs/plugins/shared.escape_special_chars.php -text
 lib/smarty/libs/plugins/shared.make_timestamp.php -text
-lib/smarty/misc/smarty_icon.README -text
-lib/smarty/misc/smarty_icon.gif -text
 lib/smarty/unit_test/README -text
 lib/smarty/unit_test/config.php -text
 lib/smarty/unit_test/configs/globals_double_quotes.conf -text
