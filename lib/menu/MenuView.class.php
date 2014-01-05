@@ -36,27 +36,11 @@ class MenuView extends SimpleHTML {
 		$this->_menu = $menu;
 		$this->_level = $level;
 		
-		echo $_SERVER['REQUEST_URI'] .'<br />'; //DEBUG
-		
-		$path = filter_input(INPUT_SERVER, 'REQUEST_URI', FILTER_SANITIZE_URL);
-		
-		echo $path .'<br />'; //DEBUG
-		
-		$pos = strpos($path, '.php');
-		if ($pos !== false) {
-			$path = substr($path, 0, $pos);
-		}
-		$pos = strpos($path, '#');
-		if ($pos !== false) {
-			$path = substr($path, 0, $pos);
-		}
-		
-		echo $path .'<br />'; //DEBUG
+		$path = $_SERVER['REQUEST_URI'];
+		//$path = filter_input(INPUT_SERVER, 'REQUEST_URI', FILTER_SANITIZE_URL); // faalt op productie
 		
 		$items = MenusModel::getMenuItemsVoorLid($menu);
 		foreach ($items as $item) {
-			
-			echo $item->getLink() .'<br />'; //DEBUG
 			
 			if (startsWith($path, $item->getLink())) {
 				$this->_active_item = $item;

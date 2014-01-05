@@ -10,7 +10,7 @@
 		<ul id="mainmenu">
 			{foreach from=$root->children item=item}
 				<li>
-					<a href="{$item->getLink()}" id="top{$item->getMenuId()}" onmouseover="StartShowMenu('{$item->getMenuId()}');" onmouseout="ResetShowMenu();" {if $item === $huidig}class="active" {/if}title="{$item->getTekst()}">{$item->getTekst()}</a>
+					<a href="{$item->getLink()}" id="top{$item->getMenuId()}" onmouseover="StartShowMenu('{$item->getMenuId()}');" onmouseout="ResetShowMenu();"{if $item->isParentOf($huidig)} class="active"{/if} title="{$item->getTekst()}">{$item->getTekst()}</a>
 					{if $item->isParentOf($huidig)}
 						<script type="text/javascript">
 							SetActive({$item->getMenuId()});
@@ -114,7 +114,7 @@
 {foreach from=$root->children item=item}
 	{foreach name=sub from=$item->children item=subitem}
 		{if $smarty.foreach.sub.first}
-			<div id="sub{$item->getMenuId()}"{if $item->isParentOf($subitem)} class="active"{/if} style="display: none;">
+			<div id="sub{$item->getMenuId()}"{if $item->isParentOf($huidig)} class="active"{/if}>
 		{/if}
 			<a href="{$subitem->getLink()}" title="{$subitem->getTekst()}"{if $subitem === $huidig} class="active"{/if}>{$subitem->getTekst()}</a>
 		{if !$smarty.foreach.sub.last}
