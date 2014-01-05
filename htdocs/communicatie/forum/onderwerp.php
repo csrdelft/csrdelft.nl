@@ -50,8 +50,8 @@ if(LoginLid::instance()->hasPermission('P_LEDEN_READ')){
 else {
 	//uitgelogd heeft nieuwe layout
 	$page=new csrdelft2($midden);
-	$page->addStylesheet('ubb.css');
-	$page->addScript('csrdelft.js');
+	$page->addStylesheet('ubb.css', '/layout/');
+	$page->addScript('csrdelft.js', '/layout/');
 }
 $page->addStylesheet('forum.css', '/layout/');
 $page->addScript('groepen.js', '/layout/');
