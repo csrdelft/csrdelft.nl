@@ -6,16 +6,11 @@
 # Verzorgt het weergeven van het archief van de c.s.r.-courant
 # -------------------------------------------------------------------
 
-
 require_once 'courant/courantcontent.class.php';
 
-
 class CourantarchiefContent{
-	
-	var $courant;	
 
-	//wat moet er gedaan worden, zie ook setZijkolom()
-	var $zijkolom=false;
+	var $courant;	
 	
 	function CourantarchiefContent(&$courant){
 		$this->courant=$courant;

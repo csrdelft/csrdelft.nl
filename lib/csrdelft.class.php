@@ -1,109 +1,69 @@
 <?php
+
 # C.S.R. Delft | pubcie@csrdelft.nl
 # -------------------------------------------------------------------
-# class.csrdelft.php
+# csrdelft.class.php
 # -------------------------------------------------------------------
 # csrdelft is de klasse waarbinnen een pagina in elkaar wordt gezooid
 # -------------------------------------------------------------------
 
+require_once('menu/menu.class.php');
+
 class csrdelft extends SimpleHTML {
 
-	//body is een object met een view-methode welke de content van de pagina maakt.
-	//Als body een methode zijKolom() heeft die gebruiken om de zij-kolom te vullen
-	public $_body;
-	//menu bevat een menu-object.
-	public $_menu;
-
-	/*
-	 * Zijkolom is standaard, tenzij met setZijkolom($simplehtml); een ander object
-	 * gezet wordt, of met setZijkolom(false); de zijkolom wordt uitgezet.
-	 */
-	public $_zijkolom = null;
-
+	private $_body;
+	private $_mainmenu;
+	private $_zijkolom = array();
 	private $_stylesheets = array();
 	private $_scripts = array();
 
-	private $_titel = 'Geen titel gezet.';
-	private $_menutpl = '';
+	function __construct(SimpleHTML $body) {
+		$this->_body = $body;
+		$this->_mainmenu = new Menu('main');
 
-	private $_prefix;
-
-	function __construct($body, $prefix=''){
-		if(is_object($body)){
-			$this->_body=$body;
-			//als de body een methode heeft om een titel mee te geven die gebruiken, anders de standaard.
-			if(method_exists($this->_body, 'getTitel')){
-				$this->_titel=$this->_body->getTitel();
-			}
-			if(method_exists($this->_body, 'getMenuTpl')){
-				$this->_menutpl=$this->_body->getMenuTpl();
+		$this->addStylesheet('undohtml.css');
+		$this->addStylesheet('ubb.css');
+		$this->addStylesheet(Instelling::get('layout') . '.css');
+		if (Instelling::get('layout_beeld') == 'breedbeeld') {
+			$this->addStylesheet('breedbeeld.css');
+		}
+		if (Instelling::get('layout_sneeuw') != 'nee') {
+			if (Instelling::get('layout_sneeuw') == 'ja') {
+				$this->addStylesheet('snow.anim.css');
+			} else {
+				$this->addStylesheet('snow.css');
 			}
 		}
-		//Prefix opslaan
-		$this->_prefix=$prefix;
-		if($this->_prefix == 'csrdelft2') {
-			//nieuwe layout
-			$this->addStylesheet('style.css', $this->_prefix);
-			$this->addStylesheet('foundation.css', $this->_prefix);
-			$this->addStylesheet('normalize.css', $this->_prefix);
-
-			$this->addScript('jquery.js', $this->_prefix);
-			$this->addScript('jquery.backstretch.js', $this->_prefix);
-			$this->addScript('jquery.timeago.js');
-			$this->addScript('init.js', $this->_prefix);
-			$this->addScript('dragobject.js');
-		} else {
-			//oude layout
-			if(Instelling::get('layout')=='owee'){	$this->_prefix='owee_'; }
-			if(Instelling::get('layout')=='lustrum'){	$this->_prefix='lustrum_'; }
-
-			//nieuw menu-object aanmaken...
-			require_once('menu/menu.class.php');
-			$this->_menu=new Menu();
-
-			//Stylesheets en scripts die we altijd gebruiken
-
-			$this->addStylesheet('undohtml.css');
-			$this->addStylesheet('default.css');
-			$this->addStylesheet('ubb.css');
-			if(Instelling::get('layout_beeld')=='breedbeeld'){
-				$this->addStylesheet('breedbeeld.css');
-			}
-			if(Instelling::get('layout_sneeuw')!='nee'){
-				if(Instelling::get('layout_sneeuw')=='ja'){
-					$this->addStylesheet('snow.anim.css');
-				}
-				else {
-					$this->addStylesheet('snow.css');
-				}
-			}
-
-			$this->addScript('jquery.js');
-			$this->addScript('jquery.timeago.js');
-			$this->addScript('csrdelft.js');
-			$this->addScript('dragobject.js');
-			$this->addScript('menu.js');
-			if(Instelling::get('algemeen_sneltoetsen')=='ja'){
-				$this->addScript('sneltoetsen.js');
-			}
-			if(Instelling::get('layout_minion')=='ja'){
-				$this->addScript('minion.js');
-				$this->addStylesheet('minion.css');
-			}
-			if(Instelling::get('layout')=='roze' AND LoginLid::instance()->getUid()!='x999'){
-				$this->addStylesheet('roze.css');
-			}
-			if(Instelling::get('layout')=='lustrum'){ // || LoginLid::instance()->getUid()=='x999'){
-				$this->addStylesheet('lustrum.css');
-			}
-			if(Instelling::get('layout')=='zonderSpikkels'){
-				$this->addStylesheet('zonderSpikkels.css');
-			}
-			if($this->_prefix=='owee_'){
-				$this->addStylesheet('owee.css');
-			}
+		$this->addScript('jquery.js');
+		$this->addScript('jquery.timeago.js');
+		$this->addScript('csrdelft.js');
+		$this->addScript('dragobject.js');
+		$this->addScript('menu.js');
+		if (Instelling::get('algemeen_sneltoetsen') == 'ja') {
+			$this->addScript('sneltoetsen.js');
+		}
+		if (Instelling::get('layout_minion') == 'ja') {
+			$this->addScript('minion.js');
+			$this->addStylesheet('minion.css');
 		}
 	}
+
+	function setZijkolom($zijkolom) {
+		$this->_zijkolom = $zijkolom;
+	}
+
+	function addZijkolom(SimpleHTML $block) {
+		$this->_zijkolom[] = $block;
+	}
+
+	function insertZijkolom(SimpleHTML $block, $index) {
+		array_splice($this->_zijkolom, $index, 0, $block);
+	}
+
+	function getTitel() {
+		return 'C.S.R. Delft | ' . mb_htmlentities($this->_body->getTitel());
+	}
+
 	/**
 	 * Zorg dat de template een stijl inlaadt. Er zijn twee verianten:
 	 *
@@ -116,20 +76,35 @@ class csrdelft extends SimpleHTML {
 	 *
 	 * Merk op: local-entry wordt ook gebruikt om een map buiten /layout/ toe te voegen.
 	 */
-	function addStylesheet($sheet, $layout = ''){
-		//TODO netter fixen, mappen herordenen??
-		$map = '';
-		if($layout == 'csrdelft2') {
-			$map .= '/layout2/';
+	function addStylesheet($sheet, $localpath = '/layout/') {
+		if (startsWith($sheet, 'http')) {
+			//extern
+			$add = array(
+				'naam' => $script,
+				'local' => false,
+				'datum' => ''
+			);
+		} else {
+			//lokaal
+			$add = array(
+				'naam' => $localpath . $sheet,
+				'local' => true,
+				//voeg geen datum toe als er al een '?' in de scriptnaam staat
+				'datum' => (strstr($sheet, '?') ? '' : filemtime(HTDOCS_PATH . $localpath . $sheet))
+			);
 		}
-		$this->_stylesheets[]=array(
-			'naam' => $map.$sheet,
-			'local' => ($map ? false : true ),
-			'datum' => filemtime(HTDOCS_PATH.($map ? $map : '/layout/').$sheet),
-		);
+		if (!$this->hasStylesheet($add['naam'])) {
+			$this->_stylesheets[$add['naam']] = $add;
+		}
 	}
-	function getStylesheets(){		return $this->_stylesheets; }
 
+	public function hasStylesheet($name) {
+		return array_key_exists($name, $this->_stylesheets);
+	}
+
+	function getStylesheets() {
+		return $this->_stylesheets;
+	}
 
 	/**
 	 * Zorg dat de template een script inlaadt. Er zijn twee verianten:
@@ -144,113 +119,152 @@ class csrdelft extends SimpleHTML {
 	 *
 	 * Merk op: local-entry wordt ook gebruikt om een map buiten /layout/ toe te voegen.
 	 */
-	function addScript($script, $layout = ''){
-		//TODO netter fixen, mappen herordenen??
-		$map = '';
-		if($layout == 'csrdelft2') {
-			$map .= '/layout2/js/';
-		}
-		$localJsPath=HTDOCS_PATH.($map ? $map : '/layout/js/');
-
-		if(substr($script, 0, 7)=='http://'){
-			//extern script
-			$add=array(
+	function addScript($script, $localpath = '/layout/') {
+		if (startsWith($script, 'http')) {
+			//extern
+			$add = array(
 				'naam' => $script,
 				'local' => false,
 				'datum' => ''
 			);
-		}else{
-			//lokaal script
-			$add=array(
-				'naam' => $map.$script,
-				'local' => ($map ? false : true ),
+		} else {
+			//lokaal
+			$add = array(
+				'naam' => $localpath . 'js/' . $script,
+				'local' => true,
 				//voeg geen datum toe als er al een '?' in de scriptnaam staat
-				'datum' => (strstr($script,'?')?'':filemtime($localJsPath.$script))
+				'datum' => (strstr($script, '?') ? '' : filemtime(HTDOCS_PATH . $localpath . 'js/' . $script))
 			);
 		}
-		if(!$this->hasScript($add['naam'])){
-			$this->_scripts[]=$add;
+		if (!$this->hasScript($add['naam'])) {
+			$this->_scripts[$add['naam']] = $add;
 		}
 	}
-	public function hasScript($filename){
-		foreach($this->_scripts as $script){
-			if($script['naam']==$filename){
-				return true;
-			}
-		}
-		return false;
-	}
-	function getScripts(){			return $this->_scripts; }
 
-	function getTitel(){ return mb_htmlentities($this->_titel); }
-	function setZijkolom($zijkolom=null){
-		$this->_zijkolom=$zijkolom;
+	public function hasScript($naam) {
+		return array_key_exists($naam, $this->_scripts);
 	}
 
-	public function getDebug($sql=true, $get=true, $post=true, $files=false, $session=true, $cookie=true){
+	function getScripts() {
+		return $this->_scripts;
+	}
+
+	public function getDebug($sql = true, $get = true, $post = true, $files = false, $session = true, $cookie = true) {
 		$debug = '';
-		if ($sql)         { $debug .= '<hr />SQL<hr />';    $debug .= '<pre>'.htmlentities(print_r(array("PDO" => CsrPdo::instance()->getQueries(), "MySql" => MySql::instance()->getQueries()), true)).'</pre>';     }
-		if ($get)         { $debug .= '<hr />GET<hr />';     if (count($_GET) > 0)		$debug .= '<pre>'.htmlentities(print_r($_GET, true)).'</pre>';     }
-		if ($post)        { $debug .= '<hr />POST<hr />';    if (count($_POST) > 0)		$debug .= '<pre>'.htmlentities(print_r($_POST, true)).'</pre>';    }
-		if ($files)       { $debug .= '<hr />FILES<hr />';   if (count($_FILES) > 0)		$debug .= '<pre>'.htmlentities(print_r($_FILES, true)).'</pre>';   }
-		//only print session if relevent, because it might be quite big.
-		if(isset($_GET['debug_session'])){
-			$debug .= '<hr />SESSION<hr />'; if (count($_SESSION) > 0){
-				$debug .= '<pre>'.htmlentities(print_r($_SESSION, true)).'</pre>';
+		if ($sql) {
+			$debug .= '<hr />SQL<hr />';
+			$debug .= '<pre>' . htmlentities(print_r(array("PDO" => CsrPdo::instance()->getQueries(), "MySql" => MySql::instance()->getQueries()), true)) . '</pre>';
+		}
+		if ($get) {
+			$debug .= '<hr />GET<hr />';
+			if (count($_GET) > 0) {
+				$debug .= '<pre>' . htmlentities(print_r($_GET, true)) . '</pre>';
 			}
 		}
-
-		if ($cookie)      { $debug .= '<hr />COOKIE<hr />';  if (count($_COOKIE) > 0)		$debug .= '<pre>'.htmlentities(print_r($_COOKIE, true)).'</pre>';  }
+		if ($post) {
+			$debug .= '<hr />POST<hr />';
+			if (count($_POST) > 0) {
+				$debug .= '<pre>' . htmlentities(print_r($_POST, true)) . '</pre>';
+			}
+		}
+		if ($files) {
+			$debug .= '<hr />FILES<hr />';
+			if (count($_FILES) > 0) {
+				$debug .= '<pre>' . htmlentities(print_r($_FILES, true)) . '</pre>';
+			}
+		}
+		if (isset($_GET['debug_session'])) { // only print session if relevent, because it might be quite big.
+			$debug .= '<hr />SESSION<hr />';
+			if (count($_SESSION) > 0) {
+				$debug .= '<pre>' . htmlentities(print_r($_SESSION, true)) . '</pre>';
+			}
+		}
+		if ($cookie) {
+			$debug .= '<hr />COOKIE<hr />';
+			if (count($_COOKIE) > 0) {
+				$debug .= '<pre>' . htmlentities(print_r($_COOKIE, true)) . '</pre>';
+			}
+		}
 		return $debug;
 	}
-    
-    /**
-	 * $template zorgt ervoor dat we pagina's in verschillende templates kunnen renderen.
-	 * Default is 'content' dat is de layout van de hoofdpagina voor de 2012-remake
-	 *
-	 * @param string $template naam van smarty template
-	 */
-	function view($template = 'content') {
-		$loginlid=LoginLid::instance();
 
-		//als $this->_zijkolom geen Kolom-object bevat en niet false is
-		//$this->_zijkolom vullen met een standaard lege kolom.
-		if($this->_zijkolom!==false AND !($this->_zijkolom instanceof Kolom)){
-			//DefaultKolom zit in simplehtml.class.php
-			$this->_zijkolom=new DefaultKolom();
+	private function standaardZijkolom() {
+		// Is het al...
+		if (Instelling::get('zijbalk_ishetal') != 'niet weergeven') {
+			$this->addZijkolom(new IsHetAlContent(Instelling::get('zijbalk_ishetal')));
 		}
-		else if($this->_zijkolom===false AND Instelling::get('layout_beeld')=='breedbeeld'){
-			//DefaultKolom zit in simplehtml.class.php
-			$this->_zijkolom=new DefaultKolom();
+		// Ga snel naar
+		if (Instelling::get('zijbalk_gasnelnaar') == 'ja') {
+			$this->addZijkolom(new Menu('gasnelnaar', 3));
 		}
+		// Agenda
+		if (LoginLid::instance()->hasPermission('P_AGENDA_READ') && Instelling::get('zijbalk_agendaweken') > 0) {
+			require_once('agenda/agenda.class.php');
+			require_once('agenda/agendacontent.class.php');
+			$this->addZijkolom(new AgendaZijbalkContent(new Agenda(), Instelling::get('zijbalk_agendaweken')));
+		}
+		// Laatste mededelingen
+		if (Instelling::get('zijbalk_mededelingen') > 0) {
+			require_once('mededelingen/mededeling.class.php');
+			require_once('mededelingen/mededelingencontent.class.php');
+			$this->addZijkolom(new MededelingenZijbalkContent(Instelling::get('zijbalk_mededelingen')));
+		}
+		// Nieuwste belangrijke forumberichten
+		if (Instelling::get('zijbalk_forum_belangrijk') >= 0) {
+			require_once 'forum/forumcontent.class.php';
+			$this->addZijkolom(new ForumContent('lastposts_belangrijk'));
+		}
+		// Nieuwste forumberichten
+		if (Instelling::get('zijbalk_forum') > 0) {
+			require_once 'forum/forumcontent.class.php';
+			$this->addZijkolom(new ForumContent('lastposts'));
+		}
+		// Zelfgeposte forumberichten
+		if (Instelling::get('zijbalk_forum_zelf') > 0) {
+			require_once 'forum/forumcontent.class.php';
+			$this->addZijkolom(new ForumContent('lastposts_zelf'));
+		}
+		// Nieuwste fotoalbum
+		if (Instelling::get('zijbalk_fotoalbum') == 'ja') {
+			require_once 'fotoalbumcontent.class.php';
+			$this->addZijkolom(new FotalbumZijbalkContent());
+		}
+		// Komende verjaardagen
+		if (Instelling::get('zijbalk_verjaardagen') > 0) {
+			require_once 'lid/verjaardagcontent.class.php';
+			$this->addZijkolom(new VerjaardagContent('komende'));
+		}
+	}
 
+	function view() {
 		header('Content-Type: text/html; charset=UTF-8');
-		$csrdelft=new Smarty_csr();
-		$csrdelft->assign_by_ref('csrdelft', $this);
+		$smarty = new Smarty_csr();
+		$smarty->assign_by_ref('this', $this);
 
-		if(Instelling::get('layout_minion')=='ja'){
-			$csrdelft->assign('minion', $csrdelft->fetch('minion.tpl'));
+		if (Instelling::get('layout_minion') == 'ja') {
+			$smarty->assign('minion', $smarty->fetch('minion.tpl'));
 		}
 
-		//SocCie-saldi, MaalCie-saldi
-		$csrdelft->assign('saldi', $loginlid->getLid()->getSaldi());
-		$csrdelft->assign('menutpl', $this->_menutpl);
+		// SocCie-saldi & MaalCie-saldi
+		$smarty->assign('saldi', LoginLid::instance()->getLid()->getSaldi());
 
-		if(defined('DEBUG') AND ($loginlid->hasPermission('P_ADMIN') OR $loginlid->isSued())){
-			$csrdelft->assign('db', MySql::instance());
+		if ($this->_zijkolom !== false || Instelling::get('layout_beeld') === 'breedbeeld') {
+			$this->standaardZijkolom();
+			$smarty->assign('zijkolom', $this->_zijkolom);
 		}
 
-		$csrdelft->caching=false;
+		if (defined('DEBUG') AND (LoginLid::instance()->hasPermission('P_ADMIN') OR LoginLid::instance()->isSued())) {
+			$smarty->assign('db', MySql::instance());
+		}
 
-        // laad oude template of de benoemde nieuwe
-        if($this->_prefix !== 'csrdelft2') {
-            $csrdelft->display($this->_prefix.'csrdelft.tpl');
-        } else {
-            $csrdelft->display('csrdelft2/'.$template.'.tpl');
-        }
+		$smarty->assign('mainmenu', $this->_mainmenu);
+		$smarty->assign('body', $this->_body);
+		$smarty->display('csrdelft.tpl');
 
-		//als er een error is geweest, die unsetten...
-		if(isset($_SESSION['auth_error'])){ unset($_SESSION['auth_error']); }
+		// als er een error is geweest, die unsetten...
+		if (isset($_SESSION['auth_error'])) {
+			unset($_SESSION['auth_error']);
+		}
 	}
 
 }

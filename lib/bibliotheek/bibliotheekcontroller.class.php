@@ -14,7 +14,6 @@ require_once 'bibliotheek/bibliotheekcontent.class.php';
 class BibliotheekController extends Controller{
 
 	public $boek;
-	private $zijkolom=true;
 
 	public $baseurl='/communicatie/bibliotheek/';
 
@@ -60,10 +59,6 @@ class BibliotheekController extends Controller{
 		$this->performAction();
 	}
 
-	public function hasZijkolom(){
-		return $this->zijkolom;
-	}
-
 	/*
 	 * Catalogus tonen
 	 * 
@@ -71,7 +66,6 @@ class BibliotheekController extends Controller{
 	 * 
 	 */
 	protected function action_default(){
-		$this->zijkolom = false;
 		$this->content=new BibliotheekCatalogusContent();
 	}
 

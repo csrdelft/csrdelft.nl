@@ -47,7 +47,8 @@ class BeheerMenusController extends \ACLController {
 		if ($menu === null) {
 			$menu = '';
 		}
-		$tree = MenusModel::getMenuTree($menu);
+		$items = MenusModel::getMenuItems($menu, false);
+		$tree = MenusModel::getMenuTree($menu, $items);
 		$this->content = new BeheerMenusView($menus, $tree);
 		$this->content = new \csrdelft($this->getContent());
 		$this->content->addStylesheet('menubeheer.css');

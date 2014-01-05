@@ -12,15 +12,26 @@ class MenusModel {
 	}
 	
 	public static function getMenuItem($mid) {
-		$menus = self::loadMenuItems('menu_id = ?', array($mid));
-		return reset($menus);
+		$items = self::loadMenuItems('menu_id = ?', array($mid), false, 1);
+		return reset($items);
 	}
 	
-	public static function getMenuTree($menu) {
+	public static function getMenuItems($menu, $zichtbaar=true) {
+		if ($zichtbaar) {
+			return self::loadMenuItems('menu = ? AND zichtbaar = true', array($menu));
+		}
+		return self::loadMenuItems('menu = ?', array($menu));
+	}
+	
+	public static function getMenuItemsVoorLid($menu) {
+		$items = self::getMenuItems($menu, true);
+		return self::filterMenuItems($items);
+	}
+	
+	public static function getMenuTree($menu, array $items) {
 		$root = new MenuItem();
 		$root->setTekst($menu);
 		$root->setMenu($menu);
-		$items = self::loadMenuItems('menu = ?', array($menu));
 		self::addChildren($root, $items);
 		foreach ($items as $item) {
 			setMelding('Parent '. $item->getParentId() .' bestaat niet: '. $item->getTekst() .' ('. $item->getMenuId() .')', -1);
@@ -29,7 +40,7 @@ class MenusModel {
 		return $root;
 	}
 	
-	private static function addChildren($parent, &$children) {
+	private static function addChildren(&$parent, &$children) {
 		foreach ($children as $i => $item) {
 			if ($parent->getMenuId() === $item->getParentId()) { // this is the correct parent
 				$parent->children[] = $item;
@@ -39,7 +50,23 @@ class MenusModel {
 		}
 	}
 	
-	private static function loadMenuItems($where=null, $values=array(), $menusOnly=false) {
+	/**
+	 * Filtert de menu-items met de permissies van het ingelogede lid.
+	 * 
+	 * @param MenuItem[] $items
+	 * @return MenuItem[]
+	 */
+	private static function filterMenuItems($items) {
+		$result = array();
+		foreach ($items as $i => $item) {
+			if (\LoginLid::instance()->hasPermission($item->getPermission())) {
+				$result[$i] = $item;
+			}
+		}
+		return $result;
+	}
+	
+	private static function loadMenuItems($where=null, $values=array(), $menusOnly=false, $limit=null) {
 		if ($menusOnly) {
 			$sql = 'SELECT DISTINCT menu';
 		}
@@ -51,6 +78,9 @@ class MenusModel {
 			$sql.= ' WHERE '. $where;
 		}
 		$sql.= ' ORDER BY parent_id ASC, prioriteit ASC';
+		if (is_int($limit) && $limit > 0) {
+			$sql.= ' LIMIT '. $limit;
+		}
 		$db = \CsrPdo::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);

@@ -1,167 +1,96 @@
 <?php
-# C.S.R. Delft | pubcie@csrdelft.nl
-# -------------------------------------------------------------------
-# class.menu.php
-# -------------------------------------------------------------------
-# Een menu incl permissies uit de database trekken.
-# De menuopties die niet overeenkomen met de permissies die de
-# gebruiker heeft worden niet getoond.
-# -------------------------------------------------------------------
+require_once 'menu/beheer/MenusModel.class.php';
+/**
+ * menu.class.php	| 	P.W.G. Brussee (brussee@live.nl)
+ * 
+ * Een menu incl. permissies uit de database trekken.
+ * De menuopties die niet overeenkomen met de permissies die de
+ * gebruiker heeft worden niet getoond.
+ */
+class Menu extends SimpleHTML {
 
-class Menu {
-
-	//menu is een array met menu-opties.
-	private $_menu=array();
-
-	//huidig is het ID van de menu-optie waar we nu zijn.
-	private $_huidig=1;
-	//huidigTop is het ID van de menu-optie waaronder de huidige valt
-	private $_huidigTop=0;
+	/**
+	 * unique short name of the menu
+	 */
+	private $_menu;
 	
-	public function __construct() {
-		$db=MySql::instance();
-
-		$this->_menu=array();
-
-		//ff de request_url van #name en .php ontdoen.
-		$request_uri_full=$request_uri=$_SERVER['REQUEST_URI'];
-		$dotphp=strpos($request_uri, '.php');
-		if($dotphp!==false){ $request_uri=substr($request_uri, 0, $dotphp); }
-		$sharp=strpos($request_uri, '#');
-		if($sharp!==false){ $request_uri=substr($request_uri, 0, $sharp); }
-
-		# menu ophalen
-		$sMenu="
-			SELECT
-				menu_id, parent_id, tekst, link, permission
-			FROM
-				menus
-			WHERE
-				zichtbaar=TRUE AND menu='main'
-			ORDER BY
-				parent_id ASC, prioriteit ASC, tekst ASC;";
-		$rMenu=$db->query($sMenu);
-
-		//Nu hier een boom-array maken.
-		while($aMenu=$db->next($rMenu)){
-			//uitzoeken of de huidige pagina overeenkomt met de opgehaalde rij
-			$bHuidig=false;
-			if(	($aMenu['link']=='/' AND $request_uri=='/') OR
-					($request_uri==$aMenu['link'] AND $aMenu['link']!='/') OR
-					($request_uri_full==$aMenu['link'] AND $aMenu['link']!='/') OR
-					(strpos($request_uri, $aMenu['link'])!==false AND $aMenu['link']!='/')){
-				$this->_huidig=$aMenu['menu_id'];
-				$this->_huidigTop=$aMenu['parent_id'];
-				$bHuidig=true;
-			}
-			if($aMenu['parent_id']==0){
-				//hoofdniveau
-				$this->_menu[$aMenu['menu_id']]=array(
-					'menu_id' => $aMenu['menu_id'],
-					'parent_id' => $aMenu['parent_id'],
-					'tekst' => $aMenu['tekst'],
-					'link' => $aMenu['link'],
-					'subitems' => array(),
-					'huidig' => $bHuidig,
-					'rechten' => $aMenu['permission'] );
-			}else{
-				// Als een submenuitem huidig is, eventuele voorgaande submenuitems huidig=0 maken, om dubbele huidigen te voorkomen
-				if ($bHuidig) {
-					foreach ($this->_menu[$aMenu['parent_id']]['subitems'] as $key => $dummy) {
-						$this->_menu[$aMenu['parent_id']]['subitems'][$key]['huidig'] = 0;
-					}
-				}
-
-				//subniveau
-				$this->_menu[$aMenu['parent_id']]['subitems'][$aMenu['menu_id']]=array(
-					'menu_id' => $aMenu['menu_id'],
-					'parent_id' => $aMenu['parent_id'],
-					'tekst' => $aMenu['tekst'],
-					'link' => $aMenu['link'],
-					'subitems' => array(),
-					'huidig' => $bHuidig,
-					'rechten' => $aMenu['permission'] );
-			}
-		}
-	}
-
-
-	//viewWaarbenik gebruikt de menu array en $this->_huidig om een paadje te tekenen waar men is.
-	public function viewWaarbenik(){
-		echo '&raquo; ';
-		if($this->_huidig!=1){
-			if(isset($this->_menu[$this->_huidig])){
-				//één niveau diep: enkel de pagina zelf weergeven, met thuis als link ervoor
-				echo ' '.$this->_menu[$this->_huidig]['tekst'];
-			}else{
-				//twee niveau's diep. Thuis link, hoofd-categorie link, sub-categorie
-				$aTop=$this->_menu[$this->_huidigTop];
-				echo '<a href="'.$aTop['link'].'">'.$aTop['tekst'].'</a> &raquo; ';
-				echo $aTop['subitems'][$this->_huidig]['tekst'];
-			}
-		}else{
-			echo 'Thuis';
-		}
-	}
-
-	public function view() {
-		$lid=LoginLid::instance();
-		$menu=new Smarty_csr();
-		$menu->caching=false;
-
-		$aMenuItems=array();
-		$bHuidig=false;
-
-		foreach($this->_menu as $aMenuItem){
-			//controleer of de gebruiker wel het recht heeft om dit item te zien
-			if(!$lid->hasPermission($aMenuItem['rechten'])) continue;
-
-			if($aMenuItem['huidig']){$bHuidig=true;}
-
-			$aSubItems=array();
-			foreach($aMenuItem['subitems'] as $aSubItem){
-				if(!$lid->hasPermission($aSubItem['rechten'])) continue;
-
-				$aSubItems[]=$aSubItem;
-			}
-
-			$aMenuItem['subitems']=$aSubItems;
-			$aMenuItems[] = $aMenuItem;
-		}
-
-		//Als er geen huidig item is gekozen wordt het eerste menu huidig
-		//if($bHuidig===false){$aMenuItems[0]['huidig']=true;}
-
-		$menu->assign('items', $aMenuItems);
+	/**
+	 * 0: main
+	 * 1: sub
+	 * 2: page
+	 * 3: block
+	 */
+	private $_level;
+	
+	/**
+	 * Requested url
+	 */
+	private $_path;
+	
+	/**
+	 * Root MenuItem of menu tree
+	 */
+	private $_tree_root;
+	
+	/**
+	 * MenuItem of the current page
+	 */
+	private $_active_item;
+	
+	public function __construct($menu, $level=0) {
+		$this->_menu = $menu;
+		$this->_level = $level;
 		
-		if(Loginlid::instance()->hasPermission('P_ADMIN')){
-			require_once 'savedquery.class.php';
-			$menu->assign('queues', array(
-				'forum' => new SavedQuery(ROWID_QUEUE_FORUM),
-				'meded' => new SavedQuery(ROWID_QUEUE_MEDEDELINGEN)));
+		$path = filter_input(INPUT_SERVER, 'REQUEST_URI', FILTER_SANITIZE_URL);
+		
+		//echo $path .'<br />'; //DEBUG
+		
+		$pos = strpos($path, '.php');
+		if ($pos !== false) {
+			$path = substr($path, 0, $pos);
 		}
-		$menu->display('menu/menu.tpl');
-	}
-
-	public static function getGaSnelNaar(){
-		//hier worden even de objecten lokaal gemaakt, anders moet er voor dit ding ook nog een
-		//tweede instantie van Menu gemaakt worden.
-		$lid=LoginLid::instance();
-		$db=MySql::instance();
-
-		$gasnelnaar="SELECT tekst, link, permission FROM menus WHERE zichtbaar=TRUE AND menu='gasnelnaar' ORDER BY prioriteit ASC, tekst ASC;";
-		$result=$db->query($gasnelnaar);
-		$return='<div id="zijbalk_gasnelnaar"><h1>Ga snel naar</h1>';
-		if($result!==false AND $db->numRows($result)>0){
-			while($gsn=$db->next($result)){
-				if($lid->hasPermission($gsn['permission'])){
-					$return.='<div class="item">&raquo; <a href="'.$gsn['link'].'">'.$gsn['tekst'].'</a></div>';
-				}
+		$pos = strpos($path, '#');
+		if ($pos !== false) {
+			$path = substr($path, 0, $pos);
+		}
+		$this->_path = $path;
+		
+		//echo $path .'<br />'; //DEBUG
+		
+		$items = MenusModel::getMenuItemsVoorLid($menu);
+		foreach ($items as $item) {
+			
+			//echo $item->getLink() .'<br />'; //DEBUG
+			
+			if ($path === $item->getLink()) {
+				$this->_active_item = $item;
 			}
-		}else{
-			$return.='<div class="item">Geen items gevonden.</div>';
 		}
-		return $return.'</div>';
+		if ($this->_active_item === null) {
+			$this->_active_item = new MenuItem();
+		}
+		
+		$this->_tree_root = MenusModel::getMenuTree($menu, $items);
+	}
+	
+	public function view() {
+		$smarty = new \Smarty_csr();
+		$smarty->assign('root', $this->_tree_root);
+		$smarty->assign('huidig', $this->_active_item);
+		
+		if ($this->_level === 0) {
+			if(Loginlid::instance()->hasPermission('P_ADMIN')){
+				require_once 'savedquery.class.php';
+				$smarty->assign('queues', array(
+					'forum' => new SavedQuery(ROWID_QUEUE_FORUM),
+					'meded' => new SavedQuery(ROWID_QUEUE_MEDEDELINGEN)
+				));
+			}
+			$smarty->display('menu/menu.tpl');
+		}
+		else if ($this->_level === 3) {
+			$smarty->display('menu/menu_block.tpl');
+		}
 	}
 }
 

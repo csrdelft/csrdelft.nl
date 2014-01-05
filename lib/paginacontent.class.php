@@ -1,7 +1,7 @@
 <?php
 # C.S.R. Delft | pubcie@csrdelft.nl
 # -------------------------------------------------------------------
-# class.pagina.php
+# paginacontent.php
 # -------------------------------------------------------------------
 # Weergeven en bewerken van pagina's met tekst uit de database
 # -------------------------------------------------------------------
@@ -15,15 +15,12 @@ class PaginaContent extends SimpleHTML{
 
 	private $sActie;
 
-	function __construct($pagina){
+	function __construct(Pagina $pagina){
 		$this->_pagina=$pagina;
 	}
 
 	function getTitel(){
 		return $this->_pagina->getTitel();
-	}
-	function getMenuTpl(){
-		return $this->_pagina->getMenu();
 	}
 
 	function setActie($sActie){

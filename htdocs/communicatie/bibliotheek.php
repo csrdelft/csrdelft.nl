@@ -1,6 +1,6 @@
 <?php
 /*
- * index.php	| 	Gerrit Uitslag (jieter@jpwaag.com)
+ * index.php	| 	Gerrit Uitslag (klapinklapin@gmail.com)
  *
  * Bibliotheek
  */
@@ -14,10 +14,6 @@ if(isset($_GET['querystring'])){
 }
 
 $pagina=new csrdelft($biebControl->getContent());
-//zijkolom kan uitgezet worden
-if(!$biebControl->hasZijkolom()){
-	$pagina->setZijkolom(false); 
-}
 $pagina->addStylesheet('bibliotheek.css');
 $pagina->addStylesheet('js/datatables/css/datatables_basic.css');
 $pagina->addStylesheet('js/autocomplete/jquery.autocomplete.css');

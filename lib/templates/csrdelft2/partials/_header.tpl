@@ -3,16 +3,16 @@
 
 <head>
     <meta charset="utf-8">
-    <title>C.S.R. Delft - {$csrdelft->getTitel()}</title>
+    <title>C.S.R. Delft - {$this->getTitel()}</title>
 
-    {foreach from=$csrdelft->getStylesheets() item=sheet}
-        <link rel="stylesheet" href="{if $sheet.local}/layout/{/if}{$sheet.naam}?{$sheet.datum}" type="text/css" />
+    {foreach from=$this->getStylesheets() item=sheet}
+        <link rel="stylesheet" href="{$sheet.naam}?{$sheet.datum}" type="text/css" />
     {/foreach}
 
     <link rel="shortcut icon" href="http://plaetjes.csrdelft.nl/layout/favicon.ico">
 
-    {foreach from=$csrdelft->getScripts() item=script}
-        <script type="text/javascript" src="{if $script.local}/layout/js/{/if}{$script.naam}?{$script.datum}"></script>
+    {foreach from=$this->getScripts() item=script}
+        <script type="text/javascript" src="{$script.naam}?{$script.datum}"></script>
     {/foreach}
 
     {literal}

@@ -91,6 +91,18 @@ class MenuItem {
 		}
 		$this->menu = $string;
 	}
+	
+	public function isParentOf(MenuItem $item) {
+		if ($this->getMenuId() === $item->getParentId()) {
+			return true;
+		}
+		foreach ($this->children as $child) {
+			if ($child->isParentOf($item)) {
+				return true;
+			}
+		}
+		return false;
+	}
 }
 
 ?>

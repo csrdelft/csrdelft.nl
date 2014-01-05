@@ -8,14 +8,14 @@
 			<div id="banner4" class="menubanner"></div>
 		</div>
 		<ul id="mainmenu">
-			{foreach from=$items item=item}
+			{foreach from=$root->children item=item}
 				<li>
-					<a href="{$item.link}" id="top{$item.menu_id}" onmouseover="StartShowMenu('{$item.menu_id}');" onmouseout="ResetShowMenu();" {if $item.huidig}class="active" {/if}title="{$item.tekst}">{$item.tekst}</a>
-					{if $item.huidig}
+					<a href="{$item->getLink()}" id="top{$item->getMenuId()}" onmouseover="StartShowMenu('{$item->getMenuId()}');" onmouseout="ResetShowMenu();" {if $item === $huidig}class="active" {/if}title="{$item->getTekst()}">{$item->getTekst()}</a>
+					{if $item->isParentOf($huidig)}
 						<script type="text/javascript">
-							SetActive({$item.menu_id});
-							document.getElementById('banner'+{$item.menu_id}).style.display = "inline";
-							fixPNG('imgbanner1')
+							SetActive({$item->getMenuId()});
+							document.getElementById('banner'+{$item->getMenuId()}).style.display = "inline";
+							fixPNG('imgbanner1');
 						</script>
 					{/if}
 				</li>
@@ -94,7 +94,7 @@
 				<form action="/login.php" method="post">
 					<fieldset>
 						<input type="hidden" name="url" value="{$smarty.server.REQUEST_URI}" />
-						<input type="text" name="user" value="naam" onfocus="if(this.value=='naam')this.value='';" />
+						<input type="text" name="user" value="naam" onfocus="if(this.value==='naam')this.value='';" />
 						<input type="password" name="pass" value="wachtwoord" />
 						<input type="checkbox" name="checkip" class="checkbox" value="true" id="login-checkip" />
 						<label for="login-checkip">Koppel IP</label>
@@ -111,15 +111,18 @@
 
 <div id="submenu" onmouseover="ResetTimer()" onmouseout="StartTimer()">
 	<div id="submenuitems">
-		{foreach from=$items item=item}
-			<div id="sub{$item.menu_id}" {if $item.huidig}class="active"{/if}>
-				{assign var='showseperator' value=false}
-				{foreach from=$item.subitems item=subitem}
-					{if $showseperator} <span class="separator">&nbsp;&nbsp;</span> {/if}
-					{assign var='showseperator' value=true}
-					<a href="{$subitem.link}" title="{$subitem.tekst}"{if $subitem.huidig} class="active"{/if}>{$subitem.tekst}</a>
-				{/foreach}
+{foreach from=$root->children item=item}
+	{foreach name=sub from=$item->children item=subitem}
+		{if $smarty.foreach.sub.first}
+			<div id="sub{$item->getMenuId()}"{if $item->isParentOf($subitem)} class="active"{/if}>
+		{/if}
+			<a href="{$subitem->getLink()}" title="{$subitem->getTekst()}"{if $subitem === $huidig} class="active"{/if}>{$subitem->getTekst()}</a>
+		{if !$smarty.foreach.sub.last}
+			<span class="separator">&nbsp;&nbsp;</span>
+		{else}
 			</div>
-		{/foreach}
+		{/if}
+	{/foreach}
+{/foreach}
 	</div>
 </div>

@@ -1,4 +1,5 @@
 <?php
+
 # C.S.R. Delft | pubcie@csrdelft.nl
 # -------------------------------------------------------------------
 # pagina.php
@@ -16,52 +17,42 @@ require_once 'paginacontent.class.php';
 $pagina = new Pagina($_GET['naam']);
 $paginacontent = new PaginaContent($pagina);
 
-if (isset($_GET['bewerken']) && $pagina->magBewerken()){
-	if($_SERVER['REQUEST_METHOD']=='POST'){
+if (isset($_GET['bewerken']) && $pagina->magBewerken()) {
+	
+	if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		$pagina->setTitel($_POST['titel']);
 		$pagina->setInhoud($_POST['inhoud']);
 		$pagina->setMenu($_POST['menu']);
-		if($pagina->magPermissiesBewerken()){
+		if ($pagina->magPermissiesBewerken()) {
 			$pagina->setRechtenBekijken($_POST['rechten_bekijken']);
 			$pagina->setRechtenBewerken($_POST['rechten_bewerken']);
 		}
 		$pagina->save();
-		header('Location: '.CSR_ROOT.'pagina/'.$pagina->getNaam());
+		header('Location: ' . CSR_ROOT . 'pagina/' . $pagina->getNaam());
 	}
 	$paginacontent->setActie('bewerken');
-	
+
 	$zijkolomlijst = new PaginaContent($pagina);
 	$zijkolomlijst->setActie('zijkolom');
-	$zijkolom=new Kolom();
-	$zijkolom->add($zijkolomlijst);
-}elseif($pagina->magBekijken()){
+}
+elseif ($pagina->magBekijken()) {
 	$paginacontent->setActie('bekijken');
-}else{
+}
+else {
 	$pagina = new Pagina('geentoegang');
 	$paginacontent = new PaginaContent($pagina);
 }
 
-
-# pagina weergeven
-if($_GET['naam']=='owee' OR $_GET['naam']=='oweeprogramma' OR $_GET['naam']=='video' OR $_GET['naam']=='interesse'){
-	$prefix='owee_';
-}else{
-	$prefix='';
-}
-
 // Hier alle namen van pagina's die in de nieuwe layout moeten worden weergegeven
 $nieuwNamen = array("contact", "csrindeowee", "vereniging", "lidworden", "geloof", "vorming", "filmpjes", "gezelligheid", "sport", "vragen", "officieel", "societeit", "ontspanning", "interesse", "interesseverzonden", "accountaanvragen");
-if(in_array($_GET['naam'],$nieuwNamen)) {
-  	$prefix = 'csrdelft2';
+if (in_array($_GET['naam'], $nieuwNamen)) {
+	$depagina = new csrdelft2($paginacontent);
 }
+else {
+	$depagina = new csrdelft($paginacontent);
 
-$depagina=new csrdelft($paginacontent,$prefix);
-
-if($_GET['naam']=='video'){
-	$depagina->setZijkolom(false);
-}else{
-	if(isset($zijkolom)){
-		$depagina->setZijkolom($zijkolom);
+	if (isset($zijkolomlijst)) {
+		$depagina->addZijkolom($zijkolomlijst)
 	}
 }
 
