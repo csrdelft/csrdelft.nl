@@ -43,8 +43,6 @@ class MenuView extends SimpleHTML {
 		
 		$path = filter_input(INPUT_SERVER, 'REQUEST_URI', FILTER_SANITIZE_URL);
 		
-		//echo $path .'<br />'; //DEBUG
-		
 		$pos = strpos($path, '.php');
 		if ($pos !== false) {
 			$path = substr($path, 0, $pos);
@@ -55,12 +53,12 @@ class MenuView extends SimpleHTML {
 		}
 		$this->_path = $path;
 		
-		//echo $path .'<br />'; //DEBUG
+		echo $path .'<br />'; //DEBUG
 		
 		$items = MenusModel::getMenuItemsVoorLid($menu);
 		foreach ($items as $item) {
 			
-			//echo $item->getLink() .'<br />'; //DEBUG
+			echo $item->getLink() .'<br />'; //DEBUG
 			
 			if (startsWith($path, $item->getLink())) {
 				$this->_active_item = $item;
