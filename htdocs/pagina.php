@@ -52,7 +52,7 @@ else {
 	$depagina = new csrdelft($paginacontent);
 
 	if (isset($zijkolomlijst)) {
-		$depagina->addZijkolom($zijkolomlijst)
+		$depagina->addZijkolom($zijkolomlijst);
 	}
 }
 
