@@ -23,30 +23,34 @@ if($pad==''){
 
 $fotoalbum = new Fotoalbum($pad, $mapnaam);
 
-//uitgelogd heeft nieuwe layout
-if(LoginLid::instance()->hasPermission('P_LEDEN_READ')){
-	$layout = '';
-} else {
-	$layout = 'csrdelft2';
-}
-
-
 if($fotoalbum->magBekijken()){
 	$fotoalbumcontent = new FotoalbumContent($fotoalbum);
 	$fotoalbumcontent->setActie('album');
-
-	$pagina=new csrdelft($fotoalbumcontent, $layout);
-	$pagina->addStylesheet('fotoalbum.css');
-	$pagina->addStylesheet('jquery.prettyPhoto.css');
-	$pagina->addScript('jquery.prettyPhoto.js');
-	$pagina->setZijkolom(false);
+	
+	if(LoginLid::instance()->hasPermission('P_LEDEN_READ')){
+		$pagina=new csrdelft($fotoalbumcontent);
+		$pagina->setZijkolom(false);
+	}
+	else {
+		//uitgelogd heeft nieuwe layout
+		$pagina=new csrdelft2($fotoalbumcontent);
+	}
+	$pagina->addStylesheet('fotoalbum.css', '/layout/');
+	$pagina->addStylesheet('jquery.prettyPhoto.css', '/layout/');
+	$pagina->addScript('jquery.prettyPhoto.js', '/layout/');
 	$pagina->view();
-
-
-}else{
+}
+else{
 	require_once 'paginacontent.class.php';
 	$pagina=new Pagina('geentoegang');
 	$midden=new PaginaContent($pagina);
-	$page=new csrdelft($midden, $layout);
+	
+	if(LoginLid::instance()->hasPermission('P_LEDEN_READ')){
+		$pagina=new csrdelft($midden);
+	}
+	else {
+		//uitgelogd heeft nieuwe layout
+		$page=new csrdelft2($midden);
+	}
 	$page->view();
 }

@@ -47,6 +47,11 @@ else {
 $nieuwNamen = array("contact", "csrindeowee", "vereniging", "lidworden", "geloof", "vorming", "filmpjes", "gezelligheid", "sport", "vragen", "officieel", "societeit", "ontspanning", "interesse", "interesseverzonden", "accountaanvragen");
 if (in_array($_GET['naam'], $nieuwNamen)) {
 	$depagina = new csrdelft2($paginacontent);
+	
+	$nieuwNamen = array("vereniging", "geloof", "vorming", "gezelligheid", "sport", "ontspanning", "societeit", "officieel");
+	if (in_array($_GET['naam'], $nieuwNamen)) {
+		$depagina->setMenu('Vereniging');
+	}
 }
 else {
 	$depagina = new csrdelft($paginacontent);

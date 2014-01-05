@@ -36,18 +36,15 @@ if($loginlid->hasPermission('P_FORUM_READ')) {
 	$body=new PaginaContent($pagina);
 }
 
-//uitgelogd heeft nieuwe layout
-if(LoginLid::instance()->hasPermission('P_LOGGED_IN')){
-	$layout = '';
-} else {
-	$layout = 'csrdelft2';
+if(LoginLid::instance()->hasPermission('P_LEDEN_READ')){
+	$page=new csrdelft($body);
 }
-
-$page=new csrdelft($body, $layout);
-$page->addStylesheet('forum.css');
-$page->addScript('forum.js');
-if($layout=='csrdelft2'){
+else {
+	//uitgelogd heeft nieuwe layout
+	$page=new csrdelft2($body);
 	$page->addStylesheet('ubb.css');
 	$page->addScript('csrdelft.js');
 }
+$page->addStylesheet('forum.css');
+$page->addScript('forum.js');
 $page->view();

@@ -10,6 +10,7 @@
 class csrdelft2 extends SimpleHTML {
 
 	private $_body;
+	private $_menu;
 	private $_stylesheets = array();
 	private $_scripts = array();
 
@@ -22,6 +23,10 @@ class csrdelft2 extends SimpleHTML {
 		$this->addScript('jquery.backstretch.js');
 		$this->addScript('jquery.timeago.js', '/layout/');
 		$this->addScript('init.js');
+	}
+
+	function setMenu($menu) {
+		$this->_menu = $menu;
 	}
 
 	/**
@@ -123,10 +128,7 @@ class csrdelft2 extends SimpleHTML {
 		// SocCie-saldi & MaalCie-saldi
 		$smarty->assign('saldi', LoginLid::instance()->getLid()->getSaldi());
 
-		if(method_exists($this->_body, 'getMenuTpl')){
-			$smarty->assign('menutpl', $this->_body->getMenuTpl());
-		}
-
+		$smarty->assign('menutpl', $this->_menu);
 		$smarty->assign('body', $this->_body);
 
 		$smarty->display('csrdelft2/'. $template .'.tpl');
