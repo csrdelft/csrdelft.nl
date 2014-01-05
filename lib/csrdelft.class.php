@@ -67,7 +67,7 @@ class csrdelft extends SimpleHTML {
 	}
 
 	function getTitel() {
-		return 'C.S.R. Delft | ' . mb_htmlentities($this->_body->getTitel());
+		return mb_htmlentities($this->_body->getTitel());
 	}
 
 	/**
@@ -86,7 +86,7 @@ class csrdelft extends SimpleHTML {
 		if (startsWith($sheet, 'http')) {
 			//extern
 			$add = array(
-				'naam' => $script,
+				'naam' => $sheet,
 				'local' => false,
 				'datum' => ''
 			);

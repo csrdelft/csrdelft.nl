@@ -45,7 +45,7 @@ class csrdelft2 extends SimpleHTML {
 		if (startsWith($sheet, 'http')) {
 			//extern
 			$add = array(
-				'naam' => $script,
+				'naam' => $sheet,
 				'local' => false,
 				'datum' => ''
 			);
