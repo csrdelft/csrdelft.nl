@@ -24,7 +24,13 @@ class csrdelft extends SimpleHTML {
 		$this->addStylesheet('undohtml.css');
 		$this->addStylesheet('ubb.css');
 		$this->addStylesheet('csrdelft.css');
-		$this->addStylesheet(Instelling::get('layout') . '.css');
+		$layout = Instelling::get('layout');
+		if (!Instelling::hasEnumOption($layout)) { // fix verwijderde layout
+			$layout = 'normaal';
+			Instelling::set('layout', $layout);
+			Instelling::save();
+		}
+		$this->addStylesheet($layout .'.css');
 		if (Instelling::get('layout_beeld') == 'breedbeeld') {
 			$this->addStylesheet('breedbeeld.css');
 		}

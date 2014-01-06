@@ -65,6 +65,9 @@ class Instelling{
 		return false;
 	}
 
+	public static function hasEnumOption($key, $value){
+		return in_array($value, self::getEnumOptions($key));
+	}
 
 	public static function get($key){
 		//als er nog niets in SESSION staat, herladen.
@@ -104,7 +107,7 @@ class Instelling{
 			case 'enum':
 				//als $value niet een van de toegestane waarden is
 				//de standaardwaarde teruggeven.
-				if(!in_array($value, self::getEnumOptions($key))){
+				if(!self::hasEnumOption($key, $value)){
 					$value=self::getDefault($key);
 				}
 			break;
