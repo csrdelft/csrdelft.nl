@@ -450,11 +450,11 @@ div.visitekaartje p {
 	color: #000 !important;
 }
 div.visitekaartje p a {
-	color: #0a338d;
+	color: #0a338d !important;
 }
 div.visitekaartje p.naam a {
 	font-weight: bold;
-	color: #000;
+	color: #000 !important;
 }
 div.visitekaartje div.uid {
 	float: right;
