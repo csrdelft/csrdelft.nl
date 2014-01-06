@@ -1,7 +1,7 @@
-<?
+<?php
 # This file is derived from xc/programs/rgb/rgb.txt in the X11R6 X 
 # Consortium distribution.  Conversion to PHP was done by 
-# Lars Magne Ingebrigtsen <larsi@gnus.org>, financed by Net Fonds ASA
+# Lars Magne Ingebrigtsen <larsi@gnus.org>, financed by Netfonds ASA
 # <URL:http://www.netfonds.no/>.
 #
 # The following copyright notice applies to this file, and was taken from
@@ -822,29 +822,36 @@ function rgb_allocate ($image, $color) {
   }
 }
 
-function rgb_gradient_color ($from, $to, $numcols) {
-    $fcol = rgb_color($from);
-    $tcol = rgb_color($to);
+function rgb_allocate_colors ($im, $from_color, $to_color, $bound,
+			      $numcols = 111) {
+  // We use at most $numcols different colors.
 
-    $rfactor = ($tcol[0]-$fcol[0]) / $numcols;
-    $gfactor = ($tcol[1]-$fcol[1]) / $numcols;
-    $bfactor = ($tcol[2]-$fcol[2]) / $numcols;
-
-    for ($i = 0; $i < $numcols; $i++) {
-	$rnum = floor($fcol[0] + $i * $rfactor);
-	$gnum = floor($fcol[1] + $i * $gfactor);
-	$bnum = floor($fcol[2] + $i * $bfactor);
-
-	$colors[$i] = sprintf("#%02x%02x%02x", $rnum, $gnum, $bnum);
+  $fcol = rgb_color($from_color);
+  $tcol = rgb_color($to_color);
+      
+  $rfactor = ($tcol[0]-$fcol[0]) / $numcols;
+  $gfactor = ($tcol[1]-$fcol[1]) / $numcols;
+  $bfactor = ($tcol[2]-$fcol[2]) / $numcols;
+  
+  $col_factor = $numcols/$bound;
+  $prev = -1;
+  for ($i = 0; $i < $bound; $i++) {
+    $num = floor($col_factor*($bound-$i));
+    
+    $rnum = max(0, floor($fcol[0] + $num * $rfactor));
+    $gnum = max(0, floor($fcol[1] + $num * $gfactor));
+    $bnum = max(0, floor($fcol[2] + $num * $bfactor));
+    
+    if ($num == $prev) {
+      $colors[$i] = $col;
+    } else {
+      $col = rgb_allocate($im, sprintf("#%02x%02x%02x", 
+				       $rnum, $gnum, $bnum));
+      $colors[$i] = $col;
     }
-    return ($colors);
-}
-
-function rgb_allocate_colors ($im, $colors) {
-    for ($i = 0; $i<sizeof($colors); $i++) {
-	$colors[$i]= rgb_allocate($im, $colors[$i]);
-    }
-    return $colors;
+    $prev = $num;
+  }
+  return $colors;
 }
 
 ?>

@@ -8,7 +8,7 @@
   <body bgcolor=white text=black>
     <h1>Chart Manual</h1>
 
-<?
+<?php
 function example ($file) {
   echo "<a href=\"examples/$file.phps\"><img src=\"examples/$file.php\" border=0 align=right width=300 height=200></a>\n";
 }
@@ -18,20 +18,20 @@ function examplena ($file) {
 }
 ?>
 
-<p><? example("example31"); ?><br>
+<p><?php example("example31"); ?><br>
 
-Chart is a PHP4 library for generating charts--two dimensional
-representations of data sets.  This is the manual for Chart 0.7.
+Chart is a PHP library for generating charts--two dimensional
+representations of data sets.
 
 <p>Chart is covered by the <a href="COPYING">GNU GPL</a> and
 is written by <a href="http://quimby.gnus.org/lmi/">Lars Magne
 Ingebrigtsen</a>.  Development of this library was paid for by <a
-href="http://www.netfonds.no/">Net Fonds ASA</a>.
+href="http://www.netfonds.no/">Netfonds Bank AS</a>.
 
 <h3>Download</h3>
 
-<a href="chart-0.7.tar.gz">A tarred and gzipped package of the
-latest version of the library</a>.
+<a href="https://github.com/larsmagne/chart">Get the source from
+GitHub</a>.
 
 <h3>A super-quick example</h3>
 
@@ -41,7 +41,7 @@ a quick example of what Chart is meant to do, and how it does it.
 <p>
 The simplest Chart program imaginable is the one that generated the
 image to the right.  The source code is the following: 
-<? example("example1"); ?>
+<?php example("example1"); ?>
 
 <pre>
 $chart = new chart(300, 200);
@@ -106,22 +106,18 @@ something similar.
 the charts.
 
 
-<h3>PHP4</h3>
+<h3>PHP</h3>
 
-Chart needs PHP4.  PHP3 has a much too weak object model to allow
-working with a non-trivial set of objects in a sensible manner.  PHP4
-can be gotten from <a href="http://www.php.net/">the PHP web site</a>.
-The only non-standard library Chart relies on is <a
-href="rgb.phps">RGB</a>, which makes it much easier to deal with
-colors.  RGB is included in the <a href="chart-0.7.tar.gz">Chart
-package</a>.
+Chart needs PHP4 or 5.  The only non-standard library Chart relies on
+is <a href="rgb.phps">RGB</a>, which makes it much easier to deal with
+colors.  RGB is included in the Chart package.
 
 
 <h3>Function reference</h3>
 
 There are two classes in the Chart library -- <tt>chart</tt> and
 <tt>plot</tt>.  Each chart can contain any number of plots.
-<? example("example2"); ?>
+<?php example("example2"); ?>
 
 <p>Here's a chart with two plots:
 
@@ -148,7 +144,7 @@ Draw a border around the chart using the specified color and width.
 If you specify <tt>false</tt> as the color, no border will be drawn.
 
 
-<? example("example3"); ?>
+<?php example("example3"); ?>
 <h4>set_background_color</h4>
 
 <pre>
@@ -260,7 +256,7 @@ $callback($image, $xmin, $xmax, $ymin, $ymax,
 Then it is up to the call-back function to draw the data set. 
 
 
-<? example("example4"); ?>
+<?php example("example4"); ?>
 <h4>set_frame</h4>
 
 <pre>
@@ -284,7 +280,7 @@ output headers to discourage caching on the client side.  Note that
 this will probably result in much higher traffic.  
 
 <br clear=all>
-<? example("example23"); ?>
+<?php example("example23"); ?>
 <h4>set_extrema</h4>
 
 <pre>
@@ -330,7 +326,7 @@ set_tick_distance (int $distance)
 Set the distance (in pixels) between the ticks on the axes.
 
 
-<? example("example5"); ?>
+<?php example("example5"); ?>
 <h4>set_labels</h4>
 
 <pre>
@@ -369,7 +365,7 @@ plot styles.
 
 
 <br clear=all>
-<? example("example26"); ?>
+<?php example("example26"); ?>
 <h4>set_font</h4>
 
 <pre>
@@ -407,7 +403,7 @@ $chart->set_font("/usr/share/texmf/fonts/type1/adobe/utopia/putb8a.pfb",
 to get the chart above.
 
 <br clear=all>
-<? example("example27"); ?>
+<?php example("example27"); ?>
 <p>If you specify the optional <tt>$size</tt> parameter, the
 font will be scaled using that point size.  The parameter has no
 effect for internal fonts.
@@ -418,7 +414,7 @@ Caching is an absolute must is you don't use the internal fonts.
 
 
 <br clear=all>
-<? example("example22"); ?>
+<?php example("example22"); ?>
 <h4>add_legend</h4>
 
 <pre>
@@ -503,52 +499,52 @@ draw under the data plot.
 <p>Below is the same data set plotted using different styles.
 
 <p>
-<? examplena("example6"); ?>
-<? examplena("example7"); ?><br>
-<? examplena("example8"); ?>
-<? examplena("example9"); ?><br>
-<? examplena("example10"); ?>
-<? examplena("example11"); ?><br>
-<? examplena("example24"); ?>
-<? examplena("example25"); ?><br>
+<?php examplena("example6"); ?>
+<?php examplena("example7"); ?><br>
+<?php examplena("example8"); ?>
+<?php examplena("example9"); ?><br>
+<?php examplena("example10"); ?>
+<?php examplena("example11"); ?><br>
+<?php examplena("example24"); ?>
+<?php examplena("example25"); ?><br>
 
 <p>Below is the same data set plotted using the <tt>"gradient"</tt>
 style, but with different parameters.
 
 <p>
-<? examplena("example12"); ?>
-<? examplena("example13"); ?><br>
-<? examplena("example14"); ?>
-<? examplena("example15"); ?><br>
-<? examplena("example16"); ?>
-<? examplena("example17"); ?><br>
-<? examplena("example36"); ?>
-<? examplena("example37"); ?><br>
-<? examplena("example38"); ?>
-<? examplena("example39"); ?><br>
+<?php examplena("example12"); ?>
+<?php examplena("example13"); ?><br>
+<?php examplena("example14"); ?>
+<?php examplena("example15"); ?><br>
+<?php examplena("example16"); ?>
+<?php examplena("example17"); ?><br>
+<?php examplena("example36"); ?>
+<?php examplena("example37"); ?><br>
+<?php examplena("example38"); ?>
+<?php examplena("example39"); ?><br>
 
 <p>And, of course, you can go completely wild and plot several different
 gradients in the same chart:
 
 <p>
-<? examplena("example18"); ?>
-<? examplena("example19"); ?><br>
+<?php examplena("example18"); ?>
+<?php examplena("example19"); ?><br>
 
 <p>The usefulness of these charts may be rather questionable.  Placing the 
 grid over the plot helps some:
 
-<p><? examplena("example20"); ?>
-<? examplena("example21"); ?><br>
+<p><?php examplena("example20"); ?>
+<?php examplena("example21"); ?><br>
 
 <p>And finally, <tt>fill</tt> and <tt>fillgradient</tt> plots:
 
-<p><? examplena("example29"); ?>
-<? examplena("example28"); ?><br>
+<p><?php examplena("example29"); ?>
+<?php examplena("example28"); ?><br>
 
 <p>Plotting the upper and lower bounds separately often makes
 the filling plots look nicer:
 
-<p><? examplena("example30"); ?><br>
+<p><?php examplena("example30"); ?><br>
 
 <p>Using gradients means slowing down chart generation somewhat.
 Dynamic gradients are no slower that non-dynamic gradients, but using
@@ -671,6 +667,14 @@ etc.
 </ul>
 
 
+<h3>Output data</h3>
+
+To allow interacting with the data from Javascript, Chart can output
+the data it plots in JSON format.  To do that, call <tt>new
+chart()</tt> with the optional <tt>jsonpart</tt> parameter set.
+
+
+
 <h3>Bugs</h3>
 
 <p>Chart hasn't been optimized for speed at all.  There are probably
@@ -719,7 +723,7 @@ right locale.
 
 <h3>Contact</h3>
 
-Chart is &copy; 1999, 2000, 2001 Lars Magne Ingebrigtsen.
+Chart is &copy; 1999-2013 Lars Magne Ingebrigtsen.
 
 <p>Chart is released under the <a href="COPYING">GNU General Public
 License</a>.  This means that Chart is <a
@@ -740,7 +744,7 @@ page is the documentation to Chart and is covered by the same license.
       <small>
 <!-- Created: Sun Sep  4 19:27:03 CET 1999 -->
 <!-- hhmts start -->
-2001-11-08 21:44:14
+2013-07-29 21:44:14
 <!-- hhmts end -->
       </small>
     </div>
