@@ -54,15 +54,14 @@
 				{/if}
 				{if $groep->magBewerken() OR $loginlid->getUid()==$groeplid.uid}
 					<td>
-					{assign var=type value=$groep->getType()}
 					{if in_array($groep->getTypeId(), array(2, 3)) AND $groep->getStatus()=='ht'}{* maak lid ot voor huizen/onderverenigingen. Dit kunnen leden ook bij zichzelf doen. *}
-						<a href="/actueel/groepen/{$type->getNaam()}/{$groep->getId()}/maakLidOt/{$groeplid.uid}" title="Verplaats lid naar o.t.-groep" 
+						<a href="/actueel/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/maakLidOt/{$groeplid.uid}" title="Verplaats lid naar o.t.-groep" 
 							{if !$groep->isAdmin()}onclick="return confirm('Weet u zeker dat u deze bewoner naar de oudbewonersgroep wilt verplaatsen?')"{/if}>
 							&raquo;
 						</a>
 					{/if}
 					{if $groep->isAdmin() OR $groep->isEigenaar() OR $groeplid.uid!=$loginlid->getUid()} {* We kunnen onzelf niet uit een groep gooien gooien *}
-						<a href="/actueel/groepen/{$type->getNaam()}/{$groep->getId()}/verwijderLid/{$groeplid.uid}" title="Verwijder lid uit groep">X</a>
+						<a href="/actueel/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/verwijderLid/{$groeplid.uid}" title="Verwijder lid uit groep">X</a>
 					{/if}
 					</td>
 				{/if}
@@ -74,9 +73,8 @@
 {if $groep->isAanmeldbaar() AND !$groep->isLid() AND $loginlid->hasPermission('P_LOGGED_IN')}
 	<div class="aanmelden">
 		{if $groep->magAanmelden()}
-			{assign var=type value=$groep->getType()}
 			{if $groep->getToonFuncties()=='niet' OR $groep->getToonFuncties()=='tonenzonderinvoer'}
-				<a  {if $actie!='pasfotos'}class="knop"{/if} href="/actueel/groepen/{$type->getNaam()}/{$groep->getId()}/aanmelden" onclick="return confirm('Weet u zeker dat u zich wilt aanmelden?')">
+				<a  {if $actie!='pasfotos'}class="knop"{/if} href="/actueel/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/aanmelden" onclick="return confirm('Weet u zeker dat u zich wilt aanmelden?')">
 					{if $actie=='pasfotos'}
 						<img class="pasfoto" src="{$csr_pics}/groepen/aanmelden.jpg" title="Aanmelden voor deze groep"
 							onmouseover="this.src='/tools/pasfotos.php?image';" onmouseout="this.src='{$csr_pics}/groepen/aanmelden.jpg';" />
@@ -86,7 +84,7 @@
 				</a>
 				{if $groep->getVrijeplaatsen()!=0}<br />{/if}{* nog-vrije-plaatsen-melding *}
 			{else}
-				<form action="/actueel/groepen/{$type->getNaam()}/{$groep->getId()}/aanmelden" method="post" id="aanmeldForm" class="clear">
+				<form action="/actueel/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/aanmelden" method="post" id="aanmeldForm" class="clear">
 					<strong>Aanmelden</strong><br />
 					{if $groep->hasFunctiefilter()}
 						{foreach from=$groep->getFunctiefilters() item=filter}
