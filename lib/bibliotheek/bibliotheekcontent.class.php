@@ -97,11 +97,12 @@ Rubriek: '.$aBoek['categorie'].'"';
 	protected function render_lidlink($aBoek, $key){
 		$aUid = explode(', ', $aBoek[$key]);
 		$sNaamlijst = '';
-		foreach( $aUid as $uid ){
+		foreach($aUid as $uid ){
 			if($uid == 'x222'){
 				$sNaamlijst .= 'C.S.R.-bibliotheek';
 			}else{
-				if($naam = Lid::getNaamLinkFromUid($uid, $vorm='civitas', $mode='link')){
+				$naam = Lid::getNaamLinkFromUid($uid, 'civitas', 'visitekaartje');
+				if($naam){
 					$sNaamlijst .= $naam;
 				}else{
 					$sNaamlijst .= '-';
