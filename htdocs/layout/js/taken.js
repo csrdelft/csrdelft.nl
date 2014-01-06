@@ -321,6 +321,7 @@ function taken_update_dom(htmlString) {
 	});
 	taken_form_init();
 	taken_link_init();
+	init_visitekaartjes();
 	if (popup) {
 		$('#taken-popup input:visible:first').focus();
 	}

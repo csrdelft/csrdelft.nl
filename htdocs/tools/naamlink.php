@@ -41,7 +41,7 @@ if(isset($_GET['zoekin']) AND in_array($_GET['zoekin'], $toegestanezoekfilters))
 function uid2naam($uid){
 	$lid=LidCache::getLid($uid);
 	if($lid instanceof Lid){
-		return $lid->getNaamLink('civitas', 'link');
+		return $lid->getNaamLink('civitas', 'visitekaartje');
 	}else{
 		return 'Geen geldig lid';
 	}
