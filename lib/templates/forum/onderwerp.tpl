@@ -128,7 +128,7 @@
 			<td class="auteur">
 
 				<a href="/communicatie/forum/reactie/{$bericht.id}" class="postlink" title="Link naar deze post">&rarr;</a>
-				{$bericht.uid|csrnaam:'user'}
+				{$bericht.uid|csrnaam:'user':'visitekaartje'}
 			{if $loginlid->hasPermission('P_LEDEN_READ')}
 				<span tabindex="0"  id="t{$bericht.uid}-{$bericht.id}" class="togglePasfoto"
 				{if $loginlid->getInstelling('forum_toonpasfotos')=='nee'} title="Toon pasfoto">&raquo;{else}>{/if}</span>

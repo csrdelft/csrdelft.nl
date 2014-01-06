@@ -113,7 +113,7 @@
 							{if $exemplaar.eigenaar_uid=='x222'}{assign var=total_exemplaren_bibliotheek value=`$total_exemplaren_bibliotheek+1`}
 								C.S.R.-bibliotheek
 							{else}
-								{$exemplaar.eigenaar_uid|csrnaam:'civitas'}
+								{$exemplaar.eigenaar_uid|csrnaam:'civitas':'visitekaartje'}
 							{/if}
 						</div>
 					{* opmerking *}
@@ -130,7 +130,7 @@
 						<div class="regel">
 							<label>Status</label>
 							{if $exemplaar.status=='uitgeleend'}
-								<span title="Sinds {$exemplaar.uitleendatum|reldate|strip_tags}">Uitgeleend aan {$exemplaar.uitgeleend_uid|csrnaam:'civitas'}</span>
+								<span title="Sinds {$exemplaar.uitleendatum|reldate|strip_tags}">Uitgeleend aan {$exemplaar.uitgeleend_uid|csrnaam:'civitas':'visitekaartje'}</span>
 							{elseif $exemplaar.status=='teruggegeven'}
 								<span title="Was uitgeleend sinds {$exemplaar.uitleendatum|reldate|strip_tags}">Teruggegeven door {$exemplaar.uitgeleend_uid|csrnaam:'civitas'}</span>
 							{elseif $exemplaar.status=='vermist'}
@@ -216,7 +216,7 @@
 						</td>
 					{else}
 						<td class="linkerkolom recensist">
-							<span class="recensist">{$beschrijving.schrijver_uid|csrnaam:'user'}</span><br />
+							<span class="recensist">{$beschrijving.schrijver_uid|csrnaam:'user':'visitekaartje'}</span><br />
 							<span class="moment">{$beschrijving.toegevoegd|reldate}</span><br />
 
 						{* knopjes bij elke post *}	

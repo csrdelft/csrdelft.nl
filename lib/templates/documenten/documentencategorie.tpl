@@ -38,7 +38,7 @@
 			<td class="size">{$document->getSize()}</td>
 			<td class="mimetype" title="{$document->getMimetype()}">{$document->getMimetype()|mimeicon}</td>
 			<td class="datum"><div class="verborgen">{$document->getToegevoegd()}</div>{$document->getToegevoegd()|reldate}</td>
-			<td class="eigenaar">{$document->getEigenaar()|csrnaam}</td>
+			<td class="eigenaar">{$document->getEigenaar()|csrnaam:'civitas':'visitekaartje'}</td>
 		</tr>
 	{/foreach}
 	</tbody>
