@@ -434,16 +434,16 @@ div.visitekaartje {
 	-webkit-box-shadow: 0 0 11px #000000;
 	box-shadow: 0 0 11px #000000;
 	z-index: 111;
-	font-weight: normal;
-	color: #000;
-	opacity: 1.0;
-	filter: alpha(opacity=100);
+	opacity: 1.0 !important;
+	filter: alpha(opacity=100) !important;
 }
 div.visitekaartje img {
 	float: right;
 }
 div.visitekaartje p {
 	margin: 8px 0px 0px 10px;
+	font-weight: normal;
+	color: #000;
 }
 div.visitekaartje p.naam a {
 	font-weight: bold;
