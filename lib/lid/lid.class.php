@@ -678,7 +678,7 @@ $k.= '</div><span id="v'.$v.'" class="visite">';
 					else {
 						$k = '<span>';
 					}
-					return $k.$l.$naam.'</a></span>';
+					return '<div style="display: inline-block;">'.$k.$l.$naam.'</a></span></div>';
 				}
 			case 'html':
 				if($vorm=='pasfoto'){
