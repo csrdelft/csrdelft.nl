@@ -25,7 +25,7 @@ class csrdelft extends SimpleHTML {
 		$this->addStylesheet('ubb.css');
 		$this->addStylesheet('csrdelft.css');
 		$layout = Instelling::get('layout');
-		if (!Instelling::hasEnumOption($layout)) { // fix verwijderde layout
+		if (!Instelling::hasEnumOption('layout', $layout)) { // fix verwijderde layout
 			$layout = 'normaal';
 			Instelling::set('layout', $layout);
 			Instelling::save();
