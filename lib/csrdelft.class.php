@@ -37,6 +37,7 @@ class csrdelft extends SimpleHTML {
 		}
 		$this->addScript('jquery.js');
 		$this->addScript('jquery.timeago.js');
+		$this->addScript('jquery.hoverIntent.min.js');
 		$this->addScript('csrdelft.js');
 		$this->addScript('dragobject.js');
 		$this->addScript('menu.js');

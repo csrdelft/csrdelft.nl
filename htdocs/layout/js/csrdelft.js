@@ -60,7 +60,7 @@ function selectText(element) {
 
 function init_visitekaartjes() {
 	$('.visite').each(function() {
-		$(this).mouseenter(function() {
+		$(this).hoverIntent(function() {
 			var id = $(this).attr('id');
 			id = id.replace('v', 'k');
 			$('#'+id).fadeIn();

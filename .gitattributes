@@ -243,6 +243,7 @@ htdocs/layout/js/flot/jquery.min.js -text
 htdocs/layout/js/forum.js -text
 htdocs/layout/js/gmaps.js -text
 htdocs/layout/js/groepen.js -text
+htdocs/layout/js/jquery.hoverIntent.min.js -text
 htdocs/layout/js/jquery.js -text
 htdocs/layout/js/jquery.prettyPhoto.js -text
 htdocs/layout/js/jquery.scrollTo.min.js -text
