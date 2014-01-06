@@ -109,14 +109,21 @@
                         <img src="/images/layout2/box-picture-1.jpg" class="rotate">
                     </figure>
                 </div>
-                <div class="columns large-2 small-2">
+                <div class="columns large-2 small-2" style="width: auto; height: auto;">
+                    <div class="box h2 link" style="width: auto; height: auto;">
+                        <a href="https://ddb.tudelft.nl/" style="width: auto; height: auto;">
+                            <img style="width: 120px;" src="http://plaetjes.csrdelft.nl/ddb.gif" class="border">
+                        </a>
+                    </div>
+                </div>
+                {* <div class="columns large-2 small-2">
                     <div class="box h2 link">
                         <a href="/lidworden">
                             <img src="http://plaetjes.csrdelft.nl/owee/owee-thema.jpg" class="border">
                             <h2 class="overlay">OWee pagina!</h2>
                         </a>
                     </div>
-                </div>
+                </div> *}
             </div>
             <div class="push"></div>
         </div>
