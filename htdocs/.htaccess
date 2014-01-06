@@ -57,5 +57,8 @@ RewriteRule ^menubeheer/?(.*)$		menubeheer.php?uri=$1 [QSA,L]
 # Facebook link voor BINAS voor de Owee(Cie)
 RewriteRule ^facebook/?$			http://www.facebook.com/group.php?gid=10294513917&ref=ts [L]
 
+# Dies site
+RewriteRule ^dies/(.*)$				/dies/$1
+
 # Account aanvragen
 RewriteRule ^account-aanvragen/?$	pagina.php?naam=accountaanvragen [L]
