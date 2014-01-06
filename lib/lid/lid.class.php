@@ -669,8 +669,11 @@ class Lid implements Serializable, Agendeerbaar{
 					$k.= $this->getPasfoto('small', 'lidfoto');
 				}
 				$k.= '<div class="uid">('.$this->getUid().')</div>';
-				$k.= '<p class="naam">'.$l.$sVolledigeNaam.'</a></p>';
-				$k.= '<p style="word-break: break-all;"><a href="mailto:'.$this->profiel['email'].'">'.$this->profiel['email'].'</a><br />';
+				$k.= '<p class="naam">'.$l.$sVolledigeNaam;
+				if (!$this->isLid()) {
+					$k.= '&nbsp;'.$this->getStatus()->getChar();
+				}
+				$k.= '</a></p><p style="word-break: break-all;"><a href="mailto:'.$this->profiel['email'].'">'.$this->profiel['email'].'</a><br />';
 				$k.= $this->profiel['mobiel'].'</p>';
 				$k.= '<p>'.$this->profiel['adres'].'<br />';
 				$k.= $this->profiel['postcode'].' '.$this->profiel['woonplaats'].'</p>';
