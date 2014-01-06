@@ -677,6 +677,7 @@ $('.UidField').each(function(index, tag){
 				url: "/tools/naamlink.php?uid="+field.val(),
 				success: function(response){
 					$('#uidPreview_'+field.attr('id').substring(6)).html(response);
+					init_visitekaartjes();
 				}
 			});
 		}
@@ -770,6 +771,7 @@ $('.wantsLidPreview').each(function(index, tag){
 				url: "/tools/naamlink.php?naam="+field.val()+ "&"+$.param({ zoekin: suggesties[suggesties.length-1] }),
 				success: function(response){
 					$('#lidPreview_'+field.attr('id').substring(6)).html(response);
+					init_visitekaartjes();
 				}
 			});
 		}else{
