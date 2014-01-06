@@ -16,13 +16,13 @@
 		{foreach from=$maaltijd->getAanmeldingenArray() item=aanmelding}
 			<li>
 				{if $aanmelding[0] === 'gast'}Gast van
-				{else}{$this->getVisitekaartje($aanmelding[0])}
+				{else}{$this->getLidLink($aanmelding[0])}
 				{/if}
 				{if $aanmelding[1] === 'abo'} (abo)
 				{elseif $aanmelding[0] !== $aanmelding[1]}
 					{if $aanmelding[0] !== 'gast'} door
 					{/if}
-					&nbsp;{$this->getVisitekaartje($aanmelding[1])}
+					&nbsp;{$this->getLidLink($aanmelding[1])}
 				{/if}
 			</li>
 		{/foreach}

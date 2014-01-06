@@ -18,7 +18,7 @@
 		{foreach from=$functie->getGekwalificeerden() item=kwali}
 			<div class="kwali"{if $kwali->getLid()->isOudlid()} style="display: none;"{/if}>
 				<a href="{$globals.taken_module}/dekwalificeer/{$functie->getFunctieId()}" title="Kwalificatie intrekken" class="knop post" post="voor_lid={$kwali->getLidId()}">{icon get="vcard_delete"}</a>
-				&nbsp;{$kwali->getLid()->getNaamLink($globals.weergave_ledennamen_beheer, 'visitekaartje')}
+				&nbsp;{$kwali->getLid()->getNaamLink($globals.weergave_ledennamen_beheer, $globals.weergave_ledennamen)}
 			</div>
 		{/foreach}
 	</td>

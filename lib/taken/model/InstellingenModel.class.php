@@ -11,7 +11,6 @@ class InstellingenModel {
 
 	private static $_instellingen = null;
 	private static $_defaults = array(
-		'taken_menu_path' => '/actueel/',
 		'maaltijd_budget_maalcie' => '1.00',
 		'corveepunten_per_jaar' => '11',
 		'herinnering_aantal_mails' => '2',
@@ -38,6 +37,7 @@ class InstellingenModel {
 		'marge_gasten_max' => '6',
 		'vrijstelling_percentage_max' => '200',
 		'vrijstelling_percentage_min' => '0',
+		'weergave_ledennamen' => 'visitekaartje',
 		'weergave_ledennamen_beheer' => 'volledig',
 		'weergave_ledennamen_corveerooster' => 'civitas',
 		'weergave_ledennamen_maaltijdlijst' => 'streeplijst',
