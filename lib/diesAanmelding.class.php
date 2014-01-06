@@ -39,7 +39,16 @@ class DiesAanmelding {
 		return $res;
 	}
 	
-	
+	public function galaVol(){
+		$db = MySql::instance();
+		$query = 'SELECT COUNT(*) FROM diesaanmelding';
+		$result = $db->select($query);
+		$res = '';
+		while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
+			$res = $row['COUNT(*)'];
+		}
+		return $res>=80;
+	}
 	
 	public function setData($naamDate, $eetZelf, $eetDate, $allerZelf, $allerDate, $date18) {
 		$db = MySql::instance();

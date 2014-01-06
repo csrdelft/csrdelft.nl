@@ -7,27 +7,33 @@ require_once 'diesAanmelding.class.php';
 
 $data=array();
 $ingelogd=true;
+$bericht='';
 if($loginlid->instance()->getUid()=='x999'){
 	$ingelogd=false;
 }else{
-	$dies = new DiesAanmelding($loginlid->getUid());
-
-	if($_POST){
-		$data=$_POST;
+	$dies = new DiesAanmelding($loginlid->getUid());	
+	if($dies->galaVol()){
+		$bericht='<p>gala is vol</p>';
+		$ingelogd=false;
+	}else{
+		if($_POST){
+			$data=$_POST;
 		
-		$dies->setData($data['naamDate'],$data['eetZelf'],$data['eetDate'],$data['allerZelf'],$data['allerDate'],$data['date18']);
-	}
-	else{
-		if($dies->filledInBefore()){
-			$data=$dies->getData();
+			$dies->setData($data['naamDate'],$data['eetZelf'],$data['eetDate'],$data['allerZelf'],$data['allerDate'],$data['date18']);
+			$bericht='<p>Wijziging/aanmelding succesvol opgeslagen</p>';
 		}
 		else{
-			$data['eetZelf'] = 0;
-			$data['allerZelf'] = '';
-			$data['naamDate']= '';
-			$data['eetDate'] = 0;
-			$data['allerDate'] = '';
-			$data['date18'] = 0;
+			if($dies->filledInBefore()){
+				$data=$dies->getData();
+			}
+			else{
+				$data['eetZelf'] = 0;
+				$data['allerZelf'] = '';
+				$data['naamDate']= '';
+				$data['eetDate'] = 0;
+				$data['allerDate'] = '';
+				$data['date18'] = 0;
+			}
 		}
 	}
 }
@@ -100,12 +106,13 @@ padding-right:5%;
 
 
 <?php
+echo $bericht;
 if($ingelogd){
                ?>
               <h4>Aanmelding gala 21 februari 2014</h4>
               <p>Met behulp van dit formulier kunt u zich aanmelden voor het Dies Natalis gala der Civitas Studiosorum Reformatorum op 21 februari 2014. U dient hier de gegevens van u en uw Diesdame of -heer in te vullen. Door u aan te melden gaat u akkoord met het betalen van twee galakaartjes d.m.v. een machtiging (wilt u geen machtiging dan dient u contact op te nemen met de DiesCie).</p>
               <?php
-              
+
 $eetopties=array('vlees','vis','vegatarisch');
 $leeftijdopties=array('nee','ja');
 
