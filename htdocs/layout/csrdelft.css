@@ -434,6 +434,10 @@ div.visitekaartje {
 	-webkit-box-shadow: 0 0 11px #000000;
 	box-shadow: 0 0 11px #000000;
 	z-index: 111;
+	font-weight: normal;
+	color: #000;
+	opacity: 1.0;
+	filter: alpha(opacity=100);
 }
 div.visitekaartje img {
 	float: right;
