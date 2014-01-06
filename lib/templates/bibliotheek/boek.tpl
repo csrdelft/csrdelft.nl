@@ -132,7 +132,7 @@
 							{if $exemplaar.status=='uitgeleend'}
 								<span title="Sinds {$exemplaar.uitleendatum|reldate|strip_tags}">Uitgeleend aan {$exemplaar.uitgeleend_uid|csrnaam:'civitas':'visitekaartje'}</span>
 							{elseif $exemplaar.status=='teruggegeven'}
-								<span title="Was uitgeleend sinds {$exemplaar.uitleendatum|reldate|strip_tags}">Teruggegeven door {$exemplaar.uitgeleend_uid|csrnaam:'civitas'}</span>
+								<span title="Was uitgeleend sinds {$exemplaar.uitleendatum|reldate|strip_tags}">Teruggegeven door {$exemplaar.uitgeleend_uid|csrnaam:'civitas':'visitekaartje'}</span>
 							{elseif $exemplaar.status=='vermist'}
 								<span class="waarschuwing" title="Sinds {$exemplaar.uitleendatum|reldate|strip_tags}">Vermist</span>
 							{elseif $exemplaar.status=='beschikbaar' }
