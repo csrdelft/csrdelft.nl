@@ -21,7 +21,7 @@ class MijnMaaltijdenView extends \SimpleHtml {
 	}
 	
 	public function view() {
-		$smarty = new \Smarty_csr();
+		$smarty = new \Smarty3CSR();
 		$smarty->assign('standaardprijs', sprintf('%.2f', floatval($GLOBALS['standaard_maaltijdprijs'])));
 		
 		if (is_array($this->_maaltijden)) { // list of maaltijden and list of aanmeldingen

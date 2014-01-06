@@ -7,13 +7,13 @@
 	<script type="text/javascript" src="/layout/js/taken.js"></script>
 </head>
 <body>
-<img alt="Beeldmerk van de Vereniging" src="{$csr_pics}/layout/beeldmerk.jpg" style="float: right; padding: 0px 50px;" />
+<img alt="Beeldmerk van de Vereniging" src="{$CSR_PICS}/layout/beeldmerk.jpg" style="float: right; padding: 0px 50px;" />
 <h1>{$kop} op {$maaltijd->getDatum()|date_format:"%A %e %B %Y"}</h1>
-<div class="header">{$globals.maaltijdlijst_tekst|replace:'MAALTIJDPRIJS':$prijs}</div>
+<div class="header">{$GLOBALS.maaltijdlijst_tekst|replace:'MAALTIJDPRIJS':$prijs}</div>
 {if !$maaltijd->getIsGesloten()}
 	<h2 style="color: red">De inschrijving voor deze maaltijd is nog niet gesloten
 	{if !$maaltijd->getIsVerwijderd() and !$maaltijd->getIsGesloten()}
-	&nbsp;<button onclick="if(confirm('Weet u zeker dat u deze maaltijd wil sluiten?'))taken_ajax(this, '{$globals.taken_module}/sluit/{$maaltijd->getMaaltijdId()}', page_reload);">Nu sluiten!</button>
+	&nbsp;<button onclick="if(confirm('Weet u zeker dat u deze maaltijd wil sluiten?'))taken_ajax(this, '{$GLOBALS.taken_module}/sluit/{$maaltijd->getMaaltijdId()}', page_reload);">Nu sluiten!</button>
 	{/if}
 	</h2>
 {/if}
@@ -22,13 +22,13 @@
 	{table_foreach from=$aanmeldingen inner=rows item=aanmelding table_attr='class="aanmeldingen"' cols=2 name=aanmeldingen}
 		<div class="nummer">{$teller++}</div></td>
 		{if $aanmelding->getLidId()}
-		<td class="naam">{$aanmelding->getLid()->getNaamLink($globals.weergave_ledennamen_maaltijdlijst, 'link')}
+		<td class="naam">{$aanmelding->getLid()->getNaamLink($GLOBALS.weergave_ledennamen_maaltijdlijst, 'link')}
 			{if $aanmelding->getLid()->getProperty('eetwens') !== ''}<div class="eetwens">{$aanmelding->getLid()->getProperty('eetwens')}</div>{/if}
 			{if $aanmelding->getGastenOpmerking() !== ''}<div class="opmerking">Gasten opmerking: {$aanmelding->getGastenOpmerking()}</div>{/if}
 		</td>
 		<td class="box">{$aanmelding->getSaldoMelding()}</td>
 		{elseif $aanmelding->getDoorLidId()}
-		<td class="naam">Gast van {$aanmelding->getDoorLid()->getNaamLink($globals.weergave_ledennamen_maaltijdlijst)}</td>
+		<td class="naam">Gast van {$aanmelding->getDoorLid()->getNaamLink($GLOBALS.weergave_ledennamen_maaltijdlijst)}</td>
 		<td class="box">-</td>
 		{else}
 		<td class="naam"></td>
@@ -60,7 +60,7 @@
 	{table_foreach from=$corveetaken inner=rows item=taak table_attr='class="corveetaken"' cols=2 name=corveetaken}
 			&bullet;&nbsp;
 		{if $taak->getLidId()}
-			{$taak->getLid()->getNaamLink($globals.weergave_ledennamen_maaltijdlijst, 'link')}
+			{$taak->getLid()->getNaamLink($GLOBALS.weergave_ledennamen_maaltijdlijst, 'link')}
 		{else}
 			<i>vacature</i>
 		{/if}

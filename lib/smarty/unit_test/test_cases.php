@@ -1,7 +1,7 @@
 <?php
 
 require_once './config.php';
-require_once SMARTY_DIR . 'Smarty.class.php';
+require_once SMARTY2_DIR . 'Smarty.class.php';
 require_once 'PHPUnit.php';
 
 class Obj {
@@ -36,7 +36,7 @@ class SmartyTest extends PHPUnit_TestCase {
     function setUp() {
         // create a new instance of String with the
         // string 'abc'
-        $this->smarty = new Smarty;
+        $this->smarty = new Smarty2;
     }
     // called after the test functions are executed    
     // this function is defined in PHPUnit_TestCase and overwritten 

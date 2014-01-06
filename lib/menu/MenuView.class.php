@@ -54,7 +54,7 @@ class MenuView extends SimpleHTML {
 	}
 	
 	public function view() {
-		$smarty = new \Smarty_csr();
+		$smarty = new \Smarty3CSR();
 		$smarty->assign('root', $this->_tree_root);
 		$smarty->assign('huidig', $this->_active_item);
 		

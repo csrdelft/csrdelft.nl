@@ -1,4 +1,5 @@
 <?php
+if(!function_exists('smarty_modifier_date_format')){
 /**
  * Smarty plugin
  * @package Smarty
@@ -54,5 +55,5 @@ function smarty_modifier_date_format($string, $format = '%b %e, %Y', $default_da
 }
 
 /* vim: set expandtab: */
-
+}
 ?>

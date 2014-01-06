@@ -33,7 +33,7 @@ class BeheerTakenView extends \SimpleHtml {
 	}
 	
 	public function view() {
-		$smarty = new \Smarty_csr();
+		$smarty = new \Smarty3CSR();
 		
 		if ($this->_maaltijd !== null) {
 			$smarty->assign('maaltijd', $this->_maaltijd);

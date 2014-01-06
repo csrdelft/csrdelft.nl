@@ -1,5 +1,5 @@
 <?php
 
-define('SMARTY_DIR', '../libs/');
+define('SMARTY2_DIR', '../libs/');
 
 ?>

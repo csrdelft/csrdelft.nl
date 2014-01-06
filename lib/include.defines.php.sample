@@ -29,7 +29,8 @@ define('CSR_ROOT','http://csrdelft.nl/');
 define('CSR_SERVER','http://csrdelft.nl');
 
 # smarty template engine...
-define('SMARTY_DIR', LIB_PATH.'/smarty/libs/');
+define('SMARTY_DIR', LIB_PATH.'/smarty3/libs/');
+define('SMARTY2_DIR', LIB_PATH.'/smarty/libs/');
 define('SMARTY_TEMPLATE_DIR', LIB_PATH.'/templates/');
 define('SMARTY_COMPILE_DIR', DATA_PATH.'/smarty/compiled/');
 define('SMARTY_CACHE_DIR', DATA_PATH.'/smarty/cache/');

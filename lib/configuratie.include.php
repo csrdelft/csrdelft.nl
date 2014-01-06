@@ -87,8 +87,9 @@ switch (constant('MODE')) {
 			require_once 'simplehtml.class.php';
 			require_once 'csrdelft.class.php';
 			require_once 'csrdelft2.class.php';
-			require_once 'csrubb.class.php';
+			require_once 'csrsmarty3.class.php';
 			require_once 'csrsmarty.class.php';
+			require_once 'csrubb.class.php';
 			require_once 'icon.class.php';
 
 			//volgt de defaults van webserver Syrinx, zodat testen met een workcopy overeenkomt.

@@ -80,7 +80,7 @@ function smarty_function_config_load($params, &$smarty)
         if($_compile) {
             // compile config file
             if(!is_object($smarty->_conf_obj)) {
-                require_once SMARTY_DIR . $smarty->config_class . '.class.php';
+                require_once SMARTY2_DIR . $smarty->config_class . '.class.php';
                 $smarty->_conf_obj = new $smarty->config_class();
                 $smarty->_conf_obj->overwrite = $smarty->config_overwrite;
                 $smarty->_conf_obj->booleanize = $smarty->config_booleanize;

@@ -1,4 +1,5 @@
 <?php
+if(!function_exists('smarty_function_icon')){
 /**
  * Smarty plugin
  * @package Smarty
@@ -41,5 +42,5 @@ function smarty_function_icon($params, &$smarty){
 
 
 /* vim: set expandtab: */
-
+}
 ?>
