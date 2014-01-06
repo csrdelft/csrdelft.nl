@@ -17,11 +17,7 @@ if(isset($_GET['string'])){
 			if(Lid::isValidUid($uid)){
 				$lid=LidCache::getLid($uid);
 				if($lid instanceof Lid){
-					if($link){
-						echo '<a href="/communicatie/profiel/'.$uid.'" title="'.$lid->getNaam().'">';
-					}
-					echo $lid->getPasfoto(true);
-					if($link){ echo '</a>'; }
+					echo $lid->getNaamLink('pasfoto', ($link ? 'link' : 'plain'));
 				}
 			}
 		}
