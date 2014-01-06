@@ -97,7 +97,7 @@ class Streeplijstcontent extends SimpleHTML {
 				$sReturn.='<span class="breekpunt"></span>';
 				$sReturn.='<table><tr>'.$sKop;
 			}
-			$sReturn.='<tr><td class="naam">'.str_replace(' ', '&nbsp;', $lid->getNaamLink('streeplijst', 'html')).'</td>';
+			$sReturn.='<tr><td class="naam">'.$lid->getNaamLink('streeplijst', 'plain').'</td>';
 			for($i=1; $i<=$this->goederenCount(); $i++){
 				$sReturn.='<td class="cell'.($i%2).'">&nbsp;</td>';
 			}

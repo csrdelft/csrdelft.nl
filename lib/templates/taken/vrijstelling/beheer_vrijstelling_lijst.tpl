@@ -5,7 +5,7 @@
 	<td>
 		<a href="{$globals.taken_module}/bewerk/{$vrijstelling->getLidId()}" title="Vrijstelling wijzigen" class="knop post popup">{icon get="pencil"}</a>
 	</td>
-	<td>{$vrijstelling->getLid()->getNaamLink($globals.weergave_ledennamen_beheer, 'link')}</td>
+	<td>{$vrijstelling->getLid()->getNaamLink($globals.weergave_ledennamen_beheer, 'visitekaartje')}</td>
 	<td>{$vrijstelling->getBeginDatum()|date_format:"%e %b %Y"}</td>
 	<td>{$vrijstelling->getEindDatum()|date_format:"%e %b %Y"}</td>
 	<td>{$vrijstelling->getPercentage()}%</td>

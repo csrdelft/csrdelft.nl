@@ -2,7 +2,7 @@
 <p>
 	<a href="/instellingen/" class="instellingen no-line" title="Webstekinstellingen">{icon get="instellingen"}</a>
 	{if $loginlid->isSued()}
-		<a href="/endsu/" style="color: red;">{$loginlid->getSuedFrom()->getNaamLink('civitas','html')} als</a><br />»
+		<a href="/endsu/" style="color: red;">{$loginlid->getSuedFrom()->getNaamLink('civitas', 'link')} als</a><br />ï¿½
 	{/if}
 	{$loginlid->getUid()|csrnaam}
 	<a href="/logout.php">log&nbsp;uit</a><br />

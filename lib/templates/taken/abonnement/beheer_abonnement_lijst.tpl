@@ -4,7 +4,7 @@
 <tr id="abonnement-row-{$uid}">
 	{foreach name=loop from=$abonnementen item=abonnement}
 		{if $smarty.foreach.loop.first}
-			<td>{$abonnement->getLid()->getNaamLink($globals.weergave_ledennamen_beheer, 'link')}</td>
+			<td>{$abonnement->getLid()->getNaamLink($globals.weergave_ledennamen_beheer, 'visitekaartje')}</td>
 		{/if}
 		{if $abonnement->getMaaltijdRepetitieId() and $abonnement->getMaaltijdRepetitie()->getIsAbonneerbaar()}
 			{include file='taken/abonnement/beheer_abonnement_veld.tpl' abonnement=$abonnement lidid=$abonnement->getLidId() uid=$uid}

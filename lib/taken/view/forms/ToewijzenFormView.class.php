@@ -30,8 +30,12 @@ class ToewijzenFormView extends \SimpleHtml {
 		return 'Taak toewijzen aan lid';
 	}
 	
-	public function getLidLink($uid) {
-		return \LidCache::getLid($uid)->getNaamLink($GLOBALS['weergave_ledennamen_beheer'], 'link');
+	public function getVisitekaartje($uid) {
+		$lid = \LidCache::getLid($uid);
+		if ($lid instanceof \Lid) {
+			return $lid->getNaamLink($GLOBALS['weergave_ledennamen_beheer'], 'visitekaartje');
+		}
+		return $uid;
 	}
 	
 	public function getIsJongsteLichting($uid) {

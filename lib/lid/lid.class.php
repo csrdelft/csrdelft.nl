@@ -531,7 +531,7 @@ class Lid implements Serializable, Agendeerbaar{
 			if($imgTag==='small'){
 				$html.='style="width: 100px;" ';
 			}
-			$html.='alt="pasfoto van '.$this->getNaamLink('full', 'html').'" />';
+			$html.='alt="pasfoto van '.$this->getNaamLink('full', 'plain').'" />';
 			return $html;
 		}else{
 			return $pasfoto;
@@ -652,44 +652,38 @@ class Lid implements Serializable, Agendeerbaar{
 			$mode='html';
 		}
 		
-		switch($mode){
-			case 'link':
-				if(LoginLid::instance()->hasPermission('P_LEDEN_READ')){
-					$k = '';
-					if($vorm!='pasfoto'){
-						$naam=mb_htmlentities($naam);
-						if(Instelling::get('layout_neuzen') == 'overal' || (Instelling::get('layout_neuzen') == '2013' && $this->getLichting() == 2013)) {
-							$naam = CsrUBB::instance()->ubb_neuzen($naam);
-						}
-					}
-					$l = '<a href="'.CSR_ROOT.'communicatie/profiel/'.$this->getUid().'" title="'.$sVolledigeNaam.'" class="lidLink '.$this->profiel['status'].'">';
-					if(Instelling::get('layout_visitekaartjes') == 'ja') {
-$v = str_replace(' ', '', str_replace('.', '', microtime()));
-$k = '<div id="k'.$v.'" class="visitekaartje">';
-$k.= $this->getPasfoto('small', 'lidfoto').'<div class="uid">('.$this->getUid().')</div>';
-$k.= '<p class="naam">'.$l.$sVolledigeNaam.'</a></p>';
-$k.= '<p style="word-break: break-all;"><a href="mailto:'.$this->profiel['email'].'">'.$this->profiel['email'].'</a><br />';
-$k.= $this->profiel['mobiel'].'</p>';
-$k.= '<p>'.$this->profiel['adres'].'<br />';
-$k.= $this->profiel['postcode'].' '.$this->profiel['woonplaats'].'</p>';
-$k.= '<p>'.$this->profiel['lidjaar'].' '.$this->getVerticale().'</p>';
-$k.= '</div><span id="v'.$v.'" class="visite">';
-					}
-					else {
-						$k = '<span>';
-					}
-					return '<div style="display: inline-block;">'.$k.$l.$naam.'</a></span></div>';
+		if (($mode === 'visitekaartje' || $mode === 'link') && LoginLid::instance()->hasPermission('P_LEDEN_READ')) {
+			$k = '';
+			if($vorm!='pasfoto'){
+				$naam=mb_htmlentities($naam);
+				if(Instelling::get('layout_neuzen') == 'overal' || (Instelling::get('layout_neuzen') == '2013' && $this->getLichting() == 2013)) {
+					$naam = CsrUBB::instance()->ubb_neuzen($naam);
 				}
-			case 'html':
-				if($vorm=='pasfoto'){
-					return $naam;
-				}else{
-					return mb_htmlentities($naam);
+			}
+			$l = '<a href="'.CSR_ROOT.'communicatie/profiel/'.$this->getUid().'" title="'.$sVolledigeNaam.'" class="lidLink '.$this->profiel['status'].'">';
+			
+			if ($mode === 'visitekaartje' && Instelling::get('layout_visitekaartjes') == 'ja') {
+				$v = str_replace(' ', '', str_replace('.', '', microtime()));
+				$k = '<div id="k'.$v.'" class="visitekaartje">';
+				if (Instelling::get('forum_toonpasfotos') == 'ja') {
+					$k.= $this->getPasfoto('small', 'lidfoto');
 				}
-			break;
-			case 'plain':
-			default:
-				return $naam;
+				$k.= '<div class="uid">('.$this->getUid().')</div>';
+				$k.= '<p class="naam">'.$l.$sVolledigeNaam.'</a></p>';
+				$k.= '<p style="word-break: break-all;"><a href="mailto:'.$this->profiel['email'].'">'.$this->profiel['email'].'</a><br />';
+				$k.= $this->profiel['mobiel'].'</p>';
+				$k.= '<p>'.$this->profiel['adres'].'<br />';
+				$k.= $this->profiel['postcode'].' '.$this->profiel['woonplaats'].'</p>';
+				$k.= '<p>'.$this->profiel['lidjaar'].' '.$this->getVerticale().'</p>';
+				$k.= '</div><span id="v'.$v.'" class="visite">';
+			}
+			else {
+				$k = '<span>';
+			}
+			return '<div style="display: inline-block;">'.$k.$l.$naam.'</a></span></div>';
+		}
+		else {
+			return $naam;
 		}
 	}
 

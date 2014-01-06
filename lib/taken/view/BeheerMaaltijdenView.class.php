@@ -34,10 +34,10 @@ class BeheerMaaltijdenView extends \SimpleHtml {
 		}
 	}
 	
-	public function getLidLink($uid) {
+	public function getVisitekaartje($uid) {
 		$lid = \LidCache::getLid($uid);
 		if ($lid instanceof \Lid) {
-			return $lid->getNaamLink($GLOBALS['weergave_ledennamen_beheer'], 'link');
+			return $lid->getNaamLink($GLOBALS['weergave_ledennamen_beheer'], 'visitekaartje');
 		}
 		return $uid;
 	}

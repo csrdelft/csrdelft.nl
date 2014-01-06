@@ -22,7 +22,7 @@
 	{table_foreach from=$aanmeldingen inner=rows item=aanmelding table_attr='class="aanmeldingen"' cols=2 name=aanmeldingen}
 		<div class="nummer">{$teller++}</div></td>
 		{if $aanmelding->getLidId()}
-		<td class="naam">{$aanmelding->getLid()->getNaamLink($globals.weergave_ledennamen_maaltijdlijst, 'link')}
+		<td class="naam">{$aanmelding->getLid()->getNaamLink($globals.weergave_ledennamen_maaltijdlijst, 'visitekaartje')}
 			{if $aanmelding->getLid()->getProperty('eetwens') !== ''}<div class="eetwens">{$aanmelding->getLid()->getProperty('eetwens')}</div>{/if}
 			{if $aanmelding->getGastenOpmerking() !== ''}<div class="opmerking">Gasten opmerking: {$aanmelding->getGastenOpmerking()}</div>{/if}
 		</td>
@@ -60,7 +60,7 @@
 	{table_foreach from=$corveetaken inner=rows item=taak table_attr='class="corveetaken"' cols=2 name=corveetaken}
 			&bullet;&nbsp;
 		{if $taak->getLidId()}
-			{$taak->getLid()->getNaamLink($globals.weergave_ledennamen_maaltijdlijst, 'link')}
+			{$taak->getLid()->getNaamLink($globals.weergave_ledennamen_maaltijdlijst, 'visitekaartje')}
 		{else}
 			<i>vacature</i>
 		{/if}
