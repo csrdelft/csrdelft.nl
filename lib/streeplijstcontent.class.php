@@ -8,7 +8,7 @@
 
 require_once 'verticale.class.php';
 
-class Streeplijstcontent {
+class Streeplijstcontent extends SimpleHTML {
 	private $moot='alle';
 	private $lichting='';
 

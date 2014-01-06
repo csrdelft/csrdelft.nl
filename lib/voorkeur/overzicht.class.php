@@ -1,6 +1,6 @@
 <?php
 
-class CommissieOverzicht{
+class CommissieOverzicht extends SimpleHTML{
 	
 	private $id;
 	
@@ -49,7 +49,7 @@ class CommissieOverzicht{
 		return $arr[$voorkeur];
 	}
 
-class LidOverzicht {
+class LidOverzicht extends SimpleHTML {
 	
 	private $lid;
 	
@@ -104,6 +104,4 @@ class LidOverzicht {
 		$voorkeur = new LidVoorkeur($this->lid);
 		$voorkeur->setPraesesOpmerking($actie);	
 	}
-}	
-
-?>
+}

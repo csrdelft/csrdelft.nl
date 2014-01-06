@@ -174,5 +174,3 @@ class EetplanContent extends SimpleHTML {
 		}
 	}
 }
-
-?>

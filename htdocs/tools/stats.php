@@ -10,11 +10,7 @@ if(!$loginlid->hasPermission('P_ADMIN')){
 	exit;
 }
 
-$pagina=new Csrdelft(new stats());
-$pagina->setZijkolom(false);
-$pagina->view();
-
-class stats{
+class stats extends SimpleHTML{
 
 	function view(){
 
@@ -179,4 +175,8 @@ class stats{
 		echo '</table>';
 	}
 }// einde stats klasse
-?>
+
+
+$pagina=new csrdelft(new stats());
+$pagina->setZijkolom(false);
+$pagina->view();

@@ -62,11 +62,12 @@ $beheer = new PeilingBeheerContent();
 $beheer->setMelding($resultaat);
 
 if(!$loginlid->hasPermission('P_LOGGED_IN') OR !Peiling::magBewerken()){
-	$melding="Je hebt geen rechten om deze pagina te bekijken.";
-	$beheer=new Stringincluder($melding, 'Peilingbeheer');
+	# geen rechten
+	require_once 'paginacontent.class.php';
+	$pagina=new Pagina('geentoegang');
+	$beheer=new PaginaContent($pagina);
 }
 
 $pagina=new csrdelft($beheer);
 $pagina->addScript('peilingbeheer.js');
 $pagina->view();
-?>
