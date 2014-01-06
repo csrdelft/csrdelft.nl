@@ -112,7 +112,7 @@
                 <div class="columns large-2 small-2" style="width: auto; height: auto;">
                     <div class="box h2 link" style="width: auto; height: auto;">
                         <a href="https://ddb.tudelft.nl/" style="width: auto; height: auto;">
-                            <img style="width: 120px;" src="http://plaetjes.csrdelft.nl/ddb.gif" class="border">
+                            <img style="float: left; width: 120px;" src="http://plaetjes.csrdelft.nl/ddb.gif" class="border">
                         </a>
                     </div>
                 </div>
