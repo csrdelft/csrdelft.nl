@@ -655,13 +655,30 @@ class Lid implements Serializable, Agendeerbaar{
 		switch($mode){
 			case 'link':
 				if(LoginLid::instance()->hasPermission('P_LEDEN_READ')){
+					$k = '';
 					if($vorm!='pasfoto'){
 						$naam=mb_htmlentities($naam);
 						if(Instelling::get('layout_neuzen') == 'overal' || (Instelling::get('layout_neuzen') == '2013' && $this->getLichting() == 2013)) {
 							$naam = CsrUBB::instance()->ubb_neuzen($naam);
 						}
 					}
-					return '<a href="'.CSR_ROOT.'communicatie/profiel/'.$this->getUid().'" title="'.$sVolledigeNaam.'" class="lidLink '.$this->profiel['status'].'">'.$naam.'</a>';
+					$l = '<a href="'.CSR_ROOT.'communicatie/profiel/'.$this->getUid().'" title="'.$sVolledigeNaam.'" class="lidLink '.$this->profiel['status'].'">';
+					if(Instelling::get('layout_visitekaartjes') == 'ja') {
+$v = str_replace(' ', '', str_replace('.', '', microtime()));
+$k = '<div id="k'.$v.'" class="visitekaartje">';
+$k.= $this->getPasfoto('small', 'lidfoto').'<div class="uid">('.$this->getUid().')</div>';
+$k.= '<p class="naam">'.$l.$sVolledigeNaam.'</a></p>';
+$k.= '<p style="word-break: break-all;"><a href="mailto:'.$this->profiel['email'].'">'.$this->profiel['email'].'</a><br />';
+$k.= $this->profiel['mobiel'].'</p>';
+$k.= '<p>'.$this->profiel['adres'].'<br />';
+$k.= $this->profiel['postcode'].' '.$this->profiel['woonplaats'].'</p>';
+$k.= '<p>'.$this->profiel['lidjaar'].' '.$this->getVerticale().'</p>';
+$k.= '</div><span id="v'.$v.'" class="visite">';
+					}
+					else {
+						$k = '<span>';
+					}
+					return $k.$l.$naam.'</a></span>';
 				}
 			case 'html':
 				if($vorm=='pasfoto'){

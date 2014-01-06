@@ -2,6 +2,10 @@
  * csrdelft.nl javascript libje...
  */
 
+$(document).ready(function() {
+	init_visitekaartjes();
+});
+
 /**
  * Aan-/afmelden m.b.v. een ketzer
  * 
@@ -52,6 +56,21 @@ function selectText(element) {
         selection.removeAllRanges();
         selection.addRange(range);
     }
+}
+
+function init_visitekaartjes() {
+	$('.visite').each(function() {
+		$(this).mouseenter(function() {
+			var id = $(this).attr('id');
+			id = id.replace('v', 'k');
+			$('#'+id).fadeIn();
+		});
+	});
+	$('.visitekaartje').each(function() {
+		$(this).mouseleave(function() {
+			$(this).fadeOut();
+		});
+	});
 }
 
 //we maken een standaard AJAX-ding aan.

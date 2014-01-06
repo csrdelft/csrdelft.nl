@@ -295,13 +295,6 @@ class LLLijst extends LLweergave{
 				case 'website':
 					echo '<a href="'.mb_htmlentities($lid->getProperty($veld)).'" class="linkExt">'.mb_htmlentities($lid->getProperty($veld)).'</a>';
 				break;
-				case 'corvee_kwalikok':
-					if($lid->getProperty($veld)==1){
-						echo 'ja';
-					}else{
-						echo 'nee';
-					}
-				break;
 				default:
 					try{
 						echo mb_htmlentities($lid->getProperty($veld));
@@ -326,7 +319,7 @@ class LLKaartje extends LLweergave{
 	public function viewFooter(){}
 	
 	public function viewLid(Lid $lid){
-		echo '<div class="visitekaartje"  id="lid'.$lid->getUid().'">';
+		echo '<div class="lijstvisitekaartje"  id="lid'.$lid->getUid().'">';
 		echo $lid->getNaamLink('pasfoto', 'link');
 		echo '<h2>'.$lid->getNaamLink('full', 'link' ).'</h2>';
 		echo '<div class="adres">';

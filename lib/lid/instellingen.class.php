@@ -19,6 +19,7 @@ class Instelling{
 			'algemeen_bijbel' => array('NBV', 'Bijbelvertaling voor bijbelrooster', 'enum', array('NBV', 'NBG', 'Herziene Statenvertaling', 'Statenvertaling (Jongbloed)', 'Groot Nieuws Bijbel', 'Willibrordvertaling')),
 			'layout' => array('normaal', 'Websteklayout', 'enum', array('normaal', 'owee', 'roze', 'lustrum')),
 			'layout_beeld' => array('normaal', 'Schermmodus', 'enum', array('normaal', 'breedbeeld')),
+			'layout_visitekaartjes' => array('ja', 'Visitekaartjes', 'enum', array('ja', 'nee')),
 			'layout_sneeuw' => array('ja', 'Sneeuw', 'enum', array('ja', 'freeze!', 'nee')),
 			'layout_neuzen' => array('2013', 'Neuzen', 'enum', array('overal', '2013', 'nee')),
 			'layout_minion' => array('nee', 'Minion', 'enum', array('ja', 'nee')),

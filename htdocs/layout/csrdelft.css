@@ -422,6 +422,36 @@ ul.nobullets li{ list-style-type: none; }
 	text-decoration: underline;
 }
 
+/**** VISITEKAARTJE ******************************************************************/
+div.visitekaartje {
+	display: none;
+	position: absolute;
+	width: 330px;
+	font-size: 11px !important;
+	border: 1px solid #000;
+	background-color: #FFF;
+	-moz-box-shadow: 0 0 11px #000000;
+	-webkit-box-shadow: 0 0 11px #000000;
+	box-shadow: 0 0 11px #000000;
+	z-index: 111;
+}
+div.visitekaartje img {
+	float: right;
+}
+div.visitekaartje p {
+	margin: 8px 0px 0px 10px;
+}
+div.visitekaartje p.naam a {
+	font-weight: bold;
+	color: #000;
+}
+div.visitekaartje div.uid {
+	float: right;
+	padding-right: 5px;
+	margin-top: 8px;
+	color: #999;
+}
+
 /**** OVERIG ******************************************************************/
 a.knop, div.knop{
 	background-color: #f5f5f5;
