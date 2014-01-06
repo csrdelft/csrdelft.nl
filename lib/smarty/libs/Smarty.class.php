@@ -40,17 +40,17 @@ if(!defined('DIR_SEP')) {
 }
 
 /**
- * set SMARTY2_DIR to absolute path to Smarty library files.
- * if not defined, include_path will be used. Sets SMARTY2_DIR only if user
+ * set SMARTY_DIR to absolute path to Smarty library files.
+ * if not defined, include_path will be used. Sets SMARTY_DIR only if user
  * application has not already defined it.
  */
 
-if (!defined('SMARTY2_DIR')) {
-    define('SMARTY2_DIR', dirname(__FILE__) . DIRECTORY_SEPARATOR);
+if (!defined('SMARTY_DIR')) {
+    define('SMARTY_DIR', dirname(__FILE__) . DIRECTORY_SEPARATOR);
 }
 
 if (!defined('SMARTY_CORE_DIR')) {
-    define('SMARTY_CORE_DIR', SMARTY2_DIR . 'internals' . DIRECTORY_SEPARATOR);
+    define('SMARTY_CORE_DIR', SMARTY_DIR . 'internals' . DIRECTORY_SEPARATOR);
 }
 
 define('SMARTY_PHP_PASSTHRU',   0);
@@ -61,7 +61,7 @@ define('SMARTY_PHP_ALLOW',      3);
 /**
  * @package Smarty
  */
-class Smarty2
+class Smarty
 {
     /**#@+
      * Smarty Configuration Section
@@ -1446,8 +1446,8 @@ class Smarty2
      */
     function _compile_source($resource_name, &$source_content, &$compiled_content, $cache_include_path=null)
     {
-        if (file_exists(SMARTY2_DIR . $this->compiler_file)) {
-            require_once(SMARTY2_DIR . $this->compiler_file);
+        if (file_exists(SMARTY_DIR . $this->compiler_file)) {
+            require_once(SMARTY_DIR . $this->compiler_file);
         } else {
             // use include_path
             require_once($this->compiler_file);

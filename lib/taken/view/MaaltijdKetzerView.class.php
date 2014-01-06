@@ -24,7 +24,7 @@ class MaaltijdKetzerView extends \SimpleHtml {
 	}
 	
 	public function fetch() {
-		$smarty = new \Smarty3CSR();
+		$smarty = new \Smarty_csr();
 		$smarty->assign('maaltijd', $this->_maaltijd);
 		$smarty->assign('aanmelding', $this->_aanmelding);
 		$smarty->assign('toonlijst', MijnMaaltijdenController::magMaaltijdlijstTonen($this->_maaltijd));

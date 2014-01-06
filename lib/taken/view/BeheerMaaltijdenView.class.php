@@ -43,7 +43,7 @@ class BeheerMaaltijdenView extends \SimpleHtml {
 	}
 	
 	public function view() {
-		$smarty = new \Smarty3CSR();
+		$smarty = new \Smarty_csr();
 		
 		if (is_array($this->_maaltijden)) { // list of maaltijden
 			if ($this->_prullenbak || $this->_archief || $this->_repetities !== null) { // normal view

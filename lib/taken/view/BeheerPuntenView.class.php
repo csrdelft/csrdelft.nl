@@ -21,7 +21,7 @@ class BeheerPuntenView extends \SimpleHtml {
 	}
 	
 	public function view() {
-		$smarty = new \Smarty3CSR();
+		$smarty = new \Smarty_csr();
 		
 		if ($this->_functies === null) { // voor een lid
 			$smarty->assign('puntenlijst', $this->_leden_punten);

@@ -28,7 +28,7 @@ class BeheerAbonnementenView extends \SimpleHtml {
 	}
 	
 	public function view() {
-		$smarty = new \Smarty3CSR();
+		$smarty = new \Smarty_csr();
 		
 		$status = 'abo';
 		if (is_bool($this->_ingeschakeld)) {

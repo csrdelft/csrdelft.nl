@@ -23,7 +23,7 @@ class MaalCieSaldiView extends \SimpleHtml {
 			echo '<tr id="taken-melding"><td>'. $this->getMelding() .'</td></tr>';
 		}
 		else {
-			$smarty= new \Smarty3CSR();
+			$smarty= new \Smarty_csr();
 			$smarty->assign('melding', $this->getMelding());
 			$smarty->assign('kop', $this->getTitel());
 			$smarty->display('taken/menu_pagina.tpl');

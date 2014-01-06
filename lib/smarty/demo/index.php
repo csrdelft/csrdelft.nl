@@ -2,7 +2,7 @@
 
 require '../libs/Smarty.class.php';
 
-$smarty = new Smarty2;
+$smarty = new Smarty;
 
 $smarty->compile_check = true;
 $smarty->debugging = true;

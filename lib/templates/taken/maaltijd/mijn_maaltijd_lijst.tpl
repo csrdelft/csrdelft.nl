@@ -44,7 +44,7 @@
 		</div>
 	{else}
 	<td class="maaltijd-aangemeld">
-		<a href="{$GLOBALS.taken_module}/afmelden/{$maaltijd->getMaaltijdId()}" class="knop post maaltijd-aangemeld"><input type="checkbox" checked="checked" /> Ja</a>
+		<a href="{$globals.taken_module}/afmelden/{$maaltijd->getMaaltijdId()}" class="knop post maaltijd-aangemeld"><input type="checkbox" checked="checked" /> Ja</a>
 		{if $aanmelding->getDoorAbonnement()} (abo){/if}
 	{/if}
 	</td>
@@ -53,7 +53,7 @@
 		{$aanmelding->getAantalGasten()}
 	{else}
 		<div class="inline-edit maaltijd-gasten" onclick="taken_toggle_hiddenform(this);">{$aanmelding->getAantalGasten()}</div>
-		<form method="post" action="{$GLOBALS.taken_module}/gasten/{$maaltijd->getMaaltijdId()}" class="Formulier taken-hidden-form taken-subform">
+		<form method="post" action="{$globals.taken_module}/gasten/{$maaltijd->getMaaltijdId()}" class="Formulier taken-hidden-form taken-subform">
 			<input type="text" name="aantal_gasten" origvalue="{$aanmelding->getAantalGasten()}" class="regular" maxlength="4" size="4" />
 			<a onclick="$(this).parent().submit();" title="Wijzigingen opslaan" class="knop">{icon get="accept"}</a>
 			<a onclick="taken_toggle_hiddenform($(this).parent());" title="Annuleren" class="knop">{icon get="delete"}</a>
@@ -73,7 +73,7 @@
 			<a class="knop">{icon get="comment_add" title="Gasten opmerking maken"}</a>
 		{/if}
 		</div>
-		<form method="post" action="{$GLOBALS.taken_module}/opmerking/{$maaltijd->getMaaltijdId()}" class="Formulier taken-hidden-form taken-subform">
+		<form method="post" action="{$globals.taken_module}/opmerking/{$maaltijd->getMaaltijdId()}" class="Formulier taken-hidden-form taken-subform">
 			<input type="text" name="gasten_opmerking" value="{$aanmelding->getGastenOpmerking()}" origvalue="{$aanmelding->getGastenOpmerking()}" class="regular" maxlength="255" size="20" />
 			<a onclick="$(this).parent().submit();" title="Wijzigingen opslaan" class="knop">{icon get="accept"}</a>
 			<a onclick="taken_toggle_hiddenform($(this).parent());" title="Annuleren" class="knop">{icon get="delete"}</a>
@@ -95,7 +95,7 @@
 		{/if}
 	{else}
 	<td class="maaltijd-afgemeld">
-		<a href="{$GLOBALS.taken_module}/aanmelden/{$maaltijd->getMaaltijdId()}" class="knop post maaltijd-afgemeld"><input type="checkbox" /> Nee</a>
+		<a href="{$globals.taken_module}/aanmelden/{$maaltijd->getMaaltijdId()}" class="knop post maaltijd-afgemeld"><input type="checkbox" /> Nee</a>
 	{/if}
 	</td>
 	<td>-</td>

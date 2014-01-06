@@ -19,7 +19,7 @@ class BeheerInstellingenView extends \SimpleHtml {
 	}
 	
 	public function view() {
-		$smarty = new \Smarty3CSR();
+		$smarty = new \Smarty_csr();
 		
 		if (is_array($this->_instellingen)) {
 			$smarty->assign('melding', $this->getMelding());

@@ -23,7 +23,7 @@ class BeheerMenusView extends \SimpleHtml {
 	}
 	
 	public function view() {
-		$smarty = new \Smarty3CSR();
+		$smarty = new \Smarty_csr();
 		
 		if (is_array($this->_menus)) {
 			$smarty->assign('melding', $this->getMelding());

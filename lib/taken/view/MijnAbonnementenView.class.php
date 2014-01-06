@@ -19,7 +19,7 @@ class MijnAbonnementenView extends \SimpleHtml {
 	}
 	
 	public function view() {
-		$smarty = new \Smarty3CSR();
+		$smarty = new \Smarty_csr();
 		
 		if (is_array($this->_abonnementen)) { // list of abonnementen
 			$smarty->assign('melding', $this->getMelding());

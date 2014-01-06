@@ -30,7 +30,7 @@ class CorveeRepetitiesView extends \SimpleHtml {
 	}
 	
 	public function view() {
-		$smarty = new \Smarty3CSR();
+		$smarty = new \Smarty_csr();
 		
 		if ($this->_maaltijdrepetitie !== null) {
 			$smarty->assign('maaltijdrepetitie', $this->_maaltijdrepetitie);

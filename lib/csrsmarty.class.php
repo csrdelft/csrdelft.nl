@@ -1,12 +1,14 @@
 <?php
 # C.S.R. Delft | pubcie@csrdelft.nl
 # -------------------------------------------------------------------
-# csrsmarty.class.php
+# class.csrsmarty.php
 # -------------------------------------------------------------------
 
+
+// load Smarty library
 require_once('smarty/libs/Smarty.class.php');
 
-class Smarty_csr extends Smarty2 {
+class Smarty_csr extends Smarty {
 
 	public function __construct(){
 		$this->Smarty();

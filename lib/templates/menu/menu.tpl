@@ -29,7 +29,7 @@
 				{if $loginlid->isSued()}
 					<a href="/endsu/" style="color: red;">{$loginlid->getSuedFrom()->getNaamLink('civitas','html')} als</a><br />»
 				{/if}
-				{$loginlid->getLid()->getNaamLink('civitas', 'link')}<br />
+				{$loginlid->getUid()|csrnaam}<br />
 				<div id="uitloggen"><a href="/logout.php">log&nbsp;uit</a></div>
 				<div id="saldi">
 					{foreach from=$loginlid->getLid()->getSaldi() item=saldo}

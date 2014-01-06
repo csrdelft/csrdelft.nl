@@ -25,7 +25,7 @@
 		<div style="display: inline-block; width: 25px;">
 			<form method="post" action="/menubeheer/wijzig/{$item->getMenuId()}/zichtbaar">
 				<input type="hidden" name="Zichtbaar" value="{if $item->getIsZichtbaar()}0{else}1{/if}" />
-				<input type="image" src="{$CSR_PICS}/famfamfam/{if $item->getIsZichtbaar()}eye{else}shading{/if}.png" title="{if $item->getIsZichtbaar()}Menu-item is nu zichtbaar.&#013;Klik om onzichtbaar te maken.{else}Menu-item is nu onzichtbaar.&#013;Klik om zichtbaar te maken{/if}" />
+				<input type="image" src="{$csr_pics}/famfamfam/{if $item->getIsZichtbaar()}eye{else}shading{/if}.png" title="{if $item->getIsZichtbaar()}Menu-item is nu zichtbaar.&#013;Klik om onzichtbaar te maken.{else}Menu-item is nu onzichtbaar.&#013;Klik om zichtbaar te maken{/if}" />
 			</form>
 		</div>
 		<div style="display: inline-block; width: 60px; text-align: center;">

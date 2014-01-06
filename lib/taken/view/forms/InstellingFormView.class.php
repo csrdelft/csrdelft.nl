@@ -27,7 +27,7 @@ class InstellingFormView extends \SimpleHtml {
 	}
 	
 	public function view() {
-		$smarty = new \Smarty3CSR();
+		$smarty = new \Smarty_csr();
 		$smarty->assign('melding', $this->getMelding());
 		$smarty->assign('kop', $this->getTitel());
 		$this->_form->cssClass .= ' popup';
