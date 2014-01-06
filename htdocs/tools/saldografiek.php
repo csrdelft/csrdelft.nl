@@ -6,7 +6,7 @@
  */
 
 require_once 'configuratie.include.php';
-require_once 'chart-0.8/chart.php';
+require_once 'chart/chart.php';
 require_once 'lid/saldi.class.php';
 
 
