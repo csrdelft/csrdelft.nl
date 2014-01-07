@@ -5,7 +5,7 @@
 	<tr>
 		<th style="vertical-align: bottom;">Lid</th>
 	{foreach from=$repetities item=repetitie}
-		<th style="width: 30px; background-color: {cycle values="#F0F0F0,#FAFAFA"};">{strip}
+		<th style="width: 30px; background-color: {cycle values="#F0F0F0,#FAFAFA"}; color: #000;">{strip}
 			<div style="width: 28px;">
 				<a href="/maaltijdenrepetities/beheer/{$repetitie->getMaaltijdRepetitieId()}" title="Wijzig maaltijdrepetitie" class="knop get">
 					{icon get="calendar_edit"}

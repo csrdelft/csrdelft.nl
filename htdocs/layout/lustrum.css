@@ -147,3 +147,17 @@ body{
 body{
 	background-color: transparent !important;
 }
+
+.taken-tabel tr {
+	height: 25px;
+	background-color: #222;
+}
+.taken-tabel tr:nth-child(even) {
+	background-color: #555;
+}
+.taken-tabel tr:hover {
+	background-color: #222;
+}
+.taken-tabel th {
+	background-color: #555;
+}

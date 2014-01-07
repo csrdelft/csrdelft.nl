@@ -10,7 +10,7 @@
 		{foreach name=taken from=$perfunctie item=taak}
 			{if $first eq "true"}
 				{assign var="first" value="false"}
-	<th style="width: 60px; padding: 2px 7px;{if strtotime($datum) >= strtotime('-1 day')} background-color: {cycle values="#F0F0F0,#FAFAFA" advance=false};{/if}">
+	<th style="width: 60px; padding: 2px 7px;{if strtotime($datum) >= strtotime('-1 day')} background-color: {cycle values="#F0F0F0,#FAFAFA" advance=false};{/if} color: #000;">
 				{if $taak->getMaaltijdId()}
 		<a href="/corveebeheer/maaltijd/{$taak->getMaaltijdId()}" title="Beheer maaltijdcorvee" class="knop get">{icon get="cup_link"}</a>
 		<a href="/maaltijdenbeheer/beheer/{$taak->getMaaltijdId()}" title="Wijzig gekoppelde maaltijd" class="knop get">{icon get="cup_edit"}</a>
@@ -21,7 +21,7 @@
 					{/if}
 				{/if}
 	</th>
-	<th colspan="6" style="background-color: {cycle};">
+	<th colspan="6" style="background-color: {cycle}; color: #000;">
 		<div style="display: inline-block; width: 80px; font-weight: normal;">{$taak->getDatum()|date_format:"%a %e %b"}</div>
 			{/if}
 			{if $smarty.foreach.taken.first}
