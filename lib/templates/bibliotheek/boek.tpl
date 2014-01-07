@@ -185,7 +185,7 @@
 							<div class="statusmarkering"><span class="biebindicator {$exemplaar.status}" title="Boek is {$exemplaar.status}">• </span></div>
 						{/if}
 						{if $exemplaar.eigenaar_uid=='x222'}
-							{assign var=total_exemplaren_bibliotheek value=`$total_exemplaren_bibliotheek+1`}
+							{assign var=total_exemplaren_bibliotheek value=$total_exemplaren_bibliotheek+1}
 						{/if}
 					{/foreach}
 					<br /><div style="clear: both;"></div>
