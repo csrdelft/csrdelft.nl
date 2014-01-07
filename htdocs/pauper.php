@@ -23,6 +23,5 @@ $forumcontent=new forumcontent($forum, 'lastposts');
 
 ## pagina weergeven
 $pagina=new csrdelft($forumcontent);
-$pagina->setZijkolom(false);
-
+$pagina->zijkolom=false;
 $pagina->view();

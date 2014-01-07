@@ -43,6 +43,6 @@ else {
 	//uitgelogd heeft nieuwe layout
 	$page=new csrdelft($body, 'csrdelft2');
 }
-$page->addStylesheet('forum.css', '/layout/');
-$page->addScript('forum.js', '/layout/');
+$page->addStylesheet('forum.css');
+$page->addScript('forum.js');
 $page->view();

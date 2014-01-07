@@ -51,8 +51,8 @@ else {
 	//uitgelogd heeft nieuwe layout
 	$page=new csrdelft($midden, 'csrdelft2');
 }
-$page->addStylesheet('forum.css', '/layout/');
-$page->addScript('groepen.js', '/layout/');
-$page->addScript('forum.js', '/layout/');
+$page->addStylesheet('forum.css');
+$page->addScript('groepen.js');
+$page->addScript('forum.js');
 
 $page->view();

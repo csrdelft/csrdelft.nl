@@ -49,8 +49,8 @@ if($form->valid(null)){
 $midden=new TestFormulierContent($form);
 $pagina=new csrdelft($midden);
 
-//lege zijkolom, overzichterlijker debuggen
-$pagina->setZijkolom(new Kolom());
+//geen zijkolom, overzichterlijker debuggen
+$pagina->zijkolom=false;
 $pagina->addStylesheet('profiel.css');
 $pagina->addStylesheet('js/autocomplete/jquery.autocomplete.css');
 //$pagina->addScript('profiel.js');

@@ -74,6 +74,7 @@ abstract class SimpleHTML {
 		}
 		// Ga snel naar
 		if (Instelling::get('zijbalk_gasnelnaar') == 'ja') {
+			require_once('menu/MenuView.class.php');
 			$zijkolom[] = new MenuView('gasnelnaar', 3);
 		}
 		// Agenda

@@ -178,5 +178,5 @@ class stats extends SimpleHTML{
 
 
 $pagina=new csrdelft(new stats());
-$pagina->setZijkolom(false);
+$pagina->zijkolom=false;
 $pagina->view();

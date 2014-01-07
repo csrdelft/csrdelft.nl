@@ -29,15 +29,15 @@ if($fotoalbum->magBekijken()){
 	
 	if(LoginLid::instance()->hasPermission('P_LEDEN_READ')){
 		$pagina=new csrdelft($fotoalbumcontent);
-		$pagina->setZijkolom(false);
+		$pagina->zijkolom=false;
 	}
 	else {
 		//uitgelogd heeft nieuwe layout
 		$pagina=new csrdelft($fotoalbumcontent, 'csrdelft2');
 	}
-	$pagina->addStylesheet('fotoalbum.css', '/layout/');
-	$pagina->addStylesheet('jquery.prettyPhoto.css', '/layout/');
-	$pagina->addScript('jquery.prettyPhoto.js', '/layout/');
+	$pagina->addStylesheet('fotoalbum.css');
+	$pagina->addStylesheet('jquery.prettyPhoto.css');
+	$pagina->addScript('jquery.prettyPhoto.min.js');
 	$pagina->view();
 }
 else{

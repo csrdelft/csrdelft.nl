@@ -15,11 +15,63 @@ class csrdelft extends SimpleHTML {
 	/**
 	 * De normale layout heeft een array van SimpleHTML als zijkolom
 	 */
-	public $_zijkolom = array();
+	public $zijkolom = array();
 
 	function __construct(SimpleHTML $body, $layout = 'normaal') {
 		$this->_body = $body;
 		$this->_layout = $layout;
+		
+		switch($this->_layout) {
+
+			case 'csrdelft2':
+				$this->addStylesheet('style.css', '/layout2/');
+				$this->addStylesheet('foundation.css', '/layout2/');
+				$this->addStylesheet('normalize.css', '/layout2/');
+				$this->addStylesheet('ubb.css', '/layout/');
+				$this->addScript('jquery.js', '/layout2/');
+				$this->addScript('jquery.backstretch.js', '/layout2/');
+				$this->addScript('jquery.timeago.js');
+				$this->addScript('init.js', '/layout2/');
+				$this->addScript('csrdelft.js', '/layout/');
+			return;
+
+			case 'normaal':
+			case 'owee':
+			case 'lustrum':
+			default:
+				
+				$this->addStylesheet('undohtml.css');
+				$this->addStylesheet('ubb.css');
+				$this->addStylesheet('csrdelft.css');
+				$layout = Instelling::get('layout');
+				if (!Instelling::hasEnumOption('layout', $layout)) { // fix verwijderde layout
+					$layout = 'normaal';
+					Instelling::set('layout', $layout);
+					Instelling::save();
+				}
+				$this->addStylesheet($layout .'.css');
+				if (Instelling::get('layout_beeld') == 'breedbeeld') {
+					$this->addStylesheet('breedbeeld.css');
+				}
+				if (Instelling::get('layout_sneeuw') != 'nee') {
+					if (Instelling::get('layout_sneeuw') == 'ja') {
+						$this->addStylesheet('snow.anim.css');
+					} else {
+						$this->addStylesheet('snow.css');
+					}
+				}
+				$this->addScript('jquery.min.js');
+				$this->addScript('jquery.timeago.js');
+				$this->addScript('jquery.hoverIntent.min.js');
+				$this->addScript('csrdelft.js');
+				$this->addScript('dragobject.js');
+				$this->addScript('menu.js');
+				
+				if (Instelling::get('algemeen_sneltoetsen') == 'ja') {
+					$this->addScript('sneltoetsen.js');
+				}
+			return;
+		}
 	}
 
 	/**
@@ -122,15 +174,6 @@ class csrdelft extends SimpleHTML {
 		switch($this->_layout) {
 
 			case 'csrdelft2':
-				$this->addStylesheet('style.css', '/layout2/');
-				$this->addStylesheet('foundation.css', '/layout2/');
-				$this->addStylesheet('normalize.css', '/layout2/');
-				$this->addStylesheet('ubb.css', '/layout/');
-				$this->addScript('jquery.js', '/layout2/');
-				$this->addScript('jquery.backstretch.js', '/layout2/');
-				$this->addScript('jquery.timeago.js');
-				$this->addScript('init.js', '/layout2/');
-				$this->addScript('csrdelft.js', '/layout/');
 				if ($template === '') {
 					$template = 'content';
 				}
@@ -144,54 +187,23 @@ class csrdelft extends SimpleHTML {
 			case 'owee':
 			case 'lustrum':
 			default:
-				
-				$this->addStylesheet('undohtml.css');
-				$this->addStylesheet('ubb.css');
-				$this->addStylesheet('csrdelft.css');
-				$layout = Instelling::get('layout');
-				if (!Instelling::hasEnumOption('layout', $layout)) { // fix verwijderde layout
-					$layout = 'normaal';
-					Instelling::set('layout', $layout);
-					Instelling::save();
-				}
-				$this->addStylesheet($layout .'.css');
-				if (Instelling::get('layout_beeld') == 'breedbeeld') {
-					$this->addStylesheet('breedbeeld.css');
-				}
-				if (Instelling::get('layout_sneeuw') != 'nee') {
-					if (Instelling::get('layout_sneeuw') == 'ja') {
-						$this->addStylesheet('snow.anim.css');
-					} else {
-						$this->addStylesheet('snow.css');
-					}
-				}
-				$this->addScript('jquery.js');
-				$this->addScript('jquery.timeago.js');
-				$this->addScript('jquery.hoverIntent.min.js');
-				$this->addScript('csrdelft.js');
-				$this->addScript('dragobject.js');
-				$this->addScript('menu.js');
-				require_once('menu/MenuView.class.php');
-				$smarty->assign('mainmenu', new MenuView('main'));
-				
-				if (Instelling::get('algemeen_sneltoetsen') == 'ja') {
-					$this->addScript('sneltoetsen.js');
-				}
 				if (Instelling::get('layout_minion') == 'ja') {
-					$this->addScript('minion.js');
 					$this->addStylesheet('minion.css');
-					
+					$this->addScript('minion.js');
 					$smarty->assign('minion', $smarty->fetch('minion.tpl'));
 				}
-				
-				if ($this->_zijkolom !== false || Instelling::get('layout_beeld') === 'breedbeeld') {
-					$this->_zijkolom += SimpleHTML::getStandaardZijkolom();
-				}
-				$smarty->assign('zijkolom', $this->_zijkolom);
 				
 				if (defined('DEBUG') AND (LoginLid::instance()->hasPermission('P_ADMIN') OR LoginLid::instance()->isSued())) {
 					$smarty->assign('debug', SimpleHTML::getDebug());
 				}
+				
+				if ($this->zijkolom !== false || Instelling::get('layout_beeld') === 'breedbeeld') {
+					$this->zijkolom += SimpleHTML::getStandaardZijkolom();
+				}
+				$smarty->assign('zijkolom', $this->zijkolom);
+				
+				require_once('menu/MenuView.class.php');
+				$smarty->assign('mainmenu', new MenuView('main'));
 				
 				$smarty->display('csrdelft.tpl');
 			return;
