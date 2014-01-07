@@ -198,7 +198,12 @@ class csrdelft extends SimpleHTML {
 				}
 				
 				if ($this->zijkolom !== false || Instelling::get('layout_beeld') === 'breedbeeld') {
-					$this->zijkolom = array_merge($this->zijkolom, SimpleHTML::getStandaardZijkolom());
+					if (is_array($this->zijkolom)) {
+						$this->zijkolom += SimpleHTML::getStandaardZijkolom();
+					}
+					else {
+						$this->zijkolom = SimpleHTML::getStandaardZijkolom();
+					}
 				}
 				$smarty->assign('zijkolom', $this->zijkolom);
 				
