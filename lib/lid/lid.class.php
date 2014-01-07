@@ -542,7 +542,7 @@ class Lid implements Serializable, Agendeerbaar{
 	 * Maak een link met de naam van het huidige lid naar zijn profiel.
 	 *
 	 * @vorm:	user, nick, bijnaam, streeplijst, full/volledig, civitas, aaidrom
-	 * @mode:	link, html, plain
+	 * @mode:	link, plain
 	 */
 	public function getNaamLink($vorm='full', $mode='plain'){
 		if($this->profiel['voornaam']!=''){
@@ -643,16 +643,19 @@ class Lid implements Serializable, Agendeerbaar{
 					$naam='$vorm [pasfoto] alleen toegestaan in linkmodus';
 				}
 			break;
+			case 'leeg':
+				$naam='';
+			break;
 			default:
 				$naam='Formaat in $vorm is onbekend.';
 		}
 		//niet ingelogged nooit een link laten zijn.
 		$nolinks=array('x999', 'x101', 'x027', '4444');
-		if(in_array($this->getUid(), $nolinks) AND $mode=='link'){
-			$mode='html';
+		if(in_array($this->getUid(), $nolinks) || !LoginLid::instance()->hasPermission('P_LEDEN_READ')){
+			$mode='plain';
 		}
 		
-		if (($mode === 'visitekaartje' || $mode === 'link') && LoginLid::instance()->hasPermission('P_LEDEN_READ')) {
+		if ($mode === 'visitekaartje' || $mode === 'link') {
 			$k = '';
 			if($vorm!='pasfoto'){
 				$naam=mb_htmlentities($naam);
@@ -662,9 +665,15 @@ class Lid implements Serializable, Agendeerbaar{
 			}
 			$l = '<a href="'.CSR_ROOT.'communicatie/profiel/'.$this->getUid().'" title="'.$sVolledigeNaam.'" class="lidLink '.$this->profiel['status'].'">';
 			
-			if ($mode === 'visitekaartje' && Instelling::get('layout_visitekaartjes') == 'ja') {
+			if ($mode === 'visitekaartje' && ($vorm === 'leeg' || Instelling::get('layout_visitekaartjes') == 'ja')) {
 				$v = str_replace(' ', '', str_replace('.', '', microtime()));
-				$k = '<div id="k'.$v.'" class="init visitekaartje';
+				$k = '<div id="k'.$v.'"';
+				if ($vorm === 'leeg') {
+					$k.= ' class="visitekaartje';
+				}
+				else {
+					$k.= ' style="display: none; position: absolute;" class="init visitekaartje';
+				}
 				if ($this->isJarig()) {
 					$k.= ' jarig';
 				}
@@ -681,12 +690,15 @@ class Lid implements Serializable, Agendeerbaar{
 				$k.= '<p>'.$this->profiel['adres'].'<br />';
 				$k.= $this->profiel['postcode'].' '.$this->profiel['woonplaats'].'</p>';
 				$k.= '<p>'.$this->profiel['lidjaar'].' '.$this->getVerticale().'</p>';
-				$k.= '</div><span id="v'.$v.'" class="init visite">';
+				$k.= '</div>';
+				if ($vorm === 'leeg') {
+					$naam = $k.$naam;
+				}
+				else {
+					$naam = '<span id="v'.$v.'" class="init visite">'.$k.$l.$naam.'</a></span>';
+				}
 			}
-			else {
-				$k = '<span>';
-			}
-			return '<div style="display: inline-block;">'.$k.$l.$naam.'</a></span></div>';
+			return '<div style="display: inline-block;">'.$naam.'</div>';
 		}
 		else {
 			return $naam;

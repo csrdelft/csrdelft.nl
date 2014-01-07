@@ -319,14 +319,7 @@ class LLKaartje extends LLweergave{
 	public function viewFooter(){}
 	
 	public function viewLid(Lid $lid){
-		echo '<div class="lijstvisitekaartje"  id="lid'.$lid->getUid().'">';
-		echo $lid->getNaamLink('pasfoto', 'link');
-		echo '<h2>'.$lid->getNaamLink('full', 'link' ).'</h2>';
-		echo '<div class="adres">';
-		echo $lid->getProperty('adres').'<br />'.$lid->getProperty('postcode').' '.$lid->getProperty('woonplaats').'<br />';
-		echo $lid->getProperty('mobiel').'<br />';
-		echo '<a href="mailto:'.htmlspecialchars($lid->getEmail()).'">'.mb_htmlentities($lid->getEmail()).'</a><br />';
-		echo '</div></div>';
+		echo $lid->getNaamLink('leeg', 'visitekaartje');
 	}
 }
 
