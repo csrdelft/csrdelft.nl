@@ -60,16 +60,22 @@ function selectText(element) {
 
 function init_visitekaartjes() {
 	$('.visite').each(function() {
-		$(this).hoverIntent(function() {
-			var id = $(this).attr('id');
-			id = id.replace('v', 'k');
-			$('#'+id).fadeIn();
-		});
+		if ($(this).hasClass('init')) {
+			$(this).removeClass('init'); // 1 handler
+			$(this).hoverIntent(function() {
+				var id = $(this).attr('id');
+				id = id.replace('v', 'k');
+				$('#'+id).fadeIn();
+			});
+		}
 	});
 	$('.visitekaartje').each(function() {
-		$(this).mouseleave(function() {
-			$(this).fadeOut();
-		});
+		if ($(this).hasClass('init')) {
+			$(this).removeClass('init'); // 1 handler
+			$(this).mouseleave(function() {
+				$(this).fadeOut();
+			});
+		}
 	});
 }
 

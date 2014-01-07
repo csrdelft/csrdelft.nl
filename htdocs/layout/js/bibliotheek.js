@@ -36,6 +36,7 @@ jQuery(document).ready(function($) {
 		"fnStateSaveCallback": function ( oSettings, sValue ) {
 			sValue += ',"sEigenaarFilter": "'+$('span.filter.actief').attr('id')+'"';
 			sValue += ',"sView": '+$('input[name=boekstatus]').is(':checked');
+			init_visitekaartjes();
 			return sValue;
 		},
 		"fnStateLoadCallback": function ( oSettings, oData ) {
@@ -94,8 +95,6 @@ jQuery(document).ready(function($) {
 		oTable.fnSetColumnVis( 6, bVis, false);
 		oTable.fnSetColumnVis( 5, bVis, false);
 		oTable.fnSetColumnVis( 4, bVis, true );
-
-		init_visitekaartjes();
 	 } );
 
 

@@ -664,7 +664,7 @@ class Lid implements Serializable, Agendeerbaar{
 			
 			if ($mode === 'visitekaartje' && Instelling::get('layout_visitekaartjes') == 'ja') {
 				$v = str_replace(' ', '', str_replace('.', '', microtime()));
-				$k = '<div id="k'.$v.'" class="visitekaartje">';
+				$k = '<div id="k'.$v.'" class="init visitekaartje">';
 				if (Instelling::get('forum_toonpasfotos') == 'ja') {
 					$k.= $this->getPasfoto('small', 'lidfoto');
 				}
@@ -678,7 +678,7 @@ class Lid implements Serializable, Agendeerbaar{
 				$k.= '<p>'.$this->profiel['adres'].'<br />';
 				$k.= $this->profiel['postcode'].' '.$this->profiel['woonplaats'].'</p>';
 				$k.= '<p>'.$this->profiel['lidjaar'].' '.$this->getVerticale().'</p>';
-				$k.= '</div><span id="v'.$v.'" class="visite">';
+				$k.= '</div><span id="v'.$v.'" class="init visite">';
 			}
 			else {
 				$k = '<span>';
