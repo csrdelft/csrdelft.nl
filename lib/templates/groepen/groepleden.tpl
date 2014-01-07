@@ -1,4 +1,4 @@
-{if $actie=='pasfotos'}
+{if isset($actie) and $actie=='pasfotos'}
 	<div class="pasfotomatrix">
 		{foreach from=$groep->getLidObjects() item=groeplid name=pasfotos}
 			{assign var='meerisopen' value='false'}
@@ -75,8 +75,8 @@
 	<div class="aanmelden">
 		{if $groep->magAanmelden()}
 			{if $groep->getToonFuncties()=='niet' OR $groep->getToonFuncties()=='tonenzonderinvoer'}
-				<a  {if $actie!='pasfotos'}class="knop"{/if} href="/actueel/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/aanmelden" onclick="return confirm('Weet u zeker dat u zich wilt aanmelden?')">
-					{if $actie=='pasfotos'}
+				<a  {if !isset($actie) or $actie!='pasfotos'}class="knop"{/if} href="/actueel/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/aanmelden" onclick="return confirm('Weet u zeker dat u zich wilt aanmelden?')">
+					{if isset($actie) and $actie=='pasfotos'}
 						<img class="pasfoto" src="{$CSR_PICS}/groepen/aanmelden.jpg" title="Aanmelden voor deze groep"
 							onmouseover="this.src='/tools/pasfotos.php?image';" onmouseout="this.src='{$CSR_PICS}/groepen/aanmelden.jpg';" />
 					{else}
