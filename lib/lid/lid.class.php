@@ -668,10 +668,7 @@ class Lid implements Serializable, Agendeerbaar{
 				if ($this->isJarig()) {
 					$k.= ' jarig';
 				}
-				$k.= '">';
-				if (Instelling::get('forum_toonpasfotos') == 'ja') {
-					$k.= $this->getPasfoto('small', 'lidfoto');
-				}
+				$k.= '">'.$this->getPasfoto('small', 'lidfoto');
 				$k.= '<div class="uid">('.$this->getUid().')</div>';
 				$k.= '<p class="naam">'.$l.$sVolledigeNaam;
 				if (!$this->isLid()) {
