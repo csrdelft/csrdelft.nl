@@ -59,7 +59,7 @@ class ForumCategorie{
 		$onderwerpen="
 			SELECT
 				id, titel, categorie, topic.uid, datumtijd, lastuser, lastpost, lastpostID,
-				reacties, plakkerig, open, zichtbaar, gelezen.moment AS momentGelezen
+				reacties, plakkerig, belangrijk, open, zichtbaar, gelezen.moment AS momentGelezen
 			FROM
 				forum_topic topic
 			LEFT JOIN
