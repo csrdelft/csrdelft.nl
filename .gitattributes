@@ -166,6 +166,7 @@ htdocs/layout/documenten.css -text
 htdocs/layout/forum.css -text
 htdocs/layout/fotoalbum.css -text
 htdocs/layout/groepen.css -text
+htdocs/layout/jquery.prettyPhoto.css -text
 htdocs/layout/js/autocomplete/README[!!-~]PubCie -text
 htdocs/layout/js/autocomplete/README.md -text
 htdocs/layout/js/autocomplete/changelog.txt -text
