@@ -27,7 +27,7 @@
 			<div id="ingelogd">
 				<a href="/instellingen/" class="instellingen" title="Webstekinstellingen">{icon get="instellingen"}</a>
 				{if $loginlid->isSued()}
-					<a href="/endsu/" style="color: red;">{$loginlid->getSuedFrom()->getNaamLink('civitas', 'link')} als</a><br />»
+					<a href="/endsu/" style="color: red;">{$loginlid->getSuedFrom()->getNaamLink('civitas', 'plain')} als</a><br />»
 				{/if}
 				{$loginlid->getUid()|csrnaam}<br />
 				<div id="uitloggen"><a href="/logout.php">log&nbsp;uit</a></div>
