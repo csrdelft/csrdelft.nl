@@ -145,10 +145,13 @@ class ForumContent extends SimpleHTML {
 		echo '<a href="/communicatie/forum/" class="forumGrootlink">Forum</a> &raquo; Zoeken';
 		echo '<h1>Zoeken in het forum</h1>Hier kunt u zoeken in het forum.<br />';
 		//altijd het zoekformulier weergeven.
-
-		$this->zoekFormulier($sZoekQuery, (int)$_POST['categorie']);
+		$catId=0;
+		if(array_key_exists('categorie', $_POST)){
+			$catId=(int)$_POST['categorie'];
+		}
+		$this->zoekFormulier($sZoekQuery, $catId);
 		if($sZoekQuery!=''){
-			$aZoekResultaten=Forum::searchPosts($sZoekQuery, (int)$_POST['categorie']);
+			$aZoekResultaten=Forum::searchPosts($sZoekQuery, $catId);
 			if(is_array($aZoekResultaten)){
 				$aZoekOnderdelen=explode(' ', $sZoekQuery);
 				//escape +-en in zoekterm
