@@ -29,7 +29,7 @@
 	<meta property="og:image" content="http://plaetjes.csrdelft.nl/layout/beeldmerk.jpg" />
 	<meta property="og:title" content="C.S.R. Delft | {$body->getTitel()}" />
 	<link rel="alternate" title="C.S.R. Delft RSS" type="application/rss+xml" href="http://csrdelft.nl/communicatie/forum/rss.xml" />
-	<link rel="shortcut icon" href="{$csr_pics}layout/favicon.ico" />
+	<link rel="shortcut icon" href="{$CSR_PICS}layout/favicon.ico" />
 </head>
 
 <body onload="ShowMenu(menu_active);">

@@ -49,7 +49,7 @@ class BeheerMaaltijdenView extends \SimpleHtml {
 			if ($this->_prullenbak || $this->_archief || $this->_repetities !== null) { // normal view
 				$smarty->assign('prullenbak', $this->_prullenbak);
 				$smarty->assign('archief', $this->_archief);
-				$smarty->assign_by_ref('this', $this);
+				$smarty->assignByRef('this', $this);
 				$smarty->assign('popup', $this->_popup);
 				$smarty->assign('melding', $this->getMelding());
 				$smarty->assign('kop', $this->getTitel());

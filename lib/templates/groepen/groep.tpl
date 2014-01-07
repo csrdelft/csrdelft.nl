@@ -12,10 +12,10 @@
 		<ul id="tabs">
 			{if $groep->isIngelogged()}
 				<li id="lidlijst" class="active" onclick="return showTab({$groep->getId()}, 'lidlijst');">
-					<img src="{$csr_pics}knopjes/lijst.png" title="Lidlijst tonen" />
+					<img src="{$CSR_PICS}knopjes/lijst.png" title="Lidlijst tonen" />
 				</li>
 				<li id="pasfotos" onclick="return showTab({$groep->getId()}, 'pasfotos');">
-					<img src="{$csr_pics}/knopjes/pasfoto.png" title="schakel naar pasfoto's" />
+					<img src="{$CSR_PICS}/knopjes/pasfoto.png" title="schakel naar pasfoto's" />
 				</li>
 			{/if}
 			{* if $groep->magBewerken() AND $action!='edit' AND !($action=='addLid' AND $lidAdder!=false)}
@@ -122,12 +122,12 @@
 			
 			{if $groep->magBewerken()}
 				<a class="knop" href="/actueel/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/bewerken#groepFormulier">
-					<img src="{$csr_pics}knopjes/bewerken.png" title="Bewerk groep" />
+					<img src="{$CSR_PICS}knopjes/bewerken.png" title="Bewerk groep" />
 				</a>
 			{/if}
 			{if $groep->isAdmin()}
 				<a class="knop" onclick="return confirm('Weet u zeker dat u deze groep wilt verwijderen?');" href="/actueel/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/verwijderen">
-					<img src="{$csr_pics}forum/verwijderen.png" title="Verwijder deze groep" />
+					<img src="{$CSR_PICS}forum/verwijderen.png" title="Verwijder deze groep" />
 				</a>
 			{/if}
 		</div>

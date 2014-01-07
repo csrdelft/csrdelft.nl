@@ -4,7 +4,7 @@
 	<div class="mededeling-grotebalk">
 		<div class="plaatje">
 			<a href="{$mededelingenRoot}{$mededeling->getId()}">
-				<img src="{$csr_pics}nieuws/{$mededeling->getPlaatje()}" width="70px" height="70px" alt="{$mededeling->getPlaatje()|escape:'html'}" />
+				<img src="{$CSR_PICS}nieuws/{$mededeling->getPlaatje()}" width="70px" height="70px" alt="{$mededeling->getPlaatje()|escape:'html'}" />
 				</a>
 		</div>
 		<div class="titel">

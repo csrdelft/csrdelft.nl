@@ -16,7 +16,7 @@
 		<image>
 			<link>http://csrdelft.nl/</link>
 			<title>C.S.R. Delft</title>
-			<url>{$csr_pics}layout/beeldmerk.jpg</url>
+			<url>{$CSR_PICS}layout/beeldmerk.jpg</url>
 			<height>150</height>
 			<width>118</width>
 			<description>Logo van C.S.R. Delft</description>

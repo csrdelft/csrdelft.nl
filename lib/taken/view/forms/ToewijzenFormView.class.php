@@ -48,7 +48,7 @@ class ToewijzenFormView extends \SimpleHtml {
 		$smarty->assign('kop', $this->getTitel());
 		$this->_form->cssClass .= ' popup';
 		
-		$smarty->assign_by_ref('this', $this);
+		$smarty->assignByRef('this', $this);
 		$smarty->assign('taak', $this->_taak);
 		$smarty->assign('suggesties', $this->_suggesties);
 		

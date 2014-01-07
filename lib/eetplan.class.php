@@ -123,7 +123,9 @@ class Eetplan {
 			'29-10-2013',
 			'26-11-2013',
 			'07-01-2014');
-		return $aAvonden[$iAvond-1];
+		if($iAvond<sizeof($aAvonden)){
+			return $aAvonden[$iAvond-1];
+		}
 	}
 
 	function getHuizen(){

@@ -26,8 +26,11 @@ class FotalbumZijbalkContent extends SimpleHtml{
 		echo '</a>';
 
 		echo '<div class="fotos">';
-		$limit=6;
 		$fotos=$this->album->getFotos();
+		$limit=sizeof($fotos);
+		if($limit > 6){
+			$limit=6;
+		}
 
 		$url=$this->album->getPad();
 		for($i=0; $i<$limit; $i++){

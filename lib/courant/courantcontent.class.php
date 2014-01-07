@@ -50,7 +50,7 @@ class CourantContent {
 		$mail=new Smarty_csr();
 		
 		$mail->assign('instellingen', $this->instellingen);
-		$mail->assign_by_ref('courant', $this->courant);
+		$mail->assignByRef('courant', $this->courant);
 		
 		$mail->assign('indexCats', $this->courant->getCats());
 		$mail->assign('catNames', $this->courant->getCats(true));

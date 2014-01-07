@@ -34,8 +34,9 @@ function smarty_function_knop($params, &$smarty){
         return;
     }
    	if(!isset($params['ignorePrefix'])){
-   		if(isset($smarty->_tpl_vars['knopUrlPrefix'])){
-   		 	$params['url']=$smarty->_tpl_vars['knopUrlPrefix'].$params['url'];
+		$prefix = $smarty->getTemplateVars('knopUrlPrefix');
+   		if(isset($prefix)){
+   		 	$params['url']=$smarty->getTemplateVars('knopUrlPrefix').$params['url'];
    		}
    	}
    	$knop=new Knop($params['url']);

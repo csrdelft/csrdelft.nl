@@ -64,7 +64,7 @@
 						{if $mededeling->getCategorie()->getPlaatje() !=''}
 							<div class="mededelingenlijst-plaatje">
 								<a href="{$pagina_root}{$mededeling->getId()}">
-									<img src="{$csr_pics}nieuws/{$mededeling->getCategorie()->getPlaatje()}" width="10px" height="10px" />
+									<img src="{$CSR_PICS}nieuws/{$mededeling->getCategorie()->getPlaatje()}" width="10px" height="10px" />
 								</a>
 							</div>
 						{/if}
@@ -85,7 +85,7 @@
 	<div class="nieuwsbericht">
 		<div class="nieuwsbody">
 			<div class="nieuwstitel">{$geselecteerdeMededeling->getTitel()|escape:'html'}</div>
-			<img class="nieuwsplaatje" src="{$csr_pics}nieuws/{$geselecteerdeMededeling->getPlaatje()}" width="200px" height="200px" alt="{$geselecteerdeMededeling->getPlaatje()}" />
+			<img class="nieuwsplaatje" src="{$CSR_PICS}nieuws/{$geselecteerdeMededeling->getPlaatje()}" width="200px" height="200px" alt="{$geselecteerdeMededeling->getPlaatje()}" />
 			{$geselecteerdeMededeling->getTekst()|ubb}<br />
 		</div>
 		<div class="informatie">

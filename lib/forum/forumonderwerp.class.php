@@ -315,6 +315,9 @@ class ForumOnderwerp{
 				if($post['uid']=='0308' AND $post['datum']>'2010-05-19 13:30:00'){
 					$post['tekst']='[nobold]'.$post['tekst'].'[/nobold]';
 				}
+				if(!array_key_exists('filtered', $post)){
+					$post['filtered']=false;
+				}
 				$return[]=$post;
 			}
 

@@ -5,7 +5,6 @@
  * @subpackage plugins
  */
 
-
 /**
  * Smarty {icon} function plugin
  *
@@ -17,11 +16,11 @@
  *
  * Examples:
  * <pre>
- *	{icon get='verwijderen'}
- *	{icon get='verwijderen' notag}
+ * 	{icon get='verwijderen'}
+ * 	{icon get='verwijderen' notag}
  * </pre>
  * @link http://feuten.csrdelft.nl
- * @version  1.0
+ * @version  1.1
  * @author   Jan Pieter Waagmeester <jpwaag@jpwaag.com>
  * @param    array
  * @param    Smarty
@@ -29,17 +28,19 @@
  */
 require_once 'icon.class.php';
 
-function smarty_function_icon($params, &$smarty){
-   if(isset($params['get'])){
-		if(isset($params['notag'])){
-			return Icon::get($params['get'], $params['title']);
-		}else{
-			return Icon::getTag($params['get'], $params['title']);
+function smarty_function_icon($params, &$smarty) {
+
+	if (array_key_exists('get', $params)) {
+
+		$title = null;
+		if (array_key_exists('title', $params)) {
+			$title = $params['title'];
+		}
+
+		if (array_key_exists('notag', $params)) {
+			return Icon::get($params['get'], $title);
+		} else {
+			return Icon::getTag($params['get'], $title);
 		}
 	}
 }
-
-
-/* vim: set expandtab: */
-
-?>

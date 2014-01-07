@@ -44,7 +44,7 @@
 	{/if}
 	{if $loginlid->hasPermission('P_ADMIN') AND $action!='edit'}
 		<a class="knop" href="/actueel/groepen/{$groepen->getNaam()}/?bewerken=true">
-			<img src="{$csr_pics}knopjes/bewerken.png" title="Bewerk beschrijving" />
+			<img src="{$CSR_PICS}knopjes/bewerken.png" title="Bewerk beschrijving" />
 		</a>
 	{/if}
 </div>

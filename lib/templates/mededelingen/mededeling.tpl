@@ -55,7 +55,7 @@
 			<strong>Afbeelding</strong><br />
 		{/if}
 		{if $mededeling->getPlaatje() != ''}
-			<img src="{$csr_pics}nieuws/{$mededeling->getPlaatje()|escape:'html'}" width="200px" height="200px" alt="Afbeelding" style="margin: 5px 0px 15px 0px;" /><br />
+			<img src="{$CSR_PICS}nieuws/{$mededeling->getPlaatje()|escape:'html'}" width="200px" height="200px" alt="Afbeelding" style="margin: 5px 0px 15px 0px;" /><br />
 			<strong>Vervangende afbeelding</strong><br />
 		{/if}
 		<input type="file" name="plaatje" size="40" /><br />

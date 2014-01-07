@@ -1,4 +1,4 @@
-{knopConfig prefix=/communicatie/forum/}
+{knopConfig prefix="/communicatie/forum/"}
 
 <form id="forum_zoeken" action="/communicatie/forum/zoeken.php" method="post">
 	<input type="text" name="zoeken" value="zoeken in forum" onfocus="this.value='';" />

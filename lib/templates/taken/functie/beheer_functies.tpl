@@ -9,7 +9,7 @@ Ook kunt u aangeven of er een kwalificatie benodigd is en een kwalificatie toewi
 <p>
 N.B. Voordat een corveefunctie verwijderd kan worden moeten eerst alle bijbehorende corveetaken en alle bijbehorende corveerepetities definitief zijn verwijderd.
 </p>
-<div style="float: right;"><a href="{$globals.taken_module}/nieuw" title="Nieuwe functie" class="knop post popup">{icon get="add"} Nieuwe functie</a></div>
+<div style="float: right;"><a href="{$GLOBALS.taken_module}/nieuw" title="Nieuwe functie" class="knop post popup">{icon get="add"} Nieuwe functie</a></div>
 <table id="taken-tabel" class="taken-tabel">
 	<thead>
 		<tr>
