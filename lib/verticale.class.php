@@ -108,8 +108,10 @@ class Verticale{
 		$verticalen=array();
 		
 		while($row=$db->next($result)){
-			if($vID!=$row['verticale']){
-				$verticalen[]=$verticale;
+			if($vID!=$row['verticale']){ // nieuwe verticale
+				if(isset($verticale)){ // save vorige
+					$verticalen[]=$verticale;
+				}
 				$vID=$row['verticale'];
 				$verticale=new Verticale($vID);
 			}
