@@ -3,7 +3,7 @@
 <head>
 	<title>{$kop} {$maaltijd->getDatum()|date_format:"%A %e %B"}</title>
 	<link type="text/css" href="/layout/maaltijdlijst.css" rel="stylesheet">
-	<script type="text/javascript" src="/layout/js/jquery.js"></script>
+	<script type="text/javascript" src="/layout/js/jquery.min.js"></script>
 	<script type="text/javascript" src="/layout/js/csrdelft.js"></script>
 	<script type="text/javascript" src="/layout/js/taken.js"></script>
 </head>
