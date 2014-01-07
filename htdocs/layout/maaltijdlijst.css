@@ -58,3 +58,44 @@ div.nummer {
 div.header {
 	width: 590px;
 }
+
+/**** VISITEKAARTJE ******************************************************************/
+div.visitekaartje {
+	display: none;
+	position: absolute;
+	width: 330px;
+	font-size: 11px !important;
+	border: 1px solid #000;
+	background-color: #FFF;
+	-moz-box-shadow: 0 0 11px #000000;
+	-webkit-box-shadow: 0 0 11px #000000;
+	box-shadow: 0 0 11px #000000;
+	z-index: 111;
+	font-weight: normal !important;
+	font-style: normal !important;
+	float: none !important;
+	overflow: visible;
+}
+div.visitekaartje img {
+	float: right;
+	height: auto !important;
+	opacity: 1.0 !important;
+	filter: alpha(opacity=100) !important;
+}
+div.visitekaartje p {
+	margin: 8px 0px 0px 10px;
+	color: #000 !important;
+}
+div.visitekaartje p a {
+	color: #0a338d !important;
+}
+div.visitekaartje p.naam a {
+	font-weight: bold;
+	color: #000 !important;
+}
+div.visitekaartje div.uid {
+	float: right;
+	padding-right: 5px;
+	margin-top: 8px;
+	color: #999;
+}
