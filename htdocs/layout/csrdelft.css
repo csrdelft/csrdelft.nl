@@ -463,6 +463,13 @@ div.visitekaartje div.uid {
 	margin-top: 8px;
 	color: #999;
 }
+div.visitekaartje div.envelop {
+	float: right;
+	padding-right: 5px;
+}
+div.visitekaartje div.envelop img {
+	width: 50px;
+}
 
 /**** OVERIG ******************************************************************/
 a.knop, div.knop{
