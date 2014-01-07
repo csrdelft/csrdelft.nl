@@ -110,7 +110,7 @@
 					{* eigenaar *}
 						<div class="regel">
 							<label>Eigenaar</label>
-							{if $exemplaar.eigenaar_uid=='x222'}{assign var=total_exemplaren_bibliotheek value=`$total_exemplaren_bibliotheek+1`}
+							{if $exemplaar.eigenaar_uid=='x222'}{assign var=total_exemplaren_bibliotheek value=$total_exemplaren_bibliotheek+1}
 								C.S.R.-bibliotheek
 							{else}
 								{$exemplaar.eigenaar_uid|csrnaam:'civitas':'visitekaartje'}
