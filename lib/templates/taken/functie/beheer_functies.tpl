@@ -24,7 +24,7 @@ N.B. Voordat een corveefunctie verwijderd kan worden moeten eerst alle bijbehore
 	</thead>
 	<tbody>
 {foreach from=$functies item=functie}
-	{include file='taken/functie/beheer_functie_lijst.tpl' taak=$taak}
+	{include file='taken/functie/beheer_functie_lijst.tpl'}
 {/foreach}
 	</tbody>
 </table>
