@@ -114,11 +114,6 @@ class csrdelft extends SimpleHTML {
 	 */
 	function view($template = '', $menutemplate = '') {
 		
-		// als er een error is geweest, die unsetten...
-		if (isset($_SESSION['auth_error'])) {
-			unset($_SESSION['auth_error']);
-		}
-		
 		header('Content-Type: text/html; charset=UTF-8');
 		$smarty = new Smarty_csr();
 		$smarty->assign_by_ref('this', $this);
@@ -200,6 +195,11 @@ class csrdelft extends SimpleHTML {
 				
 				$smarty->display('csrdelft.tpl');
 			return;
+		}
+		
+		// als er een error is geweest, die unsetten...
+		if (isset($_SESSION['auth_error'])) {
+			unset($_SESSION['auth_error']);
 		}
 	}
 }
