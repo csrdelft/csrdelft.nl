@@ -27,6 +27,7 @@ class ToewijzenModel {
 		if ($functie->getIsKwalificatieBenodigd()) { // laad alleen gekwalificeerde leden
 			$kwalificaties = KwalificatiesModel::getKwalificatiesVoorFunctie($functie);
 			$lijst = array();
+			$avg = 0;
 			foreach ($kwalificaties as $kwali) {
 				$uid = $kwali->getLidId();
 				$lid = \LidCache::getLid($uid); // false if lid does not exist
@@ -45,6 +46,11 @@ class ToewijzenModel {
 				}
 				$lijst[$uid] = PuntenModel::loadPuntenVoorLid($lid, array($functie->getFunctieId() => $functie));
 				$lijst[$uid]['aantal'] = $lijst[$uid]['aantal'][$functie->getFunctieId()];
+				$avg += $lijst[$uid]['aantal'];
+			}
+			$avg /= sizeof($lijst);
+			foreach ($lijst as $uid => $punten) {
+				$lijst[$uid]['relatief'] = $lijst[$uid]['aantal'] - (int) $avg;
 			}
 			$sorteer = 'sorteerKwali';
 		}

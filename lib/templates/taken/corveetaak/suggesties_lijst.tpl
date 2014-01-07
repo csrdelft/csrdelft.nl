@@ -9,9 +9,9 @@
 		<tr>
 			<th style="width: 65px; padding-right: 0px;">
 {if $taak->getCorveeFunctie()->getIsKwalificatieBenodigd()}
-	Aantal
+	Relatief
 {else}
-	Punten{icon get="bullet_arrow_up"}
+	Prognose
 {/if}
 			</th>
 			<th style="width: 135px;">Naam</th>
@@ -45,7 +45,8 @@
 				</td>
 				<td style="width: 30px; padding-right: 10px; text-align: right;">
 					{if $taak->getCorveeFunctie()->getIsKwalificatieBenodigd()}
-						{$suggestie.aantal}
+						{if $suggestie.relatief > 0}+{/if}
+						{$suggestie.relatief}
 					{else}
 						 {$suggestie.prognose}
 					{/if}
