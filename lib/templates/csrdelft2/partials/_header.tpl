@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>C.S.R. Delft - {$this->getTitel()}</title>
+    <title>C.S.R. Delft - {$body->getTitel()}</title>
 
     {foreach from=$this->getStylesheets() item=sheet}
         <link rel="stylesheet" href="{$sheet.naam}?{$sheet.datum}" type="text/css" />

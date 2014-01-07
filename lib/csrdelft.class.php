@@ -108,7 +108,7 @@ class csrdelft extends SimpleHTML {
 	}
 
 	/**
-	 * Voor layout2013 zijn extra parameters nodig:
+	 * Voor layout csrdelft2 zijn extra parameters nodig:
 	 * @param string $template
 	 * @param string $menutemplate
 	 */
