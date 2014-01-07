@@ -1,7 +1,7 @@
 {*
 	corvee_rooster.tpl	|	P.W.G. Brussee (brussee@live.nl)
 *}
-{if $toonverleden}
+{if isset($toonverleden) and $toonverleden}
 <div style="float: right;">
 	<a href="{$GLOBALS.taken_module}/verleden" title="Taken in het verleden tonen" class="knop get">{icon get="time"} Toon verleden</a>
 </div>
