@@ -261,7 +261,7 @@
 		
 	</div>
 	{/if}
-	{if $profiel->getForumPostCount()>0 OR is_array($profhtml.recenteForumberichten) OR $loginlid->getUid()==$profiel->getUid()}
+	{if $profiel->getForumPostCount() > 0 OR $loginlid->getUid()==$profiel->getUid()}
 	<div class="profielregel" id="forum">
 		<div class="gegevens" id="forum_gegevens">
 			{if $loginlid->getUid()==$profiel->getUid()}
