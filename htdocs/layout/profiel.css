@@ -8,10 +8,6 @@
 #profiel .knopjes{ margin-left: 20px; line-height: 2.5em;}
 
 #profiel .knopjes .inGoogleContacts{ border: 1px solid darkblue; background-color: lightblue; }
-.jarig {
-	background-image: url(http://plaetjes.csrdelft.nl/layout/jarig.jpg);
-	background-repeat: none;
-}
 
 #profiel .profielregel{ margin-bottom: 20px; clear: left; }
 	#profiel .left{ display: none; float: left; width: 10px; text-align: right; font-style: italic; font-size: 0.9em; }

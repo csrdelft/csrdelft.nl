@@ -632,10 +632,10 @@ form#streeplijst input, form#streeplijst label{ text-align: left; margin: 3px; p
 .eetplantabel tr.kleur1 td{ background-color: #f4f4f4; }
 .eetplantabel tr .huis{ border-left: 1px solid #000; padding:3px 4px; margin: 0; font-size: 10px;}
 
-#shoutbox{
 
+.jarig {
+	background-image: url("http://plaetjes.csrdelft.nl/layout/jarig.jpg");
 }
-
 
 /* Mededelingen */
 .mededeling-grotebalk{
