@@ -18,23 +18,25 @@
  * @link http://csrdelft.nl/feuten
  *          (svn repository)
  * @author   Jan Pieter Waagmeester < jpwaag at jpwaag dot com>
- * @version 1.0
+ * @version 1.1
  * @param string
  * @param string
  * @param bool
  * @return string
  */
-function smarty_modifier_pasfoto($uid, $cssclass='pasfoto', $link=true){
-	$uids=explode(',', $uid);
-	$return.='';
-	foreach($uids as $uid){
-		$lid=LidCache::getLid($uid);
-		if($lid instanceof Lid){
-			if($link){
-				$return.='<a href="/communicatie/profiel/'.$uid.'" title="'.$lid->getNaamLink('full', 'plain').'">';
+function smarty_modifier_pasfoto($uid, $cssclass = 'pasfoto', $link = true) {
+	$uids = explode(',', $uid);
+	$return = '';
+	foreach ($uids as $uid) {
+		$lid = LidCache::getLid($uid);
+		if ($lid instanceof Lid) {
+			if ($link) {
+				$return.='<a href="/communicatie/profiel/' . $uid . '" title="' . $lid->getNaamLink('full', 'plain') . '">';
 			}
 			$return.=$lid->getPasfoto(true, $cssclass);
-			if($link){ $return.='</a>'; }
+			if ($link) {
+				$return.='</a>';
+			}
 		}
 	}
 	return $return;
