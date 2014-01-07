@@ -13,3 +13,5 @@ DELETE FROM menu WHERE tekst LIKE 'Corveerooster' AND menu = 'main';
 UPDATE menu SET `parent_id` = 0 WHERE menu = 'gasnelnaar';
 UPDATE menu SET `parent_id` = 0,menu='beheer' WHERE parent_id>4;
 UPDATE menu SET zichtbaar = FALSE WHERE tekst LIKE 'OWee' OR tekst LIKE 'Dies' OR tekst LIKE 'Lustrum';
+RENAME TABLE `csrdelft`.`menu` TO `csrdelft`.`menus` ;
+ALTER TABLE `menus` ENGINE = InnoDB;
