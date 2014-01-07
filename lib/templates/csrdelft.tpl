@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xml:lang="nl" xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<title>C.S.R. Delft | {$this->getTitel()}</title>
+	<title>C.S.R. Delft | {$body->getTitel()}</title>
 	<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
 	<meta name="author" content="PubCie C.S.R. Delft" />
 	<meta name="robots" content="index, follow" />
@@ -27,7 +27,7 @@
 	{/literal}</script>
 
 	<meta property="og:image" content="http://plaetjes.csrdelft.nl/layout/beeldmerk.jpg" />
-	<meta property="og:title" content="C.S.R. Delft | {$this->getTitel()}" />
+	<meta property="og:title" content="C.S.R. Delft | {$body->getTitel()}" />
 	<link rel="alternate" title="C.S.R. Delft RSS" type="application/rss+xml" href="http://csrdelft.nl/communicatie/forum/rss.xml" />
 	<link rel="shortcut icon" href="{$csr_pics}layout/favicon.ico" />
 </head>
@@ -53,11 +53,11 @@
 </div>
 {$ubbHulp}
 {if isset($minion)}{$minion}{/if}
-{if isset($db)}
+{if isset($debug)}
 	<h2 id="mysql_debug_header">
 		<a id="mysql_debug_showhide" href="#mysql_debug_header" onclick="return toggleDiv('mysql_debug');">Debug Tonen/Verstoppen</a>
 	</h2>
-	<div id="mysql_debug" style="display: none">{$this->getDebug()}</div>
+	<div id="mysql_debug" style="display: none">{$debug}</div>
 {/if}
 </body>
 </html>

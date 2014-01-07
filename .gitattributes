@@ -248,8 +248,6 @@ htdocs/layout/js/jquery.js -text
 htdocs/layout/js/jquery.prettyPhoto.js -text
 htdocs/layout/js/jquery.scrollTo.min.js -text
 htdocs/layout/js/jquery.timeago.js -text
-htdocs/layout/js/layout2/jquery.backstretch.js -text
-htdocs/layout/js/layout2/jquery.js -text
 htdocs/layout/js/lightbox.js -text
 htdocs/layout/js/maaltijd.js -text
 htdocs/layout/js/maaltijdabos.js -text
@@ -2982,7 +2980,6 @@ lib/courant/courantarchiefcontent.class.php -text
 lib/courant/courantbeheercontent.class.php -text
 lib/courant/courantcontent.class.php -text
 lib/csrdelft.class.php -text
-lib/csrdelft2.class.php -text
 lib/csrgozerbot.class.php -text
 lib/csrpdo.class.php -text
 lib/csrsmarty.class.php -text

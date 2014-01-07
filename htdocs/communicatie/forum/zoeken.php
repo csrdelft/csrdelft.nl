@@ -23,7 +23,7 @@ if(LoginLid::instance()->hasPermission('P_LEDEN_READ')){
 }
 else {
 	//uitgelogd heeft nieuwe layout
-	$pagina=new csrdelft2($midden);
+	$pagina=new csrdelft($midden, 'csrdelft2');
 }
 $pagina->addStylesheet('forum.css');
 $pagina->view();

@@ -33,7 +33,7 @@ if($fotoalbum->magBekijken()){
 	}
 	else {
 		//uitgelogd heeft nieuwe layout
-		$pagina=new csrdelft2($fotoalbumcontent);
+		$pagina=new csrdelft($fotoalbumcontent, 'csrdelft2');
 	}
 	$pagina->addStylesheet('fotoalbum.css', '/layout/');
 	$pagina->addStylesheet('jquery.prettyPhoto.css', '/layout/');
@@ -50,7 +50,7 @@ else{
 	}
 	else {
 		//uitgelogd heeft nieuwe layout
-		$page=new csrdelft2($midden);
+		$page=new csrdelft($midden, 'csrdelft2');
 	}
 	$page->view();
 }

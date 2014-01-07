@@ -18,7 +18,7 @@ try {
 	$paginacontent->setActie('bekijken');
 
 	## pagina weergeven
-	$pagina=new csrdelft2($paginacontent);
+	$pagina=new csrdelft($paginacontent, 'csrdelft2');
 	$pagina->view('lidworden');
 }
 catch (\Exception $e) { // TODO: logging

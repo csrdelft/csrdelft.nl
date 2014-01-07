@@ -86,7 +86,6 @@ switch (constant('MODE')) {
 			//sessie starten
 			require_once 'simplehtml.class.php';
 			require_once 'csrdelft.class.php';
-			require_once 'csrdelft2.class.php';
 			require_once 'csrubb.class.php';
 			require_once 'csrsmarty.class.php';
 			require_once 'icon.class.php';

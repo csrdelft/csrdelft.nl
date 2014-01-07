@@ -47,19 +47,21 @@ else {
 $nieuwNamen = array("contact", "csrindeowee", "vereniging", "lidworden", "geloof", "vorming", "filmpjes", "gezelligheid", "sport", "vragen", "officieel", "societeit", "ontspanning", "interesse", "interesseverzonden", "accountaanvragen");
 if (in_array($_GET['naam'], $nieuwNamen) && !LoginLid::instance()->hasPermission('P_LEDEN_READ')) {
 	// uitgelogde bezoeker heeft nieuwe layout
-	$depagina = new csrdelft2($paginacontent);
+	$depagina = new csrdelft($paginacontent, 'csrdelft2');
 	
 	$nieuwNamen = array("vereniging", "geloof", "vorming", "gezelligheid", "sport", "ontspanning", "societeit", "officieel");
 	if (in_array($_GET['naam'], $nieuwNamen)) {
-		$depagina->setMenu('Vereniging');
+		$depagina->view('content', 'Vereniging');
+	} else {
+		$depagina->view();
 	}
-}
-else {
+
+} else {
 	$depagina = new csrdelft($paginacontent);
 
 	if (isset($zijkolomlijst)) {
 		$depagina->addZijkolom($zijkolomlijst);
 	}
+	
+	$depagina->view();
 }
-
-$depagina->view();

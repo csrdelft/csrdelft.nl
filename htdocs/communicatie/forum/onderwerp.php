@@ -49,9 +49,7 @@ if(LoginLid::instance()->hasPermission('P_LEDEN_READ')){
 }
 else {
 	//uitgelogd heeft nieuwe layout
-	$page=new csrdelft2($midden);
-	$page->addStylesheet('ubb.css', '/layout/');
-	$page->addScript('csrdelft.js', '/layout/');
+	$page=new csrdelft($midden, 'csrdelft2');
 }
 $page->addStylesheet('forum.css', '/layout/');
 $page->addScript('groepen.js', '/layout/');
