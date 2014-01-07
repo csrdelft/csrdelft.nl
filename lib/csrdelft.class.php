@@ -130,12 +130,12 @@ class csrdelft extends SimpleHTML {
 				$this->addStylesheet('style.css', '/layout2/');
 				$this->addStylesheet('foundation.css', '/layout2/');
 				$this->addStylesheet('normalize.css', '/layout2/');
-				$page->addStylesheet('ubb.css', '/layout/');
+				$this->addStylesheet('ubb.css', '/layout/');
 				$this->addScript('jquery.js', '/layout2/');
 				$this->addScript('jquery.backstretch.js', '/layout2/');
 				$this->addScript('jquery.timeago.js');
 				$this->addScript('init.js', '/layout2/');
-				$page->addScript('csrdelft.js', '/layout/');
+				$this->addScript('csrdelft.js', '/layout/');
 				if ($template === '') {
 					$template = 'content';
 				}
