@@ -89,11 +89,13 @@ jQuery(document).ready(function($) {
 	$('input#boekstatus').click( function() { 
 		/* Get the DataTables object again - this is not a recreation, just a get of the object */
 		var oTable = $('#boekencatalogus').dataTable();
-	
+
 		var bVis = $('input[name=boekstatus]').is(':checked');
 		oTable.fnSetColumnVis( 6, bVis, false);
 		oTable.fnSetColumnVis( 5, bVis, false);
 		oTable.fnSetColumnVis( 4, bVis, true );
+
+		init_visitekaartjes();
 	 } );
 
 
@@ -251,7 +253,7 @@ jQuery(document).ready(function($) {
 				$(this).removeClass("leeg");
 			}
 		}).change();
-	}); 
+	});
 
 });
 

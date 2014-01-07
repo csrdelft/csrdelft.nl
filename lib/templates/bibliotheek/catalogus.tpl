@@ -43,7 +43,7 @@
 			<tr><th>Titel</th><th>Auteur</th><th>Rubriek</th><th title="Aantal recensies">#Rc.</th><th>Eigenaar</th><th>Uitgeleend&nbsp;aan</th><th>Uitleendatum</th></tr>
 		</thead>
 		<tbody>
-			<tr><td colspan="7">Inhoud komt eraan2..</td></tr>
+			<tr><td colspan="7">Inhoud komt eraan&#8230;</td></tr>
 		</tbody>
 		<tfoot>
 			<tr><th>Titel</th><th>Auteur</th><th>Rubriek</th><th title="Aantal recensies">#Rc.</th><th>Eigenaar</th><th>Uitgeleend&nbsp;aan</th><th>Uitleendatum</th></tr>
