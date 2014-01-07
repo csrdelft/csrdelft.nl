@@ -138,7 +138,11 @@ class Groepcontent extends SimpleHTML{
 		$content->assign('action', $this->action);
 		$content->assign('groeptypes', Groepen::getGroeptypes());
 		$content->assign('aanmeldfilters', $this->getAanmeldfilters());
-		$content->assign('oudegroep',$_SESSION['oudegroep']);
+		$oud = null;
+		if (array_key_exists('oudegroep', $_SESSION)){
+			$oud = $_SESSION['oudegroep'];
+		}
+		$content->assign('oudegroep', $oud);
 		if($this->action=='addLid'){
 			$content->assign('lidAdder', $this->getLidAdder());
 		}
