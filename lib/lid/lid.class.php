@@ -677,7 +677,7 @@ class Lid implements Serializable, Agendeerbaar{
 				$k.= '</a></p><p style="word-break: break-all;"><a href="mailto:'.$this->profiel['email'].'">'.$this->profiel['email'].'</a><br />';
 				$k.= $this->profiel['mobiel'].'</p>';
 				$kleur = ($this->getGeslacht() === 'm' ? 'roze' : 'blauwe');
-				$k.= '<div class="envelop"><a href="https://www.google.nl/search?q='.$kleur.'+envelop+briefpapier" target="_blank" title="Nu direct '.$kleur.' envelop & briefpapier regelen!"><img src="'.CSR_PICS.'layout/'.$kleur.'_envelop.png" alt="env" width="100"></a></div>';
+				$k.= '<div class="envelop"><a href="https://www.google.nl/search?q='.$kleur.'+envelop+briefpapier" target="_blank" title="Nu direct '.$kleur.' envelop & briefpapier regelen!"><img src="'.CSR_PICS.'layout/'.$kleur.'_envelop.png" alt="env" width="50" height="34"></a></div>';
 				$k.= '<p>'.$this->profiel['adres'].'<br />';
 				$k.= $this->profiel['postcode'].' '.$this->profiel['woonplaats'].'</p>';
 				$k.= '<p>'.$this->profiel['lidjaar'].' '.$this->getVerticale().'</p>';
