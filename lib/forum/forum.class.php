@@ -101,6 +101,7 @@ class Forum{
 				post.uid AS uid,
 				post.id AS postID,
 				post.tekst AS tekst,
+				post.zichtbaar AS zichtbaar,
 				post.datum AS datum,
 				post.bewerkDatum AS bewerkDatum,
 				gelezen.moment AS momentGelezen
