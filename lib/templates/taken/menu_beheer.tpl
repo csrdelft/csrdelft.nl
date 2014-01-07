@@ -7,13 +7,13 @@
 {if $loginlid->hasPermission('P_MAAL_MOD')}
 	<h1>Beheer</h1>
 	{assign var="link" value="/maaltijdenbeheer"}
-	<div class="item{if !$prullenbak and !$archief and $GLOBALS.taken_module === $link} active{/if}">»
+	<div class="item{if !isset($prullenbak) and !isset($archief) and $GLOBALS.taken_module === $link} active{/if}">»
 		<a href="{$link}" title="Beheer maaltijden">Maaltijden</a>
 	</div>
-	<div class="item{if $prullenbak and $GLOBALS.taken_module === $link} active{/if}">»
+	<div class="item{if isset($prullenbak) and $GLOBALS.taken_module === $link} active{/if}">»
 		<a href="{$link}/prullenbak" title="Open prullenbak">Prullenbak</a>
 	</div>
-	<div class="item{if $archief and $GLOBALS.taken_module === $link} active{/if}">»
+	<div class="item{if isset($archief) and $GLOBALS.taken_module === $link} active{/if}">»
 		<a href="{$link}/archief" title="Open archief">Archief</a>
 	</div>
 	{assign var="link" value="/maaltijdenrepetities"}
@@ -38,10 +38,10 @@
 {/if}
 	<h1>Corveebeheer</h1>
 	{assign var="link" value="/corveebeheer"}
-	<div class="item{if !$prullenbak and $GLOBALS.taken_module === $link} active{/if}">»
+	<div class="item{if !isset($prullenbak) and $GLOBALS.taken_module === $link} active{/if}">»
 		<a href="{$link}" title="Beheer corveetaken">Taken</a>
 	</div>
-	<div class="item{if $prullenbak and $GLOBALS.taken_module === $link} active{/if}">»
+	<div class="item{if isset($prullenbak) and $GLOBALS.taken_module === $link} active{/if}">»
 		<a href="{$link}/prullenbak" title="Open prullenbak">Prullenbak</a>
 	</div>
 	{assign var="link" value="/corveerepetities"}
