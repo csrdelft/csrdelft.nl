@@ -12,6 +12,8 @@
 		<a href="{$GLOBALS.taken_module}/bewerk/{$taak->getTaakId()}" title="Taak wijzigen" class="knop post popup">{icon get="pencil"}</a>
 	{if $taak->getCorveeRepetitieId()}
 		<a href="/corveerepetities/beheer/{$taak->getCorveeRepetitieId()}" title="Wijzig gekoppelde corveerepetitie" class="knop get popup">{icon get="calendar_edit"}</a>
+	{else}
+		<div style="display: inline-block; width: 28px;"></div>
 	{/if}
 {/if}
 {if !isset($maaltijd) and $taak->getMaaltijdId()}
