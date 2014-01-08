@@ -42,7 +42,7 @@ class MijnMaaltijdenController extends \ACLController {
 		$this->performAction($mid);
 	}
 	
-	public static function magMaaltijdlijstTonen(Maaltijd $maaltijd, $taken) {
+	public static function magMaaltijdlijstTonen(Maaltijd $maaltijd) {
 		//$taken = \Taken\CRV\TakenModel::getTakenVoorMaaltijd($maaltijd->getMaaltijdId());
 		// als er meerdere maaltijden op 1 dag zijn en maar 1 kookploeg (een taak kan maar aan 1 maaltijd gekoppeld zijn)
 		$taken = \Taken\CRV\TakenModel::getTakenVoorAgenda($maaltijd->getBeginMoment(), $maaltijd->getBeginMoment());

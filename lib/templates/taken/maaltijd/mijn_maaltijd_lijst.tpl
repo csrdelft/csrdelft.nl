@@ -2,7 +2,7 @@
 	mijn_maaltijd_lijst.tpl	|	P.W.G. Brussee (brussee@live.nl)
 *}
 {strip}
-<tr id="maaltijd-row-{$maaltijd->getMaaltijdId()}"{if !isset($aanmelding) and $maaltijd->getIsGesloten()} class="taak-grijs"{/if}>
+<tr id="maaltijd-row-{$maaltijd->getMaaltijdId()}"{if !$aanmelding and $maaltijd->getIsGesloten()} class="taak-grijs"{/if}>
 	<td>
 		{$maaltijd->getDatum()|date_format:"%a %e %b"} {$maaltijd->getTijd()|date_format:"%H:%M"}
 {if $toonlijst|is_a:'\Taken\CRV\CorveeTaak'}
@@ -14,9 +14,9 @@
 	<td>{$maaltijd->getTitel()}
 		<div style="float: right;">
 {assign var=prijs value=$maaltijd->getPrijs()|string_format:"%.2f"}
-{if isset($aanmelding) and $aanmelding->getSaldoStatus() < 0}
+{if $aanmelding and $aanmelding->getSaldoStatus() < 0}
 		{icon get="money_delete" title="U staat rood bij de MaalCie!&#013;Maaltijdprijs: &euro; "|cat:$prijs}
-{elseif isset($aanmelding) and $aanmelding->getSaldoStatus() < 2}
+{elseif $aanmelding and $aanmelding->getSaldoStatus() < 2}
 		{icon get="money_delete" title="Uw MaalCie saldo is te laag!&#013;Maaltijdprijs: &euro; "|cat:$prijs}
 {elseif $prijs !== $standaardprijs}
 		{icon get="money" title="Afwijkende maaltijdprijs: &euro; "|cat:$prijs}
@@ -33,7 +33,7 @@
 		</div>
 {/if}
 	</td>
-{if isset($aanmelding)}
+{if $aanmelding}
 	{if $maaltijd->getIsGesloten()}
 	<td class="maaltijd-aangemeld">
 		Ja

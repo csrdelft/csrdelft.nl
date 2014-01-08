@@ -31,7 +31,11 @@ class MijnMaaltijdenView extends \SimpleHtml {
 			
 			$toonlijst = array();
 			foreach ($this->_maaltijden as $maaltijd) {
-				$toonlijst[$maaltijd->getMaaltijdId()] = MijnMaaltijdenController::magMaaltijdlijstTonen($maaltijd);
+				$mid = $maaltijd->getMaaltijdId();
+				$toonlijst[$mid] = MijnMaaltijdenController::magMaaltijdlijstTonen($maaltijd);
+				if (!array_key_exists($mid, $this->_aanmeldingen)) {
+					$this->_aanmeldingen[$mid] = false;
+				}
 			}
 			$smarty->assign('toonlijst', $toonlijst);
 			$smarty->assign('maaltijden', $this->_maaltijden);
@@ -42,6 +46,7 @@ class MijnMaaltijdenView extends \SimpleHtml {
 			$smarty->assign('toonlijst', MijnMaaltijdenController::magMaaltijdlijstTonen($this->_maaltijden));
 			if ($this->_aanmeldingen === null) { // single maaltijd
 				$smarty->assign('maaltijd', $this->_maaltijden);
+				$smarty->assign('aanmelding', false);
 				$smarty->display('taken/maaltijd/mijn_maaltijd_lijst.tpl');
 			}
 			else { // single aanmelding with maaltijd
