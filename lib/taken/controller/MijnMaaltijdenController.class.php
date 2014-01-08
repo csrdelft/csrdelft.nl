@@ -42,19 +42,18 @@ class MijnMaaltijdenController extends \ACLController {
 		$this->performAction($mid);
 	}
 	
-	public static function magMaaltijdlijstTonen(Maaltijd $maaltijd, $taken=null) {
-		if (opConfide() || \LoginLid::instance()->hasPermission('P_MAAL_MOD')) {
-			return true;
-		}
-		if ($taken === null) {
-			//$taken = \Taken\CRV\TakenModel::getTakenVoorMaaltijd($maaltijd->getMaaltijdId());
-			$taken = \Taken\CRV\TakenModel::getTakenVoorAgenda($maaltijd->getBeginMoment(), $maaltijd->getBeginMoment());
-		}
+	public static function magMaaltijdlijstTonen(Maaltijd $maaltijd, $taken) {
+		//$taken = \Taken\CRV\TakenModel::getTakenVoorMaaltijd($maaltijd->getMaaltijdId());
+		// als er meerdere maaltijden op 1 dag zijn en maar 1 kookploeg (een taak kan maar aan 1 maaltijd gekoppeld zijn)
+		$taken = \Taken\CRV\TakenModel::getTakenVoorAgenda($maaltijd->getBeginMoment(), $maaltijd->getBeginMoment());
 		$uid = \LoginLid::instance()->getUid();
 		foreach ($taken as $taak) {
 			if ($taak->getLidId() === $uid) {
 				return $taak; // de taak die toegang geeft tot de maaltijdlijst
 			}
+		}
+		if (opConfide() || \LoginLid::instance()->hasPermission('P_MAAL_MOD')) {
+			return true;
 		}
 		return false;
 	}
@@ -70,12 +69,12 @@ class MijnMaaltijdenController extends \ACLController {
 	
 	public function action_lijst($mid) {
 		$maaltijd = MaaltijdenModel::getMaaltijd($mid, true);
-		$taken = \Taken\CRV\TakenModel::getTakenVoorMaaltijd($mid);
-		if (!self::magMaaltijdlijstTonen($maaltijd, $taken)) {
+		if (!self::magMaaltijdlijstTonen($maaltijd)) {
 			$this->action_geentoegang();
 			return;
 		}
 		$aanmeldingen = AanmeldingenModel::getAanmeldingenVoorMaaltijd($maaltijd);
+		$taken = \Taken\CRV\TakenModel::getTakenVoorMaaltijd($mid);
 		require_once 'taken/view/MaaltijdLijstView.class.php';
 		$this->content = new MaaltijdLijstView($maaltijd, $aanmeldingen, $taken);
 	}
