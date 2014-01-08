@@ -38,7 +38,7 @@ class SjaarsactieContent extends SimpleHTML {
 		echo '<strong>Naam:</strong> (van de sjaarsactie)<br /><input type="text" value="'.$naam.'" name="actieNaam" class="tekst" style="width: 700px" /><br />';
 		echo '<strong>Beschrijving:</strong><br /><textarea name="beschrijving" rows="8" class="tekst" style="width: 700px">'.$beschrijving.'</textarea><br />';
 		echo '<strong>Limiet:</strong> (maximaal beschikbare plaatsen)<br /><input type="text" name="limiet" value="'.$limiet.'" class="tekst"  style="width: 700px" /><br />';
-		echo '<input type="submit" value="verzenden" name="verzenden" />'; 
+		echo '<input type="submit" name="opslaan" value="opslaan" />'; 
 
 		echo '</div></form></td></tr>';
 	}
