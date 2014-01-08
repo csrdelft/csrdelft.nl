@@ -81,14 +81,14 @@
 {if !isset($voorkeurbaar) or !voorkeurbaar}
 	disabled
 {else}
-	{if !$taak->getCorveeFunctie()->getIsKwalificatieBenodigd()}
+	{if $voorkeur}
 		checked="checked" 
 	{/if}
 	onchange="taken_toggle_suggestie('geenvoorkeur');" 
 {/if}
 	/>
 	<label for="voorkeur" style="padding-left: 7px !important; float: none; position: relative; top: -4px;">Met voorkeur</label>
-{if isset($voorkeurbaar) and $voorkeurbaar and !$taak->getCorveeFunctie()->getIsKwalificatieBenodigd()}
+{if $voorkeur}
 	<script type="text/javascript">
 		$(document).ready(function() {ldelim}
 			taken_toggle_suggestie('geenvoorkeur');
@@ -123,12 +123,12 @@
 </td></tr>
 <tr><td style="padding-left: 7px;">
 	<input type="checkbox" id="recent" onchange="taken_toggle_suggestie('recent');" 
-{if !$taak->getCorveeFunctie()->getIsKwalificatieBenodigd()}
+{if $recent}
 	checked="checked" 
 {/if}
 	/>
 	<label for="recent" style="padding-left: 7px !important; float: none; position: relative; top: -4px;">Niet recent gecorveed</label>
-{if !$taak->getCorveeFunctie()->getIsKwalificatieBenodigd()}
+{if $recent}
 	<script type="text/javascript">
 		$(document).ready(function() {ldelim}
 			taken_toggle_suggestie('recent');

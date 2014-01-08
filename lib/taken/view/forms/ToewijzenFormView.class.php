@@ -56,6 +56,14 @@ class ToewijzenFormView extends \SimpleHtml {
 		if ($crid !== null) {
 			$smarty->assign('voorkeurbaar', CorveeRepetitiesModel::getRepetitie($crid)->getIsVoorkeurbaar());
 		}
+		if ($this->_taak->getCorveeFunctie()->getIsKwalificatieBenodigd()) {
+			$smarty->assign('voorkeur', $GLOBALS['suggesties_voorkeur_kwali_filter']);
+			$smarty->assign('recent', $GLOBALS['suggesties_recent_kwali_filter']);
+		}
+		else {
+			$smarty->assign('voorkeur', $GLOBALS['suggesties_voorkeur_filter']);
+			$smarty->assign('recent', $GLOBALS['suggesties_recent_filter']);
+		}
 		
 		$lijst = $smarty->fetch('taken/corveetaak/suggesties_lijst.tpl');
 		$formFields[] = new \HTMLComment($lijst);
