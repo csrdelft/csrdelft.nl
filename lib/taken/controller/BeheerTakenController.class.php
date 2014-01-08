@@ -107,6 +107,10 @@ class BeheerTakenController extends \ACLController {
 	}
 	
 	public function action_nieuw($mid=null) {
+		if ($mid !== null) {
+			$maaltijd = \Taken\MLT\MaaltijdenModel::getMaaltijd($mid);
+			$beginDatum = $maaltijd->getDatum();
+		}
 		if (array_key_exists('crid', $_POST)) {
 			$crid = (int) filter_input(INPUT_POST, 'crid', FILTER_SANITIZE_NUMBER_INT);
 			$repetitie = CorveeRepetitiesModel::getRepetitie($crid);
@@ -125,15 +129,14 @@ class BeheerTakenController extends \ACLController {
 					return;
 				}
 			}
-			else {
-				$maaltijd = \Taken\MLT\MaaltijdenModel::getMaaltijd($mid);
-				$beginDatum = $maaltijd->getDatum();
-			}
 			$functie = FunctiesModel::getFunctie($repetitie->getFunctieId());
 			$this->content = new TaakFormView(0, $functie->getFunctieId(), null, $crid, $mid, $beginDatum, $functie->getStandaardPunten(), 0); // fetches POST values itself
 		}
 		else {
 			$taak = new CorveeTaak();
+			if (isset($beginDatum)) {
+				$taak->setDatum($beginDatum);
+			}
 			$this->content = new TaakFormView($taak->getTaakId(), $taak->getFunctieId(), $taak->getLidId(), $taak->getCorveeRepetitieId(), $mid, $taak->getDatum(), $taak->getPunten(), $taak->getBonusMalus()); // fetches POST values itself
 		}
 	}
