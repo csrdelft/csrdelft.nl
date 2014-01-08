@@ -14,6 +14,9 @@
 		<a href="/corveerepetities/beheer/{$taak->getCorveeRepetitieId()}" title="Wijzig gekoppelde corveerepetitie" class="knop get popup">{icon get="calendar_edit"}</a>
 	{/if}
 {/if}
+{if !isset($maaltijd) and $taak->getMaaltijdId()}
+	<a href="/corveebeheer/maaltijd/{$taak->getMaaltijdId()}" title="Beheer maaltijdcorvee" class="knop get">{icon get="cup_link"}</a>
+{/if}
 	</td>
 	<td style="width: 50px; text-align: center;">
 {assign var=aantal value=$taak->getAantalKeerGemaild()}
