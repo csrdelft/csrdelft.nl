@@ -52,9 +52,9 @@ class ToewijzenFormView extends \SimpleHtml {
 		$smarty->assign('taak', $this->_taak);
 		$smarty->assign('suggesties', $this->_suggesties);
 		
-		if ($this->_taak->getCorveeRepetitieId() !== null) {
-			$repetitie = CorveeRepetitiesModel::getRepetitie($this->_taak->getCorveeRepetitieId());
-			$smarty->assign('voorkeur', $repetitie->getIsVoorkeurbaar());
+		$crid = $this->_taak->getCorveeRepetitieId();
+		if ($crid !== null) {
+			$smarty->assign('voorkeurbaar', CorveeRepetitiesModel::getRepetitie($crid)->getIsVoorkeurbaar());
 		}
 		
 		$lijst = $smarty->fetch('taken/corveetaak/suggesties_lijst.tpl');
