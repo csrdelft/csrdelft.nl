@@ -80,7 +80,7 @@ class FunctiesModel {
 	private static function newFunctie($naam, $afk, $email, $punten, $kwali) {
 		$sql = 'INSERT INTO crv_functies';
 		$sql.= ' (functie_id, naam, afkorting, email_bericht, standaard_punten, kwalificatie_benodigd)';
-		$sql.= ' VALUES (?, ?, ?, ?, ?, ?, ?)';
+		$sql.= ' VALUES (?, ?, ?, ?, ?, ?)';
 		$values = array(null, $naam, $afk, $email, $punten, $kwali);
 		$db = \CsrPdo::instance();
 		$query = $db->prepare($sql, $values);
