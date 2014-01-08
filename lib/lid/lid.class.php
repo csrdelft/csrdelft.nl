@@ -223,7 +223,7 @@ class Lid implements Serializable, Agendeerbaar{
 	public function getEmail(){ 		return $this->profiel['email']; }
 	public function getAdres(){			return $this->profiel['adres'].' '.$this->profiel['postcode'].' '.$this->profiel['woonplaats']; }
 	public function getMoot(){ 			return $this->profiel['moot']; }
-	public function getLichting(){		return $this->profiel['lidjaar']; }
+	public function getLichting(){		return (int) $this->profiel['lidjaar']; }
 
 	public function isJarig(){			return substr($this->profiel['gebdatum'], 5, 5)==date('m-d'); }
 	public function getGeboortedatum(){ return $this->profiel['gebdatum']; }
@@ -650,35 +650,28 @@ class Lid implements Serializable, Agendeerbaar{
 				$naam='Formaat in $vorm is onbekend.';
 		}
 		//niet ingelogged nooit een link laten zijn.
-		$nolinks=array('x999', 'x101', 'x027', '4444');
+		$nolinks=array('x999', 'x101', 'x027', 'x222', '4444');
 		if(in_array($this->getUid(), $nolinks) || !LoginLid::instance()->hasPermission('P_LEDEN_READ')){
 			$mode='plain';
 		}
-		
+		if ($mode !== 'plain' && $vorm !== 'pasfoto' && $this->getLichting() === 2013) {
+			$naam = CsrUBB::instance()->ubb_neuzen($naam);
+		}
 		if ($mode === 'visitekaartje' || $mode === 'link') {
 			$k = '';
-			if($vorm!='pasfoto'){
-				$naam=mb_htmlentities($naam);
-				if(Instelling::get('layout_neuzen') == 'overal' || (Instelling::get('layout_neuzen') == '2013' && $this->getLichting() == 2013)) {
-					$naam = CsrUBB::instance()->ubb_neuzen($naam);
-				}
-			}
 			$l = '<a href="'.CSR_ROOT.'communicatie/profiel/'.$this->getUid().'" title="'.$sVolledigeNaam.'" class="lidLink '.$this->profiel['status'].'">';
 			
-			if ($mode === 'visitekaartje' && ($vorm === 'leeg' || Instelling::get('layout_visitekaartjes') == 'ja')) {
+			if (($vorm === 'leeg' || $mode === 'visitekaartje') && Instelling::get('layout_visitekaartjes') == 'ja') {
 				$v = str_replace(' ', '', str_replace('.', '', microtime()));
-				$k = '<div id="k'.$v.'"';
-				if ($vorm === 'leeg') {
-					$k.= ' class="visitekaartje';
-				}
-				else {
-					$k.= ' style="display: none; position: absolute;" class="init visitekaartje';
+				$k = '<div id="k'.$v.'" class="visitekaartje';
+				if ($vorm !== 'leeg') {
+					$k.= ' init';
 				}
 				if ($this->isJarig()) {
 					$k.= ' jarig';
 				}
 				$k.= '">'.$this->getPasfoto('small', 'lidfoto');
-				$k.= '<div class="uid">('.$this->getUid().')</div>';
+				$k.= '<div class="uid uitgebreid">('.$this->getUid().')</div>';
 				$k.= '<p class="naam">'.$l.$sVolledigeNaam;
 				if (!$this->isLid()) {
 					$k.= '&nbsp;'.$this->getStatus()->getChar();
@@ -686,19 +679,20 @@ class Lid implements Serializable, Agendeerbaar{
 				$k.= '</a></p><p style="word-break: break-all;"><a href="mailto:'.$this->profiel['email'].'">'.$this->profiel['email'].'</a><br />';
 				$k.= $this->profiel['mobiel'].'</p>';
 				$kleur = ($this->getGeslacht() === 'm' ? 'roze' : 'blauwe');
-				$k.= '<div class="envelop"><a href="https://www.google.nl/search?q='.$kleur.'+envelop+briefpapier" target="_blank" title="Nu direct '.$kleur.' envelop & briefpapier regelen!"><img src="'.CSR_PICS.'layout/'.$kleur.'_envelop.png" alt="env" width="50" height="34"></a></div>';
+				$k.= '<div class="envelop uitgebreid"><a href="https://www.google.nl/search?q='.$kleur.'+envelop+briefpapier" target="_blank" title="Nu direct '.$kleur.' envelop & briefpapier regelen!"><img src="'.CSR_PICS.'layout/'.$kleur.'_envelop.png" alt="env" width="50" height="34"></a></div>';
 				$k.= '<p>'.$this->profiel['adres'].'<br />';
 				$k.= $this->profiel['postcode'].' '.$this->profiel['woonplaats'].'</p>';
-				$k.= '<p>'.$this->profiel['lidjaar'].' '.$this->getVerticale().'</p>';
+				$k.= '<p class="uitgebreid">'.$this->profiel['lidjaar'].' '.$this->getVerticale().'</p>';
 				$k.= '</div>';
 				if ($vorm === 'leeg') {
 					$naam = $k.$naam;
 				}
 				else {
-					$naam = '<span id="v'.$v.'" class="init visite">'.$k.$l.$naam.'</a></span>';
+					$naam = $k.'<span id="v'.$v.'" class="init visite">'.$l.$naam.'</a></span>';
 				}
+				return '<div style="display: inline-block;">'.$naam.'</div>';
 			}
-			return '<div style="display: inline-block;">'.$naam.'</div>';
+			return $l.$naam.'</a>';
 		}
 		else {
 			return $naam;

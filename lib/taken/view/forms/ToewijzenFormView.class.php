@@ -39,7 +39,7 @@ class ToewijzenFormView extends \SimpleHtml {
 	}
 	
 	public function getIsJongsteLichting($uid) {
-		return ($this->_jong === (int) \LidCache::getLid($uid)->getLichting());
+		return ($this->_jong === \LidCache::getLid($uid)->getLichting());
 	}
 	
 	public function view() {

@@ -42,3 +42,17 @@ textarea.csv{
 	width: 100%;
 	height: 500px;
 }
+div.visitekaartje{
+	width: 275px;
+	height: 111px;
+	-moz-box-shadow: none;
+	-webkit-box-shadow: none;
+	box-shadow: none;
+	margin: 5px;
+}
+div.visitekaartje img.lidfoto{
+	width: 70px !important;
+}
+div.visitekaartje .uitgebreid{
+	display: none;
+}
