@@ -195,7 +195,7 @@ class Forum{
 	public static function getPostsPerPagina(){ return Instelling::get('forum_postsPerPagina'); }
 
 	public static function getForumNaam($uid=false, $aNaam=false, $aLink=true, $bHtmlentities=true ){
-		return LidCache::getLid($uid)->getNaamLink('user', ($aLink ? 'link' : 'html'));
+		return LidCache::getLid($uid)->getNaamLink('user', ($aLink ? 'link' : 'plain'));
 	}
 
 
