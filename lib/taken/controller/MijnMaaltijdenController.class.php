@@ -47,12 +47,13 @@ class MijnMaaltijdenController extends \ACLController {
 			return true;
 		}
 		if ($taken === null) {
-			$taken = \Taken\CRV\TakenModel::getTakenVoorMaaltijd($maaltijd->getMaaltijdId());
+			//$taken = \Taken\CRV\TakenModel::getTakenVoorMaaltijd($maaltijd->getMaaltijdId());
+			$taken = \Taken\CRV\TakenModel::getTakenVoorAgenda($maaltijd->getBeginMoment(), $maaltijd->getBeginMoment());
 		}
 		$uid = \LoginLid::instance()->getUid();
 		foreach ($taken as $taak) {
 			if ($taak->getLidId() === $uid) {
-				return $taak;
+				return $taak; // de taak die toegang geeft tot de maaltijdlijst
 			}
 		}
 		return false;
