@@ -192,8 +192,8 @@ class csrdelft extends SimpleHTML {
 					$this->addScript('minion.js');
 					$top = 40;
 					$left = 40;
-					require_once 'dragobject.php';
-					getDragObjectCoords('minion', $top, $left);
+					require_once 'dragobject.class.php';
+					DragObject::getCoords('minion', $top, $left);
 					$smarty->assign('top', $top);
 					$smarty->assign('left', $left);
 					$smarty->assign('minion', $smarty->fetch('minion.tpl'));

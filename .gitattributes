@@ -2991,7 +2991,7 @@ lib/documenten/document.class.php -text
 lib/documenten/documentcontent.class.php -text
 lib/documenten/documentcontroller.class.php -text
 lib/documenten/documentuploader.class.php -text
-lib/dragobject.php -text
+lib/dragobject.class.php -text
 lib/eetplan.class.php -text
 lib/eetplancontent.class.php -text
 lib/formulier.class.php -text
