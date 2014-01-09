@@ -23,11 +23,12 @@ class TaakFormView extends \SimpleHtml {
 		foreach ($functieNamen as $functie) {
 			$functieNamen[$functie->getFunctieId()] = $functie->getNaam();
 			$functiePunten .= 'punten['. $functie->getFunctieId() .']='. $functie->getStandaardPunten() .';';
+			if ($punten === null) {
+				$punten = $functie->getStandaardPunten();
+			}
 			if ($fid === $functie->getFunctieId()) {
 				$functieSelectie[$fid] = 'arrow';
-				if ($punten === null) {
-					$punten = $functie->getStandaardPunten();
-				}
+				
 			}
 		}
 		

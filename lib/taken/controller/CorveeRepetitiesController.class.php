@@ -65,7 +65,7 @@ class CorveeRepetitiesController extends \ACLController {
 	
 	public function action_nieuw($mrid=null) {
 		$repetitie = new CorveeRepetitie(0, $mrid);
-		$this->content = new CorveeRepetitieFormView($repetitie->getCorveeRepetitieId(), $repetitie->getMaaltijdRepetitieId(), $repetitie->getDagVanDeWeek(), $repetitie->getPeriodeInDagen(), $repetitie->getFunctieId(), $repetitie->getStandaardPunten(), $repetitie->getStandaardAantal(), $repetitie->getIsVoorkeurbaar()); // fetches POST values itself
+		$this->content = new CorveeRepetitieFormView($repetitie->getCorveeRepetitieId(), $repetitie->getMaaltijdRepetitieId(), $repetitie->getDagVanDeWeek(), $repetitie->getPeriodeInDagen(), $repetitie->getFunctieId(), null, $repetitie->getStandaardAantal(), $repetitie->getIsVoorkeurbaar()); // fetches POST values itself
 	}
 	
 	public function action_bewerk($crid) {

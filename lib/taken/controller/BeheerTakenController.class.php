@@ -136,7 +136,7 @@ class BeheerTakenController extends \ACLController {
 			if (isset($beginDatum)) {
 				$taak->setDatum($beginDatum);
 			}
-			$this->content = new TaakFormView($taak->getTaakId(), $taak->getFunctieId(), $taak->getLidId(), $taak->getCorveeRepetitieId(), $mid, $taak->getDatum(), $taak->getPunten(), $taak->getBonusMalus()); // fetches POST values itself
+			$this->content = new TaakFormView($taak->getTaakId(), $taak->getFunctieId(), $taak->getLidId(), $taak->getCorveeRepetitieId(), $mid, $taak->getDatum(), null, $taak->getBonusMalus()); // fetches POST values itself
 		}
 	}
 	
