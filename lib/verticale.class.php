@@ -5,7 +5,7 @@ class Verticale{
 	public $naam;
 	public $kringen=array();
 
-	
+
 	public function __construct($nummer, $kringen=array()){
 		if(preg_match('/^[A-Z]{1}$/', $nummer)){
 			$nummer=array_search($nummer, Verticale::getLetters());
@@ -23,7 +23,7 @@ class Verticale{
 		$query="
 			SELECT kring, GROUP_CONCAT(uid ORDER BY kringleider DESC, achternaam ASC) as kringleden
 			FROM lid
-			WHERE (status='S_NOVIET' OR status='S_GASTLID' OR status='S_LID' OR status='S_KRINGEL' OR (status='S_OUDLID' AND kring>0)) 
+			WHERE (status='S_NOVIET' OR status='S_GASTLID' OR status='S_LID' OR status='S_KRINGEL' OR (status='S_OUDLID' AND kring>0))
 			  AND verticale=".$this->nummer."
 			GROUP BY kring
 			ORDER BY kring";
@@ -38,11 +38,11 @@ class Verticale{
 	public function getLetter(){
 		return self::getLetterById($this->nummer);
 	}
-	
+
 	public function getKringen(){
 		return $this->kringen;
 	}
-	
+
 	public function getKring($kring){
 		if(sizeof($this->kringen)==0){
 			$this->loadKringen();
@@ -52,7 +52,7 @@ class Verticale{
 		}
 		return $this->kringen[$kring];
 	}
-	
+
 	public function addKring($kring, $kringleden){
 		$leden=explode(',', $kringleden);
 		$this->kringen[$kring]=array();
@@ -68,7 +68,7 @@ class Verticale{
 		$letters=self::getLetters();
 		return $letters[$nummer];
 	}
-		
+
 	public static function getNamen(){
 		$db=MySql::instance();
 		$query="
@@ -89,24 +89,24 @@ class Verticale{
 		$result=$db->query($query);
 		while($row=$db->next($result)){
 			$letters[]=$row['letter'];
-		}	
+		}
 		return $letters;
 	}
-		
+
 	public static function getAll(){
 		$db=MySql::instance();
 		$query="
 			SELECT verticale, kring, GROUP_CONCAT(uid ORDER BY kringleider DESC, achternaam ASC) as kringleden
 			FROM lid
-			WHERE (status='S_NOVIET' OR status='S_GASTLID' OR status='S_LID' OR status='S_KRINGEL' OR (status='S_OUDLID' AND kring>0)) 
+			WHERE (status='S_NOVIET' OR status='S_GASTLID' OR status='S_LID' OR status='S_KRINGEL' OR (status='S_OUDLID' AND kring>0))
 			  AND verticale !=0
 			GROUP BY verticale, kring
 			ORDER BY verticale, kring";
 		$result=$db->query($query);
-	
+
 		$vID=0;
 		$verticalen=array();
-		
+
 		while($row=$db->next($result)){
 			if($vID!=$row['verticale']){ // nieuwe verticale
 				if(isset($verticale)){ // save vorige
@@ -118,12 +118,11 @@ class Verticale{
 			$verticale->addKring($row['kring'], $row['kringleden']);
 		}
 		$verticalen[]=$verticale;
-		unset($verticalen[0]);
 
 		return $verticalen;
-		
+
 	}
-	
+
 }
 
 ?>
