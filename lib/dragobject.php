@@ -7,6 +7,4 @@ function getDragObjectCoords($id, &$top, &$left) {
 		$top = (int) $_SESSION['dragobject'][$id]['top'];
 		$left = (int) $_SESSION['dragobject'][$id]['left'];
 	}
-	
-	echo print_r($_SESSION['dragobject']);
 }
