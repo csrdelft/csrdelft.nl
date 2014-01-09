@@ -9,7 +9,7 @@
      - Wave on the coat.
      - Animation when changing the clothes.
 -->
-<div id="minion" class="dragobject" ondblclick="superman();">
+<div id="minion" class="dragobject" ondblclick="superman();" style="top: {$top}px; left: {$left}px;">
   <ul class="hair hair-left">
     <li></li>
     <li></li>

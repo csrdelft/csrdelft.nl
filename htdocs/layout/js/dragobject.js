@@ -9,7 +9,7 @@ $(document).ready(function() {
 	window.addEventListener('mouseup', stopDrag, false);
 });
 
-var dragobjectID;
+var dragobjectID = false;
 var oldX;
 var oldY;
 
@@ -29,27 +29,45 @@ function startDrag(e) {
 		oldY = mouseY(e);
 		window.addEventListener('mousemove', mouseMoveHandler, true);
 	}
+	else {
+		dragobjectID = false;
+	}
 }
 function stopDrag(e) {
 	window.removeEventListener('mousemove', mouseMoveHandler, true);
+	$.post('/session.php', {
+		set: "dragobject_" + dragobjectID,
+		array: {
+			left: dragobjLeft(),
+			top: dragobjTop()
+		}
+	});
+	dragobjectID = false;
 }
 function mouseMoveHandler(e) {
+	if (!dragobjectID) {
+		return;
+	}
 	e = e || window.event;
 	var newX = mouseX(e);
 	var newY = mouseY(e);
-	var oldL = $('#'+dragobjectID).offset().left - (document.documentElement.scrollLeft ? document.documentElement.scrollLeft : document.body.scrollLeft);
-	var oldT = $('#'+dragobjectID).offset().top - (document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop);
-	$('#'+dragobjectID).css('left', (oldL + newX - oldX) + 'px');
-	$('#'+dragobjectID).css('top', (oldT + newY - oldY) + 'px');
+	$('#'+dragobjectID).css('left', (dragobjLeft() + newX - oldX) + 'px');
+	$('#'+dragobjectID).css('top', (dragobjTop() + newY - oldY) + 'px');
 	oldX = newX;
 	oldY = newY;
+}
+function docScrollLeft() {
+	return (document.documentElement.scrollLeft ? document.documentElement.scrollLeft : document.body.scrollLeft);
+}
+function docScrollTop() {
+	return (document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop);
 }
 function mouseX(e) {
 	if (e.pageX) {
 	  return e.pageX;
 	}
 	if (e.clientX) {
-		return e.clientX + (document.documentElement.scrollLeft ? document.documentElement.scrollLeft : document.body.scrollLeft);
+		return e.clientX + docScrollLeft();
 	}
 	return null;
 }
@@ -58,7 +76,13 @@ function mouseY(e) {
 		return e.pageY;
 	}
 	if (e.clientY) {
-		return e.clientY + (document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop);
+		return e.clientY + docScrollTop();
 	}
 	return null;
+}
+function dragobjLeft() {
+	return $('#'+dragobjectID).offset().left - docScrollLeft();
+}
+function dragobjTop() {
+	return $('#'+dragobjectID).offset().top - docScrollTop();
 }

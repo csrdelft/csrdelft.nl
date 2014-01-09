@@ -735,7 +735,7 @@ return <<<UBBVERHAAL
 	<h2>Tekst opmaken</h2>
 	<p>U kunt uw berichten opmaken met een simpel opmaaktaaltje wat ubb genoemd wordt. Het lijkt wat op html, maar dan met vierkante haken:</p>
 	<ul>
-		<li>[b]...[/b] voor <strong>dikgedrunkte tekst</strong></li>
+		<li>[b]...[/b] voor <strong>dikgedrukte tekst</strong></li>
 		<li>[i]...[/i] voor <em>cursieve tekst</em></li>
 		<li>[u]...[/u] voor <span style="text-decoration: underline;">onderstreepte tekst</span></li>
 		<li>[s]...[/s] voor <span style="text-decoration: line-through;">doorgestreepte tekst</span></li>

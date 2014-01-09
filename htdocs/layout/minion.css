@@ -7,9 +7,9 @@
  */
 #minion {
   position: fixed;
-  top: 40px;
-  left: 40px;
-  z-index: 1;
+  z-index: 111;
+  height: 400px;
+  width: 250px;
 }
 
 #minion .face {

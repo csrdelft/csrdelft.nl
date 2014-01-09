@@ -302,6 +302,7 @@ htdocs/menubeheer.php -text
 htdocs/pagina.php -text
 htdocs/pauper.php -text
 htdocs/robots.txt -text
+htdocs/session.php -text
 htdocs/soccie/count.png -text
 htdocs/soccie/index.php -text
 htdocs/soccie/logo.png -text
