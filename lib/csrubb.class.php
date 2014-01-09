@@ -756,7 +756,7 @@ return <<<UBBVERHAAL
 	</ul><br />
 	In de beperking toont zich de meester!<br />
 	<br />
-
+	<a href="http://csrdelft.nl/wiki/cie:diensten:forum" target="_blank" title="Meer info">Meer...</a>
 </div>
 UBBVERHAAL;
 
