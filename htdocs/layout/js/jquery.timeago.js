@@ -1,7 +1,7 @@
 /**
  * AANGEPAST-Paul: NLD vertaling & abbr autostart & custom title Date.toLocaleString()
- * 
- * 
+ *
+ *
  * Timeago is a jQuery plugin that makes it easy to support automatically
  * updating fuzzy timestamps (e.g. "4 minutes ago" or "about 1 day ago").
  *
@@ -115,7 +115,8 @@ jQuery(document).ready(function() {
       s = s.replace(/\.\d+/,""); // remove milliseconds
       s = s.replace(/-/,"/").replace(/-/,"/");
       s = s.replace(/T/," ").replace(/Z/," UTC");
-      s = s.replace(/([\+\-]\d\d)\:?(\d\d)/," $1$2"); // -04:00 -> -0400
+      s = s.replace(/([\+\-]\d\d)\:?(\d\d)/,"$1$2"); // -04:00 -> -0400
+      s = s.replace(/([\+\-]\d\d)$/,"$100"); // +09 -> +0900
       return new Date(s);
     },
     datetime: function(elem) {
