@@ -14,7 +14,7 @@ class CorveeRepetitieFormView extends \SimpleHtml {
 	private $_form;
 	private $_crid;
 	
-	public function __construct($crid, $mrid=null, $dag=null, $periode=null, $fid=null, $aantal=null, $voorkeur=null, $verplaats=null) {
+	public function __construct($crid, $mrid=null, $dag=null, $periode=null, $fid=null, $punten=null, $aantal=null, $voorkeur=null, $verplaats=null) {
 		$this->_crid = $crid;
 		
 		$functieNamen = FunctiesModel::getAlleFuncties(true); // grouped by fid
@@ -45,6 +45,7 @@ class CorveeRepetitieFormView extends \SimpleHtml {
 			$formFields['vrk']->setOnChangeScript("if (!this.checked) alert('Alle voorkeuren zullen worden verwijderd!');");
 		}
 		$formFields[] = new \SelectField('mlt_repetitie_id', $mrid, 'Maaltijdrepetitie', $repetitieNamen, $repetitieSelectie);
+		$formFields[] = new \IntField('standaard_punten', $punten, 'Standaard punten', 10, 0);
 		$formFields[] = new \IntField('standaard_aantal', $aantal, 'Aantal corveeërs', 10, 1);
 		if ($this->_crid !== 0) {
 			$formFields['ver'] = new \VinkField('verplaats_dag', $verplaats, 'Ook verplaatsen');

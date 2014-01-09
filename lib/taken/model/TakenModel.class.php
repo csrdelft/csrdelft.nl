@@ -479,12 +479,12 @@ class TakenModel {
 		while ($datum <= $eindDatum) { // break after one
 			for ($i = $repetitie->getStandaardAantal(); $i > 0; $i--) {
 				$taak = self::newTaak(
-					$functie->getFunctieId(),
+					$repetitie->getFunctieId(),
 					null,
 					$repetitie->getCorveeRepetitieId(),
 					$mid,
 					date('Y-m-d', $datum),
-					$functie->getStandaardPunten(),
+					$repetitie->getStandaardPunten(),
 					0
 				);
 				$taak->setCorveeFunctie($functie);
@@ -531,7 +531,6 @@ class TakenModel {
 	}
 	
 	public static function updateRepetitieTaken(CorveeRepetitie $repetitie, $verplaats) {
-		$functie = FunctiesModel::getFunctie($repetitie->getFunctieId());
 		$db = \CsrPdo::instance();
 		try {
 			$db->beginTransaction();
@@ -540,7 +539,7 @@ class TakenModel {
 			$sql.= ' WHERE verwijderd = false AND crv_repetitie_id = ?';
 			$values = array(
 				$repetitie->getFunctieId(),
-				$functie->getStandaardPunten(),
+				$repetitie->getStandaardPunten(),
 				$repetitie->getCorveeRepetitieId()
 			);
 			$query = $db->prepare($sql, $values);
@@ -590,12 +589,12 @@ class TakenModel {
 				$verschil = $repetitie->getStandaardAantal() - sizeof($taken);
 				for ($i = $verschil; $i > 0; $i--) {
 					self::newTaak(
-						$functie->getFunctieId(),
+						$repetitie->getFunctieId(),
 						null,
 						$repetitie->getCorveeRepetitieId(),
 						null,
 						$taken[0]->getDatum(),
-						$functie->getStandaardPunten(),
+						$repetitie->getStandaardPunten(),
 						0
 					);
 				}
@@ -606,12 +605,12 @@ class TakenModel {
 				$verschil = $repetitie->getStandaardAantal() - sizeof($taken);
 				for ($i = $verschil; $i > 0; $i--) {
 					self::newTaak(
-						$functie->getFunctieId(),
+						$repetitie->getFunctieId(),
 						null,
 						$repetitie->getCorveeRepetitieId(),
 						$mid,
 						$maaltijdenById[$mid]->getDatum(),
-						$functie->getStandaardPunten(),
+						$repetitie->getStandaardPunten(),
 						0
 					);
 				}

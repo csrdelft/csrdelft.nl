@@ -13,6 +13,7 @@
 	<td>{$repetitie->getDagVanDeWeekText()}</td>
 	<td>{$repetitie->getPeriodeInDagenText()}</td>
 	<td>{if $repetitie->getIsVoorkeurbaar()}{icon get="tick" title="Voorkeurbaar"}{/if}</td>
+	<td>{$repetitie->getStandaardPunten()}</td>
 	<td>{$repetitie->getStandaardAantal()}</td>
 	<td class="col-del"><a href="{$GLOBALS.taken_module}/verwijder/{$repetitie->getCorveeRepetitieId()}" title="Corveerepetitie definitief verwijderen" class="knop post confirm">{icon get="cross"}</a></td>
 </tr>

@@ -51,7 +51,7 @@ class CorveeRepetitiesModel {
 	}
 	
 	private static function loadRepetities($where=null, $values=array(), $limit=null) {
-		$sql = 'SELECT crv_repetitie_id, mlt_repetitie_id, dag_vd_week, periode_in_dagen, functie_id, standaard_aantal, voorkeurbaar';
+		$sql = 'SELECT crv_repetitie_id, mlt_repetitie_id, dag_vd_week, periode_in_dagen, functie_id, standaard_punten, standaard_aantal, voorkeurbaar';
 		$sql.= ' FROM crv_repetities';
 		if ($where !== null) {
 			$sql.= ' WHERE '. $where;
@@ -76,13 +76,13 @@ class CorveeRepetitiesModel {
 		return $result;
 	}
 	
-	public static function saveRepetitie($crid, $mrid, $dag, $periode, $fid, $aantal, $voorkeur) {
+	public static function saveRepetitie($crid, $mrid, $dag, $periode, $fid, $punten, $aantal, $voorkeur) {
 		$db = \CsrPdo::instance();
 		try {
 			$db->beginTransaction();
 			$voorkeuren = 0;
 			if ($crid === 0) {
-				$repetitie = self::newRepetitie($mrid, $dag, $periode, $fid, $aantal, $voorkeur);
+				$repetitie = self::newRepetitie($mrid, $dag, $periode, $fid, $punten, $aantal, $voorkeur);
 			}
 			else {
 				$repetitie = self::getRepetitie($crid);
@@ -90,6 +90,7 @@ class CorveeRepetitiesModel {
 				$repetitie->setDagVanDeWeek($dag);
 				$repetitie->setPeriodeInDagen($periode);
 				$repetitie->setFunctieId($fid);
+				$repetitie->setStandaardPunten($punten);
 				$repetitie->setStandaardAantal($aantal);
 				$repetitie->setVoorkeurbaar($voorkeur);
 				self::updateRepetitie($repetitie);
@@ -109,13 +110,14 @@ class CorveeRepetitiesModel {
 	
 	private static function updateRepetitie(CorveeRepetitie $repetitie) {
 		$sql = 'UPDATE crv_repetities';
-		$sql.= ' SET mlt_repetitie_id=?, dag_vd_week=?, periode_in_dagen=?, functie_id=?, standaard_aantal=?, voorkeurbaar=?';
+		$sql.= ' SET mlt_repetitie_id=?, dag_vd_week=?, periode_in_dagen=?, functie_id=?, standaard_punten=?, standaard_aantal=?, voorkeurbaar=?';
 		$sql.= ' WHERE crv_repetitie_id=?';
 		$values = array(
 			$repetitie->getMaaltijdRepetitieId(),
 			$repetitie->getDagVanDeWeek(),
 			$repetitie->getPeriodeInDagen(),
 			$repetitie->getFunctieId(),
+			$repetitie->getStandaardPunten(),
 			$repetitie->getStandaardAantal(),
 			$repetitie->getIsVoorkeurbaar(),
 			$repetitie->getCorveeRepetitieId()
@@ -128,18 +130,18 @@ class CorveeRepetitiesModel {
 		}
 	}
 	
-	private static function newRepetitie($mrid, $dag, $periode, $fid, $aantal, $voorkeur) {
+	private static function newRepetitie($mrid, $dag, $periode, $fid, $punten, $aantal, $voorkeur) {
 		$sql = 'INSERT INTO crv_repetities';
-		$sql.= ' (crv_repetitie_id, mlt_repetitie_id, dag_vd_week, periode_in_dagen, functie_id, standaard_aantal, voorkeurbaar)';
-		$sql.= ' VALUES (?, ?, ?, ?, ?, ?, ?)';
-		$values = array(null, $mrid, $dag, $periode, $fid, $aantal, $voorkeur);
+		$sql.= ' (crv_repetitie_id, mlt_repetitie_id, dag_vd_week, periode_in_dagen, functie_id, standaard_punten, standaard_aantal, voorkeurbaar)';
+		$sql.= ' VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+		$values = array(null, $mrid, $dag, $periode, $fid, $punten, $aantal, $voorkeur);
 		$db = \CsrPdo::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		if ($query->rowCount() !== 1) {
 			throw new \Exception('New corvee-repetitie faalt: $query->rowCount() ='. $query->rowCount());
 		}
-		return new CorveeRepetitie(intval($db->lastInsertId()), $mrid, $dag, $periode, $fid, $aantal, $voorkeur);
+		return new CorveeRepetitie(intval($db->lastInsertId()), $mrid, $dag, $periode, $fid, $punten, $aantal, $voorkeur);
 	}
 	
 	public static function verwijderRepetitie($crid) {

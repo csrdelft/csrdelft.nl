@@ -65,12 +65,12 @@ class CorveeRepetitiesController extends \ACLController {
 	
 	public function action_nieuw($mrid=null) {
 		$repetitie = new CorveeRepetitie(0, $mrid);
-		$this->content = new CorveeRepetitieFormView($repetitie->getCorveeRepetitieId(), $repetitie->getMaaltijdRepetitieId(), $repetitie->getDagVanDeWeek(), $repetitie->getPeriodeInDagen(), $repetitie->getFunctieId(), $repetitie->getStandaardAantal(), $repetitie->getIsVoorkeurbaar()); // fetches POST values itself
+		$this->content = new CorveeRepetitieFormView($repetitie->getCorveeRepetitieId(), $repetitie->getMaaltijdRepetitieId(), $repetitie->getDagVanDeWeek(), $repetitie->getPeriodeInDagen(), $repetitie->getFunctieId(), $repetitie->getStandaardPunten(), $repetitie->getStandaardAantal(), $repetitie->getIsVoorkeurbaar()); // fetches POST values itself
 	}
 	
 	public function action_bewerk($crid) {
 		$repetitie = CorveeRepetitiesModel::getRepetitie($crid);
-		$this->content = new CorveeRepetitieFormView($repetitie->getCorveeRepetitieId(), $repetitie->getMaaltijdRepetitieId(), $repetitie->getDagVanDeWeek(), $repetitie->getPeriodeInDagen(), $repetitie->getFunctieId(), $repetitie->getStandaardAantal(), $repetitie->getIsVoorkeurbaar()); // fetches POST values itself
+		$this->content = new CorveeRepetitieFormView($repetitie->getCorveeRepetitieId(), $repetitie->getMaaltijdRepetitieId(), $repetitie->getDagVanDeWeek(), $repetitie->getPeriodeInDagen(), $repetitie->getFunctieId(), $repetitie->getStandaardPunten(), $repetitie->getStandaardAantal(), $repetitie->getIsVoorkeurbaar()); // fetches POST values itself
 	}
 	
 	public function action_opslaan($crid) {
@@ -83,7 +83,7 @@ class CorveeRepetitiesController extends \ACLController {
 		if ($this->content->validate()) {
 			$values = $this->content->getValues(); 
 			$mrid = ($values['mlt_repetitie_id'] === '' ? null : intval($values['mlt_repetitie_id']));
-			$repetitie_aantal = CorveeRepetitiesModel::saveRepetitie($crid, $mrid, $values['dag_vd_week'], $values['periode_in_dagen'], intval($values['functie_id']), $values['standaard_aantal'], $values['voorkeurbaar']);
+			$repetitie_aantal = CorveeRepetitiesModel::saveRepetitie($crid, $mrid, $values['dag_vd_week'], $values['periode_in_dagen'], intval($values['functie_id']), $values['standaard_punten'], $values['standaard_aantal'], $values['voorkeurbaar']);
 			$maaltijdrepetitie = null;
 			if (endsWith($_SERVER['HTTP_REFERER'], $GLOBALS['taken_module'] .'/maaltijd/'. $values['mlt_repetitie_id'])) { // state of gui
 				$maaltijdrepetitie = \Taken\MLT\MaaltijdRepetitiesModel::getRepetitie($mrid);

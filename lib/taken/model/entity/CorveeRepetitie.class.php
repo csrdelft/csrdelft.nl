@@ -9,9 +9,10 @@ namespace Taken\CRV;
  *  - bij welke maaltijdrepetitie deze periodieke taken horen (optioneel)
  *  - op welke dag van de week dit moet gebeuren
  *  - na hoeveel dagen dit opnieuw moet gebeuren
- *  - welke functie deze taak inhoud (bijv. kwalikok)
- *  - standaard aantal mensen dat deze taak moeten uitvoeren (bijv. 1 kwalikok, 2 hulpkoks, etc.)
- *  - of deze taak als voorkeur kan worden opgegeven (bijv. kwalikok is niet voorkeurbaar)
+ *  - welke functie deze periodieke taak inhoud (bijv. kwalikok)
+ *  - standaard aantal punten dat een lid krijgt voor deze periodieke taak
+ *  - standaard aantal mensen dat deze periodieke taak moeten uitvoeren (bijv. 1 kwalikok, 2 hulpkoks, etc.)
+ *  - of deze periodieke taak als voorkeur kan worden opgegeven (bijv. kwalikok is niet voorkeurbaar)
  * 
  * Bij het koppelen van corvee-repetities aan een maaltijd-repetitie maakt het mogelijk om bij het aanmaken van
  * een maaltijd automatisch ook corveetaken aan te maken.
@@ -38,12 +39,13 @@ class CorveeRepetitie {
 	
 	private $functie_id; # foreign key crv_functie.id
 	
+	private $standaard_punten; # int 11
 	private $standaard_aantal; # int 11
 	private $voorkeurbaar; # boolean
 	
 	private $corvee_functie;
 	
-	public function __construct($crid=0, $mrid=null, $dag=null, $periode=null, $fid=0, $aantal=null, $voorkeur=null) {
+	public function __construct($crid=0, $mrid=null, $dag=null, $periode=null, $fid=0, $punten=0, $aantal=null, $voorkeur=null) {
 		$this->crv_repetitie_id = (int) $crid;
 		$this->setMaaltijdRepetitieId($mrid);
 		if ($dag === null) {
@@ -55,6 +57,7 @@ class CorveeRepetitie {
 		}
 		$this->setPeriodeInDagen($periode);
 		$this->setFunctieId($fid);
+		$this->setStandaardPunten($punten);
 		if ($aantal === null) {
 			$aantal = intval($GLOBALS['standaard_aantal_corveers']);
 		}
@@ -105,6 +108,9 @@ class CorveeRepetitie {
 	public function getFunctieId() {
 		return (int) $this->functie_id;
 	}
+	public function getStandaardPunten() {
+		return (int) $this->standaard_punten;
+	}
 	public function getStandaardAantal() {
 		return (int) $this->standaard_aantal;
 	}
@@ -138,6 +144,12 @@ class CorveeRepetitie {
 			throw new \Exception('Geen integer: functie id');
 		}
 		$this->functie_id = $int;
+	}
+	public function setStandaardPunten($int) {
+		if (!is_int($int) || $int < 0) {
+			throw new \Exception('Geen integer: standaard punten');
+		}
+		$this->standaard_punten = $int;
 	}
 	public function setStandaardAantal($int) {
 		if (!is_int($int) || $int < 0) {
