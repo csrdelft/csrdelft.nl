@@ -60,6 +60,10 @@ function taken_link_init() {
 			$(this).removeClass('get');
 			$(this).click(taken_knop_get);
 		}
+		else if ($(this).hasClass('range')) {
+			$(this).removeClass('range');
+			$(this).click(taken_submit_range);
+		}
 		if ($(this).hasClass('ruilen')) {
 			$(this).removeClass('ruilen');
 			$(this).attr('ondragover', 'taken_mag_ruilen(event);');
@@ -353,10 +357,13 @@ function taken_select_range(e) {
 	lastSelectedId = e.target.id;
 }
 function taken_submit_range(e) {
+	if (e.target.tagName.toUpperCase() === 'IMG') { // over an image inside of anchor
+		e.target = $(e.target).parent();
+	}
 	if ($(e.target).hasClass('confirm') && !confirm($(e.target).attr('title') +'.\n\nWeet u het zeker?')) {
 		return false;
 	}
-	$("#taken-tabel tbody tr td a input[name='"+$(e.target).attr('name')+"']:visible").each(function() {
+	$("input[name='"+$(e.target).attr('name')+"']:visible").each(function() {
 		if ($(this).prop('checked')) {
 			taken_ajax($(this).parent(), $(this).parent().attr('href'), taken_handle_response, $(this).parent().attr('post'));
 		}

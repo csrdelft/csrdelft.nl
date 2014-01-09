@@ -64,7 +64,7 @@
 {if $maaltijd->getIsVerwijderd()}
 		<a href="{$GLOBALS.taken_module}/verwijder/{$maaltijd->getMaaltijdId()}" title="Maaltijd definitief verwijderen" class="knop post confirm range"><input type=checkbox id="box-{$maaltijd->getMaaltijdId()}" name="del" /> {icon get="cross"}</a>
 {else}
-		<a href="{$GLOBALS.taken_module}/verwijder/{$maaltijd->getMaaltijdId()}" title="Maaltijd naar prullenbak verplaatsen" class="knop post range"><input type=checkbox id="box-{$maaltijd->getMaaltijdId()}" name="del" /> {icon get="bin_closed"}</a>
+		<a href="{$GLOBALS.taken_module}/verwijder/{$maaltijd->getMaaltijdId()}" title="Maaltijd naar prullenbak verplaatsen" class="knop post range"><input type=checkbox id="box-{$maaltijd->getMaaltijdId()}" name="del-maaltijd" /> {icon get="bin_closed"}</a>
 {/if}
 	</td>
 </tr>
