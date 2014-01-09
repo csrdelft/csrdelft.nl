@@ -25,6 +25,9 @@ class CorveeRepetitieFormView extends \SimpleHtml {
 			$functiePunten .= 'punten['. $functie->getFunctieId() .']='. $functie->getStandaardPunten() .';';
 			if ($fid === $functie->getFunctieId()) {
 				$functieSelectie[$fid] = 'arrow';
+				if ($punten === null) {
+					$punten = $functie->getStandaardPunten();
+				}
 			}
 		}
 		
