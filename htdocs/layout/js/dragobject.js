@@ -10,8 +10,8 @@ $(document).ready(function() {
 });
 
 var dragobjectID;
-var offsetX;
-var offsetY;
+var oldX;
+var oldY;
 
 function startDrag(e) {
 	e = e || window.event;
@@ -25,8 +25,8 @@ function startDrag(e) {
 		dragobjectID = $(e.target).closest('.dragobject').attr('id');
 	}
 	if (typeof dragobjectID !== 'undefined' && dragobjectID !== false) {
-		offsetX = mouseX(e);
-		offsetY = mouseY(e);
+		oldX = mouseX(e);
+		oldY = mouseY(e);
 		window.addEventListener('mousemove', mouseMoveHandler, true);
 	}
 }
@@ -35,16 +35,14 @@ function stopDrag(e) {
 }
 function mouseMoveHandler(e) {
 	e = e || window.event;
-	var x = mouseX(e);
-	var y = mouseY(e);
-	if (x !== offsetX || y !== offsetY) {
-		var l = $('#'+dragobjectID).offset().left - (document.documentElement.scrollLeft ? document.documentElement.scrollLeft : document.body.scrollLeft);
-		var t = $('#'+dragobjectID).offset().top - (document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop);
-		$('#'+dragobjectID).css('left', (l + x - offsetX) + 'px');
-		$('#'+dragobjectID).css('top', (t + y - offsetY) + 'px');
-		offsetX = x;
-		offsetY = y;
-	}
+	var newX = mouseX(e);
+	var newY = mouseY(e);
+	var oldL = $('#'+dragobjectID).offset().left - (document.documentElement.scrollLeft ? document.documentElement.scrollLeft : document.body.scrollLeft);
+	var oldT = $('#'+dragobjectID).offset().top - (document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop);
+	$('#'+dragobjectID).css('left', (oldL + newX - oldX) + 'px');
+	$('#'+dragobjectID).css('top', (oldT + newY - oldY) + 'px');
+	oldX = newX;
+	oldY = newY;
 }
 function mouseX(e) {
 	if (e.pageX) {

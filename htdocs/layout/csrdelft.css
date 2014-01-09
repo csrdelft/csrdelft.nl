@@ -578,16 +578,18 @@ div.msgnotify{
 /* ubb-hulp */
 div#ubbhulpverhaal{
 	display: none;
-	z-index: 999;
 	position: fixed;
-	left: 50px;
-	top: 50px;
+	top: 25px;
+	left: 25px;
+	z-index: 111;
 	width: 330px;
-	border: 1px solid #bbb;
-	margin-top: -13px;
 	padding: 5px;
+	border: 1px solid #bbb;
 	background-color: white;
 	text-align: left;
+}
+div#ubbhulpverhaal h2, div#ubbhulpverhaal p, div#ubbhulpverhaal ul{
+	margin-bottom: 5px;
 }
 span#ubbsluiten{
 	display: block;
