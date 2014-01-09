@@ -42,7 +42,7 @@ class RepetitieMaaltijdenFormView extends \SimpleHtml {
 			$fields['eind']->error = 'Moet na begindatum liggen';
 			return false;
 		}
-		return $this->_form->valid(null);
+		return $this->_form->valid();
 	}
 	
 	public function getValues() {

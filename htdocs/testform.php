@@ -42,7 +42,7 @@ class TestFormulierContent extends SimpleHTML{
 }
 
 
-if($form->valid(null)){
+if($form->valid()){
 	pr($form);
 }
 

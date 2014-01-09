@@ -34,7 +34,7 @@ class TaakFormView extends \SimpleHtml {
 		
 		$formFields['fid'] = new \SelectField('functie_id', $fid, 'Functie', $functieNamen, $functieSelectie);
 		$formFields['fid']->setOnChangeScript($functiePunten ."$('#field_punten').val(punten[this.value]);");
-		$formFields['lid'] = new \LidField('lid_id', $uid, 'Lid');
+		$formFields['lid'] = new \LidField('lid_id', $uid, 'Naam of lidnummer');
 		$formFields['lid']->title = 'Bij het wijzigen van het toegewezen lid worden ook de corveepunten aan het nieuwe lid gegeven.';
 		$formFields[] = new \DatumField('datum', $datum, 'Datum', date('Y')+2, date('Y')-2);
 		$formFields[] = new \IntField('punten', $punten, 'Punten', 10, 0);
@@ -69,7 +69,18 @@ class TaakFormView extends \SimpleHtml {
 		if (!is_int($this->_tid) || $this->_tid < 0) {
 			return false;
 		}
-		return $this->_form->valid(null);
+		$valid = $this->_form->valid();
+		$fields = $this->_form->getFields();
+		if ($fields['mid']->getValue() !== 0) {
+			try {
+				$maaltijd = \Taken\MLT\MaaltijdenModel::getMaaltijd($fields['mid']->getValue(), true);
+			}
+			catch (\Exception $e) {
+				$fields['mid']->error = 'Maaltijd bestaat niet.';
+				return false;
+			}
+		}
+		return $valid;
 	}
 	
 	public function getValues() {

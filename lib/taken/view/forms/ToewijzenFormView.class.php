@@ -77,7 +77,7 @@ class ToewijzenFormView extends \SimpleHtml {
 		if (!is_int($this->_taak->getTaakId()) || $this->_taak->getTaakId() <= 0) {
 			return false;
 		}
-		return $this->_form->valid(null);
+		return $this->_form->valid();
 	}
 	
 	public function getValues() {

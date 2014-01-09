@@ -88,7 +88,7 @@ class CorveeRepetitieFormView extends \SimpleHtml {
 		if (!is_int($this->_crid) || $this->_crid < 0) {
 			return false;
 		}
-		return $this->_form->valid(null);
+		return $this->_form->valid();
 	}
 	
 	public function getValues() {

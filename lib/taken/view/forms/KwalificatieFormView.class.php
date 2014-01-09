@@ -39,7 +39,7 @@ class KwalificatieFormView extends \SimpleHtml {
 		if (!is_int($this->_fid) || $this->_fid <= 0) {
 			return false;
 		}
-		return $this->_form->valid(null);
+		return $this->_form->valid();
 	}
 	
 	public function getValues() {

@@ -91,7 +91,7 @@ class MaaltijdRepetitieFormView extends \SimpleHtml {
 				return false;
 			}
 		}
-		return $this->_form->valid(null);
+		return $this->_form->valid();
 	}
 	
 	public function getValues() {

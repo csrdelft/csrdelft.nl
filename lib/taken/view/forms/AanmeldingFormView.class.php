@@ -47,7 +47,7 @@ class AanmeldingFormView extends \SimpleHtml {
 		if (!is_int($this->_mid) || $this->_mid <= 0) {
 			return false;
 		}
-		return $this->_form->valid(null);
+		return $this->_form->valid();
 	}
 	
 	public function getValues() {

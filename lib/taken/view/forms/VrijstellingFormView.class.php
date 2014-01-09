@@ -45,7 +45,7 @@ class VrijstellingFormView extends \SimpleHtml {
 	}
 	
 	public function validate() {
-		return $this->_form->valid(null);
+		return $this->_form->valid();
 	}
 	
 	public function getValues() {

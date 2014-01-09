@@ -122,7 +122,7 @@ class Formulier{
 	 * alle valid-functies krijgen een argument mee, wat kan wisselen per
 	 * gemaakt formulier.
 	 */
-	public function valid($extra){
+	public function valid($extra=null){
 		if(!$this->isPosted()){
 			$this->error='Formulier is niet compleet';
 			return false;

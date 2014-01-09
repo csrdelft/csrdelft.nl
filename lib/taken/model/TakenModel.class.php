@@ -203,10 +203,7 @@ class TakenModel {
 					$taak->setCorveeRepetitieId(null);
 					$taak->setFunctieId($fid);
 				}
-				if ($taak->getMaaltijdId() !== $mid) {
-					\Taken\MLT\MaaltijdenModel::getMaaltijd($mid, true);
-					$taak->setMaaltijdId($mid);
-				}
+				$taak->setMaaltijdId($mid);
 				$taak->setDatum($datum);
 				$taak->setPunten($punten);
 				$taak->setBonusMalus($bonus_malus);
