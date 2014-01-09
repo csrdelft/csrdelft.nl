@@ -464,6 +464,7 @@ div.visitekaartje div.uid {
 	color: #999;
 }
 div.visitekaartje div.envelop {
+	display: none;
 	float: right;
 	padding-right: 5px;
 }
