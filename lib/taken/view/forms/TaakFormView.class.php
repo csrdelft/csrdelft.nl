@@ -18,15 +18,18 @@ class TaakFormView extends \SimpleHtml {
 		$this->_tid = $tid;
 		
 		$functieNamen = FunctiesModel::getAlleFuncties(true); // grouped by fid
+		$functiePunten = 'var punten=[];';
 		$functieSelectie = array();
 		foreach ($functieNamen as $functie) {
 			$functieNamen[$functie->getFunctieId()] = $functie->getNaam();
+			$functiePunten .= 'punten['. $functie->getFunctieId() .']='. $functie->getStandaardPunten() .';';
 			if ($fid === $functie->getFunctieId()) {
 				$functieSelectie[$fid] = 'arrow';
 			}
 		}
 		
-		$formFields[] = new \SelectField('functie_id', $fid, 'Functie', $functieNamen, $functieSelectie);
+		$formFields['fid'] = new \SelectField('functie_id', $fid, 'Functie', $functieNamen, $functieSelectie);
+		$formFields['fid']->setOnChangeScript($functiePunten ."$('#field_standaard_punten').val(punten[this.value]);");
 		$formFields['lid'] = new \LidField('lid_id', $uid, 'Lid');
 		$formFields['lid']->title = 'Bij het wijzigen van het toegewezen lid worden ook de corveepunten aan het nieuwe lid gegeven.';
 		$formFields[] = new \DatumField('datum', $datum, 'Datum', date('Y')+2, date('Y')-2);

@@ -18,9 +18,11 @@ class CorveeRepetitieFormView extends \SimpleHtml {
 		$this->_crid = $crid;
 		
 		$functieNamen = FunctiesModel::getAlleFuncties(true); // grouped by fid
+		$functiePunten = 'var punten=[];';
 		$functieSelectie = array();
 		foreach ($functieNamen as $functie) {
 			$functieNamen[$functie->getFunctieId()] = $functie->getNaam();
+			$functiePunten .= 'punten['. $functie->getFunctieId() .']='. $functie->getStandaardPunten() .';';
 			if ($fid === $functie->getFunctieId()) {
 				$functieSelectie[$fid] = 'arrow';
 			}
@@ -36,7 +38,8 @@ class CorveeRepetitieFormView extends \SimpleHtml {
 			}
 		}
 		
-		$formFields[] = new \SelectField('functie_id', $fid, 'Functie', $functieNamen, $functieSelectie);
+		$formFields['fid'] = new \SelectField('functie_id', $fid, 'Functie', $functieNamen, $functieSelectie);
+		$formFields['fid']->setOnChangeScript($functiePunten ."$('#field_standaard_punten').val(punten[this.value]);");
 		$formFields[] = new \WeekdagField('dag_vd_week', $dag, 'Dag v/d week');
 		$formFields['dag'] = new \IntField('periode_in_dagen', $periode, 'Periode (in dagen)', 183, 0);
 		$formFields['dag']->title = 'Als de periode ongelijk is aan 7 is dit de start-dag bij het aanmaken van periodiek corvee';

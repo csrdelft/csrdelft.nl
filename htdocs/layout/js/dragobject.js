@@ -38,13 +38,15 @@ function stopDrag(e) {
 		return;
 	}
 	window.removeEventListener('mousemove', mouseMoveHandler, true);
-	$.post('/tools/dragobject.php', {
-		id: dragobjectID,
-		coords: {
-			left: dragobjLeft(),
-			top: dragobjTop()
-		}
-	});
+	if ($('#'+dragobjectID).hasClass('remember')) {
+		$.post('/tools/dragobject.php', {
+			id: dragobjectID,
+			coords: {
+				left: dragobjLeft(),
+				top: dragobjTop()
+			}
+		});
+	}
 	dragobjectID = false;
 }
 function mouseMoveHandler(e) {

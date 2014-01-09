@@ -33,14 +33,11 @@ class CorveeFunctie {
 	
 	private $gekwalificeerden;
 	
-	public function __construct($fid=0, $naam='', $afk='', $email='', $punten=null, $kwali=null) {
+	public function __construct($fid=0, $naam='', $afk='', $email='', $punten=0, $kwali=null) {
 		$this->functie_id = (int) $fid;
 		$this->setNaam($naam);
 		$this->setAfkorting($afk);
 		$this->setEmailBericht($email);
-		if ($punten === null) {
-			$punten = intval($GLOBALS['standaard_functie_punten']);
-		}
 		$this->setStandaardPunten($punten);
 		if ($kwali === null) {
 			$kwali = (bool) $GLOBALS['standaard_kwalificatie'];

@@ -30,7 +30,6 @@ class InstellingenModel {
 		'standaard_abonneerbaar' => '1',
 		'standaard_voorkeurbaar' => '1',
 		'standaard_kwalificatie' => '0',
-		'standaard_functie_punten' => '1',
 		'standaard_aantal_corveers' => '1',
 		'standaard_vrijstelling_percentage' => '100',
 		'standaard_maaltijdaanvang' => '18:00',
