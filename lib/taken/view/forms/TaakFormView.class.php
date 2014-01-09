@@ -29,7 +29,7 @@ class TaakFormView extends \SimpleHtml {
 		}
 		
 		$formFields['fid'] = new \SelectField('functie_id', $fid, 'Functie', $functieNamen, $functieSelectie);
-		$formFields['fid']->setOnChangeScript($functiePunten ."$('#field_standaard_punten').val(punten[this.value]);");
+		$formFields['fid']->setOnChangeScript($functiePunten ."$('#field_punten').val(punten[this.value]);");
 		$formFields['lid'] = new \LidField('lid_id', $uid, 'Lid');
 		$formFields['lid']->title = 'Bij het wijzigen van het toegewezen lid worden ook de corveepunten aan het nieuwe lid gegeven.';
 		$formFields[] = new \DatumField('datum', $datum, 'Datum', date('Y')+2, date('Y')-2);
