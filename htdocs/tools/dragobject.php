@@ -8,6 +8,4 @@ if (\LoginLid::instance()->hasPermission('P_LEDEN_READ')) {
 	$coords = filter_input(INPUT_POST, 'coords', FILTER_SANITIZE_STRING, FILTER_REQUIRE_ARRAY);
 	
 	$_SESSION['dragobject'][$id] = $coords;
-	
-	echo print_r($_SESSION['dragobject']);
 }
