@@ -34,10 +34,13 @@ function startDrag(e) {
 	}
 }
 function stopDrag(e) {
+	if (!dragobjectID) {
+		return;
+	}
 	window.removeEventListener('mousemove', mouseMoveHandler, true);
-	$.post('/session.php', {
-		set: "dragobject_" + dragobjectID,
-		array: {
+	$.post('/tools/dragobject.php', {
+		id: dragobjectID,
+		coords: {
 			left: dragobjLeft(),
 			top: dragobjTop()
 		}

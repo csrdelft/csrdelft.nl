@@ -302,7 +302,6 @@ htdocs/menubeheer.php -text
 htdocs/pagina.php -text
 htdocs/pauper.php -text
 htdocs/robots.txt -text
-htdocs/session.php -text
 htdocs/soccie/count.png -text
 htdocs/soccie/index.php -text
 htdocs/soccie/logo.png -text
@@ -331,6 +330,7 @@ htdocs/tools/alphabanner/tegel_leeg.jpg -text
 htdocs/tools/alphabanner/tegel_start.jpg -text
 htdocs/tools/corvee_mailer.php -text
 htdocs/tools/downloadalbum.php -text
+htdocs/tools/dragobject.php -text
 htdocs/tools/eetplan.php -text
 htdocs/tools/flushcache.php -text
 htdocs/tools/index.php -text
@@ -2991,6 +2991,7 @@ lib/documenten/document.class.php -text
 lib/documenten/documentcontent.class.php -text
 lib/documenten/documentcontroller.class.php -text
 lib/documenten/documentuploader.class.php -text
+lib/dragobject.php -text
 lib/eetplan.class.php -text
 lib/eetplancontent.class.php -text
 lib/formulier.class.php -text

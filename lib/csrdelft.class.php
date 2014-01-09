@@ -190,14 +190,10 @@ class csrdelft extends SimpleHTML {
 				if (Instelling::get('layout_minion') == 'ja') {
 					$this->addStylesheet('minion.css');
 					$this->addScript('minion.js');
-					if (array_key_exists('dragobject_minion', $_SESSION)) {
-						$top = $_SESSION['dragobject_minion']['top'];
-						$left = $_SESSION['dragobject_minion']['left'];
-					}
-					if (!isset($top) || !isset($left) || $top < 0 || $left < 0) {
-						$top = 40;
-						$left = 40;
-					}
+					$top = 40;
+					$left = 40;
+					require_once 'dragobject.php';
+					getDragObjectCoords('minion', $top, $left);
 					$smarty->assign('top', $top);
 					$smarty->assign('left', $left);
 					$smarty->assign('minion', $smarty->fetch('minion.tpl'));
