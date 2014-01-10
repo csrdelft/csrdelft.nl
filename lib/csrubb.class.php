@@ -85,7 +85,32 @@ class CsrUBB extends eamBBParser{
 		}
 		return $result;
 	}
+/*todo
+	function ubb_mail($parameters) {
+		return $this->ubb_email($parameters);
+	}
 
+	function ubb_email($parameters){
+		$content = $this->parseArray(array('[/email]', '[/mail]'), array());
+		if (isset($parameters['email'])) { // [email=
+			$email = $parameters['email'];
+		}
+		elseif (isset($parameters['mail'])) { // [mail=
+			$email = $parameters['mail'];
+		}
+		else { // [email][/email]
+			$email = $content;
+		}
+		// only valid patterns
+		if (!email_like($email)){
+			return '[Ongeldig e-mail-adres]';
+		}
+		$result = '<a href="mailto:'. $email .'">'. $content .'</a>';
+		// spamprotectie: rot13 de email-tags, en voeg javascript toe om dat weer terug te rot13-en.
+		$result = '<script>document.write("'. str_rot13(addslashes($result)) .'".replace(/[a-zA-Z]/g, function(c){ return String.fromCharCode((c<="Z"?90:122)>=(c=c.charCodeAt(0)+13)?c:c-26);}));</script>';
+		return $result;
+	}
+*/
 	function ubb_neuzen($arguments=array()){
 		if (is_array($arguments)) {
 			$content = $this->parseArray(array('[/neuzen]'), array());
