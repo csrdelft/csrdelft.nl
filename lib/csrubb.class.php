@@ -138,7 +138,7 @@ class CsrUBB extends eamBBParser {
 					$text.=' van ' . $lid->getNaamLink('user', 'link');
 				}
 			} else if (array_key_exists('url', $arguments) AND startsWith($arguments['url'], 'http')) {
-				$text.=' van <a href="' . $arguments['url'] . '" target="_blank" class="external">' . $citaat . '</a>';
+				$text.=' van website <a href="' . $arguments['url'] . '" title="' . $arguments['url'] . '" target="_blank" class="external">' . $citaat . '</a>';
 			} elseif ($citaat !== '') {
 				$text.=' van ' . $citaat;
 			}
