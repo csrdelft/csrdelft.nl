@@ -7,13 +7,14 @@ require_once 'MVC/model/PersistenceModel.class.php';
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  *
- * CRUD by means of PHP Reflection.
+ * Provides pagination on top of the persistence model.
  * 
  */
 abstract class PagingModel extends PersistenceModel {
 
 	/**
 	 * Start at 0
+	 * 
 	 * @var int
 	 */
 	protected $current_page_number;
@@ -34,6 +35,7 @@ abstract class PagingModel extends PersistenceModel {
 
 	/**
 	 * Start at 0
+	 * 
 	 * @return int
 	 */
 	public function getPageNumber() {
@@ -68,6 +70,7 @@ abstract class PagingModel extends PersistenceModel {
 
 	/**
 	 * Start at 0
+	 * 
 	 * @param int $number
 	 * @return boolean
 	 */

@@ -8,12 +8,12 @@
  */
 abstract class PersistentEntity {
 
-	public abstract static function getPrimaryKey();
-
-	public abstract static function getPersistentFields();
+	public static $table_name;
+	public static $persistent_fields;
+	public static $primary_key;
 
 	public function getPersistingValues() {
-		$fields = self::getPersistingFields();
+		$fields = $this::$persistent_fields;
 		foreach ($fields as $key => $value) {
 			$fields[$key] = $this->$key;
 		}

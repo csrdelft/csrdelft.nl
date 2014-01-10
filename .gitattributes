@@ -307,6 +307,7 @@ htdocs/soccie/index.php -text
 htdocs/soccie/logo.png -text
 htdocs/su.php -text
 htdocs/taken.php -text
+htdocs/test.php -text
 htdocs/testform.php -text
 htdocs/tools/.htaccess -text
 htdocs/tools/ajax/login.php -text

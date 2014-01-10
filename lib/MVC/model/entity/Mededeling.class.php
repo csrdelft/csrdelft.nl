@@ -31,28 +31,24 @@ class Mededeling extends PersistentEntity {
 	 * @var string
 	 */
 	public $zichtbaar_voor = 'niemand';
-	public $zichtbaar_van = null;
+	public $zichtbaar_vanaf = '0000-00-00 00:00:00';
 	public $zichtbaar_tot = null;
 	public $prioriteit = 0;
 	public $afbeelding_url = null;
-	private static $_persist = array(
+	/**
+	 * Database
+	 */
+	public static $table_name = 'mededelingen';
+	public static $persistent_fields = array(
 		'id' => 'int(11) NOT NULL AUTO_INCREMENT',
 		'type' => 'varchar(255) NOT NULL',
 		'tekst' => 'text NOT NULL',
 		'zichtbaar_voor' => 'varchar(255) NOT NULL',
-		'zichtbaar_van' => 'datetime NOT NULL',
+		'zichtbaar_vanaf' => 'datetime NOT NULL',
 		'zichtbaar_tot' => 'datetime',
 		'prioriteit' => 'int(11) NOT NULL',
 		'afbeelding_url' => 'text');
-	private static $_primary_key = array('id');
-
-	public static function getPersistentFields() {
-		return self::$_persist;
-	}
-
-	public static function getPrimaryKey() {
-		return self::$_primary_key;
-	}
+	public static $primary_key = array('id');
 
 }
 

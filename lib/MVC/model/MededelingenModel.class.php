@@ -12,7 +12,7 @@ require_once 'MVC/model/entity/Mededeling.class.php';
 class MededelingenModel extends PagingModel {
 
 	public function __construct() {
-		parent::__construct('Mededeling', 'mededelingen');
+		parent::__construct('Mededeling');
 	}
 
 	public function fetch($where = null, array $params = array(), $assoc = false) {
@@ -43,7 +43,7 @@ class MededelingenModel extends PagingModel {
 		}
 	}
 
-	public function delete($id) {
+	public function remove($id) {
 		parent::delete('id=?', array($id));
 	}
 

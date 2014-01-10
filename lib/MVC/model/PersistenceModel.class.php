@@ -1,5 +1,7 @@
 <?php
 
+require_once 'MVC/model/CsrPdo.class.php';
+
 /**
  * ReflectionModel.class.php
  * 
@@ -10,17 +12,16 @@
  */
 abstract class PersistenceModel {
 
-	private $_class_name;
+	private $class_name;
 	protected $table_name;
 	protected $columns;
 	protected $primary_key;
 
-	public function __construct($class_name, $table_name) {
-		$this->_class_name = $class_name;
-		$this->table_name = $table_name;
-		$this->columns = array_keys(call_user_func(array($class_name, 'getPersistentFields')));
-		$this->primary_key = call_user_func(array($class_name, 'getPrimaryKey'));
-		//$this->create_table();
+	public function __construct($class_name) {
+		$this->class_name = $class_name;
+		$this->table_name = $class_name::$table_name;
+		$this->columns = array_keys($class_name::$persistent_fields);
+		$this->primary_key = $class_name::$primary_key;
 	}
 
 	protected function fetchOne($where, array $params) {
@@ -55,7 +56,7 @@ abstract class PersistenceModel {
 		$db = CsrPdo::instance();
 		$query = $db->prepare($sql, $params);
 		$query->execute($params);
-		return $query->fetchAll(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, $this->_class_name);
+		return $query->fetchAll(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, $this->class_name);
 	}
 
 	/**
@@ -95,9 +96,9 @@ abstract class PersistenceModel {
 		$fields = array();
 		foreach ($properties as $key => $value) {
 			if (!array_key_exists($key, $this->primary_key)) { // never change primary key
-				$fields[] = $key . ' = :' . $this->_class_name . $key;
+				$fields[] = $key . ' = :' . $this->class_name . $key;
 			}
-			$params[':' . $this->_class_name . $key] = $value; // named params
+			$params[':' . $this->class_name . $key] = $value; // named params
 		}
 		$sql .= implode(', ', $fields);
 		$sql .= ' WHERE ' . $where;
@@ -124,16 +125,16 @@ abstract class PersistenceModel {
 	}
 
 	/**
-	 * Single or multiple columns as primary key.
+	 * Convenience method.
 	 * 
 	 */
 	protected function create_table() {
-		$fields = call_user_func(array($this->_class_name, 'getPersistentFields'));
 		$sql = 'CREATE TABLE ' . $this->table_name . ' (';
-		foreach ($fields as $key => $value) {
+		$class_name = $this->class_name;
+		foreach ($class_name::$persistent_fields as $key => $value) {
 			$sql .= $key . ' ' . $value . ', ';
 		}
-		$sql = ') PRIMARY KEY (' . implode(', ', $this->primary_key) . ') ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1';
+		$sql .= 'PRIMARY KEY (' . implode(', ', $this->primary_key) . ')) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1';
 		$db = CsrPdo::instance();
 		$query = $db->prepare($sql, array());
 		$query->execute(array());
