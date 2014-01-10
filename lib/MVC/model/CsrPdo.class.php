@@ -1,5 +1,7 @@
 <?php
 
+require_once 'MVC/model/CsrPdo.class.php';
+
 /**
  * CsrPdo.class.php
  * 
@@ -10,7 +12,7 @@ class CsrPdo extends PDO {
 
 	static private $_instance;
 
-	public static function &instance() {
+	public static function instance() {
 		if (!isset(self::$_instance)) {
 
 			if (defined('ETC_PATH')) {
