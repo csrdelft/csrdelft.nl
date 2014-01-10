@@ -55,12 +55,19 @@ class Groepcontroller extends Controller{
 			$this->content->invokeRefresh(CSR_ROOT.'actueel/groepen/', 'We geven geen 0-groepen weer! (Groepcontroller::__construct())');
 		}
 
+		$this->action = 'standaard';
 		$this->performAction();
 	}
 
-	public function default(){
+	public function standaard(){
 		$this->content->setAction('view');
 	}
+
+	protected function hasPermission() {
+		// wordt afgehandeld per actie
+		return true;
+	}
+
 	public function getUrl($action=null){
 		$url=CSR_ROOT.'actueel/groepen/'.$this->groep->getType()->getNaam().'/'.$this->groep->getId().'/';
 		if($action!=null AND $this->hasAction($action)){

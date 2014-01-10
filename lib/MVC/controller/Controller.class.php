@@ -14,26 +14,32 @@
  */
 abstract class Controller {
 
+	private $kvp = false;
 	private $queryparts = array();
-	private $action = 'geentoegang';
+	protected $action = '';
 	protected $content = null;
 
 	public function __construct($querystring) {
-		$kvp = strpos($querystring, '?');
-		if ($kvp !== FALSE) { // KVP
+		$this->kvp = strpos($querystring, '?');
+		if ($this->kvp === false) { // REST
+			$this->queryparts = explode('/', $querystring);
+		} else { // KVP
 			$querystring = substr($querystring, $kvp);
 			$queryparts = explode('&', $querystring);
 			foreach ($queryparts as $i => $part) {
 				$this->queryparts[$i] = explode('=', $part);
 			}
 		}
-		else { // REST
-			$this->queryparts = explode('/', $querystring);
-		}
 	}
 
 	protected function hasParam($key) {
-		return isset($this->queryparts[$key]) && isset($this->queryparts[$key]);
+		if (!array_key_exists($key, $this->queryparts) || !isset($this->queryparts[$key])) {
+			return false;
+		}
+		if ($this->kvp === false) {
+			return $this->queryparts[$key] !== '';
+		}
+		return true;
 	}
 
 	protected function getParam($key) {
@@ -54,18 +60,16 @@ abstract class Controller {
 		return method_exists($this, $action);
 	}
 
-	abstract protected function hasPermission($action);
+	abstract protected function hasPermission();
 
-	protected function performAction(array $args) {
-		if ($this->hasAction($this->action)) {
-			if (!$this->hasPermission($this->action)) {
-				$this->action = 'geentoegang';
-			}
-			call_user_func_array(array($this, $this->action), $args);
+	protected function performAction(array $args = array()) {
+		if (!$this->hasPermission()) {
+			$this->action = 'geentoegang';
 		}
-		else {
+		if (!$this->hasAction($this->action)) {
 			throw new Exception('Action undefined: ' . $this->action);
 		}
+		call_user_func_array(array($this, $this->action), $args);
 	}
 
 	protected function geentoegang() {

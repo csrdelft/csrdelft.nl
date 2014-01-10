@@ -11,7 +11,7 @@ require_once 'MVC/controller/Controller.class.php';
  * door middel van een access control list.
  * 
  */
-class ACLController extends Controller {
+abstract class ACLController extends Controller {
 
 	/**
 	 * Example:
@@ -25,8 +25,8 @@ class ACLController extends Controller {
 	 */
 	protected $acl = array();
 
-	protected function hasPermission($action) {
-		return array_key_exists($action, $this->acl) && isset($this->acl[$action]) && LoginLid::instance()->hasPermission($this->acl[$action]);
+	protected function hasPermission() {
+		return array_key_exists($this->action, $this->acl) && isset($this->acl[$this->action]) && LoginLid::instance()->hasPermission($this->acl[$this->action]);
 	}
 
 }

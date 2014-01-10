@@ -28,7 +28,7 @@ class MaalCieSaldiController extends \ACLController {
 		if ($this->hasParam(2)) {
 			$this->action = $this->getParam(2);
 		}
-		$this->performAction(array());
+		$this->performAction();
 	}
 	
 	public function beheer() {
