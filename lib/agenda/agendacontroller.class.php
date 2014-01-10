@@ -37,6 +37,7 @@ class AgendaController extends AclController {
 			case 'maand':
 			case 'jaar':
 			case 'icalendar':
+			case 'courant':
 				return true;
 
 			case 'toevoegen':
@@ -187,11 +188,10 @@ class AgendaController extends AclController {
 		}
 	}
 
-	function courant() {
+	public function courant() {
 		require_once 'courant/courant.class.php';
 		if (Courant::magBeheren()) {
 			$content = new AgendaCourantContent($this->agenda, 2);
-
 			$content->view();
 		}
 		//ajax-request, we doen zelf de $content->view() hier
