@@ -10,7 +10,7 @@
 
 require_once 'agenda.class.php';
 require_once 'agendacontent.class.php';
-require_once 'controller.class.php';
+require_once 'MVC/controller/Controller.class.php';
 
 class AgendaController extends Controller {
 

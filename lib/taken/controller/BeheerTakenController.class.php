@@ -1,7 +1,7 @@
 <?php
 namespace Taken\CRV;
 
-require_once 'aclcontroller.class.php';
+require_once 'ACLController.class.php';
 require_once 'taken/model/TakenModel.class.php';
 require_once 'taken/model/CorveeRepetitiesModel.class.php';
 require_once 'taken/view/BeheerTakenView.class.php';

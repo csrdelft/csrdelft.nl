@@ -1,6 +1,6 @@
 <?php
 require_once 'groepen.class.php';
-require_once 'controller.class.php';
+require_once 'MVC/controller/Controller.class.php';
 
 /**
  * class.groepcontroller.php	| 	Jan Pieter Waagmeester (jieter@jpwaag.com)

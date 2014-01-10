@@ -1,5 +1,5 @@
 <?php
-require_once 'controller.class.php';
+require_once 'MVC/controller/Controller.class.php';
 require_once 'documenten/document.class.php';
 require_once 'documenten/categorie.class.php';
 require_once 'documenten/documentuploader.class.php';

@@ -2562,6 +2562,9 @@ htdocs_confide/mysql.class.php -text
 htdocs_confide/mysql.ini.sample -text
 htdocs_confide/streeplijstrapportage.php -text
 images/famfamfam/.index -text
+lib/MVC/controller/ACLController.class.php -text
+lib/MVC/controller/Controller.php -text
+lib/MVC/model/ReflectionModel.class.php -text
 lib/Zend/Exception.php -text
 lib/Zend/Gdata.php -text
 lib/Zend/Gdata/App.php -text
@@ -2915,7 +2918,6 @@ lib/Zend/Validate/Hostname/Jp.php -text
 lib/Zend/Validate/Interface.php -text
 lib/Zend/Validate/Ip.php -text
 lib/Zend/Version.php -text
-lib/aclcontroller.class.php -text
 lib/agenda/agenda.class.php -text
 lib/agenda/agendacontent.class.php -text
 lib/agenda/agendacontroller.class.php -text
@@ -2975,7 +2977,6 @@ lib/chart/examples/rgb.php -text
 lib/chart/rgb.php -text
 lib/common.functions.php -text
 lib/configuratie.include.php -text
-lib/controller.class.php -text
 lib/courant/courant.class.php -text
 lib/courant/courantarchiefcontent.class.php -text
 lib/courant/courantbeheercontent.class.php -text

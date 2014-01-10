@@ -1,7 +1,7 @@
 <?php
 namespace Taken\CRV;
 
-require_once 'aclcontroller.class.php';
+require_once 'ACLController.class.php';
 
 /**
  * ModuleController.class.php	| 	P.W.G. Brussee (brussee@live.nl)

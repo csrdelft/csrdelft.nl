@@ -1,5 +1,5 @@
 <?php
-require_once 'aclcontroller.class.php';
+require_once 'ACLController.class.php';
 require_once 'menu/beheer/MenusModel.class.php';
 require_once 'menu/beheer/BeheerMenusView.class.php';
 
