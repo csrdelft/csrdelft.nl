@@ -2563,7 +2563,7 @@ htdocs_confide/mysql.ini.sample -text
 htdocs_confide/streeplijstrapportage.php -text
 images/famfamfam/.index -text
 lib/MVC/controller/ACLController.class.php -text
-lib/MVC/controller/Controller.php -text
+lib/MVC/controller/Controller.class.php -text
 lib/MVC/model/ReflectionModel.class.php -text
 lib/Zend/Exception.php -text
 lib/Zend/Gdata.php -text

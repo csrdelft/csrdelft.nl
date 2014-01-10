@@ -33,10 +33,10 @@ class MijnCorveeController extends \ACLController {
 		if ($this->hasParam(3)) {
 			$arg = $this->getParam(3);
 		}
-		$this->performAction($arg);
+		$this->performAction(array($arg));
 	}
 	
-	public function action_mijn() {
+	public function mijn() {
 		$taken = TakenModel::getKomendeTakenVoorLid(\LoginLid::instance()->getUid());
 		$rooster = TakenModel::getRoosterMatrix($taken);
 		$functies = FunctiesModel::getAlleFuncties(true);
@@ -48,7 +48,7 @@ class MijnCorveeController extends \ACLController {
 		$this->content->addScript('taken.js');
 	}
 	
-	public function action_rooster($arg=null) {
+	public function rooster($arg=null) {
 		$toonverleden = false;
 		if ($arg === 'verleden') {
 			$taken = TakenModel::getVerledenTaken();

@@ -32,10 +32,10 @@ class BeheerInstellingenController extends \ACLController {
 		if ($this->hasParam(3)) {
 			$key = $this->getParam(3);
 		}
-		$this->performAction($key);
+		$this->performAction(array($key));
 	}
 	
-	public function action_beheer() {
+	public function beheer() {
 		$instellingen = InstellingenModel::getAlleInstellingen();
 		$this->content = new BeheerInstellingenView($instellingen);
 		$this->content = new \csrdelft($this->getContent());
@@ -43,13 +43,13 @@ class BeheerInstellingenController extends \ACLController {
 		$this->content->addScript('taken.js');
 	}
 	
-	public function action_bewerk($key) {
+	public function bewerk($key) {
 		$instelling = InstellingenModel::getInstelling($key);
 		$this->content = new InstellingFormView($instelling->getInstellingId(), $instelling->getWaarde()); // fetches POST values itself
 	}
 	
-	public function action_opslaan($key) {
-		$this->action_bewerk($key);
+	public function opslaan($key) {
+		$this->bewerk($key);
 		if ($this->content->validate()) {
 			$values = $this->content->getValues();
 			$instelling = InstellingenModel::saveInstelling($values['instelling_id'], $values['waarde']);
@@ -57,7 +57,7 @@ class BeheerInstellingenController extends \ACLController {
 		}
 	}
 	
-	public function action_reset($key) {
+	public function reset($key) {
 		InstellingenModel::verwijderInstelling($key);
 		$instelling = InstellingenModel::getInstelling($key);
 		$this->content = new BeheerInstellingenView($instelling);

@@ -38,12 +38,12 @@ class BeheerFunctiesController extends \ACLController {
 		if ($this->hasParam(3)) {
 			$fid = intval($this->getParam(3));
 		}
-		$this->performAction($fid);
+		$this->performAction(array($fid));
 	}
 	
-	public function action_beheer($fid=null) {
+	public function beheer($fid=null) {
 		if (is_int($fid) && $fid > 0) {
-			$this->action_bewerk($fid);
+			$this->bewerk($fid);
 		}
 		$functies = FunctiesModel::getAlleFuncties();
 		KwalificatiesModel::loadKwalificatiesVoorFuncties($functies);
@@ -55,19 +55,19 @@ class BeheerFunctiesController extends \ACLController {
 		$this->content->addScript('taken.js');
 	}
 	
-	public function action_nieuw() {
+	public function nieuw() {
 		$functie = new CorveeFunctie();
 		$this->content = new FunctieFormView($functie->getFunctieId(), $functie->getNaam(), $functie->getAfkorting(), $functie->getEmailBericht(), $functie->getStandaardPunten(), $functie->getIsKwalificatieBenodigd()); // fetches POST values itself
 	}
 	
-	public function action_bewerk($fid) {
+	public function bewerk($fid) {
 		$functie = FunctiesModel::getFunctie($fid);
 		$this->content = new FunctieFormView($functie->getFunctieId(), $functie->getNaam(), $functie->getAfkorting(), $functie->getEmailBericht(), $functie->getStandaardPunten(), $functie->getIsKwalificatieBenodigd()); // fetches POST values itself
 	}
 	
-	public function action_opslaan($fid) {
+	public function opslaan($fid) {
 		if ($fid > 0) {
-			$this->action_bewerk($fid);
+			$this->bewerk($fid);
 		}
 		else {
 			$this->content = new FunctieFormView($fid); // fetches POST values itself
@@ -80,12 +80,12 @@ class BeheerFunctiesController extends \ACLController {
 		}
 	}
 	
-	public function action_verwijder($fid) {
+	public function verwijder($fid) {
 		FunctiesModel::verwijderFunctie($fid);
 		$this->content = new BeheerFunctiesView($fid);
 	}
 	
-	public function action_kwalificeer($fid) {
+	public function kwalificeer($fid) {
 		$form = new KwalificatieFormView($fid); // fetches POST values itself
 		if ($form->validate()) {
 			$values = $form->getValues();
@@ -99,7 +99,7 @@ class BeheerFunctiesController extends \ACLController {
 		}
 	}
 	
-	public function action_dekwalificeer($fid) {
+	public function dekwalificeer($fid) {
 		$uid = filter_input(INPUT_POST, 'voor_lid', FILTER_SANITIZE_STRING);
 		if (!\Lid::exists($uid)) {
 			throw new \Exception('Lid bestaat niet: $uid ='. $uid);

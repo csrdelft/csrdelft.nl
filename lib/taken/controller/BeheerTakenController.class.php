@@ -1,7 +1,7 @@
 <?php
 namespace Taken\CRV;
 
-require_once 'ACLController.class.php';
+require_once 'MVC/controller/ACLController.class.php';
 require_once 'taken/model/TakenModel.class.php';
 require_once 'taken/model/CorveeRepetitiesModel.class.php';
 require_once 'taken/view/BeheerTakenView.class.php';
@@ -47,12 +47,12 @@ class BeheerTakenController extends \ACLController {
 		if ($this->hasParam(3)) {
 			$tid = intval($this->getParam(3));
 		}
-		$this->performAction($tid);
+		$this->performAction(array($tid));
 	}
 	
-	public function action_beheer($tid=null, $mid=null) {
+	public function beheer($tid=null, $mid=null) {
 		if (is_int($tid) && $tid > 0) {
-			$this->action_bewerk($tid);
+			$this->bewerk($tid);
 		}
 		elseif (is_int($mid) && $mid > 0) {
 			$maaltijd = \Taken\MLT\MaaltijdenModel::getMaaltijd($mid, true);
@@ -70,18 +70,18 @@ class BeheerTakenController extends \ACLController {
 		$this->content->addScript('taken.js');
 	}
 	
-	public function action_maaltijd($mid) {
-		$this->action_beheer(null, $mid);
+	public function maaltijd($mid) {
+		$this->beheer(null, $mid);
 	}
 	
-	public function action_prullenbak() {
+	public function prullenbak() {
 		$this->content = new BeheerTakenView(TakenModel::getVerwijderdeTaken(), null, true);
 		$this->content = new \csrdelft($this->getContent());
 		$this->content->addStylesheet('taken.css');
 		$this->content->addScript('taken.js');
 	}
 	
-	public function action_herinneren() {
+	public function herinneren() {
 		require_once 'taken/model/HerinneringenModel.class.php';
 		$verstuurd_errors = HerinneringenModel::stuurHerinneringen();
 		$verstuurd = $verstuurd_errors[0];
@@ -106,7 +106,7 @@ class BeheerTakenController extends \ACLController {
 		\SimpleHTML::invokeRefresh($GLOBALS['taken_module']);
 	}
 	
-	public function action_nieuw($mid=null) {
+	public function nieuw($mid=null) {
 		if ($mid !== null) {
 			$maaltijd = \Taken\MLT\MaaltijdenModel::getMaaltijd($mid);
 			$beginDatum = $maaltijd->getDatum();
@@ -140,14 +140,14 @@ class BeheerTakenController extends \ACLController {
 		}
 	}
 	
-	public function action_bewerk($tid) {
+	public function bewerk($tid) {
 		$taak = TakenModel::getTaak($tid);
 		$this->content = new TaakFormView($taak->getTaakId(), $taak->getFunctieId(), $taak->getLidId(), $taak->getCorveeRepetitieId(), $taak->getMaaltijdId(), $taak->getDatum(), $taak->getPunten(), $taak->getBonusMalus()); // fetches POST values itself
 	}
 	
-	public function action_opslaan($tid) {
+	public function opslaan($tid) {
 		if ($tid > 0) {
-			$this->action_bewerk($tid);
+			$this->bewerk($tid);
 		}
 		else {
 			$this->content = new TaakFormView($tid); // fetches POST values itself
@@ -166,17 +166,17 @@ class BeheerTakenController extends \ACLController {
 		}
 	}
 	
-	public function action_verwijder($tid) {
+	public function verwijder($tid) {
 		TakenModel::verwijderTaak($tid);
 		$this->content = new BeheerTakenView($tid);
 	}
 	
-	public function action_herstel($tid) {
+	public function herstel($tid) {
 		$taak = TakenModel::herstelTaak($tid);
 		$this->content = new BeheerTakenView($taak->getTaakId());
 	}
 	
-	public function action_toewijzen($tid) {
+	public function toewijzen($tid) {
 		$taak = TakenModel::getTaak($tid);
 		$formField = new \LidField('lid_id', null, null, 'leden'); // fetches POST values itself
 		if ($formField->valid()) {
@@ -197,33 +197,33 @@ class BeheerTakenController extends \ACLController {
 		}
 	}
 	
-	public function action_puntentoekennen($tid) {
+	public function puntentoekennen($tid) {
 		$taak = TakenModel::getTaak($tid);
 		TakenModel::puntenToekennen($taak);
 		$this->content = new BeheerTakenView($taak);
 	}
 	
-	public function action_puntenintrekken($tid) {
+	public function puntenintrekken($tid) {
 		$taak = TakenModel::getTaak($tid);
 		TakenModel::puntenIntrekken($taak);
 		$this->content = new BeheerTakenView($taak);
 	}
 	
-	public function action_email($tid) {
+	public function email($tid) {
 		$taak = TakenModel::getTaak($tid);
 		require_once 'taken/model/HerinneringenModel.class.php';
 		HerinneringenModel::stuurHerinnering($taak);
 		$this->content = new BeheerTakenView($taak);
 	}
 	
-	public function action_leegmaken() {
+	public function leegmaken() {
 		$aantal = TakenModel::prullenbakLeegmaken();
 		\SimpleHTML::invokeRefresh($GLOBALS['taken_module'] .'/prullenbak', $aantal . ($aantal === 1 ? ' taak' : ' taken') .' definitief verwijderd.', ($aantal === 0 ? 0 : 1 ));
 	}
 	
 	// Repetitie-Taken ############################################################
 	
-	public function action_aanmaken($crid) {
+	public function aanmaken($crid) {
 		$repetitie = CorveeRepetitiesModel::getRepetitie($crid);
 		$form = new RepetitieCorveeFormView($repetitie); // fetches POST values itself
 		if ($form->validate()) {

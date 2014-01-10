@@ -34,10 +34,10 @@ class BeheerVrijstellingenController extends \ACLController {
 		if ($this->hasParam(3)) {
 			$uid = $this->getParam(3);
 		}
-		$this->performAction($uid);
+		$this->performAction(array($uid));
 	}
 	
-	public function action_beheer() {
+	public function beheer() {
 		$vrijstellingen = VrijstellingenModel::getAlleVrijstellingen();
 		$this->content = new BeheerVrijstellingenView($vrijstellingen);
 		$this->content = new \csrdelft($this->getContent());
@@ -47,12 +47,12 @@ class BeheerVrijstellingenController extends \ACLController {
 		$this->content->addScript('taken.js');
 	}
 	
-	public function action_nieuw() {
+	public function nieuw() {
 		$vrijstelling = new CorveeVrijstelling();
 		$this->content = new VrijstellingFormView($vrijstelling->getLidId(), $vrijstelling->getBeginDatum(), $vrijstelling->getEindDatum(), $vrijstelling->getPercentage()); // fetches POST values itself
 	}
 	
-	public function action_bewerk($uid) {
+	public function bewerk($uid) {
 		if (!\Lid::exists($uid)) {
 			throw new \Exception('Lid bestaat niet: $uid ='. $uid);
 		}
@@ -60,9 +60,9 @@ class BeheerVrijstellingenController extends \ACLController {
 		$this->content = new VrijstellingFormView($vrijstelling->getLidId(), $vrijstelling->getBeginDatum(), $vrijstelling->getEindDatum(), $vrijstelling->getPercentage()); // fetches POST values itself
 	}
 	
-	public function action_opslaan($uid=null) {
+	public function opslaan($uid=null) {
 		if ($uid !== null) {
-			$this->action_bewerk($uid);
+			$this->bewerk($uid);
 		}
 		else {
 			$this->content = new VrijstellingFormView(); // fetches POST values itself
@@ -75,7 +75,7 @@ class BeheerVrijstellingenController extends \ACLController {
 		}
 	}
 	
-	public function action_verwijder($uid) {
+	public function verwijder($uid) {
 		if (!\Lid::exists($uid)) {
 			throw new \Exception('Lid bestaat niet: $uid ='. $uid);
 		}

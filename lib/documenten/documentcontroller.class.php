@@ -61,11 +61,11 @@ class DocumentController extends Controller{
 	/*
 	 * Recente documenten uit alle categorieën tonen
 	 */
-	protected function action_default(){
+	protected function default(){
 		$this->content=new DocumentenContent();
 	}
 
-	protected function action_verwijderen(){
+	protected function verwijderen(){
 		$this->loadDocument();
 		try{
 			if($this->document->delete()){
@@ -77,7 +77,7 @@ class DocumentController extends Controller{
 			DocumentContent::invokeRefresh($this->baseurl, 'Document is niet verwijderd: '.$e->getMessage());
 		}
 	}
-	public function action_download(){
+	public function download(){
 		$this->loadDocument();
 
 		if($this->document->hasFile()){
@@ -88,7 +88,7 @@ class DocumentController extends Controller{
 		}
 		exit;
 	}
-	protected function action_categorie(){
+	protected function categorie(){
 		if($this->hasParam(1)){
 			try{
 				$categorie=new DocumentenCategorie($this->getParam(1));
@@ -102,14 +102,14 @@ class DocumentController extends Controller{
 		$this->content=new DocumentCategorieContent($categorie);
 	}
 
-	protected function action_bewerken(){
+	protected function bewerken(){
 		$this->loadDocument();
-		$this->action_toevoegen(true);
+		$this->toevoegen(true);
 
 	}
 
 	private $uploaders;	//array met uploaders.
-	protected function action_toevoegen($edit=false){
+	protected function toevoegen($edit=false){
 		if(!$edit){
 			//maak een nieuw, leeg document aan.
 			$this->document=new Document(0);

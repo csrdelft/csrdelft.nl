@@ -31,10 +31,10 @@ class BeheerVoorkeurenController extends \ACLController {
 		if ($this->hasParam(3)) {
 			$crid = intval($this->getParam(3));
 		}
-		$this->performAction($crid);
+		$this->performAction(array($crid));
 	}
 	
-	public function action_beheer() {
+	public function beheer() {
 		$matrix_repetities = VoorkeurenModel::getVoorkeurenMatrix();
 		$this->content = new BeheerVoorkeurenView($matrix_repetities[0], $matrix_repetities[1]);
 		$this->content = new \csrdelft($this->getContent());
@@ -42,7 +42,7 @@ class BeheerVoorkeurenController extends \ACLController {
 		$this->content->addScript('taken.js');
 	}
 	
-	public function action_inschakelen($crid) {
+	public function inschakelen($crid) {
 		$uid = filter_input(INPUT_POST, 'voor_lid', FILTER_SANITIZE_STRING);
 		if (!\Lid::exists($uid)) {
 			throw new \Exception('Lid bestaat niet: $uid ='. $uid);
@@ -52,7 +52,7 @@ class BeheerVoorkeurenController extends \ACLController {
 		$this->content = new BeheerVoorkeurenView($abonnement);
 	}
 	
-	public function action_uitschakelen($crid) {
+	public function uitschakelen($crid) {
 		$uid = filter_input(INPUT_POST, 'voor_lid', FILTER_SANITIZE_STRING);
 		if (!\Lid::exists($uid)) {
 			throw new \Exception('Lid bestaat niet: $uid ='. $uid);

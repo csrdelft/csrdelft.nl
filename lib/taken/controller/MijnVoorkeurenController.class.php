@@ -32,10 +32,10 @@ class MijnVoorkeurenController extends \ACLController {
 		if ($this->hasParam(3)) {
 			$crid = intval($this->getParam(3));
 		}
-		$this->performAction($crid);
+		$this->performAction(array($crid));
 	}
 	
-	public function action_mijn() {
+	public function mijn() {
 		$voorkeuren = VoorkeurenModel::getVoorkeurenVoorLid(\LoginLid::instance()->getUid());
 		$eetwens = VoorkeurenModel::getEetwens(\LoginLid::instance()->getLid());
 		$this->content = new MijnVoorkeurenView($voorkeuren, $eetwens);
@@ -44,17 +44,17 @@ class MijnVoorkeurenController extends \ACLController {
 		$this->content->addScript('taken.js');
 	}
 	
-	public function action_inschakelen($crid) {
+	public function inschakelen($crid) {
 		$abonnement = VoorkeurenModel::inschakelenVoorkeur($crid, \LoginLid::instance()->getUid());
 		$this->content = new MijnVoorkeurenView($abonnement);
 	}
 	
-	public function action_uitschakelen($crid) {
+	public function uitschakelen($crid) {
 		VoorkeurenModel::uitschakelenVoorkeur($crid, \LoginLid::instance()->getUid());
 		$this->content = new MijnVoorkeurenView($crid);
 	}
 	
-	public function action_eetwens() {
+	public function eetwens() {
 		$eetwens = filter_input(INPUT_POST, 'eetwens', FILTER_SANITIZE_SPECIAL_CHARS);
 		VoorkeurenModel::setEetwens(\LoginLid::instance()->getLid(), $eetwens);
 		$this->content = new MijnVoorkeurenView(null, $eetwens);

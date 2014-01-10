@@ -35,12 +35,12 @@ class MaaltijdRepetitiesController extends \ACLController {
 		if ($this->hasParam(3)) {
 			$mrid = intval($this->getParam(3));
 		}
-		$this->performAction($mrid);
+		$this->performAction(array($mrid));
 	}
 	
-	public function action_beheer($mrid=null) {
+	public function beheer($mrid=null) {
 		if (is_int($mrid) && $mrid > 0) {
-			$this->action_bewerk($mrid);
+			$this->bewerk($mrid);
 		}
 		$this->content = new MaaltijdRepetitiesView(MaaltijdRepetitiesModel::getAlleRepetities(), $this->getContent());
 		$this->content = new \csrdelft($this->getContent());
@@ -50,19 +50,19 @@ class MaaltijdRepetitiesController extends \ACLController {
 		$this->content->addScript('taken.js');
 	}
 	
-	public function action_nieuw() {
+	public function nieuw() {
 		$repetitie = new MaaltijdRepetitie();
 		$this->content = new MaaltijdRepetitieFormView($repetitie->getMaaltijdRepetitieId(), $repetitie->getDagVanDeWeek(), $repetitie->getPeriodeInDagen(), $repetitie->getStandaardTitel(), $repetitie->getStandaardTijd(), $repetitie->getStandaardPrijs(), $repetitie->getIsAbonneerbaar(), $repetitie->getStandaardLimiet(), $repetitie->getAbonnementFilter()); // fetches POST values itself
 	}
 	
-	public function action_bewerk($mrid) {
+	public function bewerk($mrid) {
 		$repetitie = MaaltijdRepetitiesModel::getRepetitie($mrid);
 		$this->content = new MaaltijdRepetitieFormView($repetitie->getMaaltijdRepetitieId(), $repetitie->getDagVanDeWeek(), $repetitie->getPeriodeInDagen(), $repetitie->getStandaardTitel(), $repetitie->getStandaardTijd(), $repetitie->getStandaardPrijs(), $repetitie->getIsAbonneerbaar(), $repetitie->getStandaardLimiet(), $repetitie->getAbonnementFilter()); // fetches POST values itself
 	}
 	
-	public function action_opslaan($mrid) {
+	public function opslaan($mrid) {
 		if ($mrid > 0) {
-			$this->action_bewerk($mrid);
+			$this->bewerk($mrid);
 		}
 		else {
 			$this->content = new MaaltijdRepetitieFormView($mrid); // fetches POST values itself
@@ -77,7 +77,7 @@ class MaaltijdRepetitiesController extends \ACLController {
 		}
 	}
 	
-	public function action_verwijder($mrid) {
+	public function verwijder($mrid) {
 		$aantal = MaaltijdRepetitiesModel::verwijderRepetitie($mrid);
 		$this->content = new MaaltijdRepetitiesView($mrid);
 		if ($aantal > 0) {
@@ -85,8 +85,8 @@ class MaaltijdRepetitiesController extends \ACLController {
 		}
 	}
 	
-	public function action_bijwerken($mrid) {
-		$this->action_opslaan($mrid);
+	public function bijwerken($mrid) {
+		$this->opslaan($mrid);
 		if ($this->content instanceof MaaltijdRepetitiesView) { // opslaan succesvol
 			$verplaats = isset($_POST['verplaats_dag']);
 			$updated_aanmeldingen = MaaltijdenModel::updateRepetitieMaaltijden($this->content->getRepetitie(), $verplaats);

@@ -32,10 +32,10 @@ class BeheerPuntenController extends \ACLController {
 		if ($this->hasParam(3)) {
 			$uid = $this->getParam(3);
 		}
-		$this->performAction($uid);
+		$this->performAction(array($uid));
 	}
 	
-	public function action_beheer() {
+	public function beheer() {
 		$functies = FunctiesModel::getAlleFuncties(true); // grouped by fid
 		$matrix = PuntenModel::loadPuntenVoorAlleLeden($functies);
 		$this->content = new BeheerPuntenView($matrix, $functies);
@@ -44,7 +44,7 @@ class BeheerPuntenController extends \ACLController {
 		$this->content->addScript('taken.js');
 	}
 	
-	public function action_wijzigpunten($uid) {
+	public function wijzigpunten($uid) {
 		$lid = \LidCache::getLid($uid); // false if lid does not exist
 		if (!$lid instanceof \Lid) {
 			throw new \Exception('Lid bestaat niet: $uid ='. $uid);
@@ -56,7 +56,7 @@ class BeheerPuntenController extends \ACLController {
 		$this->content = new BeheerPuntenView($lijst);
 	}
 	
-	public function action_wijzigbonus($uid) {
+	public function wijzigbonus($uid) {
 		$lid = \LidCache::getLid($uid); // false if lid does not exist
 		if (!$lid instanceof \Lid) {
 			throw new \Exception('Lid bestaat niet: $uid ='. $uid);
@@ -68,9 +68,9 @@ class BeheerPuntenController extends \ACLController {
 		$this->content = new BeheerPuntenView($lijst);
 	}
 	
-	public function action_resetjaar() {
+	public function resetjaar() {
 		$aantal_taken_errors = PuntenModel::resetCorveejaar();
-		$this->action_beheer();
+		$this->beheer();
 		$aantal = $aantal_taken_errors[0];
 		$taken = $aantal_taken_errors[1];
 		$this->content->setMelding($aantal .' vrijstelling'. ($aantal !== 1 ? 'en' : '') .' verwerkt en verwijderd', 1);

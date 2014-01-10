@@ -58,7 +58,7 @@ class Groepcontroller extends Controller{
 		$this->performAction();
 	}
 
-	public function action_default(){
+	public function default(){
 		$this->content->setAction('view');
 	}
 	public function getUrl($action=null){
@@ -175,7 +175,7 @@ class Groepcontroller extends Controller{
 	 * voor een deel bewerkt worden, de P_ADMINS kunnen alles aanpassen. Hier wordt de
 	 * toegangscontrole voor verschillende velden geregeld.
 	 */
-	public function action_bewerken(){
+	public function bewerken(){
 		if(!LoginLid::instance()->hasPermission('P_LOGGED_IN')){
 			$this->content->invokeRefresh($this->getUrl('default'), 'Niet voldoende rechten voor deze actie');
 		}
@@ -278,7 +278,7 @@ class Groepcontroller extends Controller{
 						//todo: loggen dat LDAP niet beschikbaar is in een mooi eventlog wat ook nog gemaakt moet worden...
 					}
 				}else{
-					$melding='Opslaan van groep mislukt. (returned from Groep::save() called by Groepcontroller::action_bewerken())';
+					$melding='Opslaan van groep mislukt. (returned from Groep::save() called by Groepcontroller::bewerken())';
 				}
 				$this->content->invokeRefresh($this->getUrl('default'), $melding);
 			}else{
@@ -306,7 +306,7 @@ class Groepcontroller extends Controller{
 	/*
 	 * Een groep permanent verwijderen.
 	 */
-	public function action_verwijderen(){
+	public function verwijderen(){
 		$groeptypenaam = $this->groep->getType()->getNaam();
 		if($this->groep->isAdmin()){
 			if($this->groep->delete()){
@@ -317,7 +317,7 @@ class Groepcontroller extends Controller{
 					//todo: loggen dat LDAP niet beschikbaar is in een mooi eventlog wat ook nog gemaakt moet worden...
 				}
 			}else{
-				$melding='Groep verwijderen mislukt Groepcontroller::action_deleteGroep()';
+				$melding='Groep verwijderen mislukt Groepcontroller::deleteGroep()';
 			}
 		}else{
 			$melding='Niet voldoende rechten voor deze actie';
@@ -328,7 +328,7 @@ class Groepcontroller extends Controller{
 	/*
 	 * Ingelogde leden kunnen zich aanmelden.
 	 */
-	public function action_aanmelden(){
+	public function aanmelden(){
 		if($this->groep->magAanmelden()){
 			$functie='';
 			if(isset($_POST['functie'])){
@@ -362,7 +362,7 @@ class Groepcontroller extends Controller{
 	/*
 	 * Leden toevoegen aan een groep.
 	 */
-	public function action_addLid(){
+	public function addLid(){
 		if(!$this->groep->magBewerken()){
 			$this->content->invokeRefresh($this->getUrl('default'), 'Niet voldoende rechten voor deze actie');
 		}
@@ -384,7 +384,7 @@ class Groepcontroller extends Controller{
 			if($success===true){
 				$melding=array($aantal.' leden met succes toegevoegd.', 1);
 			}else{
-				$melding='Niet alle leden met succes toegevoegd. Wellicht waren sommigen al lid van deze groep? (Groepcontroller::action_addLid())';
+				$melding='Niet alle leden met succes toegevoegd. Wellicht waren sommigen al lid van deze groep? (Groepcontroller::addLid())';
 			}
 			try{
 				$this->groep->save_ldap();
@@ -398,7 +398,7 @@ class Groepcontroller extends Controller{
 	/*
 	 * Leden verwijderen uit een groep
 	 */
-	public function action_verwijderLid(){
+	public function verwijderLid(){
 		if($this->hasParam(2) AND Lid::isValidUid($this->getParam(2)) AND $this->groep->magBewerken()){
 			if($this->groep->verwijderLid($this->getParam(2))){
 				$melding=array('Lid is met succes verwijderd uit de groep.', 1);
@@ -408,7 +408,7 @@ class Groepcontroller extends Controller{
 					//todo: loggen dat LDAP niet beschikbaar is in een mooi eventlog wat ook nog gemaakt moet worden...
 				}
 			}else{
-				$melding='Lid uit groep verwijderen mislukt (GroepController::action_verwijderLid()).';
+				$melding='Lid uit groep verwijderen mislukt (GroepController::verwijderLid()).';
 			}
 			$this->content->invokeRefresh($this->getUrl('default').'#lidlijst', $melding);
 		}
@@ -417,7 +417,7 @@ class Groepcontroller extends Controller{
 	/*
 	 * Opmerking/functie van een lid aanpassen, return functie of een foutmelding
 	 */
-	public function action_bewerkfunctieLid(){
+	public function bewerkfunctieLid(){
 		if(!$this->groep->magBewerken() AND LoginLid::instance()->getUid()!=$this->getParam(2)){
 			echo '<span class="melding">Onvoldoende rechten voor deze actie</span>';
 			exit;
@@ -436,7 +436,7 @@ class Groepcontroller extends Controller{
 					}
 					echo $functie;
 				}else{
-					echo '<span class="melding">Opmerking opslaan mislukt (GroepController::action_bewerkfunctieLid()).</span>';
+					echo '<span class="melding">Opmerking opslaan mislukt (GroepController::bewerkfunctieLid()).</span>';
 				}
 			}else{
 				echo '<span class="melding">Ongeldig uid of lid niet in groep</span>'; 
@@ -448,7 +448,7 @@ class Groepcontroller extends Controller{
 	/*
 	 * Een lid naar de eerstvolgende o.t. groep verplaatsen.
 	 */
-	public function action_maakLidOt(){
+	public function maakLidOt(){
 		if($this->hasParam(2) AND Lid::isValidUid($this->getParam(2)) AND $this->groep->magBewerken()){
 			if($this->groep->maakLidOt($this->getParam(2))){
 				$melding=array('Lid naar o.t.-groep verplaatsen gelukt.', 1);
@@ -458,7 +458,7 @@ class Groepcontroller extends Controller{
 					//todo: loggen dat LDAP niet beschikbaar is in een mooi eventlog wat ook nog gemaakt moet worden...
 				}
 			}else{
-				$melding='Lid naar o.t.-groep verplaatsen mislukt. ['. $this->groep->getError().']  (GroepController::action_maakLidOt())';
+				$melding='Lid naar o.t.-groep verplaatsen mislukt. ['. $this->groep->getError().']  (GroepController::maakLidOt())';
 			}
 			$this->content->invokeRefresh($this->getUrl('default').'#lidlijst', $melding);
 		}
@@ -467,7 +467,7 @@ class Groepcontroller extends Controller{
 	/*
 	 * De groep o.t. maken.
 	 */
-	public function action_maakGroepOt(){
+	public function maakGroepOt(){
 		if($this->groep->isAdmin() OR $this->groep->isEigenaar()){
 			if($this->groep->getStatus()=='ht'){
 				if($this->groep->maakOt()){
@@ -478,7 +478,7 @@ class Groepcontroller extends Controller{
 						//todo: loggen dat LDAP niet beschikbaar is in een mooi eventlog wat ook nog gemaakt moet worden...
 					}
 				}else{
-					$melding='Groep o.t. maken mislukt ['. $this->groep->getError().'] (GroepController::action_maakGroepOt())';
+					$melding='Groep o.t. maken mislukt ['. $this->groep->getError().'] (GroepController::maakGroepOt())';
 				}
 
 			}else{
@@ -489,30 +489,30 @@ class Groepcontroller extends Controller{
 	}
 	
 	
-	public function action_geschiedenis(){
+	public function geschiedenis(){
 		$this->content=new Groepgeschiedeniscontent(new Groepen($_GET['gtype']));
 	}
 
 	//we willen de volgende acties met javascript initieren, dus niet de hele site-structuur eromheen
 	//hebben, daarom sluiten we aan het einde van elke methode af met exit;
-	public function action_lidLijst(){
+	public function lidLijst(){
 		$this->content=new GroepledenContent($this->groep);
 		$this->content->view();
 		exit;
 	}
-	public function action_pasfotos(){
+	public function pasfotos(){
 		$this->content=new GroepledenContent($this->groep, 'pasfotos');
 		$this->content->view();
 		exit;
 	}
-	public function action_emails(){
+	public function emails(){
 		if($this->groep->isIngelogged()){
 			$this->content=new GroepEmailContent($this->groep);
 			$this->content->view();
 		}
 		exit;
 	}
-	public function action_stats(){
+	public function stats(){
 		if($this->groep->isAdmin() OR $this->groep->isOp() OR $this->groep->isEigenaar() OR ($this->groep->isAanmeldbaar() AND $this->groep->isIngelogged())){
 			$this->content=new GroepStatsContent($this->groep);
 			$this->content->view();

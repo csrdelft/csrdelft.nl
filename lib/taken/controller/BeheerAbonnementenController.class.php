@@ -36,10 +36,10 @@ class BeheerAbonnementenController extends \ACLController {
 		if ($this->hasParam(3)) {
 			$mrid = intval($this->getParam(3));
 		}
-		$this->performAction($mrid);
+		$this->performAction(array($mrid));
 	}
 	
-	private function action_beheer($alleenWaarschuwingen, $ingeschakeld=null) {
+	private function beheer($alleenWaarschuwingen, $ingeschakeld=null) {
 		$repetities = MaaltijdRepetitiesModel::getAlleRepetities();
 		$matrix = AbonnementenModel::getAbonnementenMatrix($repetities, false, $alleenWaarschuwingen, $ingeschakeld);
 		$this->content = new BeheerAbonnementenView($matrix, $repetities, $alleenWaarschuwingen, $ingeschakeld);
@@ -50,19 +50,19 @@ class BeheerAbonnementenController extends \ACLController {
 		$this->content->addScript('taken.js');
 	}
 	
-	public function action_waarschuwingen() {
-		$this->action_beheer(true, null);
+	public function waarschuwingen() {
+		$this->beheer(true, null);
 	}
 	
-	public function action_ingeschakeld() {
-		$this->action_beheer(false, true);
+	public function ingeschakeld() {
+		$this->beheer(false, true);
 	}
 	
-	public function action_abonneerbaar() {
-		$this->action_beheer(false, false);
+	public function abonneerbaar() {
+		$this->beheer(false, false);
 	}
 	
-	public function action_voorlid() {
+	public function voorlid() {
 		$formField = new \LidField('voor_lid', null, null, 'allepersonen'); // fetches POST values itself
 		if ($formField->valid()) {
 			$uid = $formField->getValue();
@@ -76,7 +76,7 @@ class BeheerAbonnementenController extends \ACLController {
 		}
 	}
 	
-	public function action_novieten() {
+	public function novieten() {
 		$mrid = (int) filter_input(INPUT_POST, 'mrid', FILTER_SANITIZE_NUMBER_INT);
 		$aantal = AbonnementenModel::inschakelenAbonnementVoorNovieten($mrid);
 		$matrix = AbonnementenModel::getAbonnementenVanNovieten();
@@ -87,7 +87,7 @@ class BeheerAbonnementenController extends \ACLController {
 			$novieten .' noviet'. ($novieten !== 1 ? 'en' : '') .'.', 1);
 	}
 	
-	public function action_inschakelen($mrid) {
+	public function inschakelen($mrid) {
 		$uid = filter_input(INPUT_POST, 'voor_lid', FILTER_SANITIZE_STRING);
 		if (!\Lid::exists($uid)) {
 			throw new \Exception('Lid bestaat niet: $uid ='. $uid);
@@ -99,7 +99,7 @@ class BeheerAbonnementenController extends \ACLController {
 		}
 	}
 	
-	public function action_uitschakelen($mrid) {
+	public function uitschakelen($mrid) {
 		$uid = filter_input(INPUT_POST, 'voor_lid', FILTER_SANITIZE_STRING);
 		if (!\Lid::exists($uid)) {
 			throw new \Exception('Lid bestaat niet: $uid ='. $uid);

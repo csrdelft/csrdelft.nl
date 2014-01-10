@@ -1,7 +1,7 @@
 <?php
 namespace Taken\MLT;
 
-require_once 'ACLController.class.php';
+require_once 'MVC/controller/ACLController.class.php';
 require_once 'taken/model/MaaltijdenModel.class.php';
 require_once 'taken/model/AanmeldingenModel.class.php';
 require_once 'taken/view/MijnMaaltijdenView.class.php';
@@ -39,7 +39,7 @@ class MijnMaaltijdenController extends \ACLController {
 		if ($this->hasParam(3)) {
 			$mid = intval($this->getParam(3));
 		}
-		$this->performAction($mid);
+		$this->performAction(array($mid));
 	}
 	
 	public static function magMaaltijdlijstTonen(Maaltijd $maaltijd) {
@@ -58,7 +58,7 @@ class MijnMaaltijdenController extends \ACLController {
 		return false;
 	}
 	
-	public function action_ketzer() {
+	public function ketzer() {
 		$maaltijden = MaaltijdenModel::getKomendeMaaltijdenVoorLid(\LoginLid::instance()->getUid());
 		$aanmeldingen = AanmeldingenModel::getAanmeldingenVoorLid($maaltijden, \LoginLid::instance()->getUid());
 		$this->content = new MijnMaaltijdenView($maaltijden, $aanmeldingen);
@@ -67,10 +67,10 @@ class MijnMaaltijdenController extends \ACLController {
 		$this->content->addScript('taken.js');
 	}
 	
-	public function action_lijst($mid) {
+	public function lijst($mid) {
 		$maaltijd = MaaltijdenModel::getMaaltijd($mid, true);
 		if (!self::magMaaltijdlijstTonen($maaltijd)) {
-			$this->action_geentoegang();
+			$this->geentoegang();
 			return;
 		}
 		$aanmeldingen = AanmeldingenModel::getAanmeldingenVoorMaaltijd($maaltijd);
@@ -79,16 +79,16 @@ class MijnMaaltijdenController extends \ACLController {
 		$this->content = new MaaltijdLijstView($maaltijd, $aanmeldingen, $taken);
 	}
 	
-	public function action_sluit($mid) {
+	public function sluit($mid) {
 		$maaltijd = MaaltijdenModel::getMaaltijd($mid);
 		if (!self::magMaaltijdlijstTonen($maaltijd)) {
-			$this->action_geentoegang();
+			$this->geentoegang();
 			return;
 		}
 		MaaltijdenModel::sluitMaaltijd($maaltijd);
 	}
 	
-	public function action_aanmelden($mid) {
+	public function aanmelden($mid) {
 		$aanmelding = AanmeldingenModel::aanmeldenVoorMaaltijd($mid, \LoginLid::instance()->getUid(), \LoginLid::instance()->getUid());
 		if (parent::isPOSTed()) {
 			$this->content = new MijnMaaltijdenView($aanmelding->getMaaltijd(), $aanmelding);
@@ -99,7 +99,7 @@ class MijnMaaltijdenController extends \ACLController {
 		}
 	}
 	
-	public function action_afmelden($mid) {
+	public function afmelden($mid) {
 		$maaltijd = AanmeldingenModel::afmeldenDoorLid($mid, \LoginLid::instance()->getUid());
 		if (parent::isPOSTed()) {
 			$this->content = new MijnMaaltijdenView($maaltijd);
@@ -110,13 +110,13 @@ class MijnMaaltijdenController extends \ACLController {
 		}
 	}
 	
-	public function action_gasten($mid) {
+	public function gasten($mid) {
 		$gasten = (int) filter_input(INPUT_POST, 'aantal_gasten', FILTER_SANITIZE_NUMBER_INT);
 		$aanmelding = AanmeldingenModel::saveGasten($mid, \LoginLid::instance()->getUid(), $gasten);
 		$this->content = new MijnMaaltijdenView($aanmelding->getMaaltijd(), $aanmelding);
 	}
 	
-	public function action_opmerking($mid) {
+	public function opmerking($mid) {
 		$opmerking = filter_input(INPUT_POST, 'gasten_opmerking', FILTER_SANITIZE_SPECIAL_CHARS);
 		$aanmelding = AanmeldingenModel::saveGastenOpmerking($mid, \LoginLid::instance()->getUid(), $opmerking);
 		$this->content = new MijnMaaltijdenView($aanmelding->getMaaltijd(), $aanmelding);

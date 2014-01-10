@@ -23,7 +23,7 @@ class ACLController extends Controller {
 	 * @see LoginLid->hasPermission()
 	 * @var array
 	 */
-	protected $acl;
+	protected $acl = array();
 
 	protected function hasPermission($action) {
 		return array_key_exists($action, $this->acl) && isset($this->acl[$action]) && LoginLid::instance()->hasPermission($this->acl[$action]);

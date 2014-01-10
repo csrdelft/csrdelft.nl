@@ -28,23 +28,23 @@ class MaalCieSaldiController extends \ACLController {
 		if ($this->hasParam(2)) {
 			$this->action = $this->getParam(2);
 		}
-		$this->performAction();
+		$this->performAction(array());
 	}
 	
-	public function action_beheer() {
+	public function beheer() {
 		$this->content = new MaalCieSaldiView();
 		$this->content = new \csrdelft($this->getContent());
 		$this->content->addStylesheet('taken.css');
 		$this->content->addScript('taken.js');
 	}
 	
-	public function action_upload() {
-		$this->action_beheer();
+	public function upload() {
+		$this->beheer();
 		$melding_level = \Saldi::putMaalcieCsv();
 		$this->content->setMelding($melding_level[0], $melding_level[1]);
 	}
 	
-	public function action_sluitboekjaar() {
+	public function sluitboekjaar() {
 		$form = new BoekjaarSluitenFormView(date('Y-m-d', strtotime('-1 year')), date('Y-m-d')); // fetches POST values itself
 		if ($form->validate()) {
 			$values = $form->getValues();

@@ -22,7 +22,7 @@ require_once 'configuratie.include.php';
 try {
 	require_once 'taken/controller/BeheerTakenController.class.php';
 	$controller = new Taken\CRV\BeheerTakenController();
-	$controller->action_herinneren();
+	$controller->herinneren();
 	$controller->getContent()->view();
 }
 catch (\Exception $e) {

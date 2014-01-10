@@ -1,7 +1,8 @@
 <?php
+
 namespace Taken\CRV;
 
-require_once 'ACLController.class.php';
+require_once 'MVC/controller/ACLController.class.php';
 
 /**
  * ModuleController.class.php	| 	P.W.G. Brussee (brussee@live.nl)
@@ -14,32 +15,33 @@ class ModuleController extends \ACLController {
 		$module = $this->getParam(0);
 		if ($module === 'maaltijden') {
 			$this->acl = array(
-				'maaltijden_ketzer' => 'P_MAAL_IK',
-				'maaltijden_lijst' => 'P_MAAL_IK', // shortcut
-				'maaltijden_beheer' => 'P_MAAL_MOD',
-				'maaltijden_repetities' => 'P_MAAL_MOD',
-				'maaltijden_abonnementen' => 'P_MAAL_IK',
-				'maaltijden_abonnementenbeheer' => 'P_MAAL_MOD',
-				'maaltijden_maalciesaldi' => 'P_MAAL_SALDI',
-				'maaltijden_instellingen' => 'P_MAAL_MOD'
+				'maaltijden' => 'P_MAAL_IK', // shortcut
+				'maaltijdenketzer' => 'P_MAAL_IK',
+				'maaltijdenlijst' => 'P_MAAL_IK', // shortcut
+				'maaltijdenbeheer' => 'P_MAAL_MOD',
+				'maaltijdenrepetities' => 'P_MAAL_MOD',
+				'maaltijdenabonnementen' => 'P_MAAL_IK',
+				'maaltijdenabonnementenbeheer' => 'P_MAAL_MOD',
+				'maaltijdenmaalciesaldi' => 'P_MAAL_SALDI',
+				'maaltijdeninstellingen' => 'P_MAAL_MOD'
 			);
 			$this->action = 'ketzer'; // default
 		}
 		elseif ($module === 'corvee') {
 			$this->acl = array(
-				'corvee_' => 'P_CORVEE_IK', // shortcut
-				'corvee_mijn' => 'P_CORVEE_IK',
-				'corvee_rooster' => 'P_CORVEE_IK', // shortcut
-				'corvee_beheer' => 'P_CORVEE_MOD',
-				'corvee_repetities' => 'P_CORVEE_MOD',
-				'corvee_voorkeuren' => 'P_CORVEE_IK',
-				'corvee_voorkeurenbeheer' => 'P_CORVEE_MOD',
-				'corvee_puntenbeheer' => 'P_CORVEE_MOD',
-				'corvee_vrijstellingen' => 'P_CORVEE_MOD',
-				'corvee_functies' => 'P_CORVEE_MOD',
-				'corvee_instellingen' => 'P_MAAL_MOD' // shortcut
+				'corvee' => 'P_CORVEE_IK', // shortcut
+				'corveemijn' => 'P_CORVEE_IK',
+				'corveerooster' => 'P_CORVEE_IK', // shortcut
+				'corveebeheer' => 'P_CORVEE_MOD',
+				'corveerepetities' => 'P_CORVEE_MOD',
+				'corveevoorkeuren' => 'P_CORVEE_IK',
+				'corveevoorkeurenbeheer' => 'P_CORVEE_MOD',
+				'corveepuntenbeheer' => 'P_CORVEE_MOD',
+				'corveevrijstellingen' => 'P_CORVEE_MOD',
+				'corveefuncties' => 'P_CORVEE_MOD',
+				'corveeinstellingen' => 'P_MAAL_MOD' // shortcut
 			);
-			$this->action = ''; // default
+			$this->action = 'mijn'; // default
 		}
 		else {
 			$module = '';
@@ -48,126 +50,133 @@ class ModuleController extends \ACLController {
 			$this->action = $this->getParam(1);
 		}
 		$GLOBALS['taken_module'] = '/' . $module . $this->action;
-		$this->action = $module .'_'. $this->action;
-		$this->performAction($query);
+		$this->action = $module . $this->action;
+
+		echo $query . '<br />';
+		echo $module . '<br />';
+		echo $this->action . '<br />';
+
+		$this->performAction(array($query));
 	}
-	
-	/**
-	 * @override
-	 */
-	protected function action_geentoegang() {
-		$this->content = new \PaginaContent(new \Pagina('maaltijden'));
-		$this->content = new \csrdelft($this->getContent());
+
+	protected function geentoegang() {
+		require_once 'paginacontent.class.php';
+		$this->content = new \csrdelft(new \PaginaContent(new \Pagina('maaltijden')));
 	}
-	
-	public function action_maaltijden_ketzer($query) {
+
+	public function maaltijden($query) {
+		$this->maaltijdenketzer('ketzer/' . $query);
+	}
+
+	public function maaltijdenketzer($query) {
 		require_once 'taken/controller/MijnMaaltijdenController.class.php';
 		$controller = new \Taken\MLT\MijnMaaltijdenController($query);
 		$this->content = $controller->getContent();
 	}
-	
-	public function action_maaltijden_lijst($query) {
+
+	public function maaltijdenlijst($query) {
 		$query = str_replace('lijst/sluit/', 'sluit/', $query);
-		$this->action_maaltijden_ketzer('ketzer/'. $query);
+		$this->maaltijdenketzer('ketzer/' . $query);
 	}
-	
-	public function action_maaltijden_beheer($query) {
+
+	public function maaltijdenbeheer($query) {
 		require_once 'taken/controller/BeheerMaaltijdenController.class.php';
 		$controller = new \Taken\MLT\BeheerMaaltijdenController($query);
 		$this->content = $controller->getContent();
 	}
-	
-	public function action_maaltijden_repetities($query) {
+
+	public function maaltijdenrepetities($query) {
 		require_once 'taken/controller/MaaltijdRepetitiesController.class.php';
 		$controller = new \Taken\MLT\MaaltijdRepetitiesController($query);
 		$this->content = $controller->getContent();
 	}
-	
-	public function action_maaltijden_abonnementen($query) {
+
+	public function maaltijdenabonnementen($query) {
 		require_once 'taken/controller/MijnAbonnementenController.class.php';
 		$controller = new \Taken\MLT\MijnAbonnementenController($query);
 		$this->content = $controller->getContent();
 	}
-	
-	public function action_maaltijden_abonnementenbeheer($query) {
+
+	public function maaltijdenabonnementenbeheer($query) {
 		require_once 'taken/controller/BeheerAbonnementenController.class.php';
 		$controller = new \Taken\MLT\BeheerAbonnementenController($query);
 		$this->content = $controller->getContent();
 	}
-	
-	public function action_maaltijden_maalciesaldi($query) {
+
+	public function maaltijdenmaalciesaldi($query) {
 		require_once 'taken/controller/MaalCieSaldiController.class.php';
 		$controller = new \Taken\MLT\MaalCieSaldiController($query);
 		$this->content = $controller->getContent();
 	}
-	
-	public function action_corvee_($query) {
+
+	public function corvee($query) {
 		require_once 'taken/controller/MijnCorveeController.class.php';
 		$controller = new \Taken\CRV\MijnCorveeController($query);
 		$this->content = $controller->getContent();
 	}
-	
-	public function action_corvee_mijn($query) {
+
+	public function corveemijn($query) {
 		$GLOBALS['taken_module'] = str_replace('mijn', '', $GLOBALS['taken_module']);
-		$this->action_corvee_('mijn/'. $query);
+		$this->corvee('mijn/' . $query);
 	}
-	
-	public function action_corvee_rooster($query) {
-		$this->action_corvee_('mijn/'. $query);
+
+	public function corveerooster($query) {
+		$this->corvee('mijn/' . $query);
 	}
-	
-	public function action_corvee_beheer($query) {
+
+	public function corveebeheer($query) {
 		require_once 'taken/controller/BeheerTakenController.class.php';
 		$controller = new \Taken\CRV\BeheerTakenController($query);
 		$this->content = $controller->getContent();
 	}
-	
-	public function action_corvee_repetities($query) {
+
+	public function corveerepetities($query) {
 		require_once 'taken/controller/CorveeRepetitiesController.class.php';
 		$controller = new \Taken\CRV\CorveeRepetitiesController($query);
 		$this->content = $controller->getContent();
 	}
-	
-	public function action_corvee_voorkeuren($query) {
+
+	public function corveevoorkeuren($query) {
 		require_once 'taken/controller/MijnVoorkeurenController.class.php';
 		$controller = new \Taken\CRV\MijnVoorkeurenController($query);
 		$this->content = $controller->getContent();
 	}
-	
-	public function action_corvee_voorkeurenbeheer($query) {
+
+	public function corveevoorkeurenbeheer($query) {
 		require_once 'taken/controller/BeheerVoorkeurenController.class.php';
 		$controller = new \Taken\CRV\BeheerVoorkeurenController($query);
 		$this->content = $controller->getContent();
 	}
-	
-	public function action_corvee_puntenbeheer($query) {
+
+	public function corveepuntenbeheer($query) {
 		require_once 'taken/controller/BeheerPuntenController.class.php';
 		$controller = new \Taken\CRV\BeheerPuntenController($query);
 		$this->content = $controller->getContent();
 	}
-	
-	public function action_corvee_vrijstellingen($query) {
+
+	public function corveevrijstellingen($query) {
 		require_once 'taken/controller/BeheerVrijstellingenController.class.php';
 		$controller = new \Taken\CRV\BeheerVrijstellingenController($query);
 		$this->content = $controller->getContent();
 	}
-			
-	public function action_corvee_functies($query) {
+
+	public function corveefuncties($query) {
 		require_once 'taken/controller/BeheerFunctiesController.class.php';
 		$controller = new \Taken\CRV\BeheerFunctiesController($query);
 		$this->content = $controller->getContent();
 	}
-	
-	public function action_corvee_instellingen($query) {
+
+	public function corveeinstellingen($query) {
 		$GLOBALS['taken_module'] = str_replace('corvee', 'maaltijden', $GLOBALS['taken_module']);
-		$this->action_maaltijden_instellingen($query);
+		$this->maaltijdeninstellingen($query);
 	}
-	
-	public function action_maaltijden_instellingen($query) {
+
+	public function maaltijdeninstellingen($query) {
 		require_once 'taken/controller/BeheerInstellingenController.class.php';
 		$controller = new \Taken\MLT\BeheerInstellingenController($query);
 		$this->content = $controller->getContent();
 	}
+
 }
 
 ?>

@@ -1,5 +1,5 @@
 <?php
-require_once 'ACLController.class.php';
+require_once 'MVC/controller/ACLController.class.php';
 require_once 'menu/beheer/MenusModel.class.php';
 require_once 'menu/beheer/BeheerMenusView.class.php';
 
@@ -27,22 +27,22 @@ class BeheerMenusController extends \ACLController {
 		if ($this->hasParam(0)) {
 			$this->action = $this->getParam(0);
 		}
-		$params = null;
+		$params = array();
 		if ($this->hasParam(1)) {
 			if ($this->action === 'beheer') {
-				$params = $this->getParam(1);
+				$params[] = $this->getParam(1);
 			}
 			else {
-				$params = intval($this->getParam(1));
+				$params[] = intval($this->getParam(1));
 				if ($this->hasParam(2)) {
-					$params = array($params, $this->getParam(2));
+					$params[] = $this->getParam(2);
 				}
 			}
 		}
 		$this->performAction($params);
 	}
 	
-	public function action_beheer($menu=null) {
+	public function beheer($menu=null) {
 		$menus = MenusModel::getAlleMenus();
 		if ($menu === null) {
 			$menu = '';
@@ -55,7 +55,7 @@ class BeheerMenusController extends \ACLController {
 		$this->content->addScript('menubeheer.js');
 	}
 	
-	public function action_nieuw($pid) {
+	public function nieuw($pid) {
 		$prio = (int) filter_input(INPUT_POST, 'Prioriteit', FILTER_SANITIZE_NUMBER_INT);
 		$text = filter_input(INPUT_POST, 'Tekst', FILTER_SANITIZE_STRING);
 		$link = filter_input(INPUT_POST, 'Link', FILTER_SANITIZE_URL);
@@ -66,7 +66,7 @@ class BeheerMenusController extends \ACLController {
 		\SimpleHTML::invokeRefresh('/menubeheer/beheer/'. $item->getMenu(), $item->getTekst() .' ('. $item->getMenuId() .') aangemaakt', 1);
 	}
 	
-	public function action_wijzig($mid, $prop) {
+	public function wijzig($mid, $prop) {
 		$item = MenusModel::getMenuItem($mid);
 		$prop = ucfirst($prop);
 		$setter = 'set'. $prop;
@@ -81,7 +81,7 @@ class BeheerMenusController extends \ACLController {
 		\SimpleHTML::invokeRefresh('/menubeheer/beheer/'. $item->getMenu(), $item->getTekst() .' ('. $item->getMenuId() .') opgeslagen', 1);
 	}
 	
-	public function action_verwijder($mid) {
+	public function verwijder($mid) {
 		$item = MenusModel::getMenuItem($mid);
 		MenusModel::deleteMenuItem($item);
 		\SimpleHTML::invokeRefresh('/menubeheer/beheer/'. $item->getMenu(), $item->getTekst() .' ('. $item->getMenuId() .') verwijderd', 1);

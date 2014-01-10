@@ -14,19 +14,20 @@
  */
 abstract class Controller {
 
-	private $queryparts;
-	private $action;
-	protected $content;
+	private $queryparts = array();
+	private $action = 'geentoegang';
+	protected $content = null;
 
 	public function __construct($querystring) {
 		$kvp = strpos($querystring, '?');
 		if ($kvp !== FALSE) { // KVP
 			$querystring = substr($querystring, $kvp);
-			$this->queryparts = explode('&', $querystring);
-			foreach ($this->queryparts as $i => $part) {
+			$queryparts = explode('&', $querystring);
+			foreach ($queryparts as $i => $part) {
 				$this->queryparts[$i] = explode('=', $part);
 			}
-		} else { // REST
+		}
+		else { // REST
 			$this->queryparts = explode('/', $querystring);
 		}
 	}
@@ -46,10 +47,7 @@ abstract class Controller {
 	}
 
 	public function getContent() {
-		if (parent::isPOSTed()) {
-			return $this->content;
-		}
-		return new csrdelft($this->content);
+		return $this->content;
 	}
 
 	public function hasAction($action) {
@@ -59,13 +57,13 @@ abstract class Controller {
 	abstract protected function hasPermission($action);
 
 	protected function performAction(array $args) {
-		$action = 'action_' . $this->action;
 		if ($this->hasAction($this->action)) {
 			if (!$this->hasPermission($this->action)) {
 				$this->action = 'geentoegang';
 			}
-			call_user_func_array(array($this, $action), $args);
-		} else {
+			call_user_func_array(array($this, $this->action), $args);
+		}
+		else {
 			throw new Exception('Action undefined: ' . $this->action);
 		}
 	}
