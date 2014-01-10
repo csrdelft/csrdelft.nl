@@ -11,7 +11,7 @@ require_once 'taken/view/CorveeRoosterView.class.php';
  * MijnCorveeController.class.php	| 	P.W.G. Brussee (brussee@live.nl)
  * 
  */
-class MijnCorveeController extends \ACLController {
+class MijnCorveeController extends \AclController {
 
 	public function __construct($query) {
 		parent::__construct($query);

@@ -10,7 +10,7 @@ require_once 'taken/view/forms/CorveeRepetitieFormView.class.php';
  * CorveeRepetitiesController.class.php	| 	P.W.G. Brussee (brussee@live.nl)
  * 
  */
-class CorveeRepetitiesController extends \ACLController {
+class CorveeRepetitiesController extends \AclController {
 
 	public function __construct($query) {
 		parent::__construct($query);

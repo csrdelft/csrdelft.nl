@@ -3,7 +3,7 @@
 require_once 'MVC/controller/Controller.class.php';
 
 /**
- * ACLController.class.php
+ * AclController.class.php
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  *
@@ -11,7 +11,7 @@ require_once 'MVC/controller/Controller.class.php';
  * door middel van een access control list.
  * 
  */
-abstract class ACLController extends Controller {
+abstract class AclController extends Controller {
 
 	/**
 	 * Example:

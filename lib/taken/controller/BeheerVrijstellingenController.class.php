@@ -9,7 +9,7 @@ require_once 'taken/view/forms/VrijstellingFormView.class.php';
  * BeheerVrijstellingenController.class.php	| 	P.W.G. Brussee (brussee@live.nl)
  * 
  */
-class BeheerVrijstellingenController extends \ACLController {
+class BeheerVrijstellingenController extends \AclController {
 
 	public function __construct($query) {
 		parent::__construct($query);

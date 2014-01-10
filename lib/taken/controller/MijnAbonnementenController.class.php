@@ -9,7 +9,7 @@ require_once 'taken/view/MijnAbonnementenView.class.php';
  * MijnAbonnementenController.class.php	| 	P.W.G. Brussee (brussee@live.nl)
  * 
  */
-class MijnAbonnementenController extends \ACLController {
+class MijnAbonnementenController extends \AclController {
 
 	public function __construct($query) {
 		parent::__construct($query);

@@ -12,7 +12,7 @@ require_once 'taken/view/forms/RepetitieCorveeFormView.class.php';
  * BeheerTakenController.class.php	| 	P.W.G. Brussee (brussee@live.nl)
  * 
  */
-class BeheerTakenController extends \ACLController {
+class BeheerTakenController extends \AclController {
 
 	public function __construct($query) {
 		parent::__construct($query);

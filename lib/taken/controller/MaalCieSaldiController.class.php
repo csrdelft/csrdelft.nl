@@ -9,7 +9,7 @@ require_once 'taken/view/forms/BoekjaarSluitenFormView.class.php';
  * MaalCieSaldiController.class.php	| 	P.W.G. Brussee (brussee@live.nl)
  * 
  */
-class MaalCieSaldiController extends \ACLController {
+class MaalCieSaldiController extends \AclController {
 
 	public function __construct($query) {
 		parent::__construct($query);

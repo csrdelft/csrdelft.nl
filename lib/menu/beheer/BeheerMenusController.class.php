@@ -7,7 +7,7 @@ require_once 'menu/beheer/BeheerMenusView.class.php';
  * BeheerMenuController.class.php	| 	P.W.G. Brussee (brussee@live.nl)
  * 
  */
-class BeheerMenusController extends \ACLController {
+class BeheerMenusController extends AclController {
 
 	public function __construct($query) {
 		parent::__construct($query);

@@ -66,7 +66,7 @@ define('ROWID_QUEUE_MEDEDELINGEN', 62);
 require_once 'common.functions.php';
 require_once 'lid/loginlid.class.php';
 require_once 'mysql.class.php';
-require_once 'csrpdo.class.php';
+require_once 'MVC/model/CsrPdo.class.php';
 
 // instellingen van Taken-module
 require_once 'taken/model/InstellingenModel.class.php';

@@ -8,7 +8,7 @@ require_once 'taken/view/forms/InstellingFormView.class.php';
  * BeheerInstellingenController.class.php	| 	P.W.G. Brussee (brussee@live.nl)
  * 
  */
-class BeheerInstellingenController extends \ACLController {
+class BeheerInstellingenController extends \AclController {
 
 	public function __construct($query) {
 		parent::__construct($query);

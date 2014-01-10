@@ -11,7 +11,7 @@ require_once 'agenda.class.php';
 require_once 'agendacontent.class.php';
 require_once 'MVC/controller/ACLController.class.php';
 
-class AgendaController extends ACLController {
+class AgendaController extends AclController {
 
 	private $agenda;
 
@@ -33,6 +33,12 @@ class AgendaController extends ACLController {
 
 	protected function hasPermission() {
 		switch ($this->action) {
+			case 'week':
+			case 'maand':
+			case 'jaar':
+			case 'icalendar':
+				return true;
+
 			case 'toevoegen':
 
 				if ($this->agenda->magToevoegen()) {

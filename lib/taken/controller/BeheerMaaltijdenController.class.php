@@ -13,7 +13,7 @@ require_once 'taken/view/forms/AanmeldingFormView.class.php';
  * BeheerMaaltijdenController.class.php	| 	P.W.G. Brussee (brussee@live.nl)
  * 
  */
-class BeheerMaaltijdenController extends \ACLController {
+class BeheerMaaltijdenController extends \AclController {
 
 	public function __construct($query) {
 		parent::__construct($query);

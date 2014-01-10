@@ -11,7 +11,7 @@ require_once 'taken/view/forms/KwalificatieFormView.class.php';
  * BeheerFunctiesController.class.php	| 	P.W.G. Brussee (brussee@live.nl)
  * 
  */
-class BeheerFunctiesController extends \ACLController {
+class BeheerFunctiesController extends \AclController {
 
 	public function __construct($query) {
 		parent::__construct($query);

@@ -9,7 +9,7 @@ require_once 'taken/view/BeheerAbonnementenView.class.php';
  * BeheerMaaltijdenController.class.php	| 	P.W.G. Brussee (brussee@live.nl)
  * 
  */
-class BeheerAbonnementenController extends \ACLController {
+class BeheerAbonnementenController extends \AclController {
 
 	public function __construct($query) {
 		parent::__construct($query);
