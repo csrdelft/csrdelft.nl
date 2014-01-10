@@ -12,7 +12,7 @@
  * actie.
  * 
  */
-abstract class Controller extends KVPController {
+abstract class Controller {
 
 	private $queryparts;
 	private $action;
