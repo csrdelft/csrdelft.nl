@@ -187,12 +187,12 @@ function setMelding($message, $lvl=0){
 }
 /**
  * Probeert uit invoer van uids of namen per zoekterm een unieke uid te bepalen, zoniet een lijstje suggesties en anders false.
- * 
+ *
  * @param 	string $sNamen string met namen en/of uids op nieuwe regels en/of gescheiden door komma's
  * @param   array|string $filter zoekfilter voor Zoeker::zoekLeden, toegestane input: '', 'leden', 'oudleden' of array met stati
  * @return 	bool false bij geen matches
  * 			of een array met per zoekterm een entry met een unieke uid en naam òf een array met naamopties.
- * Voorbeeld: 
+ * Voorbeeld:
  * Input: $sNamen = 'Lid, Klaassen'
  * Output: Array(
 		[0] => Array (
@@ -213,7 +213,7 @@ function setMelding($message, $lvl=0){
 			[uid] => 0431
 			[naam] => Jan Klaassen
 		)
-	) 
+	)
  */
 function namen2uid($sNamen, $filter='leden'){
 
@@ -325,7 +325,7 @@ function reldate($datum){
 	}else{
 		$return=date("G:i j-n-Y", $moment);
 	}
-	return '<abbr class="timeago" title="'.date('Y-m-d\TG:i:s\ZO', $moment).'">'.$return.'</abbr>'; // ISO8601
+	return '<abbr class="timeago" title="'.date('Y-m-d\TG:i:sO', $moment).'">'.$return.'</abbr>'; // ISO8601
 }
 
 function internationalizePhonenumber($phonenumber, $prefix='+31'){
@@ -433,7 +433,7 @@ function square_crop($src_image, $dest_image, $thumb_size = 64, $jpg_quality = 9
  */
 function only_printable($string){
 	return $string;
-	//er gaat nog wat mis, want ik postte net iets met á erin, en die 
+	//er gaat nog wat mis, want ik postte net iets met á erin, en die
 	//snoepte dit ding ook weg. Niet de bedoeling natuurlijk, dus ff hdb ermee...
 	return preg_replace('/[^\x0A^\x09\x20-\x7E]/', '', $string);
 }
