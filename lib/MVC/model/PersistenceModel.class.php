@@ -5,41 +5,44 @@
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  *
- * CRUD by means of PHP Reflection.
+ * Generic CRUD.
  * 
  */
-abstract class ReflectionModel {
+abstract class PersistenceModel {
 
-	private $class;
-	protected $table;
+	private $_class_name;
+	protected $table_name;
 	protected $columns;
+	protected $primary_key;
 
-	public function __construct($class, $table = null) {
-		$this->class = $class;
-		if ($table === null) {
-			$this->table = $this->class;
-		}
-		$this->columns = array_keys(get_class_vars($class));
+	public function __construct($class_name, $table_name) {
+		$this->_class_name = $class_name;
+		$this->table_name = $table_name;
+		$this->columns = array_keys(call_user_func(array($class_name, 'getPersistentFields')));
+		$this->primary_key = call_user_func(array($class_name, 'getPrimaryKey'));
+		//$this->create_table();
 	}
 
-	abstract public function getOne($primary_key);
-
-	abstract public function getAll($where = null, array $values = array(), $assoc = false);
-
-	abstract public function save($entity);
+	protected function fetchOne($where, array $params) {
+		$one = $this->load($where, $params, null, 1);
+		if (sizeof($one) !== 1) {
+			throw new Exception('fetchOne row count: ' . sizeof($one));
+		}
+		return $one[0];
+	}
 
 	/**
 	 * Optional named parameters.
 	 * 
 	 * @param string $where
-	 * @param array $values
+	 * @param array $params
 	 * @param type $orderby
 	 * @param type $limit
 	 * @param type $start
 	 * @return type
 	 */
-	protected function load($where = null, array $values = array(), $orderby = null, $limit = null, $start = 0) {
-		$sql = 'SELECT ' . implode(', ', $this->columns) . ' FROM ' . $this->table;
+	protected function load($where = null, array $params = array(), $orderby = null, $limit = null, $start = 0) {
+		$sql = 'SELECT ' . implode(', ', $this->columns) . ' FROM ' . $this->table_name;
 		if ($where !== null) {
 			$sql .= ' WHERE ' . $where;
 		}
@@ -50,9 +53,9 @@ abstract class ReflectionModel {
 			$sql .= ' LIMIT ' . $start . ', ' . $limit;
 		}
 		$db = CsrPdo::instance();
-		$query = $db->prepare($sql, $values);
-		$query->execute($values);
-		return $query->fetchAll(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, $this->class);
+		$query = $db->prepare($sql, $params);
+		$query->execute($params);
+		return $query->fetchAll(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, $this->_class_name);
 	}
 
 	/**
@@ -67,14 +70,14 @@ abstract class ReflectionModel {
 		foreach ($properties as $key => $value) {
 			$params[':' . $key] = $value; // named params
 		}
-		$sql = 'INSERT INTO ' . $this->table;
-		$sql .= ' (' . implode(', ', array_keys($properties)) . ')';
+		$sql = 'INSERT INTO ' . $this->table_name;
+		$sql .= ' (' . implode(', ', $this->columns) . ')';
 		$sql .= ' VALUES (' . implode(', ', array_keys($params)) . ')';
 		$db = CsrPdo::instance();
 		$query = $db->prepare($sql, $params);
 		$query->execute($params);
 		if ($query->rowCount() !== 1) {
-			throw new Exception('Insert row count: ' . $query->rowCount());
+			throw new Exception('insert row count: ' . $query->rowCount());
 		}
 		return intval($db->lastInsertId());
 	}
@@ -88,11 +91,13 @@ abstract class ReflectionModel {
 	 * @return int affected rows
 	 */
 	protected function update($where, array $params, array $properties) {
-		$sql = 'UPDATE ' . $this->table . ' SET ';
+		$sql = 'UPDATE ' . $this->table_name . ' SET ';
 		$fields = array();
 		foreach ($properties as $key => $value) {
-			$fields[] = $key . ' = :' . $this->class . $key;
-			$params[':' . $this->class . $key] = $value; // named params
+			if (!array_key_exists($key, $this->primary_key)) { // never change primary key
+				$fields[] = $key . ' = :' . $this->_class_name . $key;
+			}
+			$params[':' . $this->_class_name . $key] = $value; // named params
 		}
 		$sql .= implode(', ', $fields);
 		$sql .= ' WHERE ' . $where;
@@ -110,7 +115,7 @@ abstract class ReflectionModel {
 	 * @return type
 	 */
 	protected function delete($where, array $params) {
-		$sql = 'DELETE FROM ' . $this->table;
+		$sql = 'DELETE FROM ' . $this->table_name;
 		$sql .= ' WHERE ' . $where;
 		$db = CsrPdo::instance();
 		$query = $db->prepare($sql, $params);
@@ -121,15 +126,14 @@ abstract class ReflectionModel {
 	/**
 	 * Single or multiple columns as primary key.
 	 * 
-	 * @param array $primary_key
 	 */
-	protected function create_table(array $primary_key) {
-		$sql = 'CREATE TABLE ' . $this->table . ' (';
-		$fields = get_class_vars($this->class);
+	protected function create_table() {
+		$fields = call_user_func(array($this->_class_name, 'getPersistentFields'));
+		$sql = 'CREATE TABLE ' . $this->table_name . ' (';
 		foreach ($fields as $key => $value) {
 			$sql .= $key . ' ' . $value . ', ';
 		}
-		$sql = ') PRIMARY KEY (' . implode(', ', $primary_key) . ') ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1';
+		$sql = ') PRIMARY KEY (' . implode(', ', $this->primary_key) . ') ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1';
 		$db = CsrPdo::instance();
 		$query = $db->prepare($sql, array());
 		$query->execute(array());

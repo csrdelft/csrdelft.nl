@@ -8,7 +8,7 @@ require_once 'MVC/model/CsrPdo.class.php';
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
-class CsrPdo extends PDO {
+final class CsrPdo extends PDO {
 
 	static private $_instance;
 

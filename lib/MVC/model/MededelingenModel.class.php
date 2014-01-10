@@ -1,6 +1,7 @@
 <?php
 
 require_once 'MVC/model/PagingModel.class.php';
+require_once 'MVC/model/entity/Mededeling.class.php';
 
 /**
  * MededelingenModel.class.php
@@ -12,15 +13,13 @@ class MededelingenModel extends PagingModel {
 
 	public function __construct() {
 		parent::__construct('Mededeling', 'mededelingen');
-		//$this->create_table(array('id'));
 	}
 
-	public function getOne($id) {
-		$this->load('id=?', array($id), null, 1);
-	}
-
-	public function getAll($where = null, array $values = array(), $assoc = false) {
-		$list = $this->load($where, $values, 'prioriteit ASC, id DESC');
+	public function fetch($where = null, array $params = array(), $assoc = false) {
+		if (is_int($where)) {
+			return parent::fetchOne('id = ?', array($where));
+		}
+		$list = $this->load($where, $params, 'prioriteit ASC, id DESC');
 		if (!$assoc) {
 			return $list;
 		}
@@ -32,18 +31,16 @@ class MededelingenModel extends PagingModel {
 		return $result;
 	}
 
-	public function save(Mededeling $mededeling) {
-		$properties = get_object_vars($mededeling);
-		unset($properties['id']); // never change primary key
-		if (is_int($mededeling->id) && $mededeling->id > 0) {
+	public function save(Mededeling &$mededeling) {
+		$properties = $mededeling->getPersistingValues();
+		if (is_int($mededeling->id) && $mededeling->id > 0) { // update existing
 			$count = $this->update('id = :id', array(':id', $mededeling->id), $properties);
 			if ($count !== 1) {
 				throw new Exception('Update row count: ' . $count);
 			}
-			return $mededeling;
+		} else { // insert new
+			$mededeling->id = $this->insert($properties);
 		}
-		$mededeling->id = $this->insert($properties);
-		return $mededeling;
 	}
 
 	public function delete($id) {

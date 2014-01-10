@@ -2567,8 +2567,9 @@ lib/MVC/controller/Controller.class.php -text
 lib/MVC/model/CsrPdo.class.php -text
 lib/MVC/model/MededelingenModel.class.php -text
 lib/MVC/model/PagingModel.class.php -text
-lib/MVC/model/ReflectionModel.class.php -text
+lib/MVC/model/PersistenceModel.class.php -text
 lib/MVC/model/entity/Mededeling.class.php -text
+lib/MVC/model/entity/PersistentEntity.class.php -text
 lib/Zend/Exception.php -text
 lib/Zend/Gdata.php -text
 lib/Zend/Gdata/App.php -text

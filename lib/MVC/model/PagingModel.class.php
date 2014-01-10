@@ -1,6 +1,6 @@
 <?php
 
-require_once 'MVC/model/ReflectionModel.class.php';
+require_once 'MVC/model/PersistenceModel.class.php';
 
 /**
  * PagingModel.class.php
@@ -10,7 +10,7 @@ require_once 'MVC/model/ReflectionModel.class.php';
  * CRUD by means of PHP Reflection.
  * 
  */
-abstract class PagingModel extends ReflectionModel {
+abstract class PagingModel extends PersistenceModel {
 
 	/**
 	 * Start at 0
@@ -51,7 +51,7 @@ abstract class PagingModel extends ReflectionModel {
 
 	public function getPageCount() {
 		if (!isset($this->last_page_number)) {
-			$sql = 'SELECT COUNT(*) as total FROM ' . $this->table;
+			$sql = 'SELECT COUNT(*) as total FROM ' . $this->table_name;
 			if ($this->where !== null) {
 				$sql .= ' WHERE ' . $this->where;
 			}
@@ -98,3 +98,5 @@ abstract class PagingModel extends ReflectionModel {
 	}
 
 }
+
+?>
