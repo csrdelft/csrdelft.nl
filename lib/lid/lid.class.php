@@ -665,11 +665,14 @@ class Lid implements Serializable, Agendeerbaar{
 			if (($vorm === 'leeg' || $mode === 'visitekaartje') && Instelling::get('layout_visitekaartjes') == 'ja') {
 				$v = str_replace(' ', '', str_replace('.', '', microtime()));
 				$k = '<div id="k'.$v.'" class="visitekaartje';
-				if ($vorm !== 'leeg') {
-					$k.= ' init';
-				}
 				if ($this->isJarig()) {
 					$k.= ' jarig';
+				}
+				if ($vorm === 'leeg') {
+					$k.= '" style="display: block; position: static;';
+				}
+				else {
+					$k.= ' init';
 				}
 				$k.= '">'.$this->getPasfoto('small', 'lidfoto');
 				$k.= '<div class="uid uitgebreid">('.$this->getUid().')</div>';
