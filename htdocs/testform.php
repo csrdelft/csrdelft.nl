@@ -12,7 +12,7 @@ $form=array();
 //testformulier bouwen.
 $form[]=new Comment('Studie:');
 $form[]=new StudieField('studie', $default, 'Studie');
-$form[]=new TextField('opmerking1', $default, 'Opmerking1');
+$form[]=new TextareaField('opmerking1', $default, 'Opmerking1');
 $hippeTextarea=new PreviewTextField('opmerking', $default, 'previewOnEnter:');
 $hippeTextarea->previewOnEnter();
 

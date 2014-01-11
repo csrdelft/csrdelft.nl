@@ -39,7 +39,7 @@ class SjaarsactieContent extends TemplateView {
 		if (isset($_POST['limiet'])) {
 			$limiet = (int) $_POST['limiet'];
 		}
-		$sError = $this->_sjaarsactie->getError();
+		$sError = $this->_sjaarsactie->getErrorDiv();
 		echo '<tr><td colspan="2">';
 		echo '<h2 style="border-bottom: 1px dashed black; margin: 15px 0 0px 0;">Een sjaarsactie aanmelden</h2></td></tr>';
 		echo '<tr><td colspan="2">';

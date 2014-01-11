@@ -15,7 +15,7 @@ class InstellingFormView extends TemplateView {
 	public function __construct($key = null, $value = null) {
 		parent::__construct();
 		$formFields['key'] = new InputField('instelling_id', $key, 'Id');
-		$formFields[] = new AutoresizeTextField('waarde', $value, 'Waarde', 0);
+		$formFields[] = new AutotesizeTextareaField('waarde', $value, 'Waarde', 0);
 
 		$this->_form = new Formulier('taken-instelling-form', $GLOBALS['taken_module'] . '/opslaan/' . $key, $formFields);
 	}
@@ -27,7 +27,7 @@ class InstellingFormView extends TemplateView {
 	public function view() {
 		$this->assign('melding', $this->getMelding());
 		$this->assign('kop', $this->getTitel());
-		$this->_form->css_classes .= ' popup';
+		$this->_form->css_classes[] = 'popup';
 		$this->assign('form', $this->_form);
 		$this->display('taken/popup_form.tpl');
 	}

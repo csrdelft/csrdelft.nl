@@ -166,18 +166,18 @@ select{
 .regel label{	  width:75px;}
 
 
-.FormElement label{	width:71px;}
-.boek .FormElement:hover{
+.InputField label{	width:71px;}
+.boek .InputField:hover{
 	background: url(http://plaetjes.csrdelft.nl/knopjes/bewerken.png) no-repeat 488px #f3f3f3;
 }
-.FormElement:hover input,
-.FormElement:hover textarea,
-.FormElement:hover select{
+.InputField:hover input,
+.InputField:hover textarea,
+.InputField:hover select{
 	border: 1px solid #999;
 }
-.FormElement input:focus,
-.FormElement textarea:focus,
-.FormElement select:focus{
+.InputField input:focus,
+.InputField textarea:focus,
+.InputField select:focus{
 	background-color: #FFC;
 	border: 1px solid black;
 }
@@ -189,32 +189,32 @@ div.opslaan{
 	width: 46px;
 	float: right;
 }
-.FormElement input:focus~div.opslaan,
-.FormElement textarea:focus+div.opslaan,
-.FormElement select:focus+div.opslaan{
+.InputField input:focus~div.opslaan,
+.InputField textarea:focus+div.opslaan,
+.InputField select:focus+div.opslaan{
 	display: inline;
 }
-.FormElement input.leeg,
-.FormElement textarea.leeg{
+.InputField input.leeg,
+.InputField textarea.leeg{
 	border: 1px solid #D9D9D9;
 }
 /* nog niet opgeslagen: geel, opslagen: groen, fout bij opslaan: rood */
-.FormElement input.nonsavededits,
-.FormElement textarea.nonsavededits{ background-color: #FFFFC1; }
+.InputField input.nonsavededits,
+.InputField textarea.nonsavededits{ background-color: #FFFFC1; }
 
-.FormElement .melding	{ margin-right: 3px; display:none; }
+.InputField .melding	{ margin-right: 3px; display:none; }
 
-.FormElement.opgeslagen input,
-.FormElement.opgeslagen textarea 	{ background-color: #BFB; }
-.FormElement.opgeslagen .melding 	{ color: green; display: inline; float: right; }
+.InputField.opgeslagen input,
+.InputField.opgeslagen textarea 	{ background-color: #BFB; }
+.InputField.opgeslagen .melding 	{ color: green; display: inline; float: right; }
 
-.FormElement.metFouten 			{ background-color: #FFC3CE; padding: 4px 2px; }
-.FormElement.metFouten input,
-.FormElement.metFouten textarea 	{ background-color: #E88; }
-.FormElement.metFouten .melding	{ color: red; display: block; margin-left: 77px;}
+.InputField.metFouten 			{ background-color: #FFC3CE; padding: 4px 2px; }
+.InputField.metFouten input,
+.InputField.metFouten textarea 	{ background-color: #E88; }
+.InputField.metFouten .melding	{ color: red; display: block; margin-left: 77px;}
 
 /* AutoriseTextField */
-.FormElement .wantsAutoresize {
+.InputField .wantsAutoresize {
 	min-height: 14px;
 	overflow: hidden;
 	resize: none;
@@ -233,14 +233,14 @@ div.opslaan{
 	border: 1px solid white;
 }
 /* InputField voor biebcode */
-.FormElement input#field_code{
+.InputField input#field_code{
 	width: 100px;
 }
-.boek .FormElement a.genereer {		display: none;}
-.FormElement input:focus~a.genereer {	display: inline;}
+.boek .InputField a.genereer {		display: none;}
+.InputField input:focus~a.genereer {	display: inline;}
 
 /* LidField */
-.FormElement input.RequiredLidField {
+.InputField input.RequiredLidField {
 	width: 220px;
 }
 .lidPreview, .uidPreview{
@@ -339,10 +339,10 @@ div.beschrijvingen{ margin-top: 40px;}
 .Formulier select{
 	width: 406px;
 }
-.Formulier .FormElement, .Formulier h3, .Formulier .password{
+.Formulier .InputField, .Formulier h3, .Formulier .password{
 	clear: both;
 }
-.Formulier .FormElement, .Formulier .submit, .boekzoeker{
+.Formulier .InputField, .Formulier .submit, .boekzoeker{
 	margin-left: 10px;
 	padding: 1px 2px;
 	border: 1px solid white;
@@ -352,7 +352,7 @@ div.beschrijvingen{ margin-top: 40px;}
 	padding: 7px 2px 7px 2px;
 }
 
-.Formulier .FormElement:hover,.boekzoeker{
+.Formulier .InputField:hover,.boekzoeker{
 	border: 1px  solid #ddd;
 	background-color: #eee;
 }
@@ -360,7 +360,7 @@ div.beschrijvingen{ margin-top: 40px;}
 	background-color: #FFC3CE;
 	padding: 4px 2px;
 }
-.Formulier .FormElement .waarschuwing{
+.Formulier .InputField .waarschuwing{
 	float: right;
 	margin-right: 10px;
 }
@@ -388,7 +388,7 @@ div.beschrijvingen{ margin-top: 40px;}
 	margin-left: 109px;
 	width: 506px;
 }
-#Beschrijvingsformulier .FormElement, 
+#Beschrijvingsformulier .InputField, 
 #Beschrijvingsformulier .submit{
 	margin-left: 0;
 	display: inline-block;
@@ -402,7 +402,7 @@ div.beschrijvingen{ margin-top: 40px;}
 #Beschrijvingsformulier h3{
 	margin-left: 111px;
 } 
-#Beschrijvingsformulier .FormElement .waarschuwing{
+#Beschrijvingsformulier .InputField .waarschuwing{
 	float: left;
 	margin-right: 10px;
 }

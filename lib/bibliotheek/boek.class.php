@@ -22,7 +22,7 @@ class Boek {
 	protected $taal = 'Nederlands';
 	protected $isbn;
 	protected $code;
-	protected $status;	//'beschikbaar'/'teruggeven'/'geen'
+	protected $status; //'beschikbaar'/'teruggeven'/'geen'
 	protected $biebboek = 'nee'; //'ja'/'nee'
 	protected $error = '';
 	protected $exemplaren = null; // array
@@ -410,15 +410,15 @@ class Boek {
 	protected function getCommonFields($naamtitelveld = 'Titel') {
 		$fields['titel'] = new TitelField('titel', $this->getTitel(), $naamtitelveld, 200, 'Titel ontbreekt!');
 		$fields['auteur'] = new InputField('auteur', $this->getAuteur(), 'Auteur', 100);
-		$fields['auteur']->setRemoteSuggestionsSource("/communicatie/bibliotheek/autocomplete/auteur");
+		$fields['auteur']->remotedatasource = '/communicatie/bibliotheek/autocomplete/auteur';
 		$fields['auteur']->setPlaceholder('Achternaam, Voornaam V.L. van de');
 		$fields['paginas'] = new IntField('paginas', $this->getPaginas(), "Pagina's", 10000, 0);
 		$fields['taal'] = new InputField('taal', $this->getTaal(), 'Taal', 25);
-		$fields['taal']->setRemoteSuggestionsSource("/communicatie/bibliotheek/autocomplete/taal");
+		$fields['taal']->remotedatasource = '/communicatie/bibliotheek/autocomplete/taal';
 		$fields['isbn'] = new InputField('isbn', $this->getISBN(), 'ISBN', 15);
 		$fields['isbn']->setPlaceholder('Uniek nummer');
 		$fields['uitgeverij'] = new InputField('uitgeverij', $this->getUitgeverij(), 'Uitgeverij', 100);
-		$fields['uitgeverij']->setRemoteSuggestionsSource("/communicatie/bibliotheek/autocomplete/uitgeverij");
+		$fields['uitgeverij']->remotedatasource = '/communicatie/bibliotheek/autocomplete/uitgeverij';
 		$fields['uitgavejaar'] = new IntField('uitgavejaar', $this->getUitgavejaar(), 'Uitgavejaar', 2100, 0);
 		$fields['rubriek'] = new SelectField('rubriek', $this->getRubriek()->getId(), 'Rubriek', Rubriek::getAllRubrieken($samenvoegen = true, $short = true));
 		$fields['code'] = new InputField('code', $this->getCode(), 'Biebcode', 7);
@@ -447,7 +447,7 @@ class Boek {
 	public function setValuesFromFormulier() {
 		//object Boek vullen
 		foreach ($this->getFormulier()->getFields() as $field) {
-			if ($field instanceof FormField) {
+			if ($field instanceof InputField) {
 				$this->setValue($field->getName(), $field->getValue());
 			}
 		}
@@ -597,7 +597,7 @@ class NieuwBoek extends Boek {
 
 class BewerkBoek extends Boek {
 
-	protected $formulier;	// Form objecten voor recensieformulier
+	protected $formulier; // Form objecten voor recensieformulier
 	public $ajaxformuliervelden;  // Form objecten info v. boek
 	//protected $beschrijving;			// recensie tijdens toevoegen/bewerken
 	protected $beschrijvingen = array();
@@ -638,7 +638,7 @@ class BewerkBoek extends Boek {
 			foreach ($this->exemplaren as $exemplaar) {//id, eigenaar_uid, uitgeleend_uid, toegevoegd, status, uitleendatum
 				if ($this->isEigenaar($exemplaar['id'])) {
 					$ajaxformuliervelden['lener_' . $exemplaar['id']] = new RequiredLidField('lener_' . $exemplaar['id'], $exemplaar['uitgeleend_uid'], 'Uitgeleend aan', 'alleleden');
-					$ajaxformuliervelden['opmerking_' . $exemplaar['id']] = new AutoresizeTextField('opmerking_' . $exemplaar['id'], $exemplaar['opmerking'], 'Opmerking', 255, 'Geef opmerking over exemplaar..');
+					$ajaxformuliervelden['opmerking_' . $exemplaar['id']] = new AutotesizeTextareaField('opmerking_' . $exemplaar['id'], $exemplaar['opmerking'], 'Opmerking', 255, 'Geef opmerking over exemplaar..');
 				}
 			}
 		}
@@ -663,7 +663,7 @@ class BewerkBoek extends Boek {
 	public function validField($entry) {
 		//we checken alleen de formfields, niet de comments enzo.
 		$field = $this->getField($entry);
-		return $field instanceof FormField AND $field->validate('');
+		return $field instanceof InputField AND $field->validate('');
 	}
 
 	/*
@@ -673,7 +673,7 @@ class BewerkBoek extends Boek {
 	public function saveField($entry) {
 		//waarde van $entry in Boek invullen
 		$field = $this->getField($entry);
-		if ($field instanceof FormField) {
+		if ($field instanceof InputField) {
 			$this->setValue($field->getName(), $field->getValue());
 		} else {
 			$this->error .= 'saveField(): ' . $entry . ' Geen instanceof FormField.';
@@ -1063,7 +1063,7 @@ class BewerkBoek extends Boek {
 
 }
 
-class TitelField extends AutoresizeTextField {
+class TitelField extends AutotesizeTextareaField {
 
 	public function valid() {
 		if (!parent::valid()) {

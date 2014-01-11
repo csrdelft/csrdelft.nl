@@ -6,14 +6,14 @@ require_once 'MVC/view/form/FormElement.abstract.php';
 class Formulier implements View, Validator {
 
 	private $id;
-	private $method;
+	private $method = 'post';
 	private $fields;
 	public $action;
 	public $css_classes = array('Formulier');
 
-	public function __construct($id, $method = 'post', array $fields = array()) {
+	public function __construct($id, $action = null, array $fields = array()) {
 		$this->id = $id;
-		$this->setMethod($method);
+		$this->action = $action;
 		$this->fields = $fields;
 	}
 
@@ -33,7 +33,20 @@ class Formulier implements View, Validator {
 		return false;
 	}
 
-	public function addField(FormField $field) {
+	/**
+	 * Is het gehele formulier gepost?
+	 */
+	public function isPosted() {
+		$posted = true;
+		foreach ($this->getFields() as $field) {
+			if ($field instanceof InputField AND !$field->isPosted()) {
+				$posted = false;
+			}
+		}
+		return $posted;
+	}
+
+	public function addField(InputField $field) {
 		$this->fields[] = $field;
 	}
 
@@ -41,17 +54,8 @@ class Formulier implements View, Validator {
 		$this->fields = array_merge($this->fields, $fields);
 	}
 
-	/**
-	 * Is het gehele formulier gepost?
-	 */
-	public function isPosted() {
-		$posted = true;
-		foreach ($this->getFields() as $field) {
-			if ($field instanceof FormField AND !$field->isPosted()) {
-				$posted = false;
-			}
-		}
-		return $posted;
+	public function getFields() {
+		return $this->fields;
 	}
 
 	/**
@@ -60,7 +64,7 @@ class Formulier implements View, Validator {
 	public function getValues() {
 		$values = array();
 		foreach ($this->getFields() as $field) {
-			if ($field instanceof FormField) {
+			if ($field instanceof InputField) {
 				$values[$field->getName()] = $field->getValue();
 			}
 		}
@@ -73,9 +77,9 @@ class Formulier implements View, Validator {
 	public function getError() {
 		$error = array();
 		foreach ($this->getFields() as $field) {
-			if ($field instanceof FormField) {
-				if ($field->getError() !== '') {
-					$error[] = $field->getError();
+			if ($field instanceof InputField) {
+				if ($field->getErrorDiv() !== '') {
+					$error[] = $field->getErrorDiv();
 				}
 			}
 		}
@@ -95,7 +99,7 @@ class Formulier implements View, Validator {
 		$valid = true;
 		foreach ($this->getFields() as $field) {
 			//we checken alleen de formfields, niet de comments enzo.
-			if ($field instanceof FormField AND !$field->validate($extra)) {
+			if ($field instanceof InputField AND !$field->validate($extra)) {
 				$valid = false;
 			}
 		}

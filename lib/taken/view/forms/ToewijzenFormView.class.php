@@ -45,7 +45,7 @@ class ToewijzenFormView extends TemplateView {
 	public function view() {
 		$this->assign('melding', $this->getMelding());
 		$this->assign('kop', $this->getTitel());
-		$this->_form->css_classes .= ' popup';
+		$this->_form->css_classes[] = 'popup';
 
 		$this->assignByRef('this', $this);
 		$this->assign('taak', $this->_taak);

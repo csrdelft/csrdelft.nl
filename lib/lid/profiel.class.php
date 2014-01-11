@@ -362,15 +362,15 @@ class ProfielBewerken extends Profiel {
 		if(LoginLid::instance()->hasPermission('P_ADMIN,P_BESTUUR,groep:novcie')){
 			$form[]=new SelectField('ovkaart', $profiel['ovkaart'], 'OV-kaart', array('' => 'Kies...','geen' => '(Nog) geen OV-kaart','week' => 'Week','weekend' => 'Weekend','niet' => 'Niet geactiveerd'));
 			$form[]=new SelectField('zingen', $profiel['zingen'], 'Zingen', array('' => 'Kies...','ja' => 'Ja, ik zing in een band/koor','nee' => 'Nee, ik houd niet van zingen','soms' => 'Alleen onder de douche','anders' => 'Anders'));
-			$form[]=new TextField('novitiaat', $profiel['novitiaat'], 'Wat verwacht je van het novitiaat?');
+			$form[]=new TextareaField('novitiaat', $profiel['novitiaat'], 'Wat verwacht je van het novitiaat?');
 			$form[]=new Comment('<br>Einde vragenlijst<br><br><br><br><br><span id="novcieKnopFormulier" >In te vullen door NovCie: (klik hier)</span><br>');
 		
 			$form[]=new SelectField('novietSoort', $profiel['novietSoort'], 'Soort Noviet', array('noviet','nanoviet'));
 			$form[]=new SelectField('matrixPlek', $profiel['matrixPlek'], 'Matrix plek', array('voor','midden','achter'));
 			$form[]=new SelectField('startkamp', $profiel['startkamp'], 'Startkamp', array('ja', 'nee'));
-			$form[]=new TextField('medisch', $profiel['medisch'], 'medisch (NB alleen als relevant voor hele NovCie)');
-			$form[]=new TextField('novitiaatBijz', $profiel['novitiaatBijz'], 'Bijzonderheden novitiaat (op dag x ...)');
-			$form[]=new TextField('kgb', $profiel['kgb'], 'Overige NovCie-opmerking');
+			$form[]=new TextareaField('medisch', $profiel['medisch'], 'medisch (NB alleen als relevant voor hele NovCie)');
+			$form[]=new TextareaField('novitiaatBijz', $profiel['novitiaatBijz'], 'Bijzonderheden novitiaat (op dag x ...)');
+			$form[]=new TextareaField('kgb', $profiel['kgb'], 'Overige NovCie-opmerking');
 		}
 
 		if(!$this->editNoviet){
@@ -403,7 +403,7 @@ class ProfielBewerken extends Profiel {
 		$this->changelog[]='Bewerking van [lid='.LoginLid::instance()->getUid().'] op [reldate]'.getDatetime().'[/reldate]';
 
 		foreach($this->form->getFields() as $field){
-			if($field instanceof FormField){
+			if($field instanceof InputField){
 				//als een wachtwoordveld leeg is doen we er niets mee
 				if($field instanceof PassField AND $field->getValue()==''){ continue; }
 				//is het wel een wijziging?
@@ -489,7 +489,7 @@ class ProfielStatus extends Profiel{
 
 		//relevante gegevens uit velden verwerken
 		foreach($this->form->getFields() as $field){
-			if($field instanceof FormField){
+			if($field instanceof InputField){
 				
 				//mag het opgeslagen worden en is het wel een wijziging?
 				if($fieldsToSave[$field->getName()]['save']==true){
@@ -771,7 +771,7 @@ class ProfielVoorkeur extends Profiel{
 				$form[]=new SelectField($id, $this->getVoorkeur($voorkeur,$id), $com, $opties);
 			}
 			
-			$form[]=new TextField('lidOpmerking', $lidvoorkeur->getLidOpmerking(), 'Vul hier je eventuele voorkeur voor functie in, of andere opmerkingen');
+			$form[]=new TextareaField('lidOpmerking', $lidvoorkeur->getLidOpmerking(), 'Vul hier je eventuele voorkeur voor functie in, of andere opmerkingen');
 			$form[]=new SubmitButton('opslaan', '<a class="knop" href="/communicatie/profiel/'.$this->getUid().'">Annuleren</a>');
 
 			$this->form=new Formulier('profielForm', '/communicatie/profiel/'.$this->getUid().'/voorkeuren', $form);
@@ -788,7 +788,7 @@ class ProfielVoorkeur extends Profiel{
 			//relevante gegevens uit velden verwerken
 			$lidvoorkeur = new Lidvoorkeur($this->lid->getUid());
 			foreach($this->form->getFields() as $field){
-				if($field instanceof FormField){
+				if($field instanceof InputField){
 					//aan de hand van status bepalen welke POSTed velden worden opgeslagen van het formulier
 					if($field->getName() == 'lidOpmerking')
 						$lidvoorkeur->setLidOpmerking($field->getValue());

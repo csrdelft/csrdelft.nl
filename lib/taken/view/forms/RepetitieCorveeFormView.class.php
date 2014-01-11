@@ -29,7 +29,7 @@ class RepetitieCorveeFormView extends TemplateView {
 	public function view() {
 		$this->assign('melding', $this->getMelding());
 		$this->assign('kop', $this->getTitel());
-		$this->_form->css_classes .= ' popup';
+		$this->_form->css_classes[] = 'popup';
 		$this->assign('form', $this->_form);
 		$this->assign('nocheck', true);
 		$this->display('taken/popup_form.tpl');

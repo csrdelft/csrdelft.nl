@@ -19,7 +19,7 @@ class FunctieFormView extends TemplateView {
 
 		$formFields[] = new InputField('naam', $naam, 'Naam', 25);
 		$formFields[] = new InputField('afkorting', $afk, 'Afkorting', 3);
-		$formFields[] = new TextField('email_bericht', $email, 'Email', 9);
+		$formFields[] = new TextareaField('email_bericht', $email, 'Email', 9);
 		$formFields[] = new IntField('standaard_punten', $punten, 'Standaard punten', 10, 0);
 		$formFields['kwali'] = new VinkField('kwalificatie_benodigd', $kwali, 'Kwalificatie benodigd');
 		if ($this->_fid !== 0) {
@@ -39,7 +39,7 @@ class FunctieFormView extends TemplateView {
 	public function view() {
 		$this->assign('melding', $this->getMelding());
 		$this->assign('kop', $this->getTitel());
-		$this->_form->css_classes .= ' popup';
+		$this->_form->css_classes[] = 'popup';
 		$this->assign('form', $this->_form);
 		if ($this->_fid === 0) {
 			$this->assign('nocheck', true);

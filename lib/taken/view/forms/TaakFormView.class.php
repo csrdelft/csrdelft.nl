@@ -32,7 +32,7 @@ class TaakFormView extends TemplateView {
 		}
 
 		$formFields['fid'] = new SelectField('functie_id', $fid, 'Functie', $functieNamen, $functieSelectie);
-		$formFields['fid']->setOnChangeScript($functiePunten . "$('#field_punten').val(punten[this.value]);");
+		$formFields['fid']->onchange = $functiePunten . "$('#field_punten').val(punten[this.value]);";
 		$formFields['lid'] = new LidField('lid_id', $uid, 'Naam of lidnummer');
 		$formFields['lid']->title = 'Bij het wijzigen van het toegewezen lid worden ook de corveepunten aan het nieuwe lid gegeven.';
 		$formFields[] = new DatumField('datum', $datum, 'Datum', date('Y') + 2, date('Y') - 2);
@@ -55,7 +55,7 @@ class TaakFormView extends TemplateView {
 	public function view() {
 		$this->assign('melding', $this->getMelding());
 		$this->assign('kop', $this->getTitel());
-		$this->_form->css_classes .= ' popup';
+		$this->_form->css_classes[] = 'popup';
 		$this->assign('form', $this->_form);
 		if ($this->_tid === 0) {
 			$this->assign('nocheck', true);
