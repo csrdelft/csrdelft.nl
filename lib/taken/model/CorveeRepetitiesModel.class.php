@@ -1,5 +1,5 @@
 <?php
-namespace Taken\CRV;
+
 
 require_once 'taken/model/entity/CorveeRepetitie.class.php';
 require_once 'taken/model/VoorkeurenModel.class.php';
@@ -62,7 +62,7 @@ class CorveeRepetitiesModel {
 		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
-		$result = $query->fetchAll(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, '\Taken\CRV\CorveeRepetitie');
+		$result = $query->fetchAll(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, '\CorveeRepetitie');
 		// load corvee functies
 		if ($query->rowCount() === 1) {
 			$result[0]->setCorveeFunctie(FunctiesModel::getFunctie($result[0]->getFunctieId()));

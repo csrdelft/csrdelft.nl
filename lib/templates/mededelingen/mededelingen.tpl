@@ -26,9 +26,9 @@
 	<a class="knop" href="{$pagina_root}toevoegen">{icon get="toevoegen"} Toevoegen</a>
 {/if}
 {if $geselecteerdeMededeling->isModerator()}
-	<a class="knop" href="#" onclick="toggleDiv('legenda')">{icon get="legenda"} Legenda</a>
+	<a class="knop" href="#" onclick="$('#legenda').toggle();">{icon get="legenda"} Legenda</a>
 	<div id="legenda" style="display:none;">
-		<span id="ubbsluiten" onclick="toggleDiv('legenda')" title="Legenda verbergen">&times;</span>
+		<span id="ubbsluiten" onclick="$('#legenda').toggle();" title="Legenda verbergen">&times;</span>
 		<h2>Legenda Mededelingen</h2>
 		<br />
 		Voor de moderators zijn mededelingen in de lijst gemarkeerd. Dit is de betekenis van de markering:<br />

@@ -413,7 +413,7 @@ class Lid implements Serializable, Agendeerbaar{
 	 */
 	public function getCorveeKwalificaties(){
 		require_once 'taken/model/KwalificatiesModel.class.php';
-		return Taken\CRV\KwalificatiesModel::getKwalificatiesVanLid($this->getUid());
+		return KwalificatiesModel::getKwalificatiesVanLid($this->getUid());
 	}
 
 	/**
@@ -421,7 +421,7 @@ class Lid implements Serializable, Agendeerbaar{
 	 */
 	public function getCorveeVrijstelling(){
 		require_once 'taken/model/VrijstellingenModel.class.php';
-		return \Taken\CRV\VrijstellingenModel::getVrijstelling($this->getUid());
+		return \VrijstellingenModel::getVrijstelling($this->getUid());
 	}
 
 	/**
@@ -429,7 +429,7 @@ class Lid implements Serializable, Agendeerbaar{
 	 */
 	public function getCorveeVoorkeuren(){
 		require_once 'taken/model/VoorkeurenModel.class.php';
-		return \Taken\CRV\VoorkeurenModel::getVoorkeurenVoorLid($this->getUid(), true);
+		return \VoorkeurenModel::getVoorkeurenVoorLid($this->getUid(), true);
 	}
 
 	/**
@@ -437,11 +437,11 @@ class Lid implements Serializable, Agendeerbaar{
 	 */
 	public function getCorveeTaken(){
 		require_once 'taken/model/TakenModel.class.php';
-		return \Taken\CRV\TakenModel::getTakenVoorLid($this->getUid());
+		return \TakenModel::getTakenVoorLid($this->getUid());
 	}
 
 	//deze willen we hebben om vanuit templates handig instellingen op te halen.
-	public function instelling($key){ return Instelling::get($key); }
+	public function instelling($key){ return Instellingen::get($key); }
 	public function getInstellingen(){ return $this->profiel['instellingen']; }
 
 	/**
@@ -556,7 +556,7 @@ class Lid implements Serializable, Agendeerbaar{
 
 		//als $vorm==='user', de instelling uit het profiel gebruiken voor vorm
 		if($vorm=='user'){
-			$vorm=Instelling::get('forum_naamWeergave');
+			$vorm=Instellingen::get('forum_naamWeergave');
 		}
 		switch($vorm){
 			case 'nick':
@@ -662,7 +662,7 @@ class Lid implements Serializable, Agendeerbaar{
 			$k = '';
 			$l = '<a href="'.CSR_ROOT.'communicatie/profiel/'.$this->getUid().'" title="'.$sVolledigeNaam.'" class="lidLink '.$this->profiel['status'].'">';
 			
-			if (($vorm === 'leeg' || $mode === 'visitekaartje') && Instelling::get('layout_visitekaartjes') == 'ja') {
+			if (($vorm === 'leeg' || $mode === 'visitekaartje') && Instellingen::get('layout_visitekaartjes') == 'ja') {
 				$v = str_replace(' ', '', str_replace('.', '', microtime()));
 				$k = '<div id="k'.$v.'" class="visitekaartje';
 				if ($vorm !== 'leeg') {

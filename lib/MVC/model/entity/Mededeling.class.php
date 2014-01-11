@@ -1,7 +1,5 @@
 <?php
 
-require_once 'MVC/model/entity/PersistentEntity.class.php';
-
 /**
  * Mededeling.class.php
  * 
@@ -35,6 +33,7 @@ class Mededeling extends PersistentEntity {
 	public $zichtbaar_tot = null;
 	public $prioriteit = 0;
 	public $afbeelding_url = null;
+
 	/**
 	 * Database
 	 */

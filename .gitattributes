@@ -249,7 +249,6 @@ htdocs/layout/js/jquery.prettyPhoto.min.js -text
 htdocs/layout/js/jquery.scrollTo.min.js -text
 htdocs/layout/js/jquery.timeago.js -text
 htdocs/layout/js/lightbox.js -text
-htdocs/layout/js/maaltijd.js -text
 htdocs/layout/js/maaltijdabos.js -text
 htdocs/layout/js/menu.js -text
 htdocs/layout/js/menubeheer.js -text
@@ -2571,10 +2570,13 @@ lib/MVC/model/PaginationModel.abstract.php -text
 lib/MVC/model/PersistenceModel.abstract.php -text
 lib/MVC/model/entity/Mededeling.class.php -text
 lib/MVC/model/entity/PersistentEntity.abstract.php -text
-lib/MVC/view/Input.interface.php -text
-lib/MVC/view/TemplateEngine.class.php -text
+lib/MVC/view/MenuView.class.php -text
+lib/MVC/view/TemplateView.abstract.php -text
+lib/MVC/view/Validator.interface.php -text
 lib/MVC/view/View.interface.php -text
-lib/MVC/view/forms/formulier.class.php -text
+lib/MVC/view/form/FormElement.abstract.php -text
+lib/MVC/view/form/FormulierView.class.php -text
+lib/MVC/view/form/formulier.class.php -text
 lib/Zend/Exception.php -text
 lib/Zend/Gdata.php -text
 lib/Zend/Gdata/App.php -text
@@ -3044,7 +3046,6 @@ lib/mededelingen/mededelingcontent.class.php -text
 lib/mededelingen/mededelingencontent.class.php -text
 lib/mededelingen/mededelingtopdrieoverzichtcontent.class.php -text
 lib/memcached.class.php -text
-lib/menu/MenuView.class.php -text
 lib/menu/beheer/BeheerMenusController.class.php -text
 lib/menu/beheer/BeheerMenusView.class.php -text
 lib/menu/beheer/MenuItem.class.php -text
@@ -3317,6 +3318,7 @@ lib/taken/view/forms/RepetitieMaaltijdenFormView.class.php -text
 lib/taken/view/forms/TaakFormView.class.php -text
 lib/taken/view/forms/ToewijzenFormView.class.php -text
 lib/taken/view/forms/VrijstellingFormView.class.php -text
+lib/templates/LIB/layout/ubbhulp.tpl -text
 lib/templates/agenda/courant.tpl -text
 lib/templates/agenda/icalendar.tpl -text
 lib/templates/agenda/item.tpl -text
@@ -3436,7 +3438,6 @@ lib/templates/taken/voorkeur/mijn_voorkeuren.tpl -text
 lib/templates/taken/vrijstelling/beheer_vrijstelling_lijst.tpl -text
 lib/templates/taken/vrijstelling/beheer_vrijstellingen.tpl -text
 lib/templates/taken/vrijstelling/mijn_vrijstelling.tpl -text
-lib/templates/ubbhulp.tpl -text
 lib/ubb/LICENSE -text
 lib/ubb/README -text
 lib/ubb/TODO -text

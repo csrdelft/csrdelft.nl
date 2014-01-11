@@ -38,7 +38,7 @@ if(isset($_POST['namenRaw'])){
 				}
 				
 				require_once('taken/model/AbonnementenModel.class.php');
-				$abos = Taken\MLT\AbonnementenModel::getAbonnementenVoorLid($aLid['uid']);
+				$abos = AbonnementenModel::getAbonnementenVoorLid($aLid['uid']);
 				echo '<td>'.print_r($abos).'</td>';
 				echo '<td><input type="checkbox" name="delabos[]" /></td>';
 				echo '<td><select name="status[]"><option value="S_NOBODY">Lid af</option><option value="S_OUDLID">Oudlid</option></select></td>';

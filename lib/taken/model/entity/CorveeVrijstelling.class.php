@@ -1,5 +1,5 @@
 <?php
-namespace Taken\CRV;
+
 /**
  * CorveeVrijstelling.class.php	| 	P.W.G. Brussee (brussee@live.nl)
  * 

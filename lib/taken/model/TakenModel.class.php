@@ -1,5 +1,5 @@
 <?php
-namespace Taken\CRV;
+
 
 require_once 'taken/model/entity/CorveeTaak.class.php';
 require_once 'taken/model/FunctiesModel.class.php';
@@ -299,7 +299,7 @@ class TakenModel {
 		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
-		$result = $query->fetchAll(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, '\Taken\CRV\CorveeTaak');
+		$result = $query->fetchAll(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, '\CorveeTaak');
 		// load corvee functies
 		if ($query->rowCount() === 1) {
 			$result[0]->setCorveeFunctie(FunctiesModel::getFunctie($result[0]->getFunctieId()));
@@ -546,7 +546,7 @@ class TakenModel {
 			$taken = self::loadTaken('verwijderd = false AND crv_repetitie_id = ?', array($repetitie->getCorveeRepetitieId()));
 			$takenPerDatum = array(); // taken per datum indien geen maaltijd
 			$takenPerMaaltijd = array(); // taken per maaltijd
-			$maaltijden = \Taken\MLT\MaaltijdenModel::getKomendeRepetitieMaaltijden($repetitie->getMaaltijdRepetitieId(), true);
+			$maaltijden = MaaltijdenModel::getKomendeRepetitieMaaltijden($repetitie->getMaaltijdRepetitieId(), true);
 			$maaltijdenById = array();
 			foreach ($maaltijden as $maaltijd) {
 				$takenPerMaaltijd[$maaltijd->getMaaltijdId()] = array();

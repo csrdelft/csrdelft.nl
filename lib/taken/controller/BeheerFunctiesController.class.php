@@ -1,5 +1,5 @@
 <?php
-namespace Taken\CRV;
+
 
 require_once 'taken/model/FunctiesModel.class.php';
 require_once 'taken/model/KwalificatiesModel.class.php';

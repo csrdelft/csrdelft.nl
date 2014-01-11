@@ -1,5 +1,5 @@
 <?php
-namespace Taken\MLT;
+
 
 require_once 'taken/model/entity/MaaltijdAbonnement.class.php';
 require_once 'taken/model/AanmeldingenModel.class.php';
@@ -189,7 +189,7 @@ class AbonnementenModel {
 		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
-		$result = $query->fetchAll(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, '\Taken\MLT\MaaltijdAbonnement');
+		$result = $query->fetchAll(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, 'MaaltijdAbonnement');
 		return $result;
 	}
 	

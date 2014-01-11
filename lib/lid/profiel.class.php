@@ -7,7 +7,7 @@
 # -------------------------------------------------------------------
 
 
-require_once 'formulier.class.php';
+
 require_once 'forum/forum.class.php';
 require_once 'mail.class.php';
 
@@ -293,7 +293,7 @@ class ProfielBewerken extends Profiel {
 		$email=new RequiredEmailField('email', $profiel['email'], 'Emailadres');
 		if(LoginLid::instance()->isSelf($this->lid->getUid())){
 			//als we ons *eigen* profiel bewerken is het email-adres verplicht
-			$email->notnull=true;
+			$email->required=true;
 		}
 		$form[]=$email;
 		$form[]=new EmailField('msn', $profiel['msn'], 'MSN');
@@ -396,7 +396,7 @@ class ProfielBewerken extends Profiel {
 	 * dingen te controleren, dus die geven we mee.
 	 */
 	public function valid(){
-		return $this->form->valid($this->lid);
+		return $this->form->validate($this->lid);
 	}
 
 	public function save(){
@@ -472,7 +472,7 @@ class ProfielStatus extends Profiel{
 	 * dingen te controleren, dus die geven we mee.
 	 */
 	public function valid(){
-		return $this->form->valid($this->lid);
+		return $this->form->validate($this->lid);
 	}
 
 	/**
@@ -485,7 +485,7 @@ class ProfielStatus extends Profiel{
 		$this->changelog[]='Statusverandering van [lid='.LoginLid::instance()->getUid().'] op [reldate]'.getDatetime().'[/reldate]';
 
 		//aan de hand van status bepalen welke POSTed velden worden opgeslagen van het formulier
-		$fieldsToSave = $this->getFieldsToSave($this->form->findByName('status')->getValue());
+		$fieldsToSave = $this->getFieldsToSave($this->form->getFieldByName('status')->getValue());
 
 		//relevante gegevens uit velden verwerken
 		foreach($this->form->getFields() as $field){
@@ -567,7 +567,7 @@ class ProfielStatus extends Profiel{
 	 * @return string changelogregel
 	 */
 	private function disableMaaltijdabos(){
-		$aantal = \Taken\MLT\AbonnementenModel::verwijderAbonnementenVoorLid($this->lid->getUid());
+		$aantal = AbonnementenModel::verwijderAbonnementenVoorLid($this->lid->getUid());
 		return 'Afmelden abo\'s: '. $aantal .' uitgezet. ';
 	}
 
@@ -580,8 +580,8 @@ class ProfielStatus extends Profiel{
 	 */
 	private function removeToekomstigeCorvee($oudestatus, $nieuwestatus){
 		$uid = $this->bewerktLid->getUid();
-		$taken = Taken\CRV\TakenModel::getKomendeTakenVoorLid($uid);
-		$aantal = Taken\CRV\TakenModel::verwijderTakenVoorLid($uid);
+		$taken = TakenModel::getKomendeTakenVoorLid($uid);
+		$aantal = TakenModel::verwijderTakenVoorLid($uid);
 		if (sizeof($taken) !== $aantal) {
 			setMelding('Niet alle toekomstige corveetaken zijn verwijderd!', -1);
 		}

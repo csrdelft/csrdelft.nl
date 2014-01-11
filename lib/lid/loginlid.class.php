@@ -128,14 +128,14 @@ class LoginLid{
 		$_SESSION['_suedFrom']=$this->lid->getUid();
 		$_SESSION['_uid']=$uid;
 		$this->lid=$suNaar;
-		Instelling::reload();
+		Instellingen::reload();
 	}
 	public function endSu(){
 		$_SESSION['_uid']=$_SESSION['_suedFrom'];
 		$this->lid=$this->suedFrom;
 		unset($_SESSION['_suedFrom']);
 		$this->suedFrom=null;
-		Instelling::reload();
+		Instellingen::reload();
 	}
 	public function isSued(){
 		return $this->suedFrom!==null;
@@ -193,7 +193,7 @@ class LoginLid{
 		}elseif(isset($_SESSION['_ip'])){
 			unset($_SESSION['_ip']);
 		}
-		Instelling::reload();
+		Instellingen::reload();
 		return true;
 	}
 
@@ -221,7 +221,7 @@ class LoginLid{
 		$this->login('x999','x999',true);
 	}
 	public function getInstelling($key){
-		return Instelling::get($key);
+		return Instellingen::get($key);
 	}
 
 	/*

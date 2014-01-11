@@ -1,5 +1,5 @@
 <?php
-namespace Taken\CRV;
+
 
 require_once 'mail.class.php';
 
@@ -24,7 +24,7 @@ class HerinneringenModel {
 		$lidnaam = $lid->getNaamLink('civitas');
 		$eten = '';
 		if ($taak->getMaaltijdId() !== null) {
-			$aangemeld = \Taken\MLT\AanmeldingenModel::getIsAangemeld($taak->getMaaltijdId(), $uid);
+			$aangemeld = AanmeldingenModel::getIsAangemeld($taak->getMaaltijdId(), $uid);
 			if ($aangemeld) {
 				$eten = 'U eet WEL mee met de maaltijd.';
 			}

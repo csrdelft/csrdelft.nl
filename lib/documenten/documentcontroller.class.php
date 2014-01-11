@@ -1,6 +1,6 @@
 <?php
 
-require_once 'MVC/controller/Controller.class.php';
+require_once 'MVC/controller/Controller.abstract.php';
 require_once 'documenten/document.class.php';
 require_once 'documenten/categorie.class.php';
 require_once 'documenten/documentuploader.class.php';
@@ -199,7 +199,7 @@ class DocumentController extends Controller {
 					$this->addError('Dit document heeft nog geen bestand, dus dat kan ook niet behouden worden.');
 				}
 				//kijken of we errors hebben in de huidige methode.
-				if (!$this->uploaders[$_POST['methode']]->valid()) {
+				if (!$this->uploaders[$_POST['methode']]->validate()) {
 					$this->addError($this->uploaders[$_POST['methode']]->getErrors());
 				}
 			}

@@ -1,5 +1,5 @@
 <?php
-namespace Taken\MLT;
+
 
 require_once 'taken/model/AbonnementenModel.class.php';
 require_once 'taken/model/MaaltijdRepetitiesModel.class.php';
@@ -64,7 +64,7 @@ class BeheerAbonnementenController extends \AclController {
 	
 	public function voorlid() {
 		$formField = new \LidField('voor_lid', null, null, 'allepersonen'); // fetches POST values itself
-		if ($formField->valid()) {
+		if ($formField->validate()) {
 			$uid = $formField->getValue();
 			$matrix = array();
 			$matrix[$uid] = AbonnementenModel::getAbonnementenVoorLid($uid, false, true);

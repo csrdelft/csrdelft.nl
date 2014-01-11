@@ -1,5 +1,5 @@
 <?php
-namespace Taken\CRV;
+
 
 require_once 'taken/model/VrijstellingenModel.class.php';
 require_once 'taken/model/KwalificatiesModel.class.php';
@@ -17,7 +17,7 @@ class ToewijzenModel {
 	 * Als er een kwalificatie benodigd is worden alleen de
 	 * gekwalificeerde leden teruggegeven.
 	 * 
-	 * @param \Taken\CRV\CorveeTaak $taak
+	 * @param \CorveeTaak $taak
 	 * @return type
 	 * @throws \Exception
 	 */

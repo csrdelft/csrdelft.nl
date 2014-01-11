@@ -1,5 +1,5 @@
 <?php
-namespace Taken\CRV;
+
 
 require_once 'taken/model/VrijstellingenModel.class.php';
 

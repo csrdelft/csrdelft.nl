@@ -1,27 +1,29 @@
 <?php
+
 # C.S.R. Delft | pubcie@csrdelft.nl
 # -------------------------------------------------------------------
 # csrdelft.class.php
 # -------------------------------------------------------------------
 # csrdelft is de klasse waarbinnen een pagina in elkaar wordt gezet
 # -------------------------------------------------------------------
-class csrdelft extends SimpleHTML {
+
+class csrdelft extends TemplateView {
 
 	private $_body;
 	private $_layout;
 	private $_stylesheets = array();
 	private $_scripts = array();
-
 	/**
 	 * De normale layout heeft een array van SimpleHTML als zijkolom
 	 */
 	public $zijkolom = array();
 
-	function __construct(SimpleHTML $body, $layout = 'normaal') {
+	function __construct(View $body, $layout = 'normaal') {
+		parent::__construct();
 		$this->_body = $body;
 		$this->_layout = $layout;
-		
-		switch($this->_layout) {
+
+		switch ($this->_layout) {
 
 			case 'csrdelft2':
 				$this->addStylesheet('style.css', '/layout2/');
@@ -33,28 +35,28 @@ class csrdelft extends SimpleHTML {
 				$this->addScript('jquery.timeago.js');
 				$this->addScript('init.js', '/layout2/');
 				$this->addScript('csrdelft.js', '/layout/');
-			return;
+				return;
 
 			case 'normaal':
 			case 'owee':
 			case 'lustrum':
 			default:
-				
+
 				$this->addStylesheet('undohtml.css');
 				$this->addStylesheet('ubb.css');
 				$this->addStylesheet('csrdelft.css');
-				$layout = Instelling::get('layout');
-				if (!Instelling::hasEnumOption('layout', $layout)) { // fix verwijderde layout
+				$layout = Instellingen::get('layout');
+				if (!Instellingen::hasEnumOption('layout', $layout)) { // fix verwijderde layout
 					$layout = 'normaal';
-					Instelling::set('layout', $layout);
-					Instelling::save();
+					Instellingen::set('layout', $layout);
+					Instellingen::save();
 				}
-				$this->addStylesheet($layout .'.css');
-				if (Instelling::get('layout_beeld') == 'breedbeeld') {
+				$this->addStylesheet($layout . '.css');
+				if (Instellingen::get('layout_beeld') == 'breedbeeld') {
 					$this->addStylesheet('breedbeeld.css');
 				}
-				if (Instelling::get('layout_sneeuw') != 'nee') {
-					if (Instelling::get('layout_sneeuw') == 'ja') {
+				if (Instellingen::get('layout_sneeuw') != 'nee') {
+					if (Instellingen::get('layout_sneeuw') == 'ja') {
 						$this->addStylesheet('snow.anim.css');
 					} else {
 						$this->addStylesheet('snow.css');
@@ -66,11 +68,11 @@ class csrdelft extends SimpleHTML {
 				$this->addScript('csrdelft.js');
 				$this->addScript('dragobject.js');
 				$this->addScript('menu.js');
-				
-				if (Instelling::get('algemeen_sneltoetsen') == 'ja') {
+
+				if (Instellingen::get('algemeen_sneltoetsen') == 'ja') {
 					$this->addScript('sneltoetsen.js');
 				}
-			return;
+				return;
 		}
 	}
 
@@ -165,64 +167,62 @@ class csrdelft extends SimpleHTML {
 	 * @param string $menutemplate
 	 */
 	function view($template = '', $menutemplate = '') {
-		
+
 		header('Content-Type: text/html; charset=UTF-8');
-		$smarty = new TemplateEngine();
-		$smarty->assignByRef('this', $this);
-		$smarty->assign('body', $this->_body);
-		
-		switch($this->_layout) {
+		$this->assign('body', $this->_body);
+
+		switch ($this->_layout) {
 
 			case 'csrdelft2':
 				if ($template === '') {
 					$template = 'content';
 				}
 				if ($menutemplate !== '') {
-					$smarty->assign('menutpl', $menutemplate);
+					$this->assign('menutpl', $menutemplate);
 				}
-				$smarty->display('csrdelft2/'. $template .'.tpl');
-			return;
+				$this->display('csrdelft2/' . $template . '.tpl');
+				break;
 
 			case 'normaal':
 			case 'owee':
 			case 'lustrum':
 			default:
-				if (Instelling::get('layout_minion') == 'ja') {
+				if (Instellingen::get('layout_minion') == 'ja') {
 					$this->addStylesheet('minion.css');
 					$this->addScript('minion.js');
 					$top = 40;
 					$left = 40;
 					require_once 'dragobject.class.php';
 					DragObject::getCoords('minion', $top, $left);
-					$smarty->assign('top', $top);
-					$smarty->assign('left', $left);
-					$smarty->assign('minion', $smarty->fetch('minion.tpl'));
+					$this->assign('top', $top);
+					$this->assign('left', $left);
+					$this->assign('minion', $this->fetch('minion.tpl'));
 				}
-				
+
 				if (defined('DEBUG') AND (LoginLid::instance()->hasPermission('P_ADMIN') OR LoginLid::instance()->isSued())) {
-					$smarty->assign('debug', SimpleHTML::getDebug());
+					$this->assign('debug', SimpleHTML::getDebug());
 				}
-				
-				if ($this->zijkolom !== false || Instelling::get('layout_beeld') === 'breedbeeld') {
+
+				if ($this->zijkolom !== false || Instellingen::get('layout_beeld') === 'breedbeeld') {
 					if (is_array($this->zijkolom)) {
 						$this->zijkolom += SimpleHTML::getStandaardZijkolom();
-					}
-					else {
+					} else {
 						$this->zijkolom = SimpleHTML::getStandaardZijkolom();
 					}
 				}
-				$smarty->assign('zijkolom', $this->zijkolom);
-				
-				require_once('menu/MenuView.class.php');
-				$smarty->assign('mainmenu', new MenuView('main'));
-				
-				$smarty->display('csrdelft.tpl');
-			return;
+				$this->assign('zijkolom', $this->zijkolom);
+
+				require_once('MVC/view/MenuView.class.php');
+				$this->assign('mainmenu', new MenuView('main'));
+
+				$this->display('csrdelft.tpl');
+				break;
 		}
-		
+
 		// als er een error is geweest, die unsetten...
 		if (isset($_SESSION['auth_error'])) {
 			unset($_SESSION['auth_error']);
 		}
 	}
+
 }

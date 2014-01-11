@@ -1,5 +1,5 @@
 <?php
-namespace Taken\MLT;
+
 
 require_once 'taken/model/entity/MaaltijdAanmelding.class.php';
 
@@ -242,7 +242,7 @@ class AanmeldingenModel {
 		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
-		$result = $query->fetchAll(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, '\Taken\MLT\MaaltijdAanmelding');
+		$result = $query->fetchAll(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, 'MaaltijdAanmelding');
 		return $result;
 	}
 	

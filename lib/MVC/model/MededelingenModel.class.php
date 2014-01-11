@@ -1,6 +1,5 @@
 <?php
 
-require_once 'MVC/model/PagingModel.abstract.php';
 require_once 'MVC/model/entity/Mededeling.class.php';
 
 /**

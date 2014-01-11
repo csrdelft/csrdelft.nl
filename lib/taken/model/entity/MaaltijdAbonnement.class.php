@@ -1,5 +1,5 @@
 <?php
-namespace Taken\MLT;
+
 /**
  * MaaltijdAbonnement.class.php	| 	P.W.G. Brussee (brussee@live.nl)
  * 

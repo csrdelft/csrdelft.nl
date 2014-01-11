@@ -1,4 +1,5 @@
 <?php
+
 /*
  * PeilingContent
  * 
@@ -6,24 +7,28 @@
  */
 require_once 'peiling.class.php';
 
-class PeilingContent extends SimpleHTML{
+class PeilingContent extends TemplateView {
+
 	private $peiling;
-	
-	function PeilingContent(Peiling $peiling){
-		$this->peiling=$peiling;
+
+	function PeilingContent(Peiling $peiling) {
+		parent::__construct();
+		$this->peiling = $peiling;
 	}
 
-	public function getHTML($beheer=false){
-		$smarty=new TemplateEngine();
-		
-		$smarty->assign('peiling', $this->peiling);
-		$smarty->assign('beheer', $beheer);
-		
-		return $smarty->fetch('peiling.ubb.tpl');
-	} 
-	
-	public function view(){
+	public function getHTML($beheer = false) {
+
+
+		$this->assign('peiling', $this->peiling);
+		$this->assign('beheer', $beheer);
+
+		return $this->fetch('peiling.ubb.tpl');
+	}
+
+	public function view() {
 		echo $this->getHTML();
 	}
+
 }
+
 ?>

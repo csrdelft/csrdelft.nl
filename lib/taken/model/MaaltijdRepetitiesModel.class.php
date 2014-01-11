@@ -1,5 +1,5 @@
 <?php
-namespace Taken\MLT;
+
 
 require_once 'taken/model/entity/MaaltijdRepetitie.class.php';
 
@@ -66,7 +66,7 @@ class MaaltijdRepetitiesModel {
 		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
-		$result = $query->fetchAll(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, '\Taken\MLT\MaaltijdRepetitie');
+		$result = $query->fetchAll(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, 'MaaltijdRepetitie');
 		return $result;
 	}
 	
@@ -143,7 +143,7 @@ class MaaltijdRepetitiesModel {
 		if (!is_int($mrid) || $mrid <= 0) {
 			throw new \Exception('Verwijder maaltijd-repetitie faalt: Invalid $mrid ='. $mrid);
 		}
-		if (\Taken\CRV\CorveeRepetitiesModel::existMaaltijdRepetitieCorvee($mrid)) {
+		if (\CorveeRepetitiesModel::existMaaltijdRepetitieCorvee($mrid)) {
 			throw new \Exception('Ontkoppel of verwijder eerst de bijbehorende corvee-repetities!');
 		}
 		if (MaaltijdenModel::existRepetitieMaaltijden($mrid)) {

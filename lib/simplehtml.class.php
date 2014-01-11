@@ -1,4 +1,5 @@
 <?php
+
 # C.S.R. Delft | pubcie@csrdelft.nl
 # -------------------------------------------------------------------
 # simplehtml.class.php
@@ -6,18 +7,16 @@
 # Van deze klasse worden alle klassen afgeleid die ervoor
 # bedoeld zijn om uiteindelijk HTML te tonen met view()
 # -------------------------------------------------------------------
-abstract class SimpleHTML {
+
+abstract class SimpleHTML implements View {
+
+	public function getTitel() {
+		return 'C.S.R. Delft';
+	}
 
 	/**
-	 * Genereer html
-	 */
-	public function view() {}
-	
-	public function getTitel() { return 'C.S.R. Delft'; }
-	
-	/**
 	 * Geeft berichten weer die opgeslagen zijn in de sessie met met setMelding($message, $lvl=0)
-     * Levels can be:
+	 * Levels can be:
 	 *
 	 * -1 error
 	 *  0 info
@@ -26,14 +25,14 @@ abstract class SimpleHTML {
 	 *
 	 * @return string html van melding(en) of lege string
 	 */
-	public function getMelding(){
-		if(isset($_SESSION['melding']) AND is_array($_SESSION['melding'])){
-			$sMelding='<div id="melding">';
-			$shown=array();
-			foreach($_SESSION['melding'] as $msg){
+	public static function getMelding() {
+		if (isset($_SESSION['melding']) AND is_array($_SESSION['melding'])) {
+			$sMelding = '<div id="melding">';
+			$shown = array();
+			foreach ($_SESSION['melding'] as $msg) {
 				$hash = md5($msg['msg']);
 				//if(isset($shown[$hash])) continue; // skip double messages
-				$sMelding.='<div class="msg'.$msg['lvl'].'">';
+				$sMelding.='<div class="msg' . $msg['lvl'] . '">';
 				$sMelding.=$msg['msg'];
 				$sMelding.='</div>';
 				$shown[$hash] = 1;
@@ -42,81 +41,82 @@ abstract class SimpleHTML {
 			//maar één keer tonen, de melding.
 			unset($_SESSION['melding']);
 			return $sMelding;
-		}else{
+		} else {
 			return '';
 		}
 	}
-	public function setMelding($sMelding, $level=-1){
+
+	public static function setMelding($sMelding, $level = -1) {
 		setMelding($sMelding, $level);
 	}
-	
-	public static function invokeRefresh($url=null, $melding='', $level=-1){
+
+	public static function invokeRefresh($url = null, $melding = '', $level = -1) {
 		//als $melding een array is die uit elkaar halen
-		if(is_array($melding)){
-			list($melding, $level)=$melding;
+		if (is_array($melding)) {
+			list($melding, $level) = $melding;
 		}
-		if($melding!=''){
+		if ($melding != '') {
 			setMelding($melding, $level);
 		}
-		if($url==null){
-			$url=CSR_ROOT.$_SERVER['REQUEST_URI'];
+		if ($url == null) {
+			$url = CSR_ROOT . $_SERVER['REQUEST_URI'];
 		}
-		header('location: '.$url);
+		header('location: ' . $url);
 		exit;
 	}
-	
+
 	public static function getStandaardZijkolom() {
 		$zijkolom = array();
 		// Is het al...
-		if (Instelling::get('zijbalk_ishetal') != 'niet weergeven') {
+		if (Instellingen::get('zijbalk_ishetal') != 'niet weergeven') {
 			require_once('ishetalcontent.class.php');
-			$zijkolom[] = new IsHetAlContent(Instelling::get('zijbalk_ishetal'));
+			$zijkolom[] = new IsHetAlContent(Instellingen::get('zijbalk_ishetal'));
 		}
 		// Ga snel naar
-		if (Instelling::get('zijbalk_gasnelnaar') == 'ja') {
-			require_once('menu/MenuView.class.php');
+		if (Instellingen::get('zijbalk_gasnelnaar') == 'ja') {
+			require_once('MVC/view/MenuView.class.php');
 			$zijkolom[] = new MenuView('gasnelnaar', 3);
 		}
 		// Agenda
-		if (LoginLid::instance()->hasPermission('P_AGENDA_READ') && Instelling::get('zijbalk_agendaweken') > 0) {
+		if (LoginLid::instance()->hasPermission('P_AGENDA_READ') && Instellingen::get('zijbalk_agendaweken') > 0) {
 			require_once('agenda/agenda.class.php');
 			require_once('agenda/agendacontent.class.php');
-			$zijkolom[] = new AgendaZijbalkContent(new Agenda(), Instelling::get('zijbalk_agendaweken'));
+			$zijkolom[] = new AgendaZijbalkContent(new Agenda(), Instellingen::get('zijbalk_agendaweken'));
 		}
 		// Laatste mededelingen
-		if (Instelling::get('zijbalk_mededelingen') > 0) {
+		if (Instellingen::get('zijbalk_mededelingen') > 0) {
 			require_once('mededelingen/mededeling.class.php');
 			require_once('mededelingen/mededelingencontent.class.php');
-			$zijkolom[] = new MededelingenZijbalkContent(Instelling::get('zijbalk_mededelingen'));
+			$zijkolom[] = new MededelingenZijbalkContent(Instellingen::get('zijbalk_mededelingen'));
 		}
 		// Nieuwste belangrijke forumberichten
-		if (Instelling::get('zijbalk_forum_belangrijk') >= 0) {
+		if (Instellingen::get('zijbalk_forum_belangrijk') >= 0) {
 			require_once 'forum/forumcontent.class.php';
 			$zijkolom[] = new ForumContent('lastposts_belangrijk');
 		}
 		// Nieuwste forumberichten
-		if (Instelling::get('zijbalk_forum') > 0) {
+		if (Instellingen::get('zijbalk_forum') > 0) {
 			require_once 'forum/forumcontent.class.php';
 			$zijkolom[] = new ForumContent('lastposts');
 		}
 		// Zelfgeposte forumberichten
-		if (Instelling::get('zijbalk_forum_zelf') > 0) {
+		if (Instellingen::get('zijbalk_forum_zelf') > 0) {
 			require_once 'forum/forumcontent.class.php';
 			$zijkolom[] = new ForumContent('lastposts_zelf');
 		}
 		// Nieuwste fotoalbum
-		if (Instelling::get('zijbalk_fotoalbum') == 'ja') {
+		if (Instellingen::get('zijbalk_fotoalbum') == 'ja') {
 			require_once 'fotoalbumcontent.class.php';
 			$zijkolom[] = new FotalbumZijbalkContent();
 		}
 		// Komende verjaardagen
-		if (Instelling::get('zijbalk_verjaardagen') > 0) {
+		if (Instellingen::get('zijbalk_verjaardagen') > 0) {
 			require_once 'lid/verjaardagcontent.class.php';
 			$zijkolom[] = new VerjaardagContent('komende');
 		}
 		return $zijkolom;
 	}
-	
+
 	public static function getDebug($sql = true, $get = true, $post = true, $files = false, $session = true, $cookie = true) {
 		$debug = '';
 		if ($sql) {
@@ -155,4 +155,5 @@ abstract class SimpleHTML {
 		}
 		return $debug;
 	}
+
 }

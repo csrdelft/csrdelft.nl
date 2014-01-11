@@ -1,5 +1,5 @@
 <?php
-namespace Taken\CRV;
+
 
 require_once 'taken/model/VoorkeurenModel.class.php';
 require_once 'taken/view/BeheerVoorkeurenView.class.php';

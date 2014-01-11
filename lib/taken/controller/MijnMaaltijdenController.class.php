@@ -1,5 +1,5 @@
 <?php
-namespace Taken\MLT;
+
 
 require_once 'MVC/controller/AclController.abstract.php';
 require_once 'taken/model/MaaltijdenModel.class.php';
@@ -43,9 +43,9 @@ class MijnMaaltijdenController extends \AclController {
 	}
 	
 	public static function magMaaltijdlijstTonen(Maaltijd $maaltijd) {
-		//$taken = \Taken\CRV\TakenModel::getTakenVoorMaaltijd($maaltijd->getMaaltijdId());
+		//$taken = \TakenModel::getTakenVoorMaaltijd($maaltijd->getMaaltijdId());
 		// als er meerdere maaltijden op 1 dag zijn en maar 1 kookploeg (een taak kan maar aan 1 maaltijd gekoppeld zijn)
-		$taken = \Taken\CRV\TakenModel::getTakenVoorAgenda($maaltijd->getBeginMoment(), $maaltijd->getBeginMoment());
+		$taken = \TakenModel::getTakenVoorAgenda($maaltijd->getBeginMoment(), $maaltijd->getBeginMoment());
 		$uid = \LoginLid::instance()->getUid();
 		foreach ($taken as $taak) {
 			if ($taak->getLidId() === $uid) {
@@ -74,7 +74,7 @@ class MijnMaaltijdenController extends \AclController {
 			return;
 		}
 		$aanmeldingen = AanmeldingenModel::getAanmeldingenVoorMaaltijd($maaltijd);
-		$taken = \Taken\CRV\TakenModel::getTakenVoorMaaltijd($mid);
+		$taken = \TakenModel::getTakenVoorMaaltijd($mid);
 		require_once 'taken/view/MaaltijdLijstView.class.php';
 		$this->content = new MaaltijdLijstView($maaltijd, $aanmeldingen, $taken);
 	}

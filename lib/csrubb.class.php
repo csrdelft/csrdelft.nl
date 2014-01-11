@@ -23,7 +23,7 @@ class CsrUBB extends eamBBParser{
 	{
 		parent::getHTML($ubb);
 		
-		if (Instelling::get('layout_neuzen') == 'overal') {
+		if (Instellingen::get('layout_neuzen') == 'overal') {
 			$pointer = 0;
 			$counter = 0;
 			$counter2 =0;
@@ -93,7 +93,7 @@ class CsrUBB extends eamBBParser{
 		else {
 			$content = $arguments;
 		}
-		if (Instelling::get('layout_neuzen') != 'nee') {
+		if (Instellingen::get('layout_neuzen') != 'nee') {
 			$neus = '<img src="http://plaetjes.csrdelft.nl/famfamfam/bullet_red.png" width="16" height="16" alt="o" style="margin: -5px;">';
 			$content = str_replace('o', $neus, $content);
 		}
@@ -208,7 +208,7 @@ class CsrUBB extends eamBBParser{
 			$testwaarde=$arguments['waarde'];
 		}
 		try{
-			if(Instelling::get($arguments['instelling'])==$testwaarde){
+			if(Instellingen::get($arguments['instelling'])==$testwaarde){
 				return $content;
 			}
 		}catch(Exception $e){
@@ -523,7 +523,7 @@ HTML;
 		try{
 			$boek=new Boek((int)$boekid);
 			$content=new BoekUbbContent($boek);
-			return $content->getHTML();
+			return $content->view();
 		}catch(Exception $e){
 			return '[boek] Boek [boekid:'.(int)$boekid.'] bestaat niet.';
 		}
@@ -648,7 +648,7 @@ HTML;
 		require_once 'taken/view/MaaltijdKetzerView.class.php';
 		try {
 			if ($mid === 'next' || $mid === 'eerstvolgende' || $mid === 'next2' || $mid === 'eerstvolgende2') {
-				$maaltijden = \Taken\MLT\MaaltijdenModel::getKomendeMaaltijdenVoorLid(\LoginLid::instance()->getUid()); // met filter
+				$maaltijden = MaaltijdenModel::getKomendeMaaltijdenVoorLid(\LoginLid::instance()->getUid()); // met filter
 				$aantal = sizeof($maaltijden);
 				if ($aantal < 1) {
 					return 'Geen aankomende maaltijd.';
@@ -660,7 +660,7 @@ HTML;
 				}
 			}
 			elseif (preg_match('/\d+/', $mid)) {
-				$maaltijd = \Taken\MLT\MaaltijdenModel::getMaaltijdVoorKetzer((int)$mid); // met filter
+				$maaltijd = MaaltijdenModel::getMaaltijdVoorKetzer((int)$mid); // met filter
 				if (!$maaltijd) {
 					return '';
 				}
@@ -675,26 +675,26 @@ HTML;
 		if (!isset($maaltijd)) {
 			return '<div class="ubb_block ubb_maaltijd">Maaltijd niet gevonden: '. mb_htmlentities($mid) .'</div>';
 		}
-		$aanmeldingen = \Taken\MLT\AanmeldingenModel::getAanmeldingenVoorLid(array($maaltijd->getMaaltijdId() => $maaltijd), \LoginLid::instance()->getUid());
+		$aanmeldingen = AanmeldingenModel::getAanmeldingenVoorLid(array($maaltijd->getMaaltijdId() => $maaltijd), \LoginLid::instance()->getUid());
 		if (empty($aanmeldingen)) {
 			$aanmelding = null;
 		}
 		else {
 			$aanmelding = $aanmeldingen[$maaltijd->getMaaltijdId()];
 		}
-		$ketzer = new \Taken\MLT\MaaltijdKetzerView($maaltijd, $aanmelding);
-		$result = $ketzer->fetch();
+		$ketzer = new MaaltijdKetzerView($maaltijd, $aanmelding);
+		$result = $ketzer->fetchContent();
 		
 		if ($maaltijd2 !== null) {
-			$aanmeldingen2 = \Taken\MLT\AanmeldingenModel::getAanmeldingenVoorLid(array($maaltijd2->getMaaltijdId() => $maaltijd2), \LoginLid::instance()->getUid());
+			$aanmeldingen2 = AanmeldingenModel::getAanmeldingenVoorLid(array($maaltijd2->getMaaltijdId() => $maaltijd2), \LoginLid::instance()->getUid());
 			if (empty($aanmeldingen2)) {
 				$aanmelding2 = null;
 			}
 			else {
 				$aanmelding2 = $aanmeldingen2[$maaltijd2->getMaaltijdId()];
 			}
-			$ketzer2 = new \Taken\MLT\MaaltijdKetzerView($maaltijd2, $aanmelding2);
-			$result .= $ketzer2->fetch();
+			$ketzer2 = new MaaltijdKetzerView($maaltijd2, $aanmelding2);
+			$result .= $ketzer2->fetchContent();
 		}
 		return $result;
 	}

@@ -1,7 +1,5 @@
 <?php
 
-require_once 'MVC/model/Database.class.php';
-
 /**
  * Database.class.php
  * 

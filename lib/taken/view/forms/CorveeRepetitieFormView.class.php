@@ -1,7 +1,6 @@
 <?php
-namespace Taken\CRV;
 
-require_once 'formulier.class.php';
+
 
 /**
  * CorveeRepetitieFormView.class.php	| 	P.W.G. Brussee (brussee@live.nl)
@@ -9,30 +8,30 @@ require_once 'formulier.class.php';
  * Formulier voor een nieuwe of te bewerken corvee-repetitie.
  * 
  */
-class CorveeRepetitieFormView extends \SimpleHtml {
+class CorveeRepetitieFormView extends TemplateView {
 
 	private $_form;
 	private $_crid;
-	
-	public function __construct($crid, $mrid=null, $dag=null, $periode=null, $fid=null, $punten=null, $aantal=null, $voorkeur=null, $verplaats=null) {
+
+	public function __construct($crid, $mrid = null, $dag = null, $periode = null, $fid = null, $punten = null, $aantal = null, $voorkeur = null, $verplaats = null) {
+		parent::__construct();
 		$this->_crid = $crid;
-		
+
 		$functieNamen = FunctiesModel::getAlleFuncties(true); // grouped by fid
 		$functiePunten = 'var punten=[];';
 		$functieSelectie = array();
 		foreach ($functieNamen as $functie) {
 			$functieNamen[$functie->getFunctieId()] = $functie->getNaam();
-			$functiePunten .= 'punten['. $functie->getFunctieId() .']='. $functie->getStandaardPunten() .';';
+			$functiePunten .= 'punten[' . $functie->getFunctieId() . ']=' . $functie->getStandaardPunten() . ';';
 			if ($punten === null) {
 				$punten = $functie->getStandaardPunten();
 			}
 			if ($fid === $functie->getFunctieId()) {
 				$functieSelectie[$fid] = 'arrow';
-				
 			}
 		}
-		
-		$mlt_repetities = \Taken\MLT\MaaltijdRepetitiesModel::getAlleRepetities();
+
+		$mlt_repetities = MaaltijdRepetitiesModel::getAlleRepetities();
 		$repetitieNamen = array('' => '');
 		$repetitieSelectie = array();
 		foreach ($mlt_repetities as $rep) {
@@ -41,9 +40,9 @@ class CorveeRepetitieFormView extends \SimpleHtml {
 				$repetitieSelectie[$mrid] = 'arrow';
 			}
 		}
-		
+
 		$formFields['fid'] = new \SelectField('functie_id', $fid, 'Functie', $functieNamen, $functieSelectie);
-		$formFields['fid']->setOnChangeScript($functiePunten ."$('#field_standaard_punten').val(punten[this.value]);");
+		$formFields['fid']->setOnChangeScript($functiePunten . "$('#field_standaard_punten').val(punten[this.value]);");
 		$formFields[] = new \WeekdagField('dag_vd_week', $dag, 'Dag v/d week');
 		$formFields['dag'] = new \IntField('periode_in_dagen', $periode, 'Periode (in dagen)', 183, 0);
 		$formFields['dag']->title = 'Als de periode ongelijk is aan 7 is dit de start-dag bij het aanmaken van periodiek corvee';
@@ -58,42 +57,41 @@ class CorveeRepetitieFormView extends \SimpleHtml {
 			$formFields['ver'] = new \VinkField('verplaats_dag', $verplaats, 'Ook verplaatsen');
 			$formFields['ver']->title = 'Verplaats naar dag v/d week bij bijwerken';
 		}
-		
-		$this->_form = new \Formulier('taken-corvee-repetitie-form', $GLOBALS['taken_module'] .'/opslaan/'. $crid, $formFields);
+
+		$this->_form = new \Formulier('taken-corvee-repetitie-form', $GLOBALS['taken_module'] . '/opslaan/' . $crid, $formFields);
 	}
-	
+
 	public function getTitel() {
 		if ($this->_crid === 0) {
 			return 'Corveerepetitie aanmaken';
 		}
 		return 'Corveerepetitie wijzigen';
 	}
-	
+
 	public function view() {
-		$smarty = new \TemplateEngine();
-		$smarty->assign('melding', $this->getMelding());
-		$smarty->assign('kop', $this->getTitel());
-		$this->_form->cssClass .= ' popup';
-		$smarty->assign('form', $this->_form);
+		$this->assign('melding', $this->getMelding());
+		$this->assign('kop', $this->getTitel());
+		$this->_form->css_classes .= ' popup';
+		$this->assign('form', $this->_form);
 		if ($this->_crid === 0) {
-			$smarty->assign('nocheck', true);
+			$this->assign('nocheck', true);
+		} elseif ($this->_crid > 0) {
+			$this->assign('bijwerken', $GLOBALS['taken_module'] . '/bijwerken/' . $this->_crid);
 		}
-		elseif ($this->_crid > 0) {
-			$smarty->assign('bijwerken', $GLOBALS['taken_module'] .'/bijwerken/'. $this->_crid);
-		}
-		$smarty->display('taken/popup_form.tpl');
+		$this->display('taken/popup_form.tpl');
 	}
-	
+
 	public function validate() {
 		if (!is_int($this->_crid) || $this->_crid < 0) {
 			return false;
 		}
-		return $this->_form->valid();
+		return $this->_form->validate();
 	}
-	
+
 	public function getValues() {
 		return $this->_form->getValues(); // escapes HTML
 	}
+
 }
 
 ?>

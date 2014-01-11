@@ -13,45 +13,49 @@
  */
 require_once 'lid/lidzoeker.class.php';
 
+class LedenlijstContent extends TemplateView {
 
-
-class LedenlijstContent extends SimpleHTML{
 	private $zoeker;
-	
-	public function __construct(LidZoeker $zoeker){
-		$this->zoeker=$zoeker;
+
+	public function __construct(LidZoeker $zoeker) {
+		parent::__construct();
+		$this->zoeker = $zoeker;
 	}
-	
-	public function getTitel(){ return 'Ledenlijst der Civitas'; }
-	
-	public function viewSelect($name, $options){
-		echo '<select name="'.$name.'" id="f'.$name.'">';
-		foreach($options as $key => $value){
-			echo '<option value="'.htmlspecialchars($key).'"';
-			if($key==$this->zoeker->getRawQuery($name)){
+
+	public function getTitel() {
+		return 'Ledenlijst der Civitas';
+	}
+
+	public function viewSelect($name, $options) {
+		echo '<select name="' . $name . '" id="f' . $name . '">';
+		foreach ($options as $key => $value) {
+			echo '<option value="' . htmlspecialchars($key) . '"';
+			if ($key == $this->zoeker->getRawQuery($name)) {
 				echo ' selected="selected"';
 			}
-			echo '>'.mb_htmlentities($value).'</option>';
+			echo '>' . mb_htmlentities($value) . '</option>';
 		}
 		echo '</select> ';
 	}
-	public function viewVeldselectie(){
+
+	public function viewVeldselectie() {
 		echo '<label for="veldselectie">Veldselectie: </label>';
 		echo '<div id="veldselectie">';
-		$velden=$this->zoeker->getSelectableVelden();
-		foreach($velden as $key => $veld){
+		$velden = $this->zoeker->getSelectableVelden();
+		foreach ($velden as $key => $veld) {
 			echo '<div class="selectVeld">';
-			echo '<input type="checkbox" name="velden[]" id="veld'.$key.'" value="'.$key.'" ';
-			if(in_array($key, $this->zoeker->getSelectedVelden())){
+			echo '<input type="checkbox" name="velden[]" id="veld' . $key . '" value="' . $key . '" ';
+			if (in_array($key, $this->zoeker->getSelectedVelden())) {
 				echo 'checked="checked" ';
 			}
 			echo ' />';
-			echo '<label for="veld'.$key.'">'.ucfirst($veld).'</label>';
+			echo '<label for="veld' . $key . '">' . ucfirst($veld) . '</label>';
 			echo '</div>';
 		}
 		echo '</div>';
 	}
-	public function view(){
+
+	public function view() {
 		echo '<ul class="horizontal nobullets">
 	<li class="active"><a href="/communicatie/ledenlijst/">Ledenlijst</a></li>
 	<li><a href="/communicatie/verjaardagen" title="Overzicht verjaardagen">Verjaardagen</a></li>
@@ -59,253 +63,257 @@ class LedenlijstContent extends SimpleHTML{
 </ul>';
 		echo '<hr />';
 
-		if($this->zoeker->count()>0){
-			if(strstr($_SERVER['REQUEST_URI'], '?')!==false){
-				$url=$_SERVER['REQUEST_URI'].'&amp;addToGoogle=true';
-			}else{
-				$url=$_SERVER['REQUEST_URI'].'?addToGoogle=true';
+		if ($this->zoeker->count() > 0) {
+			if (strstr($_SERVER['REQUEST_URI'], '?') !== false) {
+				$url = $_SERVER['REQUEST_URI'] . '&amp;addToGoogle=true';
+			} else {
+				$url = $_SERVER['REQUEST_URI'] . '?addToGoogle=true';
 			}
-			echo '<a href="'.$url.'" class="knop" style="float: right" title="Huidige selectie exporteren naar Google Contacts" onclick="return confirm(\'Weet u zeker dat u deze '.$this->zoeker->count().' leden wilt importeren in uw Google-contacts?\')"><img src="http://code.google.com/favicon.ico" alt="google"/></a>';
+			echo '<a href="' . $url . '" class="knop" style="float: right" title="Huidige selectie exporteren naar Google Contacts" onclick="return confirm(\'Weet u zeker dat u deze ' . $this->zoeker->count() . ' leden wilt importeren in uw Google-contacts?\')"><img src="http://code.google.com/favicon.ico" alt="google"/></a>';
 		}
-		$melding=$this->getMelding();
-		if($melding!=''){
-			echo $melding.'<br />';
+		$melding = $this->getMelding();
+		if ($melding != '') {
+			echo $melding . '<br />';
 		}
-		echo '<h1>'.(LoginLid::instance()->getLid()->isOudlid() ? 'Oud-leden en l' : 'L').'edenlijst </h1>';
+		echo '<h1>' . (LoginLid::instance()->getLid()->isOudlid() ? 'Oud-leden en l' : 'L') . 'edenlijst </h1>';
 		echo '<form method="get" id="zoekform">';
-		echo '<label for="q"></label><input type="text" name="q" value="'.htmlspecialchars($this->zoeker->getQuery()).'" /> ';
+		echo '<label for="q"></label><input type="text" name="q" value="' . htmlspecialchars($this->zoeker->getQuery()) . '" /> ';
 		echo '<input type="submit" class="submit" value="zoeken" /> <a class="knop" id="toggleAdvanced" href="#geavanceerd">Geavanceerd</a>';
-		
+
 		echo '<div id="advanced" class="verborgen">';
 		echo '<label for="status">Status:</label>';
 		$this->viewSelect('status', array(
-			'LEDEN'=>'Leden', 
-			'NOVIET'=>'Novieten', 'GASTLID'=>'Gastlid',
-			'OUDLEDEN'=> 'Oudleden', 
-			'LEDEN|OUDLEDEN'=>'Leden & oudleden', 'ALL'=>'Alles'));
+			'LEDEN' => 'Leden',
+			'NOVIET' => 'Novieten', 'GASTLID' => 'Gastlid',
+			'OUDLEDEN' => 'Oudleden',
+			'LEDEN|OUDLEDEN' => 'Leden & oudleden', 'ALL' => 'Alles'));
 		echo '<br />';
 		echo '<label for="weergave">Weergave:</label>';
 		$this->viewSelect('weergave', array(
-			'lijst' => 'Lijst (standaard)', 
+			'lijst' => 'Lijst (standaard)',
 			'kaartje' => 'Visitekaartjes',
 			'CSV' => 'CSV-bestand'));
 		echo '<br />';
-			
+
 		//sorteren op:
 		echo '<label for="sort">Sorteer op:</label>';
 		$this->viewSelect('sort', $this->zoeker->getSortableVelden());
 		echo '<br />';
-			
+
 		//selecteer velden
 		echo '<div id="veldselectiecontainer">';
 		$this->viewVeldselectie();
 		echo '</div><br />';
-		
+
 		echo '</div>'; //einde advanced div.
 		echo '</form>';
-		
+
 		echo '<hr class="clear" />';
-		
-		if($this->zoeker->count()>0){
-			$viewclass=$this->zoeker->getWeergave();
-			$view=new $viewclass($this->zoeker);
+
+		if ($this->zoeker->count() > 0) {
+			$viewclass = $this->zoeker->getWeergave();
+			$view = new $viewclass($this->zoeker);
 			$view->view();
-		}elseif($this->zoeker->searched()){
+		} elseif ($this->zoeker->searched()) {
 			echo 'Geen resultaten';
-		}else{
+		} else {
 			//nog niet gezocht.
 		}
 		?>
 		<script type="text/javascript">
-			function updateVeldselectie(){
-				if(jQuery('#fweergave').val()=='kaartje'){
+			function updateVeldselectie() {
+				if (jQuery('#fweergave').val() == 'kaartje') {
 					jQuery('#veldselectiecontainer').hide('fast');
-				}else{
+				} else {
 					jQuery('#veldselectiecontainer').show('fast');
 				}
 			}
-			
-			jQuery(document).ready(function($){
-				$('#toggleAdvanced').click(function(){
-					adv=$('#advanced');
+
+			jQuery(document).ready(function($) {
+				$('#toggleAdvanced').click(function() {
+					adv = $('#advanced');
 					adv.toggleClass('verborgen');
-					
-					if(adv.hasClass('verborgen')){
-						window.location.hash='';
+
+					if (adv.hasClass('verborgen')) {
+						window.location.hash = '';
 						$('#advanced input').attr('disabled', 'disabled');
-					}else{
-						window.location.hash='geavanceerd';
+					} else {
+						window.location.hash = 'geavanceerd';
 						$('#zoekform').attr('action', '#geavanceerd');
 						$('#advanced input').removeAttr('disabled');
 						$('#advanced select').removeAttr('disabled');
 					}
 				});
-				
-				if(document.location.hash=='#geavanceerd'){
+
+				if (document.location.hash == '#geavanceerd') {
 					$('#advanced').removeClass('verborgen');
-				}else{
+				} else {
 					$('#advanced input').attr('disabled', 'disabled');
 					$('#advanced select').attr('disabled', 'disabled');
 				}
 				//weergave van selectie beschikbare veldjes
-				$('#fweergave').change(function(){
+				$('#fweergave').change(function() {
 					updateVeldselectie();
 					$('#zoekform').submit();
-					});
+				});
 				updateVeldselectie();
 			});
 		</script>
-		
+
 		<?php
 	}
+
 }
 
-abstract class LLWeergave{
+abstract class LLWeergave {
+
 	protected $leden;
-	
-	public function __construct(LidZoeker $zoeker){
-		$this->leden=$zoeker->getLeden();
-		$this->velden=$zoeker->getVelden();
+
+	public function __construct(LidZoeker $zoeker) {
+		$this->leden = $zoeker->getLeden();
+		$this->velden = $zoeker->getVelden();
 	}
-	
+
 	public abstract function viewHeader();
+
 	public abstract function viewFooter();
-	
+
 	//viewLid print één regel of vakje ofzo.
 	public abstract function viewLid(Lid $lid);
-	
-	public function view(){
+
+	public function view() {
 		$this->viewHeader();
-		foreach($this->leden as $lid){
+		foreach ($this->leden as $lid) {
 			$this->viewLid($lid);
 		}
 		$this->viewFooter();
 	}
-	
+
 }
 
 /*
  * De 'normale' ledenlijst, zoals het is zoals het was.
  */
-class LLLijst extends LLweergave{ 
-	
-	private function viewVeldnamen(){
+
+class LLLijst extends LLweergave {
+
+	private function viewVeldnamen() {
 		echo '<tr>';
-		foreach($this->velden as $veld){
-			echo '<th>'.ucfirst($veld).'</th>';
+		foreach ($this->velden as $veld) {
+			echo '<th>' . ucfirst($veld) . '</th>';
 		}
 		echo '</tr>';
 	}
-	public function viewHeader(){
+
+	public function viewHeader() {
 		echo '<table class="zoekResultaat" id="zoekResultaat">';
 		echo '<thead>';
 		$this->viewVeldnamen();
 		echo '</thead><tbody>';
 	}
 
-	public function viewFooter(){
+	public function viewFooter() {
 		echo "</tbody>\n<tfoot>";
 		$this->viewVeldnamen();
 		echo '</tfoot></table>';
-		
+
 		//fix jQuery datatables op deze tabel.
-		$aoColumns=array();
-		foreach($this->velden as $veld){
-			switch($veld){
+		$aoColumns = array();
+		foreach ($this->velden as $veld) {
+			switch ($veld) {
 				case 'pasfoto':
-					$aoColumns[]='{"bSortable": false}';
-				break;
+					$aoColumns[] = '{"bSortable": false}';
+					break;
 				case 'email':
 				case 'naam':
 				case 'kring':
 				case 'patroon':
 				case 'verticale':
-					$aoColumns[]='{"sType": \'html\'}';
-				break;
+					$aoColumns[] = '{"sType": \'html\'}';
+					break;
 				case 'woonoord':
-					$aoColumns[]='{"sType": \'html\'}';
-				break;
+					$aoColumns[] = '{"sType": \'html\'}';
+					break;
 				default:
-					$aoColumns[]='null';
+					$aoColumns[] = 'null';
 			}
 		}
 		?>
 		<script type="text/javascript">
-		jQuery(document).ready(function($){
-			$("#zoekResultaat").dataTable({
-				"aaSorting": [],
-				"bStateSave": true,
-				"oLanguage": {
-					"sSearch": "Zoeken in selectie:"
-				},
-				"iDisplayLength": 50,
-				"bInfo": false,
-				"bLengthChange": false,
-				"aoColumns": [ <?php echo implode(', ', $aoColumns); ?> ]
+			jQuery(document).ready(function($) {
+				$("#zoekResultaat").dataTable({
+					"aaSorting": [],
+					"bStateSave": true,
+					"oLanguage": {
+						"sSearch": "Zoeken in selectie:"
+					},
+					"iDisplayLength": 50,
+					"bInfo": false,
+					"bLengthChange": false,
+					"aoColumns": [<?php echo implode(', ', $aoColumns); ?>]
+				});
 			});
-		});
 		</script><?php
 	}
-	
-	public function viewLid(Lid $lid){
-		echo '<tr id="lid'.$lid->getUid().'">';
-		foreach($this->velden as $veld){
-			echo '<td class="'.$veld.'">';
-			switch($veld){
+
+	public function viewLid(Lid $lid) {
+		echo '<tr id="lid' . $lid->getUid() . '">';
+		foreach ($this->velden as $veld) {
+			echo '<td class="' . $veld . '">';
+			switch ($veld) {
 				case 'adres':
 					echo mb_htmlentities($lid->getAdres());
-				break;
+					break;
 				case 'kring':
 					echo $lid->getKring(true);
-				break;
-				case 'naam': 
+					break;
+				case 'naam':
 					//we stoppen er een verborgen <span> bij waar op gesorteerd wordt door datatables.
-					echo '<span class="verborgen">'.$lid->getNaamLink('streeplijst', 'plain').'</span>';
-					echo $lid->getNaamLink('full', 'link'); 
-				break;
-				case 'pasfoto': 
-					echo $lid->getPasfoto(); 
-				break;
+					echo '<span class="verborgen">' . $lid->getNaamLink('streeplijst', 'plain') . '</span>';
+					echo $lid->getNaamLink('full', 'link');
+					break;
+				case 'pasfoto':
+					echo $lid->getPasfoto();
+					break;
 				case 'patroon':
-					$patroon=$lid->getPatroon();
-					if($patroon instanceof Lid){
+					$patroon = $lid->getPatroon();
+					if ($patroon instanceof Lid) {
 						echo $patroon->getNaamLink('full', 'link');
-					}else{
+					} else {
 						echo '-';
 					}
-				break;
+					break;
 				case 'echtgenoot':
-					$echtgenoot=$lid->getEchtgenoot();
-					if($echtgenoot instanceof Lid){
+					$echtgenoot = $lid->getEchtgenoot();
+					if ($echtgenoot instanceof Lid) {
 						echo $echtgenoot->getNaamLink('full', 'link');
-					}else{
+					} else {
 						echo '-';
 					}
-				break;
+					break;
 				case 'status':
 					echo $lid->getStatus()->getDescription();
-				break;
+					break;
 				case 'verticale':
 					echo mb_htmlentities($lid->getVerticale());
-				break;
+					break;
 				case 'woonoord':
 					echo $lid->getWoonoord();
-				break;
+					break;
 				case 'linkedin':
 				case 'website':
-					echo '<a href="'.mb_htmlentities($lid->getProperty($veld)).'" class="linkExt">'.mb_htmlentities($lid->getProperty($veld)).'</a>';
-				break;
+					echo '<a href="' . mb_htmlentities($lid->getProperty($veld)) . '" class="linkExt">' . mb_htmlentities($lid->getProperty($veld)) . '</a>';
+					break;
 				default:
-					try{
+					try {
 						echo mb_htmlentities($lid->getProperty($veld));
-					}catch(Exception $e){
+					} catch (Exception $e) {
 						echo ' - ';
 					}
-					
 			}
 			echo '</td>';
 		}
-		
+
 		echo '</tr>';
 	}
 
@@ -314,89 +322,102 @@ class LLLijst extends LLweergave{
 /*
  * Visitekaartjes, 3 op één regel.
  */
-class LLKaartje extends LLweergave{ 
-	public function viewHeader(){}
-	public function viewFooter(){}
-	
-	public function viewLid(Lid $lid){
+
+class LLKaartje extends LLweergave {
+
+	public function viewHeader() {
+		
+	}
+
+	public function viewFooter() {
+		
+	}
+
+	public function viewLid(Lid $lid) {
 		echo $lid->getNaamLink('leeg', 'visitekaartje');
 	}
+
 }
 
 /*
  * CSV in een textarea. 
  * Eventueel zou het nog geforceerd downloadbaar gemaakt kunnen worden
  */
-class LLCSV extends LLweergave{
-	public function viewHeader(){
+
+class LLCSV extends LLweergave {
+
+	public function viewHeader() {
 		echo '<textarea class="csv">';
 	}
-	public function viewFooter(){
+
+	public function viewFooter() {
 		echo '</textarea>';
 	}
-	
-	public function viewLid(Lid $lid){
-		
-		foreach($this->velden as $veld){
-			$return='';
-			switch($veld){
+
+	public function viewLid(Lid $lid) {
+
+		foreach ($this->velden as $veld) {
+			$return = '';
+			switch ($veld) {
 				case 'adres':
-					$return.=$lid->getProperty('adres').';';
-					$return.=$lid->getProperty('postcode').';';
+					$return.=$lid->getProperty('adres') . ';';
+					$return.=$lid->getProperty('postcode') . ';';
 					$return.=$lid->getProperty('woonplaats');
-				break;
+					break;
 				case 'naam':
-					$return.=$lid->getProperty('voornaam').';';
-					$return.=$lid->getProperty('tussenvoegsel').';';
+					$return.=$lid->getProperty('voornaam') . ';';
+					$return.=$lid->getProperty('tussenvoegsel') . ';';
 					$return.=$lid->getProperty('achternaam');
-				break;
+					break;
 				case 'kring':
 					$return.=$lid->getKring(false);
-				break;
+					break;
 				case 'pasfoto':
 					$return.=$lid->getPasfoto(false);
-				break;
+					break;
 				case 'patroon':
-					$patroon=$lid->getPatroon();
-					if($patroon instanceof Lid){
+					$patroon = $lid->getPatroon();
+					if ($patroon instanceof Lid) {
 						$return.=$patroon->getNaamLink('full', 'plain');
 					}
-				break;
+					break;
 				case 'echtgenoot':
-					$echtgenoot=$lid->getEchtgenoot();
-					if($echtgenoot instanceof Lid){
+					$echtgenoot = $lid->getEchtgenoot();
+					if ($echtgenoot instanceof Lid) {
 						$return.=$echtgenoot->getNaamLink('full', 'plain');
 					}
-				break;
+					break;
 				case 'adresseringechtpaar':
 					$return.=$lid->getAdresseringechtpaar();
-				break;
+					break;
 				case 'verticale':
 					$return.=$lid->getVerticale();
-				break;
+					break;
 				case 'woonoord':
-					$woonoord=$lid->getWoonoord();
-					if($woonoord instanceof Groep){
+					$woonoord = $lid->getWoonoord();
+					if ($woonoord instanceof Groep) {
 						$return.=$woonoord->getNaam();
 					}
 				default:
-					try{
+					try {
 						$return.=$lid->getProperty($veld);
-					}catch(Exception $e){
+					} catch (Exception $e) {
 						//omit non-existant fields
 					}
-				break;
+					break;
 			}
-			echo htmlspecialchars($return).';';
+			echo htmlspecialchars($return) . ';';
 		}
 		echo "\n";
 	}
+
 }
+
 /*
  * Google wil een CSV met kolomnamen erboven.
  */
-class LLGoogleCSV extends LLCSV{
+
+class LLGoogleCSV extends LLCSV {
 	
 }
-
 ?>

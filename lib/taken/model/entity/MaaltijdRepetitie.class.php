@@ -1,5 +1,5 @@
 <?php
-namespace Taken\MLT;
+
 /**
  * MaaltijdRepetitie.class.php	| 	P.W.G. Brussee (brussee@live.nl)
  * 

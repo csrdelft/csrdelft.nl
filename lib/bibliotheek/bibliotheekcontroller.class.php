@@ -5,7 +5,7 @@
  *
  *
  */
-require_once 'MVC/controller/Controller.class.php';
+require_once 'MVC/controller/Controller.abstract.php';
 require_once 'bibliotheek/boek.class.php';
 require_once 'bibliotheek/catalogus.class.php';
 

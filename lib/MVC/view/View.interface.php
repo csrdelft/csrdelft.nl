@@ -9,7 +9,7 @@
  * 
  */
 interface View {
-	
+
 	public function view();
 }
 

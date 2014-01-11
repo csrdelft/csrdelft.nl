@@ -1,5 +1,5 @@
 <?php
-namespace Taken\CRV;
+
 
 require_once 'taken/model/CorveeRepetitiesModel.class.php';
 require_once 'taken/model/MaaltijdRepetitiesModel.class.php';
@@ -48,7 +48,7 @@ class CorveeRepetitiesController extends \AclController {
 		}
 		elseif (is_int($mrid) && $mrid > 0) {
 			$repetities = CorveeRepetitiesModel::getRepetitiesVoorMaaltijdRepetitie($mrid);
-			$maaltijdrepetitie = \Taken\MLT\MaaltijdRepetitiesModel::getRepetitie($mrid);
+			$maaltijdrepetitie = MaaltijdRepetitiesModel::getRepetitie($mrid);
 		}
 		else {
 			$repetities = CorveeRepetitiesModel::getAlleRepetities();
@@ -86,7 +86,7 @@ class CorveeRepetitiesController extends \AclController {
 			$repetitie_aantal = CorveeRepetitiesModel::saveRepetitie($crid, $mrid, $values['dag_vd_week'], $values['periode_in_dagen'], intval($values['functie_id']), $values['standaard_punten'], $values['standaard_aantal'], $values['voorkeurbaar']);
 			$maaltijdrepetitie = null;
 			if (endsWith($_SERVER['HTTP_REFERER'], $GLOBALS['taken_module'] .'/maaltijd/'. $values['mlt_repetitie_id'])) { // state of gui
-				$maaltijdrepetitie = \Taken\MLT\MaaltijdRepetitiesModel::getRepetitie($mrid);
+				$maaltijdrepetitie = MaaltijdRepetitiesModel::getRepetitie($mrid);
 			}
 			$this->content = new CorveeRepetitiesView($repetitie_aantal[0], $maaltijdrepetitie);
 			if ($repetitie_aantal[1] > 0) {

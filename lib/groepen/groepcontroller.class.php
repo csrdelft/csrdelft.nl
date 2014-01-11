@@ -1,6 +1,6 @@
 <?php
 require_once 'groepen.class.php';
-require_once 'MVC/controller/Controller.class.php';
+require_once 'MVC/controller/Controller.abstract.php';
 
 /**
  * class.groepcontroller.php	| 	Jan Pieter Waagmeester (jieter@jpwaag.com)
@@ -212,7 +212,7 @@ class Groepcontroller extends Controller{
 			}
 		}
 
-		if($this->isPOSTed()){
+		if($this->isPosted()){
 			if($this->groepValidator()){
 				//slaan we een nieuwe groep op?
 				if($this->groep->getId()==0 ){

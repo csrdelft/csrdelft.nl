@@ -1,5 +1,5 @@
 <?php
-namespace Taken\MLT;
+
 /**
  * Instelling.class.php	| 	P.W.G. Brussee (brussee@live.nl)
  * 

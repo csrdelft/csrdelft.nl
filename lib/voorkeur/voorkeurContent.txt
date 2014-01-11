@@ -1,4 +1,4 @@
-class LidPaginaVoorkeurContent extends SimpleHTML{
+class LidPaginaVoorkeurContent extends TemplateView{
 	private $profiel;
 	private $actie;
 
@@ -12,7 +12,7 @@ class LidPaginaVoorkeurContent extends SimpleHTML{
 	public function view(){
 
 
-		require_once 'formulier.class.php';
+		
 		$profiel=new Smarty_csr();
 		$profiel->assign('profiel', $this->profiel);
 

@@ -1,5 +1,5 @@
 <?php
-namespace Taken\MLT;
+
 
 require_once 'taken/model/entity/Instelling.class.php';
 
@@ -62,7 +62,7 @@ class InstellingenModel {
 	 * Laad alle instellingen uit de database.
 	 * Als default instellingen ontbreken worden deze aangemaakt en opgeslagen.
 	 * 
-	 * @return Instelling[]
+	 * @return Instellingen[]
 	 */
 	public static function getAlleInstellingen() {
 		if (self::$_instellingen === null) { // laad maar 1x
@@ -84,7 +84,7 @@ class InstellingenModel {
 	 * Zoek een instelling voor bewerken of na verwijderen.
 	 * Als een default instelling ontbreekt wordt deze aangemaakt en opgeslagen.
 	 * 
-	 * @return Instelling
+	 * @return Instellingen
 	 */
 	public static function getInstelling($key) {
 		foreach (self::$_instellingen as $instelling) {
@@ -112,7 +112,7 @@ class InstellingenModel {
 		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
-		$result = $query->fetchAll(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, '\Taken\MLT\Instelling');
+		$result = $query->fetchAll(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, 'Instelling');
 		return $result;
 	}
 	
@@ -148,10 +148,10 @@ class InstellingenModel {
 		if ($query->rowCount() !== 1) {
 			throw new \Exception('New instelling faalt: $query->rowCount() ='. $query->rowCount());
 		}
-		return new Instelling($key, $value);
+		return new Instellingen($key, $value);
 	}
 	
-	private static function updateInstelling(Instelling $instelling) {
+	private static function updateInstelling(Instellingen $instelling) {
 		$sql = 'UPDATE mlt_instellingen';
 		$sql.= ' SET waarde = ?';
 		$sql.= ' WHERE instelling_id = ?';

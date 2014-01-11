@@ -225,7 +225,7 @@ jQuery(document).ready(function($) {
 						if(result.value){
 							//opgeslagen waarde in input zetten en een tijdelijke succesmelding
 							$("#"+input.id).val(result.value);
-							field.removeClass('metfouten').addClass('opgeslagen');
+							field.removeClass('metFouten').addClass('opgeslagen');
 							window.setTimeout(function(){
 								field.removeClass('opgeslagen');
 							}, 3000);
@@ -233,7 +233,7 @@ jQuery(document).ready(function($) {
 							if(input.id.substring(6,11)=='lener'){ location.reload(); }
 						}else{
 							//rode foutmelding
-							field.removeClass('opgeslagen').addClass('metfouten');
+							field.removeClass('opgeslagen').addClass('metFouten');
 						}
 						//meldingsboodschap plaatsen, en verwijder bewerkt-markering
 						field.find(".melding").html(result.melding).show();

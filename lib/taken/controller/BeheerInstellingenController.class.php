@@ -1,5 +1,5 @@
 <?php
-namespace Taken\MLT;
+
 
 require_once 'taken/view/BeheerInstellingenView.class.php';
 require_once 'taken/view/forms/InstellingFormView.class.php';

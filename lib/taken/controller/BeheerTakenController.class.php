@@ -1,5 +1,5 @@
 <?php
-namespace Taken\CRV;
+
 
 require_once 'MVC/controller/AclController.abstract.php';
 require_once 'taken/model/TakenModel.class.php';
@@ -55,7 +55,7 @@ class BeheerTakenController extends \AclController {
 			$this->bewerk($tid);
 		}
 		elseif (is_int($mid) && $mid > 0) {
-			$maaltijd = \Taken\MLT\MaaltijdenModel::getMaaltijd($mid, true);
+			$maaltijd = MaaltijdenModel::getMaaltijd($mid, true);
 			$taken = TakenModel::getTakenVoorMaaltijd($mid, true);
 		}
 		else {
@@ -108,7 +108,7 @@ class BeheerTakenController extends \AclController {
 	
 	public function nieuw($mid=null) {
 		if ($mid !== null) {
-			$maaltijd = \Taken\MLT\MaaltijdenModel::getMaaltijd($mid);
+			$maaltijd = MaaltijdenModel::getMaaltijd($mid);
 			$beginDatum = $maaltijd->getDatum();
 		}
 		if (array_key_exists('crid', $_POST)) {
@@ -160,7 +160,7 @@ class BeheerTakenController extends \AclController {
 			$taak = TakenModel::saveTaak($tid, intval($values['functie_id']), $uid, $crid, $mid, $values['datum'], intval($values['punten']), intval($values['bonus_malus']));
 			$maaltijd = null;
 			if (endsWith($_SERVER['HTTP_REFERER'], $GLOBALS['taken_module'] .'/maaltijd/'. $values['maaltijd_id'])) { // state of gui
-				$maaltijd = \Taken\MLT\MaaltijdenModel::getMaaltijd($mid);
+				$maaltijd = MaaltijdenModel::getMaaltijd($mid);
 			}
 			$this->content = new BeheerTakenView($taak, $maaltijd);
 		}
@@ -179,7 +179,7 @@ class BeheerTakenController extends \AclController {
 	public function toewijzen($tid) {
 		$taak = TakenModel::getTaak($tid);
 		$formField = new \LidField('lid_id', null, null, 'leden'); // fetches POST values itself
-		if ($formField->valid()) {
+		if ($formField->validate()) {
 			$uid = $formField->getValue();
 			if ($uid === '') {
 				$uid = null;

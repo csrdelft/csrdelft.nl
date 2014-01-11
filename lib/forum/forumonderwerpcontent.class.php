@@ -1,67 +1,71 @@
 <?php
+
 # C.S.R. Delft | pubcie@csrdelft.nl
 # -------------------------------------------------------------------
 # class.forumonderwerpcontent.php
 # -------------------------------------------------------------------
 
+class ForumOnderwerpContent extends TemplateView {
 
-
-class ForumOnderwerpContent extends SimpleHTML {
 	private $forumonderwerp;
-
 	//nul als er niets geciteerd wordt, anders een postID
-	private $citeerPost=0;
+	private $citeerPost = 0;
+	private $titel = 'forum';
+	private $error = false;
 
-	private $titel='forum';
-
-	private $error=false;
-
-	public function __construct($bForumonderwerp){
-		$this->forumonderwerp=$bForumonderwerp;
+	public function __construct($bForumonderwerp) {
+		parent::__construct();
+		$this->forumonderwerp = $bForumonderwerp;
 	}
 
+	public function citeer($iPostID) {
+		$this->citeerPost = (int) $iPostID;
+	}
 
-	public function citeer($iPostID){ 	$this->citeerPost=(int)$iPostID; }
-	private function getCiteerPost(){	return $this->citeerPost; }
+	private function getCiteerPost() {
+		return $this->citeerPost;
+	}
 
-	function getTitel(){
-		$sTitel='Forum - '.
-			$this->forumonderwerp->getCategorie()->getNaam().' - '.
-			$this->forumonderwerp->getTitel();
+	function getTitel() {
+		$sTitel = 'Forum - ' .
+				$this->forumonderwerp->getCategorie()->getNaam() . ' - ' .
+				$this->forumonderwerp->getTitel();
 		return $sTitel;
 	}
-	function view(){
-		if($this->forumonderwerp->getPosts()===false){
+
+	function view() {
+		if ($this->forumonderwerp->getPosts() === false) {
 			$this->setMelding($this->forumonderwerp->getError());
 
 			echo '<h2><a href="/communicatie/forum/" class="forumGrootlink">Forum</a> &raquo; Foutje</h2>';
 			echo $this->getMelding();
+		} else {
 
-		}else{
-			$smarty=new TemplateEngine();
-			$smarty->assign('onderwerp', $this->forumonderwerp);
+			$this->assign('onderwerp', $this->forumonderwerp);
 
-			$smarty->assign('melding', $this->getMelding());
+			$this->assign('melding', $this->getMelding());
 
 			//wat komt er in de textarea te staan?
-			$textarea='';
-			if($this->getCiteerPost()!=0){
-				$post=$this->forumonderwerp->getSinglePost($this->getCiteerPost());
-				if(is_array($post)){
-					if(!$this->forumonderwerp->isIngelogged()){
-						$aPost['tekst']=CsrUBB::filterPrive($post['tekst']);
+			$textarea = '';
+			if ($this->getCiteerPost() != 0) {
+				$post = $this->forumonderwerp->getSinglePost($this->getCiteerPost());
+				if (is_array($post)) {
+					if (!$this->forumonderwerp->isIngelogged()) {
+						$aPost['tekst'] = CsrUBB::filterPrive($post['tekst']);
 					}
-					$textarea='[citaat='.$post['uid'].']'.htmlspecialchars($post['tekst']).'[/citaat]';
+					$textarea = '[citaat=' . $post['uid'] . ']' . htmlspecialchars($post['tekst']) . '[/citaat]';
 				}
-			}else{
-				if(isset($_SESSION['compose_snapshot'])){
-					$textarea=htmlspecialchars($_SESSION['compose_snapshot']);
+			} else {
+				if (isset($_SESSION['compose_snapshot'])) {
+					$textarea = htmlspecialchars($_SESSION['compose_snapshot']);
 				}
 			}
-			$smarty->assign('textarea', $textarea);
+			$this->assign('textarea', $textarea);
 
-			$smarty->display('forum/onderwerp.tpl');
+			$this->display('forum/onderwerp.tpl');
 		}
 	}
+
 }
+
 ?>

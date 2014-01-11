@@ -1,4 +1,5 @@
 <?php
+
 # C.S.R. Delft | pubcie@csrdelft.nl
 # -------------------------------------------------------------------
 # class.streeplijst.php
@@ -8,46 +9,58 @@
 
 require_once 'verticale.class.php';
 
-class Streeplijstcontent extends SimpleHTML {
-	private $moot='alle';
-	private $lichting='';
+class Streeplijstcontent extends TemplateView {
 
+	private $moot = 'alle';
+	private $lichting = '';
 	private $aGoederen;
 	private $aLeden;
 
-	function __construct(){
+	function __construct() {
+		parent::__construct();
 		$this->load();
-
 	}
-	function load(){
-		if(isset($_GET['goederen']) AND trim($_GET['goederen'])!=''){
-			$sGoederen=htmlspecialchars($_GET['goederen']);
-		}else{
-			$sGoederen='Grolschbier, S.bier, frisfris, reep, mix, sig., wijnF, sterk, B.noot, WW';
+
+	function load() {
+		if (isset($_GET['goederen']) AND trim($_GET['goederen']) != '') {
+			$sGoederen = htmlspecialchars($_GET['goederen']);
+		} else {
+			$sGoederen = 'Grolschbier, S.bier, frisfris, reep, mix, sig., wijnF, sterk, B.noot, WW';
 		}
 		$this->parseGoederen($sGoederen);
 
-		if(isset($_GET['moot']) AND (int)$_GET['moot']==$_GET['moot']){
-			$this->moot=(int)$_GET['moot'];
+		if (isset($_GET['moot']) AND (int) $_GET['moot'] == $_GET['moot']) {
+			$this->moot = (int) $_GET['moot'];
 		}
-		if(isset($_GET['lichting']) AND preg_match('/^\d{2}$/', $_GET['lichting'])==1){
-			$this->lichting=$_GET['lichting'];
+		if (isset($_GET['lichting']) AND preg_match('/^\d{2}$/', $_GET['lichting']) == 1) {
+			$this->lichting = $_GET['lichting'];
 		}
 		//leden welke in de lijst moeten laden.
-		$this->aLeden=Zoeker::zoekLeden($this->lichting, 'uid', $this->moot, 'achternaam', 'leden');
+		$this->aLeden = Zoeker::zoekLeden($this->lichting, 'uid', $this->moot, 'achternaam', 'leden');
 	}
 
-	function parseGoederen($sGoederen){
-		$sGoederen=str_replace(array(', ', ',  '), ',', $sGoederen);
-		$this->aGoederen=explode(',', $sGoederen);
-		if(isset($_GET['sortCols'])){ sort($this->aGoederen); }
+	function parseGoederen($sGoederen) {
+		$sGoederen = str_replace(array(', ', ',  '), ',', $sGoederen);
+		$this->aGoederen = explode(',', $sGoederen);
+		if (isset($_GET['sortCols'])) {
+			sort($this->aGoederen);
+		}
 	}
-	function getGoederenArray(){ return $this->aGoederen; }
-	function goederenCount(){ return count($this->getGoederenArray()); }
-	function getGoederen(){ return implode(', ', $this->getGoederenArray()); }
 
-	function getHtml(){
- 		$sReturn='
+	function getGoederenArray() {
+		return $this->aGoederen;
+	}
+
+	function goederenCount() {
+		return count($this->getGoederenArray());
+	}
+
+	function getGoederen() {
+		return implode(', ', $this->getGoederenArray());
+	}
+
+	function getHtml() {
+		$sReturn = '
 			<html>
 				<head>
 					<style>
@@ -74,13 +87,17 @@ class Streeplijstcontent extends SimpleHTML {
 			</head>
 			<body><table>';
 		//headerregeltje klussen
-		$sKop='<thead><tr><td class="naam">Naam</td>';
-		$i=1;
-		foreach($this->aGoederen as $sArtikel){
+		$sKop = '<thead><tr><td class="naam">Naam</td>';
+		$i = 1;
+		foreach ($this->aGoederen as $sArtikel) {
 			$sKop.='<td class="cell';
 			//switch the row coloring..
-			if(isset($_GET['colorCols'])){ $sKop.=($i%2); }else{ $sKop.='0'; }
-			$sKop.='">'.$sArtikel.'</td>';
+			if (isset($_GET['colorCols'])) {
+				$sKop.=($i % 2);
+			} else {
+				$sKop.='0';
+			}
+			$sKop.='">' . $sArtikel . '</td>';
 			$i++;
 		}
 		$sKop.='</tr></thead>';
@@ -88,20 +105,20 @@ class Streeplijstcontent extends SimpleHTML {
 		//eerte header weergeven.
 		$sReturn.=$sKop;
 
-		$iTeller=2;
-		foreach($this->aLeden as $aLid){
-			$lid=LidCache::getLid($aLid['uid']);
+		$iTeller = 2;
+		foreach ($this->aLeden as $aLid) {
+			$lid = LidCache::getLid($aLid['uid']);
 
-			if($iTeller%43==1){
-				$sReturn.=$sKop.'</tr></table>';
+			if ($iTeller % 43 == 1) {
+				$sReturn.=$sKop . '</tr></table>';
 				$sReturn.='<span class="breekpunt"></span>';
-				$sReturn.='<table><tr>'.$sKop;
+				$sReturn.='<table><tr>' . $sKop;
 			}
-			$sReturn.='<tr><td class="naam">'.$lid->getNaamLink('streeplijst', 'plain').'</td>';
-			for($i=1; $i<=$this->goederenCount(); $i++){
-				$sReturn.='<td class="cell'.($i%2).'">&nbsp;</td>';
+			$sReturn.='<tr><td class="naam">' . $lid->getNaamLink('streeplijst', 'plain') . '</td>';
+			for ($i = 1; $i <= $this->goederenCount(); $i++) {
+				$sReturn.='<td class="cell' . ($i % 2) . '">&nbsp;</td>';
 			}
-			$sReturn.='</tr>'."\r\n";
+			$sReturn.='</tr>' . "\r\n";
 			$iTeller++;
 		}
 		$sReturn.=$sKop;
@@ -109,24 +126,31 @@ class Streeplijstcontent extends SimpleHTML {
 
 		return $sReturn;
 	}
-	function getPdf(){
 
+	function getPdf() {
+		
 	}
-	function getUrl(){
-		$sReturn='streeplijst.php?goederen='.urlencode($this->getGoederen()).
-			'&moot='.$this->moot.'&lichting='.$this->lichting.'&';
-		if(isset($_GET['colorCols'])){ $sReturn.='colorCols&'; }
-		if(isset($_GET['sortCols'])){ $sReturn.='sortCols&'; }
+
+	function getUrl() {
+		$sReturn = 'streeplijst.php?goederen=' . urlencode($this->getGoederen()) .
+				'&moot=' . $this->moot . '&lichting=' . $this->lichting . '&';
+		if (isset($_GET['colorCols'])) {
+			$sReturn.='colorCols&';
+		}
+		if (isset($_GET['sortCols'])) {
+			$sReturn.='sortCols&';
+		}
 		return $sReturn;
 	}
-	function view(){
+
+	function view() {
 		echo '<h1>Bestel- &amp; inschrijflijst-generator voor C.S.R. Delft</h1>
 			<form action="streeplijst.php" method="get" id="streeplijst">
 			<fieldset>
 				<legend>Bestellijst</legend>
 				<br />
 				<strong>Goederen:</strong> (Voer goederen in gescheiden door een komma.)<br />
-				<input type="text" name="goederen" value="'.$this->getGoederen().'" style="width: 100%;" /><br />
+				<input type="text" name="goederen" value="' . $this->getGoederen() . '" style="width: 100%;" /><br />
 				<br />
 			</fieldset>
 			<br />
@@ -134,22 +158,30 @@ class Streeplijstcontent extends SimpleHTML {
 				<legend>Ledenselectie</legend><br />';
 		//mootselectie
 		echo '<strong>Verticale:</strong><br />';
-		$moten=array_merge(array('alle'), range(1, 8));
-		foreach($moten as $moot){
-			echo '<input type="radio" name="moot" id="m'.$moot.'" value="'.$moot.'" ';
-			if($moot==$this->moot){ echo 'checked="checked" '; }
-			echo '/> <label for="m'.$moot.'">';
-			if($moot=='alle'){ echo $moot; }else{ echo Verticale::getNaamById($moot); }
+		$moten = array_merge(array('alle'), range(1, 8));
+		foreach ($moten as $moot) {
+			echo '<input type="radio" name="moot" id="m' . $moot . '" value="' . $moot . '" ';
+			if ($moot == $this->moot) {
+				echo 'checked="checked" ';
+			}
+			echo '/> <label for="m' . $moot . '">';
+			if ($moot == 'alle') {
+				echo $moot;
+			} else {
+				echo Verticale::getNaamById($moot);
+			}
 			echo '</label>';
 		}
 		echo '<br />';
 		//lichtingsselectie
 		echo '<strong>Lichting:</strong><br />';
-		$jaren=array_merge(array('alle'), range(date('Y')-7, date('Y')));
-		foreach($jaren as $jaar){
-			echo '<input type="radio" name="lichting" id="l'.$jaar.'" value="'.substr($jaar, 2).'" ';
-			if(substr($jaar, 2)==$this->lichting){ echo 'checked="checked" '; }
-			echo '/> <label for="l'.$jaar.'">'.$jaar.'</label>';
+		$jaren = array_merge(array('alle'), range(date('Y') - 7, date('Y')));
+		foreach ($jaren as $jaar) {
+			echo '<input type="radio" name="lichting" id="l' . $jaar . '" value="' . substr($jaar, 2) . '" ';
+			if (substr($jaar, 2) == $this->lichting) {
+				echo 'checked="checked" ';
+			}
+			echo '/> <label for="l' . $jaar . '">' . $jaar . '</label>';
 		}
 		echo '</fieldset>
 			<br />
@@ -176,12 +208,11 @@ class Streeplijstcontent extends SimpleHTML {
 					<li>Achtergrondkleuren afdrukken <i>aan</i>vinken</li>
 				</ul>
 				</li>
-			</ul><br />';	
-		if(isset($_GET['toon'])){
-			echo '<a href="'.$this->getUrl().'iframe">Alleen de streeplijst</a><br />';
+			</ul><br />';
+		if (isset($_GET['toon'])) {
+			echo '<a href="' . $this->getUrl() . 'iframe">Alleen de streeplijst</a><br />';
 			//iframe met html meuk...
-			echo '<iframe style="width: 100%; height: 400px;" src="'.$this->getUrl().'iframe"></iframe>';
-
+			echo '<iframe style="width: 100%; height: 400px;" src="' . $this->getUrl() . 'iframe"></iframe>';
 		}
 	}
 

@@ -5,7 +5,7 @@
 <tr id="maaltijd-row-{$maaltijd->getMaaltijdId()}"{if !$aanmelding and $maaltijd->getIsGesloten()} class="taak-grijs"{/if}>
 	<td>
 		{$maaltijd->getDatum()|date_format:"%a %e %b"} {$maaltijd->getTijd()|date_format:"%H:%M"}
-{if $toonlijst|is_a:'\Taken\CRV\CorveeTaak'}
+{if $toonlijst|is_a:'\CorveeTaak'}
 		<div style="float: right;">
 			{icon get="paintcan" title=$toonlijst->getCorveeFunctie()->getNaam()}
 		</div>

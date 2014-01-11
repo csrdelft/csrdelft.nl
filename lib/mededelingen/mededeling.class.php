@@ -332,7 +332,7 @@ class Mededeling{
 		
 		$resource=$db->select($positieQuery);
 		$record=$db->next($resource);
-		$paginaNummer=ceil(($record['positie'])/Instelling::get('mededelingen_aantalPerPagina'));
+		$paginaNummer=ceil(($record['positie'])/Instellingen::get('mededelingen_aantalPerPagina'));
 		$paginaNummer=$paginaNummer >= 1 ? $paginaNummer : 1; // Het moet natuurlijk wel groter dan 0 zijn.
 		return $paginaNummer;
 	}

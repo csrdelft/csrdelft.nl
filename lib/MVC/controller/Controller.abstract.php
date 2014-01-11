@@ -47,7 +47,7 @@ abstract class Controller {
 		}
 	}
 
-	protected function isPOSTed() {
+	protected function isPosted() {
 		return $_SERVER['REQUEST_METHOD'] === 'POST';
 	}
 

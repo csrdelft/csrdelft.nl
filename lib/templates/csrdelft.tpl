@@ -51,11 +51,11 @@
 		</div>
 	</div>
 </div>
-{include file='ubbhulp.tpl'}
+{include file='LIB/layout/ubbhulp.tpl'}
 {if isset($minion)}{$minion}{/if}
 {if isset($debug)}
 	<h2 id="mysql_debug_header">
-		<a id="mysql_debug_showhide" href="#mysql_debug_header" onclick="return toggleDiv('mysql_debug');">Debug Tonen/Verstoppen</a>
+		<a id="mysql_debug_showhide" href="#mysql_debug_header" onclick="$('#mysql_debug').toggle();">Debug Tonen/Verstoppen</a>
 	</h2>
 	<div id="mysql_debug" style="display: none">{$debug}</div>
 {/if}

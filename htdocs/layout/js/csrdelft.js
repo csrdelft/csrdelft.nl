@@ -176,7 +176,7 @@ function forumBewerken(post){
 			bewerkForm+='<div id="bewerkPreviewContainer" class="previewContainer"><h3>Voorbeeld van uw bericht:</h3><div id="bewerkPreview" class="preview"></div></div>';
 			bewerkForm+='<textarea name="bericht" id="forumBewerkBericht" class="tekst" rows="8" style="width: 100%;"></textarea>';
 			bewerkForm+='Reden van bewerking: <input type="text" name="reden" style="width: 250px;"/><br /><br />';
-			bewerkForm+='<a style="float: right;" class="handje knop" onclick="toggleDiv(\'ubbhulpverhaal\')" title="Opmaakhulp weergeven">UBB</a>';
+			bewerkForm+='<a style="float: right;" class="handje knop" onclick="$(\'#ubbhulpverhaal\').toggle();" title="Opmaakhulp weergeven">UBB</a>';
 			bewerkForm+='<a style="float: right;" class="handje knop" onclick="vergrootTextarea(\'forumBewerkBericht\', 10)" title="Vergroot het invoerveld"><strong>&uarr;&darr;</strong></a>';
 			bewerkForm+='<input type="submit" value="opslaan" /> <input type="button" value="voorbeeld" onclick="previewPost(\'forumBewerkBericht\', \'bewerkPreview\')" /> <input type="button" value="terug" onclick="restorePost()" />';
 			bewerkForm+='</form>';
@@ -235,17 +235,6 @@ function youtubeDisplay(ytID){
  */
 function LZ(x) {return(x<0||x>9?"":"0")+x}
 
-function hideDiv(div){ div.style.display="none"; }
-function displayDiv(div){ div.style.display="block"; }
-
-function toggleDiv(id){
-	var div=document.getElementById(id);
-	if(div.style.display=="block" || div.style.display=="inline"){
-		hideDiv(div);
-	}else{
-		displayDiv(div);
-	}
-}
 var orig=null;
 function togglePasfotos(uids, div){
 	if(orig!=null){

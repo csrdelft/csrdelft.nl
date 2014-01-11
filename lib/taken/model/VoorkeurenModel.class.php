@@ -1,5 +1,5 @@
 <?php
-namespace Taken\CRV;
+
 
 require_once 'taken/model/entity/CorveeVoorkeur.class.php';
 require_once 'taken/model/CorveeRepetitiesModel.class.php';
@@ -138,7 +138,7 @@ class VoorkeurenModel {
 		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
-		$result = $query->fetchAll(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, '\Taken\CRV\CorveeVoorkeur');
+		$result = $query->fetchAll(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, '\CorveeVoorkeur');
 		return $result;
 	}
 	

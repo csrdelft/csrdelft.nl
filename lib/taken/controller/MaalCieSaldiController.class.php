@@ -1,5 +1,5 @@
 <?php
-namespace Taken\MLT;
+
 
 require_once 'lid/saldi.class.php';
 require_once 'taken/view/MaalCieSaldiView.class.php';

@@ -1,5 +1,5 @@
 <?php
-namespace Taken\MLT;
+
 
 require_once 'taken/model/MaaltijdRepetitiesModel.class.php';
 require_once 'taken/view/MaaltijdRepetitiesView.class.php';

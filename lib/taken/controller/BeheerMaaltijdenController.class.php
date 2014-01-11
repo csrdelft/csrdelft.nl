@@ -1,5 +1,5 @@
 <?php
-namespace Taken\MLT;
+
 
 require_once 'taken/model/MaaltijdenModel.class.php';
 require_once 'taken/model/AanmeldingenModel.class.php';

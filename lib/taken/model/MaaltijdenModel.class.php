@@ -1,5 +1,5 @@
 <?php
-namespace Taken\MLT;
+
 
 require_once 'taken/model/entity/Maaltijd.class.php';
 require_once 'taken/model/entity/ArchiefMaaltijd.class.php';
@@ -174,8 +174,8 @@ class MaaltijdenModel {
 	public static function verwijderMaaltijd($mid) {
 		$maaltijd = self::loadMaaltijd($mid);
 		if ($maaltijd->getIsVerwijderd()) {
-			if (\Taken\CRV\TakenModel::existMaaltijdCorvee($mid)) {
-				\Taken\CRV\TakenModel::verwijderMaaltijdCorvee($mid); // delete corveetaken first (foreign key)
+			if (\TakenModel::existMaaltijdCorvee($mid)) {
+				\TakenModel::verwijderMaaltijdCorvee($mid); // delete corveetaken first (foreign key)
 				throw new \Exception('Alle bijbehorende corveetaken zijn naar de prullenbak verplaatst. Verwijder die eerst!');
 			}
 			self::deleteMaaltijd($mid); // definitief verwijderen
@@ -249,7 +249,7 @@ class MaaltijdenModel {
 		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
-		$result = $query->fetchAll(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, '\Taken\MLT\Maaltijd');
+		$result = $query->fetchAll(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, 'Maaltijd');
 		if ($query->rowCount() > 0) {
 			self::existArchiefMaaltijden($result);
 		}
@@ -366,7 +366,7 @@ class MaaltijdenModel {
 		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
-		$result = $query->fetchAll(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, '\Taken\MLT\ArchiefMaaltijd');
+		$result = $query->fetchAll(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, 'ArchiefMaaltijd');
 		return $result;
 	}
 	
@@ -379,7 +379,7 @@ class MaaltijdenModel {
 		foreach ($maaltijden as $maaltijd) {
 			try {
 				self::verplaatsNaarArchief($maaltijd);
-				if (\Taken\CRV\TakenModel::existMaaltijdCorvee($maaltijd->getMaaltijdId())) {
+				if (\TakenModel::existMaaltijdCorvee($maaltijd->getMaaltijdId())) {
 					setMelding($maaltijd->getDatum() . ' ' . $maaltijd->getTitel() .' heeft nog gekoppelde corveetaken!', 2);
 				}
 			}
@@ -539,7 +539,7 @@ class MaaltijdenModel {
 				$beginDatum = strtotime('+'. $shift .' days', $beginDatum);
 			}
 			$datum = $beginDatum;
-			$corveerepetities = \Taken\CRV\CorveeRepetitiesModel::getRepetitiesVoorMaaltijdRepetitie($repetitie->getMaaltijdRepetitieId());
+			$corveerepetities = \CorveeRepetitiesModel::getRepetitiesVoorMaaltijdRepetitie($repetitie->getMaaltijdRepetitieId());
 			$maaltijden = array();
 			while ($datum <= $eindDatum) { // break after one
 				$maaltijd = self::newMaaltijd(
@@ -552,7 +552,7 @@ class MaaltijdenModel {
 					$repetitie->getAbonnementFilter()
 				);
 				foreach ($corveerepetities as $corveerepetitie) {
-					\Taken\CRV\TakenModel::newRepetitieTaken($corveerepetitie, $datum, $datum, $maaltijd->getMaaltijdId()); // do not repeat within maaltijd period
+					\TakenModel::newRepetitieTaken($corveerepetitie, $datum, $datum, $maaltijd->getMaaltijdId()); // do not repeat within maaltijd period
 				}
 				$maaltijden[] = $maaltijd;
 				if ($repetitie->getPeriodeInDagen() < 1) {

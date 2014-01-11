@@ -47,7 +47,7 @@
 	
 	<div id="submitContainer">
 		<label for="submit">&nbsp;</label>
-		<a class="handje knop" title="Opmaakhulp weergeven" onclick="toggleDiv('ubbhulpverhaal')" style="float: right;">UBB</a>
+		<a class="handje knop" title="Opmaakhulp weergeven" onclick="$('#ubbhulpverhaal').toggle();" style="float: right;">UBB</a>
 		<a class="handje knop" title="Vergroot het invoerveld" onclick="vergrootTextarea('berichtInvoer', 10)" style="float: right;"><strong>↑↓</strong></a>
 
 		<input type="button" name="submit" id="submit" value="Verder gaan" onclick="roodschopper('simulate'); return false;" />

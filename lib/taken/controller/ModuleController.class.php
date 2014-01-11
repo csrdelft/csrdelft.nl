@@ -1,6 +1,6 @@
 <?php
 
-namespace Taken\CRV;
+
 
 require_once 'MVC/controller/AclController.abstract.php';
 
@@ -59,7 +59,7 @@ class ModuleController extends \AclController {
 
 	public function maaltijdenketzer($query) {
 		require_once 'taken/controller/MijnMaaltijdenController.class.php';
-		$controller = new \Taken\MLT\MijnMaaltijdenController($query);
+		$controller = new MijnMaaltijdenController($query);
 		$this->content = $controller->getContent();
 	}
 
@@ -70,38 +70,38 @@ class ModuleController extends \AclController {
 
 	public function maaltijdenbeheer($query) {
 		require_once 'taken/controller/BeheerMaaltijdenController.class.php';
-		$controller = new \Taken\MLT\BeheerMaaltijdenController($query);
+		$controller = new BeheerMaaltijdenController($query);
 		$this->content = $controller->getContent();
 	}
 
 	public function maaltijdenrepetities($query) {
 		require_once 'taken/controller/MaaltijdRepetitiesController.class.php';
-		$controller = new \Taken\MLT\MaaltijdRepetitiesController($query);
+		$controller = new MaaltijdRepetitiesController($query);
 		$this->content = $controller->getContent();
 	}
 
 	public function maaltijdenabonnementen($query) {
 		require_once 'taken/controller/MijnAbonnementenController.class.php';
-		$controller = new \Taken\MLT\MijnAbonnementenController($query);
+		$controller = new MijnAbonnementenController($query);
 		$this->content = $controller->getContent();
 	}
 
 	public function maaltijdenabonnementenbeheer($query) {
 		require_once 'taken/controller/BeheerAbonnementenController.class.php';
-		$controller = new \Taken\MLT\BeheerAbonnementenController($query);
+		$controller = new BeheerAbonnementenController($query);
 		$this->content = $controller->getContent();
 	}
 
 	public function maaltijdenmaalciesaldi($query) {
 		require_once 'taken/controller/MaalCieSaldiController.class.php';
-		$controller = new \Taken\MLT\MaalCieSaldiController($query);
+		$controller = new MaalCieSaldiController($query);
 		$this->content = $controller->getContent();
 	}
 
 	public function corveemijn($query) {
 		$GLOBALS['taken_module'] = str_replace('mijn', '', $GLOBALS['taken_module']);
 		require_once 'taken/controller/MijnCorveeController.class.php';
-		$controller = new \Taken\CRV\MijnCorveeController($query);
+		$controller = new \MijnCorveeController($query);
 		$this->content = $controller->getContent();
 	}
 
@@ -111,43 +111,43 @@ class ModuleController extends \AclController {
 
 	public function corveebeheer($query) {
 		require_once 'taken/controller/BeheerTakenController.class.php';
-		$controller = new \Taken\CRV\BeheerTakenController($query);
+		$controller = new \BeheerTakenController($query);
 		$this->content = $controller->getContent();
 	}
 
 	public function corveerepetities($query) {
 		require_once 'taken/controller/CorveeRepetitiesController.class.php';
-		$controller = new \Taken\CRV\CorveeRepetitiesController($query);
+		$controller = new \CorveeRepetitiesController($query);
 		$this->content = $controller->getContent();
 	}
 
 	public function corveevoorkeuren($query) {
 		require_once 'taken/controller/MijnVoorkeurenController.class.php';
-		$controller = new \Taken\CRV\MijnVoorkeurenController($query);
+		$controller = new \MijnVoorkeurenController($query);
 		$this->content = $controller->getContent();
 	}
 
 	public function corveevoorkeurenbeheer($query) {
 		require_once 'taken/controller/BeheerVoorkeurenController.class.php';
-		$controller = new \Taken\CRV\BeheerVoorkeurenController($query);
+		$controller = new \BeheerVoorkeurenController($query);
 		$this->content = $controller->getContent();
 	}
 
 	public function corveepuntenbeheer($query) {
 		require_once 'taken/controller/BeheerPuntenController.class.php';
-		$controller = new \Taken\CRV\BeheerPuntenController($query);
+		$controller = new \BeheerPuntenController($query);
 		$this->content = $controller->getContent();
 	}
 
 	public function corveevrijstellingen($query) {
 		require_once 'taken/controller/BeheerVrijstellingenController.class.php';
-		$controller = new \Taken\CRV\BeheerVrijstellingenController($query);
+		$controller = new \BeheerVrijstellingenController($query);
 		$this->content = $controller->getContent();
 	}
 
 	public function corveefuncties($query) {
 		require_once 'taken/controller/BeheerFunctiesController.class.php';
-		$controller = new \Taken\CRV\BeheerFunctiesController($query);
+		$controller = new \BeheerFunctiesController($query);
 		$this->content = $controller->getContent();
 	}
 
@@ -158,7 +158,7 @@ class ModuleController extends \AclController {
 
 	public function maaltijdeninstellingen($query) {
 		require_once 'taken/controller/BeheerInstellingenController.class.php';
-		$controller = new \Taken\MLT\BeheerInstellingenController($query);
+		$controller = new BeheerInstellingenController($query);
 		$this->content = $controller->getContent();
 	}
 

@@ -345,14 +345,14 @@
 	{/if}
 	{if $loginlid->hasPermission('P_ADMIN,P_BESTUUR,groep:novcie') AND $profiel->getStatus()=='S_NOVIET' AND $profhtml.kgb!=''}
 		<div class="profielregel" id="novcieopmerking">
-			<div class="handje" onclick="toggleDiv('novcie_gegevens')">NovCie-Opmerking &raquo;</div>
+			<div class="handje" onclick="$('#novcie_gegevens').toggle();">NovCie-Opmerking &raquo;</div>
 			<div class="gegevens verborgen" id="novcie_gegevens">{$profhtml.kgb|ubb}</div>
 		</div>
 	{/if}
 	{if ($isAdmin OR $isLidMod) AND $profhtml.changelog!=''}
 		<div class="profielregel" id="changelog">
 			<div class="gegevens">
-				<div class="handje" onclick="toggleDiv('changelog_gegevens'); this.remove()">Bewerklog &raquo;</div>
+				<div class="handje" onclick="$('#changelog_gegevens').toggle(); this.remove()">Bewerklog &raquo;</div>
 				<div class="verborgen" id="changelog_gegevens">
 					{$profhtml.changelog|ubb}
 				</div>

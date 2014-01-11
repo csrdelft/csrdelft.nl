@@ -1,45 +1,44 @@
 <?php
+
 /**
  * BeheerMenuView.class.php	| 	P.W.G. Brussee (brussee@live.nl)
  * 
  * Tonen van alle menus en menu-items om te beheren.
  * 
  */
-class BeheerMenusView extends \SimpleHtml {
+class BeheerMenusView extends TemplateView {
 
 	private $_menus;
 	private $_root;
-	
-	public function __construct($menus, MenuItem $root=null) {
+
+	public function __construct($menus, MenuItem $root = null) {
+		parent::__construct();
 		$this->_menus = $menus;
 		$this->_root = $root;
 	}
-	
+
 	public function getTitel() {
 		if ($this->_root !== null && $this->_root->getMenu() !== '') {
-			return 'Beheer '. $this->_root->getMenu() .'-menu';
+			return 'Beheer ' . $this->_root->getMenu() . '-menu';
 		}
 		return 'Menubeheer';
 	}
-	
+
 	public function view() {
-		$smarty = new \TemplateEngine();
-		
 		if (is_array($this->_menus)) {
-			$smarty->assign('melding', $this->getMelding());
-			$smarty->assign('kop', $this->getTitel());
-			$smarty->assign('menus', $this->_menus);
-			$smarty->assign('root', $this->_root);
-			$smarty->display('menu/beheer/menu_tree.tpl');
-		}
-		elseif (is_int($this->_menus)) {
-			echo '<div id="menu-item-'. $this->_menus .'" class="remove"></div>';
-		}
-		else {
-			$smarty->assign('item', $this->_menus);
-			$smarty->display('menu/beheer/menu_item.tpl');
+			$this->assign('melding', $this->getMelding());
+			$this->assign('kop', $this->getTitel());
+			$this->assign('menus', $this->_menus);
+			$this->assign('root', $this->_root);
+			$this->display('menu/beheer/menu_tree.tpl');
+		} elseif (is_int($this->_menus)) {
+			echo '<div id="menu-item-' . $this->_menus . '" class="remove"></div>';
+		} else {
+			$this->assign('item', $this->_menus);
+			$this->display('menu/beheer/menu_item.tpl');
 		}
 	}
+
 }
 
 ?>
