@@ -55,7 +55,7 @@ class KwalificatiesModel {
 	
 	private static function existKwalificatie($uid, $fid) {
 		if (!is_int($fid) || $fid <= 0) {
-			throw new \Exception('Exist corvee-kwalificatie faalt: Invalid $fid ='. $fid);
+			throw new Exception('Exist corvee-kwalificatie faalt: Invalid $fid ='. $fid);
 		}
 		$sql = 'SELECT EXISTS (SELECT * FROM crv_kwalificaties WHERE lid_id = ? AND functie_id = ?)';
 		$values = array($uid, $fid);
@@ -84,7 +84,7 @@ class KwalificatiesModel {
 	
 	public static function kwalificatieToewijzen($fid, $uid) {
 		if (self::existKwalificatie($uid, $fid)) {
-			throw new \Exception('Is al gekwalificeerd!');
+			throw new Exception('Is al gekwalificeerd!');
 		}
 		$db = \Database::instance();
 		try {
@@ -97,7 +97,7 @@ class KwalificatiesModel {
 			$query = $db->prepare($sql, $values);
 			$query->execute($values);
 			if ($query->rowCount() !== 1) {
-				throw new \Exception('New kwalificatie faalt: $query->rowCount() ='. $query->rowCount());
+				throw new Exception('New kwalificatie faalt: $query->rowCount() ='. $query->rowCount());
 			}
 			$db->commit();
 			return new CorveeKwalificatie($uid, $fid, $wanneer);
@@ -110,14 +110,14 @@ class KwalificatiesModel {
 	
 	public static function kwalificatieTerugtrekken($fid, $uid) {
 		if (!self::existKwalificatie($uid, $fid)) {
-			throw new \Exception('Is niet gekwalificeerd!');
+			throw new Exception('Is niet gekwalificeerd!');
 		}
 		self::deleteKwalificatie($fid, $uid);
 	}
 	
 	public static function verwijderKwalificaties($fid) {
 		if (!is_int($fid) || $fid <= 0) {
-			throw new \Exception('Verwijder corvee-kwalificatie faalt: Invalid $fid ='. $fid);
+			throw new Exception('Verwijder corvee-kwalificatie faalt: Invalid $fid ='. $fid);
 		}
 		self::deleteKwalificatie($fid);
 	}
@@ -134,7 +134,7 @@ class KwalificatiesModel {
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		if ($uid !== null && $query->rowCount() !== 1) {
-			throw new \Exception('Delete kwalificatie faalt: $query->rowCount() ='. $query->rowCount());
+			throw new Exception('Delete kwalificatie faalt: $query->rowCount() ='. $query->rowCount());
 		}
 	}
 }

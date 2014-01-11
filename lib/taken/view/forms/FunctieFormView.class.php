@@ -17,16 +17,16 @@ class FunctieFormView extends TemplateView {
 		parent::__construct();
 		$this->_fid = $fid;
 
-		$formFields[] = new \InputField('naam', $naam, 'Naam', 25);
-		$formFields[] = new \InputField('afkorting', $afk, 'Afkorting', 3);
-		$formFields[] = new \TextField('email_bericht', $email, 'Email', 9);
-		$formFields[] = new \IntField('standaard_punten', $punten, 'Standaard punten', 10, 0);
-		$formFields['kwali'] = new \VinkField('kwalificatie_benodigd', $kwali, 'Kwalificatie benodigd');
+		$formFields[] = new InputField('naam', $naam, 'Naam', 25);
+		$formFields[] = new InputField('afkorting', $afk, 'Afkorting', 3);
+		$formFields[] = new TextField('email_bericht', $email, 'Email', 9);
+		$formFields[] = new IntField('standaard_punten', $punten, 'Standaard punten', 10, 0);
+		$formFields['kwali'] = new VinkField('kwalificatie_benodigd', $kwali, 'Kwalificatie benodigd');
 		if ($this->_fid !== 0) {
 			$formFields['kwali']->setOnChangeScript("if (!this.checked) alert('Alle kwalificaties zullen worden verwijderd!');");
 		}
 
-		$this->_form = new \Formulier('taken-functie-form', $GLOBALS['taken_module'] . '/opslaan/' . $fid, $formFields);
+		$this->_form = new Formulier('taken-functie-form', $GLOBALS['taken_module'] . '/opslaan/' . $fid, $formFields);
 	}
 
 	public function getTitel() {

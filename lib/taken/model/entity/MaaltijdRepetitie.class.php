@@ -118,49 +118,49 @@ class MaaltijdRepetitie {
 
 	public function setDagVanDeWeek($int) {
 		if (!is_int($int) || $int < 0 || $int > 6) {
-			throw new \Exception('Geen integer: dag van de week');
+			throw new Exception('Geen integer: dag van de week');
 		}
 		$this->dag_vd_week = $int;
 	}
 	public function setPeriodeInDagen($int) {
 		if (!is_int($int) || $int < 0) {
-			throw new \Exception('Geen integer: periode in dagen');
+			throw new Exception('Geen integer: periode in dagen');
 		}
 		$this->periode_in_dagen = $int;
 	}
 	public function setStandaardTitel($titel) {
 		if (!is_string($titel)) {
-			throw new \Exception('Geen string: standaard titel');
+			throw new Exception('Geen string: standaard titel');
 		}
 		$this->standaard_titel = $titel;
 	}
 	public function setStandaardTijd($time) {
 		if (!is_string($time)) {
-			throw new \Exception('Geen string: standaard tijd');
+			throw new Exception('Geen string: standaard tijd');
 		}
 		$this->standaard_tijd = $time;
 	}
 	public function setStandaardPrijs($prijs) {
 		if (!is_float($prijs)) {
-			throw new \Exception('Geen float: standaard prijs: '. $prijs);
+			throw new Exception('Geen float: standaard prijs: '. $prijs);
 		}
 		$this->standaard_prijs = $prijs;
 	}
 	public function setAbonneerbaar($bool) {
 		if (!is_bool($bool)) {
-			throw new \Exception('Geen boolean: abonneerbaar');
+			throw new Exception('Geen boolean: abonneerbaar');
 		}
 		$this->abonneerbaar = $bool;
 	}
 	public function setStandaardLimiet($int) {
 		if (!is_int($int) || $int < 0) {
-			throw new \Exception('Geen integer: standaard limiet');
+			throw new Exception('Geen integer: standaard limiet');
 		}
 		$this->standaard_limiet = $int;
 	}
 	public function setAbonnementFilter($filter) {
 		if (!is_string($filter)) {
-			throw new \Exception('Geen string: abonnement filter');
+			throw new Exception('Geen string: abonnement filter');
 		}
 		$this->abonnement_filter = $filter;
 	}

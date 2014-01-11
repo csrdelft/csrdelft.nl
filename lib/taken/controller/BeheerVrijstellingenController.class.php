@@ -40,7 +40,7 @@ class BeheerVrijstellingenController extends \AclController {
 	public function beheer() {
 		$vrijstellingen = VrijstellingenModel::getAlleVrijstellingen();
 		$this->content = new BeheerVrijstellingenView($vrijstellingen);
-		$this->content = new \csrdelft($this->getContent());
+		$this->content = new csrdelft($this->getContent());
 		$this->content->addStylesheet('js/autocomplete/jquery.autocomplete.css');
 		$this->content->addStylesheet('taken.css');
 		$this->content->addScript('autocomplete/jquery.autocomplete.min.js');
@@ -54,7 +54,7 @@ class BeheerVrijstellingenController extends \AclController {
 	
 	public function bewerk($uid) {
 		if (!\Lid::exists($uid)) {
-			throw new \Exception('Lid bestaat niet: $uid ='. $uid);
+			throw new Exception('Lid bestaat niet: $uid ='. $uid);
 		}
 		$vrijstelling = VrijstellingenModel::getVrijstelling($uid);
 		$this->content = new VrijstellingFormView($vrijstelling->getLidId(), $vrijstelling->getBeginDatum(), $vrijstelling->getEindDatum(), $vrijstelling->getPercentage()); // fetches POST values itself
@@ -77,7 +77,7 @@ class BeheerVrijstellingenController extends \AclController {
 	
 	public function verwijder($uid) {
 		if (!\Lid::exists($uid)) {
-			throw new \Exception('Lid bestaat niet: $uid ='. $uid);
+			throw new Exception('Lid bestaat niet: $uid ='. $uid);
 		}
 		VrijstellingenModel::verwijderVrijstelling($uid);
 		$this->content = new BeheerVrijstellingenView($uid);

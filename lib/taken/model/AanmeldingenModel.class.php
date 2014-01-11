@@ -16,24 +16,24 @@ class AanmeldingenModel {
 		}
 		if (!$beheer) {
 			if (!self::checkAanmeldFilter($uid, $maaltijd->getAanmeldFilter())) {
-				throw new \Exception('Niet toegestaan vanwege aanmeldrestrictie: '. $maaltijd->getAanmeldFilter());
+				throw new Exception('Niet toegestaan vanwege aanmeldrestrictie: '. $maaltijd->getAanmeldFilter());
 			}
 			if ($maaltijd->getIsGesloten()) {
-				throw new \Exception('Maaltijd is gesloten');
+				throw new Exception('Maaltijd is gesloten');
 			}
 			if ($maaltijd->getAantalAanmeldingen() >= $maaltijd->getAanmeldLimiet()) {
-				throw new \Exception('Maaltijd zit al vol');
+				throw new Exception('Maaltijd zit al vol');
 			}
 		}
 		if (self::getIsAangemeld($mid, $uid)) {
 			if (!$beheer) {
-				throw new \Exception('Al aangemeld');
+				throw new Exception('Al aangemeld');
 			}
 			// aanmelding van lid updaten met aantal gasen door beheerder
 			$aanmelding = self::loadAanmelding($mid, $uid);
 			$verschil = $aantalGasten - $aanmelding->getAantalGasten();
 			if ($verschil === 0) {
-				throw new \Exception('Al aangemeld met '. $aantalGasten .' gasten');
+				throw new Exception('Al aangemeld met '. $aantalGasten .' gasten');
 			}
 			$aanmelding->setAantalGasten($aantalGasten);
 			$aanmelding->setLaatstGewijzigd(date('Y-m-d H:i'));
@@ -83,14 +83,14 @@ class AanmeldingenModel {
 	
 	public static function afmeldenDoorLid($mid, $uid, $beheer=false) {
 		if (!self::getIsAangemeld($mid, $uid)) {
-			throw new \Exception('Niet aangemeld');
+			throw new Exception('Niet aangemeld');
 		}
 		$maaltijd = MaaltijdenModel::getMaaltijd($mid);
 		if (!$maaltijd->getIsGesloten() && $maaltijd->getBeginMoment() < time()) {
 			MaaltijdenModel::sluitMaaltijd($maaltijd);
 		}
 		if (!$beheer && $maaltijd->getIsGesloten()) {
-			throw new \Exception('Maaltijd is gesloten');
+			throw new Exception('Maaltijd is gesloten');
 		}
 		$aanmelding = self::loadAanmelding($mid, $uid);
 		self::deleteAanmeldingen($mid, $uid);
@@ -100,25 +100,25 @@ class AanmeldingenModel {
 	
 	public static function saveGasten($mid, $uid, $gasten) {
 		if (!is_int($mid) || $mid <= 0) {
-			throw new \Exception('Save gasten faalt: Invalid $mid ='. $mid);
+			throw new Exception('Save gasten faalt: Invalid $mid ='. $mid);
 		}
 		if (!is_int($gasten) || $gasten < 0) {
-			throw new \Exception('Save gasten faalt: Invalid $gasten ='. $gasten);
+			throw new Exception('Save gasten faalt: Invalid $gasten ='. $gasten);
 		}
 		if (!self::getIsAangemeld($mid, $uid)) {
-			throw new \Exception('Niet aangemeld');
+			throw new Exception('Niet aangemeld');
 		}
 		$db = \Database::instance();
 		try {
 			$db->beginTransaction();
 			$maaltijd = MaaltijdenModel::getMaaltijd($mid);
 			if ($maaltijd->getIsGesloten()) {
-				throw new \Exception('Maaltijd is gesloten');
+				throw new Exception('Maaltijd is gesloten');
 			}
 			$aanmelding = self::loadAanmelding($mid, $uid);
 			$verschil = $gasten - $aanmelding->getAantalGasten();
 			if ($maaltijd->getAantalAanmeldingen() + $verschil > $maaltijd->getAanmeldLimiet()) {
-				throw new \Exception('Maaltijd zit te vol');
+				throw new Exception('Maaltijd zit te vol');
 			}
 			if ($aanmelding->getAantalGasten() !== $gasten) {
 				$aanmelding->setLaatstGewijzigd(date('Y-m-d H:i'));
@@ -138,17 +138,17 @@ class AanmeldingenModel {
 
 	public static function saveGastenOpmerking($mid, $uid, $opmerking) {
 		if (!is_int($mid) || $mid <= 0) {
-			throw new \Exception('Save gasten-opmerking faalt: Invalid $mid ='. $mid);
+			throw new Exception('Save gasten-opmerking faalt: Invalid $mid ='. $mid);
 		}
 		if (!self::getIsAangemeld($mid, $uid)) {
-			throw new \Exception('Niet aangemeld');
+			throw new Exception('Niet aangemeld');
 		}
 		$db = \Database::instance();
 		try {
 			$db->beginTransaction();
 			$maaltijd = MaaltijdenModel::getMaaltijd($mid);
 			if ($maaltijd->getIsGesloten()) {
-				throw new \Exception('Maaltijd is gesloten');
+				throw new Exception('Maaltijd is gesloten');
 			}
 			$aanmelding = self::loadAanmelding($mid, $uid);
 			$aanmelding->setMaaltijd($maaltijd);
@@ -200,7 +200,7 @@ class AanmeldingenModel {
 	
 	public static function getIsAangemeld($mid, $uid, $doorAbo=null) {
 		if (!is_int($mid) || $mid <= 0) {
-			throw new \Exception('Load maaltijd faalt: Invalid $mid ='. $mid);
+			throw new Exception('Load maaltijd faalt: Invalid $mid ='. $mid);
 		}
 		$sql = 'SELECT EXISTS (SELECT * FROM mlt_aanmeldingen WHERE maaltijd_id=? AND lid_id=?';
 		$values = array($mid, $uid);
@@ -218,7 +218,7 @@ class AanmeldingenModel {
 	private static function loadAanmelding($mid, $uid) {
 		$aanmeldingen = self::loadAanmeldingen(array($mid), $uid, 1);
 		if (!array_key_exists(0, $aanmeldingen)) {
-			throw new \Exception('Load aanmelding faalt: Not found $mid ='. $mid);
+			throw new Exception('Load aanmelding faalt: Not found $mid ='. $mid);
 		}
 		return $aanmeldingen[0];
 	}
@@ -264,7 +264,7 @@ class AanmeldingenModel {
 		$query->execute($values);
 		if ($mid !== null) {
 			if ($query->rowCount() !== 1) {
-				throw new \Exception('New aanmelding faalt: $query->rowCount() ='. $query->rowCount());
+				throw new Exception('New aanmelding faalt: $query->rowCount() ='. $query->rowCount());
 			}
 			return new MaaltijdAanmelding($mid, $uid, $gasten, $opmerking, $doorAbo, $doorUid, $wanneer);
 		}
@@ -292,7 +292,7 @@ class AanmeldingenModel {
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		if ($uid !== null && $query->rowCount() !== 1) {
-			throw new \Exception('Delete aanmelding faalt: $query->rowCount() ='. $query->rowCount());
+			throw new Exception('Delete aanmelding faalt: $query->rowCount() ='. $query->rowCount());
 		}
 	}
 	
@@ -313,7 +313,7 @@ class AanmeldingenModel {
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		if ($query->rowCount() !== 1) {
-			throw new \Exception('Update aanmelding faalt: $query->rowCount() ='. $query->rowCount());
+			throw new Exception('Update aanmelding faalt: $query->rowCount() ='. $query->rowCount());
 		}
 	}
 	
@@ -346,7 +346,7 @@ class AanmeldingenModel {
 	public static function checkAanmeldFilter($uid, $filter) {
 		$lid = \LidCache::getLid($uid); // false if lid does not exist
 		if (!$lid instanceof \Lid) {
-			throw new \Exception('Lid bestaat niet: $uid ='. $uid);
+			throw new Exception('Lid bestaat niet: $uid ='. $uid);
 		}
 		if ($filter === '') {
 			return true;
@@ -357,7 +357,7 @@ class AanmeldingenModel {
 		
 		$filter = explode(':', $filter);
 		if (sizeof($filter) !== 2) {
-			throw new \Exception('Check aanmeldfilter faalt');
+			throw new Exception('Check aanmeldfilter faalt');
 		}
 		switch ($filter[0]) {
 
@@ -388,7 +388,7 @@ class AanmeldingenModel {
 
 			try {
 				$parts = explode('>', $filter[1], 2); // Splitst opgegeven term in groepsnaam en functie
-				$groep = new \Groep($parts[0]);
+				$groep = new Groep($parts[0]);
 				if ($groep->isLid($uid)) {
 					// Wordt er een functie gevraagd?
 					if (isset($parts[1])) {
@@ -441,11 +441,11 @@ class AanmeldingenModel {
 	 */
 	public static function aanmeldenVoorKomendeRepetitieMaaltijden($mrid, $uid) {
 		if (!is_int($mrid) || $mrid <= 0) {
-			throw new \Exception('Invalid abonnement: $voorAbo ='. $mrid);
+			throw new Exception('Invalid abonnement: $voorAbo ='. $mrid);
 		}
 		$repetitie = MaaltijdRepetitiesModel::getRepetitie($mrid);
 		if (!self::checkAanmeldFilter($uid, $repetitie->getAbonnementFilter())) {
-			throw new \Exception('Niet toegestaan vanwege aanmeldrestrictie: '. $repetitie->getAbonnementFilter());
+			throw new Exception('Niet toegestaan vanwege aanmeldrestrictie: '. $repetitie->getAbonnementFilter());
 		}
 		return self::newAanmelding(null, $uid, 0, '', $mrid, null);
 	}

@@ -14,7 +14,7 @@ class HerinneringenModel {
 		$uid = $taak->getLidId();
 		$lid = \LidCache::getLid($uid); // false if lid does not exist
 		if (!$lid instanceof \Lid) {
-			throw new \Exception($datum .' '. $taak->getCorveeFunctie()->getNaam() .' niet toegewezen!'. (!empty($uid) ? ' ($uid ='. $uid .')' : ''));
+			throw new Exception($datum .' '. $taak->getCorveeFunctie()->getNaam() .' niet toegewezen!'. (!empty($uid) ? ' ($uid ='. $uid .')' : ''));
 		}
 		//$to = $lid->getEmail();
 		$to = $uid .'@csrdelft.nl';
@@ -33,14 +33,14 @@ class HerinneringenModel {
 			}
 		}
 		$bericht = str_replace(array('LIDNAAM', 'DATUM', 'MEEETEN'), array($lidnaam, $datum, $eten), $bericht);
-		$mail = new \Mail($to, $onderwerp, $bericht);
+		$mail = new Mail($to, $onderwerp, $bericht);
 		$mail->setFrom($from);
 		if ($mail->send()) { // false if failed
 			TakenModel::updateGemaild($taak);
 			return $datum .' '. $taak->getCorveeFunctie()->getNaam() .' verstuurd! ('. $lidnaam .')';
 		}
 		else {
-			throw new \Exception($datum .' '. $taak->getCorveeFunctie()->getNaam() .' faalt! ('. $lidnaam .')');
+			throw new Exception($datum .' '. $taak->getCorveeFunctie()->getNaam() .' faalt! ('. $lidnaam .')');
 		}
 	}
 	

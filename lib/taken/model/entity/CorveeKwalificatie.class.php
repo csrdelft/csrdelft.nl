@@ -38,7 +38,7 @@ class CorveeKwalificatie {
 		$uid = $this->getLidId();
 		$lid = \LidCache::getLid($uid); // false if lid does not exist
 		if (!$lid instanceof \Lid) {
-			throw new \Exception('Lid bestaat niet: $uid ='. $uid);
+			throw new Exception('Lid bestaat niet: $uid ='. $uid);
 		}
 		return $lid;
 	}
@@ -55,7 +55,7 @@ class CorveeKwalificatie {
 	
 	public function setWanneerToegewezen($datumtijd) {
 		if (!is_string($datumtijd)) {
-			throw new \Exception('Geen string: wanneer toegewezen');
+			throw new Exception('Geen string: wanneer toegewezen');
 		}
 		$this->wanneer_toegewezen = $datumtijd;
 	}

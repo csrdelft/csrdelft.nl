@@ -38,7 +38,7 @@ class BeheerInstellingenController extends \AclController {
 	public function beheer() {
 		$instellingen = InstellingenModel::getAlleInstellingen();
 		$this->content = new BeheerInstellingenView($instellingen);
-		$this->content = new \csrdelft($this->getContent());
+		$this->content = new csrdelft($this->getContent());
 		$this->content->addStylesheet('taken.css');
 		$this->content->addScript('taken.js');
 	}

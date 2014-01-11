@@ -10,7 +10,7 @@ try {
 	require_once 'taken/controller/ModuleController.class.php';
 	
 	$query = filter_input(INPUT_GET, 'uri', FILTER_SANITIZE_URL);
-	$controller = new \ModuleController($query);
+	$controller = new ModuleController($query);
 	$controller->getContent()->view();
 }
 catch (\Exception $e) { // TODO: logging

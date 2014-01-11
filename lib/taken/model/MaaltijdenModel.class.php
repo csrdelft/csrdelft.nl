@@ -14,7 +14,7 @@ class MaaltijdenModel {
 
 	public static function openMaaltijd(Maaltijd $maaltijd) {
 		if (!$maaltijd->getIsGesloten()) {
-			throw new \Exception('Maaltijd is al geopend');
+			throw new Exception('Maaltijd is al geopend');
 		}
 		$maaltijd->setGesloten(false);
 		self::updateMaaltijd($maaltijd);
@@ -23,7 +23,7 @@ class MaaltijdenModel {
 	
 	public static function sluitMaaltijd(Maaltijd $maaltijd) {
 		if ($maaltijd->getIsGesloten()) {
-			throw new \Exception('Maaltijd is al gesloten');
+			throw new Exception('Maaltijd is al gesloten');
 		}
 		$maaltijd->setGesloten(true);
 		$maaltijd->setLaatstGesloten(date('Y-m-d H:i'));
@@ -46,13 +46,13 @@ class MaaltijdenModel {
 			$van = strtotime('-1 year');
 		}
 		elseif (!is_int($van)) {
-			throw new \Exception('Invalid timestamp: $van getMaaltijdenVoorAgenda()');
+			throw new Exception('Invalid timestamp: $van getMaaltijdenVoorAgenda()');
 		}
 		if ($tot === null) { // RSS
 			$tot = strtotime('+1 year');
 		}
 		elseif (!is_int($tot)) {
-			throw new \Exception('Invalid timestamp: $tot getMaaltijdenVoorAgenda()');
+			throw new Exception('Invalid timestamp: $tot getMaaltijdenVoorAgenda()');
 		}
 		$maaltijden = self::loadMaaltijden('verwijderd = false AND datum >= ? AND datum <= ?', array(date('Y-m-d', $van), date('Y-m-d', $tot)));
 		$maaltijden = self::filterMaaltijdenVoorLid($maaltijden, \LoginLid::instance()->getUid());
@@ -106,18 +106,18 @@ class MaaltijdenModel {
 	public static function getMaaltijd($mid, $verwijderd=false) {
 		$maaltijd = self::loadMaaltijd($mid);
 		if (!$verwijderd && $maaltijd->getIsVerwijderd()) {
-			throw new \Exception('Maaltijd is verwijderd');
+			throw new Exception('Maaltijd is verwijderd');
 		}
 		return $maaltijd;
 	}
 	
 	private static function loadMaaltijd($mid) {
 		if (!is_int($mid) || $mid <= 0) {
-			throw new \Exception('Load maaltijd faalt: Invalid $mid ='. $mid);
+			throw new Exception('Load maaltijd faalt: Invalid $mid ='. $mid);
 		}
 		$maaltijden = self::loadMaaltijden('m.maaltijd_id = ?', array($mid), 1);
 		if (!array_key_exists(0, $maaltijden)) {
-			throw new \Exception('Load maaltijd faalt: Not found $mid ='. $mid);
+			throw new Exception('Load maaltijd faalt: Not found $mid ='. $mid);
 		}
 		return $maaltijden[0];
 	}
@@ -176,7 +176,7 @@ class MaaltijdenModel {
 		if ($maaltijd->getIsVerwijderd()) {
 			if (\TakenModel::existMaaltijdCorvee($mid)) {
 				\TakenModel::verwijderMaaltijdCorvee($mid); // delete corveetaken first (foreign key)
-				throw new \Exception('Alle bijbehorende corveetaken zijn naar de prullenbak verplaatst. Verwijder die eerst!');
+				throw new Exception('Alle bijbehorende corveetaken zijn naar de prullenbak verplaatst. Verwijder die eerst!');
 			}
 			self::deleteMaaltijd($mid); // definitief verwijderen
 		}
@@ -197,7 +197,7 @@ class MaaltijdenModel {
 			$query = $db->prepare($sql, $values);
 			$query->execute($values);
 			if ($query->rowCount() !== 1) {
-				throw new \Exception('Delete maaltijd faalt: $query->rowCount() ='. $query->rowCount());
+				throw new Exception('Delete maaltijd faalt: $query->rowCount() ='. $query->rowCount());
 			}
 			$db->commit();
 		}
@@ -210,7 +210,7 @@ class MaaltijdenModel {
 	public static function herstelMaaltijd($mid) {
 		$maaltijd = self::loadMaaltijd($mid);
 		if (!$maaltijd->getIsVerwijderd()) {
-			throw new \Exception('Maaltijd is niet verwijderd');
+			throw new Exception('Maaltijd is niet verwijderd');
 		}
 		$maaltijd->setVerwijderd(false);
 		self::updateMaaltijd($maaltijd);
@@ -276,7 +276,7 @@ class MaaltijdenModel {
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		if ($query->rowCount() !== 1) {
-			throw new \Exception('Update maaltijd faalt: $query->rowCount() ='. $query->rowCount());
+			throw new Exception('Update maaltijd faalt: $query->rowCount() ='. $query->rowCount());
 		}
 	}
 	
@@ -295,7 +295,7 @@ class MaaltijdenModel {
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		if ($query->rowCount() !== 1) {
-			throw new \Exception('New maaltijd faalt: $query->rowCount() ='. $query->rowCount());
+			throw new Exception('New maaltijd faalt: $query->rowCount() ='. $query->rowCount());
 		}
 		$maaltijd = new Maaltijd(intval($db->lastInsertId()), $mrid, $titel, $limiet, $datum, $tijd, $prijs, $gesloten, $wanneer, false, $filter);
 		$aantal = 0;
@@ -342,13 +342,13 @@ class MaaltijdenModel {
 			$van = 0;
 		}
 		elseif (!is_int($van)) {
-			throw new \Exception('Invalid timestamp: $van getArchiefMaaltijden()');
+			throw new Exception('Invalid timestamp: $van getArchiefMaaltijden()');
 		}
 		if ($tot === null) { // RSS
 			$tot = time();
 		}
 		elseif (!is_int($tot)) {
-			throw new \Exception('Invalid timestamp: $tot getArchiefMaaltijden()');
+			throw new Exception('Invalid timestamp: $tot getArchiefMaaltijden()');
 		}
 		return self::loadArchiefMaaltijden('datum >= ? AND datum <= ?', array(date('Y-m-d', $van), date('Y-m-d', $tot)));
 	}
@@ -372,7 +372,7 @@ class MaaltijdenModel {
 	
 	public static function archiveerOudeMaaltijden($van, $tot) {
 		if (!is_int($van) || !is_int($tot)) {
-			throw new \Exception('Invalid timestamp: archiveerOudeMaaltijden()');
+			throw new Exception('Invalid timestamp: archiveerOudeMaaltijden()');
 		}
 		$errors = array();
 		$maaltijden = self::loadMaaltijden('verwijderd = false AND datum >= ? AND datum <= ?', array(date('Y-m-d', $van), date('Y-m-d', $tot)));
@@ -424,7 +424,7 @@ class MaaltijdenModel {
 			$query->execute($values);
 			if ($query->rowCount() !== 1) {
 				$db->rollback();
-				throw new \Exception('New archief-maaltijd faalt: $query->rowCount() ='. $query->rowCount());
+				throw new Exception('New archief-maaltijd faalt: $query->rowCount() ='. $query->rowCount());
 			}
 			$db->commit();
 		}
@@ -446,7 +446,7 @@ class MaaltijdenModel {
 	
 	public static function verwijderRepetitieMaaltijden($mrid) {
 		if (!is_int($mrid) || $mrid <= 0) {
-			throw new \Exception('Verwijder repetitie-maaltijden faalt: Invalid $mrid ='. $mrid);
+			throw new Exception('Verwijder repetitie-maaltijden faalt: Invalid $mrid ='. $mrid);
 		}
 		$sql = 'UPDATE mlt_maaltijden SET verwijderd = true WHERE mlt_repetitie_id = ?';
 		$values = array($mrid);
@@ -464,7 +464,7 @@ class MaaltijdenModel {
 	 */
 	public static function existRepetitieMaaltijden($mrid) {
 		if (!is_int($mrid) || $mrid <= 0) {
-			throw new \Exception('Exist repetitie-maaltijden faalt: Invalid $mrid ='. $mrid);
+			throw new Exception('Exist repetitie-maaltijden faalt: Invalid $mrid ='. $mrid);
 		}
 		$sql = 'SELECT EXISTS (SELECT * FROM mlt_maaltijden WHERE mlt_repetitie_id = ?)';
 		$values = array($mrid);
@@ -527,7 +527,7 @@ class MaaltijdenModel {
 	 */
 	public static function maakRepetitieMaaltijden(MaaltijdRepetitie $repetitie, $beginDatum, $eindDatum) {
 		if ($repetitie->getPeriodeInDagen() < 1) {
-			throw new \Exception('New repetitie-maaltijden faalt: $periode ='. $repetitie->getPeriodeInDagen());
+			throw new Exception('New repetitie-maaltijden faalt: $periode ='. $repetitie->getPeriodeInDagen());
 		}
 		$db = \Database::instance();
 		try {

@@ -32,7 +32,7 @@ class ToewijzenModel {
 				$uid = $kwali->getLidId();
 				$lid = \LidCache::getLid($uid); // false if lid does not exist
 				if (!$lid instanceof \Lid) {
-					throw new \Exception('Lid bestaat niet: $uid ='. $uid);
+					throw new Exception('Lid bestaat niet: $uid ='. $uid);
 				}
 				if (!$lid->isLid()) {
 					continue; // geen oud-lid of overleden lid

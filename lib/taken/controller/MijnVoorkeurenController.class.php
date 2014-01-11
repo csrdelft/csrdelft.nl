@@ -39,7 +39,7 @@ class MijnVoorkeurenController extends \AclController {
 		$voorkeuren = VoorkeurenModel::getVoorkeurenVoorLid(\LoginLid::instance()->getUid());
 		$eetwens = VoorkeurenModel::getEetwens(\LoginLid::instance()->getLid());
 		$this->content = new MijnVoorkeurenView($voorkeuren, $eetwens);
-		$this->content = new \csrdelft($this->getContent());
+		$this->content = new csrdelft($this->getContent());
 		$this->content->addStylesheet('taken.css');
 		$this->content->addScript('taken.js');
 	}

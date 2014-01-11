@@ -99,7 +99,7 @@ class MenusModel {
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		if ($query->rowCount() !== 1) {
-			throw new \Exception('New functie faalt: $query->rowCount() =' . $query->rowCount());
+			throw new Exception('New functie faalt: $query->rowCount() =' . $query->rowCount());
 		}
 		return new MenuItem(intval($db->lastInsertId()), $pid, $prio, $text, $link, $perm, $show, $menu);
 	}
@@ -137,7 +137,7 @@ class MenusModel {
 			$query = $db->prepare($sql, $values);
 			$query->execute($values);
 			if ($query->rowCount() !== 1) {
-				throw new \Exception('Delete menu-item faalt: $query->rowCount() =' . $query->rowCount());
+				throw new Exception('Delete menu-item faalt: $query->rowCount() =' . $query->rowCount());
 			}
 			$db->commit();
 		} catch (\Exception $e) {

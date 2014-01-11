@@ -509,7 +509,7 @@ class ConversieModel {
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		if ($query->rowCount() !== 1) {
-			throw new \Exception('New maaltijd faalt: $query->rowCount() ='. $query->rowCount());
+			throw new Exception('New maaltijd faalt: $query->rowCount() ='. $query->rowCount());
 		}
 		$maaltijd = new Maaltijd($mid, $mrid, $titel, $limiet, $datum, $tijd, $prijs, false, null, false, $filter);
 		$maaltijd->setAantalAanmeldingen(0);
@@ -535,7 +535,7 @@ class ConversieModel {
 			$query->execute($values);
 			if ($query->rowCount() !== 1) {
 				$db->rollback();
-				throw new \Exception('New archief-maaltijd faalt: $query->rowCount() ='. $query->rowCount());
+				throw new Exception('New archief-maaltijd faalt: $query->rowCount() ='. $query->rowCount());
 			}
 			$db->commit();
 		}

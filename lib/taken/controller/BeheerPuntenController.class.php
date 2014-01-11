@@ -39,7 +39,7 @@ class BeheerPuntenController extends \AclController {
 		$functies = FunctiesModel::getAlleFuncties(true); // grouped by fid
 		$matrix = PuntenModel::loadPuntenVoorAlleLeden($functies);
 		$this->content = new BeheerPuntenView($matrix, $functies);
-		$this->content = new \csrdelft($this->getContent());
+		$this->content = new csrdelft($this->getContent());
 		$this->content->addStylesheet('taken.css');
 		$this->content->addScript('taken.js');
 	}
@@ -47,7 +47,7 @@ class BeheerPuntenController extends \AclController {
 	public function wijzigpunten($uid) {
 		$lid = \LidCache::getLid($uid); // false if lid does not exist
 		if (!$lid instanceof \Lid) {
-			throw new \Exception('Lid bestaat niet: $uid ='. $uid);
+			throw new Exception('Lid bestaat niet: $uid ='. $uid);
 		}
 		$punten = (int) filter_input(INPUT_POST, 'totaal_punten', FILTER_SANITIZE_NUMBER_INT);
 		PuntenModel::savePuntenVoorLid($lid, $punten, null);
@@ -59,7 +59,7 @@ class BeheerPuntenController extends \AclController {
 	public function wijzigbonus($uid) {
 		$lid = \LidCache::getLid($uid); // false if lid does not exist
 		if (!$lid instanceof \Lid) {
-			throw new \Exception('Lid bestaat niet: $uid ='. $uid);
+			throw new Exception('Lid bestaat niet: $uid ='. $uid);
 		}
 		$bonus = (int) filter_input(INPUT_POST, 'totaal_bonus', FILTER_SANITIZE_NUMBER_INT);
 		PuntenModel::savePuntenVoorLid($lid, null, $bonus);

@@ -24,7 +24,7 @@ class VrijstellingenModel {
 	public static function getVrijstelling($uid) {
 		$vrijstellingen = self::loadVrijstellingen('lid_id = ?', array($uid), 1);
 		if (!array_key_exists(0, $vrijstellingen)) {
-			return null; //throw new \Exception('Get vrijstelling faalt: Not found $uid ='. $uid);
+			return null; //throw new Exception('Get vrijstelling faalt: Not found $uid ='. $uid);
 		}
 		return $vrijstellingen[0];
 	}
@@ -78,7 +78,7 @@ class VrijstellingenModel {
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		if ($query->rowCount() !== 1) {
-			throw new \Exception('New vrijstelling faalt: $query->rowCount() ='. $query->rowCount());
+			throw new Exception('New vrijstelling faalt: $query->rowCount() ='. $query->rowCount());
 		}
 		return new CorveeVrijstelling($uid, $begin, $eind, $percentage);
 	}
@@ -97,7 +97,7 @@ class VrijstellingenModel {
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		if ($query->rowCount() !== 1) {
-			throw new \Exception('Update vrijstelling faalt: $query->rowCount() ='. $query->rowCount());
+			throw new Exception('Update vrijstelling faalt: $query->rowCount() ='. $query->rowCount());
 		}
 	}
 	
@@ -113,7 +113,7 @@ class VrijstellingenModel {
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		if ($query->rowCount() !== 1) {
-			throw new \Exception('Delete vrijstelling faalt: $query->rowCount() ='. $query->rowCount());
+			throw new Exception('Delete vrijstelling faalt: $query->rowCount() ='. $query->rowCount());
 		}
 	}
 }

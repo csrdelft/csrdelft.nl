@@ -48,7 +48,7 @@ class BeheerFunctiesController extends \AclController {
 		$functies = FunctiesModel::getAlleFuncties();
 		KwalificatiesModel::loadKwalificatiesVoorFuncties($functies);
 		$this->content = new BeheerFunctiesView($functies, $this->getContent());
-		$this->content = new \csrdelft($this->getContent());
+		$this->content = new csrdelft($this->getContent());
 		$this->content->addStylesheet('js/autocomplete/jquery.autocomplete.css');
 		$this->content->addStylesheet('taken.css');
 		$this->content->addScript('autocomplete/jquery.autocomplete.min.js');
@@ -102,7 +102,7 @@ class BeheerFunctiesController extends \AclController {
 	public function dekwalificeer($fid) {
 		$uid = filter_input(INPUT_POST, 'voor_lid', FILTER_SANITIZE_STRING);
 		if (!\Lid::exists($uid)) {
-			throw new \Exception('Lid bestaat niet: $uid ='. $uid);
+			throw new Exception('Lid bestaat niet: $uid ='. $uid);
 		}
 		KwalificatiesModel::kwalificatieTerugtrekken($fid, $uid);
 		$functie = FunctiesModel::getFunctie($fid);

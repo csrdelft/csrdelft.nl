@@ -30,26 +30,26 @@ class MaaltijdRepetitieFormView extends TemplateView {
 			$suggesties[] = 'lichting:' . $jaar;
 		}
 
-		$formFields[] = new \RequiredInputField('standaard_titel', $titel, 'Standaard titel', 255);
-		$formFields[] = new \TijdField('standaard_tijd', $tijd, 'Standaard tijd', 15);
-		$formFields['dag'] = new \WeekdagField('dag_vd_week', $dag, 'Dag v/d week');
+		$formFields[] = new RequiredInputField('standaard_titel', $titel, 'Standaard titel', 255);
+		$formFields[] = new TijdField('standaard_tijd', $tijd, 'Standaard tijd', 15);
+		$formFields['dag'] = new WeekdagField('dag_vd_week', $dag, 'Dag v/d week');
 		$formFields['dag']->title = 'Als de periode ongelijk is aan 7 is dit de start-dag bij het aanmaken van periodieke maaltijden';
-		$formFields[] = new \IntField('periode_in_dagen', $periode, 'Periode (in dagen)', 183, 0);
-		$formFields['abo'] = new \VinkField('abonneerbaar', $abo, 'Abonneerbaar');
+		$formFields[] = new IntField('periode_in_dagen', $periode, 'Periode (in dagen)', 183, 0);
+		$formFields['abo'] = new VinkField('abonneerbaar', $abo, 'Abonneerbaar');
 		if ($this->_mrid !== 0) {
 			$formFields['abo']->setOnChangeScript("if (!this.checked) alert('Alle abonnementen zullen worden verwijderd!');");
 		}
-		$formFields[] = new \FloatField('standaard_prijs', $prijs, 'Standaard prijs (€)', 50.00, 0.00);
-		$formFields[] = new \IntField('standaard_limiet', $limiet, 'Standaard limiet', 200, 0);
-		$formFields['filter'] = new \InputField('abonnement_filter', $filter, 'Aanmeldrestrictie', 255, $suggesties);
+		$formFields[] = new FloatField('standaard_prijs', $prijs, 'Standaard prijs (€)', 50.00, 0.00);
+		$formFields[] = new IntField('standaard_limiet', $limiet, 'Standaard limiet', 200, 0);
+		$formFields['filter'] = new InputField('abonnement_filter', $filter, 'Aanmeldrestrictie', 255, $suggesties);
 		$formFields['filter']->title = 'Plaats een ! vooraan om van de restrictie een uitsluiting te maken.';
 		$formFields['filter']->required = false;
 		if ($this->_mrid !== 0) {
-			$formFields['ver'] = new \VinkField('verplaats_dag', $verplaats, 'Ook verplaatsen');
+			$formFields['ver'] = new VinkField('verplaats_dag', $verplaats, 'Ook verplaatsen');
 			$formFields['ver']->title = 'Verplaats naar dag v/d week bij bijwerken';
 		}
 
-		$this->_form = new \Formulier('taken-maaltijd-repetitie-form', $GLOBALS['taken_module'] . '/opslaan/' . $mrid, $formFields);
+		$this->_form = new Formulier('taken-maaltijd-repetitie-form', $GLOBALS['taken_module'] . '/opslaan/' . $mrid, $formFields);
 	}
 
 	public function getTitel() {

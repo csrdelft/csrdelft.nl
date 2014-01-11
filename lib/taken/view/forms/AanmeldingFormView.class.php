@@ -19,12 +19,12 @@ class AanmeldingFormView extends TemplateView {
 		$this->_mid = $mid;
 		$this->_nieuw = $nieuw;
 
-		$formFields[] = new \LidField('voor_lid', $uid, 'Naam of lidnummer', 'leden');
+		$formFields[] = new LidField('voor_lid', $uid, 'Naam of lidnummer', 'leden');
 		if ($nieuw) {
-			$formFields[] = new \IntField('aantal_gasten', $gasten, 'Aantal gasten', 200, 0);
+			$formFields[] = new IntField('aantal_gasten', $gasten, 'Aantal gasten', 200, 0);
 		}
 
-		$this->_form = new \Formulier('taken-aanmelding-form', $GLOBALS['taken_module'] . '/ander' . ($nieuw ? 'aanmelden' : 'afmelden') . '/' . $mid, $formFields);
+		$this->_form = new Formulier('taken-aanmelding-form', $GLOBALS['taken_module'] . '/ander' . ($nieuw ? 'aanmelden' : 'afmelden') . '/' . $mid, $formFields);
 	}
 
 	public function getTitel() {

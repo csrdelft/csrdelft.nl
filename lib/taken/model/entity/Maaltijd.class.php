@@ -147,61 +147,61 @@ class Maaltijd implements \Agendeerbaar {
 	
 	public function setTitel($titel) {
 		if (!is_string($titel)) {
-			throw new \Exception('Geen string: titel');
+			throw new Exception('Geen string: titel');
 		}
 		$this->titel = $titel;
 	}
 	public function setAanmeldLimiet($int) {
 		if (!is_int($int) || $int < 0) {
-			throw new \Exception('Geen integer: aanmeld limiet');
+			throw new Exception('Geen integer: aanmeld limiet');
 		}
 		$this->aanmeld_limiet = $int;
 	}
 	public function setDatum($datum) {
 		if (!is_string($datum)) {
-			throw new \Exception('Geen string: datum');
+			throw new Exception('Geen string: datum');
 		}
 		$this->datum = $datum;
 	}
 	public function setTijd($time) {
 		if (!is_string($time)) {
-			throw new \Exception('Geen string: tijd');
+			throw new Exception('Geen string: tijd');
 		}
 		$this->tijd = $time;
 	}
 	public function setPrijs($prijs) {
 		if (!is_float($prijs)) {
-			throw new \Exception('Geen float: prijs');
+			throw new Exception('Geen float: prijs');
 		}
 		$this->prijs = $prijs;
 	}
 	public function setGesloten($bool) {
 		if (!is_bool($bool)) {
-			throw new \Exception('Geen boolean: gesloten');
+			throw new Exception('Geen boolean: gesloten');
 		}
 		$this->gesloten = $bool;
 	}
 	public function setLaatstGesloten($datetime) {
 		if ($datetime !== null && !is_string($datetime)) {
-			throw new \Exception('Geen string: laatst gesloten');
+			throw new Exception('Geen string: laatst gesloten');
 		}
 		$this->laatst_gesloten = $datetime;
 	}
 	public function setVerwijderd($bool) {
 		if (!is_bool($bool)) {
-			throw new \Exception('Geen boolean: verwijderd');
+			throw new Exception('Geen boolean: verwijderd');
 		}
 		$this->verwijderd = $bool;
 	}
 	public function setAanmeldFilter($filter) {
 		if (!is_string($filter)) {
-			throw new \Exception('Geen string: aanmeld filter');
+			throw new Exception('Geen string: aanmeld filter');
 		}
 		$this->aanmeld_filter = $filter;
 	}
 	public function setAantalAanmeldingen($int) {
 		if (!is_int($int) || $int < 0) {
-			throw new \Exception('Geen integer: aantal aanmeldingen');
+			throw new Exception('Geen integer: aantal aanmeldingen');
 		}
 		$this->aantal_aanmeldingen = $int;
 	}

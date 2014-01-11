@@ -93,7 +93,7 @@ class InstellingenModel {
 			}
 		}
 		if (!array_key_exists($key, self::$_defaults)) { // geen default instelling
-			throw new \Exception('Get instelling faalt: Not found $key ='. $key);
+			throw new Exception('Get instelling faalt: Not found $key ='. $key);
 		}
 		$instelling = self::newInstelling($key, self::$_defaults[$key]);
 		return $instelling;
@@ -146,7 +146,7 @@ class InstellingenModel {
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		if ($query->rowCount() !== 1) {
-			throw new \Exception('New instelling faalt: $query->rowCount() ='. $query->rowCount());
+			throw new Exception('New instelling faalt: $query->rowCount() ='. $query->rowCount());
 		}
 		return new Instellingen($key, $value);
 	}
@@ -163,7 +163,7 @@ class InstellingenModel {
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		if ($query->rowCount() !== 1) {
-			throw new \Exception('Update instelling faalt: $query->rowCount() ='. $query->rowCount());
+			throw new Exception('Update instelling faalt: $query->rowCount() ='. $query->rowCount());
 		}
 	}
 	
@@ -181,7 +181,7 @@ class InstellingenModel {
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		if ($query->rowCount() !== 1) {
-			throw new \Exception('Delete instelling faalt: $query->rowCount() ='. $query->rowCount());
+			throw new Exception('Delete instelling faalt: $query->rowCount() ='. $query->rowCount());
 		}
 	}
 }

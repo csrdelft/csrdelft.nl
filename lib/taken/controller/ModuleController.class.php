@@ -54,7 +54,7 @@ class ModuleController extends \AclController {
 
 	protected function geentoegang() {
 		require_once 'paginacontent.class.php';
-		$this->content = new \csrdelft(new \PaginaContent(new \Pagina('maaltijden')));
+		$this->content = new csrdelft(new \PaginaContent(new \Pagina('maaltijden')));
 	}
 
 	public function maaltijdenketzer($query) {
@@ -101,7 +101,7 @@ class ModuleController extends \AclController {
 	public function corveemijn($query) {
 		$GLOBALS['taken_module'] = str_replace('mijn', '', $GLOBALS['taken_module']);
 		require_once 'taken/controller/MijnCorveeController.class.php';
-		$controller = new \MijnCorveeController($query);
+		$controller = new MijnCorveeController($query);
 		$this->content = $controller->getContent();
 	}
 
@@ -111,43 +111,43 @@ class ModuleController extends \AclController {
 
 	public function corveebeheer($query) {
 		require_once 'taken/controller/BeheerTakenController.class.php';
-		$controller = new \BeheerTakenController($query);
+		$controller = new BeheerTakenController($query);
 		$this->content = $controller->getContent();
 	}
 
 	public function corveerepetities($query) {
 		require_once 'taken/controller/CorveeRepetitiesController.class.php';
-		$controller = new \CorveeRepetitiesController($query);
+		$controller = new CorveeRepetitiesController($query);
 		$this->content = $controller->getContent();
 	}
 
 	public function corveevoorkeuren($query) {
 		require_once 'taken/controller/MijnVoorkeurenController.class.php';
-		$controller = new \MijnVoorkeurenController($query);
+		$controller = new MijnVoorkeurenController($query);
 		$this->content = $controller->getContent();
 	}
 
 	public function corveevoorkeurenbeheer($query) {
 		require_once 'taken/controller/BeheerVoorkeurenController.class.php';
-		$controller = new \BeheerVoorkeurenController($query);
+		$controller = new BeheerVoorkeurenController($query);
 		$this->content = $controller->getContent();
 	}
 
 	public function corveepuntenbeheer($query) {
 		require_once 'taken/controller/BeheerPuntenController.class.php';
-		$controller = new \BeheerPuntenController($query);
+		$controller = new BeheerPuntenController($query);
 		$this->content = $controller->getContent();
 	}
 
 	public function corveevrijstellingen($query) {
 		require_once 'taken/controller/BeheerVrijstellingenController.class.php';
-		$controller = new \BeheerVrijstellingenController($query);
+		$controller = new BeheerVrijstellingenController($query);
 		$this->content = $controller->getContent();
 	}
 
 	public function corveefuncties($query) {
 		require_once 'taken/controller/BeheerFunctiesController.class.php';
-		$controller = new \BeheerFunctiesController($query);
+		$controller = new BeheerFunctiesController($query);
 		$this->content = $controller->getContent();
 	}
 

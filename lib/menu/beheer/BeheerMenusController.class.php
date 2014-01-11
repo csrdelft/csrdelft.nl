@@ -50,7 +50,7 @@ class BeheerMenusController extends AclController {
 		$items = MenusModel::getMenuItems($menu, false);
 		$tree = MenusModel::getMenuTree($menu, $items);
 		$this->content = new BeheerMenusView($menus, $tree);
-		$this->content = new \csrdelft($this->getContent());
+		$this->content = new csrdelft($this->getContent());
 		$this->content->addStylesheet('menubeheer.css');
 		$this->content->addScript('menubeheer.js');
 	}
@@ -76,7 +76,7 @@ class BeheerMenusController extends AclController {
 			MenusModel::updateMenuItem($item);
 		}
 		else{
-			throw new \Exception('Wijzig faalt: '. $setter .' undefined');
+			throw new Exception('Wijzig faalt: '. $setter .' undefined');
 		}
 		\SimpleHTML::invokeRefresh('/menubeheer/beheer/'. $item->getMenu(), $item->getTekst() .' ('. $item->getMenuId() .') opgeslagen', 1);
 	}

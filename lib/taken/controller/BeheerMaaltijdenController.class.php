@@ -56,7 +56,7 @@ class BeheerMaaltijdenController extends \AclController {
 			$this->bewerk($mid);
 		}
 		$this->content = new BeheerMaaltijdenView(MaaltijdenModel::getAlleMaaltijden(), false, false, MaaltijdRepetitiesModel::getAlleRepetities(), $this->getContent());
-		$this->content = new \csrdelft($this->getContent());
+		$this->content = new csrdelft($this->getContent());
 		$this->content->addStylesheet('js/autocomplete/jquery.autocomplete.css');
 		$this->content->addStylesheet('taken.css');
 		$this->content->addScript('autocomplete/jquery.autocomplete.min.js');
@@ -66,14 +66,14 @@ class BeheerMaaltijdenController extends \AclController {
 	
 	public function prullenbak() {
 		$this->content = new BeheerMaaltijdenView(MaaltijdenModel::getVerwijderdeMaaltijden(), true);
-		$this->content = new \csrdelft($this->getContent());
+		$this->content = new csrdelft($this->getContent());
 		$this->content->addStylesheet('taken.css');
 		$this->content->addScript('taken.js');
 	}
 	
 	public function archief() {
 		$this->content = new BeheerMaaltijdenView(MaaltijdenModel::getArchiefMaaltijdenTussen(), false, true);
-		$this->content = new \csrdelft($this->getContent());
+		$this->content = new csrdelft($this->getContent());
 		$this->content->addStylesheet('taken.css');
 		$this->content->addScript('taken.js');
 	}
@@ -193,7 +193,7 @@ class BeheerMaaltijdenController extends \AclController {
 			$values = $form->getValues();
 			$maaltijden = MaaltijdenModel::maakRepetitieMaaltijden($repetitie, strtotime($values['begindatum']), strtotime($values['einddatum']));
 			if (empty($maaltijden)) {
-				throw new \Exception('Geen nieuwe maaltijden aangemaakt');
+				throw new Exception('Geen nieuwe maaltijden aangemaakt');
 			}
 			$this->content = new BeheerMaaltijdenView($maaltijden);
 		}

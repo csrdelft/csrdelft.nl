@@ -84,7 +84,7 @@ class MaaltijdAanmelding {
 		$uid = $this->getLidId();
 		$lid = \LidCache::getLid($uid); // false if lid does not exist
 		if (!$lid instanceof \Lid) {
-			throw new \Exception('Lid bestaat niet: $uid ='. $uid);
+			throw new Exception('Lid bestaat niet: $uid ='. $uid);
 		}
 		return $lid;
 	}
@@ -96,7 +96,7 @@ class MaaltijdAanmelding {
 		$uid = $this->getDoorLidId();
 		$lid = \LidCache::getLid($uid); // false if lid does not exist
 		if (!$lid instanceof \Lid) {
-			throw new \Exception('Lid bestaat niet: $uid ='. $uid);
+			throw new Exception('Lid bestaat niet: $uid ='. $uid);
 		}
 		return $lid;
 	}
@@ -162,7 +162,7 @@ class MaaltijdAanmelding {
 	
 	public function setAantalGasten($int) {
 		if (!is_int($int) || $int < 0) {
-			throw new \Exception('Geen integer: aantal gasten');
+			throw new Exception('Geen integer: aantal gasten');
 		}
 		$this->aantal_gasten = $int;
 	}
@@ -171,7 +171,7 @@ class MaaltijdAanmelding {
 	}
 	public function setDoorAbonnement($mrid) {
 		if ($mrid !== null && !is_int($mrid)) {
-			throw new \Exception('Ongeldig id: door abonnement');
+			throw new Exception('Ongeldig id: door abonnement');
 		}
 		$this->door_abonnement = $mrid;
 	}
@@ -180,7 +180,7 @@ class MaaltijdAanmelding {
 	}
 	public function setLaatstGewijzigd($datumtijd) {
 		if (!is_string($datumtijd)) {
-			throw new \Exception('Geen string: laatst gewijzigd');
+			throw new Exception('Geen string: laatst gewijzigd');
 		}
 		$this->laatst_gewijzigd = $datumtijd;
 	}

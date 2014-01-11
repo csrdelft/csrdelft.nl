@@ -33,7 +33,7 @@ class MaalCieSaldiController extends \AclController {
 	
 	public function beheer() {
 		$this->content = new MaalCieSaldiView();
-		$this->content = new \csrdelft($this->getContent());
+		$this->content = new csrdelft($this->getContent());
 		$this->content->addStylesheet('taken.css');
 		$this->content->addScript('taken.js');
 	}

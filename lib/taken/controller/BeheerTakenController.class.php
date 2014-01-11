@@ -63,7 +63,7 @@ class BeheerTakenController extends \AclController {
 			$maaltijd = null;
 		}
 		$this->content = new BeheerTakenView($taken, $maaltijd, false, CorveeRepetitiesModel::getAlleRepetities(), $this->getContent());
-		$this->content = new \csrdelft($this->getContent());
+		$this->content = new csrdelft($this->getContent());
 		$this->content->addStylesheet('js/autocomplete/jquery.autocomplete.css');
 		$this->content->addStylesheet('taken.css');
 		$this->content->addScript('autocomplete/jquery.autocomplete.min.js');
@@ -76,7 +76,7 @@ class BeheerTakenController extends \AclController {
 	
 	public function prullenbak() {
 		$this->content = new BeheerTakenView(TakenModel::getVerwijderdeTaken(), null, true);
-		$this->content = new \csrdelft($this->getContent());
+		$this->content = new csrdelft($this->getContent());
 		$this->content->addStylesheet('taken.css');
 		$this->content->addScript('taken.js');
 	}
@@ -178,7 +178,7 @@ class BeheerTakenController extends \AclController {
 	
 	public function toewijzen($tid) {
 		$taak = TakenModel::getTaak($tid);
-		$formField = new \LidField('lid_id', null, null, 'leden'); // fetches POST values itself
+		$formField = new LidField('lid_id', null, null, 'leden'); // fetches POST values itself
 		if ($formField->validate()) {
 			$uid = $formField->getValue();
 			if ($uid === '') {
@@ -231,7 +231,7 @@ class BeheerTakenController extends \AclController {
 			$mid = ($values['maaltijd_id'] === '' ? null : intval($values['maaltijd_id']));
 			$taken = TakenModel::maakRepetitieTaken($repetitie, $values['begindatum'], $values['einddatum'], $mid);
 			if (empty($taken)) {
-				throw new \Exception('Geen nieuwe taken aangemaakt');
+				throw new Exception('Geen nieuwe taken aangemaakt');
 			}
 			$this->content = new BeheerTakenView($taken);
 		}

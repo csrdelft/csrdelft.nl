@@ -34,7 +34,7 @@ class Instelling {
 	
 	public function setWaarde($value) {
 		if ($value === null) {
-			throw new \Exception('Set waarde faalt: null');
+			throw new Exception('Set waarde faalt: null');
 		}
 		$this->waarde = $value;
 	}

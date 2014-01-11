@@ -60,7 +60,7 @@ class MaaltijdAbonnement {
 		$uid = $this->van_lid;
 		$lid = \LidCache::getLid($uid); // false if lid does not exist
 		if (!$lid instanceof \Lid) {
-			throw new \Exception('Lid bestaat niet: $uid ='. $uid);
+			throw new Exception('Lid bestaat niet: $uid ='. $uid);
 		}
 		return $lid;
 	}
@@ -70,7 +70,7 @@ class MaaltijdAbonnement {
 	
 	public function setWanneerIngeschakeld($datumtijd) {
 		if (!is_string($datumtijd)) {
-			throw new \Exception('Geen string: wanneer ingeschakeld');
+			throw new Exception('Geen string: wanneer ingeschakeld');
 		}
 		$this->wanneer_ingeschakeld = $datumtijd;
 	}
@@ -82,7 +82,7 @@ class MaaltijdAbonnement {
 	}
 	public function setWaarschuwing($string) {
 		if (!is_string($string)) {
-			throw new \Exception('Geen string: set waarschuwing');
+			throw new Exception('Geen string: set waarschuwing');
 		}
 		$this->waarschuwing = $string;
 	}

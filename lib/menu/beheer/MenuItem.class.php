@@ -66,19 +66,19 @@ class MenuItem {
 	}
 	public function setTekst($string) {
 		if (!is_string($string)) {
-			throw new \Exception('Geen string: tekst');
+			throw new Exception('Geen string: tekst');
 		}
 		$this->tekst = $string;
 	}
 	public function setLink($string) {
 		if (!is_string($string)) {
-			throw new \Exception('Geen string: link');
+			throw new Exception('Geen string: link');
 		}
 		$this->link = $string;
 	}
 	public function setPermission($string) {
 		if (!is_string($string)) {
-			throw new \Exception('Geen string: permission');
+			throw new Exception('Geen string: permission');
 		}
 		$this->permission = $string;
 	}
@@ -87,7 +87,7 @@ class MenuItem {
 	}
 	public function setMenu($string) {
 		if (!is_string($string)) {
-			throw new \Exception('Geen string: menu');
+			throw new Exception('Geen string: menu');
 		}
 		$this->menu = $string;
 	}

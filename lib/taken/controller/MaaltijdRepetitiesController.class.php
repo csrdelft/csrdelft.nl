@@ -43,7 +43,7 @@ class MaaltijdRepetitiesController extends \AclController {
 			$this->bewerk($mrid);
 		}
 		$this->content = new MaaltijdRepetitiesView(MaaltijdRepetitiesModel::getAlleRepetities(), $this->getContent());
-		$this->content = new \csrdelft($this->getContent());
+		$this->content = new csrdelft($this->getContent());
 		$this->content->addStylesheet('js/autocomplete/jquery.autocomplete.css');
 		$this->content->addStylesheet('taken.css');
 		$this->content->addScript('autocomplete/jquery.autocomplete.min.js');

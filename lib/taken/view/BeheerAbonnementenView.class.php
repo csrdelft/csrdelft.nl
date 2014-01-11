@@ -37,8 +37,8 @@ class BeheerAbonnementenView extends TemplateView {
 		}
 		$this->assign('toon', $status);
 
-		$field = new \LidField('voor_lid', null, "Toon abonnementen van persoon:", 'allepersonen');
-		$form = new \Formulier('taken-subform-abos', $GLOBALS['taken_module'] . '/voorlid', array($field));
+		$field = new LidField('voor_lid', null, "Toon abonnementen van persoon:", 'allepersonen');
+		$form = new Formulier('taken-subform-abos', $GLOBALS['taken_module'] . '/voorlid', array($field));
 		$form->css_classes .= ' popup';
 		$this->assign('form', $form);
 

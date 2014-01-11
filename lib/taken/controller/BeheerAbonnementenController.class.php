@@ -43,7 +43,7 @@ class BeheerAbonnementenController extends \AclController {
 		$repetities = MaaltijdRepetitiesModel::getAlleRepetities();
 		$matrix = AbonnementenModel::getAbonnementenMatrix($repetities, false, $alleenWaarschuwingen, $ingeschakeld);
 		$this->content = new BeheerAbonnementenView($matrix, $repetities, $alleenWaarschuwingen, $ingeschakeld);
-		$this->content = new \csrdelft($this->getContent());
+		$this->content = new csrdelft($this->getContent());
 		$this->content->addStylesheet('js/autocomplete/jquery.autocomplete.css');
 		$this->content->addStylesheet('taken.css');
 		$this->content->addScript('autocomplete/jquery.autocomplete.min.js');
@@ -63,7 +63,7 @@ class BeheerAbonnementenController extends \AclController {
 	}
 	
 	public function voorlid() {
-		$formField = new \LidField('voor_lid', null, null, 'allepersonen'); // fetches POST values itself
+		$formField = new LidField('voor_lid', null, null, 'allepersonen'); // fetches POST values itself
 		if ($formField->validate()) {
 			$uid = $formField->getValue();
 			$matrix = array();
@@ -90,7 +90,7 @@ class BeheerAbonnementenController extends \AclController {
 	public function inschakelen($mrid) {
 		$uid = filter_input(INPUT_POST, 'voor_lid', FILTER_SANITIZE_STRING);
 		if (!\Lid::exists($uid)) {
-			throw new \Exception('Lid bestaat niet: $uid ='. $uid);
+			throw new Exception('Lid bestaat niet: $uid ='. $uid);
 		}
 		$abo_aantal = AbonnementenModel::inschakelenAbonnement($mrid, $uid);
 		$this->content = new BeheerAbonnementenView($abo_aantal[0]);
@@ -102,7 +102,7 @@ class BeheerAbonnementenController extends \AclController {
 	public function uitschakelen($mrid) {
 		$uid = filter_input(INPUT_POST, 'voor_lid', FILTER_SANITIZE_STRING);
 		if (!\Lid::exists($uid)) {
-			throw new \Exception('Lid bestaat niet: $uid ='. $uid);
+			throw new Exception('Lid bestaat niet: $uid ='. $uid);
 		}
 		$abo_aantal = AbonnementenModel::uitschakelenAbonnement($mrid, $uid);
 		$this->content = new BeheerAbonnementenView($abo_aantal[0]);

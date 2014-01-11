@@ -55,7 +55,7 @@ class AbonnementenModel {
 	
 	public static function getHeeftAbonnement($mrid, $uid) {
 		if (!is_int($mrid) || $mrid <= 0) {
-			throw new \Exception('Get heeft abonnement faalt: Invalid $mrid ='. $mrid);
+			throw new Exception('Get heeft abonnement faalt: Invalid $mrid ='. $mrid);
 		}
 		$sql = 'SELECT EXISTS (SELECT * FROM mlt_abonnementen WHERE mlt_repetitie_id=? AND lid_id=?)';
 		$values = array($mrid, $uid);
@@ -157,7 +157,7 @@ class AbonnementenModel {
 	
 	public static function getAbonnementenVoorRepetitie($mrid) {
 		if (!is_int($mrid) || $mrid <= 0) {
-			throw new \Exception('Get abonnementen voor repetitie faalt: Invalid $mrid ='. $mrid);
+			throw new Exception('Get abonnementen voor repetitie faalt: Invalid $mrid ='. $mrid);
 		}
 		return self::loadAbonnementen($mrid);
 	}
@@ -196,13 +196,13 @@ class AbonnementenModel {
 	public static function inschakelenAbonnement($mrid, $uid) {
 		$repetitie = MaaltijdRepetitiesModel::getRepetitie($mrid);
 		if (!$repetitie->getIsAbonneerbaar()) {
-			throw new \Exception('Niet abonneerbaar');
+			throw new Exception('Niet abonneerbaar');
 		}
 		if (self::getHeeftAbonnement($mrid, $uid)) {
-			throw new \Exception('Abonnement al ingeschakeld');
+			throw new Exception('Abonnement al ingeschakeld');
 		}
 		if (!AanmeldingenModel::checkAanmeldFilter($uid, $repetitie->getAbonnementFilter())) {
-			throw new \Exception('Niet toegestaan vanwege aanmeldrestrictie: '. $repetitie->getAbonnementFilter());
+			throw new Exception('Niet toegestaan vanwege aanmeldrestrictie: '. $repetitie->getAbonnementFilter());
 		}
 		$abo_aantal = self::newAbonnement($mrid, $uid);
 		$abo_aantal[0]->setVanLid($uid);
@@ -211,7 +211,7 @@ class AbonnementenModel {
 	
 	public static function inschakelenAbonnementVoorNovieten($mrid) {
 		if (!is_int($mrid) || $mrid <= 0) {
-			throw new \Exception('Inschakelen abonnement voor novieten faalt: Invalid $mrid ='. $mrid);
+			throw new Exception('Inschakelen abonnement voor novieten faalt: Invalid $mrid ='. $mrid);
 		}
 		return self::newAbonnement($mrid);
 	}
@@ -264,7 +264,7 @@ class AbonnementenModel {
 			}
 			else {
 				if ($abos !== 1) {
-					throw new \Exception('New maaltijd-abonnement faalt: $query->rowCount() ='. $abos);
+					throw new Exception('New maaltijd-abonnement faalt: $query->rowCount() ='. $abos);
 				}
 				$aantal = AanmeldingenModel::aanmeldenVoorKomendeRepetitieMaaltijden($mrid, $uid);
 				$db->commit();
@@ -279,7 +279,7 @@ class AbonnementenModel {
 	
 	public static function uitschakelenAbonnement($mrid, $uid) {
 		if (!self::getHeeftAbonnement($mrid, $uid)) {
-			throw new \Exception('Abonnement al uitgeschakeld');
+			throw new Exception('Abonnement al uitgeschakeld');
 		}
 		$aantal = self::deleteAbonnementen($mrid, $uid);
 		$abo = new MaaltijdAbonnement($mrid, null);
@@ -296,7 +296,7 @@ class AbonnementenModel {
 	 */
 	public static function verwijderAbonnementen($mrid) {
 		if (!is_int($mrid) || $mrid < 0) {
-			throw new \Exception('Verwijder abonnementen faalt: Invalid $mrid ='. $mrid);
+			throw new Exception('Verwijder abonnementen faalt: Invalid $mrid ='. $mrid);
 		}
 		return self::deleteAbonnementen($mrid);
 	}
@@ -333,7 +333,7 @@ class AbonnementenModel {
 		$query->execute($values);
 		if ($uid !== null) {
 			if ($query->rowCount() !== 1) {
-				throw new \Exception('Delete abonnementen faalt: $query->rowCount() ='. $query->rowCount());
+				throw new Exception('Delete abonnementen faalt: $query->rowCount() ='. $query->rowCount());
 			}
 			return $aantal;
 		}

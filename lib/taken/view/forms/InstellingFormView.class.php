@@ -14,10 +14,10 @@ class InstellingFormView extends TemplateView {
 
 	public function __construct($key = null, $value = null) {
 		parent::__construct();
-		$formFields['key'] = new \InputField('instelling_id', $key, 'Id');
-		$formFields[] = new \AutoresizeTextField('waarde', $value, 'Waarde', 0);
+		$formFields['key'] = new InputField('instelling_id', $key, 'Id');
+		$formFields[] = new AutoresizeTextField('waarde', $value, 'Waarde', 0);
 
-		$this->_form = new \Formulier('taken-instelling-form', $GLOBALS['taken_module'] . '/opslaan/' . $key, $formFields);
+		$this->_form = new Formulier('taken-instelling-form', $GLOBALS['taken_module'] . '/opslaan/' . $key, $formFields);
 	}
 
 	public function getTitel() {
