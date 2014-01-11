@@ -39,7 +39,7 @@ class VrijstellingenModel {
 		if (is_int($limit) && $limit > 0) {
 			$sql.= ' LIMIT '. $limit;
 		}
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		$result = $query->fetchAll(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, '\Taken\CRV\CorveeVrijstelling');
@@ -47,7 +47,7 @@ class VrijstellingenModel {
 	}
 	
 	public static function saveVrijstelling($uid, $begin, $eind, $percentage) {
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		try {
 			$db->beginTransaction();
 			$vrijstelling = self::getVrijstelling($uid);
@@ -74,7 +74,7 @@ class VrijstellingenModel {
 		$sql.= ' (lid_id, begin_datum, eind_datum, percentage)';
 		$sql.= ' VALUES (?, ?, ?, ?)';
 		$values = array($uid, $begin, $eind, $percentage);
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		if ($query->rowCount() !== 1) {
@@ -93,7 +93,7 @@ class VrijstellingenModel {
 			$vrijstelling->getPercentage(),
 			$vrijstelling->getLidId()
 		);
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		if ($query->rowCount() !== 1) {
@@ -109,7 +109,7 @@ class VrijstellingenModel {
 		$sql = 'DELETE FROM crv_vrijstellingen';
 		$sql.= ' WHERE lid_id = ?';
 		$values = array($uid);
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		if ($query->rowCount() !== 1) {

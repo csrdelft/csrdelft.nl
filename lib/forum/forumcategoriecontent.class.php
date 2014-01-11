@@ -25,7 +25,7 @@ class ForumCategorieContent extends SimpleHTML{
 			return;
 		}
 
-		$smarty=new Smarty_csr();
+		$smarty=new TemplateEngine();
 		$smarty->assign('categorie', $this->forumcategorie);
 
 		$smarty->assign('melding', $this->getMelding());

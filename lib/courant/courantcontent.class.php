@@ -47,7 +47,7 @@ class CourantContent {
 		echo '</pre>';
 	}
 	function getMail($headers=false){
-		$mail=new Smarty_csr();
+		$mail=new TemplateEngine();
 		
 		$mail->assign('instellingen', $this->instellingen);
 		$mail->assignByRef('courant', $this->courant);

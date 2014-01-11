@@ -109,7 +109,7 @@ class InstellingenModel {
 		if (is_int($limit) && $limit > 0) {
 			$sql.= ' LIMIT '. $limit;
 		}
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		$result = $query->fetchAll(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, '\Taken\MLT\Instelling');
@@ -117,7 +117,7 @@ class InstellingenModel {
 	}
 	
 	public static function saveInstelling($key, $value) {
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		try {
 			$db->beginTransaction();
 			$instelling = self::getInstelling($key);
@@ -142,7 +142,7 @@ class InstellingenModel {
 		$sql.= ' (instelling_id, waarde)';
 		$sql.= ' VALUES (?, ?)';
 		$values = array($key, $value);
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		if ($query->rowCount() !== 1) {
@@ -159,7 +159,7 @@ class InstellingenModel {
 			$instelling->getWaarde(),
 			$instelling->getInstellingId()
 		);
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		if ($query->rowCount() !== 1) {
@@ -177,7 +177,7 @@ class InstellingenModel {
 		$sql = 'DELETE FROM mlt_instellingen';
 		$sql.= ' WHERE instelling_id = ?';
 		$values = array($key);
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		if ($query->rowCount() !== 1) {

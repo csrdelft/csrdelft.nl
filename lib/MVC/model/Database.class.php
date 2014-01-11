@@ -1,14 +1,14 @@
 <?php
 
-require_once 'MVC/model/CsrPdo.class.php';
+require_once 'MVC/model/Database.class.php';
 
 /**
- * CsrPdo.class.php
+ * Database.class.php
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
-final class CsrPdo extends PDO {
+class Database extends PDO {
 
 	static private $_instance;
 
@@ -31,7 +31,7 @@ final class CsrPdo extends PDO {
 				PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
 			);
 
-			self::$_instance = new CsrPdo($dsn, $cred['user'], $cred['pass'], $options);
+			self::$_instance = new Database($dsn, $cred['user'], $cred['pass'], $options);
 		}
 		return self::$_instance;
 	}

@@ -59,7 +59,7 @@ class AbonnementenModel {
 		}
 		$sql = 'SELECT EXISTS (SELECT * FROM mlt_abonnementen WHERE mlt_repetitie_id=? AND lid_id=?)';
 		$values = array($mrid, $uid);
-		$query = \CsrPdo::instance()->prepare($sql, $values);
+		$query = \Database::instance()->prepare($sql, $values);
 		$query->execute($values);
 		$result = $query->fetchColumn();
 		return $result;
@@ -148,7 +148,7 @@ class AbonnementenModel {
 			$sql.= ' WHERE lid.status IN("S_LID", "S_GASTLID", "S_NOVIET")';
 		}
 		$sql.= ' ORDER BY achternaam, voornaam ASC';
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		$result = $query->fetchAll();
@@ -186,7 +186,7 @@ class AbonnementenModel {
 			$sql.= ' WHERE lid_id=?';
 			$values[] = $uid;
 		}
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		$result = $query->fetchAll(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, '\Taken\MLT\MaaltijdAbonnement');
@@ -226,7 +226,7 @@ class AbonnementenModel {
 	 * @return MaaltijdAbonnement OR aantal nieuwe abonnementen novieten
 	 */
 	private static function newAbonnement($mrid, $uid=null) {
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		try {
 			$db->beginTransaction();
 			$sql = 'INSERT IGNORE INTO mlt_abonnementen';
@@ -328,7 +328,7 @@ class AbonnementenModel {
 			$sql.= ' AND lid_id=?';
 			$values[] = $uid;
 		}
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		if ($uid !== null) {

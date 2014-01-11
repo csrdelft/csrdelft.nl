@@ -70,7 +70,7 @@ class MededelingenContent extends SimpleHTML{
 			$this->paginaNummer = $this->geselecteerdeMededeling->getPaginaNummer($this->prullenbak);
 		}
 		
-		$content=new Smarty_csr();
+		$content=new TemplateEngine();
 
 		$content->assign('melding', $this->getMelding());
 		$content->assign('prullenbak', $this->prullenbak);
@@ -97,7 +97,7 @@ class MededelingenContent extends SimpleHTML{
 	}
 	
 	public function getTopBlock($doelgroep){
-		$content=new Smarty_csr();
+		$content=new TemplateEngine();
 		
 		$topMost=Mededeling::getTopmost(self::aantalTopMostBlock, $doelgroep);
 
@@ -115,7 +115,7 @@ class MededelingenZijbalkContent extends SimpleHTML{
 	}
 	
 	public function view(){
-		$content=new Smarty_csr();
+		$content=new TemplateEngine();
 		
 		// Handige variabelen.
 		$content->assign('mededelingenRoot', MededelingenContent::mededelingenRoot);

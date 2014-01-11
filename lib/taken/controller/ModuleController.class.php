@@ -2,7 +2,7 @@
 
 namespace Taken\CRV;
 
-require_once 'MVC/controller/ACLController.class.php';
+require_once 'MVC/controller/AclController.abstract.php';
 
 /**
  * ModuleController.class.php

@@ -26,7 +26,7 @@ class DocumentContent extends SimpleHtml{
 	}
 	
 	public function view(){
-		$smarty=new Smarty_csr();
+		$smarty=new TemplateEngine();
 
 		$smarty->assign('melding', $this->getMelding());
 		$smarty->assign('categorieen', DocumentenCategorie::getAll());
@@ -47,7 +47,7 @@ class DocumentenContent extends SimpleHtml{
 	}
 
 	public function view(){
-		$smarty=new Smarty_csr();
+		$smarty=new TemplateEngine();
 		$smarty->assign('melding', $this->getMelding());
 		$smarty->assign('categorieen', DocumentenCategorie::getAll());
 		$smarty->display('documenten/documenten.tpl');
@@ -67,7 +67,7 @@ class DocumentCategorieContent extends SimpleHtml{
 		return 'Documenten in categorie: '.$this->categorie->getNaam();
 	}
 	public function view(){
-		$smarty=new Smarty_csr();
+		$smarty=new TemplateEngine();
 		$smarty->assign('melding', $this->getMelding());
 		$smarty->assign('categorie', $this->categorie);
 		$smarty->display('documenten/documentencategorie.tpl');
@@ -104,7 +104,7 @@ class DocumentUbbContent extends SimpleHtml{
 		$this->document=$document;
 	}
 	public function getHTML(){
-		$smarty=new Smarty_csr();	//hmm, lekker overkill
+		$smarty=new TemplateEngine();	//hmm, lekker overkill
 		$smarty->assign('document', $this->document);
 		return $smarty->fetch('documenten/document.ubb.tpl'); 
 	}

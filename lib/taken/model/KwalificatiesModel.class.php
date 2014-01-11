@@ -59,7 +59,7 @@ class KwalificatiesModel {
 		}
 		$sql = 'SELECT EXISTS (SELECT * FROM crv_kwalificaties WHERE lid_id = ? AND functie_id = ?)';
 		$values = array($uid, $fid);
-		$query = \CsrPdo::instance()->prepare($sql, $values);
+		$query = \Database::instance()->prepare($sql, $values);
 		$query->execute($values);
 		$result = (boolean) $query->fetchColumn();
 		return $result;
@@ -75,7 +75,7 @@ class KwalificatiesModel {
 		if (is_int($limit) && $limit > 0) {
 			$sql.= ' LIMIT '. $limit;
 		}
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		$result = $query->fetchAll(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, '\Taken\CRV\CorveeKwalificatie');
@@ -86,7 +86,7 @@ class KwalificatiesModel {
 		if (self::existKwalificatie($uid, $fid)) {
 			throw new \Exception('Is al gekwalificeerd!');
 		}
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		try {
 			$db->beginTransaction();
 			$sql = 'INSERT INTO crv_kwalificaties';
@@ -130,7 +130,7 @@ class KwalificatiesModel {
 			$sql .= 'AND lid_id = ?';
 			$values[] = $uid;
 		}
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		if ($uid !== null && $query->rowCount() !== 1) {

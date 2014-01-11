@@ -44,7 +44,7 @@ class ProfielContent extends SimpleHTML {
 		}
 
 		//de html template in elkaar draaien en weergeven
-		$profiel=new Smarty_csr();
+		$profiel=new TemplateEngine();
 
 		$profiel->assign('profhtml', $profhtml);
 
@@ -97,7 +97,7 @@ class ProfielEditContent extends SimpleHTML{
 	}
 	public function view(){
 		require_once 'formulier.class.php';
-		$profiel=new Smarty_csr();
+		$profiel=new TemplateEngine();
 		$profiel->assign('profiel', $this->profiel);
 
 		$profiel->assign('melding', $this->getMelding());
@@ -125,7 +125,7 @@ class ProfielStatusContent extends SimpleHTML{
 		$gelijknamigeleden = Zoeker::zoekLeden($this->profiel->getLid()->getProperty('achternaam'), 'achternaam', 'alle', 'lidjaar', array('S_LID', 'S_GASTLID'), array('uid'));
 
 		require_once 'formulier.class.php';
-		$profiel=new Smarty_csr();
+		$profiel=new TemplateEngine();
 		$profiel->assign('profiel', $this->profiel);
 		$profiel->assign('gelijknamigenovieten', $gelijknamigenovieten);
 		$profiel->assign('gelijknamigeleden', $gelijknamigeleden);
@@ -151,7 +151,7 @@ class ProfielVoorkeurContent extends SimpleHTML{
 
 
 		require_once 'formulier.class.php';
-		$profiel=new Smarty_csr();
+		$profiel=new TemplateEngine();
 		$profiel->assign('profiel', $this->profiel);
 
 		$profiel->assign('melding', $this->getMelding());

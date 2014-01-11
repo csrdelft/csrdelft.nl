@@ -39,7 +39,7 @@ class TakenModel {
 	}
 	
 	public static function puntenToekennen(CorveeTaak $taak) {
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		try {
 			$db->beginTransaction();
 			PuntenModel::puntenToekennen($taak->getLidId(), $taak->getPunten(), $taak->getBonusMalus());
@@ -56,7 +56,7 @@ class TakenModel {
 	}
 	
 	public static function puntenIntrekken(CorveeTaak $taak) {
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		try {
 			$db->beginTransaction();
 			PuntenModel::puntenIntrekken($taak->getLidId(), $taak->getPunten(), $taak->getBonusMalus());
@@ -191,7 +191,7 @@ class TakenModel {
 	}
 	
 	public static function saveTaak($tid, $fid, $uid, $crid, $mid, $datum, $punten, $bonus_malus) {
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		try {
 			$db->beginTransaction();
 			if ($tid === 0) {
@@ -235,7 +235,7 @@ class TakenModel {
 		$sql = 'DELETE FROM crv_taken';
 		$sql.= ' WHERE verwijderd = true';
 		$values = array();
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		return $query->rowCount();
@@ -246,7 +246,7 @@ class TakenModel {
 		$sql.= ' SET verwijderd = true';
 		$sql.= ' WHERE datum < ?';
 		$values = array(date('Y-m-d'));
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		return $query->rowCount();
@@ -257,7 +257,7 @@ class TakenModel {
 		$sql.= ' SET lid_id = ?';
 		$sql.= ' WHERE lid_id = ? AND datum >= ?';
 		$values = array(null, $uid, date('Y-m-d'));
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		return $query->rowCount();
@@ -278,7 +278,7 @@ class TakenModel {
 		$sql = 'DELETE FROM crv_taken';
 		$sql.= ' WHERE taak_id = ?';
 		$values = array($tid);
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		if ($query->rowCount() !== 1) {
@@ -296,7 +296,7 @@ class TakenModel {
 		if (is_int($limit) && $limit > 0) {
 			$sql.= ' LIMIT '. $limit;
 		}
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		$result = $query->fetchAll(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, '\Taken\CRV\CorveeTaak');
@@ -332,7 +332,7 @@ class TakenModel {
 			$taak->getIsVerwijderd(),
 			$taak->getTaakId()
 		);
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		if ($query->rowCount() !== 1) {
@@ -348,7 +348,7 @@ class TakenModel {
 		$sql.= ' (taak_id, functie_id, lid_id, crv_repetitie_id, maaltijd_id, datum, punten, bonus_malus, punten_toegekend, bonus_toegekend, wanneer_toegekend, wanneer_gemaild, verwijderd)';
 		$sql.= ' VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
 		$values = array(null, $fid, $uid, $crid, $mid, $datum, $punten, $bonus_malus, 0, 0, null, '', false);
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		if ($query->rowCount() !== 1) {
@@ -389,7 +389,7 @@ class TakenModel {
 		}
 		$sql = 'SELECT EXISTS (SELECT * FROM crv_taken WHERE maaltijd_id = ?)';
 		$values = array($mid);
-		$query = \CsrPdo::instance()->prepare($sql, $values);
+		$query = \Database::instance()->prepare($sql, $values);
 		$query->execute($values);
 		$result = $query->fetchColumn();
 		return $result;
@@ -406,7 +406,7 @@ class TakenModel {
 		}
 		$sql = 'UPDATE crv_taken SET verwijderd = true WHERE maaltijd_id = ?';
 		$values = array($mid);
-		$query = \CsrPdo::instance()->prepare($sql, $values);
+		$query = \Database::instance()->prepare($sql, $values);
 		$query->execute($values);
 		return $query->rowCount();
 	}
@@ -438,7 +438,7 @@ class TakenModel {
 		}
 		$sql = 'SELECT EXISTS (SELECT * FROM crv_taken WHERE functie_id = ?)';
 		$values = array($fid);
-		$query = \CsrPdo::instance()->prepare($sql, $values);
+		$query = \Database::instance()->prepare($sql, $values);
 		$query->execute($values);
 		$result = $query->fetchColumn();
 		return $result;
@@ -450,7 +450,7 @@ class TakenModel {
 		if ($repetitie->getPeriodeInDagen() < 1) {
 			throw new \Exception('New repetitie-taken faalt: $periode ='. $repetitie->getPeriodeInDagen());
 		}
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		try {
 			$db->beginTransaction();
 			$taken = self::newRepetitieTaken($repetitie, strtotime($beginDatum), strtotime($eindDatum), $mid);
@@ -503,7 +503,7 @@ class TakenModel {
 		$sql.= ' SET verwijderd = true';
 		$sql.= ' WHERE crv_repetitie_id = ?';
 		$values = array($crid);
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		return $query->rowCount();
@@ -521,14 +521,14 @@ class TakenModel {
 		}
 		$sql = 'SELECT EXISTS (SELECT * FROM crv_taken WHERE crv_repetitie_id = ?)';
 		$values = array($crid);
-		$query = \CsrPdo::instance()->prepare($sql, $values);
+		$query = \Database::instance()->prepare($sql, $values);
 		$query->execute($values);
 		$result = (boolean) $query->fetchColumn();
 		return $result;
 	}
 	
 	public static function updateRepetitieTaken(CorveeRepetitie $repetitie, $verplaats) {
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		try {
 			$db->beginTransaction();
 			$sql = 'UPDATE crv_taken';

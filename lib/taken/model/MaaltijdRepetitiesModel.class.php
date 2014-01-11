@@ -63,7 +63,7 @@ class MaaltijdRepetitiesModel {
 		if (is_int($limit)) {
 			$sql.= ' LIMIT '. $limit;
 		}
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		$result = $query->fetchAll(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, '\Taken\MLT\MaaltijdRepetitie');
@@ -71,7 +71,7 @@ class MaaltijdRepetitiesModel {
 	}
 	
 	public static function saveRepetitie($mrid, $dag, $periode, $titel, $tijd, $prijs, $abo, $limiet, $filter) {
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		try {
 			$db->beginTransaction();
 			$abos = 0;
@@ -117,7 +117,7 @@ class MaaltijdRepetitiesModel {
 			$repetitie->getAbonnementFilter(),
 			$repetitie->getMaaltijdRepetitieId()
 		);
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		if ($query->rowCount() !== 1) {
@@ -130,7 +130,7 @@ class MaaltijdRepetitiesModel {
 		$sql.= ' (mlt_repetitie_id, dag_vd_week, periode_in_dagen, standaard_titel, standaard_tijd, standaard_prijs, abonneerbaar, standaard_limiet, abonnement_filter)';
 		$sql.= ' VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
 		$values = array(null, $dag, $periode, $titel, $tijd, $prijs, $abo, $limiet, $filter);
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		if ($query->rowCount() !== 1) {
@@ -154,7 +154,7 @@ class MaaltijdRepetitiesModel {
 	}
 	
 	private static function deleteRepetitie($mrid) {
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		try {
 			$db->beginTransaction();
 			$aantal = AbonnementenModel::verwijderAbonnementen($mrid); // delete abonnementen first (foreign key)

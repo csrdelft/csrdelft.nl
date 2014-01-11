@@ -38,7 +38,7 @@ class ForumOnderwerpContent extends SimpleHTML {
 			echo $this->getMelding();
 
 		}else{
-			$smarty=new Smarty_csr();
+			$smarty=new TemplateEngine();
 			$smarty->assign('onderwerp', $this->forumonderwerp);
 
 			$smarty->assign('melding', $this->getMelding());

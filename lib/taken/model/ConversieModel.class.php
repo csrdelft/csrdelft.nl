@@ -490,7 +490,7 @@ class ConversieModel {
 	}
 	
 	private static function queryDb($sql, $values=array()) {
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		if ($query->rowCount() > 0) {
@@ -505,7 +505,7 @@ class ConversieModel {
 		$sql.= ' (maaltijd_id, mlt_repetitie_id, titel, aanmeld_limiet, datum, tijd, prijs, gesloten, laatst_gesloten, verwijderd, aanmeld_filter)';
 		$sql.= ' VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
 		$values = array($mid, $mrid, $titel, $limiet, $datum, $tijd, $prijs, false, null, false, $filter);
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		if ($query->rowCount() !== 1) {
@@ -517,7 +517,7 @@ class ConversieModel {
 	}
 	
 	private static function archiefMaaltijd(ArchiefMaaltijd $archief) {
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		try {
 			$db->beginTransaction();
 			$sql = 'INSERT INTO mlt_archief';

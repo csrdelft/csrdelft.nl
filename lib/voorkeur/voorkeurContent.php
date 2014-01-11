@@ -15,7 +15,7 @@ class LidPaginaVoorkeurContent extends SimpleHTML{
 
 
 		require_once 'formulier.class.php';
-		$profiel=new Smarty_csr();
+		$profiel=new TemplateEngine();
 		$profiel->assign('profiel', $this->profiel);
 
 		$profiel->assign('melding', $this->getMelding());

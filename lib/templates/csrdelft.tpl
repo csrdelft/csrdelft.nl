@@ -51,7 +51,7 @@
 		</div>
 	</div>
 </div>
-{$ubbHulp}
+{include file='ubbhulp.tpl'}
 {if isset($minion)}{$minion}{/if}
 {if isset($debug)}
 	<h2 id="mysql_debug_header">

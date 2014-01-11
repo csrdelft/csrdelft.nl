@@ -21,7 +21,7 @@ class BeheerVoorkeurenView extends \SimpleHtml {
 	}
 	
 	public function view() {
-		$smarty = new \Smarty_csr();
+		$smarty = new \TemplateEngine();
 		
 		if ($this->_repetities === null) { // voor een lid
 			if (is_array($this->_leden_voorkeuren)) { // lijst van voorkeuren

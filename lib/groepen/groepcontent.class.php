@@ -130,7 +130,7 @@ class Groepcontent extends SimpleHTML{
 	}
 
 	public function view(){
-		$content=new Smarty_csr();
+		$content=new TemplateEngine();
 
 		$content->assign('groep', $this->groep);
 		$content->assign('opvolgerVoorganger', $this->groep->getOpvolgerVoorganger());
@@ -167,7 +167,7 @@ class Groepencontent extends SimpleHTML{
 	}
 
 	public function view(){
-		$content=new Smarty_csr();
+		$content=new TemplateEngine();
 
 		$content->assign('groepen', $this->groepen);
 
@@ -189,7 +189,7 @@ class GroepledenContent{
 		$this->actie=$actie;
 	}
 	public function view(){
-		$content=new Smarty_csr();
+		$content=new TemplateEngine();
 		$content->assign('groep', $this->groep);
 		$content->assign('actie', $this->actie);
 
@@ -314,7 +314,7 @@ class GroepUbbContent extends SimpleHTML{
 		$this->groep = $groep;
 	}
 	public function getHTML(){
-			$content=new Smarty_csr();
+			$content=new TemplateEngine();
 			$content->assign('groep', $this->groep);
 			return $content->fetch('groepen/groep.ubb.tpl');
 	}

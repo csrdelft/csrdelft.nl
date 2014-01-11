@@ -123,7 +123,7 @@ class MaaltijdenModel {
 	}
 	
 	public static function saveMaaltijd($mid, $mrid, $titel, $limiet, $datum, $tijd, $prijs, $filter) {
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		try {
 			$db->beginTransaction();
 			$verwijderd = 0;
@@ -187,7 +187,7 @@ class MaaltijdenModel {
 	}
 	
 	private static function deleteMaaltijd($mid) {
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		try {
 			$db->beginTransaction();
 			AanmeldingenModel::deleteAanmeldingenVoorMaaltijd($mid); // delete aanmeldingen first (foreign key)
@@ -246,7 +246,7 @@ class MaaltijdenModel {
 		if (is_int($limit) && $limit > 0) {
 			$sql.= ' LIMIT '. $limit;
 		}
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		$result = $query->fetchAll(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, '\Taken\MLT\Maaltijd');
@@ -272,7 +272,7 @@ class MaaltijdenModel {
 			$maaltijd->getAanmeldFilter(),
 			$maaltijd->getMaaltijdId()
 		);
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		if ($query->rowCount() !== 1) {
@@ -291,7 +291,7 @@ class MaaltijdenModel {
 		$sql.= ' (maaltijd_id, mlt_repetitie_id, titel, aanmeld_limiet, datum, tijd, prijs, gesloten, laatst_gesloten, verwijderd, aanmeld_filter)';
 		$sql.= ' VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
 		$values = array(null, $mrid, $titel, $limiet, $datum, $tijd, $prijs, $gesloten, $wanneer, false, $filter);
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		if ($query->rowCount() !== 1) {
@@ -363,7 +363,7 @@ class MaaltijdenModel {
 		if (is_int($limit) && $limit > 0) {
 			$sql.= ' LIMIT '. $limit;
 		}
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		$result = $query->fetchAll(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, '\Taken\MLT\ArchiefMaaltijd');
@@ -406,7 +406,7 @@ class MaaltijdenModel {
 	}
 	
 	private static function newArchiefMaaltijd(ArchiefMaaltijd $archief) {
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		try {
 			$db->beginTransaction();
 			$sql = 'INSERT INTO mlt_archief';
@@ -450,7 +450,7 @@ class MaaltijdenModel {
 		}
 		$sql = 'UPDATE mlt_maaltijden SET verwijderd = true WHERE mlt_repetitie_id = ?';
 		$values = array($mrid);
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		return $query->rowCount();
@@ -468,14 +468,14 @@ class MaaltijdenModel {
 		}
 		$sql = 'SELECT EXISTS (SELECT * FROM mlt_maaltijden WHERE mlt_repetitie_id = ?)';
 		$values = array($mrid);
-		$query = \CsrPdo::instance()->prepare($sql, $values);
+		$query = \Database::instance()->prepare($sql, $values);
 		$query->execute($values);
 		$result = (boolean) $query->fetchColumn();
 		return $result;
 	}
 	
 	public static function updateRepetitieMaaltijden(MaaltijdRepetitie $repetitie, $verplaats) {
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		try {
 			$db->beginTransaction();
 			// update day of the week & check filter
@@ -529,7 +529,7 @@ class MaaltijdenModel {
 		if ($repetitie->getPeriodeInDagen() < 1) {
 			throw new \Exception('New repetitie-maaltijden faalt: $periode ='. $repetitie->getPeriodeInDagen());
 		}
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		try {
 			$db->beginTransaction();
 			// start at first occurence

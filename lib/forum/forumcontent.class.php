@@ -20,7 +20,7 @@ class ForumContent extends SimpleHTML {
 *
 ***********************************************************************************************************/
 	function viewCategories(){
-		$smarty=new Smarty_csr();
+		$smarty=new TemplateEngine();
 		$smarty->assign('categories', ForumCategorie::getAll(true));
 		$smarty->assign('melding', $this->getMelding());
 		$smarty->display('forum/list_categories.tpl');
@@ -34,7 +34,7 @@ class ForumContent extends SimpleHTML {
 	function rssFeed(){
 		$aPosts=Forum::getPostsVoorRss(false, false);
 
-		$rss=new Smarty_csr();
+		$rss=new TemplateEngine();
 		$rss->assign('aPosts', $aPosts);
 
 		$rss->assign('selflink', LoginLid::instance()->getLid()->getRssLink());
@@ -52,7 +52,7 @@ class ForumContent extends SimpleHTML {
 		if(!is_array($aPosts)){
 			echo '<div class="item">Geen items gevonden</div>';
 		}else{
-			$smarty=new Smarty_csr();
+			$smarty=new TemplateEngine();
 			foreach($aPosts as $aPost){
 				$tekst=$aPost['titel'];
 				if(strlen($tekst)>40){
@@ -95,7 +95,7 @@ class ForumContent extends SimpleHTML {
 		if(!is_array($aPosts)){
 			echo '<div class="item">Geen items gevonden</div>';
 		}else{
-			$smarty=new Smarty_csr();
+			$smarty=new TemplateEngine();
 			foreach($aPosts as $aPost){
 				$tekst=$aPost['titel'];
 				if(strlen($tekst)>40){
@@ -125,7 +125,7 @@ class ForumContent extends SimpleHTML {
 		}
 	}
 	public function lastPosts(){
- 		$smarty=new Smarty_csr();
+ 		$smarty=new TemplateEngine();
 		$smarty->assign('berichten', Forum::getPostsVoorRss(Instelling::get('forum_zoekresultaten')));
 		$smarty->assign('melding', $this->getMelding());
 		$smarty->display('forum/list_recent.tpl');

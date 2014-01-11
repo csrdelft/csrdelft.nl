@@ -1,9 +1,9 @@
 <?php
 
-require_once 'MVC/controller/Controller.class.php';
+require_once 'MVC/controller/Controller.abstract.php';
 
 /**
- * AclController.class.php
+ * AclController.abstract.php
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  *

@@ -67,7 +67,7 @@ class VoorkeurenModel {
 		}
 		$sql = 'SELECT EXISTS (SELECT * FROM crv_voorkeuren WHERE crv_repetitie_id=? AND lid_id=?)';
 		$values = array($crid, $uid);
-		$query = \CsrPdo::instance()->prepare($sql, $values);
+		$query = \Database::instance()->prepare($sql, $values);
 		$query->execute($values);
 		$result = $query->fetchColumn();
 		return $result;
@@ -105,7 +105,7 @@ class VoorkeurenModel {
 		$sql.= ' FROM lid, crv_repetities';
 		$sql.= ' WHERE voorkeurbaar = true AND lid.status IN("S_LID", "S_GASTLID", "S_NOVIET")'; // alleen leden
 		$sql.= ' ORDER BY achternaam, voornaam ASC';
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$values = array();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
@@ -135,7 +135,7 @@ class VoorkeurenModel {
 			$sql.= ' WHERE lid_id=?';
 			$values[] = $uid;
 		}
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		$result = $query->fetchAll(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, '\Taken\CRV\CorveeVoorkeur');
@@ -161,7 +161,7 @@ class VoorkeurenModel {
 	 * @return CorveeVoorkeur
 	 */
 	private static function newVoorkeur($crid, $uid) {
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		try {
 			$db->beginTransaction();
 			$sql = 'INSERT IGNORE INTO crv_voorkeuren';
@@ -227,7 +227,7 @@ class VoorkeurenModel {
 			$sql.= ' AND lid_id=?';
 			$values[] = $uid;
 		}
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		if ($uid !== null && $query->rowCount() !== 1) {

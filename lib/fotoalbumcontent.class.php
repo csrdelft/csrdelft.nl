@@ -248,7 +248,7 @@ class FotoalbumContent extends SimpleHTML{
 	function view(){
 		switch($this->actie){
 			case 'album':
-				$smarty=new Smarty_csr();
+				$smarty=new TemplateEngine();
 				$smarty->assign('album',$this->_fotoalbum);
 				$smarty->display('fotoalbum/album.tpl');
 				break;

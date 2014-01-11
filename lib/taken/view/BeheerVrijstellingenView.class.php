@@ -19,7 +19,7 @@ class BeheerVrijstellingenView extends \SimpleHtml {
 	}
 	
 	public function view() {
-		$smarty = new \Smarty_csr();
+		$smarty = new \TemplateEngine();
 		
 		if (is_array($this->_vrijstellingen)) {
 			$smarty->assign('melding', $this->getMelding());

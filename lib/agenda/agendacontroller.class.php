@@ -9,7 +9,7 @@
 
 require_once 'agenda.class.php';
 require_once 'agendacontent.class.php';
-require_once 'MVC/controller/ACLController.class.php';
+require_once 'MVC/controller/AclController.abstract.php';
 
 class AgendaController extends AclController {
 

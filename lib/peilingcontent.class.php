@@ -14,7 +14,7 @@ class PeilingContent extends SimpleHTML{
 	}
 
 	public function getHTML($beheer=false){
-		$smarty=new Smarty_csr();
+		$smarty=new TemplateEngine();
 		
 		$smarty->assign('peiling', $this->peiling);
 		$smarty->assign('beheer', $beheer);

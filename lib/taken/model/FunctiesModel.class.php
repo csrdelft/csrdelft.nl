@@ -42,7 +42,7 @@ class FunctiesModel {
 		if (is_int($limit) && $limit > 0) {
 			$sql.= ' LIMIT '. $limit;
 		}
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		$result = $query->fetchAll(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, '\Taken\CRV\CorveeFunctie');
@@ -50,7 +50,7 @@ class FunctiesModel {
 	}
 	
 	public static function saveFunctie($fid, $naam, $afk, $email, $punten, $kwali) {
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		try {
 			$db->beginTransaction();
 			if ($fid === 0) {
@@ -82,7 +82,7 @@ class FunctiesModel {
 		$sql.= ' (functie_id, naam, afkorting, email_bericht, standaard_punten, kwalificatie_benodigd)';
 		$sql.= ' VALUES (?, ?, ?, ?, ?, ?)';
 		$values = array(null, $naam, $afk, $email, $punten, $kwali);
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		if ($query->rowCount() !== 1) {
@@ -103,7 +103,7 @@ class FunctiesModel {
 			$functie->getIsKwalificatieBenodigd(),
 			$functie->getFunctieId()
 		);
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		if ($query->rowCount() !== 1) {
@@ -125,7 +125,7 @@ class FunctiesModel {
 	}
 	
 	private static function deleteFunctie($fid) {
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		try {
 			$db->beginTransaction();
 			KwalificatiesModel::verwijderKwalificaties($fid); // delete kwalificaties first (foreign key)

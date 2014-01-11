@@ -59,7 +59,7 @@ class CorveeRepetitiesModel {
 		if (is_int($limit)) {
 			$sql.= ' LIMIT '. $limit;
 		}
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		$result = $query->fetchAll(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, '\Taken\CRV\CorveeRepetitie');
@@ -77,7 +77,7 @@ class CorveeRepetitiesModel {
 	}
 	
 	public static function saveRepetitie($crid, $mrid, $dag, $periode, $fid, $punten, $aantal, $voorkeur) {
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		try {
 			$db->beginTransaction();
 			$voorkeuren = 0;
@@ -122,7 +122,7 @@ class CorveeRepetitiesModel {
 			$repetitie->getIsVoorkeurbaar(),
 			$repetitie->getCorveeRepetitieId()
 		);
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		if ($query->rowCount() !== 1) {
@@ -135,7 +135,7 @@ class CorveeRepetitiesModel {
 		$sql.= ' (crv_repetitie_id, mlt_repetitie_id, dag_vd_week, periode_in_dagen, functie_id, standaard_punten, standaard_aantal, voorkeurbaar)';
 		$sql.= ' VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
 		$values = array(null, $mrid, $dag, $periode, $fid, $punten, $aantal, $voorkeur);
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		if ($query->rowCount() !== 1) {
@@ -156,7 +156,7 @@ class CorveeRepetitiesModel {
 	}
 	
 	private static function deleteRepetitie($crid) {
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		try {
 			$db->beginTransaction();
 			$aantal = VoorkeurenModel::verwijderVoorkeuren($crid); // delete voorkeuren first (foreign key)
@@ -191,7 +191,7 @@ class CorveeRepetitiesModel {
 		}
 		$sql = 'SELECT EXISTS (SELECT * FROM crv_repetities WHERE mlt_repetitie_id = ?)';
 		$values = array($mrid);
-		$query = \CsrPdo::instance()->prepare($sql, $values);
+		$query = \Database::instance()->prepare($sql, $values);
 		$query->execute($values);
 		$result = $query->fetchColumn();
 		return $result;
@@ -211,7 +211,7 @@ class CorveeRepetitiesModel {
 		}
 		$sql = 'SELECT EXISTS (SELECT * FROM crv_repetities WHERE functie_id = ?)';
 		$values = array($fid);
-		$query = \CsrPdo::instance()->prepare($sql, $values);
+		$query = \Database::instance()->prepare($sql, $values);
 		$query->execute($values);
 		$result = $query->fetchColumn();
 		return $result;

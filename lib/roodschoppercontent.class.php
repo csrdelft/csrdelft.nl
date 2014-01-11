@@ -11,7 +11,7 @@ class RoodschopperContent extends SimpleHTML{
 		return 'Roodschopper';
 	}
 	public function view(){
-		$content=new Smarty_csr();
+		$content=new TemplateEngine();
 
 		
 		$content->assign('roodschopper', $this->roodschopper);

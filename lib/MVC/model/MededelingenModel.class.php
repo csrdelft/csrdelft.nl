@@ -1,6 +1,6 @@
 <?php
 
-require_once 'MVC/model/PagingModel.class.php';
+require_once 'MVC/model/PagingModel.abstract.php';
 require_once 'MVC/model/entity/Mededeling.class.php';
 
 /**
@@ -9,7 +9,7 @@ require_once 'MVC/model/entity/Mededeling.class.php';
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  */
-class MededelingenModel extends PagingModel {
+class MededelingenModel extends PaginationModel {
 
 	public function __construct() {
 		parent::__construct('Mededeling');

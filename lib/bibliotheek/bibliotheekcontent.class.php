@@ -16,7 +16,7 @@ class BibliotheekCatalogusContent extends SimpleHtml{
 		return 'Bibliotheek | Catalogus';
 	}
 	public function view(){
-		$smarty=new Smarty_csr();
+		$smarty=new TemplateEngine();
 		$smarty->assign('melding', $this->getMelding());
 
 		$smarty->display('bibliotheek/catalogus.tpl');
@@ -161,7 +161,7 @@ class BibliotheekBoekContent extends SimpleHtml{
 		return 'Bibliotheek | Boek: '.$this->boek->getTitel();
 	}
 	public function view(){
-		$smarty=new Smarty_csr();
+		$smarty=new TemplateEngine();
 		$smarty->assign('melding', $this->getMelding());
 		$smarty->assign('boek', $this->boek);
 
@@ -179,7 +179,7 @@ class BoekUbbContent extends SimpleHTML{
 	}
 
 	public function getHTML(){
-		$content=new Smarty_csr();
+		$content=new TemplateEngine();
 		$content->assign('boek', $this->boek);
 		return $content->fetch('bibliotheek/boek.ubb.tpl');
 	}

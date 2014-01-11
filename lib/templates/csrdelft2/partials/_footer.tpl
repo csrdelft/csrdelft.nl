@@ -2,7 +2,7 @@
     <script>
         $(document).foundation();
   </script>
-  {$ubbHulp}
+  {include file='ubbhulp.tpl'}
 </body>
 
 </html>

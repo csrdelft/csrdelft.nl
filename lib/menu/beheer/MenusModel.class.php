@@ -83,7 +83,7 @@ class MenusModel {
 		if (is_int($limit) && $limit > 0) {
 			$sql.= ' LIMIT ' . $limit;
 		}
-		$db = CsrPdo::instance();
+		$db = Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		$result = $query->fetchAll(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, 'MenuItem');
@@ -95,7 +95,7 @@ class MenusModel {
 		$sql.= ' (menu_id, parent_id, prioriteit, tekst, link, permission, zichtbaar, menu)';
 		$sql.= ' VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
 		$values = array(null, $pid, $prio, $text, $link, $perm, $show, $menu);
-		$db = CsrPdo::instance();
+		$db = Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		if ($query->rowCount() !== 1) {
@@ -118,13 +118,13 @@ class MenusModel {
 			$item->getMenu(),
 			$item->getMenuId()
 		);
-		$db = CsrPdo::instance();
+		$db = Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 	}
 
 	public static function deleteMenuItem(MenuItem $item) {
-		$db = CsrPdo::instance();
+		$db = Database::instance();
 		try {
 			$db->beginTransaction();
 			foreach ($item->children as $child) { // give new parent to otherwise future orphans

@@ -121,7 +121,7 @@ abstract class SimpleHTML {
 		$debug = '';
 		if ($sql) {
 			$debug .= '<hr />SQL<hr />';
-			$debug .= '<pre>' . htmlentities(print_r(array("PDO" => CsrPdo::instance()->getQueries(), "MySql" => MySql::instance()->getQueries()), true)) . '</pre>';
+			$debug .= '<pre>' . htmlentities(print_r(array("PDO" => Database::instance()->getQueries(), "MySql" => MySql::instance()->getQueries()), true)) . '</pre>';
 		}
 		if ($get) {
 			$debug .= '<hr />GET<hr />';

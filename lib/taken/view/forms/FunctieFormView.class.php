@@ -39,7 +39,7 @@ class FunctieFormView extends \SimpleHtml {
 	}
 	
 	public function view() {
-		$smarty = new \Smarty_csr();
+		$smarty = new \TemplateEngine();
 		$smarty->assign('melding', $this->getMelding());
 		$smarty->assign('kop', $this->getTitel());
 		$this->_form->cssClass .= ' popup';

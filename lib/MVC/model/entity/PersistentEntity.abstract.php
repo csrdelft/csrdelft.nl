@@ -1,7 +1,7 @@
 <?php
 
 /**
- * PersistentEntity.class.php
+ * PersistentEntity.abstract.php
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 

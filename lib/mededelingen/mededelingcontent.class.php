@@ -10,7 +10,7 @@ class MededelingContent extends SimpleHTML{
 
 	public function view(){
 
-		$content=new Smarty_csr();
+		$content=new TemplateEngine();
 		define( 'NIEUWS_ROOT', '/actueel/mededelingen/');
 
 		$content->assign('mededeling', $this->mededeling);

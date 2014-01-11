@@ -1,15 +1,14 @@
 <?php
 
 /**
- * Controller.class.php
+ * Controller.abstract.php
  * 
  * @author Jan Pieter Waagmeester <jieter@jpwaag.com>
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  * Een controller zorgt ervoor dat de juiste acties uitgevoerd worden,
  * dat er gecontroleerd wordt of de gebruiker mag doen dat hij probeert
- * te doen, en dat er een content-ding aangemaakt wordt voor de huidige
- * actie.
+ * te doen, en dat er een View aangemaakt wordt.
  * 
  */
 abstract class Controller {

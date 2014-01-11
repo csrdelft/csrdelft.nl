@@ -167,7 +167,7 @@ class csrdelft extends SimpleHTML {
 	function view($template = '', $menutemplate = '') {
 		
 		header('Content-Type: text/html; charset=UTF-8');
-		$smarty = new Smarty_csr();
+		$smarty = new TemplateEngine();
 		$smarty->assignByRef('this', $this);
 		$smarty->assign('body', $this->_body);
 		

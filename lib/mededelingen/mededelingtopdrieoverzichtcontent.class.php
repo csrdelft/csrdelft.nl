@@ -9,7 +9,7 @@ class MededelingTopDrieOverzichtContent extends SimpleHTML {
 	}
 	
 	public function view(){
-		$content=new Smarty_csr();
+		$content=new TemplateEngine();
 
 		$content->assign('mededelingen_root', MededelingenContent::mededelingenRoot);
 		

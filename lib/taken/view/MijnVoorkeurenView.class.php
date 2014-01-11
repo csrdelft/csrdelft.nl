@@ -21,7 +21,7 @@ class MijnVoorkeurenView extends \SimpleHtml {
 	}
 	
 	public function view() {
-		$smarty = new \Smarty_csr();
+		$smarty = new \TemplateEngine();
 		
 		if ($this->_voorkeuren === null) { // eetwens
 			$smarty->assign('eetwens', $this->_eetwens);

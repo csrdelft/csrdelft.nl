@@ -108,7 +108,7 @@ class AanmeldingenModel {
 		if (!self::getIsAangemeld($mid, $uid)) {
 			throw new \Exception('Niet aangemeld');
 		}
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		try {
 			$db->beginTransaction();
 			$maaltijd = MaaltijdenModel::getMaaltijd($mid);
@@ -143,7 +143,7 @@ class AanmeldingenModel {
 		if (!self::getIsAangemeld($mid, $uid)) {
 			throw new \Exception('Niet aangemeld');
 		}
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		try {
 			$db->beginTransaction();
 			$maaltijd = MaaltijdenModel::getMaaltijd($mid);
@@ -209,7 +209,7 @@ class AanmeldingenModel {
 			$values[] = $doorAbo;
 		}
 		$sql.= ')';
-		$query = \CsrPdo::instance()->prepare($sql, $values);
+		$query = \Database::instance()->prepare($sql, $values);
 		$query->execute($values);
 		$result = $query->fetchColumn();
 		return (boolean) $result;
@@ -239,7 +239,7 @@ class AanmeldingenModel {
 		if (is_int($limit)) {
 			$sql.= ' LIMIT '. $limit;
 		}
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		$result = $query->fetchAll(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, '\Taken\MLT\MaaltijdAanmelding');
@@ -259,7 +259,7 @@ class AanmeldingenModel {
 			$sql.= ' VALUES (?, ?, ?, ?, ?, ?, ?)';
 			$values = array($mid, $uid, $gasten, $opmerking, $doorAbo, $doorUid, $wanneer);
 		}
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		if ($mid !== null) {
@@ -288,7 +288,7 @@ class AanmeldingenModel {
 			$sql.= ' AND lid_id=?';
 			$values[] = $uid;
 		}
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		if ($uid !== null && $query->rowCount() !== 1) {
@@ -309,7 +309,7 @@ class AanmeldingenModel {
 			$aanmelding->getMaaltijdId(),
 			$aanmelding->getLidId()
 		);
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		if ($query->rowCount() !== 1) {

@@ -47,7 +47,7 @@ class CourantBeheercontent extends SimpleHTML{
 			}
 		}
 
-			$content=new Smarty_csr();
+			$content=new TemplateEngine();
 
 		$content->assign('courant', $this->courant);
 		$content->assign('form', $formulier);
