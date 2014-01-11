@@ -1,9 +1,11 @@
 <?php
 /**
- * MenuItem.class.php	| 	P.W.G. Brussee (brussee@live.nl)
+ * MenuItem.class.php
  * 
+ * @author P.W.G. Brussee <brussee@live.nl>
  * 
- * Een menu-item instantie beschrijft een menu onderdeel van een menu-boom en heeft daarom een parent.
+ * Een menu-item instantie beschrijft een menu onderdeel van een menu-boom
+ * en heeft daarom een parent.
  * 
  */
 class MenuItem {

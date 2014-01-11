@@ -1,6 +1,6 @@
 <?php
 
-require_once 'menu/beheer/MenuItem.class.php';
+require_once 'MVC/model/entity/MenuItem.class.php';
 
 /**
  * MenuModel.class.php
@@ -8,7 +8,7 @@ require_once 'menu/beheer/MenuItem.class.php';
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
-class MenusModel {
+class MenuModel {
 
 	public static function getAlleMenus() {
 		return self::loadMenuItems(null, array(), true);

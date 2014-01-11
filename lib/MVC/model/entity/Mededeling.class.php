@@ -6,34 +6,31 @@
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
-class Mededeling extends PersistentEntity {
+class Mededeling2 extends PersistentEntity {
 
 	/**
 	 * Primary key
 	 * 
 	 * @var int
 	 */
-	public $id = null;
-
+	protected $id = null;
 	/**
 	 * Bestuur, commissie, lid
 	 * 
 	 * @var string
 	 */
-	public $type = '';
-	public $tekst = '';
-
+	protected $type = '';
+	protected $tekst = '';
 	/**
 	 * Iedereen, leden, oud-leden, niemand, prullenbak
 	 * 
 	 * @var string
 	 */
-	public $zichtbaar_voor = 'niemand';
-	public $zichtbaar_vanaf = '0000-00-00 00:00:00';
-	public $zichtbaar_tot = null;
-	public $prioriteit = 0;
-	public $afbeelding_url = null;
-
+	protected $zichtbaar_voor = 'niemand';
+	protected $zichtbaar_vanaf = '0000-00-00 00:00:00';
+	protected $zichtbaar_tot = null;
+	protected $prioriteit = 0;
+	protected $afbeelding_url = null;
 	/**
 	 * Database
 	 */

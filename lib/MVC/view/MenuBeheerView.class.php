@@ -1,12 +1,14 @@
 <?php
 
 /**
- * BeheerMenuView.class.php	| 	P.W.G. Brussee (brussee@live.nl)
+ * MenuBeheerView.class.php
+ * 
+ * @author P.W.G. Brussee <brussee@live.nl>
  * 
  * Tonen van alle menus en menu-items om te beheren.
  * 
  */
-class BeheerMenusView extends TemplateView {
+class MenuBeheerView extends TemplateView {
 
 	private $_menus;
 	private $_root;

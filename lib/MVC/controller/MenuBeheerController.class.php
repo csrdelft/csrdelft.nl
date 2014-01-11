@@ -1,13 +1,15 @@
 <?php
-require_once 'MVC/controller/AclController.abstract.php';
-require_once 'menu/beheer/MenusModel.class.php';
+
+require_once 'menu/beheer/MenuModel.class.php';
 require_once 'menu/beheer/BeheerMenusView.class.php';
 
 /**
- * BeheerMenuController.class.php	| 	P.W.G. Brussee (brussee@live.nl)
+ * MenuBeheerController.class.php
+ * 
+ * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
-class BeheerMenusController extends AclController {
+class MenuBeheerController extends AclController {
 
 	public function __construct($query) {
 		parent::__construct($query);
@@ -16,8 +18,7 @@ class BeheerMenusController extends AclController {
 				'beheer' => 'P_ADMIN',
 				'verwijder' => 'P_ADMIN'
 			);
-		}
-		else {
+		} else {
 			$this->acl = array(
 				'nieuw' => 'P_ADMIN',
 				'wijzig' => 'P_ADMIN'
@@ -31,8 +32,7 @@ class BeheerMenusController extends AclController {
 		if ($this->hasParam(1)) {
 			if ($this->action === 'beheer') {
 				$params[] = $this->getParam(1);
-			}
-			else {
+			} else {
 				$params[] = intval($this->getParam(1));
 				if ($this->hasParam(2)) {
 					$params[] = $this->getParam(2);
@@ -41,20 +41,20 @@ class BeheerMenusController extends AclController {
 		}
 		$this->performAction($params);
 	}
-	
-	public function beheer($menu=null) {
-		$menus = MenusModel::getAlleMenus();
+
+	public function beheer($menu = null) {
+		$menus = MenuModel::getAlleMenus();
 		if ($menu === null) {
 			$menu = '';
 		}
-		$items = MenusModel::getMenuItems($menu, false);
-		$tree = MenusModel::getMenuTree($menu, $items);
-		$this->content = new BeheerMenusView($menus, $tree);
+		$items = MenuModel::getMenuItems($menu, false);
+		$tree = MenuModel::getMenuTree($menu, $items);
+		$this->content = new MenuBeheerView($menus, $tree);
 		$this->content = new csrdelft($this->getContent());
 		$this->content->addStylesheet('menubeheer.css');
 		$this->content->addScript('menubeheer.js');
 	}
-	
+
 	public function nieuw($pid) {
 		$prio = (int) filter_input(INPUT_POST, 'Prioriteit', FILTER_SANITIZE_NUMBER_INT);
 		$text = filter_input(INPUT_POST, 'Tekst', FILTER_SANITIZE_STRING);
@@ -62,30 +62,30 @@ class BeheerMenusController extends AclController {
 		$perm = filter_input(INPUT_POST, 'Permission', FILTER_SANITIZE_STRING);
 		$show = (boolean) filter_input(INPUT_POST, 'Zichtbaar', FILTER_SANITIZE_STRING);
 		$menu = filter_input(INPUT_POST, 'Menu', FILTER_SANITIZE_STRING);
-		$item = MenusModel::newMenuItem($pid, $prio, $text, $link, $perm, $show, $menu);
-		\SimpleHTML::invokeRefresh('/menubeheer/beheer/'. $item->getMenu(), $item->getTekst() .' ('. $item->getMenuId() .') aangemaakt', 1);
+		$item = MenuModel::newMenuItem($pid, $prio, $text, $link, $perm, $show, $menu);
+		\SimpleHTML::invokeRefresh('/menubeheer/beheer/' . $item->getMenu(), $item->getTekst() . ' (' . $item->getMenuId() . ') aangemaakt', 1);
 	}
-	
+
 	public function wijzig($mid, $prop) {
-		$item = MenusModel::getMenuItem($mid);
+		$item = MenuModel::getMenuItem($mid);
 		$prop = ucfirst($prop);
-		$setter = 'set'. $prop;
+		$setter = 'set' . $prop;
 		if (method_exists($item, $setter)) {
 			$val = filter_input(INPUT_POST, $prop);
 			$item->$setter($val);
-			MenusModel::updateMenuItem($item);
+			MenuModel::updateMenuItem($item);
+		} else {
+			throw new Exception('Wijzig faalt: ' . $setter . ' undefined');
 		}
-		else{
-			throw new Exception('Wijzig faalt: '. $setter .' undefined');
-		}
-		\SimpleHTML::invokeRefresh('/menubeheer/beheer/'. $item->getMenu(), $item->getTekst() .' ('. $item->getMenuId() .') opgeslagen', 1);
+		\SimpleHTML::invokeRefresh('/menubeheer/beheer/' . $item->getMenu(), $item->getTekst() . ' (' . $item->getMenuId() . ') opgeslagen', 1);
 	}
-	
+
 	public function verwijder($mid) {
-		$item = MenusModel::getMenuItem($mid);
-		MenusModel::deleteMenuItem($item);
-		\SimpleHTML::invokeRefresh('/menubeheer/beheer/'. $item->getMenu(), $item->getTekst() .' ('. $item->getMenuId() .') verwijderd', 1);
+		$item = MenuModel::getMenuItem($mid);
+		MenuModel::deleteMenuItem($item);
+		\SimpleHTML::invokeRefresh('/menubeheer/beheer/' . $item->getMenu(), $item->getTekst() . ' (' . $item->getMenuId() . ') verwijderd', 1);
 	}
+
 }
 
 ?>

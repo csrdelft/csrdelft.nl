@@ -837,11 +837,11 @@ class IntField extends InputField {
 			return false;
 		}
 		if (!$this->required AND parent::getValue() === '') { // do not check if empty
-		} else if (!preg_match('/\d+/', parent::getValue())) {
+		} elseif (!preg_match('/\d+/', parent::getValue())) {
 			$this->error = 'Alleen getallen toegestaan';
-		} else if ($this->max !== null AND $this->getValue() > $this->max) {
+		} elseif ($this->max !== null AND $this->getValue() > $this->max) {
 			$this->error = 'Maximale waarde is ' . $this->max . ' ';
-		} else if ($this->min !== null AND $this->getValue() < $this->min) {
+		} elseif ($this->min !== null AND $this->getValue() < $this->min) {
 			$this->error = 'Minimale waarde is ' . $this->min . ' ';
 		}
 		return $this->error === null;
@@ -878,11 +878,11 @@ class FloatField extends InputField {
 			return false;
 		}
 		if (!$this->required AND strlen(parent::getValue()) === 0) { // do not check if empty
-		} else if (!preg_match('/\d+(,{1}\d*)?/', str_replace('.', ',', parent::getValue()))) {
+		} elseif (!preg_match('/\d+(,{1}\d*)?/', str_replace('.', ',', parent::getValue()))) {
 			$this->error = 'Alleen komma-getallen toegestaan';
-		} else if ($this->max !== null AND $this->getValue() > $this->max) {
+		} elseif ($this->max !== null AND $this->getValue() > $this->max) {
 			$this->error = 'Maximale waarde is ' . $this->max . ' ';
-		} else if ($this->min !== null AND $this->getValue() < $this->min) {
+		} elseif ($this->min !== null AND $this->getValue() < $this->min) {
 			$this->error = 'Minimale waarde is ' . $this->min . ' ';
 		}
 		return $this->error === null;

@@ -2564,12 +2564,16 @@ htdocs_confide/streeplijstrapportage.php -text
 images/famfamfam/.index -text
 lib/MVC/controller/AclController.abstract.php -text
 lib/MVC/controller/Controller.abstract.php -text
+lib/MVC/controller/MenuBeheerController.class.php -text
 lib/MVC/model/Database.class.php -text
 lib/MVC/model/MededelingenModel.class.php -text
+lib/MVC/model/MenuModel.class.php -text
 lib/MVC/model/PaginationModel.abstract.php -text
 lib/MVC/model/PersistenceModel.abstract.php -text
 lib/MVC/model/entity/Mededeling.class.php -text
+lib/MVC/model/entity/MenuItem.class.php -text
 lib/MVC/model/entity/PersistentEntity.abstract.php -text
+lib/MVC/view/MenuBeheerView.class.php -text
 lib/MVC/view/MenuView.class.php -text
 lib/MVC/view/TemplateView.abstract.php -text
 lib/MVC/view/Validator.interface.php -text
@@ -3045,10 +3049,6 @@ lib/mededelingen/mededelingcontent.class.php -text
 lib/mededelingen/mededelingencontent.class.php -text
 lib/mededelingen/mededelingtopdrieoverzichtcontent.class.php -text
 lib/memcached.class.php -text
-lib/menu/beheer/BeheerMenusController.class.php -text
-lib/menu/beheer/BeheerMenusView.class.php -text
-lib/menu/beheer/MenuItem.class.php -text
-lib/menu/beheer/MenusModel.class.php -text
 lib/mimemagic/DjVuImage.php -text
 lib/mimemagic/MimeMagic.php -text
 lib/mimemagic/XmlTypeCheck.php -text

@@ -1,6 +1,6 @@
 <?php
 
-require_once 'menu/beheer/MenusModel.class.php';
+require_once 'MVC/model/MenuModel.class.php';
 
 /**
  * MenuView.class.php
@@ -45,7 +45,7 @@ class MenuView extends TemplateView {
 		$path = $_SERVER['REQUEST_URI'];
 		//$path = filter_input(INPUT_SERVER, 'REQUEST_URI', FILTER_SANITIZE_URL); // faalt op productie
 
-		$items = MenusModel::getMenuItemsVoorLid($menu);
+		$items = MenuModel::getMenuItemsVoorLid($menu);
 		foreach ($items as $item) {
 
 			if (startsWith($path, $item->getLink())) {
@@ -56,7 +56,7 @@ class MenuView extends TemplateView {
 			$this->active_item = new MenuItem();
 		}
 
-		$this->tree_root = MenusModel::getMenuTree($menu, $items);
+		$this->tree_root = MenuModel::getMenuTree($menu, $items);
 	}
 
 	public function view() {
@@ -75,7 +75,7 @@ class MenuView extends TemplateView {
 				));
 			}
 			$this->display('menu/menu.tpl');
-		} else if ($this->level === 3) {
+		} elseif ($this->level === 3) {
 			$this->display('menu/menu_block.tpl');
 		}
 	}

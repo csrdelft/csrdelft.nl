@@ -7,7 +7,7 @@ try {
 
 	$model = new MededelingenModel();
 
-	$m1 = new Mededeling();
+	$m1 = new Mededeling2();
 	echo var_dump($m1);
 	
 	$model->save($m1);

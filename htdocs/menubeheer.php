@@ -9,7 +9,7 @@ try {
 	require_once 'menu/beheer/BeheerMenusController.class.php';
 	
 	$query = filter_input(INPUT_GET, 'uri', FILTER_SANITIZE_URL);
-	$controller = new BeheerMenusController($query);
+	$controller = new MenuBeheerController($query);
 	$controller->getContent()->view();
 }
 catch (\Exception $e) { // TODO: logging
