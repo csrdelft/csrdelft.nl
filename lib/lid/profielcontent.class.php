@@ -86,12 +86,12 @@ class ProfielContent extends TemplateView {
 
 class ProfielEditContent extends TemplateView {
 
-	private $this;
+	private $profiel;
 	private $actie;
 
-	public function __construct($this, $actie) {
+	public function __construct($profiel, $actie) {
 		parent::__construct();
-		$this->profiel = $this;
+		$this->profiel = $profiel;
 		$this->actie = $actie;
 	}
 
@@ -100,7 +100,6 @@ class ProfielEditContent extends TemplateView {
 	}
 
 	public function view() {
-		
 		$this->assign('profiel', $this->profiel);
 
 		$this->assign('melding', $this->getMelding());
@@ -112,12 +111,12 @@ class ProfielEditContent extends TemplateView {
 
 class ProfielStatusContent extends TemplateView {
 
-	private $this;
+	private $profiel;
 	private $actie;
 
-	public function __construct($this, $actie) {
+	public function __construct($profiel, $actie) {
 		parent::__construct();
-		$this->profiel = $this;
+		$this->profiel = $profiel;
 		$this->actie = $actie;
 	}
 
@@ -126,12 +125,9 @@ class ProfielStatusContent extends TemplateView {
 	}
 
 	public function view() {
-
-
 		$gelijknamigenovieten = Zoeker::zoekLeden($this->profiel->getLid()->getProperty('voornaam'), 'voornaam', 'alle', 'achternaam', array('S_NOVIET'), array('uid'));
 		$gelijknamigeleden = Zoeker::zoekLeden($this->profiel->getLid()->getProperty('achternaam'), 'achternaam', 'alle', 'lidjaar', array('S_LID', 'S_GASTLID'), array('uid'));
 
-		
 		$this->assign('profiel', $this->profiel);
 		$this->assign('gelijknamigenovieten', $gelijknamigenovieten);
 		$this->assign('gelijknamigeleden', $gelijknamigeleden);
@@ -145,12 +141,12 @@ class ProfielStatusContent extends TemplateView {
 
 class ProfielVoorkeurContent extends TemplateView {
 
-	private $this;
+	private $profiel;
 	private $actie;
 
-	public function __construct($this, $actie) {
+	public function __construct($profiel, $actie) {
 		parent::__construct();
-		$this->profiel = $this;
+		$this->profiel = $profiel;
 		$this->actie = $actie;
 	}
 
@@ -159,7 +155,6 @@ class ProfielVoorkeurContent extends TemplateView {
 	}
 
 	public function view() {
-		
 		$this->assign('profiel', $this->profiel);
 		$this->assign('melding', $this->getMelding());
 		$this->assign('actie', $this->actie);

@@ -2,7 +2,6 @@
 
 class LidPaginaVoorkeurContent extends TemplateView {
 
-	private $this;
 	private $actie;
 
 	public function __construct($lid, $actie) {
@@ -16,8 +15,6 @@ class LidPaginaVoorkeurContent extends TemplateView {
 	}
 
 	public function view() {
-		
-
 		$this->assign('profiel', $this->profiel);
 		$this->assign('melding', $this->getMelding());
 		$this->assign('actie', $this->actie);
