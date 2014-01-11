@@ -55,6 +55,7 @@ class FotalbumZijbalkContent extends TemplateView {
 
 class FotoalbumUbbContent extends TemplateView {
 
+	private $album = null;
 	private $compact = false; //compact or expanded tag.
 	private $rows = 2;  //number of rows
 	private $per_row = 7;  //images per row
