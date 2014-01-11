@@ -11,14 +11,14 @@ require_once 'MVC/model/entity/Mededeling.class.php';
 class MededelingenModel extends PaginationModel {
 
 	public function __construct() {
-		parent::__construct('Mededeling');
+		parent::__construct('Mededeling2');
 	}
 
-	public function fetch($where = null, array $params = array(), $assoc = false) {
+	public function load($where = null, array $params = array(), $assoc = false) {
 		if (is_int($where)) {
-			return parent::fetchOne('id = ?', array($where));
+			return $this->get('id = ?', array($where));
 		}
-		$list = $this->load($where, $params, 'prioriteit ASC, id DESC');
+		$list = $this->select($where, $params, 'prioriteit ASC, id DESC');
 		if (!$assoc) {
 			return $list;
 		}
@@ -33,7 +33,7 @@ class MededelingenModel extends PaginationModel {
 	public function save(Mededeling &$mededeling) {
 		$properties = $mededeling->getPersistingValues();
 		if (is_int($mededeling->id) && $mededeling->id > 0) { // update existing
-			$count = $this->update('id = :id', array(':id', $mededeling->id), $properties);
+			$count = $this->update($properties, 'id = :id', array(':id' => $mededeling->id));
 			if ($count !== 1) {
 				throw new Exception('Update row count: ' . $count);
 			}
@@ -43,7 +43,7 @@ class MededelingenModel extends PaginationModel {
 	}
 
 	public function remove($id) {
-		parent::delete('id=?', array($id));
+		$this->delete('id = ?', array($id));
 	}
 
 }

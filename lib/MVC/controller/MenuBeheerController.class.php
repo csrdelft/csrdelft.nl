@@ -1,7 +1,7 @@
 <?php
 
-require_once 'menu/beheer/MenuModel.class.php';
-require_once 'menu/beheer/BeheerMenusView.class.php';
+require_once 'MVC/model/MenuModel.class.php';
+require_once 'MVC/view/MenuBeheerView.class.php';
 
 /**
  * MenuBeheerController.class.php
@@ -33,7 +33,7 @@ class MenuBeheerController extends AclController {
 			if ($this->action === 'beheer') {
 				$params[] = $this->getParam(1);
 			} else {
-				$params[] = intval($this->getParam(1));
+				$params[] = (int) $this->getParam(1);
 				if ($this->hasParam(2)) {
 					$params[] = $this->getParam(2);
 				}
@@ -42,48 +42,38 @@ class MenuBeheerController extends AclController {
 		$this->performAction($params);
 	}
 
-	public function beheer($menu = null) {
-		$menus = MenuModel::getAlleMenus();
-		if ($menu === null) {
-			$menu = '';
-		}
-		$items = MenuModel::getMenuItems($menu, false);
-		$tree = MenuModel::getMenuTree($menu, $items);
-		$this->content = new MenuBeheerView($menus, $tree);
+	public function beheer($menu = '') {
+		$this->content = new MenuBeheerView($menu);
 		$this->content = new csrdelft($this->getContent());
 		$this->content->addStylesheet('menubeheer.css');
 		$this->content->addScript('menubeheer.js');
 	}
 
-	public function nieuw($pid) {
-		$prio = (int) filter_input(INPUT_POST, 'Prioriteit', FILTER_SANITIZE_NUMBER_INT);
-		$text = filter_input(INPUT_POST, 'Tekst', FILTER_SANITIZE_STRING);
-		$link = filter_input(INPUT_POST, 'Link', FILTER_SANITIZE_URL);
-		$perm = filter_input(INPUT_POST, 'Permission', FILTER_SANITIZE_STRING);
-		$show = (boolean) filter_input(INPUT_POST, 'Zichtbaar', FILTER_SANITIZE_STRING);
-		$menu = filter_input(INPUT_POST, 'Menu', FILTER_SANITIZE_STRING);
-		$item = MenuModel::newMenuItem($pid, $prio, $text, $link, $perm, $show, $menu);
-		\SimpleHTML::invokeRefresh('/menubeheer/beheer/' . $item->getMenu(), $item->getTekst() . ' (' . $item->getMenuId() . ') aangemaakt', 1);
+	public function verwijder($id) {
+		$model = new MenuModel();
+		$menuitem = $model->load($id);
+		$model->deleteMenuItem($menuitem);
+		SimpleHTML::invokeRefresh('/menubeheer/beheer/' . $item->getMenu(), 'Verwijderd ' . $item->getTekst() . ' (' . $item->getMenuId() . ')', 1);
 	}
 
-	public function wijzig($mid, $prop) {
-		$item = MenuModel::getMenuItem($mid);
-		$prop = ucfirst($prop);
-		$setter = 'set' . $prop;
-		if (method_exists($item, $setter)) {
-			$val = filter_input(INPUT_POST, $prop);
-			$item->$setter($val);
-			MenuModel::updateMenuItem($item);
-		} else {
-			throw new Exception('Wijzig faalt: ' . $setter . ' undefined');
-		}
-		\SimpleHTML::invokeRefresh('/menubeheer/beheer/' . $item->getMenu(), $item->getTekst() . ' (' . $item->getMenuId() . ') opgeslagen', 1);
+	public function nieuw() {
+		$item = new MenuItem();
+		$item->prioriteit = (int) filter_input(INPUT_POST, 'prioriteit', FILTER_SANITIZE_NUMBER_INT);
+		$item->tekst = filter_input(INPUT_POST, 'tekst', FILTER_SANITIZE_STRING);
+		$item->link = filter_input(INPUT_POST, 'link', FILTER_SANITIZE_URL);
+		$item->permission = filter_input(INPUT_POST, 'permission', FILTER_SANITIZE_STRING);
+		$item->zichtbaar = (boolean) filter_input(INPUT_POST, 'zichtbaar', FILTER_SANITIZE_STRING);
+		$item->menu_naam = filter_input(INPUT_POST, 'menu_naam', FILTER_SANITIZE_STRING);
+		$model = new MenuModel();
+		$model->saveMenuItem($item);
+		SimpleHTML::invokeRefresh('/menubeheer/beheer/' . $item->menu_naam, 'Nieuw aangemaakt ' . $item->tekst . ' (' . $item->id . ')', 1);
 	}
 
-	public function verwijder($mid) {
-		$item = MenuModel::getMenuItem($mid);
-		MenuModel::deleteMenuItem($item);
-		\SimpleHTML::invokeRefresh('/menubeheer/beheer/' . $item->getMenu(), $item->getTekst() . ' (' . $item->getMenuId() . ') verwijderd', 1);
+	public function wijzig($id, $propery) {
+		$value = filter_input(INPUT_POST, $property);
+		$model = new MenuModel();
+		$model->saveProperty($id, $property, $value);
+		SimpleHTML::invokeRefresh('/menubeheer/beheer/' . $item->menu_naam, 'Wijzigingen opgeslagen ' . $item->tekst . ' (' . $item->id . ')', 1);
 	}
 
 }

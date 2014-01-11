@@ -10,31 +10,48 @@ class Mededeling2 extends PersistentEntity {
 
 	/**
 	 * Primary key
-	 * 
 	 * @var int
 	 */
-	protected $id = null;
+	public $id = null;
 	/**
 	 * Bestuur, commissie, lid
-	 * 
 	 * @var string
 	 */
-	protected $type = '';
-	protected $tekst = '';
+	public $type = '';
+	/**
+	 * Inhoud
+	 * @var string 
+	 */
+	public $tekst = '';
 	/**
 	 * Iedereen, leden, oud-leden, niemand, prullenbak
-	 * 
 	 * @var string
 	 */
-	protected $zichtbaar_voor = 'niemand';
-	protected $zichtbaar_vanaf = '0000-00-00 00:00:00';
-	protected $zichtbaar_tot = null;
-	protected $prioriteit = 0;
-	protected $afbeelding_url = null;
+	public $zichtbaar_voor = 'niemand';
 	/**
-	 * Database
+	 * Vanaf dit moment zichtbaar
+	 * @var DateTime
 	 */
-	public static $table_name = 'mededelingen';
+	public $zichtbaar_vanaf = '0000-00-00 00:00:00';
+	/**
+	 * Tot dit moment zichtbaar
+	 * @var DateTime
+	 */
+	public $zichtbaar_tot = null;
+	/**
+	 * Volgorde van weergave
+	 * @var int
+	 */
+	public $prioriteit = 0;
+	/**
+	 * Url naar afbeelding van 200x200
+	 * @var string
+	 */
+	public $afbeelding_url = null;
+	/**
+	 * Database table fields
+	 * @var array
+	 */
 	public static $persistent_fields = array(
 		'id' => 'int(11) NOT NULL AUTO_INCREMENT',
 		'type' => 'varchar(255) NOT NULL',
@@ -43,8 +60,18 @@ class Mededeling2 extends PersistentEntity {
 		'zichtbaar_vanaf' => 'datetime NOT NULL',
 		'zichtbaar_tot' => 'datetime',
 		'prioriteit' => 'int(11) NOT NULL',
-		'afbeelding_url' => 'text');
+		'afbeelding_url' => 'text'
+	);
+	/**
+	 * Database primary key
+	 * @var array
+	 */
 	public static $primary_key = array('id');
+	/**
+	 * Database table name
+	 * @var string
+	 */
+	public static $table_name = 'mededelingen';
 
 }
 

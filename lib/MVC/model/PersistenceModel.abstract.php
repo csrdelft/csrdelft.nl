@@ -32,8 +32,8 @@ abstract class PersistenceModel {
 	 * @return PersistentEntity
 	 * @throws Exception row count !== 1
 	 */
-	protected function fetchOne($where, array $params) {
-		$one = $this->load($where, $params, null, 1);
+	protected function get($where, array $params) {
+		$one = $this->select($where, $params, null, 1);
 		if (sizeof($one) !== 1) {
 			throw new Exception('fetchOne row count: ' . sizeof($one));
 		}
@@ -50,7 +50,7 @@ abstract class PersistenceModel {
 	 * @param int $start
 	 * @return PersistentEntity[]
 	 */
-	protected function load($where = null, array $params = array(), $orderby = null, $limit = null, $start = 0) {
+	protected function select($where = null, array $params = array(), $orderby = null, $limit = null, $start = 0) {
 		$sql = 'SELECT ' . implode(', ', $this->columns) . ' FROM ' . $this->table_name;
 		if ($where !== null) {
 			$sql .= ' WHERE ' . $where;
@@ -94,12 +94,12 @@ abstract class PersistenceModel {
 	/**
 	 * Requires named parameters.
 	 * 
-	 * @param string $where
-	 * @param array $params by value
 	 * @param array $properties
+	 * @param string $where
+	 * @param array $params
 	 * @return int affected rows
 	 */
-	protected function update($where, array $params, array $properties) {
+	protected function update(array $properties, $where, array $params) {
 		$sql = 'UPDATE ' . $this->table_name . ' SET ';
 		$fields = array();
 		foreach ($properties as $key => $value) {

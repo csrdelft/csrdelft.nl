@@ -47,7 +47,7 @@ abstract class PaginationModel extends PersistenceModel {
 			$this->current_page_number = $number;
 		}
 		if (hasPage($this->current_page_number)) {
-			return $this->load($this->where, $this->values, $this->orderby, $this->per_page, $this->current_page_number * $this->per_page);
+			return $this->select($this->where, $this->values, $this->orderby, $this->per_page, $this->current_page_number * $this->per_page);
 		}
 	}
 

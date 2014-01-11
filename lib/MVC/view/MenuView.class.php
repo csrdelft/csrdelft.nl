@@ -19,14 +19,6 @@ class MenuView extends TemplateView {
 	 */
 	private $menu;
 	/**
-	 * 0: main
-	 * 1: sub
-	 * 2: page
-	 * 3: block
-	 * @var int
-	 */
-	private $level;
-	/**
 	 * Root MenuItem of menu tree
 	 * @var MenuItem
 	 */
@@ -37,10 +29,9 @@ class MenuView extends TemplateView {
 	 */
 	private $active_item;
 
-	public function __construct($menu, $level = 0) {
+	public function __construct($menu) {
 		parent::__construct();
 		$this->menu = $menu;
-		$this->level = $level;
 
 		$path = $_SERVER['REQUEST_URI'];
 		//$path = filter_input(INPUT_SERVER, 'REQUEST_URI', FILTER_SANITIZE_URL); // faalt op productie
@@ -59,11 +50,18 @@ class MenuView extends TemplateView {
 		$this->tree_root = MenuModel::getMenuTree($menu, $items);
 	}
 
-	public function view() {
+	/**
+	 * 0: main
+	 * 1: sub
+	 * 2: page
+	 * 3: block
+	 * @param int $level
+	 */
+	public function view($level) {
 		$this->assign('root', $this->tree_root);
 		$this->assign('huidig', $this->active_item);
 
-		if ($this->level === 0) {
+		if ($level === 0) {
 			// SocCie-saldi & MaalCie-saldi
 			$this->assign('saldi', LoginLid::instance()->getLid()->getSaldi());
 
@@ -75,7 +73,7 @@ class MenuView extends TemplateView {
 				));
 			}
 			$this->display('menu/menu.tpl');
-		} elseif ($this->level === 3) {
+		} elseif ($level === 3) {
 			$this->display('menu/menu_block.tpl');
 		}
 	}

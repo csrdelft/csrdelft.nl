@@ -8,137 +8,106 @@ require_once 'MVC/model/entity/MenuItem.class.php';
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
-class MenuModel {
+class MenuModel extends PaginationModel {
 
-	public static function getAlleMenus() {
-		return self::loadMenuItems(null, array(), true);
+	public function __construct() {
+		parent::__construct('Mededeling');
 	}
 
-	public static function getMenuItem($mid) {
-		$items = self::loadMenuItems('menu_id = ?', array($mid), false, 1);
-		return reset($items);
-	}
-
-	public static function getMenuItems($menu, $zichtbaar = true) {
-		if ($zichtbaar) {
-			return self::loadMenuItems('menu = ? AND zichtbaar = true', array($menu));
-		}
-		return self::loadMenuItems('menu = ?', array($menu));
-	}
-
-	public static function getMenuItemsVoorLid($menu) {
-		$items = self::getMenuItems($menu, true);
-		return self::filterMenuItems($items);
-	}
-
-	public static function getMenuTree($menu, array $items) {
-		$root = new MenuItem();
-		$root->setTekst($menu);
-		$root->setMenu($menu);
-		self::addChildren($root, $items);
-		foreach ($items as $item) {
-			setMelding('Parent ' . $item->getParentId() . ' bestaat niet: ' . $item->getTekst() . ' (' . $item->getMenuId() . ')', -1);
-			$root->children[] = $item;
-		}
-		return $root;
-	}
-
-	private static function addChildren(&$parent, &$children) {
-		foreach ($children as $i => $item) {
-			if ($parent->getMenuId() === $item->getParentId()) { // this is the correct parent
-				$parent->children[] = $item;
-				unset($children[$i]); // only one parent
-				self::addChildren($item, $children); // add children of children
-			}
-		}
+	public function getAlleMenus() {
+		$sql = 'SELECT DISTINCT menu_naam FROM menu';
+		$params = array();
+		$db = Database::instance();
+		$query = $db->prepare($sql, $params);
+		$query->execute($params);
+		return $query->fetchAll(PDO::FETCH_COLUMN, 0);
 	}
 
 	/**
-	 * Filtert de menu-items met de permissies van het ingelogede lid.
-	 * 
-	 * @param MenuItem[] $items
+	 * Haalt alle menu-items op (die zichtbaar zijn)
+	 * @param string $menu
+	 * @param boolean $zichtbaar
 	 * @return MenuItem[]
 	 */
-	private static function filterMenuItems($items) {
+	public function getMenuItems($menu, $zichtbaar) {
+		$where = 'menu = ?';
+		$params = array($menu);
+		if ($zichtbaar === true OR $zichtbaar === false) {
+			$where .= ' AND zichtbaar = ?';
+			$params[] = $zichtbaar;
+		}
+		return $this->select($where, $params);
+	}
+
+	public function getMenuItemsVoorLid($menu) {
+		return $this->filterMenuItems($this->getMenuItems($menu, true));
+	}
+
+	/**
+	 * Filtert de menu-items met de permissies van het ingelogede lid
+	 * @param MenuItem[] $menuitems
+	 * @return MenuItem[]
+	 */
+	protected function filterMenuItems($menuitems) {
 		$result = array();
-		foreach ($items as $i => $item) {
+		foreach ($menuitems as $i => $item) {
 			if (\LoginLid::instance()->hasPermission($item->getPermission())) {
 				$result[$i] = $item;
 			}
+			unset($menuitems[$i]);
 		}
 		return $result;
 	}
 
-	private static function loadMenuItems($where = null, $values = array(), $menusOnly = false, $limit = null) {
-		if ($menusOnly) {
-			$sql = 'SELECT DISTINCT menu';
-		} else {
-			$sql = 'SELECT menu_id, parent_id, prioriteit, tekst, link, permission, zichtbaar, menu';
+	public function getMenuTree($menu, &$menuitems) {
+		$root = new MenuItem();
+		$root->tekst = $menu;
+		$root->menu_naam = $menu;
+		$root->addChildren($menuitems);
+		return $root;
+	}
+
+	protected function load($where = null, array $params = array(), $assoc = false) {
+		if (is_int($where)) {
+			return $this->get('id = ?', array($where));
 		}
-		$sql.= ' FROM menus';
-		if ($where !== null) {
-			$sql.= ' WHERE ' . $where;
+		$list = $this->select($where, $params, 'parent_id ASC, prioriteit ASC');
+		if (!$assoc) {
+			return $list;
 		}
-		$sql.= ' ORDER BY parent_id ASC, prioriteit ASC';
-		if (is_int($limit) && $limit > 0) {
-			$sql.= ' LIMIT ' . $limit;
+		$result = array();
+		foreach ($list as $i => $menuitem) {
+			$result[$menuitem->id] = $menuitem;
+			unset($list[$i]);
 		}
-		$db = Database::instance();
-		$query = $db->prepare($sql, $values);
-		$query->execute($values);
-		$result = $query->fetchAll(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, 'MenuItem');
 		return $result;
 	}
 
-	public static function newMenuItem($pid, $prio, $text, $link, $perm, $show, $menu) {
-		$sql = 'INSERT INTO menus';
-		$sql.= ' (menu_id, parent_id, prioriteit, tekst, link, permission, zichtbaar, menu)';
-		$sql.= ' VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
-		$values = array(null, $pid, $prio, $text, $link, $perm, $show, $menu);
-		$db = Database::instance();
-		$query = $db->prepare($sql, $values);
-		$query->execute($values);
-		if ($query->rowCount() !== 1) {
-			throw new Exception('New functie faalt: $query->rowCount() =' . $query->rowCount());
+	public function saveMenuItem(MenuItem &$menuitem) {
+		$properties = $menuitem->getPersistingValues();
+		if (is_int($menuitem->id) && $menuitem->id > 0) { // update existing
+			$count = $this->update($properties, 'id = :id', array(':id' => $menuitem->id));
+			if ($count !== 1) {
+				throw new Exception('Update row count: ' . $count);
+			}
+		} else { // insert new
+			$menuitem->id = $this->insert($properties);
 		}
-		return new MenuItem(intval($db->lastInsertId()), $pid, $prio, $text, $link, $perm, $show, $menu);
 	}
 
-	public static function updateMenuItem(MenuItem $item) {
-		$sql = 'UPDATE menus';
-		$sql.= ' SET parent_id=?, prioriteit=?, tekst=?, link=?, permission=?, zichtbaar=?, menu=?';
-		$sql.= ' WHERE menu_id=?';
-		$values = array(
-			$item->getParentId(),
-			$item->getPrioriteit(),
-			$item->getTekst(),
-			$item->getLink(),
-			$item->getPermission(),
-			$item->getIsZichtbaar(),
-			$item->getMenu(),
-			$item->getMenuId()
-		);
-		$db = Database::instance();
-		$query = $db->prepare($sql, $values);
-		$query->execute($values);
+	public function saveProperty($id, $key, $value) {
+		$this->update(array($key => $value), 'id = :id', array(':id' => $id));
 	}
 
-	public static function deleteMenuItem(MenuItem $item) {
+	public function deleteMenuItem(MenuItem $menuitem) {
 		$db = Database::instance();
 		try {
 			$db->beginTransaction();
-			foreach ($item->children as $child) { // give new parent to otherwise future orphans
-				$child->setParentId($item->getParentId());
-				self::updateMenuItem($child);
+			foreach ($menuitem->children as $child) { // give new parent to otherwise future orphans
+				$properties = array('parent_id' => $menuitem->parent_id);
+				$this->update($properties, 'parent_id = :oldid', array(':oldid' => $menuitem->parent_id));
 			}
-			$sql = 'DELETE FROM menus';
-			$sql.= ' WHERE menu_id = ?';
-			$values = array($item->getMenuId());
-			$query = $db->prepare($sql, $values);
-			$query->execute($values);
-			if ($query->rowCount() !== 1) {
-				throw new Exception('Delete menu-item faalt: $query->rowCount() =' . $query->rowCount());
-			}
+			$this->delete('id = ?', array($menuitem->id));
 			$db->commit();
 		} catch (\Exception $e) {
 			$db->rollback();

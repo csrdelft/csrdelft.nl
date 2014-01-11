@@ -6,7 +6,7 @@
  */
 try {
 	require_once 'configuratie.include.php';
-	require_once 'menu/beheer/BeheerMenusController.class.php';
+	require_once 'MVC/controller/MenuBeheerController.class.php';
 	
 	$query = filter_input(INPUT_GET, 'uri', FILTER_SANITIZE_URL);
 	$controller = new MenuBeheerController($query);
