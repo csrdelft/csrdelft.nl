@@ -63,8 +63,8 @@ a.knop, textarea, input, select, #filters span, #boekencatalogus_wrapper *, .med
 .ubb_block, .ubb_block .groepleden{
 	background-color: #444 !important;
 }
-#profielForm div.InputField{ border: 0 !important; }
-#profielForm div.InputField:hover{ background-color: #222 !important; }
+#profielForm div.FormInput{ border: 0 !important; }
+#profielForm div.FormInput:hover{ background-color: #222 !important; }
 
 #maand #dezeweek td.vandaag, .eetplantabel tr.kleur1 td, .eetplantabel tr.kleur1 td a{ background-color: #666 !important; }
 .blokje{ color: black !important; }

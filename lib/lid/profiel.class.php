@@ -395,7 +395,7 @@ class ProfielBewerken extends Profiel {
 	 * De velden die we gebruiken willen graag een lid hebben om bepaalde
 	 * dingen te controleren, dus die geven we mee.
 	 */
-	public function valid(){
+	public function validate(){
 		return $this->form->validate($this->lid);
 	}
 
@@ -471,7 +471,7 @@ class ProfielStatus extends Profiel{
 	 * De velden die we gebruiken willen graag een lid hebben om bepaalde
 	 * dingen te controleren, dus die geven we mee.
 	 */
-	public function valid(){
+	public function validate(){
 		return $this->form->validate($this->lid);
 	}
 
@@ -829,7 +829,7 @@ class ProfielVoorkeur extends Profiel{
 			return $this->form;
 		}
 		
-		public function valid(){
+		public function validate(){
 			return true;
 		}
 }

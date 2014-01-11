@@ -719,19 +719,19 @@ form#streeplijst input, form#streeplijst label{ text-align: left; margin: 3px; p
     display: inline;
     padding-left: 10px;
 }
-.Formulier .InputField, .Formulier h3, .Formulier .password{
+.Formulier .FormInput, .Formulier h3, .Formulier .password{
     clear: both;
 }
-.Formulier .InputField, .Formulier .submit{
+.Formulier .FormInput, .Formulier .submit{
     margin-left: 10px;
     padding: 1px 2px;
     border: 1px solid white;
 }
 
-.Formulier .InputField{
+.Formulier .FormInput{
     overflow: auto;
 }
-.Formulier .InputField:hover{
+.Formulier .FormInput:hover{
     border: 1px  solid #ddd;
     background-color: #eee;
 }
@@ -739,7 +739,7 @@ form#streeplijst input, form#streeplijst label{ text-align: left; margin: 3px; p
     background-color: #FFC3CE;
     padding: 4px 2px;
 }
-.Formulier .InputField .waarschuwing{
+.Formulier .FormInput .waarschuwing{
     float: right;
     margin-right: 10px;
 }

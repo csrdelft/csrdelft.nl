@@ -41,7 +41,7 @@ abstract class DocumentUploader {
 
 //is deze uploadmethode beschikbaar?
 
-	abstract public function valid();	  //is de formulierinvoer geldig voor deze methode?
+	abstract public function validate();	  //is de formulierinvoer geldig voor deze methode?
 
 	abstract public function movefile(Document $document); //bestand uiteindelijk opslaan op de juiste plek.
 
@@ -108,7 +108,7 @@ class DUKeepfile extends DocumentUploader {
 		$this->beschrijving = 'Huidige behouden';
 	}
 
-	public function valid() {
+	public function validate() {
 		return true;
 	}
 
@@ -131,7 +131,7 @@ class DUFileupload extends DocumentUploader {
 		$this->beschrijving = 'Uploaden in browser';
 	}
 
-	public function valid() {
+	public function validate() {
 		if (!isset($_FILES['file_upload'])) {
 			$this->addError('Formulier niet compleet');
 		}
@@ -207,7 +207,7 @@ class DUFromurl extends DocumentUploader {
 		}
 	}
 
-	public function valid() {
+	public function validate() {
 		if (!$this->available()) {
 			$this->addError('PHP.ini configuratie: cURL of allow_url_fopen moet aan staan...');
 		}
@@ -283,7 +283,7 @@ class DUFromftp extends DocumentUploader {
 		return $results;
 	}
 
-	public function valid() {
+	public function validate() {
 		if (!isset($_POST['ftpfile'])) {
 			$this->addError('Formulier niet compleet.');
 		}

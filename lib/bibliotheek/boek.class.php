@@ -1065,8 +1065,8 @@ class BewerkBoek extends Boek {
 
 class TitelField extends AutotesizeTextareaField {
 
-	public function valid() {
-		if (!parent::valid()) {
+	public function validate() {
+		if (!parent::validate()) {
 			return false;
 		}
 		if (Catalogus::existsProperty('titel', $this->getValue())) {

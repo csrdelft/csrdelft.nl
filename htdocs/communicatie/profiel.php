@@ -53,7 +53,7 @@ if(!($loginlid->hasPermission('P_LEDEN_READ') or $loginlid->hasPermission('P_OUD
 			$profiel=new ProfielBewerken($uid, $actie);
 			
 			if($profiel->magBewerken()){
-				if($profiel->valid() AND $profiel->save()){
+				if($profiel->validate() AND $profiel->save()){
 					header('location: '.CSR_ROOT.'communicatie/profiel/'.$uid);
 					exit;
 				}else{
@@ -66,7 +66,7 @@ if(!($loginlid->hasPermission('P_LEDEN_READ') or $loginlid->hasPermission('P_OUD
 			$profiel=new ProfielBewerken($uid, $actie);
 			
 			if($profiel->magBewerken()){
-				if($profiel->valid() AND $profiel->save()){
+				if($profiel->validate() AND $profiel->save()){
 					header('location: '.CSR_ROOT.'communicatie/profiel/'.$uid);
 					exit;
 				}else{
@@ -108,7 +108,7 @@ if(!($loginlid->hasPermission('P_LEDEN_READ') or $loginlid->hasPermission('P_OUD
 			}
 			$profiel=new ProfielStatus($uid, $actie);
 
-			if($profiel->valid() AND $profiel->save()){
+			if($profiel->validate() AND $profiel->save()){
 				header('location: '.CSR_ROOT.'communicatie/profiel/'.$uid);
 				exit;
 			}else{
@@ -120,7 +120,7 @@ if(!($loginlid->hasPermission('P_LEDEN_READ') or $loginlid->hasPermission('P_OUD
 			$voorkeur = new ProfielVoorkeur($uid, $actie);
 			
 			if($voorkeur->magBewerken()){
-				if($voorkeur->isPosted() AND $voorkeur->valid() AND $voorkeur->save()){
+				if($voorkeur->isPosted() AND $voorkeur->validate() AND $voorkeur->save()){
 					header('location: '.CSR_ROOT.'communicatie/profiel/'.$uid);
 					exit;
 				} else {

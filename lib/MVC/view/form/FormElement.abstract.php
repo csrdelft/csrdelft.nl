@@ -122,7 +122,7 @@ abstract class FormElement implements View {
  * InputField is de moeder van alle input fields die data leveren.
  * Standaard required mag deze niet leeg zijn.
  */
-abstract class InputField extends FormElement implements Validator {
+class InputField extends FormElement implements Validator {
 
 	/**
 	 * Original value of field even after posting.
@@ -179,7 +179,8 @@ abstract class InputField extends FormElement implements Validator {
 
 	public function getValue() {
 		if ($this->isPosted()) {
-			return trim($_POST[$this->name]);
+			$value = filter_input(INPUT_POST, $this->name);
+			return trim($value);
 		}
 		return $this->value;
 	}
@@ -222,9 +223,6 @@ abstract class InputField extends FormElement implements Validator {
 	 * De input kan allerlei CSS-classes hebben.
 	 */
 	protected function getCssClasses() {
-		if ($this->error !== null) {
-			$this->css_classes[] = 'metFouten';
-		}
 		if ($this->remotedatasource !== null) {
 			$this->css_classes[] = 'hasRemoteSuggestions';
 		} elseif (count($this->suggestions) > 0) {
@@ -302,11 +300,13 @@ abstract class InputField extends FormElement implements Validator {
 	 * Elk veld staat in een div, geef de html terug voor de openingstag van die div.
 	 */
 	protected function getDiv() {
-		$css_class = 'InputField';
-		if ($this->error != '') {
-			$css_class.=' metfouten';
+		$css_classes = array('FormInput');
+		if ($this->error !== null) {
+			$css_classes[] = 'metFouten';
+		} else {
+			$css_classes[] = 'regular';
 		}
-		return '<div class="' . $css_class . '" id="' . $this->id . '" ' . $this->getAttribute('title') . '>';
+		return '<div class="' . implode(' ', $css_classes) . '" id="' . $this->id . '" ' . $this->getAttribute('title') . '>';
 	}
 
 	/**
@@ -354,7 +354,7 @@ class SuggestionField extends InputField {
 	}
 
 	public function validate() {
-		if (!parent::valid()) {
+		if (!parent::validate()) {
 			return false;
 		}
 		if ($this->getValue() === '') {
@@ -601,7 +601,7 @@ class UidField extends InputField {
 	}
 
 	public function validate() {
-		if (!parent::valid()) {
+		if (!parent::validate()) {
 			return false;
 		}
 		// als er iets wordt ingevuld, moet het een geldig uid zijn.
@@ -680,7 +680,7 @@ class LidField extends InputField {
 	 * checkt of er een uniek lid wordt gevonden
 	 */
 	public function validate() {
-		if (!parent::valid()) {
+		if (!parent::validate()) {
 			return false;
 		}
 		$uid = namen2uid(parent::getValue(), $this->zoekin);
@@ -757,7 +757,7 @@ class EmailField extends InputField {
 	 * Dikke valideerfunctie voor emails.
 	 */
 	public function validate() {
-		if (!parent::valid()) {
+		if (!parent::validate()) {
 			return false;
 		}
 //bevat het email-adres een @
@@ -794,7 +794,7 @@ class EmailField extends InputField {
 class UrlField extends InputField {
 
 	public function validate() {
-		if (!parent::valid()) {
+		if (!parent::validate()) {
 			return false;
 		}
 		// controleren of het een geldige url is...
@@ -833,7 +833,7 @@ class IntField extends InputField {
 	}
 
 	public function validate() {
-		if (!parent::valid()) {
+		if (!parent::validate()) {
 			return false;
 		}
 		if (!$this->required AND parent::getValue() === '') { // do not check if empty
@@ -874,7 +874,7 @@ class FloatField extends InputField {
 	}
 
 	public function validate() {
-		if (!parent::valid()) {
+		if (!parent::validate()) {
 			return false;
 		}
 		if (!$this->required AND strlen(parent::getValue()) === 0) { // do not check if empty
@@ -911,7 +911,7 @@ class NickField extends InputField {
 	public $max_len = 20;
 
 	public function validate($lid = null) {
-		if (!parent::valid()) {
+		if (!parent::validate()) {
 			return false;
 		}
 		if (!is_utf8($this->getValue())) {
@@ -937,7 +937,7 @@ class NickField extends InputField {
 class TelefoonField extends InputField {
 
 	public function validate() {
-		if (!parent::valid()) {
+		if (!parent::validate()) {
 			return false;
 		}
 		if (!preg_match('/^([\d\+\-]{10,20})$/', $this->getValue())) {
@@ -974,9 +974,9 @@ class PassField extends InputField {
 
 	public function validate($lid = null) {
 		if (!$lid instanceof Lid) {
-			throw new Exception($this->getType() . '::valid() moet een Lid-object meekrijgen');
+			throw new Exception($this->getType() . '::validate() moet een Lid-object meekrijgen');
 		}
-		if (!parent::valid()) {
+		if (!parent::validate()) {
 			return false;
 		}
 		$current = $_POST[$this->name . '_current'];
@@ -1048,7 +1048,7 @@ class SelectField extends InputField {
 			if ($this->getValue() !== null) {
 				$this->error = 'Onbekende optie gekozen';
 			}
-			if ($this->size === 1 && !parent::isValid()) {
+			if ($this->size === 1 && !parent::isvalidate()) {
 				return false;
 			}
 		}
@@ -1226,7 +1226,7 @@ class DatumField extends InputField {
 	}
 
 	public function validate() {
-		if (!parent::valid()) {
+		if (!parent::validate()) {
 			return false;
 		}
 		if (!preg_match('/^(\d{4})-(\d\d?)-(\d\d?)$/', $this->getValue())) {
@@ -1326,7 +1326,7 @@ class TijdField extends InputField {
 	}
 
 	public function validate() {
-		if (!parent::valid()) {
+		if (!parent::validate()) {
 			return false;
 		}
 		if (!preg_match('/^(\d\d?):(\d{2})$/', $this->getValue())) {
