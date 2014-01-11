@@ -14,10 +14,13 @@ require_once 'MVC/model/MenuModel.class.php';
 class MenuView extends TemplateView {
 
 	/**
-	 * Unique short name of the menu
-	 * @var string
+	 * 0: main
+	 * 1: sub
+	 * 2: page
+	 * 3: block
+	 * @var int
 	 */
-	private $menu;
+	private $level;
 	/**
 	 * Root MenuItem of menu tree
 	 * @var MenuItem
@@ -29,16 +32,17 @@ class MenuView extends TemplateView {
 	 */
 	private $active_item;
 
-	public function __construct($menu) {
+	public function __construct($menu_name, $level) {
 		parent::__construct();
-		$this->menu = $menu;
+		$this->level = $level;
 
 		$path = $_SERVER['REQUEST_URI'];
 		//$path = filter_input(INPUT_SERVER, 'REQUEST_URI', FILTER_SANITIZE_URL); // faalt op productie
 
-		$items = MenuModel::getMenuItemsVoorLid($menu);
-		foreach ($items as $item) {
+		$model = new MenuModel();
+		$items = $model->getMenuItemsVoorLid($menu_name);
 
+		foreach ($items as $item) {
 			if (startsWith($path, $item->getLink())) {
 				$this->active_item = $item;
 			}
@@ -47,21 +51,14 @@ class MenuView extends TemplateView {
 			$this->active_item = new MenuItem();
 		}
 
-		$this->tree_root = MenuModel::getMenuTree($menu, $items);
+		$this->tree_root = $model->getMenuTree($menu_name, $items);
 	}
 
-	/**
-	 * 0: main
-	 * 1: sub
-	 * 2: page
-	 * 3: block
-	 * @param int $level
-	 */
-	public function view($level) {
+	public function view() {
 		$this->assign('root', $this->tree_root);
 		$this->assign('huidig', $this->active_item);
 
-		if ($level === 0) {
+		if ($this->level === 0) {
 			// SocCie-saldi & MaalCie-saldi
 			$this->assign('saldi', LoginLid::instance()->getLid()->getSaldi());
 
@@ -73,7 +70,7 @@ class MenuView extends TemplateView {
 				));
 			}
 			$this->display('menu/menu.tpl');
-		} elseif ($level === 3) {
+		} elseif ($this->level === 3) {
 			$this->display('menu/menu_block.tpl');
 		}
 	}
