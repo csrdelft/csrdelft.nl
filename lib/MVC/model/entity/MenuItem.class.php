@@ -111,7 +111,7 @@ class MenuItem extends PersistentEntity {
 			if ($this->id === $child->parent_id) { // this is the correct parent
 				$this->children[] = $child;
 				unset($items[$i]); // only one parent
-				$this->addChildren($items); // add children of children
+				$child->addChildren($items); // add children of children
 			}
 		}
 	}
