@@ -1,6 +1,6 @@
 <?php
 
-require_once 'MVC/mededeling/MededelingNew.class.php';
+require_once 'MVC/mededeling/Mededeling2.class.php';
 
 /**
  * MededelingenModel.class.php
@@ -9,10 +9,6 @@ require_once 'MVC/mededeling/MededelingNew.class.php';
  *
  */
 class MededelingenModel extends PaginationModel {
-
-	public function __construct() {
-		parent::__construct('Mededeling2');
-	}
 
 	public function load($where = null, array $params = array(), $assoc = false) {
 		if (is_int($where)) {
@@ -47,5 +43,3 @@ class MededelingenModel extends PaginationModel {
 	}
 
 }
-
-?>

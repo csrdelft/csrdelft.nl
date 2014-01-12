@@ -76,5 +76,3 @@ abstract class Controller {
 	}
 
 }
-
-?>

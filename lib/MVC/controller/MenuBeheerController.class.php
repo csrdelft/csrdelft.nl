@@ -78,5 +78,3 @@ class MenuBeheerController extends AclController {
 	}
 
 }
-
-?>

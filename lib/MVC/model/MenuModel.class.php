@@ -10,10 +10,6 @@ require_once 'MVC/model/entity/MenuItem.class.php';
  */
 class MenuModel extends PaginationModel {
 
-	public function __construct() {
-		parent::__construct('MenuItem');
-	}
-
 	public function getAlleMenus() {
 		$sql = 'SELECT DISTINCT menu_naam FROM menu';
 		$params = array();
@@ -116,5 +112,3 @@ class MenuModel extends PaginationModel {
 	}
 
 }
-
-?>

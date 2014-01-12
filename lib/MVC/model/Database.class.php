@@ -46,7 +46,7 @@ class Database extends PDO {
 	 * Array of prepared SQL statements for debug
 	 * @var array
 	 */
-	protected $queries = array();
+	private $queries = array();
 
 	/**
 	 * Get array of prepared SQL statements for debug
@@ -91,7 +91,7 @@ class Database extends PDO {
 	 * @param int $start
 	 * @return PDOStatement
 	 */
-	protected function sqlSelect(array $select, $from, $where = null, array $params = array(), $orderby = null, $limit = null, $start = 0) {
+	public static function sqlSelect(array $select, $from, $where = null, array $params = array(), $orderby = null, $limit = null, $start = 0) {
 		$sql = 'SELECT ' . implode(', ', $select) . ' FROM ' . $from;
 		if ($where !== null) {
 			$sql .= ' WHERE ' . $where;
@@ -102,19 +102,19 @@ class Database extends PDO {
 		if ($limit !== null) {
 			$sql .= ' LIMIT ' . $start . ', ' . $limit;
 		}
-		$query = $this->prepare($sql, $params);
+		$query = self::instance()->prepare($sql, $params);
 		$query->execute($params);
 		return $query;
 	}
 
 	/**
-	 * Requires named parameters.
+	 * Optional named parameters.
 	 * 
 	 * @param array $properties
 	 * @return int last insert id
 	 * @throws Exception row count !== 1
 	 */
-	protected function sqlInsert($into, array $properties) {
+	public static function sqlInsert($into, array $properties) {
 		$params = array();
 		foreach ($properties as $key => $value) {
 			$params[':' . $key] = $value; // named params
@@ -122,34 +122,34 @@ class Database extends PDO {
 		$sql = 'INSERT INTO ' . $into;
 		$sql .= ' (' . implode(', ', array_keys($properties)) . ')';
 		$sql .= ' VALUES (' . implode(', ', array_keys($params)) . ')';
-		$query = $this->prepare($sql, $params);
+		$query = self::instance()->prepare($sql, $params);
 		$query->execute($params);
 		if ($query->rowCount() !== 1) {
 			throw new Exception('insert row count: ' . $query->rowCount());
 		}
-		return intval($this->lastInsertId());
+		return self::instance()->lastInsertId();
 	}
 
 	/**
 	 * Requires named parameters.
 	 * 
 	 * @param string $table
-	 * @param array $set
+	 * @param array $set_properties
 	 * @param string $where
-	 * @param array $params
+	 * @param array $where_params
 	 * @return int number of rows affected
 	 */
-	protected function sqlUpdate($table, array $set, $where, array $params = array()) {
+	public static function sqlUpdate($table, array $set_properties, $where, array $where_params = array()) {
 		$sql = 'UPDATE ' . $table . ' SET ';
 		$fields = array();
-		foreach ($set as $key => $value) {
-			$fields[] = $key . ' = :' . $this->class_name . $key;
-			$params[':' . $this->class_name . $key] = $value; // named params
+		foreach ($set_properties as $key => $value) {
+			$fields[] = $key . ' = :sql' . $key;
+			$where_params[':sql' . $key] = $value; // named params
 		}
 		$sql .= implode(', ', $fields);
 		$sql .= ' WHERE ' . $where;
-		$query = $this->prepare($sql, $params);
-		$query->execute($params);
+		$query = self::instance()->prepare($sql, $where_params);
+		$query->execute($where_params);
 		return $query->rowCount();
 	}
 
@@ -157,14 +157,14 @@ class Database extends PDO {
 	 * Optional named parameters.
 	 * 
 	 * @param string $where
-	 * @param array $params
+	 * @param array $where_params
 	 * @return int number of rows affected
 	 */
-	protected function sqlDelete($from, $where, array $params = array()) {
+	public static function sqlDelete($from, $where, array $where_params) {
 		$sql = 'DELETE FROM ' . $from;
 		$sql .= ' WHERE ' . $where;
-		$query = $this->prepare($sql, $params);
-		$query->execute($params);
+		$query = self::instance()->prepare($sql, $where_params);
+		$query->execute($where_params);
 		return $query->rowCount();
 	}
 
@@ -176,17 +176,15 @@ class Database extends PDO {
 	 * @param array $primary_key
 	 * @return string
 	 */
-	protected function sqlCreate($table, array $columns, array $primary_key) {
-		$sql = 'CREATE TABLE ' . $table . ' (';
+	public static function sqlCreateTable($name, array $columns, array $primary_key) {
+		$sql = 'CREATE TABLE ' . $name . ' (';
 		foreach ($columns as $key => $value) {
 			$sql .= $key . ' ' . $value . ', ';
 		}
 		$sql .= 'PRIMARY KEY (' . implode(', ', $primary_key) . ')) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1';
-		$query = $this->prepare($sql);
+		$query = self::instance()->prepare($sql);
 		$query->execute();
 		return $sql;
 	}
 
 }
-
-?>

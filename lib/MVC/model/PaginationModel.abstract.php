@@ -13,8 +13,7 @@ require_once 'MVC/model/PersistenceModel.abstract.php';
 abstract class PaginationModel extends PersistenceModel {
 
 	/**
-	 * Start at 0
-	 * 
+	 * Starts at 0
 	 * @var int
 	 */
 	protected $current_page_number;
@@ -34,7 +33,7 @@ abstract class PaginationModel extends PersistenceModel {
 	}
 
 	/**
-	 * Start at 0
+	 * Starts at 0.
 	 * 
 	 * @return int
 	 */
@@ -47,21 +46,17 @@ abstract class PaginationModel extends PersistenceModel {
 			$this->current_page_number = $number;
 		}
 		if (hasPage($this->current_page_number)) {
-			return $this->select($this->where, $this->values, $this->orderby, $this->per_page, $this->current_page_number * $this->per_page);
+			return $this->find($this->where, $this->values, $this->orderby, $this->per_page, $this->current_page_number * $this->per_page);
 		}
 	}
 
-	public function getPageCount() {
-		if (!isset($this->last_page_number)) {
+	public function getPageCount($recount = false) {
+		if (!isset($this->last_page_number) OR $recount) {
 			$sql = 'SELECT COUNT(*) as total FROM ' . $this->table_name;
 			if ($this->where !== null) {
 				$sql .= ' WHERE ' . $this->where;
 			}
-			if ($this->orderby !== null) {
-				$sql .= ' ORDER BY ' . $this->orderby;
-			}
-			$db = Database::instance();
-			$query = $db->prepare($sql, $this->values);
+			$query = Database::instance()->prepare($sql, $this->values);
 			$query->execute($this->values);
 			$this->last_page_number = ceil(((int) $query->fetchColumn()) / $this->per_page);
 		}
@@ -101,5 +96,3 @@ abstract class PaginationModel extends PersistenceModel {
 	}
 
 }
-
-?>

@@ -3,6 +3,14 @@
 require_once 'MVC/view/Validator.interface.php';
 require_once 'MVC/view/form/FormElement.abstract.php';
 
+/**
+ * Formulier.class.php
+ * 
+ * @author Jan Pieter Waagmeester <jieter@jpwaag.com>
+ * @author P.W.G. Brussee <brussee@live.nl>
+ * 
+ * @see FormElement
+ */
 class Formulier implements View, Validator {
 
 	private $id;
@@ -131,5 +139,3 @@ class Formulier implements View, Validator {
 	}
 
 }
-
-?>

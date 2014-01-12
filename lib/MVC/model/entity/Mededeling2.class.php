@@ -74,5 +74,3 @@ class Mededeling2 extends PersistentEntity {
 	protected static $table_name = 'mededelingen';
 
 }
-
-?>

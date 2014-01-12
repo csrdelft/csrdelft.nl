@@ -15,5 +15,3 @@ interface Validator {
 
 	public function getError();
 }
-
-?>

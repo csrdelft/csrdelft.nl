@@ -36,5 +36,3 @@ class MenuBeheerView extends TemplateView {
 	}
 
 }
-
-?>

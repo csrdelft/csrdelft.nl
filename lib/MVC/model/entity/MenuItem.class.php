@@ -115,5 +115,3 @@ class MenuItem extends PersistentEntity {
 	}
 
 }
-
-?>

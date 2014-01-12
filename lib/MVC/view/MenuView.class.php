@@ -69,12 +69,10 @@ class MenuView extends TemplateView {
 					'meded' => new SavedQuery(ROWID_QUEUE_MEDEDELINGEN)
 				));
 			}
-			$this->display('menu/menu.tpl');
+			$this->display('MVC/menu/menu.tpl');
 		} elseif ($this->level === 3) {
-			$this->display('menu/menu_block.tpl');
+			$this->display('MVC/menu/menu_block.tpl');
 		}
 	}
 
 }
-
-?>

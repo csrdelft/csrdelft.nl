@@ -42,5 +42,3 @@ abstract class TemplateView extends Smarty implements View {
 	}
 
 }
-
-?>
