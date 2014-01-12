@@ -24,7 +24,7 @@ class MenuBeheerView extends TemplateView {
 	public function __construct($menu_naam) {
 		parent::__construct(new MenuModel());
 		$this->menus = $this->model->getAlleMenus();
-		$items = $this->model->getMenuItems($menu_naam, false);
+		$items = $this->model->getMenuItems($menu_naam);
 		$this->tree_root = $this->model->buildMenuTree($menu_naam, $items);
 	}
 

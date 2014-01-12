@@ -1,11 +1,10 @@
 {*
 	menu_item.tpl	|	P.W.G. Brussee (brussee@live.nl)
 *}
-{strip}
-<li id="menu-item-{$item->id}" parentid="{$item->parent_id}" class="menu-item"{if $item->id === 0} style="list-style-type: none; background: none;"{/if}>
+<li id="menu-item-{$item->id}" parentid="{$item->parent_id}" class="menu-item"{if !$item->id} style="list-style-type: none; background: none;"{/if}>
 	<div class="inline-edit-{$item->id}">
 		<div style="display: inline-block; width: 25px;">
-{if $item->id !== 0}
+{if $item->id}
 			<a title="Item wijzigen" class="knop" onclick="$('.inline-edit-{$item->id}').slideDown();$(this).parent().parent().slideUp();">{icon get="pencil"}</a>
 {/if}
 		</div>
@@ -15,13 +14,13 @@
 		<div style="display: inline-block; width: 50px; color: grey;">
 			{$item->id}
 		</div>
-		<div style="display: inline-block; width: 170px;{if $item->children} font-weight: bold;{/if}">
+		<div style="display: inline-block; width: 160px;{if $item->children} font-weight: bold;{/if}">
 			{$item->tekst}
 		</div>
-		<div style="display: inline-block; width: 310px;">
+		<div style="display: inline-block; width: 275px;">
 			<a href="{$item->link}">{$item->link}</a>
 		</div>
-{if $item->id !== 0}
+{if $item->id}
 		<div style="display: inline-block; width: 25px;">
 			<form method="post" action="/menubeheer/wijzig/{$item->id}/zichtbaar">
 				<input type="hidden" name="Zichtbaar" value="{if $item->zichtbaar}0{else}1{/if}" />
@@ -36,7 +35,7 @@
 		</div>
 {/if}
 	</div>
-{if $item->id !== 0}
+{if $item->id}
 	<div class="inline-edit-{$item->id}" style="display: none;">
 		<form method="post" action="/menubeheer/wijzig/{$item->id}/parentId">
 			<div style="display: inline-block; width: 75px;">Parent id:</div>
@@ -64,7 +63,7 @@
 		</form>
 		<form method="post" action="/menubeheer/wijzig/{$item->id}/permission">
 			<div style="display: inline-block; width: 75px;">Rechten:</div>
-			<input type="text" name="Permission" maxlength="255" size="60" value="{$item->getPermission()}" />
+			<input type="text" name="Permission" maxlength="255" size="60" value="{$item->permission}" />
 			&nbsp;<input type="submit" value="opslaan" />
 			&nbsp;<input type="reset" value="annuleren" onclick="$('.inline-edit-{$item->id}').slideDown();$(this).parent().parent().slideUp();" />
 		</form>
@@ -96,11 +95,10 @@
 			</form>
 		</li>
 	{foreach from=$item->children item=child}
-		{include file='menu/beheer/menu_item.tpl' item=$child}
+		{include file='MVC/menu/beheer/menu_item.tpl' item=$child}
 	{/foreach}
 	</ul>
 	{if $item->children}
 	<hr />
 	{/if}
 </li>
-{/strip}

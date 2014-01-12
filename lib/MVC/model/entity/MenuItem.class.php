@@ -20,7 +20,7 @@ class MenuItem extends PersistentEntity {
 	 * Dit menu-item is een sub-item van
 	 * @var int
 	 */
-	public $parent_id = 0;
+	public $parent_id = null;
 	/**
 	 * Volgorde van weergave
 	 * @var int

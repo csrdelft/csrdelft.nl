@@ -77,6 +77,7 @@ class MenuModel extends PersistenceModel {
 		$root->tekst = $menu_naam;
 		$root->menu_naam = $menu_naam;
 		$root->addChildren($menuitems); // recursive
+		$root->id = false;
 		return $root;
 	}
 
