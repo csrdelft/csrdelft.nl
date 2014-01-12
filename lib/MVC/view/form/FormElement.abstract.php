@@ -21,27 +21,27 @@
  *  - HTMLComment					Uitleg/commentaar in een formulier stoppen.
  *
  * Uitbreidingen van FormField:
- * 		- TextField					Textarea
- * 			* PreviewTextField		Textarea met ubb voorbeeld 
- * 			* AutoresizeTextField	Textarea die automagisch uitbreidt bij typen, lijkt een autoresizing input
- * 		- InputField				Simpele input
- * 			* CountryField			Landjes 
- * 			* UidField				Uid's  met preview
- * 			* StudieField
- * 			* EmailField
- * 			* UrlField				Urls
- * 		- LidField					Leden selecteren
- * 		- IntField					Integers 
- * 			* NickField				Nicknames
- * 			* TelefoonField
- * 		- FloatField				Bedragen
- * 		- PassField					Wachtwoorden (oude, nieuwe, nieuwe ter bevestiging)
- * 		- SelectField
- * 			* GeslachtField
- * 			* JaNeeField
- * 			* VerticaleField		Verticalen
- * 			* KerkField
- * 		- DatumField				Datums (want data is zo ambigu)
+ * 	- TextareaField					Textarea
+ * 		* PreviewTextField			Textarea met ubb voorbeeld 
+ * 		* AutoresizeTextareaField	Textarea die automagisch uitbreidt bij typen, lijkt een autoresizing input
+ * 	- InputField					Simpele input
+ * 		* CountryField				Landjes 
+ * 		* UidField					Uid's  met preview
+ * 		* StudieField
+ * 		* EmailField
+ * 		* UrlField					Urls
+ * 	- LidField						Leden selecteren
+ * 	- IntField						Integers 
+ * 		* NickField					Nicknames
+ * 		* TelefoonField
+ * 	- FloatField					Bedragen
+ * 	- PassField						Wachtwoorden (oude, nieuwe, nieuwe ter bevestiging)
+ * 	- SelectField
+ * 		* GeslachtField
+ * 		* JaNeeField
+ * 		* VerticaleField			Verticalen
+ * 		* KerkField
+ * 	- DatumField					Datums (want data is zo ambigu)
  *
  * SubmitButton
  *
@@ -80,7 +80,7 @@ abstract class FormElement implements View {
 /**
  * class FormField is de moeder van input die data leveren.
  */
-class FormField extends FormElement implements Validator {
+class InputField extends FormElement implements Validator {
 
 	public $name;  //naam van het veld in POST
 	public $value;  //welke initiele waarde heeft het veld?
@@ -369,7 +369,7 @@ JS;
  * een TextField levert een textarea.
  */
 
-class TextField extends FormField {
+class TextareaField extends InputField {
 
 	public function __construct($name, $value, $description = null, $rows = 5, $max_len = 0) {
 		parent::__construct($name, $value, $description);
@@ -396,7 +396,7 @@ class TextField extends FormField {
  * een Textarea die groter wordt als de inhoud niet meer in het veld past.
  */
 
-class AutoresizeTextField extends TextField {
+class AutoresizeTextareaField extends TextareaField {
 
 	public function __construct($name, $value, $description = null, $max_len = 255, $placeholder = null) {
 		parent::__construct($name, $value, $description, 1, $max_len);
@@ -435,7 +435,7 @@ JS;
 
 }
 
-class RequiredAutoresizeTextField extends AutoresizeTextField {
+class RequiredAutoresizeTextField extends AutoresizeTextareaField {
 
 	public $notnull = true;
 
@@ -449,7 +449,7 @@ class RequiredAutoresizeTextField extends AutoresizeTextField {
  * met previewOnEnter() is klikken op het voorbeeld-knopje niet meer
  * nodig, er wordt een voorbeeld gemaakt bij het op enter drukken.
  */
-class PreviewTextField extends TextField {
+class PreviewTextField extends TextareaField {
 
 	private $previewOnEnter = false;
 
@@ -523,7 +523,7 @@ class RequiredPreviewTextField extends PreviewTextField {
  * HTML wordt ge-escaped.
  * Uiteraard kunnen er suggesties worden opgegeven.
  */
-class InputField extends FormField {
+class SuggestionField extends InputField {
 
 	public $max_len = 255;
 
@@ -553,7 +553,7 @@ class InputField extends FormField {
 
 }
 
-class RequiredInputField extends InputField {
+class RequiredInputField extends SuggestionField {
 
 	public $notnull = true;
 
@@ -563,7 +563,7 @@ class RequiredInputField extends InputField {
  * CountryField met een aantal autocomplete suggesties voor landen.
  * Doet verder geen controle op niet-bestaande landen...
  */
-class CountryField extends FormField {
+class CountryField extends InputField {
 
 	public function __construct($name, $value, $description) {
 		parent::__construct($name, $value, $description);
@@ -586,7 +586,7 @@ class RequiredCountryField extends CountryField {
  *  - het leeg is.
  *  - het een geldig uid bevat.
  */
-class UidField extends InputField {
+class UidField extends SuggestionField {
 
 	public function __construct($name, $value, $description) {
 		parent::__construct($name, $value, $description, 4);
@@ -641,7 +641,7 @@ JS;
  * één lid selecteren zonder een uid te hoeven typen.
  *
  */
-class LidField extends FormField {
+class LidField extends InputField {
 
 	// zoekfilter voor door namen2uid gebruikte Zoeker::zoekLeden. 
 	// geaccepteerde input: 'leden', 'oudleden', 'alleleden', 'allepersonen', 'nobodies'
@@ -764,7 +764,7 @@ class RequiredLidField extends LidField {
  *
  * Suggereert een aantal studies, doet verder geen controle op invoer.
  */
-class StudieField extends InputField {
+class StudieField extends SuggestionField {
 
 	public function __construct($name, $value, $description) {
 		parent::__construct($name, $value, $description, 100);
@@ -780,7 +780,7 @@ class StudieField extends InputField {
 
 }
 
-class EmailField extends FormField {
+class EmailField extends InputField {
 
 	/**
 	 * Dikke valideerfunctie voor emails.
@@ -829,7 +829,7 @@ class RequiredEmailField extends EmailField {
 /**
  * UrlField checked of de invoer op een url lijkt.
  */
-class UrlField extends FormField {
+class UrlField extends InputField {
 
 	public function validate() {
 		if (!parent::validate()) {
@@ -853,7 +853,7 @@ class UrlField extends FormField {
 /**
  * Invoeren van een integer. Eventueel met minima/maxima. Leeg evt. toegestaan.
  */
-class IntField extends FormField {
+class IntField extends InputField {
 
 	public $min = null;
 	public $max = null;
@@ -896,7 +896,7 @@ class IntField extends FormField {
 /**
  * Invoeren van een float. Eventueel met minima/maxima. Leeg evt. toegestaan.
  */
-class FloatField extends FormField {
+class FloatField extends InputField {
 
 	public $min = null;
 	public $max = null;
@@ -939,7 +939,7 @@ class FloatField extends FormField {
 /**
  * Verborgen veld voor de gebruiker.
  */
-class HiddenField extends FormField {
+class HiddenField extends InputField {
 
 	public function view() {
 		echo '<input type="hidden"' . $this->getInputAttribute(array('id', 'name', 'class', 'value', 'origvalue', 'disabled', 'maxlength', 'placeholder', 'autocomplete')) . ' />';
@@ -952,7 +952,7 @@ class HiddenField extends FormField {
  *
  * is pas valid als dit lid de enige is met deze nick.
  */
-class NickField extends FormField {
+class NickField extends InputField {
 
 	public $max_len = 20;
 
@@ -986,7 +986,7 @@ class NickField extends FormField {
  * is valid als er een enigszins op een telefoonnummer lijkende string wordt
  * ingegeven.
  */
-class TelefoonField extends InputField {
+class TelefoonField extends SuggestionField {
 
 	public function validate() {
 		if (!parent::validate()) {
@@ -1010,7 +1010,7 @@ class TelefoonField extends InputField {
  * Aanpassen van wachtwoorden.
  * Vreemde eend in de 'bijt', deze unit produceert 3 velden: oud, nieuw en bevestiging.
  */
-class PassField extends FormField {
+class PassField extends InputField {
 
 	public function __construct($name) {
 		$this->name = $name;
@@ -1083,7 +1083,7 @@ class PassField extends FormField {
  *
  * is valid als één van de opties geselecteerd is //TODO: of meerdere
  */
-class SelectField extends FormField {
+class SelectField extends InputField {
 
 	public $options;
 	public $cssOptions;
@@ -1247,7 +1247,7 @@ class KeuzeRondjeField extends SelectField {
  *
  * Produceert drie velden.
  */
-class DatumField extends FormField {
+class DatumField extends InputField {
 
 	protected $maxyear;
 	protected $minyear;
@@ -1357,7 +1357,7 @@ class DatumField extends FormField {
 
 }
 
-class TijdField extends FormField {
+class TijdField extends InputField {
 
 	protected $minutensteps;
 
@@ -1438,7 +1438,7 @@ class TijdField extends FormField {
 
 }
 
-class VinkField extends FormField {
+class VinkField extends InputField {
 
 	public function getValue() {
 		if (parent::isPosted()) {

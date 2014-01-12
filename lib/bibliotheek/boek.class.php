@@ -638,7 +638,7 @@ class BewerkBoek extends Boek {
 			foreach ($this->exemplaren as $exemplaar) {//id, eigenaar_uid, uitgeleend_uid, toegevoegd, status, uitleendatum
 				if ($this->isEigenaar($exemplaar['id'])) {
 					$ajaxformuliervelden['lener_' . $exemplaar['id']] = new RequiredLidField('lener_' . $exemplaar['id'], $exemplaar['uitgeleend_uid'], 'Uitgeleend aan', 'alleleden');
-					$ajaxformuliervelden['opmerking_' . $exemplaar['id']] = new AutotesizeTextareaField('opmerking_' . $exemplaar['id'], $exemplaar['opmerking'], 'Opmerking', 255, 'Geef opmerking over exemplaar..');
+					$ajaxformuliervelden['opmerking_' . $exemplaar['id']] = new AutoresizeTextareaField('opmerking_' . $exemplaar['id'], $exemplaar['opmerking'], 'Opmerking', 255, 'Geef opmerking over exemplaar..');
 				}
 			}
 		}
@@ -1063,7 +1063,7 @@ class BewerkBoek extends Boek {
 
 }
 
-class TitelField extends AutotesizeTextareaField {
+class TitelField extends AutoresizeTextareaField {
 
 	public function validate() {
 		if (!parent::validate()) {
