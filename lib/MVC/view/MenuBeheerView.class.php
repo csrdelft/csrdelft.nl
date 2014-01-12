@@ -13,9 +13,8 @@ class MenuBeheerView extends TemplateView {
 	private $menus;
 	private $tree;
 
-	public function __construct($menu) {
-		parent::__construct();
-		$model = new MenuModel();
+	public function __construct(MenuModel $model, $menu) {
+		parent::__construct($model);
 		$this->menus = $model->getAlleMenus();
 		$items = $model->getMenuItems($menu, false);
 		$this->tree = $model->getMenuTree($menu, $items);
@@ -29,18 +28,11 @@ class MenuBeheerView extends TemplateView {
 	}
 
 	public function view() {
-		if (is_array($this->menus)) {
-			$this->assign('melding', $this->getMelding());
-			$this->assign('kop', $this->getTitel());
-			$this->assign('menus', $this->menus);
-			$this->assign('root', $this->tree);
-			$this->display('menu/beheer/menu_tree.tpl');
-		} elseif (is_int($this->menus)) {
-			echo '<div id="menu-item-' . $this->menus . '" class="remove"></div>';
-		} else {
-			$this->assign('item', $this->menus);
-			$this->display('menu/beheer/menu_item.tpl');
-		}
+		$this->assign('melding', $this->getMelding());
+		$this->assign('kop', $this->getTitel());
+		$this->assign('menus', $this->menus);
+		$this->assign('root', $this->tree);
+		$this->display('MVC/menu/beheer/menu_tree.tpl');
 	}
 
 }

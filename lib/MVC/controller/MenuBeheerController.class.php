@@ -53,7 +53,7 @@ class MenuBeheerController extends AclController {
 		$model = new MenuModel();
 		$menuitem = $model->load($id);
 		$model->deleteMenuItem($menuitem);
-		SimpleHTML::invokeRefresh('/menubeheer/beheer/' . $item->getMenu(), 'Verwijderd ' . $item->getTekst() . ' (' . $item->getMenuId() . ')', 1);
+		SimpleHTML::invokeRefresh('/menubeheer/beheer/' . $menuitem->menu_naam, 'Verwijderd ' . $menuitem->tekst . ' (' . $menuitem->getMenuId() . ')', 1);
 	}
 
 	public function nieuw() {
@@ -69,10 +69,11 @@ class MenuBeheerController extends AclController {
 		SimpleHTML::invokeRefresh('/menubeheer/beheer/' . $item->menu_naam, 'Nieuw aangemaakt ' . $item->tekst . ' (' . $item->id . ')', 1);
 	}
 
-	public function wijzig($id, $propery) {
+	public function wijzig($id, $property) {
 		$value = filter_input(INPUT_POST, $property);
 		$model = new MenuModel();
 		$model->saveProperty($id, $property, $value);
+		$menuitem = $model->load($id);
 		SimpleHTML::invokeRefresh('/menubeheer/beheer/' . $item->menu_naam, 'Wijzigingen opgeslagen ' . $item->tekst . ' (' . $item->id . ')', 1);
 	}
 

@@ -11,7 +11,7 @@ require_once 'MVC/model/entity/MenuItem.class.php';
 class MenuModel extends PaginationModel {
 
 	public function __construct() {
-		parent::__construct('Mededeling');
+		parent::__construct('MenuItem');
 	}
 
 	public function getAlleMenus() {

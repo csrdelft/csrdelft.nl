@@ -1,6 +1,6 @@
 <?php
 
-require_once 'MVC/model/entity/Mededeling.class.php';
+require_once 'MVC/mededeling/MededelingNew.class.php';
 
 /**
  * MededelingenModel.class.php
@@ -30,7 +30,7 @@ class MededelingenModel extends PaginationModel {
 		return $result;
 	}
 
-	public function save(Mededeling &$mededeling) {
+	public function save(MededelingNew &$mededeling) {
 		$properties = $mededeling->getPersistingValues();
 		if (is_int($mededeling->id) && $mededeling->id > 0) { // update existing
 			$count = $this->update($properties, 'id = :id', array(':id' => $mededeling->id));

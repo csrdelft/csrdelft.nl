@@ -2569,10 +2569,12 @@ lib/MVC/model/Database.class.php -text
 lib/MVC/model/MededelingenModel.class.php -text
 lib/MVC/model/MenuModel.class.php -text
 lib/MVC/model/PaginationModel.abstract.php -text
+lib/MVC/model/Persistence.interface.php -text
 lib/MVC/model/PersistenceModel.abstract.php -text
-lib/MVC/model/entity/Mededeling.class.php -text
+lib/MVC/model/entity/Mededeling2.class.php -text
 lib/MVC/model/entity/MenuItem.class.php -text
 lib/MVC/model/entity/PersistentEntity.abstract.php -text
+lib/MVC/view/MededelingView.class.php -text
 lib/MVC/view/MenuBeheerView.class.php -text
 lib/MVC/view/MenuView.class.php -text
 lib/MVC/view/TemplateView.abstract.php -text
@@ -3317,7 +3319,11 @@ lib/taken/view/forms/RepetitieMaaltijdenFormView.class.php -text
 lib/taken/view/forms/TaakFormView.class.php -text
 lib/taken/view/forms/ToewijzenFormView.class.php -text
 lib/taken/view/forms/VrijstellingFormView.class.php -text
-lib/templates/LIB/layout/ubbhulp.tpl -text
+lib/templates/MVC/layout/ubbhulp.tpl -text
+lib/templates/MVC/menu/beheer/menu_item.tpl -text
+lib/templates/MVC/menu/beheer/menu_tree.tpl -text
+lib/templates/MVC/menu/menu.tpl -text
+lib/templates/MVC/menu/menu_block.tpl -text
 lib/templates/agenda/courant.tpl -text
 lib/templates/agenda/icalendar.tpl -text
 lib/templates/agenda/item.tpl -text
@@ -3376,10 +3382,6 @@ lib/templates/mededelingen/mededelingen.tpl -text
 lib/templates/mededelingen/mededelingentopblock.tpl -text
 lib/templates/mededelingen/mededelingenzijbalk.tpl -text
 lib/templates/mededelingen/top3overzicht.tpl -text
-lib/templates/menu/beheer/menu_item.tpl -text
-lib/templates/menu/beheer/menu_tree.tpl -text
-lib/templates/menu/menu.tpl -text
-lib/templates/menu/menu_block.tpl -text
 lib/templates/minion.tpl -text
 lib/templates/peiling.ubb.tpl -text
 lib/templates/profiel/_saldografiek.tpl -text

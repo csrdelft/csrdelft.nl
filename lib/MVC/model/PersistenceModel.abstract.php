@@ -1,28 +1,35 @@
 <?php
 
 require_once 'MVC/model/Database.class.php';
+require_once 'MVC/model/Persistence.interface.php';
 
 /**
  * PersistenceModel.abstract.php
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  *
- * Generic CRUD.
+ * Uses database to provide persistence.
  * 
  */
-abstract class PersistenceModel {
+abstract class PersistenceModel extends Database implements Persistence {
 
-	private $class_name;
-	protected $table_name;
-	protected $columns;
-	protected $primary_key;
+	abstract function create(PersistentEntity &$entity);
 
-	public function __construct($class_name) {
-		$this->class_name = $class_name;
-		$this->table_name = $class_name::$table_name;
-		$this->columns = array_keys($class_name::$persistent_fields);
-		$this->primary_key = $class_name::$primary_key;
+	function retrieve(PersistentEntity &$entity) {
+		$select = PersistentEntity::getFields();
+		$where = '';
+		$params = array();
+		foreach (PersistentEntity::getPrimaryKey() as $key) {
+			$where .= $key . ' = ?';
+			$params[] = $entity->$key;
+		}
+		$result = parent::select($select, PersistentEntity::getTableName(), $where, $params, null, 1);
+		$result->fetch(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, get_class($entity));
 	}
+
+	abstract function update(PersistentEntity &$entity);
+
+	abstract function delete(PersistentEntity &$entity);
 
 	/**
 	 * Optional named parameters.
@@ -33,11 +40,11 @@ abstract class PersistenceModel {
 	 * @throws Exception row count !== 1
 	 */
 	protected function get($where, array $params) {
-		$one = $this->select($where, $params, null, 1);
+		$one = $this->load($where, $params, null, 1);
 		if (sizeof($one) !== 1) {
-			throw new Exception('fetchOne row count: ' . sizeof($one));
+			throw new Exception('getEntity row count: ' . sizeof($one));
 		}
-		return $one[0];
+		return reset($one);
 	}
 
 	/**
@@ -50,20 +57,8 @@ abstract class PersistenceModel {
 	 * @param int $start
 	 * @return PersistentEntity[]
 	 */
-	protected function select($where = null, array $params = array(), $orderby = null, $limit = null, $start = 0) {
-		$sql = 'SELECT ' . implode(', ', $this->columns) . ' FROM ' . $this->table_name;
-		if ($where !== null) {
-			$sql .= ' WHERE ' . $where;
-		}
-		if ($orderby !== null) {
-			$sql .= ' ORDER BY ' . $orderby;
-		}
-		if ($limit !== null) {
-			$sql .= ' LIMIT ' . $start . ', ' . $limit;
-		}
-		$db = Database::instance();
-		$query = $db->prepare($sql, $params);
-		$query->execute($params);
+	protected function load($where = null, array $params = array(), $orderby = null, $limit = null, $start = 0) {
+
 		return $query->fetchAll(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, $this->class_name);
 	}
 
@@ -74,7 +69,8 @@ abstract class PersistenceModel {
 	 * @return int last insert id
 	 * @throws Exception row count !== 1
 	 */
-	protected function insert(array $properties) {
+	protected function nieuw(array $properties) {
+
 		$params = array();
 		foreach ($properties as $key => $value) {
 			$params[':' . $key] = $value; // named params
@@ -99,7 +95,7 @@ abstract class PersistenceModel {
 	 * @param array $params
 	 * @return int affected rows
 	 */
-	protected function update(array $properties, $where, array $params) {
+	protected function wijzig(array $properties, $where, array $params) {
 		$sql = 'UPDATE ' . $this->table_name . ' SET ';
 		$fields = array();
 		foreach ($properties as $key => $value) {
@@ -123,31 +119,13 @@ abstract class PersistenceModel {
 	 * @param array $params
 	 * @return int row count
 	 */
-	protected function delete($where, array $params) {
+	protected function verwijder($where, array $params) {
 		$sql = 'DELETE FROM ' . $this->table_name;
 		$sql .= ' WHERE ' . $where;
 		$db = Database::instance();
 		$query = $db->prepare($sql, $params);
 		$query->execute($params);
 		return $query->rowCount();
-	}
-
-	/**
-	 * Convenience method.
-	 * 
-	 */
-	protected function create_table() {
-		$sql = 'CREATE TABLE ' . $this->table_name . ' (';
-		$class_name = $this->class_name;
-		foreach ($class_name::$persistent_fields as $key => $value) {
-			$sql .= $key . ' ' . $value . ', ';
-		}
-		$sql .= 'PRIMARY KEY (' . implode(', ', $this->primary_key) . ')) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1';
-		$db = Database::instance();
-		$query = $db->prepare($sql, array());
-		$query->execute(array());
-		echo $sql;
-		exit;
 	}
 
 }

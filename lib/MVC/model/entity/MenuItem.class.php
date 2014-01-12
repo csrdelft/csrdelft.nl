@@ -9,7 +9,7 @@
  * en heeft daarom een parent.
  * 
  */
-class MenuItem {
+class MenuItem extends PersistentEntity {
 
 	/**
 	 * Primary key
@@ -55,7 +55,7 @@ class MenuItem {
 	 * Database table fields
 	 * @var array
 	 */
-	public static $persistent_fields = array(
+	protected static $persistent_fields = array(
 		'id' => 'int(11) NOT NULL AUTO_INCREMENT',
 		'parent_id' => 'int(11) NOT NULL',
 		'prioriteit' => 'int(11) NOT NULL',
@@ -69,12 +69,12 @@ class MenuItem {
 	 * Database primary key
 	 * @var array
 	 */
-	public static $primary_key = array('id');
+	protected static $primary_key = array('id');
 	/**
 	 * Database table name
 	 * @var string
 	 */
-	public static $table_name = 'menus';
+	protected static $table_name = 'menus';
 	/**
 	 * De sub-items van dit menu-item
 	 * @var array

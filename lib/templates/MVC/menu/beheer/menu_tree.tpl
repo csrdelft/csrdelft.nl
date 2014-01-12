@@ -19,6 +19,6 @@ Op deze pagina kunt u het menu beheren.
 <br />
 {if sizeof($root->children) > 0}
 <ul class="menubeheer-tree">
-	{include file='menu/beheer/menu_item.tpl' item=$root}
+	{include file='MVC/menu/beheer/menu_item.tpl' item=$root}
 </ul>
 {/if}

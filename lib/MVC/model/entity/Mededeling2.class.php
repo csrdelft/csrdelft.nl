@@ -52,7 +52,7 @@ class Mededeling2 extends PersistentEntity {
 	 * Database table fields
 	 * @var array
 	 */
-	public static $persistent_fields = array(
+	protected static $persistent_fields = array(
 		'id' => 'int(11) NOT NULL AUTO_INCREMENT',
 		'type' => 'varchar(255) NOT NULL',
 		'tekst' => 'text NOT NULL',
@@ -66,12 +66,12 @@ class Mededeling2 extends PersistentEntity {
 	 * Database primary key
 	 * @var array
 	 */
-	public static $primary_key = array('id');
+	protected static $primary_key = array('id');
 	/**
 	 * Database table name
 	 * @var string
 	 */
-	public static $table_name = 'mededelingen';
+	protected static $table_name = 'mededelingen';
 
 }
 

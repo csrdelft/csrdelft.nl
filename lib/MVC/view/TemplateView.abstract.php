@@ -14,8 +14,11 @@ require_once('smarty/libs/Smarty.class.php');
  */
 abstract class TemplateView extends Smarty implements View {
 
-	public function __construct() {
+	protected $model;
+
+	public function __construct(PersistenceModel $model) {
 		parent::__construct();
+		$this->model = $model;
 
 		$this->setTemplateDir(SMARTY_TEMPLATE_DIR);
 		$this->setCompileDir(SMARTY_COMPILE_DIR);

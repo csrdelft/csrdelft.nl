@@ -8,16 +8,28 @@
  */
 abstract class PersistentEntity {
 
-	public static $table_name;
-	public static $persistent_fields;
-	public static $primary_key;
+	protected static $table_name;
+	protected static $persistent_fields;
+	protected static $primary_key;
 
-	public function getPersistingValues() {
-		$fields = $this::$persistent_fields;
-		foreach ($fields as $key => $value) {
-			$fields[$key] = $this->$key;
+	public static function getTableName() {
+		return static::$table_name;
+	}
+
+	public static function getPrimaryKey() {
+		return static::$primary_key;
+	}
+
+	public static function getFields() {
+		return array_keys(static::$persistent_fields);
+	}
+
+	public function getValues() {
+		$values = array();
+		foreach ($this->getFields() as $field) {
+			$values[$field] = $this->$field;
 		}
-		return $fields;
+		return $values;
 	}
 
 }
