@@ -2,7 +2,7 @@
 	menu_item.tpl	|	P.W.G. Brussee (brussee@live.nl)
 *}
 <li id="menu-item-{$item->id}" parentid="{$item->parent_id}" class="menu-item"{if !$item->id} style="list-style-type: none; background: none;"{/if}>
-	<div class="inline-edit-{$item->id}">
+	<div class="inline-edit-{$item->id}" style="text-align: left;">
 		<div style="display: inline-block; width: 25px;">
 {if $item->id}
 			<a title="Item wijzigen" class="knop" onclick="$('.inline-edit-{$item->id}').slideDown();$(this).parent().parent().slideUp();">{icon get="pencil"}</a>
