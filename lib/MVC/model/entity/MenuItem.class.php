@@ -15,7 +15,7 @@ class MenuItem extends PersistentEntity {
 	 * Primary key
 	 * @var int
 	 */
-	public $id = null;
+	public $menu_id = null;
 	/**
 	 * Dit menu-item is een sub-item van
 	 * @var int
@@ -50,26 +50,26 @@ class MenuItem extends PersistentEntity {
 	 * Unieke naam per menu
 	 * @var string
 	 */
-	public $menu_naam = 'main';
+	public $menu = 'main';
 	/**
 	 * Database table fields
 	 * @var array
 	 */
 	protected static $persistent_fields = array(
-		'id' => 'int(11) NOT NULL AUTO_INCREMENT',
+		'menu_id' => 'int(11) NOT NULL AUTO_INCREMENT',
 		'parent_id' => 'int(11) NOT NULL',
 		'prioriteit' => 'int(11) NOT NULL',
 		'tekst' => 'varchar(50) NOT NULL',
 		'link' => 'varchar(255) NOT NULL',
 		'permission' => 'varchar(255) NOT NULL',
 		'zichtbaar' => 'tinyint(1) NOT NULL',
-		'menu_naam' => 'varchar(255) NOT NULL'
+		'menu' => 'varchar(255) NOT NULL'
 	);
 	/**
 	 * Database primary key
 	 * @var array
 	 */
-	protected static $primary_key = array('id');
+	protected static $primary_key = array('menu_id');
 	/**
 	 * Database table name
 	 * @var string
@@ -89,7 +89,7 @@ class MenuItem extends PersistentEntity {
 	 * @return boolean
 	 */
 	public function isParentOf(MenuItem $item) {
-		if ($this->id === $item->parent_id) {
+		if ($this->menu_id === $item->parent_id) {
 			return true;
 		}
 		foreach ($this->children as $child) {
@@ -108,7 +108,7 @@ class MenuItem extends PersistentEntity {
 	 */
 	public function addChildren(array &$items) {
 		foreach ($items as $i => $child) {
-			if ($this->id === $child->parent_id) { // this is the correct parent
+			if ($this->menu_id === $child->parent_id) { // this is the correct parent
 				$this->children[] = $child;
 				unset($items[$i]); // only one parent
 				$child->addChildren($items); // add children of children

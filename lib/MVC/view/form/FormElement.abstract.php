@@ -5,43 +5,43 @@
  * 
  * @author Jan Pieter Waagmeester <jieter@jpwaag.com>
  * @author P.W.G. Brussee <brussee@live.nl>
- *
+ * 
+ * 
  * Dit is een poging om maar op één plek dingen voor een formulier te defenieren:
  *  - validatorfuncties
  *  - Html voor de velden, inclusief bijbehorende javascript.
  *  - suggesties voor formuliervelden
  *
  * Alle elementen die in een formulier terecht kunnen komen stammen af van
- * de class InputField.
+ * de class FormElement.
  *
  * FormElement
- *  - InputField					Elementen die data leveren.
+ *  - FormField						Elementen die data leveren.
  *  - SubmitButton					Submitten van het formulier.
  *  - HTMLComment					Uitleg/commentaar in een formulier stoppen.
  *
- * Uitbreidingen van InputField:
- *  	
- * 		- IntField					Integers
- * 		- FloatField				Bedragen
- * 		- UrlField					Urls
- * 		- PassField					Wachtwoorden (oude, nieuwe, nieuwe ter bevestiging)
- * 		- TextareaField				Textarea
+ * Uitbreidingen van FormField:
+ * 		- TextField					Textarea
  * 			* PreviewTextField		Textarea met ubb voorbeeld 
  * 			* AutoresizeTextField	Textarea die automagisch uitbreidt bij typen, lijkt een autoresizing input
- * 		- SuggestionField			Simpele input
+ * 		- InputField				Simpele input
  * 			* CountryField			Landjes 
- * 			* StudieField			Studies
- * 		- TelefoonField				Telefoonnummers
- * 		- EmailField				Emailadres
- * 		- DatumField				Datums
- * 		- UidField					Uid's  met preview
+ * 			* UidField				Uid's  met preview
+ * 			* StudieField
+ * 			* EmailField
+ * 			* UrlField				Urls
  * 		- LidField					Leden selecteren
- * 		- NickField					Nicknames
+ * 		- IntField					Integers 
+ * 			* NickField				Nicknames
+ * 			* TelefoonField
+ * 		- FloatField				Bedragen
+ * 		- PassField					Wachtwoorden (oude, nieuwe, nieuwe ter bevestiging)
  * 		- SelectField
  * 			* GeslachtField
  * 			* JaNeeField
  * 			* VerticaleField		Verticalen
  * 			* KerkField
+ * 		- DatumField				Datums (want data is zo ambigu)
  *
  * SubmitButton
  *
@@ -56,57 +56,15 @@
  * 		'formulier-ID',
  * 		'/index.php',
  * 		array(
- * 			TextField('naam', '', 'Naam'),
+ * 			InputField('naam', '', 'Naam'),
  * 			PassField('password'),
  * 			SubmitButton('save')
  * 		);
+ * 
+ * Alle dingen die we in de field-array van een Formulier stoppen
+ * moeten een uitbreiding zijn van FormElement
  */
 abstract class FormElement implements View {
-
-	/**
-	 * ID van het HTML element.
-	 * @var string
-	 */
-	public $id;
-	/**
-	 * Naam van het veld in POST.
-	 * @var string
-	 */
-	public $name;
-	/**
-	 * De waarde verschilt per element.
-	 * @var mixed 
-	 */
-	public $value;
-	/**
-	 * Omschrijving bij mouseover
-	 * @var string 
-	 */
-	public $title;
-	/**
-	 * CSS classes
-	 * @var string
-	 */
-	public $css_classes = array();
-	/**
-	 * JS onclick handler
-	 * @var string
-	 */
-	public $onclick;
-	/**
-	 * HTML element uitgeschakeld
-	 * @var boolean
-	 */
-	public $disabled = false;
-
-	public function __construct($id, $value = '', $title = null) {
-		$this->id = $id;
-		$this->name = $id;
-		$this->value = $value;
-		$this->title = $title;
-		$this->css_classes[] = 'FormElment';
-		$this->css_classes[] = $this->getType();
-	}
 
 	public function getModel() {
 		return $this;
@@ -116,123 +74,172 @@ abstract class FormElement implements View {
 		return get_class($this);
 	}
 
-	public function isPosted() {
-		return array_key_exists($this->name, $_POST) AND isset($_POST[$this->name]);
-	}
-
+	abstract public function getJavascript();
 }
 
 /**
- * InputField is de moeder van alle input fields die data leveren.
- * Standaard required mag deze niet leeg zijn.
+ * class FormField is de moeder van input die data leveren.
  */
-class InputField extends FormElement implements Validator {
+class FormField extends FormElement implements Validator {
 
-	/**
-	 * Original value of field even after posting.
-	 * @var mixed
-	 */
-	public $orig_value;
-	/**
-	 * Verplicht veld of mag het leeg blijven.
-	 * @var boolean
-	 */
-	public $required = true;
-	/**
-	 * Foutmelding.
-	 * @var string
-	 */
-	public $error = null;
-	/**
-	 * Tekst weergeven bij leeg veld.
-	 * @var string
-	 */
-	public $placeholder = null;
-	/**
-	 * JS onchange handler.
-	 * @var string
-	 */
-	public $onchange = null;
-	/**
-	 * Automatisch aanvullen met Ajax.
-	 * @var type
-	 */
-	public $autocomplete = true;
-	/**
-	 * Suggestielijst voor automatisch aanvullen.
-	 * @var array
-	 */
+	public $name;  //naam van het veld in POST
+	public $value;  //welke initiele waarde heeft het veld?
+	public $origvalue; //welke originele waarde had het veld?
+	public $title;  //omschrijving bij mouseover title
+	public $disabled = false;   //veld uitgeschakeld?
+	public $notnull = false; //mag het veld leeg zijn?
+	public $forcenotnull = false;  //mag het veld echt niet leeg zijn? (ook voor LEDEN_MOD)
+	public $autocomplete = true;   //browser laten autoaanvullen?
+	public $placeholder = null;  //plaats een grijze placeholdertekst in leeg veld
+	public $error = ''; //foutmelding van dit veld
+	public $onchange = null;   //javascript onChange
+	public $onclick = null;   //javascript onClick
+	public $max_len = 0; //maximale lengte van de invoer.
+	public $rows = 0;  //aantal rijen van textarea
+	//array met classnames die later in de class-tag komen.
+	public $inputClasses = array('regular');
+	//array met suggesties die de javascript-autocomplete aan gaat bieden.
 	public $suggestions = array();
-	/**
-	 * Bron van de data overruled suggestios.
-	 * @var string
-	 */
-	public $remotedatasource = null;
-	/**
-	 * Maximale lengte van de invoer.
-	 * @var int
-	 */
-	public $max_len = 255;
+	public $remotedatasource = '';
 
-	public function __construct($id, $value, $description = null) {
-		parent::__construct($id, $value, $description);
-		$this->orig_value = $value;
+	public function __construct($name, $value, $description = null) {
+		$this->name = $name;
+		$this->value = $value;
+		$this->origvalue = $value;
 		$this->description = $description;
-		$this->value = $this->getValue();
+
+		if ($this->isPosted() !== false) {
+			$this->value = $this->getValue();
+		}
+
+		//add *Field classname to cssclasses
+		$this->inputClasses[] = $this->getType();
+	}
+
+	public function getType() {
+		return get_class($this);
+	}
+
+	public function getName() {
+		return $this->name;
+	}
+
+	public function isPosted() {
+		return isset($_POST[$this->name]);
+	}
+
+	//een remotedatasource instellen overruled suggestions
+	public function setRemoteSuggestionsSource($url) {
+		$this->remotedatasource = $url;
+	}
+
+	public function setSuggestions($array) {
+		$this->suggestions = $array;
+	}
+
+	public function setPlaceholder($bericht) {
+		$this->placeholder = $bericht;
+	}
+
+	public function setOnChangeScript($javascript) {
+		$this->onchange = $javascript;
+	}
+
+	public function setOnClickScript($javascript) {
+		$this->onclick = $javascript;
 	}
 
 	public function getValue() {
 		if ($this->isPosted()) {
-			$value = filter_input(INPUT_POST, $this->name);
-			return trim($value);
+			return trim($_POST[$this->name]);
 		}
 		return $this->value;
 	}
 
 	/**
-	 * Elk veld staat in een div en heeft een label met beschrijving.
-	 */
-	public function view() {
-		echo $this->getDiv();
-		echo $this->getLabel();
-		echo $this->getErrorDiv();
-
-		echo '<input type="text"' . $this->getAttribute(array('id', 'name', 'class', 'value', 'origvalue', 'disabled', 'maxlength', 'placeholder', 'autocomplete', 'onchange', 'onclick')) . ' />';
-
-//afsluiten van de div om de hele tag heen.
-		echo '</div>';
-	}
-
-	/**
 	 * Is de invoer voor het veld correct?
+	 * standaard krijgt deze functie de huidige waarde mee als argument
 	 * 
 	 * Kindertjes van deze classe kunnen deze methode overloaden om specifiekere
 	 * testen mogelijk te maken.
 	 */
 	public function validate() {
-		$len = strlen($this->getValue());
+		//vallen over lege velden als dat aangezet is voor het veld en als gebruiker geen LEDEN_MOD heeft of het geforceerd wordt.
 		if (!$this->isPosted()) {
 			$this->error = 'Veld is niet gepost';
-		} elseif ($len === 0 AND $this->required) {
+		} elseif ($this->getValue() === '' AND ($this->forcenotnull OR ($this->notnull AND !LoginLid::instance()->hasPermission('P_LEDEN_MOD')))) {
 			$this->error = 'Dit is een verplicht veld';
 		}
-		// als max_len > 0 dan checken of de lengte er niet overheen gaat.
-		if (is_int($this->max_len) AND $this->max_len > 0 AND $len > $this->max_len) {
-			$this->error = 'Maximaal ' . $this->max_len . ' tekens toegestaan';
+		//als max_len > 0 dan checken of de lengte er niet overheen gaat.
+		if ($this->max_len > 0 AND strlen($this->getValue()) > $this->max_len) {
+			$this->error = 'Dit veld mag maximaal ' . $this->max_len . ' tekens lang zijn';
 		}
-		return $this->error === null;
+		return $this->error == '';
 	}
 
 	/**
-	 * De input kan allerlei CSS-classes hebben.
+	 * Elk veld staat in een div, geef de html terug voor de openingstag van die div.
 	 */
-	protected function getCssClasses() {
-		if ($this->remotedatasource !== null) {
-			$this->css_classes[] = 'hasRemoteSuggestions';
-		} elseif (count($this->suggestions) > 0) {
-			$this->css_classes[] = 'hasSuggestions';
+	protected function getDiv() {
+		$cssclass = 'veld';
+		if ($this->error != '') {
+			$cssclass.=' metfouten';
 		}
-		return $this->css_classes;
+		return '<div class="' . $cssclass . '" id="' . $this->name . '" ' . $this->getInputAttribute('title') . '>';
+	}
+
+	/**
+	 * Elk veld heeft een label, geef de html voor het label
+	 */
+	protected function getLabel() {
+		if ($this->description != null) {
+			echo '<label for="field_' . $this->name . '">' . mb_htmlentities($this->description) . '</label>';
+		}
+	}
+
+	/**
+	 * Zorg dat de suggesties gegeven gaan worden.
+	 */
+	protected function getFieldSuggestions() {
+		$return = '';
+
+		if (count($this->suggestions) > 0 OR $this->remotedatasource != '') {
+			if ($this->remotedatasource != '') {
+				$suggestions = $this->remotedatasource;
+			} else {
+				$suggestions = $this->suggestions;
+			}
+			$return .= '<script language="javascript"> ' . "\n";
+			$return .= 'FieldSuggestions["' . $this->name . '"]=' . json_encode($suggestions) . "; \n";
+			$return .= '</script>';
+		}
+		return $return;
+	}
+
+	/**
+	 * Geef een foutmelding voor dit veld terug.
+	 */
+	public function getError($html = true) {
+		if ($html === false) {
+			return $this->error;
+		}
+
+		if ($this->error != '') {
+			return '<div class="waarschuwing">' . $this->error . '</div>';
+		}
+	}
+
+	/**
+	 * De input kan allerlei CSS-classes hebben. Geef hier een lijstje
+	 * terug...
+	 */
+	protected function getInputClasses() {
+		if ($this->remotedatasource != '') {
+			$this->inputClasses[] = 'hasRemoteSuggestions';
+		} elseif (count($this->suggestions) > 0) {
+			$this->inputClasses[] = 'hasSuggestions';
+		}
+		return $this->inputClasses;
 	}
 
 	/**
@@ -242,22 +249,27 @@ class InputField extends FormElement implements Validator {
 	 * elke instantie dan bijvoorbeeld de prefix van het id-veld te
 	 * moeten aanpassen. Niet meer nodig dus.
 	 */
-	protected function getAttribute($attr) {
+	protected function getInputAttribute($attr) {
 		if (is_array($attr)) {
 			$return = '';
 			foreach ($attr as $a) {
-				$return.=' ' . $this->getAttribute($a);
+				$return.=' ' . $this->getInputAttribute($a);
 			}
 			return $return;
 		}
 		switch ($attr) {
-			case 'id': return 'id="field_' . $this->id . '"';
-			case 'class': return 'class="' . implode(' ', $this->getCssClasses()) . '"';
+			case 'id': return 'id="field_' . $this->getName() . '"';
+				break;
+			case 'class': return 'class="' . implode(' ', $this->getInputClasses()) . '"';
+				break;
 			case 'value': return 'value="' . htmlspecialchars($this->value) . '"';
-			case 'origvalue': return 'origvalue="' . htmlspecialchars($this->orig_value) . '"';
+				break;
+			case 'origvalue': return 'origvalue="' . htmlspecialchars($this->origvalue) . '"';
+				break;
 			case 'name': return 'name="' . $this->name . '"';
+				break;
 			case 'title':
-				if ($this->title !== null) {
+				if ($this->title) {
 					return 'title="' . $this->title . '"';
 				}
 				break;
@@ -267,13 +279,14 @@ class InputField extends FormElement implements Validator {
 				}
 				break;
 			case 'placeholder':
-				if ($this->placeholder !== null) {
+				if ($this->placeholder != null) {
 					return 'placeholder="' . $this->placeholder . '"';
 				}
 				break;
 			case 'rows':
 				if ($this->rows > 0) {
 					return 'rows="' . $this->rows . '"';
+					break;
 				}
 				break;
 			case 'maxlength':
@@ -301,110 +314,27 @@ class InputField extends FormElement implements Validator {
 	}
 
 	/**
-	 * Elk veld staat in een div, geef de html terug voor de openingstag van die div.
-	 */
-	protected function getDiv() {
-		$css_classes = array('FormInput');
-		if ($this->error !== null) {
-			$css_classes[] = 'metFouten';
-		} else {
-			$css_classes[] = 'regular';
-		}
-		return '<div class="' . implode(' ', $css_classes) . '" id="' . $this->id . '" ' . $this->getAttribute('title') . '>';
-	}
-
-	/**
-	 * Elk veld heeft een label, geef de html voor het label.
-	 */
-	protected function getLabel() {
-		if ($this->description !== null) {
-			echo '<label for="field_' . $this->id . '">' . mb_htmlentities($this->description) . '</label>';
-		}
-	}
-
-	/**
-	 * Geef de foutmelding voor dit veld terug.
-	 */
-	public function getError() {
-		return $this->error;
-	}
-
-	/**
-	 * Geef een div met foutmelding voor dit veld terug.
-	 */
-	public function getErrorDiv() {
-		if ($this->error !== null) {
-			return '<div class="waarschuwing">' . $this->error . '</div>';
-		}
-	}
-
-	public function getJavascript() {
-		return '';
-	}
-
-}
-
-/**
- * Een TextField is een elementaire input-tag en heeft een maximale lengte.
- * HTML wordt ge-escaped.
- * Uiteraard kunnen er suggesties worden opgegeven.
- */
-class SuggestionField extends InputField {
-
-	public function __construct($name, $value, $description, $max_len = 255, $suggestions = array()) {
-		parent::__construct($name, htmlspecialchars_decode($value), $description);
-		$this->max_len = (int) $max_len;
-		parent::setSuggestions($suggestions);
-	}
-
-	public function validate() {
-		if (!parent::validate()) {
-			return false;
-		}
-		if ($this->getValue() === '') {
-			return true;
-		}
-		return $this->error === null;
-	}
-
-	public function getValue() {
-		return htmlspecialchars(parent::getValue());
-	}
-
-	/**
-	 * Elk veld staat in een div en heeft een label met beschrijving.
+	 * view die zou moeten werken voor veel velden...
 	 */
 	public function view() {
-		parent::view();
+		echo $this->getDiv();
+		echo $this->getLabel();
+		echo $this->getError();
+
+		echo '<input type="text"' . $this->getInputAttribute(array('id', 'name', 'class', 'value', 'origvalue', 'disabled', 'maxlength', 'placeholder', 'autocomplete', 'onchange', 'onclick')) . ' />';
 
 		echo $this->getFieldSuggestions();
-		echo '</div>'; // afsluiten van de div om de hele tag heen.
-	}
-
-	/**
-	 * Zorg dat de suggesties gegeven gaan worden.
-	 */
-	protected function getFieldSuggestions() {
-		$return = '';
-
-		if (count($this->suggestions) > 0 OR $this->remotedatasource != '') {
-			if ($this->remotedatasource != '') {
-				$suggestions = $this->remotedatasource;
-			} else {
-				$suggestions = $this->suggestions;
-			}
-			$return .= '<script language="javascript"> ' . "\n";
-			$return .= 'FieldSuggestions["' . $this->name . '"]=' . json_encode($suggestions) . "; \n";
-			$return .= '</script>';
-		}
-		return $return;
+		//afsluiten van de div om de hele tag heen.
+		echo '</div>';
 	}
 
 	/**
 	 * Javascript nodig voor dit *Field. Dit wordt één keer per *Field
 	 * geprint door het Formulier-object.
-	 * 
-	 * Toelichting op options voor RemoteSuggestions:
+	 */
+
+	/**
+	 * Toelichting op options voor RemoteSuggestions
 	 * result = array(
 	 * 		array(data:array(..,..,..), value: "string", result:"string"),
 	 * 		array(... )
@@ -435,12 +365,11 @@ JS;
 
 }
 
-/**
- * Een TextareaField levert een textarea.
+/*
+ * een TextField levert een textarea.
  */
-class TextareaField extends InputField {
 
-	public $rows = 0;  //aantal rijen van textarea
+class TextField extends FormField {
 
 	public function __construct($name, $value, $description = null, $rows = 5, $max_len = 0) {
 		parent::__construct($name, $value, $description);
@@ -451,9 +380,9 @@ class TextareaField extends InputField {
 	public function view() {
 		echo $this->getDiv();
 		echo $this->getLabel();
-		echo $this->getErrorDiv();
+		echo $this->getError();
 
-		echo '<textarea' . $this->getAttribute(array('id', 'name', 'origvalue', 'class', 'disabled', 'rows', 'maxlength', 'placeholder', 'autocomplete', 'onchange', 'onclick')) . '>';
+		echo '<textarea' . $this->getInputAttribute(array('id', 'name', 'origvalue', 'class', 'disabled', 'rows', 'maxlength', 'placeholder', 'autocomplete', 'onchange', 'onclick')) . '>';
 		echo htmlspecialchars($this->value);
 		echo '</textarea>';
 
@@ -464,20 +393,20 @@ class TextareaField extends InputField {
 }
 
 /*
- * Een textarea die groter wordt als de inhoud niet meer in het veld past.
+ * een Textarea die groter wordt als de inhoud niet meer in het veld past.
  */
 
-class AutotesizeTextareaField extends TextareaField {
+class AutoresizeTextField extends TextField {
 
 	public function __construct($name, $value, $description = null, $max_len = 255, $placeholder = null) {
 		parent::__construct($name, $value, $description, 1, $max_len);
-		$this->css_classes[] = 'wantsAutoresize';
+		$this->inputClasses[] = 'wantsAutoresize';
 		$this->placeholder = $placeholder;
 	}
 
 	public function getJavascript() {
-// maakt een verborgen div met dezelfde eigenschappen als de textarea
-// en gebruikt autoresize eigenschappen van de div om de hoogte te bepalen voor de textarea
+		// maakt een verborgen div met dezelfde eigenschappen als de textarea
+		// en gebruikt autoresize eigenschappen van de div om de hoogte te bepalen voor de textarea
 		return <<<JS
 $('.wantsAutoresize').each(function(){
 	var textarea=$(this);
@@ -506,6 +435,12 @@ JS;
 
 }
 
+class RequiredAutoresizeTextField extends AutoresizeTextField {
+
+	public $notnull = true;
+
+}
+
 /**
  * Textarea met een ubb-preview erbij. De hele ubb-preview wordt gemaakt
  * door de javascript in de klasse Formulier, op alle textarea's met
@@ -514,13 +449,13 @@ JS;
  * met previewOnEnter() is klikken op het voorbeeld-knopje niet meer
  * nodig, er wordt een voorbeeld gemaakt bij het op enter drukken.
  */
-class PreviewTextField extends TextareaField {
+class PreviewTextField extends TextField {
 
 	private $previewOnEnter = false;
 
 	public function __construct($name, $value, $description = null) {
 		parent::__construct($name, $value, $description);
-		$this->css_classes[] = 'wantsPreview';
+		$this->inputClasses[] = 'wantsPreview';
 	}
 
 	/**
@@ -554,12 +489,12 @@ $('.wantsPreview').each(function(){
 	textarea.wrap('<div class="UBBpreview regular"  style="width: '+(textarea.width()+6)+'px" />')
 			.before('<div id="preview_'+fieldname+'" class="preview" style="display: none;"></div>')
 			.after($('<a style="float: left; margin-left: 0px;" class="knop">voorbeeld</a>').click(triggerPreview))
-			.after($('<a style="float: right;" class="knop" title="Opmaakhulp weergeven" onclick="$(\'#ubbhulpverhaal\').toggle();">UBB</a>'))
+			.after($('<a style="float: right;" class="knop" title="Opmaakhulp weergeven" onclick="toggleDiv(\'ubbhulpverhaal\')">UBB</a>'))
 			.after($('<a style="float: right; margin-right: 0px" class="knop" title="Vergroot het invoerveld"><strong>&uarr;&darr;</strong></a>').click(vergrootTextarea));
 
 JS;
-//We voegen een keyup-event toe dat bij elke enter een nieuwe
-//preview opvraagt.
+		//We voegen een keyup-event toe dat bij elke enter een nieuwe
+		//preview opvraagt.
 		if ($this->previewOnEnter) {
 			$js.=<<<JS
 	textarea.keyup(
@@ -570,10 +505,57 @@ JS;
 		});
 JS;
 		}
-//en de .each() nog afsluiten
+		//en de .each() nog afsluiten
 		$js.="});\n";
 		return $js;
 	}
+
+}
+
+class RequiredPreviewTextField extends PreviewTextField {
+
+	public $notnull = true;
+
+}
+
+/**
+ * Een InputField is een elementaire input-tag en heeft een maximale lengte.
+ * HTML wordt ge-escaped.
+ * Uiteraard kunnen er suggesties worden opgegeven.
+ */
+class InputField extends FormField {
+
+	public $max_len = 255;
+
+	public function __construct($name, $value, $description, $max_len = 255, $suggestions = array()) {
+		parent::__construct($name, htmlspecialchars_decode($value), $description);
+		$this->max_len = (int) $max_len;
+		parent::setSuggestions($suggestions);
+	}
+
+	public function validate() {
+		if (!parent::validate()) {
+			return false;
+		}
+		if ($this->getValue() == '') {
+			return true;
+		}
+
+		if (mb_strlen($this->getValue()) > $this->max_len) {
+			$this->error = 'Maximaal ' . $this->max_len . ' karakters toegestaan.';
+		}
+		return $this->error == '';
+	}
+
+	public function getValue() {
+		return htmlspecialchars(parent::getValue());
+	}
+
+}
+
+class RequiredInputField extends InputField {
+
+	public $notnull = true;
 
 }
 
@@ -581,7 +563,7 @@ JS;
  * CountryField met een aantal autocomplete suggesties voor landen.
  * Doet verder geen controle op niet-bestaande landen...
  */
-class CountryField extends SuggestionField {
+class CountryField extends FormField {
 
 	public function __construct($name, $value, $description) {
 		parent::__construct($name, $value, $description);
@@ -589,6 +571,12 @@ class CountryField extends SuggestionField {
 		$landSuggesties = array('Nederland', 'België', 'Duitsland', 'Frankrijk', 'Verenigd Koninkrijk', 'Verenigde Staten');
 		$this->setSuggestions($landSuggesties);
 	}
+
+}
+
+class RequiredCountryField extends CountryField {
+
+	public $notnull = true;
 
 }
 
@@ -608,11 +596,17 @@ class UidField extends InputField {
 		if (!parent::validate()) {
 			return false;
 		}
-		// als er iets wordt ingevuld, moet het een geldig uid zijn.
+
+		//leeg veld wel accepteren.
+		if ($this->getValue() == '') {
+			return true;
+		}
+
+		//maar als er iets wordt ingevuld, moet het wel een uid zijn.
 		if (!Lid::exists($this->getValue())) {
 			$this->error = 'Geen geldig uid opgegeven.';
 		}
-		return $this->error === null;
+		return $this->error == '';
 	}
 
 	/**
@@ -647,10 +641,10 @@ JS;
  * één lid selecteren zonder een uid te hoeven typen.
  *
  */
-class LidField extends InputField {
+class LidField extends FormField {
 
-// zoekfilter voor door namen2uid gebruikte Zoeker::zoekLeden. 
-// geaccepteerde input: 'leden', 'oudleden', 'alleleden', 'allepersonen', 'nobodies'
+	// zoekfilter voor door namen2uid gebruikte Zoeker::zoekLeden. 
+	// geaccepteerde input: 'leden', 'oudleden', 'alleleden', 'allepersonen', 'nobodies'
 	private $zoekin;
 
 	public function __construct($name, $value, $description = null, $zoekin = 'leden') {
@@ -663,21 +657,30 @@ class LidField extends InputField {
 			$zoekin = 'leden';
 		}
 		$this->zoekin = $zoekin;
-		$this->remotedatasource = '/tools/naamsuggesties/' . $this->zoekin;
-		$this->css_classes[] = 'wantsLidPreview';
+		$this->setRemoteSuggestionsSource('/tools/naamsuggesties/' . $this->zoekin);
+		$this->inputClasses[] = 'wantsLidPreview';
 	}
 
 	/**
 	 * LidField::getValue() levert altijd een uid of '' op.
 	 */
 	public function getValue() {
-		if (parent::getValue() === null OR parent::getValue() === '') { // leeg veld meteen teruggeven
+		//leeg veld meteen teruggeven
+		if ($this->getOriginalValue() == '') {
 			return '';
 		}
-		if ($uid = namen2uid(parent::getValue(), $this->zoekin) AND isset($uid[0]['uid'])) { // uid opzoeken
+		//uid opzoeken
+		if ($uid = namen2uid($this->getOriginalValue(), $this->zoekin) AND isset($uid[0]['uid'])) {
 			return $uid[0]['uid'];
 		}
 		return '';
+	}
+
+	/**
+	 * getOriginalValue() levert het ingevoerde.
+	 */
+	public function getOriginalValue() {
+		return parent::getValue();
 	}
 
 	/**
@@ -687,7 +690,13 @@ class LidField extends InputField {
 		if (!parent::validate()) {
 			return false;
 		}
-		$uid = namen2uid(parent::getValue(), $this->zoekin);
+
+		//leeg veld wel accepteren.
+		if ($this->getOriginalValue() == '') {
+			return true;
+		}
+
+		$uid = namen2uid($this->getOriginalValue(), $this->zoekin);
 		if ($uid) {
 			if (isset($uid[0]['uid']) AND Lid::exists($uid[0]['uid'])) {
 				return true;
@@ -697,7 +706,7 @@ class LidField extends InputField {
 			}
 		}
 		$this->error = 'Geen geldig lid';
-		return false;
+		return $this->error == '';
 	}
 
 	/**
@@ -734,17 +743,33 @@ JS;
 
 }
 
+class RequiredLidField extends LidField {
+
+	public $notnull = true;
+
+	public function validate() {
+		if (!parent::validate()) {
+			return false;
+		}
+		if ($this->getValue() == '') {
+			$this->error = 'Dit is een verplicht veld.';
+		}
+		return $this->error == '';
+	}
+
+}
+
 /**
  * StudieField
  *
  * Suggereert een aantal studies, doet verder geen controle op invoer.
  */
-class StudieField extends SuggestionField {
+class StudieField extends InputField {
 
 	public function __construct($name, $value, $description) {
 		parent::__construct($name, $value, $description, 100);
 
-//de studies aan de TU, even prefixen met 'TU Delft - '
+		//de studies aan de TU, even prefixen met 'TU Delft - '
 		$tustudies = array('BK', 'CT', 'ET', 'IO', 'LST', 'LR', 'MT', 'MST', 'TA', 'TB', 'TI', 'TN', 'TW', 'WB');
 		$tustudies = array_map(create_function('$value', 'return "TU Delft - ".$value;'), $tustudies);
 
@@ -755,7 +780,7 @@ class StudieField extends SuggestionField {
 
 }
 
-class EmailField extends InputField {
+class EmailField extends FormField {
 
 	/**
 	 * Dikke valideerfunctie voor emails.
@@ -764,19 +789,22 @@ class EmailField extends InputField {
 		if (!parent::validate()) {
 			return false;
 		}
-//bevat het email-adres een @
+		if ($this->getValue() == '') {
+			return true;
+		}
+		//bevat het email-adres een @
 		if (strpos($this->getValue(), '@') === false) {
 			$this->error = 'Ongeldig formaat email-adres';
 		} else {
-# anders gaan we m ontleden en controleren
+			# anders gaan we m ontleden en controleren
 			list ($usr, $dom) = explode('@', $this->getValue());
 			if (mb_strlen($usr) > 50) {
 				$this->error = 'Gebruik max. 50 karakters voor de @:';
 			} elseif (mb_strlen($dom) > 50) {
 				$this->error = 'Gebruik max. 50 karakters na de @:';
-# RFC 821 <- voorlopig voor JabberID even zelfde regels aanhouden
-# http://www.lookuptables.com/
-# Hmmmz, \x2E er uit gehaald ( . )
+				# RFC 821 <- voorlopig voor JabberID even zelfde regels aanhouden
+				# http://www.lookuptables.com/
+				# Hmmmz, \x2E er uit gehaald ( . )
 			} elseif (preg_match('/[^\x21-\x7E]/', $usr) OR preg_match('/[\x3C\x3E\x28\x29\x5B\x5D\x5C\x2C\x3B\x40\x22]/', $usr)) {
 				$this->error = 'Het adres bevat ongeldige karakters voor de @:';
 			} elseif (!preg_match('/^[a-z0-9]+([-.][a-z0-9]+)*\\.[a-z]{2,4}$/i', $dom)) {
@@ -787,27 +815,37 @@ class EmailField extends InputField {
 				$this->error = 'Het domein is niet geconfigureerd om email te ontvangen:';
 			}
 		}
-		return $this->error === null;
+		return $this->error == '';
 	}
+
+}
+
+class RequiredEmailField extends EmailField {
+
+	public $notnull = true;
 
 }
 
 /**
  * UrlField checked of de invoer op een url lijkt.
  */
-class UrlField extends InputField {
+class UrlField extends FormField {
 
 	public function validate() {
 		if (!parent::validate()) {
 			return false;
 		}
+		if ($this->getValue() == '') {
+			return true;
+		}
+
 		// controleren of het een geldige url is...
 		if (!is_utf8($this->getValue()) OR !preg_match('#([\w]+?://[^ "\n\r\t<]*?)#is', $this->getValue())) {
 			$this->error = 'Ongeldige karakters:';
 		} elseif ($this->max_len != null && mb_strlen($this->getValue()) > $this->max_len) {
 			$this->error = 'Gebruik maximaal ' . $this->max_len . ' karakters:';
 		}
-		return $this->error === null;
+		return $this->error == '';
 	}
 
 }
@@ -815,7 +853,7 @@ class UrlField extends InputField {
 /**
  * Invoeren van een integer. Eventueel met minima/maxima. Leeg evt. toegestaan.
  */
-class IntField extends InputField {
+class IntField extends FormField {
 
 	public $min = null;
 	public $max = null;
@@ -829,7 +867,7 @@ class IntField extends InputField {
 		if ($min !== null) {
 			$this->min = (int) $min;
 		}
-		$this->required = !$empty;
+		$this->notnull = !$empty;
 	}
 
 	public function getValue() {
@@ -837,18 +875,20 @@ class IntField extends InputField {
 	}
 
 	public function validate() {
-		if (!parent::validate()) {
+		if (!parent::validate()) { // als dit een veld verplicht is heeft het in FormField::validate() al een foutmelding opgeleverd.
 			return false;
 		}
-		if (!$this->required AND parent::getValue() === '') { // do not check if empty
-		} elseif (!preg_match('/\d+/', parent::getValue())) {
+
+		if (!$this->notnull AND parent::getValue() === '') {
+			// do not check if empty
+		} else if (!preg_match('/\d+/', parent::getValue())) {
 			$this->error = 'Alleen getallen toegestaan';
-		} elseif ($this->max !== null AND $this->getValue() > $this->max) {
+		} else if ($this->max !== null AND $this->getValue() > $this->max) {
 			$this->error = 'Maximale waarde is ' . $this->max . ' ';
-		} elseif ($this->min !== null AND $this->getValue() < $this->min) {
+		} else if ($this->min !== null AND $this->getValue() < $this->min) {
 			$this->error = 'Minimale waarde is ' . $this->min . ' ';
 		}
-		return $this->error === null;
+		return $this->error == '';
 	}
 
 }
@@ -856,7 +896,7 @@ class IntField extends InputField {
 /**
  * Invoeren van een float. Eventueel met minima/maxima. Leeg evt. toegestaan.
  */
-class FloatField extends InputField {
+class FloatField extends FormField {
 
 	public $min = null;
 	public $max = null;
@@ -870,7 +910,7 @@ class FloatField extends InputField {
 		if ($min !== null) {
 			$this->min = (float) $min;
 		}
-		$this->required = !$empty;
+		$this->notnull = !$empty;
 	}
 
 	public function getValue() {
@@ -878,18 +918,20 @@ class FloatField extends InputField {
 	}
 
 	public function validate() {
-		if (!parent::validate()) {
+		if (!parent::validate()) { // als dit een veld verplicht is heeft het in FormField::validate() al een foutmelding opgeleverd.
 			return false;
 		}
-		if (!$this->required AND strlen(parent::getValue()) === 0) { // do not check if empty
-		} elseif (!preg_match('/\d+(,{1}\d*)?/', str_replace('.', ',', parent::getValue()))) {
+
+		if (!$this->notnull AND strlen(parent::getValue()) === 0) {
+			// do not check if empty
+		} else if (!preg_match('/\d+(,{1}\d*)?/', str_replace('.', ',', parent::getValue()))) {
 			$this->error = 'Alleen komma-getallen toegestaan';
-		} elseif ($this->max !== null AND $this->getValue() > $this->max) {
+		} else if ($this->max !== null AND $this->getValue() > $this->max) {
 			$this->error = 'Maximale waarde is ' . $this->max . ' ';
-		} elseif ($this->min !== null AND $this->getValue() < $this->min) {
+		} else if ($this->min !== null AND $this->getValue() < $this->min) {
 			$this->error = 'Minimale waarde is ' . $this->min . ' ';
 		}
-		return $this->error === null;
+		return $this->error == '';
 	}
 
 }
@@ -897,10 +939,10 @@ class FloatField extends InputField {
 /**
  * Verborgen veld voor de gebruiker.
  */
-class HiddenField extends InputField {
+class HiddenField extends FormField {
 
 	public function view() {
-		echo '<input type="hidden"' . $this->getAttribute(array('id', 'name', 'class', 'value', 'origvalue', 'disabled', 'maxlength', 'placeholder', 'autocomplete')) . ' />';
+		echo '<input type="hidden"' . $this->getInputAttribute(array('id', 'name', 'class', 'value', 'origvalue', 'disabled', 'maxlength', 'placeholder', 'autocomplete')) . ' />';
 	}
 
 }
@@ -910,7 +952,7 @@ class HiddenField extends InputField {
  *
  * is pas valid als dit lid de enige is met deze nick.
  */
-class NickField extends InputField {
+class NickField extends FormField {
 
 	public $max_len = 20;
 
@@ -918,16 +960,22 @@ class NickField extends InputField {
 		if (!parent::validate()) {
 			return false;
 		}
+
+		//lege nicknames vinden we prima.
+		if ($this->getValue() == '') {
+			return true;
+		}
+
 		if (!is_utf8($this->getValue())) {
 			$this->error = 'Ongeldige karakters, gebruik reguliere tekst.';
 		} elseif (mb_strlen($this->getValue()) > $this->max_len) {
 			$this->error = 'Gebruik maximaal ' . $this->max_len . ' karakters.';
-# 2e check met strtolower is toegevoegd omdat je anders je eigen nick niet van case kan veranderen
-# omdat this->nickExists in mysql case-insensitive zoek
+			# 2e check met strtolower is toegevoegd omdat je anders je eigen nick niet van case kan veranderen
+			# omdat this->nickExists in mysql case-insensitive zoek
 		} elseif (strtolower($lid->getNickname()) != strtolower($this->getValue()) AND Lid::nickExists($this->getValue())) {
 			$this->error = 'Deze bijnaam is al in gebruik.';
 		}
-		return $this->error === null;
+		return $this->error == '';
 	}
 
 }
@@ -944,11 +992,14 @@ class TelefoonField extends InputField {
 		if (!parent::validate()) {
 			return false;
 		}
+		if ($this->getValue() == '') {
+			return true;
+		}
 		if (!preg_match('/^([\d\+\-]{10,20})$/', $this->getValue())) {
 			$this->error = 'Geen geldig telefoonnummer.';
 		}
 
-		return $this->error === null;
+		return $this->error == '';
 	}
 
 }
@@ -959,7 +1010,7 @@ class TelefoonField extends InputField {
  * Aanpassen van wachtwoorden.
  * Vreemde eend in de 'bijt', deze unit produceert 3 velden: oud, nieuw en bevestiging.
  */
-class PassField extends InputField {
+class PassField extends FormField {
 
 	public function __construct($name) {
 		$this->name = $name;
@@ -1004,13 +1055,13 @@ class PassField extends InputField {
 		if ($new != '' AND $current == '') {
 			$this->error = 'U dient uw huidige wachtwoord ook in te voeren';
 		}
-		return $this->error === null;
+		return $this->error == '';
 	}
 
 	public function view() {
 		echo $this->getDiv();
 		echo '<div class="password">';
-		echo $this->getErrorDiv();
+		echo $this->getError();
 		echo '<label for="field_' . $this->name . '_current">Huidige wachtwoord</label>';
 		echo '<input type="password" autocomplete="off" id="field_' . $this->name . '_current" name="' . $this->name . '_current" /></div>';
 		echo '<div class="password"><label for="field_' . $this->name . '_new">Nieuw wachtwoord</label>';
@@ -1018,6 +1069,10 @@ class PassField extends InputField {
 		echo '<div class="password"><label for="field_' . $this->name . '_confirm">Nogmaals</label>';
 		echo '<input type="password" autocomplete="off" id="field_' . $this->name . '_confirm" name="' . $this->name . '_confirm" /></div>';
 		echo '</div>';
+	}
+
+	public function getJavascript() {
+		return '';
 	}
 
 }
@@ -1028,23 +1083,23 @@ class PassField extends InputField {
  *
  * is valid als één van de opties geselecteerd is //TODO: of meerdere
  */
-class SelectField extends InputField {
+class SelectField extends FormField {
 
 	public $options;
-	public $css_options;
+	public $cssOptions;
 	public $size;
 	public $multiple; //TODO
 
-	public function __construct($name, $value, $description, array $options, $css_options = array(), $size = 1, $multiple = false) {
+	public function __construct($name, $value, $description, array $options, $cssOptions = array(), $size = 1, $multiple = false) {
 		parent::__construct($name, $value, $description);
 		$this->options = $options;
-		$this->css_options = $css_options;
+		$this->cssOptions = $cssOptions;
 		$this->size = (int) $size;
 		$this->multiple = $multiple;
 		if (count($this->options) < 1) {
 			throw new Exception('Tenminste 1 optie nodig voor selectieveld: ' . $name);
 		}
-		$this->required = true;
+		$this->notnull = true;
 	}
 
 	public function validate() {
@@ -1052,64 +1107,38 @@ class SelectField extends InputField {
 			if ($this->getValue() !== null) {
 				$this->error = 'Onbekende optie gekozen';
 			}
-			if ($this->size === 1 && !parent::isvalidate()) {
+			if ($this->size === 1 && !parent::isValid()) {
 				return false;
 			}
 		}
-		return $this->error === null;
+		return $this->error == '';
 	}
 
 	public function view() {
 		echo $this->getDiv();
 		echo $this->getLabel();
-		echo $this->getErrorDiv();
+		echo $this->getError();
 
-		echo '<select origvalue="' . $this->orig_value . '" ';
+		echo '<select origvalue="' . $this->origvalue . '" ';
 		if ($this->multiple) {
 			echo 'multiple ';
 		}
 		if ($this->size > 1) {
 			echo 'size="' . $this->size . '"';
 		}
-		echo $this->getAttribute(array('id', 'name', 'class', 'disabled', 'onchange', 'onclick')) . '>';
+		echo $this->getInputAttribute(array('id', 'name', 'class', 'disabled', 'onchange', 'onclick')) . '>';
 
 		foreach ($this->options as $value => $description) {
 			echo '<option value="' . $value . '"';
 			if ($value == $this->value) {
 				echo ' selected="selected"';
 			}
-			if (array_key_exists($value, $this->css_options)) {
-				echo ' class="' . $this->css_options[$value] . '"';
+			if (array_key_exists($value, $this->cssOptions)) {
+				echo ' class="' . $this->cssOptions[$value] . '"';
 			}
 			echo '>' . htmlspecialchars($description) . '</option>';
 		}
 		echo '</select>';
-
-		echo '</div>';
-	}
-
-}
-
-class KeuzeRondjeField extends SelectField {
-
-	public function __construct($name, $value, $description, array $options) {
-		parent::__construct($name, $value, $description, $options, array(), 1, false);
-	}
-
-	public function view() {
-		echo $this->getDiv();
-		echo $this->getLabel();
-		echo $this->getErrorDiv();
-
-		echo '<div style="float: left;">';
-		foreach ($this->options as $value => $description) {
-			echo '<input type="radio" id="field_' . $this->getName() . '_option_' . $value . '" value="' . $value . '"' . $this->getAttribute(array('name', 'origvalue', 'class', 'disabled', 'onchange', 'onclick'));
-			if ($value == $this->value) {
-				echo ' checked="checked"';
-			}
-			echo '><label for="field_' . $this->getName() . '_option_' . $value . '" ' . $this->getAttribute('class') . '> ' . htmlspecialchars($description) . '</label><br />';
-		}
-		echo '</div>';
 
 		echo '</div>';
 	}
@@ -1180,13 +1209,45 @@ class KerkField extends SelectField {
 }
 
 /**
+ * KeuzeRondjeField
+ * Zelfde soort mogelijkheden als een SelectField, maar dan minder klikken
+ *
+ * is valid als één van de opties geselecteerd is
+ */
+class KeuzeRondjeField extends SelectField {
+
+	public function __construct($name, $value, $description, array $options) {
+		parent::__construct($name, $value, $description, $options, array(), 1, false);
+	}
+
+	public function view() {
+		echo $this->getDiv();
+		echo $this->getLabel();
+		echo $this->getError();
+
+		echo '<div style="float: left;">';
+		foreach ($this->options as $value => $description) {
+			echo '<input type="radio" id="field_' . $this->getName() . '_option_' . $value . '" value="' . $value . '"' . $this->getInputAttribute(array('name', 'origvalue', 'class', 'disabled', 'onchange', 'onclick'));
+			if ($value == $this->value) {
+				echo ' checked="checked"';
+			}
+			echo '><label for="field_' . $this->getName() . '_option_' . $value . '" ' . $this->getInputAttribute('class') . '> ' . htmlspecialchars($description) . '</label><br />';
+		}
+		echo '</div>';
+
+		echo '</div>';
+	}
+
+}
+
+/**
  * DatumField
  *
  * Selecteer een datum, met een mogelijk maximum jaar.
  *
  * Produceert drie velden.
  */
-class DatumField extends InputField {
+class DatumField extends FormField {
 
 	protected $maxyear;
 	protected $minyear;
@@ -1240,26 +1301,26 @@ class DatumField extends InputField {
 		} elseif ($this->getValue() != '0000-00-00' AND !checkdate($this->getMaand(), $this->getDag(), $this->getJaar())) {
 			$this->error = 'Datum bestaat niet';
 		}
-		return $this->error === null;
+		return $this->error == '';
 	}
 
 	public function view() {
 		echo $this->getDiv();
 		echo $this->getLabel();
-		echo $this->getErrorDiv();
+		echo $this->getError();
 
 		$years = range($this->minyear, $this->maxyear);
 		$mounths = range(1, 12);
 		$days = range(1, 31);
 
-//als de datum al nul is, moet ie dat ook weer kunnen worden...
+		//als de datum al nul is, moet ie dat ook weer kunnen worden...
 		if ($this->getValue() == '0000-00-00' OR $this->getValue() == 0) {
 			$years[] = '0000';
 			$mounths[] = 0;
 			$days[] = 0;
 		}
 
-		echo '<select id="field_' . $this->name . '_dag" name="' . $this->name . '_dag" origvalue="' . substr($this->orig_value, 8, 2) . '" ' . $this->getAttribute('class') . '>';
+		echo '<select id="field_' . $this->name . '_dag" name="' . $this->name . '_dag" origvalue="' . substr($this->origvalue, 8, 2) . '" ' . $this->getInputAttribute('class') . '>';
 		foreach ($days as $value) {
 			$value = sprintf('%02d', $value);
 			echo '<option value="' . $value . '"';
@@ -1270,7 +1331,7 @@ class DatumField extends InputField {
 		}
 		echo '</select> ';
 
-		echo '<select id="field_' . $this->name . '_maand" name="' . $this->name . '_maand" origvalue="' . substr($this->orig_value, 5, 2) . '" ' . $this->getAttribute('class') . '>';
+		echo '<select id="field_' . $this->name . '_maand" name="' . $this->name . '_maand" origvalue="' . substr($this->origvalue, 5, 2) . '" ' . $this->getInputAttribute('class') . '>';
 		foreach ($mounths as $value) {
 			$value = sprintf('%02d', $value);
 			echo '<option value="' . $value . '"';
@@ -1282,7 +1343,7 @@ class DatumField extends InputField {
 		}
 		echo '</select> ';
 
-		echo '<select id="field_' . $this->name . '_jaar" name="' . $this->name . '_jaar" origvalue="' . substr($this->orig_value, 0, 4) . '" ' . $this->getAttribute('class') . '>';
+		echo '<select id="field_' . $this->name . '_jaar" name="' . $this->name . '_jaar" origvalue="' . substr($this->origvalue, 0, 4) . '" ' . $this->getInputAttribute('class') . '>';
 		foreach ($years as $value) {
 			echo '<option value="' . $value . '"';
 			if ($value == substr($this->value, 0, 4)) {
@@ -1296,7 +1357,7 @@ class DatumField extends InputField {
 
 }
 
-class TijdField extends InputField {
+class TijdField extends FormField {
 
 	protected $minutensteps;
 
@@ -1338,18 +1399,18 @@ class TijdField extends InputField {
 		} elseif (substr($this->getValue(), 0, 2) > 23 OR substr($this->getValue(), 3, 5) > 59) {
 			$this->error = 'Tijdstip bestaat niet';
 		}
-		return $this->error === null;
+		return $this->error == '';
 	}
 
 	public function view() {
 		echo $this->getDiv();
 		echo $this->getLabel();
-		echo $this->getErrorDiv();
+		echo $this->getError();
 
 		$hours = range(0, 23);
 		$minutes = range(0, 59, $this->minutensteps);
 
-		echo '<select id="field_' . $this->name . '_uur" name="' . $this->name . '_uur" origvalue="' . substr($this->orig_value, 0, 2) . '" ' . $this->getAttribute('class') . '>';
+		echo '<select id="field_' . $this->name . '_uur" name="' . $this->name . '_uur" origvalue="' . substr($this->origvalue, 0, 2) . '" ' . $this->getInputAttribute('class') . '>';
 		foreach ($hours as $value) {
 			$value = sprintf('%02d', $value);
 			echo '<option value="' . $value . '"';
@@ -1360,7 +1421,7 @@ class TijdField extends InputField {
 		}
 		echo '</select> ';
 
-		echo '<select id="field_' . $this->name . '_minuut" name="' . $this->name . '_minuut" origvalue="' . substr($this->orig_value, 3, 2) . '" ' . $this->getAttribute('class') . '>';
+		echo '<select id="field_' . $this->name . '_minuut" name="' . $this->name . '_minuut" origvalue="' . substr($this->origvalue, 3, 2) . '" ' . $this->getInputAttribute('class') . '>';
 		$previousvalue = 0;
 		foreach ($minutes as $value) {
 			$value = sprintf('%02d', $value);
@@ -1377,9 +1438,7 @@ class TijdField extends InputField {
 
 }
 
-class VinkField extends InputField {
-
-	public $required = false;
+class VinkField extends FormField {
 
 	public function getValue() {
 		if (parent::isPosted()) {
@@ -1390,18 +1449,18 @@ class VinkField extends InputField {
 	}
 
 	public function validate() {
-		if ($this->required AND (boolean) $this->getValue() === false) {
+		if ($this->notnull AND $this->getValue() == false) {
 			$this->error = 'Dit is een verplicht veld.';
 		}
-		return $this->error === null;
+		return $this->error == '';
 	}
 
 	public function view() {
 		echo $this->getDiv();
 		echo $this->getLabel();
-		echo $this->getErrorDiv();
+		echo $this->getError();
 
-		echo '<input type="checkbox"' . $this->getAttribute(array('id', 'name', 'value', 'origvalue', 'class', 'disabled', 'onchange', 'onclick'));
+		echo '<input type="checkbox"' . $this->getInputAttribute(array('id', 'name', 'value', 'origvalue', 'class', 'disabled', 'onchange', 'onclick'));
 		if ($this->value) {
 			echo ' checked="checked" ';
 		}
@@ -1412,10 +1471,16 @@ class VinkField extends InputField {
 
 }
 
+class RequiredVinkField extends VinkField {
+
+	public $notnull = true;
+
+}
+
 /**
  * SubmitButton.
  */
-class SubmitButton extends InputField {
+class SubmitButton extends FormElement {
 
 	protected $buttontext;
 	protected $extra = '';
@@ -1436,12 +1501,16 @@ class SubmitButton extends InputField {
 HTML;
 	}
 
+	public function getJavascript() {
+		
+	}
+
 }
 
 /**
  * Commentaardingen voor formulieren
  */
-class HTMLComment extends InputField {
+class HTMLComment extends FormElement {
 
 	public $comment;
 
@@ -1451,6 +1520,10 @@ class HTMLComment extends InputField {
 
 	public function view() {
 		echo $this->comment;
+	}
+
+	public function getJavascript() {
+		
 	}
 
 }

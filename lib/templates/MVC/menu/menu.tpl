@@ -10,11 +10,11 @@
 		<ul id="mainmenu">
 			{foreach from=$root->children item=item}
 				<li>
-					<a href="{$item->link}" id="top{$item->id}" onmouseover="StartShowMenu('{$item->id}');" onmouseout="ResetShowMenu();"{if $item->isParentOf($huidig)} class="active"{/if} title="{$item->tekst}">{$item->tekst}</a>
+					<a href="{$item->link}" id="top{$item->menu_id}" onmouseover="StartShowMenu('{$item->menu_id}');" onmouseout="ResetShowMenu();"{if $item->isParentOf($huidig)} class="active"{/if} title="{$item->tekst}">{$item->tekst}</a>
 					{if $item->isParentOf($huidig)}
 						<script type="text/javascript">
-							SetActive({$item->id});
-							document.getElementById('banner'+{$item->id}).style.display = "inline";
+							SetActive({$item->menu_id});
+							document.getElementById('banner'+{$item->menu_id}).style.display = "inline";
 							fixPNG('imgbanner1');
 						</script>
 					{/if}
@@ -114,7 +114,7 @@
 {foreach from=$root->children item=item}
 	{foreach name=sub from=$item->children item=subitem}
 		{if $smarty.foreach.sub.first}
-			<div id="sub{$item->id}"{if $item->isParentOf($huidig)} class="active"{/if}>
+			<div id="sub{$item->menu_id}"{if $item->isParentOf($huidig)} class="active"{/if}>
 		{/if}
 			<a href="{$subitem->link}" title="{$subitem->tekst}"{if $subitem === $huidig} class="active"{/if}>{$subitem->tekst}</a>
 		{if !$smarty.foreach.sub.last}

@@ -21,16 +21,16 @@ class MenuBeheerView extends TemplateView {
 	 */
 	private $tree_root;
 
-	public function __construct($menu_naam) {
+	public function __construct($menu) {
 		parent::__construct(new MenuModel());
 		$this->menus = $this->model->getAlleMenus();
-		$items = $this->model->getMenuItems($menu_naam);
-		$this->tree_root = $this->model->buildMenuTree($menu_naam, $items);
+		$items = $this->model->getMenuItems($menu);
+		$this->tree_root = $this->model->buildMenuTree($menu, $items);
 	}
 
 	public function getTitel() {
-		if ($this->tree_root !== null && $this->tree_root->menu_naam !== '') {
-			return 'Beheer ' . $this->tree_root->menu_naam . '-menu';
+		if ($this->tree_root !== null && $this->tree_root->menu !== '') {
+			return 'Beheer ' . $this->tree_root->menu . '-menu';
 		}
 		return 'Menubeheer';
 	}

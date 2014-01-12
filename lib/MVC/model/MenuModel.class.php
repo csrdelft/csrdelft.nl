@@ -16,7 +16,7 @@ class MenuModel extends PersistenceModel {
 	 * @return array
 	 */
 	public function getAlleMenus() {
-		$sql = 'SELECT DISTINCT menu_naam FROM menus';
+		$sql = 'SELECT DISTINCT menu FROM menus';
 		$query = Database::instance()->prepare($sql);
 		$query->execute();
 		return $query->fetchAll(PDO::FETCH_COLUMN, 0);
@@ -24,7 +24,7 @@ class MenuModel extends PersistenceModel {
 
 	public function getMenuItem($id) {
 		$item = new MenuItem();
-		$item->id = $id;
+		$item->menu_id = $id;
 		return $this->retrieve($item);
 	}
 
@@ -36,7 +36,7 @@ class MenuModel extends PersistenceModel {
 	 * @return MenuItem[]
 	 */
 	public function getMenuItems($menu, $zichtbaar = null) {
-		$where = 'menu_naam = ?';
+		$where = 'menu = ?';
 		$params = array($menu);
 		if ($zichtbaar !== null) {
 			$where .= ' AND zichtbaar = ' . ($zichtbaar ? 'true' : 'false');
@@ -73,16 +73,16 @@ class MenuModel extends PersistenceModel {
 
 	public function buildMenuTree($menu_naam, $menuitems) {
 		$root = new MenuItem();
-		$root->id = '0';
+		$root->menu_id = '0';
 		$root->tekst = $menu_naam;
-		$root->menu_naam = $menu_naam;
+		$root->menu = $menu_naam;
 		$root->addChildren($menuitems); // recursive
 		$root->id = false;
 		return $root;
 	}
 
 	public function wijzigProperty($id, $property, $value) {
-		$rowcount = Database::sqlUpdate('menus', array($property => $value), 'id = :id', array(':id' => $id));
+		$rowcount = Database::sqlUpdate('menus', array($property => $value), 'menu_id = :id', array(':id' => $id));
 		if ($rowcount !== 1) {
 			throw new Exception('wijzigProperty rowCount=' . $rowcount);
 		}

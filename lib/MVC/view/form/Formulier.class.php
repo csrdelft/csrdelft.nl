@@ -13,14 +13,13 @@ require_once 'MVC/view/form/FormElement.abstract.php';
  */
 class Formulier implements View, Validator {
 
-	private $id;
-	private $method = 'post';
+	private $action;
 	private $fields;
-	public $action;
-	public $css_classes = array('Formulier');
+	private $formId;
+	public $cssClass = 'Formulier';
 
-	public function __construct($id, $action = null, array $fields = array()) {
-		$this->id = $id;
+	public function __construct($formId, $action = '', $fields = array()) {
+		$this->formId = $formId;
 		$this->action = $action;
 		$this->fields = $fields;
 	}
@@ -29,54 +28,47 @@ class Formulier implements View, Validator {
 		return $this;
 	}
 
+	public function setAction($action) {
+		$this->action = $action;
+	}
+
+	public function getAction() {
+		return $this->action;
+	}
+
 	public function getFormId() {
-		return $this->id;
-	}
-
-	public function getMethod() {
-		return $this->method;
-	}
-
-	public function setMethod($method) {
-		if ($method === 'post' OR $method === 'post') {
-			$this->method = $method;
-			return true;
-		}
-		return false;
-	}
-
-	/**
-	 * Is het gehele formulier gepost?
-	 */
-	public function isPosted() {
-		$posted = true;
-		foreach ($this->getFields() as $field) {
-			if ($field instanceof InputField AND !$field->isPosted()) {
-				$posted = false;
-			}
-		}
-		return $posted;
-	}
-
-	public function addField(InputField $field) {
-		$this->fields[] = $field;
-	}
-
-	public function addFields(array $fields) {
-		$this->fields = array_merge($this->fields, $fields);
+		return $this->formId;
 	}
 
 	public function getFields() {
 		return $this->fields;
 	}
 
+	public function addFields($fields) {
+		$this->fields = array_merge($this->fields, $fields);
+	}
+
 	/**
-	 * Geeft waardes van de formuliervelden terug.
+	 * Is het formulier *helemaal* gePOST?
+	 */
+	public function isPosted() {
+		$posted = false;
+		foreach ($this->getFields() as $field) {
+			if ($field instanceof FormField AND $field->isPosted()) {
+				$posted = true;
+			}
+		}
+		return $posted;
+	}
+
+	/**
+	 * Geeft waardes van de formuliervelden terug
 	 */
 	public function getValues() {
 		$values = array();
+		/** @var $field FormField */
 		foreach ($this->getFields() as $field) {
-			if ($field instanceof InputField) {
+			if ($field instanceof FormField) {
 				$values[$field->getName()] = $field->getValue();
 			}
 		}
@@ -84,25 +76,9 @@ class Formulier implements View, Validator {
 	}
 
 	/**
-	 * Heeft het formulier een error?
+	 * Alle valid-functies krijgen eventueel een model mee om tegen te valideren.
 	 */
-	public function getError() {
-		$error = array();
-		foreach ($this->getFields() as $field) {
-			if ($field instanceof InputField) {
-				if ($field->getErrorDiv() !== '') {
-					$error[] = $field->getErrorDiv();
-				}
-			}
-		}
-		return $error;
-	}
-
-	/**
-	 * Alle valid-functies krijgen een argument mee, wat kan wisselen per
-	 * gemaakt formulier.
-	 */
-	public function validate($extra = null) {
+	public function validate($model = null) {
 		if (!$this->isPosted()) {
 			$this->error = 'Formulier is niet compleet';
 			return false;
@@ -111,16 +87,21 @@ class Formulier implements View, Validator {
 		$valid = true;
 		foreach ($this->getFields() as $field) {
 			//we checken alleen de formfields, niet de comments enzo.
-			if ($field instanceof InputField AND !$field->validate($extra)) {
+			if ($field instanceof FormField AND !$field->validate($model)) {
 				$valid = false;
 			}
 		}
 		return $valid;
 	}
 
-	public function getFieldByName($fieldname) {
+	public function getError() {
+		return $this->error;
+	}
+
+	public function findByName($fieldname) {
 		foreach ($this->fields as $field) {
-			if ($field->getName() == $fieldname) {
+			//we checken alleen de formfields, niet de comments enzo.
+			if ($field instanceof FormField AND $field->getName() == $fieldname) {
 				return $field;
 			}
 		}
@@ -128,18 +109,28 @@ class Formulier implements View, Validator {
 	}
 
 	/**
-	 * Displays form including javascript for autocomplete.
+	 * Poept het formulier uit, inclusief <form>-tag, en de javascript
+	 * voor de autocomplete...
 	 */
-	public function view() {
-		echo '<form id="' . $this->id . '" action="' . $this->action . '" method="' . $this->method . '"class="' . implode(' ', $this->css_classes) . '">';
+	public function view($compleetformulier = true) {
+		if ($compleetformulier) {
+			echo '<form action="' . $this->action . '" id="' . $this->formId . '" class="' . $this->cssClass . '" method="post">' . "\n";
+			echo '<script type="text/javascript">if(FieldSuggestions==undefined){var FieldSuggestions=[];} </script>';
+		}
+
 		$javascript = array();
 		foreach ($this->getFields() as $field) {
-			$field->view();
-			$javascript[] = $field->getJavascript();
+			if ($compleetformulier) {
+				$field->view();
+			}
+			$js = $field->getJavascript();
+			$javascript[md5($js)] = $js . "\n";
 		}
-		$javascript[] = 'if(FieldSuggestions==undefined){var FieldSuggestions=[];}';
-		echo '<script type="text/javascript">jQuery(document).ready(function($){' . "\n" . implode("\n", $javascript) . "\n" . '});</script>';
-		echo '</form>';
+
+		echo '<script type="text/javascript">jQuery(document).ready(function($){' . "\n" . implode($javascript) . "\n" . '});</script>';
+		if ($compleetformulier) {
+			echo '</form>';
+		}
 	}
 
 }
