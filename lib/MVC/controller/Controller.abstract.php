@@ -13,10 +13,27 @@
  */
 abstract class Controller {
 
+	/**
+	 * Is this controller called with key-value-pair (KVP)
+	 * or representational state transfer (REST)
+	 * @var boolean
+	 */
 	private $kvp = false;
+	/**
+	 * Broken down query to (named) parameters
+	 * @var array
+	 */
 	private $queryparts = array();
+	/**
+	 * Action to be performed
+	 * @var string
+	 */
 	protected $action = '';
-	protected $content = null;
+	/**
+	 * The view to be shown
+	 * @var View
+	 */
+	protected $view = null;
 
 	public function __construct($querystring) {
 		$this->kvp = strpos($querystring, '?');
@@ -52,7 +69,7 @@ abstract class Controller {
 	}
 
 	public function getContent() {
-		return $this->content;
+		return $this->view;
 	}
 
 	public function hasAction($action) {

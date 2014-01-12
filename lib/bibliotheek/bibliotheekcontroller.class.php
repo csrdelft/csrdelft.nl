@@ -72,7 +72,7 @@ class BibliotheekController extends Controller {
 	 * 
 	 */
 	protected function catalogustonen() {
-		$this->content = new BibliotheekCatalogusContent();
+		$this->view = new BibliotheekCatalogusContent();
 	}
 
 	/**
@@ -80,8 +80,8 @@ class BibliotheekController extends Controller {
 	 */
 	protected function catalogusdata() {
 		$catalogus = new Catalogus();
-		$this->content = new BibliotheekCatalogusDatatableContent($catalogus);
-		$this->content->view();
+		$this->view = new BibliotheekCatalogusDatatableContent($catalogus);
+		$this->view->view();
 		exit;
 	}
 
@@ -118,7 +118,7 @@ class BibliotheekController extends Controller {
 	 */
 	protected function boek() {
 		$this->loadBoek();
-		$this->content = new BibliotheekBoekContent($this->boek);
+		$this->view = new BibliotheekBoekContent($this->boek);
 	}
 
 	/**
@@ -168,7 +168,7 @@ class BibliotheekController extends Controller {
 		if ($this->boek->validFormulier() AND $this->boek->saveFormulier()) {
 			header('location: ' . CSR_ROOT . 'communicatie/bibliotheek/boek/' . $this->boek->getId());
 		} else {
-			$this->content = new BibliotheekBoekContent($this->boek);
+			$this->view = new BibliotheekBoekContent($this->boek);
 		}
 	}
 
@@ -206,7 +206,7 @@ class BibliotheekController extends Controller {
 		if ($this->boek->validFormulier() AND $this->boek->saveFormulier()) {
 			header('location: ' . CSR_ROOT . 'communicatie/bibliotheek/boek/' . $this->boek->getId() . '#beschrijving' . $this->boek->getEditBeschrijving()->getId());
 		} else {
-			$this->content = new BibliotheekBoekContent($this->boek);
+			$this->view = new BibliotheekBoekContent($this->boek);
 		}
 	}
 

@@ -125,7 +125,7 @@ class Database extends PDO {
 		$query = self::instance()->prepare($sql, $params);
 		$query->execute($params);
 		if ($query->rowCount() !== 1) {
-			throw new Exception('insert row count: ' . $query->rowCount());
+			throw new Exception('sqlInsert rowCount=' . $query->rowCount());
 		}
 		return self::instance()->lastInsertId();
 	}
@@ -143,8 +143,8 @@ class Database extends PDO {
 		$sql = 'UPDATE ' . $table . ' SET ';
 		$fields = array();
 		foreach ($set_properties as $key => $value) {
-			$fields[] = $key . ' = :sql' . $key;
-			$where_params[':sql' . $key] = $value; // named params
+			$fields[] = $key . ' = :sql' . $key; // sql prefix
+			$where_params[':sql' . $key] = $value; // named parameters
 		}
 		$sql .= implode(', ', $fields);
 		$sql .= ' WHERE ' . $where;

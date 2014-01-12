@@ -71,7 +71,7 @@ class AgendaController extends AclController {
 			$week = strftime('%U');
 		}
 
-		$this->content->setActie('week');
+		$this->view->setActie('week');
 	}
 
 	/**
@@ -96,7 +96,7 @@ class AgendaController extends AclController {
 			$maand = (int) substr($weergavedatum, 5);
 		}
 
-		$this->content = new AgendaMaandContent($this->agenda, $jaar, $maand);
+		$this->view = new AgendaMaandContent($this->agenda, $jaar, $maand);
 	}
 
 	/**
@@ -110,15 +110,15 @@ class AgendaController extends AclController {
 			$jaar = date('Y');
 		}
 
-		$this->content->setActie('jaar');
+		$this->view->setActie('jaar');
 	}
 
 	/**
 	 * iCalendar genereren.
 	 */
 	public function icalendar() {
-		$this->content = new AgendaIcalendarContent($this->agenda);
-		$this->content->view();
+		$this->view = new AgendaIcalendarContent($this->agenda);
+		$this->view->view();
 		exit;
 	}
 
@@ -149,8 +149,8 @@ class AgendaController extends AclController {
 			$item = new AgendaItem(0, $beginMoment, $eindMoment);
 		}
 
-		$this->content = new AgendaItemContent($this->agenda, $item, 'toevoegen');
-		$this->content->setMelding($this->errors);
+		$this->view = new AgendaItemContent($this->agenda, $item, 'toevoegen');
+		$this->view->setMelding($this->errors);
 	}
 
 	public function bewerken() {
@@ -172,8 +172,8 @@ class AgendaController extends AclController {
 			AgendaMaandContent::invokeRefresh('/actueel/agenda/', 'Agenda-item niet gevonden.');
 		}
 
-		$this->content = new AgendaItemContent($this->agenda, $item, 'toevoegen');
-		$this->content->setMelding($this->errors);
+		$this->view = new AgendaItemContent($this->agenda, $item, 'toevoegen');
+		$this->view->setMelding($this->errors);
 	}
 
 	public function verwijderen() {

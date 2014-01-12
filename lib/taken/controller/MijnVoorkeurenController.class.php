@@ -38,26 +38,26 @@ class MijnVoorkeurenController extends \AclController {
 	public function mijn() {
 		$voorkeuren = VoorkeurenModel::getVoorkeurenVoorLid(\LoginLid::instance()->getUid());
 		$eetwens = VoorkeurenModel::getEetwens(\LoginLid::instance()->getLid());
-		$this->content = new MijnVoorkeurenView($voorkeuren, $eetwens);
-		$this->content = new csrdelft($this->getContent());
-		$this->content->addStylesheet('taken.css');
-		$this->content->addScript('taken.js');
+		$this->view = new MijnVoorkeurenView($voorkeuren, $eetwens);
+		$this->view = new csrdelft($this->getContent());
+		$this->view->addStylesheet('taken.css');
+		$this->view->addScript('taken.js');
 	}
 	
 	public function inschakelen($crid) {
 		$abonnement = VoorkeurenModel::inschakelenVoorkeur($crid, \LoginLid::instance()->getUid());
-		$this->content = new MijnVoorkeurenView($abonnement);
+		$this->view = new MijnVoorkeurenView($abonnement);
 	}
 	
 	public function uitschakelen($crid) {
 		VoorkeurenModel::uitschakelenVoorkeur($crid, \LoginLid::instance()->getUid());
-		$this->content = new MijnVoorkeurenView($crid);
+		$this->view = new MijnVoorkeurenView($crid);
 	}
 	
 	public function eetwens() {
 		$eetwens = filter_input(INPUT_POST, 'eetwens', FILTER_SANITIZE_SPECIAL_CHARS);
 		VoorkeurenModel::setEetwens(\LoginLid::instance()->getLid(), $eetwens);
-		$this->content = new MijnVoorkeurenView(null, $eetwens);
+		$this->view = new MijnVoorkeurenView(null, $eetwens);
 	}
 }
 

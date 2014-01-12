@@ -32,16 +32,16 @@ class MaalCieSaldiController extends \AclController {
 	}
 	
 	public function beheer() {
-		$this->content = new MaalCieSaldiView();
-		$this->content = new csrdelft($this->getContent());
-		$this->content->addStylesheet('taken.css');
-		$this->content->addScript('taken.js');
+		$this->view = new MaalCieSaldiView();
+		$this->view = new csrdelft($this->getContent());
+		$this->view->addStylesheet('taken.css');
+		$this->view->addScript('taken.js');
 	}
 	
 	public function upload() {
 		$this->beheer();
 		$melding_level = \Saldi::putMaalcieCsv();
-		$this->content->setMelding($melding_level[0], $melding_level[1]);
+		$this->view->setMelding($melding_level[0], $melding_level[1]);
 	}
 	
 	public function sluitboekjaar() {
@@ -49,13 +49,13 @@ class MaalCieSaldiController extends \AclController {
 		if ($form->validate()) {
 			$values = $form->getValues();
 			$errors_aantal = MaaltijdenModel::archiveerOudeMaaltijden(strtotime($values['begindatum']), strtotime($values['einddatum']));
-			$this->content = new MaalCieSaldiView(true);
+			$this->view = new MaalCieSaldiView(true);
 			if (sizeof($errors_aantal[0]) === 0) {
-				$this->content->setMelding('Boekjaar succesvol gesloten: '. $errors_aantal[1] .' maaltijden naar het archief verplaatst.', 1);
+				$this->view->setMelding('Boekjaar succesvol gesloten: '. $errors_aantal[1] .' maaltijden naar het archief verplaatst.', 1);
 			}
 		}
 		else {
-			$this->content = $form;
+			$this->view = $form;
 		}
 	}
 }

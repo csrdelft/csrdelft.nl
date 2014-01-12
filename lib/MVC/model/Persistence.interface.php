@@ -10,11 +10,11 @@
  */
 interface Persistence {
 
-	function create(PersistentEntity $entity);
+	public function create(PersistentEntity $entity);
 
-	function retrieve(PersistentEntity $entity);
+	public function retrieve(PersistentEntity $entity);
 
-	function update(PersistentEntity $entity);
+	public function update(PersistentEntity $entity);
 
-	function delete(PersistentEntity $entity);
+	public function delete(PersistentEntity $entity);
 }

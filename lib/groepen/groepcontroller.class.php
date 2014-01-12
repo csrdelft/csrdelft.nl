@@ -48,11 +48,11 @@ class Groepcontroller extends Controller{
 			$this->action=$this->getParam(1);
 		}
 		//content-object aanmaken..
-		$this->content=new Groepcontent($this->groep);
+		$this->view=new Groepcontent($this->groep);
 
 		//controleer dat we geen lege groep weergeven.
 		if($this->action=='default' AND $this->groep->getId()==0){
-			$this->content->invokeRefresh(CSR_ROOT.'actueel/groepen/', 'We geven geen 0-groepen weer! (Groepcontroller::__construct())');
+			$this->view->invokeRefresh(CSR_ROOT.'actueel/groepen/', 'We geven geen 0-groepen weer! (Groepcontroller::__construct())');
 		}
 
 		$this->action = 'standaard';
@@ -60,7 +60,7 @@ class Groepcontroller extends Controller{
 	}
 
 	public function standaard(){
-		$this->content->setAction('view');
+		$this->view->setAction('view');
 	}
 
 	protected function hasPermission() {
@@ -184,9 +184,9 @@ class Groepcontroller extends Controller{
 	 */
 	public function bewerken(){
 		if(!LoginLid::instance()->hasPermission('P_LOGGED_IN')){
-			$this->content->invokeRefresh($this->getUrl('default'), 'Niet voldoende rechten voor deze actie');
+			$this->view->invokeRefresh($this->getUrl('default'), 'Niet voldoende rechten voor deze actie');
 		}
-		$this->content->setAction('edit');
+		$this->view->setAction('edit');
 
 		/* Als er een derde argument meegegeven wordt is dat het id van de groep waar 
 		 * een opvolger voor gemaakt moet worden. We nemen wat dingen over van die oude groep,
@@ -287,7 +287,7 @@ class Groepcontroller extends Controller{
 				}else{
 					$melding='Opslaan van groep mislukt. (returned from Groep::save() called by Groepcontroller::bewerken())';
 				}
-				$this->content->invokeRefresh($this->getUrl('default'), $melding);
+				$this->view->invokeRefresh($this->getUrl('default'), $melding);
 			}else{
 				//geposte waarden in het object stoppen zodat de template ze zo in het
 				//formulier kan knallen
@@ -304,7 +304,7 @@ class Groepcontroller extends Controller{
 					$this->groep->setFunctiefilter($_POST['functiefilter']);
 				}
 				//de eventuele fouten van de groepValidator aan de melding toevoegen.
-				$this->content->setMelding($this->errors);
+				$this->view->setMelding($this->errors);
 
 			}
 		}
@@ -329,7 +329,7 @@ class Groepcontroller extends Controller{
 		}else{
 			$melding='Niet voldoende rechten voor deze actie';
 		}
-		$this->content->invokeRefresh(CSR_ROOT.'actueel/groepen/'.$groeptypenaam.'/', $melding);
+		$this->view->invokeRefresh(CSR_ROOT.'actueel/groepen/'.$groeptypenaam.'/', $melding);
 	}
 
 	/*
@@ -363,7 +363,7 @@ class Groepcontroller extends Controller{
 		}else{
 			$url=$this->getUrl('default');
 		}
-		$this->content->invokeRefresh($url, $melding);
+		$this->view->invokeRefresh($url, $melding);
 	}
 	
 	/*
@@ -371,9 +371,9 @@ class Groepcontroller extends Controller{
 	 */
 	public function addLid(){
 		if(!$this->groep->magBewerken()){
-			$this->content->invokeRefresh($this->getUrl('default'), 'Niet voldoende rechten voor deze actie');
+			$this->view->invokeRefresh($this->getUrl('default'), 'Niet voldoende rechten voor deze actie');
 		}
-		$this->content->setAction('addLid');
+		$this->view->setAction('addLid');
 		if(isset($_POST['naam'], $_POST['functie']) AND is_array($_POST['naam']) AND is_array($_POST['functie']) AND count($_POST['naam'])==count($_POST['functie'])){
 			//nieuwe groepleden erin stoppen.
 			$success=true;
@@ -398,7 +398,7 @@ class Groepcontroller extends Controller{
 			}catch(Exception $e){
 				//todo: loggen dat LDAP niet beschikbaar is in een mooi eventlog wat ook nog gemaakt moet worden...
 			}
-			$this->content->invokeRefresh($this->getUrl('default').'#lidlijst', $melding);
+			$this->view->invokeRefresh($this->getUrl('default').'#lidlijst', $melding);
 		}
 	}
 	
@@ -417,7 +417,7 @@ class Groepcontroller extends Controller{
 			}else{
 				$melding='Lid uit groep verwijderen mislukt (GroepController::verwijderLid()).';
 			}
-			$this->content->invokeRefresh($this->getUrl('default').'#lidlijst', $melding);
+			$this->view->invokeRefresh($this->getUrl('default').'#lidlijst', $melding);
 		}
 	}
 
@@ -467,7 +467,7 @@ class Groepcontroller extends Controller{
 			}else{
 				$melding='Lid naar o.t.-groep verplaatsen mislukt. ['. $this->groep->getError().']  (GroepController::maakLidOt())';
 			}
-			$this->content->invokeRefresh($this->getUrl('default').'#lidlijst', $melding);
+			$this->view->invokeRefresh($this->getUrl('default').'#lidlijst', $melding);
 		}
 	}
 	
@@ -491,38 +491,38 @@ class Groepcontroller extends Controller{
 			}else{
 				$melding='Groep kan niet o.t. gemaakt worden omdat groep niet h.t. is.';
 			}
-			$this->content->invokeRefresh($this->getUrl('default'), $melding);
+			$this->view->invokeRefresh($this->getUrl('default'), $melding);
 		}
 	}
 	
 	
 	public function geschiedenis(){
-		$this->content=new Groepgeschiedeniscontent(new Groepen($_GET['gtype']));
+		$this->view=new Groepgeschiedeniscontent(new Groepen($_GET['gtype']));
 	}
 
 	//we willen de volgende acties met javascript initieren, dus niet de hele site-structuur eromheen
 	//hebben, daarom sluiten we aan het einde van elke methode af met exit;
 	public function lidLijst(){
-		$this->content=new GroepledenContent($this->groep);
-		$this->content->view();
+		$this->view=new GroepledenContent($this->groep);
+		$this->view->view();
 		exit;
 	}
 	public function pasfotos(){
-		$this->content=new GroepledenContent($this->groep, 'pasfotos');
-		$this->content->view();
+		$this->view=new GroepledenContent($this->groep, 'pasfotos');
+		$this->view->view();
 		exit;
 	}
 	public function emails(){
 		if($this->groep->isIngelogged()){
-			$this->content=new GroepEmailContent($this->groep);
-			$this->content->view();
+			$this->view=new GroepEmailContent($this->groep);
+			$this->view->view();
 		}
 		exit;
 	}
 	public function stats(){
 		if($this->groep->isAdmin() OR $this->groep->isOp() OR $this->groep->isEigenaar() OR ($this->groep->isAanmeldbaar() AND $this->groep->isIngelogged())){
-			$this->content=new GroepStatsContent($this->groep);
-			$this->content->view();
+			$this->view=new GroepStatsContent($this->groep);
+			$this->view->view();
 		}
 		exit;
 	}

@@ -61,10 +61,10 @@ class MijnMaaltijdenController extends \AclController {
 	public function ketzer() {
 		$maaltijden = MaaltijdenModel::getKomendeMaaltijdenVoorLid(\LoginLid::instance()->getUid());
 		$aanmeldingen = AanmeldingenModel::getAanmeldingenVoorLid($maaltijden, \LoginLid::instance()->getUid());
-		$this->content = new MijnMaaltijdenView($maaltijden, $aanmeldingen);
-		$this->content = new csrdelft($this->getContent());
-		$this->content->addStylesheet('taken.css');
-		$this->content->addScript('taken.js');
+		$this->view = new MijnMaaltijdenView($maaltijden, $aanmeldingen);
+		$this->view = new csrdelft($this->getContent());
+		$this->view->addStylesheet('taken.css');
+		$this->view->addScript('taken.js');
 	}
 	
 	public function lijst($mid) {
@@ -76,7 +76,7 @@ class MijnMaaltijdenController extends \AclController {
 		$aanmeldingen = AanmeldingenModel::getAanmeldingenVoorMaaltijd($maaltijd);
 		$taken = \TakenModel::getTakenVoorMaaltijd($mid);
 		require_once 'taken/view/MaaltijdLijstView.class.php';
-		$this->content = new MaaltijdLijstView($maaltijd, $aanmeldingen, $taken);
+		$this->view = new MaaltijdLijstView($maaltijd, $aanmeldingen, $taken);
 	}
 	
 	public function sluit($mid) {
@@ -91,35 +91,35 @@ class MijnMaaltijdenController extends \AclController {
 	public function aanmelden($mid) {
 		$aanmelding = AanmeldingenModel::aanmeldenVoorMaaltijd($mid, \LoginLid::instance()->getUid(), \LoginLid::instance()->getUid());
 		if (parent::isPOSTed()) {
-			$this->content = new MijnMaaltijdenView($aanmelding->getMaaltijd(), $aanmelding);
+			$this->view = new MijnMaaltijdenView($aanmelding->getMaaltijd(), $aanmelding);
 		}
 		else {
 			require_once 'taken/view/MaaltijdKetzerView.class.php';
-			$this->content = new MaaltijdKetzerView($aanmelding->getMaaltijd(), $aanmelding);
+			$this->view = new MaaltijdKetzerView($aanmelding->getMaaltijd(), $aanmelding);
 		}
 	}
 	
 	public function afmelden($mid) {
 		$maaltijd = AanmeldingenModel::afmeldenDoorLid($mid, \LoginLid::instance()->getUid());
 		if (parent::isPOSTed()) {
-			$this->content = new MijnMaaltijdenView($maaltijd);
+			$this->view = new MijnMaaltijdenView($maaltijd);
 		}
 		else {
 			require_once 'taken/view/MaaltijdKetzerView.class.php';
-			$this->content = new MaaltijdKetzerView($maaltijd);
+			$this->view = new MaaltijdKetzerView($maaltijd);
 		}
 	}
 	
 	public function gasten($mid) {
 		$gasten = (int) filter_input(INPUT_POST, 'aantal_gasten', FILTER_SANITIZE_NUMBER_INT);
 		$aanmelding = AanmeldingenModel::saveGasten($mid, \LoginLid::instance()->getUid(), $gasten);
-		$this->content = new MijnMaaltijdenView($aanmelding->getMaaltijd(), $aanmelding);
+		$this->view = new MijnMaaltijdenView($aanmelding->getMaaltijd(), $aanmelding);
 	}
 	
 	public function opmerking($mid) {
 		$opmerking = filter_input(INPUT_POST, 'gasten_opmerking', FILTER_SANITIZE_SPECIAL_CHARS);
 		$aanmelding = AanmeldingenModel::saveGastenOpmerking($mid, \LoginLid::instance()->getUid(), $opmerking);
-		$this->content = new MijnMaaltijdenView($aanmelding->getMaaltijd(), $aanmelding);
+		$this->view = new MijnMaaltijdenView($aanmelding->getMaaltijd(), $aanmelding);
 	}
 }
 

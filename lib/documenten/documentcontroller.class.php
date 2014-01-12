@@ -74,7 +74,7 @@ class DocumentController extends Controller {
 	 * Recente documenten uit alle categorieën tonen
 	 */
 	protected function recenttonen() {
-		$this->content = new DocumentenContent();
+		$this->view = new DocumentenContent();
 	}
 
 	protected function verwijderen() {
@@ -94,8 +94,8 @@ class DocumentController extends Controller {
 		$this->loadDocument();
 
 		if ($this->document->hasFile()) {
-			$this->content = new DocumentDownloadContent($this->document);
-			$this->content->view();
+			$this->view = new DocumentDownloadContent($this->document);
+			$this->view->view();
 		} else {
 			DocumentContent::invokeRefresh($this->baseurl, 'Document heeft geen bestand, sorry voor het ongemak.');
 		}
@@ -113,7 +113,7 @@ class DocumentController extends Controller {
 			DocumentenCategorie::invokeRefresh(null, 'categorie bestaat niet');
 		}
 
-		$this->content = new DocumentCategorieContent($categorie);
+		$this->view = new DocumentCategorieContent($categorie);
 	}
 
 	protected function bewerken() {
@@ -183,8 +183,8 @@ class DocumentController extends Controller {
 				$this->document->setCatID($_GET['catID']);
 			}
 		}
-		$this->content = new DocumentContent($this->document, $this->uploaders);
-		$this->content->setMelding($this->errors);
+		$this->view = new DocumentContent($this->document, $this->uploaders);
+		$this->view->setMelding($this->errors);
 	}
 
 	private function validate_document() {

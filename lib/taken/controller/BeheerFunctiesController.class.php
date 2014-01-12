@@ -47,22 +47,22 @@ class BeheerFunctiesController extends \AclController {
 		}
 		$functies = FunctiesModel::getAlleFuncties();
 		KwalificatiesModel::loadKwalificatiesVoorFuncties($functies);
-		$this->content = new BeheerFunctiesView($functies, $this->getContent());
-		$this->content = new csrdelft($this->getContent());
-		$this->content->addStylesheet('js/autocomplete/jquery.autocomplete.css');
-		$this->content->addStylesheet('taken.css');
-		$this->content->addScript('autocomplete/jquery.autocomplete.min.js');
-		$this->content->addScript('taken.js');
+		$this->view = new BeheerFunctiesView($functies, $this->getContent());
+		$this->view = new csrdelft($this->getContent());
+		$this->view->addStylesheet('js/autocomplete/jquery.autocomplete.css');
+		$this->view->addStylesheet('taken.css');
+		$this->view->addScript('autocomplete/jquery.autocomplete.min.js');
+		$this->view->addScript('taken.js');
 	}
 	
 	public function nieuw() {
 		$functie = new CorveeFunctie();
-		$this->content = new FunctieFormView($functie->getFunctieId(), $functie->getNaam(), $functie->getAfkorting(), $functie->getEmailBericht(), $functie->getStandaardPunten(), $functie->getIsKwalificatieBenodigd()); // fetches POST values itself
+		$this->view = new FunctieFormView($functie->getFunctieId(), $functie->getNaam(), $functie->getAfkorting(), $functie->getEmailBericht(), $functie->getStandaardPunten(), $functie->getIsKwalificatieBenodigd()); // fetches POST values itself
 	}
 	
 	public function bewerk($fid) {
 		$functie = FunctiesModel::getFunctie($fid);
-		$this->content = new FunctieFormView($functie->getFunctieId(), $functie->getNaam(), $functie->getAfkorting(), $functie->getEmailBericht(), $functie->getStandaardPunten(), $functie->getIsKwalificatieBenodigd()); // fetches POST values itself
+		$this->view = new FunctieFormView($functie->getFunctieId(), $functie->getNaam(), $functie->getAfkorting(), $functie->getEmailBericht(), $functie->getStandaardPunten(), $functie->getIsKwalificatieBenodigd()); // fetches POST values itself
 	}
 	
 	public function opslaan($fid) {
@@ -70,19 +70,19 @@ class BeheerFunctiesController extends \AclController {
 			$this->bewerk($fid);
 		}
 		else {
-			$this->content = new FunctieFormView($fid); // fetches POST values itself
+			$this->view = new FunctieFormView($fid); // fetches POST values itself
 		}
-		if ($this->content->validate()) {
-			$values = $this->content->getValues();
+		if ($this->view->validate()) {
+			$values = $this->view->getValues();
 			$functie = FunctiesModel::saveFunctie($fid, $values['naam'], $values['afkorting'], $values['email_bericht'], $values['standaard_punten'], $values['kwalificatie_benodigd']);
 			$functie->setGekwalificeerden(KwalificatiesModel::getKwalificatiesVoorFunctie($functie));
-			$this->content = new BeheerFunctiesView($functie);
+			$this->view = new BeheerFunctiesView($functie);
 		}
 	}
 	
 	public function verwijder($fid) {
 		FunctiesModel::verwijderFunctie($fid);
-		$this->content = new BeheerFunctiesView($fid);
+		$this->view = new BeheerFunctiesView($fid);
 	}
 	
 	public function kwalificeer($fid) {
@@ -92,10 +92,10 @@ class BeheerFunctiesController extends \AclController {
 			KwalificatiesModel::kwalificatieToewijzen($fid, $values['voor_lid']);
 			$functie = FunctiesModel::getFunctie($fid);
 			$functie->setGekwalificeerden(KwalificatiesModel::getKwalificatiesVoorFunctie($functie));
-			$this->content = new BeheerFunctiesView($functie);
+			$this->view = new BeheerFunctiesView($functie);
 		}
 		else {
-			$this->content = $form;
+			$this->view = $form;
 		}
 	}
 	
@@ -107,7 +107,7 @@ class BeheerFunctiesController extends \AclController {
 		KwalificatiesModel::kwalificatieTerugtrekken($fid, $uid);
 		$functie = FunctiesModel::getFunctie($fid);
 		$functie->setGekwalificeerden(KwalificatiesModel::getKwalificatiesVoorFunctie($functie));
-		$this->content = new BeheerFunctiesView($functie);
+		$this->view = new BeheerFunctiesView($functie);
 	}
 }
 

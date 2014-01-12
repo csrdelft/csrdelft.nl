@@ -37,25 +37,25 @@ class MijnAbonnementenController extends \AclController {
 	
 	public function mijn() {
 		$abonnementen = AbonnementenModel::getAbonnementenVoorLid(\LoginLid::instance()->getUid(), true, true);
-		$this->content = new MijnAbonnementenView($abonnementen);
-		$this->content = new csrdelft($this->getContent());
-		$this->content->addStylesheet('taken.css');
-		$this->content->addScript('taken.js');
+		$this->view = new MijnAbonnementenView($abonnementen);
+		$this->view = new csrdelft($this->getContent());
+		$this->view->addStylesheet('taken.css');
+		$this->view->addScript('taken.js');
 	}
 	
 	public function inschakelen($mrid) {
 		$abo_aantal = AbonnementenModel::inschakelenAbonnement($mrid, \LoginLid::instance()->getUid());
-		$this->content = new MijnAbonnementenView($abo_aantal[0]);
+		$this->view = new MijnAbonnementenView($abo_aantal[0]);
 		if ($abo_aantal[1] > 0) {
-			$this->content->setMelding('Automatisch aangemeld voor '. $abo_aantal[1] .' maaltijd'. ($abo_aantal[1] === 1 ? '' : 'en'), 2);
+			$this->view->setMelding('Automatisch aangemeld voor '. $abo_aantal[1] .' maaltijd'. ($abo_aantal[1] === 1 ? '' : 'en'), 2);
 		}
 	}
 	
 	public function uitschakelen($mrid) {
 		$abo_aantal = AbonnementenModel::uitschakelenAbonnement($mrid, \LoginLid::instance()->getUid());
-		$this->content = new MijnAbonnementenView($mrid);
+		$this->view = new MijnAbonnementenView($mrid);
 		if ($abo_aantal[1] > 0) {
-			$this->content->setMelding('Automatisch afgemeld voor '. $abo_aantal[1] .' maaltijd'. ($abo_aantal[1] === 1 ? '' : 'en'), 2);
+			$this->view->setMelding('Automatisch afgemeld voor '. $abo_aantal[1] .' maaltijd'. ($abo_aantal[1] === 1 ? '' : 'en'), 2);
 		}
 	}
 }

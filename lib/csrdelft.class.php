@@ -213,7 +213,7 @@ class csrdelft extends TemplateView {
 				$this->assign('zijkolom', $this->zijkolom);
 
 				require_once('MVC/view/MenuView.class.php');
-				$this->assign('mainmenu', new MenuView('main'));
+				$this->assign('mainmenu', new MenuView('main', 0));
 
 				$this->display('csrdelft.tpl');
 				break;

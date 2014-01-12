@@ -11,8 +11,15 @@ require_once 'MVC/view/MenuBeheerView.class.php';
  */
 class MenuBeheerController extends AclController {
 
+	/**
+	 * Data access model
+	 * @var MenuModel
+	 */
+	private $model;
+
 	public function __construct($query) {
 		parent::__construct($query);
+		$this->model = new MenuModel();
 		if (!parent::isPOSTed()) {
 			$this->acl = array(
 				'beheer' => 'P_ADMIN',
@@ -43,17 +50,15 @@ class MenuBeheerController extends AclController {
 	}
 
 	public function beheer($menu = '') {
-		$this->content = new MenuBeheerView($menu);
-		$this->content = new csrdelft($this->getContent());
-		$this->content->addStylesheet('menubeheer.css');
-		$this->content->addScript('menubeheer.js');
+		$this->view = new MenuBeheerView($menu);
+		$this->view = new csrdelft($this->getContent());
+		$this->view->addStylesheet('menubeheer.css');
+		$this->view->addScript('menubeheer.js');
 	}
 
 	public function verwijder($id) {
-		$model = new MenuModel();
-		$menuitem = $model->load($id);
-		$model->deleteMenuItem($menuitem);
-		SimpleHTML::invokeRefresh('/menubeheer/beheer/' . $menuitem->menu_naam, 'Verwijderd ' . $menuitem->tekst . ' (' . $menuitem->getMenuId() . ')', 1);
+		$item = $this->model->deleteMenuItem($id);
+		SimpleHTML::invokeRefresh('/menubeheer/beheer/' . $item->menu_naam, 'Verwijderd ' . $item->tekst . ' (' . $item->getMenuId() . ')', 1);
 	}
 
 	public function nieuw() {
@@ -72,8 +77,7 @@ class MenuBeheerController extends AclController {
 	public function wijzig($id, $property) {
 		$value = filter_input(INPUT_POST, $property);
 		$model = new MenuModel();
-		$model->saveProperty($id, $property, $value);
-		$menuitem = $model->load($id);
+		$item = $model->wijzigProperty($id, $property, $value);
 		SimpleHTML::invokeRefresh('/menubeheer/beheer/' . $item->menu_naam, 'Wijzigingen opgeslagen ' . $item->tekst . ' (' . $item->id . ')', 1);
 	}
 

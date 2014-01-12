@@ -83,12 +83,13 @@ class MenuItem extends PersistentEntity {
 
 	/**
 	 * Bepaald of het gevraagde menu-item een
-	 * sub-item is van dit menu-item
+	 * sub-item is van dit menu-item.
+	 * 
 	 * @param MenuItem $item
 	 * @return boolean
 	 */
 	public function isParentOf(MenuItem $item) {
-		if ($this->getMenuId() === $item->getParentId()) {
+		if ($this->id === $item->parent_id) {
 			return true;
 		}
 		foreach ($this->children as $child) {
@@ -101,7 +102,8 @@ class MenuItem extends PersistentEntity {
 
 	/**
 	 * Doorloopt een lijst met menu-items en
-	 * voegt de kinderen toe
+	 * voegt recursief de kinderen toe.
+	 * 
 	 * @param MenuItem[] $items
 	 */
 	public function addChildren(array &$items) {
@@ -109,7 +111,7 @@ class MenuItem extends PersistentEntity {
 			if ($this->id === $child->parent_id) { // this is the correct parent
 				$this->children[] = $child;
 				unset($items[$i]); // only one parent
-				$this->addChildren($child, $items); // add children of children
+				$this->addChildren($items); // add children of children
 			}
 		}
 	}

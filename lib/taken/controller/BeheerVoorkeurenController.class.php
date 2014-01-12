@@ -36,10 +36,10 @@ class BeheerVoorkeurenController extends \AclController {
 	
 	public function beheer() {
 		$matrix_repetities = VoorkeurenModel::getVoorkeurenMatrix();
-		$this->content = new BeheerVoorkeurenView($matrix_repetities[0], $matrix_repetities[1]);
-		$this->content = new csrdelft($this->getContent());
-		$this->content->addStylesheet('taken.css');
-		$this->content->addScript('taken.js');
+		$this->view = new BeheerVoorkeurenView($matrix_repetities[0], $matrix_repetities[1]);
+		$this->view = new csrdelft($this->getContent());
+		$this->view->addStylesheet('taken.css');
+		$this->view->addScript('taken.js');
 	}
 	
 	public function inschakelen($crid) {
@@ -49,7 +49,7 @@ class BeheerVoorkeurenController extends \AclController {
 		}
 		$abonnement = VoorkeurenModel::inschakelenVoorkeur($crid, $uid);
 		$abonnement->setVanLid($abonnement->getLidId());
-		$this->content = new BeheerVoorkeurenView($abonnement);
+		$this->view = new BeheerVoorkeurenView($abonnement);
 	}
 	
 	public function uitschakelen($crid) {
@@ -60,7 +60,7 @@ class BeheerVoorkeurenController extends \AclController {
 		VoorkeurenModel::uitschakelenVoorkeur($crid, $uid);
 		$abonnement = new CorveeVoorkeur($crid, null);
 		$abonnement->setVanLid($uid);
-		$this->content = new BeheerVoorkeurenView($abonnement);
+		$this->view = new BeheerVoorkeurenView($abonnement);
 	}
 }
 

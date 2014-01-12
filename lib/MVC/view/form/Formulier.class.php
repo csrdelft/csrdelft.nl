@@ -25,6 +25,10 @@ class Formulier implements View, Validator {
 		$this->fields = $fields;
 	}
 
+	public function getModel() {
+		return $this;
+	}
+
 	public function getFormId() {
 		return $this->id;
 	}

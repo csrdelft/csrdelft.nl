@@ -14,9 +14,12 @@ require_once('smarty/libs/Smarty.class.php');
  */
 abstract class TemplateView extends Smarty implements View {
 
+	/**
+	 * Data access model
+	 */
 	protected $model;
 
-	public function __construct(PersistenceModel $model) {
+	public function __construct($model = null) {
 		parent::__construct();
 		$this->model = $model;
 
@@ -33,7 +36,13 @@ abstract class TemplateView extends Smarty implements View {
 		$this->assign('loginlid', LoginLid::instance());
 	}
 
-	function getTitel() {
+	public abstract function view();
+
+	public function getModel() {
+		return $this->model;
+	}
+
+	public function getTitel() {
 		return '';
 	}
 

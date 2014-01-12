@@ -42,10 +42,10 @@ class MijnCorveeController extends \AclController {
 		$functies = FunctiesModel::getAlleFuncties(true);
 		$punten = PuntenModel::loadPuntenVoorLid(\LoginLid::instance()->getLid(), $functies);
 		$vrijstelling = VrijstellingenModel::getVrijstelling(\LoginLid::instance()->getUid());
-		$this->content = new MijnCorveeView($rooster, $punten, $functies, $vrijstelling);
-		$this->content = new csrdelft($this->getContent());
-		$this->content->addStylesheet('taken.css');
-		$this->content->addScript('taken.js');
+		$this->view = new MijnCorveeView($rooster, $punten, $functies, $vrijstelling);
+		$this->view = new csrdelft($this->getContent());
+		$this->view->addStylesheet('taken.css');
+		$this->view->addScript('taken.js');
 	}
 	
 	public function rooster($arg=null) {
@@ -60,10 +60,10 @@ class MijnCorveeController extends \AclController {
 			}
 		}
 		$rooster = TakenModel::getRoosterMatrix($taken);
-		$this->content = new CorveeRoosterView($rooster, $toonverleden);
-		$this->content = new csrdelft($this->getContent());
-		$this->content->addStylesheet('taken.css');
-		$this->content->addScript('taken.js');
+		$this->view = new CorveeRoosterView($rooster, $toonverleden);
+		$this->view = new csrdelft($this->getContent());
+		$this->view->addStylesheet('taken.css');
+		$this->view->addScript('taken.js');
 	}
 }
 

@@ -8,46 +8,62 @@ require_once 'MVC/model/entity/MenuItem.class.php';
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
-class MenuModel extends PaginationModel {
+class MenuModel extends PersistenceModel {
 
+	/**
+	 * Lijst van alle menus.
+	 * 
+	 * @return array
+	 */
 	public function getAlleMenus() {
-		$sql = 'SELECT DISTINCT menu_naam FROM menu';
-		$params = array();
-		$db = Database::instance();
-		$query = $db->prepare($sql, $params);
-		$query->execute($params);
+		$sql = 'SELECT DISTINCT menu_naam FROM menus';
+		$query = Database::instance()->prepare($sql);
+		$query->execute();
 		return $query->fetchAll(PDO::FETCH_COLUMN, 0);
 	}
 
+	public function getMenuItem($id) {
+		$item = new MenuItem();
+		$item->id = $id;
+		return $this->retrieve($item);
+	}
+
 	/**
-	 * Haalt alle menu-items op (die zichtbaar zijn)
+	 * Haalt alle menu-items op (die zichtbaar zijn).
+	 * 
 	 * @param string $menu
 	 * @param boolean $zichtbaar
 	 * @return MenuItem[]
 	 */
-	public function getMenuItems($menu, $zichtbaar) {
-		$where = 'menu = ?';
+	public function getMenuItems($menu, $zichtbaar = null) {
+		$where = 'menu_naam = ?';
 		$params = array($menu);
-		if ($zichtbaar === true OR $zichtbaar === false) {
-			$where .= ' AND zichtbaar = ?';
-			$params[] = $zichtbaar;
+		if ($zichtbaar !== null) {
+			$where .= ' AND zichtbaar = ' . ($zichtbaar ? 'true' : 'false');
 		}
-		return $this->select($where, $params);
+		return $this->find(new MenuItem(), $where, $params, 'parent_id ASC, prioriteit ASC');
 	}
 
+	/**
+	 * Haalt alle menu-items op die zichtbaar zijn voor het ingelogde lid.
+	 * 
+	 * @param string $menu
+	 * @return MenuItem[]
+	 */
 	public function getMenuItemsVoorLid($menu) {
 		return $this->filterMenuItems($this->getMenuItems($menu, true));
 	}
 
 	/**
-	 * Filtert de menu-items met de permissies van het ingelogede lid
+	 * Filtert de menu-items met de permissies van het ingelogede lid.
+	 * 
 	 * @param MenuItem[] $menuitems
 	 * @return MenuItem[]
 	 */
-	protected function filterMenuItems($menuitems) {
+	private function filterMenuItems(array $menuitems) {
 		$result = array();
 		foreach ($menuitems as $i => $item) {
-			if (\LoginLid::instance()->hasPermission($item->getPermission())) {
+			if (LoginLid::instance()->hasPermission($item->permission)) {
 				$result[$i] = $item;
 			}
 			unset($menuitems[$i]);
@@ -55,56 +71,48 @@ class MenuModel extends PaginationModel {
 		return $result;
 	}
 
-	public function getMenuTree($menu, &$menuitems) {
+	public function buildMenuTree($menu_naam, $menuitems) {
 		$root = new MenuItem();
-		$root->tekst = $menu;
-		$root->menu_naam = $menu;
-		$root->addChildren($menuitems);
+		$root->id = '0';
+		$root->tekst = $menu_naam;
+		$root->menu_naam = $menu_naam;
+		$root->addChildren($menuitems); // recursive
 		return $root;
 	}
 
-	protected function load($where = null, array $params = array(), $assoc = false) {
-		if (is_int($where)) {
-			return $this->get('id = ?', array($where));
+	public function wijzigProperty($id, $property, $value) {
+		$rowcount = Database::sqlUpdate('menus', array($property => $value), 'id = :id', array(':id' => $id));
+		if ($rowcount !== 1) {
+			throw new Exception('wijzigProperty rowCount=' . $rowcount);
 		}
-		$list = $this->select($where, $params, 'parent_id ASC, prioriteit ASC');
-		if (!$assoc) {
-			return $list;
-		}
-		$result = array();
-		foreach ($list as $i => $menuitem) {
-			$result[$menuitem->id] = $menuitem;
-			unset($list[$i]);
-		}
-		return $result;
+		return $this->getMenuItem($id);
 	}
 
-	public function saveMenuItem(MenuItem &$menuitem) {
-		$properties = $menuitem->getPersistingValues();
-		if (is_int($menuitem->id) && $menuitem->id > 0) { // update existing
-			$count = $this->update($properties, 'id = :id', array(':id' => $menuitem->id));
-			if ($count !== 1) {
-				throw new Exception('Update row count: ' . $count);
-			}
-		} else { // insert new
-			$menuitem->id = $this->insert($properties);
+	public function saveMenuItem(MenuItem $item) {
+		if (is_int($item->id) AND $item->id > 0) {
+			$this->update($item);
+		} else {
+			$id = $this->create($item);
+			$item->id = intval($id);
 		}
 	}
 
-	public function saveProperty($id, $key, $value) {
-		$this->update(array($key => $value), 'id = :id', array(':id' => $id));
+	public function deleteMenuItem($id) {
+		$item = $this->getMenuItem($id);
+		$this->delete($item);
+		return $item;
 	}
 
-	public function deleteMenuItem(MenuItem $menuitem) {
+	public function delete(PersistentEntity $item) {
 		$db = Database::instance();
 		try {
 			$db->beginTransaction();
-			foreach ($menuitem->children as $child) { // give new parent to otherwise future orphans
-				$properties = array('parent_id' => $menuitem->parent_id);
-				$this->update($properties, 'parent_id = :oldid', array(':oldid' => $menuitem->parent_id));
-			}
-			$this->delete('id = ?', array($menuitem->id));
+			// give new parent to otherwise future orphans
+			$properties = array('parent_id' => $item->parent_id);
+			$count = $this->update($properties, 'parent_id = :oldid', array(':oldid' => $item->parent_id));
+			$this->delete($item);
 			$db->commit();
+			return $count;
 		} catch (\Exception $e) {
 			$db->rollback();
 			throw $e; // rethrow to controller

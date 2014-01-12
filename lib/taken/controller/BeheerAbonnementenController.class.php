@@ -42,12 +42,12 @@ class BeheerAbonnementenController extends \AclController {
 	private function beheer($alleenWaarschuwingen, $ingeschakeld=null) {
 		$repetities = MaaltijdRepetitiesModel::getAlleRepetities();
 		$matrix = AbonnementenModel::getAbonnementenMatrix($repetities, false, $alleenWaarschuwingen, $ingeschakeld);
-		$this->content = new BeheerAbonnementenView($matrix, $repetities, $alleenWaarschuwingen, $ingeschakeld);
-		$this->content = new csrdelft($this->getContent());
-		$this->content->addStylesheet('js/autocomplete/jquery.autocomplete.css');
-		$this->content->addStylesheet('taken.css');
-		$this->content->addScript('autocomplete/jquery.autocomplete.min.js');
-		$this->content->addScript('taken.js');
+		$this->view = new BeheerAbonnementenView($matrix, $repetities, $alleenWaarschuwingen, $ingeschakeld);
+		$this->view = new csrdelft($this->getContent());
+		$this->view->addStylesheet('js/autocomplete/jquery.autocomplete.css');
+		$this->view->addStylesheet('taken.css');
+		$this->view->addScript('autocomplete/jquery.autocomplete.min.js');
+		$this->view->addScript('taken.js');
 	}
 	
 	public function waarschuwingen() {
@@ -68,11 +68,11 @@ class BeheerAbonnementenController extends \AclController {
 			$uid = $formField->getValue();
 			$matrix = array();
 			$matrix[$uid] = AbonnementenModel::getAbonnementenVoorLid($uid, false, true);
-			$this->content = new BeheerAbonnementenView($matrix);
+			$this->view = new BeheerAbonnementenView($matrix);
 		}
 		else {
-			$this->content = new BeheerAbonnementenView(array(), null);
-			$this->content->setMelding($formField->error, -1);
+			$this->view = new BeheerAbonnementenView(array(), null);
+			$this->view->setMelding($formField->error, -1);
 		}
 	}
 	
@@ -81,8 +81,8 @@ class BeheerAbonnementenController extends \AclController {
 		$aantal = AbonnementenModel::inschakelenAbonnementVoorNovieten($mrid);
 		$matrix = AbonnementenModel::getAbonnementenVanNovieten();
 		$novieten = sizeof($matrix);
-		$this->content = new BeheerAbonnementenView($matrix);
-		$this->content->setMelding(
+		$this->view = new BeheerAbonnementenView($matrix);
+		$this->view->setMelding(
 			$aantal .' abonnement'. ($aantal !== 1 ? 'en' : '') .' aangemaakt voor '.
 			$novieten .' noviet'. ($novieten !== 1 ? 'en' : '') .'.', 1);
 	}
@@ -93,9 +93,9 @@ class BeheerAbonnementenController extends \AclController {
 			throw new Exception('Lid bestaat niet: $uid ='. $uid);
 		}
 		$abo_aantal = AbonnementenModel::inschakelenAbonnement($mrid, $uid);
-		$this->content = new BeheerAbonnementenView($abo_aantal[0]);
+		$this->view = new BeheerAbonnementenView($abo_aantal[0]);
 		if ($abo_aantal[1] > 0) {
-			$this->content->setMelding('Automatisch aangemeld voor '. $abo_aantal[1] .' maaltijd'. ($abo_aantal[1] === 1 ? '' : 'en'), 2);
+			$this->view->setMelding('Automatisch aangemeld voor '. $abo_aantal[1] .' maaltijd'. ($abo_aantal[1] === 1 ? '' : 'en'), 2);
 		}
 	}
 	
@@ -105,9 +105,9 @@ class BeheerAbonnementenController extends \AclController {
 			throw new Exception('Lid bestaat niet: $uid ='. $uid);
 		}
 		$abo_aantal = AbonnementenModel::uitschakelenAbonnement($mrid, $uid);
-		$this->content = new BeheerAbonnementenView($abo_aantal[0]);
+		$this->view = new BeheerAbonnementenView($abo_aantal[0]);
 		if ($abo_aantal[1] > 0) {
-			$this->content->setMelding('Automatisch afgemeld voor '. $abo_aantal[1] .' maaltijd'. ($abo_aantal[1] === 1 ? '' : 'en'), 2);
+			$this->view->setMelding('Automatisch afgemeld voor '. $abo_aantal[1] .' maaltijd'. ($abo_aantal[1] === 1 ? '' : 'en'), 2);
 		}
 	}
 }

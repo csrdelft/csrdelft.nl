@@ -39,17 +39,17 @@ class BeheerVrijstellingenController extends \AclController {
 	
 	public function beheer() {
 		$vrijstellingen = VrijstellingenModel::getAlleVrijstellingen();
-		$this->content = new BeheerVrijstellingenView($vrijstellingen);
-		$this->content = new csrdelft($this->getContent());
-		$this->content->addStylesheet('js/autocomplete/jquery.autocomplete.css');
-		$this->content->addStylesheet('taken.css');
-		$this->content->addScript('autocomplete/jquery.autocomplete.min.js');
-		$this->content->addScript('taken.js');
+		$this->view = new BeheerVrijstellingenView($vrijstellingen);
+		$this->view = new csrdelft($this->getContent());
+		$this->view->addStylesheet('js/autocomplete/jquery.autocomplete.css');
+		$this->view->addStylesheet('taken.css');
+		$this->view->addScript('autocomplete/jquery.autocomplete.min.js');
+		$this->view->addScript('taken.js');
 	}
 	
 	public function nieuw() {
 		$vrijstelling = new CorveeVrijstelling();
-		$this->content = new VrijstellingFormView($vrijstelling->getLidId(), $vrijstelling->getBeginDatum(), $vrijstelling->getEindDatum(), $vrijstelling->getPercentage()); // fetches POST values itself
+		$this->view = new VrijstellingFormView($vrijstelling->getLidId(), $vrijstelling->getBeginDatum(), $vrijstelling->getEindDatum(), $vrijstelling->getPercentage()); // fetches POST values itself
 	}
 	
 	public function bewerk($uid) {
@@ -57,7 +57,7 @@ class BeheerVrijstellingenController extends \AclController {
 			throw new Exception('Lid bestaat niet: $uid ='. $uid);
 		}
 		$vrijstelling = VrijstellingenModel::getVrijstelling($uid);
-		$this->content = new VrijstellingFormView($vrijstelling->getLidId(), $vrijstelling->getBeginDatum(), $vrijstelling->getEindDatum(), $vrijstelling->getPercentage()); // fetches POST values itself
+		$this->view = new VrijstellingFormView($vrijstelling->getLidId(), $vrijstelling->getBeginDatum(), $vrijstelling->getEindDatum(), $vrijstelling->getPercentage()); // fetches POST values itself
 	}
 	
 	public function opslaan($uid=null) {
@@ -65,13 +65,13 @@ class BeheerVrijstellingenController extends \AclController {
 			$this->bewerk($uid);
 		}
 		else {
-			$this->content = new VrijstellingFormView(); // fetches POST values itself
+			$this->view = new VrijstellingFormView(); // fetches POST values itself
 		}
-		if ($this->content->validate()) {
-			$values = $this->content->getValues();
+		if ($this->view->validate()) {
+			$values = $this->view->getValues();
 			$uid = ($values['lid_id'] === '' ? null : $values['lid_id']);
 			$vrijstelling = VrijstellingenModel::saveVrijstelling($uid, $values['begin_datum'], $values['eind_datum'], $values['percentage']);
-			$this->content = new BeheerVrijstellingenView($vrijstelling);
+			$this->view = new BeheerVrijstellingenView($vrijstelling);
 		}
 	}
 	
@@ -80,7 +80,7 @@ class BeheerVrijstellingenController extends \AclController {
 			throw new Exception('Lid bestaat niet: $uid ='. $uid);
 		}
 		VrijstellingenModel::verwijderVrijstelling($uid);
-		$this->content = new BeheerVrijstellingenView($uid);
+		$this->view = new BeheerVrijstellingenView($uid);
 	}
 }
 

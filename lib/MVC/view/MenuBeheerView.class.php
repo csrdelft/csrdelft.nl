@@ -10,19 +10,27 @@
  */
 class MenuBeheerView extends TemplateView {
 
+	/**
+	 * List of all menus
+	 * @var array
+	 */
 	private $menus;
-	private $tree;
+	/**
+	 * Root of the menu tree
+	 * @var MenuItem
+	 */
+	private $tree_root;
 
-	public function __construct(MenuModel $model, $menu) {
-		parent::__construct($model);
-		$this->menus = $model->getAlleMenus();
-		$items = $model->getMenuItems($menu, false);
-		$this->tree = $model->getMenuTree($menu, $items);
+	public function __construct($menu_naam) {
+		parent::__construct(new MenuModel());
+		$this->menus = $this->model->getAlleMenus();
+		$items = $this->model->getMenuItems($menu_naam, false);
+		$this->tree_root = $this->model->buildMenuTree($menu_naam, $items);
 	}
 
 	public function getTitel() {
-		if ($this->tree !== null && $this->tree->getMenu() !== '') {
-			return 'Beheer ' . $this->tree->getMenu() . '-menu';
+		if ($this->tree_root !== null && $this->tree_root->menu_naam !== '') {
+			return 'Beheer ' . $this->tree_root->menu_naam . '-menu';
 		}
 		return 'Menubeheer';
 	}
@@ -31,7 +39,7 @@ class MenuBeheerView extends TemplateView {
 		$this->assign('melding', $this->getMelding());
 		$this->assign('kop', $this->getTitel());
 		$this->assign('menus', $this->menus);
-		$this->assign('root', $this->tree);
+		$this->assign('root', $this->tree_root);
 		$this->display('MVC/menu/beheer/menu_tree.tpl');
 	}
 

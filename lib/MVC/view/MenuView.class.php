@@ -33,17 +33,16 @@ class MenuView extends TemplateView {
 	private $active_item;
 
 	public function __construct($menu_name, $level) {
-		parent::__construct();
+		parent::__construct(new MenuModel());
 		$this->level = $level;
 
 		$path = $_SERVER['REQUEST_URI'];
 		//$path = filter_input(INPUT_SERVER, 'REQUEST_URI', FILTER_SANITIZE_URL); // faalt op productie
 
-		$model = new MenuModel();
-		$items = $model->getMenuItemsVoorLid($menu_name);
+		$items = $this->model->getMenuItemsVoorLid($menu_name);
 
 		foreach ($items as $item) {
-			if (startsWith($path, $item->getLink())) {
+			if (startsWith($path, $item->link)) {
 				$this->active_item = $item;
 			}
 		}
@@ -51,7 +50,7 @@ class MenuView extends TemplateView {
 			$this->active_item = new MenuItem();
 		}
 
-		$this->tree_root = $model->getMenuTree($menu_name, $items);
+		$this->tree_root = $this->model->buildMenuTree($menu_name, $items);
 	}
 
 	public function view() {

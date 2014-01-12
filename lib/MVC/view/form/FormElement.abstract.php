@@ -108,6 +108,10 @@ abstract class FormElement implements View {
 		$this->css_classes[] = $this->getType();
 	}
 
+	public function getModel() {
+		return $this;
+	}
+
 	public function getType() {
 		return get_class($this);
 	}
