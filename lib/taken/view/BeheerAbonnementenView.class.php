@@ -39,7 +39,7 @@ class BeheerAbonnementenView extends TemplateView {
 
 		$field = new LidField('voor_lid', null, "Toon abonnementen van persoon:", 'allepersonen');
 		$form = new Formulier('taken-subform-abos', $GLOBALS['taken_module'] . '/voorlid', array($field));
-		$form->css_classes .= ' popup';
+		$form->css_classes[] = 'popup';
 		$this->assign('form', $form);
 
 		if (is_array($this->_leden_abonnementen)) { // matrix van abonnementen
