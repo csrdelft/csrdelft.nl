@@ -255,11 +255,8 @@ class FotoalbumContent extends TemplateView {
 	private $_fotoalbum;
 	private $actie;
 
-	public function __construct() {
+	public function __construct($fotoalbum) {
 		parent::__construct();
-	}
-
-	function FotoalbumContent($fotoalbum) {
 		$this->_fotoalbum = $fotoalbum;
 	}
 
