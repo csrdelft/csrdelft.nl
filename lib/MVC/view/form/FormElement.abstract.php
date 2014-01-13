@@ -11,15 +11,15 @@
  *  - validatorfuncties
  *  - Html voor de velden, inclusief bijbehorende javascript.
  *  - suggesties voor formuliervelden
- *
+ * 
  * Alle elementen die in een formulier terecht kunnen komen stammen af van
  * de class FormElement.
- *
+ * 
  * FormElement
  *  - FormField						Elementen die data leveren.
  *  - SubmitButton					Submitten van het formulier.
  *  - HTMLComment					Uitleg/commentaar in een formulier stoppen.
- *
+ * 
  * Uitbreidingen van FormField:
  * 	- TextareaField					Textarea
  * 		* PreviewTextField			Textarea met ubb voorbeeld 
@@ -42,27 +42,14 @@
  * 		* VerticaleField			Verticalen
  * 		* KerkField
  * 	- DatumField					Datums (want data is zo ambigu)
- *
+ * 
  * SubmitButton
- *
+ * 
  * Uitbreidingen van HTMLComment:
  * 		- HTMLComment				invoer wordt als html weergegeven.
  * 		- UBBComment				invoer wordt als ubb geparsed
  * 		- Comment					invoer wordt niet geparsed en in een <h3> weergegeven.
- *
- * Voorbeeld:
- *
- * $form=new Formulier(
- * 		'formulier-ID',
- * 		'/index.php',
- * 		array(
- * 			InputField('naam', '', 'Naam'),
- * 			PassField('password'),
- * 			SubmitButton('save')
- * 		);
  * 
- * Alle dingen die we in de field-array van een Formulier stoppen
- * moeten een uitbreiding zijn van FormElement
  */
 abstract class FormElement implements View {
 

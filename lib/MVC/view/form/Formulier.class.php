@@ -9,6 +9,21 @@ require_once 'MVC/view/form/FormElement.abstract.php';
  * @author Jan Pieter Waagmeester <jieter@jpwaag.com>
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
+ * 
+ * Voorbeeld:
+ *
+ * $form=new Formulier(
+ * 		'formulier-ID',
+ * 		'/index.php',
+ * 		array(
+ * 			InputField('naam', '', 'Naam'),
+ * 			PassField('password'),
+ * 			SubmitButton('save')
+ * 		);
+ * 
+ * Alle dingen die we in de field-array van een Formulier stoppen
+ * moeten een uitbreiding zijn van FormElement.
+ *
  * @see FormElement
  */
 class Formulier implements View, Validator {
