@@ -8,6 +8,10 @@ class MededelingTopDrieOverzichtContent extends TemplateView {
 		parent::__construct();
 	}
 
+	public function getTitel() {
+		return 'Top 3 mededelingenoverzicht';
+	}
+
 	public function view() {
 		$this->assign('mededelingen_root', MededelingenContent::mededelingenRoot);
 		$this->display('mededelingen/top3overzicht.tpl');

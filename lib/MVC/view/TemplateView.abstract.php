@@ -36,6 +36,8 @@ abstract class TemplateView extends Smarty implements View {
 		$this->assign('loginlid', LoginLid::instance());
 	}
 
+	public abstract function getTitel();
+
 	public abstract function view();
 
 	public function getModel() {

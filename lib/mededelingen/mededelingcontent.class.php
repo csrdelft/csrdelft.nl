@@ -11,6 +11,10 @@ class MededelingContent extends TemplateView {
 		$this->prullenbak = $prullenbak;
 	}
 
+	public function getTitel() {
+		return 'Mededelingen';
+	}
+
 	public function view() {
 		define('NIEUWS_ROOT', '/actueel/mededelingen/');
 
