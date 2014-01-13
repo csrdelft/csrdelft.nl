@@ -224,7 +224,7 @@ class CsrUBB extends eamBBParser {
 			$testwaarde = $arguments['waarde'];
 		}
 		try {
-			if (Instelling::get($arguments['instelling']) == $testwaarde) {
+			if (Instellingen::get($arguments['instelling']) == $testwaarde) {
 				return $content;
 			}
 		} catch (Exception $e) {
