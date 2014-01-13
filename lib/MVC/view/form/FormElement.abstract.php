@@ -88,7 +88,7 @@ abstract class InputField extends FormElement implements Validator {
 	public $onclick = null;   //javascript onClick
 	public $max_len = 0; //maximale lengte van de invoer.
 	public $rows = 0;  //aantal rijen van textarea
-	public $inputClasses = array('regular'); //array met classnames die later in de class-tag komen.
+	public $css_classes = array('regular'); //array met classnames die later in de class-tag komen.
 	public $suggestions = array(); //array met suggesties die de javascript-autocomplete aan gaat bieden.
 	public $remotedatasource = '';
 
@@ -103,8 +103,8 @@ abstract class InputField extends FormElement implements Validator {
 		if ($this->isPosted() !== false) {
 			$this->value = $this->getValue();
 		}
-		//add *Field classname to cssclasses
-		$this->inputClasses[] = $this->getType();
+		//add *Field classname to css_classes
+		$this->css_classes[] = $this->getType();
 	}
 
 	public function getName() {
@@ -228,13 +228,13 @@ abstract class InputField extends FormElement implements Validator {
 	 * De input kan allerlei CSS-classes hebben. Geef hier een lijstje
 	 * terug...
 	 */
-	protected function getInputClasses() {
+	protected function getCssClasses() {
 		if ($this->remotedatasource != '') {
-			$this->inputClasses[] = 'hasRemoteSuggestions';
+			$this->css_classes[] = 'hasRemoteSuggestions';
 		} elseif (count($this->suggestions) > 0) {
-			$this->inputClasses[] = 'hasSuggestions';
+			$this->css_classes[] = 'hasSuggestions';
 		}
-		return $this->inputClasses;
+		return $this->css_classes;
 	}
 
 	/**
@@ -255,7 +255,7 @@ abstract class InputField extends FormElement implements Validator {
 		switch ($attr) {
 			case 'id': return 'id="field_' . $this->getName() . '"';
 				break;
-			case 'class': return 'class="' . implode(' ', $this->getInputClasses()) . '"';
+			case 'class': return 'class="' . implode(' ', $this->getCssClasses()) . '"';
 				break;
 			case 'value': return 'value="' . htmlspecialchars($this->value) . '"';
 				break;
@@ -502,7 +502,7 @@ class LidField extends TextField {
 		}
 		$this->zoekin = $zoekin;
 		$this->setRemoteSuggestionsSource('/tools/naamsuggesties/' . $this->zoekin);
-		$this->inputClasses[] = 'wantsLidPreview';
+		$this->css_classes[] = 'wantsLidPreview';
 	}
 
 	/**
@@ -721,6 +721,12 @@ class IntField extends TextField {
 
 }
 
+class RequiredIntField extends IntField {
+
+	public $notnull = true;
+
+}
+
 /**
  * Invoeren van een float. Eventueel met minima/maxima. Leeg evt. toegestaan.
  */
@@ -760,6 +766,12 @@ class FloatField extends TextField {
 		}
 		return $this->error == '';
 	}
+
+}
+
+class RequiredFloatField extends FloatField {
+
+	public $notnull = true;
 
 }
 
@@ -854,7 +866,7 @@ class AutoresizeTextareaField extends TextareaField {
 
 	public function __construct($name, $value, $description = null, $max_len = 255, $placeholder = null) {
 		parent::__construct($name, $value, $description, 1, $max_len);
-		$this->inputClasses[] = 'wantsAutoresize';
+		$this->css_classes[] = 'wantsAutoresize';
 		$this->placeholder = $placeholder;
 	}
 
@@ -909,7 +921,7 @@ class UbbPreviewField extends TextareaField {
 
 	public function __construct($name, $value, $description = null) {
 		parent::__construct($name, $value, $description);
-		$this->inputClasses[] = 'wantsPreview';
+		$this->css_classes[] = 'wantsPreview';
 	}
 
 	/**

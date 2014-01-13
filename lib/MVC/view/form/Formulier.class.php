@@ -28,15 +28,16 @@ require_once 'MVC/view/form/FormElement.abstract.php';
  */
 class Formulier implements View, Validator {
 
+	private $formId;
 	private $action;
 	private $fields;
-	private $formId;
-	public $cssClass = 'Formulier';
+	public $css_classes;
 
 	public function __construct($formId, $action = '', $fields = array()) {
 		$this->formId = $formId;
 		$this->action = $action;
 		$this->fields = $fields;
+		$this->css_classes = array('Formulier');
 	}
 
 	public function getModel() {
@@ -130,7 +131,7 @@ class Formulier implements View, Validator {
 	 */
 	public function view($compleetformulier = true) {
 		if ($compleetformulier) {
-			echo '<form action="' . $this->action . '" id="' . $this->formId . '" class="' . $this->cssClass . '" method="post">' . "\n";
+			echo '<form action="' . $this->action . '" id="' . $this->formId . '" class="' . implode(' ', $this->css_classes) . '" method="post">' . "\n";
 			echo '<script type="text/javascript">if(FieldSuggestions==undefined){var FieldSuggestions=[];} </script>';
 		}
 
