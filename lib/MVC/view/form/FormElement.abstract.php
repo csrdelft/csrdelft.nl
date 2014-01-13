@@ -175,7 +175,7 @@ abstract class InputField extends FormElement implements Validator {
 	protected function getDiv() {
 		$cssclass = 'InputField';
 		if ($this->error != '') {
-			$cssclass.=' metfouten';
+			$cssclass.=' metFouten';
 		}
 		return '<div class="' . $cssclass . '" id="' . $this->name . '" ' . $this->getInputAttribute('title') . '>';
 	}
