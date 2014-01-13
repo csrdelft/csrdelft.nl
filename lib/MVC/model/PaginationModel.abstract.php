@@ -24,6 +24,15 @@ abstract class PaginationModel extends PersistenceModel {
 	private $orderby;
 	private $assoc;
 
+	public function __construct() {
+		$key = get_class($this) . '_current_page_number';
+		if (array_key_exists($key, $_SESSION)) {
+			$this->current_page_number = $_SESSION[$key]; // load from session
+		} else {
+			$this->current_page_number = 0;
+		}
+	}
+
 	public function setPaging($per_page, $where = null, array $values = array(), $orderby = null, $assoc = false) {
 		$this->per_page = $per_page;
 		$this->where = $where;
@@ -42,12 +51,11 @@ abstract class PaginationModel extends PersistenceModel {
 	}
 
 	public function getPage($number = null) {
-		if (is_int($number)) {
+		if (is_int($number) && hasPage($number)) {
 			$this->current_page_number = $number;
 		}
-		if (hasPage($this->current_page_number)) {
-			return $this->find($this->where, $this->values, $this->orderby, $this->per_page, $this->current_page_number * $this->per_page);
-		}
+		$_SESSION[get_class($this) . '_current_page_number'] = $this->current_page_number; // save to session
+		return $this->find($this->where, $this->values, $this->orderby, $this->per_page, $this->current_page_number * $this->per_page);
 	}
 
 	public function getPageCount($recount = false) {

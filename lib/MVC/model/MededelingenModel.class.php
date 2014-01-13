@@ -1,6 +1,6 @@
 <?php
 
-require_once 'MVC/mededeling/Mededeling2.class.php';
+require_once 'MVC/model/entity/Mededeling2.class.php';
 
 /**
  * MededelingenModel.class.php
