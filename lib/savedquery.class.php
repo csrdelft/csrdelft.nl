@@ -116,6 +116,8 @@ class SavedQuery {
 
 class SavedQueryContent extends TemplateView {
 
+	private $sq;
+
 	public function __construct(SavedQuery $sq = null) {
 		parent::__construct();
 		$this->sq = $sq;
