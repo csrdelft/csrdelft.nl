@@ -29,8 +29,8 @@ class MenuBeheerView extends TemplateView {
 	}
 
 	public function getTitel() {
-		if ($this->tree_root !== null && $this->tree_root->menu !== '') {
-			return 'Beheer ' . $this->tree_root->menu . '-menu';
+		if ($this->tree_root !== null && $this->tree_root->menu_naam !== '') {
+			return 'Beheer ' . $this->tree_root->menu_naam . '-menu';
 		}
 		return 'Menubeheer';
 	}

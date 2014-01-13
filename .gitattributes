@@ -2566,7 +2566,6 @@ lib/MVC/controller/AclController.abstract.php -text
 lib/MVC/controller/Controller.abstract.php -text
 lib/MVC/controller/MenuBeheerController.class.php -text
 lib/MVC/model/Database.class.php -text
-lib/MVC/model/MededelingenModel.class.php -text
 lib/MVC/model/MenuModel.class.php -text
 lib/MVC/model/PaginationModel.abstract.php -text
 lib/MVC/model/Persistence.interface.php -text
@@ -2574,7 +2573,6 @@ lib/MVC/model/PersistenceModel.abstract.php -text
 lib/MVC/model/entity/Mededeling2.class.php -text
 lib/MVC/model/entity/MenuItem.class.php -text
 lib/MVC/model/entity/PersistentEntity.abstract.php -text
-lib/MVC/view/MededelingView.class.php -text
 lib/MVC/view/MenuBeheerView.class.php -text
 lib/MVC/view/MenuView.class.php -text
 lib/MVC/view/TemplateView.abstract.php -text
@@ -3514,4 +3512,4 @@ sql/3731_mlt_archief.sql -text
 sql/3744_drop_oude_maaltijdsysteem.sql -text
 sql/3747_menu.sql -text
 sql/3901_standaard_punten.sql -text
-sql/3925_menus.sql -text
+sql/3961_menus.sql -text
