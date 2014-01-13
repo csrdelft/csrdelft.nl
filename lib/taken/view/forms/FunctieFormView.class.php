@@ -17,8 +17,8 @@ class FunctieFormView extends TemplateView {
 		parent::__construct();
 		$this->_fid = $fid;
 
-		$formFields[] = new InputField('naam', $naam, 'Naam', 25);
-		$formFields[] = new InputField('afkorting', $afk, 'Afkorting', 3);
+		$formFields[] = new TextField('naam', $naam, 'Naam', 25);
+		$formFields[] = new TextField('afkorting', $afk, 'Afkorting', 3);
 		$formFields[] = new TextareaField('email_bericht', $email, 'Email', 9);
 		$formFields[] = new IntField('standaard_punten', $punten, 'Standaard punten', 10, 0);
 		$formFields['kwali'] = new VinkField('kwalificatie_benodigd', $kwali, 'Kwalificatie benodigd');

@@ -409,19 +409,19 @@ class Boek {
 
 	protected function getCommonFields($naamtitelveld = 'Titel') {
 		$fields['titel'] = new TitelField('titel', $this->getTitel(), $naamtitelveld, 200, 'Titel ontbreekt!');
-		$fields['auteur'] = new InputField('auteur', $this->getAuteur(), 'Auteur', 100);
+		$fields['auteur'] = new TextField('auteur', $this->getAuteur(), 'Auteur', 100);
 		$fields['auteur']->remotedatasource = '/communicatie/bibliotheek/autocomplete/auteur';
 		$fields['auteur']->setPlaceholder('Achternaam, Voornaam V.L. van de');
 		$fields['paginas'] = new IntField('paginas', $this->getPaginas(), "Pagina's", 10000, 0);
-		$fields['taal'] = new InputField('taal', $this->getTaal(), 'Taal', 25);
+		$fields['taal'] = new TextField('taal', $this->getTaal(), 'Taal', 25);
 		$fields['taal']->remotedatasource = '/communicatie/bibliotheek/autocomplete/taal';
-		$fields['isbn'] = new InputField('isbn', $this->getISBN(), 'ISBN', 15);
+		$fields['isbn'] = new TextField('isbn', $this->getISBN(), 'ISBN', 15);
 		$fields['isbn']->setPlaceholder('Uniek nummer');
-		$fields['uitgeverij'] = new InputField('uitgeverij', $this->getUitgeverij(), 'Uitgeverij', 100);
+		$fields['uitgeverij'] = new TextField('uitgeverij', $this->getUitgeverij(), 'Uitgeverij', 100);
 		$fields['uitgeverij']->remotedatasource = '/communicatie/bibliotheek/autocomplete/uitgeverij';
 		$fields['uitgavejaar'] = new IntField('uitgavejaar', $this->getUitgavejaar(), 'Uitgavejaar', 2100, 0);
 		$fields['rubriek'] = new SelectField('rubriek', $this->getRubriek()->getId(), 'Rubriek', Rubriek::getAllRubrieken($samenvoegen = true, $short = true));
-		$fields['code'] = new InputField('code', $this->getCode(), 'Biebcode', 7);
+		$fields['code'] = new TextField('code', $this->getCode(), 'Biebcode', 7);
 		return $fields;
 	}
 
@@ -443,7 +443,6 @@ class Boek {
 	/*
 	 * Plaats waardes van formulier in object
 	 */
-
 	public function setValuesFromFormulier() {
 		//object Boek vullen
 		foreach ($this->getFormulier()->getFields() as $field) {
@@ -454,11 +453,11 @@ class Boek {
 	}
 
 	/*
-	 * set gegeven waardes in Boek
+	 * Set gegeven waardes in Boek
+	 * 
 	 * @param	$key moet bekend zijn, anders exception
 	 * @return	void
 	 */
-
 	public function setValue($key, $value, $initboek = false) {
 		//$key voor leners en opmerkingen eerst opsplitsen
 		if (substr($key, 0, 6) == 'lener_') {
@@ -661,9 +660,9 @@ class BewerkBoek extends Boek {
 	 */
 
 	public function validField($entry) {
-		//we checken alleen de formfields, niet de comments enzo.
+		//we checken alleen de TextFields, niet de comments enzo.
 		$field = $this->getField($entry);
-		return $field instanceof InputField AND $field->validate('');
+		return $field instanceof InputField AND $field->validate();
 	}
 
 	/*
@@ -676,7 +675,7 @@ class BewerkBoek extends Boek {
 		if ($field instanceof InputField) {
 			$this->setValue($field->getName(), $field->getValue());
 		} else {
-			$this->error .= 'saveField(): ' . $entry . ' Geen instanceof FormField.';
+			$this->error .= 'saveField(): ' . $entry . ' Geen instanceof TextField.';
 			return false;
 		}
 		//waarde van $entry uit Boek opslaan
@@ -975,7 +974,7 @@ class BewerkBoek extends Boek {
 				$posturl.='/' . $this->editbeschrijving;
 			}
 			$boekbeschrijvingform[] = new Comment($titeltekst);
-			$textfield = new RequiredPreviewTextField('beschrijving', $this->getEditBeschrijving()->getTekst(), $schrijver);
+			$textfield = new RequiredUbbPreviewField('beschrijving', $this->getEditBeschrijving()->getTekst(), $schrijver);
 			$textfield->previewOnEnter();
 			$boekbeschrijvingform[] = $textfield;
 			$boekbeschrijvingform[] = new SubmitButton('opslaan', $annuleerknop);

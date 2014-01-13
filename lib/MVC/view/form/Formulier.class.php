@@ -69,7 +69,7 @@ class Formulier implements View, Validator {
 	public function isPosted() {
 		$posted = false;
 		foreach ($this->getFields() as $field) {
-			if ($field instanceof FormField AND $field->isPosted()) {
+			if ($field instanceof InputField AND $field->isPosted()) {
 				$posted = true;
 			}
 		}
@@ -81,9 +81,9 @@ class Formulier implements View, Validator {
 	 */
 	public function getValues() {
 		$values = array();
-		/** @var $field FormField */
+		/** @var $field InputField */
 		foreach ($this->getFields() as $field) {
-			if ($field instanceof FormField) {
+			if ($field instanceof InputField) {
 				$values[$field->getName()] = $field->getValue();
 			}
 		}
@@ -91,9 +91,10 @@ class Formulier implements View, Validator {
 	}
 
 	/**
-	 * Alle valid-functies krijgen eventueel een model mee om tegen te valideren.
+	 * Alle valideer-functies kunnen het model gebruiken dat meegegeven is
+	 * bij constructie van het InputField om tegen te valideren.
 	 */
-	public function validate($model = null) {
+	public function validate() {
 		if (!$this->isPosted()) {
 			$this->error = 'Formulier is niet compleet';
 			return false;
@@ -101,8 +102,8 @@ class Formulier implements View, Validator {
 		//alle veldjes langslopen, en kijken of ze valideren.
 		$valid = true;
 		foreach ($this->getFields() as $field) {
-			//we checken alleen de formfields, niet de comments enzo.
-			if ($field instanceof FormField AND !$field->validate($model)) {
+			//we checken alleen de InputFields, niet de comments enzo.
+			if ($field instanceof InputField AND !$field->validate()) {
 				$valid = false;
 			}
 		}
@@ -115,8 +116,8 @@ class Formulier implements View, Validator {
 
 	public function findByName($fieldname) {
 		foreach ($this->fields as $field) {
-			//we checken alleen de formfields, niet de comments enzo.
-			if ($field instanceof FormField AND $field->getName() == $fieldname) {
+			//we checken alleen de InputFields, niet de comments enzo.
+			if ($field instanceof InputField AND $field->getName() == $fieldname) {
 				return $field;
 			}
 		}

@@ -30,7 +30,7 @@ class MaaltijdRepetitieFormView extends TemplateView {
 			$suggesties[] = 'lichting:' . $jaar;
 		}
 
-		$formFields[] = new RequiredInputField('standaard_titel', $titel, 'Standaard titel', 255);
+		$formFields[] = new RequiredTextField('standaard_titel', $titel, 'Standaard titel', 255);
 		$formFields[] = new TijdField('standaard_tijd', $tijd, 'Standaard tijd', 15);
 		$formFields['dag'] = new WeekdagField('dag_vd_week', $dag, 'Dag v/d week');
 		$formFields['dag']->title = 'Als de periode ongelijk is aan 7 is dit de start-dag bij het aanmaken van periodieke maaltijden';
@@ -41,7 +41,7 @@ class MaaltijdRepetitieFormView extends TemplateView {
 		}
 		$formFields[] = new FloatField('standaard_prijs', $prijs, 'Standaard prijs (€)', 50.00, 0.00);
 		$formFields[] = new IntField('standaard_limiet', $limiet, 'Standaard limiet', 200, 0);
-		$formFields['filter'] = new InputField('abonnement_filter', $filter, 'Aanmeldrestrictie', 255, $suggesties);
+		$formFields['filter'] = new TextField('abonnement_filter', $filter, 'Aanmeldrestrictie', 255, $suggesties);
 		$formFields['filter']->title = 'Plaats een ! vooraan om van de restrictie een uitsluiting te maken.';
 		$formFields['filter']->required = false;
 		if ($this->_mrid !== 0) {

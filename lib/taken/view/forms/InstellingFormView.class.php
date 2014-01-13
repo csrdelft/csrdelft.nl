@@ -14,7 +14,7 @@ class InstellingFormView extends TemplateView {
 
 	public function __construct($key = null, $value = null) {
 		parent::__construct();
-		$formFields['key'] = new InputField('instelling_id', $key, 'Id');
+		$formFields['key'] = new TextField('instelling_id', $key, 'Id');
 		$formFields[] = new AutoresizeTextareaField('waarde', $value, 'Waarde', 0);
 
 		$this->_form = new Formulier('taken-instelling-form', $GLOBALS['taken_module'] . '/opslaan/' . $key, $formFields);

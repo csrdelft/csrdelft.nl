@@ -32,12 +32,12 @@ class MaaltijdFormView extends TemplateView {
 		}
 
 		$formFields[] = new HiddenField('mlt_repetitie_id', $mrid);
-		$formFields[] = new InputField('titel', $titel, 'Titel', 255);
+		$formFields[] = new TextField('titel', $titel, 'Titel', 255);
 		$formFields[] = new DatumField('datum', $datum, 'Datum', date('Y') + 2, date('Y') - 2);
 		$formFields[] = new TijdField('tijd', $tijd, 'Tijd', 15);
 		$formFields[] = new FloatField('prijs', $prijs, 'Prijs (€)', 50, 0);
 		$formFields[] = new IntField('aanmeld_limiet', $limiet, 'Aanmeldlimiet', 200, 0);
-		$formFields['filter'] = new InputField('aanmeld_filter', $filter, 'Aanmeldrestrictie', 255, $suggesties);
+		$formFields['filter'] = new TextField('aanmeld_filter', $filter, 'Aanmeldrestrictie', 255, $suggesties);
 		$formFields['filter']->required = false;
 		$formFields['filter']->title = 'Plaats een ! vooraan om van de restrictie een uitsluiting te maken.';
 

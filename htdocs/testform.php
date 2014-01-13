@@ -13,7 +13,7 @@ $form=array();
 $form[]=new Comment('Studie:');
 $form[]=new StudieField('studie', $default, 'Studie');
 $form[]=new TextareaField('opmerking1', $default, 'Opmerking1');
-$hippeTextarea=new PreviewTextField('opmerking', $default, 'previewOnEnter:');
+$hippeTextarea=new UbbPreviewField('opmerking', $default, 'previewOnEnter:');
 $hippeTextarea->previewOnEnter();
 
 $form[]=$hippeTextarea;

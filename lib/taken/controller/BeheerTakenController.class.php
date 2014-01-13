@@ -178,9 +178,9 @@ class BeheerTakenController extends \AclController {
 	
 	public function toewijzen($tid) {
 		$taak = TakenModel::getTaak($tid);
-		$formField = new LidField('lid_id', null, null, 'leden'); // fetches POST values itself
-		if ($formField->validate()) {
-			$uid = $formField->getValue();
+		$InputField = new LidField('lid_id', null, null, 'leden'); // fetches POST values itself
+		if ($InputField->validate()) {
+			$uid = $InputField->getValue();
 			if ($uid === '') {
 				$uid = null;
 			}

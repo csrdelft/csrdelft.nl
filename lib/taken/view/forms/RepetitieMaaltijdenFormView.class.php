@@ -14,11 +14,11 @@ class RepetitieMaaltijdenFormView extends TemplateView {
 
 	public function __construct(MaaltijdRepetitie $repetitie, $beginDatum = null, $eindDatum = null) {
 		parent::__construct();
-		$formFields[] = new HTMLComment('<p>Aanmaken op de eerste ' . $repetitie->getDagVanDeWeekText() . ' en vervolgens ' . $repetitie->getPeriodeInDagenText() . ' in de periode:</p>');
-		$formFields['begin'] = new DatumField('begindatum', $beginDatum, 'Vanaf', date('Y') + 1, date('Y'));
-		$formFields['eind'] = new DatumField('einddatum', $eindDatum, 'Tot en met', date('Y') + 1, date('Y'));
+		$InputFields[] = new HtmlComment('<p>Aanmaken op de eerste ' . $repetitie->getDagVanDeWeekText() . ' en vervolgens ' . $repetitie->getPeriodeInDagenText() . ' in de periode:</p>');
+		$InputFields['begin'] = new DatumField('begindatum', $beginDatum, 'Vanaf', date('Y') + 1, date('Y'));
+		$InputFields['eind'] = new DatumField('einddatum', $eindDatum, 'Tot en met', date('Y') + 1, date('Y'));
 
-		$this->_form = new Formulier('taken-repetitie-aanmaken-form', $GLOBALS['taken_module'] . '/aanmaken/' . $repetitie->getMaaltijdRepetitieId(), $formFields);
+		$this->_form = new Formulier('taken-repetitie-aanmaken-form', $GLOBALS['taken_module'] . '/aanmaken/' . $repetitie->getMaaltijdRepetitieId(), $InputFields);
 	}
 
 	public function getTitel() {

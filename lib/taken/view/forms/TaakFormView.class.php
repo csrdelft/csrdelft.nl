@@ -31,18 +31,18 @@ class TaakFormView extends TemplateView {
 			}
 		}
 
-		$formFields['fid'] = new SelectField('functie_id', $fid, 'Functie', $functieNamen, $functieSelectie);
-		$formFields['fid']->onchange = $functiePunten . "$('#field_punten').val(punten[this.value]);";
-		$formFields['lid'] = new LidField('lid_id', $uid, 'Naam of lidnummer');
-		$formFields['lid']->title = 'Bij het wijzigen van het toegewezen lid worden ook de corveepunten aan het nieuwe lid gegeven.';
-		$formFields[] = new DatumField('datum', $datum, 'Datum', date('Y') + 2, date('Y') - 2);
-		$formFields[] = new IntField('punten', $punten, 'Punten', 10, 0);
-		$formFields[] = new IntField('bonus_malus', $bonus_malus, 'Bonus/malus', 10, -10);
-		$formFields[] = new HiddenField('crv_repetitie_id', $crid);
-		$formFields['mid'] = new IntField('maaltijd_id', $mid, 'Gekoppelde maaltijd', null, 0, true);
-		$formFields['mid']->title = 'Het ID van de maaltijd waar deze taak bij hoort.';
+		$InputFields['fid'] = new SelectField('functie_id', $fid, 'Functie', $functieNamen, $functieSelectie);
+		$InputFields['fid']->onchange = $functiePunten . "$('#field_punten').val(punten[this.value]);";
+		$InputFields['lid'] = new LidField('lid_id', $uid, 'Naam of lidnummer');
+		$InputFields['lid']->title = 'Bij het wijzigen van het toegewezen lid worden ook de corveepunten aan het nieuwe lid gegeven.';
+		$InputFields[] = new DatumField('datum', $datum, 'Datum', date('Y') + 2, date('Y') - 2);
+		$InputFields[] = new IntField('punten', $punten, 'Punten', 10, 0);
+		$InputFields[] = new IntField('bonus_malus', $bonus_malus, 'Bonus/malus', 10, -10);
+		$InputFields[] = new HiddenField('crv_repetitie_id', $crid);
+		$InputFields['mid'] = new IntField('maaltijd_id', $mid, 'Gekoppelde maaltijd', null, 0, true);
+		$InputFields['mid']->title = 'Het ID van de maaltijd waar deze taak bij hoort.';
 
-		$this->_form = new Formulier('taken-corveetaak-form', $GLOBALS['taken_module'] . '/opslaan/' . $tid, $formFields);
+		$this->_form = new Formulier('taken-corveetaak-form', $GLOBALS['taken_module'] . '/opslaan/' . $tid, $InputFields);
 	}
 
 	public function getTitel() {

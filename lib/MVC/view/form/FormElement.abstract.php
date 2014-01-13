@@ -16,25 +16,25 @@
  * de class FormElement.
  * 
  * FormElement
- *  - FormField						Elementen die data leveren.
+ *  - InputField					Elementen die data leveren.
  *  - SubmitButton					Submitten van het formulier.
- *  - HTMLComment					Uitleg/commentaar in een formulier stoppen.
+ *  - HtmlComment					Uitleg/commentaar in een formulier stoppen.
  * 
- * Uitbreidingen van FormField:
- * 	- TextareaField					Textarea
- * 		* PreviewTextField			Textarea met ubb voorbeeld 
- * 		* AutoresizeTextareaField	Textarea die automagisch uitbreidt bij typen, lijkt een autoresizing input
- * 	- InputField					Simpele input
+ * Uitbreidingen van InputField:
+ * 	- TextField						Simpele input
  * 		* CountryField				Landjes 
- * 		* UidField					Uid's  met preview
- * 		* StudieField
- * 		* EmailField
+ * 		* StudieField				Studie
+ * 		* EmailField				Email adressen
  * 		* UrlField					Urls
- * 	- LidField						Leden selecteren
- * 	- IntField						Integers 
- * 		* NickField					Nicknames
- * 		* TelefoonField
- * 	- FloatField					Bedragen
+ * 		* TelefoonField				Telefoonnummers
+ * 		* TextareaField					Textarea
+ * 			- UbbPreviewField			Textarea met ubb voorbeeld 
+ * 			- AutoresizeTextareaField	Textarea die automagisch uitbreidt bij typen
+ *  	* NickField					Nicknames
+ *  	* UidField					Uid's  met preview
+ * 		* LidField					Leden selecteren
+ * 		* IntField					Integers 
+ * 		* FloatField				Bedragen
  * 	- PassField						Wachtwoorden (oude, nieuwe, nieuwe ter bevestiging)
  * 	- SelectField
  * 		* GeslachtField
@@ -42,12 +42,11 @@
  * 		* VerticaleField			Verticalen
  * 		* KerkField
  * 	- DatumField					Datums (want data is zo ambigu)
+ * 	- TijdField						Tijsstip
  * 
- * SubmitButton
- * 
- * Uitbreidingen van HTMLComment:
- * 		- HTMLComment				invoer wordt als html weergegeven.
- * 		- UBBComment				invoer wordt als ubb geparsed
+ * Uitbreidingen van HtmlComment:
+ * 		- HtmlComment				invoer wordt als html weergegeven.
+ * 		- UbbComment				invoer wordt als ubb geparsed
  * 		- Comment					invoer wordt niet geparsed en in een <h3> weergegeven.
  * 
  */
@@ -71,9 +70,9 @@ abstract class FormElement implements View {
 }
 
 /**
- * class FormField is de moeder van input die data leveren.
+ * InputField is de moeder van alle FormElements die data leveren.
  */
-class InputField extends FormElement implements Validator {
+abstract class InputField extends FormElement implements Validator {
 
 	public $name;  //naam van het veld in POST
 	public $value;  //welke initiele waarde heeft het veld?
@@ -174,7 +173,7 @@ class InputField extends FormElement implements Validator {
 	 * Elk veld staat in een div, geef de html terug voor de openingstag van die div.
 	 */
 	protected function getDiv() {
-		$cssclass = 'veld';
+		$cssclass = 'InputField';
 		if ($this->error != '') {
 			$cssclass.=' metfouten';
 		}
@@ -358,16 +357,475 @@ JS;
 
 }
 
-/*
- * een TextField levert een textarea.
+/**
+ * Verborgen veld voor de gebruiker.
  */
+class HiddenField extends InputField {
 
-class TextareaField extends InputField {
+	public function view() {
+		echo '<input type="hidden"' . $this->getInputAttribute(array('id', 'name', 'class', 'value', 'origvalue', 'disabled', 'maxlength', 'placeholder', 'autocomplete')) . ' />';
+	}
+
+}
+
+/**
+ * Een TextField is een elementaire input-tag en heeft een maximale lengte.
+ * HTML wordt ge-escaped.
+ * Uiteraard kunnen er suggesties worden opgegeven.
+ */
+class TextField extends InputField {
+
+	public function __construct($name, $value, $description, $max_len = 255, $model = null) {
+		parent::__construct($name, htmlspecialchars_decode($value), $description, $model);
+		$this->max_len = (int) $max_len;
+	}
+
+	public function validate() {
+		if (!parent::validate()) {
+			return false;
+		}
+		if (!is_utf8($this->getValue())) {
+			$this->error = 'Ongeldige karakters, gebruik reguliere tekst.';
+		} elseif (mb_strlen($this->getValue()) > $this->max_len) {
+			$this->error = 'Maximaal ' . $this->max_len . ' karakters toegestaan.';
+		}
+		return $this->error == '';
+	}
+
+	public function getValue() {
+		return htmlspecialchars(parent::getValue());
+	}
+
+}
+
+class RequiredTextField extends TextField {
+
+	public $notnull = true;
+
+}
+
+/**
+ * CountryField met een aantal autocomplete suggesties voor landen.
+ * Doet verder geen controle op niet-bestaande landen...
+ */
+class CountryField extends TextField {
+
+	public function __construct($name, $value, $description) {
+		parent::__construct($name, $value, $description);
+		$landSuggesties = array('Nederland', 'België', 'Duitsland', 'Frankrijk', 'Verenigd Koninkrijk', 'Verenigde Staten');
+		$this->setSuggestions($landSuggesties);
+	}
+
+}
+
+class RequiredCountryField extends CountryField {
+
+	public $notnull = true;
+
+}
+
+/**
+ * In een UidField kunnen we een uid invullen.
+ * Erachter zal dan de naam komen te staan. Het veld valideert als
+ *  - het leeg is.
+ *  - het een geldig uid bevat.
+ */
+class UidField extends TextField {
+
+	public function __construct($name, $value, $description) {
+		parent::__construct($name, $value, $description, 4);
+	}
+
+	public function validate() {
+		if (!parent::validate()) {
+			return false;
+		}
+		//parent checks notnull
+		if ($this->getValue() == '') {
+			return true;
+		}
+		if (!Lid::exists($this->getValue())) {
+			$this->error = 'Geen geldig uid opgegeven.';
+		}
+		return $this->error == '';
+	}
+
+	/**
+	 * Voeg een preview-div toe achter het veld, defenier een keyup-
+	 * event op het veld waarin de ajax-request gedaan wordt en trigger
+	 * het event meteen om de boel meteen te vullen.
+	 */
+	public function getJavascript() {
+		return <<<JS
+$('.UidField').each(function(index, tag){
+	$(this).after('<div id="uidPreview_'+$(this).attr('id').substring(6)+'" class="uidPreview" />');
+	$(this).keyup(function(){
+		var field=$(this);
+		if(field.val().length==4){
+			$.ajax({
+				url: "/tools/naamlink.php?uid="+field.val(),
+				success: function(response){
+					$('#uidPreview_'+field.attr('id').substring(6)).html(response);
+					init_visitekaartjes();
+				}
+			});
+		}
+	}).keyup();
+});
+JS;
+	}
+
+}
+
+/**
+ * LidField
+ * één lid selecteren zonder een uid te hoeven typen.
+ *
+ */
+class LidField extends TextField {
+
+	// zoekfilter voor door namen2uid gebruikte Zoeker::zoekLeden. 
+	// geaccepteerde input: 'leden', 'oudleden', 'alleleden', 'allepersonen', 'nobodies'
+	private $zoekin;
+
+	public function __construct($name, $value, $description = null, $zoekin = 'leden') {
+		$lid = LidCache::getLid($value);
+		if ($lid instanceof Lid) {
+			$value = $lid->getNaamLink('full', 'plain');
+		}
+		parent::__construct($name, $value, $description);
+		if (!in_array($zoekin, array('leden', 'oudleden', 'alleleden', 'allepersonen', 'nobodies'))) {
+			$zoekin = 'leden';
+		}
+		$this->zoekin = $zoekin;
+		$this->setRemoteSuggestionsSource('/tools/naamsuggesties/' . $this->zoekin);
+		$this->inputClasses[] = 'wantsLidPreview';
+	}
+
+	/**
+	 * LidField::getValue() levert altijd een uid of '' op.
+	 */
+	public function getValue() {
+		//leeg veld meteen teruggeven
+		if ($this->getOriginalValue() == '') {
+			return '';
+		}
+		//uid opzoeken
+		if ($uid = namen2uid($this->getOriginalValue(), $this->zoekin) AND isset($uid[0]['uid'])) {
+			return $uid[0]['uid'];
+		}
+		return '';
+	}
+
+	/**
+	 * getOriginalValue() levert het ingevoerde.
+	 */
+	public function getOriginalValue() {
+		return parent::getValue();
+	}
+
+	/**
+	 * checkt of er een uniek lid wordt gevonden
+	 */
+	public function validate() {
+		if (!parent::validate()) {
+			return false;
+		}
+		$uid = namen2uid($this->getOriginalValue(), $this->zoekin);
+		if ($uid) {
+			if (isset($uid[0]['uid']) AND Lid::exists($uid[0]['uid'])) {
+				return true;
+			} elseif (count($uid[0]['naamOpties']) > 0) { //meerdere naamopties?
+				$this->error = 'Meerdere leden mogelijk';
+				return false;
+			}
+		}
+		$this->error = 'Geen geldig lid';
+		return $this->error == '';
+	}
+
+	/**
+	 * Voeg een preview-div toe achter het veld, defenier een
+	 * keyup-event op het veld, en trigger het event meteen om de boel
+	 * meteen te vullen.
+	 */
+	public function getJavascript() {
+		$js = parent::getJavascript();
+		$js.=<<<JS
+$('.wantsLidPreview').each(function(index, tag){
+	var suggesties=FieldSuggestions[$(this).attr('id').substring(6)].split("/");
+
+	$(this).after('<div id="lidPreview_'+$(this).attr('id').substring(6)+'" class="lidPreview" />');
+	$(this).keyup(function(){
+		var field=$(this);
+		if(field.val().length>2){
+			$.ajax({
+				url: "/tools/naamlink.php?naam="+field.val()+ "&"+$.param({ zoekin: suggesties[suggesties.length-1] }),
+				success: function(response){
+					$('#lidPreview_'+field.attr('id').substring(6)).html(response);
+					init_visitekaartjes();
+				}
+			});
+		}else{
+			$('#lidPreview_'+field.attr('id').substring(6)).html('');
+		}
+	}).keyup();
+});
+JS;
+		return $js;
+	}
+
+}
+
+class RequiredLidField extends LidField {
+
+	public $notnull = true;
+
+}
+
+/**
+ * StudieField
+ *
+ * Suggereert een aantal studies, doet verder geen controle op invoer.
+ */
+class StudieField extends TextField {
+
+	public function __construct($name, $value, $description) {
+		parent::__construct($name, $value, $description, 100);
+
+		//de studies aan de TU, even prefixen met 'TU Delft - '
+		$tustudies = array('BK', 'CT', 'ET', 'IO', 'LST', 'LR', 'MT', 'MST', 'TA', 'TB', 'TI', 'TN', 'TW', 'WB');
+		$tustudies = array_map(create_function('$value', 'return "TU Delft - ".$value;'), $tustudies);
+
+		$andere = array('INHolland', 'Haagse Hogeschool', 'EURotterdam', 'ULeiden');
+
+		$this->setSuggestions(array_merge($tustudies, $andere));
+	}
+
+}
+
+class EmailField extends TextField {
+
+	/**
+	 * Dikke valideerfunctie voor emails.
+	 */
+	public function validate() {
+		if (!parent::validate()) {
+			return false;
+		}
+		//parent checks notnull
+		if ($this->getValue() == '') {
+			return true;
+		}
+		//bevat het email-adres een @
+		if (strpos($this->getValue(), '@') === false) {
+			$this->error = 'Ongeldig formaat email-adres';
+		} else {
+			# anders gaan we m ontleden en controleren
+			list ($usr, $dom) = explode('@', $this->getValue());
+			if (mb_strlen($usr) > 50) {
+				$this->error = 'Gebruik max. 50 karakters voor de @:';
+			} elseif (mb_strlen($dom) > 50) {
+				$this->error = 'Gebruik max. 50 karakters na de @:';
+				# RFC 821 <- voorlopig voor JabberID even zelfde regels aanhouden
+				# http://www.lookuptables.com/
+				# Hmmmz, \x2E er uit gehaald ( . )
+			} elseif (preg_match('/[^\x21-\x7E]/', $usr) OR preg_match('/[\x3C\x3E\x28\x29\x5B\x5D\x5C\x2C\x3B\x40\x22]/', $usr)) {
+				$this->error = 'Het adres bevat ongeldige karakters voor de @:';
+			} elseif (!preg_match('/^[a-z0-9]+([-.][a-z0-9]+)*\\.[a-z]{2,4}$/i', $dom)) {
+				$this->error = 'Het domein is ongeldig:';
+			} elseif (!checkdnsrr($dom, 'A') and !checkdnsrr($dom, 'MX')) {
+				$this->error = 'Het domein bestaat niet (IPv4):';
+			} elseif (!checkdnsrr($dom, 'MX')) {
+				$this->error = 'Het domein is niet geconfigureerd om email te ontvangen:';
+			}
+		}
+		return $this->error == '';
+	}
+
+}
+
+class RequiredEmailField extends EmailField {
+
+	public $notnull = true;
+
+}
+
+/**
+ * UrlField checked of de invoer op een url lijkt.
+ */
+class UrlField extends TextField {
+
+	public function validate() {
+		if (!parent::validate()) {
+			return false;
+		}
+		//parent checks notnull
+		if ($this->getValue() == '') {
+			return true;
+		}
+		// controleren of het een geldige url is...
+		if (!is_utf8($this->getValue()) OR !preg_match('#([\w]+?://[^ "\n\r\t<]*?)#is', $this->getValue())) {
+			$this->error = 'Ongeldige karakters:';
+		} elseif ($this->max_len != null && mb_strlen($this->getValue()) > $this->max_len) {
+			$this->error = 'Gebruik maximaal ' . $this->max_len . ' karakters:';
+		}
+		return $this->error == '';
+	}
+
+}
+
+/**
+ * Invoeren van een integer. Eventueel met minima/maxima. Leeg evt. toegestaan.
+ */
+class IntField extends TextField {
+
+	public $min = null;
+	public $max = null;
+
+	public function __construct($name, $value, $description, $max = null, $min = null, $empty = false) {
+		parent::__construct($name, $value, $description);
+
+		if ($max !== null) {
+			$this->max = (int) $max;
+		}
+		if ($min !== null) {
+			$this->min = (int) $min;
+		}
+		$this->notnull = !$empty;
+	}
+
+	public function getValue() {
+		return (int) parent::getValue();
+	}
+
+	public function validate() {
+		if (!parent::validate()) {
+			return false;
+		}
+		//parent checks notnull
+		if ($this->getValue() == '') {
+			return true;
+		} else if (!preg_match('/\d+/', parent::getValue())) {
+			$this->error = 'Alleen getallen toegestaan';
+		} else if ($this->max !== null AND $this->getValue() > $this->max) {
+			$this->error = 'Maximale waarde is ' . $this->max . ' ';
+		} else if ($this->min !== null AND $this->getValue() < $this->min) {
+			$this->error = 'Minimale waarde is ' . $this->min . ' ';
+		}
+		return $this->error == '';
+	}
+
+}
+
+/**
+ * Invoeren van een float. Eventueel met minima/maxima. Leeg evt. toegestaan.
+ */
+class FloatField extends TextField {
+
+	public $min = null;
+	public $max = null;
+
+	public function __construct($name, $value, $description, $max = null, $min = null, $empty = false) {
+		parent::__construct($name, $value, $description);
+		if ($max !== null) {
+			$this->max = (float) $max;
+		}
+		if ($min !== null) {
+			$this->min = (float) $min;
+		}
+		$this->notnull = !$empty;
+	}
+
+	public function getValue() {
+		return (float) str_replace(',', '.', parent::getValue());
+	}
+
+	public function validate() {
+		if (!parent::validate()) {
+			return false;
+		}
+		//parent checks notnull
+		if ($this->getValue() == '') {
+			return true;
+		} else if (!preg_match('/\d+(,{1}\d*)?/', str_replace('.', ',', parent::getValue()))) {
+			$this->error = 'Alleen komma-getallen toegestaan';
+		} else if ($this->max !== null AND $this->getValue() > $this->max) {
+			$this->error = 'Maximale waarde is ' . $this->max . ' ';
+		} else if ($this->min !== null AND $this->getValue() < $this->min) {
+			$this->error = 'Minimale waarde is ' . $this->min . ' ';
+		}
+		return $this->error == '';
+	}
+
+}
+
+/**
+ * NickField
+ *
+ * is pas valid als dit lid de enige is met deze nick.
+ */
+class NickField extends TextField {
+
+	public $max_len = 20;
+
+	public function __construct($name, $value, $description, Lid $lid) {
+		parent::__construct($name, $value, $description, 255, array(), $lid);
+	}
+
+	public function validate() {
+		if (!$this->model instanceof Lid) {
+			throw new Exception($this->getType() . ' moet een Lid-object meekrijgen');
+		}
+		if (!parent::validate()) {
+			return false;
+		}
+		//parent checks notnull
+		if ($this->getValue() == '') {
+			return true;
+		}
+		//check met strtolower is toegevoegd omdat je anders je eigen nick niet van case kan veranderen
+		//omdat this->nickExists in mysql case-insensitive zoek
+		if (Lid::nickExists($this->getValue()) AND strtolower($this->model->getNickname()) != strtolower($this->getValue())) {
+			$this->error = 'Deze bijnaam is al in gebruik.';
+		}
+		return $this->error == '';
+	}
+
+}
+
+/**
+ * TelefoonField
+ *
+ * is valid als er een enigszins op een telefoonnummer lijkende string wordt
+ * ingegeven.
+ */
+class TelefoonField extends TextField {
+
+	public function validate() {
+		if (!parent::validate()) {
+			return false;
+		}
+		//parent checks notnull
+		if ($this->getValue() == '') {
+			return true;
+		}
+		if (!preg_match('/^([\d\+\-]{10,20})$/', $this->getValue())) {
+			$this->error = 'Geen geldig telefoonnummer.';
+		}
+		return $this->error == '';
+	}
+
+}
+
+/**
+ * Een TextField levert een textarea.
+ */
+class TextareaField extends TextField {
 
 	public function __construct($name, $value, $description = null, $rows = 5, $max_len = 0) {
-		parent::__construct($name, $value, $description);
+		parent::__construct($name, $value, $description, $max_len);
 		$this->rows = (int) $rows;
-		$this->max_len = (int) $max_len;
 	}
 
 	public function view() {
@@ -386,7 +844,7 @@ class TextareaField extends InputField {
 }
 
 /*
- * een Textarea die groter wordt als de inhoud niet meer in het veld past.
+ * Een Textarea die groter wordt als de inhoud niet meer in het veld past.
  */
 
 class AutoresizeTextareaField extends TextareaField {
@@ -442,7 +900,7 @@ class RequiredAutoresizeTextField extends AutoresizeTextareaField {
  * met previewOnEnter() is klikken op het voorbeeld-knopje niet meer
  * nodig, er wordt een voorbeeld gemaakt bij het op enter drukken.
  */
-class PreviewTextField extends TextareaField {
+class UbbPreviewField extends TextareaField {
 
 	private $previewOnEnter = false;
 
@@ -454,7 +912,7 @@ class PreviewTextField extends TextareaField {
 	/**
 	 * Bij elk keyup-event een nieuwe preview maken.
 	 * Genereert dus heel veel evens, niet erg wenselijk, moet dus nog
-	 * een time-out in komen...
+	 * Een time-out in komen...
 	 */
 	public function previewOnEnter($value = true) {
 		$this->previewOnEnter = $value;
@@ -505,483 +963,9 @@ JS;
 
 }
 
-class RequiredPreviewTextField extends PreviewTextField {
+class RequiredUbbPreviewField extends UbbPreviewField {
 
 	public $notnull = true;
-
-}
-
-/**
- * Een InputField is een elementaire input-tag en heeft een maximale lengte.
- * HTML wordt ge-escaped.
- * Uiteraard kunnen er suggesties worden opgegeven.
- */
-class SuggestionField extends InputField {
-
-	public $max_len = 255;
-
-	public function __construct($name, $value, $description, $max_len = 255, $suggestions = array()) {
-		parent::__construct($name, htmlspecialchars_decode($value), $description);
-		$this->max_len = (int) $max_len;
-		parent::setSuggestions($suggestions);
-	}
-
-	public function validate() {
-		if (!parent::validate()) {
-			return false;
-		}
-		if ($this->getValue() == '') {
-			return true;
-		}
-
-		if (mb_strlen($this->getValue()) > $this->max_len) {
-			$this->error = 'Maximaal ' . $this->max_len . ' karakters toegestaan.';
-		}
-		return $this->error == '';
-	}
-
-	public function getValue() {
-		return htmlspecialchars(parent::getValue());
-	}
-
-}
-
-class RequiredInputField extends SuggestionField {
-
-	public $notnull = true;
-
-}
-
-/**
- * CountryField met een aantal autocomplete suggesties voor landen.
- * Doet verder geen controle op niet-bestaande landen...
- */
-class CountryField extends InputField {
-
-	public function __construct($name, $value, $description) {
-		parent::__construct($name, $value, $description);
-
-		$landSuggesties = array('Nederland', 'België', 'Duitsland', 'Frankrijk', 'Verenigd Koninkrijk', 'Verenigde Staten');
-		$this->setSuggestions($landSuggesties);
-	}
-
-}
-
-class RequiredCountryField extends CountryField {
-
-	public $notnull = true;
-
-}
-
-/**
- * In een UidField kunnen we een uid invullen.
- * Erachter zal dan de naam komen te staan. Het veld valideert als
- *  - het leeg is.
- *  - het een geldig uid bevat.
- */
-class UidField extends SuggestionField {
-
-	public function __construct($name, $value, $description) {
-		parent::__construct($name, $value, $description, 4);
-	}
-
-	public function validate() {
-		if (!parent::validate()) {
-			return false;
-		}
-
-		//leeg veld wel accepteren.
-		if ($this->getValue() == '') {
-			return true;
-		}
-
-		//maar als er iets wordt ingevuld, moet het wel een uid zijn.
-		if (!Lid::exists($this->getValue())) {
-			$this->error = 'Geen geldig uid opgegeven.';
-		}
-		return $this->error == '';
-	}
-
-	/**
-	 * Voeg een preview-div toe achter het veld, defenier een keyup-
-	 * event op het veld waarin de ajax-request gedaan wordt en trigger
-	 * het event meteen om de boel meteen te vullen.
-	 */
-	public function getJavascript() {
-		return <<<JS
-$('.UidField').each(function(index, tag){
-	$(this).after('<div id="uidPreview_'+$(this).attr('id').substring(6)+'" class="uidPreview" />');
-	$(this).keyup(function(){
-		var field=$(this);
-		if(field.val().length==4){
-			$.ajax({
-				url: "/tools/naamlink.php?uid="+field.val(),
-				success: function(response){
-					$('#uidPreview_'+field.attr('id').substring(6)).html(response);
-					init_visitekaartjes();
-				}
-			});
-		}
-	}).keyup();
-});
-JS;
-	}
-
-}
-
-/**
- * LidField
- * één lid selecteren zonder een uid te hoeven typen.
- *
- */
-class LidField extends InputField {
-
-	// zoekfilter voor door namen2uid gebruikte Zoeker::zoekLeden. 
-	// geaccepteerde input: 'leden', 'oudleden', 'alleleden', 'allepersonen', 'nobodies'
-	private $zoekin;
-
-	public function __construct($name, $value, $description = null, $zoekin = 'leden') {
-		$lid = LidCache::getLid($value);
-		if ($lid instanceof Lid) {
-			$value = $lid->getNaamLink('full', 'plain');
-		}
-		parent::__construct($name, $value, $description);
-		if (!in_array($zoekin, array('leden', 'oudleden', 'alleleden', 'allepersonen', 'nobodies'))) {
-			$zoekin = 'leden';
-		}
-		$this->zoekin = $zoekin;
-		$this->setRemoteSuggestionsSource('/tools/naamsuggesties/' . $this->zoekin);
-		$this->inputClasses[] = 'wantsLidPreview';
-	}
-
-	/**
-	 * LidField::getValue() levert altijd een uid of '' op.
-	 */
-	public function getValue() {
-		//leeg veld meteen teruggeven
-		if ($this->getOriginalValue() == '') {
-			return '';
-		}
-		//uid opzoeken
-		if ($uid = namen2uid($this->getOriginalValue(), $this->zoekin) AND isset($uid[0]['uid'])) {
-			return $uid[0]['uid'];
-		}
-		return '';
-	}
-
-	/**
-	 * getOriginalValue() levert het ingevoerde.
-	 */
-	public function getOriginalValue() {
-		return parent::getValue();
-	}
-
-	/**
-	 * checkt of er een uniek lid wordt gevonden
-	 */
-	public function validate() {
-		if (!parent::validate()) {
-			return false;
-		}
-
-		$uid = namen2uid($this->getOriginalValue(), $this->zoekin);
-		if ($uid) {
-			if (isset($uid[0]['uid']) AND Lid::exists($uid[0]['uid'])) {
-				return true;
-			} elseif (count($uid[0]['naamOpties']) > 0) { //meerdere naamopties?
-				$this->error = 'Meerdere leden mogelijk';
-				return false;
-			}
-		}
-		$this->error = 'Geen geldig lid';
-		return $this->error == '';
-	}
-
-	/**
-	 * Voeg een preview-div toe achter het veld, defenier een
-	 * keyup-event op het veld, en trigger het event meteen om de boel
-	 * meteen te vullen.
-	 */
-	public function getJavascript() {
-		$zoekin = '';
-		$js = parent::getJavascript();
-		$js.=<<<JS
-$('.wantsLidPreview').each(function(index, tag){
-	var suggesties=FieldSuggestions[$(this).attr('id').substring(6)].split("/");
-
-	$(this).after('<div id="lidPreview_'+$(this).attr('id').substring(6)+'" class="lidPreview" />');
-	$(this).keyup(function(){
-		var field=$(this);
-		if(field.val().length>2){
-			$.ajax({
-				url: "/tools/naamlink.php?naam="+field.val()+ "&"+$.param({ zoekin: suggesties[suggesties.length-1] }),
-				success: function(response){
-					$('#lidPreview_'+field.attr('id').substring(6)).html(response);
-					init_visitekaartjes();
-				}
-			});
-		}else{
-			$('#lidPreview_'+field.attr('id').substring(6)).html('');
-		}
-	}).keyup();
-});
-JS;
-		return $js;
-	}
-
-}
-
-class RequiredLidField extends LidField {
-
-	public $notnull = true;
-
-}
-
-/**
- * StudieField
- *
- * Suggereert een aantal studies, doet verder geen controle op invoer.
- */
-class StudieField extends SuggestionField {
-
-	public function __construct($name, $value, $description) {
-		parent::__construct($name, $value, $description, 100);
-
-		//de studies aan de TU, even prefixen met 'TU Delft - '
-		$tustudies = array('BK', 'CT', 'ET', 'IO', 'LST', 'LR', 'MT', 'MST', 'TA', 'TB', 'TI', 'TN', 'TW', 'WB');
-		$tustudies = array_map(create_function('$value', 'return "TU Delft - ".$value;'), $tustudies);
-
-		$andere = array('INHolland', 'Haagse Hogeschool', 'EURotterdam', 'ULeiden');
-
-		$this->setSuggestions(array_merge($tustudies, $andere));
-	}
-
-}
-
-class EmailField extends InputField {
-
-	/**
-	 * Dikke valideerfunctie voor emails.
-	 */
-	public function validate() {
-		if (!parent::validate()) {
-			return false;
-		}
-		if ($this->getValue() == '') {
-			return true;
-		}
-		//bevat het email-adres een @
-		if (strpos($this->getValue(), '@') === false) {
-			$this->error = 'Ongeldig formaat email-adres';
-		} else {
-			# anders gaan we m ontleden en controleren
-			list ($usr, $dom) = explode('@', $this->getValue());
-			if (mb_strlen($usr) > 50) {
-				$this->error = 'Gebruik max. 50 karakters voor de @:';
-			} elseif (mb_strlen($dom) > 50) {
-				$this->error = 'Gebruik max. 50 karakters na de @:';
-				# RFC 821 <- voorlopig voor JabberID even zelfde regels aanhouden
-				# http://www.lookuptables.com/
-				# Hmmmz, \x2E er uit gehaald ( . )
-			} elseif (preg_match('/[^\x21-\x7E]/', $usr) OR preg_match('/[\x3C\x3E\x28\x29\x5B\x5D\x5C\x2C\x3B\x40\x22]/', $usr)) {
-				$this->error = 'Het adres bevat ongeldige karakters voor de @:';
-			} elseif (!preg_match('/^[a-z0-9]+([-.][a-z0-9]+)*\\.[a-z]{2,4}$/i', $dom)) {
-				$this->error = 'Het domein is ongeldig:';
-			} elseif (!checkdnsrr($dom, 'A') and !checkdnsrr($dom, 'MX')) {
-				$this->error = 'Het domein bestaat niet (IPv4):';
-			} elseif (!checkdnsrr($dom, 'MX')) {
-				$this->error = 'Het domein is niet geconfigureerd om email te ontvangen:';
-			}
-		}
-		return $this->error == '';
-	}
-
-}
-
-class RequiredEmailField extends EmailField {
-
-	public $notnull = true;
-
-}
-
-/**
- * UrlField checked of de invoer op een url lijkt.
- */
-class UrlField extends InputField {
-
-	public function validate() {
-		if (!parent::validate()) {
-			return false;
-		}
-		if ($this->getValue() == '') {
-			return true;
-		}
-
-		// controleren of het een geldige url is...
-		if (!is_utf8($this->getValue()) OR !preg_match('#([\w]+?://[^ "\n\r\t<]*?)#is', $this->getValue())) {
-			$this->error = 'Ongeldige karakters:';
-		} elseif ($this->max_len != null && mb_strlen($this->getValue()) > $this->max_len) {
-			$this->error = 'Gebruik maximaal ' . $this->max_len . ' karakters:';
-		}
-		return $this->error == '';
-	}
-
-}
-
-/**
- * Invoeren van een integer. Eventueel met minima/maxima. Leeg evt. toegestaan.
- */
-class IntField extends InputField {
-
-	public $min = null;
-	public $max = null;
-
-	public function __construct($name, $value, $description, $max = null, $min = null, $empty = false) {
-		parent::__construct($name, $value, $description);
-
-		if ($max !== null) {
-			$this->max = (int) $max;
-		}
-		if ($min !== null) {
-			$this->min = (int) $min;
-		}
-		$this->notnull = !$empty;
-	}
-
-	public function getValue() {
-		return (int) parent::getValue();
-	}
-
-	public function validate() {
-		if (!parent::validate()) { // als dit een veld verplicht is heeft het in FormField::validate() al een foutmelding opgeleverd.
-			return false;
-		}
-
-		if (!$this->notnull AND parent::getValue() === '') {
-			// do not check if empty
-		} else if (!preg_match('/\d+/', parent::getValue())) {
-			$this->error = 'Alleen getallen toegestaan';
-		} else if ($this->max !== null AND $this->getValue() > $this->max) {
-			$this->error = 'Maximale waarde is ' . $this->max . ' ';
-		} else if ($this->min !== null AND $this->getValue() < $this->min) {
-			$this->error = 'Minimale waarde is ' . $this->min . ' ';
-		}
-		return $this->error == '';
-	}
-
-}
-
-/**
- * Invoeren van een float. Eventueel met minima/maxima. Leeg evt. toegestaan.
- */
-class FloatField extends InputField {
-
-	public $min = null;
-	public $max = null;
-
-	public function __construct($name, $value, $description, $max = null, $min = null, $empty = false) {
-		parent::__construct($name, $value, $description);
-
-		if ($max !== null) {
-			$this->max = (float) $max;
-		}
-		if ($min !== null) {
-			$this->min = (float) $min;
-		}
-		$this->notnull = !$empty;
-	}
-
-	public function getValue() {
-		return (float) str_replace(',', '.', parent::getValue());
-	}
-
-	public function validate() {
-		if (!parent::validate()) { // als dit een veld verplicht is heeft het in FormField::validate() al een foutmelding opgeleverd.
-			return false;
-		}
-
-		if (!$this->notnull AND strlen(parent::getValue()) === 0) {
-			// do not check if empty
-		} else if (!preg_match('/\d+(,{1}\d*)?/', str_replace('.', ',', parent::getValue()))) {
-			$this->error = 'Alleen komma-getallen toegestaan';
-		} else if ($this->max !== null AND $this->getValue() > $this->max) {
-			$this->error = 'Maximale waarde is ' . $this->max . ' ';
-		} else if ($this->min !== null AND $this->getValue() < $this->min) {
-			$this->error = 'Minimale waarde is ' . $this->min . ' ';
-		}
-		return $this->error == '';
-	}
-
-}
-
-/**
- * Verborgen veld voor de gebruiker.
- */
-class HiddenField extends InputField {
-
-	public function view() {
-		echo '<input type="hidden"' . $this->getInputAttribute(array('id', 'name', 'class', 'value', 'origvalue', 'disabled', 'maxlength', 'placeholder', 'autocomplete')) . ' />';
-	}
-
-}
-
-/**
- * NickField
- *
- * is pas valid als dit lid de enige is met deze nick.
- */
-class NickField extends InputField {
-
-	public $max_len = 20;
-
-	public function validate() {
-		if (!$this->model instanceof Lid) {
-			throw new Exception($this->getType() . ' moet een Lid-object meekrijgen');
-		}
-		if (!parent::validate()) {
-			return false;
-		}
-
-		//lege nicknames vinden we prima.
-		if ($this->getValue() == '') {
-			return true;
-		}
-
-		if (!is_utf8($this->getValue())) {
-			$this->error = 'Ongeldige karakters, gebruik reguliere tekst.';
-		} elseif (mb_strlen($this->getValue()) > $this->max_len) {
-			$this->error = 'Gebruik maximaal ' . $this->max_len . ' karakters.';
-			# 2e check met strtolower is toegevoegd omdat je anders je eigen nick niet van case kan veranderen
-			# omdat this->nickExists in mysql case-insensitive zoek
-		} elseif (strtolower($this->model->getNickname()) != strtolower($this->getValue()) AND Lid::nickExists($this->getValue())) {
-			$this->error = 'Deze bijnaam is al in gebruik.';
-		}
-		return $this->error == '';
-	}
-
-}
-
-/**
- * TelefoonField
- *
- * is valid als er een enigszins op een telefoonnummer lijkende string wordt
- * ingegeven.
- */
-class TelefoonField extends SuggestionField {
-
-	public function validate() {
-		if (!parent::validate()) {
-			return false;
-		}
-		if ($this->getValue() == '') {
-			return true;
-		}
-		if (!preg_match('/^([\d\+\-]{10,20})$/', $this->getValue())) {
-			$this->error = 'Geen geldig telefoonnummer.';
-		}
-
-		return $this->error == '';
-	}
 
 }
 
@@ -994,8 +978,7 @@ class TelefoonField extends SuggestionField {
 class PassField extends InputField {
 
 	public function __construct($name, Lid $lid) {
-		$this->name = $name;
-		$this->model = $lid;
+		parent::__construct($name, $name, null, $lid);
 	}
 
 	public function isPosted() {
@@ -1430,13 +1413,6 @@ class VinkField extends InputField {
 		}
 	}
 
-	public function validate() {
-		if ($this->notnull AND $this->getValue() == false) {
-			$this->error = 'Dit is een verplicht veld.';
-		}
-		return $this->error == '';
-	}
-
 	public function view() {
 		echo $this->getDiv();
 		echo $this->getLabel();
@@ -1492,11 +1468,12 @@ HTML;
 /**
  * Commentaardingen voor formulieren
  */
-class HTMLComment extends FormElement {
+class HtmlComment extends FormElement {
 
 	public $comment;
 
 	public function __construct($comment) {
+		parent::__construct(null);
 		$this->comment = $comment;
 	}
 
@@ -1510,7 +1487,7 @@ class HTMLComment extends FormElement {
 
 }
 
-class UBBComment extends HTMLComment {
+class UbbComment extends HtmlComment {
 
 	public function view() {
 		echo CsrUBB::instance()->getHtml($this->comment);
@@ -1518,7 +1495,7 @@ class UBBComment extends HTMLComment {
 
 }
 
-class Comment extends HTMLComment {
+class Comment extends HtmlComment {
 
 	public function view() {
 		echo '<h3>' . $this->comment . '</h3>';

@@ -63,16 +63,16 @@ class BeheerAbonnementenController extends \AclController {
 	}
 	
 	public function voorlid() {
-		$formField = new LidField('voor_lid', null, null, 'allepersonen'); // fetches POST values itself
-		if ($formField->validate()) {
-			$uid = $formField->getValue();
+		$InputField = new LidField('voor_lid', null, null, 'allepersonen'); // fetches POST values itself
+		if ($InputField->validate()) {
+			$uid = $InputField->getValue();
 			$matrix = array();
 			$matrix[$uid] = AbonnementenModel::getAbonnementenVoorLid($uid, false, true);
 			$this->view = new BeheerAbonnementenView($matrix);
 		}
 		else {
 			$this->view = new BeheerAbonnementenView(array(), null);
-			$this->view->setMelding($formField->error, -1);
+			$this->view->setMelding($InputField->error, -1);
 		}
 	}
 	

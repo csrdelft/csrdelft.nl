@@ -113,11 +113,11 @@ if ($ingelogd) {
 	$form = array();
 	$form[] = new Comment('Uw gegevens:');
 	$form[] = new SelectField('eetZelf', $data['eetZelf'], 'Eetvoorkeur', $eetopties);
-	$form[] = new InputField('allerZelf', $data['allerZelf'], 'Allergie-informatie:');
+	$form[] = new TextField('allerZelf', $data['allerZelf'], 'Allergie-informatie:');
 	$form[] = new Comment('Gegevens van uw Diesdame of Diesheer:');
-	$form[] = new InputField('naamDate', $data['naamDate'], 'Naam:');
+	$form[] = new TextField('naamDate', $data['naamDate'], 'Naam:');
 	$form[] = new SelectField('eetDate', $data['eetDate'], 'Eetvoorkeur', $eetopties);
-	$form[] = new InputField('allerDate', $data['allerDate'], 'Allergie-informatie:');
+	$form[] = new TextField('allerDate', $data['allerDate'], 'Allergie-informatie:');
 	$form[] = new SelectField('date18', $data['date18'], 'Is uw Diesdame of Diesheer meerderjarig op de dag van het gala?', $leeftijdopties);
 	$form[] = new SubmitButton('opslaan', '<a class="knop" href="/dies2014">Annuleren</a>');
 

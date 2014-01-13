@@ -249,16 +249,16 @@ class ProfielBewerken extends Profiel {
 		//zaken bewerken als we oudlid zijn of P_LEDEN_MOD hebben
 		if(in_array($profiel['status'], array('S_OUDLID', 'S_ERELID')) OR $hasLedenMod OR $this->editNoviet){
 			$form[]=new Comment('Identiteit:');
-			$form[]=new RequiredInputField('voornaam', $profiel['voornaam'], 'Voornaam', 50);
-			$form[]=new RequiredInputField('voorletters', $profiel['voorletters'], 'Voorletters', 10);
-			$form[]=new InputField('tussenvoegsel', $profiel['tussenvoegsel'], 'Tussenvoegsel', 15);
-			$form[]=new RequiredInputField('achternaam', $profiel['achternaam'], 'Achternaam', 50);
+			$form[]=new RequiredTextField('voornaam', $profiel['voornaam'], 'Voornaam', 50);
+			$form[]=new RequiredTextField('voorletters', $profiel['voorletters'], 'Voorletters', 10);
+			$form[]=new TextField('tussenvoegsel', $profiel['tussenvoegsel'], 'Tussenvoegsel', 15);
+			$form[]=new RequiredTextField('achternaam', $profiel['achternaam'], 'Achternaam', 50);
 			if($hasLedenMod OR $this->editNoviet){
 				if(!$this->editNoviet){
-					$form[]=new InputField('postfix', $profiel['postfix'], 'Postfix', 7);
+					$form[]=new TextField('postfix', $profiel['postfix'], 'Postfix', 7);
 				}
 				$form[]=new GeslachtField('geslacht', $profiel['geslacht'], 'Geslacht');
-				$form[]=new InputField('voornamen', $profiel['voornamen'], 'Voornamen', 100);
+				$form[]=new TextField('voornamen', $profiel['voornamen'], 'Voornamen', 100);
 			}
 			$form[]=new DatumField('gebdatum', $profiel['gebdatum'], 'Geboortedatum', date('Y')-15);
 			if(in_array($profiel['status'], array('S_NOBODY', 'S_EXLID', 'S_OVERLEDEN'))){
@@ -267,24 +267,24 @@ class ProfielBewerken extends Profiel {
 			if($hasLedenMod OR in_array($profiel['status'], array('S_OUDLID', 'S_ERELID', 'S_OVERLEDEN'))){
 				$form[]=new LidField('echtgenoot', $profiel['echtgenoot'], 'Echtgenoot (naam/lidnr):', 'allepersonen');
 				$form[]=new Comment('Oudledenpost:');
-				$form[]=new InputField('adresseringechtpaar',$profiel['adresseringechtpaar'], 'Tenaamstelling post echtpaar:',250);
+				$form[]=new TextField('adresseringechtpaar',$profiel['adresseringechtpaar'], 'Tenaamstelling post echtpaar:',250);
 				$form[] = new SelectField('ontvangtcontactueel', $profiel['ontvangtcontactueel'], 'Ontvangt Contactueel?', array('ja'=>'ja', 'digitaal'=>'ja, digitaal', 'nee'=>'nee'));
 			}
 		}
 
 		$form[]=new Comment('Adres:');
-		$form[]=new RequiredInputField('adres', $profiel['adres'], 'Straatnaam', 100);
-		$form[]=new RequiredInputField('postcode', $profiel['postcode'], 'Postcode', 20);
-		$form[]=new RequiredInputField('woonplaats', $profiel['woonplaats'], 'Woonplaats', 50);
+		$form[]=new RequiredTextField('adres', $profiel['adres'], 'Straatnaam', 100);
+		$form[]=new RequiredTextField('postcode', $profiel['postcode'], 'Postcode', 20);
+		$form[]=new RequiredTextField('woonplaats', $profiel['woonplaats'], 'Woonplaats', 50);
 		$form[]=new RequiredCountryField('land', $profiel['land'], 'Land');
 		$form[]=new TelefoonField('telefoon', $profiel['telefoon'], 'Telefoonnummer (vast)', 20);
 		$form[]=new TelefoonField('mobiel', $profiel['mobiel'], 'Paupernummer', 20);
 
 		if(!in_array($profiel['status'], array('S_OUDLID', 'S_ERELID'))){
 			$form[]=new Comment('Adres ouders:');
-			$form[]=new InputField('o_adres', $profiel['o_adres'], 'Straatnaam', 100);
-			$form[]=new InputField('o_postcode', $profiel['o_postcode'], 'Postcode', 20);
-			$form[]=new InputField('o_woonplaats', $profiel['o_woonplaats'], 'Woonplaats', 50);
+			$form[]=new TextField('o_adres', $profiel['o_adres'], 'Straatnaam', 100);
+			$form[]=new TextField('o_postcode', $profiel['o_postcode'], 'Postcode', 20);
+			$form[]=new TextField('o_woonplaats', $profiel['o_woonplaats'], 'Woonplaats', 50);
 			$form[]=new CountryField('o_land', $profiel['o_land'], 'Land', 50);
 			$form[]=new TelefoonField('o_telefoon', $profiel['o_telefoon'], 'Telefoonnummer', 20);
 		}
@@ -297,14 +297,14 @@ class ProfielBewerken extends Profiel {
 		}
 		$form[]=$email;
 		$form[]=new EmailField('msn', $profiel['msn'], 'MSN');
-		$form[]=new InputField('icq', $profiel['icq'], 'ICQ', 10); //TODO specifiek ding voor maken
+		$form[]=new TextField('icq', $profiel['icq'], 'ICQ', 10); //TODO specifiek ding voor maken
 		$form[]=new EmailField('jid', $profiel['jid'], 'Jabber/Google-talk'); //TODO specifiek ding voor maken
-		$form[]=new InputField('skype', $profiel['skype'], 'Skype', 20); //TODO specifiek ding voor maken
+		$form[]=new TextField('skype', $profiel['skype'], 'Skype', 20); //TODO specifiek ding voor maken
 		$form[]=new UrlField('linkedin', $profiel['linkedin'], 'Publiek LinkedIn-profiel');
 		$form[]=new UrlField('website', $profiel['website'], 'Website');
 
 		$form[]=new Comment('Boekhouding:');
-		$form[]=new InputField('bankrekening', $profiel['bankrekening'], 'Bankrekening', 11); //TODO specifiek ding voor maken
+		$form[]=new TextField('bankrekening', $profiel['bankrekening'], 'Bankrekening', 11); //TODO specifiek ding voor maken
 		if($hasLedenMod){
 			$form[]=new JaNeeField('machtiging', $profiel['machtiging'], 'Machtiging getekend?');
 		}
@@ -326,11 +326,11 @@ class ProfielBewerken extends Profiel {
 		}
 
 		if(!in_array($profiel['status'], array('S_OUDLID', 'S_ERELID'))){
-			$form[]=new InputField('studienr', $profiel['studienr'], 'Studienummer (TU)', 20);
+			$form[]=new TextField('studienr', $profiel['studienr'], 'Studienummer (TU)', 20);
 		}
 
 		if(!$this->editNoviet AND (in_array($profiel['status'], array('S_OUDLID', 'S_ERELID')) OR $hasLedenMod)){
-			$form[]=new InputField('beroep', $profiel['beroep'], 'Beroep/werk', 4096);
+			$form[]=new TextField('beroep', $profiel['beroep'], 'Beroep/werk', 4096);
 			$form[]=new IntField('lidjaar', $profiel['lidjaar'], 'Lid sinds', date('Y'), $beginjaar);
 		}
 
@@ -350,14 +350,14 @@ class ProfielBewerken extends Profiel {
 
 		$form[]=new Comment('Persoonlijk:');
 		if($hasLedenMod OR $this->editNoviet){
-			$form[]=new InputField('eetwens', $profiel['eetwens'], 'Dieet/allergie', 200);
+			$form[]=new TextField('eetwens', $profiel['eetwens'], 'Dieet/allergie', 200);
 			//wellicht binnenkort voor iedereen beschikbaar?
-			$form[]=new InputField('kerk', $profiel['kerk'], 'Kerk', 50);
+			$form[]=new TextField('kerk', $profiel['kerk'], 'Kerk', 50);
 			$form[]=new IntField('lengte', $profiel['lengte'], 'Lengte (cm)', 250);
-			$form[]=new InputField('vrienden', $profiel['vrienden'], 'Vrienden binnnen C.S.R./lichting', 300);
-			$form[]=new InputField('middelbareSchool', $profiel['middelbareSchool'], 'Middelbare school', 200);
+			$form[]=new TextField('vrienden', $profiel['vrienden'], 'Vrienden binnnen C.S.R./lichting', 300);
+			$form[]=new TextField('middelbareSchool', $profiel['middelbareSchool'], 'Middelbare school', 200);
 		}
-		$form[]=new InputField('muziek', $profiel['muziek'], 'Muziekinstrument', 50);
+		$form[]=new TextField('muziek', $profiel['muziek'], 'Muziekinstrument', 50);
 
 		if(LoginLid::instance()->hasPermission('P_ADMIN,P_BESTUUR,groep:novcie')){
 			$form[]=new SelectField('ovkaart', $profiel['ovkaart'], 'OV-kaart', array('' => 'Kies...','geen' => '(Nog) geen OV-kaart','week' => 'Week','weekend' => 'Weekend','niet' => 'Niet geactiveerd'));
@@ -405,7 +405,9 @@ class ProfielBewerken extends Profiel {
 		foreach($this->form->getFields() as $field){
 			if($field instanceof InputField){
 				//als een wachtwoordveld leeg is doen we er niets mee
-				if($field instanceof PassField AND $field->getValue()==''){ continue; }
+				if($field instanceof PassField AND $field->getValue()==''){
+					continue;
+				}
 				//is het wel een wijziging?
 				if($field->getValue()!=$this->lid->getProperty($field->getName())){
 					$this->bewerktLid->setProperty($field->getName(), $field->getValue());
@@ -456,10 +458,10 @@ class ProfielStatus extends Profiel{
 		$form[]=new SelectField('permissies', $profiel['permissies'], 'Permissies', $perm);
 		$form[]=new DatumField('lidafdatum', $profiel['lidafdatum'], 'Lid-af sinds');
 		$form[]=new SelectField('kring', $profiel['kring'], 'Kringnummer', range(0,9));
-		$form[]=new InputField('postfix', $profiel['postfix'], 'Postfix', 7);
+		$form[]=new TextField('postfix', $profiel['postfix'], 'Postfix', 7);
 		$form[]=new SelectField('ontvangtcontactueel', $profiel['ontvangtcontactueel'], 'Ontvangt Contactueel?', array('ja'=>'ja', 'digitaal'=>'ja, digitaal', 'nee'=>'nee'));
 		$form[]=new LidField('echtgenoot', $profiel['echtgenoot'], 'Echtgenoot (naam/lidnr):', 'allepersonen');
-		$form[]=new InputField('adresseringechtpaar',$profiel['adresseringechtpaar'], 'Tenaamstelling post echtpaar:',250);
+		$form[]=new TextField('adresseringechtpaar',$profiel['adresseringechtpaar'], 'Tenaamstelling post echtpaar:',250);
 		$form[]=new DatumField('sterfdatum', $profiel['sterfdatum'], 'Overleden op:');
 		$form[]=new SubmitButton();
 
@@ -490,13 +492,12 @@ class ProfielStatus extends Profiel{
 		//relevante gegevens uit velden verwerken
 		foreach($this->form->getFields() as $field){
 			if($field instanceof InputField){
-				
 				//mag het opgeslagen worden en is het wel een wijziging?
 				if($fieldsToSave[$field->getName()]['save']==true){
 					if($field->getValue()!=$this->lid->getProperty($field->getName())){
 						$this->bewerktLid->setProperty($field->getName(), $field->getValue());
 					}
-				}else{
+				} else {
 					//als het niet bewaard wordt, checken of veld gereset moet worden.
 					if($fieldsToSave[$field->getName()]['reset']!==null){
 						$this->bewerktLid->setProperty($field->getName(), $fieldsToSave[$field->getName()]['reset']);
@@ -790,10 +791,11 @@ class ProfielVoorkeur extends Profiel{
 			foreach($this->form->getFields() as $field){
 				if($field instanceof InputField){
 					//aan de hand van status bepalen welke POSTed velden worden opgeslagen van het formulier
-					if($field->getName() == 'lidOpmerking')
+					if($field->getName() == 'lidOpmerking') {
 						$lidvoorkeur->setLidOpmerking($field->getValue());
-					else
+					} else {
 						$lidvoorkeur->setCommissieVoorkeur($field->getName(),$field->getValue());
+					}
 				}
 			}
 		}
