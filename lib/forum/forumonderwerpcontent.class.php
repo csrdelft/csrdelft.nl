@@ -35,7 +35,7 @@ class ForumOnderwerpContent extends TemplateView {
 
 	function view() {
 		if ($this->forumonderwerp->getPosts() === false) {
-			$this->setMelding($this->forumonderwerp->getErrorDiv());
+			setMelding($this->forumonderwerp->getError());
 
 			echo '<h2><a href="/communicatie/forum/" class="forumGrootlink">Forum</a> &raquo; Foutje</h2>';
 			echo $this->getMelding();

@@ -209,13 +209,16 @@ abstract class InputField extends FormElement implements Validator {
 	}
 
 	/**
-	 * Geef een foutmelding voor dit veld terug.
+	 * Geef de foutmelding voor dit veld terug.
 	 */
-	public function getError($html = true) {
-		if ($html === false) {
-			return $this->error;
-		}
+	public function getError() {
+		return $this->error;
+	}
 
+	/**
+	 * Geef een div met de foutmelding voor dit veld terug.
+	 */
+	public function getErrorDiv() {
 		if ($this->error != '') {
 			return '<div class="waarschuwing">' . $this->error . '</div>';
 		}
@@ -311,7 +314,7 @@ abstract class InputField extends FormElement implements Validator {
 	public function view() {
 		echo $this->getDiv();
 		echo $this->getLabel();
-		echo $this->getError();
+		echo $this->getErrorDiv();
 
 		echo '<input type="text"' . $this->getInputAttribute(array('id', 'name', 'class', 'value', 'origvalue', 'disabled', 'maxlength', 'placeholder', 'autocomplete', 'onchange', 'onclick')) . ' />';
 
@@ -831,7 +834,7 @@ class TextareaField extends TextField {
 	public function view() {
 		echo $this->getDiv();
 		echo $this->getLabel();
-		echo $this->getError();
+		echo $this->getErrorDiv();
 
 		echo '<textarea' . $this->getInputAttribute(array('id', 'name', 'origvalue', 'class', 'disabled', 'rows', 'maxlength', 'placeholder', 'autocomplete', 'onchange', 'onclick')) . '>';
 		echo htmlspecialchars($this->value);
@@ -1026,7 +1029,7 @@ class PassField extends InputField {
 	public function view() {
 		echo $this->getDiv();
 		echo '<div class="password">';
-		echo $this->getError();
+		echo $this->getErrorDiv();
 		echo '<label for="field_' . $this->name . '_current">Huidige wachtwoord</label>';
 		echo '<input type="password" autocomplete="off" id="field_' . $this->name . '_current" name="' . $this->name . '_current" /></div>';
 		echo '<div class="password"><label for="field_' . $this->name . '_new">Nieuw wachtwoord</label>';
@@ -1082,7 +1085,7 @@ class SelectField extends InputField {
 	public function view() {
 		echo $this->getDiv();
 		echo $this->getLabel();
-		echo $this->getError();
+		echo $this->getErrorDiv();
 
 		echo '<select origvalue="' . $this->origvalue . '" ';
 		if ($this->multiple) {
@@ -1188,7 +1191,7 @@ class KeuzeRondjeField extends SelectField {
 	public function view() {
 		echo $this->getDiv();
 		echo $this->getLabel();
-		echo $this->getError();
+		echo $this->getErrorDiv();
 
 		echo '<div style="float: left;">';
 		foreach ($this->options as $value => $description) {
@@ -1272,7 +1275,7 @@ class DatumField extends InputField {
 	public function view() {
 		echo $this->getDiv();
 		echo $this->getLabel();
-		echo $this->getError();
+		echo $this->getErrorDiv();
 
 		$years = range($this->minyear, $this->maxyear);
 		$mounths = range(1, 12);
@@ -1370,7 +1373,7 @@ class TijdField extends InputField {
 	public function view() {
 		echo $this->getDiv();
 		echo $this->getLabel();
-		echo $this->getError();
+		echo $this->getErrorDiv();
 
 		$hours = range(0, 23);
 		$minutes = range(0, 59, $this->minutensteps);
@@ -1416,7 +1419,7 @@ class VinkField extends InputField {
 	public function view() {
 		echo $this->getDiv();
 		echo $this->getLabel();
-		echo $this->getError();
+		echo $this->getErrorDiv();
 
 		echo '<input type="checkbox"' . $this->getInputAttribute(array('id', 'name', 'value', 'origvalue', 'class', 'disabled', 'onchange', 'onclick'));
 		if ($this->value) {

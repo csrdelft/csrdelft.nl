@@ -42,12 +42,18 @@ abstract class TemplateView extends Smarty implements View {
 		return $this->model;
 	}
 
-	public function getTitel() {
-		return '';
-	}
-
+	/**
+	 * Backwards compatibility with SimpleHTML
+	 */
 	public function getMelding() {
 		return SimpleHTML::getMelding();
+	}
+
+	/**
+	 * Backwards compatibility with SimpleHTML
+	 */
+	public static function setMelding($sMelding, $level = -1) {
+		setMelding($sMelding, $level);
 	}
 
 }

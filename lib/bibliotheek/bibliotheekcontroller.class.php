@@ -138,7 +138,7 @@ class BibliotheekController extends Controller {
 					$return['value'] = $this->boek->getProperty($_POST['id']) . '';
 					$return['melding'] = 'Opgeslagen';
 				} else {
-					$return['melding'] = 'Fout: ' . $this->boek->getField($_POST['id'])->getError() . ' ' . $this->boek->getErrorDiv();
+					$return['melding'] = 'Fout: ' . $this->boek->getField($_POST['id'])->getError() . ' ' . $this->boek->getError();
 				}
 			} catch (Exception $e) {
 				$return['melding'] = 'Fout: ' . $e->getMessage();
