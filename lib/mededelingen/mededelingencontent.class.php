@@ -118,10 +118,6 @@ class MededelingenZijbalkContent extends TemplateView {
 		$this->aantal = (int) $aantal;
 	}
 
-	public function getTitel() {
-		return '';
-	}
-
 	public function view() {
 
 		// Handige variabelen.
