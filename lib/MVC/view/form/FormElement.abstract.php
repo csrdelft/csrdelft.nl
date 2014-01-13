@@ -16,13 +16,13 @@
  * de class FormElement.
  * 
  * FormElement
- *  - InputField					Elementen die data leveren.
- *  - SubmitButton					Submitten van het formulier.
- *  - HtmlComment					Uitleg/commentaar in een formulier stoppen.
+ *  - InputField					Elementen die data leveren
+ *  - SubmitButton					Submitten en resetten van het formulier
+ *  - HtmlComment					Uitleg/commentaar in een formulier stoppen
  * 
  * Uitbreidingen van InputField:
  * 	- TextField						Simpele input
- * 		* CountryField				Landjes 
+ * 		* LandField					Landjes 
  * 		* StudieField				Studie
  * 		* EmailField				Email adressen
  * 		* UrlField					Urls
@@ -37,17 +37,17 @@
  * 		* FloatField				Bedragen
  * 	- PassField						Wachtwoorden (oude, nieuwe, nieuwe ter bevestiging)
  * 	- SelectField
- * 		* GeslachtField
- * 		* JaNeeField
+ * 		* GeslachtField				m/v
+ * 		* JaNeeField				ja/nee
  * 		* VerticaleField			Verticalen
- * 		* KerkField
+ * 		* KerkField					Denominaties
  * 	- DatumField					Datums (want data is zo ambigu)
  * 	- TijdField						Tijsstip
  * 
  * Uitbreidingen van HtmlComment:
- * 		- HtmlComment				invoer wordt als html weergegeven.
+ * 		- HtmlComment				invoer wordt als html weergegeven
  * 		- UbbComment				invoer wordt als ubb geparsed
- * 		- Comment					invoer wordt niet geparsed en in een <h3> weergegeven.
+ * 		- Subkopje					invoer wordt als <h3> weergegeven
  * 
  */
 abstract class FormElement implements View {
@@ -405,10 +405,10 @@ class RequiredTextField extends TextField {
 }
 
 /**
- * CountryField met een aantal autocomplete suggesties voor landen.
+ * LandField met een aantal autocomplete suggesties voor landen.
  * Doet verder geen controle op niet-bestaande landen...
  */
-class CountryField extends TextField {
+class LandField extends TextField {
 
 	public function __construct($name, $value, $description) {
 		parent::__construct($name, $value, $description);
@@ -418,7 +418,7 @@ class CountryField extends TextField {
 
 }
 
-class RequiredCountryField extends CountryField {
+class RequiredLandField extends LandField {
 
 	public $notnull = true;
 
@@ -1495,7 +1495,7 @@ class UbbComment extends HtmlComment {
 
 }
 
-class Comment extends HtmlComment {
+class Subkopje extends HtmlComment {
 
 	public function view() {
 		echo '<h3>' . $this->comment . '</h3>';

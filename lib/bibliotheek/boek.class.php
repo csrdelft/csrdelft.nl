@@ -536,7 +536,7 @@ class NieuwBoek extends Boek {
 	public function createBoekformulier() {
 		//Iedereen die bieb mag bekijken mag nieuwe boeken toevoegen
 		if ($this->magBekijken()) {
-			$nieuwboekformulier['boekgeg'] = new Comment('Boekgegevens:');
+			$nieuwboekformulier['boekgeg'] = new Subkopje('Boekgegevens:');
 			$nieuwboekformulier = $nieuwboekformulier + $this->getCommonFields();
 			if ($this->isBASFCie()) {
 				$nieuwboekformulier['biebboek'] = new SelectField('biebboek', $this->biebboek, 'Is een biebboek?', array('ja' => 'C.S.R. boek', 'nee' => 'Eigen boek'));
@@ -973,7 +973,7 @@ class BewerkBoek extends Boek {
 				$annuleerknop = '<a class="knop" href="/communicatie/bibliotheek/boek/' . $this->getId() . '">Annuleren</a>';
 				$posturl.='/' . $this->editbeschrijving;
 			}
-			$boekbeschrijvingform[] = new Comment($titeltekst);
+			$boekbeschrijvingform[] = new Subkopje($titeltekst);
 			$textfield = new RequiredUbbPreviewField('beschrijving', $this->getEditBeschrijving()->getTekst(), $schrijver);
 			$textfield->previewOnEnter();
 			$boekbeschrijvingform[] = $textfield;

@@ -21,9 +21,9 @@ class ToewijzenFormView extends TemplateView {
 		$this->_suggesties = $suggesties;
 		$this->_jong = (int) \Lichting::getJongsteLichting();
 
-		$InputFields[] = new LidField('lid_id', $taak->getLidId(), 'Naam of lidnummer', 'leden');
+		$formFields[] = new LidField('lid_id', $taak->getLidId(), 'Naam of lidnummer', 'leden');
 
-		$this->_form = new Formulier('taken-taak-toewijzen-form', $GLOBALS['taken_module'] . '/toewijzen/' . $this->_taak->getTaakId(), $InputFields);
+		$this->_form = new Formulier('taken-taak-toewijzen-form', $GLOBALS['taken_module'] . '/toewijzen/' . $this->_taak->getTaakId(), $formFields);
 	}
 
 	public function getTitel() {
@@ -64,8 +64,8 @@ class ToewijzenFormView extends TemplateView {
 		}
 
 		$lijst = $this->fetch('taken/corveetaak/suggesties_lijst.tpl');
-		$InputFields[] = new HtmlComment($lijst);
-		$this->_form->addFields($InputFields);
+		$formFields[] = new HtmlComment($lijst);
+		$this->_form->addFields($formFields);
 
 		$this->assign('form', $this->_form);
 		$this->display('taken/popup_form.tpl');

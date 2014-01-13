@@ -41,24 +41,24 @@ class CorveeRepetitieFormView extends TemplateView {
 			}
 		}
 
-		$InputFields['fid'] = new SelectField('functie_id', $fid, 'Functie', $functieNamen, $functieSelectie);
-		$InputFields['fid']->setOnChangeScript($functiePunten . "$('#field_standaard_punten').val(punten[this.value]);");
-		$InputFields[] = new WeekdagField('dag_vd_week', $dag, 'Dag v/d week');
-		$InputFields['dag'] = new IntField('periode_in_dagen', $periode, 'Periode (in dagen)', 183, 0);
-		$InputFields['dag']->title = 'Als de periode ongelijk is aan 7 is dit de start-dag bij het aanmaken van periodiek corvee';
-		$InputFields['vrk'] = new VinkField('voorkeurbaar', $voorkeur, 'Voorkeurbaar');
+		$formFields['fid'] = new SelectField('functie_id', $fid, 'Functie', $functieNamen, $functieSelectie);
+		$formFields['fid']->setOnChangeScript($functiePunten . "$('#field_standaard_punten').val(punten[this.value]);");
+		$formFields[] = new WeekdagField('dag_vd_week', $dag, 'Dag v/d week');
+		$formFields['dag'] = new IntField('periode_in_dagen', $periode, 'Periode (in dagen)', 183, 0);
+		$formFields['dag']->title = 'Als de periode ongelijk is aan 7 is dit de start-dag bij het aanmaken van periodiek corvee';
+		$formFields['vrk'] = new VinkField('voorkeurbaar', $voorkeur, 'Voorkeurbaar');
 		if ($this->_crid !== 0) {
-			$InputFields['vrk']->setOnChangeScript("if (!this.checked) alert('Alle voorkeuren zullen worden verwijderd!');");
+			$formFields['vrk']->setOnChangeScript("if (!this.checked) alert('Alle voorkeuren zullen worden verwijderd!');");
 		}
-		$InputFields[] = new SelectField('mlt_repetitie_id', $mrid, 'Maaltijdrepetitie', $repetitieNamen, $repetitieSelectie);
-		$InputFields[] = new IntField('standaard_punten', $punten, 'Standaard punten', 10, 0);
-		$InputFields[] = new IntField('standaard_aantal', $aantal, 'Aantal corveeërs', 10, 1);
+		$formFields[] = new SelectField('mlt_repetitie_id', $mrid, 'Maaltijdrepetitie', $repetitieNamen, $repetitieSelectie);
+		$formFields[] = new IntField('standaard_punten', $punten, 'Standaard punten', 10, 0);
+		$formFields[] = new IntField('standaard_aantal', $aantal, 'Aantal corveeërs', 10, 1);
 		if ($this->_crid !== 0) {
-			$InputFields['ver'] = new VinkField('verplaats_dag', $verplaats, 'Ook verplaatsen');
-			$InputFields['ver']->title = 'Verplaats naar dag v/d week bij bijwerken';
+			$formFields['ver'] = new VinkField('verplaats_dag', $verplaats, 'Ook verplaatsen');
+			$formFields['ver']->title = 'Verplaats naar dag v/d week bij bijwerken';
 		}
 
-		$this->_form = new Formulier('taken-corvee-repetitie-form', $GLOBALS['taken_module'] . '/opslaan/' . $crid, $InputFields);
+		$this->_form = new Formulier('taken-corvee-repetitie-form', $GLOBALS['taken_module'] . '/opslaan/' . $crid, $formFields);
 	}
 
 	public function getTitel() {

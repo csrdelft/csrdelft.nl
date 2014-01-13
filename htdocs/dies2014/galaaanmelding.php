@@ -111,10 +111,10 @@ if ($ingelogd) {
 	$leeftijdopties = array('nee', 'ja');
 
 	$form = array();
-	$form[] = new Comment('Uw gegevens:');
+	$form[] = new Subkopje('Uw gegevens:');
 	$form[] = new SelectField('eetZelf', $data['eetZelf'], 'Eetvoorkeur', $eetopties);
 	$form[] = new TextField('allerZelf', $data['allerZelf'], 'Allergie-informatie:');
-	$form[] = new Comment('Gegevens van uw Diesdame of Diesheer:');
+	$form[] = new Subkopje('Gegevens van uw Diesdame of Diesheer:');
 	$form[] = new TextField('naamDate', $data['naamDate'], 'Naam:');
 	$form[] = new SelectField('eetDate', $data['eetDate'], 'Eetvoorkeur', $eetopties);
 	$form[] = new TextField('allerDate', $data['allerDate'], 'Allergie-informatie:');

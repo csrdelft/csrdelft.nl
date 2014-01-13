@@ -10,7 +10,7 @@ $uid='0436';
 $form=array();
 
 //testformulier bouwen.
-$form[]=new Comment('Studie:');
+$form[]=new Subkopje('Studie:');
 $form[]=new StudieField('studie', $default, 'Studie');
 $form[]=new TextareaField('opmerking1', $default, 'Opmerking1');
 $hippeTextarea=new UbbPreviewField('opmerking', $default, 'previewOnEnter:');

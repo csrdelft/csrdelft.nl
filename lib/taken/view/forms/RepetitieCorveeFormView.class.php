@@ -14,12 +14,12 @@ class RepetitieCorveeFormView extends TemplateView {
 
 	public function __construct(CorveeRepetitie $repetitie, $beginDatum = null, $eindDatum = null, $mid = null) {
 		parent::__construct();
-		$InputFields[] = new HtmlComment('<p>Aanmaken op de eerste ' . $repetitie->getDagVanDeWeekText() . 'en vervolgens ' . $repetitie->getPeriodeInDagenText() . ' in de periode:</p>');
-		$InputFields['begin'] = new DatumField('begindatum', $beginDatum, 'Vanaf', date('Y') + 1, date('Y'));
-		$InputFields['eind'] = new DatumField('einddatum', $eindDatum, 'Tot en met', date('Y') + 1, date('Y'));
-		$InputFields[] = new HiddenField('maaltijd_id', $mid);
+		$formFields[] = new HtmlComment('<p>Aanmaken op de eerste ' . $repetitie->getDagVanDeWeekText() . 'en vervolgens ' . $repetitie->getPeriodeInDagenText() . ' in de periode:</p>');
+		$formFields['begin'] = new DatumField('begindatum', $beginDatum, 'Vanaf', date('Y') + 1, date('Y'));
+		$formFields['eind'] = new DatumField('einddatum', $eindDatum, 'Tot en met', date('Y') + 1, date('Y'));
+		$formFields[] = new HiddenField('maaltijd_id', $mid);
 
-		$this->_form = new Formulier('taken-repetitie-aanmaken-form', $GLOBALS['taken_module'] . '/aanmaken/' . $repetitie->getCorveeRepetitieId(), $InputFields);
+		$this->_form = new Formulier('taken-repetitie-aanmaken-form', $GLOBALS['taken_module'] . '/aanmaken/' . $repetitie->getCorveeRepetitieId(), $formFields);
 	}
 
 	public function getTitel() {
