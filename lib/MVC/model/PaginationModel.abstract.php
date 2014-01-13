@@ -20,7 +20,7 @@ abstract class PaginationModel extends PersistenceModel {
 	protected $per_page;
 	private $last_page_number;
 	private $where;
-	private $values;
+	private $where_params;
 	private $orderby;
 	private $assoc;
 
@@ -33,10 +33,10 @@ abstract class PaginationModel extends PersistenceModel {
 		}
 	}
 
-	public function setPaging($per_page, $where = null, array $values = array(), $orderby = null, $assoc = false) {
+	public function setPaging($per_page, $where = null, array $where_params = array(), $orderby = null, $assoc = false) {
 		$this->per_page = $per_page;
 		$this->where = $where;
-		$this->values = $values;
+		$this->where_params = $where_params;
 		$this->orderby = $orderby;
 		$this->assoc = $assoc;
 	}
@@ -55,17 +55,17 @@ abstract class PaginationModel extends PersistenceModel {
 			$this->current_page_number = $number;
 		}
 		$_SESSION[get_class($this) . '_current_page_number'] = $this->current_page_number; // save to session
-		return $this->find($this->where, $this->values, $this->orderby, $this->per_page, $this->current_page_number * $this->per_page);
+		return $this->find($this->where, $this->where_params, $this->orderby, $this->per_page, $this->current_page_number * $this->per_page);
 	}
 
 	public function getPageCount($recount = false) {
-		if (!isset($this->last_page_number) OR $recount) {
+		if (!isset($this->last_page_number) OR $recount) { //TODO? save to session as well or even global cache?
 			$sql = 'SELECT COUNT(*) as total FROM ' . $this->table_name;
 			if ($this->where !== null) {
 				$sql .= ' WHERE ' . $this->where;
 			}
-			$query = Database::instance()->prepare($sql, $this->values);
-			$query->execute($this->values);
+			$query = Database::instance()->prepare($sql, $this->where_params);
+			$query->execute($this->where_params);
 			$this->last_page_number = ceil(((int) $query->fetchColumn()) / $this->per_page);
 		}
 		return $this->last_page_number;
