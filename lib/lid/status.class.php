@@ -118,7 +118,8 @@ class Status{
 	static public function getAllDescriptions(){
 		$return = array();
 		foreach(self::getAll() as $status){
-			$return[$status] = Status::getDescription($status);
+			$obj = new Status($status);
+			$return[$status] = $obj->getDescription();
 		}
 		return $return;
 	}
