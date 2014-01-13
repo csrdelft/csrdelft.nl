@@ -66,10 +66,6 @@
  */
 abstract class FormElement implements View {
 
-	public function getModel() {
-		return $this;
-	}
-
 	public function getType() {
 		return get_class($this);
 	}
@@ -101,8 +97,10 @@ class InputField extends FormElement implements Validator {
 	//array met suggesties die de javascript-autocomplete aan gaat bieden.
 	public $suggestions = array();
 	public $remotedatasource = '';
+	protected $model;
 
-	public function __construct($name, $value, $description = null) {
+	public function __construct(/* TODO: $model, */$name, $value, $description = null) {
+		//TODO: $this->model = $model;
 		$this->name = $name;
 		$this->value = $value;
 		$this->origvalue = $value;
@@ -116,8 +114,8 @@ class InputField extends FormElement implements Validator {
 		$this->inputClasses[] = $this->getType();
 	}
 
-	public function getType() {
-		return get_class($this);
+	public function getModel() {
+		return $this; //TODO: $model
 	}
 
 	public function getName() {
@@ -331,10 +329,10 @@ class InputField extends FormElement implements Validator {
 	/**
 	 * Javascript nodig voor dit *Field. Dit wordt één keer per *Field
 	 * geprint door het Formulier-object.
-	 */
-
-	/**
-	 * Toelichting op options voor RemoteSuggestions
+	 * 
+	 * TODO: client side validation
+	 * 
+	 * Toelichting op options voor RemoteSuggestions:
 	 * result = array(
 	 * 		array(data:array(..,..,..), value: "string", result:"string"),
 	 * 		array(... )
