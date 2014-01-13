@@ -1,5 +1,5 @@
 <?php
-namespace Taken\CRV;
+
 
 require_once 'taken/model/entity/CorveeVrijstelling.class.php';
 
@@ -24,7 +24,7 @@ class VrijstellingenModel {
 	public static function getVrijstelling($uid) {
 		$vrijstellingen = self::loadVrijstellingen('lid_id = ?', array($uid), 1);
 		if (!array_key_exists(0, $vrijstellingen)) {
-			return null; //throw new \Exception('Get vrijstelling faalt: Not found $uid ='. $uid);
+			return null; //throw new Exception('Get vrijstelling faalt: Not found $uid ='. $uid);
 		}
 		return $vrijstellingen[0];
 	}
@@ -39,15 +39,15 @@ class VrijstellingenModel {
 		if (is_int($limit) && $limit > 0) {
 			$sql.= ' LIMIT '. $limit;
 		}
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
-		$result = $query->fetchAll(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, '\Taken\CRV\CorveeVrijstelling');
+		$result = $query->fetchAll(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, '\CorveeVrijstelling');
 		return $result;
 	}
 	
 	public static function saveVrijstelling($uid, $begin, $eind, $percentage) {
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		try {
 			$db->beginTransaction();
 			$vrijstelling = self::getVrijstelling($uid);
@@ -74,11 +74,11 @@ class VrijstellingenModel {
 		$sql.= ' (lid_id, begin_datum, eind_datum, percentage)';
 		$sql.= ' VALUES (?, ?, ?, ?)';
 		$values = array($uid, $begin, $eind, $percentage);
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		if ($query->rowCount() !== 1) {
-			throw new \Exception('New vrijstelling faalt: $query->rowCount() ='. $query->rowCount());
+			throw new Exception('New vrijstelling faalt: $query->rowCount() ='. $query->rowCount());
 		}
 		return new CorveeVrijstelling($uid, $begin, $eind, $percentage);
 	}
@@ -93,11 +93,11 @@ class VrijstellingenModel {
 			$vrijstelling->getPercentage(),
 			$vrijstelling->getLidId()
 		);
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		if ($query->rowCount() !== 1) {
-			throw new \Exception('Update vrijstelling faalt: $query->rowCount() ='. $query->rowCount());
+			throw new Exception('Update vrijstelling faalt: $query->rowCount() ='. $query->rowCount());
 		}
 	}
 	
@@ -109,11 +109,11 @@ class VrijstellingenModel {
 		$sql = 'DELETE FROM crv_vrijstellingen';
 		$sql.= ' WHERE lid_id = ?';
 		$values = array($uid);
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		if ($query->rowCount() !== 1) {
-			throw new \Exception('Delete vrijstelling faalt: $query->rowCount() ='. $query->rowCount());
+			throw new Exception('Delete vrijstelling faalt: $query->rowCount() ='. $query->rowCount());
 		}
 	}
 }

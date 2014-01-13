@@ -1,5 +1,5 @@
 <?php
-namespace Taken\CRV;
+
 
 require_once 'taken/model/VrijstellingenModel.class.php';
 
@@ -18,7 +18,7 @@ class PuntenModel {
 			try {
 				$lid = \LidCache::getLid($uid); // false if lid does not exist
 				if (!$lid instanceof \Lid) {
-					throw new \Exception('Lid bestaat niet: $uid ='. $uid);
+					throw new Exception('Lid bestaat niet: $uid ='. $uid);
 				}
 				$punten = $totalen['puntenTotaal'];
 				$punten += $totalen['bonusTotaal'];
@@ -44,29 +44,29 @@ class PuntenModel {
 	
 	public static function puntenToekennen($uid, $punten, $bonus_malus) {
 		if (!is_int($punten) || !is_int($bonus_malus)) {
-			throw new \Exception('Punten toekennen faalt: geen integer');
+			throw new Exception('Punten toekennen faalt: geen integer');
 		}
 		$lid = \LidCache::getLid($uid); // false if lid does not exist
 		if (!$lid instanceof \Lid) {
-			throw new \Exception('Lid bestaat niet: $uid ='. $uid);
+			throw new Exception('Lid bestaat niet: $uid ='. $uid);
 		}
 		self::savePuntenVoorLid($lid, (int) $lid->getProperty('corvee_punten') + $punten, (int) $lid->getProperty('corvee_punten_bonus') + $bonus_malus);
 	}
 	
 	public static function puntenIntrekken($uid, $punten, $bonus_malus) {
 		if (!is_int($punten) || !is_int($bonus_malus)) {
-			throw new \Exception('Punten intrekken faalt: geen integer');
+			throw new Exception('Punten intrekken faalt: geen integer');
 		}
 		$lid = \LidCache::getLid($uid); // false if lid does not exist
 		if (!$lid instanceof \Lid) {
-			throw new \Exception('Lid bestaat niet: $uid ='. $uid);
+			throw new Exception('Lid bestaat niet: $uid ='. $uid);
 		}
 		self::savePuntenVoorLid($lid, (int) $lid->getProperty('corvee_punten') - $punten, (int) $lid->getProperty('corvee_punten_bonus') - $bonus_malus);
 	}
 	
 	public static function savePuntenVoorLid(\Lid $lid, $punten=null, $bonus_malus=null) {
 		if (!is_int($punten) && !is_int($bonus_malus)) {
-			throw new \Exception('Save punten voor lid faalt: geen integer');
+			throw new Exception('Save punten voor lid faalt: geen integer');
 		}
 		if (is_int($punten)) {
 			$lid->setProperty('corvee_punten', $punten);
@@ -75,7 +75,7 @@ class PuntenModel {
 			$lid->setProperty('corvee_punten_bonus', $bonus_malus);
 		}
 		if (!$lid->save()) {
-			throw new \Exception('Save punten voor lid faalt: opslaan mislukt');
+			throw new Exception('Save punten voor lid faalt: opslaan mislukt');
 		}
 	}
 	
@@ -93,7 +93,7 @@ class PuntenModel {
 		if (is_int($limit) && $limit > 0) {
 			$sql.= ' LIMIT '. $limit;
 		}
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		$result = $query->fetchAll();
@@ -114,7 +114,7 @@ class PuntenModel {
 		foreach ($matrix as $uid => $totalen) {
 			$lid = \LidCache::getLid($uid); // false if lid does not exist
 			if (!$lid instanceof \Lid) {
-				throw new \Exception('Lid bestaat niet: $uid ='. $uid);
+				throw new Exception('Lid bestaat niet: $uid ='. $uid);
 			}
 			$lidtaken = array();
 			if (array_key_exists($uid, $taken)) {

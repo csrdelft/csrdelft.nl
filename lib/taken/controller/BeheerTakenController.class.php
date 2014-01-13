@@ -1,7 +1,7 @@
 <?php
-namespace Taken\CRV;
 
-require_once 'aclcontroller.class.php';
+
+require_once 'MVC/controller/AclController.abstract.php';
 require_once 'taken/model/TakenModel.class.php';
 require_once 'taken/model/CorveeRepetitiesModel.class.php';
 require_once 'taken/view/BeheerTakenView.class.php';
@@ -12,7 +12,7 @@ require_once 'taken/view/forms/RepetitieCorveeFormView.class.php';
  * BeheerTakenController.class.php	| 	P.W.G. Brussee (brussee@live.nl)
  * 
  */
-class BeheerTakenController extends \ACLController {
+class BeheerTakenController extends \AclController {
 
 	public function __construct($query) {
 		parent::__construct($query);
@@ -47,41 +47,41 @@ class BeheerTakenController extends \ACLController {
 		if ($this->hasParam(3)) {
 			$tid = intval($this->getParam(3));
 		}
-		$this->performAction($tid);
+		$this->performAction(array($tid));
 	}
 	
-	public function action_beheer($tid=null, $mid=null) {
+	public function beheer($tid=null, $mid=null) {
 		if (is_int($tid) && $tid > 0) {
-			$this->action_bewerk($tid);
+			$this->bewerk($tid);
 		}
 		elseif (is_int($mid) && $mid > 0) {
-			$maaltijd = \Taken\MLT\MaaltijdenModel::getMaaltijd($mid, true);
+			$maaltijd = MaaltijdenModel::getMaaltijd($mid, true);
 			$taken = TakenModel::getTakenVoorMaaltijd($mid, true);
 		}
 		else {
 			$taken = TakenModel::getAlleTaken();
 			$maaltijd = null;
 		}
-		$this->content = new BeheerTakenView($taken, $maaltijd, false, CorveeRepetitiesModel::getAlleRepetities(), $this->getContent());
-		$this->content = new \csrdelft($this->getContent());
-		$this->content->addStylesheet('js/autocomplete/jquery.autocomplete.css');
-		$this->content->addStylesheet('taken.css');
-		$this->content->addScript('autocomplete/jquery.autocomplete.min.js');
-		$this->content->addScript('taken.js');
+		$this->view = new BeheerTakenView($taken, $maaltijd, false, CorveeRepetitiesModel::getAlleRepetities(), $this->getContent());
+		$this->view = new csrdelft($this->getContent());
+		$this->view->addStylesheet('js/autocomplete/jquery.autocomplete.css');
+		$this->view->addStylesheet('taken.css');
+		$this->view->addScript('autocomplete/jquery.autocomplete.min.js');
+		$this->view->addScript('taken.js');
 	}
 	
-	public function action_maaltijd($mid) {
-		$this->action_beheer(null, $mid);
+	public function maaltijd($mid) {
+		$this->beheer(null, $mid);
 	}
 	
-	public function action_prullenbak() {
-		$this->content = new BeheerTakenView(TakenModel::getVerwijderdeTaken(), null, true);
-		$this->content = new \csrdelft($this->getContent());
-		$this->content->addStylesheet('taken.css');
-		$this->content->addScript('taken.js');
+	public function prullenbak() {
+		$this->view = new BeheerTakenView(TakenModel::getVerwijderdeTaken(), null, true);
+		$this->view = new csrdelft($this->getContent());
+		$this->view->addStylesheet('taken.css');
+		$this->view->addScript('taken.js');
 	}
 	
-	public function action_herinneren() {
+	public function herinneren() {
 		require_once 'taken/model/HerinneringenModel.class.php';
 		$verstuurd_errors = HerinneringenModel::stuurHerinneringen();
 		$verstuurd = $verstuurd_errors[0];
@@ -106,9 +106,9 @@ class BeheerTakenController extends \ACLController {
 		\SimpleHTML::invokeRefresh($GLOBALS['taken_module']);
 	}
 	
-	public function action_nieuw($mid=null) {
+	public function nieuw($mid=null) {
 		if ($mid !== null) {
-			$maaltijd = \Taken\MLT\MaaltijdenModel::getMaaltijd($mid);
+			$maaltijd = MaaltijdenModel::getMaaltijd($mid);
 			$beginDatum = $maaltijd->getDatum();
 		}
 		if (array_key_exists('crid', $_POST)) {
@@ -125,105 +125,105 @@ class BeheerTakenController extends \ACLController {
 				$beginDatum = date('Y-m-d', $datum);
 				
 				if ($repetitie->getPeriodeInDagen() > 0) {
-					$this->content = new RepetitieCorveeFormView($repetitie, $beginDatum, $beginDatum); // fetches POST values itself
+					$this->view = new RepetitieCorveeFormView($repetitie, $beginDatum, $beginDatum); // fetches POST values itself
 					return;
 				}
 			}
-			$this->content = new TaakFormView(0, $repetitie->getFunctieId(), null, $crid, $mid, $beginDatum, $repetitie->getStandaardPunten(), 0); // fetches POST values itself
+			$this->view = new TaakFormView(0, $repetitie->getFunctieId(), null, $crid, $mid, $beginDatum, $repetitie->getStandaardPunten(), 0); // fetches POST values itself
 		}
 		else {
 			$taak = new CorveeTaak();
 			if (isset($beginDatum)) {
 				$taak->setDatum($beginDatum);
 			}
-			$this->content = new TaakFormView($taak->getTaakId(), $taak->getFunctieId(), $taak->getLidId(), $taak->getCorveeRepetitieId(), $mid, $taak->getDatum(), null, $taak->getBonusMalus()); // fetches POST values itself
+			$this->view = new TaakFormView($taak->getTaakId(), $taak->getFunctieId(), $taak->getLidId(), $taak->getCorveeRepetitieId(), $mid, $taak->getDatum(), null, $taak->getBonusMalus()); // fetches POST values itself
 		}
 	}
 	
-	public function action_bewerk($tid) {
+	public function bewerk($tid) {
 		$taak = TakenModel::getTaak($tid);
-		$this->content = new TaakFormView($taak->getTaakId(), $taak->getFunctieId(), $taak->getLidId(), $taak->getCorveeRepetitieId(), $taak->getMaaltijdId(), $taak->getDatum(), $taak->getPunten(), $taak->getBonusMalus()); // fetches POST values itself
+		$this->view = new TaakFormView($taak->getTaakId(), $taak->getFunctieId(), $taak->getLidId(), $taak->getCorveeRepetitieId(), $taak->getMaaltijdId(), $taak->getDatum(), $taak->getPunten(), $taak->getBonusMalus()); // fetches POST values itself
 	}
 	
-	public function action_opslaan($tid) {
+	public function opslaan($tid) {
 		if ($tid > 0) {
-			$this->action_bewerk($tid);
+			$this->bewerk($tid);
 		}
 		else {
-			$this->content = new TaakFormView($tid); // fetches POST values itself
+			$this->view = new TaakFormView($tid); // fetches POST values itself
 		}
-		if ($this->content->validate()) {
-			$values = $this->content->getValues();
+		if ($this->view->validate()) {
+			$values = $this->view->getValues();
 			$uid = ($values['lid_id'] === '' ? null : $values['lid_id']);
 			$crid = ($values['crv_repetitie_id'] === '' ? null : intval($values['crv_repetitie_id']));
 			$mid = ($values['maaltijd_id'] === 0 ? null : $values['maaltijd_id']);
 			$taak = TakenModel::saveTaak($tid, intval($values['functie_id']), $uid, $crid, $mid, $values['datum'], intval($values['punten']), intval($values['bonus_malus']));
 			$maaltijd = null;
 			if (endsWith($_SERVER['HTTP_REFERER'], $GLOBALS['taken_module'] .'/maaltijd/'. $values['maaltijd_id'])) { // state of gui
-				$maaltijd = \Taken\MLT\MaaltijdenModel::getMaaltijd($mid);
+				$maaltijd = MaaltijdenModel::getMaaltijd($mid);
 			}
-			$this->content = new BeheerTakenView($taak, $maaltijd);
+			$this->view = new BeheerTakenView($taak, $maaltijd);
 		}
 	}
 	
-	public function action_verwijder($tid) {
+	public function verwijder($tid) {
 		TakenModel::verwijderTaak($tid);
-		$this->content = new BeheerTakenView($tid);
+		$this->view = new BeheerTakenView($tid);
 	}
 	
-	public function action_herstel($tid) {
+	public function herstel($tid) {
 		$taak = TakenModel::herstelTaak($tid);
-		$this->content = new BeheerTakenView($taak->getTaakId());
+		$this->view = new BeheerTakenView($taak->getTaakId());
 	}
 	
-	public function action_toewijzen($tid) {
+	public function toewijzen($tid) {
 		$taak = TakenModel::getTaak($tid);
-		$formField = new \LidField('lid_id', null, null, 'leden'); // fetches POST values itself
-		if ($formField->valid()) {
-			$uid = $formField->getValue();
+		$InputField = new LidField('lid_id', null, null, 'leden'); // fetches POST values itself
+		if ($InputField->validate()) {
+			$uid = $InputField->getValue();
 			if ($uid === '') {
 				$uid = null;
 			}
 			$taak = TakenModel::getTaak($tid);
 			TakenModel::taakToewijzenAanLid($taak, $uid);
-			$this->content = new BeheerTakenView($taak);
+			$this->view = new BeheerTakenView($taak);
 		}
 		else {
 			require_once 'taken/model/ToewijzenModel.class.php';
 			require_once 'taken/view/forms/ToewijzenFormView.class.php';
 			
 			$suggesties = ToewijzenModel::getSuggesties($taak);
-			$this->content = new ToewijzenFormView($taak, $suggesties); // fetches POST values itself
+			$this->view = new ToewijzenFormView($taak, $suggesties); // fetches POST values itself
 		}
 	}
 	
-	public function action_puntentoekennen($tid) {
+	public function puntentoekennen($tid) {
 		$taak = TakenModel::getTaak($tid);
 		TakenModel::puntenToekennen($taak);
-		$this->content = new BeheerTakenView($taak);
+		$this->view = new BeheerTakenView($taak);
 	}
 	
-	public function action_puntenintrekken($tid) {
+	public function puntenintrekken($tid) {
 		$taak = TakenModel::getTaak($tid);
 		TakenModel::puntenIntrekken($taak);
-		$this->content = new BeheerTakenView($taak);
+		$this->view = new BeheerTakenView($taak);
 	}
 	
-	public function action_email($tid) {
+	public function email($tid) {
 		$taak = TakenModel::getTaak($tid);
 		require_once 'taken/model/HerinneringenModel.class.php';
 		HerinneringenModel::stuurHerinnering($taak);
-		$this->content = new BeheerTakenView($taak);
+		$this->view = new BeheerTakenView($taak);
 	}
 	
-	public function action_leegmaken() {
+	public function leegmaken() {
 		$aantal = TakenModel::prullenbakLeegmaken();
 		\SimpleHTML::invokeRefresh($GLOBALS['taken_module'] .'/prullenbak', $aantal . ($aantal === 1 ? ' taak' : ' taken') .' definitief verwijderd.', ($aantal === 0 ? 0 : 1 ));
 	}
 	
 	// Repetitie-Taken ############################################################
 	
-	public function action_aanmaken($crid) {
+	public function aanmaken($crid) {
 		$repetitie = CorveeRepetitiesModel::getRepetitie($crid);
 		$form = new RepetitieCorveeFormView($repetitie); // fetches POST values itself
 		if ($form->validate()) {
@@ -231,12 +231,12 @@ class BeheerTakenController extends \ACLController {
 			$mid = ($values['maaltijd_id'] === '' ? null : intval($values['maaltijd_id']));
 			$taken = TakenModel::maakRepetitieTaken($repetitie, $values['begindatum'], $values['einddatum'], $mid);
 			if (empty($taken)) {
-				throw new \Exception('Geen nieuwe taken aangemaakt');
+				throw new Exception('Geen nieuwe taken aangemaakt');
 			}
-			$this->content = new BeheerTakenView($taken);
+			$this->view = new BeheerTakenView($taken);
 		}
 		else {
-			$this->content = $form;
+			$this->view = $form;
 		}
 	}
 }

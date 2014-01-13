@@ -1,18 +1,17 @@
 <?php
 
-
 # C.S.R. Delft | pubcie@csrdelft.nl
 # -------------------------------------------------------------------
-# class.agendacontroller.php
+# agendacontroller.class.php
 # -------------------------------------------------------------------
 # Controller voor de agenda.
 # -------------------------------------------------------------------
 
 require_once 'agenda.class.php';
 require_once 'agendacontent.class.php';
-require_once 'controller.class.php';
+require_once 'MVC/controller/AclController.abstract.php';
 
-class AgendaController extends Controller {
+class AgendaController extends AclController {
 
 	private $agenda;
 
@@ -23,6 +22,7 @@ class AgendaController extends Controller {
 		$this->agenda = new Agenda();
 
 		// Actie opslaan
+		$this->action = 'maand';
 		if ($this->hasParam(0) AND $this->hasAction($this->getParam(0))) {
 			$this->action = $this->getParam(0);
 		}
@@ -31,15 +31,38 @@ class AgendaController extends Controller {
 		$this->performAction();
 	}
 
-	public function action_default() {
-		$this->action_maand();
+	protected function hasPermission() {
+		switch ($this->action) {
+			case 'week':
+			case 'maand':
+			case 'jaar':
+			case 'icalendar':
+			case 'courant':
+				return true;
+
+			case 'toevoegen':
+
+				if ($this->agenda->magToevoegen()) {
+					return true;
+				}
+				break;
+
+			case 'bewerken':
+			case 'verwijderen':
+
+				if ($this->agenda->magBeheren()) {
+					return true;
+				}
+				break;
+		}
+		return false;
 	}
 
 	/**
 	 * Weekoverzicht laten zien. Als er een jaar-week is meegegeven gebruiken
 	 * we die, anders laten we de huidige week zien.
 	 */
-	public function action_week() {
+	public function week() {
 		if ($this->hasParam(0) AND preg_match('/^[0-9]{4}\-[0-9]{1,2}$/', $this->getParam(0))) {
 			$jaar = (int) substr($this->getParam(0), 0, 4);
 			$week = (int) substr($this->getParam(0), 5);
@@ -47,134 +70,116 @@ class AgendaController extends Controller {
 			$jaar = date('Y');
 			$week = strftime('%U');
 		}
-		
-		$this->content->setActie('week');
+
+		$this->view->setActie('week');
 	}
 
 	/**
 	 * Maandoverzicht laten zien. Als er een jaar-maand is meegegeven gebruiken
 	 * we die, anders laten we de huidige maand zien.
 	 */
-	public function action_maand() {
+	public function maand() {
 		//Standaard tonen we het huidige jaar en maand.
-		$jaar=date('Y');
-		$maand=date('n');
-		
+		$jaar = date('Y');
+		$maand = date('n');
+
 		//is er een andere datum opgegeven? Dan gebruiken we die.
-		$weergavedatum='';
-		if($this->hasParam(0) AND $this->getParam(0)=='maand'){
-			$weergavedatum=$this->getParam(1);
-		}elseif($this->hasParam(0)){
-			$weergavedatum=$this->getParam(0);
+		$weergavedatum = '';
+		if ($this->hasParam(0) AND $this->getParam(0) == 'maand') {
+			$weergavedatum = $this->getParam(1);
+		} elseif ($this->hasParam(0)) {
+			$weergavedatum = $this->getParam(0);
 		}
-		
-		if(preg_match('/^[0-9]{4}\-[0-9]{1,2}$/', $weergavedatum)){
+
+		if (preg_match('/^[0-9]{4}\-[0-9]{1,2}$/', $weergavedatum)) {
 			$jaar = (int) substr($weergavedatum, 0, 4);
 			$maand = (int) substr($weergavedatum, 5);
 		}
-		
-		$this->content = new AgendaMaandContent($this->agenda, $jaar, $maand);
+
+		$this->view = new AgendaMaandContent($this->agenda, $jaar, $maand);
 	}
 
 	/**
 	 * Jaaroverzicht laten zien. Als er een jaar is meegegeven gebruiken we die,
 	 * anders laten we dit jaar zien.
 	 */
-	public function action_jaar() {
+	public function jaar() {
 		if ($this->hasParam(1) AND preg_match('/^[0-9]{4}$/', $this->getParam(1))) {
 			$jaar = $this->getParam(1);
 		} else {
 			$jaar = date('Y');
 		}
-		
-		$this->content->setActie('jaar');
+
+		$this->view->setActie('jaar');
 	}
-	
+
 	/**
 	 * iCalendar genereren.
 	 */
-	public function action_icalendar() {		
-		$this->content = new AgendaIcalendarContent($this->agenda);
-		$this->content->view();
+	public function icalendar() {
+		$this->view = new AgendaIcalendarContent($this->agenda);
+		$this->view->view();
 		exit;
 	}
 
 	/**
 	 * Item toevoegen aan de agenda.
 	 */
-	public function action_toevoegen() {
-		if (!$this->agenda->magToevoegen()) {
-			$this->action = 'geentoegang';
-			$this->performAction();
-			return;
-		}
-		
+	public function toevoegen() {
 		if ($this->isPosted()) {
 			$item = $this->maakItem();
 			if ($this->valideerItem($item) === false) {
 				
 			} else {
 				$item->opslaan();
-				AgendaMaandContent::invokeRefresh('/actueel/agenda/'.date('Y-m', $item->getBeginMoment()).'/', 'Het agenda-item is succesvol toegevoegd.', 1);
+				AgendaMaandContent::invokeRefresh('/actueel/agenda/' . date('Y-m', $item->getBeginMoment()) . '/', 'Het agenda-item is succesvol toegevoegd.', 1);
 			}
-		} else {			
+		} else {
 			if ($this->hasParam(1) AND preg_match('/^[0-9]{4}\-[0-9]{1,2}-[0-9]{1,2}$/', $this->getParam(1))) {
 				$dag = strtotime($this->getParam(1));
 			} else {
 				$dag = time();
 				// Afkappen naar 0:00
-				$dag = strtotime(substr(date('Y-m-d', $dag), 0, 10)); 
+				$dag = strtotime(substr(date('Y-m-d', $dag), 0, 10));
 			}
-			
+
 			$beginMoment = $dag + 72000;
 			$eindMoment = $dag + 79200;
-			
+
 			$item = new AgendaItem(0, $beginMoment, $eindMoment);
 		}
-		
-		$this->content = new AgendaItemContent($this->agenda, $item, 'toevoegen');
-		$this->content->setMelding($this->errors);
+
+		$this->view = new AgendaItemContent($this->agenda, $item, 'toevoegen');
+		$this->view->setMelding($this->errors);
 	}
-	
-	public function action_bewerken() {
-		if (!$this->agenda->magBeheren()) {
-			$this->action = 'geentoegang';
-			$this->performAction();
-			return;
-		}
-		
+
+	public function bewerken() {
 		if ($this->hasParam(1) && is_numeric($this->getParam(1))) {
-			$itemID = (int)$this->getParam(1);
-			
+			$itemID = (int) $this->getParam(1);
+
 			if ($this->isPosted()) {
 				$item = $this->maakItem($itemID);
 				if ($this->valideerItem($item) === false) {
 					
 				} else {
 					$item->opslaan();
-					AgendaMaandContent::invokeRefresh('/actueel/agenda/'.date('Y-m', $item->getBeginMoment()).'/', 'Het agenda-item is succesvol bewerkt.', 1);
+					AgendaMaandContent::invokeRefresh('/actueel/agenda/' . date('Y-m', $item->getBeginMoment()) . '/', 'Het agenda-item is succesvol bewerkt.', 1);
 				}
-			} else {		
+			} else {
 				$item = AgendaItem::getItem($itemID);
 			}
 		} else {
 			AgendaMaandContent::invokeRefresh('/actueel/agenda/', 'Agenda-item niet gevonden.');
 		}
-		
-		$this->content = new AgendaItemContent($this->agenda, $item, 'toevoegen');
-		$this->content->setMelding($this->errors);
+
+		$this->view = new AgendaItemContent($this->agenda, $item, 'toevoegen');
+		$this->view->setMelding($this->errors);
 	}
-		
-	public function action_verwijderen() {
-		if (!$this->agenda->magBeheren()) {
-			$this->action = 'geentoegang';
-			$this->performAction();
-			return;
-		}
-		
+
+	public function verwijderen() {
 		if ($this->hasParam(1) && is_numeric($this->getParam(1))) {
-			$item = AgendaItem::getItem((int)$this->getParam(1));
-			$url = '/actueel/agenda/'.date('Y-m', $item->getBeginMoment()).'/';
+			$item = AgendaItem::getItem((int) $this->getParam(1));
+			$url = '/actueel/agenda/' . date('Y-m', $item->getBeginMoment()) . '/';
 			if ($item->verwijder()) {
 				AgendaMaandContent::invokeRefresh($url, 'Het agenda-item is succesvol verwijderd.', 1);
 			} else {
@@ -182,31 +187,31 @@ class AgendaController extends Controller {
 			}
 		}
 	}
-	function action_courant(){
+
+	public function courant() {
 		require_once 'courant/courant.class.php';
-		if(Courant::magBeheren()){
-			$content=new AgendaCourantContent($this->agenda, 2);
-			
+		if (Courant::magBeheren()) {
+			$content = new AgendaCourantContent($this->agenda, 2);
 			$content->view();
 		}
 		//ajax-request, we doen zelf de $content->view() hier
 		exit;
 	}
-	
+
 	/**
 	 * Maakt een nieuw AgendaItem met de gePOSTe gegevens.
 	 */
-	private function maakItem($itemId=0) {
-		if(isset($_POST['heledag'])){
-			$beginMoment = strtotime($_POST['datum'].' 00:00');
-			$eindMoment = strtotime($_POST['datum'].' 23:59');
-		}else{
-			$beginMoment = strtotime($_POST['datum'].' '.$_POST['beginMoment']);
-			$eindMoment = strtotime($_POST['datum'].' '.$_POST['eindMoment']);
+	private function maakItem($itemId = 0) {
+		if (isset($_POST['heledag'])) {
+			$beginMoment = strtotime($_POST['datum'] . ' 00:00');
+			$eindMoment = strtotime($_POST['datum'] . ' 23:59');
+		} else {
+			$beginMoment = strtotime($_POST['datum'] . ' ' . $_POST['beginMoment']);
+			$eindMoment = strtotime($_POST['datum'] . ' ' . $_POST['eindMoment']);
 		}
 		return new AgendaItem($itemId, $beginMoment, $eindMoment, $_POST['titel'], $_POST['beschrijving'], 'P_NOBODY');
 	}
-	
+
 	/**
 	 * Controleert of de ingevulde gegevens een geldig AgendaItem kunnen vormen.
 	 * Geeft dat AgendaItem terug als dat het geval is, en false als dat niet 
@@ -221,7 +226,7 @@ class AgendaController extends Controller {
 			$item->setEindMoment($item->getBeginMoment());
 		}
 		if (date('Y-m-d', $item->getBeginMoment()) != date('Y-m-d', $item->getEindMoment())) {
-			$this->addError('Beginmoment en eindmoment moeten op dezelfde dag zijn.');			
+			$this->addError('Beginmoment en eindmoment moeten op dezelfde dag zijn.');
 		}
 
 		if ($this->valid) {
@@ -230,5 +235,7 @@ class AgendaController extends Controller {
 			return false;
 		}
 	}
+
 }
+
 ?>

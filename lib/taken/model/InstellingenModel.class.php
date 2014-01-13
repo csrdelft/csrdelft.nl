@@ -1,5 +1,5 @@
 <?php
-namespace Taken\MLT;
+
 
 require_once 'taken/model/entity/Instelling.class.php';
 
@@ -62,7 +62,7 @@ class InstellingenModel {
 	 * Laad alle instellingen uit de database.
 	 * Als default instellingen ontbreken worden deze aangemaakt en opgeslagen.
 	 * 
-	 * @return Instelling[]
+	 * @return Instellingen[]
 	 */
 	public static function getAlleInstellingen() {
 		if (self::$_instellingen === null) { // laad maar 1x
@@ -84,7 +84,7 @@ class InstellingenModel {
 	 * Zoek een instelling voor bewerken of na verwijderen.
 	 * Als een default instelling ontbreekt wordt deze aangemaakt en opgeslagen.
 	 * 
-	 * @return Instelling
+	 * @return Instellingen
 	 */
 	public static function getInstelling($key) {
 		foreach (self::$_instellingen as $instelling) {
@@ -93,7 +93,7 @@ class InstellingenModel {
 			}
 		}
 		if (!array_key_exists($key, self::$_defaults)) { // geen default instelling
-			throw new \Exception('Get instelling faalt: Not found $key ='. $key);
+			throw new Exception('Get instelling faalt: Not found $key ='. $key);
 		}
 		$instelling = self::newInstelling($key, self::$_defaults[$key]);
 		return $instelling;
@@ -109,15 +109,15 @@ class InstellingenModel {
 		if (is_int($limit) && $limit > 0) {
 			$sql.= ' LIMIT '. $limit;
 		}
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
-		$result = $query->fetchAll(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, '\Taken\MLT\Instelling');
+		$result = $query->fetchAll(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, 'Instelling');
 		return $result;
 	}
 	
 	public static function saveInstelling($key, $value) {
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		try {
 			$db->beginTransaction();
 			$instelling = self::getInstelling($key);
@@ -142,16 +142,16 @@ class InstellingenModel {
 		$sql.= ' (instelling_id, waarde)';
 		$sql.= ' VALUES (?, ?)';
 		$values = array($key, $value);
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		if ($query->rowCount() !== 1) {
-			throw new \Exception('New instelling faalt: $query->rowCount() ='. $query->rowCount());
+			throw new Exception('New instelling faalt: $query->rowCount() ='. $query->rowCount());
 		}
-		return new Instelling($key, $value);
+		return new Instellingen($key, $value);
 	}
 	
-	private static function updateInstelling(Instelling $instelling) {
+	private static function updateInstelling(Instellingen $instelling) {
 		$sql = 'UPDATE mlt_instellingen';
 		$sql.= ' SET waarde = ?';
 		$sql.= ' WHERE instelling_id = ?';
@@ -159,11 +159,11 @@ class InstellingenModel {
 			$instelling->getWaarde(),
 			$instelling->getInstellingId()
 		);
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		if ($query->rowCount() !== 1) {
-			throw new \Exception('Update instelling faalt: $query->rowCount() ='. $query->rowCount());
+			throw new Exception('Update instelling faalt: $query->rowCount() ='. $query->rowCount());
 		}
 	}
 	
@@ -177,11 +177,11 @@ class InstellingenModel {
 		$sql = 'DELETE FROM mlt_instellingen';
 		$sql.= ' WHERE instelling_id = ?';
 		$values = array($key);
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		if ($query->rowCount() !== 1) {
-			throw new \Exception('Delete instelling faalt: $query->rowCount() ='. $query->rowCount());
+			throw new Exception('Delete instelling faalt: $query->rowCount() ='. $query->rowCount());
 		}
 	}
 }

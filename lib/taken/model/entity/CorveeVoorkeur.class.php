@@ -1,5 +1,5 @@
 <?php
-namespace Taken\CRV;
+
 /**
  * CorveeVoorkeur.class.php	| 	P.W.G. Brussee (brussee@live.nl)
  * 
@@ -38,7 +38,7 @@ class CorveeVoorkeur {
 		$uid = $this->van_lid;
 		$lid = \LidCache::getLid($uid); // false if lid does not exist
 		if (!$lid instanceof \Lid) {
-			throw new \Exception('Lid bestaat niet: $uid ='. $uid);
+			throw new Exception('Lid bestaat niet: $uid ='. $uid);
 		}
 		return $lid;
 	}

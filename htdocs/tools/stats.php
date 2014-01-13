@@ -10,7 +10,11 @@ if(!$loginlid->hasPermission('P_ADMIN')){
 	exit;
 }
 
-class stats extends SimpleHTML{
+class stats extends TemplateView{
+	
+	public function __construct() {
+		parent::__construct();
+	}
 
 	function view(){
 

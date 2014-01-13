@@ -1,5 +1,5 @@
 <?php
-namespace Taken\CRV;
+
 /**
  * CorveeVrijstelling.class.php	| 	P.W.G. Brussee (brussee@live.nl)
  * 
@@ -45,7 +45,7 @@ class CorveeVrijstelling {
 		$uid = $this->getLidId();
 		$lid = \LidCache::getLid($uid); // false if lid does not exist
 		if (!$lid instanceof \Lid) {
-			throw new \Exception('Lid bestaat niet: $uid ='. $uid);
+			throw new Exception('Lid bestaat niet: $uid ='. $uid);
 		}
 		return $lid;
 	}
@@ -65,19 +65,19 @@ class CorveeVrijstelling {
 	
 	public function setBeginDatum($datum) {
 		if (!is_string($datum)) {
-			throw new \Exception('Geen string: begin datum');
+			throw new Exception('Geen string: begin datum');
 		}
 		$this->begin_datum = $datum;
 	}
 	public function setEindDatum($datum) {
 		if (!is_string($datum)) {
-			throw new \Exception('Geen string: eind datum');
+			throw new Exception('Geen string: eind datum');
 		}
 		$this->eind_datum = $datum;
 	}
 	public function setPercentage($int) {
 		if (!is_int($int) || $int < intval($GLOBALS['vrijstelling_percentage_min']) || $int > intval($GLOBALS['vrijstelling_percentage_max'])) {
-			throw new \Exception('Geen integer: percentage');
+			throw new Exception('Geen integer: percentage');
 		}
 		$this->percentage = $int;
 	}

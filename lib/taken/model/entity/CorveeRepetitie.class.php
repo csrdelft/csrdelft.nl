@@ -1,5 +1,5 @@
 <?php
-namespace Taken\CRV;
+
 /**
  * CorveeRepetitie.class.php	| 	P.W.G. Brussee (brussee@live.nl)
  * 
@@ -123,43 +123,43 @@ class CorveeRepetitie {
 	
 	public function setMaaltijdRepetitieId($mrid) {
 		if ($mrid !== null && !is_int($mrid)) {
-			throw new \Exception('Ongeldig id: maaltijd repetitie');
+			throw new Exception('Ongeldig id: maaltijd repetitie');
 		}
 		$this->mlt_repetitie_id = $mrid;
 	}
 	public function setDagVanDeWeek($int) {
 		if (!is_int($int) || $int < 0 || $int > 6) {
-			throw new \Exception('Geen integer: dag van de week');
+			throw new Exception('Geen integer: dag van de week');
 		}
 		$this->dag_vd_week = $int;
 	}
 	public function setPeriodeInDagen($int) {
 		if (!is_int($int) || $int < 0) {
-			throw new \Exception('Geen integer: periode in dagen');
+			throw new Exception('Geen integer: periode in dagen');
 		}
 		$this->periode_in_dagen = $int;
 	}
 	public function setFunctieId($int) {
 		if (!is_int($int)) {
-			throw new \Exception('Geen integer: functie id');
+			throw new Exception('Geen integer: functie id');
 		}
 		$this->functie_id = $int;
 	}
 	public function setStandaardPunten($int) {
 		if (!is_int($int) || $int < 0) {
-			throw new \Exception('Geen integer: standaard punten');
+			throw new Exception('Geen integer: standaard punten');
 		}
 		$this->standaard_punten = $int;
 	}
 	public function setStandaardAantal($int) {
 		if (!is_int($int) || $int < 0) {
-			throw new \Exception('Geen integer: standaard aantal');
+			throw new Exception('Geen integer: standaard aantal');
 		}
 		$this->standaard_aantal = $int;
 	}
 	public function setVoorkeurbaar($bool) {
 		if (!is_bool($bool)) {
-			throw new \Exception('Geen boolean: voorkeurbaar');
+			throw new Exception('Geen boolean: voorkeurbaar');
 		}
 		$this->voorkeurbaar = $bool;
 	}

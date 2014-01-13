@@ -1,5 +1,5 @@
 <?php
-namespace Taken\CRV;
+
 
 require_once 'taken/model/TakenModel.class.php';
 require_once 'taken/model/PuntenModel.class.php';
@@ -11,7 +11,7 @@ require_once 'taken/view/CorveeRoosterView.class.php';
  * MijnCorveeController.class.php	| 	P.W.G. Brussee (brussee@live.nl)
  * 
  */
-class MijnCorveeController extends \ACLController {
+class MijnCorveeController extends \AclController {
 
 	public function __construct($query) {
 		parent::__construct($query);
@@ -33,22 +33,22 @@ class MijnCorveeController extends \ACLController {
 		if ($this->hasParam(3)) {
 			$arg = $this->getParam(3);
 		}
-		$this->performAction($arg);
+		$this->performAction(array($arg));
 	}
 	
-	public function action_mijn() {
+	public function mijn() {
 		$taken = TakenModel::getKomendeTakenVoorLid(\LoginLid::instance()->getUid());
 		$rooster = TakenModel::getRoosterMatrix($taken);
 		$functies = FunctiesModel::getAlleFuncties(true);
 		$punten = PuntenModel::loadPuntenVoorLid(\LoginLid::instance()->getLid(), $functies);
 		$vrijstelling = VrijstellingenModel::getVrijstelling(\LoginLid::instance()->getUid());
-		$this->content = new MijnCorveeView($rooster, $punten, $functies, $vrijstelling);
-		$this->content = new \csrdelft($this->getContent());
-		$this->content->addStylesheet('taken.css');
-		$this->content->addScript('taken.js');
+		$this->view = new MijnCorveeView($rooster, $punten, $functies, $vrijstelling);
+		$this->view = new csrdelft($this->getContent());
+		$this->view->addStylesheet('taken.css');
+		$this->view->addScript('taken.js');
 	}
 	
-	public function action_rooster($arg=null) {
+	public function rooster($arg=null) {
 		$toonverleden = false;
 		if ($arg === 'verleden') {
 			$taken = TakenModel::getVerledenTaken();
@@ -60,10 +60,10 @@ class MijnCorveeController extends \ACLController {
 			}
 		}
 		$rooster = TakenModel::getRoosterMatrix($taken);
-		$this->content = new CorveeRoosterView($rooster, $toonverleden);
-		$this->content = new \csrdelft($this->getContent());
-		$this->content->addStylesheet('taken.css');
-		$this->content->addScript('taken.js');
+		$this->view = new CorveeRoosterView($rooster, $toonverleden);
+		$this->view = new csrdelft($this->getContent());
+		$this->view->addStylesheet('taken.css');
+		$this->view->addScript('taken.js');
 	}
 }
 

@@ -1,5 +1,4 @@
 <?php
-namespace Taken\MLT;
 
 require_once 'taken/controller/MijnMaaltijdenController.class.php';
 
@@ -9,31 +8,32 @@ require_once 'taken/controller/MijnMaaltijdenController.class.php';
  * Tonen van een ketzer voor een specifieke maaltijd waarmee een lid zich kan aan- of afmelden voor die maaltijd.
  * 
  */
-class MaaltijdKetzerView extends \SimpleHtml {
+class MaaltijdKetzerView extends TemplateView {
 
 	private $_maaltijd;
 	private $_aanmelding;
-	
-	public function __construct($maaltijd, $aanmelding=null) {
+
+	public function __construct($maaltijd, $aanmelding = null) {
+		parent::__construct();
 		$this->_maaltijd = $maaltijd;
 		$this->_aanmelding = $aanmelding;
 	}
-	
+
 	public function getTitel() {
 		return 'Maaltijdketzer';
 	}
-	
-	public function fetch() {
-		$smarty = new \Smarty_csr();
-		$smarty->assign('maaltijd', $this->_maaltijd);
-		$smarty->assign('aanmelding', $this->_aanmelding);
-		$smarty->assign('toonlijst', MijnMaaltijdenController::magMaaltijdlijstTonen($this->_maaltijd));
-		return $smarty->fetch('taken/maaltijd/maaltijd_ketzer.tpl');
+
+	public function fetchContent() {
+		$this->assign('maaltijd', $this->_maaltijd);
+		$this->assign('aanmelding', $this->_aanmelding);
+		$this->assign('toonlijst', MijnMaaltijdenController::magMaaltijdlijstTonen($this->_maaltijd));
+		return $this->fetch('taken/maaltijd/maaltijd_ketzer.tpl');
 	}
-	
+
 	public function view() {
 		echo $this->fetch();
 	}
+
 }
 
 ?>

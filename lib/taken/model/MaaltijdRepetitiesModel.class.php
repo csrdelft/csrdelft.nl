@@ -1,5 +1,5 @@
 <?php
-namespace Taken\MLT;
+
 
 require_once 'taken/model/entity/MaaltijdRepetitie.class.php';
 
@@ -45,11 +45,11 @@ class MaaltijdRepetitiesModel {
 	
 	public static function getRepetitie($mrid) {
 		if (!is_int($mrid) || $mrid <= 0) {
-			throw new \Exception('Get maaltijd-repetitie faalt: Invalid $mrid ='. $mrid);
+			throw new Exception('Get maaltijd-repetitie faalt: Invalid $mrid ='. $mrid);
 		}
 		$repetities = self::loadRepetities('mlt_repetitie_id = ?', array($mrid), 1);
 		if (!array_key_exists(0, $repetities)) {
-			throw new \Exception('Get maaltijd-repetitie faalt: Not found $mrid ='. $mrid);
+			throw new Exception('Get maaltijd-repetitie faalt: Not found $mrid ='. $mrid);
 		}
 		return $repetities[0];
 	}
@@ -63,15 +63,15 @@ class MaaltijdRepetitiesModel {
 		if (is_int($limit)) {
 			$sql.= ' LIMIT '. $limit;
 		}
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
-		$result = $query->fetchAll(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, '\Taken\MLT\MaaltijdRepetitie');
+		$result = $query->fetchAll(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, 'MaaltijdRepetitie');
 		return $result;
 	}
 	
 	public static function saveRepetitie($mrid, $dag, $periode, $titel, $tijd, $prijs, $abo, $limiet, $filter) {
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		try {
 			$db->beginTransaction();
 			$abos = 0;
@@ -117,11 +117,11 @@ class MaaltijdRepetitiesModel {
 			$repetitie->getAbonnementFilter(),
 			$repetitie->getMaaltijdRepetitieId()
 		);
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		if ($query->rowCount() !== 1) {
-			//throw new \Exception('Update maaltijd-repetitie faalt: $query->rowCount() ='. $query->rowCount());
+			//throw new Exception('Update maaltijd-repetitie faalt: $query->rowCount() ='. $query->rowCount());
 		}
 	}
 	
@@ -130,31 +130,31 @@ class MaaltijdRepetitiesModel {
 		$sql.= ' (mlt_repetitie_id, dag_vd_week, periode_in_dagen, standaard_titel, standaard_tijd, standaard_prijs, abonneerbaar, standaard_limiet, abonnement_filter)';
 		$sql.= ' VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
 		$values = array(null, $dag, $periode, $titel, $tijd, $prijs, $abo, $limiet, $filter);
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		if ($query->rowCount() !== 1) {
-			throw new \Exception('New maaltijd-repetitie faalt: $query->rowCount() ='. $query->rowCount());
+			throw new Exception('New maaltijd-repetitie faalt: $query->rowCount() ='. $query->rowCount());
 		}
 		return new MaaltijdRepetitie(intval($db->lastInsertId()), $dag, $periode, $titel, $tijd, $prijs, $abo, $limiet, $filter);
 	}
 	
 	public static function verwijderRepetitie($mrid) {
 		if (!is_int($mrid) || $mrid <= 0) {
-			throw new \Exception('Verwijder maaltijd-repetitie faalt: Invalid $mrid ='. $mrid);
+			throw new Exception('Verwijder maaltijd-repetitie faalt: Invalid $mrid ='. $mrid);
 		}
-		if (\Taken\CRV\CorveeRepetitiesModel::existMaaltijdRepetitieCorvee($mrid)) {
-			throw new \Exception('Ontkoppel of verwijder eerst de bijbehorende corvee-repetities!');
+		if (\CorveeRepetitiesModel::existMaaltijdRepetitieCorvee($mrid)) {
+			throw new Exception('Ontkoppel of verwijder eerst de bijbehorende corvee-repetities!');
 		}
 		if (MaaltijdenModel::existRepetitieMaaltijden($mrid)) {
 			MaaltijdenModel::verwijderRepetitieMaaltijden($mrid); // delete maaltijden first (foreign key)
-			throw new \Exception('Alle bijbehorende maaltijden zijn naar de prullenbak verplaatst. Verwijder die eerst!');
+			throw new Exception('Alle bijbehorende maaltijden zijn naar de prullenbak verplaatst. Verwijder die eerst!');
 		}
 		return self::deleteRepetitie($mrid);
 	}
 	
 	private static function deleteRepetitie($mrid) {
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		try {
 			$db->beginTransaction();
 			$aantal = AbonnementenModel::verwijderAbonnementen($mrid); // delete abonnementen first (foreign key)
@@ -164,7 +164,7 @@ class MaaltijdRepetitiesModel {
 			$query = $db->prepare($sql, $values);
 			$query->execute($values);
 			if ($query->rowCount() !== 1) {
-				throw new \Exception('Delete maaltijd-repetitie faalt: $query->rowCount() ='. $query->rowCount());
+				throw new Exception('Delete maaltijd-repetitie faalt: $query->rowCount() ='. $query->rowCount());
 			}
 			$db->commit();
 			return $aantal;

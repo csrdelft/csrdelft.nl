@@ -12,7 +12,7 @@
 		<textarea id="tekst" name="tekst" rows="12" class="tekst">{$mededeling->getTekst()|escape:'html'}</textarea><br />
 		<a id="voorbeeld" class="handje knop" onclick="return previewPost('tekst', 'bewerkPreview')">Voorbeeld</a>
 		<a id="vergroot" class="handje knop" onclick="vergrootTextarea('tekst', 10)" title="Vergroot het invoerveld"><strong>&uarr;&darr;</strong></a>
-		<a id="opmaakhulp" class="handje knop" onclick="toggleDiv('ubbhulpverhaal')" title="Opmaakhulp weergeven">UBB</a>
+		<a id="opmaakhulp" class="handje knop" onclick="$('#ubbhulpverhaal').toggle();" title="Opmaakhulp weergeven">UBB</a>
 	</div>
 	
 	<div id="instellingen">

@@ -1,27 +1,26 @@
 <?php
 
-class LidPaginaVoorkeurContent extends SimpleHTML{
-	private $profiel;
+class LidPaginaVoorkeurContent extends TemplateView {
+
 	private $actie;
 
-	public function __construct($lid, $actie){
-		$this->lid=$lid;
-		$this->actie=$actie;
+	public function __construct($lid, $actie) {
+		parent::__construct();
+		$this->lid = $lid;
+		$this->actie = $actie;
 	}
-	public function getTitel(){
-		return 'voorkeur van '.$this->lid->getNaam().' bekijken.';
+
+	public function getTitel() {
+		return 'voorkeur van ' . $this->lid->getNaam() . ' bekijken.';
 	}
-	public function view(){
 
-
-		require_once 'formulier.class.php';
-		$profiel=new Smarty_csr();
-		$profiel->assign('profiel', $this->profiel);
-
-		$profiel->assign('melding', $this->getMelding());
-		$profiel->assign('actie', $this->actie);
-		$profiel->display('profiel/wijzigvoorkeur.tpl');
+	public function view() {
+		$this->assign('profiel', $this->profiel);
+		$this->assign('melding', $this->getMelding());
+		$this->assign('actie', $this->actie);
+		$this->display('profiel/wijzigvoorkeur.tpl');
 	}
+
 }
 
 ?>

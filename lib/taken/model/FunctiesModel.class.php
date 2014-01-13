@@ -1,5 +1,5 @@
 <?php
-namespace Taken\CRV;
+
 
 require_once 'taken/model/entity/CorveeFunctie.class.php';
 
@@ -23,11 +23,11 @@ class FunctiesModel {
 	
 	public static function getFunctie($fid) {
 		if (!is_int($fid) || $fid <= 0) {
-			throw new \Exception('Get functie faalt: Invalid $fid ='. $fid);
+			throw new Exception('Get functie faalt: Invalid $fid ='. $fid);
 		}
 		$functies = self::loadFuncties('functie_id = ?', array($fid), 1);
 		if (!array_key_exists(0, $functies)) {
-			throw new \Exception('Get functie faalt: Not found $fid ='. $fid);
+			throw new Exception('Get functie faalt: Not found $fid ='. $fid);
 		}
 		return $functies[0];
 	}
@@ -42,15 +42,15 @@ class FunctiesModel {
 		if (is_int($limit) && $limit > 0) {
 			$sql.= ' LIMIT '. $limit;
 		}
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
-		$result = $query->fetchAll(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, '\Taken\CRV\CorveeFunctie');
+		$result = $query->fetchAll(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, '\CorveeFunctie');
 		return $result;
 	}
 	
 	public static function saveFunctie($fid, $naam, $afk, $email, $punten, $kwali) {
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		try {
 			$db->beginTransaction();
 			if ($fid === 0) {
@@ -82,11 +82,11 @@ class FunctiesModel {
 		$sql.= ' (functie_id, naam, afkorting, email_bericht, standaard_punten, kwalificatie_benodigd)';
 		$sql.= ' VALUES (?, ?, ?, ?, ?, ?)';
 		$values = array(null, $naam, $afk, $email, $punten, $kwali);
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		if ($query->rowCount() !== 1) {
-			throw new \Exception('New functie faalt: $query->rowCount() ='. $query->rowCount());
+			throw new Exception('New functie faalt: $query->rowCount() ='. $query->rowCount());
 		}
 		return new CorveeFunctie(intval($db->lastInsertId()), $naam, $afk, $email, $punten, $kwali);
 	}
@@ -103,29 +103,29 @@ class FunctiesModel {
 			$functie->getIsKwalificatieBenodigd(),
 			$functie->getFunctieId()
 		);
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		if ($query->rowCount() !== 1) {
-			throw new \Exception('Update functie faalt: $query->rowCount() ='. $query->rowCount());
+			throw new Exception('Update functie faalt: $query->rowCount() ='. $query->rowCount());
 		}
 	}
 	
 	public static function verwijderFunctie($fid) {
 		if (!is_int($fid) || $fid <= 0) {
-			throw new \Exception('Verwijder functie faalt: Invalid $fid ='. $fid);
+			throw new Exception('Verwijder functie faalt: Invalid $fid ='. $fid);
 		}
 		if (TakenModel::existFunctieTaken($fid)) {
-			throw new \Exception('Verwijder eerst de bijbehorende corveetaken!');
+			throw new Exception('Verwijder eerst de bijbehorende corveetaken!');
 		}
 		if (CorveeRepetitiesModel::existFunctieRepetities($fid)) {
-			throw new \Exception('Verwijder eerst de bijbehorende corveerepetities!');
+			throw new Exception('Verwijder eerst de bijbehorende corveerepetities!');
 		}
 		self::deleteFunctie($fid);
 	}
 	
 	private static function deleteFunctie($fid) {
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		try {
 			$db->beginTransaction();
 			KwalificatiesModel::verwijderKwalificaties($fid); // delete kwalificaties first (foreign key)
@@ -135,7 +135,7 @@ class FunctiesModel {
 			$query = $db->prepare($sql, $values);
 			$query->execute($values);
 			if ($query->rowCount() !== 1) {
-				throw new \Exception('Delete functie faalt: $query->rowCount() ='. $query->rowCount());
+				throw new Exception('Delete functie faalt: $query->rowCount() ='. $query->rowCount());
 			}
 			$db->commit();
 		}

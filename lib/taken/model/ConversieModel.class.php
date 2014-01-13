@@ -1,5 +1,5 @@
 <?php
-namespace Taken\MLT;
+
 
 require_once 'taken/model/KwalificatiesModel.class.php';
 require_once 'taken/model/MaaltijdRepetitiesModel.class.php';
@@ -18,9 +18,9 @@ class ConversieModel {
 		self::queryDb('TRUNCATE TABLE crv_vrijstellingen');
 		self::queryDb('TRUNCATE TABLE crv_voorkeuren');
 		self::queryDb('TRUNCATE TABLE crv_taken');
-		$repetities = \Taken\CRV\CorveeRepetitiesModel::getAlleRepetities();
+		$repetities = \CorveeRepetitiesModel::getAlleRepetities();
 		foreach ($repetities as $repetitie) {
-			\Taken\CRV\CorveeRepetitiesModel::verwijderRepetitie($repetitie->getCorveeRepetitieId());
+			\CorveeRepetitiesModel::verwijderRepetitie($repetitie->getCorveeRepetitieId());
 		}
 		
 		echo '<br />' . date('H:i:s') . ' leegmaken mlt_tabellen';
@@ -167,7 +167,7 @@ class ConversieModel {
 			'puntenlichteklus' => 10,
 			'puntenzwareklus' => 11,
 		);
-		$byFid = \Taken\CRV\FunctiesModel::getAlleFuncties(true);
+		$byFid = \FunctiesModel::getAlleFuncties(true);
 		$rows = self::queryDb('SELECT * FROM maaltijdcorveeinstellingen');
 		foreach ($rows as $row) {
 			$id = $row['instelling'];
@@ -175,14 +175,14 @@ class ConversieModel {
 				$fid = $functies[$id];
 				$functie = $byFid[$fid];
 				try {
-					$byFid[$fid] = \Taken\CRV\FunctiesModel::saveFunctie($fid, $functie->getNaam(), $functie->getAfkorting(), $row['tekst'], $functie->getStandaardPunten(), false);
+					$byFid[$fid] = \FunctiesModel::saveFunctie($fid, $functie->getNaam(), $functie->getAfkorting(), $row['tekst'], $functie->getStandaardPunten(), false);
 				}
 				catch (\Exception $e) {
 				}
 				if ($fid === 1) { // email kwalikok
 					$functie = $byFid[7];
 					try {
-						$byFid[7] = \Taken\CRV\FunctiesModel::saveFunctie(7, $functie->getNaam(), $functie->getAfkorting(), $row['tekst'], $functie->getStandaardPunten(), false);
+						$byFid[7] = \FunctiesModel::saveFunctie(7, $functie->getNaam(), $functie->getAfkorting(), $row['tekst'], $functie->getStandaardPunten(), false);
 					}
 					catch (\Exception $e) {
 					}
@@ -190,7 +190,7 @@ class ConversieModel {
 				elseif ($fid === 2) { // email kwaliafwas
 					$functie = $byFid[8];
 					try {
-						$byFid[8] = \Taken\CRV\FunctiesModel::saveFunctie(8, $functie->getNaam(), $functie->getAfkorting(), $row['tekst'], $functie->getStandaardPunten(), false);
+						$byFid[8] = \FunctiesModel::saveFunctie(8, $functie->getNaam(), $functie->getAfkorting(), $row['tekst'], $functie->getStandaardPunten(), false);
 					}
 					catch (\Exception $e) {
 					}
@@ -200,14 +200,14 @@ class ConversieModel {
 				$fid = $punten[$id];
 				$functie = $byFid[$fid];
 				try {
-					$byFid[$fid] = \Taken\CRV\FunctiesModel::saveFunctie($fid, $functie->getNaam(), $functie->getAfkorting(), $functie->getEmailBericht(), intval($row['int']), false);
+					$byFid[$fid] = \FunctiesModel::saveFunctie($fid, $functie->getNaam(), $functie->getAfkorting(), $functie->getEmailBericht(), intval($row['int']), false);
 				}
 				catch (\Exception $e) {
 				}
 				if ($fid === 2) { // puntenkwaliafwas
 					$functie = $byFid[8];
 					try {
-						$byFid[8] = \Taken\CRV\FunctiesModel::saveFunctie(8, $functie->getNaam(), $functie->getAfkorting(), $functie->getEmailBericht(), intval($row['int']), false);
+						$byFid[8] = \FunctiesModel::saveFunctie(8, $functie->getNaam(), $functie->getAfkorting(), $functie->getEmailBericht(), intval($row['int']), false);
 					}
 					catch (\Exception $e) {
 					}
@@ -279,22 +279,22 @@ class ConversieModel {
 				elseif ($fid === 10 || $fid === 11) {
 					$periode = 0;
 				}
-				$corvee[$fid] = \Taken\CRV\CorveeRepetitiesModel::saveRepetitie(0, null, 1, $periode, $fid, 1, $vrk);
+				$corvee[$fid] = \CorveeRepetitiesModel::saveRepetitie(0, null, 1, $periode, $fid, 1, $vrk);
 				$corvee[$fid] = $corvee[$fid][0];
 			}
 			else {
-				$corvee[$fid] = \Taken\CRV\CorveeRepetitiesModel::saveRepetitie(0, $mrid_do, 4, 7, $fid, 1, $vrk);
+				$corvee[$fid] = \CorveeRepetitiesModel::saveRepetitie(0, $mrid_do, 4, 7, $fid, 1, $vrk);
 				$corvee[$fid] = $corvee[$fid][0];
 			}
 		}
 		$corvee_wo = array();
-		$corvee_wo[1] = \Taken\CRV\CorveeRepetitiesModel::saveRepetitie(0, $rep_wo->getMaaltijdRepetitieId(), $rep_wo->getDagVanDeWeek(), $rep_wo->getPeriodeInDagen(), 1, 1, true);
+		$corvee_wo[1] = \CorveeRepetitiesModel::saveRepetitie(0, $rep_wo->getMaaltijdRepetitieId(), $rep_wo->getDagVanDeWeek(), $rep_wo->getPeriodeInDagen(), 1, 1, true);
 		$corvee_wo[1] = $corvee_wo[1][0];
-		$corvee_wo[2] = \Taken\CRV\CorveeRepetitiesModel::saveRepetitie(0, $rep_wo->getMaaltijdRepetitieId(), $rep_wo->getDagVanDeWeek(), $rep_wo->getPeriodeInDagen(), 2, 1, true);
+		$corvee_wo[2] = \CorveeRepetitiesModel::saveRepetitie(0, $rep_wo->getMaaltijdRepetitieId(), $rep_wo->getDagVanDeWeek(), $rep_wo->getPeriodeInDagen(), 2, 1, true);
 		$corvee_wo[2] = $corvee_wo[2][0];
-		$corvee_wo[8] = \Taken\CRV\CorveeRepetitiesModel::saveRepetitie(0, $rep_wo->getMaaltijdRepetitieId(), $rep_wo->getDagVanDeWeek(), $rep_wo->getPeriodeInDagen(), 8, 1, true);
+		$corvee_wo[8] = \CorveeRepetitiesModel::saveRepetitie(0, $rep_wo->getMaaltijdRepetitieId(), $rep_wo->getDagVanDeWeek(), $rep_wo->getPeriodeInDagen(), 8, 1, true);
 		$corvee_wo[8] = $corvee_wo[8][0];
-		$corvee_wo[7] = \Taken\CRV\CorveeRepetitiesModel::saveRepetitie(0, $rep_wo->getMaaltijdRepetitieId(), $rep_wo->getDagVanDeWeek(), $rep_wo->getPeriodeInDagen(), 7, 1, true);
+		$corvee_wo[7] = \CorveeRepetitiesModel::saveRepetitie(0, $rep_wo->getMaaltijdRepetitieId(), $rep_wo->getDagVanDeWeek(), $rep_wo->getPeriodeInDagen(), 7, 1, true);
 		$corvee_wo[7] = $corvee_wo[7][0];
 		
 		echo '<br />' . date('H:i:s') . ' converteren: vrijstelling => CorveeVrijstelling & kwalikok => CorveeKwalificatie & voorkeuren => CorveeVoorkeur';
@@ -304,46 +304,46 @@ class ConversieModel {
 			$percentage = intval($row['corvee_vrijstelling']);
 			if ($percentage > 0) {
 				try {
-					\Taken\CRV\VrijstellingenModel::saveVrijstelling($row['uid'], date('Y-m-d'), date('Y-m-d', strtotime('+2 years')), $percentage);
+					\VrijstellingenModel::saveVrijstelling($row['uid'], date('Y-m-d'), date('Y-m-d', strtotime('+2 years')), $percentage);
 				}
 				catch (\Exception $e) {
 				}
 			}
 			if ($row['corvee_kwalikok'] === '1') {
-				\Taken\CRV\KwalificatiesModel::kwalificatieToewijzen(7, $row['uid']);
+				\KwalificatiesModel::kwalificatieToewijzen(7, $row['uid']);
 			}
 			$vrk = str_split($row['corvee_voorkeuren']);
 			if (array_key_exists(0, $vrk) && $vrk[0] === '1') { // klussen licht
-				\Taken\CRV\VoorkeurenModel::inschakelenVoorkeur($corvee[10]->getCorveeRepetitieId(), $row['uid']);
+				\VoorkeurenModel::inschakelenVoorkeur($corvee[10]->getCorveeRepetitieId(), $row['uid']);
 			}
 			if (array_key_exists(1, $vrk) && $vrk[1] === '1') { // klussen zwaar
-				\Taken\CRV\VoorkeurenModel::inschakelenVoorkeur($corvee[11]->getCorveeRepetitieId(), $row['uid']);
+				\VoorkeurenModel::inschakelenVoorkeur($corvee[11]->getCorveeRepetitieId(), $row['uid']);
 			}
 			if (array_key_exists(2, $vrk) && $vrk[2] === '1') { // woensdag koken
-				\Taken\CRV\VoorkeurenModel::inschakelenVoorkeur($corvee_wo[1]->getCorveeRepetitieId(), $row['uid']);
+				\VoorkeurenModel::inschakelenVoorkeur($corvee_wo[1]->getCorveeRepetitieId(), $row['uid']);
 			}
 			if (array_key_exists(3, $vrk) && $vrk[3] === '1') { // woensdag kwaliafwassen
-				\Taken\CRV\VoorkeurenModel::inschakelenVoorkeur($corvee_wo[2]->getCorveeRepetitieId(), $row['uid']);
-				\Taken\CRV\VoorkeurenModel::inschakelenVoorkeur($corvee_wo[8]->getCorveeRepetitieId(), $row['uid']);
+				\VoorkeurenModel::inschakelenVoorkeur($corvee_wo[2]->getCorveeRepetitieId(), $row['uid']);
+				\VoorkeurenModel::inschakelenVoorkeur($corvee_wo[8]->getCorveeRepetitieId(), $row['uid']);
 			}
 			if (array_key_exists(4, $vrk) && $vrk[4] === '1') { // donderdag koken
-				\Taken\CRV\VoorkeurenModel::inschakelenVoorkeur($corvee[1]->getCorveeRepetitieId(), $row['uid']);
+				\VoorkeurenModel::inschakelenVoorkeur($corvee[1]->getCorveeRepetitieId(), $row['uid']);
 			}
 			if (array_key_exists(5, $vrk) && $vrk[5] === '1') { // donderdag afwassen & kwaliafwassen
-				\Taken\CRV\VoorkeurenModel::inschakelenVoorkeur($corvee[2]->getCorveeRepetitieId(), $row['uid']);
-				\Taken\CRV\VoorkeurenModel::inschakelenVoorkeur($corvee[8]->getCorveeRepetitieId(), $row['uid']);
+				\VoorkeurenModel::inschakelenVoorkeur($corvee[2]->getCorveeRepetitieId(), $row['uid']);
+				\VoorkeurenModel::inschakelenVoorkeur($corvee[8]->getCorveeRepetitieId(), $row['uid']);
 			}
 			if (array_key_exists(6, $vrk) && $vrk[6] === '1') { // theedoeken wassen
-				\Taken\CRV\VoorkeurenModel::inschakelenVoorkeur($corvee[4]->getCorveeRepetitieId(), $row['uid']);
+				\VoorkeurenModel::inschakelenVoorkeur($corvee[4]->getCorveeRepetitieId(), $row['uid']);
 			}
 			if (array_key_exists(7, $vrk) && $vrk[7] === '1') { // schoonmaken afzuigkap
-				\Taken\CRV\VoorkeurenModel::inschakelenVoorkeur($corvee[6]->getCorveeRepetitieId(), $row['uid']);
+				\VoorkeurenModel::inschakelenVoorkeur($corvee[6]->getCorveeRepetitieId(), $row['uid']);
 			}
 			if (array_key_exists(8, $vrk) && $vrk[8] === '1') { // schoonmaken frituur
-				\Taken\CRV\VoorkeurenModel::inschakelenVoorkeur($corvee[9]->getCorveeRepetitieId(), $row['uid']);
+				\VoorkeurenModel::inschakelenVoorkeur($corvee[9]->getCorveeRepetitieId(), $row['uid']);
 			}
 			if (array_key_exists(9, $vrk) && $vrk[9] === '1') { // schoonmaken keuken
-				\Taken\CRV\VoorkeurenModel::inschakelenVoorkeur($corvee[5]->getCorveeRepetitieId(), $row['uid']);
+				\VoorkeurenModel::inschakelenVoorkeur($corvee[5]->getCorveeRepetitieId(), $row['uid']);
 			}
 		}
 		
@@ -398,9 +398,9 @@ class ConversieModel {
 					$uid = null;
 				}
 				if ($titel !== 'Alpha-cursus') {
-					$corveetaak = \Taken\CRV\TakenModel::saveTaak(0, 3, $uid, $crid, $mid, date('Y-m-d', $datum), 0, 0);
+					$corveetaak = \TakenModel::saveTaak(0, 3, $uid, $crid, $mid, date('Y-m-d', $datum), 0, 0);
 					for ($i = 0; $i < $gemailed; $i++) {
-						\Taken\CRV\TakenModel::updateGemaild($corveetaak);
+						\TakenModel::updateGemaild($corveetaak);
 					}
 				}
 			}
@@ -431,12 +431,12 @@ class ConversieModel {
 								$crid = $corvee_wo[$fid]->getCorveeRepetitieId();
 							}
 						}
-						$corveetaak = \Taken\CRV\TakenModel::saveTaak(0, $fid, $uid, $crid, $mid, date('Y-m-d', $datum), $punt, 0);
+						$corveetaak = \TakenModel::saveTaak(0, $fid, $uid, $crid, $mid, date('Y-m-d', $datum), $punt, 0);
 						if ($taak['punten_toegekend'] === 'ja') {
-							\Taken\CRV\TakenModel::puntenToekennen($corveetaak);
+							\TakenModel::puntenToekennen($corveetaak);
 						}
 						for ($i = 0; $i < $gemailed; $i++) {
-							\Taken\CRV\TakenModel::updateGemaild($corveetaak);
+							\TakenModel::updateGemaild($corveetaak);
 						}
 					}
 				}
@@ -459,7 +459,7 @@ class ConversieModel {
 					}
 				}
 				for ($i = 0; $i < $tekort; $i++) {
-					$corveetaak = \Taken\CRV\TakenModel::saveTaak(0, $fid, null, $crid, $mid, date('Y-m-d', $datum), $punt, 0);
+					$corveetaak = \TakenModel::saveTaak(0, $fid, null, $crid, $mid, date('Y-m-d', $datum), $punt, 0);
 				}
 			}
 		}
@@ -490,7 +490,7 @@ class ConversieModel {
 	}
 	
 	private static function queryDb($sql, $values=array()) {
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		if ($query->rowCount() > 0) {
@@ -505,11 +505,11 @@ class ConversieModel {
 		$sql.= ' (maaltijd_id, mlt_repetitie_id, titel, aanmeld_limiet, datum, tijd, prijs, gesloten, laatst_gesloten, verwijderd, aanmeld_filter)';
 		$sql.= ' VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
 		$values = array($mid, $mrid, $titel, $limiet, $datum, $tijd, $prijs, false, null, false, $filter);
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		if ($query->rowCount() !== 1) {
-			throw new \Exception('New maaltijd faalt: $query->rowCount() ='. $query->rowCount());
+			throw new Exception('New maaltijd faalt: $query->rowCount() ='. $query->rowCount());
 		}
 		$maaltijd = new Maaltijd($mid, $mrid, $titel, $limiet, $datum, $tijd, $prijs, false, null, false, $filter);
 		$maaltijd->setAantalAanmeldingen(0);
@@ -517,7 +517,7 @@ class ConversieModel {
 	}
 	
 	private static function archiefMaaltijd(ArchiefMaaltijd $archief) {
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		try {
 			$db->beginTransaction();
 			$sql = 'INSERT INTO mlt_archief';
@@ -535,7 +535,7 @@ class ConversieModel {
 			$query->execute($values);
 			if ($query->rowCount() !== 1) {
 				$db->rollback();
-				throw new \Exception('New archief-maaltijd faalt: $query->rowCount() ='. $query->rowCount());
+				throw new Exception('New archief-maaltijd faalt: $query->rowCount() ='. $query->rowCount());
 			}
 			$db->commit();
 		}

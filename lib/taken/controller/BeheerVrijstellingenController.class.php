@@ -1,5 +1,5 @@
 <?php
-namespace Taken\CRV;
+
 
 require_once 'taken/model/VrijstellingenModel.class.php';
 require_once 'taken/view/BeheerVrijstellingenView.class.php';
@@ -9,7 +9,7 @@ require_once 'taken/view/forms/VrijstellingFormView.class.php';
  * BeheerVrijstellingenController.class.php	| 	P.W.G. Brussee (brussee@live.nl)
  * 
  */
-class BeheerVrijstellingenController extends \ACLController {
+class BeheerVrijstellingenController extends \AclController {
 
 	public function __construct($query) {
 		parent::__construct($query);
@@ -34,53 +34,53 @@ class BeheerVrijstellingenController extends \ACLController {
 		if ($this->hasParam(3)) {
 			$uid = $this->getParam(3);
 		}
-		$this->performAction($uid);
+		$this->performAction(array($uid));
 	}
 	
-	public function action_beheer() {
+	public function beheer() {
 		$vrijstellingen = VrijstellingenModel::getAlleVrijstellingen();
-		$this->content = new BeheerVrijstellingenView($vrijstellingen);
-		$this->content = new \csrdelft($this->getContent());
-		$this->content->addStylesheet('js/autocomplete/jquery.autocomplete.css');
-		$this->content->addStylesheet('taken.css');
-		$this->content->addScript('autocomplete/jquery.autocomplete.min.js');
-		$this->content->addScript('taken.js');
+		$this->view = new BeheerVrijstellingenView($vrijstellingen);
+		$this->view = new csrdelft($this->getContent());
+		$this->view->addStylesheet('js/autocomplete/jquery.autocomplete.css');
+		$this->view->addStylesheet('taken.css');
+		$this->view->addScript('autocomplete/jquery.autocomplete.min.js');
+		$this->view->addScript('taken.js');
 	}
 	
-	public function action_nieuw() {
+	public function nieuw() {
 		$vrijstelling = new CorveeVrijstelling();
-		$this->content = new VrijstellingFormView($vrijstelling->getLidId(), $vrijstelling->getBeginDatum(), $vrijstelling->getEindDatum(), $vrijstelling->getPercentage()); // fetches POST values itself
+		$this->view = new VrijstellingFormView($vrijstelling->getLidId(), $vrijstelling->getBeginDatum(), $vrijstelling->getEindDatum(), $vrijstelling->getPercentage()); // fetches POST values itself
 	}
 	
-	public function action_bewerk($uid) {
+	public function bewerk($uid) {
 		if (!\Lid::exists($uid)) {
-			throw new \Exception('Lid bestaat niet: $uid ='. $uid);
+			throw new Exception('Lid bestaat niet: $uid ='. $uid);
 		}
 		$vrijstelling = VrijstellingenModel::getVrijstelling($uid);
-		$this->content = new VrijstellingFormView($vrijstelling->getLidId(), $vrijstelling->getBeginDatum(), $vrijstelling->getEindDatum(), $vrijstelling->getPercentage()); // fetches POST values itself
+		$this->view = new VrijstellingFormView($vrijstelling->getLidId(), $vrijstelling->getBeginDatum(), $vrijstelling->getEindDatum(), $vrijstelling->getPercentage()); // fetches POST values itself
 	}
 	
-	public function action_opslaan($uid=null) {
+	public function opslaan($uid=null) {
 		if ($uid !== null) {
-			$this->action_bewerk($uid);
+			$this->bewerk($uid);
 		}
 		else {
-			$this->content = new VrijstellingFormView(); // fetches POST values itself
+			$this->view = new VrijstellingFormView(); // fetches POST values itself
 		}
-		if ($this->content->validate()) {
-			$values = $this->content->getValues();
+		if ($this->view->validate()) {
+			$values = $this->view->getValues();
 			$uid = ($values['lid_id'] === '' ? null : $values['lid_id']);
 			$vrijstelling = VrijstellingenModel::saveVrijstelling($uid, $values['begin_datum'], $values['eind_datum'], $values['percentage']);
-			$this->content = new BeheerVrijstellingenView($vrijstelling);
+			$this->view = new BeheerVrijstellingenView($vrijstelling);
 		}
 	}
 	
-	public function action_verwijder($uid) {
+	public function verwijder($uid) {
 		if (!\Lid::exists($uid)) {
-			throw new \Exception('Lid bestaat niet: $uid ='. $uid);
+			throw new Exception('Lid bestaat niet: $uid ='. $uid);
 		}
 		VrijstellingenModel::verwijderVrijstelling($uid);
-		$this->content = new BeheerVrijstellingenView($uid);
+		$this->view = new BeheerVrijstellingenView($uid);
 	}
 }
 

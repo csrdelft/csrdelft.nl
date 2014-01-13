@@ -1,7 +1,6 @@
 <?php
-namespace Taken\MLT;
 
-require_once 'formulier.class.php';
+
 require_once 'verticale.class.php';
 require_once 'lichting.class.php';
 
@@ -11,58 +10,58 @@ require_once 'lichting.class.php';
  * Formulier voor een nieuwe of te bewerken maaltijd.
  * 
  */
-class MaaltijdFormView extends \SimpleHtml {
+class MaaltijdFormView extends TemplateView {
 
 	private $_form;
 	private $_mid;
-	
-	public function __construct($mid, $mrid=null, $titel=null, $limiet=null, $datum=null, $tijd=null, $prijs=null, $filter=null) {
+
+	public function __construct($mid, $mrid = null, $titel = null, $limiet = null, $datum = null, $tijd = null, $prijs = null, $filter = null) {
+		parent::__construct();
 		$this->_mid = $mid;
-		
+
 		$suggesties = array();
 		$suggesties[] = 'geslacht:m';
 		$suggesties[] = 'geslacht:v';
 		$verticalen = \Verticale::getNamen();
 		foreach ($verticalen as $naam) {
-			$suggesties[] = 'verticale:'. $naam;
+			$suggesties[] = 'verticale:' . $naam;
 		}
 		$jong = \Lichting::getJongsteLichting();
-		for ($jaar = $jong; $jaar > $jong-9; $jaar--) {
-			$suggesties[] = 'lichting:'. $jaar;
+		for ($jaar = $jong; $jaar > $jong - 9; $jaar--) {
+			$suggesties[] = 'lichting:' . $jaar;
 		}
-		
-		$formFields[] = new \HiddenField('mlt_repetitie_id', $mrid);
-		$formFields['req'] = new \RequiredInputField('titel', $titel, 'Titel', 255);
-		$formFields['req']->forcenotnull = true;
-		$formFields[] = new \DatumField('datum', $datum, 'Datum', date('Y')+2, date('Y')-2);
-		$formFields[] = new \TijdField('tijd', $tijd, 'Tijd', 15);
-		$formFields[] = new \FloatField('prijs', $prijs, 'Prijs (€)', 50, 0);
-		$formFields[] = new \IntField('aanmeld_limiet', $limiet, 'Aanmeldlimiet', 200, 0);
-		$formFields['filter'] = new \InputField('aanmeld_filter', $filter, 'Aanmeldrestrictie', 255, $suggesties);
+
+		$formFields[] = new HiddenField('mlt_repetitie_id', $mrid);
+		$formFields[] = new TextField('titel', $titel, 'Titel', 255);
+		$formFields[] = new DatumField('datum', $datum, 'Datum', date('Y') + 2, date('Y') - 2);
+		$formFields[] = new TijdField('tijd', $tijd, 'Tijd', 15);
+		$formFields[] = new FloatField('prijs', $prijs, 'Prijs (€)', 50, 0);
+		$formFields[] = new IntField('aanmeld_limiet', $limiet, 'Aanmeldlimiet', 200, 0);
+		$formFields['filter'] = new TextField('aanmeld_filter', $filter, 'Aanmeldrestrictie', 255, $suggesties);
+		$formFields['filter']->required = false;
 		$formFields['filter']->title = 'Plaats een ! vooraan om van de restrictie een uitsluiting te maken.';
-		
-		$this->_form = new \Formulier('taken-maaltijd-form', $GLOBALS['taken_module'] .'/opslaan/'. $mid, $formFields);
+
+		$this->_form = new Formulier('taken-maaltijd-form', $GLOBALS['taken_module'] . '/opslaan/' . $mid, $formFields);
 	}
-	
+
 	public function getTitel() {
 		if ($this->_mid === 0) {
 			return 'Maaltijd aanmaken';
 		}
 		return 'Maaltijd wijzigen';
 	}
-	
+
 	public function view() {
-		$smarty = new \Smarty_csr();
-		$smarty->assign('melding', $this->getMelding());
-		$smarty->assign('kop', $this->getTitel());
-		$this->_form->cssClass .= ' popup';
-		$smarty->assign('form', $this->_form);
+		$this->assign('melding', $this->getMelding());
+		$this->assign('kop', $this->getTitel());
+		$this->_form->css_classes[] = 'popup';
+		$this->assign('form', $this->_form);
 		if ($this->_mid === 0) {
-			$smarty->assign('nocheck', true);
+			$this->assign('nocheck', true);
 		}
-		$smarty->display('taken/popup_form.tpl');
+		$this->display('taken/popup_form.tpl');
 	}
-	
+
 	public function validate() {
 		if (!is_int($this->_mid) || $this->_mid < 0) {
 			return false;
@@ -80,12 +79,13 @@ class MaaltijdFormView extends \SimpleHtml {
 				return false;
 			}
 		}
-		return $this->_form->valid();
+		return $this->_form->validate();
 	}
-	
+
 	public function getValues() {
 		return $this->_form->getValues(); // escapes HTML
 	}
+
 }
 
 ?>

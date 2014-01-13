@@ -1,5 +1,5 @@
 <?php
-namespace Taken\CRV;
+
 /**
  * CorveeFunctie.class.php	| 	P.W.G. Brussee (brussee@live.nl)
  * 
@@ -71,38 +71,38 @@ class CorveeFunctie {
 	
 	public function setNaam($string) {
 		if (!is_string($string)) {
-			throw new \Exception('Geen string: functie naam');
+			throw new Exception('Geen string: functie naam');
 		}
 		$this->naam = $string;
 	}
 	public function setAfkorting($string) {
 		if (!is_string($string)) {
-			throw new \Exception('Geen string: functie afkorting');
+			throw new Exception('Geen string: functie afkorting');
 		}
 		$this->afkorting = $string;
 	}
 	public function setEmailBericht($string) {
 		if (!is_string($string)) {
-			throw new \Exception('Geen string: email bericht');
+			throw new Exception('Geen string: email bericht');
 		}
 		$this->email_bericht = $string;
 	}
 	public function setStandaardPunten($int) {
 		if (!is_int($int)) {
-			throw new \Exception('Geen integer: standaard punten');
+			throw new Exception('Geen integer: standaard punten');
 		}
 		$this->standaard_punten = $int;
 	}
 	public function setKwalificatieBenodigd($bool) {
 		if (!is_bool($bool)) {
-			throw new \Exception('Geen boolean: kwalificatie benodigd');
+			throw new Exception('Geen boolean: kwalificatie benodigd');
 		}
 		$this->kwalificatie_benodigd = $bool;
 	}
 	
 	public function setGekwalificeerden($kwali) {
 		if ($kwali !== null && !is_array($kwali)) {
-			throw new \Exception('Geen array: gekwalificeerden');
+			throw new Exception('Geen array: gekwalificeerden');
 		}
 		$this->gekwalificeerden = $kwali;
 	}

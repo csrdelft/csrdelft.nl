@@ -10,11 +10,11 @@
 		<ul id="mainmenu">
 			{foreach from=$root->children item=item}
 				<li>
-					<a href="{$item->getLink()}" id="top{$item->getMenuId()}" onmouseover="StartShowMenu('{$item->getMenuId()}');" onmouseout="ResetShowMenu();"{if $item->isParentOf($huidig)} class="active"{/if} title="{$item->getTekst()}">{$item->getTekst()}</a>
+					<a href="{$item->link}" id="top{$item->item_id}" onmouseover="StartShowMenu('{$item->item_id}');" onmouseout="ResetShowMenu();"{if $item->isParentOf($huidig)} class="active"{/if} title="{$item->tekst}">{$item->tekst}</a>
 					{if $item->isParentOf($huidig)}
 						<script type="text/javascript">
-							SetActive({$item->getMenuId()});
-							document.getElementById('banner'+{$item->getMenuId()}).style.display = "inline";
+							SetActive({$item->item_id});
+							document.getElementById('banner'+{$item->item_id}).style.display = "inline";
 							fixPNG('imgbanner1');
 						</script>
 					{/if}
@@ -86,7 +86,7 @@
 				</form>
 			</div>
 		{else}
-			<div id="key"><img src="{$CSR_PICS}/layout/key.png" onclick="toggleDiv('login')" alt="Inloggen" /></div>
+			<div id="key"><img src="{$CSR_PICS}/layout/key.png" onclick="$('#login').toggle();" alt="Inloggen" /></div>
 			<div id="login">
 				{if isset($smarty.session.auth_error)}
 					<span class="waarschuwing">{$smarty.session.auth_error}</span>
@@ -103,7 +103,7 @@
 				</form>
 			</div>
 			{if !isset($smarty.session.auth_error)}
-				<script type="text/javascript">hideDiv(document.getElementById('login'));</script>
+				<script type="text/javascript">$('#login').hide();</script>
 			{/if}
 		{/if}
 	</div>
@@ -114,9 +114,9 @@
 {foreach from=$root->children item=item}
 	{foreach name=sub from=$item->children item=subitem}
 		{if $smarty.foreach.sub.first}
-			<div id="sub{$item->getMenuId()}"{if $item->isParentOf($huidig)} class="active"{/if}>
+			<div id="sub{$item->item_id}"{if $item->isParentOf($huidig)} class="active"{/if}>
 		{/if}
-			<a href="{$subitem->getLink()}" title="{$subitem->getTekst()}"{if $subitem === $huidig} class="active"{/if}>{$subitem->getTekst()}</a>
+			<a href="{$subitem->link}" title="{$subitem->tekst}"{if $subitem === $huidig} class="active"{/if}>{$subitem->tekst}</a>
 		{if !$smarty.foreach.sub.last}
 			<span class="separator">&nbsp;&nbsp;</span>
 		{else}

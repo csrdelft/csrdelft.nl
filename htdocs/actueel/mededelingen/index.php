@@ -179,7 +179,7 @@ switch($actie){
 				if($errorNumber==UPLOAD_ERR_NO_FILE){ // If there was no file being uploaded at all. 
 					setMelding('Het toevoegen van een plaatje is verplicht.', -1);
 					$allOK=false;
-				}else if($errorNumber!=UPLOAD_ERR_OK){
+				}elseif($errorNumber!=UPLOAD_ERR_OK){
 					// Uploading the picture failed.
 					$allOK=false;
 				}
@@ -218,7 +218,7 @@ switch($actie){
 		$content=new MededelingenContent($mededelingId, $prullenbak);
 		if(isset($pagina)){	// Als de gebruiker een pagina opvraagt.
 			$content->setPaginaNummer($pagina);
-		}else if($mededelingId==0){	// Als de gebruiker GEEN pagina opvraagt en ook geen mededeling.
+		}elseif($mededelingId==0){	// Als de gebruiker GEEN pagina opvraagt en ook geen mededeling.
 			$content->setPaginaNummer(1);
 		}
 	break;

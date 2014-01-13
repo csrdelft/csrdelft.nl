@@ -98,14 +98,14 @@ div.vertical {
 	line-height: 2em;
 	vertical-align: middle;
 }
-.Formulier .veld {
+.Formulier .InputField {
 	margin: 0px;
 }
 .Formulier .knop {
 	float: none;
 }
 input.LidField, input.RequiredLidField {
-	width: 150px !important;
+	width: 160px !important;
 }
 input.KeuzeRondjeField {
 	width: auto !important;

@@ -1,5 +1,5 @@
 <?php
-namespace Taken\MLT;
+
 /**
  * Instelling.class.php	| 	P.W.G. Brussee (brussee@live.nl)
  * 
@@ -34,7 +34,7 @@ class Instelling {
 	
 	public function setWaarde($value) {
 		if ($value === null) {
-			throw new \Exception('Set waarde faalt: null');
+			throw new Exception('Set waarde faalt: null');
 		}
 		$this->waarde = $value;
 	}

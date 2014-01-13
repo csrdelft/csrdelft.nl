@@ -2,7 +2,7 @@
 
 require_once 'configuratie.include.php';
 
-require_once 'formulier.class.php';
+
 
 $default='test123';
 $uid='0436';
@@ -10,10 +10,10 @@ $uid='0436';
 $form=array();
 
 //testformulier bouwen.
-$form[]=new Comment('Studie:');
+$form[]=new Subkopje('Studie:');
 $form[]=new StudieField('studie', $default, 'Studie');
-$form[]=new TextField('opmerking1', $default, 'Opmerking1');
-$hippeTextarea=new PreviewTextField('opmerking', $default, 'previewOnEnter:');
+$form[]=new TextareaField('opmerking1', $default, 'Opmerking1');
+$hippeTextarea=new UbbPreviewField('opmerking', $default, 'previewOnEnter:');
 $hippeTextarea->previewOnEnter();
 
 $form[]=$hippeTextarea;
@@ -29,8 +29,9 @@ $form[]=new LidField('lid2test', 'Gra', 'Wat is je naam?', 'nobodies');
 
 $form=new Formulier('test-form', '/testform.php', $form);
 
-class TestFormulierContent extends SimpleHTML{
+class TestFormulierContent extends TemplateView{
 	public function __construct($form){
+		parent::__construct();
 		$this->form=$form;
 	}
 	public function getTitel(){ return 'Testformulier'; }
@@ -42,7 +43,7 @@ class TestFormulierContent extends SimpleHTML{
 }
 
 
-if($form->valid()){
+if($form->validate()){
 	pr($form);
 }
 

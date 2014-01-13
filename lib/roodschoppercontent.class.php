@@ -1,21 +1,22 @@
 <?php
 
+class RoodschopperContent extends TemplateView {
 
-class RoodschopperContent extends SimpleHTML{
 	private $roodschopper;
-	
-	public function __construct($roodschopper){
-		$this->roodschopper=$roodschopper;
+
+	public function __construct($roodschopper) {
+		parent::__construct();
+		$this->roodschopper = $roodschopper;
 	}
-	public function getTitel(){
+
+	public function getTitel() {
 		return 'Roodschopper';
 	}
-	public function view(){
-		$content=new Smarty_csr();
 
-		
-		$content->assign('roodschopper', $this->roodschopper);
-		$content->assign('melding', $this->getMelding());
-		$content->display('roodschopper/roodschopper.tpl');
+	public function view() {
+		$this->assign('roodschopper', $this->roodschopper);
+		$this->assign('melding', $this->getMelding());
+		$this->display('roodschopper/roodschopper.tpl');
 	}
+
 }

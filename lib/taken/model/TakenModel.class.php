@@ -1,5 +1,5 @@
 <?php
-namespace Taken\CRV;
+
 
 require_once 'taken/model/entity/CorveeTaak.class.php';
 require_once 'taken/model/FunctiesModel.class.php';
@@ -39,7 +39,7 @@ class TakenModel {
 	}
 	
 	public static function puntenToekennen(CorveeTaak $taak) {
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		try {
 			$db->beginTransaction();
 			PuntenModel::puntenToekennen($taak->getLidId(), $taak->getPunten(), $taak->getBonusMalus());
@@ -56,7 +56,7 @@ class TakenModel {
 	}
 	
 	public static function puntenIntrekken(CorveeTaak $taak) {
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		try {
 			$db->beginTransaction();
 			PuntenModel::puntenIntrekken($taak->getLidId(), $taak->getPunten(), $taak->getBonusMalus());
@@ -111,18 +111,18 @@ class TakenModel {
 	public static function getTaak($tid) {
 		$taak = self::loadTaak($tid);
 		if ($taak->getIsVerwijderd()) {
-			throw new \Exception('Maaltijd is verwijderd');
+			throw new Exception('Maaltijd is verwijderd');
 		}
 		return $taak;
 	}
 	
 	private static function loadTaak($tid) {
 		if (!is_int($tid) || $tid <= 0) {
-			throw new \Exception('Load taak faalt: Invalid $tid ='. $tid);
+			throw new Exception('Load taak faalt: Invalid $tid ='. $tid);
 		}
 		$taken = self::loadTaken('taak_id = ?', array($tid), 1);
 		if (!array_key_exists(0, $taken)) {
-			throw new \Exception('Load taak faalt: Not found $tid ='. $tid);
+			throw new Exception('Load taak faalt: Not found $tid ='. $tid);
 		}
 		return $taken[0];
 	}
@@ -139,13 +139,13 @@ class TakenModel {
 			$van = strtotime('-1 year');
 		}
 		elseif (!is_int($van)) {
-			throw new \Exception('Invalid timestamp: $van getTakenVoorAgenda()');
+			throw new Exception('Invalid timestamp: $van getTakenVoorAgenda()');
 		}
 		if ($tot === null) {
 			$tot = strtotime('+1 year');
 		}
 		elseif (!is_int($tot)) {
-			throw new \Exception('Invalid timestamp: $tot getTakenVoorAgenda()');
+			throw new Exception('Invalid timestamp: $tot getTakenVoorAgenda()');
 		}
 		$where = 'verwijderd = false AND datum >= ? AND datum <= ?';
 		$values = array(date('Y-m-d', $van), date('Y-m-d', $tot));
@@ -191,7 +191,7 @@ class TakenModel {
 	}
 	
 	public static function saveTaak($tid, $fid, $uid, $crid, $mid, $datum, $punten, $bonus_malus) {
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		try {
 			$db->beginTransaction();
 			if ($tid === 0) {
@@ -224,7 +224,7 @@ class TakenModel {
 	public static function herstelTaak($tid) {
 		$taak = self::loadTaak($tid);
 		if (!$taak->getIsVerwijderd()) {
-			throw new \Exception('Corveetaak is niet verwijderd');
+			throw new Exception('Corveetaak is niet verwijderd');
 		}
 		$taak->setVerwijderd(false);
 		self::updateTaak($taak);
@@ -235,7 +235,7 @@ class TakenModel {
 		$sql = 'DELETE FROM crv_taken';
 		$sql.= ' WHERE verwijderd = true';
 		$values = array();
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		return $query->rowCount();
@@ -246,7 +246,7 @@ class TakenModel {
 		$sql.= ' SET verwijderd = true';
 		$sql.= ' WHERE datum < ?';
 		$values = array(date('Y-m-d'));
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		return $query->rowCount();
@@ -257,7 +257,7 @@ class TakenModel {
 		$sql.= ' SET lid_id = ?';
 		$sql.= ' WHERE lid_id = ? AND datum >= ?';
 		$values = array(null, $uid, date('Y-m-d'));
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		return $query->rowCount();
@@ -278,11 +278,11 @@ class TakenModel {
 		$sql = 'DELETE FROM crv_taken';
 		$sql.= ' WHERE taak_id = ?';
 		$values = array($tid);
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		if ($query->rowCount() !== 1) {
-			throw new \Exception('Delete taak faalt: $query->rowCount() ='. $query->rowCount());
+			throw new Exception('Delete taak faalt: $query->rowCount() ='. $query->rowCount());
 		}
 	}
 	
@@ -296,10 +296,10 @@ class TakenModel {
 		if (is_int($limit) && $limit > 0) {
 			$sql.= ' LIMIT '. $limit;
 		}
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
-		$result = $query->fetchAll(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, '\Taken\CRV\CorveeTaak');
+		$result = $query->fetchAll(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, '\CorveeTaak');
 		// load corvee functies
 		if ($query->rowCount() === 1) {
 			$result[0]->setCorveeFunctie(FunctiesModel::getFunctie($result[0]->getFunctieId()));
@@ -332,27 +332,27 @@ class TakenModel {
 			$taak->getIsVerwijderd(),
 			$taak->getTaakId()
 		);
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		if ($query->rowCount() !== 1) {
-			throw new \Exception('Update taak faalt: $query->rowCount() ='. $query->rowCount());
+			throw new Exception('Update taak faalt: $query->rowCount() ='. $query->rowCount());
 		}
 	}
 	
 	private static function newTaak($fid, $uid, $crid, $mid, $datum, $punten, $bonus_malus) {
 		if ($mid !== null && (!is_int($mid) || $mid < 1)) {
-			throw new \Exception('New taak faalt: $mid ='. $mid);
+			throw new Exception('New taak faalt: $mid ='. $mid);
 		}
 		$sql = 'INSERT INTO crv_taken';
 		$sql.= ' (taak_id, functie_id, lid_id, crv_repetitie_id, maaltijd_id, datum, punten, bonus_malus, punten_toegekend, bonus_toegekend, wanneer_toegekend, wanneer_gemaild, verwijderd)';
 		$sql.= ' VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
 		$values = array(null, $fid, $uid, $crid, $mid, $datum, $punten, $bonus_malus, 0, 0, null, '', false);
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		if ($query->rowCount() !== 1) {
-			throw new \Exception('New taak faalt: $query->rowCount() ='. $query->rowCount());
+			throw new Exception('New taak faalt: $query->rowCount() ='. $query->rowCount());
 		}
 		$taak = new CorveeTaak(intval($db->lastInsertId()), $fid, $uid, $crid, $mid, $datum, $punten, $bonus_malus, 0, 0, null, '', false);
 		return $taak;
@@ -369,7 +369,7 @@ class TakenModel {
 	 */
 	public static function getTakenVoorMaaltijd($mid, $verwijderd=false) {
 		if (!is_int($mid) || $mid <= 0) {
-			throw new \Exception('Load taken voor maaltijd faalt: Invalid $mid ='. $mid);
+			throw new Exception('Load taken voor maaltijd faalt: Invalid $mid ='. $mid);
 		}
 		if ($verwijderd) {
 			return self::loadTaken('maaltijd_id = ?', array($mid));
@@ -385,11 +385,11 @@ class TakenModel {
 	 */
 	public static function existMaaltijdCorvee($mid) {
 		if (!is_int($mid) || $mid <= 0) {
-			throw new \Exception('Exist maaltijd-corvee faalt: Invalid $mid ='. $mid);
+			throw new Exception('Exist maaltijd-corvee faalt: Invalid $mid ='. $mid);
 		}
 		$sql = 'SELECT EXISTS (SELECT * FROM crv_taken WHERE maaltijd_id = ?)';
 		$values = array($mid);
-		$query = \CsrPdo::instance()->prepare($sql, $values);
+		$query = \Database::instance()->prepare($sql, $values);
 		$query->execute($values);
 		$result = $query->fetchColumn();
 		return $result;
@@ -402,11 +402,11 @@ class TakenModel {
 	 */
 	public static function verwijderMaaltijdCorvee($mid) {
 		if (!is_int($mid) || $mid <= 0) {
-			throw new \Exception('Delete maaltijd-corvee faalt: Invalid $mid ='. $mid);
+			throw new Exception('Delete maaltijd-corvee faalt: Invalid $mid ='. $mid);
 		}
 		$sql = 'UPDATE crv_taken SET verwijderd = true WHERE maaltijd_id = ?';
 		$values = array($mid);
-		$query = \CsrPdo::instance()->prepare($sql, $values);
+		$query = \Database::instance()->prepare($sql, $values);
 		$query->execute($values);
 		return $query->rowCount();
 	}
@@ -421,7 +421,7 @@ class TakenModel {
 	 */
 	public static function getTakenVanFunctie($fid) {
 		if (!is_int($fid) || $fid <= 0) {
-			throw new \Exception('Load taken van functie faalt: Invalid $fid ='. $fid);
+			throw new Exception('Load taken van functie faalt: Invalid $fid ='. $fid);
 		}
 		return self::loadTaken('verwijderd = false AND functie_id = ?', array($fid));
 	}
@@ -434,11 +434,11 @@ class TakenModel {
 	 */
 	public static function existFunctieTaken($fid) {
 		if (!is_int($fid) || $fid <= 0) {
-			throw new \Exception('Exist functie-taken faalt: Invalid $fid ='. $fid);
+			throw new Exception('Exist functie-taken faalt: Invalid $fid ='. $fid);
 		}
 		$sql = 'SELECT EXISTS (SELECT * FROM crv_taken WHERE functie_id = ?)';
 		$values = array($fid);
-		$query = \CsrPdo::instance()->prepare($sql, $values);
+		$query = \Database::instance()->prepare($sql, $values);
 		$query->execute($values);
 		$result = $query->fetchColumn();
 		return $result;
@@ -448,9 +448,9 @@ class TakenModel {
 	
 	public static function maakRepetitieTaken(CorveeRepetitie $repetitie, $beginDatum, $eindDatum, $mid=null) {
 		if ($repetitie->getPeriodeInDagen() < 1) {
-			throw new \Exception('New repetitie-taken faalt: $periode ='. $repetitie->getPeriodeInDagen());
+			throw new Exception('New repetitie-taken faalt: $periode ='. $repetitie->getPeriodeInDagen());
 		}
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		try {
 			$db->beginTransaction();
 			$taken = self::newRepetitieTaken($repetitie, strtotime($beginDatum), strtotime($eindDatum), $mid);
@@ -497,13 +497,13 @@ class TakenModel {
 	
 	public static function verwijderRepetitieTaken($crid) {
 		if (!is_int($crid) || $crid <= 0) {
-			throw new \Exception('Verwijder repetitie-taken faalt: Invalid $crid ='. $crid);
+			throw new Exception('Verwijder repetitie-taken faalt: Invalid $crid ='. $crid);
 		}
 		$sql = 'UPDATE crv_taken';
 		$sql.= ' SET verwijderd = true';
 		$sql.= ' WHERE crv_repetitie_id = ?';
 		$values = array($crid);
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		return $query->rowCount();
@@ -517,18 +517,18 @@ class TakenModel {
 	 */
 	public static function existRepetitieTaken($crid) {
 		if (!is_int($crid) || $crid <= 0) {
-			throw new \Exception('Exist repetitie-taken faalt: Invalid $crid ='. $crid);
+			throw new Exception('Exist repetitie-taken faalt: Invalid $crid ='. $crid);
 		}
 		$sql = 'SELECT EXISTS (SELECT * FROM crv_taken WHERE crv_repetitie_id = ?)';
 		$values = array($crid);
-		$query = \CsrPdo::instance()->prepare($sql, $values);
+		$query = \Database::instance()->prepare($sql, $values);
 		$query->execute($values);
 		$result = (boolean) $query->fetchColumn();
 		return $result;
 	}
 	
 	public static function updateRepetitieTaken(CorveeRepetitie $repetitie, $verplaats) {
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		try {
 			$db->beginTransaction();
 			$sql = 'UPDATE crv_taken';
@@ -546,7 +546,7 @@ class TakenModel {
 			$taken = self::loadTaken('verwijderd = false AND crv_repetitie_id = ?', array($repetitie->getCorveeRepetitieId()));
 			$takenPerDatum = array(); // taken per datum indien geen maaltijd
 			$takenPerMaaltijd = array(); // taken per maaltijd
-			$maaltijden = \Taken\MLT\MaaltijdenModel::getKomendeRepetitieMaaltijden($repetitie->getMaaltijdRepetitieId(), true);
+			$maaltijden = MaaltijdenModel::getKomendeRepetitieMaaltijden($repetitie->getMaaltijdRepetitieId(), true);
 			$maaltijdenById = array();
 			foreach ($maaltijden as $maaltijd) {
 				$takenPerMaaltijd[$maaltijd->getMaaltijdId()] = array();

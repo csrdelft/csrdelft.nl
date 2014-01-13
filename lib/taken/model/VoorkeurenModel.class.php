@@ -1,5 +1,5 @@
 <?php
-namespace Taken\CRV;
+
 
 require_once 'taken/model/entity/CorveeVoorkeur.class.php';
 require_once 'taken/model/CorveeRepetitiesModel.class.php';
@@ -17,7 +17,7 @@ class VoorkeurenModel {
 	public static function setEetwens(\Lid $lid, $eetwens) {
 		$lid->setProperty('eetwens', $eetwens);
 		if (!$lid->save()) {
-			throw new \Exception('Eetwens opslaan mislukt');
+			throw new Exception('Eetwens opslaan mislukt');
 		}
 	}
 	
@@ -63,11 +63,11 @@ class VoorkeurenModel {
 	
 	public static function getHeeftVoorkeur($crid, $uid) {
 		if (!is_int($crid) || $crid <= 0) {
-			throw new \Exception('Get heeft voorkeur faalt: Invalid $crid ='. $crid);
+			throw new Exception('Get heeft voorkeur faalt: Invalid $crid ='. $crid);
 		}
 		$sql = 'SELECT EXISTS (SELECT * FROM crv_voorkeuren WHERE crv_repetitie_id=? AND lid_id=?)';
 		$values = array($crid, $uid);
-		$query = \CsrPdo::instance()->prepare($sql, $values);
+		$query = \Database::instance()->prepare($sql, $values);
 		$query->execute($values);
 		$result = $query->fetchColumn();
 		return $result;
@@ -105,7 +105,7 @@ class VoorkeurenModel {
 		$sql.= ' FROM lid, crv_repetities';
 		$sql.= ' WHERE voorkeurbaar = true AND lid.status IN("S_LID", "S_GASTLID", "S_NOVIET")'; // alleen leden
 		$sql.= ' ORDER BY achternaam, voornaam ASC';
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$values = array();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
@@ -115,14 +115,14 @@ class VoorkeurenModel {
 	
 	public static function getVoorkeurenVoorRepetitie($crid) {
 		if (!is_int($crid) || $crid <= 0) {
-			throw new \Exception('Get voorkeuren voor repetitie faalt: Invalid $crid ='. $crid);
+			throw new Exception('Get voorkeuren voor repetitie faalt: Invalid $crid ='. $crid);
 		}
 		return self::loadVoorkeuren($crid);
 	}
 	
 	private static function loadVoorkeuren($crid=null, $uid=null) {
 		if (is_int($crid) && $uid !== null) {
-			throw new \Exception('Load voorkeuren faalt: both $crid AND $uid provided');
+			throw new Exception('Load voorkeuren faalt: both $crid AND $uid provided');
 		}
 		$sql = 'SELECT crv_repetitie_id, lid_id';
 		$sql.= ' FROM crv_voorkeuren';
@@ -135,20 +135,20 @@ class VoorkeurenModel {
 			$sql.= ' WHERE lid_id=?';
 			$values[] = $uid;
 		}
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
-		$result = $query->fetchAll(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, '\Taken\CRV\CorveeVoorkeur');
+		$result = $query->fetchAll(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, '\CorveeVoorkeur');
 		return $result;
 	}
 	
 	public static function inschakelenVoorkeur($crid, $uid) {
 		if (self::getHeeftVoorkeur($crid, $uid)) {
-			throw new \Exception('Voorkeur al ingeschakeld');
+			throw new Exception('Voorkeur al ingeschakeld');
 		}
 		$repetitie = CorveeRepetitiesModel::getRepetitie($crid);
 		if (!$repetitie->getIsVoorkeurbaar()) {
-			throw new \Exception('Niet voorkeurbaar');
+			throw new Exception('Niet voorkeurbaar');
 		}
 		return self::newVoorkeur($crid, $uid);
 	}
@@ -161,7 +161,7 @@ class VoorkeurenModel {
 	 * @return CorveeVoorkeur
 	 */
 	private static function newVoorkeur($crid, $uid) {
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		try {
 			$db->beginTransaction();
 			$sql = 'INSERT IGNORE INTO crv_voorkeuren';
@@ -171,7 +171,7 @@ class VoorkeurenModel {
 			$query = $db->prepare($sql, $values);
 			$query->execute($values);
 			if ($query->rowCount() !== 1) {
-				throw new \Exception('New corvee-voorkeur faalt: $query->rowCount() ='. $query->rowCount());
+				throw new Exception('New corvee-voorkeur faalt: $query->rowCount() ='. $query->rowCount());
 			}
 			$db->commit();
 			return new CorveeVoorkeur($crid, $uid);
@@ -184,7 +184,7 @@ class VoorkeurenModel {
 	
 	public static function uitschakelenVoorkeur($crid, $uid) {
 		if (!self::getHeeftVoorkeur($crid, $uid)) {
-			throw new \Exception('Voorkeur al uitgeschakeld');
+			throw new Exception('Voorkeur al uitgeschakeld');
 		}
 		self::deleteVoorkeuren($crid, $uid);
 	}
@@ -197,7 +197,7 @@ class VoorkeurenModel {
 	 */
 	public static function verwijderVoorkeuren($crid) {
 		if (!is_int($crid) || $crid <= 0) {
-			throw new \Exception('Verwijder voorkeuren faalt: Invalid $crid ='. $crid);
+			throw new Exception('Verwijder voorkeuren faalt: Invalid $crid ='. $crid);
 		}
 		return self::deleteVoorkeuren($crid);
 	}
@@ -214,7 +214,7 @@ class VoorkeurenModel {
 			$aantal += self::deleteVoorkeuren($voorkeur->getCorveeRepetitieId(), $uid);
 		}
 		if (sizeof($voorkeuren) !== $aantal) {
-			throw new \Exception('Niet alle voorkeuren zijn uitgeschakeld!');
+			throw new Exception('Niet alle voorkeuren zijn uitgeschakeld!');
 		}
 		return $aantal;
 	}
@@ -227,11 +227,11 @@ class VoorkeurenModel {
 			$sql.= ' AND lid_id=?';
 			$values[] = $uid;
 		}
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		if ($uid !== null && $query->rowCount() !== 1) {
-			throw new \Exception('Delete voorkeuren faalt: $query->rowCount() ='. $query->rowCount());
+			throw new Exception('Delete voorkeuren faalt: $query->rowCount() ='. $query->rowCount());
 		}
 		return $query->rowCount();
 	}

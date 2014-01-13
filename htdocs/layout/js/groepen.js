@@ -5,41 +5,41 @@
 function updateGroepform(){
 	var gAanmeldDiv=document.getElementById('groepAanmeldbaarContainer');
 	if(document.getElementById('groepStatus').value=='ht'){
-		displayDiv(gAanmeldDiv);
+		$(gAanmeldDiv).show();
 		var gLimietDiv=document.getElementById('groepLimietContainer');
 
 		if(document.getElementById('groepAanmeldbaar').value!=''){
-			displayDiv(gLimietDiv);
+			$(gLimietDiv).show();
 			//eventueel een opmerking weergeven bij de gekozen optie in de select.
 			switch(document.getElementById('toonFuncties').selectedIndex){
 				case 1:
-					displayDiv(document.getElementById('functieOpmTonenzonderinvoer'));
-					hideDiv(document.getElementById('functieOpmVerbergen'));
-					hideDiv(document.getElementById('functieOpmNiet'));
+					$('#functieOpmTonenzonderinvoer').show();
+					$('#functieOpmVerbergen').hide();
+					$('#functieOpmNiet').hide();
 				break;
 				case 2:
-					displayDiv(document.getElementById('functieOpmVerbergen'));
-					hideDiv(document.getElementById('functieOpmNiet'));
-					hideDiv(document.getElementById('functieOpmTonenzonderinvoer'));
+					$('#functieOpmVerbergen').show();
+					$('#functieOpmNiet').hide();
+					$('#functieOpmTonenzonderinvoer').hide();
 				break;
 				case 3:
-					displayDiv(document.getElementById('functieOpmNiet'));
-					hideDiv(document.getElementById('functieOpmVerbergen'));
-					hideDiv(document.getElementById('functieOpmTonenzonderinvoer'));
+					$('#functieOpmNiet').show();
+					$('#functieOpmVerbergen').hide();
+					$('#functieOpmTonenzonderinvoer').hide();
 				break;
 				default:
-					hideDiv(document.getElementById('functieOpmVerbergen'));
-					hideDiv(document.getElementById('functieOpmNiet'));
-					hideDiv(document.getElementById('functieOpmTonenzonderinvoer'));
+					$('#functieOpmVerbergen').hide();
+					$('#functieOpmNiet').hide();
+					$('#functieOpmTonenzonderinvoer').hide();
 			}
 		}else{
-			hideDiv(gLimietDiv);
-			hideDiv(document.getElementById('functieOpmVerbergen'));
-			hideDiv(document.getElementById('functieOpmNiet'));
-			hideDiv(document.getElementById('functieOpmTonenzonderinvoer'));
+			$(gLimietDiv).hide();
+			$('#functieOpmVerbergen').hide();
+			$('#functieOpmNiet').hide();
+			$('#functieOpmTonenzonderinvoer').hide();
 		}
 	}else{
-		hideDiv(gAanmeldDiv);
+		$(gAanmeldDiv).hide();
 		var gEindeVeld=document.getElementById('einde');
 		if(gEindeVeld.value=='0000-00-00'){
 			var now=new Date();

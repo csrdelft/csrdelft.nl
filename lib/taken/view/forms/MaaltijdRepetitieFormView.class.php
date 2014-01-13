@@ -1,7 +1,6 @@
 <?php
-namespace Taken\MLT;
 
-require_once 'formulier.class.php';
+
 require_once 'verticale.class.php';
 
 /**
@@ -10,70 +9,69 @@ require_once 'verticale.class.php';
  * Formulier voor een nieuwe of te bewerken maaltijd-repetitie.
  * 
  */
-class MaaltijdRepetitieFormView extends \SimpleHtml {
+class MaaltijdRepetitieFormView extends TemplateView {
 
 	private $_form;
 	private $_mrid;
-	
-	public function __construct($mrid, $dag=null, $periode=null, $titel=null, $tijd=null, $prijs=null, $abo=null, $limiet=null, $filter=null, $verplaats=null) {
+
+	public function __construct($mrid, $dag = null, $periode = null, $titel = null, $tijd = null, $prijs = null, $abo = null, $limiet = null, $filter = null, $verplaats = null) {
+		parent::__construct();
 		$this->_mrid = $mrid;
-		
+
 		$suggesties = array();
 		$suggesties[] = 'geslacht:m';
 		$suggesties[] = 'geslacht:v';
 		$verticalen = \Verticale::getNamen();
 		foreach ($verticalen as $naam) {
-			$suggesties[] = 'verticale:'. $naam;
+			$suggesties[] = 'verticale:' . $naam;
 		}
 		$jong = \Lichting::getJongsteLichting();
-		for ($jaar = $jong; $jaar > $jong-9; $jaar--) {
-			$suggesties[] = 'lichting:'. $jaar;
+		for ($jaar = $jong; $jaar > $jong - 9; $jaar--) {
+			$suggesties[] = 'lichting:' . $jaar;
 		}
-		
-		$formFields['req'] = new \RequiredInputField('standaard_titel', $titel, 'Standaard titel', 255);
-		$formFields['req']->forcenotnull = true;
-		$formFields[] = new \TijdField('standaard_tijd', $tijd, 'Standaard tijd', 15);
-		$formFields['dag'] = new \WeekdagField('dag_vd_week', $dag, 'Dag v/d week');
+
+		$formFields[] = new RequiredTextField('standaard_titel', $titel, 'Standaard titel', 255);
+		$formFields[] = new TijdField('standaard_tijd', $tijd, 'Standaard tijd', 15);
+		$formFields['dag'] = new WeekdagField('dag_vd_week', $dag, 'Dag v/d week');
 		$formFields['dag']->title = 'Als de periode ongelijk is aan 7 is dit de start-dag bij het aanmaken van periodieke maaltijden';
-		$formFields[] = new \IntField('periode_in_dagen', $periode, 'Periode (in dagen)', 183, 0);
-		$formFields['abo'] = new \VinkField('abonneerbaar', $abo, 'Abonneerbaar');
+		$formFields[] = new IntField('periode_in_dagen', $periode, 'Periode (in dagen)', 183, 0);
+		$formFields['abo'] = new VinkField('abonneerbaar', $abo, 'Abonneerbaar');
 		if ($this->_mrid !== 0) {
 			$formFields['abo']->setOnChangeScript("if (!this.checked) alert('Alle abonnementen zullen worden verwijderd!');");
 		}
-		$formFields[] = new \FloatField('standaard_prijs', $prijs, 'Standaard prijs (€)', 50.00, 0.00);
-		$formFields[] = new \IntField('standaard_limiet', $limiet, 'Standaard limiet', 200, 0);
-		$formFields['filter'] = new \InputField('abonnement_filter', $filter, 'Aanmeldrestrictie', 255, $suggesties);
+		$formFields[] = new FloatField('standaard_prijs', $prijs, 'Standaard prijs (€)', 50.00, 0.00);
+		$formFields[] = new IntField('standaard_limiet', $limiet, 'Standaard limiet', 200, 0);
+		$formFields['filter'] = new TextField('abonnement_filter', $filter, 'Aanmeldrestrictie', 255, $suggesties);
 		$formFields['filter']->title = 'Plaats een ! vooraan om van de restrictie een uitsluiting te maken.';
+		$formFields['filter']->required = false;
 		if ($this->_mrid !== 0) {
-			$formFields['ver'] = new \VinkField('verplaats_dag', $verplaats, 'Ook verplaatsen');
+			$formFields['ver'] = new VinkField('verplaats_dag', $verplaats, 'Ook verplaatsen');
 			$formFields['ver']->title = 'Verplaats naar dag v/d week bij bijwerken';
 		}
-		
-		$this->_form = new \Formulier('taken-maaltijd-repetitie-form', $GLOBALS['taken_module'] .'/opslaan/'. $mrid, $formFields);
+
+		$this->_form = new Formulier('taken-maaltijd-repetitie-form', $GLOBALS['taken_module'] . '/opslaan/' . $mrid, $formFields);
 	}
-	
+
 	public function getTitel() {
 		if ($this->_mrid === 0) {
 			return 'Maaltijdrepetitie aanmaken';
 		}
 		return 'Maaltijdrepetitie wijzigen';
 	}
-	
+
 	public function view() {
-		$smarty = new \Smarty_csr();
-		$smarty->assign('melding', $this->getMelding());
-		$smarty->assign('kop', $this->getTitel());
-		$this->_form->cssClass .= ' popup';
-		$smarty->assign('form', $this->_form);
+		$this->assign('melding', $this->getMelding());
+		$this->assign('kop', $this->getTitel());
+		$this->_form->css_classes[] = 'popup';
+		$this->assign('form', $this->_form);
 		if ($this->_mrid === 0) {
-			$smarty->assign('nocheck', true);
+			$this->assign('nocheck', true);
+		} elseif ($this->_mrid > 0) {
+			$this->assign('bijwerken', $GLOBALS['taken_module'] . '/bijwerken/' . $this->_mrid);
 		}
-		elseif ($this->_mrid > 0) {
-			$smarty->assign('bijwerken', $GLOBALS['taken_module'] .'/bijwerken/'. $this->_mrid);
-		}
-		$smarty->display('taken/popup_form.tpl');
+		$this->display('taken/popup_form.tpl');
 	}
-	
+
 	public function validate() {
 		if (!is_int($this->_mrid) || $this->_mrid < 0) {
 			return false;
@@ -91,12 +89,13 @@ class MaaltijdRepetitieFormView extends \SimpleHtml {
 				return false;
 			}
 		}
-		return $this->_form->valid();
+		return $this->_form->validate();
 	}
-	
+
 	public function getValues() {
 		return $this->_form->getValues(); // escapes HTML
 	}
+
 }
 
 ?>

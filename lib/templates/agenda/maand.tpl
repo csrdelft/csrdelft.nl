@@ -43,12 +43,12 @@
 								<a href="/actueel/maaltijden/" title="{$item->getBeschrijving()|escape:'htmlall'}">
 									{$item->getTitel()}
 								</a>
-							{elseif $item|is_a:'\Taken\MLT\Maaltijd'}
+							{elseif $item|is_a:'Maaltijd'}
 								{icon get="cup"} <div class="tijd">{$item->getBeginMoment()|date_format:"%R"}</div>
 								<a href="/maaltijden" title="{$item->getBeschrijving()}">
 									{$item->getTitel()}
 								</a>
-							{elseif $item|is_a:'\Taken\CRV\CorveeTaak'}
+							{elseif $item|is_a:'\CorveeTaak'}
 								{icon get="paintcan"}
 								<a href="/corvee/rooster" title="{$item->getBeschrijving()}">
 									{$item->getTitel()}

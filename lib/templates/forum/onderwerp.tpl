@@ -232,7 +232,7 @@
 						<div id="berichtPreviewContainer" class="previewContainer"><div id="berichtPreview" class="preview"></div></div>
 						<textarea name="bericht" id="forumBericht" class="forumBericht {if $onderwerp->isOpenbaar()}extern{/if}" rows="12">{$textarea}</textarea>
                         <div class="butn">
-						    <a style="float: right; margin-right:0" class="handje knop" onclick="toggleDiv('ubbhulpverhaal')" title="Opmaakhulp weergeven">Opmaak</a>
+						    <a style="float: right; margin-right:0" class="handje knop" onclick="$('#ubbhulpverhaal').toggle();" title="Opmaakhulp weergeven">Opmaak</a>
 						    <a style="float: right;" class="handje knop" onclick="vergrootTextarea('forumBericht', 10)" title="Vergroot het invoerveld"><strong>&uarr;&darr;</strong></a>
 
                             <input type="submit" name="submit" value="opslaan" id="forumOpslaan" />

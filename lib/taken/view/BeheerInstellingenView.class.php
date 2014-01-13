@@ -1,42 +1,40 @@
 <?php
-namespace Taken\MLT;
+
 /**
  * BeheerInstellingenView.class.php	| 	P.W.G. Brussee (brussee@live.nl)
  * 
  * Tonen van alle instellingen om te beheren.
  * 
  */
-class BeheerInstellingenView extends \SimpleHtml {
+class BeheerInstellingenView extends TemplateView {
 
 	private $_instellingen;
-	
+
 	public function __construct($instellingen) {
+		parent::__construct();
 		$this->_instellingen = $instellingen;
 	}
-	
+
 	public function getTitel() {
 		return 'Beheer instellingen';
 	}
-	
+
 	public function view() {
-		$smarty = new \Smarty_csr();
-		
 		if (is_array($this->_instellingen)) {
-			$smarty->assign('melding', $this->getMelding());
-			$smarty->assign('kop', $this->getTitel());
-			$smarty->display('taken/menu_pagina.tpl');
-			
-			$smarty->assign('instellingen', $this->_instellingen);
-			$smarty->display('taken/instelling/beheer_instellingen.tpl');
-		}
-		elseif (is_string($this->_instellingen)) { // id of deleted corveefunctie
-			echo '<tr id="instelling-row-'. $this->_instellingen .'" class="remove"></tr>';
-		}
-		else {
-			$smarty->assign('instelling', $this->_instellingen);
-			$smarty->display('taken/instelling/beheer_instelling_lijst.tpl');
+			$this->assign('melding', $this->getMelding());
+			$this->assign('kop', $this->getTitel());
+			$this->display('taken/menu_pagina.tpl');
+
+			$this->assign('instellingen', $this->_instellingen);
+			$this->display('taken/instelling/beheer_instellingen.tpl');
+		} elseif (is_string($this->_instellingen)) { // id of deleted corveefunctie
+			echo '<tr id="instelling-row-' . $this->_instellingen . '" class="remove"></tr>';
+		} else {
+			$this->assign('instelling', $this->_instellingen);
+			$this->display('taken/instelling/beheer_instelling_lijst.tpl');
 		}
 	}
+
 }
 
 ?>

@@ -234,7 +234,7 @@ ul.nobullets li{ list-style-type: none; }
 
 #adminding div{
 	display: none;
-	
+
 	position: relative; 
 	left: -3px; top: 1px;
 	width: 200px; min-height: 50px;
@@ -701,7 +701,7 @@ form#streeplijst input, form#streeplijst label{ text-align: left; margin: 3px; p
     width: 250px;
 }
 .Formulier select{
-   /* width: 250px;*/
+	/* width: 250px;*/
 }
 
 .Formulier .UBBpreview{
@@ -719,27 +719,27 @@ form#streeplijst input, form#streeplijst label{ text-align: left; margin: 3px; p
     display: inline;
     padding-left: 10px;
 }
-.Formulier .veld, .Formulier h3, .Formulier .password{
+.Formulier .InputField, .Formulier h3, .Formulier .password{
     clear: both;
 }
-.Formulier .veld, .Formulier .submit{
+.Formulier .InputField, .Formulier .submit{
     margin-left: 10px;
     padding: 1px 2px;
     border: 1px solid white;
 }
 
-.Formulier .veld{
+.Formulier .InputField{
     overflow: auto;
 }
-.Formulier .veld:hover{
+.Formulier .InputField:hover{
     border: 1px  solid #ddd;
     background-color: #eee;
 }
-.Formulier .metfouten{
+.Formulier .metFouten{
     background-color: #FFC3CE;
     padding: 4px 2px;
 }
-.Formulier .veld .waarschuwing{
+.Formulier .InputField .waarschuwing{
     float: right;
     margin-right: 10px;
 }

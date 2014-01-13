@@ -1,5 +1,5 @@
 <?php
-namespace Taken\CRV;
+
 
 require_once 'taken/model/entity/CorveeKwalificatie.class.php';
 
@@ -55,11 +55,11 @@ class KwalificatiesModel {
 	
 	private static function existKwalificatie($uid, $fid) {
 		if (!is_int($fid) || $fid <= 0) {
-			throw new \Exception('Exist corvee-kwalificatie faalt: Invalid $fid ='. $fid);
+			throw new Exception('Exist corvee-kwalificatie faalt: Invalid $fid ='. $fid);
 		}
 		$sql = 'SELECT EXISTS (SELECT * FROM crv_kwalificaties WHERE lid_id = ? AND functie_id = ?)';
 		$values = array($uid, $fid);
-		$query = \CsrPdo::instance()->prepare($sql, $values);
+		$query = \Database::instance()->prepare($sql, $values);
 		$query->execute($values);
 		$result = (boolean) $query->fetchColumn();
 		return $result;
@@ -75,18 +75,18 @@ class KwalificatiesModel {
 		if (is_int($limit) && $limit > 0) {
 			$sql.= ' LIMIT '. $limit;
 		}
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
-		$result = $query->fetchAll(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, '\Taken\CRV\CorveeKwalificatie');
+		$result = $query->fetchAll(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, '\CorveeKwalificatie');
 		return $result;
 	}
 	
 	public static function kwalificatieToewijzen($fid, $uid) {
 		if (self::existKwalificatie($uid, $fid)) {
-			throw new \Exception('Is al gekwalificeerd!');
+			throw new Exception('Is al gekwalificeerd!');
 		}
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		try {
 			$db->beginTransaction();
 			$sql = 'INSERT INTO crv_kwalificaties';
@@ -97,7 +97,7 @@ class KwalificatiesModel {
 			$query = $db->prepare($sql, $values);
 			$query->execute($values);
 			if ($query->rowCount() !== 1) {
-				throw new \Exception('New kwalificatie faalt: $query->rowCount() ='. $query->rowCount());
+				throw new Exception('New kwalificatie faalt: $query->rowCount() ='. $query->rowCount());
 			}
 			$db->commit();
 			return new CorveeKwalificatie($uid, $fid, $wanneer);
@@ -110,14 +110,14 @@ class KwalificatiesModel {
 	
 	public static function kwalificatieTerugtrekken($fid, $uid) {
 		if (!self::existKwalificatie($uid, $fid)) {
-			throw new \Exception('Is niet gekwalificeerd!');
+			throw new Exception('Is niet gekwalificeerd!');
 		}
 		self::deleteKwalificatie($fid, $uid);
 	}
 	
 	public static function verwijderKwalificaties($fid) {
 		if (!is_int($fid) || $fid <= 0) {
-			throw new \Exception('Verwijder corvee-kwalificatie faalt: Invalid $fid ='. $fid);
+			throw new Exception('Verwijder corvee-kwalificatie faalt: Invalid $fid ='. $fid);
 		}
 		self::deleteKwalificatie($fid);
 	}
@@ -130,11 +130,11 @@ class KwalificatiesModel {
 			$sql .= 'AND lid_id = ?';
 			$values[] = $uid;
 		}
-		$db = \CsrPdo::instance();
+		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		if ($uid !== null && $query->rowCount() !== 1) {
-			throw new \Exception('Delete kwalificatie faalt: $query->rowCount() ='. $query->rowCount());
+			throw new Exception('Delete kwalificatie faalt: $query->rowCount() ='. $query->rowCount());
 		}
 	}
 }

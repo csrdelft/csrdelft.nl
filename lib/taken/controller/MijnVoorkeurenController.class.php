@@ -1,5 +1,5 @@
 <?php
-namespace Taken\CRV;
+
 
 require_once 'taken/model/VoorkeurenModel.class.php';
 require_once 'taken/view/MijnVoorkeurenView.class.php';
@@ -8,7 +8,7 @@ require_once 'taken/view/MijnVoorkeurenView.class.php';
  * MijnVoorkeurenController.class.php	| 	P.W.G. Brussee (brussee@live.nl)
  * 
  */
-class MijnVoorkeurenController extends \ACLController {
+class MijnVoorkeurenController extends \AclController {
 
 	public function __construct($query) {
 		parent::__construct($query);
@@ -32,32 +32,32 @@ class MijnVoorkeurenController extends \ACLController {
 		if ($this->hasParam(3)) {
 			$crid = intval($this->getParam(3));
 		}
-		$this->performAction($crid);
+		$this->performAction(array($crid));
 	}
 	
-	public function action_mijn() {
+	public function mijn() {
 		$voorkeuren = VoorkeurenModel::getVoorkeurenVoorLid(\LoginLid::instance()->getUid());
 		$eetwens = VoorkeurenModel::getEetwens(\LoginLid::instance()->getLid());
-		$this->content = new MijnVoorkeurenView($voorkeuren, $eetwens);
-		$this->content = new \csrdelft($this->getContent());
-		$this->content->addStylesheet('taken.css');
-		$this->content->addScript('taken.js');
+		$this->view = new MijnVoorkeurenView($voorkeuren, $eetwens);
+		$this->view = new csrdelft($this->getContent());
+		$this->view->addStylesheet('taken.css');
+		$this->view->addScript('taken.js');
 	}
 	
-	public function action_inschakelen($crid) {
+	public function inschakelen($crid) {
 		$abonnement = VoorkeurenModel::inschakelenVoorkeur($crid, \LoginLid::instance()->getUid());
-		$this->content = new MijnVoorkeurenView($abonnement);
+		$this->view = new MijnVoorkeurenView($abonnement);
 	}
 	
-	public function action_uitschakelen($crid) {
+	public function uitschakelen($crid) {
 		VoorkeurenModel::uitschakelenVoorkeur($crid, \LoginLid::instance()->getUid());
-		$this->content = new MijnVoorkeurenView($crid);
+		$this->view = new MijnVoorkeurenView($crid);
 	}
 	
-	public function action_eetwens() {
+	public function eetwens() {
 		$eetwens = filter_input(INPUT_POST, 'eetwens', FILTER_SANITIZE_SPECIAL_CHARS);
 		VoorkeurenModel::setEetwens(\LoginLid::instance()->getLid(), $eetwens);
-		$this->content = new MijnVoorkeurenView(null, $eetwens);
+		$this->view = new MijnVoorkeurenView(null, $eetwens);
 	}
 }
 

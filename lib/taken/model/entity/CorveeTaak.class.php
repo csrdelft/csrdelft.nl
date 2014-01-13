@@ -1,5 +1,5 @@
 <?php
-namespace Taken\CRV;
+
 
 require_once 'agenda/agenda.class.php';
 
@@ -191,7 +191,7 @@ class CorveeTaak implements \Agendeerbaar {
 		$uid = $this->getLidId();
 		$lid = \LidCache::getLid($uid); // false if lid does not exist
 		if (!$lid instanceof \Lid) {
-			throw new \Exception('Lid bestaat niet: $uid ='. $uid);
+			throw new Exception('Lid bestaat niet: $uid ='. $uid);
 		}
 		return $lid;
 	}
@@ -201,68 +201,68 @@ class CorveeTaak implements \Agendeerbaar {
 	
 	public function setFunctieId($int) {
 		if (!is_int($int)) {
-			throw new \Exception('Geen integer: functie id');
+			throw new Exception('Geen integer: functie id');
 		}
 		$this->functie_id = $int;
 	}
 	public function setLidId($uid) {
 		if ($uid !== null && !\Lid::exists($uid)) {
-			throw new \Exception('Geen lid: set lid id');
+			throw new Exception('Geen lid: set lid id');
 		}
 		$this->lid_id = $uid;
 		
 	}
 	public function setCorveeRepetitieId($int) {
 		if ($int !== null && !is_int($int)) {
-			throw new \Exception('Geen integer: corvee-repetitie id');
+			throw new Exception('Geen integer: corvee-repetitie id');
 		}
 		$this->crv_repetitie_id = $int;
 	}
 	public function setMaaltijdId($int) {
 		if ($int !== null && !is_int($int)) {
-			throw new \Exception('Geen integer: maaltijd id');
+			throw new Exception('Geen integer: maaltijd id');
 		}
 		$this->maaltijd_id = $int;
 	}
 	public function setDatum($datum) {
 		if (!is_string($datum)) {
-			throw new \Exception('Geen string: datum');
+			throw new Exception('Geen string: datum');
 		}
 		$this->datum = $datum;
 	}
 	public function setPunten($int) {
 		if (!is_int($int)) {
-			throw new \Exception('Geen integer: punten');
+			throw new Exception('Geen integer: punten');
 		}
 		$this->punten = $int;
 	}
 	public function setBonusMalus($int) {
 		if (!is_int($int)) {
-			throw new \Exception('Geen integer: bonus malus');
+			throw new Exception('Geen integer: bonus malus');
 		}
 		$this->bonus_malus = $int;
 	}
 	public function setPuntenToegekend($int) {
 		if (!is_int($int)) {
-			throw new \Exception('Geen integer: punten toegekend');
+			throw new Exception('Geen integer: punten toegekend');
 		}
 		$this->punten_toegekend = $int;
 	}
 	public function setBonusToegekend($int) {
 		if (!is_int($int)) {
-			throw new \Exception('Geen integer: bonus toegekend');
+			throw new Exception('Geen integer: bonus toegekend');
 		}
 		$this->bonus_toegekend = $int;
 	}
 	public function setWanneerToegekend($datumtijd) {
 		if ($datumtijd !== null && !is_string($datumtijd)) {
-			throw new \Exception('Geen string: wanneer toegekend');
+			throw new Exception('Geen string: wanneer toegekend');
 		}
 		$this->wanneer_toegekend = $datumtijd;
 	}
 	public function setWanneerGemaild($datumtijd) {
 		if (!is_string($datumtijd)) {
-			throw new \Exception('Geen string: wanneer gemaild');
+			throw new Exception('Geen string: wanneer gemaild');
 		}
 		if ($datumtijd !== '') {
 			 $datumtijd .= '&#013;'. $this->getWanneerGemaild();
@@ -271,7 +271,7 @@ class CorveeTaak implements \Agendeerbaar {
 	}
 	public function setVerwijderd($bool) {
 		if (!is_bool($bool)) {
-			throw new \Exception('Geen boolean: verwijderd');
+			throw new Exception('Geen boolean: verwijderd');
 		}
 		$this->verwijderd = $bool;
 	}

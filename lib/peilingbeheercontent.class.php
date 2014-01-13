@@ -2,20 +2,24 @@
 
 require_once 'peiling.class.php';
 
-class PeilingBeheerContent extends SimpleHTML{
+class PeilingBeheerContent extends TemplateView {
 
-	public function getHTML(){
-		$lijst='<h3>Peilingen:</h3>';
-		
-		foreach(Peiling::getLijst() as $peiling){
+	public function __construct() {
+		parent::__construct();
+	}
+
+	public function getHTML() {
+		$lijst = '<h3>Peilingen:</h3>';
+
+		foreach (Peiling::getLijst() as $peiling) {
 			$pcontent = new PeilingContent(new Peiling($peiling['id']));
-			$lijst.=$pcontent->getHTML($beheer=true);
+			$lijst.=$pcontent->getHTML($beheer = true);
 		}
-		
+
 		$html = '
 		<h1>Peilingbeheertool</h1>
 		<div>
-			'.$this->getMelding().'
+			' . $this->getMelding() . '
 			<b>Nieuwe peiling:</b><br/>
 			<form id="nieuwePeiling" action="/tools/peilingbeheer.php?action=toevoegen" method="post">
 				<label for="titel">Titel:</label><input name="titel" type="text"/><br />
@@ -29,17 +33,21 @@ class PeilingBeheerContent extends SimpleHTML{
 			</form>
 			<br />
 			<div class="peilingen">
-			'.$lijst.'
+			' . $lijst . '
 			</div>
 		</div>
 		<br/>';
 		return $html;
-	} 
-	
-	public function getTitel(){ return 'Peilingbeheer'; }
-	
-	public function view(){
+	}
+
+	public function getTitel() {
+		return 'Peilingbeheer';
+	}
+
+	public function view() {
 		echo $this->getHTML();
 	}
+
 }
+
 ?>

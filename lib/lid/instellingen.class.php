@@ -8,7 +8,7 @@
  * heeft kan het op termijn netjes in een losse tabel in de database.
  */
 
-class Instelling{
+class Instellingen{
 
 	/*
 	 * Instellingarray, een naampje, met een default-value en een type.
@@ -121,7 +121,7 @@ class Instelling{
 		if(is_array(LoginLid::instance()->getLid()->getInstellingen())){
 			$_SESSION['instellingen']=LoginLid::instance()->getLid()->getInstellingen();
 		}else{
-			$_SESSION['instellingen']=Instelling::getDefaults();
+			$_SESSION['instellingen']=Instellingen::getDefaults();
 		}
 	}
 	public static function save(){

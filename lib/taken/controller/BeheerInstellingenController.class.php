@@ -1,5 +1,5 @@
 <?php
-namespace Taken\MLT;
+
 
 require_once 'taken/view/BeheerInstellingenView.class.php';
 require_once 'taken/view/forms/InstellingFormView.class.php';
@@ -8,7 +8,7 @@ require_once 'taken/view/forms/InstellingFormView.class.php';
  * BeheerInstellingenController.class.php	| 	P.W.G. Brussee (brussee@live.nl)
  * 
  */
-class BeheerInstellingenController extends \ACLController {
+class BeheerInstellingenController extends \AclController {
 
 	public function __construct($query) {
 		parent::__construct($query);
@@ -32,35 +32,35 @@ class BeheerInstellingenController extends \ACLController {
 		if ($this->hasParam(3)) {
 			$key = $this->getParam(3);
 		}
-		$this->performAction($key);
+		$this->performAction(array($key));
 	}
 	
-	public function action_beheer() {
+	public function beheer() {
 		$instellingen = InstellingenModel::getAlleInstellingen();
-		$this->content = new BeheerInstellingenView($instellingen);
-		$this->content = new \csrdelft($this->getContent());
-		$this->content->addStylesheet('taken.css');
-		$this->content->addScript('taken.js');
+		$this->view = new BeheerInstellingenView($instellingen);
+		$this->view = new csrdelft($this->getContent());
+		$this->view->addStylesheet('taken.css');
+		$this->view->addScript('taken.js');
 	}
 	
-	public function action_bewerk($key) {
+	public function bewerk($key) {
 		$instelling = InstellingenModel::getInstelling($key);
-		$this->content = new InstellingFormView($instelling->getInstellingId(), $instelling->getWaarde()); // fetches POST values itself
+		$this->view = new InstellingFormView($instelling->getInstellingId(), $instelling->getWaarde()); // fetches POST values itself
 	}
 	
-	public function action_opslaan($key) {
-		$this->action_bewerk($key);
-		if ($this->content->validate()) {
-			$values = $this->content->getValues();
+	public function opslaan($key) {
+		$this->bewerk($key);
+		if ($this->view->validate()) {
+			$values = $this->view->getValues();
 			$instelling = InstellingenModel::saveInstelling($values['instelling_id'], $values['waarde']);
-			$this->content = new BeheerInstellingenView($instelling);
+			$this->view = new BeheerInstellingenView($instelling);
 		}
 	}
 	
-	public function action_reset($key) {
+	public function reset($key) {
 		InstellingenModel::verwijderInstelling($key);
 		$instelling = InstellingenModel::getInstelling($key);
-		$this->content = new BeheerInstellingenView($instelling);
+		$this->view = new BeheerInstellingenView($instelling);
 	}
 }
 

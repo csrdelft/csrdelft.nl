@@ -11,7 +11,7 @@ Op deze pagina kunt u het menu beheren.
 	</div><select name="toon" onchange="location.href='/menubeheer/beheer/'+this.value;">
 			<option selected="selected">kies</option>
 		{foreach from=$menus item=menu}
-			<option value="{$menu->getMenu()}">{$menu->getMenu()}</option>
+			<option value="{$menu}">{$menu}</option>
 		{/foreach}
 	</select>
 	<a href="/menubeheer/beheer/" title="Nieuw menu" class="knop" onclick="this.href+=prompt('Voer unieke naam in','');">{icon get="add"}</a>
@@ -19,6 +19,6 @@ Op deze pagina kunt u het menu beheren.
 <br />
 {if sizeof($root->children) > 0}
 <ul class="menubeheer-tree">
-	{include file='menu/beheer/menu_item.tpl' item=$root}
+	{include file='MVC/menu/beheer/menu_item.tpl' item=$root}
 </ul>
 {/if}

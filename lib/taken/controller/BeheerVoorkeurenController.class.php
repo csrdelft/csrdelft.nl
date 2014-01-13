@@ -1,5 +1,5 @@
 <?php
-namespace Taken\CRV;
+
 
 require_once 'taken/model/VoorkeurenModel.class.php';
 require_once 'taken/view/BeheerVoorkeurenView.class.php';
@@ -8,7 +8,7 @@ require_once 'taken/view/BeheerVoorkeurenView.class.php';
  * BeheerVoorkeurenController.class.php	| 	P.W.G. Brussee (brussee@live.nl)
  * 
  */
-class BeheerVoorkeurenController extends \ACLController {
+class BeheerVoorkeurenController extends \AclController {
 
 	public function __construct($query) {
 		parent::__construct($query);
@@ -31,36 +31,36 @@ class BeheerVoorkeurenController extends \ACLController {
 		if ($this->hasParam(3)) {
 			$crid = intval($this->getParam(3));
 		}
-		$this->performAction($crid);
+		$this->performAction(array($crid));
 	}
 	
-	public function action_beheer() {
+	public function beheer() {
 		$matrix_repetities = VoorkeurenModel::getVoorkeurenMatrix();
-		$this->content = new BeheerVoorkeurenView($matrix_repetities[0], $matrix_repetities[1]);
-		$this->content = new \csrdelft($this->getContent());
-		$this->content->addStylesheet('taken.css');
-		$this->content->addScript('taken.js');
+		$this->view = new BeheerVoorkeurenView($matrix_repetities[0], $matrix_repetities[1]);
+		$this->view = new csrdelft($this->getContent());
+		$this->view->addStylesheet('taken.css');
+		$this->view->addScript('taken.js');
 	}
 	
-	public function action_inschakelen($crid) {
+	public function inschakelen($crid) {
 		$uid = filter_input(INPUT_POST, 'voor_lid', FILTER_SANITIZE_STRING);
 		if (!\Lid::exists($uid)) {
-			throw new \Exception('Lid bestaat niet: $uid ='. $uid);
+			throw new Exception('Lid bestaat niet: $uid ='. $uid);
 		}
 		$abonnement = VoorkeurenModel::inschakelenVoorkeur($crid, $uid);
 		$abonnement->setVanLid($abonnement->getLidId());
-		$this->content = new BeheerVoorkeurenView($abonnement);
+		$this->view = new BeheerVoorkeurenView($abonnement);
 	}
 	
-	public function action_uitschakelen($crid) {
+	public function uitschakelen($crid) {
 		$uid = filter_input(INPUT_POST, 'voor_lid', FILTER_SANITIZE_STRING);
 		if (!\Lid::exists($uid)) {
-			throw new \Exception('Lid bestaat niet: $uid ='. $uid);
+			throw new Exception('Lid bestaat niet: $uid ='. $uid);
 		}
 		VoorkeurenModel::uitschakelenVoorkeur($crid, $uid);
 		$abonnement = new CorveeVoorkeur($crid, null);
 		$abonnement->setVanLid($uid);
-		$this->content = new BeheerVoorkeurenView($abonnement);
+		$this->view = new BeheerVoorkeurenView($abonnement);
 	}
 }
 

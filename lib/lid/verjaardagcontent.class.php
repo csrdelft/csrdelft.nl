@@ -1,4 +1,5 @@
 <?php
+
 # C.S.R. Delft | pubcie@csrdelft.nl
 # -------------------------------------------------------------------
 # class.verjaardagcontent.php
@@ -8,24 +9,25 @@
 
 require_once 'lid/verjaardag.class.php';
 
-class VerjaardagContent extends SimpleHTML {
-
+class VerjaardagContent extends TemplateView {
 	### private ###
-
 	# de objecten die data leveren
+
 	var $_lid;
 	var $_actie;
 
 	### public ###
 
-	function VerjaardagContent ($actie) {
-		$this->_lid =LoginLid::instance();
+	function VerjaardagContent($actie) {
+		parent::__construct();
+		$this->_lid = LoginLid::instance();
 		$this->_actie = $actie;
-
 	}
-	function getTitel(){
+
+	function getTitel() {
 		return 'Verjaardagen';
 	}
+
 	function view() {
 		switch ($this->_actie) {
 			case 'alleverjaardagen':
@@ -48,9 +50,10 @@ class VerjaardagContent extends SimpleHTML {
 				$dezedag = date('j', $nu);
 
 				# afbeelden van alle verjaardagen in 3 rijen en 4 kolommen
-				$rijen = 3; $kolommen = 4;
+				$rijen = 3;
+				$kolommen = 4;
 
-				$maanden = array (
+				$maanden = array(
 					1 => "Januari",
 					2 => "Februari",
 					3 => "Maart",
@@ -66,25 +69,27 @@ class VerjaardagContent extends SimpleHTML {
 				);
 
 				echo '<table style="width: 100%;">';
-				for ($r=0; $r<$rijen; $r++) {
+				for ($r = 0; $r < $rijen; $r++) {
 					echo '<tr>';
-					for ($k=1; $k<=$kolommen; $k++) {
-						$maand = ($r*$kolommen+$k+$dezemaand-2)%12+1;
+					for ($k = 1; $k <= $kolommen; $k++) {
+						$maand = ($r * $kolommen + $k + $dezemaand - 2) % 12 + 1;
 						$tekst = ($maand <= 12) ? $maanden[$maand] : '&nbsp;';
-						echo '<th>'.$tekst.'</th>'."\n";
+						echo '<th>' . $tekst . '</th>' . "\n";
 					}
 					echo "</tr><tr>\n";
-					for ($k=1; $k<=$kolommen; $k++) {
-						$maand = ($r*$kolommen+$k+$dezemaand-2)%12+1;
+					for ($k = 1; $k <= $kolommen; $k++) {
+						$maand = ($r * $kolommen + $k + $dezemaand - 2) % 12 + 1;
 						if ($maand <= 12) {
-							echo '<td>'."\n";
+							echo '<td>' . "\n";
 							$verjaardagen = Verjaardag::getVerjaardagen($maand);
-							foreach ($verjaardagen as $verjaardag){
-								$lid=LidCache::getLid($verjaardag['uid']);
-								if ($verjaardag['gebdag'] == $dezedag and $maand == $dezemaand) echo '<em>';
+							foreach ($verjaardagen as $verjaardag) {
+								$lid = LidCache::getLid($verjaardag['uid']);
+								if ($verjaardag['gebdag'] == $dezedag and $maand == $dezemaand)
+									echo '<em>';
 								echo $verjaardag['gebdag'] . " ";
-								echo $lid->getNaamLink('civitas', 'link')."<br />\n";
-								if ($verjaardag['gebdag'] == $dezedag and $maand == $dezemaand) echo "</em>";
+								echo $lid->getNaamLink('civitas', 'link') . "<br />\n";
+								if ($verjaardag['gebdag'] == $dezedag and $maand == $dezemaand)
+									echo "</em>";
 							}
 							echo "<br /></td>\n";
 						} else {
@@ -93,59 +98,66 @@ class VerjaardagContent extends SimpleHTML {
 					}
 					echo "</tr>\n";
 				}
-				echo '</table><br>'."\n";
+				echo '</table><br>' . "\n";
 				break;
 			case 'komende':
-				if(LoginLid::instance()->getUid()=='x999'){
-					$toonpasfotos=false;
-				}else{
-					$toonpasfotos=Instelling::get('zijbalk_verjaardagen_pasfotos')=='ja';
+				if (LoginLid::instance()->getUid() == 'x999') {
+					$toonpasfotos = false;
+				} else {
+					$toonpasfotos = Instellingen::get('zijbalk_verjaardagen_pasfotos') == 'ja';
 				}
 
 				echo '<div id="zijbalk_verjaardagen"><h1>';
-				if($this->_lid->hasPermission('P_LEDEN_READ')){
+				if ($this->_lid->hasPermission('P_LEDEN_READ')) {
 					echo '<a href="/communicatie/verjaardagen">Verjaardagen</a>';
-				}else{
+				} else {
 					echo 'Verjaardagen';
 				}
 				echo '</h1>';
 
-				$aantal=Instelling::get('zijbalk_verjaardagen');
-				if($toonpasfotos){
+				$aantal = Instellingen::get('zijbalk_verjaardagen');
+				if ($toonpasfotos) {
 					//veelvouden van 3 overhouden
-					$aantal=$aantal-($aantal%3);
-					if($aantal<3){
-						$aantal=3;
+					$aantal = $aantal - ($aantal % 3);
+					if ($aantal < 3) {
+						$aantal = 3;
 					}
 				}
 				//verjaardagen opvragen voor 30 dagen vooruit, met een limiet als hierboven 
 				//gedefenieerd.
-				$aVerjaardagen=Lid::getVerjaardagen(time(), time()+3600*24*30, $aantal);
-				
-				if($toonpasfotos){
+				$aVerjaardagen = Lid::getVerjaardagen(time(), time() + 3600 * 24 * 30, $aantal);
+
+				if ($toonpasfotos) {
 					echo '<div class="item" id="komende_pasfotos">';
-					foreach($aVerjaardagen as $lid){
+					foreach ($aVerjaardagen as $lid) {
 						echo '<div class="verjaardag';
-						if($lid->isJarig()){ echo ' opvallend'; }
+						if ($lid->isJarig()) {
+							echo ' opvallend';
+						}
 						echo '">';
 						echo $lid->getNaamLink('pasfoto', 'link');
-						echo '<span class="datum">'.date('d-m', strtotime($lid->getGeboortedatum())).'</span>';
+						echo '<span class="datum">' . date('d-m', strtotime($lid->getGeboortedatum())) . '</span>';
 						echo '</div>';
 					}
 					echo '<div class="clear"></div></div>';
-				}else{
-					foreach($aVerjaardagen as $lid) {
-						echo '<div class="item">'.date('d-m', strtotime($lid->getGeboortedatum())).' ';
-						if($lid->isJarig()){echo '<span class="opvallend">';}
+				} else {
+					foreach ($aVerjaardagen as $lid) {
+						echo '<div class="item">' . date('d-m', strtotime($lid->getGeboortedatum())) . ' ';
+						if ($lid->isJarig()) {
+							echo '<span class="opvallend">';
+						}
 						echo $lid->getNaamLink('civitas', 'link');
-						if($lid->isJarig()){echo '</span>';}
+						if ($lid->isJarig()) {
+							echo '</span>';
+						}
 						echo '</div>';
 					}
 				}
 				echo '</div>'; //einde wrapperdiv
-			break;
+				break;
 		}
 	}
+
 }
 
 ?>

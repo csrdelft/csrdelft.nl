@@ -45,8 +45,8 @@ class GoogleSync{
 			throw new Exception('Authsub token not available');
 		}
 
-		if(Instelling::get('googleContacts_groepnaam')!=''){
-			$this->groupname=trim(Instelling::get('googleContacts_groepnaam'));
+		if(Instellingen::get('googleContacts_groepnaam')!=''){
+			$this->groupname=trim(Instellingen::get('googleContacts_groepnaam'));
 			if($this->groupname==''){
 				$this->groupname='C.S.R.-import';
 			}
@@ -65,7 +65,7 @@ class GoogleSync{
 		$this->loadContactsForGroup($this->groupid);
 		
 		//copy setting from settings manager.
-		$this->extendedExport=Instelling::get('googleContacts_extended')=='ja';
+		$this->extendedExport=Instellingen::get('googleContacts_extended')=='ja';
 			
 	}
 

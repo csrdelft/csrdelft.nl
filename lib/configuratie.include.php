@@ -9,24 +9,23 @@
 # Instellingen van het include_path enzo...
 # -------------------------------------------------------------------
 #
-
 //uncomment de volgende regel om de boel in onderhoudsmode te ketzen
 //define('MODE', 'ONDERHOUD');
-
 # de wiki genereert de nodige notices. En heeft daarom de error_reporting 
 # anders ingesteld.
 global $conf;
-if(!(isset($conf['authtype']) AND $conf['authtype']=='authcsr')){
+if (!(isset($conf['authtype']) AND $conf['authtype'] == 'authcsr')) {
 	define('DEBUG', 'DEBUG');
 }
 
-if(defined('DEBUG')){
+if (defined('DEBUG')) {
 	error_reporting(E_ALL);
 }
 
 # default to website mode
 # [ WEB, CLI, BOT ]
-if (!defined('MODE')) define('MODE', 'WEB');
+if (!defined('MODE'))
+	define('MODE', 'WEB');
 
 //alle paden goedzetten.
 require_once('include.defines.php');
@@ -37,7 +36,7 @@ if (constant('MODE') == 'WEB') {
 	session_save_path(SESSION_PATH);
 
 	# wat instellingen
-	ini_set('upload_tmp_dir',TMP_PATH);
+	ini_set('upload_tmp_dir', TMP_PATH);
 }
 
 setlocale(LC_ALL, 'nl_NL.utf8');
@@ -53,7 +52,7 @@ define('CONFIDE_IP', '80.112.180.123');
 define('AGENDA_LIJST_DEFAULT_DAGEN', 70);
 
 //verenigingsstatisticus
-define('STATISTICUS', '0630' );
+define('STATISTICUS', '0630');
 //Feut ip voor de rss feed in #csrdelft
 define('FEUT_IP', '82.94.188.77');
 
@@ -66,33 +65,39 @@ define('ROWID_QUEUE_MEDEDELINGEN', 62);
 require_once 'common.functions.php';
 require_once 'lid/loginlid.class.php';
 require_once 'mysql.class.php';
-require_once 'csrpdo.class.php';
+
+
+/** MVC * */
+require_once 'MVC/model/PaginationModel.abstract.php';
+require_once 'MVC/view/TemplateView.abstract.php';
+require_once 'MVC/view/form/Formulier.class.php';
+require_once 'MVC/controller/AclController.abstract.php';
+
 
 // instellingen van Taken-module
 require_once 'taken/model/InstellingenModel.class.php';
-\Taken\MLT\InstellingenModel::getAlleInstellingen();
+InstellingenModel::getAlleInstellingen();
 
 switch (constant('MODE')) {
 	case 'ONDERHOUD':
 		$loginlid = LoginLid::instance();
-		if(!$loginlid->hasPermission('P_ADMIN')){
-			header('location: '.CSR_ROOT.'/tools/onderhoud.html');
+		if (!$loginlid->hasPermission('P_ADMIN')) {
+			header('location: ' . CSR_ROOT . '/tools/onderhoud.html');
 			exit;
 		}
 	case 'WEB':
 		//als er een wikiconfiguratie is en hierin is de csr-wikiauthicatie geselecteerd 
 		//dan is de sessie al gestart en zijn sommige includes niet nodig.
-		if(!(isset($conf['authtype']) AND $conf['authtype']=='authcsr')){
+		if (!(isset($conf['authtype']) AND $conf['authtype'] == 'authcsr')) {
 			//sessie starten
 			require_once 'simplehtml.class.php';
 			require_once 'csrdelft.class.php';
 			require_once 'csrubb.class.php';
-			require_once 'csrsmarty.class.php';
 			require_once 'icon.class.php';
 
 			//volgt de defaults van webserver Syrinx, zodat testen met een workcopy overeenkomt.
 			session_name("PHPSESSID");
-			session_set_cookie_params(1036800, '/', '', false,false);
+			session_set_cookie_params(1036800, '/', '', false, false);
 
 			# N.B. het is van belang dat na het starten van de sessie meteen het databaseobject en het
 			# Lid-object worden aangemaakt, omdat die de ingelogde gebruiker controleert, en tevens
@@ -102,17 +107,16 @@ switch (constant('MODE')) {
 		//database & lid initialiseren...
 		$db = MySQL::instance();
 		$loginlid = LoginLid::instance();
-	break;
+		break;
 
 	case 'BOT':
 	case 'CLI':
-        $db = MySQL::instance();
+		$db = MySQL::instance();
 		//TODO: voor bot & cli blijft het nog even $lid ipv $loginlid, nog geen zin om dat allemaal aan te passen.
 		$lid = LoginLid::instance();
-	break;
+		break;
 
 	default:
 		die("configuratie.include.php:: unsupported MODE");
 }
-
 ?>

@@ -1,5 +1,5 @@
 <?php
-namespace Taken\CRV;
+
 
 require_once 'taken/model/VrijstellingenModel.class.php';
 require_once 'taken/model/KwalificatiesModel.class.php';
@@ -17,7 +17,7 @@ class ToewijzenModel {
 	 * Als er een kwalificatie benodigd is worden alleen de
 	 * gekwalificeerde leden teruggegeven.
 	 * 
-	 * @param \Taken\CRV\CorveeTaak $taak
+	 * @param \CorveeTaak $taak
 	 * @return type
 	 * @throws \Exception
 	 */
@@ -32,7 +32,7 @@ class ToewijzenModel {
 				$uid = $kwali->getLidId();
 				$lid = \LidCache::getLid($uid); // false if lid does not exist
 				if (!$lid instanceof \Lid) {
-					throw new \Exception('Lid bestaat niet: $uid ='. $uid);
+					throw new Exception('Lid bestaat niet: $uid ='. $uid);
 				}
 				if (!$lid->isLid()) {
 					continue; // geen oud-lid of overleden lid

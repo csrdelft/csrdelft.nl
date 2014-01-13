@@ -2,18 +2,19 @@
 
 require_once 'mededelingencontent.class.php';
 
-class MededelingTopDrieOverzichtContent extends SimpleHTML {
-	
-	public function __construct(){
-		
-	}
-	
-	public function view(){
-		$content=new Smarty_csr();
+class MededelingTopDrieOverzichtContent extends TemplateView {
 
-		$content->assign('mededelingen_root', MededelingenContent::mededelingenRoot);
-		
-		$content->display('mededelingen/top3overzicht.tpl');
+	public function __construct() {
+		parent::__construct();
 	}
-	
+
+	public function getTitel() {
+		return 'Top 3 mededelingenoverzicht';
+	}
+
+	public function view() {
+		$this->assign('mededelingen_root', MededelingenContent::mededelingenRoot);
+		$this->display('mededelingen/top3overzicht.tpl');
+	}
+
 }
