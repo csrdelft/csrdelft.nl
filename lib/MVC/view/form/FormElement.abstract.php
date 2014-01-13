@@ -81,7 +81,7 @@ class InputField extends FormElement implements Validator {
 	public $title;  //omschrijving bij mouseover title
 	public $disabled = false;   //veld uitgeschakeld?
 	public $notnull = false; //mag het veld leeg zijn?
-	public $forcenotnull = false;  //mag het veld echt niet leeg zijn? (ook voor LEDEN_MOD)
+	public $leden_mod = true; //uitzondering leeg verplicht veld voor LEDEN_MOD
 	public $autocomplete = true;   //browser laten autoaanvullen?
 	public $placeholder = null;  //plaats een grijze placeholdertekst in leeg veld
 	public $error = ''; //foutmelding van dit veld
@@ -152,11 +152,16 @@ class InputField extends FormElement implements Validator {
 	 * testen mogelijk te maken.
 	 */
 	public function validate() {
-		//vallen over lege velden als dat aangezet is voor het veld en als gebruiker geen LEDEN_MOD heeft of het geforceerd wordt.
+		//vallen over lege velden als dat aangezet is voor het veld
+		//(tenzij gebruiker LEDEN_MOD heeft en deze optie aan staat voor dit veld)
 		if (!$this->isPosted()) {
 			$this->error = 'Veld is niet gepost';
-		} elseif ($this->getValue() === '' AND ($this->forcenotnull OR ($this->notnull AND !LoginLid::instance()->hasPermission('P_LEDEN_MOD')))) {
-			$this->error = 'Dit is een verplicht veld';
+		} elseif ($this->getValue() == '' AND $this->notnull) {
+			if ($this->leden_mod AND LoginLid::instance()->hasPermission('P_LEDEN_MOD')) {
+				
+			} else {
+				$this->error = 'Dit is een verplicht veld';
+			}
 		}
 		//als max_len > 0 dan checken of de lengte er niet overheen gaat.
 		if ($this->max_len > 0 AND strlen($this->getValue()) > $this->max_len) {
@@ -679,11 +684,6 @@ class LidField extends InputField {
 			return false;
 		}
 
-		//leeg veld wel accepteren.
-		if ($this->getOriginalValue() == '') {
-			return true;
-		}
-
 		$uid = namen2uid($this->getOriginalValue(), $this->zoekin);
 		if ($uid) {
 			if (isset($uid[0]['uid']) AND Lid::exists($uid[0]['uid'])) {
@@ -734,16 +734,6 @@ JS;
 class RequiredLidField extends LidField {
 
 	public $notnull = true;
-
-	public function validate() {
-		if (!parent::validate()) {
-			return false;
-		}
-		if ($this->getValue() == '') {
-			$this->error = 'Dit is een verplicht veld.';
-		}
-		return $this->error == '';
-	}
 
 }
 
@@ -944,7 +934,10 @@ class NickField extends InputField {
 
 	public $max_len = 20;
 
-	public function validate($lid = null) {
+	public function validate() {
+		if (!$this->model instanceof Lid) {
+			throw new Exception($this->getType() . ' moet een Lid-object meekrijgen');
+		}
 		if (!parent::validate()) {
 			return false;
 		}
@@ -960,7 +953,7 @@ class NickField extends InputField {
 			$this->error = 'Gebruik maximaal ' . $this->max_len . ' karakters.';
 			# 2e check met strtolower is toegevoegd omdat je anders je eigen nick niet van case kan veranderen
 			# omdat this->nickExists in mysql case-insensitive zoek
-		} elseif (strtolower($lid->getNickname()) != strtolower($this->getValue()) AND Lid::nickExists($this->getValue())) {
+		} elseif (strtolower($this->model->getNickname()) != strtolower($this->getValue()) AND Lid::nickExists($this->getValue())) {
 			$this->error = 'Deze bijnaam is al in gebruik.';
 		}
 		return $this->error == '';
@@ -1000,8 +993,9 @@ class TelefoonField extends SuggestionField {
  */
 class PassField extends InputField {
 
-	public function __construct($name) {
+	public function __construct($name, Lid $lid) {
 		$this->name = $name;
+		$this->model = $lid;
 	}
 
 	public function isPosted() {
@@ -1015,9 +1009,9 @@ class PassField extends InputField {
 		return false;
 	}
 
-	public function validate($lid = null) {
-		if (!$lid instanceof Lid) {
-			throw new Exception($this->getType() . '::validate() moet een Lid-object meekrijgen');
+	public function validate() {
+		if (!$this->model instanceof Lid) {
+			throw new Exception($this->getType() . ' moet een Lid-object meekrijgen');
 		}
 		if (!parent::validate()) {
 			return false;
@@ -1026,7 +1020,7 @@ class PassField extends InputField {
 		$new = $_POST[$this->name . '_new'];
 		$confirm = $_POST[$this->name . '_confirm'];
 		if ($current != '') {
-			if (!$lid->checkpw($current)) {
+			if (!$this->model->checkpw($current)) {
 				$this->error = 'Uw huidige wachtwoord is niet juist';
 			} else {
 				if ($new == '' OR $confirm == '') {

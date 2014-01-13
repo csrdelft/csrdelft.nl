@@ -376,9 +376,9 @@ class ProfielBewerken extends Profiel {
 		if(!$this->editNoviet){
 			//we voeren nog geen wachtwoord of bijnaam in bij novieten, die krijgen ze pas na het novitiaat
 			$form[]=new Comment('Inloggen:');
-			$form[]=new NickField('nickname', $profiel['nickname'], 'Bijnaam (inloggen)');
+			$form[]=new NickField('nickname', $profiel['nickname'], 'Bijnaam (inloggen)', $this->lid);
 
-			$form[]=new PassField('password');
+			$form[]=new PassField('password', $this->lid);
 		}
 		$form[]=new SubmitButton('opslaan', '<a class="knop" href="/communicatie/profiel/'.$this->getUid().'">Annuleren</a>');
 		
@@ -393,10 +393,10 @@ class ProfielBewerken extends Profiel {
 	/**
 	 * We defenieren een valid-functie voor deze profieleditpagina.
 	 * De velden die we gebruiken willen graag een lid hebben om bepaalde
-	 * dingen te controleren, dus die geven we mee.
+	 * dingen te controleren, dus die hebben we meegegeven bij het aanmaken.
 	 */
 	public function validate(){
-		return $this->form->validate($this->lid);
+		return $this->form->validate();
 	}
 
 	public function save(){
