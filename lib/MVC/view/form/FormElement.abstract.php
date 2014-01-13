@@ -66,6 +66,16 @@
  */
 abstract class FormElement implements View {
 
+	protected $model;
+
+	public function __construct($model) {
+		$this->model = $model;
+	}
+
+	public function getModel() {
+		return $this->model;
+	}
+
 	public function getType() {
 		return get_class($this);
 	}
@@ -92,15 +102,13 @@ class InputField extends FormElement implements Validator {
 	public $onclick = null;   //javascript onClick
 	public $max_len = 0; //maximale lengte van de invoer.
 	public $rows = 0;  //aantal rijen van textarea
-	//array met classnames die later in de class-tag komen.
-	public $inputClasses = array('regular');
-	//array met suggesties die de javascript-autocomplete aan gaat bieden.
-	public $suggestions = array();
+	public $inputClasses = array('regular'); //array met classnames die later in de class-tag komen.
+	public $suggestions = array(); //array met suggesties die de javascript-autocomplete aan gaat bieden.
 	public $remotedatasource = '';
-	protected $model;
 
-	public function __construct(/* TODO: $model, */$name, $value, $description = null) {
-		//TODO: $this->model = $model;
+	public function __construct($name, $value, $description = null, $model = null) {
+		parent::__construct($model);
+
 		$this->name = $name;
 		$this->value = $value;
 		$this->origvalue = $value;
@@ -109,13 +117,8 @@ class InputField extends FormElement implements Validator {
 		if ($this->isPosted() !== false) {
 			$this->value = $this->getValue();
 		}
-
 		//add *Field classname to cssclasses
 		$this->inputClasses[] = $this->getType();
-	}
-
-	public function getModel() {
-		return $this; //TODO: $model
 	}
 
 	public function getName() {
