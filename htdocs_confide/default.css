@@ -42,7 +42,6 @@ table.zebra tr.even td{ background-color: #f5f5f5;}
 .dataTables_filter input{ border: 1px solid black; }
 .dataTables_paginate {
 	width: 44px;
-	* width: 50px;
 	float: right;
 	text-align: right;
 }

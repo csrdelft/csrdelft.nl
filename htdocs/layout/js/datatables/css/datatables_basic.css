@@ -71,7 +71,6 @@
 
 .dataTables_paginate {
 	width: 44px;
-	* width: 50px;
 	float: right;
 	text-align: right;
 }
@@ -130,7 +129,6 @@
 	border-bottom: 1px solid black;
 	font-weight: bold;
 	cursor: pointer;
-	* cursor: hand;
 }
 
 .dataTables_wrapper table.display tfoot th {
