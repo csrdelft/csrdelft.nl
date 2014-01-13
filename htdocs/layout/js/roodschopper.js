@@ -24,8 +24,8 @@ function roodschopper(actie){
 			}else{
 				div=document.getElementById('messageContainer');
 				div.innerHTML=http.responseText;
-				displayDiv(div);
-				hideDiv(document.getElementById('submitContainer'));
+				$(div).show();
+				$('#submitContainer').hide();
 			}
 			
 		}
@@ -39,6 +39,6 @@ function restoreRoodschopper(){
 			form.elements[i].disabled=false;			
 		}
 	}
-	displayDiv(document.getElementById('submitContainer'));
-	hideDiv(document.getElementById('messageContainer'))
+	$('#submitContainer').show();
+	$('#messageContainer').hide();
 }

@@ -130,7 +130,7 @@ function previewPost(source, dest){
 	if(post.length!=''){
 		var previewDiv=document.getElementById(dest);
 		applyUBB(post, previewDiv);
-		displayDiv(document.getElementById(dest+"Container"));
+		$('#'+dest+"Container").show();
 	}
 }
 /*

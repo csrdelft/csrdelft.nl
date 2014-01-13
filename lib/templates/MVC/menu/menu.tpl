@@ -103,7 +103,7 @@
 				</form>
 			</div>
 			{if !isset($smarty.session.auth_error)}
-				<script type="text/javascript">hideDiv(document.getElementById('login'));</script>
+				<script type="text/javascript">$('#login').hide();</script>
 			{/if}
 		{/if}
 	</div>
