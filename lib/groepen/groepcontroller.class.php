@@ -44,6 +44,7 @@ class Groepcontroller extends Controller {
 				}
 			}
 		}
+		$this->action = 'standaard';
 		//action voor deze controller goedzetten.
 		if ($this->hasParam(1) AND $this->hasAction($this->getParam(1))) {
 			$this->action = $this->getParam(1);
@@ -55,8 +56,6 @@ class Groepcontroller extends Controller {
 		if ($this->action == 'standaard' AND $this->groep->getId() == 0) {
 			invokeRefresh(CSR_ROOT . 'actueel/groepen/', 'We geven geen 0-groepen weer! (Groepcontroller::__construct())');
 		}
-
-		$this->action = 'standaard';
 		$this->performAction();
 	}
 
