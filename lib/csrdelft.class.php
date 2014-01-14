@@ -45,18 +45,18 @@ class csrdelft extends TemplateView {
 				$this->addStylesheet('undohtml.css');
 				$this->addStylesheet('ubb.css');
 				$this->addStylesheet('csrdelft.css');
-				$layout = Instellingen::get('layout');
-				if (!Instellingen::hasEnumOption('layout', $layout)) { // fix verwijderde layout
+				$layout = LidInstellingen::get('layout');
+				if (!LidInstellingen::hasEnumOption('layout', $layout)) { // fix verwijderde layout
 					$layout = 'normaal';
-					Instellingen::set('layout', $layout);
-					Instellingen::save();
+					LidInstellingen::set('layout', $layout);
+					LidInstellingen::save();
 				}
 				$this->addStylesheet($layout . '.css');
-				if (Instellingen::get('layout_beeld') == 'breedbeeld') {
+				if (LidInstellingen::get('layout_beeld') == 'breedbeeld') {
 					$this->addStylesheet('breedbeeld.css');
 				}
-				if (Instellingen::get('layout_sneeuw') != 'nee') {
-					if (Instellingen::get('layout_sneeuw') == 'ja') {
+				if (LidInstellingen::get('layout_sneeuw') != 'nee') {
+					if (LidInstellingen::get('layout_sneeuw') == 'ja') {
 						$this->addStylesheet('snow.anim.css');
 					} else {
 						$this->addStylesheet('snow.css');
@@ -69,7 +69,7 @@ class csrdelft extends TemplateView {
 				$this->addScript('dragobject.js');
 				$this->addScript('menu.js');
 
-				if (Instellingen::get('algemeen_sneltoetsen') == 'ja') {
+				if (LidInstellingen::get('algemeen_sneltoetsen') == 'ja') {
 					$this->addScript('sneltoetsen.js');
 				}
 				return;
@@ -187,7 +187,7 @@ class csrdelft extends TemplateView {
 			case 'owee':
 			case 'lustrum':
 			default:
-				if (Instellingen::get('layout_minion') == 'ja') {
+				if (LidInstellingen::get('layout_minion') == 'ja') {
 					$this->addStylesheet('minion.css');
 					$this->addScript('minion.js');
 					$top = 40;
@@ -203,7 +203,7 @@ class csrdelft extends TemplateView {
 					$this->assign('debug', SimpleHTML::getDebug());
 				}
 
-				if ($this->zijkolom !== false || Instellingen::get('layout_beeld') === 'breedbeeld') {
+				if ($this->zijkolom !== false || LidInstellingen::get('layout_beeld') === 'breedbeeld') {
 					if (is_array($this->zijkolom)) {
 						$this->zijkolom += SimpleHTML::getStandaardZijkolom();
 					} else {

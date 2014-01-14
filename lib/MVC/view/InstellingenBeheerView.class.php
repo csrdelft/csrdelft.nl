@@ -1,12 +1,14 @@
 <?php
 
 /**
- * BeheerInstellingenView.class.php	| 	P.W.G. Brussee (brussee@live.nl)
+ * InstellingenBeheerView.class.php
+ * 
+ * @author P.W.G. Brussee <brussee@live.nl>
  * 
  * Tonen van alle instellingen om te beheren.
  * 
  */
-class BeheerInstellingenView extends TemplateView {
+class InstellingenBeheerView extends TemplateView {
 
 	private $_instellingen;
 
@@ -23,15 +25,14 @@ class BeheerInstellingenView extends TemplateView {
 		if (is_array($this->_instellingen)) {
 			$this->assign('melding', $this->getMelding());
 			$this->assign('kop', $this->getTitel());
-			$this->display('taken/menu_pagina.tpl');
 
 			$this->assign('instellingen', $this->_instellingen);
-			$this->display('taken/instelling/beheer_instellingen.tpl');
+			$this->display('MVC/instellingen/beheer/instellingen.tpl');
 		} elseif (is_string($this->_instellingen)) { // id of deleted corveefunctie
 			echo '<tr id="instelling-row-' . $this->_instellingen . '" class="remove"></tr>';
 		} else {
 			$this->assign('instelling', $this->_instellingen);
-			$this->display('taken/instelling/beheer_instelling_lijst.tpl');
+			$this->display('MVC/instellingen/beheer/instelling_lijst.tpl');
 		}
 	}
 

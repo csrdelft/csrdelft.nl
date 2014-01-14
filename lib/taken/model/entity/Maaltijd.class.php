@@ -55,7 +55,7 @@ class Maaltijd implements \Agendeerbaar {
 		}
 		$this->setTitel($titel);
 		if ($limiet === null) {
-			$limiet = intval($GLOBALS['standaard_maaltijdlimiet']);
+			$limiet = intval($GLOBALS['maaltijden']['standaard_maaltijdlimiet']);
 		}
 		$this->setAanmeldLimiet($limiet);
 		if ($datum === null) {
@@ -63,11 +63,11 @@ class Maaltijd implements \Agendeerbaar {
 		}
 		$this->setDatum($datum);
 		if ($tijd === null) {
-			$tijd = $GLOBALS['standaard_maaltijdaanvang'];
+			$tijd = $GLOBALS['maaltijden']['standaard_maaltijdaanvang'];
 		}
 		$this->setTijd($tijd);
 		if ($prijs === null) {
-			$prijs = floatval($GLOBALS['standaard_maaltijdprijs']);
+			$prijs = floatval($GLOBALS['maaltijden']['standaard_maaltijdprijs']);
 		}
 		$this->setPrijs($prijs);
 		$this->setGesloten($gesloten);
@@ -122,12 +122,12 @@ class Maaltijd implements \Agendeerbaar {
 	 */
 	public function getMarge() {
 		$aantal = $this->getAantalAanmeldingen();
-		$marge = floor($aantal / floatval($GLOBALS['marge_gasten_verhouding']));
-		$min = intval($GLOBALS['marge_gasten_min']);
+		$marge = floor($aantal / floatval($GLOBALS['maaltijden']['marge_gasten_verhouding']));
+		$min = intval($GLOBALS['maaltijden']['marge_gasten_min']);
 		if ($marge < $min) {
 			$marge = $min;
 		}
-		$max = intval($GLOBALS['marge_gasten_max']);
+		$max = intval($GLOBALS['maaltijden']['marge_gasten_max']);
 		if ($marge > $max) {
 			$marge = $max;
 		}
@@ -139,7 +139,7 @@ class Maaltijd implements \Agendeerbaar {
 	 * @return double
 	 */
 	public function getBudget() {
-		return ((float)($this->getAantalAanmeldingen() + $this->getMarge())) * ($this->getPrijs() - floatval($GLOBALS['maaltijd_budget_maalcie']));
+		return ((float)($this->getAantalAanmeldingen() + $this->getMarge())) * ($this->getPrijs() - floatval($GLOBALS['maaltijden']['maaltijd_budget_maalcie']));
 	}
 	public function getArchief() {
 		return $this->archief;

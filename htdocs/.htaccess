@@ -16,6 +16,9 @@ RewriteRule ^dies/(.*)$				/dies2014/$1 [QSA,L]
 RewriteRule ^maaltijden/?(.*)$		taken.php?uri=maaltijden/$1 [L]
 RewriteRule ^corvee/?(.*)$			taken.php?uri=corvee/$1 [L]
 
+# instellingenbeheer
+RewriteRule ^instellingenbeheer/?(.*)$		instellingenbeheer.php?uri=$1 [QSA,L]
+
 # menubeheer
 RewriteRule ^menubeheer/?(.*)$		menubeheer.php?uri=$1 [QSA,L]
 

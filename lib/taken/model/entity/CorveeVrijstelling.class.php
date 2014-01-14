@@ -33,7 +33,7 @@ class CorveeVrijstelling {
 		}
 		$this->setEindDatum($eind);
 		if ($percentage === null) {
-			$percentage = intval($GLOBALS['standaard_vrijstelling_percentage']);
+			$percentage = intval($GLOBALS['corvee']['standaard_vrijstelling_percentage']);
 		}
 		$this->setPercentage($percentage);
 	}
@@ -60,7 +60,7 @@ class CorveeVrijstelling {
 		return (int) $this->percentage;
 	}
 	public function getPunten() {
-		return (int) ceil($this->getPercentage() * intval($GLOBALS['corveepunten_per_jaar']) / 100);
+		return (int) ceil($this->getPercentage() * intval($GLOBALS['corvee']['corveepunten_per_jaar']) / 100);
 	}
 	
 	public function setBeginDatum($datum) {
@@ -76,7 +76,7 @@ class CorveeVrijstelling {
 		$this->eind_datum = $datum;
 	}
 	public function setPercentage($int) {
-		if (!is_int($int) || $int < intval($GLOBALS['vrijstelling_percentage_min']) || $int > intval($GLOBALS['vrijstelling_percentage_max'])) {
+		if (!is_int($int) || $int < intval($GLOBALS['corvee']['vrijstelling_percentage_min']) || $int > intval($GLOBALS['corvee']['vrijstelling_percentage_max'])) {
 			throw new Exception('Geen integer: percentage');
 		}
 		$this->percentage = $int;

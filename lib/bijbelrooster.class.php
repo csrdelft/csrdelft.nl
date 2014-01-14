@@ -46,7 +46,7 @@ class Bijbelrooster extends TemplateView {
 			"Groot Nieuws Bijbel" => "id17=1",
 			"Willibrordvertaling" => "id35=1"
 		);
-		$link = 'http://www.biblija.net/biblija.cgi?m=' . urlencode($stukje) . '&' . $bijbelvertalingen[Instellingen::get('algemeen_bijbel')] . '&l=nl&set=10';
+		$link = 'http://www.biblija.net/biblija.cgi?m=' . urlencode($stukje) . '&' . $bijbelvertalingen[LidInstellingen::get('algemeen_bijbel')] . '&l=nl&set=10';
 
 		return '<a href=' . $link . '>' . $stukje . '</a>';
 	}

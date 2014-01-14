@@ -22,7 +22,7 @@ class MijnMaaltijdenView extends TemplateView {
 	}
 
 	public function view() {
-		$this->assign('standaardprijs', sprintf('%.2f', floatval($GLOBALS['standaard_maaltijdprijs'])));
+		$this->assign('standaardprijs', sprintf('%.2f', floatval($GLOBALS['maaltijden']['standaard_maaltijdprijs'])));
 
 		if (is_array($this->_maaltijden)) { // list of maaltijden and list of aanmeldingen
 			$this->assign('melding', $this->getMelding());

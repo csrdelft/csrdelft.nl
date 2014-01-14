@@ -11,7 +11,7 @@ class IsHetAlContent extends TemplateView {
 		if ($ishetal == 'willekeurig') {
 			$this->ishetal = $this->opties[array_rand($this->opties)];
 		} else {
-			$this->ishetal = Instellingen::get('zijbalk_ishetal');
+			$this->ishetal = LidInstellingen::get('zijbalk_ishetal');
 		}
 		switch ($this->ishetal) {
 			case 'jarig': $this->ja = LoginLid::instance()->getLid()->getJarigOver();

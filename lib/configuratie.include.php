@@ -74,9 +74,9 @@ require_once 'MVC/view/form/Formulier.class.php';
 require_once 'MVC/controller/AclController.abstract.php';
 
 
-// instellingen van Taken-module
-require_once 'taken/model/InstellingenModel.class.php';
-InstellingenModel::getAlleInstellingen();
+// instellingen
+require_once 'MVC/model/InstellingenModel.class.php';
+InstellingenModel::instance();
 
 switch (constant('MODE')) {
 	case 'ONDERHOUD':

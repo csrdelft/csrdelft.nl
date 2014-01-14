@@ -84,12 +84,12 @@ class MededelingenContent extends TemplateView {
 			$this->assign('pagina_root', self::mededelingenRoot . 'prullenbak/');
 		}
 
-		$this->assign('lijst', Mededeling::getLijstVanPagina($this->paginaNummer, Instellingen::get('mededelingen_aantalPerPagina'), $this->prullenbak));
+		$this->assign('lijst', Mededeling::getLijstVanPagina($this->paginaNummer, LidInstellingen::get('mededelingen_aantalPerPagina'), $this->prullenbak));
 		$this->assign('geselecteerdeMededeling', $this->geselecteerdeMededeling);
 		$this->assign('wachtGoedkeuring', Mededeling::getLijstWachtGoedkeuring());
 
 		$this->assign('huidigePagina', $this->paginaNummer);
-		$this->assign('totaalAantalPaginas', (ceil(Mededeling::getAantal($this->prullenbak) / Instellingen::get('mededelingen_aantalPerPagina'))));
+		$this->assign('totaalAantalPaginas', (ceil(Mededeling::getAantal($this->prullenbak) / LidInstellingen::get('mededelingen_aantalPerPagina'))));
 
 		$this->assign('datumtijdFormaat', '%d-%m-%Y %H:%M');
 

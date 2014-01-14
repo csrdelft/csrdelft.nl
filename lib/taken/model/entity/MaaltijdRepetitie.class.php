@@ -39,28 +39,28 @@ class MaaltijdRepetitie {
 	public function __construct($mrid=0, $dag=null, $periode=null, $titel='', $tijd=null, $prijs=null, $abo=null, $limiet=null, $filter='') {
 		$this->mlt_repetitie_id = (int) $mrid;
 		if ($dag === null) {
-			$dag = intval($GLOBALS['standaard_repetitie_weekdag']);
+			$dag = intval($GLOBALS['maaltijden']['standaard_repetitie_weekdag']);
 		}
 		$this->setDagVanDeWeek($dag);
 		if ($periode === null) {
-			$periode = intval($GLOBALS['standaard_repetitie_periode']);
+			$periode = intval($GLOBALS['maaltijden']['standaard_repetitie_periode']);
 		}
 		$this->setPeriodeInDagen($periode);
 		$this->setStandaardTitel($titel);
 		if ($tijd === null) {
-			$tijd = $GLOBALS['standaard_maaltijdaanvang'];
+			$tijd = $GLOBALS['maaltijden']['standaard_maaltijdaanvang'];
 		}
 		$this->setStandaardTijd($tijd);
 		if ($prijs === null) {
-			$prijs = floatval($GLOBALS['standaard_maaltijdprijs']);
+			$prijs = floatval($GLOBALS['maaltijden']['standaard_maaltijdprijs']);
 		}
 		$this->setStandaardPrijs($prijs);
 		if ($abo === null) {
-			$abo = (bool) $GLOBALS['standaard_abonneerbaar'];
+			$abo = (bool) $GLOBALS['maaltijden']['standaard_abonneerbaar'];
 		}
 		$this->setAbonneerbaar($abo);
 		if ($limiet === null) {
-			$limiet = intval($GLOBALS['standaard_maaltijdlimiet']);
+			$limiet = intval($GLOBALS['maaltijden']['standaard_maaltijdlimiet']);
 		}
 		$this->setStandaardLimiet($limiet);
 		$this->setAbonnementFilter($filter);

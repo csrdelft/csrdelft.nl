@@ -226,7 +226,7 @@ class Groep{
 	public function getToonPasfotos(){	return $this->groep['toonPasfotos']; }
 	public function toonPasfotos(){
 		return $this->isIngelogged() AND $this->getToonPasfotos()==1 AND
-			Instellingen::get('groepen_toonPasfotos')=='ja';
+			LidInstellingen::get('groepen_toonPasfotos')=='ja';
 	}
 	public function getLidIsMod(){ 		return $this->groep['lidIsMod']; }
 	public function getEigenaar(){ 		return $this->groep['eigenaar']; }

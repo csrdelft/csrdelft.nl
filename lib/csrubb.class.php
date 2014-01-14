@@ -20,7 +20,7 @@ class CsrUBB extends eamBBParser {
 	function getHTML($ubb) {
 		parent::getHTML($ubb);
 
-		if (Instellingen::get('layout_neuzen') == 'overal') {
+		if (LidInstellingen::get('layout_neuzen') == 'overal') {
 			$pointer = 0;
 			$counter = 0;
 			$counter2 = 0;
@@ -108,7 +108,7 @@ class CsrUBB extends eamBBParser {
 		} else {
 			$content = $arguments;
 		}
-		if (Instellingen::get('layout_neuzen') != 'nee') {
+		if (LidInstellingen::get('layout_neuzen') != 'nee') {
 			$neus = '<img src="http://plaetjes.csrdelft.nl/famfamfam/bullet_red.png" width="16" height="16" alt="o" style="margin: -5px;">';
 			$content = str_replace('o', $neus, $content);
 		}
@@ -224,7 +224,7 @@ class CsrUBB extends eamBBParser {
 			$testwaarde = $arguments['waarde'];
 		}
 		try {
-			if (Instellingen::get($arguments['instelling']) == $testwaarde) {
+			if (LidInstellingen::get($arguments['instelling']) == $testwaarde) {
 				return $content;
 			}
 		} catch (Exception $e) {

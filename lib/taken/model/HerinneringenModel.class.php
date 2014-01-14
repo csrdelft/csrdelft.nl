@@ -45,8 +45,8 @@ class HerinneringenModel {
 	}
 	
 	public static function stuurHerinneringen() {
-		if (array_key_exists('herinnering_1e_mail', $GLOBALS)) {
-			$vooraf = str_replace('-', '+', $GLOBALS['herinnering_1e_mail']);
+		if (array_key_exists('herinnering_1e_mail', $GLOBALS['corvee'])) {
+			$vooraf = str_replace('-', '+', $GLOBALS['corvee']['herinnering_1e_mail']);
 		}
 		$van = strtotime(date('Y-m-d'));
 		$tot = strtotime($vooraf, $van);

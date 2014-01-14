@@ -20,7 +20,7 @@ class VrijstellingFormView extends TemplateView {
 		$formFields[] = new RequiredLidField('lid_id', $uid, 'Naam of lidnummer');
 		$formFields[] = new DatumField('begin_datum', $begin, 'Vanaf', date('Y') + 1, date('Y'));
 		$formFields[] = new DatumField('eind_datum', $eind, 'Tot en met', date('Y') + 1, date('Y'));
-		$formFields[] = new IntField('percentage', $percentage, 'Percentage (%)', $GLOBALS['vrijstelling_percentage_max'], $GLOBALS['vrijstelling_percentage_min']);
+		$formFields[] = new IntField('percentage', $percentage, 'Percentage (%)', $GLOBALS['corvee']['vrijstelling_percentage_max'], $GLOBALS['corvee']['vrijstelling_percentage_min']);
 
 		$this->_form = new Formulier('taken-vrijstelling-form', $GLOBALS['taken_module'] . '/opslaan' . ($uid === null ? '' : '/' . $uid), $formFields);
 	}

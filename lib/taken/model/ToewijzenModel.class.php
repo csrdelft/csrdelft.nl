@@ -73,7 +73,7 @@ class ToewijzenModel {
 		}
 		foreach ($lijst as $uid => $punten) {
 			$lijst[$uid]['laatste'] = TakenModel::getLaatsteTaakVanLid($uid);
-			if ($lijst[$uid]['laatste'] !== null && $lijst[$uid]['laatste']->getBeginMoment() >= strtotime($GLOBALS['suggesties_recent_verbergen'], $taak->getBeginMoment())) {
+			if ($lijst[$uid]['laatste'] !== null && $lijst[$uid]['laatste']->getBeginMoment() >= strtotime($GLOBALS['corvee']['suggesties_recent_verbergen'], $taak->getBeginMoment())) {
 				$lijst[$uid]['recent'] = true;
 			}
 			else {

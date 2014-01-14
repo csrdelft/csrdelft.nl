@@ -54,49 +54,49 @@ abstract class SimpleHTML implements View {
 	public static function getStandaardZijkolom() {
 		$zijkolom = array();
 		// Is het al...
-		if (Instellingen::get('zijbalk_ishetal') != 'niet weergeven') {
+		if (LidInstellingen::get('zijbalk_ishetal') != 'niet weergeven') {
 			require_once('ishetalcontent.class.php');
-			$zijkolom[] = new IsHetAlContent(Instellingen::get('zijbalk_ishetal'));
+			$zijkolom[] = new IsHetAlContent(LidInstellingen::get('zijbalk_ishetal'));
 		}
 		// Ga snel naar
-		if (Instellingen::get('zijbalk_gasnelnaar') == 'ja') {
+		if (LidInstellingen::get('zijbalk_gasnelnaar') == 'ja') {
 			require_once('MVC/view/MenuView.class.php');
 			$zijkolom[] = new MenuView('gasnelnaar', 3);
 		}
 		// Agenda
-		if (LoginLid::instance()->hasPermission('P_AGENDA_READ') && Instellingen::get('zijbalk_agendaweken') > 0) {
+		if (LoginLid::instance()->hasPermission('P_AGENDA_READ') && LidInstellingen::get('zijbalk_agendaweken') > 0) {
 			require_once('agenda/agenda.class.php');
 			require_once('agenda/agendacontent.class.php');
-			$zijkolom[] = new AgendaZijbalkContent(new Agenda(), Instellingen::get('zijbalk_agendaweken'));
+			$zijkolom[] = new AgendaZijbalkContent(new Agenda(), LidInstellingen::get('zijbalk_agendaweken'));
 		}
 		// Laatste mededelingen
-		if (Instellingen::get('zijbalk_mededelingen') > 0) {
+		if (LidInstellingen::get('zijbalk_mededelingen') > 0) {
 			require_once('mededelingen/mededeling.class.php');
 			require_once('mededelingen/mededelingencontent.class.php');
-			$zijkolom[] = new MededelingenZijbalkContent(Instellingen::get('zijbalk_mededelingen'));
+			$zijkolom[] = new MededelingenZijbalkContent(LidInstellingen::get('zijbalk_mededelingen'));
 		}
 		// Nieuwste belangrijke forumberichten
-		if (Instellingen::get('zijbalk_forum_belangrijk') >= 0) {
+		if (LidInstellingen::get('zijbalk_forum_belangrijk') >= 0) {
 			require_once 'forum/forumcontent.class.php';
 			$zijkolom[] = new ForumContent('lastposts_belangrijk');
 		}
 		// Nieuwste forumberichten
-		if (Instellingen::get('zijbalk_forum') > 0) {
+		if (LidInstellingen::get('zijbalk_forum') > 0) {
 			require_once 'forum/forumcontent.class.php';
 			$zijkolom[] = new ForumContent('lastposts');
 		}
 		// Zelfgeposte forumberichten
-		if (Instellingen::get('zijbalk_forum_zelf') > 0) {
+		if (LidInstellingen::get('zijbalk_forum_zelf') > 0) {
 			require_once 'forum/forumcontent.class.php';
 			$zijkolom[] = new ForumContent('lastposts_zelf');
 		}
 		// Nieuwste fotoalbum
-		if (Instellingen::get('zijbalk_fotoalbum') == 'ja') {
+		if (LidInstellingen::get('zijbalk_fotoalbum') == 'ja') {
 			require_once 'fotoalbumcontent.class.php';
 			$zijkolom[] = new FotalbumZijbalkContent();
 		}
 		// Komende verjaardagen
-		if (Instellingen::get('zijbalk_verjaardagen') > 0) {
+		if (LidInstellingen::get('zijbalk_verjaardagen') > 0) {
 			require_once 'lid/verjaardagcontent.class.php';
 			$zijkolom[] = new VerjaardagContent('komende');
 		}

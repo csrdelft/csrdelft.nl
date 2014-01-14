@@ -49,21 +49,21 @@ class CorveeRepetitie {
 		$this->crv_repetitie_id = (int) $crid;
 		$this->setMaaltijdRepetitieId($mrid);
 		if ($dag === null) {
-			$dag = intval($GLOBALS['standaard_repetitie_weekdag']);
+			$dag = intval($GLOBALS['corvee']['standaard_repetitie_weekdag']);
 		}
 		$this->setDagVanDeWeek($dag);
 		if ($periode === null) {
-			$periode = intval($GLOBALS['standaard_repetitie_periode']);
+			$periode = intval($GLOBALS['corvee']['standaard_repetitie_periode']);
 		}
 		$this->setPeriodeInDagen($periode);
 		$this->setFunctieId($fid);
 		$this->setStandaardPunten($punten);
 		if ($aantal === null) {
-			$aantal = intval($GLOBALS['standaard_aantal_corveers']);
+			$aantal = intval($GLOBALS['corvee']['standaard_aantal_corveers']);
 		}
 		$this->setStandaardAantal($aantal);
 		if ($voorkeur === null) {
-			$voorkeur = (bool) $GLOBALS['standaard_voorkeurbaar'];
+			$voorkeur = (bool) $GLOBALS['corvee']['standaard_voorkeurbaar'];
 		}
 		$this->setVoorkeurbaar($voorkeur);
 	}

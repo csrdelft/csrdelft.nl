@@ -107,8 +107,8 @@ class AgendaZijbalkContent extends TemplateView {
 		$eindMoment = strtotime('next saturday', $eindMoment);
 		$items = $this->agenda->getItems($beginMoment, $eindMoment, $filter);
 
-		if (count($items) > Instellingen::get('zijbalk_agenda_max')) {
-			$items = array_slice($items, 0, Instellingen::get('zijbalk_agenda_max'));
+		if (count($items) > LidInstellingen::get('zijbalk_agenda_max')) {
+			$items = array_slice($items, 0, LidInstellingen::get('zijbalk_agenda_max'));
 		}
 
 		$this->assign('items', $items);

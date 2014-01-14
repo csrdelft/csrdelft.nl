@@ -1,5 +1,5 @@
 {*
-	beheer_instellingen.tpl	|	P.W.G. Brussee (brussee@live.nl)
+	instellingen.tpl	|	P.W.G. Brussee (brussee@live.nl)
 *}
 <p>
 Op deze pagina kunt u instellingen wijzigen en resetten.
@@ -19,7 +19,7 @@ N.B. Deze instellingen zijn essentieel voor het systeem!
 	</thead>
 	<tbody>
 {foreach from=$instellingen item=instelling}
-	{include file='taken/instelling/beheer_instelling_lijst.tpl' instelling=$instelling}
+	{include file='MVC/instellingen/beheer/instelling_lijst.tpl'}
 {/foreach}
 	</tbody>
 </table>

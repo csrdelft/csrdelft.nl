@@ -104,7 +104,7 @@ class VerjaardagContent extends TemplateView {
 				if (LoginLid::instance()->getUid() == 'x999') {
 					$toonpasfotos = false;
 				} else {
-					$toonpasfotos = Instellingen::get('zijbalk_verjaardagen_pasfotos') == 'ja';
+					$toonpasfotos = LidInstellingen::get('zijbalk_verjaardagen_pasfotos') == 'ja';
 				}
 
 				echo '<div id="zijbalk_verjaardagen"><h1>';
@@ -115,7 +115,7 @@ class VerjaardagContent extends TemplateView {
 				}
 				echo '</h1>';
 
-				$aantal = Instellingen::get('zijbalk_verjaardagen');
+				$aantal = LidInstellingen::get('zijbalk_verjaardagen');
 				if ($toonpasfotos) {
 					//veelvouden van 3 overhouden
 					$aantal = $aantal - ($aantal % 3);

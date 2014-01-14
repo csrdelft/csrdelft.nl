@@ -33,7 +33,7 @@ class ToewijzenFormView extends TemplateView {
 	public function getLidLink($uid) {
 		$lid = \LidCache::getLid($uid);
 		if ($lid instanceof \Lid) {
-			return $lid->getNaamLink($GLOBALS['weergave_ledennamen_beheer'], $GLOBALS['weergave_ledennamen']);
+			return $lid->getNaamLink($GLOBALS['corvee']['weergave_ledennamen_beheer'], $GLOBALS['corvee']['weergave_ledennamen']);
 		}
 		return $uid;
 	}
@@ -56,11 +56,11 @@ class ToewijzenFormView extends TemplateView {
 			$this->assign('voorkeurbaar', CorveeRepetitiesModel::getRepetitie($crid)->getIsVoorkeurbaar());
 		}
 		if ($this->_taak->getCorveeFunctie()->getIsKwalificatieBenodigd()) {
-			$this->assign('voorkeur', $GLOBALS['suggesties_voorkeur_kwali_filter']);
-			$this->assign('recent', $GLOBALS['suggesties_recent_kwali_filter']);
+			$this->assign('voorkeur', $GLOBALS['corvee']['suggesties_voorkeur_kwali_filter']);
+			$this->assign('recent', $GLOBALS['corvee']['suggesties_recent_kwali_filter']);
 		} else {
-			$this->assign('voorkeur', $GLOBALS['suggesties_voorkeur_filter']);
-			$this->assign('recent', $GLOBALS['suggesties_recent_filter']);
+			$this->assign('voorkeur', $GLOBALS['corvee']['suggesties_voorkeur_filter']);
+			$this->assign('recent', $GLOBALS['corvee']['suggesties_recent_filter']);
 		}
 
 		$lijst = $this->fetch('taken/corveetaak/suggesties_lijst.tpl');

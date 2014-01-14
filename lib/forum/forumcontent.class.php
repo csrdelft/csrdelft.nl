@@ -46,10 +46,10 @@ class ForumContent extends TemplateView {
 	public function lastPostsZijbalk($zelf = false) {
 		if ($zelf) {
 			$uid = LoginLid::instance()->getUid();
-			$aPosts = Forum::getPostsVoorUid($uid, Instellingen::get('zijbalk_forum_zelf'), false);
+			$aPosts = Forum::getPostsVoorUid($uid, LidInstellingen::get('zijbalk_forum_zelf'), false);
 			echo '<h1><a href="/communicatie/profiel/' . $uid . '/#forum">Forum (zelf gepost)</a></h1>';
 		} else {
-			$aPosts = Forum::getPostsVoorRss(Instellingen::get('zijbalk_forum'), true);
+			$aPosts = Forum::getPostsVoorRss(LidInstellingen::get('zijbalk_forum'), true);
 			echo '<div id="zijbalk_forum"><h1><a href="/communicatie/forum/categorie/laatste">Forum</a></h1>';
 		}
 		if (!is_array($aPosts)) {
@@ -85,10 +85,10 @@ class ForumContent extends TemplateView {
 	}
 
 	public function lastPostsZijbalkBelangrijk($zelf = false) {
-		$aantal = Instellingen::get('zijbalk_forum_belangrijk');
+		$aantal = LidInstellingen::get('zijbalk_forum_belangrijk');
 		if (!is_int($aantal)) {
 			$aantal = 5;
-			Instellingen::set('zijbalk_forum_belangrijk', 5); // oude instelling was "ja/nee"
+			LidInstellingen::set('zijbalk_forum_belangrijk', 5); // oude instelling was "ja/nee"
 		}
 		if ($aantal <= 0) {
 			return;
@@ -129,7 +129,7 @@ class ForumContent extends TemplateView {
 
 	public function lastPosts() {
 
-		$this->assign('berichten', Forum::getPostsVoorRss(Instellingen::get('forum_zoekresultaten')));
+		$this->assign('berichten', Forum::getPostsVoorRss(LidInstellingen::get('forum_zoekresultaten')));
 		$this->assign('melding', $this->getMelding());
 		$this->display('forum/list_recent.tpl');
 	}

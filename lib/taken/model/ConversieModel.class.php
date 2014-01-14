@@ -389,7 +389,7 @@ class ConversieModel {
 					$titel .= 'maaltijd';
 					$crid = $corvee[3]->getCorveeRepetitieId();
 				}
-				$maaltijd = self::conversieMaaltijd(intval($row['id']), $mrid, $titel, intval($row['max']), date('Y-m-d', $datum), date('H:i', $datum), floatval($GLOBALS['standaard_maaltijdprijs']), $filter);
+				$maaltijd = self::conversieMaaltijd(intval($row['id']), $mrid, $titel, intval($row['max']), date('Y-m-d', $datum), date('H:i', $datum), floatval($GLOBALS['maaltijden']['standaard_maaltijdprijs']), $filter);
 				$mid = $maaltijd->getMaaltijdId();
 				$maaltijden[$mid] = $maaltijd;
 				

@@ -2,7 +2,7 @@
 	beheer_punten_lijst.tpl	|	P.W.G. Brussee (brussee@live.nl)
 *}
 <tr id="punten-row-{$puntenlijst.lid->getUid()}">
-	<td>{$puntenlijst.lid->getNaamLink($GLOBALS.weergave_ledennamen_beheer, $GLOBALS.weergave_ledennamen)}</td>
+	<td>{$puntenlijst.lid->getNaamLink($GLOBALS.corvee.weergave_ledennamen_beheer, $GLOBALS.corvee.weergave_ledennamen)}</td>
 {foreach from=$puntenlijst.aantal key=fid item=aantal}
 	<td>{strip}
 	{if $aantal !== 0}

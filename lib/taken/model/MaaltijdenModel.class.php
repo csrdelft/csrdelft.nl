@@ -66,7 +66,7 @@ class MaaltijdenModel {
 	 * @return Maaltijd[]
 	 */
 	public static function getKomendeMaaltijdenVoorLid($uid) {
-		$maaltijden = self::loadMaaltijden('verwijderd = false AND datum >= ? AND datum <= ?', array(date('Y-m-d'), date('Y-m-d', strtotime($GLOBALS['maaltijden_ketzer_vooraf']))));
+		$maaltijden = self::loadMaaltijden('verwijderd = false AND datum >= ? AND datum <= ?', array(date('Y-m-d'), date('Y-m-d', strtotime($GLOBALS['maaltijden']['maaltijden_ketzer_vooraf']))));
 		$maaltijden = self::filterMaaltijdenVoorLid($maaltijden, $uid);
 		return $maaltijden;
 	}
@@ -77,7 +77,7 @@ class MaaltijdenModel {
 	 * @return Maaltijd[]
 	 */
 	public static function getRecenteMaaltijden() {
-		$maaltijden = self::loadMaaltijden('verwijderd = false AND datum >= ? AND datum <= ?', array(date('Y-m-d', strtotime($GLOBALS['maaltijden_recent_lidprofiel'])), date('Y-m-d')));
+		$maaltijden = self::loadMaaltijden('verwijderd = false AND datum >= ? AND datum <= ?', array(date('Y-m-d', strtotime($GLOBALS['maaltijden']['maaltijden_recent_lidprofiel'])), date('Y-m-d')));
 		$maaltijdenById = array();
 		foreach ($maaltijden as $maaltijd) {
 			$maaltijdenById[$maaltijd->getMaaltijdId()] = $maaltijd;

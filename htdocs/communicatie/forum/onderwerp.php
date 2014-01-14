@@ -31,7 +31,7 @@ if($loginlid->hasPermission('P_FORUM_READ')) {
 		exit;
 	}
 
-	if(Instellingen::get('forum_filter2008')=='ja'){
+	if(LidInstellingen::get('forum_filter2008')=='ja'){
 		$forumonderwerp->filter2008();
 	}
 	$midden = new ForumOnderwerpContent($forumonderwerp);

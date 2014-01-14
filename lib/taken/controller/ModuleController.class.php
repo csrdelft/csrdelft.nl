@@ -1,7 +1,5 @@
 <?php
 
-
-
 require_once 'MVC/controller/AclController.abstract.php';
 
 /**
@@ -23,8 +21,7 @@ class ModuleController extends \AclController {
 				'maaltijdenrepetities' => 'P_MAAL_MOD',
 				'maaltijdenabonnementen' => 'P_MAAL_IK',
 				'maaltijdenabonnementenbeheer' => 'P_MAAL_MOD',
-				'maaltijdenmaalciesaldi' => 'P_MAAL_SALDI',
-				'maaltijdeninstellingen' => 'P_MAAL_MOD'
+				'maaltijdenmaalciesaldi' => 'P_MAAL_SALDI'
 			);
 			$this->action = 'ketzer'; // default
 		} elseif ($module === 'corvee') {
@@ -37,8 +34,7 @@ class ModuleController extends \AclController {
 				'corveevoorkeurenbeheer' => 'P_CORVEE_MOD',
 				'corveepuntenbeheer' => 'P_CORVEE_MOD',
 				'corveevrijstellingen' => 'P_CORVEE_MOD',
-				'corveefuncties' => 'P_CORVEE_MOD',
-				'corveeinstellingen' => 'P_MAAL_MOD' // shortcut
+				'corveefuncties' => 'P_CORVEE_MOD'
 			);
 			$this->action = 'mijn'; // default
 		} else {
@@ -148,17 +144,6 @@ class ModuleController extends \AclController {
 	public function corveefuncties($query) {
 		require_once 'taken/controller/BeheerFunctiesController.class.php';
 		$controller = new BeheerFunctiesController($query);
-		$this->view = $controller->getContent();
-	}
-
-	public function corveeinstellingen($query) {
-		$GLOBALS['taken_module'] = str_replace('corvee', 'maaltijden', $GLOBALS['taken_module']);
-		$this->maaltijdeninstellingen($query);
-	}
-
-	public function maaltijdeninstellingen($query) {
-		require_once 'taken/controller/BeheerInstellingenController.class.php';
-		$controller = new BeheerInstellingenController($query);
 		$this->view = $controller->getContent();
 	}
 

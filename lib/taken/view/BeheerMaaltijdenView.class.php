@@ -36,7 +36,7 @@ class BeheerMaaltijdenView extends TemplateView {
 	public function getLidLink($uid) {
 		$lid = \LidCache::getLid($uid);
 		if ($lid instanceof \Lid) {
-			return $lid->getNaamLink($GLOBALS['weergave_ledennamen_beheer'], $GLOBALS['weergave_ledennamen']);
+			return $lid->getNaamLink($GLOBALS['maaltijden']['weergave_ledennamen_beheer'], $GLOBALS['maaltijden']['weergave_ledennamen']);
 		}
 		return $uid;
 	}

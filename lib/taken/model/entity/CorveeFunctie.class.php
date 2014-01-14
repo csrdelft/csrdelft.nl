@@ -40,7 +40,7 @@ class CorveeFunctie {
 		$this->setEmailBericht($email);
 		$this->setStandaardPunten($punten);
 		if ($kwali === null) {
-			$kwali = (bool) $GLOBALS['standaard_kwalificatie'];
+			$kwali = (bool) $GLOBALS['corvee']['standaard_kwalificatie'];
 		}
 		$this->setKwalificatieBenodigd($kwali);
 	}

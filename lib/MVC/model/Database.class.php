@@ -15,7 +15,8 @@ class Database extends PDO {
 	private static $_instance;
 
 	/**
-	 * Get singleton Database instance
+	 * Get singleton Database instance.
+	 * 
 	 * @return Database
 	 */
 	public static function instance() {

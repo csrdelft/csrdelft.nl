@@ -441,7 +441,7 @@ class Lid implements Serializable, Agendeerbaar{
 	}
 
 	//deze willen we hebben om vanuit templates handig instellingen op te halen.
-	public function instelling($key){ return Instellingen::get($key); }
+	public function instelling($key){ return LidInstellingen::get($key); }
 	public function getInstellingen(){ return $this->profiel['instellingen']; }
 
 	/**
@@ -556,7 +556,7 @@ class Lid implements Serializable, Agendeerbaar{
 
 		//als $vorm==='user', de instelling uit het profiel gebruiken voor vorm
 		if($vorm=='user'){
-			$vorm=Instellingen::get('forum_naamWeergave');
+			$vorm=LidInstellingen::get('forum_naamWeergave');
 		}
 		switch($vorm){
 			case 'nick':
@@ -662,7 +662,7 @@ class Lid implements Serializable, Agendeerbaar{
 			$k = '';
 			$l = '<a href="'.CSR_ROOT.'communicatie/profiel/'.$this->getUid().'" title="'.$sVolledigeNaam.'" class="lidLink '.$this->profiel['status'].'">';
 			
-			if (($vorm === 'leeg' || $mode === 'visitekaartje') && Instellingen::get('layout_visitekaartjes') == 'ja') {
+			if (($vorm === 'leeg' || $mode === 'visitekaartje') && LidInstellingen::get('layout_visitekaartjes') == 'ja') {
 				$v = str_replace(' ', '', str_replace('.', '', microtime()));
 				$k = '<div id="k'.$v.'" class="visitekaartje';
 				if ($this->isJarig()) {

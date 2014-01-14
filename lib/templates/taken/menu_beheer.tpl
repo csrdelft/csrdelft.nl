@@ -24,9 +24,8 @@
 	<div class="item{if $GLOBALS.taken_module === $link} active{/if}">»
 		<a href="{$link}" title="Beheer abonnementen">Abonnementen</a>
 	</div>
-	{assign var="link" value="/maaltijdeninstellingen"}
-	<div class="item{if $GLOBALS.taken_module === $link} active{/if}">»
-		<a href="{$link}" title="Beheer instellingen">Instellingen</a>
+	<div class="item">»
+		<a href="/instellingenbeheer" title="Beheer instellingen">Instellingen</a>
 	</div>
 {if $loginlid->hasPermission('P_MAAL_SALDI')}
 	{assign var="link" value="/maaltijdenmaalciesaldi"}
