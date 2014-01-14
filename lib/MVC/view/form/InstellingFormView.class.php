@@ -19,7 +19,7 @@ class InstellingFormView extends TemplateView {
 		$formFields['key'] = new TextField('instelling_id', $instelling->key, 'Id');
 		$formFields[] = new AutoresizeTextareaField('waarde', $instelling->value, 'Waarde', 0);
 
-		$this->form = new Formulier('taken-instelling-form', $GLOBALS['taken_module'] . '/opslaan/' . $instelling->module . '/' . $instelling->key, $formFields);
+		$this->form = new Formulier('taken-instelling-form', '/instellingenbeheer/opslaan/' . $instelling->module . '/' . $instelling->key, $formFields);
 	}
 
 	public function getTitel() {
