@@ -1,6 +1,5 @@
 <?php
 
-
 require_once 'taken/model/VrijstellingenModel.class.php';
 
 /**
@@ -18,7 +17,7 @@ class PuntenModel {
 			try {
 				$lid = \LidCache::getLid($uid); // false if lid does not exist
 				if (!$lid instanceof \Lid) {
-					throw new Exception('Lid bestaat niet: $uid ='. $uid);
+					throw new Exception('Lid bestaat niet: $uid =' . $uid);
 				}
 				$punten = $totalen['puntenTotaal'];
 				$punten += $totalen['bonusTotaal'];
@@ -33,38 +32,37 @@ class PuntenModel {
 					VrijstellingenModel::verwijderVrijstelling($vrijstelling->getLidId());
 					$aantal++;
 				}
-			}
-			catch (\Exception $e) {
+			} catch (\Exception $e) {
 				$errors[] = $e;
 			}
 		}
 		$taken = TakenModel::verwijderOudeTaken();
 		return array($aantal, $taken, $errors);
 	}
-	
+
 	public static function puntenToekennen($uid, $punten, $bonus_malus) {
 		if (!is_int($punten) || !is_int($bonus_malus)) {
 			throw new Exception('Punten toekennen faalt: geen integer');
 		}
 		$lid = \LidCache::getLid($uid); // false if lid does not exist
 		if (!$lid instanceof \Lid) {
-			throw new Exception('Lid bestaat niet: $uid ='. $uid);
+			throw new Exception('Lid bestaat niet: $uid =' . $uid);
 		}
 		self::savePuntenVoorLid($lid, (int) $lid->getProperty('corvee_punten') + $punten, (int) $lid->getProperty('corvee_punten_bonus') + $bonus_malus);
 	}
-	
+
 	public static function puntenIntrekken($uid, $punten, $bonus_malus) {
 		if (!is_int($punten) || !is_int($bonus_malus)) {
 			throw new Exception('Punten intrekken faalt: geen integer');
 		}
 		$lid = \LidCache::getLid($uid); // false if lid does not exist
 		if (!$lid instanceof \Lid) {
-			throw new Exception('Lid bestaat niet: $uid ='. $uid);
+			throw new Exception('Lid bestaat niet: $uid =' . $uid);
 		}
 		self::savePuntenVoorLid($lid, (int) $lid->getProperty('corvee_punten') - $punten, (int) $lid->getProperty('corvee_punten_bonus') - $bonus_malus);
 	}
-	
-	public static function savePuntenVoorLid(\Lid $lid, $punten=null, $bonus_malus=null) {
+
+	public static function savePuntenVoorLid(\Lid $lid, $punten = null, $bonus_malus = null) {
 		if (!is_int($punten) && !is_int($bonus_malus)) {
 			throw new Exception('Save punten voor lid faalt: geen integer');
 		}
@@ -78,20 +76,20 @@ class PuntenModel {
 			throw new Exception('Save punten voor lid faalt: opslaan mislukt');
 		}
 	}
-	
+
 	public static function loadPuntenTotaalVoorAlleLeden() {
 		return self::loadPuntenTotaal('status IN("S_LID", "S_GASTLID", "S_NOVIET")');
 	}
-	
-	private static function loadPuntenTotaal($where=null, $values=array(), $limit=null) {
+
+	private static function loadPuntenTotaal($where = null, $values = array(), $limit = null) {
 		$sql = 'SELECT uid, corvee_punten, corvee_punten_bonus';
 		$sql.= ' FROM lid';
 		if ($where !== null) {
-			$sql.= ' WHERE '. $where;
+			$sql.= ' WHERE ' . $where;
 		}
 		$sql.= ' ORDER BY achternaam, voornaam ASC';
 		if (is_int($limit) && $limit > 0) {
-			$sql.= ' LIMIT '. $limit;
+			$sql.= ' LIMIT ' . $limit;
 		}
 		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
@@ -106,15 +104,15 @@ class PuntenModel {
 		}
 		return $totalen;
 	}
-	
-	public static function loadPuntenVoorAlleLeden($functies=null) {
+
+	public static function loadPuntenVoorAlleLeden($functies = null) {
 		$taken = TakenModel::getAlleTaken(true); // grouped by uid
 		$vrijstellingen = VrijstellingenModel::getAlleVrijstellingen(true); // grouped by uid
 		$matrix = self::loadPuntenTotaalVoorAlleLeden();
 		foreach ($matrix as $uid => $totalen) {
 			$lid = \LidCache::getLid($uid); // false if lid does not exist
 			if (!$lid instanceof \Lid) {
-				throw new Exception('Lid bestaat niet: $uid ='. $uid);
+				throw new Exception('Lid bestaat niet: $uid =' . $uid);
 			}
 			$lidtaken = array();
 			if (array_key_exists($uid, $taken)) {
@@ -128,8 +126,8 @@ class PuntenModel {
 		}
 		return $matrix;
 	}
-	
-	public static function loadPuntenVoorLid(\Lid $lid, $functies=null, $lidtaken=null, $vrijstelling=null) {
+
+	public static function loadPuntenVoorLid(\Lid $lid, $functies = null, $lidtaken = null, $vrijstelling = null) {
 		if ($lidtaken === null) {
 			$lidtaken = TakenModel::getTakenVoorLid($lid->getUid());
 			$vrijstelling = VrijstellingenModel::getVrijstelling($lid->getUid());
@@ -140,14 +138,16 @@ class PuntenModel {
 			foreach ($lidtaken as $taak) {
 				$lijst['prognose'] += $taak->getPuntenPrognose();
 			}
-		}
-		else {
+		} else {
 			$lijst = self::sumPuntenPerFunctie($functies, $lidtaken);
 		}
-		if ($vrijstelling !== null) { // bij suggestielijst wordt de prognose gecorrigeerd voor beginDatum van vrijstelling
+		if ($vrijstelling === null) {
+			$lijst['vrijstelling'] = false;
+		} else { // bij suggestielijst wordt de prognose gecorrigeerd voor beginDatum van vrijstelling
 			$lijst['vrijstelling'] = $vrijstelling;
 			$lijst['prognose'] += $vrijstelling->getPunten();
 		}
+
 		$lijst['lid'] = $lid;
 		$lijst['puntenTotaal'] = (int) $lid->getProperty('corvee_punten');
 		$lijst['bonusTotaal'] = (int) $lid->getProperty('corvee_punten_bonus');
@@ -155,8 +155,7 @@ class PuntenModel {
 		$lijst['prognoseColor'] = self::rgbCalculate($lijst['prognose']);
 		if ($lid->isLid()) {
 			$lijst['tekort'] = $GLOBALS['corvee']['corveepunten_per_jaar'] - $lijst['prognose'];
-		}
-		else {
+		} else {
 			$lijst['tekort'] = 0 - $lijst['prognose'];
 		}
 		if ($lijst['tekort'] < 0) {
@@ -165,14 +164,14 @@ class PuntenModel {
 		$lijst['tekortColor'] = self::rgbCalculate($lijst['tekort'], true);
 		return $lijst;
 	}
-	
+
 	private static function sumPuntenPerFunctie($functies, $taken) {
 		$sumAantal = array();
 		$sumPunten = array();
 		$sumBonus = array();
 		$sumPrognose = 0;
 		foreach ($functies as $fid => $functie) {
-			$sumAantal[$fid] = 0; 
+			$sumAantal[$fid] = 0;
 			$sumPunten[$fid] = 0;
 			$sumBonus[$fid] = 0;
 		}
@@ -187,25 +186,30 @@ class PuntenModel {
 		}
 		return array('aantal' => $sumAantal, 'punten' => $sumPunten, 'bonus' => $sumBonus, 'prognose' => $sumPrognose, 'prognoseColor' => self::rgbCalculate($sumPrognose));
 	}
-	
+
 	/**
 	 * RGB kleurovergang berekenen
 	 */
-	private static function rgbCalculate($punten, $tekort=false) {
+	private static function rgbCalculate($punten, $tekort = false) {
 		$perjaar = intval($GLOBALS['corvee']['corveepunten_per_jaar']);
 		if (!$tekort) {
 			$punten = $perjaar - $punten;
 		}
 		$verhouding = $punten / $perjaar;
-		
+
 		$r = 2 * $verhouding;
 		$g = 2 * (1 - $verhouding);
-		
-		if ($r < 0) $r = 0; if ($r > 1) $r = 1;
-		if ($g < 0) $g = 0; if ($g > 1) $g = 1;
-		
-		return dechex(8 + round($r * 6)).dechex(8 + round($g * 6)).dechex(8);
+
+		if ($r < 0)
+			$r = 0; if ($r > 1)
+			$r = 1;
+		if ($g < 0)
+			$g = 0; if ($g > 1)
+			$g = 1;
+
+		return dechex(8 + round($r * 6)) . dechex(8 + round($g * 6)) . dechex(8);
 	}
+
 }
 
 ?>
