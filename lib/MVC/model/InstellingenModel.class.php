@@ -98,7 +98,7 @@ class InstellingenModel extends PersistenceModel {
 		// zet missende instellingen op default waarde
 		foreach ($this->defaults as $module => $instellingen) {
 			foreach ($instellingen as $key => $value) {
-				if (!array_key_exists($key, $this->instellingen[$module])) {
+				if (!array_key_exists($module, $this->instellingen) OR !array_key_exists($key, $this->instellingen[$module])) {
 					$this->instellingen[$module][$key] = self::newInstelling($module, $key, $value); // save to db
 					$GLOBALS[$module][$key] = $value;
 				}
