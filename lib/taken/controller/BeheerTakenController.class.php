@@ -103,7 +103,7 @@ class BeheerTakenController extends \AclController {
 		else {
 			setMelding('Geen herinneringen verstuurd.', 0);
 		}
-		\SimpleHTML::invokeRefresh($GLOBALS['taken_module']);
+		invokeRefresh($GLOBALS['taken_module']);
 	}
 	
 	public function nieuw($mid=null) {
@@ -218,7 +218,7 @@ class BeheerTakenController extends \AclController {
 	
 	public function leegmaken() {
 		$aantal = TakenModel::prullenbakLeegmaken();
-		\SimpleHTML::invokeRefresh($GLOBALS['taken_module'] .'/prullenbak', $aantal . ($aantal === 1 ? ' taak' : ' taken') .' definitief verwijderd.', ($aantal === 0 ? 0 : 1 ));
+		invokeRefresh($GLOBALS['taken_module'] .'/prullenbak', $aantal . ($aantal === 1 ? ' taak' : ' taken') .' definitief verwijderd.', ($aantal === 0 ? 0 : 1 ));
 	}
 	
 	// Repetitie-Taken ############################################################

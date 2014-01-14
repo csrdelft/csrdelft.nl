@@ -8,10 +8,10 @@ $courant=new Courant();
 
 //niet verzenden bij geen rechten, en niet bij een lege courant.
 if(!$courant->magVerzenden()){
-	CourantContent::invokeRefresh(CSR_ROOT.'actueel/courant/', 'U heeft geen rechten om de courant te verzenden.');
+	invokeRefresh(CSR_ROOT.'actueel/courant/', 'U heeft geen rechten om de courant te verzenden.');
 	exit;
 }elseif($courant->getBerichtenCount()==0){
-	CourantContent::invokeRefresh(CSR_ROOT.'actueel/courant/', 'Lege courant kan niet worden verzonden');
+	invokeRefresh(CSR_ROOT.'actueel/courant/', 'Lege courant kan niet worden verzonden');
 	exit;
 }
 

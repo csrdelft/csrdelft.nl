@@ -25,7 +25,8 @@ class MenuBeheerController extends AclController {
 				'beheer' => 'P_ADMIN',
 				'verwijder' => 'P_ADMIN'
 			);
-		} else {
+		}
+		else {
 			$this->acl = array(
 				'nieuw' => 'P_ADMIN',
 				'wijzig' => 'P_ADMIN'
@@ -39,7 +40,8 @@ class MenuBeheerController extends AclController {
 		if ($this->hasParam(1)) {
 			if ($this->action === 'beheer') {
 				$params[] = $this->getParam(1);
-			} else {
+			}
+			else {
 				$params[] = (int) $this->getParam(1);
 				if ($this->hasParam(2)) {
 					$params[] = $this->getParam(2);
@@ -58,7 +60,7 @@ class MenuBeheerController extends AclController {
 
 	public function verwijder($id) {
 		$item = $this->model->deleteMenuItem($id);
-		SimpleHTML::invokeRefresh('/menubeheer/beheer/' . $item->menu_naam, 'Verwijderd ' . $item->tekst . ' (' . $item->getMenuId() . ')', 1);
+		invokeRefresh('/menubeheer/beheer/' . $item->menu_naam, 'Verwijderd ' . $item->tekst . ' (' . $item->getMenuId() . ')', 1);
 	}
 
 	public function nieuw() {
@@ -71,14 +73,14 @@ class MenuBeheerController extends AclController {
 		$item->menu_naam = filter_input(INPUT_POST, 'menu_naam', FILTER_SANITIZE_STRING);
 		$model = new MenuModel();
 		$model->saveMenuItem($item);
-		SimpleHTML::invokeRefresh('/menubeheer/beheer/' . $item->menu_naam, 'Nieuw aangemaakt ' . $item->tekst . ' (' . $item->id . ')', 1);
+		invokeRefresh('/menubeheer/beheer/' . $item->menu_naam, 'Nieuw aangemaakt ' . $item->tekst . ' (' . $item->id . ')', 1);
 	}
 
 	public function wijzig($id, $property) {
 		$value = filter_input(INPUT_POST, $property);
 		$model = new MenuModel();
 		$item = $model->wijzigProperty($id, $property, $value);
-		SimpleHTML::invokeRefresh('/menubeheer/beheer/' . $item->menu_naam, 'Wijzigingen opgeslagen ' . $item->tekst . ' (' . $item->id . ')', 1);
+		invokeRefresh('/menubeheer/beheer/' . $item->menu_naam, 'Wijzigingen opgeslagen ' . $item->tekst . ' (' . $item->id . ')', 1);
 	}
 
 }

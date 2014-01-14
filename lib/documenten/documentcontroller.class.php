@@ -65,7 +65,7 @@ class DocumentController extends Controller {
 			try {
 				$this->document = new Document($this->getParam(1));
 			} catch (Exception $e) {
-				DocumentContent::invokeRefresh($this->baseurl, 'Geen geldig id opgegeven of een niet-bestaand document opgevraagd');
+				invokeRefresh($this->baseurl, 'Geen geldig id opgegeven of een niet-bestaand document opgevraagd');
 			}
 		}
 	}
@@ -81,12 +81,12 @@ class DocumentController extends Controller {
 		$this->loadDocument();
 		try {
 			if ($this->document->delete()) {
-				DocumentContent::invokeRefresh($this->baseurl, 'Document is met succes verwijderd.', 1);
+				invokeRefresh($this->baseurl, 'Document is met succes verwijderd.', 1);
 			} else {
-				DocumentContent::invokeRefresh($this->baseurl, 'Document is niet verwijderd. Gaat mis in (Document::delete())');
+				invokeRefresh($this->baseurl, 'Document is niet verwijderd. Gaat mis in (Document::delete())');
 			}
 		} catch (Exception $e) {
-			DocumentContent::invokeRefresh($this->baseurl, 'Document is niet verwijderd: ' . $e->getMessage());
+			invokeRefresh($this->baseurl, 'Document is niet verwijderd: ' . $e->getMessage());
 		}
 	}
 
@@ -97,7 +97,7 @@ class DocumentController extends Controller {
 			$this->view = new DocumentDownloadContent($this->document);
 			$this->view->view();
 		} else {
-			DocumentContent::invokeRefresh($this->baseurl, 'Document heeft geen bestand, sorry voor het ongemak.');
+			invokeRefresh($this->baseurl, 'Document heeft geen bestand, sorry voor het ongemak.');
 		}
 		exit;
 	}
@@ -107,10 +107,10 @@ class DocumentController extends Controller {
 			try {
 				$categorie = new DocumentenCategorie($this->getParam(1));
 			} catch (Exception $e) {
-				DocumentenCategorie::invokeRefresh(null, 'categorie bestaat niet');
+				invokeRefresh(null, 'categorie bestaat niet');
 			}
 		} else {
-			DocumentenCategorie::invokeRefresh(null, 'categorie bestaat niet');
+			invokeRefresh(null, 'categorie bestaat niet');
 		}
 
 		$this->view = new DocumentCategorieContent($categorie);
@@ -151,7 +151,7 @@ class DocumentController extends Controller {
 					try {
 						$this->document->deleteFile();
 					} catch (Exception $e) {
-						DocumentContent::invokeRefresh($this->baseurl, $e->getMessage());
+						invokeRefresh($this->baseurl, $e->getMessage());
 					}
 				}
 				//Actieve methode selecteren.
@@ -176,10 +176,10 @@ class DocumentController extends Controller {
 				} else {
 					$melding = 'Fout bij toevoegen van document Document::save()';
 				}
-				DocumentContent::invokeRefresh($this->baseurl, $melding);
+				invokeRefresh($this->baseurl, $melding);
 			}
 		} else {
-			if (isset($_GET['catID']) AND DocumentenCategorie::exists($_GET['catID'])) {
+			if (isset($_GET['catID']) AND exists($_GET['catID'])) {
 				$this->document->setCatID($_GET['catID']);
 			}
 		}

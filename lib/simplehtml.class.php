@@ -14,8 +14,12 @@ abstract class SimpleHTML implements View {
 		return 'C.S.R. Delft';
 	}
 
+	public function setMelding($sMelding, $level = -1) {
+		setMelding($sMelding, $level);
+	}
+
 	/**
-	 * Geeft berichten weer die opgeslagen zijn in de sessie met met setMelding($message, $lvl=0)
+	 * Geeft berichten weer die opgeslagen zijn in de sessie met met setMelding($message, $lvl = -1)
 	 * Levels can be:
 	 *
 	 * -1 error
@@ -41,28 +45,10 @@ abstract class SimpleHTML implements View {
 			//maar één keer tonen, de melding.
 			unset($_SESSION['melding']);
 			return $sMelding;
-		} else {
+		}
+		else {
 			return '';
 		}
-	}
-
-	public static function setMelding($sMelding, $level = -1) {
-		setMelding($sMelding, $level);
-	}
-
-	public static function invokeRefresh($url = null, $melding = '', $level = -1) {
-		//als $melding een array is die uit elkaar halen
-		if (is_array($melding)) {
-			list($melding, $level) = $melding;
-		}
-		if ($melding != '') {
-			setMelding($melding, $level);
-		}
-		if ($url == null) {
-			$url = CSR_ROOT . $_SERVER['REQUEST_URI'];
-		}
-		header('location: ' . $url);
-		exit;
 	}
 
 	public static function getStandaardZijkolom() {

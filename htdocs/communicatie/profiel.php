@@ -19,163 +19,176 @@ require_once 'configuratie.include.php';
 
 require_once 'lid/profiel.class.php';
 
-if(isset($_GET['uid'])){
-	$uid=$_GET['uid'];
-}else{
-	$uid=$loginlid->getUid();
+if (isset($_GET['uid'])) {
+	$uid = $_GET['uid'];
+}
+else {
+	$uid = $loginlid->getUid();
 }
 
 //welke actie gaan we doen?
-if(isset($_GET['a'])){
-	$actie=$_GET['a'];
+if (isset($_GET['a'])) {
+	$actie = $_GET['a'];
 	//is er een status opgegeven
-	if(isset($_GET['s'])){
-		$status=$_GET['s'];
-	}else{
-		$status=null;
+	if (isset($_GET['s'])) {
+		$status = $_GET['s'];
 	}
-}else{
+	else {
+		$status = null;
+	}
+}
+else {
 	//default-actie.
-	$actie='view';
+	$actie = 'view';
 }
 
 
-if(!($loginlid->hasPermission('P_LEDEN_READ') or $loginlid->hasPermission('P_OUDLEDEN_READ'))){
+if (!($loginlid->hasPermission('P_LEDEN_READ') or $loginlid->hasPermission('P_OUDLEDEN_READ'))) {
 	require_once 'paginacontent.class.php';
-	$midden=new PaginaContent(new Pagina('geentoegang'));
+	$midden = new PaginaContent(new Pagina('geentoegang'));
 	$midden->setActie('bekijken');
-}else{
+}
+else {
 	require_once 'lid/profielcontent.class.php';
 	require_once 'lid/profiel.class.php';
-	
-	switch($actie){
+
+	switch ($actie) {
 		case 'novietBewerken':
-			$profiel=new ProfielBewerken($uid, $actie);
-			
-			if($profiel->magBewerken()){
-				if($profiel->validate() AND $profiel->save()){
-					header('location: '.CSR_ROOT.'communicatie/profiel/'.$uid);
+			$profiel = new ProfielBewerken($uid, $actie);
+
+			if ($profiel->magBewerken()) {
+				if ($profiel->validate() AND $profiel->save()) {
+					header('location: ' . CSR_ROOT . 'communicatie/profiel/' . $uid);
 					exit;
-				}else{
-					$midden=new ProfielEditContent($profiel, $actie);
 				}
-			}else{
-				$midden=new ProfielContent(LidCache::getLid($uid));
+				else {
+					$midden = new ProfielEditContent($profiel, $actie);
+				}
+			}
+			else {
+				$midden = new ProfielContent(LidCache::getLid($uid));
 			}
 		case 'bewerken':
-			$profiel=new ProfielBewerken($uid, $actie);
-			
-			if($profiel->magBewerken()){
-				if($profiel->validate() AND $profiel->save()){
-					header('location: '.CSR_ROOT.'communicatie/profiel/'.$uid);
+			$profiel = new ProfielBewerken($uid, $actie);
+
+			if ($profiel->magBewerken()) {
+				if ($profiel->validate() AND $profiel->save()) {
+					header('location: ' . CSR_ROOT . 'communicatie/profiel/' . $uid);
 					exit;
-				}else{
-					$midden=new ProfielEditContent($profiel, $actie);
 				}
-			}else{
-				$midden=new ProfielContent(LidCache::getLid($uid));
+				else {
+					$midden = new ProfielEditContent($profiel, $actie);
+				}
 			}
-		break;
+			else {
+				$midden = new ProfielContent(LidCache::getLid($uid));
+			}
+			break;
 		case 'nieuw':
 			//maak van een standaard statusstring van de input
-			$status = 'S_'.strtoupper($status);
-			if(!
+			$status = 'S_' . strtoupper($status);
+			if (!
 				($loginlid->hasPermission('P_ADMIN,P_LEDEN_MOD') OR
-				($status=='S_NOVIET' AND $loginlid->hasPermission('groep:novcie')))
-			  ){
+				($status == 'S_NOVIET' AND $loginlid->hasPermission('groep:novcie')))
+			) {
 
 				// nieuwe leden mogen worden aangemaakt door P_ADMIN,P_LEDEN_MOD,
 				// novieten ook door de novcie.
-				ProfielContent::invokeRefresh('/communicatie/profiel/','U mag geen nieuwe leden aanmaken');
+				invokeRefresh('/communicatie/profiel/', 'U mag geen nieuwe leden aanmaken');
 			}
-			try{
+			try {
 				//maak het nieuwe uid aan.
 				$nieuwUid = Lid::createNew($_GET['uid'], $status);
 
-				if($status=='S_NOVIET'){
+				if ($status == 'S_NOVIET') {
 					$bewerkactie = 'novietBewerken';
-				}else{
+				}
+				else {
 					$bewerkactie = 'bewerken';
 				}
-				ProfielContent::invokeRefresh('/communicatie/profiel/'.$nieuwUid.'/'.$bewerkactie);
-			}catch(Exception $e){
-				ProfielContent::invokeRefresh('/communicatie/profiel/', '<h2>Nieuw lidnummer aanmaken mislukt.</h2>'.$e->getMessage());
-			}	
-		break;
+				invokeRefresh('/communicatie/profiel/' . $nieuwUid . '/' . $bewerkactie);
+			}
+			catch (Exception $e) {
+				invokeRefresh('/communicatie/profiel/', '<h2>Nieuw lidnummer aanmaken mislukt.</h2>' . $e->getMessage());
+			}
+			break;
 		case 'wijzigstatus':
-			if(!$loginlid->hasPermission('P_ADMIN,P_LEDEN_MOD')){
-				ProfielContent::invokeRefresh('/communicatie/profiel/', 'U mag lidstatus niet aanpassen');
+			if (!$loginlid->hasPermission('P_ADMIN,P_LEDEN_MOD')) {
+				invokeRefresh('/communicatie/profiel/', 'U mag lidstatus niet aanpassen');
 			}
-			$profiel=new ProfielStatus($uid, $actie);
+			$profiel = new ProfielStatus($uid, $actie);
 
-			if($profiel->validate() AND $profiel->save()){
-				header('location: '.CSR_ROOT.'communicatie/profiel/'.$uid);
+			if ($profiel->validate() AND $profiel->save()) {
+				header('location: ' . CSR_ROOT . 'communicatie/profiel/' . $uid);
 				exit;
-			}else{
-				$midden=new ProfielStatusContent($profiel, $actie);
 			}
-		break;
+			else {
+				$midden = new ProfielStatusContent($profiel, $actie);
+			}
+			break;
 		case 'voorkeuren':
 			//TODO Rechten goed zetten!
 			$voorkeur = new ProfielVoorkeur($uid, $actie);
-			
-			if($voorkeur->magBewerken()){
-				if($voorkeur->isPosted() AND $voorkeur->validate() AND $voorkeur->save()){
-					header('location: '.CSR_ROOT.'communicatie/profiel/'.$uid);
+
+			if ($voorkeur->magBewerken()) {
+				if ($voorkeur->isPosted() AND $voorkeur->validate() AND $voorkeur->save()) {
+					header('location: ' . CSR_ROOT . 'communicatie/profiel/' . $uid);
 					exit;
-				} else {
+				}
+				else {
 					$midden = new ProfielVoorkeurContent($voorkeur, $actie);
 				}
-			}else{
-				$midden=new ProfielContent(LidCache::getLid($uid));
 			}
-		break;
+			else {
+				$midden = new ProfielContent(LidCache::getLid($uid));
+			}
+			break;
 		case 'wachtwoord':
-			if($loginlid->hasPermission('P_ADMIN')){
-				if(Profiel::resetWachtwoord($uid)){
-					$melding=array('Nieuw wachtwoord met succes verzonden.', 1);
-				}else{
-					$melding='Wachtwoord resetten mislukt.';
+			if ($loginlid->hasPermission('P_ADMIN')) {
+				if (Profiel::resetWachtwoord($uid)) {
+					$melding = array('Nieuw wachtwoord met succes verzonden.', 1);
+				}
+				else {
+					$melding = 'Wachtwoord resetten mislukt.';
 				}
 			}
-			ProfielContent::invokeRefresh('/communicatie/profiel/'.$uid, $melding);
-		break;
+			invokeRefresh('/communicatie/profiel/' . $uid, $melding);
+			break;
 		case 'addToGoogleContacts';
 			require_once('googlesync.class.php');
-			GoogleSync::doRequestToken(CSR_ROOT.'communicatie/profiel/'.$uid.'/addToGoogleContacts');
-			
-			$gSync=GoogleSync::instance();
-			$message=$gSync->syncLid($uid);
-			ProfielContent::invokeRefresh(CSR_ROOT.'communicatie/profiel/'.$uid, '<h2>Opgeslagen in Google Contacts:</h2>'.$message, 2);
+			GoogleSync::doRequestToken(CSR_ROOT . 'communicatie/profiel/' . $uid . '/addToGoogleContacts');
+
+			$gSync = GoogleSync::instance();
+			$message = $gSync->syncLid($uid);
+			invokeRefresh(CSR_ROOT . 'communicatie/profiel/' . $uid, '<h2>Opgeslagen in Google Contacts:</h2>' . $message, 2);
 			exit;
-		break;
+			break;
 		case 'rssToken':
-			if($uid==$loginlid->getUid()){
+			if ($uid == $loginlid->getUid()) {
 				$loginlid->getToken();
-				header('location: '.CSR_ROOT.'communicatie/profiel/'.$uid.'#forum');
+				header('location: ' . CSR_ROOT . 'communicatie/profiel/' . $uid . '#forum');
 				exit;
 			}
 		//geen break hier, want als de bovenstaande actie aangevraagd werd voor de
 		//niet-huidige gebruiker, doen we gewoon een normale view.
 		case 'view':
 		default;
-			$lid=LidCache::getLid($uid);
-			if(!$lid instanceof Lid){
-				ProfielContent::invokeRefresh('/communicatie/ledenlijst/', '<h2>Helaas</h2>Dit lid bestaat niet.<br /> U kunt verder zoeken in deze ledenlijst.');
+			$lid = LidCache::getLid($uid);
+			if (!$lid instanceof Lid) {
+				invokeRefresh('/communicatie/ledenlijst/', '<h2>Helaas</h2>Dit lid bestaat niet.<br /> U kunt verder zoeken in deze ledenlijst.');
 			}
-			$midden=new ProfielContent($lid);
-		break;
-		
+			$midden = new ProfielContent($lid);
+			break;
 	}
 }
 
-$pagina=new csrdelft($midden);
+$pagina = new csrdelft($midden);
 $pagina->addStylesheet('profiel.css');
 $pagina->addStylesheet('js/autocomplete/jquery.autocomplete.css');
 $pagina->addScript('profiel.js');
 
 $pagina->addScript('autocomplete/jquery.autocomplete.min.js');
-if($actie=='view'){
+if ($actie == 'view') {
 	$pagina->addScript('flot/jquery.flot.min.js');
 	$pagina->addScript('flot/jquery.flot.threshold.min.js');
 	$pagina->addScript('flot/jquery.flot.time.min.js');

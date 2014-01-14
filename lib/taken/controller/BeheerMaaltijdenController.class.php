@@ -1,6 +1,5 @@
 <?php
 
-
 require_once 'taken/model/MaaltijdenModel.class.php';
 require_once 'taken/model/AanmeldingenModel.class.php';
 require_once 'taken/model/MaaltijdRepetitiesModel.class.php';
@@ -50,8 +49,8 @@ class BeheerMaaltijdenController extends \AclController {
 		}
 		$this->performAction(array($mid));
 	}
-	
-	public function beheer($mid=null) {
+
+	public function beheer($mid = null) {
 		if (is_int($mid) && $mid > 0) {
 			$this->bewerk($mid);
 		}
@@ -63,40 +62,40 @@ class BeheerMaaltijdenController extends \AclController {
 		$this->view->addScript('jquery.scrollTo.min.js');
 		$this->view->addScript('taken.js');
 	}
-	
+
 	public function prullenbak() {
 		$this->view = new BeheerMaaltijdenView(MaaltijdenModel::getVerwijderdeMaaltijden(), true);
 		$this->view = new csrdelft($this->getContent());
 		$this->view->addStylesheet('taken.css');
 		$this->view->addScript('taken.js');
 	}
-	
+
 	public function archief() {
 		$this->view = new BeheerMaaltijdenView(MaaltijdenModel::getArchiefMaaltijdenTussen(), false, true);
 		$this->view = new csrdelft($this->getContent());
 		$this->view->addStylesheet('taken.css');
 		$this->view->addScript('taken.js');
 	}
-	
+
 	public function fiscaal($mid) {
 		$maaltijd = MaaltijdenModel::getMaaltijd($mid, true);
 		$aanmeldingen = AanmeldingenModel::getAanmeldingenVoorMaaltijd($maaltijd);
 		require_once 'taken/view/MaaltijdLijstView.class.php';
 		$this->view = new MaaltijdLijstView($maaltijd, $aanmeldingen, null, true);
 	}
-	
+
 	public function sluit($mid) {
 		$maaltijd = MaaltijdenModel::getMaaltijd($mid);
 		MaaltijdenModel::sluitMaaltijd($maaltijd);
 		$this->view = new BeheerMaaltijdenView($maaltijd);
 	}
-	
+
 	public function open($mid) {
 		$maaltijd = MaaltijdenModel::getMaaltijd($mid);
 		MaaltijdenModel::openMaaltijd($maaltijd);
 		$this->view = new BeheerMaaltijdenView($maaltijd);
 	}
-	
+
 	public function nieuw() {
 		if (array_key_exists('mrid', $_POST)) {
 			$mrid = (int) filter_input(INPUT_POST, 'mrid', FILTER_SANITIZE_NUMBER_INT);
@@ -106,7 +105,7 @@ class BeheerMaaltijdenController extends \AclController {
 			$shift = $repetitie->getDagVanDeWeek() - date('w', $datum) + 7;
 			$shift %= 7;
 			if ($shift > 0) {
-				$datum = strtotime('+'. $shift .' days', $datum);
+				$datum = strtotime('+' . $shift . ' days', $datum);
 			}
 			$beginDatum = date('Y-m-d', $datum);
 			if ($repetitie->getPeriodeInDagen() > 0) {
@@ -121,12 +120,12 @@ class BeheerMaaltijdenController extends \AclController {
 			$this->view = new MaaltijdFormView($maaltijd->getMaaltijdId(), $maaltijd->getMaaltijdRepetitieId(), $maaltijd->getTitel(), $maaltijd->getAanmeldLimiet(), $maaltijd->getDatum(), $maaltijd->getTijd(), $maaltijd->getPrijs(), $maaltijd->getAanmeldFilter()); // fetches POST values itself
 		}
 	}
-	
+
 	public function bewerk($mid) {
 		$maaltijd = MaaltijdenModel::getMaaltijd($mid);
 		$this->view = new MaaltijdFormView($maaltijd->getMaaltijdId(), $maaltijd->getMaaltijdRepetitieId(), $maaltijd->getTitel(), $maaltijd->getAanmeldLimiet(), $maaltijd->getDatum(), $maaltijd->getTijd(), $maaltijd->getPrijs(), $maaltijd->getAanmeldFilter()); // fetches POST values itself
 	}
-	
+
 	public function opslaan($mid) {
 		if ($mid > 0) {
 			$this->bewerk($mid);
@@ -140,21 +139,21 @@ class BeheerMaaltijdenController extends \AclController {
 			$maaltijd_aanmeldingen = MaaltijdenModel::saveMaaltijd($mid, $mrid, $values['titel'], $values['aanmeld_limiet'], $values['datum'], $values['tijd'], $values['prijs'], $values['aanmeld_filter']);
 			$this->view = new BeheerMaaltijdenView($maaltijd_aanmeldingen[0]);
 			if ($maaltijd_aanmeldingen[1] > 0) {
-				$this->view->setMelding($maaltijd_aanmeldingen[1] .' aanmelding'. ($maaltijd_aanmeldingen[1] !== 1 ? 'en' : '') .' verwijderd vanwege aanmeldrestrictie: '. $maaltijd_aanmeldingen[0]->getAanmeldFilter(), 2);
+				$this->view->setMelding($maaltijd_aanmeldingen[1] . ' aanmelding' . ($maaltijd_aanmeldingen[1] !== 1 ? 'en' : '') . ' verwijderd vanwege aanmeldrestrictie: ' . $maaltijd_aanmeldingen[0]->getAanmeldFilter(), 2);
 			}
 		}
 	}
-	
+
 	public function verwijder($mid) {
 		MaaltijdenModel::verwijderMaaltijd($mid);
 		$this->view = new BeheerMaaltijdenView($mid);
 	}
-	
+
 	public function herstel($mid) {
 		$maaltijd = MaaltijdenModel::herstelMaaltijd($mid);
 		$this->view = new BeheerMaaltijdenView($maaltijd->getMaaltijdId());
 	}
-	
+
 	public function anderaanmelden($mid) {
 		$form = new AanmeldingFormView($mid, true); // fetches POST values itself
 		if ($form->validate()) {
@@ -166,7 +165,7 @@ class BeheerMaaltijdenController extends \AclController {
 			$this->view = $form;
 		}
 	}
-	
+
 	public function anderafmelden($mid) {
 		$form = new AanmeldingFormView($mid, false); // fetches POST values itself
 		if ($form->validate()) {
@@ -178,14 +177,14 @@ class BeheerMaaltijdenController extends \AclController {
 			$this->view = $form;
 		}
 	}
-	
+
 	public function leegmaken() {
 		$aantal = MaaltijdenModel::prullenbakLeegmaken();
-		\SimpleHTML::invokeRefresh($GLOBALS['taken_module'] .'/prullenbak', $aantal . ($aantal === 1 ? ' maaltijd' : ' maaltijden') .' definitief verwijderd.', ($aantal === 0 ? 0 : 1 ));
+		invokeRefresh($GLOBALS['taken_module'] . '/prullenbak', $aantal . ($aantal === 1 ? ' maaltijd' : ' maaltijden') . ' definitief verwijderd.', ($aantal === 0 ? 0 : 1));
 	}
-	
+
 	// Repetitie-Maaltijden ############################################################
-	
+
 	public function aanmaken($mrid) {
 		$repetitie = MaaltijdRepetitiesModel::getRepetitie($mrid);
 		$form = new RepetitieMaaltijdenFormView($repetitie); // fetches POST values itself
@@ -201,6 +200,7 @@ class BeheerMaaltijdenController extends \AclController {
 			$this->view = $form;
 		}
 	}
+
 }
 
 ?>

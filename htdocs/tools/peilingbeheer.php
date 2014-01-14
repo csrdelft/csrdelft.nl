@@ -1,57 +1,58 @@
 <?php
+
 /*
  * Peiling beheerpagina
  * 
  */
 require_once 'configuratie.include.php';
-require_once 'peilingcontent.class.php' ;
+require_once 'peilingcontent.class.php';
 require_once 'peiling.class.php';
 
-$resultaat ='';
-if(isset($_GET['action'])){
-	switch($_GET['action']){
+$resultaat = '';
+if (isset($_GET['action'])) {
+	switch ($_GET['action']) {
 		case 'toevoegen':
-			if(isset($_POST['titel'], $_POST['opties']) AND Peiling::magBewerken()){
+			if (isset($_POST['titel'], $_POST['opties']) AND Peiling::magBewerken()) {
 				$properties['titel'] = $_POST['titel'];
 				$properties['verhaal'] = $_POST['verhaal'];
-				$properties['opties']=array();
-				foreach($_POST['opties'] as $optie){
-					if(trim($optie)!=''){
-						$properties['opties'][]=trim($optie);
+				$properties['opties'] = array();
+				foreach ($_POST['opties'] as $optie) {
+					if (trim($optie) != '') {
+						$properties['opties'][] = trim($optie);
 					}
 				}
-				$peiling=Peiling::maakPeiling($properties);
-				
-				PeilingContent::invokeRefresh('/tools/peilingbeheer.php', 'De nieuwe peiling heeft id '.$peiling->getId().'.', 1);
+				$peiling = Peiling::maakPeiling($properties);
+				invokeRefresh('/tools/peilingbeheer.php', 'De nieuwe peiling heeft id ' . $peiling->getId() . '.', 1);
 				exit;
 			}
-		break;
+			break;
 		case 'stem':
-			if(isset($_POST['id'])){
-				try{
-					$peiling=new Peiling((int)$_POST['id']);
-				}catch(Exception $e){
+			if (isset($_POST['id'])) {
+				try {
+					$peiling = new Peiling((int) $_POST['id']);
+				}
+				catch (Exception $e) {
 					
 				}
-				
-				if(isset($_POST['optie']) && is_numeric($_POST['optie'])){
-					$peiling->stem((int)$_POST['optie']);
+
+				if (isset($_POST['optie']) && is_numeric($_POST['optie'])) {
+					$peiling->stem((int) $_POST['optie']);
 				}
-				header('location: '.$_SERVER['HTTP_REFERER'].'#peiling'.$peiling->getId());
+				header('location: ' . $_SERVER['HTTP_REFERER'] . '#peiling' . $peiling->getId());
 			}
-		break;
+			break;
 		case 'verwijder':
-			if(isset($_GET['id']) AND Peiling::magBewerken()){
-				try{
-					$peiling=new Peiling((int)$_GET['id']);
+			if (isset($_GET['id']) AND Peiling::magBewerken()) {
+				try {
+					$peiling = new Peiling((int) $_GET['id']);
 					$peiling->deletePeiling();
-					header('location: '.$_SERVER['HTTP_REFERER']);
-				}catch(Exception $e){
-					$resultaat=$e->getMessage();
+					header('location: ' . $_SERVER['HTTP_REFERER']);
 				}
-				
+				catch (Exception $e) {
+					$resultaat = $e->getMessage();
+				}
 			}
-		break;
+			break;
 	}
 }
 
@@ -61,13 +62,13 @@ $beheer = new PeilingBeheerContent();
 
 $beheer->setMelding($resultaat);
 
-if(!$loginlid->hasPermission('P_LOGGED_IN') OR !Peiling::magBewerken()){
+if (!$loginlid->hasPermission('P_LOGGED_IN') OR !Peiling::magBewerken()) {
 	# geen rechten
 	require_once 'paginacontent.class.php';
-	$pagina=new Pagina('geentoegang');
-	$beheer=new PaginaContent($pagina);
+	$pagina = new Pagina('geentoegang');
+	$beheer = new PaginaContent($pagina);
 }
 
-$pagina=new csrdelft($beheer);
+$pagina = new csrdelft($beheer);
 $pagina->addScript('peilingbeheer.js');
 $pagina->view();

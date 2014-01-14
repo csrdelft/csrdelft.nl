@@ -66,7 +66,8 @@ class AgendaController extends AclController {
 		if ($this->hasParam(0) AND preg_match('/^[0-9]{4}\-[0-9]{1,2}$/', $this->getParam(0))) {
 			$jaar = (int) substr($this->getParam(0), 0, 4);
 			$week = (int) substr($this->getParam(0), 5);
-		} else {
+		}
+		else {
 			$jaar = date('Y');
 			$week = strftime('%U');
 		}
@@ -87,7 +88,8 @@ class AgendaController extends AclController {
 		$weergavedatum = '';
 		if ($this->hasParam(0) AND $this->getParam(0) == 'maand') {
 			$weergavedatum = $this->getParam(1);
-		} elseif ($this->hasParam(0)) {
+		}
+		elseif ($this->hasParam(0)) {
 			$weergavedatum = $this->getParam(0);
 		}
 
@@ -106,7 +108,8 @@ class AgendaController extends AclController {
 	public function jaar() {
 		if ($this->hasParam(1) AND preg_match('/^[0-9]{4}$/', $this->getParam(1))) {
 			$jaar = $this->getParam(1);
-		} else {
+		}
+		else {
 			$jaar = date('Y');
 		}
 
@@ -130,14 +133,17 @@ class AgendaController extends AclController {
 			$item = $this->maakItem();
 			if ($this->valideerItem($item) === false) {
 				
-			} else {
-				$item->opslaan();
-				AgendaMaandContent::invokeRefresh('/actueel/agenda/' . date('Y-m', $item->getBeginMoment()) . '/', 'Het agenda-item is succesvol toegevoegd.', 1);
 			}
-		} else {
+			else {
+				$item->opslaan();
+				invokeRefresh('/actueel/agenda/' . date('Y-m', $item->getBeginMoment()) . '/', 'Het agenda-item is succesvol toegevoegd.', 1);
+			}
+		}
+		else {
 			if ($this->hasParam(1) AND preg_match('/^[0-9]{4}\-[0-9]{1,2}-[0-9]{1,2}$/', $this->getParam(1))) {
 				$dag = strtotime($this->getParam(1));
-			} else {
+			}
+			else {
 				$dag = time();
 				// Afkappen naar 0:00
 				$dag = strtotime(substr(date('Y-m-d', $dag), 0, 10));
@@ -161,15 +167,18 @@ class AgendaController extends AclController {
 				$item = $this->maakItem($itemID);
 				if ($this->valideerItem($item) === false) {
 					
-				} else {
-					$item->opslaan();
-					AgendaMaandContent::invokeRefresh('/actueel/agenda/' . date('Y-m', $item->getBeginMoment()) . '/', 'Het agenda-item is succesvol bewerkt.', 1);
 				}
-			} else {
+				else {
+					$item->opslaan();
+					invokeRefresh('/actueel/agenda/' . date('Y-m', $item->getBeginMoment()) . '/', 'Het agenda-item is succesvol bewerkt.', 1);
+				}
+			}
+			else {
 				$item = AgendaItem::getItem($itemID);
 			}
-		} else {
-			AgendaMaandContent::invokeRefresh('/actueel/agenda/', 'Agenda-item niet gevonden.');
+		}
+		else {
+			invokeRefresh('/actueel/agenda/', 'Agenda-item niet gevonden.');
 		}
 
 		$this->view = new AgendaItemContent($this->agenda, $item, 'toevoegen');
@@ -181,9 +190,10 @@ class AgendaController extends AclController {
 			$item = AgendaItem::getItem((int) $this->getParam(1));
 			$url = '/actueel/agenda/' . date('Y-m', $item->getBeginMoment()) . '/';
 			if ($item->verwijder()) {
-				AgendaMaandContent::invokeRefresh($url, 'Het agenda-item is succesvol verwijderd.', 1);
-			} else {
-				AgendaMaandContent::invokeRefresh($url, 'Het agenda-item kon niet worden verwijderd.');
+				invokeRefresh($url, 'Het agenda-item is succesvol verwijderd.', 1);
+			}
+			else {
+				invokeRefresh($url, 'Het agenda-item kon niet worden verwijderd.');
 			}
 		}
 	}
@@ -205,7 +215,8 @@ class AgendaController extends AclController {
 		if (isset($_POST['heledag'])) {
 			$beginMoment = strtotime($_POST['datum'] . ' 00:00');
 			$eindMoment = strtotime($_POST['datum'] . ' 23:59');
-		} else {
+		}
+		else {
 			$beginMoment = strtotime($_POST['datum'] . ' ' . $_POST['beginMoment']);
 			$eindMoment = strtotime($_POST['datum'] . ' ' . $_POST['eindMoment']);
 		}
@@ -231,7 +242,8 @@ class AgendaController extends AclController {
 
 		if ($this->valid) {
 			return $item;
-		} else {
+		}
+		else {
 			return false;
 		}
 	}
