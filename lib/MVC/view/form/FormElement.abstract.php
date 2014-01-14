@@ -389,7 +389,8 @@ class TextField extends InputField {
 		}
 		if (!is_utf8($this->getValue())) {
 			$this->error = 'Ongeldige karakters, gebruik reguliere tekst.';
-		} elseif (mb_strlen($this->getValue()) > $this->max_len) {
+		} elseif ($this->max_len > 0 AND mb_strlen($this->getValue()) > $this->max_len) {
+			//als max_len > 0 dan checken of de lengte er niet overheen gaat.
 			$this->error = 'Maximaal ' . $this->max_len . ' karakters toegestaan.';
 		}
 		return $this->error == '';
@@ -533,6 +534,10 @@ class LidField extends TextField {
 	public function validate() {
 		if (!parent::validate()) {
 			return false;
+		}
+		//parent checks notnull
+		if ($this->getValue() == '') {
+			return true;
 		}
 		$uid = namen2uid($this->getOriginalValue(), $this->zoekin);
 		if ($uid) {
@@ -785,7 +790,7 @@ class NickField extends TextField {
 	public $max_len = 20;
 
 	public function __construct($name, $value, $description, Lid $lid) {
-		parent::__construct($name, $value, $description, 255, array(), $lid);
+		parent::__construct($name, $value, $description, 255, $lid);
 	}
 
 	public function validate() {

@@ -23,13 +23,15 @@ require_once 'mail.class.php';
  * 
  */
 class Profiel {
+	/** @var  Lid */
 	protected $lid;
+	/** @var  Lid */
 	protected $bewerktLid;
 
-	//Zijn we een nieuwe noviet aan het toevoegen?
+	/** @var Bool Zijn we een nieuwe noviet aan het toevoegen? */
 	protected $editNoviet=false;
 
-	//Hierin kan een formulier gedefenieerd worden.
+	/** @var Formulier Hierin kan een formulier gedefinieerd worden. */
 	protected $form=array();
 
 	//we houden voor elke wijziging een changelog bij, die stoppen we
@@ -293,7 +295,7 @@ class ProfielBewerken extends Profiel {
 		$email=new RequiredEmailField('email', $profiel['email'], 'Emailadres');
 		if(LoginLid::instance()->isSelf($this->lid->getUid())){
 			//als we ons *eigen* profiel bewerken is het email-adres verplicht
-			$email->required=true;
+			$email->notnull=true;
 		}
 		$form[]=$email;
 		$form[]=new EmailField('msn', $profiel['msn'], 'MSN');

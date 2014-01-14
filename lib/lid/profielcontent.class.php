@@ -7,8 +7,12 @@
 # Bekijken en wijzigen van een ledenprofiel
 # -------------------------------------------------------------------
 
+/**
+ * Profiel bekijken
+ */
 class ProfielContent extends TemplateView {
 
+	/** @var Lid  */
 	private $lid;
 
 	function __construct($lid) {
@@ -84,8 +88,12 @@ class ProfielContent extends TemplateView {
 
 }
 
+/**
+ * Profiel bewerken formulierpagina
+ */
 class ProfielEditContent extends TemplateView {
 
+	/** @var Profiel */
 	private $profiel;
 	private $actie;
 
@@ -109,8 +117,12 @@ class ProfielEditContent extends TemplateView {
 
 }
 
+/**
+ * Lidstatus-wijzigingsformulierpagina
+ */
 class ProfielStatusContent extends TemplateView {
 
+	/** @var Profiel */
 	private $profiel;
 	private $actie;
 
@@ -139,8 +151,12 @@ class ProfielStatusContent extends TemplateView {
 
 }
 
+/**
+ * Commissievoorkeuren formulierpagina
+ */
 class ProfielVoorkeurContent extends TemplateView {
 
+	/** @var Profiel */
 	private $profiel;
 	private $actie;
 
@@ -162,5 +178,3 @@ class ProfielVoorkeurContent extends TemplateView {
 	}
 
 }
-
-?>
