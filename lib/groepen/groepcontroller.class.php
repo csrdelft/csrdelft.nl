@@ -63,7 +63,7 @@ class Groepcontroller extends Controller {
 	}
 
 	public function standaard() {
-		setAction('view');
+		$this->view->setAction('view');
 	}
 
 	protected function hasPermission() {
@@ -194,7 +194,7 @@ class Groepcontroller extends Controller {
 		if (!LoginLid::instance()->hasPermission('P_LOGGED_IN')) {
 			invokeRefresh($this->getUrl('default'), 'Niet voldoende rechten voor deze actie');
 		}
-		setAction('edit');
+		$this->view->setAction('edit');
 
 		/* Als er een derde argument meegegeven wordt is dat het id van de groep waar 
 		 * een opvolger voor gemaakt moet worden. We nemen wat dingen over van die oude groep,
@@ -399,7 +399,7 @@ class Groepcontroller extends Controller {
 		if (!$this->groep->magBewerken()) {
 			invokeRefresh($this->getUrl('default'), 'Niet voldoende rechten voor deze actie');
 		}
-		setAction('addLid');
+		$this->view->setAction('addLid');
 		if (isset($_POST['naam'], $_POST['functie']) AND is_array($_POST['naam']) AND is_array($_POST['functie']) AND count($_POST['naam']) == count($_POST['functie'])) {
 			//nieuwe groepleden erin stoppen.
 			$success = true;
