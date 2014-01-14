@@ -7,14 +7,13 @@
 # Verzorgt het in elkaar zetten van de c.s.r.-courant
 # -------------------------------------------------------------------
 
-class CourantContent {
+class CourantContent extends TemplateView {
 
-	private $courant;
 	private $instellingen;
 
 	public function __construct(&$courant) {
+		parent::__construct($courant);
 		setlocale(LC_ALL, 'nl_NL@euro');
-		$this->courant = $courant;
 		$this->instellingen = parse_ini_file(ETC_PATH . '/csrmail.ini');
 	}
 
@@ -48,14 +47,14 @@ class CourantContent {
 	function getMail($headers = false) {
 
 		$this->assign('instellingen', $this->instellingen);
-		$this->assignByRef('courant', $this->courant);
+		$this->assignByRef('courant', $this->model);
 
-		$this->assign('indexCats', $this->courant->getCats());
-		$this->assign('catNames', $this->courant->getCats(true));
+		$this->assign('indexCats', $this->model->getCats());
+		$this->assign('catNames', $this->model->getCats(true));
 
 		$this->assign('headers', $headers);
 
-		return $this->fetch($this->courant->getTemplatePath());
+		return $this->fetch($this->model->getTemplatePath());
 	}
 
 	function view() {
