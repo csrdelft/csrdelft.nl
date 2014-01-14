@@ -18,20 +18,14 @@ require_once 'lichting.class.php';
 
 class Groepcontent extends TemplateView {
 
-	private $groep;
 	private $action = 'view';
-
-	public function __construct($groep) {
-		parent::__construct();
-		$this->groep = $groep;
-	}
 
 	public function setAction($action) {
 		$this->action = $action;
 	}
 
 	public function getTitel() {
-		return $_GET['gtype'] . ' - ' . $this->groep->getNaam();
+		return $_GET['gtype'] . ' - ' . $this->model->getNaam();
 	}
 
 	/*
@@ -50,7 +44,7 @@ class Groepcontent extends TemplateView {
 				$zoekin[] = 'S_OUDLID';
 				$zoekin[] = 'S_ERELID';
 			}
-			if (isset($_POST['filterNobody']) AND $this->groep->isAdmin()) {
+			if (isset($_POST['filterNobody']) AND $this->model->isAdmin()) {
 				$zoekin[] = 'S_NOBODY';
 				$zoekin[] = 'S_EXLID';
 				$zoekin[] = 'S_OVERLEDEN';
@@ -77,7 +71,7 @@ class Groepcontent extends TemplateView {
 							$return.='</select></td>';
 						}//dingen die niets opleveren wordt niets voor weergegeven.
 					}
-					if ($this->groep->magBewerken()) {
+					if ($this->model->magBewerken()) {
 						$return.='<td><input type="text" maxlength="25" name="functie[]" /></td></tr>';
 					} else {
 						$return.='<td>' . $this->getFunctieSelector() . '</td></tr>';
@@ -105,7 +99,7 @@ class Groepcontent extends TemplateView {
 		$return.='<select name="functie[]" class="tekst">';
 		foreach ($aFuncties as $sFunctie) {
 			$return.='<option value="' . $sFunctie . '"';
-			if ($sFunctie == $this->groep->getFunctie($uid)) {
+			if ($sFunctie == $this->model->getFunctie($uid)) {
 				$return.='selected="selected"';
 			}
 			$return.='>' . $sFunctie . '</option>';
@@ -141,8 +135,8 @@ class Groepcontent extends TemplateView {
 
 	public function view() {
 
-		$this->assign('groep', $this->groep);
-		$this->assign('opvolgerVoorganger', $this->groep->getOpvolgerVoorganger());
+		$this->assign('groep', $this->model);
+		$this->assign('opvolgerVoorganger', $this->model->getOpvolgerVoorganger());
 
 		$this->assign('action', $this->action);
 		$this->assign('groeptypes', Groepen::getGroeptypes());
@@ -164,52 +158,39 @@ class Groepcontent extends TemplateView {
 
 class Groepencontent extends TemplateView {
 
-	private $groepen;
 	private $action = 'view';
-
-	public function __construct($groepen) {
-		parent::__construct();
-		$this->groepen = $groepen;
-	}
 
 	public function setAction($action) {
 		$this->action = $action;
 	}
 
 	public function getTitel() {
-		return 'Groepen - ' . $this->groepen->getNaam();
+		return 'Groepen - ' . $this->model->getNaam();
 	}
 
 	public function view() {
-
-
-		$this->assign('groepen', $this->groepen);
-
-		$this->assign('action', $this->action);
-		$this->assign('gtype', $this->groepen->getNaam());
+		$this->assign('groepen', $this->model);
+		$this->assign('gtype', $this->model->getNaam());
 		$this->assign('groeptypes', Groepen::getGroeptypes());
-
+		$this->assign('action', $this->action);
 		$this->assign('melding', $this->getMelding());
 		$this->display('groepen/groepen.tpl');
 	}
 
 }
 
-class GroepledenContent {
+class GroepledenContent extends TemplateView {
 
-	private $groep;
-	private $actie = 'default';
+	private $actie = 'standaard';
 
-	public function __construct(Groep $groep, $actie = 'default') {
-		$this->groep = $groep;
+	public function __construct(Groep $groep, $actie = 'standaard') {
+		parent::__construct($groep);
 		$this->actie = $actie;
 	}
 
 	public function view() {
-
-		$this->assign('groep', $this->groep);
+		$this->assign('groep', $this->model);
 		$this->assign('actie', $this->actie);
-
 		$this->display('groepen/groepleden.tpl');
 	}
 
@@ -217,15 +198,8 @@ class GroepledenContent {
 
 class Groepgeschiedeniscontent extends TemplateView {
 
-	private $groepen;
-
-	public function __construct($groepen) {
-		parent::__construct();
-		$this->groepen = $groepen;
-	}
-
 	public function getTitel() {
-		return 'Groepen - ' . $this->groepen->getNaam();
+		return 'Groepen - ' . $this->model->getNaam();
 	}
 
 	public function view() {
@@ -242,7 +216,7 @@ class Groepgeschiedeniscontent extends TemplateView {
 			echo '<td style="max-width: 10px;">&nbsp;</td>';
 		}
 		echo '</tr>';
-		foreach ($this->groepen->getGroepen() as $groep) {
+		foreach ($this->model->getGroepen() as $groep) {
 			echo '<tr>';
 			$startspacer = 12 - substr($groep->getBegin(), 5, 2);
 			if ($startspacer != 0) {
@@ -256,7 +230,7 @@ class Groepgeschiedeniscontent extends TemplateView {
 					$duration = 12;
 				}
 				echo '<td colspan="' . $duration . '" style="font-size: 8px; border: 1px solid black; padding: 2px; width: 150px; text-align: left;">';
-				echo '<a href="/actueel/groepen/' . $this->groepen->getNaam() . '/' . $grp['id'] . '">' . $grp['naam'] . '</a>';
+				echo '<a href="/actueel/groepen/' . $this->model->getNaam() . '/' . $grp['id'] . '">' . $grp['naam'] . '</a>';
 
 				echo '</td>';
 			}
@@ -277,19 +251,13 @@ class Groepgeschiedeniscontent extends TemplateView {
 
 class GroepenProfielContent extends TemplateView {
 
-	private $uid;
 	private $display_lower_limit = 8;
 	private $display_upper_limit = 12;
-
-	public function __construct($uid) {
-		parent::__construct();
-		$this->uid = $uid;
-	}
 
 	public function getHTML() {
 		//per status in een array rammen
 		$groepenPerStatus = array();
-		foreach (Groepen::getByUid($this->uid) as $groep) {
+		foreach (Groepen::getByUid($this->model) as $groep) {
 			$groepenPerStatus[$groep->getStatus()][] = $groep;
 		}
 
@@ -339,16 +307,8 @@ class GroepenProfielContent extends TemplateView {
 
 class GroepUbbContent extends TemplateView {
 
-	private $groep;
-
-	public function __construct(Groep $groep) {
-		parent::__construct();
-		$this->groep = $groep;
-	}
-
 	public function getHTML() {
-
-		$this->assign('groep', $this->groep);
+		$this->assign('groep', $this->model);
 		return $this->fetch('groepen/groep.ubb.tpl');
 	}
 
@@ -360,15 +320,8 @@ class GroepUbbContent extends TemplateView {
 
 class GroepStatsContent extends TemplateView {
 
-	private $groep;
-
-	public function __construct($groep) {
-		parent::__construct();
-		$this->groep = $groep;
-	}
-
 	public function view() {
-		$stats = $this->groep->getStats();
+		$stats = $this->model->getStats();
 		if (!is_array($stats)) {
 			return;
 		}
@@ -401,16 +354,9 @@ class GroepStatsContent extends TemplateView {
 
 class GroepEmailContent extends TemplateView {
 
-	private $groep;
-
-	public function __construct($groep) {
-		parent::__construct();
-		$this->groep = $groep;
-	}
-
 	public function view() {
 		$emails = array();
-		$groepleden = $this->groep->getLeden();
+		$groepleden = $this->model->getLeden();
 		if (is_array($groepleden)) {
 			foreach ($groepleden as $groeplid) {
 				$lid = LidCache::getLid($groeplid['uid']);
