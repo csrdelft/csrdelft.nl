@@ -1,7 +1,6 @@
 <?php
 
 require_once 'MVC/view/InstellingenBeheerView.class.php';
-require_once 'MVC/view/form/InstellingFormView.class.php';
 
 /**
  * InstellingenBeheerController.class.php
@@ -26,7 +25,6 @@ class InstellingenBeheerController extends AclController {
 			);
 		} else {
 			$this->acl = array(
-				'bewerk' => 'P_LEDEN_READ',
 				'opslaan' => 'P_LEDEN_READ',
 				'reset' => 'P_LEDEN_READ'
 			);
@@ -62,18 +60,10 @@ class InstellingenBeheerController extends AclController {
 		$this->view->addScript('taken.js');
 	}
 
-	public function bewerk($model, $key) {
-		$instelling = $this->model->getInstelling($model, $key);
-		$this->view = new InstellingFormView($instelling); // fetches POST values itself
-	}
-
-	public function opslaan($model, $key) {
-		$this->bewerk($model, $key); // sets view
-		if ($this->view->validate()) {
-			$values = $this->view->getValues();
-			$instelling = $this->model->wijzigInstelling($values['module'], $values['instelling_id'], $values['waarde']);
-			$this->view = new InstellingenBeheerView($this->model, $instelling->module, $instelling);
-		}
+	public function opslaan($module, $key) {
+		$value = filter_input(INPUT_POST, 'waarde');
+		$instelling = $this->model->wijzigInstelling($module, $key, $value);
+		$this->view = new InstellingenBeheerView($this->model, $instelling->module, $instelling);
 	}
 
 	public function reset($module, $key) {
@@ -82,5 +72,3 @@ class InstellingenBeheerController extends AclController {
 	}
 
 }
-
-?>

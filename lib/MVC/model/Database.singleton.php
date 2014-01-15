@@ -110,7 +110,8 @@ class Database extends PDO {
 
 	/**
 	 * Optional named parameters.
-	 *
+	 * 
+	 * @param string $into
 	 * @param string $into
 	 * @param array $properties
 	 * @throws Exception
@@ -161,7 +162,8 @@ class Database extends PDO {
 
 	/**
 	 * Optional named parameters.
-	 *
+	 * 
+	 * @param string $from
 	 * @param string $from
 	 * @param string $where
 	 * @param array $where_params
@@ -181,7 +183,7 @@ class Database extends PDO {
 
 	/**
 	 * Create table and return SQL.
-	 *
+	 * 
 	 * @param string $name
 	 * @param array $columns
 	 * @param array $primary_key

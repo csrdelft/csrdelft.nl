@@ -2585,7 +2585,6 @@ lib/MVC/view/Validator.interface.php -text
 lib/MVC/view/View.interface.php -text
 lib/MVC/view/form/FormElement.abstract.php -text
 lib/MVC/view/form/Formulier.class.php -text
-lib/MVC/view/form/InstellingFormView.class.php -text
 lib/Zend/Exception.php -text
 lib/Zend/Gdata.php -text
 lib/Zend/Gdata/App.php -text

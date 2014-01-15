@@ -61,7 +61,7 @@ abstract class PaginationModel extends PersistenceModel {
 
 	public function getPageCount($recount = false) {
 		if (!isset($this->last_page_number) OR $recount) { //TODO? save to session as well or even global cache?
-			$sql = 'SELECT COUNT(*) as total FROM ' . $this->table_name;
+			$sql = 'SELECT COUNT(*) as total FROM ' . $this->orm_entity->getTableName();
 			if ($this->where !== null) {
 				$sql .= ' WHERE ' . $this->where;
 			}

@@ -18,7 +18,7 @@ abstract class PersistenceModel implements Persistence {
 	 * ORM entity class
 	 * @var PersistentEntity
 	 */
-	private $orm_entity;
+	protected $orm_entity;
 
 	/**
 	 * Requires an entity class for ORM
@@ -82,7 +82,7 @@ abstract class PersistenceModel implements Persistence {
 		foreach ($this->orm_entity->getPrimaryKey() as $key) {
 			$where[] = $key . ' = ?';
 		}
-		$result = Database::sqlSelect(array('*'), $this->orm_entity->getTableName(), implode(', ', $where), $primary_key_values, 1);
+		$result = Database::sqlSelect(array('*'), $this->orm_entity->getTableName(), implode(' AND ', $where), $primary_key_values, 1);
 		return $result->fetchObject(get_class($this->orm_entity));
 	}
 
@@ -93,14 +93,14 @@ abstract class PersistenceModel implements Persistence {
 	 */
 	public function update(PersistentEntity $entity) {
 		$properties = $entity->getValues();
-		$where = '';
+		$where = array();
 		$params = array();
 		foreach ($this->orm_entity->getPrimaryKey() as $key) {
-			$where .= $key . ' = :' . $key; // name parameters after key
+			$where[] = $key . ' = :' . $key; // name parameters after key
 			$params[':' . $key] = $properties[$key]; // named parameters
 			unset($properties[$key]); // do not update primary key
 		}
-		$rowcount = Database::sqlUpdate($this->orm_entity->getTableName(), $properties, $where, $params, 1);
+		$rowcount = Database::sqlUpdate($this->orm_entity->getTableName(), $properties, implode(' AND ', $where), $params, 1);
 		if ($rowcount !== 1) {
 			throw new Exception('update rowCount=' . $rowcount);
 		}
@@ -129,7 +129,7 @@ abstract class PersistenceModel implements Persistence {
 		foreach ($this->orm_entity->getPrimaryKey() as $key) {
 			$where[] = $key . ' = ?';
 		}
-		$rowcount = Database::sqlDelete($this->orm_entity->getTableName(), implode(', ', $where), $primary_key_values, 1);
+		$rowcount = Database::sqlDelete($this->orm_entity->getTableName(), implode(' AND ', $where), $primary_key_values, 1);
 		if ($rowcount !== 1) {
 			throw new Exception('delete rowCount=' . $rowcount);
 		}
