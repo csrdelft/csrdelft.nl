@@ -205,25 +205,15 @@
 		</div>
 	{/if}
 
-	{if $loginlid->getUid()==$profhtml.uid OR $loginlid->hasPermission('P_MAAL_MOD')}
 	<div class="profielregel" id="maaltijden">
 		<div class="gegevens">
+	{if $loginlid->getUid()==$profhtml.uid OR $loginlid->hasPermission('P_MAAL_MOD')}
 			<div class="label">Recent:</div>
 			<ul class="nobullets data">
 			{foreach from=$profhtml.recenteAanmeldingen item=aanmelding}
 				<li>{$aanmelding->getMaaltijd()->getTitel()} <span style="color: #676767">({$aanmelding->getMaaltijd()->getDatum()|date_format:"%a %e %b"})</span></li>
 			{/foreach}
 			</ul>
-			<br />
-			<div class="label">Allergie/dieet:</div>
-			<div class="data">{strip}
-		{if $profhtml.eetwens!=''}
-			{$profhtml.eetwens}
-		{/if}
-		{if $loginlid->getUid()==$profhtml.uid}
-			&nbsp;<a href="/corveevoorkeuren" title="Bewerk voorkeuren" class="knop">{icon get="pencil"}</a>
-		{/if}
-			</div>{/strip}
 			<br />
 		{if $profhtml.abos}
 			<div class="label">Abo's:</div>
@@ -234,7 +224,20 @@
 			</ul>
 		{/if}
 			<br />
-			<div class="label">Voorkeuren:</div>
+	{/if}
+			<div class="label">Allergie/dieet:</div>
+			<div class="data">{strip}
+			{if $profhtml.eetwens!=''}
+				{$profhtml.eetwens}
+			{else}
+				-
+			{/if}
+			{if $loginlid->getUid()==$profhtml.uid}
+				&nbsp;<div style="display: inline-block; position: absolute;"><a href="/corveevoorkeuren" title="Bewerk voorkeuren" class="knop">{icon get="pencil"}</a></div>
+			{/if}
+			</div>{/strip}
+			<br />
+			<div class="label">Corvee-<br />voorkeuren:</div>
 			<ul class="nobullets data">
 			{foreach from=$corveevoorkeuren item=vrk}
 				<li>{$vrk->getCorveeRepetitie()->getDagVanDeWeekText()|truncate:2:""} {$vrk->getCorveeRepetitie()->getCorveeFunctie()->getNaam()}</span></li>
@@ -258,9 +261,8 @@
 			<div class="label">Corveepunten:</div>
 			<div class="data">{$corveepunten}{if $corveebonus > 0}+{/if}{if $corveebonus != 0}{$corveebonus}{/if}</div>
 		</div>
-		
 	</div>
-	{/if}
+	
 	{if $profiel->getForumPostCount() > 0 OR $loginlid->getUid()==$profiel->getUid()}
 	<div class="profielregel" id="forum">
 		<div class="gegevens" id="forum_gegevens">
