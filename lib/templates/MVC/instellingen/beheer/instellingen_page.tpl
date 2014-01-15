@@ -12,7 +12,7 @@ instellingen_page.tpl	|	P.W.G. Brussee (brussee@live.nl)
 </p>
 <div style="float: right;">
 	<div style="display: inline-block;"><label for="toon">Toon module:</label>
-	</div><select name="toon" onchange="location.href = '/instellingenbeheer/beheer/' + this.value;">
+	</div><select name="toon" onchange="location.href = '/instellingenbeheer/module/' + this.value;">
 		<option selected="selected">kies</option>
 		{foreach from=$modules item=module}
 			<option value="{$module}">{$module}</option>
