@@ -345,7 +345,7 @@
 			</div>
 		</div>
 	{/if}
-	{if $loginlid->hasPermission('P_ADMIN,P_BESTUUR,groep:novcie') AND $profiel->getStatus()=='S_NOVIET' AND $profhtml.kgb!=''}
+	{if $loginlid->hasPermission('P_ADMIN,R_BESTUUR,groep:novcie') AND $profiel->getStatus()=='S_NOVIET' AND $profhtml.kgb!=''}
 		<div class="profielregel" id="novcieopmerking">
 			<div class="handje" onclick="$('#novcie_gegevens').toggle();">NovCie-Opmerking &raquo;</div>
 			<div class="gegevens verborgen" id="novcie_gegevens">{$profhtml.kgb|ubb}</div>

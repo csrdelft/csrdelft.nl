@@ -360,7 +360,7 @@ class ProfielBewerken extends Profiel {
 		}
 		$form[]=new TextField('muziek', $profiel['muziek'], 'Muziekinstrument', 50);
 
-		if(LoginLid::instance()->hasPermission('P_ADMIN,P_BESTUUR,groep:novcie')){
+		if(LoginLid::instance()->hasPermission('P_ADMIN,R_BESTUUR,groep:novcie')){
 			$form[]=new SelectField('ovkaart', $profiel['ovkaart'], 'OV-kaart', array('' => 'Kies...','geen' => '(Nog) geen OV-kaart','week' => 'Week','weekend' => 'Weekend','niet' => 'Niet geactiveerd'));
 			$form[]=new SelectField('zingen', $profiel['zingen'], 'Zingen', array('' => 'Kies...','ja' => 'Ja, ik zing in een band/koor','nee' => 'Nee, ik houd niet van zingen','soms' => 'Alleen onder de douche','anders' => 'Anders'));
 			$form[]=new TextareaField('novitiaat', $profiel['novitiaat'], 'Wat verwacht je van het novitiaat?');
@@ -441,12 +441,12 @@ class ProfielStatus extends Profiel{
 		$profiel=$this->lid->getProfiel();
 
 		//permissies
-		$perm = array('P_LID'=>'Lid', 'P_OUDLID'=>'Oudlid', 'P_NOBODY'=>'Ex-lid/Nobody', 'P_MAALCIE'=>'MaalCierechten', 'P_BASF'=>'BAS-FCierechten', 'P_ETER'=>'Eter (mag abo\'s) - geen inlog');
-		$permbeheer = array('P_BESTUUR'=>'Bestuur', 'P_VAB'=>'Vice-Abactis', 'P_PUBCIE'=>'PubCierechten');
+		$perm = array('R_LID'=>'Lid', 'R_OUDLID'=>'Oudlid', 'R_NOBODY'=>'Ex-lid/Nobody', 'R_MAALCIE'=>'MaalCierechten', 'R_BASF'=>'BAS-FCierechten', 'R_ETER'=>'Eter (mag abo\'s) - geen inlog');
+		$permbeheer = array('R_BESTUUR'=>'Bestuur', 'R_VAB'=>'Vice-Abactis', 'R_PUBCIE'=>'PubCierechten');
 		if(LoginLid::instance()->hasPermission('P_ADMIN')){
 			//admin mag alle permissies toekennen
 			$perm = array_merge($perm, $permbeheer);
-		}elseif(in_array($profiel['permissies'],array('P_BESTUUR', 'P_VAB', 'P_PUBCIE', 'P_MODERATOR'))){
+		}elseif(in_array($profiel['permissies'],array('R_BESTUUR', 'R_VAB', 'R_PUBCIE', 'P_MODERATOR'))){
 			//niet admin mag geen beheerpermissies aanpassen
 			$perm = array($permbeheer[$profiel['permissies']],$permbeheer[$profiel['permissies']]);
 		}
@@ -516,7 +516,7 @@ class ProfielStatus extends Profiel{
 		//bij wijzigingen door niet-admins worden aanpassingen aan permissies ongedaan gemaakt
 		if(!LoginLid::instance()->hasPermission('P_ADMIN')){
 
-			$adminperms = array('P_PUBCIE','P_MODERATOR','P_BESTUUR','P_VAB');
+			$adminperms = array('R_PUBCIE','P_MODERATOR','R_BESTUUR','R_VAB');
 
 			if(in_array($oudepermissie, $adminperms)){
 				if($oudepermissie!=$nieuwepermissie){
@@ -536,8 +536,8 @@ class ProfielStatus extends Profiel{
 		//maaltijd en corvee bijwerken
 		$geenAboEnCorveeVoor=array('S_OUDLID','S_ERELID','S_NOBODY','S_EXLID','S_CIE','S_OVERLEDEN');
 		if(in_array($nieuwestatus, $geenAboEnCorveeVoor)){
-			//maaltijdabo's uitzetten (P_ETER is een S_NOBODY die toch een abo mag hebben)
-			if($nieuwepermissie!='P_ETER'){
+			//maaltijdabo's uitzetten (R_ETER is een S_NOBODY die toch een abo mag hebben)
+			if($nieuwepermissie!='R_ETER'){
 				$this->changelog[]=$this->disableMaaltijdabos();
 			}
 

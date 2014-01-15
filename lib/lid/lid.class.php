@@ -1104,7 +1104,7 @@ class Zoeker {
 		# In welke status wordt gezocht, is afhankelijk van wat voor rechten de
 		# ingelogd persoon heeft. 
 		#
-		# P_LID en P_OUDLID hebben beide P_LEDEN_READ en P_OUDLEDEN_READ en kunnen 
+		# R_LID en R_OUDLID hebben beide P_LEDEN_READ en P_OUDLEDEN_READ en kunnen 
 		# de volgende afkortingen gebruiken:
 		#  - '' (lege string) of alleleden: novieten, (gast)leden, kringels, ere- en oudleden
 		#  - leden :  						novieten, (gast)leden en kringels
