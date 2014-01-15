@@ -5,7 +5,7 @@
 <td id="abonnement-cell-{$uid}-{$abonnement->getMaaltijdRepetitieId()}"
 	class="abonnement-{if $abonnement->getWaarschuwing()}warning{else}{if $lidid}in{else}uit{/if}geschakeld{/if}"
 	title="{$abonnement->getWaarschuwing()}">
-	<a href="{$instellingen->get('maaltijden', 'taken_module}/{if $lidid}uit{else}in{/if}schakelen/{$abonnement->getMaaltijdRepetitieId()}"
+	<a href="{$instellingen->get('taken', 'url')}/{if $lidid}uit{else}in{/if}schakelen/{$abonnement->getMaaltijdRepetitieId()}"
 	   post="voor_lid={$uid}"
 	   class="knop post abonnement-{if $lidid}in{else}uit{/if}geschakeld">
 		
