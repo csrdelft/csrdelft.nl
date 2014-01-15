@@ -16,6 +16,9 @@
 	<div class="item{if isset($archief) and $archief and $instellingen->get('taken', 'url') === $link} active{/if}">»
 		<a href="{$link}/archief" title="Open archief">Archief</a>
 	</div>
+	<div class="item">»
+		<a href="/instellingenbeheer/module/maaltijden" title="Beheer instellingen">Instellingen</a>
+	</div>
 	{assign var="link" value="/maaltijdenrepetities"}
 	<div class="item{if $instellingen->get('taken', 'url') === $link} active{/if}">»
 		<a href="{$link}" title="Beheer maaltijdrepetities">Maaltijdrepetities</a>
@@ -47,6 +50,9 @@
 	{assign var="link" value="/corveefuncties"}
 	<div class="item{if $instellingen->get('taken', 'url') === $link} active{/if}">»
 		<a href="{$link}" title="Beheer corveefuncties">Functies & kwalificaties</a>
+	</div>
+	<div class="item">»
+		<a href="/instellingenbeheer/module/corvee" title="Beheer instellingen">Instellingen</a>
 	</div>
 	{assign var="link" value="/corveevoorkeurenbeheer"}
 	<div class="item{if $instellingen->get('taken', 'url') === $link} active{/if}">»
