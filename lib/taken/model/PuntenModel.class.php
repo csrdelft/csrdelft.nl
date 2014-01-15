@@ -26,7 +26,7 @@ class PuntenModel {
 					$vrijstelling = $vrijstellingen[$uid];
 					$punten += $vrijstelling->getPunten();
 				}
-				$punten -= intval($GLOBALS['corvee']['corveepunten_per_jaar']);
+				$punten -= intval(Instellingen::get('corvee', 'punten_per_jaar'));
 				self::savePuntenVoorLid($lid, $punten, 0);
 				if ($vrijstelling !== null && time() > strtotime($vrijstelling->getEindDatum())) {
 					VrijstellingenModel::verwijderVrijstelling($vrijstelling->getLidId());
@@ -154,7 +154,7 @@ class PuntenModel {
 		$lijst['prognose'] += $lijst['puntenTotaal'] + $lijst['bonusTotaal'];
 		$lijst['prognoseColor'] = self::rgbCalculate($lijst['prognose']);
 		if ($lid->isLid()) {
-			$lijst['tekort'] = $GLOBALS['corvee']['corveepunten_per_jaar'] - $lijst['prognose'];
+			$lijst['tekort'] = Instellingen::get('corvee', 'punten_per_jaar') - $lijst['prognose'];
 		} else {
 			$lijst['tekort'] = 0 - $lijst['prognose'];
 		}
@@ -191,7 +191,7 @@ class PuntenModel {
 	 * RGB kleurovergang berekenen
 	 */
 	private static function rgbCalculate($punten, $tekort = false) {
-		$perjaar = intval($GLOBALS['corvee']['corveepunten_per_jaar']);
+		$perjaar = intval(Instellingen::get('corvee', 'punten_per_jaar'));
 		if (!$tekort) {
 			$punten = $perjaar - $punten;
 		}

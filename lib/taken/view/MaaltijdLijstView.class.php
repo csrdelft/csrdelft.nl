@@ -26,9 +26,9 @@ class MaaltijdLijstView extends TemplateView {
 	}
 
 	public function view() {
-		$this->assign('kop', $this->getTitel());
-		$this->assign('maaltijd', $this->_maaltijd);
-		$this->assign('prijs', sprintf('%.2f', $this->_maaltijd->getPrijs()));
+		$this->smarty->assign('kop', $this->getTitel());
+		$this->smarty->assign('maaltijd', $this->_maaltijd);
+		$this->smarty->assign('prijs', sprintf('%.2f', $this->_maaltijd->getPrijs()));
 
 		if (!$this->_fiscaal) {
 			for ($i = $this->_maaltijd->getMarge(); $i > 0; $i--) { // ruimte voor marge eters
@@ -37,15 +37,15 @@ class MaaltijdLijstView extends TemplateView {
 			if (sizeof($this->_aanmeldingen) % 2 === 1) { // altijd even aantal voor lijst
 				$this->_aanmeldingen[] = new MaaltijdAanmelding();
 			}
-			$this->assign('eterstotaal', $this->_maaltijd->getAantalAanmeldingen() + $this->_maaltijd->getMarge());
-			$this->assign('corveetaken', $this->_corvee);
+			$this->smarty->assign('eterstotaal', $this->_maaltijd->getAantalAanmeldingen() + $this->_maaltijd->getMarge());
+			$this->smarty->assign('corveetaken', $this->_corvee);
 		}
-		$this->assign('aanmeldingen', $this->_aanmeldingen);
+		$this->smarty->assign('aanmeldingen', $this->_aanmeldingen);
 
 		if ($this->_fiscaal) {
-			$this->display('taken/maaltijd/maaltijd_lijst_fiscaal.tpl');
+			$this->smarty->display('taken/maaltijd/maaltijd_lijst_fiscaal.tpl');
 		} else {
-			$this->display('taken/maaltijd/maaltijd_lijst.tpl');
+			$this->smarty->display('taken/maaltijd/maaltijd_lijst.tpl');
 		}
 	}
 

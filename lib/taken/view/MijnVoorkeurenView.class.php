@@ -23,23 +23,23 @@ class MijnVoorkeurenView extends TemplateView {
 
 	public function view() {
 		if ($this->_voorkeuren === null) { // eetwens
-			$this->assign('eetwens', $this->_eetwens);
-			$this->display('taken/voorkeur/mijn_eetwens.tpl');
+			$this->smarty->assign('eetwens', $this->_eetwens);
+			$this->smarty->display('taken/voorkeur/mijn_eetwens.tpl');
 		} elseif (is_array($this->_voorkeuren)) { // list of voorkeuren
-			$this->assign('melding', $this->getMelding());
-			$this->assign('kop', $this->getTitel());
-			$this->display('taken/menu_pagina.tpl');
+			$this->smarty->assign('melding', $this->getMelding());
+			$this->smarty->assign('kop', $this->getTitel());
+			$this->smarty->display('taken/menu_pagina.tpl');
 
-			$this->assign('eetwens', $this->_eetwens);
-			$this->assign('voorkeuren', $this->_voorkeuren);
-			$this->display('taken/voorkeur/mijn_voorkeuren.tpl');
+			$this->smarty->assign('eetwens', $this->_eetwens);
+			$this->smarty->assign('voorkeuren', $this->_voorkeuren);
+			$this->smarty->display('taken/voorkeur/mijn_voorkeuren.tpl');
 		} elseif (is_int($this->_voorkeuren)) { // id of disabled voorkeur
-			$this->assign('crid', $this->_voorkeuren);
-			$this->display('taken/voorkeur/mijn_voorkeur_veld.tpl');
+			$this->smarty->assign('crid', $this->_voorkeuren);
+			$this->smarty->display('taken/voorkeur/mijn_voorkeur_veld.tpl');
 		} else { // single voorkeur
-			$this->assign('uid', $this->_voorkeuren->getLidId());
-			$this->assign('crid', $this->_voorkeuren->getCorveeRepetitieId());
-			$this->display('taken/voorkeur/mijn_voorkeur_veld.tpl');
+			$this->smarty->assign('uid', $this->_voorkeuren->getLidId());
+			$this->smarty->assign('crid', $this->_voorkeuren->getCorveeRepetitieId());
+			$this->smarty->display('taken/voorkeur/mijn_voorkeur_veld.tpl');
 		}
 	}
 

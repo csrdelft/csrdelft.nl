@@ -15,10 +15,10 @@ class LidPaginaVoorkeurContent extends TemplateView {
 	}
 
 	public function view() {
-		$this->assign('profiel', $this->profiel);
-		$this->assign('melding', $this->getMelding());
-		$this->assign('actie', $this->actie);
-		$this->display('profiel/wijzigvoorkeur.tpl');
+		$this->smarty->assign('profiel', $this->profiel);
+		$this->smarty->assign('melding', $this->getMelding());
+		$this->smarty->assign('actie', $this->actie);
+		$this->smarty->display('profiel/wijzigvoorkeur.tpl');
 	}
 
 }

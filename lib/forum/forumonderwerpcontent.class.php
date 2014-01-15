@@ -41,9 +41,9 @@ class ForumOnderwerpContent extends TemplateView {
 			echo $this->getMelding();
 		} else {
 
-			$this->assign('onderwerp', $this->forumonderwerp);
+			$this->smarty->assign('onderwerp', $this->forumonderwerp);
 
-			$this->assign('melding', $this->getMelding());
+			$this->smarty->assign('melding', $this->getMelding());
 
 			//wat komt er in de textarea te staan?
 			$textarea = '';
@@ -60,9 +60,9 @@ class ForumOnderwerpContent extends TemplateView {
 					$textarea = htmlspecialchars($_SESSION['compose_snapshot']);
 				}
 			}
-			$this->assign('textarea', $textarea);
+			$this->smarty->assign('textarea', $textarea);
 
-			$this->display('forum/onderwerp.tpl');
+			$this->smarty->display('forum/onderwerp.tpl');
 		}
 	}
 

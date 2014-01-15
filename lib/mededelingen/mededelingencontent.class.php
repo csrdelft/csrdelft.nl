@@ -72,28 +72,28 @@ class MededelingenContent extends TemplateView {
 			$this->paginaNummer = $this->geselecteerdeMededeling->getPaginaNummer($this->prullenbak);
 		}
 
-		$this->assign('melding', $this->getMelding());
-		$this->assign('prullenbak', $this->prullenbak);
+		$this->smarty->assign('melding', $this->getMelding());
+		$this->smarty->assign('prullenbak', $this->prullenbak);
 
 		// De link om terug te gaan naar de mededelingenketser.
-		$this->assign('mededelingenketser_root', self::mededelingenRoot);
+		$this->smarty->assign('mededelingenketser_root', self::mededelingenRoot);
 		// Het pad naar de paginaroot (mededelingenketser of prullenbak).
 		if (!$this->prullenbak) {
-			$this->assign('pagina_root', self::mededelingenRoot);
+			$this->smarty->assign('pagina_root', self::mededelingenRoot);
 		} else {
-			$this->assign('pagina_root', self::mededelingenRoot . 'prullenbak/');
+			$this->smarty->assign('pagina_root', self::mededelingenRoot . 'prullenbak/');
 		}
 
-		$this->assign('lijst', Mededeling::getLijstVanPagina($this->paginaNummer, LidInstellingen::get('mededelingen_aantalPerPagina'), $this->prullenbak));
-		$this->assign('geselecteerdeMededeling', $this->geselecteerdeMededeling);
-		$this->assign('wachtGoedkeuring', Mededeling::getLijstWachtGoedkeuring());
+		$this->smarty->assign('lijst', Mededeling::getLijstVanPagina($this->paginaNummer, LidInstellingen::get('mededelingen_aantalPerPagina'), $this->prullenbak));
+		$this->smarty->assign('geselecteerdeMededeling', $this->geselecteerdeMededeling);
+		$this->smarty->assign('wachtGoedkeuring', Mededeling::getLijstWachtGoedkeuring());
 
-		$this->assign('huidigePagina', $this->paginaNummer);
-		$this->assign('totaalAantalPaginas', (ceil(Mededeling::getAantal($this->prullenbak) / LidInstellingen::get('mededelingen_aantalPerPagina'))));
+		$this->smarty->assign('huidigePagina', $this->paginaNummer);
+		$this->smarty->assign('totaalAantalPaginas', (ceil(Mededeling::getAantal($this->prullenbak) / LidInstellingen::get('mededelingen_aantalPerPagina'))));
 
-		$this->assign('datumtijdFormaat', '%d-%m-%Y %H:%M');
+		$this->smarty->assign('datumtijdFormaat', '%d-%m-%Y %H:%M');
 
-		$this->display('mededelingen/mededelingen.tpl');
+		$this->smarty->display('mededelingen/mededelingen.tpl');
 	}
 
 	public function getTopBlock($doelgroep) {
@@ -101,10 +101,10 @@ class MededelingenContent extends TemplateView {
 
 		$topMost = Mededeling::getTopmost(self::aantalTopMostBlock, $doelgroep);
 
-		$this->assign('mededelingenRoot', self::mededelingenRoot);
-		$this->assign('topmost', $topMost);
+		$this->smarty->assign('mededelingenRoot', self::mededelingenRoot);
+		$this->smarty->assign('topmost', $topMost);
 
-		return $this->fetch('mededelingen/mededelingentopblock.tpl');
+		return $this->smarty->fetch('mededelingen/mededelingentopblock.tpl');
 	}
 
 }
@@ -121,13 +121,13 @@ class MededelingenZijbalkContent extends TemplateView {
 	public function view() {
 
 		// Handige variabelen.
-		$this->assign('mededelingenRoot', MededelingenContent::mededelingenRoot);
+		$this->smarty->assign('mededelingenRoot', MededelingenContent::mededelingenRoot);
 
 		// De laatste n mededelingen ophalen en meegeven aan $this.
 		$mededelingen = Mededeling::getLaatsteMededelingen($this->aantal);
-		$this->assign('mededelingen', $mededelingen);
+		$this->smarty->assign('mededelingen', $mededelingen);
 
-		$this->display('mededelingen/mededelingenzijbalk.tpl');
+		$this->smarty->display('mededelingen/mededelingenzijbalk.tpl');
 	}
 
 }

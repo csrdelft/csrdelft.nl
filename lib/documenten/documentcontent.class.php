@@ -33,11 +33,11 @@ class DocumentContent extends TemplateView {
 	public function view() {
 
 
-		$this->assign('melding', $this->getMelding());
-		$this->assign('categorieen', DocumentenCategorie::getAll());
-		$this->assign('document', $this->document);
-		$this->assign('uploaders', $this->uploaders);
-		$this->display('documenten/document.tpl');
+		$this->smarty->assign('melding', $this->getMelding());
+		$this->smarty->assign('categorieen', DocumentenCategorie::getAll());
+		$this->smarty->assign('document', $this->document);
+		$this->smarty->assign('uploaders', $this->uploaders);
+		$this->smarty->display('documenten/document.tpl');
 	}
 
 }
@@ -59,9 +59,9 @@ class DocumentenContent extends TemplateView {
 
 	public function view() {
 
-		$this->assign('melding', $this->getMelding());
-		$this->assign('categorieen', DocumentenCategorie::getAll());
-		$this->display('documenten/documenten.tpl');
+		$this->smarty->assign('melding', $this->getMelding());
+		$this->smarty->assign('categorieen', DocumentenCategorie::getAll());
+		$this->smarty->display('documenten/documenten.tpl');
 	}
 
 }
@@ -85,9 +85,9 @@ class DocumentCategorieContent extends TemplateView {
 
 	public function view() {
 
-		$this->assign('melding', $this->getMelding());
-		$this->assign('categorie', $this->categorie);
-		$this->display('documenten/documentencategorie.tpl');
+		$this->smarty->assign('melding', $this->getMelding());
+		$this->smarty->assign('categorie', $this->categorie);
+		$this->smarty->display('documenten/documentencategorie.tpl');
 	}
 
 }
@@ -132,8 +132,8 @@ class DocumentUbbContent extends TemplateView {
 	}
 
 	public function getHTML() {
-		$this->assign('document', $this->document);
-		return $this->fetch('documenten/document.ubb.tpl');
+		$this->smarty->assign('document', $this->document);
+		return $this->smarty->fetch('documenten/document.ubb.tpl');
 	}
 
 	public function view() {

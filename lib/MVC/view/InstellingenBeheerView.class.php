@@ -10,32 +10,26 @@
  */
 class InstellingenBeheerView extends TemplateView {
 
-	private $_instellingen;
-
 	public function __construct($instellingen) {
-		parent::__construct();
-		$this->_instellingen = $instellingen;
+		parent::__construct($instellingen);
 	}
 
 	public function getTitel() {
-		return 'Beheer instellingen';
+		return 'Beheer instellingen stek';
 	}
 
 	public function view() {
-		if (is_array($this->_instellingen)) {
-			$this->assign('melding', $this->getMelding());
-			$this->assign('kop', $this->getTitel());
-
-			$this->assign('instellingen', $this->_instellingen);
-			$this->display('MVC/instellingen/beheer/instellingen.tpl');
-		} elseif (is_string($this->_instellingen)) { // id of deleted corveefunctie
-			echo '<tr id="instelling-row-' . $this->_instellingen . '" class="remove"></tr>';
-		} else {
-			$this->assign('instelling', $this->_instellingen);
-			$this->display('MVC/instellingen/beheer/instelling_lijst.tpl');
+		if (is_array($this->model)) {
+			$this->smarty->assign('melding', $this->getMelding());
+			$this->smarty->assign('kop', $this->getTitel());
+			$this->smarty->assign('instellingen', $this->model);
+			$this->smarty->display('MVC/instellingen/beheer/instellingen_page.tpl');
+		} elseif ($this->model instanceof Instelling) {
+			$this->smarty->assign('instelling', $this->model);
+			$this->smarty->display('MVC/instellingen/beheer/instelling_row.tpl');
+		} else { // id of deleted instelling
+			echo '<tr id="instelling-row-' . $this->model . '" class="remove"></tr>';
 		}
 	}
 
 }
-
-?>

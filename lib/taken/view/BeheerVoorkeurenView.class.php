@@ -24,22 +24,22 @@ class BeheerVoorkeurenView extends TemplateView {
 	public function view() {
 		if ($this->_repetities === null) { // voor een lid
 			if (is_array($this->_leden_voorkeuren)) { // lijst van voorkeuren
-				$this->assign('voorkeuren', $this->_leden_voorkeuren);
-				$this->display('taken/voorkeur/beheer_voorkeur_lijst.tpl');
+				$this->smarty->assign('voorkeuren', $this->_leden_voorkeuren);
+				$this->smarty->display('taken/voorkeur/beheer_voorkeur_lijst.tpl');
 			} else { // voorkeur aan/afmelding
-				$this->assign('voorkeur', $this->_leden_voorkeuren);
-				$this->assign('crid', $this->_leden_voorkeuren->getCorveeRepetitieId());
-				$this->assign('uid', $this->_leden_voorkeuren->getLidId());
-				$this->display('taken/voorkeur/beheer_voorkeur_veld.tpl');
+				$this->smarty->assign('voorkeur', $this->_leden_voorkeuren);
+				$this->smarty->assign('crid', $this->_leden_voorkeuren->getCorveeRepetitieId());
+				$this->smarty->assign('uid', $this->_leden_voorkeuren->getLidId());
+				$this->smarty->display('taken/voorkeur/beheer_voorkeur_veld.tpl');
 			}
 		} else { // matrix of repetities and voorkeuren
-			$this->assign('melding', $this->getMelding());
-			$this->assign('kop', $this->getTitel());
-			$this->display('taken/menu_pagina.tpl');
+			$this->smarty->assign('melding', $this->getMelding());
+			$this->smarty->assign('kop', $this->getTitel());
+			$this->smarty->display('taken/menu_pagina.tpl');
 
-			$this->assign('matrix', $this->_leden_voorkeuren);
-			$this->assign('repetities', $this->_repetities);
-			$this->display('taken/voorkeur/beheer_voorkeuren.tpl');
+			$this->smarty->assign('matrix', $this->_leden_voorkeuren);
+			$this->smarty->assign('repetities', $this->_repetities);
+			$this->smarty->display('taken/voorkeur/beheer_voorkeuren.tpl');
 		}
 	}
 

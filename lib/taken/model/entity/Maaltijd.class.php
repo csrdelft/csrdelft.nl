@@ -1,6 +1,5 @@
 <?php
 
-
 require_once 'agenda/agenda.class.php';
 
 /**
@@ -29,12 +28,10 @@ require_once 'agenda/agenda.class.php';
  * 
  */
 class Maaltijd implements \Agendeerbaar {
-
 	# primary key
+
 	private $maaltijd_id; # int 11
-	
 	private $mlt_repetitie_id; # foreign key mlt_repetitie.id
-	
 	private $titel; # string 255
 	private $aanmeld_limiet; # int 11
 	private $datum; # date
@@ -44,18 +41,17 @@ class Maaltijd implements \Agendeerbaar {
 	private $laatst_gesloten; # int 11
 	private $verwijderd; # boolean
 	private $aanmeld_filter; # string 255
-	
 	private $aantal_aanmeldingen;
 	private $archief;
-	
-	public function __construct($mid=0, $mrid=null, $titel='', $limiet=null, $datum=null, $tijd=null, $prijs=null, $gesloten=false, $wanneer_gesloten=null, $verwijderd=false, $filter='') {
+
+	public function __construct($mid = 0, $mrid = null, $titel = '', $limiet = null, $datum = null, $tijd = null, $prijs = null, $gesloten = false, $wanneer_gesloten = null, $verwijderd = false, $filter = '') {
 		$this->maaltijd_id = (int) $mid;
 		if ($mrid !== null) {
 			$this->mlt_repetitie_id = (int) $mrid;
 		}
 		$this->setTitel($titel);
 		if ($limiet === null) {
-			$limiet = intval($GLOBALS['maaltijden']['standaard_maaltijdlimiet']);
+			$limiet = intval(Instellingen::get('maaltijden', 'standaard_limiet'));
 		}
 		$this->setAanmeldLimiet($limiet);
 		if ($datum === null) {
@@ -63,11 +59,11 @@ class Maaltijd implements \Agendeerbaar {
 		}
 		$this->setDatum($datum);
 		if ($tijd === null) {
-			$tijd = $GLOBALS['maaltijden']['standaard_maaltijdaanvang'];
+			$tijd = Instellingen::get('maaltijden', 'standaard_aanvang');
 		}
 		$this->setTijd($tijd);
 		if ($prijs === null) {
-			$prijs = floatval($GLOBALS['maaltijden']['standaard_maaltijdprijs']);
+			$prijs = floatval(Instellingen::get('maaltijden', 'standaard_prijs'));
 		}
 		$this->setPrijs($prijs);
 		$this->setGesloten($gesloten);
@@ -75,46 +71,58 @@ class Maaltijd implements \Agendeerbaar {
 		$this->setVerwijderd($verwijderd);
 		$this->setAanmeldFilter($filter);
 	}
-	
+
 	public function getMaaltijdId() {
 		return (int) $this->maaltijd_id;
 	}
+
 	public function getMaaltijdRepetitieId() {
 		if ($this->mlt_repetitie_id === null) {
 			return null;
 		}
 		return (int) $this->mlt_repetitie_id;
 	}
+
 	public function getTitel() {
 		return $this->titel;
 	}
+
 	public function getAanmeldLimiet() {
 		return (int) $this->aanmeld_limiet;
 	}
+
 	public function getDatum() {
 		return $this->datum;
 	}
+
 	public function getTijd() {
 		return $this->tijd;
 	}
+
 	public function getPrijs() {
 		return (float) $this->prijs;
 	}
+
 	public function getIsGesloten() {
 		return (boolean) $this->gesloten;
 	}
+
 	public function getLaatstGesloten() {
 		return $this->laatst_gesloten;
 	}
+
 	public function getIsVerwijderd() {
 		return (boolean) $this->verwijderd;
 	}
+
 	public function getAanmeldFilter() {
 		return $this->aanmeld_filter;
 	}
+
 	public function getAantalAanmeldingen() {
 		return (int) $this->aantal_aanmeldingen;
 	}
+
 	/**
 	 * Bereken de marge in verband met niet aangemelde gasten.
 	 * 
@@ -122,107 +130,123 @@ class Maaltijd implements \Agendeerbaar {
 	 */
 	public function getMarge() {
 		$aantal = $this->getAantalAanmeldingen();
-		$marge = floor($aantal / floatval($GLOBALS['maaltijden']['marge_gasten_verhouding']));
-		$min = intval($GLOBALS['maaltijden']['marge_gasten_min']);
+		$marge = floor($aantal / floatval(Instellingen::get('maaltijden', 'marge_gasten_verhouding')));
+		$min = intval(Instellingen::get('maaltijden', 'marge_gasten_min'));
 		if ($marge < $min) {
 			$marge = $min;
 		}
-		$max = intval($GLOBALS['maaltijden']['marge_gasten_max']);
+		$max = intval(Instellingen::get('maaltijden', 'marge_gasten_max'));
 		if ($marge > $max) {
 			$marge = $max;
 		}
 		return $marge;
 	}
+
 	/**
 	 * Bereken het budget voor deze maaltijd.
 	 * 
 	 * @return double
 	 */
 	public function getBudget() {
-		return ((float)($this->getAantalAanmeldingen() + $this->getMarge())) * ($this->getPrijs() - floatval($GLOBALS['maaltijden']['maaltijd_budget_maalcie']));
+		return ((float) ($this->getAantalAanmeldingen() + $this->getMarge())) * ($this->getPrijs() - floatval(Instellingen::get('maaltijden', 'budget_maalcie')));
 	}
+
 	public function getArchief() {
 		return $this->archief;
 	}
-	
+
 	public function setTitel($titel) {
 		if (!is_string($titel)) {
 			throw new Exception('Geen string: titel');
 		}
 		$this->titel = $titel;
 	}
+
 	public function setAanmeldLimiet($int) {
 		if (!is_int($int) || $int < 0) {
 			throw new Exception('Geen integer: aanmeld limiet');
 		}
 		$this->aanmeld_limiet = $int;
 	}
+
 	public function setDatum($datum) {
 		if (!is_string($datum)) {
 			throw new Exception('Geen string: datum');
 		}
 		$this->datum = $datum;
 	}
+
 	public function setTijd($time) {
 		if (!is_string($time)) {
 			throw new Exception('Geen string: tijd');
 		}
 		$this->tijd = $time;
 	}
+
 	public function setPrijs($prijs) {
 		if (!is_float($prijs)) {
 			throw new Exception('Geen float: prijs');
 		}
 		$this->prijs = $prijs;
 	}
+
 	public function setGesloten($bool) {
 		if (!is_bool($bool)) {
 			throw new Exception('Geen boolean: gesloten');
 		}
 		$this->gesloten = $bool;
 	}
+
 	public function setLaatstGesloten($datetime) {
 		if ($datetime !== null && !is_string($datetime)) {
 			throw new Exception('Geen string: laatst gesloten');
 		}
 		$this->laatst_gesloten = $datetime;
 	}
+
 	public function setVerwijderd($bool) {
 		if (!is_bool($bool)) {
 			throw new Exception('Geen boolean: verwijderd');
 		}
 		$this->verwijderd = $bool;
 	}
+
 	public function setAanmeldFilter($filter) {
 		if (!is_string($filter)) {
 			throw new Exception('Geen string: aanmeld filter');
 		}
 		$this->aanmeld_filter = $filter;
 	}
+
 	public function setAantalAanmeldingen($int) {
 		if (!is_int($int) || $int < 0) {
 			throw new Exception('Geen integer: aantal aanmeldingen');
 		}
 		$this->aantal_aanmeldingen = $int;
 	}
+
 	public function setArchief(ArchiefMaaltijd $archief) {
 		$this->archief = $archief;
 	}
-	
+
 	// Agendeerbaar ############################################################
-	
+
 	public function getBeginMoment() {
-		return strtotime($this->getDatum() .' '. $this->getTijd());
+		return strtotime($this->getDatum() . ' ' . $this->getTijd());
 	}
+
 	public function getEindMoment() {
 		return $this->getBeginMoment();
 	}
+
 	public function getBeschrijving() {
-		return 'Maaltijd met '. $this->getAantalAanmeldingen() .' eters';
+		return 'Maaltijd met ' . $this->getAantalAanmeldingen() . ' eters';
 	}
+
 	public function isHeledag() {
 		return false;
 	}
+
 }
 
 ?>

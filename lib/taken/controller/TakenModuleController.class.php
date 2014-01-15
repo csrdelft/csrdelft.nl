@@ -8,7 +8,7 @@ require_once 'MVC/controller/AclController.abstract.php';
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
-class ModuleController extends \AclController {
+class TakenModuleController extends \AclController {
 
 	public function __construct($query) {
 		parent::__construct($query);
@@ -43,7 +43,7 @@ class ModuleController extends \AclController {
 		if ($this->hasParam(1)) {
 			$this->action = $this->getParam(1);
 		}
-		$GLOBALS['taken_module'] = '/' . $module . $this->action;
+		Instellingen::setTemp('taken', 'url', '/' . $module . $this->action);
 		$this->action = $module . $this->action;
 		$this->performAction(array($query));
 	}
@@ -95,7 +95,7 @@ class ModuleController extends \AclController {
 	}
 
 	public function corveemijn($query) {
-		$GLOBALS['taken_module'] = str_replace('mijn', '', $GLOBALS['taken_module']);
+		Instellingen::setTemp('taken', 'url', str_replace('mijn', '', Instellingen::get('taken', 'url')));
 		require_once 'taken/controller/MijnCorveeController.class.php';
 		$controller = new MijnCorveeController($query);
 		$this->view = $controller->getContent();

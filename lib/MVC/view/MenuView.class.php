@@ -54,23 +54,23 @@ class MenuView extends TemplateView {
 	}
 
 	public function view() {
-		$this->assign('root', $this->tree_root);
-		$this->assign('huidig', $this->active_item);
+		$this->smarty->assign('root', $this->tree_root);
+		$this->smarty->assign('huidig', $this->active_item);
 
 		if ($this->level === 0) {
 			// SocCie-saldi & MaalCie-saldi
-			$this->assign('saldi', LoginLid::instance()->getLid()->getSaldi());
+			$this->smarty->assign('saldi', LoginLid::instance()->getLid()->getSaldi());
 
 			if (Loginlid::instance()->hasPermission('P_ADMIN')) {
 				require_once 'savedquery.class.php';
-				$this->assign('queues', array(
+				$this->smarty->assign('queues', array(
 					'forum' => new SavedQuery(ROWID_QUEUE_FORUM),
 					'meded' => new SavedQuery(ROWID_QUEUE_MEDEDELINGEN)
 				));
 			}
-			$this->display('MVC/menu/menu.tpl');
+			$this->smarty->display('MVC/menu/menu.tpl');
 		} elseif ($this->level === 3) {
-			$this->display('MVC/menu/menu_block.tpl');
+			$this->smarty->display('MVC/menu/menu_block.tpl');
 		}
 	}
 

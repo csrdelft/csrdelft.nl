@@ -23,10 +23,9 @@
  * 
  */
 class MaaltijdRepetitie {
-
 	# primary key
+
 	private $mlt_repetitie_id; # int 11
-	
 	private $dag_vd_week; # int 1
 	private $periode_in_dagen; # int 11
 	private $standaard_titel; # string 255
@@ -35,41 +34,41 @@ class MaaltijdRepetitie {
 	private $abonneerbaar; # boolean
 	private $standaard_limiet; # int 11
 	private $abonnement_filter; # string 255
-	
-	public function __construct($mrid=0, $dag=null, $periode=null, $titel='', $tijd=null, $prijs=null, $abo=null, $limiet=null, $filter='') {
+
+	public function __construct($mrid = 0, $dag = null, $periode = null, $titel = '', $tijd = null, $prijs = null, $abo = null, $limiet = null, $filter = '') {
 		$this->mlt_repetitie_id = (int) $mrid;
 		if ($dag === null) {
-			$dag = intval($GLOBALS['maaltijden']['standaard_repetitie_weekdag']);
+			$dag = intval(Instellingen::get('maaltijden', 'standaard_repetitie_weekdag'));
 		}
 		$this->setDagVanDeWeek($dag);
 		if ($periode === null) {
-			$periode = intval($GLOBALS['maaltijden']['standaard_repetitie_periode']);
+			$periode = intval(Instellingen::get('maaltijden', 'standaard_repetitie_periode'));
 		}
 		$this->setPeriodeInDagen($periode);
 		$this->setStandaardTitel($titel);
 		if ($tijd === null) {
-			$tijd = $GLOBALS['maaltijden']['standaard_maaltijdaanvang'];
+			$tijd = Instellingen::get('maaltijden', 'standaard_aanvang');
 		}
 		$this->setStandaardTijd($tijd);
 		if ($prijs === null) {
-			$prijs = floatval($GLOBALS['maaltijden']['standaard_maaltijdprijs']);
+			$prijs = floatval(Instellingen::get('maaltijden', 'standaard_prijs'));
 		}
 		$this->setStandaardPrijs($prijs);
 		if ($abo === null) {
-			$abo = (bool) $GLOBALS['maaltijden']['standaard_abonneerbaar'];
+			$abo = (bool) Instellingen::get('maaltijden', 'standaard_abonneerbaar');
 		}
 		$this->setAbonneerbaar($abo);
 		if ($limiet === null) {
-			$limiet = intval($GLOBALS['maaltijden']['standaard_maaltijdlimiet']);
+			$limiet = intval(Instellingen::get('maaltijden', 'standaard_limiet'));
 		}
 		$this->setStandaardLimiet($limiet);
 		$this->setAbonnementFilter($filter);
 	}
-	
+
 	public function getMaaltijdRepetitieId() {
 		return (int) $this->mlt_repetitie_id;
 	}
-	
+
 	/**
 	 * 0: Sunday
 	 * 6: Saturday
@@ -77,41 +76,49 @@ class MaaltijdRepetitie {
 	public function getDagVanDeWeek() {
 		return (int) $this->dag_vd_week;
 	}
+
 	public function getDagVanDeWeekText() {
-		return strftime('%A', ($this->getDagVanDeWeek()+3)*24*3600);
+		return strftime('%A', ($this->getDagVanDeWeek() + 3) * 24 * 3600);
 	}
+
 	public function getPeriodeInDagen() {
 		return (int) $this->periode_in_dagen;
 	}
+
 	public function getPeriodeInDagenText() {
-		switch($this->getPeriodeInDagen()) {
+		switch ($this->getPeriodeInDagen()) {
 			case 0: return '-';
 			case 1: return 'elke dag';
 			case 7: return 'elke week';
 			default:
 				if ($this->getPeriodeInDagen() % 7 === 0) {
-					return 'elke '. ($this->getPeriodeInDagen() / 7) .' weken';
-				}
-				else {
-					return 'elke '. $this->getPeriodeInDagen() .' dagen';
+					return 'elke ' . ($this->getPeriodeInDagen() / 7) . ' weken';
+				} else {
+					return 'elke ' . $this->getPeriodeInDagen() . ' dagen';
 				}
 		}
 	}
+
 	public function getStandaardTitel() {
 		return $this->standaard_titel;
 	}
+
 	public function getStandaardTijd() {
 		return $this->standaard_tijd;
 	}
+
 	public function getStandaardPrijs() {
 		return (float) $this->standaard_prijs;
 	}
+
 	public function getIsAbonneerbaar() {
 		return (boolean) $this->abonneerbaar;
 	}
+
 	public function getStandaardLimiet() {
 		return (int) $this->standaard_limiet;
 	}
+
 	public function getAbonnementFilter() {
 		return $this->abonnement_filter;
 	}
@@ -122,48 +129,56 @@ class MaaltijdRepetitie {
 		}
 		$this->dag_vd_week = $int;
 	}
+
 	public function setPeriodeInDagen($int) {
 		if (!is_int($int) || $int < 0) {
 			throw new Exception('Geen integer: periode in dagen');
 		}
 		$this->periode_in_dagen = $int;
 	}
+
 	public function setStandaardTitel($titel) {
 		if (!is_string($titel)) {
 			throw new Exception('Geen string: standaard titel');
 		}
 		$this->standaard_titel = $titel;
 	}
+
 	public function setStandaardTijd($time) {
 		if (!is_string($time)) {
 			throw new Exception('Geen string: standaard tijd');
 		}
 		$this->standaard_tijd = $time;
 	}
+
 	public function setStandaardPrijs($prijs) {
 		if (!is_float($prijs)) {
-			throw new Exception('Geen float: standaard prijs: '. $prijs);
+			throw new Exception('Geen float: standaard prijs: ' . $prijs);
 		}
 		$this->standaard_prijs = $prijs;
 	}
+
 	public function setAbonneerbaar($bool) {
 		if (!is_bool($bool)) {
 			throw new Exception('Geen boolean: abonneerbaar');
 		}
 		$this->abonneerbaar = $bool;
 	}
+
 	public function setStandaardLimiet($int) {
 		if (!is_int($int) || $int < 0) {
 			throw new Exception('Geen integer: standaard limiet');
 		}
 		$this->standaard_limiet = $int;
 	}
+
 	public function setAbonnementFilter($filter) {
 		if (!is_string($filter)) {
 			throw new Exception('Geen string: abonnement filter');
 		}
 		$this->abonnement_filter = $filter;
 	}
+
 }
 
 ?>

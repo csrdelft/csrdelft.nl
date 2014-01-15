@@ -22,13 +22,13 @@ class CorveeRoosterView extends TemplateView {
 	}
 
 	public function view() {
-		$this->assign('melding', $this->getMelding());
-		$this->assign('kop', $this->getTitel());
-		$this->display('taken/menu_pagina.tpl');
+		$this->smarty->assign('melding', $this->getMelding());
+		$this->smarty->assign('kop', $this->getTitel());
+		$this->smarty->display('taken/menu_pagina.tpl');
 
-		$this->assign('rooster', $this->_rooster);
-		$this->assign('toonverleden', $this->_toonverleden);
-		$this->display('taken/corveetaak/corvee_rooster.tpl');
+		$this->smarty->assign('rooster', $this->_rooster);
+		$this->smarty->assign('toonverleden', $this->_toonverleden);
+		$this->smarty->display('taken/corveetaak/corvee_rooster.tpl');
 	}
 
 }

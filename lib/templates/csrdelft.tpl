@@ -5,10 +5,10 @@
 	<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
 	<meta name="author" content="PubCie C.S.R. Delft" />
 	<meta name="robots" content="index, follow" />
-	{foreach from=$this->getStylesheets() item=sheet}
+	{foreach from=$view->getStylesheets() item=sheet}
 		<link rel="stylesheet" href="{$sheet.naam}?{$sheet.datum}" type="text/css" />
 	{/foreach}
-	{foreach from=$this->getScripts() item=script}
+	{foreach from=$view->getScripts() item=script}
 		<script type="text/javascript" src="{$script.naam}?{$script.datum}"></script>
 	{/foreach}
 	<!--[if lt IE 7.]>

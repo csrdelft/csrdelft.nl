@@ -75,8 +75,7 @@ require_once 'MVC/controller/AclController.abstract.php';
 
 
 // instellingen
-require_once 'MVC/model/InstellingenModel.class.php';
-InstellingenModel::instance();
+require_once 'MVC/model/Instellingen.singleton.php';
 
 switch (constant('MODE')) {
 	case 'ONDERHOUD':

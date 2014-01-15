@@ -58,7 +58,7 @@ class CorveeRepetitieFormView extends TemplateView {
 			$formFields['ver']->title = 'Verplaats naar dag v/d week bij bijwerken';
 		}
 
-		$this->_form = new Formulier('taken-corvee-repetitie-form', $GLOBALS['taken_module'] . '/opslaan/' . $crid, $formFields);
+		$this->_form = new Formulier('taken-corvee-repetitie-form', Instellingen::get('taken', 'url') . '/opslaan/' . $crid, $formFields);
 	}
 
 	public function getTitel() {
@@ -69,16 +69,16 @@ class CorveeRepetitieFormView extends TemplateView {
 	}
 
 	public function view() {
-		$this->assign('melding', $this->getMelding());
-		$this->assign('kop', $this->getTitel());
+		$this->smarty->assign('melding', $this->getMelding());
+		$this->smarty->assign('kop', $this->getTitel());
 		$this->_form->css_classes[] = 'popup';
-		$this->assign('form', $this->_form);
+		$this->smarty->assign('form', $this->_form);
 		if ($this->_crid === 0) {
-			$this->assign('nocheck', true);
+			$this->smarty->assign('nocheck', true);
 		} elseif ($this->_crid > 0) {
-			$this->assign('bijwerken', $GLOBALS['taken_module'] . '/bijwerken/' . $this->_crid);
+			$this->smarty->assign('bijwerken', Instellingen::get('taken', 'url') . '/bijwerken/' . $this->_crid);
 		}
-		$this->display('taken/popup_form.tpl');
+		$this->smarty->display('taken/popup_form.tpl');
 	}
 
 	public function validate() {

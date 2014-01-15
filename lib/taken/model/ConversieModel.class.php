@@ -1,6 +1,5 @@
 <?php
 
-
 require_once 'taken/model/KwalificatiesModel.class.php';
 require_once 'taken/model/MaaltijdRepetitiesModel.class.php';
 
@@ -11,9 +10,9 @@ require_once 'taken/model/MaaltijdRepetitiesModel.class.php';
 class ConversieModel {
 
 	public static function leegmaken() {
-		
+
 		echo '<br />' . date('H:i:s') . ' leegmaken crv_tabellen';
-		
+
 		self::queryDb('TRUNCATE TABLE crv_kwalificaties');
 		self::queryDb('TRUNCATE TABLE crv_vrijstellingen');
 		self::queryDb('TRUNCATE TABLE crv_voorkeuren');
@@ -22,9 +21,9 @@ class ConversieModel {
 		foreach ($repetities as $repetitie) {
 			\CorveeRepetitiesModel::verwijderRepetitie($repetitie->getCorveeRepetitieId());
 		}
-		
+
 		echo '<br />' . date('H:i:s') . ' leegmaken mlt_tabellen';
-		
+
 		self::queryDb('TRUNCATE TABLE mlt_aanmeldingen');
 		self::queryDb('TRUNCATE TABLE mlt_abonnementen');
 		$maaltijden = MaaltijdenModel::getAlleMaaltijden();
@@ -37,7 +36,7 @@ class ConversieModel {
 			MaaltijdRepetitiesModel::verwijderRepetitie($repetitie->getMaaltijdRepetitieId());
 		}
 	}
-	
+
 	public static function archiveer() {
 		$maaltijd = null;
 		$aanmeldingen = array();
@@ -47,24 +46,18 @@ class ConversieModel {
 			if ($maaltijd === null || $maaltijd->getMaaltijdId() !== $mid) {
 				if ($maaltijd !== null) {
 					self::archiefMaaltijd(new ArchiefMaaltijd(
-						$maaltijd->getMaaltijdId(),
-						$maaltijd->getTitel(),
-						$maaltijd->getDatum(),
-						$maaltijd->getTijd(),
-						$maaltijd->getPrijs(),
-						$aanmeldingen
+							$maaltijd->getMaaltijdId(), $maaltijd->getTitel(), $maaltijd->getDatum(), $maaltijd->getTijd(), $maaltijd->getPrijs(), $aanmeldingen
 					));
 					unset($maaltijd);
 					unset($aanmeldingen);
 				}
-				echo '<br />' . date('H:i:s') . ' converteren: maaltijd (id: '. $mid .')';
-				$maaltijd = self::queryDb('SELECT id, datum, type, tekst FROM maaltijd WHERE id="'.$mid.'"');
+				echo '<br />' . date('H:i:s') . ' converteren: maaltijd (id: ' . $mid . ')';
+				$maaltijd = self::queryDb('SELECT id, datum, type, tekst FROM maaltijd WHERE id="' . $mid . '"');
 				if (sizeof($maaltijd) === 1) {
 					$datum = intval($maaltijd[0]['datum']);
 					$maaltijd = new Maaltijd($mid, null, $maaltijd[0]['tekst'], 0, date('Y-m-d', $datum), date('H:i', $datum));
 					$aanmeldingen = array();
-				}
-				else {
+				} else {
 					$maaltijd = new Maaltijd($mid, null, 'null', 0, date('Y-m-d', 0), date('H:i', 0));
 					$aanmeldingen = array();
 				}
@@ -78,12 +71,7 @@ class ConversieModel {
 		}
 		if ($maaltijd !== null) {
 			self::archiefMaaltijd(new ArchiefMaaltijd(
-				$maaltijd->getMaaltijdId(),
-				$maaltijd->getTitel(),
-				$maaltijd->getDatum(),
-				$maaltijd->getTijd(),
-				$maaltijd->getPrijs(),
-				$aanmeldingen
+					$maaltijd->getMaaltijdId(), $maaltijd->getTitel(), $maaltijd->getDatum(), $maaltijd->getTijd(), $maaltijd->getPrijs(), $aanmeldingen
 			));
 			unset($maaltijd);
 			unset($aanmeldingen);
@@ -100,24 +88,18 @@ class ConversieModel {
 				}
 				if ($maaltijd !== null) {
 					self::archiefMaaltijd(new ArchiefMaaltijd(
-						$maaltijd->getMaaltijdId(),
-						$maaltijd->getTitel(),
-						$maaltijd->getDatum(),
-						$maaltijd->getTijd(),
-						$maaltijd->getPrijs(),
-						$aanmeldingen
+							$maaltijd->getMaaltijdId(), $maaltijd->getTitel(), $maaltijd->getDatum(), $maaltijd->getTijd(), $maaltijd->getPrijs(), $aanmeldingen
 					));
 					unset($maaltijd);
 					unset($aanmeldingen);
 				}
-				echo '<br />' . date('H:i:s') . ' converteren: maaltijd (id: '. $mid .')';
-				$maaltijd = self::queryDb('SELECT id, datum, type, tekst FROM maaltijd WHERE id="'.$mid.'"');
+				echo '<br />' . date('H:i:s') . ' converteren: maaltijd (id: ' . $mid . ')';
+				$maaltijd = self::queryDb('SELECT id, datum, type, tekst FROM maaltijd WHERE id="' . $mid . '"');
 				if (sizeof($maaltijd) === 1) {
 					$datum = intval($maaltijd[0]['datum']);
 					$maaltijd = new Maaltijd($mid, null, $maaltijd[0]['tekst'], 0, date('Y-m-d', $datum), date('H:i', $datum));
 					$aanmeldingen = array();
-				}
-				else {
+				} else {
 					$maaltijd = new Maaltijd($mid, null, 'null', 0, date('Y-m-d', 0), date('H:i', 0));
 					$aanmeldingen = array();
 				}
@@ -131,20 +113,15 @@ class ConversieModel {
 		}
 		if ($maaltijd !== null) {
 			self::archiefMaaltijd(new ArchiefMaaltijd(
-				$maaltijd->getMaaltijdId(),
-				$maaltijd->getTitel(),
-				$maaltijd->getDatum(),
-				$maaltijd->getTijd(),
-				$maaltijd->getPrijs(),
-				$aanmeldingen
+					$maaltijd->getMaaltijdId(), $maaltijd->getTitel(), $maaltijd->getDatum(), $maaltijd->getTijd(), $maaltijd->getPrijs(), $aanmeldingen
 			));
 		}
 	}
-	
+
 	public static function converteer() {
-		
+
 		echo '<br />' . date('H:i:s') . ' converteren: maaltijdcorveeinstelligen => CorveeFunctie[]';
-		
+
 		$functies = array(
 			'koks' => 1,
 			'afwas' => 2,
@@ -176,47 +153,45 @@ class ConversieModel {
 				$functie = $byFid[$fid];
 				try {
 					$byFid[$fid] = \FunctiesModel::saveFunctie($fid, $functie->getNaam(), $functie->getAfkorting(), $row['tekst'], $functie->getStandaardPunten(), false);
-				}
-				catch (\Exception $e) {
+				} catch (\Exception $e) {
+					
 				}
 				if ($fid === 1) { // email kwalikok
 					$functie = $byFid[7];
 					try {
 						$byFid[7] = \FunctiesModel::saveFunctie(7, $functie->getNaam(), $functie->getAfkorting(), $row['tekst'], $functie->getStandaardPunten(), false);
+					} catch (\Exception $e) {
+						
 					}
-					catch (\Exception $e) {
-					}
-				}
-				elseif ($fid === 2) { // email kwaliafwas
+				} elseif ($fid === 2) { // email kwaliafwas
 					$functie = $byFid[8];
 					try {
 						$byFid[8] = \FunctiesModel::saveFunctie(8, $functie->getNaam(), $functie->getAfkorting(), $row['tekst'], $functie->getStandaardPunten(), false);
-					}
-					catch (\Exception $e) {
+					} catch (\Exception $e) {
+						
 					}
 				}
-			}
-			elseif (array_key_exists($id, $punten)) {
+			} elseif (array_key_exists($id, $punten)) {
 				$fid = $punten[$id];
 				$functie = $byFid[$fid];
 				try {
 					$byFid[$fid] = \FunctiesModel::saveFunctie($fid, $functie->getNaam(), $functie->getAfkorting(), $functie->getEmailBericht(), intval($row['int']), false);
-				}
-				catch (\Exception $e) {
+				} catch (\Exception $e) {
+					
 				}
 				if ($fid === 2) { // puntenkwaliafwas
 					$functie = $byFid[8];
 					try {
 						$byFid[8] = \FunctiesModel::saveFunctie(8, $functie->getNaam(), $functie->getAfkorting(), $functie->getEmailBericht(), intval($row['int']), false);
-					}
-					catch (\Exception $e) {
+					} catch (\Exception $e) {
+						
 					}
 				}
 			}
 		}
-		
+
 		echo '<br />' . date('H:i:s') . ' converteren: abosoort => MaaltijdRepetitie';
-		
+
 		$rows = self::queryDb('SELECT abosoort, tekst FROM maaltijdabosoort');
 		$default = new MaaltijdRepetitie();
 		$repetities = array();
@@ -227,7 +202,8 @@ class ConversieModel {
 			$dag = 2;
 			$periode = 0;
 			$limiet = 40;
-			$filter = str_replace('Verticale ', 'verticale:', $row['tekst']);;
+			$filter = str_replace('Verticale ', 'verticale:', $row['tekst']);
+			;
 			$titel = str_replace('Verticale', 'Grootfeest', $row['tekst']);
 			if ($row['abosoort'] === 'A_DONDERDAG') {
 				$dag = $default->getDagVanDeWeek();
@@ -249,9 +225,9 @@ class ConversieModel {
 		}
 		$rep_wo = MaaltijdRepetitiesModel::saveRepetitie(0, 3, 7, 'Alpha-cursus', '18:30', $default->getStandaardPrijs(), false, 1, '');
 		$rep_wo = $rep_wo[0];
-		
+
 		echo '<br />' . date('H:i:s') . ' aanmaken: CorveeRepetitie[]';
-		
+
 		$functies = array(
 			'kwalikok' => 7,
 			'kwaliafwas' => 8,
@@ -275,14 +251,12 @@ class ConversieModel {
 				$periode = 28;
 				if ($fid === 4) {
 					$periode = 7;
-				}
-				elseif ($fid === 10 || $fid === 11) {
+				} elseif ($fid === 10 || $fid === 11) {
 					$periode = 0;
 				}
 				$corvee[$fid] = \CorveeRepetitiesModel::saveRepetitie(0, null, 1, $periode, $fid, 1, $vrk);
 				$corvee[$fid] = $corvee[$fid][0];
-			}
-			else {
+			} else {
 				$corvee[$fid] = \CorveeRepetitiesModel::saveRepetitie(0, $mrid_do, 4, 7, $fid, 1, $vrk);
 				$corvee[$fid] = $corvee[$fid][0];
 			}
@@ -296,17 +270,17 @@ class ConversieModel {
 		$corvee_wo[8] = $corvee_wo[8][0];
 		$corvee_wo[7] = \CorveeRepetitiesModel::saveRepetitie(0, $rep_wo->getMaaltijdRepetitieId(), $rep_wo->getDagVanDeWeek(), $rep_wo->getPeriodeInDagen(), 7, 1, true);
 		$corvee_wo[7] = $corvee_wo[7][0];
-		
+
 		echo '<br />' . date('H:i:s') . ' converteren: vrijstelling => CorveeVrijstelling & kwalikok => CorveeKwalificatie & voorkeuren => CorveeVoorkeur';
-		
+
 		$rows = self::queryDb('SELECT uid, corvee_vrijstelling, corvee_kwalikok, corvee_voorkeuren FROM lid');
 		foreach ($rows as $row) {
 			$percentage = intval($row['corvee_vrijstelling']);
 			if ($percentage > 0) {
 				try {
 					\VrijstellingenModel::saveVrijstelling($row['uid'], date('Y-m-d'), date('Y-m-d', strtotime('+2 years')), $percentage);
-				}
-				catch (\Exception $e) {
+				} catch (\Exception $e) {
+					
 				}
 			}
 			if ($row['corvee_kwalikok'] === '1') {
@@ -346,9 +320,9 @@ class ConversieModel {
 				\VoorkeurenModel::inschakelenVoorkeur($corvee[5]->getCorveeRepetitieId(), $row['uid']);
 			}
 		}
-		
+
 		echo '<br />' . date('H:i:s') . ' converteren: maaltijd => Maaltijd & maaltijdcorvee => CorveeTaak[]';
-		
+
 		$aantallen = array(
 			7 => 'kwalikoks',
 			1 => 'koks',
@@ -389,10 +363,10 @@ class ConversieModel {
 					$titel .= 'maaltijd';
 					$crid = $corvee[3]->getCorveeRepetitieId();
 				}
-				$maaltijd = self::conversieMaaltijd(intval($row['id']), $mrid, $titel, intval($row['max']), date('Y-m-d', $datum), date('H:i', $datum), floatval($GLOBALS['maaltijden']['standaard_maaltijdprijs']), $filter);
+				$maaltijd = self::conversieMaaltijd(intval($row['id']), $mrid, $titel, intval($row['max']), date('Y-m-d', $datum), date('H:i', $datum), floatval(Instellingen::get('maaltijden', 'standaard_prijs')), $filter);
 				$mid = $maaltijd->getMaaltijdId();
 				$maaltijden[$mid] = $maaltijd;
-				
+
 				$uid = $row['tp'];
 				if ($uid === 'x101') {
 					$uid = null;
@@ -404,7 +378,7 @@ class ConversieModel {
 					}
 				}
 			}
-			
+
 			foreach ($functies as $functie => $fid) {
 				if ($fid === 3) {
 					continue;
@@ -412,9 +386,8 @@ class ConversieModel {
 				$taken = self::queryDb('SELECT * FROM maaltijdcorvee WHERE maalid = ?', array($mid));
 				if ($fid === 8) {
 					$punt = intval($row['punten_afwas']);
-				}
-				else {
-					$punt = intval($row['punten_'. $functie]);
+				} else {
+					$punt = intval($row['punten_' . $functie]);
 				}
 				$aantal = 0;
 				foreach ($taken as $taak) {
@@ -444,8 +417,7 @@ class ConversieModel {
 					if ($aantal === 0 && $mid !== null) {
 						$tekort = 1;
 					}
-				}
-				else {
+				} else {
 					$tekort = intval($row[$aantallen[$fid]]) - $aantal;
 				}
 				if ($fid === 2 && $tekort > 0) {
@@ -463,33 +435,33 @@ class ConversieModel {
 				}
 			}
 		}
-		
+
 		echo '<br />' . date('H:i:s') . ' converteren: maaltijdaanmelding => MaaltijdAanmelding[]';
-		
+
 		$rows = self::queryDb('SELECT * FROM maaltijdaanmelding');
 		foreach ($rows as $row) {
 			if ($row['status'] === 'AAN') {
 				try {
 					AanmeldingenModel::aanmeldenVoorMaaltijd(intval($row['maalid']), $row['uid'], $row['door'], intval($row['gasten']), true, $row['gasten_opmerking']);
-				}
-				catch (\Exception $e) {
+				} catch (\Exception $e) {
+					
 				}
 			}
 		}
-		
+
 		echo '<br />' . date('H:i:s') . ' converteren: maaltijdabo => MaaltijdAbonnement';
-		
+
 		$rows = self::queryDb('SELECT uid, abosoort FROM maaltijdabo');
 		foreach ($rows as $row) {
 			if (array_key_exists($row['abosoort'], $repetities)) {
 				AbonnementenModel::inschakelenAbonnement($repetities[$row['abosoort']]->getMaaltijdRepetitieId(), $row['uid']);
 			}
 		}
-		
+
 		echo '<br />' . date('H:i:s') . ' converteren voltooid';
 	}
-	
-	private static function queryDb($sql, $values=array()) {
+
+	private static function queryDb($sql, $values = array()) {
 		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
@@ -499,7 +471,7 @@ class ConversieModel {
 		}
 		return array();
 	}
-	
+
 	private static function conversieMaaltijd($mid, $mrid, $titel, $limiet, $datum, $tijd, $prijs, $filter) {
 		$sql = 'INSERT INTO mlt_maaltijden';
 		$sql.= ' (maaltijd_id, mlt_repetitie_id, titel, aanmeld_limiet, datum, tijd, prijs, gesloten, laatst_gesloten, verwijderd, aanmeld_filter)';
@@ -509,13 +481,13 @@ class ConversieModel {
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		if ($query->rowCount() !== 1) {
-			throw new Exception('New maaltijd faalt: $query->rowCount() ='. $query->rowCount());
+			throw new Exception('New maaltijd faalt: $query->rowCount() =' . $query->rowCount());
 		}
 		$maaltijd = new Maaltijd($mid, $mrid, $titel, $limiet, $datum, $tijd, $prijs, false, null, false, $filter);
 		$maaltijd->setAantalAanmeldingen(0);
 		return $maaltijd;
 	}
-	
+
 	private static function archiefMaaltijd(ArchiefMaaltijd $archief) {
 		$db = \Database::instance();
 		try {
@@ -535,15 +507,15 @@ class ConversieModel {
 			$query->execute($values);
 			if ($query->rowCount() !== 1) {
 				$db->rollback();
-				throw new Exception('New archief-maaltijd faalt: $query->rowCount() ='. $query->rowCount());
+				throw new Exception('New archief-maaltijd faalt: $query->rowCount() =' . $query->rowCount());
 			}
 			$db->commit();
-		}
-		catch (\Exception $e) {
+		} catch (\Exception $e) {
 			$db->rollback();
 			throw $e; // rethrow to controller
 		}
 	}
+
 }
 
 ?>

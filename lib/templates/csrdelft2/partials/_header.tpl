@@ -5,13 +5,13 @@
     <meta charset="utf-8">
     <title>C.S.R. Delft - {$body->getTitel()}</title>
 
-    {foreach from=$this->getStylesheets() item=sheet}
+    {foreach from=$view->getStylesheets() item=sheet}
         <link rel="stylesheet" href="{$sheet.naam}?{$sheet.datum}" type="text/css" />
     {/foreach}
 
     <link rel="shortcut icon" href="http://plaetjes.csrdelft.nl/layout/favicon.ico">
 
-    {foreach from=$this->getScripts() item=script}
+    {foreach from=$view->getScripts() item=script}
         <script type="text/javascript" src="{$script.naam}?{$script.datum}"></script>
     {/foreach}
 

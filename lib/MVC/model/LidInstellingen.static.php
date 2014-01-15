@@ -1,20 +1,22 @@
 <?php
 
 /**
- * instellingen.class.php	| 	C.S.R. Delft pubcie@csrdelft.nl
+ * LidInstellingenModel.class.php
+ * 
+ * @author C.S.R. Delft <pubcie@csrdelft.nl>
  *
- * Instelling houdt instellingen bij voor gebruikers. In de sessie en in
- * het profiel van leden.
+ * Deze static class houdt de instellingen bij voor een gebruiker.
+ * In de sessie en in het profiel van leden.
  * De array met instellingen wordt geserialiseerd opgeslagen, als iemand zin
  * heeft kan het op termijn netjes in een losse tabel in de database.
  */
 class LidInstellingen {
 
 	/**
-	 * Instellingarray, een naampje, met een default-value en een type.
+	 * 'name' => array('defaul value', 'beschrijving', 'type', type-opties)
+	 * @var array
 	 */
 	private static $instellingen = array(
-		//	'name' => array('defaul value', 'beschrijving', 'type', type-opties),
 		'algemeen_sneltoetsen' => array('nee', 'Sneltoetsen op de webstek', 'enum', array('ja', 'nee')),
 		'algemeen_bijbel' => array('NBV', 'Bijbelvertaling voor bijbelrooster', 'enum', array('NBV', 'NBG', 'Herziene Statenvertaling', 'Statenvertaling (Jongbloed)', 'Groot Nieuws Bijbel', 'Willibrordvertaling')),
 		'layout' => array('normaal', 'Websteklayout', 'enum', array('normaal', 'owee', 'roze', 'lustrum')),
@@ -53,7 +55,6 @@ class LidInstellingen {
 		'googleContacts_extended' => array('ja', 'Uitgebreide export (nickname, voorletters, adres/tel ouders, website, chataccounts, eetwens) ', 'enum', array('ja', 'nee'))
 	);
 
-	//hebben we een instelling die $key heet?
 	public static function has($key) {
 		return array_key_exists($key, self::$instellingen);
 	}
@@ -145,7 +146,6 @@ class LidInstellingen {
 		return $lid->save();
 	}
 
-	//standaardwaarden teruggeven.
 	public static function getDefaults() {
 		$return = array();
 		foreach (self::$instellingen as $key => $instelling) {

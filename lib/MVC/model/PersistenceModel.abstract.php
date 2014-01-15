@@ -1,6 +1,6 @@
 <?php
 
-require_once 'MVC/model/Database.class.php';
+require_once 'MVC/model/Database.singleton.php';
 require_once 'MVC/model/Persistence.interface.php';
 require_once 'MVC/model/entity/PersistentEntity.abstract.php';
 

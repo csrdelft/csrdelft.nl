@@ -19,10 +19,10 @@ class PeilingContent extends TemplateView {
 	public function getHTML($beheer = false) {
 
 
-		$this->assign('peiling', $this->peiling);
-		$this->assign('beheer', $beheer);
+		$this->smarty->assign('peiling', $this->peiling);
+		$this->smarty->assign('beheer', $beheer);
 
-		return $this->fetch('peiling.ubb.tpl');
+		return $this->smarty->fetch('peiling.ubb.tpl');
 	}
 
 	public function view() {

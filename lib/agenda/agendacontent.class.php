@@ -29,11 +29,11 @@ class AgendaMaandContent extends TemplateView {
 	public function view() {
 		$filter = !LoginLid::instance()->hasPermission('P_AGENDA_MOD');
 
-		$this->assign('datum', strtotime($this->jaar . '-' . $this->maand . '-01'));
-		$this->assign('weken', $this->agenda->getItemsByMaand($this->jaar, $this->maand, $filter));
-		$this->assign('magToevoegen', $this->agenda->magToevoegen());
-		$this->assign('magBeheren', $this->agenda->magBeheren());
-		$this->assign('melding', $this->getMelding());
+		$this->smarty->assign('datum', strtotime($this->jaar . '-' . $this->maand . '-01'));
+		$this->smarty->assign('weken', $this->agenda->getItemsByMaand($this->jaar, $this->maand, $filter));
+		$this->smarty->assign('magToevoegen', $this->agenda->magToevoegen());
+		$this->smarty->assign('magBeheren', $this->agenda->magBeheren());
+		$this->smarty->assign('melding', $this->getMelding());
 
 		// URL voor vorige maand
 		$urlVorige = CSR_ROOT . 'actueel/agenda/';
@@ -42,7 +42,7 @@ class AgendaMaandContent extends TemplateView {
 		} else {
 			$urlVorige .= $this->jaar . '-' . ($this->maand - 1) . '/';
 		}
-		$this->assign('urlVorige', $urlVorige);
+		$this->smarty->assign('urlVorige', $urlVorige);
 
 		// URL voor volgende maand
 		$urlVolgende = CSR_ROOT . 'actueel/agenda/';
@@ -51,9 +51,9 @@ class AgendaMaandContent extends TemplateView {
 		} else {
 			$urlVolgende .= $this->jaar . '-' . ($this->maand + 1) . '/';
 		}
-		$this->assign('urlVolgende', $urlVolgende);
+		$this->smarty->assign('urlVolgende', $urlVolgende);
 
-		$this->display('agenda/maand.tpl');
+		$this->smarty->display('agenda/maand.tpl');
 	}
 
 }
@@ -76,10 +76,10 @@ class AgendaItemContent extends TemplateView {
 	}
 
 	public function view() {
-		$this->assign('item', $this->item);
-		$this->assign('actie', $this->actie);
-		$this->assign('melding', $this->getMelding());
-		$this->display('agenda/item.tpl');
+		$this->smarty->assign('item', $this->item);
+		$this->smarty->assign('actie', $this->actie);
+		$this->smarty->assign('melding', $this->getMelding());
+		$this->smarty->display('agenda/item.tpl');
 	}
 
 }
@@ -111,8 +111,8 @@ class AgendaZijbalkContent extends TemplateView {
 			$items = array_slice($items, 0, LidInstellingen::get('zijbalk_agenda_max'));
 		}
 
-		$this->assign('items', $items);
-		$this->display('agenda/zijbalk.tpl');
+		$this->smarty->assign('items', $items);
+		$this->smarty->display('agenda/zijbalk.tpl');
 	}
 
 }
@@ -137,8 +137,8 @@ class AgendaCourantContent extends TemplateView {
 		$items = $this->agenda->getItems($beginMoment, $eindMoment, $filter);
 
 
-		$this->assign('items', $items);
-		$this->display('agenda/courant.tpl');
+		$this->smarty->assign('items', $items);
+		$this->smarty->display('agenda/courant.tpl');
 	}
 
 }
@@ -157,8 +157,8 @@ class AgendaIcalendarContent extends TemplateView {
 		$items = $this->agenda->getItems(null, null, $filter);
 
 
-		$this->assign('items', $items);
-		$this->display('agenda/icalendar.tpl');
+		$this->smarty->assign('items', $items);
+		$this->smarty->display('agenda/icalendar.tpl');
 	}
 
 }

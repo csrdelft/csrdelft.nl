@@ -58,11 +58,11 @@ class CourantBeheercontent extends TemplateView {
 			}
 		}
 
-		$this->assign('courant', $this->courant);
-		$this->assign('form', $formulier);
-		$this->assign('melding', $this->getMelding());
+		$this->smarty->assign('courant', $this->courant);
+		$this->smarty->assign('form', $formulier);
+		$this->smarty->assign('melding', $this->getMelding());
 
-		$this->display('courant/courantbeheer.tpl');
+		$this->smarty->display('courant/courantbeheer.tpl');
 	}
 
 }

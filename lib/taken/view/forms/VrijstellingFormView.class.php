@@ -1,7 +1,5 @@
 <?php
 
-
-
 /**
  * VrijstellingFormView.class.php	| 	P.W.G. Brussee (brussee@live.nl)
  *
@@ -20,9 +18,9 @@ class VrijstellingFormView extends TemplateView {
 		$formFields[] = new RequiredLidField('lid_id', $uid, 'Naam of lidnummer');
 		$formFields[] = new DatumField('begin_datum', $begin, 'Vanaf', date('Y') + 1, date('Y'));
 		$formFields[] = new DatumField('eind_datum', $eind, 'Tot en met', date('Y') + 1, date('Y'));
-		$formFields[] = new IntField('percentage', $percentage, 'Percentage (%)', $GLOBALS['corvee']['vrijstelling_percentage_max'], $GLOBALS['corvee']['vrijstelling_percentage_min']);
+		$formFields[] = new IntField('percentage', $percentage, 'Percentage (%)', Instellingen::get('corvee', 'vrijstelling_percentage_max'), Instellingen::get('corvee', 'vrijstelling_percentage_min'));
 
-		$this->_form = new Formulier('taken-vrijstelling-form', $GLOBALS['taken_module'] . '/opslaan' . ($uid === null ? '' : '/' . $uid), $formFields);
+		$this->_form = new Formulier('taken-vrijstelling-form', Instellingen::get('taken', 'url') . '/opslaan' . ($uid === null ? '' : '/' . $uid), $formFields);
 	}
 
 	public function getTitel() {
@@ -33,14 +31,14 @@ class VrijstellingFormView extends TemplateView {
 	}
 
 	public function view() {
-		$this->assign('melding', $this->getMelding());
-		$this->assign('kop', $this->getTitel());
+		$this->smarty->assign('melding', $this->getMelding());
+		$this->smarty->assign('kop', $this->getTitel());
 		$this->_form->css_classes[] = 'popup';
-		$this->assign('form', $this->_form);
+		$this->smarty->assign('form', $this->_form);
 		if ($this->_uid === null) {
-			$this->assign('nocheck', true);
+			$this->smarty->assign('nocheck', true);
 		}
-		$this->display('taken/popup_form.tpl');
+		$this->smarty->display('taken/popup_form.tpl');
 	}
 
 	public function validate() {

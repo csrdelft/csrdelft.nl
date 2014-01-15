@@ -30,7 +30,7 @@
 			<tr class="
 				{if !$suggestie.voorkeur} geenvoorkeur{/if}
 				{if $suggestie.recent} recent{/if}
-				{if $this->getIsJongsteLichting($uid)} jongste{else} oudere{/if}	
+				{if $view->getIsJongsteLichting($uid)} jongste{else} oudere{/if}	
 				">
 				<td style="width: 15px;">
 					<a class="knop" style="padding: 0px 2px;" onclick="$('#field_lid_id').val('{$uid}');$('#taken-taak-toewijzen-form').submit();">
@@ -52,7 +52,7 @@
 					{/if}
 				</td>
 				<td style="width: 140px;">
-					{$this->getLidLink($uid)}
+					{$view->getLidLink($uid)}
 				</td>
 			{if $suggestie.laatste}
 				<td>{$suggestie.laatste->getBeginMoment()|date_format:"%d %b %Y"}</td>

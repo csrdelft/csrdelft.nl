@@ -2567,8 +2567,9 @@ lib/MVC/controller/AclController.abstract.php -text
 lib/MVC/controller/Controller.abstract.php -text
 lib/MVC/controller/InstellingenBeheerController.class.php -text
 lib/MVC/controller/MenuBeheerController.class.php -text
-lib/MVC/model/Database.class.php -text
-lib/MVC/model/InstellingenModel.class.php -text
+lib/MVC/model/Database.singleton.php -text
+lib/MVC/model/Instellingen.singleton.php -text
+lib/MVC/model/LidInstellingen.static.php -text
 lib/MVC/model/MenuModel.class.php -text
 lib/MVC/model/PaginationModel.abstract.php -text
 lib/MVC/model/Persistence.interface.php -text
@@ -3035,7 +3036,6 @@ lib/ishetalcontent.class.php -text
 lib/knop.class.php -text
 lib/ldap.class.php -text
 lib/lichting.class.php -text
-lib/lid/instellingen.class.php -text
 lib/lid/instellingencontent.class.php -text
 lib/lid/ledenlijstcontent.class.php -text
 lib/lid/lid.class.php -text
@@ -3262,7 +3262,7 @@ lib/taken/controller/MijnAbonnementenController.class.php -text
 lib/taken/controller/MijnCorveeController.class.php -text
 lib/taken/controller/MijnMaaltijdenController.class.php -text
 lib/taken/controller/MijnVoorkeurenController.class.php -text
-lib/taken/controller/ModuleController.class.php -text
+lib/taken/controller/TakenModuleController.class.php -text
 lib/taken/model/AanmeldingenModel.class.php -text
 lib/taken/model/AbonnementenModel.class.php -text
 lib/taken/model/ConversieModel.class.php -text
@@ -3318,11 +3318,11 @@ lib/taken/view/forms/RepetitieMaaltijdenFormView.class.php -text
 lib/taken/view/forms/TaakFormView.class.php -text
 lib/taken/view/forms/ToewijzenFormView.class.php -text
 lib/taken/view/forms/VrijstellingFormView.class.php -text
-lib/templates/MVC/instellingen/beheer/instelling_lijst.tpl -text
-lib/templates/MVC/instellingen/beheer/instellingen.tpl -text
+lib/templates/MVC/instellingen/beheer/instelling_row.tpl -text
+lib/templates/MVC/instellingen/beheer/instellingen_page.tpl -text
 lib/templates/MVC/layout/ubbhulp.tpl -text
 lib/templates/MVC/menu/beheer/menu_item.tpl -text
-lib/templates/MVC/menu/beheer/menu_tree.tpl -text
+lib/templates/MVC/menu/beheer/menu_page.tpl -text
 lib/templates/MVC/menu/menu.tpl -text
 lib/templates/MVC/menu/menu_block.tpl -text
 lib/templates/agenda/courant.tpl -text

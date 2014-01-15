@@ -23,9 +23,9 @@ class BibliotheekCatalogusContent extends TemplateView {
 
 	public function view() {
 
-		$this->assign('melding', $this->getMelding());
+		$this->smarty->assign('melding', $this->getMelding());
 
-		$this->display('bibliotheek/catalogus.tpl');
+		$this->smarty->display('bibliotheek/catalogus.tpl');
 	}
 
 }
@@ -178,10 +178,10 @@ class BibliotheekBoekContent extends TemplateView {
 
 	public function view() {
 
-		$this->assign('melding', $this->getMelding());
-		$this->assign('boek', $this->boek);
+		$this->smarty->assign('melding', $this->getMelding());
+		$this->smarty->assign('boek', $this->boek);
 
-		$this->display('bibliotheek/boek.tpl');
+		$this->smarty->display('bibliotheek/boek.tpl');
 	}
 
 }
@@ -200,8 +200,8 @@ class BoekUbbContent extends TemplateView {
 	}
 
 	public function view() {
-		$this->assign('boek', $this->boek);
-		return $this->fetch('bibliotheek/boek.ubb.tpl');
+		$this->smarty->assign('boek', $this->boek);
+		return $this->smarty->fetch('bibliotheek/boek.ubb.tpl');
 	}
 
 }

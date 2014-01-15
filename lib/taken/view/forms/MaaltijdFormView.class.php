@@ -41,7 +41,7 @@ class MaaltijdFormView extends TemplateView {
 		$formFields['filter']->required = false;
 		$formFields['filter']->title = 'Plaats een ! vooraan om van de restrictie een uitsluiting te maken.';
 
-		$this->_form = new Formulier('taken-maaltijd-form', $GLOBALS['taken_module'] . '/opslaan/' . $mid, $formFields);
+		$this->_form = new Formulier('taken-maaltijd-form', Instellingen::get('taken', 'url') . '/opslaan/' . $mid, $formFields);
 	}
 
 	public function getTitel() {
@@ -52,14 +52,14 @@ class MaaltijdFormView extends TemplateView {
 	}
 
 	public function view() {
-		$this->assign('melding', $this->getMelding());
-		$this->assign('kop', $this->getTitel());
+		$this->smarty->assign('melding', $this->getMelding());
+		$this->smarty->assign('kop', $this->getTitel());
 		$this->_form->css_classes[] = 'popup';
-		$this->assign('form', $this->_form);
+		$this->smarty->assign('form', $this->_form);
 		if ($this->_mid === 0) {
-			$this->assign('nocheck', true);
+			$this->smarty->assign('nocheck', true);
 		}
-		$this->display('taken/popup_form.tpl');
+		$this->smarty->display('taken/popup_form.tpl');
 	}
 
 	public function validate() {

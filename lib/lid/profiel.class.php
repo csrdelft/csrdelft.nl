@@ -751,7 +751,7 @@ class ProfielVoorkeur extends Profiel{
 
 		public function __construct($lid, $actie){
 			parent::__construct($lid, $actie);
-			$this->assignFields();
+			$this->smarty->assignFields();
 		}
 
 		/**

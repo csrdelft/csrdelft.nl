@@ -1,8 +1,5 @@
 <?php
 
-require_once 'lid/instellingen.class.php';
-require_once 'memcached.class.php';
-
 class Bijbelrooster extends TemplateView {
 
 	public function __construct() {
@@ -94,5 +91,3 @@ class Bijbelrooster extends TemplateView {
 	}
 
 }
-
-?>

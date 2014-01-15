@@ -16,7 +16,7 @@ Daarnaast blijven bij het verwijderen eventuele gekoppelde corveerepetities best
 N.B. Pas na het definitief verwijderen van de bijbehorende maaltijden zal de maaltijdrepetitie verwijderd kunnen worden.
 Dan pas zullen ook alle abonnementen op deze maaltijdrepetitie automatisch worden uitgeschakeld en verwijderd. 
 </p>
-<div style="float: right;"><a href="{$GLOBALS.taken_module}/nieuw" title="Nieuwe repetitie" class="knop post popup">{icon get="add"} Nieuwe repetitie</a></div>
+<div style="float: right;"><a href="{$instellingen->get('taken', 'url')}/nieuw" title="Nieuwe repetitie" class="knop post popup">{icon get="add"} Nieuwe repetitie</a></div>
 <table id="taken-tabel" class="taken-tabel">
 	<thead>
 		<tr>

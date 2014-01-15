@@ -34,16 +34,16 @@ class BeheerTakenView extends TemplateView {
 
 	public function view() {
 		if ($this->_maaltijd !== null) {
-			$this->assign('maaltijd', $this->_maaltijd);
+			$this->smarty->assign('maaltijd', $this->_maaltijd);
 		}
 
 		if (is_array($this->_taken)) { // list of corveetaken
 			if ($this->_prullenbak || $this->_repetities !== null) { // normal view
-				$this->assign('prullenbak', $this->_prullenbak);
-				$this->assign('popup', $this->_popup);
-				$this->assign('melding', $this->getMelding());
-				$this->assign('kop', $this->getTitel());
-				$this->display('taken/menu_pagina.tpl');
+				$this->smarty->assign('prullenbak', $this->_prullenbak);
+				$this->smarty->assign('popup', $this->_popup);
+				$this->smarty->assign('melding', $this->getMelding());
+				$this->smarty->assign('kop', $this->getTitel());
+				$this->smarty->display('taken/menu_pagina.tpl');
 
 				$takenByDate = array();
 				foreach ($this->_taken as $taak) {
@@ -54,25 +54,25 @@ class BeheerTakenView extends TemplateView {
 					$takenByDate[$datum][$taak->getFunctieId()][] = $taak;
 				}
 				if ($this->_maaltijd !== null) {
-					$this->assign('show', true);
+					$this->smarty->assign('show', true);
 				}
-				$this->assign('taken', $takenByDate);
-				$this->assign('repetities', $this->_repetities);
-				$this->display('taken/corveetaak/beheer_taken.tpl');
+				$this->smarty->assign('taken', $takenByDate);
+				$this->smarty->assign('repetities', $this->_repetities);
+				$this->smarty->display('taken/corveetaak/beheer_taken.tpl');
 			} else { // list of new corveetaken
 				echo '<tr id="taken-melding"><td>' . $this->getMelding() . '</td></tr>';
 				foreach ($this->_taken as $taken) {
-					$this->assign('taak', $taken);
-					$this->assign('show', true);
-					$this->display('taken/corveetaak/beheer_taak_lijst.tpl');
+					$this->smarty->assign('taak', $taken);
+					$this->smarty->assign('show', true);
+					$this->smarty->display('taken/corveetaak/beheer_taak_lijst.tpl');
 				}
 			}
 		} elseif (is_int($this->_taken)) { // id of deleted corveetaak
 			echo '<tr id="corveetaak-row-' . $this->_taken . '" class="remove"></tr>';
 		} else { // single corveetaak
-			$this->assign('taak', $this->_taken);
-			$this->assign('show', true);
-			$this->display('taken/corveetaak/beheer_taak_lijst.tpl');
+			$this->smarty->assign('taak', $this->_taken);
+			$this->smarty->assign('show', true);
+			$this->smarty->display('taken/corveetaak/beheer_taak_lijst.tpl');
 		}
 	}
 

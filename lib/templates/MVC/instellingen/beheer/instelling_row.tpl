@@ -1,5 +1,5 @@
 {*
-	instelling_lijst.tpl	|	P.W.G. Brussee (brussee@live.nl)
+	instelling_row.tpl	|	P.W.G. Brussee (brussee@live.nl)
 *}
 <tr id="instelling-row-{$instelling->instelling_id}">
 	<td>

@@ -13,8 +13,8 @@ class MededelingTopDrieOverzichtContent extends TemplateView {
 	}
 
 	public function view() {
-		$this->assign('mededelingen_root', MededelingenContent::mededelingenRoot);
-		$this->display('mededelingen/top3overzicht.tpl');
+		$this->smarty->assign('mededelingen_root', MededelingenContent::mededelingenRoot);
+		$this->smarty->display('mededelingen/top3overzicht.tpl');
 	}
 
 }

@@ -26,9 +26,9 @@ class ForumContent extends TemplateView {
 
 	function viewCategories() {
 
-		$this->assign('categories', ForumCategorie::getAll(true));
-		$this->assign('melding', $this->getMelding());
-		$this->display('forum/list_categories.tpl');
+		$this->smarty->assign('categories', ForumCategorie::getAll(true));
+		$this->smarty->assign('melding', $this->getMelding());
+		$this->smarty->display('forum/list_categories.tpl');
 	}
 
 	/*	 * *********************************************************************************************************
@@ -38,9 +38,9 @@ class ForumContent extends TemplateView {
 
 	function rssFeed() {
 		$aPosts = Forum::getPostsVoorRss(false, false);
-		$this->assign('aPosts', $aPosts);
-		$this->assign('selflink', LoginLid::instance()->getLid()->getRssLink());
-		$this->display('forum/rss.tpl');
+		$this->smarty->assign('aPosts', $aPosts);
+		$this->smarty->assign('selflink', LoginLid::instance()->getLid()->getRssLink());
+		$this->smarty->display('forum/rss.tpl');
 	}
 
 	public function lastPostsZijbalk($zelf = false) {
@@ -65,18 +65,18 @@ class ForumContent extends TemplateView {
 				$post = preg_replace('/(\[(|\/)\w+\])/', '|', $aPost['tekst']);
 				$postfragment = substr(str_replace(array("\n", "\r", ' '), ' ', $post), 0, 40);
 
-				$this->assign('timestamp', strtotime($aPost['datum']));
-				$this->assign('postID', $aPost['postID']);
-				$this->assign('titel', htmlspecialchars($aPost['titel']));
-				$this->assign('naam', Forum::getForumNaam($aPost['uid'], false, false));
-				$this->assign('postfragment', mb_htmlentities($postfragment));
+				$this->smarty->assign('timestamp', strtotime($aPost['datum']));
+				$this->smarty->assign('postID', $aPost['postID']);
+				$this->smarty->assign('titel', htmlspecialchars($aPost['titel']));
+				$this->smarty->assign('naam', Forum::getForumNaam($aPost['uid'], false, false));
+				$this->smarty->assign('postfragment', mb_htmlentities($postfragment));
 				if (LoginLid::instance()->getUid() != 'x999' && ($aPost['momentGelezen'] == '' || $aPost['momentGelezen'] < $aPost['lastpost'])) {
-					$this->assign('opvallend', true);
+					$this->smarty->assign('opvallend', true);
 				} else {
-					$this->assign('opvallend', false);
+					$this->smarty->assign('opvallend', false);
 				}
-				$this->assign('linktekst', $tekst);
-				$this->display('forum/zijbalk_item.tpl');
+				$this->smarty->assign('linktekst', $tekst);
+				$this->smarty->display('forum/zijbalk_item.tpl');
 			}
 		}
 		if (!$zelf) {
@@ -108,18 +108,18 @@ class ForumContent extends TemplateView {
 				$post = preg_replace('/(\[(|\/)\w+\])/', '|', $aPost['tekst']);
 				$postfragment = substr(str_replace(array("\n", "\r", ' '), ' ', $post), 0, 40);
 
-				$this->assign('timestamp', strtotime($aPost['datum']));
-				$this->assign('postID', $aPost['postID']);
-				$this->assign('titel', htmlspecialchars($aPost['titel']));
-				$this->assign('naam', Forum::getForumNaam($aPost['uid'], false, false));
-				$this->assign('postfragment', mb_htmlentities($postfragment));
+				$this->smarty->assign('timestamp', strtotime($aPost['datum']));
+				$this->smarty->assign('postID', $aPost['postID']);
+				$this->smarty->assign('titel', htmlspecialchars($aPost['titel']));
+				$this->smarty->assign('naam', Forum::getForumNaam($aPost['uid'], false, false));
+				$this->smarty->assign('postfragment', mb_htmlentities($postfragment));
 				if (LoginLid::instance()->getUid() != 'x999' && ($aPost['momentGelezen'] == '' || $aPost['momentGelezen'] < $aPost['lastpost'])) {
-					$this->assign('opvallend', true);
+					$this->smarty->assign('opvallend', true);
 				} else {
-					$this->assign('opvallend', false);
+					$this->smarty->assign('opvallend', false);
 				}
-				$this->assign('linktekst', $tekst);
-				$this->display('forum/zijbalk_item.tpl');
+				$this->smarty->assign('linktekst', $tekst);
+				$this->smarty->display('forum/zijbalk_item.tpl');
 			}
 		}
 		if (!$zelf) {
@@ -129,9 +129,9 @@ class ForumContent extends TemplateView {
 
 	public function lastPosts() {
 
-		$this->assign('berichten', Forum::getPostsVoorRss(LidInstellingen::get('forum_zoekresultaten')));
-		$this->assign('melding', $this->getMelding());
-		$this->display('forum/list_recent.tpl');
+		$this->smarty->assign('berichten', Forum::getPostsVoorRss(LidInstellingen::get('forum_zoekresultaten')));
+		$this->smarty->assign('melding', $this->getMelding());
+		$this->smarty->display('forum/list_recent.tpl');
 	}
 
 	public function zoeken() {

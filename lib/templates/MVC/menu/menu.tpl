@@ -60,7 +60,7 @@
 						{/if}
 						<a href="/pagina/beheer">&raquo; Beheeroverzicht</a><br />
 						<a href="/tools/query.php">&raquo; Opgeslagen queries</a><br />
-						<a href="/menubeheer">&raquo; Menubeheer</a><br />
+						<a href="/menubeheer">&raquo; Menubeheer</a> <a href="/instellingenbeheer">&raquo; Instellingen</a><br />
 					</div>
 				</div>
 				{literal}
@@ -109,7 +109,7 @@
 	</div>
 </div>
 
-<div id="submenu" onmouseover="ResetTimer()" onmouseout="StartTimer()">
+<div id="submenu" onmouseover="ResetTimer();" onmouseout="StartTimer();">
 	<div id="submenuitems">
 {foreach from=$root->children item=item}
 	{foreach name=sub from=$item->children item=subitem}

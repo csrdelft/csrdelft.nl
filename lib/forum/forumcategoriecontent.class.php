@@ -30,10 +30,10 @@ class ForumCategorieContent extends TemplateView {
 		}
 
 
-		$this->assign('categorie', $this->forumcategorie);
+		$this->smarty->assign('categorie', $this->forumcategorie);
 
-		$this->assign('melding', $this->getMelding());
-		$this->display('forum/list_onderwerpen.tpl');
+		$this->smarty->assign('melding', $this->getMelding());
+		$this->smarty->display('forum/list_onderwerpen.tpl');
 	}
 
 }

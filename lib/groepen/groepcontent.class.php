@@ -135,23 +135,23 @@ class Groepcontent extends TemplateView {
 
 	public function view() {
 
-		$this->assign('groep', $this->model);
-		$this->assign('opvolgerVoorganger', $this->model->getOpvolgerVoorganger());
+		$this->smarty->assign('groep', $this->model);
+		$this->smarty->assign('opvolgerVoorganger', $this->model->getOpvolgerVoorganger());
 
-		$this->assign('action', $this->action);
-		$this->assign('groeptypes', Groepen::getGroeptypes());
-		$this->assign('aanmeldfilters', $this->getAanmeldfilters());
+		$this->smarty->assign('action', $this->action);
+		$this->smarty->assign('groeptypes', Groepen::getGroeptypes());
+		$this->smarty->assign('aanmeldfilters', $this->getAanmeldfilters());
 		$oud = null;
 		if (array_key_exists('oudegroep', $_SESSION)) {
 			$oud = $_SESSION['oudegroep'];
 		}
-		$this->assign('oudegroep', $oud);
+		$this->smarty->assign('oudegroep', $oud);
 		if ($this->action == 'addLid') {
-			$this->assign('lidAdder', $this->getLidAdder());
+			$this->smarty->assign('lidAdder', $this->getLidAdder());
 		}
 
-		$this->assign('melding', $this->getMelding());
-		$this->display('groepen/groep.tpl');
+		$this->smarty->assign('melding', $this->getMelding());
+		$this->smarty->display('groepen/groep.tpl');
 	}
 
 }
@@ -169,12 +169,12 @@ class Groepencontent extends TemplateView {
 	}
 
 	public function view() {
-		$this->assign('groepen', $this->model);
-		$this->assign('gtype', $this->model->getNaam());
-		$this->assign('groeptypes', Groepen::getGroeptypes());
-		$this->assign('action', $this->action);
-		$this->assign('melding', $this->getMelding());
-		$this->display('groepen/groepen.tpl');
+		$this->smarty->assign('groepen', $this->model);
+		$this->smarty->assign('gtype', $this->model->getNaam());
+		$this->smarty->assign('groeptypes', Groepen::getGroeptypes());
+		$this->smarty->assign('action', $this->action);
+		$this->smarty->assign('melding', $this->getMelding());
+		$this->smarty->display('groepen/groepen.tpl');
 	}
 
 }
@@ -189,9 +189,9 @@ class GroepledenContent extends TemplateView {
 	}
 
 	public function view() {
-		$this->assign('groep', $this->model);
-		$this->assign('actie', $this->actie);
-		$this->display('groepen/groepleden.tpl');
+		$this->smarty->assign('groep', $this->model);
+		$this->smarty->assign('actie', $this->actie);
+		$this->smarty->display('groepen/groepleden.tpl');
 	}
 
 }
@@ -308,8 +308,8 @@ class GroepenProfielContent extends TemplateView {
 class GroepUbbContent extends TemplateView {
 
 	public function getHTML() {
-		$this->assign('groep', $this->model);
-		return $this->fetch('groepen/groep.ubb.tpl');
+		$this->smarty->assign('groep', $this->model);
+		return $this->smarty->fetch('groepen/groep.ubb.tpl');
 	}
 
 	public function view() {

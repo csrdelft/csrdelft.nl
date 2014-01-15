@@ -1,7 +1,5 @@
 <?php
 
-
-
 /**
  * ToewijzenFormView.class.php	| 	P.W.G. Brussee (brussee@live.nl)
  *
@@ -23,7 +21,7 @@ class ToewijzenFormView extends TemplateView {
 
 		$formFields[] = new LidField('lid_id', $taak->getLidId(), 'Naam of lidnummer', 'leden');
 
-		$this->_form = new Formulier('taken-taak-toewijzen-form', $GLOBALS['taken_module'] . '/toewijzen/' . $this->_taak->getTaakId(), $formFields);
+		$this->_form = new Formulier('taken-taak-toewijzen-form', Instellingen::get('taken', 'url') . '/toewijzen/' . $this->_taak->getTaakId(), $formFields);
 	}
 
 	public function getTitel() {
@@ -33,7 +31,7 @@ class ToewijzenFormView extends TemplateView {
 	public function getLidLink($uid) {
 		$lid = \LidCache::getLid($uid);
 		if ($lid instanceof \Lid) {
-			return $lid->getNaamLink($GLOBALS['corvee']['weergave_ledennamen_beheer'], $GLOBALS['corvee']['weergave_ledennamen']);
+			return $lid->getNaamLink(Instellingen::get('corvee', 'weergave_ledennamen_beheer'), Instellingen::get('corvee', 'weergave_link_ledennamen'));
 		}
 		return $uid;
 	}
@@ -43,32 +41,31 @@ class ToewijzenFormView extends TemplateView {
 	}
 
 	public function view() {
-		$this->assign('melding', $this->getMelding());
-		$this->assign('kop', $this->getTitel());
+		$this->smarty->assign('melding', $this->getMelding());
+		$this->smarty->assign('kop', $this->getTitel());
 		$this->_form->css_classes[] = 'popup';
 
-		$this->assignByRef('this', $this);
-		$this->assign('taak', $this->_taak);
-		$this->assign('suggesties', $this->_suggesties);
+		$this->smarty->assign('taak', $this->_taak);
+		$this->smarty->assign('suggesties', $this->_suggesties);
 
 		$crid = $this->_taak->getCorveeRepetitieId();
 		if ($crid !== null) {
-			$this->assign('voorkeurbaar', CorveeRepetitiesModel::getRepetitie($crid)->getIsVoorkeurbaar());
+			$this->smarty->assign('voorkeurbaar', CorveeRepetitiesModel::getRepetitie($crid)->getIsVoorkeurbaar());
 		}
 		if ($this->_taak->getCorveeFunctie()->getIsKwalificatieBenodigd()) {
-			$this->assign('voorkeur', $GLOBALS['corvee']['suggesties_voorkeur_kwali_filter']);
-			$this->assign('recent', $GLOBALS['corvee']['suggesties_recent_kwali_filter']);
+			$this->smarty->assign('voorkeur', Instellingen::get('corvee', 'suggesties_voorkeur_kwali_filter'));
+			$this->smarty->assign('recent', Instellingen::get('corvee', 'suggesties_recent_kwali_filter'));
 		} else {
-			$this->assign('voorkeur', $GLOBALS['corvee']['suggesties_voorkeur_filter']);
-			$this->assign('recent', $GLOBALS['corvee']['suggesties_recent_filter']);
+			$this->smarty->assign('voorkeur', Instellingen::get('corvee', 'suggesties_voorkeur_filter'));
+			$this->smarty->assign('recent', Instellingen::get('corvee', 'suggesties_recent_filter'));
 		}
 
-		$lijst = $this->fetch('taken/corveetaak/suggesties_lijst.tpl');
+		$lijst = $this->smarty->fetch('taken/corveetaak/suggesties_lijst.tpl');
 		$formFields[] = new HtmlComment($lijst);
 		$this->_form->addFields($formFields);
 
-		$this->assign('form', $this->_form);
-		$this->display('taken/popup_form.tpl');
+		$this->smarty->assign('form', $this->_form);
+		$this->smarty->display('taken/popup_form.tpl');
 	}
 
 	public function validate() {

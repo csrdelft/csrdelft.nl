@@ -22,12 +22,12 @@ class MijnMaaltijdenView extends TemplateView {
 	}
 
 	public function view() {
-		$this->assign('standaardprijs', sprintf('%.2f', floatval($GLOBALS['maaltijden']['standaard_maaltijdprijs'])));
+		$this->smarty->assign('standaardprijs', sprintf('%.2f', floatval(Instellingen::get('maaltijden', 'standaard_prijs'))));
 
 		if (is_array($this->_maaltijden)) { // list of maaltijden and list of aanmeldingen
-			$this->assign('melding', $this->getMelding());
-			$this->assign('kop', $this->getTitel());
-			$this->display('taken/menu_pagina.tpl');
+			$this->smarty->assign('melding', $this->getMelding());
+			$this->smarty->assign('kop', $this->getTitel());
+			$this->smarty->display('taken/menu_pagina.tpl');
 
 			$toonlijst = array();
 			foreach ($this->_maaltijden as $maaltijd) {
@@ -37,20 +37,20 @@ class MijnMaaltijdenView extends TemplateView {
 					$this->_aanmeldingen[$mid] = false;
 				}
 			}
-			$this->assign('toonlijst', $toonlijst);
-			$this->assign('maaltijden', $this->_maaltijden);
-			$this->assign('aanmeldingen', $this->_aanmeldingen);
-			$this->display('taken/maaltijd/mijn_maaltijden.tpl');
+			$this->smarty->assign('toonlijst', $toonlijst);
+			$this->smarty->assign('maaltijden', $this->_maaltijden);
+			$this->smarty->assign('aanmeldingen', $this->_aanmeldingen);
+			$this->smarty->display('taken/maaltijd/mijn_maaltijden.tpl');
 		} else {
-			$this->assign('toonlijst', MijnMaaltijdenController::magMaaltijdlijstTonen($this->_maaltijden));
+			$this->smarty->assign('toonlijst', MijnMaaltijdenController::magMaaltijdlijstTonen($this->_maaltijden));
 			if ($this->_aanmeldingen === null) { // single maaltijd
-				$this->assign('maaltijd', $this->_maaltijden);
-				$this->assign('aanmelding', false);
-				$this->display('taken/maaltijd/mijn_maaltijd_lijst.tpl');
+				$this->smarty->assign('maaltijd', $this->_maaltijden);
+				$this->smarty->assign('aanmelding', false);
+				$this->smarty->display('taken/maaltijd/mijn_maaltijd_lijst.tpl');
 			} else { // single aanmelding with maaltijd
-				$this->assign('maaltijd', $this->_maaltijden);
-				$this->assign('aanmelding', $this->_aanmeldingen);
-				$this->display('taken/maaltijd/mijn_maaltijd_lijst.tpl');
+				$this->smarty->assign('maaltijd', $this->_maaltijden);
+				$this->smarty->assign('aanmelding', $this->_aanmeldingen);
+				$this->smarty->display('taken/maaltijd/mijn_maaltijd_lijst.tpl');
 			}
 		}
 	}

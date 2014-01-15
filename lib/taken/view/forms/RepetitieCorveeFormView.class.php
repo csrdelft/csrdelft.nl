@@ -19,7 +19,7 @@ class RepetitieCorveeFormView extends TemplateView {
 		$formFields['eind'] = new DatumField('einddatum', $eindDatum, 'Tot en met', date('Y') + 1, date('Y'));
 		$formFields[] = new HiddenField('maaltijd_id', $mid);
 
-		$this->_form = new Formulier('taken-repetitie-aanmaken-form', $GLOBALS['taken_module'] . '/aanmaken/' . $repetitie->getCorveeRepetitieId(), $formFields);
+		$this->_form = new Formulier('taken-repetitie-aanmaken-form', Instellingen::get('taken', 'url') . '/aanmaken/' . $repetitie->getCorveeRepetitieId(), $formFields);
 	}
 
 	public function getTitel() {
@@ -27,12 +27,12 @@ class RepetitieCorveeFormView extends TemplateView {
 	}
 
 	public function view() {
-		$this->assign('melding', $this->getMelding());
-		$this->assign('kop', $this->getTitel());
+		$this->smarty->assign('melding', $this->getMelding());
+		$this->smarty->assign('kop', $this->getTitel());
 		$this->_form->css_classes[] = 'popup';
-		$this->assign('form', $this->_form);
-		$this->assign('nocheck', true);
-		$this->display('taken/popup_form.tpl');
+		$this->smarty->assign('form', $this->_form);
+		$this->smarty->assign('nocheck', true);
+		$this->smarty->display('taken/popup_form.tpl');
 	}
 
 	public function validate() {

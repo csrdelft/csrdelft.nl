@@ -27,20 +27,20 @@ class MaaltijdRepetitiesView extends TemplateView {
 
 	public function view() {
 		if (is_array($this->_repetities)) { // list of repetities
-			$this->assign('popup', $this->_popup);
-			$this->assign('melding', $this->getMelding());
-			$this->assign('kop', $this->getTitel());
-			$this->display('taken/menu_pagina.tpl');
+			$this->smarty->assign('popup', $this->_popup);
+			$this->smarty->assign('melding', $this->getMelding());
+			$this->smarty->assign('kop', $this->getTitel());
+			$this->smarty->display('taken/menu_pagina.tpl');
 
-			$this->assign('repetities', $this->_repetities);
-			$this->display('taken/maaltijd-repetitie/beheer_maaltijd_repetities.tpl');
+			$this->smarty->assign('repetities', $this->_repetities);
+			$this->smarty->display('taken/maaltijd-repetitie/beheer_maaltijd_repetities.tpl');
 		} elseif (is_int($this->_repetities)) { // id of deleted repetitie
 			echo '<tr id="taken-melding"><td>' . $this->getMelding() . '</td></tr>';
 			echo '<tr id="repetitie-row-' . $this->_repetities . '" class="remove"></tr>';
 		} else { // single repetitie
 			echo '<tr id="taken-melding"><td>' . $this->getMelding() . '</td></tr>';
-			$this->assign('repetitie', $this->_repetities);
-			$this->display('taken/maaltijd-repetitie/beheer_maaltijd_repetitie_lijst.tpl');
+			$this->smarty->assign('repetitie', $this->_repetities);
+			$this->smarty->display('taken/maaltijd-repetitie/beheer_maaltijd_repetitie_lijst.tpl');
 		}
 	}
 

@@ -26,19 +26,19 @@ class MijnCorveeView extends TemplateView {
 	}
 
 	public function view() {
-		$this->assign('melding', $this->getMelding());
-		$this->assign('kop', $this->getTitel());
-		$this->display('taken/menu_pagina.tpl');
+		$this->smarty->assign('melding', $this->getMelding());
+		$this->smarty->assign('kop', $this->getTitel());
+		$this->smarty->display('taken/menu_pagina.tpl');
 
-		$this->assign('rooster', $this->_rooster);
-		$this->display('taken/corveetaak/mijn_rooster.tpl');
+		$this->smarty->assign('rooster', $this->_rooster);
+		$this->smarty->display('taken/corveetaak/mijn_rooster.tpl');
 
-		$this->assign('puntenlijst', $this->_punten);
-		$this->assign('functies', $this->_functies);
-		$this->display('taken/corveepunt/mijn_punten.tpl');
+		$this->smarty->assign('puntenlijst', $this->_punten);
+		$this->smarty->assign('functies', $this->_functies);
+		$this->smarty->display('taken/corveepunt/mijn_punten.tpl');
 
-		$this->assign('vrijstelling', $this->_vrijstelling);
-		$this->display('taken/vrijstelling/mijn_vrijstelling.tpl');
+		$this->smarty->assign('vrijstelling', $this->_vrijstelling);
+		$this->smarty->display('taken/vrijstelling/mijn_vrijstelling.tpl');
 	}
 
 }

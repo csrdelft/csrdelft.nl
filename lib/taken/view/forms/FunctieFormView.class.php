@@ -26,7 +26,7 @@ class FunctieFormView extends TemplateView {
 			$formFields['kwali']->setOnChangeScript("if (!this.checked) alert('Alle kwalificaties zullen worden verwijderd!');");
 		}
 
-		$this->_form = new Formulier('taken-functie-form', $GLOBALS['taken_module'] . '/opslaan/' . $fid, $formFields);
+		$this->_form = new Formulier('taken-functie-form', Instellingen::get('taken', 'url') . '/opslaan/' . $fid, $formFields);
 	}
 
 	public function getTitel() {
@@ -37,14 +37,14 @@ class FunctieFormView extends TemplateView {
 	}
 
 	public function view() {
-		$this->assign('melding', $this->getMelding());
-		$this->assign('kop', $this->getTitel());
+		$this->smarty->assign('melding', $this->getMelding());
+		$this->smarty->assign('kop', $this->getTitel());
 		$this->_form->css_classes[] = 'popup';
-		$this->assign('form', $this->_form);
+		$this->smarty->assign('form', $this->_form);
 		if ($this->_fid === 0) {
-			$this->assign('nocheck', true);
+			$this->smarty->assign('nocheck', true);
 		}
-		$this->display('taken/popup_form.tpl');
+		$this->smarty->display('taken/popup_form.tpl');
 	}
 
 	public function validate() {

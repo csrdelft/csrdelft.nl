@@ -14,9 +14,9 @@ class RoodschopperContent extends TemplateView {
 	}
 
 	public function view() {
-		$this->assign('roodschopper', $this->roodschopper);
-		$this->assign('melding', $this->getMelding());
-		$this->display('roodschopper/roodschopper.tpl');
+		$this->smarty->assign('roodschopper', $this->roodschopper);
+		$this->smarty->assign('melding', $this->getMelding());
+		$this->smarty->display('roodschopper/roodschopper.tpl');
 	}
 
 }

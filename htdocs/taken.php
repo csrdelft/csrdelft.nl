@@ -10,10 +10,10 @@
  */
 try {
 	require_once 'configuratie.include.php';
-	require_once 'taken/controller/ModuleController.class.php';
+	require_once 'taken/controller/TakenModuleController.class.php';
 
 	$query = filter_input(INPUT_GET, 'uri', FILTER_SANITIZE_URL);
-	$controller = new ModuleController($query);
+	$controller = new TakenModuleController($query);
 	$controller->getContent()->view();
 }
 catch (\Exception $e) { // TODO: logging

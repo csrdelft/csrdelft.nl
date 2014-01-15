@@ -5,7 +5,7 @@
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
- * Formulier voor een nieuwe of te bewerken instelling.
+ * Formulier voor het bewerken van een instelling.
  * 
  */
 class InstellingFormView extends TemplateView {
@@ -20,6 +20,7 @@ class InstellingFormView extends TemplateView {
 		$formFields[] = new AutoresizeTextareaField('waarde', $instelling->value, 'Waarde', 0);
 
 		$this->form = new Formulier('taken-instelling-form', '/instellingenbeheer/opslaan/' . $instelling->module . '/' . $instelling->key, $formFields);
+		$this->form->css_classes[] = 'popup';
 	}
 
 	public function getTitel() {
@@ -27,11 +28,9 @@ class InstellingFormView extends TemplateView {
 	}
 
 	public function view() {
-		$this->assign('melding', $this->getMelding());
-		$this->assign('kop', $this->getTitel());
-		$this->form->css_classes[] = 'popup';
-		$this->assign('form', $this->form);
-		$this->display('taken/popup_form.tpl');
+		$this->smarty->assign('kop', $this->getTitel());
+		$this->smarty->assign('form', $this->form);
+		$this->smarty->display('taken/popup_form.tpl');
 	}
 
 	public function validate() {
@@ -47,9 +46,7 @@ class InstellingFormView extends TemplateView {
 	}
 
 	public function getValues() {
-		return $this->form->getValues(); // escapes HTML
+		return $this->form->getValues();
 	}
 
 }
-
-?>

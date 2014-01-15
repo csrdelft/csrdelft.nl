@@ -19,7 +19,7 @@ class KwalificatieFormView extends TemplateView {
 
 		$formFields[] = new LidField('voor_lid', $uid, 'Naam of lidnummer', 'leden');
 
-		$this->_form = new Formulier('taken-kwalificatie-form', $GLOBALS['taken_module'] . '/kwalificeer/' . $fid, $formFields);
+		$this->_form = new Formulier('taken-kwalificatie-form', Instellingen::get('taken', 'url') . '/kwalificeer/' . $fid, $formFields);
 	}
 
 	public function getTitel() {
@@ -27,11 +27,11 @@ class KwalificatieFormView extends TemplateView {
 	}
 
 	public function view() {
-		$this->assign('melding', $this->getMelding());
-		$this->assign('kop', $this->getTitel());
+		$this->smarty->assign('melding', $this->getMelding());
+		$this->smarty->assign('kop', $this->getTitel());
 		$this->_form->css_classes[] = 'popup';
-		$this->assign('form', $this->_form);
-		$this->display('taken/popup_form.tpl');
+		$this->smarty->assign('form', $this->_form);
+		$this->smarty->display('taken/popup_form.tpl');
 	}
 
 	public function validate() {

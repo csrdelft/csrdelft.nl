@@ -24,7 +24,7 @@ class AanmeldingFormView extends TemplateView {
 			$formFields[] = new IntField('aantal_gasten', $gasten, 'Aantal gasten', 200, 0);
 		}
 
-		$this->_form = new Formulier('taken-aanmelding-form', $GLOBALS['taken_module'] . '/ander' . ($nieuw ? 'aanmelden' : 'afmelden') . '/' . $mid, $formFields);
+		$this->_form = new Formulier('taken-aanmelding-form', Instellingen::get('taken', 'url') . '/ander' . ($nieuw ? 'aanmelden' : 'afmelden') . '/' . $mid, $formFields);
 	}
 
 	public function getTitel() {
@@ -35,11 +35,11 @@ class AanmeldingFormView extends TemplateView {
 	}
 
 	public function view() {
-		$this->assign('melding', $this->getMelding());
-		$this->assign('kop', $this->getTitel());
+		$this->smarty->assign('melding', $this->getMelding());
+		$this->smarty->assign('kop', $this->getTitel());
 		$this->_form->css_classes[] = 'popup';
-		$this->assign('form', $this->_form);
-		$this->display('taken/popup_form.tpl');
+		$this->smarty->assign('form', $this->_form);
+		$this->smarty->display('taken/popup_form.tpl');
 	}
 
 	public function validate() {

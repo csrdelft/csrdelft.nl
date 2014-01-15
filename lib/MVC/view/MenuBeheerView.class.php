@@ -36,11 +36,11 @@ class MenuBeheerView extends TemplateView {
 	}
 
 	public function view() {
-		$this->assign('melding', $this->getMelding());
-		$this->assign('kop', $this->getTitel());
-		$this->assign('menus', $this->menus);
-		$this->assign('root', $this->tree_root);
-		$this->display('MVC/menu/beheer/menu_tree.tpl');
+		$this->smarty->assign('melding', $this->getMelding());
+		$this->smarty->assign('kop', $this->getTitel());
+		$this->smarty->assign('menus', $this->menus);
+		$this->smarty->assign('root', $this->tree_root);
+		$this->smarty->display('MVC/menu/beheer/menu_page.tpl');
 	}
 
 }

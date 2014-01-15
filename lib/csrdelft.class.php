@@ -169,7 +169,7 @@ class csrdelft extends TemplateView {
 	function view($template = '', $menutemplate = '') {
 
 		header('Content-Type: text/html; charset=UTF-8');
-		$this->assign('body', $this->_body);
+		$this->smarty->assign('body', $this->_body);
 
 		switch ($this->_layout) {
 
@@ -178,9 +178,9 @@ class csrdelft extends TemplateView {
 					$template = 'content';
 				}
 				if ($menutemplate !== '') {
-					$this->assign('menutpl', $menutemplate);
+					$this->smarty->assign('menutpl', $menutemplate);
 				}
-				$this->display('csrdelft2/' . $template . '.tpl');
+				$this->smarty->display('csrdelft2/' . $template . '.tpl');
 				break;
 
 			case 'normaal':
@@ -194,13 +194,13 @@ class csrdelft extends TemplateView {
 					$left = 40;
 					require_once 'dragobject.class.php';
 					DragObject::getCoords('minion', $top, $left);
-					$this->assign('top', $top);
-					$this->assign('left', $left);
-					$this->assign('minion', $this->fetch('minion.tpl'));
+					$this->smarty->assign('top', $top);
+					$this->smarty->assign('left', $left);
+					$this->smarty->assign('minion', $this->smarty->fetch('minion.tpl'));
 				}
 
 				if (defined('DEBUG') AND (LoginLid::instance()->hasPermission('P_ADMIN') OR LoginLid::instance()->isSued())) {
-					$this->assign('debug', SimpleHTML::getDebug());
+					$this->smarty->assign('debug', SimpleHTML::getDebug());
 				}
 
 				if ($this->zijkolom !== false || LidInstellingen::get('layout_beeld') === 'breedbeeld') {
@@ -210,12 +210,12 @@ class csrdelft extends TemplateView {
 						$this->zijkolom = SimpleHTML::getStandaardZijkolom();
 					}
 				}
-				$this->assign('zijkolom', $this->zijkolom);
+				$this->smarty->assign('zijkolom', $this->zijkolom);
 
 				require_once('MVC/view/MenuView.class.php');
-				$this->assign('mainmenu', new MenuView('main', 0));
+				$this->smarty->assign('mainmenu', new MenuView('main', 0));
 
-				$this->display('csrdelft.tpl');
+				$this->smarty->display('csrdelft.tpl');
 				break;
 		}
 

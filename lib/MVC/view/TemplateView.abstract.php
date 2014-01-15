@@ -8,32 +8,37 @@ require_once('smarty/libs/Smarty.class.php');
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
- * The template engine compiles the templates
- * and displays them to the user.
+ * Uses the template engine Smarty to compile and
+ * display the template.
  * 
  */
-abstract class TemplateView extends Smarty implements View {
+abstract class TemplateView implements View {
 
 	/**
 	 * Data access model
 	 */
 	protected $model;
+	/**
+	 * Template engine
+	 * @var Smarty
+	 */
+	protected $smarty;
 
 	public function __construct($model = null) {
-		parent::__construct();
 		$this->model = $model;
+		$this->smarty = new Smarty();
 
-		$this->setTemplateDir(SMARTY_TEMPLATE_DIR);
-		$this->setCompileDir(SMARTY_COMPILE_DIR);
-		//$this->setConfigDir(SMARTY_CONFIG_DIR); 
-		$this->setCacheDir(SMARTY_CACHE_DIR);
-		$this->caching = false;
+		$this->smarty->setTemplateDir(SMARTY_TEMPLATE_DIR);
+		$this->smarty->setCompileDir(SMARTY_COMPILE_DIR);
+		//$this->smarty->setConfigDir(SMARTY_CONFIG_DIR); 
+		$this->smarty->setCacheDir(SMARTY_CACHE_DIR);
+		$this->smarty->caching = false;
 
 		// frequently used things
-		$this->assignByRef('this', $this);
-		$this->assign('GLOBALS', $GLOBALS);
-		$this->assign('CSR_PICS', CSR_PICS);
-		$this->assign('loginlid', LoginLid::instance());
+		$this->smarty->assignByRef('view', $this);
+		$this->smarty->assign('instellingen', Instellingen::instance());
+		$this->smarty->assign('loginlid', LoginLid::instance());
+		$this->smarty->assign('CSR_PICS', CSR_PICS);
 	}
 
 	public function getModel() {

@@ -1,6 +1,5 @@
 <?php
 
-
 require_once 'mail.class.php';
 
 /**
@@ -14,12 +13,12 @@ class HerinneringenModel {
 		$uid = $taak->getLidId();
 		$lid = \LidCache::getLid($uid); // false if lid does not exist
 		if (!$lid instanceof \Lid) {
-			throw new Exception($datum .' '. $taak->getCorveeFunctie()->getNaam() .' niet toegewezen!'. (!empty($uid) ? ' ($uid ='. $uid .')' : ''));
+			throw new Exception($datum . ' ' . $taak->getCorveeFunctie()->getNaam() . ' niet toegewezen!' . (!empty($uid) ? ' ($uid =' . $uid . ')' : ''));
 		}
 		//$to = $lid->getEmail();
-		$to = $uid .'@csrdelft.nl';
+		$to = $uid . '@csrdelft.nl';
 		$from = 'corvee@csrdelft.nl';
-		$onderwerp = 'C.S.R. Delft Corvee - '. $datum;
+		$onderwerp = 'C.S.R. Delft Corvee - ' . $datum;
 		$bericht = $taak->getCorveeFunctie()->getEmailBericht();
 		$lidnaam = $lid->getNaamLink('civitas');
 		$eten = '';
@@ -27,8 +26,7 @@ class HerinneringenModel {
 			$aangemeld = AanmeldingenModel::getIsAangemeld($taak->getMaaltijdId(), $uid);
 			if ($aangemeld) {
 				$eten = 'U eet WEL mee met de maaltijd.';
-			}
-			else {
+			} else {
 				$eten = 'U eet NIET mee met de maaltijd.';
 			}
 		}
@@ -37,16 +35,15 @@ class HerinneringenModel {
 		$mail->setFrom($from);
 		if ($mail->send()) { // false if failed
 			TakenModel::updateGemaild($taak);
-			return $datum .' '. $taak->getCorveeFunctie()->getNaam() .' verstuurd! ('. $lidnaam .')';
-		}
-		else {
-			throw new Exception($datum .' '. $taak->getCorveeFunctie()->getNaam() .' faalt! ('. $lidnaam .')');
+			return $datum . ' ' . $taak->getCorveeFunctie()->getNaam() . ' verstuurd! (' . $lidnaam . ')';
+		} else {
+			throw new Exception($datum . ' ' . $taak->getCorveeFunctie()->getNaam() . ' faalt! (' . $lidnaam . ')');
 		}
 	}
-	
+
 	public static function stuurHerinneringen() {
 		if (array_key_exists('herinnering_1e_mail', $GLOBALS['corvee'])) {
-			$vooraf = str_replace('-', '+', $GLOBALS['corvee']['herinnering_1e_mail']);
+			$vooraf = str_replace('-', '+', Instellingen::get('corvee', 'herinnering_1e_mail'));
 		}
 		$van = strtotime(date('Y-m-d'));
 		$tot = strtotime($vooraf, $van);
@@ -57,14 +54,14 @@ class HerinneringenModel {
 			if ($taak->getMoetHerinneren()) {
 				try {
 					$verzonden[] = self::stuurHerinnering($taak);
-				}
-				catch (\Exception $e) {
+				} catch (\Exception $e) {
 					$errors[] = $e;
 				}
 			}
 		}
 		return array($verzonden, $errors);
 	}
+
 }
 
 ?>

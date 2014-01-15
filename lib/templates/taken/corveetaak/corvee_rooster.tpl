@@ -3,7 +3,7 @@
 *}
 {if isset($toonverleden) and $toonverleden}
 <div style="float: right;">
-	<a href="{$GLOBALS.taken_module}/verleden" title="Taken in het verleden tonen" class="knop get">{icon get="time"} Toon verleden</a>
+	<a href="{$instellingen->get('taken', 'url')}/verleden" title="Taken in het verleden tonen" class="knop get">{icon get="time"} Toon verleden</a>
 </div>
 {/if}
 <table id="taken-tabel" class="taken-tabel">
@@ -48,7 +48,7 @@
 					<a href="/communicatie/forum/zoeken.php?zoeken=corveedraad" title="Ruilen" class="knop" style="margin-right:10px;">{icon get="arrow_switch"}</a>
 				{else}>
 				{/if}
-				{$taak->getLid()->getNaamLink($GLOBALS.corvee.weergave_ledennamen_corveerooster, $GLOBALS.corvee.weergave_ledennamen)}
+				{$taak->getLid()->getNaamLink($instellingen->get('corvee', 'weergave_ledennamen_corveerooster'), $instellingen->get('corvee', 'weergave_link_ledennamen'))}
 			{else} class="taak-grijs"><i>vacature</i>
 			{/if}</td>
 		{/if}

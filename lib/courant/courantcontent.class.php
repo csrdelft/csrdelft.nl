@@ -46,15 +46,15 @@ class CourantContent extends TemplateView {
 
 	function getMail($headers = false) {
 
-		$this->assign('instellingen', $this->instellingen);
-		$this->assignByRef('courant', $this->model);
+		$this->smarty->assign('instellingen', $this->instellingen);
+		$this->smarty->assignByRef('courant', $this->model);
 
-		$this->assign('indexCats', $this->model->getCats());
-		$this->assign('catNames', $this->model->getCats(true));
+		$this->smarty->assign('indexCats', $this->model->getCats());
+		$this->smarty->assign('catNames', $this->model->getCats(true));
 
-		$this->assign('headers', $headers);
+		$this->smarty->assign('headers', $headers);
 
-		return $this->fetch($this->model->getTemplatePath());
+		return $this->smarty->fetch($this->model->getTemplatePath());
 	}
 
 	function view() {

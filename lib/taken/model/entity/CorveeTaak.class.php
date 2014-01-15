@@ -146,11 +146,11 @@ class CorveeTaak implements \Agendeerbaar {
 			return false;
 		}
 		
-		for ($i = intval($GLOBALS['corvee']['herinnering_aantal_mails']); $i > 0; $i--) {
+		for ($i = intval(Instellingen::get('corvee', 'herinnering_aantal_mails')); $i > 0; $i--) {
 			
 			if ($aantal < $i &&
-				$nu >= strtotime($GLOBALS['corvee']['herinnering_'. $i .'e_mail'], $datum) &&
-				$nu <= strtotime($GLOBALS['corvee']['herinnering_'. $i .'e_mail_uiterlijk'], $datum)
+				$nu >= strtotime(Instellingen::get('corvee', 'herinnering_'. $i .'e_mail'), $datum) &&
+				$nu <= strtotime(Instellingen::get('corvee', 'herinnering_'. $i .'e_mail_uiterlijk'), $datum)
 			) {
 				return true;
 			}
@@ -169,8 +169,8 @@ class CorveeTaak implements \Agendeerbaar {
 		$nu = strtotime(date('Y-m-d'));
 		$moeten = 0;
 		
-		for ($i = intval($GLOBALS['corvee']['herinnering_aantal_mails']); $i > 0; $i--) {
-			$uiterlijk = strtotime($GLOBALS['corvee']['herinnering_'. $i .'e_mail_uiterlijk'], $datum);
+		for ($i = intval(Instellingen::get('corvee', 'herinnering_aantal_mails')); $i > 0; $i--) {
+			$uiterlijk = strtotime(Instellingen::get('corvee', 'herinnering_'. $i .'e_mail_uiterlijk'), $datum);
 			if ($nu >= $uiterlijk) {
 				$moeten++;
 			}

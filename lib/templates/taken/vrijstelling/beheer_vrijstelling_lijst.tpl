@@ -3,14 +3,14 @@
 *}
 <tr id="vrijstelling-row-{$vrijstelling->getLidId()}">
 	<td>
-		<a href="{$GLOBALS.taken_module}/bewerk/{$vrijstelling->getLidId()}" title="Vrijstelling wijzigen" class="knop post popup">{icon get="pencil"}</a>
+		<a href="{$instellingen->get('taken', 'url')}/bewerk/{$vrijstelling->getLidId()}" title="Vrijstelling wijzigen" class="knop post popup">{icon get="pencil"}</a>
 	</td>
-	<td>{$vrijstelling->getLid()->getNaamLink($GLOBALS.corvee.weergave_ledennamen_beheer, $GLOBALS.corvee.weergave_ledennamen)}</td>
+	<td>{$vrijstelling->getLid()->getNaamLink($instellingen->get('corvee', 'weergave_ledennamen_beheer'), $instellingen->get('corvee', 'weergave_link_ledennamen'))}</td>
 	<td>{$vrijstelling->getBeginDatum()|date_format:"%e %b %Y"}</td>
 	<td>{$vrijstelling->getEindDatum()|date_format:"%e %b %Y"}</td>
 	<td>{$vrijstelling->getPercentage()}%</td>
 	<td>{$vrijstelling->getPunten()}</td>
 	<td class="col-del">
-		<a href="{$GLOBALS.taken_module}/verwijder/{$vrijstelling->getLidId()}" title="Vrijstelling definitief verwijderen" class="knop post confirm">{icon get="cross"}</a>
+		<a href="{$instellingen->get('taken', 'url')}/verwijder/{$vrijstelling->getLidId()}" title="Vrijstelling definitief verwijderen" class="knop post confirm">{icon get="cross"}</a>
 	</td>
 </tr>

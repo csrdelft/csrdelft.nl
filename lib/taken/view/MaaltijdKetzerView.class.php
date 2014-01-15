@@ -24,14 +24,14 @@ class MaaltijdKetzerView extends TemplateView {
 	}
 
 	public function fetchContent() {
-		$this->assign('maaltijd', $this->_maaltijd);
-		$this->assign('aanmelding', $this->_aanmelding);
-		$this->assign('toonlijst', MijnMaaltijdenController::magMaaltijdlijstTonen($this->_maaltijd));
-		return $this->fetch('taken/maaltijd/maaltijd_ketzer.tpl');
+		$this->smarty->assign('maaltijd', $this->_maaltijd);
+		$this->smarty->assign('aanmelding', $this->_aanmelding);
+		$this->smarty->assign('toonlijst', MijnMaaltijdenController::magMaaltijdlijstTonen($this->_maaltijd));
+		return $this->smarty->fetch('taken/maaltijd/maaltijd_ketzer.tpl');
 	}
 
 	public function view() {
-		echo $this->fetch();
+		echo $this->smarty->fetch();
 	}
 
 }

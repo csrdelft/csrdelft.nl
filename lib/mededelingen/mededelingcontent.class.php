@@ -18,22 +18,22 @@ class MededelingContent extends TemplateView {
 	public function view() {
 		define('NIEUWS_ROOT', '/actueel/mededelingen/');
 
-		$this->assign('mededeling', $this->mededeling);
-		$this->assign('prullenbak', $this->prullenbak);
-		$this->assign('melding', $this->getMelding());
-		$this->assign('nieuws_root', NIEUWS_ROOT);
-		$this->assign('prioriteiten', Mededeling::getPrioriteiten());
-		$this->assign('datumtijdFormaat', '%Y-%m-%d %H:%M');
-		$this->assign('aantalTopMostBlock', MededelingenContent::aantalTopMostBlock);
+		$this->smarty->assign('mededeling', $this->mededeling);
+		$this->smarty->assign('prullenbak', $this->prullenbak);
+		$this->smarty->assign('melding', $this->getMelding());
+		$this->smarty->assign('nieuws_root', NIEUWS_ROOT);
+		$this->smarty->assign('prioriteiten', Mededeling::getPrioriteiten());
+		$this->smarty->assign('datumtijdFormaat', '%Y-%m-%d %H:%M');
+		$this->smarty->assign('aantalTopMostBlock', MededelingenContent::aantalTopMostBlock);
 
 		// Een standaard vervaltijd verzinnen indien nodig.
 		if ($this->mededeling->getVervaltijd() === null) {
 			$standaardVervaltijd = new DateTime(getDateTime());
 			$standaardVervaltijd = $standaardVervaltijd->format('Y-m-d 23:59');
-			$this->assign('standaardVervaltijd', $standaardVervaltijd);
+			$this->smarty->assign('standaardVervaltijd', $standaardVervaltijd);
 		}
 
-		$this->display('mededelingen/mededeling.tpl');
+		$this->smarty->display('mededelingen/mededeling.tpl');
 	}
 
 }

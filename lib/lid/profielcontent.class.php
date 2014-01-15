@@ -50,29 +50,29 @@ class ProfielContent extends TemplateView {
 		}
 
 		//de html template in elkaar draaien en weergeven
-		$this->assign('profhtml', $profhtml);
+		$this->smarty->assign('profhtml', $profhtml);
 
 		require_once 'lid/saldi.class.php';
 		if (Saldi::magGrafiekZien($this->lid->getUid())) {
-			$this->assign('saldografiek', Saldi::getDatapoints($this->lid->getUid(), 60));
+			$this->smarty->assign('saldografiek', Saldi::getDatapoints($this->lid->getUid(), 60));
 		}
 
-		$this->assign('corveepunten', $this->lid->getProperty('corvee_punten'));
-		$this->assign('corveebonus', $this->lid->getProperty('corvee_punten_bonus'));
-		$this->assign('corveetaken', $this->lid->getCorveeTaken());
-		$this->assign('corveevoorkeuren', $this->lid->getCorveeVoorkeuren());
-		$this->assign('corveevrijstelling', $this->lid->getCorveeVrijstelling());
-		$this->assign('corveekwalificaties', $this->lid->getCorveeKwalificaties());
+		$this->smarty->assign('corveepunten', $this->lid->getProperty('corvee_punten'));
+		$this->smarty->assign('corveebonus', $this->lid->getProperty('corvee_punten_bonus'));
+		$this->smarty->assign('corveetaken', $this->lid->getCorveeTaken());
+		$this->smarty->assign('corveevoorkeuren', $this->lid->getCorveeVoorkeuren());
+		$this->smarty->assign('corveevrijstelling', $this->lid->getCorveeVrijstelling());
+		$this->smarty->assign('corveekwalificaties', $this->lid->getCorveeKwalificaties());
 
 		require_once 'bibliotheek/catalogus.class.php';
-		$this->assign('boeken', Catalogus::getBoekenByUid($this->lid->getUid(), 'eigendom'));
-		$this->assign('gerecenseerdeboeken', Catalogus::getBoekenByUid($this->lid->getUid(), 'gerecenseerd'));
+		$this->smarty->assign('boeken', Catalogus::getBoekenByUid($this->lid->getUid(), 'eigendom'));
+		$this->smarty->assign('gerecenseerdeboeken', Catalogus::getBoekenByUid($this->lid->getUid(), 'gerecenseerd'));
 
 		$loginlid = LoginLid::instance();
-		$this->assign('isAdmin', $loginlid->hasPermission('P_ADMIN'));
-		$this->assign('isBestuur', $loginlid->hasPermission('P_BESTUUR'));
-		$this->assign('isLidMod', $loginlid->hasPermission('P_LEDEN_MOD'));
-		$this->assign('melding', $this->getMelding());
+		$this->smarty->assign('isAdmin', $loginlid->hasPermission('P_ADMIN'));
+		$this->smarty->assign('isBestuur', $loginlid->hasPermission('P_BESTUUR'));
+		$this->smarty->assign('isLidMod', $loginlid->hasPermission('P_LEDEN_MOD'));
+		$this->smarty->assign('melding', $this->getMelding());
 
 		//eigen profiel niet cachen, dan krijgen we namelijk rare dingen
 		//dat we andermans saldo's zien enzo
@@ -80,10 +80,10 @@ class ProfielContent extends TemplateView {
 			$this->caching = false;
 		}
 
-		$this->assign('profiel', new Profiel($this->lid));
+		$this->smarty->assign('profiel', new Profiel($this->lid));
 
 		$template = 'profiel/profiel.tpl';
-		$this->display($template, $this->lid->getUid());
+		$this->smarty->display($template, $this->lid->getUid());
 	}
 
 }
@@ -108,11 +108,11 @@ class ProfielEditContent extends TemplateView {
 	}
 
 	public function view() {
-		$this->assign('profiel', $this->profiel);
+		$this->smarty->assign('profiel', $this->profiel);
 
-		$this->assign('melding', $this->getMelding());
-		$this->assign('actie', $this->actie);
-		$this->display('profiel/bewerken.tpl');
+		$this->smarty->assign('melding', $this->getMelding());
+		$this->smarty->assign('actie', $this->actie);
+		$this->smarty->display('profiel/bewerken.tpl');
 	}
 
 }
@@ -140,13 +140,13 @@ class ProfielStatusContent extends TemplateView {
 		$gelijknamigenovieten = Zoeker::zoekLeden($this->profiel->getLid()->getProperty('voornaam'), 'voornaam', 'alle', 'achternaam', array('S_NOVIET'), array('uid'));
 		$gelijknamigeleden = Zoeker::zoekLeden($this->profiel->getLid()->getProperty('achternaam'), 'achternaam', 'alle', 'lidjaar', array('S_LID', 'S_GASTLID'), array('uid'));
 
-		$this->assign('profiel', $this->profiel);
-		$this->assign('gelijknamigenovieten', $gelijknamigenovieten);
-		$this->assign('gelijknamigeleden', $gelijknamigeleden);
+		$this->smarty->assign('profiel', $this->profiel);
+		$this->smarty->assign('gelijknamigenovieten', $gelijknamigenovieten);
+		$this->smarty->assign('gelijknamigeleden', $gelijknamigeleden);
 
-		$this->assign('melding', $this->getMelding());
-		$this->assign('actie', $this->actie);
-		$this->display('profiel/wijzigstatus.tpl');
+		$this->smarty->assign('melding', $this->getMelding());
+		$this->smarty->assign('actie', $this->actie);
+		$this->smarty->display('profiel/wijzigstatus.tpl');
 	}
 
 }
@@ -171,10 +171,10 @@ class ProfielVoorkeurContent extends TemplateView {
 	}
 
 	public function view() {
-		$this->assign('profiel', $this->profiel);
-		$this->assign('melding', $this->getMelding());
-		$this->assign('actie', $this->actie);
-		$this->display('profiel/wijzigvoorkeur.tpl');
+		$this->smarty->assign('profiel', $this->profiel);
+		$this->smarty->assign('melding', $this->getMelding());
+		$this->smarty->assign('actie', $this->actie);
+		$this->smarty->display('profiel/wijzigvoorkeur.tpl');
 	}
 
 }

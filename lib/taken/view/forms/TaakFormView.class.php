@@ -42,7 +42,7 @@ class TaakFormView extends TemplateView {
 		$formFields['mid'] = new IntField('maaltijd_id', $mid, 'Gekoppelde maaltijd', null, 0, true);
 		$formFields['mid']->title = 'Het ID van de maaltijd waar deze taak bij hoort.';
 
-		$this->_form = new Formulier('taken-corveetaak-form', $GLOBALS['taken_module'] . '/opslaan/' . $tid, $formFields);
+		$this->_form = new Formulier('taken-corveetaak-form', Instellingen::get('taken', 'url') . '/opslaan/' . $tid, $formFields);
 	}
 
 	public function getTitel() {
@@ -53,14 +53,14 @@ class TaakFormView extends TemplateView {
 	}
 
 	public function view() {
-		$this->assign('melding', $this->getMelding());
-		$this->assign('kop', $this->getTitel());
+		$this->smarty->assign('melding', $this->getMelding());
+		$this->smarty->assign('kop', $this->getTitel());
 		$this->_form->css_classes[] = 'popup';
-		$this->assign('form', $this->_form);
+		$this->smarty->assign('form', $this->_form);
 		if ($this->_tid === 0) {
-			$this->assign('nocheck', true);
+			$this->smarty->assign('nocheck', true);
 		}
-		$this->display('taken/popup_form.tpl');
+		$this->smarty->display('taken/popup_form.tpl');
 	}
 
 	public function validate() {

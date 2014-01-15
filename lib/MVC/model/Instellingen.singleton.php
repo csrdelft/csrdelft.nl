@@ -3,34 +3,49 @@
 require_once 'MVC/model/entity/Instelling.class.php';
 
 /**
- * InstellingenModel.class.php
+ * Instellingen.class.php
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
-class InstellingenModel extends PersistenceModel {
+class Instellingen extends PersistenceModel {
 
 	/**
 	 * Singleton instance
-	 * @var InstellingenModel
+	 * @var Instellingen
 	 */
 	private static $_instance;
 
 	/**
 	 * Get singleton InstellingenModel instance.
 	 * 
-	 * @return InstellingenModel
+	 * @return Instellingen
 	 */
 	public static function instance() {
 		if (!isset(self::$_instance)) {
-			self::$_instance = new InstellingenModel();
+			self::$_instance = new Instellingen();
 		}
 		return self::$_instance;
 	}
 
+	public static function get($module, $key) {
+		return Instellingen::instance()->instellingen[$module][$key];
+	}
+
+	/**
+	 * Temporary setting (behaves like $GLOBAL).
+	 * 
+	 * @param string $module
+	 * @param string $key
+	 * @param mixed $value
+	 */
+	public static function setTemp($module, $key, $value) {
+		Instellingen::instance()->instellingen[$module][$key] = $value;
+	}
+
 	private $defaults = array(
 		'corvee' => array(
-			'corveepunten_per_jaar' => '11',
+			'punten_per_jaar' => '11',
 			'herinnering_aantal_mails' => '2',
 			'herinnering_1e_mail' => '-5 weeks',
 			'herinnering_1e_mail_uiterlijk' => '-4 weeks',
@@ -49,26 +64,26 @@ class InstellingenModel extends PersistenceModel {
 			'standaard_vrijstelling_percentage' => '100',
 			'vrijstelling_percentage_max' => '200',
 			'vrijstelling_percentage_min' => '0',
-			'weergave_ledennamen' => 'visitekaartje',
+			'weergave_link_ledennamen' => 'visitekaartje',
 			'weergave_ledennamen_beheer' => 'volledig',
 			'weergave_ledennamen_corveerooster' => 'civitas',
 			'waarschuwing_taaktoewijzing_vooraf' => '+14 days',
 			'waarschuwing_puntentoewijzing_achteraf' => '-1 days'
 		),
 		'maaltijden' => array(
-			'maaltijd_budget_maalcie' => '1.00',
-			'maaltijden_ketzer_vooraf' => '+1 month',
-			'maaltijden_recent_lidprofiel' => '-2 months',
+			'budget_maalcie' => '1.00',
+			'toon_ketzer_vooraf' => '+1 month',
+			'recent_lidprofiel' => '-2 months',
 			'standaard_repetitie_weekdag' => '4',
 			'standaard_repetitie_periode' => '7',
 			'standaard_abonneerbaar' => '1',
-			'standaard_maaltijdaanvang' => '18:00',
-			'standaard_maaltijdprijs' => '3.00',
-			'standaard_maaltijdlimiet' => '0',
+			'standaard_aanvang' => '18:00',
+			'standaard_prijs' => '3.00',
+			'standaard_limiet' => '0',
 			'marge_gasten_verhouding' => '10',
 			'marge_gasten_min' => '3',
 			'marge_gasten_max' => '6',
-			'weergave_ledennamen' => 'visitekaartje',
+			'weergave_link_ledennamen' => 'visitekaartje',
 			'weergave_ledennamen_beheer' => 'volledig',
 			'weergave_ledennamen_maaltijdlijst' => 'streeplijst',
 			'maaltijdlijst_tekst' => '<p>Regels omtrent het betalen van de maaltijden op Confide:</p>
@@ -83,6 +98,10 @@ class InstellingenModel extends PersistenceModel {
 </ul>'
 		)
 	);
+	/**
+	 * Instellingen array like $defaults
+	 * @var array
+	 */
 	private $instellingen = null;
 
 	/**
@@ -92,15 +111,14 @@ class InstellingenModel extends PersistenceModel {
 	private function __construct() {
 		$instellingen = $this->find(new Instelling()); // load all from db
 		foreach ($instellingen as $instelling) {
-			$this->instellingen[$instelling->module][$instelling->instelling_id] = $instelling;
-			$GLOBALS[$instelling->module][$instelling->instelling_id] = $instelling->waarde; // zet publieke toegang
+			$this->instellingen[$instelling->module][$instelling->instelling_id] = $instelling->waarde;
 		}
 		// zet missende instellingen op default waarde
 		foreach ($this->defaults as $module => $instellingen) {
 			foreach ($instellingen as $key => $value) {
 				if (!array_key_exists($module, $this->instellingen) OR !array_key_exists($key, $this->instellingen[$module])) {
-					$this->instellingen[$module][$key] = self::newInstelling($module, $key, $value); // save to db
-					$GLOBALS[$module][$key] = $value;
+					$this->instellingen[$module][$key] = $value;
+					self::newInstelling($module, $key, $value); // save to db
 				}
 			}
 		}
@@ -113,7 +131,7 @@ class InstellingenModel extends PersistenceModel {
 	 */
 	public function getModuleInstellingen($module) {
 		if (!array_key_exists($module, $this->instellingen)) {
-			return null;
+			return false;
 		}
 		return $this->instellingen[$module];
 	}
@@ -128,12 +146,16 @@ class InstellingenModel extends PersistenceModel {
 		if (!array_key_exists($module, $this->instellingen) OR !array_key_exists($key, $this->instellingen[$module])) {
 			// get default for missing instelling
 			if (array_key_exists($module, $this->defaults) AND array_key_exists($key, $this->defaults[$module])) {
-				$this->instellingen[$module][$key] = self::newInstelling($module, $key, $this->defaults[$key]);
+				$this->instellingen[$module][$key] = $this->defaults[$module][$key];
+				return self::newInstelling($module, $key, $this->defaults[$module][$key]); // save to db
 			} else { // geen default instelling
 				throw new Exception('Instelling default not found: ' . $key . ' module: ' . $module);
 			}
 		}
-		return $this->instellingen[$module][$key];
+		$instelling = new Instelling();
+		$instelling->module = $module;
+		$instelling->instelling_id = $key;
+		return $this->retrieve($instelling);
 	}
 
 	public function wijzigInstelling($module, $key, $value) {
@@ -155,7 +177,6 @@ class InstellingenModel extends PersistenceModel {
 
 	public function resetInstelling($module, $key) {
 		self::deleteInstelling($module, $key);
-		unset($GLOBALS[$module][$key]);
 		unset($this->instellingen[$module][$key]);
 	}
 

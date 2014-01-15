@@ -272,8 +272,8 @@ class FotoalbumContent extends TemplateView {
 		switch ($this->actie) {
 			case 'album':
 
-				$this->assign('album', $this->_fotoalbum);
-				$this->display('fotoalbum/album.tpl');
+				$this->smarty->assign('album', $this->_fotoalbum);
+				$this->smarty->display('fotoalbum/album.tpl');
 				break;
 
 			case 'foto':

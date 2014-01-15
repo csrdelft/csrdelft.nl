@@ -23,16 +23,16 @@ class BeheerPuntenView extends TemplateView {
 
 	public function view() {
 		if ($this->_functies === null) { // voor een lid
-			$this->assign('puntenlijst', $this->_leden_punten);
-			$this->display('taken/corveepunt/beheer_punten_lijst.tpl');
+			$this->smarty->assign('puntenlijst', $this->_leden_punten);
+			$this->smarty->display('taken/corveepunt/beheer_punten_lijst.tpl');
 		} else { // matrix of repetities and voorkeuren
-			$this->assign('melding', $this->getMelding());
-			$this->assign('kop', $this->getTitel());
-			$this->display('taken/menu_pagina.tpl');
+			$this->smarty->assign('melding', $this->getMelding());
+			$this->smarty->assign('kop', $this->getTitel());
+			$this->smarty->display('taken/menu_pagina.tpl');
 
-			$this->assign('matrix', $this->_leden_punten);
-			$this->assign('functies', $this->_functies);
-			$this->display('taken/corveepunt/beheer_punten.tpl');
+			$this->smarty->assign('matrix', $this->_leden_punten);
+			$this->smarty->assign('functies', $this->_functies);
+			$this->smarty->display('taken/corveepunt/beheer_punten.tpl');
 		}
 	}
 
