@@ -713,7 +713,7 @@ class IntField extends TextField {
 			return false;
 		}
 		//parent checks notnull
-		if ($this->getValue() == '') {
+		if ($this->getValue() == 0) {
 			return true;
 		} else if (!preg_match('/\d+/', parent::getValue())) {
 			$this->error = 'Alleen getallen toegestaan';
@@ -761,7 +761,7 @@ class FloatField extends TextField {
 			return false;
 		}
 		//parent checks notnull
-		if ($this->getValue() == '') {
+		if ($this->getValue() == 0) {
 			return true;
 		} else if (!preg_match('/\d+(,{1}\d*)?/', str_replace('.', ',', parent::getValue()))) {
 			$this->error = 'Alleen komma-getallen toegestaan';
