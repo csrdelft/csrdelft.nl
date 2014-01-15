@@ -1093,7 +1093,7 @@ class SelectField extends InputField {
 			if ($this->getValue() !== null) {
 				$this->error = 'Onbekende optie gekozen';
 			}
-			if ($this->size === 1 && !parent::isValid()) {
+			if ($this->size === 1 && !parent::validate()) {
 				return false;
 			}
 		}
