@@ -21,6 +21,8 @@ require_once 'MVC/controller/Controller.abstract.php';
 class Groepcontroller extends Controller {
 
 	private $groep;
+	protected $valid = true;
+	protected $errors = '';
 
 	public function __construct($querystring) {
 		parent::__construct($querystring);
@@ -66,6 +68,11 @@ class Groepcontroller extends Controller {
 	protected function hasPermission() {
 		// wordt afgehandeld per actie
 		return true;
+	}
+
+	public function addError($error) {
+		$this->valid = false;
+		$this->errors.=$error . '<br />';
 	}
 
 	public function getUrl($action = null) {
