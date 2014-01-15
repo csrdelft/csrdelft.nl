@@ -16,6 +16,8 @@ class DocumentController extends Controller {
 
 	public $document;
 	public $baseurl = '/communicatie/documenten/';
+	protected $valid = true;
+	protected $errors = '';
 
 	/**
 	 * querystring:
@@ -55,6 +57,11 @@ class DocumentController extends Controller {
 	 */
 	protected function hasPermission() {
 		return true;
+	}
+
+	public function addError($error) {
+		$this->valid = false;
+		$this->errors.=$error . '<br />';
 	}
 
 	/**
