@@ -30,8 +30,10 @@ class Formulier implements View, Validator {
 
 	private $formId;
 	private $action;
+	/** @var FormElement[] */
 	private $fields;
 	public $css_classes;
+	public $error = '';
 
 	public function __construct($formId, $action = '', $fields = array()) {
 		$this->formId = $formId;
@@ -115,6 +117,12 @@ class Formulier implements View, Validator {
 		return $this->error;
 	}
 
+	/**
+	 * Zoekt een InputField met de gegeven naam
+	 *
+	 * @param string $fieldname
+	 * @return bool|InputField
+	 */
 	public function findByName($fieldname) {
 		foreach ($this->fields as $field) {
 			//we checken alleen de InputFields, niet de comments enzo.
