@@ -22,7 +22,7 @@ abstract class PersistenceModel implements Persistence {
 
 	/**
 	 * Requires an entity class for ORM
-	 * @param PersistentEntity $entity
+	 * @param PersistentEntity $orm_entity
 	 */
 	protected function __construct(PersistentEntity $orm_entity) {
 		$this->orm_entity = $orm_entity;
@@ -88,7 +88,7 @@ abstract class PersistenceModel implements Persistence {
 
 	/**
 	 * Save existing entity.
-	 * 
+	 *
 	 * @param PersistentEntity $entity
 	 */
 	public function update(PersistentEntity $entity) {
@@ -110,7 +110,6 @@ abstract class PersistenceModel implements Persistence {
 	 * Remove existing entity.
 	 * 
 	 * @param PersistentEntity $entity
-	 * @throws Exception
 	 */
 	public function delete(PersistentEntity $entity) {
 		$primary_key_values = array();

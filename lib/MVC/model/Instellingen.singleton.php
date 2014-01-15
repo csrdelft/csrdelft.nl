@@ -152,7 +152,10 @@ class Instellingen extends PersistenceModel {
 	/**
 	 * Zoek een instelling voor bewerken of na verwijderen.
 	 * Als een default instelling ontbreekt wordt deze aangemaakt en opgeslagen.
-	 * 
+	 *
+	 * @param string $module
+	 * @param string $key
+	 * @throws Exception
 	 * @return LidInstellingen
 	 */
 	public function getInstelling($module, $key) {

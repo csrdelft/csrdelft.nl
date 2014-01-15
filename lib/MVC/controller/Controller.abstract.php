@@ -41,7 +41,7 @@ abstract class Controller {
 			$this->queryparts = explode('/', $querystring);
 		} else { // KVP
 			$this->kvp = true;
-			$querystring = substr($querystring, $kvp);
+			$querystring = substr($querystring, $this->kvp);
 			$queryparts = explode('&', $querystring);
 			foreach ($queryparts as $i => $part) {
 				$this->queryparts[$i] = explode('=', $part);

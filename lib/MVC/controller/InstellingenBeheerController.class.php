@@ -67,8 +67,8 @@ class InstellingenBeheerController extends AclController {
 		$this->view = new InstellingFormView($instelling); // fetches POST values itself
 	}
 
-	public function opslaan($key) {
-		$this->bewerk($key); // sets view
+	public function opslaan($model, $key) {
+		$this->bewerk($model, $key); // sets view
 		if ($this->view->validate()) {
 			$values = $this->view->getValues();
 			$instelling = $this->model->wijzigInstelling($values['module'], $values['instelling_id'], $values['waarde']);

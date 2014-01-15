@@ -110,10 +110,11 @@ class Database extends PDO {
 
 	/**
 	 * Optional named parameters.
-	 * 
+	 *
+	 * @param string $into
 	 * @param array $properties
+	 * @throws Exception
 	 * @return int last insert id
-	 * @throws Exception row count !== 1
 	 */
 	public static function sqlInsert($into, array $properties) {
 		$params = array();
@@ -160,7 +161,8 @@ class Database extends PDO {
 
 	/**
 	 * Optional named parameters.
-	 * 
+	 *
+	 * @param string $from
 	 * @param string $where
 	 * @param array $where_params
 	 * @param int $limit
@@ -179,8 +181,8 @@ class Database extends PDO {
 
 	/**
 	 * Create table and return SQL.
-	 * 
-	 * @param string $table
+	 *
+	 * @param string $name
 	 * @param array $columns
 	 * @param array $primary_key
 	 * @return string

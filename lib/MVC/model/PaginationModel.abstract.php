@@ -52,7 +52,7 @@ abstract class PaginationModel extends PersistenceModel {
 	}
 
 	public function getPage($number = null) {
-		if (is_int($number) && hasPage($number)) {
+		if (is_int($number) && $this->hasPage($number)) {
 			$this->current_page_number = $number;
 		}
 		$_SESSION[get_class($this) . '_current_page_number'] = $this->current_page_number; // save to session
@@ -79,14 +79,14 @@ abstract class PaginationModel extends PersistenceModel {
 	 * @return boolean
 	 */
 	public function hasPage($number) {
-		return $number <= getPageCount();
+		return $number <= $this->getPageCount();
 	}
 
 	public function nextPage() {
 		if ($this->hasNextPage()) {
 			$this->current_page_number++;
 		}
-		return getPage();
+		return $this->getPage();
 	}
 
 	public function hasNextPage() {
@@ -97,7 +97,7 @@ abstract class PaginationModel extends PersistenceModel {
 		if ($this->hasPreviousPage()) {
 			$this->current_page_number--;
 		}
-		return getPage();
+		return $this->getPage();
 	}
 
 	public function hasPreviousPage() {
