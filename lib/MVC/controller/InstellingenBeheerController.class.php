@@ -40,7 +40,7 @@ class InstellingenBeheerController extends \AclController {
 			if ($this->action === 'beheer') {
 				$params[] = $this->getParam(1);
 			} else {
-				$params[] = (int) $this->getParam(1);
+				$params[] = $this->getParam(1);
 				if ($this->hasParam(2)) {
 					$params[] = $this->getParam(2);
 				}
@@ -49,9 +49,8 @@ class InstellingenBeheerController extends \AclController {
 		$this->performAction($params);
 	}
 
-	public function beheer($module = null) {
-		$instellingen = $this->model->getModuleInstellingen($module);
-		$this->view = new InstellingenBeheerView($instellingen);
+	public function beheer($module = '') {
+		$this->view = new InstellingenBeheerView($this->model, $module);
 		$this->view = new csrdelft($this->getContent());
 		$this->view->addStylesheet('taken.css');
 		$this->view->addScript('taken.js');
@@ -67,14 +66,13 @@ class InstellingenBeheerController extends \AclController {
 		if ($this->view->validate()) {
 			$values = $this->view->getValues();
 			$instelling = $this->model->wijzigInstelling($values['module'], $values['instelling_id'], $values['waarde']);
-			$this->view = new InstellingenBeheerView($instelling);
+			$this->view = new InstellingenBeheerView($this->model, $instelling->module, $instelling);
 		}
 	}
 
 	public function reset($module, $key) {
-		$this->model->resetInstelling($module, $key);
-		$instelling = $this->model->getInstelling($module, $key);
-		$this->view = new InstellingenBeheerView($instelling);
+		$instelling = $this->model->resetInstelling($module, $key);
+		$this->view = new InstellingenBeheerView($this->model, $instelling->module, $instelling);
 	}
 
 }

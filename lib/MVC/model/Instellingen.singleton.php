@@ -125,15 +125,27 @@ class Instellingen extends PersistenceModel {
 	}
 
 	/**
-	 * Geeft alle instellingen op voor een module.
+	 * Lijst van alle modules.
 	 * 
-	 * @return Instellingen[]
+	 * @return array
+	 */
+	public function getAlleModules() {
+		$sql = 'SELECT DISTINCT module FROM instellingen';
+		$query = Database::instance()->prepare($sql);
+		$query->execute();
+		return $query->fetchAll(PDO::FETCH_COLUMN, 0);
+	}
+
+	/**
+	 * Haalt alle instellingen op voor een module.
+	 * 
+	 * @param string $module
+	 * @return Instelling[]
 	 */
 	public function getModuleInstellingen($module) {
-		if (!array_key_exists($module, $this->instellingen)) {
-			return false;
-		}
-		return $this->instellingen[$module];
+		$where = 'module = ?';
+		$params = array($module);
+		return $this->find(new Instelling(), $where, $params);
 	}
 
 	/**
@@ -176,15 +188,12 @@ class Instellingen extends PersistenceModel {
 	}
 
 	public function resetInstelling($module, $key) {
-		self::deleteInstelling($module, $key);
-		unset($this->instellingen[$module][$key]);
-	}
-
-	private function deleteInstelling($module, $key) {
 		$instelling = new Instelling();
 		$instelling->module = $module;
 		$instelling->instelling_id = $key;
 		$this->delete($instelling);
+		unset($this->instellingen[$module][$key]);
+		$instelling = $this->model->getInstelling($module, $key); // creates new
 	}
 
 }

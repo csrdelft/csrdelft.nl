@@ -21,11 +21,11 @@ class MenuBeheerView extends TemplateView {
 	 */
 	private $tree_root;
 
-	public function __construct($menu) {
-		parent::__construct(new MenuModel());
-		$this->menus = $this->model->getAlleMenus();
-		$items = $this->model->getMenuItems($menu);
-		$this->tree_root = $this->model->buildMenuTree($menu, $items);
+	public function __construct(MenuModel $model, $menu) {
+		parent::__construct($model);
+		$this->menus = $model->getAlleMenus();
+		$items = $model->getMenuItems($menu);
+		$this->tree_root = $model->buildMenuTree($menu, $items);
 	}
 
 	public function getTitel() {
