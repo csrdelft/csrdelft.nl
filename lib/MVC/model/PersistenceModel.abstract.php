@@ -77,12 +77,12 @@ abstract class PersistenceModel implements Persistence {
 	 * @param array $primary_key_values
 	 * @return PersistentEntity
 	 */
-	public function retrieveByPrimaryKey(array $primary_key_values) {
+	protected function retrieveByPrimaryKey(array $primary_key_values) {
 		$where = array();
 		foreach ($this->orm_entity->getPrimaryKey() as $key) {
 			$where[] = $key . ' = ?';
 		}
-		$result = Database::sqlSelect(array('*'), $this->orm_entity->getTableName(), implode(', ', $where), $primary_key_values, null, 1);
+		$result = Database::sqlSelect(array('*'), $this->orm_entity->getTableName(), implode(', ', $where), $primary_key_values, 1);
 		return $result->fetchObject(get_class($this->orm_entity));
 	}
 
@@ -100,7 +100,7 @@ abstract class PersistenceModel implements Persistence {
 			$params[':' . $key] = $properties[$key]; // named parameters
 			unset($properties[$key]); // do not update primary key
 		}
-		$rowcount = Database::sqlUpdate($this->orm_entity->getTableName(), $properties, $where, $params);
+		$rowcount = Database::sqlUpdate($this->orm_entity->getTableName(), $properties, $where, $params, 1);
 		if ($rowcount !== 1) {
 			throw new Exception('update rowCount=' . $rowcount);
 		}
@@ -125,12 +125,12 @@ abstract class PersistenceModel implements Persistence {
 	 * 
 	 * @param array $primary_key_values
 	 */
-	public function deleteByPrimaryKey(array $primary_key_values) {
+	protected function deleteByPrimaryKey(array $primary_key_values) {
 		$where = array();
 		foreach ($this->orm_entity->getPrimaryKey() as $key) {
 			$where[] = $key . ' = ?';
 		}
-		$rowcount = Database::sqlDelete($this->orm_entity->getTableName(), implode(', ', $where), $primary_key_values);
+		$rowcount = Database::sqlDelete($this->orm_entity->getTableName(), implode(', ', $where), $primary_key_values, 1);
 		if ($rowcount !== 1) {
 			throw new Exception('delete rowCount=' . $rowcount);
 		}

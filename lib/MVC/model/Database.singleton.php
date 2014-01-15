@@ -100,7 +100,7 @@ class Database extends PDO {
 		if ($orderby !== null) {
 			$sql .= ' ORDER BY ' . $orderby;
 		}
-		if ($limit !== null) {
+		if (is_int($limit)) {
 			$sql .= ' LIMIT ' . $start . ', ' . $limit;
 		}
 		$query = self::instance()->prepare($sql, $params);
@@ -138,9 +138,10 @@ class Database extends PDO {
 	 * @param array $set_properties
 	 * @param string $where
 	 * @param array $where_params
+	 * @param int $limit
 	 * @return int number of rows affected
 	 */
-	public static function sqlUpdate($table, array $set_properties, $where, array $where_params = array()) {
+	public static function sqlUpdate($table, array $set_properties, $where, array $where_params = array(), $limit = null) {
 		$sql = 'UPDATE ' . $table . ' SET ';
 		$fields = array();
 		foreach ($set_properties as $key => $value) {
@@ -149,6 +150,9 @@ class Database extends PDO {
 		}
 		$sql .= implode(', ', $fields);
 		$sql .= ' WHERE ' . $where;
+		if (is_int($limit)) {
+			$sql .= ' LIMIT ' . $limit;
+		}
 		$query = self::instance()->prepare($sql, $where_params);
 		$query->execute($where_params);
 		return $query->rowCount();
@@ -159,11 +163,15 @@ class Database extends PDO {
 	 * 
 	 * @param string $where
 	 * @param array $where_params
+	 * @param int $limit
 	 * @return int number of rows affected
 	 */
-	public static function sqlDelete($from, $where, array $where_params) {
+	public static function sqlDelete($from, $where, array $where_params, $limit = null) {
 		$sql = 'DELETE FROM ' . $from;
 		$sql .= ' WHERE ' . $where;
+		if (is_int($limit)) {
+			$sql .= ' LIMIT ' . $limit;
+		}
 		$query = self::instance()->prepare($sql, $where_params);
 		$query->execute($where_params);
 		return $query->rowCount();

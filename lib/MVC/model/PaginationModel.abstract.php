@@ -24,7 +24,7 @@ abstract class PaginationModel extends PersistenceModel {
 	private $orderby;
 	private $assoc;
 
-	public function __construct(PersistentEntity $orm_entity) {
+	protected function __construct(PersistentEntity $orm_entity) {
 		parent::__construct($orm_entity);
 		$key = get_class($this) . '_current_page_number';
 		if (array_key_exists($key, $_SESSION)) {
