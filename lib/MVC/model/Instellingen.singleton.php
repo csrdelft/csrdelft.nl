@@ -146,7 +146,7 @@ class Instellingen extends PersistenceModel {
 	public function getModuleInstellingen($module) {
 		$where = 'module = ?';
 		$params = array($module);
-		return $this->find(new Instelling(), $where, $params);
+		return $this->find($where, $params);
 	}
 
 	/**
