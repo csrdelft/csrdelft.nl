@@ -280,9 +280,8 @@ class LoginLid {
 		}
 
 		# ga alleen verder als er een geldige permissie wordt teruggegeven
-		if (!array_key_exists($liddescr, $this->_perm_user)) {
+		if (!array_key_exists($liddescr, $this->_perm_user))
 			return false;
-		}
 		# zoek de code op
 		$lidheeft = $this->_perm_user[$liddescr];
 
@@ -313,11 +312,11 @@ class LoginLid {
 				#
 				# voorbeeld:
 				#  gevraagd:   P_FORUM_MOD: 0000000700
-				#  lid heeft:  R_LID      : 0005544500
+				#  lid heeft:  P_LID      : 0005544500
 				#  AND resultaat          : 0000000500 -> is niet wat gevraagd is -> weiger
 				#
 				#  gevraagd:  P_DOCS_READ : 0000004000
-				#  gebr heeft: R_LID      : 0005544500
+				#  gebr heeft: P_LID      : 0005544500
 				#  AND resultaat          : 0000004000 -> ja!
 				$resultaat = $gevraagd & $lidheeft;
 
@@ -451,23 +450,23 @@ class LoginLid {
 
 		# Deze waarden worden samengesteld uit bovenstaande permissies en
 		# worden in de gebruikersprofielen gebruikt als aanduiding voor
-		# welke permissie-groep (Role) de gebruiker in zit.
+		# welke permissie-groep de gebruiker in zit.
 
 		$p = $this->_permissions;
 		$this->_perm_user = array(
-			'R_NOBODY' => $p['P_NOBODY'] | $p['P_FORUM_READ'] | $p['P_AGENDA_READ'],
-			'R_LID' => $p['P_LOGGED_IN'] | $p['P_OUDLEDEN_READ'] | $p['P_FORUM_POST'] | $p['P_DOCS_READ'] | $p['P_LEDEN_READ'] | $p['P_PROFIEL_EDIT'] | $p['P_AGENDA_READ'] | $p['P_MAAL_IK'] | $p['P_CORVEE_IK'] | $p['P_MAIL_POST'] | $p['P_BIEB_READ'] | $p['P_NEWS_POST'],
-			'R_OUDLID' => $p['P_LOGGED_IN'] | $p['P_LEDEN_READ'] | $p['P_OUDLEDEN_READ'] | $p['P_FORUM_POST'] | $p['P_DOCS_READ'] | $p['P_PROFIEL_EDIT'] | $p['P_FORUM_READ'] | $p['P_MAAL_IK'] | $p['P_CORVEE_IK'] | $p['P_MAIL_POST'] | $p['P_BIEB_READ'] | $p['P_AGENDA_READ'] | $p['P_ALLEEN_OUDLID'],
+			'P_NOBODY' => $p['P_NOBODY'] | $p['P_FORUM_READ'] | $p['P_AGENDA_READ'],
+			'P_LID' => $p['P_LOGGED_IN'] | $p['P_OUDLEDEN_READ'] | $p['P_FORUM_POST'] | $p['P_DOCS_READ'] | $p['P_LEDEN_READ'] | $p['P_PROFIEL_EDIT'] | $p['P_AGENDA_READ'] | $p['P_MAAL_IK'] | $p['P_CORVEE_IK'] | $p['P_MAIL_POST'] | $p['P_BIEB_READ'] | $p['P_NEWS_POST'],
+			'P_OUDLID' => $p['P_LOGGED_IN'] | $p['P_LEDEN_READ'] | $p['P_OUDLEDEN_READ'] | $p['P_FORUM_POST'] | $p['P_DOCS_READ'] | $p['P_PROFIEL_EDIT'] | $p['P_FORUM_READ'] | $p['P_MAAL_IK'] | $p['P_CORVEE_IK'] | $p['P_MAIL_POST'] | $p['P_BIEB_READ'] | $p['P_AGENDA_READ'] | $p['P_ALLEEN_OUDLID'],
 			'P_MODERATOR' => $p['P_ADMIN'] | $p['P_FORUM_MOD'] | $p['P_DOCS_MOD'] | $p['P_LEDEN_MOD'] | $p['P_OUDLEDEN_MOD'] | $p['P_AGENDA_MOD'] | $p['P_MAAL_IK'] | $p['P_CORVEE_IK'] | $p['P_MAIL_SEND'] | $p['P_NEWS_MOD'] | $p['P_BIEB_MOD']
 		);
 
 		# extra dingen, waarvoor de array perm_user zelf nodig is
-		$this->_perm_user['R_PUBCIE'] = $this->_perm_user['P_MODERATOR'] | $p['P_MAAL_MOD'] | $p['P_CORVEE_MOD'] | $p['P_MAAL_SALDI'];
-		$this->_perm_user['R_MAALCIE'] = $this->_perm_user['R_LID'] | $p['P_MAAL_MOD'] | $p['P_CORVEE_MOD'] | $p['P_MAAL_SALDI'];
-		$this->_perm_user['R_BESTUUR'] = $this->_perm_user['R_LID'] | $p['P_LEDEN_MOD'] | $p['P_OUDLEDEN_READ'] | $p['P_NEWS_MOD'] | $p['P_MAAL_MOD'] | $p['P_CORVEE_MOD'] | $p['P_MAAL_SALDI'] | $p['P_MAIL_COMPOSE'] | $p['P_AGENDA_MOD'] | $p['P_FORUM_MOD'] | $p['P_DOCS_MOD'];
-		$this->_perm_user['R_VAB'] = $this->_perm_user['R_BESTUUR'] | $p['P_OUDLEDEN_MOD'];
-		$this->_perm_user['R_ETER'] = $this->_perm_user['R_NOBODY'] | $p['P_LOGGED_IN'] | $p['P_MAAL_IK'] | $p['P_PROFIEL_EDIT'];
-		$this->_perm_user['R_BASF'] = $this->_perm_user['R_LID'] | $p['P_DOCS_MOD'];
+		$this->_perm_user['P_PUBCIE'] = $this->_perm_user['P_MODERATOR'] | $p['P_MAAL_MOD'] | $p['P_CORVEE_MOD'] | $p['P_MAAL_SALDI'];
+		$this->_perm_user['P_MAALCIE'] = $this->_perm_user['P_LID'] | $p['P_MAAL_MOD'] | $p['P_CORVEE_MOD'] | $p['P_MAAL_SALDI'];
+		$this->_perm_user['P_BESTUUR'] = $this->_perm_user['P_LID'] | $p['P_LEDEN_MOD'] | $p['P_OUDLEDEN_READ'] | $p['P_NEWS_MOD'] | $p['P_MAAL_MOD'] | $p['P_CORVEE_MOD'] | $p['P_MAAL_SALDI'] | $p['P_MAIL_COMPOSE'] | $p['P_AGENDA_MOD'] | $p['P_FORUM_MOD'] | $p['P_DOCS_MOD'];
+		$this->_perm_user['P_VAB'] = $this->_perm_user['P_BESTUUR'] | $p['P_OUDLEDEN_MOD'];
+		$this->_perm_user['P_ETER'] = $this->_perm_user['P_NOBODY'] | $p['P_LOGGED_IN'] | $p['P_MAAL_IK'] | $p['P_PROFIEL_EDIT'];
+		$this->_perm_user['P_BASF'] = $this->_perm_user['P_LID'] | $p['P_DOCS_MOD'];
 	}
 
 	public function isValidPerm($key, $user = true) {

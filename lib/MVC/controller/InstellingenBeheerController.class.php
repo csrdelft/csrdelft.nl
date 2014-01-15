@@ -22,13 +22,13 @@ class InstellingenBeheerController extends AclController {
 		parent::__construct($query);
 		if (!parent::isPOSTed()) {
 			$this->acl = array(
-				'module' => 'R_LID'
+				'module' => 'P_LID'
 			);
 		} else {
 			$this->acl = array(
-				'bewerk' => 'R_LID',
-				'opslaan' => 'R_LID',
-				'reset' => 'R_LID'
+				'bewerk' => 'P_LID',
+				'opslaan' => 'P_LID',
+				'reset' => 'P_LID'
 			);
 		}
 		$this->action = 'module';

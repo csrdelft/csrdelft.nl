@@ -70,7 +70,7 @@ class ProfielContent extends TemplateView {
 
 		$loginlid = LoginLid::instance();
 		$this->smarty->assign('isAdmin', $loginlid->hasPermission('P_ADMIN'));
-		$this->smarty->assign('isBestuur', $loginlid->hasPermission('R_BESTUUR'));
+		$this->smarty->assign('isBestuur', $loginlid->hasPermission('P_BESTUUR'));
 		$this->smarty->assign('isLidMod', $loginlid->hasPermission('P_LEDEN_MOD'));
 		$this->smarty->assign('melding', $this->getMelding());
 
