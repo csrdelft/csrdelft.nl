@@ -185,8 +185,9 @@ abstract class InputField extends FormElement implements Validator {
 	 */
 	protected function getLabel() {
 		if ($this->description != null) {
-			echo '<label for="field_' . $this->name . '">' . mb_htmlentities($this->description) . '</label>';
+			return '<label for="field_' . $this->name . '">' . mb_htmlentities($this->description) . '</label>';
 		}
+		return '';
 	}
 
 	/**
@@ -955,12 +956,12 @@ $('.wantsPreview').each(function(){
 	var vergrootTextarea=function(){
 		var currentRows=parseInt(textarea.attr('rows'));
 		textarea.attr('rows', 10 + currentRows);
-	}
+	};
 	
 	textarea.wrap('<div class="UBBpreview regular"  style="width: '+(textarea.width()+6)+'px" />')
 			.before('<div id="preview_'+fieldname+'" class="preview" style="display: none;"></div>')
 			.after($('<a style="float: left; margin-left: 0px;" class="knop">voorbeeld</a>').click(triggerPreview))
-			.after($('<a style="float: right;" class="knop" title="Opmaakhulp weergeven" onclick="toggleDiv(\'ubbhulpverhaal\')">UBB</a>'))
+			.after($('<a style="float: right;" class="knop" title="Opmaakhulp weergeven" onclick="$(\'#ubbhulpverhaal\').toggle();">UBB</a>'))
 			.after($('<a style="float: right; margin-right: 0px" class="knop" title="Vergroot het invoerveld"><strong>&uarr;&darr;</strong></a>').click(vergrootTextarea));
 
 JS;
