@@ -84,7 +84,7 @@ class MenuModel extends PersistenceModel {
 		if ($rowcount !== 1) {
 			throw new Exception('wijzigProperty rowCount=' . $rowcount);
 		}
-		return $this->getMenuItem($id);
+		return $this->retrieveByPrimaryKey(array($id));
 	}
 
 	public function saveMenuItem(MenuItem $item) {
