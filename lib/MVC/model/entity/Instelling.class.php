@@ -40,9 +40,9 @@ class Instelling extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_fields = array(
-		'module' => 'varchar(50) NOT NULL',
+		'module' => 'varchar(255) NOT NULL',
 		'instelling_id' => 'varchar(255) NOT NULL',
-		'waarde' => 'varchar(255) NOT NULL'
+		'waarde' => 'text NOT NULL'
 	);
 	/**
 	 * Database primary key

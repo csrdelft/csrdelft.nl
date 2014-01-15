@@ -10,6 +10,10 @@ require_once 'MVC/model/entity/MenuItem.class.php';
  */
 class MenuModel extends PersistenceModel {
 
+	public function __construct() {
+		parent::__construct(new MenuItem());
+	}
+
 	/**
 	 * Lijst van alle menus.
 	 * 
@@ -20,12 +24,6 @@ class MenuModel extends PersistenceModel {
 		$query = Database::instance()->prepare($sql);
 		$query->execute();
 		return $query->fetchAll(PDO::FETCH_COLUMN, 0);
-	}
-
-	public function getMenuItem($id) {
-		$item = new MenuItem();
-		$item->item_id = $id;
-		return $this->retrieve($item);
 	}
 
 	/**
@@ -41,7 +39,7 @@ class MenuModel extends PersistenceModel {
 		if ($zichtbaar !== null) {
 			$where .= ' AND zichtbaar = ' . ($zichtbaar ? 'true' : 'false');
 		}
-		return $this->find(new MenuItem(), $where, $params, 'parent_id ASC, prioriteit ASC');
+		return $this->find($where, $params, 'parent_id ASC, prioriteit ASC');
 	}
 
 	/**
@@ -99,7 +97,10 @@ class MenuModel extends PersistenceModel {
 	}
 
 	public function deleteMenuItem($id) {
-		$item = $this->getMenuItem($id);
+		$item = $this->retrieveByPrimaryKey(array($id));
+		if (!$item) {
+			throw new Exception('Menu-item ' . $id . ' bestaat niet');
+		}
 		$this->delete($item);
 		return $item;
 	}
@@ -110,8 +111,9 @@ class MenuModel extends PersistenceModel {
 			$db->beginTransaction();
 			// give new parent to otherwise future orphans
 			$properties = array('parent_id' => $item->parent_id);
-			$count = $this->update($properties, 'parent_id = :oldid', array(':oldid' => $item->parent_id));
-			$this->delete($item);
+			$count = Database::sqlUpdate('menus', $properties, 'parent_id = :oldid', array(':oldid' => $item->parent_id));
+			setMelding($count . ' menu-items nieuwe parent gegeven.', 2);
+			parent::delete($item);
 			$db->commit();
 			return $count;
 		} catch (\Exception $e) {

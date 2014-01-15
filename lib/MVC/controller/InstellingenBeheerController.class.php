@@ -22,7 +22,7 @@ class InstellingenBeheerController extends AclController {
 		parent::__construct($query);
 		if (!parent::isPOSTed()) {
 			$this->acl = array(
-				'beheer' => 'P_LID'
+				'toon' => 'P_LID'
 			);
 		} else {
 			$this->acl = array(
@@ -31,7 +31,7 @@ class InstellingenBeheerController extends AclController {
 				'reset' => 'P_LID'
 			);
 		}
-		$this->action = 'beheer';
+		$this->action = 'toon';
 		if ($this->hasParam(0)) {
 			$this->action = $this->getParam(0);
 		}
@@ -55,7 +55,7 @@ class InstellingenBeheerController extends AclController {
 		return true; // hoofdpagina: geen module
 	}
 
-	public function beheer($module = null) {
+	public function toon($module = null) {
 		$this->view = new InstellingenBeheerView($this->model, $module);
 		$this->view = new csrdelft($this->getContent());
 		$this->view->addStylesheet('taken.css');

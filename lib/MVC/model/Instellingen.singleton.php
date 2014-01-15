@@ -102,14 +102,15 @@ class Instellingen extends PersistenceModel {
 	 * Instellingen array like $defaults
 	 * @var array
 	 */
-	private $instellingen = null;
+	protected $instellingen = null;
 
 	/**
 	 * Laad alle instellingen uit de database.
 	 * Als default instellingen ontbreken worden deze aangemaakt en opgeslagen.
 	 */
-	private function __construct() {
-		$instellingen = $this->find(new Instelling()); // load all from db
+	protected function __construct() {
+		parent::__construct(new Instelling());
+		$instellingen = $this->find(); // load all from db
 		foreach ($instellingen as $instelling) {
 			$this->instellingen[$instelling->module][$instelling->instelling_id] = $instelling->waarde;
 		}

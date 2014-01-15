@@ -89,7 +89,7 @@
 				<div style="display: inline-block; width: 75px;">Rechten:</div>
 				<input type="text" name="permission" maxlength="255" size="60" value="P_NOBODY" /><br />
 				<div style="display: inline-block; width: 75px;">&nbsp</div>
-				<input type="hidden" name="menu" value="{$item->menu_naam}" />
+				<input type="hidden" name="menu_naam" value="{$item->menu_naam}" />
 				<input type="submit" value="opslaan" />&nbsp;
 				<input type="reset" value="annuleren" onclick="$(this).parent().parent().slideUp(400, function() {ldelim} $(this).remove(); {rdelim});" />
 			</form>

@@ -15,6 +15,20 @@ require_once 'MVC/model/entity/PersistentEntity.abstract.php';
 abstract class PersistenceModel implements Persistence {
 
 	/**
+	 * ORM entity class
+	 * @var PersistentEntity
+	 */
+	private $orm_entity;
+
+	/**
+	 * Requires an entity class for ORM
+	 * @param PersistentEntity $entity
+	 */
+	protected function __construct(PersistentEntity $orm_entity) {
+		$this->orm_entity = $orm_entity;
+	}
+
+	/**
 	 * Find existing entities.
 	 * 
 	 * @param string $criteria WHERE
@@ -24,13 +38,13 @@ abstract class PersistenceModel implements Persistence {
 	 * @param int $start
 	 * @return PersistentEntity[]
 	 */
-	public function find(PersistentEntity $entity, $criteria = null, array $criteria_params = array(), $orderby = null, $limit = null, $start = 0) {
-		$select = $entity::getFields();
+	public function find($criteria = null, array $criteria_params = array(), $orderby = null, $limit = null, $start = 0) {
+		$select = $this->orm_entity->getFields();
 		if ($criteria === null) {
 			$criteria = '1';
 		}
-		$result = Database::sqlSelect($select, $entity::getTableName(), $criteria, $criteria_params, $orderby, $limit, $start);
-		return $result->fetchAll(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, get_class($entity));
+		$result = Database::sqlSelect($select, $this->orm_entity->getTableName(), $criteria, $criteria_params, $orderby, $limit, $start);
+		return $result->fetchAll(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, get_class($this->orm_entity));
 	}
 
 	/**
@@ -40,7 +54,7 @@ abstract class PersistenceModel implements Persistence {
 	 * @return string last insert id
 	 */
 	public function create(PersistentEntity $entity) {
-		return Database::sqlInsert($entity::getTableName(), $entity->getValues());
+		return Database::sqlInsert($this->orm_entity->getTableName(), $entity->getValues());
 	}
 
 	/**
@@ -50,16 +64,26 @@ abstract class PersistenceModel implements Persistence {
 	 * @return PersistentEntity
 	 */
 	public function retrieve(PersistentEntity $entity) {
-		$select = $entity::getFields();
-		$where = array();
-		$params = array();
-		foreach ($entity::getPrimaryKey() as $key) {
-			$where[] = $key . ' = ?';
-			$params[] = $entity->$key;
+		$primary_key_values = array();
+		foreach ($this->orm_entity->getPrimaryKey() as $key) {
+			$primary_key_values[] = $entity->$key;
 		}
-		$result = Database::sqlSelect($select, $entity::getTableName(), implode(', ', $where), $params, null, 1);
-		$entity = $result->fetchObject(get_class($entity));
-		return $entity;
+		return $this->retrieveByPrimaryKey($primary_key_values);
+	}
+
+	/**
+	 * Get entity by primary key.
+	 * 
+	 * @param array $primary_key_values
+	 * @return PersistentEntity
+	 */
+	public function retrieveByPrimaryKey(array $primary_key_values) {
+		$where = array();
+		foreach ($this->orm_entity->getPrimaryKey() as $key) {
+			$where[] = $key . ' = ?';
+		}
+		$result = Database::sqlSelect(array('*'), $this->orm_entity->getTableName(), implode(', ', $where), $primary_key_values, null, 1);
+		return $result->fetchObject(get_class($this->orm_entity));
 	}
 
 	/**
@@ -71,12 +95,12 @@ abstract class PersistenceModel implements Persistence {
 		$properties = $entity->getValues();
 		$where = '';
 		$params = array();
-		foreach ($entity::getPrimaryKey() as $key) {
+		foreach ($this->orm_entity->getPrimaryKey() as $key) {
 			$where .= $key . ' = :' . $key; // name parameters after key
 			$params[':' . $key] = $properties[$key]; // named parameters
 			unset($properties[$key]); // do not update primary key
 		}
-		$rowcount = Database::sqlUpdate($entity::getTableName(), $properties, $where, $params);
+		$rowcount = Database::sqlUpdate($this->orm_entity->getTableName(), $properties, $where, $params);
 		if ($rowcount !== 1) {
 			throw new Exception('update rowCount=' . $rowcount);
 		}
@@ -89,12 +113,24 @@ abstract class PersistenceModel implements Persistence {
 	 * @throws Exception
 	 */
 	public function delete(PersistentEntity $entity) {
-		$where = implode(', ', $entity::getPrimaryKey());
-		$params = array();
-		foreach ($entity::getPrimaryKey() as $key) {
-			$params[] = $entity->$key;
+		$primary_key_values = array();
+		foreach ($this->orm_entity->getPrimaryKey() as $key) {
+			$primary_key_values[] = $entity->$key;
 		}
-		$rowcount = Database::sqlDelete($entity::getTableName(), $where, $params);
+		$this->deleteByPrimaryKey($primary_key_values);
+	}
+
+	/**
+	 * Delete entity by primary key.
+	 * 
+	 * @param array $primary_key_values
+	 */
+	public function deleteByPrimaryKey(array $primary_key_values) {
+		$where = array();
+		foreach ($this->orm_entity->getPrimaryKey() as $key) {
+			$where[] = $key . ' = ?';
+		}
+		$rowcount = Database::sqlDelete($this->orm_entity->getTableName(), implode(', ', $where), $primary_key_values);
 		if ($rowcount !== 1) {
 			throw new Exception('delete rowCount=' . $rowcount);
 		}

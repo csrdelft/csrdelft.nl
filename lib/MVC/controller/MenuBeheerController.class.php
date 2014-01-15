@@ -46,12 +46,17 @@ class MenuBeheerController extends AclController {
 	}
 
 	public function verwijder($id) {
-		$item = $this->model->deleteMenuItem($id);
-		invokeRefresh('/menubeheer/beheer/' . $item->menu_naam, 'Verwijderd ' . $item->tekst . ' (' . $item->getMenuId() . ')', 1);
+		try {
+			$item = $this->model->deleteMenuItem($id);
+			invokeRefresh('/menubeheer/beheer/' . $item->menu_naam, 'Verwijderd ' . $item->tekst . ' (' . $item->item_id . ')', 1);
+		} catch (Exception $e) {
+			invokeRefresh('/menubeheer/beheer', $e->getMessage(), -1);
+		}
 	}
 
-	public function nieuw() {
+	public function nieuw($parent_id) {
 		$item = new MenuItem();
+		$item->parent_id = (int) $parent_id;
 		$item->prioriteit = (int) filter_input(INPUT_POST, 'prioriteit', FILTER_SANITIZE_NUMBER_INT);
 		$item->tekst = filter_input(INPUT_POST, 'tekst', FILTER_SANITIZE_STRING);
 		$item->link = filter_input(INPUT_POST, 'link', FILTER_SANITIZE_URL);

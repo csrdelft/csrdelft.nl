@@ -83,7 +83,7 @@ class Database extends PDO {
 	/**
 	 * Optional named parameters.
 	 * 
-	 * @param array $select
+	 * @param array $columns
 	 * @param string $from
 	 * @param string $where
 	 * @param array $params
@@ -92,8 +92,8 @@ class Database extends PDO {
 	 * @param int $start
 	 * @return PDOStatement
 	 */
-	public static function sqlSelect(array $select, $from, $where = null, array $params = array(), $orderby = null, $limit = null, $start = 0) {
-		$sql = 'SELECT ' . implode(', ', $select) . ' FROM ' . $from;
+	public static function sqlSelect(array $columns, $from, $where = null, array $params = array(), $orderby = null, $limit = null, $start = 0) {
+		$sql = 'SELECT ' . implode(', ', $columns) . ' FROM ' . $from;
 		if ($where !== null) {
 			$sql .= ' WHERE ' . $where;
 		}

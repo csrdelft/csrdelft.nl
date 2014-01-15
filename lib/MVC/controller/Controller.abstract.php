@@ -113,6 +113,8 @@ abstract class Controller {
 
 	protected function geentoegang() {
 		header('HTTP/1.0 403 Forbidden');
+		echo 'access denied';
+		exit;
 	}
 
 }
