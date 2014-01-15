@@ -1,7 +1,7 @@
 <?php
 
 /**
- * LidInstellingenModel.class.php
+ * LidInstellingen.static.php
  * 
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  *

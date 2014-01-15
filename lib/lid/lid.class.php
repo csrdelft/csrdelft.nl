@@ -9,13 +9,14 @@ require_once 'agenda/agenda.class.php';
 require_once 'groepen/groep.class.php';
 
 /**
- * @ahtuor C.S.R. Delft <pubcie@csrdelft.nl>
- *
- * Lid is een representatie van een lid in de DB. Lid is serializable en wordt door
- * LidCache in memcached gestopt. In principe roept LidCache als enige deHatsi3hoe
+ * lid.class.php
  * 
- * constructor van Lid aan.
- *
+ * @author C.S.R. Delft <pubcie@csrdelft.nl>
+ * 
+ * Lid is een representatie van een lid in de DB. Lid is serializable en wordt door
+ * LidCache in memcached gestopt. In principe roept LidCache als enige *kuch*
+ * de constructor van Lid aan.
+ * 
  * LidCache is een wrappertje om memcached die fijn allemaal Lid-objecten beheert.
  */
 class Lid implements Serializable, Agendeerbaar {
