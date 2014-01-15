@@ -1,0 +1,13 @@
+ALTER TABLE `lid` CHANGE `permissies` `permissies` ENUM( 'R_LID', 'R_NOBODY', 'R_PUBCIE', 'R_OUDLID', 'R_MODERATOR', 'R_MAALCIE', 'R_BESTUUR', 'R_KNORRIE', 'R_VAB', 'R_ETER', 'R_BASF', 'P_LID', 'P_NOBODY', 'P_PUBCIE', 'P_OUDLID', 'P_MODERATOR', 'P_MAALCIE', 'P_BESTUUR', 'P_KNORRIE', 'P_VAB', 'P_ETER', 'P_BASF' ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'R_NOBODY';
+UPDATE lid SET permissies = 'P_LID' WHERE permissies = 'R_LID';
+UPDATE lid SET permissies = 'P_NOBODY' WHERE permissies = 'R_NOBODY';
+UPDATE lid SET permissies = 'P_PUBCIE' WHERE permissies = 'R_PUBCIE';
+UPDATE lid SET permissies = 'P_OUDLID' WHERE permissies = 'R_OUDLID';
+UPDATE lid SET permissies = 'P_MODERATOR' WHERE permissies = 'R_MODERATOR';
+UPDATE lid SET permissies = 'P_MAALCIE' WHERE permissies = 'R_MAALCIE';
+UPDATE lid SET permissies = 'P_BESTUUR' WHERE permissies = 'R_BESTUUR';
+UPDATE lid SET permissies = 'P_KNORRIE' WHERE permissies = 'R_KNORRIE';
+UPDATE lid SET permissies = 'P_VAB' WHERE permissies = 'R_VAB';
+UPDATE lid SET permissies = 'P_ETER' WHERE permissies = 'R_ETER';
+UPDATE lid SET permissies = 'P_BASF' WHERE permissies = 'R_BASF';
+ALTER TABLE `lid` CHANGE `permissies` `permissies` ENUM( 'P_LID', 'P_NOBODY', 'P_PUBCIE', 'P_OUDLID', 'P_MODERATOR', 'P_MAALCIE', 'P_BESTUUR', 'P_KNORRIE', 'P_VAB', 'P_ETER', 'P_BASF' ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'P_NOBODY';
