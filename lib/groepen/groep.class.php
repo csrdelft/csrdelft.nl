@@ -47,8 +47,8 @@ class Groep{
 				}
 				$this->groep=array(
 					'groepId'=>0, 'snaam'=>'', 'naam'=>'', 'sbeschrijving'=>'', 'beschrijving'=>'',
-					'zichtbaar'=>'zichtbaar', 'begin'=>date('Y-m-d'), 'einde'=>'0000-00-00',
-					'aanmeldbaar'=>'', 'limiet'=>0, 'toonFuncties'=>'tonen', 'functiefilter',
+					'zichtbaar'=>'zichtbaar', 'status'=>'ht' ,'begin'=>date('Y-m-d'), 'einde'=>'0000-00-00',
+					'aanmeldbaar'=>'', 'limiet'=>0, 'toonFuncties'=>'tonen', 'functiefilter'=>'',
 					'toonPasfotos'=>0, 'lidIsMod'=>0, 'eigenaar'=>$eigenaar);
 			}else{
 				$this->load($init);
