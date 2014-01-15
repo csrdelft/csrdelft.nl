@@ -68,7 +68,7 @@ class MenuBeheerController extends AclController {
 		$model = new MenuModel();
 		try {
 			$item = $model->wijzigProperty($id, $property, $value);
-			invokeRefresh('/menubeheer/beheer/' . $item->menu_naam, 'Wijzigingen opgeslagen ' . $item->tekst . ' (' . $item->id . ')', 1);
+			invokeRefresh('/menubeheer/beheer/' . $item->menu_naam, 'Wijzigingen opgeslagen ' . $item->item_id . ': ' . $item->tekst, 1);
 		} catch (Exception $e) {
 			invokeRefresh('/menubeheer/beheer', $e->getMessage(), -1);
 		}

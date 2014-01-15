@@ -8,7 +8,7 @@ require_once 'taken/view/MijnVoorkeurenView.class.php';
  * MijnVoorkeurenController.class.php	| 	P.W.G. Brussee (brussee@live.nl)
  * 
  */
-class MijnVoorkeurenController extends \AclController {
+class MijnVoorkeurenController extends AclController {
 
 	public function __construct($query) {
 		parent::__construct($query);

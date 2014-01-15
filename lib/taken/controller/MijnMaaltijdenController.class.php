@@ -10,7 +10,7 @@ require_once 'taken/view/MijnMaaltijdenView.class.php';
  * MijnMaaltijdenController.class.php	| 	P.W.G. Brussee (brussee@live.nl)
  * 
  */
-class MijnMaaltijdenController extends \AclController {
+class MijnMaaltijdenController extends AclController {
 
 	public function __construct($query) {
 		parent::__construct($query);

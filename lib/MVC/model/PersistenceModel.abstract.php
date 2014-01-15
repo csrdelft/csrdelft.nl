@@ -51,14 +51,14 @@ abstract class PersistenceModel implements Persistence {
 	 */
 	public function retrieve(PersistentEntity $entity) {
 		$select = $entity::getFields();
-		$where = '';
+		$where = array();
 		$params = array();
 		foreach ($entity::getPrimaryKey() as $key) {
-			$where .= $key . ' = ?';
+			$where[] = $key . ' = ?';
 			$params[] = $entity->$key;
 		}
 		$result = Database::sqlSelect($select, $entity::getTableName(), implode(', ', $where), $params, null, 1);
-		$entity = $result->fetch(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, get_class($entity));
+		$entity = $result->fetchObject(get_class($entity));
 		return $entity;
 	}
 

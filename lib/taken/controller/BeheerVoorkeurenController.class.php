@@ -8,7 +8,7 @@ require_once 'taken/view/BeheerVoorkeurenView.class.php';
  * BeheerVoorkeurenController.class.php	| 	P.W.G. Brussee (brussee@live.nl)
  * 
  */
-class BeheerVoorkeurenController extends \AclController {
+class BeheerVoorkeurenController extends AclController {
 
 	public function __construct($query) {
 		parent::__construct($query);

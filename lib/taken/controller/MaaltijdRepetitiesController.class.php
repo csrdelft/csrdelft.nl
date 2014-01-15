@@ -9,7 +9,7 @@ require_once 'taken/view/forms/MaaltijdRepetitieFormView.class.php';
  * MaaltijdRepetitiesController.class.php	| 	P.W.G. Brussee (brussee@live.nl)
  * 
  */
-class MaaltijdRepetitiesController extends \AclController {
+class MaaltijdRepetitiesController extends AclController {
 
 	public function __construct($query) {
 		parent::__construct($query);

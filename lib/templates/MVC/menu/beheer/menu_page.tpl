@@ -17,7 +17,7 @@
 	<a href="/menubeheer/beheer/" title="Nieuw menu" class="knop" onclick="this.href += prompt('Voer unieke naam in', '');">{icon get="add"}</a>
 </div>
 <br />
-{if sizeof($root->children) > 0}
+{if $root}
 	<ul class="menubeheer-tree">
 		{include file='MVC/menu/beheer/menu_item.tpl' item=$root}
 	</ul>

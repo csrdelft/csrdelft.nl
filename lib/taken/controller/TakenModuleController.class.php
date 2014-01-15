@@ -8,7 +8,7 @@ require_once 'MVC/controller/AclController.abstract.php';
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
-class TakenModuleController extends \AclController {
+class TakenModuleController extends AclController {
 
 	public function __construct($query) {
 		parent::__construct($query);

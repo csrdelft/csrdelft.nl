@@ -8,7 +8,7 @@ require_once 'taken/view/BeheerPuntenView.class.php';
  * BeheerPuntenController.class.php	| 	P.W.G. Brussee (brussee@live.nl)
  * 
  */
-class BeheerPuntenController extends \AclController {
+class BeheerPuntenController extends AclController {
 
 	public function __construct($query) {
 		parent::__construct($query);

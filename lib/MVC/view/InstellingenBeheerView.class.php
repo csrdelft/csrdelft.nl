@@ -37,14 +37,14 @@ class InstellingenBeheerView extends TemplateView {
 		$this->instelling = $instelling;
 		if ($instelling === null) {
 			$this->modules = $model->getAlleModules();
-			if ($module !== '') {
+			if ($module !== null) {
 				$this->instellingen = $model->getModuleInstellingen($module);
 			}
 		}
 	}
 
 	public function getTitel() {
-		if ($this->module !== '') {
+		if ($this->module !== null) {
 			return 'Beheer instellingen module: ' . $this->module;
 		}
 		return 'Beheer instellingen stek';
@@ -54,7 +54,6 @@ class InstellingenBeheerView extends TemplateView {
 		if ($this->instelling === null) {
 			$this->smarty->assign('melding', $this->getMelding());
 			$this->smarty->assign('kop', $this->getTitel());
-			$this->smarty->assign('module', $this->module);
 			$this->smarty->assign('modules', $this->modules);
 			$this->smarty->assign('instellingen', $this->instellingen);
 			$this->smarty->display('MVC/instellingen/beheer/instellingen_page.tpl');

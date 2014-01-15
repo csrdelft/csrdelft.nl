@@ -9,7 +9,7 @@ require_once 'MVC/view/form/InstellingFormView.class.php';
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
-class InstellingenBeheerController extends \AclController {
+class InstellingenBeheerController extends AclController {
 
 	/**
 	 * Data access model
@@ -22,34 +22,40 @@ class InstellingenBeheerController extends \AclController {
 		parent::__construct($query);
 		if (!parent::isPOSTed()) {
 			$this->acl = array(
-				'beheer' => 'P_CORVEE_MOD'
+				'beheer' => 'P_LID'
 			);
 		} else {
 			$this->acl = array(
-				'bewerk' => 'P_CORVEE_MOD',
-				'opslaan' => 'P_CORVEE_MOD',
-				'reset' => 'P_CORVEE_MOD'
+				'bewerk' => 'P_LID',
+				'opslaan' => 'P_LID',
+				'reset' => 'P_LID'
 			);
 		}
 		$this->action = 'beheer';
 		if ($this->hasParam(0)) {
 			$this->action = $this->getParam(0);
 		}
-		$params = array();
-		if ($this->hasParam(1)) {
-			if ($this->action === 'beheer') {
-				$params[] = $this->getParam(1);
-			} else {
-				$params[] = $this->getParam(1);
-				if ($this->hasParam(2)) {
-					$params[] = $this->getParam(2);
-				}
-			}
-		}
-		$this->performAction($params);
+		$this->performAction($this->getParams(1));
 	}
 
-	public function beheer($module = '') {
+	protected function hasPermission() {
+		if (!parent::hasPermission()) {
+			return false;
+		}
+		if ($this->hasParam(1)) {
+			switch ($this->getParam(1)) {
+				case 'corvee':
+					return LoginLid::instance()->hasPermission('P_CORVEE_MOD');
+				case 'maaltijden':
+					return LoginLid::instance()->hasPermission('P_MAAL_MOD');
+				default:
+					return LoginLid::instance()->hasPermission('P_ADMIN');
+			}
+		}
+		return true; // hoofdpagina: geen module
+	}
+
+	public function beheer($module = null) {
 		$this->view = new InstellingenBeheerView($this->model, $module);
 		$this->view = new csrdelft($this->getContent());
 		$this->view->addStylesheet('taken.css');
