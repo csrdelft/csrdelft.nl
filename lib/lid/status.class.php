@@ -84,13 +84,13 @@ class Status{
 			case 'S_KRINGEL':
 			case 'S_NOVIET':
 			case 'S_GASTLID':
-			case 'S_LID': 		return 'P_LID';
+			case 'S_LID': 		return 'R_LID';
 			case 'S_OUDLID':
-			case 'S_ERELID': 	return 'P_OUDLID';
+			case 'S_ERELID': 	return 'R_OUDLID';
 			case 'S_NOBODY':
 			case 'S_EXLID':
 			case 'S_OVERLEDEN': 
-			case 'S_CIE':		return 'P_NOBODY';
+			case 'S_CIE':		return 'R_NOBODY';
 		}
 	}
 

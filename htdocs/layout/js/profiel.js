@@ -51,7 +51,7 @@ jQuery(document).ready(function($) {
 					var now = new Date();
 					setLidaf(now.getFullYear(), now.getMonth(), now.getDate());
 				}
-				$("#field_permissies").val(status=="S_NOBODY" || status=='S_EXLID' ? 'P_NOBODY' : 'P_OUDLID');
+				$("#field_permissies").val(status=="S_NOBODY" || status=='S_EXLID' ? 'R_NOBODY' : 'R_OUDLID');
 			break;
 			case "S_LID":
 			case "S_GASTLID":
@@ -64,7 +64,7 @@ jQuery(document).ready(function($) {
 					$(".leden").show();
 				}
 				//waardes voorinvullen
-				$("#field_permissies").val(original['permissies']=='P_OUDLID' || original['permissies']=='P_NOBODY' ? 'P_LID' : original['permissies']);
+				$("#field_permissies").val(original['permissies']=='R_OUDLID' || original['permissies']=='R_NOBODY' ? 'R_LID' : original['permissies']);
 			break;
 			case "S_OVERLEDEN":
 				$('#lidafdatum, #sterfdatum').show();
@@ -72,7 +72,7 @@ jQuery(document).ready(function($) {
 			case "S_CIE":
 			case "S_KRINGEL":
 				//waardes voorinvullen
-				$("#field_permissies").val(status=="S_KRINGEL" ? 'P_LID' : 'P_NOBODY');
+				$("#field_permissies").val(status=="S_KRINGEL" ? 'R_LID' : 'R_NOBODY');
 			break;
 		} //end switch(status)
 		
