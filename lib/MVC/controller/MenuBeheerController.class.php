@@ -25,8 +25,7 @@ class MenuBeheerController extends AclController {
 				'beheer' => 'P_ADMIN',
 				'verwijder' => 'P_ADMIN'
 			);
-		}
-		else {
+		} else {
 			$this->acl = array(
 				'nieuw' => 'P_ADMIN',
 				'wijzig' => 'P_ADMIN'
@@ -36,19 +35,7 @@ class MenuBeheerController extends AclController {
 		if ($this->hasParam(0)) {
 			$this->action = $this->getParam(0);
 		}
-		$params = array();
-		if ($this->hasParam(1)) {
-			if ($this->action === 'beheer') {
-				$params[] = $this->getParam(1);
-			}
-			else {
-				$params[] = (int) $this->getParam(1);
-				if ($this->hasParam(2)) {
-					$params[] = $this->getParam(2);
-				}
-			}
-		}
-		$this->performAction($params);
+		$this->performAction($this->getParams(1));
 	}
 
 	public function beheer($menu = '') {
@@ -79,8 +66,12 @@ class MenuBeheerController extends AclController {
 	public function wijzig($id, $property) {
 		$value = filter_input(INPUT_POST, $property);
 		$model = new MenuModel();
-		$item = $model->wijzigProperty($id, $property, $value);
-		invokeRefresh('/menubeheer/beheer/' . $item->menu_naam, 'Wijzigingen opgeslagen ' . $item->tekst . ' (' . $item->id . ')', 1);
+		try {
+			$item = $model->wijzigProperty($id, $property, $value);
+			invokeRefresh('/menubeheer/beheer/' . $item->menu_naam, 'Wijzigingen opgeslagen ' . $item->tekst . ' (' . $item->id . ')', 1);
+		} catch (Exception $e) {
+			invokeRefresh('/menubeheer/beheer', $e->getMessage(), -1);
+		}
 	}
 
 }

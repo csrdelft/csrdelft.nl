@@ -69,7 +69,7 @@ class MenuItem extends PersistentEntity {
 	 * Database primary key
 	 * @var array
 	 */
-	protected static $primary_key = array('menu_id');
+	protected static $primary_key = array('item_id');
 	/**
 	 * Database table name
 	 * @var string

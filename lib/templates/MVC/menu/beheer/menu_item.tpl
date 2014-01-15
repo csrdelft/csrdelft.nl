@@ -37,39 +37,39 @@
 	</div>
 {if $item->item_id}
 	<div class="inline-edit-{$item->item_id}" style="display: none;">
-		<form method="post" action="/menubeheer/wijzig/{$item->item_id}/parentId">
+		<form method="post" action="/menubeheer/wijzig/{$item->item_id}/parent_id">
 			<div style="display: inline-block; width: 75px;">Parent id:</div>
-			<input type="text" name="ParentId" maxlength="5" size="60" value="{$item->parent_id}" />
+			<input type="text" name="parent_id" maxlength="5" size="60" value="{$item->parent_id}" />
 			&nbsp;<input type="submit" value="opslaan" />
 			&nbsp;<input type="reset" value="annuleren" onclick="$('.inline-edit-{$item->item_id}').slideDown();$(this).parent().parent().slideUp();" />
 		</form>
 		<form method="post" action="/menubeheer/wijzig/{$item->item_id}/prioriteit">
 			<div style="display: inline-block; width: 75px;">Prioriteit:</div>
-			<input type="text" name="Prioriteit" maxlength="5" size="60" value="{$item->prioriteit}" />
+			<input type="text" name="prioriteit" maxlength="5" size="60" value="{$item->prioriteit}" />
 			&nbsp;<input type="submit" value="opslaan" />
 			&nbsp;<input type="reset" value="annuleren" onclick="$('.inline-edit-{$item->item_id}').slideDown();$(this).parent().parent().slideUp();" />
 		</form>
 		<form method="post" action="/menubeheer/wijzig/{$item->item_id}/tekst">
 			<div style="display: inline-block; width: 75px;">Label:</div>
-			<input type="text" name="Tekst" maxlength="255" size="60" value="{$item->tekst}" />
+			<input type="text" name="tekst" maxlength="255" size="60" value="{$item->tekst}" />
 			&nbsp;<input type="submit" value="opslaan" />
 			&nbsp;<input type="reset" value="annuleren" onclick="$('.inline-edit-{$item->item_id}').slideDown();$(this).parent().parent().slideUp();" />
 		</form>
 		<form method="post" action="/menubeheer/wijzig/{$item->item_id}/link">
 			<div style="display: inline-block; width: 75px;">Url:</div>
-			<input type="text" name="Link" maxlength="255" size="60" value="{$item->link}" />
+			<input type="text" name="link" maxlength="255" size="60" value="{$item->link}" />
 			&nbsp;<input type="submit" value="opslaan" />
 			&nbsp;<input type="reset" value="annuleren" onclick="$('.inline-edit-{$item->item_id}').slideDown();$(this).parent().parent().slideUp();" />
 		</form>
 		<form method="post" action="/menubeheer/wijzig/{$item->item_id}/permission">
 			<div style="display: inline-block; width: 75px;">Rechten:</div>
-			<input type="text" name="Permission" maxlength="255" size="60" value="{$item->permission}" />
+			<input type="text" name="permission" maxlength="255" size="60" value="{$item->permission}" />
 			&nbsp;<input type="submit" value="opslaan" />
 			&nbsp;<input type="reset" value="annuleren" onclick="$('.inline-edit-{$item->item_id}').slideDown();$(this).parent().parent().slideUp();" />
 		</form>
 		<form method="post" action="/menubeheer/wijzig/{$item->item_id}/menu">
 			<div style="display: inline-block; width: 75px;">Menu:</div>
-			<input type="text" name="Menu" maxlength="255" size="60" value="{$item->menu_naam}" />
+			<input type="text" name="menu" maxlength="255" size="60" value="{$item->menu_naam}" />
 			&nbsp;<input type="submit" value="opslaan" />
 			&nbsp;<input type="reset" value="annuleren" onclick="$('.inline-edit-{$item->item_id}').slideDown();$(this).parent().parent().slideUp();" />
 		</form>
@@ -79,17 +79,17 @@
 		<li id="inline-newchild-{$item->item_id}" style="display: none;">
 			<form method="post" action="/menubeheer/nieuw/{$item->item_id}">
 				<div style="display: inline-block; width: 75px;">Parent id:</div>
-				<input type="text" name="ParentId" maxlength="5" size="60" value="{$item->item_id}" /><br />
+				<input type="text" name="parent_id" maxlength="5" size="60" value="{$item->item_id}" /><br />
 				<div style="display: inline-block; width: 75px;">Prioriteit:</div>
-				<input type="text" name="Prioriteit" maxlength="5" size="60" value="0" /><br />
+				<input type="text" name="prioriteit" maxlength="5" size="60" value="0" /><br />
 				<div style="display: inline-block; width: 75px;">Label:</div>
-				<input type="text" name="Tekst" maxlength="255" size="60" value="Tekst" /><br />
+				<input type="text" name="tekst" maxlength="255" size="60" value="Tekst" /><br />
 				<div style="display: inline-block; width: 75px;">Url:</div>
-				<input type="text" name="Link" maxlength="255" size="60" value="/url" /><br />
+				<input type="text" name="link" maxlength="255" size="60" value="/url" /><br />
 				<div style="display: inline-block; width: 75px;">Rechten:</div>
-				<input type="text" name="Permission" maxlength="255" size="60" value="P_NOBODY" /><br />
+				<input type="text" name="permission" maxlength="255" size="60" value="P_NOBODY" /><br />
 				<div style="display: inline-block; width: 75px;">&nbsp</div>
-				<input type="hidden" name="Menu" value="{$item->menu_naam}" />
+				<input type="hidden" name="menu" value="{$item->menu_naam}" />
 				<input type="submit" value="opslaan" />&nbsp;
 				<input type="reset" value="annuleren" onclick="$(this).parent().parent().slideUp(400, function() {ldelim} $(this).remove(); {rdelim});" />
 			</form>
