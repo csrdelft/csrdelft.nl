@@ -54,20 +54,6 @@ else {
 
 	switch ($actie) {
 		case 'novietBewerken':
-			$profiel = new ProfielBewerken($uid, $actie);
-
-			if ($profiel->magBewerken()) {
-				if ($profiel->validate() AND $profiel->save()) {
-					header('location: ' . CSR_ROOT . 'communicatie/profiel/' . $uid);
-					exit;
-				}
-				else {
-					$midden = new ProfielEditContent($profiel, $actie);
-				}
-			}
-			else {
-				$midden = new ProfielContent(LidCache::getLid($uid));
-			}
 		case 'bewerken':
 			$profiel = new ProfielBewerken($uid, $actie);
 
@@ -163,6 +149,8 @@ else {
 			invokeRefresh(CSR_ROOT . 'communicatie/profiel/' . $uid, '<h2>Opgeslagen in Google Contacts:</h2>' . $message, 2);
 			exit;
 			break;
+
+		/** @noinspection PhpMissingBreakStatementInspection */
 		case 'rssToken':
 			if ($uid == $loginlid->getUid()) {
 				$loginlid->getToken();
