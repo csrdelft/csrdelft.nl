@@ -513,9 +513,6 @@ class Boek {
 			case 'auteur':
 				$this->$key = trim($value);
 				break;
-			case 'beschrijving':
-				$this->getEditBeschrijving()->setTekst($value);
-				break;
 			case 'biebboek':
 				$this->biebboek = $value;
 				break;
@@ -656,6 +653,24 @@ class BewerkBoek extends Boek {
 	}
 
 	/**
+	 * Set gegeven waardes in Boek
+	 *
+	 * @param string $key moet bekend zijn, anders exception
+	 * @param        $value
+	 * @param bool   $initboek
+	 * @throws Exception
+	 * @return void
+	 */
+	public function setValue($key, $value, $initboek = false) {
+		switch ($key) {
+			case 'beschrijving':
+				$this->getEditBeschrijving()->setTekst($value);
+				break;
+		}
+		parent::setValue($key, $value, $initboek);
+	}
+
+	/**
 	 * Geeft één veldobject $entry terug
 	 *
 	 * @param string $entry
@@ -663,7 +678,7 @@ class BewerkBoek extends Boek {
 	 * @return InputField
 	 */
 	public function getField($entry) {
-		if (!$field = $this->ajaxformuliervelden->getFieldByName($entry)) {
+		if (!$field = $this->ajaxformuliervelden->findByName($entry)) {
 			throw new Exception('Dit formulier bevat geen veld "' . $entry . '"');
 		}
 		return $field;
