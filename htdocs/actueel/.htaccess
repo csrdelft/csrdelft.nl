@@ -6,9 +6,6 @@ RewriteRule ^owee/?$		/csrindeowee/ [R=301]
 # Als we naar /actueel/ gaan worden we doorgestuurd naar de mededelingen
 RewriteRule ^/?$ /actueel/mededelingen/ [R]
 
-# Sjaarsacties
-RewriteRule ^sjaarsacties/?$ sjaarsacties.php
-
 # Bijbelleesrooster
 RewriteRule ^bijbelrooster/$ bijbelrooster.php
 

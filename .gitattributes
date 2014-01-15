@@ -41,7 +41,6 @@ htdocs/actueel/mededelingen/.htaccess -text
 htdocs/actueel/mededelingen/goedkeuren.php -text
 htdocs/actueel/mededelingen/index.php -text
 htdocs/actueel/mededelingen/top3overzicht.php -text
-htdocs/actueel/sjaarsacties.php -text
 htdocs/android/get_user.php -text
 htdocs/android/get_userlist.php -text
 htdocs/android/login.php -text
@@ -3071,8 +3070,6 @@ lib/roodschoppercontent.class.php -text
 lib/savedquery.class.php -text
 lib/simplehtml.class.php -text
 lib/simplespamfilter.class.php -text
-lib/sjaarsactie.class.php -text
-lib/sjaarsactiecontent.class.php -text
 lib/smarty/3.1.16_RELEASE_NOTES.txt -text
 lib/smarty/COPYING.lib -text
 lib/smarty/README -text
@@ -3516,3 +3513,4 @@ sql/3901_standaard_punten.sql -text
 sql/3961_menus.sql -text
 sql/3977_instellingen.sql -text
 sql/4003_permissie_roles.sql -text
+sql/4014_drop_sjaarsacties.sql -text
