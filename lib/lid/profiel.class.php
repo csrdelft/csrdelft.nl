@@ -32,7 +32,7 @@ class Profiel {
 	protected $editNoviet=false;
 
 	/** @var Formulier Hierin kan een formulier gedefinieerd worden. */
-	protected $form=array();
+	protected $form = null;
 
 	//we houden voor elke wijziging een changelog bij, die stoppen we
 	//bovenin het veld 'changelog' in de database bij het opslaan.
@@ -70,7 +70,6 @@ class Profiel {
 	public function isPosted(){
 		return $this->form->isPosted();
 	}
-	
 
 	/**
 	 * Save bewerktLid en push wijzigingen naar de LDAP.
@@ -489,7 +488,7 @@ class ProfielStatus extends Profiel{
 		$this->changelog[]='Statusverandering van [lid='.LoginLid::instance()->getUid().'] op [reldate]'.getDatetime().'[/reldate]';
 
 		//aan de hand van status bepalen welke POSTed velden worden opgeslagen van het formulier
-		$fieldsToSave = $this->getFieldsToSave($this->form->getFieldByName('status')->getValue());
+		$fieldsToSave = $this->getFieldsToSave($this->form->findByName('status')->getValue());
 
 		//relevante gegevens uit velden verwerken
 		foreach($this->form->getFields() as $field){
@@ -749,15 +748,13 @@ class ProfielStatus extends Profiel{
 }
 
 class ProfielVoorkeur extends Profiel{
-		
-		protected $form=array();
-		
+
 		public function __construct($lid, $actie){
 			parent::__construct($lid, $actie);
 			$this->assignFields();
 		}
 
-		/*
+		/**
 		 * Defineert de velden van formulier voor het wijzigen van voorkeur
 		 */
 		public function assignFields(){
@@ -781,11 +778,9 @@ class ProfielVoorkeur extends Profiel{
 		}
 
 		/**
-		 * Slaat waardes uit de velden op. Voor opslaan worden sommige velden nog geconditioneerd.
+		 * Slaat waardes uit de velden op.
 		 *
-		 * @return bool wel/niet slagen van opslaan van lidgegevens
-		 *
-		 * acties: verwerkt velden, conditioneert die, zet abo's uit, slaat lidgegevens op en mailt fisci.
+		 * @return bool wel/niet slagen van opslaan van gegevens
 		 */
 		public function save(){
 			//relevante gegevens uit velden verwerken
@@ -801,11 +796,7 @@ class ProfielVoorkeur extends Profiel{
 				}
 			}
 		}
-		
-		public function isPosted(){
-			return $this->form->isPosted();
-		}
-	
+
 		Public function magBewerken(){
 			//lid-moderator
 			if(LoginLid::instance()->hasPermission('P_LEDEN_MOD')){
@@ -829,12 +820,7 @@ class ProfielVoorkeur extends Profiel{
 			return 0;
 		}
 		
-		public function getFields(){
-			return $this->form;
-		}
-		
 		public function validate(){
 			return true;
 		}
 }
-?>
