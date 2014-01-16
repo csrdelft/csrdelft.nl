@@ -42,9 +42,7 @@ class HerinneringenModel {
 	}
 
 	public static function stuurHerinneringen() {
-		if (array_key_exists('herinnering_1e_mail', $GLOBALS['corvee'])) {
-			$vooraf = str_replace('-', '+', Instellingen::get('corvee', 'herinnering_1e_mail'));
-		}
+		$vooraf = str_replace('-', '+', Instellingen::get('corvee', 'herinnering_1e_mail'));
 		$van = strtotime(date('Y-m-d'));
 		$tot = strtotime($vooraf, $van);
 		$taken = TakenModel::getTakenVoorAgenda($van, $tot, true);
