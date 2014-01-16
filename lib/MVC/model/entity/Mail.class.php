@@ -18,7 +18,7 @@ class Mail {
 	protected $to = array();
 	protected $bcc = array();
 	protected $charset = 'utf8';
-	protected $layout = 'simple';
+	protected $layout = '';
 	protected $placeholders = array();
 
 	public function __construct($to, $onderwerp, $bericht) {
@@ -165,7 +165,7 @@ class Mail {
 		else {
 			$body = getBody();
 		}
-		//return mail($this->getTo(), $this->getSubject(), $body, $this->getHeaders(), $this->getExtraparameters());
+		return mail($this->getTo(), $this->getSubject(), $body, $this->getHeaders(), $this->getExtraparameters());
 	}
 
 	public function __toString() {
