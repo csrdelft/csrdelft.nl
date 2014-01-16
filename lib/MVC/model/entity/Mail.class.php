@@ -17,8 +17,10 @@ class Mail {
 	protected $from = 'pubcie@csrdelft.nl';
 	protected $to = array();
 	protected $bcc = array();
+	protected $type = 'html'; // plain or html
 	protected $charset = 'utf8';
-	protected $layout = '';
+	protected $layout = 'simple';
+	protected $ubb = true;
 	protected $placeholders = array();
 
 	public function __construct($to, $onderwerp, $bericht) {
@@ -107,7 +109,7 @@ class Mail {
 		}
 
 		if ($this->charset === 'utf8') {
-			$headers .= "Content-Type: text/plain; charset=UTF-8\r\n";
+			$headers .= "Content-Type: text/" . $this->type . "; charset=UTF-8\r\n";
 		}
 		$headers .= 'X-Mailer: nl.csrdelft.lib.Mail' . "\n\r";
 
@@ -145,13 +147,13 @@ class Mail {
 	 * Controleert niet of alle placeholders ook gegeven worden in de
 	 * values-array!
 	 */
-	public function getBody($ubb = true) {
+	public function getBody() {
 		$body = $this->bericht;
 		foreach ($this->placeholders as $key => $value) {
 			$body = str_replace($key, $value, $body);
 		}
-		if ($ubb) {
-			CsrUbb::parse($body);
+		if ($this->ubb) {
+			$body = CsrUbb::parse($body);
 		}
 		return $body;
 	}

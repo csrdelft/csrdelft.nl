@@ -22,7 +22,6 @@ abstract class PaginationModel extends PersistenceModel {
 	private $where;
 	private $where_params;
 	private $orderby;
-	private $assoc;
 
 	protected function __construct(PersistentEntity $orm_entity) {
 		parent::__construct($orm_entity);
@@ -34,12 +33,11 @@ abstract class PaginationModel extends PersistenceModel {
 		}
 	}
 
-	public function setPaging($per_page, $where = null, array $where_params = array(), $orderby = null, $assoc = false) {
+	public function setPaging($per_page, $where = null, array $where_params = array(), $orderby = null) {
 		$this->per_page = $per_page;
 		$this->where = $where;
 		$this->where_params = $where_params;
 		$this->orderby = $orderby;
-		$this->assoc = $assoc;
 	}
 
 	/**
