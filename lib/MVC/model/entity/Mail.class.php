@@ -165,7 +165,6 @@ class Mail {
 		if ($this->layout != '') {
 			$view = new MailTemplateView($this);
 			$body = $view->getBody();
-			echo $body;
 		} else {
 			$body = $this->getBody();
 		}
