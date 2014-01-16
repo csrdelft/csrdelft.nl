@@ -78,7 +78,7 @@
 	>
 	<input type="checkbox" id="voorkeur" 
 
-{if !isset($voorkeurbaar) or !voorkeurbaar}
+{if !isset($voorkeurbaar) or !$voorkeurbaar}
 	disabled
 {else}
 	{if $voorkeur}
@@ -88,7 +88,7 @@
 {/if}
 	/>
 	<label for="voorkeur" style="padding-left: 7px !important; float: none; position: relative; top: -4px;">Met voorkeur</label>
-{if $voorkeur}
+{if isset($voorkeurbaar) and $voorkeur}
 	<script type="text/javascript">
 		$(document).ready(function() {ldelim}
 			taken_toggle_suggestie('geenvoorkeur');

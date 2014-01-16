@@ -1,6 +1,5 @@
 <?php
 
-
 require_once 'taken/model/VrijstellingenModel.class.php';
 require_once 'taken/model/KwalificatiesModel.class.php';
 require_once 'taken/model/PuntenModel.class.php';
@@ -32,7 +31,7 @@ class ToewijzenModel {
 				$uid = $kwali->getLidId();
 				$lid = \LidCache::getLid($uid); // false if lid does not exist
 				if (!$lid instanceof \Lid) {
-					throw new Exception('Lid bestaat niet: $uid ='. $uid);
+					throw new Exception('Lid bestaat niet: $uid =' . $uid);
 				}
 				if (!$lid->isLid()) {
 					continue; // geen oud-lid of overleden lid
@@ -53,8 +52,7 @@ class ToewijzenModel {
 				$lijst[$uid]['relatief'] = $lijst[$uid]['aantal'] - (int) $avg;
 			}
 			$sorteer = 'sorteerKwali';
-		}
-		else {
+		} else {
 			$lijst = PuntenModel::loadPuntenVoorAlleLeden();
 			foreach ($lijst as $uid => $punten) {
 				if (array_key_exists($uid, $vrijstellingen)) {
@@ -75,57 +73,52 @@ class ToewijzenModel {
 			$lijst[$uid]['laatste'] = TakenModel::getLaatsteTaakVanLid($uid);
 			if ($lijst[$uid]['laatste'] !== null && $lijst[$uid]['laatste']->getBeginMoment() >= strtotime(Instellingen::get('corvee', 'suggesties_recent_verbergen'), $taak->getBeginMoment())) {
 				$lijst[$uid]['recent'] = true;
-			}
-			else {
+			} else {
 				$lijst[$uid]['recent'] = false;
 			}
 			if ($taak->getCorveeRepetitieId() !== null) {
 				$lijst[$uid]['voorkeur'] = VoorkeurenModel::getHeeftVoorkeur($taak->getCorveeRepetitieId(), $uid);
+			} else {
+				$lijst[$uid]['voorkeur'] = false;
 			}
 		}
 		uasort($lijst, array('self', $sorteer));
 		return $lijst;
 	}
-	
+
 	static function sorteerKwali($a, $b) {
 		if ($a['laatste'] !== null && $b['laatste'] !== null) {
 			$a = $a['laatste']->getBeginMoment();
 			$b = $b['laatste']->getBeginMoment();
-		}
-		elseif ($a['laatste'] === null) {
+		} elseif ($a['laatste'] === null) {
 			return -1;
-		}
-		elseif ($b['laatste'] === null) {
+		} elseif ($b['laatste'] === null) {
 			return 1;
-		}
-		else {
+		} else {
 			$a = $a['aantal'];
 			$b = $b['aantal'];
 		}
 		if ($a === $b) {
 			return 0;
-		}
-		elseif ($a < $b) { // < ASC
+		} elseif ($a < $b) { // < ASC
 			return -1;
-		}
-		else {
+		} else {
 			return 1;
 		}
 	}
-	
+
 	static function sorteerPrognose($a, $b) {
 		$a = $a['prognose'];
 		$b = $b['prognose'];
 		if ($a === $b) {
 			return 0;
-		}
-		elseif ($a < $b) { // < ASC
+		} elseif ($a < $b) { // < ASC
 			return -1;
-		}
-		else {
+		} else {
 			return 1;
 		}
 	}
+
 }
 
 ?>
