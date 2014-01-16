@@ -1533,7 +1533,7 @@ class HtmlComment extends FormElement {
 class UbbComment extends HtmlComment {
 
 	public function view() {
-		echo CsrUbb::instance()->getHtml($this->comment);
+		echo CsrUbb::instance()->getHTML($this->comment);
 	}
 
 }

@@ -59,7 +59,7 @@ class Streeplijstcontent extends TemplateView {
 		return implode(', ', $this->getGoederenArray());
 	}
 
-	function getHtml() {
+	function getHTML() {
 		$sReturn = '
 			<html>
 				<head>

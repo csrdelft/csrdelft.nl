@@ -59,7 +59,7 @@ function smarty_function_knop($params, &$smarty){
 		$knop->setClass($params['class']);
 	}
 
-    return $knop->getHtml();
+    return $knop->getHTML();
 }
 
 
