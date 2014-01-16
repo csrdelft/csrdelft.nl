@@ -151,7 +151,7 @@ class Mail {
 			$body = str_replace($key, $value, $body);
 		}
 		if ($ubb) {
-			CsrUbb::instance()->getHTML($body);
+			CsrUbb::parse($body);
 		}
 		return $body;
 	}

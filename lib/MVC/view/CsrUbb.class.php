@@ -3,29 +3,20 @@
 require_once 'ubb/eamBBParser.class.php';
 
 /**
- * CsrUbb.singleton.php
+ * CsrUbb.class.php
  * 
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  */
 class CsrUbb extends eamBBParser {
 
-	private static $instance;
-
-	/**
-	 * Singleton
-	 * @return CsrUbb
-	 */
-	public static function instance() {
-		//als er nog geen instantie gemaakt is, die nu maken
-		if (!isset(self::$instance)) {
-			self::$instance = new CsrUbb();
-		}
-		return self::$instance;
-	}
-
-	protected function __construct() {
+	public function __construct() {
 		$this->eamBBParser();
 		$this->paragraph_mode = false;
+	}
+
+	public static function parse($ubb) {
+		$parser = new CsrUbb();
+		return $parser->getHTML($ubb);
 	}
 
 	function getHTML($ubb) {
@@ -247,7 +238,7 @@ class CsrUbb extends eamBBParser {
 	 * Omdat we niet willen dat dingen die in privé staan alsnog gezien
 	 * kunnen worden bij het citeren, slopen we hier alles wat in privé-tags staat weg.
 	 */
-	public function filterPrive($string) {
+	public static function filterPrive($string) {
 		if (LoginLid::instance()->hasPermission('P_LOGGED_IN')) {
 			return $string;
 		} else {
@@ -738,7 +729,7 @@ HTML;
 		return '<br style="height: 0px; clear: ' . $sClear . ';" />';
 	}
 
-	function getUbbHelp() {
+	public static function getUbbHelp() {
 		return <<<UBBVERHAAL
 <div id="ubbhulpverhaal" class="dragobject">
 	<span id="ubbsluiten" onclick="$('#ubbhulpverhaal').toggle();" title="Opmaakhulp verbergen">&times;</span>
@@ -963,24 +954,12 @@ UBBVERHAAL;
 
 }
 
-//we staan normaal geen HTML toe, met deze kan dat wel.
+/**
+ * We staan normaal geen HTML toe, maar met deze mag het wel.
+ */
 class CsrHtmlUbb extends CsrUbb {
 
-	private static $instance;
-
-	/**
-	 * Singleton
-	 * @return CsrHtmlUbb
-	 */
-	public static function instance() {
-		//als er nog geen instantie gemaakt is, die nu maken
-		if (!isset(self::$instance)) {
-			self::$instance = new CsrHtmlUbb();
-		}
-		return self::$instance;
-	}
-
-	protected function __construct() {
+	public function __construct() {
 		parent::__construct();
 		$this->allow_html = true;
 	}

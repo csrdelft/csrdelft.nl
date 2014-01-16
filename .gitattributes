@@ -2579,7 +2579,7 @@ lib/MVC/model/entity/Mededeling2.class.php -text
 lib/MVC/model/entity/MenuItem.class.php -text
 lib/MVC/model/entity/PersistentEntity.abstract.php -text
 lib/MVC/view/CsrSmarty.class.php -text
-lib/MVC/view/CsrUbb.singleton.php -text
+lib/MVC/view/CsrUbb.class.php -text
 lib/MVC/view/InstellingenBeheerView.class.php -text
 lib/MVC/view/MailTemplateView.class.php -text
 lib/MVC/view/MenuBeheerView.class.php -text

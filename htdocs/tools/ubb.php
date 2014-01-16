@@ -18,6 +18,6 @@ if(isset($_GET['string'])){
 //$_SESSION['compose_snapshot']=$string;
 
 $string=trim($string);
-echo CsrUbb::instance()->getHTML($string);
+echo CsrUbb::parse($string);
 
 ?>

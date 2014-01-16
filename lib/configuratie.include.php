@@ -72,7 +72,7 @@ require_once 'MVC/model/PaginationModel.abstract.php';
 require_once 'MVC/model/Instellingen.singleton.php';
 require_once 'MVC/view/TemplateView.abstract.php';
 require_once 'MVC/view/form/Formulier.class.php';
-require_once 'MVC/view/CsrUbb.singleton.php';
+require_once 'MVC/view/CsrUbb.class.php';
 require_once 'MVC/controller/AclController.abstract.php';
 
 switch (constant('MODE')) {

@@ -27,7 +27,7 @@ if (isset($_GET['post'])) {
 		$post = $forumonderwerp->getSinglePost($iPostID);
 
 		if (!$loginlid->hasPermission('P_LOGGED_IN')) {
-			$post = CsrUbb::instance()->filterPrive($post);
+			$post = CsrUbb::filterPrive($post);
 		}
 
 		if ($citaat) {

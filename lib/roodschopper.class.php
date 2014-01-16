@@ -108,7 +108,7 @@ h.t. Fiscus.';
 
 		$data=$db->query2array($query);
 
-		$bericht=CsrUbb::instance()->getHTML($this->bericht);
+		$bericht=CsrUbb::parse($this->bericht);
 
 		$this->teschoppen=array();
 		if(is_array($data)){
