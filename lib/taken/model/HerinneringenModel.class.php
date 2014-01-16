@@ -27,9 +27,9 @@ class HerinneringenModel {
 		if ($taak->getMaaltijdId() !== null) {
 			$aangemeld = AanmeldingenModel::getIsAangemeld($taak->getMaaltijdId(), $uid);
 			if ($aangemeld) {
-				$eten = 'U eet WEL mee met de maaltijd.';
+				$eten = Instellingen::get('corvee', 'mail_wel_meeeten');
 			} else {
-				$eten = 'U eet NIET mee met de maaltijd.';
+				$eten = Instellingen::get('corvee', 'mail_niet_meeeten');
 			}
 		}
 		$mail = new Mail($to, $onderwerp, $bericht);
