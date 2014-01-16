@@ -49,7 +49,7 @@ class PaginaContent extends TemplateView {
 			# Gewoon de inhoud van een pagina laten zien
 			case 'bekijken':
 				$sInhoud = $this->getMelding();
-				$sInhoud.=CsrHtmlUbb::instance()->getHTML($this->_pagina->getInhoud());
+				$sInhoud.=CsrHtmlUbb::parse($this->_pagina->getInhoud());
 
 				if ($this->_pagina->magBewerken()) {
 					$sInhoud = '<a href="/pagina/' . $this->_pagina->getNaam() . '/bewerken" class="knop editpage" style="float: right;" title="Bewerk pagina">

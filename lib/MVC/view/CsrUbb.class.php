@@ -964,4 +964,9 @@ class CsrHtmlUbb extends CsrUbb {
 		$this->allow_html = true;
 	}
 
+	public static function parse($ubb) {
+		$parser = new CsrHtmlUbb();
+		return $parser->getHTML($ubb);
+	}
+
 }
