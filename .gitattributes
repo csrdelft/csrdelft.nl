@@ -1008,6 +1008,7 @@ htdocs/wiki/lib/plugins/bureaucracy/fields/subject.php -text
 htdocs/wiki/lib/plugins/bureaucracy/fields/submit.php -text
 htdocs/wiki/lib/plugins/bureaucracy/fields/textarea.php -text
 htdocs/wiki/lib/plugins/bureaucracy/fields/textbox.php -text
+htdocs/wiki/lib/plugins/bureaucracy/fields/textboxcsr.php -text
 htdocs/wiki/lib/plugins/bureaucracy/fields/user.php -text
 htdocs/wiki/lib/plugins/bureaucracy/fields/users.php -text
 htdocs/wiki/lib/plugins/bureaucracy/fields/wiki.php -text

@@ -97,6 +97,7 @@ class syntax_plugin_bureaucracy_field extends syntax_plugin_bureaucracy {
                 $this->opt['rows'] = substr($arg,1);
             } elseif($arg[0] == '.'){
                 $this->opt['class'] = substr($arg,1);
+            } elseif($this->additionalStandardArg($arg)) {
             } else {
                 $t = $arg[0];
                 $d = substr($arg,1);
@@ -116,6 +117,16 @@ class syntax_plugin_bureaucracy_field extends syntax_plugin_bureaucracy {
                 $this->checks[] = array('t' => $t, 'd' => $d);
             }
         }
+    }
+
+    /**
+     * Implement this method for adding other standard arguments
+     *
+     * @param string $arg
+     * @return bool whether there was a recognized argument
+     */
+    protected function additionalStandardArg($arg) {
+        return false;
     }
 
     /**
