@@ -1,9 +1,9 @@
 Beste Corveecaesar,
 
-De lidstatus van %naam% (%uid%) is gewijzigd van %oudestatus% in %nieuwestatus%.
+De lidstatus van NAAM (UID) is gewijzigd van OUD in NIEUW.
 De toekomstige corveetaken van dit lid zijn verwijderd waardoor er corveeplaatsen vrijvallen.
 
-%changelog%
+CHANGE
 
 Met amicale groet,
-%admin_naam%
+ADMIN

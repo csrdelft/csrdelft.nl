@@ -45,7 +45,7 @@
 		{if !isset($mijn)}
 				<td{if $smarty.foreach.taak.last} colspan="10"{else} style="width: 150px;"
 			{/if}{if $taak->getLidId()}{if $loginlid->getUid() === $taak->getLidId()} class="taak-self">
-					<a href="/communicatie/forum/zoeken.php?zoeken=corveedraad" title="Ruilen" class="knop" style="margin-right:10px;">{icon get="arrow_switch"}</a>
+					{* <a href="/communicatie/forum/zoeken.php?zoeken=corveedraad" title="Ruilen" class="knop" style="margin-right:10px;">{icon get="arrow_switch"}</a> *}
 				{else}>
 				{/if}
 				{$taak->getLid()->getNaamLink($instellingen->get('corvee', 'weergave_ledennamen_corveerooster'), $instellingen->get('corvee', 'weergave_link_ledennamen'))}

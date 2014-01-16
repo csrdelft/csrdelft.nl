@@ -138,8 +138,8 @@ class Mail {
 	/**
 	 * Eenvoudige search-and-replace jetzer.
 	 *
-	 * voorbeeld: "hallo %naam%, groet, %afzender%"
-	 * replace_values: array('naam' => 'Jieter', 'afzender' => 'PubCie');
+	 * voorbeeld: "hallo NAAM, groet, AFZENDER"
+	 * replace_values: array('NAAM' => 'Jieter', 'AFZENDER' => 'PubCie');
 	 * resultaat in body: "hallo Jieter, groet, PubCie"
 	 *
 	 * Controleert niet of alle placeholders ook gegeven worden in de
@@ -148,7 +148,7 @@ class Mail {
 	public function getBody($ubb = true) {
 		$body = $this->bericht;
 		foreach ($this->placeholders as $key => $value) {
-			$body = str_replace('%' . $key . '%', $value, $body);
+			$body = str_replace($key, $value, $body);
 		}
 		if ($ubb) {
 			CsrUbb::instance()->getHTML($body);

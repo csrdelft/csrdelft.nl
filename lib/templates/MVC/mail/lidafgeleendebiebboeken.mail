@@ -1,12 +1,12 @@
-Beste bibliothecaris en %naam%,
+Beste bibliothecaris en NAAM,
 
-De lidstatus van %naam% (%uid%) is gewijzigd van %oudestatus% in %nieuwestatus%.
+De lidstatus van NAAM (UID) is gewijzigd van OUD in NIEUW.
 
-%csrlijst%
+CSRLIJST
 
-%ledenlijst%
+LEDENLIJST
 
 Groeten van de Lid-af mailer.
 ----
 Wijziging lidstatus uit gevoerd door:
-%admin_naam%
+ADMIN
