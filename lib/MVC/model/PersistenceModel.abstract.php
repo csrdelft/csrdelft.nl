@@ -82,7 +82,7 @@ abstract class PersistenceModel implements Persistence {
 		foreach ($this->orm_entity->getPrimaryKey() as $key) {
 			$where[] = $key . ' = ?';
 		}
-		$result = Database::sqlSelect(array('*'), $this->orm_entity->getTableName(), implode(' AND ', $where), $primary_key_values, 1);
+		$result = Database::sqlSelect($this->orm_entity->getFields(), $this->orm_entity->getTableName(), implode(' AND ', $where), $primary_key_values, 1);
 		return $result->fetchObject(get_class($this->orm_entity));
 	}
 
