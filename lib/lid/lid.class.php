@@ -761,8 +761,7 @@ class Lid implements Serializable, Agendeerbaar {
 		if ($mode === 'visitekaartje' || $mode === 'link') {
 
 			if ($vorm !== 'pasfoto' && $this->getLichting() === 2013) {
-				$parser = new CsrUbb();
-				$naam = $parser->ubb_neuzen($naam);
+				$naam = CsrUbb::parse('[neuzen]' . $naam . '[/neuzen]');
 			}
 			$k = '';
 			$l = '<a href="' . CSR_ROOT . 'communicatie/profiel/' . $this->getUid() . '" title="' . $sVolledigeNaam . '" class="lidLink ' . $this->profiel['status'] . '">';
