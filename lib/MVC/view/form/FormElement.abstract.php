@@ -1454,6 +1454,7 @@ class VinkField extends InputField {
 				$this->error = 'Dit is een verplicht veld';
 			}
 		}
+		return $this->error === '';
 	}
 
 	public function view() {
