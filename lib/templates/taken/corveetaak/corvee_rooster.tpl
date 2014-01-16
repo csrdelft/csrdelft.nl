@@ -49,6 +49,8 @@ corvee_rooster.tpl	|	P.W.G. Brussee (brussee@live.nl)
 			{if $taak->getLidId()}
 				{if $taak->getLidId() === $loginlid->getUid()} 
 					{assign var="class" value="taak-self"}
+				{else}
+					{assign var="class" value=""}
 				{/if}
 			{else}
 				{assign var="class" value="taak-grijs"}
