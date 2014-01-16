@@ -18,7 +18,7 @@ class Mail {
 	protected $to = array();
 	protected $bcc = array();
 	protected $charset = 'utf8';
-	protected $layout = '';
+	protected $layout = 'simple';
 	protected $placeholders = array();
 
 	public function __construct($to, $onderwerp, $bericht) {

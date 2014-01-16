@@ -1436,10 +1436,23 @@ class TijdField extends InputField {
 class VinkField extends InputField {
 
 	public function getValue() {
-		if (parent::isPosted()) {
+		if ($this->isPosted()) {
 			return true;
 		} else {
 			return false;
+		}
+	}
+
+	/**
+	 * Speciaal geval, want niet gepost = uitgevinkt
+	 */
+	public function validate() {
+		if (!$this->getValue() AND $this->notnull) {
+			if ($this->leden_mod AND LoginLid::instance()->hasPermission('P_LEDEN_MOD')) {
+				
+			} else {
+				$this->error = 'Dit is een verplicht veld';
+			}
 		}
 	}
 
