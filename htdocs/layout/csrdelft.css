@@ -585,6 +585,9 @@ div#ubbhulpverhaal{
 	border: 1px solid #bbb;
 	background-color: white;
 	text-align: left;
+	-moz-box-shadow: 0 0 15px #333;
+	-webkit-box-shadow: 0 0 15px #333;
+	box-shadow: 0 0 15px #333;
 }
 div#ubbhulpverhaal h2, div#ubbhulpverhaal p, div#ubbhulpverhaal ul{
 	margin-bottom: 5px;
