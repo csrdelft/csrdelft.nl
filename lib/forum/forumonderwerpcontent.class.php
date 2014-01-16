@@ -51,7 +51,7 @@ class ForumOnderwerpContent extends TemplateView {
 				$post = $this->forumonderwerp->getSinglePost($this->getCiteerPost());
 				if (is_array($post)) {
 					if (!$this->forumonderwerp->isIngelogged()) {
-						$aPost['tekst'] = CsrUBB::filterPrive($post['tekst']);
+						$aPost['tekst'] = CsrUbb::instance()->filterPrive($post['tekst']);
 					}
 					$textarea = '[citaat=' . $post['uid'] . ']' . htmlspecialchars($post['tekst']) . '[/citaat]';
 				}

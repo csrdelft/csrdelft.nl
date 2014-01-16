@@ -165,6 +165,7 @@ class Mail {
 		else {
 			$body = $this->getBody();
 		}
+		CsrUbb::instance();
 		return mail($this->getTo(), $this->getSubject(), $body, $this->getHeaders(), $this->getExtraparameters());
 	}
 

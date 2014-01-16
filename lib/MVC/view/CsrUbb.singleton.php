@@ -1,18 +1,29 @@
 <?php
 
-# C.S.R. Delft | pubcie@csrdelft.nl
-# -------------------------------------------------------------------
-# csrubb.class.php
-
 require_once 'ubb/eamBBParser.class.php';
 
-class CsrUBB extends eamBBParser {
+/**
+ * CsrUbb.singleton.php
+ * 
+ * @author C.S.R. Delft <pubcie@csrdelft.nl>
+ */
+class CsrUbb extends eamBBParser {
 
+	private static $instance;
+
+	/**
+	 * Singleton
+	 * @return CsrUbb
+	 */
 	public static function instance() {
-		return new CsrUBB();
+		//als er nog geen instantie gemaakt is, die nu maken
+		if (!isset(self::$instance)) {
+			self::$instance = new CsrUbb();
+		}
+		return self::$instance;
 	}
 
-	private function __construct() {
+	protected function __construct() {
 		$this->eamBBParser();
 		$this->paragraph_mode = false;
 	}
@@ -236,7 +247,7 @@ class CsrUBB extends eamBBParser {
 	 * Omdat we niet willen dat dingen die in privé staan alsnog gezien
 	 * kunnen worden bij het citeren, slopen we hier alles wat in privé-tags staat weg.
 	 */
-	public static function filterPrive($string) {
+	public function filterPrive($string) {
 		if (LoginLid::instance()->hasPermission('P_LOGGED_IN')) {
 			return $string;
 		} else {
@@ -727,7 +738,7 @@ HTML;
 		return '<br style="height: 0px; clear: ' . $sClear . ';" />';
 	}
 
-	static function getUbbHelp() {
+	function getUbbHelp() {
 		return <<<UBBVERHAAL
 <div id="ubbhulpverhaal" class="dragobject">
 	<span id="ubbsluiten" onclick="$('#ubbhulpverhaal').toggle();" title="Opmaakhulp verbergen">&times;</span>
@@ -953,24 +964,25 @@ UBBVERHAAL;
 }
 
 //we staan normaal geen HTML toe, met deze kan dat wel.
-class CsrHtmlUBB extends CsrUBB {
+class CsrHtmlUbb extends CsrUbb {
 
-	static private $instance;
+	private static $instance;
 
+	/**
+	 * Singleton
+	 * @return CsrHtmlUbb
+	 */
 	public static function instance() {
 		//als er nog geen instantie gemaakt is, die nu maken
 		if (!isset(self::$instance)) {
-			self::$instance = new CsrHtmlUBB();
+			self::$instance = new CsrHtmlUbb();
 		}
 		return self::$instance;
 	}
 
-	private function __construct() {
-		$this->eamBBParser();
-		$this->paragraph_mode = false;
+	protected function __construct() {
+		parent::__construct();
 		$this->allow_html = true;
 	}
 
 }
-
-?>

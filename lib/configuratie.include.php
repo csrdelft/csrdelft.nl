@@ -67,15 +67,13 @@ require_once 'lid/loginlid.class.php';
 require_once 'mysql.class.php';
 
 
-/** MVC * */
+// MVC
 require_once 'MVC/model/PaginationModel.abstract.php';
+require_once 'MVC/model/Instellingen.singleton.php';
 require_once 'MVC/view/TemplateView.abstract.php';
 require_once 'MVC/view/form/Formulier.class.php';
+require_once 'MVC/view/CsrUbb.singleton.php';
 require_once 'MVC/controller/AclController.abstract.php';
-
-
-// instellingen
-require_once 'MVC/model/Instellingen.singleton.php';
 
 switch (constant('MODE')) {
 	case 'ONDERHOUD':
@@ -91,7 +89,6 @@ switch (constant('MODE')) {
 			//sessie starten
 			require_once 'simplehtml.class.php';
 			require_once 'csrdelft.class.php';
-			require_once 'csrubb.class.php';
 			require_once 'icon.class.php';
 
 			//volgt de defaults van webserver Syrinx, zodat testen met een workcopy overeenkomt.
