@@ -145,10 +145,13 @@ class Mail {
 	 * Controleert niet of alle placeholders ook gegeven worden in de
 	 * values-array!
 	 */
-	public function getBody() {
+	public function getBody($ubb = true) {
 		$body = $this->bericht;
 		foreach ($this->placeholders as $key => $value) {
 			$body = str_replace('%' . $key . '%', $value, $body);
+		}
+		if ($ubb) {
+			CsrUbb::instance()->getHTML($body);
 		}
 		return $body;
 	}
@@ -161,11 +164,9 @@ class Mail {
 			$view = new MailTemplateView($this);
 			$body = $view->getBody();
 			echo $body;
-		}
-		else {
+		} else {
 			$body = $this->getBody();
 		}
-		CsrUbb::instance();
 		return mail($this->getTo(), $this->getSubject(), $body, $this->getHeaders(), $this->getExtraparameters());
 	}
 
