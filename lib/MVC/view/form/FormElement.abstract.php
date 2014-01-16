@@ -101,7 +101,7 @@ abstract class InputField extends FormElement implements Validator {
 		$this->description = $description;
 
 		if ($this->isPosted() !== false) {
-			$this->value = self::getValue();
+			$this->value = $this->getValue();
 		}
 		//add *Field classname to css_classes
 		$this->css_classes[] = $this->getType();
@@ -155,7 +155,7 @@ abstract class InputField extends FormElement implements Validator {
 		//(tenzij gebruiker LEDEN_MOD heeft en deze optie aan staat voor dit veld)
 		if (!$this->isPosted()) {
 			$this->error = 'Veld is niet gepost';
-		} elseif (self::getValue() == '' AND $this->notnull) {
+		} elseif ($this->getValue() == '' AND $this->notnull) {
 			if ($this->leden_mod AND LoginLid::instance()->hasPermission('P_LEDEN_MOD')) {
 				
 			} else {
@@ -163,7 +163,7 @@ abstract class InputField extends FormElement implements Validator {
 			}
 		}
 		//als max_len > 0 dan checken of de lengte er niet overheen gaat.
-		if ($this->max_len > 0 AND strlen(self::getValue()) > $this->max_len) {
+		if ($this->max_len > 0 AND strlen($this->getValue()) > $this->max_len) {
 			$this->error = 'Dit veld mag maximaal ' . $this->max_len . ' tekens lang zijn';
 		}
 		return $this->error == '';
@@ -383,9 +383,9 @@ class TextField extends InputField {
 		if (!parent::validate()) {
 			return false;
 		}
-		if (!is_utf8(self::getValue())) {
+		if (!is_utf8($this->getValue())) {
 			$this->error = 'Ongeldige karakters, gebruik reguliere tekst.';
-		} elseif ($this->max_len > 0 AND mb_strlen(self::getValue()) > $this->max_len) {
+		} elseif ($this->max_len > 0 AND mb_strlen($this->getValue()) > $this->max_len) {
 			//als max_len > 0 dan checken of de lengte er niet overheen gaat.
 			$this->error = 'Maximaal ' . $this->max_len . ' karakters toegestaan.';
 		}
@@ -441,10 +441,10 @@ class UidField extends TextField {
 			return false;
 		}
 		//parent checks notnull
-		if (self::getValue() == '') {
+		if ($this->getValue() == '') {
 			return true;
 		}
-		if (!Lid::exists(self::getValue())) {
+		if (!Lid::exists($this->getValue())) {
 			$this->error = 'Geen geldig uid opgegeven.';
 		}
 		return $this->error == '';
@@ -532,10 +532,10 @@ class LidField extends TextField {
 			return false;
 		}
 		//parent checks notnull
-		if (self::getValue() == '') {
+		if ($this->getValue() == '') {
 			return true;
 		}
-		$uid = namen2uid(self::getOriginalValue(), $this->zoekin);
+		$uid = namen2uid($this->getOriginalValue(), $this->zoekin);
 		if ($uid) {
 			if (isset($uid[0]['uid']) AND Lid::exists($uid[0]['uid'])) {
 				return true;
@@ -618,15 +618,15 @@ class EmailField extends TextField {
 			return false;
 		}
 		//parent checks notnull
-		if (self::getValue() == '') {
+		if ($this->getValue() == '') {
 			return true;
 		}
 		//bevat het email-adres een @
-		if (strpos(self::getValue(), '@') === false) {
+		if (strpos($this->getValue(), '@') === false) {
 			$this->error = 'Ongeldig formaat email-adres';
 		} else {
 			# anders gaan we m ontleden en controleren
-			list ($usr, $dom) = explode('@', self::getValue());
+			list ($usr, $dom) = explode('@', $this->getValue());
 			if (mb_strlen($usr) > 50) {
 				$this->error = 'Gebruik max. 50 karakters voor de @:';
 			} elseif (mb_strlen($dom) > 50) {
@@ -665,13 +665,13 @@ class UrlField extends TextField {
 			return false;
 		}
 		//parent checks notnull
-		if (self::getValue() == '') {
+		if ($this->getValue() == '') {
 			return true;
 		}
 		// controleren of het een geldige url is...
-		if (!is_utf8(self::getValue()) OR !preg_match('#([\w]+?://[^ "\n\r\t<]*?)#is', self::getValue())) {
+		if (!is_utf8($this->getValue()) OR !preg_match('#([\w]+?://[^ "\n\r\t<]*?)#is', $this->getValue())) {
 			$this->error = 'Ongeldige karakters:';
-		} elseif ($this->max_len != null && mb_strlen(self::getValue()) > $this->max_len) {
+		} elseif ($this->max_len != null && mb_strlen($this->getValue()) > $this->max_len) {
 			$this->error = 'Gebruik maximaal ' . $this->max_len . ' karakters:';
 		}
 		return $this->error == '';
@@ -700,7 +700,14 @@ class IntField extends TextField {
 	}
 
 	public function getValue() {
-		return (int) parent::getValue();
+		return (int) $this->getOriginalValue();
+	}
+
+	/**
+	 * getOriginalValue() levert het ingevoerde.
+	 */
+	public function getOriginalValue() {
+		return parent::getValue();
 	}
 
 	public function validate() {
@@ -708,13 +715,13 @@ class IntField extends TextField {
 			return false;
 		}
 		//parent checks notnull
-		if (parent::getValue() == '') {
+		if ($this->getOriginalValue() == '') {
 			return true;
-		} else if (!preg_match('/\d+/', parent::getValue())) {
+		} else if (!preg_match('/\d+/', $this->getOriginalValue())) {
 			$this->error = 'Alleen getallen toegestaan';
-		} else if ($this->max !== null AND self::getValue() > $this->max) {
+		} else if ($this->max !== null AND $this->getValue() > $this->max) {
 			$this->error = 'Maximale waarde is ' . $this->max . ' ';
-		} else if ($this->min !== null AND self::getValue() < $this->min) {
+		} else if ($this->min !== null AND $this->getValue() < $this->min) {
 			$this->error = 'Minimale waarde is ' . $this->min . ' ';
 		}
 		return $this->error == '';
@@ -748,7 +755,14 @@ class FloatField extends TextField {
 	}
 
 	public function getValue() {
-		return (float) str_replace(',', '.', parent::getValue());
+		return (float) str_replace(',', '.', $this->getOriginalValue());
+	}
+
+	/**
+	 * getOriginalValue() levert het ingevoerde.
+	 */
+	public function getOriginalValue() {
+		return parent::getValue();
 	}
 
 	public function validate() {
@@ -756,13 +770,13 @@ class FloatField extends TextField {
 			return false;
 		}
 		//parent checks notnull
-		if (parent::getValue() == '') {
+		if ($this->getOriginalValue() == '') {
 			return true;
-		} else if (!preg_match('/\d+(,{1}\d*)?/', str_replace('.', ',', parent::getValue()))) {
+		} else if (!preg_match('/\d+(,{1}\d*)?/', str_replace('.', ',', $this->getOriginalValue()))) {
 			$this->error = 'Alleen komma-getallen toegestaan';
-		} else if ($this->max !== null AND self::getValue() > $this->max) {
+		} else if ($this->max !== null AND $this->getValue() > $this->max) {
 			$this->error = 'Maximale waarde is ' . $this->max . ' ';
-		} else if ($this->min !== null AND self::getValue() < $this->min) {
+		} else if ($this->min !== null AND $this->getValue() < $this->min) {
 			$this->error = 'Minimale waarde is ' . $this->min . ' ';
 		}
 		return $this->error == '';
@@ -797,12 +811,12 @@ class NickField extends TextField {
 			return false;
 		}
 		//parent checks notnull
-		if (self::getValue() == '') {
+		if ($this->getValue() == '') {
 			return true;
 		}
 		//check met strtolower is toegevoegd omdat je anders je eigen nick niet van case kan veranderen
 		//omdat this->nickExists in mysql case-insensitive zoek
-		if (Lid::nickExists(self::getValue()) AND strtolower($this->model->getNickname()) != strtolower(self::getValue())) {
+		if (Lid::nickExists($this->getValue()) AND strtolower($this->model->getNickname()) != strtolower($this->getValue())) {
 			$this->error = 'Deze bijnaam is al in gebruik.';
 		}
 		return $this->error == '';
@@ -823,10 +837,10 @@ class TelefoonField extends TextField {
 			return false;
 		}
 		//parent checks notnull
-		if (self::getValue() == '') {
+		if ($this->getValue() == '') {
 			return true;
 		}
-		if (!preg_match('/^([\d\+\-]{10,20})$/', self::getValue())) {
+		if (!preg_match('/^([\d\+\-]{10,20})$/', $this->getValue())) {
 			$this->error = 'Geen geldig telefoonnummer.';
 		}
 		return $this->error == '';
@@ -1084,8 +1098,8 @@ class SelectField extends InputField {
 	}
 
 	public function validate() {
-		if (!array_key_exists(self::getValue(), $this->options)) {
-			if (self::getValue() !== null) {
+		if (!array_key_exists($this->getValue(), $this->options)) {
+			if ($this->getValue() !== null) {
 				$this->error = 'Onbekende optie gekozen';
 			}
 			if ($this->size === 1 && !parent::validate()) {
@@ -1275,11 +1289,11 @@ class DatumField extends InputField {
 		if (!parent::validate()) {
 			return false;
 		}
-		if (!preg_match('/^(\d{4})-(\d\d?)-(\d\d?)$/', self::getValue())) {
+		if (!preg_match('/^(\d{4})-(\d\d?)-(\d\d?)$/', $this->getValue())) {
 			$this->error = 'Ongeldige datum';
-		} elseif (substr(self::getValue(), 0, 4) > $this->maxyear) {
+		} elseif (substr($this->getValue(), 0, 4) > $this->maxyear) {
 			$this->error = 'Er kunnen geen data later dan ' . $this->maxyear . ' worden weergegeven';
-		} elseif (self::getValue() != '0000-00-00' AND !checkdate($this->getMaand(), $this->getDag(), $this->getJaar())) {
+		} elseif ($this->getValue() != '0000-00-00' AND !checkdate($this->getMaand(), $this->getDag(), $this->getJaar())) {
 			$this->error = 'Datum bestaat niet';
 		}
 		return $this->error == '';
@@ -1295,7 +1309,7 @@ class DatumField extends InputField {
 		$days = range(1, 31);
 
 		//als de datum al nul is, moet ie dat ook weer kunnen worden...
-		if (self::getValue() == '0000-00-00' OR self::getValue() == 0) {
+		if ($this->getValue() == '0000-00-00' OR $this->getValue() == 0) {
 			$years[] = '0000';
 			$mounths[] = 0;
 			$days[] = 0;
@@ -1375,9 +1389,9 @@ class TijdField extends InputField {
 		if (!parent::validate()) {
 			return false;
 		}
-		if (!preg_match('/^(\d\d?):(\d{2})$/', self::getValue())) {
+		if (!preg_match('/^(\d\d?):(\d{2})$/', $this->getValue())) {
 			$this->error = 'Ongeldige tijdstip';
-		} elseif (substr(self::getValue(), 0, 2) > 23 OR substr(self::getValue(), 3, 5) > 59) {
+		} elseif (substr($this->getValue(), 0, 2) > 23 OR substr($this->getValue(), 3, 5) > 59) {
 			$this->error = 'Tijdstip bestaat niet';
 		}
 		return $this->error == '';
