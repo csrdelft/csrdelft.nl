@@ -80,7 +80,7 @@ abstract class InputField extends FormElement implements Validator {
 	public $title;  //omschrijving bij mouseover title
 	public $disabled = false;   //veld uitgeschakeld?
 	public $notnull = false; //mag het veld leeg zijn?
-	public $leden_mod = true; //uitzondering leeg verplicht veld voor LEDEN_MOD
+	public $leden_mod = false; //uitzondering leeg verplicht veld voor LEDEN_MOD
 	public $autocomplete = true;   //browser laten autoaanvullen?
 	public $placeholder = null;  //plaats een grijze placeholdertekst in leeg veld
 	public $error = ''; //foutmelding van dit veld
@@ -155,7 +155,7 @@ abstract class InputField extends FormElement implements Validator {
 		//(tenzij gebruiker LEDEN_MOD heeft en deze optie aan staat voor dit veld)
 		if (!$this->isPosted()) {
 			$this->error = 'Veld is niet gepost';
-		} elseif ($this->getValue() == '' AND $this->notnull) {
+		} elseif ($this->getValue() === '' AND $this->notnull) {
 			if ($this->leden_mod AND LoginLid::instance()->hasPermission('P_LEDEN_MOD')) {
 				
 			} else {
@@ -166,7 +166,7 @@ abstract class InputField extends FormElement implements Validator {
 		if ($this->max_len > 0 AND strlen($this->getValue()) > $this->max_len) {
 			$this->error = 'Dit veld mag maximaal ' . $this->max_len . ' tekens lang zijn';
 		}
-		return $this->error == '';
+		return $this->error === '';
 	}
 
 	/**
@@ -389,7 +389,7 @@ class TextField extends InputField {
 			//als max_len > 0 dan checken of de lengte er niet overheen gaat.
 			$this->error = 'Maximaal ' . $this->max_len . ' karakters toegestaan.';
 		}
-		return $this->error == '';
+		return $this->error === '';
 	}
 
 	public function getValue() {
@@ -441,13 +441,13 @@ class UidField extends TextField {
 			return false;
 		}
 		//parent checks notnull
-		if ($this->getValue() == '') {
+		if ($this->getValue() === '') {
 			return true;
 		}
 		if (!Lid::exists($this->getValue())) {
 			$this->error = 'Geen geldig uid opgegeven.';
 		}
-		return $this->error == '';
+		return $this->error === '';
 	}
 
 	/**
@@ -507,7 +507,7 @@ class LidField extends TextField {
 	 */
 	public function getValue() {
 		//leeg veld meteen teruggeven
-		if ($this->getOriginalValue() == '') {
+		if ($this->getOriginalValue() === '') {
 			return '';
 		}
 		//uid opzoeken
@@ -532,7 +532,7 @@ class LidField extends TextField {
 			return false;
 		}
 		//parent checks notnull
-		if ($this->getValue() == '') {
+		if ($this->getValue() === '') {
 			return true;
 		}
 		$uid = namen2uid($this->getOriginalValue(), $this->zoekin);
@@ -545,7 +545,7 @@ class LidField extends TextField {
 			}
 		}
 		$this->error = 'Geen geldig lid';
-		return $this->error == '';
+		return $this->error === '';
 	}
 
 	/**
@@ -618,7 +618,7 @@ class EmailField extends TextField {
 			return false;
 		}
 		//parent checks notnull
-		if ($this->getValue() == '') {
+		if ($this->getValue() === '') {
 			return true;
 		}
 		//bevat het email-adres een @
@@ -644,7 +644,7 @@ class EmailField extends TextField {
 				$this->error = 'Het domein is niet geconfigureerd om email te ontvangen:';
 			}
 		}
-		return $this->error == '';
+		return $this->error === '';
 	}
 
 }
@@ -665,7 +665,7 @@ class UrlField extends TextField {
 			return false;
 		}
 		//parent checks notnull
-		if ($this->getValue() == '') {
+		if ($this->getValue() === '') {
 			return true;
 		}
 		// controleren of het een geldige url is...
@@ -674,7 +674,7 @@ class UrlField extends TextField {
 		} elseif ($this->max_len != null && mb_strlen($this->getValue()) > $this->max_len) {
 			$this->error = 'Gebruik maximaal ' . $this->max_len . ' karakters:';
 		}
-		return $this->error == '';
+		return $this->error === '';
 	}
 
 }
@@ -715,7 +715,7 @@ class IntField extends TextField {
 			return false;
 		}
 		//parent checks notnull
-		if ($this->getOriginalValue() == '') {
+		if ($this->getOriginalValue() === '') {
 			return true;
 		} else if (!preg_match('/\d+/', $this->getOriginalValue())) {
 			$this->error = 'Alleen getallen toegestaan';
@@ -724,7 +724,7 @@ class IntField extends TextField {
 		} else if ($this->min !== null AND $this->getValue() < $this->min) {
 			$this->error = 'Minimale waarde is ' . $this->min . ' ';
 		}
-		return $this->error == '';
+		return $this->error === '';
 	}
 
 }
@@ -770,7 +770,7 @@ class FloatField extends TextField {
 			return false;
 		}
 		//parent checks notnull
-		if ($this->getOriginalValue() == '') {
+		if ($this->getOriginalValue() === '') {
 			return true;
 		} else if (!preg_match('/\d+(,{1}\d*)?/', str_replace('.', ',', $this->getOriginalValue()))) {
 			$this->error = 'Alleen komma-getallen toegestaan';
@@ -779,7 +779,7 @@ class FloatField extends TextField {
 		} else if ($this->min !== null AND $this->getValue() < $this->min) {
 			$this->error = 'Minimale waarde is ' . $this->min . ' ';
 		}
-		return $this->error == '';
+		return $this->error === '';
 	}
 
 }
@@ -811,7 +811,7 @@ class NickField extends TextField {
 			return false;
 		}
 		//parent checks notnull
-		if ($this->getValue() == '') {
+		if ($this->getValue() === '') {
 			return true;
 		}
 		//check met strtolower is toegevoegd omdat je anders je eigen nick niet van case kan veranderen
@@ -819,7 +819,7 @@ class NickField extends TextField {
 		if (Lid::nickExists($this->getValue()) AND strtolower($this->model->getNickname()) != strtolower($this->getValue())) {
 			$this->error = 'Deze bijnaam is al in gebruik.';
 		}
-		return $this->error == '';
+		return $this->error === '';
 	}
 
 }
@@ -837,13 +837,13 @@ class TelefoonField extends TextField {
 			return false;
 		}
 		//parent checks notnull
-		if ($this->getValue() == '') {
+		if ($this->getValue() === '') {
 			return true;
 		}
 		if (!preg_match('/^([\d\+\-]{10,20})$/', $this->getValue())) {
 			$this->error = 'Geen geldig telefoonnummer.';
 		}
-		return $this->error == '';
+		return $this->error === '';
 	}
 
 }
@@ -1036,7 +1036,7 @@ class PassField extends InputField {
 			if (!$this->model->checkpw($current)) {
 				$this->error = 'Uw huidige wachtwoord is niet juist';
 			} else {
-				if ($new == '' OR $confirm == '') {
+				if ($new === '' OR $confirm === '') {
 					$this->error = 'Vul uw nieuwe wachtwoord twee keer in';
 				} elseif ($new != $confirm) {
 					$this->error = 'Nieuwe wachtwoorden komen niet overeen';
@@ -1047,10 +1047,10 @@ class PassField extends InputField {
 				}
 			}
 		}
-		if ($new != '' AND $current == '') {
+		if ($new != '' AND $current === '') {
 			$this->error = 'U dient uw huidige wachtwoord ook in te voeren';
 		}
-		return $this->error == '';
+		return $this->error === '';
 	}
 
 	public function view() {
@@ -1106,7 +1106,7 @@ class SelectField extends InputField {
 				return false;
 			}
 		}
-		return $this->error == '';
+		return $this->error === '';
 	}
 
 	public function view() {
@@ -1296,7 +1296,7 @@ class DatumField extends InputField {
 		} elseif ($this->getValue() != '0000-00-00' AND !checkdate($this->getMaand(), $this->getDag(), $this->getJaar())) {
 			$this->error = 'Datum bestaat niet';
 		}
-		return $this->error == '';
+		return $this->error === '';
 	}
 
 	public function view() {
@@ -1394,7 +1394,7 @@ class TijdField extends InputField {
 		} elseif (substr($this->getValue(), 0, 2) > 23 OR substr($this->getValue(), 3, 5) > 59) {
 			$this->error = 'Tijdstip bestaat niet';
 		}
-		return $this->error == '';
+		return $this->error === '';
 	}
 
 	public function view() {
