@@ -69,8 +69,8 @@ class Instellingen extends PersistenceModel {
 			'weergave_ledennamen_corveerooster' => 'civitas',
 			'waarschuwing_taaktoewijzing_vooraf' => '+14 days',
 			'waarschuwing_puntentoewijzing_achteraf' => '-1 days',
-			'mail_wel_meeeten', 'P.S.: U eet WEL mee met de maaltijd.',
-			'mail_niet_meeeten', 'P.S.: U eet NIET mee met de maaltijd.',
+			'mail_wel_meeeten' => 'P.S.: U eet WEL mee met de maaltijd.',
+			'mail_niet_meeeten' => 'P.S.: U eet NIET mee met de maaltijd.'
 		),
 		'maaltijden' => array(
 			'budget_maalcie' => '1.00',
