@@ -681,7 +681,7 @@ HTML;
 			$aanmelding = $aanmeldingen[$maaltijd->getMaaltijdId()];
 		}
 		$ketzer = new MaaltijdKetzerView($maaltijd, $aanmelding);
-		$result = $ketzer->viewReturn();
+		$result = $ketzer->getKetzer();
 
 		if ($maaltijd2 !== null) {
 			$aanmeldingen2 = AanmeldingenModel::getAanmeldingenVoorLid(array($maaltijd2->getMaaltijdId() => $maaltijd2), \LoginLid::instance()->getUid());
@@ -691,7 +691,7 @@ HTML;
 				$aanmelding2 = $aanmeldingen2[$maaltijd2->getMaaltijdId()];
 			}
 			$ketzer2 = new MaaltijdKetzerView($maaltijd2, $aanmelding2);
-			$result .= $ketzer2->viewReturn();
+			$result .= $ketzer2->getKetzer();
 		}
 		return $result;
 	}

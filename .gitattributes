@@ -2574,10 +2574,13 @@ lib/MVC/model/PaginationModel.abstract.php -text
 lib/MVC/model/Persistence.interface.php -text
 lib/MVC/model/PersistenceModel.abstract.php -text
 lib/MVC/model/entity/Instelling.class.php -text
+lib/MVC/model/entity/Mail.class.php -text
 lib/MVC/model/entity/Mededeling2.class.php -text
 lib/MVC/model/entity/MenuItem.class.php -text
 lib/MVC/model/entity/PersistentEntity.abstract.php -text
+lib/MVC/view/CsrSmarty.class.php -text
 lib/MVC/view/InstellingenBeheerView.class.php -text
+lib/MVC/view/MailTemplateView.class.php -text
 lib/MVC/view/MenuBeheerView.class.php -text
 lib/MVC/view/MenuView.class.php -text
 lib/MVC/view/TemplateView.abstract.php -text
@@ -3046,7 +3049,6 @@ lib/lid/stamboomcontent.class.php -text
 lib/lid/status.class.php -text
 lib/lid/verjaardag.class.php -text
 lib/lid/verjaardagcontent.class.php -text
-lib/mail.class.php -text
 lib/mededelingen/mededeling.class.php -text
 lib/mededelingen/mededelingcategorie.class.php -text
 lib/mededelingen/mededelingcontent.class.php -text
@@ -3317,6 +3319,11 @@ lib/taken/view/forms/VrijstellingFormView.class.php -text
 lib/templates/MVC/instellingen/beheer/instelling_row.tpl -text
 lib/templates/MVC/instellingen/beheer/instellingen_page.tpl -text
 lib/templates/MVC/layout/ubbhulp.tpl -text
+lib/templates/MVC/mail/layout/simple_layout.tpl -text
+lib/templates/MVC/mail/lidafgeleendebiebboeken.mail -text
+lib/templates/MVC/mail/lidafmeldingfisci.mail -text
+lib/templates/MVC/mail/nieuwwachtwoord.mail -text
+lib/templates/MVC/mail/toekomstigcorveeverwijderd.mail -text
 lib/templates/MVC/menu/beheer/menu_item.tpl -text
 lib/templates/MVC/menu/beheer/menu_page.tpl -text
 lib/templates/MVC/menu/menu.tpl -text
@@ -3369,10 +3376,6 @@ lib/templates/groepen/groepen.tpl -text
 lib/templates/groepen/groepformulier.tpl -text
 lib/templates/groepen/groepleden.tpl -text
 lib/templates/maalciemail.tpl -text
-lib/templates/mails/lidafgeleendebiebboeken.mail -text
-lib/templates/mails/lidafmeldingfisci.mail -text
-lib/templates/mails/nieuwwachtwoord.mail -text
-lib/templates/mails/toekomstigcorveeverwijderd.mail -text
 lib/templates/mededelingen/lijst.tpl -text
 lib/templates/mededelingen/mededeling.tpl -text
 lib/templates/mededelingen/mededelingen.tpl -text

@@ -1,7 +1,7 @@
 <?php
 
 require_once 'MVC/view/View.interface.php';
-require_once('smarty/libs/Smarty.class.php');
+require_once('MVC/view/CsrSmarty.class.php');
 
 /**
  * TemplateView.abstract.php
@@ -20,25 +20,14 @@ abstract class TemplateView implements View {
 	protected $model;
 	/**
 	 * Template engine
-	 * @var Smarty
+	 * @var CsrSmarty
 	 */
 	protected $smarty;
 
 	public function __construct($model = null) {
 		$this->model = $model;
-		$this->smarty = new Smarty();
-
-		$this->smarty->setTemplateDir(SMARTY_TEMPLATE_DIR);
-		$this->smarty->setCompileDir(SMARTY_COMPILE_DIR);
-		//$this->smarty->setConfigDir(SMARTY_CONFIG_DIR); 
-		$this->smarty->setCacheDir(SMARTY_CACHE_DIR);
-		$this->smarty->caching = false;
-
-		// frequently used things
+		$this->smarty = new CsrSmarty();
 		$this->smarty->assignByRef('view', $this);
-		$this->smarty->assign('instellingen', Instellingen::instance());
-		$this->smarty->assign('loginlid', LoginLid::instance());
-		$this->smarty->assign('CSR_PICS', CSR_PICS);
 	}
 
 	public function getModel() {

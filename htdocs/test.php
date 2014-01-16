@@ -3,8 +3,12 @@
 try {
 
 	require_once 'configuratie.include.php';
-	require_once 'MVC/model/MededelingenModel.class.php';
+	require_once 'MVC/model/entity/Mail.class.php';
 
+	
+	$mail = new Mail('brussee@live.nl','brussee@live.nl','test');
+	$mail->send();
+	/*
 	$model = new MededelingenModel();
 
 	$m1 = new Mededeling2();
@@ -18,7 +22,7 @@ try {
 	echo var_dump($m2);
 	
 	$model->remove($id);
-	
+	*/
 } catch (Exception $e) {
 	echo str_replace('#', '<br />#', $e); // stacktrace
 }

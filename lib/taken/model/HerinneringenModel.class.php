@@ -1,9 +1,11 @@
 <?php
 
-require_once 'mail.class.php';
+require_once 'MVC/model/entity/Mail.class.php';
 
 /**
- * HerinneringenModel.class.php	| 	P.W.G. Brussee (brussee@live.nl)
+ * HerinneringenModel.class.php
+ * 
+ * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
 class HerinneringenModel {
@@ -18,7 +20,7 @@ class HerinneringenModel {
 		//$to = $lid->getEmail();
 		$to = $uid . '@csrdelft.nl';
 		$from = 'corvee@csrdelft.nl';
-		$onderwerp = 'C.S.R. Delft Corvee - ' . $datum;
+		$onderwerp = 'C.S.R. Delft corvee ' . $datum;
 		$bericht = $taak->getCorveeFunctie()->getEmailBericht();
 		$lidnaam = $lid->getNaamLink('civitas');
 		$eten = '';
@@ -30,9 +32,9 @@ class HerinneringenModel {
 				$eten = 'U eet NIET mee met de maaltijd.';
 			}
 		}
-		$bericht = str_replace(array('LIDNAAM', 'DATUM', 'MEEETEN'), array($lidnaam, $datum, $eten), $bericht);
 		$mail = new Mail($to, $onderwerp, $bericht);
 		$mail->setFrom($from);
+		$mail->setPlaceholders(array('LIDNAAM' => $lidnaam, 'DATUM' => $datum, 'MEEETEN' => $eten));
 		if ($mail->send()) { // false if failed
 			TakenModel::updateGemaild($taak);
 			return $datum . ' ' . $taak->getCorveeFunctie()->getNaam() . ' verstuurd! (' . $lidnaam . ')';
@@ -61,5 +63,3 @@ class HerinneringenModel {
 	}
 
 }
-
-?>

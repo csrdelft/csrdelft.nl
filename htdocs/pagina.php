@@ -60,7 +60,7 @@ if (in_array($_GET['naam'], $nieuwNamen) && !LoginLid::instance()->hasPermission
 	$depagina = new csrdelft($paginacontent);
 
 	if (isset($zijkolomlijst)) {
-		$depagina->addZijkolom($zijkolomlijst);
+		$depagina->zijkolom = array($zijkolomlijst);
 	}
 	
 	$depagina->view();

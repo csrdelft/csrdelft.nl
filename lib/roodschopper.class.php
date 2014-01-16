@@ -8,7 +8,7 @@
  * van overblijven. Wellicht kan er later nog een html-optie ingeklust worden.
  */
 require_once 'csrubb.class.php';
-require_once 'mail.class.php';
+require_once 'MVC/model/entity/Mail.class.php';
 
 class Roodschopper{
 	private $cie='soccie';
