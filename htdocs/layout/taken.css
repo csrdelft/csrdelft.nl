@@ -185,6 +185,15 @@ tr.taak-datum-head th, tr.taak-datum-summary th {
 #suggesties-tabel tr:hover, tr.taak-datum-summary:hover th {
 	background-color: #DDEEFF !important;
 }
+.taken-rooster tr {
+	background-color: transparent !important;
+}
+.taken-rooster td {
+	width: 5px;
+}
+.taken-rooster td.taak {
+	width: 170px;
+}
 
 /* cell style */
 
