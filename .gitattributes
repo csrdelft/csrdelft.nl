@@ -981,7 +981,9 @@ htdocs/wiki/lib/plugins/blockquote/style.css -text
 htdocs/wiki/lib/plugins/blockquote/syntax/blockquote.php -text
 htdocs/wiki/lib/plugins/blockquote/syntax/cite.php -text
 htdocs/wiki/lib/plugins/blockquote/syntax/q.php -text
+htdocs/wiki/lib/plugins/bureaucracy/.travis.yml -text
 htdocs/wiki/lib/plugins/bureaucracy/README -text
+htdocs/wiki/lib/plugins/bureaucracy/_test/actions_template.test.php -text
 htdocs/wiki/lib/plugins/bureaucracy/_test/input.txt -text
 htdocs/wiki/lib/plugins/bureaucracy/_test/syntax.test.php -text
 htdocs/wiki/lib/plugins/bureaucracy/action.php -text
@@ -1002,6 +1004,7 @@ htdocs/wiki/lib/plugins/bureaucracy/fields/onoff.php -text
 htdocs/wiki/lib/plugins/bureaucracy/fields/password.php -text
 htdocs/wiki/lib/plugins/bureaucracy/fields/select.php -text
 htdocs/wiki/lib/plugins/bureaucracy/fields/static.php -text
+htdocs/wiki/lib/plugins/bureaucracy/fields/subject.php -text
 htdocs/wiki/lib/plugins/bureaucracy/fields/submit.php -text
 htdocs/wiki/lib/plugins/bureaucracy/fields/textarea.php -text
 htdocs/wiki/lib/plugins/bureaucracy/fields/textbox.php -text
