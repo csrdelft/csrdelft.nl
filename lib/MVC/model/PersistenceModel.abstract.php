@@ -44,7 +44,7 @@ abstract class PersistenceModel implements Persistence {
 			$criteria = '1';
 		}
 		$result = Database::sqlSelect($select, $this->orm_entity->getTableName(), $criteria, $criteria_params, $orderby, $limit, $start);
-		return $result->fetchAll(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, get_class($this->orm_entity));
+		return $result->fetchAll(\PDO::FETCH_CLASS, get_class($this->orm_entity));
 	}
 
 	/**

@@ -12,6 +12,10 @@ abstract class PersistentEntity {
 	protected static $persistent_fields;
 	protected static $primary_key;
 
+	public function __construct() {
+		$this->castValues();
+	}
+
 	public static function getTableName() {
 		return static::$table_name;
 	}
@@ -30,6 +34,20 @@ abstract class PersistentEntity {
 			$values[$field] = $this->$field;
 		}
 		return $values;
+	}
+
+	/**
+	 * Cast values to defined type.
+	 * PDO does not do this automatically (yet).
+	 */
+	private function castValues() {
+		foreach (static::$persistent_fields as $field => $type) {
+			if (startsWith($type, 'int')) {
+				$this->$field = (int) $this->$field;
+			} else if (startsWith($type, 'tinyint')) {
+				$this->$field = (boolean) $this->$field;
+			}
+		}
 	}
 
 }

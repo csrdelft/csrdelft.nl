@@ -71,11 +71,10 @@ class MenuModel extends PersistenceModel {
 
 	public function buildMenuTree($menu_naam, $menuitems) {
 		$root = new MenuItem();
-		$root->item_id = '0';
+		$root->item_id = 0;
 		$root->tekst = $menu_naam;
 		$root->menu_naam = $menu_naam;
 		$root->addChildren($menuitems); // recursive
-		$root->item_id = 0;
 		return $root;
 	}
 

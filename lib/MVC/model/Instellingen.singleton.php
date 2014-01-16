@@ -119,7 +119,7 @@ class Instellingen extends PersistenceModel {
 			foreach ($instellingen as $key => $value) {
 				if (!array_key_exists($module, $this->instellingen) OR !array_key_exists($key, $this->instellingen[$module])) {
 					$this->instellingen[$module][$key] = $value;
-					self::newInstelling($module, $key, $value); // save to db
+					$this->newInstelling($module, $key, $value); // save to db
 				}
 			}
 		}
@@ -163,7 +163,7 @@ class Instellingen extends PersistenceModel {
 			// get default for missing instelling
 			if (array_key_exists($module, $this->defaults) AND array_key_exists($key, $this->defaults[$module])) {
 				$this->instellingen[$module][$key] = $this->defaults[$module][$key];
-				return self::newInstelling($module, $key, $this->defaults[$module][$key]); // save to db
+				return $this->newInstelling($module, $key, $this->defaults[$module][$key]); // save to db
 			} else { // geen default instelling
 				throw new Exception('Instelling default not found: ' . $key . ' module: ' . $module);
 			}
@@ -171,7 +171,7 @@ class Instellingen extends PersistenceModel {
 		return $this->retrieveByPrimaryKey(array($module, $key));
 	}
 
-	public function newInstelling($module, $key, $value) {
+	private function newInstelling($module, $key, $value) {
 		$instelling = new Instelling();
 		$instelling->module = $module;
 		$instelling->instelling_id = $key;
