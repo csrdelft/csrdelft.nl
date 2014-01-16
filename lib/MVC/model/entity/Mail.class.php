@@ -163,7 +163,7 @@ class Mail {
 			echo $body;
 		}
 		else {
-			$body = getBody();
+			$body = $this->getBody();
 		}
 		return mail($this->getTo(), $this->getSubject(), $body, $this->getHeaders(), $this->getExtraparameters());
 	}
