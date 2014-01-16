@@ -659,9 +659,8 @@ HTML;
 					unset($maaltijden[$maaltijd->getMaaltijdId()]);
 					$maaltijd2 = reset($maaltijden);
 				}
-			}
-			elseif (preg_match('/\d+/', $mid)) {
-				$maaltijd = MaaltijdenModel::getMaaltijdVoorKetzer((int)$mid); // met filter
+			} elseif (preg_match('/\d+/', $mid)) {
+				$maaltijd = MaaltijdenModel::getMaaltijdVoorKetzer((int) $mid); // met filter
 				if (!$maaltijd) {
 					return '';
 				}
@@ -682,7 +681,7 @@ HTML;
 			$aanmelding = $aanmeldingen[$maaltijd->getMaaltijdId()];
 		}
 		$ketzer = new MaaltijdKetzerView($maaltijd, $aanmelding);
-		$result = $ketzer->fetchContent();
+		$result = $ketzer->viewReturn();
 
 		if ($maaltijd2 !== null) {
 			$aanmeldingen2 = AanmeldingenModel::getAanmeldingenVoorLid(array($maaltijd2->getMaaltijdId() => $maaltijd2), \LoginLid::instance()->getUid());
@@ -692,7 +691,7 @@ HTML;
 				$aanmelding2 = $aanmeldingen2[$maaltijd2->getMaaltijdId()];
 			}
 			$ketzer2 = new MaaltijdKetzerView($maaltijd2, $aanmelding2);
-			$result .= $ketzer2->fetchContent();
+			$result .= $ketzer2->viewReturn();
 		}
 		return $result;
 	}

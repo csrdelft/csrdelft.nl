@@ -23,7 +23,7 @@ class MaaltijdKetzerView extends TemplateView {
 		return 'Maaltijdketzer';
 	}
 
-	public function fetchContent() {
+	public function viewReturn() {
 		$this->smarty->assign('maaltijd', $this->_maaltijd);
 		$this->smarty->assign('aanmelding', $this->_aanmelding);
 		$this->smarty->assign('toonlijst', MijnMaaltijdenController::magMaaltijdlijstTonen($this->_maaltijd));
@@ -31,7 +31,7 @@ class MaaltijdKetzerView extends TemplateView {
 	}
 
 	public function view() {
-		echo $this->smarty->fetch();
+		echo $this->viewReturn();
 	}
 
 }
