@@ -56,7 +56,7 @@ class MenuBeheerController extends AclController {
 
 	public function nieuw($parent_id) {
 		$item = new MenuItem();
-		$item->parent_id = (int) $parent_id;
+		$item->parent_id = intval($parent_id);
 		$item->prioriteit = (int) filter_input(INPUT_POST, 'prioriteit', FILTER_SANITIZE_NUMBER_INT);
 		$item->tekst = filter_input(INPUT_POST, 'tekst', FILTER_SANITIZE_STRING);
 		$item->link = filter_input(INPUT_POST, 'link', FILTER_SANITIZE_URL);
@@ -65,7 +65,7 @@ class MenuBeheerController extends AclController {
 		$item->menu_naam = filter_input(INPUT_POST, 'menu_naam', FILTER_SANITIZE_STRING);
 		$model = new MenuModel();
 		$model->saveMenuItem($item);
-		invokeRefresh('/menubeheer/beheer/' . $item->menu_naam, 'Nieuw aangemaakt ' . $item->tekst . ' (' . $item->id . ')', 1);
+		invokeRefresh('/menubeheer/beheer/' . $item->menu_naam, 'Nieuw aangemaakt ' . $item->tekst . ' (' . $item->item_id . ')', 1);
 	}
 
 	public function wijzig($id, $property) {
