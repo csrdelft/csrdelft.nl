@@ -13,6 +13,7 @@ require_once 'bibliotheek/bibliotheekcontent.class.php';
 
 class BibliotheekController extends Controller {
 
+	/** @var BewerkBoek|NieuwBoek */
 	public $boek;
 	public $baseurl = '/communicatie/bibliotheek/';
 
@@ -193,7 +194,7 @@ class BibliotheekController extends Controller {
 			$melding = array('Boek met succes verwijderd.', 1);
 		}
 		else {
-			$melding = 'Boek verwijderen mislukt. ' . $this->boek->getErrorDiv() . 'Biebcontrllr::verwijderboek()';
+			$melding = 'Boek verwijderen mislukt. ' . $this->boek->getError() . 'Biebcontrllr::verwijderboek()';
 		}
 		invokeRefresh(CSR_ROOT . 'communicatie/bibliotheek/', $melding);
 	}
@@ -205,7 +206,6 @@ class BibliotheekController extends Controller {
 	 */
 	protected function bewerkbeschrijving() {
 		$this->loadBoek();
-
 		if ($this->boek->getEditBeschrijving()->getId() != 0 AND !$this->boek->magBeschrijvingVerwijderen()) {
 			invokeRefresh(CSR_ROOT . 'communicatie/bibliotheek/boek/' . $this->boek->getId(), 'Onvoldoende rechten voor deze actie. Biebcontrllr::bewerkbeschrijving()');
 		}
@@ -234,7 +234,7 @@ class BibliotheekController extends Controller {
 			$melding = array('Beschrijving met succes verwijderd.', 1);
 		}
 		else {
-			$melding = 'Beschrijving verwijderen mislukt. ' . $this->boek->getErrorDiv() . 'Biebcontrllr::verwijderbeschrijving()';
+			$melding = 'Beschrijving verwijderen mislukt. ' . $this->boek->getError() . 'Biebcontrllr::verwijderbeschrijving()';
 		}
 
 		invokeRefresh(CSR_ROOT . 'communicatie/bibliotheek/boek/' . $this->boek->getId(), $melding);
@@ -261,7 +261,7 @@ class BibliotheekController extends Controller {
 				$melding = array('Exemplaar met succes toegevoegd.', 1);
 			}
 			else {
-				$melding = 'Exemplaar toevoegen mislukt. ' . $this->boek->getErrorDiv() . 'Biebcontrllr::addexemplaar()';
+				$melding = 'Exemplaar toevoegen mislukt. ' . $this->boek->getError() . 'Biebcontrllr::addexemplaar()';
 			}
 		}
 		else {
@@ -281,7 +281,7 @@ class BibliotheekController extends Controller {
 				$melding = array('Exemplaar met succes verwijderd.', 1);
 			}
 			else {
-				$melding = 'Exemplaar verwijderen mislukt. ' . $this->boek->getErrorDiv() . 'Biebcontrllr::verwijderexemplaar()';
+				$melding = 'Exemplaar verwijderen mislukt. ' . $this->boek->getError() . 'Biebcontrllr::verwijderexemplaar()';
 			}
 		}
 		else {
@@ -307,7 +307,7 @@ class BibliotheekController extends Controller {
 							$melding = array('Exemplaar uitgeleend', 1);
 						}
 						else {
-							$melding = 'Exemplaar uitlenen is mislukt. ' . $this->boek->getField($_POST['id'])->getFieldError() . '- ' . $this->boek->getErrorDiv() . 'Biebcontrllr::exemplaarlenen()';
+							$melding = 'Exemplaar uitlenen is mislukt. ' . $this->boek->getField($_POST['id'])->getError() . '- ' . $this->boek->getError() . 'Biebcontrllr::exemplaarlenen()';
 						}
 					}
 					else {
@@ -324,7 +324,7 @@ class BibliotheekController extends Controller {
 					$melding = array('Exemplaar geleend.', 1);
 				}
 				else {
-					$melding = 'Exemplaar lenen is mislukt. ' . $this->boek->getErrorDiv() . 'Biebcontrllr::exemplaarlenen()';
+					$melding = 'Exemplaar lenen is mislukt. ' . $this->boek->getError() . 'Biebcontrllr::exemplaarlenen()';
 				}
 			}
 		}
@@ -347,11 +347,11 @@ class BibliotheekController extends Controller {
 				$melding = array('Exemplaar is teruggegeven.', 1);
 			}
 			else {
-				$melding = 'Teruggave van exemplaar melden is mislukt. ' . $this->boek->getErrorDiv() . 'Biebcontrllr::exemplaarteruggegeven()';
+				$melding = 'Teruggave van exemplaar melden is mislukt. ' . $this->boek->getError() . 'Biebcontrllr::exemplaarteruggegeven()';
 			}
 		}
 		else {
-			$melding = 'Onvoldoende rechten voor deze actie. ' . $this->boek->getErrorDiv() . ' Biebcontrllr::exemplaarteruggegeven()';
+			$melding = 'Onvoldoende rechten voor deze actie. ' . $this->boek->getError() . ' Biebcontrllr::exemplaarteruggegeven()';
 		}
 		invokeRefresh(CSR_ROOT . 'communicatie/bibliotheek/boek/' . $this->boek->getId(), $melding);
 	}
@@ -369,7 +369,7 @@ class BibliotheekController extends Controller {
 				$melding = array('Exemplaar terugontvangen.', 1);
 			}
 			else {
-				$melding = 'Exemplaar terugontvangen melden is mislukt. ' . $this->boek->getErrorDiv() . 'Biebcontrllr::exemplaarterugontvangen()';
+				$melding = 'Exemplaar terugontvangen melden is mislukt. ' . $this->boek->getError() . 'Biebcontrllr::exemplaarterugontvangen()';
 			}
 		}
 		else {
@@ -391,7 +391,7 @@ class BibliotheekController extends Controller {
 				$melding = array('Exemplaar vermist.', 1);
 			}
 			else {
-				$melding = 'Exemplaar vermist melden is mislukt. ' . $this->boek->getErrorDiv() . 'Biebcontrllr::exemplaarvermist()';
+				$melding = 'Exemplaar vermist melden is mislukt. ' . $this->boek->getError() . 'Biebcontrllr::exemplaarvermist()';
 			}
 		}
 		else {
@@ -413,7 +413,7 @@ class BibliotheekController extends Controller {
 				$melding = array('Exemplaar gevonden.', 1);
 			}
 			else {
-				$melding = 'Exemplaar gevonden melden is mislukt. ' . $this->boek->getErrorDiv() . 'Biebcontrllr::exemplaargevonden()';
+				$melding = 'Exemplaar gevonden melden is mislukt. ' . $this->boek->getError() . 'Biebcontrllr::exemplaargevonden()';
 			}
 		}
 		else {
@@ -437,5 +437,3 @@ class BibliotheekController extends Controller {
 	}
 
 }
-
-?>
