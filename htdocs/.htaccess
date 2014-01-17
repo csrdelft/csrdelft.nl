@@ -11,7 +11,7 @@ RewriteRule ^pauper/?$				pauper.php [L]
 
 # Dies site
 # RewriteRule ^dies/?(.*)$			dies2014/$1 [L]
-RewriteRule ^dies/?$				dies2014 [R=301, L]
+RewriteRule ^dies/?$				dies2014/ [R=301,L]
 
 # maaltijden & corvee
 RewriteRule ^maaltijden/?(.*)$		taken.php?uri=maaltijden/$1 [L]
