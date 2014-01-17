@@ -295,6 +295,8 @@ function importAgenda(id){
 }
 
 //javascript voor UBB tag [spoiler]verborgen tekst[/spoiler]
-$(".spoiler_button").click(function spoiler_toggle() {
-      $(this).next(".spoiler").toggle('fast');
-    });
+$(document).ready(function() {
+	$(".spoiler_button").click(function spoiler_toggle() {
+		  $(this).next(".spoiler").toggle('fast');
+		});
+});
