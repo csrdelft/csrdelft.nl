@@ -2075,7 +2075,9 @@ htdocs/wiki/lib/plugins/revert/lang/nl/lang.php -text
 htdocs/wiki/lib/plugins/revert/plugin.info.txt -text
 htdocs/wiki/lib/plugins/safefnrecode/action.php -text
 htdocs/wiki/lib/plugins/safefnrecode/plugin.info.txt -text
+htdocs/wiki/lib/plugins/searchform/README.md -text
 htdocs/wiki/lib/plugins/searchform/manager.dat -text
+htdocs/wiki/lib/plugins/searchform/plugin.info.txt -text
 htdocs/wiki/lib/plugins/searchform/script.js -text
 htdocs/wiki/lib/plugins/searchform/syntax.php -text
 htdocs/wiki/lib/plugins/showlogin/action.php -text
