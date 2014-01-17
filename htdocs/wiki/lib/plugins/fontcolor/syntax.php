@@ -5,7 +5,7 @@
  * @license    GPL 2 (http://www.gnu.org/licenses/gpl.html)
  * @author     modified by ThorstenStratmann <thorsten.stratmann@web.de>
  * @link       http://www.dokuwiki.org/plugin:fontcolor
- * @version    4.0
+ * @version    3.1
  */
  
 if(!defined('DOKU_INC')) define('DOKU_INC',realpath(dirname(__FILE__).'/../../').'/');
@@ -22,7 +22,7 @@ class syntax_plugin_fontcolor extends DokuWiki_Syntax_Plugin {
         return array(
             'author' => 'ThorstenStratmann',
             'email'  => 'thorsten.stratmann@web.de',
-            'date'   => '2010-03-23',
+            'date'   => '2009-02-04',
             'name'   => 'fontcolor Plugin',
             'desc'   => 'color text with a specific color
                          Syntax: <fc color>Your Text </fc>',

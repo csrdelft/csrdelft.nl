@@ -870,7 +870,6 @@ htdocs/wiki/lib/plugins/authad/adLDAP/collections/adLDAPUserCollection.php -text
 htdocs/wiki/lib/plugins/authad/auth.php -text
 htdocs/wiki/lib/plugins/authad/conf/default.php -text
 htdocs/wiki/lib/plugins/authad/conf/metadata.php -text
-htdocs/wiki/lib/plugins/authad/lang/bg/settings.php -text
 htdocs/wiki/lib/plugins/authad/lang/cs/settings.php -text
 htdocs/wiki/lib/plugins/authad/lang/de-informal/settings.php -text
 htdocs/wiki/lib/plugins/authad/lang/de/settings.php -text
@@ -898,7 +897,6 @@ htdocs/wiki/lib/plugins/authcsr/plugin.info.txt -text
 htdocs/wiki/lib/plugins/authldap/auth.php -text
 htdocs/wiki/lib/plugins/authldap/conf/default.php -text
 htdocs/wiki/lib/plugins/authldap/conf/metadata.php -text
-htdocs/wiki/lib/plugins/authldap/lang/bg/settings.php -text
 htdocs/wiki/lib/plugins/authldap/lang/cs/settings.php -text
 htdocs/wiki/lib/plugins/authldap/lang/de-informal/settings.php -text
 htdocs/wiki/lib/plugins/authldap/lang/de/settings.php -text
@@ -919,7 +917,6 @@ htdocs/wiki/lib/plugins/authldap/plugin.info.txt -text
 htdocs/wiki/lib/plugins/authmysql/auth.php -text
 htdocs/wiki/lib/plugins/authmysql/conf/default.php -text
 htdocs/wiki/lib/plugins/authmysql/conf/metadata.php -text
-htdocs/wiki/lib/plugins/authmysql/lang/bg/settings.php -text
 htdocs/wiki/lib/plugins/authmysql/lang/cs/settings.php -text
 htdocs/wiki/lib/plugins/authmysql/lang/de-informal/settings.php -text
 htdocs/wiki/lib/plugins/authmysql/lang/de/settings.php -text
@@ -940,7 +937,6 @@ htdocs/wiki/lib/plugins/authmysql/plugin.info.txt -text
 htdocs/wiki/lib/plugins/authpgsql/auth.php -text
 htdocs/wiki/lib/plugins/authpgsql/conf/default.php -text
 htdocs/wiki/lib/plugins/authpgsql/conf/metadata.php -text
-htdocs/wiki/lib/plugins/authpgsql/lang/bg/settings.php -text
 htdocs/wiki/lib/plugins/authpgsql/lang/cs/settings.php -text
 htdocs/wiki/lib/plugins/authpgsql/lang/de-informal/settings.php -text
 htdocs/wiki/lib/plugins/authpgsql/lang/de/settings.php -text
@@ -1247,9 +1243,6 @@ htdocs/wiki/lib/plugins/discussion/lang/da/subscribermail.txt -text
 htdocs/wiki/lib/plugins/discussion/lang/de-informal/lang.php -text
 htdocs/wiki/lib/plugins/discussion/lang/de-informal/settings.php -text
 htdocs/wiki/lib/plugins/discussion/lang/de-informal/subscribermail.txt -text
-htdocs/wiki/lib/plugins/discussion/lang/de/lang.php -text
-htdocs/wiki/lib/plugins/discussion/lang/de/settings.php -text
-htdocs/wiki/lib/plugins/discussion/lang/de/subscribermail.txt -text
 htdocs/wiki/lib/plugins/discussion/lang/el/confirmsubscribe.txt -text
 htdocs/wiki/lib/plugins/discussion/lang/el/lang.php -text
 htdocs/wiki/lib/plugins/discussion/lang/el/settings.php -text
@@ -1258,9 +1251,6 @@ htdocs/wiki/lib/plugins/discussion/lang/en/confirmsubscribe.txt -text
 htdocs/wiki/lib/plugins/discussion/lang/en/lang.php -text
 htdocs/wiki/lib/plugins/discussion/lang/en/settings.php -text
 htdocs/wiki/lib/plugins/discussion/lang/en/subscribermail.txt -text
-htdocs/wiki/lib/plugins/discussion/lang/eo/lang.php -text
-htdocs/wiki/lib/plugins/discussion/lang/eo/settings.php -text
-htdocs/wiki/lib/plugins/discussion/lang/eo/subscribermail.txt -text
 htdocs/wiki/lib/plugins/discussion/lang/es/lang.php -text
 htdocs/wiki/lib/plugins/discussion/lang/es/settings.php -text
 htdocs/wiki/lib/plugins/discussion/lang/es/subscribermail.txt -text
@@ -1268,9 +1258,6 @@ htdocs/wiki/lib/plugins/discussion/lang/fi/confirmsubscribe.txt -text
 htdocs/wiki/lib/plugins/discussion/lang/fi/lang.php -text
 htdocs/wiki/lib/plugins/discussion/lang/fi/settings.php -text
 htdocs/wiki/lib/plugins/discussion/lang/fi/subscribermail.txt -text
-htdocs/wiki/lib/plugins/discussion/lang/fr/lang.php -text
-htdocs/wiki/lib/plugins/discussion/lang/fr/settings.php -text
-htdocs/wiki/lib/plugins/discussion/lang/fr/subscribermail.txt -text
 htdocs/wiki/lib/plugins/discussion/lang/hu/settings.php -text
 htdocs/wiki/lib/plugins/discussion/lang/it/lang.php -text
 htdocs/wiki/lib/plugins/discussion/lang/it/settings.php -text
@@ -1306,9 +1293,6 @@ htdocs/wiki/lib/plugins/discussion/lang/zh-tw/confirmsubscribe.txt -text
 htdocs/wiki/lib/plugins/discussion/lang/zh-tw/lang.php -text
 htdocs/wiki/lib/plugins/discussion/lang/zh-tw/settings.php -text
 htdocs/wiki/lib/plugins/discussion/lang/zh-tw/subscribermail.txt -text
-htdocs/wiki/lib/plugins/discussion/lang/zh/lang.php -text
-htdocs/wiki/lib/plugins/discussion/lang/zh/settings.php -text
-htdocs/wiki/lib/plugins/discussion/lang/zh/subscribermail.txt -text
 htdocs/wiki/lib/plugins/discussion/manager.dat -text
 htdocs/wiki/lib/plugins/discussion/plugin.info.txt -text
 htdocs/wiki/lib/plugins/discussion/print.css -text
@@ -1365,6 +1349,7 @@ htdocs/wiki/lib/plugins/fontcolor/images/toolbar_icon.png -text
 htdocs/wiki/lib/plugins/fontcolor/lang/de/lang.php -text
 htdocs/wiki/lib/plugins/fontcolor/lang/en/lang.php -text
 htdocs/wiki/lib/plugins/fontcolor/manager.dat -text
+htdocs/wiki/lib/plugins/fontcolor/plugin.info.txt -text
 htdocs/wiki/lib/plugins/fontcolor/script.js -text
 htdocs/wiki/lib/plugins/fontcolor/syntax.php -text
 htdocs/wiki/lib/plugins/imagebox/conf/default.php -text

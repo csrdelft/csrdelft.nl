@@ -99,6 +99,6 @@ function plugin_fontcolor_toolbar_picker() {
   body.appendChild(picker);     // attach the picker <div> to the page body
   toolbar.appendChild(p_btn);   // attach the picker button to the toolbar
 }
-addInitEvent(plugin_fontcolor_toolbar_picker);
+jQuery(plugin_fontcolor_toolbar_picker);
  
 //Setup VIM: ex: et ts=2 sw=2 enc=utf-8 :
