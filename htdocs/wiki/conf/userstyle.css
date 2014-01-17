@@ -2,6 +2,17 @@
  * Eigen aanpassingen op default opmaak
  */
 
+/* custom CSS to make upload button more visisble*/ 
+.qq-upload-button { 
+	background-color: beige; 
+	border: 1px solid #AAAAAA; 
+	padding: 4px; 
+} 
+
+.qq-upload-button:hover { 
+	background-color: #dee7ec; 
+}
+
 
 div.dokuwiki .toolbar button {
     margin: 0 0 1px 0;

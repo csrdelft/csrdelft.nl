@@ -895,8 +895,8 @@ function pageTemplate($id) {
             // if the before event did not set a template file, try to find one
             if(empty($data['tplfile'])) {
                 $path = dirname(wikiFN($id));
-                if(@file_exists($path.'/_template.txt')) {
-                    $data['tplfile'] = $path.'/_template.txt';
+                if(@file_exists($path . '/_template.txt')) {
+                    $data['tplfile'] = $path . '/_template.txt';
                 } else {
                     // search upper namespaces for templates
                     $len = strlen(rtrim($conf['datadir'], '/'));
@@ -1425,6 +1425,7 @@ function editorinfo($username) {
         case 'username':
         case 'email':
         case 'email_link':
+		case 'username_profiellink':
             if($auth) $info = $auth->getUserData($username);
             break;
         default:
@@ -1440,6 +1441,8 @@ function editorinfo($username) {
             case 'email_link':
                 $mail = obfuscate($info['mail']);
                 return '<a href="mailto:'.$mail.'">'.$mail.'</a>';
+			case 'username_profiellink': 
+				return '<a href="'.$conf['profiellink'].$username.'">'.hsc($info['name']).'</a>';
             default:
                 return hsc($username);
         }
@@ -1562,7 +1565,7 @@ function send_redirect($url) {
  *
  * @param string $param        The name of the parameter
  * @param array  $valid_values A set of valid values; Optionally a default may
- *                             be marked by the key “default”.
+ *                             be marked by the key default.
  * @param array  $array        The array containing the value (typically $_POST
  *                             or $_GET)
  * @param string $exc          The text of the raised exception

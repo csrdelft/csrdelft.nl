@@ -293,3 +293,8 @@ function importAgenda(id){
 	http.send(null);
 	return null;
 }
+
+//javascript voor UBB tag [spoiler]verborgen tekst[/spoiler]
+$(".spoiler_button").click(function spoiler_toggle() {
+      $(this).next(".spoiler").toggle('fast');
+    });
