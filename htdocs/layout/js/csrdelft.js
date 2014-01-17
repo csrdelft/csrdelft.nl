@@ -294,9 +294,11 @@ function importAgenda(id){
 	return null;
 }
 
+/* deze js moet wel hier komen, maar op een andere manier blijkbaar
 //javascript voor UBB tag [spoiler]verborgen tekst[/spoiler]
 $(document).ready(function() {
 	$(".spoiler_button").click(function spoiler_toggle() {
 		  $(this).next(".spoiler").toggle('fast');
 		});
 });
+*/
