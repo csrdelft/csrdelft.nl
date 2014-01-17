@@ -8,7 +8,7 @@
  */
 
 // must be run within Dokuwiki
-if (!defined('DOKU_INC')) die();
+if(!defined('DOKU_INC')) die();
 
 /**
  * Create link to C.S.R. profiel
@@ -52,25 +52,24 @@ class syntax_plugin_csrlink_profiellink extends DokuWiki_Syntax_Plugin {
      * @param $mode
      */
     function connectTo($mode) {
-        $this->Lexer->addSpecialPattern('\[\[lid>.+?\]\]',$mode,'plugin_csrlink_profiellink');
+        $this->Lexer->addSpecialPattern('\[\[lid>.+?\]\]', $mode, 'plugin_csrlink_profiellink');
     }
 
     /**
      * Handler to prepare matched data for the rendering process
      *
-     * @param   string       $match   The text matched by the patterns
-     * @param   int          $state   The lexer state for the match
-     * @param   int          $pos     The character position of the matched text
+     * @param   string $match   The text matched by the patterns
+     * @param   int $state   The lexer state for the match
+     * @param   int $pos     The character position of the matched text
      * @param   Doku_Handler $handler Reference to the Doku_Handler object
      * @return  array Return an array with all data you want to use in render
      */
-    function handle($match, $state, $pos, &$handler){
-        $match = trim(substr($match,6,-2));
+    function handle($match, $state, $pos, &$handler) {
+        $match = trim(substr($match, 6, -2));
 
+        list($uid, $title) = explode('|', $match, 2);
 
-        list($uid,$title) = explode('|',$match,2);
-
-        return compact('uid','title');
+        return compact('uid', 'title');
     }
 
     /**
@@ -88,8 +87,8 @@ class syntax_plugin_csrlink_profiellink extends DokuWiki_Syntax_Plugin {
         /** @var string $uid */
         extract($data);
 
-        if($format != 'xhtml' || is_null($auth) || !$auth instanceof auth_csr){
-            $renderer->cdata($title?$title:$uid);
+        if($format != 'xhtml' || is_null($auth) || !$auth instanceof auth_csr) {
+            $renderer->cdata($title ? $title : $uid);
             return true;
         }
 
@@ -97,28 +96,27 @@ class syntax_plugin_csrlink_profiellink extends DokuWiki_Syntax_Plugin {
         $uinfo = $auth->getUserData($uid);
 
         // nothing found? render as text
-        if(!$uinfo){
-            $renderer->doc .='<span class="csrlink invalid" title="[[lid>]] Geen geldig lidnummer ('.hsc($uid).')">'.hsc($title?$title:$uid).'</span>';
+        if(!$uinfo) {
+            $renderer->doc .= '<span class="csrlink invalid" title="[[lid>]] Geen geldig lidnummer (' . hsc($uid) . ')">' . hsc($title ? $title : $uid) . '</span>';
             return true;
         }
 
-        if(!$title){
-            if($this->getConf('usefullname')){
+        if(!$title) {
+            if($this->getConf('usefullname')) {
                 $title = $uinfo['name'];
-            }else{
+            } else {
                 $title = $uid;
             }
         }
         if(!$title) $title = $uid;
 
-
-        $renderer->doc .= '<a href="'.$this->getConf('profileurl').$uid.'" class="profiellink_plugin">';
+        $renderer->doc .= '<a href="' . $this->getConf('profileurl') . $uid . '" class="profiellink_plugin">';
         $renderer->doc .= hsc($title);
 
         $renderer->doc .= '<span class="profiellink_popup" title="Bekijk Profiel">';
-        $renderer->doc .= '<img src="'.$uinfo['pasfoto'].'" class="medialeft" width="48" height="64" alt="" />';
-        $renderer->doc .= '<b>'.hsc($uinfo['name']).'</b><br />';
-        if($uinfo['name'] != $uid) $renderer->doc .= '<i>'.hsc($uid).'</i><br />';
+        $renderer->doc .= '<img src="' . $uinfo['pasfoto'] . '" class="medialeft" width="48" height="64" alt="" />';
+        $renderer->doc .= '<b>' . hsc($uinfo['name']) . '</b><br />';
+        if($uinfo['name'] != $uid) $renderer->doc .= '<i>' . hsc($uid) . '</i><br />';
         $renderer->doc .= '</span>';
 
         $renderer->doc .= '</a>';
