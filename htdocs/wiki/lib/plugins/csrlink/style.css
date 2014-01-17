@@ -1,3 +1,5 @@
+@import "script/autocomplete/jquery.autocomplete.css";
+
 /* profiellink */
 div.dokuwiki a.profiellink_plugin:link,
 div.dokuwiki a.profiellink_plugin:active,
@@ -62,3 +64,4 @@ div.dokuwiki .bieblink .boekindicator.geen             {color: red;}
 div.dokuwiki .csrlink.invalid {
     color: __missing__;
 }
+
