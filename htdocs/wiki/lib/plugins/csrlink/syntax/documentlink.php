@@ -45,10 +45,11 @@ class syntax_plugin_csrlink_documentlink extends DokuWiki_Syntax_Plugin {
 
     function render($mode, &$R, $data) {
         global $auth;
-        global $conf;
+        /** @var string $title */
+        /** @var string $documentid */
         extract($data);
 
-        if($mode != 'xhtml' || is_null($auth) || !$auth instanceof auth_csr){
+        if($mode != 'xhtml' || is_null($auth) || !$auth instanceof auth_plugin_authcsr){
             $R->cdata($title?$title:$documentid);
             return true;
         }

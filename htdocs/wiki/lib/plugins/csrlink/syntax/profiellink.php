@@ -87,7 +87,7 @@ class syntax_plugin_csrlink_profiellink extends DokuWiki_Syntax_Plugin {
         /** @var string $uid */
         extract($data);
 
-        if($format != 'xhtml' || is_null($auth) || !$auth instanceof auth_csr) {
+        if($format != 'xhtml' || is_null($auth) || !$auth instanceof auth_plugin_authcsr) {
             $renderer->cdata($title ? $title : $uid);
             return true;
         }
