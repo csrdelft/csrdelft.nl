@@ -162,7 +162,7 @@
 					{if $bericht.zichtbaar=='wacht_goedkeuring'}
 						<br />
 						{knop url="keur-goed/`$bericht.id`" confirm='Weet u zeker dat u dit bericht wilt goedkeuren?' text='bericht goedkeuren'}
-						{knop ignorePrefix=true url="/tools/stats.php?ip=`$bericht.ip`" text=ip-log}
+						{knop ignorePrefix=true url="/tools/stats.php?ip=`$bericht.ip`" text='ip-log'}
 					{elseif $bericht.zichtbaar=='spam'}
 						<h1>SPAM</h1>
 					{/if}
