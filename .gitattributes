@@ -2617,7 +2617,7 @@ lib/MVC/model/entity/ForumCategorie.class.php -text
 lib/MVC/model/entity/ForumDeel.class.php -text
 lib/MVC/model/entity/ForumPost.class.php -text
 lib/MVC/model/entity/ForumTopic.class.php -text
-lib/MVC/model/entity/Groep.class.php -text
+lib/MVC/model/entity/Groep.abstract.php -text
 lib/MVC/model/entity/GroepCategorie.class.php -text
 lib/MVC/model/entity/GroepLid.class.php -text
 lib/MVC/model/entity/Instelling.class.php -text
