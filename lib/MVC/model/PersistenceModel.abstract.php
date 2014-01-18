@@ -64,11 +64,7 @@ abstract class PersistenceModel implements Persistence {
 	 * @return PersistentEntity
 	 */
 	public function retrieve(PersistentEntity $entity) {
-		$primary_key_values = array();
-		foreach ($this->orm_entity->getPrimaryKey() as $key) {
-			$primary_key_values[] = $entity->$key;
-		}
-		return $this->retrieveByPrimaryKey($primary_key_values);
+		return $this->retrieveByPrimaryKey(array_values($entity->getValues(true)));
 	}
 
 	/**
@@ -112,11 +108,7 @@ abstract class PersistenceModel implements Persistence {
 	 * @param PersistentEntity $entity
 	 */
 	public function delete(PersistentEntity $entity) {
-		$primary_key_values = array();
-		foreach ($this->orm_entity->getPrimaryKey() as $key) {
-			$primary_key_values[] = $entity->$key;
-		}
-		$this->deleteByPrimaryKey($primary_key_values);
+		$this->deleteByPrimaryKey(array_values($entity->getValues(true)));
 	}
 
 	/**

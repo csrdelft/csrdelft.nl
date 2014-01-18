@@ -28,9 +28,20 @@ abstract class PersistentEntity {
 		return array_keys(static::$persistent_fields);
 	}
 
-	public function getValues() {
+	/**
+	 * Get the fields and their values of this object.
+	 * 
+	 * @param boolean $primary_key_only
+	 * @return array
+	 */
+	public function getValues($primary_key_only = false) {
 		$values = array();
-		foreach ($this->getFields() as $field) {
+		if ($primary_key_only) {
+			$fields = $this->getPrimaryKey();
+		} else {
+			$fields = $this->getFields();
+		}
+		foreach ($fields as $field) {
 			$values[$field] = $this->$field;
 		}
 		return $values;

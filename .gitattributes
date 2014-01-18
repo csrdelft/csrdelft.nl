@@ -2611,6 +2611,7 @@ lib/MVC/model/MenuModel.class.php -text
 lib/MVC/model/PaginationModel.abstract.php -text
 lib/MVC/model/Persistence.interface.php -text
 lib/MVC/model/PersistenceModel.abstract.php -text
+lib/MVC/model/entity/ForumPost.class.php -text
 lib/MVC/model/entity/Instelling.class.php -text
 lib/MVC/model/entity/Mail.class.php -text
 lib/MVC/model/entity/Mededeling2.class.php -text

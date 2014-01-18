@@ -18,26 +18,41 @@ abstract class PaginationModel extends PersistenceModel {
 	 */
 	protected $current_page_number;
 	protected $per_page;
-	private $last_page_number;
-	private $where;
-	private $where_params;
-	private $orderby;
+	protected $last_page_number;
+	protected $where;
+	protected $where_params;
+	protected $orderby;
 
-	protected function __construct(PersistentEntity $orm_entity) {
+	protected function __construct(PersistentEntity $orm_entity, $per_page = 25, $where = null, array $where_params = array(), $orderby = null) {
 		parent::__construct($orm_entity);
-		$key = get_class($this) . '_current_page_number';
-		if (array_key_exists($key, $_SESSION)) {
-			$this->current_page_number = $_SESSION[$key]; // load from session
-		} else {
-			$this->current_page_number = 0;
-		}
-	}
-
-	public function setPaging($per_page, $where = null, array $where_params = array(), $orderby = null) {
+		$this->current_page_number = 0;
 		$this->per_page = $per_page;
 		$this->where = $where;
 		$this->where_params = $where_params;
 		$this->orderby = $orderby;
+	}
+
+	/**
+	 * Save current page to session variable to remember where the user was.
+	 * 
+	 * @param PersistentEntity $entity
+	 */
+	protected function saveCurrentPage(PersistentEntity $entity) {
+		$id = 'current_page_number_' . get_class($entity) . implode('_', $entity->getValues(true));
+		$_SESSION[$id] = $this->current_page_number;
+	}
+
+	/**
+	 * Not nessecarily the same class as the orm entity.
+	 * Example: forum topic (this entity) has paging of forum posts (orm entity).
+	 * 
+	 * @param PersistentEntity $entity
+	 */
+	protected function loadCurrentPage(PersistentEntity $entity) {
+		$id = 'current_page_number_' . get_class($entity) . implode('_', $entity->getValues(true));
+		if (array_key_exists($id, $_SESSION)) {
+			$this->current_page_number = $_SESSION[$id];
+		}
 	}
 
 	/**
@@ -53,21 +68,34 @@ abstract class PaginationModel extends PersistenceModel {
 		if (is_int($number) && $this->hasPage($number)) {
 			$this->current_page_number = $number;
 		}
-		$_SESSION[get_class($this) . '_current_page_number'] = $this->current_page_number; // save to session
+
 		return $this->find($this->where, $this->where_params, $this->orderby, $this->per_page, $this->current_page_number * $this->per_page);
 	}
 
-	public function getPageCount($recount = false) {
-		if (!isset($this->last_page_number) OR $recount) { //TODO? save to session as well or even global cache?
-			$sql = 'SELECT COUNT(*) as total FROM ' . $this->orm_entity->getTableName();
-			if ($this->where !== null) {
-				$sql .= ' WHERE ' . $this->where;
-			}
-			$query = Database::instance()->prepare($sql, $this->where_params);
-			$query->execute($this->where_params);
-			$this->last_page_number = ceil(((int) $query->fetchColumn()) / $this->per_page);
+	public function getPageCount() {
+		if (!isset($this->last_page_number)) {
+			$this->recount();
 		}
 		return $this->last_page_number;
+	}
+
+	/**
+	 * Calculate amount of pages based on total amount.
+	 * 
+	 * @param int $total
+	 */
+	public function setPageCount($total) {
+		$this->last_page_number = ceil($total / $this->per_page);
+	}
+
+	public function recount() {
+		$sql = 'SELECT COUNT(*) as total FROM ' . $this->orm_entity->getTableName();
+		if ($this->where !== null) {
+			$sql .= ' WHERE ' . $this->where;
+		}
+		$query = Database::instance()->prepare($sql, $this->where_params);
+		$query->execute($this->where_params);
+		setPageCount((int) $query->fetchColumn());
 	}
 
 	/**
