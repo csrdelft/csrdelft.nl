@@ -1,3 +1,2 @@
 User-agent: *
-Disallow: /pasfoto/
-Disallow: /kek/
+Disallow: /
