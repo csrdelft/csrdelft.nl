@@ -2601,6 +2601,7 @@ htdocs_confide/mysql.ini.sample -text
 htdocs_confide/streeplijstrapportage.php -text
 images/.htaccess -text
 images/famfamfam/.index -text
+images/robots.txt -text
 lib/MVC/controller/AclController.abstract.php -text
 lib/MVC/controller/Controller.abstract.php -text
 lib/MVC/controller/InstellingenBeheerController.class.php -text
