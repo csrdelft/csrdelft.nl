@@ -9,9 +9,6 @@ RewriteEngine On
 RewriteRule ^instellingen/?$		instellingen.php [L]
 RewriteRule ^pauper/?$				pauper.php [L]
 
-# Dies site
-RewriteRule ^dies/?(.*)$				/dies2014/$1 [QSA,L]
-
 # maaltijden & corvee
 RewriteRule ^maaltijden/?(.*)$		taken.php?uri=maaltijden/$1 [L]
 RewriteRule ^corvee/?(.*)$			taken.php?uri=corvee/$1 [L]
