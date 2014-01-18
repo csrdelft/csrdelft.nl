@@ -5,8 +5,7 @@
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
- * Een menu-item instantie beschrijft een menu onderdeel van een menu-boom
- * en heeft daarom een parent.
+ * Een forumpost zit in een forumtopic.
  * 
  */
 class ForumPost extends PersistentEntity {
@@ -20,12 +19,12 @@ class ForumPost extends PersistentEntity {
 	 * Deze post is van dit draadje
 	 * @var int
 	 */
-	public $topic_id = 0;
+	public $topic_id = null;
 	/**
-	 * Uid van lid
+	 * Uid van auteur
 	 * @var string
 	 */
-	public $lid_id = 0;
+	public $lid_id = null;
 	/**
 	 * Tekst
 	 * @var string
@@ -45,7 +44,7 @@ class ForumPost extends PersistentEntity {
 	 * Zichtbaar, verwijderd of wacht op goedkeuring
 	 * @var string
 	 */
-	public $status = status;
+	public $status = 'zichtbaar';
 	/**
 	 * IP adres van de auteur
 	 * @var string
@@ -60,9 +59,9 @@ class ForumPost extends PersistentEntity {
 		'topic_id' => 'int(11) NOT NULL',
 		'lid_id' => 'varchar(4) NOT NULL',
 		'tekst' => 'text NOT NULL',
-		'datum_tijd' => 'varchar(255) NOT NULL',
-		'laatst_bewerkt' => 'varchar(255) NOT NULL',
-		'status' => 'tinyint(1) NOT NULL',
+		'datum_tijd' => 'datetime NOT NULL',
+		'laatst_bewerkt' => 'datetime NOT NULL',
+		'status' => 'varchar(25) NOT NULL',
 		'auteur_ip' => 'varchar(255) NOT NULL'
 	);
 	/**

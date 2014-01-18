@@ -16,7 +16,7 @@ abstract class PaginationModel extends PersistenceModel {
 	 * Starts at 0
 	 * @var int
 	 */
-	protected $current_page_number;
+	private $current_page_number;
 	protected $per_page;
 	protected $last_page_number;
 	protected $where;
@@ -50,7 +50,7 @@ abstract class PaginationModel extends PersistenceModel {
 	 */
 	protected function loadCurrentPage(PersistentEntity $entity) {
 		$id = 'current_page_number_' . get_class($entity) . implode('_', $entity->getValues(true));
-		if (array_key_exists($id, $_SESSION)) {
+		if (array_key_exists($id, $_SESSION) && $this->hasPage($_SESSION[$id])) {
 			$this->current_page_number = $_SESSION[$id];
 		}
 	}
@@ -64,11 +64,16 @@ abstract class PaginationModel extends PersistenceModel {
 		return $this->current_page_number;
 	}
 
+	/**
+	 * Get the current page or a specific page that has to exist.
+	 * 
+	 * @param type $number
+	 * @return type
+	 */
 	public function getPage($number = null) {
 		if (is_int($number) && $this->hasPage($number)) {
 			$this->current_page_number = $number;
 		}
-
 		return $this->find($this->where, $this->where_params, $this->orderby, $this->per_page, $this->current_page_number * $this->per_page);
 	}
 
