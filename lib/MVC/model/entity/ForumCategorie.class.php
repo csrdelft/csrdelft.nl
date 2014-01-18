@@ -14,17 +14,17 @@ class ForumCategorie extends PersistentEntity {
 	 * Primary key
 	 * @var int
 	 */
-	public $categorie_id = null;
+	public $categorie_id;
 	/**
 	 * Titel
 	 * @var string
 	 */
-	public $titel = '';
+	public $titel;
 	/**
 	 * Omschrijving
 	 * @var string
 	 */
-	public $omschrijving = '';
+	public $omschrijving;
 	/**
 	 * Rechten benodigd voor bekijken
 	 * @var string

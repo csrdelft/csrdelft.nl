@@ -14,42 +14,42 @@ class ForumTopic extends PersistentEntity {
 	 * Primary key
 	 * @var int
 	 */
-	public $topic_id = null;
+	public $topic_id;
 	/**
 	 * Forum waaronder dit topic valt
 	 * @var int
 	 */
-	public $forum_id = null;
+	public $forum_id;
 	/**
 	 * Uid van auteur
 	 * @var string
 	 */
-	public $lid_id = '';
+	public $lid_id;
 	/**
 	 * Titel
 	 * @var string
 	 */
-	public $titel = '';
+	public $titel;
 	/**
 	 * Datum en tijd van aanmaken
 	 * @var string
 	 */
-	public $datum_tijd = null;
+	public $datum_tijd;
 	/**
 	 * Datum en tijd van laatst geplaatste post
 	 * @var string
 	 */
-	public $laatst_gepost = null;
+	public $laatst_gepost;
 	/**
 	 * Id van de laatst geplaatste post
 	 * @var string
 	 */
-	public $laatste_post_id = null;
+	public $laatste_post_id;
 	/**
 	 * Uid van de auteur van de laatst geplaatste post
 	 * @var string
 	 */
-	public $laatste_lid_id = null;
+	public $laatste_lid_id;
 	/**
 	 * Aantal zichtbare posts in dit topic
 	 * @var int
@@ -59,22 +59,22 @@ class ForumTopic extends PersistentEntity {
 	 * Zichtbaar, verwijderd of wacht op goedkeuring
 	 * @var string
 	 */
-	public $status = 'zichtbaar';
+	public $status;
 	/**
 	 * Open of gesloten
 	 * @var boolean
 	 */
-	public $gesloten = false;
+	public $gesloten;
 	/**
 	 * Plakkerig of niet
 	 * @var boolean
 	 */
-	public $sticky = false;
+	public $sticky;
 	/**
 	 * Belangrijk markering of niet
 	 * @var boolean
 	 */
-	public $belangrijk = false;
+	public $belangrijk;
 	/**
 	 * Database table fields
 	 * @var array

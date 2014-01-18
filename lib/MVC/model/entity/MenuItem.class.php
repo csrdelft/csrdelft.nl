@@ -15,12 +15,12 @@ class MenuItem extends PersistentEntity {
 	 * Primary key
 	 * @var int
 	 */
-	public $item_id = null;
+	public $item_id;
 	/**
 	 * Dit menu-item is een sub-item van
 	 * @var int
 	 */
-	public $parent_id = null;
+	public $parent_id;
 	/**
 	 * Volgorde van weergave
 	 * @var int
@@ -30,17 +30,17 @@ class MenuItem extends PersistentEntity {
 	 * Link tekst
 	 * @var string
 	 */
-	public $tekst = '';
+	public $tekst;
 	/**
 	 * Link url
 	 * @var string
 	 */
-	public $link = '';
+	public $link;
 	/**
 	 * LoginLid::hasPermission
 	 * @var string
 	 */
-	public $permission = '';
+	public $permission;
 	/**
 	 * Zichtbaar of verborgen
 	 * @var boolean
@@ -50,7 +50,7 @@ class MenuItem extends PersistentEntity {
 	 * Unieke naam per menu
 	 * @var string
 	 */
-	public $menu_naam = 'main';
+	public $menu_naam;
 	/**
 	 * Database table fields
 	 * @var array

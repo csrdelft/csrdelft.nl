@@ -14,32 +14,32 @@ class ForumPost extends PersistentEntity {
 	 * Primary key
 	 * @var int
 	 */
-	public $post_id = null;
+	public $post_id;
 	/**
 	 * Deze post is van dit draadje
 	 * @var int
 	 */
-	public $topic_id = null;
+	public $topic_id;
 	/**
 	 * Uid van auteur
 	 * @var string
 	 */
-	public $lid_id = null;
+	public $lid_id;
 	/**
 	 * Tekst
 	 * @var string
 	 */
-	public $tekst = '';
+	public $tekst;
 	/**
 	 * Datum en tijd van aanmaken
 	 * @var string
 	 */
-	public $datum_tijd = null;
+	public $datum_tijd;
 	/**
 	 * Datum en tijd van laatste bewerking
 	 * @var string
 	 */
-	public $laatst_bewerkt = null;
+	public $laatst_bewerkt;
 	/**
 	 * Zichtbaar, verwijderd of wacht op goedkeuring
 	 * @var string
@@ -49,7 +49,7 @@ class ForumPost extends PersistentEntity {
 	 * IP adres van de auteur
 	 * @var string
 	 */
-	public $auteur_ip = null;
+	public $auteur_ip;
 	/**
 	 * Database table fields
 	 * @var array

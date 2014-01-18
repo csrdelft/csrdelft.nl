@@ -14,37 +14,37 @@ class ForumDeel extends PersistentEntity {
 	 * Primary key
 	 * @var int
 	 */
-	public $forum_id = null;
+	public $forum_id;
 	/**
 	 * Dit forum valt onder deze categorie
 	 * @var int
 	 */
-	public $categorie_id = null;
+	public $categorie_id;
 	/**
 	 * Titel
 	 * @var string
 	 */
-	public $titel = '';
+	public $titel;
 	/**
 	 * Omschrijving
 	 * @var string
 	 */
-	public $omschrijving = '';
+	public $omschrijving;
 	/**
 	 * Datum en tijd van laatst geplaatste post
 	 * @var string
 	 */
-	public $laatst_gepost = null;
+	public $laatst_gepost;
 	/**
 	 * Id van de laatst geplaatste post
 	 * @var string
 	 */
-	public $laatste_post_id = null;
+	public $laatste_post_id;
 	/**
 	 * Uid van de auteur van de laatst geplaatste post
 	 * @var string
 	 */
-	public $laatste_lid_id = null;
+	public $laatste_lid_id;
 	/**
 	 * Aantal topics in dit forum
 	 * @var int
@@ -69,7 +69,7 @@ class ForumDeel extends PersistentEntity {
 	 * Weergave volgorde
 	 * @var int
 	 */
-	public $prioriteit = 0;
+	public $prioriteit;
 	/**
 	 * Database table fields
 	 * @var array
