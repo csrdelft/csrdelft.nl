@@ -1,6 +1,3 @@
-<<<<<<< .mine
 User-agent: *
 Disallow: /pasfoto/
-Disallow: /kek/=======
-User-agent: *
-Disallow: />>>>>>> .r4085
+Disallow: /kek/
