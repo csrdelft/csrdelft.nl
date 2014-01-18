@@ -1,4 +1,5 @@
 RewriteEngine on
 RewriteCond %{HTTP_REFERER} !^$
+RewriteCond %{HTTP_REFERER} !^http(s)?://csrdelft.nl [NC]
 RewriteCond %{HTTP_REFERER} !^http(s)?://(.)*\.csrdelft.nl [NC]
 RewriteRule \.(jpg|jpeg|png|gif)$ http://csrdelft.nl [NC,R,L]
