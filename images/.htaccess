@@ -1,4 +1,8 @@
 RewriteEngine on
 RewriteCond %{HTTP_REFERER} !^$
 RewriteCond %{HTTP_REFERER} !^http(s)?://(www\.)csrdelft.nl [NC]
+RewriteCond %{HTTP_REFERER} !^http(s)?://(plaetjes\.)csrdelft.nl [NC]
 RewriteRule \.(jpg|jpeg|png|gif)$ http://csrdelft.nl [NC,R,L]
+
+RewriteCond %{HTTP_USER_AGENT} (googlebot|adsbot-google|bingbot|msnbot|psbot|gigabot|twitterbot|linkedinbot|yahoo-mmcrawler|pingdom\.com_bot) [NC]
+RewriteRule ^ - [L,F,NC]
