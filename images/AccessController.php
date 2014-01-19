@@ -5,7 +5,7 @@ require_once 'configuratie.include.php';
 
 $request = filter_input(INPUT_GET, 'request', FILTER_SANITIZE_URL);
 
-if (!LoginLid::instance()->getLid() instanceof Lid) {
+if (!LoginLid::instance()->getUid() != 'x999') {
 
 	$filter = '/(pasfoto|kek|intern|novitiaat|ontvoering|feuten|slachten|zuipen|prive|privé)/i';
 
