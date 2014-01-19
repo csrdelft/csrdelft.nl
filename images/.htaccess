@@ -1,4 +1,4 @@
 RewriteEngine on
 
 # Gewoon alles doorschuiven naar de controller
-RewriteRule ^(.*)$ AccessController.php?request=$1 [QSA]
+RewriteRule ^(.*)$ AccessController.php?request=/$1 [QSA]
