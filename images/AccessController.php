@@ -14,14 +14,4 @@ if (!LoginLid::instance()->hasPermission('P_LOGGED_IN')) {
 	}
 }
 
-$path = PICS_PATH . $request;
-$ext = pathinfo($path, PATHINFO_EXTENSION);
-
-header("Content-Type: image/" . $ext);
-header("Content-Length: " . filesize($path));
-header("Cache-Control: maxage=21000"); // 6 dagen
-header("Expires: " . gmdate('D, d M Y H:i:s', (time() + 21000)) . ' GMT');
-
-$fp = fopen($path, 'rb'); // open in a binary mode
-fpassthru($fp);
-exit;
+echo file_get_contents(PICS_PATH . $request);
