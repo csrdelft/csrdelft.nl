@@ -173,7 +173,7 @@ class Fotoalbum{
 					$bestanden[]=$bestand;
 				}
 			}
-			
+
 			sort($bestanden);
 
 			$fotos=array();
@@ -277,11 +277,11 @@ class Foto{
 	}
 
 	function getThumbURL(){
-		return CSR_PICS.'fotoalbum/'.$this->urlencode($this->getMap()).'_thumbs/'.$this->urlencode($this->getBestandsnaam());
+		return CSR_PICS.'fotoalbum'.$this->urlencode($this->getMap()).'_thumbs/'.$this->urlencode($this->getBestandsnaam());
 	}
 
 	function getResizedURL(){
-		return CSR_PICS.'fotoalbum/'.$this->urlencode($this->getMap()).'_resized/'.$this->urlencode($this->getBestandsnaam());
+		return CSR_PICS.'fotoalbum'.$this->urlencode($this->getMap()).'_resized/'.$this->urlencode($this->getBestandsnaam());
 	}
 
 	function bestaatThumb(){
