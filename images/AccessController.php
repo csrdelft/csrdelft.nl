@@ -12,7 +12,7 @@ if (!LoginLid::instance()->hasPermission('P_LEDEN_READ')) {
 
 	if (preg_match($filter, $request)) {
 		header('HTTP/1.0 403 Forbidden');
-		header('Location: http://csrdelft.nl/');
+		//header('Location: http://csrdelft.nl/');
 		exit;
 	}
 }
