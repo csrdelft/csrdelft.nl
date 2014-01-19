@@ -1,11 +1,4 @@
 RewriteEngine on
 
-#hotlink
-RewriteCond %{HTTP_REFERER} !^$
-RewriteCond %{HTTP_REFERER} !^http(s)?://csrdelft.nl [NC]
-RewriteCond %{HTTP_REFERER} !^http(s)?://(.)*\.csrdelft.nl [NC]
-RewriteRule \.(jpg|jpeg|png|gif)$ http://csrdelft.nl [NC,R,L]
-
-#crawler
-RewriteCond %{HTTP_USER_AGENT} (googlebot|adsbot-google|bingbot|msnbot|psbot|gigabot|twitterbot|linkedinbot|yahoo-mmcrawler|pingdom\.com_bot) [NC]
-RewriteRule \.(jpg|jpeg|png|gif)$ http://csrdelft.nl [NC,R,L]
+# Gewoon alles doorschuiven naar de controller
+RewriteRule ^(.*)$ AccessController.php?request=$1 [QSA]
