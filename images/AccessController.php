@@ -4,8 +4,8 @@ chdir('../lib/');
 require_once 'configuratie.include.php';
 
 $request = filter_input(INPUT_GET, 'request', FILTER_SANITIZE_URL);
-
-if (!LoginLid::instance()->getUid() != 'x999') {
+/* TODO:
+if (!LoginLid::instance()->hasPermission('P_LOGGED_IN')) {
 
 	$filter = '/(pasfoto|kek|intern|novitiaat|ontvoering|feuten|slachten|zuipen|prive|privé)/i';
 
@@ -14,7 +14,7 @@ if (!LoginLid::instance()->getUid() != 'x999') {
 		exit;
 	}
 }
-
+*/
 $path = PICS_PATH . $request;
 $ext = pathinfo($path, PATHINFO_EXTENSION);
 
