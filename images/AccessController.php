@@ -3,21 +3,18 @@
 chdir('../lib/');
 require_once 'configuratie.include.php';
 
-
-if (!startsWith($request, '/')) {
-	$request = '/' . $request;
-}
+$request = filter_input(INPUT_GET, 'request', FILTER_SANITIZE_URL);
 
 if (!LoginLid::instance()->hasPermission('P_LOGGED_IN')) {
 
 	$filter = '/(pasfoto|intern|novitiaat|ontvoering|feuten|slachten|zuipen|prive|privé)/i';
-	$request = filter_input(INPUT_GET, 'request', FILTER_SANITIZE_URL);
 
 	if (preg_match($filter, $request)) {
 		header('Location: http://csrdelft.nl/');
 		exit;
 	}
 }
+
 chdir('../images/');
 $path = PICS_PATH . $request;
 $ext = pathinfo($path, PATHINFO_EXTENSION);
