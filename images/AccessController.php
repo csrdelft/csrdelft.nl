@@ -8,6 +8,8 @@ if (!LoginLid::instance()->hasPermission('P_LEDEN_READ')) {
 	$filter = '/(pasfoto|intern|novitiaat|ontvoering|feuten|slachten|zuipen|prive|privé)/i';
 	$request = filter_input(INPUT_GET, 'request', FILTER_SANITIZE_URL);
 
+	header("Request was: " . $request);
+
 	if (preg_match($filter, $request)) {
 		header('HTTP/1.0 403 Forbidden');
 		header('Location: http://csrdelft.nl/');
