@@ -1,6 +1,6 @@
 <?php
 
-require_once 'configuratie.include.php';
+require_once '../lib/configuratie.include.php';
 
 if (!LoginLid::instance()->hasPermission('P_LEDEN_READ')) {
 
