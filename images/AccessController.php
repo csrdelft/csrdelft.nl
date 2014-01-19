@@ -5,9 +5,9 @@ require_once 'configuratie.include.php';
 
 $request = filter_input(INPUT_GET, 'request', FILTER_SANITIZE_URL);
 
-if (!LoginLid::instance()->hasPermission('P_LOGGED_IN')) {
+if (!LoginLid::instance()->getLid() instanceof Lid) {
 
-	$filter = '/(pasfoto|intern|novitiaat|ontvoering|feuten|slachten|zuipen|prive|privé)/i';
+	$filter = '/(pasfoto|kek|intern|novitiaat|ontvoering|feuten|slachten|zuipen|prive|privé)/i';
 
 	if (preg_match($filter, $request)) {
 		header('Location: http://csrdelft.nl/');
@@ -15,7 +15,6 @@ if (!LoginLid::instance()->hasPermission('P_LOGGED_IN')) {
 	}
 }
 
-chdir('../images/');
 $path = PICS_PATH . $request;
 $ext = pathinfo($path, PATHINFO_EXTENSION);
 
