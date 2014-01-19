@@ -3,6 +3,11 @@
 chdir('../lib/');
 require_once 'configuratie.include.php';
 
+
+if (!startsWith($request, '/')) {
+	$request = '/' . $request;
+}
+
 if (!LoginLid::instance()->hasPermission('P_LOGGED_IN')) {
 
 	$filter = '/(pasfoto|intern|novitiaat|ontvoering|feuten|slachten|zuipen|prive|privé)/i';
@@ -14,7 +19,7 @@ if (!LoginLid::instance()->hasPermission('P_LOGGED_IN')) {
 	}
 }
 chdir('../images/');
-$path = $request;
+$path = PICS_PATH . $request;
 $ext = pathinfo($path, PATHINFO_EXTENSION);
 
 header("Content-Type: image/" . $ext);
