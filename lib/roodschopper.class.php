@@ -7,7 +7,7 @@
  * Er wordt ubb over gedaan, maar de mail wordt plaintext verzonden, dus erg veel zal daar niet
  * van overblijven. Wellicht kan er later nog een html-optie ingeklust worden.
  */
-require_once 'csrubb.class.php';
+require_once 'configuratie.include.php';
 require_once 'MVC/model/entity/Mail.class.php';
 
 class Roodschopper{
