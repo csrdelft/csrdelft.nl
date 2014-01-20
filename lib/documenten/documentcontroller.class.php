@@ -186,7 +186,7 @@ class DocumentController extends Controller {
 				invokeRefresh($this->baseurl, $melding);
 			}
 		} else {
-			if (isset($_GET['catID']) AND exists($_GET['catID'])) {
+			if (isset($_GET['catID']) AND DocumentenCategorie::exists($_GET['catID'])) {
 				$this->document->setCatID($_GET['catID']);
 			}
 		}
