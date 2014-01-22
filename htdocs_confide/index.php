@@ -47,9 +47,10 @@ $weekResult=$db->query($weekrapportQuery);
 	<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
 	<meta name="author" content="PubCie C.S.R. Delft - Jieter" />
 	<meta name="robots" content="nfollow" />
-	<link rel="stylesheet" href="default.css" type="text/css" />
+	<link rel="stylesheet" href="csrdelft.css" type="text/css" />
+	<link rel="stylesheet" href="normaal.css" type="text/css" />
 	<link rel="stylesheet" href="ubb.css" type="text/css" />
-	<script type="text/javascript" src="http://csrdelft.nl/layout/js/jquery.js"></script>
+	<script type="text/javascript" src="http://csrdelft.nl/layout/js/jquery.min.js"></script>
 	<script type="text/javascript" src="http://csrdelft.nl/layout/js/datatables/jquery.dataTables.min.js"></script>
 
 	<script type="text/javascript">
