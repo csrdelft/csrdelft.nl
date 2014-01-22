@@ -5,6 +5,9 @@ RewriteEngine On
 # Tijdelijk OWee redirect(nu niet!)
 # RewriteRule ^$ /actueel/owee [NC,R=302,L]
 
+# Dies site 
+RewriteRule ^dies/?(.*)$			/dies2014/$1 [QSA,L] 
+
 # mod_rewrite-dingen
 RewriteRule ^instellingen/?$		instellingen.php [L]
 RewriteRule ^pauper/?$				pauper.php [L]
