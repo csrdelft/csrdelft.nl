@@ -84,7 +84,7 @@ function observeCheckboxesAbos(){
 
         jQuery.ajax({
             type: "POST",
-            url: '/actueel/maaltijden/abonnementenbeheer/abo/'+actie,
+            url: '/maaltijden/abonnementenbeheer/abo/'+actie,
             data: data,
             cache: false,
             success: function(result){

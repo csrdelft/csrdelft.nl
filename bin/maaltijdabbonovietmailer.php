@@ -15,7 +15,7 @@ if ($result !== false and $db->numRows($result) > 0) {
 		$tekst = <<<EOD
 			Lieve novieten,
 
-			Zoals jullie misschien tijdens het novitiaat al hebben gehoord hebben jullie een maaltijd abonnement op de donderdagmaaltijd bij C.S.R. voor de komende tijd. Dit om jullie te stimuleren deel te nemen aan C.S.R. activiteiten en te integreren met leden. Als je inlogt op de webstek zie je meteen op de hoofdpagina een grijs blokje waarin je jezelf kunt af- of aanmelden voor de eerstvolgende maaltijd. Dit kan ook op de pagina http://csrdelft.nl/actueel/maaltijden/ .
+			Zoals jullie misschien tijdens het novitiaat al hebben gehoord hebben jullie een maaltijd abonnement op de donderdagmaaltijd bij C.S.R. voor de komende tijd. Dit om jullie te stimuleren deel te nemen aan C.S.R. activiteiten en te integreren met leden. Als je inlogt op de webstek zie je meteen op de hoofdpagina een grijs blokje waarin je jezelf kunt af- of aanmelden voor de eerstvolgende maaltijd. Dit kan ook op de pagina http://csrdelft.nl/maaltijden .
 
 			Kun je niet op een maaltijd aanwezig zijn, meld je dan af op de webstek, voor 15:00 op de dag dat de maaltijd gegeven wordt, na dat tijdstip beginnen de koks namelijk met koken en wordt er op jou gerekend met boodschappen doen. Als je er na 15:00 achter komt dat je niet aanwezig kunt zijn, bel dan even de koks of bel Confide, met een goede reden kan je dan eventueel doorgestreept worden van de maaltijdlijst.
 

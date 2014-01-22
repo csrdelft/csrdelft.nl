@@ -38,19 +38,14 @@
 							<li {if $smarty.foreach.agendaItems.iteration % 2==1}class="odd"{/if}>
 							{if $item instanceof Lid} {* Verjaardag *}
 								{icon get="verjaardag"} {$item->getTitel()}
-							{elseif $item instanceof Maaltijd}{* //TODO: deprecated *}
-								{icon get="cup"} <div class="tijd">{$item->getBeginMoment()|date_format:"%R"}</div>
-								<a href="/actueel/maaltijden/" title="{$item->getBeschrijving()|escape:'htmlall'}">
-									{$item->getTitel()}
-								</a>
 							{elseif $item|is_a:'Maaltijd'}
 								{icon get="cup"} <div class="tijd">{$item->getBeginMoment()|date_format:"%R"}</div>
 								<a href="/maaltijden" title="{$item->getBeschrijving()}">
 									{$item->getTitel()}
 								</a>
-							{elseif $item|is_a:'\CorveeTaak'}
+							{elseif $item|is_a:'CorveeTaak'}
 								{icon get="paintcan"}
-								<a href="/corvee/rooster" title="{$item->getBeschrijving()}">
+								<a href="/corveerooster" title="{$item->getBeschrijving()}">
 									{$item->getTitel()}
 								</a>
 							{else}
