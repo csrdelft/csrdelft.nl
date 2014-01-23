@@ -6,7 +6,7 @@ RewriteEngine On
 # RewriteRule ^$ /actueel/owee [NC,R=302,L]
 
 # Dies site 
-RewriteRule ^dies/?(.*)$			/dies2014/$1 [QSA,L] 
+RewriteRule ^dies2014/(.*)$			/dies/$1 [R=301,L]
 
 # mod_rewrite-dingen
 RewriteRule ^instellingen/?$		instellingen.php [L]
