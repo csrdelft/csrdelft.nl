@@ -2079,6 +2079,7 @@ htdocs/wiki/lib/plugins/searchform/README.md -text
 htdocs/wiki/lib/plugins/searchform/manager.dat -text
 htdocs/wiki/lib/plugins/searchform/plugin.info.txt -text
 htdocs/wiki/lib/plugins/searchform/script.js -text
+htdocs/wiki/lib/plugins/searchform/style.css -text
 htdocs/wiki/lib/plugins/searchform/syntax.php -text
 htdocs/wiki/lib/plugins/showlogin/action.php -text
 htdocs/wiki/lib/plugins/sortablejs/manager.dat -text

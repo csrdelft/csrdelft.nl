@@ -1,11 +1,18 @@
 jQuery(function () {
-    var $searchform__input = jQuery('#qsearch2__in');
+    jQuery('.searchform__qsearch_in')
+        .each(function (i, input) {
+            var $input = jQuery(input);
+            var $form = $input.parent().parent();
+            var $output = $form.find('.searchform__qsearch_out');
+            var $ns = $form.find('.searchform__ns');
 
-    $searchform__input.dw_qsearch({
-        output: '#qsearch2__out',
-        getSearchterm: function() {
-            var sf_ns = jQuery('#searchform__ns').val();
-            return $searchform__input.val() + (sf_ns ? ' @' + sf_ns : '');
-        }
-    });
+            $input.dw_qsearch({
+                output: $output,
+                getSearchterm: function () {
+                    var namespace = $ns.val();
+                    return $input.val() + (namespace ? ' @' + namespace : '');
+                }
+            });
+
+        });
 });
