@@ -119,10 +119,10 @@ if ($ingelogd) {
 	$form[] = new SelectField('eetDate', $data['eetDate'], 'Eetvoorkeur', $eetopties);
 	$form[] = new TextField('allerDate', $data['allerDate'], 'Allergie-informatie:');
 	$form[] = new SelectField('date18', $data['date18'], 'Is uw Diesdame of Diesheer meerderjarig op de dag van het gala?', $leeftijdopties);
-	$form[] = new SubmitButton('opslaan', '<a class="knop" href="/dies2014">Annuleren</a>');
+	$form[] = new SubmitButton('opslaan', '<a class="knop" href="/dies">Annuleren</a>');
 
 
-	$form = new Formulier('galaaanmelding', '/dies2014/galaaanmelding.php', $form);
+	$form = new Formulier('galaaanmelding', '/dies/galaaanmelding.php', $form);
 	$form->view();
 } else {
 	?>
