@@ -292,21 +292,21 @@ class LoginLid {
 			# dan ook uid's tussen zitten, als een daarvan gelijk is aan dat van de
 			# gebruiker heeft hij ook rechten.
 			$permissies = explode(',', $descr);
+			$result = false;
 			foreach ($permissies as $permissie) {
-				$result = false;
 				$result |= $this->hasPermission($permissie, $token_authorizable);
-				return $result;
 			}
+			return $result;
 		}
 		if (strpos($descr, '+') !== false) {
 			# Gecombineerde permissie:
 			# gebruiker moet alle permissies bezitten
 			$permissies = explode('+', $descr);
+			$result = true;
 			foreach ($permissies as $permissie) {
-				$result = true;
 				$result &= $this->hasPermission($permissie, $token_authorizable);
-				return $result;
 			}
+			return $result;
 		}
 		$permissie = trim($descr);
 		# Negatie van een permissie:
