@@ -10,7 +10,7 @@ if ($loginlid->instance()->getUid() == 'x999') {
 } else {
 	$dies = new DiesAanmelding($loginlid->getUid());
 	if ($dies->galaVol()) {
-		$bericht = '<h3>Gala is vol</h3><p>Helaas, er zijn inmiddels 80 inschrijvingen voor het gala, daarom is de inschrijving nu gesloten.</p>';
+		$bericht = '<h3>Gala is vol</h3><p>Helaas, er zijn inmiddels 100 inschrijvingen voor het gala, daarom is de inschrijving nu gesloten.</p>';
 		$ingelogd = false;
 	} else {
 		if ($_POST) {
@@ -18,18 +18,18 @@ if ($loginlid->instance()->getUid() == 'x999') {
 
 			$dies->setData($data['naamDate'], $data['eetZelf'], $data['eetDate'], $data['allerZelf'], $data['allerDate'], $data['date18']);
 			$bericht = '<p>Wijziging/aanmelding succesvol opgeslagen</p>';
-		} else {
-			if ($dies->filledInBefore()) {
-				$data = $dies->getData();
-			} else {
-				$data['eetZelf'] = 0;
-				$data['allerZelf'] = '';
-				$data['naamDate'] = '';
-				$data['eetDate'] = 0;
-				$data['allerDate'] = '';
-				$data['date18'] = 0;
-			}
-		}
+		} 
+	}
+	if ($dies->filledInBefore()) {
+		$data = $dies->getData();
+		$ingelogd = true;
+	} else {
+		$data['eetZelf'] = 0;
+		$data['allerZelf'] = '';
+		$data['naamDate'] = '';
+		$data['eetDate'] = 0;
+		$data['allerDate'] = '';
+		$data['date18'] = 0;
 	}
 }
 ?>

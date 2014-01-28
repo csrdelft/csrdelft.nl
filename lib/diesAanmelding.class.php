@@ -38,7 +38,7 @@ class DiesAanmelding {
 		while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
 			$res = $row['COUNT(*)'];
 		}
-		return $res >= 80;
+		return $res >= 100;
 	}
 
 	public function setData($naamDate, $eetZelf, $eetDate, $allerZelf, $allerDate, $date18) {
