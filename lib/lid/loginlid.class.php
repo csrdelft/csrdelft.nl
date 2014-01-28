@@ -293,7 +293,6 @@ class LoginLid {
 			# gebruiker heeft hij ook rechten.
 			$permissies = explode(',', $descr);
 			foreach ($permissies as $permissie) {
-				$permissie = trim($permissie);
 				$result |= $this->hasPermission($permissie, $token_authorizable);
 				return $result;
 			}
@@ -303,10 +302,10 @@ class LoginLid {
 			# gebruiker moet alle permissies bezitten
 			$permissies = explode('+', $descr);
 			foreach ($permissies as $permissie) {
-				$permissie = trim($permissie);
 				$result &= $this->hasPermission($permissie, $token_authorizable);
 			}
 		}
+		$permissie = trim($descr);
 		# Negatie van een permissie:
 		# gebruiker mag deze permissie niet bezitten
 		if (substr($permissie, 0, 1) == '!' && !$this->hasPermission(substr($permissie, 1), $token_authorizable)) {
