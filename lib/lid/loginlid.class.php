@@ -286,114 +286,127 @@ class LoginLid {
 		# zoek de code op
 		$lidheeft = $this->_perm_user[$liddescr];
 
-		# Het gevraagde mag een enkele permissie zijn, of meerdere, door komma's
-		# gescheiden, waarvan de gebruiker er dan een hoeft te hebben. Er kunnen
-		# dan ook uid's tussen zitten, als een daarvan gelijk is aan dat van de
-		# gebruiker heeft hij ook rechten.
-		$permissies = explode(',', $descr);
-		foreach ($permissies as $permissie) {
-			$permissies = trim($permissie);
+		if (strpos($descr, ',') !== false) {
+			# Het gevraagde mag een enkele permissie zijn, of meerdere, door komma's
+			# gescheiden, waarvan de gebruiker er dan een hoeft te hebben. Er kunnen
+			# dan ook uid's tussen zitten, als een daarvan gelijk is aan dat van de
+			# gebruiker heeft hij ook rechten.
+			$permissies = explode(',', $descr);
+			foreach ($permissies as $permissie) {
+				$permissie = trim($permissie);
+				$result |= $this->hasPermission($permissie, $token_authorizable);
+				return $result;
+			}
+		}
+		if (strpos($descr, '+') !== false) {
+			# Gecombineerde permissie:
+			# gebruiker moet alle permissies bezitten
+			$permissies = explode('+', $descr);
+			foreach ($permissies as $permissie) {
+				$permissie = trim($permissie);
+				$result &= $this->hasPermission($permissie, $token_authorizable);
+			}
+		}
+		# Negatie van een permissie:
+		# gebruiker mag deze permissie niet bezitten
+		if (substr($permissie, 0, 1) == '!' && !$this->hasPermission(substr($permissie, 1), $token_authorizable)) {
+			return true;
+		}
 
-			//een negatie van een permissie.
-			if (substr($permissie, 0, 1) == '!' && !$this->hasPermission(substr($permissie, 1), $token_authorizable)) {
+		# Normale permissie:
+		# ga alleen verder als er een geldige permissie wordt gevraagd
+		if (array_key_exists($permissie, $this->_permissions)) {
+			# zoek de code op
+			$gevraagd = (int) $this->_permissions[$permissie];
+
+			# $p is de gevraagde permissie als octaal getal
+			# de permissies van de gebruiker kunnen we bij $this->_lid opvragen
+			# als we die 2 met elkaar AND-en, dan moet het resultaat hetzelfde
+			# zijn aan de gevraagde permissie. In dat geval bestaat de permissie
+			# van het lid dus minimaal uit de gevraagde permissie
+			#
+			# voorbeeld:
+			#  gevraagd:   P_FORUM_MOD: 0000000700
+			#  lid heeft:  R_LID      : 0005544500
+			#  AND resultaat          : 0000000500 -> is niet wat gevraagd is -> weiger
+			#
+			#  gevraagd:  P_DOCS_READ : 0000004000
+			#  gebr heeft: R_LID      : 0005544500
+			#  AND resultaat          : 0000004000 -> ja!
+			$resultaat = $gevraagd & $lidheeft;
+
+			if ($resultaat == $gevraagd) {
 				return true;
 			}
+		}
 
-			//Normale permissies.
-			# ga alleen verder als er een geldige permissie wordt gevraagd
-			if (array_key_exists($permissie, $this->_permissions)) {
-				# zoek de code op
-				$gevraagd = (int) $this->_permissions[$permissie];
-
-				# $p is de gevraagde permissie als octaal getal
-				# de permissies van de gebruiker kunnen we bij $this->_lid opvragen
-				# als we die 2 met elkaar AND-en, dan moet het resultaat hetzelfde
-				# zijn aan de gevraagde permissie. In dat geval bestaat de permissie
-				# van het lid dus minimaal uit de gevraagde permissie
-				#
-				# voorbeeld:
-				#  gevraagd:   P_FORUM_MOD: 0000000700
-				#  lid heeft:  R_LID      : 0005544500
-				#  AND resultaat          : 0000000500 -> is niet wat gevraagd is -> weiger
-				#
-				#  gevraagd:  P_DOCS_READ : 0000004000
-				#  gebr heeft: R_LID      : 0005544500
-				#  AND resultaat          : 0000004000 -> ja!
-				$resultaat = $gevraagd & $lidheeft;
-
-				if ($resultaat == $gevraagd) {
+		//als een uid ingevoerd wordt true teruggeven als het om de huidige gebruiker gaat.
+		if ($permissie == $this->getUid()) {
+			return true;
+			//Behoort een lid tot een bepaalde verticale?
+		} elseif (substr($permissie, 0, 9) == 'verticale') {
+			$verticale = strtoupper(substr($permissie, 10));
+			if (is_numeric($verticale)) {
+				if ($verticale == $this->lid->getVerticaleID()) {
 					return true;
 				}
-			}
-
-			//als een uid ingevoerd wordt true teruggeven als het om de huidige gebruiker gaat.
-			if ($permissie == $this->getUid()) {
+			} elseif ($verticale == $this->lid->getVerticaleLetter()) {
 				return true;
-				//Behoort een lid tot een bepaalde verticale?
-			} elseif (substr($permissie, 0, 9) == 'verticale') {
-				$verticale = strtoupper(substr($permissie, 10));
-				if (is_numeric($verticale)) {
-					if ($verticale == $this->lid->getVerticaleID()) {
-						return true;
-					}
-				} elseif ($verticale == $this->lid->getVerticaleLetter()) {
-					return true;
-				} elseif ($verticale == strtoupper($this->lid->getVerticale())) {
-					return true;
-				}
-				//Behoort een lid tot een bepaalde (h.t.) groep?
-				//als een string als bijvoorbeeld 'pubcie' wordt meegegeven zoekt de ketzer
-				//de h.t. groep met die korte naam erbij, als het getal is uiteraard de groep
-				//met dat id.
-				//met de toevoeging '>Fiscus' kan ook specifieke functie geëist worden binnen een groep
-			} elseif (substr($permissie, 0, 5) == 'groep') {
-				require_once 'groepen/groep.class.php';
-				//splitst opgegeven term in groepsnaam en functie
-				$parts = explode(">", substr($permissie, 6), 2);
-				try {
-					$groep = new Groep($parts[0]);
-					if ($groep->isLid()) {
-						//wordt er een functie gevraagd?
-						if (isset($parts[1])) {
-							$functie = $groep->getFunctie();
-							if (strtolower($functie[0]) == strtolower($parts[1])) {
-								return true;
-							}
-						} else {
+			} elseif ($verticale == strtoupper($this->lid->getVerticale())) {
+				return true;
+			}
+			//Behoort een lid tot een bepaalde (h.t.) groep?
+			//als een string als bijvoorbeeld 'pubcie' wordt meegegeven zoekt de ketzer
+			//de h.t. groep met die korte naam erbij, als het getal is uiteraard de groep
+			//met dat id.
+			//met de toevoeging '>Fiscus' kan ook specifieke functie geëist worden binnen een groep
+		} elseif (substr($permissie, 0, 5) == 'groep') {
+			require_once 'groepen/groep.class.php';
+			//splitst opgegeven term in groepsnaam en functie
+			$parts = explode(">", substr($permissie, 6), 2);
+			try {
+				$groep = new Groep($parts[0]);
+				if ($groep->isLid()) {
+					//wordt er een functie gevraagd?
+					if (isset($parts[1])) {
+						$functie = $groep->getFunctie();
+						if (strtolower($functie[0]) == strtolower($parts[1])) {
 							return true;
 						}
+					} else {
+						return true;
 					}
-				} catch (Exception $e) {
-					//de groep bestaat niet, we gaan verder.
 				}
-				//Is een lid man, vrouw en/of geslacht?
-			} elseif (substr($permissie, 0, 8) == 'geslacht') {
-				$geslacht = strtolower(substr($permissie, 9));
-				if ($geslacht == $this->lid->getGeslacht()) {
-					return true;
-					//we zijn toch zeker niet geslacht??
-				} elseif ($geslacht == 'nee' AND $this->hasPermission('P_LOGGED_IN', $token_authorizable)) {
-					return true;
-				}
-				//Behoort een lid tot een bepaalde lichting?
-			} elseif (substr($permissie, 0, 7) == 'lidjaar') {
-				$lidjaar = substr($permissie, 8);
-				if ($lidjaar == $this->lid->getProperty('lidjaar')) {
-					return true;
-				}
-			} elseif (substr($permissie, 0, 8) == 'lichting') {
-				$lidjaar = substr($permissie, 9);
-				if ($lidjaar == $this->lid->getProperty('lidjaar')) {
-					return true;
-				}
-			} elseif (substr($permissie, 0, 10) == 'Ouderjaars' OR substr($permissie, 0, 10) == 'ouderjaars') {
-				if (Lichting::getJongsteLichting() > $this->lid->getProperty('lidjaar') AND $this->hasPermission('P_LOGGED_IN', $token_authorizable)) {
-					return true;
-				}
-			} elseif (substr($permissie, 0, 11) == 'eerstejaars' OR substr($permissie, 0, 11) == 'eerstejaars') {
-				if (Lichting::getJongsteLichting() == $this->lid->getProperty('lidjaar') AND $this->hasPermission('P_LOGGED_IN', $token_authorizable)) {
-					return true;
-				}
+			} catch (Exception $e) {
+				//de groep bestaat niet, we gaan verder.
+			}
+			//Is een lid man, vrouw en/of geslacht?
+		} elseif (substr($permissie, 0, 8) == 'geslacht') {
+			$geslacht = strtolower(substr($permissie, 9));
+			if ($geslacht == $this->lid->getGeslacht()) {
+				return true;
+				//we zijn toch zeker niet geslacht??
+			} elseif ($geslacht == 'nee' AND $this->hasPermission('P_LOGGED_IN', $token_authorizable)) {
+				return true;
+			}
+			//Behoort een lid tot een bepaalde lichting?
+		} elseif (substr($permissie, 0, 7) == 'lidjaar') {
+			$lidjaar = substr($permissie, 8);
+			if ($lidjaar == $this->lid->getProperty('lidjaar')) {
+				return true;
+			}
+		} elseif (substr($permissie, 0, 8) == 'lichting') {
+			$lidjaar = substr($permissie, 9);
+			if ($lidjaar == $this->lid->getProperty('lidjaar')) {
+				return true;
+			}
+		} elseif (substr($permissie, 0, 10) == 'Ouderjaars' OR substr($permissie, 0, 10) == 'ouderjaars') {
+			if (Lichting::getJongsteLichting() > $this->lid->getProperty('lidjaar') AND $this->hasPermission('P_LOGGED_IN', $token_authorizable)) {
+				return true;
+			}
+		} elseif (substr($permissie, 0, 11) == 'eerstejaars' OR substr($permissie, 0, 11) == 'eerstejaars') {
+			if (Lichting::getJongsteLichting() == $this->lid->getProperty('lidjaar') AND $this->hasPermission('P_LOGGED_IN', $token_authorizable)) {
+				return true;
 			}
 		}
 		# Zo niet... dan niet
