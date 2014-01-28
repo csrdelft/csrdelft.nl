@@ -66,6 +66,7 @@
 			{icon get="comment" title=$aanmelding->getGastenOpmerking()}
 		{/if}
 	{else}
+	{if $aanmelding->getAantalGasten() > 0}
 		<div onclick="taken_toggle_hiddenform(this);" title="{$aanmelding->getGastenOpmerking()}">
 		{if $aanmelding->getGastenOpmerking()}
 			<a class="knop">{icon get="comment_edit" title=$aanmelding->getGastenOpmerking()}</a>
@@ -78,6 +79,7 @@
 			<a onclick="$(this).parent().submit();" title="Wijzigingen opslaan" class="knop">{icon get="accept"}</a>
 			<a onclick="taken_toggle_hiddenform($(this).parent());" title="Annuleren" class="knop">{icon get="delete"}</a>
 		</form>
+	{/if}
 	{/if}
 	</td>
 {else}
