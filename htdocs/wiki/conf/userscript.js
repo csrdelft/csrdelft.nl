@@ -3,7 +3,6 @@
  *  - blockquote
  */
 // try to add button to toolbar
-console.log(window.toolbar);
 if (window.toolbar != undefined) {
     jQuery.each(window.toolbar, function(i, button) {
         if(button.title == "Wrap Plugin") {
