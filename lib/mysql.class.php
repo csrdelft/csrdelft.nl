@@ -90,9 +90,21 @@ class MySql{
 	  return $this->query($query);
 	}
 
-	public function next($result)		{ return mysql_fetch_assoc($result); }
-	public function next_array($result)	{ return mysql_fetch_array($result); }
-	public function numRows($result)	{ return mysql_num_rows($result); }
+	public function next($result)		{
+		if(!$result) die ('Unable to run query: '.mysql_error());
+		return mysql_fetch_assoc($result);
+	}
+	
+	public function next_array($result)	{
+		if(!$result) die ('Unable to run query: '.mysql_error());
+		return mysql_fetch_array($result);
+	}
+	
+	public function numRows($result)	{
+		if(!$result) die ('Unable to run query: '.mysql_error());
+		return mysql_num_rows($result);
+	}
+	
 	public function insert_id()			{ return mysql_insert_id($this->_db); }
 	public function affected_rows() 	{ return mysql_affected_rows($this->_db); }
 
