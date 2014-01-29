@@ -306,7 +306,7 @@ class ProfielBewerken extends Profiel {
 		$form[] = new UrlField('website', $profiel['website'], 'Website');
 
 		$form[] = new Subkopje('Boekhouding:');
-		$form[] = new TextField('bankrekening', $profiel['bankrekening'], 'Bankrekening', 11); //TODO specifiek ding voor maken
+		$form[] = new TextField('bankrekening', $profiel['bankrekening'], 'Bankrekening', 18); //TODO specifiek ding voor maken
 		if ($hasLedenMod) {
 			$form[] = new JaNeeField('machtiging', $profiel['machtiging'], 'Machtiging getekend?');
 		}
