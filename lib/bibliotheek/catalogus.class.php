@@ -275,11 +275,8 @@ private $iKolommenZichtbaar; //aantal kolommen zichtbaar in de tabel.
 			if ($db->numRows($result) > 0) {
 				while ($prop = $db->next($result)) {
 					if($sKey=='biebboek'){
-						$data = array('titel' => $prop['titel'], 'auteur' => $prop['auteur'], 'id' => $prop['id']);
-						$properties[] = array(
-							'data' => $data,
-							'value' => $prop['titel'],
-							'result' => $prop['id']);
+						//input for UI autocomplete
+						$properties[] = array('titel' => $prop['titel'], 'auteur' => $prop['auteur'], 'id' => $prop['id']);
 					}else{
 						if ($sKey == 'titel') {
 							$data = array('titel' => $prop['titel'], 'id' => $prop['id']);

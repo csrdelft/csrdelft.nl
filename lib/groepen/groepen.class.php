@@ -420,10 +420,7 @@ class Groepen{
 		$rGroepen=$db->query($qLookup);
 		if ($rGroepen !== false and $db->numRows($rGroepen) > 0){
 			while($row=$db->next($rGroepen)){
-				$groepen[] = array(
-					'data' => $row,
-					'value' => $row['naam'],
-					'result' => $row['id']);
+				$groepen[] = $row;
 			}
 		}
 		return $groepen;

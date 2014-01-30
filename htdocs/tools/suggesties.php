@@ -44,11 +44,7 @@ switch ($datatype) {
 				$bestandsnaam = $document->getBestandsnaam();
 				$id = $document->getID();
 
-				$result[] = array(
-					'data' => array('naam'=>$naam, 'bestandsnaam'=>$bestandsnaam, 'id'=>$id),
-					'value' => $naam,
-					'result' => $id
-				);
+				$result[] = array('naam'=>$naam, 'bestandsnaam'=>$bestandsnaam, 'id'=>$id);
 			}
 		}
 		break;
@@ -78,5 +74,5 @@ exit;
 
 
 function printmessage($error) {
-	echo json_encode(array(array('data' => array($error), 'value' => $error, 'result' => '')));
+	echo json_encode(array(array('error' => $error)));
 }

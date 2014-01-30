@@ -41,5 +41,3 @@ foreach($namen as $naam){
 }
 echo json_encode($result);
 exit;
-
-?>

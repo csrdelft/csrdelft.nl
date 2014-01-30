@@ -1198,6 +1198,7 @@ htdocs/wiki/lib/plugins/csrlink/script/autocomplete/jquery.autocomplete.js -text
 htdocs/wiki/lib/plugins/csrlink/script/autocomplete/jquery.autocomplete.min.js -text
 htdocs/wiki/lib/plugins/csrlink/script/autocompletion.js -text
 htdocs/wiki/lib/plugins/csrlink/style.css -text
+htdocs/wiki/lib/plugins/csrlink/style.less -text
 htdocs/wiki/lib/plugins/csrlink/syntax/bieblink.php -text
 htdocs/wiki/lib/plugins/csrlink/syntax/documentlink.php -text
 htdocs/wiki/lib/plugins/csrlink/syntax/groeplink.php -text
