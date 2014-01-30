@@ -2,6 +2,9 @@
  * Adds suggestions from csrdelft.nl to inputs in the wiki
  */
 var CSRAutocomplete = {
+    /**
+     * Properties for groep, lid, document and boek autocompletion
+     */
     props: {
         groep: {
             datatype: 'groep',
@@ -48,15 +51,34 @@ var CSRAutocomplete = {
         }
     },
 
-    split: function (val) {
-        return val.split(/,\s*/);
+    /**
+     * Splits de waarde op komma-spatie combi's
+     *
+     * @param {string} value
+     * @returns {*|Array} array met termen
+     */
+    split: function (value) {
+        return value.split(/,\s*/);
     },
 
+    /**
+     * Bepaald de laatste zoekterm in de invoer
+     *
+     * @param term
+     * @returns {String}
+     */
     extractLast: function (term) {
         return CSRAutocomplete.split(term).pop();
     },
 
-    // id, type, snaam, naam, status
+    /**
+     * Haalt suggesties op van de server en parsed die in een array met labels en waardes
+     *
+     * @param {Object} request with single property 'term' containing the search term
+     * @param {Function} response callback, with one argument: the data Array
+     * @param {Function} getTerm returns the search term, retrieved from the request argument
+     * @param {Object} props properties
+     */
     remotesource: function (request, response, getTerm, props) {
         jQuery.getJSON(
             props.url,
@@ -84,10 +106,17 @@ var CSRAutocomplete = {
         );
     },
 
-
+    /**
+     * Initialiseert autocomplete m.b.v. de gegevens in props
+     *
+     * @param {Element} input die moet worden voorzien van autocomplete
+     * @param {Function} resulthandler actie uit te voeren na nieuwe invoer
+     * @param {Object} props eigenschappen voor de autocomplete
+     */
     initAutocomplete: function (input, resulthandler, props) {
         var $input = jQuery(input);
 
+        // info van de input aanvullen van de properties
         props = jQuery.extend({}, {
             url: '/tools/suggesties.php',
             type: $input.data('type') || 0,
@@ -96,7 +125,7 @@ var CSRAutocomplete = {
             zoekin: $input.data('zoekin') || ''
         }, props);
 
-
+        // opties voor alle autocompletes
         var options = {
             source: function (request, response) {
                 function getTerm(req) {
@@ -108,6 +137,7 @@ var CSRAutocomplete = {
             change: resulthandler
         };
 
+        // aanvullende opties voor autocompletes die meerdere waardes accepteren
         var multipleoptions = {
             minLength: 0,
             source: function (request, response) {
@@ -138,14 +168,19 @@ var CSRAutocomplete = {
                 return false;
             }
         };
+        // combineren van opties
         if (props.multiple) {
             options = jQuery.extend({}, options, multipleoptions);
         }
 
+        // autocomplete initialiseren
         $input.autocomplete(options);
     }
 };
 
+/**
+ * Triggert keyup events - nodig voor bureaucracy fieldsets
+ */
 function triggerFieldset() {
     //trigger depending fieldset
     jQuery(this).keyup();

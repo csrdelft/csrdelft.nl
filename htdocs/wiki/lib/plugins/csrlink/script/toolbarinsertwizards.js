@@ -146,6 +146,13 @@ if (window.toolbar != undefined) {
     };
 }
 
+/**
+ * Wizard die invoerveld met invoegknop weergeeft.
+ * Bij invoegen wordt respectievelijke syntax in textarea geplaatst.
+ *
+ * @param {Object} overrides Object met waardes die bestaande onderdelen aanvullen of vervangen
+ * @returns {Object} CSRLink object
+ */
 jQuery.fn.csrLink = function (overrides) {
     var CSRLink = {
 
@@ -159,6 +166,9 @@ jQuery.fn.csrLink = function (overrides) {
             zoekin: ''
         },
 
+        /**
+         * Draws dialog and add its event handlers
+         */
         init: function () {
             // position relative to the text area
             var pos = CSRLink.$textArea.position();
