@@ -1192,10 +1192,6 @@ htdocs/wiki/lib/plugins/csrlink/lang/en/lang.php -text
 htdocs/wiki/lib/plugins/csrlink/lang/en/settings.php -text
 htdocs/wiki/lib/plugins/csrlink/plugin.info.txt -text
 htdocs/wiki/lib/plugins/csrlink/script.js -text
-htdocs/wiki/lib/plugins/csrlink/script/autocomplete/indicator.gif -text
-htdocs/wiki/lib/plugins/csrlink/script/autocomplete/jquery.autocomplete.css -text
-htdocs/wiki/lib/plugins/csrlink/script/autocomplete/jquery.autocomplete.js -text
-htdocs/wiki/lib/plugins/csrlink/script/autocomplete/jquery.autocomplete.min.js -text
 htdocs/wiki/lib/plugins/csrlink/script/autocompletion.js -text
 htdocs/wiki/lib/plugins/csrlink/style.css -text
 htdocs/wiki/lib/plugins/csrlink/style.less -text
