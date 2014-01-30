@@ -9,7 +9,10 @@ Voor vragen kunt u contact opnemen met de CorveeCaesar: <a href="mailto:corvee@c
 {else}
 <p>
 De onderstaande tabel toont de aankomende corveetaken waarvoor u bent ingedeeld.
-Als u niet kunt op de betreffende datum kunt u proberen te ruilen via het <a href="/communicatie/forum" title="Forum">forum</a>.
+Als u niet kunt op de betreffende datum bent u zelf verantwoordelijk voor het regelen van een vervanger en dit te melden aan de <a href="mailto:corvee@csrdelft.nl">CorveeCaesar</a>.
+</p>
+<p>
+Tip: zoek in het <a href="/corveerooster" title="Corveerooster">corveerooster</a> iemand met dezelfde taak wanneer u zelf wel kunt om te ruilen.
 </p>
 {include file='taken/corveetaak/corvee_rooster.tpl' mijn=true}
 {/if}
