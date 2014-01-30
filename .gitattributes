@@ -1193,7 +1193,6 @@ htdocs/wiki/lib/plugins/csrlink/lang/en/settings.php -text
 htdocs/wiki/lib/plugins/csrlink/plugin.info.txt -text
 htdocs/wiki/lib/plugins/csrlink/script.js -text
 htdocs/wiki/lib/plugins/csrlink/script/autocompletion.js -text
-htdocs/wiki/lib/plugins/csrlink/style.css -text
 htdocs/wiki/lib/plugins/csrlink/style.less -text
 htdocs/wiki/lib/plugins/csrlink/syntax/bieblink.php -text
 htdocs/wiki/lib/plugins/csrlink/syntax/documentlink.php -text
