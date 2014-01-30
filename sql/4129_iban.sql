@@ -1,0 +1,1 @@
+ALTER TABLE `lid` CHANGE `bankrekening` `bankrekening` VARCHAR( 18 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '';
