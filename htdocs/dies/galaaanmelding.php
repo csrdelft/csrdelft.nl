@@ -12,13 +12,12 @@ if ($loginlid->instance()->getUid() == 'x999') {
 	if ($dies->galaVol()) {
 		$bericht = '<h3>Gala is vol</h3><p>Helaas, er zijn inmiddels 100 inschrijvingen voor het gala, daarom is de inschrijving nu gesloten.</p>';
 		$ingelogd = false;
-	} else {
-		if ($_POST) {
-			$data = $_POST;
+	}
+	if ($_POST) {
+		$data = $_POST;
 
-			$dies->setData($data['naamDate'], $data['eetZelf'], $data['eetDate'], $data['allerZelf'], $data['allerDate'], $data['date18']);
-			$bericht = '<p>Wijziging/aanmelding succesvol opgeslagen</p>';
-		} 
+		$dies->setData($data['naamDate'], $data['eetZelf'], $data['eetDate'], $data['allerZelf'], $data['allerDate'], $data['date18']);
+		$bericht = '<p>Wijziging/aanmelding succesvol opgeslagen</p>';
 	}
 	if ($dies->filledInBefore()) {
 		$data = $dies->getData();
