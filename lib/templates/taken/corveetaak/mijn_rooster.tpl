@@ -9,7 +9,7 @@ Voor vragen kunt u contact opnemen met de CorveeCaesar: <a href="mailto:corvee@c
 {else}
 <p>
 De onderstaande tabel toont de aankomende corveetaken waarvoor u bent ingedeeld.
-Als u niet kunt op de betreffende datum kunt u proberen te <a href="/communicatie/forum/zoeken.php?zoeken=corveedraad" title="Ruilen">ruilen via het forum</a>.
+Als u niet kunt op de betreffende datum kunt u proberen te ruilen via het <a href="/communicatie/forum" title="Forum">forum</a>.
 </p>
 {include file='taken/corveetaak/corvee_rooster.tpl' mijn=true}
 {/if}
