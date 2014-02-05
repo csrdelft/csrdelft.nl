@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="utf-8">
+	<meta name="google-site-verification" content="zLTm1NVzZPHx7jiGHBpe4HeH1goQAlJej2Rdc0_qKzE" />
     <title>C.S.R. Delft - {$body->getTitel()}</title>
 
     {foreach from=$view->getStylesheets() item=sheet}
