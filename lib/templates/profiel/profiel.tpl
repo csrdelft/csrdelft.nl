@@ -20,9 +20,6 @@
 							title="Reset wachtwoord voor {$profiel->getNaam()}"
 							onclick="return confirm('Weet u zeker dat u het wachtwoord van deze gebruiker wilt resetten?')">
 							{icon get="resetpassword"}</a>
-						{if $loginlid->maySuTo($profiel->getLid())}
-							<a href="/su/{$profiel->getUid()}/" class="knop" title="Su naar dit lid">{icon get='su'}</a>
-						{/if}
 					{/if}
 					{if $profiel->getStatus()=='S_NOVIET' AND $loginlid->hasPermission('groep:novcie')}
 						<a href="/communicatie/profiel/{$profiel->getUid()}/novietBewerken" class="knop"><img src="{$CSR_PICS}forum/bewerken.png" title="Bewerk dit profiel" />Noviet bewerken</a><br />
@@ -43,7 +40,12 @@
 		<div class="left">Naam</div>
 		<div class="gegevens">
 			<div class="label">&nbsp;</div> {$profiel->getNaamLink('civitas', 'plain')}<br />
-			<div class="label">Lidnummer:</div> {$profhtml.uid}<br />
+			<div class="label">Lidnummer:</div>
+			{if $loginlid->maySuTo($profiel->getLid())}
+				<a href="/su/{$profiel->getUid()}/" title="Su naar dit lid">{$profiel->getUid()}</a>
+			{else}
+				{$profhtml.uid}
+			{/if}<br />
 			{if $profhtml.nickname!=''}<div class="label">Bijnaam:</div> {$profhtml.nickname}<br />{/if}
 			{if $profhtml.voorletters!=''}<div class="label">Voorletters:</div> {$profhtml.voorletters}<br />{/if}
 			{if $profhtml.gebdatum!='0000-00-00'}<div class="label">Geb.datum:</div> {$profhtml.gebdatum|date_format:"%d-%m-%Y"}<br />{/if}
