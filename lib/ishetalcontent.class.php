@@ -15,13 +15,14 @@ class IsHetAlContent extends TemplateView {
 		}
 		switch ($this->ishetal) {
 			case 'dies' : 
-				$dies = strtotime(date('Y') . '-02-11');
+				$begin = strtotime('2014-02-11');
+				$einde = strtotime('2014-02-21');
 				$nu = strtotime(date('Y-m-d'));
-				if ($dies < $nu) {
-					$dies = strtotime('+1 year', $dies);
+				if ($nu > $einde) {
+					$begin = strtotime('+1 year', $begin);
 				}
-				$dagen = round(($dies - $nu) / 86400);
-				if ($dagen == 0) {
+				$dagen = round(($begin - $nu) / 86400);
+				if ($dagen <= 0) {
 					$this->ja = true;
 				} else {
 					$this->ja = $dagen;
