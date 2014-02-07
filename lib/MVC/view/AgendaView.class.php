@@ -1,23 +1,22 @@
 <?php
 
-# C.S.R. Delft | pubcie@csrdelft.nl
-# -------------------------------------------------------------------
-# class.agendacontent.php
-# -------------------------------------------------------------------
-# Klasse voor het weergeven van agenda-gerelateerde dingen.
-# -------------------------------------------------------------------
+require_once 'MVC/controller/AgendaController.class.php';
 
-require_once 'agenda.class.php';
+/**
+ * AgendaView.class.php
+ * 
+ * @author C.S.R. Delft <pubcie@csrdelft.nl>
+ * @author P.W.G. Brussee <brussee@live.nl>
+ * 
+ * Klasse voor het weergeven van agenda-gerelateerde dingen.
+ */
+class AgendaMaandView extends TemplateView {
 
-class AgendaMaandContent extends TemplateView {
-
-	private $agenda;
 	private $jaar;
 	private $maand;
 
-	public function __construct($agenda, $jaar, $maand) {
-		parent::__construct();
-		$this->agenda = $agenda;
+	public function __construct(AgendaModel $agenda, $jaar, $maand) {
+		parent::__construct($agenda);
 		$this->jaar = $jaar;
 		$this->maand = $maand;
 	}
@@ -27,12 +26,10 @@ class AgendaMaandContent extends TemplateView {
 	}
 
 	public function view() {
-		$filter = !LoginLid::instance()->hasPermission('P_AGENDA_MOD');
-
 		$this->smarty->assign('datum', strtotime($this->jaar . '-' . $this->maand . '-01'));
-		$this->smarty->assign('weken', $this->agenda->getItemsByMaand($this->jaar, $this->maand, $filter));
-		$this->smarty->assign('magToevoegen', $this->agenda->magToevoegen());
-		$this->smarty->assign('magBeheren', $this->agenda->magBeheren());
+		$this->smarty->assign('weken', $this->model->getItemsByMaand($this->jaar, $this->maand));
+		$this->smarty->assign('magToevoegen', AgendaController::magToevoegen());
+		$this->smarty->assign('magBeheren', AgendaController::magBeheren());
 
 		// URL voor vorige maand
 		$urlVorige = CSR_ROOT . 'actueel/agenda/';
@@ -57,39 +54,33 @@ class AgendaMaandContent extends TemplateView {
 
 }
 
-class AgendaItemContent extends TemplateView {
+class AgendaItemView extends TemplateView {
 
-	private $agenda;
-	private $item;
 	private $actie;
 
-	public function __construct($agenda, $item, $actie) {
-		parent::__construct();
-		$this->agenda = $agenda;
-		$this->item = $item;
+	public function __construct(AgendaItem $item, $actie) {
+		parent::__construct($item);
 		$this->actie = $actie;
 	}
 
 	public function getTitel() {
-		return 'Agenda - Item toevoegen';
+		return 'Agenda - Item ' . $this->actie;
 	}
 
 	public function view() {
-		$this->smarty->assign('item', $this->item);
+		$this->smarty->assign('item', $this->model);
 		$this->smarty->assign('actie', $this->actie);
-		$this->smarty->display('agenda/item.tpl');
+		$this->smarty->display('agenda/item_form.tpl');
 	}
 
 }
 
-class AgendaZijbalkContent extends TemplateView {
+class AgendaZijbalkView extends TemplateView {
 
-	private $agenda;
 	private $aantalWeken;
 
 	public function __construct($agenda, $aantalWeken) {
-		parent::__construct();
-		$this->agenda = $agenda;
+		parent::__construct($agenda);
 		$this->aantalWeken = $aantalWeken;
 	}
 
@@ -98,12 +89,10 @@ class AgendaZijbalkContent extends TemplateView {
 	}
 
 	public function view() {
-		$filter = !LoginLid::instance()->hasPermission('P_AGENDA_MOD');
-
 		$beginMoment = strtotime(date('Y-m-d'));
 		$eindMoment = strtotime('+' . $this->aantalWeken . ' weeks', $beginMoment);
 		$eindMoment = strtotime('next saturday', $eindMoment);
-		$items = $this->agenda->getItems($beginMoment, $eindMoment, $filter);
+		$items = $this->model->getAllAgendeerbaar($beginMoment, $eindMoment);
 
 		if (count($items) > LidInstellingen::get('zijbalk', 'agenda_max')) {
 			$items = array_slice($items, 0, LidInstellingen::get('zijbalk', 'agenda_max'));
@@ -115,25 +104,24 @@ class AgendaZijbalkContent extends TemplateView {
 
 }
 
-class AgendaCourantContent extends TemplateView {
+class AgendaCourantView extends TemplateView {
 
-	private $agenda;
 	private $aantalWeken;
 
-	public function __construct($agenda, $aantalWeken) {
-		parent::__construct();
-		$this->agenda = $agenda;
+	public function __construct(AgendaModel $agenda, $aantalWeken) {
+		parent::__construct($agenda);
 		$this->aantalWeken = $aantalWeken;
 	}
 
-	public function view() {
-		$filter = !LoginLid::instance()->hasPermission('P_AGENDA_MOD');
+	public function getTitel() {
+		return 'Agenda - Courant';
+	}
 
+	public function view() {
 		$beginMoment = strtotime(date('Y-m-d'));
 		$eindMoment = strtotime('+' . $this->aantalWeken . ' weeks', $beginMoment);
 		$eindMoment = strtotime('next saturday', $eindMoment);
-		$items = $this->agenda->getItems($beginMoment, $eindMoment, $filter);
-
+		$items = $this->model->getAllAgendeerbaar($beginMoment, $eindMoment);
 
 		$this->smarty->assign('items', $items);
 		$this->smarty->display('agenda/courant.tpl');
@@ -141,24 +129,19 @@ class AgendaCourantContent extends TemplateView {
 
 }
 
-class AgendaIcalendarContent extends TemplateView {
+class AgendaICalendarContent extends TemplateView {
 
-	private $agenda;
+	public function __construct(AgendaModel $agenda) {
+		parent::__construct($agenda);
+	}
 
-	public function __construct($agenda) {
-		parent::__construct();
-		$this->agenda = $agenda;
+	public function getTitel() {
+		return 'Agenda - iCalendar';
 	}
 
 	public function view() {
-		$filter = !LoginLid::instance()->hasPermission('P_AGENDA_MOD');
-		$items = $this->agenda->getItems(null, null, $filter);
-
-
-		$this->smarty->assign('items', $items);
+		$this->smarty->assign('items', $this->model->getiCalendarItems());
 		$this->smarty->display('agenda/icalendar.tpl');
 	}
 
 }
-
-?>

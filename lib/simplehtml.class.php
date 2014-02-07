@@ -65,9 +65,8 @@ abstract class SimpleHTML implements View {
 		}
 		// Agenda
 		if (LoginLid::instance()->hasPermission('P_AGENDA_READ') && LidInstellingen::get('zijbalk', 'agendaweken') > 0) {
-			require_once('agenda/agenda.class.php');
-			require_once('agenda/agendacontent.class.php');
-			$zijkolom[] = new AgendaZijbalkContent(new Agenda(), LidInstellingen::get('zijbalk', 'agendaweken'));
+			require_once('MVC/view/AgendaView.class.php');
+			$zijkolom[] = new AgendaZijbalkView(new AgendaModel(), LidInstellingen::get('zijbalk', 'agendaweken'));
 		}
 		// Laatste mededelingen
 		if (LidInstellingen::get('zijbalk', 'mededelingen') > 0) {

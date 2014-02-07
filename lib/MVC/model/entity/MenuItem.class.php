@@ -25,7 +25,7 @@ class MenuItem extends PersistentEntity {
 	 * Volgorde van weergave
 	 * @var int
 	 */
-	public $prioriteit = 0;
+	public $prioriteit;
 	/**
 	 * Link tekst
 	 * @var string
@@ -45,7 +45,7 @@ class MenuItem extends PersistentEntity {
 	 * Zichtbaar of verborgen
 	 * @var boolean
 	 */
-	public $zichtbaar = false;
+	public $zichtbaar;
 	/**
 	 * Unieke naam per menu
 	 * @var string

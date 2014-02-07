@@ -22,8 +22,7 @@ etc/soccie.ini.sample -text
 gozerbot/csrdelft.py -text
 htdocs/.htaccess -text
 htdocs/actueel/.htaccess -text
-htdocs/actueel/agenda/.htaccess -text
-htdocs/actueel/agenda/index.php -text
+htdocs/actueel/agenda.php -text
 htdocs/actueel/bijbelrooster.php -text
 htdocs/actueel/courant/.htaccess -text
 htdocs/actueel/courant/archief.php -text
@@ -3042,10 +3041,13 @@ htdocs_confide/streeplijstrapportage.php -text
 images/famfamfam/.index -text
 images/robots.txt -text
 lib/MVC/controller/AclController.abstract.php -text
+lib/MVC/controller/AgendaController.class.php -text
 lib/MVC/controller/Controller.abstract.php -text
 lib/MVC/controller/InstellingenBeheerController.class.php -text
 lib/MVC/controller/LidInstellingenController.class.php -text
 lib/MVC/controller/MenuBeheerController.class.php -text
+lib/MVC/model/AgendaModel.class.php -text
+lib/MVC/model/Agendeerbaar.interface.php -text
 lib/MVC/model/Database.singleton.php -text
 lib/MVC/model/Instellingen.singleton.php -text
 lib/MVC/model/LidInstellingen.singleton.php -text
@@ -3053,6 +3055,7 @@ lib/MVC/model/MenuModel.class.php -text
 lib/MVC/model/PaginationModel.abstract.php -text
 lib/MVC/model/Persistence.interface.php -text
 lib/MVC/model/PersistenceModel.abstract.php -text
+lib/MVC/model/entity/AgendaItem.class.php -text
 lib/MVC/model/entity/Bestuur.class.php -text
 lib/MVC/model/entity/Commissie.class.php -text
 lib/MVC/model/entity/ForumCategorie.class.php -text
@@ -3069,6 +3072,7 @@ lib/MVC/model/entity/Mail.class.php -text
 lib/MVC/model/entity/Mededeling.class.php -text
 lib/MVC/model/entity/MenuItem.class.php -text
 lib/MVC/model/entity/PersistentEntity.abstract.php -text
+lib/MVC/view/AgendaView.class.php -text
 lib/MVC/view/CsrSmarty.class.php -text
 lib/MVC/view/CsrUbb.class.php -text
 lib/MVC/view/InstellingenBeheerView.class.php -text
@@ -3434,9 +3438,6 @@ lib/Zend/Validate/Hostname/Jp.php -text
 lib/Zend/Validate/Interface.php -text
 lib/Zend/Validate/Ip.php -text
 lib/Zend/Version.php -text
-lib/agenda/agenda.class.php -text
-lib/agenda/agendacontent.class.php -text
-lib/agenda/agendacontroller.class.php -text
 lib/bibliotheek/beschrijving.class.php -text
 lib/bibliotheek/bibliotheekcontent.class.php -text
 lib/bibliotheek/bibliotheekcontroller.class.php -text
@@ -3823,10 +3824,8 @@ lib/templates/MVC/menu/menu.tpl -text
 lib/templates/MVC/menu/menu_block.tpl -text
 lib/templates/agenda/courant.tpl -text
 lib/templates/agenda/icalendar.tpl -text
-lib/templates/agenda/item.tpl -text
-lib/templates/agenda/jaar.tpl -text
+lib/templates/agenda/item_form.tpl -text
 lib/templates/agenda/maand.tpl -text
-lib/templates/agenda/week.tpl -text
 lib/templates/agenda/zijbalk.tpl -text
 lib/templates/bibliotheek/boek.tpl -text
 lib/templates/bibliotheek/boek.ubb.tpl -text
@@ -4010,3 +4009,4 @@ sql/4014_drop_sjaarsacties.sql -text
 sql/4015_drop_oude_vormingsbank.sql -text
 sql/4129_iban.sql -text
 sql/4142_lidinstellingen.sql -text
+sql/4160_agenda.sql -text

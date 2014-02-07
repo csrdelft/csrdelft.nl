@@ -1,6 +1,5 @@
 <?php
 
-
 require_once 'taken/model/entity/CorveeTaak.class.php';
 require_once 'taken/model/FunctiesModel.class.php';
 require_once 'taken/model/PuntenModel.class.php';
@@ -15,7 +14,7 @@ class TakenModel {
 		$taak->setWanneerGemaild(date('Y-m-d H:i'));
 		self::updateTaak($taak);
 	}
-	
+
 	public static function taakToewijzenAanLid(CorveeTaak $taak, $uid) {
 		if ($taak->getLidId() === $uid) {
 			return false;
@@ -31,13 +30,12 @@ class TakenModel {
 		$taak->setLidId($uid);
 		if ($puntenruilen && $uid !== null) {
 			self::puntenToekennen($taak);
-		}
-		else {
+		} else {
 			self::updateTaak($taak);
 		}
 		return true;
 	}
-	
+
 	public static function puntenToekennen(CorveeTaak $taak) {
 		$db = \Database::instance();
 		try {
@@ -48,13 +46,12 @@ class TakenModel {
 			$taak->setWanneerToegekend(date('Y-m-d H:i'));
 			self::updateTaak($taak);
 			$db->commit();
-		}
-		catch (\Exception $e) {
+		} catch (\Exception $e) {
 			$db->rollback();
 			throw $e; // rethrow to controller
 		}
 	}
-	
+
 	public static function puntenIntrekken(CorveeTaak $taak) {
 		$db = \Database::instance();
 		try {
@@ -65,12 +62,12 @@ class TakenModel {
 			$taak->setWanneerToegekend(null);
 			self::updateTaak($taak);
 			$db->commit();
-		}
-		catch (\Exception $e) {
+		} catch (\Exception $e) {
 			$db->rollback();
 			throw $e; // rethrow to controller
 		}
 	}
+
 	public static function getRoosterMatrix(array $taken) {
 		$matrix = array();
 		foreach ($taken as $taak) {
@@ -80,16 +77,16 @@ class TakenModel {
 		}
 		return $matrix;
 	}
-	
+
 	public static function getKomendeTaken() {
 		return self::loadTaken('verwijderd = false AND datum >= ?', array(date('Y-m-d')));
 	}
-	
+
 	public static function getVerledenTaken() {
 		return self::loadTaken('verwijderd = false AND datum < ?', array(date('Y-m-d')));
 	}
-	
-	public static function getAlleTaken($groupByUid=false) {
+
+	public static function getAlleTaken($groupByUid = false) {
 		$taken = self::loadTaken('verwijderd = false');
 		if ($groupByUid) {
 			$takenByUid = array();
@@ -103,11 +100,11 @@ class TakenModel {
 		}
 		return $taken;
 	}
-	
+
 	public static function getVerwijderdeTaken() {
 		return self::loadTaken('verwijderd = true');
 	}
-	
+
 	public static function getTaak($tid) {
 		$taak = self::loadTaak($tid);
 		if ($taak->getIsVerwijderd()) {
@@ -115,18 +112,18 @@ class TakenModel {
 		}
 		return $taak;
 	}
-	
+
 	private static function loadTaak($tid) {
 		if (!is_int($tid) || $tid <= 0) {
-			throw new Exception('Load taak faalt: Invalid $tid ='. $tid);
+			throw new Exception('Load taak faalt: Invalid $tid =' . $tid);
 		}
 		$taken = self::loadTaken('taak_id = ?', array($tid), 1);
 		if (!array_key_exists(0, $taken)) {
-			throw new Exception('Load taak faalt: Not found $tid ='. $tid);
+			throw new Exception('Load taak faalt: Not found $tid =' . $tid);
 		}
 		return $taken[0];
 	}
-	
+
 	/**
 	 * Haalt de taken op voor het ingelode lid of alle leden tussen de opgegeven data.
 	 * 
@@ -134,17 +131,11 @@ class TakenModel {
 	 * @param timestamp $tot
 	 * @return CorveeTaak[] (implements Agendeerbaar)
 	 */
-	public static function getTakenVoorAgenda($van, $tot, $iedereen=false) {
-		if ($van === null) { // RSS
-			$van = strtotime('-1 year');
-		}
-		elseif (!is_int($van)) {
+	public static function getTakenVoorAgenda($van, $tot, $iedereen = false) {
+		if (!is_int($van)) {
 			throw new Exception('Invalid timestamp: $van getTakenVoorAgenda()');
 		}
-		if ($tot === null) {
-			$tot = strtotime('+1 year');
-		}
-		elseif (!is_int($tot)) {
+		if (!is_int($tot)) {
 			throw new Exception('Invalid timestamp: $tot getTakenVoorAgenda()');
 		}
 		$where = 'verwijderd = false AND datum >= ? AND datum <= ?';
@@ -155,7 +146,7 @@ class TakenModel {
 		}
 		return self::loadTaken($where, $values);
 	}
-	
+
 	/**
 	 * Haalt de taken op voor een lid.
 	 * 
@@ -165,7 +156,7 @@ class TakenModel {
 	public static function getTakenVoorLid($uid) {
 		return self::loadTaken('verwijderd = false AND lid_id = ?', array($uid));
 	}
-	
+
 	/**
 	 * Zoekt de laatste taak op van een lid.
 	 * 
@@ -179,7 +170,7 @@ class TakenModel {
 		}
 		return $taken[0];
 	}
-	
+
 	/**
 	 * Haalt de komende taken op waarvoor een lid is ingedeeld.
 	 * 
@@ -189,15 +180,14 @@ class TakenModel {
 	public static function getKomendeTakenVoorLid($uid) {
 		return self::loadTaken('verwijderd = false AND lid_id = ? AND datum >= ?', array($uid, date('Y-m-d')));
 	}
-	
+
 	public static function saveTaak($tid, $fid, $uid, $crid, $mid, $datum, $punten, $bonus_malus) {
 		$db = \Database::instance();
 		try {
 			$db->beginTransaction();
 			if ($tid === 0) {
 				$taak = self::newTaak($fid, $uid, $crid, $mid, $datum, $punten, $bonus_malus);
-			}
-			else {
+			} else {
 				$taak = self::getTaak($tid);
 				if ($taak->getFunctieId() !== $fid) {
 					$taak->setCorveeRepetitieId(null);
@@ -214,13 +204,12 @@ class TakenModel {
 			$taak->setCorveeFunctie(FunctiesModel::getFunctie($taak->getFunctieId()));
 			$db->commit();
 			return $taak;
-		}
-		catch (\Exception $e) {
+		} catch (\Exception $e) {
 			$db->rollback();
 			throw $e; // rethrow to controller
 		}
 	}
-	
+
 	public static function herstelTaak($tid) {
 		$taak = self::loadTaak($tid);
 		if (!$taak->getIsVerwijderd()) {
@@ -230,7 +219,7 @@ class TakenModel {
 		self::updateTaak($taak);
 		return $taak;
 	}
-	
+
 	public static function prullenbakLeegmaken() {
 		$sql = 'DELETE FROM crv_taken';
 		$sql.= ' WHERE verwijderd = true';
@@ -240,7 +229,7 @@ class TakenModel {
 		$query->execute($values);
 		return $query->rowCount();
 	}
-	
+
 	public static function verwijderOudeTaken() {
 		$sql = 'UPDATE crv_taken';
 		$sql.= ' SET verwijderd = true';
@@ -251,7 +240,7 @@ class TakenModel {
 		$query->execute($values);
 		return $query->rowCount();
 	}
-	
+
 	public static function verwijderTakenVoorLid($uid) {
 		$sql = 'UPDATE crv_taken';
 		$sql.= ' SET lid_id = ?';
@@ -262,19 +251,18 @@ class TakenModel {
 		$query->execute($values);
 		return $query->rowCount();
 	}
-	
+
 	public static function verwijderTaak($tid) {
 		$taak = self::loadTaak($tid);
 		if ($taak->getIsVerwijderd()) {
 			self::deleteTaken($tid); // definitief verwijderen
-		}
-		else {
+		} else {
 			$taak->setVerwijderd(true);
 			self::updateTaak($taak);
 		}
 	}
-	
-	private static function deleteTaken($tid=null) {
+
+	private static function deleteTaken($tid = null) {
 		$sql = 'DELETE FROM crv_taken';
 		$sql.= ' WHERE taak_id = ?';
 		$values = array($tid);
@@ -282,29 +270,28 @@ class TakenModel {
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		if ($query->rowCount() !== 1) {
-			throw new Exception('Delete taak faalt: $query->rowCount() ='. $query->rowCount());
+			throw new Exception('Delete taak faalt: $query->rowCount() =' . $query->rowCount());
 		}
 	}
-	
-	private static function loadTaken($where=null, $values=array(), $limit=null, $orderAsc=true) {
+
+	private static function loadTaken($where = null, $values = array(), $limit = null, $orderAsc = true) {
 		$sql = 'SELECT taak_id, functie_id, lid_id, crv_repetitie_id, maaltijd_id, datum, punten, bonus_malus, punten_toegekend, bonus_toegekend, wanneer_toegekend, wanneer_gemaild, verwijderd';
 		$sql.= ' FROM crv_taken';
 		if ($where !== null) {
-			$sql.= ' WHERE '. $where;
+			$sql.= ' WHERE ' . $where;
 		}
-		$sql.= ' ORDER BY datum '. ($orderAsc ? 'ASC' : 'DESC') .', functie_id ASC';
+		$sql.= ' ORDER BY datum ' . ($orderAsc ? 'ASC' : 'DESC') . ', functie_id ASC';
 		if (is_int($limit) && $limit > 0) {
-			$sql.= ' LIMIT '. $limit;
+			$sql.= ' LIMIT ' . $limit;
 		}
 		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
-		$result = $query->fetchAll(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, '\CorveeTaak');
+		$result = $query->fetchAll(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\CorveeTaak');
 		// load corvee functies
 		if ($query->rowCount() === 1) {
 			$result[0]->setCorveeFunctie(FunctiesModel::getFunctie($result[0]->getFunctieId()));
-		}
-		elseif ($query->rowCount() > 1) {
+		} elseif ($query->rowCount() > 1) {
 			$functies = FunctiesModel::getAlleFuncties(true); // grouped by fid
 			foreach ($result as $taak) {
 				$taak->setCorveeFunctie($functies[$taak->getFunctieId()]);
@@ -312,7 +299,7 @@ class TakenModel {
 		}
 		return $result;
 	}
-	
+
 	private static function updateTaak(CorveeTaak $taak) {
 		$sql = 'UPDATE crv_taken';
 		$sql.= ' SET functie_id=?, lid_id=?, crv_repetitie_id=?, maaltijd_id=?, datum=?, punten=?, bonus_malus=?, punten_toegekend=?, bonus_toegekend=?, wanneer_toegekend=?, wanneer_gemaild=?, verwijderd=?';
@@ -336,13 +323,13 @@ class TakenModel {
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		if ($query->rowCount() !== 1) {
-			throw new Exception('Update taak faalt: $query->rowCount() ='. $query->rowCount());
+			throw new Exception('Update taak faalt: $query->rowCount() =' . $query->rowCount());
 		}
 	}
-	
+
 	private static function newTaak($fid, $uid, $crid, $mid, $datum, $punten, $bonus_malus) {
 		if ($mid !== null && (!is_int($mid) || $mid < 1)) {
-			throw new Exception('New taak faalt: $mid ='. $mid);
+			throw new Exception('New taak faalt: $mid =' . $mid);
 		}
 		$sql = 'INSERT INTO crv_taken';
 		$sql.= ' (taak_id, functie_id, lid_id, crv_repetitie_id, maaltijd_id, datum, punten, bonus_malus, punten_toegekend, bonus_toegekend, wanneer_toegekend, wanneer_gemaild, verwijderd)';
@@ -352,14 +339,14 @@ class TakenModel {
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		if ($query->rowCount() !== 1) {
-			throw new Exception('New taak faalt: $query->rowCount() ='. $query->rowCount());
+			throw new Exception('New taak faalt: $query->rowCount() =' . $query->rowCount());
 		}
 		$taak = new CorveeTaak(intval($db->lastInsertId()), $fid, $uid, $crid, $mid, $datum, $punten, $bonus_malus, 0, 0, null, '', false);
 		return $taak;
 	}
-	
+
 	// Maaltijd-Corvee ############################################################
-	
+
 	/**
 	 * Haalt de taken op die gekoppeld zijn aan een maaltijd.
 	 * Eventueel ook alle verwijderde taken.
@@ -367,16 +354,16 @@ class TakenModel {
 	 * @param int $mid
 	 * @return CorveeTaak[]
 	 */
-	public static function getTakenVoorMaaltijd($mid, $verwijderd=false) {
+	public static function getTakenVoorMaaltijd($mid, $verwijderd = false) {
 		if (!is_int($mid) || $mid <= 0) {
-			throw new Exception('Load taken voor maaltijd faalt: Invalid $mid ='. $mid);
+			throw new Exception('Load taken voor maaltijd faalt: Invalid $mid =' . $mid);
 		}
 		if ($verwijderd) {
 			return self::loadTaken('maaltijd_id = ?', array($mid));
 		}
 		return self::loadTaken('verwijderd = false AND maaltijd_id = ?', array($mid));
 	}
-	
+
 	/**
 	 * Called when a Maaltijd is going to be deleted.
 	 * 
@@ -385,7 +372,7 @@ class TakenModel {
 	 */
 	public static function existMaaltijdCorvee($mid) {
 		if (!is_int($mid) || $mid <= 0) {
-			throw new Exception('Exist maaltijd-corvee faalt: Invalid $mid ='. $mid);
+			throw new Exception('Exist maaltijd-corvee faalt: Invalid $mid =' . $mid);
 		}
 		$sql = 'SELECT EXISTS (SELECT * FROM crv_taken WHERE maaltijd_id = ?)';
 		$values = array($mid);
@@ -394,7 +381,7 @@ class TakenModel {
 		$result = $query->fetchColumn();
 		return $result;
 	}
-	
+
 	/**
 	 * Called when a Maaltijd is going to be deleted.
 	 * 
@@ -402,7 +389,7 @@ class TakenModel {
 	 */
 	public static function verwijderMaaltijdCorvee($mid) {
 		if (!is_int($mid) || $mid <= 0) {
-			throw new Exception('Delete maaltijd-corvee faalt: Invalid $mid ='. $mid);
+			throw new Exception('Delete maaltijd-corvee faalt: Invalid $mid =' . $mid);
 		}
 		$sql = 'UPDATE crv_taken SET verwijderd = true WHERE maaltijd_id = ?';
 		$values = array($mid);
@@ -410,9 +397,9 @@ class TakenModel {
 		$query->execute($values);
 		return $query->rowCount();
 	}
-	
+
 	// Functie-Taken ############################################################
-	
+
 	/**
 	 * Haalt de taken op van een bepaalde functie.
 	 * 
@@ -421,11 +408,11 @@ class TakenModel {
 	 */
 	public static function getTakenVanFunctie($fid) {
 		if (!is_int($fid) || $fid <= 0) {
-			throw new Exception('Load taken van functie faalt: Invalid $fid ='. $fid);
+			throw new Exception('Load taken van functie faalt: Invalid $fid =' . $fid);
 		}
 		return self::loadTaken('verwijderd = false AND functie_id = ?', array($fid));
 	}
-	
+
 	/**
 	 * Called when a CorveeFunctie is going to be deleted.
 	 * 
@@ -434,7 +421,7 @@ class TakenModel {
 	 */
 	public static function existFunctieTaken($fid) {
 		if (!is_int($fid) || $fid <= 0) {
-			throw new Exception('Exist functie-taken faalt: Invalid $fid ='. $fid);
+			throw new Exception('Exist functie-taken faalt: Invalid $fid =' . $fid);
 		}
 		$sql = 'SELECT EXISTS (SELECT * FROM crv_taken WHERE functie_id = ?)';
 		$values = array($fid);
@@ -443,12 +430,12 @@ class TakenModel {
 		$result = $query->fetchColumn();
 		return $result;
 	}
-	
+
 	// Repetitie-Taken ############################################################
-	
-	public static function maakRepetitieTaken(CorveeRepetitie $repetitie, $beginDatum, $eindDatum, $mid=null) {
+
+	public static function maakRepetitieTaken(CorveeRepetitie $repetitie, $beginDatum, $eindDatum, $mid = null) {
 		if ($repetitie->getPeriodeInDagen() < 1) {
-			throw new Exception('New repetitie-taken faalt: $periode ='. $repetitie->getPeriodeInDagen());
+			throw new Exception('New repetitie-taken faalt: $periode =' . $repetitie->getPeriodeInDagen());
 		}
 		$db = \Database::instance();
 		try {
@@ -456,19 +443,18 @@ class TakenModel {
 			$taken = self::newRepetitieTaken($repetitie, strtotime($beginDatum), strtotime($eindDatum), $mid);
 			$db->commit();
 			return $taken;
-		}
-		catch (\Exception $e) {
+		} catch (\Exception $e) {
 			$db->rollback();
 			throw $e; // rethrow to controller
 		}
 	}
-	
-	public static function newRepetitieTaken(CorveeRepetitie $repetitie, $beginDatum, $eindDatum, $mid=null) {
+
+	public static function newRepetitieTaken(CorveeRepetitie $repetitie, $beginDatum, $eindDatum, $mid = null) {
 		// start at first occurence
 		$shift = $repetitie->getDagVanDeWeek() - date('w', $beginDatum) + 7;
 		$shift %= 7;
 		if ($shift > 0) {
-			$beginDatum = strtotime('+'. $shift .' days', $beginDatum);
+			$beginDatum = strtotime('+' . $shift . ' days', $beginDatum);
 		}
 		$datum = $beginDatum;
 		$functie = FunctiesModel::getFunctie($repetitie->getFunctieId());
@@ -476,13 +462,7 @@ class TakenModel {
 		while ($datum <= $eindDatum) { // break after one
 			for ($i = $repetitie->getStandaardAantal(); $i > 0; $i--) {
 				$taak = self::newTaak(
-					$repetitie->getFunctieId(),
-					null,
-					$repetitie->getCorveeRepetitieId(),
-					$mid,
-					date('Y-m-d', $datum),
-					$repetitie->getStandaardPunten(),
-					0
+								$repetitie->getFunctieId(), null, $repetitie->getCorveeRepetitieId(), $mid, date('Y-m-d', $datum), $repetitie->getStandaardPunten(), 0
 				);
 				$taak->setCorveeFunctie($functie);
 				$taken[] = $taak;
@@ -490,14 +470,14 @@ class TakenModel {
 			if ($repetitie->getPeriodeInDagen() < 1) {
 				break;
 			}
-			$datum = strtotime('+'. $repetitie->getPeriodeInDagen() .' days', $datum);
+			$datum = strtotime('+' . $repetitie->getPeriodeInDagen() . ' days', $datum);
 		}
 		return $taken;
 	}
-	
+
 	public static function verwijderRepetitieTaken($crid) {
 		if (!is_int($crid) || $crid <= 0) {
-			throw new Exception('Verwijder repetitie-taken faalt: Invalid $crid ='. $crid);
+			throw new Exception('Verwijder repetitie-taken faalt: Invalid $crid =' . $crid);
 		}
 		$sql = 'UPDATE crv_taken';
 		$sql.= ' SET verwijderd = true';
@@ -508,7 +488,7 @@ class TakenModel {
 		$query->execute($values);
 		return $query->rowCount();
 	}
-	
+
 	/**
 	 * Called when a CorveeRepetitie is updated or is going to be deleted.
 	 * 
@@ -517,7 +497,7 @@ class TakenModel {
 	 */
 	public static function existRepetitieTaken($crid) {
 		if (!is_int($crid) || $crid <= 0) {
-			throw new Exception('Exist repetitie-taken faalt: Invalid $crid ='. $crid);
+			throw new Exception('Exist repetitie-taken faalt: Invalid $crid =' . $crid);
 		}
 		$sql = 'SELECT EXISTS (SELECT * FROM crv_taken WHERE crv_repetitie_id = ?)';
 		$values = array($crid);
@@ -526,7 +506,7 @@ class TakenModel {
 		$result = (boolean) $query->fetchColumn();
 		return $result;
 	}
-	
+
 	public static function updateRepetitieTaken(CorveeRepetitie $repetitie, $verplaats) {
 		$db = \Database::instance();
 		try {
@@ -542,7 +522,7 @@ class TakenModel {
 			$query = $db->prepare($sql, $values);
 			$query->execute($values);
 			$updatecount = $query->rowCount();
-			
+
 			$taken = self::loadTaken('verwijderd = false AND crv_repetitie_id = ?', array($repetitie->getCorveeRepetitieId()));
 			$takenPerDatum = array(); // taken per datum indien geen maaltijd
 			$takenPerMaaltijd = array(); // taken per maaltijd
@@ -559,10 +539,9 @@ class TakenModel {
 				if ($verplaats) {
 					$shift = $repetitie->getDagVanDeWeek() - date('w', $datum);
 					if ($shift > 0) {
-						$datum = strtotime('+'. $shift .' days', $datum);
-					}
-					elseif ($shift < 0) {
-						$datum = strtotime($shift .' days', $datum);
+						$datum = strtotime('+' . $shift . ' days', $datum);
+					} elseif ($shift < 0) {
+						$datum = strtotime($shift . ' days', $datum);
 					}
 					if ($shift !== 0) {
 						$taak->setDatum(date('Y-m-d', $datum));
@@ -575,8 +554,7 @@ class TakenModel {
 					if (array_key_exists($mid, $maaltijdenById)) { // do not change if not komende repetitie maaltijd
 						$takenPerMaaltijd[$mid][] = $taak;
 					}
-				}
-				else {
+				} else {
 					$takenPerDatum[$datum][] = $taak;
 				}
 			}
@@ -586,13 +564,7 @@ class TakenModel {
 				$verschil = $repetitie->getStandaardAantal() - sizeof($taken);
 				for ($i = $verschil; $i > 0; $i--) {
 					self::newTaak(
-						$repetitie->getFunctieId(),
-						null,
-						$repetitie->getCorveeRepetitieId(),
-						null,
-						$taken[0]->getDatum(),
-						$repetitie->getStandaardPunten(),
-						0
+							$repetitie->getFunctieId(), null, $repetitie->getCorveeRepetitieId(), null, $taken[0]->getDatum(), $repetitie->getStandaardPunten(), 0
 					);
 				}
 				$datumcount += $verschil;
@@ -602,25 +574,19 @@ class TakenModel {
 				$verschil = $repetitie->getStandaardAantal() - sizeof($taken);
 				for ($i = $verschil; $i > 0; $i--) {
 					self::newTaak(
-						$repetitie->getFunctieId(),
-						null,
-						$repetitie->getCorveeRepetitieId(),
-						$mid,
-						$maaltijdenById[$mid]->getDatum(),
-						$repetitie->getStandaardPunten(),
-						0
+							$repetitie->getFunctieId(), null, $repetitie->getCorveeRepetitieId(), $mid, $maaltijdenById[$mid]->getDatum(), $repetitie->getStandaardPunten(), 0
 					);
 				}
 				$maaltijdcount += $verschil;
 			}
 			$db->commit();
 			return array('update' => $updatecount, 'day' => $daycount, 'datum' => $datumcount, 'maaltijd' => $maaltijdcount);
-		}
-		catch (\Exception $e) {
+		} catch (\Exception $e) {
 			$db->rollback();
 			throw $e; // rethrow to controller
 		}
 	}
+
 }
 
 ?>

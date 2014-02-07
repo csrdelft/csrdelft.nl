@@ -1,6 +1,7 @@
 <?php
 
 require_once 'MVC/model/entity/LidInstelling.class.php';
+require_once 'MVC/model/Instellingen.singleton.php';
 
 /**
  * LidInstellingen.singleton.php

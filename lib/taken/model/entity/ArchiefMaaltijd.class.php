@@ -1,8 +1,5 @@
 <?php
 
-
-require_once 'agenda/agenda.class.php';
-
 /**
  * MaaltijdArchief.class.php	| 	P.W.G. Brussee (brussee@live.nl)
  * 
@@ -21,18 +18,18 @@ require_once 'agenda/agenda.class.php';
  * Zie ook Maaltijd.class.php
  * 
  */
-class ArchiefMaaltijd implements \Agendeerbaar {
+class ArchiefMaaltijd implements Agendeerbaar {
 
 	# primary key
 	private $maaltijd_id; # int 11
-	
+
 	private $titel; # string 255
 	private $datum; # date
 	private $tijd; # time
 	private $prijs; # float
 	private $aanmeldingen; # text
-	
-	public function __construct($mid=0, $titel=null, $datum=null, $tijd=null, $prijs=null, $aanmeldingen=array()) {
+
+	public function __construct($mid = 0, $titel = null, $datum = null, $tijd = null, $prijs = null, $aanmeldingen = array()) {
 		$this->maaltijd_id = (int) $mid;
 		$this->titel = $titel;
 		$this->datum = $datum;
@@ -42,38 +39,43 @@ class ArchiefMaaltijd implements \Agendeerbaar {
 		foreach ($aanmeldingen as $aanmelding) {
 			if ($aanmelding->getLidId() === '') {
 				$this->aanmeldingen .= 'gast';
-			}
-			else {
+			} else {
 				$this->aanmeldingen .= $aanmelding->getLidId();
 			}
 			if ($aanmelding->getDoorAbonnement()) {
 				$this->aanmeldingen .= '_abo';
 			}
 			if ($aanmelding->getDoorLidId() !== null) {
-				$this->aanmeldingen .= '_'. $aanmelding->getDoorLidId();
+				$this->aanmeldingen .= '_' . $aanmelding->getDoorLidId();
 			}
 			$this->aanmeldingen .= ',';
 		}
 	}
-	
+
 	public function getMaaltijdId() {
 		return (int) $this->maaltijd_id;
 	}
+
 	public function getTitel() {
 		return $this->titel;
 	}
+
 	public function getDatum() {
 		return $this->datum;
 	}
+
 	public function getTijd() {
 		return $this->tijd;
 	}
+
 	public function getPrijs() {
 		return (float) $this->prijs;
 	}
+
 	public function getAanmeldingen() {
 		return $this->aanmeldingen;
 	}
+
 	public function getAanmeldingenArray() {
 		$result = array();
 		$aanmeldingen = explode(',', $this->aanmeldingen);
@@ -84,24 +86,29 @@ class ArchiefMaaltijd implements \Agendeerbaar {
 		}
 		return $result;
 	}
+
 	public function getAantalAanmeldingen() {
 		return substr_count($this->aanmeldingen, ',');
 	}
-	
+
 	// Agendeerbaar ############################################################
-	
+
 	public function getBeginMoment() {
-		return strtotime($this->getDatum() .' '. $this->getTijd());
+		return strtotime($this->getDatum() . ' ' . $this->getTijd());
 	}
+
 	public function getEindMoment() {
 		return $this->getBeginMoment();
 	}
+
 	public function getBeschrijving() {
-		return 'Maaltijd met '. $this->getAantalAanmeldingen() .' eters';
+		return 'Maaltijd met ' . $this->getAantalAanmeldingen() . ' eters';
 	}
+
 	public function isHeledag() {
 		return false;
 	}
+
 }
 
 ?>

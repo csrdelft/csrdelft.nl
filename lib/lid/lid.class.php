@@ -2,10 +2,8 @@
 
 require_once 'ldap.class.php';
 require_once 'memcached.class.php';
-require_once 'MVC/model/LidInstellingen.singleton.php';
 require_once 'verticale.class.php';
 require_once 'status.class.php';
-require_once 'agenda/agenda.class.php';
 require_once 'groepen/groep.class.php';
 
 /**

@@ -1,10 +1,9 @@
 <?php
 
 /**
- * instellingencontent.class.php	| 	Jan Pieter Waagmeester (jieter@jpwaag.com)
- *
+ * LidInstellingenView.class.php
  * 
- * Instellingenketzerding.
+ * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
 class LidInstellingenView extends TemplateView {

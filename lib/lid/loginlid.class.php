@@ -239,7 +239,7 @@ class LoginLid {
 		$this->login('x999', 'x999', true);
 	}
 
-	public function getInstelling($module, $key=null) {
+	public function getInstelling($module, $key = null) {
 		return LidInstellingen::get($module, $key);
 	}
 
@@ -509,7 +509,7 @@ class LoginLid {
 	private function logBezoek() {
 		$db = MySql::instance();
 		$uid = $this->getUid();
-		$datumtijd = date('Y-m-d H:i:s');
+		$datumtijd = getDateTime();
 		$locatie = '';
 		if (isset($_SERVER['REMOTE_ADDR'])) {
 			$ip = $db->escape($_SERVER['REMOTE_ADDR']);

@@ -1,19 +1,19 @@
 <?php
 
 /**
- * taken.php
+ * agenda.php
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
- * Entry point voor Taken module.
+ * Entry point voor Agenda module.
  * 
  */
 try {
 	require_once 'configuratie.include.php';
-	require_once 'taken/controller/TakenModuleController.class.php';
+	require_once 'MVC/controller/AgendaController.class.php';
 
 	$query = filter_input(INPUT_GET, 'uri', FILTER_SANITIZE_URL);
-	$controller = new TakenModuleController($query);
+	$controller = new AgendaController($query);
 	$controller->getContent()->view();
 }
 catch (\Exception $e) { // TODO: logging

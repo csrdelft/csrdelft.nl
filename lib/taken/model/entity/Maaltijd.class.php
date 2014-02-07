@@ -1,7 +1,5 @@
 <?php
 
-require_once 'agenda/agenda.class.php';
-
 /**
  * Maaltijd.class.php	| 	P.W.G. Brussee (brussee@live.nl)
  * 
@@ -27,11 +25,13 @@ require_once 'agenda/agenda.class.php';
  * Zie ook MaaltijdAanmelding.class.php
  * 
  */
-class Maaltijd implements \Agendeerbaar {
-	# primary key
+class Maaltijd implements Agendeerbaar {
 
+	# primary key
 	private $maaltijd_id; # int 11
+
 	private $mlt_repetitie_id; # foreign key mlt_repetitie.id
+
 	private $titel; # string 255
 	private $aanmeld_limiet; # int 11
 	private $datum; # date
@@ -41,6 +41,7 @@ class Maaltijd implements \Agendeerbaar {
 	private $laatst_gesloten; # int 11
 	private $verwijderd; # boolean
 	private $aanmeld_filter; # string 255
+
 	private $aantal_aanmeldingen;
 	private $archief;
 

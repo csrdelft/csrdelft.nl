@@ -2,20 +2,70 @@
 
 # C.S.R. Delft | pubcie@csrdelft.nl
 # -------------------------------------------------------------------
-# include.common.php
+# common.functions.php
 # -------------------------------------------------------------------
-// http://stackoverflow.com/questions/834303/php-startswith-and-endswith-functions
 
+/**
+ * @source http://stackoverflow.com/questions/834303/php-startswith-and-endswith-functions
+ * @param string $haystack
+ * @param string $needle
+ * @return boolean
+ */
 function startsWith($haystack, $needle) {
 	return $needle === "" || strpos($haystack, $needle) === 0;
 }
 
+/**
+ * @source http://stackoverflow.com/questions/834303/php-startswith-and-endswith-functions
+ * @param string $haystack
+ * @param string $needle
+ * @return boolean
+ */
 function endsWith($haystack, $needle) {
 	return $needle === "" || substr($haystack, -strlen($needle)) === $needle;
 }
 
+/**
+ * @source http://nl.php.net/manual/en/function.in_array.php
+ */
+function array_values_in_array($needles, $haystack) {
+	if (is_array($needles)) {
+		$valid = true;
+		foreach ($needles as $needle) {
+			if (!in_array($needle, $haystack)) {
+				$valid = false;
+			}
+		}
+		return $valid;
+	} else {
+		return in_array($needles, $haystack);
+	}
+}
+
+/**
+ * Geeft een array terug met alleen de opgegeven keys.
+ *
+ * @param	$in		ééndimensionele array.
+ * @param	$keys	Keys die uit de in-array gereturned moeten worden.
+ * @return			Array met alleen keys die in $keys zitten
+ *
+ * @author			Jan Pieter Waagmeester (jieter@jpwaag.com)
+ */
+function array_get_keys($in, $keys) {
+	if (!is_array($in) OR !is_array($keys)) {
+		return false;
+	}
+	$out = array();
+	foreach ($keys as $key) {
+		if (isset($in[$key])) {
+			$out[$key] = $in[$key];
+		}
+	}
+	return $out;
+}
+
 function invokeRefresh($url = null, $melding = '', $level = -1) {
-	//als $melding een array is die uit elkaar halen
+	// als $melding een array is die uit elkaar halen
 	if (is_array($melding)) {
 		list($melding, $level) = $melding;
 	}
@@ -29,9 +79,14 @@ function invokeRefresh($url = null, $melding = '', $level = -1) {
 	exit;
 }
 
-// http://nl.php.net/manual/en/function.ip2long.php
-// User Contributed Notes
-function matchCIDR($addr, $cidr) {
+/**
+ * User Contributed Notes
+ * @source http://nl.php.net/manual/en/function.ip2long.php
+ * @param string $addr IP address
+ * @param array $cidr CIDR
+ * @return boolean
+ */
+function matchCIDR($addr, array $cidr) {
 	list($ip, $mask) = explode('/', $cidr);
 	$bitmask = ($mask != 0) ? 0xffffffff >> (32 - $mask) : 0x00000000;
 	return ((ip2long($addr) & $bitmask) == (ip2long($ip) & $bitmask));
@@ -55,90 +110,50 @@ function url_like($url) {
 	}
 	#					  http://		  user:pass@
 	return preg_match('#^(([a-zA-z]{1,6}\://)(\w+:\w+@)?' .
-		#	f			oo.bar.   org	   :80
-		'([a-zA-Z0-9]([-\w]+\.)+(\w{2,5}))(:\d{1,5})?)?' .
-		#	/path	   ?file=http://foo:bar@w00t.l33t.h4x0rz/
-		'(/~)?[-\w./]*([-@()\#?/&;:+,._\w= ]+)?$#', $url);
+			#	f			oo.bar.   org	   :80
+			'([a-zA-Z0-9]([-\w]+\.)+(\w{2,5}))(:\d{1,5})?)?' .
+			#	/path	   ?file=http://foo:bar@w00t.l33t.h4x0rz/
+			'(/~)?[-\w./]*([-@()\#?/&;:+,._\w= ]+)?$#', $url);
 }
 
-//http://nl.php.net/manual/en/function.in_array.php
-function array_values_in_array($needles, $haystack) {
-	if (is_array($needles)) {
-		$valid = true;
-		foreach ($needles as $needle) {
-			if (!in_array($needle, $haystack)) {
-				$valid = false;
-			}
-		}
-		return $valid;
-	}
-	else {
-		return in_array($needles, $haystack);
-	}
-}
-
-function kapStringNetjesAf(&$sTekst, $iMaxTekens) {
-	//test of tekst überhaupt te lang is
-	if (mb_strlen($sTekst) > $iMaxTekens) {
-		//tekst is te lang. Afk(n)appen dan maar?
-		$sRanzigAfgekort = mb_substr($sTekst, 0, $iMaxTekens);
-		//controleren of er op een spatie is afgekapt.
-		if ($sTekst[$iMaxTekens] == ' ' OR $sTekst[$iMaxTekens - 1] == ' ') {
-			//er is op een spatie afgekapt.
-			$bAfgekapt = true;
-			$sTekst = trim($sRanzigAfgekort);
-		}
-		else {
-			//kijk waar de laatste spatie zit.
-			$iSpatiePositie = mb_strrpos($sRanzigAfgekort, ' ');
-			if ($iSpatiePositie === false) {
-				//geen spatie meer aanwezig voor het afkappunt.
-				//Gewoon ranzig afkappen met puntjes dus
-				$bAfgekapt = true;
-				$sTekst = trim($sRanzigAfgekort);
-			}
-			else {
-				//alles na laatste spatie eraf slopen.
-				$sTekst = trim(mb_substr($sRanzigAfgekort, 0, $iSpatiePositie));
-				$bAfgekapt = true;
-			}
-		}
-	}
-	else {
-		$bAfgekapt = false;
-	}
-	return $bAfgekapt;
-}
-
-//over de hele site dezelfde htmlentities gebruiken....
+/**
+ * Gebruik over de hele site dezelfde htmlentities parameters.
+ * @param string $string
+ * @return string
+ */
 function mb_htmlentities($string) {
 	return htmlentities($string, ENT_QUOTES, 'UTF-8');
 }
 
-// Returns true if $string is valid UTF-8 and false otherwise.
+/**
+ * @source http://w3.org/International/questions/qa-forms-utf-8.html
+ * @param string $string
+ * @return boolean true if $string is valid UTF-8; false otherwise
+ */
 function is_utf8($string) {
-
-	// From http://w3.org/International/questions/qa-forms-utf-8.html
 	return preg_match('%^(?:
 		 [\x09\x0A\x0D\x20-\x7E]			# ASCII
-	   | [\xC2-\xDF][\x80-\xBF]			# non-overlong 2-byte
+	   | [\xC2-\xDF][\x80-\xBF]				# non-overlong 2-byte
 	   |  \xE0[\xA0-\xBF][\x80-\xBF]		# excluding overlongs
 	   | [\xE1-\xEC\xEE\xEF][\x80-\xBF]{2}  # straight 3-byte
 	   |  \xED[\x80-\x9F][\x80-\xBF]		# excluding surrogates
-	   |  \xF0[\x90-\xBF][\x80-\xBF]{2}	# planes 1-3
-	   | [\xF1-\xF3][\x80-\xBF]{3}		  # planes 4-15
-	   |  \xF4[\x80-\x8F][\x80-\xBF]{2}	# plane 16
+	   |  \xF0[\x90-\xBF][\x80-\xBF]{2}		# planes 1-3
+	   | [\xF1-\xF3][\x80-\xBF]{3}			# planes 4-15
+	   |  \xF4[\x80-\x8F][\x80-\xBF]{2}		# plane 16
    )*$%xs', $string);
 }
 
-// function is_utf8
-
-function opConfide() {//echo $_SERVER['REMOTE_ADDR'];
+/**
+ * Komt de request vanaf Confide?
+ * @return boolean
+ */
+function opConfide() {
 	return ( isset($_SERVER['REMOTE_ADDR']) and defined('CONFIDE_IP') and in_array($_SERVER['REMOTE_ADDR'], explode(':', CONFIDE_IP)) );
 }
 
 /**
  * Komt de request van Feut (irc-bot)?
+ * @return boolean
  */
 function isFeut() {
 	return isset($_SERVER['REMOTE_ADDR']) and defined('FEUT_IP') and $_SERVER['REMOTE_ADDR'] == FEUT_IP;
@@ -146,25 +161,45 @@ function isFeut() {
 
 /**
  * Is de huidige server syrinx?
+ * @return boolean
  */
 function isSyrinx() {
 	return $_SERVER['SERVER_NAME'] === 'csrdelft.nl';
 }
 
-function getDateTime() {
-	return date('Y-m-d H:i:s');
+/**
+ * @param int $timestamp optional
+ * @return string current DateTime formatted Y-m-d H:i:s
+ */
+function getDateTime($timestamp = null) {
+	if ($timestamp === null) {
+		$timestamp = time();
+	}
+	return date('Y-m-d H:i:s', $timestamp);
 }
 
-// function isGeldigeDatum
-// pre: $datum is een string die begint met 'yyyy-mm-dd'. Wat daarna komt maakt niet uit.
-// post: true is teruggegeven als de datum in de string geldig is (volgens checkdate()). Anders is false teruggegeven.
+/**
+ * @param int $timestamp
+ * @return string aangepast ISO-8601 weeknummer met zondag als eerste dag van de week
+ */
+function getWeekNumber($timestamp) {
+	if (date('w', $timestamp) == 0) {
+		return date('W', $timestamp + 60 * 60 * 24);
+	} else {
+		return date('W', $timestamp);
+	}
+}
+
+/**
+ * @param string $datum moet beginnen met 'yyyy-mm-dd' (wat daarna komt maakt niet uit)
+ * @return boolean true als $datum geldig is volgens checkdate(); false otherwise
+ */
 function isGeldigeDatum($datum) {
 	// De string opdelen en checken of er genoeg delen zijn.
 	$delen = explode('-', $datum);
 	if (count($delen) < 3) {
 		return false;
 	}
-
 	// Checken of we geldige strings hebben, voordat we ze casten naar ints.
 	$jaar = $delen[0];
 	if (!is_numeric($jaar) OR strlen($jaar) != 4) {
@@ -178,29 +213,28 @@ function isGeldigeDatum($datum) {
 	if (!is_numeric($dag) OR strlen($dag) != 2) {
 		return false;
 	}
-
 	// De strings casten naar ints en de datum laten checken.
 	return checkdate((int) $maand, (int) $dag, (int) $jaar);
 }
 
-/*
+/**
  * print_r een variabele met <pre>-tags eromheen als:
  *  - het ip van de gebruiker een admin-ip is
  * of
  *  - de gebruiker het recht P_ADMIN heeft.
+ * @param string $sString
+ * @param string $cssID
  */
-
 function pr($sString, $cssID = 'pubcie_debug') {
 	$adminIPs = array('145.94.61.229', '145.94.59.158', '192.168.16.101', '127.0.0.1');
 	$isFromAdminIP = isset($_SERVER['REMOTE_ADDR']) AND in_array($_SERVER['REMOTE_ADDR'], $adminIPs);
-
 	if ($isFromAdminIP OR LoginLid::instance()->hasPermission('P_ADMIN')) {
 		echo '<pre id="' . $cssID . '">' . print_r($sString, true) . '</pre>';
 	}
 }
 
 /**
- * stores a message
+ * Stores a message.
  *
  * Levels can be:
  *
@@ -261,11 +295,9 @@ function setMelding($message, $lvl = -1) {
   )
  */
 function namen2uid($sNamen, $filter = 'leden') {
-
 	$return = array();
 	$sNamen = trim($sNamen);
 	$sNamen = str_replace(array(', ', "\r\n", "\n"), ',', $sNamen);
-
 	$aNamen = explode(',', $sNamen);
 	$return = false;
 	foreach ($aNamen as $sNaam) {
@@ -278,11 +310,9 @@ function namen2uid($sNamen, $filter = 'leden') {
 			}
 			$naam.=$aZoekNamen[0]['achternaam'];
 			$return[] = array('uid' => $aZoekNamen[0]['uid'], 'naam' => $naam);
-		}
-		elseif (count($aZoekNamen) == 0) {
+		} elseif (count($aZoekNamen) == 0) {
 			
-		}
-		else {
+		} else {
 			//geen enkelvoudige match, dan een array teruggeven
 			foreach ($aZoekNamen as $aZoekNaam) {
 				$lid = LidCache::getLid($aZoekNaam['uid']);
@@ -296,21 +326,28 @@ function namen2uid($sNamen, $filter = 'leden') {
 	return $return;
 }
 
-//$type: null, post, get (gebruik om alléén post of alléén get te checken)
+/**
+ * Gebruik om alléén post of alléén get te checken.
+ * @param string $key
+ * @param string $type null/post/get
+ */
 function getOrPost($key, $type = null, $default = '') {
 	if ($type != 'get' && isset($_POST[$key])) {
 		return $_POST[$key];
-	}
-	elseif ($type != 'post' && isset($_GET[$key])) {
+	} elseif ($type != 'post' && isset($_GET[$key])) {
 		return $_GET[$key];
-	}
-	else {
+	} else {
 		return $default;
 	}
 }
 
+/**
+ * Sorteer op achternaam ASC, uid DESC.
+ * @param string $a
+ * @param string $b
+ * @return int
+ */
 function sort_achternaam_uid($a, $b) {
-	//sorteer op achternaam ASC, uid DESC
 	$vals = array('achternaam' => 'ASC', 'uid' => 'DESC');
 	while (list($key, $val) = each($vals)) {
 		if ($val == 'DESC') {
@@ -336,35 +373,14 @@ function strNthPos($haystack, $needle, $nth = 1) {
 	//Fixes a null return if the position is at the beginning of input
 	//It also changes all input to that of a string ^.~
 	$haystack = ' ' . $haystack;
-	if (!strpos($haystack, $needle))
+	if (!strpos($haystack, $needle)) {
 		return false;
+	}
 	$offset = 0;
-	for ($i = 1; $i < $nth; $i++)
+	for ($i = 1; $i < $nth; $i++) {
 		$offset = strpos($haystack, $needle, $offset) + 1;
+	}
 	return strpos($haystack, $needle, $offset) - 1;
-}
-
-/*
- * Geeft een array terug met alleen de opgegeven keys.
- *
- * @param	$in		ééndimensionele array.
- * @param	$keys	Keys die uit de in-array gereturned moeten worden.
- * @return			Array met alleen keys die in $keys zitten
- *
- * @author			Jan Pieter Waagmeester (jieter@jpwaag.com)
- */
-
-function array_get_keys($in, $keys) {
-	if (!is_array($in) OR !is_array($keys)) {
-		return false;
-	}
-	$out = array();
-	foreach ($keys as $key) {
-		if (isset($in[$key])) {
-			$out[$key] = $in[$key];
-		}
-	}
-	return $out;
 }
 
 function reldate($datum) {
@@ -375,32 +391,25 @@ function reldate($datum) {
 		$return = $verschil . ' ';
 		if ($verschil == 1) {
 			$return.='seconde';
-		}
-		else {
+		} else {
 			$return.='seconden';
 		}
 		$return.=' geleden';
-	}
-	elseif ($verschil <= 60 * 60) {
+	} elseif ($verschil <= 60 * 60) {
 		$return = floor($verschil / 60);
 		if (floor($verschil / 60) == 1) {
 			$return.=' minuut';
-		}
-		else {
+		} else {
 			$return.=' minuten';
 		}
 		$return.=' geleden';
-	}
-	elseif ($verschil <= (60 * 60 * 4)) {
+	} elseif ($verschil <= (60 * 60 * 4)) {
 		$return = floor($verschil / (60 * 60)) . ' uur geleden';
-	}
-	elseif (date('Y-m-d') == date('Y-m-d', $moment)) {
+	} elseif (date('Y-m-d') == date('Y-m-d', $moment)) {
 		$return = 'vandaag om ' . date("G:i", $moment);
-	}
-	elseif (date('Y-m-d', $moment) == date('Y-m-d', strtotime('1 day ago'))) {
+	} elseif (date('Y-m-d', $moment) == date('Y-m-d', strtotime('1 day ago'))) {
 		$return = 'gisteren om ' . date("G:i", $moment);
-	}
-	else {
+	} else {
 		$return = date("G:i j-n-Y", $moment);
 	}
 	return '<abbr class="timeago" title="' . date('Y-m-d\TG:i:sO', $moment) . '">' . $return . '</abbr>'; // ISO8601
@@ -410,16 +419,15 @@ function internationalizePhonenumber($phonenumber, $prefix = '+31') {
 	$number = str_replace(array(' ', '-'), '', $phonenumber);
 	if ($number[0] == 0) {
 		return $prefix . substr($number, 1);
-	}
-	else {
+	} else {
 		return $phonenumber;
 	}
 }
 
-/* plaatje vierkant croppen.
- * http://abeautifulsite.net/blog/2009/08/cropping-an-image-to-make-square-thumbnails-in-php/
+/**
+ * Plaatje vierkant croppen.
+ * @source http://abeautifulsite.net/blog/2009/08/cropping-an-image-to-make-square-thumbnails-in-php/
  */
-
 function square_crop($src_image, $dest_image, $thumb_size = 64, $jpg_quality = 90) {
 
 	// Get dimensions of existing image
@@ -447,12 +455,12 @@ function square_crop($src_image, $dest_image, $thumb_size = 64, $jpg_quality = 9
 		default:
 			// Unsupported format
 			return false;
-			break;
 	}
 
 	// Verify import
-	if ($image_data == false)
+	if ($image_data == false) {
 		return false;
+	}
 
 	// Calculate measurements
 	if ($image[0] > $image[1]) {
@@ -460,8 +468,7 @@ function square_crop($src_image, $dest_image, $thumb_size = 64, $jpg_quality = 9
 		$x_offset = ($image[0] - $image[1]) / 2;
 		$y_offset = 0;
 		$square_size = $image[0] - ($x_offset * 2);
-	}
-	else {
+	} else {
 		// For portrait and square images
 		$x_offset = 0;
 		$y_offset = ($image[1] - $image[0]) / 2;
@@ -470,9 +477,7 @@ function square_crop($src_image, $dest_image, $thumb_size = 64, $jpg_quality = 9
 
 	// Resize and crop
 	$canvas = imagecreatetruecolor($thumb_size, $thumb_size);
-	if (imagecopyresampled(
-			$canvas, $image_data, 0, 0, $x_offset, $y_offset, $thumb_size, $thumb_size, $square_size, $square_size
-		)) {
+	if (imagecopyresampled($canvas, $image_data, 0, 0, $x_offset, $y_offset, $thumb_size, $thumb_size, $square_size, $square_size)) {
 
 		// Create thumbnail
 		switch (strtolower(preg_replace('/^.*\./', '', $dest_image))) {
@@ -497,29 +502,26 @@ function square_crop($src_image, $dest_image, $thumb_size = 64, $jpg_quality = 9
 			chmod($dest_image, 0644);
 		}
 		return $return;
-	}
-	else {
+	} else {
 		return false;
 	}
 }
 
-/*
- * return input without unprintable characters
- * (excluding newlines and tabs)
+/**
+ * @param string $string
+ * @return string input without unprintable characters (excluding newlines and tabs)
  */
-
 function only_printable($string) {
 	return $string;
 	//er gaat nog wat mis, want ik postte net iets met á erin, en die
 	//snoepte dit ding ook weg. Niet de bedoeling natuurlijk, dus ff hdb ermee...
-	return preg_replace('/[^\x0A^\x09\x20-\x7E]/', '', $string);
+	//FIXME return preg_replace('/[^\x0A^\x09\x20-\x7E]/', '', $string);
 }
 
 function format_filesize($size) {
 	$units = array(' B', ' KB', ' MB', ' GB', ' TB');
-	for ($i = 0; $size >= 1024 && $i < 4; $i++)
+	for ($i = 0; $size >= 1024 && $i < 4; $i++) {
 		$size /= 1024;
+	}
 	return round($size, 2) . $units[$i];
 }
-
-?>

@@ -1,8 +1,5 @@
 <?php
 
-
-require_once 'agenda/agenda.class.php';
-
 /**
  * CorveeTaak.class.php	| 	P.W.G. Brussee (brussee@live.nl)
  * 
@@ -27,16 +24,16 @@ require_once 'agenda/agenda.class.php';
  * Zie ook MaaltijdCorvee.class.php
  * 
  */
-class CorveeTaak implements \Agendeerbaar {
+class CorveeTaak implements Agendeerbaar {
 
 	# primary key
 	private $taak_id; # int 11
-	
+
 	private $functie_id; # foreign key crv_functie.id
 	private $lid_id; # foreign key lid.uid
 	private $crv_repetitie_id; # foreign key crv_repetitie.id
 	private $maaltijd_id; # foreign key maaltijd.id
-	
+
 	private $datum; # date
 	private $punten; # int 11
 	private $bonus_malus; # int 11
@@ -45,10 +42,10 @@ class CorveeTaak implements \Agendeerbaar {
 	private $wanneer_toegekend; # datetime
 	private $wanneer_gemaild; # text
 	private $verwijderd; # boolean
-	
+
 	private $corvee_functie;
-	
-	public function __construct($tid=0, $fid=0, $uid=null, $crid=null, $mid=null, $datum=null, $punten=0, $bonus_malus=0, $toegekend=0, $bonus_toegekend=0, $wanneer=null, $gemaild='', $verwijderd=false) {
+
+	public function __construct($tid = 0, $fid = 0, $uid = null, $crid = null, $mid = null, $datum = null, $punten = 0, $bonus_malus = 0, $toegekend = 0, $bonus_toegekend = 0, $wanneer = null, $gemaild = '', $verwijderd = false) {
 		$this->taak_id = (int) $tid;
 		$this->setFunctieId($fid);
 		$this->setLidId($uid);
@@ -66,56 +63,69 @@ class CorveeTaak implements \Agendeerbaar {
 		$this->setWanneerGemaild($gemaild);
 		$this->setVerwijderd($verwijderd);
 	}
-	
+
 	public function getTaakId() {
 		return (int) $this->taak_id;
 	}
-	
+
 	public function getFunctieId() {
 		return (int) $this->functie_id;
 	}
+
 	public function getLidId() {
 		return $this->lid_id;
 	}
+
 	public function getCorveeRepetitieId() {
 		if ($this->crv_repetitie_id === null) {
 			return null;
 		}
 		return (int) $this->crv_repetitie_id;
 	}
+
 	public function getMaaltijdId() {
 		if ($this->maaltijd_id === null) {
 			return null;
 		}
 		return (int) $this->maaltijd_id;
 	}
+
 	public function getDatum() {
 		return $this->datum;
 	}
+
 	public function getPunten() {
 		return (int) $this->punten;
 	}
+
 	public function getBonusMalus() {
 		return (int) $this->bonus_malus;
 	}
+
 	public function getPuntenToegekend() {
 		return (int) $this->punten_toegekend;
 	}
+
 	public function getBonusToegekend() {
 		return (int) $this->bonus_toegekend;
 	}
+
 	public function getPuntenPrognose() {
 		return $this->getPunten() + $this->getBonusMalus() - $this->getPuntenToegekend() - $this->getBonusToegekend();
 	}
+
 	public function getWanneerToegekend() {
 		return $this->wanneer_toegekend;
 	}
+
 	public function getWanneerGemaild() {
 		return $this->wanneer_gemaild;
 	}
+
 	public function getIsVerwijderd() {
 		return (boolean) $this->verwijderd;
 	}
+
 	public function getLaatstGemaildTimestamp() {
 		$pos = strpos($this->wanneer_gemaild, '&#013;');
 		if ($pos === false) {
@@ -123,6 +133,7 @@ class CorveeTaak implements \Agendeerbaar {
 		}
 		return strtotime(substr($this->wanneer_gemaild, 0, $pos));
 	}
+
 	/**
 	 * Berekent hoevaak er gemaild is op basis van wanneer er gemaild is.
 	 * 
@@ -131,6 +142,7 @@ class CorveeTaak implements \Agendeerbaar {
 	public function getAantalKeerGemaild() {
 		return substr_count($this->wanneer_gemaild, '&#013;');
 	}
+
 	/**
 	 * Bepaalt of er een herinnering gemaild moet worden op basis van het aantal verstuurde herinneringen en de ingestelde periode vooraf.
 	 * 
@@ -141,22 +153,23 @@ class CorveeTaak implements \Agendeerbaar {
 		$datum = strtotime($this->getDatum());
 		$laatst = $this->getLaatstGemaildTimestamp();
 		$nu = strtotime(date('Y-m-d'));
-		
+
 		if ($laatst === $nu) {
 			return false;
 		}
-		
+
 		for ($i = intval(Instellingen::get('corvee', 'herinnering_aantal_mails')); $i > 0; $i--) {
-			
+
 			if ($aantal < $i &&
-				$nu >= strtotime(Instellingen::get('corvee', 'herinnering_'. $i .'e_mail'), $datum) &&
-				$nu <= strtotime(Instellingen::get('corvee', 'herinnering_'. $i .'e_mail_uiterlijk'), $datum)
+					$nu >= strtotime(Instellingen::get('corvee', 'herinnering_' . $i . 'e_mail'), $datum) &&
+					$nu <= strtotime(Instellingen::get('corvee', 'herinnering_' . $i . 'e_mail_uiterlijk'), $datum)
 			) {
 				return true;
 			}
 		}
 		return false;
 	}
+
 	/**
 	 * Bepaalt of er op tijd is gemaild op basis van de laatst verstuurde email.
 	 * 
@@ -168,9 +181,9 @@ class CorveeTaak implements \Agendeerbaar {
 		$laatst = $this->getLaatstGemaildTimestamp();
 		$nu = strtotime(date('Y-m-d'));
 		$moeten = 0;
-		
+
 		for ($i = intval(Instellingen::get('corvee', 'herinnering_aantal_mails')); $i > 0; $i--) {
-			$uiterlijk = strtotime(Instellingen::get('corvee', 'herinnering_'. $i .'e_mail_uiterlijk'), $datum);
+			$uiterlijk = strtotime(Instellingen::get('corvee', 'herinnering_' . $i . 'e_mail_uiterlijk'), $datum);
 			if ($nu >= $uiterlijk) {
 				$moeten++;
 			}
@@ -183,6 +196,7 @@ class CorveeTaak implements \Agendeerbaar {
 		}
 		return false;
 	}
+
 	/**
 	 * Laad het Lid object behorende bij deze corveetaak.
 	 * @return Lid if exists, false otherwise
@@ -191,117 +205,134 @@ class CorveeTaak implements \Agendeerbaar {
 		$uid = $this->getLidId();
 		$lid = \LidCache::getLid($uid); // false if lid does not exist
 		if (!$lid instanceof \Lid) {
-			throw new Exception('Lid bestaat niet: $uid ='. $uid);
+			throw new Exception('Lid bestaat niet: $uid =' . $uid);
 		}
 		return $lid;
 	}
+
 	public function getCorveeFunctie() {
 		return $this->corvee_functie;
 	}
-	
+
 	public function setFunctieId($int) {
 		if (!is_int($int)) {
 			throw new Exception('Geen integer: functie id');
 		}
 		$this->functie_id = $int;
 	}
+
 	public function setLidId($uid) {
 		if ($uid !== null && !\Lid::exists($uid)) {
 			throw new Exception('Geen lid: set lid id');
 		}
 		$this->lid_id = $uid;
-		
 	}
+
 	public function setCorveeRepetitieId($int) {
 		if ($int !== null && !is_int($int)) {
 			throw new Exception('Geen integer: corvee-repetitie id');
 		}
 		$this->crv_repetitie_id = $int;
 	}
+
 	public function setMaaltijdId($int) {
 		if ($int !== null && !is_int($int)) {
 			throw new Exception('Geen integer: maaltijd id');
 		}
 		$this->maaltijd_id = $int;
 	}
+
 	public function setDatum($datum) {
 		if (!is_string($datum)) {
 			throw new Exception('Geen string: datum');
 		}
 		$this->datum = $datum;
 	}
+
 	public function setPunten($int) {
 		if (!is_int($int)) {
 			throw new Exception('Geen integer: punten');
 		}
 		$this->punten = $int;
 	}
+
 	public function setBonusMalus($int) {
 		if (!is_int($int)) {
 			throw new Exception('Geen integer: bonus malus');
 		}
 		$this->bonus_malus = $int;
 	}
+
 	public function setPuntenToegekend($int) {
 		if (!is_int($int)) {
 			throw new Exception('Geen integer: punten toegekend');
 		}
 		$this->punten_toegekend = $int;
 	}
+
 	public function setBonusToegekend($int) {
 		if (!is_int($int)) {
 			throw new Exception('Geen integer: bonus toegekend');
 		}
 		$this->bonus_toegekend = $int;
 	}
+
 	public function setWanneerToegekend($datumtijd) {
 		if ($datumtijd !== null && !is_string($datumtijd)) {
 			throw new Exception('Geen string: wanneer toegekend');
 		}
 		$this->wanneer_toegekend = $datumtijd;
 	}
+
 	public function setWanneerGemaild($datumtijd) {
 		if (!is_string($datumtijd)) {
 			throw new Exception('Geen string: wanneer gemaild');
 		}
 		if ($datumtijd !== '') {
-			 $datumtijd .= '&#013;'. $this->getWanneerGemaild();
+			$datumtijd .= '&#013;' . $this->getWanneerGemaild();
 		}
 		$this->wanneer_gemaild = $datumtijd;
 	}
+
 	public function setVerwijderd($bool) {
 		if (!is_bool($bool)) {
 			throw new Exception('Geen boolean: verwijderd');
 		}
 		$this->verwijderd = $bool;
 	}
+
 	public function setCorveeFunctie(CorveeFunctie $functie) {
 		$this->corvee_functie = $functie;
 	}
-	
+
 	// Agendeerbaar ############################################################
-	
+
 	public function getBeginMoment() {
 		return strtotime($this->getDatum());
 	}
+
 	public function getEindMoment() {
 		return $this->getBeginMoment();
 	}
+
 	public function getTitel() {
 		if ($this->getLidId()) {
-			return 'Corvee '. $this->getLid()->getNaamLink('civitas');
+			return 'Corvee ' . $this->getLid()->getNaamLink('civitas');
 		}
-		return 'Corvee '. $this->getCorveeFunctie()->getNaam();
+		return 'Corvee ' . $this->getCorveeFunctie()->getNaam();
 	}
+
 	public function getBeschrijving() {
 		if ($this->getLidId()) {
 			return $this->getCorveeFunctie()->getNaam();
 		}
 		return 'Nog niet ingedeeld';
 	}
+
 	public function isHeledag() {
 		return false;
 	}
+
 }
 
 ?>

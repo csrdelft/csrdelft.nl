@@ -1,16 +1,15 @@
 <?php
 
-#
-# C.S.R. Delft
-#
 # -------------------------------------------------------------------
 # configuratie.include.php
 # -------------------------------------------------------------------
 # Instellingen van het include_path enzo...
 # -------------------------------------------------------------------
 #
-//uncomment de volgende regel om de boel in onderhoudsmode te ketzen
-//define('MODE', 'ONDERHOUD');
+# uncomment de volgende regel om de boel in onderhoudsmode te ketzen
+# 
+# define('MODE', 'ONDERHOUD');
+# 
 # de wiki genereert de nodige notices. En heeft daarom de error_reporting 
 # anders ingesteld.
 global $conf;
@@ -49,11 +48,6 @@ define('COURANT_TEMPLATE', 'courant.tpl');
 # wordt gebruikt om pagina's alleen op Confide te laten zien
 define('CONFIDE_IP', '80.112.180.123');
 
-# hoeveel dagen van tevoren worden agendapunten standaard getoond?
-define('AGENDA_LIJST_DEFAULT_DAGEN', 70);
-
-//verenigingsstatisticus
-define('STATISTICUS', '0630');
 //Feut ip voor de rss feed in #csrdelft
 define('FEUT_IP', '82.94.188.77');
 
@@ -61,12 +55,12 @@ define('FEUT_IP', '82.94.188.77');
 define('ROWID_QUEUE_FORUM', 38);
 define('ROWID_QUEUE_MEDEDELINGEN', 62);
 
-
 //stapeltje dingen includeren die toch (bijna) altijd nodig zijn:
 require_once 'common.functions.php';
 require_once 'mysql.class.php';
 require_once 'MVC/model/PaginationModel.abstract.php';
-require_once 'MVC/model/Instellingen.singleton.php';
+require_once 'MVC/model/LidInstellingen.singleton.php';
+require_once 'MVC/model/AgendaModel.class.php';
 require_once 'MVC/view/TemplateView.abstract.php';
 require_once 'MVC/view/form/Formulier.class.php';
 require_once 'MVC/view/CsrUbb.class.php';
@@ -81,15 +75,15 @@ switch (constant('MODE')) {
 			exit;
 		}
 	case 'WEB':
-		//als er een wikiconfiguratie is en hierin is de csr-wikiauthicatie geselecteerd 
-		//dan is de sessie al gestart en zijn sommige includes niet nodig.
+		// als er een wikiconfiguratie is en hierin is de csr-wikiauthicatie geselecteerd 
+		// dan is de sessie al gestart en zijn sommige includes niet nodig.
 		if (!(isset($conf['authtype']) AND $conf['authtype'] == 'authcsr')) {
-			//sessie starten
+			// sessie starten
 			require_once 'simplehtml.class.php';
 			require_once 'csrdelft.class.php';
 			require_once 'icon.class.php';
 
-			//volgt de defaults van webserver Syrinx, zodat testen met een workcopy overeenkomt.
+			// volgt de defaults van webserver Syrinx, zodat testen met een workcopy overeenkomt.
 			session_name("PHPSESSID");
 			session_set_cookie_params(1036800, '/', '', false, false);
 
@@ -98,7 +92,7 @@ switch (constant('MODE')) {
 			# sess_deleted bugs ondervangt en ip-checks doet
 			session_start();
 		}
-		//database & lid initialiseren...
+		// database & lid initialiseren...
 		$db = MySQL::instance();
 		$loginlid = LoginLid::instance();
 		break;
@@ -113,4 +107,3 @@ switch (constant('MODE')) {
 	default:
 		die("configuratie.include.php:: unsupported MODE");
 }
-?>

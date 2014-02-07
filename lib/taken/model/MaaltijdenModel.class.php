@@ -41,14 +41,10 @@ class MaaltijdenModel {
 	 * @return Maaltijd[] (implements Agendeerbaar)
 	 */
 	public static function getMaaltijdenVoorAgenda($van, $tot) {
-		if ($van === null) { // RSS
-			$van = strtotime('-1 year');
-		} elseif (!is_int($van)) {
+		if (!is_int($van)) {
 			throw new Exception('Invalid timestamp: $van getMaaltijdenVoorAgenda()');
 		}
-		if ($tot === null) { // RSS
-			$tot = strtotime('+1 year');
-		} elseif (!is_int($tot)) {
+		if (!is_int($tot)) {
 			throw new Exception('Invalid timestamp: $tot getMaaltijdenVoorAgenda()');
 		}
 		$maaltijden = self::loadMaaltijden('verwijderd = false AND datum >= ? AND datum <= ?', array(date('Y-m-d', $van), date('Y-m-d', $tot)));
