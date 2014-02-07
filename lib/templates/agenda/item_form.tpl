@@ -47,5 +47,5 @@
 
 	<label for="submit">&nbsp;</label>
 	<input type="submit" name="submit" value="Opslaan" /> 
-	<a class="knop" href="/actueel/agenda/{$item->begin_moment|date_format:"%Y-%m"}">Terug</a>
+	<a class="knop" href="/actueel/agenda/maand/{$item->begin_moment|date_format:"%Y-%m"}">Terug</a>
 </form>
