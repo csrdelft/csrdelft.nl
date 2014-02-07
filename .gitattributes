@@ -4009,3 +4009,4 @@ sql/4003_permissie_roles.sql -text
 sql/4014_drop_sjaarsacties.sql -text
 sql/4015_drop_oude_vormingsbank.sql -text
 sql/4129_iban.sql -text
+sql/4142_lidinstellingen.sql -text
