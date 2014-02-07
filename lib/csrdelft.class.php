@@ -58,13 +58,9 @@ class csrdelft extends TemplateView {
 					}
 				}
 				if (defined('DEBUG') AND (LoginLid::instance()->hasPermission('P_ADMIN') OR LoginLid::instance()->isSued())) {
-					$this->addStylesheet('jquery-ui.css', '/layout/js/jquery/themes/ui-lightness/');
 					$this->addScript('jquery/jquery-2.1.0.js');
-					$this->addScript('jquery/jquery-ui-1.10.4.custom.js');
 				} else { // minimized javascript
-					$this->addStylesheet('jquery-ui.min.css', '/layout/js/jquery/themes/ui-lightness/');
 					$this->addScript('jquery/jquery-2.1.0.min.js');
-					$this->addScript('jquery/jquery-ui-1.10.4.custom.min.js');
 				}
 				$this->addScript('jquery/plugins/jquery.timeago.js');
 				$this->addScript('jquery/plugins/jquery.hoverIntent.min.js');
