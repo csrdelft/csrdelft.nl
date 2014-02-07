@@ -34,6 +34,7 @@ class LidInstellingenView extends TemplateView {
 				$this->smarty->assign('label', $this->model->getDescription($module, $key));
 				$this->smarty->assign('waarde', $this->model->getValue($module, $key));
 				$this->smarty->assign('default', $this->model->getDefault($module, $key));
+				$this->smarty->assign('iedereen', LoginLid::instance()->hasPermission('P_ADMIN'));
 				$this->smarty->display('MVC/instellingen/lidinstelling.tpl');
 			}
 			echo '</div>';
