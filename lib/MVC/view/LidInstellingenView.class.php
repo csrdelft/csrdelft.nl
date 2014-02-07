@@ -18,13 +18,6 @@ class LidInstellingenView extends TemplateView {
 	}
 
 	public function view() {
-		if (defined('DEBUG') AND (LoginLid::instance()->hasPermission('P_ADMIN') OR LoginLid::instance()->isSued())) {
-			//$this->addStylesheet('jquery-ui.css', '/layout/js/jquery/themes/ui-lightness/'); //FIXME
-			$this->addScript('jquery/jquery-ui-1.10.4.custom.js');
-		} else { // minimized javascript
-			//$this->addStylesheet('jquery-ui.min.css', '/layout/js/jquery/themes/ui-lightness/'); //FIXME
-			$this->addScript('jquery/jquery-ui-1.10.4.custom.min.js');
-		}
 		$this->smarty->display('MVC/instellingen/lidinstellingen_page.tpl');
 		echo '<form id="form" action="/instellingen/opslaan" method="post"><div id="tabs" style="width: 700px;"><ul>';
 		foreach (array_keys($this->model->getInstellingen()) as $module) {
