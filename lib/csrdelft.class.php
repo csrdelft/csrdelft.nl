@@ -32,7 +32,7 @@ class csrdelft extends TemplateView {
 				$this->addStylesheet('ubb.css', '/layout/');
 				$this->addScript('jquery.js', '/layout2/');
 				$this->addScript('jquery.backstretch.js', '/layout2/');
-				$this->addScript('jquery/plugins/jquery.timeago.js', '/layout/');
+				$this->addScript('jquery/plugins/jquery.timeago-1.3.0.custom.js', '/layout/');
 				$this->addScript('init.js', '/layout2/');
 				$this->addScript('csrdelft.js', '/layout/');
 				return;
