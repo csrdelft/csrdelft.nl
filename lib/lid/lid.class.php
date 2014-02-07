@@ -770,7 +770,13 @@ class Lid implements Serializable, Agendeerbaar {
 					$k.= ' init';
 				}
 				$k.= '">' . $this->getPasfoto('small', 'lidfoto');
-				$k.= '<div class="uid uitgebreid">(' . $this->getUid() . ')</div>';
+				$k.= '<div class="uid uitgebreid">(';
+				if (LoginLid::instance()->hasPermission('P_ADMIN')) {
+					$k.= '<a href="/su/' . $this->getUid() . '" title="Su naar dit lid">' . $this->getUid() . '</a>';
+				} else {
+					$k.= $this->getUid();
+				}
+				$k.= ')</div>';
 				$k.= '<p class="naam">' . $l . $sVolledigeNaam;
 				if (!$this->isLid()) {
 					$k.= '&nbsp;' . $this->getStatus()->getChar();
