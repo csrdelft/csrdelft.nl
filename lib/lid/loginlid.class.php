@@ -141,7 +141,6 @@ class LoginLid {
 		$_SESSION['_suedFrom'] = $this->lid->getUid();
 		$_SESSION['_uid'] = $uid;
 		$this->lid = $suNaar;
-		LidInstellingen::reload();
 	}
 
 	public function endSu() {
@@ -149,7 +148,6 @@ class LoginLid {
 		$this->lid = $this->suedFrom;
 		unset($_SESSION['_suedFrom']);
 		$this->suedFrom = null;
-		LidInstellingen::reload();
 	}
 
 	public function isSued() {
