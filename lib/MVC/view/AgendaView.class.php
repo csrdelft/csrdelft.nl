@@ -32,7 +32,7 @@ class AgendaMaandView extends TemplateView {
 		$this->smarty->assign('magBeheren', AgendaController::magBeheren());
 
 		// URL voor vorige maand
-		$urlVorige = CSR_ROOT . 'actueel/agenda/';
+		$urlVorige = CSR_ROOT . 'actueel/agenda/maand/';
 		if ($this->maand == 1) {
 			$urlVorige .= ($this->jaar - 1) . '-12/';
 		} else {
@@ -41,7 +41,7 @@ class AgendaMaandView extends TemplateView {
 		$this->smarty->assign('urlVorige', $urlVorige);
 
 		// URL voor volgende maand
-		$urlVolgende = CSR_ROOT . 'actueel/agenda/';
+		$urlVolgende = CSR_ROOT . 'actueel/agenda/maand/';
 		if ($this->maand == 12) {
 			$urlVolgende .= ($this->jaar + 1) . '-1/';
 		} else {
