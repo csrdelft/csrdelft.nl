@@ -13,7 +13,6 @@ switch ($action) {
 			$loginlid->su($uid);
 			setMelding('U bekijkt de webstek nu als ' . Lid::getNaamLinkFromUid($_GET['uid']) . '!', 1);
 		}
-		invokeRefresh($_SERVER['HTTP_REFERER']);
 		break;
 
 	case 'endSu':
@@ -23,6 +22,11 @@ switch ($action) {
 			$loginlid->endSu();
 			setMelding('Switch-useractie is beëindigd.', 1);
 		}
-		invokeRefresh($_SERVER['HTTP_REFERER']);
 		break;
 }
+if (array_key_exists('HTTP_REFERER', $_SERVER)) {
+	$url = $_SERVER['HTTP_REFERER'];
+} else {
+	$url = CSR_ROOT;
+}
+invokeRefresh($url);
