@@ -58,7 +58,7 @@ class LidInstellingen extends PersistenceModel {
 			'layout' => array('Websteklayout', 'enum', array('normaal', 'owee', 'roze', 'lustrum'), 'normaal'),
 			'beeld' => array('Schermmodus', 'enum', array('normaal', 'breedbeeld'), 'normaal'),
 			'visitekaartjes' => array('Visitekaartjes', 'enum', array('ja', 'nee'), 'ja'),
-			'sneeuw' => array('Sneeuw', 'enum', array('ja', 'freeze!', 'nee'), 'ja'),
+			'sneeuw' => array('Sneeuw', 'enum', array('ja', 'freeze!', 'nee'), 'nee'),
 			'neuzen' => array('Neuzen', 'enum', array('overal', '2013', 'nee'), '2013'),
 			'minion' => array('Minion', 'enum', array('ja', 'nee'), 'nee')
 		),
