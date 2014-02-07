@@ -1,4 +1,5 @@
 <?php
+
 # C.S.R. Delft | pubcie@csrdelft.nl
 # -------------------------------------------------------------------
 # class.agenda.php
@@ -16,11 +17,14 @@ require_once 'taken/model/TakenModel.class.php';
 interface Agendeerbaar {
 
 	public function getBeginMoment(); //timestamp van beginmoment
-	public function getEindMoment();  //timestamp van eindmoment
-	public function getTitel();
-	public function getBeschrijving();
-	public function isHeledag();
 
+	public function getEindMoment();  //timestamp van eindmoment
+
+	public function getTitel();
+
+	public function getBeschrijving();
+
+	public function isHeledag();
 }
 
 /**
@@ -36,7 +40,7 @@ class AgendaItem implements Agendeerbaar {
 	private $beschrijving;
 	private $rechtenBekijken;
 
-	public function __construct($itemid=0, $beginMoment=0, $eindMoment=0, $titel='', $beschrijving='', $rechtenBekijken='P_NOBODY') {
+	public function __construct($itemid = 0, $beginMoment = 0, $eindMoment = 0, $titel = '', $beschrijving = '', $rechtenBekijken = 'P_NOBODY') {
 		$this->itemid = $itemid;
 		$this->setBeginMoment($beginMoment);
 		$this->setEindMoment($eindMoment);
@@ -48,18 +52,23 @@ class AgendaItem implements Agendeerbaar {
 	public function getItemID() {
 		return $this->itemid;
 	}
+
 	public function getBeginMoment() {
 		return $this->beginMoment;
 	}
+
 	public function getEindMoment() {
 		return $this->eindMoment;
 	}
+
 	public function getTitel() {
 		return $this->titel;
 	}
+
 	public function getBeschrijving() {
 		return $this->beschrijving;
 	}
+
 	public function getRechtenBekijken() {
 		return $this->rechtenBekijken;
 	}
@@ -67,15 +76,19 @@ class AgendaItem implements Agendeerbaar {
 	public function setBeginMoment($beginMoment) {
 		$this->beginMoment = $beginMoment;
 	}
+
 	public function setEindMoment($eindMoment) {
 		$this->eindMoment = $eindMoment;
 	}
+
 	public function setTitel($titel) {
 		$this->titel = $titel;
 	}
+
 	public function setBeschrijving($beschrijving) {
 		$this->beschrijving = $beschrijving;
 	}
+
 	public function setRechtenBekijken($rechtenBekijken) {
 		$this->rechtenBekijken = $rechtenBekijken;
 	}
@@ -83,11 +96,12 @@ class AgendaItem implements Agendeerbaar {
 	public function magBekijken() {
 		return LoginLid::instance()->hasPermission($this->getRechtenBekijken());
 	}
+
 	//lekker fies
-	public function isHeledag(){
+	public function isHeledag() {
 		return
-			date('H:i', $this->getBeginMoment())=='00:00' AND
-			date('H:i', $this->getEindMoment())=='23:59';
+				date('H:i', $this->getBeginMoment()) == '00:00' AND
+				date('H:i', $this->getEindMoment()) == '23:59';
 	}
 
 	public function opslaan() {
@@ -97,20 +111,20 @@ class AgendaItem implements Agendeerbaar {
 				INSERT INTO agenda (
 					titel, beschrijving, begin, eind, rechtenBekijken
 				) VALUES (
-					'".$db->escape($this->getTitel())."',
-					'".$db->escape($this->getBeschrijving())."',
-					FROM_UNIXTIME(".$this->getBeginMoment()."),
-					FROM_UNIXTIME(".$this->getEindMoment()."),
-					'".$this->getRechtenBekijken()."'
+					'" . $db->escape($this->getTitel()) . "',
+					'" . $db->escape($this->getBeschrijving()) . "',
+					FROM_UNIXTIME(" . $this->getBeginMoment() . "),
+					FROM_UNIXTIME(" . $this->getEindMoment() . "),
+					'" . $this->getRechtenBekijken() . "'
 				);";
 		} else {
 			$query = "
 				UPDATE agenda SET
-					titel = '".$db->escape($this->getTitel())."',
-					beschrijving = '".$db->escape($this->getBeschrijving())."',
-					begin = FROM_UNIXTIME(".$this->getBeginMoment()."),
-					eind = FROM_UNIXTIME(".$this->getEindMoment().")
-				WHERE id=".$this->getItemID().";";
+					titel = '" . $db->escape($this->getTitel()) . "',
+					beschrijving = '" . $db->escape($this->getBeschrijving()) . "',
+					begin = FROM_UNIXTIME(" . $this->getBeginMoment() . "),
+					eind = FROM_UNIXTIME(" . $this->getEindMoment() . ")
+				WHERE id=" . $this->getItemID() . ";";
 		}
 		if ($db->query($query)) {
 			if ($this->getItemID() == 0) {
@@ -123,7 +137,7 @@ class AgendaItem implements Agendeerbaar {
 
 	public function verwijder() {
 		$db = MySQL::instance();
-		$query = "DELETE FROM agenda WHERE id = ".$this->getItemID();
+		$query = "DELETE FROM agenda WHERE id = " . $this->getItemID();
 		if ($db->query($query)) {
 			return true;
 		} else {
@@ -134,14 +148,14 @@ class AgendaItem implements Agendeerbaar {
 	public static function getItem($id) {
 		$db = MySQL::instance();
 		$query = "SELECT titel, beschrijving, begin, eind, rechtenBekijken
-					FROM agenda WHERE id = ".(int)$id;
+					FROM agenda WHERE id = " . (int) $id;
 		$item = $db->getRow($query);
 		$item['begin'] = strtotime($item['begin']);
 		$item['eind'] = strtotime($item['eind']);
 
-		return new AgendaItem($id, $item['begin'], $item['eind'], $item['titel'],
-				$item['beschrijving'], $item['rechtenBekijken']);
+		return new AgendaItem($id, $item['begin'], $item['eind'], $item['titel'], $item['beschrijving'], $item['rechtenBekijken']);
 	}
+
 }
 
 /**
@@ -152,7 +166,7 @@ class Agenda {
 	private $items;
 
 	public function __construct() {
-
+		
 	}
 
 	public function magToevoegen() {
@@ -163,16 +177,16 @@ class Agenda {
 		return LoginLid::instance()->hasPermission('P_AGENDA_MOD');
 	}
 
-	public function getItems($van=null, $tot=null, $filter) {
+	public function getItems($van = null, $tot = null, $filter) {
 		$result = array();
 
 		// Regulie agenda-items
 		$qItems = "SELECT id, titel, beschrijving, begin, eind, rechtenBekijken FROM agenda WHERE 1=1";
 		if ($van != null) {
-			$qItems .= " AND eind >= '".date('Y-m-d', $van)."'";
+			$qItems .= " AND eind >= '" . date('Y-m-d', $van) . "'";
 		}
 		if ($tot != null) {
-			$qItems .= " AND begin <= '".date('Y-m-d', $tot)."'";
+			$qItems .= " AND begin <= '" . date('Y-m-d', $tot) . "'";
 		}
 		$qItems .= " ORDER BY begin ASC, titel ASC";
 
@@ -185,23 +199,23 @@ class Agenda {
 			}
 		}
 
-		if(LidInstellingen::get('agenda', 'toonMaaltijden')=='ja'){ // Maaltijden ophalen
+		if (LidInstellingen::get('agenda', 'toonMaaltijden') == 'ja') { // Maaltijden ophalen
 			$result = array_merge($result, MaaltijdenModel::getMaaltijdenVoorAgenda($van, $tot));
 		}
 
-		if(LidInstellingen::get('agenda', 'toonCorvee')=='iedereen'){ // Corveetaken ophalen
+		if (LidInstellingen::get('agenda', 'toonCorvee') == 'iedereen') { // Corveetaken ophalen
 			$result = array_merge($result, TakenModel::getTakenVoorAgenda($van, $tot, true));
 		}
-		if(LidInstellingen::get('agenda', 'toonCorvee')=='eigen'){ // Corveetaken ophalen
+		if (LidInstellingen::get('agenda', 'toonCorvee') == 'eigen') { // Corveetaken ophalen
 			$result = array_merge($result, TakenModel::getTakenVoorAgenda($van, $tot, false));
 		}
 
-		if(LidInstellingen::get('agenda', 'toonVerjaardagen')=='ja'){
+		if (LidInstellingen::get('agenda', 'toonVerjaardagen') == 'ja') {
 			//Verjaardagen. Omdat Lid-objectjes eigenlijk niet Agendeerbaar, maar meer iets als
 			//PeriodiekAgendeerbaar zijn, maar we geen zin hebben om dat te implementeren,
 			//doen we hier even een vieze hack waardoor het wel soort van werkt.
-			$GLOBALS['agenda_jaar']=date('Y', $van);
-			$GLOBALS['agenda_maand']=date('m', ($van+$tot)/2);
+			$GLOBALS['agenda_jaar'] = date('Y', $van);
+			$GLOBALS['agenda_maand'] = date('m', ($van + $tot) / 2);
 
 			$result = array_merge($result, Lid::getVerjaardagen($van, $tot));
 		}
@@ -212,18 +226,20 @@ class Agenda {
 		return $result;
 	}
 
-	public function getItemsByWeek($jaar=null, $week=null) {
+	public function getItemsByWeek($jaar = null, $week = null) {
 		$van = null;
 		$tot = null;
 
 		return $this->getItems($van, $tot);
 	}
-	public function getItemsByDay($jaar, $maand, $dag){
-		$van=mktime(0, 0, 0, $maand, $dag, $jaar);
-		$tot=mktime(0, 0, 0, $maand, $dag+1, $jaar);
+
+	public function getItemsByDay($jaar, $maand, $dag) {
+		$van = mktime(0, 0, 0, $maand, $dag, $jaar);
+		$tot = mktime(0, 0, 0, $maand, $dag + 1, $jaar);
 
 		return $this->getItems($van, $tot, true);
 	}
+
 	public function getItemsByMaand($jaar, $maand, $filter) {
 		// Zondag van de eerste week van de maand uitrekenen
 		$startMoment = mktime(0, 0, 0, $maand, 1, $jaar);
@@ -263,14 +279,16 @@ class Agenda {
 
 		return $agenda;
 	}
+
 	/*
 	 * Zoek in de activiteiten (titel en beschrijving) van vandaag
 	 * naar het woord $woord, geef de eerste terug.
 	 */
-	public function isActiviteitGaande($woord){
-		foreach($this->getItemsByDay(date('Y'), date('m'), date('d')) as $item){
-			if(	stristr($item->getTitel(), $woord)!==false OR
-				stristr($item->getBeschrijving(), $woord)!==false ){
+
+	public function isActiviteitGaande($woord) {
+		foreach ($this->getItemsByDay(date('Y'), date('m'), date('d')) as $item) {
+			if (stristr($item->getTitel(), $woord) !== false OR
+					stristr($item->getBeschrijving(), $woord) !== false) {
 				return $item;
 				break;
 			}
@@ -279,13 +297,14 @@ class Agenda {
 	}
 
 	/**
-	 * Geeft het weeknummer van de eerste dag van de week van $date terug.
+	 * Geeft het ISO-8601 weeknummer van $date terug,
+	 * gecorrigeerd naar zondag als eerste dag van de week.
 	 */
 	public static function weekNumber($date) {
 		if (date('w', $date) == 0) {
-			return strftime('%U', $date);
+			return date('W', $date + 60 * 60 * 24);
 		} else {
-			return strftime('%U', strtotime('last Sunday', $date));
+			return date('W', $date);
 		}
 	}
 
@@ -298,5 +317,7 @@ class Agenda {
 		}
 		return ($foo->getBeginMoment() > $bar->getBeginMoment()) ? 1 : -1;
 	}
+
 }
+
 ?>
