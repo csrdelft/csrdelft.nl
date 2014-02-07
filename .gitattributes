@@ -213,7 +213,7 @@ htdocs/layout/documenten.css -text
 htdocs/layout/forum.css -text
 htdocs/layout/fotoalbum.css -text
 htdocs/layout/groepen.css -text
-htdocs/layout/jquery.prettyPhoto.css -text
+htdocs/layout/jquery.prettyPhoto-3.1.5.css -text
 htdocs/layout/js/autocomplete/README[!!-~]PubCie -text
 htdocs/layout/js/autocomplete/README.md -text
 htdocs/layout/js/autocomplete/changelog.txt -text
@@ -294,10 +294,10 @@ htdocs/layout/js/jquery/jquery-2.1.0.js -text
 htdocs/layout/js/jquery/jquery-2.1.0.min.js -text
 htdocs/layout/js/jquery/jquery-ui-1.10.4.custom.js -text
 htdocs/layout/js/jquery/jquery-ui-1.10.4.custom.min.js -text
-htdocs/layout/js/jquery/plugins/jquery.hoverIntent.min.js -text
-htdocs/layout/js/jquery/plugins/jquery.prettyPhoto.min.js -text
-htdocs/layout/js/jquery/plugins/jquery.scrollTo.min.js -text
-htdocs/layout/js/jquery/plugins/jquery.timeago.js -text
+htdocs/layout/js/jquery/plugins/jquery.hoverIntent-r7.min.js -text
+htdocs/layout/js/jquery/plugins/jquery.prettyPhoto-3.1.5.min.js -text
+htdocs/layout/js/jquery/plugins/jquery.scrollTo-1.4.3.1.min.js -text
+htdocs/layout/js/jquery/plugins/jquery.timeago-1.3.0.custom.js -text
 htdocs/layout/js/jquery/themes/black-tie/images/animated-overlay.gif -text
 htdocs/layout/js/jquery/themes/black-tie/images/ui-bg_diagonals-thick_8_333333_40x40.png -text
 htdocs/layout/js/jquery/themes/black-tie/images/ui-bg_flat_65_ffffff_40x100.png -text

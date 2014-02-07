@@ -36,8 +36,8 @@ if($fotoalbum->magBekijken()){
 		$pagina=new csrdelft($fotoalbumcontent, 'csrdelft2');
 	}
 	$pagina->addStylesheet('fotoalbum.css');
-	$pagina->addStylesheet('jquery.prettyPhoto.css');
-	$pagina->addScript('jquery.prettyPhoto.min.js');
+	$pagina->addStylesheet('jquery.prettyPhoto-3.1.5.css?');
+	$pagina->addScript('jquery/plugins/jquery.prettyPhoto-3.1.5.min.js?');
 	$pagina->view();
 }
 else{
