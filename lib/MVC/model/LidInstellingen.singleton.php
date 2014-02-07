@@ -72,7 +72,7 @@ class LidInstellingen extends PersistenceModel {
 			'filter2008' => array('Berichten van 2008 eerst verbergen', 'enum', array('ja', 'nee'), 'nee')
 		),
 		'zijbalk' => array(
-			'ishetal' => array('Is het al…', 'enum', array('niet weergeven', 'donderdag', 'vrijdag', 'zondag', 'lunch', 'avond', 'borrel', 'lezing', 'jarig', 'dies', 'studeren', 'willekeurig'), 'niet weergeven'),
+			'ishetal' => array('Is het al…', 'enum', array('niet weergeven', 'donderdag', 'vrijdag', 'zondag', 'lunch', 'avond', 'borrel', 'lezing', 'jarig', 'dies', 'studeren', 'willekeurig'), 'dies'),
 			'gasnelnaar' => array('Ga snel naar weergeven', 'enum', array('ja', 'nee'), 'ja'),
 			'agendaweken' => array('Aantal weken weergeven', 'int', array(0, 10), 2),
 			'agenda_max' => array('Maximaal aantal agenda-items', 'int', array(0, 50), 15),

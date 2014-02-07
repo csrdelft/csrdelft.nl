@@ -15,11 +15,17 @@ class IsHetAlContent extends TemplateView {
 		}
 		switch ($this->ishetal) {
 			case 'dies' : 
-				$cdate = mktime(0, 0, 0, 12, 31, 2009, 0);
-				$today = time();
-				$difference = $cdate - $today;
-				if ($difference < 0) { $difference = 0; }
-				$this->ja = floor($difference/60/60/24);
+				$dies = strtotime(date('Y') . '-02-11');
+				$nu = strtotime(date('Y-m-d'));
+				if ($dies < $nu) {
+					$dies = strtotime('+1 year', $dies);
+				}
+				$dagen = round(($dies - $nu) / 86400);
+				if ($dagen == 0) {
+					return true;
+				} else {
+					return $dagen;
+				}
 				break;
 			case 'jarig': $this->ja = LoginLid::instance()->getLid()->getJarigOver();
 				break;
@@ -77,7 +83,7 @@ class IsHetAlContent extends TemplateView {
 		if ($this->ja === true) {
 			echo '<div class="ja">JA!</div>';
 		} else {
-			if ($this->ishetal == 'jarig') {
+			if ($this->ishetal == 'jarig' || $this->ishetal == 'dies') {
 				echo '<div class="nee">OVER ' . $this->ja . ' DAGEN!</div>';
 			} else {
 				echo '<div class="nee">NEE.</div>';
