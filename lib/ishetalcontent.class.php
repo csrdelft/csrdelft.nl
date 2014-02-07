@@ -22,9 +22,9 @@ class IsHetAlContent extends TemplateView {
 				}
 				$dagen = round(($dies - $nu) / 86400);
 				if ($dagen == 0) {
-					return true;
+					$this->ja = true;
 				} else {
-					return $dagen;
+					$this->ja = $dagen;
 				}
 				break;
 			case 'jarig': $this->ja = LoginLid::instance()->getLid()->getJarigOver();
