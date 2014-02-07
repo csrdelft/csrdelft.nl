@@ -61,4 +61,11 @@ abstract class PersistentEntity {
 		}
 	}
 
+	/**
+	 * Create database table
+	 */
+	public function createTable() {
+		return Database::instance()->sqlCreateTable($this->getTableName(), static::$persistent_fields, $this->getPrimaryKey());
+	}
+
 }

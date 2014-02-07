@@ -20,7 +20,6 @@ class MededelingContent extends TemplateView {
 
 		$this->smarty->assign('mededeling', $this->mededeling);
 		$this->smarty->assign('prullenbak', $this->prullenbak);
-		$this->smarty->assign('melding', $this->getMelding());
 		$this->smarty->assign('nieuws_root', NIEUWS_ROOT);
 		$this->smarty->assign('prioriteiten', Mededeling::getPrioriteiten());
 		$this->smarty->assign('datumtijdFormaat', '%Y-%m-%d %H:%M');
@@ -37,5 +36,3 @@ class MededelingContent extends TemplateView {
 	}
 
 }
-
-?>

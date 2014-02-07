@@ -23,13 +23,9 @@ class MaalCieSaldiView extends TemplateView {
 		if ($this->_melding) {
 			echo '<tr id="taken-melding"><td>' . $this->getMelding() . '</td></tr>';
 		} else {
-			$this->smarty->assign('melding', $this->getMelding());
-			$this->smarty->assign('kop', $this->getTitel());
 			$this->smarty->display('taken/menu_pagina.tpl');
 			$this->smarty->display('taken/maalcie_saldi.tpl');
 		}
 	}
 
 }
-
-?>

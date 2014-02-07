@@ -25,7 +25,7 @@
 </div>
 
 {* feutmeldingen weergeven... *}
-{if $melding!=''}{$melding}{/if}
+{if $melding!=''}{$view->getMelding()}{/if}
 
 {* geen overzicht van berichten bij het bewerken... *}
 {if $form.ID==0 AND sizeof($courant->getBerichtenVoorGebruiker())>0}

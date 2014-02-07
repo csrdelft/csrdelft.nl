@@ -57,15 +57,9 @@ class CourantBeheercontent extends TemplateView {
 				$formulier['bericht'] = htmlspecialchars($_SESSION['compose_snapshot']);
 			}
 		}
-
 		$this->smarty->assign('courant', $this->courant);
 		$this->smarty->assign('form', $formulier);
-		$this->smarty->assign('melding', $this->getMelding());
-
 		$this->smarty->display('courant/courantbeheer.tpl');
 	}
 
 }
-
-//einde classe
-?>

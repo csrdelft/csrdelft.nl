@@ -7,7 +7,7 @@
 	</div>
 {/capture}
 {$smarty.capture.navlinks}
-{$melding}
+{$view->getMelding()}
 
 <table id="forumtabel">
 	<tr>

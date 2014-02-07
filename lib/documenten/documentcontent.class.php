@@ -31,9 +31,6 @@ class DocumentContent extends TemplateView {
 	}
 
 	public function view() {
-
-
-		$this->smarty->assign('melding', $this->getMelding());
 		$this->smarty->assign('categorieen', DocumentenCategorie::getAll());
 		$this->smarty->assign('document', $this->document);
 		$this->smarty->assign('uploaders', $this->uploaders);
@@ -49,17 +46,11 @@ class DocumentContent extends TemplateView {
 
 class DocumentenContent extends TemplateView {
 
-	public function __construct() {
-		parent::__construct();
-	}
-
 	public function getTitel() {
 		return 'Documentenketzer';
 	}
 
 	public function view() {
-
-		$this->smarty->assign('melding', $this->getMelding());
 		$this->smarty->assign('categorieen', DocumentenCategorie::getAll());
 		$this->smarty->display('documenten/documenten.tpl');
 	}
@@ -84,8 +75,6 @@ class DocumentCategorieContent extends TemplateView {
 	}
 
 	public function view() {
-
-		$this->smarty->assign('melding', $this->getMelding());
 		$this->smarty->assign('categorie', $this->categorie);
 		$this->smarty->display('documenten/documentencategorie.tpl');
 	}
@@ -141,5 +130,3 @@ class DocumentUbbContent extends TemplateView {
 	}
 
 }
-
-?>

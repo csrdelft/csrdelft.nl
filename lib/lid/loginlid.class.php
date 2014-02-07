@@ -211,7 +211,6 @@ class LoginLid {
 		} elseif (isset($_SESSION['_ip'])) {
 			unset($_SESSION['_ip']);
 		}
-		LidInstellingen::reload();
 		return true;
 	}
 
@@ -242,8 +241,8 @@ class LoginLid {
 		$this->login('x999', 'x999', true);
 	}
 
-	public function getInstelling($key) {
-		return LidInstellingen::get($key);
+	public function getInstelling($module, $key=null) {
+		return LidInstellingen::get($module, $key);
 	}
 
 	/*

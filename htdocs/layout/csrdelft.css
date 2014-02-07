@@ -316,7 +316,7 @@ ul.nobullets li{ list-style-type: none; }
 
 /**** BLOCK *******************************************************************/
 #mainleft .block {
-	margin: 0 15px 0 10px;
+	margin: 10px 15px 0 10px;
 }
 #mainleft .block h1 {
 	margin: 0;

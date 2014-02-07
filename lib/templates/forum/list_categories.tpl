@@ -3,7 +3,7 @@
 <div class="forumNavigatie">
 	<h1 style="width: 200px;">Forum</h1>
 </div>
-{$melding}
+{$view->getMelding()}
 
 <table id="forumtabel">
 	<tr>

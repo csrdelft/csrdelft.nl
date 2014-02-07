@@ -185,18 +185,18 @@ class Agenda {
 			}
 		}
 
-		if(LidInstellingen::get('agenda_toonMaaltijden')=='ja'){ // Maaltijden ophalen
+		if(LidInstellingen::get('agenda', 'toonMaaltijden')=='ja'){ // Maaltijden ophalen
 			$result = array_merge($result, MaaltijdenModel::getMaaltijdenVoorAgenda($van, $tot));
 		}
 
-		if(LidInstellingen::get('agenda_toonCorvee')=='iedereen'){ // Corveetaken ophalen
+		if(LidInstellingen::get('agenda', 'toonCorvee')=='iedereen'){ // Corveetaken ophalen
 			$result = array_merge($result, TakenModel::getTakenVoorAgenda($van, $tot, true));
 		}
-		if(LidInstellingen::get('agenda_toonCorvee')=='eigen'){ // Corveetaken ophalen
+		if(LidInstellingen::get('agenda', 'toonCorvee')=='eigen'){ // Corveetaken ophalen
 			$result = array_merge($result, TakenModel::getTakenVoorAgenda($van, $tot, false));
 		}
 
-		if(LidInstellingen::get('agenda_toonVerjaardagen')=='ja'){
+		if(LidInstellingen::get('agenda', 'toonVerjaardagen')=='ja'){
 			//Verjaardagen. Omdat Lid-objectjes eigenlijk niet Agendeerbaar, maar meer iets als
 			//PeriodiekAgendeerbaar zijn, maar we geen zin hebben om dat te implementeren,
 			//doen we hier even een vieze hack waardoor het wel soort van werkt.

@@ -70,9 +70,9 @@ class Database extends PDO {
 			$query = $statement;
 			foreach ($values as $value) {
 				if (is_bool($value)) {
-					$query = preg_replace('/\?/', ($value ? 'true' : 'false'), $query, 1);
+					$query = preg_replace('/\?/', ($value ? 'true' : 'false'), $query, 1); //TODO: named parameters
 				} else {
-					$query = preg_replace('/\?/', "'$value'", $query, 1);
+					$query = preg_replace('/\?/', "'$value'", $query, 1); //TODO: named parameters
 				}
 			}
 			$this->queries[] = $query;
@@ -101,7 +101,7 @@ class Database extends PDO {
 			$sql .= ' ORDER BY ' . $orderby;
 		}
 		if (is_int($limit)) {
-			$sql .= ' LIMIT ' . $start . ', ' . $limit;
+			$sql .= ' LIMIT ' . (int) $start . ', ' . $limit;
 		}
 		$query = self::instance()->prepare($sql, $params);
 		$query->execute($params);
@@ -110,6 +110,26 @@ class Database extends PDO {
 
 	/**
 	 * Optional named parameters.
+	 * 
+	 * @param string $from
+	 * @param string $where
+	 * @param array $params
+	 * @return boolean
+	 */
+	public static function sqlExists($from, $where = null, array $params = array()) {
+		$sql = 'SELECT EXISTS (SELECT 1 FROM ' . $from;
+		if ($where !== null) {
+			$sql .= ' WHERE ' . $where;
+		}
+		$sql .= ')';
+		$query = self::instance()->prepare($sql, $params);
+		$query->execute($params);
+		$result = $query->fetchColumn();
+		return (boolean) $result;
+	}
+
+	/**
+	 * Requires named parameters.
 	 * 
 	 * @param string $into
 	 * @param string $into
@@ -120,11 +140,11 @@ class Database extends PDO {
 	public static function sqlInsert($into, array $properties) {
 		$params = array();
 		foreach ($properties as $key => $value) {
-			$params[':' . $key] = $value; // named params
+			$params[':' . $key] = $value; // name parameters after column
 		}
 		$sql = 'INSERT INTO ' . $into;
 		$sql .= ' (' . implode(', ', array_keys($properties)) . ')';
-		$sql .= ' VALUES (' . implode(', ', array_keys($params)) . ')';
+		$sql .= ' VALUES (' . implode(', ', array_keys($params)) . ')'; // named params
 		$query = self::instance()->prepare($sql, $params);
 		$query->execute($params);
 		if ($query->rowCount() !== 1) {
@@ -147,8 +167,11 @@ class Database extends PDO {
 		$sql = 'UPDATE ' . $table . ' SET ';
 		$fields = array();
 		foreach ($set_properties as $key => $value) {
-			$fields[] = $key . ' = :sql' . $key; // sql prefix
-			$where_params[':sql' . $key] = $value; // named parameters
+			$fields[] = $key . ' = :' . $key; // name parameters after column
+			if (array_key_exists($key, $where_params)) {
+				throw new Exception('Named parameter already defined: ' . $key);
+			}
+			$where_params[':' . $key] = $value;
 		}
 		$sql .= implode(', ', $fields);
 		$sql .= ' WHERE ' . $where;

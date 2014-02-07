@@ -26,8 +26,6 @@ class BeheerPuntenView extends TemplateView {
 			$this->smarty->assign('puntenlijst', $this->_leden_punten);
 			$this->smarty->display('taken/corveepunt/beheer_punten_lijst.tpl');
 		} else { // matrix of repetities and voorkeuren
-			$this->smarty->assign('melding', $this->getMelding());
-			$this->smarty->assign('kop', $this->getTitel());
 			$this->smarty->display('taken/menu_pagina.tpl');
 
 			$this->smarty->assign('matrix', $this->_leden_punten);

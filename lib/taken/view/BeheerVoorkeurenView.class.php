@@ -33,8 +33,6 @@ class BeheerVoorkeurenView extends TemplateView {
 				$this->smarty->display('taken/voorkeur/beheer_voorkeur_veld.tpl');
 			}
 		} else { // matrix of repetities and voorkeuren
-			$this->smarty->assign('melding', $this->getMelding());
-			$this->smarty->assign('kop', $this->getTitel());
 			$this->smarty->display('taken/menu_pagina.tpl');
 
 			$this->smarty->assign('matrix', $this->_leden_voorkeuren);

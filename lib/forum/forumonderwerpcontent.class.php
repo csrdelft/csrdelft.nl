@@ -36,15 +36,10 @@ class ForumOnderwerpContent extends TemplateView {
 	function view() {
 		if ($this->forumonderwerp->getPosts() === false) {
 			setMelding($this->forumonderwerp->getError());
-
 			echo '<h2><a href="/communicatie/forum/" class="forumGrootlink">Forum</a> &raquo; Foutje</h2>';
 			echo $this->getMelding();
 		} else {
-
 			$this->smarty->assign('onderwerp', $this->forumonderwerp);
-
-			$this->smarty->assign('melding', $this->getMelding());
-
 			//wat komt er in de textarea te staan?
 			$textarea = '';
 			if ($this->getCiteerPost() != 0) {

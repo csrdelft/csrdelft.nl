@@ -28,8 +28,6 @@ class MaaltijdRepetitiesView extends TemplateView {
 	public function view() {
 		if (is_array($this->_repetities)) { // list of repetities
 			$this->smarty->assign('popup', $this->_popup);
-			$this->smarty->assign('melding', $this->getMelding());
-			$this->smarty->assign('kop', $this->getTitel());
 			$this->smarty->display('taken/menu_pagina.tpl');
 
 			$this->smarty->assign('repetities', $this->_repetities);

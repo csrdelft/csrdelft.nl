@@ -33,7 +33,6 @@ class AgendaMaandContent extends TemplateView {
 		$this->smarty->assign('weken', $this->agenda->getItemsByMaand($this->jaar, $this->maand, $filter));
 		$this->smarty->assign('magToevoegen', $this->agenda->magToevoegen());
 		$this->smarty->assign('magBeheren', $this->agenda->magBeheren());
-		$this->smarty->assign('melding', $this->getMelding());
 
 		// URL voor vorige maand
 		$urlVorige = CSR_ROOT . 'actueel/agenda/';
@@ -78,7 +77,6 @@ class AgendaItemContent extends TemplateView {
 	public function view() {
 		$this->smarty->assign('item', $this->item);
 		$this->smarty->assign('actie', $this->actie);
-		$this->smarty->assign('melding', $this->getMelding());
 		$this->smarty->display('agenda/item.tpl');
 	}
 
@@ -107,8 +105,8 @@ class AgendaZijbalkContent extends TemplateView {
 		$eindMoment = strtotime('next saturday', $eindMoment);
 		$items = $this->agenda->getItems($beginMoment, $eindMoment, $filter);
 
-		if (count($items) > LidInstellingen::get('zijbalk_agenda_max')) {
-			$items = array_slice($items, 0, LidInstellingen::get('zijbalk_agenda_max'));
+		if (count($items) > LidInstellingen::get('zijbalk', 'agenda_max')) {
+			$items = array_slice($items, 0, LidInstellingen::get('zijbalk', 'agenda_max'));
 		}
 
 		$this->smarty->assign('items', $items);

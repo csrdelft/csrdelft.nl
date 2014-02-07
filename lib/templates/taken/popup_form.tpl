@@ -2,8 +2,9 @@
 	popup_form.tpl	| 	P.W.G. Brussee (brussee@live.nl)
 *}
 <div id="taken-popup" class="outer-shadow dragobject">
-<h1>{$kop}</h1>
-{$melding}<br />
+<h1>{$view->getTitel()}</h1>
+{$view->getMelding()}
+<br />
 {$form->view()}
 <div id="taken-popup-buttons">
 {if isset($bijwerken)}

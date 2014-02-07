@@ -52,8 +52,6 @@ class InstellingenBeheerView extends TemplateView {
 
 	public function view() {
 		if ($this->instelling === null) {
-			$this->smarty->assign('melding', $this->getMelding());
-			$this->smarty->assign('kop', $this->getTitel());
 			$this->smarty->assign('modules', $this->modules);
 			$this->smarty->assign('instellingen', $this->instellingen);
 			$this->smarty->display('MVC/instellingen/beheer/instellingen_page.tpl');

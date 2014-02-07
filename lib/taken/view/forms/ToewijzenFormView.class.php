@@ -41,8 +41,6 @@ class ToewijzenFormView extends TemplateView {
 	}
 
 	public function view() {
-		$this->smarty->assign('melding', $this->getMelding());
-		$this->smarty->assign('kop', $this->getTitel());
 		$this->_form->css_classes[] = 'popup';
 
 		$this->smarty->assign('taak', $this->_taak);

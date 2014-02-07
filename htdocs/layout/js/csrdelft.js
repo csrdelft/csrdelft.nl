@@ -3,6 +3,7 @@
  */
 
 $(document).ready(function() {
+	ShowMenu(menu_active);
 	init_visitekaartjes();
 });
 

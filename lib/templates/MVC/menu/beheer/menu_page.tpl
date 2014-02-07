@@ -1,8 +1,8 @@
 {*
 	menu_tree.tpl	|	P.W.G. Brussee (brussee@live.nl)
 *}
-{$melding}
-<h1>{$kop}</h1>
+{$view->getMelding()}
+<h1>{$view->getTitel()}</h1>
 <p>
 	Op deze pagina kunt u het menu beheren.
 </p>

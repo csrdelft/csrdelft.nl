@@ -40,11 +40,33 @@ abstract class PersistenceModel implements Persistence {
 	 */
 	public function find($criteria = null, array $criteria_params = array(), $orderby = null, $limit = null, $start = 0) {
 		$select = $this->orm_entity->getFields();
-		if ($criteria === null) {
-			$criteria = '1';
-		}
 		$result = Database::sqlSelect($select, $this->orm_entity->getTableName(), $criteria, $criteria_params, $orderby, $limit, $start);
 		return $result->fetchAll(\PDO::FETCH_CLASS, get_class($this->orm_entity));
+	}
+
+	/**
+	 * Check if entities exist.
+	 * 
+	 * @param string $criteria
+	 * @param array $criteria_params
+	 * @return boolean
+	 */
+	public function exists($criteria = null, array $criteria_params = array()) {
+		return Database::sqlExists($this->orm_entity->getTableName(), $criteria, $criteria_params);
+	}
+
+	/**
+	 * Check if entity exists by primary key.
+	 * 
+	 * @param array $primary_key_values
+	 * @return boolean
+	 */
+	protected function existsByPrimaryKey(array $primary_key_values) {
+		$where = array();
+		foreach ($this->orm_entity->getPrimaryKey() as $key) {
+			$where[] = $key . ' = ?';
+		}
+		return $this->exists($where, $primary_key_values);
 	}
 
 	/**
@@ -92,8 +114,8 @@ abstract class PersistenceModel implements Persistence {
 		$where = array();
 		$params = array();
 		foreach ($this->orm_entity->getPrimaryKey() as $key) {
-			$where[] = $key . ' = :' . $key; // name parameters after key
-			$params[':' . $key] = $properties[$key]; // named parameters
+			$where[] = $key . ' = :' . $key; // name parameters after column
+			$params[':' . $key] = $properties[$key];
 			unset($properties[$key]); // do not update primary key
 		}
 		$rowcount = Database::sqlUpdate($this->orm_entity->getTableName(), $properties, implode(' AND ', $where), $params, 1);

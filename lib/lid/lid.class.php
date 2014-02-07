@@ -2,7 +2,7 @@
 
 require_once 'ldap.class.php';
 require_once 'memcached.class.php';
-require_once 'MVC/model/LidInstellingen.static.php';
+require_once 'MVC/model/LidInstellingen.singleton.php';
 require_once 'verticale.class.php';
 require_once 'status.class.php';
 require_once 'agenda/agenda.class.php';
@@ -39,10 +39,6 @@ class Lid implements Serializable, Agendeerbaar {
 		$lid = $db->getRow($query);
 		if (is_array($lid)) {
 			$this->profiel = $lid;
-			//we unserializeren de instellingen-array even, hmm, lekker vier
-			if ($this->profiel['instellingen'] != '') {
-				$this->profiel['instellingen'] = unserialize($this->profiel['instellingen']);
-			}
 			$this->profiel['status'] = new Status($this->profiel['status']);
 		} else {
 			throw new Exception('Lid [uid:' . $uid . '] kon niet geladen worden.');
@@ -533,12 +529,8 @@ class Lid implements Serializable, Agendeerbaar {
 	}
 
 	//deze willen we hebben om vanuit templates handig instellingen op te halen.
-	public function instelling($key) {
-		return LidInstellingen::get($key);
-	}
-
-	public function getInstellingen() {
-		return $this->profiel['instellingen'];
+	public function instelling($module, $key) {
+		return LidInstellingen::get($module, $key);
 	}
 
 	/**
@@ -657,7 +649,7 @@ class Lid implements Serializable, Agendeerbaar {
 
 		//als $vorm==='user', de instelling uit het profiel gebruiken voor vorm
 		if ($vorm == 'user') {
-			$vorm = LidInstellingen::get('forum_naamWeergave');
+			$vorm = LidInstellingen::get('forum', 'naamWeergave');
 		}
 		switch ($vorm) {
 			case 'nick':
@@ -766,7 +758,7 @@ class Lid implements Serializable, Agendeerbaar {
 			$k = '';
 			$l = '<a href="' . CSR_ROOT . 'communicatie/profiel/' . $this->getUid() . '" title="' . $sVolledigeNaam . '" class="lidLink ' . $this->profiel['status'] . '">';
 
-			if (($vorm === 'leeg' || $mode === 'visitekaartje') && LidInstellingen::get('layout_visitekaartjes') == 'ja') {
+			if (($vorm === 'leeg' || $mode === 'visitekaartje') && LidInstellingen::get('layout', 'visitekaartjes') == 'ja') {
 				$v = str_replace(' ', '', str_replace('.', '', microtime()));
 				$k = '<div id="k' . $v . '" class="visitekaartje';
 				if ($this->isJarig()) {

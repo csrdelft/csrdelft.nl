@@ -9,15 +9,15 @@ RewriteEngine On
 RewriteRule ^dies2014/(.*)$			/dies/$1 [R=301,L]
 
 # mod_rewrite-dingen
-RewriteRule ^instellingen/?$		instellingen.php [L]
 RewriteRule ^pauper/?$				pauper.php [L]
 
 # maaltijden & corvee
 RewriteRule ^maaltijden/?(.*)$		taken.php?uri=maaltijden/$1 [L]
 RewriteRule ^corvee/?(.*)$			taken.php?uri=corvee/$1 [L]
 
-# instellingenbeheer
+# instellingen
 RewriteRule ^instellingenbeheer/?(.*)$		instellingenbeheer.php?uri=$1 [QSA,L]
+RewriteRule ^instellingen/?(.*)$	instellingen.php?uri=$1 [QSA,L]
 
 # menubeheer
 RewriteRule ^menubeheer/?(.*)$		menubeheer.php?uri=$1 [QSA,L]

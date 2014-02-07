@@ -73,7 +73,6 @@ class ProfielContent extends TemplateView {
 		//TODO check role vs permission R_BESTUUR
 		$this->smarty->assign('isBestuur', $loginlid->hasPermission('R_BESTUUR'));
 		$this->smarty->assign('isLidMod', $loginlid->hasPermission('P_LEDEN_MOD'));
-		$this->smarty->assign('melding', $this->getMelding());
 
 		//eigen profiel niet cachen, dan krijgen we namelijk rare dingen
 		//dat we andermans saldo's zien enzo
@@ -110,8 +109,6 @@ class ProfielEditContent extends TemplateView {
 
 	public function view() {
 		$this->smarty->assign('profiel', $this->profiel);
-
-		$this->smarty->assign('melding', $this->getMelding());
 		$this->smarty->assign('actie', $this->actie);
 		$this->smarty->display('profiel/bewerken.tpl');
 	}
@@ -140,12 +137,9 @@ class ProfielStatusContent extends TemplateView {
 	public function view() {
 		$gelijknamigenovieten = Zoeker::zoekLeden($this->profiel->getLid()->getProperty('voornaam'), 'voornaam', 'alle', 'achternaam', array('S_NOVIET'), array('uid'));
 		$gelijknamigeleden = Zoeker::zoekLeden($this->profiel->getLid()->getProperty('achternaam'), 'achternaam', 'alle', 'lidjaar', array('S_LID', 'S_GASTLID'), array('uid'));
-
 		$this->smarty->assign('profiel', $this->profiel);
 		$this->smarty->assign('gelijknamigenovieten', $gelijknamigenovieten);
 		$this->smarty->assign('gelijknamigeleden', $gelijknamigeleden);
-
-		$this->smarty->assign('melding', $this->getMelding());
 		$this->smarty->assign('actie', $this->actie);
 		$this->smarty->display('profiel/wijzigstatus.tpl');
 	}
@@ -173,7 +167,6 @@ class ProfielVoorkeurContent extends TemplateView {
 
 	public function view() {
 		$this->smarty->assign('profiel', $this->profiel);
-		$this->smarty->assign('melding', $this->getMelding());
 		$this->smarty->assign('actie', $this->actie);
 		$this->smarty->display('profiel/wijzigvoorkeur.tpl');
 	}

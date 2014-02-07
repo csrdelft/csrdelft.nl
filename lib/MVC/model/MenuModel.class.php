@@ -110,11 +110,10 @@ class MenuModel extends PersistenceModel {
 			$db->beginTransaction();
 			// give new parent to otherwise future orphans
 			$properties = array('parent_id' => $item->parent_id);
-			$count = Database::sqlUpdate('menus', $properties, 'parent_id = :oldid', array(':oldid' => $item->item_id));
-			setMelding($count . ' menu-items nieuwe parent gegeven.', 2);
+			$count = Database::sqlUpdate($this->orm_entity->getTableName(), $properties, 'parent_id = :oldid', array(':oldid' => $item->item_id));
 			parent::delete($item);
 			$db->commit();
-			return $count;
+			setMelding($count . ' menu-items nieuwe parent gegeven.', 2);
 		} catch (\Exception $e) {
 			$db->rollback();
 			throw $e; // rethrow to controller

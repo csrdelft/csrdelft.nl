@@ -22,9 +22,6 @@ class BibliotheekCatalogusContent extends TemplateView {
 	}
 
 	public function view() {
-
-		$this->smarty->assign('melding', $this->getMelding());
-
 		$this->smarty->display('bibliotheek/catalogus.tpl');
 	}
 
@@ -165,7 +162,6 @@ Rubriek: ' . $aBoek['categorie'] . '"';
 class BibliotheekBoekContent extends TemplateView {
 
 	private $boek;
-	private $action = 'view';
 
 	public function __construct(Boek $boek) {
 		parent::__construct();
@@ -177,10 +173,7 @@ class BibliotheekBoekContent extends TemplateView {
 	}
 
 	public function view() {
-
-		$this->smarty->assign('melding', $this->getMelding());
 		$this->smarty->assign('boek', $this->boek);
-
 		$this->smarty->display('bibliotheek/boek.tpl');
 	}
 

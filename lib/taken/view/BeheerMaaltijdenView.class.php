@@ -47,8 +47,6 @@ class BeheerMaaltijdenView extends TemplateView {
 				$this->smarty->assign('prullenbak', $this->_prullenbak);
 				$this->smarty->assign('archief', $this->_archief);
 				$this->smarty->assign('popup', $this->_popup);
-				$this->smarty->assign('melding', $this->getMelding());
-				$this->smarty->assign('kop', $this->getTitel());
 				$this->smarty->display('taken/menu_pagina.tpl');
 
 				$this->smarty->assign('maaltijden', $this->_maaltijden);

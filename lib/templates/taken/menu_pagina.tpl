@@ -28,5 +28,5 @@
 	</ul>
 </div>
 <hr/>
-<table style="width: 100%;"><tr id="taken-melding"><td id="taken-melding-veld">{$melding}</td></tr></table>
-<h1>{$kop}</h1>
+<table style="width: 100%;"><tr id="taken-melding"><td id="taken-melding-veld">{$view->getMelding()}</td></tr></table>
+<h1>{$view->getTitel()}</h1>

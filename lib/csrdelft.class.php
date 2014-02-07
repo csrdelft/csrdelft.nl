@@ -32,7 +32,7 @@ class csrdelft extends TemplateView {
 				$this->addStylesheet('ubb.css', '/layout/');
 				$this->addScript('jquery.js', '/layout2/');
 				$this->addScript('jquery.backstretch.js', '/layout2/');
-				$this->addScript('jquery.timeago.js');
+				$this->addScript('jquery/plugins/jquery.timeago.js', '/layout/');
 				$this->addScript('init.js', '/layout2/');
 				$this->addScript('csrdelft.js', '/layout/');
 				return;
@@ -45,31 +45,34 @@ class csrdelft extends TemplateView {
 				$this->addStylesheet('undohtml.css');
 				$this->addStylesheet('ubb.css');
 				$this->addStylesheet('csrdelft.css');
-				$layout = LidInstellingen::get('layout');
-				if (!LidInstellingen::hasEnumOption('layout', $layout)) { // fix verwijderde layout
-					$layout = 'normaal';
-					LidInstellingen::set('layout', $layout);
-					LidInstellingen::save();
-				}
+				$layout = LidInstellingen::get('layout', 'layout');
 				$this->addStylesheet($layout . '.css');
-				if (LidInstellingen::get('layout_beeld') == 'breedbeeld') {
+				if (LidInstellingen::get('layout', 'beeld') == 'breedbeeld') {
 					$this->addStylesheet('breedbeeld.css');
 				}
-				if (LidInstellingen::get('layout_sneeuw') != 'nee') {
-					if (LidInstellingen::get('layout_sneeuw') == 'ja') {
+				if (LidInstellingen::get('layout', 'sneeuw') != 'nee') {
+					if (LidInstellingen::get('layout', 'sneeuw') == 'ja') {
 						$this->addStylesheet('snow.anim.css');
 					} else {
 						$this->addStylesheet('snow.css');
 					}
 				}
-				$this->addScript('jquery.min.js');
-				$this->addScript('jquery.timeago.js');
-				$this->addScript('jquery.hoverIntent.min.js');
+				if (defined('DEBUG') AND (LoginLid::instance()->hasPermission('P_ADMIN') OR LoginLid::instance()->isSued())) {
+					$this->addStylesheet('jquery-ui.css', '/layout/js/jquery/themes/ui-lightness/');
+					$this->addScript('jquery/jquery-2.1.0.js');
+					$this->addScript('jquery/jquery-ui-1.10.4.custom.js');
+				} else { // minimized javascript
+					$this->addStylesheet('jquery-ui.min.css', '/layout/js/jquery/themes/ui-lightness/');
+					$this->addScript('jquery/jquery-2.1.0.min.js');
+					$this->addScript('jquery/jquery-ui-1.10.4.custom.min.js');
+				}
+				$this->addScript('jquery/plugins/jquery.timeago.js');
+				$this->addScript('jquery/plugins/jquery.hoverIntent.min.js');
 				$this->addScript('csrdelft.js');
 				$this->addScript('dragobject.js');
 				$this->addScript('menu.js');
 
-				if (LidInstellingen::get('algemeen_sneltoetsen') == 'ja') {
+				if (LidInstellingen::get('algemeen', 'sneltoetsen') == 'ja') {
 					$this->addScript('sneltoetsen.js');
 				}
 				return;
@@ -174,6 +177,7 @@ class csrdelft extends TemplateView {
 		switch ($this->_layout) {
 
 			case 'csrdelft2':
+
 				if ($template === '') {
 					$template = 'content';
 				}
@@ -187,7 +191,8 @@ class csrdelft extends TemplateView {
 			case 'owee':
 			case 'lustrum':
 			default:
-				if (LidInstellingen::get('layout_minion') == 'ja') {
+
+				if (LidInstellingen::get('layout', 'minion') == 'ja') {
 					$this->addStylesheet('minion.css');
 					$this->addScript('minion.js');
 					$top = 40;
@@ -203,7 +208,7 @@ class csrdelft extends TemplateView {
 					$this->smarty->assign('debug', SimpleHTML::getDebug());
 				}
 
-				if ($this->zijkolom !== false || LidInstellingen::get('layout_beeld') === 'breedbeeld') {
+				if ($this->zijkolom !== false || LidInstellingen::get('layout', 'beeld') === 'breedbeeld') {
 					if (is_array($this->zijkolom)) {
 						$this->zijkolom += SimpleHTML::getStandaardZijkolom();
 					} else {

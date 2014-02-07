@@ -5,7 +5,7 @@
 	<h1>Agenda-item bewerken</h1>
 {/if}
 
-{$melding}
+{$view->getMelding()}
 {literal}
 <script type="text/javascript">
 function setTijd(begin, einde){

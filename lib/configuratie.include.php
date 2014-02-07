@@ -24,8 +24,9 @@ if (defined('DEBUG')) {
 
 # default to website mode
 # [ WEB, CLI, BOT ]
-if (!defined('MODE'))
+if (!defined('MODE')) {
 	define('MODE', 'WEB');
+}
 
 //alle paden goedzetten.
 require_once('include.defines.php');
@@ -63,17 +64,14 @@ define('ROWID_QUEUE_MEDEDELINGEN', 62);
 
 //stapeltje dingen includeren die toch (bijna) altijd nodig zijn:
 require_once 'common.functions.php';
-require_once 'lid/loginlid.class.php';
 require_once 'mysql.class.php';
-
-
-// MVC
 require_once 'MVC/model/PaginationModel.abstract.php';
 require_once 'MVC/model/Instellingen.singleton.php';
 require_once 'MVC/view/TemplateView.abstract.php';
 require_once 'MVC/view/form/Formulier.class.php';
 require_once 'MVC/view/CsrUbb.class.php';
 require_once 'MVC/controller/AclController.abstract.php';
+require_once 'lid/loginlid.class.php';
 
 switch (constant('MODE')) {
 	case 'ONDERHOUD':

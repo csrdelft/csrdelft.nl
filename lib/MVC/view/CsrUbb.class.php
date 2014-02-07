@@ -22,7 +22,7 @@ class CsrUbb extends eamBBParser {
 	function getHTML($ubb) {
 		parent::getHTML($ubb);
 
-		if (LidInstellingen::get('layout_neuzen') == 'overal') {
+		if (LidInstellingen::get('layout', 'neuzen') == 'overal') {
 			$pointer = 0;
 			$counter = 0;
 			$counter2 = 0;
@@ -110,7 +110,7 @@ class CsrUbb extends eamBBParser {
 		} else {
 			$content = $arguments;
 		}
-		if (LidInstellingen::get('layout_neuzen') != 'nee') {
+		if (LidInstellingen::get('layout', 'neuzen') != 'nee') {
 			$neus = '<img src="http://plaetjes.csrdelft.nl/famfamfam/bullet_red.png" width="16" height="16" alt="o" style="margin: -5px;">';
 			$content = str_replace('o', $neus, $content);
 		}
@@ -214,19 +214,23 @@ class CsrUbb extends eamBBParser {
 	 * Toont content als instelling een bepaalde waarde heeft,
 	 * standaard 'ja';
 	 *
-	 * [instelling=voorpagina_maaltijdblokje][maaltijd=next][/instelling]
+	 * [instelling=maaltijdblokje module=voorpagina][maaltijd=next][/instelling]
 	 */
 	function ubb_instelling($arguments = array()) {
 		$content = $this->parseArray(array('[/instelling]'), array());
-		if (!isset($arguments['instelling'])) {
-			return 'Geen of een niet bestaande instelling (' . mb_htmlentities($arguments['instelling']) . ') opgegeven.';
+		if (!array_key_exists('instelling', $arguments) OR !isset($arguments['instelling'])) {
+			return 'Geen of een niet bestaande instelling opgegeven: ' . mb_htmlentities($arguments['instelling']);
+		}
+		if (!array_key_exists('module', $arguments) OR !isset($arguments['module'])) {
+			$arguments['module'] = $arguments['instelling']; // backwards compatibility
+			$arguments['instelling'] = null;
 		}
 		$testwaarde = 'ja';
 		if (isset($arguments['waarde'])) {
 			$testwaarde = $arguments['waarde'];
 		}
 		try {
-			if (LidInstellingen::get($arguments['instelling']) == $testwaarde) {
+			if (LidInstellingen::get($arguments['module'], $arguments['instelling']) == $testwaarde) {
 				return $content;
 			}
 		} catch (Exception $e) {

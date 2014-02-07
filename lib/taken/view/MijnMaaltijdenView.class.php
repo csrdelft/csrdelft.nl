@@ -25,8 +25,6 @@ class MijnMaaltijdenView extends TemplateView {
 		$this->smarty->assign('standaardprijs', sprintf('%.2f', floatval(Instellingen::get('maaltijden', 'standaard_prijs'))));
 
 		if (is_array($this->_maaltijden)) { // list of maaltijden and list of aanmeldingen
-			$this->smarty->assign('melding', $this->getMelding());
-			$this->smarty->assign('kop', $this->getTitel());
 			$this->smarty->display('taken/menu_pagina.tpl');
 
 			$toonlijst = array();

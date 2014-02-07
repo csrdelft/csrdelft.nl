@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.1//EN' 'http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd'>
 <html>{strip}
 <head>
-	<title>{$kop} {$maaltijd->getDatum()|date_format:"%A %e %B"}</title>
+	<title>{$view->getTitel()} {$maaltijd->getDatum()|date_format:"%A %e %B"}</title>
 	<link type="text/css" href="/layout/maaltijdlijst.css" rel="stylesheet">
 	<script type="text/javascript" src="/layout/js/jquery.min.js"></script>
 	<script type="text/javascript" src="/layout/js/jquery.hoverIntent.min.js"></script>
@@ -10,7 +10,7 @@
 </head>
 <body>
 <img alt="Beeldmerk van de Vereniging" src="{$CSR_PICS}/layout/beeldmerk.jpg" style="float: right; padding: 0px 50px;" />
-<h1>{$kop} op {$maaltijd->getDatum()|date_format:"%A %e %B %Y"}</h1>
+<h1>{$view->getTitel()} op {$maaltijd->getDatum()|date_format:"%A %e %B %Y"}</h1>
 <div class="header">{$instellingen->get('maaltijden', 'maaltijdlijst_tekst')|replace:'MAALTIJDPRIJS':$prijs}</div>
 {if !$maaltijd->getIsGesloten()}
 	<h2 style="color: red">De inschrijving voor deze maaltijd is nog niet gesloten

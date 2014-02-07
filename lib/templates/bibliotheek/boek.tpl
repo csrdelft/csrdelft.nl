@@ -2,7 +2,7 @@
  *	Boek weergeven
  *}
 
-<div class="foutje">{$melding}</div>
+<div class="foutje">{$view->getMelding()}</div>
 <ul class="horizontal">
 	<li>
 		<a href="/communicatie/bibliotheek/" title="Naar de catalogus">Catalogus</a>

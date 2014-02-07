@@ -17,7 +17,7 @@ class Instellingen extends PersistenceModel {
 	private static $_instance;
 
 	/**
-	 * Get singleton InstellingenModel instance.
+	 * Get singleton Instellingen model instance.
 	 * 
 	 * @return Instellingen
 	 */
@@ -28,8 +28,12 @@ class Instellingen extends PersistenceModel {
 		return self::$_instance;
 	}
 
+	public static function has($module, $key) {
+		return array_key_exists($module, static::instance()->instellingen) AND is_array(static::instance()->instellingen[$module]) AND array_key_exists($key, static::instance()->instellingen[$module]);
+	}
+
 	public static function get($module, $key) {
-		return Instellingen::instance()->instellingen[$module][$key];
+		return static::instance()->instellingen[$module][$key];
 	}
 
 	/**
@@ -40,7 +44,7 @@ class Instellingen extends PersistenceModel {
 	 * @param mixed $value
 	 */
 	public static function setTemp($module, $key, $value) {
-		Instellingen::instance()->instellingen[$module][$key] = $value;
+		static::instance()->instellingen[$module][$key] = $value;
 	}
 
 	private $defaults = array(
@@ -114,11 +118,15 @@ class Instellingen extends PersistenceModel {
 		parent::__construct(new Instelling());
 		$instellingen = $this->find(); // load all from db
 		foreach ($instellingen as $instelling) {
+			// haal verwijderde instellingen uit de database
+			if (!array_key_exists($instelling->module, $this->defaults) OR !array_key_exists($instelling->instelling_id, $this->defaults[$instelling->module])) {
+				$this->deleteByPrimaryKey($instelling->getValues(true));
+			}
 			$this->instellingen[$instelling->module][$instelling->instelling_id] = $instelling->waarde;
 		}
-		// zet missende instellingen op default waarde
 		foreach ($this->defaults as $module => $instellingen) {
 			foreach ($instellingen as $key => $value) {
+				// maak missende instellingen opnieuw aan met default waarde
 				if (!array_key_exists($module, $this->instellingen) OR !array_key_exists($key, $this->instellingen[$module])) {
 					$this->instellingen[$module][$key] = $value;
 					$this->newInstelling($module, $key, $value); // save to db
@@ -158,7 +166,7 @@ class Instellingen extends PersistenceModel {
 	 * @param string $module
 	 * @param string $key
 	 * @throws Exception
-	 * @return LidInstellingen
+	 * @return Instelling
 	 */
 	public function getInstelling($module, $key) {
 		if (!array_key_exists($module, $this->instellingen) OR !array_key_exists($key, $this->instellingen[$module])) {

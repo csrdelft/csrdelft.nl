@@ -28,14 +28,8 @@ class ForumCategorieContent extends TemplateView {
 				<a href="/communicatie/forum/">Terug naar het forum</a>';
 			return;
 		}
-
-
 		$this->smarty->assign('categorie', $this->forumcategorie);
-
-		$this->smarty->assign('melding', $this->getMelding());
 		$this->smarty->display('forum/list_onderwerpen.tpl');
 	}
 
 }
-
-?>

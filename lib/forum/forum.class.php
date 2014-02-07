@@ -191,8 +191,8 @@ class Forum{
 	public static function isModerator(){ return LoginLid::instance()->hasPermission('P_FORUM_MOD'); }
 	public static function getLaatstBekeken(){ return LoginLid::instance()->getForumLaatstBekeken(); }
 
-	public static function getTopicsPerPagina(){ return LidInstellingen::get('forum_onderwerpenPerPagina'); }
-	public static function getPostsPerPagina(){ return LidInstellingen::get('forum_postsPerPagina'); }
+	public static function getTopicsPerPagina(){ return LidInstellingen::get('forum', 'onderwerpenPerPagina'); }
+	public static function getPostsPerPagina(){ return LidInstellingen::get('forum', 'postsPerPagina'); }
 
 	public static function getForumNaam($uid=false, $aNaam=false, $aLink=true, $bHtmlentities=true ){
 		return LidCache::getLid($uid)->getNaamLink('user', ($aLink ? 'link' : 'plain'));
@@ -273,7 +273,7 @@ class Forum{
 			ORDER BY
 				relevance DESC, post.datum DESC
 			LIMIT
-				".LidInstellingen::get('forum_zoekresultaten').";";
+				".LidInstellingen::get('forum', 'zoekresultaten').";";
 		//Als MySQL 5.1.7 op syrinx staat kan er in 'natural language mode' gezocht worden
 		//MATCH(post.tekst)AGAINST('".$query."' IN NATURAL LANGUAGE MODE ) OR
 

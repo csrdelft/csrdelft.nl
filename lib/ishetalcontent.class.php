@@ -3,7 +3,7 @@
 class IsHetAlContent extends TemplateView {
 
 	private $ishetal = null;
-	private $opties = array('jarig', 'vrijdag', 'donderdag', 'zondag', 'borrel', 'lezing', 'lunch', 'avond');
+	private $opties = array('dies', 'jarig', 'vrijdag', 'donderdag', 'zondag', 'borrel', 'lezing', 'lunch', 'avond');
 	private $ja = false; //ja of nee.
 
 	public function __construct($ishetal) {
@@ -11,9 +11,16 @@ class IsHetAlContent extends TemplateView {
 		if ($ishetal == 'willekeurig') {
 			$this->ishetal = $this->opties[array_rand($this->opties)];
 		} else {
-			$this->ishetal = LidInstellingen::get('zijbalk_ishetal');
+			$this->ishetal = LidInstellingen::get('zijbalk', 'ishetal');
 		}
 		switch ($this->ishetal) {
+			case 'dies' : 
+				$cdate = mktime(0, 0, 0, 12, 31, 2009, 0);
+				$today = time();
+				$difference = $cdate - $today;
+				if ($difference < 0) { $difference = 0; }
+				$this->ja = floor($difference/60/60/24);
+				break;
 			case 'jarig': $this->ja = LoginLid::instance()->getLid()->getJarigOver();
 				break;
 			case 'lunch': $this->ja = (date('Hi') > '1245' AND date('Hi') < '1345');

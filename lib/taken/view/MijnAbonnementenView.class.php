@@ -21,8 +21,6 @@ class MijnAbonnementenView extends TemplateView {
 
 	public function view() {
 		if (is_array($this->_abonnementen)) { // list of abonnementen
-			$this->smarty->assign('melding', $this->getMelding());
-			$this->smarty->assign('kop', $this->getTitel());
 			$this->smarty->display('taken/menu_pagina.tpl');
 
 			$this->smarty->assign('abonnementen', $this->_abonnementen);

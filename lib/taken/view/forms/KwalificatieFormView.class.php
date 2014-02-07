@@ -27,8 +27,6 @@ class KwalificatieFormView extends TemplateView {
 	}
 
 	public function view() {
-		$this->smarty->assign('melding', $this->getMelding());
-		$this->smarty->assign('kop', $this->getTitel());
 		$this->_form->css_classes[] = 'popup';
 		$this->smarty->assign('form', $this->_form);
 		$this->smarty->display('taken/popup_form.tpl');

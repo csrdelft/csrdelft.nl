@@ -44,8 +44,6 @@ class BeheerAbonnementenView extends TemplateView {
 
 		if (is_array($this->_leden_abonnementen)) { // matrix van abonnementen
 			if (is_array($this->_repetities)) {
-				$this->smarty->assign('melding', $this->getMelding());
-				$this->smarty->assign('kop', $this->getTitel());
 				$this->smarty->display('taken/menu_pagina.tpl');
 
 				$this->smarty->assign('aborepetities', MaaltijdRepetitiesModel::getAbonneerbareRepetities());

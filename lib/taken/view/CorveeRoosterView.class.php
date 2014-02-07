@@ -22,8 +22,6 @@ class CorveeRoosterView extends TemplateView {
 	}
 
 	public function view() {
-		$this->smarty->assign('melding', $this->getMelding());
-		$this->smarty->assign('kop', $this->getTitel());
 		$this->smarty->display('taken/menu_pagina.tpl');
 
 		$this->smarty->assign('rooster', $this->_rooster);
@@ -32,5 +30,3 @@ class CorveeRoosterView extends TemplateView {
 	}
 
 }
-
-?>

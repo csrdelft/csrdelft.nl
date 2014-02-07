@@ -34,7 +34,7 @@
 	</div>
 {/capture}
 {$smarty.capture.navlinks}
-{$melding}
+{$view->getMelding()}
 
 {if $onderwerp->isModerator()}
 	<div id="modereren" style="display:none;border:1px solid #999;margin:10px;padding:10px;">

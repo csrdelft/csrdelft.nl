@@ -1,7 +1,5 @@
 <?php
 
-require_once 'MVC/view/MailTemplateView.class.php';
-
 /**
  * Mails versturen vanuit csrdelft.nl.
  *
@@ -163,6 +161,7 @@ class Mail {
 			throw new Exception('Geen onderwerp ingevuld');
 		}
 		if ($this->layout != '') {
+			require_once 'MVC/view/MailTemplateView.class.php';
 			$view = new MailTemplateView($this);
 			$body = $view->getBody();
 		} else {

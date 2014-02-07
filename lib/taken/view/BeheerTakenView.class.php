@@ -41,8 +41,6 @@ class BeheerTakenView extends TemplateView {
 			if ($this->_prullenbak || $this->_repetities !== null) { // normal view
 				$this->smarty->assign('prullenbak', $this->_prullenbak);
 				$this->smarty->assign('popup', $this->_popup);
-				$this->smarty->assign('melding', $this->getMelding());
-				$this->smarty->assign('kop', $this->getTitel());
 				$this->smarty->display('taken/menu_pagina.tpl');
 
 				$takenByDate = array();

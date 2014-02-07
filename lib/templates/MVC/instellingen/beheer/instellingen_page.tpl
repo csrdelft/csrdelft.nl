@@ -1,8 +1,8 @@
 {*
-instellingen_page.tpl	|	P.W.G. Brussee (brussee@live.nl)
+	instellingen_page.tpl	|	P.W.G. Brussee (brussee@live.nl)
 *}
-<table style="width: 100%;"><tr id="taken-melding"><td id="taken-melding-veld">{$melding}</td></tr></table>
-<h1>{$kop}</h1>
+<table style="width: 100%;"><tr id="taken-melding"><td id="taken-melding-veld">{$view->getMelding()}</td></tr></table>
+<h1>{$view->getTitel()}</h1>
 <p>
 	Op deze pagina kunt u instellingen wijzigen en resetten voor elke module op de stek.
 	Onderstaande tabel toont alle instellingen van de gekozen module.

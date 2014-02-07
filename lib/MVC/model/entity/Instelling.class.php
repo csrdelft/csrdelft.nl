@@ -56,5 +56,3 @@ class Instelling extends PersistentEntity {
 	protected static $table_name = 'instellingen';
 
 }
-
-?>

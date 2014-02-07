@@ -26,8 +26,6 @@ class MijnVoorkeurenView extends TemplateView {
 			$this->smarty->assign('eetwens', $this->_eetwens);
 			$this->smarty->display('taken/voorkeur/mijn_eetwens.tpl');
 		} elseif (is_array($this->_voorkeuren)) { // list of voorkeuren
-			$this->smarty->assign('melding', $this->getMelding());
-			$this->smarty->assign('kop', $this->getTitel());
 			$this->smarty->display('taken/menu_pagina.tpl');
 
 			$this->smarty->assign('eetwens', $this->_eetwens);

@@ -26,7 +26,6 @@ class MaaltijdLijstView extends TemplateView {
 	}
 
 	public function view() {
-		$this->smarty->assign('kop', $this->getTitel());
 		$this->smarty->assign('maaltijd', $this->_maaltijd);
 		$this->smarty->assign('prijs', sprintf('%.2f', $this->_maaltijd->getPrijs()));
 

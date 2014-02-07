@@ -8,7 +8,7 @@
 	{/if}
 </div>
 <h1>Documenten</h1>
-<div class="foutje">{$melding}</div>
+<div class="foutje">{$view->getMelding()}</div>
 
 <table id="documenten" class="documenten">
 <thead>

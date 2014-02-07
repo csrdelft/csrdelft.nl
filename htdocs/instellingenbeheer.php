@@ -1,7 +1,7 @@
 <?php
 
 /**
- * instellingenbheer.php
+ * instellingenbeheer.php
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
@@ -24,4 +24,3 @@ catch (\Exception $e) { // TODO: logging
 		echo str_replace('#', '<br />#', $e); // stacktrace
 	}
 }
-?>

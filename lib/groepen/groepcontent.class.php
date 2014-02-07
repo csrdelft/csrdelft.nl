@@ -134,10 +134,8 @@ class Groepcontent extends TemplateView {
 	}
 
 	public function view() {
-
 		$this->smarty->assign('groep', $this->model);
 		$this->smarty->assign('opvolgerVoorganger', $this->model->getOpvolgerVoorganger());
-
 		$this->smarty->assign('action', $this->action);
 		$this->smarty->assign('groeptypes', Groepen::getGroeptypes());
 		$this->smarty->assign('aanmeldfilters', $this->getAanmeldfilters());
@@ -149,8 +147,6 @@ class Groepcontent extends TemplateView {
 		if ($this->action == 'addLid') {
 			$this->smarty->assign('lidAdder', $this->getLidAdder());
 		}
-
-		$this->smarty->assign('melding', $this->getMelding());
 		$this->smarty->display('groepen/groep.tpl');
 	}
 
@@ -173,7 +169,6 @@ class Groepencontent extends TemplateView {
 		$this->smarty->assign('gtype', $this->model->getNaam());
 		$this->smarty->assign('groeptypes', Groepen::getGroeptypes());
 		$this->smarty->assign('action', $this->action);
-		$this->smarty->assign('melding', $this->getMelding());
 		$this->smarty->display('groepen/groepen.tpl');
 	}
 
