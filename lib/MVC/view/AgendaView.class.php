@@ -54,7 +54,7 @@ class AgendaMaandView extends TemplateView {
 
 }
 
-class AgendaItemFormView extends TemplateView {
+class AgendaItemFormView extends TemplateView implements Validator {
 
 	private $form;
 	private $actie;
@@ -63,23 +63,19 @@ class AgendaItemFormView extends TemplateView {
 		parent::__construct($item);
 		$this->actie = $actie;
 
-		$fields[] = new TextField('titel', $item->titel, 'Titel');
+		$fields[] = new RequiredTextField('titel', $item->titel, 'Titel');
 		$fields[] = new DatumField('datum', $item->begin_moment, 'Datum');
-		$fields['dag'] = new VinkField('heledag', $item->isHeledag(), 'Hele dag');
-		$fields['dag']->onchange = 'toggleTijden(this.checked);';
-
 		$fields[] = new HtmlComment('<div id="tijden" class="InputField"><label>Standaard tijden</label><div>
-			<a onclick="setTijd(\'09\',\'00\',\'17\',\'30\');">» Dag</a> &nbsp;
-			<a onclick="setTijd(\'18\',\'30\',\'22\',\'00\');">» Kring</a> &nbsp;
-			<a onclick="setTijd(\'20\',\'00\',\'23\',\'59\');">» Avond</a> &nbsp;
+			<a onclick="setTijd(\'00\',\'00\',\'23\',\'59\');">» Hele dag</a> &nbsp;
+			<a onclick="setTijd(\'18\',\'30\',\'22\',\'30\');">» Kring</a> &nbsp;
 			<a onclick="setTijd(\'20\',\'00\',\'22\',\'00\');">» Lezing</a> &nbsp;
+			<a onclick="setTijd(\'20\',\'00\',\'23\',\'59\');">» Borrel</a> &nbsp;
 		</div></div>');
-
-		$fields[] = new TijdField('begin', $item->begin_moment, 'Van');
-		$fields[] = new TijdField('eind', $item->eind_moment, 'Tot');
+		$fields['van'] = new TijdField('begin', date('H:i', $item->getBeginMoment()), 'Van');
+		$fields['tot'] = new TijdField('eind', date('H:i', $item->getEindMoment()), 'Tot');
 		$fields[] = new AutoresizeTextareaField('beschrijving', $item->beschrijving, 'Beschrijving');
 
-		$fields[] = new SubmitButton($this->actie, '<a href="/actueel/agenda/maand/' . date('%Y-%m', $item->getBeginMoment()) . '" class="knop" style="float: none;">annuleren</a>');
+		$fields[] = new SubmitButton($this->actie, '<a href="/actueel/agenda/maand/' . date('Y-m', $item->getBeginMoment()) . '" class="knop" style="float: none;">annuleren</a>');
 
 		$this->form = new Formulier('agenda-item-form', null, $fields);
 		$this->form->css_classes[] = 'agendaitem';
@@ -93,6 +89,26 @@ class AgendaItemFormView extends TemplateView {
 		$this->smarty->assign('form', $this->form);
 		$this->smarty->assign('actie', $this->actie);
 		$this->smarty->display('MVC/agenda/item_form.tpl');
+	}
+
+	public function validate() {
+		if (!is_int($this->model->item_id) || $this->model->item_id < 0) {
+			return false;
+		}
+		$fields = $this->form->getFields();
+		if (strtotime($fields['van']->getValue()) > strtotime($fields['tot']->getValue())) {
+			$fields['van']->error = 'Beginmoment moet voor eindmoment liggen';
+			return false;
+		}
+		return $this->form->validate();
+	}
+
+	public function getError() {
+		return $this->form->error;
+	}
+
+	public function getValues() {
+		return $this->form->getValues(); // escapes HTML
 	}
 
 }

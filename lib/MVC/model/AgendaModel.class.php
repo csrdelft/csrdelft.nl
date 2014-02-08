@@ -76,7 +76,7 @@ class AgendaModel extends PersistenceModel {
 		return ($foo->getBeginMoment() > $bar->getBeginMoment()) ? 1 : -1;
 	}
 
-	public function getMenuItem($itemId) {
+	public function getAgendaItem($itemId) {
 		return $this->retrieveByPrimaryKey(array($itemId));
 	}
 
@@ -144,8 +144,16 @@ class AgendaModel extends PersistenceModel {
 		return null;
 	}
 
-	public function saveAgendaItem(AgendaItem $item) {
-		if (is_int($item->item_id) && $item->item_id > 0) {
+	public function saveAgendaItem($id, array $properties) {
+		$item = new AgendaItem();
+		$item->item_id = (int) $id;
+		$item->titel = $properties['titel'];
+		$item->begin_moment = $properties['datum'] . ' ' . $properties['begin'];
+		$item->eind_moment = $properties['datum'] . ' ' . $properties['eind'];
+		$item->beschrijving = $properties['beschrijving'];
+		$item->rechten_bekijken = 'P_NOBODY';
+
+		if (is_int($id) && $id > 0) {
 			$this->update($item);
 		} else {
 			$id = $this->create($item);
