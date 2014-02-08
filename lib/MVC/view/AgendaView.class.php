@@ -32,7 +32,7 @@ class AgendaMaandView extends TemplateView {
 		$this->smarty->assign('magBeheren', AgendaController::magBeheren());
 
 		// URL voor vorige maand
-		$urlVorige = CSR_ROOT . 'actueel/agenda/maand/';
+		$urlVorige = '/actueel/agenda/maand/';
 		if ($this->maand == 1) {
 			$urlVorige .= ($this->jaar - 1) . '-12/';
 		} else {
@@ -41,7 +41,7 @@ class AgendaMaandView extends TemplateView {
 		$this->smarty->assign('urlVorige', $urlVorige);
 
 		// URL voor volgende maand
-		$urlVolgende = CSR_ROOT . 'actueel/agenda/maand/';
+		$urlVolgende = '/actueel/agenda/maand/';
 		if ($this->maand == 12) {
 			$urlVolgende .= ($this->jaar + 1) . '-1/';
 		} else {
@@ -49,18 +49,40 @@ class AgendaMaandView extends TemplateView {
 		}
 		$this->smarty->assign('urlVolgende', $urlVolgende);
 
-		$this->smarty->display('agenda/maand.tpl');
+		$this->smarty->display('MVC/agenda/maand.tpl');
 	}
 
 }
 
-class AgendaItemView extends TemplateView {
+class AgendaItemFormView extends TemplateView {
 
+	private $form;
 	private $actie;
 
 	public function __construct(AgendaItem $item, $actie) {
 		parent::__construct($item);
 		$this->actie = $actie;
+
+		$fields[] = new TextField('titel', $item->titel, 'Titel');
+		$fields[] = new DatumField('datum', $item->begin_moment, 'Datum');
+		$fields['dag'] = new VinkField('heledag', $item->isHeledag(), 'Hele dag');
+		$fields['dag']->onchange = 'toggleTijden(this.checked);';
+
+		$fields[] = new HtmlComment('<div id="tijden" class="InputField"><label>Standaard tijden</label><div>
+			<a onclick="setTijd(\'09\',\'00\',\'17\',\'30\');">» Dag</a> &nbsp;
+			<a onclick="setTijd(\'18\',\'30\',\'22\',\'00\');">» Kring</a> &nbsp;
+			<a onclick="setTijd(\'20\',\'00\',\'23\',\'59\');">» Avond</a> &nbsp;
+			<a onclick="setTijd(\'20\',\'00\',\'22\',\'00\');">» Lezing</a> &nbsp;
+		</div></div>');
+
+		$fields[] = new TijdField('begin', $item->begin_moment, 'Van');
+		$fields[] = new TijdField('eind', $item->eind_moment, 'Tot');
+		$fields[] = new AutoresizeTextareaField('beschrijving', $item->beschrijving, 'Beschrijving');
+
+		$fields[] = new SubmitButton($this->actie, '<a href="/actueel/agenda/maand/' . date('%Y-%m', $item->getBeginMoment()) . '" class="knop" style="float: none;">annuleren</a>');
+
+		$this->form = new Formulier('agenda-item-form', null, $fields);
+		$this->form->css_classes[] = 'agendaitem';
 	}
 
 	public function getTitel() {
@@ -68,68 +90,57 @@ class AgendaItemView extends TemplateView {
 	}
 
 	public function view() {
-		$this->smarty->assign('item', $this->model);
+		$this->smarty->assign('form', $this->form);
 		$this->smarty->assign('actie', $this->actie);
-		$this->smarty->display('agenda/item_form.tpl');
+		$this->smarty->display('MVC/agenda/item_form.tpl');
 	}
 
 }
 
-class AgendaZijbalkView extends TemplateView {
+abstract class AgendaItemsView extends TemplateView {
 
-	private $aantalWeken;
+	protected $items;
 
-	public function __construct($agenda, $aantalWeken) {
+	public function __construct(AgendaModel $agenda, $aantalWeken) {
 		parent::__construct($agenda);
-		$this->aantalWeken = $aantalWeken;
+		$beginMoment = strtotime(date('Y-m-d'));
+		$eindMoment = strtotime('+' . $aantalWeken . ' weeks', $beginMoment);
+		$eindMoment = strtotime('next saturday', $eindMoment);
+		$this->items = $this->model->getAllAgendeerbaar($beginMoment, $eindMoment);
 	}
+
+}
+
+class AgendaZijbalkView extends AgendaItemsView {
 
 	public function getTitel() {
 		return 'Agenda - Zijbalk';
 	}
 
 	public function view() {
-		$beginMoment = strtotime(date('Y-m-d'));
-		$eindMoment = strtotime('+' . $this->aantalWeken . ' weeks', $beginMoment);
-		$eindMoment = strtotime('next saturday', $eindMoment);
-		$items = $this->model->getAllAgendeerbaar($beginMoment, $eindMoment);
-
-		if (count($items) > LidInstellingen::get('zijbalk', 'agenda_max')) {
-			$items = array_slice($items, 0, LidInstellingen::get('zijbalk', 'agenda_max'));
+		if (count($this->items) > LidInstellingen::get('zijbalk', 'agenda_max')) {
+			$this->items = array_slice($this->items, 0, LidInstellingen::get('zijbalk', 'agenda_max'));
 		}
-
-		$this->smarty->assign('items', $items);
-		$this->smarty->display('agenda/zijbalk.tpl');
+		$this->smarty->assign('items', $this->items);
+		$this->smarty->display('MVC/agenda/zijbalk.tpl');
 	}
 
 }
 
-class AgendaCourantView extends TemplateView {
-
-	private $aantalWeken;
-
-	public function __construct(AgendaModel $agenda, $aantalWeken) {
-		parent::__construct($agenda);
-		$this->aantalWeken = $aantalWeken;
-	}
+class AgendaCourantView extends AgendaItemsView {
 
 	public function getTitel() {
 		return 'Agenda - Courant';
 	}
 
 	public function view() {
-		$beginMoment = strtotime(date('Y-m-d'));
-		$eindMoment = strtotime('+' . $this->aantalWeken . ' weeks', $beginMoment);
-		$eindMoment = strtotime('next saturday', $eindMoment);
-		$items = $this->model->getAllAgendeerbaar($beginMoment, $eindMoment);
-
-		$this->smarty->assign('items', $items);
-		$this->smarty->display('agenda/courant.tpl');
+		$this->smarty->assign('items', $this->items);
+		$this->smarty->display('MVC/agenda/courant.tpl');
 	}
 
 }
 
-class AgendaICalendarContent extends TemplateView {
+class AgendaICalendarView extends TemplateView {
 
 	public function __construct(AgendaModel $agenda) {
 		parent::__construct($agenda);
@@ -141,7 +152,7 @@ class AgendaICalendarContent extends TemplateView {
 
 	public function view() {
 		$this->smarty->assign('items', $this->model->getiCalendarItems());
-		$this->smarty->display('agenda/icalendar.tpl');
+		$this->smarty->display('MVC/agenda/icalendar.tpl');
 	}
 
 }

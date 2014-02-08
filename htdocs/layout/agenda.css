@@ -18,6 +18,9 @@ table.agenda th {
 	vertical-align: top;
 	background-color: #dddddd;
 }
+div#tijden a{
+	cursor: pointer;
+}
 
 /*** MAAND ***************************/
 div.maandnavigatie a{
@@ -38,7 +41,7 @@ table#maand tr td{
 table#maand tr td.dag{
 	padding: 0px;
 	text-align: left;
-	
+
 }
 table#maand td.anderemaand { /* De dagen die van andere maanden in de maand-tabel vallen doorzichtig maken */
 	opacity: 0.4;
@@ -86,26 +89,11 @@ table#maand td ul li.odd{
 table#maand td ul li .tijd{
 	font-size: 10px;
 	color: #777;
-	
+
 }
 table#maand td ul li  img.icon{
 	float: right;
 }
 table#maand td ul li a.beheren{
 	float: right; margin-left: 1px;
-}
-
-/*** FORMULIER ***********************/
-form.agendaitem label {
-	float: left;
-	width: 120px;
-}
-form.agendaitem input.tijd{
-	width: 70px;
-}
-div.standaardtijden{
-	float: right; margin-right: 450px; width: 200px; 
-}
-div.standaardtijden a{
-	cursor: pointer;
 }

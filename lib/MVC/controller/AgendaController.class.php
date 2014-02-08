@@ -84,7 +84,7 @@ class AgendaController extends AclController {
 	 * iCalendar genereren.
 	 */
 	public function icalendar() {
-		$this->view = new AgendaICalendarContent($this->model);
+		$this->view = new AgendaICalendarView($this->model);
 	}
 
 	/**
@@ -127,9 +127,10 @@ class AgendaController extends AclController {
 			$item->begin_moment = $beginMoment;
 			$item->eind_moment = $eindMoment;
 		}
-		$this->view = new AgendaItemView($item, 'toevoegen');
+		$this->view = new AgendaItemFormView($item, 'toevoegen');
 		$this->view = new csrdelft($this->getContent());
 		$this->view->addStylesheet('agenda.css');
+		$this->view->addScript('agenda.js');
 	}
 
 	public function bewerken() {
@@ -147,9 +148,10 @@ class AgendaController extends AclController {
 		} else {
 			invokeRefresh('/actueel/agenda/', 'Agenda-item niet gevonden.');
 		}
-		$this->view = new AgendaItemView($item, 'toevoegen');
+		$this->view = new AgendaItemFormView($item, 'bewerken');
 		$this->view = new csrdelft($this->getContent());
 		$this->view->addStylesheet('agenda.css');
+		$this->view->addScript('agenda.js');
 	}
 
 	public function verwijderen() {

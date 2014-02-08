@@ -7,6 +7,10 @@
 	</li>
 </ul>
 <hr />
+
+{* feutmeldingen weergeven... *}
+{$view->getMelding()}
+
 <h1>C.S.R.-courant</h1>
 <p>
 	De C.S.R.-courant wordt elke maandagavond verzonden naar alle leden van C.S.R.. 
@@ -18,14 +22,11 @@
 		<a href="/actueel/courant/verzenden.php" onclick="return confirm('Weet u het zeker dat u de C.S.R.-courant wilt versturen?')" class="knop">Verzenden</a>
 	{/if}
 	{* Volgens mij wordt deze nooit gebruikt...
-		{if $courant->magBeheren()}
-		<a href="/actueel/courant/leegmaken" class="knop" onclick="return confirm('Weet u zeker dat u de cache wilt leeggooien?')">Leegmaken</a>
-		{/if}
+	{if $courant->magBeheren()}
+	<a href="/actueel/courant/leegmaken" class="knop" onclick="return confirm('Weet u zeker dat u de cache wilt leeggooien?')">Leegmaken</a>
+	{/if}
 	*}
 </div>
-
-{* feutmeldingen weergeven... *}
-{if $melding!=''}{$view->getMelding()}{/if}
 
 {* geen overzicht van berichten bij het bewerken... *}
 {if $form.ID==0 AND sizeof($courant->getBerichtenVoorGebruiker())>0}
@@ -33,18 +34,17 @@
 	<dl>
 		{foreach from=$courant->getBerichtenVoorGebruiker() item=bericht}
 			<dt>
-				<u>{$bericht.categorie|replace:'csr':'C.S.R.'}</u>
-				{if $courant->magBeheren()}({$bericht.uid|csrnaam:'full':false}){/if}
-				<strong>{$bericht.titel}</strong>
-				[ <a href="/actueel/courant/bewerken/{$bericht.ID}">bewerken</a> | 
-				<a href="/actueel/courant/verwijder/{$bericht.ID}" onclick="return confirm('Weet u zeker dat u dit bericht wilt verwijderen?')" >verwijderen</a> ]
+			<u>{$bericht.categorie|replace:'csr':'C.S.R.'}</u>
+			{if $courant->magBeheren()}({$bericht.uid|csrnaam:'full':false}){/if}
+			<strong>{$bericht.titel}</strong>
+			[ <a href="/actueel/courant/bewerken/{$bericht.ID}">bewerken</a> | 
+			<a href="/actueel/courant/verwijder/{$bericht.ID}" onclick="return confirm('Weet u zeker dat u dit bericht wilt verwijderen?')" >verwijderen</a> ]
 			</dt>
 			<dd id="courantbericht{$bericht.ID}"></dd>
 			{if !$courant->magBeheren()}<dd>{$bericht.bericht|ubb}</dd>{/if}
 		{/foreach}
 	</dl>
 {/if}
-
 
 <form method="post" action="?ID={$form.ID}" >
 	<div id="pubciemail_form">
@@ -55,8 +55,8 @@
 		<strong>Categorie:</strong><br />
 		Selecteer hier een categorie. Uw invoer is enkel een voorstel.
 		<em>Aankondigingen over kamers te huur komen in <strong>overig</strong> terecht! C.S.R. is bedoeld voor 
-		activiteiten van C.S.R.-commissies en andere verenigingsactiviteiten.</em><br />
-		{html_options name=categorie values=$courant->getCats() output=$courant->getCats(true) selected=$form.categorie}
+			activiteiten van C.S.R.-commissies en andere verenigingsactiviteiten.</em><br />
+			{html_options name=categorie values=$courant->getCats() output=$courant->getCats(true) selected=$form.categorie}
 		<br /><br />
 		<strong>Bericht:</strong><br />
 		<div id="bewerkPreviewContainer" class="previewContainer"><div id="bewerkPreview" class="preview"></div></div>
@@ -72,12 +72,12 @@
 </form>
 {if $courant->magBeheren() AND $courant->getBerichtenCount()>0}<br />
 	<h3 id="voorbeeld">Voorbeeld van de C.S.R.-courant.</h3>
-		<script type="text/javascript">//<![CDATA[{literal}
-			function showIframe(){
-				target =document.getElementById('courant_voorbeeld');
-				target.innerHTML = "<iframe src=\"/actueel/courant/courant.php\" style=\"width: 100%; height: 600px;\"></iframe>";
-			}
+	<script type="text/javascript">//<![CDATA[{literal}
+		function showIframe() {
+			target = document.getElementById('courant_voorbeeld');
+			target.innerHTML = "<iframe src=\"/actueel/courant/courant.php\" style=\"width: 100%; height: 600px;\"></iframe>";
+		}
 		//]]></script>{/literal}
-		<a href="#voorbeeld" onclick="showIframe()">Laat voorbeeld zien...</a>
-		<div id="courant_voorbeeld"></div>
+	<a href="#voorbeeld" onclick="showIframe()">Laat voorbeeld zien...</a>
+	<div id="courant_voorbeeld"></div>
 {/if}

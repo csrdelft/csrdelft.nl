@@ -35,7 +35,7 @@ class Formulier implements View, Validator {
 	public $css_classes;
 	public $error = '';
 
-	public function __construct($formId, $action = '', $fields = array()) {
+	public function __construct($formId, $action = null, $fields = array()) {
 		$this->formId = $formId;
 		$this->action = $action;
 		$this->fields = $fields;
@@ -139,7 +139,11 @@ class Formulier implements View, Validator {
 	 */
 	public function view($compleetformulier = true) {
 		if ($compleetformulier) {
-			echo '<form action="' . $this->action . '" id="' . $this->formId . '" class="' . implode(' ', $this->css_classes) . '" method="post">' . "\n";
+			echo '<form';
+			if ($this->action != null) {
+				echo ' action="' . $this->action . '"';
+			}
+			echo ' id="' . $this->formId . '" class="' . implode(' ', $this->css_classes) . '" method="post">' . "\n";
 			echo '<script type="text/javascript">if(FieldSuggestions==undefined){var FieldSuggestions=[];} </script>';
 		}
 
