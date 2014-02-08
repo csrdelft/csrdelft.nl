@@ -95,7 +95,7 @@ class AgendaController extends AclController {
 	public function courant() {
 		require_once 'courant/courant.class.php';
 		if (Courant::magBeheren()) {
-			$content = new AgendaCourantView($this->agenda, 2);
+			$content = new AgendaCourantView($this->model, 2);
 			$content->view();
 		}
 		exit;
