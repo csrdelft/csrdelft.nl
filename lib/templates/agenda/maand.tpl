@@ -1,6 +1,6 @@
 {$view->getMelding()}
-<h1>Agenda {$datum|date_format:"%B %Y"}</h1>
 <div style="float: right;"><a href="/actueel/agenda/icalendar/" class="knop" title="Icalender export (Google calendar)">{icon get="calendar_link"}</a></div>
+<h1>Agenda {$datum|date_format:"%B %Y"}</h1>
 <div class="maandnavigatie">
 	<a class="knop" href="{$urlVorige}" style="float: left;" >&laquo; Vorige maand</a>
 	<a class="knop" href="{$urlVolgende}" style="float: right;">Volgende maand &raquo;</a>
