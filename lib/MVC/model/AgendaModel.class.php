@@ -81,7 +81,7 @@ class AgendaModel extends PersistenceModel {
 	}
 
 	public function getiCalendarItems() {
-		return $this->getAllAgendeerbaar(Instellingen::get('agenda', 'RSS_begin'), Instellingen::get('agenda', 'RSS_eind'));
+		return $this->getAllAgendeerbaar(strtotime('-1 year'), strtotime('+1 year'));
 	}
 
 	public function getItemsByDay($jaar, $maand, $dag) {
