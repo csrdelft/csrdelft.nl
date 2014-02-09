@@ -25,15 +25,13 @@
  * 
  */
 class CorveeTaak implements Agendeerbaar {
-
 	# primary key
-	private $taak_id; # int 11
 
+	private $taak_id; # int 11
 	private $functie_id; # foreign key crv_functie.id
 	private $lid_id; # foreign key lid.uid
 	private $crv_repetitie_id; # foreign key crv_repetitie.id
 	private $maaltijd_id; # foreign key maaltijd.id
-
 	private $datum; # date
 	private $punten; # int 11
 	private $bonus_malus; # int 11
@@ -42,7 +40,6 @@ class CorveeTaak implements Agendeerbaar {
 	private $wanneer_toegekend; # datetime
 	private $wanneer_gemaild; # text
 	private $verwijderd; # boolean
-
 	private $corvee_functie;
 
 	public function __construct($tid = 0, $fid = 0, $uid = null, $crid = null, $mid = null, $datum = null, $punten = 0, $bonus_malus = 0, $toegekend = 0, $bonus_toegekend = 0, $wanneer = null, $gemaild = '', $verwijderd = false) {
@@ -313,6 +310,10 @@ class CorveeTaak implements Agendeerbaar {
 
 	public function getEindMoment() {
 		return $this->getBeginMoment();
+	}
+
+	public function getDuration() {
+		return ($this->getEindMoment() - $this->getBeginMoment()) / 60;
 	}
 
 	public function getTitel() {

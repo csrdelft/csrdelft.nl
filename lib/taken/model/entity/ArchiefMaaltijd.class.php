@@ -19,10 +19,9 @@
  * 
  */
 class ArchiefMaaltijd implements Agendeerbaar {
-
 	# primary key
-	private $maaltijd_id; # int 11
 
+	private $maaltijd_id; # int 11
 	private $titel; # string 255
 	private $datum; # date
 	private $tijd; # time
@@ -99,6 +98,10 @@ class ArchiefMaaltijd implements Agendeerbaar {
 
 	public function getEindMoment() {
 		return $this->getBeginMoment();
+	}
+
+	public function getDuration() {
+		return ($this->getEindMoment() - $this->getBeginMoment()) / 60;
 	}
 
 	public function getBeschrijving() {

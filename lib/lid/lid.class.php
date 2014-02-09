@@ -324,6 +324,10 @@ class Lid implements Serializable, Agendeerbaar {
 		return $this->getBeginMoment() + 60;
 	}
 
+	public function getDuration() {
+		return 60 * 24;
+	}
+
 	public function getTitel() {
 		return $this->getNaamLink('civitas', 'link');
 	}

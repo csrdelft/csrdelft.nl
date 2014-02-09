@@ -41,7 +41,7 @@ END:VTIMEZONE
 BEGIN:VEVENT
 UID:{$item->item_id}
 {if $item->isHeledag()}DTSTART;VALUE=DATE:{$item->getBeginMoment()|date_format:'%Y%m%d'}{else}DTSTART;TZID=Europe/Amsterdam:{$item->getBeginMoment()|date_format:'%Y%m%dT%H%M%S'}{/if}
-{if $item->isHeledag()}DTEND;VALUE=DATE:{$item->getEindMoment()|date_format:'%Y%m%d'}{else}DTEND;TZID=Europe/Amsterdam:{$item->getEindMoment()|date_format:'%Y%m%dT%H%M%S'}{/if}
+{if $item->isHeledag()}DTEND;VALUE=DATE:{$item->getEindMoment()|date_format:'%Y%m%d'}{else}DURATION:PT{$item->getDuration()}M{/if}
 SUMMARY:{$item->getTitel()}
 END:VEVENT
 {/if}{/foreach}

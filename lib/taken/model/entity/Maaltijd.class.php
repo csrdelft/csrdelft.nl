@@ -26,12 +26,10 @@
  * 
  */
 class Maaltijd implements Agendeerbaar {
-
 	# primary key
+
 	private $maaltijd_id; # int 11
-
 	private $mlt_repetitie_id; # foreign key mlt_repetitie.id
-
 	private $titel; # string 255
 	private $aanmeld_limiet; # int 11
 	private $datum; # date
@@ -41,7 +39,6 @@ class Maaltijd implements Agendeerbaar {
 	private $laatst_gesloten; # int 11
 	private $verwijderd; # boolean
 	private $aanmeld_filter; # string 255
-
 	private $aantal_aanmeldingen;
 	private $archief;
 
@@ -238,6 +235,10 @@ class Maaltijd implements Agendeerbaar {
 
 	public function getEindMoment() {
 		return $this->getBeginMoment();
+	}
+
+	public function getDuration() {
+		return ($this->getEindMoment() - $this->getBeginMoment()) / 60;
 	}
 
 	public function getBeschrijving() {
