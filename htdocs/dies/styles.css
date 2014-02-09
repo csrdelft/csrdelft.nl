@@ -55,11 +55,12 @@ select {
     width: 150px;
 }
 
-input[type="submit"], input[type="reset"] {
+.knop {
     color: #f1ddbc;
     background-color: #690f36;
     font-family: geosanslightregular;
-    margin-top:5px;
+	padding: 0px 5px;
+	margin: 10px 5px 0px 0px;
 }
 
 #header {height:126px;z-index: 0;}

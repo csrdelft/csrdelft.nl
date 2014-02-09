@@ -29,6 +29,8 @@
 	</td>
 	<td style="text-align: center;">
 		{$maaltijd->getAantalAanmeldingen()} ({$maaltijd->getAanmeldLimiet()})
+	</td>
+	<td>
 {if !$maaltijd->getIsVerwijderd() and $maaltijd->getArchief() === null}
 		<div style="float: right;">
 			<a href="{$instellingen->get('taken', 'url')}/anderaanmelden/{$maaltijd->getMaaltijdId()}" title="Aanmelding toevoegen" class="knop post popup">{icon get="user_add"}</a>

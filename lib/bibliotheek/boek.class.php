@@ -26,7 +26,6 @@ class Boek {
 	protected $biebboek = 'nee'; //'ja'/'nee'
 	protected $error = '';
 	protected $exemplaren = null; // array
-
 	protected $formulier; // Form objecten voor recensieformulier of nieuwboekformulier
 
 	public function __construct($init) {
@@ -284,9 +283,9 @@ class Boek {
 		}
 	}
 
-	/* *************
+	/*	 * ************
 	 * Exemplaren *
-	 * *************/
+	 * ************ */
 
 	/**
 	 * Laad exemplaren van dit boek in Boek
@@ -402,7 +401,7 @@ class Boek {
 		return $db->query($qDeleteExemplaar);
 	}
 
-	/* *****************************************************************************
+	/*	 * ****************************************************************************
 	 * methodes voor gewone formulieren *
 	 * **************************************************************************** */
 
@@ -549,7 +548,7 @@ class NieuwBoek extends Boek {
 			if ($this->isBASFCie()) {
 				$nieuwboekformulier['biebboek'] = new SelectField('biebboek', $this->biebboek, 'Is een biebboek?', array('ja' => 'C.S.R. boek', 'nee' => 'Eigen boek'));
 			}
-			$nieuwboekformulier['submit'] = new SubmitButton('opslaan', '<a class="knop" href="/communicatie/bibliotheek/">Annuleren</a>');
+			$nieuwboekformulier[] = new SubmitResetCancel('/communicatie/bibliotheek/');
 
 			$this->formulier = new Formulier('boekaddForm', '/communicatie/bibliotheek/nieuwboek/0', $nieuwboekformulier);
 		}
@@ -623,7 +622,7 @@ class BewerkBoek extends Boek {
 		$this->createBeschrijvingformulier();
 	}
 
-	/* ***************************
+	/*	 * **************************
 	 * Ajax formuliervelden		*
 	 * ************************** */
 
@@ -832,10 +831,9 @@ class BewerkBoek extends Boek {
 		return htmlspecialchars($return);
 	}
 
-	/* *************
+	/*	 * ************
 	 * Exemplaren *
 	 * ************ */
-
 
 	/**
 	 * Slaat op dat een exemplaar is geleend
@@ -979,9 +977,9 @@ class BewerkBoek extends Boek {
 		return false;
 	}
 
-	/* *******************************
+	/*	 * ******************************
 	 * Boekrecensies/beschrijvingen *
-	 * *******************************/
+	 * ****************************** */
 
 	/**
 	 * maakt objecten van formulier om beschrijving toe te voegen of te bewerken
@@ -989,7 +987,7 @@ class BewerkBoek extends Boek {
 	public function createBeschrijvingformulier() {
 		if ($this->magBekijken()) {
 			$schrijver = '';
-			$annuleerknop = '';
+			$annuleer = null;
 			$posturl = '/communicatie/bibliotheek/bewerkbeschrijving/' . $this->getId();
 
 			if ($this->editbeschrijving == 0) {
@@ -1001,14 +999,14 @@ class BewerkBoek extends Boek {
 				if ($lid instanceof Lid) {
 					$schrijver = $lid->getNaamLink('full', 'plain') . ':';
 				}
-				$annuleerknop = '<a class="knop" href="/communicatie/bibliotheek/boek/' . $this->getId() . '">Annuleren</a>';
+				$annuleer = '/communicatie/bibliotheek/boek/' . $this->getId();
 				$posturl.='/' . $this->editbeschrijving;
 			}
 			$boekbeschrijvingform[] = new Subkopje($titeltekst);
 			$textfield = new RequiredUbbPreviewField('beschrijving', $this->getEditBeschrijving()->getTekst(), $schrijver);
 			$textfield->previewOnEnter();
 			$boekbeschrijvingform[] = $textfield;
-			$boekbeschrijvingform[] = new SubmitButton('opslaan', $annuleerknop);
+			$boekbeschrijvingform[] = new SubmitResetCancel($annuleer);
 
 			$this->formulier = new Formulier('Beschrijvingsformulier', $posturl, $boekbeschrijvingform);
 		}

@@ -71,10 +71,7 @@ class LedenlijstContent extends TemplateView {
 			}
 			echo '<a href="' . $url . '" class="knop" style="float: right" title="Huidige selectie exporteren naar Google Contacts" onclick="return confirm(\'Weet u zeker dat u deze ' . $this->zoeker->count() . ' leden wilt importeren in uw Google-contacts?\')"><img src="http://code.google.com/favicon.ico" alt="google"/></a>';
 		}
-		$melding = $this->getMelding();
-		if ($melding != '') {
-			echo $melding . '<br />';
-		}
+		echo $this->getMelding();
 		echo '<h1>' . (LoginLid::instance()->getLid()->isOudlid() ? 'Oud-leden en l' : 'L') . 'edenlijst </h1>';
 		echo '<form method="get" id="zoekform">';
 		echo '<label for="q"></label><input type="text" name="q" value="' . htmlspecialchars($this->zoeker->getQuery()) . '" /> ';

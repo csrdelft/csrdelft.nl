@@ -1,7 +1,5 @@
 <?php
 
-
-
 /**
  * TaakFormView.class.php	| 	P.W.G. Brussee (brussee@live.nl)
  *
@@ -19,19 +17,15 @@ class TaakFormView extends TemplateView {
 
 		$functieNamen = FunctiesModel::getAlleFuncties(true); // grouped by fid
 		$functiePunten = 'var punten=[];';
-		$functieSelectie = array();
 		foreach ($functieNamen as $functie) {
 			$functieNamen[$functie->getFunctieId()] = $functie->getNaam();
 			$functiePunten .= 'punten[' . $functie->getFunctieId() . ']=' . $functie->getStandaardPunten() . ';';
 			if ($punten === null) {
 				$punten = $functie->getStandaardPunten();
 			}
-			if ($fid === $functie->getFunctieId()) {
-				$functieSelectie[$fid] = 'arrow';
-			}
 		}
 
-		$formFields['fid'] = new SelectField('functie_id', $fid, 'Functie', $functieNamen, $functieSelectie);
+		$formFields['fid'] = new SelectField('functie_id', $fid, 'Functie', $functieNamen);
 		$formFields['fid']->onchange = $functiePunten . "$('#field_punten').val(punten[this.value]);";
 		$formFields['lid'] = new LidField('lid_id', $uid, 'Naam of lidnummer');
 		$formFields['lid']->title = 'Bij het wijzigen van het toegewezen lid worden ook de corveepunten aan het nieuwe lid gegeven.';

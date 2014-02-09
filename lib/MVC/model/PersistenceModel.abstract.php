@@ -108,6 +108,7 @@ abstract class PersistenceModel implements Persistence {
 	 * Save existing entity.
 	 *
 	 * @param PersistentEntity $entity
+	 * @return int rowcount
 	 */
 	public function update(PersistentEntity $entity) {
 		$properties = $entity->getValues();
@@ -118,10 +119,7 @@ abstract class PersistenceModel implements Persistence {
 			$params[':' . $key] = $properties[$key];
 			unset($properties[$key]); // do not update primary key
 		}
-		$rowcount = Database::sqlUpdate($this->orm_entity->getTableName(), $properties, implode(' AND ', $where), $params, 1);
-		if ($rowcount !== 1) {
-			throw new Exception('update rowCount=' . $rowcount);
-		}
+		return Database::sqlUpdate($this->orm_entity->getTableName(), $properties, implode(' AND ', $where), $params, 1);
 	}
 
 	/**

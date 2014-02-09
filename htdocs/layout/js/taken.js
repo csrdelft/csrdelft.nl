@@ -117,15 +117,7 @@ function taken_submit_dropdown(form) {
 		taken_loading();
 	}
 	taken_ajax(null, $(form).attr('action'), taken_handle_response, $(form).serialize());
-	taken_reset_form(form);
-}
-
-function taken_reset_form(form) {
-	$(form).find('.regular').each(function() {
-		if ($(this).val() !== $(this).attr('origvalue')) {
-			$(this).val($(this).attr('origvalue'));
-		}
-	});
+	form_reset(form);
 }
 
 function taken_check_form(form) {
@@ -250,7 +242,7 @@ function taken_toggle_hiddenform(source) {
 	$(parent).find('div').toggle();
 	var form = $(parent).find('form');
 	$(form).toggle();
-	taken_reset_form(form);
+	form_reset(form);
 	var elmnt = $(form).find('input[type=text]');
 	if ($(elmnt).is(':visible')) {
 		var val = $(elmnt).val();

@@ -144,20 +144,29 @@ class AgendaModel extends PersistenceModel {
 		return null;
 	}
 
-	public function saveAgendaItem($id, array $properties) {
+	public function newAgendaItem($datum) {
 		$item = new AgendaItem();
-		$item->item_id = (int) $id;
-		$item->titel = $properties['titel'];
-		$item->begin_moment = $properties['datum'] . ' ' . $properties['begin'];
-		$item->eind_moment = $properties['datum'] . ' ' . $properties['eind'];
-		$item->beschrijving = $properties['beschrijving'];
-		$item->rechten_bekijken = 'P_NOBODY';
+		$item->item_id = 0;
+		if (!preg_match('/^[0-9]{4}\-[0-9]{1,2}-[0-9]{1,2}$/', $datum)) {
+			$datum = strtotime('Y-m-d');
+		}
+		$item->begin_moment = getDateTime(strtotime($datum) + 72000);
+		$item->eind_moment = getDateTime(strtotime($datum) + 79200);
+		return $item;
+	}
 
-		if (is_int($id) && $id > 0) {
-			$this->update($item);
+	public function saveAgendaItem(AgendaItem $item) {
+		if (is_int($item->item_id) && $item->item_id > 0) {
+			$rowcount = $this->update($item);
+			if ($rowcount > 0) {
+				setMelding('Bijgewerkt', 1);
+			} else {
+				setMelding('Geen wijzigingen', 0);
+			}
 		} else {
 			$id = $this->create($item);
 			$item->item_id = $id;
+			setMelding('Toegevoegd', 1);
 		}
 	}
 

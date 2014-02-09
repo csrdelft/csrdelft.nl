@@ -66,7 +66,10 @@ abstract class FormElement implements View {
 		return get_class($this);
 	}
 
-	abstract public function getJavascript();
+	public function getJavascript() {
+		return '';
+	}
+
 }
 
 /**
@@ -892,24 +895,23 @@ class AutoresizeTextareaField extends TextareaField {
 $('.wantsAutoresize').each(function(){
 	var textarea=$(this);
 	var fieldname=textarea.attr('id').substring(6);
-	var hiddenDiv = $(document.createElement('div')),  
-	content = null;  
-  
+	var hiddenDiv = $(document.createElement('div')),
+	content = null;
+
 	hiddenDiv.addClass('hiddendiv '+fieldname)
-		.css({'font-size': textarea.css('font-size'), 
-			'font-weight': textarea.css('font-size'), 
-			'width': textarea.css('width')});
-	$('body').append(hiddenDiv);  
-  
-	textarea.bind('keyup', function() {  
-  
-		content = textarea.val();  
-		content = content.replace(/\\n/g, '<br>');  
-		hiddenDiv.html(content+'<br>');  
-  
-		textarea.css('height', hiddenDiv.height());  
-  
-	}).keyup();  
+		.css({'font-size': textarea.css('font-size'),
+			'font-weight': textarea.css('font-size'),
+			'width': textarea.css('width'),
+			'word-break': 'break-all',
+			'visibility': 'hidden'});
+	$('body').append(hiddenDiv);
+
+	textarea.bind('keyup', function() {
+		content = textarea.val();
+		content = content.replace(/\\n/g, '<br>');
+		hiddenDiv.html(content+'<br><br>');
+		textarea.css('height', hiddenDiv.height());
+	}).keyup();
 });
 JS;
 	}
@@ -1081,14 +1083,12 @@ class PassField extends InputField {
 class SelectField extends InputField {
 
 	public $options;
-	public $cssOptions;
 	public $size;
 	public $multiple; //TODO
 
-	public function __construct($name, $value, $description, array $options, $cssOptions = array(), $size = 1, $multiple = false) {
+	public function __construct($name, $value, $description, array $options, $size = 1, $multiple = false) {
 		parent::__construct($name, $value, $description);
 		$this->options = $options;
-		$this->cssOptions = $cssOptions;
 		$this->size = (int) $size;
 		$this->multiple = $multiple;
 		if (count($this->options) < 1) {
@@ -1127,9 +1127,6 @@ class SelectField extends InputField {
 			echo '<option value="' . $value . '"';
 			if ($value == $this->value) {
 				echo ' selected="selected"';
-			}
-			if (array_key_exists($value, $this->cssOptions)) {
-				echo ' class="' . $this->cssOptions[$value] . '"';
 			}
 			echo '>' . htmlspecialchars($description) . '</option>';
 		}
@@ -1480,31 +1477,49 @@ class RequiredVinkField extends VinkField {
 }
 
 /**
- * SubmitButton.
+ * Submit, reset en cancel buttons
  */
-class SubmitButton extends FormElement {
+class SubmitResetCancel extends FormElement {
 
-	protected $buttontext;
-	protected $extra = '';
+	public $submitText = 'Opslaan';
+	public $submitTitle;
+	public $submitIcon;
+	public $resetText = 'Reset';
+	public $resetTitle;
+	public $resetIcon;
+	public $cancelText = 'Annuleren';
+	public $cancelTitle;
+	public $cancelIcon;
+	public $cancelUrl = '';
 
-	public function __construct($buttontext = 'opslaan', $extra = '') {
-		$this->buttontext = $buttontext;
-		$this->extra = $extra;
+	/**
+	 * Volgorde van parameters naar meest aangepast
+	 * @param type $cancelurl
+	 * @param type $submittext
+	 * @param type $canceltext
+	 * @param type $resettext
+	 */
+	public function __construct($cancel_url = null, $icons = true, $submit_title = 'Invoer opslaan', $cancel_title = 'Niet opslaan en terugkeren', $reset_title = 'Reset naar opgeslagen gegevens') {
+		parent::__construct(null);
+		$this->submitTitle = $submit_title;
+		$this->resetTitle = $reset_title;
+		$this->cancelTitle = $cancel_title;
+		$this->cancelUrl = $cancel_url;
+		if ($icons) {
+			$this->submitIcon = '<img src="' . CSR_PICS . 'famfamfam/disk.png" class="icon" width="16" height="16" alt="submit" /> ';
+			$this->resetIcon = '<img src="' . CSR_PICS . 'famfamfam/arrow_rotate_anticlockwise.png" class="icon" width="16" height="16" alt="reset" /> ';
+			$this->cancelIcon = '<img src="' . CSR_PICS . 'famfamfam/delete.png" class="icon" width="16" height="16" alt="cancel" /> ';
+		}
 	}
 
 	public function view() {
-		echo <<<HTML
-<div class="submit">
-	<label for="submit"> </label>
-	<input type="submit" value="{$this->buttontext}" />
-	<input type="reset" value="reset formulier" />
-	{$this->extra}
-</div>
-HTML;
-	}
-
-	public function getJavascript() {
-		
+		echo '<div class="InputField"><label> </label>';
+		echo '<a href="javascript:void(0);" class="knop submit" title="' . $this->submitTitle . '" onclick="$(this).closest(\'form\').submit();">' . $this->submitIcon . $this->submitText . '</a> ';
+		echo '<a href="javascript:void(0);" class="knop reset" title="' . $this->resetTitle . '" onclick="form_reset($(this).closest(\'form\'));">' . $this->resetIcon . $this->resetText . '</a> ';
+		if (!empty($this->cancelUrl)) {
+			echo '<a href="' . $this->cancelUrl . '" class="knop cancel" title="' . $this->cancelTitle . '">' . $this->cancelIcon . $this->cancelText . '</a>';
+		}
+		echo '</div>';
 	}
 
 }
@@ -1523,10 +1538,6 @@ class HtmlComment extends FormElement {
 
 	public function view() {
 		echo $this->comment;
-	}
-
-	public function getJavascript() {
-		
 	}
 
 }

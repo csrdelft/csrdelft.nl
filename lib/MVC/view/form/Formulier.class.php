@@ -84,7 +84,6 @@ class Formulier implements View, Validator {
 	 */
 	public function getValues() {
 		$values = array();
-		/** @var $field InputField */
 		foreach ($this->getFields() as $field) {
 			if ($field instanceof InputField) {
 				$values[$field->getName()] = $field->getValue();

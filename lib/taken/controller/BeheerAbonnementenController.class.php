@@ -72,7 +72,7 @@ class BeheerAbonnementenController extends AclController {
 		}
 		else {
 			$this->view = new BeheerAbonnementenView(array(), null);
-			$this->view->setMelding($InputField->error, -1);
+			setMelding($InputField->error, -1);
 		}
 	}
 	
@@ -82,7 +82,7 @@ class BeheerAbonnementenController extends AclController {
 		$matrix = AbonnementenModel::getAbonnementenVanNovieten();
 		$novieten = sizeof($matrix);
 		$this->view = new BeheerAbonnementenView($matrix);
-		$this->view->setMelding(
+		setMelding(
 			$aantal .' abonnement'. ($aantal !== 1 ? 'en' : '') .' aangemaakt voor '.
 			$novieten .' noviet'. ($novieten !== 1 ? 'en' : '') .'.', 1);
 	}
@@ -95,7 +95,7 @@ class BeheerAbonnementenController extends AclController {
 		$abo_aantal = AbonnementenModel::inschakelenAbonnement($mrid, $uid);
 		$this->view = new BeheerAbonnementenView($abo_aantal[0]);
 		if ($abo_aantal[1] > 0) {
-			$this->view->setMelding('Automatisch aangemeld voor '. $abo_aantal[1] .' maaltijd'. ($abo_aantal[1] === 1 ? '' : 'en'), 2);
+			setMelding('Automatisch aangemeld voor '. $abo_aantal[1] .' maaltijd'. ($abo_aantal[1] === 1 ? '' : 'en'), 2);
 		}
 	}
 	
@@ -107,7 +107,7 @@ class BeheerAbonnementenController extends AclController {
 		$abo_aantal = AbonnementenModel::uitschakelenAbonnement($mrid, $uid);
 		$this->view = new BeheerAbonnementenView($abo_aantal[0]);
 		if ($abo_aantal[1] > 0) {
-			$this->view->setMelding('Automatisch afgemeld voor '. $abo_aantal[1] .' maaltijd'. ($abo_aantal[1] === 1 ? '' : 'en'), 2);
+			setMelding('Automatisch afgemeld voor '. $abo_aantal[1] .' maaltijd'. ($abo_aantal[1] === 1 ? '' : 'en'), 2);
 		}
 	}
 }

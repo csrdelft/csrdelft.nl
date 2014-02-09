@@ -191,7 +191,7 @@ class DocumentController extends Controller {
 			}
 		}
 		$this->view = new DocumentContent($this->document, $this->uploaders);
-		$this->view->setMelding($this->errors);
+		setMelding($this->errors, -1);
 	}
 
 	private function validate_document() {

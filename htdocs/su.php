@@ -25,8 +25,9 @@ switch ($action) {
 		break;
 }
 if (array_key_exists('HTTP_REFERER', $_SERVER)) {
-	$url = $_SERVER['HTTP_REFERER'];
-} else {
-	$url = CSR_ROOT;
+	$referer = filter_input(INPUT_SERVER, 'HTTP_REFERER', FILTER_SANITIZE_SPECIAL_CHARS);
+	if (startsWith($referer, CSR_ROOT)) {
+		invokeRefresh($referer);
+	}
 }
 invokeRefresh($url);

@@ -1,8 +1,7 @@
 {$view->getMelding()}
-<div style="float: right;"><a href="/actueel/agenda/icalendar/" class="knop" title="Icalender export (Google calendar)">{icon get="calendar_link"}</a></div>
-<h1>Agenda {$datum|date_format:"%B %Y"}</h1>
 {capture name='navlinks'}
 	<div class="maandnavigatie">
+		<h1>{$datum|date_format:"%B %Y"}</h1>
 		<a class="knop" href="{$urlVorige}" style="float: left;" >&laquo; Vorige maand</a>
 		<a class="knop" href="{$urlVolgende}" style="float: right;">Volgende maand &raquo;</a>
 	</div>
@@ -74,3 +73,4 @@
 	{/foreach}
 </table>
 {$smarty.capture.navlinks}
+<div id="ical"><a href="/actueel/agenda/icalendar/" title="ICalender export (Google calendar)"><img src="{$CSR_PICS}knopjes/ical.gif" /></a></div>

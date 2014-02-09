@@ -50,11 +50,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	else {
 		if (isset($_GET['ID']) AND $_GET['ID'] == 0) {
 			//nieuw bericht
-			$body->setMelding($courant->getError());
+			setMelding($courant->getError(), -1);
 		}
 		else {
 			//bewerken
-			$body->setMelding($courant->getError());
+			setMelding($courant->getError(), -1);
 			$body->edit((int) $_GET['ID']);
 		}
 	}

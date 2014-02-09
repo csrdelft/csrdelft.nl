@@ -41,7 +41,7 @@ class MaalCieSaldiController extends AclController {
 	public function upload() {
 		$this->beheer();
 		$melding_level = \Saldi::putMaalcieCsv();
-		$this->view->setMelding($melding_level[0], $melding_level[1]);
+		setMelding($melding_level[0], $melding_level[1]);
 	}
 	
 	public function sluitboekjaar() {
@@ -51,7 +51,7 @@ class MaalCieSaldiController extends AclController {
 			$errors_aantal = MaaltijdenModel::archiveerOudeMaaltijden(strtotime($values['begindatum']), strtotime($values['einddatum']));
 			$this->view = new MaalCieSaldiView(true);
 			if (sizeof($errors_aantal[0]) === 0) {
-				$this->view->setMelding('Boekjaar succesvol gesloten: '. $errors_aantal[1] .' maaltijden naar het archief verplaatst.', 1);
+				setMelding('Boekjaar succesvol gesloten: '. $errors_aantal[1] .' maaltijden naar het archief verplaatst.', 1);
 			}
 		}
 		else {

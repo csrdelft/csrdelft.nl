@@ -45,11 +45,4 @@ abstract class TemplateView implements View {
 		return SimpleHTML::getMelding();
 	}
 
-	/**
-	 * Backwards compatibility with SimpleHTML
-	 */
-	public static function setMelding($sMelding, $level = -1) {
-		setMelding($sMelding, $level);
-	}
-
 }

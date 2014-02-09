@@ -48,10 +48,11 @@ class MenuBeheerController extends AclController {
 	public function verwijder($id) {
 		try {
 			$item = $this->model->deleteMenuItem($id);
-			invokeRefresh('/menubeheer/beheer/' . $item->menu_naam, 'Verwijderd ' . $item->tekst . ' (' . $item->item_id . ')', 1);
+			setMelding('Verwijderd ' . $item->tekst . ' (' . $item->item_id . ')', 1);
 		} catch (Exception $e) {
-			invokeRefresh('/menubeheer/beheer', $e->getMessage(), -1);
+			setMelding($e->getMessage(), -1);
 		}
+		$this->beheer($item->menu_naam);
 	}
 
 	public function nieuw($parent_id) {
@@ -65,7 +66,8 @@ class MenuBeheerController extends AclController {
 		$item->menu_naam = filter_input(INPUT_POST, 'menu_naam', FILTER_SANITIZE_STRING);
 		$model = new MenuModel();
 		$model->saveMenuItem($item);
-		invokeRefresh('/menubeheer/beheer/' . $item->menu_naam, 'Nieuw aangemaakt ' . $item->tekst . ' (' . $item->item_id . ')', 1);
+		setMelding('Nieuw aangemaakt ' . $item->tekst . ' (' . $item->item_id . ')', 1);
+		$this->beheer($item->menu_naam);
 	}
 
 	public function wijzig($id, $property) {
@@ -73,10 +75,11 @@ class MenuBeheerController extends AclController {
 		$model = new MenuModel();
 		try {
 			$item = $model->wijzigProperty($id, $property, $value);
-			invokeRefresh('/menubeheer/beheer/' . $item->menu_naam, 'Wijzigingen opgeslagen ' . $item->item_id . ': ' . $item->tekst, 1);
+			setMelding('Wijzigingen opgeslagen ' . $item->item_id . ': ' . $item->tekst, 1);
 		} catch (Exception $e) {
-			invokeRefresh('/menubeheer/beheer', $e->getMessage(), -1);
+			setMelding($e->getMessage(), -1);
 		}
+		$this->beheer($item->menu_naam);
 	}
 
 }

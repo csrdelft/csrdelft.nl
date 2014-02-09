@@ -8,7 +8,7 @@ require_once 'configuratie.include.php';
 require_once 'peilingcontent.class.php';
 require_once 'peiling.class.php';
 
-$resultaat = '';
+$error = '';
 if (isset($_GET['action'])) {
 	switch ($_GET['action']) {
 		case 'toevoegen':
@@ -30,8 +30,7 @@ if (isset($_GET['action'])) {
 			if (isset($_POST['id'])) {
 				try {
 					$peiling = new Peiling((int) $_POST['id']);
-				}
-				catch (Exception $e) {
+				} catch (Exception $e) {
 					
 				}
 
@@ -47,9 +46,8 @@ if (isset($_GET['action'])) {
 					$peiling = new Peiling((int) $_GET['id']);
 					$peiling->deletePeiling();
 					header('location: ' . $_SERVER['HTTP_REFERER']);
-				}
-				catch (Exception $e) {
-					$resultaat = $e->getMessage();
+				} catch (Exception $e) {
+					$error = $e->getMessage();
 				}
 			}
 			break;
@@ -60,7 +58,9 @@ if (isset($_GET['action'])) {
 require_once 'peilingbeheercontent.class.php';
 $beheer = new PeilingBeheerContent();
 
-$beheer->setMelding($resultaat);
+if ($error != '') {
+	setMelding($error);
+}
 
 if (!$loginlid->hasPermission('P_LOGGED_IN') OR !Peiling::magBewerken()) {
 	# geen rechten

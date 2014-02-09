@@ -13,6 +13,7 @@
 		<th>Titel</th>
 		<th style="width: 60px;">Lijst</th>
 		<th>Eters (Limiet)</th>
+		<th style="width: 80px;"> </th>
 		<th>Status</th>
 		<th style="text-align: center;">
 			<a name="del-maaltijd" class="knop{if $prullenbak} confirm{/if} range" title="Selectie {if $prullenbak}definitief verwijderen{else}naar de prullenbak verplaatsen{/if}">

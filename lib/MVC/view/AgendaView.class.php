@@ -64,7 +64,7 @@ class AgendaItemFormView extends TemplateView implements Validator {
 		$this->actie = $actie;
 
 		$fields[] = new RequiredTextField('titel', $item->titel, 'Titel');
-		$fields[] = new DatumField('datum', $item->begin_moment, 'Datum');
+		$fields[] = new DatumField('datum', $item->begin_moment, 'Datum', date('Y') + 5, date('Y') - 5);
 		$fields[] = new HtmlComment('<div id="tijden" class="InputField"><label>Standaard tijden</label><div>
 			<a onclick="setTijd(\'00\',\'00\',\'23\',\'59\');">» Hele dag</a> &nbsp;
 			<a onclick="setTijd(\'18\',\'30\',\'22\',\'30\');">» Kring</a> &nbsp;
@@ -73,9 +73,10 @@ class AgendaItemFormView extends TemplateView implements Validator {
 		</div></div>');
 		$fields['van'] = new TijdField('begin', date('H:i', $item->getBeginMoment()), 'Van');
 		$fields['tot'] = new TijdField('eind', date('H:i', $item->getEindMoment()), 'Tot');
+		$fields[] = new SelectField('rechten', $item->rechten_bekijken, 'Zichtbaar', array('P_LEDEN_READ' => 'Intern', 'P_NOBODY' => 'Extern'));
 		$fields[] = new AutoresizeTextareaField('beschrijving', $item->beschrijving, 'Beschrijving');
 
-		$fields[] = new SubmitButton($this->actie, '<a href="/actueel/agenda/maand/' . date('Y-m', $item->getBeginMoment()) . '" class="knop" style="float: none;">annuleren</a>');
+		$fields[] = new SubmitResetCancel('/actueel/agenda/maand/' . date('Y-m', $item->getBeginMoment()));
 
 		$this->form = new Formulier('agenda-item-form', null, $fields);
 		$this->form->css_classes[] = 'agendaitem';
@@ -96,8 +97,8 @@ class AgendaItemFormView extends TemplateView implements Validator {
 			return false;
 		}
 		$fields = $this->form->getFields();
-		if (strtotime($fields['van']->getValue()) > strtotime($fields['tot']->getValue())) {
-			$fields['van']->error = 'Beginmoment moet voor eindmoment liggen';
+		if (strtotime($fields['tot']->getValue()) < strtotime($fields['van']->getValue())) {
+			$fields['tot']->error = 'Eindmoment moet na beginmoment liggen';
 			return false;
 		}
 		return $this->form->validate();
@@ -107,8 +108,14 @@ class AgendaItemFormView extends TemplateView implements Validator {
 		return $this->form->error;
 	}
 
-	public function getValues() {
-		return $this->form->getValues(); // escapes HTML
+	public function getModel() {
+		$properties = $this->form->getValues();
+		$this->model->titel = $properties['titel'];
+		$this->model->begin_moment = $properties['datum'] . ' ' . $properties['begin'];
+		$this->model->eind_moment = $properties['datum'] . ' ' . $properties['eind'];
+		$this->model->beschrijving = $properties['beschrijving'];
+		$this->model->rechten_bekijken = $properties['rechten'];
+		return $this->model;
 	}
 
 }

@@ -34,8 +34,8 @@ if ($loginlid->instance()->getUid() == 'x999') {
 ?>
 <html>
 	<head>
-		<SCRIPT LANGUAGE="JavaScript">
-		<!-- Begin
+		<script language="javascript" type="text/javascript">
+			<!-- Begin
 			loadImage1 = new Image();
 			loadImage1.src = "./knoppen/themafilmpje2.png";
 			staticImage1 = new Image();
@@ -65,9 +65,9 @@ if ($loginlid->instance()->getUid() == 'x999') {
 			loadImage6.src = "./knoppen/posters2.png";
 			staticImage6 = new Image();
 			staticImage6.src = "./knoppen/posters1.png";
-		// End -->
+			// End -->
 		</script>
-
+		<script src="/layout/js/jquery/jquery-2.1.0.js" type="text/javascript"></script>
 		<link rel="stylesheet" type="text/css" href="styles.css">
 		<style>
 			p {
@@ -97,42 +97,37 @@ if ($loginlid->instance()->getUid() == 'x999') {
 				<img src="./Afbeeldingen/aanmelding_konijn.png" width="291" height="500" vspace="25" style="position:relative;left:50% ; margin-left:-145px;">
 			</div>
 			<div id="column4">
-
-
 <?php
-echo $bericht;
-if ($ingelogd) {
-	?>
+				echo $bericht;
+				if ($ingelogd) {
+					?>
 					<h4>Aanmelding gala 21 februari 2014</h4>
 					<p>Met behulp van dit formulier kunt u zich aanmelden voor het Dies Natalis gala der Civitas Studiosorum Reformatorum op 21 februari 2014. U dient hier de gegevens van u en uw Diesdame of -heer in te vullen. Door u aan te melden gaat u akkoord met het betalen van twee galakaartjes d.m.v. een machtiging (wilt u geen machtiging dan dient u contact op te nemen met de DiesCie).</p>
-	<?php
-	$eetopties = array('vlees', 'vis', 'vegatarisch');
-	$leeftijdopties = array('nee', 'ja');
+					<?php
+					$eetopties = array('vlees', 'vis', 'vegatarisch');
+					$leeftijdopties = array('nee', 'ja');
 
-	$form = array();
-	$form[] = new Subkopje('Uw gegevens:');
-	$form[] = new SelectField('eetZelf', $data['eetZelf'], 'Eetvoorkeur', $eetopties);
-	$form[] = new TextField('allerZelf', $data['allerZelf'], 'Allergie-informatie:');
-	$form[] = new Subkopje('Gegevens van uw Diesdame of Diesheer:');
-	$form[] = new TextField('naamDate', $data['naamDate'], 'Naam:');
-	$form[] = new SelectField('eetDate', $data['eetDate'], 'Eetvoorkeur', $eetopties);
-	$form[] = new TextField('allerDate', $data['allerDate'], 'Allergie-informatie:');
-	$form[] = new SelectField('date18', $data['date18'], 'Is uw Diesdame of Diesheer meerderjarig op de dag van het gala?', $leeftijdopties);
-	$form[] = new SubmitButton('opslaan', '<a class="knop" href="/dies">Annuleren</a>');
+					$fields[] = new Subkopje('Uw gegevens:');
+					$fields[] = new SelectField('eetZelf', $data['eetZelf'], 'Eetvoorkeur', $eetopties);
+					$fields[] = new TextField('allerZelf', $data['allerZelf'], 'Allergie-informatie:');
+					$fields[] = new Subkopje('Gegevens van uw Diesdame of Diesheer:');
+					$fields[] = new TextField('naamDate', $data['naamDate'], 'Naam:');
+					$fields[] = new SelectField('eetDate', $data['eetDate'], 'Eetvoorkeur', $eetopties);
+					$fields[] = new TextField('allerDate', $data['allerDate'], 'Allergie-informatie:');
+					$fields[] = new SelectField('date18', $data['date18'], 'Is uw Diesdame of Diesheer meerderjarig op de dag van het gala?', $leeftijdopties);
+					$fields[] = new SubmitResetCancel('/dies', false);
 
-
-	$form = new Formulier('galaaanmelding', '/dies/galaaanmelding.php', $form);
-	$form->view();
-} else {
-	?>
+					$form = new Formulier('galaaanmelding', '/dies/galaaanmelding.php', $fields);
+					$form->view();
+				} else {
+?>
 					<h4>Aanmelding gala 21 februari 2014</h4>
 					<h2>U bent niet ingelogd</h2>
 					<p>Als u lid bent van C.S.R. Delft dan dient u eerst in te loggen op de webstek. Daarna kan u zich aanmelden voor het gala.</p>
-					<p>Als u geen lid bent van C.S.R. Delft maar toch naar het gala wilt dan verzoeken wij u contact op te nemen met ons galadatingbureau 'Onder de Panne'. Dit kan u doen door naar <A HREF="http://www.sonnenvanck.com/onderdepanne2014">de site</A> te gaan of te mailen naar <A HREF="mailto:onderdepanne@sonnenvanck.com">onderdepanne@sonnenvanck.com</A>.</p>
-	<?php
-}
+					<p>Als u geen lid bent van C.S.R. Delft maar toch naar het gala wilt dan verzoeken wij u contact op te nemen met ons galadatingbureau 'Onder de Panne'. Dit kan u doen door naar <a href="http://www.sonnenvanck.com/onderdepanne2014">de site</a> te gaan of te mailen naar <a href="mailto:onderdepanne@sonnenvanck.com">onderdepanne@sonnenvanck.com</a>.</p>
+<?php
+				}
 ?>
-
 			</div>
 		</div>
 
@@ -159,7 +154,7 @@ if ($ingelogd) {
 							<img name="image6" src="./knoppen/posters1.png" width="154" height="50" border=0></a></td>
 				</tr>
 			</table>
-			<h5 align="center">Gemaakt door DiesCie der C.S.R. Delft | Voor vragen neem contact op met de <A HREF="mailto:diescie@csrdelft.nl">DiesCie</A></h5>
+			<h5 align="center">Gemaakt door DiesCie der C.S.R. Delft | Voor vragen neem contact op met de <a href="mailto:diescie@csrdelft.nl">DiesCie</a></h5>
 		</div>
 
 	</body>

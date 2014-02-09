@@ -15,8 +15,7 @@ require_once 'groepen/groepcontroller.class.php';
 
 if (isset($_GET['gtype'])) {
 	$gtype = $_GET['gtype'];
-}
-else {
+} else {
 	$gtype = "Commissies";
 }
 
@@ -24,16 +23,14 @@ try {
 	$groepen = new Groepen($gtype);
 
 	$content = new Groepencontent($groepen);
-}
-catch (Exception $e) {
+} catch (Exception $e) {
 	invokeRefresh('/actueel/groepen/', 'Groeptype (' . mb_htmlentities($gtype) . ') bestaat niet');
 }
 
 if (isset($_GET['maakOt']) AND $groepen->isAdmin()) {
 	if ($groepen->maakGroepenOt()) {
 		invokeRefresh('/actueel/groepen/' . $groepen->getNaam(), 'De h.t. groepen in deze categorie zijn met succes o.t. gemaakt.', 1);
-	}
-	else {
+	} else {
 		invokeRefresh('/actueel/groepen/' . $groepen->getNaam(), 'De h.t. groepen zijn niet allemaal met succes o.t. gemaakt.');
 	}
 }
@@ -44,20 +41,16 @@ if (isset($_GET['bewerken']) AND $groepen->isAdmin()) {
 			$groepen->setBeschrijving($_POST['beschrijving']);
 			if ($groepen->save()) {
 				invokeRefresh('/actueel/groepen/' . $groepen->getNaam(), 'Beschrijving van groepstype met succes opgeslagen.', 1);
+			} else {
+				setMelding('Opslaan mislukt.', -1);
 			}
-			else {
-				$content->setMelding('Opslaan mislukt');
-			}
-		}
-		else {
-			$content->setMelding('Opslaan mislukt. Geen inhoud gevonden. ');
+		} else {
+			setMelding('Opslaan mislukt. Geen inhoud gevonden.', -1);
 		}
 	}
 }
-
 
 $pagina = new csrdelft($content);
 $pagina->addStylesheet('groepen.css');
 $pagina->addScript('groepen.js');
 $pagina->view();
-?>

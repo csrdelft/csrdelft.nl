@@ -382,7 +382,7 @@ class ProfielBewerken extends Profiel {
 
 			$form[] = new PassField('password', $this->lid);
 		}
-		$form[] = new SubmitButton('opslaan', '<a class="knop" href="/communicatie/profiel/' . $this->getUid() . '">Annuleren</a>');
+		$form[] = new SubmitResetCancel('/communicatie/profiel/' . $this->getUid());
 
 		if ($this->editNoviet) {
 			$this->form = new Formulier('profielForm', '/communicatie/profiel/' . $this->getUid() . '/novietBewerken', $form);
@@ -465,7 +465,7 @@ class ProfielStatus extends Profiel {
 		$form[] = new LidField('echtgenoot', $profiel['echtgenoot'], 'Echtgenoot (naam/lidnr):', 'allepersonen');
 		$form[] = new TextField('adresseringechtpaar', $profiel['adresseringechtpaar'], 'Tenaamstelling post echtpaar:', 250);
 		$form[] = new DatumField('sterfdatum', $profiel['sterfdatum'], 'Overleden op:');
-		$form[] = new SubmitButton();
+		$form[] = new SubmitResetCancel();
 
 		$this->form = new Formulier('statusForm', '/communicatie/profiel/' . $this->getUid() . '/wijzigstatus/', $form);
 	}
@@ -778,7 +778,7 @@ class ProfielVoorkeur extends Profiel {
 		}
 
 		$form[] = new TextareaField('lidOpmerking', $lidvoorkeur->getLidOpmerking(), 'Vul hier je eventuele voorkeur voor functie in, of andere opmerkingen');
-		$form[] = new SubmitButton('opslaan', '<a class="knop" href="/communicatie/profiel/' . $this->getUid() . '">Annuleren</a>');
+		$form[] = new SubmitResetCancel('/communicatie/profiel/' . $this->getUid());
 
 		$this->form = new Formulier('profielForm', '/communicatie/profiel/' . $this->getUid() . '/voorkeuren', $form);
 	}

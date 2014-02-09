@@ -64,6 +64,13 @@ function array_get_keys($in, $keys) {
 	return $out;
 }
 
+/**
+ * Invokes a client page (re)load the url.
+ * 
+ * @param string $url
+ * @param string $melding
+ * @param int $level
+ */
 function invokeRefresh($url = null, $melding = '', $level = -1) {
 	// als $melding een array is die uit elkaar halen
 	if (is_array($melding)) {

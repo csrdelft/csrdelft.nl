@@ -1,7 +1,5 @@
 <?php
 
-
-
 /**
  * CorveeRepetitieFormView.class.php	| 	P.W.G. Brussee (brussee@live.nl)
  *
@@ -19,29 +17,21 @@ class CorveeRepetitieFormView extends TemplateView {
 
 		$functieNamen = FunctiesModel::getAlleFuncties(true); // grouped by fid
 		$functiePunten = 'var punten=[];';
-		$functieSelectie = array();
 		foreach ($functieNamen as $functie) {
 			$functieNamen[$functie->getFunctieId()] = $functie->getNaam();
 			$functiePunten .= 'punten[' . $functie->getFunctieId() . ']=' . $functie->getStandaardPunten() . ';';
 			if ($punten === null) {
 				$punten = $functie->getStandaardPunten();
 			}
-			if ($fid === $functie->getFunctieId()) {
-				$functieSelectie[$fid] = 'arrow';
-			}
 		}
 
 		$mlt_repetities = MaaltijdRepetitiesModel::getAlleRepetities();
 		$repetitieNamen = array('' => '');
-		$repetitieSelectie = array();
 		foreach ($mlt_repetities as $rep) {
 			$repetitieNamen[$rep->getMaaltijdRepetitieId()] = $rep->getStandaardTitel();
-			if ($mrid === $rep->getMaaltijdRepetitieId()) {
-				$repetitieSelectie[$mrid] = 'arrow';
-			}
 		}
 
-		$formFields['fid'] = new SelectField('functie_id', $fid, 'Functie', $functieNamen, $functieSelectie);
+		$formFields['fid'] = new SelectField('functie_id', $fid, 'Functie', $functieNamen);
 		$formFields['fid']->setOnChangeScript($functiePunten . "$('#field_standaard_punten').val(punten[this.value]);");
 		$formFields[] = new WeekdagField('dag_vd_week', $dag, 'Dag v/d week');
 		$formFields['dag'] = new IntField('periode_in_dagen', $periode, 'Periode (in dagen)', 183, 0);
@@ -50,7 +40,7 @@ class CorveeRepetitieFormView extends TemplateView {
 		if ($this->_crid !== 0) {
 			$formFields['vrk']->setOnChangeScript("if (!this.checked) alert('Alle voorkeuren zullen worden verwijderd!');");
 		}
-		$formFields[] = new SelectField('mlt_repetitie_id', $mrid, 'Maaltijdrepetitie', $repetitieNamen, $repetitieSelectie);
+		$formFields[] = new SelectField('mlt_repetitie_id', $mrid, 'Maaltijdrepetitie', $repetitieNamen);
 		$formFields[] = new IntField('standaard_punten', $punten, 'Standaard punten', 10, 0);
 		$formFields[] = new IntField('standaard_aantal', $aantal, 'Aantal corveeërs', 10, 1);
 		if ($this->_crid !== 0) {

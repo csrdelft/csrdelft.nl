@@ -96,33 +96,20 @@ class AgendaController extends AclController {
 	 * Item toevoegen aan de agenda.
 	 */
 	public function toevoegen($datum = '') {
-		$item = new AgendaItem();
-		$item->item_id = 0;
-		if (!preg_match('/^[0-9]{4}\-[0-9]{1,2}-[0-9]{1,2}$/', $datum)) {
-			$datum = strtotime('Y-m-d');
-		}
-		$item->begin_moment = getDateTime(strtotime($datum) + 72000);
-		$item->eind_moment = getDateTime(strtotime($datum) + 79200);
-
+		$item = $this->model->newAgendaItem($datum);
 		$this->view = new AgendaItemFormView($item, 'toevoegen'); // fetches POST values itself
-		if ($this->view->validate()) {
-			$this->model->saveAgendaItem($item->item_id, $this->view->getValues());
-			setMelding('Toegevoegd', 1);
-			$this->maand(date('Y-m', $item->getBeginMoment()));
-		} else {
-			$this->view = new csrdelft($this->getContent());
-			$this->view->addStylesheet('agenda.css');
-			$this->view->addScript('agenda.js');
-		}
+		$this->opslaan($item);
 	}
 
 	public function bewerken($aid) {
 		$item = $this->model->getAgendaItem($aid);
-
 		$this->view = new AgendaItemFormView($item, 'bewerken'); // fetches POST values itself
+		$this->opslaan($item);
+	}
+
+	private function opslaan(AgendaItem $item) {
 		if ($this->view->validate()) {
-			$this->model->saveAgendaItem($item->item_id, $this->view->getValues());
-			setMelding('Bijgewerkt', 1);
+			$this->model->saveAgendaItem($this->view->getModel());
 			$this->maand(date('Y-m', $item->getBeginMoment()));
 		} else {
 			$this->view = new csrdelft($this->getContent());
@@ -132,7 +119,7 @@ class AgendaController extends AclController {
 	}
 
 	public function verwijderen($aid) {
-		$item = $this->model->getAgendaItem((int) $aid);
+		$item = $this->model->getAgendaItem($aid);
 		$this->model->delete($item);
 		setMelding('Verwijderd', 1);
 		$this->maand(date('Y-m', $item->getBeginMoment()));
