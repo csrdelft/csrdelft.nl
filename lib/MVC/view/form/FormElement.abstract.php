@@ -1114,12 +1114,12 @@ class SelectField extends InputField {
 		echo $this->getLabel();
 		echo $this->getErrorDiv();
 
-		echo '<select ';
+		echo '<select';
 		if ($this->multiple) {
-			echo 'multiple ';
+			echo ' multiple';
 		}
 		if ($this->size > 1) {
-			echo 'size="' . $this->size . '"';
+			echo ' size="' . $this->size . '"';
 		}
 		echo $this->getInputAttribute(array('id', 'name', 'origvalue', 'class', 'disabled', 'onchange', 'onclick')) . '>';
 
