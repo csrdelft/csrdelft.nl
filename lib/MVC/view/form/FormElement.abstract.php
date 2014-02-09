@@ -103,7 +103,7 @@ abstract class InputField extends FormElement implements Validator {
 		$this->origvalue = $value;
 		$this->description = $description;
 
-		if ($this->isPosted() !== false) {
+		if ($this->isPosted()) {
 			$this->value = $this->getValue();
 		}
 		//add *Field classname to css_classes
@@ -115,7 +115,7 @@ abstract class InputField extends FormElement implements Validator {
 	}
 
 	public function isPosted() {
-		return isset($_POST[$this->name]);
+		return array_key_exists($this->name, $_POST);
 	}
 
 	//een remotedatasource instellen overruled suggestions
@@ -141,7 +141,7 @@ abstract class InputField extends FormElement implements Validator {
 
 	public function getValue() {
 		if ($this->isPosted()) {
-			return trim($_POST[$this->name]);
+			return filter_input(INPUT_POST, $this->name, FILTER_UNSAFE_RAW);
 		}
 		return $this->value;
 	}
@@ -378,8 +378,9 @@ class HiddenField extends InputField {
 class TextField extends InputField {
 
 	public function __construct($name, $value, $description, $max_len = 255, $model = null) {
-		parent::__construct($name, htmlspecialchars_decode($value), $description, $model);
+		parent::__construct($name, $value, $description, $model);
 		$this->max_len = (int) $max_len;
+		$this->value = htmlspecialchars_decode($this->value); // decode getValue() called in parent constructor
 	}
 
 	public function validate() {
@@ -876,10 +877,9 @@ class TextareaField extends TextField {
 
 }
 
-/*
+/**
  * Een Textarea die groter wordt als de inhoud niet meer in het veld past.
  */
-
 class AutoresizeTextareaField extends TextareaField {
 
 	public function __construct($name, $value, $description = null, $max_len = 255, $placeholder = null) {
