@@ -16,8 +16,8 @@
 					{$item->getBeginMoment()|date_format:"%d-%m"}
 				{/if}
 				&nbsp;
-				<a href="/agenda/maand/{$item->getBeginMoment()|date_format:"%Y-%m"}/#dag-{$item->getBeginMoment()|date_format:"%Y-%m-%d"}" title="{$item->getTitel()|strip_tags}">
-					{$item->getTitel()|strip_tags|truncate:25:"…":true}
+				<a href="/agenda/maand/{$item->getBeginMoment()|date_format:"%Y-%m"}/#dag-{$item->getBeginMoment()|date_format:"%Y-%m-%d"}" title="{$item->getTitel()}">
+					{$item->getTitel()|truncate:25:"…":true}
 				</a>
 			</div>
 		{/if}

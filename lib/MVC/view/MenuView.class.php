@@ -36,8 +36,7 @@ class MenuView extends TemplateView {
 		parent::__construct(new MenuModel());
 		$this->level = $level;
 
-		$path = $_SERVER['REQUEST_URI'];
-		//$path = filter_input(INPUT_SERVER, 'REQUEST_URI', FILTER_SANITIZE_URL); // faalt op productie
+		$path = filter_input(INPUT_SERVER, 'REQUEST_URI', FILTER_SANITIZE_URL);
 
 		$items = $this->model->getMenuItemsVoorLid($menu_name);
 
