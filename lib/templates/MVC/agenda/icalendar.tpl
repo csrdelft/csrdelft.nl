@@ -1,7 +1,6 @@
 BEGIN:VCALENDAR
 PRODID:-//C.S.R. Delft/Webstek C.S.R. Delft//NL
 VERSION:2.0
-
 BEGIN:VTIMEZONE
 TZID:Europe/Amsterdam
 X-LIC-LOCATION:Europe/Amsterdam
@@ -38,20 +37,12 @@ DTSTART:19701025T030000
 RRULE:FREQ=YEARLY;INTERVAL=1;BYDAY=-1SU;BYMONTH=10
 END:STANDARD
 END:VTIMEZONE
-
-{foreach from=$items item=item}
-{if $item instanceof Lid}{* 
-	geen verjaardagen hier. 
-*}{else}
+{foreach from=$items item=item}{if $item instanceof Lid}{* geen verjaardagen hier *}{else}
 BEGIN:VEVENT
-SUMMARY:{$item->getTitel()}
+UID:{$item->item_id}
 {if $item->isHeledag()}DTSTART;VALUE=DATE:{$item->getBeginMoment()|date_format:'%Y%m%d'}{else}DTSTART;TZID=Europe/Amsterdam:{$item->getBeginMoment()|date_format:'%Y%m%dT%H%M%S'}{/if}
 {if $item->isHeledag()}DTEND;VALUE=DATE:{$item->getEindMoment()|date_format:'%Y%m%d'}{else}DTEND;TZID=Europe/Amsterdam:{$item->getEindMoment()|date_format:'%Y%m%dT%H%M%S'}{/if}
-{*
-X-GOOGLE-CALENDAR-CONTENT-TITLE:{$item->getTitel()|ubb|strip_tags}
-X-GOOGLE-CALENDAR-CONTENT-ICON:http://plaetjes.csrdelft.nl/layout/favicon.ico
-*}
+SUMMARY:{$item->getTitel()}
 END:VEVENT
-{/if}
-{/foreach}
+{/if}{/foreach}
 END:VCALENDAR
