@@ -33,20 +33,26 @@ class AgendaModel extends PersistenceModel {
 		$beheer = AgendaController::magBeheren();
 		foreach ($items as $item) {
 			if ($beheer OR $item->magBekijken()) {
-				$result[] = $item;
+				$result['agendaitem' . $item->item_id] = $item;
 			}
 		}
 
 		// Maaltijden
 		if (LidInstellingen::get('agenda', 'toonMaaltijden') === 'ja') {
-			$result = array_merge($result, MaaltijdenModel::getMaaltijdenVoorAgenda($van, $tot));
+			foreach (MaaltijdenModel::getMaaltijdenVoorAgenda($van, $tot) as $maaltijd) {
+				$result['maaltijd' . $maaltijd->getMaaltijdId()] = $maaltijd;
+			}
 		}
 
 		// CorveeTaken
 		if (LidInstellingen::get('agenda', 'toonCorvee') === 'iedereen') {
-			$result = array_merge($result, TakenModel::getTakenVoorAgenda($van, $tot, true));
+			foreach (TakenModel::getTakenVoorAgenda($van, $tot, true) as $taak) {
+				$result['taak' . $taak->getTaakId()] = $taak;
+			}
 		} elseif (LidInstellingen::get('agenda', 'toonCorvee') === 'eigen') {
-			$result = array_merge($result, TakenModel::getTakenVoorAgenda($van, $tot, false));
+			foreach (TakenModel::getTakenVoorAgenda($van, $tot, false) as $taak) {
+				$result['taak' . $taak->getTaakId()] = $taak;
+			}
 		}
 
 		// Verjaardagen
@@ -56,8 +62,9 @@ class AgendaModel extends PersistenceModel {
 			//doen we hier even een vieze hack waardoor het wel soort van werkt.
 			$GLOBALS['agenda_jaar'] = date('Y', $van);
 			$GLOBALS['agenda_maand'] = date('m', ($van + $tot) / 2);
-
-			$result = array_merge($result, Lid::getVerjaardagen($van, $tot));
+			foreach (Lid::getVerjaardagen($van, $tot) as $lid) {
+				$result['verjaardag' . $lid->getUid()] = $lid;
+			}
 		}
 
 		// Sorteren
