@@ -40,8 +40,12 @@ END:VTIMEZONE
 {foreach from=$items item=item}{if $item instanceof Lid}{* geen verjaardagen hier *}{else}
 BEGIN:VEVENT
 UID:{$item->item_id}
-{if $item->isHeledag()}DTSTART;VALUE=DATE:{$item->getBeginMoment()|date_format:'%Y%m%d'}{else}DTSTART;TZID=Europe/Amsterdam:{$item->getBeginMoment()|date_format:'%Y%m%dT%H%M%S'}{/if}
-{if $item->isHeledag()}DTEND;VALUE=DATE:{$item->getEindMoment()|date_format:'%Y%m%d'}{else}DURATION:PT{$item->getDuration()}M{/if}
+{if $item->isHeledag()}DTSTART;VALUE=DATE:{$item->getBeginMoment()|date_format:'%Y%m%d'}
+{else}DTSTART;TZID=Europe/Amsterdam:{$item->getBeginMoment()|date_format:'%Y%m%dT%H%M%S'}
+{/if}
+{if $item->isHeledag()}DTEND;VALUE=DATE:{$item->getEindMoment()|date_format:'%Y%m%d'}
+{else}DTEND;TZID=Europe/Amsterdam:{$item->getEindMoment()|date_format:'%Y%m%dT%H%M%S'}
+{/if}
 SUMMARY:{$item->getTitel()}
 END:VEVENT
 {/if}{/foreach}
