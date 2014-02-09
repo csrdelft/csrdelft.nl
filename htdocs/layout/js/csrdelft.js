@@ -299,7 +299,7 @@ function readableFileSize(size) {
 function importAgenda(id) {
 	textarea = document.getElementById(id);
 	http.abort();
-	http.open("GET", "/actueel/agenda/courant/", true);
+	http.open("GET", "/agenda/courant/", true);
 	http.onreadystatechange = function() {
 		if (http.readyState == 4) {
 			document.getElementById(id).value += "\n" + http.responseText;

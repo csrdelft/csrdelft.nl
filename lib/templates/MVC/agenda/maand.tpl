@@ -26,7 +26,7 @@
 					id="dag-{$dag.datum|date_format:"%Y-%m-%d"}">
 					<div class="meta">
 						{if	$magToevoegen}
-							<a class="toevoegen" href="/actueel/agenda/toevoegen/{$dag.datum|date_format:"%Y-%m-%d"}/"
+							<a class="toevoegen" href="/agenda/toevoegen/{$dag.datum|date_format:"%Y-%m-%d"}/"
 							   title="Item toevoegen">
 								{icon get="toevoegen"}
 							</a>
@@ -50,10 +50,10 @@
 										</a>
 									{else}
 										{if $magBeheren && $item instanceof AgendaItem}
-											<a class="beheren" href="/actueel/agenda/verwijderen/{$item->item_id}/" onclick="return confirm('Weet u zeker dat u dit agenda-item wilt verwijderen?');" title="verwijderen">
+											<a class="beheren" href="/agenda/verwijderen/{$item->item_id}/" onclick="return confirm('Weet u zeker dat u dit agenda-item wilt verwijderen?');" title="verwijderen">
 												{icon get="verwijderen"}
 											</a>
-											<a class="beheren" href="/actueel/agenda/bewerken/{$item->item_id}/" title="bewerken">
+											<a class="beheren" href="/agenda/bewerken/{$item->item_id}/" title="bewerken">
 												{icon get="bewerken"}
 											</a>
 										{/if}
@@ -73,4 +73,4 @@
 	{/foreach}
 </table>
 {$smarty.capture.navlinks}
-<div id="ical"><a href="/actueel/agenda/icalendar/" title="ICalender export (Google calendar)"><img src="{$CSR_PICS}knopjes/ical.gif" /></a></div>
+<div id="ical"><a href="/agenda/icalendar/" title="ICalender export (Google calendar)"><img src="{$CSR_PICS}knopjes/ical.gif" /></a></div>

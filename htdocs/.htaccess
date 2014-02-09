@@ -15,6 +15,9 @@ RewriteRule ^pauper/?$				pauper.php [L]
 RewriteRule ^maaltijden/?(.*)$		taken.php?uri=maaltijden/$1 [L]
 RewriteRule ^corvee/?(.*)$			taken.php?uri=corvee/$1 [L]
 
+# Agenda
+RewriteRule ^agenda/?(.*)$			agenda.php?uri=$1 [QSA,L]
+
 # instellingen
 RewriteRule ^instellingenbeheer/?(.*)$		instellingenbeheer.php?uri=$1 [QSA,L]
 RewriteRule ^instellingen/?(.*)$	instellingen.php?uri=$1 [QSA,L]

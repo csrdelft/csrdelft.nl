@@ -22,7 +22,6 @@ etc/soccie.ini.sample -text
 gozerbot/csrdelft.py -text
 htdocs/.htaccess -text
 htdocs/actueel/.htaccess -text
-htdocs/actueel/agenda.php -text
 htdocs/actueel/bijbelrooster.php -text
 htdocs/actueel/courant/.htaccess -text
 htdocs/actueel/courant/archief.php -text
@@ -40,6 +39,7 @@ htdocs/actueel/mededelingen/.htaccess -text
 htdocs/actueel/mededelingen/goedkeuren.php -text
 htdocs/actueel/mededelingen/index.php -text
 htdocs/actueel/mededelingen/top3overzicht.php -text
+htdocs/agenda.php -text
 htdocs/android/get_user.php -text
 htdocs/android/get_userlist.php -text
 htdocs/android/login.php -text

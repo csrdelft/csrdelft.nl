@@ -4,7 +4,7 @@
 # C.S.R. Delft
 #
 # -------------------------------------------------------------------
-# htdocs/index.php
+# htdocs/leden.php
 # -------------------------------------------------------------------
 
 try {
@@ -21,8 +21,9 @@ try {
 	## pagina weergeven
 	$pagina = new csrdelft($paginacontent);
 	$pagina->view();
+}
+catch (\Exception $e) { // TODO: logging
 
-} catch (\Exception $e) { // TODO: logging
 	$protocol = filter_input(INPUT_SERVER, 'SERVER_PROTOCOL', FILTER_SANITIZE_STRING);
 	header($protocol . ' 500 ' . $e->getMessage(), true, 500);
 

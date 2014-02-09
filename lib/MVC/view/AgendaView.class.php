@@ -32,7 +32,7 @@ class AgendaMaandView extends TemplateView {
 		$this->smarty->assign('magBeheren', AgendaController::magBeheren());
 
 		// URL voor vorige maand
-		$urlVorige = '/actueel/agenda/maand/';
+		$urlVorige = '/agenda/maand/';
 		if ($this->maand == 1) {
 			$urlVorige .= ($this->jaar - 1) . '-12/';
 		} else {
@@ -41,7 +41,7 @@ class AgendaMaandView extends TemplateView {
 		$this->smarty->assign('urlVorige', $urlVorige);
 
 		// URL voor volgende maand
-		$urlVolgende = '/actueel/agenda/maand/';
+		$urlVolgende = '/agenda/maand/';
 		if ($this->maand == 12) {
 			$urlVolgende .= ($this->jaar + 1) . '-1/';
 		} else {
@@ -76,7 +76,7 @@ class AgendaItemFormView extends TemplateView implements Validator {
 		$fields[] = new SelectField('rechten', $item->rechten_bekijken, 'Zichtbaar', array('P_LEDEN_READ' => 'Intern', 'P_NOBODY' => 'Extern'));
 		$fields[] = new AutoresizeTextareaField('beschrijving', $item->beschrijving, 'Beschrijving');
 
-		$fields[] = new SubmitResetCancel('/actueel/agenda/maand/' . date('Y-m', $item->getBeginMoment()));
+		$fields[] = new SubmitResetCancel('/agenda/maand/' . date('Y-m', $item->getBeginMoment()));
 
 		$this->form = new Formulier('agenda-item-form', null, $fields);
 		$this->form->css_classes[] = 'agendaitem';

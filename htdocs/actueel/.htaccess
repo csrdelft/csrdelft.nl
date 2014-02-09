@@ -6,9 +6,8 @@ RewriteRule ^owee/?$		/csrindeowee/ [R=301]
 # Als we naar /actueel/ gaan worden we doorgestuurd naar de mededelingen
 RewriteRule ^/?$ /actueel/mededelingen/ [R]
 
-# Agenda
-RewriteRule ^agendaa/?			../pagina.php?naam=agenda [L]
-RewriteRule ^agenda/?(.*)$		agenda.php?uri=$1 [QSA,L]
+# Agenda pagina
+#RewriteRule ^agenda/?			../pagina.php?naam=agenda
 
 # Bijbelleesrooster
 RewriteRule ^bijbelrooster/$ bijbelrooster.php

@@ -1,7 +1,7 @@
 {strip}
 <div id="zijbalk_agenda">
 	<h1>
-		<a href="/actueel/agenda/" title="Agenda">Agenda</a>
+		<a href="/agenda/" title="Agenda">Agenda</a>
 	</h1>
 	{foreach from=$items item=item}
 		{if $item instanceof Lid}
@@ -16,7 +16,7 @@
 					{$item->getBeginMoment()|date_format:"%d-%m"}
 				{/if}
 				&nbsp;
-				<a href="/actueel/agenda/maand/{$item->getBeginMoment()|date_format:"%Y-%m"}/#dag-{$item->getBeginMoment()|date_format:"%Y-%m-%d"}" title="{$item->getTitel()|strip_tags}">
+				<a href="/agenda/maand/{$item->getBeginMoment()|date_format:"%Y-%m"}/#dag-{$item->getBeginMoment()|date_format:"%Y-%m-%d"}" title="{$item->getTitel()|strip_tags}">
 					{$item->getTitel()|strip_tags|truncate:25:"…":true}
 				</a>
 			</div>
