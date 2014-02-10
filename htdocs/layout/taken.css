@@ -180,3 +180,7 @@ td.maaltijd-aangemeld, td.maaltijd-afgemeld {
 .taak-maaltijd-oud, .taak-datum-oud {
 	display: none;
 }
+
+#eetwens-form .FormToggle {
+	width: 300px;
+}

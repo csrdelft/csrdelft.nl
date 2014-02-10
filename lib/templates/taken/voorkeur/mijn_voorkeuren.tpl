@@ -15,6 +15,7 @@ Dit kunt u hieronder aangeven, de koks zullen er dan rekening mee houden.
 N.B. Dit is niet de plek om aan te geven dat u iets niet lekker vindt!
 </p>
 {$eetwens->view(true)}
+<br />
 <table id="taken-tabel" class="taken-tabel">
 	<thead>
 		<tr>

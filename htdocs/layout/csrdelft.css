@@ -798,7 +798,7 @@ form#streeplijst input, form#streeplijst label{ text-align: left; margin: 3px; p
 	display: inline;
 }
 .InlineForm .FormToggle{
-	display: inline;
+	float: left;
 	border-bottom: 1px dotted grey;
 	width: 100%;
 	cursor: pointer;

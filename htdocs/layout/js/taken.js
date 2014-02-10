@@ -113,10 +113,8 @@ function taken_submit_range(e) {
 	});
 }
 
-/**
- * Ruilen van CorveeTaak
- * 
- */
+/* Ruilen van CorveeTaak */
+
 function taken_mag_ruilen(e) {
 	if (e.target.tagName.toUpperCase() === 'IMG') { // over an image inside of anchor
 		e.target = $(e.target).parent();

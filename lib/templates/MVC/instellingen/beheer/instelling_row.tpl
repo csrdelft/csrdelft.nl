@@ -12,11 +12,11 @@
 	</td>
 	<td><nobr>{$instelling->instelling_id|replace:'_':' '}</nobr></td>
 	<td>
-		<div>{$instelling->waarde}</div>
 		<form method="post" action="/instellingenbeheer/opslaan/{$instelling->module}/{$instelling->instelling_id}" class="Formulier InlineForm">
+			<div class="FormToggle">{$instelling->waarde}</div>
 			<textarea name="waarde" origvalue="{htmlspecialchars($instelling->waarde)}" class="FormField" rows="1">{$instelling->waarde}</textarea>
-			<a onclick="$(this).parent().submit();" title="Wijzigingen opslaan" class="knop">{icon get="accept"}</a>
-			<a onclick="form_inline_toggle($(this).parent());" title="Annuleren" class="knop">{icon get="delete"}</a>
+			<a class="knop submit" title="Wijzigingen opslaan">{icon get="accept"}</a>
+			<a class="knop cancel" title="Annuleren">{icon get="delete"}</a>
 		</form>
 	</td>
 	<td class="col-del">

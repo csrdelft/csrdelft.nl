@@ -869,7 +869,7 @@ class TextareaField extends TextField {
 		echo $this->getErrorDiv();
 
 		echo '<textarea' . $this->getInputAttribute(array('id', 'name', 'origvalue', 'class', 'disabled', 'rows', 'maxlength', 'placeholder', 'autocomplete', 'onchange', 'onclick')) . '>';
-		echo htmlspecialchars($this->value);
+		echo $this->getValue();
 		echo '</textarea>';
 
 		echo $this->getFieldSuggestions();
