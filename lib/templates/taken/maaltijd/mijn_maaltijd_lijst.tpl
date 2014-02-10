@@ -54,7 +54,7 @@
 	{else}
 		<div class="inline-edit maaltijd-gasten" onclick="taken_toggle_hiddenform(this);">{$aanmelding->getAantalGasten()}</div>
 		<form method="post" action="{$instellingen->get('taken', 'url')}/gasten/{$maaltijd->getMaaltijdId()}" class="Formulier taken-hidden-form taken-subform">
-			<input type="text" name="aantal_gasten" origvalue="{$aanmelding->getAantalGasten()}" class="regular" maxlength="4" size="4" />
+			<input type="text" name="aantal_gasten" origvalue="{$aanmelding->getAantalGasten()}" class="FormField" maxlength="4" size="4" />
 			<a onclick="$(this).parent().submit();" title="Wijzigingen opslaan" class="knop">{icon get="accept"}</a>
 			<a onclick="taken_toggle_hiddenform($(this).parent());" title="Annuleren" class="knop">{icon get="delete"}</a>
 		</form>
@@ -75,7 +75,7 @@
 		{/if}
 		</div>
 		<form method="post" action="{$instellingen->get('taken', 'url')}/opmerking/{$maaltijd->getMaaltijdId()}" class="Formulier taken-hidden-form taken-subform">
-			<input type="text" name="gasten_opmerking" value="{$aanmelding->getGastenOpmerking()}" origvalue="{$aanmelding->getGastenOpmerking()}" class="regular" maxlength="255" size="20" />
+			<input type="text" name="gasten_opmerking" value="{$aanmelding->getGastenOpmerking()}" origvalue="{$aanmelding->getGastenOpmerking()}" class="FormField" maxlength="255" size="20" />
 			<a onclick="$(this).parent().submit();" title="Wijzigingen opslaan" class="knop">{icon get="accept"}</a>
 			<a onclick="taken_toggle_hiddenform($(this).parent());" title="Annuleren" class="knop">{icon get="delete"}</a>
 		</form>

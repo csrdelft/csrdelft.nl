@@ -14,7 +14,7 @@
 	<td>
 		<div>{$instelling->waarde}</div>
 		<form method="post" action="/instellingenbeheer/opslaan/{$instelling->module}/{$instelling->instelling_id}" class="Formulier taken-hidden-form taken-subform">
-			<textarea name="waarde" origvalue="{htmlspecialchars($instelling->waarde)}" class="regular" rows="1">{$instelling->waarde}</textarea>
+			<textarea name="waarde" origvalue="{htmlspecialchars($instelling->waarde)}" class="FormField" rows="1">{$instelling->waarde}</textarea>
 			<a onclick="$(this).parent().submit();" title="Wijzigingen opslaan" class="knop">{icon get="accept"}</a>
 			<a onclick="taken_toggle_hiddenform($(this).parent());" title="Annuleren" class="knop">{icon get="delete"}</a>
 		</form>

@@ -26,46 +26,32 @@
 					id="dag-{$dag.datum|date_format:"%Y-%m-%d"}">
 					<div class="meta">
 						{if	$magToevoegen}
-							<a class="toevoegen" href="/agenda/toevoegen/{$dag.datum|date_format:"%Y-%m-%d"}/"
-							   title="Item toevoegen">
+							<a class="toevoegen get popup" href="/agenda/toevoegen/{$dag.datum|date_format:"%Y-%m-%d"}/" title="Item toevoegen">
 								{icon get="toevoegen"}
 							</a>
 						{/if}
 						{$dagnr}
 					</div>
-					<ul class="items">
-						{foreach from=$dag.items item=item name=agendaItems}
-							<li {if $smarty.foreach.agendaItems.iteration % 2==1}class="odd"{/if}>
-								{if $item instanceof Lid} {* Verjaardag *}
-										{icon get="verjaardag"} {$item->getTitel()}
-									{elseif $item|is_a:'Maaltijd'}
-										{icon get="cup"} <div class="tijd">{$item->getBeginMoment()|date_format:"%R"}</div>
-										<a href="/maaltijden" title="{$item->getBeschrijving()}">
-											{$item->getTitel()}
-										</a>
-									{elseif $item|is_a:'CorveeTaak'}
-										{icon get="paintcan"}
-										<a href="/corveerooster" title="{$item->getBeschrijving()}">
-											{$item->getTitel()}
-										</a>
-									{else}
-										{if $magBeheren && $item instanceof AgendaItem}
-											<a class="beheren" href="/agenda/verwijderen/{$item->item_id}/" onclick="return confirm('Weet u zeker dat u dit agenda-item wilt verwijderen?');" title="verwijderen">
-												{icon get="verwijderen"}
-											</a>
-											<a class="beheren" href="/agenda/bewerken/{$item->item_id}/" title="bewerken">
-												{icon get="bewerken"}
-											</a>
-										{/if}
-										{if !$item->isHeledag()}
-											<div class="tijd">
-												{$item->getBeginMoment()|date_format:"%R"}-{$item->getEindMoment()|date_format:"%R"}
-											</div>
-										{/if}
-										<span title="{$item->getBeschrijving()}">{$item->getTitel()}</span>
-								{/if}{* end if $item instance of ?? *}
-							</li>
-						{/foreach}
+					<ul id="{$dag.datum}-items" class="items">
+						{foreach from=$dag.items item=item}
+							<li>
+								{if $item instanceof Lid}
+									{icon get="verjaardag"} {$item->getTitel()}
+								{elseif $item instanceof Maaltijd}
+									{icon get="cup"} <div class="tijd">{$item->getBeginMoment()|date_format:"%R"}</div>
+									<a href="/maaltijden" title="{$item->getBeschrijving()}">
+										{$item->getTitel()}
+									</a>
+								{elseif $item instanceof CorveeTaak}
+									{icon get="paintcan"}
+									<a href="/corveerooster" title="{$item->getBeschrijving()}">
+										{$item->getTitel()}
+									</a>
+								{elseif $item instanceof AgendaItem}
+									{include file='MVC/agenda/maand_item.tpl'}
+								{/if}
+							{/foreach}
+						</li>
 					</ul>
 				</td>
 			{/foreach}

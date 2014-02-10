@@ -3813,6 +3813,7 @@ lib/templates/MVC/agenda/courant.tpl -text
 lib/templates/MVC/agenda/icalendar.tpl -text
 lib/templates/MVC/agenda/item_form.tpl -text
 lib/templates/MVC/agenda/maand.tpl -text
+lib/templates/MVC/agenda/maand_item.tpl -text
 lib/templates/MVC/agenda/zijbalk.tpl -text
 lib/templates/MVC/instellingen/beheer/instelling_row.tpl -text
 lib/templates/MVC/instellingen/beheer/instellingen_page.tpl -text

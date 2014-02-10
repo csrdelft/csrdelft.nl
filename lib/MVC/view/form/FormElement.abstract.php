@@ -91,7 +91,7 @@ abstract class InputField extends FormElement implements Validator {
 	public $onclick = null;   //javascript onClick
 	public $max_len = 0; //maximale lengte van de invoer.
 	public $rows = 0;  //aantal rijen van textarea
-	public $css_classes = array('regular'); //array met classnames die later in de class-tag komen.
+	public $css_classes = array('FormField'); //array met classnames die later in de class-tag komen.
 	public $suggestions = array(); //array met suggesties die de javascript-autocomplete aan gaat bieden.
 	public $remotedatasource = '';
 
@@ -969,7 +969,7 @@ $('.wantsPreview').each(function(){
 		textarea.attr('rows', 10 + currentRows);
 	};
 	
-	textarea.wrap('<div class="UBBpreview regular"  style="width: '+(textarea.width()+6)+'px" />')
+	textarea.wrap('<div class="UBBpreview FormField"  style="width: '+(textarea.width()+6)+'px" />')
 			.before('<div id="preview_'+fieldname+'" class="preview" style="display: none;"></div>')
 			.after($('<a style="float: left; margin-left: 0px;" class="knop">voorbeeld</a>').click(triggerPreview))
 			.after($('<a style="float: right;" class="knop" title="Opmaakhulp weergeven" onclick="$(\'#ubbhulpverhaal\').toggle();">UBB</a>'))
@@ -1514,8 +1514,8 @@ class SubmitResetCancel extends FormElement {
 
 	public function view() {
 		echo '<div class="InputField"><label> </label>';
-		echo '<a href="javascript:void(0);" class="knop submit" title="' . $this->submitTitle . '" onclick="$(this).closest(\'form\').submit();">' . $this->submitIcon . $this->submitText . '</a> ';
-		echo '<a href="javascript:void(0);" class="knop reset" title="' . $this->resetTitle . '" onclick="form_reset($(this).closest(\'form\'));">' . $this->resetIcon . $this->resetText . '</a> ';
+		echo '<a class="knop submit" title="' . $this->submitTitle . '">' . $this->submitIcon . $this->submitText . '</a> ';
+		echo '<a class="knop reset" title="' . $this->resetTitle . '">' . $this->resetIcon . $this->resetText . '</a> ';
 		if (!empty($this->cancelUrl)) {
 			echo '<a href="' . $this->cancelUrl . '" class="knop cancel" title="' . $this->cancelTitle . '">' . $this->cancelIcon . $this->cancelText . '</a>';
 		}

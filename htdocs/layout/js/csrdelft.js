@@ -3,44 +3,277 @@
  */
 
 $(document).ready(function() {
+	init_links('');
+	init_forms('');
+	init_visitekaartjes('');
 	ShowMenu(menu_active);
-	init_visitekaartjes();
 });
 
-function form_reset(form) {
-	$(form).find('.regular').each(function() {
-		if ($(this).val() !== $(this).attr('origvalue')) {
-			$(this).val($(this).attr('origvalue'));
+function page_reload() {
+	location.reload();
+}
+
+function isShiftKeyDown(event) {
+	if ((window.event && window.event.shiftKey) || event.shiftKey) {
+		return true;
+	}
+	return false;
+}
+function isCtrlKeyDown(event) {
+	if ((window.event && window.event.ctrlKey) || event.ctrlKey) {
+		return true;
+	}
+	return false;
+}
+
+function init_visitekaartjes(context) {
+	$(context + '.visite').hoverIntent(function() {
+		var id = $(this).attr('id');
+		id = id.replace('v', 'k');
+		$('#' + id).fadeIn();
+	});
+	$(context + '.visitekaartje').mouseleave(function() {
+		$(this).fadeOut();
+	});
+}
+
+function init_links(context) {
+	$(context + 'a.post').click(knop_post);
+	$(context + 'a.get').click(knop_get);
+}
+
+function knop_ajax(knop, type) {
+	if (knop.hasClass('confirm') && !confirm(knop.attr('title') + '.\n\nWeet u het zeker?')) {
+		return false;
+	}
+	var source = knop;
+	var done = dom_update;
+	if (knop.hasClass('popup')) {
+		source = null;
+		done = popup_open;
+	}
+	ajax_request(type, knop.attr('href'), knop.attr('postdata'), source, done, alert);
+	if (knop.hasClass('popup')) {
+		popup_open();
+	}
+}
+
+function knop_post(event) {
+	event.preventDefault();
+	knop_ajax($(this), 'POST');
+	return false;
+}
+
+function knop_get(event) {
+	event.preventDefault();
+	knop_ajax($(this), 'GET');
+	return false;
+}
+
+function popup_open(htmlString) {
+	if (htmlString) {
+		$('#popup').html(htmlString);
+		init_forms('#popup');
+		init_links('#popup');
+		init_visitekaartjes('#popup');
+		$('#popup').show();
+		$('#popup-background').css('background-image', 'none');
+	}
+	else {
+		$('#popup-background').css('background-image', 'url("http://plaetjes.csrdelft.nl/layout/loading_bar_black.gif")');
+	}
+	$('#popup-background').fadeIn();
+}
+
+function popup_close() {
+	$('#popup').hide();
+	$('#popup').html('');
+	$('#popup-background').fadeOut();
+}
+
+function init_forms(context) {
+	$(context + '.submit').click(form_submit);
+	$(context + '.reset').click(form_reset);
+	$(context + '.cancel').click(form_cancel);
+
+	$(context + '.Formulier').each(function() {
+		$(this).submit(form_submit); // enter
+
+		if ($(this).hasClass('popup')) {
+			$(this).keyup(function(e) {
+				if (e.keyCode === 27) { // esc
+					if (confirm('Sluiten zonder op te slaan?')) {
+						popup_close();
+					}
+				}
+			});
+		}
+	});
+	$(context + '.InlineFormulier').each(function() {
+		$(this).submit(form_submit); // enter
+
+		$(this).keyup(function(event) {
+			if (event.keyCode === 27) { // esc
+				form_cancel(event);
+			}
+		});
+	});
+}
+
+function form_ischanged(form) {
+	var changed = false;
+	$(form).find('.FormField').each(function() {
+		if ($(this).is('input:radio')) {
+			if ($(this).is(':checked') && $(this).attr('origvalue') !== $(this).val()) {
+				changed = true;
+				return false;
+			}
+		}
+		else if ($(this).is('input:checkbox')) {
+			if ($(this).is(':checked') !== ($(this).attr('origvalue') === '1')) {
+				changed = true;
+				return false;
+			}
+		}
+		else if ($(this).val() !== $(this).attr('origvalue')) {
+			changed = true;
+			return false;
+		}
+	});
+	return changed;
+}
+
+function form_submit(event) {
+	var form = $(this).closest('form');
+	if (form.hasClass('CheckChanged') && !form_ischanged(form)) {
+		event.preventDefault();
+		alert('Geen wijzigingen');
+		return false;
+	}
+	if (form.hasClass('popup')) {
+		event.preventDefault();
+		ajax_request('POST', form.attr('action'), form.serialize(), null, form_done_popup, alert);
+		return false;
+	}
+	form.unbind('submit');
+	form.submit();
+	return true;
+}
+
+function form_reset(event) {
+	event.preventDefault();
+	$(this).closest('form').find('.FormField').each(function() {
+		var orig = $(this).attr('origvalue');
+		if (typeof orig !== 'undefined' && orig !== false) {
+			$(this).val(orig);
+		}
+	});
+	return false;
+}
+
+function form_cancel(event) {
+	var form = $(this).closest('form');
+	if (form.hasClass('.InlineForm')) {
+		event.preventDefault();
+		form_toggle(event);
+		return false;
+	}
+	if (form.hasClass('popup')) {
+		event.preventDefault();
+		popup_close();
+		return false;
+	}
+	if ($(this).hasClass('post')) {
+		event.preventDefault();
+		knop_post(event);
+		return false;
+	}
+	return true;
+}
+
+function form_done_popup(response) {
+	popup_close();
+	dom_update(response);
+}
+
+function dom_update(htmlString) {
+	htmlString = $.trim(htmlString);
+	if (htmlString.substring(0, 9) === '<!DOCTYPE') {
+		alert('response error'); //DEBUG
+		document.write(htmlString);
+	}
+	var html = $.parseHTML(htmlString);
+	$(html).each(function() {
+		var id = $(this).attr('id');
+		var elmnt = $('#' + id);
+		if (elmnt.length === 1) {
+			if ($(this).hasClass('remove')) {
+				elmnt.remove();
+			}
+			else {
+				elmnt.replaceWith($(this));
+			}
+		}
+		else {
+			$(this).prependTo('#' + $(this).attr('parentid'));
+		}
+		init_forms('#' + id);
+		init_links('#' + id);
+		init_visitekaartjes('#' + id);
+	});
+}
+
+function ajax_request(type, url, data, source, onsuccess, onerror) {
+	if (typeof source !== 'undefined' && source !== false) {
+		$(source).replaceWith('<img title="' + url + '" src="http://plaetjes.csrdelft.nl/layout/loading-arrows.gif" />');
+	}
+	else {
+		popup_open();
+	}
+	var jqXHR = $.ajax({
+		type: type,
+		cache: false,
+		url: url,
+		data: data
+	});
+	jqXHR.done(function(data, textStatus, jqXHR) {
+		onsuccess(data);
+	});
+	jqXHR.fail(function(jqXHR, textStatus, errorThrown) {
+		if (errorThrown === '') {
+			errorThrown = 'Nog bezig met laden!';
+		}
+		if (typeof source !== 'undefined' && source !== false) {
+			$(source).replaceWith('<img title="' + errorThrown + '" src="http://plaetjes.csrdelft.nl/famfamfam/cancel.png" />');
+		}
+		else {
+			popup_close();
+		}
+		if (typeof onerror !== 'undefined' && onerror !== false) {
+			onerror(errorThrown);
 		}
 	});
 }
 
-/**
- * Aan-/afmelden m.b.v. een ketzer
- * 
- * @requires jQuery
- * @param url
- * @param ketzer
- */
 function ketzer_ajax(url, ketzer) {
-	jQuery(ketzer + ' .aanmelddata').html('Aangemeld:<br /><img src="http://plaetjes.csrdelft.nl/layout/loading-arrows.gif" />');
-	jQuery.ajax({
+	$(ketzer + ' .aanmelddata').html('Aangemeld:<br /><img src="http://plaetjes.csrdelft.nl/layout/loading-arrows.gif" />');
+	var jqXHR = $.ajax({
 		type: 'GET',
 		cache: false,
 		url: url,
-		data: '',
-		success: function(response) {
-			var html = jQuery.parseHTML(response);
-			jQuery('.ubb_maaltijd').each(function() {
-				if (jQuery(this).attr('id') === jQuery(html).attr('id')) {
-					jQuery(this).replaceWith(response);
-				}
-			});
-		},
-		error: function(jqXHR, textStatus, errorThrown) {
-			jQuery(ketzer + ' .aanmelddata').html('<span style="color: red; font-weight: bold;">Error:</span><br />' + errorThrown);
-			alert(errorThrown);
-		}
+		data: ''
+	});
+	jqXHR.done(function(data, textStatus, jqXHR) {
+		var html = $.parseHTML(data);
+		$('.ubb_maaltijd').each(function() {
+			if ($(this).attr('id') === $(html).attr('id')) {
+				$(this).replaceWith(data);
+			}
+		});
+	});
+	jqXHR.fail(function(jqXHR, textStatus, errorThrown) {
+		$(ketzer + ' .aanmelddata').html('<span style="color: red; font-weight: bold;">Error:</span><br />' + errorThrown);
+		alert(errorThrown);
 	});
 	return true;
 }
@@ -67,27 +300,6 @@ function selectText(element) {
 		selection.removeAllRanges();
 		selection.addRange(range);
 	}
-}
-
-function init_visitekaartjes() {
-	$('.visite').each(function() {
-		if ($(this).hasClass('init')) {
-			$(this).removeClass('init'); // 1 handler
-			$(this).hoverIntent(function() {
-				var id = $(this).attr('id');
-				id = id.replace('v', 'k');
-				$('#' + id).fadeIn();
-			});
-		}
-	});
-	$('.visitekaartje').each(function() {
-		if ($(this).hasClass('init')) {
-			$(this).removeClass('init'); // 1 handler
-			$(this).mouseleave(function() {
-				$(this).fadeOut();
-			});
-		}
-	});
 }
 
 //we maken een standaard AJAX-ding aan.

@@ -27,7 +27,7 @@ function isCtrlKeyDown(event) {
 function taken_form_init() {
 	$('.Formulier').each(function() {
 		$(this).submit(taken_post_form); // enter
-		
+
 		if ($(this).hasClass('popup')) {
 			$(this).keyup(function(e) {
 				if (e.keyCode === 27) { // esc
@@ -78,7 +78,7 @@ function taken_knop_disabled(event) {
 }
 
 function taken_knop_get(event) {
-	if ($(this).hasClass('confirm') && !confirm($(this).attr('title') +'.\n\nWeet u het zeker?')) {
+	if ($(this).hasClass('confirm') && !confirm($(this).attr('title') + '.\n\nWeet u het zeker?')) {
 		event.preventDefault();
 		return false;
 	}
@@ -94,7 +94,7 @@ function taken_knop_post(event) {
 		taken_select_range(event);
 		return false;
 	}
-	if ($(this).hasClass('confirm') && !confirm($(this).attr('title') +'.\n\nWeet u het zeker?')) {
+	if ($(this).hasClass('confirm') && !confirm($(this).attr('title') + '.\n\nWeet u het zeker?')) {
 		return false;
 	}
 	var source = $(this);
@@ -122,8 +122,8 @@ function taken_submit_dropdown(form) {
 
 function taken_check_form(form) {
 	var changed = false;
-	$(form).find('.regular').each(function() {
-		if  ($(this).is('input:radio')) {
+	$(form).find('.FormField').each(function() {
+		if ($(this).is('input:radio')) {
 			if ($(this).is(':checked') && $(this).attr('origvalue') !== $(this).val()) {
 				changed = true;
 				return false;
@@ -162,7 +162,7 @@ function taken_submit_form(form, unchecked, url) {
 
 function taken_ajax(source, url, successCallback, data) {
 	if (typeof source !== 'undefined' && source !== false) {
-		$(source).parent().html('<img title="'+ url +'" src="http://plaetjes.csrdelft.nl/layout/loading-arrows.gif" />');
+		$(source).parent().html('<img title="' + url + '" src="http://plaetjes.csrdelft.nl/layout/loading-arrows.gif" />');
 	}
 	$.ajax({
 		type: 'POST',
@@ -176,11 +176,11 @@ function taken_ajax(source, url, successCallback, data) {
 			if (errorThrown === '') {
 				errorThrown = 'Nog bezig met laden!';
 			}
-			$('img[title="'+ this.url +'"]').each(function() {
+			$('img[title="' + this.url + '"]').each(function() {
 				this.src = 'http://plaetjes.csrdelft.nl/famfamfam/cancel.png';
 				this.title = errorThrown;
 			});
-			$('#taken-melding').html('<td><div id="melding"><div class="msgerror">'+ errorThrown +'</div></div></td>');
+			$('#taken-melding').html('<td><div id="melding"><div class="msgerror">' + errorThrown + '</div></div></td>');
 			taken_close_popup();
 		}
 	});
@@ -201,10 +201,6 @@ function taken_handle_response(htmlString) {
 	}
 }
 
-function page_reload() {
-	location.reload();
-}
-
 function taken_loading() {
 	$('#taken-popup-background').css('background-image', 'url("http://plaetjes.csrdelft.nl/layout/loading_bar_black.gif")');
 	$('#taken-popup-background').fadeIn();
@@ -217,13 +213,13 @@ function taken_close_popup() {
 
 function taken_toggle_datum(datum) {
 	taken_toggle_datum_first(datum, 0);
-	$('.taak-datum-'+ datum).toggle();
+	$('.taak-datum-' + datum).toggle();
 	taken_toggle_datum_first(datum, 1);
 	taken_color_datum();
-	
+
 }
 function taken_toggle_datum_first(datum, index) {
-	if ('taak-datum-head-'+ datum === $('#taken-tabel tr:visible').eq(index).attr('id')) {
+	if ('taak-datum-head-' + datum === $('#taken-tabel tr:visible').eq(index).attr('id')) {
 		$('#taak-datum-head-first').toggle();
 	}
 }
@@ -253,18 +249,18 @@ function taken_toggle_hiddenform(source) {
 }
 
 function taken_toggle_suggestie(soort, show) {
-	$('#suggesties-tabel .'+soort).each(function() {
+	$('#suggesties-tabel .' + soort).each(function() {
 		var verborgen = 0;
 		if (typeof show !== 'undefined') {
 			if (show) {
-				$(this).removeClass(soort+'verborgen');
+				$(this).removeClass(soort + 'verborgen');
 			}
 			else {
-				$(this).addClass(soort+'verborgen');
+				$(this).addClass(soort + 'verborgen');
 			}
 		}
 		else {
-			$(this).toggleClass(soort+'verborgen');
+			$(this).toggleClass(soort + 'verborgen');
 		}
 		if ($(this).hasClass('geenvoorkeurverborgen')) {
 			verborgen++;
@@ -330,7 +326,7 @@ var lastSelectedId;
 function taken_select_range(e) {
 	var shift = isShiftKeyDown(e);
 	var withinRange = false;
-	$("#taken-tabel tbody tr td a input[name='"+$(e.target).attr('name')+"']:visible").each(function() {
+	$("#taken-tabel tbody tr td a input[name='" + $(e.target).attr('name') + "']:visible").each(function() {
 		var thisId = $(this).attr('id');
 		if (thisId === lastSelectedId) {
 			withinRange = !withinRange;
@@ -339,7 +335,7 @@ function taken_select_range(e) {
 			withinRange = !withinRange;
 			var check = $(this).prop('checked');
 			setTimeout(function() { // workaround e.preventDefault()
-				$('#'+thisId).prop('checked', check);
+				$('#' + thisId).prop('checked', check);
 			}, 50);
 		}
 		else if (shift && withinRange) {
@@ -352,10 +348,10 @@ function taken_submit_range(e) {
 	if (e.target.tagName.toUpperCase() === 'IMG') { // over an image inside of anchor
 		e.target = $(e.target).parent();
 	}
-	if ($(e.target).hasClass('confirm') && !confirm($(e.target).attr('title') +'.\n\nWeet u het zeker?')) {
+	if ($(e.target).hasClass('confirm') && !confirm($(e.target).attr('title') + '.\n\nWeet u het zeker?')) {
 		return false;
 	}
-	$("input[name='"+$(e.target).attr('name')+"']:visible").each(function() {
+	$("input[name='" + $(e.target).attr('name') + "']:visible").each(function() {
 		if ($(this).prop('checked')) {
 			taken_ajax($(this).parent(), $(this).parent().attr('href'), taken_handle_response, $(this).parent().attr('post'));
 		}
@@ -370,7 +366,7 @@ function taken_mag_ruilen(e) {
 	if (e.target.tagName.toUpperCase() === 'IMG') { // over an image inside of anchor
 		e.target = $(e.target).parent();
 	}
-	var source = $('#'+dragobjectID);
+	var source = $('#' + dragobjectID);
 	if ($(source).attr('id') !== $(e.target).attr('id')) {
 		e.preventDefault();
 	}
@@ -381,7 +377,7 @@ function taken_ruilen(e) {
 	if (elmnt.tagName.toUpperCase() === 'IMG') { // dropped on image inside of anchor
 		elmnt = $(elmnt).parent();
 	}
-	var source = $('#'+dragobjectID);
+	var source = $('#' + dragobjectID);
 	if (!confirm('Toegekende corveepunten worden meegeruild!\n\nDoorgaan met ruilen?')) {
 		return;
 	}
@@ -389,10 +385,10 @@ function taken_ruilen(e) {
 	if (typeof attr === 'undefined' || attr === false) {
 		attr = '';
 	}
-	taken_ajax(elmnt, $(elmnt).attr('href'), taken_handle_response, 'lid_id='+attr);
+	taken_ajax(elmnt, $(elmnt).attr('href'), taken_handle_response, 'lid_id=' + attr);
 	attr = $(elmnt).attr('lid_id');
 	if (typeof attr === 'undefined' || attr === false) {
 		attr = '';
 	}
-	taken_ajax(source, $(source).attr('href'), taken_handle_response, 'lid_id='+attr);
+	taken_ajax(source, $(source).attr('href'), taken_handle_response, 'lid_id=' + attr);
 }

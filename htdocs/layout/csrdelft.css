@@ -76,6 +76,38 @@ ul.nobullets li{ list-style-type: none; }
 	cursor: move;
 }
 
+.outer-shadow {
+	-moz-box-shadow: 0 0 20px #000000;
+	-webkit-box-shadow: 0 0 20px #000000;
+	box-shadow: 0 0 20px #000000;
+}
+
+/**** POPUP ********************************************************************/
+#popup {
+	display: none;
+	position: fixed;
+	width: 500px;
+	z-index: 11;
+	padding: 50px;
+	background-color: white;/*
+	background-image: url("http://plaetjes.csrdelft.nl/layout/beeldmerk.jpg");
+	background-position: top right;
+	background-repeat: no-repeat;*/
+}
+#popup-background {
+	display: none;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 10;
+	opacity: 0.5;
+	background-color: black;/*
+	background-image: url("http://plaetjes.csrdelft.nl/layout/loading_bar_black.gif");*/
+	background-position: 50% 300px;
+	background-repeat: no-repeat;
+}
 
 /**** MENU ********************************************************************/
 #menu {
@@ -685,7 +717,7 @@ form#streeplijst input, form#streeplijst label{ text-align: left; margin: 3px; p
 	width: 150px;
 	float: left;
 }
-.Formulier input.regular{
+.Formulier input.FormField{
 	width: 250px;
 }
 .Formulier input[type=checkbox] {

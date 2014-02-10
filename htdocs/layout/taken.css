@@ -81,7 +81,7 @@ div.vertical {
 	display: none;
 	white-space: nowrap;
 }
-.taken-hidden-form input.regular {
+.taken-hidden-form input.FormField {
 	width: auto;
 }
 .inline-edit {
@@ -118,11 +118,6 @@ input.IntField, input.FloatField {
 }
 input.VinkField {
 	margin-top: 4px !important;
-}
-
-#taken-popup-buttons {
-	float: right;
-	margin-top: 20px;
 }
 
 /* taken menu */
@@ -229,37 +224,4 @@ td.maaltijd-aangemeld, td.maaltijd-afgemeld {
 }
 .taak-maaltijd-oud, .taak-datum-oud {
 	display: none;
-}
-
-/* popup formulier */
-
-#taken-popup-background {
-	display: none;
-	position: fixed;
-	z-index: 10;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	opacity: 0.5;
-	background-color: black;
-	background-image: url("http://plaetjes.csrdelft.nl/layout/loading_bar_black.gif");
-	background-position: 50% 300px;
-	background-repeat: no-repeat;
-}
-#taken-popup {
-	position: fixed;
-	z-index: 11;
-	width: 500px;
-	padding: 50px;
-	background-color: white;/*
-	background-image: url("http://plaetjes.csrdelft.nl/layout/beeldmerk.jpg");
-	background-position: top right;
-	background-repeat: no-repeat;*/
-}
-
-.outer-shadow {
-	-moz-box-shadow: 0 0 20px #000000;
-	-webkit-box-shadow: 0 0 20px #000000;
-	box-shadow: 0 0 20px #000000;
 }

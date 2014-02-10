@@ -26,15 +26,15 @@ class AgendaController extends AclController {
 			$this->acl = array(
 				'maand' => 'P_NOBODY',
 				'icalendar' => 'P_NOBODY',
+				'toevoegen' => 'P_AGENDA_POST',
+				'bewerken' => 'P_AGENDA_MOD'
+			);
+		} else {
+			$this->acl = array(
 				'courant' => 'P_NOBODY',
 				'toevoegen' => 'P_AGENDA_POST',
 				'bewerken' => 'P_AGENDA_MOD',
 				'verwijderen' => 'P_AGENDA_MOD'
-			);
-		} else {
-			$this->acl = array(
-				'toevoegen' => 'P_AGENDA_POST',
-				'bewerken' => 'P_AGENDA_MOD'
 			);
 		}
 		$this->action = 'maand';
@@ -71,50 +71,37 @@ class AgendaController extends AclController {
 		$this->view->zijkolom = false;
 	}
 
-	/**
-	 * iCalendar genereren.
-	 */
 	public function icalendar() {
 		$this->view = new AgendaICalendarView($this->model);
 	}
 
-	/**
-	 * Get courant agenda content
-	 * 
-	 * N.B. ajax-request, we doen zelf de $content->view() hier
-	 */
 	public function courant() {
 		require_once 'courant/courant.class.php';
 		if (Courant::magBeheren()) {
-			$content = new AgendaCourantView($this->model, 2);
-			$content->view();
+			$this->view = new AgendaCourantView($this->model, 2);
 		}
-		exit;
 	}
 
-	/**
-	 * Item toevoegen aan de agenda.
-	 */
 	public function toevoegen($datum = '') {
 		$item = $this->model->newAgendaItem($datum);
 		$this->view = new AgendaItemFormView($item, 'toevoegen'); // fetches POST values itself
-		$this->opslaan($item);
+		if ($this->isPosted()) {
+			$this->opslaan($item);
+		}
 	}
 
 	public function bewerken($aid) {
 		$item = $this->model->getAgendaItem($aid);
 		$this->view = new AgendaItemFormView($item, 'bewerken'); // fetches POST values itself
-		$this->opslaan($item);
+		if ($this->isPosted()) {
+			$this->opslaan($item);
+		}
 	}
 
 	private function opslaan(AgendaItem $item) {
 		if ($this->view->validate()) {
 			$this->model->saveAgendaItem($this->view->getModel());
-			$this->maand(date('Y-m', $item->getBeginMoment()));
-		} else {
-			$this->view = new csrdelft($this->getContent());
-			$this->view->addStylesheet('agenda.css');
-			$this->view->addScript('agenda.js');
+			$this->view->AgendaItemMaandView($item);
 		}
 	}
 

@@ -54,6 +54,23 @@ class AgendaMaandView extends TemplateView {
 
 }
 
+class AgendaItemMaandView extends TemplateView {
+
+	public function __construct(AgendaItem $item) {
+		parent::__construct($item);
+	}
+
+	public function getTitel() {
+		return 'Agenda - Item';
+	}
+
+	public function view() {
+		$this->smarty->assign('item', $this->model);
+		$this->smarty->display('MVC/agenda/maand_item.tpl');
+	}
+
+}
+
 class AgendaItemFormView extends TemplateView implements Validator {
 
 	private $form;
@@ -78,8 +95,8 @@ class AgendaItemFormView extends TemplateView implements Validator {
 
 		$fields[] = new SubmitResetCancel('/agenda/maand/' . date('Y-m', $item->getBeginMoment()));
 
-		$this->form = new Formulier('agenda-item-form', null, $fields);
-		$this->form->css_classes[] = 'agendaitem';
+		$this->form = new Formulier('agenda-item-form', 'agenda/opslaan/' . $item->item_id, $fields);
+		$this->form->css_classes[] = 'popup CheckChanged';
 	}
 
 	public function getTitel() {
@@ -93,9 +110,6 @@ class AgendaItemFormView extends TemplateView implements Validator {
 	}
 
 	public function validate() {
-		if (!is_int($this->model->item_id) || $this->model->item_id < 0) {
-			return false;
-		}
 		$fields = $this->form->getFields();
 		if (strtotime($fields['tot']->getValue()) < strtotime($fields['van']->getValue())) {
 			$fields['tot']->error = 'Eindmoment moet na beginmoment liggen';
