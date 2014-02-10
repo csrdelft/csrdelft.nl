@@ -28,10 +28,10 @@ require_once 'MVC/view/form/FormElement.abstract.php';
  */
 class Formulier implements View, Validator {
 
-	private $formId;
-	private $action;
+	protected $formId;
+	protected $action;
 	/** @var FormElement[] */
-	private $fields;
+	protected $fields;
 	public $css_classes;
 	public $error = '';
 
@@ -133,8 +133,7 @@ class Formulier implements View, Validator {
 	}
 
 	/**
-	 * Poept het formulier uit, inclusief <form>-tag, en de javascript
-	 * voor de autocomplete...
+	 * Toont het formulier en javascript van alle fields
 	 */
 	public function view($compleetformulier = true) {
 		if ($compleetformulier) {
@@ -143,22 +142,37 @@ class Formulier implements View, Validator {
 				echo ' action="' . $this->action . '"';
 			}
 			echo ' id="' . $this->formId . '" class="' . implode(' ', $this->css_classes) . '" method="post">' . "\n";
-			echo '<script type="text/javascript">if(FieldSuggestions==undefined){var FieldSuggestions=[];} </script>';
+			echo '<script type="text/javascript">if(FieldSuggestions==undefined){var FieldSuggestions=[];}</script>';
 		}
-
 		$javascript = array();
 		foreach ($this->getFields() as $field) {
 			if ($compleetformulier) {
 				$field->view();
 			}
 			$js = $field->getJavascript();
-			$javascript[md5($js)] = $js . "\n";
+			$javascript[md5($js)] = $js;
 		}
-
-		echo '<script type="text/javascript">jQuery(document).ready(function($){' . "\n" . implode($javascript) . "\n" . '});</script>';
+		echo '<script type="text/javascript">$(document).ready(function(){' . "\n" . implode("\n", $javascript) . "\n" . '});</script>';
 		if ($compleetformulier) {
 			echo '</form>';
 		}
+	}
+
+}
+
+/**
+ * InlineForm with single InputField
+ */
+class InlineForm extends Formulier {
+
+	public function view($tekst = false) {
+		echo '<div id="inline-' . $this->formId . '">';
+		echo '<form id="' . $this->formId . '" action="' . $this->action . '" method="post" class="Formulier InlineForm">';
+		echo $this->fields[0]->view();
+		echo '<div class="FormToggle" onclick="form_inline_toggle($(this).parent());">' . $this->fields[0]->getValue() . '</div>';
+		echo '<a class="knop submit" title="Opslaan"><img width="16" height="16" class="icon" alt="submit" src="' . CSR_PICS . 'famfamfam/accept.png">' . ($tekst ? ' Opslaan ' : '') . '</a>';
+		echo '<a class="knop reset cancel" title="Annuleren"><img width="16" height="16" class="icon" alt="cancel" src="' . CSR_PICS . 'famfamfam/delete.png">' . ($tekst ? ' Annuleren ' : '') . '</a>';
+		echo '</form></div>';
 	}
 
 }

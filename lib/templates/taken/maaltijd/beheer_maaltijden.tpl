@@ -25,9 +25,9 @@ Onderstaande tabel toont alle maaltijden die niet verwijderd zijn.
 	<a class="knop" onclick="$(this).hide();$('tr.taak-maaltijd-oud').show();">{icon get="eye"} Toon verleden</a>
 	<a href="{$instellingen->get('taken', 'url')}/nieuw" title="Nieuwe maaltijd" class="knop post popup">{icon get="add"} Nieuwe maaltijd</a>
 </div>
-<form method="post" action="{$instellingen->get('taken', 'url')}/nieuw" class="Formulier popup">
+<form method="post" action="{$instellingen->get('taken', 'url')}/nieuw" class="Formulier popup SubmitReset">
 	<label for="mrid">{icon get="calendar_add"} Periodieke maaltijden aanmaken:</label>
-	<select name="mrid" origvalue="kies" class="FormField" onchange="taken_submit_dropdown($(this).parent());">
+	<select name="mrid" origvalue="kies" class="FormField SubmitChange">
 		<option selected="selected">kies</option>
 	{foreach from=$repetities item=repetitie}
 		<option value="{$repetitie->getMaaltijdRepetitieId()}">{$repetitie->getStandaardTitel()}</option>

@@ -81,6 +81,7 @@ abstract class InputField extends FormElement implements Validator {
 	public $value;  //welke initiele waarde heeft het veld?
 	public $origvalue; //welke originele waarde had het veld?
 	public $title;  //omschrijving bij mouseover title
+	public $description; //omschrijving in label
 	public $disabled = false;   //veld uitgeschakeld?
 	public $notnull = false; //mag het veld leeg zijn?
 	public $leden_mod = false; //uitzondering leeg verplicht veld voor LEDEN_MOD
@@ -1513,7 +1514,7 @@ class SubmitResetCancel extends FormElement {
 	}
 
 	public function view() {
-		echo '<div class="InputField"><label> </label>';
+		echo '<div class="FormButtons">';
 		echo '<a class="knop submit" title="' . $this->submitTitle . '">' . $this->submitIcon . $this->submitText . '</a> ';
 		echo '<a class="knop reset" title="' . $this->resetTitle . '">' . $this->resetIcon . $this->resetText . '</a> ';
 		echo '<a href="' . $this->cancelUrl . '" class="knop cancel" title="' . $this->cancelTitle . '">' . $this->cancelIcon . $this->cancelText . '</a>';

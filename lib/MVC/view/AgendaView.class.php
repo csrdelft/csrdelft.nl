@@ -115,7 +115,7 @@ HTML
 		$fields[] = new SubmitResetCancel();
 
 		$this->form = new Formulier('agenda-item-form', $this->actie . '/' . $item->item_id, $fields);
-		$this->form->css_classes[] = 'popup CheckChanged';
+		$this->form->css_classes[] = 'popup PreventUnchanged';
 
 		$properties = $this->form->getValues(); // fetch POST values
 		$this->model->titel = $properties['titel'];

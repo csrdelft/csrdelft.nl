@@ -75,51 +75,6 @@ div.vertical {
 	-ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=3)"; /* IE8 */
 }
 
-/* formulier */
-
-.taken-hidden-form {
-	display: none;
-	white-space: nowrap;
-}
-.taken-hidden-form input.FormField {
-	width: auto;
-}
-.inline-edit {
-	border-bottom: 1px dotted grey;
-	width: 100%;
-	cursor: pointer;
-	font-style: italic;
-}
-.Formulier label {
-	margin: 0px !important;
-	padding: 0px !important;
-	width: 30% !important;
-	line-height: 2em;
-	vertical-align: middle;
-}
-.Formulier .InputField {
-	margin: 0px;
-}
-.Formulier .knop {
-	float: none;
-}
-input.LidField, input.RequiredLidField {
-	width: 160px !important;
-}
-input.KeuzeRondjeField {
-	width: auto !important;
-}
-label.KeuzeRondjeField {
-	float: none !important;
-}
-input.IntField, input.FloatField {
-	width: 40px !important;
-	text-align: right;
-}
-input.VinkField {
-	margin-top: 4px !important;
-}
-
 /* taken menu */
 
 #taken-menu {

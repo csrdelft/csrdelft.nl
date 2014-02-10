@@ -6,17 +6,17 @@
 	<td>
 		<a title="Instelling wijzigen" class="knop" onclick="
 			if (confirm($(this).attr('title') + '.\n\nWeet u het zeker?')) {
-				taken_toggle_hiddenform($(this).parent());
+				form_inline_toggle($(this).parent());
 			}
 		">{icon get="pencil"}</a>
 	</td>
 	<td><nobr>{$instelling->instelling_id|replace:'_':' '}</nobr></td>
 	<td>
 		<div>{$instelling->waarde}</div>
-		<form method="post" action="/instellingenbeheer/opslaan/{$instelling->module}/{$instelling->instelling_id}" class="Formulier taken-hidden-form taken-subform">
+		<form method="post" action="/instellingenbeheer/opslaan/{$instelling->module}/{$instelling->instelling_id}" class="Formulier InlineForm">
 			<textarea name="waarde" origvalue="{htmlspecialchars($instelling->waarde)}" class="FormField" rows="1">{$instelling->waarde}</textarea>
 			<a onclick="$(this).parent().submit();" title="Wijzigingen opslaan" class="knop">{icon get="accept"}</a>
-			<a onclick="taken_toggle_hiddenform($(this).parent());" title="Annuleren" class="knop">{icon get="delete"}</a>
+			<a onclick="form_inline_toggle($(this).parent());" title="Annuleren" class="knop">{icon get="delete"}</a>
 		</form>
 	</td>
 	<td class="col-del">

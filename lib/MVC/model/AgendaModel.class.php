@@ -1,6 +1,7 @@
 <?php
 
 require_once 'MVC/model/entity/AgendaItem.class.php';
+require_once 'MVC/controller/AgendaController.class.php';
 require_once 'taken/model/MaaltijdenModel.class.php';
 require_once 'taken/model/TakenModel.class.php';
 
@@ -135,7 +136,7 @@ class AgendaModel extends PersistenceModel {
 	 * Zoek in de activiteiten (titel en beschrijving) van vandaag
 	 * naar het woord $woord, geef de eerste terug.
 	 */
-	public function isActiviteitGaande($woord) {
+	public function zoekWoordAgenda($woord) {
 		foreach ($this->getItemsByDay(date('Y'), date('m'), date('d')) as $item) {
 			if (stristr($item->getTitel(), $woord) !== false OR stristr($item->getBeschrijving(), $woord) !== false) {
 				return $item;

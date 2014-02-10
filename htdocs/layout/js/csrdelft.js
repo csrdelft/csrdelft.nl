@@ -75,6 +75,7 @@ function popup_open(htmlString) {
 		init_visitekaartjes('#popup ');
 		$('#popup').show();
 		$('#popup-background').css('background-image', 'none');
+		$('#popup input:visible:first').focus();
 	}
 	else {
 		$('#popup-background').css('background-image', 'url("http://plaetjes.csrdelft.nl/layout/loading_bar_black.gif")');
@@ -94,21 +95,8 @@ function init_forms(context) {
 	$(context + '.submit').click(form_submit);
 	$(context + '.reset').click(form_reset);
 	$(context + '.cancel').click(form_cancel);
-
+	$(context + '.SubmitChange').change(form_submit);
 	$(context + '.Formulier').each(function() {
-		$(this).submit(form_submit); // enter
-
-		if ($(this).hasClass('popup')) {
-			$(this).keyup(function(e) {
-				if (e.keyCode === 27) { // esc
-					if (confirm('Sluiten zonder op te slaan?')) {
-						popup_close();
-					}
-				}
-			});
-		}
-	});
-	$(context + '.InlineFormulier').each(function() {
 		$(this).submit(form_submit); // enter
 
 		$(this).keyup(function(event) {
@@ -142,16 +130,26 @@ function form_ischanged(form) {
 	return changed;
 }
 
+function form_inline_toggle(form) {
+	$(form).find('.FormToggle').toggle();
+	$(form).find('.FormField').toggle().focus();
+	$(form).find('.knop').toggle();
+}
+
 function form_submit(event) {
 	var form = $(this).closest('form');
-	if (form.hasClass('CheckChanged') && !form_ischanged(form)) {
+	if (form.hasClass('PreventUnchanged') && !form_ischanged(form)) {
 		event.preventDefault();
 		alert('Geen wijzigingen');
 		return false;
 	}
-	if (form.hasClass('popup')) {
+	if (form.hasClass('popup') || form.hasClass('InlineForm')) {
 		event.preventDefault();
-		ajax_request('POST', form.attr('action'), form.serialize(), false, dom_update, alert);
+		ajax_request('POST', form.attr('action'), form.serialize(), false, dom_update, alert, function() {
+			if (form.hasClass('SubmitReset')) {
+				form_reset(event, form);
+			}
+		});
 		return false;
 	}
 	form.unbind('submit');
@@ -159,11 +157,14 @@ function form_submit(event) {
 	return true;
 }
 
-function form_reset(event) {
-	event.preventDefault();
-	$(this).closest('form').find('.FormField').each(function() {
+function form_reset(event, form) {
+	if (!form) {
+		form = $(this).closest('form');
+		event.preventDefault();
+	}
+	form.find('.FormField').each(function() {
 		var orig = $(this).attr('origvalue');
-		if (typeof orig !== 'undefined' && orig !== false) {
+		if (orig) {
 			$(this).val(orig);
 		}
 	});
@@ -172,19 +173,21 @@ function form_reset(event) {
 
 function form_cancel(event) {
 	var form = $(this).closest('form');
-	if (form.hasClass('.InlineForm')) {
+	if (form.hasClass('InlineForm')) {
 		event.preventDefault();
-		form_toggle(event);
-		return false;
-	}
-	if (form.hasClass('popup')) {
-		event.preventDefault();
-		popup_close();
+		form_inline_toggle(form);
 		return false;
 	}
 	if ($(this).hasClass('post')) {
 		event.preventDefault();
 		knop_post(event);
+		return false;
+	}
+	if (form.hasClass('popup')) {
+		event.preventDefault();
+		if (confirm('Sluiten zonder op te slaan?')) {
+			popup_close();
+		}
 		return false;
 	}
 	return true;
@@ -227,8 +230,8 @@ function remove() {
 	$(this).remove();
 }
 
-function ajax_request(type, url, data, source, onsuccess, onerror) {
-	if (typeof source !== 'undefined' && source !== false) {
+function ajax_request(type, url, data, source, onsuccess, onerror, onfinish) {
+	if (source) {
 		$(source).replaceWith('<img title="' + url + '" src="http://plaetjes.csrdelft.nl/layout/loading-arrows.gif" />');
 	}
 	else {
@@ -247,14 +250,19 @@ function ajax_request(type, url, data, source, onsuccess, onerror) {
 		if (errorThrown === '') {
 			errorThrown = 'Nog bezig met laden!';
 		}
-		if (typeof source !== 'undefined' && source !== false) {
+		if (source) {
 			$(source).replaceWith('<img title="' + errorThrown + '" src="http://plaetjes.csrdelft.nl/famfamfam/cancel.png" />');
 		}
 		else {
 			popup_close();
 		}
-		if (typeof onerror !== 'undefined' && onerror !== false) {
+		if (onerror) {
 			onerror(errorThrown);
+		}
+	});
+	jqXHR.always(function() {
+		if (onfinish) {
+			onfinish();
 		}
 	});
 }

@@ -2,19 +2,16 @@
 
 class IsHetAlContent extends TemplateView {
 
-	private $ishetal = null;
 	private $opties = array('dies', 'jarig', 'vrijdag', 'donderdag', 'zondag', 'borrel', 'lezing', 'lunch', 'avond');
 	private $ja = false; //ja of nee.
 
 	public function __construct($ishetal) {
-		parent::__construct();
-		if ($ishetal == 'willekeurig') {
-			$this->ishetal = $this->opties[array_rand($this->opties)];
-		} else {
-			$this->ishetal = LidInstellingen::get('zijbalk', 'ishetal');
+		parent::__construct($ishetal);
+		if ($this->model == 'willekeurig') {
+			$this->model = $this->opties[array_rand($this->opties)];
 		}
-		switch ($this->ishetal) {
-			case 'dies' : 
+		switch ($this->model) {
+			case 'dies' :
 				$begin = strtotime('2014-02-11');
 				$einde = strtotime('2014-02-21');
 				$nu = strtotime(date('Y-m-d'));
@@ -40,18 +37,6 @@ class IsHetAlContent extends TemplateView {
 				break;
 			case 'zondag': $this->ja = (date('w') == 0);
 				break;
-			case 'borrel':
-				require_once 'agenda/agenda.class.php';
-				$agenda = new Agenda();
-				$vandaag = $agenda->isActiviteitGaande($ishetal);
-				if ($vandaag instanceof AgendaItem) {
-					if ($ishetal == 'borrel') {
-						$this->ja = time() > $vandaag->getBeginMoment();
-					} else {
-						$this->ja = time() > $vandaag->getBeginMoment() AND time() < $vandaag->getEindMoment();
-					}
-				}
-				break;
 			case 'studeren':
 				if (isset($_COOKIE['studeren'])) {
 					$this->ja = (time() > ($_COOKIE['studeren'] + 5 * 60) AND date('w') != 0);
@@ -61,30 +46,42 @@ class IsHetAlContent extends TemplateView {
 				}
 				setcookie('studeren', $tijd, time() + 30 * 60);
 				break;
+			default:
+				require_once 'MVC/model/AgendaModel.class.php';
+				$agenda = new AgendaModel();
+				$vandaag = $agenda->zoekWoordAgenda($this->model);
+				if ($vandaag instanceof AgendaItem) {
+					if ($this->model == 'borrel') {
+						$this->ja = time() > $vandaag->getBeginMoment();
+					} else {
+						$this->ja = time() > $vandaag->getBeginMoment() AND time() < $vandaag->getEindMoment();
+					}
+				}
+				break;
 		}
 	}
 
 	public function view() {
-		switch ($this->ishetal) {
+		switch ($this->model) {
 			case 'jarig':
-				echo '<div id="ishetalvrijdag">Ben ik al jarig?<br />';
+				echo '<div id="ishetal">Ben ik al jarig?<br />';
 				break;
 			case 'studeren':
-				echo '<div id="ishetalvrijdag">Moet ik alweer studeren?<br />';
+				echo '<div id="ishetal">Moet ik alweer studeren?<br />';
 				break;
 			case 'borrel':
 			case 'lezing':
-				echo '<div id="ishetalvrijdag">Is er een ' . $this->ishetal . '?<br />';
+				echo '<div id="ishetal">Is er een ' . $this->model . '?<br />';
 				break;
 			default:
-				echo '<div id="ishetalvrijdag">Is het al ' . $this->ishetal . '?<br />';
+				echo '<div id="ishetal">Is het al ' . $this->model . '?<br />';
 				break;
 		}
 
 		if ($this->ja === true) {
 			echo '<div class="ja">JA!</div>';
 		} else {
-			if ($this->ishetal == 'jarig' || $this->ishetal == 'dies') {
+			if ($this->model == 'jarig' || $this->model == 'dies') {
 				echo '<div class="nee">OVER ' . $this->ja . ' DAGEN!</div>';
 			} else {
 				echo '<div class="nee">NEE.</div>';

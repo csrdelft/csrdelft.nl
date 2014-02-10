@@ -52,11 +52,11 @@
 	{if $maaltijd->getIsGesloten()}
 		{$aanmelding->getAantalGasten()}
 	{else}
-		<div class="inline-edit maaltijd-gasten" onclick="taken_toggle_hiddenform(this);">{$aanmelding->getAantalGasten()}</div>
-		<form method="post" action="{$instellingen->get('taken', 'url')}/gasten/{$maaltijd->getMaaltijdId()}" class="Formulier taken-hidden-form taken-subform">
+		<div class="inline-edit maaltijd-gasten" onclick="form_inline_toggle(this);">{$aanmelding->getAantalGasten()}</div>
+		<form method="post" action="{$instellingen->get('taken', 'url')}/gasten/{$maaltijd->getMaaltijdId()}" class="Formulier InlineForm">
 			<input type="text" name="aantal_gasten" origvalue="{$aanmelding->getAantalGasten()}" class="FormField" maxlength="4" size="4" />
 			<a onclick="$(this).parent().submit();" title="Wijzigingen opslaan" class="knop">{icon get="accept"}</a>
-			<a onclick="taken_toggle_hiddenform($(this).parent());" title="Annuleren" class="knop">{icon get="delete"}</a>
+			<a onclick="form_inline_toggle($(this).parent());" title="Annuleren" class="knop">{icon get="delete"}</a>
 		</form>
 	{/if}
 	</td>
@@ -67,17 +67,17 @@
 		{/if}
 	{else}
 	{if $aanmelding->getAantalGasten() > 0}
-		<div onclick="taken_toggle_hiddenform(this);" title="{$aanmelding->getGastenOpmerking()}">
+		<div onclick="form_inline_toggle(this);" title="{$aanmelding->getGastenOpmerking()}">
 		{if $aanmelding->getGastenOpmerking()}
 			<a class="knop">{icon get="comment_edit" title=$aanmelding->getGastenOpmerking()}</a>
 		{else}
 			<a class="knop">{icon get="comment_add" title="Gasten opmerking maken"}</a>
 		{/if}
 		</div>
-		<form method="post" action="{$instellingen->get('taken', 'url')}/opmerking/{$maaltijd->getMaaltijdId()}" class="Formulier taken-hidden-form taken-subform">
+		<form method="post" action="{$instellingen->get('taken', 'url')}/opmerking/{$maaltijd->getMaaltijdId()}" class="Formulier InlineForm">
 			<input type="text" name="gasten_opmerking" value="{$aanmelding->getGastenOpmerking()}" origvalue="{$aanmelding->getGastenOpmerking()}" class="FormField" maxlength="255" size="20" />
 			<a onclick="$(this).parent().submit();" title="Wijzigingen opslaan" class="knop">{icon get="accept"}</a>
-			<a onclick="taken_toggle_hiddenform($(this).parent());" title="Annuleren" class="knop">{icon get="delete"}</a>
+			<a onclick="form_inline_toggle($(this).parent());" title="Annuleren" class="knop">{icon get="delete"}</a>
 		</form>
 	{/if}
 	{/if}
