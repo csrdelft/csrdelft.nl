@@ -40,7 +40,7 @@ class IsHetAlContent extends TemplateView {
 				break;
 			case 'zondag': $this->ja = (date('w') == 0);
 				break;
-			case 'borrel':
+			/*case 'borrel':
 				require_once 'agenda/agenda.class.php';
 				$agenda = new Agenda();
 				$vandaag = $agenda->isActiviteitGaande($ishetal);
@@ -51,7 +51,7 @@ class IsHetAlContent extends TemplateView {
 						$this->ja = time() > $vandaag->getBeginMoment() AND time() < $vandaag->getEindMoment();
 					}
 				}
-				break;
+				break; werkt niet meer agenda.class.php bestaat niet meer */
 			case 'studeren':
 				if (isset($_COOKIE['studeren'])) {
 					$this->ja = (time() > ($_COOKIE['studeren'] + 5 * 60) AND date('w') != 0);
