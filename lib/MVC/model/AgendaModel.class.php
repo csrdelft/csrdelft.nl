@@ -156,19 +156,4 @@ class AgendaModel extends PersistenceModel {
 		return $item;
 	}
 
-	public function saveAgendaItem(AgendaItem $item) {
-		if (is_int($item->item_id) && $item->item_id > 0) {
-			$rowcount = $this->update($item);
-			if ($rowcount > 0) {
-				setMelding('Bijgewerkt', 1);
-			} else {
-				setMelding('Geen wijzigingen', 0);
-			}
-		} else {
-			$id = $this->create($item);
-			$item->item_id = $id;
-			setMelding('Toegevoegd', 1);
-		}
-	}
-
 }

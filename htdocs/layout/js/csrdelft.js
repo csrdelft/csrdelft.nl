@@ -49,13 +49,10 @@ function knop_ajax(knop, type) {
 	var source = knop;
 	var done = dom_update;
 	if (knop.hasClass('popup')) {
-		source = null;
+		source = false;
 		done = popup_open;
 	}
 	ajax_request(type, knop.attr('href'), knop.attr('postdata'), source, done, alert);
-	if (knop.hasClass('popup')) {
-		popup_open();
-	}
 }
 
 function knop_post(event) {
@@ -73,14 +70,16 @@ function knop_get(event) {
 function popup_open(htmlString) {
 	if (htmlString) {
 		$('#popup').html(htmlString);
-		init_forms('#popup');
-		init_links('#popup');
-		init_visitekaartjes('#popup');
+		init_forms('#popup ');
+		init_links('#popup ');
+		init_visitekaartjes('#popup ');
 		$('#popup').show();
 		$('#popup-background').css('background-image', 'none');
 	}
 	else {
 		$('#popup-background').css('background-image', 'url("http://plaetjes.csrdelft.nl/layout/loading_bar_black.gif")');
+		$('#popup').hide();
+		$('#popup').html('');
 	}
 	$('#popup-background').fadeIn();
 }
@@ -152,7 +151,7 @@ function form_submit(event) {
 	}
 	if (form.hasClass('popup')) {
 		event.preventDefault();
-		ajax_request('POST', form.attr('action'), form.serialize(), null, form_done_popup, alert);
+		ajax_request('POST', form.attr('action'), form.serialize(), false, dom_update, alert);
 		return false;
 	}
 	form.unbind('submit');
@@ -191,11 +190,6 @@ function form_cancel(event) {
 	return true;
 }
 
-function form_done_popup(response) {
-	popup_close();
-	dom_update(response);
-}
-
 function dom_update(htmlString) {
 	htmlString = $.trim(htmlString);
 	if (htmlString.substring(0, 9) === '<!DOCTYPE') {
@@ -205,22 +199,32 @@ function dom_update(htmlString) {
 	var html = $.parseHTML(htmlString);
 	$(html).each(function() {
 		var id = $(this).attr('id');
+		if (id === 'popup-content') {
+			popup_open(htmlString);
+		}
+		else {
+			popup_close();
+		}
 		var elmnt = $('#' + id);
 		if (elmnt.length === 1) {
 			if ($(this).hasClass('remove')) {
-				elmnt.remove();
+				elmnt.effect('puff', {}, 400, remove);
 			}
 			else {
-				elmnt.replaceWith($(this));
+				elmnt.replaceWith($(this)).effect('highlight');
 			}
 		}
 		else {
-			$(this).prependTo('#' + $(this).attr('parentid'));
+			$(this).prependTo('#' + $(this).attr('parentid')).effect('highlight');
 		}
-		init_forms('#' + id);
-		init_links('#' + id);
-		init_visitekaartjes('#' + id);
+		init_forms('#' + id + ' ');
+		init_links('#' + id + ' ');
+		init_visitekaartjes('#' + id + ' ');
 	});
+}
+
+function remove() {
+	$(this).remove();
 }
 
 function ajax_request(type, url, data, source, onsuccess, onerror) {
@@ -511,7 +515,7 @@ function readableFileSize(size) {
 function importAgenda(id) {
 	textarea = document.getElementById(id);
 	http.abort();
-	http.open("GET", "/agenda/courant/", true);
+	http.open("POST", "/agenda/courant/", true);
 	http.onreadystatechange = function() {
 		if (http.readyState == 4) {
 			document.getElementById(id).value += "\n" + http.responseText;

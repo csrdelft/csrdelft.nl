@@ -1,9 +1,9 @@
-<div id="item-{$item->item_id}">
+<li id="item-{$item->item_id}" parentid="items-{$item->getBeginMoment()|date_format:"%Y-%m-%d"}">
 	{if $magBeheren}
-		<a class="beheren" href="/agenda/verwijderen/{$item->item_id}/" onclick="return confirm('Weet u zeker dat u dit agenda-item wilt verwijderen?');" title="verwijderen">
+		<a href="verwijderen/{$item->item_id}" class="beheren post confirm" title="Dit agenda-item definitief verwijderen">
 			{icon get="verwijderen"}
 		</a>
-		<a class="beheren" href="/agenda/bewerken/{$item->item_id}/" title="bewerken">
+		<a href="bewerken/{$item->item_id}" class="beheren post popup" title="Dit agenda-item bewerken">
 			{icon get="bewerken"}
 		</a>
 	{/if}
@@ -13,4 +13,4 @@
 		</div>
 	{/if}
 	<span title="{$item->getBeschrijving()}">{$item->getTitel()}</span>
-</div>
+</li>

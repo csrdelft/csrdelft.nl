@@ -22,7 +22,7 @@ class AgendaController extends AclController {
 	public function __construct($query) {
 		parent::__construct($query);
 		$this->model = new AgendaModel();
-		if (!parent::isPOSTed()) {
+		if (!parent::isPosted()) {
 			$this->acl = array(
 				'maand' => 'P_NOBODY',
 				'icalendar' => 'P_NOBODY',
@@ -85,31 +85,26 @@ class AgendaController extends AclController {
 	public function toevoegen($datum = '') {
 		$item = $this->model->newAgendaItem($datum);
 		$this->view = new AgendaItemFormView($item, 'toevoegen'); // fetches POST values itself
-		if ($this->isPosted()) {
-			$this->opslaan($item);
+		if ($this->isPosted() AND $this->view->validate()) {
+			$id = $this->model->create($item);
+			$item->item_id = $id;
+			$this->view = new AgendaItemMaandView($item, 'toevoegen');
 		}
 	}
 
 	public function bewerken($aid) {
 		$item = $this->model->getAgendaItem($aid);
 		$this->view = new AgendaItemFormView($item, 'bewerken'); // fetches POST values itself
-		if ($this->isPosted()) {
-			$this->opslaan($item);
-		}
-	}
-
-	private function opslaan(AgendaItem $item) {
-		if ($this->view->validate()) {
-			$this->model->saveAgendaItem($this->view->getModel());
-			$this->view->AgendaItemMaandView($item);
+		if ($this->isPosted() AND $this->view->validate()) {
+			$this->model->update($item);
+			$this->view = new AgendaItemMaandView($item, 'bewerken');
 		}
 	}
 
 	public function verwijderen($aid) {
 		$item = $this->model->getAgendaItem($aid);
 		$this->model->delete($item);
-		setMelding('Verwijderd', 1);
-		$this->maand(date('Y-m', $item->getBeginMoment()));
+		$this->view = new AgendaItemMaandView($item, 'verwijderen');
 	}
 
 }

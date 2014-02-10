@@ -19,7 +19,7 @@ class InstellingenBeheerController extends AclController {
 	public function __construct($query) {
 		$this->model = Instellingen::instance();
 		parent::__construct($query);
-		if (!parent::isPOSTed()) {
+		if (!parent::isPosted()) {
 			$this->acl = array(
 				'module' => 'P_LEDEN_READ'
 			);

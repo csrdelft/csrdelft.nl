@@ -22,36 +22,40 @@
 		<tr id="{if strftime('%U', $dag.datum) == strftime('%U')-1}dezeweek{/if}">
 			<th>{$weeknr}</th>
 				{foreach from=$dagen key=dagnr item=dag}
-				<td class="dag {if strftime('%m', $dag.datum) != strftime('%m', $datum)}anderemaand{/if}{if date('d-m', $dag.datum)==date('d-m')} vandaag{/if}"
-					id="dag-{$dag.datum|date_format:"%Y-%m-%d"}">
+				<td id="dag-{$dag.datum|date_format:"%Y-%m-%d"}" class="dag {if strftime('%m', $dag.datum) != strftime('%m', $datum)}anderemaand{/if}{if date('d-m', $dag.datum)==date('d-m')} vandaag{/if}">
 					<div class="meta">
 						{if	$magToevoegen}
-							<a class="toevoegen get popup" href="/agenda/toevoegen/{$dag.datum|date_format:"%Y-%m-%d"}/" title="Item toevoegen">
+							<a href="toevoegen/{$dag.datum|date_format:"%Y-%m-%d"}" class="toevoegen get popup" title="Agenda-item toevoegen">
 								{icon get="toevoegen"}
 							</a>
 						{/if}
 						{$dagnr}
 					</div>
-					<ul id="{$dag.datum}-items" class="items">
+					<ul id="items-{$dag.datum|date_format:"%Y-%m-%d"}" class="items">
 						{foreach from=$dag.items item=item}
-							<li>
-								{if $item instanceof Lid}
-									{icon get="verjaardag"} {$item->getTitel()}
-								{elseif $item instanceof Maaltijd}
+							{if $item instanceof Lid}
+								<li>
+									{icon get="verjaardag"}
+									{$item->getTitel()}
+								</li>
+							{elseif $item instanceof Maaltijd}
+								<li>
 									{icon get="cup"} <div class="tijd">{$item->getBeginMoment()|date_format:"%R"}</div>
 									<a href="/maaltijden" title="{$item->getBeschrijving()}">
 										{$item->getTitel()}
 									</a>
-								{elseif $item instanceof CorveeTaak}
+								</li>
+							{elseif $item instanceof CorveeTaak}
+								<li>
 									{icon get="paintcan"}
 									<a href="/corveerooster" title="{$item->getBeschrijving()}">
 										{$item->getTitel()}
 									</a>
-								{elseif $item instanceof AgendaItem}
-									{include file='MVC/agenda/maand_item.tpl'}
-								{/if}
-							{/foreach}
-						</li>
+								</li>
+							{elseif $item instanceof AgendaItem}
+								{include file='MVC/agenda/maand_item.tpl'}
+							{/if}
+						{/foreach}
 					</ul>
 				</td>
 			{/foreach}

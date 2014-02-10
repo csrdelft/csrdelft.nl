@@ -1494,12 +1494,12 @@ class SubmitResetCancel extends FormElement {
 
 	/**
 	 * Volgorde van parameters naar meest aangepast
-	 * @param type $cancelurl
-	 * @param type $submittext
-	 * @param type $canceltext
-	 * @param type $resettext
+	 * @param string $cancelurl
+	 * @param string $submittext
+	 * @param string $canceltext
+	 * @param string $resettext
 	 */
-	public function __construct($cancel_url = null, $icons = true, $submit_title = 'Invoer opslaan', $cancel_title = 'Niet opslaan en terugkeren', $reset_title = 'Reset naar opgeslagen gegevens') {
+	public function __construct($cancel_url = '', $icons = true, $submit_title = 'Invoer opslaan', $cancel_title = 'Niet opslaan en terugkeren', $reset_title = 'Reset naar opgeslagen gegevens') {
 		parent::__construct(null);
 		$this->submitTitle = $submit_title;
 		$this->resetTitle = $reset_title;
@@ -1516,9 +1516,7 @@ class SubmitResetCancel extends FormElement {
 		echo '<div class="InputField"><label> </label>';
 		echo '<a class="knop submit" title="' . $this->submitTitle . '">' . $this->submitIcon . $this->submitText . '</a> ';
 		echo '<a class="knop reset" title="' . $this->resetTitle . '">' . $this->resetIcon . $this->resetText . '</a> ';
-		if (!empty($this->cancelUrl)) {
-			echo '<a href="' . $this->cancelUrl . '" class="knop cancel" title="' . $this->cancelTitle . '">' . $this->cancelIcon . $this->cancelText . '</a>';
-		}
+		echo '<a href="' . $this->cancelUrl . '" class="knop cancel" title="' . $this->cancelTitle . '">' . $this->cancelIcon . $this->cancelText . '</a>';
 		echo '</div>';
 	}
 

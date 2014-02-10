@@ -20,7 +20,7 @@ class MenuBeheerController extends AclController {
 	public function __construct($query) {
 		parent::__construct($query);
 		$this->model = new MenuModel();
-		if (!parent::isPOSTed()) {
+		if (!parent::isPosted()) {
 			$this->acl = array(
 				'beheer' => 'P_ADMIN',
 				'verwijder' => 'P_ADMIN'
