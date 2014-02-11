@@ -2,7 +2,6 @@
 	menu_pagina.tpl	|	P.W.G. Brussee (brussee@live.nl)
 *}
 {include file='taken/menu_beheer.tpl'}
-<div id="taken-popup-background"{if isset($popup)} style="display: block;"{/if}></div>{if isset($popup)}{$popup->view()}{/if}
 <div id="taken-menu">
 	<ul class="horizontal">
 		{assign var="link" value="/maaltijdenketzer"}

@@ -26,7 +26,8 @@ class AgendaMaandView extends TemplateView {
 	}
 
 	public function view() {
-		$this->smarty->assign('datum', strtotime($this->jaar . '-' . $this->maand . '-01'));
+		$cur = strtotime($this->jaar . '-' . $this->maand . '-01');
+		$this->smarty->assign('datum', $cur);
 		$this->smarty->assign('weken', $this->model->getItemsByMaand($this->jaar, $this->maand));
 		$this->smarty->assign('magToevoegen', AgendaController::magToevoegen());
 		$this->smarty->assign('magBeheren', AgendaController::magBeheren());
@@ -39,6 +40,7 @@ class AgendaMaandView extends TemplateView {
 			$urlVorige .= $this->jaar . '-' . ($this->maand - 1) . '/';
 		}
 		$this->smarty->assign('urlVorige', $urlVorige);
+		$this->smarty->assign('prevMaand', strftime('%B', strtotime('-1 Month', $cur)));
 
 		// URL voor volgende maand
 		$urlVolgende = '/agenda/maand/';
@@ -48,8 +50,34 @@ class AgendaMaandView extends TemplateView {
 			$urlVolgende .= $this->jaar . '-' . ($this->maand + 1) . '/';
 		}
 		$this->smarty->assign('urlVolgende', $urlVolgende);
+		$this->smarty->assign('nextMaand', strftime('%B', strtotime('+1 Month', $cur)));
 
 		$this->smarty->display('MVC/agenda/maand.tpl');
+	}
+
+}
+
+class AgendaItemMaandView extends TemplateView {
+
+	private $actie;
+
+	public function __construct(AgendaItem $item, $actie) {
+		parent::__construct($item);
+		$this->actie = $actie;
+	}
+
+	public function getTitel() {
+		return 'Agenda - Item';
+	}
+
+	public function view() {
+		if ($this->actie === 'verwijderen') {
+			echo '<div id="item-' . $this->model->item_id . '" class="remove"></div>';
+		} else {
+			$this->smarty->assign('magBeheren', AgendaController::magBeheren());
+			$this->smarty->assign('item', $this->model);
+			$this->smarty->display('MVC/agenda/maand_item.tpl');
+		}
 	}
 
 }
@@ -65,21 +93,39 @@ class AgendaItemFormView extends TemplateView implements Validator {
 
 		$fields[] = new RequiredTextField('titel', $item->titel, 'Titel');
 		$fields[] = new DatumField('datum', $item->begin_moment, 'Datum', date('Y') + 5, date('Y') - 5);
-		$fields[] = new HtmlComment('<div id="tijden" class="InputField"><label>Standaard tijden</label><div>
-			<a onclick="setTijd(\'00\',\'00\',\'23\',\'59\');">» Hele dag</a> &nbsp;
-			<a onclick="setTijd(\'18\',\'30\',\'22\',\'30\');">» Kring</a> &nbsp;
-			<a onclick="setTijd(\'20\',\'00\',\'22\',\'00\');">» Lezing</a> &nbsp;
-			<a onclick="setTijd(\'20\',\'00\',\'23\',\'59\');">» Borrel</a> &nbsp;
-		</div></div>');
+		$fields[] = new HtmlComment(<<<HTML
+<div id="tijden" class="InputField"><label>Standaard tijden</label>
+	<a onclick="setTijd('00','00','23','59');">» Hele dag</a> &nbsp;
+	<a onclick="setTijd('18','30','22','30');">» Kring</a> &nbsp;
+	<a onclick="setTijd('20','00','22','00');">» Lezing</a> &nbsp;
+	<a onclick="setTijd('20','00','23','59');">» Borrel</a> &nbsp;
+<script type="text/javascript">
+function setTijd(a, b, c, d) {
+	document.getElementById('field_begin_uur').value = a;
+	document.getElementById('field_begin_minuut').value = b;
+	document.getElementById('field_eind_uur').value = c;
+	document.getElementById('field_eind_minuut').value = d;
+}
+</script>
+</div>
+HTML
+		);
 		$fields['van'] = new TijdField('begin', date('H:i', $item->getBeginMoment()), 'Van');
 		$fields['tot'] = new TijdField('eind', date('H:i', $item->getEindMoment()), 'Tot');
 		$fields[] = new SelectField('rechten', $item->rechten_bekijken, 'Zichtbaar', array('P_LEDEN_READ' => 'Intern', 'P_NOBODY' => 'Extern'));
 		$fields[] = new AutoresizeTextareaField('beschrijving', $item->beschrijving, 'Beschrijving');
 
-		$fields[] = new SubmitResetCancel('/agenda/maand/' . date('Y-m', $item->getBeginMoment()));
+		$fields[] = new SubmitResetCancel();
 
-		$this->form = new Formulier('agenda-item-form', null, $fields);
-		$this->form->css_classes[] = 'agendaitem';
+		$this->form = new Formulier('agenda-item-form', '/agenda/' . $this->actie . '/' . $item->item_id, $fields);
+		$this->form->css_classes[] = 'popup PreventUnchanged';
+
+		$properties = $this->form->getValues(); // fetch POST values
+		$this->model->titel = $properties['titel'];
+		$this->model->begin_moment = $properties['datum'] . ' ' . $properties['begin'];
+		$this->model->eind_moment = $properties['datum'] . ' ' . $properties['eind'];
+		$this->model->beschrijving = $properties['beschrijving'];
+		$this->model->rechten_bekijken = $properties['rechten'];
 	}
 
 	public function getTitel() {
@@ -93,9 +139,6 @@ class AgendaItemFormView extends TemplateView implements Validator {
 	}
 
 	public function validate() {
-		if (!is_int($this->model->item_id) || $this->model->item_id < 0) {
-			return false;
-		}
 		$fields = $this->form->getFields();
 		if (strtotime($fields['tot']->getValue()) < strtotime($fields['van']->getValue())) {
 			$fields['tot']->error = 'Eindmoment moet na beginmoment liggen';
@@ -106,16 +149,6 @@ class AgendaItemFormView extends TemplateView implements Validator {
 
 	public function getError() {
 		return $this->form->error;
-	}
-
-	public function getModel() {
-		$properties = $this->form->getValues();
-		$this->model->titel = $properties['titel'];
-		$this->model->begin_moment = $properties['datum'] . ' ' . $properties['begin'];
-		$this->model->eind_moment = $properties['datum'] . ' ' . $properties['eind'];
-		$this->model->beschrijving = $properties['beschrijving'];
-		$this->model->rechten_bekijken = $properties['rechten'];
-		return $this->model;
 	}
 
 }

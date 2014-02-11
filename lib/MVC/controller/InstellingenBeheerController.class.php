@@ -19,7 +19,7 @@ class InstellingenBeheerController extends AclController {
 	public function __construct($query) {
 		$this->model = Instellingen::instance();
 		parent::__construct($query);
-		if (!parent::isPOSTed()) {
+		if (!parent::isPosted()) {
 			$this->acl = array(
 				'module' => 'P_LEDEN_READ'
 			);
@@ -61,7 +61,7 @@ class InstellingenBeheerController extends AclController {
 	}
 
 	public function opslaan($module, $key) {
-		$value = filter_input(INPUT_POST, 'waarde', FILTER_SANITIZE_SPECIAL_CHARS);
+		$value = filter_input(INPUT_POST, 'waarde', FILTER_UNSAFE_RAW);
 		$instelling = $this->model->wijzigInstelling($module, $key, $value);
 		$this->view = new InstellingenBeheerView($this->model, $instelling->module, $instelling);
 	}

@@ -13,7 +13,7 @@ class BeheerAbonnementenController extends AclController {
 
 	public function __construct($query) {
 		parent::__construct($query);
-		if (!parent::isPOSTed()) {
+		if (!parent::isPosted()) {
 			$this->acl = array(
 				'waarschuwingen' => 'P_MAAL_MOD',
 				'ingeschakeld' => 'P_MAAL_MOD',

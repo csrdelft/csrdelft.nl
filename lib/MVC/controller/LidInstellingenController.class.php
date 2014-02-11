@@ -19,7 +19,7 @@ class LidInstellingenController extends AclController {
 	public function __construct($query) {
 		$this->model = LidInstellingen::instance();
 		parent::__construct($query);
-		if (!parent::isPOSTed()) {
+		if (!parent::isPosted()) {
 			$this->acl = array(
 				'beheer' => 'P_LEDEN_READ',
 				'reset' => 'P_ADMIN'

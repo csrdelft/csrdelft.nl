@@ -12,7 +12,7 @@ class MijnVoorkeurenController extends AclController {
 
 	public function __construct($query) {
 		parent::__construct($query);
-		if (!parent::isPOSTed()) {
+		if (!parent::isPosted()) {
 			$this->acl = array(
 				'mijn' => 'P_CORVEE_IK'
 			);
@@ -55,7 +55,7 @@ class MijnVoorkeurenController extends AclController {
 	}
 	
 	public function eetwens() {
-		$eetwens = filter_input(INPUT_POST, 'eetwens', FILTER_SANITIZE_SPECIAL_CHARS);
+		$eetwens = filter_input(INPUT_POST, 'eetwens', FILTER_SANITIZE_STRING);
 		VoorkeurenModel::setEetwens(\LoginLid::instance()->getLid(), $eetwens);
 		$this->view = new MijnVoorkeurenView(null, $eetwens);
 	}

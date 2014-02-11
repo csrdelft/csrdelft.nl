@@ -22,19 +22,19 @@ class AgendaController extends AclController {
 	public function __construct($query) {
 		parent::__construct($query);
 		$this->model = new AgendaModel();
-		if (!parent::isPOSTed()) {
+		if (!parent::isPosted()) {
 			$this->acl = array(
 				'maand' => 'P_NOBODY',
 				'icalendar' => 'P_NOBODY',
+				'toevoegen' => 'P_AGENDA_POST',
+				'bewerken' => 'P_AGENDA_MOD'
+			);
+		} else {
+			$this->acl = array(
 				'courant' => 'P_NOBODY',
 				'toevoegen' => 'P_AGENDA_POST',
 				'bewerken' => 'P_AGENDA_MOD',
 				'verwijderen' => 'P_AGENDA_MOD'
-			);
-		} else {
-			$this->acl = array(
-				'toevoegen' => 'P_AGENDA_POST',
-				'bewerken' => 'P_AGENDA_MOD'
 			);
 		}
 		$this->action = 'maand';
@@ -71,58 +71,47 @@ class AgendaController extends AclController {
 		$this->view->zijkolom = false;
 	}
 
-	/**
-	 * iCalendar genereren.
-	 */
 	public function icalendar() {
 		$this->view = new AgendaICalendarView($this->model);
 	}
 
-	/**
-	 * Get courant agenda content
-	 * 
-	 * N.B. ajax-request, we doen zelf de $content->view() hier
-	 */
 	public function courant() {
 		require_once 'courant/courant.class.php';
 		if (Courant::magBeheren()) {
-			$content = new AgendaCourantView($this->model, 2);
-			$content->view();
+			$this->view = new AgendaCourantView($this->model, 2);
 		}
-		exit;
 	}
 
-	/**
-	 * Item toevoegen aan de agenda.
-	 */
 	public function toevoegen($datum = '') {
 		$item = $this->model->newAgendaItem($datum);
 		$this->view = new AgendaItemFormView($item, 'toevoegen'); // fetches POST values itself
-		$this->opslaan($item);
+		if ($this->isPosted() AND $this->view->validate()) {
+			$id = $this->model->create($item);
+			$item->item_id = $id;
+			//setMelding('Toegevoegd', 1);
+			$this->view = new AgendaItemMaandView($item, 'toevoegen');
+		}
 	}
 
 	public function bewerken($aid) {
 		$item = $this->model->getAgendaItem($aid);
 		$this->view = new AgendaItemFormView($item, 'bewerken'); // fetches POST values itself
-		$this->opslaan($item);
-	}
-
-	private function opslaan(AgendaItem $item) {
-		if ($this->view->validate()) {
-			$this->model->saveAgendaItem($this->view->getModel());
-			$this->maand(date('Y-m', $item->getBeginMoment()));
-		} else {
-			$this->view = new csrdelft($this->getContent());
-			$this->view->addStylesheet('agenda.css');
-			$this->view->addScript('agenda.js');
+		if ($this->isPosted() AND $this->view->validate()) {
+			$rowcount = $this->model->update($item);
+			if ($rowcount > 0) {
+				//setMelding('Bijgewerkt', 1);
+			} else {
+				//setMelding('Geen wijzigingen', 0);
+			}
+			$this->view = new AgendaItemMaandView($item, 'bewerken');
 		}
 	}
 
 	public function verwijderen($aid) {
 		$item = $this->model->getAgendaItem($aid);
 		$this->model->delete($item);
-		setMelding('Verwijderd', 1);
-		$this->maand(date('Y-m', $item->getBeginMoment()));
+		//setMelding('Verwijderd', 1);
+		$this->view = new AgendaItemMaandView($item, 'verwijderen');
 	}
 
 }

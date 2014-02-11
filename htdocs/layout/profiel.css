@@ -66,6 +66,6 @@ li.verborgen{ display: none; }
 #wijzigstatus .novieten, #wijzigstatus .leden {
 	margin: 0px 0px 5px 167px;
 }
-#statusForm input#field_postfix.regular{
+#statusForm input#field_postfix.FormField{
 	width: 100px;
 }

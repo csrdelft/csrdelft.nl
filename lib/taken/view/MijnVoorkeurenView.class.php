@@ -14,7 +14,9 @@ class MijnVoorkeurenView extends TemplateView {
 	public function __construct($voorkeuren = null, $eetwens = null) {
 		parent::__construct();
 		$this->_voorkeuren = $voorkeuren;
-		$this->_eetwens = $eetwens;
+
+		$fields[] = new AutoresizeTextareaField('eetwens', $eetwens, 'Allergie/diëet:');
+		$this->_eetwens = new InlineForm('eetwens-form', Instellingen::get('taken', 'url') . '/eetwens', $fields);
 	}
 
 	public function getTitel() {
@@ -23,18 +25,20 @@ class MijnVoorkeurenView extends TemplateView {
 
 	public function view() {
 		if ($this->_voorkeuren === null) { // eetwens
-			$this->smarty->assign('eetwens', $this->_eetwens);
-			$this->smarty->display('taken/voorkeur/mijn_eetwens.tpl');
-		} elseif (is_array($this->_voorkeuren)) { // list of voorkeuren
+			echo $this->_eetwens->view(true);
+		}
+		elseif (is_array($this->_voorkeuren)) { // list of voorkeuren
 			$this->smarty->display('taken/menu_pagina.tpl');
 
 			$this->smarty->assign('eetwens', $this->_eetwens);
 			$this->smarty->assign('voorkeuren', $this->_voorkeuren);
 			$this->smarty->display('taken/voorkeur/mijn_voorkeuren.tpl');
-		} elseif (is_int($this->_voorkeuren)) { // id of disabled voorkeur
+		}
+		elseif (is_int($this->_voorkeuren)) { // id of disabled voorkeur
 			$this->smarty->assign('crid', $this->_voorkeuren);
 			$this->smarty->display('taken/voorkeur/mijn_voorkeur_veld.tpl');
-		} else { // single voorkeur
+		}
+		else { // single voorkeur
 			$this->smarty->assign('uid', $this->_voorkeuren->getLidId());
 			$this->smarty->assign('crid', $this->_voorkeuren->getCorveeRepetitieId());
 			$this->smarty->display('taken/voorkeur/mijn_voorkeur_veld.tpl');
@@ -42,5 +46,3 @@ class MijnVoorkeurenView extends TemplateView {
 	}
 
 }
-
-?>

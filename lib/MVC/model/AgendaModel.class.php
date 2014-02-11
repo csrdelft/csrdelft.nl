@@ -1,6 +1,7 @@
 <?php
 
 require_once 'MVC/model/entity/AgendaItem.class.php';
+require_once 'MVC/controller/AgendaController.class.php';
 require_once 'taken/model/MaaltijdenModel.class.php';
 require_once 'taken/model/TakenModel.class.php';
 
@@ -135,7 +136,7 @@ class AgendaModel extends PersistenceModel {
 	 * Zoek in de activiteiten (titel en beschrijving) van vandaag
 	 * naar het woord $woord, geef de eerste terug.
 	 */
-	public function isActiviteitGaande($woord) {
+	public function zoekWoordAgenda($woord) {
 		foreach ($this->getItemsByDay(date('Y'), date('m'), date('d')) as $item) {
 			if (stristr($item->getTitel(), $woord) !== false OR stristr($item->getBeschrijving(), $woord) !== false) {
 				return $item;
@@ -152,22 +153,8 @@ class AgendaModel extends PersistenceModel {
 		}
 		$item->begin_moment = getDateTime(strtotime($datum) + 72000);
 		$item->eind_moment = getDateTime(strtotime($datum) + 79200);
+		$item->rechten_bekijken = 'P_NOBODY';
 		return $item;
-	}
-
-	public function saveAgendaItem(AgendaItem $item) {
-		if (is_int($item->item_id) && $item->item_id > 0) {
-			$rowcount = $this->update($item);
-			if ($rowcount > 0) {
-				setMelding('Bijgewerkt', 1);
-			} else {
-				setMelding('Geen wijzigingen', 0);
-			}
-		} else {
-			$id = $this->create($item);
-			$item->item_id = $id;
-			setMelding('Toegevoegd', 1);
-		}
 	}
 
 }

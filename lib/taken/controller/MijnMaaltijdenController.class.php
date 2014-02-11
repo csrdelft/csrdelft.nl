@@ -13,7 +13,7 @@ class MijnMaaltijdenController extends AclController {
 
 	public function __construct($query) {
 		parent::__construct($query);
-		if (!parent::isPOSTed()) {
+		if (!parent::isPosted()) {
 			$this->acl = array(
 				'ketzer' => 'P_MAAL_IK',
 				'lijst' => 'P_MAAL_IK',
@@ -88,7 +88,7 @@ class MijnMaaltijdenController extends AclController {
 
 	public function aanmelden($mid) {
 		$aanmelding = AanmeldingenModel::aanmeldenVoorMaaltijd($mid, \LoginLid::instance()->getUid(), \LoginLid::instance()->getUid());
-		if (parent::isPOSTed()) {
+		if (parent::isPosted()) {
 			$this->view = new MijnMaaltijdenView($aanmelding->getMaaltijd(), $aanmelding);
 		} else {
 			require_once 'taken/view/MaaltijdKetzerView.class.php';
@@ -98,7 +98,7 @@ class MijnMaaltijdenController extends AclController {
 
 	public function afmelden($mid) {
 		$maaltijd = AanmeldingenModel::afmeldenDoorLid($mid, \LoginLid::instance()->getUid());
-		if (parent::isPOSTed()) {
+		if (parent::isPosted()) {
 			$this->view = new MijnMaaltijdenView($maaltijd);
 		} else {
 			require_once 'taken/view/MaaltijdKetzerView.class.php';
@@ -113,7 +113,7 @@ class MijnMaaltijdenController extends AclController {
 	}
 
 	public function opmerking($mid) {
-		$opmerking = filter_input(INPUT_POST, 'gasten_opmerking', FILTER_SANITIZE_SPECIAL_CHARS);
+		$opmerking = filter_input(INPUT_POST, 'gasten_opmerking', FILTER_SANITIZE_STRING);
 		$aanmelding = AanmeldingenModel::saveGastenOpmerking($mid, \LoginLid::instance()->getUid(), $opmerking);
 		$this->view = new MijnMaaltijdenView($aanmelding->getMaaltijd(), $aanmelding);
 	}

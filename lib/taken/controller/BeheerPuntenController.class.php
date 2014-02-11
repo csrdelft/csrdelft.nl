@@ -12,7 +12,7 @@ class BeheerPuntenController extends AclController {
 
 	public function __construct($query) {
 		parent::__construct($query);
-		if (!parent::isPOSTed()) {
+		if (!parent::isPosted()) {
 			$this->acl = array(
 				'beheer' => 'P_CORVEE_MOD',
 				'resetjaar' => 'P_CORVEE_MOD'

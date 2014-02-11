@@ -20,19 +20,19 @@
 	</td>{/strip}
 {/foreach}
 	<td>
-		<div class="inline-edit" onclick="taken_toggle_hiddenform(this);">{$puntenlijst.puntenTotaal}</div>
-		<form method="post" action="{$instellingen->get('taken', 'url')}/wijzigpunten/{$puntenlijst.lid->getUid()}" class="Formulier taken-hidden-form taken-subform">
-			<input type="text" name="totaal_punten" value="{$puntenlijst.puntenTotaal}" origvalue="{$puntenlijst.puntenTotaal}" class="regular" maxlength="4" size="4" />
-			<a onclick="$(this).parent().submit();" title="Wijzigingen opslaan" class="knop">{icon get="accept"}</a>
-			<a onclick="taken_toggle_hiddenform($(this).parent());" title="Annuleren" class="knop">{icon get="delete"}</a>
+		<form method="post" action="{$instellingen->get('taken', 'url')}/wijzigpunten/{$puntenlijst.lid->getUid()}" class="Formulier InlineForm">
+			<div class="FormToggle">{$puntenlijst.puntenTotaal}</div>
+			<input type="text" name="totaal_punten" value="{$puntenlijst.puntenTotaal}" origvalue="{$puntenlijst.puntenTotaal}" class="FormField" maxlength="4" size="4" />
+			<a class="knop submit" title="Wijzigingen opslaan">{icon get="accept"}</a>
+			<a class="knop reset cancel" title="Annuleren" >{icon get="delete"}</a>
 		</form>
 	</td>
 	<td>
-		<div class="inline-edit" onclick="taken_toggle_hiddenform(this);">{$puntenlijst.bonusTotaal}</div>
-		<form method="post" action="{$instellingen->get('taken', 'url')}/wijzigbonus/{$puntenlijst.lid->getUid()}" class="Formulier taken-hidden-form taken-subform">
-			<input type="text" name="totaal_bonus" value="{$puntenlijst.bonusTotaal}" origvalue="{$puntenlijst.bonusTotaal}" class="regular" maxlength="4" size="4" />
-			<a onclick="$(this).parent().submit();" title="Wijzigingen opslaan" class="knop">{icon get="accept"}</a>
-			<a onclick="taken_toggle_hiddenform($(this).parent());" title="Annuleren" class="knop">{icon get="delete"}</a>
+		<form method="post" action="{$instellingen->get('taken', 'url')}/wijzigbonus/{$puntenlijst.lid->getUid()}" class="Formulier InlineForm">
+			<div class="FormToggle">{$puntenlijst.bonusTotaal}</div>
+			<input type="text" name="totaal_bonus" value="{$puntenlijst.bonusTotaal}" origvalue="{$puntenlijst.bonusTotaal}" class="FormField" maxlength="4" size="4" />
+			<a class="knop submit" title="Wijzigingen opslaan">{icon get="accept"}</a>
+			<a class="knop reset cancel" title="Annuleren">{icon get="delete"}</a>
 		</form>
 	</td>
 	<td style="text-align: right; background-color: #{$puntenlijst.prognoseColor};"{if $puntenlijst.vrijstelling} title="{$puntenlijst.vrijstelling->getPercentage()}% vrijstelling"{/if}>

@@ -45,10 +45,7 @@ textarea{
 	font-size: 1em;
 	border: 1px solid #A9A9A9;
 }
-input, select{ padding-left: 2px; padding-right: 2px;	border: 1px solid #A9A9A9; font-size: 1em;}
-select{ padding-right: 0px; }
-input.checkbox{ border: 0px; }
-label{ text-align: left; margin: 3px; padding: 0px; line-height: 1em;}
+input, select{ padding: 2px; border: 1px solid #A9A9A9; font-size: 1em;}
 
 th{ text-align: left; }
 td{ vertical-align: top; padding: 0px; }
@@ -76,6 +73,38 @@ ul.nobullets li{ list-style-type: none; }
 	cursor: move;
 }
 
+.outer-shadow {
+	-moz-box-shadow: 0 0 20px #000000;
+	-webkit-box-shadow: 0 0 20px #000000;
+	box-shadow: 0 0 20px #000000;
+}
+
+/**** POPUP ********************************************************************/
+#popup {
+	display: none;
+	position: fixed;
+	width: 500px;
+	z-index: 11;
+	padding: 50px;
+	background-color: white;/*
+	background-image: url("http://plaetjes.csrdelft.nl/layout/beeldmerk.jpg");
+	background-position: top right;
+	background-repeat: no-repeat;*/
+}
+#popup-background {
+	display: none;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 10;
+	opacity: 0.5;
+	background-color: black;/*
+	background-image: url("http://plaetjes.csrdelft.nl/layout/loading_bar_black.gif");*/
+	background-position: 50% 300px;
+	background-repeat: no-repeat;
+}
 
 /**** MENU ********************************************************************/
 #menu {
@@ -353,16 +382,16 @@ ul.nobullets li{ list-style-type: none; }
 #mainleft a:hover{
 	text-decoration: underline;
 }
-#ishetalvrijdag{
+#ishetal{
 	text-align: center;
 }
-#ishetalvrijdag div.ja, #ishetalvrijdag div.nee{
+#ishetal div.ja, #ishetal div.nee{
 	font-size: 16px;
 	font-weight: bold;
 	color: red;
 	text-align: center;
 }
-#ishetalvrijdag div.ja{
+#ishetal div.ja{
 	color: green;
 }
 
@@ -682,50 +711,66 @@ form#streeplijst input, form#streeplijst label{ text-align: left; margin: 3px; p
 /* Formulier */
 
 .Formulier label{
-	width: 150px;
 	float: left;
+	margin: 0px;
+	padding: 0px;
+	width: 140px;
+	line-height: 2em;
+	vertical-align: middle;
 }
-.Formulier input.regular{
+.Formulier input.FormField{
 	width: 250px;
-}
-.Formulier input[type=checkbox] {
-	width: auto;
-}
-.Formulier input.UidField{
-	width: 70px;
 }
 .Formulier textarea{
 	width: 250px;
 }
-.Formulier select{
-	margin: 0px;
-}
 .Formulier .knop{
 	padding: 0px 5px;
 	text-align: center;
-	font-family: Verdana,​Geneva,​Arial,​Helvetica,​sans-serif;
-}
-.Formulier .UBBpreview{
-	margin-left: 156px;
-}
-.Formulier .uidPreview, .Formulier .lidPreview{
-	display: inline;
-	padding-left: 10px;
 }
 .Formulier .InputField, .Formulier h3, .Formulier .password{
 	clear: both;
+	margin: 0px;
+	padding: 0px;
 }
 .Formulier .InputField{
-	margin-left: 10px;
-	padding: 1px 2px;
-	border: 1px solid white;
-}
-.Formulier .InputField{
+	border: 1px solid transparent;
 	overflow: auto;
 }
 .Formulier .InputField:hover{
 	border: 1px  solid #ddd;
 	background-color: #eee;
+}
+.Formulier .FormButtons{
+	text-align: right;
+	margin-top: 25px;
+}
+.Formulier .UBBpreview{
+	margin-left: 156px;
+}
+.Formulier .UidField{
+	width: 70px;
+}
+.Formulier .uidPreview, .Formulier .lidPreview{
+	display: inline;
+	padding-left: 10px;
+}
+.Formulier .LidField, .Formulier .RequiredLidField {
+	width: 160px;
+}
+.Formulier .KeuzeRondjeField {
+	width: auto;
+}
+.Formulier label.KeuzeRondjeField {
+	float: none;
+}
+.Formulier .IntField, .Formulier .FloatField {
+	width: 40px;
+	text-align: right;
+}
+.Formulier .VinkField {
+	width: auto;
+	margin-top: 4px;
 }
 .Formulier .metFouten{
 	background-color: #FFC3CE;
@@ -741,4 +786,26 @@ form#streeplijst input, form#streeplijst label{ text-align: left; margin: 3px; p
 .Formulier h3{
 	margin-top: 8px;
 	margin-bottom: 1px;
+}
+
+/* Inline Formulier */
+
+.InlineForm .FormField, .InlineForm .knop{
+	display: none;
+	width: auto !important;
+}
+.InlineForm .InputField{
+	display: inline;
+}
+.InlineForm .FormToggle{
+	float: left;
+	border-bottom: 1px dotted grey;
+	width: 100%;
+	height: 15px;
+	cursor: pointer;
+	font-style: italic;
+}
+.InlineForm div.InputField:hover{
+	border: 1px solid transparent;
+	background-color: transparent;
 }

@@ -331,7 +331,7 @@ div.beschrijvingen{ margin-top: 40px;}
 	margin-top:-3px;
 }
 
-.Formulier input.regular,.Formulier textarea, .boekzoeker input{
+.Formulier input.FormField,.Formulier textarea, .boekzoeker input{
 	width: 400px;
 	padding: 1px 2px;
 }

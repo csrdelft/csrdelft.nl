@@ -213,7 +213,6 @@ htdocs/layout/forum.css -text
 htdocs/layout/fotoalbum.css -text
 htdocs/layout/groepen.css -text
 htdocs/layout/jquery.prettyPhoto-3.1.5.css -text
-htdocs/layout/js/agenda.js -text
 htdocs/layout/js/autocomplete/README[!!-~]PubCie -text
 htdocs/layout/js/autocomplete/README.md -text
 htdocs/layout/js/autocomplete/changelog.txt -text
@@ -3813,6 +3812,7 @@ lib/templates/MVC/agenda/courant.tpl -text
 lib/templates/MVC/agenda/icalendar.tpl -text
 lib/templates/MVC/agenda/item_form.tpl -text
 lib/templates/MVC/agenda/maand.tpl -text
+lib/templates/MVC/agenda/maand_item.tpl -text
 lib/templates/MVC/agenda/zijbalk.tpl -text
 lib/templates/MVC/instellingen/beheer/instelling_row.tpl -text
 lib/templates/MVC/instellingen/beheer/instellingen_page.tpl -text
@@ -3923,7 +3923,6 @@ lib/templates/taken/popup_form.tpl -text
 lib/templates/taken/voorkeur/beheer_voorkeur_lijst.tpl -text
 lib/templates/taken/voorkeur/beheer_voorkeur_veld.tpl -text
 lib/templates/taken/voorkeur/beheer_voorkeuren.tpl -text
-lib/templates/taken/voorkeur/mijn_eetwens.tpl -text
 lib/templates/taken/voorkeur/mijn_voorkeur_lijst.tpl -text
 lib/templates/taken/voorkeur/mijn_voorkeur_veld.tpl -text
 lib/templates/taken/voorkeur/mijn_voorkeuren.tpl -text
