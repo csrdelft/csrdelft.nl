@@ -25,13 +25,12 @@ function isCtrlKeyDown(event) {
 	}
 	return false;
 }
-/*
- function htmlDecode(input) {
- var div = document.createElement('div');
- div.innerHTML = input;
- return div.childNodes.length === 0 ? '' : div.childNodes[0].nodeValue;
- }
- */
+
+function htmlDecode(input) {
+	var div = document.createElement('div');
+	div.innerHTML = input;
+	return div.childNodes.length === 0 ? '' : div.childNodes[0].nodeValue;
+}
 
 function init_visitekaartjes(context) {
 	$(context + '.visite').hoverIntent(function() {
@@ -176,7 +175,7 @@ function form_reset(event, form) {
 	form.find('.FormField').each(function() {
 		var orig = $(this).attr('origvalue');
 		if (orig) {
-			$(this).val(orig);
+			$(this).val(htmlDecode(orig));
 		}
 	});
 	return false;
