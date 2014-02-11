@@ -718,7 +718,7 @@ form#streeplijst input, form#streeplijst label{ text-align: left; margin: 3px; p
 	line-height: 2em;
 	vertical-align: middle;
 }
-.Formulier textarea, .Formulier .TextField{
+.Formulier textarea, .Formulier .TextField, .Formulier .RequiredTextField{
 	width: 250px;
 }
 .Formulier .knop{
