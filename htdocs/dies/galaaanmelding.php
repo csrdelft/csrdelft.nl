@@ -69,6 +69,7 @@ if ($loginlid->instance()->getUid() == 'x999') {
 		</script>
 		<script src="/layout/js/jquery/jquery-2.1.0.js" type="text/javascript"></script>
 		<link rel="stylesheet" type="text/css" href="styles.css">
+		<script src="/layout/js/csrdelft.js" type="text/javascript"></script>
 		<style>
 			p {
 				padding-right:5%;
@@ -115,7 +116,7 @@ if ($loginlid->instance()->getUid() == 'x999') {
 					$fields[] = new SelectField('eetDate', $data['eetDate'], 'Eetvoorkeur', $eetopties);
 					$fields[] = new TextField('allerDate', $data['allerDate'], 'Allergie-informatie:');
 					$fields[] = new SelectField('date18', $data['date18'], 'Is uw Diesdame of Diesheer meerderjarig op de dag van het gala?', $leeftijdopties);
-					$fields[] = new SubmitResetCancel('/dies', false);
+					$fields[] = new SubmitResetCancel('/dies', false, 'submit', 'cancel','reset');
 
 					$form = new Formulier('galaaanmelding', '/dies/galaaanmelding.php', $fields);
 					$form->view();
