@@ -134,6 +134,9 @@ class LoginLid {
 		if ($uid == 'x999') {
 			throw new Exception('Ja, log dan maar lekker uit!');
 		}
+		if ($this->isSelf($uid)) {
+			throw new Exception('Dit ben je zelf!');
+		}
 		$suNaar = LidCache::getLid($uid);
 		if (in_array($suNaar->getStatus(), array('S_NOBODY', 'S_EXLID'))) {
 			throw new Exception('Kan niet su-en naar nobodies!');
@@ -611,5 +614,3 @@ class LoginLid {
 	}
 
 }
-
-?>

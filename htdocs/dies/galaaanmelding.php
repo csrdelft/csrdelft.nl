@@ -1,5 +1,4 @@
 <?php
-
 require_once 'configuratie.include.php';
 require_once 'diesAanmelding.class.php';
 
@@ -105,7 +104,7 @@ if ($loginlid->instance()->getUid() == 'x999') {
 ?>
 					<h4>Aanmelding gala 21 februari 2014</h4>
 					<p>Met behulp van dit formulier kunt u zich aanmelden voor het Dies Natalis gala der Civitas Studiosorum Reformatorum op 21 februari 2014. U dient hier de gegevens van u en uw Diesdame of -heer in te vullen. Door u aan te melden gaat u akkoord met het betalen van twee galakaartjes d.m.v. een machtiging (wilt u geen machtiging dan dient u contact op te nemen met de DiesCie).</p>
-					<?php
+<?php
 					$eetopties = array('vlees', 'vis', 'vegatarisch');
 					$leeftijdopties = array('nee', 'ja');
 

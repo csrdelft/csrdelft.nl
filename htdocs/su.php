@@ -28,6 +28,7 @@ if (array_key_exists('HTTP_REFERER', $_SERVER)) {
 	$referer = filter_input(INPUT_SERVER, 'HTTP_REFERER', FILTER_SANITIZE_URL);
 	if (startsWith($referer, CSR_ROOT)) {
 		invokeRefresh($referer);
+		exit;
 	}
 }
-invokeRefresh($url);
+invokeRefresh(CSR_ROOT);
