@@ -55,7 +55,7 @@ class MijnVoorkeurenController extends AclController {
 	}
 	
 	public function eetwens() {
-		$eetwens = filter_input(INPUT_POST, 'eetwens', FILTER_UNSAFE_RAW);
+		$eetwens = filter_input(INPUT_POST, 'eetwens', FILTER_SANITIZE_STRING);
 		VoorkeurenModel::setEetwens(\LoginLid::instance()->getLid(), $eetwens);
 		$this->view = new MijnVoorkeurenView(null, $eetwens);
 	}

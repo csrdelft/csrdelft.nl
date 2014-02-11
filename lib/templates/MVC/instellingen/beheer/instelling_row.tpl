@@ -16,7 +16,7 @@
 			<div class="FormToggle">{$instelling->waarde}</div>
 			<textarea name="waarde" origvalue="{htmlspecialchars($instelling->waarde)}" class="FormField" rows="1">{$instelling->waarde}</textarea>
 			<a class="knop submit" title="Wijzigingen opslaan">{icon get="accept"}</a>
-			<a class="knop cancel" title="Annuleren">{icon get="delete"}</a>
+			<a class="knop reset cancel" title="Annuleren">{icon get="delete"}</a>
 		</form>
 	</td>
 	<td class="col-del">

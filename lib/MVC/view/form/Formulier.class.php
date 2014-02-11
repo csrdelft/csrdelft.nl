@@ -168,7 +168,7 @@ class InlineForm extends Formulier {
 		echo '<div id="inline-' . $this->formId . '">';
 		echo '<form id="' . $this->formId . '" action="' . $this->action . '" method="post" class="Formulier InlineForm">';
 		echo $this->fields[0]->view();
-		echo '<div class="FormToggle" onclick="form_inline_toggle($(this).parent());">' . $this->fields[0]->getValue() . ' </div>';
+		echo '<div class="FormToggle">' . $this->fields[0]->getValue() . '</div>';
 		echo '<a class="knop submit" title="Opslaan"><img width="16" height="16" class="icon" alt="submit" src="' . CSR_PICS . 'famfamfam/accept.png">' . ($tekst ? ' Opslaan ' : '') . '</a>';
 		echo '<a class="knop reset cancel" title="Annuleren"><img width="16" height="16" class="icon" alt="cancel" src="' . CSR_PICS . 'famfamfam/delete.png">' . ($tekst ? ' Annuleren ' : '') . '</a>';
 		echo $this->getJavascript();

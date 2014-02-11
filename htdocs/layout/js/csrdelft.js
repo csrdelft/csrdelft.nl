@@ -101,6 +101,7 @@ function init_forms(context) {
 	$(context + '.submit').click(form_submit);
 	$(context + '.reset').click(form_reset);
 	$(context + '.cancel').click(form_cancel);
+	$(context + '.FormToggle').click(form_toggle);
 	$(context + '.SubmitChange').change(form_submit);
 	$(context + '.Formulier').each(function() {
 		$(this).submit(form_submit); // enter
@@ -140,6 +141,13 @@ function form_inline_toggle(form) {
 	$(form).find('.FormToggle').toggle();
 	$(form).find('.FormField').toggle().focus();
 	$(form).find('.knop').toggle();
+}
+
+function form_toggle(event) {
+	var form = $(this).closest('form');
+	event.preventDefault();
+	form_inline_toggle(form);
+	return false;
 }
 
 function form_submit(event) {

@@ -54,9 +54,9 @@
 	{else}
 		<form method="post" action="{$instellingen->get('taken', 'url')}/gasten/{$maaltijd->getMaaltijdId()}" class="Formulier InlineForm">
 			<div class="FormToggle maaltijd-gasten">{$aanmelding->getAantalGasten()}</div>
-			<input type="text" name="aantal_gasten" origvalue="{$aanmelding->getAantalGasten()}" class="FormField" maxlength="4" size="4" />
+			<input type="text" name="aantal_gasten" value="{$aanmelding->getAantalGasten()}" origvalue="{$aanmelding->getAantalGasten()}" class="FormField" maxlength="4" size="4" />
 			<a class="knop submit" title="Wijzigingen opslaan">{icon get="accept"}</a>
-			<a class="knop cancel" title="Annuleren">{icon get="delete"}</a>
+			<a class="knop reset cancel" title="Annuleren">{icon get="delete"}</a>
 		</form>
 	{/if}
 	</td>
@@ -77,7 +77,7 @@
 			</div>
 			<input type="text" name="gasten_opmerking" value="{$aanmelding->getGastenOpmerking()}" origvalue="{$aanmelding->getGastenOpmerking()}" class="FormField" maxlength="255" size="20" />
 			<a class="knop submit" title="Wijzigingen opslaan">{icon get="accept"}</a>
-			<a class="knop cancel" title="Annuleren">{icon get="delete"}</a>
+			<a class="knop reset cancel" title="Annuleren">{icon get="delete"}</a>
 		</form>
 	{/if}
 	{/if}

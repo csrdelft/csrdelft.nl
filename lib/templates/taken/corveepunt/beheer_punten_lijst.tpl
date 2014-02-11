@@ -24,7 +24,7 @@
 			<div class="FormToggle">{$puntenlijst.puntenTotaal}</div>
 			<input type="text" name="totaal_punten" value="{$puntenlijst.puntenTotaal}" origvalue="{$puntenlijst.puntenTotaal}" class="FormField" maxlength="4" size="4" />
 			<a class="knop submit" title="Wijzigingen opslaan">{icon get="accept"}</a>
-			<a class="knop cancel" title="Annuleren" >{icon get="delete"}</a>
+			<a class="knop reset cancel" title="Annuleren" >{icon get="delete"}</a>
 		</form>
 	</td>
 	<td>
@@ -32,7 +32,7 @@
 			<div class="FormToggle">{$puntenlijst.bonusTotaal}</div>
 			<input type="text" name="totaal_bonus" value="{$puntenlijst.bonusTotaal}" origvalue="{$puntenlijst.bonusTotaal}" class="FormField" maxlength="4" size="4" />
 			<a class="knop submit" title="Wijzigingen opslaan">{icon get="accept"}</a>
-			<a class="knop cancel" title="Annuleren">{icon get="delete"}</a>
+			<a class="knop reset cancel" title="Annuleren">{icon get="delete"}</a>
 		</form>
 	</td>
 	<td style="text-align: right; background-color: #{$puntenlijst.prognoseColor};"{if $puntenlijst.vrijstelling} title="{$puntenlijst.vrijstelling->getPercentage()}% vrijstelling"{/if}>
