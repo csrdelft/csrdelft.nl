@@ -105,7 +105,7 @@ abstract class InputField extends FormElement implements Validator {
 		$this->description = $description;
 
 		if ($this->isPosted()) {
-			$this->value = $this->getValue();
+			$this->value = filter_input(INPUT_POST, $this->name, FILTER_UNSAFE_RAW);
 		}
 		//add *Field classname to css_classes
 		$this->css_classes[] = $this->getType();
@@ -141,9 +141,6 @@ abstract class InputField extends FormElement implements Validator {
 	}
 
 	public function getValue() {
-		if ($this->isPosted()) {
-			return filter_input(INPUT_POST, $this->name, FILTER_UNSAFE_RAW);
-		}
 		return $this->value;
 	}
 
@@ -338,6 +335,9 @@ abstract class InputField extends FormElement implements Validator {
 	 */
 	public function getJavascript() {
 		return <<<JS
+if(FieldSuggestions==undefined){
+	var FieldSuggestions=[];
+}
 $('.hasSuggestions').each(function(index, tag){
 	$('#'+tag.id).autocomplete(
 		FieldSuggestions[tag.id.substring(6)],
@@ -381,7 +381,8 @@ class TextField extends InputField {
 	public function __construct($name, $value, $description, $max_len = 255, $model = null) {
 		parent::__construct($name, $value, $description, $model);
 		$this->max_len = (int) $max_len;
-		$this->value = htmlspecialchars_decode($this->value); // decode getValue() called in parent constructor
+		$this->value = htmlspecialchars_decode($this->value);
+		$this->origvalue = htmlspecialchars_decode($value);
 	}
 
 	public function validate() {
@@ -398,7 +399,7 @@ class TextField extends InputField {
 	}
 
 	public function getValue() {
-		return htmlspecialchars(parent::getValue());
+		return htmlspecialchars($this->value);
 	}
 
 }

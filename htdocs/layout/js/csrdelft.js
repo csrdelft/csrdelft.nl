@@ -175,7 +175,7 @@ function form_reset(event, form) {
 	form.find('.FormField').each(function() {
 		var orig = $(this).attr('origvalue');
 		if (orig) {
-			$(this).val(htmlDecode(orig));
+			$(this).val(orig);
 		}
 	});
 	return false;

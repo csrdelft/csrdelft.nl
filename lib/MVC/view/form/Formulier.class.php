@@ -132,30 +132,29 @@ class Formulier implements View, Validator {
 		return false;
 	}
 
-	/**
-	 * Toont het formulier en javascript van alle fields
-	 */
-	public function view($compleetformulier = true) {
-		if ($compleetformulier) {
-			echo '<form';
-			if ($this->action != null) {
-				echo ' action="' . $this->action . '"';
-			}
-			echo ' id="' . $this->formId . '" class="' . implode(' ', $this->css_classes) . '" method="post">' . "\n";
-			echo '<script type="text/javascript">if(FieldSuggestions==undefined){var FieldSuggestions=[];}</script>';
-		}
+	public function getJavascript() {
 		$javascript = array();
 		foreach ($this->getFields() as $field) {
-			if ($compleetformulier) {
-				$field->view();
-			}
 			$js = $field->getJavascript();
 			$javascript[md5($js)] = $js;
 		}
-		echo '<script type="text/javascript">$(document).ready(function(){' . "\n" . implode("\n", $javascript) . "\n" . '});</script>';
-		if ($compleetformulier) {
-			echo '</form>';
+		return '<script type="text/javascript">$(document).ready(function(){' . "\n" . implode("\n", $javascript) . "\n" . '});</script>';
+	}
+
+	/**
+	 * Toont het formulier en javascript van alle fields
+	 */
+	public function view() {
+		echo '<form';
+		if ($this->action != null) {
+			echo ' action="' . $this->action . '"';
 		}
+		echo ' id="' . $this->formId . '" class="' . implode(' ', $this->css_classes) . '" method="post">' . "\n";
+		foreach ($this->getFields() as $field) {
+			$field->view();
+		}
+		echo $this->getJavascript();
+		echo '</form>';
 	}
 
 }
@@ -172,6 +171,7 @@ class InlineForm extends Formulier {
 		echo '<div class="FormToggle" onclick="form_inline_toggle($(this).parent());">' . $this->fields[0]->getValue() . ' </div>';
 		echo '<a class="knop submit" title="Opslaan"><img width="16" height="16" class="icon" alt="submit" src="' . CSR_PICS . 'famfamfam/accept.png">' . ($tekst ? ' Opslaan ' : '') . '</a>';
 		echo '<a class="knop reset cancel" title="Annuleren"><img width="16" height="16" class="icon" alt="cancel" src="' . CSR_PICS . 'famfamfam/delete.png">' . ($tekst ? ' Annuleren ' : '') . '</a>';
+		echo $this->getJavascript();
 		echo '</form></div>';
 	}
 
