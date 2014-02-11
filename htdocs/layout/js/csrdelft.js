@@ -2,10 +2,12 @@
  * csrdelft.nl javascript libje...
  */
 
+var FieldSuggestions = [];
+
 $(document).ready(function() {
-	init_links('');
-	init_forms('');
-	init_visitekaartjes('');
+	init_links();
+	init_forms();
+	init_visitekaartjes();
 	ShowMenu(menu_active);
 });
 
@@ -32,20 +34,23 @@ function htmlDecode(input) {
 	return div.childNodes.length === 0 ? '' : div.childNodes[0].nodeValue;
 }
 
-function init_visitekaartjes(context) {
-	$(context + '.visite').hoverIntent(function() {
+function init_visitekaartjes() {
+	$('.visite').hoverIntent(function() {
 		var id = $(this).attr('id');
 		id = id.replace('v', 'k');
 		$('#' + id).fadeIn();
 	});
-	$(context + '.visitekaartje').mouseleave(function() {
+	$('.visitekaartje').unbind('mouseleave.visitekaartje');
+	$('.visitekaartje').bind('mouseleave.visitekaartje', function() {
 		$(this).fadeOut();
 	});
 }
 
-function init_links(context) {
-	$(context + 'a.post').click(knop_post);
-	$(context + 'a.get').click(knop_get);
+function init_links() {
+	$('a.post').unbind('click.post');
+	$('a.post').bind('click.post', knop_post);
+	$('a.get').unbind('click.get');
+	$('a.get').bind('click.get', knop_get);
 }
 
 function knop_ajax(knop, type) {
@@ -76,9 +81,9 @@ function knop_get(event) {
 function popup_open(htmlString) {
 	if (htmlString) {
 		$('#popup').html(htmlString);
-		init_forms('#popup ');
-		init_links('#popup ');
-		init_visitekaartjes('#popup ');
+		init_forms();
+		init_links();
+		init_visitekaartjes();
 		$('#popup').show();
 		$('#popup-background').css('background-image', 'none');
 		$('#popup input:visible:first').focus();
@@ -97,20 +102,22 @@ function popup_close() {
 	$('#popup-background').fadeOut();
 }
 
-function init_forms(context) {
-	$(context + '.submit').click(form_submit);
-	$(context + '.reset').click(form_reset);
-	$(context + '.cancel').click(form_cancel);
-	$(context + '.FormToggle').click(form_toggle);
-	$(context + '.SubmitChange').change(form_submit);
-	$(context + '.Formulier').each(function() {
-		$(this).submit(form_submit); // enter
-
-		$(this).keyup(function(event) {
-			if (event.keyCode === 27) { // esc
-				form_cancel(event);
-			}
-		});
+function init_forms() {
+	$('.submit').unbind('click.sumbit');
+	$('.submit').bind('click.sumbit', form_submit);
+	$('.reset').unbind('click.reset');
+	$('.reset').bind('click.reset', form_reset);
+	$('.cancel').unbind('click.cancel');
+	$('.cancel').bind('click.cancel', form_cancel);
+	$('.FormToggle').unbind('click.toggle');
+	$('.FormToggle').bind('click.toggle', form_toggle);
+	$('.SubmitChange').unbind('change.change');
+	$('.SubmitChange').bind('change.change', form_submit);
+	$('.Formulier').each(function() {
+		$(this).unbind('submit.enter');
+		$(this).bind('submit.enter', form_submit);
+		$(this).unbind('keyup.esc');
+		$(this).bind('keyup.esc', form_esc);
 	});
 }
 
@@ -148,6 +155,12 @@ function form_toggle(event) {
 	event.preventDefault();
 	form_inline_toggle(form);
 	return false;
+}
+
+function form_esc(event) {
+	if (event.keyCode === 27) {
+		form_cancel(event);
+	}
 }
 
 function form_submit(event) {
@@ -244,9 +257,9 @@ function dom_update(htmlString) {
 				$(this).prependTo('#taken-tabel tbody:visible:first').effect('highlight');
 			}
 		}
-		init_forms('#' + id + ' ');
-		init_links('#' + id + ' ');
-		init_visitekaartjes('#' + id + ' ');
+		init_forms();
+		init_links();
+		init_visitekaartjes();
 	});
 }
 

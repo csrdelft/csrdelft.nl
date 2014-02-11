@@ -340,9 +340,6 @@ abstract class InputField extends FormElement implements Validator {
 	 */
 	public function getJavascript() {
 		return <<<JS
-if(FieldSuggestions==undefined){
-	var FieldSuggestions=[];
-}
 $('.hasSuggestions').each(function(index, tag){
 	$('#'+tag.id).autocomplete(
 		FieldSuggestions[tag.id.substring(6)],
@@ -562,7 +559,6 @@ class LidField extends TextField {
 		$js.=<<<JS
 $('.wantsLidPreview').each(function(index, tag){
 	var suggesties=FieldSuggestions[$(this).attr('id').substring(6)].split("/");
-
 	$(this).after('<div id="lidPreview_'+$(this).attr('id').substring(6)+'" class="lidPreview" />');
 	$(this).keyup(function(){
 		var field=$(this);
