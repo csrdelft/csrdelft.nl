@@ -1,10 +1,12 @@
 <?php
+
 require_once 'configuratie.include.php';
 require_once 'diesAanmelding.class.php';
 
 $data = array();
 $ingelogd = true;
 $bericht = '';
+
 if ($loginlid->instance()->getUid() == 'x999') {
 	$ingelogd = false;
 } else {
@@ -15,9 +17,8 @@ if ($loginlid->instance()->getUid() == 'x999') {
 	}
 	if ($_POST) {
 		$data = $_POST;
-
 		$dies->setData($data['naamDate'], $data['eetZelf'], $data['eetDate'], $data['allerZelf'], $data['allerDate'], $data['date18']);
-		$bericht = '<p>Wijziging/aanmelding succesvol opgeslagen</p>';
+		$bericht = '<h3>Aanmelding succesvol opgeslagen</h3>';
 	}
 	if ($dies->filledInBefore()) {
 		$data = $dies->getData();
@@ -101,7 +102,7 @@ if ($loginlid->instance()->getUid() == 'x999') {
 <?php
 				echo $bericht;
 				if ($ingelogd) {
-					?>
+?>
 					<h4>Aanmelding gala 21 februari 2014</h4>
 					<p>Met behulp van dit formulier kunt u zich aanmelden voor het Dies Natalis gala der Civitas Studiosorum Reformatorum op 21 februari 2014. U dient hier de gegevens van u en uw Diesdame of -heer in te vullen. Door u aan te melden gaat u akkoord met het betalen van twee galakaartjes d.m.v. een machtiging (wilt u geen machtiging dan dient u contact op te nemen met de DiesCie).</p>
 					<?php
@@ -116,7 +117,7 @@ if ($loginlid->instance()->getUid() == 'x999') {
 					$fields[] = new SelectField('eetDate', $data['eetDate'], 'Eetvoorkeur', $eetopties);
 					$fields[] = new TextField('allerDate', $data['allerDate'], 'Allergie-informatie:');
 					$fields[] = new SelectField('date18', $data['date18'], 'Is uw Diesdame of Diesheer meerderjarig op de dag van het gala?', $leeftijdopties);
-					$fields[] = new SubmitResetCancel('/dies', false, 'submit', 'cancel','reset');
+					$fields[] = new SubmitResetCancel('/dies', false, 'Aanmelding opslaan');
 
 					$form = new Formulier('galaaanmelding', '/dies/galaaanmelding.php', $fields);
 					$form->view();
