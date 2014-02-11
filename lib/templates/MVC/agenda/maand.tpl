@@ -2,8 +2,8 @@
 {capture name='navlinks'}
 	<div class="maandnavigatie">
 		<h1>{$datum|date_format:"%B %Y"}</h1>
-		<a class="knop" href="{$urlVorige}" style="float: left;" >&laquo; Vorige maand</a>
-		<a class="knop" href="{$urlVolgende}" style="float: right;">Volgende maand &raquo;</a>
+		<a class="knop" href="{$urlVorige}" style="float: left;">&laquo; {$prevMaand}</a>
+		<a class="knop" href="{$urlVolgende}" style="float: right;">{$nextMaand} &raquo;</a>
 	</div>
 {/capture}
 {$smarty.capture.navlinks}

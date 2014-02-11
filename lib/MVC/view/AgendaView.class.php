@@ -26,7 +26,8 @@ class AgendaMaandView extends TemplateView {
 	}
 
 	public function view() {
-		$this->smarty->assign('datum', strtotime($this->jaar . '-' . $this->maand . '-01'));
+		$cur = strtotime($this->jaar . '-' . $this->maand . '-01');
+		$this->smarty->assign('datum', $cur);
 		$this->smarty->assign('weken', $this->model->getItemsByMaand($this->jaar, $this->maand));
 		$this->smarty->assign('magToevoegen', AgendaController::magToevoegen());
 		$this->smarty->assign('magBeheren', AgendaController::magBeheren());
@@ -39,6 +40,7 @@ class AgendaMaandView extends TemplateView {
 			$urlVorige .= $this->jaar . '-' . ($this->maand - 1) . '/';
 		}
 		$this->smarty->assign('urlVorige', $urlVorige);
+		$this->smarty->assign('prevMaand', strftime('%B', strtotime('-1 Month', $cur)));
 
 		// URL voor volgende maand
 		$urlVolgende = '/agenda/maand/';
@@ -48,6 +50,7 @@ class AgendaMaandView extends TemplateView {
 			$urlVolgende .= $this->jaar . '-' . ($this->maand + 1) . '/';
 		}
 		$this->smarty->assign('urlVolgende', $urlVolgende);
+		$this->smarty->assign('nextMaand', strftime('%B', strtotime('+1 Month', $cur)));
 
 		$this->smarty->display('MVC/agenda/maand.tpl');
 	}
