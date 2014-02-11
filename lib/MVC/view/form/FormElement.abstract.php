@@ -909,6 +909,7 @@ $('.wantsAutoresize').each(function(){
 
 	textarea.bind('keyup', function() {
 		content = textarea.val();
+		content = content.replace('<', 'X');
 		content = content.replace(/\\n/g, '<br>');
 		hiddenDiv.html(content+'<br><br>');
 		textarea.css('height', hiddenDiv.height());
