@@ -790,7 +790,7 @@ form#streeplijst input, form#streeplijst label{ text-align: left; margin: 3px; p
 
 /* Inline Formulier */
 
-.InlineForm .FormField, .InlineForm .knop{
+.InlineForm .FormField, .InlineForm .submit, .InlineForm .cancel{
 	display: none;
 	width: auto !important;
 }
