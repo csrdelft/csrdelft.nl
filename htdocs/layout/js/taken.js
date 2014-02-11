@@ -12,10 +12,6 @@ $(document).ready(function() {
 		$(this).attr('ondragover', 'taken_mag_ruilen(event);');
 		$(this).attr('ondrop', 'taken_ruilen(event);');
 	});
-	$('a.range').each(function() {
-		$(this).removeClass('range');
-		$(this).click(taken_submit_range);
-	});
 });
 
 function taken_toggle_datum(datum) {

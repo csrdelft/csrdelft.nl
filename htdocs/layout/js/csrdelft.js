@@ -51,6 +51,8 @@ function init_links() {
 	$('a.post').bind('click.post', knop_post);
 	$('a.get').unbind('click.get');
 	$('a.get').bind('click.get', knop_get);
+	$('a.range').unbind('click.range');
+	$('a.range').bind('click.range', taken_submit_range);
 }
 
 function knop_ajax(knop, type) {
@@ -68,6 +70,10 @@ function knop_ajax(knop, type) {
 
 function knop_post(event) {
 	event.preventDefault();
+	if ($(this).hasClass('range') && event.target.tagName.toUpperCase() === 'INPUT') {
+		taken_select_range(event);
+		return false;
+	}
 	knop_ajax($(this), 'POST');
 	return false;
 }
