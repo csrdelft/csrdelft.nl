@@ -225,7 +225,7 @@ function form_cancel(event) {
 	}
 	if (form.hasClass('popup')) {
 		event.preventDefault();
-		if (confirm('Sluiten zonder op te slaan?')) {
+		if (form_ischanged(form) && confirm('Sluiten zonder wijzigingen op te slaan?')) {
 			popup_close();
 		}
 		return false;
