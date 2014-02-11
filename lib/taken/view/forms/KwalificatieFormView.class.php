@@ -1,7 +1,5 @@
 <?php
 
-
-
 /**
  * KwalificatieFormView.class.php	| 	P.W.G. Brussee (brussee@live.nl)
  *
@@ -17,9 +15,10 @@ class KwalificatieFormView extends TemplateView {
 		parent::__construct();
 		$this->_fid = $fid;
 
-		$formFields[] = new LidField('voor_lid', $uid, 'Naam of lidnummer', 'leden');
+		$fields[] = new LidField('voor_lid', $uid, 'Naam of lidnummer', 'leden');
+		$fields[] = new SubmitResetCancel();
 
-		$this->_form = new Formulier('taken-kwalificatie-form', Instellingen::get('taken', 'url') . '/kwalificeer/' . $fid, $formFields);
+		$this->_form = new Formulier('taken-kwalificatie-form', Instellingen::get('taken', 'url') . '/kwalificeer/' . $fid, $fields);
 	}
 
 	public function getTitel() {

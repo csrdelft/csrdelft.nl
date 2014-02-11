@@ -1,7 +1,5 @@
 <?php
 
-
-
 /**
  * FunctieFormView.class.php	| 	P.W.G. Brussee (brussee@live.nl)
  *
@@ -17,16 +15,17 @@ class FunctieFormView extends TemplateView {
 		parent::__construct();
 		$this->_fid = $fid;
 
-		$formFields[] = new TextField('naam', $naam, 'Naam', 25);
-		$formFields[] = new TextField('afkorting', $afk, 'Afkorting', 3);
-		$formFields[] = new TextareaField('email_bericht', $email, 'Email', 9);
-		$formFields[] = new IntField('standaard_punten', $punten, 'Standaard punten', 10, 0);
-		$formFields['kwali'] = new VinkField('kwalificatie_benodigd', $kwali, 'Kwalificatie benodigd');
+		$fields[] = new TextField('naam', $naam, 'Naam', 25);
+		$fields[] = new TextField('afkorting', $afk, 'Afkorting', 3);
+		$fields[] = new TextareaField('email_bericht', $email, 'Email', 9);
+		$fields[] = new IntField('standaard_punten', $punten, 'Standaard punten', 10, 0);
+		$fields['kwali'] = new VinkField('kwalificatie_benodigd', $kwali, 'Kwalificatie benodigd');
 		if ($this->_fid !== 0) {
-			$formFields['kwali']->setOnChangeScript("if (!this.checked) alert('Alle kwalificaties zullen worden verwijderd!');");
+			$fields['kwali']->setOnChangeScript("if (!this.checked) alert('Alle kwalificaties zullen worden verwijderd!');");
 		}
+		$fields[] = new SubmitResetCancel();
 
-		$this->_form = new Formulier('taken-functie-form', Instellingen::get('taken', 'url') . '/opslaan/' . $fid, $formFields);
+		$this->_form = new Formulier('taken-functie-form', Instellingen::get('taken', 'url') . '/opslaan/' . $fid, $fields);
 	}
 
 	public function getTitel() {

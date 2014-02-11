@@ -114,7 +114,6 @@ HTML
 		$fields['tot'] = new TijdField('eind', date('H:i', $item->getEindMoment()), 'Tot');
 		$fields[] = new SelectField('rechten', $item->rechten_bekijken, 'Zichtbaar', array('P_LEDEN_READ' => 'Intern', 'P_NOBODY' => 'Extern'));
 		$fields[] = new AutoresizeTextareaField('beschrijving', $item->beschrijving, 'Beschrijving');
-
 		$fields[] = new SubmitResetCancel();
 
 		$this->form = new Formulier('agenda-item-form', '/agenda/' . $this->actie . '/' . $item->item_id, $fields);

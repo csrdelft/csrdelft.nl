@@ -1,6 +1,5 @@
 <?php
 
-
 require_once 'verticale.class.php';
 require_once 'lichting.class.php';
 
@@ -31,17 +30,18 @@ class MaaltijdFormView extends TemplateView {
 			$suggesties[] = 'lichting:' . $jaar;
 		}
 
-		$formFields[] = new HiddenField('mlt_repetitie_id', $mrid);
-		$formFields[] = new TextField('titel', $titel, 'Titel', 255);
-		$formFields[] = new DatumField('datum', $datum, 'Datum', date('Y') + 2, date('Y') - 2);
-		$formFields[] = new TijdField('tijd', $tijd, 'Tijd', 15);
-		$formFields[] = new FloatField('prijs', $prijs, 'Prijs (€)', 50, 0);
-		$formFields[] = new IntField('aanmeld_limiet', $limiet, 'Aanmeldlimiet', 200, 0);
-		$formFields['filter'] = new TextField('aanmeld_filter', $filter, 'Aanmeldrestrictie', 255, $suggesties);
-		$formFields['filter']->required = false;
-		$formFields['filter']->title = 'Plaats een ! vooraan om van de restrictie een uitsluiting te maken.';
+		$fields[] = new HiddenField('mlt_repetitie_id', $mrid);
+		$fields[] = new TextField('titel', $titel, 'Titel', 255);
+		$fields[] = new DatumField('datum', $datum, 'Datum', date('Y') + 2, date('Y') - 2);
+		$fields[] = new TijdField('tijd', $tijd, 'Tijd', 15);
+		$fields[] = new FloatField('prijs', $prijs, 'Prijs (€)', 50, 0);
+		$fields[] = new IntField('aanmeld_limiet', $limiet, 'Aanmeldlimiet', 200, 0);
+		$fields['filter'] = new TextField('aanmeld_filter', $filter, 'Aanmeldrestrictie', 255, $suggesties);
+		$fields['filter']->required = false;
+		$fields['filter']->title = 'Plaats een ! vooraan om van de restrictie een uitsluiting te maken.';
+		$fields[] = new SubmitResetCancel();
 
-		$this->_form = new Formulier('taken-maaltijd-form', Instellingen::get('taken', 'url') . '/opslaan/' . $mid, $formFields);
+		$this->_form = new Formulier('taken-maaltijd-form', Instellingen::get('taken', 'url') . '/opslaan/' . $mid, $fields);
 	}
 
 	public function getTitel() {

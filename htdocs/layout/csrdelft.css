@@ -714,7 +714,7 @@ form#streeplijst input, form#streeplijst label{ text-align: left; margin: 3px; p
 	float: left;
 	margin: 0px;
 	padding: 0px;
-	width: 140px;
+	width: 30%;
 	line-height: 2em;
 	vertical-align: middle;
 }

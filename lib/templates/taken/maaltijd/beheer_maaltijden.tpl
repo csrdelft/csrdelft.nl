@@ -26,7 +26,7 @@ Onderstaande tabel toont alle maaltijden die niet verwijderd zijn.
 	<a href="{$instellingen->get('taken', 'url')}/nieuw" title="Nieuwe maaltijd" class="knop post popup">{icon get="add"} Nieuwe maaltijd</a>
 </div>
 <form method="post" action="{$instellingen->get('taken', 'url')}/nieuw" class="Formulier popup SubmitReset">
-	<label for="mrid">{icon get="calendar_add"} Periodieke maaltijden aanmaken:</label>
+	<label for="mrid" style="width: auto;">{icon get="calendar_add"} Periodieke maaltijden aanmaken:</label>&nbsp;
 	<select name="mrid" origvalue="kies" class="FormField SubmitChange">
 		<option selected="selected">kies</option>
 	{foreach from=$repetities item=repetitie}

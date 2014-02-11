@@ -1,7 +1,5 @@
 <?php
 
-
-
 /**
  * BoekjaarSluitenFormView.class.php	| 	P.W.G. Brussee (brussee@live.nl)
  *
@@ -14,11 +12,13 @@ class BoekjaarSluitenFormView extends TemplateView {
 
 	public function __construct($beginDatum = null, $eindDatum = null) {
 		parent::__construct();
-		$formFields[] = new HtmlComment('<p style="color:red;">Dit is een onomkeerbare stap!</p>');
-		$formFields['begin'] = new DatumField('begindatum', $beginDatum, 'Vanaf', date('Y') + 1, date('Y') - 2);
-		$formFields['eind'] = new DatumField('einddatum', $eindDatum, 'Tot en met', date('Y') + 1, date('Y') - 2);
 
-		$this->_form = new Formulier('taken-boekjaar-sluiten-form', Instellingen::get('taken', 'url') . '/sluitboekjaar', $formFields);
+		$fields[] = new HtmlComment('<p style="color:red;">Dit is een onomkeerbare stap!</p>');
+		$fields['begin'] = new DatumField('begindatum', $beginDatum, 'Vanaf', date('Y') + 1, date('Y') - 2);
+		$fields['eind'] = new DatumField('einddatum', $eindDatum, 'Tot en met', date('Y') + 1, date('Y') - 2);
+		$fields[] = new SubmitResetCancel();
+
+		$this->_form = new Formulier('taken-boekjaar-sluiten-form', Instellingen::get('taken', 'url') . '/sluitboekjaar', $fields);
 	}
 
 	public function getTitel() {

@@ -15,12 +15,13 @@ class VrijstellingFormView extends TemplateView {
 		parent::__construct();
 		$this->_uid = $uid;
 
-		$formFields[] = new RequiredLidField('lid_id', $uid, 'Naam of lidnummer');
-		$formFields[] = new DatumField('begin_datum', $begin, 'Vanaf', date('Y') + 1, date('Y'));
-		$formFields[] = new DatumField('eind_datum', $eind, 'Tot en met', date('Y') + 1, date('Y'));
-		$formFields[] = new IntField('percentage', $percentage, 'Percentage (%)', Instellingen::get('corvee', 'vrijstelling_percentage_max'), Instellingen::get('corvee', 'vrijstelling_percentage_min'));
+		$fields[] = new RequiredLidField('lid_id', $uid, 'Naam of lidnummer');
+		$fields[] = new DatumField('begin_datum', $begin, 'Vanaf', date('Y') + 1, date('Y'));
+		$fields[] = new DatumField('eind_datum', $eind, 'Tot en met', date('Y') + 1, date('Y'));
+		$fields[] = new IntField('percentage', $percentage, 'Percentage (%)', Instellingen::get('corvee', 'vrijstelling_percentage_max'), Instellingen::get('corvee', 'vrijstelling_percentage_min'));
+		$fields[] = new SubmitResetCancel();
 
-		$this->_form = new Formulier('taken-vrijstelling-form', Instellingen::get('taken', 'url') . '/opslaan' . ($uid === null ? '' : '/' . $uid), $formFields);
+		$this->_form = new Formulier('taken-vrijstelling-form', Instellingen::get('taken', 'url') . '/opslaan' . ($uid === null ? '' : '/' . $uid), $fields);
 	}
 
 	public function getTitel() {

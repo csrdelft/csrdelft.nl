@@ -25,18 +25,19 @@ class TaakFormView extends TemplateView {
 			}
 		}
 
-		$formFields['fid'] = new SelectField('functie_id', $fid, 'Functie', $functieNamen);
-		$formFields['fid']->onchange = $functiePunten . "$('#field_punten').val(punten[this.value]);";
-		$formFields['lid'] = new LidField('lid_id', $uid, 'Naam of lidnummer');
-		$formFields['lid']->title = 'Bij het wijzigen van het toegewezen lid worden ook de corveepunten aan het nieuwe lid gegeven.';
-		$formFields[] = new DatumField('datum', $datum, 'Datum', date('Y') + 2, date('Y') - 2);
-		$formFields[] = new IntField('punten', $punten, 'Punten', 10, 0);
-		$formFields[] = new IntField('bonus_malus', $bonus_malus, 'Bonus/malus', 10, -10);
-		$formFields[] = new HiddenField('crv_repetitie_id', $crid);
-		$formFields['mid'] = new IntField('maaltijd_id', $mid, 'Gekoppelde maaltijd', null, 0, true);
-		$formFields['mid']->title = 'Het ID van de maaltijd waar deze taak bij hoort.';
+		$fields['fid'] = new SelectField('functie_id', $fid, 'Functie', $functieNamen);
+		$fields['fid']->onchange = $functiePunten . "$('#field_punten').val(punten[this.value]);";
+		$fields['lid'] = new LidField('lid_id', $uid, 'Naam of lidnummer');
+		$fields['lid']->title = 'Bij het wijzigen van het toegewezen lid worden ook de corveepunten aan het nieuwe lid gegeven.';
+		$fields[] = new DatumField('datum', $datum, 'Datum', date('Y') + 2, date('Y') - 2);
+		$fields[] = new IntField('punten', $punten, 'Punten', 10, 0);
+		$fields[] = new IntField('bonus_malus', $bonus_malus, 'Bonus/malus', 10, -10);
+		$fields[] = new HiddenField('crv_repetitie_id', $crid);
+		$fields['mid'] = new IntField('maaltijd_id', $mid, 'Gekoppelde maaltijd', null, 0, true);
+		$fields['mid']->title = 'Het ID van de maaltijd waar deze taak bij hoort.';
+		$fields[] = new SubmitResetCancel();
 
-		$this->_form = new Formulier('taken-corveetaak-form', Instellingen::get('taken', 'url') . '/opslaan/' . $tid, $formFields);
+		$this->_form = new Formulier('taken-corveetaak-form', Instellingen::get('taken', 'url') . '/opslaan/' . $tid, $fields);
 	}
 
 	public function getTitel() {

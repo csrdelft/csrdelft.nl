@@ -1,7 +1,5 @@
 <?php
 
-
-
 /**
  * AanmeldingFormView.class.php	| 	P.W.G. Brussee (brussee@live.nl)
  *
@@ -19,12 +17,13 @@ class AanmeldingFormView extends TemplateView {
 		$this->_mid = $mid;
 		$this->_nieuw = $nieuw;
 
-		$formFields[] = new LidField('voor_lid', $uid, 'Naam of lidnummer', 'leden');
+		$fields[] = new LidField('voor_lid', $uid, 'Naam of lidnummer', 'leden');
 		if ($nieuw) {
-			$formFields[] = new IntField('aantal_gasten', $gasten, 'Aantal gasten', 200, 0);
+			$fields[] = new IntField('aantal_gasten', $gasten, 'Aantal gasten', 200, 0);
 		}
+		$fields[] = new SubmitResetCancel();
 
-		$this->_form = new Formulier('taken-aanmelding-form', Instellingen::get('taken', 'url') . '/ander' . ($nieuw ? 'aanmelden' : 'afmelden') . '/' . $mid, $formFields);
+		$this->_form = new Formulier('taken-aanmelding-form', Instellingen::get('taken', 'url') . '/ander' . ($nieuw ? 'aanmelden' : 'afmelden') . '/' . $mid, $fields);
 	}
 
 	public function getTitel() {

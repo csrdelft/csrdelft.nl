@@ -19,9 +19,10 @@ class ToewijzenFormView extends TemplateView {
 		$this->_suggesties = $suggesties;
 		$this->_jong = (int) \Lichting::getJongsteLichting();
 
-		$formFields[] = new LidField('lid_id', $taak->getLidId(), 'Naam of lidnummer', 'leden');
+		$fields[] = new LidField('lid_id', $taak->getLidId(), 'Naam of lidnummer', 'leden');
+		$fields[] = new SubmitResetCancel();
 
-		$this->_form = new Formulier('taken-taak-toewijzen-form', Instellingen::get('taken', 'url') . '/toewijzen/' . $this->_taak->getTaakId(), $formFields);
+		$this->_form = new Formulier('taken-taak-toewijzen-form', Instellingen::get('taken', 'url') . '/toewijzen/' . $this->_taak->getTaakId(), $fields);
 	}
 
 	public function getTitel() {

@@ -236,7 +236,13 @@ function dom_update(htmlString) {
 			}
 		}
 		else {
-			$(this).prependTo('#' + $(this).attr('parentid')).effect('highlight');
+			var parentid = $(this).attr('parentid');
+			if (parentid) {
+				$(this).prependTo('#' + parentid).effect('highlight');
+			}
+			else {
+				$(this).prependTo('#taken-tabel tbody:visible:first').effect('highlight');
+			}
 		}
 		init_forms('#' + id + ' ');
 		init_links('#' + id + ' ');

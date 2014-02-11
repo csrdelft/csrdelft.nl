@@ -14,7 +14,7 @@ Op deze pagina kunt u alle abonnementen beheren en zoeken.
 	</select>
 </form>
 <div style="width: 30%; display: inline-block;"><label for="toon">Toon abonnementen:</label>
-</div><select name="toon" onchange="location.href='{$instellingen->get('taken', 'url')}/'+this.value;" style="margin: 3px 1px;">
+</div><select name="toon" onchange="location.href='{$instellingen->get('taken', 'url')}/'+this.value;">
 	<option value="waarschuwingen" class="arrow"{if $toon === 'waarschuwing'} selected="selected"{/if}>waarschuwingen</option>
 	<option value="ingeschakeld" class="arrow"{if $toon === 'in'} selected="selected"{/if}>ingeschakeld</option>
 	<option value="abonneerbaar" class="arrow"{if $toon === 'abo'} selected="selected"{/if}>abonneerbaar</option>
