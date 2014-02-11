@@ -8,13 +8,5 @@
 	<th>Functie</th>
 	<th>Lid</th>
 	<th>Punten<br />toegekend</th>
-	<th style="text-align: center;">{strip}
-		<a name="del-taak" class="knop{if $prullenbak} confirm{/if} range" title="Selectie {if $prullenbak}definitief verwijderen{else}naar de prullenbak verplaatsen{/if}">
-		{if $prullenbak}
-			{icon get="cross"}
-		{else}
-			{icon get="bin_empty"}
-		{/if}
-		</a>
-	</th>{/strip}
+	<th style="text-align: center;">{if $prullenbak}{icon get="cross" title="Definitief verwijderen"}{else}{icon get="bin_empty" title="Naar de prullenbak verplaatsen"}{/if}</th>
 </tr>

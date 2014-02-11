@@ -102,9 +102,9 @@ function taken_submit_range(e) {
 	if ($(e.target).hasClass('confirm') && !confirm($(e.target).attr('title') + '.\n\nWeet u het zeker?')) {
 		return false;
 	}
-	$("input[name='" + $(e.target).attr('name') + "']:visible").each(function() {
+	$("input[name='" + $(e.target).find('input:first').attr('name') + "']:visible").each(function() {
 		if ($(this).prop('checked')) {
-			taken_ajax($(this).parent(), $(this).parent().attr('href'), taken_handle_response, $(this).parent().attr('post'));
+			ajax_request('POST', $(this).parent().attr('href'), $(this).parent().attr('post'), $(this).parent(), dom_update, alert);
 		}
 	});
 }
