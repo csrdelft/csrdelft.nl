@@ -99,6 +99,7 @@ function taken_submit_range(e) {
 	if (e.target.tagName.toUpperCase() === 'IMG') { // over an image inside of anchor
 		e.target = $(e.target).parent();
 	}
+	$(e.target).find('input').prop('checked', true);
 	if ($(e.target).hasClass('confirm') && !confirm($(e.target).attr('title') + '.\n\nWeet u het zeker?')) {
 		return false;
 	}

@@ -1,4 +1,3 @@
-{strip}
 <thead>
 	<tr>
 	{if $archief}
@@ -15,16 +14,7 @@
 		<th style="text-align: right;">Eters</th>
 		<th style="width: 80px;">(Limiet)</th>
 		<th>Status</th>
-		<th style="text-align: center;">
-			<a name="del-maaltijd" class="knop{if $prullenbak} confirm{/if} range" title="Selectie {if $prullenbak}definitief verwijderen{else}naar de prullenbak verplaatsen{/if}">
-			{if $prullenbak}
-				{icon get="cross"}
-			{else}
-				{icon get="bin_empty"}
-			{/if}
-			</a>
-		</th>
+		<th style="text-align: center;">{if $prullenbak}{icon get="cross" title="Definitief verwijderen"}{else}{icon get="bin_empty" title="Naar de prullenbak verplaatsen"}{/if}</th>
 	{/if}
 	</tr>
 </thead>
-{/strip}

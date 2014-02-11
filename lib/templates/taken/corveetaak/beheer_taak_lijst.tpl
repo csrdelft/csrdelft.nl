@@ -89,7 +89,7 @@
 {if $taak->getIsVerwijderd()}
 		<a href="{$instellingen->get('taken', 'url')}/verwijder/{$taak->getTaakId()}" title="Corveetaak definitief verwijderen" class="knop post confirm range"><input type=checkbox id="box-{$taak->getTaakId()}" name="del-taak" /> {icon get="cross"}</a>
 {else}
-		<a href="{$instellingen->get('taken', 'url')}/verwijder/{$taak->getTaakId()}" title="Corveetaak naar prullenbak verplaatsen" class="knop post range"><input type=checkbox id="box-{$taak->getTaakId()}" name="del-taak" /> {icon get="bin_closed"}</a>
+		<a href="{$instellingen->get('taken', 'url')}/verwijder/{$taak->getTaakId()}" title="Corveetaak naar de prullenbak verplaatsen" class="knop post range"><input type=checkbox id="box-{$taak->getTaakId()}" name="del-taak" /> {icon get="bin_closed"}</a>
 {/if}
 	</td>
 </tr>
