@@ -159,7 +159,8 @@ class SavedQueryContent extends TemplateView {
 	public function render_queryResult() {
 		if ($this->sq->hasResult()) {
 			$sq = $this->sq;
-			$return = $sq->getBeschrijving() . ' (' . $sq->count() . ' regels)<br /><table class="query_table">';
+			$id = 'query-'. time();
+			$return = $sq->getBeschrijving() . ' (' . $sq->count() . ' regels)<br /><table class="query_table" id="'.$id.'">';
 
 			$return.='<thead><tr>';
 			foreach ($sq->getHeaders() as $kopje) {
@@ -174,7 +175,7 @@ class SavedQueryContent extends TemplateView {
 				}
 				$return.='</tr>';
 			}
-			$return.='</tbody></table>';
+			$return.='</tbody></table><a class="knop" onclick="$(\'#'.$id.'\').animate({height: \'+=250\'}, 800, function() {});" title="Vergroot de lijst"><strong>↑↓</strong></a>';
 		} else {
 			//foutmelding in geval van geen resultaat, dus of geen query die bestaat, of niet
 			//voldoende rechten.
