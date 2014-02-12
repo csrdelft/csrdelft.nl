@@ -162,11 +162,11 @@ class SavedQueryContent extends TemplateView {
 			$return = $sq->getBeschrijving() . ' (' . $sq->count() . ' regels)<br /><table class="query_table">';
 
 			//table header
-			$return.='<tr>';
+			$return.='<thead><tr>';
 			foreach ($sq->getHeaders() as $kopje) {
 				$return.='<th>' . self::render_header($kopje) . '</th>';
 			}
-			$return.='</tr>';
+			$return.='</tr></thead><tbody>';
 
 			$rowColor = false;
 			foreach ($sq->getResult() as $rij) {
@@ -180,7 +180,7 @@ class SavedQueryContent extends TemplateView {
 				}
 				$return.='</tr>';
 			}
-			$return.='</table>';
+			$return.='</tbody></table>';
 		} else {
 			//foutmelding in geval van geen resultaat, dus of geen query die bestaat, of niet
 			//voldoende rechten.
