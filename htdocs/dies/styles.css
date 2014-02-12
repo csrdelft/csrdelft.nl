@@ -161,9 +161,14 @@ a.knop {
 	white-space: normal;
 }
 
+.Formulier div {
+	margin-top: 10px;
+}
+
 .Formulier label {
 	width: 255px;
-	display:inline-block;	
+	float: left;
+	clear: left;
 }
 
 #lightbox {
