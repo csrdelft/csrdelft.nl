@@ -514,6 +514,11 @@ table.query_table{
 	border: 1px solid black;
 }
 
+table.query_table tbody{
+	max-height: 300px;
+	overflow: auto;
+}
+
 table.query_table td{
 	margin: 0;
 	padding: 4px;
