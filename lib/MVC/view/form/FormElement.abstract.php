@@ -1095,7 +1095,6 @@ class SelectField extends InputField {
 		if (count($this->options) < 1) {
 			throw new Exception('Tenminste 1 optie nodig voor selectieveld: ' . $name);
 		}
-		$this->notnull = true;
 	}
 
 	public function validate() {
@@ -1135,6 +1134,12 @@ class SelectField extends InputField {
 
 		echo '</div>';
 	}
+
+}
+
+class RequiredSelectField extends SelectField {
+
+	public $notnull = true;
 
 }
 

@@ -38,6 +38,7 @@ class TestFormulierContent extends TemplateView implements Validator {
 
 	public function view() {
 		//gebruik smarty optioneel
+		echo getMelding();
 		echo '<h1>Testformulier</h1>Wat autoaanvullen dingen testen, net als hippe ajax-inline-bewerkzaken...';
 		$this->form->view();
 		pr($this->getModel()); // TEST
