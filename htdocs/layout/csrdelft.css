@@ -517,9 +517,7 @@ table.query_table{
 table.query_table tbody{
 	max-height: 300px;
 	overflow: auto;
-}
-thead > tr, tbody{
-    display: block;
+	display: block
 }
 table.query_table tbody tr {
 	background-color: #EBEBEB;
