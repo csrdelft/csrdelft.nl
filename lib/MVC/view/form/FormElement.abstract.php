@@ -344,14 +344,22 @@ abstract class InputField extends FormElement implements Validator {
 	 */
 	public function getJavascript() {
 		return <<<JS
-$('.metFouten input, .metFouten textarea, .metFouten select').bind('focusout.clearFout', function(event){
-	$(this).parent().removeClass('metFouten');
-	$(this).parent().find('div.waarschuwing').html('');
-});
-$('.required').bind('focusout.required', function(event){
+function field_change(event, field){
+	if(event) {
+		field = $(this);
+	}
+	$(field).parent().removeClass('metFouten');
+	$(field).parent().find('div.waarschuwing').html('');
+}
+$('.metFouten .FormField').change(field_change);
+$('.required').focusout(function(event){
+	console.log($(this).val().length);
 	if ($(this).val().length < 1) {
 		$(this).parent().addClass('metFouten');
 		$(this).parent().find('div.waarschuwing').html('Dit is een verplicht veld');
+	}
+	else {
+		field_change(false, $(this));
 	}
 });
 $('.hasSuggestions').each(function(index, tag){
