@@ -29,5 +29,7 @@ interface Agendeerbaar {
 
 	public function getBeschrijving();
 
+	public function getLink();
+
 	public function isHeledag();
 }

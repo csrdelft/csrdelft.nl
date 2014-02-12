@@ -36,19 +36,19 @@
 							{if $item instanceof Lid}
 								<li>
 									{icon get="verjaardag"}
-									{$item->getTitel()}
+									{$item->getLink()}
 								</li>
 							{elseif $item instanceof Maaltijd}
 								<li>
 									{icon get="cup"} <div class="tijd">{$item->getBeginMoment()|date_format:"%R"}</div>
-									<a href="/maaltijden" title="{$item->getBeschrijving()}">
+									<a href="{$item->getLink()}" title="{$item->getBeschrijving()}">
 										{$item->getTitel()}
 									</a>
 								</li>
 							{elseif $item instanceof CorveeTaak}
 								<li>
 									{icon get="paintcan"}
-									<a href="/corveerooster" title="{$item->getBeschrijving()}">
+									<a href="{$item->getLink()}" title="{$item->getBeschrijving()}">
 										{$item->getTitel()}
 									</a>
 								</li>

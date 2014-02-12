@@ -113,6 +113,7 @@ HTML
 		$fields['van'] = new TijdField('begin', date('H:i', $item->getBeginMoment()), 'Van');
 		$fields['tot'] = new TijdField('eind', date('H:i', $item->getEindMoment()), 'Tot');
 		$fields[] = new SelectField('rechten', $item->rechten_bekijken, 'Zichtbaar', array('P_LEDEN_READ' => 'Intern', 'P_NOBODY' => 'Extern'));
+		$fields[] = new TextField('link', $item->link, 'Link');
 		$fields[] = new AutoresizeTextareaField('beschrijving', $item->beschrijving, 'Beschrijving');
 		$fields[] = new SubmitResetCancel();
 
@@ -125,6 +126,7 @@ HTML
 		$this->model->eind_moment = $properties['datum'] . ' ' . $properties['eind'];
 		$this->model->beschrijving = $properties['beschrijving'];
 		$this->model->rechten_bekijken = $properties['rechten'];
+		$this->model->link = $properties['link'];
 	}
 
 	public function getTitel() {

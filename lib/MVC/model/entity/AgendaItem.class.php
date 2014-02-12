@@ -43,6 +43,11 @@ class AgendaItem extends PersistentEntity implements Agendeerbaar {
 	 */
 	public $rechten_bekijken;
 	/**
+	 * Link
+	 * @var string
+	 */
+	public $link;
+	/**
 	 * Database table fields
 	 * @var array
 	 */
@@ -52,7 +57,8 @@ class AgendaItem extends PersistentEntity implements Agendeerbaar {
 		'beschrijving' => 'text NOT NULL',
 		'begin_moment' => 'datetime NOT NULL',
 		'eind_moment' => 'datetime NOT NULL',
-		'rechten_bekijken' => 'varchar(255) NOT NULL'
+		'rechten_bekijken' => 'varchar(255) NOT NULL',
+		'link' => 'varchar(255) DEFAULT NULL'
 	);
 	/**
 	 * Database primary key
@@ -83,6 +89,10 @@ class AgendaItem extends PersistentEntity implements Agendeerbaar {
 
 	public function getBeschrijving() {
 		return $this->beschrijving;
+	}
+
+	public function getLink() {
+		return $this->link;
 	}
 
 	public function isHeledag() {

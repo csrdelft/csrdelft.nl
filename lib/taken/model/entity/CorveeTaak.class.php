@@ -330,6 +330,10 @@ class CorveeTaak implements Agendeerbaar {
 		return 'Nog niet ingedeeld';
 	}
 
+	public function getLink() {
+		return '/corveerooster';
+	}
+
 	public function isHeledag() {
 		return false;
 	}

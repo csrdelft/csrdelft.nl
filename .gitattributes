@@ -4010,3 +4010,4 @@ sql/4015_drop_oude_vormingsbank.sql -text
 sql/4129_iban.sql -text
 sql/4142_lidinstellingen.sql -text
 sql/4160_agenda.sql -text
+sql/4249_agenda_link.sql -text

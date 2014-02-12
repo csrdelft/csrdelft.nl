@@ -245,6 +245,10 @@ class Maaltijd implements Agendeerbaar {
 		return 'Maaltijd met ' . $this->getAantalAanmeldingen() . ' eters';
 	}
 
+	public function getLink() {
+		return '/maaltijden';
+	}
+
 	public function isHeledag() {
 		return false;
 	}

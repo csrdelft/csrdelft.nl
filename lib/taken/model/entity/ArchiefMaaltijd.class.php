@@ -108,6 +108,10 @@ class ArchiefMaaltijd implements Agendeerbaar {
 		return 'Maaltijd met ' . $this->getAantalAanmeldingen() . ' eters';
 	}
 
+	public function getLink() {
+		return '/maaltijdenbeheer/archief';
+	}
+
 	public function isHeledag() {
 		return false;
 	}

@@ -329,11 +329,15 @@ class Lid implements Serializable, Agendeerbaar {
 	}
 
 	public function getTitel() {
-		return $this->getNaamLink('civitas', 'link');
+		return $this->getNaamLink('civitas');
 	}
 
 	public function getBeschrijving() {
 		return $this->getTitel() . ' wordt n';
+	}
+
+	public function getLink() {
+		return $this->getNaamLink('civitas', 'link');
 	}
 
 	public function isHeledag() {

@@ -12,5 +12,9 @@
 			{$item->getBeginMoment()|date_format:"%R"}-{$item->getEindMoment()|date_format:"%R"}
 		</div>
 	{/if}
-	<span title="{$item->getBeschrijving()}">{$item->getTitel()}</span>
+	{if $item->getLink() != ''}
+		<a href="{$item->getLink()}" title="{$item->getBeschrijving()}">{$item->getTitel()}</a>
+	{else}
+		<span title="{$item->getBeschrijving()}">{$item->getTitel()}</span>
+	{/if}
 </li>
