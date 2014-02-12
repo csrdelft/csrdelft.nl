@@ -190,8 +190,16 @@ abstract class InputField extends FormElement implements Validator {
 	 * Elk veld heeft een label, geef de html voor het label
 	 */
 	protected function getLabel() {
-		if ($this->description != null) {
-			return '<label for="field_' . $this->name . '">' . mb_htmlentities($this->description) . '</label>';
+		if (!empty($this->description)) {
+			$required = '';
+			if ($this->notnull) {
+				if ($this->leden_mod AND LoginLid::instance()->hasPermission('P_LEDEN_MOD')) {
+					
+				} else {
+					$required = '<span class="required"> *</span>';
+				}
+			}
+			return '<label for="field_' . $this->name . '">' . mb_htmlentities($this->description) . $required . '</label>';
 		}
 		return '';
 	}
@@ -344,24 +352,6 @@ abstract class InputField extends FormElement implements Validator {
 	 */
 	public function getJavascript() {
 		return <<<JS
-function field_change(event, field){
-	if(event) {
-		field = $(this);
-	}
-	$(field).parent().removeClass('metFouten');
-	$(field).parent().find('div.waarschuwing').html('');
-}
-$('.metFouten .FormField').change(field_change);
-$('.required').focusout(function(event){
-	console.log($(this).val().length);
-	if ($(this).val().length < 1) {
-		$(this).parent().addClass('metFouten');
-		$(this).parent().find('div.waarschuwing').html('Dit is een verplicht veld');
-	}
-	else {
-		field_change(false, $(this));
-	}
-});
 $('.hasSuggestions').each(function(index, tag){
 	$('#'+tag.id).autocomplete(
 		FieldSuggestions[tag.id.substring(6)],

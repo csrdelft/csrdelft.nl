@@ -701,20 +701,15 @@ form#streeplijst input, form#streeplijst label{ text-align: left; margin: 3px; p
 
 /* Formulier */
 
-textarea{
+input, textarea, select{
 	padding: 2px;
 	border: 1px solid #A9A9A9;
-	font-size: 1em;
 	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
-}
-input, select{
-	padding: 2px;
-	border: 1px solid #A9A9A9;
-	font-size: 1em;
 }
 .Formulier * {
 	margin: 0px;
 	padding: 0px;
+	font-size: 1em;
 }
 .Formulier label{
 	float: left;
@@ -722,12 +717,14 @@ input, select{
 	line-height: 2em;
 	vertical-align: middle;
 }
-.Formulier .input, .Formulier select{
+.Formulier label .required{
+	color: red;
+}
+.Formulier input, .Formulier textarea, .Formulier select{
 	padding: 2px;
 }
 .Formulier textarea, .Formulier input[type="text"]{
 	width: 250px;
-	padding: 2px;
 }
 .Formulier .knop{
 	padding: 0px 5px;
