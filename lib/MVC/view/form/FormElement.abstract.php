@@ -226,16 +226,20 @@ abstract class InputField extends FormElement implements Validator {
 	 * Geef een div met de foutmelding voor dit veld terug.
 	 */
 	public function getErrorDiv() {
-		if ($this->error != '') {
-			return '<div class="waarschuwing">' . $this->error . '</div>';
-		}
+		return '<div class="waarschuwing">' . $this->getError() . '</div>';
 	}
 
 	/**
-	 * De input kan allerlei CSS-classes hebben. Geef hier een lijstje
-	 * terug...
+	 * Geef lijst van allerlei CSS-classes voor dit veld terug.
 	 */
 	protected function getCssClasses() {
+		if ($this->notnull) {
+			if ($this->leden_mod AND LoginLid::instance()->hasPermission('P_LEDEN_MOD')) {
+				
+			} else {
+				$this->css_classes[] = 'required';
+			}
+		}
 		if ($this->remotedatasource != '') {
 			$this->css_classes[] = 'hasRemoteSuggestions';
 		} elseif (count($this->suggestions) > 0) {
@@ -340,6 +344,16 @@ abstract class InputField extends FormElement implements Validator {
 	 */
 	public function getJavascript() {
 		return <<<JS
+$('.metFouten input, .metFouten textarea, .metFouten select').bind('focusout.clearFout', function(event){
+	$(this).parent().removeClass('metFouten');
+	$(this).parent().find('div.waarschuwing').html('');
+});
+$('.required').bind('focusout.required', function(event){
+	if ($(this).val().length < 1) {
+		$(this).parent().addClass('metFouten');
+		$(this).parent().find('div.waarschuwing').html('Dit is een verplicht veld');
+	}
+});
 $('.hasSuggestions').each(function(index, tag){
 	$('#'+tag.id).autocomplete(
 		FieldSuggestions[tag.id.substring(6)],
@@ -856,6 +870,12 @@ class TextareaField extends TextField {
 		echo $this->getFieldSuggestions();
 		echo '</div>';
 	}
+
+}
+
+class RequiredTextareaField extends TextareaField {
+
+	public $notnull = true;
 
 }
 

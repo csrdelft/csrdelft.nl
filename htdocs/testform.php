@@ -15,7 +15,7 @@ class TestFormulierContent extends TemplateView implements Validator {
 
 		$fields[] = new Subkopje('Studie:');
 		$fields[] = new StudieField('studie', $model->default, 'Studie');
-		$fields[] = new TextareaField('opmerking1', $model->default, 'Opmerking1');
+		$fields[] = new RequiredTextareaField('opmerking1', $model->default, 'Opmerking1');
 		$fields['pre'] = new UbbPreviewField('opmerking', $model->default, 'previewOnEnter:');
 		$fields['pre']->previewOnEnter();
 		$fields[] = new UidField('uidtest', '0436', 'Wie ben jij?');
@@ -26,6 +26,10 @@ class TestFormulierContent extends TemplateView implements Validator {
 		$fields[] = new LidField('lid2test', 'Gra', 'Wat is je naam?', 'nobodies');
 
 		$this->form = new Formulier('test-form', '/testform.php', $fields);
+
+		$properties = $this->form->getValues(); // fetch POST values
+		$model->default = $properties['studie'];
+		$model->uid = $properties['uidtest'];
 	}
 
 	public function getTitel() {
@@ -36,6 +40,7 @@ class TestFormulierContent extends TemplateView implements Validator {
 		//gebruik smarty optioneel
 		echo '<h1>Testformulier</h1>Wat autoaanvullen dingen testen, net als hippe ajax-inline-bewerkzaken...';
 		$this->form->view();
+		pr($this->getModel()); // TEST
 	}
 
 	public function validate() {
@@ -43,7 +48,6 @@ class TestFormulierContent extends TemplateView implements Validator {
 	}
 
 	public function getError() {
-		pr($this->form->getFields()); //TEST
 		return $this->form->getError();
 	}
 
@@ -63,11 +67,11 @@ $model->uid = '0436';
 /* start controller */
 
 $view = new TestFormulierContent($model);
-if (isPosted()) {
+if (isPosted()) { // fetches POST values itself
 	if ($view->validate()) {
-		echo 'VALID';
+		setMelding('Save to DB here', 1);
 	} else {
-		setMelding($view->getError());
+		setMelding($view->getError(), -1);
 	}
 }
 
