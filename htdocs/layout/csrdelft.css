@@ -531,16 +531,16 @@ table.query_table tr:nth-child(odd) {
 }
 table.query_table thead th {
 	width: 150px !important;
-	height: 25px !important;
+	height: 20px !important;
 	background-color: #FAFAFA !important;
 	font-weight: bold !important;
 	padding: 10px !important;
 	border-bottom: none !important;
 }
 table.query_table tbody tr td {
-	height: 15px;
-	width: 150px;
-	padding: 4px;
+	height: 20px;
+	width: 175px;
+	padding: 0px 10px;
 	vertical-align: middle;
 }
 
