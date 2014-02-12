@@ -63,7 +63,8 @@ function init_visitekaartjes() {
 }
 
 function init_links() {
-	$('a.popup').click(function(event) {
+	$('a.popup').unbind('click.popup');
+	$('a.popup').bind('click.popup', function() {
 		popup_open();
 	});
 	$('a.post').unbind('click.post');
