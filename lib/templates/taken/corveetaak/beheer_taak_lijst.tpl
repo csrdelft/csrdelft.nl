@@ -11,13 +11,13 @@
 {else}
 		<a href="{$instellingen->get('taken', 'url')}/bewerk/{$taak->getTaakId()}" title="Taak wijzigen" class="knop post popup">{icon get="pencil"}</a>
 	{if $taak->getCorveeRepetitieId()}
-		<a href="/corveerepetities/beheer/{$taak->getCorveeRepetitieId()}" title="Wijzig gekoppelde corveerepetitie" class="knop get popup">{icon get="calendar_edit"}</a>
+		<a href="/corveerepetities/beheer/{$taak->getCorveeRepetitieId()}" title="Wijzig gekoppelde corveerepetitie" class="knop popup">{icon get="calendar_edit"}</a>
 	{else}
 		<div style="display: inline-block; width: 28px;"></div>
 	{/if}
 {/if}
 {if !isset($maaltijd) and $taak->getMaaltijdId()}
-	<a href="/corveebeheer/maaltijd/{$taak->getMaaltijdId()}" title="Beheer maaltijdcorvee" class="knop get">{icon get="cup_link"}</a>
+	<a href="/corveebeheer/maaltijd/{$taak->getMaaltijdId()}" title="Beheer maaltijdcorvee" class="knop">{icon get="cup_link"}</a>
 {/if}
 	</td>
 	<td style="width: 50px; text-align: center;">

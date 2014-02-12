@@ -51,8 +51,10 @@ class BeheerMaaltijdenController extends AclController {
 	}
 
 	public function beheer($mid = null) {
+		$popup = null;
 		if (is_int($mid) && $mid > 0) {
 			$this->bewerk($mid);
+			$popup = $this->getContent();
 		}
 		$this->view = new BeheerMaaltijdenView(MaaltijdenModel::getAlleMaaltijden(), false, false, MaaltijdRepetitiesModel::getAlleRepetities(), $this->getContent());
 		$this->view = new csrdelft($this->getContent());
@@ -60,6 +62,7 @@ class BeheerMaaltijdenController extends AclController {
 		$this->view->addStylesheet('taken.css');
 		$this->view->addScript('autocomplete/jquery.autocomplete.min.js');
 		$this->view->addScript('taken.js');
+		$this->view->popup = $popup;
 	}
 
 	public function prullenbak() {

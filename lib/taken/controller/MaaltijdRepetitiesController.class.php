@@ -39,15 +39,18 @@ class MaaltijdRepetitiesController extends AclController {
 	}
 	
 	public function beheer($mrid=null) {
+		$popup = null;
 		if (is_int($mrid) && $mrid > 0) {
 			$this->bewerk($mrid);
+			$popup = $this->getContent();
 		}
-		$this->view = new MaaltijdRepetitiesView(MaaltijdRepetitiesModel::getAlleRepetities(), $this->getContent());
+		$this->view = new MaaltijdRepetitiesView(MaaltijdRepetitiesModel::getAlleRepetities());
 		$this->view = new csrdelft($this->getContent());
 		$this->view->addStylesheet('js/autocomplete/jquery.autocomplete.css');
 		$this->view->addStylesheet('taken.css');
 		$this->view->addScript('autocomplete/jquery.autocomplete.min.js');
 		$this->view->addScript('taken.js');
+		$this->view->popup = $popup;
 	}
 	
 	public function nieuw() {
@@ -89,10 +92,10 @@ class MaaltijdRepetitiesController extends AclController {
 		$this->opslaan($mrid);
 		if ($this->view instanceof MaaltijdRepetitiesView) { // opslaan succesvol
 			$verplaats = isset($_POST['verplaats_dag']);
-			$updated_aanmeldingen = MaaltijdenModel::updateRepetitieMaaltijden($this->view->getRepetitie(), $verplaats);
+			$updated_aanmeldingen = MaaltijdenModel::updateRepetitieMaaltijden($this->view->getModel(), $verplaats);
 			setMelding($updated_aanmeldingen[0] .' maaltijd'. ($updated_aanmeldingen[0] !== 1 ? 'en' : '') .' bijgewerkt'. ($verplaats ? ' en eventueel verplaatst.': '.'), 1);
 			if ($updated_aanmeldingen[1] > 0) {
-				setMelding($updated_aanmeldingen[1] .' aanmelding'. ($updated_aanmeldingen[1] !== 1 ? 'en' : '') .' verwijderd vanwege aanmeldrestrictie: '. $this->view->getRepetitie()->getAbonnementFilter(), 2);
+				setMelding($updated_aanmeldingen[1] .' aanmelding'. ($updated_aanmeldingen[1] !== 1 ? 'en' : '') .' verwijderd vanwege aanmeldrestrictie: '. $this->view->getModel()->getAbonnementFilter(), 2);
 			}
 		}
 	}

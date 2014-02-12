@@ -735,7 +735,7 @@ input, textarea, select{
 .Formulier label .required{
 	color: red;
 }
-.Formulier input, .Formulier textarea, .Formulier select{
+.Formulier input, .Formulier textarea{
 	padding: 2px;
 }
 .Formulier textarea, .Formulier input[type="text"]{
@@ -784,8 +784,7 @@ input, textarea, select{
 	text-align: right;
 }
 .Formulier input.VinkField {
-	width: auto;
-	margin-top: 4px;
+	margin-top: 4px !important;
 }
 .Formulier .metFouten{
 	background-color: #FFC3CE;

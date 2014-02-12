@@ -51,8 +51,10 @@ class BeheerTakenController extends AclController {
 	}
 	
 	public function beheer($tid=null, $mid=null) {
+		$popup = null;
 		if (is_int($tid) && $tid > 0) {
 			$this->bewerk($tid);
+			$popup = $this->getContent();
 		}
 		elseif (is_int($mid) && $mid > 0) {
 			$maaltijd = MaaltijdenModel::getMaaltijd($mid, true);
@@ -62,12 +64,13 @@ class BeheerTakenController extends AclController {
 			$taken = TakenModel::getAlleTaken();
 			$maaltijd = null;
 		}
-		$this->view = new BeheerTakenView($taken, $maaltijd, false, CorveeRepetitiesModel::getAlleRepetities(), $this->getContent());
+		$this->view = new BeheerTakenView($taken, $maaltijd, false, CorveeRepetitiesModel::getAlleRepetities());
 		$this->view = new csrdelft($this->getContent());
 		$this->view->addStylesheet('js/autocomplete/jquery.autocomplete.css');
 		$this->view->addStylesheet('taken.css');
 		$this->view->addScript('autocomplete/jquery.autocomplete.min.js');
 		$this->view->addScript('taken.js');
+		$this->view->popup = $popup;
 	}
 	
 	public function maaltijd($mid) {

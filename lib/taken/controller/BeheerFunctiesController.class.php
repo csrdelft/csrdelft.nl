@@ -42,17 +42,20 @@ class BeheerFunctiesController extends AclController {
 	}
 	
 	public function beheer($fid=null) {
+		$popup = null;
 		if (is_int($fid) && $fid > 0) {
 			$this->bewerk($fid);
+			$popup = $this->getContent();
 		}
 		$functies = FunctiesModel::getAlleFuncties();
 		KwalificatiesModel::loadKwalificatiesVoorFuncties($functies);
-		$this->view = new BeheerFunctiesView($functies, $this->getContent());
+		$this->view = new BeheerFunctiesView($functies);
 		$this->view = new csrdelft($this->getContent());
 		$this->view->addStylesheet('js/autocomplete/jquery.autocomplete.css');
 		$this->view->addStylesheet('taken.css');
 		$this->view->addScript('autocomplete/jquery.autocomplete.min.js');
 		$this->view->addScript('taken.js');
+		$this->view->popup = $popup;
 	}
 	
 	public function nieuw() {

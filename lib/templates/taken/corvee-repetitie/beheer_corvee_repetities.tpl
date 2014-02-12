@@ -4,7 +4,7 @@
 <p>
 Op deze pagina kunt u corveerepetities aanmaken, wijzigen en verwijderen{if isset($maaltijdrepetitie)} behorend bij de maaltijdrepetitie:<br />
 <b>{$maaltijdrepetitie->getStandaardTitel()}</b>
-<a href="/maaltijdenrepetities/beheer/{$maaltijdrepetitie->getMaaltijdRepetitieId()}" title="Wijzig gekoppelde maaltijd" class="knop get">{icon get="calendar_edit"}</a>
+<a href="/maaltijdenrepetities/beheer/{$maaltijdrepetitie->getMaaltijdRepetitieId()}" title="Wijzig gekoppelde maaltijd" class="knop popup">{icon get="calendar_edit"}</a>
 </p><p>
 {else}.
 {/if}

@@ -17,7 +17,7 @@
 		{elseif $maaltijd->getIsVerwijderd()}
 			{icon get="bin" title="Maaltijd is verwijderd"}
 		{else}
-			<a href="/maaltijdenbeheer/beheer/{$maaltijd->getMaaltijdId()}" title="Wijzig gekoppelde maaltijd" class="knop get">{icon get="cup_edit"}</a>
+			<a href="/maaltijdenbeheer/beheer/{$maaltijd->getMaaltijdId()}" title="Wijzig gekoppelde maaltijd" class="knop popup">{icon get="cup_edit"}</a>
 		{/if}
 			<b>{$maaltijd->getTitel()} op {$maaltijd->getDatum()|date_format:"%A %e %B"} om {$maaltijd->getTijd()|date_format:"%H:%M"}</b>
 		</p>
@@ -54,7 +54,7 @@
 <br />
 {if !$prullenbak and !isset($maaltijd)}
 	{*<a href="/corveebeheer/indelen" title="Leden automatisch indelen voor taken" class="knop disabled">{icon get="date"} Automatisch indelen</a>*}
-	<a href="/corveebeheer/herinneren" title="Verstuur herinneringen" class="knop get popup">{icon get="clock"} Herinneringen versturen</a>
+	<a href="/corveebeheer/herinneren" title="Verstuur herinneringen" class="knop">{icon get="clock"} Herinneringen versturen</a>
 {/if}
 <table id="taken-tabel" class="taken-tabel">
 {foreach name="tabel" from=$taken key=datum item=perdatum}

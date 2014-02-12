@@ -4,7 +4,7 @@
 <tr id="repetitie-row-{$repetitie->getMaaltijdRepetitieId()}">
 	<td>{strip}
 		<a href="{$instellingen->get('taken', 'url')}/bewerk/{$repetitie->getMaaltijdRepetitieId()}" title="Maaltijdrepetitie wijzigen" class="knop post popup">{icon get="pencil"}</a>
-		<a href="/corveerepetities/maaltijd/{$repetitie->getMaaltijdRepetitieId()}" title="Corveebeheer maaltijdrepetitie" class="knop get popup">{icon get="chart_organisation"}</a>
+		<a href="/corveerepetities/maaltijd/{$repetitie->getMaaltijdRepetitieId()}" title="Corveebeheer maaltijdrepetitie" class="knop popup">{icon get="chart_organisation"}</a>
 	</td>{/strip}
 	<td>{$repetitie->getStandaardTitel()}</td>
 	<td>{$repetitie->getDagVanDeWeekText()}</td>

@@ -17,6 +17,7 @@ class csrdelft extends TemplateView {
 	 * De normale layout heeft een array van SimpleHTML als zijkolom
 	 */
 	public $zijkolom = array();
+	public $popup;
 
 	function __construct(View $body, $layout = 'normaal') {
 		parent::__construct();
@@ -216,6 +217,7 @@ class csrdelft extends TemplateView {
 					}
 				}
 				$this->smarty->assign('zijkolom', $this->zijkolom);
+				$this->smarty->assign('popup', $this->popup);
 
 				require_once('MVC/view/MenuView.class.php');
 				$this->smarty->assign('mainmenu', new MenuView('main', 0));

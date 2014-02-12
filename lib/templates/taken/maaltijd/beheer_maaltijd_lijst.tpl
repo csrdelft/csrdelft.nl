@@ -14,12 +14,12 @@
 {else}
 		<a href="{$instellingen->get('taken', 'url')}/bewerk/{$maaltijd->getMaaltijdId()}" title="Maaltijd wijzigen" class="knop post popup">{icon get="pencil"}</a>
 	{if $maaltijd->getMaaltijdRepetitieId()}
-		<a href="/maaltijdenrepetities/beheer/{$maaltijd->getMaaltijdRepetitieId()}" title="Wijzig gekoppelde maaltijdrepetitie" class="knop get popup">{icon get="calendar_edit"}</a>
+		<a href="/maaltijdenrepetities/beheer/{$maaltijd->getMaaltijdRepetitieId()}" title="Wijzig gekoppelde maaltijdrepetitie" class="knop popup">{icon get="calendar_edit"}</a>
 	{else}
 		<div style="display: inline-block; width: 28px;"></div>
 	{/if}
 {/if}
-		<a href="/corveebeheer/maaltijd/{$maaltijd->getMaaltijdId()}" title="Beheer maaltijdcorvee" class="knop get">{icon get="chart_organisation"}</a>
+		<a href="/corveebeheer/maaltijd/{$maaltijd->getMaaltijdId()}" title="Beheer maaltijdcorvee" class="knop">{icon get="chart_organisation"}</a>
 	</td>
 	<td>{$maaltijd->getDatum()|date_format:"%a %e %b"}</td>
 	<td>{$maaltijd->getTitel()}</td>

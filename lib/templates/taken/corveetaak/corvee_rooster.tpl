@@ -4,7 +4,7 @@ corvee_rooster.tpl	|	P.W.G. Brussee (brussee@live.nl)
 {strip}
 	{if isset($toonverleden) and $toonverleden}
 		<div style="float: right;">
-			<a href="{$instellingen->get('taken', 'url')}/verleden" title="Taken in het verleden tonen" class="knop get">{icon get="time"} Toon verleden</a>
+			<a href="{$instellingen->get('taken', 'url')}/verleden" title="Taken in het verleden tonen" class="knop">{icon get="time"} Toon verleden</a>
 		</div>
 	{/if}
 	<table id="taken-tabel" class="taken-tabel">

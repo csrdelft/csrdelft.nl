@@ -41,9 +41,11 @@ class CorveeRepetitiesController extends AclController {
 	}
 	
 	public function beheer($crid=null, $mrid=null) {
+		$popup = null;
 		$maaltijdrepetitie = null;
 		if (is_int($crid) && $crid > 0) {
 			$this->bewerk($crid);
+			$popup = $this->getContent();
 			$repetities = CorveeRepetitiesModel::getAlleRepetities();
 		}
 		elseif (is_int($mrid) && $mrid > 0) {
@@ -53,10 +55,11 @@ class CorveeRepetitiesController extends AclController {
 		else {
 			$repetities = CorveeRepetitiesModel::getAlleRepetities();
 		}
-		$this->view = new CorveeRepetitiesView($repetities, $maaltijdrepetitie, $this->getContent());
+		$this->view = new CorveeRepetitiesView($repetities, $maaltijdrepetitie);
 		$this->view = new csrdelft($this->getContent());
 		$this->view->addStylesheet('taken.css');
 		$this->view->addScript('taken.js');
+		$this->view->popup = $popup;
 	}
 	
 	public function maaltijd($mrid) {
@@ -107,7 +110,7 @@ class CorveeRepetitiesController extends AclController {
 		$this->opslaan($crid);
 		if ($this->view instanceof CorveeRepetitiesView) { // opslaan succesvol
 			$verplaats = isset($_POST['verplaats_dag']);
-			$aantal = TakenModel::updateRepetitieTaken($this->view->getRepetitie(), $verplaats);
+			$aantal = TakenModel::updateRepetitieTaken($this->view->getModel(), $verplaats);
 			if ($aantal['update'] < $aantal['day']) {
 				$aantal['update'] = $aantal['day'];
 			}
