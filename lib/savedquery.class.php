@@ -176,7 +176,7 @@ class SavedQueryContent extends TemplateView {
 				$return.='</tr>';
 			}
 			$return.='</tbody></table><a class="knop" style="float:left;" onclick="' . <<<JS
-$('#{$id} tbody').animate({max-height: '+=300'}, 800, function() {});.
+$('#{$id} tbody').animate({'max-height': '+=300'}, 800, function() {});.
 JS;
 			$return.='" title="Vergroot de lijst"><strong>↑↓</strong></a>';
 		} else {

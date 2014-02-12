@@ -509,6 +509,7 @@ pre#pubcie_debug{
 }
 
 table.query_table {
+	float: left;
 	margin: 10px;
 	padding: 0px;
 	border-collapse: collapse;
