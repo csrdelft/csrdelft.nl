@@ -510,29 +510,26 @@ pre#pubcie_debug{
 
 table.query_table{
 	margin: 10px;
-	padding: 0;	border-collapse: collapse;
+	padding: 0px;
+	border-collapse: collapse;
 	border: 1px solid black;
 }
-
 table.query_table tbody{
-	max-height: 250px;
+	height: 250px;
 	overflow: auto;
 }
-
-table.query_table td{
-	margin: 0;
-	padding: 4px;
-	padding-left: 10px; padding-right: 10px;
-	background-color: #bbbbbb;
+table.query_table tr {
+	height: 25px;
+	background-color: #EBEBEB;
 }
-
-table.query_table th{
-	margin: 0; padding: 4px;
-	padding-left: 10px; padding-right: 10px;
-	border-top: 1px solid #000;
-	border-bottom: 1px solid #000;
-	background-color: #3262d7;
-	color: #fff;
+table.query_table tr:nth-child(even) {
+	background-color: #FAFAFA;
+}
+table.query_table th {
+	background-color: #FAFAFA;
+	font-weight: bold;
+	padding: 10px;
+	border-bottom: 2px solid #FFFFFF;
 }
 
 .youtubeVideo{

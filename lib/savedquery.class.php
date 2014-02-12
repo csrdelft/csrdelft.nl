@@ -161,22 +161,16 @@ class SavedQueryContent extends TemplateView {
 			$sq = $this->sq;
 			$return = $sq->getBeschrijving() . ' (' . $sq->count() . ' regels)<br /><table class="query_table">';
 
-			//table header
 			$return.='<thead><tr>';
 			foreach ($sq->getHeaders() as $kopje) {
 				$return.='<th>' . self::render_header($kopje) . '</th>';
 			}
 			$return.='</tr></thead><tbody>';
 
-			$rowColor = false;
 			foreach ($sq->getResult() as $rij) {
-				//kleurtjes omwisselen
-				$style = $rowColor ? 'style="background-color: #ccc;"' : '';
-				$rowColor = (!$rowColor);
-
 				$return.='<tr>';
 				foreach ($rij as $key => $veld) {
-					$return.='<td ' . $style . '>' . self::render_field($key, $veld) . '</td>';
+					$return.='<td>' . self::render_field($key, $veld) . '</td>';
 				}
 				$return.='</tr>';
 			}
