@@ -748,14 +748,14 @@ input, textarea, select{
 .Formulier .UBBpreview{
 	float: left;
 }
-.Formulier .UidField{
+.Formulier input.UidField{
 	width: 70px;
 }
 .Formulier .uidPreview, .Formulier .lidPreview{
 	display: inline;
 	padding-left: 10px;
 }
-.Formulier .LidField, .Formulier .RequiredLidField {
+.Formulier input.LidField, .Formulier input.RequiredLidField {
 	width: 160px;
 }
 .Formulier .KeuzeRondjeField {
@@ -764,11 +764,11 @@ input, textarea, select{
 .Formulier label.KeuzeRondjeField {
 	float: none;
 }
-.Formulier .IntField, .Formulier .FloatField {
+.Formulier input.IntField, .Formulier input.FloatField {
 	width: 40px;
 	text-align: right;
 }
-.Formulier .VinkField {
+.Formulier input.VinkField {
 	width: auto;
 	margin-top: 4px;
 }
