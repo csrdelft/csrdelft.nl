@@ -522,11 +522,11 @@ table.query_table tbody {
 	overflow: auto;
 	display: block;
 }
-table.query_table tbody tr {
-	background-color: #EBEBEB;
+table.query_table tr {
+	background-color: #ccc;
 }
-table.query_table tbody tr:nth-child(even) {
-	background-color: #FAFAFA;
+table.query_table tr:nth-child(odd) {
+	background-color: #eee;
 }
 table.query_table thead th {
 	width: auto !important;
@@ -537,7 +537,7 @@ table.query_table thead th {
 	border-bottom: none !important;
 }
 table.query_table tbody tr td {
-	height: 25px;
+	height: 15px;
 	padding: 2px;
 	vertical-align: middle;
 }
