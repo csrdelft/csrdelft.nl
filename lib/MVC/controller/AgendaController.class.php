@@ -22,7 +22,7 @@ class AgendaController extends AclController {
 	public function __construct($query) {
 		parent::__construct($query);
 		$this->model = new AgendaModel();
-		if (!parent::isPosted()) {
+		if (!$this->isPosted()) {
 			$this->acl = array(
 				'maand' => 'P_NOBODY',
 				'icalendar' => 'P_NOBODY',

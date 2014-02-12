@@ -12,7 +12,7 @@ class BeheerVoorkeurenController extends AclController {
 
 	public function __construct($query) {
 		parent::__construct($query);
-		if (!parent::isPosted()) {
+		if (!$this->isPosted()) {
 			$this->acl = array(
 				'beheer' => 'P_CORVEE_MOD'
 			);

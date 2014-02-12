@@ -6,6 +6,14 @@
 # -------------------------------------------------------------------
 
 /**
+ * Is the current request posted?
+ * @return boolean
+ */
+function isPosted() {
+	return filter_input(INPUT_SERVER, 'REQUEST_METHOD', FILTER_SANITIZE_STRING) === 'POST';
+}
+
+/**
  * @source http://stackoverflow.com/questions/834303/php-startswith-and-endswith-functions
  * @param string $haystack
  * @param string $needle

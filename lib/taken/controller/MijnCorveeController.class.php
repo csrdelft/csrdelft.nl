@@ -15,7 +15,7 @@ class MijnCorveeController extends AclController {
 
 	public function __construct($query) {
 		parent::__construct($query);
-		if (!parent::isPosted()) {
+		if (!$this->isPosted()) {
 			$this->acl = array(
 				'mijn' => 'P_CORVEE_IK',
 				'rooster' => 'P_CORVEE_IK'

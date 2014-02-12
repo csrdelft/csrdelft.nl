@@ -13,7 +13,7 @@ class MijnMaaltijdenController extends AclController {
 
 	public function __construct($query) {
 		parent::__construct($query);
-		if (!parent::isPosted()) {
+		if (!$this->isPosted()) {
 			$this->acl = array(
 				'ketzer' => 'P_MAAL_IK',
 				'lijst' => 'P_MAAL_IK',
@@ -88,7 +88,7 @@ class MijnMaaltijdenController extends AclController {
 
 	public function aanmelden($mid) {
 		$aanmelding = AanmeldingenModel::aanmeldenVoorMaaltijd($mid, \LoginLid::instance()->getUid(), \LoginLid::instance()->getUid());
-		if (parent::isPosted()) {
+		if ($this->isPosted()) {
 			$this->view = new MijnMaaltijdenView($aanmelding->getMaaltijd(), $aanmelding);
 		} else {
 			require_once 'taken/view/MaaltijdKetzerView.class.php';
@@ -98,7 +98,7 @@ class MijnMaaltijdenController extends AclController {
 
 	public function afmelden($mid) {
 		$maaltijd = AanmeldingenModel::afmeldenDoorLid($mid, \LoginLid::instance()->getUid());
-		if (parent::isPosted()) {
+		if ($this->isPosted()) {
 			$this->view = new MijnMaaltijdenView($maaltijd);
 		} else {
 			require_once 'taken/view/MaaltijdKetzerView.class.php';

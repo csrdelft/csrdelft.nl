@@ -13,7 +13,7 @@ class MijnAbonnementenController extends AclController {
 
 	public function __construct($query) {
 		parent::__construct($query);
-		if (!parent::isPosted()) {
+		if (!$this->isPosted()) {
 			$this->acl = array(
 				'mijn' => 'P_MAAL_IK'
 			);

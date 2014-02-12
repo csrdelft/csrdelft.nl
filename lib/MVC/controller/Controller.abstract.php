@@ -80,7 +80,7 @@ abstract class Controller {
 	}
 
 	public function isPosted() {
-		return $_SERVER['REQUEST_METHOD'] === 'POST';
+		return isPosted();
 	}
 
 	public function isKvp() {
