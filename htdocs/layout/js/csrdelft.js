@@ -39,7 +39,7 @@ function init_buttons() {
 	$('button.spoiler').click(function() {
 		var button = $(this);
 		var content = button.next('div.spoiler-content');
-		content.toggle('slow', 'easeInOutBounce', function() {
+		content.toggle(1000, 'easeInOutCubic', function() {
 			if (content.is(':visible')) {
 				button.html('Toon verklapper');
 			}
