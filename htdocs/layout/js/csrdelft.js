@@ -41,10 +41,10 @@ function init_buttons() {
 		var content = button.next('div.spoiler-content');
 		content.toggle(1000, 'easeInOutCubic', function() {
 			if (content.is(':visible')) {
-				button.html('Toon verklapper');
+				button.html('Verberg verklapper');
 			}
 			else {
-				button.html('Verberg verklapper');
+				button.html('Toon verklapper');
 			}
 		});
 	});
