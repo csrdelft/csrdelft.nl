@@ -3,7 +3,7 @@
 *}
 {strip}
 <br />
-<div style=" border: 1px solid #A9A9A9;">
+<div id="suggesties" style="border: 1px solid #A9A9A9; ">
 <table class="taken-tabel" style="padding: 0px;">
 	<thead>
 		<tr>
@@ -23,8 +23,8 @@
 		</tr>
 	</thead>
 </table>
-<div id="scrollpane" style="height: 250px; overflow: auto;">
-	<table id="suggesties-tabel" class="taken-tabel" style="padding: 0px;">
+<div class="scrollpane" style="height: 250px;">
+	<table id="suggesties-tabel" class="taken-tabel" style="display: none;">
 		<tbody>
 		{foreach name="tabel" from=$suggesties key=uid item=suggestie}
 			<tr class="
@@ -77,7 +77,6 @@
 {/if}
 	>
 	<input type="checkbox" id="voorkeur" 
-
 {if !isset($voorkeurbaar) or !$voorkeurbaar}
 	disabled
 {else}
@@ -118,7 +117,7 @@
 </td><td rowspan="3" style="width: 25px;">
 	<br />
 	<a class="knop" onclick="
-		$('#scrollpane').animate({ldelim}height: '+=250'{rdelim}, 800, function() {ldelim}{rdelim});
+		$('.scrollpane').animate({ldelim}height: '+=250'{rdelim}, 800, function() {ldelim}{rdelim});
 	" title="Vergroot de lijst met suggesties"><strong>&uarr;&darr;</strong></a>
 </td></tr>
 <tr><td style="padding-left: 7px;">
@@ -138,3 +137,8 @@
 </td></tr>
 </table>
 {/strip}
+<script type="text/javascript">
+	$(document).ready(function() {ldelim}
+		$('#suggesties-tabel').show(1, taken_color_suggesties);
+	{rdelim});
+</script>

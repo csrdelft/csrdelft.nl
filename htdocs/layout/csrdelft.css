@@ -51,6 +51,8 @@ hr{
 .clear{	clear: both; }
 .verborgen{ display: none; }
 .handje{ cursor: pointer; }
+
+.scrollpane{ overflow: auto; }
 .small{ font-size: smaller; }
 .lichtgrijs{ color: #aaa; }
 ul.horizontal li{

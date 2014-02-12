@@ -20,7 +20,6 @@ class ToewijzenFormView extends TemplateView {
 		$this->_jong = (int) \Lichting::getJongsteLichting();
 
 		$fields[] = new LidField('lid_id', $taak->getLidId(), 'Naam of lidnummer', 'leden');
-		$fields[] = new SubmitResetCancel();
 
 		$this->_form = new Formulier('taken-taak-toewijzen-form', Instellingen::get('taken', 'url') . '/toewijzen/' . $this->_taak->getTaakId(), $fields);
 	}
@@ -60,8 +59,9 @@ class ToewijzenFormView extends TemplateView {
 		}
 
 		$lijst = $this->smarty->fetch('taken/corveetaak/suggesties_lijst.tpl');
-		$formFields[] = new HtmlComment($lijst);
-		$this->_form->addFields($formFields);
+		$fields[] = new HtmlComment($lijst);
+		$fields[] = new SubmitResetCancel();
+		$this->_form->addFields($fields);
 
 		$this->smarty->assign('form', $this->_form);
 		$this->smarty->display('taken/popup_form.tpl');

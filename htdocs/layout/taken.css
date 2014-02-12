@@ -131,6 +131,9 @@ tr.taak-datum-head th, tr.taak-datum-summary th {
 #taak-datum-head-first th {
 	cursor: default;
 }
+#suggesties-tabel {
+	padding: 0px;
+}
 #suggesties-tabel tr:hover, tr.taak-datum-summary:hover th {
 	background-color: #DDEEFF !important;
 }

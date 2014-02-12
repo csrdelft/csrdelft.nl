@@ -69,6 +69,9 @@ function taken_toggle_suggestie(soort, show) {
 			$(this).show();
 		}
 	});
+	taken_color_suggesties();
+}
+function taken_color_suggesties() {
 	$('#suggesties-tabel tr:visible:odd').css('background-color', '#FAFAFA');
 	$('#suggesties-tabel tr:visible:even').css('background-color', '#EBEBEB');
 }
