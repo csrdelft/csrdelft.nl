@@ -7,10 +7,6 @@ a.external {
 	background-image: url('http://plaetjes.csrdelft.nl/layout/external-link-blue.png');
 }
 
-textarea{
-	border: 1px solid #A9A9A9;
-}
-input, select{ border: 1px solid #A9A9A9; }
 hr{
 	background-color: black;
 }
