@@ -37,14 +37,16 @@ function htmlDecode(input) {
 
 function init_buttons() {
 	$('button.spoiler').click(function() {
-		var content = $(this).next('div.spoiler-content');
-		content.toggle('fast');
-		if ($(content).is(':visible')) {
-			$(this).html('Verberg verklapper');
-		}
-		else {
-			$(this).html('Toon verklapper');
-		}
+		var button = $(this);
+		var content = button.next('div.spoiler-content');
+		content.toggle('fast', 'easeInOutBounce', function() {
+			if (content.is(':visible')) {
+				button.html('Toon verklapper');
+			}
+			else {
+				button.html('Verberg verklapper');
+			}
+		});
 	});
 }
 
