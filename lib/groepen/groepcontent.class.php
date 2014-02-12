@@ -325,7 +325,7 @@ class GroepStatsContent extends TemplateView {
 			if (!is_array($stat)) {
 				continue;
 			}
-			echo '<tr><th colspan="2">' . $title . '</th></tr>';
+			echo '<thead><tr><th colspan="2">' . $title . '</th></tr></thead><tbody>';
 			$rowColor = false;
 			foreach ($stat as $row) {
 				//kleurtjes omwisselen
@@ -342,7 +342,7 @@ class GroepStatsContent extends TemplateView {
 				echo '</tr>';
 			}
 		}
-		echo '</table>';
+		echo '</tbody></table>';
 	}
 
 }

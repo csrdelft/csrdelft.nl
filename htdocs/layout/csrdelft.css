@@ -515,7 +515,7 @@ table.query_table{
 }
 
 table.query_table tbody{
-	height: 300px;
+	max-height: 300px;
 	overflow: auto;
 }
 
