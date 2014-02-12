@@ -10,7 +10,7 @@
  * @return boolean
  */
 function isPosted() {
-	return filter_input(INPUT_SERVER, 'REQUEST_METHOD', FILTER_SANITIZE_STRING) === 'POST';
+	return $_SERVER['REQUEST_METHOD'] === 'POST';
 }
 
 /**
