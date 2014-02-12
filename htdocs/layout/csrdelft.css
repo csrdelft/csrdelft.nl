@@ -518,26 +518,26 @@ table.query_table tbody{
 	max-height: 300px;
 	overflow: auto;
 }
+thead > tr, tbody{
+    display: block;
+}
 table.query_table tbody tr {
-	height: 25px;
 	background-color: #EBEBEB;
 }
 table.query_table tbody tr:nth-child(even) {
 	background-color: #FAFAFA;
 }
 table.query_table thead th {
-	background-color: #FAFAFA;
-	font-weight: bold;
-	padding: 10px;
-	border-bottom: 2px solid #FFFFFF;
+	width: auto !important;
+	background-color: #FAFAFA !important;
+	font-weight: bold !important;
+	padding: 10px !important;
+	border-bottom: 2px solid #FFFFFF !important;
 }
-thead > tr, tbody{
-    display: block;
-}
-
 table.query_table tbody tr td {
-	padding: 2px 7px;
-	vertical-align: text-bottom;
+	height: 25px;
+	padding: 2px;
+	vertical-align: middle;
 }
 
 .youtubeVideo{
