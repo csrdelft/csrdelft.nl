@@ -709,7 +709,7 @@ HTML;
 
 	public function ubb_spoiler() {
 		$content = $this->parseArray(array('[/spoiler]'), array());
-		return '<div class="spoiler_button"><button>Toon/verberg spoiler</button></div><div class="spoiler">' . $content . '</div>';
+		return '<button class="spoiler">Toon verklapper</button><div class="spoiler-content">' . $content . '</div>';
 	}
 
 	function ubb_1337() {

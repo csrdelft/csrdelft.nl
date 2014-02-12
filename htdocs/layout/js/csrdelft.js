@@ -6,6 +6,7 @@ var FieldSuggestions = [];
 
 $(document).ready(function() {
 	init_links();
+	init_buttons();
 	init_forms();
 	init_visitekaartjes();
 	ShowMenu(menu_active);
@@ -32,6 +33,19 @@ function htmlDecode(input) {
 	var div = document.createElement('div');
 	div.innerHTML = input;
 	return div.childNodes.length === 0 ? '' : div.childNodes[0].nodeValue;
+}
+
+function init_buttons() {
+	$('button.spoiler').click(function() {
+		var content = $(this).next('div.spoiler-content');
+		content.toggle('fast');
+		if ($(content).is(':visible')) {
+			$(this).html('Verberg verklapper');
+		}
+		else {
+			$(this).html('Toon verklapper');
+		}
+	});
 }
 
 function init_visitekaartjes() {
@@ -578,12 +592,3 @@ function importAgenda(id) {
 	http.send(null);
 	return null;
 }
-
-/* deze js moet wel hier komen, maar op een andere manier blijkbaar
- //javascript voor UBB tag [spoiler]verborgen tekst[/spoiler]
- $(document).ready(function() {
- $(".spoiler_button").click(function spoiler_toggle() {
- $(this).next(".spoiler").toggle('fast');
- });
- });
- */
