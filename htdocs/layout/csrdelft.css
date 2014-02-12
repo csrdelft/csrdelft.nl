@@ -517,7 +517,6 @@ table.query_table {
 }
 table.query_table thead {
 	display: block;
-	background-color: #FAFAFA !important;
 }
 table.query_table tbody {
 	max-height: 300px;
@@ -532,14 +531,15 @@ table.query_table tr:nth-child(odd) {
 	background-color: #EBEBEB;
 }
 table.query_table thead th {
-	width: 165px !important;
+	width: 170px !important;
 	font-weight: bold !important;
 	padding: 10px !important;
 	border-bottom: none !important;
+	background-color: #FAFAFA !important;
 }
 table.query_table tbody tr td {
 	width: 175px;
-	padding: 0px 10px;
+	padding: 5px 10px;
 	vertical-align: middle;
 }
 
