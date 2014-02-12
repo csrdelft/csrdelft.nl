@@ -508,16 +508,19 @@ pre#pubcie_debug{
 	z-index: 100;
 }
 
-table.query_table{
+table.query_table {
 	margin: 10px;
 	padding: 0px;
 	border-collapse: collapse;
 	border: 1px solid black;
 }
-table.query_table tbody{
+table.query_table thead {
+	display: block;
+}
+table.query_table tbody {
 	max-height: 300px;
 	overflow: auto;
-	display: block
+	display: block;
 }
 table.query_table tbody tr {
 	background-color: #EBEBEB;
@@ -527,10 +530,11 @@ table.query_table tbody tr:nth-child(even) {
 }
 table.query_table thead th {
 	width: auto !important;
+	height: auto !important;
 	background-color: #FAFAFA !important;
 	font-weight: bold !important;
 	padding: 10px !important;
-	border-bottom: 2px solid #FFFFFF !important;
+	border-bottom: none !important;
 }
 table.query_table tbody tr td {
 	height: 25px;
