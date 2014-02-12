@@ -275,7 +275,7 @@ class ProfielBewerken extends Profiel {
 		}
 
 		$form[] = new Subkopje('Adres:');
-		$form[] = new RequiredTextField('adres', $profiel['adres'], 'Straatnaam', 100);
+		$form[] = new RequiredTextField('adres', $profiel['adres'], 'Straatnaam + Huisnummer', 100);
 		$form[] = new RequiredTextField('postcode', $profiel['postcode'], 'Postcode', 20);
 		$form[] = new RequiredTextField('woonplaats', $profiel['woonplaats'], 'Woonplaats', 50);
 		$form[] = new RequiredLandField('land', $profiel['land'], 'Land');
