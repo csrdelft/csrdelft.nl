@@ -14,7 +14,7 @@ if ($loginlid->instance()->getUid() == 'x999') {
 		$bericht = '<h3>Gala is vol</h3><p>Helaas, er zijn inmiddels 100 inschrijvingen voor het gala, daarom is de inschrijving nu gesloten.</p>';
 		$ingelogd = false;
 	}
-	if ($_POST) {
+	if ($_POST && false) {
 		$data = $_POST;
 		$dies->setData($data['naamDate'], $data['eetZelf'], $data['eetDate'], $data['allerZelf'], $data['allerDate'], $data['date18']);
 		$bericht = '<h3>Aanmelding succesvol opgeslagen</h3>';
@@ -31,6 +31,7 @@ if ($loginlid->instance()->getUid() == 'x999') {
 		$data['date18'] = 0;
 	}
 }
+$ingelogd = false;
 ?>
 <html>
 	<head>
@@ -123,9 +124,7 @@ if ($loginlid->instance()->getUid() == 'x999') {
 				} else {
 ?>
 					<h4>Aanmelding gala 21 februari 2014</h4>
-					<h2>U bent niet ingelogd</h2>
-					<p>Als u lid bent van C.S.R. Delft dan dient u eerst in te loggen op de webstek. Daarna kan u zich aanmelden voor het gala.</p>
-					<p>Als u geen lid bent van C.S.R. Delft maar toch naar het gala wilt dan verzoeken wij u contact op te nemen met ons galadatingbureau 'Onder de Panne'. Dit kan u doen door naar <a href="http://www.sonnenvanck.com/onderdepanne2014">de site</a> te gaan of te mailen naar <a href="mailto:onderdepanne@sonnenvanck.com">onderdepanne@sonnenvanck.com</a>.</p>
+					<p>De inschrijving voor het gala is gesloten, wijzigingen doorgeven is ook niet meer mogelijk</p>
 <?php
 				}
 ?>
