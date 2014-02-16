@@ -771,10 +771,10 @@ class ProfielVoorkeur extends Profiel {
 		require_once('voorkeur/lidvoorkeur.class.php');
 		$lidvoorkeur = new Lidvoorkeur($this->lid->getUid());
 		$commissies = $lidvoorkeur->getCommissies();
-		$voorkeur = $lidvoorkeur->getVoorkeur();
+		$voorkeuren = $lidvoorkeur->getVoorkeur();
 		//status-select is eerste veld omdat die bij opslaan als eerste uitgelezen moet worden.
-		foreach ($commissies as $id => $com) {
-			$form[] = new SelectField($id, $this->getVoorkeur($voorkeur, $id), $com, $opties);
+		foreach ($commissies as $id => $comm) {
+			$form[] = new SelectField('comm' . $id, $this->getVoorkeur($voorkeuren, $id), $comm, $opties);
 		}
 
 		$form[] = new TextareaField('lidOpmerking', $lidvoorkeur->getLidOpmerking(), 'Vul hier je eventuele voorkeur voor functie in, of andere opmerkingen');
@@ -791,15 +791,18 @@ class ProfielVoorkeur extends Profiel {
 	public function save() {
 		//relevante gegevens uit velden verwerken
 		$lidvoorkeur = new Lidvoorkeur($this->lid->getUid());
-		foreach ($this->form->getFields() as $field) {
-			if ($field instanceof InputField) {
+		if ($this->form->validate()) {
+			foreach ($this->form->getValues() as $fieldname => $value) {
 				//aan de hand van status bepalen welke POSTed velden worden opgeslagen van het formulier
-				if ($field->getName() == 'lidOpmerking') {
-					$lidvoorkeur->setLidOpmerking($field->getValue());
+				if ($fieldname == 'lidOpmerking') {
+					$lidvoorkeur->setLidOpmerking($value);
 				} else {
-					$lidvoorkeur->setCommissieVoorkeur($field->getName(), $field->getValue());
+					$lidvoorkeur->setCommissieVoorkeur(substr($fieldname, 4), $value);
 				}
 			}
+			return true;
+		} else {
+			return false;
 		}
 	}
 
@@ -824,10 +827,6 @@ class ProfielVoorkeur extends Profiel {
 			return $voorkeur[$id];
 		}
 		return 0;
-	}
-
-	public function validate() {
-		return true;
 	}
 
 }

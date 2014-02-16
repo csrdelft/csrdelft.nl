@@ -17,10 +17,10 @@ class Lidvoorkeur {
 
 	public function setCommissieVoorkeur($cid, $voorkeur) {
 		$db = MySql::instance();
-		$query = 'DELETE FROM voorkeurVoorkeur WHERE uid =' . $this->uid . ' AND cid = ' . $cid;
+		$query = 'DELETE FROM voorkeurVoorkeur WHERE uid =\'' . $this->uid . '\' AND cid = ' . $cid;
 		$db->query($query);
 		$query = 'INSERT INTO `voorkeurVoorkeur` VALUES ("'
-				. $this->uid . '",'
+				. $this->uid . '", '
 				. $cid . ', 1, '
 				. $voorkeur . ', CURRENT_TIMESTAMP )';
 		$db->query($query);
@@ -39,7 +39,7 @@ class Lidvoorkeur {
 
 	public function getVoorkeur() {
 		$db = MySql::instance();
-		$query = 'SELECT * FROM voorkeurVoorkeur WHERE actief = 1 AND uid =' . $this->uid;
+		$query = 'SELECT * FROM voorkeurVoorkeur WHERE actief = 1 AND uid =\'' . $this->uid . '\'';
 		$result = $db->select($query);
 		$res = array();
 		while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
@@ -50,7 +50,7 @@ class Lidvoorkeur {
 
 	public function getLidOpmerking() {
 		$db = MySql::instance();
-		$query = 'SELECT lidOpmerking FROM voorkeurOpmerking WHERE uid =' . $this->uid;
+		$query = 'SELECT lidOpmerking FROM voorkeurOpmerking WHERE uid =\'' . $this->uid . '\'';
 		$result = $db->select($query);
 		$res = '';
 		if (mysql_num_rows($result) == 0)
@@ -64,13 +64,13 @@ class Lidvoorkeur {
 
 	public function setLidOpmerking($opmerking) {
 		$db = MySql::instance();
-		$query = 'UPDATE voorkeurOpmerking Set lidOpmerking = "' . $opmerking . '" WHERE uid = ' . $this->uid;
+		$query = 'UPDATE voorkeurOpmerking Set lidOpmerking = "' . $opmerking . '" WHERE uid = \'' . $this->uid . '\'';
 		$db->query($query);
 	}
 
 	public function getPraesesOpmerking() {
 		$db = MySql::instance();
-		$query = 'SELECT praesesOpmerking FROM voorkeurOpmerking WHERE uid =' . $this->uid;
+		$query = 'SELECT praesesOpmerking FROM voorkeurOpmerking WHERE uid =\'' . $this->uid . '\'';
 		$result = $db->select($query);
 		$res = '';
 		if (mysql_num_rows($result) == 0)
@@ -84,7 +84,7 @@ class Lidvoorkeur {
 
 	public function setPraesesOpmerking($opmerking) {
 		$db = MySql::instance();
-		$query = 'UPDATE voorkeurOpmerking Set praesesOpmerking = "' . $opmerking . '" WHERE uid = ' . $this->uid;
+		$query = 'UPDATE voorkeurOpmerking Set praesesOpmerking = "' . $opmerking . '" WHERE uid = \'' . $this->uid . '\'';
 		$db->query($query);
 	}
 

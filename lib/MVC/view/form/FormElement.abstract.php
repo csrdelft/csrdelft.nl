@@ -98,7 +98,6 @@ abstract class InputField extends FormElement implements Validator {
 
 	public function __construct($name, $value, $description = null, $model = null) {
 		parent::__construct($model);
-
 		$this->name = $name;
 		if ($this->isPosted()) {
 			$this->value = $this->getValue();

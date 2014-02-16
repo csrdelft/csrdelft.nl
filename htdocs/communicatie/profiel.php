@@ -21,8 +21,7 @@ require_once 'lid/profiel.class.php';
 
 if (isset($_GET['uid'])) {
 	$uid = $_GET['uid'];
-}
-else {
+} else {
 	$uid = $loginlid->getUid();
 }
 
@@ -32,12 +31,10 @@ if (isset($_GET['a'])) {
 	//is er een status opgegeven
 	if (isset($_GET['s'])) {
 		$status = $_GET['s'];
-	}
-	else {
+	} else {
 		$status = null;
 	}
-}
-else {
+} else {
 	//default-actie.
 	$actie = 'view';
 }
@@ -47,8 +44,7 @@ if (!($loginlid->hasPermission('P_LEDEN_READ') or $loginlid->hasPermission('P_OU
 	require_once 'paginacontent.class.php';
 	$midden = new PaginaContent(new Pagina('geentoegang'));
 	$midden->setActie('bekijken');
-}
-else {
+} else {
 	require_once 'lid/profielcontent.class.php';
 	require_once 'lid/profiel.class.php';
 
@@ -61,12 +57,10 @@ else {
 				if ($profiel->validate() AND $profiel->save()) {
 					header('location: ' . CSR_ROOT . 'communicatie/profiel/' . $uid);
 					exit;
-				}
-				else {
+				} else {
 					$midden = new ProfielEditContent($profiel, $actie);
 				}
-			}
-			else {
+			} else {
 				$midden = new ProfielContent(LidCache::getLid($uid));
 			}
 			break;
@@ -74,8 +68,8 @@ else {
 			//maak van een standaard statusstring van de input
 			$status = 'S_' . strtoupper($status);
 			if (!
-				($loginlid->hasPermission('P_ADMIN,P_LEDEN_MOD') OR
-				($status == 'S_NOVIET' AND $loginlid->hasPermission('groep:novcie')))
+					($loginlid->hasPermission('P_ADMIN,P_LEDEN_MOD') OR
+					($status == 'S_NOVIET' AND $loginlid->hasPermission('groep:novcie')))
 			) {
 
 				// nieuwe leden mogen worden aangemaakt door P_ADMIN,P_LEDEN_MOD,
@@ -88,13 +82,11 @@ else {
 
 				if ($status == 'S_NOVIET') {
 					$bewerkactie = 'novietBewerken';
-				}
-				else {
+				} else {
 					$bewerkactie = 'bewerken';
 				}
 				invokeRefresh('/communicatie/profiel/' . $nieuwUid . '/' . $bewerkactie);
-			}
-			catch (Exception $e) {
+			} catch (Exception $e) {
 				invokeRefresh('/communicatie/profiel/', '<h2>Nieuw lidnummer aanmaken mislukt.</h2>' . $e->getMessage());
 			}
 			break;
@@ -107,8 +99,7 @@ else {
 			if ($profiel->validate() AND $profiel->save()) {
 				header('location: ' . CSR_ROOT . 'communicatie/profiel/' . $uid);
 				exit;
-			}
-			else {
+			} else {
 				$midden = new ProfielStatusContent($profiel, $actie);
 			}
 			break;
@@ -117,15 +108,12 @@ else {
 			$voorkeur = new ProfielVoorkeur($uid, $actie);
 
 			if ($voorkeur->magBewerken()) {
-				if ($voorkeur->isPosted() AND $voorkeur->validate() AND $voorkeur->save()) {
-					header('location: ' . CSR_ROOT . 'communicatie/profiel/' . $uid);
-					exit;
-				}
-				else {
+				if ($voorkeur->isPosted() AND $voorkeur->save()) {
+					invokeRefresh('/communicatie/profiel/' . $uid, 'Voorkeuren opgeslagen', 1);
+				} else {
 					$midden = new ProfielVoorkeurContent($voorkeur, $actie);
 				}
-			}
-			else {
+			} else {
 				$midden = new ProfielContent(LidCache::getLid($uid));
 			}
 			break;
@@ -133,8 +121,7 @@ else {
 			if ($loginlid->hasPermission('P_ADMIN')) {
 				if (Profiel::resetWachtwoord($uid)) {
 					$melding = array('Nieuw wachtwoord met succes verzonden.', 1);
-				}
-				else {
+				} else {
 					$melding = 'Wachtwoord resetten mislukt.';
 				}
 			}
