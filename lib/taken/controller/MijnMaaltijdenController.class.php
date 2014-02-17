@@ -84,6 +84,8 @@ class MijnMaaltijdenController extends AclController {
 			return;
 		}
 		MaaltijdenModel::sluitMaaltijd($maaltijd);
+		echo '<h2 id="maaltijd-gesloten" class="remove"></div>';
+		exit;
 	}
 
 	public function aanmelden($mid) {

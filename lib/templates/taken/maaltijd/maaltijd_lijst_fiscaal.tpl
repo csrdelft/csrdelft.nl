@@ -2,7 +2,12 @@
 <html>
 <head>
 <title>{$maaltijd->getDatum()|date_format:"%Y-%m-%d"} {$maaltijd->getTijd()|date_format:"%H:%M"}</title>
-<script type="text/javascript" src="/layout/js/csrdelft.js"></script>
+{foreach from=$view->getStylesheets() item=sheet}
+<link rel="stylesheet" href="{$sheet.naam}?{$sheet.datum}" type="text/css" />
+{/foreach}
+{foreach from=$view->getScripts() item=script}
+<script type="text/javascript" src="{$script.naam}?{$script.datum}"></script>
+{/foreach}
 </head>
 <body style="font-family: verdana; font-size: 11px; margin-left: 250px;" onload="selectText('lijst');">
 <img alt="Beeldmerk van de Vereniging" src="{$CSR_PICS}/layout/beeldmerk.jpg" style="position: absolute; left: 50px;" />

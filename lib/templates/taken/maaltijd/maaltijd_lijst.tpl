@@ -2,20 +2,21 @@
 <html>{strip}
 <head>
 	<title>{$view->getTitel()} {$maaltijd->getDatum()|date_format:"%A %e %B"}</title>
-	<link type="text/css" href="/layout/maaltijdlijst.css" rel="stylesheet">
-	<script type="text/javascript" src="/layout/js/jquery.min.js"></script>
-	<script type="text/javascript" src="/layout/js/jquery.hoverIntent.min.js"></script>
-	<script type="text/javascript" src="/layout/js/csrdelft.js"></script>
-	<script type="text/javascript" src="/layout/js/taken.js"></script>
+{foreach from=$view->getStylesheets() item=sheet}
+	<link rel="stylesheet" href="{$sheet.naam}?{$sheet.datum}" type="text/css" />
+{/foreach}
+{foreach from=$view->getScripts() item=script}
+	<script type="text/javascript" src="{$script.naam}?{$script.datum}"></script>
+{/foreach}
 </head>
 <body>
 <img alt="Beeldmerk van de Vereniging" src="{$CSR_PICS}/layout/beeldmerk.jpg" style="float: right; padding: 0px 50px;" />
 <h1>{$view->getTitel()} op {$maaltijd->getDatum()|date_format:"%A %e %B %Y"}</h1>
 <div class="header">{$instellingen->get('maaltijden', 'maaltijdlijst_tekst')|replace:'MAALTIJDPRIJS':$prijs}</div>
 {if !$maaltijd->getIsGesloten()}
-	<h2 style="color: red">De inschrijving voor deze maaltijd is nog niet gesloten
+	<h2 id="maaltijd-gesloten" style="color: red">De inschrijving voor deze maaltijd is nog niet gesloten
 	{if !$maaltijd->getIsVerwijderd() and !$maaltijd->getIsGesloten()}
-	&nbsp;<button onclick="if(confirm('Weet u zeker dat u deze maaltijd wil sluiten?'))taken_ajax(this, '{$instellingen->get('taken', 'url')}/sluit/{$maaltijd->getMaaltijdId()}', page_reload);">Nu sluiten!</button>
+	&nbsp;<button href="{$instellingen->get('taken', 'url')}/sluit/{$maaltijd->getMaaltijdId()}" class="knop post confirm" title="Deze maaltijd sluiten">Nu sluiten!</button>
 	{/if}
 	</h2>
 {/if}

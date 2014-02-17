@@ -60,6 +60,14 @@ function init_visitekaartjes() {
 	$('.visitekaartje').bind('mouseleave.visitekaartje', function() {
 		$(this).fadeOut();
 	});
+	$('button.popup').unbind('click.popup');
+	$('button.popup').bind('click.popup', function() {
+		popup_open();
+	});
+	$('button.post').unbind('click.post');
+	$('button.post').bind('click.post', knop_post);
+	$('button.get').unbind('click.get');
+	$('button.get').bind('click.get', knop_get);
 }
 
 function init_links() {
@@ -299,6 +307,7 @@ function remove() {
 function ajax_request(type, url, data, source, onsuccess, onerror, onfinish) {
 	if (source) {
 		$(source).replaceWith('<img title="' + url + '" src="http://plaetjes.csrdelft.nl/layout/loading-arrows.gif" />');
+		source = 'img[title="' + url + '"]';
 	}
 	else {
 		popup_open();
