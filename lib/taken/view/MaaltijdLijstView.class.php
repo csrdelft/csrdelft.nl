@@ -26,8 +26,8 @@ class MaaltijdLijstView extends HtmlPage {
 	}
 
 	public function view() {
-		$this->addStylesheet('jquery-ui.min.css', '/layout/js/jquery/themes/ui-lightness/');
 		$this->addScript('jquery/jquery-2.1.0.min.js');
+		$this->addScript('jquery/plugins/jquery.hoverIntent-r7.min.js');
 		$this->addScript('csrdelft.js');
 		$this->addScript('taken.js');
 
@@ -50,8 +50,6 @@ class MaaltijdLijstView extends HtmlPage {
 			$this->smarty->display('taken/maaltijd/maaltijd_lijst_fiscaal.tpl');
 		} else {
 			$this->addStylesheet('maaltijdlijst.css');
-			$this->addScript('jquery/jquery-ui-1.10.4.custom.min.js');
-			$this->addScript('jquery/plugins/jquery.hoverIntent-r7.min.js');
 
 			$this->smarty->display('taken/maaltijd/maaltijd_lijst.tpl');
 		}
