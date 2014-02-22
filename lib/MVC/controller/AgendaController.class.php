@@ -84,18 +84,18 @@ class AgendaController extends AclController {
 
 	public function toevoegen($datum = '') {
 		$item = $this->model->newAgendaItem($datum);
-		$this->view = new AgendaItemFormView($item, 'toevoegen'); // fetches POST values itself
+		$this->view = new AgendaItemFormView($item, $this->action); // fetches POST values itself
 		if ($this->isPosted() AND $this->view->validate()) {
 			$id = $this->model->create($item);
 			$item->item_id = $id;
 			//setMelding('Toegevoegd', 1);
-			$this->view = new AgendaItemMaandView($item, 'toevoegen');
+			$this->view = new AgendaItemMaandView($item, $this->action);
 		}
 	}
 
 	public function bewerken($aid) {
 		$item = $this->model->getAgendaItem($aid);
-		$this->view = new AgendaItemFormView($item, 'bewerken'); // fetches POST values itself
+		$this->view = new AgendaItemFormView($item, $this->action); // fetches POST values itself
 		if ($this->isPosted() AND $this->view->validate()) {
 			$rowcount = $this->model->update($item);
 			if ($rowcount > 0) {
@@ -103,7 +103,7 @@ class AgendaController extends AclController {
 			} else {
 				//setMelding('Geen wijzigingen', 0);
 			}
-			$this->view = new AgendaItemMaandView($item, 'bewerken');
+			$this->view = new AgendaItemMaandView($item, $this->action);
 		}
 	}
 
@@ -111,7 +111,7 @@ class AgendaController extends AclController {
 		$item = $this->model->getAgendaItem($aid);
 		$this->model->delete($item);
 		//setMelding('Verwijderd', 1);
-		$this->view = new AgendaItemMaandView($item, 'verwijderen');
+		$this->view = new AgendaItemMaandView($item, $this->action);
 	}
 
 }

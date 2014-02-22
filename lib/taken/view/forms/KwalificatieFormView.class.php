@@ -18,7 +18,7 @@ class KwalificatieFormView extends TemplateView {
 		$fields[] = new LidField('voor_lid', $uid, 'Naam of lidnummer', 'leden');
 		$fields[] = new SubmitResetCancel();
 
-		$this->_form = new Formulier('taken-kwalificatie-form', Instellingen::get('taken', 'url') . '/kwalificeer/' . $fid, $fields);
+		$this->_form = new Formulier(null, 'taken-kwalificatie-form', Instellingen::get('taken', 'url') . '/kwalificeer/' . $fid, $fields);
 	}
 
 	public function getTitel() {

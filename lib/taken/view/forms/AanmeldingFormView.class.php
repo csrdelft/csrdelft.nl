@@ -23,7 +23,7 @@ class AanmeldingFormView extends TemplateView {
 		}
 		$fields[] = new SubmitResetCancel();
 
-		$this->_form = new Formulier('taken-aanmelding-form', Instellingen::get('taken', 'url') . '/ander' . ($nieuw ? 'aanmelden' : 'afmelden') . '/' . $mid, $fields);
+		$this->_form = new Formulier(null, 'taken-aanmelding-form', Instellingen::get('taken', 'url') . '/ander' . ($nieuw ? 'aanmelden' : 'afmelden') . '/' . $mid, $fields);
 	}
 
 	public function getTitel() {

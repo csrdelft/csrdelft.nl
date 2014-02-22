@@ -21,7 +21,7 @@ class ToewijzenFormView extends TemplateView {
 
 		$fields[] = new LidField('lid_id', $taak->getLidId(), 'Naam of lidnummer', 'leden');
 
-		$this->_form = new Formulier('taken-taak-toewijzen-form', Instellingen::get('taken', 'url') . '/toewijzen/' . $this->_taak->getTaakId(), $fields);
+		$this->_form = new Formulier(null, 'taken-taak-toewijzen-form', Instellingen::get('taken', 'url') . '/toewijzen/' . $this->_taak->getTaakId(), $fields);
 	}
 
 	public function getTitel() {

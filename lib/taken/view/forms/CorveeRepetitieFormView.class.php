@@ -49,7 +49,7 @@ class CorveeRepetitieFormView extends TemplateView {
 		}
 		$fields[] = new SubmitResetCancel();
 
-		$this->_form = new Formulier('taken-corvee-repetitie-form', Instellingen::get('taken', 'url') . '/opslaan/' . $crid, $fields);
+		$this->_form = new Formulier(null, 'taken-corvee-repetitie-form', Instellingen::get('taken', 'url') . '/opslaan/' . $crid, $fields);
 	}
 
 	public function getTitel() {

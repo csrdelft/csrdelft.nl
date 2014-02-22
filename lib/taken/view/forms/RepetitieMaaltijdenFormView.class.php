@@ -18,7 +18,7 @@ class RepetitieMaaltijdenFormView extends TemplateView {
 		$fields['eind'] = new DatumField('einddatum', $eindDatum, 'Tot en met', date('Y') + 1, date('Y'));
 		$fields[] = new SubmitResetCancel();
 
-		$this->_form = new Formulier('taken-repetitie-aanmaken-form', Instellingen::get('taken', 'url') . '/aanmaken/' . $repetitie->getMaaltijdRepetitieId(), $fields);
+		$this->_form = new Formulier(null, 'taken-repetitie-aanmaken-form', Instellingen::get('taken', 'url') . '/aanmaken/' . $repetitie->getMaaltijdRepetitieId(), $fields);
 	}
 
 	public function getTitel() {

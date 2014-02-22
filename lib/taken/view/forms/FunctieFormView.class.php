@@ -25,7 +25,7 @@ class FunctieFormView extends TemplateView {
 		}
 		$fields[] = new SubmitResetCancel();
 
-		$this->_form = new Formulier('taken-functie-form', Instellingen::get('taken', 'url') . '/opslaan/' . $fid, $fields);
+		$this->_form = new Formulier(null, 'taken-functie-form', Instellingen::get('taken', 'url') . '/opslaan/' . $fid, $fields);
 	}
 
 	public function getTitel() {

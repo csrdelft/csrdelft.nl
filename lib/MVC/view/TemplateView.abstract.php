@@ -16,6 +16,7 @@ abstract class TemplateView implements View {
 
 	/**
 	 * Data access model
+	 * @var mixed
 	 */
 	protected $model;
 	/**
@@ -40,6 +41,7 @@ abstract class TemplateView implements View {
 
 	/**
 	 * Backwards compatibility with SimpleHTML
+	 * @deprecated
 	 */
 	public function getMelding() {
 		return SimpleHTML::getMelding();

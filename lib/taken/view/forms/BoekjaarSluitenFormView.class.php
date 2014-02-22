@@ -18,7 +18,7 @@ class BoekjaarSluitenFormView extends TemplateView {
 		$fields['eind'] = new DatumField('einddatum', $eindDatum, 'Tot en met', date('Y') + 1, date('Y') - 2);
 		$fields[] = new SubmitResetCancel();
 
-		$this->_form = new Formulier('taken-boekjaar-sluiten-form', Instellingen::get('taken', 'url') . '/sluitboekjaar', $fields);
+		$this->_form = new Formulier(null, 'taken-boekjaar-sluiten-form', Instellingen::get('taken', 'url') . '/sluitboekjaar', $fields);
 	}
 
 	public function getTitel() {

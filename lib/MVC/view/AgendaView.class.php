@@ -8,7 +8,7 @@ require_once 'MVC/controller/AgendaController.class.php';
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
- * Klasse voor het weergeven van agenda-gerelateerde dingen.
+ * Klasse voor het weergeven begin agenda-gerelateerde dingen.
  */
 class AgendaMaandView extends TemplateView {
 
@@ -66,10 +66,6 @@ class AgendaItemMaandView extends TemplateView {
 		$this->actie = $actie;
 	}
 
-	public function getTitel() {
-		return 'Agenda - Item';
-	}
-
 	public function view() {
 		if ($this->actie === 'verwijderen') {
 			echo '<div id="item-' . $this->model->item_id . '" class="remove"></div>';
@@ -82,17 +78,15 @@ class AgendaItemMaandView extends TemplateView {
 
 }
 
-class AgendaItemFormView extends TemplateView implements Validator {
+class AgendaItemFormView extends Formulier {
 
-	private $form;
 	private $actie;
 
 	public function __construct(AgendaItem $item, $actie) {
-		parent::__construct($item);
-		$this->actie = $actie;
+		parent::__construct($item, 'agenda-item-form', '/agenda/' . $actie . '/' . $item->item_id);
 
 		$fields[] = new RequiredTextField('titel', $item->titel, 'Titel');
-		$fields[] = new DatumField('datum', $item->begin_moment, 'Datum', date('Y') + 5, date('Y') - 5);
+		$fields['datum'] = new DatumField('datum', $item->begin_moment, 'Datum', date('Y') + 5, date('Y') - 5);
 		$fields[] = new HtmlComment(<<<HTML
 <div id="tijden" class="InputField"><label>Standaard tijden</label>
 	<a onclick="setTijd('00','00','23','59');">» Hele dag</a> &nbsp;
@@ -110,46 +104,33 @@ function setTijd(a, b, c, d) {
 </div>
 HTML
 		);
-		$fields['van'] = new TijdField('begin', date('H:i', $item->getBeginMoment()), 'Van');
-		$fields['tot'] = new TijdField('eind', date('H:i', $item->getEindMoment()), 'Tot');
-		$fields[] = new SelectField('rechten', $item->rechten_bekijken, 'Zichtbaar', array('P_LEDEN_READ' => 'Intern', 'P_NOBODY' => 'Extern'));
+		$fields['begin'] = new TijdField('begin', date('H:i', $item->getBeginMoment()), 'Van');
+		$fields['eind'] = new TijdField('eind', date('H:i', $item->getEindMoment()), 'Tot');
+		$fields[] = new SelectField('rechten_bekijken', $item->rechten_bekijken, 'Zichtbaar', array('P_LEDEN_READ' => 'Intern', 'P_NOBODY' => 'Extern'));
 		$fields[] = new TextField('link', $item->link, 'Link');
 		$fields[] = new AutoresizeTextareaField('beschrijving', $item->beschrijving, 'Beschrijving');
 		$fields[] = new SubmitResetCancel();
 
-		$this->form = new Formulier('agenda-item-form', '/agenda/' . $this->actie . '/' . $item->item_id, $fields);
-		$this->form->css_classes[] = 'popup PreventUnchanged';
+		$this->addFields($fields);
+		$this->css_classes[] = 'popup PreventUnchanged';
 
-		$properties = $this->form->getValues(); // fetch POST values
-		$this->model->titel = $properties['titel'];
-		$this->model->begin_moment = $properties['datum'] . ' ' . $properties['begin'];
-		$this->model->eind_moment = $properties['datum'] . ' ' . $properties['eind'];
-		$this->model->beschrijving = $properties['beschrijving'];
-		$this->model->rechten_bekijken = $properties['rechten'];
-		$this->model->link = $properties['link'];
-	}
-
-	public function getTitel() {
-		return 'Agenda - Item ' . $this->actie;
+		$this->model->begin_moment = $fields['datum']->getValue() . ' ' . $fields['begin']->getValue();
+		$this->model->eind_moment = $fields['datum']->getValue() . ' ' . $fields['eind']->getValue();
 	}
 
 	public function view() {
-		$this->smarty->assign('form', $this->form);
-		$this->smarty->assign('actie', $this->actie);
-		$this->smarty->display('MVC/agenda/item_form.tpl');
+		echo '<div id="popup-content"><h1>Agenda-item ' . $this->actie . '</h1>';
+		echo parent::view();
+		echo '</div>';
 	}
 
 	public function validate() {
-		$fields = $this->form->getFields();
-		if (strtotime($fields['tot']->getValue()) < strtotime($fields['van']->getValue())) {
-			$fields['tot']->error = 'Eindmoment moet na beginmoment liggen';
+		$fields = $this->getFields();
+		if (strtotime($fields['eind']->getValue()) < strtotime($fields['begin']->getValue())) {
+			$fields['eind']->error = 'Eindmoment moet na beginmoment liggen';
 			return false;
 		}
-		return $this->form->validate();
-	}
-
-	public function getError() {
-		return $this->form->error;
+		return parent::validate();
 	}
 
 }
@@ -170,10 +151,6 @@ abstract class AgendaItemsView extends TemplateView {
 
 class AgendaZijbalkView extends AgendaItemsView {
 
-	public function getTitel() {
-		return 'Agenda - Zijbalk';
-	}
-
 	public function view() {
 		if (count($this->items) > LidInstellingen::get('zijbalk', 'agenda_max')) {
 			$this->items = array_slice($this->items, 0, LidInstellingen::get('zijbalk', 'agenda_max'));
@@ -186,10 +163,6 @@ class AgendaZijbalkView extends AgendaItemsView {
 
 class AgendaCourantView extends AgendaItemsView {
 
-	public function getTitel() {
-		return 'Agenda - Courant';
-	}
-
 	public function view() {
 		$this->smarty->assign('items', $this->items);
 		$this->smarty->display('MVC/agenda/courant.tpl');
@@ -201,10 +174,6 @@ class AgendaICalendarView extends TemplateView {
 
 	public function __construct(AgendaModel $agenda) {
 		parent::__construct($agenda);
-	}
-
-	public function getTitel() {
-		return 'Agenda - iCalendar';
 	}
 
 	public function view() {

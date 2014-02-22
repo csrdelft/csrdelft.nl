@@ -12,7 +12,8 @@ require_once 'MVC/view/form/FormElement.abstract.php';
  * 
  * Voorbeeld:
  *
- * $form=new Formulier(
+ * $form=new Formulier(null, 
+ * 		$model,
  * 		'formulier-ID',
  * 		'/index.php',
  * 		array(
@@ -28,22 +29,32 @@ require_once 'MVC/view/form/FormElement.abstract.php';
  */
 class Formulier implements View, Validator {
 
+	protected $model;
 	protected $formId;
 	protected $action;
 	/** @var FormElement[] */
-	protected $fields;
-	public $css_classes;
+	protected $fields = array();
+	public $css_classes = array();
 	public $error = '';
 
-	public function __construct($formId, $action = null, $fields = array()) {
+	public function __construct($model, $formId, $action = null, $fields = array()) {
+		$this->model = $model;
 		$this->formId = $formId;
 		$this->action = $action;
-		$this->fields = $fields;
-		$this->css_classes = array('Formulier');
+		$this->css_classes[] = 'Formulier';
+		$this->addFields($fields);
 	}
 
+	/**
+	 * Fetches form values
+	 */
 	public function getModel() {
-		return $this;
+		foreach ($this->getValues() as $field => $value) {
+			if (property_exists($this->model, $field)) {
+				$this->model->$field = $value;
+			}
+		}
+		return $this->model;
 	}
 
 	public function setAction($action) {
@@ -62,18 +73,21 @@ class Formulier implements View, Validator {
 		return $this->fields;
 	}
 
-	public function addFields($fields) {
+	public function addFields(array $fields) {
 		$this->fields = array_merge($this->fields, $fields);
+		if ($this->isPosted() AND isset($this->model)) {
+			$this->getModel(); // Fetch POST values
+		}
 	}
 
 	/**
 	 * Is het formulier *helemaal* gePOST?
 	 */
 	public function isPosted() {
-		$posted = false;
+		$posted = true;
 		foreach ($this->getFields() as $field) {
-			if ($field instanceof InputField AND $field->isPosted()) {
-				$posted = true;
+			if ($field instanceof InputField) {
+				$posted &= $field->isPosted();
 			}
 		}
 		return $posted;

@@ -119,7 +119,7 @@ $ingelogd = false;
 					$fields[] = new SelectField('date18', $data['date18'], 'Is uw Diesdame of Diesheer meerderjarig op de dag van het gala?', $leeftijdopties);
 					$fields[] = new SubmitResetCancel('/dies', false, 'Aanmelding opslaan');
 
-					$form = new Formulier('galaaanmelding', '/dies/galaaanmelding.php', $fields);
+					$form = new Formulier(null, 'galaaanmelding', '/dies/galaaanmelding.php', $fields);
 					$form->view();
 				} else {
 ?>

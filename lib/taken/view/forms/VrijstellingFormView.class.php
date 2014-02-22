@@ -21,7 +21,7 @@ class VrijstellingFormView extends TemplateView {
 		$fields[] = new IntField('percentage', $percentage, 'Percentage (%)', Instellingen::get('corvee', 'vrijstelling_percentage_max'), Instellingen::get('corvee', 'vrijstelling_percentage_min'));
 		$fields[] = new SubmitResetCancel();
 
-		$this->_form = new Formulier('taken-vrijstelling-form', Instellingen::get('taken', 'url') . '/opslaan' . ($uid === null ? '' : '/' . $uid), $fields);
+		$this->_form = new Formulier(null, 'taken-vrijstelling-form', Instellingen::get('taken', 'url') . '/opslaan' . ($uid === null ? '' : '/' . $uid), $fields);
 	}
 
 	public function getTitel() {

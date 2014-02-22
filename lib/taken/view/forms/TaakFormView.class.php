@@ -37,7 +37,7 @@ class TaakFormView extends TemplateView {
 		$fields['mid']->title = 'Het ID van de maaltijd waar deze taak bij hoort.';
 		$fields[] = new SubmitResetCancel();
 
-		$this->_form = new Formulier('taken-corveetaak-form', Instellingen::get('taken', 'url') . '/opslaan/' . $tid, $fields);
+		$this->_form = new Formulier(null, 'taken-corveetaak-form', Instellingen::get('taken', 'url') . '/opslaan/' . $tid, $fields);
 	}
 
 	public function getTitel() {

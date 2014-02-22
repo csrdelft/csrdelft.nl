@@ -19,7 +19,7 @@ class RepetitieCorveeFormView extends TemplateView {
 		$fields[] = new HiddenField('maaltijd_id', $mid);
 		$fields[] = new SubmitResetCancel();
 
-		$this->_form = new Formulier('taken-repetitie-aanmaken-form', Instellingen::get('taken', 'url') . '/aanmaken/' . $repetitie->getCorveeRepetitieId(), $fields);
+		$this->_form = new Formulier(null, 'taken-repetitie-aanmaken-form', Instellingen::get('taken', 'url') . '/aanmaken/' . $repetitie->getCorveeRepetitieId(), $fields);
 	}
 
 	public function getTitel() {

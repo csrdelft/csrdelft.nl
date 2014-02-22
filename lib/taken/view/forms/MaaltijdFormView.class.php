@@ -41,7 +41,7 @@ class MaaltijdFormView extends TemplateView {
 		$fields['filter']->title = 'Plaats een ! vooraan om van de restrictie een uitsluiting te maken.';
 		$fields[] = new SubmitResetCancel();
 
-		$this->_form = new Formulier('taken-maaltijd-form', Instellingen::get('taken', 'url') . '/opslaan/' . $mid, $fields);
+		$this->_form = new Formulier(null, 'taken-maaltijd-form', Instellingen::get('taken', 'url') . '/opslaan/' . $mid, $fields);
 	}
 
 	public function getTitel() {

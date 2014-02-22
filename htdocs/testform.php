@@ -6,12 +6,10 @@ require_once 'MVC/view/validator.interface.php';
 
 /* start view */
 
-class TestFormulierContent extends TemplateView implements Validator {
-
-	protected $form;
+class TestFormulier extends Formulier {
 
 	public function __construct($model) {
-		parent::__construct($model);
+		parent::__construct($model, 'test-form', '/testform.php');
 
 		$fields[] = new Subkopje('Studie:');
 		$fields[] = new StudieField('studie', $model->default, 'Studie');
@@ -25,11 +23,7 @@ class TestFormulierContent extends TemplateView implements Validator {
 		$fields[] = new LidField('lidtest', 'x101', 'Wat is je naam?', 'alleleden');
 		$fields[] = new LidField('lid2test', 'Gra', 'Wat is je naam?', 'nobodies');
 
-		$this->form = new Formulier('test-form', '/testform.php', $fields);
-
-		$properties = $this->form->getValues(); // fetch POST values
-		$model->default = $properties['studie'];
-		$model->uid = $properties['uidtest'];
+		$this->addFields($fields);
 	}
 
 	public function getTitel() {
@@ -37,19 +31,10 @@ class TestFormulierContent extends TemplateView implements Validator {
 	}
 
 	public function view() {
-		//gebruik smarty optioneel
 		echo getMelding();
-		echo '<h1>Testformulier</h1>Wat autoaanvullen dingen testen, net als hippe ajax-inline-bewerkzaken...';
-		$this->form->view();
+		echo '<h1>Testformulier</h1><p>Wat autoaanvullen dingen testen, net als hippe ajax-inline-bewerkzaken...</p>';
+		echo parent::view();
 		pr($this->getModel()); // TEST
-	}
-
-	public function validate() {
-		return $this->form->validate();
-	}
-
-	public function getError() {
-		return $this->form->getError();
 	}
 
 }
@@ -59,15 +44,15 @@ class TestFormulierContent extends TemplateView implements Validator {
 
 /* start model */
 $model = (object) 'vies';
-$model->default = 'test123';
-$model->uid = '0436';
+$model->studie = 'test123';
+$model->uidtest = '0436';
 
 /* end model */
 
 
 /* start controller */
 
-$view = new TestFormulierContent($model);
+$view = new TestFormulier($model);
 if (isPosted()) { // fetches POST values itself
 	if ($view->validate()) {
 		setMelding('Save to DB here', 1);

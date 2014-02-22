@@ -49,7 +49,7 @@ class MaaltijdRepetitieFormView extends TemplateView {
 		}
 		$fields[] = new SubmitResetCancel();
 
-		$this->_form = new Formulier('taken-maaltijd-repetitie-form', Instellingen::get('taken', 'url') . '/opslaan/' . $mrid, $fields);
+		$this->_form = new Formulier(null, 'taken-maaltijd-repetitie-form', Instellingen::get('taken', 'url') . '/opslaan/' . $mrid, $fields);
 	}
 
 	public function getTitel() {
